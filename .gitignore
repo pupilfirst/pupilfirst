@@ -17,3 +17,7 @@
 
 *.yml
 .env
+.rspec
+tags
+coverage
+public/svapp-dev

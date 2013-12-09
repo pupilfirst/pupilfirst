@@ -27,8 +27,36 @@ gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
 
+gem 'versionist'
+
+gem 'carrierwave'
+
+gem "rmagick", "~> 2.13.2"
+
+gem "fog", "~> 1.3.1" # required by carrierwave to upload to s3
+
+gem 'carrierwave_backgrounder'
+
+# gem "active_model_serializers", "~> 0.8.0"
+
+gem 'activeadmin', github: 'gregbell/active_admin' # master for rails 4
+
+gem "just-datetime-picker"
+
 group :development do
 	gem 'foreman'
+	gem 'seed-fu', github: 'mbleigh/seed-fu'
+end
+
+group :test do
+	gem 'simplecov', require: false
+	gem 'rspec', '~> 3.0.0.beta1'
+	gem "factory_girl_rails", "~> 4.0"
+
+end
+
+group :development, :test do
+  gem 'rspec-rails', '~> 3.0.0.beta'
 end
 
 group :production do

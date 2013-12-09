@@ -1,0 +1,19 @@
+ActiveAdmin.register Event do
+
+
+  # See permitted parameters documentation:
+  # https://github.com/gregbell/active_admin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
+  #
+  # permit_params :list, :of, :attributes, :on, :model
+  #
+  # or
+  #
+  # permit_params do
+  #  permitted = [:permitted, :attributes]
+  #  permitted << :other if resource.something?
+  #  permitted
+  # end
+  form :partial => "form"
+  permit_params :title, :description, :featured, :start_at_date, :start_at_time_hour, :start_at_time_minute, :end_at_date, :end_at_time_hour, :end_at_time_minute
+
+end

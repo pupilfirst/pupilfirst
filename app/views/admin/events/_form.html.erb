@@ -1,0 +1,16 @@
+<%= semantic_form_for [:admin, @event] do |f| %>
+  <%= f.inputs :name => "Basic" do %>
+
+    <%= f.input :title %>
+    <%= f.input :description %>
+    <%= f.input :featured %>
+    <%= f.input :location %>
+    <%= f.input :category %>
+    <%= f.input :picture, as: :file %>
+    <%= f.input :remote_picture_url, placeholder: "publicly accesable url" %>
+    <%= f.input :start_at, :label => "Start Date Time", as: :just_datetime_picker, :hint => "Time in 24hr format" %>
+    <%= f.input :end_at, label: "End Date Time", as: :just_datetime_picker, :hint => "Time in 24hr format" %>
+
+    <%= f.action :submit, :as => :button %>
+  <% end %>
+<% end %>

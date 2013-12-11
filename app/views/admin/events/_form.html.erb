@@ -2,7 +2,7 @@
   <%= f.inputs :name => "Basic" do %>
 
     <%= f.input :title %>
-    <%= f.input :description %>
+    <%= f.input :description, as: :html_editor %>
     <%= f.input :featured %>
     <%= f.input :location %>
     <%= f.input :category %>

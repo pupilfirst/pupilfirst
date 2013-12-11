@@ -36,6 +36,10 @@ GEM
       erubis (~> 2.7.0)
       rack (~> 1.5.2)
       rack-test (~> 0.6.2)
+    active_admin_editor (1.1.0)
+      activeadmin (>= 0.4.0)
+      ejs
+      rails (>= 3.0.0)
     activemodel (4.0.1)
       activesupport (= 4.0.1)
       builder (~> 3.1.0)
@@ -55,6 +59,7 @@ GEM
       activesupport (>= 3.0.0)
     arel (4.0.1)
     atomic (1.1.14)
+    attribute_normalizer (1.2.0.b)
     bcrypt-ruby (3.1.2)
     bourbon (3.1.8)
       sass (>= 3.2.0)
@@ -82,6 +87,7 @@ GEM
     diff-lcs (1.2.5)
     docile (1.1.1)
     dotenv (0.9.0)
+    ejs (1.1.1)
     erubis (2.7.0)
     excon (0.13.4)
     execjs (2.0.2)
@@ -249,7 +255,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  active_admin_editor
   activeadmin!
+  attribute_normalizer (~> 1.2.0.b)
   carrierwave
   carrierwave_backgrounder
   coffee-rails (~> 4.0.0)

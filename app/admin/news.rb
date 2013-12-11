@@ -1,6 +1,6 @@
 ActiveAdmin.register News do
 
-  
+
   # See permitted parameters documentation:
   # https://github.com/gregbell/active_admin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
   #
@@ -13,5 +13,38 @@ ActiveAdmin.register News do
   #  permitted << :other if resource.something?
   #  permitted
   # end
-  
+  permit_params :title, :body, :user_id, :featured, :youtube_id, :remote_picture_url, :picture
+
+
+  form do |f|
+    f.inputs "Details" do
+      f.input :title
+      f.input :body, as: :html_editor
+      f.input :author
+      f.input :featured
+      f.input :youtube_id, label: "youtube_id", hint: "Eg in \"https://www.youtube.com/watch?v=foobar\" ID is foobar"
+      f.input :picture, as: :file
+      f.input :remote_picture_url, placeholder: "publicly accesable url"
+    end
+    f.actions
+  end
+
+  show do |event|
+    attributes_table do
+      row :title
+      row :image do
+        link_to(image_tag(event.picture_url(:thumb)), event.picture_url)
+      end
+      row :featured
+      row :author
+      row :youtube_id do
+        link_to(image_tag(event.youtube_thumbnail_url(:mid)), "http://youtube.com/watch?v=#{event.youtube_id}") if event.youtube_id.present?
+      end
+      row :body do
+        simple_format event.body
+      end
+    end
+    active_admin_comments
+  end
+
 end

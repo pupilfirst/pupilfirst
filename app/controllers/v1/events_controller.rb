@@ -6,4 +6,12 @@ class V1::EventsController < V1::BaseController
         format.json
     end
 	end
+
+
+	def show
+		@event = Event.find(params[:id])
+		respond_to do |f|
+			f.json
+		end
+	end
 end

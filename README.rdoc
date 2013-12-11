@@ -21,7 +21,11 @@ Things you may want to cover:
 
 * Deployment instructions
 
-* ...
+* Web resources considered for dev
+
+  * http://matthewlehner.net/rails-api-testing-guidelines/
+  * https://github.com/joshbuddy/jsonpath
+  * http://pivotallabs.com/api-versioning/
 
 
 Please feel free to use a different markup language if you do not plan to run

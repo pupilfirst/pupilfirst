@@ -19,6 +19,8 @@ gem "fog", "~> 1.3.1" # required by carrierwave to upload to s3
 gem 'carrierwave_backgrounder'
 gem 'activeadmin', github: 'gregbell/active_admin' # master for rails 4
 gem "just-datetime-picker"
+gem 'active_admin_editor'
+gem "attribute_normalizer", "~> 1.2.0.b"
 group :development do
 	gem 'foreman'
 	gem 'seed-fu', github: 'mbleigh/seed-fu'

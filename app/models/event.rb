@@ -5,4 +5,6 @@ class Event < ActiveRecord::Base
   just_define_datetime_picker :start_at
   just_define_datetime_picker :end_at
 
+  normalize_attributes :title, :description, :start_at, :end_at, :featured, :picture
+
 end

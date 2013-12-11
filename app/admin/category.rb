@@ -13,5 +13,9 @@ ActiveAdmin.register Category do
   #  permitted << :other if resource.something?
   #  permitted
   # end
+  controller do
+    newrelic_ignore
+  end
+
   permit_params :name
 end

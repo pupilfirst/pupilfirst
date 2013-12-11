@@ -13,6 +13,10 @@ ActiveAdmin.register Location do
   #  permitted << :other if resource.something?
   #  permitted
   # end
+  controller do
+    newrelic_ignore
+  end
+
   permit_params :latitude, :longitude, :title, :address
 
 

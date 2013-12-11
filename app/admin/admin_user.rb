@@ -1,4 +1,8 @@
 ActiveAdmin.register AdminUser do
+  controller do
+    newrelic_ignore
+  end
+
   permit_params :email, :password, :password_confirmation
 
   index do

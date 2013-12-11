@@ -1,4 +1,7 @@
 ActiveAdmin.register Event do
+  controller do
+    newrelic_ignore
+  end
 
   form :partial => "form"
   permit_params :title, :description, :featured, :start_at_date, :start_at_time_hour, :start_at_time_minute, :end_at_date, :end_at_time_hour, :end_at_time_minute, :location_id, :category_id, :remote_picture_url, :picture

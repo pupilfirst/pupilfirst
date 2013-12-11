@@ -13,6 +13,9 @@ ActiveAdmin.register User do
   #  permitted << :other if resource.something?
   #  permitted
   # end
+  controller do
+    newrelic_ignore
+  end
 
   permit_params :username, :fullname, :email, :remote_avatar_url, :avatar
 

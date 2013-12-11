@@ -13,6 +13,10 @@ ActiveAdmin.register News do
   #  permitted << :other if resource.something?
   #  permitted
   # end
+  controller do
+    newrelic_ignore
+  end
+
   permit_params :title, :body, :user_id, :featured, :youtube_id, :remote_picture_url, :picture
 
 

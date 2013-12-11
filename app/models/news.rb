@@ -3,6 +3,7 @@ class News < ActiveRecord::Base
   normalize_attributes :title, :body, :featured, :youtube_id, :picture
 
   mount_uploader :picture, FeedImageUploader
+  process_in_background :picture
 
   def youtube_thumbnail_url(size = :high)
   	case size

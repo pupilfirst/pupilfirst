@@ -13,10 +13,11 @@ gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
 gem 'versionist'
+gem 'sucker_punch'
 gem 'carrierwave'
-gem "rmagick", "~> 2.13.2"
+gem 'carrierwave_backgrounder', git: 'https://github.com/glhewett/carrierwave_backgrounder.git' # https://github.com/lardawge/carrierwave_backgrounder not updated for sucker_punch v1.0 api changes
+gem "mini_magick"
 gem "fog", "~> 1.3.1" # required by carrierwave to upload to s3
-gem 'carrierwave_backgrounder'
 gem 'activeadmin', github: 'gregbell/active_admin' # master for rails 4
 gem "just-datetime-picker"
 gem 'active_admin_editor'

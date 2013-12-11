@@ -1,8 +1,9 @@
 json.array! @events do |e|
-	json.(e, :title, :featured, :picture_url)
+	json.(e, :id, :title, :featured, :picture_url)
 	json.start_at 	fmt_time(e.start_at)
 	json.end_at 		fmt_time(e.end_at)
 	location_block = -> {
+		json.id 					e.location.id
 		json.title 				e.location.title
 		json.latitude 		e.location.latitude
 		json.longitude		e.location.longitude

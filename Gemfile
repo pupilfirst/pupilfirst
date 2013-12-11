@@ -7,8 +7,6 @@ gem 'pg'
 gem 'sass-rails', '~> 4.0.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
-# See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
@@ -22,6 +20,8 @@ gem 'activeadmin', github: 'gregbell/active_admin' # master for rails 4
 gem "just-datetime-picker"
 gem 'active_admin_editor'
 gem "attribute_normalizer", "~> 1.2.0.b"
+gem 'newrelic_rpm'
+
 group :development do
 	gem 'foreman'
 	gem 'seed-fu', github: 'mbleigh/seed-fu'

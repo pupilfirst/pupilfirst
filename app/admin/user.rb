@@ -14,6 +14,8 @@ ActiveAdmin.register User do
   #  permitted
   # end
 
+  permit_params :username, :fullname, :email, :remote_avatar_url, :avatar
+
   form do |f|
     f.inputs "User details" do
       f.input :username

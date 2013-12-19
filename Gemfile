@@ -21,6 +21,7 @@ gem "just-datetime-picker"
 gem 'active_admin_editor'
 gem "attribute_normalizer", "~> 1.2.0.b"
 gem 'newrelic_rpm'
+gem 'urbanairship'
 
 group :development do
 	gem 'foreman'

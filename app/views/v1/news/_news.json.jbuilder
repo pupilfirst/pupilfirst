@@ -7,7 +7,6 @@ else
 end
 json.created_at fmt_time(news.created_at)
 path = "#{__FILE__.match(/v\d/)[0]}/users/user"
-puts path
 json.author do
 	json.partial! path, user: news.author
 end

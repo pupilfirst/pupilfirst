@@ -11,4 +11,7 @@ location_block = -> {
 json.location do
 	@event.location.present? ? location_block.call : nil
 end
-
+path = "#{__FILE__.match(/v\d/)[0]}/users/user"
+json.author do
+	json.partial! path, user: @event.author
+end

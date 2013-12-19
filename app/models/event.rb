@@ -10,4 +10,5 @@ class Event < ActiveRecord::Base
 
   normalize_attributes :title, :description, :start_at, :end_at, :featured, :picture
 
+  validates_associated :author
 end

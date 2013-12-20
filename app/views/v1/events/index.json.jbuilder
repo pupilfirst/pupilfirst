@@ -3,6 +3,7 @@ json.array! @events do |e|
 	json.start_at 	fmt_time(e.start_at)
 	json.end_at 		fmt_time(e.end_at)
 	json.created_at 		fmt_time(e.created_at)
+	json.category   @event.category.name
 	location_block = -> {
 		json.id 					e.location.id
 		json.title 				e.location.title

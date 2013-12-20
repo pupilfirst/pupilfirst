@@ -5,6 +5,16 @@ class News < ActiveRecord::Base
   mount_uploader :picture, FeedImageUploader
   process_in_background :picture
 
+  alias_attribute :push_title, :title
+  PUSH_TYPE = 'news'
+
+
+  after_save do
+    if featured_changed? and featured and not notification_sent
+      PushNotifyJob.new.async.perform(self.class.to_s.downcase, self.id)
+    end
+  end
+
   def youtube_thumbnail_url(size = :high)
   	case size
   	when :max

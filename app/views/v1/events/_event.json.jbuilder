@@ -6,7 +6,7 @@ category_block = -> {
 	json.id 				event.category.id
 	json.name 			event.category.name
 }
-json.category event.category.present? ? category_block.call : nil
+event.category.present? ? json.category {category_block.call} : json.category(nil)
 location_block = -> {
 	json.id 					event.location.id
 	json.title 				event.location.title
@@ -14,7 +14,7 @@ location_block = -> {
 	json.longitude		event.location.longitude
 	json.address 			event.location.address
 }
-json.location event.location.present? ? location_block.call : nil
+event.location.present? ? json.location {location_block.call} : json.location(nil)
 
 path = "#{__FILE__.match(/v\d/)[0]}/users/user"
 json.author do

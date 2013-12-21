@@ -1,7 +1,7 @@
 class V1::NewsController < V1::BaseController
 
 	def index
-    @news = News.order('created_at desc').limit(50)
+    @news = News.order('published_at desc').limit(50)
     @news = @news.select{|e| e.featured } + @news.reject{|e| e.featured }
     respond_to do |format|
         format.json

@@ -1,9 +1,10 @@
 class News < ActiveRecord::Base
   belongs_to :author, class_name: 'User', foreign_key: :user_id
-  normalize_attributes :title, :body, :featured, :youtube_id, :picture
+  normalize_attributes :title, :body, :featured, :youtube_id, :picture, :published_at
 
   mount_uploader :picture, FeedImageUploader
   process_in_background :picture
+  just_define_datetime_picker :published_at
 
   alias_attribute :push_title, :title
   PUSH_TYPE = 'news'
@@ -12,6 +13,9 @@ class News < ActiveRecord::Base
   after_save do
     if featured_changed? and featured and not notification_sent
       PushNotifyJob.new.async.perform(self.class.to_s.downcase, self.id)
+    end
+    unless published_at.present?
+      published_at = Time.now
     end
   end
 

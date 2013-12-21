@@ -5,7 +5,7 @@ if news.youtube_id.present?
 else
 	json.picture_url news.picture_url
 end
-json.created_at fmt_time(news.created_at)
+json.created_at fmt_time(news.published_at)
 path = "#{__FILE__.match(/v\d/)[0]}/users/user"
 json.author do
 	json.partial! path, user: news.author

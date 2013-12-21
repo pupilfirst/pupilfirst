@@ -17,7 +17,7 @@ ActiveAdmin.register News do
     newrelic_ignore
   end
 
-  permit_params :title, :body, :user_id, :featured, :youtube_id, :remote_picture_url, :picture
+  permit_params :title, :body, :user_id, :featured, :youtube_id, :remote_picture_url, :picture, :published_at, :published_at_date, :published_at_time_hour, :published_at_time_minute
 
 
   form do |f|
@@ -26,6 +26,7 @@ ActiveAdmin.register News do
       f.input :body, as: :html_editor
       f.input :author
       f.input :featured
+      f.input :published_at, as: :just_datetime_picker
       f.input :youtube_id, label: "youtube_id", hint: "Eg in \"https://www.youtube.com/watch?v=foobar\" ID is foobar"
       f.input :picture, as: :file
       f.input :remote_picture_url, placeholder: "publicly accesable url"
@@ -47,6 +48,7 @@ ActiveAdmin.register News do
       row :body do
         simple_format event.body
       end
+      row :published_at
     end
     active_admin_comments
   end

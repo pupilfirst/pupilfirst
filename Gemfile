@@ -22,6 +22,8 @@ gem 'active_admin_editor'
 gem "attribute_normalizer", "~> 1.2.0.b"
 gem 'newrelic_rpm'
 gem 'urbanairship'
+gem 'rubypress'
+gem 'nokogiri'
 
 group :development do
 	gem 'foreman'

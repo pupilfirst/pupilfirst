@@ -214,6 +214,7 @@ GEM
       rspec-mocks (= 3.0.0.beta1)
     rspec-support (3.0.0.beta1)
     ruby-hmac (0.4.0)
+    rubypress (1.0.2)
     sass (3.2.12)
     sass-rails (4.0.1)
       railties (>= 4.0.0, < 5.0)
@@ -284,11 +285,13 @@ DEPENDENCIES
   just-datetime-picker
   mini_magick
   newrelic_rpm
+  nokogiri
   pg
   rails (= 4.0.1)
   rails_12factor
   rspec (~> 3.0.0.beta1)
   rspec-rails (~> 3.0.0.beta)
+  rubypress
   sass-rails (~> 4.0.0)
   sdoc
   seed-fu!

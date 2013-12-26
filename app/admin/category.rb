@@ -16,6 +16,12 @@ ActiveAdmin.register Category do
   controller do
     newrelic_ignore
   end
-
-  permit_params :name
+  form do |f|
+    f.inputs "Details" do
+      f.input :name
+      f.input :category_type, collection: Category::TYPES, prompt: "Choose a type"
+    end
+    f.actions
+  end
+  permit_params :name, :category_type
 end

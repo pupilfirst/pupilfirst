@@ -1,5 +1,6 @@
 class News < ActiveRecord::Base
   belongs_to :author, class_name: 'User', foreign_key: :user_id
+  belongs_to :category
   normalize_attributes :title, :body, :featured, :youtube_id, :picture, :published_at
 
   mount_uploader :picture, FeedImageUploader

@@ -17,7 +17,7 @@ ActiveAdmin.register News do
     newrelic_ignore
   end
 
-  permit_params :title, :body, :user_id, :featured, :youtube_id, :remote_picture_url, :picture, :published_at, :published_at_date, :published_at_time_hour, :published_at_time_minute
+  permit_params :title, :body, :user_id, :featured, :youtube_id, :remote_picture_url, :picture, :published_at, :published_at_date, :published_at_time_hour, :published_at_time_minute, :category_id
 
 
   form do |f|
@@ -26,6 +26,7 @@ ActiveAdmin.register News do
       f.input :body, as: :html_editor
       f.input :author
       f.input :featured
+      f.input :category, collection: Category.news_category, prompt: "Choose a Category"
       f.input :published_at, as: :just_datetime_picker
       f.input :youtube_id, label: "youtube_id", hint: "Eg in \"https://www.youtube.com/watch?v=foobar\" ID is foobar"
       f.input :picture, as: :file
@@ -42,6 +43,7 @@ ActiveAdmin.register News do
       end
       row :featured
       row :author
+      row :category
       row :youtube_id do
         link_to(image_tag(event.youtube_thumbnail_url(:mid)), "http://youtube.com/watch?v=#{event.youtube_id}") if event.youtube_id.present?
       end

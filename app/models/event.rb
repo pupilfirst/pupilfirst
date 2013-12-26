@@ -10,7 +10,13 @@ class Event < ActiveRecord::Base
 
   normalize_attributes :title, :description, :start_at, :end_at, :featured, :picture, :notification_sent
 
-  validates_associated :author
+  validates_presence_of :title
+  validates_presence_of :author
+  validates_presence_of :location
+  validates_presence_of :category
+  validates_presence_of :picture
+  validates_presence_of :start_at
+  validates_presence_of :end_at
 
 	alias_attribute :push_title, :title
 

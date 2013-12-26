@@ -7,6 +7,10 @@ class News < ActiveRecord::Base
   process_in_background :picture
   just_define_datetime_picker :published_at
 
+  validates_presence_of :author
+  validates_presence_of :category_id
+  validates_presence_of :picture
+  validates_presence_of :title
   alias_attribute :push_title, :title
   PUSH_TYPE = 'news'
 

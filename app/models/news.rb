@@ -9,13 +9,15 @@ class News < ActiveRecord::Base
   alias_attribute :push_title, :title
   PUSH_TYPE = 'news'
 
+  before_create do
+    unless self.published_at.present?
+      self.published_at = Time.now
+    end
+  end
 
   after_save do
     if featured_changed? and featured and not notification_sent
       PushNotifyJob.new.async.perform(self.class.to_s.downcase, self.id)
-    end
-    unless published_at.present?
-      published_at = Time.now
     end
   end
 

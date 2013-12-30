@@ -6,5 +6,5 @@ class Category < ActiveRecord::Base
 	has_many :news
 	has_many :events
 
-	TYPES = ['events', 'news']
+	TYPES = ['event', 'news']
 end

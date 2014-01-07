@@ -35,6 +35,7 @@ group :test do
 	gem 'simplecov', require: false
 	gem 'rspec', '~> 3.0.0.beta1'
 	gem "factory_girl_rails", "~> 4.0"
+	gem 'faker'
 
 end
 

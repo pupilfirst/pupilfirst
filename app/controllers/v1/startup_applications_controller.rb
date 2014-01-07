@@ -1,7 +1,6 @@
-class V1::StartupApplicationController < V1::BaseController
+class V1::StartupApplicationsController < V1::BaseController
   def create
-  	puts params
-  	StartupApplication.create!(params[:startup_application])
+  	StartupApplication.create!(startup_application_params)
   	render json: {success: true}
   end
 

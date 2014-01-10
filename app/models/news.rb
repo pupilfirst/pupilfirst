@@ -1,7 +1,12 @@
 class News < ActiveRecord::Base
   belongs_to :author, class_name: 'User', foreign_key: :user_id
   belongs_to :category
-  normalize_attributes :title, :body, :featured, :youtube_id, :picture, :published_at
+  normalize_attributes :title, :body, :featured, :picture, :published_at
+
+  normalize_attribute :youtube_id do |value|
+    reg = /.*youtube\.com\/watch\?v=(.*)/
+    value =~ reg ? value.match(reg).captures.first  : value
+  end
 
   mount_uploader :picture, FeedImageUploader
   process_in_background :picture

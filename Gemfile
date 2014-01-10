@@ -29,6 +29,8 @@ gem 'versionist'
 group :development do
 	gem 'foreman'
 	gem 'seed-fu', github: 'mbleigh/seed-fu'
+	gem 'pry'
+	gem 'pry-debugger'
 end
 
 group :test do

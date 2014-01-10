@@ -4,7 +4,7 @@ ActiveAdmin.register Event do
   end
 
   form :partial => "form"
-  permit_params :title, :description, :featured, :start_at_date, :start_at_time_hour, :start_at_time_minute, :end_at_date, :end_at_time_hour, :end_at_time_minute, :location_id, :category_id, :remote_picture_url, :picture, :user_id
+  permit_params :title, :description, :featured, :start_at_date, :start_at_time_hour, :start_at_time_minute, :end_at_date, :end_at_time_hour, :end_at_time_minute, :location_id, :category_id, :remote_picture_url, :picture, :user_id, :_wysihtml5_mode
 
   show do
     h3 event.title
@@ -30,7 +30,7 @@ ActiveAdmin.register Event do
         row :author
         row :featured
         row :dates do
-          div "#{event.start_at.strftime('%a %b %e %Y,  %H:%M')} - #{event.end_at.strftime('%a %b %e %Y,  %H:%M')}  -- In UTC"
+          div "#{event.start_at.in_time_zone('Mumbai').strftime('%a %b %e %Y,  %H:%M')} - #{event.end_at.in_time_zone('Mumbai').strftime('%a %b %e %Y,  %H:%M')}  -- In GMT+05:30"
         end
         row :location
         row :category

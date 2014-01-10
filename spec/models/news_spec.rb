@@ -12,6 +12,9 @@ describe News do
 			expect(news.youtube_id).to eq('foobar')
 			news.youtube_id = 'youtube.com/watch?v=foobar'
 			expect(news.youtube_id).to eq('foobar')
+			news.youtube_id = 'http://www.youtube.com/watch?v=Xvq6gOKkow8'
+			expect(news.youtube_id).to eq('Xvq6gOKkow8')
+
 		end
 	end
 end

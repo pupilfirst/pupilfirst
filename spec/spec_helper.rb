@@ -1,11 +1,17 @@
 require 'simplecov'
-SimpleCov.start "rails"
+SimpleCov.start :rails do
+  add_filter do |src|
+    src.filename =~ /.*app\/admin.*/
+  end
+  add_group 'Controllers', 'app/controllers'
+end
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 # require 'rspec/autorun'
+require 'sucker_punch/testing/inline'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -16,9 +22,22 @@ require 'rspec/rails'
 # option on the command line or in ~/.rspec, .rspec or `.rspec-local`.
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
+Dir[Rails.root.join("spec/helpers/**/*.rb")].each { |f| require f }
+
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
+
+# this part is optional, but it gets SimpleCov working when running
+# specs without zeus (as long as zeus is not running)
+def zeus_running?
+  File.exists? '.zeus.sock'
+end
+
+if !zeus_running?
+  require 'simplecov'
+  SimpleCov.start
+end
 
 RSpec.configure do |config|
   # ## Mock Framework

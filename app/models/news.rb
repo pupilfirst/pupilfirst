@@ -4,6 +4,7 @@ class News < ActiveRecord::Base
   normalize_attributes :title, :body, :featured, :picture, :published_at
 
   normalize_attribute :youtube_id do |value|
+    value = nil unless value.nil? or value.strip.present?
     reg = /.*youtube\.com\/watch\?v=(.*)/
     value =~ reg ? value.match(reg).captures.first  : value
   end
@@ -25,9 +26,11 @@ class News < ActiveRecord::Base
   end
 
   after_save do
-    if featured_changed? and featured and not notification_sent
-      PushNotifyJob.new.async.perform(self.class.to_s.downcase, self.id)
-    end
+    send_push_notification if featured_changed? and featured and not notification_sent
+  end
+
+  def send_push_notification
+    PushNotifyJob.new.async.perform(self.class.to_s.downcase, self.id)
   end
 
   def youtube_thumbnail_url(size = :high)

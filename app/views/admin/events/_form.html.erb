@@ -1,17 +1,69 @@
-<%= semantic_form_for [:admin, @event] do |f| %>
-  <%= f.inputs :name => "Basic" do %>
+<div id="event_form_wrap">
+    <%= semantic_form_for [:admin, @event] do |f| %>
+      <%= f.inputs :name => "Basic" do %>
 
-    <%= f.input :title %>
-    <%= f.input :description, as: :html_editor %>
-    <%= f.input :featured %>
-    <%= f.input :location %>
-    <%= f.input :author %>
-    <%= f.input :category, collection: Category.event_category, prompt: "Choose a event" %>
-    <%= f.input :picture, as: :file %>
-    <%= f.input :remote_picture_url, placeholder: "publicly accesable url" %>
-    <%= f.input :start_at, :label => "Start Date Time", as: :just_datetime_picker, :hint => "Time in 24hr format" %>
-    <%= f.input :end_at, label: "End Date Time", as: :just_datetime_picker, :hint => "Time in 24hr format" %>
-
+        <%= f.input :title %>
+        <%= f.input :description, as: :html_editor %>
+        <%= f.input :featured %>
+        <%= f.input :location %>
+        <%= f.input :author %>
+        <%= f.input :category, collection: Category.event_category, prompt: "Choose a event" %>
+        <%= f.input :picture, as: :file %>
+        <%= f.input :remote_picture_url, placeholder: "publicly accesable url" %>
+      <% end %>
+      <%= f.inputs :name => "Time" do %>
+        <%= f.input :time_zone, collection: ActiveSupport::TimeZone.all.map { |e| [e.to_s, e.name, data: {offset: e.to_s.match(/\((.*)\).*/).captures.first} ] } , include_blank: false, selected: "Mumbai"%>
+        <% Time.use_zone('Mumbai') do  %>
+            <%= f.input :start_at, :label => "Start Date Time", as: :just_datetime_picker, :hint => "Time in 24hr format" %>
+            <%= f.input :end_at, label: "End Date Time", as: :just_datetime_picker, :hint => "Time in 24hr format" %>
+        <% end %>
+      <% end %>
     <%= f.action :submit, :as => :button %>
-  <% end %>
+    <% end %>
+</div>
+<%= javascript_tag do %>
+$(function() {
+    function getDate(type, offset) {
+        var inputs = $("#event_"+type+"_input input").toArray()
+        var date_obj = new Date(Date.parse(inputs[0].value  +" "+ inputs[1].value +":"+ inputs[2].value + " "+ offset))
+        return date_obj
+    }
+    function setDate(type, date_obj, use_utc) {
+        var inputs = $("#event_"+type+"_input input").toArray()
+        var utc = use_utc ? "UTC" : ""
+        var functions = {
+            "fullyear" : "get"+utc+"FullYear",
+            "month" : "get"+utc+"Month",
+            "date" : "get"+utc+"Date",
+            "hours" : "get"+utc+"Hours",
+            "minutes" : "get"+utc+"Minutes"
+        }
+        $(inputs[0]).val(date_obj[functions["fullyear"]]()+"-"+(date_obj[functions["month"]]()+1)+"-"+date_obj[functions["date"]]())
+        $(inputs[1]).val(date_obj[functions["hours"]]())
+        $(inputs[2]).val(date_obj[functions["minutes"]]())
+    }
+    function adjustDate(in_utc) {
+        var names = ["start_at", "end_at"]
+        var offset = $("#event_time_zone option:selected").data("offset")
+        for(var index in names){
+            var type = names[index]
+            setDate(type, getDate(type, offset), in_utc)
+        }
+    }
+    $("#event_time_zone").change(function(){
+        console.log('change occured')
+        adjustDate(false)
+    })
+    $("#event_form_wrap form").submit(function() {
+        adjustDate(true)
+        return true
+    });
+    // var names = ["start_at", "end_at"]
+    // var offset = $("#event_time_zone option:selected").data("offset")
+    // for(var index in names){
+    //     var type = names[index]
+    //     setDate(type, getDate(type, 'UTC'), false)
+    // }
+
+});
 <% end %>

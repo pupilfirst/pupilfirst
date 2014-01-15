@@ -4,6 +4,7 @@ class News < ActiveRecord::Base
   normalize_attributes :title, :body, :featured, :picture, :published_at
 
   normalize_attribute :youtube_id do |value|
+    value = nil unless value.nil? or value.strip.present?
     reg = /.*youtube\.com\/watch\?v=(.*)/
     value =~ reg ? value.match(reg).captures.first  : value
   end

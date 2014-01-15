@@ -17,6 +17,15 @@ describe News do
 			expect(news.youtube_id).to eq('Xvq6gOKkow8')
 		end
 
+		it "will normalize youtube_id to nil if empty string is passed" do
+			news = build(:news)
+
+			news.youtube_id = ' '
+			expect(news.youtube_id).to eq(nil)
+			news.youtube_id = nil
+			expect(news.youtube_id).to eq(nil)
+		end
+
 		it "will give youtube thumbnail urls for respective id" do
 			news = build(:news)
 			youtube_id = 'foobar'

@@ -29,6 +29,8 @@ gem 'versionist'
 group :development do
 	gem 'foreman'
 	gem 'seed-fu', github: 'mbleigh/seed-fu'
+  gem 'guard'
+  gem 'guard-rspec'
 	gem 'pry'
 	gem 'pry-debugger'
 end
@@ -36,13 +38,16 @@ end
 group :test do
 	gem 'simplecov', require: false
 	gem 'rspec', '~> 3.0.0.beta1'
+	gem "rspec-mocks", "~> 3.0.0.beta1"
 	gem "factory_girl_rails", "~> 4.0"
 	gem 'faker'
+	gem 'json_spec', github: 'collectiveidea/json_spec'
 
 end
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0.0.beta'
+	gem 'dotenv'
 end
 
 group :production do

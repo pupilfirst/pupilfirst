@@ -23,8 +23,10 @@ class Event < ActiveRecord::Base
   PUSH_TYPE = "event"
 
   after_save do
-  	if featured_changed? and featured and not notification_sent
-			PushNotifyJob.new.async.perform(self.class.to_s.downcase, self.id)
-  	end
+  	send_push_notification if featured_changed? and featured and not notification_sent
+  end
+
+  def send_push_notification
+    PushNotifyJob.new.async.perform(self.class.to_s.downcase, self.id)
   end
 end

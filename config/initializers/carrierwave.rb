@@ -22,7 +22,7 @@ CarrierWave.configure do |config|
   config.fog_attributes = {'Cache-Control'=>'max-age=315576000'}  # optional, defaults to {}
   config.cache_dir = "#{Rails.root}/tmp/uploads"                  # To let CarrierWave work on heroku
 
-  config.fog_directory    = ENV['S3_BUCKET_NAME']
+  config.fog_directory    = ENV['S3_BUCKET_NAME'] || "svapp-#{Rails.env.to_s}"
   # config.asset_host         = "https://#{ENV["S3_BUCKET_NAME"]}.s3.amazonaws.com/#{ENV['S3_BUCKET_NAME']}"
   config.asset_host         = "http://192.168.1.165/#{ENV['S3_BUCKET_NAME']}" unless Rails.env.production?
   # For testing, upload files to local `tmp` folder.

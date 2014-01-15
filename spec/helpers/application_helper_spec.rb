@@ -7,7 +7,7 @@ end
 describe ApplicationHelper do
   context "valid time instance" do
   	it "formats time with no exception" do
-  		t = Time.mktime(2000,"jan",1,20,15,1)
+  		t = Time.strptime("2000-01-01T20:15:00", '%Y-%m-%dT%H:%M:%S').in_time_zone("Mumbai")
   		d = Date.parse("2000-jan-1")
   		dt = DateTime.parse('2000-01-01T00:00:00+05:30')
   		expect(Includer.new.fmt_time(t)).to eq("2000-01-01 20:15+0530")

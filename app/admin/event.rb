@@ -1,10 +1,25 @@
 ActiveAdmin.register Event do
   controller do
     newrelic_ignore
+
+    before_filter :convert_time_zone, only: [:update, :create]
+
+    def convert_time_zone
+      return false unless params[:event][:time_zone].present?
+      zone = ActiveSupport::TimeZone[params[:event][:time_zone]]
+      e = params[:event]
+      [:start_at, :end_at].each do |date_type|
+        time = Time.parse(e["#{date_type}_date".to_s]+" "+ e["#{date_type}_time_hour".to_s]+":"+ e["#{date_type}_time_minute".to_s] +" UTC") - zone.utc_offset
+        params[:event]["#{date_type}_date".to_s] = time.strftime("%F")
+        params[:event]["#{date_type}_time_hour".to_s] = time.hour
+        params[:event]["#{date_type}_time_minute".to_s] = time.min
+      end
+      params[:event].delete(:time_zone)
+    end
   end
 
   form :partial => "form"
-  permit_params :title, :description, :featured, :start_at_date, :start_at_time_hour, :start_at_time_minute, :end_at_date, :end_at_time_hour, :end_at_time_minute, :location_id, :category_id, :remote_picture_url, :picture, :user_id, :_wysihtml5_mode
+  permit_params :title, :description, :featured, :start_at_date, :start_at_time_hour, :start_at_time_minute, :end_at_date, :end_at_time_hour, :end_at_time_minute, :location_id, :category_id, :remote_picture_url, :picture, :user_id, :_wysihtml5_mode, :time_zone
 
   show do
     h3 event.title

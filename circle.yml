@@ -7,5 +7,5 @@ deployment:
     staging:
       branch: development
       commands:
-        - git push git@heroku.com:svapp-staging.git $CIRCLE_SHA1:development
+        - git push git@heroku.com:svapp-staging.git $CIRCLE_SHA1:master
         - heroku run rake db:migrate --app svapp-staging

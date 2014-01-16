@@ -25,6 +25,9 @@ gem 'turbolinks'
 gem 'uglifier', '>= 1.3.0'
 gem 'urbanairship'
 gem 'versionist'
+gem 'simple_form'
+gem 'omniauth'
+gem 'devise_invitable'
 
 group :development do
 	gem 'foreman'

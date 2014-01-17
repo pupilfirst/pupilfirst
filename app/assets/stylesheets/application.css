@@ -9,6 +9,14 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require_tree .
- *= require active_admin/editor/wysiwyg
  */
+
+body {
+  text-align: center;
+}
+
+#container {
+  margin: 0 auto;
+  width: 960px;
+  text-align: left;
+}

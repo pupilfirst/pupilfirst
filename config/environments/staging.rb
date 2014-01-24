@@ -78,7 +78,7 @@ Svapp::Application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
-  config.action_mailer.default_url_options = { :host => 'http://svlabs.in' }
+  config.action_mailer.default_url_options = { :host => 'http://staging.svlabs.in' }
 
 end
 ActionMailer::Base.smtp_settings = {

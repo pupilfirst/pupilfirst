@@ -1,4 +1,5 @@
-json.(event, :id, :title, :featured, :picture_url)
+json.(event, :id, :title, :featured)
+json.picture_url     event.picture_url(:mid)
 json.start_at 	fmt_time(event.start_at)
 json.end_at 		fmt_time(event.end_at)
 json.created_at 		fmt_time(event.created_at)

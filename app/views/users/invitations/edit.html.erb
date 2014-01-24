@@ -6,6 +6,16 @@
 
   <%= f.input :password %>
   <%= f.input :password_confirmation %>
+  <div>Additional Info</div>
+  <% if resource.startup %>
+  	<span>Linked to Startup: </span>
+  	<%= resource.startup.name %>
+  <% end %>
+  <%= f.input :username %>
+  <%= f.input :title, hint: 'hint: at the startup' %>
+  <%= f.input :twitter_url %>
+  <%= f.input :linkedin_url %>
+  <%= f.input :avatar %>
 
   <%= f.submit t("devise.invitations.edit.submit_button") %>
 <% end %>

@@ -26,16 +26,17 @@ gem 'uglifier', '>= 1.3.0'
 gem 'urbanairship'
 gem 'versionist'
 gem 'simple_form'
+gem 'cocoon'
+gem 'slim'
 gem 'omniauth'
 gem 'devise_invitable'
+gem 'acts-as-taggable-on'
 
 group :development do
 	gem 'foreman'
 	gem 'seed-fu', github: 'mbleigh/seed-fu'
   gem 'guard'
   gem 'guard-rspec'
-	gem 'pry'
-	gem 'pry-debugger'
 end
 
 group :test do
@@ -51,6 +52,8 @@ end
 group :development, :test do
   gem 'rspec-rails', '~> 3.0.0.beta'
 	gem 'dotenv'
+	gem 'pry'
+	gem 'pry-debugger'
 end
 
 group :production do

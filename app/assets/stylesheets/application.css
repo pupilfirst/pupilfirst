@@ -20,3 +20,12 @@ body {
   width: 960px;
   text-align: left;
 }
+
+.footnote{
+	bottom: 5px;
+	font-size: 10px;
+	position: absolute;
+	text-align: center;
+  margin: 0 auto;
+  width: 960px;
+}

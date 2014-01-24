@@ -1,0 +1,5 @@
+<%= form_for User.new, url: {action: "send_invite", partial: true} do |f| %>
+  <%= f.text_field :fullname, placeholder: 'Full Name' %>
+  <%= f.text_field :email, placeholder: 'Email' %>
+  <%= f.submit "Invite" %>
+<% end %>

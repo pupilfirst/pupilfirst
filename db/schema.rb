@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140116152022) do
+ActiveRecord::Schema.define(version: 20140124090335) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -112,6 +112,43 @@ ActiveRecord::Schema.define(version: 20140116152022) do
     t.datetime "updated_at"
   end
 
+  create_table "startups", force: true do |t|
+    t.string   "name"
+    t.string   "logo"
+    t.string   "pitch"
+    t.string   "website"
+    t.text     "about"
+    t.string   "email"
+    t.string   "phone"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "facebook_link"
+    t.string   "twitter_link"
+  end
+
+  create_table "startups_categories", id: false, force: true do |t|
+    t.integer "startup_id"
+    t.integer "category_id"
+  end
+
+  create_table "taggings", force: true do |t|
+    t.integer  "tag_id"
+    t.integer  "taggable_id"
+    t.string   "taggable_type"
+    t.integer  "tagger_id"
+    t.string   "tagger_type"
+    t.string   "context",       limit: 128
+    t.datetime "created_at"
+  end
+
+  add_index "taggings", ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true, using: :btree
+
+  create_table "tags", force: true do |t|
+    t.string "name"
+  end
+
+  add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
+
   create_table "users", force: true do |t|
     t.string   "username"
     t.string   "email"
@@ -139,6 +176,10 @@ ActiveRecord::Schema.define(version: 20140116152022) do
     t.integer  "invitation_limit"
     t.integer  "invited_by_id"
     t.string   "invited_by_type"
+    t.integer  "startup_id"
+    t.string   "title"
+    t.string   "linkedin_url"
+    t.string   "twitter_url"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

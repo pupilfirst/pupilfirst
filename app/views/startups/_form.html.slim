@@ -1,0 +1,37 @@
+- session[:startup_id] = @startup.id
+- @startup.founders << current_user if @startup.founders.empty?
+- if @startup.errors.any?
+  h4 Errors
+  = @startup.errors.full_messages.first if @startup.errors.any?
+= simple_form_for @startup do |f|
+  = f.input :name, label: "Startup Name"
+  = f.input :logo, as: :file
+  = f.input :pitch, as: :text
+  = f.input :website
+  = f.input :about, as: :text
+  = f.input :twitter_link
+  = f.input :facebook_link
+  = f.association :categories, collection: Category.startup_category, as: :select
+  h3 Founders
+  #founders
+    - @startup.founders.each do |founder|
+      .fullname
+        = "#{founder.fullname}(#{founder.email})"
+    .links
+      - if @startup.new_record?
+        = "Complete the Form and submit to add more co-founders"
+      - else
+        = link_to 'Invite More Co-Founders', '#', id: 'invite_link'
+
+  h4 Other details
+  = f.input :email
+  = f.input :phone
+  = f.submit
+
+javascript:
+  $(function(){
+    $("#invite_link").click(function(){
+      var opts = "menubar=no,location=no,resizable=no,scrollbars=yes,status=false,top=200,left=400,width=500,height=300";
+      var inviteWindow = window.open(window.location.origin+"/users/invite?partial=true&startup_id=#{}", "inviteWindow", opts);
+    })
+  })

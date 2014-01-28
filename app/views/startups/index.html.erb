@@ -28,9 +28,7 @@
         <td><%= startup.categories.map &:name %></td>
         <td><%= startup.email %></td>
         <td><%= startup.phone %></td>
-        <td><%= link_to 'Show', startup %></td>
         <td><%= link_to 'Edit', edit_startup_path(startup) %></td>
-        <td><%= link_to 'Destroy', startup, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -38,4 +36,4 @@
 
 <br>
 
-<%= link_to 'New Startup', new_startup_path %>
+<%= link_to 'New Startup', new_startup_path if current_user.startup.nil? %>

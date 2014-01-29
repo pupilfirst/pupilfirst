@@ -1,0 +1,28 @@
+
+= semantic_form_for [:admin, @startup] do |f|
+  = f.inputs :name, :logo, :pitch, :website, :about, :twitter_link, :facebook_link, :email, :phone
+  = f.inputs do
+    = f.input :categories, :collection => Category.startup_category
+    = f.inputs do
+      = f.has_many :founders, :allow_destroy => true, :heading => 'Founders', :new_record => true do |cf|
+        = cf.input :title
+    h3 Founders
+    #founders
+      - @startup.founders.each do |founder|
+        .fullname
+          = "#{founder.fullname}(#{founder.email})"
+      .links
+        - if @startup.new_record?
+          = "Complete the Form and submit to add more co-founders"
+        - else
+          = link_to 'Invite More Co-Founders', '#', id: 'invite_link'
+
+    = f.submit
+
+javascript:
+  $(function(){
+    $("#invite_link").click(function(){
+      var opts = "menubar=no,location=no,resizable=no,scrollbars=yes,status=false,top=200,left=400,width=500,height=300";
+      var inviteWindow = window.open(window.location.origin+"/users/invite?partial=true&startup_id=#{}", "inviteWindow", opts);
+    })
+  })

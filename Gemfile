@@ -31,6 +31,7 @@ gem 'slim'
 gem 'omniauth'
 gem 'devise_invitable'
 gem 'acts-as-taggable-on'
+gem 'textacular', '~> 3.0'
 
 group :development do
 	gem 'foreman'

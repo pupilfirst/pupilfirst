@@ -3,7 +3,12 @@ class V1::StartupsController < V1::BaseController
 	def index
 		category = Category.startup_category.find_by_name(params['category']) rescue nil
 		clause = category ? ["category_id = ?", category.id] : nil
-    @startups = Startup.where(clause)
+		@startups = if params[:search_term]
+				Startup.fuzzy_search(name: params[:search_term])
+			else
+				Startup.joins(:categories).where(clause).order("id desc").uniq
+			end
+		@startups = @startups * 20 if Rails.env.development?
     respond_to do |format|
         format.json
     end

@@ -21,7 +21,7 @@
     <% @startups.each do |startup| %>
       <tr>
         <td><%= startup.name %></td>
-        <td><%= startup.logo %></td>
+        <td><%= startup.logo_url %></td>
         <td><%= startup.pitch %></td>
         <td><%= startup.website %></td>
         <td><%= startup.about %></td>
@@ -36,4 +36,4 @@
 
 <br>
 
-<%= link_to 'New Startup', new_startup_path if current_user.startup.nil? %>
+<%= link_to 'New Startup', new_startup_path if @current_user.startup.nil? %>

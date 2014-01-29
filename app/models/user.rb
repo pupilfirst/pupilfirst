@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   mount_uploader :avatar, AvatarUploader
 	process_in_background :avatar
   normalize_attribute :skip_password do |value|
-    value.is_a?(String) ? value.downcase == 'true' : false
+    value.is_a?(String) ? value.downcase == 'true' : value
   end
 
 	def to_s

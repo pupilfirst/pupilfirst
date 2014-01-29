@@ -3,12 +3,11 @@
 include ActionDispatch::TestProcess
 
 FactoryGirl.define do
-  factory :user, aliases: [:author] do
-    fullname "John Doe"
-    username  "Doe"
-    email 		"foo@bar.com"
-	  password               "password"
-  	password_confirmation  "password"
+  factory :user, aliases: [:author, :founder] do
+    fullname { "#{Faker::Name.first_name} #{Faker::Name.last_name}" }
+    username  { Faker::Name.first_name }
+    email 		{ Faker::Internet.email }
+    skip_password true
   end
 
 	factory :startup_application do |f|
@@ -20,17 +19,17 @@ FactoryGirl.define do
 	end
 
 	factory :news_category,  class: Category do |f|
-		f.name "News Category"
+		f.name {Faker::Lorem.words(2).join(' ')}
 		f.category_type :news
 	end
 
 	factory :event_category,  class: Category do |f|
-		f.name "News Category"
+		f.name {Faker::Lorem.words(2).join(' ')}
 		f.category_type :event
 	end
 
 	factory :startup_category,  class: Category do |f|
-		f.name "Startup Category"
+		f.name {Faker::Lorem.words(2).join(' ')}
 		f.category_type :startup
 	end
 
@@ -70,6 +69,7 @@ FactoryGirl.define do
 		f.website   {Faker::Internet.domain_name}
 		f.email 		{Faker::Internet.email}
 		f.phone  	{Faker::PhoneNumber.cell_phone}
+		f.founders {[create(:founder), create(:founder)]}
 		f.category_ids {[create(:startup_category).id]}
   end
 end

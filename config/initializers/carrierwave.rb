@@ -1,4 +1,4 @@
-fog_credentials = if Rails.env.production?
+fog_credentials = if Rails.env.production? or Rails.env == 'staging'
   {
     :provider               => 'AWS',                        # required
     :aws_access_key_id      => ENV['AWS_ACCESS_KEY_ID'],     # required

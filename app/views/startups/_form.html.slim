@@ -5,7 +5,7 @@
   = @startup.errors.full_messages.first if @startup.errors.any?
 = simple_form_for @startup do |f|
   = f.input :name, label: "Startup Name"
-  = f.input :logo, as: :file
+  = f.input :logo, as: :file, required: false
   = f.input :pitch, as: :text
   = f.input :website
   = f.input :about, as: :text

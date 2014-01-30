@@ -23,7 +23,6 @@ class UsersController < ApplicationController
 			@user.startup = Startup.find(session[:startup_id])
 			@user.save!
 		else
-			p "*"*80
 			@user.errors[:exist] = "this user is associated with other startup"
 		end
   end

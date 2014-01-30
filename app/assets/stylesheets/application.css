@@ -9,6 +9,7 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
+ *= require bootstrap.min
  */
 
 body {
@@ -24,7 +25,6 @@ body {
 .footnote{
 	bottom: 5px;
 	font-size: 10px;
-	position: absolute;
 	text-align: center;
   margin: 0 auto;
   width: 960px;

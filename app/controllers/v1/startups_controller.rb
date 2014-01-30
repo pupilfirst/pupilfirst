@@ -8,7 +8,6 @@ class V1::StartupsController < V1::BaseController
 			else
 				Startup.joins(:categories).where(clause).order("id desc").uniq
 			end
-		@startups = @startups * 20 if Rails.env.development?
     respond_to do |format|
         format.json
     end

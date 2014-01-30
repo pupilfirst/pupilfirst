@@ -39,6 +39,11 @@ describe StartupsController do
       get :index, {}, valid_session
       expect(assigns(:startups)).to eq([startup])
     end
+
+    it "assigns empty array to @startups if user dosent' have a startup linked" do
+      get :index, {}, valid_session
+      expect(assigns(:startups)).to eq([])
+    end
   end
 
   describe "GET show" do

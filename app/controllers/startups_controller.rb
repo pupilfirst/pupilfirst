@@ -3,7 +3,7 @@ class StartupsController < InheritedResources::Base
 
 	def index
 		@current_user = current_user
-		@startups = [current_user.startup]
+		@startups = current_user.startup.present? ? [current_user.startup] : []
 	end
 
 	def show

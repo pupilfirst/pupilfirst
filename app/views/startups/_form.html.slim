@@ -6,12 +6,12 @@
 = simple_form_for @startup do |f|
   = f.input :name, label: "Startup Name"
   = f.input :logo, as: :file, required: false
-  = f.input :pitch, as: :text
+  = f.input :pitch, as: :text, hint: "max 10 words"
   = f.input :website
   = f.input :about, as: :text
   = f.input :twitter_link
   = f.input :facebook_link
-  = f.association :categories, collection: Category.startup_category, as: :select
+  = f.association :categories, collection: Category.startup_category, as: :select, hint: "Min:1, Max:3 categories"
   h3 Founders
   #founders
     - @startup.founders.each do |founder|

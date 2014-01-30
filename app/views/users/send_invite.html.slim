@@ -1,2 +1,3 @@
 - @user.errors.each do |e, message|
 	= message
+= "Invitation sent" unless @user.errors.any?

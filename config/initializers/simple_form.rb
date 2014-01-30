@@ -53,10 +53,9 @@ SimpleForm.setup do |config|
     b.optional :readonly
 
     b.use :label
-    b.use :label
+    b.use :hint,  wrap_with: { tag: 'span', class: 'help-block' }
     b.wrapper :right_column, tag: :div do |component|
       component.use :input
-      component.use :hint,  wrap_with: { tag: 'span', class: 'help-block' }
       component.use :error, wrap_with: { tag: 'span', class: 'help-block has-error' }
     end
 

@@ -1,0 +1,21 @@
+doctype html
+html
+  head
+    title Svapp
+    meta name="keywords" content="startup village, kerala, svapp, svlabs"
+    = stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true
+    = javascript_include_tag "application", "data-turbolinks-track" => true
+    = csrf_meta_tags
+    = yield :head
+
+  body
+    .notice
+      = notice
+    - if alert.present?
+      .alert
+        = alert
+
+    #container
+      == yield
+    .footnote
+      | MVP product in β

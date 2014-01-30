@@ -3,7 +3,7 @@
 - if @startup.errors.any?
   h4 Errors
   = @startup.errors.full_messages.first if @startup.errors.any?
-= simple_form_for @startup do |f|
+= simple_form_for @startup, :html => { :class => 'form-horizontal' } do |f|
   = f.input :name, label: "Startup Name"
   = f.input :logo, as: :file, required: false
   = f.input :pitch, as: :text, hint: "max 10 words"

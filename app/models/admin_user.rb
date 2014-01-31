@@ -3,4 +3,9 @@ class AdminUser < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable,
          :recoverable, :rememberable, :trackable, :validatable
+
+  mount_uploader :avatar, AvatarUploader
+	process_in_background :avatar
+  normalize_attribute :password, :password_confirmation, :username, :fullname, :avatar
+
 end

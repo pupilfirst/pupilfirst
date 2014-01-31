@@ -1,7 +1,7 @@
 class Event < ActiveRecord::Base
   belongs_to :location
   belongs_to :category
-  belongs_to :author, class_name: 'User', foreign_key: :user_id
+  belongs_to :author, class_name: 'AdminUser', foreign_key: :user_id
   mount_uploader :picture, FeedImageUploader
 	process_in_background :picture
 

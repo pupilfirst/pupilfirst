@@ -3,7 +3,16 @@
 include ActionDispatch::TestProcess
 
 FactoryGirl.define do
-  factory :user, aliases: [:author, :founder] do
+
+  factory :admin_user, aliases: [:author] do
+    fullname { "#{Faker::Name.first_name} #{Faker::Name.last_name}" }
+    username  { Faker::Name.first_name }
+    email 		{ Faker::Internet.email }
+    password  "password"
+    password_confirmation "password"
+  end
+
+  factory :user, aliases: [:founder] do
     fullname { "#{Faker::Name.first_name} #{Faker::Name.last_name}" }
     username  { Faker::Name.first_name }
     email 		{ Faker::Internet.email }

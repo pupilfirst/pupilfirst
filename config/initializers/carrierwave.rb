@@ -24,7 +24,7 @@ CarrierWave.configure do |config|
 
   config.fog_directory    = ENV['S3_BUCKET_NAME'] || "svapp-#{Rails.env.to_s}"
   # config.asset_host         = "https://#{ENV["S3_BUCKET_NAME"]}.s3.amazonaws.com/#{ENV['S3_BUCKET_NAME']}"
-  config.asset_host         = "http://#{ENV['HOST'] or "localhost:3000"}/#{ENV['S3_BUCKET_NAME']}" unless Rails.env.production?
+  config.asset_host         = ENV['ASSET_HOST']
   # For testing, upload files to local `tmp` folder.
   if Rails.env.production?
     config.storage = :fog

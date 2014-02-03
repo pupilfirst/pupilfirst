@@ -8,4 +8,7 @@ class AdminUser < ActiveRecord::Base
 	process_in_background :avatar
   normalize_attribute :password, :password_confirmation, :username, :fullname, :avatar
 
+  def to_s
+  	fullname or username
+  end
 end

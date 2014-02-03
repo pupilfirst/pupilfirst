@@ -1,0 +1,46 @@
+p#notice
+  = notice
+table.table.table-hover
+  tbody
+    tr
+      td Name:
+      td
+        = @startup.name
+    tr
+      td Logo:
+      td
+        = image_tag @startup.logo_url(:thumb)
+    tr
+      td Pitch:
+      td
+        = @startup.pitch
+    tr
+      td Website:
+      td
+        = @startup.website
+    tr
+      td About:
+      td
+        = @startup.about
+    tr
+      td Categories:
+      td
+        = @startup.categories.map &:name
+    tr
+      td Email:
+      td
+        = @startup.email
+    tr
+      td Phone:
+      td
+        = @startup.phone
+    tr
+      td Facebook Link:
+      td
+        = @startup.facebook_link
+    tr
+      td Twitter Link:
+      td
+        = @startup.twitter_link
+
+= link_to 'Edit', edit_startup_path(@startup), {class: 'btn'}

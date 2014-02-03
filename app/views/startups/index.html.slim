@@ -1,0 +1,42 @@
+<h1>Startups</h1>
+
+table.table.table-hover
+  thead
+    tr
+      th Name
+      th Logo
+      th Pitch
+      th Website
+      th About
+      th Categories
+      th Email
+      th Phone
+      th Facebook Link
+      th Twitter Link
+      th
+  tbody
+    - @startups.each do |startup|
+      td
+        = startup.name
+      td
+        = image_tag startup.logo_url(:thumb)
+      td
+        = startup.pitch
+      td
+        = startup.website
+      td
+        = startup.about.nil? ? nil : startup.about[0..50]
+      td
+        = startup.categories.map &:name
+      td
+        = startup.email
+      td
+        = startup.phone
+      td
+        = startup.facebook_link
+      td
+        = startup.twitter_link
+      td
+        = link_to 'Edit', edit_startup_path(startup)
+
+= link_to 'New Startup', new_startup_path if @current_user.startup.nil?

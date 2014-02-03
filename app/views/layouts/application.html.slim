@@ -14,8 +14,9 @@ html
     - if alert.present?
       .alert
         = alert
-
-    #container
+    #nav-menu
+      = render 'layouts/nav_menu' if current_user
+    .container
       == yield
     .footnote
-      | MVP product in β
+      | MVP product ; β

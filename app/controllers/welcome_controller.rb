@@ -1,6 +1,10 @@
 class WelcomeController < ApplicationController
 
 	def index
-		redirect_to controller: :startups if current_user
+		if current_user and current_user.startup.present?
+			redirect_to current_user.startup
+		elsif current_user
+			redirect_to controller: :startups
+		end
 	end
 end

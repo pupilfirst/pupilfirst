@@ -23,7 +23,8 @@ ActiveAdmin.register Startup do
     f.inputs do
       f.input :categories, :collection => Category.startup_category
       f.inputs do
-        f.has_many :founders, :allow_destroy => false, :heading => 'Founders', :new_record => true do |cf|
+        f.has_many :founders, :allow_destroy => true, :heading => 'Founders', :new_record => true do |cf|
+          cf.input :id, as: :hidden
           cf.input :fullname
           cf.input :email
           cf.input :skip_password, as: :hidden, :input_html => { :value => true}
@@ -32,6 +33,6 @@ ActiveAdmin.register Startup do
     end
     f.actions
   end
-  permit_params :name, :pitch, :website, :about, :email, :phone, :logo, :facebook_link, :twitter_link, {category_ids: []}, {founders_attributes: [:fullname, :email, :skip_password]}, :created_at, :updated_at
+  permit_params :name, :pitch, :website, :about, :email, :phone, :logo, :facebook_link, :twitter_link, {category_ids: []}, {founders_attributes: [:id, :fullname, :email, :skip_password]}, :created_at, :updated_at
 
 end

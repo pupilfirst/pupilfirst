@@ -1,13 +1,24 @@
 class UsersController < ApplicationController
-
+  before_filter :authenticate_user!, only: [:update, :edit]
 	before_filter do
 		self.class.layout false if params[:partial].present?
 	end
 
   def show
+    @user = User.find(params[:id])
   end
 
   def edit
+    @user = params[:id].present? ? User.find(params[:id]) : current_user
+  end
+
+  def update
+    @user = User.find(params[:id])
+    if @user.update_attributes(user_params)
+      redirect_to action: :show
+    else
+      respond_to :html
+    end
   end
 
   def new
@@ -37,6 +48,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-      params.require(:user).permit(:fullname, :username, :email)
+      params.require(:user).permit(:fullname, :username, :email, :twitter_url, :linkedin_url, :avatar, :startup_id, :title)
   end
 end

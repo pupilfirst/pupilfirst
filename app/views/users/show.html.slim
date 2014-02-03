@@ -1,0 +1,53 @@
+H3 User Details
+br
+  br
+    .container-fluid.span10
+      .row-fluid
+        .span2
+        	= image_tag @user.avatar_url, class: 'img-circle'
+        .span8
+        	table.table.table-hover
+        		tbody
+        			tr
+        				td Full Name
+        				td
+        					= @user.fullname
+        			tr
+        				td Email
+        				td
+        					= @user.email
+        			tr
+        				td Username
+        				td
+        					= @user.username
+        			tr
+        				td Startup
+        				td
+        					= @user.startup.try(:name)
+        			tr
+        				td Title
+        				td
+        					= @user.title
+        			tr
+        				td Linked-in url
+        				td
+        					= @user.linkedin_url
+        			tr
+        				td Twitter url
+        				td
+        					= @user.twitter_url
+        .span2
+          .btn-group
+            a.btn.dropdown-toggle.btn-info data-toggle="dropdown" href="#"
+              | Action
+              span.icon-cog.icon-white
+              span.caret
+            ul.dropdown-menu
+              li
+                = link_to '/profile_edit' do
+                  span.icon-wrench
+                  | Edit Profile
+              li
+              	= link_to @user, method: :delete do
+                  span.icon-trash
+                  | Delete

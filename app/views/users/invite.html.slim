@@ -1,0 +1,4 @@
+= form_for User.new, url: {action: "send_invite"}, html: {class: 'form-horizontal'} do |f|
+  = f.text_field :fullname, placeholder: 'Full Name'
+  = f.text_field :email, placeholder: 'Email'
+  = f.submit "Invite"

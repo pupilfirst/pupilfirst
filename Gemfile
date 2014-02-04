@@ -38,6 +38,7 @@ group :development do
 	gem 'seed-fu', github: 'mbleigh/seed-fu'
   gem 'guard'
   gem 'guard-rspec'
+  gem 'terminal-notifier-guard'
 end
 
 group :test do

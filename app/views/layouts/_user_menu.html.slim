@@ -1,0 +1,22 @@
+.nav-collapse.collapse.navbar-responsive-collapse
+  ul.nav
+    li.active
+      = link_to "My Startup", current_user.startup
+    / li
+    /   a href="#"
+    /     | Link
+  ul.nav.pull-right
+    li.dropdown
+      a.dropdown-toggle data-toggle="dropdown" href="#"
+        | Account
+        b.caret
+      ul.dropdown-menu
+        li
+          = link_to "Edit Profile", '/profile_edit'
+        li
+          a href="#"
+            = link_to :logout
+        / li.divider
+        / li
+        /   a href="#"
+        /     | Separated link

@@ -17,13 +17,16 @@ ActiveAdmin.register User do
     newrelic_ignore
   end
 
-  permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id
+  permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url, :title
 
   form do |f|
     f.inputs "User details" do
       f.input :username
       f.input :email
       f.input :fullname
+      f.input :twitter_url
+      f.input :linkedin_url
+      f.input :title
       f.input :avatar, as: :file
       f.input :remote_avatar_url
       f.input :startup

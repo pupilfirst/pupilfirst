@@ -1,5 +1,9 @@
 class StartupsController < InheritedResources::Base
 	before_filter :authenticate_user!
+	after_filter only: [:create] do
+		@startup.founders << current_user
+		@startup.save!
+	end
 
 	def index
 		@current_user = current_user

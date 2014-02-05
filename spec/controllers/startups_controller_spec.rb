@@ -91,15 +91,6 @@ describe StartupsController do
       end
     end
 
-    describe "with invalid params" do
-      it "assigns a newly created but unsaved startup as @startup" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        Startup.any_instance.stub(:save).and_return(false)
-        post :create, {:startup => { "name" => "invalid value" }}, valid_session
-        expect(assigns(:startup)).to be_a_new(Startup)
-      end
-
-    end
   end
 
   describe "PUT update" do

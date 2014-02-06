@@ -14,8 +14,7 @@
         li
           = link_to "Edit Profile", '/profile_edit'
         li
-          a href="#"
-            = link_to :logout
+          = link_to('Logout', destroy_user_session_path, :method => :delete)
         / li.divider
         / li
         /   a href="#"

@@ -7,9 +7,9 @@
   = f.input :name, label: "Startup Name"
   = f.input :logo, as: :file, required: false
   = f.input :remote_logo_url, required: false, label: "or Logo URL", hint: "URL to the image"
-  = f.input :pitch, as: :text, hint: "max 10 words"
+  = f.input :pitch, as: :text, hint: "max 10 words",  input_html: {rows: 8, class:'span5', placeholder: 'max 10 words'}
   = f.input :website
-  = f.input :about, as: :text, hint: "500 words max"
+  = f.input :about, as: :text, hint: "min 10 words, 500 words max", input_html: {rows: 10, class:'span8', placeholder: 'min 10 words, 500 words max'}
   = f.input :twitter_link
   = f.input :facebook_link
   = f.association :categories, collection: Category.startup_category, as: :select, hint: "Min:1, Max:3 categories"
@@ -25,8 +25,8 @@
         = link_to 'Invite More Co-Founders', '#', id: 'invite_link'
 
   h4 Other details
-  = f.input :email
-  = f.input :phone
+  = f.input :email, label: "Company's email"
+  = f.input :phone, label: "Company's contact number"
   = f.submit
 
 javascript:
@@ -40,7 +40,7 @@ javascript:
         var value = $(ele).val();
 
         if (value.length == 0) {
-            $(help_ele).html(0);
+            $(help_ele).html(0+"/"+max_words+ " words");
             return;
         }
 
@@ -50,7 +50,7 @@ javascript:
         // var charCount = value.trim().length;
         // var charCountNoSpace = value.replace(regex, '').length;
 
-        $(help_ele).html(wordCount+"/"+max_words);
+        $(help_ele).html(wordCount+"/"+max_words+" words");
     };
     update_pitch = function(){
       var help_ele = $(".startup_pitch .help-block")

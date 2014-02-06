@@ -21,4 +21,16 @@ class Startup < ActiveRecord::Base
   mount_uploader :logo, AvatarUploader
   accepts_nested_attributes_for :founders
   normalize_attribute :name, :pitch, :about, :email, :phone
+
+  normalize_attribute :twitter_link do |value|
+    value = "http://#{value}" if value =~ /^twitter\.com.*/
+    value = "http://twitter.com/#{value}"  unless value =~ /[http:\/\/]*twitter\.com.*/
+    value if value =~ /^http[s]*:\/\/twitter\.com.*/
+  end
+
+  normalize_attribute :facebook_link do |value|
+    value = "http://#{value}" if value =~ /^facebook\.com.*/
+    value = "http://facebook.com/#{value}"  unless value =~ /[http:\/\/]*facebook\.com.*/
+    value if value =~ /^http[s]*:\/\/facebook\.com.*/
+  end
 end

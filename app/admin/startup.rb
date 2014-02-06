@@ -19,7 +19,17 @@ ActiveAdmin.register Startup do
 
   # form :partial => "admin/startups/form"
   form do |f|
-    f.inputs :name, :logo, :pitch, :website, :about, :twitter_link, :facebook_link, :email, :phone
+    f.inputs do
+      f.input :name
+      f.input :logo
+      f.input :website
+      f.input :pitch, :input_html => { :maxlength => nil  }
+      f.input :about, :input_html => { :maxlength => nil  }
+      f.input :twitter_link
+      f.input :facebook_link
+      f.input :email
+      f.input :phone
+    end
     f.inputs do
       f.input :categories, :collection => Category.startup_category
       f.inputs do

@@ -21,6 +21,6 @@ class StartupsController < InheritedResources::Base
 	end
 
 	def permitted_params
-	  {:startup => params.fetch(:startup, {}).permit(:name, :pitch, :website, :about, :email, :phone, :logo, :facebook_link, :twitter_link, {category_ids: []})}
+	  {:startup => params.fetch(:startup, {}).permit(:name, :pitch, :website, :about, :email, :phone, :logo, :remote_logo_url, :facebook_link, :twitter_link, {category_ids: []})}
 	end
 end

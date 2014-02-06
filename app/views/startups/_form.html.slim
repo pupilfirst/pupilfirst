@@ -6,6 +6,7 @@
 = simple_form_for @startup, :html => { :class => 'form-horizontal' } do |f|
   = f.input :name, label: "Startup Name"
   = f.input :logo, as: :file, required: false
+  = f.input :remote_logo_url, required: false, label: "or Logo URL", hint: "URL to the image"
   = f.input :pitch, as: :text, hint: "max 10 words"
   = f.input :website
   = f.input :about, as: :text, hint: "500 words max"

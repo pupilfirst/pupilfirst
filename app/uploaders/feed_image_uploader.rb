@@ -31,6 +31,7 @@ class FeedImageUploader < CarrierWave::Uploader::Base
   # def scale(width, height)
   #   # do something
   # end
+  process :resize_to_fit => [1024, 1024]
 
   # Create different versions of your uploaded files:
   version :thumb do

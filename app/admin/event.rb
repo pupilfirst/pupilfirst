@@ -32,6 +32,22 @@ ActiveAdmin.register Event do
     div event.author
     div event.location.try :name
   end
+  index do
+    column :title
+    column :description do |event|
+      event.description[0..100] rescue nil
+    end
+    column :featured
+    column :start_at do |event|
+      event.start_at.in_time_zone('Mumbai').strftime('%a %b %e %Y, %H:%M') rescue nil
+    end
+    column :end_at do |event|
+      event.end_at.in_time_zone('Mumbai').strftime('%a %b %e %Y, %H:%M') rescue nil
+    end
+    column :author
+    column :location
+    default_actions
+  end
 
     show do |event|
       attributes_table do

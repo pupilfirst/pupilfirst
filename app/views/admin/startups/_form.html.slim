@@ -10,12 +10,12 @@
     = f.input :facebook_link
     = f.input :email
     = f.input :phone
-    = f.input :categories, collection: Category.startup_category, hint: "Max: 3, Min: 1"
-    = f.input :founders
+    = f.input :categories, collection: Category.startup_category, hint: "Max: 3, Min: 1", input_html: {style: "width: 400px;"}
+    = f.input :founders, input_html: {style: "width: 400px;"}
     = f.submit
 
 javascript:
   $(function(){
-      $('#startup_founder_ids').select2({ placeholder : 'Select Category' });
-      $('#startup_category_ids').select2({ placeholder : 'Add Founder' });
+      $('#startup_founder_ids').select2({ placeholder : 'Add Founder' });
+      $('#startup_category_ids').select2({ placeholder : 'Select Category' });
   })

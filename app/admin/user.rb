@@ -17,7 +17,7 @@ ActiveAdmin.register User do
     newrelic_ignore
   end
 
-  permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url, :title
+  permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url, :title, :skip_password
 
   form do |f|
     f.inputs "User details" do
@@ -30,6 +30,7 @@ ActiveAdmin.register User do
       f.input :avatar, as: :file
       f.input :remote_avatar_url
       f.input :startup
+      f.input :skip_password, as: :hidden, input_html:{value: true}
     end
     f.actions
   end

@@ -34,4 +34,11 @@ describe User do
 			expect( user.linkedin_url).to eq("http://linkedin.com/in/gouthamvel")
 		end
 	end
+
+	context "non_founders scopes" do
+		it "returns users who are not related to any startup" do
+			user = create(:user, startup: nil)
+			expect(User.non_founders.map &:id).to include(user.id)
+		end
+	end
 end

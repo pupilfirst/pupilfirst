@@ -3,13 +3,16 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :invitable, :database_authenticatable,
          :recoverable, :rememberable, :trackable, :validatable, :confirmable, :omniauthable
-	has_many :news, :class_name => "News", :foreign_key => "user_id"
-	has_many :events
-	belongs_to :startup
+  has_many :news, :class_name => "News", :foreign_key => "user_id"
+  has_many :events
+  belongs_to :startup
+  scope :non_founders, -> { where("startup_id IS NULL") }
 
   validates_uniqueness_of :username
+  attr_reader :skip_password
   mount_uploader :avatar, AvatarUploader
-	process_in_background :avatar
+  process_in_background :avatar
+  normalize_attribute :startup_id
   normalize_attribute :skip_password do |value|
     value.is_a?(String) ? value.downcase == 'true' : value
   end
@@ -26,7 +29,7 @@ class User < ActiveRecord::Base
     value if value =~ /^http[s]*:\/\/linkedin\.com.*/
   end
 
-	def to_s
-		fullname or username
-	end
+  def to_s
+    fullname or username
+  end
 end

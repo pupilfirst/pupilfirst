@@ -140,8 +140,8 @@ ActiveAdmin.setup do |config|
   # Active Admin resources and pages from here.
   #
   # config.before_filter :do_something_awesome
-  
-  
+
+
   # == Setting a Favicon
   #
   # config.favicon = '/assets/favicon.ico'
@@ -192,6 +192,14 @@ ActiveAdmin.setup do |config|
   #       menu.add label: "My Great Website", url: "http://www.mygreatwebsite.com", html_options: { target: :blank }
   #     end
   #   end
+  config.namespace :admin do |admin|
+
+    # This block will edit the default menu
+    admin.build_menu do |menu|
+      menu.add :label => "Startup", :priority => 0
+    end
+
+  end
 
 
   # == Download Links

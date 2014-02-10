@@ -14,7 +14,7 @@ FactoryGirl.define do
 
   factory :user, aliases: [:founder] do
     fullname { "#{Faker::Name.first_name} #{Faker::Name.last_name}" }
-    username  { Faker::Name.first_name }
+    username  { Faker::Lorem.characters(9) }
     email 		{ Faker::Internet.email }
     skip_password true
   end

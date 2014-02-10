@@ -1,28 +1,21 @@
 
 = semantic_form_for [:admin, @startup] do |f|
-  = f.inputs :name, :logo, :pitch, :website, :about, :twitter_link, :facebook_link, :email, :phone
-  = f.inputs do
-    = f.input :categories, :collection => Category.startup_category
-    = f.inputs do
-      = f.has_many :founders, :allow_destroy => true, :heading => 'Founders', :new_record => true do |cf|
-        = cf.input :title
-    h3 Founders
-    #founders
-      - @startup.founders.each do |founder|
-        .fullname
-          = "#{founder.fullname}(#{founder.email})"
-      .links
-        - if @startup.new_record?
-          = "Complete the Form and submit to add more co-founders"
-        - else
-          = link_to 'Invite More Co-Founders', '#', id: 'invite_link'
-
+  = f.inputs
+    = f.input :name
+    = f.input :logo
+    = f.input :pitch, input_html: {maxlength: nil}
+    = f.input :website, input_html: {maxlength: nil}
+    = f.input :about
+    = f.input :twitter_link
+    = f.input :facebook_link
+    = f.input :email
+    = f.input :phone
+    = f.input :categories, collection: Category.startup_category, hint: "Max: 3, Min: 1"
+    = f.input :founders
     = f.submit
 
 javascript:
   $(function(){
-    $("#invite_link").click(function(){
-      var opts = "menubar=no,location=no,resizable=no,scrollbars=yes,status=false,top=200,left=400,width=500,height=300";
-      var inviteWindow = window.open(window.location.origin+"/users/invite?partial=true&startup_id=#{}", "inviteWindow", opts);
-    })
+      $('#startup_founder_ids').select2({ placeholder : 'Select Category' });
+      $('#startup_category_ids').select2({ placeholder : 'Add Founder' });
   })

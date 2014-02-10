@@ -27,6 +27,6 @@ class User < ActiveRecord::Base
   end
 
 	def to_s
-		username
+		fullname or username
 	end
 end

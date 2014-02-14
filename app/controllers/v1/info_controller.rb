@@ -1,15 +1,20 @@
 class V1::InfoController < V1::BaseController
 
-	def mentors
+  def mentors
     respond_to do |format|
         format.json
     end
-	end
+  end
 
-	def advisory_council
+  def advisory_council
     respond_to do |format|
         format.json
     end
-	end
+  end
 
+  def startup_stats
+    respond_to do |format|
+        format.json
+    end
+  end
 end

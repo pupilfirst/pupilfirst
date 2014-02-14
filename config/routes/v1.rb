@@ -7,6 +7,7 @@ Svapp::Application.routes.draw do
 	    resources :startup_applications
       get '/mentors' => 'info#mentors'
       get '/advisory-council' => 'info#advisory_council'
+      get '/startup_stats' => 'info#startup_stats'
 	  end
   end
 end

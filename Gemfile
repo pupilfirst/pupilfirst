@@ -37,7 +37,11 @@ group :development do
 	gem 'foreman'
 	gem 'seed-fu', github: 'mbleigh/seed-fu'
   gem 'guard'
+  gem 'guard-shell'
   gem 'guard-rspec'
+  gem "guard-spork"
+  gem 'guard-livereload'
+  gem 'childprocess'
   gem 'terminal-notifier-guard'
 end
 
@@ -53,9 +57,13 @@ end
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0.0.beta'
+  gem 'rb-inotify', :require => false
+  gem 'rb-fsevent', :require => false
+  gem 'rb-fchange', :require => false
 	gem 'dotenv'
 	gem 'pry'
 	gem 'pry-debugger'
+	gem "spork-rails", git: "https://github.com/sporkrb/spork-rails"
 end
 
 group :production do

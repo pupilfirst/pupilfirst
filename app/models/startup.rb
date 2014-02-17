@@ -1,6 +1,6 @@
 class Startup < ActiveRecord::Base
-  MAX_PITCH_WORDS = 10
-  MAX_ABOUT_WORDS = 500
+  MAX_PITCH_WORDS = 10      unless defined?(MAX_PITCH_WORDS)
+  MAX_ABOUT_WORDS = 500     unless defined?(MAX_ABOUT_WORDS)
 
 	has_many :founders, :class_name => "User", :foreign_key => "startup_id"
 	has_and_belongs_to_many :categories, :join_table => "startups_categories"

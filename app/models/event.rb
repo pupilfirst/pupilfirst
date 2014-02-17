@@ -20,7 +20,7 @@ class Event < ActiveRecord::Base
 
 	alias_attribute :push_title, :title
 
-  PUSH_TYPE = "event"
+  PUSH_TYPE = "event" unless defined?(PUSH_TYPE)
 
   after_save do
   	send_push_notification if featured_changed? and featured and not notification_sent

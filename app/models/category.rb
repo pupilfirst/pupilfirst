@@ -7,5 +7,5 @@ class Category < ActiveRecord::Base
 	has_many :news
 	has_many :events
 	has_and_belongs_to_many :startups, :join_table => "startups_categories"
-	TYPES = ['event', 'news', 'startup']
+	TYPES = ['event', 'news', 'startup'] unless defined?(TYPES)
 end

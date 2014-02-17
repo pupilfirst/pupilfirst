@@ -5,7 +5,7 @@ class News < ActiveRecord::Base
 
   normalize_attribute :youtube_id do |value|
     value = nil unless value.nil? or value.strip.present?
-    reg = /.*youtube\.com\/watch\?v=(.*)/
+    reg = /.*youtube\.com\/watch\?v=([\w-]*)/
     value =~ reg ? value.match(reg).captures.first  : value
   end
 
@@ -17,7 +17,7 @@ class News < ActiveRecord::Base
   validates_presence_of :picture, unless: Proc.new { |user| user.youtube_id.present? }
   validates_presence_of :title
   alias_attribute :push_title, :title
-  PUSH_TYPE = 'news'
+  PUSH_TYPE = 'news' unless defined?(PUSH_TYPE)
 
   before_create do
     unless self.published_at.present?

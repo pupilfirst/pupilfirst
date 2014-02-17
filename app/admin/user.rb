@@ -17,6 +17,8 @@ ActiveAdmin.register User do
     newrelic_ignore
   end
 
+  menu :label => "Startup Founders"
+
   permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url, :title, :skip_password
 
   form do |f|

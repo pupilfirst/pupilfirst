@@ -12,11 +12,36 @@ FactoryGirl.define do
     password_confirmation "password"
   end
 
-  factory :user, aliases: [:founder] do
+  factory :social_id do
+    social_id 			{Faker::Number.number(8)}
+    social_token		{Faker::Lorem.characters(256)}
+    permission			[]
+    # association :user, factory: :user_with_out_password, strategy: :build
+    factory :facebook_social_id do
+    	provider :facebook
+    	primary  true
+    end
+  end
+
+  factory :user do
     fullname { "#{Faker::Name.first_name} #{Faker::Name.last_name}" }
     username  { Faker::Lorem.characters(9) }
     email 		{ Faker::Internet.email }
-    skip_password true
+    born_on 	Date.current.to_s
+		avatar { fixture_file_upload(Rails.root.join(*%w[ spec fixtures files example.jpg ]), 'image/jpg') }
+    factory :user_with_out_password, aliases: [:founder] do
+	    skip_password true
+	    factory :user_with_facebook do
+	      after(:create) do |user, evaluator|
+	        create_list(:facebook_social_id, 1, user: user)
+	      end
+		  end
+	  end
+
+    factory :user_with_password do
+    	password "user_password"
+    	password_confirmation "user_password"
+    end
   end
 
 	factory :startup_application do |f|

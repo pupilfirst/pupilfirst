@@ -5,10 +5,11 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable
   has_many :news, :class_name => "News", :foreign_key => "user_id"
   has_many :events
+  has_many :social_ids
   belongs_to :startup
   scope :non_founders, -> { where("startup_id IS NULL") }
+  accepts_nested_attributes_for :social_ids
 
-  validates_uniqueness_of :username
   attr_reader :skip_password
   mount_uploader :avatar, AvatarUploader
   process_in_background :avatar
@@ -29,7 +30,19 @@ class User < ActiveRecord::Base
     value if value =~ /^http[s]*:\/\/linkedin\.com.*/
   end
 
+  before_create do
+    self.auth_token = SecureRandom.hex(30)
+  end
+
+  class << self
+    def find_by_social_record(network, social_id)
+      social_record = SocialId.find_by_provider_and_social_id(network.to_s, social_id.to_s)
+      return nil if social_record.nil?
+      social_record.user
+    end
+  end
+
   def to_s
-    fullname or username
+    fullname
   end
 end

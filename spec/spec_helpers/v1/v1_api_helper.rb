@@ -1,4 +1,3 @@
-require "spec_helper"
 
 module V1ApiSpecHelper
   include ApiSpecHelper

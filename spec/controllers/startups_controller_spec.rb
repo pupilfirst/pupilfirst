@@ -27,14 +27,11 @@ describe StartupsController do
     attributes_for(:startup)
   }
 
-  # This should return the minimal set of values that should be in the session
-  # in order to pass any filters (e.g. authentication) defined in
-  # StartupsController. Be sure to keep this updated too.
   let(:valid_session) { {} }
+  let(:startup) { startup = Startup.create! valid_attributes }
 
   describe "GET index" do
     it "assigns all startups as @startups" do
-      startup = Startup.create! valid_attributes
       @current_user.update_attributes(startup: startup)
       get :index, {}, valid_session
       expect(assigns(:startups)).to eq([startup])
@@ -48,7 +45,6 @@ describe StartupsController do
 
   describe "GET show" do
     it "assigns the requested startup as @startup" do
-      startup = Startup.create! valid_attributes
       @current_user.update_attributes(startup: startup)
       get :show, {:id => startup.to_param}, valid_session
       expect(assigns(:startup)).to eq(startup)
@@ -64,7 +60,6 @@ describe StartupsController do
 
   describe "GET edit" do
     it "assigns the requested startup as @startup" do
-      startup = Startup.create! valid_attributes
       @current_user.update_attributes(startup: startup)
       get :edit, {:id => startup.to_param}, valid_session
       expect(assigns(:startup)).to eq(startup)
@@ -96,7 +91,6 @@ describe StartupsController do
   describe "PUT update" do
     describe "with valid params" do
       it "updates the requested startup" do
-        startup = Startup.create! valid_attributes
         # Assuming there are no other startups in the database, this
         # specifies that the Startup created on the previous line
         # receives the :update_attributes message with whatever params are
@@ -106,13 +100,11 @@ describe StartupsController do
       end
 
       it "assigns the requested startup as @startup" do
-        startup = Startup.create! valid_attributes
         put :update, {:id => startup.to_param, :startup => valid_attributes}, valid_session
         expect(assigns(:startup)).to eq(startup)
       end
 
       it "redirects to the startup" do
-        startup = Startup.create! valid_attributes
         put :update, {:id => startup.to_param, :startup => valid_attributes}, valid_session
         expect(response).to redirect_to(startup)
       end
@@ -120,7 +112,6 @@ describe StartupsController do
 
     describe "with invalid params" do
       it "assigns the startup as @startup" do
-        startup = Startup.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Startup.any_instance.stub(:save).and_return(false)
         put :update, {:id => startup.to_param, :startup => { "name" => nil }}, valid_session
@@ -139,7 +130,6 @@ describe StartupsController do
     end
 
     it "redirects to the startups list" do
-      startup = Startup.create! valid_attributes
       delete :destroy, {:id => startup.to_param}, valid_session
       expect(response).to redirect_to(startups_url)
     end

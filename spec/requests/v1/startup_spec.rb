@@ -1,10 +1,14 @@
 require "spec_helper"
 
 describe "Startup Requests" do
-	include V1ApiSpecHelper
+  include V1ApiSpecHelper
+
+  let(:startup) { create(:startup, {name: 'startup 1'}) }
+  let(:startup1) { create(:startup, {name: 'startup 2'}) }
+  let(:startup2) { create(:startup, {name: 'foobar 1'}) }
+  let(:startup3) { create(:startup, {name: 'foobar 2'}) }
 
   it "fetch startups on index" do
-  	startup = create(:startup)
     get "/api/startups", {},version_header
     expect(response).to render_template(:index)
     response.body.should have_json_path("0/id")
@@ -16,8 +20,6 @@ describe "Startup Requests" do
   end
 
   it "fetch startups within a category" do
-    startup1 = create(:startup)
-    startup2 = create(:startup)
     get "/api/startups", {category: startup1.categories.first.name},version_header
     expect(response).to render_template(:index)
     response.body.should have_json_size(1).at_path("/")
@@ -30,10 +32,6 @@ describe "Startup Requests" do
   end
 
   it "fetches related startups when searched for" do
-    startup = create(:startup, {name: 'startup 1'})
-    startup = create(:startup, {name: 'startup 2'})
-    startup = create(:startup, {name: 'foobar 2'})
-    startup = create(:startup, {name: 'foobar 1'})
     get "/api/startups", {search_term: 'foobar'}, version_header
     expect(response).to render_template(:index)
     response.body.should have_json_size(2).at_path("/")
@@ -46,8 +44,7 @@ describe "Startup Requests" do
   end
 
   it "fetches one startup with " do
-  	startup = create(:startup)
-  	get "/api/startups/#{startup.id}", {}, version_header
+    get "/api/startups/#{startup.id}", {}, version_header
     expect(response).to render_template(:show)
     response.body.should have_json_path("id")
     response.body.should have_json_path("name")

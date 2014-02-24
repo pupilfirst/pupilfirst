@@ -4,6 +4,7 @@ Svapp::Application.routes.draw do
 	    resources :users do
 	    	collection do
 	    		resources :sessions, only: [:create]
+	    		post :forgot_password
 	    	end
 	    end
 	    resources :events

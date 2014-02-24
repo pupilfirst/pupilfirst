@@ -49,6 +49,7 @@ group :test do
 	gem 'simplecov', require: false
 	gem 'rspec', '~> 3.0.0.beta1'
 	gem "rspec-mocks", "~> 3.0.0.beta1"
+  gem 'email_spec'
 	gem "factory_girl_rails", "~> 4.0"
 	gem 'faker'
 	gem 'json_spec', github: 'collectiveidea/json_spec'

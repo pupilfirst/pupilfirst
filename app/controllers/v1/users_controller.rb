@@ -15,8 +15,10 @@ class V1::UsersController < V1::BaseController
 		end
 	end
 
-	def login
-
+	def forgot_password
+		user = User.find_by_email params[:email]
+		user.send_reset_password_instructions
+		render nothing: true, status: 200
 	end
 
 	private

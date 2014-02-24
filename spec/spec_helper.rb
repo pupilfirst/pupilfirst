@@ -20,7 +20,7 @@ Spork.prefork do
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
   require 'rspec/autorun'
-
+  require "email_spec"
   require 'simplecov'
   SimpleCov.start :rails do
     add_filter do |src|
@@ -64,6 +64,8 @@ Spork.prefork do
     config.include Devise::TestHelpers, :type => :controller
     config.extend ControllerMacros, :type => :controller
     config.include FactoryGirl::Syntax::Methods
+    config.include(EmailSpec::Helpers)
+    config.include(EmailSpec::Matchers)
   end
 
 end

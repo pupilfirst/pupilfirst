@@ -3,10 +3,12 @@ require "spec_helper"
 describe "Startup Requests" do
   include V1ApiSpecHelper
 
-  let(:startup) { create(:startup, {name: 'startup 1'}) }
-  let(:startup1) { create(:startup, {name: 'startup 2'}) }
-  let(:startup2) { create(:startup, {name: 'foobar 1'}) }
-  let(:startup3) { create(:startup, {name: 'foobar 2'}) }
+  before(:all) do
+    @startup =  create(:startup, {name: 'startup 1'})
+    @startup1 = create(:startup, {name: 'startup 2'})
+    @startup2 = create(:startup, {name: 'foobar 1'})
+    @startup3 = create(:startup, {name: 'foobar 2'})
+  end
 
   it "fetch startups on index" do
     get "/api/startups", {},version_header
@@ -20,7 +22,7 @@ describe "Startup Requests" do
   end
 
   it "fetch startups within a category" do
-    get "/api/startups", {category: startup1.categories.first.name},version_header
+    get "/api/startups", {category: @startup1.categories.first.name},version_header
     expect(response).to render_template(:index)
     response.body.should have_json_size(1).at_path("/")
     response.body.should have_json_path("0/id")
@@ -44,7 +46,7 @@ describe "Startup Requests" do
   end
 
   it "fetches one startup with " do
-    get "/api/startups/#{startup.id}", {}, version_header
+    get "/api/startups/#{@startup.id}", {}, version_header
     expect(response).to render_template(:show)
     response.body.should have_json_path("id")
     response.body.should have_json_path("name")

@@ -62,6 +62,7 @@ group :development, :test do
   gem 'rb-fsevent', :require => false
   gem 'rb-fchange', :require => false
 	gem 'dotenv'
+  gem 'database_cleaner'
 	gem 'pry'
 	gem 'pry-debugger'
 	gem "spork-rails", git: "https://github.com/sporkrb/spork-rails"

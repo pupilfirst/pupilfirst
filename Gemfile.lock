@@ -109,6 +109,7 @@ GEM
       execjs
     coffee-script-source (1.6.3)
     columnize (0.3.6)
+    database_cleaner (1.2.0)
     debugger (1.6.4)
       columnize (>= 0.3.1)
       debugger-linecache (~> 1.2.0)
@@ -387,6 +388,7 @@ DEPENDENCIES
   childprocess
   cocoon
   coffee-rails (~> 4.0.0)
+  database_cleaner
   devise_invitable
   dotenv
   email_spec

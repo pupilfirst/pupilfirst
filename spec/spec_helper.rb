@@ -66,6 +66,17 @@ Spork.prefork do
     config.include FactoryGirl::Syntax::Methods
     config.include(EmailSpec::Helpers)
     config.include(EmailSpec::Matchers)
+    config.before(:suite) do
+      DatabaseCleaner.strategy = :transaction
+      DatabaseCleaner.clean_with(:truncation)
+      DatabaseCleaner.start
+      DatabaseCleaner.clean
+    end
+
+    config.after(:suite) do
+      DatabaseCleaner.clean
+    end
+
   end
 
 end

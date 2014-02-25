@@ -9,7 +9,11 @@ Svapp::Application.routes.draw do
 	    end
 	    resources :events
 	    resources :news
-	    resources :startups
+	    resources :startups do
+	    	collection do
+	    		get :load_suggestions
+	    	end
+	    end
 	    resources :startup_applications
       get '/mentors' => 'info#mentors'
       get '/advisory-council' => 'info#advisory_council'

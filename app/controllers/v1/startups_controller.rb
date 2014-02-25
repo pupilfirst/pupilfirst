@@ -20,4 +20,9 @@ class V1::StartupsController < V1::BaseController
 			f.json
 		end
 	end
+
+	def load_suggestions
+	  @suggestions = Startup.where("name like ?", "#{params[:term]}%")
+	end
+
 end

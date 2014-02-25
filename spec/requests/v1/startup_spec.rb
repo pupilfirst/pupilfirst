@@ -66,6 +66,12 @@ describe "Startup Requests" do
     response.body.should have_json_path("founders/0/picture_url")
     response.body.should have_json_path("founders/0/linkedin_url")
     response.body.should have_json_path("founders/0/twitter_url")
+  end
 
+  it "fetches suggestions based on given term" do
+    get "/api/startups/load_suggestions", {term: 'fo'}, version_header
+    response.body.should have_json_path("0/id")
+    response.body.should have_json_path("0/name")
+    response.body.should have_json_path("0/logo_url")
   end
 end

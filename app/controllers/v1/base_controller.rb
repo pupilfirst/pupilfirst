@@ -9,6 +9,17 @@ class V1::BaseController < ApplicationController
     @current_user
   end
 
+  rescue_from StandardError do |exception|
+  	status = case exception
+	  	when ActiveRecord::RecordInvalid then 400
+	  	when ActiveRecord::RecordNotFound then 404
+	  	else
+	  		logger.fatal "UNIDENTIFIED ERROR OCCURED IN API :: #{exception.class} #{exception.message}, #{exception.backtrace}"
+	  		raise exception
+	  	end
+    render :json => {error: exception.message}, :status => 500
+    true
+  end
 
   def auth_token
     params[:auth_token] || request.headers['HTTP_API_TOKEN']

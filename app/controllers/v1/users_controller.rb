@@ -17,8 +17,12 @@ class V1::UsersController < V1::BaseController
 
 	def forgot_password
 		user = User.find_by_email params[:email]
-		user.send_reset_password_instructions
-		render nothing: true, status: 200
+		if user
+			user.send_reset_password_instructions
+			render nothing: true, status: 200
+		else
+			render nothing: true, status: :unprocessable_entity
+		end
 	end
 
 	private

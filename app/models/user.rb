@@ -3,10 +3,11 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :invitable, :database_authenticatable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable
-  has_many :news, :class_name => "News", :foreign_key => "user_id"
+  has_many :news, class_name: "News", foreign_key: :user_id
   has_many :events
   has_many :social_ids
   belongs_to :startup
+  belongs_to :startup_link_verifier, class_name: "User", foreign_key: "startup_link_verifier_id"
   scope :non_founders, -> { where("startup_id IS NULL") }
   accepts_nested_attributes_for :social_ids
 
@@ -40,6 +41,13 @@ class User < ActiveRecord::Base
       return nil if social_record.nil?
       social_record.user
     end
+  end
+
+  def verify(user)
+    return false if user.startup.nil?
+    raise "#{fullname} not allowed to verify founders yet" if startup_link_verifier.nil?
+    raise "#{fullname} not allowed to verify founders of #{user.startup.name}" if startup != user.startup
+    user.update_attributes!(startup_link_verifier: self, startup_verifier_token: SecureRandom.hex(30))
   end
 
   def to_s

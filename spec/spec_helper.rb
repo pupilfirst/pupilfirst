@@ -64,6 +64,7 @@ Spork.prefork do
     config.include Devise::TestHelpers, :type => :controller
     config.extend ControllerMacros, :type => :controller
     config.include FactoryGirl::Syntax::Methods
+    config.include(JsonSpec::Helpers)
     config.include(EmailSpec::Helpers)
     config.include(EmailSpec::Matchers)
     config.before(:suite) do
@@ -87,6 +88,8 @@ Spork.each_run do
   # Checks for pending migrations before tests are run.
   # If you are not using ActiveRecord, you can remove this line.
   ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
+
+  Dir[Rails.root.join("spec/spec_helpers/**/*.rb")].each { |f| load f }
 
   FactoryGirl.reload
 end

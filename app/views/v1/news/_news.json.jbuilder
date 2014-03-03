@@ -6,7 +6,7 @@ else
 	json.picture_url news.picture_url(:mid)
 end
 json.created_at fmt_time(news.published_at)
-path = "#{__FILE__.match(/v\d/)[0]}/users/user"
+path = "#{__FILE__.match(/v\d/)[0]}/users/author"
 json.author do
 	json.partial! path, user: news.author
 end

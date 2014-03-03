@@ -5,8 +5,7 @@ describe V1::UsersController do
 
   describe "GET on user" do
   	context "fetches details of user when id is provided" do
-	    it "returns http success with details" do
-	      pending "check for details once design arives"
+	    xit "returns http success with details" do
 	    	user = create(:user_with_out_password)
 	      get "/api/users/#{user.id}", {}, version_header
 	      expect(response).to be_success

@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe V1::SessionsController do
 	include V1ApiSpecHelper
+	include UserSpecHelper
+	include StartupSpecHelper
 
   describe "POST on session" do
   	context "with valid attributes for" do
@@ -11,11 +13,7 @@ describe V1::SessionsController do
 	      digest = Digest::SHA1.hexdigest("#{time}#{Svapp::Application.config.secret_key_base}#{user.email}")
 	      post '/api/users/sessions', {timestamp: time, email: user.email, digest: digest, password: 'password'}, version_header
 	      expect(response).to be_success
-				expect(response.body).to have_json_path("id")
-	      expect(response.body).to have_json_type(Integer).at_path("id")
-	      expect(response.body).to have_json_path("auth_token")
-	      response_json = %({"id":#{user.id},"auth_token":"#{user.auth_token}"})
-	      expect(response.body).to be_json_eql(response_json)
+	      have_user_object(response, 'user', also_check: [:auth_token], ignore: [:startup])
 	    end
 
 	    it "user with secret & social_id is given" do
@@ -24,11 +22,7 @@ describe V1::SessionsController do
 	      digest = Digest::SHA1.hexdigest("#{time}#{Svapp::Application.config.secret_key_base}#{user.social_ids.first.social_id}#{user.email}")
 	      post '/api/users/sessions', {timestamp: time, email: user.email, digest: digest, social_id: user.social_ids.first.social_id, provider: 'facebook'}, version_header
 	      expect(response).to be_success
-				expect(response.body).to have_json_path("id")
-	      expect(response.body).to have_json_type(Integer).at_path("id")
-	      expect(response.body).to have_json_path("auth_token")
-	      response_json = %({"id":#{user.id},"auth_token":"#{user.auth_token}"})
-	      expect(response.body).to be_json_eql(response_json)
+	      have_user_object(response, 'user', also_check: [:auth_token], ignore: [:startup])
 	    end
 	  end
 
@@ -48,7 +42,11 @@ describe V1::SessionsController do
 	      time = Time.now.to_i
 	      digest = Digest::SHA1.hexdigest("#{time}#{Svapp::Application.config.secret_key_base}#{user.email}")
 	      post '/api/users/sessions', {timestamp: time, email: user.email, digest: digest, password: 'wrongpassword'}, version_header
-	      expect(response.status).to eq(400)
+	      expect(response.status).to eq(200)
+	      expect(parse_json(response.body, 'success')).to eql(false)
+		    expect(response.body).to have_json_path("success")
+		    expect(response.body).to have_json_path("user")
+	      expect(parse_json(response.body, 'user')).to eql(nil)
 	  	end
 	  end
 
@@ -58,7 +56,11 @@ describe V1::SessionsController do
 	      time = Time.now.to_i
 	      digest = Digest::SHA1.hexdigest("#{time}#{Svapp::Application.config.secret_key_base}#{"bad_social_id"}#{user.email}")
 	      post '/api/users/sessions', {timestamp: time, email: user.email, digest: digest, social_id: "bad_social_id"}, version_header
-	      expect(response.status).to eq(400)
+	      expect(response.status).to eq(200)
+	      expect(parse_json(response.body, 'success')).to eql(false)
+		    expect(response.body).to have_json_path("success")
+		    expect(response.body).to have_json_path("user")
+	      expect(parse_json(response.body, 'user')).to eql(nil)
 	  	end
 	  end
 
@@ -68,7 +70,11 @@ describe V1::SessionsController do
 	      time = Time.now.to_i
 	      digest = Digest::SHA1.hexdigest("#{time}#{Svapp::Application.config.secret_key_base}#{user.email}")
 	      post '/api/users/sessions', {timestamp: time, email: user.email, digest: digest}, version_header
-	      expect(response.status).to eq(400)
+	      expect(response.status).to eq(200)
+	      expect(parse_json(response.body, 'success')).to eql(false)
+		    expect(response.body).to have_json_path("success")
+		    expect(response.body).to have_json_path("user")
+	      expect(parse_json(response.body, 'user')).to eql(nil)
 	  	end
 	  end
   end

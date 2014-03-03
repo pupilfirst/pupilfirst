@@ -17,7 +17,9 @@ Spork.prefork do
   # end with _spec.rb. You can configure this pattern with with the --pattern
   # option on the command line or in ~/.rspec, .rspec or `.rspec-local`.
   ENV["RAILS_ENV"] ||= 'test'
+
   require File.expand_path("../../config/environment", __FILE__)
+  load "#{Rails.root.to_s}/db/schema.rb" if ENV['IN_MEM']
   require 'rspec/rails'
   require 'rspec/autorun'
   require "email_spec"
@@ -63,6 +65,7 @@ Spork.prefork do
 
     config.include Devise::TestHelpers, :type => :controller
     config.extend ControllerMacros, :type => :controller
+    config.include DeviseHelpers, type: :request
     config.include FactoryGirl::Syntax::Methods
     config.include(JsonSpec::Helpers)
     config.include(EmailSpec::Helpers)

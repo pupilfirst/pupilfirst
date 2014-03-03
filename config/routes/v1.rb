@@ -13,6 +13,9 @@ Svapp::Application.routes.draw do
 	    	collection do
 	    		get :load_suggestions
 	    	end
+        member do
+          post :link_employee
+        end
 	    end
 	    resources :startup_applications
       get '/mentors' => 'info#mentors'

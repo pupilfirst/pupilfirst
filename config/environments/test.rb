@@ -31,6 +31,8 @@ Svapp::Application.configure do
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  config.default_url_options = { :host => 'localhost:3000' }
   # Print deprecation notices to the stderr.
-  config.active_support.deprecation = :stderr
+  config.active_support.deprecation = nil
 end
+Svapp::Application.default_url_options = Svapp::Application.config.action_mailer.default_url_options

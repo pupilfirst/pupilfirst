@@ -16,9 +16,10 @@ class V1::SessionsController < V1::BaseController
         user_valid ? user : nil
       end
     if @user.nil?
-      render nothing: true, status: :bad_request
+      render json: {success: false, user: nil}
     else
-      render json: {id: @user.id, auth_token: @user.auth_token}
+      render :create
+      # render json: {id: @user.id, auth_token: @user.auth_token}
     end
   end
 

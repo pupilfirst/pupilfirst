@@ -11,7 +11,11 @@ Svapp::Application.routes.draw do
       post 'send_invite'
     end
   end
-  resources :startups
+  resources :startups do
+    member do
+      get :confirm_employee
+    end
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

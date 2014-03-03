@@ -20,6 +20,15 @@ class StartupsController < InheritedResources::Base
 		raise_not_found unless current_user.startup.try(:id) == @startup.id
 	end
 
+
+	def confirm_employee
+		@startup = Startup.find(params[:id])
+		raise_not_found unless current_user.startup.try(:id) == @startup.id
+		@new_employee = User.find_by_startup_verifier_token(params[:token])
+		@new_employee.update_attributes!(startup_link_verifier: current_user)
+		render text: 'done', status: :created
+	end
+
 	def permitted_params
 	  {:startup => params.fetch(:startup, {}).permit(:name, :pitch, :website, :about, :email, :phone, :logo, :remote_logo_url, :facebook_link, :twitter_link, {category_ids: []})}
 	end

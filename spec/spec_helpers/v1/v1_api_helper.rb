@@ -11,6 +11,6 @@ module V1ApiSpecHelper
   end
 
   def version_header
-    {"HTTP_ACCEPT"=>'application/vnd.svapp.v1+json'}
+    {"HTTP_ACCEPT"=>'application/vnd.svapp.v1+json', 'AUTH_TOKEN'=> User.last.auth_token}
   end
 end

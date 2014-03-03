@@ -1,0 +1,4 @@
+#div
+	| Confirm new co-founder added to your startup #{@startup.name}
+= link_to "Click to confirm \"#{@new_employee.fullname}\" as \"#{@new_employee.title}\" of #{@startup.name}", confirm_employee_startup_url(@startup, token: @new_employee.startup_verifier_token)
+

@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.1'
+gem 'rails', '4.0.3'
 
 gem 'active_admin_editor'
 gem 'activeadmin', github: 'gregbell/active_admin' # master for rails 4
@@ -46,10 +46,12 @@ group :development do
 end
 
 group :test do
+  gem 'sqlite3'
 	gem 'simplecov', require: false
 	gem 'rspec', '~> 3.0.0.beta1'
 	gem "rspec-mocks", "~> 3.0.0.beta1"
   gem 'email_spec'
+  gem 'factory_girl', require: false
 	gem "factory_girl_rails", "~> 4.0"
 	gem 'faker'
 	gem 'json_spec', github: 'collectiveidea/json_spec'

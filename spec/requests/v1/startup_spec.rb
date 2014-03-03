@@ -2,6 +2,7 @@ require "spec_helper"
 
 describe "Startup Requests" do
   include V1ApiSpecHelper
+  include Rails.application.routes.url_helpers
 
   before(:all) do
     @startup =  create(:startup, {name: 'startup 1'})
@@ -73,5 +74,30 @@ describe "Startup Requests" do
     response.body.should have_json_path("0/id")
     response.body.should have_json_path("0/name")
     response.body.should have_json_path("0/logo_url")
+  end
+
+  context "request to add new founder to a startup" do
+    before(:all) do
+      @startup = create :startup
+      @new_employee = create :employee
+    end
+
+    before(:each) do
+      ActionMailer::Base.deliveries = []
+    end
+
+    xit "sends email to all existing co-founders" do
+      post "/api/startups/#{@startup.id}/link_employee", {employee_id: @new_employee.id}, version_header
+      expect(response.status).to eql(201)
+      expect(emails_sent.last).to have_subject(/Approve new employee at #{@startup.name}/)
+      expect(emails_sent.last.body.to_s).to include(confirm_employee_startup_url(@startup, token: @new_employee.startup_verifier_token))
+      pending "Check fo startup_link_verifier"
+      expect(@new_employee.startup_link_verifier.id).to eql(1)
+      # expect(emails_sent.last).to have_body_text(/#{confirm_employee_startup_url(@startup, token: @new_employee.startup_verifier_token)}/)
+    end
+
+    def emails_sent
+      ActionMailer::Base.deliveries
+    end
   end
 end

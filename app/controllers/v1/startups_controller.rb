@@ -25,4 +25,9 @@ class V1::StartupsController < V1::BaseController
 	  @suggestions = Startup.where("name like ?", "#{params[:term]}%")
 	end
 
+	def link_employee
+		@new_employee = User.find(params[:employee_id])
+		StartupMailer.respond_to_new_employee(Startup.find(params[:id]), @new_employee).deliver
+		render nothing: true, status: :created
+	end
 end

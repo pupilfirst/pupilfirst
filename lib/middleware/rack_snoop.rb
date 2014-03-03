@@ -12,7 +12,7 @@ module Rack
       when 200
         # Who needs weekly status reports?
         # @logger.add  @logger.class::INFO, "RESPONSE:: #{body.as_json}"
-      when 500
+      else
         # A bit of extra motivation to fix these errors
         @logger.add  @logger.class::ERROR, "RESPONSE:: #{body.as_json}"
       end

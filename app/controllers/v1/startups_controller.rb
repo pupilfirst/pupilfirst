@@ -43,7 +43,7 @@ class V1::StartupsController < V1::BaseController
 
 	def link_employee
 		@new_employee = current_user
-		@new_employee.update_attributes!(startup: Startup.find(params[:id]), startup_link_verifier_id: nil)
+		@new_employee.update_attributes!(startup: Startup.find(params[:id]), startup_link_verifier_id: nil, title: params[:position])
 		StartupMailer.respond_to_new_employee(Startup.find(params[:id]), @new_employee).deliver
 		# render nothing: true, status: :created
 	end

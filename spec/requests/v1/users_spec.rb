@@ -14,15 +14,6 @@ describe V1::UsersController do
   end
 
   describe "POST on user" do
-  	context 'with valid attributes and no password' do
-  		it "should create user" do
-  			attributes = attributes_for(:user_with_out_password)
-				post '/api/users', {user: attributes}, version_header
-	      expect(response.status).to eq(201)
-	      response_user_id = JSON.parse(response.body)['id']
-				expect(User.find(response_user_id).email).to eq(attributes[:email])
-  		end
-	  end
 
   	context 'with valid attributes and valid password' do
   		it "should create user" do
@@ -42,20 +33,6 @@ describe V1::UsersController do
   		end
 	  end
 
-	  context 'with valid attributes' do
-	  	context "and facebook details" do
-	  		it "should create user" do
-	  			attributes = attributes_for(:user_with_out_password)
-	  			attributes[:social_ids_attributes] = [attributes_for(:facebook_social_id)]
-					post '/api/users', {user: attributes}, version_header
-		      expect(response.status).to eq(201)
-		      response_user_id = JSON.parse(response.body)['id']
-		      check_user = User.find(response_user_id)
-					expect(check_user.social_ids.size).to eq(1)
-					check_user.social_ids.first.as_json(only: [])
-	  		end
-	  	end
-	  end
   end
 
 end

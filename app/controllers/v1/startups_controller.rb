@@ -50,7 +50,7 @@ class V1::StartupsController < V1::BaseController
 
 private
   def startup_params
-    params.require(:startup).permit(:name, :phone, :idea, :website)
+    params.require(:startup).permit(:name, :phone, :pitch, :website)
   end
 
 end

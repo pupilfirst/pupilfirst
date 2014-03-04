@@ -4,7 +4,6 @@ class V1::UsersController < V1::BaseController
 
 	def show
 		@user = User.find params[:id]
-		@user = User.find params[:id]
 	end
 
 	def create
@@ -28,6 +27,6 @@ class V1::UsersController < V1::BaseController
 
 	private
 	def user_params
-		params.require(:user).permit :email, :fullname, :password, :password_confirmation, :skip_password, :avatar, :remote_avatar_url, :born_on, social_ids_attributes: [[:social_id, :social_token, :permission, :provider]]
+		params.require(:user).permit :email, :fullname, :password, :password_confirmation, :avatar, :remote_avatar_url, :born_on
 	end
 end

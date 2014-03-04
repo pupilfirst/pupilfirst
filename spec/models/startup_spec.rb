@@ -1,6 +1,14 @@
 require 'spec_helper'
 
 describe Startup do
+
+	it "should have atleast one founder" do
+		startup = create(:startup)
+		startup.founders = []
+		expect(startup.valid?).to eql(false)
+		expect { startup.save! }.to raise_error(ActiveRecord::RecordInvalid)
+	end
+
 	it "returns only verified users as founders" do
 		startup = create(:startup)
 		founder = startup.founders.last

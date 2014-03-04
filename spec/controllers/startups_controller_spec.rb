@@ -24,7 +24,7 @@ describe StartupsController do
   # Startup. As you add validations to Startup, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    attributes_for(:startup).merge(categories: [build(:startup_category)])
+    attributes_for(:startup).merge(categories: [build(:startup_category)], founders: [build(:founder)])
   }
   let(:valid_params) {
     attributes_for(:startup).merge(category_ids: [create(:startup_category).id])
@@ -83,10 +83,6 @@ describe StartupsController do
         expect(assigns(:startup)).to be_persisted
       end
 
-      it "redirects to the created startup" do
-        post :create, {:startup => valid_params}, valid_session
-        expect(response).to redirect_to(Startup.last)
-      end
     end
 
   end

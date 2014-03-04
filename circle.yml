@@ -2,12 +2,12 @@ deployment:
     production:
       branch: master
       commands:
-        - git push git@heroku.com:svapp.git $CIRCLE_SHA1:master
+        - git `[[ ! -s "$(git rev-parse --git-dir)/shallow" ]] || git fetch --unshallow` push git@heroku.com:svapp.git $CIRCLE_SHA1:master
         - heroku run rake db:migrate --app svapp
         - heroku restart --app svapp
     staging:
       branch: development
       commands:
-        - git push git@heroku.com:svapp-staging.git $CIRCLE_SHA1:master
+        - git `[[ ! -s "$(git rev-parse --git-dir)/shallow" ]] || git fetch --unshallow` push git@heroku.com:svapp-staging.git $CIRCLE_SHA1:master
         - heroku run rake db:migrate --app svapp-staging
         - heroku restart --app svapp-staging

@@ -1,5 +1,7 @@
 class V1::NewsController < V1::BaseController
 
+  skip_before_filter :require_token, only: [:index, :show]
+
 	def index
 		category = Category.find_by_name(params['category']) rescue nil
 		clause = category ? ["category_id = ?", category.id] : nil

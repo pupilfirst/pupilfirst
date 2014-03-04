@@ -1,5 +1,6 @@
 class V1::UsersController < V1::BaseController
   respond_to :json
+  skip_before_filter :require_token, only: [:create, :forgot_password]
 
 	def show
 		@user = User.find params[:id]

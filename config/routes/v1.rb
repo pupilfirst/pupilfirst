@@ -17,7 +17,6 @@ Svapp::Application.routes.draw do
           post :link_employee
         end
 	    end
-	    resources :startup_applications
       get '/mentors' => 'info#mentors'
       get '/advisory-council' => 'info#advisory_council'
       get '/startup_stats' => 'info#startup_stats'

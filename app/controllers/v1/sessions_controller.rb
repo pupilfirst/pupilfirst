@@ -1,5 +1,6 @@
 class V1::SessionsController < V1::BaseController
   respond_to :json
+  skip_before_filter :require_token, only: [:create]
 
   def create
     hash_string = "#{params[:timestamp]}#{Svapp::Application.config.secret_key_base}#{params[:social_id]}#{params[:email]}"

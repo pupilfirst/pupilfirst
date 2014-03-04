@@ -16,14 +16,6 @@ describe V1::SessionsController do
 	      have_user_object(response, 'user', also_check: [:auth_token], ignore: [:startup])
 	    end
 
-	    it "user with secret & social_id is given" do
-	    	user = create(:user_with_facebook)
-	      time = Time.now.to_i
-	      digest = Digest::SHA1.hexdigest("#{time}#{Svapp::Application.config.secret_key_base}#{user.social_ids.first.social_id}#{user.email}")
-	      post '/api/users/sessions', {timestamp: time, email: user.email, digest: digest, social_id: user.social_ids.first.social_id, provider: 'facebook'}, version_header
-	      expect(response).to be_success
-	      have_user_object(response, 'user', also_check: [:auth_token], ignore: [:startup])
-	    end
 	  end
 
 	  context "with invalid secret" do
@@ -42,20 +34,6 @@ describe V1::SessionsController do
 	      time = Time.now.to_i
 	      digest = Digest::SHA1.hexdigest("#{time}#{Svapp::Application.config.secret_key_base}#{user.email}")
 	      post '/api/users/sessions', {timestamp: time, email: user.email, digest: digest, password: 'wrongpassword'}, version_header
-	      expect(response.status).to eq(200)
-	      expect(parse_json(response.body, 'success')).to eql(false)
-		    expect(response.body).to have_json_path("success")
-		    expect(response.body).to have_json_path("user")
-	      expect(parse_json(response.body, 'user')).to eql(nil)
-	  	end
-	  end
-
-	  context 'with invalid social_id' do
-	  	it "should returns :bad_request" do
-	    	user = create(:user_with_facebook)
-	      time = Time.now.to_i
-	      digest = Digest::SHA1.hexdigest("#{time}#{Svapp::Application.config.secret_key_base}#{"bad_social_id"}#{user.email}")
-	      post '/api/users/sessions', {timestamp: time, email: user.email, digest: digest, social_id: "bad_social_id"}, version_header
 	      expect(response.status).to eq(200)
 	      expect(parse_json(response.body, 'success')).to eql(false)
 		    expect(response.body).to have_json_path("success")

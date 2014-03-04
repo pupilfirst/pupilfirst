@@ -50,6 +50,10 @@ class User < ActiveRecord::Base
     user.update_attributes!(startup_link_verifier: self, startup_verifier_token: SecureRandom.hex(30))
   end
 
+  def verify_self!
+    update_attributes!(startup_link_verifier: self, startup_verifier_token: SecureRandom.hex(30))
+  end
+
   def to_s
     fullname
   end

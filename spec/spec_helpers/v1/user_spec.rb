@@ -8,7 +8,9 @@ module UserSpecHelper
   def have_user_object(response, prefix = '', opt = {})
     opt[:also_check] ||= []
     opt[:ignore] ||= []
-    prefix = prefix[-1] == '/' ? prefix : "#{prefix}/"
+    prefix = if prefix.present?
+      prefix[-1] == '/' ? prefix : "#{prefix}/"
+    end
     check_path(response, "#{prefix}id")
     check_type(response, "#{prefix}id",Integer)
     check_path(response, "#{prefix}fullname")

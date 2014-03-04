@@ -2,6 +2,7 @@ require "spec_helper"
 
 describe "Startup Requests" do
   include V1ApiSpecHelper
+  include UserSpecHelper
   include Rails.application.routes.url_helpers
 
   before(:all) do
@@ -69,6 +70,12 @@ describe "Startup Requests" do
     response.body.should have_json_path("founders/0/twitter_url")
   end
 
+  it "POST startup" do
+    post "/api/startups", {startup: attributes_for(:startup_application)}, version_header
+    expect(response).to be_success
+    have_user_object(response)
+  end
+
   it "fetches suggestions based on given term" do
     get "/api/startups/load_suggestions", {term: 'fo'}, version_header
     response.body.should have_json_path("0/id")
@@ -79,21 +86,25 @@ describe "Startup Requests" do
   context "request to add new founder to a startup" do
     before(:all) do
       @startup = create :startup
-      @new_employee = create :employee
+      @new_employee = create :user_with_out_password
     end
 
     before(:each) do
       ActionMailer::Base.deliveries = []
     end
 
-    xit "sends email to all existing co-founders" do
-      post "/api/startups/#{@startup.id}/link_employee", {employee_id: @new_employee.id}, version_header
-      expect(response.status).to eql(201)
+    it "raise error if auth_token is not given" do
+      expect { post "/api/startups/#{@startup.id}/link_employee", {employee_id: @new_employee.id}, {} }.to raise_error(RuntimeError)
+    end
+
+    it "sends email to all existing co-founders" do
+      post "/api/startups/#{@startup.id}/link_employee", {}, version_header(@new_employee)
       expect(emails_sent.last).to have_subject(/Approve new employee at #{@startup.name}/)
       expect(emails_sent.last.body.to_s).to include(confirm_employee_startup_url(@startup, token: @new_employee.startup_verifier_token))
-      pending "Check fo startup_link_verifier"
-      expect(@new_employee.startup_link_verifier.id).to eql(1)
-      # expect(emails_sent.last).to have_body_text(/#{confirm_employee_startup_url(@startup, token: @new_employee.startup_verifier_token)}/)
+      expect(@new_employee.startup_link_verifier_id).to eql(nil)
+      expect(@new_employee.reload.startup_id).to eql(@startup.id)
+      expect(response).to be_success
+      have_user_object(response)
     end
 
     def emails_sent

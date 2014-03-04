@@ -53,14 +53,6 @@ FactoryGirl.define do
     end
   end
 
-	factory :startup_application do |f|
-		f.name { "#{Faker::Name.first_name} #{Faker::Name.last_name}" }
-		f.email { Faker::Internet.email }
-		f.phone { Faker::PhoneNumber.phone_number}
-		f.idea { Faker::Lorem.paragraph }
-		f.website {Faker::Internet.domain_name}
-	end
-
 	factory :news_category,  class: Category do |f|
 		f.name {Faker::Lorem.words(2).join(' ')}
 		f.category_type :news
@@ -104,15 +96,27 @@ FactoryGirl.define do
 		association :category, factory: :event_category, strategy: :build
 	end
 
-	factory :startup do |f|
-		f.name 			{Faker::Lorem.characters(20)}
-		f.logo { fixture_file_upload(Rails.root.join(*%w[ spec fixtures files example.jpg ]), 'image/jpg') }
-		f.pitch 		{Faker::Lorem.words(6).join(' ')}
-		f.about 		{Faker::Lorem.paragraph(7)}
-		f.website   {Faker::Internet.domain_name}
-		f.email 		{Faker::Internet.email}
-		f.phone  	{Faker::PhoneNumber.cell_phone}
-		f.founders {[create(:founder), create(:founder)]}
-		f.category_ids {[create(:startup_category).id]}
+  factory :startup do |f|
+    f.name      {Faker::Lorem.characters(20)}
+    f.logo { fixture_file_upload(Rails.root.join(*%w[ spec fixtures files example.jpg ]), 'image/jpg') }
+    f.pitch     {Faker::Lorem.words(6).join(' ')}
+    f.about     {Faker::Lorem.paragraph(7)}
+    f.website   {Faker::Internet.domain_name}
+    f.email     {Faker::Internet.email}
+    f.phone   {Faker::PhoneNumber.cell_phone}
+    # f.founders {[create(:founder), create(:founder)]}
+    # f.category_ids {[create(:startup_category).id]}
+    after(:build) do |startup|
+      startup.founders << create(:founder, startup: startup)
+      startup.founders << create(:founder, startup: startup)
+      startup.categories << create(:startup_category)
+    end
+  end
+
+  factory :startup_application, class: Startup do |f|
+    f.name      {Faker::Lorem.characters(20)}
+    f.pitch     {Faker::Lorem.words(6).join(' ')}
+    f.website   {Faker::Internet.domain_name}
+    f.phone   {Faker::PhoneNumber.cell_phone}
   end
 end

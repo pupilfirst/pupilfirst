@@ -1,5 +1,6 @@
 class StartupsController < InheritedResources::Base
 	before_filter :authenticate_user!
+	skip_before_filter :authenticate_user!, only: [:confirm_employee]
 	after_filter only: [:create] do
 		@startup.founders << current_user
 		@startup.save!

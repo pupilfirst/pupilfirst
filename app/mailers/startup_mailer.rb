@@ -1,5 +1,5 @@
 class StartupMailer < ActionMailer::Base
-  default from: "no-reply@svlabs.in"
+  default from: "SV App <no-reply@svlabs.in>"
 
   def respond_to_new_employee(startup, new_employee)
     @new_employee = new_employee

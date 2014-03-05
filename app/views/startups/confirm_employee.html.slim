@@ -1,0 +1,12 @@
+.row-fluid
+  .span8.well
+    = form_tag confirm_employee_startup_path(@startup), class: "form-horizontal" do
+      fieldset
+        = hidden_field_tag 'token', @token
+
+        legend Approve Employee
+        label.checkbox
+          = check_box_tag :is_founder
+          | Is employ a founder of the startup
+        div &nbsp;
+        = submit_tag "Accept",:class => "btn btn-primary"

@@ -21,13 +21,18 @@ class StartupsController < InheritedResources::Base
 		raise_not_found unless current_user.startup.try(:id) == @startup.id
 	end
 
-
 	def confirm_employee
 		@startup = Startup.find(params[:id])
-		raise_not_found unless current_user.startup.try(:id) == @startup.id
 		@new_employee = User.find_by_startup_verifier_token(params[:token])
-		@new_employee.update_attributes!(startup_link_verifier: current_user)
-		render text: 'done', status: :created
+		raise_not_found unless @new_employee
+		if request.post?
+			flash[:message] = "User was already accepted as startup employee." if @new_employee.startup_link_verifier_id
+			@new_employee.update_attributes!(startup_link_verifier_id: @new_employee.id, is_founder: params[:is_founder])
+			render :confirm_employee_done
+		else
+			@token = params[:token]
+			render :confirm_employee
+		end
 	end
 
 	def permitted_params

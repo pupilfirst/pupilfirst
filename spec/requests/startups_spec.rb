@@ -17,20 +17,20 @@ describe "Startups" do
       @new_employee = create :employee, {startup_link_verifier_id: nil, startup: @startup}
       @founder = @startup.founders.first
       login(@founder)
-      get "/startups/#{@startup.id}/confirm_employee", {token: @new_employee.startup_verifier_token}
+      post "/startups/#{@startup.id}/confirm_employee", {token: @new_employee.startup_verifier_token, is_founder: true}
+      @new_employee.reload
+      @startup.reload
     end
 
-    it "responds with 201 status" do
-      expect(response.status).to eql(201)
+    it "responds with 200 status" do
+      expect(response.status).to eql(200)
     end
 
     it "assigns requested employee to startup" do
       employees_ids = @startup.reload.employees.map &:id
       expect(employees_ids).to include(@new_employee.id)
+      expect(@new_employee.is_founder).to be(true)
     end
 
-    it "assigns one of the founder as verifier" do
-      expect(@new_employee.reload.startup_link_verifier.id).to eql(@founder.id)
-    end
   end
 end

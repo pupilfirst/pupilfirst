@@ -1,6 +1,6 @@
 Svapp::Application.routes.draw do
 
-  devise_for :users
+  devise_for :users, controllers: { passwords: "users/passwords" }
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
@@ -13,6 +13,7 @@ Svapp::Application.routes.draw do
   end
   resources :startups do
     member do
+      post :confirm_employee
       get :confirm_employee
     end
   end

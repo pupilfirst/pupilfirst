@@ -32,6 +32,7 @@ gem 'omniauth'
 gem 'devise_invitable'
 gem 'acts-as-taggable-on'
 gem 'textacular', '~> 3.0'
+gem 'sendgrid_smtpapi'
 
 group :development do
 	gem 'foreman'

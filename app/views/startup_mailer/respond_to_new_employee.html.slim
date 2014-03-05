@@ -1,4 +1,8 @@
-#div
-	| Confirm new co-founder added to your startup #{@startup.name}
-= link_to "Click to confirm \"#{@new_employee.fullname}\" as \"#{@new_employee.title}\" of #{@startup.name}", confirm_employee_startup_url(@startup, token: @new_employee.startup_verifier_token)
+- link = link_to "clicking here", confirm_employee_startup_url(@startup, token: @new_employee.startup_verifier_token)
+
+p Hi -founder_full_name-,
+
+p #{@new_employee.fullname} has listed himself/herself as #{@new_employee.title} at #{@startup.name}. Please approve or reject by #{link}.
+
+p - Team SV App
 

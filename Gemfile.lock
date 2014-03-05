@@ -324,6 +324,9 @@ GEM
     sdoc (0.4.0)
       json (~> 1.8)
       rdoc (~> 4.0, < 5.0)
+    sendgrid_smtpapi (0.0.2)
+      actionmailer (>= 3.0.0)
+      activesupport (>= 2.1.0)
     sentry-raven (0.7.1)
       faraday (>= 0.7.6)
       hashie (>= 1.1.0)
@@ -436,6 +439,7 @@ DEPENDENCIES
   sass-rails (~> 4.0.0)
   sdoc
   seed-fu!
+  sendgrid_smtpapi
   sentry-raven
   simple_form
   simplecov

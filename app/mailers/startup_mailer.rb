@@ -5,6 +5,7 @@ class StartupMailer < ActionMailer::Base
     @new_employee = new_employee
     @startup = startup
     send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
+    substitute '-founder_full_name-', startup.founders.map(&:fullname)
     mail(to: send_to, subject: "Approve new employee at #{startup.name}")
   end
 end

@@ -106,7 +106,7 @@ describe "Startup Requests" do
       expect(@new_employee.title).to eql('startup ceo')
       expect(@new_employee.reload.startup_id).to eql(@startup.id)
       expect(response).to be_success
-      have_user_object(response, 'user')
+      have_user_object(response)
     end
 
     def emails_sent

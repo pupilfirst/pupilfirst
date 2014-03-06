@@ -9,9 +9,9 @@ class V1::SessionsController < V1::BaseController
     if not valid_request?(hash_string, params[:digest])
       render nothing: true, status: :unauthorized
     elsif @user.nil?
-      render json: {success: false, user: nil}
+      render json: {error: "User not found with that email/password."}, status: :bad_request
     elsif not @user.valid_password?(params[:password])
-      render json: {success: false, user: nil}
+      render json: {error: "User not found with that email/password."}, status: :bad_request
     else
       render :create
       # render json: {id: @user.id, auth_token: @user.auth_token}

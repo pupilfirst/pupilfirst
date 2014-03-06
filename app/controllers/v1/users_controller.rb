@@ -11,7 +11,7 @@ class V1::UsersController < V1::BaseController
 		if @user.save
 	    render 'create', status: :created
 		else
-	    render json: @user.errors, status: :bad_request
+	    render json: @user.errors.join(', '), status: :bad_request
 		end
 	end
 
@@ -21,7 +21,7 @@ class V1::UsersController < V1::BaseController
 			user.send_reset_password_instructions
 			render nothing: true, status: 200
 		else
-			render nothing: true, status: :unprocessable_entity
+			render json: {error: "No user found with that email"}, status: :unprocessable_entity
 		end
 	end
 

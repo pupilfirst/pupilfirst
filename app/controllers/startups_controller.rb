@@ -27,7 +27,7 @@ class StartupsController < InheritedResources::Base
 		raise_not_found unless @new_employee
 		if request.post?
 			flash[:message] = "User was already accepted as startup employee." if @new_employee.startup_link_verifier_id
-			@new_employee.update_attributes!(startup_link_verifier_id: @new_employee.id, is_founder: params[:is_founder])
+			@new_employee.confirm_employee! params[:is_founder]
 			render :confirm_employee_done
 		else
 			@token = params[:token]

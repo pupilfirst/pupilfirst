@@ -17,6 +17,10 @@ describe "Startups" do
       @new_employee = create :employee, {startup_link_verifier_id: nil, startup: @startup}
       @founder = @startup.founders.first
       login(@founder)
+    end
+
+    before(:each) do
+      expect(Urbanairship).to receive(:push).and_return true
       post "/startups/#{@startup.id}/confirm_employee", {token: @new_employee.startup_verifier_token, is_founder: true}
       @new_employee.reload
       @startup.reload

@@ -11,6 +11,27 @@ describe V1::UsersController do
 	      expect(response).to be_success
 	    end
 	  end
+
+    context 'when id is self' do
+      it "returns extra details about related startups" do
+        pending "contains startup info"
+        check_type(response, "startup/approval_status", Boolean)
+        check_path(response, "startup/approval_status")
+        check_path(response, "startup/incorporation")
+        check_path(response, "startup/incorporation/status")
+        check_path(response, "startup/incorporation/message")
+        check_path(response, "startup/banking")
+        check_path(response, "startup/banking/status")
+        check_path(response, "startup/banking/message")
+        check_path(response, "startup/sep")
+        check_path(response, "startup/sep/status")
+        check_path(response, "startup/sep/message")
+
+        check_path(response, "startup/director_info")
+        check_path(response, "startup/director_info/pan_status")
+        check_path(response, "startup/director_info/din_status")
+      end
+    end
   end
 
   describe "POST on user" do

@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :invitable, :database_authenticatable,
+  devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable
   has_many :news, class_name: "News", foreign_key: :user_id
   has_many :events
@@ -52,6 +52,12 @@ class User < ActiveRecord::Base
 
   def verify_self!
     update_attributes!(startup_link_verifier: self, startup_verifier_token: SecureRandom.hex(30))
+  end
+
+  def confirm_employee!(is_founder)
+    self.update_attributes!(startup_link_verifier_id: self.id, is_founder: is_founder)
+    push_message = 'Hola! you have been accepted.'
+    UserPushNotifyJob.new.async.perform(self.id, :employee_confirmed, push_message)
   end
 
   def to_s

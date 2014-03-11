@@ -3,7 +3,7 @@ class V1::UsersController < V1::BaseController
   skip_before_filter :require_token, only: [:create, :forgot_password]
 
 	def show
-		@user = User.find params[:id]
+		@user = (params[:id] == 'self') ? current_user : User.find(params[:id])
 	end
 
 	def create
@@ -11,7 +11,7 @@ class V1::UsersController < V1::BaseController
 		if @user.save
 	    render 'create', status: :created
 		else
-	    render json: @user.errors.join(', '), status: :bad_request
+	    render json: {error: @user.errors.to_a.join(', ')} , status: :bad_request
 		end
 	end
 

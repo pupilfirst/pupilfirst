@@ -54,6 +54,15 @@ describe V1::UsersController do
   		end
 	  end
 
+    context 'with invalid password' do
+      it "return bad_request with errors in body" do
+        dob = Time.parse('2000-5-5').to_date.to_s
+        attributes = attributes_for(:user_with_password, born_on: dob).merge(password: 'foo')
+        post '/api/users', {user: attributes}, version_header
+        expect(response.status).to eq(400)
+        expect(response.body).to have_json_path("error")
+      end
+    end
   end
 
 end

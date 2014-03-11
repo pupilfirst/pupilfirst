@@ -3,6 +3,34 @@ require 'spec_helper'
 describe V1::UsersController do
 	include V1ApiSpecHelper
 
+  shared_examples "applicaiton process status for" do |process_name|
+    context process_name do
+      context "user filling up the applicaiton" do
+        context 'not submited' do
+          xit "should be nil" do
+
+          end
+        end
+        context 'submited and pending' do
+          xit "should have status false" do
+
+          end
+        end
+        context 'submited and completed' do
+          xit "should have status true" do
+
+          end
+        end
+      end
+
+      context "user has been assigned as director of startups" do
+        xit "should set #{process_name} status/message as nil" do
+
+        end
+      end
+    end
+  end
+
   describe "GET on user" do
   	context "fetches details of user when id is provided" do
 	    xit "returns http success with details" do
@@ -10,26 +38,42 @@ describe V1::UsersController do
 	      get "/api/users/#{user.id}", {}, version_header
 	      expect(response).to be_success
 	    end
+
 	  end
 
     context 'when id is self' do
       it "returns extra details about related startups" do
-        pending "contains startup info"
-        check_type(response, "startup/approval_status", Boolean)
-        check_path(response, "startup/approval_status")
-        check_path(response, "startup/incorporation")
-        check_path(response, "startup/incorporation/status")
-        check_path(response, "startup/incorporation/message")
-        check_path(response, "startup/banking")
-        check_path(response, "startup/banking/status")
-        check_path(response, "startup/banking/message")
-        check_path(response, "startup/sep")
-        check_path(response, "startup/sep/status")
-        check_path(response, "startup/sep/message")
+        get "/api/users/self", {}, version_header
+        expect(response).to be_success
+        check_path(response, "startup_meta_details/approval_status")
+        check_path(response, "startup_meta_details/next_process")
+        check_path(response, "startup_meta_details/incorporation")
+        check_path(response, "startup_meta_details/incorporation/status")
+        check_path(response, "startup_meta_details/incorporation/message")
+        check_path(response, "startup_meta_details/banking")
+        check_path(response, "startup_meta_details/banking/status")
+        check_path(response, "startup_meta_details/banking/message")
+        check_path(response, "startup_meta_details/sep")
+        check_path(response, "startup_meta_details/sep/status")
+        check_path(response, "startup_meta_details/sep/message")
+        check_path(response, "startup_meta_details/director_info")
+        check_path(response, "startup_meta_details/director_info/pan_status")
+        check_path(response, "startup_meta_details/director_info/din_status")
+      end
 
-        check_path(response, "startup/director_info")
-        check_path(response, "startup/director_info/pan_status")
-        check_path(response, "startup/director_info/din_status")
+      it_behaves_like "applicaiton process status for", 'incorporation'
+      it_behaves_like "applicaiton process status for", 'banking'
+      it_behaves_like "applicaiton process status for", 'SEP'
+
+      context 'after applying pan/din' do
+        context 'when applicaiton in-progress' do
+          xit "should show status as true" do
+          end
+        end
+        context "when pan/din recived" do
+          xit "should show status as true" do
+          end
+        end
       end
     end
   end
@@ -65,4 +109,15 @@ describe V1::UsersController do
     end
   end
 
+  describe "PUT on user" do
+    context 'user pan details are passed' do
+      xit "should update details" do
+
+      end
+
+      xit "should apply for pan &/or din " do
+
+      end
+    end
+  end
 end

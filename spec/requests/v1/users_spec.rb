@@ -49,32 +49,27 @@ describe V1::UsersController do
         check_path(response, "startup_meta_details/next_process")
         check_path(response, "startup_meta_details/incorporation")
         check_path(response, "startup_meta_details/incorporation/status")
+        check_path(response, "startup_meta_details/incorporation/is_enabled")
         check_path(response, "startup_meta_details/incorporation/message")
         check_path(response, "startup_meta_details/banking")
         check_path(response, "startup_meta_details/banking/status")
+        check_path(response, "startup_meta_details/banking/is_enabled")
         check_path(response, "startup_meta_details/banking/message")
         check_path(response, "startup_meta_details/sep")
         check_path(response, "startup_meta_details/sep/status")
+        check_path(response, "startup_meta_details/sep/is_enabled")
         check_path(response, "startup_meta_details/sep/message")
-        check_path(response, "startup_meta_details/director_info")
-        check_path(response, "startup_meta_details/director_info/pan_status")
-        check_path(response, "startup_meta_details/director_info/din_status")
+        check_path(response, "startup_meta_details/personal_info")
+        check_path(response, "startup_meta_details/personal_info/is_enabled")
+        check_path(response, "startup_meta_details/personal_info/status")
+        check_path(response, "startup_meta_details/personal_info/message")
       end
 
       it_behaves_like "applicaiton process status for", 'incorporation'
       it_behaves_like "applicaiton process status for", 'banking'
       it_behaves_like "applicaiton process status for", 'SEP'
+      it_behaves_like "applicaiton process status for", 'personal_info'
 
-      context 'after applying pan/din' do
-        context 'when applicaiton in-progress' do
-          xit "should show status as true" do
-          end
-        end
-        context "when pan/din recived" do
-          xit "should show status as true" do
-          end
-        end
-      end
     end
   end
 

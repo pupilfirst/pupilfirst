@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140228094513) do
+ActiveRecord::Schema.define(version: 20140312083438) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,17 @@ ActiveRecord::Schema.define(version: 20140228094513) do
   add_index "active_admin_comments", ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
   add_index "active_admin_comments", ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
   add_index "active_admin_comments", ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
+
+  create_table "addresses", force: true do |t|
+    t.string   "flat"
+    t.string   "building"
+    t.string   "area"
+    t.string   "town"
+    t.string   "state"
+    t.string   "pin"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "admin_users", force: true do |t|
     t.string   "email",                  default: "", null: false
@@ -81,11 +92,29 @@ ActiveRecord::Schema.define(version: 20140228094513) do
   add_index "events", ["location_id"], name: "index_events_on_location_id", using: :btree
   add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
 
+  create_table "guardians", force: true do |t|
+    t.integer  "name_id"
+    t.integer  "address_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "guardians", ["address_id"], name: "index_guardians_on_address_id", using: :btree
+  add_index "guardians", ["name_id"], name: "index_guardians_on_name_id", using: :btree
+
   create_table "locations", force: true do |t|
     t.decimal  "latitude"
     t.decimal  "longitude"
     t.string   "title"
     t.text     "address"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "names", force: true do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "middle_name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -105,6 +134,17 @@ ActiveRecord::Schema.define(version: 20140228094513) do
   end
 
   add_index "news", ["user_id"], name: "index_news_on_user_id", using: :btree
+
+  create_table "people", force: true do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "middle_name"
+    t.string   "current_occupation"
+    t.text     "educational_qualification"
+    t.date     "place_of_birth"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "social_ids", force: true do |t|
     t.string   "provider"
@@ -202,12 +242,26 @@ ActiveRecord::Schema.define(version: 20140228094513) do
     t.integer  "startup_link_verifier_id"
     t.string   "startup_verifier_token"
     t.boolean  "is_founder"
+    t.string   "pan"
+    t.string   "din"
+    t.string   "aadhar"
+    t.integer  "other_name_id"
+    t.integer  "address_id"
+    t.integer  "father_id"
+    t.string   "mother_maiden_name"
+    t.boolean  "married"
+    t.string   "religion"
+    t.integer  "guardian_id"
   end
 
+  add_index "users", ["address_id"], name: "index_users_on_address_id", using: :btree
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["father_id"], name: "index_users_on_father_id", using: :btree
+  add_index "users", ["guardian_id"], name: "index_users_on_guardian_id", using: :btree
   add_index "users", ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
   add_index "users", ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
+  add_index "users", ["other_name_id"], name: "index_users_on_other_name_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
 end

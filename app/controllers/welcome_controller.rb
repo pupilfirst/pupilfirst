@@ -1,4 +1,5 @@
 class WelcomeController < ApplicationController
+  layout 'home'
 
 	def index
 		if current_user and current_user.startup.present?

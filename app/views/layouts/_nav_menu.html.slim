@@ -1,13 +1,8 @@
-.navbar
-  .navbar-inner
-    .container
-      a.btn.btn-navbar data-target=".navbar-responsive-collapse" data-toggle="collapse"
-        span.icon-bar
-        span.icon-bar
-        span.icon-bar
-      a.brand href="/"
-        | SvLabs β
-      - if current_user
-        = render 'layouts/user_menu'
-      - else
-        = render 'layouts/guest_menu'
+.header-wrap
+
+  a.logo href="/"
+    img src="../assets/logo.png"
+  - if current_user
+    = render 'layouts/user_menu'
+  - else
+    = render 'layouts/guest_menu'

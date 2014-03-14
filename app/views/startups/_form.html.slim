@@ -3,31 +3,32 @@
 - if @startup.errors.any?
   h4 Errors
   = @startup.errors.full_messages.first if @startup.errors.any?
-= simple_form_for @startup, :html => { :class => 'form-horizontal' } do |f|
-  = f.input :name, label: "Startup Name"
-  = f.input :logo, as: :file, required: false
-  = f.input :remote_logo_url, required: false, label: "or Logo URL", hint: "URL to the image"
-  = f.input :pitch, as: :text, hint: "max 10 words",  input_html: {rows: 8, class:'span5', placeholder: 'max 10 words'}
-  = f.input :website
-  = f.input :about, as: :text, hint: "min 10 words, 500 words max", input_html: {rows: 10, class:'span8', placeholder: 'min 10 words, 500 words max'}
-  = f.input :twitter_link
-  = f.input :facebook_link
-  = f.association :categories, collection: Category.startup_category, as: :select, hint: "Min:1, Max:3 categories"
-  h3 Founders
-  #founders
-    - @startup.founders.each do |founder|
-      .fullname
-        = "#{founder.fullname}(#{founder.email})"
-    .links
-      - if @startup.new_record?
-        = "Complete the Form and submit to add more co-founders"
-      - else
-        = link_to 'Invite More Co-Founders', '#', id: 'invite_link'
+.wrapper-form
+  = simple_form_for @startup, :html => { :class => 'form-horizontal' } do |f|
+    = f.input :name, label: "Startup Name"
+    = f.input :logo, as: :file, required: false
+    = f.input :remote_logo_url, required: false, label: "or Logo URL", hint: "URL to the image"
+    = f.input :pitch, as: :text, hint: "max 10 words",  input_html: {rows: 8, class:'span5', placeholder: 'max 10 words'}
+    = f.input :website
+    = f.input :about, as: :text, hint: "min 10 words, 500 words max", input_html: {rows: 10, class:'span8', placeholder: 'min 10 words, 500 words max'}
+    = f.input :twitter_link
+    = f.input :facebook_link
+    = f.association :categories, collection: Category.startup_category, as: :select, hint: "Min:1, Max:3 categories"
+    h3 Founders
+    #founders
+      - @startup.founders.each do |founder|
+        .fullname
+          = "#{founder.fullname}(#{founder.email})"
+      .links
+        - if @startup.new_record?
+          = "Complete the Form and submit to add more co-founders"
+        - else
+          = link_to 'Invite More Co-Founders', '#', id: 'invite_link'
 
-  h4 Other details
-  = f.input :email, label: "Company's email"
-  = f.input :phone, label: "Company's contact number"
-  = f.submit
+    h4 Other details
+    = f.input :email, label: "Company's email"
+    = f.input :phone, label: "Company's contact number"
+    = f.submit
 
 javascript:
   $(function(){

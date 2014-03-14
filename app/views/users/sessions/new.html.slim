@@ -1,13 +1,22 @@
-h2 Sign in
+.login-block
 
-= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
-  .form-inputs
-    = f.input :email, :required => false, :autofocus => true
-    = f.input :password, :required => false
-    = f.input :remember_me, :as => :boolean if devise_mapping.rememberable?
+  h3 Sign in
 
-	.form-actions
-  	= f.button :submit, "Sign in"
+  = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+    .form-inputs.form-horizontal
 
-= render "users/shared/links"
+      .form-group
+        = f.input :email, :required => false, :autofocus => true
+      .form-group
+        = f.input :password, :required => false
+
+      .form-group
+        .remember
+          = f.input :remember_me, :as => :boolean if devise_mapping.rememberable?
+      .form-group
+        .signin-pad
+          = f.button :submit, "Sign in", :class=>'btn btn-success'
+
+  .form-group.login-links
+    = render "users/shared/links"
 

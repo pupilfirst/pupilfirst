@@ -4,22 +4,20 @@ html
     title Svapp
     meta name="keywords" content="startup village, kerala, svapp, svlabs"
     = stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true
+    link href="http://fonts.googleapis.com/css?family=Roboto:400,300,700,100" media="screen" rel="stylesheet" type="text/css"
     = javascript_include_tag "application", "data-turbolinks-track" => true
     = csrf_meta_tags
     = yield :head
 
   body
 
-.header-block
 
-    = render 'layouts/nav_menu'
-    .notice
-      = notice
-    - if alert.present?
-      .alert
-        = alert
-
-    .container
+    .home-container
+      .notice
+        = notice
+          - if alert.present?
+            .alert
+              = alert
       == yield
     .footer
       .footer-wrap

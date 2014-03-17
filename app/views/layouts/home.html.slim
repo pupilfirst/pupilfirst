@@ -13,12 +13,8 @@ html
 
 
     .home-container
-      .notice
-        = notice
-          - if alert.present?
-            .alert
-              = alert
       == yield
+
     .footer
       .footer-wrap
         .ftr-lft
@@ -27,4 +23,5 @@ html
         .ftr-rgt
           img src="../assets/facebook.png"
           img src="../assets/twitter.png"
+          img src="../assets/linkedin.png"
       .clear

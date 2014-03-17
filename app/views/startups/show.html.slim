@@ -1,46 +1,49 @@
-p#notice
-  = notice
-table.table.table-hover
+
+
+<h1> Startup Name  </h1>
+
+
+table.table.table-hover.table-bordered.table-striped
   tbody
     tr
-      td Name:
+      td Name
       td
         = @startup.name
     tr
-      td Logo:
+      td Logo
       td
         = image_tag @startup.logo_url(:thumb)
     tr
-      td Pitch:
+      td Pitch
       td
         = @startup.pitch
     tr
-      td Website:
+      td Website
       td
         = @startup.website
     tr
-      td About:
+      td About
       td
         = @startup.about
     tr
-      td Categories:
+      td Categories
       td
         = @startup.categories.map &:name
     tr
-      td Email:
+      td Email
       td
         = @startup.email
     tr
-      td Phone:
+      td Phone
       td
         = @startup.phone
     tr
-      td Facebook Link:
+      td Facebook
       td
         = @startup.facebook_link
     tr
-      td Twitter Link:
+      td Twitter
       td
         = @startup.twitter_link
 
-= link_to 'Edit', edit_startup_path(@startup), {class: 'btn'}
+= link_to 'Edit', edit_startup_path(@startup), {class: 'btn btn-success'}

@@ -11,8 +11,7 @@
         = f.input :password, :required => false
 
       .form-group
-        .remember
-          = f.input :remember_me, :as => :boolean if devise_mapping.rememberable?
+        = f.input :remember_me, :as => :boolean,  :inline_label =>true, :label => false if devise_mapping.rememberable?
       .form-group
         .signin-pad
           = f.button :submit, "Sign in", :class=>'btn btn-success'

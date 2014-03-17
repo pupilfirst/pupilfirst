@@ -14,7 +14,8 @@
     = f.input :twitter_link
     = f.input :facebook_link
     = f.association :categories, collection: Category.startup_category, as: :select, hint: "Min:1, Max:3 categories"
-    h3 Founders
+
+    h1 Founders
     #founders
       - @startup.founders.each do |founder|
         .fullname
@@ -24,11 +25,36 @@
           = "Complete the Form and submit to add more co-founders"
         - else
           = link_to 'Invite More Co-Founders', '#', id: 'invite_link'
+          <button class="btn " data-toggle="modal" data-target="#myModal" >   Invite more Co-founders</button>
 
-    h4 Other details
+    h1 Other details
     = f.input :email, label: "Company's email"
     = f.input :phone, label: "Company's contact number"
-    = f.submit
+    = f.submit :class=> 'btn btn-success'
+    = link_to 'Show', @startup, :class => "btn btn-info"
+
+    <!-- Modal -->
+  #myModal.modal.fade aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1"
+    .modal-dialog
+      - resource = User.new
+      - resource_name = 'user'
+      = simple_form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => {:method => :post, :class => "form-horizontal"} do |f|
+        .modal-content
+          .modal-header
+            button.close aria-hidden="true" data-dismiss="modal" type="button"  &times;
+            h4#myModalLabel.modal-title
+              = t "devise.invitations.new.header"
+          .modal-body
+            h2
+            = devise_error_messages!
+            - resource.class.invite_key_fields.each do |field|
+              = f.input field
+          .modal-footer
+            = f.submit t("devise.invitations.new.submit_button"), class: 'btn btn-primary'
+
+            /button.btn.btn-default data-dismiss="modal" type="button"  Close
+            /button.btn.btn-primary type="button"  Save changes
+
 
 javascript:
   $(function(){
@@ -67,3 +93,6 @@ javascript:
     $(".startup_pitch #startup_pitch").click(update_pitch).change(update_pitch).keydown(update_pitch).keypress(update_pitch).keyup(update_pitch).blur(update_pitch).focus(update_pitch);
     $(".startup_about #startup_about").click(update_about).change(update_about).keydown(update_about).keypress(update_about).keyup(update_about).blur(update_about).focus(update_about);
   })
+
+
+

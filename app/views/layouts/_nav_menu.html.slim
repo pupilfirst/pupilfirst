@@ -1,8 +1,14 @@
 .header-wrap
 
-  a.logo href="/"
-    img src="../assets/logo.png"
+ .logo
+
+  a href="/"
+   img src="../../assets/logo.png"
+
+ #menu
   - if current_user
-    = render 'layouts/user_menu'
-  - else
-    = render 'layouts/guest_menu'
+   = render 'layouts/user_menu'
+  /- else
+  / = render 'layouts/guest_menu'
+
+ .clear

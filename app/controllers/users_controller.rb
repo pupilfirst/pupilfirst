@@ -1,8 +1,5 @@
 class UsersController < ApplicationController
   before_filter :authenticate_user!, only: [:update, :edit]
-	before_filter do
-		self.class.layout false if params[:partial].present?
-	end
 
   def show
     @user = User.find(params[:id])
@@ -25,6 +22,7 @@ class UsersController < ApplicationController
   end
 
   def invite
+    render layout: false
   end
 
   def send_invite

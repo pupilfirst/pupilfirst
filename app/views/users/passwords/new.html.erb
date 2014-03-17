@@ -1,4 +1,7 @@
-<h2>Forgot your password?</h2>
+
+<div class="login-block">
+
+<h3>Forgot your password?</h3>
 
 <%= simple_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post, :class => "form-horizontal" }) do |f| %>
   <%= f.error_notification %>
@@ -6,9 +9,9 @@
     <%= f.input :email, :required => true, :autofocus => true %>
   </div>
 
-  <div class="form-actions">
-    <%= f.button :submit, "Send me reset password instructions" %>
+  <div class="signin-pad">
+    <%= f.button :submit, "Send me reset password instructions", :class=>'btn btn-success' %>
   </div>
 <% end %>
 
-<%= render "users/shared/links" %>
+</div>

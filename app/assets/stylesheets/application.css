@@ -45,11 +45,12 @@ body {
 
 .ftr-rgt {
     float: right;
-    width: 100px;
+    width: 120px;
 }
 
 .ftr-rgt img {
     margin-right: 10px;
+    cursor: pointer;
 }
 .home-container {
     background: url("bg.png")repeat scroll center top / cover;
@@ -69,16 +70,24 @@ body {
 
 .logo {
     float: left;
+    padding: 5px 0 0 0;
 }
 
 .home-top-right-block {
     float: right;
-    padding: 30px 0 0 0;
+    padding: 15px 0 0 0;
     color: #ccc;
 }
 
 .clear {
     clear: both;
+}
+
+#menu {
+    float: right;
+    width: 550px;
+    padding: 10px 0 0 0;
+    margin: 20px 0 0 0;
 }
 
 .home-block {
@@ -95,6 +104,7 @@ body {
 .text-block {
     float: right;
     width: 550px;
+    padding-top: 100px;
 }
 
 .text-block h1 {
@@ -139,7 +149,6 @@ button.emerald:hover{
 
 
 button.sunflower{
-    margin-left:30px;
     background:#f1c40f;
     border-bottom: #f39c12 3px solid;
     border-left: #f39c12 1px solid;
@@ -161,7 +170,7 @@ button.sunflower:hover{
 
 
 .login-block {
-    margin: 150px auto 150px auto;
+    margin: 50px auto 100px auto;
     width: 500px;
     border: 1px solid #f3f3f3;
     background: #fff;
@@ -200,7 +209,7 @@ button.sunflower:hover{
 }
 
 .container {
-    padding-top: 100px;
+    padding-top: 50px;
     width: 1000px !important;
     min-height: 600px;
     margin: 0 auto 30px auto;
@@ -213,4 +222,17 @@ button.sunflower:hover{
     border-bottom: 1px solid #f3f3f3;
     font-size: 30px;
 }
+
+
+.notice {
+    width: 50%;
+    padding: 20px;
+    margin: 0 auto;
+    text-align: center;
+    color: darkred;
+}
+
+
+
+
 

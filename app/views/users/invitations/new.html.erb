@@ -1,4 +1,4 @@
-<h2><%= t "devise.invitations.new.header" %></h2>
+<h2><%= t "devise.invitations.new.header" %> </h2>
 
 <%= simple_form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => {:method => :post, :class => "form-horizontal"} do |f| %>
   <%= devise_error_messages! %>

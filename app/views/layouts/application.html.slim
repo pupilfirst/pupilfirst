@@ -13,13 +13,15 @@ html
 .header-block
 
     = render 'layouts/nav_menu'
-    .notice
-      = notice
-    - if alert.present?
-      .alert
-        = alert
+
 
     .container
+
+      .notice
+        = notice
+      - if alert.present?
+        .alert
+          = alert
       == yield
     .footer
       .footer-wrap
@@ -27,6 +29,7 @@ html
         | &copy; SV Labs. All rights reserved
 
         .ftr-rgt
-          img src="../assets/facebook.png"
-          img src="../assets/twitter.png"
+          img src="../../assets/facebook.png"
+          img src="../../assets/twitter.png"
+          img src="../../assets/linkedin.png"
       .clear

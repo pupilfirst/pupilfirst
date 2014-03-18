@@ -3,6 +3,7 @@ class CreateAddresses < ActiveRecord::Migration
     create_table :addresses do |t|
       t.string :flat
       t.string :building
+      t.string :street
       t.string :area
       t.string :town
       t.string :state

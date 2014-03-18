@@ -3,9 +3,11 @@ class Startup < ActiveRecord::Base
   MAX_ABOUT_WORDS = 500     unless defined?(MAX_ABOUT_WORDS)
 
   has_many :founders, -> { where("startup_link_verifier_id IS NOT NULL AND is_founder = ?", true)}, :class_name => "User", :foreign_key => "startup_id"
+  has_many :directors, -> { where("startup_link_verifier_id IS NOT NULL AND is_founder = ? AND is_director = ?", true, true)}, :class_name => "User", :foreign_key => "startup_id"
 	has_many :employees, -> { where("startup_link_verifier_id IS NOT NULL")}, :class_name => "User", :foreign_key => "startup_id"
 	has_and_belongs_to_many :categories, :join_table => "startups_categories"
-
+  has_one :bank
+  serialize :company, JSON
   validate :valid_categories?
   validate :valid_founders?
   validates_presence_of :name
@@ -38,5 +40,19 @@ class Startup < ActiveRecord::Base
     value = "http://#{value}" if value =~ /^facebook\.com.*/
     value = "http://facebook.com/#{value}"  unless value =~ /[http:\/\/]*facebook\.com.*/
     value if value =~ /^http[s]*:\/\/facebook\.com.*/
+  end
+
+  def incorporation_submited?
+    return true unless company.present?
+    false
+  end
+
+  def bank_details_submited?
+    return true if self.bank
+    false
+  end
+
+  def sep_submited?
+    false
   end
 end

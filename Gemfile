@@ -17,7 +17,7 @@ gem 'mini_magick'
 gem 'newrelic_rpm'
 gem 'nokogiri'
 gem 'pg'
-gem 'rubypress'
+gem 'rubypress' # wordpress
 gem 'sass-rails', '~> 4.0.0'
 gem 'sentry-raven'
 gem 'sucker_punch'
@@ -35,12 +35,11 @@ gem 'textacular', '~> 3.0'
 gem 'sendgrid_smtpapi'
 
 group :development do
-	gem 'foreman'
-	gem 'seed-fu', github: 'mbleigh/seed-fu'
+	gem 'seed-fu', github: 'mbleigh/seed-fu'  # check and remove
   gem 'guard'
   gem 'guard-shell'
   gem 'guard-rspec'
-  gem "guard-spork"
+  # gem "guard-spork"
   gem 'guard-livereload'
   gem 'childprocess'
   gem 'terminal-notifier-guard'
@@ -48,9 +47,6 @@ end
 
 group :test do
   gem 'sqlite3'
-	gem 'simplecov', require: false
-	gem 'rspec', '~> 3.0.0.beta1'
-	gem "rspec-mocks", "~> 3.0.0.beta1"
   gem 'email_spec'
   gem 'factory_girl', require: false
 	gem "factory_girl_rails", "~> 4.0"
@@ -68,7 +64,7 @@ group :development, :test do
   gem 'database_cleaner'
 	gem 'pry'
 	gem 'pry-debugger'
-	gem "spork-rails", git: "https://github.com/sporkrb/spork-rails"
+	# gem "spork-rails", git: "https://github.com/sporkrb/spork-rails"
 end
 
 group :production do

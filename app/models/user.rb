@@ -6,10 +6,15 @@ class User < ActiveRecord::Base
   has_many :news, class_name: "News", foreign_key: :user_id
   has_many :events
   has_many :social_ids
+  belongs_to :bank
+  belongs_to :other_name, class_name: 'Name', foreign_key: 'other_name_id'
+  belongs_to :father, class_name: 'Name'
+  belongs_to :address
+  belongs_to :guardian
   belongs_to :startup
   belongs_to :startup_link_verifier, class_name: "User", foreign_key: "startup_link_verifier_id"
   scope :non_founders, -> { where("startup_id IS NULL") }
-  accepts_nested_attributes_for :social_ids
+  accepts_nested_attributes_for :social_ids, :other_name, :father, :address, :guardian
 
   attr_reader :skip_password
   mount_uploader :avatar, AvatarUploader
@@ -58,6 +63,32 @@ class User < ActiveRecord::Base
     self.update_attributes!(startup_link_verifier_id: self.id, is_founder: is_founder)
     push_message = 'Hola! you have been accepted.'
     UserPushNotifyJob.new.async.perform(self.id, :employee_confirmed, push_message)
+  end
+
+  def profile_info_submitted?
+    return true if self.father
+    false
+  end
+
+  def profile_info_enabled?
+    return true if is_founder and not profile_info_submitted?
+    false
+  end
+
+  def incorporation_enabled?
+    return false if startup.incorporation_status?
+    return true if is_founder
+    false
+  end
+
+  def bank_details_enabled?
+    return false if startup.bank_status?
+    return true if is_founder and startup.incorporation_submited?
+    false
+  end
+
+  def sep_enabled?
+    true
   end
 
   def to_s

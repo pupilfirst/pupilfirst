@@ -32,4 +32,14 @@ CarrierWave.configure do |config|
     config.storage = :file
     config.root = "#{Rails.root}/public"
   end
+  if Rails.env.test? || Rails.env.cucumber?
+    config.storage = :file
+    config.enable_processing = false
+  end
+end
+
+if Rails.env.test? || Rails.env.cucumber?
+  # make sure our uploader is auto-loaded
+  AvatarUploader
+  FeedImageUploader
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140228094513) do
+ActiveRecord::Schema.define(version: 20140319084019) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,18 @@ ActiveRecord::Schema.define(version: 20140228094513) do
   add_index "active_admin_comments", ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
   add_index "active_admin_comments", ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
   add_index "active_admin_comments", ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
+
+  create_table "addresses", force: true do |t|
+    t.string   "flat"
+    t.string   "building"
+    t.string   "street"
+    t.string   "area"
+    t.string   "town"
+    t.string   "state"
+    t.string   "pin"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "admin_users", force: true do |t|
     t.string   "email",                  default: "", null: false
@@ -52,6 +64,15 @@ ActiveRecord::Schema.define(version: 20140228094513) do
 
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "banks", force: true do |t|
+    t.string   "mode_of_operation"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "startup_id"
+  end
+
+  add_index "banks", ["startup_id"], name: "index_banks_on_startup_id", using: :btree
 
   create_table "categories", force: true do |t|
     t.string   "name"
@@ -81,11 +102,29 @@ ActiveRecord::Schema.define(version: 20140228094513) do
   add_index "events", ["location_id"], name: "index_events_on_location_id", using: :btree
   add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
 
+  create_table "guardians", force: true do |t|
+    t.integer  "name_id"
+    t.integer  "address_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "guardians", ["address_id"], name: "index_guardians_on_address_id", using: :btree
+  add_index "guardians", ["name_id"], name: "index_guardians_on_name_id", using: :btree
+
   create_table "locations", force: true do |t|
     t.decimal  "latitude"
     t.decimal  "longitude"
     t.string   "title"
     t.text     "address"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "names", force: true do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "middle_name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -141,6 +180,16 @@ ActiveRecord::Schema.define(version: 20140228094513) do
     t.datetime "updated_at"
     t.string   "facebook_link"
     t.string   "twitter_link"
+    t.string   "dsc"
+    t.text     "company"
+    t.string   "authorized_capital"
+    t.string   "share_holding_pattern"
+    t.string   "moa"
+    t.text     "police_station"
+    t.boolean  "approval_status",       default: false
+    t.boolean  "incorporation_status",  default: false
+    t.boolean  "bank_status",           default: false
+    t.boolean  "sep_status",            default: false
   end
 
   create_table "startups_categories", id: false, force: true do |t|
@@ -173,11 +222,11 @@ ActiveRecord::Schema.define(version: 20140228094513) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "avatar"
-    t.string   "encrypted_password",       default: ""
+    t.string   "encrypted_password",        default: ""
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",            default: 0,  null: false
+    t.integer  "sign_in_count",             default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -202,12 +251,32 @@ ActiveRecord::Schema.define(version: 20140228094513) do
     t.integer  "startup_link_verifier_id"
     t.string   "startup_verifier_token"
     t.boolean  "is_founder"
+    t.string   "pan"
+    t.string   "din"
+    t.string   "aadhaar"
+    t.integer  "other_name_id"
+    t.integer  "address_id"
+    t.integer  "father_id"
+    t.boolean  "is_director",               default: false
+    t.string   "mother_maiden_name"
+    t.boolean  "married"
+    t.string   "current_occupation"
+    t.text     "educational_qualification"
+    t.string   "place_of_birth"
+    t.string   "religion"
+    t.integer  "guardian_id"
+    t.integer  "bank_id"
   end
 
+  add_index "users", ["address_id"], name: "index_users_on_address_id", using: :btree
+  add_index "users", ["bank_id"], name: "index_users_on_bank_id", using: :btree
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["father_id"], name: "index_users_on_father_id", using: :btree
+  add_index "users", ["guardian_id"], name: "index_users_on_guardian_id", using: :btree
   add_index "users", ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
   add_index "users", ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
+  add_index "users", ["other_name_id"], name: "index_users_on_other_name_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
 end

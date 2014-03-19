@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe V1::UsersController do
 	include V1ApiSpecHelper
-
+  include JsonSpec::Helpers
   describe "GET on user" do
   	context "fetches details of user when id is provided" do
 	    xit "returns http success with details" do
@@ -10,26 +10,146 @@ describe V1::UsersController do
 	      get "/api/users/#{user.id}", {}, version_header
 	      expect(response).to be_success
 	    end
+
 	  end
 
     context 'when id is self' do
       it "returns extra details about related startups" do
-        pending "contains startup info"
-        check_type(response, "startup/approval_status", Boolean)
-        check_path(response, "startup/approval_status")
-        check_path(response, "startup/incorporation")
-        check_path(response, "startup/incorporation/status")
-        check_path(response, "startup/incorporation/message")
-        check_path(response, "startup/banking")
-        check_path(response, "startup/banking/status")
-        check_path(response, "startup/banking/message")
-        check_path(response, "startup/sep")
-        check_path(response, "startup/sep/status")
-        check_path(response, "startup/sep/message")
+        @startup = create :startup
+        get "/api/users/self", {}, version_header(@startup.founders.first)
+        expect(response).to be_success
+        check_path(response, "startup_meta_details/approval_status")
+        check_path(response, "startup_meta_details/incorporation")
+        check_path(response, "startup_meta_details/incorporation/is_enabled")
+        check_path(response, "startup_meta_details/incorporation/message")
+        check_path(response, "startup_meta_details/banking")
+        check_path(response, "startup_meta_details/banking/is_enabled")
+        check_path(response, "startup_meta_details/banking/message")
+        check_path(response, "startup_meta_details/sep")
+        check_path(response, "startup_meta_details/sep/is_enabled")
+        check_path(response, "startup_meta_details/sep/message")
+        check_path(response, "startup_meta_details/personal_info")
+        check_path(response, "startup_meta_details/personal_info/is_enabled")
+        check_path(response, "startup_meta_details/personal_info/message")
+      end
 
-        check_path(response, "startup/director_info")
-        check_path(response, "startup/director_info/pan_status")
-        check_path(response, "startup/director_info/din_status")
+      context "when startup is just created" do
+        before(:all) do
+          @startup = create :startup
+          get "/api/users/self", {}, version_header(@startup.founders.first)
+        end
+        it "should have incorporation enabled, message nil" do
+          expect(parse_json(response.body, 'startup_meta_details/incorporation/is_enabled')).to eq(true)
+          expect(parse_json(response.body, 'startup_meta_details/incorporation/message')).to eq(nil)
+        end
+
+        it "should have banking disabled" do
+          expect(parse_json(response.body, 'startup_meta_details/banking/is_enabled')).to eq(false)
+          expect(parse_json(response.body, 'startup_meta_details/banking/message')).to eq(nil)
+        end
+        it "should have personal_info enabled" do
+          expect(parse_json(response.body, 'startup_meta_details/personal_info/is_enabled')).to eq(true)
+          expect(parse_json(response.body, 'startup_meta_details/personal_info/message')).to eq(nil)
+        end
+      end
+
+      context "profileinfo is submited" do
+        before(:all) do
+          @startup = create :startup
+          @founder = @startup.founders.each do |f|
+            f.update_attributes!(
+                                 address: create(:address),
+                                 father: create(:name),
+                                )
+          end
+          get "/api/users/self", {}, version_header(@startup.founders.first)
+        end
+        it "should have incorporation enabled" do
+          expect(parse_json(response.body, 'startup_meta_details/incorporation/is_enabled')).to eq(true)
+          expect(parse_json(response.body, 'startup_meta_details/incorporation/message')).to eq(nil)
+        end
+
+        it "should have personal_info disabled" do
+          expect(parse_json(response.body, 'startup_meta_details/personal_info/is_enabled')).to eq(false)
+        end
+      end
+
+      context "all director's info is completed" do
+        let(:startup) { create :startup }
+        before(:each) do
+          startup.founders.each do |f|
+            f.update_attributes!(
+                                 address: create(:address),
+                                 father: create(:name),
+                                )
+          end
+        end
+
+        it "should have personal_info disabled" do
+          get "/api/users/self", {}, version_header(startup.founders.first)
+          expect(parse_json(response.body, 'startup_meta_details/personal_info/is_enabled')).to eq(false)
+        end
+
+        context "incorporation is submited" do
+          before(:each) do
+            startup.update_attributes!(attributes_for(:incorporation))
+
+            get "/api/users/self", {}, version_header(startup.founders.first)
+          end
+          it "should have banking enabled" do
+            expect(parse_json(response.body, 'startup_meta_details/banking/is_enabled')).to eq(true)
+            expect(parse_json(response.body, 'startup_meta_details/banking/message')).to eq(nil)
+          end
+
+          context 'and approved' do
+            before(:each) do
+              startup.update_attributes!(incorporation_status: true)
+            end
+            it "should have incorporation disabled" do
+              get "/api/users/self", {}, version_header(startup.founders.first)
+              expect(parse_json(response.body, 'startup_meta_details/incorporation/is_enabled')).to eq(false)
+            end
+          end
+
+          context 'and pending' do
+            it "should have incorporation enabled, with a message" do
+              get "/api/users/self", {}, version_header(startup.founders.first)
+              expect(parse_json(response.body, 'startup_meta_details/incorporation/is_enabled')).to eq(true)
+              expect(response.body).to have_json_type(String).at_path('startup_meta_details/incorporation/message')
+            end
+          end
+        end
+
+        context "incorporation is submited/approved" do
+          before(:each) do
+            startup.update_attributes!(attributes_for(:incorporation))
+          end
+          context "banking is pending" do
+            before(:each) do
+              create :bank, startup: startup, directors: startup.founders
+            end
+
+            it "and should be enabled" do
+              get "/api/users/self", {}, version_header(startup.founders.first)
+              expect(parse_json(response.body, 'startup_meta_details/banking/is_enabled')).to eq(true)
+              expect(parse_json(response.body, 'startup_meta_details/banking/message')).to be_kind_of(String)
+            end
+          end
+
+          context 'banking is approved' do
+            before(:each) do
+              create :bank, startup: startup, directors: startup.founders
+              startup.update_attributes!(bank_status: true)
+            end
+
+            it "should be disabled" do
+              get "/api/users/self", {}, version_header(startup.founders.first)
+              expect(parse_json(response.body, 'startup_meta_details/banking/is_enabled')).to eq(false)
+            end
+
+          end
+        end
+
       end
     end
   end
@@ -65,4 +185,24 @@ describe V1::UsersController do
     end
   end
 
+  describe "PUT on user" do
+    context 'user pan details are passed' do
+      it "should update details" do
+        @user = create :founder
+        attributes = attributes_for(:director).merge({
+          other_name_attributes: attributes_for(:name),
+          address_attributes: attributes_for(:address),
+          father_attributes: attributes_for(:name),
+          guardian_attributes: {
+            name_attributes: attributes_for(:name),
+            address_attributes: attributes_for(:address)
+          }
+        })
+        put '/api/users/self', { user: attributes}, version_header(@user)
+        expect(response.body).to have_json_path("message")
+      end
+
+      it "should apply for pan &/or din"
+    end
+  end
 end

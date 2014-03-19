@@ -1,4 +1,5 @@
 json.(user, :id, :avatar_url, :fullname)
+json.born_on user.born_on.nil? ? nil : fmt_time(user.born_on)
 extra_block.call(user) if defined?(extra_block) and extra_block
 
 if user.startup

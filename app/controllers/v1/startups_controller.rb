@@ -30,6 +30,10 @@ class V1::StartupsController < V1::BaseController
     end
 	end
 
+  def update
+
+  end
+
 	def show
 		@startup = Startup.find(params[:id])
 		respond_to do |f|

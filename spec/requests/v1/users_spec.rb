@@ -34,9 +34,9 @@ describe V1::UsersController do
       end
 
       context "when startup is just created" do
-        before(:all) do
-          @startup = create :startup
-          get "/api/users/self", {}, version_header(@startup.founders.first)
+        let(:startup) { create :startup }
+        before(:each) do
+          get "/api/users/self", {}, version_header(startup.founders.first)
         end
         it "should have incorporation enabled, message nil" do
           expect(parse_json(response.body, 'startup_meta_details/incorporation/is_enabled')).to eq(true)
@@ -54,15 +54,15 @@ describe V1::UsersController do
       end
 
       context "profileinfo is submited" do
-        before(:all) do
-          @startup = create :startup
-          @founder = @startup.founders.each do |f|
+        let(:startup) { startup = create :startup }
+        before(:each) do
+          startup.founders.each do |f|
             f.update_attributes!(
                                  address: create(:address),
                                  father: create(:name),
                                 )
           end
-          get "/api/users/self", {}, version_header(@startup.founders.first)
+          get "/api/users/self", {}, version_header(startup.founders.first)
         end
         it "should have incorporation enabled" do
           expect(parse_json(response.body, 'startup_meta_details/incorporation/is_enabled')).to eq(true)

@@ -5,12 +5,10 @@ describe "Startup Requests" do
   include UserSpecHelper
   include Rails.application.routes.url_helpers
 
-  before(:all) do
-    @startup =  create(:startup, {name: 'startup 1'})
-    @startup1 = create(:startup, {name: 'startup 2'})
-    @startup2 = create(:startup, {name: 'foobar 1'})
-    @startup3 = create(:startup, {name: 'foobar 2'})
-  end
+  let!(:startup ) { create(:startup, {name: 'startup 1'}) }
+  let!(:startup1) { create(:startup, {name: 'startup 2'}) }
+  let!(:startup2) { create(:startup, {name: 'foobar 1'}) }
+  let!(:startup3) { create(:startup, {name: 'foobar 2'}) }
 
   it "fetch startups on index" do
     get "/api/startups", {},version_header
@@ -24,7 +22,7 @@ describe "Startup Requests" do
   end
 
   it "fetch startups within a category" do
-    get "/api/startups", {category: @startup1.categories.first.name},version_header
+    get "/api/startups", {category: startup1.categories.first.name},version_header
     expect(response).to render_template(:index)
     response.body.should have_json_size(1).at_path("/")
     response.body.should have_json_path("0/id")
@@ -48,7 +46,7 @@ describe "Startup Requests" do
   end
 
   it "fetches one startup with " do
-    get "/api/startups/#{@startup.id}", {}, version_header
+    get "/api/startups/#{startup.id}", {}, version_header
     expect(response).to render_template(:show)
     response.body.should have_json_path("id")
     response.body.should have_json_path("name")
@@ -78,33 +76,32 @@ describe "Startup Requests" do
 
   it "fetches suggestions based on given term" do
     get "/api/startups/load_suggestions", {term: 'fo'}, version_header
-    response.body.should have_json_path("0/id")
-    response.body.should have_json_path("0/name")
-    response.body.should have_json_path("0/logo_url")
+    expect(response.body).to have_json_size(2).at_path("/")
+    expect(response.body).to have_json_path("0/id")
+    expect(response.body).to have_json_path("0/name")
+    expect(response.body).to have_json_path("0/logo_url")
   end
 
   context "request to add new founder to a startup" do
-    before(:all) do
-      @startup = create :startup
-      @new_employee = create :user_with_out_password
-    end
+    let(:startup) { create :startup}
+    let(:new_employee) { create :user_with_out_password}
 
     before(:each) do
       ActionMailer::Base.deliveries = []
     end
 
     it "raise error if auth_token is not given" do
-      expect { post "/api/startups/#{@startup.id}/link_employee", {employee_id: @new_employee.id}, {} }.to raise_error(RuntimeError)
+      expect { post "/api/startups/#{startup.id}/link_employee", {employee_id: new_employee.id}, {} }.to raise_error(RuntimeError)
     end
 
     it "sends email to all existing co-founders" do
-      post "/api/startups/#{@startup.id}/link_employee", {position: 'startup ceo'}, version_header(@new_employee)
-      @new_employee.reload
-      expect(emails_sent.last).to have_subject(/Approve new employee at #{@startup.name}/)
-      expect(emails_sent.last.body.to_s).to include(confirm_employee_startup_url(@startup, token: @new_employee.startup_verifier_token))
-      expect(@new_employee.startup_link_verifier_id).to eql(nil)
-      expect(@new_employee.title).to eql('startup ceo')
-      expect(@new_employee.reload.startup_id).to eql(@startup.id)
+      post "/api/startups/#{startup.id}/link_employee", {position: 'startup ceo'}, version_header(new_employee)
+      new_employee.reload
+      expect(emails_sent.last).to have_subject(/Approve new employee at #{startup.name}/)
+      expect(emails_sent.last.body.to_s).to include(confirm_employee_startup_url(startup, token: new_employee.startup_verifier_token))
+      expect(new_employee.startup_link_verifier_id).to eql(nil)
+      expect(new_employee.title).to eql('startup ceo')
+      expect(new_employee.reload.startup_id).to eql(startup.id)
       expect(response).to be_success
       have_user_object(response, 'user')
     end

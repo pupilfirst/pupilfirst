@@ -50,7 +50,7 @@ RSpec.configure do |config|
   config.include(JsonSpec::Helpers)
   config.include(EmailSpec::Helpers)
   config.include(EmailSpec::Matchers)
-  config.before(:suite) do
+  config.before(:each) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
     DatabaseCleaner.start

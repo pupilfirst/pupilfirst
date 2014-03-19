@@ -27,18 +27,18 @@ FactoryGirl.define do
     fullname { "#{Faker::Name.first_name} #{Faker::Name.last_name}" }
     username  { Faker::Lorem.characters(9) }
     email 		{ Faker::Internet.email }
-    born_on 	Date.current.to_s
+    born_on 	{ Date.current.to_s }
 		avatar { fixture_file_upload(Rails.root.join(*%w[ spec fixtures files example.jpg ]), 'image/jpg') }
     factory :user_with_out_password do
 	    skip_password true
       factory :employee do
         startup_link_verifier_id 1
-        startup_verifier_token SecureRandom.hex(30)
+        startup_verifier_token { SecureRandom.hex(30) }
       end
       factory :founder do
         is_founder true
         startup_link_verifier_id 1
-        startup_verifier_token SecureRandom.hex(30)
+        startup_verifier_token { SecureRandom.hex(30) }
       end
 	    factory :user_with_facebook do
 	      after(:create) do |user, evaluator|

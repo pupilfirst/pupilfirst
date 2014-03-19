@@ -26,7 +26,7 @@ describe "startups/show" do
     expect(rendered).to match(/Email/)
     expect(rendered).to match(/Phone/)
     expect(rendered).to match(/Categories/)
-    expect(rendered).to match(/Facebook Link/)
-    expect(rendered).to match(/Twitter Link/)
+    expect(rendered).to match(/Facebook/)
+    expect(rendered).to match(/Twitter/)
   end
 end

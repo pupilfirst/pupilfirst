@@ -53,6 +53,42 @@ FactoryGirl.define do
     end
   end
 
+  factory :name do
+    first_name  "first_name"
+    last_name  "last_name"
+    middle_name  "middle_name"
+  end
+
+  factory :address do
+    flat  "flat"
+    building  "building"
+    area  "area"
+    town  "town"
+    state "state"
+    pin "pin"
+  end
+
+  factory :guardian do
+    association :name, factory: :name, strategy: :build
+    association :address, factory: :address, strategy: :build
+  end
+
+  factory :director, parent: :founder do
+    pan   "pan"
+    din   "din"
+    aadhaar    "aadhaar"
+    current_occupation  :current_occupation
+    educational_qualification  :educational_qualification
+    place_of_birth  :place_of_birth
+    association :other_name_id, factory: :name, strategy: :build
+    association :address, factory: :address, strategy: :build
+    association :father, factory: :name, strategy: :build
+    mother_maiden_name    "mother_maiden_name"
+    married   true
+    religion    "religion"
+    association :guardian, factory: :guardian, strategy: :build
+  end
+
 	factory :news_category,  class: Category do |f|
 		f.name {Faker::Lorem.words(2).join(' ')}
 		f.category_type :news
@@ -118,5 +154,19 @@ FactoryGirl.define do
     f.pitch     {Faker::Lorem.words(6).join(' ')}
     f.website   {Faker::Internet.domain_name}
     f.phone   {Faker::PhoneNumber.cell_phone}
+  end
+
+  factory :incorporation, class: Startup do |f|
+    f.dsc "dsc"
+    f.company [{name: 'company1', description: 'desc'}]
+    f.authorized_capital  "authorized_capital"
+    f.share_holding_pattern "share_holding_pattern"
+    f.moa "moa"
+    f.police_station  "police_station"
+  end
+
+  factory :bank do |f|
+    f.mode_of_operation "mode_of_operation"
+    startup
   end
 end

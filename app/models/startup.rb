@@ -43,7 +43,7 @@ class Startup < ActiveRecord::Base
   end
 
   def incorporation_submited?
-    return true unless company.present?
+    return true if company.present?
     false
   end
 
@@ -54,5 +54,17 @@ class Startup < ActiveRecord::Base
 
   def sep_submited?
     false
+  end
+
+  def incorporation_message
+    return nil if incorporation_status
+    return nil unless incorporation_submited?
+    "message"
+  end
+
+  def banking_message
+    return nil if bank_status
+    return nil unless bank_details_submited?
+    "message"
   end
 end

@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   has_many :news, class_name: "News", foreign_key: :user_id
   has_many :events
   has_many :social_ids
+  belongs_to :bank
   belongs_to :other_name, class_name: 'Name', foreign_key: 'other_name_id'
   belongs_to :father, class_name: 'Name'
   belongs_to :address
@@ -70,22 +71,24 @@ class User < ActiveRecord::Base
   end
 
   def profile_info_enabled?
-    return true if is_founder
+    return true if is_founder and not profile_info_submitted?
     false
   end
 
   def incorporation_enabled?
+    return false if startup.incorporation_status?
     return true if is_founder
     false
   end
 
   def bank_details_enabled?
-    return true if is_founder
+    return false if startup.bank_status?
+    return true if is_founder and startup.incorporation_submited?
     false
   end
 
   def sep_enabled?
-    false
+    true
   end
 
   def to_s

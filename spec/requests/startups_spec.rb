@@ -17,6 +17,8 @@ describe "Startups" do
     before(:each) do
       founder = startup.founders.first
       login(founder)
+
+      allow(UserPushNotifyJob).to receive_message_chain(:new, :async, :perform).and_return true
       allow(Urbanairship).to receive(:push).and_return true
       post "/startups/#{startup.id}/confirm_employee", {token: new_employee.startup_verifier_token, is_founder: true}
     end

@@ -31,7 +31,12 @@ class V1::StartupsController < V1::BaseController
 	end
 
   def update
-
+    startup = Startup.find params[:id]
+    if startup.update_attributes(startup_params)
+      render json: {message: "message"}, status: :ok
+    else
+      render json: {error: "Error updating Startup"}, status: :bad_request
+    end
   end
 
 	def show

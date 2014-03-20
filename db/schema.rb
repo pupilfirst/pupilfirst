@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140319084019) do
+ActiveRecord::Schema.define(version: 20140320071856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,10 +66,9 @@ ActiveRecord::Schema.define(version: 20140319084019) do
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "banks", force: true do |t|
-    t.string   "mode_of_operation"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "startup_id"
+    t.string  "name"
+    t.boolean "is_joint"
+    t.integer "startup_id"
   end
 
   add_index "banks", ["startup_id"], name: "index_banks_on_startup_id", using: :btree
@@ -266,6 +265,7 @@ ActiveRecord::Schema.define(version: 20140319084019) do
     t.string   "religion"
     t.integer  "guardian_id"
     t.integer  "bank_id"
+    t.string   "salutation"
   end
 
   add_index "users", ["address_id"], name: "index_users_on_address_id", using: :btree

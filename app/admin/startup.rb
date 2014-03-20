@@ -19,8 +19,8 @@ ActiveAdmin.register Startup do
 
   index do
     actions
-    column :status do
-      'Approved'
+    column :status do |startup|
+      startup.approval_status ? "Accepted" : "Pending"
     end
     column :name
     column :email
@@ -49,6 +49,12 @@ ActiveAdmin.register Startup do
     end
     column :website
 
+  end
+
+  member_action :send_form_email, method: :post do
+    puts "sent email"
+    # SENDEMAIL
+    redirect_to action: :show
   end
 
   show do |ad|
@@ -88,7 +94,7 @@ ActiveAdmin.register Startup do
         elsif startup.valid?
           link_to("Approve Startup", admin_startup_path(startup:{approval_status: true}), { method: :put })
         else
-          'Waiting Completion'
+          link_to("Waiting Completion. Send email with form link.", send_form_email_admin_startup_path, { method: :post })
         end
 
       end

@@ -158,7 +158,7 @@ FactoryGirl.define do
 
   factory :incorporation, class: Startup do |f|
     f.dsc "dsc"
-    f.company [{name: 'company1', description: 'desc'}]
+    f.company_names [{name: 'company1', description: 'desc'}]
     f.authorized_capital  "authorized_capital"
     f.share_holding_pattern "share_holding_pattern"
     f.moa "moa"
@@ -166,7 +166,7 @@ FactoryGirl.define do
   end
 
   factory :bank do |f|
-    f.mode_of_operation "mode_of_operation"
+    f.is_joint true
     startup
   end
 end

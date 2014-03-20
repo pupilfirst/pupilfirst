@@ -1,5 +1,4 @@
 - session[:startup_id] = @startup.id
-- @startup.founders << current_user if @startup.founders.empty?
 - if @startup.errors.any?
   h4 Errors
   = @startup.errors.full_messages.first if @startup.errors.any?
@@ -14,18 +13,6 @@
     = f.input :twitter_link
     = f.input :facebook_link
     = f.association :categories, collection: Category.startup_category, as: :select, hint: "Min:1, Max:3 categories"
-
-    h1 Founders
-    #founders
-      - @startup.founders.each do |founder|
-        .fullname
-          = "#{founder.fullname}(#{founder.email})"
-      .links
-        - if @startup.new_record?
-          = "Complete the Form and submit to add more co-founders"
-        - else
-          = link_to 'Invite More Co-Founders', '#', id: 'invite_link'
-          <button class="btn " data-toggle="modal" data-target="#myModal" >   Invite more Co-founders</button>
 
     h1 Other details
     = f.input :email, label: "Company's email"
@@ -58,10 +45,6 @@
 
 javascript:
   $(function(){
-    $("#invite_link").click(function(){
-      var opts = "menubar=no,location=no,resizable=no,scrollbars=yes,status=false,top=200,left=400,width=500,height=300";
-      var inviteWindow = window.open(window.location.origin+"/users/invite?partial=true&startup_id=#{}", "inviteWindow", opts);
-    })
     $('select').selectpicker();
     counter = function(ele, help_ele, max_words) {
         var value = $(ele).val();

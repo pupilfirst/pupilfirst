@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140320071856) do
+ActiveRecord::Schema.define(version: 20140320114615) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -180,7 +180,6 @@ ActiveRecord::Schema.define(version: 20140320071856) do
     t.string   "facebook_link"
     t.string   "twitter_link"
     t.string   "dsc"
-    t.text     "company"
     t.string   "authorized_capital"
     t.string   "share_holding_pattern"
     t.string   "moa"
@@ -189,6 +188,7 @@ ActiveRecord::Schema.define(version: 20140320071856) do
     t.boolean  "incorporation_status",  default: false
     t.boolean  "bank_status",           default: false
     t.boolean  "sep_status",            default: false
+    t.text     "company_names"
   end
 
   create_table "startups_categories", id: false, force: true do |t|
@@ -266,6 +266,8 @@ ActiveRecord::Schema.define(version: 20140320071856) do
     t.integer  "guardian_id"
     t.integer  "bank_id"
     t.string   "salutation"
+    t.integer  "number_of_shares"
+    t.boolean  "is_share_holder"
   end
 
   add_index "users", ["address_id"], name: "index_users_on_address_id", using: :btree

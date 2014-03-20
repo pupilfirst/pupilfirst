@@ -31,8 +31,15 @@ class V1::StartupsController < V1::BaseController
 	end
 
   def update
-    startup = Startup.find params[:id]
+    id = params[:id]
+    startup = (id == "self") ? current_user.startup : Startup.find(id)
     if startup.update_attributes(startup_params)
+      (directors_in_params[:directors] or []).each do |dir|
+        founder = startup.founders.find(dir['id'].to_i) rescue nil
+        founder.update_attributes(dir.select{|key|
+          ['number_of_shares', 'is_share_holder'].include?(key)
+        }.merge({is_director: true}))
+      end
       render json: {message: "message"}, status: :ok
     else
       render json: {error: "Error updating Startup"}, status: :bad_request
@@ -59,7 +66,13 @@ class V1::StartupsController < V1::BaseController
 
 private
   def startup_params
-    params.require(:startup).permit(:name, :phone, :pitch, :website)
+    params.require(:startup).permit(:name, :phone, :pitch, :website,:dsc,
+                                    company_names: [:justification, :name],
+                                    police_station: [:city, :line1, :line2, :name, :pin]
+                                    )
   end
 
+  def directors_in_params
+    params.require(:startup).permit(directors: [:id, :is_share_holder, :number_of_shares])
+  end
 end

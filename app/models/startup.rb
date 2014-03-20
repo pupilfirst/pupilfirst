@@ -7,7 +7,8 @@ class Startup < ActiveRecord::Base
 	has_many :employees, -> { where("startup_link_verifier_id IS NOT NULL")}, :class_name => "User", :foreign_key => "startup_id"
 	has_and_belongs_to_many :categories, :join_table => "startups_categories"
   has_one :bank
-  serialize :company, JSON
+  serialize :company_names, JSON
+  serialize :police_station, JSON
   validate :valid_categories?
   validate :valid_founders?
   validates_presence_of :name
@@ -43,7 +44,7 @@ class Startup < ActiveRecord::Base
   end
 
   def incorporation_submited?
-    return true if company.present?
+    return true if company_names.present?
     false
   end
 

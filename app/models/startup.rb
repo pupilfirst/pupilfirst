@@ -1,5 +1,5 @@
 class Startup < ActiveRecord::Base
-  MAX_PITCH_WORDS = 10      unless defined?(MAX_PITCH_WORDS)
+  MAX_PITCH_CHARS = 140      unless defined?(MAX_PITCH_CHARS)
   MAX_ABOUT_WORDS = 500     unless defined?(MAX_ABOUT_WORDS)
 
   has_many :founders, -> { where("startup_link_verifier_id IS NOT NULL AND is_founder = ?", true)}, :class_name => "User", :foreign_key => "startup_id"
@@ -13,9 +13,10 @@ class Startup < ActiveRecord::Base
   validate :valid_founders?
   validates_presence_of :name
   validates_presence_of :logo
+  validates_presence_of :address
   validates_presence_of :email
   validates_presence_of :phone
-  validates_length_of :pitch, :within => 2..MAX_PITCH_WORDS, :message => "must be within 2 to #{MAX_PITCH_WORDS} words", tokenizer: ->(str) { str.scan(/\w+/) }, allow_nil: false
+  validates_length_of :pitch, :maximum => MAX_PITCH_CHARS, :message => "must be within #{MAX_PITCH_CHARS} characters", allow_nil: false
   validates_length_of :about, :within => 10..MAX_ABOUT_WORDS, :message => "must be within 10 to #{MAX_ABOUT_WORDS} words", tokenizer: ->(str) { str.scan(/\w+/) }, allow_nil: false
 
 	def valid_categories?

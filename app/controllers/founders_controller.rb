@@ -10,7 +10,7 @@ class FoundersController < ApplicationController
       fullname = params[:email].split("@")[0]
       @user = User.invite!({
         fullname: fullname, email: params[:email],
-        startup_id: current_user.startup.id, is_founder: true})
+        startup_id: current_user.startup.id, is_founder: true, startup_link_verifier_id: current_user.id})
       @user.save!
       flash[:notice] = "Email invite sent!"
     elsif @user.startup

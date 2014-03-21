@@ -10,6 +10,14 @@ table.table.table-hover.table-bordered.table-striped
       td
         = @startup.name
     tr
+      td Email
+      td
+        = @startup.email
+    tr
+      td Phone
+      td
+        = @startup.phone
+    tr
       td Logo
       td
         = image_tag @startup.logo_url(:thumb)
@@ -22,6 +30,10 @@ table.table.table-hover.table-bordered.table-striped
       td
         = @startup.website
     tr
+      td Office Address
+      td
+        = @startup.address
+    tr
       td About
       td
         = @startup.about
@@ -30,14 +42,6 @@ table.table.table-hover.table-bordered.table-striped
       td
         = @startup.categories.map &:name
     tr
-      td Email
-      td
-        = @startup.email
-    tr
-      td Phone
-      td
-        = @startup.phone
-    tr
       td Facebook
       td
         = @startup.facebook_link
@@ -45,5 +49,6 @@ table.table.table-hover.table-bordered.table-striped
       td Twitter
       td
         = @startup.twitter_link
+
 
 = link_to 'Edit', edit_startup_path(@startup), {class: 'btn btn-success'}

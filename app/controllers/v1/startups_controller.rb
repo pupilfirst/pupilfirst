@@ -42,7 +42,7 @@ class V1::StartupsController < V1::BaseController
       end
       render json: {message: "message"}, status: :ok
     else
-      render json: {error: "Error updating Startup"}, status: :bad_request
+      render json: {error: startup.errors.to_a.join(', ')}, status: :bad_request
     end
   end
 

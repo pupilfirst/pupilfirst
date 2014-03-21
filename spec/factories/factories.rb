@@ -136,6 +136,7 @@ FactoryGirl.define do
     f.name      {Faker::Lorem.characters(20)}
     f.logo { fixture_file_upload(Rails.root.join(*%w[ spec fixtures files example.jpg ]), 'image/jpg') }
     f.pitch     {Faker::Lorem.words(6).join(' ')}
+    f.address     {Faker::Lorem.words(6).join(' ')}
     f.about     {Faker::Lorem.paragraph(7)}
     f.website   {Faker::Internet.domain_name}
     f.email     {Faker::Internet.email}

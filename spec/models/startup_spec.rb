@@ -18,9 +18,7 @@ describe Startup do
 	end
 
 	it "validates the size of pitch" do
-		startup = build(:startup, pitch: Faker::Lorem.words(20).join(' '))
-		expect { startup.save! }.to raise_error(ActiveRecord::RecordInvalid)
-		startup.pitch = Faker::Lorem.words(1).join(' ')
+		startup = build(:startup, pitch: Faker::Lorem.words(200).join(' '))
 		expect { startup.save! }.to raise_error(ActiveRecord::RecordInvalid)
 	end
 

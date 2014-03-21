@@ -31,7 +31,7 @@ Svapp::Application.configure do
 
   config.middleware.insert_before(ActionDispatch::ShowExceptions, Rack::Snoop)
 
-  config.action_mailer.default_url_options = { :host => '172.16.55.171:3000' }
+  config.action_mailer.default_url_options = { :host => '192.168.1.195:3000' }
 end
 ActionMailer::Base.smtp_settings = {
   :address        => 'smtp.sendgrid.net',

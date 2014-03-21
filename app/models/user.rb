@@ -38,6 +38,7 @@ class User < ActiveRecord::Base
 
   before_create do
     self.auth_token = SecureRandom.hex(30)
+    self.startup_verifier_token = SecureRandom.hex(30)
   end
 
   class << self
@@ -63,6 +64,14 @@ class User < ActiveRecord::Base
     self.update_attributes!(startup_link_verifier_id: self.id, is_founder: is_founder)
     push_message = 'Hola! you have been accepted.'
     UserPushNotifyJob.new.async.perform(self.id, :employee_confirmed, push_message)
+  end
+
+  def verified?
+    return true if startup_link_verifier
+  end
+
+  def approved?
+    return true if startup.approval_status and verified?
   end
 
   def profile_info_submitted?

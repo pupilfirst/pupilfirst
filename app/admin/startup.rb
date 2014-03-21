@@ -59,8 +59,8 @@ ActiveAdmin.register Startup do
 
   show do |ad|
     attributes_table do
-      row :status do
-        'Approved'
+      row :status do |startup|
+        startup.approval_status ? 'Approved' : 'Pending'
       end
       row :name
       row :email
@@ -68,6 +68,15 @@ ActiveAdmin.register Startup do
       row :logo do |startup|
         link_to(image_tag(startup.logo_url(:thumb)), startup.logo_url)
       end
+      row :pitch
+      row :address
+      row :website
+      row :about
+      row :categories do |startup|
+        startup.categories.map &:name
+      end
+      row :facebook_link
+      row :twitter_link
       row :directors do |startup|
         table_for startup.directors.order('id ASC') do
           column do |director|
@@ -82,19 +91,13 @@ ActiveAdmin.register Startup do
           end
         end
       end
-      row :facebook_link
-      row :twitter_link
-      row :pitch do |startup|
-        startup.pitch.truncate(50) rescue nil
-      end
-      row :website
       row :startup_status do |startup|
         if startup.approval_status
           'Approved'
         elsif startup.valid?
           link_to("Approve Startup", admin_startup_path(startup:{approval_status: true}), { method: :put })
         else
-          link_to("Waiting Completion. Send email with form link.", send_form_email_admin_startup_path, { method: :post })
+          link_to("Waiting Completion. Send email with web form link.", send_form_email_admin_startup_path, { method: :post })
         end
 
       end

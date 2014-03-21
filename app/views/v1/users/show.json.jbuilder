@@ -2,7 +2,7 @@ path = "#{__FILE__.match(/v\d/)[0]}/users/user"
 
 extra_block = Proc.new do
   json.startup_meta_details do
-    json.approval_status @user.startup.approval_status
+    json.approval_status @user.approved?
     json.incorporation do
       json.is_enabled @user.incorporation_enabled?
       json.message @user.startup.incorporation_message

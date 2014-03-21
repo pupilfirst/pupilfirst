@@ -13,7 +13,7 @@ describe 'StartupMailer' do
     end
 
     it "with body containing a link to the confirmation link" do
-      email.should have_body_text(/#{confirm_employee_startup_url(startup, token: new_employee.startup_verifier_token)}/)
+      email.should have_body_text(confirm_employee_startup_url(startup, token: new_employee.startup_verifier_token))
     end
 
     it "with subject \"Approve new employee at startup\"" do

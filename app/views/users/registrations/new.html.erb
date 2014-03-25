@@ -5,9 +5,10 @@
 
   <div class="form-inputs">
     <%= f.input :email, :required => true, :autofocus => true %>
+    <%= f.input :salutation, collection: ['Mr', 'Ms'], required: true %>
     <%= f.input :fullname, :required => true %>
     <%= f.input :avatar, :required => true %>
-    <%= f.input :born_on, :required => true %>
+    <%= f.input :born_on, as: :date, start_year: Date.today.year - 100, required: true %>
     <%= f.input :password, :required => true %>
     <%= f.input :password_confirmation, :required => true %>
   </div>

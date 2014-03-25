@@ -1,0 +1,47 @@
+- if @startup.errors.any?
+  h4 Errors
+  = @startup.errors.full_messages.first if @startup.errors.any?
+.wrapper-form
+  = simple_form_for @startup, :html => { :class => 'form-horizontal' } do |f|
+    = f.input :name, label: "Startup Name", required: true
+    = f.input :email, label: "Company's email", required: true
+    = f.input :phone, label: "Company's contact number", required: true
+    = f.input :pitch, as: :text, hint: "max 140 characters",  input_html: {rows: 8, class:'span5', placeholder: 'max 140 characters'}, required: true
+    = f.input :website
+    = f.submit :class=> 'btn btn-success'
+    = link_to 'Show', @startup, :class => "btn btn-info"
+
+javascript:
+  $(function(){
+    $('select').selectpicker();
+    counter = function(ele, help_ele, max_chars, is_words) {
+        var value = $(ele).val();
+
+        if (value.length == 0) {
+            $(help_ele).html(0+"/"+max_chars+ " "+(is_words ? "words" : "characters"));
+            return;
+        }
+
+        var regex = /\s+/gi;
+        var wordCount = value.trim().replace(regex, ' ').split(' ').length;
+        // var totalChars = value.length;
+        var charCount = value.length;
+        // var charCountNoSpace = value.replace(regex, '').length;
+
+        $(help_ele).html((is_words ? wordCount : charCount)+"/"+max_chars+" characters");
+    };
+    update_pitch = function(){
+      var help_ele = $(".startup_pitch .help-block")
+      var ele = $(".startup_pitch #startup_pitch")
+      counter(ele, help_ele, #{Startup::MAX_PITCH_CHARS})
+    }
+    update_about = function(){
+      var help_ele = $(".startup_about .help-block")
+      var ele = $(".startup_about #startup_about")
+      counter(ele, help_ele, #{Startup::MAX_ABOUT_WORDS}, true)
+    }
+
+    $(".startup_pitch #startup_pitch").click(update_pitch).change(update_pitch).keydown(update_pitch).keypress(update_pitch).keyup(update_pitch).blur(update_pitch).focus(update_pitch);
+    $(".startup_about #startup_about").click(update_about).change(update_about).keydown(update_about).keypress(update_about).keyup(update_about).blur(update_about).focus(update_about);
+  })
+

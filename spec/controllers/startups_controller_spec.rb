@@ -33,19 +33,6 @@ describe StartupsController do
   let(:valid_session) { {} }
   let(:startup) { startup = Startup.create! valid_attributes }
 
-  describe "GET index" do
-    it "assigns all startups as @startups" do
-      @current_user.update_attributes(startup: startup)
-      get :index, {}, valid_session
-      expect(assigns(:startups)).to eq([startup])
-    end
-
-    it "assigns empty array to @startups if user dosent' have a startup linked" do
-      get :index, {}, valid_session
-      expect(assigns(:startups)).to eq([])
-    end
-  end
-
   describe "GET show" do
     it "assigns the requested startup as @startup" do
       @current_user.update_attributes(startup: startup)

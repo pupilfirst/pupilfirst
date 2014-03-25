@@ -49,6 +49,12 @@ table.table.table-hover.table-bordered.table-striped
       td Twitter
       td
         = @startup.twitter_link
+    tr
+      td Founders
+      td
+        = @startup.founders.map &:email
+        br
+        = link_to "Invite more founders", startup_founders_path(startup_id: @startup.id)
 
 
 = link_to 'Edit', edit_startup_path(@startup), {class: 'btn btn-success'}

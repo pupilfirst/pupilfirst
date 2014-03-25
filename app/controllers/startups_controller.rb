@@ -3,12 +3,23 @@ class StartupsController < InheritedResources::Base
 	skip_before_filter :authenticate_user!, only: [:confirm_employee]
 	after_filter only: [:create] do
 		@startup.founders << current_user
-		@startup.save!
+		@startup.save
 	end
 
 	def index
 		@current_user = current_user
-		@startups = current_user.startup.present? ? [current_user.startup] : []
+		if current_user.startup.present?
+			redirect_to action: :show, id: current_user.startup.id
+		else
+			redirect_to action: :new
+		end
+	end
+
+	def create
+		@startup = Startup.create(apply_now_params)
+		@startup.full_validation = false
+		@startup.founders << current_user
+		redirect_to(action: :show, id: @startup.id) if @startup.save
 	end
 
 	def show
@@ -35,7 +46,15 @@ class StartupsController < InheritedResources::Base
 		end
 	end
 
+	def apply_now_params
+    params.require(:startup).permit(:name, :phone, :pitch, :website, :email)
+	end
+
 	def permitted_params
-	  {:startup => params.fetch(:startup, {}).permit(:name, :address, :pitch, :website, :about, :email, :phone, :logo, :remote_logo_url, :facebook_link, :twitter_link, {category_ids: []})}
+	  {:startup => params.fetch(:startup, {}).permit(:name, :address, :pitch, :website, :about, :email, :phone, :logo,
+	                                                 :remote_logo_url, :facebook_link, :twitter_link, :pre_funds,
+	                                                 :help_from_sv, {category_ids: []},
+	                                                 {startup_before: [:startup_name, :startup_descripition] }
+                                                 	)}
 	end
 end

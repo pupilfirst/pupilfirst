@@ -2,24 +2,35 @@ class Startup < ActiveRecord::Base
   MAX_PITCH_CHARS = 140      unless defined?(MAX_PITCH_CHARS)
   MAX_ABOUT_WORDS = 500     unless defined?(MAX_ABOUT_WORDS)
 
-  has_many :founders, -> { where("startup_link_verifier_id IS NOT NULL AND is_founder = ?", true)}, :class_name => "User", :foreign_key => "startup_id"
+  has_many :founders, -> { where("startup_link_verifier_id IS NOT NULL AND is_founder = ?", true)}, class_name: "User", foreign_key: "startup_id" do
+    def <<(founder)
+      founder.update_attributes!(is_founder: true, startup_link_verifier: founder, startup_verifier_token: SecureRandom.hex(30))
+      super founder
+    end
+  end
   has_many :directors, -> { where("startup_link_verifier_id IS NOT NULL AND is_founder = ? AND is_director = ?", true, true)}, :class_name => "User", :foreign_key => "startup_id"
 	has_many :employees, -> { where("startup_link_verifier_id IS NOT NULL")}, :class_name => "User", :foreign_key => "startup_id"
 	has_and_belongs_to_many :categories, :join_table => "startups_categories"
   has_one :bank
   serialize :company_names, JSON
+  serialize :startup_before, JSON
   serialize :police_station, JSON
   validate :valid_categories?
   validate :valid_founders?
   validates_presence_of :name
-  validates_presence_of :logo
-  validates_presence_of :address
+  validates_presence_of :logo, if: ->(){@full_validation }
+  validates_presence_of :address, if: ->(){@full_validation }
   validates_presence_of :email
   validates_presence_of :phone
-  validates_length_of :pitch, :maximum => MAX_PITCH_CHARS, :message => "must be within #{MAX_PITCH_CHARS} characters", allow_nil: false
-  validates_length_of :about, :within => 10..MAX_ABOUT_WORDS, :message => "must be within 10 to #{MAX_ABOUT_WORDS} words", tokenizer: ->(str) { str.scan(/\w+/) }, allow_nil: false
+  validates_length_of :pitch, maximum: MAX_PITCH_CHARS, message: "must be within #{MAX_PITCH_CHARS} characters", allow_nil: false
+  validates_length_of :about, {
+    within: 10..MAX_ABOUT_WORDS, message: "must be within 10 to #{MAX_ABOUT_WORDS} words",
+    tokenizer: ->(str) { str.scan(/\w+/) }, allow_nil: false,
+    if: ->(){@full_validation }
+  }
 
 	def valid_categories?
+   return true unless @full_validation
    self.errors.add(:categories, "cannot have more than 3 categories") if categories.size > 3
    self.errors.add(:categories, "must have atleast one category") if categories.size < 1
 	end
@@ -31,6 +42,11 @@ class Startup < ActiveRecord::Base
   mount_uploader :logo, AvatarUploader
   accepts_nested_attributes_for :founders
   normalize_attribute :name, :pitch, :about, :email, :phone
+  attr_accessor :full_validation
+
+  after_initialize ->(){
+    @full_validation = true
+  }
 
   normalize_attribute :twitter_link do |value|
     value = "http://#{value}" if value =~ /^twitter\.com.*/
@@ -43,6 +59,13 @@ class Startup < ActiveRecord::Base
     value = "http://facebook.com/#{value}"  unless value =~ /[http:\/\/]*facebook\.com.*/
     value if value =~ /^http[s]*:\/\/facebook\.com.*/
   end
+
+  # def founders=(list)
+  #   list = list.map{|founder|
+  #     founder.update_attributes!(is_founder: true, startup_link_verifier: founder.id, startup_verifier_token: SecureRandom.hex(30))
+  #   }
+  #   super(list)
+  # end
 
   def incorporation_submited?
     return true if company_names.present?

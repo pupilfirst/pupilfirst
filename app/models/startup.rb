@@ -18,15 +18,15 @@ class Startup < ActiveRecord::Base
   validate :valid_categories?
   validate :valid_founders?
   validates_presence_of :name
-  validates_presence_of :logo, if: ->(){@full_validation }
-  validates_presence_of :address, if: ->(){@full_validation }
+  validates_presence_of :logo, if: ->(*args){@full_validation }
+  validates_presence_of :address, if: ->(*args){@full_validation }
   validates_presence_of :email
   validates_presence_of :phone
   validates_length_of :pitch, maximum: MAX_PITCH_CHARS, message: "must be within #{MAX_PITCH_CHARS} characters", allow_nil: false
   validates_length_of :about, {
     within: 10..MAX_ABOUT_WORDS, message: "must be within 10 to #{MAX_ABOUT_WORDS} words",
     tokenizer: ->(str) { str.scan(/\w+/) }, allow_nil: false,
-    if: ->(){@full_validation }
+    if: ->(*args){@full_validation }
   }
 
 	def valid_categories?

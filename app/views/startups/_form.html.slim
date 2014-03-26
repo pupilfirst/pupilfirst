@@ -27,10 +27,10 @@
         p Have you run a startup before?
       .content
         .form-group
-          label.sr-only Email address
+          label.sr-only
           = text_field_tag "startup[startup_before][startup_name]", (@startup.startup_before['startup_name'] rescue nil), placeholder: "Startup Name", class: "form-control"
         .form-group
-          = text_field_tag "startup[startup_before][startup_descripition]", (@startup.startup_before['startup_descripition'] rescue nil), placeholder: "startup_descripition", class: "form-control"
+          = text_area_tag "startup[startup_before][startup_descripition]", (@startup.startup_before['startup_descripition'] rescue nil), placeholder: "startup_descripition", class: "form-control"
 
     .sv_help
       = f.input :help_from_sv, collection: ["help1", "help2"]

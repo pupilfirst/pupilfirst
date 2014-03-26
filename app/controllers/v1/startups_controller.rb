@@ -40,7 +40,7 @@ class V1::StartupsController < V1::BaseController
           ['number_of_shares', 'is_share_holder'].include?(key)
         }.merge({is_director: true}))
       end
-      StartupMailer.reminder_to_complete_personal_info(@startup, current_user).deliver if startup_params[:company_names]
+      StartupMailer.reminder_to_complete_personal_info(startup, current_user).deliver if startup_params[:company_names]
       message = "#{current_user.fullname} has listed you as a Director at #{@startup.name}"
       startup.reload.directors.each do |dir|
         UserPushNotifyJob.new.async.perform(dir.id, :fill_personal_info, message)

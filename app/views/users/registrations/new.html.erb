@@ -3,31 +3,17 @@
 <%= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html=>{:class => "form-horizontal"}) do |f| %>
   <%= f.error_notification %>
 
-  <div class="form form-horizontal">
-    <div class="form-group">
-    <%= f.text_field :email, class: 'form-control', placeholder: 'email'  %>
-    </div>
-    <div class="form-group">
-    <%= f.input :salutation, collection: ['Mr', 'Ms'], required: true, class: 'form-control'  %>
-      </div>
-    <div class="form-group">
-    <%= f.text_field :fullname, :required => true, class: 'form-control', placeholder: 'Full Name'  %>
-      </div>
-    <div class="form-group">
+  <div class="form-inputs">
+    <%= f.input :email, :required => true, :autofocus => true %>
+    <%= f.input :salutation, collection: ['Mr', 'Ms'], required: true %>
+    <%= f.input :fullname, :required => true %>
     <%= f.input :avatar, :required => true %>
-      </div>
-    <div class="form-group">
     <%= f.input :born_on, as: :date, start_year: Date.today.year - 100, required: true %>
-      </div>
-    <div class="form-group">
-    <%= f.text_field :password, :required => true, class: 'form-control', placeholder: 'Password'  %>
-      </div>
-    <div class="form-group">
-    <%= f.text_field :password_confirmation, :required => true, class: 'form-control', placeholder: 'Confirm Password'  %>
-      </div>
+    <%= f.input :password, :required => true %>
+    <%= f.input :password_confirmation, :required => true %>
   </div>
 
-    <div class="form-group">
+  <div class="signin-pad">
     <%= f.button :submit, "Sign up", :class=>'btn btn-success'%>
 <% end %>
 

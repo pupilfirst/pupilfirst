@@ -3,18 +3,18 @@
   h3 Sign in
 
   = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
-    .form-inputs.form
+    .form-inputs.form-horizontal
 
       .form-group
-        = f.input :email, :required => false, :autofocus => true, input_html: {class:'form-control'}
+        = f.input :email, :required => false, :autofocus => true
       .form-group
-        = f.input :password, :required => false, input_html: {class:'form-control'}
+        = f.input :password, :required => false
 
       .form-group
-        .checkbox
-          = f.input :remember_me, :as => :boolean,  :inline_label =>true, :label => false if devise_mapping.rememberable?
+        = f.input :remember_me, :as => :boolean,  :inline_label =>true, :label => false if devise_mapping.rememberable?
       .form-group
-        = f.button :submit, "Sign in", :class=>'btn btn-success'
+        .signin-pad
+          = f.button :submit, "Sign in", :class=>'btn btn-success'
 
   .form-group.login-links
     = render "users/shared/links"

@@ -19,7 +19,10 @@ class StartupsController < InheritedResources::Base
 		@startup = Startup.create(apply_now_params)
 		@startup.full_validation = false
 		@startup.founders << current_user
-		redirect_to(action: :show, id: @startup.id) if @startup.save
+		if @startup.save
+			redirect_to(action: :show, id: @startup.id)
+			StartupMailer.apply_now(@startup).deliver
+		end
 	end
 
 	def show
@@ -30,7 +33,29 @@ class StartupsController < InheritedResources::Base
 	def edit
 		@startup = Startup.find(params[:id])
 		raise_not_found unless current_user.startup.try(:id) == @startup.id
+    raise_not_found unless current_user.is_founder?
 	end
+
+  def update
+    update! do |success, failure|
+      success.html {
+        StartupMailer.notify_secretary_about_startup_update(@startup).deliver
+      	StartupMailer.fill_personal_info_for_director(@startup).deliver
+        @startup.directors.each do |user|
+          message = "Please fill in personl info"
+          UserPushNotifyJob.new.async.perform(user.id, :fill_personal_info, message)
+        end
+      	redirect_to startup_founders_url(@startup)
+      }
+    end
+  end
+
+  def confirm_startup_link
+    @startup = Startup.find(params[:id])
+    @self = User.find_by_startup_verifier_token(params[:token])
+    raise_not_found unless @self
+		@self.confirm_employee! params[:is_founder]
+  end
 
 	def confirm_employee
 		@startup = Startup.find(params[:id])
@@ -39,6 +64,9 @@ class StartupsController < InheritedResources::Base
 		if request.post?
 			flash[:message] = "User was already accepted as startup employee." if @new_employee.startup_link_verifier_id
 			@new_employee.confirm_employee! params[:is_founder]
+      message = "Congratulations! You've been approved as #{@new_employee.title} at #{@startup.name}."
+      UserMailer.accepted_as_employee(@new_employee).deliver
+      UserPushNotifyJob.new.async.perform(@new_employee.id, :confirm_employee, message)
 			render :confirm_employee_done
 		else
 			@token = params[:token]
@@ -56,5 +84,9 @@ class StartupsController < InheritedResources::Base
 	                                                 :help_from_sv, {category_ids: []},
 	                                                 {startup_before: [:startup_name, :startup_descripition] }
                                                  	)}
-	end
+# TODO
+# "university"=>"uni", "course"=>"course", "semester"=>"sem"}, "commit"=>"Sign up"}
+# Unpermitted parameters: salutation, fullname, avatar, born_on(1i), born_on(2i), born_on(3i), is_student, college, university, course, semester
+#   User Load (1.3ms)
+  end
 end

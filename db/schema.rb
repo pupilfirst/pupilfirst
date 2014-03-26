@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140324100852) do
+ActiveRecord::Schema.define(version: 20140326063909) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -180,7 +180,7 @@ ActiveRecord::Schema.define(version: 20140324100852) do
     t.datetime "updated_at"
     t.string   "facebook_link"
     t.string   "twitter_link"
-    t.string   "dsc"
+    t.boolean  "dsc"
     t.string   "authorized_capital"
     t.string   "share_holding_pattern"
     t.string   "moa"
@@ -273,6 +273,11 @@ ActiveRecord::Schema.define(version: 20140324100852) do
     t.string   "salutation"
     t.integer  "number_of_shares"
     t.boolean  "is_share_holder"
+    t.boolean  "is_student"
+    t.string   "college"
+    t.string   "university"
+    t.string   "course"
+    t.string   "semester"
   end
 
   add_index "users", ["address_id"], name: "index_users_on_address_id", using: :btree

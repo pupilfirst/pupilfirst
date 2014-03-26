@@ -14,7 +14,7 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require cocoon
-//= require bootstrap
+//= require bootstrap.min
 //= require bootstrap-select.min
 
 $(function(){

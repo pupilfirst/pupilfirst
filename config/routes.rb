@@ -20,6 +20,7 @@ Svapp::Application.routes.draw do
     member do
       post :confirm_employee
       get :confirm_employee
+      get :confirm_startup_link
     end
   end
 

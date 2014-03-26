@@ -4,7 +4,7 @@ class Startup < ActiveRecord::Base
 
   has_many :founders, -> { where("startup_link_verifier_id IS NOT NULL AND is_founder = ?", true)}, class_name: "User", foreign_key: "startup_id" do
     def <<(founder)
-      founder.update_attributes!(is_founder: true, startup_link_verifier: founder, startup_verifier_token: SecureRandom.hex(30))
+      founder.update_attributes!(is_founder: true, startup_link_verifier: founder)
       super founder
     end
   end
@@ -59,13 +59,6 @@ class Startup < ActiveRecord::Base
     value = "http://facebook.com/#{value}"  unless value =~ /[http:\/\/]*facebook\.com.*/
     value if value =~ /^http[s]*:\/\/facebook\.com.*/
   end
-
-  # def founders=(list)
-  #   list = list.map{|founder|
-  #     founder.update_attributes!(is_founder: true, startup_link_verifier: founder.id, startup_verifier_token: SecureRandom.hex(30))
-  #   }
-  #   super(list)
-  # end
 
   def incorporation_submited?
     return true if company_names.present?

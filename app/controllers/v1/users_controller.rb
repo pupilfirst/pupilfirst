@@ -40,6 +40,7 @@ class V1::UsersController < V1::BaseController
 		params.require(:user).permit(
 		                             :email, :fullname, :password, :password_confirmation, :avatar, :remote_avatar_url, :born_on,
 		                             :pan, :din, :aadhaar, :mother_maiden_name, :married, :salutation,
+		                             :is_student, :college, :university, :course, :semester,
 		                             :religion,:current_occupation, :educational_qualification, :place_of_birth,
 		                             other_name_attributes: [:first_name, :middle_name, :last_name],
 		                             address_attributes: [:flat, :building, :street, :area, :town, :state, :pin],

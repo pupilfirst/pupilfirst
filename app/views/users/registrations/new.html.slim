@@ -1,0 +1,36 @@
+h1 Sign up
+= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html=>{:class => "form-horizontal"}) do |f|
+  = f.error_notification
+  .form-inputs
+    = f.input :email, :required => true, :autofocus => true
+    = f.input :salutation, collection: ['Mr', 'Ms'], required: true
+    = f.input :fullname, :required => true
+    = f.input :avatar, :required => true
+    = f.input :born_on, as: :date, start_year: Date.today.year - 100, required: true
+    = f.input :password, :required => true
+    = f.input :password_confirmation, :required => true
+    #is_student.optional.checkbox
+      = f.input :is_student, as: :boolean, label: "Are you a student?"
+      .content
+        = f.input :college
+        = f.input :university
+        = f.input :course
+        = f.input :semester
+  .signin-pad
+    = f.button :submit, "Sign up", :class=>'btn btn-success'
+
+javascript:
+  $(function(){
+    $(".optional").each(function(optional){
+      $(".content", optional).hide()
+      $("input:checkbox", optional).click(function() {
+        var $this = $(this);
+        if ($this.is(':checked')) {
+          $(".content",optional).show()
+        } else {
+          $(".content",optional).hide()
+        }
+      });
+
+    })
+  });

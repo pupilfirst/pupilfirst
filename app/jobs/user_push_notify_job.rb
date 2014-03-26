@@ -9,14 +9,12 @@ class UserPushNotifyJob
         alert: message,
         extra: {
           id: user.id,
-          type: 'startup'
+          type: type
         }
       }
       notification = {
         aliases: [user.id],
-        ios: {
-          aps: payload
-        },
+        aps: payload,
         android: payload
       }
       Urbanairship.push(notification)

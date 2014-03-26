@@ -37,7 +37,7 @@ class StartupMailer < ActionMailer::Base
     @current_user = current_user
     send_to = startup.directors.map { |e| "#{e.fullname} <#{e.email}>" }
     substitute '-founder_full_name-', startup.directors.map(&:fullname)
-    mail(to: send_to, subject: "#{current_user.name} has listed you as a Director at #{startup.name}")
+    mail(to: send_to, subject: "#{current_user.fullname} has listed you as a Director at #{startup.name}")
   end
 
   def reminder_to_complete_startup_info(startup)

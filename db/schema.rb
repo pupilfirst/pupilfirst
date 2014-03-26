@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140326063909) do
+ActiveRecord::Schema.define(version: 20140326091532) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -194,7 +194,10 @@ ActiveRecord::Schema.define(version: 20140326063909) do
     t.string   "pre_funds"
     t.text     "startup_before"
     t.string   "help_from_sv"
+    t.integer  "registered_address_id"
   end
+
+  add_index "startups", ["registered_address_id"], name: "index_startups_on_registered_address_id", using: :btree
 
   create_table "startups_categories", id: false, force: true do |t|
     t.integer "startup_id"
@@ -258,7 +261,6 @@ ActiveRecord::Schema.define(version: 20140326063909) do
     t.string   "pan"
     t.string   "din"
     t.string   "aadhaar"
-    t.integer  "other_name_id"
     t.integer  "address_id"
     t.integer  "father_id"
     t.boolean  "is_director",               default: false
@@ -288,7 +290,6 @@ ActiveRecord::Schema.define(version: 20140326063909) do
   add_index "users", ["guardian_id"], name: "index_users_on_guardian_id", using: :btree
   add_index "users", ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
   add_index "users", ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
-  add_index "users", ["other_name_id"], name: "index_users_on_other_name_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
 end

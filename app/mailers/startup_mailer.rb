@@ -28,7 +28,7 @@ class StartupMailer < ActionMailer::Base
   def sep_approved(startup)
   end
 
-  def fill_personal_info_for_director
+  def fill_personal_info_for_director(startup)
 
   end
 
@@ -62,7 +62,7 @@ class StartupMailer < ActionMailer::Base
     @startup = startup
     send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
     substitute '-founder_full_name-', startup.founders.map(&:fullname)
-    mail(to: send_to, subject: "Approve #{@new_employee.name} at #{@startup.name}")
+    mail(to: send_to, subject: "Approve #{@new_employee.fullname} at #{@startup.name}")
   end
 
 private

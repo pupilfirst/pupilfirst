@@ -7,14 +7,13 @@ class User < ActiveRecord::Base
   has_many :events
   has_many :social_ids
   belongs_to :bank
-  belongs_to :other_name, class_name: 'Name', foreign_key: 'other_name_id'
   belongs_to :father, class_name: 'Name'
   belongs_to :address
   belongs_to :guardian
   belongs_to :startup
   belongs_to :startup_link_verifier, class_name: "User", foreign_key: "startup_link_verifier_id"
   scope :non_founders, -> { where("startup_id IS NULL") }
-  accepts_nested_attributes_for :social_ids, :other_name, :father, :address, :guardian
+  accepts_nested_attributes_for :social_ids, :father, :address, :guardian
 
   attr_reader :skip_password
   mount_uploader :avatar, AvatarUploader

@@ -190,7 +190,6 @@ describe V1::UsersController do
       it "should update details" do
         @user = create :founder
         attributes = attributes_for(:director).merge({
-          other_name_attributes: attributes_for(:name),
           address_attributes: attributes_for(:address),
           father_attributes: attributes_for(:name),
           guardian_attributes: {

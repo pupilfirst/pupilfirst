@@ -80,7 +80,6 @@ FactoryGirl.define do
     current_occupation  :current_occupation
     educational_qualification  :educational_qualification
     place_of_birth  :place_of_birth
-    association :other_name_id, factory: :name, strategy: :build
     association :address, factory: :address, strategy: :build
     association :father, factory: :name, strategy: :build
     mother_maiden_name    "mother_maiden_name"

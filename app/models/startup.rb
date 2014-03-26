@@ -12,6 +12,7 @@ class Startup < ActiveRecord::Base
 	has_many :employees, -> { where("startup_link_verifier_id IS NOT NULL")}, :class_name => "User", :foreign_key => "startup_id"
 	has_and_belongs_to_many :categories, :join_table => "startups_categories"
   has_one :bank
+  belongs_to :registered_address, class_name: 'Address'
   serialize :company_names, JSON
   serialize :startup_before, JSON
   serialize :police_station, JSON
@@ -40,7 +41,7 @@ class Startup < ActiveRecord::Base
   end
 
   mount_uploader :logo, AvatarUploader
-  accepts_nested_attributes_for :founders
+  accepts_nested_attributes_for :founders, :registered_address
   normalize_attribute :name, :pitch, :about, :email, :phone
   attr_accessor :full_validation
 

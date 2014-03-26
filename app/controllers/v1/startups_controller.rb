@@ -41,7 +41,7 @@ class V1::StartupsController < V1::BaseController
         }.merge({is_director: true}))
       end
       StartupMailer.reminder_to_complete_personal_info(@startup, current_user).deliver if startup_params[:company_names]
-      message = "#{current_user.name} has listed you as a Director at #{@startup.name}"
+      message = "#{current_user.fullname} has listed you as a Director at #{@startup.name}"
       startup.reload.directors.each do |dir|
         UserPushNotifyJob.new.async.perform(dir.id, :fill_personal_info, message)
       end
@@ -73,7 +73,8 @@ private
   def startup_params
     params.require(:startup).permit(:name, :phone, :pitch, :website,:dsc,
                                     company_names: [:justification, :name],
-                                    police_station: [:city, :line1, :line2, :name, :pin]
+                                    police_station: [:city, :line1, :line2, :name, :pin],
+                                    registered_address_attributes: [:flat, :building, :street, :area, :town, :state, :pin]
                                     )
   end
 

@@ -65,7 +65,7 @@ class StartupsController < InheritedResources::Base
 			flash[:message] = "User was already accepted as startup employee." if @new_employee.startup_link_verifier_id
 			@new_employee.confirm_employee! params[:is_founder]
       message = "Congratulations! You've been approved as #{@new_employee.title} at #{@startup.name}."
-      UserMailer.accepted_as_employee(@new_employee).deliver
+      UserMailer.accepted_as_employee(@new_employee, @startup).deliver
       UserPushNotifyJob.new.async.perform(@new_employee.id, :confirm_employee, message)
 			render :confirm_employee_done
 		else

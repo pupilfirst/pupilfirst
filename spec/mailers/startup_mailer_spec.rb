@@ -16,8 +16,5 @@ describe 'StartupMailer' do
       email.should have_body_text(confirm_employee_startup_url(startup, token: new_employee.startup_verifier_token))
     end
 
-    it "with subject \"Approve new employee at startup\"" do
-      email.should have_subject(/Approve new employee at #{startup.name}/)
-    end
   end
 end

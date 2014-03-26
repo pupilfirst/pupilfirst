@@ -2,7 +2,7 @@
 
 p Hi -founder_full_name-,
 
-p #{@new_employee.fullname} has listed himself/herself as #{@new_employee.title} at #{@startup.name}. Please approve or reject by #{link}.
+p #{@new_employee.fullname} has listed #{@new_employee.salutation == "Mr" ? "himself" : "herself"} as #{@new_employee.title} at #{@startup.name}. Please approve or reject by #{link}.
 
 p - Team SV App
 

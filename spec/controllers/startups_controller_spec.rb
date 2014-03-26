@@ -50,6 +50,7 @@ describe StartupsController do
 
   describe "GET edit" do
     it "assigns the requested startup as @startup" do
+      startup.founders << @current_user
       @current_user.update_attributes(startup: startup)
       get :edit, {:id => startup.to_param}, valid_session
       expect(assigns(:startup)).to eq(startup)
@@ -92,7 +93,7 @@ describe StartupsController do
 
       it "redirects to the startup" do
         put :update, {:id => startup.to_param, :startup => valid_attributes}, valid_session
-        expect(response).to redirect_to(startup)
+        expect(response).to redirect_to(startup_founders_path(startup))
       end
     end
 

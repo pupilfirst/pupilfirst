@@ -97,7 +97,6 @@ describe "Startup Requests" do
     it "sends email to all existing co-founders" do
       post "/api/startups/#{startup.id}/link_employee", {position: 'startup ceo'}, version_header(new_employee)
       new_employee.reload
-      expect(emails_sent.last).to have_subject(/Approve new employee at #{startup.name}/)
       expect(emails_sent.last.body.to_s).to include(confirm_employee_startup_url(startup, token: new_employee.startup_verifier_token))
       expect(new_employee.startup_link_verifier_id).to eql(nil)
       expect(new_employee.title).to eql('startup ceo')

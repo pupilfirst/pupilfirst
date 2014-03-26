@@ -2,14 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="503cf642-f7b5-4e76-8481-bc21a6863323" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/startups/_form.html.slim" afterPath="$PROJECT_DIR$/app/views/startups/_form.html.slim" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/api-backend.iml" afterPath="$PROJECT_DIR$/.idea/api-backend.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/assets/stylesheets/application.css" afterPath="$PROJECT_DIR$/app/assets/stylesheets/application.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/users/passwords/new.html.erb" afterPath="$PROJECT_DIR$/app/views/users/passwords/new.html.erb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/users/registrations/new.html.erb" afterPath="$PROJECT_DIR$/app/views/users/registrations/new.html.erb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/users/sessions/new.html.slim" afterPath="$PROJECT_DIR$/app/views/users/sessions/new.html.slim" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="api-backend.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/Dummy.txt" changelist="503cf642-f7b5-4e76-8481-bc21a6863323" time="1395810537945" ignored="false" />
-    <file path="/_form.html.slim" changelist="503cf642-f7b5-4e76-8481-bc21a6863323" time="1395813665127" ignored="false" />
+    <file path="/_form.html.slim" changelist="503cf642-f7b5-4e76-8481-bc21a6863323" time="1395812419281" ignored="false" />
     <file path="/welcome_controller.rb" changelist="503cf642-f7b5-4e76-8481-bc21a6863323" time="1394701274585" ignored="false" />
     <file path="/index.html.erb" changelist="503cf642-f7b5-4e76-8481-bc21a6863323" time="1394786484943" ignored="false" />
     <file path="/application.css" changelist="503cf642-f7b5-4e76-8481-bc21a6863323" time="1395736595982" ignored="false" />
@@ -19,7 +23,7 @@
     <file path="/_links.erb" changelist="503cf642-f7b5-4e76-8481-bc21a6863323" time="1395041716407" ignored="false" />
     <file path="/_nav_menu.html.slim" changelist="503cf642-f7b5-4e76-8481-bc21a6863323" time="1395048322150" ignored="false" />
     <file path="/index.html.slim" changelist="503cf642-f7b5-4e76-8481-bc21a6863323" time="1395035708795" ignored="false" />
-    <file path="/new.html.erb" changelist="503cf642-f7b5-4e76-8481-bc21a6863323" time="1395813451635" ignored="false" />
+    <file path="/new.html.erb" changelist="503cf642-f7b5-4e76-8481-bc21a6863323" time="1395811749641" ignored="false" />
     <file path="/users_controller.rb" changelist="503cf642-f7b5-4e76-8481-bc21a6863323" time="1394792515493" ignored="false" />
     <file path="/show.html.slim" changelist="503cf642-f7b5-4e76-8481-bc21a6863323" time="1395038729121" ignored="false" />
     <file path="/edit.html.erb" changelist="503cf642-f7b5-4e76-8481-bc21a6863323" time="1395038133133" ignored="false" />
@@ -40,19 +44,10 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="new.html.erb" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/views/users/registrations/new.html.erb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="51" column="51" selection-start="2048" selection-end="2089" vertical-scroll-proportion="-25.416666">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="_form.html.slim" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/views/users/_form.html.slim">
+        <entry file="file://$PROJECT_DIR$/app/views/startups/_form.html.slim">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+            <state line="4" column="18" selection-start="157" selection-end="157" vertical-scroll-proportion="0.0729927">
               <folding />
             </state>
           </provider>
@@ -177,6 +172,28 @@
               <option name="myItemId" value="views" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="welcome" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="api-backend" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="api-backend" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -196,7 +213,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="users" />
+              <option name="myItemId" value="startups" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -597,6 +614,16 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/app/views/layouts/_nav_menu.html.slim">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="46" selection-start="183" selection-end="183" vertical-scroll-proportion="0.251497" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/layouts/_guest_menu.html.slim">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="27" selection-start="248" selection-end="248" vertical-scroll-proportion="0.17964073" />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/views/users/invitations/new.html.erb">
       <provider selected="true" editor-type-id="text-editor">
         <state line="5" column="35" selection-start="262" selection-end="279" vertical-scroll-proportion="0.092364535" />
@@ -646,6 +673,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/users/registrations/new.html.erb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="34" selection-start="225" selection-end="225" vertical-scroll-proportion="0.08982036">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/users/passwords/new.html.erb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="98" selection-start="380" selection-end="380" vertical-scroll-proportion="0.14371258">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/views/users/sessions/new.html.slim">
       <provider selected="true" editor-type-id="text-editor">
         <state line="8" column="101" selection-start="224" selection-end="259" vertical-scroll-proportion="0.14371258">
@@ -660,37 +701,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/users/passwords/new.html.erb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="8" selection-start="686" selection-end="686" vertical-scroll-proportion="0.3233533">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/views/startups/_form.html.slim">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="77" selection-start="235" selection-end="235" vertical-scroll-proportion="0.091240875">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/users/edit.html.slim">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/users/registrations/new.html.erb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="51" column="51" selection-start="2048" selection-end="2089" vertical-scroll-proportion="-25.416666">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/users/_form.html.slim">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="4" column="18" selection-start="157" selection-end="157" vertical-scroll-proportion="0.0729927">
           <folding />
         </state>
       </provider>

@@ -6,16 +6,11 @@
 <%= simple_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post, :class => "form form-horizontal" }) do |f| %>
   <%= f.error_notification %>
   <div class="form-group">
-    <label for="inputEmail3" class="col-sm-2 control-label">email</label>
-    <div class="col-sm-10">
     <%= f.input :email, :required => true, :autofocus => true,  input_html: {class:'form-control'}%>
-  </div>
   </div>
 
   <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
     <%= f.button :submit, "Send me reset password instructions", :class=>'btn btn-success' %>
-  </div>
   </div>
 <% end %>
 

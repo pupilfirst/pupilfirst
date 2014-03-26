@@ -3,13 +3,13 @@
 
 <h3>Forgot your password?</h3>
 
-<%= simple_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post, :class => "form-horizontal" }) do |f| %>
+<%= simple_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post, :class => "form form-horizontal" }) do |f| %>
   <%= f.error_notification %>
-  <div class="form-inputs">
-    <%= f.input :email, :required => true, :autofocus => true %>
+  <div class="form-group">
+    <%= f.input :email, :required => true, :autofocus => true,  input_html: {class:'form-control'}%>
   </div>
 
-  <div class="signin-pad">
+  <div class="form-group">
     <%= f.button :submit, "Send me reset password instructions", :class=>'btn btn-success' %>
   </div>
 <% end %>

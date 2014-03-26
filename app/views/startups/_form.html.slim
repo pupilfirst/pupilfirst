@@ -2,29 +2,31 @@
 - if @startup.errors.any?
   h4 Errors
   = @startup.errors.full_messages.first if @startup.errors.any?
-.wrapper-form
+.wrapper-form.form
   = simple_form_for @startup, :html => { :class => 'form-horizontal' } do |f|
-    = f.input :name, label: "Startup Name"
-    = f.input :email, label: "Company's email"
-    = f.input :phone, label: "Company's contact number"
+    = f.input :name, label: "Startup Name",  input_html: {class:'form-control'}
+    = f.input :email, label: "Company's email",  input_html: {class:'form-control'}
+    = f.input :phone, label: "Company's contact number",  input_html: {class:'form-control'}
     = f.input :logo, as: :file, required: false
-    = f.input :pitch, as: :text, hint: "max 140 characters",  input_html: {rows: 8, class:'span5', placeholder: 'max 140 characters'}
-    = f.input :address, as: :text, input_html: {rows: 10, class:'span8', placeholder: 'Office Address'}
-    = f.input :website
-    = f.input :about, as: :text, hint: "500 words max", input_html: {rows: 10, class:'span8', placeholder: 'max 500 words'}
-    = f.association :categories, collection: Category.startup_category, as: :select, hint: "Min:1, Max:3 categories", input_html:{class: "span4"}
-    = f.input :twitter_link
-    = f.input :facebook_link
-    #pre_funds.optional.checkbox
+    = f.input :pitch, as: :text, hint: "max 140 characters",  input_html: {rows: 8, class:'form-control', placeholder: 'max 140 characters'}
+    = f.input :address, as: :text, input_html: {rows: 10, class:'form-control', placeholder: 'Office Address'}
+    = f.input :website,  input_html: {class:'form-control'}
+    = f.input :about, as: :text, hint: "500 words max", input_html: {rows: 10, class:'form-control', placeholder: 'max 500 words'}
+    = f.association :categories, collection: Category.startup_category, as: :select, hint: "Min:1, Max:3 categories", input_html:{class: 'form-control'}
+    = f.input :twitter_link,  input_html: {class:'form-control'}
+    = f.input :facebook_link,  input_html: {class:'form-control'}
+    #pre_funds.optional.checkbox.col-md-6
+      .checkbox-inline
       label
         = check_box_tag "pre_funds"
-        p Have you recived funds already?
+        Have you recived funds already?
       .content
         = f.input :pre_funds
     #startup_before.optional.checkbox
+      .checkbox-inline
       label
         = check_box_tag "startup_history"
-        p Have you run a startup before?
+        Have you run a startup before?
       .content
         .form-group
           label.sr-only Email address
@@ -33,7 +35,8 @@
           = text_field_tag "startup[startup_before][startup_descripition]", (@startup.startup_before['startup_descripition'] rescue nil), placeholder: "startup_descripition", class: "form-control"
 
     .sv_help
-      = f.input :help_from_sv, collection: ["help1", "help2"]
+      = f.input :help_from_sv, collection: ["help1", "help2"], input_html:{class: 'form-control'}
+    .form-group
     = f.submit :class=> 'btn btn-success'
     = link_to 'Show', @startup, :class => "btn btn-info"
 

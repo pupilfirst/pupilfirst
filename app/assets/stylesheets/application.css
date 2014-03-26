@@ -9,6 +9,7 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require bootstrap
+ *= require bootstrap.min
  *= require bootstrap-responsive
  *= require bootstrap-select.min
  *= require_self
@@ -190,7 +191,11 @@ button.sunflower:hover{
     font-size: 24px;
     font-weight: 300;
     margin: 0 0 50px 0;
-    padding:10px;
+    padding:20px 0;
+}
+
+.login-block form {
+    padding: 0 40px;
 }
 
 .signin-pad {
@@ -206,6 +211,7 @@ button.sunflower:hover{
     padding: 20px 0;
     background: #f3f3f3;
     font-size: 12px;
+    margin: 0;
 }
 
 .container {

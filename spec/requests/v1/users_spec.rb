@@ -3,6 +3,7 @@ require 'spec_helper'
 describe V1::UsersController do
 	include V1ApiSpecHelper
   include JsonSpec::Helpers
+  include StartupHelper
   describe "GET on user" do
   	context "fetches details of user when id is provided" do
 	    xit "returns http success with details" do
@@ -39,7 +40,7 @@ describe V1::UsersController do
           get "/api/users/self", {}, version_header(startup.founders.first)
         end
         it "should have incorporation enabled, message nil" do
-          expect(parse_json(response.body, 'startup_meta_details/incorporation/is_enabled')).to eq(true)
+          expect(parse_json(response.body, 'startup_meta_details/incorporation/is_enabled')).to eq(false)
           expect(parse_json(response.body, 'startup_meta_details/incorporation/message')).to eq(nil)
         end
 
@@ -69,8 +70,54 @@ describe V1::UsersController do
           expect(parse_json(response.body, 'startup_meta_details/incorporation/message')).to eq(nil)
         end
 
-        it "should have personal_info disabled" do
-          expect(parse_json(response.body, 'startup_meta_details/personal_info/is_enabled')).to eq(false)
+        it "should have personal_info enabled with a message" do
+          expect(parse_json(response.body, 'startup_meta_details/personal_info/is_enabled')).to eq(true)
+          expect(parse_json(response.body, 'startup_meta_details/personal_info/message')).to be_kind_of String
+        end
+      end
+
+      context 'one of the founders submits incorporation' do
+        let(:startup) { create :startup }
+        before(:each) do
+          startup.update_attributes!(attributes_for(:incorporation))
+        end
+        context 'and is not yet approved' do
+          before(:each) do
+            startup.update_attributes!(incorporation_status: false)
+          end
+          context 'when personal info is not submited' do
+            it  "it should be enabled" do
+              get "/api/users/self", {}, version_header(startup.founders.first)
+              expect(parse_json(response.body, 'startup_meta_details/personal_info/is_enabled')).to eq(true)
+              expect(parse_json(response.body, 'startup_meta_details/personal_info/message')).to be(nil)
+            end
+          end
+
+          context 'users personal info is submited' do
+            before(:each) do
+              startup.founders.each do |f|
+                f.update_attributes!(
+                                 address: create(:address),
+                                 father: create(:name),
+                                 )
+              end
+            end
+            it "it should display message to bring docs" do
+              get "/api/users/self", {}, version_header(startup.founders.first)
+              expect(parse_json(response.body, 'startup_meta_details/personal_info/is_enabled')).to eq(true)
+              expect(parse_json(response.body, 'startup_meta_details/personal_info/message')).to be_kind_of String
+            end
+          end
+        end
+
+        context 'and is approved' do
+          before(:each) do
+            startup.update_attributes!(incorporation_status: true)
+          end
+          it "personal_info should not be enabled" do
+              get "/api/users/self", {}, version_header(startup.founders.first)
+              expect(parse_json(response.body, 'startup_meta_details/personal_info/is_enabled')).to eq(false)
+          end
         end
       end
 
@@ -83,11 +130,6 @@ describe V1::UsersController do
                                  father: create(:name),
                                 )
           end
-        end
-
-        it "should have personal_info disabled" do
-          get "/api/users/self", {}, version_header(startup.founders.first)
-          expect(parse_json(response.body, 'startup_meta_details/personal_info/is_enabled')).to eq(false)
         end
 
         context "incorporation is submited" do

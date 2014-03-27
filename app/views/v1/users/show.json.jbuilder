@@ -17,7 +17,7 @@ extra_block = Proc.new do
     end
     json.personal_info do
       json.is_enabled @user.profile_info_enabled?
-      json.message nil
+      json.message @user.personal_info_message
     end
 
   end

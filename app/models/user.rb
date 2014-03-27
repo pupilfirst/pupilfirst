@@ -81,13 +81,15 @@ class User < ActiveRecord::Base
   end
 
   def profile_info_enabled?
-    return true if is_founder and not profile_info_submitted?
-    false
+    return false if startup.incorporation_status?
+    return false unless is_founder
+    return false if is_director? and profile_info_submitted?
+    true
   end
 
   def incorporation_enabled?
     return false if startup.incorporation_status?
-    return true if is_founder
+    return true if is_founder and profile_info_submitted?
     false
   end
 
@@ -95,6 +97,11 @@ class User < ActiveRecord::Base
     return false if startup.bank_status?
     return true if is_founder and startup.incorporation_submited?
     false
+  end
+
+  def personal_info_message
+    return I18n.t("startup_village.messages.personal_info.incorporation_done") if profile_info_submitted? and is_director
+    return I18n.t("startup_village.messages.personal_info.no_incorporation") if profile_info_submitted?
   end
 
   def sep_enabled?

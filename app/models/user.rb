@@ -70,7 +70,9 @@ class User < ActiveRecord::Base
   end
 
   def approved?
-    return true if startup.approval_status and verified?
+    return nil if startup.approval_status and verified?
+    return "You are not approved as a founder yet." if verified?
+    "Startup is awaiting approval from Startup Village"
   end
 
   def profile_info_submitted?

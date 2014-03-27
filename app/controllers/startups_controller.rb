@@ -16,11 +16,12 @@ class StartupsController < InheritedResources::Base
 	end
 
 	def create
-		@startup = Startup.create(apply_now_params)
+		@startup = Startup.create(apply_now_params.merge({email: current_user.email}))
 		@startup.full_validation = false
 		@startup.founders << current_user
 		if @startup.save
-			redirect_to(action: :show, id: @startup.id)
+      flash[:notice] = "Your startup Application is submited and in pending for approval."
+      render :post_create
 			StartupMailer.apply_now(@startup).deliver
 		end
 	end
@@ -62,7 +63,7 @@ class StartupsController < InheritedResources::Base
 		@new_employee = User.find_by_startup_verifier_token(params[:token])
 		raise_not_found unless @new_employee
 		if request.post?
-			flash[:message] = "User was already accepted as startup employee." if @new_employee.startup_link_verifier_id
+			flash[:notice] = "User was already accepted as startup employee." if @new_employee.startup_link_verifier_id
 			@new_employee.confirm_employee! params[:is_founder]
       message = "Congratulations! You've been approved as #{@new_employee.title} at #{@startup.name}."
       UserMailer.accepted_as_employee(@new_employee, @startup).deliver
@@ -80,13 +81,9 @@ class StartupsController < InheritedResources::Base
 
 	def permitted_params
 	  {:startup => params.fetch(:startup, {}).permit(:name, :address, :pitch, :website, :about, :email, :phone, :logo,
-	                                                 :remote_logo_url, :facebook_link, :twitter_link, :pre_funds,
+	                                                 :remote_logo_url, :facebook_link, :twitter_link, :pre_funds, :pre_investers_name,
 	                                                 :help_from_sv, {category_ids: []},
 	                                                 {startup_before: [:startup_name, :startup_descripition] }
                                                  	)}
-# TODO
-# "university"=>"uni", "course"=>"course", "semester"=>"sem"}, "commit"=>"Sign up"}
-# Unpermitted parameters: salutation, fullname, avatar, born_on(1i), born_on(2i), born_on(3i), is_student, college, university, course, semester
-#   User Load (1.3ms)
   end
 end

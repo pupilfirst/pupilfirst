@@ -1,0 +1,33 @@
+
+Svlabs:
+  Web:
+      home page :
+      Sign up page:
+      Startup:
+        ☐ website has http:// once taped
+        Edit page:
+          ☐ phase of startup - dropdown
+          ☐ Help from Sv multiple selection
+        Invite founder:
+          ✔ https://app.getsentry.com/app20616953herokucom/production/group/17040778/  @fix @done (14-03-27 13:51)
+
+  Mobile:
+    ☐ Deal with messages
+    ☐ change approval_status to string message
+
+  Admin:
+    ☐ confirm message for approval
+  Bank Submition:
+
+
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+Archive:
+ ✔ icons, bg @done (14-03-27 12:19) @project(Web / home page )
+ ✔ log @done (14-03-27 12:19) @project(Web / home page )
+ ✔ student, dropdown's uni, sem @done (14-03-27 12:19) @project(Web / Sign up page)
+ ✔ pic is not mandatory @done (14-03-27 12:19) @project(Web / Sign up page)
+ ✔ sub company email with current_user email @done (14-03-27 12:19) @project(Web / Startup)
+ ✔ stop pitch at 140 char @done (14-03-27 12:38) @project(Web / Startup)
+ ✔ redirect post apply now to message page @done (14-03-27 13:17) @project(Web / Startup)
+ ✔ invester name @done (14-03-27 13:17) @project(Web / Startup / Edit page)
+ ✔ logo is optional @done (14-03-27 13:19) @project(Web / Startup / Edit page)

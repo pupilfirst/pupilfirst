@@ -11,6 +11,11 @@ html
 
   body
 
+    .notice.hide
+      = notice
+    - if alert.present?
+      .alert.hide
+        = alert
 
     .home-container
       == yield

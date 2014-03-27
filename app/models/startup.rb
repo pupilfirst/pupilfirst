@@ -18,7 +18,7 @@ class Startup < ActiveRecord::Base
   serialize :police_station, JSON
   validate :valid_categories?
   validate :valid_founders?
-  validates_presence_of :name
+  validates_presence_of :name, if: ->(*args){@full_validation }
   validates_presence_of :logo, if: ->(*args){@full_validation }
   validates_presence_of :address, if: ->(*args){@full_validation }
   validates_presence_of :email

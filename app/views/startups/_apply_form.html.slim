@@ -3,11 +3,10 @@
   = @startup.errors.full_messages.first if @startup.errors.any?
 .wrapper-form
   = simple_form_for @startup, :html => { :class => 'form-horizontal' } do |f|
-    = f.input :name, label: "Startup Name", required: true
-    = f.input :email, label: "Company's email", required: true
-    = f.input :phone, label: "Company's contact number", required: true
-    = f.input :pitch, as: :text, hint: "max 140 characters",  input_html: {rows: 8, class:'span5', placeholder: 'max 140 characters'}, required: true
-    = f.input :website
+    = f.input :phone, label: "Contact number", required: true, input_html: {placeholder: ""}
+    = f.input :pitch, as: :text, hint: "max 140 characters",  input_html: {rows: 8, class:'span5', placeholder: '', maxlength: 140}, required: true
+    = f.input :name, label: "Company name", input_html: {placeholder: ""}
+    = f.input :website, input_html: {placeholder: ""}
     = f.submit :class=> 'btn btn-success'
     = link_to 'Show', @startup, :class => "btn btn-info"
 

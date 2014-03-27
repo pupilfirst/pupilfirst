@@ -12,7 +12,10 @@ class ApplicationController < ActionController::Base
 	protected
 
 	def configure_permitted_parameters
-	  devise_parameter_sanitizer.for(:accept_invitation).concat [:avatar, :twitter_url, :linkedin_url, :username]
+    devise_parameter_sanitizer.for(:accept_invitation).concat [:avatar, :twitter_url, :linkedin_url, :username]
+    # TODO
+    # Unpermitted parameters: salutation, fullname, born_on(1i), born_on(2i), born_on(3i), is_student, college, university, course, semester
+	  devise_parameter_sanitizer.for(:sign_up).concat [:salutation, :fullname, :born_on, :is_student, :college, :university, :course, :semester]
 	end
 
 end

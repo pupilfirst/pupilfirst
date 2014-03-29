@@ -17,7 +17,7 @@ class V1::StartupsController < V1::BaseController
 
 	def create
 		@current_user = current_user
-		raise "User(#{current_user.fullname}) is already linked to startup #{current_user.startup.name}" if current_user.startup
+		raise ArgumentError.new("User(#{current_user.fullname}) is already linked to startup #{current_user.startup.name}") if current_user.startup
   	startup = Startup.create(startup_params.merge({
   		email: current_user.email,
   		founders: [@current_user]
@@ -25,6 +25,7 @@ class V1::StartupsController < V1::BaseController
 		@current_user.verify_self!
 		@current_user.update_attributes!(is_founder: true)
 		startup.save(validate: false)
+    StartupMailer.apply_now(startup).deliver
     respond_to do |format|
         format.json
     end
@@ -41,11 +42,11 @@ class V1::StartupsController < V1::BaseController
         }.merge({is_director: true}))
       end
       StartupMailer.reminder_to_complete_personal_info(startup, current_user).deliver if startup_params[:company_names]
-      message = "#{current_user.fullname} has listed you as a Director at #{@startup.name}"
+      message = "#{current_user.fullname} has listed you as a Director at #{startup.name}"
       startup.reload.directors.each do |dir|
         UserPushNotifyJob.new.async.perform(dir.id, :fill_personal_info, message)
       end
-      render json: {message: "message"}, status: :ok
+      render json: {message: "Details have been submited"}, status: :ok
     else
       render json: {error: startup.errors.to_a.join(', ')}, status: :bad_request
     end
@@ -64,14 +65,20 @@ class V1::StartupsController < V1::BaseController
 
 	def link_employee
 		@new_employee = current_user
-		@new_employee.update_attributes!(startup: Startup.find(params[:id]), startup_link_verifier_id: nil, title: params[:position])
-		StartupMailer.respond_to_new_employee(Startup.find(params[:id]), @new_employee).deliver
+    startup = Startup.find(params[:id])
+		@new_employee.update_attributes!(startup: startup, startup_link_verifier_id: nil, title: params[:position])
+		StartupMailer.respond_to_new_employee(startup, @new_employee).deliver
+    message = "#{@new_employee.fullname} wants to be linked with #{startup.name or "your startup"}. Please check your email to approve."
+    startup.founders.each do |f|
+      UserPushNotifyJob.new.async.perform(f.id, :fill_personal_info, message)
+    end
 		# render nothing: true, status: :created
 	end
 
 private
   def startup_params
     params.require(:startup).permit(:name, :phone, :pitch, :website,:dsc,
+                                    :logo, :about, :phone, :email, :facebook_link, :twitter_link,
                                     company_names: [:justification, :name],
                                     police_station: [:city, :line1, :line2, :name, :pin],
                                     registered_address_attributes: [:flat, :building, :street, :area, :town, :state, :pin]

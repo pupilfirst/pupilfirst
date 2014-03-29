@@ -1,0 +1,10 @@
+h4 Change your password
+br
+= simple_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put, :class => "form-horizontal" }) do |f|
+  = f.error_notification
+  = f.input :reset_password_token, :as => :hidden
+  = f.full_error :reset_password_token
+  .form-inputs
+    = f.input :password, :label => "New password", :required => true, :autofocus => true
+    = f.input :password_confirmation, :label => "Confirm your new password", :required => true
+    = f.button :submit, "Change my password", class:"offset2"

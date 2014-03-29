@@ -54,7 +54,7 @@ table.table.table-hover.table-bordered.table-striped
       td
         = @startup.founders.map &:email
         br
-        = link_to "Invite more founders", startup_founders_path(startup_id: @startup.id)
+        = link_to "Invite co-founders", startup_founders_path(startup_id: @startup.id)
 
 
 = link_to 'Edit', edit_startup_path(@startup), {class: 'btn btn-success'}

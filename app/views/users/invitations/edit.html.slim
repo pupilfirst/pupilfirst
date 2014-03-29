@@ -1,5 +1,6 @@
-h1 Sign up
-= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html=>{:class => "form-horizontal"}) do |f|
+h2= t 'devise.invitations.edit.header'
+= simple_form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => { :method => :put, :class => "form-horizontal" } do |f|
+  = f.hidden_field :invitation_token
   - if f.error_notification
     p style="color:#b94a48;" Error (please review the problems below)
 
@@ -18,22 +19,24 @@ h1 Sign up
         = f.input :college
         = f.input :course, collection: {"Polymer Engineering" => "Polymer Engineering", "Mechanical Engineering (production)" => "Mechanical Engineering (production)", "Mechanical (Automobile)" => "Mechanical (Automobile)", "Information Technology" => "Information Technology", "Computer engineering" => "Computer engineering", "Electronics Engineering" => "Electronics Engineering", "Bio Medical Engineering" => "Bio Medical Engineering", "Instrumentation and Control Engineering" => "Instrumentation and Control Engineering", "Electronics and Instrumentation" => "Electronics and Instrumentation", "Production Engineering" => "Production Engineering", "Production cum Plant Engineering" => "Production cum Plant Engineering", "Industrial Engineering" => "Industrial Engineering", "Architecture" => "Architecture", "Chemical Engineering" => "Chemical Engineering", "Electronics and Communication Engineering" => "Electronics and Communication Engineering", "Computer Science and Engineering" => "Computer Science and Engineering", "Applied Electronics and Instrumentation Engineering" => "Applied Electronics and Instrumentation Engineering", "Electrical and Electronics Engineering" => "Electrical and Electronics Engineering", "Mechanical Engineering" => "Mechanical Engineering", "Civil Engineering" => "Civil Engineering", "Other" => "Other"}, input_html:{"data-live-search"=>"true"}
         = f.input :semester, collection: {"1st"=>"1st","2nd"=>"2nd","3rd"=>"3rd","4th"=>"4th","5th"=>"5th","6th"=>"6th","7th"=>"7th","8th"=>"8th"}
+    - if resource.startup
+      = f.input :accept_startup, label: "Link to #{resource.startup.name}", as: :boolean, :required => true
+
   .signin-pad
     = f.button :submit, "Sign up", :class=>'btn btn-success'
 
 javascript:
   $(function(){
     $(".custom_datepicker_selector").datepicker()
-    $(".optional").each(function(optional){
-      $(".content", optional).hide()
-      $("input:checkbox", optional).click(function() {
-        var $this = $(this);
-        if ($this.is(':checked')) {
-          $(".content",optional).show()
-        } else {
-          $(".content",optional).hide()
-        }
-      });
+    student_div = $("#is_student.optional")
+    $(".content", student_div).hide()
+    $("input:checkbox", student_div).click(function() {
+      var $this = $(this);
+      if ($this.is(':checked')) {
+        $(".content",student_div).show()
+      } else {
+        $(".content",student_div).hide()
+      }
+    });
 
-    })
   });

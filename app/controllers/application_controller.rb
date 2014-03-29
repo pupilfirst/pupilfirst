@@ -16,6 +16,7 @@ class ApplicationController < ActionController::Base
     # TODO
     # Unpermitted parameters: salutation, fullname, born_on(1i), born_on(2i), born_on(3i), is_student, college, university, course, semester
 	  devise_parameter_sanitizer.for(:sign_up).concat [:salutation, :fullname, :born_on, :is_student, :college, :university, :course, :semester]
+    devise_parameter_sanitizer.for(:accept_invitation).concat [:salutation, :fullname, :email, :born_on, :is_student, :university, :college, :course, :semester, :startup, :accept_startup]
 	end
 
 end

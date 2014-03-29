@@ -26,6 +26,7 @@ FactoryGirl.define do
   factory :user do
     fullname { "#{Faker::Name.first_name} #{Faker::Name.last_name}" }
     username  { Faker::Lorem.characters(9) }
+    salutation { ['Mr', 'Miss', 'Mrs'].shuffle.first }
     email 		{ Faker::Internet.email }
     born_on 	{ Date.current.to_s }
 		avatar { fixture_file_upload(Rails.root.join(*%w[ spec fixtures files example.jpg ]), 'image/jpg') }
@@ -103,6 +104,12 @@ FactoryGirl.define do
 		f.category_type :startup
 	end
 
+  factory :startup_village_help_category,  class: Category do |f|
+    f.name {Faker::Lorem.words(2).join(' ')}
+    f.category_type :startup_village_help
+  end
+  FactoryGirl.create(:startup_village_help_category)
+  FactoryGirl.create(:startup_village_help_category)
 	factory :news do |f|
 		author
 		association :category, factory: :news_category, strategy: :build
@@ -140,6 +147,7 @@ FactoryGirl.define do
     f.website   {Faker::Internet.domain_name}
     f.email     {Faker::Internet.email}
     f.phone   {Faker::PhoneNumber.cell_phone}
+    f.help_from_sv   { Category.startup_village_help.map(&:id).shuffle[0..2]}
     # f.founders {[create(:founder), create(:founder)]}
     # f.category_ids {[create(:startup_category).id]}
     after(:build) do |startup|

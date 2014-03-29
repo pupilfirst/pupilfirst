@@ -3,15 +3,13 @@ class StartupMailer < ActionMailer::Base
 
   def startup_approved(startup)
     @startup = startup
-    @status = status
     send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
     substitute '-founder_full_name-', startup.founders.map(&:fullname)
-    mail(to: send_to, subject: "Your startup's has been approved")
+    mail(to: send_to, subject: "Welcome to Startup Village!")
   end
 
   def incorporation_approved(startup)
     @startup = startup
-    @status = status
     send_to = startup.directors.map { |e| "#{e.fullname} <#{e.email}>" }
     substitute '-founder_full_name-', startup.directors.map(&:fullname)
     mail(to: send_to, subject: "Your startup's has been approved")
@@ -19,7 +17,6 @@ class StartupMailer < ActionMailer::Base
 
   def bank_approved(startup)
     @startup = startup
-    @status = status
     send_to = startup.directors.map { |e| "#{e.fullname} <#{e.email}>" }
     substitute '-founder_full_name-', startup.directors.map(&:fullname)
     mail(to: send_to, subject: "Your startup's has been approved")
@@ -47,9 +44,9 @@ class StartupMailer < ActionMailer::Base
     mail(to: send_to, subject: "Further instructions on incubation")
   end
 
-  def notify_secretary_about_startup_update(startup)
+  def notify_svrep_about_startup_update(startup)
     @startup = startup
-    mail(to: secretary_contact, subject: "Detailed form submitted")
+    mail(to: admin_contact, subject: "Detailed form submitted")
   end
 
   def apply_now(startup)

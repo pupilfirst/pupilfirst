@@ -3,10 +3,10 @@ h1 Founders
   - @startup.founders.each do |founder|
     .fullname
       = "#{founder.fullname} -- (#{founder.email})"
+  br
   = form_tag(invite_startup_founders_path, method: :post, class: "form-inline", role: "form") do
-    .form-group
-      label.sr-only for="exampleInputEmail2"  Email address
-      input#exampleInputEmail2.form-control placeholder=("Enter email") type="email" name="email"
-    button.btn.btn-default type="submit"  Invite Founder
-
+    input.input placeholder="Enter email" type="email" name="email"
+    span &nbsp;&nbsp;&nbsp;&nbsp;
+    button.btn type="submit" Invite Founder
+br
 = link_to 'View Startup', @startup, :class => "btn btn-info"

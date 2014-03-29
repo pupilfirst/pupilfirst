@@ -5,27 +5,27 @@ class FoundersController < ApplicationController
   end
 
   def invite
+    @current_user = current_user
     @user = User.find_by_email(params[:email])
-    if @user.nil?
-      fullname = params[:email].split("@")[0]
-      @user = User.invite!({
-        fullname: fullname, email: params[:email],
-        startup_id: current_user.startup.id, is_founder: true, startup_link_verifier_id: current_user.id})
-      @user.save!
-      flash[:notice] = "Email invite sent!"
-    elsif @user.startup == current_user.startup
-      if @user.is_founder?
-        flash[:notice] = "This user is already a founder in your startup"
+    if params[:email].present?
+      if @user.nil?
+        fullname = params[:email].split("@")[0]
+        session[:current_username] = current_user.fullname
+        @user = User.invite!({
+          email: params[:email],
+          startup_id: current_user.startup.id, is_founder: true, startup_link_verifier_id: current_user.id,
+          inviter_name: current_user.fullname})
+        @user.save!(validate: false)
+        flash[:notice] = "Email invite sent!"
+      elsif @user.startup
+        flash[:alert] = "This user is associated with another startup."
       else
-        current_user.startup.founders << @user
-        UserMailer.assigned_as_founder(@user, current_user.startup).deliver
+        UserMailer.request_to_be_a_founder(@user, current_user.startup, current_user).deliver
+        flash[:notice] = "An email has been sent to the user to join your startup as a founder."
       end
-    elsif @user.startup.nil?
-      UserMailer.request_to_be_a_founder(@user, current_user.startup, current_user).deliver
-      flash[:notice] = "An email has been sent to the user to join your startup as a founder."
     else
-      flash[:alert] = "This user is associated with another startup."
+      flash[:alert] = "Please enter a valid email"
     end
-    index and render :index
+    redirect_to action: :index
   end
 end

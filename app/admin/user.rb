@@ -19,7 +19,7 @@ ActiveAdmin.register User do
 
   menu :label => "Startup Founders"
 
-  permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url, :title, :skip_password
+  permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url, :title, :skip_password, :born_on
 
   form do |f|
     f.inputs "User details" do
@@ -29,6 +29,7 @@ ActiveAdmin.register User do
       f.input :twitter_url
       f.input :linkedin_url
       f.input :title
+      f.input :born_on
       f.input :avatar, as: :file
       f.input :remote_avatar_url
       f.input :startup

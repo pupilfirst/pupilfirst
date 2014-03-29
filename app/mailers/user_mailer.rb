@@ -1,12 +1,6 @@
 class UserMailer < ActionMailer::Base
   default from: "SV App <no-reply@svlabs.in>"
 
-  def assigned_as_founder(user, startup)
-    @startup = startup
-    @user = user
-    mail(to: user.email, subject: "You have been added as a founder for #{startup.name}")
-  end
-
   def request_to_be_a_founder(user, startup, current_user)
     @startup = startup
     @user = user

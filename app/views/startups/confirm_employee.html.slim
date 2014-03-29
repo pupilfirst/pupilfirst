@@ -4,9 +4,9 @@
       fieldset
         = hidden_field_tag 'token', @token
 
-        legend Approve Employee
+        legend Approve #{@new_employee.fullname} as #{@new_employee.title}
         label.checkbox
+          | Is part of founding team and grant edit access?
           = check_box_tag :is_founder
-          | Is founder of the startup
         div &nbsp;
         = submit_tag "Accept",:class => "btn btn-primary"

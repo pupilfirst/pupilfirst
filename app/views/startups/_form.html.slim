@@ -1,7 +1,9 @@
 - session[:startup_id] = @startup.id
 - if @startup.errors.any?
-  h4 Errors
-  = @startup.errors.full_messages.first if @startup.errors.any?
+  h4 style="color:#b94a48;" Error (please review the problems below)
+p
+  i Please note that you can come back and change these details whenever you please
+br
 .wrapper-form
   = simple_form_for @startup, :html => { :class => 'form-horizontal' } do |f|
     = f.input :name, label: "Company's Name", required: true, input_html: {placeholder: ''}
@@ -9,36 +11,34 @@
     = f.input :phone, label: "Contact number"
     = f.input :website, input_html:{placeholder: ''}
     = f.input :logo, as: :file, required: false
-    = f.input :pitch, as: :text, hint: "max 140 characters",  input_html: {class:'span5', placeholder: '', maxlength: 140, rows: 3}
-    = f.input :address, as: :text, input_html: {rows: 4, class:'span5', placeholder: 'Office Address'}
-    = f.input :about, as: :text, hint: "500 words max", input_html: {rows: 10, class:'span5', placeholder: ''}
-    = f.association :categories, collection: Category.startup_category, as: :select, hint: "Min:1, Max:3 categories", input_html:{class: "span4"}
+    = f.input :pitch, label: 'Idea', as: :text, hint: "max 140 characters",  input_html: {class:'span5', placeholder: 'Your Elevator Pitch: It reflects the concept of being able to explain your product in the time span of an elevator ride', maxlength: 140, rows: 3}, required: true
+    = f.input :address, label: 'Residential address', as: :text, input_html: {rows: 4, class:'span5', placeholder: ''}, required: true
+    = f.input :about, label: 'Product description', as: :text, hint: "500 words max", input_html: {rows: 10, class:'span5', placeholder: 'Describe your product in 10 to 500 words'}, required: true
+    = f.association :categories, label: 'Categories that describe your startup', required: true, collection: Category.startup_category, as: :select, hint: "You must select min 1 & max 3", input_html:{class: "span4"}
+    = f.input :help_from_sv,label: 'Help from Startup Village', as: :select, collection: Category.startup_village_help, value_method: :id, input_html:{multiple: true, class: 'span5'}
     = f.input :twitter_link, input_html:{placeholder: ''}
     = f.input :facebook_link, input_html:{placeholder: ''}
     #pre_funds.optional.checkbox
       label
         = check_box_tag "pre_funds"
-        p Have you recived funds already?
+        p Have you raised funds yet?
       .content
-        = f.input :pre_funds, input_html: {placeholder: 'how much?'}
-        = f.input :pre_investers_name, label: "Invester's name", input_html: {placeholder: ''}
+        = f.input :pre_funds, label: "How much have you raised", input_html: {placeholder: 'Amount in INR'}
+        = f.input :pre_investers_name, label: "Name of investors", input_html: {placeholder: ''}
     #startup_before.optional.checkbox
       label
         = check_box_tag "startup_history"
         p Have you run a startup before?
       .content
         .control-group.string.optional
-          label.string.optional.control-label Startup name
+          label.string.optional.control-label Name of your previous startup
           .controls
             = text_field_tag "startup[startup_before][startup_name]", (@startup.startup_before['startup_name'] rescue nil), placeholder: "", class: "string"
         .control-group.string.optional
-          label.string.optional.control-label Startup descripition
+          label.string.optional.control-label Describe that startup
           .controls
             = text_area_tag "startup[startup_before][startup_descripition]", (@startup.startup_before['startup_descripition'] rescue nil), placeholder: "startup_descripition", class: "form-control span5", placeholder: '', rows: 5
-    .sv_help
-      = f.input :help_from_sv, collection: ["help1", "help2"]
-    = f.submit :class=> 'btn btn-success'
-    = link_to 'Show', @startup, :class => "btn btn-info"
+    = f.submit class: 'btn btn-success offset2', value: 'Update startup profile'
 
 javascript:
   $(function(){
@@ -52,6 +52,14 @@ javascript:
         $(".content",optional).hide()
       }
     });
+    // $(".bootstrap-select .dropdown-menu ul", $("#startup_category_ids").parent()).on('click', function(e){
+    //   ul_ele = $(".bootstrap-select .dropdown-menu ul", $("#startup_category_ids").parent())
+    //   selected = $("li.selected", ul_ele)
+    //   if(selected.size() > 3){
+    //     // $(selected[0]).removeClass("selected")
+    //     e.preventDefault()
+    //   }
+    // })
 
     $('select').selectpicker();
     counter = function(ele, help_ele, max_chars, is_words) {

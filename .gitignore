@@ -15,7 +15,7 @@
 /log/*.log
 /tmp
 
-*.yml
+config/*.yml
 .env
 .rspec
 tags

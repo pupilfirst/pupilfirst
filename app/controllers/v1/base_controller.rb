@@ -13,6 +13,7 @@ class V1::BaseController < ApplicationController
   	status = case exception
 	  	when ActiveRecord::RecordInvalid then 400
 	  	when ActiveRecord::RecordNotFound then 404
+      when ArgumentError then 400
 	  	else
 	  		logger.fatal "UNIDENTIFIED ERROR OCCURED IN API :: #{exception.class} #{exception.message}, #{exception.backtrace}"
 	  		raise exception

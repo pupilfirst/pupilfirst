@@ -1,6 +1,6 @@
 Svapp::Application.routes.draw do
 
-  devise_for :users, controllers: { passwords: "users/passwords" }
+  devise_for :users, controllers: { passwords: "users/passwords", invitations: 'users/invitations'}
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 

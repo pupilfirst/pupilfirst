@@ -54,10 +54,10 @@ ActiveAdmin.register Startup do
   member_action :custom_update, method: :put do
     startup = Startup.find params[:id]
     if startup.update_attributes(permitted_params[:startup])
-      case params[:email_to_send]
+      case params[:email_to_send].to_sym
       when :approval
-        StartupMailer.status_approved(startup).deliver
-        push_message = "Welcome to Startup Village! You're startup is approved."
+        StartupMailer.startup_approved(startup).deliver
+        push_message = "Voilà! You are now officially a Startup Village incubatee!"
         startup.founders.each do |user|
           UserPushNotifyJob.new.async.perform(user.id, :startup_approval, push_message)
         end
@@ -75,6 +75,10 @@ ActiveAdmin.register Startup do
 
   member_action :send_form_email, method: :post do
     startup = Startup.find params[:startup_id]
+    push_message = "You've got an email with further instructions on the incubation process. Please check."
+    startup.founders.each do |user|
+      UserPushNotifyJob.new.async.perform(user.id, :startup_approval, push_message)
+    end
     StartupMailer.reminder_to_complete_startup_info(startup).deliver
     redirect_to action: :show
   end

@@ -1,3 +1,5 @@
-p #{@current_user.fullname} has listed you as a founder at #{@startup.name}. To accept & link yourself, please head over #{link_to confirm_startup_link_startup_url("here" ,id: @startup.id, token: @user.startup_verifier_token)} or sign up on the mobile app. We are available on a[href="https://play.google.com/store/apps/details?id=in.svlabs.android"]Android & a[href="https://itunes.apple.com/in/app/startup-village-app/id804638121?mt=8"] iOS.
+- link = link_to "here", confirm_startup_link_startup_url(id: @startup.id, token: @user.startup_verifier_token)
 
-p \- Team SV App
+p #{@current_user.fullname} has listed you as a founder at #{@startup.name}. To accept & link yourself, please head over #{link} or sign up on the mobile app. We are available on a[href="https://play.google.com/store/apps/details?id=in.svlabs.android"]Android & a[href="https://itunes.apple.com/in/app/startup-village-app/id804638121?mt=8"] iOS.
+
+p - Team SV App

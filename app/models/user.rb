@@ -14,8 +14,14 @@ class User < ActiveRecord::Base
   belongs_to :startup_link_verifier, class_name: "User", foreign_key: "startup_link_verifier_id"
   scope :non_founders, -> { where("startup_id IS NULL") }
   accepts_nested_attributes_for :social_ids, :father, :address, :guardian
+  validates_presence_of :born_on
+  validates_presence_of :salutation, message: ''
+  validates_presence_of :fullname
 
   attr_reader :skip_password
+  # hack
+  attr_accessor :inviter_name
+  attr_accessor :accept_startup
   mount_uploader :avatar, AvatarUploader
   process_in_background :avatar
   normalize_attribute :startup_id
@@ -61,35 +67,32 @@ class User < ActiveRecord::Base
 
   def confirm_employee!(is_founder)
     self.update_attributes!(startup_link_verifier_id: self.id, is_founder: is_founder)
-    push_message = 'Hola! you have been accepted.'
-    UserPushNotifyJob.new.async.perform(self.id, :employee_confirmed, push_message)
   end
 
   def verified?
     return true if startup_link_verifier
   end
 
-  def approved?
+  def approved_message
     return nil if startup.approval_status and verified?
-    return "You are not approved as a founder yet." if verified?
-    "Startup is awaiting approval from Startup Village"
+    return I18n.t('startup_village.messages.startup_approval.link_startup') % {company_name: startup.name} unless verified?
+    I18n.t('startup_village.messages.startup_approval.from_startup_village') % {company_name: startup.name}
   end
 
-  def profile_info_submitted?
+  def personal_info_submitted?
     return true if self.father
     false
   end
 
-  def profile_info_enabled?
+  def personal_info_enabled?
     return false if startup.incorporation_status?
     return false unless is_founder
-    return false if is_director? and profile_info_submitted?
     true
   end
 
   def incorporation_enabled?
     return false if startup.incorporation_status?
-    return true if is_founder and profile_info_submitted?
+    return true if is_founder and personal_info_submitted?
     false
   end
 
@@ -100,8 +103,8 @@ class User < ActiveRecord::Base
   end
 
   def personal_info_message
-    return I18n.t("startup_village.messages.personal_info.incorporation_done") if profile_info_submitted? and is_director
-    return I18n.t("startup_village.messages.personal_info.no_incorporation") if profile_info_submitted?
+    return I18n.t("startup_village.messages.personal_info.incorporation_done") if personal_info_submitted? and is_director
+    return I18n.t("startup_village.messages.personal_info.no_incorporation") if personal_info_submitted?
   end
 
   def sep_enabled?

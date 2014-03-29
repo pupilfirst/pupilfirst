@@ -88,6 +88,7 @@ describe "Startup Requests" do
 
     before(:each) do
       ActionMailer::Base.deliveries = []
+      allow(UserPushNotifyJob).to receive_message_chain(:new, :async, :perform).and_return true
     end
 
     it "raise error if auth_token is not given" do

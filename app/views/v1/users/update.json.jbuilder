@@ -1,1 +1,1 @@
-json.message "message"
+json.message "Details have been updated"

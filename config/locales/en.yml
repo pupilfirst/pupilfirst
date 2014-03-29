@@ -1,0 +1,85 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+en:
+  startup_village:
+    admin_contact:
+      development: "gautham@mobme.in"
+      staging: "utsav@nwplyng.com"
+      production: "utsav@nwplyng.com"
+    messages:
+      personal_info:
+        no_incorporation: |
+          Thanks for providing us with your personal information.
+          You will now find a new option on your Startup page: Start A Company. If you are looking to incorporate a company, please head over there & fill out the required information.
+          When that does happen & you are listed as a Director, this screen will notify you of further steps.
+          In the meanwhile, get back to building & hacking things together! :)
+        incorporation_done: |
+          foobar
+      incorporate:
+        pending_director_info: |
+          Before proceeding, please have all the directors logon to the app & fill out their Personal info.
+          Pending: {Full name}
+        pending_payment: |
+          We only charge you the actuals for filing & incorporating your company. Here's the breakdown:
+          .
+          i) PAN - Rs. 105/-
+          ii) DIN (one person(including notarisation fee) - Rs. 400/-
+          iii) Form 1A - Rs. 1000/-
+          iv) Digital Signature (one person) - Rs. 800/-
+          v) Memorandum & Articles of Association fee - Rs. 4200/-
+          vi) Stamp Duty in Kerala (Form 1, 18 & 32) - Rs. 10,525/-
+          vii) Form 1, 18 & 32 (Incorporation forms) fee - Rs. 600/-
+          viii) Commonseal - Rs. 1100/-
+          
+          Total: Rs XYZ
+          .
+          Please transfer it to the following bank:
+          .
+          Name : Mobme Wireless Solutions Ltd
+          Account No : 038905002517
+          Bank : ICICI, Kawdiar, Thiruvananthapuram 
+          IFSC Code: ICIC0000389
+          .
+          Once transferred, enter your UTR (Unique Transfer Reference) number for us to validate here 
+        documents_required: |
+          Your payment is accepted. 
+          .
+          Please come over to Startup Village on {date} between {time} with the following attested* documents (along with documents mentioned on Personal Info) to get the process kickstarted:
+          .
+          i) 2 copies of Registered Address proof: Passport, driving license, latest telephone bill / electricity bill / bank statement signed by the bank.
+          .
+          ii) 1 Photo ID proof: Passport, driving license, PAN card
+          .
+          iii) No Objection Certificate from director/owner (Mandatory if registered office is owned by director (not taken on lease by company)
+          .
+          If you have any questions, feel free to reach out to us at support@svlabs.in
+          .
+          *All supporting documents should be attested by Gazetted officer or Bank Manager or Post Master        
+      startup_approval:
+        from_startup_village: |
+          Thank you! Your incubation application is under review with the SV management. You should hear back within a few days via a phone call or an email.
+          .
+          If you don't, please drop an email to dinnu@startupvillage.in
+        link_startup: |
+          Your request to be linked with %{company_name} is pending with the founders. We will notify you with an email & push notification as soon as you are approved. 
+  date:
+    datepicker: "dd/mm/yyyy"

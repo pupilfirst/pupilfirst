@@ -3,7 +3,6 @@ require 'spec_helper'
 describe V1::UsersController do
 	include V1ApiSpecHelper
   include JsonSpec::Helpers
-  include StartupHelper
   describe "GET on user" do
   	context "fetches details of user when id is provided" do
 	    xit "returns http success with details" do

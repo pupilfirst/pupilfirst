@@ -1,6 +1,6 @@
 class StartupsController < InheritedResources::Base
 	before_filter :authenticate_user!
-	skip_before_filter :authenticate_user!, only: [:confirm_employee]
+	skip_before_filter :authenticate_user!, only: [:confirm_employee, :confirm_startup_link]
 	after_filter only: [:create] do
 		@startup.founders << current_user
 		@startup.save
@@ -20,7 +20,7 @@ class StartupsController < InheritedResources::Base
 		@startup.full_validation = false
 		@startup.founders << current_user
 		if @startup.save
-      flash[:notice] = "Your startup Application is submited and in pending for approval."
+      # flash[:notice] = "Your startup Application is submited and in pending for approval."
       render :post_create
 			StartupMailer.apply_now(@startup).deliver
 		end
@@ -40,7 +40,7 @@ class StartupsController < InheritedResources::Base
   def update
     update! do |success, failure|
       success.html {
-        StartupMailer.notify_secretary_about_startup_update(@startup).deliver
+        StartupMailer.notify_svrep_about_startup_update(@startup).deliver
       	StartupMailer.fill_personal_info_for_director(@startup).deliver
         @startup.directors.each do |user|
           message = "Please fill in personl info"
@@ -55,7 +55,8 @@ class StartupsController < InheritedResources::Base
     @startup = Startup.find(params[:id])
     @self = User.find_by_startup_verifier_token(params[:token])
     raise_not_found unless @self
-		@self.confirm_employee! params[:is_founder]
+    @startup.founders << @self
+		@self.confirm_employee! true
   end
 
 	def confirm_employee
@@ -80,7 +81,7 @@ class StartupsController < InheritedResources::Base
 	end
 
 	def permitted_params
-	  {:startup => params.fetch(:startup, {}).permit(:name, :address, :pitch, :website, :about, :email, :phone, :logo,
+	  {:startup => params.fetch(:startup, {}).permit(:name, :address, :pitch, :website, :about, :email, :phone, :logo, {help_from_sv: []},
 	                                                 :remote_logo_url, :facebook_link, :twitter_link, :pre_funds, :pre_investers_name,
 	                                                 :help_from_sv, {category_ids: []},
 	                                                 {startup_before: [:startup_name, :startup_descripition] }

@@ -19,19 +19,19 @@ class Startup < ActiveRecord::Base
   serialize :help_from_sv, Array
   validate :valid_categories?
   validate :valid_founders?
-  validates_length_of :help_from_sv, minimum: 1, too_short: 'must select atleast one', if: ->(*args){@full_validation }
+  validates_length_of :help_from_sv, minimum: 1, too_short: 'must select atleast one', if: ->(startup){@full_validation }
 
-  validates_presence_of :name, if: ->(*args){@full_validation }
-  validates_presence_of :address, if: ->(*args){@full_validation }
+  validates_presence_of :name, if: ->(startup){@full_validation }
+  validates_presence_of :address, if: ->(startup){@full_validation }
   validates_presence_of :email
   validates_presence_of :phone
-  validates_presence_of :pre_funds, if: ->(){pre_investers_name.present?}
-  validates_presence_of :pre_investers_name, if: ->(){pre_funds.present?}
-  validates_length_of :pitch, maximum: MAX_PITCH_CHARS, message: "must be within #{MAX_PITCH_CHARS} characters", allow_nil: false, if: ->(*args){@full_validation }
+  validates_presence_of :pre_funds, if: ->(startup){startup.pre_investers_name.present?}
+  validates_presence_of :pre_investers_name, if: ->(startup){startup.pre_funds.present?}
+  validates_length_of :pitch, maximum: MAX_PITCH_CHARS, message: "must be within #{MAX_PITCH_CHARS} characters", allow_nil: false, if: ->(startup){@full_validation }
   validates_length_of :about, {
     within: 10..MAX_ABOUT_WORDS, message: "must be within 10 to #{MAX_ABOUT_WORDS} words",
     tokenizer: ->(str) { str.scan(/\w+/) }, allow_nil: false,
-    if: ->(*args){@full_validation }
+    if: ->(startup){@full_validation }
   }
 
   def valid_help_from_sv?
@@ -64,22 +64,32 @@ class Startup < ActiveRecord::Base
   end
 
   normalize_attribute :website do |value|
-    value = nil unless value.present?
-    value = "http://#{value}" if value =~ /^http:\/\/.*/
+    case value
+    when '' then nil
+    when nil then nil
+    when /^http:\/\/.*/ then value
+    else "http://#{value}"
+    end
   end
 
   normalize_attribute :twitter_link do |value|
-    value = nil unless value.present?
-    value = "http://#{value}" if value =~ /^twitter\.com.*/
-    value = "http://twitter.com/#{value}"  unless value =~ /[http:\/\/]*twitter\.com.*/
-    value if value =~ /^http[s]*:\/\/twitter\.com.*/
+    case value
+    when /^http[s]*:\/\/twitter\.com.*/ then value
+    when /^twitter\.com.*/ then "http://#{value}"
+    when "" then nil
+    when nil then nil
+    else "http://twitter.com/#{value}"
+    end
   end
 
   normalize_attribute :facebook_link do |value|
-    value = nil unless value.present?
-    value = "http://#{value}" if value =~ /^facebook\.com.*/
-    value = "http://facebook.com/#{value}"  unless value =~ /[http:\/\/]*facebook\.com.*/
-    value if value =~ /^http[s]*:\/\/facebook\.com.*/
+    case value
+    when /^http[s]*:\/\/facebook\.com.*/ then value
+    when /^facebook\.com.*/ then "http://#{value}"
+    when "" then nil
+    when nil then nil
+    else "http://facebook.com/#{value}"
+    end
   end
 
   def incorporation_submited?

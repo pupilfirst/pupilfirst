@@ -39,6 +39,13 @@ describe Startup do
 	end
 
 	context 'normalize twitter_link' do
+		it "to link if username is empty/nil" do
+			startup = create(:startup, twitter_link: "")
+			expect( startup.twitter_link).to eq(nil)
+			startup = create(:startup, twitter_link: nil)
+			expect( startup.twitter_link).to eq(nil)
+		end
+
 		it "to link if username is given" do
 			startup = create(:startup, twitter_link: "gouthamvel")
 			expect( startup.twitter_link).to eq("http://twitter.com/gouthamvel")
@@ -56,6 +63,13 @@ describe Startup do
 	end
 
 	context 'normalize facebook_link' do
+		it "to link if username is empty/nil" do
+			startup = create(:startup, facebook_link: "")
+			expect( startup.facebook_link).to eq(nil)
+			startup = create(:startup, facebook_link: nil)
+			expect( startup.facebook_link).to eq(nil)
+		end
+
 		it "to link if username is given" do
 			startup = create(:startup, facebook_link: "gouthamvel")
 			expect( startup.facebook_link).to eq("http://facebook.com/gouthamvel")

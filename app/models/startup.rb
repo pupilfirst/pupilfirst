@@ -50,6 +50,7 @@ class Startup < ActiveRecord::Base
   end
 
   mount_uploader :logo, AvatarUploader
+  process_in_background :logo
   accepts_nested_attributes_for :founders, :registered_address
   normalize_attribute :name, :pitch, :about, :email, :phone
   attr_accessor :full_validation

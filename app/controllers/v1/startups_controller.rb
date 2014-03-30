@@ -6,9 +6,9 @@ class V1::StartupsController < V1::BaseController
 		category = Category.startup_category.find_by_name(params['category']) rescue nil
 		clause = category ? ["category_id = ?", category.id] : nil
 		@startups = if params[:search_term]
-				Startup.fuzzy_search(name: params[:search_term])
+				Startup.valid.fuzzy_search(name: params[:search_term])
 			else
-				Startup.joins(:categories).where(clause).order("id desc").uniq
+				Startup.joins(:categories).valid.where(clause).order("id desc").uniq
 			end
     respond_to do |format|
         format.json

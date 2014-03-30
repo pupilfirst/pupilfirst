@@ -33,6 +33,7 @@ class StartupsController < InheritedResources::Base
 
 	def edit
 		@startup = Startup.find(params[:id])
+    @current_user = current_user
 		raise_not_found unless current_user.startup.try(:id) == @startup.id
     raise_not_found unless current_user.is_founder?
 	end
@@ -83,7 +84,7 @@ class StartupsController < InheritedResources::Base
 	def permitted_params
 	  {:startup => params.fetch(:startup, {}).permit(:name, :address, :pitch, :website, :about, :email, :phone, :logo, {help_from_sv: []},
 	                                                 :remote_logo_url, :facebook_link, :twitter_link, :pre_funds, :pre_investers_name,
-	                                                 :help_from_sv, {category_ids: []},
+	                                                 :help_from_sv, {category_ids: []}, {founders_attributes: [:id, :title]},
 	                                                 {startup_before: [:startup_name, :startup_descripition] }
                                                  	)}
   end

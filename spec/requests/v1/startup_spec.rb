@@ -5,10 +5,10 @@ describe "Startup Requests" do
   include UserSpecHelper
   include Rails.application.routes.url_helpers
 
-  let!(:startup ) { create(:startup, {name: 'startup 1'}) }
-  let!(:startup1) { create(:startup, {name: 'startup 2'}) }
-  let!(:startup2) { create(:startup, {name: 'foobar 1'}) }
-  let!(:startup3) { create(:startup, {name: 'foobar 2'}) }
+  let!(:startup ) { create(:startup, {approval_status: true,  name: 'startup 1'}) }
+  let!(:startup1) { create(:startup, {approval_status: true,  name: 'startup 2'}) }
+  let!(:startup2) { create(:startup, {approval_status: true,  name: 'foobar 1'}) }
+  let!(:startup3) { create(:startup, {approval_status: true,  name: 'foobar 2'}) }
 
   it "fetch startups on index" do
     get "/api/startups", {},version_header

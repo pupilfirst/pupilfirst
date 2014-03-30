@@ -10,6 +10,9 @@ br
     = f.input :email, label: "Email"
     = f.input :phone, label: "Contact number"
     = f.input :website, input_html:{placeholder: ''}
+    = f.fields_for :founders, @current_user do |p|
+      = p.input :id, as: :hidden
+      = p.input :title
     = f.input :logo, as: :file, required: false
     = f.input :pitch, label: 'Idea', as: :text, hint: "max 140 characters",  input_html: {class:'span5', placeholder: 'Your Elevator Pitch: It reflects the concept of being able to explain your product in the time span of an elevator ride', maxlength: 140, rows: 3}, required: true
     = f.input :address, label: 'Residential address', as: :text, input_html: {rows: 4, class:'span5', placeholder: ''}, required: true

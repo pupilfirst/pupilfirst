@@ -1,6 +1,7 @@
 class Startup < ActiveRecord::Base
   MAX_PITCH_CHARS = 140      unless defined?(MAX_PITCH_CHARS)
   MAX_ABOUT_WORDS = 500     unless defined?(MAX_ABOUT_WORDS)
+  scope :valid, -> { where(approval_status: true) }
 
   has_many :founders, -> { where("startup_link_verifier_id IS NOT NULL AND is_founder = ?", true)}, class_name: "User", foreign_key: "startup_id" do
     def <<(founder)
@@ -90,6 +91,11 @@ class Startup < ActiveRecord::Base
     when nil then nil
     else "http://facebook.com/#{value}"
     end
+  end
+
+  def founder_ids=(list_of_ids)
+    users_list = User.find list_of_ids.map{ |e| e.to_i }.select{ |e|  e.is_a?(Integer) and e > 0 }
+    users_list.each{|u| founders << u }
   end
 
   def incorporation_submited?

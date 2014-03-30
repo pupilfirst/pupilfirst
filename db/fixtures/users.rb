@@ -1,5 +1,5 @@
 User.seed(:id) do |s|
-	s.id = 1
+  s.id = 1
   s.username = "jon"
   s.email = "jon@example.com"
   s.fullname = "Jon Max"
@@ -7,7 +7,7 @@ User.seed(:id) do |s|
 end
 
 User.seed(:id) do |s|
-	s.id = 2
+  s.id = 2
   s.username = "nakul"
   s.email = "jon@example.com"
   s.fullname = "Kakul Nabra"

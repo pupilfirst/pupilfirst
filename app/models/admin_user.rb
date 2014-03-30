@@ -5,10 +5,10 @@ class AdminUser < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   mount_uploader :avatar, AvatarUploader
-	process_in_background :avatar
+  process_in_background :avatar
   normalize_attribute :password, :password_confirmation, :username, :fullname, :avatar
 
   def to_s
-  	fullname or username
+    fullname or username
   end
 end

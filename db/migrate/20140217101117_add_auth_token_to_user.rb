@@ -5,6 +5,6 @@ class AddAuthTokenToUser < ActiveRecord::Migration
   end
 
   def self.down
-  	remove_column :users, :auth_token
+    remove_column :users, :auth_token
   end
 end

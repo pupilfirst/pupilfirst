@@ -1,7 +1,7 @@
 class V1::BaseController < ApplicationController
-	respond_to :json
-	skip_before_filter :verify_authenticity_token
-	before_filter :require_token
+  respond_to :json
+  skip_before_filter :verify_authenticity_token
+  before_filter :require_token
 
   def current_user
     return @current_user if @current_user
@@ -10,14 +10,14 @@ class V1::BaseController < ApplicationController
   end
 
   rescue_from StandardError do |exception|
-  	status = case exception
-	  	when ActiveRecord::RecordInvalid then 400
-	  	when ActiveRecord::RecordNotFound then 404
+    status = case exception
+      when ActiveRecord::RecordInvalid then 400
+      when ActiveRecord::RecordNotFound then 404
       when ArgumentError then 400
-	  	else
-	  		logger.fatal "UNIDENTIFIED ERROR OCCURED IN API :: #{exception.class} #{exception.message}, #{exception.backtrace}"
-	  		raise exception
-	  	end
+      else
+        logger.fatal "UNIDENTIFIED ERROR OCCURED IN API :: #{exception.class} #{exception.message}, #{exception.backtrace}"
+        raise exception
+      end
     render :json => {error: exception.message}, :status => 500
     true
   end
@@ -28,14 +28,14 @@ class V1::BaseController < ApplicationController
 
 private
 
-	def require_token
-	  unless valid_token?
-	    logger.error "Request halted as no auth_token #{params}"
-	    raise "auth_token required given: #{auth_token}"
-	  end
-	end
+  def require_token
+    unless valid_token?
+      logger.error "Request halted as no auth_token #{params}"
+      raise "auth_token required given: #{auth_token}"
+    end
+  end
 
-	def valid_token?
-	  !! current_user
-	end
+  def valid_token?
+    !! current_user
+  end
 end

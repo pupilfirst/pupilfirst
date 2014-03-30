@@ -10,8 +10,8 @@ class Startup < ActiveRecord::Base
     end
   end
   has_many :directors, -> { where("startup_link_verifier_id IS NOT NULL AND is_founder = ? AND is_director = ?", true, true)}, :class_name => "User", :foreign_key => "startup_id"
-	has_many :employees, -> { where("startup_link_verifier_id IS NOT NULL")}, :class_name => "User", :foreign_key => "startup_id"
-	has_and_belongs_to_many :categories, :join_table => "startups_categories"
+  has_many :employees, -> { where("startup_link_verifier_id IS NOT NULL")}, :class_name => "User", :foreign_key => "startup_id"
+  has_and_belongs_to_many :categories, :join_table => "startups_categories"
   has_one :bank
   belongs_to :registered_address, class_name: 'Address'
   serialize :company_names, JSON
@@ -40,11 +40,11 @@ class Startup < ActiveRecord::Base
     true
   end
 
-	def valid_categories?
+  def valid_categories?
    return true unless @full_validation
    self.errors.add(:categories, "can't have more than 3 categories") if categories.size > 3
    self.errors.add(:categories, "must select at least one category") if categories.size < 1
-	end
+  end
 
   def valid_founders?
    self.errors.add(:founders, "should have at least one founder") if founders.nil? or founders.size < 1

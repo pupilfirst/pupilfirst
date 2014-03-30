@@ -1,9 +1,9 @@
 module StartupsHelper
-	def encode_startup_id
+  def encode_startup_id
 
-	end
+  end
 
-	def decode_startup_id
+  def decode_startup_id
 
-	end
+  end
 end

@@ -1,5 +1,10 @@
 class UserMailer < ActionMailer::Base
-  default from: "SV App <no-reply@svlabs.in>"
+  default from: "SV App <no-reply@svlabs.in>", cc: "outgoing@svlabs.in"
+
+  def inform_sep_submition(user)
+    @user = user
+    mail(to: student_contact, subject: "sep submited")
+  end
 
   def request_to_be_a_founder(user, startup, current_user)
     @startup = startup

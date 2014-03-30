@@ -1,1 +1,1 @@
-json.message "Details have been updated"
+json.message @user.personal_info_message

@@ -35,18 +35,18 @@ class Startup < ActiveRecord::Base
   }
 
   def valid_help_from_sv?
-    self.errors.add(:help_from_sv, "select atleast one") if help_from_sv.empty?
+    self.errors.add(:help_from_sv, "must select at least one") if help_from_sv.empty?
     true
   end
 
 	def valid_categories?
    return true unless @full_validation
-   self.errors.add(:categories, "cannot have more than 3 categories") if categories.size > 3
-   self.errors.add(:categories, "must have atleast one category") if categories.size < 1
+   self.errors.add(:categories, "can't have more than 3 categories") if categories.size > 3
+   self.errors.add(:categories, "must select at least one category") if categories.size < 1
 	end
 
   def valid_founders?
-   self.errors.add(:founders, "should have atleast one founder") if founders.nil? or founders.size < 1
+   self.errors.add(:founders, "should have at least one founder") if founders.nil? or founders.size < 1
   end
 
   mount_uploader :logo, AvatarUploader

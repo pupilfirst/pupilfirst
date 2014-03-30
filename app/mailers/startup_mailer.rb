@@ -1,5 +1,12 @@
 class StartupMailer < ActionMailer::Base
-  default from: "SV App <no-reply@svlabs.in>"
+  default from: "SV App <no-reply@svlabs.in>", cc: "outgoing@svlabs.in"
+
+  def partnership_application(startup, current_user)
+    @startup = startup
+    @current_user = current_user
+    send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
+    mail(to: secretary_contact, cc: (send_to + ["incoming <incoming@svlabs.in>", "goutham <gouthamvel@gmail.com>"]), subject: "Request for registering a Partnership")
+  end
 
   def startup_approved(startup)
     @startup = startup
@@ -32,8 +39,9 @@ class StartupMailer < ActionMailer::Base
   def reminder_to_complete_personal_info(startup, current_user)
     @startup = startup
     @current_user = current_user
-    send_to = startup.directors.map { |e| "#{e.fullname} <#{e.email}>" }
-    substitute '-founder_full_name-', startup.directors.map(&:fullname)
+    directors = startup.directors.reject { |e| e.id == current_user.id}
+    send_to = directors.map { |e| "#{e.fullname} <#{e.email}>" }
+    substitute '-founder_full_name-', directors.map(&:fullname)
     mail(to: send_to, subject: "#{current_user.fullname} has listed you as a Director at #{startup.name}")
   end
 
@@ -46,12 +54,12 @@ class StartupMailer < ActionMailer::Base
 
   def notify_svrep_about_startup_update(startup)
     @startup = startup
-    mail(to: admin_contact, subject: "Detailed form submitted")
+    mail(to: admin_contact, cc: "incoming@svlabs.in", subject: "Detailed form submitted")
   end
 
   def apply_now(startup)
     @startup = startup
-    mail(to: admin_contact, subject: "Incubation Application")
+    mail(to: admin_contact, cc: "incoming@svlabs.in", subject: "Incubation Application")
   end
 
   def respond_to_new_employee(startup, new_employee)

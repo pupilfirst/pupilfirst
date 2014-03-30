@@ -12,7 +12,8 @@ class User < ActiveRecord::Base
   belongs_to :guardian
   belongs_to :startup
   belongs_to :startup_link_verifier, class_name: "User", foreign_key: "startup_link_verifier_id"
-  scope :non_founders, -> { where("startup_id IS NULL") }
+  scope :non_employees, -> { where("startup_id IS NULL") }
+  scope :non_founders, -> { where("is_founder = ? or is_founder IS NULL", false) }
   accepts_nested_attributes_for :social_ids, :father, :address, :guardian
   validates_presence_of :born_on
   validates_presence_of :salutation, message: ''
@@ -108,10 +109,10 @@ class User < ActiveRecord::Base
   end
 
   def sep_enabled?
-    true
+    is_student?
   end
 
   def to_s
-    fullname
+    fullname or email
   end
 end

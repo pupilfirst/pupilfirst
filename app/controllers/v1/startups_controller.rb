@@ -41,12 +41,14 @@ class V1::StartupsController < V1::BaseController
           ['number_of_shares', 'is_share_holder'].include?(key)
         }.merge({is_director: true}))
       end
-      StartupMailer.reminder_to_complete_personal_info(startup, current_user).deliver if startup_params[:company_names]
-      message = "#{current_user.fullname} has listed you as a Director at #{startup.name}"
-      startup.reload.directors.each do |dir|
-        UserPushNotifyJob.new.async.perform(dir.id, :fill_personal_info, message)
+      if directors_in_params[:directors]
+        StartupMailer.reminder_to_complete_personal_info(startup, current_user).deliver if startup_params[:company_names]
+        message = "#{current_user.fullname} has listed you as a Director at #{startup.name}"
+        startup.reload.directors.reject { |e| e.id == current_user.id }.each do |dir|
+          UserPushNotifyJob.new.async.perform(dir.id, :fill_personal_info, message)
+        end
       end
-      render json: {message: "Details have been submited"}, status: :ok
+      render json: {message: startup.incorporation_message}, status: :ok
     else
       render json: {error: startup.errors.to_a.join(', ')}, status: :bad_request
     end
@@ -75,9 +77,14 @@ class V1::StartupsController < V1::BaseController
 		# render nothing: true, status: :created
 	end
 
-private
+  def partnership_application
+    StartupMailer.partnership_application(current_user.startup, current_user).deliver
+    render nothing: true, status: :created
+  end
+
+  private
   def startup_params
-    params.require(:startup).permit(:name, :phone, :pitch, :website,:dsc,
+    params.require(:startup).permit(:name, :phone, :pitch, :website,:dsc, :transaction_details,
                                     :logo, :about, :phone, :email, :facebook_link, :twitter_link,
                                     company_names: [:justification, :name],
                                     police_station: [:city, :line1, :line2, :name, :pin],

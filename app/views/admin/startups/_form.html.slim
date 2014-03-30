@@ -11,7 +11,10 @@
     = f.input :email
     = f.input :phone
     = f.input :categories, collection: Category.startup_category, hint: "Max: 3, Min: 1", input_html: {style: "width: 400px;"}
-    = f.input :founders, collection: Hash[User.non_founders.map{|b| [b.to_s,b.id]}], input_html: {style: "width: 400px;"}
+    / = f.input :founders, input_html: {style: "width: 400px;"}
+    - founders = User.non_founders + @startup.founders
+    - founders = founders.select { |e| e.valid? }
+    = f.input :founders, collection: Hash[founders.map{|b| [b.to_s,b.id]}], input_html: {style: "width: 400px;"}
     = f.input :dsc
     = f.input :authorized_capital
     = f.input :share_holding_pattern
@@ -25,7 +28,7 @@
     = f.input :address
     = f.input :pre_funds
     = f.input :startup_before
-    = f.input :help_from_sv
+    = f.input :help_from_sv, collection: Category.startup_village_help, input_html:{multiple:true}
     = f.submit
 
 javascript:

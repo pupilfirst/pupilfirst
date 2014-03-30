@@ -25,15 +25,26 @@ en:
       development: "gautham@mobme.in"
       staging: "utsav@nwplyng.com"
       production: "utsav@nwplyng.com"
+    secretary_contact:
+      development: "gautham@mobme.in"
+      staging: "utsav@nwplyng.com"
+      production: "utsav@nwplyng.com"      
     messages:
       personal_info:
         no_incorporation: |
           Thanks for providing us with your personal information.
-          You will now find a new option on your Startup page: Start A Company. If you are looking to incorporate a company, please head over there & fill out the required information.
+          You will now find a new option on your Startup page: Incorporate a company. If you are looking to incorporate a company, please head over there & fill out the required information.
           When that does happen & you are listed as a Director, this screen will notify you of further steps.
           In the meanwhile, get back to building & hacking things together! :)
         incorporation_done: |
-          foobar
+          Please come over to Startup Village on {incorporation_date} between {incorporation_time} with the following attested* documents to get the process kickstarted:
+          .
+          i) Registered Address proof: Passport, driving license, latest telephone bill / electricity bill / bank statement signed by the bank.
+          .
+          ii) Photo ID proof: Passport, driving license, PAN card
+          .
+          *All supporting documents should be attested by Gazetted officer or Bank Manager or Post Master
+
       incorporate:
         pending_director_info: |
           Before proceeding, please have all the directors logon to the app & fill out their Personal info.
@@ -59,7 +70,7 @@ en:
           Bank : ICICI, Kawdiar, Thiruvananthapuram 
           IFSC Code: ICIC0000389
           .
-          Once transferred, enter your UTR (Unique Transfer Reference) number for us to validate here 
+          Once transferred, enter your UTR (Unique Transfer Reference) number for us to validate here
         documents_required: |
           Your payment is accepted. 
           .

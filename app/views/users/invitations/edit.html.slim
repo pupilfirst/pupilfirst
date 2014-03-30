@@ -1,4 +1,4 @@
-h2= t 'devise.invitations.edit.header'
+h3= t 'devise.invitations.edit.header'
 = simple_form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => { :method => :put, :class => "form-horizontal" } do |f|
   = f.hidden_field :invitation_token
   - if f.error_notification

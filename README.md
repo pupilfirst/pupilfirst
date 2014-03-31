@@ -15,6 +15,7 @@ Things you may want to cover:
 
 * Configuration
   * setup database.yml for postgresql
+  * copy example.env to .env and set the variables as required
 
 * Database creation
   * bundle exec rake db:create

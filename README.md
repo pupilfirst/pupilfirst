@@ -1,63 +1,48 @@
-## README
+# SVLabs Web + API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Dependencies
+*  Ruby version - MRI 2.0+
+*  imagemagick
+*  postgresql
 
-Things you may want to cover:
+## Configuration
+*  Setup database.yml for postgresql
 
-* Ruby version
-  * MRI 2.0+
-* System dependencies
-  * imagemagick
-  * postgresql
-  * rubygems
-  * bundler gem
+## Database setup
+    $ bundle exec rake db:setup
 
-* Configuration
-  * setup database.yml for postgresql
+## Testing
+    bundle exec rspec spec
 
-* Database creation
-  * bundle exec rake db:create
+## Services
+  * Job query is managed by the sucker_punch gem, which runs in Rails process, processing between requests. This can be
+  switched to Resque easily.
 
-* Database initialization
-  * bundle exec rake db:setup
+## Deployment
+Deployment is taken care by git push(on master/development) using circlCI hook.
+Specific instructions can be found in circle.yml
 
-* How to run the test suite
-  * bundle exec rspec spec
+For manual push to heroku use:
 
-* Services (job queues, cache servers, search engines, etc.)
-  * job query is managed by sucker_punch which runs in rails process processing between requests
-  * can be switched to Resque easily
+Edit ``.git/config``:
 
-* Deployment instructions
+      [remote "heroku"]
+        url = git@heroku.com:svapp.git
+        fetch = +refs/heads/*:refs/remotes/heroku/*
+      [remote "staging"]
+        url = git@heroku.com:svapp-staging.git
+        fetch = +refs/heads/*:refs/remotes/staging/*
 
-  Deployment is taken care by git push(on master/development) using circlCI hook
-  Specific instructions can be found in circle.yml
-  for manual push to heroku use
-  * config .git/config
+Then:
 
-        [remote "heroku"]
-          url = git@heroku.com:svapp.git
-          fetch = +refs/heads/*:refs/remotes/heroku/*
-        [remote "staging"]
-          url = git@heroku.com:svapp-staging.git
-          fetch = +refs/heads/*:refs/remotes/staging/*
+* `git push heroku master` will push to production (svlabs.in)
+* `git push heroku staging` will push to staging (staging.svlabs.in)
 
-  * `git push heroku master` will push to production (svlabs.in)
-  * `git push heroku staging` will push to staging (staging.svlabs.in)
+## Web resources considered for dev
+*  http://matthewlehner.net/rails-api-testing-guidelines/
+*  https://github.com/joshbuddy/jsonpath
+*  http://pivotallabs.com/api-versioning/
 
-* Web resources considered for dev
-
-  * http://matthewlehner.net/rails-api-testing-guidelines/
-  * https://github.com/joshbuddy/jsonpath
-  * http://pivotallabs.com/api-versioning/
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
-
-* Known Issues
-
-  * Deprecation Warnings in rspec caused by json_spec. Gem needs to be updated
-  * n + 1 query optimization need to be added as required.
-  *
+## Known Issues
+*  Deprecation Warnings in rspec caused by json_spec. Gem needs to be updated
+*  n + 1 query optimization need to be added as required.

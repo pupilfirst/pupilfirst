@@ -24,3 +24,6 @@ public/svapp-dev
 public/svapp-*
 .tags*
 *.DS_Store
+
+# Ignore IDE-specific files.
+/.idea/

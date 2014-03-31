@@ -28,7 +28,7 @@ en:
     secretary_contact:
       development: "gautham@mobme.in"
       staging: "utsav@nwplyng.com"
-      production: "utsav@nwplyng.com"      
+      production: "utsav@nwplyng.com"
     messages:
       personal_info:
         no_incorporation: |
@@ -60,19 +60,19 @@ en:
           vi) Stamp Duty in Kerala (Form 1, 18 & 32) - Rs. 10,525/-
           vii) Form 1, 18 & 32 (Incorporation forms) fee - Rs. 600/-
           viii) Commonseal - Rs. 1100/-
-          
+
           Total: Rs XYZ
           .
           Please transfer it to the following bank:
           .
           Name : Mobme Wireless Solutions Ltd
           Account No : 038905002517
-          Bank : ICICI, Kawdiar, Thiruvananthapuram 
+          Bank : ICICI, Kawdiar, Thiruvananthapuram
           IFSC Code: ICIC0000389
           .
           Once transferred, enter your UTR (Unique Transfer Reference) number for us to validate here
         documents_required: |
-          Your payment is accepted. 
+          Your payment is accepted.
           .
           Please come over to Startup Village on {date} between {time} with the following attested* documents (along with documents mentioned on Personal Info) to get the process kickstarted:
           .
@@ -87,10 +87,12 @@ en:
           *All supporting documents should be attested by Gazetted officer or Bank Manager or Post Master
       startup_approval:
         from_startup_village: |
+          Pending Review
+          .
           Thank you! Your incubation application is under review with at Startup Village. You should hear back within a few days via a phone call or an email.
           .
           If you don't, please drop an email to dinnu@startupvillage.in
         link_startup: |
-          Your request to be linked with %{company_name} is pending with the founders. We will notify you with an email & push notification as soon as you are approved. 
+          Your request to be linked with %{company_name} is pending with the founders. We will notify you with an email & push notification as soon as you are approved.
   date:
     datepicker: "dd/mm/yyyy"

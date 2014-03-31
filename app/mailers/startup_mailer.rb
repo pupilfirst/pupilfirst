@@ -4,8 +4,8 @@ class StartupMailer < ActionMailer::Base
   def partnership_application(startup, current_user)
     @startup = startup
     @current_user = current_user
-    send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
-    mail(to: secretary_contact, cc: (send_to + ["incoming <incoming@svlabs.in>", "goutham <gouthamvel@gmail.com>"]), subject: "Request for registering a Partnership")
+    send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" } + ["incoming <incoming@svlabs.in>"]
+    mail(to: [secretary_contact] + send_to, subject: "Request for registering a Partnership")
   end
 
   def startup_approved(startup)
@@ -33,7 +33,6 @@ class StartupMailer < ActionMailer::Base
   end
 
   def fill_personal_info_for_director(startup)
-
   end
 
   def reminder_to_complete_personal_info(startup, current_user)
@@ -70,7 +69,7 @@ class StartupMailer < ActionMailer::Base
     mail(to: send_to, subject: "Approve #{@new_employee.fullname} at #{@startup.name}")
   end
 
-private
+  private
 
   def secretary_contact
     I18n.t("startup_village.secretary_contact.#{Rails.env}") or 'info@svlabs.in'

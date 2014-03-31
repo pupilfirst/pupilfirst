@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140331060302) do
+ActiveRecord::Schema.define(version: 20140331085129) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -192,10 +192,10 @@ ActiveRecord::Schema.define(version: 20140331060302) do
     t.string   "share_holding_pattern"
     t.string   "moa"
     t.text     "police_station"
-    t.boolean  "approval_status",       default: false
-    t.boolean  "incorporation_status",  default: false
-    t.boolean  "bank_status",           default: false
-    t.boolean  "sep_status",            default: false
+    t.boolean  "approval_status",         default: false
+    t.boolean  "incorporation_status",    default: false
+    t.boolean  "bank_status",             default: false
+    t.boolean  "sep_status",              default: false
     t.text     "company_names"
     t.text     "address"
     t.string   "pre_funds"
@@ -204,6 +204,7 @@ ActiveRecord::Schema.define(version: 20140331060302) do
     t.integer  "registered_address_id"
     t.string   "pre_investers_name"
     t.string   "transaction_details"
+    t.boolean  "partnership_application"
   end
 
   add_index "startups", ["registered_address_id"], name: "index_startups_on_registered_address_id", using: :btree
@@ -249,11 +250,11 @@ ActiveRecord::Schema.define(version: 20140331060302) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "avatar"
-    t.string   "encrypted_password",        default: ""
+    t.string   "encrypted_password",            default: ""
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",             default: 0,     null: false
+    t.integer  "sign_in_count",                 default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -283,7 +284,7 @@ ActiveRecord::Schema.define(version: 20140331060302) do
     t.string   "aadhaar"
     t.integer  "address_id"
     t.integer  "father_id"
-    t.boolean  "is_director",               default: false
+    t.boolean  "is_director",                   default: false
     t.string   "mother_maiden_name"
     t.boolean  "married"
     t.string   "current_occupation"
@@ -300,6 +301,7 @@ ActiveRecord::Schema.define(version: 20140331060302) do
     t.string   "university"
     t.string   "course"
     t.string   "semester"
+    t.boolean  "startup_form_link_sent_status"
   end
 
   add_index "users", ["address_id"], name: "index_users_on_address_id", using: :btree

@@ -80,6 +80,7 @@ ActiveAdmin.register Startup do
       UserPushNotifyJob.new.async.perform(user.id, :startup_approval, push_message)
     end
     StartupMailer.reminder_to_complete_startup_info(startup).deliver
+    startup.founders.each{|user| user.update_attributes!({startup_form_link_sent_status: true}) }
     redirect_to action: :show
   end
 

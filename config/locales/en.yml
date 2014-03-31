@@ -48,7 +48,7 @@ en:
       incorporate:
         pending_director_info: |
           Before proceeding, please have all the directors logon to the app & fill out their Personal info.
-          Pending: {Full name}
+          %{pending_directors_msg}
         pending_payment: |
           We only charge you the actuals for filing & incorporating your company. Here's the breakdown:
           .
@@ -60,8 +60,8 @@ en:
           vi) Stamp Duty in Kerala (Form 1, 18 & 32) - Rs. 10,525/-
           vii) Form 1, 18 & 32 (Incorporation forms) fee - Rs. 600/-
           viii) Commonseal - Rs. 1100/-
-
-          Total: Rs XYZ
+          .
+          Total: Rs %{full_amount}
           .
           Please transfer it to the following bank:
           .

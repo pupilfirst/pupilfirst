@@ -82,8 +82,8 @@ class User < ActiveRecord::Base
 
   def approved_message
     return nil if startup.approval_status and verified?
-    return I18n.t('startup_village.messages.startup_approval.link_startup') % {company_name: startup.name} unless verified?
-    I18n.t('startup_village.messages.startup_approval.from_startup_village') % {company_name: startup.name}
+    return I18n.t('startup_village.messages.startup_approval.link_startup', company_name: startup.name) unless verified?
+    I18n.t('startup_village.messages.startup_approval.from_startup_village', company_name: startup.name)
   end
 
   def personal_info_submitted?

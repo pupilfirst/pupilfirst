@@ -12,7 +12,7 @@
     $ bundle exec rake db:setup
 
 ## Testing
-    bundle exec rspec spec
+    bundle exec rake spec
 
 ## Services
   * Job query is managed by the sucker_punch gem, which runs in Rails process, processing between requests. This can be

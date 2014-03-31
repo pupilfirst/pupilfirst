@@ -12,6 +12,6 @@ class V1::StudentEntrepreneurPoliciesController < V1::BaseController
 
   private
   def sep_params
-    params.require(:sep).permit(:certificate_pic, :university_registeration_number, :address)
+    params.require(:sep).permit(:certificate_pic, :university_registration_number, :address)
   end
 end

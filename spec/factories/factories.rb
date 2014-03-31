@@ -29,6 +29,7 @@ FactoryGirl.define do
     salutation { ['Mr', 'Miss', 'Mrs'].shuffle.first }
     email     { Faker::Internet.email }
     born_on   { Date.current.to_s }
+    title   { Faker::Lorem.characters(9) }
     avatar { fixture_file_upload(Rails.root.join(*%w[ spec fixtures files example.jpg ]), 'image/jpg') }
     factory :user_with_out_password do
       skip_password true

@@ -39,11 +39,14 @@ class StartupsController < InheritedResources::Base
   end
 
   def update
+    @current_user = current_user
+    @startup = Startup.find params[:id]
+    @startup.founders.each{|f| f.full_validation = true}
     update! do |success, failure|
       success.html {
         StartupMailer.notify_svrep_about_startup_update(@startup).deliver
         StartupMailer.fill_personal_info_for_director(@startup).deliver
-        @startup.directors.each do |user|
+        @startup.directors.reject { |e| e.personal_info_submitted? }.each do |user|
           message = "Please fill in personl info"
           UserPushNotifyJob.new.async.perform(user.id, :fill_personal_info, message)
         end

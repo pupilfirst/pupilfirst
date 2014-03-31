@@ -18,14 +18,20 @@ class User < ActiveRecord::Base
   validates_presence_of :born_on
   validates_presence_of :salutation, message: ''
   validates_presence_of :fullname
+  validates_presence_of :title, if: ->(user){ user.full_validation }
 
   attr_reader :skip_password
   # hack
   attr_accessor :inviter_name
   attr_accessor :accept_startup
+  attr_accessor :full_validation
+  after_initialize ->(){
+    @full_validation = false
+  }
+
   mount_uploader :avatar, AvatarUploader
   process_in_background :avatar
-  normalize_attribute :startup_id
+  normalize_attribute :startup_id, :title
   normalize_attribute :skip_password do |value|
     value.is_a?(String) ? value.downcase == 'true' : value
   end
@@ -99,7 +105,7 @@ class User < ActiveRecord::Base
 
   def bank_details_enabled?
     return false if startup.bank_status?
-    return true if is_founder and startup.incorporation_submited?
+    return true if is_founder and startup.incorporation_submited? and personal_info_submitted?
     false
   end
 

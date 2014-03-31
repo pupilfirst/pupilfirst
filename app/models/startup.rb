@@ -20,6 +20,7 @@ class Startup < ActiveRecord::Base
   serialize :help_from_sv, Array
   validate :valid_categories?
   validate :valid_founders?
+  validates_associated :founders
   validates_length_of :help_from_sv, minimum: 1, too_short: 'must select atleast one', if: ->(startup){@full_validation }
 
   validates_presence_of :name, if: ->(startup){@full_validation }

@@ -31,7 +31,6 @@ gem 'slim'
 gem 'omniauth'
 gem 'devise_invitable'
 gem 'acts-as-taggable-on'
-gem 'textacular', '~> 3.0'
 gem 'sendgrid_smtpapi'
 
 group :development do
@@ -69,6 +68,7 @@ end
 group :production do
 	gem 'rails_12factor'
 	gem 'unicorn'
+  # gem 'pdftk-heroku', git: "https://github.com/gouthamvel/pdftk-heroku.git"
 end
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

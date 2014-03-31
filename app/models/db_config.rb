@@ -25,11 +25,11 @@ class DbConfig < ActiveRecord::Base
     find_by_key(:regular_incubatees).value rescue nil
   end
 
-  def documents_submition_date
+  def self.documents_submition_date
     find_by_key(:documents_submition_date).value rescue nil
   end
 
-  def documents_submition_time
+  def self.documents_submition_time
     find_by_key(:documents_submition_time).value rescue nil
   end
 end

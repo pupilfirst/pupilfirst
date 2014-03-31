@@ -1,3 +1,4 @@
+require_relative '../api_spec_helper'
 
 module V1ApiSpecHelper
   include ApiSpecHelper

@@ -1,64 +1,52 @@
-## README
+# SVLabs Web + API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Dependencies
+*  Ruby version - MRI 2.0+
+*  imagemagick
+*  postgresql
 
-Things you may want to cover:
+## Configuration
+*  Setup database.yml for postgresql
 
-* Ruby version
-  * MRI 2.0+
-* System dependencies
-  * imagemagick
-  * postgresql
-  * rubygems
-  * bundler gem
+## Database setup
+    $ bundle exec rake db:setup
 
-* Configuration
+## Configuration
   * setup database.yml for postgresql
   * copy example.env to .env and set the variables as required
 
-* Database creation
-  * bundle exec rake db:create
+## Testing
+    bundle exec rake spec
 
-* Database initialization
-  * bundle exec rake db:setup
+## Services
+  * Job query is managed by the sucker_punch gem, which runs in Rails process, processing between requests. This can be
+  switched to Resque easily.
 
-* How to run the test suite
-  * bundle exec rspec spec
+## Deployment
+Deployment is taken care by git push(on master/development) using circlCI hook.
+Specific instructions can be found in circle.yml
 
-* Services (job queues, cache servers, search engines, etc.)
-  * job query is managed by sucker_punch which runs in rails process processing between requests
-  * can be switched to Resque easily
+For manual push to heroku use:
 
-* Deployment instructions
+Edit ``.git/config``:
 
-  Deployment is taken care by git push(on master/development) using circlCI hook
-  Specific instructions can be found in circle.yml
-  for manual push to heroku use
-  * config .git/config
+      [remote "heroku"]
+        url = git@heroku.com:svapp.git
+        fetch = +refs/heads/*:refs/remotes/heroku/*
+      [remote "staging"]
+        url = git@heroku.com:svapp-staging.git
+        fetch = +refs/heads/*:refs/remotes/staging/*
 
-        [remote "heroku"]
-          url = git@heroku.com:svapp.git
-          fetch = +refs/heads/*:refs/remotes/heroku/*
-        [remote "staging"]
-          url = git@heroku.com:svapp-staging.git
-          fetch = +refs/heads/*:refs/remotes/staging/*
+Then:
 
-  * `git push heroku master` will push to production (svlabs.in)
-  * `git push heroku staging` will push to staging (staging.svlabs.in)
+* `git push heroku master` will push to production (svlabs.in)
+* `git push heroku staging` will push to staging (staging.svlabs.in)
 
-* Web resources considered for dev
+## Web resources considered for dev
+*  http://matthewlehner.net/rails-api-testing-guidelines/
+*  https://github.com/joshbuddy/jsonpath
+*  http://pivotallabs.com/api-versioning/
 
-  * http://matthewlehner.net/rails-api-testing-guidelines/
-  * https://github.com/joshbuddy/jsonpath
-  * http://pivotallabs.com/api-versioning/
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
-
-* Known Issues
-
-  * Deprecation Warnings in rspec caused by json_spec. Gem needs to be updated
-  * n + 1 query optimization need to be added as required.
-  *
+## Known Issues
+*  Deprecation Warnings in rspec caused by json_spec. Gem needs to be updated
+*  n + 1 query optimization need to be added as required.

@@ -79,7 +79,7 @@ class V1::StartupsController < V1::BaseController
 
   def partnership_application
     if current_user.startup.partnership_application?
-      render json: {error: "Already applied to Partnership"}, status: :bad_request
+      render json: {error: "Already applied for Partnership"}, status: :bad_request
     else
       current_user.startup.update_attributes!(partnership_application: true)
       StartupMailer.partnership_application(current_user.startup, current_user).deliver

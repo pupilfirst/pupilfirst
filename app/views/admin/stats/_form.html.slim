@@ -1,0 +1,5 @@
+= semantic_form_for [:admin, DbConfig.new], url: admin_stats_update_path, html:{method: :put} do |f|
+  = f.inputs :name => "Basic" do
+    = f.input :key
+    = f.input :value
+  = f.action :submit

@@ -128,7 +128,9 @@ class Startup < ActiveRecord::Base
   def incorporation_message
     return nil if incorporation_status?
     return nil unless incorporation_submited?
-    return I18n.t("startup_village.messages.incorporate.documents_required") if incorporation_submited? and transaction_details.present?
+    return I18n.t("startup_village.messages.incorporate.documents_required",
+                  documents_submition_date: DbConfig.documents_submition_date,
+                  documents_submition_time: DbConfig.documents_submition_time) if incorporation_submited? and transaction_details.present?
     return I18n.t("startup_village.messages.incorporate.pending_payment",
                   full_amount: amount_to_be_paid_for_incorporation) if directors.all? { |d| d.personal_info_submitted? }
     pending_directors = directors.reject { |d| d.personal_info_submitted? }

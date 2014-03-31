@@ -37,7 +37,7 @@ en:
           When that does happen & you are listed as a Director, this screen will notify you of further steps.
           In the meanwhile, get back to building & hacking things together! :)
         incorporation_done: |
-          Please come over to Startup Village on {incorporation_date} between {incorporation_time} with the following attested* documents to get the process kickstarted:
+          Please come over to Startup Village on %{documents_submition_date} between %{documents_submition_time} with the following attested* documents to get the process kickstarted:
           .
           i) Registered Address proof: Passport, driving license, latest telephone bill / electricity bill / bank statement signed by the bank.
           .
@@ -74,7 +74,7 @@ en:
         documents_required: |
           Your payment is accepted.
           .
-          Please come over to Startup Village on {date} between {time} with the following attested* documents (along with documents mentioned on Personal Info) to get the process kickstarted:
+          Please come over to Startup Village on %{documents_submition_date} between %{documents_submition_time} with the following attested* documents (along with documents mentioned on Personal Info) to get the process kickstarted:
           .
           i) 2 copies of Registered Address proof: Passport, driving license, latest telephone bill / electricity bill / bank statement signed by the bank.
           .

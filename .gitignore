@@ -27,5 +27,5 @@ public/svapp-*
 
 # Ignore IDE-specific files.
 /.idea/
-/script/startszues
+/script/startzeus
 

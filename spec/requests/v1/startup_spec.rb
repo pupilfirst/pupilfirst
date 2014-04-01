@@ -88,7 +88,7 @@ describe "Startup Requests" do
 
     before(:each) do
       ActionMailer::Base.deliveries = []
-      allow(UserPushNotifyJob).to receive_message_chain(:new, :async, :perform).and_return true
+      UserPushNotifyJob.stub_chain(:new, :async, perform: true) # TODO: Change this to allow statement in Rspec v3.
     end
 
     it "raise error if auth_token is not given" do

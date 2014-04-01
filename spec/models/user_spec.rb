@@ -54,7 +54,7 @@ describe User do
       user_self.startup_link_verifier =  user
       user_other.startup =  startup
       user_other.startup_link_verifier =  false
-      expect(user_self.verify(user_other)).to be_truthy
+      expect(user_self.verify(user_other)).to be_true # TODO: Make this be_truthy for Rspec v3.
       expect(user_other.startup_link_verifier).to eql(user_self)
       expect(user_other.startup_verifier_token).not_to eql(nil)
       expect(user_other.startup_verifier_token).not_to eql("")

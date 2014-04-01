@@ -18,7 +18,7 @@ describe "Startups" do
       founder = startup.founders.first
       login(founder)
 
-      allow(UserPushNotifyJob).to receive_message_chain(:new, :async, :perform).and_return true
+      UserPushNotifyJob.stub_chain(:new, :async, perform: true) # TODO: Change this to allow statement in Rspec v3.
       allow(Urbanairship).to receive(:push).and_return true
       post "/startups/#{startup.id}/confirm_employee", {token: new_employee.startup_verifier_token, is_founder: true}
     end

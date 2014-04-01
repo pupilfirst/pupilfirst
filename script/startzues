@@ -1,0 +1,1 @@
+env RUBYLIB=/home/hari/bin/RubyMine-6.0/rb/testing/patch/common:/home/hari/bin/RubyMine-6.0/rb/testing/patch/bdd zeus start

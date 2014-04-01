@@ -51,11 +51,11 @@ group :test do
 	gem "factory_girl_rails", "~> 4.0"
 	gem 'faker'
 	gem 'json_spec', github: 'collectiveidea/json_spec'
-
+  gem 'zeus'
 end
 
 group :development, :test do
-  gem 'rspec-rails', '~> 3.0.0.beta'
+  gem 'rspec-rails', '~> 2.14.2'
   gem 'rb-inotify', :require => false
   gem 'rb-fsevent', :require => false
   gem 'rb-fchange', :require => false

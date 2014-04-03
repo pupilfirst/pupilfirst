@@ -63,5 +63,11 @@ Then:
 *  http://pivotallabs.com/api-versioning/
 
 ## Known Issues
-*  Deprecation Warnings in rspec caused by json_spec. Gem needs to be updated
 *  n + 1 query optimization need to be added as required.
+*  User of sucker_punch may not be best choice, migration to Resque with additional working is recommended
+*  Currently Email are sent during the request, moving them to background process can optimize alot.
+
+## Code quirks
+* Mostly uses rspec request specs for integration test. Model, Controller specs are sparingly written.
+* Most of the code written post March 20th, 2014 has not been tested to fullest extent. One might wanna start from there while taking up project from here on.
+*

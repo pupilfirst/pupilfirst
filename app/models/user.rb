@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   has_many :news, class_name: "News", foreign_key: :user_id
   has_many :events
   has_many :social_ids
+  has_one :student_entrepreneur_policy
   belongs_to :bank
   belongs_to :father, class_name: 'Name'
   belongs_to :address
@@ -118,6 +119,14 @@ class User < ActiveRecord::Base
 
   def sep_enabled?
     is_student?
+  end
+
+  def gender
+    if salutation == 'Mr'
+      :male
+    else
+      :female
+    end
   end
 
   def to_s

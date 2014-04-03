@@ -21,6 +21,16 @@ class UserMailer < ActionMailer::Base
 
   end
 
+  def new_sep_notification(user)
+    @user = user
+    mail(to: student_contact, cc: "incoming@svlabs.in", subject: "New SEP applicant.")
+  end
+
+  def send_sep_certificate(user, file_path)
+    attachments['sep_certificate.pdf'] = File.read(file_path)
+    mail(to: user.email, body: "PFA", subject: "SEP from Startup Village")
+  end
+
   def accepted_as_employee(user, startup)
     @startup = startup
     @user = user

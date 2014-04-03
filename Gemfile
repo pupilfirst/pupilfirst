@@ -5,10 +5,13 @@ gem 'rails', '4.0.3'
 
 gem 'active_admin_editor'
 gem 'activeadmin', github: 'gregbell/active_admin' # master for rails 4
+gem 'acts-as-taggable-on'
 gem 'attribute_normalizer', '~> 1.2.0.b'
 gem 'carrierwave'
 gem 'carrierwave_backgrounder', git: 'https://github.com/glhewett/carrierwave_backgrounder.git' # https://github.com/lardawge/carrierwave_backgrounder not updated for sucker_punch v1.0 api changes
+gem 'cocoon'
 gem 'coffee-rails', '~> 4.0.0'
+gem 'devise_invitable'
 gem 'fog', '~> 1.3.1' # required by carrierwave to upload to s3
 gem 'jbuilder', '~> 1.2'
 gem 'jquery-rails'
@@ -16,22 +19,20 @@ gem 'just-datetime-picker'
 gem 'mini_magick'
 gem 'newrelic_rpm'
 gem 'nokogiri'
+gem 'omniauth'
 gem 'pg'
 gem 'rubypress' # wordpress
 gem 'sass-rails', '~> 4.0.0'
+gem 'sendgrid_smtpapi'
 gem 'sentry-raven'
+gem 'simple_form'
+gem 'slim'
 gem 'sucker_punch'
 gem 'turbolinks'
 gem 'uglifier', '>= 1.3.0'
 gem 'urbanairship'
+gem 'prawn'
 gem 'versionist'
-gem 'simple_form'
-gem 'cocoon'
-gem 'slim'
-gem 'omniauth'
-gem 'devise_invitable'
-gem 'acts-as-taggable-on'
-gem 'sendgrid_smtpapi'
 
 group :development do
 	gem 'seed-fu', github: 'mbleigh/seed-fu'  # check and remove
@@ -62,7 +63,6 @@ group :development, :test do
 	gem 'dotenv'
 	gem 'pry'
 	gem 'pry-debugger'
-	# gem "spork-rails", git: "https://github.com/sporkrb/spork-rails"
 end
 
 group :production do

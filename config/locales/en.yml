@@ -29,6 +29,10 @@ en:
       development: "gautham@mobme.in"
       staging: "utsav@nwplyng.com"
       production: "utsav@nwplyng.com"
+    student_contact:
+      development: "goutham@nwplyng.com"
+      staging: "utsav@nwplyng.com"
+      production: "utsav@nwplyng.com"
     messages:
       personal_info:
         no_incorporation: |

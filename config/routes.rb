@@ -24,6 +24,8 @@ Svapp::Application.routes.draw do
     end
   end
 
+  get 'team' => 'welcome#team'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

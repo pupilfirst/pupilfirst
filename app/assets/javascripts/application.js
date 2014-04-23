@@ -17,6 +17,8 @@
 //= require bootstrap.min
 //= require bootstrap-select.min
 //= require bootstrap-datepicker
+//= require slick
+//= require scripts
 
 $(function(){
 	$('select').selectpicker();

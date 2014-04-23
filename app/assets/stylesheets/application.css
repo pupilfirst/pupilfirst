@@ -13,6 +13,7 @@
  *= require bootstrap-responsive
  *= require bootstrap-select.min
  *= require datepicker
+ *= require slick
  *= require_self
  */
 

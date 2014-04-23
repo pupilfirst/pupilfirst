@@ -232,3 +232,53 @@ button.sunflower:hover{
     opacity: 0;
     filter: alpha(opacity=0);
 }
+
+.team-top-wrap {
+  width: 950px;
+  margin: 0 auto;
+  padding: 30px 0;
+}
+
+.team-block h1 {
+  font-weight: 100;
+  font-size: 30px;
+  color: #2E9ABA;
+  margin: 0 0 20px 0;
+}
+
+.team-block p {
+  font-size: 20px;
+  font-weight: 100;
+  line-height: 30px;
+  color: #777;
+}
+
+.single-item {
+  width: 950px;
+  margin: 0 auto;
+}
+
+.blue { background:#3498db;color:#fff;}
+.blue p {
+  color:#999;
+  font-size:18px;
+  line-height:30px;
+  margin:10px;
+  padding:2%;
+  position:relative;
+  text-align:center;
+}
+
+.single-item h2 {
+  padding: 0;
+  color: #2E9ABA;
+  font-weight: 100;
+  text-align: center;
+}
+
+.single-item  h4 {
+  color: #666;
+  padding: 0;
+  font-weight: 100;
+  text-align: center;
+}

@@ -8,4 +8,8 @@ class WelcomeController < ApplicationController
       redirect_to controller: :startups
     end
   end
+
+  def team
+
+  end
 end

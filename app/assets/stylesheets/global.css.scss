@@ -236,7 +236,7 @@ button.sunflower:hover{
 .team-top-wrap {
   width: 950px;
   margin: 0 auto;
-  padding: 30px 0;
+  padding: 60px 0;
 }
 
 .team-block h1 {
@@ -253,32 +253,85 @@ button.sunflower:hover{
   color: #777;
 }
 
-.single-item {
-  width: 950px;
+.carousel-inner {
   margin: 0 auto;
+  width: 950px;
+
 }
 
-.blue { background:#3498db;color:#fff;}
-.blue p {
-  color:#999;
-  font-size:18px;
-  line-height:30px;
-  margin:10px;
-  padding:2%;
-  position:relative;
-  text-align:center;
+.carousel-inner  p {
+  font-size: 18px;
+  text-align: center;
+  font-weight: 300;
 }
 
-.single-item h2 {
-  padding: 0;
+.carousel-inner  h2 {
+  font-weight: 100;
   color: #2E9ABA;
-  font-weight: 100;
   text-align: center;
+  margin: 30px 0 10px 0;
 }
 
-.single-item  h4 {
-  color: #666;
-  padding: 0;
-  font-weight: 100;
-  text-align: center;
+.carousel-inner  h2  span {
+  color: #999;
+  font-size: 20px;
 }
+
+.carousel-inner h4 {
+  text-align: center;
+  padding: 0;
+  margin: 0 0 30px 0;
+}
+
+.teammates {
+  width: 100%;
+  padding: 20px 0;
+  background: #2E9ABA;
+  height: 150px;
+}
+
+.carousel-indicators {
+  text-align: center;
+  margin: 0 auto !important;
+  width: 950px !important;
+  position: relative !important;
+}
+
+
+
+.carousel-indicators img.circle {
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 99em;
+  max-width: none !important;
+  cursor: pointer;
+  opacity:0.4;
+  filter:alpha(opacity=40); /* For IE8 and earlier */
+  margin: 0 5px;
+}
+
+.carousel-indicators img.active {
+  opacity:1;
+  filter:alpha(opacity=100); /* For IE8 and earlier */
+}
+
+.carousel-indicators img:hover {
+  opacity:.6;
+  filter:alpha(opacity=60); /* For IE8 and earlier */
+}
+
+.carousel-control {
+  display: none;
+}
+
+.opening {
+  margin: 10px 0 0 0;
+  text-transform: uppercase;
+}
+
+.opening a {
+  border: 1px solid #2E9ABA;
+  padding: 5px 15px;
+  border-radius:10px;
+}
+

@@ -233,13 +233,13 @@ button.sunflower:hover{
     filter: alpha(opacity=0);
 }
 
-.team-top-wrap {
+.team-top-wrap, .jobs-block {
   width: 950px;
   margin: 0 auto;
   padding: 60px 0;
 }
 
-.team-block h1 {
+.team-block h1, .jobs-block  h1 {
   font-weight: 100;
   font-size: 30px;
   color: #2E9ABA;
@@ -251,6 +251,40 @@ button.sunflower:hover{
   font-weight: 100;
   line-height: 30px;
   color: #777;
+}
+
+.jobs-block  p {
+  font-size: 16px;
+  font-weight: 100;
+  line-height: 24px;
+  color: #777;
+}
+
+.jobs-block ul li {
+  font-size: 16px;
+  line-height: 30px;
+  font-weight: 100;
+}
+
+.jobs-block  h3 {
+  font-size: 18px;
+  font-weight: 300;
+  color: #333;
+  margin: 0 0 5px 0;
+}
+
+.jobs-block  h2 {
+  font-size: 24px;
+  font-weight: 300;
+  color: #2E9ABA;
+  margin: 10px 0;
+  border-bottom: 1px solid #f3f3f3;
+}
+
+.job_details {
+  border-bottom: 3px solid #f3f3f3;
+  margin: 0 0 50px 0;
+  padding: 0 0 20px 0;
 }
 
 .carousel-inner {

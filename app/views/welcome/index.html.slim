@@ -4,8 +4,16 @@
       .logo
         = image_tag "logo.png"
       .home-top-right-block
-        a href="users/sign_in"
-          button.btn.emerald Sign In
+        .navbar
+          ul.nav
+            li
+              = link_to('Team', '/team')
+            li
+              = link_to('Jobs', '/jobs')
+
+            li
+              = link_to('Signin', new_user_session_path)
+      .clear
   .home-block
     .device-block
       = image_tag "iphone.png"

@@ -10,6 +10,9 @@ html
     = yield :head
 
   body
+  .header-block
+
+    = render 'layouts/nav_menu'
 
     .notice.hide
       = notice

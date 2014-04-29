@@ -1,10 +1,11 @@
 .nav-collapse.collapse.navbar-responsive-collapse
-  ul.nav
-    / li.active
-    /   = link_to "My Startup", current_user.startup
-    / li
-    /   a href="#"
-    /     | Link
-  ul.nav.pull-right
+
+  ul.nav.nav-pills.pull-right
+
     li
+      = link_to('Team', '/team')
+    li
+      = link_to('Jobs', '/jobs')
+    li.active
       = link_to('Login', new_user_session_path)
+

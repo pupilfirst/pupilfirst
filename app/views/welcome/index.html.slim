@@ -1,25 +1,10 @@
 .home-container
-  header.header-block
-    .header-wrap
-      .logo
-        = image_tag "logo.png"
-      .home-top-right-block
-        .navbar
-          ul.nav
-            li
-              = link_to('Team', '/team')
-            li
-              = link_to('Jobs', '/jobs')
-
-            li
-              = link_to('Signin', new_user_session_path)
-      .clear
   .home-block
-    .device-block
+    .span4
       = image_tag "iphone.png"
-    .text-block
-      h1.text-center Welcome to SV Labs.
-      p.text-center The online stop for everything Startup Village!
+    .span5
+      h1.welcome_text Welcome to SV Labs
+      p.welcome_para The online stop for everything Startup Village!
     .clear
 
 

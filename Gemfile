@@ -33,9 +33,10 @@ gem 'uglifier', '>= 1.3.0'
 gem 'urbanairship'
 gem 'prawn'
 gem 'versionist'
+gem 'rest-client'
 
 group :development do
-	gem 'seed-fu', github: 'mbleigh/seed-fu'  # check and remove
+  gem 'seed-fu', github: 'mbleigh/seed-fu' # check and remove
   gem 'guard'
   gem 'guard-shell'
   gem 'guard-rspec'
@@ -49,9 +50,9 @@ group :test do
   gem 'sqlite3'
   gem 'email_spec'
   gem 'factory_girl', require: false
-	gem "factory_girl_rails", "~> 4.0"
-	gem 'faker'
-	gem 'json_spec', github: 'collectiveidea/json_spec'
+  gem "factory_girl_rails", "~> 4.0"
+  gem 'faker'
+  gem 'json_spec', github: 'collectiveidea/json_spec'
   gem 'zeus'
 end
 
@@ -60,14 +61,15 @@ group :development, :test do
   gem 'rb-inotify', :require => false
   gem 'rb-fsevent', :require => false
   gem 'rb-fchange', :require => false
-	gem 'dotenv'
-	gem 'pry'
-	gem 'pry-debugger'
+  gem 'dotenv'
+  gem 'pry'
+  gem 'pry-debugger'
+  gem 'webmock', require: false
 end
 
 group :production do
-	gem 'rails_12factor'
-	gem 'unicorn'
+  gem 'rails_12factor'
+  gem 'unicorn'
   # gem 'pdftk-heroku', git: "https://github.com/gouthamvel/pdftk-heroku.git"
 end
 group :doc do

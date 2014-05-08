@@ -35,6 +35,18 @@ class V1::UsersController < V1::BaseController
     end
   end
 
+  # POST /phone_number_verification
+  def phone_number_verification
+    # Generate a 6-digit verification code to send to the phone number.
+    code = SecureRandom.random_number(1000000).to_s.ljust(6, '0')
+
+    # SMS the code to the phone number.
+    RestClient.post(APP_CONFIG[:sms_provider_url], message: "Verification code for StartupVillage application: #{code}")
+
+    # Respond with the verification code.
+    render json: { code: code }
+  end
+
   private
   def user_params
     params.require(:user).permit(

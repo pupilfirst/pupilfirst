@@ -3,6 +3,10 @@ Svapp::Application.routes.draw do
     api_version(:module => "V1", :header => {:name => "Accept", :value => "application/vnd.svapp.v1"}, :defaults => {:format => "json"}, :default => true) do
       resources :users do
         resource :student_entrepreneur_policy
+        member do
+          post :phone_number_verification
+        end
+
         collection do
           resources :sessions, only: [:create]
           post :forgot_password

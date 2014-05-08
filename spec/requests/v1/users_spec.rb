@@ -58,9 +58,9 @@ describe V1::UsersController do
         before(:each) do
           startup.founders.each do |f|
             f.update_attributes!(
-                                 address: create(:address),
-                                 father: create(:name),
-                                )
+              address: create(:address),
+              father: create(:name),
+            )
           end
           get "/api/users/self", {}, version_header(startup.founders.first)
         end
@@ -85,7 +85,7 @@ describe V1::UsersController do
             startup.update_attributes!(incorporation_status: false)
           end
           context 'when personal info is not submited' do
-            it  "it should be enabled" do
+            it "it should be enabled" do
               get "/api/users/self", {}, version_header(startup.founders.first)
               expect(parse_json(response.body, 'startup_meta_details/personal_info/is_enabled')).to eq(true)
               expect(parse_json(response.body, 'startup_meta_details/personal_info/message')).to be(nil)
@@ -96,9 +96,9 @@ describe V1::UsersController do
             before(:each) do
               startup.founders.each do |f|
                 f.update_attributes!(
-                                 address: create(:address),
-                                 father: create(:name),
-                                 )
+                  address: create(:address),
+                  father: create(:name),
+                )
               end
             end
             it "it should display message to bring docs" do
@@ -114,8 +114,8 @@ describe V1::UsersController do
             startup.update_attributes!(incorporation_status: true)
           end
           it "personal_info should not be enabled" do
-              get "/api/users/self", {}, version_header(startup.founders.first)
-              expect(parse_json(response.body, 'startup_meta_details/personal_info/is_enabled')).to eq(false)
+            get "/api/users/self", {}, version_header(startup.founders.first)
+            expect(parse_json(response.body, 'startup_meta_details/personal_info/is_enabled')).to eq(false)
           end
         end
       end
@@ -125,9 +125,9 @@ describe V1::UsersController do
         before(:each) do
           startup.founders.each do |f|
             f.update_attributes!(
-                                 address: create(:address),
-                                 father: create(:name),
-                                )
+              address: create(:address),
+              father: create(:name),
+            )
           end
         end
 
@@ -201,7 +201,7 @@ describe V1::UsersController do
       it "should create user" do
         dob = Time.parse('2000-5-5').to_date.to_s
         attributes = attributes_for(:user_with_password, born_on: dob)
-        post '/api/users', {user: attributes}, version_header
+        post '/api/users', { user: attributes }, version_header
         expect(response.status).to eq(201)
         response_user_id = JSON.parse(response.body)['id']
         check_user = User.find(response_user_id)
@@ -219,7 +219,7 @@ describe V1::UsersController do
       it "return bad_request with errors in body" do
         dob = Time.parse('2000-5-5').to_date.to_s
         attributes = attributes_for(:user_with_password, born_on: dob).merge(password: 'foo')
-        post '/api/users', {user: attributes}, version_header
+        post '/api/users', { user: attributes }, version_header
         expect(response.status).to eq(400)
         expect(response.body).to have_json_path("error")
       end
@@ -238,11 +238,41 @@ describe V1::UsersController do
             address_attributes: attributes_for(:address)
           }
         })
-        put '/api/users/self', { user: attributes}, version_header(@user)
+        put '/api/users/self', { user: attributes }, version_header(@user)
         expect(response.body).to have_json_path("message")
       end
 
       it "should apply for pan &/or din"
+    end
+  end
+
+  describe 'POST /api/users/:id/phone_number_verification' do
+    let(:test_sms_provider) { 'http://mobme.in/sms/endpoint' }
+
+    before do
+      APP_CONFIG[:sms_provider_url] = test_sms_provider
+      stub_request(:post, test_sms_provider)
+    end
+
+    after do
+      APP_CONFIG[:sms_provider_url] = ENV['SMS_PROVIDER_URL']
+    end
+
+    it 'returns a random 6-digit code' do
+      user = create :user_with_password
+      post "/api/users/#{user.id}/phone_number_verification", { phone_number: '132312' }, version_header(user)
+      code = parse_json(response.body, 'code')
+      expect(code).to match_regex(/^\d{6}$/)
+    end
+
+    it 'sends a verification code to incoming requested phone number' do
+      user = create :user_with_password
+      post "/api/users/#{user.id}/phone_number_verification", { phone_number: '132312' }, version_header(user)
+      expect(
+        a_request(:post, test_sms_provider).with { |req|
+          req.body =~ /message=.*[\d{6}]/
+        }
+      ).to have_been_made
     end
   end
 end

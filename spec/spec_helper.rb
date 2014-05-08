@@ -7,8 +7,11 @@ load "#{Rails.root.to_s}/db/schema.rb" if ENV['IN_MEM']
 require 'rspec/rails'
 # require 'rspec/autorun'
 require "email_spec"
-
+require 'webmock/rspec'
 require 'sucker_punch/testing/inline'
+
+# Disable all net connections
+WebMock.disable_net_connect!
 
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f; }
 

@@ -71,3 +71,4 @@ Then:
 * Mostly uses rspec request specs for integration test. Model, Controller specs are sparingly written.
 * Most of the code written post March 20th, 2014 has not been tested to fullest extent. One might wanna start from there while taking up project from here on.
 *
+

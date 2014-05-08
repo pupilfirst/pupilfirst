@@ -41,6 +41,7 @@ class V1::UsersController < V1::BaseController
     code = SecureRandom.random_number(1000000).to_s.ljust(6, '0')
 
     # SMS the code to the phone number.
+    # TODO: Change this to appropriate form when provider URL is available.
     RestClient.post(APP_CONFIG[:sms_provider_url], message: "Verification code for StartupVillage application: #{code}")
 
     # Respond with the verification code.

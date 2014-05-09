@@ -16,10 +16,12 @@ class User < ActiveRecord::Base
   scope :non_employees, -> { where("startup_id IS NULL") }
   scope :non_founders, -> { where("is_founder = ? or is_founder IS NULL", false) }
   accepts_nested_attributes_for :social_ids, :father, :address, :guardian
-  validates_presence_of :born_on
+
+  # TODO: Remove born_on and title columns if unneccessary.
+  # validates_presence_of :born_on
   validates_presence_of :salutation, message: ''
   validates_presence_of :fullname
-  validates_presence_of :title, if: ->(user){ user.full_validation }
+  # validates_presence_of :title, if: ->(user){ user.full_validation }
 
   attr_reader :skip_password
   # hack

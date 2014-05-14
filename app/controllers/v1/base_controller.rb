@@ -10,15 +10,21 @@ class V1::BaseController < ApplicationController
   end
 
   rescue_from StandardError do |exception|
+    status = 500
+
     status = case exception
-      when ActiveRecord::RecordInvalid then 400
-      when ActiveRecord::RecordNotFound then 404
-      when ArgumentError then 400
+      when ActiveRecord::RecordInvalid, Exceptions::ApiRequestError then
+        400
+      when ActiveRecord::RecordNotFound then
+        404
+      when ArgumentError then
+        400
       else
         logger.fatal "UNIDENTIFIED ERROR OCCURED IN API :: #{exception.class} #{exception.message}, #{exception.backtrace}"
         raise exception
-      end
-    render :json => {error: exception.message}, :status => 500
+    end
+
+    render :json => { error: exception.message, code: exception.class.name.demodulize }, status: status
     true
   end
 
@@ -26,16 +32,16 @@ class V1::BaseController < ApplicationController
     params[:auth_token] || request.headers['HTTP_AUTH_TOKEN']
   end
 
-private
+  private
 
   def require_token
     unless valid_token?
-      logger.error "Request halted as no auth_token #{params}"
-      raise "auth_token required given: #{auth_token}"
+      logger.error "Request halted since valid auth_token was missing: #{params}"
+      raise Exceptions::AuthTokenMissing, "auth_token required. Given: '#{auth_token}'"
     end
   end
 
   def valid_token?
-    !! current_user
+    !!current_user
   end
 end

@@ -89,7 +89,7 @@ class V1::StartupsController < V1::BaseController
 
   private
   def startup_params
-    params.require(:startup).permit(:name, :phone, :pitch, :website,:dsc, :transaction_details,
+    params.require(:startup).permit(:name, :phone, :pitch, :website,:dsc, :transaction_details, :registration_type,
                                     :logo, :about, :phone, :email, :facebook_link, :twitter_link,
                                     company_names: [:justification, :name],
                                     police_station: [:city, :line1, :line2, :name, :pin],

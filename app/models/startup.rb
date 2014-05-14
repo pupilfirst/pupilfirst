@@ -1,4 +1,7 @@
 class Startup < ActiveRecord::Base
+  REGISTRATION_TYPE_PRIVATE_LIMITED = 'private_limited'
+  REGISTRATION_TYPE_PARTNERSHIP = 'partnership'
+
   MAX_PITCH_CHARS = 140      unless defined?(MAX_PITCH_CHARS)
   MAX_ABOUT_WORDS = 500     unless defined?(MAX_ABOUT_WORDS)
   scope :valid, -> { where(approval_status: true) }
@@ -30,6 +33,7 @@ class Startup < ActiveRecord::Base
   validates_associated :founders
   validates_length_of :help_from_sv, minimum: 1, too_short: 'must select atleast one', if: ->(startup){@full_validation }
 
+  validates :registration_type, inclusion: { in: [REGISTRATION_TYPE_PRIVATE_LIMITED, REGISTRATION_TYPE_PARTNERSHIP] }
   validates_presence_of :name, if: ->(startup){@full_validation }
   validates_presence_of :address, if: ->(startup){@full_validation }
   validates_presence_of :email

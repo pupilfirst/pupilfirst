@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140402130916) do
+ActiveRecord::Schema.define(version: 20140513095649) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -205,6 +205,7 @@ ActiveRecord::Schema.define(version: 20140402130916) do
     t.string   "pre_investers_name"
     t.string   "transaction_details"
     t.boolean  "partnership_application"
+    t.string   "registration_type"
   end
 
   add_index "startups", ["registered_address_id"], name: "index_startups_on_registered_address_id", using: :btree

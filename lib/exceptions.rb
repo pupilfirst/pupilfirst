@@ -1,5 +1,5 @@
 module Exceptions
   class ApiRequestError < StandardError; end
 
-  class AuthTokenMissing < ApiRequestError; end
+  class AuthTokenInvalid < ApiRequestError; end
 end

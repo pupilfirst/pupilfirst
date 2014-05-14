@@ -37,7 +37,7 @@ class V1::BaseController < ApplicationController
   def require_token
     unless valid_token?
       logger.error "Request halted since valid auth_token was missing: #{params}"
-      raise Exceptions::AuthTokenMissing, "auth_token required. Given: '#{auth_token}'"
+      raise Exceptions::AuthTokenInvalid, "auth_token required. Given: '#{auth_token}'"
     end
   end
 

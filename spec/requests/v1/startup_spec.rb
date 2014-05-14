@@ -91,8 +91,11 @@ describe "Startup Requests" do
       UserPushNotifyJob.stub_chain(:new, :async, perform: true) # TODO: Change this to allow statement in Rspec v3.
     end
 
-    it "raise error if auth_token is not given" do
-      expect { post "/api/startups/#{startup.id}/link_employee", {employee_id: new_employee.id}, {} }.to raise_error(RuntimeError)
+    context 'if auth_token is not given' do
+      it 'returns error with code AuthTokenInvalid' do
+        post "/api/startups/#{startup.id}/link_employee", {employee_id: new_employee.id}, {}
+        expect(parse_json(response.body, 'code')).to eq 'AuthTokenInvalid'
+      end
     end
 
     it "sends email to all existing co-founders" do

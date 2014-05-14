@@ -1,8 +1,12 @@
 class User < ActiveRecord::Base
+  GENDER_MALE = 'male'
+  GENDER_FEMALE = 'female'
+  GENDER_OTHER = 'other'
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :invitable, :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable, :omniauthable
+    :recoverable, :rememberable, :trackable, :validatable, :omniauthable
   has_many :news, class_name: "News", foreign_key: :user_id
   has_many :events
   has_many :social_ids
@@ -17,18 +21,20 @@ class User < ActiveRecord::Base
   scope :non_founders, -> { where("is_founder = ? or is_founder IS NULL", false) }
   accepts_nested_attributes_for :social_ids, :father, :address, :guardian
 
-  # TODO: Remove born_on and title columns if unneccessary.
+  # TODO: Remove born_on, title, and salutation columns if unneccessary.
   # validates_presence_of :born_on
-  validates_presence_of :salutation, message: ''
-  validates_presence_of :fullname
   # validates_presence_of :title, if: ->(user){ user.full_validation }
+  # validates_presence_of :salutation, message: ''
+
+  validates_presence_of :fullname
+  validates :gender, inclusion: { in: [GENDER_FEMALE, GENDER_MALE, GENDER_OTHER] }, allow_nil: true
 
   attr_reader :skip_password
   # hack
   attr_accessor :inviter_name
   attr_accessor :accept_startup
   attr_accessor :full_validation
-  after_initialize ->(){
+  after_initialize ->() {
     @full_validation = false
   }
 
@@ -41,13 +47,13 @@ class User < ActiveRecord::Base
 
   normalize_attribute :twitter_url do |value|
     value = "http://#{value}" if value =~ /^twitter\.com.*/
-    value = "http://twitter.com/#{value}"  unless value =~ /[http:\/\/]*twitter\.com.*/
+    value = "http://twitter.com/#{value}" unless value =~ /[http:\/\/]*twitter\.com.*/
     value if value =~ /^http[s]*:\/\/twitter\.com.*/
   end
 
   normalize_attribute :linkedin_url do |value|
     value = "http://#{value}" if value =~ /^linkedin\.com.*/
-    value = "http://linkedin.com/in/#{value}"  unless value =~ /[http:\/\/]*linkedin\.com.*/
+    value = "http://linkedin.com/in/#{value}" unless value =~ /[http:\/\/]*linkedin\.com.*/
     value if value =~ /^http[s]*:\/\/linkedin\.com.*/
   end
 
@@ -114,22 +120,22 @@ class User < ActiveRecord::Base
 
   def personal_info_message
     return I18n.t("startup_village.messages.personal_info.incorporation_done",
-                  documents_submition_date: DbConfig.documents_submition_date,
-                  documents_submition_time: DbConfig.documents_submition_time) if personal_info_submitted? and is_director
+      documents_submition_date: DbConfig.documents_submition_date,
+      documents_submition_time: DbConfig.documents_submition_time) if personal_info_submitted? and is_director
     return I18n.t("startup_village.messages.personal_info.no_incorporation") if personal_info_submitted?
   end
 
   def sep_enabled?
     is_student?
   end
-
-  def gender
-    if salutation == 'Mr'
-      :male
-    else
-      :female
-    end
-  end
+  #
+  # def gender
+  #   if salutation == 'Mr'
+  #     :male
+  #   else
+  #     :female
+  #   end
+  # end
 
   def to_s
     fullname or email

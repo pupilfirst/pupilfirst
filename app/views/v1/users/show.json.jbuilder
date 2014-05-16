@@ -5,12 +5,12 @@ extra_block = Proc.new do
     json.approval_status @user.approved_message
     json.incorporation do
       json.is_enabled @user.incorporation_enabled?
-      json.is_bank_transaction_field_enabled @user.startup.is_bank_transaction_field_enabled?
-      json.message @user.startup.incorporation_message
+      json.is_bank_transaction_field_enabled @user.startup.try(:is_bank_transaction_field_enabled?)
+      json.message @user.startup.try(:incorporation_message)
     end
     json.banking do
       json.is_enabled @user.bank_details_enabled?
-      json.message @user.startup.banking_message
+      json.message @user.startup.try(:banking_message)
     end
     json.sep do
       json.is_enabled @user.sep_enabled?

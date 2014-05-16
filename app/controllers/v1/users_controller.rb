@@ -35,17 +35,40 @@ class V1::UsersController < V1::BaseController
     end
   end
 
+  # TODO: Add phone number validation to UsersController#generate_phone_number_verification_code
+  #
   # POST /phone_number_verification
-  def phone_number_verification
+  def generate_phone_number_verification_code
     # Generate a 6-digit verification code to send to the phone number.
     code = SecureRandom.random_number(1000000).to_s.ljust(6, '0')
+
+    # Store the phone number and verificaiton code.
+    current_user.phone = params[:phone]
+    current_user.phone_verification_code = code
+    current_user.save
 
     # SMS the code to the phone number.
     # TODO: Change this to appropriate form when provider URL is available.
     RestClient.post(APP_CONFIG[:sms_provider_url], message: "Verification code for StartupVillage application: #{code}")
 
     # Respond with the verification code.
-    render json: { code: code }
+    render nothing: true
+  end
+
+  # PATCH /phone_number_verification
+  def verify_phone_number
+    if current_user.phone.nil?
+      render json: { error: 'No phone number saved to verify"' }, status: 412
+    elsif params[:code] == current_user.phone_verification_code
+      # Set the phone number to verified.
+      current_user.phone_verified = true
+      current_user.phone_verification_code = nil
+      current_user.save
+
+      render nothing: true
+    else
+      render json: { error: 'Invalid verification code'}, status: 422
+    end
   end
 
   private

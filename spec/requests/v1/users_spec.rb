@@ -276,7 +276,7 @@ describe V1::UsersController do
 
       expect(
         a_request(:post, test_sms_provider).with { |req|
-          req.body =~ /message=.*[\d{6}]/
+          (req.body =~ /text=.*[\d{6}]/) && (req.body =~ /msisdn=132312/)
         }
       ).to have_been_made
     end

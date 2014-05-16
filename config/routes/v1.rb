@@ -4,14 +4,11 @@ Svapp::Application.routes.draw do
       resources :users do
         resource :student_entrepreneur_policy
 
-        member do
-          post 'phone_number_verification', to: :generate_phone_number_verification_code
-          patch 'phone_number_verification', to: :verify_phone_number
-        end
-
         collection do
           resources :sessions, only: [:create]
           post :forgot_password
+          post 'phone_number_verification', to: :generate_phone_number_verification_code
+          patch 'phone_number_verification', to: :verify_phone_number
         end
       end
       resources :events

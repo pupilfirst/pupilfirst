@@ -90,9 +90,9 @@ class User < ActiveRecord::Base
   end
 
   def approved_message
-    return nil if startup.approval_status and verified?
-    return I18n.t('startup_village.messages.startup_approval.link_startup', company_name: startup.name) unless verified?
-    I18n.t('startup_village.messages.startup_approval.from_startup_village', company_name: startup.name)
+    return nil if startup.try(:approval_status) and verified?
+    return I18n.t('startup_village.messages.startup_approval.link_startup', company_name: startup.try(:name)) unless verified?
+    I18n.t('startup_village.messages.startup_approval.from_startup_village', company_name: startup.try(:name))
   end
 
   def personal_info_submitted?
@@ -101,20 +101,20 @@ class User < ActiveRecord::Base
   end
 
   def personal_info_enabled?
-    return false if startup.incorporation_status?
+    return false if startup.try(:incorporation_status?)
     return false unless is_founder
     true
   end
 
   def incorporation_enabled?
-    return false if startup.incorporation_status?
+    return false if startup.try(:incorporation_status?)
     return true if is_founder and personal_info_submitted?
     false
   end
 
   def bank_details_enabled?
-    return false if startup.bank_status?
-    return true if is_founder and startup.incorporation_submited? and personal_info_submitted?
+    return false if startup.try(:bank_status?)
+    return true if is_founder and startup.try(:incorporation_submited?) and personal_info_submitted?
     false
   end
 

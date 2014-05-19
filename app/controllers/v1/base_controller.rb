@@ -20,7 +20,7 @@ class V1::BaseController < ApplicationController
       when ArgumentError then
         400
       else
-        logger.fatal "UNIDENTIFIED ERROR OCCURED IN API :: #{exception.class} #{exception.message}, #{exception.backtrace}"
+        logger.fatal "UNIDENTIFIED ERROR OCCURRED IN API :: #{exception.class} #{exception.message}, #{exception.backtrace}"
         raise exception
     end
 
@@ -38,6 +38,12 @@ class V1::BaseController < ApplicationController
     unless valid_token?
       logger.error "Request halted since valid auth_token was missing: #{params}"
       raise Exceptions::AuthTokenInvalid, "auth_token required. Given: '#{auth_token}'"
+    end
+  end
+
+  def require_self
+    if params[:id] != 'self'
+      raise Exceptions::RestrictedToSelf, 'You may not perform this action for another user. Use self.'
     end
   end
 

@@ -246,7 +246,7 @@ describe V1::UsersController do
     end
   end
 
-  describe 'POST /api/users/:id/phone_number_verification' do
+  describe 'POST /api/users/self/phone_number_verification' do
     let(:test_sms_provider) { 'http://mobme.in/sms/endpoint' }
     let(:user) { create :user_with_password }
 
@@ -260,19 +260,19 @@ describe V1::UsersController do
     end
 
     it 'renders nothing' do
-      post "/api/users/phone_number_verification", { phone: '132312' }, version_header(user)
+      post '/api/users/self/phone_number', { phone: '132312' }, version_header(user)
       expect(response.code).to eq '200'
     end
 
     it 'stores phone number and verification code' do
-      post "/api/users/phone_number_verification", { phone: '132312' }, version_header(user)
+      post '/api/users/self/phone_number', { phone: '132312' }, version_header(user)
       user.reload
       expect(user.phone).to eq '132312'
       expect(user.phone_verification_code).to match_regex(/^\d{6}$/)
     end
 
     it 'sends a verification code to incoming requested phone number' do
-      post "/api/users/phone_number_verification", { phone: '132312' }, version_header(user)
+      post '/api/users/self/phone_number', { phone: '132312' }, version_header(user)
 
       expect(
         a_request(:post, test_sms_provider).with { |req|
@@ -282,37 +282,35 @@ describe V1::UsersController do
     end
   end
 
-  describe 'PATCH /api/users/:id/phone_number_verification' do
-    let(:user) { create :user_with_password }
+  describe 'PATCH /api/users/self/phone_number_verification' do
+    let(:user) { create :user_with_password, phone: '+919876543210', phone_verification_code: '123456' }
 
-    context 'when there is no phone number' do
-      it 'renders a 412 error' do
-        patch "/api/users/phone_number_verification", { code: '213654' }, version_header(user)
-        expect(response.code).to eq '412'
+    context 'when phone number does not match stored number' do
+      it 'renders a 422 error' do
+        put '/api/users/self/phone_number', { phone: '+911234567890', code: '213654' }, version_header(user)
+        expect(response.code).to eq '422'
       end
     end
 
-    context 'when there is a saved phone number' do
-      let(:user) { create :user_with_password, phone: '+919876543210', phone_verification_code: '123456' }
+    context 'when phone number matches stored number' do
+      context 'when the verification code is incorrect' do
+        it 'renders a 422 error' do
+          put '/api/users/self/phone_number', { phone: '+919876543210', code: 'WRONG_CODE' }, version_header(user)
+          expect(response.code).to eq '422'
+        end
+      end
 
       context 'when the verification code is correct' do
         it 'sets phone number to verified' do
-          patch "/api/users/phone_number_verification", { code: '123456' }, version_header(user)
+          put '/api/users/self/phone_number', { phone: '+919876543210', code: '123456' }, version_header(user)
           user.reload
           expect(user.phone_verified?).to eq true
           expect(user.phone_verification_code).to eq nil
         end
 
         it 'renders 200' do
-          patch "/api/users/phone_number_verification", { code: '123456' }, version_header(user)
+          put '/api/users/self/phone_number', { phone: '+919876543210', code: '123456' }, version_header(user)
           expect(response.code).to eq '200'
-        end
-      end
-
-      context 'when the verification code is incorrect' do
-        it 'renders a 422 error' do
-          patch "/api/users/phone_number_verification", { code: 'WRONG_CODE' }, version_header(user)
-          expect(response.code).to eq '422'
         end
       end
     end

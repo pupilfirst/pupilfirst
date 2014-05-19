@@ -1,6 +1,7 @@
 class V1::UsersController < V1::BaseController
   respond_to :json
   skip_before_filter :require_token, only: [:create, :forgot_password]
+  before_filter :require_self, only: [:generate_phone_number_verification_code, :verify_phone_number]
 
   def show
     @extra_info = (params[:id] == 'self') ? true : false
@@ -36,7 +37,7 @@ class V1::UsersController < V1::BaseController
   end
 
 
-  # POST /phone_number_verification
+  # POST /self/phone_number
   def generate_phone_number_verification_code
     # Generate a 6-digit verification code to send to the phone number.
     code = SecureRandom.random_number(1000000).to_s.ljust(6, '0')
@@ -57,11 +58,13 @@ class V1::UsersController < V1::BaseController
     render nothing: true
   end
 
-  # PATCH /phone_number_verification
+  # PUT /self/phone_number
   def verify_phone_number
-    if current_user.phone.nil?
-      render json: { error: 'No phone number saved to verify"' }, status: 412
-    elsif params[:code] == current_user.phone_verification_code
+    # Verify incoming phone number
+    # phone_number = verify params[:phone]
+    phone_number = params[:phone]
+
+    if current_user.phone == phone_number && params[:code] == current_user.phone_verification_code
       # Set the phone number to verified.
       current_user.phone_verified = true
       current_user.phone_verification_code = nil

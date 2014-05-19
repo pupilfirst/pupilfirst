@@ -46,8 +46,9 @@ class V1::UsersController < V1::BaseController
     # phone_number = verify params[:phone_number]
     phone_number = params[:phone]
 
-    # Store the phone number and verificaiton code.
+    # Store the phone number and verification code.
     current_user.phone = phone_number
+    current_user.phone_verified = false
     current_user.phone_verification_code = code
     current_user.save
 

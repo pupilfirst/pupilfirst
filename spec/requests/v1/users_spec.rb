@@ -268,6 +268,7 @@ describe V1::UsersController do
       post '/api/users/self/phone_number', { phone: '132312' }, version_header(user)
       user.reload
       expect(user.phone).to eq '132312'
+      expect(user.phone_verified).to eq false
       expect(user.phone_verification_code).to match_regex(/^\d{6}$/)
     end
 

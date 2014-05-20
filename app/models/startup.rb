@@ -36,8 +36,8 @@ class Startup < ActiveRecord::Base
   validates :registration_type, inclusion: { in: [REGISTRATION_TYPE_PRIVATE_LIMITED, REGISTRATION_TYPE_PARTNERSHIP] }
   validates_presence_of :name, if: ->(startup){@full_validation }
   validates_presence_of :address, if: ->(startup){@full_validation }
-  validates_presence_of :email
-  validates_presence_of :phone
+  # validates_presence_of :email
+  # validates_presence_of :phone
   validates_presence_of :pre_funds, if: ->(startup){startup.pre_investers_name.present?}
   validates_presence_of :pre_investers_name, if: ->(startup){startup.pre_funds.present?}
   validates_length_of :pitch, maximum: MAX_PITCH_CHARS, message: "must be within #{MAX_PITCH_CHARS} characters", allow_nil: false, if: ->(startup){@full_validation }

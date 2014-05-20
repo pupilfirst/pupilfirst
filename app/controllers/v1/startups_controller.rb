@@ -17,15 +17,18 @@ class V1::StartupsController < V1::BaseController
 
   def create
     @current_user = current_user
-    raise ArgumentError.new("User(#{current_user.fullname}) is already linked to startup #{current_user.startup.name}") if current_user.startup
+    raise UserAlreadyHasStartup, "User #{current_user.fullname} is already linked to startup #{current_user.startup.name}" if current_user.startup
+
     startup = Startup.create(startup_params.merge({
       email: current_user.email,
       founders: [@current_user]
     }))
+
     @current_user.verify_self!
     @current_user.update_attributes!(is_founder: true)
     startup.save(validate: false)
     StartupMailer.apply_now(startup).deliver
+
     respond_to do |format|
         format.json
     end
@@ -33,7 +36,7 @@ class V1::StartupsController < V1::BaseController
 
   def update
     id = params[:id]
-    startup = (id == "self") ? current_user.startup : Startup.find(id)
+    startup = (id == 'self') ? current_user.startup : Startup.find(id)
     if startup.update_attributes(startup_params)
       (directors_in_params[:directors] or []).each do |dir|
         founder = startup.founders.find(dir['id'].to_i) rescue nil
@@ -89,8 +92,8 @@ class V1::StartupsController < V1::BaseController
 
   private
   def startup_params
-    params.require(:startup).permit(:name, :phone, :pitch, :website,:dsc, :transaction_details, :registration_type,
-                                    :logo, :about, :phone, :email, :facebook_link, :twitter_link,
+    params.permit(:startup).permit(:name, :phone, :pitch, :website,:dsc, :transaction_details, :registration_type,
+                                    :logo, :about, :phone, :facebook_link, :twitter_link,
                                     company_names: [:justification, :name],
                                     police_station: [:city, :line1, :line2, :name, :pin],
                                     registered_address_attributes: [:flat, :building, :street, :area, :town, :state, :pin]

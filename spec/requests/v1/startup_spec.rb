@@ -5,13 +5,13 @@ describe "Startup Requests" do
   include UserSpecHelper
   include Rails.application.routes.url_helpers
 
-  let!(:startup ) { create(:startup, {approval_status: true,  name: 'startup 1'}) }
-  let!(:startup1) { create(:startup, {approval_status: true,  name: 'startup 2'}) }
-  let!(:startup2) { create(:startup, {approval_status: true,  name: 'foobar 1'}) }
-  let!(:startup3) { create(:startup, {approval_status: true,  name: 'foobar 2'}) }
+  let!(:startup) { create(:startup, { approval_status: true, name: 'startup 1' }) }
+  let!(:startup1) { create(:startup, { approval_status: true, name: 'startup 2' }) }
+  let!(:startup2) { create(:startup, { approval_status: true, name: 'foobar 1' }) }
+  let!(:startup3) { create(:startup, { approval_status: true, name: 'foobar 2' }) }
 
   it "fetch startups on index" do
-    get "/api/startups", {},version_header
+    get "/api/startups", {}, version_header
     expect(response).to render_template(:index)
     response.body.should have_json_path("0/id")
     response.body.should have_json_path("0/name")
@@ -22,7 +22,7 @@ describe "Startup Requests" do
   end
 
   it "fetch startups within a category" do
-    get "/api/startups", {category: startup1.categories.first.name},version_header
+    get "/api/startups", { category: startup1.categories.first.name }, version_header
     expect(response).to render_template(:index)
     response.body.should have_json_size(1).at_path("/")
     response.body.should have_json_path("0/id")
@@ -34,7 +34,7 @@ describe "Startup Requests" do
   end
 
   it "fetches related startups when searched for" do
-    get "/api/startups", {search_term: 'foobar'}, version_header
+    get "/api/startups", { search_term: 'foobar' }, version_header
     expect(response).to render_template(:index)
     response.body.should have_json_size(2).at_path("/")
     response.body.should have_json_path("0/id")
@@ -68,14 +68,26 @@ describe "Startup Requests" do
     response.body.should have_json_path("founders/0/twitter_url")
   end
 
-  it "POST startup" do
-    post "/api/startups", {startup: attributes_for(:startup_application)}, version_header
-    expect(response).to be_success
-    have_user_object(response, 'user')
+  describe 'POST /startups' do
+    context 'when there are parameters' do
+      it 'creates a startup with parameters for authenticated user' do
+        post '/api/startups', { startup: attributes_for(:startup_application) }, version_header
+        expect(response).to be_success
+        have_user_object(response, 'user')
+      end
+    end
+
+    context 'when no parameters are given' do
+      it 'creates an empty startup for authenticated user' do
+        post '/api/startups', {}, version_header
+        expect(response.body).to have_json_path 'user'
+        have_user_object(response, 'user')
+      end
+    end
   end
 
   it "fetches suggestions based on given term" do
-    get "/api/startups/load_suggestions", {term: 'fo'}, version_header
+    get "/api/startups/load_suggestions", { term: 'fo' }, version_header
     expect(response.body).to have_json_size(2).at_path("/")
     expect(response.body).to have_json_path("0/id")
     expect(response.body).to have_json_path("0/name")
@@ -83,8 +95,8 @@ describe "Startup Requests" do
   end
 
   context "request to add new founder to a startup" do
-    let(:startup) { create :startup}
-    let(:new_employee) { create :user_with_out_password}
+    let(:startup) { create :startup }
+    let(:new_employee) { create :user_with_out_password }
 
     before(:each) do
       ActionMailer::Base.deliveries = []
@@ -93,13 +105,13 @@ describe "Startup Requests" do
 
     context 'if auth_token is not given' do
       it 'returns error with code AuthTokenInvalid' do
-        post "/api/startups/#{startup.id}/link_employee", {employee_id: new_employee.id}, {}
+        post "/api/startups/#{startup.id}/link_employee", { employee_id: new_employee.id }, {}
         expect(parse_json(response.body, 'code')).to eq 'AuthTokenInvalid'
       end
     end
 
     it "sends email to all existing co-founders" do
-      post "/api/startups/#{startup.id}/link_employee", {position: 'startup ceo'}, version_header(new_employee)
+      post "/api/startups/#{startup.id}/link_employee", { position: 'startup ceo' }, version_header(new_employee)
       new_employee.reload
       expect(emails_sent.last.body.to_s).to include(confirm_employee_startup_url(startup, token: new_employee.startup_verifier_token))
       expect(new_employee.startup_link_verifier_id).to eql(nil)

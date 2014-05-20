@@ -84,6 +84,15 @@ describe "Startup Requests" do
         have_user_object(response, 'user')
       end
     end
+
+    context 'when user already has a startup' do
+      it 'raises error UserAlreadyHasStartup' do
+        vh = version_header(create(:user_with_out_password, startup: (create :startup)))
+        post '/api/startups', { startup: attributes_for(:startup_application) }, vh
+        expect(response.code).to eq '400'
+        expect(parse_json response.body, 'code').to eq 'UserAlreadyHasStartup'
+      end
+    end
   end
 
   it "fetches suggestions based on given term" do

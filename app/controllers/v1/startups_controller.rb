@@ -17,7 +17,7 @@ class V1::StartupsController < V1::BaseController
 
   def create
     @current_user = current_user
-    raise UserAlreadyHasStartup, "User #{current_user.fullname} is already linked to startup #{current_user.startup.name}" if current_user.startup
+    raise Exceptions::UserAlreadyHasStartup, "User #{current_user.fullname} is already linked to startup #{current_user.startup.name}" if current_user.startup
 
     startup = Startup.create(startup_params.merge({
       email: current_user.email,

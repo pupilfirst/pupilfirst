@@ -72,16 +72,16 @@ describe "Startup Requests" do
     context 'when there are parameters' do
       it 'creates a startup with parameters for authenticated user' do
         post '/api/startups', { startup: attributes_for(:startup_application) }, version_header
-        expect(response).to be_success
-        have_user_object(response, 'user')
+        expect(response.code).to eq '201'
+        have_startup_object response
       end
     end
 
     context 'when no parameters are given' do
       it 'creates an empty startup for authenticated user' do
         post '/api/startups', {}, version_header
-        expect(response.body).to have_json_path 'user'
-        have_user_object(response, 'user')
+        expect(response.code).to eq '201'
+        have_startup_object response
       end
     end
 

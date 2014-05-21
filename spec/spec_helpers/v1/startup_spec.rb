@@ -6,7 +6,11 @@ module StartupSpecHelper
   def have_startup_object(response, prefix = '', opt = {})
     opt[:also_check] ||= []
     opt[:ignore] ||= []
-    prefix = prefix[-1] == '/' ? prefix : "#{prefix}/"
+
+    unless prefix.empty?
+      prefix = prefix[-1] == '/' ? prefix : "#{prefix}/"
+    end
+
     check_path(response, "#{prefix}id")
     check_type(response, "#{prefix}id",Integer)
     check_path(response, "#{prefix}name")

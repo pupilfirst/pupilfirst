@@ -16,22 +16,23 @@ class V1::StartupsController < V1::BaseController
   end
 
   def create
-    @current_user = current_user
     raise Exceptions::UserAlreadyHasStartup, "User #{current_user.fullname} is already linked to startup #{current_user.startup.name}" if current_user.startup
 
-    startup = Startup.create(startup_params.merge({
+    @startup = Startup.new(startup_params.merge({
       email: current_user.email,
-      founders: [@current_user]
+      founders: [current_user]
     }))
 
-    @current_user.verify_self!
-    @current_user.update_attributes!(is_founder: true)
-    startup.save(validate: false)
-    StartupMailer.apply_now(startup).deliver
+    # Let's allow startup to be created blank.
+    @startup.full_validation = false
+    @startup.save
 
-    respond_to do |format|
-        format.json
-    end
+    current_user.verify_self!
+    current_user.update_attributes!(is_founder: true)
+    @startup.save(validate: false)
+    StartupMailer.apply_now(@startup).deliver
+
+    respond_with @startup, status: :created
   end
 
   def update

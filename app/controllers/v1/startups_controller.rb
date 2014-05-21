@@ -91,6 +91,43 @@ class V1::StartupsController < V1::BaseController
     end
   end
 
+  # POST /api/startups/:id/founders
+  # TODO: Spec StartupsController#add_founder
+  def add_founder
+    startup = Startup.find params[:id]
+    user = User.find_or_initialize_cofounder(email: params[:email])
+
+    # Link user to startup as pending founder.
+    user.pending_startup_id = startup.id
+
+    if user.persisted?
+      # Send user a notification with co-founder invite message.
+      message = "#{@current_user.fullname} wants you to become one of the co-founders of a Startup that #{@current_user.gender == User::GENDER_MALE ? "he's" : "she's"} in the process of creating!"
+      UserPushNotifyJob.new.async.perform(user.id, :cofounder_invite, message)
+    end
+
+    # Save the record.
+    user.save_cofounder
+
+    # Send email with co-founder invite message.
+    UserMailer.cofounder_request(user.email, current_user).deliver
+
+    render nothing: true
+  end
+
+  # DELETE /api/startups/:id/founders
+  # TODO: Spec StartupsController#delete_founder
+  def delete_founder
+    user = User.find_by(email: params[:email])
+
+    raise Exceptions::NoSuchFounderForDeletion if user.nil?
+    raise Exceptions::DeleteFounderPrivilegeMissing if user.pending_startup_id.nil?
+
+    user.destroy!
+
+    render nothing: true
+  end
+
   private
   def startup_params
     params.permit(:startup).permit(:name, :phone, :pitch, :website,:dsc, :transaction_details, :registration_type,

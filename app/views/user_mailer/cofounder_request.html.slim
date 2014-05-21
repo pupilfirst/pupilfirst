@@ -1,0 +1,8 @@
+p A member of Startup Village has just added you as requested that you become the Co-founder of a new Startup!
+
+p Please download the Startup Village mobile application
+  (#{link_to 'Android', 'https://play.google.com/store/apps/details?id=in.svlabs.android'}, iOS), and sign up as a user
+  to either accept or reject this request.
+
+p This request was made by #{mail_to @current_user.email, @current_user.fullname}. You can contact
+  #{@current_user.gender == User::GENDER_MALE ? 'him' : 'her'} directly for clarifications.

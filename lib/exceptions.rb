@@ -14,4 +14,7 @@ module Exceptions
   class AuthTokenInvalid < ApiRequestError; end
   class RestrictedToSelf < ApiRequestError; end
   class UserAlreadyHasStartup < ApiRequestError; end
+  class UserAlreadyMemberOfStartup < ApiRequestError; end
+  class NoSuchFounderForDeletion < ApiResourceMissingError; end
+  class DeleteFounderPrivilegeMissing < ApiRequestError; end
 end

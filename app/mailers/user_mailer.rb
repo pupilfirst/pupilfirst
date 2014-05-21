@@ -1,6 +1,11 @@
 class UserMailer < ActionMailer::Base
   default from: "SV App <no-reply@svlabs.in>", cc: "outgoing@svlabs.in"
 
+  def cofounder_request(cofounder, current_user)
+    @current_user = current_user
+    mail(to: cofounder.email, subject: 'You have been invited to join a Startup!')
+  end
+
   def inform_sep_submition(user)
     @user = user
     mail(to: student_contact, subject: "sep submited")

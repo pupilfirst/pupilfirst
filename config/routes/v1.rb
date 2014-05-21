@@ -27,6 +27,8 @@ Svapp::Application.routes.draw do
         member do
           post :link_employee
           post :partnership_application
+          post :founders, to: :add_founder
+          delete :founders, to: :delete_founder
         end
       end
 

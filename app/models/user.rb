@@ -26,7 +26,9 @@ class User < ActiveRecord::Base
   # validates_presence_of :title, if: ->(user){ user.full_validation }
   # validates_presence_of :salutation, message: ''
 
-  validates_presence_of :fullname
+  # We don't have a full name when we're creating a temporary co-founder account.
+  validates_presence_of :fullname, unless: ->(user) { user.pending_startup_id.present? }
+
   validates :gender, inclusion: { in: [GENDER_FEMALE, GENDER_MALE, GENDER_OTHER] }, allow_nil: true
 
   attr_reader :skip_password
@@ -139,5 +141,20 @@ class User < ActiveRecord::Base
 
   def to_s
     fullname or email
+  end
+
+  def self.find_or_initialize_cofounder(email)
+    cofounder = find_or_initialize_by(email: email)
+
+    raise Exceptions::UserAlreadyMemberOfStartup if cofounder.startup
+
+    cofounder
+  end
+
+  def save_cofounder
+    # Devise wants a random password.
+    self.password = SecureRandom.hex
+
+    save
   end
 end

@@ -10,6 +10,10 @@ describe "Startup Requests" do
   let!(:startup2) { create(:startup, { approval_status: true, name: 'foobar 1' }) }
   let!(:startup3) { create(:startup, { approval_status: true, name: 'foobar 2' }) }
 
+  def emails_sent
+    ActionMailer::Base.deliveries
+  end
+
   it "fetch startups on index" do
     get "/api/startups", {}, version_header
     expect(response).to render_template(:index)
@@ -129,9 +133,101 @@ describe "Startup Requests" do
       expect(response).to be_success
       have_user_object(response, 'user')
     end
+  end
 
-    def emails_sent
-      ActionMailer::Base.deliveries
+  describe 'POST /startups/:id/founders' do
+    let(:user) { create :user_with_out_password, startup: startup }
+
+    before(:each) do
+      ActionMailer::Base.deliveries = []
+      UserPushNotifyJob.stub_chain(:new, :async, perform: true) # TODO: Change this to allow statement in Rspec v3.
+    end
+
+    context "when requested startup does not match authorized user's startup" do
+      let(:user) { create :user_with_out_password, startup: startup1 }
+
+      it 'responds with error code AuthorizedUserStartupMismatch' do
+        post "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
+        expect(response.code).to eq '422'
+        expect(parse_json(response.body, 'code')).to eq 'AuthorizedUserStartupMismatch'
+      end
+    end
+
+    shared_examples_for 'new cofounder' do
+      it 'sends an email to cofounder address' do
+        post "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
+        expect(emails_sent.last.body.to_s).to include('requested that you become the Co-founder')
+      end
+
+      it 'sets the user pending_startup_id' do
+        post "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
+        cofounder = User.find_by(email: 'james.p.sullivan@mobme.in')
+        expect(cofounder.pending_startup_id).to eq startup.id
+      end
+    end
+
+    context 'when cofounder does not exist' do
+      it_behaves_like 'new cofounder'
+    end
+
+    context 'when cofounder exists as user' do
+      context 'user already belongs to a startup' do
+        it 'responds with error code UserAlreadyMemberOfStartup' do
+          create :user_with_out_password, email: 'james.p.sullivan@mobme.in', startup: startup2
+          post "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
+          expect(response.code).to eq '422'
+          expect(parse_json(response.body, 'code')).to eq 'UserAlreadyMemberOfStartup'
+        end
+      end
+
+      context 'when user does not belong to any startup' do
+        it 'sends a notification to user' do
+          # TODO: How to test sending of notifications?
+        end
+
+        it_behaves_like 'new cofounder'
+      end
+    end
+  end
+
+  describe 'DELETE /startups/:id/founders' do
+    let(:user) { create :user_with_out_password, startup: startup }
+
+    context 'when user does not exist' do
+      it 'responds with error code NoSuchFounderForDeletion' do
+        delete "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
+        expect(response.code).to eq '404'
+        expect(parse_json(response.body, 'code')).to eq 'NoSuchFounderForDeletion'
+      end
+    end
+
+    context 'when user does not have pending_startup_id' do
+      it 'responds with error code UserIsNotPendingFounder' do
+        create :user_with_out_password, email: 'james.p.sullivan@mobme.in'
+        delete "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
+        expect(response.code).to eq '422'
+        expect(parse_json(response.body, 'code')).to eq 'UserIsNotPendingFounder'
+      end
+    end
+
+    context "when user belongs to startup other than authorized user's" do
+      it 'responds with error code UserPendingStartupMismatch' do
+        create :user_with_out_password, email: 'james.p.sullivan@mobme.in', pending_startup_id: startup1.id
+        delete "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
+        expect(response.code).to eq '422'
+        expect(parse_json(response.body, 'code')).to eq 'UserPendingStartupMismatch'
+      end
+    end
+
+    context "when user is pending founder on authorized user's startup" do
+      it 'deletes pending user' do
+        pending_cofounder = create :user_with_out_password, email: 'james.p.sullivan@mobme.in', pending_startup_id: startup.id
+
+        delete "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
+
+        expect(response.code).to eq '200'
+        expect { pending_cofounder.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
   end
 end

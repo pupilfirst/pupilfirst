@@ -15,7 +15,7 @@ class V1::BaseController < ApplicationController
     status = case exception
       when ActiveRecord::RecordInvalid then
         400
-      when Exceptions::ApiRequestError then
+      when Exceptions::ApiStandardError then
         exception.status
       when ActiveRecord::RecordNotFound then
         404

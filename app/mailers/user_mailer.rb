@@ -3,7 +3,7 @@ class UserMailer < ActionMailer::Base
 
   def cofounder_request(cofounder, current_user)
     @current_user = current_user
-    mail(to: cofounder.email, subject: 'You have been invited to join a Startup!')
+    mail(to: cofounder, subject: 'You have been invited to join a Startup!')
   end
 
   def inform_sep_submition(user)

@@ -1,11 +1,13 @@
 module Exceptions
-  class ApiRequestError < StandardError
+  class ApiStandardError < StandardError; end
+
+  class ApiRequestError < ApiStandardError
     def status
       422
     end
   end
 
-  class ApiResourceMissingError < StandardError
+  class ApiResourceMissingError < ApiStandardError
     def status
       404
     end
@@ -16,5 +18,7 @@ module Exceptions
   class UserAlreadyHasStartup < ApiRequestError; end
   class UserAlreadyMemberOfStartup < ApiRequestError; end
   class NoSuchFounderForDeletion < ApiResourceMissingError; end
-  class DeleteFounderPrivilegeMissing < ApiRequestError; end
+  class UserIsNotPendingFounder < ApiRequestError; end
+  class AuthorizedUserStartupMismatch < ApiRequestError; end
+  class UserPendingStartupMismatch < ApiRequestError; end
 end

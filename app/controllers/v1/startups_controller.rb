@@ -120,11 +120,10 @@ class V1::StartupsController < V1::BaseController
   end
 
   # DELETE /api/startups/:id/founders
-  # TODO: Spec StartupsController#delete_founder
   def delete_founder
     user = User.find_by(email: params[:email])
 
-    raise Exceptions::NoSuchFounderForDeletion if user.nil?
+    raise Exceptions::FounderMissing if user.nil?
     raise Exceptions::UserIsNotPendingFounder if user.pending_startup_id.nil?
     raise Exceptions::UserPendingStartupMismatch if user.pending_startup_id != current_user.startup.id
 

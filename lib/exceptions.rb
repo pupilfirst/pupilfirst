@@ -17,7 +17,7 @@ module Exceptions
   class RestrictedToSelf < ApiRequestError; end
   class UserAlreadyHasStartup < ApiRequestError; end
   class UserAlreadyMemberOfStartup < ApiRequestError; end
-  class NoSuchFounderForDeletion < ApiResourceMissingError; end
+  class FounderMissing < ApiResourceMissingError; end
   class UserIsNotPendingFounder < ApiRequestError; end
   class AuthorizedUserStartupMismatch < ApiRequestError; end
   class UserPendingStartupMismatch < ApiRequestError; end

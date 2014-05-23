@@ -197,7 +197,7 @@ describe "Startup Requests" do
       it 'responds with error code NoSuchFounderForDeletion' do
         delete "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
         expect(response.code).to eq '404'
-        expect(parse_json(response.body, 'code')).to eq 'NoSuchFounderForDeletion'
+        expect(parse_json(response.body, 'code')).to eq 'FounderMissing'
       end
     end
 

@@ -123,9 +123,9 @@ class V1::StartupsController < V1::BaseController
   def delete_founder
     user = User.find_by(email: params[:email])
 
-    raise Exceptions::FounderMissing if user.nil?
-    raise Exceptions::UserIsNotPendingFounder if user.pending_startup_id.nil?
-    raise Exceptions::UserPendingStartupMismatch if user.pending_startup_id != current_user.startup.id
+    raise Exceptions::FounderMissing, 'Could not find a founder with supplied e-mail ID.' if user.nil?
+    raise Exceptions::UserIsNotPendingFounder, 'User is not a pending founder. Cannot be deleted.' if user.pending_startup_id.nil?
+    raise Exceptions::UserPendingStartupMismatch, "User is not pending on authorized user's Startup." if user.pending_startup_id != current_user.startup.id
 
     user.destroy!
 

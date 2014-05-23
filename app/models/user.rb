@@ -146,7 +146,7 @@ class User < ActiveRecord::Base
   def self.find_or_initialize_cofounder(email)
     cofounder = find_or_initialize_by(email: email)
 
-    raise Exceptions::UserAlreadyMemberOfStartup if cofounder.startup
+    raise Exceptions::UserAlreadyMemberOfStartup, 'User already belongs to a startup, and cannot be added again.' if cofounder.startup
 
     cofounder
   end

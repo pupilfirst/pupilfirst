@@ -1,4 +1,4 @@
-json.(user, :id, :avatar_url, :fullname, :email)
+json.(user, :id, :avatar_url, :fullname, :email, :pending_startup_id)
 json.born_on user.born_on.nil? ? nil : fmt_time(user.born_on)
 extra_block.call(user) if defined?(extra_block) and extra_block
 

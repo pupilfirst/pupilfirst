@@ -143,6 +143,8 @@ class V1::StartupsController < V1::BaseController
   def incubate
     startup = Startup.find params[:id]
 
+    # TODO: Verify that the startup is, in fact, ready for incubation? Maybe...
+
     # Only startups with nil approval status can be moved to pending.
     unless startup.approval_status.nil?
       raise Exceptions::StartupInvalidApprovalState, 'Startup is in pending/approved/rejected state. Cannot incubate.'

@@ -193,8 +193,18 @@ describe "Startup Requests" do
   describe 'DELETE /startups/:id/founders' do
     let(:user) { create :user_with_out_password, startup: startup }
 
+    context "when requested startup does not match authorized user's startup" do
+      let(:user) { create :user_with_out_password, startup: startup1 }
+
+      it 'responds with error code AuthorizedUserStartupMismatch' do
+        delete "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
+        expect(response.code).to eq '422'
+        expect(parse_json(response.body, 'code')).to eq 'AuthorizedUserStartupMismatch'
+      end
+    end
+
     context 'when user does not exist' do
-      it 'responds with error code NoSuchFounderForDeletion' do
+      it 'responds with error code FounderMissing' do
         delete "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
         expect(response.code).to eq '404'
         expect(parse_json(response.body, 'code')).to eq 'FounderMissing'
@@ -227,6 +237,55 @@ describe "Startup Requests" do
 
         expect(response.code).to eq '200'
         expect { pending_cofounder.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
+
+  describe 'GET /api/startups/:id/founders' do
+    let(:user) { create :user_with_out_password, startup: startup }
+
+    context "when requested startup does not match authorized user's startup" do
+      let(:user) { create :user_with_out_password, startup: startup1 }
+
+      it 'responds with error code AuthorizedUserStartupMismatch' do
+        get "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
+        expect(response.code).to eq '422'
+        expect(parse_json(response.body, 'code')).to eq 'AuthorizedUserStartupMismatch'
+      end
+    end
+
+    context 'when user does not exist' do
+      it 'responds with error code FounderMissing' do
+        get "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
+        expect(response.code).to eq '404'
+        expect(parse_json(response.body, 'code')).to eq 'FounderMissing'
+      end
+    end
+
+    context 'when user is pending cofounder' do
+      it 'returns status pending' do
+        create :user_with_out_password, email: 'james.p.sullivan@mobme.in', pending_startup_id: user.startup.id
+        get "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
+        expect(response.code).to eq '200'
+        expect(parse_json(response.body, 'status')).to eq User::COFOUNDER_PENDING
+      end
+    end
+
+    context 'when user is accepted cofounder' do
+      it 'returns status accepted' do
+        create :user_with_out_password, email: 'james.p.sullivan@mobme.in', startup: user.startup
+        get "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
+        expect(response.code).to eq '200'
+        expect(parse_json(response.body, 'status')).to eq User::COFOUNDER_ACCEPTED
+      end
+    end
+
+    context 'when user is rejected cofounder' do
+      it 'returns status rejected' do
+        create :user_with_out_password, email: 'james.p.sullivan@mobme.in', startup: startup1
+        get "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
+        expect(response.code).to eq '200'
+        expect(parse_json(response.body, 'status')).to eq User::COFOUNDER_REJECTED
       end
     end
   end

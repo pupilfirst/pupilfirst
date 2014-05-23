@@ -2,6 +2,8 @@ class V1::StartupsController < V1::BaseController
 
   skip_before_filter :require_token, only: [:index, :show, :load_suggestions]
 
+  before_filter :require_user_startup_match, only: [:add_founder, :delete_founder, :retrieve_founder]
+
   def index
     category = Category.startup_category.find_by_name(params['category']) rescue nil
     clause = category ? ["category_id = ?", category.id] : nil
@@ -93,14 +95,10 @@ class V1::StartupsController < V1::BaseController
 
   # POST /api/startups/:id/founders
   def add_founder
-    startup = Startup.find params[:id]
     user = User.find_or_initialize_cofounder params[:email]
 
-    # Requested startup must match the authorized user's startup.
-    raise Exceptions::AuthorizedUserStartupMismatch if startup != current_user.startup
-
     # Link user to startup as pending founder.
-    user.pending_startup_id = startup.id
+    user.pending_startup_id = params[:id]
 
     if user.persisted?
       # Send user a notification with co-founder invite message.
@@ -132,6 +130,15 @@ class V1::StartupsController < V1::BaseController
     render nothing: true
   end
 
+  # GET /api/startups/:id/founders
+  def retrieve_founder
+    user = User.find_by(email: params[:email])
+
+    raise Exceptions::FounderMissing, 'Could not find a founder with supplied e-mail ID.' if user.nil?
+
+    render json: { status: user.cofounder_status(current_user.startup) }
+  end
+
   private
   def startup_params
     params.permit(:startup).permit(:name, :phone, :pitch, :website,:dsc, :transaction_details, :registration_type,
@@ -144,5 +151,12 @@ class V1::StartupsController < V1::BaseController
 
   def directors_in_params
     params.require(:startup).permit(directors: [:id, :is_share_holder, :number_of_shares])
+  end
+
+  def require_user_startup_match
+    # Requested startup must match the authorized user's startup.
+    if Startup.find(params[:id]) != current_user.startup
+      raise Exceptions::AuthorizedUserStartupMismatch, "Selected startup does not match User's startup."
+    end
   end
 end

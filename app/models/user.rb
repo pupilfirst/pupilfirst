@@ -3,6 +3,10 @@ class User < ActiveRecord::Base
   GENDER_FEMALE = 'female'
   GENDER_OTHER = 'other'
 
+  COFOUNDER_PENDING = 'pending'
+  COFOUNDER_ACCEPTED = 'accepted'
+  COFOUNDER_REJECTED = 'rejected'
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :invitable, :database_authenticatable, :registerable,
@@ -156,5 +160,16 @@ class User < ActiveRecord::Base
     self.password = SecureRandom.hex
 
     save
+  end
+
+  # Returns status of cofounder addition to a supplied startup.
+  def cofounder_status(for_startup)
+    if pending_startup_id
+      COFOUNDER_PENDING
+    elsif startup == for_startup
+      COFOUNDER_ACCEPTED
+    else
+      COFOUNDER_REJECTED
+    end
   end
 end

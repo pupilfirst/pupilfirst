@@ -29,6 +29,7 @@ Svapp::Application.routes.draw do
           post :partnership_application
           post :founders, to: :add_founder
           delete :founders, to: :delete_founder
+          get :founders, to: :retrieve_founder
         end
       end
 

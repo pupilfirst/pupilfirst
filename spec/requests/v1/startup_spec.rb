@@ -5,10 +5,10 @@ describe "Startup Requests" do
   include UserSpecHelper
   include Rails.application.routes.url_helpers
 
-  let!(:startup) { create(:startup, { approval_status: true, name: 'startup 1' }) }
-  let!(:startup1) { create(:startup, { approval_status: true, name: 'startup 2' }) }
-  let!(:startup2) { create(:startup, { approval_status: true, name: 'foobar 1' }) }
-  let!(:startup3) { create(:startup, { approval_status: true, name: 'foobar 2' }) }
+  let!(:startup) { create(:startup, { approval_status: Startup::APPROVAL_STATUS_APPROVED, name: 'startup 1' }) }
+  let!(:startup1) { create(:startup, { approval_status: Startup::APPROVAL_STATUS_APPROVED, name: 'startup 2' }) }
+  let!(:startup2) { create(:startup, { approval_status: Startup::APPROVAL_STATUS_APPROVED, name: 'foobar 1' }) }
+  let!(:startup3) { create(:startup, { approval_status: Startup::APPROVAL_STATUS_APPROVED, name: 'foobar 2' }) }
 
   def emails_sent
     ActionMailer::Base.deliveries
@@ -286,6 +286,41 @@ describe "Startup Requests" do
         get "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
         expect(response.code).to eq '200'
         expect(parse_json(response.body, 'status')).to eq User::COFOUNDER_REJECTED
+      end
+    end
+  end
+
+  describe 'POST /api/startups/:id/incubate' do
+    let(:user) { create :user_with_out_password, startup: startup }
+
+    context "when requested startup does not match authorized user's startup" do
+      let(:user) { create :user_with_out_password, startup: startup1 }
+
+      it 'responds with error code AuthorizedUserStartupMismatch' do
+        post "/api/startups/#{startup.id}/incubate", {}, version_header(user)
+        expect(response.code).to eq '422'
+        expect(parse_json(response.body, 'code')).to eq 'AuthorizedUserStartupMismatch'
+      end
+    end
+
+    context 'when the startup approval status is not nil' do
+
+
+      it 'responds with error code StartupInvalidApprovalState' do
+        post "/api/startups/#{startup.id}/incubate", {}, version_header(user)
+        expect(response.code).to eq '422'
+        expect(parse_json(response.body, 'code')).to eq 'StartupInvalidApprovalState'
+      end
+    end
+
+    context 'when the startup approval status is nil' do
+      let(:startup) { create(:startup) }
+
+      it 'sets approval status of startup to pending' do
+        post "/api/startups/#{startup.id}/incubate", {}, version_header(user)
+        expect(response.code).to eq '200'
+        startup.reload
+        expect(startup.approval_status).to eq Startup::APPROVAL_STATUS_PENDING
       end
     end
   end

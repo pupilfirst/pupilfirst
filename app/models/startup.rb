@@ -4,7 +4,12 @@ class Startup < ActiveRecord::Base
 
   MAX_PITCH_CHARS = 140      unless defined?(MAX_PITCH_CHARS)
   MAX_ABOUT_WORDS = 500     unless defined?(MAX_ABOUT_WORDS)
-  scope :valid, -> { where(approval_status: true) }
+
+  APPROVAL_STATUS_PENDING = 'pending'
+  APPROVAL_STATUS_APPROVED = 'approved'
+  APPROVAL_STATUS_REJECTED = 'rejected'
+
+  scope :valid, -> { where(approval_status: APPROVAL_STATUS_APPROVED) }
 
   has_many :founders, -> { where("startup_link_verifier_id IS NOT NULL AND is_founder = ?", true)}, class_name: "User", foreign_key: "startup_id" do
     def <<(founder)

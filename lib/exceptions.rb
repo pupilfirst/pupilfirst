@@ -21,4 +21,5 @@ module Exceptions
   class UserIsNotPendingFounder < ApiRequestError; end
   class AuthorizedUserStartupMismatch < ApiRequestError; end
   class UserPendingStartupMismatch < ApiRequestError; end
+  class StartupInvalidApprovalState < ApiRequestError; end
 end

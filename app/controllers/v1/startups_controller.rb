@@ -2,7 +2,7 @@ class V1::StartupsController < V1::BaseController
 
   skip_before_filter :require_token, only: [:index, :show, :load_suggestions]
 
-  before_filter :require_user_startup_match, only: [:add_founder, :delete_founder, :retrieve_founder]
+  before_filter :require_user_startup_match, only: [:add_founder, :delete_founder, :retrieve_founder, :incubate]
 
   def index
     category = Category.startup_category.find_by_name(params['category']) rescue nil
@@ -137,6 +137,22 @@ class V1::StartupsController < V1::BaseController
     raise Exceptions::FounderMissing, 'Could not find a founder with supplied e-mail ID.' if user.nil?
 
     render json: { status: user.cofounder_status(current_user.startup) }
+  end
+
+  # POST /api/startups/:id/incubate
+  def incubate
+    startup = Startup.find params[:id]
+
+    # Only startups with nil approval status can be moved to pending.
+    unless startup.approval_status.nil?
+      raise Exceptions::StartupInvalidApprovalState, 'Startup is in pending/approved/rejected state. Cannot incubate.'
+    end
+
+    # Set startup's approval status to pending.
+    startup.approval_status = Startup::APPROVAL_STATUS_PENDING
+    startup.save
+
+    render nothing: true
   end
 
   private

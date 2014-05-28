@@ -195,33 +195,63 @@ describe V1::UsersController do
     end
   end
 
-  describe "POST on user" do
+  describe 'POST /api/users' do
+    let(:dob) { Time.parse('2000-5-5').to_date }
+
+    context 'when the user already exists' do
+      let(:startup) { create :startup }
+      let(:attributes) { attributes_for(:user_with_password, born_on: dob.to_s, email: 'james.p.sullivan@mobme.in') }
+
+      context 'when the user has an invitation token' do
+        it 'updates the user entry' do
+          user = User.create(
+            email: 'james.p.sullivan@mobme.in',
+            password: SecureRandom.hex,
+            pending_startup_id: startup.id,
+            invitation_token: SecureRandom.hex
+          )
+
+          post '/api/users', { user: attributes }, version_header
+          user.reload
+          expect(user.born_on).to eq dob
+          expect(user.invitation_token).to eq nil
+        end
+      end
+
+      context 'when the user has no invitation token' do
+        it 'responds with error code AlreadyCreatedUser' do
+          user = create :user_with_out_password, email: 'james.p.sullivan@mobme.in'
+          post '/api/users', { user: attributes }, version_header
+          expect(response.code).to eq '422'
+          expect(parse_json response.body, 'code').to eq 'AlreadyCreatedUser'
+        end
+      end
+    end
 
     context 'with valid attributes and valid password' do
-      it "should create user" do
-        dob = Time.parse('2000-5-5').to_date.to_s
-        attributes = attributes_for(:user_with_password, born_on: dob)
+      let(:attributes) { attributes_for(:user_with_password, born_on: dob.to_s) }
+
+      it 'should create user' do
         post '/api/users', { user: attributes }, version_header
         expect(response.status).to eq(201)
         response_user_id = JSON.parse(response.body)['id']
         check_user = User.find(response_user_id)
         expect(check_user.email).to eq(attributes[:email])
         expect(check_user.avatar_url.present?).to eq(true)
-        expect(check_user.born_on.to_s).to eq(dob)
-        expect(response.body).to have_json_path("id")
-        expect(response.body).to have_json_path("fullname")
-        expect(response.body).to have_json_path("avatar_url")
-        expect(response.body).to have_json_path("auth_token")
+        expect(check_user.born_on).to eq(dob)
+        expect(response.body).to have_json_path('id')
+        expect(response.body).to have_json_path('fullname')
+        expect(response.body).to have_json_path('avatar_url')
+        expect(response.body).to have_json_path('auth_token')
       end
     end
 
     context 'with invalid password' do
-      it "return bad_request with errors in body" do
-        dob = Time.parse('2000-5-5').to_date.to_s
-        attributes = attributes_for(:user_with_password, born_on: dob).merge(password: 'foo')
+      it 'return bad_request with errors in body' do
+        attributes = attributes_for(:user_with_password, born_on: dob.to_s).merge(password: 'foo')
         post '/api/users', { user: attributes }, version_header
         expect(response.status).to eq(400)
-        expect(response.body).to have_json_path("error")
+        expect(response.body).to have_json_path('error')
       end
     end
   end
@@ -337,7 +367,7 @@ describe V1::UsersController do
         expect(response.code).to eq '200'
 
         user.reload
-        expect(user.startup).to eq startup
+        expect(user.startup_id).to eq startup.id
         expect(user.pending_startup_id).to eq nil
       end
     end

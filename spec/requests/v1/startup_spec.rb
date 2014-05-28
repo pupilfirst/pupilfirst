@@ -168,6 +168,12 @@ describe "Startup Requests" do
 
     context 'when cofounder does not exist' do
       it_behaves_like 'new cofounder'
+
+      it 'sets a invitation token to indicate invited status' do
+        post "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
+        created_user = User.find_by(email: 'james.p.sullivan@mobme.in')
+        expect(created_user.invitation_token).to_not eq nil
+      end
     end
 
     context 'when cofounder exists as user' do
@@ -190,11 +196,21 @@ describe "Startup Requests" do
       end
 
       context 'when user does not belong to any startup' do
+        before do
+         create :user_with_out_password, email: 'james.p.sullivan@mobme.in'
+        end
+
         it 'sends a notification to user' do
           # TODO: How to test sending of notifications?
         end
 
         it_behaves_like 'new cofounder'
+
+        it 'does not set invitation token' do
+          post "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
+          created_user = User.find_by(email: 'james.p.sullivan@mobme.in')
+          expect(created_user.invitation_token).to eq nil
+        end
       end
     end
   end

@@ -24,4 +24,5 @@ module Exceptions
   class StartupInvalidApprovalState < ApiRequestError; end
   class UserHasPendingStartupInvite < ApiRequestError; end
   class UserHasNoPendingStartupInvite < ApiResourceMissingError; end
+  class AlreadyCreatedUser < ApiRequestError; end
 end

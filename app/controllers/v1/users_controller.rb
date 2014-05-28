@@ -8,12 +8,27 @@ class V1::UsersController < V1::BaseController
     @user = (params[:id] == 'self') ? current_user : User.find(params[:id])
   end
 
+  # POST /api/users
+  #
+  # Creates a new user entry, or updates a temporarily created one.
   def create
-    @user = User.create user_params
+    @user = User.find_by(email: user_params[:email])
+
+    if @user.try(:persisted?)
+      if @user.invitation_token
+        @user.invitation_token = nil
+        @user.assign_attributes user_params
+      else
+        raise Exceptions::AlreadyCreatedUser, 'User already exists. Use the update route to change attributes.'
+      end
+    else
+      @user = User.new user_params
+    end
+
     if @user.save
       render 'create', status: :created
     else
-      render json: {error: @user.errors.to_a.join(', ')} , status: :bad_request
+      render json: { error: @user.errors.to_a.join(', ') }, status: :bad_request
     end
   end
 
@@ -22,7 +37,7 @@ class V1::UsersController < V1::BaseController
     if @user.update_attributes user_params
       render :update
     else
-      render json: {error: @user.errors.to_a.join(', ')} , status: :bad_request
+      render json: { error: @user.errors.to_a.join(', ') }, status: :bad_request
     end
   end
 
@@ -32,7 +47,7 @@ class V1::UsersController < V1::BaseController
       user.send_reset_password_instructions
       render nothing: true, status: 200
     else
-      render json: {error: "No user found with that email"}, status: :unprocessable_entity
+      render json: { error: "No user found with that email" }, status: :unprocessable_entity
     end
   end
 
@@ -73,7 +88,7 @@ class V1::UsersController < V1::BaseController
 
       render nothing: true
     else
-      render json: { error: 'Invalid verification code'}, status: 422
+      render json: { error: 'Invalid verification code' }, status: 422
     end
   end
 
@@ -92,15 +107,15 @@ class V1::UsersController < V1::BaseController
   private
   def user_params
     params.require(:user).permit(:gender, :communication_address,
-                                 :email, :fullname, :password, :password_confirmation, :avatar, :remote_avatar_url, :born_on,
-                                 :pan, :din, :aadhaar, :mother_maiden_name, :married, :salutation,
-                                 :is_student, :college, :university, :course, :semester, :title,
-                                 :religion,:current_occupation, :educational_qualification, :place_of_birth,
-                                 address_attributes: [:flat, :building, :street, :area, :town, :state, :pin],
-                                 father_attributes: [:first_name, :last_name, :middle_name],
-                                 guardian_attributes: [
-                                    name_attributes: [:salutation, :first_name, :middle_name, :last_name],
-                                    address_attributes: [:flat, :building, :street, :area, :town, :state, :pin] ]
-                                 )
+      :email, :fullname, :password, :password_confirmation, :avatar, :remote_avatar_url, :born_on,
+      :pan, :din, :aadhaar, :mother_maiden_name, :married, :salutation,
+      :is_student, :college, :university, :course, :semester, :title,
+      :religion, :current_occupation, :educational_qualification, :place_of_birth,
+      address_attributes: [:flat, :building, :street, :area, :town, :state, :pin],
+      father_attributes: [:first_name, :last_name, :middle_name],
+      guardian_attributes: [
+        name_attributes: [:salutation, :first_name, :middle_name, :last_name],
+        address_attributes: [:flat, :building, :street, :area, :town, :state, :pin]]
+    )
   end
 end

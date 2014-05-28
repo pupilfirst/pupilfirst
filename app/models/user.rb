@@ -151,6 +151,7 @@ class User < ActiveRecord::Base
     cofounder = find_or_initialize_by(email: email)
 
     raise Exceptions::UserAlreadyMemberOfStartup, 'User already belongs to a startup, and cannot be added again.' if cofounder.startup
+    raise Exceptions::UserHasPendingStartupInvite, 'User has a pending startup invite, and cannot be invited right now.' if cofounder.pending_startup_id
 
     cofounder
   end

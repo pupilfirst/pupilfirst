@@ -171,12 +171,21 @@ describe "Startup Requests" do
     end
 
     context 'when cofounder exists as user' do
-      context 'user already belongs to a startup' do
+      context 'when user already belongs to a startup' do
         it 'responds with error code UserAlreadyMemberOfStartup' do
           create :user_with_out_password, email: 'james.p.sullivan@mobme.in', startup: startup2
           post "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
           expect(response.code).to eq '422'
           expect(parse_json(response.body, 'code')).to eq 'UserAlreadyMemberOfStartup'
+        end
+      end
+
+      context 'when user already has pending invitation' do
+        it 'responds with error code UserHasPendingStartupInvite' do
+          create :user_with_out_password, email: 'james.p.sullivan@mobme.in', pending_startup_id: startup2.id
+          post "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
+          expect(response.code).to eq '422'
+          expect(parse_json(response.body, 'code')).to eq 'UserHasPendingStartupInvite'
         end
       end
 

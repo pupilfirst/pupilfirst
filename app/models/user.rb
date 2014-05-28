@@ -156,8 +156,8 @@ class User < ActiveRecord::Base
   end
 
   def save_cofounder
-    # Devise wants a random password.
-    self.password = SecureRandom.hex
+    # Devise wants a random password, so let's set one for a new user.
+    self.password = SecureRandom.hex unless self.persisted?
 
     save
   end

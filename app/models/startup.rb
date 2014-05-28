@@ -5,11 +5,12 @@ class Startup < ActiveRecord::Base
   MAX_PITCH_CHARS = 140      unless defined?(MAX_PITCH_CHARS)
   MAX_ABOUT_WORDS = 500     unless defined?(MAX_ABOUT_WORDS)
 
+  APPROVAL_STATUS_UNREADY = 'unready'
   APPROVAL_STATUS_PENDING = 'pending'
   APPROVAL_STATUS_APPROVED = 'approved'
   APPROVAL_STATUS_REJECTED = 'rejected'
 
-  scope :valid, -> { where(approval_status: APPROVAL_STATUS_APPROVED) }
+  scope :approved, -> { where(approval_status: APPROVAL_STATUS_APPROVED) }
 
   has_many :founders, -> { where("startup_link_verifier_id IS NOT NULL AND is_founder = ?", true)}, class_name: "User", foreign_key: "startup_id" do
     def <<(founder)
@@ -33,24 +34,47 @@ class Startup < ActiveRecord::Base
   serialize :startup_before, JSON
   serialize :police_station, JSON
   serialize :help_from_sv, Array
-  validate :valid_categories?
+  # validate :valid_categories?
   validate :valid_founders?
   validates_associated :founders
-  validates_length_of :help_from_sv, minimum: 1, too_short: 'must select atleast one', if: ->(startup){@full_validation }
+  # validates_length_of :help_from_sv, minimum: 1, too_short: 'must select atleast one', if: ->(startup){@full_validation }
 
-  validates :registration_type, inclusion: { in: [REGISTRATION_TYPE_PRIVATE_LIMITED, REGISTRATION_TYPE_PARTNERSHIP] }, if: ->(startup){@full_validation }
-  validates_presence_of :name, if: ->(startup){@full_validation }
-  validates_presence_of :address, if: ->(startup){@full_validation }
+  # We're concerned with registration type only when company name is also given - which implies that company has already been registered.
+  validates :registration_type, inclusion: { in: [REGISTRATION_TYPE_PRIVATE_LIMITED, REGISTRATION_TYPE_PARTNERSHIP] }, unless: ->(startup){ startup.name.nil? }
+
+  # validates_presence_of :name, if: ->(startup){@full_validation }
+  # validates_presence_of :address, if: ->(startup){@full_validation }
   # validates_presence_of :email
   # validates_presence_of :phone
+
   validates_presence_of :pre_funds, if: ->(startup){startup.pre_investers_name.present?}
   validates_presence_of :pre_investers_name, if: ->(startup){startup.pre_funds.present?}
-  validates_length_of :pitch, maximum: MAX_PITCH_CHARS, message: "must be within #{MAX_PITCH_CHARS} characters", allow_nil: false, if: ->(startup){@full_validation }
+
+  validates_length_of :pitch, maximum: MAX_PITCH_CHARS,
+    message: "must be within #{MAX_PITCH_CHARS} characters",
+    allow_nil: true, if: ->(startup){@full_validation }
+
   validates_length_of :about, {
     within: 10..MAX_ABOUT_WORDS, message: "must be within 10 to #{MAX_ABOUT_WORDS} words",
-    tokenizer: ->(str) { str.scan(/\w+/) }, allow_nil: false,
+    tokenizer: ->(str) { str.scan(/\w+/) }, allow_nil: true,
     if: ->(startup){@full_validation }
   }
+
+  def approval_status
+    super || APPROVAL_STATUS_UNREADY
+  end
+
+  def approved?
+    approval_status == APPROVAL_STATUS_APPROVED
+  end
+
+  def pending?
+    approval_status == APPROVAL_STATUS_PENDING
+  end
+
+  def unready?
+    approval_status == APPROVAL_STATUS_UNREADY
+  end
 
   def valid_help_from_sv?
     self.errors.add(:help_from_sv, "must select at least one") if help_from_sv.empty?

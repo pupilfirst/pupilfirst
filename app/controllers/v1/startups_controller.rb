@@ -4,13 +4,14 @@ class V1::StartupsController < V1::BaseController
 
   before_filter :require_user_startup_match, only: [:add_founder, :delete_founder, :retrieve_founder, :incubate]
 
+  # Returns approved startups.
   def index
     category = Category.startup_category.find_by_name(params['category']) rescue nil
     clause = category ? ["category_id = ?", category.id] : nil
     @startups = if params[:search_term]
-        Startup.valid.where("name ilike ?", "#{params[:search_term]}%")
+        Startup.approved.where("name ilike ?", "#{params[:search_term]}%")
       else
-        Startup.joins(:categories).valid.where(clause).order("id desc").uniq
+        Startup.joins(:categories).approved.where(clause).order("id desc").uniq
       end
     respond_to do |format|
         format.json
@@ -146,13 +147,13 @@ class V1::StartupsController < V1::BaseController
     # TODO: Verify that the startup is, in fact, ready for incubation? Maybe...
 
     # Only startups with nil approval status can be moved to pending.
-    unless startup.approval_status.nil?
-      raise Exceptions::StartupInvalidApprovalState, 'Startup is in pending/approved/rejected state. Cannot incubate.'
+    unless startup.unready?
+      raise Exceptions::StartupInvalidApprovalState, "Startup is in '#{startup.approval_status}' state. Cannot incubate."
     end
 
     # Set startup's approval status to pending.
     startup.approval_status = Startup::APPROVAL_STATUS_PENDING
-    startup.save
+    startup.save!
 
     render nothing: true
   end

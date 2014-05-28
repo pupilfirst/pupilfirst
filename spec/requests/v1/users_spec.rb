@@ -283,7 +283,7 @@ describe V1::UsersController do
     end
   end
 
-  describe 'PATCH /api/users/self/phone_number_verification' do
+  describe 'PUT /api/users/self/phone_number_verification' do
     let(:user) { create :user_with_password, phone: '+919876543210', phone_verification_code: '123456' }
 
     context 'when phone number does not match stored number' do
@@ -313,6 +313,32 @@ describe V1::UsersController do
           put '/api/users/self/phone_number', { phone: '+919876543210', code: '123456' }, version_header(user)
           expect(response.code).to eq '200'
         end
+      end
+    end
+  end
+
+  describe 'POST /api/users/self/accept_invitation' do
+    let(:user) { create :user_with_password }
+
+    context 'when user does not have pending invitation' do
+      it 'responds with error code UserHasNoPendingStartupInvite' do
+        post '/api/users/self/accept_invitation', { }, version_header(user)
+        expect(parse_json(response.body, 'code')).to eq 'UserHasNoPendingStartupInvite'
+        expect(response.code).to eq '404'
+      end
+    end
+
+    context 'when user has pending invitation' do
+      let(:startup) { create :startup }
+      let(:user) { create :user_with_password, pending_startup_id: startup.id }
+
+      it "sets user's startup to pending_startup_id and wipes pending_startup_id" do
+        post '/api/users/self/accept_invitation', { }, version_header(user)
+        expect(response.code).to eq '200'
+
+        user.reload
+        expect(user.startup).to eq startup
+        expect(user.pending_startup_id).to eq nil
       end
     end
   end

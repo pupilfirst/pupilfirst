@@ -1,7 +1,7 @@
 class V1::UsersController < V1::BaseController
   respond_to :json
   skip_before_filter :require_token, only: [:create, :forgot_password]
-  before_filter :require_self, only: [:generate_phone_number_verification_code, :verify_phone_number]
+  before_filter :require_self, only: [:generate_phone_number_verification_code, :verify_phone_number, :accept_invitation]
 
   def show
     @extra_info = (params[:id] == 'self') ? true : false
@@ -75,6 +75,18 @@ class V1::UsersController < V1::BaseController
     else
       render json: { error: 'Invalid verification code'}, status: 422
     end
+  end
+
+  # POST /api/users/self/accept_invitation
+  def accept_invitation
+    raise Exceptions::UserHasNoPendingStartupInvite, 'User has no pending invite to accept.' unless current_user.pending_startup_id
+
+    # Set the pending startup ID as the User's ID and wipe the pending invite.
+    current_user.startup_id = current_user.pending_startup_id
+    current_user.pending_startup_id = nil
+    current_user.save!
+
+    render nothing: true
   end
 
   private

@@ -7,6 +7,7 @@ Svapp::Application.routes.draw do
         member do
           post 'phone_number', to: :generate_phone_number_verification_code
           put 'phone_number', to: :verify_phone_number
+          post 'accept_invitation'
         end
 
         collection do

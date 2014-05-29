@@ -7,7 +7,8 @@ Svapp::Application.routes.draw do
         member do
           post 'phone_number', to: :generate_phone_number_verification_code
           put 'phone_number', to: :verify_phone_number
-          post 'accept_invitation'
+          put 'cofounder_invitation', to: :accept_cofounder_invitation
+          delete 'cofounder_invitation', to: :reject_cofounder_invitation
         end
 
         collection do

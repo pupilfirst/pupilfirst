@@ -347,12 +347,12 @@ describe V1::UsersController do
     end
   end
 
-  describe 'POST /api/users/self/accept_invitation' do
+  describe 'PUT /api/users/self/cofounder_invitation' do
     let(:user) { create :user_with_password }
 
     context 'when user does not have pending invitation' do
       it 'responds with error code UserHasNoPendingStartupInvite' do
-        post '/api/users/self/accept_invitation', { }, version_header(user)
+        put '/api/users/self/cofounder_invitation', { }, version_header(user)
         expect(parse_json(response.body, 'code')).to eq 'UserHasNoPendingStartupInvite'
         expect(response.code).to eq '404'
       end
@@ -363,11 +363,36 @@ describe V1::UsersController do
       let(:user) { create :user_with_password, pending_startup_id: startup.id }
 
       it "sets user's startup to pending_startup_id and wipes pending_startup_id" do
-        post '/api/users/self/accept_invitation', { }, version_header(user)
+        put '/api/users/self/cofounder_invitation', { }, version_header(user)
         expect(response.code).to eq '200'
 
         user.reload
         expect(user.startup_id).to eq startup.id
+        expect(user.pending_startup_id).to eq nil
+      end
+    end
+  end
+
+  describe 'DELETE /api/users/self/cofounder_invitation' do
+    let(:user) { create :user_with_password }
+
+    context 'when user does not have pending invitation' do
+      it 'responds with error code UserHasNoPendingStartupInvite' do
+        delete '/api/users/self/cofounder_invitation', { }, version_header(user)
+        expect(parse_json(response.body, 'code')).to eq 'UserHasNoPendingStartupInvite'
+        expect(response.code).to eq '404'
+      end
+    end
+
+    context 'when user has pending invitation' do
+      let(:startup) { create :startup }
+      let(:user) { create :user_with_password, pending_startup_id: startup.id }
+
+      it 'clears pending_startup_id' do
+        delete '/api/users/self/cofounder_invitation', { }, version_header(user)
+        expect(response.code).to eq '200'
+
+        user.reload
         expect(user.pending_startup_id).to eq nil
       end
     end

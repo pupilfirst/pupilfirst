@@ -1,7 +1,7 @@
 class V1::UsersController < V1::BaseController
   respond_to :json
   skip_before_filter :require_token, only: [:create, :forgot_password]
-  before_filter :require_self, only: [:generate_phone_number_verification_code, :verify_phone_number, :accept_invitation]
+  before_filter :require_self, only: [:generate_phone_number_verification_code, :verify_phone_number, :accept_cofounder_invitation, :reject_cofounder_invitation]
 
   def show
     @extra_info = (params[:id] == 'self') ? true : false
@@ -92,8 +92,8 @@ class V1::UsersController < V1::BaseController
     end
   end
 
-  # POST /api/users/self/accept_invitation
-  def accept_invitation
+  # PUT /api/users/self/accept_invitation
+  def accept_cofounder_invitation
     raise Exceptions::UserHasNoPendingStartupInvite, 'User has no pending invite to accept.' unless current_user.pending_startup_id
 
     # Set the pending startup ID as the User's ID and wipe the pending invite.
@@ -104,7 +104,19 @@ class V1::UsersController < V1::BaseController
     render nothing: true
   end
 
+  # DELETE /api/users/self/accept_invitation
+  def reject_cofounder_invitation
+    raise Exceptions::UserHasNoPendingStartupInvite, 'User has no pending invite to delete.' unless current_user.pending_startup_id
+
+    # Wipe the pending invite.
+    current_user.pending_startup_id = nil
+    current_user.save!
+
+    render nothing: true
+  end
+
   private
+
   def user_params
     params.require(:user).permit(:gender, :communication_address,
       :email, :fullname, :password, :password_confirmation, :avatar, :remote_avatar_url, :born_on,

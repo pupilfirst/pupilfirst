@@ -1,8 +1,10 @@
-p A member of Startup Village has just added you as requested that you become the Co-founder of a new Startup!
+p Congratulations! You have been invited to join #{@current_user.fullname}'s startup as a co-founder.
 
-p Please download the Startup Village mobile application
-  (#{link_to 'Android', 'https://play.google.com/store/apps/details?id=in.svlabs.android'}, iOS), and sign up as a user
-  to either accept or reject this request.
+p To be a part of #{@current_user.fullname}'s startup as a co-founder, please download the Startup Village mobile
+  application (Android, iOS), and sign up as a user using this email ID. You can then accept or reject this request.
 
-p This request was made by #{mail_to @current_user.email, @current_user.fullname}. You can contact
-  #{@current_user.gender == User::GENDER_MALE ? 'him' : 'her'} directly for clarifications.
+p Please contact #{mail_to @current_user.email, @current_user.fullname} directly for clarifications.
+
+p Good luck, and have fun!
+
+p Team SV Labs

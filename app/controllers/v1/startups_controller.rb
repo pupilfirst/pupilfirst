@@ -9,12 +9,12 @@ class V1::StartupsController < V1::BaseController
     category = Category.startup_category.find_by_name(params['category']) rescue nil
     clause = category ? ["category_id = ?", category.id] : nil
     @startups = if params[:search_term]
-        Startup.approved.where("name ilike ?", "#{params[:search_term]}%")
-      else
-        Startup.joins(:categories).approved.where(clause).order("id desc").uniq
-      end
+      Startup.approved.where("name ilike ?", "#{params[:search_term]}%")
+    else
+      Startup.joins(:categories).approved.where(clause).order("id desc").uniq
+    end
     respond_to do |format|
-        format.json
+      format.json
     end
   end
 
@@ -40,24 +40,27 @@ class V1::StartupsController < V1::BaseController
 
   def update
     id = params[:id]
-    startup = (id == 'self') ? current_user.startup : Startup.find(id)
-    if startup.update_attributes(startup_params)
+    @startup = (id == 'self') ? current_user.startup : Startup.find(id)
+
+    if @startup.update_attributes!(startup_params)
       (directors_in_params[:directors] or []).each do |dir|
-        founder = startup.founders.find(dir['id'].to_i) rescue nil
-        founder.update_attributes(dir.select{|key|
+        founder = @startup.founders.find(dir['id'].to_i) rescue nil
+
+        founder.update_attributes(dir.select { |key|
           ['number_of_shares', 'is_share_holder'].include?(key)
-        }.merge({is_director: true}))
+        }.merge({ is_director: true }))
       end
+
       if directors_in_params[:directors]
-        StartupMailer.reminder_to_complete_personal_info(startup, current_user).deliver if startup_params[:company_names]
-        message = "#{current_user.fullname} has listed you as a Director at #{startup.name}"
-        startup.reload.directors.reject { |e| e.id == current_user.id }.each do |dir|
+        StartupMailer.reminder_to_complete_personal_info(@startup, current_user).deliver if startup_params[:company_names]
+        message = "#{current_user.fullname} has listed you as a Director at #{@startup.name}"
+
+        @startup.reload.directors.reject { |e| e.id == current_user.id }.each do |dir|
           UserPushNotifyJob.new.async.perform(dir.id, :fill_personal_info, message)
         end
       end
-      render json: {message: startup.incorporation_message}, status: :ok
     else
-      render json: {error: startup.errors.to_a.join(', ')}, status: :bad_request
+      render json: { error: @startup.errors.to_a.join(', ') }, status: :bad_request
     end
   end
 
@@ -86,7 +89,7 @@ class V1::StartupsController < V1::BaseController
 
   def partnership_application
     if current_user.startup.partnership_application?
-      render json: {error: "Already applied for Partnership"}, status: :bad_request
+      render json: { error: "Already applied for Partnership" }, status: :bad_request
     else
       current_user.startup.update_attributes!(partnership_application: true)
       StartupMailer.partnership_application(current_user.startup, current_user).deliver
@@ -160,12 +163,12 @@ class V1::StartupsController < V1::BaseController
 
   private
   def startup_params
-    params.permit(:startup).permit(:name, :phone, :pitch, :website,:dsc, :transaction_details, :registration_type,
-                                    :logo, :about, :phone, :facebook_link, :twitter_link,
-                                    company_names: [:justification, :name],
-                                    police_station: [:city, :line1, :line2, :name, :pin],
-                                    registered_address_attributes: [:flat, :building, :street, :area, :town, :state, :pin]
-                                    )
+    params[:startup].permit(:name, :phone, :pitch, :website, :dsc, :transaction_details, :registration_type,
+      :logo, :about, :phone, :facebook_link, :twitter_link,
+      company_names: [:justification, :name],
+      police_station: [:city, :line1, :line2, :name, :pin],
+      registered_address_attributes: [:flat, :building, :street, :area, :town, :state, :pin]
+    )
   end
 
   def directors_in_params

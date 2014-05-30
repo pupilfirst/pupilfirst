@@ -165,6 +165,7 @@ FactoryGirl.define do
 
   factory :startup_application, class: Startup do |f|
     f.name      {Faker::Lorem.characters(20)}
+    f.registration_type Startup::REGISTRATION_TYPE_PRIVATE_LIMITED
     f.pitch     {Faker::Lorem.words(6).join(' ')}
     f.website   {Faker::Internet.domain_name}
     f.phone   {Faker::PhoneNumber.cell_phone}

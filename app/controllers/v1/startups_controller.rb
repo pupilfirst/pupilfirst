@@ -163,12 +163,16 @@ class V1::StartupsController < V1::BaseController
 
   private
   def startup_params
-    params[:startup].permit(:name, :phone, :pitch, :website, :dsc, :transaction_details, :registration_type,
-      :logo, :about, :phone, :facebook_link, :twitter_link,
-      company_names: [:justification, :name],
-      police_station: [:city, :line1, :line2, :name, :pin],
-      registered_address_attributes: [:flat, :building, :street, :area, :town, :state, :pin]
-    )
+    if params[:startup]
+      params[:startup].permit(:name, :phone, :pitch, :website, :dsc, :transaction_details, :registration_type,
+        :logo, :about, :phone, :facebook_link, :twitter_link,
+        company_names: [:justification, :name],
+        police_station: [:city, :line1, :line2, :name, :pin],
+        registered_address_attributes: [:flat, :building, :street, :area, :town, :state, :pin]
+      )
+    else
+      {}
+    end
   end
 
   def directors_in_params

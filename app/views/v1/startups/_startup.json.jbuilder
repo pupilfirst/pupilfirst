@@ -1,4 +1,4 @@
-json.(startup, :id, :logo_url, :pitch, :website, :about, :email, :phone, :twitter_link, :facebook_link, :approval_status)
+json.(startup, :id, :logo_url, :pitch, :website, :about, :email, :phone, :twitter_link, :facebook_link, :approval_status, :product_name, :product_description)
 json.name   (startup.name or "My Startup")
 json.categories     startup.categories.map &:name
 json.created_at     fmt_time(startup.created_at)

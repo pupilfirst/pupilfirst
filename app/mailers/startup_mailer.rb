@@ -15,6 +15,13 @@ class StartupMailer < ActionMailer::Base
     mail(to: send_to, subject: 'You are now part of Startup Village!')
   end
 
+  def startup_rejected(startup)
+    @startup = startup
+    send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
+    substitute '-founder_full_name-', startup.founders.map(&:fullname).join(', ')
+    mail(to: send_to, subject: 'Your incubation request at Starup Village has been rejected.')
+  end
+
   def incorporation_approved(startup)
     @startup = startup
     send_to = startup.directors.map { |e| "#{e.fullname} <#{e.email}>" }

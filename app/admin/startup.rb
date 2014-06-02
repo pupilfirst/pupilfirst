@@ -62,6 +62,13 @@ ActiveAdmin.register Startup do
           startup.founders.each do |user|
             UserPushNotifyJob.new.async.perform(user.id, :startup_approval, push_message)
           end
+        when :rejection
+          StartupMailer.startup_rejected(startup).deliver
+          push_message = "We're sorry, but your request for incubation at Startup Village has been rejected."
+
+          startup.founders.each do |user|
+            UserPushNotifyJob.new.async.perform(user.id, :startup_rejection, push_message)
+          end
         when :incorporation
           StartupMailer.incorporation_approved(startup).deliver
         when :bank
@@ -137,18 +144,19 @@ ActiveAdmin.register Startup do
       row :help_from_sv
 
       row :startup_status do |startup|
-        if startup.approved?
-          'Approved'
-        elsif startup.pending?
-          link_to('Approve Startup',
+        if startup.pending?
+          "#{link_to('Approve Startup',
             custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_APPROVED }, email_to_send: :approval),
-            { method: :put, data: { confirm: 'Are you sure?' } })
+            { method: :put, data: { confirm: 'Are you sure?' } })} / #{
+          link_to('Reject Startup',
+            custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_REJECTED }, email_to_send: :rejection),
+            { method: :put, data: { confirm: 'Are you sure?' } })}".html_safe
         elsif startup.unready?
           link_to('Waiting for Completion. Send reminder e-mail with links to mobile applications.',
             send_form_email_admin_startup_path(startup_id: startup.id),
             { method: :post })
         else
-          'Rejected'
+          startup.approval_status.capitalize
         end
       end
 

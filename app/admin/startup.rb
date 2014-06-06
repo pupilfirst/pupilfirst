@@ -44,11 +44,10 @@ ActiveAdmin.register Startup do
     end
     column :facebook_link
     column :twitter_link
-    column :pitch do |startup|
-      startup.pitch.truncate(50) rescue nil
-    end
+    # column :pitch do |startup|
+    #   startup.pitch.truncate(50) rescue nil
+    # end
     column :website
-
   end
 
   member_action :custom_update, method: :put do
@@ -142,6 +141,8 @@ ActiveAdmin.register Startup do
       row :pre_funds
       row :startup_before
       row :help_from_sv
+      row :product_name
+      row :product_description
 
       row :startup_status do |startup|
         if startup.pending?
@@ -199,5 +200,5 @@ ActiveAdmin.register Startup do
   end
 
   form :partial => "admin/startups/form"
-  permit_params :name, :pitch, :website, :about, :email, :phone, :logo, :facebook_link, :twitter_link, { category_ids: [] }, { founder_ids: [] }, { founders_attributes: [:id, :fullname, :email, :username, :avatar, :remote_avatar_url, :title, :linkedin_url, :twitter_url, :skip_password] }, :created_at, :updated_at, :approval_status, :incorporation_status, :bank_status, :sep_status, :dsc, :authorized_capital, :share_holding_pattern, :moa, :police_station, :approval_status, :incorporation_status, :bank_status, :sep_status, :company_names, :address, :pre_funds, :startup_before, help_from_sv: []
+  permit_params :name, :pitch, :website, :about, :email, :phone, :logo, :facebook_link, :twitter_link, { category_ids: [] }, { founder_ids: [] }, { founders_attributes: [:id, :fullname, :email, :username, :avatar, :remote_avatar_url, :title, :linkedin_url, :twitter_url, :skip_password] }, :created_at, :updated_at, :approval_status, :incorporation_status, :bank_status, :sep_status, :dsc, :authorized_capital, :share_holding_pattern, :moa, :police_station, :approval_status, :incorporation_status, :bank_status, :sep_status, :company_names, :address, :pre_funds, :startup_before, :product_name, :product_description, help_from_sv: []
 end

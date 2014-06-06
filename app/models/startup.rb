@@ -39,7 +39,7 @@ class Startup < ActiveRecord::Base
   validates_associated :founders
   # validates_length_of :help_from_sv, minimum: 1, too_short: 'must select atleast one', if: ->(startup){@full_validation }
 
-  # We're concerned with registration type only when company name is also given - which implies that company has already been registered.
+  # Registration type should be one of Pvt. Ltd., or a Partnership.
   validates :registration_type,
     inclusion: { in: [REGISTRATION_TYPE_PRIVATE_LIMITED, REGISTRATION_TYPE_PARTNERSHIP] },
     allow_nil: true

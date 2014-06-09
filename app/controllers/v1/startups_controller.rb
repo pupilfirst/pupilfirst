@@ -136,11 +136,9 @@ class V1::StartupsController < V1::BaseController
 
   # GET /api/startups/:id/founders
   def retrieve_founder
-    user = User.find_by(email: params[:email])
+    @users = User.where(email: params[:email].split(','))
 
-    raise Exceptions::FounderMissing, 'Could not find a founder with supplied e-mail ID.' if user.nil?
-
-    render json: { status: user.cofounder_status(current_user.startup) }
+    raise Exceptions::FounderMissing, 'Could not find a founder with supplied e-mail ID.' if @users.empty?
   end
 
   # POST /api/startups/:id/incubate

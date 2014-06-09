@@ -292,7 +292,7 @@ describe "Startup Requests" do
         create :user_with_out_password, email: 'james.p.sullivan@mobme.in', pending_startup_id: user.startup.id
         get "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
         expect(response.code).to eq '200'
-        expect(parse_json(response.body, 'status')).to eq User::COFOUNDER_PENDING
+        expect(parse_json(response.body, '0/status')).to eq User::COFOUNDER_PENDING
       end
     end
 
@@ -301,7 +301,7 @@ describe "Startup Requests" do
         create :user_with_out_password, email: 'james.p.sullivan@mobme.in', startup: user.startup
         get "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
         expect(response.code).to eq '200'
-        expect(parse_json(response.body, 'status')).to eq User::COFOUNDER_ACCEPTED
+        expect(parse_json(response.body, '0/status')).to eq User::COFOUNDER_ACCEPTED
       end
     end
 
@@ -310,7 +310,34 @@ describe "Startup Requests" do
         create :user_with_out_password, email: 'james.p.sullivan@mobme.in', startup: startup1
         get "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
         expect(response.code).to eq '200'
-        expect(parse_json(response.body, 'status')).to eq User::COFOUNDER_REJECTED
+        expect(parse_json(response.body, '0/status')).to eq User::COFOUNDER_REJECTED
+      end
+    end
+
+    context 'when no email is supplied' do
+      it 'returns status of all users' do
+        create :user_with_out_password, email: 'james.p.sullivan@mobme.in', pending_startup_id: user.startup.id
+        create :user_with_out_password, email: 'boo@mobme.in', startup: user.startup
+        create :user_with_out_password, email: 'mike.wazowski@mobme.in', startup: startup1
+
+        get "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in,boo@mobme.in,mike.wazowski@mobme.in' }, version_header(user)
+        expect(response.code).to eq '200'
+        expect(parse_json(response.body)).to eq(
+          [
+            {
+              'email' => 'james.p.sullivan@mobme.in',
+              'status' => 'pending'
+            },
+            {
+              'email' => 'boo@mobme.in',
+              'status' => 'accepted'
+            },
+            {
+              'email' => 'mike.wazowski@mobme.in',
+              'status' => 'rejected'
+            }
+          ]
+        )
       end
     end
   end

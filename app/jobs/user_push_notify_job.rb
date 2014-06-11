@@ -33,7 +33,7 @@ class UserPushNotifyJob
         payload = {
           alert: message,
           extra: {
-            type: type.to_s,
+            type: type.to_s
           }.merge(extras)
         }
 

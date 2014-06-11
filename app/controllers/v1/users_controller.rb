@@ -104,7 +104,7 @@ class V1::UsersController < V1::BaseController
     # Send out notification to all other founders. Unspec-d.
     founder_ids = Startup.find(current_user.startup_id).founders.map(&:id)
     message = "#{current_user.fullname} has accepted your request to become one of the co-founders in your startup!"
-    UserPushNotifyJob.new.async.perform_batch(founder_ids, :accept_cofounder_invitation, message)
+    UserPushNotifyJob.new.async.perform_batch(founder_ids, :accept_cofounder_invitation, message, email: current_user.email)
 
     render nothing: true
   end
@@ -121,7 +121,7 @@ class V1::UsersController < V1::BaseController
     # Send out notification to all other founders. Unspec-d.
     founder_ids = Startup.find(temp_startup_id).founders.map(&:id)
     message = "We’re sorry, but #{current_user.fullname} has rejected your request to become one of the co-founders in your startup."
-    UserPushNotifyJob.new.async.perform_batch(founder_ids, :reject_cofounder_invitation, message)
+    UserPushNotifyJob.new.async.perform_batch(founder_ids, :reject_cofounder_invitation, message, email: current_user.email)
 
     render nothing: true
   end

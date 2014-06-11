@@ -1,0 +1,4 @@
+json.applications DbConfig.stats_application
+json.startups_supported DbConfig.stats_startup_supported
+json.student_startups DbConfig.student_startups
+json.regular_incubatees DbConfig.regular_incubatees

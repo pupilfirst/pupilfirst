@@ -350,6 +350,10 @@ describe V1::UsersController do
   describe 'PUT /api/users/self/cofounder_invitation' do
     let(:user) { create :user_with_password }
 
+    before do
+      UserPushNotifyJob.stub_chain(:new, :async, perform_batch: true) # TODO: Change this to allow statement in Rspec v3.
+    end
+
     context 'when user does not have pending invitation' do
       it 'responds with error code UserHasNoPendingStartupInvite' do
         put '/api/users/self/cofounder_invitation', { }, version_header(user)
@@ -375,6 +379,10 @@ describe V1::UsersController do
 
   describe 'DELETE /api/users/self/cofounder_invitation' do
     let(:user) { create :user_with_password }
+
+    before do
+      UserPushNotifyJob.stub_chain(:new, :async, perform_batch: true) # TODO: Change this to allow statement in Rspec v3.
+    end
 
     context 'when user does not have pending invitation' do
       it 'responds with error code UserHasNoPendingStartupInvite' do

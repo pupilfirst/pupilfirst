@@ -1,4 +1,4 @@
-Svapp::Application.configure do
+Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # The test environment is used exclusively to run your application's
@@ -14,7 +14,7 @@ Svapp::Application.configure do
 
   # Configure static asset server for tests with Cache-Control for performance.
   config.serve_static_assets  = true
-  config.static_cache_control = "public, max-age=3600"
+  config.static_cache_control = 'public, max-age=3600'
 
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
@@ -30,9 +30,15 @@ Svapp::Application.configure do
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
+
+  # Print deprecation notices to the stderr (Hari: changed to nil).
+  config.active_support.deprecation = nil
+
+  # Raises error for missing translations
+  # config.action_view.raise_on_missing_translations = true
+
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
   config.default_url_options = { :host => 'localhost:3000' }
-  # Print deprecation notices to the stderr.
-  config.active_support.deprecation = nil
 end
-Svapp::Application.default_url_options = Svapp::Application.config.action_mailer.default_url_options
+
+Rails.application.default_url_options = Svapp::Application.config.action_mailer.default_url_options

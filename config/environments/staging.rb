@@ -1,4 +1,4 @@
-Svapp::Application.configure do
+Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
@@ -79,9 +79,12 @@ Svapp::Application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
-  config.action_mailer.default_url_options = { :host => 'http://staging.svlabs.in' }
+  # Do not dump schema after migrations.
+  config.active_record.dump_schema_after_migration = false
 
+  config.action_mailer.default_url_options = { :host => 'http://staging.svlabs.in' }
 end
+
 ActionMailer::Base.smtp_settings = {
   :address        => 'smtp.sendgrid.net',
   :port           => '587',

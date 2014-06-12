@@ -1,6 +1,6 @@
 require 'rubygems'
 
-ENV["RAILS_ENV"] ||= 'test'
+ENV['RAILS_ENV'] ||= 'test'
 
 require File.expand_path("../../config/environment", __FILE__)
 load "#{Rails.root.to_s}/db/schema.rb" if ENV['IN_MEM']

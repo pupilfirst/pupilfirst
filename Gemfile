@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.3'
+gem 'rails', '4.1.1'
 
 gem 'active_admin_editor'
 gem 'activeadmin', github: 'gregbell/active_admin' # master for rails 4
@@ -13,7 +13,7 @@ gem 'cocoon'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'devise_invitable'
 gem 'fog' # required by carrierwave to upload to s3
-gem 'jbuilder'
+gem 'jbuilder', '~> 2.0'
 gem 'jquery-rails'
 gem 'just-datetime-picker'
 gem 'mini_magick'
@@ -22,7 +22,7 @@ gem 'nokogiri'
 gem 'omniauth', '~> 1.2.1'
 gem 'pg'
 gem 'rubypress' # wordpress
-gem 'sass-rails', '~> 4.0.0'
+gem 'sass-rails', '~> 4.0.3'
 gem 'sendgrid_smtpapi'
 gem 'sentry-raven'
 gem 'simple_form'
@@ -44,6 +44,9 @@ group :development do
   gem 'guard-livereload'
   gem 'childprocess'
   gem 'terminal-notifier-guard'
+
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'spring'
 end
 
 group :test do
@@ -71,21 +74,16 @@ group :production do
   gem 'unicorn'
   # gem 'pdftk-heroku', git: "https://github.com/gouthamvel/pdftk-heroku.git"
 end
-group :doc do
-  # bundle exec rake doc:rails generates the API under doc/api.
-  gem 'sdoc', require: false
-end
+
+gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.1.2'
+# gem 'bcrypt', '~> 3.1.7'
 
 # Use unicorn as the app server
 # gem 'unicorn'
 
 # Use Capistrano for deployment
-# gem 'capistrano', group: :development
-
-# Use debugger
-# gem 'debugger', group: [:development, :test]
+# gem 'capistrano-rails', group: :development
 
 ruby '2.1.2'

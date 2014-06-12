@@ -3,8 +3,8 @@ html
   head
     title Svapp
     meta name="keywords" content="startup village, kerala, svapp, svlabs"
-    = stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true
-    = javascript_include_tag "application", "data-turbolinks-track" => true
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
     = yield :head
 
@@ -29,7 +29,7 @@ html
         | &copy; SV Labs. All rights reserved
 
         .ftr-rgt
-           = link_to image_tag("facebook.png"), "https://www.facebook.com/startupvillage"
-           = link_to image_tag("twitter.png"), "https://twitter.com/StartatSV"
-           = link_to image_tag("linkedin.png"), "http://www.linkedin.com/company/startup-village"
+           = link_to image_tag('facebook.png'), 'https://www.facebook.com/startupvillage'
+           = link_to image_tag('twitter.png'), 'https://twitter.com/StartatSV'
+           = link_to image_tag('linkedin.png'), 'http://www.linkedin.com/company/startup-village'
       .clear

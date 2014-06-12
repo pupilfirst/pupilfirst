@@ -16,6 +16,7 @@
 /tmp
 
 config/*.yml
+!config/secrets.yml
 .env
 .rspec
 tags

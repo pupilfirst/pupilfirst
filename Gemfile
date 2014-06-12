@@ -12,14 +12,14 @@ gem 'carrierwave_backgrounder', git: 'https://github.com/glhewett/carrierwave_ba
 gem 'cocoon'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'devise_invitable'
-gem 'fog', '~> 1.3.1' # required by carrierwave to upload to s3
-gem 'jbuilder', '~> 1.2'
+gem 'fog' # required by carrierwave to upload to s3
+gem 'jbuilder'
 gem 'jquery-rails'
 gem 'just-datetime-picker'
 gem 'mini_magick'
 gem 'newrelic_rpm'
 gem 'nokogiri'
-gem 'omniauth'
+gem 'omniauth', '~> 1.2.1'
 gem 'pg'
 gem 'rubypress' # wordpress
 gem 'sass-rails', '~> 4.0.0'
@@ -29,7 +29,7 @@ gem 'simple_form'
 gem 'slim'
 gem 'sucker_punch'
 gem 'turbolinks'
-gem 'uglifier', '>= 1.3.0'
+gem 'uglifier'
 gem 'urbanairship'
 gem 'prawn'
 gem 'versionist'
@@ -50,7 +50,7 @@ group :test do
   gem 'sqlite3'
   gem 'email_spec'
   gem 'factory_girl', require: false
-  gem "factory_girl_rails", "~> 4.0"
+  gem 'factory_girl_rails', '~> 4.0'
   gem 'faker'
   gem 'json_spec', github: 'collectiveidea/json_spec'
   gem 'zeus'
@@ -62,8 +62,7 @@ group :development, :test do
   gem 'rb-fsevent', :require => false
   gem 'rb-fchange', :require => false
   gem 'dotenv'
-  gem 'pry'
-  gem 'pry-debugger'
+  gem 'pry-rails'
   gem 'webmock', require: false
 end
 
@@ -89,4 +88,4 @@ end
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-ruby "2.0.0"
+ruby '2.1.2'

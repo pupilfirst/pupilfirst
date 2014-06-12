@@ -374,6 +374,13 @@ describe V1::UsersController do
         expect(user.startup_id).to eq startup.id
         expect(user.pending_startup_id).to eq nil
       end
+
+      it 'adds the user to the list of founders on the startup' do
+        put '/api/users/self/cofounder_invitation', { }, version_header(user)
+
+        startup.reload
+        expect(startup.founders).to include(user)
+      end
     end
   end
 

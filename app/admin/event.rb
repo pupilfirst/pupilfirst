@@ -46,7 +46,7 @@ ActiveAdmin.register Event do
     end
     column :author
     column :location
-    default_actions
+    actions
   end
 
     show do |event|

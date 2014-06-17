@@ -28,7 +28,7 @@ ActiveAdmin.register StudentEntrepreneurPolicy do
     end
 
     column :company_name do |sep|
-      sep.user.try(:startup.name)
+      sep.user.try(:startup).try(:name)
     end
 
     column :designation do |sep|
@@ -74,7 +74,7 @@ ActiveAdmin.register StudentEntrepreneurPolicy do
       end
 
       row :company_name do |sep|
-        sep.user.try(:startup.name)
+        sep.user.try(:startup).try(:name)
       end
 
       row :designation do |sep|

@@ -12,8 +12,4 @@ class WelcomeController < ApplicationController
   def team
 
   end
-
-  def jobs
-
-  end
 end

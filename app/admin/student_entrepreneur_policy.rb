@@ -17,30 +17,30 @@ ActiveAdmin.register StudentEntrepreneurPolicy do
     end
 
     column :fullname do |sep|
-      sep.user.fullname
+      sep.user.try(:fullname)
     end
     column :college do |sep|
-      sep.user.college
+      sep.user.try(:college)
     end
 
     column :course do |sep|
-      sep.user.course
+      sep.user.try(:course)
     end
 
     column :company_name do |sep|
-      sep.user.startup.name
+      sep.user.try(:startup.name)
     end
 
     column :designation do |sep|
-      sep.user.title
+      sep.user.try(:title)
     end
 
     column :semester do |sep|
-      sep.user.semester
+      sep.user.try(:semester)
     end
 
     column :university do |sep|
-      sep.user.university
+      sep.user.try(:university)
     end
     column :status
     column :created_at
@@ -54,39 +54,39 @@ ActiveAdmin.register StudentEntrepreneurPolicy do
       end
 
       row :fullname do |sep|
-        sep.user.fullname
+        sep.user.try(:fullname)
       end
 
       row :date_of_birth do |sep|
-        sep.user.born_on
+        sep.user.try(:born_on)
       end
 
       row :gender do |sep|
-        sep.user.gender
+        sep.user.try(:gender)
       end
 
       row :college do |sep|
-        sep.user.college
+        sep.user.try(:college)
       end
 
       row :course do |sep|
-        sep.user.course
+        sep.user.try(:course)
       end
 
       row :company_name do |sep|
-        sep.user.startup.name
+        sep.user.try(:startup.name)
       end
 
       row :designation do |sep|
-        sep.user.title
+        sep.user.try(:title)
       end
 
       row :semester do |sep|
-        sep.user.semester
+        sep.user.try(:semester)
       end
 
       row :university do |sep|
-        sep.user.university
+        sep.user.try(:university)
       end
 
       row :university_registration_number do |sep|

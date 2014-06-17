@@ -1,5 +1,5 @@
 ActiveAdmin.register Category do
-
+  remove_filter :categories_startups
 
   # See permitted parameters documentation:
   # https://github.com/gregbell/active_admin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
@@ -17,9 +17,9 @@ ActiveAdmin.register Category do
     newrelic_ignore
   end
   form do |f|
-    f.inputs "Details" do
+    f.inputs 'Details' do
       f.input :name
-      f.input :category_type, collection: Category::TYPES, prompt: "Choose a type"
+      f.input :category_type, collection: Category::TYPES, prompt: 'Choose a type'
     end
     f.actions
   end

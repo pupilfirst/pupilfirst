@@ -36,6 +36,8 @@ Svapp::Application.routes.draw do
         end
       end
 
+      resources :categories, only: [:index]
+
       get '/mentors' => 'info#mentors'
       get '/advisory-council' => 'info#advisory_council'
       get '/startup_stats' => 'info#startup_stats'

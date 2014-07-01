@@ -2,7 +2,6 @@ class UserPushNotifyJob
   include SuckerPunch::Job
 
   def perform(user_id, type, message)
-    type = :startup
     ActiveRecord::Base.connection_pool.with_connection do
       user = User.find user_id
       payload = {

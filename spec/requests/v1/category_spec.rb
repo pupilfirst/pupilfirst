@@ -22,5 +22,13 @@ describe 'Category Requests' do
         expect(parse_json(response.body).count).to eq 3
       end
     end
+
+    it 'contains id, name and category_type' do
+      get '/api/categories', {}, version_header
+      category = parse_json(response.body, '0')
+      expect(category['id']).to_not be_nil
+      expect(category['name']).to_not be_nil
+      expect(category['category_type']).to_not be_nil
+    end
   end
 end

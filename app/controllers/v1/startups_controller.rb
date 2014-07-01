@@ -163,7 +163,7 @@ class V1::StartupsController < V1::BaseController
   def startup_params
     if params[:startup]
       params[:startup].permit(:name, :phone, :pitch, :website, :dsc, :transaction_details, :registration_type,
-        :logo, :about, :phone, :facebook_link, :twitter_link, :product_name, :product_description,
+        :logo, :about, :phone, :facebook_link, :twitter_link, :product_name, :product_description, :categories,
         company_names: [:justification, :name],
         police_station: [:city, :line1, :line2, :name, :pin],
         registered_address_attributes: [:flat, :building, :street, :area, :town, :state, :pin]

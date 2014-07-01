@@ -197,7 +197,7 @@ describe "Startup Requests" do
 
       context 'when user does not belong to any startup' do
         before do
-         create :user_with_out_password, email: 'james.p.sullivan@mobme.in'
+          create :user_with_out_password, email: 'james.p.sullivan@mobme.in'
         end
 
         it 'sends a notification to user' do
@@ -373,6 +373,22 @@ describe "Startup Requests" do
         expect(response.code).to eq '200'
         startup.reload
         expect(startup.approval_status).to eq Startup::APPROVAL_STATUS_PENDING
+      end
+    end
+  end
+
+  describe 'PUT /api/startups/:id' do
+    context 'when supplied comma-separated category ID-s' do
+      let(:startup) { create :startup }
+      let(:user) { create :user_with_out_password, startup: startup }
+      let(:category_1) { create :startup_category }
+      let(:category_2) { create :startup_category }
+
+      it 'sets categories' do
+        put "/api/startups/#{startup.id}", { startup: { categories: "#{category_1.id},#{category_2.id}" } }, version_header(user)
+        expect(response.code).to eq '200'
+        startup.reload
+        expect(startup.categories).to eq [category_1, category_2]
       end
     end
   end

@@ -184,4 +184,20 @@ class Startup < ActiveRecord::Base
     num_dins = directors.reject{|d| d.din.present? }.count
     18225 + num_pans*105 + num_dins*400 + 105
   end
+
+  # Custom setter for startup categories.
+  #
+  # @param [String, Array] category_entries Array of Categories or comma-separated Category ID-s.
+  def categories=(category_entries)
+    unless category_entries.is_a? String
+      super(category_entries)
+      return
+    end
+
+    category_table_entries = category_entries.split(',').map do |category_id|
+      Category.find(category_id)
+    end
+
+    super category_table_entries
+  end
 end

@@ -2,7 +2,7 @@ class V1::StartupsController < V1::BaseController
 
   skip_before_filter :require_token, only: [:index, :show, :load_suggestions]
 
-  before_filter :require_user_startup_match, only: [:add_founder, :delete_founder, :retrieve_founder, :incubate]
+  before_filter :require_user_startup_match, only: [:add_founder, :delete_founder, :retrieve_founder, :incubate, :update]
 
   # Returns approved startups.
   def index

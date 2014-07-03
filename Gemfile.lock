@@ -83,6 +83,7 @@ GEM
       sass (~> 3.2)
       thor
     builder (3.2.2)
+    cancancan (1.8.4)
     carrierwave (0.10.0)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
@@ -385,6 +386,7 @@ DEPENDENCIES
   activeadmin!
   acts-as-taggable-on
   attribute_normalizer (~> 1.2.0.b)
+  cancancan (~> 1.8)
   carrierwave
   carrierwave_backgrounder!
   childprocess

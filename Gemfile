@@ -34,6 +34,7 @@ gem 'urbanairship'
 gem 'prawn'
 gem 'versionist'
 gem 'rest-client'
+gem 'cancancan', '~> 1.8'
 
 group :development do
   gem 'seed-fu', github: 'mbleigh/seed-fu' # check and remove

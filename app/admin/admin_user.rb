@@ -3,7 +3,7 @@ ActiveAdmin.register AdminUser do
     newrelic_ignore
   end
 
-  permit_params :email, :password, :password_confirmation, :fullname, :username, :avatar
+  permit_params :email, :password, :password_confirmation, :fullname, :username, :avatar, :admin_type
 
   index do
     column :email
@@ -12,6 +12,7 @@ ActiveAdmin.register AdminUser do
     column :current_sign_in_at
     column :last_sign_in_at
     column :sign_in_count
+    column :admin_type
     actions
   end
 
@@ -25,6 +26,7 @@ ActiveAdmin.register AdminUser do
       f.input :fullname
       f.input :username
       f.input :avatar, as: :file
+      f.input :admin_type, as: :select, collection: AdminUser.admin_user_types
     end
     f.actions
   end

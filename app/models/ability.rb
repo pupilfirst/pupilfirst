@@ -2,12 +2,13 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    case (user.admin_type)
+    case user.admin_type
       when AdminUser::TYPE_SUPERADMIN
         can :manage, :all
+      when AdminUser::TYPE_INCUBATION_TEAM
+        can :manage, [Startup, DbConfig, News, Event]
       when AdminUser::TYPE_EDITOR
-        can :manage, DbConfig
-        can :manage, News
+        can :manage, [DbConfig, News, Event]
     end
 
     can :read, ActiveAdmin::Page, :name => 'Dashboard'

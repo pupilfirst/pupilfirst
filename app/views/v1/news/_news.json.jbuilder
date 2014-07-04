@@ -8,5 +8,5 @@ end
 json.created_at fmt_time(news.published_at)
 path = "#{__FILE__.match(/v\d/)[0]}/users/author"
 json.author do
-  json.partial! path, user: news.author
+  news.author.present? ? json.partial!(path, user: news.author) : nil
 end

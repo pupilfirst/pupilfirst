@@ -106,7 +106,7 @@ ActiveAdmin.register Startup do
         link_to(image_tag(startup.logo_url(:thumb)), startup.logo_url)
       end
       row :pitch
-      row :tagline
+      row :cool_fact
       row :address
       row :website
       row :about
@@ -202,6 +202,6 @@ ActiveAdmin.register Startup do
   end
 
   form :partial => "admin/startups/form"
-  permit_params :name, :pitch, :website, :about, :email, :phone, :logo, :facebook_link, :twitter_link, :tagline,
+  permit_params :name, :pitch, :website, :about, :email, :phone, :logo, :facebook_link, :twitter_link, :cool_fact,
     { category_ids: [] }, { founder_ids: [] }, { founders_attributes: [:id, :fullname, :email, :username, :avatar, :remote_avatar_url, :title, :linkedin_url, :twitter_url, :skip_password] }, :created_at, :updated_at, :approval_status, :incorporation_status, :bank_status, :sep_status, :dsc, :authorized_capital, :share_holding_pattern, :moa, :police_station, :approval_status, :incorporation_status, :bank_status, :sep_status, :company_names, :address, :pre_funds, :startup_before, :product_name, :product_description, help_from_sv: []
 end

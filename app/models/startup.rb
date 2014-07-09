@@ -10,6 +10,8 @@ class Startup < ActiveRecord::Base
   APPROVAL_STATUS_APPROVED = 'approved'
   APPROVAL_STATUS_REJECTED = 'rejected'
 
+  has_paper_trail
+
   scope :approved, -> { where(approval_status: APPROVAL_STATUS_APPROVED) }
 
   has_many :founders, -> { where("startup_link_verifier_id IS NOT NULL AND is_founder = ?", true)}, class_name: "User", foreign_key: "startup_id" do

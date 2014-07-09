@@ -9,6 +9,18 @@ class ApplicationController < ActionController::Base
     raise ActionController::RoutingError.new('Not Found')
   end
 
+  # Sets whodunnit field for paper trail version entries.
+  # @see https://github.com/gregbell/active_admin/wiki/Auditing-via-paper_trail-(change-history) Auditing using Paper Trail
+  def user_for_paper_trail
+    if current_user
+      "#{current_user.fullname} (User##{current_user.id})"
+    elsif current_admin_user
+      "#{current_admin_user.email} (AdminUser##{current_admin_user.id})"
+    else
+      'Unknown User'
+    end
+  end
+
   protected
 
   def configure_permitted_parameters

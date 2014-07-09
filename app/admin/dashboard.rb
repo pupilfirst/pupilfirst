@@ -6,11 +6,20 @@ ActiveAdmin.register_page "Dashboard" do
   menu :priority => 1, :label => proc{ I18n.t("active_admin.dashboard") }
 
   content :title => proc{ I18n.t("active_admin.dashboard") } do
-    div :class => "blank_slate_container", :id => "dashboard_default_message" do
-      span :class => "blank_slate" do
-        span I18n.t("active_admin.dashboard_welcome.welcome")
-        small I18n.t("active_admin.dashboard_welcome.call_to_action")
-      end
+    h1 'Recent Changes'
+    para "Total versions stored: #{PaperTrail::Version.count}"
+
+    div(id: 'papertrail_changeset')  do
+      h2 'Changeset as JSON'
+      div(id: 'papertrail_changeset_pre')
+    end
+
+    table_for PaperTrail::Version.order('id desc').limit(20) do
+      column('Item') { |v| v.item.nil? ? "Deleted #{v.item_type} ##{v.item_id}" : link_to("#{v.item_type} ##{v.item_id}", [:admin, v.item]) }
+      column('Event') { |v| v.event }
+      column('Modified at') { |v| v.created_at.to_s :long }
+      column('Whodunnit') { |v| v.whodunnit }
+      column('Changeset') { |v| button 'Show Changeset', changeset: v.changeset.to_json, class: 'papertrail_changeset' }
     end
 
     # Here is an example of a simple dashboard with columns and panels.

@@ -1,3 +1,4 @@
+# Stores records of contacts between SV and the userbase.
 class ContactShare < ActiveRecord::Base
   SHARE_DIRECTION_SV_TO_USER = 'sv_to_user'
   SHARE_DIRECTION_USER_TO_SV = 'user_to_sv'

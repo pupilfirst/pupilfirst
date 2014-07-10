@@ -1,3 +1,4 @@
+# Stores contact details of important people, to be selectively shared with the userbase.
 class Contact < ActiveRecord::Base
   has_paper_trail
 

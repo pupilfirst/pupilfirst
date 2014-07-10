@@ -102,8 +102,11 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.7.0)
+    countries (0.9.3)
+      currencies (~> 0.4.2)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
+    currencies (0.4.2)
     devise (3.2.4)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -234,6 +237,11 @@ GEM
       activesupport (>= 3.0, < 5.0)
     pdf-core (0.2.5)
     pg (0.17.1)
+    phony (2.2.13)
+    phony_rails (0.6.1)
+      activesupport (>= 3.0)
+      countries (>= 0.8.2)
+      phony (~> 2.1)
     polyamorous (1.0.0)
       activerecord (>= 3.0)
     polyglot (0.3.5)
@@ -416,6 +424,7 @@ DEPENDENCIES
   omniauth (~> 1.2.1)
   paper_trail
   pg
+  phony_rails
   prawn
   pry-rails
   rails (= 4.1.1)

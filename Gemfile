@@ -36,6 +36,7 @@ gem 'versionist'
 gem 'rest-client'
 gem 'cancancan', '~> 1.8' # Used to manage administrator types and roles in the activeadmin interface.
 gem 'paper_trail' # Logs changes in critical tables, and displays changelog in activeadmin dashboard.
+gem 'phony_rails'
 
 group :development do
   gem 'seed-fu', github: 'mbleigh/seed-fu' # check and remove

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140708112918) do
+ActiveRecord::Schema.define(version: 20140710101307) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,6 +82,30 @@ ActiveRecord::Schema.define(version: 20140708112918) do
   end
 
   add_index "categories", ["category_type"], name: "index_categories_on_category_type", using: :btree
+
+  create_table "contact_shares", force: true do |t|
+    t.integer  "contact_id"
+    t.integer  "user_id"
+    t.string   "share_direction"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "contact_shares", ["contact_id"], name: "index_contact_shares_on_contact_id", using: :btree
+  add_index "contact_shares", ["user_id"], name: "index_contact_shares_on_user_id", using: :btree
+
+  create_table "contacts", force: true do |t|
+    t.string   "name"
+    t.string   "mobile"
+    t.string   "email"
+    t.string   "designation"
+    t.string   "company"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "contacts", ["email"], name: "index_contacts_on_email", using: :btree
+  add_index "contacts", ["mobile"], name: "index_contacts_on_mobile", using: :btree
 
   create_table "db_configs", force: true do |t|
     t.string   "key"

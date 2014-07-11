@@ -1,5 +1,6 @@
 ActiveAdmin.register Startup do
   remove_filter :startups_categories
+  remove_filter :versions
   menu :parent => "Startup"
 
   # See permitted parameters documentation:

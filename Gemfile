@@ -4,7 +4,10 @@ source 'https://rubygems.org'
 gem 'rails', '4.1.1'
 
 gem 'active_admin_editor'
+
 gem 'activeadmin', github: 'gregbell/active_admin' # master for rails 4
+gem 'jquery-ui-rails', '~> 4.2.1' # Forcing downgrade of jquery-ui-rails from 5.0.0 because of a bug that causes issue with activeadmin master.
+
 gem 'acts-as-taggable-on'
 gem 'attribute_normalizer', '~> 1.2.0.b'
 gem 'carrierwave'

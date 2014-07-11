@@ -2,6 +2,9 @@
 class Contact < ActiveRecord::Base
   has_paper_trail
 
+  has_and_belongs_to_many :categories
+  accepts_nested_attributes_for :categories
+
   # Validate e-mail address
   validates_uniqueness_of :email, allow_nil: true, allow_blank: true
 

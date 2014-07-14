@@ -1,28 +1,32 @@
 ActiveAdmin.register User do
-
-
-  # See permitted parameters documentation:
-  # https://github.com/gregbell/active_admin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
-  #
-  # permit_params :list, :of, :attributes, :on, :model
-  #
-  # or
-  #
-  # permit_params do
-  #  permitted = [:permitted, :attributes]
-  #  permitted << :other if resource.something?
-  #  permitted
-  # end
   controller do
     newrelic_ignore
   end
 
-  menu :label => "Startup Founders"
+  menu label: 'SV Users'
 
-  permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url, :title, :skip_password, :born_on
+  # Customize the index. Let's show only a small subset of the tons of fields.
+  index do
+    selectable_column
+    actions
+    column :email
+    column :fullname
+    column :is_founder
+    column :is_director
+    column :is_student
+    column :phone_verified
+  end
+
+  # Customize the filter options to reduce the size.
+  filter :email
+  filter :fullname
+  filter :is_founder
+  filter :is_student
+  filter :is_director
+  filter :phone_verified
 
   form do |f|
-    f.inputs "User details" do
+    f.inputs 'User details' do
       f.input :username
       f.input :email
       f.input :fullname
@@ -37,4 +41,6 @@ ActiveAdmin.register User do
     end
     f.actions
   end
+
+  permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url, :title, :skip_password, :born_on
 end

@@ -11,8 +11,9 @@ ActiveAdmin.register User do
     actions
     column :email
     column :fullname
+    column :phone
     column :is_founder
-    column :is_director
+    column :is_contact
     column :is_student
     column :phone_verified
   end
@@ -20,9 +21,10 @@ ActiveAdmin.register User do
   # Customize the filter options to reduce the size.
   filter :email
   filter :fullname
+  filter :phone
   filter :is_founder
   filter :is_student
-  filter :is_director
+  filter :is_contact
   filter :phone_verified
 
   form do |f|

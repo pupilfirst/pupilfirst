@@ -113,7 +113,7 @@ class V1::StartupsController < V1::BaseController
     end
 
     # Save the record.
-    user.save_cofounder
+    user.save_unregistered_user!
 
     # Send email with co-founder invite message.
     UserMailer.cofounder_request(user.email, current_user).deliver

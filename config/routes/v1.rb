@@ -9,6 +9,8 @@ Svapp::Application.routes.draw do
           put 'phone_number', to: :verify_phone_number
           put 'cofounder_invitation', to: :accept_cofounder_invitation
           delete 'cofounder_invitation', to: :reject_cofounder_invitation
+          get 'contacts', to: :connected_contacts
+          post 'contacts', to: :connect_contact
         end
 
         collection do

@@ -25,6 +25,10 @@ class User < ActiveRecord::Base
   scope :non_founders, -> { where("is_founder = ? or is_founder IS NULL", false) }
   accepts_nested_attributes_for :social_ids, :father, :address, :guardian
 
+  # Complicated connections linkage for user-to-user relationship. Destroys the connection when either user or contact are deleted.
+  has_many :connections, foreign_key: 'user_id', dependent: :destroy
+  has_many :occurrences_as_connection, class_name: 'Connection', foreign_key: 'contact_id', dependent: :destroy
+
   # TODO: Remove born_on, title, and salutation columns if unneccessary.
   # validates_presence_of :born_on
   # validates_presence_of :title, if: ->(user){ user.full_validation }
@@ -44,9 +48,28 @@ class User < ActiveRecord::Base
     @full_validation = false
   }
 
+  # Email is not required for an unregistered 'contact' user.
+  def email_required?
+    !(is_contact? && invitation_token.present?)
+  end
+
+  # Validate presence of e-mail for everyone except contacts with invitation token (unregistered contacts).
+  validates_uniqueness_of :email, unless: ->(user) { user.is_contact? && user.invitation_token.present? }
+
+  # Validate the mobile number
+  validates_uniqueness_of :phone, allow_nil: true, if: ->(user) { user.is_contact? }
+  validates_plausible_phone :phone
+
+  # Store mobile number in a standardized form.
+  phony_normalize :phone, default_country_code: 'IN'
+
+  # Store mobile number in a standardized form.
+  phony_normalize :phone, default_country_code: 'IN'
+
   mount_uploader :avatar, AvatarUploader
   process_in_background :avatar
   normalize_attribute :startup_id, :title
+
   normalize_attribute :skip_password do |value|
     value.is_a?(String) ? value.downcase == 'true' : value
   end
@@ -156,7 +179,25 @@ class User < ActiveRecord::Base
     cofounder
   end
 
-  def save_cofounder
+  # Checks for existing contact
+  #
+  # @return [User] Initialized contact user
+  def self.create_contact!(sv_user, contact_params, direction)
+    # contact = find_by(phone: PhonyRails.normalize_number(contact_params[:phone], country_code: 'IN'))
+    #
+    # raise Exceptions::ContactAlreadyExists unless contact.nil?
+
+    # Create the user
+    user = new(contact_params.merge(is_contact: true))
+    user.save_unregistered_user!
+
+    # Create the connection
+    Connection.create! user_id: sv_user.id, contact_id: user.id, direction: direction
+  end
+
+  # Saves a new user with random password and an invitation token. The random password skips Devise's block, and the
+  # invitation token allows the user to register even though the table entry already exists.
+  def save_unregistered_user!
     unless self.persisted?
       # Devise wants a random password, so let's set one for a new user.
       self.password = SecureRandom.hex
@@ -165,7 +206,7 @@ class User < ActiveRecord::Base
       self.invitation_token = SecureRandom.hex
     end
 
-    save
+    save!
   end
 
   # Returns status of cofounder addition to a supplied startup.

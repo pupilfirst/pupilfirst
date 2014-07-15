@@ -1,7 +1,8 @@
 class V1::UsersController < V1::BaseController
   respond_to :json
   skip_before_filter :require_token, only: [:create, :forgot_password]
-  before_filter :require_self, only: [:generate_phone_number_verification_code, :verify_phone_number, :accept_cofounder_invitation, :reject_cofounder_invitation]
+  before_filter :require_self, only: [:generate_phone_number_verification_code, :verify_phone_number,
+    :accept_cofounder_invitation, :reject_cofounder_invitation, :connected_contacts, :connect_contact]
 
   def show
     @extra_info = (params[:id] == 'self') ? true : false
@@ -131,7 +132,23 @@ class V1::UsersController < V1::BaseController
     render nothing: true
   end
 
+  # GET /api/users/self/contacts
+  def connected_contacts
+
+  end
+
+  # POST /api/users/self/contacts
+  def connect_contact
+    User.create_contact!(current_user, contact_params, Connection::DIRECTION_USER_TO_SV)
+
+    render nothing: true
+  end
+
   private
+
+  def contact_params
+    params.require(:user).permit(:fullname, :email, :phone, :company, :designation)
+  end
 
   def user_params
     params.require(:user).permit(:gender, :communication_address,

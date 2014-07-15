@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140711054258) do
+ActiveRecord::Schema.define(version: 20140715104320) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -86,6 +86,14 @@ ActiveRecord::Schema.define(version: 20140711054258) do
   create_table "categories_contacts", id: false, force: true do |t|
     t.integer "category_id"
     t.integer "contact_id"
+  end
+
+  create_table "connections", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "contact_id"
+    t.string   "direction"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "contact_shares", force: true do |t|
@@ -344,12 +352,14 @@ ActiveRecord::Schema.define(version: 20140711054258) do
     t.boolean  "phone_verified",                default: false
     t.string   "phone_verification_code"
     t.integer  "pending_startup_id"
+    t.string   "company"
+    t.string   "designation"
+    t.boolean  "is_contact"
   end
 
   add_index "users", ["address_id"], name: "index_users_on_address_id", using: :btree
   add_index "users", ["bank_id"], name: "index_users_on_bank_id", using: :btree
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["father_id"], name: "index_users_on_father_id", using: :btree
   add_index "users", ["guardian_id"], name: "index_users_on_guardian_id", using: :btree
   add_index "users", ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree

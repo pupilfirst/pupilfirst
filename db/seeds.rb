@@ -1,8 +1,3 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
-AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password')
+# Create an admin user for the /admin interface. This user is a 'superadmin', who can do everything possible from the
+# ActiveAdmin interface.
+AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password', admin_type: 'superadmin')

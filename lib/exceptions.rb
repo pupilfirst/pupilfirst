@@ -26,4 +26,5 @@ module Exceptions
   class UserHasNoPendingStartupInvite < ApiResourceMissingError; end
   class AlreadyCreatedUser < ApiRequestError; end
   class ContactAlreadyExists < ApiRequestError; end
+  class InvalidPhoneNumber < ApiRequestError; end
 end

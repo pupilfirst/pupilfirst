@@ -59,7 +59,12 @@ class V1::UsersController < V1::BaseController
     code = SecureRandom.random_number(1000000).to_s.ljust(6, '0')
 
     # Normalize incoming phone number.
-    phone_number = Phony.normalize params[:phone], country_code: 'IN'
+    unverified_phone_number = params[:phone].length <= 10 ? "91#{params[:phone]}" : params[:phone]
+    phone_number = if Phony.plausible?(unverified_phone_number, cc: '91')
+      PhonyRails.normalize_number params[:phone], country_code: 'IN'
+    else
+      raise Exceptions::InvalidPhoneNumber, 'Supplied phone number could not be parsed. Please check and try again.'
+    end
 
     # Store the phone number and verification code.
     current_user.phone = phone_number
@@ -77,7 +82,12 @@ class V1::UsersController < V1::BaseController
   # PUT /self/phone_number
   def verify_phone_number
     # Normalize incoming phone number.
-    phone_number = Phony.normalize params[:phone], country_code: 'IN'
+    unverified_phone_number = params[:phone].length <= 10 ? "91#{params[:phone]}" : params[:phone]
+    phone_number = if Phony.plausible?(unverified_phone_number, cc: '91')
+      PhonyRails.normalize_number params[:phone], country_code: 'IN'
+    else
+      raise Exceptions::InvalidPhoneNumber, 'Supplied phone number could not be parsed. Please check and try again.'
+    end
 
     if current_user.phone == phone_number && params[:code] == current_user.phone_verification_code
       # Set the phone number to verified.

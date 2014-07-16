@@ -289,8 +289,16 @@ describe V1::UsersController do
       APP_CONFIG[:sms_provider_url] = ENV['SMS_PROVIDER_URL']
     end
 
+    context 'when the phone number is invalid' do
+      it 'renders 422 InvalidPhoneNumber' do
+        post '/api/users/self/phone_number', { phone: '6547982' }, version_header(user)
+        expect(response.code).to eq '422'
+        expect(parse_json response.body, 'code').to eq 'InvalidPhoneNumber'
+      end
+    end
+
     it 'renders nothing' do
-      post '/api/users/self/phone_number', { phone: '132312' }, version_header(user)
+      post '/api/users/self/phone_number', { phone: '919876543210' }, version_header(user)
       expect(response.code).to eq '200'
     end
 
@@ -303,11 +311,11 @@ describe V1::UsersController do
     end
 
     it 'sends a verification code to incoming requested phone number' do
-      post '/api/users/self/phone_number', { phone: '132312' }, version_header(user)
+      post '/api/users/self/phone_number', { phone: '+919876543210' }, version_header(user)
 
       expect(
         a_request(:post, test_sms_provider).with { |req|
-          (req.body =~ /text=.*[\d{6}]/) && (req.body =~ /msisdn=132312/)
+          (req.body =~ /text=.*[\d{6}]/) && (req.body =~ /msisdn=919876543210/)
         }
       ).to have_been_made
     end
@@ -315,6 +323,14 @@ describe V1::UsersController do
 
   describe 'PUT /api/users/self/phone_number_verification' do
     let(:user) { create :user_with_password, phone: '+919876543210', phone_verification_code: '123456' }
+
+    context 'when the phone number is invalid' do
+      it 'renders 422 InvalidPhoneNumber' do
+        put '/api/users/self/phone_number', { phone: 'foobar', code: '123456' }, version_header(user)
+        expect(response.code).to eq '422'
+        expect(parse_json response.body, 'code').to eq 'InvalidPhoneNumber'
+      end
+    end
 
     context 'when phone number does not match stored number' do
       it 'renders a 422 error' do

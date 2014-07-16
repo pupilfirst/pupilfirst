@@ -57,11 +57,8 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email, unless: ->(user) { user.is_contact? && user.invitation_token.present? }
 
   # Validate the mobile number
-  validates_uniqueness_of :phone, allow_nil: true, if: ->(user) { user.is_contact? }
-  validates_plausible_phone :phone
-
-  # Store mobile number in a standardized form.
-  phony_normalize :phone, default_country_code: 'IN'
+  validates_presence_of :phone, if: ->(user) { user.is_contact? }
+  validates_uniqueness_of :phone, if: ->(user) { user.is_contact? }
 
   # Store mobile number in a standardized form.
   phony_normalize :phone, default_country_code: 'IN'
@@ -183,9 +180,13 @@ class User < ActiveRecord::Base
   #
   # @return [User] Initialized contact user
   def self.create_contact!(sv_user, contact_params, direction)
-    # contact = find_by(phone: PhonyRails.normalize_number(contact_params[:phone], country_code: 'IN'))
-    #
-    # raise Exceptions::ContactAlreadyExists unless contact.nil?
+    # Normalize incoming phone number.
+    unverified_phone_number = contact_params[:phone].length <= 10 ? "91#{contact_params[:phone]}" : contact_params[:phone]
+
+    # Pass only plausible phone numbers.
+    unless Phony.plausible?(unverified_phone_number, cc: '91')
+      raise Exceptions::InvalidPhoneNumber, 'Supplied phone number could not be parsed. Please check and try again.'
+    end
 
     # Create the user
     user = new(contact_params.merge(is_contact: true))

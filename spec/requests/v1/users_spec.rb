@@ -372,7 +372,7 @@ describe V1::UsersController do
 
     context 'when user does not have pending invitation' do
       it 'responds with error code UserHasNoPendingStartupInvite' do
-        put '/api/users/self/cofounder_invitation', { }, version_header(user)
+        put '/api/users/self/cofounder_invitation', {}, version_header(user)
         expect(parse_json(response.body, 'code')).to eq 'UserHasNoPendingStartupInvite'
         expect(response.code).to eq '404'
       end
@@ -383,7 +383,7 @@ describe V1::UsersController do
       let(:user) { create :user_with_password, pending_startup_id: startup.id }
 
       it "sets user's startup to pending_startup_id and wipes pending_startup_id" do
-        put '/api/users/self/cofounder_invitation', { }, version_header(user)
+        put '/api/users/self/cofounder_invitation', {}, version_header(user)
         expect(response.code).to eq '200'
 
         user.reload
@@ -392,7 +392,7 @@ describe V1::UsersController do
       end
 
       it 'adds the user to the list of founders on the startup' do
-        put '/api/users/self/cofounder_invitation', { }, version_header(user)
+        put '/api/users/self/cofounder_invitation', {}, version_header(user)
 
         startup.reload
         expect(startup.founders).to include(user)
@@ -409,7 +409,7 @@ describe V1::UsersController do
 
     context 'when user does not have pending invitation' do
       it 'responds with error code UserHasNoPendingStartupInvite' do
-        delete '/api/users/self/cofounder_invitation', { }, version_header(user)
+        delete '/api/users/self/cofounder_invitation', {}, version_header(user)
         expect(parse_json(response.body, 'code')).to eq 'UserHasNoPendingStartupInvite'
         expect(response.code).to eq '404'
       end
@@ -420,12 +420,60 @@ describe V1::UsersController do
       let(:user) { create :user_with_password, pending_startup_id: startup.id }
 
       it 'clears pending_startup_id' do
-        delete '/api/users/self/cofounder_invitation', { }, version_header(user)
+        delete '/api/users/self/cofounder_invitation', {}, version_header(user)
         expect(response.code).to eq '200'
 
         user.reload
         expect(user.pending_startup_id).to eq nil
       end
+    end
+  end
+
+  describe 'POST /api/users/self/contacts' do
+    let(:user) { create :user_with_password }
+
+    context 'when a bad phone number is supplied' do
+      it 'responds with 422 InvalidPhoneNumber' do
+        post '/api/users/self/contacts', { user: { phone: '123456', fullname: 'Mike Wazowski' } }, version_header(user)
+        expect(response.code).to eq '422'
+        expect(parse_json response.body, 'code').to eq 'InvalidPhoneNumber'
+      end
+    end
+
+    it 'creates user as a contact' do
+      post '/api/users/self/contacts', { user: { phone: '+919876543210', fullname: 'Mike Wazowski', company: 'Monsters, Inc.', designation: 'Scarer' } }, version_header(user)
+      expect(response).to be_success
+      last_user = User.last
+      expect(last_user.is_contact).to be_true
+      expect(last_user.fullname).to eq 'Mike Wazowski'
+      expect(last_user.company).to eq 'Monsters, Inc.'
+      expect(last_user.designation).to eq 'Scarer'
+      expect(last_user.phone).to eq '919876543210'
+    end
+
+    it 'creates a connection between current user and contact' do
+      post '/api/users/self/contacts', { user: { phone: '9876543210', fullname: 'Mike Wazowski' } }, version_header(user)
+      user_connections = user.connections.includes(:contact)
+      expect(user_connections.last.contact.id).to eq User.last.id
+    end
+  end
+
+  describe 'GET /api/users/self/contacts' do
+    let(:user) { create :user_with_password }
+    let!(:contact_1) { create :user_with_out_password, is_contact: true, phone: '9874561230' }
+    let!(:contact_2) { create :user_with_out_password, is_contact: true, phone: '8794561230' }
+    let!(:contact_3) { create :user_with_out_password, is_contact: true, phone: '8976543210' }
+
+    it 'returns all connections supplied by SV to user' do
+      Connection.create!(user_id: user.id, contact_id: contact_1.id, direction: Connection::DIRECTION_SV_TO_USER)
+      Connection.create!(user_id: user.id, contact_id: contact_2.id, direction: Connection::DIRECTION_USER_TO_SV)
+      Connection.create!(user_id: user.id, contact_id: contact_3.id, direction: Connection::DIRECTION_SV_TO_USER)
+
+      get '/api/users/self/contacts', {}, version_header(user)
+
+      expect((parse_json response.body).length).to eq 2
+      expect(parse_json response.body, '0/fullname').to eq contact_1.fullname
+      expect(parse_json response.body, '1/fullname').to eq contact_3.fullname
     end
   end
 end

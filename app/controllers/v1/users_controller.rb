@@ -97,7 +97,7 @@ class V1::UsersController < V1::BaseController
 
       render nothing: true
     else
-      render json: { error: 'Invalid verification code' }, status: 422
+      raise Exceptions::PhoneNumberVerificationFailed, 'Supplied phone number or verification code do not match stored values.'
     end
   end
 

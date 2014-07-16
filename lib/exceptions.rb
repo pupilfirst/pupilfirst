@@ -27,4 +27,5 @@ module Exceptions
   class AlreadyCreatedUser < ApiRequestError; end
   class ContactAlreadyExists < ApiRequestError; end
   class InvalidPhoneNumber < ApiRequestError; end
+  class PhoneNumberVerificationFailed < ApiRequestError; end
 end

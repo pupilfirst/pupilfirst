@@ -142,7 +142,7 @@ class V1::UsersController < V1::BaseController
 
   # GET /api/users/self/contacts
   def connected_contacts
-
+    @connections = current_user.connections.where(direction: Connection::DIRECTION_SV_TO_USER).includes(:contact)
   end
 
   # POST /api/users/self/contacts

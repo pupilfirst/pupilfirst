@@ -58,9 +58,8 @@ class V1::UsersController < V1::BaseController
     # Generate a 6-digit verification code to send to the phone number.
     code = SecureRandom.random_number(1000000).to_s.ljust(6, '0')
 
-    # TODO: Add phone number validation to UsersController#generate_phone_number_verification_code
-    # phone_number = verify params[:phone_number]
-    phone_number = params[:phone]
+    # Normalize incoming phone number.
+    phone_number = Phony.normalize params[:phone], country_code: 'IN'
 
     # Store the phone number and verification code.
     current_user.phone = phone_number
@@ -77,9 +76,8 @@ class V1::UsersController < V1::BaseController
 
   # PUT /self/phone_number
   def verify_phone_number
-    # Verify incoming phone number
-    # phone_number = verify params[:phone]
-    phone_number = params[:phone]
+    # Normalize incoming phone number.
+    phone_number = Phony.normalize params[:phone], country_code: 'IN'
 
     if current_user.phone == phone_number && params[:code] == current_user.phone_verification_code
       # Set the phone number to verified.

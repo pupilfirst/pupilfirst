@@ -28,4 +28,5 @@ module Exceptions
   class ContactAlreadyExists < ApiRequestError; end
   class InvalidPhoneNumber < ApiRequestError; end
   class PhoneNumberVerificationFailed < ApiRequestError; end
+  class LoginCredentialsInvalid < ApiRequestError; end
 end

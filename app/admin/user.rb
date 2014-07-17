@@ -39,10 +39,21 @@ ActiveAdmin.register User do
       f.input :avatar, as: :file
       f.input :remote_avatar_url
       f.input :startup
-      f.input :skip_password, as: :hidden, input_html:{value: true}
+      f.input :skip_password, as: :hidden, input_html: { value: true }
     end
+
+    f.inputs 'Contact Details' do
+      f.input :is_contact
+      f.input :phone
+      f.input :company
+      f.input :designation
+      f.input :phone_verified
+      f.input :invitation_token
+    end
+
     f.actions
   end
 
-  permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url, :title, :skip_password, :born_on
+  permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url, :title, :skip_password, :born_on,
+    :is_contact, :phone, :phone_verified, :company, :designation, :invitation_token
 end

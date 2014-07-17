@@ -176,9 +176,12 @@ class User < ActiveRecord::Base
     cofounder
   end
 
-  # Checks for existing contact
+  # Creates a contact user, from given sv_user with contact_params and supplied direction of contact.
   #
-  # @return [User] Initialized contact user
+  # @param [User] sv_user User for / from whom contact is created
+  # @param [Hash] contact_params Parameters with which to create contact User.
+  # @param [String] direction Direction of connection. See Connection::DIRECTION_*
+  # @return [User] Newly created contact user
   def self.create_contact!(sv_user, contact_params, direction)
     # Normalize incoming phone number.
     unverified_phone_number = contact_params[:phone].length <= 10 ? "91#{contact_params[:phone]}" : contact_params[:phone]

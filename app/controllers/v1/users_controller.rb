@@ -142,6 +142,7 @@ class V1::UsersController < V1::BaseController
 
   # GET /api/users/self/contacts
   def connected_contacts
+    # Fetch all user connections that were created by SV for user. Also, preload contact (User) data.
     @connections = current_user.connections.where(direction: Connection::DIRECTION_SV_TO_USER).includes(:contact)
   end
 

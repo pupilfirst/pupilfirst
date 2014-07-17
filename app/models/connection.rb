@@ -7,8 +7,10 @@ class Connection < ActiveRecord::Base
   belongs_to :contact, class_name: 'User', foreign_key: 'contact_id'
 
   # Make sure that connection entry is unique to contact and user.
+  validates_presence_of :user_id
+  validates_presence_of :contact_id
   validates_uniqueness_of :contact_id, scope: :user_id
 
   # Direction of connection is either from SV to user or from user to SV.
-  validates :direction, inclusion: { in: [DIRECTION_SV_TO_USER, DIRECTION_USER_TO_SV] }
+  validates :direction, presence: true, inclusion: { in: [DIRECTION_SV_TO_USER, DIRECTION_USER_TO_SV] }
 end

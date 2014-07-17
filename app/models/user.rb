@@ -21,8 +21,12 @@ class User < ActiveRecord::Base
   belongs_to :guardian
   belongs_to :startup
   belongs_to :startup_link_verifier, class_name: "User", foreign_key: "startup_link_verifier_id"
+
   scope :non_employees, -> { where("startup_id IS NULL") }
   scope :non_founders, -> { where("is_founder = ? or is_founder IS NULL", false) }
+  scope :startup_members, -> { where 'startup_id IS NOT NULL' }
+  scope :contacts, -> { where is_contact: true }
+
   accepts_nested_attributes_for :social_ids, :father, :address, :guardian
 
   # Complicated connections linkage for user-to-user relationship. Destroys the connection when either user or contact are deleted.
@@ -154,6 +158,7 @@ class User < ActiveRecord::Base
   def sep_enabled?
     is_student?
   end
+
   #
   # def gender
   #   if salutation == 'Mr'

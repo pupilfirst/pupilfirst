@@ -204,12 +204,11 @@ class User < ActiveRecord::Base
     Connection.create! user_id: sv_user.id, contact_id: user.id, direction: direction
   end
 
-  # Saves a new user with random password and an invitation token. The random password skips Devise's block, and the
-  # invitation token allows the user to register even though the table entry already exists.
+  # Skips setting password and sets invitation_token to allow later registration.
   def save_unregistered_user!
     unless self.persisted?
       # Devise wants a random password, so let's set one for a new user.
-      self.password = SecureRandom.hex
+      self.skip_password = true
 
       # Let's store an invitation token which indicates that the user has been invited.
       self.invitation_token = SecureRandom.hex

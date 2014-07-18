@@ -24,9 +24,9 @@ FactoryGirl.define do
   end
 
   factory :user do
-    fullname { "#{Faker::Name.first_name} #{Faker::Name.last_name}" }
+    fullname { Faker::Name.name }
     username  { Faker::Lorem.characters(9) }
-    salutation { ['Mr', 'Miss', 'Mrs'].shuffle.first }
+    salutation { %w(Mr Miss Mrs).sample }
     email     { Faker::Internet.email }
     born_on   { Date.current.to_s }
     title   { Faker::Lorem.characters(9) }
@@ -47,6 +47,14 @@ FactoryGirl.define do
         after(:create) do |user, evaluator|
           create_list(:facebook_social_id, 1, user: user)
         end
+      end
+
+      factory :user_as_contact, aliases: [:contact] do
+        is_contact true
+        sequence(:phone) { |n| "#{9876543210 + n}" }
+        company { "#{Faker::Name.last_name} Ltd." }
+        designation { Faker::Lorem.word }
+        invitation_token { Faker::Lorem.characters 10 }
       end
     end
 
@@ -183,5 +191,11 @@ FactoryGirl.define do
   factory :bank do |f|
     f.is_joint true
     startup
+  end
+
+  factory :connection do
+    user
+    contact
+    direction Connection::DIRECTION_USER_TO_SV
   end
 end

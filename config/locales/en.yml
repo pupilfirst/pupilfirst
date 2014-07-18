@@ -20,6 +20,8 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  notifications:
+    create_connection: "You have a new connection: %{fullname}!"
   startup_village:
     admin_contact:
       development: "gautham@mobme.in"

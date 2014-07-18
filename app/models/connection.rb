@@ -13,4 +13,16 @@ class Connection < ActiveRecord::Base
 
   # Direction of connection is either from SV to user or from user to SV.
   validates :direction, presence: true, inclusion: { in: [DIRECTION_SV_TO_USER, DIRECTION_USER_TO_SV] }
+
+  after_create :send_notification_for_sv_connection
+
+  private
+
+  def send_notification_for_sv_connection
+    if direction == DIRECTION_SV_TO_USER
+      UserPushNotifyJob.new.async.perform(user.id, :create_connection, I18n.t('notifications.create_connection', fullname: contact.fullname),
+        contact.contact_fields
+      )
+    end
+  end
 end

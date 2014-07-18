@@ -100,6 +100,11 @@ class User < ActiveRecord::Base
     end
   end
 
+  # Returns fields relevant to a 'contact' User.
+  def contact_fields
+    attributes.slice('fullname', 'phone', 'email', 'company', 'designation')
+  end
+
   def verify(user)
     return false if user.startup.nil?
     raise "#{fullname} not allowed to verify founders yet" if startup_link_verifier.nil?

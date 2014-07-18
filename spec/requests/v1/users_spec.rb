@@ -459,15 +459,19 @@ describe V1::UsersController do
   end
 
   describe 'GET /api/users/self/contacts' do
-    let(:user) { create :user_with_password }
-    let!(:contact_1) { create :user_with_out_password, is_contact: true, phone: '9874561230' }
-    let!(:contact_2) { create :user_with_out_password, is_contact: true, phone: '8794561230' }
-    let!(:contact_3) { create :user_with_out_password, is_contact: true, phone: '8976543210' }
+    let(:user) { create :user_with_out_password }
+    let!(:contact_1) { create :user_as_contact }
+    let!(:contact_2) { create :user_as_contact }
+    let!(:contact_3) { create :user_as_contact }
+
+    before do
+      UserPushNotifyJob.stub_chain(:new, :async, :perform)
+    end
 
     it 'returns all connections supplied by SV to user' do
-      Connection.create!(user_id: user.id, contact_id: contact_1.id, direction: Connection::DIRECTION_SV_TO_USER)
-      Connection.create!(user_id: user.id, contact_id: contact_2.id, direction: Connection::DIRECTION_USER_TO_SV)
-      Connection.create!(user_id: user.id, contact_id: contact_3.id, direction: Connection::DIRECTION_SV_TO_USER)
+      create :connection, user: user, contact: contact_1, direction: Connection::DIRECTION_SV_TO_USER
+      create :connection, user: user, contact: contact_2, direction: Connection::DIRECTION_USER_TO_SV
+      create :connection, user: user, contact: contact_3, direction: Connection::DIRECTION_SV_TO_USER
 
       get '/api/users/self/contacts', {}, version_header(user)
 

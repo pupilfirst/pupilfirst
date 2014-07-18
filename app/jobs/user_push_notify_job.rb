@@ -1,18 +1,17 @@
 class UserPushNotifyJob
   include SuckerPunch::Job
 
-  def perform(user_id, type, message)
+  def perform(user_id, type, message, extras={})
     ActiveRecord::Base.connection_pool.with_connection do
-      user = User.find user_id
       payload = {
         alert: message,
         extra: {
-          id: user.id.to_s,
+          id: user_id.to_s,
           type: type.to_s
-        }
+        }.merge(extras)
       }
       notification = {
-        aliases: [user.id],
+        aliases: [user_id],
         aps: payload,
         android: payload
       }
@@ -26,9 +25,7 @@ class UserPushNotifyJob
   # @param [Hash] extras (Optional) Extra information in payload.
   def perform_batch(user_ids, type, message, extras={})
     ActiveRecord::Base.connection_pool.with_connection do
-      users = User.where(id: user_ids)
-
-      notifications = users.map do |user|
+      notifications = user_ids.map do |user_id|
         payload = {
           alert: message,
           extra: {
@@ -37,7 +34,7 @@ class UserPushNotifyJob
         }
 
         {
-          aliases: [user.id],
+          aliases: [user_id],
           aps: payload,
           android: payload
         }

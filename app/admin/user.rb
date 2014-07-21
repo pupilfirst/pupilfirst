@@ -26,7 +26,7 @@ ActiveAdmin.register User do
   filter :is_student
   filter :is_contact
   filter :phone_verified
-  filter :categories, as: :check_boxes
+  filter :categories, as: :check_boxes, collection: Category.user_category
 
   form partial: 'admin/users/form'
 

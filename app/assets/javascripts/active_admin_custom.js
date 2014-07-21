@@ -1,17 +1,3 @@
-// When is_contact is checked, make sure that phone number is set to verified, and an invitation token is set.
-function setContactUserParameters() {
-  if($('input#user_is_contact').prop('checked')) {
-    $('input#user_phone_verified').prop('checked', true);
-
-    var invitation_token = $('input#user_invitation_token');
-
-    // Set invitation token only if it isn't set already.
-    if(!invitation_token.val()) {
-      invitation_token.val(Math.random().toString(36).slice(2));
-    }
-  }
-}
-
 $(document).ready(function() {
   // When the Changeset button is clicked on the dashboard, reveal the changeset div and insert relevant changeset into it.
   $('button.papertrail_changeset').click(function() {
@@ -19,7 +5,17 @@ $(document).ready(function() {
     $("#papertrail_changeset_pre").html(JSON.stringify(JSON.parse(this.getAttribute('changeset')), null, 4));
   });
 
-  // On the new and edit User forms, make sure contact user parameters are set.
-  $('form#edit_user').submit(setContactUserParameters);
-  $('form#new_user').submit(setContactUserParameters);
+  // When is_contact is checked, make sure that phone number is set to verified, and an invitation token is set.
+  $('.formtastic.user').submit(function() {
+    if($('input#user_is_contact').prop('checked')) {
+      $('input#user_phone_verified').prop('checked', true);
+
+      var invitation_token = $('input#user_invitation_token');
+
+      // Set invitation token only if it isn't set already.
+      if(!invitation_token.val()) {
+        invitation_token.val(Math.random().toString(36).slice(2));
+      }
+    }
+  });
 });

@@ -26,34 +26,11 @@ ActiveAdmin.register User do
   filter :is_student
   filter :is_contact
   filter :phone_verified
+  filter :categories, as: :check_boxes
 
-  form do |f|
-    f.inputs 'User details' do
-      f.input :username
-      f.input :email
-      f.input :fullname
-      f.input :twitter_url
-      f.input :linkedin_url
-      f.input :title
-      f.input :born_on
-      f.input :avatar, as: :file
-      f.input :remote_avatar_url
-      f.input :startup
-      f.input :skip_password, as: :hidden, input_html: { value: true }
-    end
-
-    f.inputs 'Contact Details' do
-      f.input :is_contact
-      f.input :phone
-      f.input :company
-      f.input :designation
-      f.input :phone_verified
-      f.input :invitation_token
-    end
-
-    f.actions
-  end
+  form partial: 'admin/users/form'
 
   permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url, :title, :skip_password, :born_on,
-    :is_contact, :phone, :phone_verified, :company, :designation, :invitation_token
+    :is_contact, :phone, :phone_verified, :company, :designation, :invitation_token,
+    { category_ids: [] }
 end

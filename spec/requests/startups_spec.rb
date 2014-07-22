@@ -16,6 +16,7 @@ describe "Startups" do
     let(:new_employee){ create :employee, {startup_link_verifier_id: nil, startup: startup}}
     before(:each) do
       founder = startup.founders.first
+      founder.confirm!
       login(founder)
 
       UserPushNotifyJob.stub_chain(:new, :async, perform: true) # TODO: Change this to allow statement in Rspec v3.

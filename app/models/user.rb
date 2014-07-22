@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :invitable, :database_authenticatable, :registerable,
+  devise :invitable, :database_authenticatable, :registerable, :confirmable,
     :recoverable, :rememberable, :trackable, :validatable, :omniauthable
   has_many :news, class_name: "News", foreign_key: :user_id
   has_many :events
@@ -219,6 +219,9 @@ class User < ActiveRecord::Base
       # Let's store an invitation token which indicates that the user has been invited.
       self.invitation_token = SecureRandom.hex
     end
+
+    # When saving unregistered users, let's not send out a confirmation e-mail.
+    skip_confirmation!
 
     save!
   end

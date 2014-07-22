@@ -11,7 +11,12 @@
     = f.input :avatar, as: :file
     = f.input :remote_avatar_url
     = f.input :startup
+
+    / When creating a user manually, let's not ask for a password.
     = f.input :skip_password, as: :hidden, input_html: { value: true }
+
+    / When creating a user manually, let's skip the e-mail confirmation step.
+    = f.input :confirmed_at, as: :hidden, input_html: { value: Time.now.utc.to_s }
 
   = f.inputs 'Contact Details'
     = f.input :is_contact
@@ -24,34 +29,6 @@
   = f.submit
 
 javascript:
-  $(function(){
-    $('#user_category_ids').select2({ placeholder : 'Select Category' });
+  $(function () {
+    $('#user_category_ids').select2({ placeholder: 'Select Category' });
   });
-
-
-/form do |f|
-/f.inputs 'User details' do
-/f.input :username
-/f.input :email
-/f.input :fullname
-/f.input :twitter_url
-/f.input :linkedin_url
-/f.input :title
-/f.input :born_on
-/f.input :avatar, as: :file
-/f.input :remote_avatar_url
-/f.input :startup
-/f.input :skip_password, as: :hidden, input_html: { value: true }
-/end
-/
-/f.inputs 'Contact Details' do
-/f.input :is_contact
-/f.input :phone
-/f.input :company
-/f.input :designation
-/f.input :phone_verified
-/f.input :invitation_token
-/end
-/
-/f.actions
-/end

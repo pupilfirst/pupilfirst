@@ -21,7 +21,7 @@ describe V1::SessionsController do
         digest = Digest::SHA1.hexdigest("#{time}LOGIN_SECRET_KEY#{user.email}")
         post '/api/users/sessions', {timestamp: time, email: user.email, digest: digest, password: 'password'}, version_header
         expect(response).to be_success
-        have_user_object(response, nil, also_check: [:auth_token], ignore: [:startup])
+        have_user_object(response, nil, also_check: [:auth_token, :phone, :phone_verified], ignore: [:startup])
       end
     end
 

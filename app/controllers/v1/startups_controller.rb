@@ -136,7 +136,11 @@ class V1::StartupsController < V1::BaseController
 
   # GET /api/startups/:id/founders
   def retrieve_founder
-    @users = User.where(email: params[:email].split(','))
+    @users = if params[:email]
+      User.where(email: params[:email].split(','))
+    else
+      User.where('pending_startup_id = ? OR startup_id = ? AND id != ?', params[:id], params[:id], current_user.id)
+    end
 
     raise Exceptions::FounderMissing, 'Could not find a founder with supplied e-mail ID.' if @users.empty?
   end

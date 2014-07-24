@@ -11,6 +11,8 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :invitable, :database_authenticatable, :registerable, :confirmable,
     :recoverable, :rememberable, :trackable, :validatable, :omniauthable
+
+  has_many :requests
   has_many :news, class_name: "News", foreign_key: :user_id
   has_many :events
   has_many :social_ids

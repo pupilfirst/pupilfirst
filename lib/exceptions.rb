@@ -29,4 +29,5 @@ module Exceptions
   class InvalidPhoneNumber < ApiRequestError; end
   class PhoneNumberVerificationFailed < ApiRequestError; end
   class LoginCredentialsInvalid < ApiRequestError; end
+  class UserDoesNotBelongToStartup < ApiRequestError; end
 end

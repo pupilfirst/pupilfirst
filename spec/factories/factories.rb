@@ -198,4 +198,9 @@ FactoryGirl.define do
     contact
     direction Connection::DIRECTION_USER_TO_SV
   end
+
+  factory :request  do
+    association :user, factory: :founder
+    body { Faker::Lorem.words(15).join ' ' }
+  end
 end

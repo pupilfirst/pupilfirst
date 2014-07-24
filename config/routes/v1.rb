@@ -19,6 +19,7 @@ Svapp::Application.routes.draw do
         end
       end
 
+      resources :requests, only: [:index, :create]
       resources :events
       resources :news
 

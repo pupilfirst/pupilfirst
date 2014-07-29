@@ -17,7 +17,7 @@ describe 'Request requests' do # :-)
     context 'when a user with startup creates request' do
       it "creates a request in user's name" do
         post '/api/requests', { request: { body: 'REQUEST_BODY' } }, version_header(user)
-        p response.body
+
         expect(response.code).to eq '200'
         request = Request.last
         expect(request.body).to eq 'REQUEST_BODY'

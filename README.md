@@ -45,17 +45,17 @@ For manual push to heroku use:
 
 Edit ``.git/config``:
 
-      [remote "heroku"]
-        url = git@heroku.com:svapp.git
-        fetch = +refs/heads/*:refs/remotes/heroku/*
-      [remote "staging"]
+      [remote "heroku-staging"]
         url = git@heroku.com:svapp-staging.git
-        fetch = +refs/heads/*:refs/remotes/staging/*
+        fetch = +refs/heads/*:refs/remotes/heroku-staging/*
+      [remote ""heroku-production"]
+        url = git@heroku.com:svapp.git
+        fetch = +refs/heads/*:refs/remotes/heroku-production/*
 
 Then:
 
-* `git push heroku master` will push to production (svlabs.in)
-* `git push heroku staging` will push to staging (staging.svlabs.in)
+* `git push heroku-production master:master` will push local master to production (svlabs.in)
+* `git push heroku-staging development:master` will push local development to staging (staging.svlabs.in)
 
 ## Web resources considered for dev
 *  http://matthewlehner.net/rails-api-testing-guidelines/

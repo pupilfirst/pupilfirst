@@ -10,7 +10,6 @@ describe V1::UsersController do
         get "/api/users/#{user.id}", {}, version_header
         expect(response).to be_success
       end
-
     end
 
     context 'when id is self' do

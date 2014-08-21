@@ -165,7 +165,7 @@ class V1::UsersController < V1::BaseController
       :pan, :din, :aadhaar, :mother_maiden_name, :married, :salutation,
       :is_student, :college, :university, :course, :semester, :title,
       :religion, :current_occupation, :educational_qualification, :place_of_birth,
-      :managing_director, :operate_bank_account, :share_percentage, :cash_contribution, :salary,
+      :operate_bank_account, :share_percentage, :cash_contribution, :salary,
       address_attributes: [:flat, :building, :street, :area, :town, :state, :pin],
       father_attributes: [:first_name, :last_name, :middle_name],
       guardian_attributes: [

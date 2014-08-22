@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140821085902) do
+ActiveRecord::Schema.define(version: 20140822070004) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -313,7 +313,6 @@ ActiveRecord::Schema.define(version: 20140821085902) do
     t.string   "aadhaar"
     t.integer  "address_id"
     t.integer  "father_id"
-    t.boolean  "is_director",                   default: false
     t.string   "mother_maiden_name"
     t.boolean  "married"
     t.string   "current_occupation"
@@ -321,10 +320,7 @@ ActiveRecord::Schema.define(version: 20140821085902) do
     t.string   "place_of_birth"
     t.string   "religion"
     t.integer  "guardian_id"
-    t.integer  "bank_id"
     t.string   "salutation"
-    t.integer  "number_of_shares"
-    t.boolean  "is_share_holder"
     t.boolean  "is_student"
     t.string   "college"
     t.string   "university"
@@ -340,14 +336,9 @@ ActiveRecord::Schema.define(version: 20140821085902) do
     t.string   "company"
     t.string   "designation"
     t.boolean  "is_contact"
-    t.boolean  "operate_bank_account",          default: false
-    t.integer  "share_percentage"
-    t.integer  "cash_contribution"
-    t.integer  "salary"
   end
 
   add_index "users", ["address_id"], name: "index_users_on_address_id", using: :btree
-  add_index "users", ["bank_id"], name: "index_users_on_bank_id", using: :btree
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["father_id"], name: "index_users_on_father_id", using: :btree
   add_index "users", ["guardian_id"], name: "index_users_on_guardian_id", using: :btree

@@ -84,24 +84,8 @@ describe V1::UsersController do
     end
   end
 
-  describe "PUT on user" do
-    context 'user pan details are passed' do
-      it "should update details" do
-        @user = create :founder
-        attributes = attributes_for(:director).merge({
-          address_attributes: attributes_for(:address),
-          father_attributes: attributes_for(:name),
-          guardian_attributes: {
-            name_attributes: attributes_for(:name),
-            address_attributes: attributes_for(:address)
-          }
-        })
-        put '/api/users/self', { user: attributes }, version_header(@user)
-        expect(response.body).to have_json_path("message")
-      end
-
-      it "should apply for pan &/or din"
-    end
+  describe 'PUT /api/user/self' do
+    # TODO: Test PUT /api/user/self
   end
 
   describe 'POST /api/users/self/phone_number_verification' do

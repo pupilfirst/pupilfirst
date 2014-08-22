@@ -4,7 +4,6 @@ class V1::BanksController < V1::BaseController
     startup = Startup.find(params[:startup_id]) rescue nil
     startup ||= current_user.startup
     attrib = bank_params.merge(startup: startup)
-    attrib[:director_ids] = [current_user.id] if attrib[:director_ids].nil?
     if Bank.create(attrib)
       render json: {message: "message"}, status: :created
     else
@@ -15,6 +14,6 @@ class V1::BanksController < V1::BaseController
 private
 
   def bank_params
-    params.require(:bank).permit(:name, :director_ids, :is_joint)
+    params.require(:bank).permit(:name, :is_joint)
   end
 end

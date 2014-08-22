@@ -156,13 +156,6 @@ class User < ActiveRecord::Base
     false
   end
 
-  def personal_info_message
-    return I18n.t("startup_village.messages.personal_info.incorporation_done",
-      documents_submition_date: DbConfig.documents_submition_date,
-      documents_submition_time: DbConfig.documents_submition_time) if personal_info_submitted? and is_director
-    return I18n.t("startup_village.messages.personal_info.no_incorporation") if personal_info_submitted?
-  end
-
   def sep_enabled?
     is_student?
   end

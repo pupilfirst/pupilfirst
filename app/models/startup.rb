@@ -21,13 +21,6 @@ class Startup < ActiveRecord::Base
     end
   end
 
-  has_many :directors, -> { where("startup_link_verifier_id IS NOT NULL AND is_founder = ? AND is_director = ?", true, true)}, :class_name => "User", :foreign_key => "startup_id" do |*args|
-    def <<(director)
-      director.update_attributes!(startup_link_verifier_id: director.id, is_founder: true, is_director: true)
-      super director
-    end
-  end
-
   has_many :employees, -> { where("startup_link_verifier_id IS NOT NULL")}, :class_name => "User", :foreign_key => "startup_id"
   has_and_belongs_to_many :categories, :join_table => "startups_categories"
   has_one :bank
@@ -155,36 +148,6 @@ class Startup < ActiveRecord::Base
 
   def sep_submited?
     false
-  end
-
-  def is_bank_transaction_field_enabled?
-    return false if transaction_details.present?
-    return true if directors.all? { |d| d.personal_info_submitted? }
-  end
-
-  def incorporation_message
-    return nil if incorporation_status?
-    return nil unless incorporation_submited?
-    return I18n.t("startup_village.messages.incorporate.documents_required",
-                  documents_submition_date: DbConfig.documents_submition_date,
-                  documents_submition_time: DbConfig.documents_submition_time) if incorporation_submited? and transaction_details.present?
-    return I18n.t("startup_village.messages.incorporate.pending_payment",
-                  full_amount: amount_to_be_paid_for_incorporation) if directors.all? { |d| d.personal_info_submitted? }
-    pending_directors = directors.reject { |d| d.personal_info_submitted? }
-    pending_directors_msg = pending_directors.map { |d| "Pending: #{d.fullname}" }.join("\n")
-    I18n.t("startup_village.messages.incorporate.pending_director_info", pending_directors_msg: pending_directors_msg)
-  end
-
-  def banking_message
-    return nil if bank_status
-    return nil unless bank_details_submited?
-    "message"
-  end
-
-  def amount_to_be_paid_for_incorporation
-    num_pans = directors.reject{|d| d.pan.present? }.count
-    num_dins = directors.reject{|d| d.din.present? }.count
-    18225 + num_pans*105 + num_dins*400 + 105
   end
 
   # Custom setter for startup categories.

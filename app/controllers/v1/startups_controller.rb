@@ -42,24 +42,7 @@ class V1::StartupsController < V1::BaseController
     id = params[:id]
     @startup = (id == 'self') ? current_user.startup : Startup.find(id)
 
-    if @startup.update_attributes!(startup_params)
-      (directors_in_params[:directors] or []).each do |dir|
-        founder = @startup.founders.find(dir['id'].to_i) rescue nil
-
-        founder.update_attributes(dir.select { |key|
-          ['number_of_shares', 'is_share_holder'].include?(key)
-        }.merge({ is_director: true }))
-      end
-
-      if directors_in_params[:directors]
-        StartupMailer.reminder_to_complete_personal_info(@startup, current_user).deliver if startup_params[:company_names]
-        message = "#{current_user.fullname} has listed you as a Director at #{@startup.name}"
-
-        @startup.reload.directors.reject { |e| e.id == current_user.id }.each do |dir|
-          UserPushNotifyJob.new.async.perform(dir.id, :fill_personal_info, message)
-        end
-      end
-    else
+    unless @startup.update_attributes!(startup_params)
       render json: { error: @startup.errors.to_a.join(', ') }, status: :bad_request
     end
   end
@@ -176,10 +159,6 @@ class V1::StartupsController < V1::BaseController
     else
       {}
     end
-  end
-
-  def directors_in_params
-    params.require(:startup).permit(directors: [:id, :is_share_holder, :number_of_shares])
   end
 
   def require_user_startup_match

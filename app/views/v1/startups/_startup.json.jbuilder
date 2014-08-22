@@ -2,7 +2,6 @@ json.(startup, :id, :logo_url, :pitch, :cool_fact, :website, :about, :email, :ph
 json.name   (startup.name or "My Startup")
 json.categories     startup.categories.map &:name
 json.created_at     fmt_time(startup.created_at)
-json.message        startup.incorporation_message
 
 valid_and_verified_founders = startup.founders.select { |f| f.verified? and f.valid? }
 

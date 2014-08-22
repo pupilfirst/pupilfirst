@@ -24,31 +24,16 @@ class StartupMailer < ActionMailer::Base
 
   def incorporation_approved(startup)
     @startup = startup
-    send_to = startup.directors.map { |e| "#{e.fullname} <#{e.email}>" }
-    substitute '-founder_full_name-', startup.directors.map(&:fullname)
+    send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
+    substitute '-founder_full_name-', startup.founders.map(&:fullname)
     mail(to: send_to, subject: "Your startup's has been approved")
   end
 
   def bank_approved(startup)
     @startup = startup
-    send_to = startup.directors.map { |e| "#{e.fullname} <#{e.email}>" }
-    substitute '-founder_full_name-', startup.directors.map(&:fullname)
+    send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
+    substitute '-founder_full_name-', startup.founders.map(&:fullname)
     mail(to: send_to, subject: "Your startup's has been approved")
-  end
-
-  def sep_approved(startup)
-  end
-
-  def fill_personal_info_for_director(startup)
-  end
-
-  def reminder_to_complete_personal_info(startup, current_user)
-    @startup = startup
-    @current_user = current_user
-    directors = startup.directors.reject { |e| e.id == current_user.id}.reject { |d| d.personal_info_submitted? }
-    send_to = directors.map { |e| "#{e.fullname} <#{e.email}>" }
-    substitute '-founder_full_name-', directors.map(&:fullname)
-    mail(to: send_to, subject: "#{current_user.fullname} has listed you as a Director at #{startup.name}")
   end
 
   def reminder_to_complete_startup_info(startup)

@@ -45,11 +45,6 @@ class StartupsController < InheritedResources::Base
     update! do |success, failure|
       success.html {
         StartupMailer.notify_svrep_about_startup_update(@startup).deliver
-        StartupMailer.fill_personal_info_for_director(@startup).deliver
-        @startup.directors.reject { |e| e.personal_info_submitted? }.each do |user|
-          message = "Please fill in personl info"
-          UserPushNotifyJob.new.async.perform(user.id, :fill_personal_info, message)
-        end
         redirect_to startup_founders_url(@startup)
       }
     end

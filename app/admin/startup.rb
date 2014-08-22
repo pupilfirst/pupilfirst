@@ -30,13 +30,6 @@ ActiveAdmin.register Startup do
     column :logo do |startup|
       link_to(image_tag(startup.logo_url(:thumb)), startup.logo_url)
     end
-    column :directors do |startup|
-      table_for startup.directors.order('id ASC') do
-        column do |director|
-          link_to director.fullname, [:admin, director]
-        end
-      end
-    end
     column :founders do |startup|
       table_for startup.founders.order('id ASC') do
         column do |founder|
@@ -116,13 +109,6 @@ ActiveAdmin.register Startup do
       end
       row :facebook_link
       row :twitter_link
-      row :directors do |startup|
-        table_for startup.directors.order('id ASC') do
-          column do |director|
-            link_to director.fullname, [:admin, director]
-          end
-        end
-      end
       row :founders do |startup|
         table_for startup.founders.order('id ASC') do
           column do |founder|

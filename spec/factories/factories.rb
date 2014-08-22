@@ -84,21 +84,6 @@ FactoryGirl.define do
     association :address, factory: :address, strategy: :build
   end
 
-  factory :director, parent: :founder do
-    pan   "pan"
-    din   "din"
-    aadhaar    "aadhaar"
-    current_occupation  :current_occupation
-    educational_qualification  :educational_qualification
-    place_of_birth  :place_of_birth
-    association :address, factory: :address, strategy: :build
-    association :father, factory: :name, strategy: :build
-    mother_maiden_name    "mother_maiden_name"
-    married   true
-    religion    "religion"
-    association :guardian, factory: :guardian, strategy: :build
-  end
-
   factory :news_category,  class: Category do |f|
     f.name {Faker::Lorem.words(2).join(' ')}
     f.category_type :news

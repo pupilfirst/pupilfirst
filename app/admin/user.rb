@@ -26,11 +26,13 @@ ActiveAdmin.register User do
   filter :is_student
   filter :is_contact
   filter :phone_verified
-  filter :categories, as: :check_boxes, collection: Category.user_category
+  # TODO: The check_boxes filter is disabled because of some bug with activeadmin. Check and enable when required.
+  # filter :categories, as: :check_boxes, collection: Category.user_category
+  filter :categories, collection: Category.user_category
 
   form partial: 'admin/users/form'
 
   permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url, :title, :skip_password, :born_on,
-    :is_contact, :phone, :phone_verified, :company, :designation, :invitation_token, :confirmed_at
+    :is_contact, :phone, :phone_verified, :company, :designation, :invitation_token, :confirmed_at,
     { category_ids: [] }
 end

@@ -2,7 +2,7 @@ class V1::StartupsController < V1::BaseController
 
   skip_before_filter :require_token, only: [:index, :show, :load_suggestions]
 
-  before_filter :require_user_startup_match, only: [:add_founder, :delete_founder, :retrieve_founder, :incubate, :update]
+  before_filter :require_user_startup_match, only: [:add_founder, :delete_founder, :retrieve_founder, :incubate, :update, :registration]
 
   # Returns approved startups.
   def index
@@ -77,6 +77,16 @@ class V1::StartupsController < V1::BaseController
       current_user.startup.update_attributes!(partnership_application: true)
       StartupMailer.partnership_application(current_user.startup, current_user).deliver
       render nothing: true, status: :created
+    end
+  end
+
+  # POST /api/startups/:id/registration
+  def registration
+    if current_user.startup.registration_type
+      raise Exceptions::StartupAlreadyRegistered, "Startup is already registered as #{current_user.startup.registration_type}."
+    else
+      current_user.startup.register(registration_params)
+      render nothing: true
     end
   end
 
@@ -159,6 +169,13 @@ class V1::StartupsController < V1::BaseController
     else
       {}
     end
+  end
+
+  def registration_params
+    params.permit(
+      :registration_type, :address, :state, :district, :pitch,
+      partners: [:fullname, :email, :shares, :cash_contribution, :salary, :managing_director, :operate_bank_account]
+    )
   end
 
   def require_user_startup_match

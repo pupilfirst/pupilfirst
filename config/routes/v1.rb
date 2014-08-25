@@ -36,6 +36,7 @@ Svapp::Application.routes.draw do
           delete :founders, to: :delete_founder
           get :founders, to: :retrieve_founder
           post :incubate
+          post :registration
         end
       end
 

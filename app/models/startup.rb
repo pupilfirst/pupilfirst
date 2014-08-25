@@ -10,6 +10,10 @@ class Startup < ActiveRecord::Base
   APPROVAL_STATUS_APPROVED = 'approved'
   APPROVAL_STATUS_REJECTED = 'rejected'
 
+  def self.valid_registration_types
+    [REGISTRATION_TYPE_PRIVATE_LIMITED, REGISTRATION_TYPE_PARTNERSHIP]
+  end
+
   has_paper_trail
 
   scope :approved, -> { where(approval_status: APPROVAL_STATUS_APPROVED) }
@@ -25,6 +29,8 @@ class Startup < ActiveRecord::Base
   has_and_belongs_to_many :categories, :join_table => "startups_categories"
   has_one :bank
   belongs_to :registered_address, class_name: 'Address'
+  has_many :partnerships
+
   serialize :company_names, JSON
   serialize :startup_before, JSON
   serialize :police_station, JSON
@@ -36,7 +42,7 @@ class Startup < ActiveRecord::Base
 
   # Registration type should be one of Pvt. Ltd., or a Partnership.
   validates :registration_type,
-    inclusion: { in: [REGISTRATION_TYPE_PRIVATE_LIMITED, REGISTRATION_TYPE_PARTNERSHIP] },
+    inclusion: { in: valid_registration_types },
     allow_nil: true
 
   # validates_presence_of :name, if: ->(startup){@full_validation }
@@ -164,5 +170,25 @@ class Startup < ActiveRecord::Base
     end
 
     super category_table_entries
+  end
+
+  def register(registration_params)
+    update_startup_parameters(registration_params)
+    create_or_update_partnerships(registration_params[:partners])
+  end
+
+  def update_startup_parameters(startup_params)
+    self.update_attributes(startup_params.slice(:registration_type, :address, :state, :district, :pitch))
+  end
+
+  def create_or_update_partnerships(partners_params)
+    partners_params.each do |partner_params|
+      user = User.find_or_initialize_by(email: partner_params[:email])
+      user.fullname = partner_params[:fullname]
+      user.save_unregistered_user!
+
+      partnership_params = partner_params.slice(:shares, :cash_contribution, :salary, :managing_director, :operate_bank_account).merge(user: user)
+      partnerships.create!(partnership_params)
+    end
   end
 end

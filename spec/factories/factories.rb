@@ -134,7 +134,6 @@ FactoryGirl.define do
 
   factory :startup do |f|
     f.name      {Faker::Lorem.characters(20)}
-    f.registration_type Startup::REGISTRATION_TYPE_PRIVATE_LIMITED
     f.logo { fixture_file_upload(Rails.root.join(*%w[ spec fixtures files example.jpg ]), 'image/jpg') }
     f.pitch     {Faker::Lorem.words(6).join(' ')}
     f.address     {Faker::Lorem.words(6).join(' ')}
@@ -158,7 +157,6 @@ FactoryGirl.define do
 
   factory :startup_application, class: Startup do |f|
     f.name      {Faker::Lorem.characters(20)}
-    f.registration_type Startup::REGISTRATION_TYPE_PRIVATE_LIMITED
     f.pitch     {Faker::Lorem.words(6).join(' ')}
     f.website   {Faker::Internet.domain_name}
     f.phone   {Faker::PhoneNumber.cell_phone}

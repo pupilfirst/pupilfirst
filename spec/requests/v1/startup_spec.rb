@@ -412,4 +412,104 @@ describe "Startup Requests" do
       end
     end
   end
+
+  describe 'POST /api/startups/:id/registration' do
+    let(:startup) { create :startup }
+    let(:user) { create :user_with_out_password, startup: startup }
+    let(:user_2) { create :user_with_out_password, startup: startup }
+    let(:mock_address) { Faker::Address.street_address }
+    let(:mock_state) { Faker::Address.state }
+    let(:mock_district) { Faker::Address.city }
+    let(:mock_pitch) { Faker::Lorem.words(rand(10) + 1).join(' ') }
+    let(:mock_salary) { rand(50000) }
+    let(:mock_cash_contribution) { rand(100000) }
+    let(:mock_shares) { rand(10000) }
+    let(:registration_params) {
+      {
+        registration_type: Startup::REGISTRATION_TYPE_PARTNERSHIP,
+        address: mock_address,
+        state: mock_state,
+        district: mock_district,
+        pitch: mock_pitch,
+        partners: [
+          {
+            fullname: user.fullname,
+            email: user.email,
+            shares: mock_shares,
+            cash_contribution: mock_cash_contribution,
+            salary: mock_salary,
+            managing_director: true,
+            operate_bank_account: true,
+          },
+          {
+            fullname: user_2.fullname,
+            email: user_2.email,
+            shares: rand(10000),
+            cash_contribution: rand(100000),
+            salary: rand(50000),
+            managing_director: false,
+            operate_bank_account: false,
+          }
+        ]
+      }
+    }
+
+    context 'if the startup is already registered' do
+      let(:startup) { create :startup, registration_type: Startup::REGISTRATION_TYPE_PARTNERSHIP }
+
+      it 'responds with 422 StartupAlreadyRegistered' do
+        post "/api/startups/#{startup.id}/registration", registration_params, version_header(user)
+        expect(response.code).to eq '422'
+        expect(parse_json(response.body, 'code')).to eq 'StartupAlreadyRegistered'
+      end
+    end
+
+    context 'if the startup is not registered' do
+      it 'updates startup details' do
+        post "/api/startups/#{startup.id}/registration", registration_params, version_header(user)
+        startup.reload
+        expect(startup.registration_type).to eq Startup::REGISTRATION_TYPE_PARTNERSHIP
+        expect(startup.address).to eq mock_address
+        expect(startup.state).to eq mock_state
+        expect(startup.district).to eq mock_district
+        expect(startup.pitch).to eq mock_pitch
+      end
+
+      context 'when there are no new partners' do
+        it 'creates partnership entries' do
+          post "/api/startups/#{startup.id}/registration", registration_params.to_json, version_header(user).merge('CONTENT_TYPE' => 'application/json')
+
+          first_partnership = Partnership.first
+          expect(Partnership.count).to eq 2
+          expect(first_partnership.user_id).to eq user.id
+          expect(first_partnership.startup_id).to eq startup.id
+          expect(first_partnership.shares).to eq mock_shares
+          expect(first_partnership.cash_contribution).to eq mock_cash_contribution
+          expect(first_partnership.salary).to eq mock_salary
+          expect(first_partnership.managing_director).to eq true
+          expect(Partnership.last.operate_bank_account).to eq false
+        end
+      end
+
+      context 'when there are new partners' do
+        it 'creates partnership entries and user entries' do
+          updated_params = registration_params
+          updated_params[:partners] << { fullname: 'Just A Partner',
+            email: Faker::Internet.email,
+            shares: rand(50000),
+            cash_contribution: rand(500000),
+            salary: 0,
+            managing_director: true,
+            operate_bank_account: false
+          }
+
+          post "/api/startups/#{startup.id}/registration", updated_params, version_header(user)
+
+          last_user = User.last
+          expect(last_user.fullname).to eq 'Just A Partner'
+          expect(Partnership.last.user_id).to eq last_user.id
+        end
+      end
+    end
+  end
 end

@@ -316,23 +316,26 @@ describe "Startup Requests" do
 
     context 'when multiple email addresses are supplied' do
       it 'returns status of all users' do
-        create :user_with_out_password, email: 'james.p.sullivan@mobme.in', pending_startup_id: user.startup.id
-        create :user_with_out_password, email: 'boo@mobme.in', startup: user.startup
-        create :user_with_out_password, email: 'mike.wazowski@mobme.in', startup: startup1
+        create :user_with_out_password, fullname: 'James P Sullivan', email: 'james.p.sullivan@mobme.in', pending_startup_id: user.startup.id
+        create :user_with_out_password, fullname: 'Boo', email: 'boo@mobme.in', startup: user.startup
+        create :user_with_out_password, fullname: 'Mike Wazowski', email: 'mike.wazowski@mobme.in', startup: startup1
 
         get "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in,boo@mobme.in,mike.wazowski@mobme.in' }, version_header(user)
         expect(response.code).to eq '200'
         expect(parse_json(response.body)).to eq(
           [
             {
+              'fullname' => 'James P Sullivan',
               'email' => 'james.p.sullivan@mobme.in',
               'status' => 'pending'
             },
             {
+              'fullname' => 'Boo',
               'email' => 'boo@mobme.in',
               'status' => 'accepted'
             },
             {
+              'fullname' => 'Mike Wazowski',
               'email' => 'mike.wazowski@mobme.in',
               'status' => 'rejected'
             }
@@ -343,7 +346,7 @@ describe "Startup Requests" do
 
     context 'when no email is supplied' do
       it 'returns status of all pending and accepted users' do
-        create :user_with_out_password, email: 'james.p.sullivan@mobme.in', pending_startup_id: startup.id
+        create :user_with_out_password, fullname: 'James P Sullivan', email: 'james.p.sullivan@mobme.in', pending_startup_id: startup.id
         boo = create :user_with_out_password, email: 'boo@mobme.in'
         mike = create :user_with_out_password, email: 'mike.wazowski@mobme.in'
 
@@ -352,8 +355,8 @@ describe "Startup Requests" do
 
         get "/api/startups/#{startup.id}/founders", {}, version_header(user)
         expect(response.code).to eq '200'
-        startup_users = startup.founders.map { |f| { 'email' => f.email, 'status' => f.cofounder_status(startup) } }
-        startup_users << { 'email' => 'james.p.sullivan@mobme.in', 'status' => 'pending' }
+        startup_users = startup.founders.map { |f| { 'fullname' => f.fullname, 'email' => f.email, 'status' => f.cofounder_status(startup) } }
+        startup_users << { 'fullname' => 'James P Sullivan', 'email' => 'james.p.sullivan@mobme.in', 'status' => 'pending' }
 
         startup_users.each do |startup_user|
           expect(parse_json(response.body)).to include(startup_user)

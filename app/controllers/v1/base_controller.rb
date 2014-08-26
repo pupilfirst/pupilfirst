@@ -46,7 +46,7 @@ class V1::BaseController < ApplicationController
   end
 
   def require_self
-    if params[:id] != 'self'
+    if params[:id] != 'self' || params[:id] == current_user.id
       raise Exceptions::RestrictedToSelf, 'You may not perform this action for another user. Use self.'
     end
   end

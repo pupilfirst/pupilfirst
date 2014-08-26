@@ -322,25 +322,11 @@ describe "Startup Requests" do
 
         get "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in,boo@mobme.in,mike.wazowski@mobme.in' }, version_header(user)
         expect(response.code).to eq '200'
-        expect(parse_json(response.body)).to eq(
-          [
-            {
-              'fullname' => 'James P Sullivan',
-              'email' => 'james.p.sullivan@mobme.in',
-              'status' => 'pending'
-            },
-            {
-              'fullname' => 'Boo',
-              'email' => 'boo@mobme.in',
-              'status' => 'accepted'
-            },
-            {
-              'fullname' => 'Mike Wazowski',
-              'email' => 'mike.wazowski@mobme.in',
-              'status' => 'rejected'
-            }
-          ]
-        )
+        parsed_response = parse_json(response.body)
+        expect(parsed_response.length).to eq 3
+        expect(parsed_response).to include({ 'fullname' => 'James P Sullivan', 'email' => 'james.p.sullivan@mobme.in', 'status' => 'pending' })
+        expect(parsed_response).to include({ 'fullname' => 'Boo', 'email' => 'boo@mobme.in', 'status' => 'accepted' })
+        expect(parsed_response).to include({ 'fullname' => 'Mike Wazowski', 'email' => 'mike.wazowski@mobme.in', 'status' => 'rejected' })
       end
     end
 

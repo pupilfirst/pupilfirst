@@ -323,6 +323,7 @@ describe "Startup Requests" do
         get "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in,boo@mobme.in,mike.wazowski@mobme.in' }, version_header(user)
         expect(response.code).to eq '200'
         parsed_response = parse_json(response.body)
+        # TODO: This test is passing when it shouldn't. Where is the current user in results?
         expect(parsed_response.length).to eq 3
         expect(parsed_response).to include({ 'fullname' => 'James P Sullivan', 'email' => 'james.p.sullivan@mobme.in', 'status' => 'pending' })
         expect(parsed_response).to include({ 'fullname' => 'Boo', 'email' => 'boo@mobme.in', 'status' => 'accepted' })

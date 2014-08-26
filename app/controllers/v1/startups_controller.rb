@@ -132,7 +132,7 @@ class V1::StartupsController < V1::BaseController
     @users = if params[:email]
       User.where(email: params[:email].split(','))
     else
-      User.where('pending_startup_id = ? OR startup_id = ? AND id != ?', params[:id], params[:id], current_user.id)
+      User.where('pending_startup_id = ? OR startup_id = ?', params[:id], params[:id])
     end
 
     raise Exceptions::FounderMissing, 'Could not find a founder with supplied e-mail ID.' if @users.empty?

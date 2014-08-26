@@ -178,7 +178,7 @@ class Startup < ActiveRecord::Base
   end
 
   def update_startup_parameters(startup_params)
-    self.update_attributes(startup_params.slice(:registration_type, :address, :state, :district, :pitch))
+    self.update_attributes(startup_params.slice(:registration_type, :address, :state, :district, :pitch, :total_shares))
   end
 
   def create_or_update_partnerships(partners_params)

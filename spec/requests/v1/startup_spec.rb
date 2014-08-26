@@ -424,6 +424,7 @@ describe "Startup Requests" do
     let(:mock_salary) { rand(50000) }
     let(:mock_cash_contribution) { rand(100000) }
     let(:mock_shares) { rand(10000) }
+    let(:mock_total_shares) { rand (30000) }
     let(:registration_params) {
       {
         registration_type: Startup::REGISTRATION_TYPE_PARTNERSHIP,
@@ -431,6 +432,7 @@ describe "Startup Requests" do
         state: mock_state,
         district: mock_district,
         pitch: mock_pitch,
+        total_shares: mock_total_shares,
         partners: [
           {
             fullname: user.fullname,
@@ -473,6 +475,7 @@ describe "Startup Requests" do
         expect(startup.state).to eq mock_state
         expect(startup.district).to eq mock_district
         expect(startup.pitch).to eq mock_pitch
+        expect(startup.total_shares).to eq mock_total_shares
       end
 
       context 'when there are no new partners' do

@@ -36,7 +36,7 @@ class V1::UsersController < V1::BaseController
   def update
     @user = current_user
     if @user.update_attributes user_params
-      render 'users/show'
+      render 'v1/users/show'
     else
       render json: { error: @user.errors.to_a.join(', ') }, status: :bad_request
     end

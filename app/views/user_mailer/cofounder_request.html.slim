@@ -1,10 +1,13 @@
 p Congratulations! You have been invited to join #{@current_user.fullname}'s startup as a co-founder.
 
-p To be a part of #{@current_user.fullname}'s startup as a co-founder, please download the Startup Village mobile
-  application (Android, iOS), and sign up as a user using this email ID. You can then accept or reject this request.
+p Please download the Startup Village mobile application (Android, iOS <links>), and sign up as a user using this email id to either accept or reject this request.
 
-p Please contact #{mail_to @current_user.email, @current_user.fullname} directly for clarifications.
+p Please contact #{mail_to @current_user.email, @current_user.fullname} directly for any kind of clarifications.
 
 p Good luck, and have fun!
 
-p Team SV Labs
+p Team Startup Village.
+
+p #{link_to 'svlabs.in', 'http://www.startupvillage.in'}
+
+

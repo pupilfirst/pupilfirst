@@ -9,6 +9,7 @@ describe V1::UsersController do
         user = create(:user_with_out_password)
         get "/api/users/#{user.id}", {}, version_header
         expect(response).to be_success
+        check_path(response, 'categories')
       end
     end
 

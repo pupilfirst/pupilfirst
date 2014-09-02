@@ -85,8 +85,35 @@ describe V1::UsersController do
     end
   end
 
-  describe 'PUT /api/user/self' do
-    # TODO: Test PUT /api/user/self
+  describe 'PUT /api/users/:id' do
+    let(:user) { create(:user_with_out_password) }
+
+    context 'when user attempts to update self' do
+      it 'works' do
+        new_name = Faker::Name.name
+        put '/api/users/self', { user: { fullname: new_name } }, version_header(user)
+        user.reload
+        expect(user.fullname).to eq new_name
+      end
+    end
+
+    context 'when user attempts to update with own ID' do
+      it 'works' do
+        new_name = Faker::Name.name
+        put "/api/users/#{user.id}", { user: { fullname: new_name } }, version_header(user)
+        user.reload
+        expect(user.fullname).to eq new_name
+      end
+    end
+
+    context 'when user attempts to update another user' do
+      it 'responds with 422 RestrictedToSelf' do
+        new_name = Faker::Name.name
+        put "/api/users/#{user.id + 1}", { user: { fullname: new_name } }, version_header(user)
+        expect(response.code).to eq '422'
+        expect(parse_json response.body, 'code').to eq 'RestrictedToSelf'
+      end
+    end
   end
 
   describe 'POST /api/users/self/phone_number_verification' do

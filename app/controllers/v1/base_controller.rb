@@ -45,9 +45,10 @@ class V1::BaseController < ApplicationController
     end
   end
 
+  # Some API routes are restricted to the authorized user. These are allowed only when the supplied ID is self, or the authorized user's ID.
   def require_self
-    if params[:id] != 'self' && params[:id] != current_user.id
-      raise Exceptions::RestrictedToSelf, 'You may not perform this action for another user. Use self.'
+    if params[:id] != 'self' && params[:id].to_i != current_user.id
+      raise Exceptions::RestrictedToSelf, 'You may not perform this action for another user. Use self or ID of user whose token is being used.'
     end
   end
 

@@ -180,7 +180,7 @@ class V1::StartupsController < V1::BaseController
 
   def require_user_startup_match
     # Requested startup must match the authorized user's startup.
-    if Startup.find(params[:id]) != current_user.startup
+    if params[:id].to_i != current_user.startup.id
       raise Exceptions::AuthorizedUserStartupMismatch, "Selected startup does not match User's startup."
     end
   end

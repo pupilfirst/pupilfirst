@@ -16,7 +16,7 @@
     = f.input :skip_password, as: :hidden, input_html: { value: true }
 
     / When creating a user manually, let's skip the e-mail confirmation step.
-    = f.input :confirmed_at, as: :hidden, input_html: { value: Time.now.utc.to_s }
+    /= f.input :confirmed_at, as: :hidden, input_html: { value: Time.now.utc.to_s }
 
   = f.inputs 'Contact Details'
     = f.input :is_contact

@@ -73,6 +73,18 @@ describe "Startup Requests" do
   end
 
   describe 'POST /startups' do
+    context 'when user does not have a startup' do
+      it 'sets links user to startup as founder and startup_admin' do
+        user = create :user_with_out_password
+        post '/api/startups', {}, version_header(user)
+
+        user.reload
+
+        expect(parse_json(response.body, 'id')).to eq user.startup_id
+        expect(user.is_founder).to eq true
+        expect(user.startup_admin).to eq true
+      end
+
     context 'when there are parameters' do
       it 'creates a startup with parameters for authenticated user' do
         post '/api/startups', { startup: attributes_for(:startup_application) }, version_header
@@ -87,6 +99,7 @@ describe "Startup Requests" do
         expect(response.code).to eq '201'
         have_startup_object response
       end
+    end
     end
 
     context 'when user already has a startup' do

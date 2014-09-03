@@ -63,6 +63,10 @@ class Startup < ActiveRecord::Base
     if: ->(startup){@full_validation }
   }
 
+  def admin
+    founders.where(startup_admin: true).first
+  end
+
   def approval_status
     super || APPROVAL_STATUS_UNREADY
   end

@@ -31,7 +31,7 @@ class V1::StartupsController < V1::BaseController
     @startup.save
 
     current_user.verify_self!
-    current_user.update_attributes!(is_founder: true)
+    current_user.update_attributes!(is_founder: true, startup_admin: true)
     @startup.save(validate: false)
     StartupMailer.apply_now(@startup).deliver
 

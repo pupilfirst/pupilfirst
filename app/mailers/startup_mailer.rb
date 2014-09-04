@@ -11,16 +11,12 @@ class StartupMailer < ActionMailer::Base
   def startup_approved(startup)
     @startup = startup
     send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
-    # substitute '-founder_full_name-', startup.founders.map(&:fullname).join(', ')
-    # substitute '-founder_email_id-', startup.founders.map(&:email).join(', ')
     mail(to: send_to, subject: 'You are now part of Startup Village!')
   end
 
   def startup_rejected(startup)
     @startup = startup
     send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
-    # substitute '-founder_full_name-', startup.founders.map(&:fullname).join(', ')
-    # substitute '-founder_email_id-', startup.founders.map(&:email).join(', ')
     mail(to: send_to, subject: 'Incubation Request update.')
   end
 

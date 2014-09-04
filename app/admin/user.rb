@@ -15,6 +15,7 @@ ActiveAdmin.register User do
     column :is_founder
     column :is_contact
     column :is_student
+    column :startup_admin
     column :phone_verified
   end
 
@@ -32,7 +33,8 @@ ActiveAdmin.register User do
 
   form partial: 'admin/users/form'
 
-  permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url, :title, :skip_password, :born_on,
+  permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url,
+    :title, :skip_password, :born_on, :startup_admin,
     :is_contact, :phone, :phone_verified, :company, :designation, :invitation_token, #:confirmed_at,
     { category_ids: [] }
 end

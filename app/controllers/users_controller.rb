@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-  before_filter :authenticate_user!, only: [:update, :edit]
+  before_filter :authenticate_user!, only: [:show, :edit, :update]
+  before_filter :restrict_to_current_user, only: [:show, :edit, :update]
 
   def show
     @user = User.find(params[:id])
@@ -47,5 +48,9 @@ class UsersController < ApplicationController
 
   def user_params
       params.require(:user).permit(:salutation,:fullname, :username, :email, :twitter_url, :linkedin_url, :avatar, :startup_id, :title, :born_on, :is_student, :college, :university, :course, :semester )
+  end
+
+  def restrict_to_current_user
+    raise_not_found if current_user.id != params[:id].to_i
   end
 end

@@ -41,6 +41,7 @@ gem 'cancancan', '~> 1.8' # Used to manage administrator types and roles in the 
 gem 'paper_trail' # Logs changes in critical tables, and displays changelog in ActiveAdmin dashboard.
 gem 'phony_rails' # Phone number validation and normalization. TODO: Get rid of phony_rails if isn't updated. Last updated was 18/3/2014.
 gem 'select2-rails' # Select2 javascript select box improvement library, using in ActiveAdmin interface.
+gem 'nilify_blanks' # Sets database fields to nil if blank values are supplied.
 
 group :development do
   gem 'seed-fu', github: 'mbleigh/seed-fu' # check and remove

@@ -91,6 +91,8 @@ class User < ActiveRecord::Base
     value if value =~ /^http[s]*:\/\/linkedin\.com.*/
   end
 
+  nilify_blanks only: [:invitation_token]
+
   before_create do
     self.auth_token = SecureRandom.hex(30)
     self.startup_verifier_token = SecureRandom.hex(30)

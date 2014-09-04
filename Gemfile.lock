@@ -226,6 +226,9 @@ GEM
       net-ssh (>= 2.6.5)
     net-ssh (2.9.1)
     newrelic_rpm (3.8.1.221)
+    nilify_blanks (1.1.0)
+      activerecord (>= 3.0.0)
+      activesupport (>= 3.0.0)
     nokogiri (1.6.2.1)
       mini_portile (= 0.6.0)
     omniauth (1.2.1)
@@ -423,6 +426,7 @@ DEPENDENCIES
   just-datetime-picker
   mini_magick
   newrelic_rpm
+  nilify_blanks
   nokogiri
   omniauth (~> 1.2.1)
   paper_trail

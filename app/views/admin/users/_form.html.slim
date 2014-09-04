@@ -25,7 +25,7 @@
     = f.input :company
     = f.input :designation
     = f.input :phone_verified
-    = f.input :invitation_token
+    = f.input :invitation_token, input_html: {data: { registered: @user.encrypted_password.blank? ? 'false' : 'true' }}
 
   = f.submit
 

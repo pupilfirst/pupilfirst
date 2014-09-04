@@ -12,8 +12,8 @@ $(document).ready(function() {
 
       var invitation_token = $('input#user_invitation_token');
 
-      // Set invitation token only if it isn't set already.
-      if(!invitation_token.val()) {
+      // Set invitation token only if it isn't set already, and user isn't registered.
+      if(!invitation_token.val() && !invitation_token.data('registered')) {
         invitation_token.val(Math.random().toString(36).slice(2));
       }
     }

@@ -1,6 +1,7 @@
 class StartupsController < InheritedResources::Base
   before_filter :authenticate_user!
   skip_before_filter :authenticate_user!, only: [:confirm_employee, :confirm_startup_link]
+  before_filter :restrict_to_startup_members, only: [:show]
   after_filter only: [:create] do
     @startup.founders << current_user
     @startup.save
@@ -28,7 +29,6 @@ class StartupsController < InheritedResources::Base
 
   def show
     @startup = Startup.find(params[:id])
-    raise_not_found unless current_user.startup.try(:id) == @startup.id
   end
 
   def edit
@@ -85,5 +85,11 @@ class StartupsController < InheritedResources::Base
                                                    :help_from_sv, {category_ids: []}, {founders_attributes: [:id, :title]},
                                                    {startup_before: [:startup_name, :startup_descripition] }
                                                   )}
+  end
+
+  private
+
+  def restrict_to_startup_members
+    raise_not_found if current_user.startup.try(:id) != params[:id].to_i
   end
 end

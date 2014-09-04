@@ -12,11 +12,11 @@ Svapp::Application.routes.draw do
     end
   end
   resources :startups, only: [:show] do
-    resources :founders do
-      collection do
-        post :invite
-      end
-    end
+    # resources :founders do
+      # collection do
+      #   post :invite
+      # end
+    # end
     member do
       post :confirm_employee
       get :confirm_employee

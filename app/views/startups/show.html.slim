@@ -52,9 +52,9 @@ table.table.table-hover.table-bordered.table-striped
     tr
       td Founders
       td
-        = @startup.founders.map &:email
-        br
-        = link_to "Invite co-founders", startup_founders_path(startup_id: @startup.id)
+        = @startup.founders.map(&:fullname).join ', '
+        /br
+        /= link_to "Invite co-founders", startup_founders_path(startup_id: @startup.id)
 
 
-= link_to 'Edit', edit_startup_path(@startup), {class: 'btn btn-success'}
+/= link_to 'Edit', edit_startup_path(@startup), {class: 'btn btn-success'}

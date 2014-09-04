@@ -11,7 +11,7 @@ Svapp::Application.routes.draw do
       post 'send_invite'
     end
   end
-  resources :startups do
+  resources :startups, only: [:show] do
     resources :founders do
       collection do
         post :invite

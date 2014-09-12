@@ -2,12 +2,21 @@
   <%= link_to "Sign in", new_session_path(resource_name), :class=>"btn btn-info" %>
 <% end -%>
 
+<a href="https://play.google.com/store/apps/details?id=in.svlabs.android">
+  <%= image_tag 'google_play.png', alt: 'Android app on Google Play' %>
+</a>
+
+<a href="https://itunes.apple.com/in/app/startup-village-enabling-entrepreneurship/id804638121">
+  <%= image_tag 'app_store.svg', alt: 'iOS app on App Store' %>
+</a>
+
 <%- if devise_mapping.registerable? && controller_name != 'registrations' %>  &nbsp;
   <%= link_to "Join us", new_registration_path(resource_name), :class=>"link" %>
 <% end -%>
 
-<%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>   &nbsp; |  &nbsp;
-    <%= link_to "Forgot your password?", new_password_path(resource_name), :class=>"link" %>
+<%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+  <br/><br/>
+  <%= link_to "Forgot your password?", new_password_path(resource_name), :class=>"link" %>
 <% end -%>
 
 <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>    &nbsp;

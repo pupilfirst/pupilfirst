@@ -64,6 +64,11 @@ class Startup < ActiveRecord::Base
     if: ->(startup){@full_validation }
   }
 
+  before_validation do
+    # Hack to fix incorrect registration_type sent by iOS build 2.0.
+    self.registration_type = REGISTRATION_TYPE_PRIVATE_LIMITED if self.registration_type == 'pvt. ltd.'
+  end
+
   def admin
     founders.where(startup_admin: true).first
   end

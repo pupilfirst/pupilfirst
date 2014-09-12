@@ -23,6 +23,7 @@ module StartupSpecHelper
     check_path(response, "#{prefix}twitter_link")
     check_path(response, "#{prefix}facebook_link")
     check_path(response, "#{prefix}categories")
+    check_path(response, "#{prefix}categories_v2")
     check_path(response, "#{prefix}created_at")
     check_path(response, "#{prefix}founders")
     check_path(response, "#{prefix}founders/0/id")

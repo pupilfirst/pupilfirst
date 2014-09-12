@@ -65,6 +65,9 @@ class Startup < ActiveRecord::Base
   }
 
   before_validation do
+    # Set registration_type to nil if its set as blank from backend.
+    self.registration_type = nil if self.registration_type.blank?
+
     # Hack to fix incorrect registration_type sent by iOS build 2.0.
     self.registration_type = REGISTRATION_TYPE_PRIVATE_LIMITED if self.registration_type == 'pvt. ltd.'
   end

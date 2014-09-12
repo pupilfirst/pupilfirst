@@ -16,6 +16,7 @@
     - founders = User.non_founders + @startup.founders
     - founders = founders.select { |e| e.valid? }
     = f.input :founders, collection: Hash[founders.map{|b| [b.to_s,b.id]}], input_html: {style: "width: 400px;"}
+    = f.input :registration_type, collection: Startup.valid_registration_types
     = f.input :dsc
     = f.input :authorized_capital
     = f.input :share_holding_pattern

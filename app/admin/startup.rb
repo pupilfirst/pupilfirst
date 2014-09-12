@@ -116,6 +116,7 @@ ActiveAdmin.register Startup do
           end
         end
       end
+      row :registration_type
       row :dsc
       row :authorized_capital
       row :share_holding_pattern
@@ -190,5 +191,9 @@ ActiveAdmin.register Startup do
 
   form :partial => "admin/startups/form"
   permit_params :name, :pitch, :website, :about, :email, :phone, :logo, :facebook_link, :twitter_link, :cool_fact,
-    { category_ids: [] }, { founder_ids: [] }, { founders_attributes: [:id, :fullname, :email, :username, :avatar, :remote_avatar_url, :title, :linkedin_url, :twitter_url, :skip_password] }, :created_at, :updated_at, :approval_status, :incorporation_status, :bank_status, :sep_status, :dsc, :authorized_capital, :share_holding_pattern, :moa, :police_station, :approval_status, :incorporation_status, :bank_status, :sep_status, :company_names, :address, :pre_funds, :startup_before, :product_name, :product_description, help_from_sv: []
+    { category_ids: [] }, { founder_ids: [] }, { founders_attributes: [:id, :fullname, :email, :username, :avatar, :remote_avatar_url, :title, :linkedin_url, :twitter_url, :skip_password] },
+    :created_at, :updated_at, :approval_status, :incorporation_status, :bank_status, :sep_status, :dsc,
+    :authorized_capital, :share_holding_pattern, :moa, :police_station, :approval_status, :incorporation_status,
+    :bank_status, :sep_status, :company_names, :address, :pre_funds, :startup_before, :product_name,
+    :product_description, :registration_type, help_from_sv: []
 end

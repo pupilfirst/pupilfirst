@@ -1,6 +1,7 @@
 class Startup < ActiveRecord::Base
   REGISTRATION_TYPE_PRIVATE_LIMITED = 'private_limited'
   REGISTRATION_TYPE_PARTNERSHIP = 'partnership'
+  REGISTRATION_TYPE_LLP = 'llp' # Limited Liability Partnership
 
   MAX_PITCH_CHARS = 140      unless defined?(MAX_PITCH_CHARS)
   MAX_ABOUT_WORDS = 500     unless defined?(MAX_ABOUT_WORDS)
@@ -11,7 +12,7 @@ class Startup < ActiveRecord::Base
   APPROVAL_STATUS_REJECTED = 'rejected'
 
   def self.valid_registration_types
-    [REGISTRATION_TYPE_PRIVATE_LIMITED, REGISTRATION_TYPE_PARTNERSHIP]
+    [REGISTRATION_TYPE_PRIVATE_LIMITED, REGISTRATION_TYPE_PARTNERSHIP, REGISTRATION_TYPE_LLP]
   end
 
   has_paper_trail

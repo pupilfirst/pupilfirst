@@ -1,60 +1,37 @@
+h1 = @startup.name
 
-
-<h1> Startup Name  </h1>
-
-
-table.table.table-hover.table-bordered.table-striped
+table.table
   tbody
     tr
-      td Name
+      th Logo
       td
-        = @startup.name
+        = logo_image_html(@startup.logo_url(:thumb))
     tr
-      td Email
-      td
-        = @startup.email
+      th About
+      td = about_html(@startup.about)
     tr
-      td Phone
-      td
-        = @startup.phone
+      th Presentation
+      td = presentation_html(@startup.presentation_link)
     tr
-      td Logo
-      td
-        = image_tag @startup.logo_url(:thumb)
+      th Founders
+      td = @startup.founders.pluck(:fullname).join ', '
     tr
-      td Pitch
-      td
-        = @startup.pitch
+      th Website
+      td = website_html(@startup.website)
     tr
-      td Website
-      td
-        = @startup.website
+      th Product Progress
+      td = product_progress_html(@startup.product_progress)
     tr
-      td Office Address
-      td
-        = @startup.address
+      th Categories
+      td = @startup.categories.map(&:name).join(', ')
     tr
-      td About
-      td
-        = @startup.about
+      th Revenue Generated
+      td = revenue_generated_html(@startup.revenue_generated)
     tr
-      td Categories
-      td
-        = @startup.categories.map &:name
+      th Incorporation Status
+      td = incorporation_status_html(@startup.registration_type)
     tr
-      td Facebook
-      td
-        = @startup.facebook_link
-    tr
-      td Twitter
-      td
-        = @startup.twitter_link
-    tr
-      td Founders
-      td
-        = @startup.founders.map(&:fullname).join ', '
-        /br
-        /= link_to "Invite co-founders", startup_founders_path(startup_id: @startup.id)
+      th Social Media Links
+      td = social_media_html(@startup.facebook_link, @startup.twitter_link)
 
-
-/= link_to 'Edit', edit_startup_path(@startup), {class: 'btn btn-success'}
+/= link_to 'Edit startup details', edit_startup_path(@startup), { class: 'btn btn-primary' }

@@ -11,6 +11,13 @@ class Startup < ActiveRecord::Base
   APPROVAL_STATUS_APPROVED = 'approved'
   APPROVAL_STATUS_REJECTED = 'rejected'
 
+  PRODUCT_PROGRESS_IDEA = 'idea'
+  PRODUCT_PROGRESS_MOCKUP = 'mockup'
+  PRODUCT_PROGRESS_PROTOTYPE = 'prototype'
+  PRODUCT_PROGRESS_PRIVATE_BETA = 'private_beta'
+  PRODUCT_PROGRESS_PUBLIC_BETA = 'public_beta'
+  PRODUCT_PROGRESS_LAUNCHED = 'launched'
+
   def self.valid_registration_types
     [REGISTRATION_TYPE_PRIVATE_LIMITED, REGISTRATION_TYPE_PARTNERSHIP, REGISTRATION_TYPE_LLP]
   end
@@ -131,28 +138,28 @@ class Startup < ActiveRecord::Base
     case value
     when '' then nil
     when nil then nil
-    when /^http:\/\/.*/ then value
+    when /^https+:\/\/.*/ then value
     else "http://#{value}"
     end
   end
 
   normalize_attribute :twitter_link do |value|
     case value
-    when /^http[s]*:\/\/twitter\.com.*/ then value
-    when /^twitter\.com.*/ then "http://#{value}"
-    when "" then nil
+    when /^https+:\/\/.*/ then value
+    when /^twitter\.com.*/ then "https://#{value}"
+    when '' then nil
     when nil then nil
-    else "http://twitter.com/#{value}"
+    else "https://twitter.com/#{value}"
     end
   end
 
   normalize_attribute :facebook_link do |value|
     case value
-    when /^http[s]*:\/\/facebook\.com.*/ then value
-    when /^facebook\.com.*/ then "http://#{value}"
-    when "" then nil
+    when /^https+:\/\/.*/ then value
+    when /^facebook\.com.*/ then "https://#{value}"
+    when '' then nil
     when nil then nil
-    else "http://facebook.com/#{value}"
+    else "https://facebook.com/#{value}"
     end
   end
 
@@ -210,4 +217,6 @@ class Startup < ActiveRecord::Base
       partnerships.create!(partnership_params)
     end
   end
+
+  # TODO: Remove incorporation_status boolean field.
 end

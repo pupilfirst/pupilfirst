@@ -1,6 +1,23 @@
 require 'spec_helper'
 
 describe Startup do
+  context 'when startup is destroyed' do
+    let(:startup) { create :startup }
+
+    it 'clears association from users' do
+      user = create :user_with_out_password, startup: startup
+      startup.destroy!
+      user.reload
+      expect(user.startup_id).to eq nil
+    end
+
+    it 'clears association from pending users' do
+      user = create :user_with_out_password, pending_startup_id: startup.id
+      startup.destroy!
+      user.reload
+      expect(user.pending_startup_id).to eq nil
+    end
+  end
 
   it "should have atleast one founder" do
     startup = create(:startup)

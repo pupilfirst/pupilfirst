@@ -72,6 +72,12 @@ class Startup < ActiveRecord::Base
     self.registration_type = REGISTRATION_TYPE_PRIVATE_LIMITED if self.registration_type == 'pvt. ltd.'
   end
 
+  before_destroy do
+    # Clear out associations from associated Users (and pending ones).
+    User.where(startup_id: self.id).update_all(startup_id: nil)
+    User.where(pending_startup_id: self.id).update_all(pending_startup_id: nil)
+  end
+
   def admin
     founders.where(startup_admin: true).first
   end

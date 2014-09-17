@@ -12,6 +12,8 @@ describe "startups/show" do
       :email => "Email",
       :phone => "Phone1"
     ))
+
+    view.stub_chain :current_user, :is_founder? => false
   end
 
   it 'renders attributes in table' do

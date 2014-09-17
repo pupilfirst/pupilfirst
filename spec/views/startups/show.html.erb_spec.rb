@@ -14,19 +14,19 @@ describe "startups/show" do
     ))
   end
 
-  it "renders attributes in <p>" do
+  it 'renders attributes in table' do
     render
     # Run the generator again with the --webrat flag if you want to use webrat matchers
     expect(rendered).to match(/Name/)
     expect(rendered).to match(/Logo/)
-    expect(rendered).to match(/Pitch/)
-    expect(rendered).to match(/Website/)
     expect(rendered).to match(/About/)
-    expect(rendered).to match(//)
-    expect(rendered).to match(/Email/)
-    expect(rendered).to match(/Phone/)
+    expect(rendered).to match(/Presentation/)
+    expect(rendered).to match(/Founders/)
+    expect(rendered).to match(/Website/)
+    expect(rendered).to match(/Product Progress/)
     expect(rendered).to match(/Categories/)
-    expect(rendered).to match(/Facebook/)
-    expect(rendered).to match(/Twitter/)
+    expect(rendered).to match(/Revenue Generated/)
+    expect(rendered).to match(/Incorporation Status/)
+    expect(rendered).to match(/Social Media Links/)
   end
 end

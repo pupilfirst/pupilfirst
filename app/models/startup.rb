@@ -5,6 +5,7 @@ class Startup < ActiveRecord::Base
 
   MAX_PITCH_CHARACTERS = 140 unless defined?(MAX_PITCH_CHARACTERS)
   MAX_ABOUT_CHARACTERS = 1000 unless defined?(MAX_ABOUT_CHARACTERS)
+  MAX_CATEGORY_COUNT = 3
 
   APPROVAL_STATUS_UNREADY = 'unready'
   APPROVAL_STATUS_PENDING = 'pending'
@@ -30,15 +31,21 @@ class Startup < ActiveRecord::Base
 
   scope :approved, -> { where(approval_status: APPROVAL_STATUS_APPROVED) }
 
-  has_many :founders, -> { where("startup_link_verifier_id IS NOT NULL AND is_founder = ?", true)}, class_name: "User", foreign_key: "startup_id" do
+  has_many :founders, -> { where("startup_link_verifier_id IS NOT NULL AND is_founder = ?", true) }, class_name: "User", foreign_key: "startup_id" do
     def <<(founder)
       founder.update_attributes!(is_founder: true, startup_link_verifier_id: founder.id)
       super founder
     end
   end
 
-  has_many :employees, -> { where("startup_link_verifier_id IS NOT NULL")}, :class_name => "User", :foreign_key => "startup_id"
-  has_and_belongs_to_many :categories, :join_table => "startups_categories"
+  has_many :employees, -> { where("startup_link_verifier_id IS NOT NULL") }, :class_name => "User", :foreign_key => "startup_id"
+
+  has_and_belongs_to_many :categories, :join_table => 'startups_categories' do
+    def <<(category)
+      raise StandardError, 'Use categories= to enforce startup category limit'
+    end
+  end
+
   has_one :bank
   belongs_to :registered_address, class_name: 'Address'
   has_many :partnerships
@@ -47,7 +54,7 @@ class Startup < ActiveRecord::Base
   serialize :startup_before, JSON
   serialize :police_station, JSON
   serialize :help_from_sv, Array
-  # validate :valid_categories?
+
   validate :valid_founders?
   validates_associated :founders
   # validates_length_of :help_from_sv, minimum: 1, too_short: 'must select atleast one', if: ->(startup){@full_validation }
@@ -67,16 +74,16 @@ class Startup < ActiveRecord::Base
   # validates_presence_of :email
   # validates_presence_of :phone
 
-  validates_presence_of :pre_funds, if: ->(startup){startup.pre_investers_name.present?}
-  validates_presence_of :pre_investers_name, if: ->(startup){startup.pre_funds.present?}
+  validates_presence_of :pre_funds, if: ->(startup) { startup.pre_investers_name.present? }
+  validates_presence_of :pre_investers_name, if: ->(startup) { startup.pre_funds.present? }
 
   validates_length_of :pitch, maximum: MAX_PITCH_CHARACTERS,
     message: "must be within #{MAX_PITCH_CHARACTERS} characters",
-    allow_nil: true, if: ->(startup){@full_validation }
+    allow_nil: true, if: ->(startup) { @full_validation }
 
   validates_length_of :about, maximum: MAX_ABOUT_CHARACTERS,
     message: "must be within #{MAX_ABOUT_CHARACTERS} characters",
-    allow_nil: true, if: ->(startup){@full_validation }
+    allow_nil: true, if: ->(startup) { @full_validation }
 
   before_validation do
     # Set registration_type to nil if its set as blank from backend.
@@ -119,14 +126,8 @@ class Startup < ActiveRecord::Base
     true
   end
 
-  def valid_categories?
-   return true unless @full_validation
-   self.errors.add(:categories, "can't have more than 3 categories") if categories.size > 3
-   self.errors.add(:categories, "must select at least one category") if categories.size < 1
-  end
-
   def valid_founders?
-   self.errors.add(:founders, "should have at least one founder") if founders.nil? or founders.size < 1
+    self.errors.add(:founders, "should have at least one founder") if founders.nil? or founders.size < 1
   end
 
   mount_uploader :logo, AvatarUploader
@@ -135,7 +136,7 @@ class Startup < ActiveRecord::Base
   normalize_attribute :name, :pitch, :about, :email, :phone
   attr_accessor :full_validation
 
-  after_initialize ->(){
+  after_initialize ->() {
     @full_validation = true
   }
 
@@ -145,36 +146,50 @@ class Startup < ActiveRecord::Base
 
   normalize_attribute :website do |value|
     case value
-    when '' then nil
-    when nil then nil
-    when /^https?:\/\/.*/ then value
-    else "http://#{value}"
+      when '' then
+        nil
+      when nil then
+        nil
+      when /^https?:\/\/.*/ then
+        value
+      else
+        "http://#{value}"
     end
   end
 
   normalize_attribute :twitter_link do |value|
     case value
-    when /^https?:\/\/(www\.)?twitter.com.*/ then value
-    when /^twitter\.com.*/ then "https://#{value}"
-    when '' then nil
-    when nil then nil
-    else "https://twitter.com/#{value}"
+      when /^https?:\/\/(www\.)?twitter.com.*/ then
+        value
+      when /^twitter\.com.*/ then
+        "https://#{value}"
+      when '' then
+        nil
+      when nil then
+        nil
+      else
+        "https://twitter.com/#{value}"
     end
   end
 
   normalize_attribute :facebook_link do |value|
     case value
-    when /^https?:\/\/(www\.)?facebook.com.*/ then value
-    when /^facebook\.com.*/ then "https://#{value}"
-    when '' then nil
-    when nil then nil
-    else "https://facebook.com/#{value}"
+      when /^https?:\/\/(www\.)?facebook.com.*/ then
+        value
+      when /^facebook\.com.*/ then
+        "https://#{value}"
+      when '' then
+        nil
+      when nil then
+        nil
+      else
+        "https://facebook.com/#{value}"
     end
   end
 
   def founder_ids=(list_of_ids)
-    users_list = User.find list_of_ids.map{ |e| e.to_i }.select{ |e|  e.is_a?(Integer) and e > 0 }
-    users_list.each{|u| founders << u }
+    users_list = User.find list_of_ids.map { |e| e.to_i }.select { |e| e.is_a?(Integer) and e > 0 }
+    users_list.each { |u| founders << u }
   end
 
   def incorporation_submited?
@@ -191,20 +206,32 @@ class Startup < ActiveRecord::Base
     false
   end
 
+  validate :category_count
+
+  def category_count
+    if @category_count_exceeded || self.categories.count > MAX_CATEGORY_COUNT
+      self.errors.add(:categories, "Can't have more than 3 categories")
+    end
+  end
+
   # Custom setter for startup categories.
   #
   # @param [String, Array] category_entries Array of Categories or comma-separated Category ID-s.
   def categories=(category_entries)
-    unless category_entries.is_a? String
-      super(category_entries)
-      return
+    parsed_categories = if category_entries.is_a? String
+      category_entries.split(',').map do |category_id|
+        Category.find(category_id)
+      end
+    else
+      category_entries
     end
 
-    category_table_entries = category_entries.split(',').map do |category_id|
-      Category.find(category_id)
+    # Enforce maximum count for categories.
+    if parsed_categories.count > MAX_CATEGORY_COUNT
+      @category_count_exceeded = true
+    else
+      super parsed_categories
     end
-
-    super category_table_entries
   end
 
   def register(registration_params)

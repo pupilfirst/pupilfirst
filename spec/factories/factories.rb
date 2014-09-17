@@ -151,7 +151,7 @@ FactoryGirl.define do
     after(:build) do |startup|
       startup.founders << create(:founder, startup: startup)
       startup.founders << create(:founder, startup: startup)
-      startup.categories << create(:startup_category)
+      startup.categories = [create(:startup_category)]
     end
   end
 

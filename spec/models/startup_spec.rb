@@ -39,10 +39,8 @@ describe Startup do
     expect { startup.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
-  it "validates the size of about" do
-    startup = build(:startup, about: Faker::Lorem.words(513, true).join(' '))
-    expect { startup.save! }.to raise_error(ActiveRecord::RecordInvalid)
-    startup.about = Faker::Lorem.words(5).join(' ')
+  it 'validates the size of about' do
+    startup = build(:startup, about: Faker::Lorem.characters(1003))
     expect { startup.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 

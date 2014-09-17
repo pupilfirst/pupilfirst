@@ -3,8 +3,8 @@ class Startup < ActiveRecord::Base
   REGISTRATION_TYPE_PARTNERSHIP = 'partnership'
   REGISTRATION_TYPE_LLP = 'llp' # Limited Liability Partnership
 
-  MAX_PITCH_CHARS = 140      unless defined?(MAX_PITCH_CHARS)
-  MAX_ABOUT_WORDS = 500     unless defined?(MAX_ABOUT_WORDS)
+  MAX_PITCH_CHARACTERS = 140 unless defined?(MAX_PITCH_CHARACTERS)
+  MAX_ABOUT_CHARACTERS = 1000 unless defined?(MAX_ABOUT_CHARACTERS)
 
   APPROVAL_STATUS_UNREADY = 'unready'
   APPROVAL_STATUS_PENDING = 'pending'
@@ -17,6 +17,10 @@ class Startup < ActiveRecord::Base
   PRODUCT_PROGRESS_PRIVATE_BETA = 'private_beta'
   PRODUCT_PROGRESS_PUBLIC_BETA = 'public_beta'
   PRODUCT_PROGRESS_LAUNCHED = 'launched'
+
+  def self.valid_product_progress_values
+    [PRODUCT_PROGRESS_IDEA, PRODUCT_PROGRESS_MOCKUP, PRODUCT_PROGRESS_PROTOTYPE, PRODUCT_PROGRESS_PRIVATE_BETA, PRODUCT_PROGRESS_PUBLIC_BETA, PRODUCT_PROGRESS_LAUNCHED]
+  end
 
   def self.valid_registration_types
     [REGISTRATION_TYPE_PRIVATE_LIMITED, REGISTRATION_TYPE_PARTNERSHIP, REGISTRATION_TYPE_LLP]
@@ -48,9 +52,14 @@ class Startup < ActiveRecord::Base
   validates_associated :founders
   # validates_length_of :help_from_sv, minimum: 1, too_short: 'must select atleast one', if: ->(startup){@full_validation }
 
-  # Registration type should be one of Pvt. Ltd., or a Partnership.
+  # Registration type should be one of Pvt. Ltd., Partnership, or LLC.
   validates :registration_type,
     inclusion: { in: valid_registration_types },
+    allow_nil: true
+
+  # Product Progress should be one of acceptable list.
+  validates :product_progress,
+    inclusion: { in: valid_product_progress_values },
     allow_nil: true
 
   # validates_presence_of :name, if: ->(startup){@full_validation }
@@ -61,15 +70,13 @@ class Startup < ActiveRecord::Base
   validates_presence_of :pre_funds, if: ->(startup){startup.pre_investers_name.present?}
   validates_presence_of :pre_investers_name, if: ->(startup){startup.pre_funds.present?}
 
-  validates_length_of :pitch, maximum: MAX_PITCH_CHARS,
-    message: "must be within #{MAX_PITCH_CHARS} characters",
+  validates_length_of :pitch, maximum: MAX_PITCH_CHARACTERS,
+    message: "must be within #{MAX_PITCH_CHARACTERS} characters",
     allow_nil: true, if: ->(startup){@full_validation }
 
-  validates_length_of :about, {
-    within: 10..MAX_ABOUT_WORDS, message: "must be within 10 to #{MAX_ABOUT_WORDS} words",
-    tokenizer: ->(str) { str.scan(/\w+/) }, allow_nil: true,
-    if: ->(startup){@full_validation }
-  }
+  validates_length_of :about, maximum: MAX_ABOUT_CHARACTERS,
+    message: "must be within #{MAX_ABOUT_CHARACTERS} characters",
+    allow_nil: true, if: ->(startup){@full_validation }
 
   before_validation do
     # Set registration_type to nil if its set as blank from backend.
@@ -84,6 +91,8 @@ class Startup < ActiveRecord::Base
     User.where(startup_id: self.id).update_all(startup_id: nil)
     User.where(pending_startup_id: self.id).update_all(pending_startup_id: nil)
   end
+
+  nilify_blanks only: [:revenue_generated]
 
   def admin
     founders.where(startup_admin: true).first

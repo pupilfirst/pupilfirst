@@ -17,7 +17,7 @@ class StartupsController < InheritedResources::Base
   end
 
   def create
-    @startup = Startup.create(apply_now_params.merge({email: current_user.email}))
+    @startup = Startup.create(apply_now_params.merge({ email: current_user.email }))
     @startup.full_validation = false
     @startup.founders << current_user
     if @startup.save
@@ -41,11 +41,11 @@ class StartupsController < InheritedResources::Base
   def update
     @current_user = current_user
     @startup = Startup.find params[:id]
-    @startup.founders.each{|f| f.full_validation = true}
+    @startup.founders.each { |f| f.full_validation = true }
     update! do |success, failure|
       success.html {
-        StartupMailer.notify_svrep_about_startup_update(@startup).deliver
-        redirect_to startup_founders_url(@startup)
+        # StartupMailer.notify_svrep_about_startup_update(@startup).deliver
+        redirect_to @startup
       }
     end
   end
@@ -80,11 +80,12 @@ class StartupsController < InheritedResources::Base
   end
 
   def permitted_params
-    {:startup => params.fetch(:startup, {}).permit(:name, :address, :pitch, :website, :about, :email, :phone, :logo, {help_from_sv: []},
-                                                   :remote_logo_url, :facebook_link, :twitter_link, :pre_funds, :pre_investers_name,
-                                                   :help_from_sv, {category_ids: []}, {founders_attributes: [:id, :title]},
-                                                   {startup_before: [:startup_name, :startup_descripition] }
-                                                  )}
+    { :startup => params.fetch(:startup, {}).permit(:name, :address, :pitch, :website, :about, :email, :phone, :logo, { help_from_sv: [] },
+      :remote_logo_url, :facebook_link, :twitter_link, :pre_funds, :pre_investers_name,
+      :help_from_sv, { category_ids: [] }, { founders_attributes: [:id, :title] },
+      { startup_before: [:startup_name, :startup_descripition] },
+      :revenue_generated, :presentation_link, :product_progress
+    ) }
   end
 
   private

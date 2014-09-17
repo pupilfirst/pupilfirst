@@ -31,12 +31,12 @@ javascript:
     update_pitch = function(){
       var help_ele = $(".startup_pitch .help-block")
       var ele = $(".startup_pitch #startup_pitch")
-      counter(ele, help_ele, #{Startup::MAX_PITCH_CHARS})
+      counter(ele, help_ele, #{Startup::MAX_PITCH_CHARACTERS})
     }
     update_about = function(){
       var help_ele = $(".startup_about .help-block")
       var ele = $(".startup_about #startup_about")
-      counter(ele, help_ele, #{Startup::MAX_ABOUT_WORDS}, true)
+      counter(ele, help_ele, #{Startup::MAX_ABOUT_CHARACTERS})
     }
 
     $(".startup_pitch #startup_pitch").click(update_pitch).change(update_pitch).keydown(update_pitch).keypress(update_pitch).keyup(update_pitch).blur(update_pitch).focus(update_pitch);

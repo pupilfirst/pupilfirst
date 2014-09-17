@@ -91,7 +91,7 @@ module StartupsHelper
 
   def about_html(about)
     if about
-      about
+      simple_format about
     else
       '<em>Not Available</em>'.html_safe
     end

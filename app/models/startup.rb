@@ -138,14 +138,14 @@ class Startup < ActiveRecord::Base
     case value
     when '' then nil
     when nil then nil
-    when /^https+:\/\/.*/ then value
+    when /^https?:\/\/.*/ then value
     else "http://#{value}"
     end
   end
 
   normalize_attribute :twitter_link do |value|
     case value
-    when /^https+:\/\/.*/ then value
+    when /^https?:\/\/(www\.)?twitter.com.*/ then value
     when /^twitter\.com.*/ then "https://#{value}"
     when '' then nil
     when nil then nil
@@ -155,7 +155,7 @@ class Startup < ActiveRecord::Base
 
   normalize_attribute :facebook_link do |value|
     case value
-    when /^https+:\/\/.*/ then value
+    when /^https?:\/\/(www\.)?facebook.com.*/ then value
     when /^facebook\.com.*/ then "https://#{value}"
     when '' then nil
     when nil then nil

@@ -65,12 +65,12 @@ describe Startup do
 
     it "to link if username is given" do
       startup = create(:startup, twitter_link: "gouthamvel")
-      expect( startup.twitter_link).to eq("http://twitter.com/gouthamvel")
+      expect( startup.twitter_link).to eq('https://twitter.com/gouthamvel')
     end
 
     it "to link with http if link starts with twitter.com" do
       startup = create(:startup, twitter_link: "twitter.com/gouthamvel")
-      expect( startup.twitter_link).to eq("http://twitter.com/gouthamvel")
+      expect( startup.twitter_link).to eq('https://twitter.com/gouthamvel')
     end
 
     it "remains unchanged if the url is valid" do
@@ -89,12 +89,12 @@ describe Startup do
 
     it "to link if username is given" do
       startup = create(:startup, facebook_link: "gouthamvel")
-      expect( startup.facebook_link).to eq("http://facebook.com/gouthamvel")
+      expect( startup.facebook_link).to eq('https://facebook.com/gouthamvel')
     end
 
     it "to link with http if link starts with twitter.com" do
       startup = create(:startup, facebook_link: "facebook.com/gouthamvel")
-      expect( startup.facebook_link).to eq("http://facebook.com/gouthamvel")
+      expect( startup.facebook_link).to eq('https://facebook.com/gouthamvel')
     end
 
     it "remains unchanged if the url is valid" do

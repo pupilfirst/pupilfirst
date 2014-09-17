@@ -23,7 +23,7 @@ table.table
       td = product_progress_html(@startup.product_progress)
     tr
       th Categories
-      td = @startup.categories.map(&:name).join(', ')
+      td = categories_html(@startup.categories)
     tr
       th Revenue Generated
       td = revenue_generated_html(@startup.revenue_generated)

@@ -50,6 +50,14 @@ module StartupsHelper
     end
   end
 
+  def categories_html(categories)
+    if categories.empty?
+      '<em>None Selected</em>'.html_safe
+    else
+      categories.map(&:name).join(', ')
+    end
+  end
+
   def presentation_html(presentation_link)
     if presentation_link.present?
       link_to presentation_link, presentation_link

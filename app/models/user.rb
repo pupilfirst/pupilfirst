@@ -80,18 +80,36 @@ class User < ActiveRecord::Base
   end
 
   normalize_attribute :twitter_url do |value|
-    value = "http://#{value}" if value =~ /^twitter\.com.*/
-    value = "http://twitter.com/#{value}" unless value =~ /[http:\/\/]*twitter\.com.*/
-    value if value =~ /^http[s]*:\/\/twitter\.com.*/
+    case value
+      when /^https?:\/\/(www\.)?twitter.com.*/ then
+        value
+      when /^(www\.)?twitter\.com.*/ then
+        "https://#{value}"
+      when '' then
+        nil
+      when nil then
+        nil
+      else
+        "https://twitter.com/#{value}"
+    end
   end
 
   normalize_attribute :linkedin_url do |value|
-    value = "http://#{value}" if value =~ /^linkedin\.com.*/
-    value = "http://linkedin.com/in/#{value}" unless value =~ /[http:\/\/]*linkedin\.com.*/
-    value if value =~ /^http[s]*:\/\/linkedin\.com.*/
+    case value
+      when /^https?:\/\/(www\.)?linkedin.com.*/ then
+        value
+      when /^(www\.)?linkedin\.com.*/ then
+        "https://#{value}"
+      when '' then
+        nil
+      when nil then
+        nil
+      else
+        "https://linkedin.com/in/#{value}"
+    end
   end
 
-  nilify_blanks only: [:invitation_token]
+  nilify_blanks only: [:invitation_token, :twitter_url, :linkedin_url]
 
   before_create do
     self.auth_token = SecureRandom.hex(30)

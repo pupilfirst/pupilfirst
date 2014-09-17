@@ -161,7 +161,7 @@ class Startup < ActiveRecord::Base
     case value
       when /^https?:\/\/(www\.)?twitter.com.*/ then
         value
-      when /^twitter\.com.*/ then
+      when /^(www\.)?twitter\.com.*/ then
         "https://#{value}"
       when '' then
         nil
@@ -176,7 +176,7 @@ class Startup < ActiveRecord::Base
     case value
       when /^https?:\/\/(www\.)?facebook.com.*/ then
         value
-      when /^facebook\.com.*/ then
+      when /^(www\.)?facebook\.com.*/ then
         "https://#{value}"
       when '' then
         nil

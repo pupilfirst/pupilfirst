@@ -48,7 +48,7 @@ ActiveAdmin.register Startup do
 
   member_action :custom_update, method: :put do
     startup = Startup.find params[:id]
-    if startup.update_attributes(permitted_params[:startup])
+    if startup.update_attributes!(permitted_params[:startup])
       case params[:email_to_send].to_sym
         when :approval
           StartupMailer.startup_approved(startup).deliver

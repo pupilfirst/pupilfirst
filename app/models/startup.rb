@@ -67,7 +67,8 @@ class Startup < ActiveRecord::Base
   # Product Progress should be one of acceptable list.
   validates :product_progress,
     inclusion: { in: valid_product_progress_values },
-    allow_nil: true
+    allow_nil: true,
+    allow_blank: true
 
   # validates_presence_of :name, if: ->(startup){@full_validation }
   # validates_presence_of :address, if: ->(startup){@full_validation }
@@ -99,7 +100,7 @@ class Startup < ActiveRecord::Base
     User.where(pending_startup_id: self.id).update_all(pending_startup_id: nil)
   end
 
-  nilify_blanks only: [:revenue_generated, :team_size, :women_employees, :approval_status]
+  nilify_blanks only: [:revenue_generated, :team_size, :women_employees, :approval_status, :product_progress]
 
   def admin
     founders.where(startup_admin: true).first

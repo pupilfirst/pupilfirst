@@ -31,8 +31,8 @@ br
         hint: 'Share the link to a presentation that showcases your company, core products in fair detail.',
         input_html: { placeholder: 'URL to presentation', class: 'span5' }
 
-    = f.input :product_progress, collection: Startup.valid_product_progress_values, label_method: ->(obj) { product_progress_html(obj) }
-    = f.association :categories, hint: 'Categories that describe your startup. Max 3.', collection: Category.startup_category, as: :select, input_html:{class: 'span4'}
+    = f.input :product_progress, collection: Startup.valid_product_progress_values, label_method: ->(obj) { product_progress_html(obj) }, input_html: { class: 'selectpicker' }
+    = f.association :categories, hint: 'Categories that describe your startup. Max 3.', collection: Category.startup_category, as: :select, input_html: { class: 'span4 selectpicker', 'data-live-search' => 'true', 'data-max-options' => "#{Startup::MAX_CATEGORY_COUNT}" }
     = f.input :revenue_generated, hint: 'How much cumulative revenue have you generated till date?'
     = f.input :team_size, label: 'Total Team Size'
     = f.input :women_employees, label: 'Number of Women Employees'
@@ -66,10 +66,10 @@ br
 
 javascript:
   $(function () {
-    $(".optional .content").hide()
+    $(".optional .content").hide();
     $(".optional input:checkbox").click(function () {
       var $this = $(this);
-      var optional = $($this).parent().parent()
+      var optional = $($this).parent().parent();
       if ($this.is(':checked')) {
         $(".content", optional).show()
       } else {
@@ -85,7 +85,12 @@ javascript:
     //   }
     // })
 
-    $('select').selectpicker();
+    $('.selectpicker').selectpicker();
+    // $('select').selectpicker();
+    // $('#startup_category_ids').select2({ placeholder : 'Select Category' });
+
+    // This method counts characters (or words) in an element, and updates that into the help element, displaying
+    // current count and max allowed count.
     counter = function (ele, help_ele, max_chars, is_words) {
       var value = $(ele).val();
 
@@ -102,18 +107,20 @@ javascript:
 
       $(help_ele).html((is_words ? wordCount : charCount) + "/" + max_chars + " characters");
     };
+
     update_pitch = function () {
-      var help_ele = $(".startup_pitch .help-block")
-      var ele = $(".startup_pitch #startup_pitch")
+      var help_ele = $(".startup_pitch .help-block");
+      var ele = $(".startup_pitch #startup_pitch");
       counter(ele, help_ele, #{Startup::MAX_PITCH_CHARACTERS})
-    }
+    };
+
     update_about = function () {
-      var help_ele = $(".startup_about .help-block")
-      var ele = $(".startup_about #startup_about")
+      var help_ele = $(".startup_about .help-block");
+      var ele = $(".startup_about #startup_about");
       counter(ele, help_ele, #{Startup::MAX_ABOUT_CHARACTERS})
-    }
+    };
 
     $(".startup_pitch #startup_pitch").click(update_pitch).change(update_pitch).keydown(update_pitch).keypress(update_pitch).keyup(update_pitch).blur(update_pitch).focus(update_pitch);
     $(".startup_about #startup_about").click(update_about).change(update_about).keydown(update_about).keypress(update_about).keyup(update_about).blur(update_about).focus(update_about);
-  })
+  });
 

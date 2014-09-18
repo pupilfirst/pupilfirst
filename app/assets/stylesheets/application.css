@@ -11,7 +11,7 @@
  *= require bootstrap
  *= require global
  *= require bootstrap-responsive
- *= require bootstrap-select.min
+ *= require bootstrap-select
  *= require datepicker
  *= require_self
  */

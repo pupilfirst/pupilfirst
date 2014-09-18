@@ -15,9 +15,5 @@
 //= require turbolinks
 //= require cocoon
 //= require bootstrap.min
-//= require bootstrap-select.min
+//= require bootstrap-select
 //= require bootstrap-datepicker
-
-$(function(){
-	$('select').selectpicker();
-})

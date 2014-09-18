@@ -25,8 +25,9 @@ ActiveAdmin.register Startup do
       startup.approval_status.capitalize
     end
     column :name
-    column :email
-    column :phone
+    column :presentation_link do |startup|
+      link_to startup.presentation_link, startup.presentation_link if startup.presentation_link.present?
+    end
     column :logo do |startup|
       link_to(image_tag(startup.logo_url(:thumb)), startup.logo_url)
     end
@@ -100,12 +101,21 @@ ActiveAdmin.register Startup do
         link_to(image_tag(startup.logo_url(:thumb)), startup.logo_url)
       end
       row :pitch
+      row :website
+      row :presentation_link do |startup|
+        link_to startup.presentation_link, startup.presentation_link if startup.presentation_link.present?
+      end
+      row :product_progress
+      row :revenue_generated
+      row :team_size
+      row :women_employees
       row :cool_fact
       row :address
-      row :website
-      row :about
+      row :about do |startup|
+        simple_format startup.about
+      end
       row :categories do |startup|
-        startup.categories.map &:name
+        startup.categories.map(&:name).join(', ')
       end
       row :facebook_link
       row :twitter_link

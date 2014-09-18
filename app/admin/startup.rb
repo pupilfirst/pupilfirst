@@ -48,31 +48,31 @@ ActiveAdmin.register Startup do
 
   member_action :custom_update, method: :put do
     startup = Startup.find params[:id]
-    if startup.update_attributes!(permitted_params[:startup])
-      case params[:email_to_send].to_sym
-        when :approval
-          StartupMailer.startup_approved(startup).deliver
-          push_message = 'Congratulations! Your request for incubation at Startup Village has been approved.'
+    startup.update_attributes!(permitted_params[:startup])
 
-          startup.founders.each do |user|
-            UserPushNotifyJob.new.async.perform(user.id, :startup_approval, push_message)
-          end
-        when :rejection
-          StartupMailer.startup_rejected(startup).deliver
-          push_message = "We're sorry, but your request for incubation at Startup Village has been rejected."
+    case params[:email_to_send].to_sym
+      when :approval
+        StartupMailer.startup_approved(startup).deliver
+        push_message = 'Congratulations! Your request for incubation at Startup Village has been approved.'
 
-          startup.founders.each do |user|
-            UserPushNotifyJob.new.async.perform(user.id, :startup_rejection, push_message)
-          end
-        when :incorporation
-          StartupMailer.incorporation_approved(startup).deliver
-        when :bank
-          StartupMailer.bank_approved(startup).deliver
-        when :sep
-      end
-      redirect_to action: :show
-    else
-      render :update
+        startup.founders.each do |user|
+          UserPushNotifyJob.new.async.perform(user.id, :startup_approval, push_message)
+        end
+      when :rejection
+        StartupMailer.startup_rejected(startup).deliver
+        push_message = "We're sorry, but your request for incubation at Startup Village has been rejected."
+
+        startup.founders.each do |user|
+          UserPushNotifyJob.new.async.perform(user.id, :startup_rejection, push_message)
+        end
+      when :incorporation
+        StartupMailer.incorporation_approved(startup).deliver
+      when :bank
+        StartupMailer.bank_approved(startup).deliver
+      when :sep
+    end
+
+    redirect_to action: :show
     end
   end
 

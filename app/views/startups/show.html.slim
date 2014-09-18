@@ -26,7 +26,13 @@ table.table
       td = categories_html(@startup.categories)
     tr
       th Revenue Generated
-      td = revenue_generated_html(@startup.revenue_generated)
+      td = integer_html(@startup.revenue_generated)
+    tr
+      th Total Team Size
+      td = integer_html(@startup.team_size)
+    tr
+      th Number of Women Employees
+      td = integer_html(@startup.women_employees)
     tr
       th Incorporation Status
       td = incorporation_status_html(@startup.registration_type)

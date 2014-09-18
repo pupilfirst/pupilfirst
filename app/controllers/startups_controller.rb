@@ -85,7 +85,7 @@ class StartupsController < InheritedResources::Base
       :remote_logo_url, :facebook_link, :twitter_link, :pre_funds, :pre_investers_name,
       :help_from_sv, { category_ids: [] }, { founders_attributes: [:id, :title] },
       { startup_before: [:startup_name, :startup_descripition] },
-      :revenue_generated, :presentation_link, :product_progress
+      :revenue_generated, :presentation_link, :product_progress, :team_size, :women_employees
     ) }
   end
 

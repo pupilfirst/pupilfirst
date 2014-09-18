@@ -20,14 +20,12 @@ module StartupsHelper
     end
   end
 
-  def revenue_generated_html(revenue_generated)
-    case revenue_generated
+  def integer_html(integer_value)
+    case integer_value
       when nil
-        '<em>Nothing yet</em>'.html_safe
-      when ''
-        '<em>Nothing yet</em>'.html_safe
+        '<em>Not Available</em>'.html_safe
       else
-        revenue_generated
+        integer_value
     end
   end
 

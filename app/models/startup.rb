@@ -99,7 +99,7 @@ class Startup < ActiveRecord::Base
     User.where(pending_startup_id: self.id).update_all(pending_startup_id: nil)
   end
 
-  nilify_blanks only: [:revenue_generated]
+  nilify_blanks only: [:revenue_generated, :team_size, :women_employees]
 
   def admin
     founders.where(startup_admin: true).first

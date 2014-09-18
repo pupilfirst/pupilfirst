@@ -28,6 +28,8 @@ describe "startups/show" do
     expect(rendered).to match(/Product Progress/)
     expect(rendered).to match(/Categories/)
     expect(rendered).to match(/Revenue Generated/)
+    expect(rendered).to match(/Total Team Size/)
+    expect(rendered).to match(/Number of Women Employees/)
     expect(rendered).to match(/Incorporation Status/)
     expect(rendered).to match(/Social Media Links/)
   end

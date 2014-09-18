@@ -34,6 +34,8 @@ br
     = f.input :product_progress, collection: Startup.valid_product_progress_values, label_method: ->(obj) { product_progress_html(obj) }
     = f.association :categories, hint: 'Categories that describe your startup. Max 3.', collection: Category.startup_category, as: :select, input_html:{class: 'span4'}
     = f.input :revenue_generated, hint: 'How much cumulative revenue have you generated till date?'
+    = f.input :team_size, label: 'Total Team Size'
+    = f.input :women_employees, label: 'Number of Women Employees'
 
     /= f.input :help_from_sv,label: 'Help from Startup Village', as: :select, collection: Category.startup_village_help, value_method: :id, input_html:{multiple: true, class: 'span5'}
 

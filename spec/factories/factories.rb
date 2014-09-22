@@ -84,6 +84,11 @@ FactoryGirl.define do
     association :address, factory: :address, strategy: :build
   end
 
+  factory :user_category, class: Category do |f|
+    f.name {Faker::Lorem.words(2).join(' ')}
+    f.category_type :user
+  end
+
   factory :news_category,  class: Category do |f|
     f.name {Faker::Lorem.words(2).join(' ')}
     f.category_type :news

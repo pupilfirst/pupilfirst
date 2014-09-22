@@ -281,7 +281,8 @@ describe V1::UsersController do
     end
 
     it 'creates user as a contact' do
-      post '/api/users/self/contacts', { user: { phone: '+919876543210', fullname: 'Mike Wazowski', company: 'Monsters, Inc.', designation: 'Scarer' } }, version_header(user)
+      user_category = create :user_category
+      post '/api/users/self/contacts', { user: { phone: '+919876543210', fullname: 'Mike Wazowski', company: 'Monsters, Inc.', designation: 'Scarer', category_ids: [user_category.id] } }, version_header(user)
       expect(response).to be_success
       last_user = User.last
       expect(last_user.is_contact).to be_true
@@ -289,6 +290,8 @@ describe V1::UsersController do
       expect(last_user.company).to eq 'Monsters, Inc.'
       expect(last_user.designation).to eq 'Scarer'
       expect(last_user.phone).to eq '919876543210'
+      expect(last_user.categories.count).to eq 1
+      expect(last_user.categories.first).to eq user_category
     end
 
     it 'creates a connection between current user and contact' do

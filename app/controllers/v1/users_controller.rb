@@ -156,7 +156,7 @@ class V1::UsersController < V1::BaseController
   private
 
   def contact_params
-    params.require(:user).permit(:fullname, :email, :phone, :company, :designation)
+    params.require(:user).permit(:fullname, :email, :phone, :company, :designation, category_ids: [])
   end
 
   def user_params

@@ -18,21 +18,17 @@ br
               = @user.fullname
           tr
             td Startup
-            td
-              - if @user.startup.present?
-                = link_to @user.startup.try(:name), startup_url(@user.startup)
+            td = startup_html @user.startup
           tr
             td Title
-            td
-              = @user.title
+            td = value_or_not_available @user.title
           tr
             td LinkedIn URL
-            td
-              = @user.linkedin_url
+            td = value_or_not_available @user.linkedin_url
           tr
             td Twitter URL
-            td
-              = @user.twitter_url
+            td = value_or_not_available @user.twitter_url
+
 .container-fluid.span10
   .row-fluid
     .span2 &nbsp;

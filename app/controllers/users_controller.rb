@@ -11,11 +11,28 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user = User.find(params[:id])
+    @user = User.find current_user.id
+
     if @user.update_attributes(user_params)
-      redirect_to action: :show
+      flash[:notice] = 'Profile updated'
+      redirect_to @user
     else
-      respond_to :html
+      render 'edit'
+    end
+  end
+
+  def update_password
+    @user = User.find current_user.id
+
+    if @user.update_with_password(user_password_change_params)
+      # Sign in the user by passing validation in case his password changed
+      sign_in @user, bypass: true
+
+      flash[:notice] = 'Password updated'
+
+      redirect_to @user
+    else
+      render 'edit'
     end
   end
 
@@ -46,8 +63,12 @@ class UsersController < ApplicationController
     params.require(:user).permit(:email, :fullname)
   end
 
+  def user_password_change_params
+    params.required(:user).permit(:current_password, :password, :password_confirmation)
+  end
+
   def user_params
-      params.require(:user).permit(:salutation,:fullname, :username, :email, :twitter_url, :linkedin_url, :avatar, :startup_id, :title, :born_on, :is_student, :college, :university, :course, :semester )
+    params.require(:user).permit(:salutation, :fullname, :username, :twitter_url, :linkedin_url, :avatar, :startup_id, :title, :born_on, :is_student, :college, :university, :course, :semester)
   end
 
   def restrict_to_current_user

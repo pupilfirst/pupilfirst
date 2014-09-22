@@ -1,2 +1,14 @@
-h1 Edit User
+h1 Edit Profile
 = render 'form', user: @user
+h1 Edit Password
+
+= simple_form_for(@user, url: { action: 'update_password' }, html: { method: :patch, class: 'form-horizontal' }) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :current_password, hint: 'We need your current password to authorize the change.', required: true
+    = f.input :password, label: 'New password', autocomplete: 'off', required: true
+    = f.input :password_confirmation, label: 'Confirm new password', required: true
+
+  .form-actions
+    = f.button :submit, 'Update Password', class: 'btn btn-primary'

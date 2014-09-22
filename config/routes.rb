@@ -4,13 +4,14 @@ Svapp::Application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
-  get 'profile_edit' => 'users#edit'
-  resources :users do
+  resources :users, only: [:show, :edit, :update] do
     collection do
+      patch 'update_password'
       get 'invite'
       post 'send_invite'
     end
   end
+
   resources :startups, only: [:show, :edit, :update] do
     # resources :founders do
       # collection do

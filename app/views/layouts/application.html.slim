@@ -9,27 +9,25 @@ html
     = yield :head
 
   body
+    .header-block
+        = render 'layouts/nav_menu'
 
-.header-block
+        .container
+          - if notice
+            .notice
+              = notice
+          - if alert.present?
+            .alert
+              = alert
+          == yield
 
-    = render 'layouts/nav_menu'
+        .footer
+          .footer-wrap
+            .ftr-lft
+            | &copy; SV Labs. All rights reserved
 
-
-    .container
-
-      .notice
-        = notice
-      - if alert.present?
-        .alert
-          = alert
-      == yield
-    .footer
-      .footer-wrap
-        .ftr-lft
-        | &copy; SV Labs. All rights reserved
-
-        .ftr-rgt
-           = link_to image_tag('facebook.png'), 'https://www.facebook.com/startupvillage'
-           = link_to image_tag('twitter.png'), 'https://twitter.com/StartatSV'
-           = link_to image_tag('linkedin.png'), 'http://www.linkedin.com/company/startup-village'
-      .clear
+            .ftr-rgt
+               = link_to image_tag('facebook.png'), 'https://www.facebook.com/startupvillage'
+               = link_to image_tag('twitter.png'), 'https://twitter.com/StartatSV'
+               = link_to image_tag('linkedin.png'), 'http://www.linkedin.com/company/startup-village'
+          .clear

@@ -1,7 +1,15 @@
 ActiveAdmin.register Startup do
-  remove_filter :startups_categories
-  remove_filter :versions
-  menu :parent => "Startup"
+  # remove_filter :startups_categories
+  # remove_filter :versions
+  menu :parent => 'Startup'
+
+  filter :approval_status, as: :select, collection: Startup.valid_approval_status_values
+  filter :name
+  filter :website
+  filter :registration_type, as: :select, collection: Startup.valid_registration_types
+  filter :product_name
+  filter :product_progress, as: :select, collection: Startup.valid_product_progress_values
+  filter :team_size
 
   # See permitted parameters documentation:
   # https://github.com/gregbell/active_admin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters

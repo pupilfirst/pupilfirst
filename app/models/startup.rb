@@ -27,6 +27,10 @@ class Startup < ActiveRecord::Base
     [REGISTRATION_TYPE_PRIVATE_LIMITED, REGISTRATION_TYPE_PARTNERSHIP, REGISTRATION_TYPE_LLP]
   end
 
+  def self.valid_approval_status_values
+    [APPROVAL_STATUS_UNREADY, APPROVAL_STATUS_PENDING, APPROVAL_STATUS_APPROVED, APPROVAL_STATUS_REJECTED]
+  end
+
   has_paper_trail
 
   scope :approved, -> { where(approval_status: APPROVAL_STATUS_APPROVED) }

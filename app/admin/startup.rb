@@ -73,7 +73,6 @@ ActiveAdmin.register Startup do
     end
 
     redirect_to action: :show
-    end
   end
 
   member_action :send_form_email, method: :post do

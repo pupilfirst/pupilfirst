@@ -5,6 +5,7 @@ ActiveAdmin.register Startup do
 
   filter :approval_status, as: :select, collection: Startup.valid_approval_status_values
   filter :name
+  filter :email
   filter :website
   filter :registration_type, as: :select, collection: Startup.valid_registration_types
   filter :product_name

@@ -4,30 +4,31 @@ html
     title Svapp
     meta name="keywords" content="startup village, kerala, svapp, svlabs"
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = stylesheet_link_tag 'http://fonts.googleapis.com/css?family=Roboto:400,300,700,100'
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
     = yield :head
 
   body
     .header-block
-        = render 'layouts/nav_menu'
+      = render 'layouts/nav_menu'
 
-        .container
-          - if notice
-            .notice
-              = notice
-          - if alert.present?
-            .alert
-              = alert
-          == yield
+    .container
+      - if notice
+        .notice
+          = notice
+      - if alert.present?
+        .alert
+          = alert
 
-        .footer
-          .footer-wrap
-            .ftr-lft
-            | &copy; SV Labs. All rights reserved
+      == yield
 
-            .ftr-rgt
-               = link_to image_tag('facebook.png'), 'https://www.facebook.com/startupvillage'
-               = link_to image_tag('twitter.png'), 'https://twitter.com/StartatSV'
-               = link_to image_tag('linkedin.png'), 'http://www.linkedin.com/company/startup-village'
-          .clear
+    .footer
+      .footer-wrap
+        .ftr-lft
+        | &copy; SV Labs. All rights reserved
+
+        .ftr-rgt
+           = link_to image_tag('facebook.png'), 'https://www.facebook.com/startupvillage'
+           = link_to image_tag('twitter.png'), 'https://twitter.com/StartatSV'
+           = link_to image_tag('linkedin.png'), 'http://www.linkedin.com/company/startup-village'

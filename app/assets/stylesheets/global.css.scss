@@ -3,10 +3,10 @@ body {
     font-size: 14px;
 }
 
-#container {
-    margin: 0 auto;
-    width: 960px;
-    text-align: left;
+// Remove the top and bottom margin for navbar-brand.
+.navbar-brand-without-vertical-padding {
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 .footer {
@@ -124,7 +124,6 @@ button.emerald:hover{
 
 }
 
-
 button.sunflower{
     background:#f1c40f;
     border-bottom: #f39c12 3px solid;
@@ -183,13 +182,6 @@ button.sunflower:hover{
     padding: 20px 0;
     background: #f3f3f3;
     font-size: 12px;
-}
-
-.container {
-    padding-top: 50px;
-    width: 1000px !important;
-    min-height: 600px;
-    margin: 0 auto 30px auto;
 }
 
 .container h1 {

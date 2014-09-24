@@ -78,7 +78,11 @@ GEM
       activesupport (>= 3.0.0)
     arel (5.0.1.20140414130214)
     attribute_normalizer (1.2.0.b)
+    autoprefixer-rails (3.1.0.20140911)
+      execjs
     bcrypt (3.1.7)
+    bootstrap-sass (3.2.0.2)
+      sass (~> 3.2)
     bourbon (3.2.3)
       sass (~> 3.2)
       thor
@@ -402,6 +406,8 @@ DEPENDENCIES
   activeadmin!
   acts-as-taggable-on
   attribute_normalizer (~> 1.2.0.b)
+  autoprefixer-rails
+  bootstrap-sass (~> 3.2.0)
   cancancan (~> 1.8)
   carrierwave
   carrierwave_backgrounder!

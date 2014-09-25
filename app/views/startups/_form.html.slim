@@ -1,68 +1,68 @@
 - session[:startup_id] = @startup.id
-- if @startup.errors.any?
-  h4 style="color:#b94a48;" Error (please review the problems below)
+
 p
   i Please note that you can come back and change these details whenever you please.
-br
-.wrapper-form
-  = simple_form_for @startup, :html => { :class => 'form-horizontal' } do |f|
-    = f.input :name, label: "Startup's Name", required: true, input_html: { placeholder: '', maxlength: 255 }
 
-    /= f.input :email, label: "Email"
-    /= f.input :phone, label: "Contact number"
+= simple_form_for @startup, :html => { :class => 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
+  = f.error_notification
 
-    = f.input :website, input_html: { placeholder: "You startup's website URL, if any.", maxlength: 255 }
+  = f.input :name, label: "Startup's Name", required: true, input_html: { placeholder: '', maxlength: 255 }
 
-    /- user = @startup.founders.select{|f| f.id == @current_user.id}
-    /= f.fields_for :founders, user do |p|
-    /  = p.input :id, as: :hidden
-    /  = p.input :title, label: "Your role at the company", input_html: {placeholder: "Eg. Co-founder & CEO, VP Engineering, COO", class: 'span4'}, required: true
+  /= f.input :email, label: "Email"
+  /= f.input :phone, label: "Contact number"
 
-    = f.input :logo, as: :file, required: false
+  = f.input :website, input_html: { placeholder: "You startup's website URL, if any.", maxlength: 255 }
 
-    /= f.input :pitch, label: 'Idea', as: :text, hint: "max 140 characters",  input_html: {class:'span5', placeholder: 'Your Elevator Pitch: It reflects the concept of being able to explain your product in the time span of an elevator ride', maxlength: 140, rows: 3}, required: true
-    /= f.input :address, label: 'Residential address', as: :text, input_html: {rows: 4, class:'span5', placeholder: ''}, required: true
+  /- user = @startup.founders.select{|f| f.id == @current_user.id}
+  /= f.fields_for :founders, user do |p|
+  /  = p.input :id, as: :hidden
+  /  = p.input :title, label: "Your role at the company", input_html: {placeholder: "Eg. Co-founder & CEO, VP Engineering, COO", class: 'span4'}, required: true
 
-    = f.input :about, label: 'About your Startup', as: :text,
-        hint: 'If you were to describe your startup and your product in less than 1000 characters, what would it be?',
-        input_html: { rows: 10, class:'span5', placeholder: 'Description in less than 1000 characters', maxlength: 1000 }
+  = f.input :logo, as: :file, required: false
 
-    = f.input :presentation_link,
-        hint: 'Share the link to a presentation that showcases your company, core products in fair detail.',
-        input_html: { placeholder: 'URL to presentation', class: 'span5', maxlength: 255 }
+  /= f.input :pitch, label: 'Idea', as: :text, hint: "max 140 characters",  input_html: {class:'span5', placeholder: 'Your Elevator Pitch: It reflects the concept of being able to explain your product in the time span of an elevator ride', maxlength: 140, rows: 3}, required: true
+  /= f.input :address, label: 'Residential address', as: :text, input_html: {rows: 4, class:'span5', placeholder: ''}, required: true
 
-    = f.input :product_progress, collection: Startup.valid_product_progress_values, label_method: ->(obj) { product_progress_html(obj) }, input_html: { class: 'selectpicker' }
-    = f.association :categories, hint: 'Categories that describe your startup. Max 3.', collection: Category.startup_category, as: :select, input_html: { class: 'span4 selectpicker', 'data-live-search' => 'true', 'data-max-options' => "#{Startup::MAX_CATEGORY_COUNT}" }
-    = f.input :revenue_generated, hint: 'How much cumulative revenue have you generated till date?', input_html: { max: 999999999, 'data-max-int-length' => 9 }
-    = f.input :team_size, label: 'Total Team Size', input_html: { max: 9999, 'data-max-int-length' => 4 }
-    = f.input :women_employees, label: 'Number of Women Employees', input_html: { max: 9999, 'data-max-int-length' => 4 }
+  = f.input :about, label: 'About your Startup', as: :text,
+      hint: 'If you were to describe your startup and your product in less than 1000 characters, what would it be?',
+      input_html: { rows: 10, class:'span5', placeholder: 'Description in less than 1000 characters', maxlength: 1000 }
 
-    /= f.input :help_from_sv,label: 'Help from Startup Village', as: :select, collection: Category.startup_village_help, value_method: :id, input_html:{multiple: true, class: 'span5'}
+  = f.input :presentation_link,
+      hint: 'Share the link to a presentation that showcases your company, core products in fair detail.',
+      input_html: { placeholder: 'URL to presentation', class: 'span5', maxlength: 255 }
 
-    = f.input :twitter_link, input_html: { placeholder: 'https://twitter.com/username', maxlength: 255 }
-    = f.input :facebook_link, input_html: { placeholder: 'https://facebook.com/username', maxlength: 255 }
+  = f.input :product_progress, collection: Startup.valid_product_progress_values, label_method: ->(obj) { product_progress_html(obj) }, input_html: { class: 'selectpicker' }
+  = f.association :categories, hint: 'Categories that describe your startup. Max 3.', collection: Category.startup_category, as: :select, input_html: { class: 'span4 selectpicker', 'data-live-search' => 'true', 'data-max-options' => "#{Startup::MAX_CATEGORY_COUNT}" }
+  = f.input :revenue_generated, hint: 'How much cumulative revenue have you generated till date?', input_html: { max: 999999999, 'data-max-int-length' => 9 }
+  = f.input :team_size, label: 'Total Team Size', input_html: { max: 9999, 'data-max-int-length' => 4 }
+  = f.input :women_employees, label: 'Number of Women Employees', input_html: { max: 9999, 'data-max-int-length' => 4 }
 
-    #pre_funds.optional.checkbox
-      /label
-      /  = check_box_tag "pre_funds"
-      /  p Have you raised funds yet?
-      /.content
-      /  = f.input :pre_funds, label: "How much have you raised", input_html: {placeholder: 'Amount in INR'}
-      /  = f.input :pre_investers_name, label: "Name of investors", input_html: {placeholder: ''}
-    #startup_before.optional.checkbox
-      /label
-      /  = check_box_tag "startup_history"
-      /  p Have you run a startup before?
-      /.content
-      /  .control-group.string.optional
-      /    label.string.optional.control-label Name of your previous startup
-      /    .controls
-      /      = text_field_tag "startup[startup_before][startup_name]", (@startup.startup_before['startup_name'] rescue nil), placeholder: "", class: "string"
-      /  .control-group.string.optional
-      /    label.string.optional.control-label Describe that startup
-      /    .controls
-      /      = text_area_tag "startup[startup_before][startup_descripition]", (@startup.startup_before['startup_descripition'] rescue nil), placeholder: "startup_descripition", class: "form-control span5", placeholder: '', rows: 5
-    = f.submit class: 'btn btn-success offset2', value: 'Update startup profile'
+  /= f.input :help_from_sv,label: 'Help from Startup Village', as: :select, collection: Category.startup_village_help, value_method: :id, input_html:{multiple: true, class: 'span5'}
+
+  = f.input :twitter_link, input_html: { placeholder: 'https://twitter.com/username', maxlength: 255 }
+  = f.input :facebook_link, input_html: { placeholder: 'https://facebook.com/username', maxlength: 255 }
+
+  #pre_funds.optional.checkbox
+    /label
+    /  = check_box_tag "pre_funds"
+    /  p Have you raised funds yet?
+    /.content
+    /  = f.input :pre_funds, label: "How much have you raised", input_html: {placeholder: 'Amount in INR'}
+    /  = f.input :pre_investers_name, label: "Name of investors", input_html: {placeholder: ''}
+  #startup_before.optional.checkbox
+    /label
+    /  = check_box_tag "startup_history"
+    /  p Have you run a startup before?
+    /.content
+    /  .control-group.string.optional
+    /    label.string.optional.control-label Name of your previous startup
+    /    .controls
+    /      = text_field_tag "startup[startup_before][startup_name]", (@startup.startup_before['startup_name'] rescue nil), placeholder: "", class: "string"
+    /  .control-group.string.optional
+    /    label.string.optional.control-label Describe that startup
+    /    .controls
+    /      = text_area_tag "startup[startup_before][startup_descripition]", (@startup.startup_before['startup_descripition'] rescue nil), placeholder: "startup_descripition", class: "form-control span5", placeholder: '', rows: 5
+  = f.submit class: 'btn btn-success offset2', value: 'Update startup profile'
 
 javascript:
   $(function () {

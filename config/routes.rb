@@ -25,7 +25,7 @@ Svapp::Application.routes.draw do
     end
   end
 
-  get 'team' => 'welcome#team'
+  # get 'team' => 'welcome#team'
 
   get 'jobs', to: redirect('https://angel.co/svlabs/jobs')
 

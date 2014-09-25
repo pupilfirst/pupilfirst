@@ -1,104 +1,21 @@
+// Common styling for all pages.
 body {
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
 }
 
-// Remove the top and bottom margin for navbar-brand.
-.navbar-brand-without-vertical-padding {
-  padding-top: 0px;
-  padding-bottom: 0px;
+// Footer element.
+footer {
+  border-top: 1px solid #f3f3f3;
+  padding: 20px 0px;
+  color: #666666;
+  background: #ffffff;
 }
 
-.footer {
-    margin: 0 auto;
-    padding: 20px 0;
-    color: #666;
-    background: #fff;
-    border-top: 1px solid #f3f3f3;
-}
-
-.footer-wrap {
-    width: 1000px;
-    margin: 0 auto;
-}
-
-.ftr-lft {
-    float: left;
-    width: 400px;
-}
-
-.ftr-rgt {
-    float: right;
-    width: 120px;
-}
-
-.ftr-rgt img {
-    margin-right: 10px;
-    cursor: pointer;
-}
-.home-container {
-    background: image-url("bg.png")repeat scroll center top / cover;
-}
-
-.header-wrap {
-    width: 1000px;
-    margin: 0 auto;
-    padding: 10px 0;
-}
-
-.header-block {
-    background: #fff;
-    height: 100px;
-    border-bottom: 1px solid #f3f3f3;
-}
-
-.logo {
-    float: left;
-    padding: 5px 0 0 0;
-}
-
-.home-top-right-block {
-    float: right;
-    padding: 15px 0 0 0;
-    color: #ccc;
-}
-
-.clear {
-    clear: both;
-}
-
-#menu {
-    float: right;
-    width: 550px;
-    padding: 10px 0 0 0;
-    margin: 20px 0 0 0;
-}
-
-.home-block {
-    min-height: 500px;
-    width: 1000px;
-    margin: 0 auto;
-    padding: 100px 0 0 0;
-}
-
-
-.device-block {
-    float: left;
-}
-
-h1.welcome_text {
-  font-size: 52px;
-  font-weight: 100;
-  color: #fff;
-  padding: 200px 0 0 0;
-  line-height: 100%;
-}
-
-p.welcome_para {
-  font-size: 24px;
-  font-weight: 100;
-  color: #fff;
-  padding: 10px 0 0 0;
+// Images in footer.
+footer img {
+  margin-right: 10px;
+  cursor: pointer;
 }
 
 button.emerald{
@@ -187,8 +104,6 @@ button.sunflower:hover{
 .container h1 {
     font-weight: 400 !important;
     color: #08C;
-    margin: 0 0 40px 0;
-    border-bottom: 1px solid #f3f3f3;
     font-size: 30px;
 }
 
@@ -316,8 +231,6 @@ button.sunflower:hover{
   position: relative !important;
 }
 
-
-
 .carousel-indicators img.circle {
   background-size: cover;
   background-repeat: no-repeat;
@@ -353,4 +266,3 @@ button.sunflower:hover{
   padding: 5px 15px;
   border-radius:10px;
 }
-

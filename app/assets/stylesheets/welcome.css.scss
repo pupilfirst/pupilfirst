@@ -1,0 +1,35 @@
+// Remove the top and bottom margin for navbar-brand.
+.navbar-brand-without-vertical-padding {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+// Remove the horizontal padding for full-width body container.
+.container-without-horizontal-padding {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+// Element which contains the body of welcome page.
+.home-container {
+  margin-top: -20px;
+  background: image-url("bg.png")repeat scroll center top / cover;
+  padding-top: 100px;
+}
+
+// 'Hero unit' heading.
+.home-container h1 {
+  font-size: 52px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 100 !important;
+  color: #ffffff;
+  padding: 200px 0 0 0;
+  line-height: 100%;
+}
+
+// 'Hero unit' text.
+.home-container p {
+  font-size: 24px;
+  font-weight: 100;
+  color: #ffffff;
+}

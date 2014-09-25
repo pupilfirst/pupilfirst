@@ -37,15 +37,24 @@ html
 
     .container
       - if notice
-        .notice = notice
+        .alert.alert-info.alert-dismissible role="alert"
+          button.close type="button" data-dismiss="alert"
+            span aria-hidden="true" &times;
+            span.sr-only Close
+          strong = notice
       - if alert.present?
-        .alert = alert
+        .alert.alert-danger.alert-dismissible role="alert"
+          button.close type="button" data-dismiss="alert"
+            span aria-hidden="true" &times;
+            span.sr-only Close
+          strong = alert
 
     - if @full_width
       .container-fluid.container-without-horizontal-padding
         == yield
     - else
-      == yield
+      .container
+        == yield
 
     footer
       .container

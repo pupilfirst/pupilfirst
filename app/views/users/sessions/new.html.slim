@@ -1,21 +1,30 @@
-.login-block
+/.login-block
 
-  h3 Sign in
+/h3 Sign in
 
-  = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
-    .form-inputs.form-horizontal
+= simple_form_for resource, as: resource_name, url: session_path(resource_name), html: {class: 'form-horizontal'}, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_fize_input, boolean: :horizontal_boolean } do |f|
+  legend Login
+  = f.error_notification
 
-      .form-group
-        = f.input :email, :required => false, :autofocus => true, label: 'SV ID (email)'
-      .form-group
-        = f.input :password, :required => false
+  = f.input :email, required: true, autofocus: true, label: 'SV ID (email)', div_html: { class: 'col-sm-4' }
+  = f.input :password, required: true, class: 'col-sm-6'
+  = f.input :remember_me, as: :boolean, inline_label: true, label: false if devise_mapping.rememberable?
 
-      .form-group
-        = f.input :remember_me, :as => :boolean,  :inline_label =>true, :label => false if devise_mapping.rememberable?
-      .form-group
-        .signin-pad
-          = f.button :submit, "Sign in", :class=>'btn btn-success'
+  .form-group
+    .col-sm-offset-3.col-sm-10
+      = f.button :submit, 'Sign in', class: 'btn btn-primary'
+      - if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations'
+        | &nbsp;
+        = link_to 'Forgot your password?', new_password_path(resource_name), class: 'btn btn-default'
+      br
+      br
+      p To sign up, download our iOS or Android application.
+      a href="https://play.google.com/store/apps/details?id=in.svlabs.android"
+        = image_tag 'google_play.png', alt: 'Android app on Google Play'
+      | &nbsp;
+      a href="https://itunes.apple.com/in/app/startup-village-enabling-entrepreneurship/id804638121"
+        = image_tag 'app_store.svg', alt: 'iOS app on App Store'
 
-  .form-group.login-links
-    = render "users/shared/links"
+.login-links
+  = render 'users/shared/links'
 

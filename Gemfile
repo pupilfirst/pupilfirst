@@ -28,7 +28,6 @@ gem 'rubypress' # wordpress
 gem 'sass-rails', '~> 4.0.3'
 gem 'sendgrid_smtpapi'
 gem 'sentry-raven'
-gem 'simple_form'
 gem 'slim'
 gem 'sucker_punch'
 gem 'turbolinks'
@@ -44,6 +43,7 @@ gem 'select2-rails' # Select2 javascript select box improvement library, using i
 gem 'nilify_blanks' # Sets database fields to nil if blank values are supplied.
 gem 'bootstrap-sass', '~> 3.2.0' # Official Sass port of Bootstrap.
 gem 'autoprefixer-rails' # Autoprefixer for Ruby and Ruby on Rails.
+gem 'simple_form', '~> 3.1.0.rc2' # Simple-form RC2 with support for Bootstrap 3. TODO: Update simple_form to stable when available.
 
 group :development do
   gem 'seed-fu', github: 'mbleigh/seed-fu' # check and remove

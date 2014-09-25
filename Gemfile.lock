@@ -341,7 +341,7 @@ GEM
       faraday (>= 0.7.6)
       hashie (>= 1.1.0)
       uuidtools
-    simple_form (3.0.2)
+    simple_form (3.1.0.rc2)
       actionpack (~> 4.0)
       activemodel (~> 4.0)
     slim (2.0.2)
@@ -454,7 +454,7 @@ DEPENDENCIES
   select2-rails
   sendgrid_smtpapi
   sentry-raven
-  simple_form
+  simple_form (~> 3.1.0.rc2)
   slim
   spring
   sqlite3

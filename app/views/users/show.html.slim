@@ -1,36 +1,28 @@
-H1 User Details
-br
-.container-fluid.span10
-  .row-fluid
-    .span2
-      = image_tag @user.avatar_url, class: 'img-circle'
-    .span8
-      table.table.table-hover.table-bordered.table-striped
-        tbody
-          tr
-            td Email (SV ID)
-            td
-              strong
-                = @user.email
-          tr
-            td Full Name
-            td
-              = @user.fullname
-          tr
-            td Startup
-            td = startup_html @user.startup
-          tr
-            td Title
-            td = value_or_not_available @user.title
-          tr
-            td LinkedIn URL
-            td = value_or_not_available @user.linkedin_url
-          tr
-            td Twitter URL
-            td = value_or_not_available @user.twitter_url
+h1 User Profile
 
-.container-fluid.span10
-  .row-fluid
-    .span2 &nbsp;
-    .span8
-      = link_to 'Edit Profile', edit_user_url(@user), class: 'btn btn-primary'
+= image_tag @user.avatar_url, class: 'img-circle'
+
+table.table.table-hover.table-bordered.table-striped
+  tbody
+    tr
+      th Email (SV ID)
+      td
+        strong = @user.email
+    tr
+      th Full Name
+      td
+        = @user.fullname
+    tr
+      th Startup
+      td = startup_html @user.startup
+    tr
+      th Title
+      td = value_or_not_available @user.title
+    tr
+      th LinkedIn URL
+      td = value_or_not_available @user.linkedin_url
+    tr
+      th Twitter URL
+      td = value_or_not_available @user.twitter_url
+
+= link_to 'Edit Profile', edit_user_url(@user), class: 'btn btn-primary'

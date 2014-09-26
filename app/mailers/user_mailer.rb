@@ -6,6 +6,11 @@ class UserMailer < ActionMailer::Base
     mail(to: cofounder, subject: 'SVApp: You have been invited to join a Startup!')
   end
 
+  def incubation_request_submitted(current_user)
+    @current_user = current_user
+    mail(to: current_user.email, subject: 'You have successfully submitted your request for incubation at Startup Village.')
+  end
+
   def inform_sep_submition(user)
     @user = user
     mail(to: student_contact, subject: "sep submited")

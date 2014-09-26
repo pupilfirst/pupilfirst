@@ -156,6 +156,9 @@ class V1::StartupsController < V1::BaseController
     startup.approval_status = Startup::APPROVAL_STATUS_PENDING
     startup.save!
 
+    # Send mail to requester about successful submission of incubation request.
+    UserMailer.incubation_request_submitted(current_user).deliver
+
     render nothing: true
   end
 

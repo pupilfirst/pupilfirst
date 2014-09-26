@@ -146,6 +146,7 @@ FactoryGirl.define do
     f.website   {Faker::Internet.domain_name}
     f.email     {Faker::Internet.email}
     f.phone   {Faker::PhoneNumber.cell_phone}
+    f.incubation_location Startup::INCUBATION_LOCATION_KOCHI
     f.help_from_sv   {
       FactoryGirl.create(:startup_village_help_category)
       FactoryGirl.create(:startup_village_help_category)

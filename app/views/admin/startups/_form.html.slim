@@ -28,6 +28,7 @@
     = f.input :sep_status
     = f.input :company_names
     = f.input :address
+    = f.input :incubation_location, collection: Startup.valid_incubation_location_values
     = f.input :pre_funds
     = f.input :startup_before
     = f.input :product_name

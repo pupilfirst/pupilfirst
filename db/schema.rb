@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140922100317) do
+ActiveRecord::Schema.define(version: 20140926103817) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -253,6 +253,7 @@ ActiveRecord::Schema.define(version: 20140922100317) do
     t.integer  "revenue_generated"
     t.integer  "team_size"
     t.integer  "women_employees"
+    t.string   "incubation_location",     default: "kochi"
   end
 
   add_index "startups", ["registered_address_id"], name: "index_startups_on_registered_address_id", using: :btree

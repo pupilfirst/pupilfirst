@@ -25,6 +25,7 @@ module StartupSpecHelper
     check_path(response, "#{prefix}categories")
     check_path(response, "#{prefix}categories_v2")
     check_path(response, "#{prefix}created_at")
+    check_path(response, "#{prefix}incubation_location")
     check_path(response, "#{prefix}founders")
     check_path(response, "#{prefix}founders/0/id")
     check_path(response, "#{prefix}founders/0/title")

@@ -19,6 +19,13 @@ class Startup < ActiveRecord::Base
   PRODUCT_PROGRESS_PUBLIC_BETA = 'public_beta'
   PRODUCT_PROGRESS_LAUNCHED = 'launched'
 
+  INCUBATION_LOCATION_KOCHI = 'kochi'
+  INCUBATION_LOCATION_VISAKHAPATNAM = 'visakhapatnam'
+
+  def self.valid_incubation_location_values
+    [INCUBATION_LOCATION_KOCHI, INCUBATION_LOCATION_VISAKHAPATNAM]
+  end
+
   def self.valid_product_progress_values
     [PRODUCT_PROGRESS_IDEA, PRODUCT_PROGRESS_MOCKUP, PRODUCT_PROGRESS_PROTOTYPE, PRODUCT_PROGRESS_PRIVATE_BETA, PRODUCT_PROGRESS_PUBLIC_BETA, PRODUCT_PROGRESS_LAUNCHED]
   end
@@ -73,6 +80,11 @@ class Startup < ActiveRecord::Base
     inclusion: { in: valid_product_progress_values },
     allow_nil: true,
     allow_blank: true
+
+  # Product Progress should be one of acceptable list.
+  validates :incubation_location,
+    inclusion: { in: valid_incubation_location_values },
+    allow_nil: true
 
   # validates_presence_of :name, if: ->(startup){@full_validation }
   # validates_presence_of :address, if: ->(startup){@full_validation }

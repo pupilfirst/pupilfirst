@@ -149,6 +149,9 @@ class V1::StartupsController < V1::BaseController
       raise Exceptions::StartupInvalidApprovalState, "Startup is in '#{startup.approval_status}' state. Cannot incubate."
     end
 
+    # Set startup's incubation_location if its supplied.
+    startup.incubation_location = params[:incubation_location] if params[:incubation_location].present?
+
     # Set startup's approval status to pending.
     startup.approval_status = Startup::APPROVAL_STATUS_PENDING
     startup.save!

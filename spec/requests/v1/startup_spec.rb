@@ -378,9 +378,7 @@ describe "Startup Requests" do
       end
     end
 
-    context 'when the startup approval status is not nil' do
-
-
+    context 'when the startup approval status is not unready' do
       it 'responds with error code StartupInvalidApprovalState' do
         post "/api/startups/#{startup.id}/incubate", {}, version_header(user)
         expect(response.code).to eq '422'
@@ -388,7 +386,7 @@ describe "Startup Requests" do
       end
     end
 
-    context 'when the startup approval status is nil' do
+    context 'when the startup approval status is unready' do
       let(:startup) { create(:startup) }
 
       it 'sets approval status of startup to pending' do
@@ -396,6 +394,14 @@ describe "Startup Requests" do
         expect(response.code).to eq '200'
         startup.reload
         expect(startup.approval_status).to eq Startup::APPROVAL_STATUS_PENDING
+      end
+
+      context 'when incubation_location is supplied' do
+        it 'also sets incubation_location' do
+          post "/api/startups/#{startup.id}/incubate", { incubation_location: Startup::INCUBATION_LOCATION_VISAKHAPATNAM }, version_header(user)
+          startup.reload
+          expect(startup.incubation_location).to eq Startup::INCUBATION_LOCATION_VISAKHAPATNAM
+        end
       end
     end
   end

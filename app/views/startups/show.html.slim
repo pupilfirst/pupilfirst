@@ -10,6 +10,9 @@ table.table
       th About
       td = about_html(@startup.about)
     tr
+      th Incubation Location
+      td = incubation_location_html @startup.incubation_location
+    tr
       th Presentation
       td = presentation_html(@startup.presentation_link)
     tr

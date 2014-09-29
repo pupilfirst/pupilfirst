@@ -102,4 +102,12 @@ module StartupsHelper
       '<em>Not Available</em>'.html_safe
     end
   end
+
+  def incubation_location_html(incubation_location)
+    if incubation_location
+      incubation_location.capitalize
+    else
+      '<em>Not Available</em>'.html_safe
+    end
+  end
 end

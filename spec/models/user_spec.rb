@@ -72,4 +72,16 @@ describe User do
       expect{user_self.verify(user_other)}.to raise_exception(/not allowed to verify founders of/)
     end
   end
+
+  describe '#remove_from_startup!' do
+    it 'disassociates a user from startup completely' do
+      startup = create :startup
+      founder = startup.founders.first
+      founder.remove_from_startup!
+      founder.reload
+      expect(founder.startup).to eq nil
+      expect(founder.is_founder).to eq nil
+      expect(founder.startup_admin).to eq nil
+    end
+  end
 end

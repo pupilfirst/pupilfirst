@@ -19,6 +19,44 @@ ActiveAdmin.register User do
     column :phone_verified
   end
 
+  member_action :remove_from_startup, method: :post do
+    user = User.find params[:id]
+    user.remove_from_startup!
+    redirect_to action: :show
+  end
+
+  show do
+    attributes_table do
+      row :id
+      row :email
+      row :fullname
+      row :pending_startup
+
+      row :startup do |f|
+        if f.startup
+          "#{link_to f.startup.name, admin_startup_path(f.startup)} (#{link_to 'Remove from Startup', remove_from_startup_admin_user_path, { method: :post, data: { confirm: 'Are you sure?' } }})".html_safe
+        end
+      end
+
+      row :startup_admin
+      row :is_founder
+      row :phone
+      row :phone_verified
+      row :communication_address
+      row :is_contact
+      row :company
+      row :designation
+    end
+
+    attributes_table do
+      row :confirmed_at
+      row :reset_password_sent_at
+      row :sign_in_count
+      row :current_sign_in_at
+      row :last_sign_in_at
+    end
+  end
+
   # Customize the filter options to reduce the size.
   filter :email
   filter :fullname

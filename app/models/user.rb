@@ -242,6 +242,13 @@ class User < ActiveRecord::Base
     save!
   end
 
+  def remove_from_startup!
+    self.startup_id = nil
+    self.startup_admin = nil
+    self.is_founder = nil
+    save!
+  end
+
   # Returns status of cofounder addition to a supplied startup.
   def cofounder_status(for_startup)
     if pending_startup_id

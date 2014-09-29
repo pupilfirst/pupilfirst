@@ -426,6 +426,7 @@ describe "Startup Requests" do
     let(:startup) { create :startup }
     let(:user) { create :user_with_out_password, startup: startup }
     let(:user_2) { create :user_with_out_password, startup: startup }
+    let(:mock_company_name) { Faker::Company.name }
     let(:mock_address) { Faker::Address.street_address }
     let(:mock_state) { Faker::Address.state }
     let(:mock_district) { Faker::Address.city }
@@ -436,6 +437,7 @@ describe "Startup Requests" do
     let(:mock_total_shares) { rand (30000) }
     let(:registration_params) {
       {
+        name: mock_company_name,
         registration_type: Startup::REGISTRATION_TYPE_PARTNERSHIP,
         address: mock_address,
         state: mock_state,
@@ -479,6 +481,7 @@ describe "Startup Requests" do
       it 'updates startup details' do
         post "/api/startups/#{startup.id}/registration", registration_params, version_header(user)
         startup.reload
+        expect(startup.name).to eq mock_company_name
         expect(startup.registration_type).to eq Startup::REGISTRATION_TYPE_PARTNERSHIP
         expect(startup.address).to eq mock_address
         expect(startup.state).to eq mock_state

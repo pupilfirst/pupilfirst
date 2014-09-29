@@ -179,7 +179,7 @@ class V1::StartupsController < V1::BaseController
 
   def registration_params
     params.permit(
-      :registration_type, :address, :state, :district, :pitch, :total_shares,
+      :registration_type, :address, :state, :district, :pitch, :total_shares, :name,
       partners: [:fullname, :email, :shares, :cash_contribution, :salary, :managing_director, :operate_bank_account]
     )
   end

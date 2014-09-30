@@ -1,10 +1,13 @@
-h4 Change your password
-br
-= simple_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put, :class => "form-horizontal" }) do |f|
+= simple_form_for resource, as: resource_name, url: password_path(resource_name), html: { method: :put, class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_fize_input, boolean: :horizontal_boolean } do |f|
+  legend Change your password
+
   = f.error_notification
-  = f.input :reset_password_token, :as => :hidden
+  = f.input :reset_password_token, as: :hidden
   = f.full_error :reset_password_token
-  .form-inputs
-    = f.input :password, :label => "New password", :required => true, :autofocus => true
-    = f.input :password_confirmation, :label => "Confirm your new password", :required => true
-    = f.button :submit, "Change my password", class:"offset2"
+
+  = f.input :password, label: 'New password', required: true, autofocus: true
+  = f.input :password_confirmation, label: 'Confirm your new password', required: true
+
+  .form-group
+    .col-sm-offset-3.col-sm-10
+      = f.button :submit, 'Change my password', class: 'btn btn-primary'

@@ -12,6 +12,7 @@ ActiveAdmin.register Startup do
   filter :product_progress, as: :select, collection: Startup.valid_product_progress_values
   filter :team_size
   filter :incubation_location, as: :select, collection: Startup.valid_incubation_location_values
+  filter :agreement_sent
 
   # See permitted parameters documentation:
   # https://github.com/gregbell/active_admin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
@@ -103,7 +104,7 @@ ActiveAdmin.register Startup do
       row :status do |startup|
         startup.approval_status.capitalize
       end
-      row :name
+      row :agreement_sent
       row :email
       row :phone
       row :logo do |startup|
@@ -215,5 +216,5 @@ ActiveAdmin.register Startup do
     :created_at, :updated_at, :approval_status, :incorporation_status, :bank_status, :sep_status, :dsc,
     :authorized_capital, :share_holding_pattern, :moa, :police_station, :approval_status, :incorporation_status,
     :bank_status, :sep_status, :company_names, :address, :pre_funds, :startup_before, :product_name,
-    :product_description, :registration_type, :incubation_location, help_from_sv: []
+    :product_description, :registration_type, :incubation_location, { help_from_sv: [] }, :agreement_sent
 end

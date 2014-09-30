@@ -35,12 +35,10 @@ ActiveAdmin.register Startup do
     column :status do |startup|
       startup.approval_status.capitalize
     end
+    column :agreement_sent
     column :name
     column :presentation_link do |startup|
       link_to startup.presentation_link, startup.presentation_link if startup.presentation_link.present?
-    end
-    column :logo do |startup|
-      link_to(image_tag(startup.logo_url(:thumb)), startup.logo_url)
     end
     column :founders do |startup|
       table_for startup.founders.order('id ASC') do

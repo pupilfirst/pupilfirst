@@ -11,6 +11,7 @@ ActiveAdmin.register Startup do
   filter :product_name
   filter :product_progress, as: :select, collection: Startup.valid_product_progress_values
   filter :team_size
+  filter :incubation_location_blank, as: :boolean, label: 'Incubation location not selected'
   filter :incubation_location, as: :select, collection: Startup.valid_incubation_location_values
   filter :agreement_sent
 

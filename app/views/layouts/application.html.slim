@@ -13,7 +13,7 @@ html
     .navbar.navbar-default role="navigation"
       .container
         .navbar-header
-          button.navbar-toggle.collapsed type="button" data-toggle="collapsed" data-target="#sv-navbar-collapse"
+          button.navbar-toggle.collapsed type="button" data-toggle="collapse" data-target="#sv-navbar-collapse"
             span.sr-only Toggle Navigation
             span.icon-bar
             span.icon-bar
@@ -21,7 +21,7 @@ html
           a.navbar-brand.navbar-brand-without-vertical-padding href="#{root_url}" = image_tag('logo.png')
 
         .collapse.navbar-collapse#sv-navbar-collapse
-          ul.nav.navbar-nav.pull-right
+          ul.nav.navbar-nav.navbar-right
             /li = link_to 'Team', '/team'
             li = link_to 'Jobs', '/jobs'
             - if current_user

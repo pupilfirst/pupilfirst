@@ -8,7 +8,7 @@ p
 
   = f.input :name, label: "Startup's Name", required: true, input_html: { placeholder: '', maxlength: 255 }
 
-  /= f.input :email, label: "Email"
+  = f.input :email, input_html: { maxlength: 255 }
   /= f.input :phone, label: "Contact number"
 
   = f.input :website, input_html: { placeholder: "You startup's website URL, if any.", maxlength: 255 }

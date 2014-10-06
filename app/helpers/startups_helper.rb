@@ -20,7 +20,7 @@ module StartupsHelper
     end
   end
 
-  def integer_html(integer_value)
+  def nil_not_available(integer_value)
     case integer_value
       when nil
         '<em>Not Available</em>'.html_safe

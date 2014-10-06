@@ -4,8 +4,10 @@ table.table
   tbody
     tr
       th Logo
-      td
-        = logo_image_html(@startup.logo_url(:thumb))
+      td = logo_image_html(@startup.logo_url(:thumb))
+    tr
+      th Email
+      td = nil_not_available @startup.email
     tr
       th About
       td = about_html(@startup.about)
@@ -29,13 +31,13 @@ table.table
       td = categories_html(@startup.categories)
     tr
       th Revenue Generated
-      td = integer_html(@startup.revenue_generated)
+      td = nil_not_available(@startup.revenue_generated)
     tr
       th Total Team Size
-      td = integer_html(@startup.team_size)
+      td = nil_not_available(@startup.team_size)
     tr
       th Number of Women Employees
-      td = integer_html(@startup.women_employees)
+      td = nil_not_available(@startup.women_employees)
     tr
       th Incorporation Status
       td = incorporation_status_html(@startup.registration_type)

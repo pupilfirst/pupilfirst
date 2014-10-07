@@ -14,6 +14,7 @@ ActiveAdmin.register Startup do
   filter :incubation_location_blank, as: :boolean, label: 'Incubation location not selected'
   filter :incubation_location, as: :select, collection: Startup.valid_incubation_location_values
   filter :agreement_sent
+  filter :categories
 
   # See permitted parameters documentation:
   # https://github.com/gregbell/active_admin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
@@ -48,8 +49,12 @@ ActiveAdmin.register Startup do
         end
       end
     end
-    column :facebook_link
-    column :twitter_link
+
+    column :categories do |startup|
+      startup.categories.pluck(:name).join ', '
+    end
+    # column :facebook_link
+    # column :twitter_link
     # column :pitch do |startup|
     #   startup.pitch.truncate(50) rescue nil
     # end

@@ -25,6 +25,12 @@ Svapp::Application.routes.draw do
     end
   end
 
+  scope 'mentoring', as: 'mentoring', controller: 'mentoring' do
+    get '/', action: 'index'
+    get 'register', action: 'new'
+    post 'register'
+  end
+
   # get 'team' => 'welcome#team'
 
   get 'jobs', to: redirect('https://angel.co/svlabs/jobs')

@@ -12,6 +12,7 @@ class CreateMentor < ActiveRecord::Migration
       t.string :third_skill_expertise
       t.string :cost_to_company
       t.integer :time_donate_percentage
+      t.datetime :verified_at
     end
   end
 end

@@ -8,7 +8,7 @@ class MentoringController < ApplicationController
 
   # GET /mentoring/register
   def new
-
+    @mentor = Mentor.new user: current_user
   end
 
   # POST /mentoring/register

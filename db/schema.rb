@@ -151,7 +151,7 @@ ActiveRecord::Schema.define(version: 20141008070913) do
     t.string   "second_skill_expertise"
     t.string   "third_skill"
     t.string   "third_skill_expertise"
-    t.string   "cost_to_company"
+    t.integer  "cost_to_company"
     t.integer  "time_donate_percentage"
     t.datetime "verified_at"
   end

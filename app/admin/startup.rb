@@ -212,6 +212,23 @@ ActiveAdmin.register Startup do
         end
       end
     end
+
+    panel 'Partnership Details' do
+      startup.partnerships.order('shares DESC').each do |partner|
+        div(class: 'admin_startup_partnership') do
+          attributes_table_for partner do
+            row :user do
+              link_to partner.user.fullname, [:admin, partner.user]
+            end
+            [:shares, :salary, :cash_contribution, :managing_director, :operate_bank_account].each do |column|
+              row column
+            end
+          end
+        end
+      end
+
+      div class: 'clear-both'
+    end
   end
 
   form :partial => "admin/startups/form"

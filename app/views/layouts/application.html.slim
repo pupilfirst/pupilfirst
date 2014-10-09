@@ -62,8 +62,9 @@ html
     footer
       .container
         .pull-left
-          | &copy; SV Labs. All rights reserved. |&nbsp;
-          = link_to 'Privacy Policy', privacy_policy_path
+          ' &copy; SV Labs. All rights reserved. |
+          ' #{link_to 'Privacy Policy', privacy_policy_path} |
+          | #{link_to 'Frequently Asked Questions', faq_path}
 
         .pull-right
           = link_to image_tag('facebook.png'), 'https://www.facebook.com/startupvillage'

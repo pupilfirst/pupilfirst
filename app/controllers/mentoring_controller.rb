@@ -1,10 +1,8 @@
 class MentoringController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, except: %w(index)
 
   # GET /mentoring
-  def index
-
-  end
+  def index; end
 
   # GET /mentoring/register
   def new

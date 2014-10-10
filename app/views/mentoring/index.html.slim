@@ -2,10 +2,13 @@
   h1 style="font-size: 400%" Pro Mentors
   h1 style="margin-bottom: 30px;" A great way for startups to meet professional mentors
 
-  - if current_user.startup_id.present?
-    = link_to 'Get Started', root_url, class: 'btn btn-primary btn-lg'
+  - if current_user
+    - if current_user.startup_id.present?
+      = link_to 'Get Started', root_url, class: 'btn btn-primary btn-lg'
+    - else
+      = link_to 'Are you an interested mentor?', mentoring_register_url, class: 'btn btn-primary btn-lg'
   - else
-    = link_to 'Are you an interested mentor?', mentoring_register_url, class: 'btn btn-primary btn-lg'
+    = link_to 'Login to get started!', new_user_session_path, class: 'btn btn-primary btn-lg'
 
 .row style="margin-top: 30px;"
   .col-md-6

@@ -34,6 +34,8 @@ Svapp::Application.routes.draw do
   # get 'team' => 'welcome#team'
 
   get 'jobs', to: redirect('https://angel.co/svlabs/jobs')
+  get 'privacy_policy', to: 'welcome#privacy_policy'
+  get 'faq', to: 'welcome#faq'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

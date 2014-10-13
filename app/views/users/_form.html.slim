@@ -1,11 +1,17 @@
 = simple_form_for user, :html => { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
   = f.error_notification
 
-  = f.input :fullname
+  = f.input :fullname, input_html: { maxlength: 255 }
   = f.input :avatar, as: :file
-  = f.input :title, hint: 'Position at startup'
-  = f.input :linkedin_url
-  = f.input :twitter_url
+  = f.input :title, hint: 'Position at startup', input_html: { maxlength: 255 }
+  = f.input :pan, label: 'Permanent Account Number (PAN)', input_html: { maxlength: 10 }
+  = f.input :mother_maiden_name, label: "Mother's maiden name", input_html: { maxlength: 255 }
+  = f.input :married, as: :select, collection: [false, true], label: 'Marital status', include_blank: false, label_method: ->(obj) { married_html(obj) }
+  = f.input :current_occupation, collection: User.valid_current_occupation_values, include_blank: false, label_method: ->(obj) { current_occupation_html(obj) }
+  = f.input :educational_qualification, collection: User.valid_educational_qualificiations, include_blank: false, label_method: ->(obj) { educational_qualification_html(obj) }
+  = f.input :religion, collection: User.valid_religions, include_blank: false, label_method: ->(obj) { religion_html(obj) }
+  = f.input :linkedin_url, input_html: { maxlength: 255 }
+  = f.input :twitter_url, input_html: { maxlength: 255 }
 
   .form-group
     .col-sm-offset-3.col-sm-10

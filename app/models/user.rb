@@ -7,6 +7,34 @@ class User < ActiveRecord::Base
   COFOUNDER_ACCEPTED = 'accepted'
   COFOUNDER_REJECTED = 'rejected'
 
+  CURRENT_OCCUPATION_SELF_EMPLOYED = 'self_employed'
+
+  def self.valid_current_occupation_values
+    [CURRENT_OCCUPATION_SELF_EMPLOYED]
+  end
+
+  EDUCATIONAL_QUALIFICATION_BELOW_MATRICULATION = 'below_matriculation'
+  EDUCATIONAL_QUALIFICATION_MATRICULATION = 'matriculation'
+  EDUCATIONAL_QUALIFICATION_HIGHER_SECONDARY = 'higher_secondary'
+  EDUCATIONAL_QUALIFICATION_GRADUATE = 'graduate'
+  EDUCATIONAL_QUALIFICATION_POSTGRADUATE = 'postgraduate'
+
+  def self.valid_educational_qualificiations
+    [EDUCATIONAL_QUALIFICATION_BELOW_MATRICULATION, EDUCATIONAL_QUALIFICATION_MATRICULATION, EDUCATIONAL_QUALIFICATION_HIGHER_SECONDARY, EDUCATIONAL_QUALIFICATION_GRADUATE, EDUCATIONAL_QUALIFICATION_POSTGRADUATE]
+  end
+
+  RELIGION_HINDU = 'hindu'
+  RELIGION_MUSLIM = 'muslim'
+  RELIGION_CHRISTIAN = 'christian'
+  RELIGION_SIKH = 'sikh'
+  RELIGION_BUDDHIST = 'buddhist'
+  RELIGION_JAIN = 'jain'
+  RELIGION_OTHER = 'other'
+
+  def self.valid_religions
+    [RELIGION_HINDU, RELIGION_MUSLIM, RELIGION_CHRISTIAN, RELIGION_SIKH, RELIGION_BUDDHIST, RELIGION_JAIN, RELIGION_OTHER]
+  end
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :invitable, :database_authenticatable, #:registerable, #:confirmable,

@@ -254,10 +254,14 @@ class Startup < ActiveRecord::Base
   def register(registration_params)
     update_startup_parameters(registration_params)
     create_or_update_partnerships(registration_params[:partners])
+
+    # Finish off registration by marking startup's registration_type
+    self.registration_type = registration_params[:registration_type]
+    save!
   end
 
   def update_startup_parameters(startup_params)
-    self.update_attributes(startup_params.slice(:name, :registration_type, :address, :state, :district, :pitch, :total_shares))
+    self.update_attributes(startup_params.slice(:name, :address, :state, :district, :pitch, :total_shares))
   end
 
   def create_or_update_partnerships(partners_params)

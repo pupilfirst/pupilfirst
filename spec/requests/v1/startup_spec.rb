@@ -435,6 +435,7 @@ describe "Startup Requests" do
     let(:mock_cash_contribution) { rand(100000) }
     let(:mock_shares) { rand(10000) }
     let(:mock_total_shares) { rand (30000) }
+    let(:mock_share_percentage) { (rand * 100).round(2) }
     let(:registration_params) {
       {
         name: mock_company_name,
@@ -453,6 +454,7 @@ describe "Startup Requests" do
             salary: mock_salary,
             managing_director: true,
             operate_bank_account: true,
+            share_percentage: mock_share_percentage,
           },
           {
             fullname: user_2.fullname,
@@ -460,6 +462,7 @@ describe "Startup Requests" do
             shares: rand(10000),
             cash_contribution: rand(100000),
             salary: rand(50000),
+            share_percentage: (rand * 100).round(2),
             managing_director: false,
             operate_bank_account: false,
           }
@@ -499,6 +502,7 @@ describe "Startup Requests" do
           expect(first_partnership.user_id).to eq user.id
           expect(first_partnership.startup_id).to eq startup.id
           expect(first_partnership.shares).to eq mock_shares
+          expect(first_partnership.share_percentage).to eq mock_share_percentage
           expect(first_partnership.cash_contribution).to eq mock_cash_contribution
           expect(first_partnership.salary).to eq mock_salary
           expect(first_partnership.managing_director).to eq true

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140930070646) do
+ActiveRecord::Schema.define(version: 20141013092110) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -141,6 +141,21 @@ ActiveRecord::Schema.define(version: 20140930070646) do
     t.datetime "updated_at"
   end
 
+  create_table "mentors", force: true do |t|
+    t.integer  "user_id"
+    t.string   "time_availability"
+    t.string   "company_level"
+    t.string   "first_skill"
+    t.string   "first_skill_expertise"
+    t.string   "second_skill"
+    t.string   "second_skill_expertise"
+    t.string   "third_skill"
+    t.string   "third_skill_expertise"
+    t.integer  "cost_to_company"
+    t.integer  "time_donate_percentage"
+    t.datetime "verified_at"
+  end
+
   create_table "names", force: true do |t|
     t.string   "first_name"
     t.string   "last_name"
@@ -176,6 +191,7 @@ ActiveRecord::Schema.define(version: 20140930070646) do
     t.boolean  "operate_bank_account"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "share_percentage",     precision: 5, scale: 2
   end
 
   add_index "partnerships", ["startup_id"], name: "index_partnerships_on_startup_id", using: :btree

@@ -25,6 +25,8 @@ Svapp::Application.routes.draw do
     end
   end
 
+  get 'partnerships/confirm/:confirmation_token' => 'partnerships#confirm', as: 'partnerships_confirm'
+
   # get 'team' => 'welcome#team'
 
   get 'jobs', to: redirect('https://angel.co/svlabs/jobs')

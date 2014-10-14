@@ -1,0 +1,14 @@
+p Hi,
+
+p You have been invited to form a partnership by #{@requesting_user.fullname}.
+  Click #{link_to 'here', partnerships_confirm_url(confirmation_token: @partnership.confirmation_token)} to view the
+  details of the proposed partnership.
+
+p If the above link does not work for you, please copy and paste the following into your browser address bar:
+
+pre #{partnerships_confirm_url(confirmation_token: @partnership.confirmation_token)}
+
+p
+  | Regards,
+  br
+  | Team Startup Village

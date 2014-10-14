@@ -287,4 +287,8 @@ class User < ActiveRecord::Base
       COFOUNDER_REJECTED
     end
   end
+
+  def confirm_partnership!(startup)
+    Partnership.find_by(user: self, startup: startup).update!(confirmed_at: Time.now)
+  end
 end

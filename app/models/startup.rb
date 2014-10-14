@@ -251,13 +251,21 @@ class Startup < ActiveRecord::Base
     end
   end
 
-  def register(registration_params)
+  def register(registration_params, requesting_user)
     update_startup_parameters(registration_params)
     create_or_update_partnerships(registration_params[:partners])
 
     # Finish off registration by marking startup's registration_type
     self.registration_type = registration_params[:registration_type]
     save!
+
+    # Confirm partnership for requesting user.
+    requesting_user.confirm_partnership!(self)
+
+    # Send email to partners asking for confirmation.
+    partnerships.each do |partnership|
+      partnership.send_confirmation_email(self, requesting_user)
+    end
   end
 
   def update_startup_parameters(startup_params)

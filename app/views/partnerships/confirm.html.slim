@@ -1,0 +1,55 @@
+h1.page-header Partnership Formation
+
+p You have been invited to form a partnership. The details of the partnership are given below:
+
+h2.subheading Partners of #{@partnership.startup.name}
+
+- @partnership.startup.partnerships.order('share_percentage DESC').each do |partnership|
+  table.table.table-striped.table-bordered.partnership-table
+    tr
+      th
+        | #{partnership.user == @partnership.user ? "Your " : nil}
+        | Full Name
+      td #{partnership.user.fullname}
+    tr
+      th Share Percentage
+      td #{partnership.share_percentage}%
+    tr
+      th Salary
+      td #{partnership.salary}
+    tr
+      th Cash Contribution
+      td #{partnership.cash_contribution}
+    tr
+      th Managing Director?
+      td #{partnership.managing_director? ? 'Yes' : 'No'}
+    tr
+      th Operate Bank Account?
+      td #{partnership.operate_bank_account? ? 'Yes' : 'No'}
+
+.clearfix
+
+p If you have any doubts regarding the information presented here, feel free to contact us
+  at #{mail_to 'support@svlabs.in'}.
+
+h2.subheading Update your personal details
+
+p Before confirming your position as partner, please confirm some essential personal details:
+
+= simple_form_for @partnership.user, url: partnerships_confirm_url, :html => { method: 'post', class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
+  = f.error_notification
+
+  = f.input :fullname, input_html: { maxlength: 255 }, required: true
+  = f.input :born_on, required: true
+  = f.input :pan, label: 'Permanent Account Number (PAN)', input_html: { maxlength: 10 }, required: true
+  = f.input :father_or_husband_name, label: "Father / Husband's name", input_html: { maxlength: 255 }, required: true
+  = f.input :mother_maiden_name, label: "Mother's maiden name", input_html: { maxlength: 255 }, required: true
+  = f.input :married, as: :select, collection: [false, true], label: 'Marital status', include_blank: false, label_method: ->(obj) { married_html(obj) }
+  = f.input :current_occupation, collection: User.valid_current_occupation_values, include_blank: false, label_method: ->(obj) { current_occupation_html(obj) }
+  = f.input :educational_qualification, collection: User.valid_educational_qualificiations, include_blank: false, label_method: ->(obj) { educational_qualification_html(obj) }
+  = f.input :religion, collection: User.valid_religions, include_blank: false, label_method: ->(obj) { religion_html(obj) }
+  = f.input :communication_address, input_html: { maxlength: 1000 }, required: true
+
+  .form-group
+    .col-sm-offset-3.col-sm-10
+      = f.submit 'Confirm and submit for review', class: 'btn btn-primary btn-lg'

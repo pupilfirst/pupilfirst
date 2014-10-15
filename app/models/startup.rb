@@ -253,14 +253,11 @@ class Startup < ActiveRecord::Base
 
   def register(registration_params, requesting_user)
     update_startup_parameters(registration_params)
-    create_or_update_partnerships(registration_params[:partners])
+    create_or_update_partnerships(registration_params[:partners], requesting_user)
 
     # Finish off registration by marking startup's registration_type
     self.registration_type = registration_params[:registration_type]
     save!
-
-    # Confirm partnership for requesting user.
-    requesting_user.confirm_partnership!(self)
 
     # Send email to partners asking for confirmation.
     partnerships.each do |partnership|
@@ -272,13 +269,17 @@ class Startup < ActiveRecord::Base
     self.update_attributes(startup_params.slice(:name, :address, :state, :district, :pitch, :total_shares))
   end
 
-  def create_or_update_partnerships(partners_params)
+  def create_or_update_partnerships(partners_params, requesting_user)
     partners_params.each do |partner_params|
       user = User.find_or_initialize_by(email: partner_params[:email])
       user.fullname = partner_params[:fullname]
       user.save_unregistered_user!
 
       partnership_params = partner_params.slice(:shares, :share_percentage, :cash_contribution, :salary, :managing_director, :operate_bank_account).merge(user: user)
+
+      # Confirm partnership for requesting user.
+      partnership_params.merge!(confirmed_at: Time.now) if requesting_user == user
+
       partnerships.create!(partnership_params)
     end
   end

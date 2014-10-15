@@ -529,6 +529,12 @@ describe "Startup Requests" do
           expect(Partnership.last.user_id).to eq last_user.id
         end
       end
+
+      it 'confirms partnership for requesting user' do
+        post "/api/startups/#{startup.id}/registration", registration_params.to_json, version_header(user).merge('CONTENT_TYPE' => 'application/json')
+        partnership = Partnership.find_by(user: user, startup: startup)
+        expect(partnership.confirmed_at).to_not be_nil
+      end
     end
   end
 end

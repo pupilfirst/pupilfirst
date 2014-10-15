@@ -21,7 +21,13 @@ class Partnership < ActiveRecord::Base
     UserMailer.confirm_partnership_formation(self, requesting_user).deliver
   end
 
+  # Generate a confirmation_token which allows visitor to edit user fields and set partnership as confirmed.
   def generate_confirmation_token!
     update! confirmation_token: SecureRandom.urlsafe_base64
+  end
+
+  # Set the partnership as confirmed, by setting confirmed_at and wiping confirmation_token.
+  def confirm!
+    update! confirmed_at: Time.now, confirmation_token: nil
   end
 end

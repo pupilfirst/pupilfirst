@@ -17,3 +17,4 @@
 //= require cocoon
 //= require bootstrap-select
 //= require bootstrap-datepicker
+//= require partnerships

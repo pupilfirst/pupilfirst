@@ -25,7 +25,13 @@ Svapp::Application.routes.draw do
     end
   end
 
-  get 'partnerships/confirm/:confirmation_token' => 'partnerships#confirm', as: 'partnerships_confirm'
+  scope 'partnerships', controller: 'partnerships', as: 'partnerships' do
+    get 'confirm/:confirmation_token', action: 'show_confirmation', as: 'show_confirmation'
+    post 'confirm/:confirmation_token', action: 'submit_confirmation', as: 'submit_confirmation'
+    get 'confirmation_success'
+  end
+  # get 'partnerships/confirm/:confirmation_token' => 'partnerships#confirm', as: 'partnerships_confirm'
+  # post 'partnerships/confirm/:confirmation_token' => 'partnerships#submit_confirmation', as: 'partnerships_submit_confirmation'
 
   # get 'team' => 'welcome#team'
 

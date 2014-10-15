@@ -1,16 +1,10 @@
 class CustomDatepickerInput < SimpleForm::Inputs::Base
-  def input
-    text_field_options = input_html_options.dup
-    hidden_field_options = input_html_options.dup
-    hidden_field_options[:class] = input_html_options[:class].dup # so they won't work with same array object
+  def input(wrapper_options)
+    # The base input box.
+    inputs = @builder.text_field(attribute_name, input_html_options)
 
-    text_field_options[:class] << 'custom_datepicker_selector'
-    text_field_options['data-date-format'] = I18n.t('date.datepicker')
-
-    hidden_field_options[:id] = "#{attribute_name}_hidden"
-
-    return_string =
-      "#{@builder.text_field(attribute_name, text_field_options)}"
-    return return_string.html_safe
+    # The alternate hidden input box with correct format.
+    inputs += @builder.hidden_field(attribute_name, { class: attribute_name.to_s + '-alt' })
+    inputs.html_safe
   end
 end

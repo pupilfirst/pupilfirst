@@ -76,6 +76,7 @@ class User < ActiveRecord::Base
   validates :gender, inclusion: { in: [GENDER_FEMALE, GENDER_MALE, GENDER_OTHER] }, allow_nil: true
 
   attr_reader :skip_password
+  attr_reader :validate_partnership_essential_fields
   # hack
   attr_accessor :inviter_name
   attr_accessor :accept_startup
@@ -95,6 +96,17 @@ class User < ActiveRecord::Base
   # Validate the mobile number
   validates_presence_of :phone, if: ->(user) { user.is_contact? }
   validates_uniqueness_of :phone, if: ->(user) { user.is_contact? }
+
+  # Couple of fields essential to forming partnerships. These are validated when partner confirms intent to form partnership.
+  validates_presence_of :born_on, if: ->(user) { user.validate_partnership_essential_fields }
+  validates_presence_of :pan, if: ->(user) { user.validate_partnership_essential_fields }
+  validates_presence_of :father_or_husband_name, if: ->(user) { user.validate_partnership_essential_fields }
+  validates_presence_of :mother_maiden_name, if: ->(user) { user.validate_partnership_essential_fields }
+  validates_inclusion_of :married, in: [true, false], if: ->(user) { user.validate_partnership_essential_fields }
+  validates_presence_of :current_occupation, if: ->(user) { user.validate_partnership_essential_fields }
+  validates_presence_of :educational_qualification, if: ->(user) { user.validate_partnership_essential_fields }
+  validates_presence_of :religion, if: ->(user) { user.validate_partnership_essential_fields }
+  validates_presence_of :communication_address, if: ->(user) { user.validate_partnership_essential_fields }
 
   # Store mobile number in a standardized form.
   phony_normalize :phone, default_country_code: 'IN'
@@ -288,7 +300,9 @@ class User < ActiveRecord::Base
     end
   end
 
-  def confirm_partnership!(startup)
-    Partnership.find_by(user: self, startup: startup).update!(confirmed_at: Time.now)
+  def update_partnership_fields(partnership_essential_user_params)
+    @validate_partnership_essential_fields = true
+
+    update(partnership_essential_user_params)
   end
 end

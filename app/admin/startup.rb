@@ -214,13 +214,13 @@ ActiveAdmin.register Startup do
     end
 
     panel 'Partnership Details' do
-      startup.partnerships.order('shares DESC').each do |partner|
+      startup.partnerships.order('share_percentage DESC').each do |partner|
         div(class: 'admin_startup_partnership') do
           attributes_table_for partner do
             row :user do
               link_to partner.user.fullname, [:admin, partner.user]
             end
-            [:shares, :share_percentage, :salary, :cash_contribution, :managing_director, :operate_bank_account].each do |column|
+            [:share_percentage, :salary, :cash_contribution, :managing_director, :operate_bank_account].each do |column|
               row column
             end
           end

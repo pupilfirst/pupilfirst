@@ -433,7 +433,6 @@ describe "Startup Requests" do
     let(:mock_pitch) { Faker::Lorem.words(rand(10) + 1).join(' ') }
     let(:mock_salary) { rand(50000) }
     let(:mock_cash_contribution) { rand(100000) }
-    let(:mock_shares) { rand(10000) }
     let(:mock_total_shares) { rand (30000) }
     let(:mock_share_percentage) { (rand * 100).round(2) }
     let(:registration_params) {
@@ -449,7 +448,6 @@ describe "Startup Requests" do
           {
             fullname: user.fullname,
             email: user.email,
-            shares: mock_shares,
             cash_contribution: mock_cash_contribution,
             salary: mock_salary,
             managing_director: true,
@@ -459,7 +457,6 @@ describe "Startup Requests" do
           {
             fullname: user_2.fullname,
             email: user_2.email,
-            shares: rand(10000),
             cash_contribution: rand(100000),
             salary: rand(50000),
             share_percentage: (rand * 100).round(2),
@@ -501,8 +498,7 @@ describe "Startup Requests" do
           expect(Partnership.count).to eq 2
           expect(first_partnership.user_id).to eq user.id
           expect(first_partnership.startup_id).to eq startup.id
-          expect(first_partnership.shares).to eq mock_shares
-          expect(first_partnership.share_percentage).to eq mock_share_percentage
+          expect(first_partnership.share_percentage.to_f).to eq mock_share_percentage
           expect(first_partnership.cash_contribution).to eq mock_cash_contribution
           expect(first_partnership.salary).to eq mock_salary
           expect(first_partnership.managing_director).to eq true
@@ -515,7 +511,7 @@ describe "Startup Requests" do
           updated_params = registration_params
           updated_params[:partners] << { fullname: 'Just A Partner',
             email: Faker::Internet.email,
-            shares: rand(50000),
+            share_percentage: (rand * 100).round(2),
             cash_contribution: rand(500000),
             salary: 0,
             managing_director: true,

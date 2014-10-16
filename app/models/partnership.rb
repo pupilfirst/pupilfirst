@@ -4,7 +4,7 @@ class Partnership < ActiveRecord::Base
 
   validates_presence_of :user_id
   validates_presence_of :startup_id
-  validates_presence_of :shares
+  validates_presence_of :share_percentage
   validates_presence_of :salary
   validates_presence_of :cash_contribution
 

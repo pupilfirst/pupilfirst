@@ -8,10 +8,10 @@ module UsersHelper
   end
 
   def value_or_not_available(value)
-    if value
-      value
-    else
+    if value.blank?
       '<em>Not Available</em>'.html_safe
+    else
+      value
     end
   end
 

@@ -22,6 +22,9 @@ table.table.table-hover.table-bordered.table-striped
       th PAN
       td = value_or_not_available @user.pan
     tr
+      th Father / Husband's name
+      td = value_or_not_available @user.father_or_husband_name
+    tr
       th Mother's maiden name
       td = value_or_not_available @user.mother_maiden_name
     tr

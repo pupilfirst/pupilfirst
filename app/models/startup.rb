@@ -66,6 +66,12 @@ class Startup < ActiveRecord::Base
   serialize :police_station, JSON
   serialize :help_from_sv, Array
 
+  attr_accessor :validate_frontend_mandatory_fields
+
+  # Some fields are mandatory when editing from the front-end.
+  validates_presence_of :about, if: ->(startup) { startup.validate_frontend_mandatory_fields }
+  validates_presence_of :team_size, if: ->(startup) { startup.validate_frontend_mandatory_fields }
+
   validate :valid_founders?
   validates_associated :founders
   # validates_length_of :help_from_sv, minimum: 1, too_short: 'must select atleast one', if: ->(startup){@full_validation }

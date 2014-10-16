@@ -25,7 +25,8 @@ p
 
   = f.input :about, label: 'About your Startup', as: :text,
       hint: 'If you were to describe your startup and your product in less than 1000 characters, what would it be?',
-      input_html: { rows: 10, class:'span5', placeholder: 'Description in less than 1000 characters', maxlength: 1000 }
+      input_html: { rows: 10, class:'span5', placeholder: 'Description in less than 1000 characters', maxlength: 1000 },
+      required: true
 
   = f.input :incubation_location, required: true, collection: Startup.valid_incubation_location_values, label_method: ->(obj) { obj.capitalize }, input_html: { class: 'selectpicker' }
 
@@ -36,7 +37,7 @@ p
   = f.input :product_progress, collection: Startup.valid_product_progress_values, label_method: ->(obj) { product_progress_html(obj) }, input_html: { class: 'selectpicker' }
   = f.association :categories, hint: 'Categories that describe your startup. Max 3.', collection: Category.startup_category, as: :select, input_html: { class: 'span4 selectpicker', 'data-live-search' => 'true', 'data-max-options' => "#{Startup::MAX_CATEGORY_COUNT}" }
   = f.input :revenue_generated, hint: 'How much cumulative revenue have you generated till date?', input_html: { max: 999999999, 'data-max-int-length' => 9 }
-  = f.input :team_size, label: 'Total Team Size', input_html: { max: 9999, 'data-max-int-length' => 4 }
+  = f.input :team_size, label: 'Total Team Size', input_html: { max: 9999, 'data-max-int-length' => 4 }, required: true
   = f.input :women_employees, label: 'Number of Women Employees', input_html: { max: 9999, 'data-max-int-length' => 4 }
 
   /= f.input :help_from_sv,label: 'Help from Startup Village', as: :select, collection: Category.startup_village_help, value_method: :id, input_html:{multiple: true, class: 'span5'}
@@ -110,19 +111,19 @@ javascript:
       $(help_ele).html((is_words ? wordCount : charCount) + "/" + max_chars + " characters");
     };
 
-    update_pitch = function () {
-      var help_ele = $(".startup_pitch .help-block");
-      var ele = $(".startup_pitch #startup_pitch");
-      counter(ele, help_ele, #{Startup::MAX_PITCH_CHARACTERS})
-    };
+  // update_pitch = function () {
+  //   var help_ele = $(".startup_pitch .help-block");
+  //   var ele = $(".startup_pitch #startup_pitch");
+  //   counter(ele, help_ele, #{Startup::MAX_PITCH_CHARACTERS})
+  // };
 
     update_about = function () {
-      var help_ele = $(".startup_about .help-block");
+      var help_ele = $(".startup_about p.help-block");
       var ele = $(".startup_about #startup_about");
       counter(ele, help_ele, #{Startup::MAX_ABOUT_CHARACTERS})
     };
 
-    $(".startup_pitch #startup_pitch").click(update_pitch).change(update_pitch).keydown(update_pitch).keypress(update_pitch).keyup(update_pitch).blur(update_pitch).focus(update_pitch);
+  // $(".startup_pitch #startup_pitch").click(update_pitch).change(update_pitch).keydown(update_pitch).keypress(update_pitch).keyup(update_pitch).blur(update_pitch).focus(update_pitch);
     $(".startup_about #startup_about").click(update_about).change(update_about).keydown(update_about).keypress(update_about).keyup(update_about).blur(update_about).focus(update_about);
 
     limit_length = function(element, length) {

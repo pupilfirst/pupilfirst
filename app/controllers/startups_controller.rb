@@ -43,6 +43,7 @@ class StartupsController < InheritedResources::Base
     @current_user = current_user
     @startup = Startup.find params[:id]
     @startup.founders.each { |f| f.full_validation = true }
+    @startup.validate_frontend_mandatory_fields = true
     update! do |success, failure|
       success.html {
         # StartupMailer.notify_svrep_about_startup_update(@startup).deliver

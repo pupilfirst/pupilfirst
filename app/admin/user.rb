@@ -80,7 +80,7 @@ ActiveAdmin.register User do
   form partial: 'admin/users/form'
 
   permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url,
-    :title, :skip_password, :born_on, :startup_admin,
+    :title, :skip_password, :born_on, :startup_admin, :communication_address,
     :is_contact, :phone, :phone_verified, :company, :designation, :invitation_token, #:confirmed_at,
     { category_ids: [] }
 end

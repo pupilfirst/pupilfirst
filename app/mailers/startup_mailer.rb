@@ -37,8 +37,7 @@ class StartupMailer < ActionMailer::Base
   def reminder_to_complete_startup_info(startup)
     @startup = startup
     send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
-    substitute '-founder_full_name-', startup.founders.map(&:fullname)
-    mail(to: send_to, subject: 'Guide to complete the incubation process at SV.')
+    mail(to: send_to, subject: 'Reminder to complete incubation application to Startup Village.')
   end
 
   def notify_svrep_about_startup_update(startup)

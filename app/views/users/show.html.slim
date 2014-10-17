@@ -19,6 +19,12 @@ table.table.table-hover.table-bordered.table-striped
       th Title
       td = value_or_not_available @user.title
     tr
+      th Date of Birth
+      td = value_or_not_available @user.born_on
+    tr
+      th Communication Address
+      td = value_or_not_available @user.communication_address
+    tr
       th PAN
       td = value_or_not_available @user.pan
     tr

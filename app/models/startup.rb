@@ -287,7 +287,7 @@ class Startup < ActiveRecord::Base
       partnership_params.merge!(confirmed_at: Time.now) if requesting_user == user
 
       # Check for existing partnership entry. Let's not try to recreate if it's there.
-      partnership = partnerships.find_or_create_by! user: user
+      partnership = partnerships.find_or_initialize_by user: user
       partnership.update!(partnership_params)
     end
   end

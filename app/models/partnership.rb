@@ -12,6 +12,9 @@ class Partnership < ActiveRecord::Base
 
   # Sends a confirmation email to partner (someone who could be a founder).
   def send_confirmation_email(startup, requesting_user)
+    # Don't send confirmation mail if confirmed_at is set.
+    return if self.confirmed_at.present?
+
     # Don't send confirmation mail for requesting user.
     return if requesting_user == self.user
 

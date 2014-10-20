@@ -25,6 +25,19 @@ ActiveAdmin.register User do
     redirect_to action: :show
   end
 
+  member_action :send_founder_profile_reminder, method: :post do
+    user = User.find params[:id]
+    push_message = 'Please make sure you complete your profile to help us connect you to mentors and investors.'
+
+    # Send push message.
+    UserPushNotifyJob.new.async.perform(user.id, :founder_profile_reminder, push_message)
+
+    # Send email.
+    UserMailer.reminder_to_complete_founder_profile(user).deliver
+
+    redirect_to action: :show
+  end
+
   show do
     attributes_table do
       row :id
@@ -62,6 +75,10 @@ ActiveAdmin.register User do
       row :sign_in_count
       row :current_sign_in_at
       row :last_sign_in_at
+    end
+
+    panel 'Emails and Notifications' do
+      link_to('Reminder to complete founder profile', send_founder_profile_reminder_admin_user_path, method: :post, data: { confirm: 'Are you sure you wish to send notification and email?' })
     end
   end
 

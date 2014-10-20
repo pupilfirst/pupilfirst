@@ -104,6 +104,20 @@ ActiveAdmin.register Startup do
     redirect_to action: :show
   end
 
+  member_action :send_startup_profile_reminder, method: :post do
+    startup = Startup.find params[:id]
+
+    push_message = 'Please make sure you complete your startup profile to get noticed by mentors and investors.'
+
+    startup.founders.each do |user|
+      UserPushNotifyJob.new.async.perform(user.id, :startup_profile_reminder, push_message)
+    end
+
+    StartupMailer.reminder_to_complete_startup_profile(startup).deliver
+
+    redirect_to action: :show
+  end
+
   show do |ad|
     attributes_table do
       row :status do |startup|
@@ -229,6 +243,10 @@ ActiveAdmin.register Startup do
       end
 
       div class: 'clear-both'
+    end
+
+    panel 'Emails and Notifications' do
+      link_to('Reminder to complete startup profile', send_startup_profile_reminder_admin_startup_path, method: :post, data: { confirm: 'Are you sure you wish to send notification and email?' })
     end
   end
 

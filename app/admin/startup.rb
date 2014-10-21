@@ -139,7 +139,6 @@ ActiveAdmin.register Startup do
       row :team_size
       row :women_employees
       row :cool_fact
-      row :address
       row :incubation_location
       row :about do |startup|
         simple_format startup.about
@@ -147,6 +146,10 @@ ActiveAdmin.register Startup do
       row :categories do |startup|
         startup.categories.map(&:name).join(', ')
       end
+      row :address
+      row :district
+      row :state
+      row :pin
       row :facebook_link
       row :twitter_link
       row :founders do |startup|

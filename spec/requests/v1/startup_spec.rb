@@ -430,6 +430,7 @@ describe "Startup Requests" do
     let(:mock_address) { Faker::Address.street_address }
     let(:mock_state) { Faker::Address.state }
     let(:mock_district) { Faker::Address.city }
+    let(:mock_pin) { (rand(899999) + 100000).to_s } # PIN code varies from 1x to 9x with 6 digits.
     let(:mock_pitch) { Faker::Lorem.words(rand(10) + 1).join(' ') }
     let(:mock_salary) { rand(50000) }
     let(:mock_cash_contribution) { rand(100000) }
@@ -442,6 +443,7 @@ describe "Startup Requests" do
         address: mock_address,
         state: mock_state,
         district: mock_district,
+        pin: mock_pin,
         pitch: mock_pitch,
         total_shares: mock_total_shares,
         partners: [
@@ -486,6 +488,7 @@ describe "Startup Requests" do
         expect(startup.address).to eq mock_address
         expect(startup.state).to eq mock_state
         expect(startup.district).to eq mock_district
+        expect(startup.pin).to eq mock_pin
         expect(startup.pitch).to eq mock_pitch
         expect(startup.total_shares).to eq mock_total_shares
       end

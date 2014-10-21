@@ -100,6 +100,8 @@ class Startup < ActiveRecord::Base
   validates_presence_of :pre_funds, if: ->(startup) { startup.pre_investers_name.present? }
   validates_presence_of :pre_investers_name, if: ->(startup) { startup.pre_funds.present? }
 
+  validates_numericality_of :pin, allow_nil: true, greater_than_or_equal_to: 100000, less_than_or_equal_to: 999999 # PIN Code is always 6 digits
+
   validates_length_of :pitch, maximum: MAX_PITCH_CHARACTERS,
     message: "must be within #{MAX_PITCH_CHARACTERS} characters",
     allow_nil: true, if: ->(startup) { @full_validation }
@@ -272,7 +274,7 @@ class Startup < ActiveRecord::Base
   end
 
   def update_startup_parameters(startup_params)
-    self.update_attributes(startup_params.slice(:name, :address, :state, :district, :pitch, :total_shares))
+    self.update_attributes(startup_params.slice(:name, :address, :state, :district, :pin, :pitch, :total_shares))
   end
 
   def create_or_update_partnerships(partners_params, requesting_user)

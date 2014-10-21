@@ -64,6 +64,9 @@ ActiveAdmin.register User do
       row :phone
       row :phone_verified
       row :communication_address
+      row 'PIN Code' do
+        user.pin
+      end
       row :is_contact
       row :company
       row :designation

@@ -160,7 +160,7 @@ class V1::UsersController < V1::BaseController
   end
 
   def user_params
-    params.require(:user).permit(:gender, :communication_address,
+    params.require(:user).permit(:gender, :communication_address, :pin,
       :email, :fullname, :password, :password_confirmation, :avatar, :remote_avatar_url, :born_on,
       :pan, :din, :aadhaar, :mother_maiden_name, :married, :salutation,
       :is_student, :college, :university, :course, :semester, :title,

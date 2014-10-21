@@ -108,6 +108,8 @@ class User < ActiveRecord::Base
   validates_presence_of :religion, if: ->(user) { user.validate_partnership_essential_fields }
   validates_presence_of :communication_address, if: ->(user) { user.validate_partnership_essential_fields }
 
+  validates_numericality_of :pin, allow_nil: true, greater_than_or_equal_to: 100000, less_than_or_equal_to: 999999 # PIN Code is always 6 digits
+
   # Store mobile number in a standardized form.
   phony_normalize :phone, default_country_code: 'IN'
 

@@ -149,7 +149,11 @@ ActiveAdmin.register Startup do
       row :address
       row :district
       row :state
-      row :pin
+
+      row 'PIN Code' do
+        startup.pin
+      end
+
       row :facebook_link
       row :twitter_link
       row :founders do |startup|

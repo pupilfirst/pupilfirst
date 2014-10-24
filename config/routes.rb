@@ -12,12 +12,17 @@ Svapp::Application.routes.draw do
     end
   end
 
+  resources :startup_links, only: :destroy
+
   resources :startups, only: [:show, :edit, :update] do
+    resources :startup_links, only: [:index, :create]
+
     # resources :founders do
       # collection do
       #   post :invite
       # end
     # end
+
     member do
       post :confirm_employee
       get :confirm_employee

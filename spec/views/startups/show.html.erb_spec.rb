@@ -13,6 +13,8 @@ describe "startups/show" do
       :phone => "Phone1"
     ))
 
+    @new_startup_link = assign(:new_startup_link, stub_model(StartupLink))
+
     view.stub_chain :current_user, :is_founder? => false
   end
 

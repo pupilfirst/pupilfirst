@@ -30,6 +30,7 @@ class StartupsController < InheritedResources::Base
 
   def show
     @startup = Startup.find(params[:id])
+    @new_startup_link = @startup.startup_links.new
   end
 
   def edit

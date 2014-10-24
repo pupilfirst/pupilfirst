@@ -13,8 +13,12 @@
 //= require jquery
 //= require bootstrap-sprockets
 //= require jquery_ujs
+//= require react
+//= require react_ujs
 //= require turbolinks
 //= require cocoon
 //= require bootstrap-select
 //= require bootstrap-datepicker
+//= require application_routes
 //= require partnerships
+// = require_tree ./react

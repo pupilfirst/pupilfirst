@@ -44,5 +44,20 @@ table.table
     tr
       th Social Media Links
       td = social_media_html(@startup.facebook_link, @startup.twitter_link)
+    tr
+      th Other Links
+      td
+        = react_component 'StartupLinksSection', { startup_id: params[:id] }
 
+        = simple_form_for @new_startup_link, url: startup_startup_links_path(@startup), wrapper: :inline_form, html: { class: 'form-inline' }, wrapper_mappings: { boolean: :vertical_booelan } do |f|
+          = f.error_notification
+          = f.input :name, placeholder: 'Name'
+          | &nbsp;
+          = f.input :url, placeholder: 'URL'
+          | &nbsp;
+          = f.input :description, placeholder: 'Description (optional)'
+          | &nbsp;
+          button type="submit" class="btn btn-primary"
+            span class="glyphicon glyphicon-plus"
+            |  Add a link
 = link_to 'Edit startup details', edit_startup_path(@startup), { class: 'btn btn-primary' } if current_user.is_founder?

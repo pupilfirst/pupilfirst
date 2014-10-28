@@ -18,7 +18,7 @@ class StartupLinksController < ApplicationController
       flash[:alert] = "Failed to create new startup link. Reason: #{startup_link.errors.full_messages.join ', '}"
     end
 
-    redirect_to startup
+    redirect_to edit_startup_path(startup)
   end
 
   # DELETE /startup_links/:id

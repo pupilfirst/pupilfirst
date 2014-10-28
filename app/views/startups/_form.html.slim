@@ -45,14 +45,14 @@ p
   = f.input :twitter_link, input_html: { placeholder: 'https://twitter.com/username', maxlength: 255 }
   = f.input :facebook_link, input_html: { placeholder: 'https://facebook.com/username', maxlength: 255 }
 
-  #pre_funds.optional.checkbox
+  /#pre_funds.optional.checkbox
     /label
     /  = check_box_tag "pre_funds"
     /  p Have you raised funds yet?
     /.content
     /  = f.input :pre_funds, label: "How much have you raised", input_html: {placeholder: 'Amount in INR'}
     /  = f.input :pre_investers_name, label: "Name of investors", input_html: {placeholder: ''}
-  #startup_before.optional.checkbox
+  /#startup_before.optional.checkbox
     /label
     /  = check_box_tag "startup_history"
     /  p Have you run a startup before?
@@ -65,7 +65,27 @@ p
     /    label.string.optional.control-label Describe that startup
     /    .controls
     /      = text_area_tag "startup[startup_before][startup_descripition]", (@startup.startup_before['startup_descripition'] rescue nil), placeholder: "startup_descripition", class: "form-control span5", placeholder: '', rows: 5
-  = f.submit class: 'btn btn-success offset2', value: 'Update startup profile'
+  .form-group
+    .col-sm-offset-3.col-sm-9
+      = f.submit class: 'btn btn-success', value: 'Update startup profile'
+
+h2.margin-bottom-20
+  ' Other Links
+  small Add links to other web-pages related to your startup
+
+= react_component 'StartupLinksSection', { startup_id: params[:id], allow_edit: true }
+
+= simple_form_for @new_startup_link, url: startup_startup_links_path(@startup), wrapper: :inline_form, html: { class: 'form-inline' }, wrapper_mappings: { boolean: :vertical_booelan } do |f|
+  = f.error_notification
+  = f.input :name, placeholder: 'Name'
+  | &nbsp;
+  = f.input :url, placeholder: 'URL'
+  | &nbsp;
+  = f.input :description, placeholder: 'Description (optional)'
+  | &nbsp;
+  button type="submit" class="btn btn-primary"
+    span class="glyphicon glyphicon-plus"
+    |  Add a link
 
 javascript:
   $(function () {

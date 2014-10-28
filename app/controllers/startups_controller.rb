@@ -30,11 +30,11 @@ class StartupsController < InheritedResources::Base
 
   def show
     @startup = Startup.find(params[:id])
-    @new_startup_link = @startup.startup_links.new
   end
 
   def edit
     @startup = Startup.find(params[:id])
+    @new_startup_link = @startup.startup_links.new
     @current_user = current_user
     raise_not_found unless current_user.startup.try(:id) == @startup.id
     raise_not_found unless current_user.is_founder?

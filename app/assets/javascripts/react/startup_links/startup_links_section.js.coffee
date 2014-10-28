@@ -49,7 +49,8 @@
     # The collection of StartupLink components we are going to display using the startup links stored in the component's state.
     startupLinksNode = @state.startupLinks.map (startupLink) ->
       # StartupLink component with a data property containing all the JSON attributes we are going to use to display it to the user.
-      <StartupLink data={startupLink}/>
+      <StartupLink data={startupLink} allow_edit={@props.allow_edit}/>
+    , @
 
     # HTML displayed if no startup links found in its state.
     noDataNode =

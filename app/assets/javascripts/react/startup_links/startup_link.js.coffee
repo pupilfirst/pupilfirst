@@ -21,16 +21,25 @@
     descriptionNode =
       <span>&nbsp;&mdash; {@props.data.description}</span>
 
+    deleteButtonNode =
+      <span>
+        &nbsp;<button className="btn btn-xs btn-danger #{'startup-link-deleted' if this.state.deleted}" type="button" onClick={this.handleClick}>
+          <span className="glyphicon glyphicon-remove" />
+          &nbsp;Remove
+        </button>
+      </span>
+
     <li className="list-group-item #{'startup-link-deleted' if this.state.deleted}">
       <a href="#{@props.data.url}">{@props.data.name}</a>
       {
         if @props.data.description
           { descriptionNode }
       }
-      &nbsp;<button className="btn btn-xs btn-danger #{'startup-link-deleted' if this.state.deleted}" type="button" onClick={this.handleClick}>
-        <span className="glyphicon glyphicon-remove" />
-        &nbsp;Remove
-      </button>
+      {
+        if @props.allow_edit
+          { deleteButtonNode }
+      }
+
     </li>
 
 

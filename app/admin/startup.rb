@@ -250,6 +250,10 @@ ActiveAdmin.register Startup do
       end
 
       div class: 'clear-both'
+
+      div do
+        link_to 'Manage these entries in Partnership section.', admin_partnerships_path(q: { startup_id_eq: startup.id })
+      end
     end
 
     panel 'Emails and Notifications' do

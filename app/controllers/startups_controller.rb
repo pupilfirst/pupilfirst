@@ -34,7 +34,6 @@ class StartupsController < InheritedResources::Base
 
   def edit
     @startup = Startup.find(params[:id])
-    @new_startup_link = @startup.startup_links.new
     @current_user = current_user
     raise_not_found unless current_user.startup.try(:id) == @startup.id
     raise_not_found unless current_user.is_founder?
@@ -45,11 +44,12 @@ class StartupsController < InheritedResources::Base
     @startup = Startup.find params[:id]
     @startup.founders.each { |f| f.full_validation = true }
     @startup.validate_frontend_mandatory_fields = true
-    update! do |success, failure|
-      success.html {
-        # StartupMailer.notify_svrep_about_startup_update(@startup).deliver
-        redirect_to @startup
-      }
+
+    if @startup.update(startup_params)
+      flash[:notice] = 'Startup details have been updated'
+      redirect_to @startup
+    else
+      render 'startups/edit'
     end
   end
 
@@ -82,13 +82,14 @@ class StartupsController < InheritedResources::Base
     params.require(:startup).permit(:name, :phone, :pitch, :website, :email, :registration_type)
   end
 
-  def permitted_params
-    { :startup => params.fetch(:startup, {}).permit(:name, :address, :pitch, :website, :about, :email, :phone, :logo, { help_from_sv: [] },
+  def startup_params
+    params.require(:startup).permit(
+      :name, :address, :pitch, :website, :about, :email, :phone, :logo, { help_from_sv: [] },
       :remote_logo_url, :facebook_link, :twitter_link, :pre_funds, :pre_investers_name, :product_name, :product_description,
       :cool_fact, :help_from_sv, { category_ids: [] }, { founders_attributes: [:id, :title] },
       { startup_before: [:startup_name, :startup_descripition] },
       :revenue_generated, :presentation_link, :product_progress, :team_size, :women_employees, :incubation_location
-    ) }
+    )
   end
 
   private

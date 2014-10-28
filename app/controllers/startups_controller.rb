@@ -84,8 +84,8 @@ class StartupsController < InheritedResources::Base
 
   def permitted_params
     { :startup => params.fetch(:startup, {}).permit(:name, :address, :pitch, :website, :about, :email, :phone, :logo, { help_from_sv: [] },
-      :remote_logo_url, :facebook_link, :twitter_link, :pre_funds, :pre_investers_name,
-      :help_from_sv, { category_ids: [] }, { founders_attributes: [:id, :title] },
+      :remote_logo_url, :facebook_link, :twitter_link, :pre_funds, :pre_investers_name, :product_name, :product_description,
+      :cool_fact, :help_from_sv, { category_ids: [] }, { founders_attributes: [:id, :title] },
       { startup_before: [:startup_name, :startup_descripition] },
       :revenue_generated, :presentation_link, :product_progress, :team_size, :women_employees, :incubation_location
     ) }

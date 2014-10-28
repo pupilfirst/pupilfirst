@@ -5,6 +5,7 @@ class Startup < ActiveRecord::Base
 
   MAX_PITCH_CHARACTERS = 140 unless defined?(MAX_PITCH_CHARACTERS)
   MAX_ABOUT_CHARACTERS = 1000 unless defined?(MAX_ABOUT_CHARACTERS)
+  MAX_PRODUCT_DESCRIPTION_CHARACTERS = 1000
   MAX_CATEGORY_COUNT = 3
 
   APPROVAL_STATUS_UNREADY = 'unready'
@@ -107,13 +108,17 @@ class Startup < ActiveRecord::Base
 
   validates_numericality_of :pin, allow_nil: true, greater_than_or_equal_to: 100000, less_than_or_equal_to: 999999 # PIN Code is always 6 digits
 
+  validates_length_of :product_description, maximum: MAX_PRODUCT_DESCRIPTION_CHARACTERS,
+    message: "must be within #{MAX_PRODUCT_DESCRIPTION_CHARACTERS} characters",
+    allow_nil: true
+
   validates_length_of :pitch, maximum: MAX_PITCH_CHARACTERS,
     message: "must be within #{MAX_PITCH_CHARACTERS} characters",
-    allow_nil: true, if: ->(startup) { @full_validation }
+    allow_nil: true
 
   validates_length_of :about, maximum: MAX_ABOUT_CHARACTERS,
     message: "must be within #{MAX_ABOUT_CHARACTERS} characters",
-    allow_nil: true, if: ->(startup) { @full_validation }
+    allow_nil: true
 
   before_validation do
     # Set registration_type to nil if its set as blank from backend.

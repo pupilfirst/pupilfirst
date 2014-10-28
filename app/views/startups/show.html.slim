@@ -10,19 +10,31 @@ table.table
       td = nil_not_available @startup.email
     tr
       th About
-      td = about_html(@startup.about)
+      td = nil_not_available(@startup.about, output_simple_format: true)
     tr
       th Incubation Location
       td = incubation_location_html @startup.incubation_location
     tr
       th Presentation
-      td = presentation_html(@startup.presentation_link)
+      td = link_html(@startup.presentation_link)
     tr
       th Founders
       td = @startup.founders.pluck(:fullname).join ', '
     tr
       th Website
-      td = website_html(@startup.website)
+      td = link_html @startup.website
+    tr
+      th Cool Fact
+      td = nil_not_available @startup.cool_fact
+    tr
+      th Product Name
+      td = nil_not_available @startup.product_name
+    tr
+      th Pitch
+      td = nil_not_available @startup.pitch
+    tr
+      th Product Description
+      td = nil_not_available @startup.product_description, output_simple_format: true
     tr
       th Product Progress
       td = product_progress_html(@startup.product_progress)

@@ -78,6 +78,8 @@ p
   .form-group
     .col-sm-offset-3.col-sm-9
       = f.submit class: 'btn btn-success', value: 'Update startup profile'
+      | &nbsp;
+      = link_to 'Cancel', startup_path(@startup), class: 'btn btn-default'
 
 h2.margin-bottom-20
   ' Other Links

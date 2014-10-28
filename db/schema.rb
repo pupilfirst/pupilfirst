@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141023092443) do
+ActiveRecord::Schema.define(version: 20141028143818) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -190,9 +190,10 @@ ActiveRecord::Schema.define(version: 20141023092443) do
     t.boolean  "operate_bank_account"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "share_percentage",     precision: 5, scale: 2
+    t.decimal  "share_percentage",             precision: 5, scale: 2
     t.datetime "confirmed_at"
     t.string   "confirmation_token"
+    t.integer  "bank_account_operation_limit"
   end
 
   add_index "partnerships", ["startup_id"], name: "index_partnerships_on_startup_id", using: :btree

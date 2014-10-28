@@ -232,8 +232,8 @@ class User < ActiveRecord::Base
   #   end
   # end
 
-  def to_s
-    fullname or email
+  def display_name
+    email || fullname
   end
 
   def self.find_or_initialize_cofounder(email)

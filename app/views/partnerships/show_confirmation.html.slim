@@ -24,6 +24,9 @@ h2.margin-bottom-20 Partners of <em>#{@partnership.startup.name}</em>
     tr
       th Operate Bank Account?
       td #{partnership.operate_bank_account? ? 'Yes' : 'No'}
+    tr
+      th Bank Account Operation Limit
+      td #{partnership.bank_account_operation_limit}
 
 .clearfix
 

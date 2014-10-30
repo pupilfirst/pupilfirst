@@ -39,6 +39,9 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
   config.default_url_options = { :host => 'localhost:3000' }
+
+  # In development and test, let's have carrierwave store everything on local disk.
+  config.carrier_wave_storage = :file
 end
 
 Rails.application.default_url_options = Svapp::Application.config.action_mailer.default_url_options

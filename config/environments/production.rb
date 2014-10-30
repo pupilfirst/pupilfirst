@@ -78,6 +78,9 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.action_mailer.default_url_options = { :host => 'http://svlabs.in' }
+
+  # In production and staging, let's have carrierwave store using fog.
+  config.carrier_wave_storage = :fog
 end
 
 ActionMailer::Base.smtp_settings = {

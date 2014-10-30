@@ -1,6 +1,9 @@
-h1 User Profile
+.row
+  .col-lg-12.clearfix
+    .pull-right
+      = image_tag @user.avatar_url, class: 'img-rounded user-avatar'
+    h1.page-header User Profile
 
-= image_tag @user.avatar_url, class: 'img-circle'
 
 table.table.table-hover.table-bordered.table-striped
   tbody

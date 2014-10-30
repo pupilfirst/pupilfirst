@@ -7,7 +7,7 @@
 .row
   .col-lg-7
     .well
-      = nil_not_available(@startup.about, output_simple_format: true)
+      = about_html @startup.about
   .col-lg-5
     .well
       table.table.table-borderless.startup-attributes-table

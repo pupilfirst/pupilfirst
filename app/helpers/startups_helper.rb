@@ -12,6 +12,14 @@ module StartupsHelper
     current_user.is_founder? && current_user.startup_id == startup.id
   end
 
+  def about_html(about)
+    if about.present?
+      simple_format about
+    else
+      "<em>This startup hasn't filled in anything about themselves yet.</em>".html_safe
+    end
+  end
+
   def incorporation_status_html(registration_type)
     case registration_type
       when Startup::REGISTRATION_TYPE_PARTNERSHIP
@@ -91,8 +99,6 @@ module StartupsHelper
   def logo_image_html(thumb_url)
     if thumb_url
       image_tag thumb_url, class: 'img-responsive startup-logo', alt: 'Startup Logo'
-    else
-      '<em>Not Available</em>'.html_safe
     end
   end
 

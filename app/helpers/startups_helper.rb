@@ -7,6 +7,11 @@ module StartupsHelper
 
   end
 
+  def user_is_startup_founder(startup)
+    return false unless current_user
+    current_user.is_founder? && current_user.startup_id == startup.id
+  end
+
   def incorporation_status_html(registration_type)
     case registration_type
       when Startup::REGISTRATION_TYPE_PARTNERSHIP
@@ -85,7 +90,7 @@ module StartupsHelper
 
   def logo_image_html(thumb_url)
     if thumb_url
-      image_tag thumb_url
+      image_tag thumb_url, class: 'img-responsive startup-logo', alt: 'Startup Logo'
     else
       '<em>Not Available</em>'.html_safe
     end

@@ -1,63 +1,45 @@
-h1 = @startup.name
+.row
+  .col-md-12.clearfix
+    .pull-right
+      = logo_image_html(@startup.logo_url(:thumb))
+    h1.page-header.startup-heading = @startup.name
 
-table.table
-  tbody
-    tr
-      th Logo
-      td = logo_image_html(@startup.logo_url(:thumb))
-    tr
-      th Email
-      td = nil_not_available @startup.email
-    tr
-      th About
-      td = nil_not_available(@startup.about, output_simple_format: true)
-    tr
-      th Incubation Location
-      td = incubation_location_html @startup.incubation_location
-    tr
-      th Presentation
-      td = link_html(@startup.presentation_link)
-    tr
-      th Founders
-      td = @startup.founders.pluck(:fullname).join ', '
-    tr
-      th Website
-      td = link_html @startup.website
-    tr
-      th Cool Fact
-      td = nil_not_available @startup.cool_fact
-    tr
-      th Product Name
-      td = nil_not_available @startup.product_name
-    tr
-      th Pitch
-      td = nil_not_available @startup.pitch
-    tr
-      th Product Description
-      td = nil_not_available @startup.product_description
-    tr
-      th Product Progress
-      td = product_progress_html(@startup.product_progress)
-    tr
-      th Categories
-      td = categories_html(@startup.categories)
-    tr
-      th Revenue Generated
-      td = nil_not_available(@startup.revenue_generated)
-    tr
-      th Total Team Size
-      td = nil_not_available(@startup.team_size)
-    tr
-      th Number of Women Employees
-      td = nil_not_available(@startup.women_employees)
-    tr
-      th Incorporation Status
-      td = incorporation_status_html(@startup.registration_type)
-    tr
-      th Social Media Links
-      td = social_media_html(@startup.facebook_link, @startup.twitter_link)
-    tr
-      th Other Links
-      td
-        = react_component 'StartupLinksSection', { startup_id: params[:id], allow_edit: false }
-= link_to 'Edit startup details', edit_startup_path(@startup), { class: 'btn btn-primary' } if current_user.is_founder?
+.row
+  .col-lg-7
+    .well
+      = nil_not_available(@startup.about, output_simple_format: true)
+  .col-lg-5
+    .well
+      table.table.table-borderless.startup-attributes-table
+        tr
+          th Categories
+          td = categories_html(@startup.categories)
+        tr
+          th Website
+          td = link_html @startup.website
+        tr
+          th Presentation
+          td = link_html(@startup.presentation_link)
+        - if @startup.startup_links.exists?
+          tr
+            td colspan="2"
+              = react_component 'StartupLinksSection', { startup_id: params[:id], allow_edit: false }
+
+h2.margin-bottom-20.margin-top-0 Founders
+
+.startup-founders-container.clearfix
+  - @startup.founders.order(:id).each do |founder|
+    .startup-founder
+      .pull-left
+        = image_tag founder.avatar_url, class: 'img-rounded user-avatar'
+      .startup-founder-text.pull-left
+        p.startup-founder-name = founder.fullname
+        p.startup-founder-title = founder.title
+
+        - if founder.linkedin_url.present?
+          .startup-founder-social = link_to image_tag('linkedin.png'), founder.linkedin_url
+        - if founder.twitter_url.present?
+          .startup-founder-social = link_to image_tag('twitter.png'), founder.twitter_url
+
+- if user_is_startup_founder(@startup)
+  = render 'private_info'

@@ -42,9 +42,9 @@ class Startup < ActiveRecord::Base
 
   scope :approved, -> { where(approval_status: APPROVAL_STATUS_APPROVED) }
 
-  has_many :founders, -> { where("startup_link_verifier_id IS NOT NULL AND is_founder = ?", true) }, class_name: "User", foreign_key: "startup_id" do
+  has_many :founders, -> { where('is_founder = ?', true) }, class_name: 'User', foreign_key: 'startup_id' do
     def <<(founder)
-      founder.update_attributes!(is_founder: true, startup_link_verifier_id: founder.id)
+      founder.update_attributes!(is_founder: true)
       super founder
     end
   end

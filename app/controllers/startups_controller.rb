@@ -1,6 +1,7 @@
 class StartupsController < InheritedResources::Base
   before_filter :authenticate_user!, except: [:confirm_employee, :confirm_startup_link, :show]
   before_filter :restrict_to_startup_founders, only: [:edit, :update]
+  before_filter :disallow_unready_startup, only: [:edit, :update]
   after_filter only: [:create] do
     @startup.founders << current_user
     @startup.save
@@ -95,6 +96,16 @@ class StartupsController < InheritedResources::Base
   def restrict_to_startup_founders
     if current_user.startup.try(:id) != params[:id].to_i && current_user.is_founder?
       raise_not_found
+    end
+  end
+
+  # A startup that is in unready state shouldn't be allowed to edit its details.
+  #
+  # @see https://trello.com/c/y4ReClzt
+  def disallow_unready_startup
+    if current_user.startup.unready?
+      flash[:alert] = "Please submit your incubation application via our Mobile app before attempting to edit your startup's details."
+      redirect_to startup_path(current_user.startup)
     end
   end
 end

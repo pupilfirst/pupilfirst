@@ -21,9 +21,10 @@ class Startup < ActiveRecord::Base
 
   INCUBATION_LOCATION_KOCHI = 'kochi'
   INCUBATION_LOCATION_VISAKHAPATNAM = 'visakhapatnam'
+  INCUBATION_LOCATION_KOZHIKODE = 'kozhikode'
 
   def self.valid_incubation_location_values
-    [INCUBATION_LOCATION_KOCHI, INCUBATION_LOCATION_VISAKHAPATNAM]
+    [INCUBATION_LOCATION_KOCHI, INCUBATION_LOCATION_VISAKHAPATNAM, INCUBATION_LOCATION_KOZHIKODE]
   end
 
   def self.valid_product_progress_values

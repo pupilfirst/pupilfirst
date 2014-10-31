@@ -14,4 +14,11 @@ class Statistic < ActiveRecord::Base
   validates_presence_of :statistic
 
   serialize :statistic, JSON
+
+  def self.chartkick_parameter_by_date(parameter)
+    where(parameter: parameter).inject({}) do |stats, statistic|
+      stats[statistic.created_at] = statistic.statistic
+      stats
+    end
+  end
 end

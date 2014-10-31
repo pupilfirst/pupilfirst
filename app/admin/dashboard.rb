@@ -3,9 +3,27 @@ ActiveAdmin.register_page "Dashboard" do
     newrelic_ignore
   end
 
+  page_action :users_count do
+    render json: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_USERS)
+  end
+
+  page_action :startups_count do
+    render json: [
+      { name: 'Total', data: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS) },
+      { name: 'Unready', data: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS_UNREADY) },
+      { name: 'Pending', data: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS_PENDING) },
+      { name: 'Approved', data: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS_APPROVED) },
+      { name: 'Rejected', data: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS_REJECTED) }
+    ]
+  end
+
   menu :priority => 1, :label => proc{ I18n.t("active_admin.dashboard") }
 
   content :title => proc{ I18n.t("active_admin.dashboard") } do
+    div do
+      render 'statistics'
+    end
+
     h1 'Recent Changes'
     para "Total versions stored: #{PaperTrail::Version.count}"
 

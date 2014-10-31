@@ -48,6 +48,7 @@ gem 'react-rails', github: 'reactjs/react-rails' # React JS!
 gem 'sprockets-coffee-react' # Sprockets preprocessor.
 gem 'js-routes' # Routes inside JS.
 gem 'validate_url' # URL validation.
+gem 'chartkick' # Pretty charts!
 
 group :development do
   gem 'seed-fu', github: 'mbleigh/seed-fu' # check and remove

@@ -41,7 +41,10 @@ class Startup < ActiveRecord::Base
 
   has_paper_trail
 
+  scope :unready, -> { where(approval_status: [APPROVAL_STATUS_UNREADY, nil]) }
+  scope :pending, -> { where(approval_status: APPROVAL_STATUS_PENDING) }
   scope :approved, -> { where(approval_status: APPROVAL_STATUS_APPROVED) }
+  scope :rejected, -> { where(approval_status: APPROVAL_STATUS_REJECTED) }
 
   has_many :founders, -> { where('is_founder = ?', true) }, class_name: 'User', foreign_key: 'startup_id' do
     def <<(founder)

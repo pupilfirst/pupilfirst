@@ -124,6 +124,9 @@ ActiveAdmin.register Startup do
         startup.approval_status.capitalize
       end
       row :agreement_sent
+      row :agreement_first_signed_at
+      row :agreement_last_signed_at
+      row :agreement_ends_at
       row :email
       row :phone
       row :logo do |startup|
@@ -267,5 +270,6 @@ ActiveAdmin.register Startup do
     :created_at, :updated_at, :approval_status, :incorporation_status, :bank_status, :sep_status, :dsc,
     :authorized_capital, :share_holding_pattern, :moa, :police_station, :approval_status, :incorporation_status,
     :bank_status, :sep_status, :company_names, :address, :pre_funds, :startup_before, :product_name,
-    :product_description, :registration_type, :incubation_location, { help_from_sv: [] }, :agreement_sent
+    :product_description, :registration_type, :incubation_location, { help_from_sv: [] }, :agreement_sent,
+    :agreement_first_signed_at, :agreement_last_signed_at, :agreement_ends_at
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141031120632) do
+ActiveRecord::Schema.define(version: 20141103110825) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -257,9 +257,9 @@ ActiveRecord::Schema.define(version: 20141031120632) do
     t.string   "share_holding_pattern"
     t.string   "moa"
     t.text     "police_station"
-    t.boolean  "incorporation_status",    default: false
-    t.boolean  "bank_status",             default: false
-    t.boolean  "sep_status",              default: false
+    t.boolean  "incorporation_status",      default: false
+    t.boolean  "bank_status",               default: false
+    t.boolean  "sep_status",                default: false
     t.text     "company_names"
     t.text     "address"
     t.string   "pre_funds"
@@ -270,7 +270,7 @@ ActiveRecord::Schema.define(version: 20141031120632) do
     t.string   "transaction_details"
     t.boolean  "partnership_application"
     t.string   "registration_type"
-    t.string   "approval_status",         default: "unready"
+    t.string   "approval_status",           default: "unready"
     t.string   "product_name"
     t.string   "product_description"
     t.string   "cool_fact"
@@ -285,6 +285,9 @@ ActiveRecord::Schema.define(version: 20141031120632) do
     t.string   "incubation_location"
     t.boolean  "agreement_sent"
     t.string   "pin"
+    t.datetime "agreement_first_signed_at"
+    t.datetime "agreement_last_signed_at"
+    t.datetime "agreement_ends_at"
   end
 
   add_index "startups", ["registered_address_id"], name: "index_startups_on_registered_address_id", using: :btree

@@ -23,6 +23,10 @@ class Startup < ActiveRecord::Base
   INCUBATION_LOCATION_VISAKHAPATNAM = 'visakhapatnam'
   INCUBATION_LOCATION_KOZHIKODE = 'kozhikode'
 
+  def self.valid_agreement_durations
+    { '1 year' => 1.year, '2 years' => 2.years, '5 years' => 5.years }
+  end
+
   def self.valid_incubation_location_values
     [INCUBATION_LOCATION_KOCHI, INCUBATION_LOCATION_VISAKHAPATNAM, INCUBATION_LOCATION_KOZHIKODE]
   end
@@ -135,6 +139,20 @@ class Startup < ActiveRecord::Base
   end
 
   nilify_blanks only: [:revenue_generated, :team_size, :women_employees, :approval_status, :product_progress]
+
+  # Backend users will see agreement duration as being nil when attempting to edit. This allows them to save edits
+  # without picking a value.
+  def agreement_duration
+    nil
+  end
+
+  # Let's allow backend users to edit agreement_ends at as a duration instead of setting absolute date.
+  def agreement_duration=(duration)
+    # Ignore blank durations.
+    return if duration.blank?
+
+    self.agreement_ends_at = (self.agreement_last_signed_at + duration.to_i).to_date
+  end
 
   def admin
     founders.where(startup_admin: true).first

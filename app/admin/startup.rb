@@ -271,5 +271,5 @@ ActiveAdmin.register Startup do
     :authorized_capital, :share_holding_pattern, :moa, :police_station, :approval_status, :incorporation_status,
     :bank_status, :sep_status, :company_names, :address, :pre_funds, :startup_before, :product_name,
     :product_description, :registration_type, :incubation_location, { help_from_sv: [] }, :agreement_sent,
-    :agreement_first_signed_at, :agreement_last_signed_at, :agreement_ends_at
+    :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration
 end

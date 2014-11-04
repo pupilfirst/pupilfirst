@@ -1,6 +1,15 @@
 class StartupMailer < ActionMailer::Base
   default from: "SV App <no-reply@svlabs.in>", cc: "outgoing@svlabs.in"
 
+  def agreement_expiring_soon(startup, expires_in, renew_within)
+    @startup = startup
+    @expires_in = expires_in
+    @renew_within = renew_within
+
+    send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
+    mail(to: send_to, subject: 'Reminder to renew your incubation agreement with Startup Village')
+  end
+
   def partnership_application(startup, current_user)
     @startup = startup
     @current_user = current_user

@@ -9,6 +9,7 @@ class Ability
         can :read, [User, Partnership]
         can :manage, [Startup, DbConfig, News, Event]
       when AdminUser::TYPE_EDITOR
+        can :read, [Startup]
         can :manage, [DbConfig, News, Event]
     end
 

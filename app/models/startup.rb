@@ -4,7 +4,7 @@ class Startup < ActiveRecord::Base
   REGISTRATION_TYPE_LLP = 'llp' # Limited Liability Partnership
 
   MAX_PITCH_CHARACTERS = 140 unless defined?(MAX_PITCH_CHARACTERS)
-  MAX_ABOUT_CHARACTERS = 1000 unless defined?(MAX_ABOUT_CHARACTERS)
+  MAX_ABOUT_CHARACTERS = 1000
   MAX_CATEGORY_COUNT = 3
 
   APPROVAL_STATUS_UNREADY = 'unready'
@@ -21,9 +21,14 @@ class Startup < ActiveRecord::Base
 
   INCUBATION_LOCATION_KOCHI = 'kochi'
   INCUBATION_LOCATION_VISAKHAPATNAM = 'visakhapatnam'
+  INCUBATION_LOCATION_KOZHIKODE = 'kozhikode'
+
+  def self.valid_agreement_durations
+    { '1 year' => 1.year, '2 years' => 2.years, '5 years' => 5.years }
+  end
 
   def self.valid_incubation_location_values
-    [INCUBATION_LOCATION_KOCHI, INCUBATION_LOCATION_VISAKHAPATNAM]
+    [INCUBATION_LOCATION_KOCHI, INCUBATION_LOCATION_VISAKHAPATNAM, INCUBATION_LOCATION_KOZHIKODE]
   end
 
   def self.valid_product_progress_values
@@ -40,11 +45,14 @@ class Startup < ActiveRecord::Base
 
   has_paper_trail
 
+  scope :unready, -> { where(approval_status: [APPROVAL_STATUS_UNREADY, nil]) }
+  scope :pending, -> { where(approval_status: APPROVAL_STATUS_PENDING) }
   scope :approved, -> { where(approval_status: APPROVAL_STATUS_APPROVED) }
+  scope :rejected, -> { where(approval_status: APPROVAL_STATUS_REJECTED) }
 
-  has_many :founders, -> { where("startup_link_verifier_id IS NOT NULL AND is_founder = ?", true) }, class_name: "User", foreign_key: "startup_id" do
+  has_many :founders, -> { where('is_founder = ?', true) }, class_name: 'User', foreign_key: 'startup_id' do
     def <<(founder)
-      founder.update_attributes!(is_founder: true, startup_link_verifier_id: founder.id)
+      founder.update_attributes!(is_founder: true)
       super founder
     end
   end
@@ -60,11 +68,22 @@ class Startup < ActiveRecord::Base
   has_one :bank
   belongs_to :registered_address, class_name: 'Address'
   has_many :partnerships
+  has_many :startup_links, dependent: :destroy
 
   serialize :company_names, JSON
   serialize :startup_before, JSON
   serialize :police_station, JSON
   serialize :help_from_sv, Array
+
+  attr_accessor :validate_frontend_mandatory_fields
+  attr_reader :validate_registration_type
+
+  # Some fields are mandatory when editing from the front-end.
+  validates_presence_of :about, if: ->(startup) { startup.validate_frontend_mandatory_fields }
+  validates_presence_of :team_size, if: ->(startup) { startup.validate_frontend_mandatory_fields }
+
+  # Registration type is required when registering.
+  validates_presence_of :registration_type, if: ->(startup) { startup.validate_registration_type }
 
   validate :valid_founders?
   validates_associated :founders
@@ -94,13 +113,13 @@ class Startup < ActiveRecord::Base
   validates_presence_of :pre_funds, if: ->(startup) { startup.pre_investers_name.present? }
   validates_presence_of :pre_investers_name, if: ->(startup) { startup.pre_funds.present? }
 
+  validates_numericality_of :pin, allow_nil: true, greater_than_or_equal_to: 100000, less_than_or_equal_to: 999999 # PIN Code is always 6 digits
+
   validates_length_of :pitch, maximum: MAX_PITCH_CHARACTERS,
-    message: "must be within #{MAX_PITCH_CHARACTERS} characters",
-    allow_nil: true, if: ->(startup) { @full_validation }
+    message: "must be within #{MAX_PITCH_CHARACTERS} characters"
 
   validates_length_of :about, maximum: MAX_ABOUT_CHARACTERS,
-    message: "must be within #{MAX_ABOUT_CHARACTERS} characters",
-    allow_nil: true, if: ->(startup) { @full_validation }
+    message: "must be within #{MAX_ABOUT_CHARACTERS} characters"
 
   before_validation do
     # Set registration_type to nil if its set as blank from backend.
@@ -108,6 +127,9 @@ class Startup < ActiveRecord::Base
 
     # Hack to fix incorrect registration_type sent by iOS build 2.0.
     self.registration_type = REGISTRATION_TYPE_PRIVATE_LIMITED if self.registration_type == 'pvt. ltd.'
+
+    # If supplied \r\n for line breaks, replace those with just \n so that length validation works.
+    self.about = about.gsub("\r\n", "\n") if self.about
   end
 
   before_destroy do
@@ -117,6 +139,20 @@ class Startup < ActiveRecord::Base
   end
 
   nilify_blanks only: [:revenue_generated, :team_size, :women_employees, :approval_status, :product_progress]
+
+  # Backend users will see agreement duration as being nil when attempting to edit. This allows them to save edits
+  # without picking a value.
+  def agreement_duration
+    nil
+  end
+
+  # Let's allow backend users to edit agreement_ends at as a duration instead of setting absolute date.
+  def agreement_duration=(duration)
+    # Ignore blank durations.
+    return if duration.blank?
+
+    self.agreement_ends_at = (self.agreement_last_signed_at + duration.to_i).to_date
+  end
 
   def admin
     founders.where(startup_admin: true).first
@@ -150,6 +186,7 @@ class Startup < ActiveRecord::Base
   mount_uploader :logo, AvatarUploader
   process_in_background :logo
   accepts_nested_attributes_for :founders, :registered_address
+  accepts_nested_attributes_for :startup_links
   normalize_attribute :name, :pitch, :about, :email, :phone
   attr_accessor :full_validation
 
@@ -251,23 +288,41 @@ class Startup < ActiveRecord::Base
     end
   end
 
-  def register(registration_params)
+  def register(registration_params, requesting_user)
     update_startup_parameters(registration_params)
-    create_or_update_partnerships(registration_params[:partners])
+    create_or_update_partnerships(registration_params[:partners], requesting_user)
+
+    # Make sure registration_type value is sent. Don't allow nil to be set on this route.
+    @validate_registration_type = true
+
+    # Finish off registration by marking startup's registration_type
+    self.registration_type = registration_params[:registration_type]
+    save!
+
+    # Send email to partners asking for confirmation.
+    partnerships.each do |partnership|
+      partnership.send_confirmation_email(self, requesting_user)
+    end
   end
 
   def update_startup_parameters(startup_params)
-    self.update_attributes(startup_params.slice(:name, :registration_type, :address, :state, :district, :pitch, :total_shares))
+    self.update_attributes(startup_params.slice(:name, :address, :state, :district, :pin, :pitch, :total_shares))
   end
 
-  def create_or_update_partnerships(partners_params)
+  def create_or_update_partnerships(partners_params, requesting_user)
     partners_params.each do |partner_params|
       user = User.find_or_initialize_by(email: partner_params[:email])
       user.fullname = partner_params[:fullname]
       user.save_unregistered_user!
 
-      partnership_params = partner_params.slice(:shares, :cash_contribution, :salary, :managing_director, :operate_bank_account).merge(user: user)
-      partnerships.create!(partnership_params)
+      partnership_params = partner_params.slice(:share_percentage, :cash_contribution, :salary, :managing_director, :operate_bank_account, :bank_account_operation_limit)
+
+      # Confirm partnership for requesting user.
+      partnership_params.merge!(confirmed_at: Time.now) if requesting_user == user
+
+      # Check for existing partnership entry. Let's not try to recreate if it's there.
+      partnership = partnerships.find_or_initialize_by user: user
+      partnership.update!(partnership_params)
     end
   end
 

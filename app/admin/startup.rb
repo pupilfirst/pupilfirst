@@ -11,8 +11,9 @@ ActiveAdmin.register Startup do
   filter :product_name
   filter :product_progress, as: :select, collection: Startup.valid_product_progress_values
   filter :team_size
-  filter :incubation_location_blank, as: :boolean, label: 'Incubation location not selected'
+  filter :team_size_blank, as: :boolean, label: 'Team size not set'
   filter :incubation_location, as: :select, collection: Startup.valid_incubation_location_values
+  filter :incubation_location_blank, as: :boolean, label: 'Incubation location not selected'
   filter :agreement_sent
   filter :categories
 
@@ -103,12 +104,29 @@ ActiveAdmin.register Startup do
     redirect_to action: :show
   end
 
+  member_action :send_startup_profile_reminder, method: :post do
+    startup = Startup.find params[:id]
+
+    push_message = 'Please make sure you complete your startup profile to get noticed by mentors and investors.'
+
+    startup.founders.each do |user|
+      UserPushNotifyJob.new.async.perform(user.id, :startup_profile_reminder, push_message)
+    end
+
+    StartupMailer.reminder_to_complete_startup_profile(startup).deliver
+
+    redirect_to action: :show
+  end
+
   show do |ad|
     attributes_table do
       row :status do |startup|
         startup.approval_status.capitalize
       end
       row :agreement_sent
+      row :agreement_first_signed_at
+      row :agreement_last_signed_at
+      row :agreement_ends_at
       row :email
       row :phone
       row :logo do |startup|
@@ -124,7 +142,6 @@ ActiveAdmin.register Startup do
       row :team_size
       row :women_employees
       row :cool_fact
-      row :address
       row :incubation_location
       row :about do |startup|
         simple_format startup.about
@@ -132,6 +149,14 @@ ActiveAdmin.register Startup do
       row :categories do |startup|
         startup.categories.map(&:name).join(', ')
       end
+      row :address
+      row :district
+      row :state
+
+      row 'PIN Code' do
+        startup.pin
+      end
+
       row :facebook_link
       row :twitter_link
       row :founders do |startup|
@@ -214,13 +239,13 @@ ActiveAdmin.register Startup do
     end
 
     panel 'Partnership Details' do
-      startup.partnerships.order('shares DESC').each do |partner|
+      startup.partnerships.order('share_percentage DESC').each do |partner|
         div(class: 'admin_startup_partnership') do
           attributes_table_for partner do
             row :user do
               link_to partner.user.fullname, [:admin, partner.user]
             end
-            [:shares, :salary, :cash_contribution, :managing_director, :operate_bank_account].each do |column|
+            [:share_percentage, :salary, :cash_contribution, :managing_director, :operate_bank_account].each do |column|
               row column
             end
           end
@@ -228,6 +253,14 @@ ActiveAdmin.register Startup do
       end
 
       div class: 'clear-both'
+
+      div do
+        link_to 'Manage these entries in Partnership section.', admin_partnerships_path(q: { startup_id_eq: startup.id })
+      end
+    end
+
+    panel 'Emails and Notifications' do
+      link_to('Reminder to complete startup profile', send_startup_profile_reminder_admin_startup_path, method: :post, data: { confirm: 'Are you sure you wish to send notification and email?' })
     end
   end
 
@@ -237,5 +270,6 @@ ActiveAdmin.register Startup do
     :created_at, :updated_at, :approval_status, :incorporation_status, :bank_status, :sep_status, :dsc,
     :authorized_capital, :share_holding_pattern, :moa, :police_station, :approval_status, :incorporation_status,
     :bank_status, :sep_status, :company_names, :address, :pre_funds, :startup_before, :product_name,
-    :product_description, :registration_type, :incubation_location, { help_from_sv: [] }, :agreement_sent
+    :product_description, :registration_type, :incubation_location, { help_from_sv: [] }, :agreement_sent,
+    :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration
 end

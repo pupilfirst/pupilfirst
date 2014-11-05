@@ -25,6 +25,19 @@ ActiveAdmin.register User do
     redirect_to action: :show
   end
 
+  member_action :send_founder_profile_reminder, method: :post do
+    user = User.find params[:id]
+    push_message = 'Please make sure you complete your profile to help us connect you to mentors and investors.'
+
+    # Send push message.
+    UserPushNotifyJob.new.async.perform(user.id, :founder_profile_reminder, push_message)
+
+    # Send email.
+    UserMailer.reminder_to_complete_founder_profile(user).deliver
+
+    redirect_to action: :show
+  end
+
   show do
     attributes_table do
       row :id
@@ -40,9 +53,20 @@ ActiveAdmin.register User do
 
       row :startup_admin
       row :is_founder
+      row :born_on
+      row :father_or_husband_name, label: "Father of Husband's name"
+      row :mother_maiden_name, label: "Mother's maiden name"
+      row :pan
+      row :religion
+      row :educational_qualification
+      row :married
+      row :current_occupation
       row :phone
       row :phone_verified
       row :communication_address
+      row 'PIN Code' do
+        user.pin
+      end
       row :is_contact
       row :company
       row :designation
@@ -54,6 +78,10 @@ ActiveAdmin.register User do
       row :sign_in_count
       row :current_sign_in_at
       row :last_sign_in_at
+    end
+
+    panel 'Emails and Notifications' do
+      link_to('Reminder to complete founder profile', send_founder_profile_reminder_admin_user_path, method: :post, data: { confirm: 'Are you sure you wish to send notification and email?' })
     end
   end
 
@@ -72,7 +100,7 @@ ActiveAdmin.register User do
   form partial: 'admin/users/form'
 
   permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url,
-    :title, :skip_password, :born_on, :startup_admin,
+    :title, :skip_password, :born_on, :startup_admin, :communication_address,
     :is_contact, :phone, :phone_verified, :company, :designation, :invitation_token, #:confirmed_at,
     { category_ids: [] }
 end

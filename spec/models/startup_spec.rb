@@ -37,14 +37,6 @@ describe Startup do
     expect { startup.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
-  it "returns only verified users as founders" do
-    startup = create(:startup)
-    founder = startup.founders.last
-    founder_count = startup.founders.count
-    founder.update_attributes!(startup_link_verifier_id: nil, startup_verifier_token: nil)
-    expect(startup.reload.founders.count).to eql(founder_count - 1)
-  end
-
   it "validates the size of pitch" do
     startup = build(:startup, pitch: Faker::Lorem.words(200).join(' '))
     expect { startup.save! }.to raise_error(ActiveRecord::RecordInvalid)

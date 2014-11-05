@@ -1,6 +1,18 @@
 class UserMailer < ActionMailer::Base
   default from: "SV App <no-reply@svlabs.in>", cc: "outgoing@svlabs.in"
 
+  def reminder_to_complete_founder_profile(user)
+    @user = user
+    mail to: @user.email, subject: 'Reminder to fill up founder profile'
+  end
+
+  def confirm_partnership_formation(partnership, requesting_user)
+    @partnership = partnership
+    @requesting_user = requesting_user
+
+    mail to: @partnership.user.email, subject: 'Request to form partnership'
+  end
+
   def cofounder_request(cofounder, current_user)
     @current_user = current_user
     mail(to: cofounder, subject: 'SVApp: You have been invited to join a Startup!')

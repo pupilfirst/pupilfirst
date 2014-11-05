@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.6'
+gem 'rails', '4.1.7'
 
 gem 'active_admin_editor'
 
@@ -44,6 +44,11 @@ gem 'nilify_blanks' # Sets database fields to nil if blank values are supplied.
 gem 'bootstrap-sass', '~> 3.2.0' # Official Sass port of Bootstrap.
 gem 'autoprefixer-rails' # Autoprefixer for Ruby and Ruby on Rails.
 gem 'simple_form', '~> 3.1.0.rc2' # Simple-form RC2 with support for Bootstrap 3. TODO: Update simple_form to stable when available.
+gem 'react-rails', github: 'reactjs/react-rails' # React JS!
+gem 'sprockets-coffee-react' # Sprockets preprocessor.
+gem 'js-routes' # Routes inside JS.
+gem 'validate_url' # URL validation.
+gem 'chartkick' # Pretty charts!
 
 group :development do
   gem 'seed-fu', github: 'mbleigh/seed-fu' # check and remove
@@ -96,4 +101,4 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-ruby '2.1.3'
+ruby '2.1.4'

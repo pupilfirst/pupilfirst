@@ -85,7 +85,7 @@ class V1::StartupsController < V1::BaseController
     if current_user.startup.registration_type
       raise Exceptions::StartupAlreadyRegistered, "Startup is already registered as #{current_user.startup.registration_type}."
     else
-      current_user.startup.register(registration_params)
+      current_user.startup.register(registration_params, current_user)
       render nothing: true
     end
   end
@@ -179,8 +179,9 @@ class V1::StartupsController < V1::BaseController
 
   def registration_params
     params.permit(
-      :registration_type, :address, :state, :district, :pitch, :total_shares, :name,
-      partners: [:fullname, :email, :shares, :cash_contribution, :salary, :managing_director, :operate_bank_account]
+      :registration_type, :address, :state, :district, :pin, :pitch, :total_shares, :name,
+      partners: [:fullname, :email, :share_percentage, :cash_contribution, :salary, :managing_director,
+        :operate_bank_account, :bank_account_operation_limit]
     )
   end
 

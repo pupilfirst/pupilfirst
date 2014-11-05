@@ -1,0 +1,12 @@
+p Hi #{@user.fullname},
+
+p We have noticed that your #{link_to 'profile', user_url(@user)} is incomplete. A completed profile will help us
+  connect you better to mentors and investors. So please make sure you complete this at the earliest.
+
+p To access your online profile #{link_to 'click here', user_url(@user)}.
+
+p If you're unable to click the link above, copy and paste the following link into your browser's address bar:
+
+pre #{user_url(@user)}
+
+p Team Startup Village.

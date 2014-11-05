@@ -1,6 +1,9 @@
-h1 User Profile
+.row
+  .col-lg-12.clearfix
+    .pull-right
+      = image_tag @user.avatar_url, class: 'img-rounded user-avatar'
+    h1.page-header User Profile
 
-= image_tag @user.avatar_url, class: 'img-circle'
 
 table.table.table-hover.table-bordered.table-striped
   tbody
@@ -18,6 +21,33 @@ table.table.table-hover.table-bordered.table-striped
     tr
       th Title
       td = value_or_not_available @user.title
+    tr
+      th Date of Birth
+      td = value_or_not_available @user.born_on
+    tr
+      th Communication Address
+      td = value_or_not_available @user.communication_address
+    tr
+      th PAN
+      td = value_or_not_available @user.pan
+    tr
+      th Father / Husband's name
+      td = value_or_not_available @user.father_or_husband_name
+    tr
+      th Mother's maiden name
+      td = value_or_not_available @user.mother_maiden_name
+    tr
+      th Marital status
+      td = married_html @user.married
+    tr
+      th Current Occupation
+      td = current_occupation_html @user.current_occupation
+    tr
+      th Educational Qualification
+      td = educational_qualification_html @user.educational_qualification
+    tr
+      th Religion
+      td = religion_html @user.religion
     tr
       th LinkedIn URL
       td = value_or_not_available @user.linkedin_url

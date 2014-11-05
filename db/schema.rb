@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141008070913) do
+ActiveRecord::Schema.define(version: 20141103110825) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -184,13 +184,16 @@ ActiveRecord::Schema.define(version: 20141008070913) do
   create_table "partnerships", force: true do |t|
     t.integer  "user_id"
     t.integer  "startup_id"
-    t.integer  "shares"
     t.integer  "salary"
     t.integer  "cash_contribution"
     t.boolean  "managing_director"
     t.boolean  "operate_bank_account"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "share_percentage",             precision: 5, scale: 2
+    t.datetime "confirmed_at"
+    t.string   "confirmation_token"
+    t.integer  "bank_account_operation_limit"
   end
 
   add_index "partnerships", ["startup_id"], name: "index_partnerships_on_startup_id", using: :btree
@@ -226,6 +229,17 @@ ActiveRecord::Schema.define(version: 20141008070913) do
     t.datetime "updated_at"
   end
 
+  create_table "startup_links", force: true do |t|
+    t.integer  "startup_id"
+    t.string   "name"
+    t.string   "url"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "startup_links", ["startup_id"], name: "index_startup_links_on_startup_id", using: :btree
+
   create_table "startups", force: true do |t|
     t.string   "name"
     t.string   "logo"
@@ -243,9 +257,9 @@ ActiveRecord::Schema.define(version: 20141008070913) do
     t.string   "share_holding_pattern"
     t.string   "moa"
     t.text     "police_station"
-    t.boolean  "incorporation_status",    default: false
-    t.boolean  "bank_status",             default: false
-    t.boolean  "sep_status",              default: false
+    t.boolean  "incorporation_status",      default: false
+    t.boolean  "bank_status",               default: false
+    t.boolean  "sep_status",                default: false
     t.text     "company_names"
     t.text     "address"
     t.string   "pre_funds"
@@ -256,7 +270,7 @@ ActiveRecord::Schema.define(version: 20141008070913) do
     t.string   "transaction_details"
     t.boolean  "partnership_application"
     t.string   "registration_type"
-    t.string   "approval_status",         default: "unready"
+    t.string   "approval_status",           default: "unready"
     t.string   "product_name"
     t.string   "product_description"
     t.string   "cool_fact"
@@ -270,6 +284,10 @@ ActiveRecord::Schema.define(version: 20141008070913) do
     t.integer  "women_employees"
     t.string   "incubation_location"
     t.boolean  "agreement_sent"
+    t.string   "pin"
+    t.datetime "agreement_first_signed_at"
+    t.datetime "agreement_last_signed_at"
+    t.datetime "agreement_ends_at"
   end
 
   add_index "startups", ["registered_address_id"], name: "index_startups_on_registered_address_id", using: :btree
@@ -278,6 +296,15 @@ ActiveRecord::Schema.define(version: 20141008070913) do
     t.integer "startup_id"
     t.integer "category_id"
   end
+
+  create_table "statistics", force: true do |t|
+    t.string   "parameter"
+    t.text     "statistic"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "statistics", ["parameter"], name: "index_statistics_on_parameter", using: :btree
 
   create_table "student_entrepreneur_policies", force: true do |t|
     t.string   "certificate_pic"
@@ -375,6 +402,8 @@ ActiveRecord::Schema.define(version: 20141008070913) do
     t.string   "designation"
     t.boolean  "is_contact"
     t.boolean  "startup_admin"
+    t.string   "father_or_husband_name"
+    t.string   "pin"
   end
 
   add_index "users", ["address_id"], name: "index_users_on_address_id", using: :btree

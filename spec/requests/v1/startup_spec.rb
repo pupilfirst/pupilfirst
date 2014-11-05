@@ -430,11 +430,13 @@ describe "Startup Requests" do
     let(:mock_address) { Faker::Address.street_address }
     let(:mock_state) { Faker::Address.state }
     let(:mock_district) { Faker::Address.city }
+    let(:mock_pin) { (rand(899999) + 100000).to_s } # PIN code varies from 1x to 9x with 6 digits.
     let(:mock_pitch) { Faker::Lorem.words(rand(10) + 1).join(' ') }
     let(:mock_salary) { rand(50000) }
     let(:mock_cash_contribution) { rand(100000) }
-    let(:mock_shares) { rand(10000) }
     let(:mock_total_shares) { rand (30000) }
+    let(:mock_share_percentage) { (rand * 100).round(2) }
+    let(:mock_bank_account_operation_limit) { rand(10000) }
     let(:registration_params) {
       {
         name: mock_company_name,
@@ -442,26 +444,29 @@ describe "Startup Requests" do
         address: mock_address,
         state: mock_state,
         district: mock_district,
+        pin: mock_pin,
         pitch: mock_pitch,
         total_shares: mock_total_shares,
         partners: [
           {
             fullname: user.fullname,
             email: user.email,
-            shares: mock_shares,
             cash_contribution: mock_cash_contribution,
             salary: mock_salary,
             managing_director: true,
             operate_bank_account: true,
+            share_percentage: mock_share_percentage,
+            bank_account_operation_limit: mock_bank_account_operation_limit
           },
           {
             fullname: user_2.fullname,
             email: user_2.email,
-            shares: rand(10000),
             cash_contribution: rand(100000),
             salary: rand(50000),
+            share_percentage: (rand * 100).round(2),
             managing_director: false,
             operate_bank_account: false,
+            bank_account_operation_limit: rand(10000)
           }
         ]
       }
@@ -486,6 +491,7 @@ describe "Startup Requests" do
         expect(startup.address).to eq mock_address
         expect(startup.state).to eq mock_state
         expect(startup.district).to eq mock_district
+        expect(startup.pin).to eq mock_pin
         expect(startup.pitch).to eq mock_pitch
         expect(startup.total_shares).to eq mock_total_shares
       end
@@ -498,10 +504,11 @@ describe "Startup Requests" do
           expect(Partnership.count).to eq 2
           expect(first_partnership.user_id).to eq user.id
           expect(first_partnership.startup_id).to eq startup.id
-          expect(first_partnership.shares).to eq mock_shares
+          expect(first_partnership.share_percentage.to_f).to eq mock_share_percentage
           expect(first_partnership.cash_contribution).to eq mock_cash_contribution
           expect(first_partnership.salary).to eq mock_salary
           expect(first_partnership.managing_director).to eq true
+          expect(first_partnership.bank_account_operation_limit).to eq mock_bank_account_operation_limit
           expect(Partnership.last.operate_bank_account).to eq false
         end
       end
@@ -511,7 +518,7 @@ describe "Startup Requests" do
           updated_params = registration_params
           updated_params[:partners] << { fullname: 'Just A Partner',
             email: Faker::Internet.email,
-            shares: rand(50000),
+            share_percentage: (rand * 100).round(2),
             cash_contribution: rand(500000),
             salary: 0,
             managing_director: true,
@@ -524,6 +531,12 @@ describe "Startup Requests" do
           expect(last_user.fullname).to eq 'Just A Partner'
           expect(Partnership.last.user_id).to eq last_user.id
         end
+      end
+
+      it 'confirms partnership for requesting user' do
+        post "/api/startups/#{startup.id}/registration", registration_params.to_json, version_header(user).merge('CONTENT_TYPE' => 'application/json')
+        partnership = Partnership.find_by(user: user, startup: startup)
+        expect(partnership.confirmed_at).to_not be_nil
       end
     end
   end

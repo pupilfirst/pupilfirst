@@ -36,6 +36,9 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   config.action_mailer.default_url_options = { host: '192.168.1.195:3000' }
+
+  # In development and test, let's have carrierwave store everything on local disk.
+  config.carrier_wave_storage = :file
 end
 
 ActionMailer::Base.smtp_settings = {

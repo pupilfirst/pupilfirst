@@ -7,6 +7,34 @@ class User < ActiveRecord::Base
   COFOUNDER_ACCEPTED = 'accepted'
   COFOUNDER_REJECTED = 'rejected'
 
+  CURRENT_OCCUPATION_SELF_EMPLOYED = 'self_employed'
+
+  def self.valid_current_occupation_values
+    [CURRENT_OCCUPATION_SELF_EMPLOYED]
+  end
+
+  EDUCATIONAL_QUALIFICATION_BELOW_MATRICULATION = 'below_matriculation'
+  EDUCATIONAL_QUALIFICATION_MATRICULATION = 'matriculation'
+  EDUCATIONAL_QUALIFICATION_HIGHER_SECONDARY = 'higher_secondary'
+  EDUCATIONAL_QUALIFICATION_GRADUATE = 'graduate'
+  EDUCATIONAL_QUALIFICATION_POSTGRADUATE = 'postgraduate'
+
+  def self.valid_educational_qualificiations
+    [EDUCATIONAL_QUALIFICATION_BELOW_MATRICULATION, EDUCATIONAL_QUALIFICATION_MATRICULATION, EDUCATIONAL_QUALIFICATION_HIGHER_SECONDARY, EDUCATIONAL_QUALIFICATION_GRADUATE, EDUCATIONAL_QUALIFICATION_POSTGRADUATE]
+  end
+
+  RELIGION_HINDU = 'hindu'
+  RELIGION_MUSLIM = 'muslim'
+  RELIGION_CHRISTIAN = 'christian'
+  RELIGION_SIKH = 'sikh'
+  RELIGION_BUDDHIST = 'buddhist'
+  RELIGION_JAIN = 'jain'
+  RELIGION_OTHER = 'other'
+
+  def self.valid_religions
+    [RELIGION_HINDU, RELIGION_MUSLIM, RELIGION_CHRISTIAN, RELIGION_SIKH, RELIGION_BUDDHIST, RELIGION_JAIN, RELIGION_OTHER]
+  end
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :invitable, :database_authenticatable, #:registerable, #:confirmable,
@@ -49,6 +77,7 @@ class User < ActiveRecord::Base
   validates :gender, inclusion: { in: [GENDER_FEMALE, GENDER_MALE, GENDER_OTHER] }, allow_nil: true
 
   attr_reader :skip_password
+  attr_reader :validate_partnership_essential_fields
   # hack
   attr_accessor :inviter_name
   attr_accessor :accept_startup
@@ -68,6 +97,19 @@ class User < ActiveRecord::Base
   # Validate the mobile number
   validates_presence_of :phone, if: ->(user) { user.is_contact? }
   validates_uniqueness_of :phone, if: ->(user) { user.is_contact? }
+
+  # Couple of fields essential to forming partnerships. These are validated when partner confirms intent to form partnership.
+  validates_presence_of :born_on, if: ->(user) { user.validate_partnership_essential_fields }
+  validates_presence_of :pan, if: ->(user) { user.validate_partnership_essential_fields }
+  validates_presence_of :father_or_husband_name, if: ->(user) { user.validate_partnership_essential_fields }
+  validates_presence_of :mother_maiden_name, if: ->(user) { user.validate_partnership_essential_fields }
+  validates_inclusion_of :married, in: [true, false], if: ->(user) { user.validate_partnership_essential_fields }
+  validates_presence_of :current_occupation, if: ->(user) { user.validate_partnership_essential_fields }
+  validates_presence_of :educational_qualification, if: ->(user) { user.validate_partnership_essential_fields }
+  validates_presence_of :religion, if: ->(user) { user.validate_partnership_essential_fields }
+  validates_presence_of :communication_address, if: ->(user) { user.validate_partnership_essential_fields }
+
+  validates_numericality_of :pin, allow_nil: true, greater_than_or_equal_to: 100000, less_than_or_equal_to: 999999 # PIN Code is always 6 digits
 
   # Store mobile number in a standardized form.
   phony_normalize :phone, default_country_code: 'IN'
@@ -191,8 +233,8 @@ class User < ActiveRecord::Base
   #   end
   # end
 
-  def to_s
-    fullname or email
+  def display_name
+    email || fullname
   end
 
   def self.find_or_initialize_cofounder(email)
@@ -259,5 +301,11 @@ class User < ActiveRecord::Base
     else
       COFOUNDER_REJECTED
     end
+  end
+
+  def update_partnership_fields(partnership_essential_user_params)
+    @validate_partnership_essential_fields = true
+
+    update(partnership_essential_user_params)
   end
 end

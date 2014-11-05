@@ -1,8 +1,7 @@
 class StartupsController < InheritedResources::Base
-  before_filter :authenticate_user!
-  skip_before_filter :authenticate_user!, only: [:confirm_employee, :confirm_startup_link]
-  before_filter :restrict_to_startup_members, only: [:show]
+  before_filter :authenticate_user!, except: [:confirm_employee, :confirm_startup_link, :show]
   before_filter :restrict_to_startup_founders, only: [:edit, :update]
+  before_filter :disallow_unready_startup, only: [:edit, :update]
   after_filter only: [:create] do
     @startup.founders << current_user
     @startup.save
@@ -43,11 +42,13 @@ class StartupsController < InheritedResources::Base
     @current_user = current_user
     @startup = Startup.find params[:id]
     @startup.founders.each { |f| f.full_validation = true }
-    update! do |success, failure|
-      success.html {
-        # StartupMailer.notify_svrep_about_startup_update(@startup).deliver
-        redirect_to @startup
-      }
+    @startup.validate_frontend_mandatory_fields = true
+
+    if @startup.update(startup_params)
+      flash[:notice] = 'Startup details have been updated'
+      redirect_to @startup
+    else
+      render 'startups/edit'
     end
   end
 
@@ -80,24 +81,31 @@ class StartupsController < InheritedResources::Base
     params.require(:startup).permit(:name, :phone, :pitch, :website, :email, :registration_type)
   end
 
-  def permitted_params
-    { :startup => params.fetch(:startup, {}).permit(:name, :address, :pitch, :website, :about, :email, :phone, :logo, { help_from_sv: [] },
-      :remote_logo_url, :facebook_link, :twitter_link, :pre_funds, :pre_investers_name,
-      :help_from_sv, { category_ids: [] }, { founders_attributes: [:id, :title] },
+  def startup_params
+    params.require(:startup).permit(
+      :name, :address, :pitch, :website, :about, :email, :phone, :logo, { help_from_sv: [] },
+      :remote_logo_url, :facebook_link, :twitter_link, :pre_funds, :pre_investers_name, :product_name, :product_description,
+      :cool_fact, :help_from_sv, { category_ids: [] }, { founders_attributes: [:id, :title] },
       { startup_before: [:startup_name, :startup_descripition] },
       :revenue_generated, :presentation_link, :product_progress, :team_size, :women_employees, :incubation_location
-    ) }
+    )
   end
 
   private
 
-  def restrict_to_startup_members
-    raise_not_found if current_user.startup.try(:id) != params[:id].to_i
-  end
-
   def restrict_to_startup_founders
     if current_user.startup.try(:id) != params[:id].to_i && current_user.is_founder?
       raise_not_found
+    end
+  end
+
+  # A startup that is in unready state shouldn't be allowed to edit its details.
+  #
+  # @see https://trello.com/c/y4ReClzt
+  def disallow_unready_startup
+    if current_user.startup.unready?
+      flash[:alert] = "Please submit your incubation application via our Mobile app before attempting to edit your startup's details."
+      redirect_to startup_path(current_user.startup)
     end
   end
 end

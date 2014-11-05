@@ -1,17 +1,16 @@
 = semantic_form_for [:admin, @user] do |f|
   = f.inputs 'Basic Details'
-    = f.input :username
     = f.input :email
     = f.input :fullname
     = f.input :categories, collection: Category.user_category, input_html: { style: 'width: 400px;' }
-    = f.input :twitter_url
-    = f.input :linkedin_url
     = f.input :title
     = f.input :born_on
-    = f.input :avatar, as: :file
-    = f.input :remote_avatar_url
     = f.input :startup
     = f.input :startup_admin
+    = f.input :communication_address
+    = f.input :twitter_url
+      = f.input :linkedin_url
+      = f.input :avatar, as: :file
 
     / When creating a user manually, let's not ask for a password.
     = f.input :skip_password, as: :hidden, input_html: { value: true }

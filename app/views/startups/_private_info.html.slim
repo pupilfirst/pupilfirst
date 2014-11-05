@@ -1,0 +1,44 @@
+h2.margin-bottom-20
+  ' Private Information
+  small Visible only to startup founders.
+
+table.table
+  tbody
+    tr
+      th Email
+      td = nil_not_available @startup.email
+    tr
+      th Incubation Location
+      td = incubation_location_html @startup.incubation_location
+    tr
+      th Cool Fact
+      td = nil_not_available @startup.cool_fact
+    tr
+      th Product Name
+      td = nil_not_available @startup.product_name
+    tr
+      th Pitch
+      td = nil_not_available @startup.pitch
+    tr
+      th Product Description
+      td = nil_not_available @startup.product_description
+    tr
+      th Product Progress
+      td = product_progress_html(@startup.product_progress)
+    tr
+      th Revenue Generated
+      td = nil_not_available(@startup.revenue_generated)
+    tr
+      th Total Team Size
+      td = nil_not_available(@startup.team_size)
+    tr
+      th Number of Women Employees
+      td = nil_not_available(@startup.women_employees)
+    tr
+      th Incorporation Status
+      td = incorporation_status_html(@startup.registration_type)
+    tr
+      th Social Media Links
+      td = social_media_html(@startup.facebook_link, @startup.twitter_link)
+
+= link_to 'Edit startup details', edit_startup_path(@startup), { class: 'btn btn-primary' } if current_user.is_founder?

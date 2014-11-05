@@ -23,6 +23,7 @@ tags
 coverage
 public/svapp-dev
 public/svapp-*
+public/uploads
 .tags*
 *.DS_Store
 

@@ -1,4 +1,6 @@
 class Mentor < ActiveRecord::Base
+  MAX_SKILL_COUNT = 3
+
   TIME_AVAILABILITY_MORNING_WEEKDAYS = 'morning_weekdays'
   TIME_AVAILABILITY_EVENING_WEEKDAYS = 'evening_weekdays'
   TIME_AVAILABILITY_MIDDAY_WEEKDAYS = 'midday_weekdays'
@@ -25,4 +27,12 @@ class Mentor < ActiveRecord::Base
   belongs_to :company
   accepts_nested_attributes_for :user
   has_many :skills, class_name: 'MentorSkill'
+
+  validate :skill_count_must_be_less_than_max
+
+  def skill_count_must_be_less_than_max
+    if self.skills.count > MAX_SKILL_COUNT
+      self.errors.add(:skills, "Can't list more than 3 skills")
+    end
+  end
 end

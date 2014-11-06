@@ -54,6 +54,7 @@ class User < ActiveRecord::Base
   belongs_to :startup_link_verifier, class_name: "User", foreign_key: "startup_link_verifier_id"
   has_and_belongs_to_many :categories
   has_many :partnerships
+  has_many :mentor_skills, foreign_key: 'mentor_id'
 
   scope :non_employees, -> { where("startup_id IS NULL") }
   scope :non_founders, -> { where("is_founder = ? or is_founder IS NULL", false) }

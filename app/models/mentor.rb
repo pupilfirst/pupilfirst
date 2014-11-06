@@ -11,11 +11,6 @@ class Mentor < ActiveRecord::Base
   SKILL_SALES = 'sales'
   SKILL_FINANCE = 'finance'
 
-  EXPERTISE_NOVICE = 'novice'
-  EXPERTISE_INTERMEDIATE = 'intermediate'
-  EXPERTISE_ADVANCED = 'advanced'
-  EXPERTISE_EXPERT = 'expert'
-
   CTC_BELOW_3L = 150000
   CTC_BETWEEN_3L_AND_6L = 450000
   CTC_BETWEEN_6L_AND_12L = 900000

@@ -236,6 +236,10 @@ class User < ActiveRecord::Base
     email || fullname
   end
 
+  def to_s
+    display_name
+  end
+
   def self.find_or_initialize_cofounder(email)
     cofounder = find_or_initialize_by(email: email)
 

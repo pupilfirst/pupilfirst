@@ -1,7 +1,4 @@
 class MentorSkill < ActiveRecord::Base
-  belongs_to :mentor, class_name: 'User'
-  belongs_to :skill, class_name: 'Category'
-
   EXPERTISE_NOVICE = 'novice'
   EXPERTISE_INTERMEDIATE = 'intermediate'
   EXPERTISE_ADVANCED = 'advanced'
@@ -10,6 +7,9 @@ class MentorSkill < ActiveRecord::Base
   def self.valid_expertise_values
     [EXPERTISE_NOVICE, EXPERTISE_INTERMEDIATE, EXPERTISE_ADVANCED, EXPERTISE_EXPERT]
   end
+
+  belongs_to :mentor
+  belongs_to :skill, class_name: 'Category'
 
   validates_presence_of :mentor
   validates_presence_of :skill

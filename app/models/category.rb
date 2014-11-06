@@ -9,7 +9,7 @@ class Category < ActiveRecord::Base
   has_and_belongs_to_many :startups, join_table: 'startups_categories'
   has_and_belongs_to_many :users
   has_many :mentor_skills, foreign_key: 'skill_id'
-  has_many :mentors, through: :mentor_skills, class_name: 'User'
+  has_many :mentors, through: :mentor_skills
 
   TYPES = %w(event news startup user mentor_skill) unless defined?(TYPES)
 

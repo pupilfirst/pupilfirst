@@ -2,10 +2,20 @@
 
 h1 Statistics
 
-h2 User Count
+h2 Total counts
 
-= line_chart admin_dashboard_users_count_path
+div style="float: left; width: 50%;"
+  = column_chart admin_dashboard_users_count_total_path, library: { hAxis: { title: 'Users' } }
+div style="float: left; width: 50%;"
+  = column_chart admin_dashboard_startups_count_total_path, library: { hAxis: { title: 'Startups' } }
 
-h2 Startups
+div style="clear: both;"
 
-= line_chart admin_dashboard_startups_count_path
+h2 Startups split
+
+div style="float: left; width: 30%;"
+  = pie_chart admin_dashboard_startups_count_current_split_path
+div style="float: left; width: 70%;"
+  = area_chart admin_dashboard_startups_count_split_path
+
+div style="clear: both;"

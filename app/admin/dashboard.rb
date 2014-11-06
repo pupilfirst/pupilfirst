@@ -3,18 +3,25 @@ ActiveAdmin.register_page "Dashboard" do
     newrelic_ignore
   end
 
-  page_action :users_count do
+  page_action :users_count_total do
     render json: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_USERS)
   end
 
-  page_action :startups_count do
+  page_action :startups_count_total do
+    render json: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS)
+  end
+
+  page_action :startups_count_split do
     render json: [
-      { name: 'Total', data: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS) },
       { name: 'Unready', data: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS_UNREADY) },
       { name: 'Pending', data: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS_PENDING) },
       { name: 'Approved', data: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS_APPROVED) },
       { name: 'Rejected', data: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS_REJECTED) }
     ]
+  end
+
+  page_action :startups_count_current_split do
+    render json: Startup.current_startups_split
   end
 
   menu :priority => 1, :label => proc{ I18n.t("active_admin.dashboard") }

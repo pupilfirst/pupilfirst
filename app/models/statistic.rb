@@ -16,8 +16,8 @@ class Statistic < ActiveRecord::Base
   serialize :statistic, JSON
 
   def self.chartkick_parameter_by_date(parameter)
-    where(parameter: parameter).inject({}) do |stats, statistic|
-      stats[statistic.created_at] = statistic.statistic
+    where(parameter: parameter).limit(30).order('created_at ASC').inject({}) do |stats, statistic|
+      stats[statistic.created_at.strftime('%b %e, %Y')] = statistic.statistic
       stats
     end
   end

@@ -106,11 +106,6 @@ FactoryGirl.define do
     f.category_type :startup
   end
 
-  factory :startup_village_help_category,  class: Category do |f|
-    f.name {Faker::Lorem.words(2).join(' ')}
-    f.category_type :startup_village_help
-  end
-
   factory :news do |f|
     author
     association :category, factory: :news_category, strategy: :build
@@ -149,11 +144,6 @@ FactoryGirl.define do
     f.email     {Faker::Internet.email}
     f.phone   {Faker::PhoneNumber.cell_phone}
     f.incubation_location Startup::INCUBATION_LOCATION_KOCHI
-    f.help_from_sv   {
-      FactoryGirl.create(:startup_village_help_category)
-      FactoryGirl.create(:startup_village_help_category)
-      Category.startup_village_help.map(&:id).shuffle[0..2]
-    }
     # f.founders {[create(:founder), create(:founder)]}
     # f.category_ids {[create(:startup_category).id]}
     after(:build) do |startup|

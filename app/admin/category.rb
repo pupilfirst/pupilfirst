@@ -1,22 +1,20 @@
 ActiveAdmin.register Category do
-  remove_filter :categories_startups
-  remove_filter :categories_users
+  filter :name
+  filter :category_type, as: :select, collection: Category::TYPES
 
-  # See permitted parameters documentation:
-  # https://github.com/gregbell/active_admin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
-  #
-  # permit_params :list, :of, :attributes, :on, :model
-  #
-  # or
-  #
-  # permit_params do
-  #  permitted = [:permitted, :attributes]
-  #  permitted << :other if resource.something?
-  #  permitted
-  # end
   controller do
     newrelic_ignore
   end
+
+  index do
+    selectable_column
+
+    column :name
+    column :category_type
+
+    actions
+  end
+
   form do |f|
     f.inputs 'Details' do
       f.input :name
@@ -24,5 +22,6 @@ ActiveAdmin.register Category do
     end
     f.actions
   end
+
   permit_params :name, :category_type
 end

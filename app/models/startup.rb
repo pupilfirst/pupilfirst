@@ -326,5 +326,14 @@ class Startup < ActiveRecord::Base
     end
   end
 
+  def self.current_startups_split
+    {
+      'Unready' => unready.count,
+      'Pending' => pending.count,
+      'Approved' => approved.count,
+      'Rejected' => rejected.count
+    }
+  end
+
   # TODO: Remove incorporation_status boolean field.
 end

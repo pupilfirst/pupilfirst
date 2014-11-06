@@ -1,5 +1,6 @@
 class Mentor < ActiveRecord::Base
   belongs_to :user
+  belongs_to :company
   accepts_nested_attributes_for :user
 
   TIME_AVAILABILITY_MORNING_WEEKDAYS = 'morning_weekdays'

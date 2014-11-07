@@ -538,6 +538,18 @@ describe "Startup Requests" do
         partnership = Partnership.find_by(user: user, startup: startup)
         expect(partnership.confirmed_at).to_not be_nil
       end
+
+      context 'when managing_director param is sent instead of managing_partner' do
+        it 'uses value of managing_director instead' do
+          registration_params[:partners][0][:managing_director] = true
+          registration_params[:partners][0].delete :managing_partner
+
+          post "/api/startups/#{startup.id}/registration", registration_params.to_json, version_header(user).merge('CONTENT_TYPE' => 'application/json')
+
+          first_partnership = Partnership.first
+          expect(first_partnership.managing_partner).to eq true
+        end
+      end
     end
   end
 end

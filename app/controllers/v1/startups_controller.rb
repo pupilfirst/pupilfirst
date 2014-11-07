@@ -181,7 +181,7 @@ class V1::StartupsController < V1::BaseController
     params.permit(
       :registration_type, :address, :state, :district, :pin, :pitch, :total_shares, :name,
       partners: [:fullname, :email, :share_percentage, :cash_contribution, :salary, :managing_partner,
-        :operate_bank_account, :bank_account_operation_limit]
+        :operate_bank_account, :bank_account_operation_limit, :managing_director]
     )
   end
 

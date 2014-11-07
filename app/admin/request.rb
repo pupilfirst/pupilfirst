@@ -15,7 +15,7 @@ ActiveAdmin.register Request do
     end
 
     column :startup do |request|
-      startup_link(request.user.startup)
+      startup_link(request.user.try(:startup))
     end
 
     column :body do |request|

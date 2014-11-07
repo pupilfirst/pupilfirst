@@ -8,6 +8,10 @@ module ActiveAdmin::ActiveAdminHelper
   end
 
   def startup_link(startup)
-    link_to startup.name, admin_startup_path(startup)
+    if startup.present?
+      link_to startup.name, admin_startup_path(startup)
+    else
+      '<em>Unknown</em>'.html_safe
+    end
   end
 end

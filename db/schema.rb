@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141103110825) do
+ActiveRecord::Schema.define(version: 20141107071347) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,6 +88,12 @@ ActiveRecord::Schema.define(version: 20141103110825) do
     t.integer "user_id"
   end
 
+  create_table "companies", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "connections", force: true do |t|
     t.integer  "user_id"
     t.integer  "contact_id"
@@ -141,20 +147,28 @@ ActiveRecord::Schema.define(version: 20141103110825) do
     t.datetime "updated_at"
   end
 
+  create_table "mentor_skills", force: true do |t|
+    t.integer  "mentor_id"
+    t.integer  "skill_id"
+    t.string   "expertise"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "mentor_skills", ["mentor_id"], name: "index_mentor_skills_on_mentor_id", using: :btree
+  add_index "mentor_skills", ["skill_id"], name: "index_mentor_skills_on_skill_id", using: :btree
+
   create_table "mentors", force: true do |t|
     t.integer  "user_id"
     t.string   "time_availability"
     t.string   "company_level"
-    t.string   "first_skill"
-    t.string   "first_skill_expertise"
-    t.string   "second_skill"
-    t.string   "second_skill_expertise"
-    t.string   "third_skill"
-    t.string   "third_skill_expertise"
     t.integer  "cost_to_company"
     t.integer  "time_donate_percentage"
     t.datetime "verified_at"
+    t.integer  "company_id"
   end
+
+  add_index "mentors", ["company_id"], name: "index_mentors_on_company_id", using: :btree
 
   create_table "names", force: true do |t|
     t.string   "first_name"
@@ -186,7 +200,7 @@ ActiveRecord::Schema.define(version: 20141103110825) do
     t.integer  "startup_id"
     t.integer  "salary"
     t.integer  "cash_contribution"
-    t.boolean  "managing_director"
+    t.boolean  "managing_partner"
     t.boolean  "operate_bank_account"
     t.datetime "created_at"
     t.datetime "updated_at"

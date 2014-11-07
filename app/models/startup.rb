@@ -315,7 +315,7 @@ class Startup < ActiveRecord::Base
       user.fullname = partner_params[:fullname]
       user.save_unregistered_user!
 
-      partnership_params = partner_params.slice(:share_percentage, :cash_contribution, :salary, :managing_director, :operate_bank_account, :bank_account_operation_limit)
+      partnership_params = partner_params.slice(:share_percentage, :cash_contribution, :salary, :managing_partner, :operate_bank_account, :bank_account_operation_limit)
 
       # Confirm partnership for requesting user.
       partnership_params.merge!(confirmed_at: Time.now) if requesting_user == user

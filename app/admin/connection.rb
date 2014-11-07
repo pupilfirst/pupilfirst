@@ -5,11 +5,11 @@ ActiveAdmin.register Connection do
 
   index do
     column :user do |connection|
-      sv_id_link(connection.user) if connection.user.present?
+      sv_id_link(connection.user)
     end
 
     column :contact do |connection|
-      sv_id_link(connection.contact) if connection.contact.present?
+      sv_id_link(connection.contact)
     end
 
     column :created_at

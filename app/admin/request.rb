@@ -11,11 +11,11 @@ ActiveAdmin.register Request do
     selectable_column
 
     column :user do |request|
-      sv_id_link(request.user) if request.user.present?
+      sv_id_link(request.user)
     end
 
     column :startup do |request|
-      startup_link(request.user.startup) if request.user.present?
+      startup_link(request.user.startup)
     end
 
     column :body do |request|

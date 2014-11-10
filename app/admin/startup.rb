@@ -245,7 +245,7 @@ ActiveAdmin.register Startup do
             row :user do
               link_to partner.user.fullname, [:admin, partner.user]
             end
-            [:share_percentage, :salary, :cash_contribution, :managing_director, :operate_bank_account].each do |column|
+            [:share_percentage, :salary, :cash_contribution, :managing_partner, :operate_bank_account].each do |column|
               row column
             end
           end

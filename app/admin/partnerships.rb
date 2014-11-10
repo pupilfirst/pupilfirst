@@ -27,13 +27,13 @@ ActiveAdmin.register Partnership do
       f.input :share_percentage
       f.input :cash_contribution
       f.input :salary
-      f.input :managing_director
+      f.input :managing_partner
       f.input :operate_bank_account
       f.input :bank_account_operation_limit
     end
     f.actions
   end
 
-  permit_params :user_id, :startup_id, :share_percentage, :salary, :cash_contribution, :managing_director,
+  permit_params :user_id, :startup_id, :share_percentage, :salary, :cash_contribution, :managing_partner,
     :operate_bank_account, :bank_account_operation_limit
 end

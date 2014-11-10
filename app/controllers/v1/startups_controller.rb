@@ -180,8 +180,8 @@ class V1::StartupsController < V1::BaseController
   def registration_params
     params.permit(
       :registration_type, :address, :state, :district, :pin, :pitch, :total_shares, :name,
-      partners: [:fullname, :email, :share_percentage, :cash_contribution, :salary, :managing_director,
-        :operate_bank_account, :bank_account_operation_limit]
+      partners: [:fullname, :email, :share_percentage, :cash_contribution, :salary, :managing_partner,
+        :operate_bank_account, :bank_account_operation_limit, :managing_director]
     )
   end
 

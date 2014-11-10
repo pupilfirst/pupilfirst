@@ -453,7 +453,7 @@ describe "Startup Requests" do
             email: user.email,
             cash_contribution: mock_cash_contribution,
             salary: mock_salary,
-            managing_director: true,
+            managing_partner: true,
             operate_bank_account: true,
             share_percentage: mock_share_percentage,
             bank_account_operation_limit: mock_bank_account_operation_limit
@@ -464,7 +464,7 @@ describe "Startup Requests" do
             cash_contribution: rand(100000),
             salary: rand(50000),
             share_percentage: (rand * 100).round(2),
-            managing_director: false,
+            managing_partner: false,
             operate_bank_account: false,
             bank_account_operation_limit: rand(10000)
           }
@@ -507,7 +507,7 @@ describe "Startup Requests" do
           expect(first_partnership.share_percentage.to_f).to eq mock_share_percentage
           expect(first_partnership.cash_contribution).to eq mock_cash_contribution
           expect(first_partnership.salary).to eq mock_salary
-          expect(first_partnership.managing_director).to eq true
+          expect(first_partnership.managing_partner).to eq true
           expect(first_partnership.bank_account_operation_limit).to eq mock_bank_account_operation_limit
           expect(Partnership.last.operate_bank_account).to eq false
         end
@@ -521,7 +521,7 @@ describe "Startup Requests" do
             share_percentage: (rand * 100).round(2),
             cash_contribution: rand(500000),
             salary: 0,
-            managing_director: true,
+            managing_partner: true,
             operate_bank_account: false
           }
 
@@ -537,6 +537,18 @@ describe "Startup Requests" do
         post "/api/startups/#{startup.id}/registration", registration_params.to_json, version_header(user).merge('CONTENT_TYPE' => 'application/json')
         partnership = Partnership.find_by(user: user, startup: startup)
         expect(partnership.confirmed_at).to_not be_nil
+      end
+
+      context 'when managing_director param is sent instead of managing_partner' do
+        it 'uses value of managing_director instead' do
+          registration_params[:partners][0][:managing_director] = true
+          registration_params[:partners][0].delete :managing_partner
+
+          post "/api/startups/#{startup.id}/registration", registration_params.to_json, version_header(user).merge('CONTENT_TYPE' => 'application/json')
+
+          first_partnership = Partnership.first
+          expect(first_partnership.managing_partner).to eq true
+        end
       end
     end
   end

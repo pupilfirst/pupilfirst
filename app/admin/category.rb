@@ -18,7 +18,9 @@ ActiveAdmin.register Category do
   form do |f|
     f.inputs 'Details' do
       f.input :name
-      f.input :category_type, collection: Category::TYPES, prompt: 'Choose a type'
+      f.input :category_type,
+        collection: current_admin_user.admin_type == AdminUser::TYPE_EDITOR ? Category.editor_categories : Category::TYPES,
+        prompt: 'Choose a type'
     end
     f.actions
   end

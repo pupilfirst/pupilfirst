@@ -11,6 +11,10 @@ class Category < ActiveRecord::Base
 
   TYPES = %w(event news startup user) unless defined?(TYPES)
 
+  def self.editor_categories
+    %w(news event)
+  end
+
   # Before a category is destroyed, make sure that entries in association tables are removed.
   before_destroy do
     startups.clear

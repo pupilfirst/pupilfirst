@@ -28,7 +28,7 @@ ActiveAdmin.register_page "Dashboard" do
 
   content :title => proc{ I18n.t("active_admin.dashboard") } do
     div do
-      render 'statistics'
+      render('statistics') if current_admin_user.admin_type != AdminUser::TYPE_EDITOR
     end
 
     h1 'Recent Changes'

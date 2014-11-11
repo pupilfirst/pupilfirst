@@ -27,6 +27,10 @@ Svapp::Application.routes.draw do
       get :confirm_employee
       get :confirm_startup_link
     end
+
+    collection do
+      get 'featured'
+    end
   end
 
   scope 'partnerships', controller: 'partnerships', as: 'partnerships' do

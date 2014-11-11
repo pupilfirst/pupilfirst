@@ -25,6 +25,7 @@ html
           ul.nav.navbar-nav.navbar-right
             /li = link_to 'Team', '/team'
             li = link_to 'Jobs', '/jobs'
+            li = link_to 'Featured Startup', featured_startups_path
             - if current_user
               li.dropdown
                 a.dropdown-toggle href="#" data-toggle="dropdown"

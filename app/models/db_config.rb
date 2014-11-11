@@ -6,7 +6,8 @@ class DbConfig < ActiveRecord::Base
     student_startups: "Student Startup's",
     regular_incubatees: "Regular Incubatee's",
     documents_submition_date: "Document's Submition Date",
-    documents_submition_time: "Document's Submition Time"
+    documents_submition_time: "Document's Submition Time",
+    featured_startup_id: 'Featured Startup ID'
   }
 
   def self.stats_application
@@ -31,5 +32,9 @@ class DbConfig < ActiveRecord::Base
 
   def self.documents_submition_time
     find_by_key(:documents_submition_time).value rescue nil
+  end
+
+  def self.featured_startup
+    Startup.find(find_by_key(:featured_startup_id).value) rescue nil
   end
 end

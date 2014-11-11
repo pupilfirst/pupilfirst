@@ -1,5 +1,5 @@
 class StartupsController < InheritedResources::Base
-  before_filter :authenticate_user!, except: [:confirm_employee, :confirm_startup_link, :show]
+  before_filter :authenticate_user!, except: [:confirm_employee, :confirm_startup_link, :show, :featured]
   before_filter :restrict_to_startup_founders, only: [:edit, :update]
   before_filter :disallow_unready_startup, only: [:edit, :update]
   after_filter only: [:create] do
@@ -75,6 +75,11 @@ class StartupsController < InheritedResources::Base
       @token = params[:token]
       render :confirm_employee
     end
+  end
+
+  # GET /startups/featured
+  def featured
+    redirect_to DbConfig.featured_startup
   end
 
   def apply_now_params

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141107071347) do
+ActiveRecord::Schema.define(version: 20141111082953) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -146,6 +146,23 @@ ActiveRecord::Schema.define(version: 20141107071347) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "mentor_meetings", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "mentor_id"
+    t.string   "purpose"
+    t.string   "suggested_meeting_timings"
+    t.datetime "meeting_at"
+    t.integer  "duration"
+    t.string   "status"
+    t.integer  "mentor_rating"
+    t.integer  "user_rating"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "mentor_meetings", ["mentor_id"], name: "index_mentor_meetings_on_mentor_id", using: :btree
+  add_index "mentor_meetings", ["user_id"], name: "index_mentor_meetings_on_user_id", using: :btree
 
   create_table "mentor_skills", force: true do |t|
     t.integer  "mentor_id"

@@ -338,5 +338,12 @@ class Startup < ActiveRecord::Base
     }
   end
 
+  # Return startups with agreement signed on or after Nov 5, 2014.
+  #
+  # @see https://trello.com/c/SzqE6l8U
+  def self.agreement_signed_filtered
+    where('agreement_first_signed_at > ?', Time.parse('2014-11-05 00:00:00 +0530'))
+  end
+
   # TODO: Remove incorporation_status boolean field.
 end

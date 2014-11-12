@@ -36,5 +36,12 @@ namespace :statistics do
       parameter: Statistic::PARAMETER_COUNT_STARTUPS_REJECTED,
       statistic: Startup.rejected.count
     )
+
+    # Number of startups that have signed an agreement.
+    # @see https://trello.com/c/SzqE6l8U
+    Statistic.create!(
+      parameter: Statistic::PARAMETER_COUNT_STARTUPS_AGREEMENT_SIGNED,
+      statistic: (849 + Startup.agreement_signed_filtered.count)
+    )
   end
 end

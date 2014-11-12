@@ -11,6 +11,10 @@ ActiveAdmin.register_page "Dashboard" do
     render json: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS)
   end
 
+  page_action :startups_count_agreement_signed do
+    render json: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS_AGREEMENT_SIGNED)
+  end
+
   page_action :startups_count_split do
     render json: [
       { name: 'Unready', data: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS_UNREADY) },

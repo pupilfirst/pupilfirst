@@ -113,6 +113,10 @@ class Startup < ActiveRecord::Base
   validates_presence_of :pre_funds, if: ->(startup) { startup.pre_investers_name.present? }
   validates_presence_of :pre_investers_name, if: ->(startup) { startup.pre_funds.present? }
 
+  # Only accept both agreement dates together.
+  validates_presence_of :agreement_first_signed_at, if: ->(startup) { startup.agreement_last_signed_at.present? || startup.agreement_duration.present? }
+  validates_presence_of :agreement_last_signed_at, if: ->(startup) { startup.agreement_first_signed_at.present? || startup.agreement_duration.present? }
+
   validates_numericality_of :pin, allow_nil: true, greater_than_or_equal_to: 100000, less_than_or_equal_to: 999999 # PIN Code is always 6 digits
 
   validates_length_of :pitch, maximum: MAX_PITCH_CHARACTERS,
@@ -148,10 +152,19 @@ class Startup < ActiveRecord::Base
 
   # Let's allow backend users to edit agreement_ends at as a duration instead of setting absolute date.
   def agreement_duration=(duration)
-    # Ignore blank durations.
-    return if duration.blank?
+    @agreement_duration = duration unless duration.blank?
+  end
 
-    self.agreement_ends_at = (self.agreement_last_signed_at + duration.to_i).to_date
+  # Reader for the validator.
+  attr_reader :agreement_duration
+
+  before_save do
+    # If agreement duration is available, store that as agreement_ends_at.
+    if agreement_duration
+      self.agreement_ends_at = (self.agreement_last_signed_at + agreement_duration.to_i).to_date
+    end
+
+    self.agreement_ends_at = nil if (self.agreement_first_signed_at.nil? && self.agreement_last_signed_at.nil?)
   end
 
   def admin
@@ -336,6 +349,13 @@ class Startup < ActiveRecord::Base
       'Approved' => approved.count,
       'Rejected' => rejected.count
     }
+  end
+
+  # Return startups with agreement signed on or after Nov 5, 2014.
+  #
+  # @see https://trello.com/c/SzqE6l8U
+  def self.agreement_signed_filtered
+    where('agreement_first_signed_at > ?', Time.parse('2014-11-05 00:00:00 +0530'))
   end
 
   # TODO: Remove incorporation_status boolean field.

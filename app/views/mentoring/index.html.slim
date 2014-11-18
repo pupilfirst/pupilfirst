@@ -8,7 +8,9 @@
     - else
       = link_to 'Are you an interested mentor?', mentoring_register_url, class: 'btn btn-primary btn-lg'
   - else
-    = link_to 'Login to get started!', new_user_session_path, class: 'btn btn-primary btn-lg'
+    p
+      ' #{link_to 'Login to get started!', new_user_session_path, class: 'btn btn-primary btn-lg'}
+      | #{link_to 'Sign up as a mentor', mentoring_sign_up_path, class: 'btn btn-primary btn-lg'}
 
 .row style="margin-top: 30px;"
   .col-md-6

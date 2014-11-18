@@ -1,0 +1,23 @@
+h1.page-header.margin-top-0 Sign up as a mentor
+
+.alert.alert-info
+  ' Please use this form only if you're interested in being a mentor. If you want to incubate your company at Startup
+  ' Village, please start with our
+  ' #{ link_to 'Android', 'https://play.google.com/store/apps/details?id=in.svlabs.android' } or
+  ' #{ link_to 'iOS', 'https://itunes.apple.com/in/app/startup-village-enabling-entrepreneurship/id804638121' }
+  | application.
+
+.alert.alert-danger.hidden
+  | Alert
+
+= simple_form_for @user, url: mentoring_sign_up_url, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
+  = f.error_notification
+
+  = f.input :fullname, label: 'Full Name'
+  = f.input :email, hint: 'This will be your SV ID.'
+  = f.input :password
+  = f.input :password_confirmation
+
+  .form-group
+    .col-sm-offset-3.col-sm-10
+      = f.button :submit, 'Sign up', class: 'btn btn-primary'

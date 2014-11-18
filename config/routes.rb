@@ -37,6 +37,8 @@ Svapp::Application.routes.draw do
     get '/', action: 'index'
     get 'register', action: 'new'
     post 'register'
+    get 'sign_up', action: 'sign_up_form'
+    post 'sign_up'
   end
 
   scope 'partnerships', controller: 'partnerships', as: 'partnerships' do

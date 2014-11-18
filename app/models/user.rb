@@ -121,35 +121,8 @@ class User < ActiveRecord::Base
     value.is_a?(String) ? value.downcase == 'true' : value
   end
 
-  normalize_attribute :twitter_url do |value|
-    case value
-      when /^https?:\/\/(www\.)?twitter.com.*/ then
-        value
-      when /^(www\.)?twitter\.com.*/ then
-        "https://#{value}"
-      when '' then
-        nil
-      when nil then
-        nil
-      else
-        "https://twitter.com/#{value}"
-    end
-  end
-
-  normalize_attribute :linkedin_url do |value|
-    case value
-      when /^https?:\/\/(www\.)?linkedin.com.*/ then
-        value
-      when /^(www\.)?linkedin\.com.*/ then
-        "https://#{value}"
-      when '' then
-        nil
-      when nil then
-        nil
-      else
-        "https://linkedin.com/in/#{value}"
-    end
-  end
+  validates :twitter_url, url: { allow_nil: true, allow_blank: true }
+  validates :linkedin_url, url: { allow_blank: true, allow_nil: true }
 
   nilify_blanks only: [:invitation_token, :twitter_url, :linkedin_url]
 

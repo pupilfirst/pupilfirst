@@ -9,8 +9,8 @@
     = f.input :startup_admin
     = f.input :communication_address
     = f.input :twitter_url
-      = f.input :linkedin_url
-      = f.input :avatar, as: :file
+    = f.input :linkedin_url
+    = f.input :avatar, as: :file
 
     / When creating a user manually, let's not ask for a password.
     = f.input :skip_password, as: :hidden, input_html: { value: true }

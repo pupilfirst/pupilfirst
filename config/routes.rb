@@ -1,5 +1,5 @@
 Svapp::Application.routes.draw do
-  devise_for :users, controllers: { passwords: "users/passwords", invitations: 'users/invitations'}
+  devise_for :users, controllers: { passwords: 'users/passwords', invitations: 'users/invitations', sessions: 'users/sessions' }
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
@@ -17,9 +17,9 @@ Svapp::Application.routes.draw do
     resources :startup_links, only: [:index, :create]
 
     # resources :founders do
-      # collection do
-      #   post :invite
-      # end
+    # collection do
+    #   post :invite
+    # end
     # end
 
     member do

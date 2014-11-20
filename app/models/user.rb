@@ -111,6 +111,9 @@ class User < ActiveRecord::Base
 
   validates_numericality_of :pin, allow_nil: true, greater_than_or_equal_to: 100000, less_than_or_equal_to: 999999 # PIN Code is always 6 digits
 
+  # Title is essential if user is a mentor.
+  validates_presence_of :title, if: Proc.new { |user| user.mentor.present? }
+
   # Store mobile number in a standardized form.
   phony_normalize :phone, default_country_code: 'IN'
 

@@ -1,15 +1,6 @@
 class Mentor < ActiveRecord::Base
   MAX_SKILL_COUNT = 3
 
-  TIME_AVAILABILITY_MORNING_WEEKDAYS = 'morning_weekdays'
-  TIME_AVAILABILITY_EVENING_WEEKDAYS = 'evening_weekdays'
-  TIME_AVAILABILITY_MIDDAY_WEEKDAYS = 'midday_weekdays'
-  TIME_AVAILABILITY_MIDDAY_WEEKENDS = 'midday_weekends'
-
-  SKILL_PROGRAMMING = 'programming'
-  SKILL_SALES = 'sales'
-  SKILL_FINANCE = 'finance'
-
   CTC_BELOW_3L = 150000
   CTC_BETWEEN_3L_AND_6L = 450000
   CTC_BETWEEN_6L_AND_12L = 900000
@@ -27,6 +18,14 @@ class Mentor < ActiveRecord::Base
   belongs_to :company
   accepts_nested_attributes_for :user
   has_many :skills, class_name: 'MentorSkill'
+
+  validates_presence_of :user
+  validates_presence_of :company
+  validates_associated :user
+  validates_presence_of :time_availability
+  validates_presence_of :company_level
+  validates_presence_of :cost_to_company
+  validates_presence_of :time_donate_percentage
 
   validate :skill_count_must_be_less_than_max
 

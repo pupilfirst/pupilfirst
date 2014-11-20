@@ -35,8 +35,10 @@ Svapp::Application.routes.draw do
 
   scope 'mentoring', as: 'mentoring', controller: 'mentoring' do
     get '/', action: 'index'
-    get 'register', action: 'new'
+    get 'register', action: 'new_step1'
     post 'register'
+    get 'register_2', action: 'new_step2'
+    post 'register_2'
     get 'sign_up', action: 'sign_up_form'
     post 'sign_up'
   end

@@ -1,0 +1,18 @@
+h1.page-header
+  ' Mentor Registration
+  small Step 1
+
+= simple_form_for @mentor, url: mentoring_register_url, html: { class: 'form-horizontal', method: :post }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
+  = f.error_notification
+  = f.simple_fields_for :user, @mentor.user do |u|
+    = u.input :fullname, label: 'Full Name', required: true
+    = u.input :title, required: true
+  = f.association :company
+  = f.input :time_availability, hint: 'When will you be available for mentoring?'
+  = f.input :company_level, hint: 'Which level of company would you prefer to mentor?', collection: Startup.valid_product_progress_values, label_method: ->(obj) { company_level_label(obj) }
+  = f.input :cost_to_company, hint: 'Your approximate CTC, per year.', as: :select, collection: cost_to_company_collection, include_blank: false
+  = f.input :time_donate_percentage, hint: 'How much of your time do you wish to donate?', as: :select, collection: time_donate_percentage_collection, include_blank: false
+
+  .form-group
+    .col-sm-offset-3.col-sm-12
+      = f.submit class: 'btn btn-primary', value: 'Proceed to final step'

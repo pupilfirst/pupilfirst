@@ -14,6 +14,16 @@ class Mentor < ActiveRecord::Base
   DONATE_25 = 25
   DONATE_0 = 0
 
+  AVAILABILITY_DAYS_EVERYDAY = 'everyday'
+  AVAILABILITY_DAYS_WEEKDAYS = 'weekdays'
+  AVAILABILITY_DAYS_WEEKENDS = 'weekends'
+
+  AVAILABILITY_TIME_ALL_DAY = 'all_day'
+  AVAILABILITY_TIME_MORNING = 'morning'
+  AVAILABILITY_TIME_MIDDAY = 'midday'
+  AVAILABILITY_TIME_AFTERNOON = 'afternoon'
+  AVAILABILITY_TIME_EVENING = 'evening'
+
   belongs_to :user
   belongs_to :company
   accepts_nested_attributes_for :user
@@ -22,7 +32,7 @@ class Mentor < ActiveRecord::Base
   validates_presence_of :user
   validates_presence_of :company
   validates_associated :user
-  validates_presence_of :time_availability
+  validates_presence_of :availability
   validates_presence_of :company_level
   validates_presence_of :cost_to_company
   validates_presence_of :time_donate_percentage
@@ -32,6 +42,58 @@ class Mentor < ActiveRecord::Base
   def skill_count_must_be_less_than_max
     if self.skills.count > MAX_SKILL_COUNT
       self.errors.add(:skills, "Can't list more than 3 skills")
+    end
+  end
+
+  serialize :availability, JSON
+
+  def days_available
+    nil
+  end
+
+  def time_available
+    nil
+  end
+
+  def days_available=(value)
+    self.availability = {} unless self.availability
+    self.availability[:days] = convert_availability_days_to_dates(value)
+  end
+
+  def time_available=(value)
+    self.availability = {} unless self.availability
+    self.availability[:time] = convert_availability_time_to_timing(value)
+  end
+
+  private
+
+  def convert_availability_days_to_dates(value)
+    case value
+      when AVAILABILITY_DAYS_EVERYDAY
+        Date::DAYNAMES
+      when AVAILABILITY_DAYS_WEEKDAYS
+        Date::DAYNAMES[1..5]
+      when AVAILABILITY_DAYS_WEEKENDS
+        Date::DAYNAMES - Date::DAYNAMES[1..5]
+      else
+        Date::DAYNAMES
+    end
+  end
+
+  def convert_availability_time_to_timing(value)
+    case value
+      when AVAILABILITY_TIME_ALL_DAY
+        { after: 8, before: 20 }
+      when AVAILABILITY_TIME_MORNING
+        { after: 8, before: 11 }
+      when AVAILABILITY_TIME_MIDDAY
+        { after: 11, before: 14}
+      when AVAILABILITY_TIME_AFTERNOON
+        { after: 14, before: 17 }
+      when AVAILABILITY_TIME_EVENING
+        { after: 17, before: 20 }
+      else
+        { after: 8, before: 20 }
     end
   end
 end

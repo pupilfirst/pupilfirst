@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141111082953) do
+ActiveRecord::Schema.define(version: 20141121100752) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -177,7 +177,7 @@ ActiveRecord::Schema.define(version: 20141111082953) do
 
   create_table "mentors", force: true do |t|
     t.integer  "user_id"
-    t.string   "time_availability"
+    t.string   "availability"
     t.string   "company_level"
     t.integer  "cost_to_company"
     t.integer  "time_donate_percentage"

@@ -38,4 +38,22 @@ module MentoringHelper
       '100%' => Mentor::DONATE_100
     }
   end
+
+  def availability_days_collection
+    {
+      'Every day' => Mentor::AVAILABILITY_DAYS_EVERYDAY,
+      'Weekdays' => Mentor::AVAILABILITY_DAYS_WEEKDAYS,
+      'Weekends' => Mentor::AVAILABILITY_DAYS_WEEKENDS
+    }
+  end
+
+  def availability_time_collection
+    {
+      'All day' => Mentor::AVAILABILITY_TIME_ALL_DAY,
+      'Morning' => Mentor::AVAILABILITY_TIME_MORNING,
+      'Midday' => Mentor::AVAILABILITY_TIME_MIDDAY,
+      'Afternoon' => Mentor::AVAILABILITY_TIME_AFTERNOON,
+      'Evening' => Mentor::AVAILABILITY_TIME_EVENING
+    }
+  end
 end

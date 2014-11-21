@@ -8,9 +8,10 @@ h1.page-header
     = u.input :fullname, label: 'Full Name', required: true
     = u.input :title, required: true
   = f.association :company
-  = f.input :time_availability, hint: 'When will you be available for mentoring?'
-  = f.input :company_level, hint: 'Which level of company would you prefer to mentor?', collection: Startup.valid_product_progress_values, label_method: ->(obj) { company_level_label(obj) }
-  = f.input :cost_to_company, hint: 'Your approximate CTC, per year.', as: :select, collection: cost_to_company_collection, include_blank: false
+  = f.input :days_available, hint: 'On which days are you available for mentoring?', required: true, include_blank: false, collection: availability_days_collection
+  = f.input :time_available, hint: 'During which time are you generally available?', required: true, include_blank: false, collection: availability_time_collection
+  = f.input :company_level, hint: 'Which level of company would you prefer to mentor?', include_blank: false, collection: Startup.valid_product_progress_values, label_method: ->(obj) { company_level_label(obj) }
+  = f.input :cost_to_company, hint: 'Your approximate CTC, per year.', include_blank: false, collection: cost_to_company_collection
   = f.input :time_donate_percentage, hint: 'How much of your time do you wish to donate?', as: :select, collection: time_donate_percentage_collection, include_blank: false
 
   .form-group

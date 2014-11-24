@@ -197,9 +197,9 @@ ActiveAdmin.setup do |config|
   config.namespace :admin do |admin|
 
     # This block will edit the default menu
-    admin.build_menu do |menu|
-      menu.add :label => "Startup", :priority => 0
-    end
+    # admin.build_menu do |menu|
+    #   menu.add :label => "Startup", :priority => 0
+    # end
 
   end
 

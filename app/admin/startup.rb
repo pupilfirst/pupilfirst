@@ -1,8 +1,4 @@
 ActiveAdmin.register Startup do
-  # remove_filter :startups_categories
-  # remove_filter :versions
-  menu :parent => 'Startup'
-
   filter :approval_status, as: :select, collection: Startup.valid_approval_status_values
   filter :name
   filter :email

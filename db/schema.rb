@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141107071347) do
+ActiveRecord::Schema.define(version: 20141124103331) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -147,6 +147,23 @@ ActiveRecord::Schema.define(version: 20141107071347) do
     t.datetime "updated_at"
   end
 
+  create_table "mentor_meetings", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "mentor_id"
+    t.string   "purpose"
+    t.string   "suggested_meeting_timings"
+    t.datetime "meeting_at"
+    t.integer  "duration"
+    t.string   "status"
+    t.integer  "mentor_rating"
+    t.integer  "user_rating"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "mentor_meetings", ["mentor_id"], name: "index_mentor_meetings_on_mentor_id", using: :btree
+  add_index "mentor_meetings", ["user_id"], name: "index_mentor_meetings_on_user_id", using: :btree
+
   create_table "mentor_skills", force: true do |t|
     t.integer  "mentor_id"
     t.integer  "skill_id"
@@ -160,7 +177,7 @@ ActiveRecord::Schema.define(version: 20141107071347) do
 
   create_table "mentors", force: true do |t|
     t.integer  "user_id"
-    t.string   "time_availability"
+    t.string   "availability"
     t.string   "company_level"
     t.integer  "cost_to_company"
     t.integer  "time_donate_percentage"
@@ -302,6 +319,7 @@ ActiveRecord::Schema.define(version: 20141107071347) do
     t.datetime "agreement_first_signed_at"
     t.datetime "agreement_last_signed_at"
     t.datetime "agreement_ends_at"
+    t.boolean  "physical_incubatee"
   end
 
   add_index "startups", ["registered_address_id"], name: "index_startups_on_registered_address_id", using: :btree

@@ -2,16 +2,25 @@
 
 h1 Statistics
 
-h2 Total counts
+h2
+  ' Number of Startups:
+  strong
+    ' #{5281 + Startup.count}
+  | (5281 + tracked Startups)
 
-div style="float: left; width: 33%;"
+div style="float: left; width: 50%;"
   = column_chart admin_dashboard_users_count_total_path, library: { hAxis: { title: 'Users' } }
-div style="float: left; width: 33%;"
-  = column_chart admin_dashboard_startups_count_total_path, library: { hAxis: { title: 'Startups' } }
-div style="float: left; width: 33%;"
-  = column_chart admin_dashboard_startups_count_agreement_signed_path, library: { hAxis: { title: 'Agreements signed' } }
+div style="float: left; width: 50%;"
+  = column_chart admin_dashboard_startups_count_total_path, library: { hAxis: { title: 'Tracked Startups' } }
 
 div style="clear: both;"
+
+div style="float: left; width: 33%;"
+  = column_chart admin_dashboard_startups_count_agreement_signed_path, library: { hAxis: { title: 'Agreements signed' } }
+div style="float: left; width: 33%;"
+  = column_chart admin_dashboard_startups_count_live_agreement_path, library: { hAxis: { title: 'Live Agreements' } }
+div style="float: left; width: 33%;"
+  = column_chart admin_dashboard_users_count_students_path, library: { hAxis: { title: 'Students Onboard' } }
 
 h2 Startups split
 

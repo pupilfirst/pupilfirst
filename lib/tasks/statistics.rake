@@ -7,6 +7,13 @@ namespace :statistics do
       statistic: User.count
     )
 
+    # Count of student users
+    # @see https://trello.com/c/zpsSaRw8
+    Statistic.create!(
+      parameter: Statistic::PARAMETER_COUNT_USERS_STUDENTS,
+      statistic: User.students.count
+    )
+
     # Count of startups
     Statistic.create!(
       parameter: Statistic::PARAMETER_COUNT_STARTUPS,
@@ -42,6 +49,13 @@ namespace :statistics do
     Statistic.create!(
       parameter: Statistic::PARAMETER_COUNT_STARTUPS_AGREEMENT_SIGNED,
       statistic: (849 + Startup.agreement_signed_filtered.count)
+    )
+
+    # Number of startups that have a live agreement.
+    # @see https://trello.com/c/zpsSaRw8
+    Statistic.create!(
+      parameter: Statistic::PARAMETER_COUNT_STARTUPS_LIVE_AGREEMENT,
+      statistic: Startup.agreement_live.count
     )
   end
 end

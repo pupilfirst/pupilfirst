@@ -3,10 +3,10 @@
 h1 Statistics
 
 h2
-  ' Number of Startups:
+  ' Total incubation requests:
   strong
-    ' #{5281 + Startup.count}
-  | (5281 + tracked Startups)
+    ' #{5281 + Startup.incubation_requested.count }
+  | (5281 + pending + rejected + approved)
 
 div style="float: left; width: 50%;"
   = column_chart admin_dashboard_users_count_total_path, library: { hAxis: { title: 'Users' } }

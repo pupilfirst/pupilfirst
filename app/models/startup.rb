@@ -51,6 +51,7 @@ class Startup < ActiveRecord::Base
   scope :rejected, -> { where(approval_status: APPROVAL_STATUS_REJECTED) }
   scope :incubation_requested, -> { where(approval_status: [APPROVAL_STATUS_PENDING, APPROVAL_STATUS_REJECTED, APPROVAL_STATUS_APPROVED])}
   scope :agreement_live, -> { where('agreement_ends_at > ?', Time.now) }
+  scope :physically_incubated, -> { where(physical_incubatee: true) }
 
   has_many :founders, -> { where('is_founder = ?', true) }, class_name: 'User', foreign_key: 'startup_id' do
     def <<(founder)

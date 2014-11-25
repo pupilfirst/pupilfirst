@@ -1,8 +1,4 @@
 ActiveAdmin.register Startup do
-  # remove_filter :startups_categories
-  # remove_filter :versions
-  menu :parent => 'Startup'
-
   filter :approval_status, as: :select, collection: Startup.valid_approval_status_values
   filter :name
   filter :email
@@ -15,20 +11,9 @@ ActiveAdmin.register Startup do
   filter :incubation_location, as: :select, collection: Startup.valid_incubation_location_values
   filter :incubation_location_blank, as: :boolean, label: 'Incubation location not selected'
   filter :agreement_sent
+  filter :physical_incubatee
   filter :categories
 
-  # See permitted parameters documentation:
-  # https://github.com/gregbell/active_admin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
-  #
-  # permit_params :list, :of, :attributes, :on, :model
-  #
-  # or
-  #
-  # permit_params do
-  #  permitted = [:permitted, :attributes]
-  #  permitted << :other if resource.something?
-  #  permitted
-  # end
   controller do
     newrelic_ignore
   end
@@ -123,6 +108,7 @@ ActiveAdmin.register Startup do
       row :status do |startup|
         startup.approval_status.capitalize
       end
+      row :physical_incubatee
       row :agreement_sent
       row :agreement_first_signed_at
       row :agreement_last_signed_at
@@ -271,5 +257,5 @@ ActiveAdmin.register Startup do
     :authorized_capital, :share_holding_pattern, :moa, :police_station, :approval_status, :incorporation_status,
     :bank_status, :sep_status, :company_names, :address, :pre_funds, :startup_before, :product_name,
     :product_description, :registration_type, :incubation_location, { help_from_sv: [] }, :agreement_sent,
-    :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration
+    :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration, :physical_incubatee
 end

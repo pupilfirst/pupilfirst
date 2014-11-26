@@ -58,7 +58,7 @@ class User < ActiveRecord::Base
   scope :non_founders, -> { where("is_founder = ? or is_founder IS NULL", false) }
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }
   scope :contacts, -> { where is_contact: true }
-  scope :students, -> { where is_student: true }
+  scope :student_entrepreneurs, -> { where(is_student: true, is_founder: true) }
 
   accepts_nested_attributes_for :social_ids, :father, :address, :guardian
 

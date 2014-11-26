@@ -9,18 +9,18 @@ h2
   | (5281 + pending + rejected + approved)
 
 div style="float: left; width: 50%;"
-  = column_chart admin_dashboard_users_count_total_path, library: { hAxis: { title: 'Users' } }
+  = column_chart admin_dashboard_users_count_total_path, library: { hAxis: { title: 'Community' } }
 div style="float: left; width: 50%;"
   = column_chart admin_dashboard_startups_count_total_path, library: { hAxis: { title: 'Tracked Startups' } }
 
 div style="clear: both;"
 
 div style="float: left; width: 33%;"
-  = column_chart admin_dashboard_startups_count_agreement_signed_path, library: { hAxis: { title: 'Agreements signed' } }
+  = column_chart admin_dashboard_startups_count_agreement_signed_path, library: { hAxis: { title: 'Incubated startups (cumulative)' } }
 div style="float: left; width: 33%;"
-  = column_chart admin_dashboard_startups_count_live_agreement_path, library: { hAxis: { title: 'Live Agreements' } }
+  = column_chart admin_dashboard_startups_count_live_agreement_path, library: { hAxis: { title: 'Incubated startups' } }
 div style="float: left; width: 33%;"
-  = column_chart admin_dashboard_users_count_students_path, library: { hAxis: { title: 'Students Onboard' } }
+  = column_chart admin_dashboard_users_count_student_entrepreneurs_path, library: { hAxis: { title: 'Student Entrepreneurs' } }
 
 h2 Startups split
 

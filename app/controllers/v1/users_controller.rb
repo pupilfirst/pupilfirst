@@ -56,21 +56,7 @@ class V1::UsersController < V1::BaseController
   # POST /self/phone_number
   def generate_phone_number_verification_code
     # Generate a 6-digit verification code to send to the phone number.
-    code = SecureRandom.random_number(1000000).to_s.ljust(6, '0')
-
-    # Normalize incoming phone number.
-    unverified_phone_number = params[:phone].length <= 10 ? "91#{params[:phone]}" : params[:phone]
-    phone_number = if Phony.plausible?(unverified_phone_number, cc: '91')
-      PhonyRails.normalize_number params[:phone], country_code: 'IN'
-    else
-      raise Exceptions::InvalidPhoneNumber, 'Supplied phone number could not be parsed. Please check and try again.'
-    end
-
-    # Store the phone number and verification code.
-    current_user.phone = phone_number
-    current_user.phone_verified = false
-    current_user.phone_verification_code = code
-    current_user.save
+    code, phone_number = current_user.generate_phone_number_verification_code(params[:phone])
 
     # SMS the code to the phone number. Currently uses FA format.
     RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for StartupVillage application: #{code}", msisdn: phone_number)
@@ -81,24 +67,9 @@ class V1::UsersController < V1::BaseController
 
   # PUT /self/phone_number
   def verify_phone_number
-    # Normalize incoming phone number.
-    unverified_phone_number = params[:phone].length <= 10 ? "91#{params[:phone]}" : params[:phone]
-    phone_number = if Phony.plausible?(unverified_phone_number, cc: '91')
-      PhonyRails.normalize_number params[:phone], country_code: 'IN'
-    else
-      raise Exceptions::InvalidPhoneNumber, 'Supplied phone number could not be parsed. Please check and try again.'
-    end
+    current_user.verify_phone_number(params[:phone], params[:code])
 
-    if current_user.phone == phone_number && params[:code] == current_user.phone_verification_code
-      # Set the phone number to verified.
-      current_user.phone_verified = true
-      current_user.phone_verification_code = nil
-      current_user.save
-
-      render nothing: true
-    else
-      raise Exceptions::PhoneNumberVerificationFailed, 'Supplied phone number or verification code do not match stored values.'
-    end
+    render nothing: true
   end
 
   # PUT /api/users/self/accept_invitation

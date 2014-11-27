@@ -289,4 +289,45 @@ class User < ActiveRecord::Base
 
     update(partnership_essential_user_params)
   end
+
+  def generate_phone_number_verification_code(incoming_phone_number)
+    code = SecureRandom.random_number(1000000).to_s.ljust(6, '0')
+
+    # Normalize incoming phone number.
+    unverified_phone_number = incoming_phone_number.length <= 10 ? "91#{incoming_phone_number}" : incoming_phone_number
+
+    phone_number = if Phony.plausible?(unverified_phone_number, cc: '91')
+      PhonyRails.normalize_number incoming_phone_number, country_code: 'IN'
+    else
+      raise Exceptions::InvalidPhoneNumber, 'Supplied phone number could not be parsed. Please check and try again.'
+    end
+
+    # Store the phone number and verification code.
+    self.phone = phone_number
+    self.phone_verified = false
+    self.phone_verification_code = code
+    self.save
+
+    return code, phone_number
+  end
+
+  def verify_phone_number(incoming_phone_number, verification_code)
+    # Normalize incoming phone number.
+    unverified_phone_number = incoming_phone_number.length <= 10 ? "91#{incoming_phone_number}" : incoming_phone_number
+
+    phone_number = if Phony.plausible?(unverified_phone_number, cc: '91')
+      PhonyRails.normalize_number incoming_phone_number, country_code: 'IN'
+    else
+      raise Exceptions::InvalidPhoneNumber, 'Supplied phone number could not be parsed. Please check and try again.'
+    end
+
+    if self.phone == phone_number && verification_code == self.phone_verification_code
+      # Set the phone number to verified.
+      self.phone_verified = true
+      self.phone_verification_code = nil
+      self.save
+    else
+      raise Exceptions::PhoneNumberVerificationFailed, 'Supplied phone number or verification code do not match stored values.'
+    end
+  end
 end

@@ -7,8 +7,8 @@ ActiveAdmin.register_page "Dashboard" do
     render json: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_USERS)
   end
 
-  page_action :users_count_students do
-    render json: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_USERS_STUDENTS)
+  page_action :users_count_student_entrepreneurs do
+    render json: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_USERS_STUDENT_ENTREPRENEURS)
   end
 
   page_action :startups_count_total do

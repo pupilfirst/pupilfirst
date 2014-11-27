@@ -10,8 +10,8 @@ namespace :statistics do
     # Count of student users
     # @see https://trello.com/c/zpsSaRw8
     Statistic.create!(
-      parameter: Statistic::PARAMETER_COUNT_USERS_STUDENTS,
-      statistic: User.students.count
+      parameter: Statistic::PARAMETER_COUNT_USERS_STUDENT_ENTREPRENEURS,
+      statistic: User.student_entrepreneurs.count
     )
 
     # Count of startups

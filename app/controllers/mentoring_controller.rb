@@ -1,7 +1,8 @@
 class MentoringController < ApplicationController
   before_filter :authenticate_user!, except: %w(index sign_up sign_up_form)
-  before_filter :redirect_step1, only: %w(new_step1 register)
-  before_filter :redirect_step2, only: %w(new_step2 register_2)
+  before_filter(only: %w(new_step1 register)) { |c| c.send(:redirect_registration_steps, 1) }
+  before_filter(only: %w(new_step2 register_2)) { |c| c.send(:redirect_registration_steps, 2) }
+  before_filter(only: %w(new_step3 register_3)) { |c| c.send(:redirect_registration_steps, 3) }
 
   # GET /mentoring
   def index
@@ -26,12 +27,32 @@ class MentoringController < ApplicationController
 
   # GET /mentoring/register_2
   def new_step2
-    @mentor = current_user.mentor
+    @skills = Category.mentor_skill_category
   end
 
   # POST /mentoring/register_2
   def register_2
-    @mentor = current_user.mentor
+    @skills = Category.mentor_skill_category
+    mentor = current_user.mentor
+
+    mentor.add_skill(params[:mentor_skill_1], params[:mentor_skill_1_expertise])
+    mentor.add_skill(params[:mentor_skill_2], params[:mentor_skill_2_expertise])
+    mentor.add_skill(params[:mentor_skill_3], params[:mentor_skill_3_expertise])
+
+    if mentor.skills.count > 0
+      flash[:notice] = 'Skills added!'
+
+      redirect_to mentoring_url
+    else
+      @failed_to_create_skills = true
+
+      render 'new_step2'
+    end
+  end
+
+  # GET /mentoring/register_3
+  def new_step3
+    @skills = Category.mentor_skill_category
   end
 
   # GET /mentoring/sign_up
@@ -63,23 +84,19 @@ class MentoringController < ApplicationController
     )
   end
 
-  # Prevent repeat of registration step.
-  def redirect_step1
+  def redirect_registration_steps(step)
     if current_user.mentor.present?
       if current_user.mentor.skills.present?
-        redirect_to mentoring_url
+        if current_user.phone_verified?
+          redirect_to mentoring_url
+        else
+          redirect_to mentoring_register_3_url unless step == 3
+        end
       else
-        redirect_to mentoring_register_2_url
+        redirect_to mentoring_register_2_url unless step == 2
       end
-    end
-  end
-
-  # Prevent repeat of registration step.
-  def redirect_step2
-    if current_user.mentor.present?
-      redirect_to mentoring_url if current_user.mentor.skills.present?
     else
-      redirect_to mentoring_register_url
+      redirect_to mentoring_register_url unless step == 1
     end
   end
 end

@@ -1,11 +1,10 @@
 class MentorSkill < ActiveRecord::Base
-  EXPERTISE_NOVICE = 'novice'
   EXPERTISE_INTERMEDIATE = 'intermediate'
   EXPERTISE_ADVANCED = 'advanced'
   EXPERTISE_EXPERT = 'expert'
 
   def self.valid_expertise_values
-    [EXPERTISE_NOVICE, EXPERTISE_INTERMEDIATE, EXPERTISE_ADVANCED, EXPERTISE_EXPERT]
+    [EXPERTISE_INTERMEDIATE, EXPERTISE_ADVANCED, EXPERTISE_EXPERT]
   end
 
   belongs_to :mentor

@@ -65,6 +65,11 @@ class Mentor < ActiveRecord::Base
     self.availability[:time] = convert_availability_time_to_timing(value)
   end
 
+  def add_skill(skill_id, expertise)
+    skill = Category.mentor_skill_category.where(id: skill_id).first
+    MentorSkill.create(mentor: self, skill: skill, expertise: expertise)
+  end
+
   private
 
   def convert_availability_days_to_dates(value)

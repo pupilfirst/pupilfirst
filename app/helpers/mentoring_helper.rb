@@ -56,4 +56,12 @@ module MentoringHelper
       'Evening' => Mentor::AVAILABILITY_TIME_EVENING
     }
   end
+
+  def mentor_skills_expertise_options
+    options_for_select([
+        ['Intermediate', MentorSkill::EXPERTISE_INTERMEDIATE],
+        ['Advanced', MentorSkill::EXPERTISE_ADVANCED],
+        ['Expert', MentorSkill::EXPERTISE_EXPERT]
+      ])
+  end
 end

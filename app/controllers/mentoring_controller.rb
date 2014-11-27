@@ -40,9 +40,7 @@ class MentoringController < ApplicationController
     mentor.add_skill(params[:mentor_skill_3], params[:mentor_skill_3_expertise])
 
     if mentor.skills.count > 0
-      flash[:notice] = 'Skills added!'
-
-      redirect_to mentoring_url
+      redirect_to mentoring_register_3_url
     else
       @failed_to_create_skills = true
 

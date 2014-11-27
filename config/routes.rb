@@ -41,6 +41,8 @@ Svapp::Application.routes.draw do
     post 'register_2'
     get 'register_3', action: 'new_step3'
     post 'register_3'
+    get 'register_4', action: 'new_step4'
+    post 'register_4'
     get 'sign_up', action: 'sign_up_form'
     post 'sign_up'
   end

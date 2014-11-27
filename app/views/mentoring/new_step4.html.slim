@@ -1,0 +1,17 @@
+h1.page-header.margin-top-0
+  ' Mentor Registration
+  small Final step
+
+- if @failed_to_verify_phone_number
+  .alert.alert-danger role='alert' The verification code you supplied does not match the code sent to your mobile number. Please check and re-enter the code.
+- else
+  .alert.alert-info role='alert' An SMS containing a verification code has been sent to your mobile number. Please supply this code to complete the registration process.
+
+= form_tag mentoring_register_4_url, class: 'form-horizontal', role: 'form' do
+  .form-group
+    label.col-sm-2.control-label for='mentor_phone_verification_code' Verification code
+    .col-sm-10
+      = text_field_tag 'mentor_phone_verification_code', '', class: 'form-control', required: true, placeholder: ''
+  .form-group
+    .col-sm-offset-2.col-sm-10
+      = submit_tag 'Proceed to final step', class: 'btn btn-primary'

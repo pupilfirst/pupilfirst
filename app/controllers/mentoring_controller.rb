@@ -3,6 +3,7 @@ class MentoringController < ApplicationController
   before_filter(only: %w(new_step1 register)) { |c| c.send(:redirect_registration_steps, 1) }
   before_filter(only: %w(new_step2 register_2)) { |c| c.send(:redirect_registration_steps, 2) }
   before_filter(only: %w(new_step3 register_3)) { |c| c.send(:redirect_registration_steps, 3) }
+  before_filter(only: %w(new_step4 register_4)) { |c| c.send(:redirect_registration_steps, 4) }
 
   # GET /mentoring
   def index
@@ -50,7 +51,42 @@ class MentoringController < ApplicationController
 
   # GET /mentoring/register_3
   def new_step3
-    @skills = Category.mentor_skill_category
+  end
+
+  # POST /mentoring/register_3
+  def register_3
+    # Generate a 6-digit verification code to send to the phone number.
+    code, phone_number = begin
+      current_user.generate_phone_number_verification_code(params[:mentor_phone_number])
+    rescue Exceptions::InvalidPhoneNumber => e
+      @failed_to_add_phone_number = e.message
+
+      render 'new_step3' and return
+    end
+
+    # SMS the code to the phone number. Currently uses FA format.
+    RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV Mentoring platform: #{code}", msisdn: phone_number)
+
+    redirect_to mentoring_register_4_url
+  end
+
+  # GET /mentoring/register_4
+  def new_step4
+  end
+
+  # POST /mentoring/register_4
+  def register_4
+    begin
+      current_user.verify_phone_number(current_user.phone, params[:mentor_phone_verification_code])
+    rescue Exceptions::PhoneNumberVerificationFailed
+      @failed_to_verify_phone_number = true
+
+      render 'new_step4' and return
+    end
+
+    flash[:notice] = 'You have successfully registered as a mentor!'
+
+    redirect_to current_user
   end
 
   # GET /mentoring/sign_up
@@ -85,8 +121,12 @@ class MentoringController < ApplicationController
   def redirect_registration_steps(step)
     if current_user.mentor.present?
       if current_user.mentor.skills.present?
-        if current_user.phone_verified?
-          redirect_to mentoring_url
+        if current_user.phone.present?
+          if current_user.phone_verified?
+            redirect_to mentoring_url
+          else
+            redirect_to mentoring_register_4_url unless step == 4
+          end
         else
           redirect_to mentoring_register_3_url unless step == 3
         end

@@ -1,4 +1,18 @@
 h1.page-header.margin-top-0
   ' Mentor Registration
-  small Final step
+  small Step 3 of 4
+
+- if @failed_to_add_phone_number
+  .alert.alert-danger role='alert' The phone number you supplied does not appear to be correct. Please re-enter a valid 10-digit mobile number.
+- else
+  .alert.alert-info role='alert' Please supply your phone number. You will be asked to verify it in the next step.
+
+= form_tag mentoring_register_3_url, class: 'form-horizontal', role: 'form' do
+  .form-group
+    label.col-sm-2.control-label for='mentor_phone_number' Your phone number
+    .col-sm-10
+      = text_field_tag 'mentor_phone_number', '', class: 'form-control', required: true, placeholder: '6-digit verification code'
+  .form-group
+    .col-sm-offset-2.col-sm-10
+      = submit_tag 'Verify and complete', class: 'btn btn-primary'
 

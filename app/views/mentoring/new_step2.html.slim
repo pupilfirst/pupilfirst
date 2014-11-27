@@ -1,6 +1,6 @@
 h1.page-header.margin-top-0
   ' Mentor Registration
-  small Step 2
+  small Step 2 of 4
 
 - if @failed_to_create_skills
   .alert.alert-danger role='alert' Could not add skills. Please make sure you pick <em>at least</em> one skill and corresponding expertise level.
@@ -31,5 +31,5 @@ h1.page-header.margin-top-0
       = select_tag 'mentor_skill_3_expertise', mentor_skills_expertise_options, class: 'form-control', prompt: 'Select expertise for skill'
   .form-group
     .col-sm-offset-2.col-sm-10
-      = submit_tag 'Add skills and continue to final step', class: 'btn btn-primary'
+      = submit_tag 'Proceed to step 3', class: 'btn btn-primary'
 

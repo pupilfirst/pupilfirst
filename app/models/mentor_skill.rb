@@ -13,6 +13,7 @@ class MentorSkill < ActiveRecord::Base
   validates_presence_of :mentor
   validates_presence_of :skill
   validates_inclusion_of :expertise, in: valid_expertise_values, allow_nil: true
+  validates_uniqueness_of :mentor_id, scope: :skill_id
 
   nilify_blanks
 end

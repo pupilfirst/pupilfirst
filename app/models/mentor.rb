@@ -47,6 +47,8 @@ class Mentor < ActiveRecord::Base
 
   validate :skill_count_must_be_less_than_max
 
+  scope :verified_mentors, -> { where 'verified_at IS NOT NULL' }
+
   def skill_count_must_be_less_than_max
     if self.skills.count > MAX_SKILL_COUNT
       self.errors.add(:skills, "Can't list more than 3 skills")

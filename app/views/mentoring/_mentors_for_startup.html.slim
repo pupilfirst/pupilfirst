@@ -1,1 +1,17 @@
-| Mentors for startup
+table.table.table-borderless.table-striped
+  thead
+    tr
+      th Name
+      th Available on
+      th Between
+      th Skills
+  tbody
+  - Mentor.verified_mentors.each do |mentor|
+    tr
+      td
+        strong #{mentor.user.fullname}
+      td #{mentor.availability['days'].join ', '}
+      td #{mentor.availability['time']['after']}:00 and #{mentor.availability['time']['before']}:00
+      td
+        = mentor.skills.map { |skill| "#{skill.skill.name} (#{skill.expertise})" }.join ', '
+

@@ -123,7 +123,7 @@ class MentoringController < ApplicationController
       if current_user.mentor.skills.present?
         if current_user.phone.present?
           if current_user.phone_verified?
-            redirect_to mentoring_url
+            redirect_to current_user
           else
             redirect_to mentoring_register_4_url unless step == 4
           end

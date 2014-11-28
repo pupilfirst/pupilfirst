@@ -18,11 +18,19 @@ class Mentor < ActiveRecord::Base
   AVAILABILITY_DAYS_WEEKDAYS = 'weekdays'
   AVAILABILITY_DAYS_WEEKENDS = 'weekends'
 
+  def self.valid_days_available
+    [AVAILABILITY_DAYS_EVERYDAY, AVAILABILITY_DAYS_WEEKDAYS, AVAILABILITY_DAYS_WEEKENDS]
+  end
+
   AVAILABILITY_TIME_ALL_DAY = 'all_day'
   AVAILABILITY_TIME_MORNING = 'morning'
   AVAILABILITY_TIME_MIDDAY = 'midday'
   AVAILABILITY_TIME_AFTERNOON = 'afternoon'
   AVAILABILITY_TIME_EVENING = 'evening'
+
+  def self.valid_time_available
+    [AVAILABILITY_TIME_ALL_DAY, AVAILABILITY_TIME_MORNING, AVAILABILITY_TIME_MIDDAY, AVAILABILITY_TIME_AFTERNOON, AVAILABILITY_TIME_EVENING]
+  end
 
   belongs_to :user
   belongs_to :company
@@ -64,11 +72,13 @@ class Mentor < ActiveRecord::Base
   end
 
   def days_available=(value)
+    return if value.blank?
     self.availability = {} unless self.availability
     self.availability[:days] = convert_availability_days_to_dates(value)
   end
 
   def time_available=(value)
+    return if value.blank?
     self.availability = {} unless self.availability
     self.availability[:time] = convert_availability_time_to_timing(value)
   end

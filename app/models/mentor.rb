@@ -47,6 +47,14 @@ class Mentor < ActiveRecord::Base
 
   serialize :availability, JSON
 
+  def display_name
+    user.email || user.fullname
+  end
+
+  def to_s
+    display_name
+  end
+
   def days_available
     nil
   end
@@ -96,7 +104,7 @@ class Mentor < ActiveRecord::Base
       when AVAILABILITY_TIME_MORNING
         { after: 8, before: 11 }
       when AVAILABILITY_TIME_MIDDAY
-        { after: 11, before: 14}
+        { after: 11, before: 14 }
       when AVAILABILITY_TIME_AFTERNOON
         { after: 14, before: 17 }
       when AVAILABILITY_TIME_EVENING

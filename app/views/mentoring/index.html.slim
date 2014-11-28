@@ -5,6 +5,13 @@
   - if current_user
     - if current_user.startup_id.present?
       = link_to 'Get Started', root_url, class: 'btn btn-primary btn-lg'
+    - elsif current_user.mentor.present?
+      - if current_user.mentor.verified?
+        ' Great! You're already a listed mentor.
+      - elsif current_user.phone_verified?
+        ' Your mentor account is being verified by the team at Startup Village.
+      - else
+        = link_to 'Continue registration process', mentoring_register_url, class: 'btn btn-primary btn-lg'
     - else
       = link_to 'Are you an interested mentor?', mentoring_register_url, class: 'btn btn-primary btn-lg'
   - else

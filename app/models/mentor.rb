@@ -70,6 +70,10 @@ class Mentor < ActiveRecord::Base
     MentorSkill.create(mentor: self, skill: skill, expertise: expertise)
   end
 
+  def verified?
+    self.verified_at.present?
+  end
+
   private
 
   def convert_availability_days_to_dates(value)

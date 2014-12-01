@@ -7,7 +7,7 @@ ActiveAdmin.register MentorSkill do
     f.inputs 'Skill' do
       f.input :mentor
       f.input :skill, collection: Category.mentor_skill_category
-      f.input :expertise
+      f.input :expertise, collection: MentorSkill.valid_expertise_values
     end
 
     f.actions

@@ -10,7 +10,7 @@ table.table.table-borderless.table-striped
     tr
       td
         strong #{mentor.user.fullname}
-      td #{mentor.availability['days'].join ', '}
+      td #{badges_for_days mentor.availability['days']}
       td #{mentor.availability['time']['after']}:00 and #{mentor.availability['time']['before']}:00
       td
         = mentor.skills.map { |skill| "#{skill.skill.name} (#{skill.expertise})" }.join ', '

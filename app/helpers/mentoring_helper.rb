@@ -64,4 +64,10 @@ module MentoringHelper
         ['Expert', MentorSkill::EXPERTISE_EXPERT]
       ])
   end
+
+  def badges_for_days(days)
+    days.map do |day|
+      "<span class='badge'>#{day[0..2].upcase}</span>"
+    end.join(' ').html_safe
+  end
 end

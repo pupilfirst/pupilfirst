@@ -49,6 +49,7 @@ gem 'sprockets-coffee-react' # Sprockets preprocessor.
 gem 'js-routes' # Routes inside JS.
 gem 'validate_url' # URL validation.
 gem 'chartkick' # Pretty charts!
+gem 'rack-timeout' # For Rack-level timeout control.
 
 group :development do
   gem 'seed-fu', github: 'mbleigh/seed-fu' # check and remove

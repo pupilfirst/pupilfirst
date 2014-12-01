@@ -13,6 +13,11 @@ table.table.table-hover.table-bordered.table-striped
       td
         strong = @user.email
     tr
+      th Phone Number
+      td
+        ' #{@user.phone}
+        | (#{@user.phone_verified? ? 'V' : 'Unv'}erified)
+    tr
       th Title
       td = value_or_not_available @user.title
     tr

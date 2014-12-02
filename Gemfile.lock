@@ -279,7 +279,6 @@ GEM
     rack (1.5.2)
     rack-test (0.6.2)
       rack (>= 1.0)
-    rack-timeout (0.1.1)
     rails (4.1.8)
       actionmailer (= 4.1.8)
       actionpack (= 4.1.8)
@@ -464,7 +463,6 @@ DEPENDENCIES
   phony_rails
   prawn
   pry-rails
-  rack-timeout
   rails (= 4.1.8)
   rails_12factor
   rb-fchange

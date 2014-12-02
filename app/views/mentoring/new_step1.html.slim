@@ -10,7 +10,7 @@ h1.page-header.margin-top-0
   = f.association :company
   = f.input :days_available, hint: 'On which days are you available for mentoring?', required: true, include_blank: false, collection: availability_days_collection
   = f.input :time_available, hint: 'During which time are you generally available?', required: true, include_blank: false, collection: availability_time_collection
-  = f.input :company_level, hint: 'Which level of company would you prefer to mentor?', include_blank: false, collection: Startup.valid_product_progress_values, label_method: ->(obj) { company_level_label(obj) }
+  = f.input :company_level, hint: 'Which level of company would you prefer to mentor?', include_blank: false, collection: Startup.valid_product_progress_values, label_method: ->(obj) { company_level_html(obj) }
   = f.input :cost_to_company, hint: 'Your approximate CTC, per year.', include_blank: false, collection: cost_to_company_collection
   = f.input :time_donate_percentage, hint: 'How much of your time do you wish to donate?', as: :select, collection: time_donate_percentage_collection, include_blank: false
 

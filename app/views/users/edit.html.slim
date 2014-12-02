@@ -1,16 +1,3 @@
-h2 Edit Profile
-
-= render 'form', user: @user
-
-h2 Edit Password
-
-= simple_form_for @user, url: { action: 'update_password' }, html: { method: :patch, class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
-  = f.error_notification
-
-  = f.input :current_password, hint: 'We need your current password to authorize the change.', required: true
-  = f.input :password, label: 'New password', autocomplete: 'off', required: true
-  = f.input :password_confirmation, label: 'Confirm new password', required: true
-
-  .form-group
-    .col-sm-offset-3.col-sm-10
-      = f.button :submit, 'Update Password', class: 'btn btn-primary'
+= render 'form_basic_details', user: @user
+= render('form_startup_details', user: @user) if @user.startup.present?
+= render 'form_password', user: @user

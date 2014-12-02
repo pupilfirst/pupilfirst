@@ -2,7 +2,9 @@
   .col-lg-12.clearfix
     .pull-right
       = image_tag @user.avatar_url, class: 'img-rounded user-avatar'
-    h1.page-header User Profile
+    h1.page-header
+      ' #{@user.fullname}
+      small Your basic details.
 
 table.table.table-hover.table-bordered.table-striped
   tbody
@@ -11,12 +13,10 @@ table.table.table-hover.table-bordered.table-striped
       td
         strong = @user.email
     tr
-      th Full Name
+      th Phone Number
       td
-        = @user.fullname
-    tr
-      th Startup
-      td = startup_html @user.startup
+        ' #{@user.phone}
+        | (#{@user.phone_verified? ? 'V' : 'Unv'}erified)
     tr
       th Title
       td = value_or_not_available @user.title
@@ -27,34 +27,15 @@ table.table.table-hover.table-bordered.table-striped
       th Communication Address
       td = value_or_not_available @user.communication_address
     tr
-      th PAN
-      td = value_or_not_available @user.pan
-    tr
-      th Father / Husband's name
-      td = value_or_not_available @user.father_or_husband_name
-    tr
-      th Mother's maiden name
-      td = value_or_not_available @user.mother_maiden_name
-    tr
-      th Marital status
-      td = married_html @user.married
-    tr
-      th Current Occupation
-      td = current_occupation_html @user.current_occupation
-    tr
-      th Educational Qualification
-      td = educational_qualification_html @user.educational_qualification
-    tr
-      th Religion
-      td = religion_html @user.religion
-    tr
       th LinkedIn URL
       td = value_or_not_available @user.linkedin_url
     tr
       th Twitter URL
       td = value_or_not_available @user.twitter_url
 
-= link_to 'Edit profile', edit_user_url(@user), class: 'btn btn-primary'
+= render('startup_info', user: @user) if @user.startup.present?
+
+= link_to 'Edit your profile', edit_user_url(@user), class: 'btn btn-primary'
 
 - if @user.startup.present?
   | &nbsp;

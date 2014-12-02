@@ -33,7 +33,7 @@ table.table.table-hover.table-bordered.table-striped
       th Twitter URL
       td = value_or_not_available @user.twitter_url
 
-= render('startup_info', user: @user) if @user.startup_id.present?
+= render('startup_info', user: @user) if @user.startup.present?
 
 = link_to 'Edit your profile', edit_user_url(@user), class: 'btn btn-primary'
 

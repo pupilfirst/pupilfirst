@@ -7,7 +7,7 @@
       | Check out our list of mentors!
     - elsif current_user.mentor.present?
       - if current_user.mentor.verified?
-        ' Great! You're already a listed mentor.
+        ' Great! You're already a listed mentor. Check out currently incubated startups at Startup Village.
       - elsif current_user.phone_verified?
         ' Your mentor account is being verified by the team at Startup Village.
       - else
@@ -21,8 +21,8 @@
 
 .row style="margin-top: 30px;"
   - if current_user
-    - if current_user.startup_id.present?
-      = render 'mentors_for_startup'
+    = render 'mentors_for_startup' if current_user.startup.present?
+    = render 'startups_for_mentor' if current_user.mentor.present? && current_user.mentor.verified?
     /- if current_user.mentor.present?
     /  = render 'startups_for_mentor'
 

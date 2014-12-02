@@ -22,4 +22,23 @@ module ApplicationHelper
         '<em>Not Known</em>'.html_safe
     end
   end
+
+  def product_progress_html(product_progress)
+    case product_progress
+      when Startup::PRODUCT_PROGRESS_IDEA
+        'Just an idea'
+      when Startup::PRODUCT_PROGRESS_MOCKUP
+        'Mockups'
+      when Startup::PRODUCT_PROGRESS_PROTOTYPE
+        'Prototyping'
+      when Startup::PRODUCT_PROGRESS_PRIVATE_BETA
+        'In Private Beta'
+      when Startup::PRODUCT_PROGRESS_PUBLIC_BETA
+        'In Public Beta'
+      when Startup::PRODUCT_PROGRESS_LAUNCHED
+        'Launched'
+      else
+        '<em>Not Known</em>'.html_safe
+    end
+  end
 end

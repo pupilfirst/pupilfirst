@@ -243,7 +243,7 @@ ActiveAdmin.register Startup do
       div do
         link_to 'Manage these entries in Partnership section.', admin_partnerships_path(q: { startup_id_eq: startup.id })
       end
-    end
+    end if startup.partnerships.present?
 
     panel 'Emails and Notifications' do
       link_to('Reminder to complete startup profile', send_startup_profile_reminder_admin_startup_path, method: :post, data: { confirm: 'Are you sure you wish to send notification and email?' })

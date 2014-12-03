@@ -1,4 +1,6 @@
 ActiveAdmin.register MentorSkill do
+  menu parent: 'Mentoring'
+
   controller do
     newrelic_ignore
   end

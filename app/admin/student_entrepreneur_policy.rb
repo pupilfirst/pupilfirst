@@ -1,5 +1,5 @@
 ActiveAdmin.register StudentEntrepreneurPolicy do
-  menu label: "SEP"
+  menu label: 'SEP', parent: 'Defunct'
 
   member_action :sep_email, method: :post do
     sep = StudentEntrepreneurPolicy.find params[:id]

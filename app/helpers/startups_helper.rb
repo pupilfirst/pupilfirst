@@ -20,7 +20,7 @@ module StartupsHelper
     end
   end
 
-  def incorporation_status_html(registration_type)
+  def registration_type_html(registration_type)
     case registration_type
       when Startup::REGISTRATION_TYPE_PARTNERSHIP
         'Partnership'
@@ -29,7 +29,7 @@ module StartupsHelper
       when Startup::REGISTRATION_TYPE_LLP
         'Limited Liability Partnership'
       else
-        '<em>Not Incorporated</em>'.html_safe
+        '<em>Not Registered</em>'.html_safe
     end
   end
 

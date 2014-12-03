@@ -45,7 +45,7 @@ class StartupsController < InheritedResources::Base
     @startup.validate_frontend_mandatory_fields = true
 
     if @startup.update(startup_params)
-      flash[:notice] = 'Startup details have been updated'
+      flash[:notice] = 'Startup details have been updated.'
       redirect_to @startup
     else
       render 'startups/edit'
@@ -91,7 +91,7 @@ class StartupsController < InheritedResources::Base
       :name, :address, :pitch, :website, :about, :email, :phone, :logo, { help_from_sv: [] },
       :remote_logo_url, :facebook_link, :twitter_link, :pre_funds, :pre_investers_name, :product_name, :product_description,
       :cool_fact, :help_from_sv, { category_ids: [] }, { founders_attributes: [:id, :title] },
-      { startup_before: [:startup_name, :startup_descripition] },
+      { startup_before: [:startup_name, :startup_descripition] }, :registration_type,
       :revenue_generated, :presentation_link, :product_progress, :team_size, :women_employees, :incubation_location
     )
   end

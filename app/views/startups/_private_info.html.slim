@@ -35,8 +35,8 @@ table.table
       th Number of Women Employees
       td = nil_not_available(@startup.women_employees)
     tr
-      th Incorporation Status
-      td = incorporation_status_html(@startup.registration_type)
+      th Registration Type
+      td = registration_type_html(@startup.registration_type)
     tr
       th Social Media Links
       td = social_media_html(@startup.facebook_link, @startup.twitter_link)

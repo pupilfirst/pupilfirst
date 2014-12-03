@@ -49,6 +49,7 @@ p
   = f.input :revenue_generated, hint: 'How much cumulative revenue have you generated till date?', input_html: { max: 999999999, 'data-max-int-length' => 9 }
   = f.input :team_size, label: 'Total Team Size', input_html: { max: 9999, 'data-max-int-length' => 4 }, required: true
   = f.input :women_employees, label: 'Number of Women Employees', input_html: { max: 9999, 'data-max-int-length' => 4 }
+  = f.input :registration_type, collection: Startup.valid_registration_types, label_method: ->(obj) { registration_type_html(obj) }, include_blank: 'Not Registered'
   = f.input :twitter_link, input_html: { placeholder: 'https://twitter.com/username', maxlength: 255 }
   = f.input :facebook_link, input_html: { placeholder: 'https://facebook.com/username', maxlength: 255 }
 

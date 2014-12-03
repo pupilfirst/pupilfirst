@@ -52,7 +52,6 @@ ActiveAdmin.register News do
       end
       row :published_at
     end
-    active_admin_comments
   end
 
 end

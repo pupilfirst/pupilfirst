@@ -108,7 +108,6 @@ ActiveAdmin.register StudentEntrepreneurPolicy do
 
       end
     end
-    active_admin_comments
   end
 
 end

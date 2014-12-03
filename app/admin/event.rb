@@ -66,7 +66,6 @@ ActiveAdmin.register Event do
         row :location
         row :category
       end
-      active_admin_comments
     end
 
 end

@@ -258,7 +258,7 @@ GEM
     paper_trail (3.0.5)
       activerecord (>= 3.0, < 5.0)
       activesupport (>= 3.0, < 5.0)
-    pdf-core (0.2.5)
+    pdf-core (0.4.0)
     pg (0.17.1)
     phony (2.2.13)
     phony_rails (0.6.1)
@@ -267,9 +267,10 @@ GEM
       phony (~> 2.1)
     polyamorous (1.0.0)
       activerecord (>= 3.0)
-    prawn (1.0.0)
-      pdf-core (~> 0.2.2)
-      ttfunk (~> 1.1.1)
+    prawn (1.3.0)
+      pdf-core (~> 0.4.0)
+      ttfunk (~> 1.4.0)
+    prawn-table (0.2.1)
     pry (0.10.0)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -389,7 +390,7 @@ GEM
     thread_safe (0.3.4)
     tilt (1.4.1)
     timers (1.1.0)
-    ttfunk (1.1.1)
+    ttfunk (1.4.0)
     turbolinks (2.2.2)
       coffee-rails
     tzinfo (1.2.2)
@@ -462,6 +463,7 @@ DEPENDENCIES
   pg
   phony_rails
   prawn
+  prawn-table
   pry-rails
   rails (= 4.1.8)
   rails_12factor

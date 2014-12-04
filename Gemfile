@@ -34,6 +34,7 @@ gem 'turbolinks'
 gem 'uglifier'
 gem 'urbanairship'
 gem 'prawn'
+gem 'prawn-table'
 gem 'versionist'
 gem 'rest-client'
 gem 'cancancan', '~> 1.8' # Used to manage administrator types and roles in the ActiveAdmin interface.

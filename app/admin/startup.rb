@@ -111,7 +111,7 @@ ActiveAdmin.register Startup do
 
     generated_pdf = Prawn::Document.new do
       partners = startup.partnerships.order('id')
-      users = User.joins(:partnerships).order('partnerships.id').where(startup_id: startup.id)
+      users = User.joins(:partnerships).order('partnerships.id').where('partnerships.startup_id = ?', startup.id)
       data = [
         ['Partner Name'] + users.pluck(:fullname),
         ['Address'] + users.pluck(:communication_address),

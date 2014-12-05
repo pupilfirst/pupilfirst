@@ -159,6 +159,43 @@ ActiveAdmin.register Startup do
     send_data generated_pdf, filename: "#{startup.name}.pdf", type: 'application/pdf'
   end
 
+  member_action :generate_bank_account_pdf, method: :get do
+    require 'prawn'
+    require 'prawn/measurement_extensions'
+
+    startup = Startup.find params[:id]
+
+    generated_pdf = Prawn::Document.new(
+      {
+        page_size: 'A4',
+        margin: 0
+      }
+    ) do
+      block_text_options_at = lambda { |x, y, spacing| { character_spacing: spacing, at: [((x / 1240.0) * 210.0).mm, ((((1754 - y) / 1754.0) * 297.0) + 2.2).mm] } }
+
+      font 'Courier', size: 9
+
+      # First page
+      image Rails.root.join('files', 'image-1.jpg'), fit: [210.mm, 297.mm]
+      text_box 'THIS IS A LONG BRANCH NAME', block_text_options_at.call(95, 208, 5.65)
+      text_box 'THIS IS A FULL NAME', block_text_options_at.call(140, 762, 7.6)
+      start_new_page
+
+      # Second page
+      image Rails.root.join('files', 'image-2.jpg'), fit: [210.mm, 297.mm]
+      start_new_page
+
+      # Third page
+      image Rails.root.join('files', 'image-3.jpg'), fit: [210.mm, 297.mm]
+      start_new_page
+
+      # Fourth page
+      image Rails.root.join('files', 'image-4.jpg'), fit: [210.mm, 297.mm]
+    end.render
+
+    send_data generated_pdf, filename: "#{startup.name}.pdf", type: 'application/pdf'
+  end
+
   show do |ad|
     attributes_table do
       row :status do |startup|
@@ -298,6 +335,7 @@ ActiveAdmin.register Startup do
 
       div { link_to 'Manage these entries in Partnership section.', admin_partnerships_path(q: { startup_id_eq: startup.id }) }
       div { link_to 'Download partnership details as PDF', generate_partnerships_pdf_admin_startup_path }
+      # div { link_to 'Download bank account opening form as PDF', generate_bank_account_pdf_admin_startup_path }
     end if startup.partnerships.present?
 
     panel 'Emails and Notifications' do

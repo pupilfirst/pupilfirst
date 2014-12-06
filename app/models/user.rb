@@ -60,6 +60,7 @@ class User < ActiveRecord::Base
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }
   scope :contacts, -> { where is_contact: true }
   scope :student_entrepreneurs, -> { where(is_student: true, is_founder: true) }
+  scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
 
   accepts_nested_attributes_for :social_ids, :father, :address, :guardian
 

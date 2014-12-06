@@ -14,6 +14,8 @@ ActiveAdmin.register Startup do
   filter :physical_incubatee
   filter :categories
 
+  scope :without_founders
+
   controller do
     newrelic_ignore
   end

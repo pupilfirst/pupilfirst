@@ -97,6 +97,8 @@ ActiveAdmin.register User do
   # filter :categories, as: :check_boxes, collection: Category.user_category
   filter :categories, collection: Category.user_category
 
+  scope :missing_startups
+
   form partial: 'admin/users/form'
 
   permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url,

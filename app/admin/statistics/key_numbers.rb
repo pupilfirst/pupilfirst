@@ -2,6 +2,6 @@ ActiveAdmin.register_page 'Key Numbers' do
   menu parent: 'Statistics'
 
   content do
-    render 'statistics'
+    render 'admin/statistics/key_numbers'
   end
 end

@@ -25,12 +25,13 @@ class Statistic < ActiveRecord::Base
   end
 
   validates_inclusion_of :parameter, in: valid_parameters
+  validates_inclusion_of :incubation_location, in: Startup.valid_incubation_location_values, allow_nil: true
   validates_presence_of :statistic
 
   serialize :statistic, JSON
 
-  def self.chartkick_parameter_by_date(parameter)
-    where(parameter: parameter).limit(30).order('created_at ASC').inject({}) do |stats, statistic|
+  def self.chartkick_parameter_by_date(parameter, incubation_location: nil)
+    where(parameter: parameter, incubation_location: incubation_location).limit(30).order('created_at ASC').inject({}) do |stats, statistic|
       stats[statistic.created_at.strftime('%b %e, %Y')] = statistic.statistic
       stats
     end

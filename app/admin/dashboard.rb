@@ -15,32 +15,19 @@ ActiveAdmin.register_page "Dashboard" do
     render json: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS)
   end
 
-  page_action :startups_count_agreement_signed do
-    render json: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS_AGREEMENT_SIGNED)
-  end
-
-  page_action :startups_count_live_agreement do
-    render json: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS_LIVE_AGREEMENT)
-  end
-
-  page_action :startups_count_split do
-    render json: [
-      { name: 'Unready', data: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS_UNREADY) },
-      { name: 'Pending', data: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS_PENDING) },
-      { name: 'Approved', data: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS_APPROVED) },
-      { name: 'Rejected', data: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS_REJECTED) }
-    ]
+  page_action :startups_count_unready do
+    render json: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS_UNREADY)
   end
 
   page_action :startups_count_current_split do
     render json: Startup.current_startups_split
   end
 
-  menu :priority => 1, :label => proc{ I18n.t("active_admin.dashboard") }
+  menu :priority => 1, :label => proc{ I18n.t('active_admin.dashboard') }
 
-  content :title => proc{ I18n.t("active_admin.dashboard") } do
+  content :title => proc{ I18n.t('active_admin.dashboard') } do
     div do
-      render('statistics') if current_admin_user.admin_type != AdminUser::TYPE_EDITOR
+      render 'statistics'
     end
 
     h1 'Recent Changes'

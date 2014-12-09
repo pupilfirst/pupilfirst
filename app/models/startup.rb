@@ -50,6 +50,7 @@ class Startup < ActiveRecord::Base
   scope :approved, -> { where(approval_status: APPROVAL_STATUS_APPROVED) }
   scope :rejected, -> { where(approval_status: APPROVAL_STATUS_REJECTED) }
   scope :incubation_requested, -> { where(approval_status: [APPROVAL_STATUS_PENDING, APPROVAL_STATUS_REJECTED, APPROVAL_STATUS_APPROVED])}
+  scope :agreement_signed, -> { where 'agreement_first_signed_at IS NOT NULL' }
   scope :agreement_live, -> { where('agreement_ends_at > ?', Time.now) }
   scope :physically_incubated, -> { where(physical_incubatee: true) }
   scope :without_founders, -> { where('id NOT in (?)', (User.pluck(:startup_id).uniq - [nil]))  }
@@ -352,6 +353,15 @@ class Startup < ActiveRecord::Base
       'Pending' => pending.count,
       'Approved' => approved.count,
       'Rejected' => rejected.count
+    }
+  end
+
+  def self.current_startups_split_by_incubation_location(incubation_location)
+    {
+      'Unready' => unready.where(incubation_location: incubation_location).count,
+      'Pending' => pending.where(incubation_location: incubation_location).count,
+      'Approved' => approved.where(incubation_location: incubation_location).count,
+      'Rejected' => rejected.where(incubation_location: incubation_location).count
     }
   end
 

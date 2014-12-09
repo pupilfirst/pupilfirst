@@ -16,17 +16,10 @@ div style="float: left; width: 50%;"
 div style="clear: both;"
 
 div style="float: left; width: 33%;"
-  = column_chart admin_dashboard_startups_count_agreement_signed_path, library: { hAxis: { title: 'Incubated startups (cumulative)' } }
-div style="float: left; width: 33%;"
-  = column_chart admin_dashboard_startups_count_live_agreement_path, library: { hAxis: { title: 'Incubated startups' } }
-div style="float: left; width: 33%;"
   = column_chart admin_dashboard_users_count_student_entrepreneurs_path, library: { hAxis: { title: 'Student Entrepreneurs' } }
-
-h2 Startups split
-
-div style="float: left; width: 30%;"
+div style="float: left; width: 33%;"
+  = column_chart admin_dashboard_startups_count_unready_path, library: { hAxis: { title: 'Unready Startups' } }
+div style="float: left; width: 33%;"
   = pie_chart admin_dashboard_startups_count_current_split_path
-div style="float: left; width: 70%;"
-  = area_chart admin_dashboard_startups_count_split_path
 
 div style="clear: both;"

@@ -358,7 +358,6 @@ class Startup < ActiveRecord::Base
 
   def self.current_startups_split_by_incubation_location(incubation_location)
     {
-      'Unready' => unready.where(incubation_location: incubation_location).count,
       'Pending' => pending.where(incubation_location: incubation_location).count,
       'Approved' => approved.where(incubation_location: incubation_location).count,
       'Rejected' => rejected.where(incubation_location: incubation_location).count

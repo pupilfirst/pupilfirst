@@ -15,7 +15,6 @@ ActiveAdmin.register_page 'Visakhapatnam' do
 
   page_action :startups_count_split do
     render json: [
-        { name: 'Unready', data: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS_UNREADY, incubation_location: Startup::INCUBATION_LOCATION_VISAKHAPATNAM) },
         { name: 'Pending', data: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS_PENDING, incubation_location: Startup::INCUBATION_LOCATION_VISAKHAPATNAM) },
         { name: 'Approved', data: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS_APPROVED, incubation_location: Startup::INCUBATION_LOCATION_VISAKHAPATNAM) },
         { name: 'Rejected', data: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS_REJECTED, incubation_location: Startup::INCUBATION_LOCATION_VISAKHAPATNAM) }

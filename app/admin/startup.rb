@@ -12,7 +12,7 @@ ActiveAdmin.register Startup do
   filter :incubation_location_blank, as: :boolean, label: 'Incubation location not selected'
   filter :agreement_sent
   filter :physical_incubatee
-  filter :categories
+  filter :categories, collection: Category.startup_category
 
   scope :without_founders
 

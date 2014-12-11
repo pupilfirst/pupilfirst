@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141209055042) do
+ActiveRecord::Schema.define(version: 20141211110730) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,6 +82,11 @@ ActiveRecord::Schema.define(version: 20141209055042) do
   end
 
   add_index "categories", ["category_type"], name: "index_categories_on_category_type", using: :btree
+
+  create_table "categories_startups", id: false, force: true do |t|
+    t.integer "startup_id"
+    t.integer "category_id"
+  end
 
   create_table "categories_users", id: false, force: true do |t|
     t.integer "category_id"
@@ -323,11 +328,6 @@ ActiveRecord::Schema.define(version: 20141209055042) do
   end
 
   add_index "startups", ["registered_address_id"], name: "index_startups_on_registered_address_id", using: :btree
-
-  create_table "startups_categories", id: false, force: true do |t|
-    t.integer "startup_id"
-    t.integer "category_id"
-  end
 
   create_table "statistics", force: true do |t|
     t.string   "parameter"

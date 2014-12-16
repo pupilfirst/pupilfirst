@@ -1,19 +1,24 @@
 # SVLabs Web + API
 
-## Dependencies
-*  Ruby version - MRI 2.0+
-*  imagemagick
-*  postgresql
+## Setup for development
 
-## Configuration
-*  Setup database.yml for postgresql
+### Install Dependencies
+  *  Ruby (version specified in .ruby-version)
+  *  imagemagick (apt-get install imagemagick)
+  *  postgresql (apt-get install postgresql postgresql-contrib)
+
+### Configure
+  *  Setup database.yml for postgresql
+  *  copy example.env to .env and set the variables as required
+
+### Bundle
+    $ bundle install
 
 ## Database setup
     $ bundle exec rake db:setup
+    $ bin/rake db:setup
 
-## Configuration
-  * setup database.yml for postgresql
-  * copy example.env to .env and set the variables as required
+Now start the server with `bin/rails s`
 
 ## Testing
 ### Manual

@@ -14,8 +14,7 @@
 ### Bundle
     $ bundle install
 
-## Database setup
-    $ bundle exec rake db:setup
+### Database setup
     $ bin/rake db:setup
 
 Now start the server with `bin/rails s`

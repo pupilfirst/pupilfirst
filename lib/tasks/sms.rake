@@ -11,7 +11,7 @@ namespace :sms do
     startups_at_visakhapatnam = Startup.where(incubation_location: Startup::INCUBATION_LOCATION_VISAKHAPATNAM)
 
     statistics_for_andhra = "\nAndra statistics follow\n" +
-      "Total incubation Requests: #{startups_at_visakhapatnam.incubation_requested.count}"
+      "Total incubation Requests: #{startups_at_visakhapatnam.incubation_requested.count}" +
       "Incubated startups: #{startups_at_visakhapatnam.agreement_live.count}" +
       "On Campus: #{startups_at_visakhapatnam.physically_incubated.count}" +
       "Incubated startups (cumulative): #{startups_at_visakhapatnam.agreement_signed.count}"

@@ -5,7 +5,7 @@
 ### Install Dependencies
   *  Ruby (version specified in .ruby-version)
   *  imagemagick (apt-get install imagemagick)
-  *  postgresql (apt-get install postgresql postgresql-contrib)
+  *  postgresql (apt-get install postgresql postgresql-contrib libpq-dev)
 
 ### Configure
   *  Setup database.yml for postgresql

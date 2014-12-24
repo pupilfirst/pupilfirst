@@ -10,6 +10,9 @@ require "email_spec"
 require 'webmock/rspec'
 require 'sucker_punch/testing/inline'
 
+# Require all shared contexts.
+Dir[Rails.root.join('spec/support/shared_context/*.rb')].sort.each {|f| require f}
+
 # Disable all net connections
 WebMock.disable_net_connect!
 

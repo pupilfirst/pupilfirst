@@ -5,14 +5,16 @@ describe 'sms:statistics' do
 
   # Let's override environment variable values...
   before(:all) do
-    APP_CONFIG[:sms_statistics_all] = %w(919876543210 919876543211)
-    APP_CONFIG[:sms_statistics_visakhapatnam] = %w(918976543212)
+    APP_CONFIG[:sms_statistics_all] = %w(919876543210)
+    APP_CONFIG[:sms_statistics_total] = %w(917876543210)
+    APP_CONFIG[:sms_statistics_visakhapatnam] = %w(918976543210)
     APP_CONFIG[:sms_provider_url] = 'https://mobme.in'
   end
 
   # ...and return them to originals after the tests are run.
   after(:all) do
     APP_CONFIG[:sms_statistics_all] = ENV['SMS_STATISTICS_ALL'].split(',')
+    APP_CONFIG[:sms_statistics_total] = ENV['SMS_STATISTICS_TOTAL'].split(',')
     APP_CONFIG[:sms_statistics_visakhapatnam] = ENV['SMS_STATISTICS_VISAKHAPATNAM'].split(',')
     APP_CONFIG[:sms_provider_url] = ENV['SMS_PROVIDER_URL']
   end
@@ -25,9 +27,8 @@ describe 'sms:statistics' do
 
     expect(RestClient).to receive(:post).with('https://mobme.in', hash_including(text: total_statistics, msisdn: '919876543210'))
     expect(RestClient).to receive(:post).with('https://mobme.in', hash_including(text: visakhapatnam_statistics, msisdn: '919876543210'))
-    expect(RestClient).to receive(:post).with('https://mobme.in', hash_including(text: total_statistics, msisdn: '919876543211'))
-    expect(RestClient).to receive(:post).with('https://mobme.in', hash_including(text: visakhapatnam_statistics, msisdn: '919876543211'))
-    expect(RestClient).to receive(:post).with('https://mobme.in', hash_including(text: visakhapatnam_statistics, msisdn: '918976543212'))
+    expect(RestClient).to receive(:post).with('https://mobme.in', hash_including(text: total_statistics, msisdn: '917876543210'))
+    expect(RestClient).to receive(:post).with('https://mobme.in', hash_including(text: visakhapatnam_statistics, msisdn: '918976543210'))
 
     subject.invoke
   end

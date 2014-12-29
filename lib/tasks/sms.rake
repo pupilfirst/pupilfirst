@@ -17,11 +17,14 @@ namespace :sms do
       "On Campus: #{startups_at_visakhapatnam.physically_incubated.count}\n" +
       "Incubated startups (cumulative): #{startups_at_visakhapatnam.agreement_signed.count}"
 
-    APP_CONFIG[:sms_statistics_all].each do |msisdn|
+    msisdns_total = APP_CONFIG[:sms_statistics_all] + APP_CONFIG[:sms_statistics_total]
+    msisdns_visakhapatnam = APP_CONFIG[:sms_statistics_all] + APP_CONFIG[:sms_statistics_visakhapatnam]
+
+    msisdns_total.each do |msisdn|
       RestClient.post(APP_CONFIG[:sms_provider_url], text: statistics_total, msisdn: msisdn)
     end
 
-    (APP_CONFIG[:sms_statistics_all] + APP_CONFIG[:sms_statistics_visakhapatnam]).each do |msisdn|
+    msisdns_visakhapatnam.each do |msisdn|
       RestClient.post(APP_CONFIG[:sms_provider_url], text: statistics_for_visakhapatnam, msisdn: msisdn)
     end
   end

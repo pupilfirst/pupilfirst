@@ -39,14 +39,9 @@ Rails.application.configure do
 
   # In development and test, let's have carrierwave store everything on local disk.
   config.carrier_wave_storage = :file
+
+  config.action_mailer.delivery_method = :letter_opener
 end
 
-ActionMailer::Base.smtp_settings = {
-  :address        => 'smtp.sendgrid.net',
-  :port           => '587',
-  :authentication => :plain,
-  :user_name      => ENV['SENDGRID_USERNAME'],
-  :password       => ENV['SENDGRID_PASSWORD'],
-  :domain         => 'heroku.com',
-  :enable_starttls_auto => true
-}
+
+

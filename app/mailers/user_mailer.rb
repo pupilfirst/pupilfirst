@@ -1,6 +1,11 @@
 class UserMailer < ActionMailer::Base
   default from: "SV App <no-reply@svlabs.in>", cc: "outgoing@svlabs.in"
 
+  def meeting_request_to_mentor(mentor_meeting)
+    @mentor_meeting = mentor_meeting
+    mail to: @mentor_meeting.mentor.user.email, subject: 'Request for mentoring'  
+  end
+
   def reminder_to_complete_founder_profile(user)
     @user = user
     mail to: @user.email, subject: 'Reminder to fill up founder profile'

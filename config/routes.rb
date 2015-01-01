@@ -1,9 +1,12 @@
 Svapp::Application.routes.draw do
+  get 'mentor_meetings/new'
+
   devise_for :users, controllers: { passwords: 'users/passwords', invitations: 'users/invitations', sessions: 'users/sessions' }
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
   resources :users, only: [:show, :edit, :update] do
+    resources :mentor_meetings, only: ['index']
     collection do
       patch 'update_password'
       get 'invite'
@@ -32,6 +35,12 @@ Svapp::Application.routes.draw do
       get 'featured'
     end
   end
+
+  resources :mentors do 
+    resources :mentor_meetings, only: %w(new create update) 
+  end
+
+ 
 
   scope 'mentoring', as: 'mentoring', controller: 'mentoring' do
     get '/', action: 'index'

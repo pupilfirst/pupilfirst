@@ -7,6 +7,26 @@ class MentoringController < ApplicationController
 
   # GET /mentoring
   def index
+    @state = OpenStruct.new
+
+    if current_user
+      @state.startup = current_user.startup.present?
+      @state.startups = Startup.agreement_live
+      @state.mentors = Mentor.verified_mentors.where.not(user_id: current_user.id)
+      @state.outgoing_meetings = MentorMeeting.where(user_id: current_user.id)
+      
+
+      if current_user.mentor.present?
+        @state.mentor = current_user.mentor
+        @state.mentor_verified = current_user.mentor.verified?
+        @state.mentor_pending_verification = current_user.phone_verified?
+        @state.mentor_registration_going_on = !current_user.phone_verified?
+        @state.incoming_meetings = current_user.mentor.mentor_meetings  #Mentor_Meeting.all 
+
+      
+
+      end
+    end
   end
 
   # GET /mentoring/register

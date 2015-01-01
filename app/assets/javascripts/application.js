@@ -20,5 +20,7 @@
 //= require bootstrap-select
 //= require bootstrap-datepicker
 //= require application_routes
-//= require partnerships
+//= require activate_datepicker
+
+
 // = require_tree ./react

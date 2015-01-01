@@ -1,21 +1,24 @@
-table.table.table-borderless.table-striped
-  thead
-    tr
-      th Name
-      th Incubated At
-      th Team size
-      th Product Name
-      th Product Progress
-  tbody
-  - Startup.agreement_live.each do |startup|
-    tr
-      td
-        strong
-          - if startup.website.present?
-            = link_to startup.name, startup.website
-          - else
-            = startup.name
-      td = startup.incubation_location.capitalize
-      td = startup.team_size
-      td = startup.product_name
-      td = product_progress_html startup.product_progress
+- if state.mentor_verified
+  ' Currently incubated startups
+  table#t02.table.table-borderless
+    thead
+      tr
+        th Name
+        th Incubated At
+        th Team size
+        th Product Name
+        th Product Progresse
+    tbody
+    - state.startups.each do |startup|
+      tr
+        td
+          strong
+            - if startup.website.present?
+              = link_to startup.name, startup.website
+            - else
+              = startup.name
+        td = startup.incubation_location.capitalize
+        td = startup.team_size
+        td = startup.product_name
+        td = product_progress_html startup.product_progress
+  hr.col-xs-12      

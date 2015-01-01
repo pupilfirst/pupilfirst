@@ -1,30 +1,20 @@
-.text-center
-  h1 style="font-size: 400%" Pro Mentors
-  h1 style="margin-bottom: 30px;" A great way for startups to meet professional mentors
+= render 'introduction', state: @state 
+= render 'incoming_meetings', state: @state 
+= render 'startups_for_mentor', state: @state
+= render 'outgoing_meetings', state: @state 
+= render 'mentors_for_startup', state: @state 
 
-  - if current_user
-    - if current_user.startup_id.present?
-      | Check out our list of mentors!
-    - elsif current_user.mentor.present?
-      - if current_user.mentor.verified?
-        ' Great! You're already a listed mentor. Check out currently incubated startups at Startup Village.
-      - elsif current_user.phone_verified?
-        ' Your mentor account is being verified by the team at Startup Village.
-      - else
-        = link_to 'Continue registration process', mentoring_register_url, class: 'btn btn-primary btn-lg'
-    - else
-      = link_to 'Are you an interested mentor?', mentoring_register_url, class: 'btn btn-primary btn-lg'
-  - else
-    p
-      ' #{link_to 'Login to get started!', new_user_session_path(referer: mentoring_url), class: 'btn btn-primary btn-lg'}
-      | #{link_to 'Sign up as a mentor', mentoring_sign_up_path, class: 'btn btn-primary btn-lg'}
 
-.row style="margin-top: 30px;"
-  - if current_user
-    = render 'mentors_for_startup' if current_user.startup.present?
-    = render 'startups_for_mentor' if current_user.mentor.present? && current_user.mentor.verified?
-    /- if current_user.mentor.present?
-    /  = render 'startups_for_mentor'
+
+  
+
+
+/.row style="margin-top: 30px;"
+/  - if current_user
+  
+/   = render 'startups_for_mentor' 
+  /- if current_user.mentor.present?
+  /  = render 'startups_for_mentor'
 
 /.row style="margin-top: 30px;"
 /  .col-md-6

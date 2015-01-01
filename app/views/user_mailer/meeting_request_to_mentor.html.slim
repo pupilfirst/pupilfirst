@@ -1,0 +1,3 @@
+p Hi #{@mentor_meeting.mentor.user.fullname} !
+
+p #{@mentor_meeting.user.fullname} of #{@mentor_meeting.user.startup.name} has requested a new meeting with you on #{@mentor_meeting.suggested_meeting_at} for #{@mentor_meeting.purpose}. To accept/decline #{link_to 'click here', mentoring_url} .

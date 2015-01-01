@@ -1,0 +1,12 @@
+table.table.table-hover.table-striped.table-bordered
+  thead
+    tr
+      th Purpose
+      th Time
+	tbody
+		-	@mentor_meetings.each do |meet|
+			tr
+				td
+					= meet.purpose
+				td
+					= meet.suggested_meeting_at

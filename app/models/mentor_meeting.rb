@@ -36,4 +36,31 @@ class MentorMeeting < ActiveRecord::Base
   end
 
   validates_inclusion_of :duration, in: valid_durations
+
+  before_save do 
+    if @suggested_meeting_time
+      self.suggested_meeting_at = self.suggested_meeting_at.change @suggested_meeting_time
+    end
+  end
+  
+  def suggested_meeting_time
+    nil
+  end
+
+  def suggested_meeting_time=(value)
+    @suggested_meeting_time = case value
+    when Mentor::AVAILABILITY_TIME_MORNING
+      {hour: 3, min: 30}
+    when Mentor::AVAILABILITY_TIME_MIDDAY
+      {hour: 6, min: 30}
+    when Mentor::AVAILABILITY_TIME_AFTERNOON
+      {hour: 9, min: 30}
+    when Mentor::AVAILABILITY_TIME_EVENING
+      {hour: 12, min: 30}
+    else
+      nil
+    end  
+  end
+
 end
+ 

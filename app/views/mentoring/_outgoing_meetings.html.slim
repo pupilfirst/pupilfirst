@@ -1,0 +1,14 @@
+- if state.outgoing_meetings.present?
+  | Meeting requests sent
+  table#t01.table.table-borderless
+      thead
+        tr
+          th Purpose
+          th Mentor
+          th Status
+      tbody
+      - state.outgoing_meetings.each do |meet|
+        tr
+          td = meet.purpose
+          td = meet.mentor.user.fullname
+          td = meet.status.capitalize

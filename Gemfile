@@ -1,19 +1,20 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.8'
+gem 'rails', '4.2.0'
 
 gem 'active_admin_editor'
 
-gem 'activeadmin', github: 'gregbell/active_admin' # master for rails 4
-gem 'jquery-ui-rails', '~> 4.2.1' # Forcing downgrade of jquery-ui-rails from 5.0.0 because of a bug that causes issue with activeadmin master.
+# ActiveAdmin doesn't like 4.2 at all (for the moment). Switch this to stable when available.
+gem 'activeadmin', github: 'activeadmin', branch: 'rails-4-2'
+gem 'inherited_resources', github: 'josevalim/inherited_resources', branch: 'rails-4-2'
 
 gem 'acts-as-taggable-on'
 gem 'attribute_normalizer', '~> 1.2.0.b'
 gem 'carrierwave'
 gem 'carrierwave_backgrounder', git: 'https://github.com/glhewett/carrierwave_backgrounder.git' # https://github.com/lardawge/carrierwave_backgrounder not updated for sucker_punch v1.0 api changes
 gem 'cocoon'
-gem 'coffee-rails', '~> 4.0.0'
+gem 'coffee-rails', '~> 4.1.0'
 gem 'devise_invitable'
 gem 'fog' # required by carrierwave to upload to s3
 gem 'jbuilder', '~> 2.0'
@@ -25,7 +26,7 @@ gem 'nokogiri'
 gem 'omniauth', '~> 1.2.1'
 gem 'pg'
 gem 'rubypress' # wordpress
-gem 'sass-rails', '~> 4.0.3'
+gem 'sass-rails', '~> 5.0'
 gem 'sendgrid_smtpapi'
 gem 'sentry-raven'
 gem 'slim'
@@ -60,9 +61,6 @@ group :development do
   gem 'guard-livereload'
   gem 'childprocess'
   gem 'terminal-notifier-guard'
-
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
 end
 
 group :test do
@@ -83,6 +81,15 @@ group :development, :test do
   gem 'dotenv'
   gem 'pry-rails'
   gem 'webmock', require: false
+
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'byebug'
+
+  # Access an IRB console on exception pages or by using <%= console %> in views
+  gem 'web-console', '~> 2.0'
+
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'spring'
 end
 
 group :production do
@@ -102,4 +109,4 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-ruby '2.1.5'
+ruby '2.2.0'

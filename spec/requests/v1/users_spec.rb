@@ -285,7 +285,7 @@ describe V1::UsersController do
       post '/api/users/self/contacts', { user: { phone: '+919876543210', fullname: 'Mike Wazowski', company: 'Monsters, Inc.', designation: 'Scarer', category_ids: [user_category.id] } }, version_header(user)
       expect(response).to be_success
       last_user = User.last
-      expect(last_user.is_contact).to be_true
+      expect(last_user.is_contact).to eq(true)
       expect(last_user.fullname).to eq 'Mike Wazowski'
       expect(last_user.company).to eq 'Monsters, Inc.'
       expect(last_user.designation).to eq 'Scarer'

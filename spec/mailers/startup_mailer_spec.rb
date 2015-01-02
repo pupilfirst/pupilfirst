@@ -9,12 +9,11 @@ describe 'StartupMailer' do
     let(:email) { StartupMailer.respond_to_new_employee(startup, new_employee) }
 
     it "with to set as founders email" do
-      email.should deliver_to(startup.founders.map { |e| "#{e.fullname} <#{e.email}>" })
+      expect(email).to deliver_to(startup.founders.map { |e| "#{e.fullname} <#{e.email}>" })
     end
 
     it "with body containing a link to the confirmation link" do
-      email.should have_body_text(confirm_employee_startup_url(startup, token: new_employee.startup_verifier_token))
+      expect(email).to have_body_text(confirm_employee_startup_url(startup, token: new_employee.startup_verifier_token))
     end
-
   end
 end

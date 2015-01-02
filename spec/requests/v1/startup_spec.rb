@@ -169,7 +169,7 @@ describe "Startup Requests" do
     shared_examples_for 'new cofounder' do
       it 'sends an email to cofounder address' do
         post "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in', fullname: 'James P Sullivan' }, version_header(user)
-        expect(emails_sent.last.body.to_s).to include "invited to join #{user.fullname}'s startup as a co-founder"
+        expect(emails_sent.last.body.to_s).to include "invited to join #{CGI.escapeHTML user.fullname}'s startup as a co-founder"
       end
 
       it 'sets the user pending_startup_id' do

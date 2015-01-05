@@ -55,7 +55,7 @@ GIT
       react-source (= 0.12)
 
 GIT
-  remote: git@github.com:ejholmes/active_admin_editor.git
+  remote: https://github.com/ejholmes/active_admin_editor.git
   revision: 86f964be3071cd938c3cd17ad00df94ece3a50c0
   specs:
     active_admin_editor (1.1.0)

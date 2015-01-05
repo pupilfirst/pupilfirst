@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Connection do
   before do
     # Let's disable User notifications for specs.
-    UserPushNotifyJob.stub_chain(:new, :async, :perform)
+    allow(UserPushNotifyJob).to receive_message_chain(:new, :async, :perform)
   end
 
   context 'when a SV to User connection is created' do
@@ -12,7 +12,7 @@ describe Connection do
     let(:contact) { create :user_as_contact }
 
     it 'send notification to the user for whom connection is created' do
-      UserPushNotifyJob.stub_chain(:new, async: performer)
+      allow(UserPushNotifyJob).to receive_message_chain(:new, :async).and_return(performer)
       expect(performer).to receive(:perform).with(user.id, :create_connection, I18n.t('notifications.create_connection', fullname: contact.fullname),
         contact.attributes.slice('fullname', 'phone', 'email', 'company', 'designation'))
 

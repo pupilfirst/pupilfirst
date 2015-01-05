@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/activeadmin/activeadmin.git
-  revision: 38bf0239a3f1eba20454748c9b1247200d7d52b3
+  revision: 990f88ba64f1f703c5d56be90c1ae136877d19fd
   branch: rails-4-2
   specs:
     activeadmin (1.0.0.pre)
@@ -27,7 +27,7 @@ GIT
 
 GIT
   remote: git://github.com/josevalim/inherited_resources.git
-  revision: 9f1c0edd6b4ceb5a1f643da5ce844ccd52364d53
+  revision: 4e348783157488b48ab6ed11afcd1e31604987aa
   branch: rails-4-2
   specs:
     inherited_resources (1.5.1)
@@ -53,6 +53,15 @@ GIT
       execjs
       rails (>= 3.1)
       react-source (= 0.12)
+
+GIT
+  remote: git@github.com:ejholmes/active_admin_editor.git
+  revision: 86f964be3071cd938c3cd17ad00df94ece3a50c0
+  specs:
+    active_admin_editor (1.1.0)
+      activeadmin (>= 0.4.0)
+      ejs
+      rails (>= 3.0.0)
 
 GIT
   remote: https://github.com/glhewett/carrierwave_backgrounder.git
@@ -84,26 +93,6 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.1)
-    active_admin_editor (1.1.0)
-      activeadmin (>= 0.4.0)
-      activeadmin (>= 0.4.0)
-      activeadmin (>= 0.4.0)
-      activeadmin (>= 0.4.0)
-      activeadmin (>= 0.4.0)
-      activeadmin (>= 0.4.0)
-      activeadmin (>= 0.4.0)
-      activeadmin (>= 0.4.0)
-      activeadmin (>= 0.4.0)
-      activeadmin (>= 0.4.0)
-      activeadmin (>= 0.4.0)
-      activeadmin (>= 0.4.0)
-      activeadmin (>= 0.4.0)
-      activeadmin (>= 0.4.0)
-      activeadmin (>= 0.4.0)
-      activeadmin (>= 0.4.0)
-      activeadmin (>= 0.4.0)
-      ejs
-      rails (>= 3.0.0)
     activejob (4.2.0)
       activesupport (= 4.2.0)
       globalid (>= 0.3.0)
@@ -459,7 +448,7 @@ GEM
       retryable-rb
     safe_yaml (1.0.4)
     sass (3.4.9)
-    sass-rails (5.0.1)
+    sass-rails (5.0.0)
       railties (>= 4.0.0, < 5.0)
       sass (~> 3.1)
       sprockets (>= 2.8, < 4.0)
@@ -546,7 +535,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_admin_editor
+  active_admin_editor!
   activeadmin!
   acts-as-taggable-on
   attribute_normalizer (~> 1.2.0.b)

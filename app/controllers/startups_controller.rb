@@ -99,7 +99,7 @@ class StartupsController < InheritedResources::Base
   private
 
   def restrict_to_startup_founders
-    if current_user.startup.try(:id) != params[:id].to_i && current_user.is_founder?
+    if current_user.startup.try(:id) != params[:id].to_i || !current_user.is_founder?
       raise_not_found
     end
   end

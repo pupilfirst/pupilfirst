@@ -16,15 +16,15 @@ class FoundersController < ApplicationController
           startup_id: current_user.startup.id, is_founder: true, startup_link_verifier_id: current_user.id,
           inviter_name: current_user.fullname})
         @user.save!(validate: false)
-        flash[:notice] = "Email invite sent!"
+        flash[:notice] = 'Email invite sent!'
       elsif @user.startup
-        flash[:alert] = "This user is associated with another startup."
+        flash[:alert] = 'This user is associated with another startup.'
       else
-        UserMailer.request_to_be_a_founder(@user, current_user.startup, current_user).deliver
-        flash[:notice] = "An email has been sent to the user to join your startup as a founder."
+        UserMailer.request_to_be_a_founder(@user, current_user.startup, current_user).deliver_now
+        flash[:notice] = 'An email has been sent to the user to join your startup as a founder.'
       end
     else
-      flash[:alert] = "Please enter a valid email"
+      flash[:alert] = 'Please enter a valid email'
     end
     redirect_to action: :index
   end

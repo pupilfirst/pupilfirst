@@ -23,7 +23,7 @@ class StartupsController < InheritedResources::Base
     if @startup.save
       # flash[:notice] = "Your startup Application is submited and in pending for approval."
       render :post_create
-      StartupMailer.apply_now(@startup).deliver
+      StartupMailer.apply_now(@startup).deliver_now
     end
   end
 
@@ -68,7 +68,7 @@ class StartupsController < InheritedResources::Base
       flash[:notice] = "User was already accepted as startup employee." if @new_employee.startup_link_verifier_id
       @new_employee.confirm_employee! params[:is_founder]
       message = "Congratulations! You've been approved as #{@new_employee.title} at #{@startup.name}."
-      UserMailer.accepted_as_employee(@new_employee, @startup).deliver
+      UserMailer.accepted_as_employee(@new_employee, @startup).deliver_now
       UserPushNotifyJob.new.async.perform(@new_employee.id, :confirm_employee, message)
       render :confirm_employee_done
     else

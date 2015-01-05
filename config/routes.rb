@@ -1,4 +1,6 @@
 Svapp::Application.routes.draw do
+  
+
   devise_for :users, controllers: { passwords: 'users/passwords', invitations: 'users/invitations', sessions: 'users/sessions' }
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
@@ -15,12 +17,13 @@ Svapp::Application.routes.draw do
 
   resources :startups, only: [:show, :edit, :update] do
     resources :startup_links, only: [:index, :create]
-
+    resources :startup_jobs, only: %w(new create) do
+      patch :repost
     # resources :founders do
     # collection do
     #   post :invite
     # end
-    # end
+    end
 
     member do
       post :confirm_employee
@@ -55,7 +58,7 @@ Svapp::Application.routes.draw do
 
   # get 'team' => 'welcome#team'
 
-  get 'jobs', to: redirect('https://angel.co/svlabs/jobs')
+  get 'jobs', to: 'startup_jobs#list_all'
   get 'privacy_policy', to: 'welcome#privacy_policy'
   get 'faq', to: 'welcome#faq'
 

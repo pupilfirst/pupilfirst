@@ -1,0 +1,39 @@
+-if job.expires_on > Time.now
+  .job-card.col-lg-3.col-md-4.col-sm-6.col-xs-12
+    .well.well-sm.fix-height
+      p.incubation-location #{job.startup.incubation_location.upcase}
+      p.created-at #{job.startup.created_at.strftime '%^b'} &mdash; #{job.startup.created_at.day}
+      br
+      h4 = link_to job.title, startup_startup_job_path(job.startup, job) 
+      -if show_startup_name ||= false
+        h5 = link_to job.startup.name,  startup_path(job.startup)
+      p
+        - if job.salary_max.present?
+          | Salary: &#8377;#{number_with_delimiter job.salary_min} &mdash; &#8377;#{number_with_delimiter job.salary_max}
+        - else
+          | Salary: ~ &#8377;#{number_with_delimiter job.salary_min}
+        br 
+      
+        -if job.equity_max.present?
+          | equity range : #{job.equity_min}% - #{job.equity_max}%  for #{job.equity_vest} year vest and  #{job.equity_cliff} year cliff
+     
+-elsif repost ||= false
+  .job-card.col-lg-3.col-md-4.col-sm-6.col-xs-12
+    .well.well-sm.fix-height
+      p.incubation-location #{job.startup.incubation_location.upcase}
+      p.created-at #{job.startup.created_at.strftime '%^b'} &mdash; #{job.startup.created_at.day}
+      br
+      h4 = link_to job.title, startup_startup_job_path(job.startup, job) 
+      -if show_startup_name ||= false
+        h5 = link_to job.startup.name,  startup_path(job.startup)
+      p
+        - if job.salary_max.present?
+          | Salary: &#8377;#{number_with_delimiter job.salary_min} &mdash; &#8377;#{number_with_delimiter job.salary_max}
+        - else
+          | Salary: ~ &#8377;#{number_with_delimiter job.salary_min}
+        br 
+      
+        -if job.equity_max.present?
+          | equity range : #{job.equity_min}% - #{job.equity_max}%  for #{job.equity_vest} year vest and  #{job.equity_cliff} year cliff
+      = simple_form_for job, url: startup_startup_job_repost_url(job.startup, job), html: { class: 'form-horizontal',method: :patch }, wrapper: :horizontal_form do |expire|
+        = expire.button :submit, 'repost', class: 'btn btn-danger'

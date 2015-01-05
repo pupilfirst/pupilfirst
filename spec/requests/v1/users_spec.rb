@@ -207,7 +207,7 @@ describe V1::UsersController do
     let(:user) { create :user_with_password }
 
     before do
-      UserPushNotifyJob.stub_chain(:new, :async, perform_batch: true) # TODO: Change this to allow statement in Rspec v3.
+      allow(UserPushNotifyJob).to receive_message_chain(:new, :async, :perform_batch).and_return(true)
     end
 
     context 'when user does not have pending invitation' do
@@ -244,7 +244,7 @@ describe V1::UsersController do
     let(:user) { create :user_with_password }
 
     before do
-      UserPushNotifyJob.stub_chain(:new, :async, perform_batch: true) # TODO: Change this to allow statement in Rspec v3.
+      allow(UserPushNotifyJob).to receive_message_chain(:new, :async, :perform_batch).and_return(true)
     end
 
     context 'when user does not have pending invitation' do
@@ -285,7 +285,7 @@ describe V1::UsersController do
       post '/api/users/self/contacts', { user: { phone: '+919876543210', fullname: 'Mike Wazowski', company: 'Monsters, Inc.', designation: 'Scarer', category_ids: [user_category.id] } }, version_header(user)
       expect(response).to be_success
       last_user = User.last
-      expect(last_user.is_contact).to be_true
+      expect(last_user.is_contact).to eq(true)
       expect(last_user.fullname).to eq 'Mike Wazowski'
       expect(last_user.company).to eq 'Monsters, Inc.'
       expect(last_user.designation).to eq 'Scarer'
@@ -308,7 +308,7 @@ describe V1::UsersController do
     let!(:contact_3) { create :user_as_contact }
 
     before do
-      UserPushNotifyJob.stub_chain(:new, :async, :perform)
+      allow(UserPushNotifyJob).to receive_message_chain(:new, :async, :perform)
     end
 
     it 'returns all connections supplied by SV to user' do

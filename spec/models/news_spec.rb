@@ -55,14 +55,14 @@ describe News do
   context 'update a News as featured' do
     it "sends push if assign news item as featured for first time" do
       news = create(:news, youtube_id: 'foobar')
-      news.stub(:send_push_notification).and_return(true)
+      allow(news).to receive(:send_push_notification).and_return(true)
       expect(news).to receive(:send_push_notification)
       news.update_attributes!(featured: true)
     end
 
     it "dosn't sends push if news item is re-asigned as featured" do
       news = create(:news, youtube_id: 'foobar', notification_sent: true)
-      news.stub(:send_push_notification).and_return(true)
+      allow(news).to receive(:send_push_notification).and_return(true)
       expect(news).not_to receive(:send_push_notification)
       news.update_attributes!(featured: true)
     end

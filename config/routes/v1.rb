@@ -5,12 +5,12 @@ Svapp::Application.routes.draw do
         resource :student_entrepreneur_policy
 
         member do
-          post 'phone_number', to: :generate_phone_number_verification_code
-          put 'phone_number', to: :verify_phone_number
-          put 'cofounder_invitation', to: :accept_cofounder_invitation
-          delete 'cofounder_invitation', to: :reject_cofounder_invitation
-          get 'contacts', to: :connected_contacts
-          post 'contacts', to: :connect_contact
+          post 'phone_number', action: :generate_phone_number_verification_code
+          put 'phone_number', action: :verify_phone_number
+          put 'cofounder_invitation', action: :accept_cofounder_invitation
+          delete 'cofounder_invitation', action: :reject_cofounder_invitation
+          get 'contacts', action: :connected_contacts
+          post 'contacts', action: :connect_contact
         end
 
         collection do
@@ -32,9 +32,9 @@ Svapp::Application.routes.draw do
         member do
           post :link_employee
           post :partnership_application
-          post :founders, to: :add_founder
-          delete :founders, to: :delete_founder
-          get :founders, to: :retrieve_founder
+          post :founders, action: :add_founder
+          delete :founders, action: :delete_founder
+          get :founders, action: :retrieve_founder
           post :incubate
           post :registration
         end

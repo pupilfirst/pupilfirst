@@ -19,7 +19,9 @@ describe 'sms:statistics' do
     APP_CONFIG[:sms_provider_url] = ENV['SMS_PROVIDER_URL']
   end
 
-  its(:prerequisites) { should include('environment') }
+  it 'includes environment' do
+    expect(subject.prerequisites).to include('environment')
+  end
 
   it 'does something' do
     total_statistics = "Total statistics\nTotal incubation requests: 5281\nIncubated startups: 0\nCommunity: 0\nStudent entrepreneurs: 0\nOn Campus: 0\nIncubated startups (cumulative): 849\n"

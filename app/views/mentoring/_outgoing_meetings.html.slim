@@ -4,11 +4,17 @@
       thead
         tr
           th Purpose
-          th Mentor
+          th Mentor 
+          th Date
+          th Time
           th Status
       tbody
       - state.outgoing_meetings.each do |meet|
         tr
           td = meet.purpose
           td = meet.mentor.user.fullname
+          td = meet.meeting_at.present? ? meet.meeting_at.to_date : meet.suggested_meeting_at.to_date
+          td = meet.meeting_at.present? ? meet.meeting_at.strftime("%l:%M %P") : meet.suggested_meeting_at.strftime("%l:%M %P")
           td = meet.status.capitalize
+          - if meet.status == MentorMeeting::STATUS_ACCEPTED && meet.meeting_at < 15.minutes.from_now
+            td = link_to 'Start Meeting', mentor_meetings_live_url(meet.id),  class: 'btn btn-primary'

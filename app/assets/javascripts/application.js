@@ -13,7 +13,6 @@
 //= require jquery
 //= require bootstrap-sprockets
 //= require jquery_ujs
-//= require turbolinks
 //= require react
 //= require react_ujs
 //= require cocoon
@@ -21,6 +20,8 @@
 //= require bootstrap-datepicker
 //= require application_routes
 //= require activate_datepicker
+//= require easyrtc.js
+//= require socket.io.js
 
 
 // = require_tree ./react

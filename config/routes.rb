@@ -40,7 +40,9 @@ Svapp::Application.routes.draw do
     resources :mentor_meetings, only: %w(new create update) 
   end
 
- 
+  scope 'mentor_meetings' do
+    get ':id', to: 'mentor_meetings#live', as: 'mentor_meetings_live'
+  end
 
   scope 'mentoring', as: 'mentoring', controller: 'mentoring' do
     get '/', action: 'index'

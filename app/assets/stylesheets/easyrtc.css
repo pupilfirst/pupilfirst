@@ -1,0 +1,74 @@
+/*
+ *  These styles define the appearance of the default error dialog box.
+ */
+#easyrtcErrorDialog {
+    background-color: #ffe0e0;
+
+    position:fixed;
+    right: 10px;
+    top:20px;
+    z-index: 30;
+    opacity: 0.95;
+    padding: 0.5em;
+    border-radius:10px;
+    border-color: red;
+    border-style: solid;
+    border-width: 1px;
+   -webkit-box-shadow: 2px 2px 8px 1px rgba(0,0,0,0.9);
+    box-shadow: 2px 2px 8px 1px rgba(0,0,0,0.9);
+}
+
+.easyrtcErrorDialog_title {
+    position:static;
+    text-align:center;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+    clear:both;
+}
+
+#easyrtcErrorDialog_body{
+    position:static;
+    height:150px;
+    overflow-y:auto;
+}
+
+.easyrtcErrorDialog_element {
+    position:static;
+    font-style: italic;
+    font-size: 12px;
+    width:300px;
+    margin-bottom: 0.5em;
+    clear: both;
+    float:left;
+}
+
+.easyrtcErrorDialog_okayButton {
+    position:static;
+    clear:both;
+    float:right;
+}
+
+.easyrtcMirror {
+    -webkit-transform: scaleX(-1);
+    -moz-transform: scaleX(-1);
+    -ms-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    transform: scaleX(-1);
+}
+
+.easyrtc_closeButton {
+    z-index: 2;
+    position: absolute;
+    width: 40px;
+    height:40px;
+    right: 0px;
+    top: 0px;
+    background-image: url('data:image/svg+xml;utf8,<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="40px" height="40px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve"><g stroke="#b0b0b0" stroke-width="7" ><g>		<path  d="M76.03,79.854c-0.979,0-1.958-0.373-2.704-1.12L21.184,26.592c-1.494-1.494-1.494-3.915,0-5.409c1.494-1.493,3.915-1.493,5.409,0l52.143,52.142c1.494,1.494,1.494,3.915,0,5.409C77.988,79.481,77.01,79.854,76.03,79.854z"/></g><g><path d="M23.888,79.854c-0.979,0-1.958-0.373-2.704-1.12c-1.494-1.494-1.494-3.915,0-5.409l52.142-52.142c1.493-1.493,3.915-1.493,5.409,0c1.494,1.494,1.494,3.915,0,5.409L26.593,78.734C25.846,79.481,24.867,79.854,23.888,79.854z"/></g></g><g fill="#000000"><g><path  d="M76.03,79.854c-0.979,0-1.958-0.373-2.704-1.12L21.184,26.592c-1.494-1.494-1.494-3.915,0-5.409c1.494-1.493,3.915-1.493,5.409,0l52.143,52.142c1.494,1.494,1.494,3.915,0,5.409C77.988,79.481,77.01,79.854,76.03,79.854z"/></g><g><path d="M23.888,79.854c-0.979,0-1.958-0.373-2.704-1.12c-1.494-1.494-1.494-3.915,0-5.409l52.142-52.142c1.493-1.493,3.915-1.493,5.409,0c1.494,1.494,1.494,3.915,0,5.409L26.593,78.734C25.846,79.481,24.867,79.854,23.888,79.854z"/></g></g></svg>');
+    opacity: 0.3;
+}
+
+.easyrtc_closeButton:hover {
+    opacity: 1;
+}
+

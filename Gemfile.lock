@@ -393,8 +393,6 @@ GEM
     tilt (1.4.1)
     timers (1.1.0)
     ttfunk (1.4.0)
-    turbolinks (2.2.2)
-      coffee-rails
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (2.5.0)
@@ -490,7 +488,6 @@ DEPENDENCIES
   sqlite3
   sucker_punch
   terminal-notifier-guard
-  turbolinks
   uglifier
   unicorn
   urbanairship

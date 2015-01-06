@@ -1,4 +1,9 @@
 class MentorMeetingsController < ApplicationController
+  
+  def live
+    @mentor_meeting = MentorMeeting.find(params[:id])
+  end
+
   def new
   	mentor = Mentor.find params[:mentor_id]
   	@mentor_meeting = mentor.mentor_meetings.new

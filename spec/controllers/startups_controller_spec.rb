@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe StartupsController do
-  login_user
+  before(:each) { login_user }
   # This should return the minimal set of attributes required to create a valid
   # Startup. As you add validations to Startup, be sure to
   # adjust the attributes here as well.

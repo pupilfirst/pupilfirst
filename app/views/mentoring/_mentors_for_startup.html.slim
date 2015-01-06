@@ -17,6 +17,7 @@
         td #{mentor.availability['time']['after']}:00 and #{mentor.availability['time']['before']}:00
         td
           = mentor.skills.map { |skill| "#{skill.skill.name} (#{skill.expertise})" }.join ', '
-        td = link_to "Request Meeting", new_mentor_mentor_meeting_path(mentor),class: "btn btn-default" 
+        td = link_to "Request Meeting", new_mentor_mentor_meeting_path(mentor),class: "btn btn-default"
+         
   hr.col-xs-12
 

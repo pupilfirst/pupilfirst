@@ -5,8 +5,13 @@ class MentorMeetingsController < ApplicationController
   end
 
   def new
-  	mentor = Mentor.find params[:mentor_id]
-  	@mentor_meeting = mentor.mentor_meetings.new
+    if current_user.startup.agreement_live?
+  	 mentor = Mentor.find params[:mentor_id]
+  	 @mentor_meeting = mentor.mentor_meetings.new
+    else 
+      flash[:alert]="Please sign/renew your agreement with SV to meet our mentors!"
+      redirect_to mentoring_url
+    end
   end
 
   def create

@@ -497,8 +497,6 @@ GEM
     timers (4.0.1)
       hitimes
     ttfunk (1.4.0)
-    turbolinks (2.5.3)
-      coffee-rails
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (2.6.1)
@@ -599,7 +597,6 @@ DEPENDENCIES
   sqlite3
   sucker_punch
   terminal-notifier-guard
-  turbolinks
   uglifier
   unicorn
   urbanairship

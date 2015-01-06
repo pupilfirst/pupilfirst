@@ -32,7 +32,7 @@ gem 'sendgrid_smtpapi'
 gem 'sentry-raven'
 gem 'slim'
 gem 'sucker_punch'
-gem 'turbolinks'
+# gem 'turbolinks' # Disabled, because it is a pain in the ass.
 gem 'uglifier'
 gem 'urbanairship'
 gem 'prawn'

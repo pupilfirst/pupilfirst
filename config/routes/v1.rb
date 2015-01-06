@@ -45,6 +45,7 @@ Svapp::Application.routes.draw do
       get '/mentors' => 'info#mentors'
       get '/advisory-council' => 'info#advisory_council'
       get '/startup_stats' => 'info#startup_stats'
+      get '/version' => 'info#api_version'
     end
   end
 end

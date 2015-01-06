@@ -4,5 +4,6 @@ APP_CONFIG = {
   sms_statistics_all: ENV['SMS_STATISTICS_ALL'].try(:split, ','),
   sms_statistics_total: ENV['SMS_STATISTICS_TOTAL'].try(:split, ','),
   sms_statistics_visakhapatnam: ENV['SMS_STATISTICS_VISAKHAPATNAM'].try(:split, ','),
-  api_version: ENV['API_VERSION']
+  api_version: ENV['API_VERSION'],
+  google_analytics_tracking_id: ENV['GOOGLE_ANALYTICS_TRACKING_ID']
 }.with_indifferent_access

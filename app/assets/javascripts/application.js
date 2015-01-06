@@ -20,4 +20,5 @@
 //= require bootstrap-datepicker
 //= require application_routes
 //= require partnerships
-// = require_tree ./react
+//= require_tree ./react
+//= require google_analytics.js.erb

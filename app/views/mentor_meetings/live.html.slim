@@ -7,8 +7,8 @@ h1 Welcome to your meeting with #{current_user == @mentor_meeting.user ? @mentor
 .container#mentor-meeting-container data-id=@mentor_meeting.id 
  .row
    #otherClients
- .row  
-   video#self.col-md-4 style="float:left" width="300" height="200"
+ .row
+   video#self.col-md-4 style="float:left" width="300" height="200" data-name=current_user.fullname
    #callerdiv.col-md-8 style="position:relative;float:left;width:300px"
      video#caller width="300" height="200"
 

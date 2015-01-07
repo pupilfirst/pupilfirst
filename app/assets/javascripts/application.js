@@ -22,6 +22,5 @@
 //= require activate_datepicker
 //= require easyrtc.js
 //= require socket.io.js
-//= require partnerships
 //= require_tree ./react
 //= require google_analytics.js.erb

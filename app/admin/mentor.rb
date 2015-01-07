@@ -14,7 +14,7 @@ ActiveAdmin.register Mentor do
       f.input :company_level, collection: Startup.valid_product_progress_values
       f.input :cost_to_company
       f.input :time_donate_percentage
-      f.input :verified_at, as: :date
+      f.input :verified_at, as: :date_picker
     end
 
     f.actions

@@ -8,6 +8,26 @@ function my_init() {
     function(myId) {
       console.log("My easyrtcid is " + myId);
     });
+  easyrtc.setOnCall( function(easyrtcid, slot) {
+    console.log('setOnCall called');
+    strong = document.getElementById('awaitingnotification')
+    button = document.getElementById('startbutton')
+    button.style.display = 'none';
+    strong.style.display = 'none' ;
+    // creating hang up button
+      hangupdiv =  document.getElementById('hangup');
+      var hangupbutton = document.createElement('button');
+      hangupbutton.onclick = function() {
+        easyrtc.hangupAll();
+        
+      }
+      hanguplabel = document.createTextNode("End Meeting");
+      hangupbutton.appendChild(hanguplabel);
+      hangupdiv.appendChild(hangupbutton); 
+  });
+   easyrtc.setOnHangup( function(easyrtcid, slot) {
+     window.location.replace("/");   
+  });
 }
 
 
@@ -20,17 +40,21 @@ function loggedInListener(roomName, otherPeers) {
   if (easyrtc.getRoomOccupantsAsArray(roomName).length === 1){
     console.log("Awaiting guest to join...");
     strong = document.createElement("strong");
+    strong.setAttribute("id", "awaitingnotification");
     notification = document.createTextNode("Awaiting guest to join...");
     strong.appendChild(notification);
     otherClientDiv.appendChild(strong);
+
   }
   else {
     for(var easyrtcid in otherPeers) {
       strong = document.createElement("strong");
+      strong.setAttribute("id", "awaitingnotification");
       notification = document.createTextNode(easyrtc.idToName(easyrtcid)+" is available now !");
       strong.appendChild(notification);
       otherClientDiv.appendChild(strong);
-      var button = document.createElement('button');
+      button = document.createElement('button');
+      button.setAttribute("id", "startbutton");
       button.onclick = function() {
         performCall(easyrtcid);
       }
@@ -42,7 +66,7 @@ function loggedInListener(roomName, otherPeers) {
       // console.log(easyrtcid);
       label = document.createTextNode("Start Meeting");
       button.appendChild(label);
-      otherClientDiv.appendChild(button);
+      otherClientDiv.appendChild(button); 
     }
   }
 }

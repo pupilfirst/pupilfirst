@@ -17,7 +17,7 @@ Svapp::Application.routes.draw do
 
   resources :startups, only: [:show, :edit, :update] do
     resources :startup_links, only: [:index, :create]
-    resources :startup_jobs, only: %w(new create) do
+    resources :startup_jobs do
       patch :repost
     # resources :founders do
     # collection do

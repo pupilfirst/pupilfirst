@@ -1,5 +1,5 @@
 class StartupJobsController < ApplicationController
-  before_filter :authenticate_user!, only: [:new,:create, :repost]
+  before_filter :authenticate_user!, except: [:show, :list_all, :index]
   before_filter :restrict_to_startup_founders, only: [:new, :create, :repost]
   
   def new
@@ -27,7 +27,7 @@ class StartupJobsController < ApplicationController
   def index
     @startup = Startup.find(params[:startup_id])
     @startup_jobs = @startup.startup_jobs.all
-    @repost = disallow_non_founder_user_repost
+    @startup_founder = disallow_unauthenticated_repost
   end
 
   def list_all
@@ -55,11 +55,16 @@ class StartupJobsController < ApplicationController
     if current_user.startup.try(:id) != params[:startup_id].to_i || !current_user.is_founder?
       raise_not_found
     end
-  end
+  end 
 
-  def disallow_non_founder_user_repost
-    if ((current_user.startup.try(:id) == params[:startup_id].to_i) && (current_user.is_founder?))
-      true
+  def disallow_unauthenticated_repost
+    if current_user.present?
+      if ((current_user.startup.try(:id) == params[:startup_id].to_i) && (current_user.is_founder?))
+        true
+      else
+        false
+      end
     end
   end
+
 end

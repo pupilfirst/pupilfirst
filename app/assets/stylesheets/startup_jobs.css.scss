@@ -1,0 +1,18 @@
+// Place all the styles related to the StartupJobs controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.job-card h3 {
+  margin-top: 5px;
+}
+
+.job-card .fix-height {
+  height: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-add-job {
+  height: 180px;
+  padding-top: 80px;
+}

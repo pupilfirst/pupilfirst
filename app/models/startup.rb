@@ -63,7 +63,7 @@ class Startup < ActiveRecord::Base
   end
 
   has_many :employees, -> { where("startup_link_verifier_id IS NOT NULL") }, :class_name => "User", :foreign_key => "startup_id"
-
+  
   has_and_belongs_to_many :categories do
     def <<(category)
       raise StandardError, 'Use categories= to enforce startup category limit'
@@ -74,6 +74,8 @@ class Startup < ActiveRecord::Base
   belongs_to :registered_address, class_name: 'Address'
   has_many :partnerships
   has_many :startup_links, dependent: :destroy
+
+  has_many :startup_jobs
 
   serialize :company_names, JSON
   serialize :startup_before, JSON
@@ -370,6 +372,11 @@ class Startup < ActiveRecord::Base
   def self.agreement_signed_filtered
     where('agreement_first_signed_at > ?', Time.parse('2014-11-05 00:00:00 +0530'))
   end
+
+  def is_agreement_live?
+    try(:agreement_ends_at).to_i > Time.now.to_i
+  end
+
 
   # TODO: Remove incorporation_status boolean field.
 end

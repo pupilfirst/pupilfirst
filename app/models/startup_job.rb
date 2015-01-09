@@ -1,5 +1,8 @@
 class StartupJob < ActiveRecord::Base
+  EXPIRY_DURATION = 2.months.from_now
+
   belongs_to :startup
+
   validates :title, presence: true
   validates :salary_min, presence: true
   validates_presence_of :equity_min, :if => :equity_max

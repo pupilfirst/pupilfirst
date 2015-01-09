@@ -12,7 +12,7 @@ class StartupJobsController < ApplicationController
     @startup_job = @startup.startup_jobs.new startup_job_params
 
     if @startup_job.save
-      redirect_to startup_startup_jobs_path @startup, @startup_job
+      redirect_to startup_startup_jobs_path @startup
     else
       render 'new'
     end

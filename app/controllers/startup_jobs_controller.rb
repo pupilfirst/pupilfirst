@@ -1,16 +1,10 @@
 class StartupJobsController < ApplicationController
   before_filter :authenticate_user!, except: [:show, :list_all, :index]
-  before_filter :restrict_to_startup_founders, only: [:new, :create, :repost]
+  before_filter :restrict_to_startup_founders_with_live_agreement, only: [:new, :create, :repost]
 
   def new
     @startup = Startup.find params[:startup_id]
     @startup_job = @startup.startup_jobs.new
-    @agreement_live = @startup.is_agreement_live?
-
-    unless @agreement_live
-      flash[:alert] = 'Your do have an active agreement with Startup Village. Please enter into agreement with SV to use this feature.'
-      redirect_to startup_startup_jobs_path @startup, @startup_job
-    end
   end
 
   def create
@@ -18,8 +12,8 @@ class StartupJobsController < ApplicationController
     @startup_jobs = @startup.startup_jobs.new startup_job_params
     @startup_jobs.update_attributes expires_on: StartupJob::EXPIRY_DURATION
 
-    if @startup_jobs.save
-      redirect_to startup_startup_jobs_path(@startup, @startup_jobs)
+    if @startup_job.save
+      redirect_to startup_startup_jobs_path @startup, @startup_job
     else
       render 'new'
     end
@@ -66,9 +60,12 @@ class StartupJobsController < ApplicationController
   end
 
 
-  def restrict_to_startup_founders
+  def restrict_to_startup_founders_with_live_agreement
     if current_user.startup.try(:id) != params[:startup_id].to_i || !current_user.is_founder?
       raise_not_found
+    elsif !current_user.startup.is_agreement_live?
+      flash[:alert] = 'Your do have an active agreement with Startup Village. Please enter into agreement with SV to post jobs listings.'
+      redirect_to current_user.startup
     end
   end
 

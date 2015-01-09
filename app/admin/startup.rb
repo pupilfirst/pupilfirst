@@ -1,18 +1,18 @@
 ActiveAdmin.register Startup do
-  filter :approval_status, as: :select, collection: Startup.valid_approval_status_values
+  filter :approval_status, as: :select, collection: proc { Startup.valid_approval_status_values}
   filter :name
   filter :email
   filter :website
-  filter :registration_type, as: :select, collection: Startup.valid_registration_types
+  filter :registration_type, as: :select, collection: proc { Startup.valid_registration_types }
   filter :product_name
-  filter :product_progress, as: :select, collection: Startup.valid_product_progress_values
+  filter :product_progress, as: :select, collection: proc { Startup.valid_product_progress_values }
   filter :team_size
   filter :team_size_blank, as: :boolean, label: 'Team size not set'
-  filter :incubation_location, as: :select, collection: Startup.valid_incubation_location_values
+  filter :incubation_location, as: :select, collection: proc { Startup.valid_incubation_location_values }
   filter :incubation_location_blank, as: :boolean, label: 'Incubation location not selected'
   filter :agreement_sent
   filter :physical_incubatee
-  filter :categories, collection: Category.startup_category
+  filter :categories, collection: proc { Category.startup_category }
 
   scope :all
   scope :without_founders

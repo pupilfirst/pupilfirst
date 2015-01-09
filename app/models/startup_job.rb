@@ -19,4 +19,8 @@ class StartupJob < ActiveRecord::Base
   before_create do
     reset_expiry!
   end
+
+  def expired?
+    Time.now > self.expires_on
+  end
 end

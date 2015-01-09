@@ -31,6 +31,11 @@ class StartupJobsController < ApplicationController
 
   def list_all
     @startup_jobs = StartupJob.all
+
+    if current_user.try(:is_founder)
+      @startup = current_user.startup
+      @startup_founder = true
+    end
   end
 
   def repost

@@ -26,7 +26,7 @@ ActiveAdmin.register AdminUser do
       f.input :fullname
       f.input :username
       f.input :avatar, as: :file
-      f.input :admin_type, as: :select, collection: proc { AdminUser.admin_user_types }
+      f.input :admin_type, as: :select, collection: AdminUser.admin_user_types 
     end
     f.actions
   end

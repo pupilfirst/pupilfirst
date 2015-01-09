@@ -19,7 +19,7 @@ ActiveAdmin.register Category do
     f.inputs 'Details' do
       f.input :name
       f.input :category_type,
-        collection: proc { current_admin_user.admin_type == AdminUser::TYPE_EDITOR ? Category.editor_categories : Category::TYPES },
+        collection: current_admin_user.admin_type == AdminUser::TYPE_EDITOR ? Category.editor_categories : Category::TYPES ,
         prompt: 'Choose a type'
     end
     f.actions

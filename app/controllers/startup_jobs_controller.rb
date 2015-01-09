@@ -6,9 +6,10 @@ class StartupJobsController < ApplicationController
     @startup = Startup.find(params[:startup_id])
     @startup_job = @startup.startup_jobs.new
     @agreement_live = @startup.is_agreement_live?
+
     unless @agreement_live
-      flash[:alert] = 'Your agreement with Startup Village has expired. Please renew your agreement to use this feature.'
-      redirect_to startup_startup_jobs_path(@startup,@startup_job)
+      flash[:alert] = 'Your do have an active agreement with Startup Village. Please enter into agreement with SV to use this feature.'
+      redirect_to startup_startup_jobs_path(@startup, @startup_job)
     end
   end
   

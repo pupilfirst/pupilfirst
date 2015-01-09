@@ -21,7 +21,7 @@
               ' #{meet.status.capitalize}
             td
               - if meet.status == MentorMeeting::STATUS_REQUESTED
-                ' #{f.submit "Approve", class: "btn btn-success"}  
+                ' #{f.submit "Accept", class: "btn btn-success"}  
                 = f.submit "Reject", class: "btn btn-danger"  
               - elsif meet.status == MentorMeeting::STATUS_ACCEPTED && meet.meeting_at < 15.minutes.from_now
                 = link_to 'Start Meeting', mentor_meetings_live_url(meet.id),  class: 'btn btn-primary'

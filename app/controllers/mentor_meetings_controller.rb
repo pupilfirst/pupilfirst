@@ -33,11 +33,16 @@ class MentorMeetingsController < ApplicationController
   end
 
   def update
-    mentor_meeting = current_user.mentor.mentor_meetings.find(params[:id])
-    mentor_meeting.status = params[:commit] == "Approve" ? MentorMeeting::STATUS_ACCEPTED : MentorMeeting::STATUS_REJECTED
-    mentor_meeting.meeting_at = mentor_meeting.suggested_meeting_at if params[:commit] == "Approve"   
-    mentor_meeting.save
-    flash[:notice] = "Meeting status has been updated"
+    @mentor_meeting = current_user.mentor.mentor_meetings.find(params[:id])
+    @mentor_meeting.status = params[:commit] == "Accept" ? MentorMeeting::STATUS_ACCEPTED : MentorMeeting::STATUS_REJECTED
+    @mentor_meeting.meeting_at = mentor_meeting.suggested_meeting_at if params[:commit] == "Accept"   
+    if @mentor_meeting.save
+      flash[:notice] = "Meeting status has been updated"
+      UserMailer.meeting_request_accepted(@mentor_meeting).deliver if @mentor_meeting.status == MentorMeeting::STATUS_ACCEPTED
+      UserMailer.meeting_request_rejected(@mentor_meeting).deliver if @mentor_meeting.status == MentorMeeting::STATUS_REJECTED
+    else 
+      flash[:alert] = "Error in saving response"
+    end
     redirect_to mentoring_url 
   end
 

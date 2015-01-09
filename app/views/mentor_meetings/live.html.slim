@@ -13,6 +13,8 @@ h1 Welcome to your meeting with #{current_user == @mentor_meeting.user ? @mentor
       video#caller width="450" height="300"
   .row#hangup
 
+  / hidden form to invoke POST upon end call
+form#endcall style="display: hidden" action="/" method="POST"
 
 
 

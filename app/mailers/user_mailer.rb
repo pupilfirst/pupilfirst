@@ -1,9 +1,19 @@
 class UserMailer < ActionMailer::Base
   default from: "SV App <no-reply@svlabs.in>", cc: "outgoing@svlabs.in"
 
+  def meeting_request_rejected(mentor_meeting)
+    @mentor_meeting = mentor_meeting
+    mail to:@mentor_meeting.user.email, subject: 'Meeting request rejected by ' + @mentor_meeting.mentor.user.fullname
+  end
+
+  def meeting_request_accepted(mentor_meeting)
+    @mentor_meeting = mentor_meeting
+    mail to:@mentor_meeting.user.email, subject: 'Meeting request accepted by ' + @mentor_meeting.mentor.user.fullname
+  end
+
   def meeting_today_user(mentor_meeting)
     @mentor_meeting = mentor_meeting
-    mail to:@mentor_meeting.user.email, subject: 'Remainder: Meeting with #{@mentor_meeting.mentor.user.fullname}'
+    mail to:@mentor_meeting.user.email, subject: 'Remainder: Meeting with' + @mentor_meeting.mentor.user.fullname
   end
 
   def meeting_today_mentor(mentor_meeting)

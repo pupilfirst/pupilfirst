@@ -26,7 +26,7 @@ function my_init() {
       hangupdiv.appendChild(hangupbutton); 
   });
    easyrtc.setOnHangup( function(easyrtcid, slot) {
-     window.location.replace("/");   
+     $("endcall").submit();   
   });
 }
 

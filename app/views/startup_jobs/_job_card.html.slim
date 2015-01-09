@@ -3,8 +3,8 @@
 - if display_card?(job, startup_founder)
   .job-card.col-lg-3.col-md-4.col-sm-6.col-xs-12
     .well.well-sm.fix-height
-      p.incubation-location #{job.startup.incubation_location.upcase}
-      p.created-at #{job.startup.created_at.strftime '%^b'} &mdash; #{job.startup.created_at.day}
+      p.pull-left #{job.startup.incubation_location.upcase}
+      p.pull-right #{job.startup.created_at.strftime '%^b'} &mdash; #{job.startup.created_at.day}
       br
       h4 = link_to job.title, startup_startup_job_path(job.startup, job)
       - if show_startup_name ||= false
@@ -19,9 +19,7 @@
           | equity range : #{job.equity_min}% - #{job.equity_max}%  for #{job.equity_vest} year vest and  #{job.equity_cliff} year cliff
         - if startup_founder ||= false
           - if job.expired?
-            .button-left
-              = button_to 'Repost', startup_startup_job_repost_url(job.startup, job), method: :patch, class: 'btn btn-success'
-          .button-right
-            = button_to 'Remove', startup_startup_job_destroy_url(job.startup, job),
-                        method: :delete, class: 'btn btn-danger',
-                        data: { confirm: 'Are you sure you want to delete this job post?' }
+            = button_to 'Repost', startup_startup_job_repost_url(job.startup, job), method: :patch, class: 'btn btn-success pull-left'
+          = button_to 'Remove', startup_startup_job_destroy_url(job.startup, job),
+                      method: :delete, class: 'btn btn-danger pull-right',
+                      data: { confirm: 'Are you sure you want to delete this job post?' }

@@ -1,6 +1,7 @@
 // Place all the styles related to the StartupJobs controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
 .job-card h3 {
   margin-top: 5px;
 }
@@ -9,24 +10,4 @@
   height: 180px;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.job-card p.incubation-location {
-  float: left;
-}
-
-.job-card p.created-at {
-  float: right;
-}
-
-.job-card p.startup-job {
-  float: right;
-}
-
-.button-right {
-  float: right; 
-}
-
-.button-left {
-  float: left;
 }

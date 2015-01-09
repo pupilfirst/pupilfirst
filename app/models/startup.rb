@@ -373,5 +373,10 @@ class Startup < ActiveRecord::Base
     where('agreement_first_signed_at > ?', Time.parse('2014-11-05 00:00:00 +0530'))
   end
 
+  def is_agreement_live?
+    try(:agreement_ends_at).to_i > Time.now.to_i
+  end
+
+
   # TODO: Remove incorporation_status boolean field.
 end

@@ -1,16 +1,17 @@
-h2.page-header Job Form
-= simple_form_for @startup_job, url: startup_startup_jobs_path(@startup), html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: {check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_file_input, boolean: :horizontal_boolean } do |j|
-  
-  = j.input :title
-  = j.input :description
-  = j.input :salary_max 
-  = j.input :salary_min
-  = j.input :equity_max
-  = j.input :equity_min
-  = j.input :equity_vest
-  = j.input :equity_cliff
+-if @agreement_live
+  h2.page-header Job Form
+  = simple_form_for @startup_job, url: startup_startup_jobs_path(@startup), html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: {check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_file_input, boolean: :horizontal_boolean } do |j|
+    
+    = j.input :title
+    = j.input :description
+    = j.input :salary_max 
+    = j.input :salary_min
+    = j.input :equity_max
+    = j.input :equity_min
+    = j.input :equity_vest
+    = j.input :equity_cliff
 
 
-  div class = "form-group"
-    div class = "col-sm-offset-2 col-sm-10"
-      = j.button :submit, 'Update basic details', class: 'btn btn-primary'
+    div class = "form-group"
+      div class = "col-sm-offset-2 col-sm-10"
+        = j.button :submit, 'Update basic details', class: 'btn btn-primary'

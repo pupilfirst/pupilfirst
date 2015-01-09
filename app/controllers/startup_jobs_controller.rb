@@ -9,8 +9,7 @@ class StartupJobsController < ApplicationController
 
   def create
     @startup = Startup.find params[:startup_id]
-    @startup_jobs = @startup.startup_jobs.new startup_job_params
-    @startup_jobs.update_attributes expires_on: StartupJob::EXPIRY_DURATION
+    @startup_job = @startup.startup_jobs.new startup_job_params
 
     if @startup_job.save
       redirect_to startup_startup_jobs_path @startup, @startup_job
@@ -37,7 +36,7 @@ class StartupJobsController < ApplicationController
   def repost
     @startup = Startup.find params[:startup_id]
     @startup_job = @startup.startup_jobs.find params[:startup_job_id]
-    @startup_job.expires_on = StartupJob::EXPIRY_DURATION
+    @startup_job.reset_expiry!
     @startup_job.save!
 
     redirect_to startup_startup_jobs_path(@startup, @startup_job)

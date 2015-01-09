@@ -11,13 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141230070619) do
+ActiveRecord::Schema.define(version: 20150107115813) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pg_trgm"
 
-  create_table "active_admin_comments", force: true do |t|
+  create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace"
     t.text     "body"
     t.string   "resource_id",   null: false
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 20141230070619) do
   add_index "active_admin_comments", ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
   add_index "active_admin_comments", ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
 
-  create_table "addresses", force: true do |t|
+  create_table "addresses", force: :cascade do |t|
     t.string   "flat"
     t.string   "building"
     t.string   "street"
@@ -44,7 +44,7 @@ ActiveRecord::Schema.define(version: 20141230070619) do
     t.datetime "updated_at"
   end
 
-  create_table "admin_users", force: true do |t|
+  create_table "admin_users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(version: 20141230070619) do
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
 
-  create_table "banks", force: true do |t|
+  create_table "banks", force: :cascade do |t|
     t.string  "name"
     t.boolean "is_joint"
     t.integer "startup_id"
@@ -74,7 +74,7 @@ ActiveRecord::Schema.define(version: 20141230070619) do
 
   add_index "banks", ["startup_id"], name: "index_banks_on_startup_id", using: :btree
 
-  create_table "categories", force: true do |t|
+  create_table "categories", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -83,23 +83,23 @@ ActiveRecord::Schema.define(version: 20141230070619) do
 
   add_index "categories", ["category_type"], name: "index_categories_on_category_type", using: :btree
 
-  create_table "categories_startups", id: false, force: true do |t|
+  create_table "categories_startups", id: false, force: :cascade do |t|
     t.integer "startup_id"
     t.integer "category_id"
   end
 
-  create_table "categories_users", id: false, force: true do |t|
+  create_table "categories_users", id: false, force: :cascade do |t|
     t.integer "category_id"
     t.integer "user_id"
   end
 
-  create_table "companies", force: true do |t|
+  create_table "companies", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "connections", force: true do |t|
+  create_table "connections", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "contact_id"
     t.string   "direction"
@@ -107,14 +107,14 @@ ActiveRecord::Schema.define(version: 20141230070619) do
     t.datetime "updated_at"
   end
 
-  create_table "db_configs", force: true do |t|
+  create_table "db_configs", force: :cascade do |t|
     t.string   "key"
     t.string   "value"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "events", force: true do |t|
+  create_table "events", force: :cascade do |t|
     t.string   "title"
     t.text     "description"
     t.datetime "start_at"
@@ -133,7 +133,7 @@ ActiveRecord::Schema.define(version: 20141230070619) do
   add_index "events", ["location_id"], name: "index_events_on_location_id", using: :btree
   add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
 
-  create_table "guardians", force: true do |t|
+  create_table "guardians", force: :cascade do |t|
     t.integer  "name_id"
     t.integer  "address_id"
     t.datetime "created_at"
@@ -143,7 +143,7 @@ ActiveRecord::Schema.define(version: 20141230070619) do
   add_index "guardians", ["address_id"], name: "index_guardians_on_address_id", using: :btree
   add_index "guardians", ["name_id"], name: "index_guardians_on_name_id", using: :btree
 
-  create_table "locations", force: true do |t|
+  create_table "locations", force: :cascade do |t|
     t.decimal  "latitude"
     t.decimal  "longitude"
     t.string   "title"
@@ -152,7 +152,7 @@ ActiveRecord::Schema.define(version: 20141230070619) do
     t.datetime "updated_at"
   end
 
-  create_table "mentor_meetings", force: true do |t|
+  create_table "mentor_meetings", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "mentor_id"
     t.string   "purpose"
@@ -169,7 +169,7 @@ ActiveRecord::Schema.define(version: 20141230070619) do
   add_index "mentor_meetings", ["mentor_id"], name: "index_mentor_meetings_on_mentor_id", using: :btree
   add_index "mentor_meetings", ["user_id"], name: "index_mentor_meetings_on_user_id", using: :btree
 
-  create_table "mentor_skills", force: true do |t|
+  create_table "mentor_skills", force: :cascade do |t|
     t.integer  "mentor_id"
     t.integer  "skill_id"
     t.string   "expertise"
@@ -180,7 +180,7 @@ ActiveRecord::Schema.define(version: 20141230070619) do
   add_index "mentor_skills", ["mentor_id"], name: "index_mentor_skills_on_mentor_id", using: :btree
   add_index "mentor_skills", ["skill_id"], name: "index_mentor_skills_on_skill_id", using: :btree
 
-  create_table "mentors", force: true do |t|
+  create_table "mentors", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "availability"
     t.string   "company_level"
@@ -192,7 +192,7 @@ ActiveRecord::Schema.define(version: 20141230070619) do
 
   add_index "mentors", ["company_id"], name: "index_mentors_on_company_id", using: :btree
 
-  create_table "names", force: true do |t|
+  create_table "names", force: :cascade do |t|
     t.string   "first_name"
     t.string   "last_name"
     t.string   "middle_name"
@@ -201,7 +201,7 @@ ActiveRecord::Schema.define(version: 20141230070619) do
     t.string   "salutation"
   end
 
-  create_table "news", force: true do |t|
+  create_table "news", force: :cascade do |t|
     t.string   "title"
     t.text     "body"
     t.integer  "user_id"
@@ -217,7 +217,7 @@ ActiveRecord::Schema.define(version: 20141230070619) do
 
   add_index "news", ["user_id"], name: "index_news_on_user_id", using: :btree
 
-  create_table "partnerships", force: true do |t|
+  create_table "partnerships", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "startup_id"
     t.integer  "salary"
@@ -235,14 +235,14 @@ ActiveRecord::Schema.define(version: 20141230070619) do
   add_index "partnerships", ["startup_id"], name: "index_partnerships_on_startup_id", using: :btree
   add_index "partnerships", ["user_id"], name: "index_partnerships_on_user_id", using: :btree
 
-  create_table "requests", force: true do |t|
+  create_table "requests", force: :cascade do |t|
     t.text     "body"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "social_ids", force: true do |t|
+  create_table "social_ids", force: :cascade do |t|
     t.string   "provider"
     t.integer  "user_id"
     t.string   "social_id"
@@ -253,9 +253,12 @@ ActiveRecord::Schema.define(version: 20141230070619) do
     t.datetime "updated_at"
   end
 
+  add_index "social_ids", ["primary"], name: "index_social_ids_on_primary", using: :btree
+  add_index "social_ids", ["provider"], name: "index_social_ids_on_provider", using: :btree
+  add_index "social_ids", ["social_id"], name: "index_social_ids_on_social_id", using: :btree
   add_index "social_ids", ["user_id"], name: "index_social_ids_on_user_id", using: :btree
 
-  create_table "startup_applications", force: true do |t|
+  create_table "startup_applications", force: :cascade do |t|
     t.string   "name"
     t.string   "email"
     t.string   "phone"
@@ -265,7 +268,7 @@ ActiveRecord::Schema.define(version: 20141230070619) do
     t.datetime "updated_at"
   end
 
-  create_table "startup_links", force: true do |t|
+  create_table "startup_links", force: :cascade do |t|
     t.integer  "startup_id"
     t.string   "name"
     t.string   "url"
@@ -276,7 +279,7 @@ ActiveRecord::Schema.define(version: 20141230070619) do
 
   add_index "startup_links", ["startup_id"], name: "index_startup_links_on_startup_id", using: :btree
 
-  create_table "startups", force: true do |t|
+  create_table "startups", force: :cascade do |t|
     t.string   "name"
     t.string   "logo"
     t.string   "pitch"
@@ -319,7 +322,7 @@ ActiveRecord::Schema.define(version: 20141230070619) do
     t.integer  "team_size"
     t.integer  "women_employees"
     t.string   "incubation_location"
-    t.boolean  "agreement_sent"
+    t.boolean  "agreement_sent",            default: false
     t.string   "pin"
     t.datetime "agreement_first_signed_at"
     t.datetime "agreement_last_signed_at"
@@ -329,7 +332,7 @@ ActiveRecord::Schema.define(version: 20141230070619) do
 
   add_index "startups", ["registered_address_id"], name: "index_startups_on_registered_address_id", using: :btree
 
-  create_table "statistics", force: true do |t|
+  create_table "statistics", force: :cascade do |t|
     t.string   "parameter"
     t.text     "statistic"
     t.datetime "created_at"
@@ -339,7 +342,7 @@ ActiveRecord::Schema.define(version: 20141230070619) do
 
   add_index "statistics", ["parameter"], name: "index_statistics_on_parameter", using: :btree
 
-  create_table "student_entrepreneur_policies", force: true do |t|
+  create_table "student_entrepreneur_policies", force: :cascade do |t|
     t.string   "certificate_pic"
     t.text     "address"
     t.integer  "user_id"
@@ -351,7 +354,7 @@ ActiveRecord::Schema.define(version: 20141230070619) do
 
   add_index "student_entrepreneur_policies", ["user_id"], name: "index_student_entrepreneur_policies_on_user_id", using: :btree
 
-  create_table "taggings", force: true do |t|
+  create_table "taggings", force: :cascade do |t|
     t.integer  "tag_id"
     t.integer  "taggable_id"
     t.string   "taggable_type"
@@ -363,14 +366,14 @@ ActiveRecord::Schema.define(version: 20141230070619) do
 
   add_index "taggings", ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true, using: :btree
 
-  create_table "tags", force: true do |t|
+  create_table "tags", force: :cascade do |t|
     t.string  "name"
     t.integer "taggings_count", default: 0
   end
 
   add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
 
-  create_table "users", force: true do |t|
+  create_table "users", force: :cascade do |t|
     t.string   "username"
     t.string   "email"
     t.string   "fullname"
@@ -447,7 +450,7 @@ ActiveRecord::Schema.define(version: 20141230070619) do
   add_index "users", ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
-  create_table "versions", force: true do |t|
+  create_table "versions", force: :cascade do |t|
     t.string   "item_type",      null: false
     t.integer  "item_id",        null: false
     t.string   "event",          null: false

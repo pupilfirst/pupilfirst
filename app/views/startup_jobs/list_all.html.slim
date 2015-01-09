@@ -1,3 +1,6 @@
 h3.page-header Jobs
-- @startup_jobs.each do |job|
-  = render 'job_card', job: job, show_startup_name: true
+- if @startup_jobs.empty?
+  p There are no listings here, at the moment. Please check back later! :-)
+- else
+  - @startup_jobs.each do |job|
+    = render 'job_card', job: job, show_startup_name: true

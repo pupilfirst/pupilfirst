@@ -1,16 +1,23 @@
 .well
-  h3.page-header 
+  h3.page-header.margin-top-0
     | #{@startup_job.title} at #{@startup_job.startup.name} 
   p
     -if @startup_job.salary_max.present? 
-      | Salary range : &#8377; #{number_with_delimiter @startup_job.salary_max} &mdash; &#8377; #{number_with_delimiter @startup_job.salary_min}
+      strong
+        ' Salary range:
+      | &#8377; #{number_with_delimiter @startup_job.salary_max} &mdash; &#8377; #{number_with_delimiter @startup_job.salary_min}
     -else 
-      | Salary:~ &#8377; #{number_with_delimiter @startup_job.salary_min}
+      strong
+        ' Salary:
+      | ~ &#8377; #{number_with_delimiter @startup_job.salary_min}
     br
 
     -if @startup_job.equity_max.present?
-      | Equity range : #{@startup_job.equity_min} &mdash; #{@startup_job.equity_max}
+      strong
+        ' Equity range:
+      ' #{@startup_job.equity_min}% &mdash; #{@startup_job.equity_max}%
+      | (#{@startup_job.equity_vest} year vest and  #{@startup_job.equity_cliff} year cliff)
       br
-      | #{@startup_job.equity_vest} year vest and  #{@startup_job.equity_cliff} year cliff
-      br
-    | Job details: #{@startup_job.description}
+    strong
+      ' Job details:
+    | #{@startup_job.description}

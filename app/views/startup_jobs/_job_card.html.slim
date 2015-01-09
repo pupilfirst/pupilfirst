@@ -11,15 +11,25 @@
         h5 = link_to job.startup.name, startup_path(job.startup)
       p
         - if job.salary_max.present?
-          | Salary: &#8377;#{number_with_delimiter job.salary_min} &mdash; &#8377;#{number_with_delimiter job.salary_max}
+          strong
+            ' Salary range:
+          | &#8377;#{number_with_delimiter job.salary_min} &mdash; &#8377;#{number_with_delimiter job.salary_max}
         - else
-          | Salary: ~ &#8377;#{number_with_delimiter job.salary_min}
+          strong
+            ' Salary:
+          | ~ &#8377;#{number_with_delimiter job.salary_min}
         br
         - if job.equity_max.present?
-          | equity range : #{job.equity_min}% - #{job.equity_max}%  for #{job.equity_vest} year vest and  #{job.equity_cliff} year cliff
+          strong
+            ' Equity:
+          a href="#" data-toggle="tooltip" data-placement='right' title="#{job.equity_vest} year vest and #{job.equity_cliff} year cliff"
+            | #{job.equity_min}% &mdash; #{job.equity_max}%
         - if startup_founder ||= false
           - if job.expired?
             = button_to 'Repost', startup_startup_job_repost_url(job.startup, job), method: :patch, class: 'btn btn-success pull-left'
           = button_to 'Remove', startup_startup_job_destroy_url(job.startup, job),
                       method: :delete, class: 'btn btn-danger pull-right',
                       data: { confirm: 'Are you sure you want to delete this job post?' }
+
+javascript:
+  $('[data-toggle="tooltip"]').tooltip();

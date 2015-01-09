@@ -1,24 +1,40 @@
 = javascript_include_tag '//www.google.com/jsapi', 'chartkick'
+div
+  span style="float:left"
+		div class="sidebar_section panel" id="filters_sidebar_section"
+			h3 Filter Date
+			div class="panel_contents"
+				= form_tag admin_root_path, :method => :get do
+				    = label_tag :date_from
+				    = date_field_tag :date_from, value = Date.today - 30, options = {:max=> Date.today}
+				    br
+				    = label_tag :date_to
+				    = date_field_tag :date_to, value = Date.today, options = {:max=> Date.today}
+				    br
+				    = submit_tag "filter"
 
-h1 Statistics
+  span style="float:left; padding-left: 20px;"
+		h1 Statistics
 
-h2
-  ' Total incubation requests:
-  strong
-    ' #{5281 + Startup.incubation_requested.count}
-  | (5281 + pending + rejected + approved)
+
+		h2
+		  ' Total incubation requests:
+		  strong
+		    ' #{5281 + Startup.incubation_requested.count}
+		  | (5281 + pending + rejected + approved)
+div style="clear: both;"
 
 div style="float: left; width: 50%;"
-  = column_chart admin_dashboard_users_count_total_path, library: { hAxis: { title: 'Community' } }
+  = column_chart admin_dashboard_users_count_total_path(from: params[:date_from], to: params[:date_to]), library: { hAxis: { title: 'Community' } }
 div style="float: left; width: 50%;"
-  = column_chart admin_dashboard_startups_count_total_path, library: { hAxis: { title: 'Tracked Startups' } }
+  = column_chart admin_dashboard_startups_count_total_path(from: params[:date_from], to: params[:date_to]), library: { hAxis: { title: 'Tracked Startups' } }
 
 div style="clear: both;"
 
 div style="float: left; width: 33%;"
-  = column_chart admin_dashboard_users_count_student_entrepreneurs_path, library: { hAxis: { title: 'Student Entrepreneurs' } }
+  = column_chart admin_dashboard_users_count_student_entrepreneurs_path(from: params[:date_from], to: params[:date_to]), library: { hAxis: { title: 'Student Entrepreneurs' } }
 div style="float: left; width: 33%;"
-  = column_chart admin_dashboard_startups_count_unready_path, library: { hAxis: { title: 'Unready Startups' } }
+  = column_chart admin_dashboard_startups_count_unready_path(from: params[:date_from], to: params[:date_to]), library: { hAxis: { title: 'Unready Startups' } }
 div style="float: left; width: 33%;"
   = pie_chart admin_dashboard_startups_count_current_split_path
 

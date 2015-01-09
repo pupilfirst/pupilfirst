@@ -16,7 +16,11 @@
       
         -if job.equity_max.present?
           | equity range : #{job.equity_min}% - #{job.equity_max}%  for #{job.equity_vest} year vest and  #{job.equity_cliff} year cliff
-     
+      
+        -if remove_job ||= false
+          .button-right
+            = button_to('remove',startup_startup_job_destroy_url(job.startup,job), method: :delete,class: 'btn btn-danger', data: {confirm: "Sure?"})
+      
 -elsif repost ||= false
   .job-card.col-lg-3.col-md-4.col-sm-6.col-xs-12
     .well.well-sm.fix-height
@@ -35,5 +39,9 @@
       
         -if job.equity_max.present?
           | equity range : #{job.equity_min}% - #{job.equity_max}%  for #{job.equity_vest} year vest and  #{job.equity_cliff} year cliff
-      = simple_form_for job, url: startup_startup_job_repost_url(job.startup, job), html: { class: 'form-horizontal',method: :patch }, wrapper: :horizontal_form do |expire|
-        = expire.button :submit, 'repost', class: 'btn btn-danger'
+      .allign-bottom  
+        .button-left
+          = button_to('repost',startup_startup_job_repost_url(job.startup, job), method: :patch, class: 'btn btn-success')
+        .button-right
+          = button_to('remove',startup_startup_job_destroy_url(job.startup,job), method: :delete,class: 'btn btn-danger',data: {confirm: "Sure?"})
+    

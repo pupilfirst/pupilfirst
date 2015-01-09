@@ -1,27 +1,27 @@
 = javascript_include_tag '//www.google.com/jsapi', 'chartkick'
 div
   span style="float:left"
-		div class="sidebar_section panel" id="filters_sidebar_section"
-			h3 Filter Date
-			div class="panel_contents"
-				= form_tag admin_root_path, :method => :get do
-				    = label_tag :date_from
-				    = date_field_tag :date_from, value = Date.today - 30, options = {:max=> Date.today}
-				    br
-				    = label_tag :date_to
-				    = date_field_tag :date_to, value = Date.today, options = {:max=> Date.today}
-				    br
-				    = submit_tag "filter"
+    div class="sidebar_section panel" id="filters_sidebar_section"
+      h3 Filter Date
+      div class="panel_contents"
+        = form_tag admin_root_path, :method => :get do
+          = label_tag :date_from
+          = date_field_tag :date_from, value = Date.today - 30, options = {:max=> Date.today}
+          br
+          = label_tag :date_to
+          = date_field_tag :date_to, value = Date.today, options = {:max=> Date.today}
+          br
+          = submit_tag "filter"
 
   span style="float:left; padding-left: 20px;"
-		h1 Statistics
+    h1 Statistics
 
 
-		h2
-		  ' Total incubation requests:
-		  strong
-		    ' #{5281 + Startup.incubation_requested.count}
-		  | (5281 + pending + rejected + approved)
+    h2
+      ' Total incubation requests:
+      strong
+      ' #{5281 + Startup.incubation_requested.count}
+      | (5281 + pending + rejected + approved)
 div style="clear: both;"
 
 div style="float: left; width: 50%;"

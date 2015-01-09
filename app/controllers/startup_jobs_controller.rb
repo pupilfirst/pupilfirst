@@ -4,7 +4,12 @@ class StartupJobsController < ApplicationController
   
   def new
     @startup = Startup.find(params[:startup_id])
-    @startup_job = @startup.startup_jobs.new 
+    @startup_job = @startup.startup_jobs.new
+    @agreement_live = @startup.is_agreement_live?
+    unless @agreement_live
+      flash[:alert] = 'Your agreement with Startup Village has expired. Please renew your agreement to use this feature.'
+      redirect_to startup_startup_jobs_path(@startup,@startup_job)
+    end
   end
   
   def create
@@ -16,7 +21,6 @@ class StartupJobsController < ApplicationController
     else
       render 'new'
     end
-
   end
 
   def show
@@ -28,6 +32,7 @@ class StartupJobsController < ApplicationController
     @startup = Startup.find(params[:startup_id])
     @startup_jobs = @startup.startup_jobs.all
     @startup_founder = disallow_unauthenticated_repost
+    
   end
 
   def list_all
@@ -38,11 +43,15 @@ class StartupJobsController < ApplicationController
     @startup = Startup.find(params[:startup_id])
     @startup_job = @startup.startup_jobs.find(params[:startup_job_id])
     @startup_job.expires_on = (Time.now.days_since (60))
-    if @startup_job.save
-      redirect_to startup_startup_jobs_path(@startup,@startup_job)
-    else
-      render 'new'
-    end
+    @startup_job.save
+    redirect_to startup_startup_jobs_path(@startup,@startup_job)
+  end
+
+  def destroy
+    @startup = Startup.find(params[:startup_id])
+    @startup_job = @startup.startup_jobs.find(params[:startup_job_id])
+    @startup_job.destroy
+    redirect_to startup_startup_jobs_path(@startup, @startup_job)
   end
 
   private
@@ -58,13 +67,7 @@ class StartupJobsController < ApplicationController
   end 
 
   def disallow_unauthenticated_repost
-    if current_user.present?
-      if ((current_user.startup.try(:id) == params[:startup_id].to_i) && (current_user.is_founder?))
-        true
-      else
-        false
-      end
-    end
+    (current_user.try(:startup).try(:id) == params[:startup_id].to_i) && (current_user.try(:is_founder?))
   end
 
 end

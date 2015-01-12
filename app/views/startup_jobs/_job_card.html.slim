@@ -19,10 +19,14 @@
             ' Salary:
           | ~ &#8377;#{number_with_delimiter job.salary_min}
         br
-        - if job.equity_max.present?
+        - if job.equity_vest.present?
           strong
             ' Equity:
           a href="#" data-toggle="tooltip" data-placement='right' title="#{job.equity_vest} year vest and #{job.equity_cliff} year cliff"
+            | #{job.equity_min}% &mdash; #{job.equity_max}%
+        - elsif job.equity_max.present?
+          strong
+            ' Equity:
             | #{job.equity_min}% &mdash; #{job.equity_max}%
         - if startup_founder ||= false
           - if job.expired?

@@ -25,5 +25,7 @@
                 = f.submit "Reject", class: "btn btn-danger"  
               - elsif meet.status == MentorMeeting::STATUS_ACCEPTED && meet.meeting_at < 15.minutes.from_now
                 = link_to 'Start Meeting', mentor_meetings_live_url(meet.id),  class: 'btn btn-primary'
+              - elsif meet.status == MentorMeeting::STATUS_AWAITFB
+                = link_to 'Give Feedback', mentor_meetings_feedback_url(meet.id),  class: 'btn btn-primary'
 
 

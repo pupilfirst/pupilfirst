@@ -48,7 +48,7 @@ class MentorMeetingsController < ApplicationController
 
   def feedback
     @mentor_meeting = MentorMeeting.find(params[:id])
-    @mentor_meeting.status = MentorMeeting::STATUS_COMPLETED
+    @mentor_meeting.status = MentorMeeting::STATUS_AWAITFB
     @mentor_meeting.save
     @role = current_user == @mentor_meeting.user ? "user" : "mentor"
     flash[:notice] = "Your meeting with #{current_user == @mentor_meeting.user ? @mentor_meeting.mentor.user.fullname : @mentor_meeting.user.fullname} has ended"
@@ -56,12 +56,28 @@ class MentorMeetingsController < ApplicationController
 
   def feedbacksave
     @mentor_meeting = MentorMeeting.find(params[:id])
-    if @mentor_meeting.update(feedback_params)
-      flash[:notice] = "Thank you for your feedback!"
-      redirect_to mentoring_path
+    if @mentor_meeting.status == MentorMeeting::STATUS_AWAITFB
+      if params[:commit] == "Later"
+        flash[:notice] = "Check your inbox for feedback remainders"
+        # if current_user == @mentor_meeting.user
+        #   UserMailer.meeting_feedback_user(@mentor_meeting).deliver
+        # elsif current_user == @mentor_meeting.mentor.user
+        #   UserMailer.meeting_feedback_mentor(@mentor_meeting).deliver
+        # end
+        redirect_to mentoring_path
+      else
+        if @mentor_meeting.update(feedback_params)
+          @mentor_meeting.status == MentorMeeting::STATUS_COMPLETED
+          flash[:notice] = "Thank you for your feedback!"
+          redirect_to mentoring_path
+        else
+          flash[:error] = "Could not save your feedback. Try again"
+          render 'feedback'
+        end
+      end
     else
-      flash[:error] = "Could not save your feedback. Try again"
-      render 'feedback'
+      flash[:notice] = "This meeting is not yet complete"
+      redirect_to mentoring_path
     end
   end
 

@@ -6,7 +6,8 @@
       = f.input :user_comments, label: "Other comments"
       .form-group
       .col-sm-offset-3.col-sm-10
-        = f.button :submit, 'Submit', class: 'btn btn-primary'
+        ' #{f.submit "Submit", class: "btn btn-success"}
+        = f.submit "Later", class: "btn btn-success"
 - else 
   h1 Hi ! Your take on the startup? 
   p
@@ -15,5 +16,6 @@
       = f.input :mentor_comments, label: "Other comments"
       .form-group
       .col-sm-offset-3.col-sm-10
-        = f.button :submit, 'Submit', class: 'btn btn-primary'
+        ' #{f.submit "Submit", class: "btn btn-success"}
+        = f.submit "Later", class: "btn btn-success"
 

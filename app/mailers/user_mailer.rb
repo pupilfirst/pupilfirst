@@ -1,6 +1,16 @@
 class UserMailer < ActionMailer::Base
   default from: "SV App <no-reply@svlabs.in>", cc: "outgoing@svlabs.in"
 
+  def meeting_feedback_user(mentor_meeting)
+    @mentor_meeting = mentor_meeting
+    mail to:@mentor_meeting.user.email, subject: 'Remainder: Feedback on mentoring session' 
+  end
+
+  def meeting_feedback_mentor(mentor_meeting)
+    @mentor_meeting = mentor_meeting
+    mail to:@mentor_meeting.mentor.user.email, subject: 'Remainder: Feedback on mentoring session' 
+  end
+
   def meeting_request_rejected(mentor_meeting)
     @mentor_meeting = mentor_meeting
     mail to:@mentor_meeting.user.email, subject: 'Meeting request rejected by ' + @mentor_meeting.mentor.user.fullname

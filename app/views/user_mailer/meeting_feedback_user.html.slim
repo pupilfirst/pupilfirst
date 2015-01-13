@@ -1,0 +1,3 @@
+p Hi #{@mentor_meeting.user.fullname} !
+
+p We are still waiting to hear your feedback on the meeting with #{@mentor_meeting.mentor.user.fullname} (on #{@mentor_meeting.meeting_at}). Kindly visit your #{link_to 'meetings page', mentor_meetings_feedback_url(@mentor_meeting)} to record your feedback! 

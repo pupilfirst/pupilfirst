@@ -40,8 +40,10 @@ Svapp::Application.routes.draw do
     resources :mentor_meetings, only: %w(new create update) 
   end
 
-  scope 'mentor_meetings' do
-    get ':id', to: 'mentor_meetings#live', as: 'mentor_meetings_live'
+  scope 'mentor_meetings', as: 'mentor_meetings', controller: 'mentor_meetings' do
+    get ':id', action: 'live', as: 'live'
+    get ':id/feedback', action: 'feedback', as: 'feedback'
+    patch ':id/feedbacksave', action: 'feedbacksave', as: 'feedbacksave'
   end
 
   scope 'mentoring', as: 'mentoring', controller: 'mentoring' do
@@ -69,6 +71,8 @@ Svapp::Application.routes.draw do
   get 'jobs', to: redirect('https://angel.co/svlabs/jobs')
   get 'privacy_policy', to: 'welcome#privacy_policy'
   get 'faq', to: 'welcome#faq'
+
+  # get 'mentor_meetings/:id/feedback', to: 'mentor_meetings#feedback'
 
   root 'welcome#index'
 end

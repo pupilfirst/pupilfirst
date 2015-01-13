@@ -20,9 +20,10 @@ class MentorMeeting < ActiveRecord::Base
   STATUS_REQUESTED = 'requested'
   STATUS_REJECTED = 'rejected'
   STATUS_ACCEPTED = 'accepted'
+  STATUS_COMPLETED = 'completed'
 
   def self.valid_statuses
-    [STATUS_REQUESTED, STATUS_REJECTED, STATUS_ACCEPTED]
+    [STATUS_REQUESTED, STATUS_REJECTED, STATUS_ACCEPTED, STATUS_COMPLETED]
   end
 
   validates_inclusion_of :status, in: valid_statuses

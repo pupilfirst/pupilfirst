@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150107115813) do
+ActiveRecord::Schema.define(version: 20150113081641) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -164,6 +164,8 @@ ActiveRecord::Schema.define(version: 20150107115813) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "suggested_meeting_at"
+    t.text     "user_comments"
+    t.text     "mentor_comments"
   end
 
   add_index "mentor_meetings", ["mentor_id"], name: "index_mentor_meetings_on_mentor_id", using: :btree

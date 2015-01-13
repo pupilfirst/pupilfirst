@@ -22,7 +22,6 @@ class MentoringController < ApplicationController
         @state.mentor_pending_verification = current_user.phone_verified?
         @state.mentor_registration_going_on = !current_user.phone_verified?
         @state.incoming_meetings = current_user.mentor.mentor_meetings  #Mentor_Meeting.all 
-
       
 
       end

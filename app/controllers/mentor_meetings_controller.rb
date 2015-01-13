@@ -35,7 +35,7 @@ class MentorMeetingsController < ApplicationController
   def update
     @mentor_meeting = current_user.mentor.mentor_meetings.find(params[:id])
     @mentor_meeting.status = params[:commit] == "Accept" ? MentorMeeting::STATUS_ACCEPTED : MentorMeeting::STATUS_REJECTED
-    @mentor_meeting.meeting_at = mentor_meeting.suggested_meeting_at if params[:commit] == "Accept"   
+    @mentor_meeting.meeting_at = @mentor_meeting.suggested_meeting_at if params[:commit] == "Accept"   
     if @mentor_meeting.save
       flash[:notice] = "Meeting status has been updated"
       UserMailer.meeting_request_accepted(@mentor_meeting).deliver if @mentor_meeting.status == MentorMeeting::STATUS_ACCEPTED
@@ -46,9 +46,33 @@ class MentorMeetingsController < ApplicationController
     redirect_to mentoring_url 
   end
 
+  def feedback
+    @mentor_meeting = MentorMeeting.find(params[:id])
+    @mentor_meeting.status = MentorMeeting::STATUS_COMPLETED
+    @mentor_meeting.save
+    @role = current_user == @mentor_meeting.user ? "user" : "mentor"
+    flash[:notice] = "Your meeting with #{current_user == @mentor_meeting.user ? @mentor_meeting.mentor.user.fullname : @mentor_meeting.user.fullname} has ended"
+  end
+
+  def feedbacksave
+    @mentor_meeting = MentorMeeting.find(params[:id])
+    if @mentor_meeting.update(feedback_params)
+      flash[:notice] = "Thank you for your feedback!"
+      redirect_to mentoring_path
+    else
+      flash[:error] = "Could not save your feedback. Try again"
+      render 'feedback'
+    end
+  end
+
 
   private
   	def meeting_params
   		params.require(:mentor_meeting).permit(:purpose,:suggested_meeting_at,:suggested_meeting_time,:duration)
   	end
+
+    def feedback_params
+      params.require(:mentor_meeting).permit(:user_rating,:mentor_rating,:user_comments,:mentor_comments)
+    end
+
 end

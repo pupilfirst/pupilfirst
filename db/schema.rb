@@ -270,6 +270,23 @@ ActiveRecord::Schema.define(version: 20150113081641) do
     t.datetime "updated_at"
   end
 
+  create_table "startup_jobs", force: :cascade do |t|
+    t.integer  "startup_id"
+    t.string   "title"
+    t.text     "description"
+    t.integer  "salary_max"
+    t.integer  "salary_min"
+    t.integer  "equity_max"
+    t.integer  "equity_min"
+    t.integer  "equity_vest"
+    t.integer  "equity_cliff"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "expires_on"
+  end
+
+  add_index "startup_jobs", ["startup_id"], name: "index_startup_jobs_on_startup_id", using: :btree
+
   create_table "startup_links", force: :cascade do |t|
     t.integer  "startup_id"
     t.string   "name"

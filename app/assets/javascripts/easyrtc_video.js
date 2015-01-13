@@ -25,13 +25,18 @@ function my_init() {
 
   easyrtc.setOnCall( function(easyrtcid, slot) {
     console.log('setOnCall called');
-    strong = document.getElementById('awaitingnotification')
-    button = document.getElementById('startbutton')
-    button.style.display = 'none';
-    strong.style.display = 'none' ;
+
+    // strong = document.getElementById('awaitingnotification')
+    // button = document.getElementById('startbutton')
+    // button.style.display = 'none';
+    // strong.style.display = 'none' ;
+    strong.remove();
+    button.remove();
+    
     // creating hang up button
       hangupdiv =  document.getElementById('hangup');
       var hangupbutton = document.createElement('button');
+      hangupbutton.setAttribute("id", "hangupbutton");
       hangupbutton.onclick = function() {
         occupants = easyrtc.getRoomOccupantsAsArray("default"); //because default room name is 'default'
         destination = occupants.filter(notmyself(easyrtc.myEasyrtcid))[0];
@@ -56,9 +61,10 @@ function my_init() {
   });
 
 
-  //  easyrtc.setOnHangup( function(easyrtcid, slot) {
-       
-  // });
+  easyrtc.setOnHangup( function(easyrtcid, slot) {
+     button = document.getElementById('hangupbutton')
+     button.remove();        
+  });
 }
 
 // function to return peer id when used with filter

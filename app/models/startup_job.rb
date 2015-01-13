@@ -7,8 +7,8 @@ class StartupJob < ActiveRecord::Base
   validates_length_of :description, maximum: 500, allow_nil: true 
   validates_presence_of :equity_min, if: :equity_max 
   validates_presence_of :equity_max, if: :equity_min
-  validates_presence_of :equity_vest, if: :equity_min && :equity_cliff
-  validates_presence_of :equity_cliff, if: :equity_min && :equity_vest
+  validates_presence_of :equity_vest, if: :equity_min || :equity_cliff
+  validates_presence_of :equity_cliff, if: :equity_min || :equity_vest
   validate :equity_vest_less_than_cliff
   validate :equity_min_less_than_max
   validate :salary_min_less_than_max

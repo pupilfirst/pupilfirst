@@ -30,7 +30,7 @@
             | #{job.equity_min}% &mdash; #{job.equity_max}%
         - if startup_founder ||= false
           - if job.expired?
-            = button_to 'Repost', startup_startup_job_repost_url(job.startup, job), method: :patch, class: 'btn btn-success pull-left'
+            = button_to 'Repost', startup_startup_job_repost_url(job.startup, job), method: :patch, class: 'btn btn-success pull-left', data: { confirm: 'Are you sure you want to rpost this job..?' }
           = button_to 'Remove', startup_startup_job_destroy_url(job.startup, job),
                       method: :delete, class: 'btn btn-danger pull-right',
                       data: { confirm: 'Are you sure you want to delete this job post?' }

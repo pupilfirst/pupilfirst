@@ -3,17 +3,44 @@ class StartupJob < ActiveRecord::Base
 
   belongs_to :startup
 
-  validates :title, :salary_min, presence: true, if: :startup_id
-  validates_numericality_of :salary_min, less_than: :salary_max, if: :salary_max
+  validates_presence_of :title, :salary_min, if: :startup_id
+  validates_length_of :description, maximum: 500, allow_nil: true 
   validates_presence_of :equity_min, if: :equity_max 
   validates_presence_of :equity_max, if: :equity_min
-  validates_numericality_of :equity_max, greater_than: :equity_min, if: :equity_min
-  validates_presence_of :equity_cliff, if: :equity_vest && :equity_min
-  validates_numericality_of :equity_cliff, greater_than: :equity_vest, if: :equity_vest
-  validates_presence_of :equity_vest, if: :equity_cliff, less_than: :equity_cliff
-  validates :description, length: { maximum: 500 }
+  validates_presence_of :equity_vest, if: :equity_min && :equity_cliff
+  validates_presence_of :equity_cliff, if: :equity_min && :equity_vest
+  validate :equity_vest_less_than_cliff
+  validate :equity_min_less_than_max
+  validate :salary_min_less_than_max
+  
+  def equity_min_less_than_max
+    if self.equity_min && self.equity_max
+      if self.equity_min >= self.equity_max
+        errors.add :equity_min, 'must be less than maximum equity.'
+        errors.add :equity_max, 'must be greater than minimum equity.'
+      end
+    end
+  end
 
-  # TODO: Minimum values should not be greater than maximum values.
+  def equity_vest_less_than_cliff
+    if self.equity_vest && self.equity_cliff
+      if self.equity_vest >= self.equity_cliff
+        errors.add :equity_vest, 'must be less than equity cliff'
+        errors.add :equity_cliff, 'must be greater than equity vest'
+      end
+    end  
+  end
+
+  def salary_min_less_than_max
+    if self.salary_max && self.salary_min
+      if self.salary_min >= self.salary_max
+        errors.add :salary_min, 'must be less than maximum salary'
+        errors.add :salary_max, 'must be greater than minimum salary'
+      end
+    end
+  end
+
+
 
   def reset_expiry!
     self.expires_on = EXPIRY_DURATION.from_now

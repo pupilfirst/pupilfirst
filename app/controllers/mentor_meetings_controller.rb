@@ -48,7 +48,7 @@ class MentorMeetingsController < ApplicationController
 
   def feedback
     @mentor_meeting = MentorMeeting.find(params[:id])
-    @mentor_meeting.status = MentorMeeting::STATUS_AWAITFB
+    @mentor_meeting.status = MentorMeeting::STATUS_AWAITING_FEEDBACK
     @mentor_meeting.save
     @role = current_user == @mentor_meeting.user ? "user" : "mentor"
     flash[:notice] = "Your meeting with #{current_user == @mentor_meeting.user ? @mentor_meeting.mentor.user.fullname : @mentor_meeting.user.fullname} has ended"
@@ -56,7 +56,7 @@ class MentorMeetingsController < ApplicationController
 
   def feedbacksave
     @mentor_meeting = MentorMeeting.find(params[:id])
-    if @mentor_meeting.status == MentorMeeting::STATUS_AWAITFB
+    if @mentor_meeting.status == MentorMeeting::STATUS_AWAITING_FEEDBACK
       if params[:commit] == "Later"
         flash[:notice] = "Check your inbox for feedback remainders"
         # if current_user == @mentor_meeting.user

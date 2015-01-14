@@ -46,6 +46,10 @@ module MentoringHelper
       ])
   end
 
+  def meeting_status_html(status)
+    status.gsub('_', ' ').capitalize
+  end
+
   def badges_for_days(days)
     days.map do |day|
       "<span class='badge'>#{day[0..2].upcase}</span>"

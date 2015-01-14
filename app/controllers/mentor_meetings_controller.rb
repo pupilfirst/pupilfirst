@@ -1,4 +1,5 @@
 class MentorMeetingsController < ApplicationController
+  before_filter :authenticate_user!
   
   def live
     @mentor_meeting = MentorMeeting.find(params[:id])

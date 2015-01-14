@@ -64,7 +64,7 @@ class StartupJobsController < ApplicationController
 
   def destroy
     @startup = Startup.find params[:startup_id]
-    @startup_job = @startup.startup_jobs.find params[:startup_job_id]
+    @startup_job = @startup.startup_jobs.find params[:id]
     @startup_job.destroy!
 
     redirect_to startup_startup_jobs_path(@startup, @startup_job)

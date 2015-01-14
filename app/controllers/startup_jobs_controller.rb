@@ -38,6 +38,21 @@ class StartupJobsController < ApplicationController
     end
   end
 
+  def edit
+    @startup = Startup.find params[:startup_id]
+    @startup_job = @startup.startup_jobs.find params[:id]
+  end
+
+  def update
+    @startup = Startup.find params[:startup_id]
+    @startup_job = @startup.startup_jobs.find params[:id]
+    if @startup_job.update(startup_job_params)
+      redirect_to startup_startup_jobs_path @startup
+    else
+      render 'edit'
+    end
+  end
+
   def repost
     @startup = Startup.find params[:startup_id]
     @startup_job = @startup.startup_jobs.find params[:startup_job_id]

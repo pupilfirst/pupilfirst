@@ -1,4 +1,7 @@
 function my_init() {
+
+  call_started = false;
+
   easyrtc.setSocketUrl(":4000");
   easyrtc.setRoomOccupantListener(loggedInListener);
   console.log("Name read:" + $("#self").data("name"));
@@ -25,7 +28,7 @@ function my_init() {
 
   easyrtc.setOnCall( function(easyrtcid, slot) {
     console.log('setOnCall called');
-
+    call_started = true;
     // strong = document.getElementById('awaitingnotification')
     // button = document.getElementById('startbutton')
     // button.style.display = 'none';
@@ -34,7 +37,7 @@ function my_init() {
     button.remove();
     
     // creating hang up button
-      hangupdiv =  document.getElementById('hangup');
+      hangupdiv =  document.getElementById('belowvideo');
       var hangupbutton = document.createElement('button');
       hangupbutton.setAttribute("id", "hangupbutton");
       hangupbutton.onclick = function() {
@@ -97,6 +100,29 @@ function loggedInListener(roomName, otherPeers) {
     notification = document.createTextNode("Awaiting guest to join...");
     strong.appendChild(notification);
     otherClientDiv.appendChild(strong);
+    if (!call_started){
+      remainderbutton = document.createElement('button');
+      remainderbutton.setAttribute("id", "remainderbutton");
+      remainderdiv = document.getElementById('belowvideo');
+      label = document.createTextNode("Send Remainder");
+      remainderbutton.appendChild(label);
+      remainderdiv.appendChild(remainderbutton);
+      remainderbutton.onclick = function(){
+        if (window.confirm("Are you sure you want to send an SMS remainder to the guest ?")){
+          $.ajax({
+            url: "/mentor_meetings/"+$("#mentor-meeting-container").data("id")+"/remainder"
+          })
+          .done(function(){
+            alert('SMS sent')
+            remainderbutton.remove();
+          })
+          .fail(function(){
+            alert('Could not sent SMS!')
+          });
+          
+        }
+      }
+    }
 
   }
   else {

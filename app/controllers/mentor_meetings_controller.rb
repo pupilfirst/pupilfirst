@@ -82,6 +82,13 @@ class MentorMeetingsController < ApplicationController
     end
   end
 
+  def remainder
+    @mentor_meeting = MentorMeeting.find(params[:id])
+    phone_number = current_user == @mentor_meeting.user ? current_user.phone : @mentor_meeting.mentor.user.phone
+    # RestClient.post(APP_CONFIG[:sms_provider_url], text: "Your guest is ready and waiting for todays mentoring session", msisdn: phone_number)
+    head :ok
+  end
+
 
   private
   	def meeting_params

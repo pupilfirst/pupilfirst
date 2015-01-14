@@ -46,6 +46,7 @@ Svapp::Application.routes.draw do
     get ':id', action: 'live', as: 'live'
     get ':id/feedback', action: 'feedback', as: 'feedback'
     patch ':id/feedbacksave', action: 'feedbacksave', as: 'feedbacksave'
+    get ':id/remainder', action: 'remainder', as: 'remainder'
   end
 
   scope 'mentoring', as: 'mentoring', controller: 'mentoring' do

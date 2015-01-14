@@ -17,8 +17,8 @@ namespace :sms do
       "On Campus: #{startups_at_visakhapatnam.physically_incubated.count}\n" +
       "Incubated startups (cumulative): #{startups_at_visakhapatnam.agreement_signed.count}"
 
-    msisdns_total =  DbConfig.where(key: 'sms_statistics_all' || 'sms_statistics_total').pluck(:value).first.split(",")
-    msisdns_visakhapatnam = DbConfig.where(key: 'sms_statistics_all' || 'sms_statistics_visakhapatnam').pluck(:value).first.split(",")
+    msisdns_total =  DbConfig.where(key: ['sms_statistics_all', 'sms_statistics_total']).pluck(:value).join(",").split(",")
+    msisdns_visakhapatnam = DbConfig.where(key: ['sms_statistics_all', 'sms_statistics_visakhapatnam']).pluck(:value).join(",").split(",")
 
     msisdns_total.each do |msisdn|
       RestClient.post(APP_CONFIG[:sms_provider_url], text: statistics_total, msisdn: msisdn)

@@ -7,4 +7,8 @@ class EventsController < ApplicationController
     @event = Event.new
   end
 
+  def create
+    binding.pry
+  end
+
 end

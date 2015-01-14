@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150107115813) do
+ActiveRecord::Schema.define(version: 20150113134354) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -115,7 +115,7 @@ ActiveRecord::Schema.define(version: 20150107115813) do
   end
 
   create_table "events", force: :cascade do |t|
-    t.string   "title",             limit: 255
+    t.string   "title",                limit: 255
     t.text     "description"
     t.datetime "start_at"
     t.datetime "end_at"
@@ -124,9 +124,12 @@ ActiveRecord::Schema.define(version: 20150107115813) do
     t.integer  "category_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "picture",           limit: 255
+    t.string   "picture",              limit: 255
     t.integer  "user_id"
     t.boolean  "notification_sent"
+    t.boolean  "approved"
+    t.string   "posters_email"
+    t.integer  "posters_phone_number"
   end
 
   add_index "events", ["category_id"], name: "index_events_on_category_id", using: :btree

@@ -1,3 +1,22 @@
 h1 Add a new Event
-= form_for(@event) do |f|
-  = f.name 
+= simple_form_for @event do |f|
+	  = f.input :title
+	  = f.input :description
+	  = f.label :starts_at
+	  = f.datetime_select :start_at
+	  = f.label :ends_at
+	  = f.datetime_select :end_at
+	  br
+	  = f.label :location
+	  = f.select(:location_id, Location.all, prompt: 'Select')
+	  br
+	  = f.label :category
+	  = f.select(:category_id, Category.all, prompt: 'Select')
+	  br
+	  = f.label :email
+	  = f.text_field :posters_email
+	  br
+	  = f.label :phone_number
+	  = f.text_field :posters_phone_number
+	  br
+	  = f.button :submit

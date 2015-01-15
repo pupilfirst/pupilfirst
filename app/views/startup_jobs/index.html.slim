@@ -1,4 +1,4 @@
-h2.page-header Jobs @ #{@startup.name}
+h2.page-header Jobs at #{link_to @startup.name, startup_path(@startup)}
 
 = render 'post_new_job', startup: @startup, startup_founder: @startup_founder
 

@@ -56,4 +56,10 @@ class StartupJob < ActiveRecord::Base
   def expired?
     Time.now > self.expires_on
   end
+
+  def can_be_modified_by?(user)
+    return false unless user
+
+    startup.is_founder?(user)
+  end
 end

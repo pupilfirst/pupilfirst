@@ -25,17 +25,11 @@ class StartupJobsController < ApplicationController
 
   def index
     @startup = Startup.find params[:startup_id]
-    @startup_jobs = @startup.startup_jobs.all
-    @startup_founder = disallow_unauthenticated_repost
+    @startup_jobs = @startup.startup_jobs.order('updated_at DESC')
   end
 
   def list_all
-    @startup_jobs = StartupJob.all
-
-    if current_user.try(:is_founder)
-      @startup = current_user.startup
-      @startup_founder = true
-    end
+    @startup_jobs = StartupJob.order('updated_at DESC')
   end
 
   def edit

@@ -1,5 +1,5 @@
 module StartupJobsHelper
-  def display_card?(job, startup_founder)
-    job.expires_on > Time.now || startup_founder
+  def display_card?(job)
+    !job.expired? || job.can_be_modified_by?(current_user)
   end
 end

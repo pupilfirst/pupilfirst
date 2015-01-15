@@ -1,4 +1,4 @@
-- if startup_founder
-  a.btn.btn-success.btn-add-job.col-lg-3.col-md-4.col-sm-6.col-xs-12 href="#{new_startup_startup_job_path(startup)}"
+- if current_user.try(:is_founder?)
+  a.btn.btn-success.btn-add-job.col-lg-3.col-md-4.col-sm-6.col-xs-12 href="#{new_startup_startup_job_path(current_user.startup)}"
     span.glyphicon.glyphicon-plus
     |  Post a new job

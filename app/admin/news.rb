@@ -26,7 +26,7 @@ ActiveAdmin.register News do
       f.input :body, as: :html_editor
       f.input :author
       f.input :featured
-      f.input :category, collection: Category.news_category, prompt: "Choose a Category"
+      f.input :category, collection: Category.news_category , prompt: 'Choose a Category'
       f.input :published_at, as: :just_datetime_picker
       f.input :youtube_id, label: "youtube_id", hint: "Eg in \"https://www.youtube.com/watch?v=foobar\" ID is foobar"
       f.input :picture, as: :file

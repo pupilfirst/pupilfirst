@@ -8,8 +8,8 @@ ActiveAdmin.register MentorSkill do
   form do |f|
     f.inputs 'Skill' do
       f.input :mentor
-      f.input :skill, collection: Category.mentor_skill_category
-      f.input :expertise, collection: MentorSkill.valid_expertise_values
+      f.input :skill, collection: Category.mentor_skill_category 
+      f.input :expertise, collection: MentorSkill.valid_expertise_values 
     end
 
     f.actions

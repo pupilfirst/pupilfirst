@@ -4,9 +4,8 @@
     = f.input :name
     = f.input :physical_incubatee
     = f.input :agreement_sent
-    = f.input :agreement_first_signed_at, as: :date
-    = f.input :agreement_last_signed_at, as: :date
-    /= f.input :agreement_ends_at, as: :date
+    = f.input :agreement_first_signed_at, as: :date_picker
+    = f.input :agreement_last_signed_at, as: :date_picker
     = f.input :agreement_duration, collection: Startup.valid_agreement_durations
     = f.input :logo
     = f.input :pitch, input_html: {maxlength: nil}

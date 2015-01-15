@@ -149,4 +149,5 @@ FactoryGirl.define do
     association :user, factory: :founder
     body { Faker::Lorem.words(15).join ' ' }
   end
+
 end

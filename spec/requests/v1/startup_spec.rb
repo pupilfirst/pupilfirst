@@ -17,59 +17,59 @@ describe "Startup Requests" do
   it "fetch startups on index" do
     get "/api/startups", {}, version_header
     expect(response).to render_template(:index)
-    response.body.should have_json_path("0/id")
-    response.body.should have_json_path("0/name")
-    response.body.should have_json_path("0/logo_url")
-    response.body.should have_json_path("0/pitch")
-    response.body.should have_json_path("0/website")
-    response.body.should have_json_path("0/created_at")
+    expect(response.body).to have_json_path("0/id")
+    expect(response.body).to have_json_path("0/name")
+    expect(response.body).to have_json_path("0/logo_url")
+    expect(response.body).to have_json_path("0/pitch")
+    expect(response.body).to have_json_path("0/website")
+    expect(response.body).to have_json_path("0/created_at")
   end
 
   it "fetch startups within a category" do
     get "/api/startups", { category: startup1.categories.first.name }, version_header
     expect(response).to render_template(:index)
-    response.body.should have_json_size(1).at_path("/")
-    response.body.should have_json_path("0/id")
-    response.body.should have_json_path("0/name")
-    response.body.should have_json_path("0/logo_url")
-    response.body.should have_json_path("0/pitch")
-    response.body.should have_json_path("0/website")
-    response.body.should have_json_path("0/created_at")
+    expect(response.body).to have_json_size(1).at_path("/")
+    expect(response.body).to have_json_path("0/id")
+    expect(response.body).to have_json_path("0/name")
+    expect(response.body).to have_json_path("0/logo_url")
+    expect(response.body).to have_json_path("0/pitch")
+    expect(response.body).to have_json_path("0/website")
+    expect(response.body).to have_json_path("0/created_at")
   end
 
   it "fetches related startups when searched for" do
     get "/api/startups", { search_term: 'foobar' }, version_header
     expect(response).to render_template(:index)
-    response.body.should have_json_size(2).at_path("/")
-    response.body.should have_json_path("0/id")
-    response.body.should have_json_path("0/name")
-    response.body.should have_json_path("0/logo_url")
-    response.body.should have_json_path("0/pitch")
-    response.body.should have_json_path("0/website")
-    response.body.should have_json_path("0/created_at")
+    expect(response.body).to have_json_size(2).at_path("/")
+    expect(response.body).to have_json_path("0/id")
+    expect(response.body).to have_json_path("0/name")
+    expect(response.body).to have_json_path("0/logo_url")
+    expect(response.body).to have_json_path("0/pitch")
+    expect(response.body).to have_json_path("0/website")
+    expect(response.body).to have_json_path("0/created_at")
   end
 
   it "fetches one startup with " do
     get "/api/startups/#{startup.id}", {}, version_header
     expect(response).to render_template(:show)
-    response.body.should have_json_path("id")
-    response.body.should have_json_path("name")
-    response.body.should have_json_path("logo_url")
-    response.body.should have_json_path("pitch")
-    response.body.should have_json_path("website")
-    response.body.should have_json_path("about")
-    response.body.should have_json_path("email")
-    response.body.should have_json_path("phone")
-    response.body.should have_json_path("twitter_link")
-    response.body.should have_json_path("facebook_link")
-    response.body.should have_json_type(Array).at_path("categories")
-    response.body.should have_json_type(Array).at_path("founders")
-    response.body.should have_json_path("founders/0/id")
-    response.body.should have_json_path("founders/0/name")
-    response.body.should have_json_path("founders/0/title")
-    response.body.should have_json_path("founders/0/picture_url")
-    response.body.should have_json_path("founders/0/linkedin_url")
-    response.body.should have_json_path("founders/0/twitter_url")
+    expect(response.body).to have_json_path("id")
+    expect(response.body).to have_json_path("name")
+    expect(response.body).to have_json_path("logo_url")
+    expect(response.body).to have_json_path("pitch")
+    expect(response.body).to have_json_path("website")
+    expect(response.body).to have_json_path("about")
+    expect(response.body).to have_json_path("email")
+    expect(response.body).to have_json_path("phone")
+    expect(response.body).to have_json_path("twitter_link")
+    expect(response.body).to have_json_path("facebook_link")
+    expect(response.body).to have_json_type(Array).at_path("categories")
+    expect(response.body).to have_json_type(Array).at_path("founders")
+    expect(response.body).to have_json_path("founders/0/id")
+    expect(response.body).to have_json_path("founders/0/name")
+    expect(response.body).to have_json_path("founders/0/title")
+    expect(response.body).to have_json_path("founders/0/picture_url")
+    expect(response.body).to have_json_path("founders/0/linkedin_url")
+    expect(response.body).to have_json_path("founders/0/twitter_url")
   end
 
   describe 'POST /startups' do
@@ -126,7 +126,7 @@ describe "Startup Requests" do
 
     before(:each) do
       ActionMailer::Base.deliveries = []
-      UserPushNotifyJob.stub_chain(:new, :async, perform: true) # TODO: Change this to allow statement in Rspec v3.
+      allow(UserPushNotifyJob).to receive_message_chain(:new, :async, :perform).and_return(true)
     end
 
     context 'if auth_token is not given' do
@@ -153,7 +153,7 @@ describe "Startup Requests" do
 
     before(:each) do
       ActionMailer::Base.deliveries = []
-      UserPushNotifyJob.stub_chain(:new, :async, perform: true) # TODO: Change this to allow statement in Rspec v3.
+      allow(UserPushNotifyJob).to receive_message_chain(:new, :async, :perform).and_return(true)
     end
 
     context "when requested startup does not match authorized user's startup" do
@@ -169,7 +169,7 @@ describe "Startup Requests" do
     shared_examples_for 'new cofounder' do
       it 'sends an email to cofounder address' do
         post "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in', fullname: 'James P Sullivan' }, version_header(user)
-        expect(emails_sent.last.body.to_s).to include "invited to join #{user.fullname}'s startup as a co-founder"
+        expect(emails_sent.last.body.to_s).to include "invited to join #{CGI.escapeHTML user.fullname}'s startup as a co-founder"
       end
 
       it 'sets the user pending_startup_id' do

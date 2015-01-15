@@ -33,7 +33,7 @@ ActiveAdmin.register User do
     UserPushNotifyJob.new.async.perform(user.id, :founder_profile_reminder, push_message)
 
     # Send email.
-    UserMailer.reminder_to_complete_founder_profile(user).deliver
+    UserMailer.reminder_to_complete_founder_profile(user).deliver_now
 
     redirect_to action: :show
   end
@@ -94,8 +94,8 @@ ActiveAdmin.register User do
   filter :is_contact
   filter :phone_verified
   # TODO: The check_boxes filter is disabled because of some bug with activeadmin. Check and enable when required.
-  # filter :categories, as: :check_boxes, collection: Category.user_category
-  filter :categories, collection: Category.user_category
+  # filter :categories, as: :check_boxes, collection: proc { Category.user_category }
+  filter :categories, collection: proc { Category.user_category }
 
   scope :missing_startups
 

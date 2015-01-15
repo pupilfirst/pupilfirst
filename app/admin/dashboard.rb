@@ -4,19 +4,19 @@ ActiveAdmin.register_page "Dashboard" do
   end
 
   page_action :users_count_total do
-    render json: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_USERS)
+    render json: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_USERS, from: params[:from], to: params[:to])
   end
 
   page_action :users_count_student_entrepreneurs do
-    render json: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_USERS_STUDENT_ENTREPRENEURS)
+    render json: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_USERS_STUDENT_ENTREPRENEURS, from: params[:from], to: params[:to])
   end
 
   page_action :startups_count_total do
-    render json: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS)
+    render json: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS, from: params[:from], to: params[:to])
   end
 
   page_action :startups_count_unready do
-    render json: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS_UNREADY)
+    render json: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_STARTUPS_UNREADY, from: params[:from], to: params[:to])
   end
 
   page_action :startups_count_current_split do

@@ -1,20 +1,22 @@
 ActiveAdmin.register Startup do
-  filter :approval_status, as: :select, collection: Startup.valid_approval_status_values
+  filter :approval_status, as: :select, collection: proc { Startup.valid_approval_status_values}
   filter :name
   filter :email
   filter :website
-  filter :registration_type, as: :select, collection: Startup.valid_registration_types
+  filter :registration_type, as: :select, collection: proc { Startup.valid_registration_types }
   filter :product_name
-  filter :product_progress, as: :select, collection: Startup.valid_product_progress_values
+  filter :product_progress, as: :select, collection: proc { Startup.valid_product_progress_values }
   filter :team_size
   filter :team_size_blank, as: :boolean, label: 'Team size not set'
-  filter :incubation_location, as: :select, collection: Startup.valid_incubation_location_values
+  filter :incubation_location, as: :select, collection: proc { Startup.valid_incubation_location_values }
   filter :incubation_location_blank, as: :boolean, label: 'Incubation location not selected'
   filter :agreement_sent
   filter :physical_incubatee
-  filter :categories, collection: Category.startup_category
+  filter :categories, collection: proc { Category.startup_category }
 
+  scope :all
   scope :without_founders
+  scope :agreement_live
 
   controller do
     newrelic_ignore
@@ -55,23 +57,23 @@ ActiveAdmin.register Startup do
 
     case params[:email_to_send].to_sym
       when :approval
-        StartupMailer.startup_approved(startup).deliver
+        StartupMailer.startup_approved(startup).deliver_now
         push_message = 'Congratulations! Your request for incubation at Startup Village has been approved.'
 
         startup.founders.each do |user|
           UserPushNotifyJob.new.async.perform(user.id, :startup_approval, push_message)
         end
       when :rejection
-        StartupMailer.startup_rejected(startup).deliver
+        StartupMailer.startup_rejected(startup).deliver_now
         push_message = "We're sorry, but your request for incubation at Startup Village has been rejected."
 
         startup.founders.each do |user|
           UserPushNotifyJob.new.async.perform(user.id, :startup_rejection, push_message)
         end
       when :incorporation
-        StartupMailer.incorporation_approved(startup).deliver
+        StartupMailer.incorporation_approved(startup).deliver_now
       when :bank
-        StartupMailer.bank_approved(startup).deliver
+        StartupMailer.bank_approved(startup).deliver_now
       when :sep
     end
 
@@ -86,7 +88,7 @@ ActiveAdmin.register Startup do
       UserPushNotifyJob.new.async.perform(user.id, :startup_approval, push_message)
     end
 
-    StartupMailer.reminder_to_complete_startup_info(startup).deliver
+    StartupMailer.reminder_to_complete_startup_info(startup).deliver_now
     startup.founders.each { |user| user.update_attributes!({ startup_form_link_sent_status: true }) }
     redirect_to action: :show
   end
@@ -100,7 +102,7 @@ ActiveAdmin.register Startup do
       UserPushNotifyJob.new.async.perform(user.id, :startup_profile_reminder, push_message)
     end
 
-    StartupMailer.reminder_to_complete_startup_profile(startup).deliver
+    StartupMailer.reminder_to_complete_startup_profile(startup).deliver_now
 
     redirect_to action: :show
   end

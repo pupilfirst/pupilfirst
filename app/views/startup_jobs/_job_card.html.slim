@@ -1,7 +1,7 @@
 - if display_card? job
   .job-card.col-lg-3.col-md-4.col-sm-6.col-xs-12
     .well.well-sm.fix-height
-      p.pull-left #{job.startup.incubation_location.upcase}
+      p.pull-left #{job.location.upcase}
       p.pull-right #{job.updated_at.strftime('%^b &mdash; %d').html_safe}
       br
       h4 = link_to job.title, startup_startup_job_path(job.startup, job)

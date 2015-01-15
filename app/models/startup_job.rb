@@ -43,7 +43,7 @@ class StartupJob < ActiveRecord::Base
     end
   end
 
-
+  scope :not_expired, -> { where('expires_on > ?', Time.now) }
 
   def reset_expiry!
     self.expires_on = EXPIRY_DURATION.from_now

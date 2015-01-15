@@ -2,7 +2,11 @@
   .col-md-12.clearfix
     .pull-right
       = logo_image_html(@startup.logo_url(:thumb))
-    h1.page-header.startup-heading = @startup.name
+    h1.page-header.startup-heading
+      ' #{@startup.name}
+      - if @startup.hiring?
+        small
+          = link_to "is hiring!", startup_startup_jobs_url(@startup)
 
 .row
   .col-lg-7

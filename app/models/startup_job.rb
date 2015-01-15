@@ -9,9 +9,8 @@ class StartupJob < ActiveRecord::Base
   validates_presence_of :equity_max, if: :equity_min
   validates_presence_of :equity_vest, if: :equity_min || :equity_cliff
   validates_presence_of :equity_cliff, if: :equity_min || :equity_vest
-  validate :equity_vest_less_than_cliff
+  
   validate :equity_min_less_than_max
-  validate :salary_min_less_than_max
   
   def equity_min_less_than_max
     if self.equity_min && self.equity_max
@@ -22,6 +21,8 @@ class StartupJob < ActiveRecord::Base
     end
   end
 
+  validate :equity_vest_less_than_cliff
+
   def equity_vest_less_than_cliff
     if self.equity_vest && self.equity_cliff
       if self.equity_vest >= self.equity_cliff
@@ -30,6 +31,8 @@ class StartupJob < ActiveRecord::Base
       end
     end  
   end
+
+  validate :salary_min_less_than_max
 
   def salary_min_less_than_max
     if self.salary_max && self.salary_min

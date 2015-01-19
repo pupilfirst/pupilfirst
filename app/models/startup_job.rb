@@ -22,13 +22,13 @@ class StartupJob < ActiveRecord::Base
     end
   end
 
-  validate :equity_vest_less_than_cliff
+  validate :equity_vest_greater_than_cliff
 
-  def equity_vest_less_than_cliff
+  def equity_vest_greater_than_cliff
     if self.equity_vest && self.equity_cliff
-      if self.equity_vest >= self.equity_cliff
-        errors.add :equity_vest, 'must be less than equity cliff'
-        errors.add :equity_cliff, 'must be greater than equity vest'
+      if self.equity_vest < self.equity_cliff
+        errors.add :equity_vest, 'must be greater than equity cliff'
+        errors.add :equity_cliff, 'must be less than equity vest'
       end
     end  
   end
@@ -51,7 +51,7 @@ class StartupJob < ActiveRecord::Base
   end
 
   before_create do
-    reset_expiry!
+    reset_expiry! if self.expires_on.nil?
   end
 
   def expired?
@@ -60,7 +60,6 @@ class StartupJob < ActiveRecord::Base
 
   def can_be_modified_by?(user)
     return false unless user
-
     startup.is_founder?(user)
   end
 end

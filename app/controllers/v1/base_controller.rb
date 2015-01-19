@@ -2,6 +2,7 @@ class V1::BaseController < ApplicationController
   respond_to :json
   skip_before_filter :verify_authenticity_token
   before_filter :require_token
+  # before_filter :require_application_token
 
   def current_user
     return @current_user if @current_user
@@ -36,12 +37,23 @@ class V1::BaseController < ApplicationController
     params[:auth_token] || request.headers['HTTP_AUTH_TOKEN']
   end
 
+  def application_token
+    params[:application_token] || request.headers['HTTP_APPLICATION_TOKEN']
+  end
+
   private
 
   def require_token
     unless valid_token?
       logger.error "Request halted since valid auth_token was missing: #{params}"
       raise Exceptions::AuthTokenInvalid, "auth_token required. Given: '#{auth_token}'"
+    end
+  end
+
+  def require_application_token
+    unless valid_application_token?
+      logger.error "Request halted since valid application token was missing: #{params}"
+      raise Exceptions::ApplicationTokenInvalid, "application_token required. Given: #{application_token}"
     end
   end
 
@@ -54,5 +66,9 @@ class V1::BaseController < ApplicationController
 
   def valid_token?
     !!current_user
+  end
+
+  def valid_application_token?
+    APP_CONFIG[:application_tokens].include? application_token
   end
 end

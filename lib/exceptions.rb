@@ -14,6 +14,7 @@ module Exceptions
   end
 
   class AuthTokenInvalid < ApiRequestError; end
+  class ApplicationTokenInvalid < ApiRequestError; end
   class RestrictedToSelf < ApiRequestError; end
   class UserAlreadyHasStartup < ApiRequestError; end
   class UserAlreadyMemberOfStartup < ApiRequestError; end

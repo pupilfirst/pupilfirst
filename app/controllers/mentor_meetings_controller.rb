@@ -1,6 +1,6 @@
 class MentorMeetingsController < ApplicationController
   before_filter :authenticate_user!
-  before_filter :meeting_started, only: [:feedback, :feedbacksave]
+  before_filter :meeting_started, only: [:feedback]
   
   def live
     @mentor_meeting = MentorMeeting.find(params[:id])
@@ -58,20 +58,18 @@ class MentorMeetingsController < ApplicationController
     @mentor_meeting = MentorMeeting.find(params[:id])
     @role = role(@mentor_meeting)
     flash[:notice] = "Your meeting with #{guest(@mentor_meeting).fullname} has ended"
+    @mentor_meeting.status = MentorMeeting::STATUS_COMPLETED
+    @mentor_meeting.save!
   end
 
   def feedbacksave
     @mentor_meeting = MentorMeeting.find(params[:id])
     if params[:commit] == "Later"
-      flash[:notice] = "Check your inbox for feedback remainders"
       redirect_to mentoring_path
     else
       if @mentor_meeting.update(feedback_params)
         flash[:notice] = "Thank you for your feedback!"
-        @mentor_meeting.status = MentorMeeting::STATUS_COMPLETED if guest_rating?(@mentor_meeting)
-        @mentor_meeting.save!
         redirect_to mentoring_path
-
       else
         flash[:error] = "Could not save your feedback. Try again"
         render 'feedback'
@@ -83,7 +81,7 @@ class MentorMeetingsController < ApplicationController
   def remainder
     @mentor_meeting = MentorMeeting.find(params[:id])
     phone_number = current_user == @mentor_meeting.user ? current_user.phone : @mentor_meeting.mentor.user.phone
-    # RestClient.post(APP_CONFIG[:sms_provider_url], text: "#{guest(@mentor_meeting.fullname)} is ready and waiting for todays mentoring session", msisdn: phone_number)
+    RestClient.post(APP_CONFIG[:sms_provider_url], text: "#{guest(@mentor_meeting).fullname} is ready and waiting for todays mentoring session", msisdn: phone_number)
     head :ok
   end
 
@@ -98,7 +96,7 @@ class MentorMeetingsController < ApplicationController
     end
 
     def meeting_started
-      raise_not_found if MentorMeeting.find(params[:id]).status != MentorMeeting::STATUS_STARTED
+      raise_not_found if !(MentorMeeting.find(params[:id]).status == MentorMeeting::STATUS_STARTED || MentorMeeting.find(params[:id]).status == MentorMeeting::STATUS_COMPLETED)
     end
 
     def role(mentormeeting)

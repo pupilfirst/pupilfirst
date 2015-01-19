@@ -19,6 +19,8 @@ function my_init() {
     console.log("Manual hangup msg received");
     console.log(easyrtc.idToName(easyrtcid) +
             " sent the following data " + JSON.stringify(msgData));
+    easyrtc.hangupAll();
+    $("#endcall").submit(); 
     },'manual_hangup');
 
   easyrtc.setOnCall( function(easyrtcid, slot) {
@@ -48,7 +50,6 @@ function my_init() {
                console.log("Couldn't send hang up to peer");
             }
         );
-        console.log('sent that as well');
         easyrtc.hangupAll();
         $("#endcall").submit();   
       }

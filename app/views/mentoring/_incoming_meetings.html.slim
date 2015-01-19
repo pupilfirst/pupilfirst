@@ -17,20 +17,14 @@
             td = meet.user.fullname
             td = meet.suggested_meeting_at.to_date
             td = meet.suggested_meeting_at.strftime("%l:%M %P")
-            - if meet.status == MentorMeeting::STATUS_STARTED 
-              -if !meet.mentor_rating?
-                td Awaiting feedback
-              -else
-                td Completed   
-            - else 
-              td = meeting_status_html meet.status
+            td = meeting_status_html meet.status
             td
               - if meet.status == MentorMeeting::STATUS_REQUESTED
                 ' #{f.submit "Accept", class: "btn btn-success"}  
                 = f.submit "Reject", class: "btn btn-danger"  
               - elsif meet.status == MentorMeeting::STATUS_ACCEPTED && meet.meeting_at < 15.minutes.from_now
                 = link_to 'Start Meeting', mentor_meetings_live_url(meet.id),  class: 'btn btn-primary'
-              - elsif meet.status == MentorMeeting::STATUS_STARTED && !meet.mentor_rating?
+              - elsif meet.status == MentorMeeting::STATUS_COMPLETED && !meet.gave_feedback?(current_user)
                 = link_to 'Give Feedback', mentor_meetings_feedback_url(meet.id),  class: 'btn btn-primary'
 
 

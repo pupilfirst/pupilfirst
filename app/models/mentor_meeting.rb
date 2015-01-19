@@ -71,5 +71,11 @@ class MentorMeeting < ActiveRecord::Base
   def user_rating?
     self.user_rating.present?
   end
+
+  def gave_feedback?(user)
+    self.user_rating? if user == self.user
+    self.mentor_rating? if user == self.mentor.user 
+  end
+
 end
  

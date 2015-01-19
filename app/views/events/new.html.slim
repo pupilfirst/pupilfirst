@@ -1,22 +1,36 @@
 h1 Add a new Event
 = simple_form_for @event do |f|
-	  = f.input :title
-	  = f.input :description
-	  = f.label :starts_at
-	  = f.datetime_select :start_at
-	  = f.label :ends_at
-	  = f.datetime_select :end_at
-	  br
-	  = f.label :location
-	  = f.select(:location_id, Location.all, prompt: 'Select')
-	  br
-	  = f.label :category
-	  = f.select(:category_id, Category.all, prompt: 'Select')
-	  br
-	  = f.label :email
-	  = f.text_field :posters_email
-	  br
-	  = f.label :phone_number
-	  = f.text_field :posters_phone_number
-	  br
-	  = f.button :submit
+  .col-md-6.col.sm-12  
+    = f.input :title
+    = f.label :description
+
+    #wysihtml5-toolbar
+      a data-wysihtml5-command="bold" title="CTRL+B" class="btn btn-xs btn-default"
+        strong bold
+      a data-wysihtml5-command="italic" title="CTRL+I" class="btn btn-xs btn-default"
+        em italic
+      a data-wysihtml5-command="underline" title="CTRL+U" class="btn btn-xs btn-default" underline
+      a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2" class="btn btn-xs btn-default"
+        strong Heading
+      a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p" class="btn btn-xs btn-default" Paragraph
+      a data-wysihtml5-command="alignLeftStyle" class="btn btn-xs btn-default" alignLeft
+      a data-wysihtml5-command="alignRightStyle" class="btn btn-xs btn-default" alignRight
+      a data-wysihtml5-command="alignCenterStyle" class="btn btn-xs btn-default" alignCenter
+
+    = f.input_field :description, id: "wysihtml5-textarea", :style => 'width: 100%'
+    = f.input :picture
+    = f.input :start_at, as: :datetime_picker
+    = f.input :end_at, as: :datetime_picker
+    = f.input :location_id, collection:@location, default: @location.first
+    = f.input :category_id, collection:Category.event_category.all, prompt: 'Select'
+    = f.input :posters_name, label: "Your Name"
+    = f.input :posters_email, label: "Your Email"
+    = f.input :posters_phone_number, label: "Your Phone Number"
+    = f.button :submit
+
+javascript:
+  var editor = new wysihtml5.Editor("wysihtml5-textarea", {
+    toolbar: "wysihtml5-toolbar",
+    stylesheets:  "#{stylesheet_path('wysihtml')}",
+    parserRules:  wysihtml5ParserRules
+  });

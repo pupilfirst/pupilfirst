@@ -1,0 +1,43 @@
+= link_to "Add New Event", new_event_path(@event)
+- @events.each do |event|
+  div class="container"
+    div class="row"
+      div class="[ col-xs-12 col-sm-offset-2 col-sm-8 ]"
+        ul class="event-list" data-toggle="modal" data-target="#todo-#{event.id}-notes"
+          li
+            time datetime="#{event.start_at}"
+              span class="day" = event.start_at.strftime('%d')
+              span class="month" = event.start_at.strftime('%b')
+              span 6:00 - 8:00
+            = image_tag event.picture
+            div class="info"
+              h2 class="title"
+                = event.title
+              p class="desc"
+                = truncate(event.description, length: 80)
+              ul
+                li style="width:30%;"
+                  = event.start_at.to_time
+                li class="till" style="width:10%;"
+                  div till
+                li style="width:30%;"
+                  = event.end_at.to_time
+
+  <!-- Button trigger modal 
+  button class="btn btn-link" data-toggle="modal" data-target="#todo-1-notes"
+    View notes-->
+
+  <!-- Modal -->
+  div class="modal fade" id="todo-#{event.id}-notes" tabindex="-1" role="dialog" aria-labelledby="todo-#{event.id}-label" aria-hidden="true"
+    div class="modal-dialog"
+      div class="modal-content"
+        div class="modal-header"
+          h4 class="modal-title" id="todo-#{event.id}-label" = event.title
+        div class="modal-body"
+          = event.description
+          div
+            = event.start_at
+            till
+            = event.end_at
+        div class="modal-footer"
+          button type="button" class="btn btn-primary" data-dismiss="modal" Close

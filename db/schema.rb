@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150113134354) do
+ActiveRecord::Schema.define(version: 20150119064153) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -128,8 +128,9 @@ ActiveRecord::Schema.define(version: 20150113134354) do
     t.integer  "user_id"
     t.boolean  "notification_sent"
     t.boolean  "approved"
+    t.string   "posters_name"
     t.string   "posters_email"
-    t.integer  "posters_phone_number"
+    t.string   "posters_phone_number"
   end
 
   add_index "events", ["category_id"], name: "index_events_on_category_id", using: :btree

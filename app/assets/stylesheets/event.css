@@ -1,15 +1,13 @@
 @import url("http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,400italic");
 @import url("//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css");
-body {
-  padding: 60px 0px;
-  background-color: rgb(220, 220, 220);
-}
+
 
 .event-list {
   list-style: none;
   font-family: 'Lato', sans-serif;
   margin: 0px;
   padding: 0px;
+  cursor: pointer;
 }
 .event-list > li {
   background-color: rgb(255, 255, 255);
@@ -22,7 +20,7 @@ body {
   display: inline-block;
   width: 100%;
   color: rgb(255, 255, 255);
-  background-color: rgb(197, 44, 102);
+  background-color: rgb(139, 71, 137);
   padding: 5px;
   text-align: center;
   text-transform: uppercase;
@@ -31,12 +29,12 @@ body {
   background-color: rgb(165, 82, 167);
 }
 .event-list > li > time > span {
-  display: none;
+  /*display: none;*/
 }
 .event-list > li > time > .day {
   display: block;
-  font-size: 56pt;
-  font-weight: 100;
+  font-size: 22pt;
+  font-weight: 200;
   line-height: 1;
 }
 .event-list > li time > .month {
@@ -58,8 +56,8 @@ body {
   margin: 0px;
 }
 .event-list > li > .info > .desc {
-  font-size: 13pt;
-  font-weight: 300;
+  font-size: 10pt;
+  font-weight: 500;
   margin: 0px;
 }
 .event-list > li > .info > ul,
@@ -82,7 +80,14 @@ body {
   font-size: 11pt;
   font-weight: 300;
   padding: 3px 0px;
+  background-color: rgb(200, 200, 200);
 }
+.event-list > li > .info > ul > li > div {
+  font-size: 10pt;
+  font-weight: 400;
+  background-color: #0A60B0;
+}
+
 .event-list > li > .info > ul > li > a {
   display: block;
   width: 100%;
@@ -98,7 +103,7 @@ body {
 .event-list > li > .info > ul > li:hover,
 .event-list > li > .social > ul > li:hover {
   color: rgb(30, 30, 30);
-  background-color: rgb(200, 200, 200);
+  background-color: rgb(200, 200, 0);
 }
 .facebook a,
 .twitter a,
@@ -162,7 +167,7 @@ body {
   }	
   .event-list > li > .info > .title, 
   .event-list > li > .info > .desc {
-    padding: 0px 10px;
+    padding: 4px 15px;
   }
   .event-list > li > .info > ul {
     position: absolute;

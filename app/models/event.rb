@@ -1,4 +1,9 @@
 class Event < ActiveRecord::Base
+
+
+#add author to events table
+  mount_uploader :picture, EventUploader
+
   belongs_to :location
   belongs_to :category
   belongs_to :author, class_name: 'AdminUser', foreign_key: :user_id
@@ -11,7 +16,7 @@ class Event < ActiveRecord::Base
   normalize_attributes :title, :description, :start_at, :end_at, :featured, :picture, :notification_sent
 
   validates_presence_of :title
-  validates_presence_of :author
+  # validates_presence_of :author
   validates_presence_of :location
   validates_presence_of :category
   validates_presence_of :picture

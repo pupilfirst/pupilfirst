@@ -98,5 +98,9 @@ en:
           If you don't, please drop an email to dinnu@startupvillage.in
         link_startup: |
           Your request to be linked with %{company_name} is pending with the founders. We will notify you with an email & push notification as soon as you are approved.
+  timepicker:
+    dformat: "hh:mm A"
+    pformat: "hh:mm A"
+
   date:
     datepicker: "dd/mm/yyyy"

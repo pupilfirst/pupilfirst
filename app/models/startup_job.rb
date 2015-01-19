@@ -22,13 +22,13 @@ class StartupJob < ActiveRecord::Base
     end
   end
 
-  validate :equity_vest_less_than_cliff
+  validate :equity_vest_greater_than_cliff
 
-  def equity_vest_less_than_cliff
+  def equity_vest_greater_than_cliff
     if self.equity_vest && self.equity_cliff
-      if self.equity_vest >= self.equity_cliff
-        errors.add :equity_vest, 'must be less than equity cliff'
-        errors.add :equity_cliff, 'must be greater than equity vest'
+      if self.equity_vest < self.equity_cliff
+        errors.add :equity_vest, 'must be greater than equity cliff'
+        errors.add :equity_cliff, 'must be less than equity vest'
       end
     end  
   end

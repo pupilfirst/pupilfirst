@@ -29,12 +29,29 @@ function my_init() {
   easyrtc.setOnCall( function(easyrtcid, slot) {
     console.log('setOnCall called');
     call_started = true;
-    // strong = document.getElementById('awaitingnotification')
-    // button = document.getElementById('startbutton')
+    $('#callstart').submit();
+
+    // &.ajax({
+    //   url: "/mentor_meetings/"+$("#mentor-meeting-container").data("id")+"/update",
+    //   data: {commit: "started"},
+    //   type: PATCH
+    // })
+    // .done(function(){
+    //         console.log('Meeting status set to started')
+    //         remainderbutton.remove();
+    // })
+    // .fail(function(){
+    //         console.log('Could not change meeting status')
+    // });
+    strong = document.getElementById('awaitingnotification');
+    button = document.getElementById('startbutton');
+    remainderbutton = document.getElementById('remainderbutton');
+    if (remainderbutton) {remainderbutton.remove();};
     // button.style.display = 'none';
     // strong.style.display = 'none' ;
     strong.remove();
     button.remove();
+    
     
     // creating hang up button
       hangupdiv =  document.getElementById('belowvideo');

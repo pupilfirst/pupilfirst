@@ -1,5 +1,6 @@
 class MentorMeetingsController < ApplicationController
   before_filter :authenticate_user!
+  before_filter :meeting_started, only: [:feedback, :feedbacksave]
   
   def live
     @mentor_meeting = MentorMeeting.find(params[:id])
@@ -34,58 +35,55 @@ class MentorMeetingsController < ApplicationController
   end
 
   def update
-    @mentor_meeting = current_user.mentor.mentor_meetings.find(params[:id])
-    @mentor_meeting.status = params[:commit] == "Accept" ? MentorMeeting::STATUS_ACCEPTED : MentorMeeting::STATUS_REJECTED
-    @mentor_meeting.meeting_at = @mentor_meeting.suggested_meeting_at if params[:commit] == "Accept"   
-    if @mentor_meeting.save
-      flash[:notice] = "Meeting status has been updated"
-      UserMailer.meeting_request_accepted(@mentor_meeting).deliver if @mentor_meeting.status == MentorMeeting::STATUS_ACCEPTED
-      UserMailer.meeting_request_rejected(@mentor_meeting).deliver if @mentor_meeting.status == MentorMeeting::STATUS_REJECTED
-    else 
-      flash[:alert] = "Error in saving response"
-    end
-    redirect_to mentoring_url 
+    @mentor_meeting = MentorMeeting.find(params[:id])
+    if params[:commit] == "started"
+      @mentor_meeting.status = MentorMeeting::STATUS_STARTED
+      @mentor_meeting.save!
+      head :ok
+    else
+      @mentor_meeting.status = params[:commit] == "Accept" ? MentorMeeting::STATUS_ACCEPTED : MentorMeeting::STATUS_REJECTED
+      @mentor_meeting.meeting_at = @mentor_meeting.suggested_meeting_at if @mentor_meeting.status == MentorMeeting::STATUS_ACCEPTED   
+      if @mentor_meeting.save
+        flash[:notice] = "Meeting status has been updated"
+        UserMailer.meeting_request_accepted(@mentor_meeting).deliver if @mentor_meeting.status == MentorMeeting::STATUS_ACCEPTED
+        UserMailer.meeting_request_rejected(@mentor_meeting).deliver if @mentor_meeting.status == MentorMeeting::STATUS_REJECTED
+      else 
+        flash[:alert] = "Error in saving response"
+      end
+      redirect_to mentoring_url
+    end 
   end
 
   def feedback
     @mentor_meeting = MentorMeeting.find(params[:id])
-    @mentor_meeting.status = MentorMeeting::STATUS_AWAITING_FEEDBACK
-    @mentor_meeting.save
-    @role = current_user == @mentor_meeting.user ? "user" : "mentor"
-    flash[:notice] = "Your meeting with #{current_user == @mentor_meeting.user ? @mentor_meeting.mentor.user.fullname : @mentor_meeting.user.fullname} has ended"
+    @role = role(@mentor_meeting)
+    flash[:notice] = "Your meeting with #{guest(@mentor_meeting).fullname} has ended"
   end
 
   def feedbacksave
     @mentor_meeting = MentorMeeting.find(params[:id])
-    if @mentor_meeting.status == MentorMeeting::STATUS_AWAITING_FEEDBACK
-      if params[:commit] == "Later"
-        flash[:notice] = "Check your inbox for feedback remainders"
-        # if current_user == @mentor_meeting.user
-        #   UserMailer.meeting_feedback_user(@mentor_meeting).deliver
-        # elsif current_user == @mentor_meeting.mentor.user
-        #   UserMailer.meeting_feedback_mentor(@mentor_meeting).deliver
-        # end
-        redirect_to mentoring_path
-      else
-        if @mentor_meeting.update(feedback_params)
-          @mentor_meeting.status == MentorMeeting::STATUS_COMPLETED
-          flash[:notice] = "Thank you for your feedback!"
-          redirect_to mentoring_path
-        else
-          flash[:error] = "Could not save your feedback. Try again"
-          render 'feedback'
-        end
-      end
-    else
-      flash[:notice] = "This meeting is not yet complete"
+    if params[:commit] == "Later"
+      flash[:notice] = "Check your inbox for feedback remainders"
       redirect_to mentoring_path
+    else
+      if @mentor_meeting.update(feedback_params)
+        flash[:notice] = "Thank you for your feedback!"
+        @mentor_meeting.status = MentorMeeting::STATUS_COMPLETED if guest_rating?(@mentor_meeting)
+        @mentor_meeting.save!
+        redirect_to mentoring_path
+
+      else
+        flash[:error] = "Could not save your feedback. Try again"
+        render 'feedback'
+      end
     end
+
   end
 
   def remainder
     @mentor_meeting = MentorMeeting.find(params[:id])
     phone_number = current_user == @mentor_meeting.user ? current_user.phone : @mentor_meeting.mentor.user.phone
-    # RestClient.post(APP_CONFIG[:sms_provider_url], text: "Your guest is ready and waiting for todays mentoring session", msisdn: phone_number)
+    # RestClient.post(APP_CONFIG[:sms_provider_url], text: "#{guest(@mentor_meeting.fullname)} is ready and waiting for todays mentoring session", msisdn: phone_number)
     head :ok
   end
 
@@ -98,5 +96,22 @@ class MentorMeetingsController < ApplicationController
     def feedback_params
       params.require(:mentor_meeting).permit(:user_rating,:mentor_rating,:user_comments,:mentor_comments)
     end
+
+    def meeting_started
+      raise_not_found if MentorMeeting.find(params[:id]).status != MentorMeeting::STATUS_STARTED
+    end
+
+    def role(mentormeeting)
+      current_user == mentormeeting.user ? "user" : "mentor"
+    end
+
+    def guest(mentormeeting)
+      current_user == mentormeeting.user ? mentormeeting.mentor.user : mentormeeting.user 
+    end
+
+    def guest_rating?(mentormeeting)
+      guest(mentormeeting) == mentormeeting.user ? mentormeeting.user_rating? : mentormeeting.mentor_rating?
+    end
+
 
 end

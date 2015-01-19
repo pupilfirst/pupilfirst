@@ -19,6 +19,9 @@ h1 Welcome to your meeting with #{current_user == @mentor_meeting.user ? @mentor
 form#endcall style="display: hidden" action=mentor_meetings_feedback_path
   / button#hangupbutton  
 
+= form_tag mentor_mentor_meeting_path(@mentor_meeting,@mentor_meeting.mentor), method: :patch, remote: true, id: "callstart" do
+  = hidden_field_tag :commit, 'started'
+
 
 
 /*****/

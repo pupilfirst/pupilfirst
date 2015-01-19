@@ -51,7 +51,7 @@ class StartupJob < ActiveRecord::Base
   end
 
   before_create do
-    reset_expiry!
+    reset_expiry! if self.expires_on.nil?
   end
 
   def expired?
@@ -60,7 +60,6 @@ class StartupJob < ActiveRecord::Base
 
   def can_be_modified_by?(user)
     return false unless user
-
     startup.is_founder?(user)
   end
 end

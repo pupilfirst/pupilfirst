@@ -117,6 +117,15 @@ function loggedInListener(roomName, otherPeers) {
     notification = document.createTextNode("Awaiting guest to join...");
     strong.appendChild(notification);
     otherClientDiv.appendChild(strong);
+    leavebutton = document.createElement('button');
+    leavebutton.setAttribute("id", "leavebutton");
+    label = document.createTextNode("Come back later");
+    leavebutton.appendChild(label);
+    otherClientDiv.appendChild(leavebutton);
+    leavebutton.onclick = function(){
+        if (window.confirm("Are you sure you want to leave the chat room ?")){
+          window.location.assign("/mentoring")       }
+      }
     if (!call_started){
       remainderbutton = document.createElement('button');
       remainderbutton.setAttribute("id", "remainderbutton");

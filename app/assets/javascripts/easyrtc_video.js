@@ -4,54 +4,33 @@ function my_init() {
 
   easyrtc.setSocketUrl(":4000");
   easyrtc.setRoomOccupantListener(loggedInListener);
+
   console.log("Name read:" + $("#self").data("name"));
   easyrtc.setUsername($("#self").data("name"));
-  // dontAddCloseButtons();
+
+  easyrtc.dontAddCloseButtons();
   easyrtc.easyApp($("#mentor-meeting-container").data("id")+"chatroom", "self", ["caller"],
     function(myId) {
       console.log("App loaded succesfully");
     });
 
+  // listener for hangup message from guest
   easyrtc.setPeerListener( function(easyrtcid, msgType, msgData, targeting){
-    // switch(msgType){
-      // case 'manual_hangup':
-        console.log("Manual hangup msg received");
-        // easyrtc.hangupAll();
-        $("#endcall").submit();
-        // break;
-      // default:    
-        console.log(easyrtc.idToName(easyrtcid) +
+    console.log("Manual hangup msg received");
+    console.log(easyrtc.idToName(easyrtcid) +
             " sent the following data " + JSON.stringify(msgData));
-        // break;
-      // }
     },'manual_hangup');
 
   easyrtc.setOnCall( function(easyrtcid, slot) {
     console.log('setOnCall called');
     call_started = true;
     $('#callstart').submit();
-
-    // &.ajax({
-    //   url: "/mentor_meetings/"+$("#mentor-meeting-container").data("id")+"/update",
-    //   data: {commit: "started"},
-    //   type: PATCH
-    // })
-    // .done(function(){
-    //         console.log('Meeting status set to started')
-    //         remainderbutton.remove();
-    // })
-    // .fail(function(){
-    //         console.log('Could not change meeting status')
-    // });
     strong = document.getElementById('awaitingnotification');
     button = document.getElementById('startbutton');
     remainderbutton = document.getElementById('remainderbutton');
     if (remainderbutton) {remainderbutton.remove();};
-    // button.style.display = 'none';
-    // strong.style.display = 'none' ;
     strong.remove();
     button.remove();
-    
     
     // creating hang up button
       hangupdiv =  document.getElementById('belowvideo');
@@ -71,9 +50,7 @@ function my_init() {
         );
         console.log('sent that as well');
         easyrtc.hangupAll();
-        $("#endcall").submit();
-         
-        
+        $("#endcall").submit();   
       }
       hanguplabel = document.createTextNode("End Meeting");
       hangupbutton.appendChild(hanguplabel);
@@ -102,13 +79,6 @@ function loggedInListener(roomName, otherPeers) {
   }
 
   console.log("Occupants: " + easyrtc.getRoomOccupantsAsArray(roomName));
-  
-
-
-  // console.log("Peer id: " + destination);
-  // console.log("My id: " + easyrtc.myEasyrtcid);
- 
-
 
   if (easyrtc.getRoomOccupantsAsArray(roomName).length === 1){
     console.log("Awaiting guest to join...");
@@ -163,12 +133,6 @@ function loggedInListener(roomName, otherPeers) {
       button.onclick = function() {
         performCall(easyrtcid);
       }
-      // button.onclick = function(easyrtcid) {
-      //   return function() {
-      //     performCall(easyrtcid);
-      //   }
-      // }(i);
-      // console.log(easyrtcid);
       label = document.createTextNode("Start Meeting");
       button.appendChild(label);
       otherClientDiv.appendChild(button); 
@@ -191,7 +155,3 @@ function performCall(easyrtcid) {
 $(document).ready(my_init)
 $(document).on('page:load', my_init)
 
-
-// $(window).on('beforeunload', function(){
-//     socket.close();
-// });

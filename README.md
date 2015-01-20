@@ -61,6 +61,12 @@ Then:
 * `git push heroku-production master:master` will push local master to production (svlabs.in)
 * `git push heroku-staging development:master` will push local development to staging (staging.svlabs.in)
 
+## API Documentation
+
+API documentation is maintained using Apiary.
+
+http://docs.startupvillage.apiary.io/
+
 ## Web resources considered for dev
 *  http://matthewlehner.net/rails-api-testing-guidelines/
 *  https://github.com/joshbuddy/jsonpath

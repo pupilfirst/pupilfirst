@@ -1,9 +1,9 @@
-h2.page-header Jobs @ #{@startup.name}
+h2.page-header Jobs at #{link_to @startup.name, startup_path(@startup)}
 
-= render 'post_new_job', startup: @startup, startup_founder: @startup_founder
+= render 'post_new_job'
 
 - if @startup_jobs.empty?
   p #{@startup.name} hasn't listed any jobs at the moment. Check again, later!
 - else
   - @startup_jobs.each do |job|
-    = render 'job_card', job: job, startup_founder: @startup_founder
+    = render 'job_card', job: job

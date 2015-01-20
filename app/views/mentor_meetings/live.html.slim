@@ -1,6 +1,6 @@
-/= javascript_include_tag 'easyrtc_mentor_meeting'
+
 = javascript_include_tag 'easyrtc_video'
-/= javascript_include_tag 'easyrtc_video_msg'
+
 
 h1 Welcome to your meeting with #{current_user == @mentor_meeting.user ? @mentor_meeting.mentor.user.fullname : @mentor_meeting.user.fullname}
 
@@ -15,45 +15,15 @@ h1 Welcome to your meeting with #{current_user == @mentor_meeting.user ? @mentor
   .row#belowvideo
 
 
-  / hidden form to invoke POST upon end call
+/ hidden form to invoke POST upon end call
 form#endcall style="display: hidden" action=mentor_meetings_feedback_path
-  / button#hangupbutton  
 
+/ hidden form to change meeting status to 'started'
 = form_tag mentor_mentor_meeting_path(@mentor_meeting,@mentor_meeting.mentor), method: :patch, remote: true, id: "callstart" do
   = hidden_field_tag :commit, 'started'
 
 
 
-/*****/
-
-
-   / .col-md-4
-   /   #receiveMessageArea
-   /     ' Received messages
-   /     #conversation
-
-   /   #sendMessageArea
-   /     #iam 
-   /     textarea#sendMessageText
-   /     #otherClients
-/*****/
-
-/ for multiparty audio-video + chat ***
-
-/ #fullpage  
-/   video#box0 muted="muted" volume="0" 
-/   video#box1 
-/   video#box2 
-/   video#box3 
-/   #textentryBox onsubmit="sendText()"  
-/     input#textentryField type="text" 
-/     br
-/     button#textentrySubmit onclick="sendText()" Send
-/     button#textentryCancel onclick="cancelText()" Cancel
-  
-/   img#killButton onclick="killActiveBox()" src="button_close.png"  alt="close button" 
-/   img#muteButton onclick="muteActiveBox()" src="button_mute.png"  alt="mute button" 
-/   img#textEntryButton onclick="showTextEntry()" src="textEntry.png"  alt="text button" 
 
 
 

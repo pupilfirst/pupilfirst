@@ -1,6 +1,7 @@
 class MentorMeetingsController < ApplicationController
   before_filter :authenticate_user!
   before_filter :meeting_started, only: [:feedback]
+  before_filter :meeting_completed, only: [:feedbacksave]
   
   def live
     @mentor_meeting = MentorMeeting.find(params[:id])
@@ -97,6 +98,10 @@ class MentorMeetingsController < ApplicationController
 
     def meeting_started
       raise_not_found if !(MentorMeeting.find(params[:id]).status == MentorMeeting::STATUS_STARTED || MentorMeeting.find(params[:id]).status == MentorMeeting::STATUS_COMPLETED)
+    end
+
+    def meeting_completed
+      raise_not_found if MentorMeeting.find(params[:id]).status != MentorMeeting::STATUS_COMPLETED
     end
 
     def role(mentormeeting)

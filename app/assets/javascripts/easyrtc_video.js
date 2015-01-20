@@ -2,13 +2,15 @@ function my_init() {
 
   call_started = false;
 
-  easyrtc.setSocketUrl(":4000");
+  easyrtc.setSocketUrl(":4000"); //change this to reflect location of node server
+
   easyrtc.setRoomOccupantListener(loggedInListener);
 
   console.log("Name read:" + $("#self").data("name"));
   easyrtc.setUsername($("#self").data("name"));
 
   easyrtc.dontAddCloseButtons();
+
   easyrtc.easyApp($("#mentor-meeting-container").data("id")+"chatroom", "self", ["caller"],
     function(myId) {
       console.log("App loaded succesfully");
@@ -17,8 +19,6 @@ function my_init() {
   // listener for hangup message from guest
   easyrtc.setPeerListener( function(easyrtcid, msgType, msgData, targeting){
     console.log("Manual hangup msg received");
-    console.log(easyrtc.idToName(easyrtcid) +
-            " sent the following data " + JSON.stringify(msgData));
     easyrtc.hangupAll();
     $("#endcall").submit(); 
     },'manual_hangup');
@@ -26,7 +26,7 @@ function my_init() {
   easyrtc.setOnCall( function(easyrtcid, slot) {
     console.log('setOnCall called');
     call_started = true;
-    $('#callstart').submit();
+    $('#callstart').submit(); // change meeting status
     strong = document.getElementById('awaitingnotification');
     button = document.getElementById('startbutton');
     remainderbutton = document.getElementById('remainderbutton');

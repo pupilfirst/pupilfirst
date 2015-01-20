@@ -381,6 +381,13 @@ class Startup < ActiveRecord::Base
     try(:agreement_ends_at).to_i > Time.now.to_i
   end
 
+  def hiring?
+    startup_jobs.not_expired.present?
+  end
+
+  def is_founder?(user)
+    founders.include? user
+  end
 
 
   # TODO: Remove incorporation_status boolean field.

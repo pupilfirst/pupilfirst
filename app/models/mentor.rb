@@ -20,7 +20,6 @@ class Mentor < ActiveRecord::Base
   end
 
   belongs_to :user
-  belongs_to :company
   accepts_nested_attributes_for :user
   has_many :skills, class_name: 'MentorSkill'
   has_many :mentor_meetings

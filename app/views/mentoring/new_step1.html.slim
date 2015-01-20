@@ -7,7 +7,7 @@ h1.page-header.margin-top-0
   = f.simple_fields_for :user, @mentor.user do |u|
     = u.input :fullname, label: 'Full Name', required: true
     = u.input :title, required: true
-  = f.association :company
+  = f.input :company
   = f.input :days_available, hint: 'On which days are you available for mentoring?', required: true, include_blank: false, collection: availability_days_collection
   = f.input :time_available, hint: 'During which time are you generally available?', required: true, include_blank: false, collection: availability_time_collection
   = f.input :company_level, hint: 'Which level of company would you prefer to mentor?', include_blank: false, collection: Startup.valid_product_progress_values, label_method: ->(obj) { company_level_html(obj) }

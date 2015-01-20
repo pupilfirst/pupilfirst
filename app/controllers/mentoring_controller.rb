@@ -129,7 +129,7 @@ class MentoringController < ApplicationController
   end
 
   def mentor_params
-    params.require(:mentor).permit({ user_attributes: [:id, :fullname, :title] }, :company_id,
+    params.require(:mentor).permit({ user_attributes: [:id, :fullname, :title] }, :company,
       :company_level, :days_available, :time_available
     )
   end

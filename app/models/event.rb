@@ -1,12 +1,12 @@
 class Event < ActiveRecord::Base
 
 
-#add author to events table
-  mount_uploader :picture, EventUploader
+#add author to events table, create modal for event show.
 
   belongs_to :location
   belongs_to :category
   belongs_to :author, class_name: 'AdminUser', foreign_key: :user_id
+  
   mount_uploader :picture, FeedImageUploader
   process_in_background :picture
 

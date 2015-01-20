@@ -56,11 +56,21 @@ describe StartupJob do
 
   describe '#equity_min_less_than_max' do
     context "when equity min greater than max" do
-      subject { build :startup_job, equity_max: 100, equity_min: 1000, equity_vest: 4, equity_cliff:1 }
+      subject { build :startup_job, equity_max: 3, equity_min: 5, equity_vest: 4, equity_cliff:1 }
 
       it 'invalidates record' do
         expect(subject).to_not be_valid
       end
+    end
+  end
+
+  describe "#salary_min_less_than_max" do
+    context "when salary min greater than max" do
+      subject { build :startup_job, salary_max: 20000, salary_min: 25000 }
+
+        it 'invalid record' do
+          expect(subject).to_not be_valid
+        end
     end
   end
 end

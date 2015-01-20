@@ -1,25 +1,4 @@
 module MentoringHelper
-  def cost_to_company_collection
-    {
-      'Less than 3 lakh' => Mentor::CTC_BELOW_3L,
-      'Between 3 lakh and 6 lakh' => Mentor::CTC_BETWEEN_3L_AND_6L,
-      'Between 6 lakh and 12 lakh' => Mentor::CTC_BETWEEN_6L_AND_12L,
-      'Between 12 lakh and 36 lakh' => Mentor::CTC_BETWEEN_12L_AND_36L,
-      'Between 36 lakh and 1 crore' => Mentor::CTC_BETWEEN_36L_AND_1CR,
-      'More than 1 crore' => Mentor::CTC_ABOVE_1_CR
-    }
-  end
-
-  def time_donate_percentage_collection
-    {
-      '0%' => Mentor::DONATE_0,
-      '25%' => Mentor::DONATE_25,
-      '50%' => Mentor::DONATE_50,
-      '75%' => Mentor::DONATE_75,
-      '100%' => Mentor::DONATE_100
-    }
-  end
-
   def availability_days_collection
     {
       'Every day' => Mentor::AVAILABILITY_DAYS_EVERYDAY,

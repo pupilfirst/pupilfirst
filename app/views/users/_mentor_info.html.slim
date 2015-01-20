@@ -12,11 +12,5 @@ table.table.table-hover.table-bordered.table-striped
       th Company
       td = mentor.company.name
     tr
-      th Cost-to-company
-      td Approximately #{number_to_currency mentor.cost_to_company, unit: '&#x20b9;'.html_safe, precision: 0} per year.
-    tr
-      th Percentage time donated
-      td #{mentor.time_donate_percentage}&#37;
-    tr
       th Company Level
       td = company_level_html mentor.company_level

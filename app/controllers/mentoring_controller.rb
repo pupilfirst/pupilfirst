@@ -14,16 +14,13 @@ class MentoringController < ApplicationController
       @state.startups = Startup.agreement_live
       @state.mentors = Mentor.verified_mentors.where.not(user_id: current_user.id)
       @state.outgoing_meetings = MentorMeeting.where(user_id: current_user.id)
-      
 
       if current_user.mentor.present?
         @state.mentor = current_user.mentor
         @state.mentor_verified = current_user.mentor.verified?
         @state.mentor_pending_verification = current_user.phone_verified?
         @state.mentor_registration_going_on = !current_user.phone_verified?
-        @state.incoming_meetings = current_user.mentor.mentor_meetings  #Mentor_Meeting.all 
-      
-
+        @state.incoming_meetings = current_user.mentor.mentor_meetings
       end
     end
   end
@@ -133,7 +130,7 @@ class MentoringController < ApplicationController
 
   def mentor_params
     params.require(:mentor).permit({ user_attributes: [:id, :fullname, :title] }, :company_id,
-      :company_level, :cost_to_company, :time_donate_percentage, :days_available, :time_available
+      :company_level, :days_available, :time_available
     )
   end
 

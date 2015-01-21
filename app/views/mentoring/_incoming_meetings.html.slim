@@ -1,27 +1,28 @@
 - if state.incoming_meetings.present?
   br
   ' Meeting requests received
-  table#t02.table.table-borderless
-      thead
-        tr
-          th Purpose
-          th From
-          th Date
-          th Time
-          th Status
-      tbody
+
+  table.table
+    thead
+      tr
+        th Purpose
+        th From
+        th Date
+        th Time
+        th Status
+    tbody
       - state.incoming_meetings.each do |meet|
         tr
           = simple_form_for(meet, url: mentor_mentor_meeting_url(state.mentor,meet), method: :patch) do |f|
             td = meet.purpose
             td = meet.user.fullname
             td = meet.suggested_meeting_at.to_date
-            td = meet.suggested_meeting_at.strftime("%l:%M %P")
-            td = meeting_status_html meet.status
+            td = meet.suggested_meeting_at.strftime('%l:%M %P')
+            td = meeting_status_html meet.statusß
             td
               - if meet.status == MentorMeeting::STATUS_REQUESTED
-                ' #{f.submit "Accept", class: "btn btn-success"}  
-                / = f.submit "Reject", class: "btn btn-danger"  
+                ' #{f.submit "Accept", class: "btn btn-success"}
+                / = f.submit "Reject", class: "btn btn-danger"
                 button.btn.btn-danger  type="button" data-toggle="modal" data-target="#commentonreject"
                   ' Reject
               - elsif meet.status == MentorMeeting::STATUS_ACCEPTED && meet.meeting_at < 15.minutes.from_now
@@ -43,6 +44,4 @@
                   .modal-footer
                     button.btn.btn-primary type="button"  data-dismiss="modal"
                       ' Close
-                    = f.submit "Submit", class: "btn btn-primary" 
-
-
+                    = f.submit 'Submit', class: 'btn btn-primary'

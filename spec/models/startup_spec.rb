@@ -21,8 +21,8 @@ describe Startup do
 
   it "can't have more than 3 categories" do
     startup = build(:startup)
-    category_1 = create(:startup_category)
     category_2 = create(:startup_category)
+    category_1 = create(:startup_category)
     category_3 = create(:startup_category)
     category_4 = create(:startup_category)
     startup.categories = "#{category_1.id},#{category_2.id},#{category_3.id},#{category_4.id}"

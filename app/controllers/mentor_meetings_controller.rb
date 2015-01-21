@@ -62,7 +62,7 @@ class MentorMeetingsController < ApplicationController
   def feedback
     @mentor_meeting = MentorMeeting.find(params[:id])
     @role = role(@mentor_meeting)
-    flash[:notice] = "Your meeting with #{guest(@mentor_meeting).fullname} has ended"
+    flash.now[:notice] = "Your meeting with #{guest(@mentor_meeting).fullname} has ended"
     @mentor_meeting.status = MentorMeeting::STATUS_COMPLETED
     @mentor_meeting.save!
   end

@@ -3,12 +3,12 @@ class UserMailer < ActionMailer::Base
 
   def meeting_feedback_user(mentor_meeting)
     @mentor_meeting = mentor_meeting
-    mail to:@mentor_meeting.user.email, subject: 'Remainder: Feedback on mentoring session' 
+    mail to:@mentor_meeting.user.email, subject: 'Reminder: Feedback on mentoring session' 
   end
 
   def meeting_feedback_mentor(mentor_meeting)
     @mentor_meeting = mentor_meeting
-    mail to:@mentor_meeting.mentor.user.email, subject: 'Remainder: Feedback on mentoring session' 
+    mail to:@mentor_meeting.mentor.user.email, subject: 'Reminder: Feedback on mentoring session' 
   end
 
   def meeting_request_rejected(mentor_meeting)
@@ -23,12 +23,12 @@ class UserMailer < ActionMailer::Base
 
   def meeting_today_user(mentor_meeting)
     @mentor_meeting = mentor_meeting
-    mail to:@mentor_meeting.user.email, subject: 'Remainder: Meeting with' + @mentor_meeting.mentor.user.fullname
+    mail to:@mentor_meeting.user.email, subject: 'Reminder: Meeting with' + @mentor_meeting.mentor.user.fullname
   end
 
   def meeting_today_mentor(mentor_meeting)
     @mentor_meeting = mentor_meeting
-    mail to:@mentor_meeting.mentor.user.email, subject: 'Remainder: Meeting with #{@mentor_meeting.user.fullname}@#{@mentor_meeting.user.startup.name}'
+    mail to:@mentor_meeting.mentor.user.email, subject: 'Reminder: Meeting with #{@mentor_meeting.user.fullname}@#{@mentor_meeting.user.startup.name}'
   end
 
   def meeting_request_to_mentor(mentor_meeting)

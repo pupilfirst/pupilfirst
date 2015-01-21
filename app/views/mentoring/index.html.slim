@@ -3,27 +3,3 @@
 = render 'startups_for_mentor', state: @state
 = render 'outgoing_meetings', state: @state 
 = render 'mentors_for_startup', state: @state 
-
-
-
-  
-
-
-/.row style="margin-top: 30px;"
-/  - if current_user
-  
-/   = render 'startups_for_mentor' 
-  /- if current_user.mentor.present?
-  /  = render 'startups_for_mentor'
-
-/.row style="margin-top: 30px;"
-/  .col-md-6
-/    .text-center
-/      .img-thumbnail style="width: 320px; height: 320px;"
-/        p style="padding-top: 20px;" This should be a collection of featured startups.
-/      p style="margin-top: 20px;" Featured Startups
-/  .col-md-6
-/    .text-center
-/      .img-thumbnail style="width: 320px; height: 320px;"
-/        p style="padding-top: 20px;" This should be a collection of featured mentors.
-/      p style="margin-top: 20px;" Featured Mentors

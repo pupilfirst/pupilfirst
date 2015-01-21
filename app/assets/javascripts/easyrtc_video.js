@@ -29,8 +29,8 @@ function my_init() {
     $('#callstart').submit(); // change meeting status
     strong = document.getElementById('awaitingnotification');
     button = document.getElementById('startbutton');
-    remainderbutton = document.getElementById('remainderbutton');
-    if (remainderbutton) {remainderbutton.remove();};
+    reminderbutton = document.getElementById('reminderbutton');
+    if (reminderbutton) {reminderbutton.remove();};
     strong.remove();
     button.remove();
     
@@ -98,20 +98,20 @@ function loggedInListener(roomName, otherPeers) {
           window.location.assign("/mentoring")       }
       }
     if (!call_started){
-      remainderbutton = document.createElement('button');
-      remainderbutton.setAttribute("id", "remainderbutton");
-      remainderdiv = document.getElementById('belowvideo');
-      label = document.createTextNode("Send Remainder");
-      remainderbutton.appendChild(label);
-      remainderdiv.appendChild(remainderbutton);
-      remainderbutton.onclick = function(){
-        if (window.confirm("Are you sure you want to send an SMS remainder to the guest ?")){
+      reminderbutton = document.createElement('button');
+      reminderbutton.setAttribute("id", "reminderbutton");
+      reminderdiv = document.getElementById('belowvideo');
+      label = document.createTextNode("Send reminder");
+      reminderbutton.appendChild(label);
+      reminderdiv.appendChild(reminderbutton);
+      reminderbutton.onclick = function(){
+        if (window.confirm("Are you sure you want to send an SMS reminder to the guest ?")){
           $.ajax({
-            url: "/mentor_meetings/"+$("#mentor-meeting-container").data("id")+"/remainder"
+            url: "/mentor_meetings/"+$("#mentor-meeting-container").data("id")+"/reminder"
           })
           .done(function(){
             alert('SMS sent')
-            remainderbutton.remove();
+            reminderbutton.remove();
           })
           .fail(function(){
             alert('Could not sent SMS!')

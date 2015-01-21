@@ -52,29 +52,20 @@ class MentorMeeting < ActiveRecord::Base
   def suggested_meeting_time=(value)
     @suggested_meeting_time = case value
     when Mentor::AVAILABILITY_TIME_MORNING
-      {hour: 3, min: 30}
+      {hour: 9, min: 00}
     when Mentor::AVAILABILITY_TIME_MIDDAY
-      {hour: 6, min: 30}
+      {hour: 12, min: 00}
     when Mentor::AVAILABILITY_TIME_AFTERNOON
-      {hour: 9, min: 30}
+      {hour: 15, min: 00}
     when Mentor::AVAILABILITY_TIME_EVENING
-      {hour: 12, min: 30}
+      {hour: 18, min: 00}
     else
       nil
     end  
   end
 
-  def mentor_rating?
-    self.mentor_rating.present?
-  end
-
-  def user_rating?
-    self.user_rating.present?
-  end
-
   def gave_feedback?(user)
-    self.user_rating? if user == self.user
-    self.mentor_rating? if user == self.mentor.user 
+     user == self.user ? self.user_rating.present? : self.mentor_rating.present?
   end
 
 end

@@ -1,4 +1,3 @@
-/ - binding.pry
 - if state.mentor_verified && state.startups.present?
   ' Currently incubated startups
   table#t02.table.table-borderless
@@ -14,10 +13,7 @@
       tr
         td
           strong
-            - if startup.website.present?
-              = link_to startup.name, startup.website
-            - else
-              = startup.name
+            = link_to startup.name, startup_path(startup)
         td = startup.incubation_location.capitalize
         td = startup.team_size
         td = startup.product_name

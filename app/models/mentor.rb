@@ -26,6 +26,7 @@ class Mentor < ActiveRecord::Base
 
   validates_presence_of :user
   validates_presence_of :company
+  validates_length_of :company, maximum: 255
   validates_associated :user
   validates_presence_of :availability
   validates_presence_of :company_level

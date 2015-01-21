@@ -16,10 +16,10 @@ h1 Welcome to your meeting with #{current_user == @mentor_meeting.user ? @mentor
 
 
 / hidden form to invoke POST upon end call
-form#endcall style="display: hidden" action=mentor_meetings_feedback_path
+form#endcall style="display: hidden" action=mentor_meetings_feedback_path(@mentor_meeting)
 
 / hidden form to change meeting status to 'started'
-= form_tag mentor_mentor_meeting_path(@mentor_meeting,@mentor_meeting.mentor), method: :patch, remote: true, id: "callstart" do
+= form_tag mentor_mentor_meeting_path(@mentor_meeting.mentor,@mentor_meeting), method: :patch, remote: true, id: "callstart" do
   = hidden_field_tag :commit, 'started'
 
 

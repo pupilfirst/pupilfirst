@@ -7,7 +7,7 @@ gem 'rails', '4.2.0'
 gem 'active_admin_editor', git: 'https://github.com/ejholmes/active_admin_editor.git'
 
 # ActiveAdmin doesn't like 4.2 at all (for the moment). Switch this to stable when available.
-gem 'activeadmin', github: 'activeadmin', branch: 'rails-4-2'
+gem 'activeadmin', github: 'activeadmin'
 gem 'inherited_resources', github: 'josevalim/inherited_resources', branch: 'rails-4-2'
 
 

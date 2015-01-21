@@ -46,8 +46,12 @@ class MentorMeetingsController < ApplicationController
       @mentor_meeting.meeting_at = @mentor_meeting.suggested_meeting_at if @mentor_meeting.status == MentorMeeting::STATUS_ACCEPTED   
       if @mentor_meeting.save
         flash[:notice] = "Meeting status has been updated"
-        UserMailer.meeting_request_accepted(@mentor_meeting).deliver if @mentor_meeting.status == MentorMeeting::STATUS_ACCEPTED
-        UserMailer.meeting_request_rejected(@mentor_meeting).deliver if @mentor_meeting.status == MentorMeeting::STATUS_REJECTED
+        if @mentor_meeting.status == MentorMeeting::STATUS_REJECTED
+          @mentor_meeting.update(reject_params)
+          UserMailer.meeting_request_rejected(@mentor_meeting).deliver
+        elsif @mentor_meeting.status == MentorMeeting::STATUS_ACCEPTED
+          UserMailer.meeting_request_accepted(@mentor_meeting).deliver
+        end
       else 
         flash[:alert] = "Error in saving response"
       end
@@ -94,6 +98,10 @@ class MentorMeetingsController < ApplicationController
 
     def feedback_params
       params.require(:mentor_meeting).permit(:user_rating,:mentor_rating,:user_comments,:mentor_comments)
+    end
+
+    def reject_params
+      params.require(:mentor_meeting).permit(:mentor_comments)
     end
 
     def meeting_started

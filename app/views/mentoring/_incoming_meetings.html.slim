@@ -21,10 +21,28 @@
             td
               - if meet.status == MentorMeeting::STATUS_REQUESTED
                 ' #{f.submit "Accept", class: "btn btn-success"}  
-                = f.submit "Reject", class: "btn btn-danger"  
+                / = f.submit "Reject", class: "btn btn-danger"  
+                button.btn.btn-danger  type="button" data-toggle="modal" data-target="#commentonreject"
+                  ' Reject
               - elsif meet.status == MentorMeeting::STATUS_ACCEPTED && meet.meeting_at < 15.minutes.from_now
                 = link_to 'Join Room', mentor_meetings_live_url(meet.id),  class: 'btn btn-primary'
               - elsif meet.status == MentorMeeting::STATUS_COMPLETED && !meet.gave_feedback?(current_user)
                 = link_to 'Give Feedback', mentor_meetings_feedback_url(meet.id),  class: 'btn btn-primary'
+
+
+            #commentonreject.modal.fade tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+              .modal-dialog
+                .modal-content
+                  .modal-header
+                    button.close type="button" data-dismiss="modal" aria-label="Close"
+                      span aria-hidden="true"
+                        ' &times;
+                    ' Please provide your comments for rejection, if any
+                  .modal-body
+                    = f.input :mentor_comments
+                  .modal-footer
+                    button.btn.btn-primary type="button"  data-dismiss="modal"
+                      ' Close
+                    = f.submit "Submit", class: "btn btn-primary" 
 
 

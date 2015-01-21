@@ -69,18 +69,14 @@ class MentorMeetingsController < ApplicationController
 
   def feedbacksave
     @mentor_meeting = MentorMeeting.find(params[:id])
-    if params[:commit] == "Later"
+
+    if @mentor_meeting.update(feedback_params)
+      flash[:notice] = 'Thank you for your feedback!'
       redirect_to mentoring_path
     else
-      if @mentor_meeting.update(feedback_params)
-        flash[:notice] = "Thank you for your feedback!"
-        redirect_to mentoring_path
-      else
-        flash[:error] = "Could not save your feedback. Try again"
-        render 'feedback'
-      end
+      flash[:error] = 'Could not save your feedback. Please try again.'
+      render 'feedback'
     end
-
   end
 
   def reminder

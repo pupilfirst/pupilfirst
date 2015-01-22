@@ -64,6 +64,9 @@ group :development do
   gem 'childprocess'
   gem 'terminal-notifier-guard'
   gem "letter_opener"
+
+  gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
+  gem 'momentjs-rails', :github => 'derekprior/momentjs-rails'
 end
 
 group :test do

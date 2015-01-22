@@ -16,12 +16,15 @@
           = simple_form_for(meet, url: mentor_mentor_meeting_url(state.mentor,meet), method: :patch) do |f|
             td = meet.purpose
             td = meet.user.fullname
-            td = meet.suggested_meeting_at.to_date
-            td = meet.suggested_meeting_at.strftime('%l:%M %P')
+            td = meet.meeting_at.present? ? meet.meeting_at.to_date : meet.suggested_meeting_at.to_date
+            td = meet.meeting_at.present? ? meet.meeting_at.strftime("%l:%M %P") : meet.suggested_meeting_at.strftime("%l:%M %P")
             td = meeting_status_html meet.status
             td
               - if meet.status == MentorMeeting::STATUS_REQUESTED
-                ' #{f.submit "Accept", class: "btn btn-success"}
+                / ' #{f.submit "Accept", class: "btn btn-success"}
+                button.btn.btn-success  type="button" data-toggle="modal" data-target="#rescheduleaccept"
+                  ' Accept/Reschedule
+                '   
                 / = f.submit "Reject", class: "btn btn-danger"
                 button.btn.btn-danger  type="button" data-toggle="modal" data-target="#commentonreject"
                   ' Reject
@@ -31,7 +34,7 @@
                 = link_to 'Give Feedback', mentor_meetings_feedback_url(meet.id),  class: 'btn btn-primary'
 
 
-            #commentonreject.modal.fade tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+            #commentonreject.modal.fade tabindex="-1" role="dialog" 
               .modal-dialog
                 .modal-content
                   .modal-header
@@ -45,3 +48,21 @@
                     button.btn.btn-primary type="button"  data-dismiss="modal"
                       ' Close
                     = f.submit 'Submit', class: 'btn btn-primary'
+
+
+            #rescheduleaccept.modal.fade tabindex="-1" role="dialog" 
+              .modal-dialog
+                .modal-content
+                  .modal-header
+                    button.close type="button" data-dismiss="modal" aria-label="Close"
+                      span aria-hidden="true"
+                        ' &times;
+                    ' You may reschedule the meeting before acceptance, if required
+                  .modal-body
+                    = f.input :meeting_at, :as => :datetime_picker, :input_html => { :value => meet.suggested_meeting_at.strftime('%d-%m-%Y %H:%M')} 
+                  .modal-footer
+                    button.btn.btn-primary type="button"  data-dismiss="modal"
+                      ' Close
+                    = f.submit 'Accept', class: 'btn btn-primary'
+
+

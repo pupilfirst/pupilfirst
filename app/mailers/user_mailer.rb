@@ -21,6 +21,11 @@ class UserMailer < ActionMailer::Base
     mail to:@mentor_meeting.user.email, subject: 'Meeting request accepted by ' + @mentor_meeting.mentor.user.fullname
   end
 
+  def meeting_request_rescheduled(mentor_meeting)
+    @mentor_meeting = mentor_meeting
+    mail to:@mentor_meeting.user.email, subject: 'Meeting request accepted with reschedule by ' + @mentor_meeting.mentor.user.fullname
+  end
+
   def meeting_today_user(mentor_meeting)
     @mentor_meeting = mentor_meeting
     mail to:@mentor_meeting.user.email, subject: 'Reminder: Meeting with' + @mentor_meeting.mentor.user.fullname

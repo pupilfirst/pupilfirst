@@ -25,6 +25,13 @@ GIT
       rspec (>= 2.0, < 4.0)
 
 GIT
+  remote: git://github.com/derekprior/momentjs-rails.git
+  revision: 4b1b0a64bca3eb5ab8741eb4a4d2c1c5a6fdf04b
+  specs:
+    momentjs-rails (2.9.0)
+      railties (>= 3.1)
+
+GIT
   remote: git://github.com/josevalim/inherited_resources.git
   revision: 4e348783157488b48ab6ed11afcd1e31604987aa
   branch: rails-4-2
@@ -52,6 +59,14 @@ GIT
       execjs
       rails (>= 3.1)
       react-source (= 0.12)
+
+GIT
+  remote: git://github.com/zpaulovics/datetimepicker-rails.git
+  revision: d0f8a68f30d7ffb34e505845a693df27467424f3
+  branch: master
+  submodules: true
+  specs:
+    datetimepicker-rails (3.1.1)
 
 GIT
   remote: https://github.com/ejholmes/active_admin_editor.git
@@ -548,6 +563,7 @@ DEPENDENCIES
   childprocess
   cocoon
   coffee-rails (~> 4.1.0)
+  datetimepicker-rails!
   devise_invitable
   dotenv
   email_spec
@@ -567,6 +583,7 @@ DEPENDENCIES
   just-datetime-picker
   letter_opener
   mini_magick
+  momentjs-rails!
   newrelic_rpm
   nilify_blanks
   nokogiri

@@ -43,15 +43,16 @@ class MentorMeetingsController < ApplicationController
       @mentor_meeting.save!
       head :ok
     else
+      @mentor_meeting.update(mentorupdate_params)
       @mentor_meeting.status = params[:commit] == "Accept" ? MentorMeeting::STATUS_ACCEPTED : MentorMeeting::STATUS_REJECTED
-      @mentor_meeting.meeting_at = @mentor_meeting.suggested_meeting_at if @mentor_meeting.status == MentorMeeting::STATUS_ACCEPTED   
+      rescheduled = @mentor_meeting.meeting_at != @mentor_meeting.suggested_meeting_at ? true : false
+      # @mentor_meeting.meeting_at = @mentor_meeting.suggested_meeting_at if @mentor_meeting.status == MentorMeeting::STATUS_ACCEPTED && !@mentor_meeting.meeting_at.present?   
       if @mentor_meeting.save
         flash[:notice] = "Meeting status has been updated"
         if @mentor_meeting.status == MentorMeeting::STATUS_REJECTED
-          @mentor_meeting.update(reject_params)
           UserMailer.meeting_request_rejected(@mentor_meeting).deliver
         elsif @mentor_meeting.status == MentorMeeting::STATUS_ACCEPTED
-          UserMailer.meeting_request_accepted(@mentor_meeting).deliver
+          rescheduled ? UserMailer.meeting_request_rescheduled(@mentor_meeting).deliver : UserMailer.meeting_request_accepted(@mentor_meeting).deliver
         end
       else 
         flash[:alert] = "Error in saving response"
@@ -97,8 +98,8 @@ class MentorMeetingsController < ApplicationController
       params.require(:mentor_meeting).permit(:user_rating,:mentor_rating,:user_comments,:mentor_comments)
     end
 
-    def reject_params
-      params.require(:mentor_meeting).permit(:mentor_comments)
+    def mentorupdate_params
+      params.require(:mentor_meeting).permit(:mentor_comments,:meeting_at)
     end
 
     def meeting_started

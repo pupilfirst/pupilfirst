@@ -24,6 +24,7 @@ class MentorMeetingsController < ApplicationController
   	@mentor_meeting.user = current_user
   	if @mentor_meeting.save
   		UserMailer.meeting_request_to_mentor(@mentor_meeting).deliver
+      flash[:notice]="Meeting request sent"
   		redirect_to mentoring_path(current_user)
   	else
   		flash[:alert]="Failed to create new meeting request"

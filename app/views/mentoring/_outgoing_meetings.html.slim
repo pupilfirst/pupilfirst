@@ -17,8 +17,7 @@
           td = meet.meeting_at.present? ? meet.meeting_at.strftime("%l:%M %P") : meet.suggested_meeting_at.strftime("%l:%M %P")
           td 
             - if meet.status == MentorMeeting::STATUS_REJECTED
-              a href="#" role="button" class="btn popovers" data-toggle="popover" data-trigger="focus" data-content="#{meet.mentor_comments}" tabindex="0"
-                = meeting_status_html meet.status
+              a href="#" class="popovers" data-toggle="popover" data-trigger="focus" data-content="#{meet.mentor_comments}" tabindex="0" #{meeting_status_html meet.status}
             - else
               = meeting_status_html meet.status
           td 

@@ -14,6 +14,13 @@ class MentoringController < ApplicationController
       @state.startups = Startup.agreement_live
       @state.mentors = Mentor.verified_mentors.where.not(user_id: current_user.id)
       @state.outgoing_meetings = MentorMeeting.where(user_id: current_user.id)
+      @state.outgoing_meetings.each do |meet|
+        time = meet.meeting_at.present? ? meet.meeting_at : meet.suggested_meeting_at
+        if time < 1.days.ago && meet.status != MentorMeeting::STATUS_COMPLETED
+          meet.status = MentorMeeting::STATUS_EXPIRED
+          meet.save
+        end
+      end
 
       if current_user.mentor.present?
         @state.mentor = current_user.mentor
@@ -21,6 +28,14 @@ class MentoringController < ApplicationController
         @state.mentor_pending_verification = current_user.phone_verified?
         @state.mentor_registration_going_on = !current_user.phone_verified?
         @state.incoming_meetings = current_user.mentor.mentor_meetings
+        @state.incoming_meetings.each do |meet|
+          time = meet.meeting_at.present? ? meet.meeting_at : meet.suggested_meeting_at
+          if time < 1.days.ago && meet.status != MentorMeeting::STATUS_COMPLETED
+            meet.status = MentorMeeting::STATUS_EXPIRED
+            meet.save
+          end
+        end
+
       end
     end
   end

@@ -6,7 +6,7 @@ class EventsController < ApplicationController
 
   def new
     @event = Event.new
-    @location = Location.where("LOWER(title) like ?", 'startup village')
+    @location = Location.where("LOWER(title) like ?", 'startup village%')
     #make location by default should be Startup Village. No other location should be allowed 
   end
 

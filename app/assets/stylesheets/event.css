@@ -36,12 +36,14 @@
   font-size: 22pt;
   font-weight: 200;
   line-height: 1;
+  margin: 5%;
 }
 .event-list > li time > .month {
   display: block;
   font-size: 24pt;
   font-weight: 900;
   line-height: 1;
+  margin: 15%;
 }
 .event-list > li > img {
   width: 100%;
@@ -77,9 +79,9 @@
   display: table-cell;
   cursor: pointer;
   color: rgb(30, 30, 30);
-  font-size: 11pt;
+  font-size: 8pt;
   font-weight: 300;
-  padding: 3px 0px;
+  padding: 1% 0px;
   background-color: rgb(200, 200, 200);
 }
 .event-list > li > .info > ul > li > div {
@@ -167,7 +169,7 @@
   }	
   .event-list > li > .info > .title, 
   .event-list > li > .info > .desc {
-    padding: 4px 15px;
+    padding: 2% 5%;
   }
   .event-list > li > .info > ul {
     position: absolute;

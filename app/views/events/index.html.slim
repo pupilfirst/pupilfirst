@@ -1,4 +1,8 @@
-= link_to "Add New Event", new_event_path(@event)
+div style = "text-align: center;padding: 4%;"
+  p Interested in Hosting an event ?
+  = link_to "Add New Event", new_event_path(@event)
+  p
+    i  Please note that once created the event cannot be edited by you. Incase you have any correction, mail us the detail along with the Event ID sent to your mail.
 - @events.each do |event|
   div class="container"
     div class="row"
@@ -12,13 +16,17 @@
             div class="info"
               h2 class="title"
                 = event.title
+              p class="desc"
+                b VENUE:   
+                = "#{event.location.title}, "
+                = event.location.address
               ul
                 li style="width:30%;"
-                  = event.start_at.to_time
+                  = "#{event.start_at.strftime('%d/%m/%Y')} : #{event.start_at.strftime('%I:%M%p')}"
                 li class="till" style="width:10%;"
                   div till
                 li style="width:30%;"
-                  = event.end_at.to_time
+                  = "#{event.end_at.strftime('%d/%m/%Y')} : #{event.start_at.strftime('%I:%M%p')}"
 
   <!-- Button trigger modal 
   button class="btn btn-link" data-toggle="modal" data-target="#todo-1-notes"
@@ -33,5 +41,5 @@
         div class="modal-body"
           = image_tag event.picture, size: "260x180"
           = simple_format(event.description)
-        div class="modal-footer" "Starts at: #{event.start_at} and Ends at: #{event.end_at}"
-        button type="button" class="btn btn-primary" data-dismiss="modal" Close
+        div class="modal-footer"
+          button type="button" class="btn btn-primary" data-dismiss="modal" Close

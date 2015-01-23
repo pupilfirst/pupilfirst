@@ -1,5 +1,5 @@
-- if state.mentor_verified && state.startups.present?
-  ' Currently incubated startups
+- if current_mentor.try(:verified?) && @startups.present?
+  h2 Currently incubated startups
 
   table.table
     thead
@@ -8,13 +8,13 @@
         th Incubated At
         th Team size
         th Product Name
-        th Product Progresse
+        th Product Progress
     tbody
-      - state.startups.each do |startup|
+      - @startups.each do |startup|
         tr
           td
             strong
-              = link_to startup.name, startup_path(startup)
+              = link_to startup.name, startup
           td = startup.incubation_location.capitalize
           td = startup.team_size
           td = startup.product_name

@@ -1,6 +1,6 @@
-- if state.outgoing_meetings.present?
+- if current_user.try(:mentor_meetings).present?
   | Meeting requests sent
-  table#t01.table.table-borderless
+  table.table
       thead
         tr
           th Purpose
@@ -9,7 +9,7 @@
           th Time
           th Status
       tbody
-      - state.outgoing_meetings.each do |meet|
+      - current_user.mentor_meetings.each do |meet|
         tr
           td = meet.purpose
           td = meet.mentor.user.fullname

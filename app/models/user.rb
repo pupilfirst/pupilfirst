@@ -332,4 +332,28 @@ class User < ActiveRecord::Base
       raise Exceptions::PhoneNumberVerificationFailed, 'Supplied phone number or verification code do not match stored values.'
     end
   end
+
+  def member_of_startup?
+    startup.present?
+  end
+
+  def not_a_mentor?
+    !mentor?
+  end
+
+  def mentor?
+    mentor.present?
+  end
+
+  def mentor_pending_verification?
+    mentor.try(:verified_at).present?
+  end
+
+  # Phone verification is the final step of the registration process. If that isn't complete, then the mentor is still
+  # going through the registration process.
+  def mentor_registration_going_on?
+    if mentor.present?
+      !phone_verified?
+    end
+  end
 end

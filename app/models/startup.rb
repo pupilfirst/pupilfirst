@@ -391,6 +391,5 @@ class Startup < ActiveRecord::Base
     founders.include? user
   end
 
-
   # TODO: Remove incorporation_status boolean field.
 end

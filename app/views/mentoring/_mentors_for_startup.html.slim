@@ -1,6 +1,6 @@
-- if state.startup && state.mentors.present?
+- if current_user.try(:member_of_startup?) && @mentors.present?
   | List of mentors
-  table#t01.table.table-borderless
+  table.table
     thead
       tr
         th Name
@@ -9,7 +9,7 @@
         th Skills
 
     tbody
-    - state.mentors.each do |mentor|
+    - @mentors.each do |mentor|
       tr
         td
           strong #{mentor.user.fullname}
@@ -17,7 +17,6 @@
         td #{mentor.availability['time']['after']}:00 and #{mentor.availability['time']['before']}:00
         td
           = mentor.skills.map { |skill| "#{skill.skill.name} (#{skill.expertise})" }.join ', '
-        td = link_to "Request Meeting", new_mentor_mentor_meeting_path(mentor),class: "btn btn-default"
+        td = link_to 'Request Meeting', new_mentor_mentor_meeting_path(mentor),class: 'btn btn-default'
          
   hr.col-xs-12
-

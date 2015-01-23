@@ -80,6 +80,11 @@ class Mentor < ActiveRecord::Base
     self.verified_at.present?
   end
 
+  def self.listed_mentors(exclude: nil)
+    list = verified_mentors
+    exclude ? list.where.not(user_id: exclude.id) : list
+  end
+
   private
 
   def convert_availability_days_to_dates(value)

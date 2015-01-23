@@ -66,8 +66,11 @@ class MentorMeeting < ActiveRecord::Base
   end
 
   def gave_feedback?(user)
-     user == self.user ? self.user_rating.present? : self.mentor_rating.present?
+    if user.is_a? Mentor
+      mentor_rating.present?
+    else
+      user_rating.present?
+    end
   end
-
 end
  

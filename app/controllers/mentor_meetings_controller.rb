@@ -39,24 +39,13 @@ class MentorMeetingsController < ApplicationController
   def update
     @mentor_meeting = MentorMeeting.find(params[:id])
     if params[:commit] == "started"
-      @mentor_meeting.status = MentorMeeting::STATUS_STARTED
-      @mentor_meeting.save!
+      @mentor_meeting.status_to_started
       head :ok
     else
       @mentor_meeting.update(mentorupdate_params)
-      @mentor_meeting.status = params[:commit] == "Accept" ? MentorMeeting::STATUS_ACCEPTED : MentorMeeting::STATUS_REJECTED
-      rescheduled = @mentor_meeting.meeting_at != @mentor_meeting.suggested_meeting_at ? true : false
-      # @mentor_meeting.meeting_at = @mentor_meeting.suggested_meeting_at if @mentor_meeting.status == MentorMeeting::STATUS_ACCEPTED && !@mentor_meeting.meeting_at.present?   
-      if @mentor_meeting.save
-        flash[:notice] = "Meeting status has been updated"
-        if @mentor_meeting.status == MentorMeeting::STATUS_REJECTED
-          UserMailer.meeting_request_rejected(@mentor_meeting).deliver
-        elsif @mentor_meeting.status == MentorMeeting::STATUS_ACCEPTED
-          rescheduled ? UserMailer.meeting_request_rescheduled(@mentor_meeting).deliver : UserMailer.meeting_request_accepted(@mentor_meeting).deliver
-        end
-      else 
-        flash[:alert] = "Error in saving response"
-      end
+      params[:commit] == "Accept" ? @mentor_meeting.status_to_accepted : @mentor_meeting.status_to_rejected   
+      flash[:notice] = "Meeting status has been updated"
+      email_mentor_response(@mentor_meeting)
       redirect_to mentoring_url
     end 
   end
@@ -65,8 +54,7 @@ class MentorMeetingsController < ApplicationController
     @mentor_meeting = MentorMeeting.find(params[:id])
     @role = role(@mentor_meeting)
     flash.now[:notice] = "Your meeting with #{guest(@mentor_meeting).fullname} has ended"
-    @mentor_meeting.status = MentorMeeting::STATUS_COMPLETED
-    @mentor_meeting.save!
+    @mentor_meeting.status_to_completed
   end
 
   def feedbacksave
@@ -120,6 +108,14 @@ class MentorMeetingsController < ApplicationController
 
     def guest_rating?(mentormeeting)
       guest(mentormeeting) == mentormeeting.user ? mentormeeting.user_rating? : mentormeeting.mentor_rating?
+    end
+
+    def email_mentor_response(mentormeeting)
+      if mentormeeting.rejected?
+        UserMailer.meeting_request_rejected(mentormeeting).deliver
+      elsif mentormeeting.accepted?
+        rescheduled? ? UserMailer.meeting_request_rescheduled(mentormeeting).deliver : UserMailer.meeting_request_accepted(mentormeeting).deliver
+      end
     end
 
 

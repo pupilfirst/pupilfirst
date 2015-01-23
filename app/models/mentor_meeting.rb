@@ -69,5 +69,50 @@ class MentorMeeting < ActiveRecord::Base
      user == self.user ? self.user_rating.present? : self.mentor_rating.present?
   end
 
+  def status_to(status)
+    case status
+    when "accepted"
+      update(status: STATUS_ACCEPTED)
+    when "rejected"
+      update(status: STATUS_REJECTED)
+    when "requested"
+      update(status: STATUS_REQUESTED)
+    when "started"
+      update(status: STATUS_STARTED)
+    when "completed"
+      update(status: STATUS_COMPLETED)
+    when "expired"
+      update(status: STATUS_EXPIRED) 
+    end
+  end
+
+  def status_to_started
+    update(status: STATUS_STARTED)
+  end
+
+  def status_to_accepted
+    update(status: STATUS_ACCEPTED)
+  end
+
+  def status_to_rejected
+    update(status: STATUS_REJECTED)
+  end
+
+  def status_to_completed
+    update(status: STATUS_COMPLETED)
+  end
+
+  def rescheduled?
+    meeting_at != suggested_meeting_at
+  end
+
+  def rejected?
+    status == STATUS_REJECTED
+  end
+
+  def accpeted?
+    status == STATUS_ACCEPTED
+  end
+
 end
  

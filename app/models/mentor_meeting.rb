@@ -130,8 +130,7 @@ class MentorMeeting < ActiveRecord::Base
     status == STATUS_REJECTED
   end
 
-  # TODO: Spelling mistake here. Fix this and any calls.
-  def accpeted?
+  def accepted?
     status == STATUS_ACCEPTED
   end
 end

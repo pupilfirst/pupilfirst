@@ -1,3 +1,7 @@
-p Hi #{@mentor_meeting.user.fullname} !
+p Hi #{@mentor_meeting.user.fullname}!
 
-p #{@mentor_meeting.mentor.user.fullname} has accepted your request for meeting! However, the meeting has been rescheduled to #{@mentor_meeting.meeting_at.strftime('%d-%m-%Y %H:%M')} by the mentor. Please login at SV as per schedule. 
+p #{@mentor_meeting.mentor.user.fullname} has accepted your request for meeting!
+
+p However, the meeting has been rescheduled to #{@mentor_meeting.meeting_at.strftime('%d-%m-%Y %H:%M')} by the mentor.
+
+p Please login to svlabs.in at the scheduled time and head to the meeting room.

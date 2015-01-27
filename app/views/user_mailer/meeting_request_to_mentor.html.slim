@@ -1,6 +1,6 @@
 p Hi #{@mentor_meeting.mentor.user.fullname} !
 
-p #{link_to @mentor_meeting.user.fullname, @mentor_meeting.user} of #{link_to @mentor_meeting.user.startup.name, @mentor_meeting.user.startup} has requested a meeting with you on #{@mentor_meeting.suggested_meeting_at.to_date} at #{@mentor_meeting.suggested_meeting_at.strftime("%l:%M %P")}. The purpose of the meeting is:
+p #{@mentor_meeting.user.fullname} of #{link_to @mentor_meeting.user.startup.name, @mentor_meeting.user.startup} has requested a meeting with you on #{@mentor_meeting.suggested_meeting_at.to_date} at #{@mentor_meeting.suggested_meeting_at.strftime("%l:%M %P")}. The purpose of the meeting is:
 
 p
   em #{@mentor_meeting.purpose}.

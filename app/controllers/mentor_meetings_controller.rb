@@ -76,7 +76,6 @@ class MentorMeetingsController < ApplicationController
     head :ok
   end
 
-
   private
   	def meeting_params
   		params.require(:mentor_meeting).permit(:purpose,:suggested_meeting_at,:suggested_meeting_time,:duration)
@@ -114,9 +113,7 @@ class MentorMeetingsController < ApplicationController
       if mentormeeting.rejected?
         UserMailer.meeting_request_rejected(mentormeeting).deliver
       elsif mentormeeting.accepted?
-        rescheduled? ? UserMailer.meeting_request_rescheduled(mentormeeting).deliver : UserMailer.meeting_request_accepted(mentormeeting).deliver
+        mentormeeting.rescheduled? ? UserMailer.meeting_request_rescheduled(mentormeeting).deliver : UserMailer.meeting_request_accepted(mentormeeting).deliver
       end
     end
-
-
 end

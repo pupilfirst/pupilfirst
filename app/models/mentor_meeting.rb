@@ -38,31 +38,46 @@ class MentorMeeting < ActiveRecord::Base
     [DURATION_QUARTER_HOUR, DURATION_HALF_HOUR, DURATION_HOUR]
   end
 
+  validates_presence_of :duration
   validates_inclusion_of :duration, in: valid_durations
 
-  before_save do 
+  validates_presence_of :purpose
+  validates_presence_of :suggested_meeting_at
+
+  validate :suggested_meeting_time_required
+
+  def suggested_meeting_time_required
+    # When creating a mentor meeting request, don't allow it to be done without specific time being selected.
+    unless persisted?
+      if @suggested_meeting_time.blank?
+        errors.add(:suggested_meeting_time, 'cannot be blank')
+      end
+    end
+  end
+
+  before_save do
     if @suggested_meeting_time
       self.suggested_meeting_at = self.suggested_meeting_at.change @suggested_meeting_time
     end
   end
-  
+
   def suggested_meeting_time
     nil
   end
 
   def suggested_meeting_time=(value)
     @suggested_meeting_time = case value
-    when Mentor::AVAILABILITY_TIME_MORNING
-      {hour: 9, min: 00}
-    when Mentor::AVAILABILITY_TIME_MIDDAY
-      {hour: 12, min: 00}
-    when Mentor::AVAILABILITY_TIME_AFTERNOON
-      {hour: 15, min: 00}
-    when Mentor::AVAILABILITY_TIME_EVENING
-      {hour: 18, min: 00}
-    else
-      nil
-    end  
+      when Mentor::AVAILABILITY_TIME_MORNING
+        { hour: 9, min: 00 }
+      when Mentor::AVAILABILITY_TIME_MIDDAY
+        { hour: 12, min: 00 }
+      when Mentor::AVAILABILITY_TIME_AFTERNOON
+        { hour: 15, min: 00 }
+      when Mentor::AVAILABILITY_TIME_EVENING
+        { hour: 18, min: 00 }
+      else
+        nil
+    end
   end
 
   def gave_feedback?(user)
@@ -73,20 +88,21 @@ class MentorMeeting < ActiveRecord::Base
     end
   end
 
+  # TODO: Where is this used? And how is it better than a update(status: status_value) with validation?
   def status_to(status)
     case status
-    when "accepted"
-      update(status: STATUS_ACCEPTED)
-    when "rejected"
-      update(status: STATUS_REJECTED)
-    when "requested"
-      update(status: STATUS_REQUESTED)
-    when "started"
-      update(status: STATUS_STARTED)
-    when "completed"
-      update(status: STATUS_COMPLETED)
-    when "expired"
-      update(status: STATUS_EXPIRED) 
+      when "accepted"
+        update(status: STATUS_ACCEPTED)
+      when "rejected"
+        update(status: STATUS_REJECTED)
+      when "requested"
+        update(status: STATUS_REQUESTED)
+      when "started"
+        update(status: STATUS_STARTED)
+      when "completed"
+        update(status: STATUS_COMPLETED)
+      when "expired"
+        update(status: STATUS_EXPIRED)
     end
   end
 

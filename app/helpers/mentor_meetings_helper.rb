@@ -1,4 +1,5 @@
 module MentorMeetingsHelper
+  include MentoringHelper
 
   def mentor_rating_list
     {

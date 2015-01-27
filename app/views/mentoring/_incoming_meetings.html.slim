@@ -21,12 +21,10 @@
             td = meeting_status_html meet.status
             td
               - if meet.status == MentorMeeting::STATUS_REQUESTED
-                / ' #{f.submit "Accept", class: "btn btn-success"}
-                button.btn.btn-success  type="button" data-toggle="modal" data-target="#rescheduleaccept"
-                  ' Accept/Reschedule
-                '   
-                / = f.submit "Reject", class: "btn btn-danger"
-                button.btn.btn-danger  type="button" data-toggle="modal" data-target="#commentonreject"
+                button.btn.btn-xs.btn-success  type="button" data-toggle="modal" data-target="#rescheduleaccept"
+                  ' Review and accept
+                | &nbsp;
+                button.btn.btn-xs.btn-danger  type="button" data-toggle="modal" data-target="#commentonreject"
                   ' Reject
               - elsif meet.status == MentorMeeting::STATUS_ACCEPTED && meet.meeting_at < 15.minutes.from_now
                 = link_to 'Join Room', mentor_meetings_live_url(meet.id),  class: 'btn btn-primary'

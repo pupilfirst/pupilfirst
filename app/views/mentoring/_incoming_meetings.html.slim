@@ -1,8 +1,6 @@
 - if current_mentor.try(:mentor_meetings).present?
-  br
-  ' Meeting requests received
-
-  table.table
+  table.table.table-striped
+    caption Meeting requests received
     thead
       tr
         th Purpose

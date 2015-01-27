@@ -1,7 +1,6 @@
 - if current_mentor.try(:verified?) && @startups.present?
-  h2 Currently incubated startups
-
-  table.table
+  table.table.table-striped
+    caption Currently incubated startups
     thead
       tr
         th Name

@@ -56,6 +56,7 @@ gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: '
 gem 'momentjs-rails', '>= 2.8.1',  :github => 'derekprior/momentjs-rails'
 gem 'wysihtml-rails', :git => 'https://github.com/Voog/wysihtml-rails.git'
 group :development do
+  gem "letter_opener"
   gem 'seed-fu', github: 'mbleigh/seed-fu' # check and remove
   gem 'guard'
   gem 'guard-shell'
@@ -90,7 +91,6 @@ group :development, :test do
   gem 'better_errors'
   gem 'binding_of_caller'
   # gem 'meta_request'
-  gem "letter_opener"
 
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'

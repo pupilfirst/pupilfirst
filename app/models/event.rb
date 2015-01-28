@@ -1,8 +1,5 @@
 class Event < ActiveRecord::Base
 
-
-#add author to events table, create modal for event show.
-
   belongs_to :location
   belongs_to :category
   belongs_to :author, class_name: 'AdminUser', foreign_key: :user_id
@@ -16,12 +13,16 @@ class Event < ActiveRecord::Base
   normalize_attributes :title, :description, :start_at, :end_at, :featured, :picture, :notification_sent
 
   validates_presence_of :title
-  # validates_presence_of :author
-  validates_presence_of :location
-  validates_presence_of :category
+  validates_presence_of :description
+  validates_presence_of :location_id
+  validates_presence_of :category_id
   validates_presence_of :picture
   validates_presence_of :start_at
   validates_presence_of :end_at
+  validates_presence_of :posters_name
+  validates_presence_of :posters_email
+  validates_presence_of :posters_phone_number
+
 
   alias_attribute :push_title, :title
 
@@ -29,6 +30,7 @@ class Event < ActiveRecord::Base
 
   after_save do
     send_push_notification if featured_changed? and featured and not notification_sent
+    EventMailer.event_approved_email(self).deliver if approved_changed? and approved and not approval_notification_sent
   end
 
   def send_push_notification

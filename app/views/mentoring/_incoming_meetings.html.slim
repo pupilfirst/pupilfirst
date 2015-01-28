@@ -19,17 +19,17 @@
             td = meeting_status_html meet.status
             td
               - if meet.status == MentorMeeting::STATUS_REQUESTED
-                button.btn.btn-xs.btn-success  type="button" data-toggle="modal" data-target="#rescheduleaccept"
+                button.btn.btn-xs.btn-success  type="button" data-toggle="modal" data-target="#review-#{meet.id}"
                   ' Review and accept
                 | &nbsp;
-                button.btn.btn-xs.btn-danger  type="button" data-toggle="modal" data-target="#commentonreject"
+                button.btn.btn-xs.btn-danger  type="button" data-toggle="modal" data-target="#reject-#{meet.id}"
                   ' Reject
               - elsif meet.status == MentorMeeting::STATUS_ACCEPTED && meet.meeting_at < 15.minutes.from_now
                 = link_to 'Join Room', mentor_meetings_live_url(meet.id),  class: 'btn btn-primary'
               - elsif meet.status == MentorMeeting::STATUS_COMPLETED && !meet.gave_feedback?(current_mentor)
                 = link_to 'Give Feedback', mentor_meetings_feedback_url(meet.id),  class: 'btn btn-primary'
 
-            #commentonreject.modal.fade tabindex="-1" role="dialog"
+            .modal.fade tabindex="-1" role="dialog" id="reject-#{meet.id}"
               .modal-dialog
                 .modal-content
                   .modal-header
@@ -44,7 +44,7 @@
                       ' Close
                     = f.submit 'Submit', class: 'btn btn-primary'
 
-            #rescheduleaccept.modal.fade tabindex="-1" role="dialog"
+            .modal.fade tabindex="-1" role="dialog" id="review-#{meet.id}"
               .modal-dialog
                 .modal-content
                   .modal-header

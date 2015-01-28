@@ -346,7 +346,7 @@ class User < ActiveRecord::Base
   end
 
   def mentor_pending_verification?
-    mentor.try(:verified_at).present?
+    mentor.try(:verified_at).blank?
   end
 
   # Phone verification is the final step of the registration process. If that isn't complete, then the mentor is still

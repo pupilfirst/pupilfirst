@@ -38,11 +38,32 @@
                         ' &times;
                     ' Please provide your comments for rejection, if any
                   .modal-body
-                    = f.input :mentor_comments
+                    #errormsg style="display: none" Mentor comments cannot be empty 
+                    = f.input :mentor_comments, :input_html => { :id => 'mentorcomments' }
                   .modal-footer
                     button.btn.btn-primary type="button"  data-dismiss="modal"
                       ' Close
-                    = f.submit 'Submit', class: 'btn btn-primary'
+                    = f.submit 'Submit', class: 'btn btn-primary', id: "rejectsubmit"
+
+              javascript:
+                $(document).ready(function(){
+                  
+                  // USE THIS AND COMMENT FUNCTION BELOW IF YOU WANT TO DISPLAY ERROR RATHER THAN DISABLE BUTTON - (error msg not formatted)
+                  //$('#rejectsubmit').on('click',function(){
+                  //if ($('#mentorcomments').val().trim() == ''){
+                  //  $('#errormsg').show();    
+                  //  return false;
+                  //}
+                  //else {
+                  //  return true;
+                  //}
+                  //})
+
+                  $('#rejectsubmit').prop('disabled',true);
+                  $('#mentorcomments').keyup(function(){
+                  $('#rejectsubmit').prop('disabled', this.value == "" ? true : false);     
+                  })
+                });       
 
             .modal.fade tabindex="-1" role="dialog" id="review-#{meet.id}"
               .modal-dialog

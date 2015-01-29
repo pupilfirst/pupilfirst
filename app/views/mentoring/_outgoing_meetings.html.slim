@@ -21,9 +21,9 @@
           - else
             = meeting_status_html meet.status
         td
-          - if meet.status == MentorMeeting::STATUS_ACCEPTED && meet.meeting_at < 15.minutes.from_now
+          - if meet.starts_soon?
             = link_to 'Join Room', mentor_meetings_live_url(meet.id), class: 'btn btn-xs btn-primary'
-          - elsif meet.status == MentorMeeting::STATUS_COMPLETED && !meet.gave_feedback?(current_user)
+          - elsif meet.completed? && meet.did_not_give_feedback?(current_user)
             = link_to 'Give Feedback', mentor_meetings_feedback_url(meet.id), class: 'btn btn-xs btn-primary'
 
 javascript:

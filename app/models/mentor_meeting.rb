@@ -88,6 +88,10 @@ class MentorMeeting < ActiveRecord::Base
     end
   end
 
+  def did_not_give_feedback?(user)
+    !gave_feedback?(user)
+  end
+
   # TODO: Where is this used? And how is it better than a update(status: status_value) with validation?
   def status_to(status)
     case status
@@ -132,6 +136,14 @@ class MentorMeeting < ActiveRecord::Base
 
   def accepted?
     status == STATUS_ACCEPTED
+  end
+
+  def completed?
+    status == STATUS_COMPLETED
+  end
+
+  def starts_soon?
+    status == STATUS_ACCEPTED && meeting_at < 15.minutes.from_now
   end
 end
  

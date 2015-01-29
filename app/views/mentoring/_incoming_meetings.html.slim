@@ -24,9 +24,9 @@
                 | &nbsp;
                 button.btn.btn-xs.btn-danger  type="button" data-toggle="modal" data-target="#reject-#{meet.id}"
                   ' Reject
-              - elsif meet.status == MentorMeeting::STATUS_ACCEPTED && meet.meeting_at < 15.minutes.from_now
+              - elsif meet.starts_soon?
                 = link_to 'Join Room', mentor_meetings_live_url(meet.id),  class: 'btn btn-primary'
-              - elsif meet.status == MentorMeeting::STATUS_COMPLETED && !meet.gave_feedback?(current_mentor)
+              - elsif meet.completed? && meet.did_not_give_feedback?(current_mentor)
                 = link_to 'Give Feedback', mentor_meetings_feedback_url(meet.id),  class: 'btn btn-primary'
 
             .modal.fade tabindex="-1" role="dialog" id="reject-#{meet.id}"

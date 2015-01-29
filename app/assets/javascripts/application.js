@@ -24,7 +24,7 @@
 //= require socket.io.js
 //= require_tree ./react
 //= require google_analytics.js.erb
-
+//= require mentor_meetings
 
 //= require moment
 //= require bootstrap-datetimepicker

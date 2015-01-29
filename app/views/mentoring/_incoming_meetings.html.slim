@@ -11,63 +11,39 @@
     tbody
       - current_mentor.mentor_meetings.each do |meet|
         tr
-          = simple_form_for(meet, url: mentor_mentor_meeting_url(current_mentor, meet), method: :patch) do |f|
-            td = meet.purpose
-            td = meet.user.fullname
-            td = meet.meeting_at.present? ? meet.meeting_at.to_date : meet.suggested_meeting_at.to_date
-            td = meet.meeting_at.present? ? meet.meeting_at.strftime("%l:%M %P") : meet.suggested_meeting_at.strftime("%l:%M %P")
-            td = meeting_status_html meet.status
-            td
-              - if meet.status == MentorMeeting::STATUS_REQUESTED
-                button.btn.btn-xs.btn-success  type="button" data-toggle="modal" data-target="#review-#{meet.id}"
-                  ' Review and accept
-                | &nbsp;
-                button.btn.btn-xs.btn-danger  type="button" data-toggle="modal" data-target="#reject-#{meet.id}"
-                  ' Reject
-              - elsif meet.starts_soon?
-                = link_to 'Join Room', mentor_meetings_live_url(meet.id),  class: 'btn btn-xs btn-primary'
-              - elsif meet.completed? && meet.did_not_give_feedback?(current_mentor)
-                = link_to 'Give Feedback', mentor_meetings_feedback_url(meet.id),  class: 'btn btn-xs btn-primary'
+          td = meet.purpose
+          td = meet.user.fullname
+          td = meet.meeting_at.present? ? meet.meeting_at.to_date : meet.suggested_meeting_at.to_date
+          td = meet.meeting_at.present? ? meet.meeting_at.strftime("%l:%M %P") : meet.suggested_meeting_at.strftime("%l:%M %P")
+          td = meeting_status_html meet.status
+          td
+            - if meet.status == MentorMeeting::STATUS_REQUESTED
+              button.btn.btn-xs.btn-success  type="button" data-toggle="modal" data-target="#review-#{meet.id}"
+                ' Review and accept
+              | &nbsp;
+              button.btn.btn-xs.btn-danger  type="button" data-toggle="modal" data-target="#reject-#{meet.id}"
+                ' Reject
+            - elsif meet.starts_soon?
+              = link_to 'Join Room', mentor_meetings_live_url(meet.id),  class: 'btn btn-xs btn-primary'
+            - elsif meet.completed? && meet.did_not_give_feedback?(current_mentor)
+              = link_to 'Give Feedback', mentor_meetings_feedback_url(meet.id),  class: 'btn btn-xs btn-primary'
 
-            .modal.fade tabindex="-1" role="dialog" id="reject-#{meet.id}"
-              .modal-dialog
-                .modal-content
-                  .modal-header
-                    button.close type="button" data-dismiss="modal" aria-label="Close"
-                      span aria-hidden="true"
-                        ' &times;
-                    ' Please provide your comments for rejection, if any
+          .modal.fade tabindex="-1" role="dialog" id="reject-#{meet.id}"
+            .modal-dialog
+              .modal-content
+                = simple_form_for(meet, url: mentor_mentor_meeting_url(current_mentor, meet), method: :patch, html: { onsubmit: "return require_comments_for_reject('#{meet.id}');"}) do |f|
                   .modal-body
-                    #errormsg style="display: none" Mentor comments cannot be empty 
-                    = f.input :mentor_comments, :input_html => { :id => 'mentorcomments' }
+                    .alert.alert-danger.hidden role="alert" id="comments-empty-alert-#{meet.id}" Please supply reason for rejecting meeting request.
+                    = f.input :mentor_comments, label: 'Reason for rejection', input_html: { id: "mentor-comments-#{meet.id}" }
                   .modal-footer
                     button.btn.btn-primary type="button"  data-dismiss="modal"
                       ' Close
-                    = f.submit 'Submit', class: 'btn btn-primary', id: "rejectsubmit"
+                    = f.submit 'Submit', class: 'btn btn-primary'
 
-              javascript:
-                $(document).ready(function(){
-                  
-                  // USE THIS AND COMMENT FUNCTION BELOW IF YOU WANT TO DISPLAY ERROR RATHER THAN DISABLE BUTTON - (error msg not formatted)
-                  //$('#rejectsubmit').on('click',function(){
-                  //if ($('#mentorcomments').val().trim() == ''){
-                  //  $('#errormsg').show();    
-                  //  return false;
-                  //}
-                  //else {
-                  //  return true;
-                  //}
-                  //})
-
-                  $('#rejectsubmit').prop('disabled',true);
-                  $('#mentorcomments').keyup(function(){
-                  $('#rejectsubmit').prop('disabled', this.value == "" ? true : false);     
-                  })
-                });       
-
-            .modal.fade tabindex="-1" role="dialog" id="review-#{meet.id}"
-              .modal-dialog
-                .modal-content
+          .modal.fade tabindex="-1" role="dialog" id="review-#{meet.id}"
+            .modal-dialog
+              .modal-content
+                = simple_form_for(meet, url: mentor_mentor_meeting_url(current_mentor, meet), method: :patch) do |f|
                   .modal-header
                     button.close type="button" data-dismiss="modal" aria-label="Close"
                       span aria-hidden="true"

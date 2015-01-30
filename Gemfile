@@ -8,7 +8,7 @@ gem 'active_admin_editor', git: 'https://github.com/ejholmes/active_admin_editor
 
 # ActiveAdmin doesn't like 4.2 at all (for the moment). Switch this to stable when available.
 gem 'activeadmin', github: 'activeadmin'
-gem 'inherited_resources', github: 'josevalim/inherited_resources', branch: 'rails-4-2'
+gem 'inherited_resources'
 
 gem 'acts-as-taggable-on'
 gem 'attribute_normalizer', '~> 1.2.0.b'
@@ -52,9 +52,12 @@ gem 'sprockets-coffee-react' # Sprockets preprocessor.
 gem 'js-routes' # Routes inside JS.
 gem 'validate_url' # URL validation.
 gem 'chartkick' # Pretty charts!
+
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'momentjs-rails', '>= 2.8.1',  :github => 'derekprior/momentjs-rails'
 gem 'wysihtml-rails', :git => 'https://github.com/Voog/wysihtml-rails.git'
+
+
 group :development do
   gem "letter_opener"
   gem 'seed-fu', github: 'mbleigh/seed-fu' # check and remove
@@ -90,7 +93,7 @@ group :development, :test do
   # gem 'byebug'
   gem 'better_errors'
   gem 'binding_of_caller'
-  # gem 'meta_request'
+
 
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'

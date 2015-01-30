@@ -36,16 +36,21 @@ class MentorMeetingsController < ApplicationController
   	@mentor_meetings = MentorMeeting.all
   end
 
+  # TODO: Refactor this method. It does two database update calls for the same entry.
   def update
     @mentor_meeting = MentorMeeting.find(params[:id])
-    if params[:commit] == "started"
+    if params[:commit] == 'started'
       @mentor_meeting.status_to_started
       head :ok
     else
-      @mentor_meeting.update(mentorupdate_params)
-      params[:commit] == "Accept" ? @mentor_meeting.status_to_accepted : @mentor_meeting.status_to_rejected   
-      flash[:notice] = "Meeting status has been updated"
-      email_mentor_response(@mentor_meeting)
+      if @mentor_meeting.update(mentorupdate_params)
+        params[:commit] == 'Accept' ? @mentor_meeting.status_to_accepted : @mentor_meeting.status_to_rejected
+        flash[:notice] = 'Meeting status has been updated'
+        email_mentor_response(@mentor_meeting)
+      else
+        flash[:alert] = 'Could not update meeting'
+      end
+
       redirect_to mentoring_url
     end 
   end

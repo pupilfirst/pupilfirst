@@ -1,19 +1,21 @@
 function my_init() {
-
   call_started = false;
 
-  easyrtc.setSocketUrl($("#chat-data").data("easyrtc-socket-url"));
+  var chat_data = $("#chat-data");
+
+  // Set socket URL for EasyRTC
+  easyrtc.setSocketUrl(chat_data.data("easyrtc-socket-url"));
 
   easyrtc.setRoomOccupantListener(loggedInListener);
 
-  console.log("Name read:" + $("#self").data("name"));
-  easyrtc.setUsername($("#self").data("name"));
+  console.log("Name read: " + chat_data.data("current-user-name"));
+  easyrtc.setUsername(chat_data.data("current-user-name"));
 
   easyrtc.dontAddCloseButtons();
 
   easyrtc.easyApp($("#mentor-meeting-container").data("id")+"chatroom", "self", ["caller"],
     function(myId) {
-      console.log("App loaded succesfully");
+      console.log("App loaded successfully");
     });
 
   // listener for hangup message from guest

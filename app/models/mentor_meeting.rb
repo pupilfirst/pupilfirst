@@ -100,24 +100,6 @@ class MentorMeeting < ActiveRecord::Base
     !gave_feedback?(user)
   end
 
-  # TODO: Where is this used? And how is it better than a update(status: status_value) with validation?
-  def status_to(status)
-    case status
-      when "accepted"
-        update(status: STATUS_ACCEPTED)
-      when "rejected"
-        update(status: STATUS_REJECTED)
-      when "requested"
-        update(status: STATUS_REQUESTED)
-      when "started"
-        update(status: STATUS_STARTED)
-      when "completed"
-        update(status: STATUS_COMPLETED)
-      when "expired"
-        update(status: STATUS_EXPIRED)
-    end
-  end
-
   def status_to_started
     update(status: STATUS_STARTED)
   end

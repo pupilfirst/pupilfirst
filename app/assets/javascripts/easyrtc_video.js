@@ -12,11 +12,11 @@ function my_init() {
   easyrtc.setUsername(chat_data.data("current-user-name"));
 
   easyrtc.dontAddCloseButtons();
-
-  easyrtc.easyApp($("#mentor-meeting-container").data("id")+"chatroom", "self", ["caller"],
+  easyrtc.easyApp($("#mentor-meeting-container").data("id")+"easyrtcapp", "self", ["caller"],
     function(myId) {
       console.log("App loaded successfully");
     });
+  easyrtc.joinRoom($("#mentor-meeting-container").data("id")+"chatroom")
 
   // listener for hangup message from guest
   easyrtc.setPeerListener( function(easyrtcid, msgType, msgData, targeting){

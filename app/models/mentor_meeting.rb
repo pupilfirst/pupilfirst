@@ -63,6 +63,14 @@ class MentorMeeting < ActiveRecord::Base
     end
   end
 
+  validate :accept_with_meeting_at
+
+  def accept_with_meeting_at
+    if accepted? && meeting_at.blank?
+      errors[:base] << 'Meeting cannot be accepted without setting meeting_at'
+    end
+  end
+
   before_save do
     if @suggested_meeting_time
       self.suggested_meeting_at = self.suggested_meeting_at.change @suggested_meeting_time
@@ -100,20 +108,34 @@ class MentorMeeting < ActiveRecord::Base
     !gave_feedback?(user)
   end
 
-  def status_to_started
-    update(status: STATUS_STARTED)
+  def start!
+    update!(status: STATUS_STARTED)
   end
 
-  def status_to_accepted
-    update(status: STATUS_ACCEPTED)
+  def accept!(accepted_meeting_at)
+    update!(status: STATUS_ACCEPTED, meeting_at: accepted_meeting_at)
+    send_acceptance_message
   end
 
-  def status_to_rejected
-    update(status: STATUS_REJECTED)
+  def send_acceptance_message
+    if rescheduled?
+      UserMailer.meeting_request_rescheduled(self).deliver_now
+    else
+      UserMailer.meeting_request_accepted(self).deliver_now
+    end
   end
 
-  def status_to_completed
-    update(status: STATUS_COMPLETED)
+  def reject!(mentor_comments_for_rejection)
+    update!(status: STATUS_REJECTED, mentor_comments: mentor_comments_for_rejection)
+    send_rejection_message
+  end
+
+  def send_rejection_message
+    UserMailer.meeting_request_rejected(self).deliver_now
+  end
+
+  def complete!
+    update!(status: STATUS_COMPLETED)
   end
 
   def rescheduled?
@@ -133,7 +155,7 @@ class MentorMeeting < ActiveRecord::Base
   end
 
   def starts_soon?
-    status == STATUS_ACCEPTED && meeting_at < 15.minutes.from_now
+    accepted? && (meeting_at < 15.minutes.from_now)
   end
 end
  

@@ -28,7 +28,7 @@ function my_init() {
   easyrtc.setOnCall( function(easyrtcid, slot) {
     console.log('setOnCall called');
     call_started = true;
-    $('#callstart').submit(); // change meeting status
+    $('#start-meeting').submit(); // change meeting status
     strong = document.getElementById('awaitingnotification');
     button = document.getElementById('startbutton');
     reminderbutton = document.getElementById('reminderbutton');

@@ -17,6 +17,7 @@ class MentorMeetingsController < ApplicationController
     end
   end
 
+  # TODO: Refactor fat MentorMeetingsController#create
   def create
     raise_not_found unless current_user.startup.present?
   	mentor = Mentor.find params[:mentor_id]
@@ -36,30 +37,38 @@ class MentorMeetingsController < ApplicationController
   	@mentor_meetings = MentorMeeting.all
   end
 
-  # TODO: Refactor this method. It does two database update calls for the same entry.
-  def update
-    @mentor_meeting = MentorMeeting.find(params[:id])
-    if params[:commit] == 'started'
-      @mentor_meeting.status_to_started
-      head :ok
-    else
-      if @mentor_meeting.update(mentorupdate_params)
-        params[:commit] == 'Accept' ? @mentor_meeting.status_to_accepted : @mentor_meeting.status_to_rejected
-        flash[:notice] = 'Meeting status has been updated'
-        email_mentor_response(@mentor_meeting)
-      else
-        flash[:alert] = 'Could not update meeting'
-      end
+  # POST /mentor_meetings/:id/accept
+  def accept
+    mentor_meeting = MentorMeeting.find(params[:id])
+    mentor_meeting.accept!(params[:mentor_meeting][:meeting_at])
 
-      redirect_to mentoring_url
-    end 
+    flash[:notice] = 'Startup member will be notified of your acceptance.'
+
+    redirect_to mentoring_url
+  end
+
+  # POST /mentor_meetings/:id/reject
+  def reject
+    mentor_meeting = MentorMeeting.find(params[:id])
+    mentor_meeting.reject!(params[:mentor_meeting][:mentor_comments])
+
+    flash[:notice] = 'Startup member will be notified of your response.'
+
+    redirect_to mentoring_url
+  end
+
+  # POST /mentor_meetings/:id/start
+  def start
+    mentor_meeting = MentorMeeting.find(params[:id])
+    mentor_meeting.start!
+    render nothing: true
   end
 
   def feedback
     @mentor_meeting = MentorMeeting.find(params[:id])
     @role = role(@mentor_meeting)
     flash.now[:notice] = "Your meeting with #{guest(@mentor_meeting).fullname} has ended"
-    @mentor_meeting.status_to_completed
+    @mentor_meeting.complete!
   end
 
   def feedbacksave
@@ -82,43 +91,33 @@ class MentorMeetingsController < ApplicationController
   end
 
   private
-  	def meeting_params
-  		params.require(:mentor_meeting).permit(:purpose,:suggested_meeting_at,:suggested_meeting_time,:duration)
-  	end
 
-    def feedback_params
-      params.require(:mentor_meeting).permit(:user_rating,:mentor_rating,:user_comments,:mentor_comments)
-    end
+  def meeting_params
+    params.require(:mentor_meeting).permit(:purpose,:suggested_meeting_at,:suggested_meeting_time,:duration)
+  end
 
-    def mentorupdate_params
-      params.require(:mentor_meeting).permit(:mentor_comments,:meeting_at)
-    end
+  def feedback_params
+    params.require(:mentor_meeting).permit(:user_rating,:mentor_rating,:user_comments,:mentor_comments)
+  end
 
-    def meeting_started
-      raise_not_found if !(MentorMeeting.find(params[:id]).status == MentorMeeting::STATUS_STARTED || MentorMeeting.find(params[:id]).status == MentorMeeting::STATUS_COMPLETED)
-    end
+  def meeting_started
+    raise_not_found if !(MentorMeeting.find(params[:id]).status == MentorMeeting::STATUS_STARTED || MentorMeeting.find(params[:id]).status == MentorMeeting::STATUS_COMPLETED)
+  end
 
-    def meeting_completed
-      raise_not_found if MentorMeeting.find(params[:id]).status != MentorMeeting::STATUS_COMPLETED
-    end
+  def meeting_completed
+    raise_not_found if MentorMeeting.find(params[:id]).status != MentorMeeting::STATUS_COMPLETED
+  end
 
-    def role(mentormeeting)
-      current_user == mentormeeting.user ? "user" : "mentor"
-    end
+  def role(mentormeeting)
+    current_user == mentormeeting.user ? "user" : "mentor"
+  end
 
-    def guest(mentormeeting)
-      current_user == mentormeeting.user ? mentormeeting.mentor.user : mentormeeting.user 
-    end
+  def guest(mentormeeting)
+    current_user == mentormeeting.user ? mentormeeting.mentor.user : mentormeeting.user
+  end
 
-    def guest_rating?(mentormeeting)
-      guest(mentormeeting) == mentormeeting.user ? mentormeeting.user_rating? : mentormeeting.mentor_rating?
-    end
-
-    def email_mentor_response(mentormeeting)
-      if mentormeeting.rejected?
-        UserMailer.meeting_request_rejected(mentormeeting).deliver
-      elsif mentormeeting.accepted?
-        mentormeeting.rescheduled? ? UserMailer.meeting_request_rescheduled(mentormeeting).deliver : UserMailer.meeting_request_accepted(mentormeeting).deliver
-      end
-    end
+  # TODO: Is this method not used anywhere?
+  def guest_rating?(mentormeeting)
+    guest(mentormeeting) == mentormeeting.user ? mentormeeting.user_rating? : mentormeeting.mentor_rating?
+  end
 end

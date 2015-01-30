@@ -1,6 +1,4 @@
 Svapp::Application.routes.draw do
-
-
   devise_for :users, controllers: { passwords: 'users/passwords', invitations: 'users/invitations', sessions: 'users/sessions' }
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
@@ -38,10 +36,13 @@ Svapp::Application.routes.draw do
   end
 
   resources :mentors do 
-    resources :mentor_meetings, only: %w(new create update) 
+    resources :mentor_meetings, only: %w(new create)
   end
 
   scope 'mentor_meetings', as: 'mentor_meetings', controller: 'mentor_meetings' do
+    patch ':id/start', action: 'start', as: 'start'
+    patch ':id/reject', action: 'reject', as: 'reject'
+    patch ':id/accept', action: 'accept', as: 'accept'
     get ':id', action: 'live', as: 'live'
     get ':id/feedback', action: 'feedback', as: 'feedback'
     patch ':id/feedbacksave', action: 'feedbacksave', as: 'feedbacksave'

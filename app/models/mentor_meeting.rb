@@ -58,7 +58,7 @@ class MentorMeeting < ActiveRecord::Base
   validate :reject_with_comment
 
   def reject_with_comment
-    if rejected?
+    if rejected? && mentor_comments.blank?
       errors[:base] << 'Mentor must write comment to reject meeting request'
     end
   end

@@ -2,7 +2,7 @@ function my_init() {
 
   call_started = false;
 
-  easyrtc.setSocketUrl(":4000"); //change this to reflect location of node server
+  easyrtc.setSocketUrl($("#chat-data").data("easyrtc-socket-url"));
 
   easyrtc.setRoomOccupantListener(loggedInListener);
 

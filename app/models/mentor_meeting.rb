@@ -55,6 +55,14 @@ class MentorMeeting < ActiveRecord::Base
     end
   end
 
+  validate :reject_with_comment
+
+  def reject_with_comment
+    if rejected?
+      errors[:base] << 'Mentor must write comment to reject meeting request'
+    end
+  end
+
   before_save do
     if @suggested_meeting_time
       self.suggested_meeting_at = self.suggested_meeting_at.change @suggested_meeting_time

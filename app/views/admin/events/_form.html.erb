@@ -1,23 +1,24 @@
 <div id="event_form_wrap">
-    <%= semantic_form_for [:admin, @event] do |f| %>
-      <%= f.inputs :name => "Basic" do %>
+  <%= semantic_form_for [:admin, @event] do |f| %>
+    <%= f.inputs :name => "Basic" do %>
 
-        <%= f.input :title %>
-        <%= f.input :description, as: :html_editor %>
-        <%= f.input :featured %>
-        <%= f.input :location %>
-        <%= f.input :author %>
-        <%= f.input :category, collection: Category.event_category, prompt: "Choose a event" %>
-        <%= f.input :picture, as: :file %>
-        <%= f.input :remote_picture_url, placeholder: "publicly accesable url" %>
-      <% end %>
-      <%= f.inputs :name => "Time" do %>
-        <%= f.input :time_zone, collection: ActiveSupport::TimeZone.all.map { |e| [e.to_s, e.name, data: {offset: e.to_s.match(/\((.*)\).*/).captures.first} ] } , include_blank: false, selected: "Mumbai"%>
-        <% Time.use_zone('Mumbai') do  %>
-            <%= f.input :start_at, :label => "Start Date Time", as: :just_datetime_picker, :hint => "Time in 24hr format" %>
-            <%= f.input :end_at, label: "End Date Time", as: :just_datetime_picker, :hint => "Time in 24hr format" %>
-        <% end %>
-      <% end %>
-    <%= f.action :submit, :as => :button %>
+      <%= f.input :title %>
+      <%= f.input :description, as: :html_editor %>
+      <%= f.input :featured %>
+      <%= f.input :approved %>
+      <%= f.input :location %>
+      <%= f.input :author %>
+      <%= f.input :category, collection: Category.event_category, prompt: "Choose a event" %>
+      <%= f.input :picture, as: :file %>
+      <%= f.input :remote_picture_url, placeholder: "publicly accesable url" %>
     <% end %>
+    <%= f.inputs :name => "Time" do %>
+      <%= f.input :time_zone, collection: ActiveSupport::TimeZone.all.map { |e| [e.to_s, e.name, data: {offset: e.to_s.match(/\((.*)\).*/).captures.first} ] } , include_blank: false, selected: "Mumbai"%>
+      <% Time.use_zone('Mumbai') do  %>
+        <%= f.input :start_at, :label => "Start Date Time", as: :just_datetime_picker, :hint => "Time in 24hr format" %>
+        <%= f.input :end_at, label: "End Date Time", as: :just_datetime_picker, :hint => "Time in 24hr format" %>
+      <% end %>
+    <% end %>
+    <%= f.action :submit, :as => :button %>
+  <% end %>
 </div>

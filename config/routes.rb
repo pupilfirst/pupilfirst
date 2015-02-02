@@ -1,5 +1,5 @@
 Svapp::Application.routes.draw do
-  
+
 
   devise_for :users, controllers: { passwords: 'users/passwords', invitations: 'users/invitations', sessions: 'users/sessions' }
   devise_for :admin_users, ActiveAdmin::Devise.config
@@ -12,6 +12,10 @@ Svapp::Application.routes.draw do
       post 'send_invite'
     end
   end
+
+  resources :news
+
+  resources :events
 
   resources :startup_links, only: :destroy
 
@@ -57,7 +61,6 @@ Svapp::Application.routes.draw do
   end
 
   # get 'team' => 'welcome#team'
-
   get 'jobs', to: 'startup_jobs#list_all'
   get 'privacy_policy', to: 'welcome#privacy_policy'
   get 'faq', to: 'welcome#faq'

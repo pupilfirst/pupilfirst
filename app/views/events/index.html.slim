@@ -1,0 +1,45 @@
+div style = "text-align: center;padding: 4%;"
+  p Interested in Hosting an event ?
+  = link_to "Add New Event", new_event_path(@event)
+  p
+    i  Please note that once created the event cannot be edited by you. Incase you have any correction, mail us the detail along with the Event ID sent to your mail.
+- @events.each do |event|
+  div class="container"
+    div class="row"
+      div class="[ col-xs-12 col-sm-offset-2 col-sm-8 ]"
+        ul class="event-list" data-toggle="modal" data-target="#todo-#{event.id}-notes"
+          li
+            time datetime="#{event.start_at}"
+              span class="day" = event.start_at.strftime('%d')
+              span class="month" = event.start_at.strftime('%b')
+            = image_tag event.picture
+            div class="info"
+              h2 class="title"
+                = event.title
+              p class="desc"
+                b VENUE:   
+                = "#{event.location.title}, "
+                = event.location.address
+              ul
+                li style="width:30%;"
+                  = "#{event.start_at.strftime('%d/%m/%Y')} : #{event.start_at.strftime('%I:%M%p')}"
+                li class="till" style="width:10%;"
+                  div till
+                li style="width:30%;"
+                  = "#{event.end_at.strftime('%d/%m/%Y')} : #{event.start_at.strftime('%I:%M%p')}"
+
+  <!-- Button trigger modal 
+  button class="btn btn-link" data-toggle="modal" data-target="#todo-1-notes"
+    View notes-->
+
+  <!-- Modal -->
+  div class="modal fade" id="todo-#{event.id}-notes" tabindex="-1" role="dialog" aria-labelledby="todo-#{event.id}-label" aria-hidden="true"
+    div class="modal-dialog"
+      div class="modal-content"
+        div class="modal-header"
+          h4 class="modal-title" id="todo-#{event.id}-label" = event.title
+        div class="modal-body"
+          = image_tag event.picture, size: "260x180"
+          = simple_format(event.description)
+        div class="modal-footer"
+          button type="button" class="btn btn-primary" data-dismiss="modal" Close

@@ -44,11 +44,17 @@ class Event < ActiveRecord::Base
   PUSH_TYPE = 'event' unless defined?(PUSH_TYPE)
 
   after_save do
-    send_push_notification if featured_changed? and featured and not notification_sent
-    EventMailer.event_approved_email(self).deliver if approved_changed? and approved and not approval_notification_sent
+    send_push_notification! if featured_changed? and featured and not notification_sent
+    send_approval_notification! if approved_changed? and approved and not approval_notification_sent
   end
 
-  def send_push_notification
+  def send_push_notification!
     PushNotifyJob.new.async.perform(self.class.to_s.downcase, self.id)
+    update!(notification_sent: true)
+  end
+
+  def send_approval_notification!
+    EventMailer.event_approved_email(self).deliver
+    update!(approval_notification_sent: true)
   end
 end

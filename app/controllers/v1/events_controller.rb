@@ -16,4 +16,5 @@ class V1::EventsController < V1::BaseController
       f.json
     end
   end
+
 end

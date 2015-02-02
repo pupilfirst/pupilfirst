@@ -58,6 +58,13 @@ GIT
     datetimepicker-rails (3.1.1)
 
 GIT
+  remote: https://github.com/Voog/wysihtml-rails.git
+  revision: 98ec3a823289fd37ce59e82bd9a37daf135205cc
+  specs:
+    wysihtml-rails (0.5.0.beta4)
+      railties (>= 3.1.0)
+
+GIT
   remote: https://github.com/ejholmes/active_admin_editor.git
   revision: 86f964be3071cd938c3cd17ad00df94ece3a50c0
   specs:
@@ -122,6 +129,10 @@ GEM
     autoprefixer-rails (4.0.2.2)
       execjs
     bcrypt (3.1.9)
+    better_errors (2.1.1)
+      coderay (>= 1.0.0)
+      erubis (>= 2.6.6)
+      rack (>= 0.9.0)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     bootstrap-sass (3.2.0.2)
@@ -130,10 +141,6 @@ GEM
       sass (~> 3.3)
       thor
     builder (3.2.2)
-    byebug (3.5.1)
-      columnize (~> 0.8)
-      debugger-linecache (~> 1.2)
-      slop (~> 3.6)
     cancancan (1.9.2)
     carrierwave (0.10.0)
       activemodel (>= 3.2.0)
@@ -156,7 +163,6 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.9.0)
-    columnize (0.9.0)
     connection_pool (2.1.0)
     countries (0.9.3)
       currencies (~> 0.4.2)
@@ -164,7 +170,6 @@ GEM
       safe_yaml (~> 1.0.0)
     currencies (0.4.2)
     debug_inspector (0.0.2)
-    debugger-linecache (1.2.0)
     devise (3.4.1)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -548,8 +553,9 @@ DEPENDENCIES
   acts-as-taggable-on
   attribute_normalizer (~> 1.2.0.b)
   autoprefixer-rails
+  better_errors
+  binding_of_caller
   bootstrap-sass (~> 3.2.0)
-  byebug
   cancancan (~> 1.8)
   carrierwave
   carrierwave_backgrounder!
@@ -577,7 +583,7 @@ DEPENDENCIES
   just-datetime-picker
   letter_opener
   mini_magick
-  momentjs-rails!
+  momentjs-rails (>= 2.8.1)!
   newrelic_rpm
   nilify_blanks
   nokogiri
@@ -617,4 +623,5 @@ DEPENDENCIES
   versionist
   web-console (~> 2.0)
   webmock
+  wysihtml-rails!
   zeus

@@ -54,7 +54,13 @@ gem 'js-routes' # Routes inside JS.
 gem 'validate_url' # URL validation.
 gem 'chartkick' # Pretty charts!
 
+gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
+gem 'momentjs-rails', '>= 2.8.1',  :github => 'derekprior/momentjs-rails'
+gem 'wysihtml-rails', :git => 'https://github.com/Voog/wysihtml-rails.git'
+
+
 group :development do
+  gem "letter_opener"
   gem 'seed-fu', github: 'mbleigh/seed-fu' # check and remove
   gem 'guard'
   gem 'guard-shell'
@@ -63,10 +69,7 @@ group :development do
   gem 'guard-livereload'
   gem 'childprocess'
   gem 'terminal-notifier-guard'
-  gem "letter_opener"
 
-  gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
-  gem 'momentjs-rails', :github => 'derekprior/momentjs-rails'
 end
 
 group :test do
@@ -89,7 +92,10 @@ group :development, :test do
   gem 'webmock', require: false
 
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
+  # gem 'byebug'
+  gem 'better_errors'
+  gem 'binding_of_caller'
+
 
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'

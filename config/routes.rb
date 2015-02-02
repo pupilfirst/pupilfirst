@@ -12,6 +12,10 @@ Svapp::Application.routes.draw do
     end
   end
 
+  resources :news
+
+  resources :events
+
   resources :startup_links, only: :destroy
 
   resources :startups, only: [:show, :edit, :update] do
@@ -70,7 +74,6 @@ Svapp::Application.routes.draw do
   end
 
   # get 'team' => 'welcome#team'
-
   get 'jobs', to: 'startup_jobs#list_all'
   get 'privacy_policy', to: 'welcome#privacy_policy'
   get 'faq', to: 'welcome#faq'

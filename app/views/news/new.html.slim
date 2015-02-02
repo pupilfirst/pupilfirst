@@ -1,0 +1,9 @@
+h1 New news
+= simple_form_for @news,  html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: {check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_file_input, boolean: :horizontal_boolean } do |j|
+  = j.error_notification
+  = j.input :title, label: 'Title'
+  = j.input :body, label: 'description'
+  = j.input :picture, label: 'image'
+  = j.input :published_at, label: 'published at'
+  = j.input :featured, label: 'featured', as: :boolean, checked_value: true
+  = j.button :submit, 'post news', class: 'btn btn-primary'

@@ -6,16 +6,16 @@ class EventsController < ApplicationController
 
   def new
     @event = Event.new
-    event_locations
+    event_locations_and_categories
   end
 
   def create
     @event = Event.new(event_params)
     if @event.save
-      EventMailer.event_registered_email(@event)
+      EventMailer.event_registered_email(@event).deliver
       redirect_to events_path
     else
-      event_locations
+      event_locations_and_categories
       render :new
     end
   end
@@ -24,10 +24,11 @@ class EventsController < ApplicationController
   private
 
     def event_params
-      params.require(:event).permit(:title, :description, :picture, :start_at, :end_at, :location_id, :category_id, :posters_email, :posters_phone_number)
+      params.require(:event).permit(:title, :description, :picture, :start_at, :end_at, :location_id, :category_id, :posters_email, :posters_name, :posters_phone_number)
     end
 
-    def event_locations
+    def event_locations_and_categories
+      @event_categories = Category.event_category.all
       @location = Location.where("LOWER(title) like ?", 'startup village%')
     end
 

@@ -25,16 +25,25 @@ class StartupJobsController < ApplicationController
 
   def index
     @startup = Startup.find params[:startup_id]
-    @startup_jobs = @startup.startup_jobs.all
-    @startup_founder = disallow_unauthenticated_repost
+    @startup_jobs = @startup.startup_jobs.order('updated_at DESC')
   end
 
   def list_all
-    @startup_jobs = StartupJob.all
+    @startup_jobs = StartupJob.order('updated_at DESC')
+  end
 
-    if current_user.try(:is_founder)
-      @startup = current_user.startup
-      @startup_founder = true
+  def edit
+    @startup = Startup.find params[:startup_id]
+    @startup_job = @startup.startup_jobs.find params[:id]
+  end
+
+  def update
+    @startup = Startup.find params[:startup_id]
+    @startup_job = @startup.startup_jobs.find params[:id]
+    if @startup_job.update(startup_job_params)
+      redirect_to startup_startup_jobs_path @startup
+    else
+      render 'edit'
     end
   end
 
@@ -49,7 +58,7 @@ class StartupJobsController < ApplicationController
 
   def destroy
     @startup = Startup.find params[:startup_id]
-    @startup_job = @startup.startup_jobs.find params[:startup_job_id]
+    @startup_job = @startup.startup_jobs.find params[:id]
     @startup_job.destroy!
 
     redirect_to startup_startup_jobs_path(@startup, @startup_job)
@@ -59,7 +68,7 @@ class StartupJobsController < ApplicationController
 
   def startup_job_params
     params.require(:startup_job).permit(
-      :title, :description, :salary_max, :salary_min, :equity_max, :equity_min, :equity_vest, :equity_cliff
+      :title, :location, :description, :salary_max, :salary_min, :equity_max, :equity_min, :equity_vest, :equity_cliff
     )
   end
 

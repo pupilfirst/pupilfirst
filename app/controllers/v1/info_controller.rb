@@ -1,5 +1,5 @@
 class V1::InfoController < V1::BaseController
-
+  #skip_before_filter :require_application_token, only: %w(api_version)
   skip_before_filter :require_token, only: [:mentors, :advisory_council, :startup_stats, :api_version]
 
   def mentors

@@ -1,6 +1,6 @@
 .well
-  h3.page-header.margin-top-0
-    | #{@startup_job.title} at #{@startup_job.startup.name} 
+  .page-header.margin-top-0
+    h3 #{@startup_job.title} at #{link_to @startup_job.startup.name, startup_path(@startup)}
   p
     -if @startup_job.salary_max.present? 
       strong

@@ -7,7 +7,7 @@ namespace :sms do
       "Community: #{User.count}\n" +
       "Student entrepreneurs: #{User.student_entrepreneurs.count}\n" +
       "On Campus: #{Startup.physically_incubated.count}\n" +
-      "Incubated startups (cumulative): #{849 + Startup.agreement_signed_filtered.count}\n"
+      "Incubated startups (cumulative): #{849 + Startup.agreement_signed_filtered.count}\n" + "#{Startup::SV_STATS_LINK}"
 
     startups_at_visakhapatnam = Startup.where(incubation_location: Startup::INCUBATION_LOCATION_VISAKHAPATNAM)
 
@@ -15,10 +15,10 @@ namespace :sms do
       "Total incubation Requests: #{startups_at_visakhapatnam.incubation_requested.count}\n" +
       "Incubated startups: #{startups_at_visakhapatnam.agreement_live.count}\n" +
       "On Campus: #{startups_at_visakhapatnam.physically_incubated.count}\n" +
-      "Incubated startups (cumulative): #{startups_at_visakhapatnam.agreement_signed.count}"
+      "Incubated startups (cumulative): #{startups_at_visakhapatnam.agreement_signed.count}\n" + "#{Startup::SV_STATS_LINK}"
 
-    msisdns_total = APP_CONFIG[:sms_statistics_all] + APP_CONFIG[:sms_statistics_total]
-    msisdns_visakhapatnam = APP_CONFIG[:sms_statistics_all] + APP_CONFIG[:sms_statistics_visakhapatnam]
+    msisdns_total =  DbConfig.where(key: ['sms_statistics_all', 'sms_statistics_total']).pluck(:value).join(",").split(",")
+    msisdns_visakhapatnam = DbConfig.where(key: ['sms_statistics_all', 'sms_statistics_visakhapatnam']).pluck(:value).join(",").split(",")
 
     msisdns_total.each do |msisdn|
       RestClient.post(APP_CONFIG[:sms_provider_url], text: statistics_total, msisdn: msisdn)

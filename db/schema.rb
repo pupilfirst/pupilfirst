@@ -115,11 +115,7 @@ ActiveRecord::Schema.define(version: 20150127100621) do
   end
 
   create_table "events", force: :cascade do |t|
-<<<<<<< HEAD
-    t.string   "title",                      limit: 255
-=======
     t.string   "title"
->>>>>>> ac80cb438670e1bcd33ae6de27ff1e662b4f1cc2
     t.text     "description"
     t.datetime "start_at"
     t.datetime "end_at"
@@ -128,16 +124,6 @@ ActiveRecord::Schema.define(version: 20150127100621) do
     t.integer  "category_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-<<<<<<< HEAD
-    t.string   "picture",                    limit: 255
-    t.integer  "user_id"
-    t.boolean  "notification_sent"
-    t.boolean  "approved",                               default: false
-    t.string   "posters_name"
-    t.string   "posters_email"
-    t.string   "posters_phone_number"
-    t.boolean  "approval_notification_sent",             default: false
-=======
     t.string   "picture"
     t.integer  "user_id"
     t.boolean  "notification_sent"
@@ -146,7 +132,6 @@ ActiveRecord::Schema.define(version: 20150127100621) do
     t.string   "posters_email"
     t.string   "posters_phone_number"
     t.boolean  "approval_notification_sent", default: false
->>>>>>> ac80cb438670e1bcd33ae6de27ff1e662b4f1cc2
   end
 
   add_index "events", ["category_id"], name: "index_events_on_category_id", using: :btree
@@ -290,7 +275,7 @@ ActiveRecord::Schema.define(version: 20150127100621) do
 
   create_table "startup_jobs", force: :cascade do |t|
     t.integer  "startup_id"
-    t.string   "title",        limit: 255
+    t.string   "title"
     t.text     "description"
     t.integer  "salary_max"
     t.integer  "salary_min"

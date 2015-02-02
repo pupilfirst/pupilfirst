@@ -1,8 +1,7 @@
-div style = "text-align: center;padding: 4%;"
-  p Interested in Hosting an event ?
-  = link_to "Add New Event", new_event_path(@event)
-  p
-    i  Please note that once created the event cannot be edited by you. Incase you have any correction, mail us the detail along with the Event ID sent to your mail.
+h1.page-header.margin-top-0 Events
+
+= link_to 'Interested in hosting an event?', new_event_path(@event), class: 'btn btn-lg btn-success'
+
 - @events.each do |event|
   div class="container"
     div class="row"

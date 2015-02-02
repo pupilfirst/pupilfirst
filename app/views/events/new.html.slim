@@ -1,32 +1,49 @@
-h1 Add a new Event
+h1.page-header.margin-top-0 Add a new Event
+
+p style="font-style: italic;"
+  sup
+    ' *
+  ' Please note that once created the event cannot be edited by you. In case you have any correction, mail us the
+  ' changes along with the Event ID sent to your mail.
+
 = simple_form_for @event do |f|
-  .col-md-6.col.sm-12  
-    = f.input :title, required: true
-    = f.label :description, required: true
+  = f.input :title, required: true
+  = f.label :description, required: true
 
-    #wysihtml5-toolbar
-      a data-wysihtml5-command="bold" title="CTRL+B" class="btn btn-xs btn-default"
-        strong bold
-      a data-wysihtml5-command="italic" title="CTRL+I" class="btn btn-xs btn-default"
-        em italic
-      a data-wysihtml5-command="underline" title="CTRL+U" class="btn btn-xs btn-default" underline
-      a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2" class="btn btn-xs btn-default"
-        strong Heading
-      a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p" class="btn btn-xs btn-default" Paragraph
-      a data-wysihtml5-command="alignLeftStyle" class="btn btn-xs btn-default" alignLeft
-      a data-wysihtml5-command="alignRightStyle" class="btn btn-xs btn-default" alignRight
-      a data-wysihtml5-command="alignCenterStyle" class="btn btn-xs btn-default" alignCenter
+  #wysihtml5-toolbar style="margin-bottom: 5px;"
+    a data-wysihtml5-command="bold" title="CTRL+B" class="btn btn-xs btn-default" style="font-weight: bold;"
+      | Bold
+    | &nbsp;
+    a data-wysihtml5-command="italic" title="CTRL+I" class="btn btn-xs btn-default" style="font-style: italic;"
+      | Italic
+    | &nbsp;
+    a data-wysihtml5-command="underline" title="CTRL+U" class="btn btn-xs btn-default" style="text-decoration: underline;"
+      | Underline
+    | &nbsp;
+    a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2" class="btn btn-xs btn-default"
+      | Heading
+    | &nbsp;
+    a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p" class="btn btn-xs btn-default" Paragraph
+    | &nbsp;
+    a data-wysihtml5-command="alignLeftStyle" class="btn btn-xs btn-default"
+      span class="glyphicon glyphicon-align-left"
+    | &nbsp;
+    a data-wysihtml5-command="alignCenterStyle" class="btn btn-xs btn-default"
+      span class="glyphicon glyphicon-align-center"
+    | &nbsp;
+    a data-wysihtml5-command="alignRightStyle" class="btn btn-xs btn-default"
+      span class="glyphicon glyphicon-align-right"
 
-    = f.input_field :description, id: "wysihtml5-textarea", :style => 'width: 100%'
-    = f.input :picture, required: true
-    = f.input :start_at, as: :datetime_picker, required: true
-    = f.input :end_at, as: :datetime_picker, required: true
-    = f.input :location_id, collection:@location, default: @location.first, required: true
-    = f.input :category_id, collection:@event_categories, prompt: 'Select', required: true
-    = f.input :posters_name, label: "Your Name", required: true
-    = f.input :posters_email, label: "Your Email", required: true
-    = f.input :posters_phone_number, label: "Your Phone Number", required: true
-    = f.button :submit
+  = f.input_field :description, id: "wysihtml5-textarea", :style => 'width: 100%'
+  = f.input :picture, required: true
+  = f.input :start_at, as: :datetime_picker, required: true
+  = f.input :end_at, as: :datetime_picker, required: true
+  = f.input :location_id, collection:@location, default: @location.first, required: true
+  = f.input :category_id, collection:@event_categories, prompt: 'Select', required: true
+  = f.input :posters_name, label: "Your Name", required: true
+  = f.input :posters_email, label: "Your Email", required: true
+  = f.input :posters_phone_number, label: "Your Phone Number", required: true
+  = f.button :submit
 
 javascript:
   var editor = new wysihtml5.Editor("wysihtml5-textarea", {

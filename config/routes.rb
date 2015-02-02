@@ -1,5 +1,5 @@
 Svapp::Application.routes.draw do
-  
+
 
   devise_for :users, controllers: { passwords: 'users/passwords', invitations: 'users/invitations', sessions: 'users/sessions' }
   devise_for :admin_users, ActiveAdmin::Devise.config
@@ -12,6 +12,8 @@ Svapp::Application.routes.draw do
       post 'send_invite'
     end
   end
+
+  resources :news
 
   resources :events
 

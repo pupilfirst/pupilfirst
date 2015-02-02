@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150119064153) do
+ActiveRecord::Schema.define(version: 20150127100621) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -115,7 +115,7 @@ ActiveRecord::Schema.define(version: 20150119064153) do
   end
 
   create_table "events", force: :cascade do |t|
-    t.string   "title",                limit: 255
+    t.string   "title",                      limit: 255
     t.text     "description"
     t.datetime "start_at"
     t.datetime "end_at"
@@ -124,13 +124,14 @@ ActiveRecord::Schema.define(version: 20150119064153) do
     t.integer  "category_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "picture",              limit: 255
+    t.string   "picture",                    limit: 255
     t.integer  "user_id"
     t.boolean  "notification_sent"
-    t.boolean  "approved"
+    t.boolean  "approved",                               default: false
     t.string   "posters_name"
     t.string   "posters_email"
     t.string   "posters_phone_number"
+    t.boolean  "approval_notification_sent",             default: false
   end
 
   add_index "events", ["category_id"], name: "index_events_on_category_id", using: :btree
@@ -271,7 +272,7 @@ ActiveRecord::Schema.define(version: 20150119064153) do
 
   create_table "startup_jobs", force: :cascade do |t|
     t.integer  "startup_id"
-    t.string   "title"
+    t.string   "title",        limit: 255
     t.text     "description"
     t.integer  "salary_max"
     t.integer  "salary_min"
@@ -282,6 +283,7 @@ ActiveRecord::Schema.define(version: 20150119064153) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "expires_on"
+    t.string   "location"
   end
 
   add_index "startup_jobs", ["startup_id"], name: "index_startup_jobs_on_startup_id", using: :btree

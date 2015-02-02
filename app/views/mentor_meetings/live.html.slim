@@ -1,7 +1,7 @@
 
 = javascript_include_tag 'easyrtc_video'
 
-#chat-data.hidden data-easyrtc-socket-url=APP_CONFIG[:easyrtc_socket_url] data-current-user-name=current_user.fullname
+#chat-data.hidden data-easyrtc-socket-url=":5000" data-current-user-name=current_user.fullname data-reminder-sent=@mentor_meeting.recent_sms_sent?(current_user).to_s
 
 h1 Welcome to your meeting with #{current_user == @mentor_meeting.user ? @mentor_meeting.mentor.user.fullname : @mentor_meeting.user.fullname}
 

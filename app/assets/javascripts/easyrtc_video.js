@@ -1,7 +1,8 @@
 function my_init() {
   call_started = false;
 
-  var chat_data = $("#chat-data");
+  chat_data = $("#chat-data");
+    console.log(chat_data.data("reminder-sent"));
 
   // Set socket URL for EasyRTC
   easyrtc.setSocketUrl(chat_data.data("easyrtc-socket-url"));
@@ -83,6 +84,7 @@ function loggedInListener(roomName, otherPeers) {
 
   console.log("Occupants: " + easyrtc.getRoomOccupantsAsArray(roomName));
 
+
   if (easyrtc.getRoomOccupantsAsArray(roomName).length === 1){
     console.log("Awaiting guest to join...");
     strong = document.createElement("strong");
@@ -99,7 +101,7 @@ function loggedInListener(roomName, otherPeers) {
         if (window.confirm("Are you sure you want to leave the chat room ?")){
           window.location.assign("/mentoring")       }
       }
-    if (!call_started){
+    if (!call_started && !chat_data.data("reminder-sent")){
       reminderbutton = document.createElement('button');
       reminderbutton.setAttribute("id", "reminderbutton");
       reminderdiv = document.getElementById('belowvideo');

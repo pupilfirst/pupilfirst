@@ -85,8 +85,7 @@ class MentorMeetingsController < ApplicationController
 
   def reminder
     @mentor_meeting = MentorMeeting.find(params[:id])
-    phone_number = current_user == @mentor_meeting.user ? current_user.phone : @mentor_meeting.mentor.user.phone
-    RestClient.post(APP_CONFIG[:sms_provider_url], text: "#{guest(@mentor_meeting).fullname} is ready and waiting for todays mentoring session", msisdn: phone_number)
+    @mentor_meeting.sent_sms(current_user)
     head :ok
   end
 
@@ -116,8 +115,4 @@ class MentorMeetingsController < ApplicationController
     current_user == mentormeeting.user ? mentormeeting.mentor.user : mentormeeting.user
   end
 
-  # TODO: Is this method not used anywhere?
-  def guest_rating?(mentormeeting)
-    guest(mentormeeting) == mentormeeting.user ? mentormeeting.user_rating? : mentormeeting.mentor_rating?
-  end
 end

@@ -17,7 +17,8 @@ function my_init() {
     function(myId) {
       console.log("App loaded successfully");
     });
-  easyrtc.joinRoom($("#mentor-meeting-container").data("id")+"chatroom")
+  RoomName = $("#mentor-meeting-container").data("id")+"chatroom";
+  easyrtc.joinRoom(RoomName);
 
   // listener for hangup message from guest
   easyrtc.setPeerListener( function(easyrtcid, msgType, msgData, targeting){
@@ -42,7 +43,7 @@ function my_init() {
       var hangupbutton = document.createElement('button');
       hangupbutton.setAttribute("id", "hangupbutton");
       hangupbutton.onclick = function() {
-        occupants = easyrtc.getRoomOccupantsAsArray("default"); //because default room name is 'default'
+        occupants = easyrtc.getRoomOccupantsAsArray(RoomName); 
         destination = occupants.filter(notmyself(easyrtc.myEasyrtcid))[0];
         console.log("Destination to send: " + destination);
         easyrtc.sendPeerMessage(destination, 'manual_hangup', {hangup_method:'button'},

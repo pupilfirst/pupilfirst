@@ -86,8 +86,7 @@
 }
 .event-list > li > .info > ul > li > div {
   font-size: 10pt;
-  font-weight: 400;
-  background-color: #0A60B0;
+  font-weight: 800;
 }
 
 .event-list > li > .info > ul > li > a {
@@ -105,7 +104,7 @@
 .event-list > li > .info > ul > li:hover,
 .event-list > li > .social > ul > li:hover {
   color: rgb(30, 30, 30);
-  background-color: rgb(200, 200, 0);
+  /*background-color: rgb(200, 200, 0);*/
 }
 .facebook a,
 .twitter a,

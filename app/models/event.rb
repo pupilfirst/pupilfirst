@@ -17,7 +17,7 @@ class Event < ActiveRecord::Base
   validates_presence_of :title, :description, :location_id, :category_id, :picture, :start_at, :end_at, :posters_name
 
   validates :posters_email, presence: true, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, on: :create }
-  validates :posters_phone_number, phony_plausible: true
+  validates :posters_phone_number, presence: true, phony_plausible: true
   validate :start_date_greater_that_today, :end_date_is_after_start_date
 
 
@@ -37,14 +37,18 @@ class Event < ActiveRecord::Base
   private
 
     def start_date_greater_that_today
-      if start_at < DateTime.now
-        errors.add(:start_at, "cannot be a past date")
+      unless start_at.nil?
+        if start_at < DateTime.now
+          errors.add(:start_at, "cannot be a past date")
+        end
       end
     end
 
     def end_date_is_after_start_date
-      if end_at < start_at
-        errors.add(:end_at, "cannot be before the start date")
+      unless start_at.nil? || end_at.nil?
+        if end_at < start_at
+          errors.add(:end_at, "cannot be before the start date")
+        end
       end
     end
 

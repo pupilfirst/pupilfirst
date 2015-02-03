@@ -3,6 +3,7 @@ module MentorMeetingsHelper
 
   def mentor_rating_list
     {
+      "Not my Expertise" => MentorMeeting::RATING_0,
       "Skeptic" => MentorMeeting::RATING_1,
       "Unsure" => MentorMeeting::RATING_2,
       "Too early to say" => MentorMeeting::RATING_3,
@@ -13,7 +14,8 @@ module MentorMeetingsHelper
 
   def user_rating_list
     {
-      "No or little use" => MentorMeeting::RATING_1,
+      "Mentor Expectations not met" => MentorMeeting::RATING_0,
+      "Little use" => MentorMeeting::RATING_1,
       "Some use" => MentorMeeting::RATING_2,
       "Useful" => MentorMeeting::RATING_3,
       "Really Useful" => MentorMeeting::RATING_4,

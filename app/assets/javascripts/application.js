@@ -22,7 +22,6 @@
 //= require activate_datepicker
 //= require easyrtc.js
 //= require socket.io.js
-//= require partnerships
 
 //= require moment
 //= require bootstrap-datetimepicker

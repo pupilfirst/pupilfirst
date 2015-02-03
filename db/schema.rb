@@ -11,11 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20150202100523) do
-=======
-ActiveRecord::Schema.define(version: 20150127100621) do
->>>>>>> development
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -97,15 +93,6 @@ ActiveRecord::Schema.define(version: 20150127100621) do
     t.integer "user_id"
   end
 
-<<<<<<< HEAD
-=======
-  create_table "companies", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
->>>>>>> development
   create_table "connections", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "contact_id"
@@ -168,16 +155,9 @@ ActiveRecord::Schema.define(version: 20150127100621) do
     t.integer  "user_id"
     t.integer  "mentor_id"
     t.string   "purpose"
-<<<<<<< HEAD
     t.datetime "meeting_at"
     t.integer  "duration"
     t.string   "status",               default: "requested"
-=======
-    t.string   "suggested_meeting_timings"
-    t.datetime "meeting_at"
-    t.integer  "duration"
-    t.string   "status"
->>>>>>> development
     t.integer  "mentor_rating"
     t.integer  "user_rating"
     t.datetime "created_at"
@@ -207,11 +187,6 @@ ActiveRecord::Schema.define(version: 20150127100621) do
     t.integer  "user_id"
     t.string   "availability"
     t.string   "company_level"
-<<<<<<< HEAD
-=======
-    t.integer  "cost_to_company"
-    t.integer  "time_donate_percentage"
->>>>>>> development
     t.datetime "verified_at"
     t.integer  "company_id"
     t.string   "company"

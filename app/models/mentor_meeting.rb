@@ -4,14 +4,15 @@ class MentorMeeting < ActiveRecord::Base
 
   serialize :suggested_meeting_timings, JSON
 
-  RATING_1 = 1 # Meeting was of no, or little use.
+  RATING_0 = 0 # Meeting was of no use.
+  RATING_1 = 1 # Meeting was of little use.
   RATING_2 = 2 # Some use.
   RATING_3 = 3 # Useful.
   RATING_4 = 4 # Really useful.
   RATING_5 = 5 # Absolutely incredible, eye-opening, etc.
 
   def self.valid_ratings
-    [RATING_1, RATING_2, RATING_3, RATING_4, RATING_5]
+    [RATING_0, RATING_1, RATING_2, RATING_3, RATING_4, RATING_5]
   end
 
   validates_inclusion_of :mentor_rating, in: valid_ratings, allow_nil: true

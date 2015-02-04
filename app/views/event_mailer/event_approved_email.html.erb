@@ -3,15 +3,17 @@
   <head>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
   </head>
-  <body>
-    <h1>Event posted by you has been APPROVED</h1>
+  <body>  
+    Hi <%= @event.posters_name.humanize %>
     <p>
       Your Event with id: <%= @event.id %> has been APPROVED.
-      Incase you want to edit any information regarding the event. Please contact SV lab's support team and dont forget to mention the event id as mentioned above<br>
+      . To make any changes to the event, please drop in a mail to daniel@startupvillage.in . Please remember to quote your event id in all further communication.
     </p>
     <p>
-      Email: support@svlabs.in
+      Email: daniel@startupvillage.in
     </p>
     <p>Thanks for your enthusiasm and have a great day!</p>
+    Cheers,<br />
+    Team Startup Village
   </body>
 </html>

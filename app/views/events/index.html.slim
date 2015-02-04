@@ -1,6 +1,7 @@
 h1.page-header.margin-top-0 Events
 
-= link_to 'Interested in hosting an event?', new_event_path(@event), class: 'btn btn-lg btn-success'
+div style="margin:1%"
+  = link_to 'Interested in hosting an event?', new_event_path(@event), class: 'btn btn-lg btn-success'
 
 - @events.each do |event|
   div class="container"

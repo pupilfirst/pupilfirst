@@ -1,164 +1,75 @@
+// declaring global variables
+var callStarted,chatData,appName,roomName,userName,reminderSent,meetingId;
+
 function initializer() {
-  call_started = false;
-  chat_data = $("#chat-data");
-  app_name = "app_for_meeting_" + chat_data.data("meeting-id");
-  room_name = "Chatroom" + chat_data.data("meeting-id");
-  user_name = chat_data.data("current-user-name");
-
-
-  // Set socket URL for EasyRTC server
-  easyrtc.setSocketUrl(chat_data.data("easyrtc-socket-url"));
-
-  // Set event listener for change in room occupancy 
-  easyrtc.setRoomOccupantListener(loggedInListener);
-
-  // Set chatroom username for current user
-  console.log("Entered room as: " + chat_data.data("current-user-name"));
-  easyrtc.setUsername(user_name);
-
-  // Remove default close buttons on videos
-  easyrtc.dontAddCloseButtons();
-
-  // initialize easyrtc app
-  easyrtc.easyApp(app_name, "self", ["caller"],appsuccesscb);
-
-  // Callback for succesfull app initialization
-  function appsuccesscb() {
-      console.log("App loaded successfully");
-    }
-
-  // join the corresponding room
-  easyrtc.joinRoom(room_name);
-
-  // listener for hangup message from guest
-  easyrtc.setPeerListener( hangup_on_msg,'manual_hangup');
-
-  // Responding to manual hangup by peer
-  function hangup_on_msg(easyrtcid, msgType, msgData, targeting){
-    console.log("Manual hangup msg received");
-    easyrtc.hangupAll();
-    $("#endcall").submit(); 
-    }
-
-  easyrtc.setOnCall(oncallcb);
-
-  // Callback for succesfull call
-  function oncallcb(easyrtcid, slot) {
-    console.log('Call established');
-    call_started = true;
-    $('#start-meeting').submit(); // change meeting status
-    $('awaitingnotification').remove();
-    $('startbutton').remove();
-    if ($(reminderbutton)) {reminderbutton.remove();}; 
-    
-    // creating hang up button
-      hangupdiv =  document.getElementById('belowvideo');
-      var hangupbutton = document.createElement('button');
-      hangupbutton.setAttribute("id", "hangupbutton");
-      hangupbutton.onclick = function() {
-        occupants = easyrtc.getRoomOccupantsAsArray(room_name); 
-        destination = occupants.filter(notmyself(easyrtc.myEasyrtcid))[0];
-        console.log("Destination to send: " + destination);
-        easyrtc.sendPeerMessage(destination, 'manual_hangup', {hangup_method:'button'},
-            function(msgType, msgBody ){
-               console.log("manual hangup was sent");
-            },
-            function(errorCode, errorText){
-               console.log("Couldn't send hang up to peer");
-            }
-        );
-        easyrtc.hangupAll();
-        $("#endcall").submit();   
-      }
-      hanguplabel = document.createTextNode("End Meeting");
-      hangupbutton.appendChild(hanguplabel);
-      hangupdiv.appendChild(hangupbutton); 
-  };
-
-
-  easyrtc.setOnHangup( function(easyrtcid, slot) {
-     button = document.getElementById('hangupbutton')
-     button.remove();        
-  });
+  callStarted = false;
+  loadChatData();
+  easyrtc.setSocketUrl(chatData.data("easyrtc-socket-url"));
+  easyrtc.setRoomOccupantListener(loggedInListener); 
+  console.log("Entered room as: " + chatData.data("current-user-name"));  
+  easyrtc.setUsername(userName);
+  easyrtc.dontAddCloseButtons();// Remove default close buttons on videos
+  easyrtc.easyApp(appName, "self", ["caller"],appSuccessCB);  // initialize easyrtc app
+  easyrtc.joinRoom(roomName);
+  easyrtc.setPeerListener( hangupOnMsg,'manualHangup');  // listener for hangup message from guest
+  easyrtc.setOnCall(onCallCB);
+  easyrtc.setOnHangup(hangUpCB);
 }
+
+// function to load chat data
+function loadChatData() {
+  chatData = $("#chat-data");
+  appName = "appForMeeting" + chatData.data("meeting-id");
+  roomName = "chatRoom" + chatData.data("meeting-id");
+  userName = chatData.data("current-user-name");
+  reminderSent = chatData.data("reminder-sent");
+  meetingId = chatData.data("meeting-id");
+};
+
+// function to respond to manual hangup by peer
+function hangupOnMsg(easyrtcid, msgType, msgData, targeting){
+  console.log("Manual hangup msg received");
+  easyrtc.hangupAll();
+  $("#end-call").submit(); 
+  }
 
 // function to return peer id when used with filter
-function notmyself(myid) {
+function notmyself(myId) {
   return function(element) {
-      return element != myid;
+      return element != myId;
   }
 }
 
+function loggedInListener(roomName, otherPeers) {
+  console.log("easyrtcid of Occupants: " + easyrtc.getRoomOccupantsAsArray(roomName));
+  if (easyrtc.getRoomOccupantsAsArray(roomName).length === 1){singleOccupancyView(otherPeers);}
+  else {multipleOccupancyView(otherPeers);}
+};
 
-function loggedInListener(room_name, otherPeers) {
-  var otherClientDiv = document.getElementById('otherClients');
-  while (otherClientDiv.hasChildNodes()) {
-    otherClientDiv.removeChild(otherClientDiv.lastChild);
-  }
+function singleOccupancyView(otherPeers){
+  console.log("Single occupancy in room");
+  resetView();
+  $('#awaiting-guest').removeClass("hidden");
+  $('#leave-room-button').removeClass("hidden");
 
-  console.log("Occupants: " + easyrtc.getRoomOccupantsAsArray(room_name));
-
-
-  if (easyrtc.getRoomOccupantsAsArray(room_name).length === 1){
-    console.log("Awaiting guest to join...");
-    strong = document.createElement("strong");
-    strong.setAttribute("id", "awaitingnotification");
-    notification = document.createTextNode("Awaiting guest to join...");
-    strong.appendChild(notification);
-    otherClientDiv.appendChild(strong);
-    leavebutton = document.createElement('button');
-    leavebutton.setAttribute("id", "leavebutton");
-    label = document.createTextNode("Come back later");
-    leavebutton.appendChild(label);
-    otherClientDiv.appendChild(leavebutton);
-    leavebutton.onclick = function(){
-        if (window.confirm("Are you sure you want to leave the chat room ?")){
-          window.location.assign("/mentoring")       }
-      }
-    if (!call_started && !chat_data.data("reminder-sent")){
-      reminderbutton = document.createElement('button');
-      reminderbutton.setAttribute("id", "reminderbutton");
-      reminderdiv = document.getElementById('belowvideo');
-      label = document.createTextNode("Send reminder");
-      reminderbutton.appendChild(label);
-      reminderdiv.appendChild(reminderbutton);
-      reminderbutton.onclick = function(){
-        if (window.confirm("Are you sure you want to send an SMS reminder to the guest ?")){
-          $.ajax({
-            url: "/mentor_meetings/"+$("#mentor-meeting-container").data("id")+"/reminder"
-          })
-          .done(function(){
-            alert('SMS sent')
-            reminderbutton.remove();
-          })
-          .fail(function(){
-            alert('Could not sent SMS!')
-          });
-          
-        }
-      }
-    }
-
-  }
-  else {
-    for(var easyrtcid in otherPeers) {
-      strong = document.createElement("strong");
-      strong.setAttribute("id", "awaitingnotification");
-      notification = document.createTextNode(easyrtc.idToName(easyrtcid)+" is available now !");
-      strong.appendChild(notification);
-      otherClientDiv.appendChild(strong);
-      button = document.createElement('button');
-      button.setAttribute("id", "startbutton");
-      button.onclick = function() {
-        performCall(easyrtcid);
-      }
-      label = document.createTextNode("Start Meeting");
-      button.appendChild(label);
-      otherClientDiv.appendChild(button); 
-    }
-  }
+  if (!callStarted && !reminderSent){
+    $('#send-reminder-button').removeClass("hidden");
+  };
 }
 
+function multipleOccupancyView(otherPeers){
+  console.log("otherPeers:" + otherPeers)
+  for(var easyrtcid in otherPeers) {
+    resetView();
+    $('#guest-available').removeClass("hidden");
+    $('#start-meeting-button').removeClass("hidden");
+  };
+};
+
+//function to reset view to blank - hide only conditional elements
+function resetView () {
+  $("#awaiting-guest ,#guest-available ,#leave-room-button ,#start-meeting-button ,#send-reminder-button ,#end-meeting-button").addClass("hidden");
+}
 
 function performCall(easyrtcid) {
   easyrtc.call(
@@ -170,6 +81,71 @@ function performCall(easyrtcid) {
     }
     );
 }
+
+//ONCLICK FUNCTIONS FOR BUTTONS
+
+window.onload = function(){
+
+  $('#end-meeting-button')[0].onclick = function() {
+    occupants = easyrtc.getRoomOccupantsAsArray(roomName); 
+    destination = occupants.filter(notmyself(easyrtc.myEasyrtcid))[0];
+    console.log("Destination to send: " + destination);
+    easyrtc.sendPeerMessage(destination, 'manualHangup', {hangup_method:'button'},
+        function(msgType, msgBody ){
+           console.log("manual hangup was sent");
+        },
+        function(errorCode, errorText){
+           console.log("Couldn't send hang up to peer");
+        }
+    );
+    easyrtc.hangupAll();
+    $("#end-call").submit();   
+  }
+
+  $('#leave-room-button')[0].onclick = function(){
+      if (window.confirm("Are you sure you want to leave the chat room ?")){
+        window.location.assign("/mentoring")       }
+    }
+
+  $('#send-reminder-button')[0].onclick = function(){
+    if (window.confirm("Are you sure you want to send an SMS reminder to the guest ?")){
+      $.ajax({
+        url: "/mentor_meetings/"+meetingId+"/reminder"
+      })
+      .done(function(){
+        alert('SMS sent')
+        $('#send-reminder-button').addClass("hidden");
+      })
+      .fail(function(){
+        alert('Could not sent SMS!')
+      });
+      
+    }
+  }
+
+  $('#start-meeting-button')[0].onclick = function(easyrtcid) {
+    performCall(easyrtcid);
+  } 
+}
+
+// CALLBACK FUNCTIONS
+
+function appSuccessCB() {
+    console.log("App loaded successfully");
+  }
+
+function onCallCB(easyrtcid, slot) {
+  console.log('Call established');
+  callStarted = true;
+  $('#start-meeting').submit(); // change meeting status
+  resetView();
+  $('#end-meeting-button').removeClass("hidden");
+};
+
+function hangUpCB() {
+  $('#end-meeting-button').addClass("hidden");
+}
+
 
 $(document).ready(initializer)
 $(document).on('page:load', initializer)

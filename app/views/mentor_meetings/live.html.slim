@@ -1,22 +1,29 @@
 
 = javascript_include_tag 'easyrtc_video'
 
-#chat-data.hidden data-easyrtc-socket-url=":5000" data-current-user-name=current_user.fullname data-reminder-sent=@mentor_meeting.recent_sms_sent?(current_user).to_s
+#chat-data.hidden data-easyrtc-socket-url=":5000" data-current-user-name=current_user.fullname data-reminder-sent=@mentor_meeting.recent_sms_sent?(current_user).to_s data-meeting-id=@mentor_meeting.id
 
-h1 Welcome to your meeting with #{current_user == @mentor_meeting.user ? @mentor_meeting.mentor.user.fullname : @mentor_meeting.user.fullname}
+h1 Welcome to your meeting with #{@mentor_meeting.guest(current_user)}
 
 / for simple audio-video chat ***
-.container#mentor-meeting-container data-id=@mentor_meeting.id 
+.container#mentor-meeting-container
   .row
     #otherClients
+      strong.hidden#awaiting-guest Awaiting guest to join . .  
+      strong.hidden#guest-available #{@mentor_meeting.guest(current_user)} is now available!
+      button.btn.btn-primary.hidden#leave-room-button Come back later
+      button.btn.btn-primary.hidden#start-meeting-button Start Meeting
   .row
+    p
     video#self.col-md-4 style="float:left" width="300" height="200"
     #callerdiv.col-md-8 style="position:relative;float:left;width:300px"
       video#caller width="450" height="300"
-  .row#belowvideo
+  .row#below-video
+    button.btn.btn-primary.hidden#send-reminder-button Sent Reminder
+    button.btn.btn-primary.hidden#end-meeting-button End Meeting
 
 / hidden form to invoke POST upon end call
-form#endcall.hidden action=mentor_meetings_feedback_path(@mentor_meeting)
+form#end-call.hidden action=mentor_meetings_feedback_path(@mentor_meeting)
 
 / hidden form to change meeting status to 'started'
 = form_tag mentor_meetings_start_url(@mentor_meeting.id), method: :patch, remote: true, id: 'start-meeting'

@@ -191,5 +191,9 @@ class MentorMeeting < ActiveRecord::Base
   def is_mentor?(currentuser)
     currentuser == self.user ? false : true
   end
+
+  def guest(currentuser)
+    currentuser == self.user ? self.mentor.user.fullname : self.user.fullname
+  end
 end
  

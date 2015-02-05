@@ -34,7 +34,7 @@ function hangupOnMsg(easyrtcid, msgType, msgData, targeting){
   }
 
 // function to return peer id when used with filter
-function notmyself(myId) {
+function notMyself(myId) {
   return function(element) {
       return element != myId;
   }
@@ -58,7 +58,6 @@ function singleOccupancyView(otherPeers){
 }
 
 function multipleOccupancyView(otherPeers){
-  console.log("otherPeers:" + otherPeers)
   for(var easyrtcid in otherPeers) {
     resetView();
     $('#guest-available').removeClass("hidden");
@@ -68,27 +67,32 @@ function multipleOccupancyView(otherPeers){
 
 //function to reset view to blank - hide only conditional elements
 function resetView () {
-  $("#awaiting-guest ,#guest-available ,#leave-room-button ,#start-meeting-button ,#send-reminder-button ,#end-meeting-button").addClass("hidden");
+  $("#awaiting-guest ,#guest-available, #leave-room-button, #start-meeting-button, #send-reminder-button, #end-meeting-button").addClass("hidden");
 }
 
 function performCall(easyrtcid) {
-  easyrtc.call(
-    easyrtcid,
-    function(easyrtcid) { console.log("completed call to " + easyrtcid);},
-    function(errorMessage) { console.log("err:" + errorMessage);},
-    function(accepted, bywho) {
-      console.log((accepted?"accepted":"rejected")+ " by " + bywho);
-    }
-    );
+  easyrtc.call(easyrtcid, callSuccessCB, callerrorCB, callAcceptCB);
+}
+
+function callSuccessCB(easyrtcid) {
+  console.log("completed call to " + easyrtcid);
+}
+
+function callerrorCB(errorMessage){
+  console.log("err:" + errorMessage);
+}
+
+function callAcceptCB(accepted,bywho){
+  console.log((accepted?"accepted":"rejected")+ " by " + bywho);
 }
 
 //ONCLICK FUNCTIONS FOR BUTTONS
 
-window.onload = function(){
+function loadOnClicks(){
 
-  $('#end-meeting-button')[0].onclick = function() {
-    occupants = easyrtc.getRoomOccupantsAsArray(roomName); 
-    destination = occupants.filter(notmyself(easyrtc.myEasyrtcid))[0];
+  $('#end-meeting-button').click(function() {
+    var occupants = easyrtc.getRoomOccupantsAsArray(roomName); 
+    var destination = occupants.filter(notMyself(easyrtc.myEasyrtcid))[0];
     console.log("Destination to send: " + destination);
     easyrtc.sendPeerMessage(destination, 'manualHangup', {hangup_method:'button'},
         function(msgType, msgBody ){
@@ -100,14 +104,14 @@ window.onload = function(){
     );
     easyrtc.hangupAll();
     $("#end-call").submit();   
-  }
+  });
 
-  $('#leave-room-button')[0].onclick = function(){
+  $('#leave-room-button').click(function(){
       if (window.confirm("Are you sure you want to leave the chat room ?")){
         window.location.assign("/mentoring")       }
-    }
+    });
 
-  $('#send-reminder-button')[0].onclick = function(){
+  $('#send-reminder-button').click(function(){
     if (window.confirm("Are you sure you want to send an SMS reminder to the guest ?")){
       $.ajax({
         url: "/mentor_meetings/"+meetingId+"/reminder"
@@ -121,11 +125,11 @@ window.onload = function(){
       });
       
     }
-  }
+  });
 
-  $('#start-meeting-button')[0].onclick = function(easyrtcid) {
+  $('#start-meeting-button').click(function(easyrtcid) {
     performCall(easyrtcid);
-  } 
+  }); 
 }
 
 // CALLBACK FUNCTIONS
@@ -147,5 +151,7 @@ function hangUpCB() {
 }
 
 
-$(document).ready(initializer)
-$(document).on('page:load', initializer)
+$(document).ready(function(){
+  initializer();
+  loadOnClicks();
+  });

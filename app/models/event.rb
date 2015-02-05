@@ -40,6 +40,8 @@ class Event < ActiveRecord::Base
     end
   end
 
+  scope :approved_events, -> {where(approved: true)}
+
   alias_attribute :push_title, :title
 
   PUSH_TYPE = 'event' unless defined?(PUSH_TYPE)

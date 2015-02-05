@@ -98,8 +98,14 @@ loadOnClicks = ->
         $('#send-reminder-button').addClass 'hidden'
       ).fail ->
         alert 'Could not sent SMS!'
-  $('#start-meeting-button').click (easyrtcid) ->
-    performCall easyrtcid
+  $('#start-meeting-button').click startMeeting
+
+startMeeting = ->
+  performCall getEasyrtcIdOfPeer()
+
+getEasyrtcIdOfPeer = ->
+  occupants = easyrtc.getRoomOccupantsAsArray(shared.roomName)
+  occupants.filter(notMyself(easyrtc.myEasyrtcid))[0]
 
 # CALLBACK FUNCTIONS
 appSuccessCB = ->

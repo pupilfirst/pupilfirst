@@ -55,6 +55,16 @@
 .event-list > li > .info > .title {
   font-size: 17pt;
   font-weight: 700;
+  padding-top: 3px;
+  text-align: center;
+  margin: 0px;
+}
+.event-list > li > .info > .scaled-title {
+  font-size: 15pt;
+  font-weight: 700;
+  padding-top: 11px;
+  padding-bottom: 9px;
+  text-align: center;
   margin: 0px;
 }
 .event-list > li > .info > .desc {
@@ -94,13 +104,13 @@
   width: 100%;
   color: rgb(30, 30, 30);
   text-decoration: none;
-} 
-.event-list > li > .social > ul > li {    
+}
+.event-list > li > .social > ul > li {
   padding: 0px;
 }
 .event-list > li > .social > ul > li > a {
   padding: 3px 0px;
-} 
+}
 .event-list > li > .info > ul > li:hover,
 .event-list > li > .social > ul > li:hover {
   color: rgb(30, 30, 30);
@@ -165,8 +175,8 @@
     height: 120px;
     text-align: left;
     padding-right: 40px;
-  }	
-  .event-list > li > .info > .title, 
+  }
+  .event-list > li > .info > .title,
   .event-list > li > .info > .desc {
     padding: 2% 5%;
   }
@@ -185,7 +195,7 @@
   .event-list > li > .social > ul {
     border-left: 1px solid rgb(230, 230, 230);
   }
-  .event-list > li > .social > ul > li {			
+  .event-list > li > .social > ul > li {
     display: block;
     padding: 0px;
   }
@@ -193,5 +203,8 @@
     display: block;
     width: 40px;
     padding: 10px 0px 9px;
+  }
+  .btn-margin{
+    margin-bottom:20px;
   }
 }

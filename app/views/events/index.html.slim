@@ -1,7 +1,6 @@
 h1.page-header.margin-top-0 Events
 
-div style="margin:1%"
-  = link_to 'Interested in hosting an event?', new_event_path(@event), class: 'btn btn-lg btn-success'
+= link_to 'Interested in hosting an event?', new_event_path(@event), class: 'btn btn-lg btn-success btn-margin'
 
 - @events.each do |event|
   div class="container"
@@ -14,10 +13,13 @@ div style="margin:1%"
               span class="month" = event.start_at.strftime('%b')
             = image_tag event.picture
             div class="info"
-              h2 class="title"
-                = event.title
+              - if event.title.length < 35
+                  h2.title #{event.title}
+              - else
+                  h2.scaled-title #{event.title}
+
               p class="desc"
-                b VENUE:   
+                b VENUE:
                 = "#{event.location.title}, "
                 = event.location.address
               ul
@@ -28,7 +30,7 @@ div style="margin:1%"
                 li style="width:30%;"
                   = "#{event.end_at.strftime('%d/%m/%Y')} : #{event.start_at.strftime('%I:%M%p')}"
 
-  <!-- Button trigger modal 
+  <!-- Button trigger modal
   button class="btn btn-link" data-toggle="modal" data-target="#todo-1-notes"
     View notes-->
 

@@ -15,6 +15,7 @@ class Event < ActiveRecord::Base
   normalize_attributes :title, :description, :start_at, :end_at, :featured, :picture, :notification_sent
 
   validates_presence_of :title, :description, :location_id, :category_id, :picture, :start_at, :end_at, :posters_name
+  validates_length_of :title, maximum: 50
 
   validates :posters_email, presence: true, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, on: :create }
   validates :posters_phone_number, presence: true, phony_plausible: true

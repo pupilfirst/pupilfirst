@@ -1,24 +1,18 @@
-# declaring global variables
-callStarted = undefined
-chatData = undefined
-appName = undefined
-roomName = undefined
-userName = undefined
-reminderSent = undefined
-meetingId = undefined
+# Holder for shared settings.
+shared = {}
 
 initializer = ->
-  callStarted = false
+  shared.callStarted = false
   loadChatData()
-  easyrtc.setSocketUrl chatData.data('easyrtc-socket-url')
+  easyrtc.setSocketUrl shared.chatData.data('easyrtc-socket-url')
   easyrtc.setRoomOccupantListener loggedInListener
-  console.log "Entered room as: #{chatData.data('current-user-name')}"
-  easyrtc.setUsername userName
+  console.log "Entered room as: #{shared.userName}"
+  easyrtc.setUsername shared.userName
   easyrtc.dontAddCloseButtons()
   # Remove default close buttons on videos
-  easyrtc.easyApp appName, 'self', [ 'caller' ], appSuccessCB
+  easyrtc.easyApp shared.appName, 'self', [ 'caller' ], appSuccessCB
   # initialize easyrtc app
-  easyrtc.joinRoom roomName
+  easyrtc.joinRoom shared.roomName
   easyrtc.setPeerListener hangupOnMsg, 'manualHangup'
   # listener for hangup message from guest
   easyrtc.setOnCall onCallCB
@@ -26,12 +20,12 @@ initializer = ->
 
 # function to load chat data
 loadChatData = ->
-  chatData = $('#chat-data')
-  appName = "appForMeeting#{chatData.data('meeting-id')}"
-  roomName = "chatRoom#{chatData.data('meeting-id')}"
-  userName = chatData.data('current-user-name')
-  reminderSent = chatData.data('reminder-sent')
-  meetingId = chatData.data('meeting-id')
+  shared.chatData = $('#chat-data')
+  shared.appName = "appForMeeting#{shared.chatData.data('meeting-id')}"
+  shared.roomName = "chatRoom#{shared.chatData.data('meeting-id')}"
+  shared.userName = shared.chatData.data('current-user-name')
+  shared.reminderSent = shared.chatData.data('reminder-sent')
+  shared.meetingId = shared.chatData.data('meeting-id')
 
 # function to respond to manual hangup by peer
 hangupOnMsg = (easyrtcid, msgType, msgData, targeting) ->
@@ -57,7 +51,7 @@ singleOccupancyView = (otherPeers) ->
   resetView()
   $('#awaiting-guest').removeClass 'hidden'
   $('#leave-room-button').removeClass 'hidden'
-  if !callStarted and !reminderSent
+  if not shared.callStarted and not shared.reminderSent
     $('#send-reminder-button').removeClass 'hidden'
 
 multipleOccupancyView = (otherPeers) ->
@@ -85,7 +79,7 @@ callAcceptCB = (accepted, bywho) ->
 #ONCLICK FUNCTIONS FOR BUTTONS
 loadOnClicks = ->
   $('#end-meeting-button').click ->
-    occupants = easyrtc.getRoomOccupantsAsArray(roomName)
+    occupants = easyrtc.getRoomOccupantsAsArray(shared.roomName)
     destination = occupants.filter(notMyself(easyrtc.myEasyrtcid))[0]
     console.log 'Destination to send: ' + destination
     easyrtc.sendPeerMessage destination, 'manualHangup', { hangup_method: 'button' }, ((msgType, msgBody) ->
@@ -99,7 +93,7 @@ loadOnClicks = ->
       window.location.assign '/mentoring'
   $('#send-reminder-button').click ->
     if window.confirm('Are you sure you want to send an SMS reminder to the guest ?')
-      $.ajax(url: '/mentor_meetings/' + meetingId + '/reminder').done(->
+      $.ajax(url: '/mentor_meetings/' + shared.meetingId + '/reminder').done(->
         alert 'SMS sent'
         $('#send-reminder-button').addClass 'hidden'
       ).fail ->
@@ -113,7 +107,7 @@ appSuccessCB = ->
 
 onCallCB = (easyrtcid, slot) ->
   console.log 'Call established'
-  callStarted = true
+  shared.callStarted = true
   $('#start-meeting').submit()
   # change meeting status
   resetView()

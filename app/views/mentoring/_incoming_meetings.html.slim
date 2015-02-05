@@ -9,7 +9,7 @@
         th Time
         th Status
     tbody
-      - current_mentor.mentor_meetings.each do |meet|
+      - current_mentor.mentor_meetings.order('id DESC').each do |meet|
         tr
           td = meet.purpose
           td = meet.user.fullname

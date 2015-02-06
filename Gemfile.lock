@@ -51,7 +51,7 @@ GIT
 
 GIT
   remote: git://github.com/zpaulovics/datetimepicker-rails.git
-  revision: d0f8a68f30d7ffb34e505845a693df27467424f3
+  revision: cba2e2f0dd029017a65a571eac186e658426cf1b
   branch: master
   submodules: true
   specs:

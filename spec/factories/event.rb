@@ -1,8 +1,8 @@
 FactoryGirl.define do
   factory :event do
     start_at { Time.now + rand(1000) }
-    title { Faker::Lorem.characters }
-    description   { Faker::Lorem.paragraph }
+    title { Faker::Lorem.words(3).join(' ') }
+    description { Faker::Lorem.paragraph }
     picture { fixture_file_upload(Rails.root.join(*%w[ spec fixtures files example.jpg ]), 'image/jpg') }
     end_at { start_at + rand(1000) }
     location

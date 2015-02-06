@@ -80,3 +80,25 @@ http://docs.startupvillage.apiary.io/
 ## Code quirks
 * Mostly uses rspec request specs for integration test. Model, Controller specs are sparingly written.
 * Most of the code written post March 20th, 2014 has not been tested to fullest extent. One might wanna start from there while taking up project from here on.
+
+## Coding style conventions
+
+### General
+
+* Tabbing - 2 spaces.
+* One blank line at the end of all files.
+* No trailing spaces at the end of any line.
+* One blank line between discrete blocks of code.
+* No more than one blank line between blocks / segments of code.
+
+### Ruby
+
+* Naming: Underscored variables and methods. CamelCase class names - `some_variable, some_method, SomeClass`
+
+### Javascript
+
+* Naming: CamelCase variables and function - `someVariable, someFunction`
+
+### CSS
+
+* Naming: Dash-separated ID-s and classes - `.some-class, #some-id`

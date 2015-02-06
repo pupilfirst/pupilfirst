@@ -1,7 +1,7 @@
 class EventsController < ApplicationController
 
   def index
-    @events = Event.all
+    @events =  Event.approved_events.where('start_at <= ? and start_at > ?', 30.days.from_now, Date.today)
   end
 
   def new
@@ -13,7 +13,7 @@ class EventsController < ApplicationController
     @event = Event.new(event_params)
     if @event.save
       EventMailer.event_registered_email(@event).deliver
-      redirect_to events_path
+      redirect_to events_path, :notice => "Your Event has been submitted for approval, please check your mail for further details"
     else
       event_locations_and_categories
       render :new

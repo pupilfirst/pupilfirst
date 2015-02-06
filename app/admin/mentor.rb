@@ -9,10 +9,10 @@ ActiveAdmin.register Mentor do
     f.inputs 'Mentor' do
       f.input :user
       f.input :company
-      f.input :days_available, collection: Mentor.valid_days_available 
+      f.input :days_available, collection: Mentor.valid_days_available
       f.input :time_available, collection: Mentor.valid_time_available 
       f.input :company_level, collection: Startup.valid_product_progress_values
-      f.input :verified_at, as: :date_picker
+      f.input :verified_at, as: :date_select
     end
 
     f.actions

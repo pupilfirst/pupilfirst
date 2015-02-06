@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150115124131) do
+ActiveRecord::Schema.define(version: 20150127100621) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,12 +93,6 @@ ActiveRecord::Schema.define(version: 20150115124131) do
     t.integer "user_id"
   end
 
-  create_table "companies", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "connections", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "contact_id"
@@ -115,7 +109,7 @@ ActiveRecord::Schema.define(version: 20150115124131) do
   end
 
   create_table "events", force: :cascade do |t|
-    t.string   "title",             limit: 255
+    t.string   "title",                      limit: 255
     t.text     "description"
     t.datetime "start_at"
     t.datetime "end_at"
@@ -124,9 +118,14 @@ ActiveRecord::Schema.define(version: 20150115124131) do
     t.integer  "category_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "picture",           limit: 255
+    t.string   "picture",                    limit: 255
     t.integer  "user_id"
     t.boolean  "notification_sent"
+    t.boolean  "approved",                               default: false
+    t.string   "posters_name"
+    t.string   "posters_email"
+    t.string   "posters_phone_number"
+    t.boolean  "approval_notification_sent",             default: false
   end
 
   add_index "events", ["category_id"], name: "index_events_on_category_id", using: :btree
@@ -155,15 +154,17 @@ ActiveRecord::Schema.define(version: 20150115124131) do
   create_table "mentor_meetings", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "mentor_id"
-    t.string   "purpose",                   limit: 255
-    t.string   "suggested_meeting_timings", limit: 255
+    t.string   "purpose",              limit: 255
     t.datetime "meeting_at"
     t.integer  "duration"
-    t.string   "status",                    limit: 255
+    t.string   "status",               limit: 255, default: "requested"
     t.integer  "mentor_rating"
     t.integer  "user_rating"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "suggested_meeting_at"
+    t.text     "user_comments"
+    t.text     "mentor_comments"
   end
 
   add_index "mentor_meetings", ["mentor_id"], name: "index_mentor_meetings_on_mentor_id", using: :btree
@@ -182,12 +183,11 @@ ActiveRecord::Schema.define(version: 20150115124131) do
 
   create_table "mentors", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "availability",           limit: 255
-    t.string   "company_level",          limit: 255
-    t.integer  "cost_to_company"
-    t.integer  "time_donate_percentage"
+    t.string   "availability",  limit: 255
+    t.string   "company_level", limit: 255
     t.datetime "verified_at"
     t.integer  "company_id"
+    t.string   "company"
   end
 
   add_index "mentors", ["company_id"], name: "index_mentors_on_company_id", using: :btree

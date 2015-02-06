@@ -120,20 +120,6 @@ FactoryGirl.define do
     f.address { Faker::Lorem.paragraph }
   end
 
-  factory :event do |f|
-    start_at = ::Time.now + ::Random.rand(1000)
-    f.title         { Faker::Lorem.characters }
-    f.description   { Faker::Lorem.paragraph }
-    # f.picture Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, '/spec/fixtures/files/example.jpg')))
-    f.picture { fixture_file_upload(Rails.root.join(*%w[ spec fixtures files example.jpg ]), 'image/jpg') }
-    f.start_at start_at
-    f.end_at (start_at + ::Random.rand(1000))
-
-    location
-    author
-    association :category, factory: :event_category, strategy: :build
-  end
-
   factory :bank do |f|
     f.is_joint true
     startup

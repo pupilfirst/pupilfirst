@@ -98,5 +98,14 @@ en:
           If you don't, please drop an email to dinnu@startupvillage.in
         link_startup: |
           Your request to be linked with %{company_name} is pending with the founders. We will notify you with an email & push notification as soon as you are approved.
+
+  datepicker:
+    dformat: '%d/%m/%Y'        # display format of the date (this is the default, can be ommited)
+    pformat: 'DD/MM/YYYY'      # picking format of the date (this is the default, can be ommited)
+    weekstart: 0               # the week starts on Sunday (this is the default, can be ommited)
+  timepicker:
+    dformat: '%R'              # display format of the time (this is the default, can be ommited)
+    pformat: 'hh:mm:A'  
+
   date:
     datepicker: "dd/mm/yyyy"

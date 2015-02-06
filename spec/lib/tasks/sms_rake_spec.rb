@@ -25,8 +25,8 @@ describe 'sms:statistics' do
   end
 
   it 'does something' do
-    total_statistics = "Total statistics\nTotal incubation requests: 5281\nIncubated startups: 0\nCommunity: 0\nStudent entrepreneurs: 0\nOn Campus: 0\nIncubated startups (cumulative): 849\n"
-    visakhapatnam_statistics = "Visakhapatnam statistics\nTotal incubation Requests: 0\nIncubated startups: 0\nOn Campus: 0\nIncubated startups (cumulative): 0"
+    total_statistics = "Total statistics\nTotal incubation requests: 5281\nIncubated startups: 0\nCommunity: 0\nStudent entrepreneurs: 0\nOn Campus: 0\nIncubated startups (cumulative): 849\n#{Startup::SV_STATS_LINK}"
+    visakhapatnam_statistics = "Visakhapatnam statistics\nTotal incubation Requests: 0\nIncubated startups: 0\nOn Campus: 0\nIncubated startups (cumulative): 0\n#{Startup::SV_STATS_LINK}"
 
     expect(RestClient).to receive(:post).with('https://mobme.in', hash_including(text: total_statistics, msisdn: '919876543210'))
     expect(RestClient).to receive(:post).with('https://mobme.in', hash_including(text: total_statistics, msisdn: '919876543211'))

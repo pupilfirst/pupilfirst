@@ -23,6 +23,8 @@ class Startup < ActiveRecord::Base
   INCUBATION_LOCATION_VISAKHAPATNAM = 'visakhapatnam'
   INCUBATION_LOCATION_KOZHIKODE = 'kozhikode'
 
+  SV_STATS_LINK = "bit.ly/svstats2"
+
   def self.valid_agreement_durations
     { '1 year' => 1.year, '2 years' => 2.years, '5 years' => 5.years }
   end
@@ -63,7 +65,7 @@ class Startup < ActiveRecord::Base
   end
 
   has_many :employees, -> { where("startup_link_verifier_id IS NOT NULL") }, :class_name => "User", :foreign_key => "startup_id"
-  
+
   has_and_belongs_to_many :categories do
     def <<(category)
       raise StandardError, 'Use categories= to enforce startup category limit'

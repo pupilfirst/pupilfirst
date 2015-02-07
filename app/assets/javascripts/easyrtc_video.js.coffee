@@ -21,7 +21,7 @@ initializer = ->
 # function to load chat data
 loadChatData = ->
   shared.chatData = $('#chat-data')
-  shared.appName = "SVMentoringEasyRTCApp}"
+  shared.appName = "SVMentoringEasyRTCApp"
   shared.roomName = "chatRoom#{shared.chatData.data('meeting-id')}"
   shared.userName = shared.chatData.data('current-user-name')
   shared.reminderSent = shared.chatData.data('reminder-sent')

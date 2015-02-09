@@ -7,12 +7,11 @@
     Hi <%= @event.posters_name.humanize %>
     <p>
       Your Event with id: <%= @event.id %> has been APPROVED.
-      . To make any changes to the event, please drop in a mail to daniel@startupvillage.in . Please remember to quote your event id in all further communication.
+      . To make any changes to the event, please drop in a mail to <%= mail_to "daniel@startupvillage.in" %> . Please remember to quote your event id in all further communication.
     </p>
-    <p>
-      Email: daniel@startupvillage.in
-    </p>
+
     <p>Thanks for your enthusiasm and have a great day!</p>
+    
     Cheers,<br />
     Team Startup Village
   </body>

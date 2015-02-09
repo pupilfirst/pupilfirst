@@ -21,7 +21,7 @@ initializer = ->
 # function to load chat data
 loadChatData = ->
   shared.chatData = $('#chat-data')
-  shared.appName = "SVMentoringEasyRTCApp}"
+  shared.appName = "SVMentoringEasyRTCApp"
   shared.roomName = "chatRoom#{shared.chatData.data('meeting-id')}"
   shared.userName = shared.chatData.data('current-user-name')
   shared.reminderSent = shared.chatData.data('reminder-sent')
@@ -49,7 +49,7 @@ loggedInListener = (roomName, otherPeers) ->
 singleOccupancyView = (otherPeers) ->
   console.log 'Single occupancy in room'
   resetView()
-  $('#awaiting-guest').removeClass 'hidden'
+  $('.awaiting-guest').removeClass 'hidden'
   $('#leave-room-button').removeClass 'hidden'
   if not shared.callStarted and not shared.reminderSent
     $('#send-reminder-button').removeClass 'hidden'
@@ -62,7 +62,7 @@ multipleOccupancyView = (otherPeers) ->
 
 #function to reset view to blank - hide only conditional elements
 resetView = ->
-  $('#awaiting-guest, #guest-available, #leave-room-button, #start-meeting-button, #send-reminder-button, #end-meeting-button').addClass 'hidden'
+  $('.awaiting-guest, #guest-available, #leave-room-button, #start-meeting-button, #send-reminder-button, #end-meeting-button').addClass 'hidden'
 
 performCall = (easyrtcid) ->
   easyrtc.call easyrtcid, callSuccessCB, callerrorCB, callAcceptCB

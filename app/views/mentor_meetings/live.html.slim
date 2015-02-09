@@ -3,23 +3,31 @@
 
 #chat-data.hidden data-easyrtc-socket-url=APP_CONFIG[:easyrtc_socket_url] data-current-user-name=current_user.fullname data-reminder-sent=@mentor_meeting.recent_sms_sent?(current_user).to_s data-meeting-id=@mentor_meeting.id
 
-h1 Welcome to your meeting with #{@mentor_meeting.guest(current_user)}
+h1.page-header.margin-top-0
+  ' Meeting with #{@mentor_meeting.guest(current_user)}
+  small.awaiting-guest waiting for #{guest_title(@mentor_meeting)}
 
 / for simple audio-video chat ***
 .container#mentor-meeting-container
   .row
-    #otherClients
-      strong.hidden#awaiting-guest Awaiting guest to join . .  
-      strong.hidden#guest-available #{@mentor_meeting.guest(current_user)} is now available!
-      button.btn.btn-primary.hidden#leave-room-button Come back later
-      button.btn.btn-primary.hidden#start-meeting-button Start Meeting
+    p.hidden.awaiting-guest
+      | It looks like the #{guest_title(@mentor_meeting)} hasn't arrived yet.
+    p.hidden.awaiting-guest
+      - if @mentor_meeting.recent_sms_sent?(current_user)
+        | Please wait for the #{guest_title(@mentor_meeting)} to arrive.
+      - else
+        | If you wish to, you can send an SMS, to remind the #{guest_title(@mentor_meeting)} of this meeting.
+
+    strong.hidden#guest-available #{@mentor_meeting.guest(current_user)} is now available!
+    button.btn.btn-primary.hidden#leave-room-button Come back later
+    button.btn.btn-primary.hidden#start-meeting-button Start Meeting
   .row
     p
     video#self.col-md-4 style="float:left" width="300" height="200"
     #callerdiv.col-md-8 style="position:relative;float:left;width:300px"
       video#caller width="450" height="300"
   .row#below-video
-    button.btn.btn-primary.hidden#send-reminder-button Sent Reminder
+    button.btn.btn-primary.hidden#send-reminder-button Send Reminder
     button.btn.btn-primary.hidden#end-meeting-button End Meeting
 
 / hidden form to invoke POST upon end call

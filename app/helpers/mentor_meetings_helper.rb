@@ -41,4 +41,8 @@ module MentorMeetingsHelper
   def current_mentor
     current_user.try(:mentor)
   end
+
+  def guest_title(mentor_meeting)
+    mentor_meeting.is_mentor?(current_user) ? 'startup founder' : 'mentor'
+  end
 end

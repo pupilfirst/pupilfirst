@@ -20,6 +20,11 @@ class EventsController < ApplicationController
     end
   end
 
+  def show
+    @event = Event.find params[:id]
+    @location = Location.find params[:id]
+  end
+
 
   private
 

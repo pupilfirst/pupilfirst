@@ -26,6 +26,7 @@ module MentoringHelper
   end
 
   def meeting_status_html(status)
+    status = "Rescheduled (to be confirmed)" if status == MentorMeeting::STATUS_RESCHEDULED
     status.gsub('_', ' ').capitalize
   end
 

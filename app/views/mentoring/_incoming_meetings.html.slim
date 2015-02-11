@@ -17,7 +17,7 @@
           td = meet.meeting_at.present? ? meet.meeting_at.strftime("%l:%M %P") : meet.suggested_meeting_at.strftime("%l:%M %P")
           td = meeting_status_html meet.status
           td
-            - if meet.status == MentorMeeting::STATUS_REQUESTED
+            - if meet.requested?
               button.btn.btn-xs.btn-success  type="button" data-toggle="modal" data-target="#review-#{meet.id}"
                 ' Review and accept
               | &nbsp;
@@ -43,14 +43,14 @@
           .modal.fade tabindex="-1" role="dialog" id="review-#{meet.id}"
             .modal-dialog
               .modal-content
-                = simple_form_for meet, url: mentor_meetings_accept_url(meet.id) do |f|
+                = simple_form_for meet, url: mentor_meetings_reschedule_url(meet.id) do |f|
                   .modal-header
                     button.close type="button" data-dismiss="modal" aria-label="Close"
                       span aria-hidden="true"
                         ' &times;
                     ' You may reschedule the meeting before acceptance, if required
                   .modal-body
-                    = f.input :meeting_at, :as => :datetime_picker, :input_html => { :value => meet.suggested_meeting_at.strftime('%d-%m-%Y %H:%M')}
+                    = f.input :suggested_meeting_at, :as => :datetime_picker, :input_html => { :value => meet.suggested_meeting_at.strftime('%d-%m-%Y %H:%M')}
                   .modal-footer
                     button.btn.btn-primary type="button"  data-dismiss="modal"
                       ' Close

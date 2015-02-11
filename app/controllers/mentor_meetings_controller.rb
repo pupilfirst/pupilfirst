@@ -40,20 +40,16 @@ class MentorMeetingsController < ApplicationController
   # POST /mentor_meetings/:id/accept
   def accept
     mentor_meeting = MentorMeeting.find(params[:id])
-    mentor_meeting.accept!(params[:mentor_meeting][:meeting_at])
-
-    flash[:notice] = 'Startup member will be notified of your acceptance.'
-
+    mentor_meeting.accept!(mentor_meeting[:suggested_meeting_at])
+    flash[:notice] = '#{guest(mentor_meeting).fullname} will be notified of your acceptance.'
     redirect_to mentoring_url
   end
 
   # POST /mentor_meetings/:id/reject
   def reject
     mentor_meeting = MentorMeeting.find(params[:id])
-    mentor_meeting.reject!(params[:mentor_meeting][:mentor_comments])
-
-    flash[:notice] = 'Startup member will be notified of your response.'
-
+    mentor_meeting.reject!(params[:mentor_meeting],role(mentor_meeting))
+    flash[:notice] = '#{guest(mentor_meeting).fullname}  will be notified of your response.'
     redirect_to mentoring_url
   end
 
@@ -87,6 +83,18 @@ class MentorMeetingsController < ApplicationController
     @mentor_meeting = MentorMeeting.find(params[:id])
     @mentor_meeting.sent_sms(current_user)
     head :ok
+  end
+
+  def reschedule
+    @mentor_meeting = MentorMeeting.find(params[:id])
+    new_time = params[:mentor_meeting][:suggested_meeting_at]
+    if @mentor_meeting.to_be_rescheduled?(new_time)
+      @mentor_meeting.update(status: MentorMeeting::STATUS_RESCHEDULED, suggested_meeting_at: new_time)
+      flash[:notice] = 'The revised schedule has been sent to the startup for confirmation'
+      redirect_to mentoring_path
+    else
+      accept
+    end
   end
 
   private

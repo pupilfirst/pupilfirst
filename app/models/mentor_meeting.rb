@@ -20,13 +20,14 @@ class MentorMeeting < ActiveRecord::Base
 
   STATUS_REQUESTED = 'requested'
   STATUS_REJECTED = 'rejected'
+  STATUS_RESCHEDULED = 'rescheduled'
   STATUS_ACCEPTED = 'accepted'
   STATUS_STARTED = 'started'
   STATUS_COMPLETED = 'completed'
   STATUS_EXPIRED = 'expired'
 
   def self.valid_statuses
-    [STATUS_REQUESTED, STATUS_REJECTED, STATUS_ACCEPTED, STATUS_COMPLETED, STATUS_STARTED, STATUS_EXPIRED]
+    [STATUS_REQUESTED, STATUS_REJECTED, STATUS_ACCEPTED, STATUS_COMPLETED, STATUS_STARTED, STATUS_EXPIRED, STATUS_RESCHEDULED]
   end
 
   validates_inclusion_of :status, in: valid_statuses
@@ -56,13 +57,14 @@ class MentorMeeting < ActiveRecord::Base
     end
   end
 
-  validate :reject_with_comment
+  # REWRITE FOR rejection by mentor and startup
+  # validate :reject_with_comment
 
-  def reject_with_comment
-    if rejected? && mentor_comments.blank?
-      errors[:base] << 'Mentor must write comment to reject meeting request'
-    end
-  end
+  # def reject_with_comment
+  #   if rejected? && mentor_comments.blank?
+  #     errors[:base] << 'Mentor must write comment to reject meeting request'
+  #   end
+  # end
 
   validate :accept_with_meeting_at
 
@@ -115,7 +117,8 @@ class MentorMeeting < ActiveRecord::Base
 
   def accept!(accepted_meeting_at)
     update!(status: STATUS_ACCEPTED, meeting_at: accepted_meeting_at)
-    send_acceptance_message
+    # TO BE CORRECTED
+    # send_acceptance_message
   end
 
   def send_acceptance_message
@@ -126,9 +129,14 @@ class MentorMeeting < ActiveRecord::Base
     end
   end
 
-  def reject!(mentor_comments_for_rejection)
-    update!(status: STATUS_REJECTED, mentor_comments: mentor_comments_for_rejection)
-    send_rejection_message
+  def reject!(mentor_meeting,role)
+    if role == "mentor"
+      update!(status: STATUS_REJECTED, mentor_comments: mentor_meeting["mentor_comments"])
+    else
+      update!(status: STATUS_REJECTED, user_comments: mentor_meeting["user_comments"])
+    end
+    # TO BE CORRECTED
+    # send_rejection_message
   end
 
   def send_rejection_message
@@ -140,7 +148,11 @@ class MentorMeeting < ActiveRecord::Base
   end
 
   def rescheduled?
-    meeting_at != suggested_meeting_at
+    status == STATUS_RESCHEDULED
+  end
+
+  def requested?
+    status == STATUS_REQUESTED
   end
 
   def rejected?
@@ -194,6 +206,10 @@ class MentorMeeting < ActiveRecord::Base
 
   def guest(currentuser)
     currentuser == self.user ? self.mentor.user.fullname : self.user.fullname
+  end
+
+  def to_be_rescheduled?(new_suggested_time)
+    self.suggested_meeting_at != Time.zone.parse(new_suggested_time).to_datetime
   end
 end
  

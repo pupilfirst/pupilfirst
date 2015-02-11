@@ -16,7 +16,7 @@
         td = meet.meeting_at.present? ? meet.meeting_at.to_date : meet.suggested_meeting_at.to_date
         td = meet.meeting_at.present? ? meet.meeting_at.strftime('%l:%M %P') : meet.suggested_meeting_at.strftime('%l:%M %P')
         td
-          - if meet.status == MentorMeeting::STATUS_REJECTED
+          - if meet.rejected?
             a href="#" class="popovers" data-toggle="popover" data-trigger="focus" data-content="#{meet.mentor_comments}" tabindex="0" #{meeting_status_html meet.status}
           - else
             = meeting_status_html meet.status
@@ -25,6 +25,23 @@
             = link_to 'Join Room', mentor_meetings_live_url(meet.id), class: 'btn btn-xs btn-primary'
           - elsif meet.completed? && meet.did_not_give_feedback?(current_user)
             = link_to 'Give Feedback', mentor_meetings_feedback_url(meet.id), class: 'btn btn-xs btn-primary'
+          - elsif meet.rescheduled? 
+            = link_to('Confirm', mentor_meetings_accept_url(meet.id), method: :patch, class: 'btn btn-xs btn-success')
+            | &nbsp;
+            button.btn.btn-xs.btn-danger  type="button" data-toggle="modal" data-target="#reject-#{meet.id}"
+                ' Reject
+
+        .modal.fade tabindex="-1" role="dialog" id="reject-#{meet.id}"
+            .modal-dialog
+              .modal-content
+                = simple_form_for meet, url: mentor_meetings_reject_url(meet.id), html: { onsubmit: "return require_user_comments_for_reject('#{meet.id}');"} do |f|
+                  .modal-body
+                    .alert.alert-danger.hidden role="alert" id="comments-empty-alert-#{meet.id}" Please supply reason for rejecting meeting reschedule.
+                    = f.input :user_comments, label: 'Reason for rejection', input_html: { id: "user-comments-#{meet.id}" }
+                  .modal-footer
+                    button.btn.btn-primary type="button"  data-dismiss="modal"
+                      ' Close
+                    = f.submit 'Submit', class: 'btn btn-primary'
 
 javascript:
   $('[data-toggle="popover"]').popover();

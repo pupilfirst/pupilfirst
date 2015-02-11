@@ -45,6 +45,8 @@ Rails.application.configure do
 
   # In development and test, let's have carrierwave store everything on local disk.
   config.carrier_wave_storage = :file
+
+  config.action_mailer.delivery_method = :letter_opener
 end
 
 ActionMailer::Base.smtp_settings = {

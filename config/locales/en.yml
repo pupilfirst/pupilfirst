@@ -105,7 +105,7 @@ en:
     weekstart: 0               # the week starts on Sunday (this is the default, can be ommited)
   timepicker:
     dformat: '%R'              # display format of the time (this is the default, can be ommited)
-    pformat: 'hh:mm:A'  
+    pformat: 'HH:mm'  
 
   date:
     datepicker: "dd/mm/yyyy"

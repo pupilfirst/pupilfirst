@@ -5,33 +5,39 @@
 
 h1.page-header.margin-top-0
   ' Meeting with #{@mentor_meeting.guest(current_user)}
-  small.awaiting-guest waiting for #{guest_title(@mentor_meeting)}
+  small.connecting-to-server connecting...
+  small.hidden.awaiting-guest waiting for #{guest_title(@mentor_meeting)}
+  small.hidden.guest-available #{guest_title(@mentor_meeting)} is available!
 
 / for simple audio-video chat ***
 .container#mentor-meeting-container
   .row
-    p.hidden.awaiting-guest
-      | It looks like the #{guest_title(@mentor_meeting)} hasn't arrived yet.
-    p.hidden.awaiting-guest
-      - if @mentor_meeting.recent_sms_sent?(current_user)
-        | Please wait for the #{guest_title(@mentor_meeting)} to arrive.
-      - else
-        | If you wish to, you can send an SMS, to remind the #{guest_title(@mentor_meeting)} of this meeting.
+    .col-md-6
+      p.connecting-to-server Please wait while we establish a connection to our server...
+      p.hidden.awaiting-guest
+        | It looks like the #{guest_title(@mentor_meeting)} hasn't arrived yet.
+      p.hidden.guest-available
+        | The #{guest_title(@mentor_meeting)} is now in the <em>room</em>. You may now start the meeting.
+      p.hidden.awaiting-guest
+        - if @mentor_meeting.recent_sms_sent?(current_user)
+          | Please wait for the #{guest_title(@mentor_meeting)} to arrive.
+        - else
+          | If you wish to, you can send an SMS, to remind the #{guest_title(@mentor_meeting)} of this meeting.
 
-    strong.hidden#guest-available #{@mentor_meeting.guest(current_user)} is now available!
-    button.btn.btn-default.hidden#leave-room-button
-      span.glyphicon.glyphicon-time
-      | &nbsp;Come back later
-    button.btn.btn-success.hidden#start-meeting-button
-      span.glyphicon.glyphicon-play
-      | &nbsp;Start Meeting
-    | &nbsp;
-    button.btn.btn-primary.hidden#send-reminder-button
-      span.glyphicon.glyphicon-envelope
-      | &nbsp;Send Reminder
-    button.btn.btn-danger.hidden#end-meeting-button
-      span.glyphicon.glyphicon-stop
-      | &nbsp;End Meeting
+    .col-md-6
+      button.btn.btn-default.hidden#leave-room-button
+        span.glyphicon.glyphicon-time
+        | &nbsp;Come back later
+      button.btn.btn-success.hidden#start-meeting-button
+        span.glyphicon.glyphicon-play
+        | &nbsp;Start Meeting
+      | &nbsp;
+      button.btn.btn-primary.hidden#send-reminder-button
+        span.glyphicon.glyphicon-envelope
+        | &nbsp;Send Reminder
+      button.btn.btn-danger.hidden#end-meeting-button
+        span.glyphicon.glyphicon-stop
+        | &nbsp;End Meeting
   .row
     p
     video#self.col-md-4 style="float:left" width="300" height="200"

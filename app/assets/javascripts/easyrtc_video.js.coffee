@@ -57,12 +57,12 @@ singleOccupancyView = (otherPeers) ->
 multipleOccupancyView = (otherPeers) ->
   for easyrtcid of otherPeers
     resetView()
-    $('#guest-available').removeClass 'hidden'
+    $('.guest-available').removeClass 'hidden'
     $('#start-meeting-button').removeClass 'hidden'
 
 #function to reset view to blank - hide only conditional elements
 resetView = ->
-  $('.awaiting-guest, #guest-available, #leave-room-button, #start-meeting-button, #send-reminder-button, #end-meeting-button').addClass 'hidden'
+  $('.connecting-to-server, .awaiting-guest, .guest-available, #leave-room-button, #start-meeting-button, #send-reminder-button, #end-meeting-button').addClass 'hidden'
 
 performCall = (easyrtcid) ->
   easyrtc.call easyrtcid, callSuccessCB, callerrorCB, callAcceptCB

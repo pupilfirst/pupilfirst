@@ -1,6 +1,11 @@
 class UserMailer < ActionMailer::Base
   default from: "SV App <no-reply@svlabs.in>", cc: "outgoing@svlabs.in"
 
+  def mentor_verified(mentor)
+    @mentor = mentor
+    mail to:@mentor.user.email, subject: 'Your mentor account has been verified'
+  end
+
   def meeting_feedback_user(mentor_meeting)
     @mentor_meeting = mentor_meeting
     mail to:@mentor_meeting.user.email, subject: 'Reminder: Feedback on mentoring session' 

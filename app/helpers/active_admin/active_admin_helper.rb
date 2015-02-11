@@ -14,4 +14,16 @@ module ActiveAdmin::ActiveAdminHelper
       '<em>Unknown</em>'.html_safe
     end
   end
+
+  def availability_as_string(availability)
+    day = case availability["days"]
+      when Date::DAYNAMES then "Everyday"
+      when Date::DAYNAMES[1..5] then "Weekdays"
+      when Date::DAYNAMES - Date::DAYNAMES[1..5] then "Weekends"
+      else availability["days"]
+    end
+    time = "#{availability["time"]["after"]}:00 to #{availability["time"]["before"]}:00 hrs"
+    "#{day} , #{time}"
+  end
+
 end

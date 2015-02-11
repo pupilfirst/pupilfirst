@@ -36,10 +36,10 @@ FactoryGirl.define do
 
     factory :user_with_out_password do
       skip_password true
-      factory :employee do
-        startup_link_verifier_id 1
-        startup_verifier_token { SecureRandom.hex(30) }
-      end
+      # factory :employee do
+      #   startup_link_verifier_id 1
+      #   startup_verifier_token { SecureRandom.hex(30) }
+      # end
       factory :founder do
         is_founder true
         startup_link_verifier_id 1

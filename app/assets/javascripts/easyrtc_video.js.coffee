@@ -68,7 +68,7 @@ performCall = (easyrtcid) ->
   easyrtc.call easyrtcid, callSuccessCB, callerrorCB, callAcceptCB
 
 callSuccessCB = (easyrtcid) ->
-  console.log 'completed call to #{easyrtcid}'
+  console.log "completed call to #{easyrtcid}"
 
 callerrorCB = (errorMessage) ->
   console.log "err: #{errorMessage}"
@@ -81,7 +81,7 @@ loadOnClicks = ->
   $('#end-meeting-button').click ->
     occupants = easyrtc.getRoomOccupantsAsArray(shared.roomName)
     destination = occupants.filter(notMyself(easyrtc.myEasyrtcid))[0]
-    console.log 'Destination to send: #{destination}'
+    console.log "Destination to send: #{destination}"
     easyrtc.sendPeerMessage destination, 'manualHangup', { hangup_method: 'button' }, ((msgType, msgBody) ->
       console.log 'manual hangup was sent'
     ), (errorCode, errorText) ->
@@ -93,7 +93,7 @@ loadOnClicks = ->
       window.location.assign '/mentoring'
   $('#send-reminder-button').click ->
     if window.confirm('Are you sure you want to send an SMS reminder to the guest ?')
-      $.ajax(url: '/mentor_meetings/#{shared.meetingId}/reminder').done(->
+      $.ajax(url: "/mentor_meetings/#{shared.meetingId}/reminder").done(->
         alert 'SMS sent'
         $('#send-reminder-button').addClass 'hidden'
       ).fail ->

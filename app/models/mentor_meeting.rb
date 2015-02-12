@@ -199,6 +199,10 @@ class MentorMeeting < ActiveRecord::Base
     status == STATUS_CANCELLED
   end
 
+  def started?
+    status == STATUS_STARTED
+  end
+
   def starts_soon?
     accepted? && (meeting_at < 15.minutes.from_now)
   end

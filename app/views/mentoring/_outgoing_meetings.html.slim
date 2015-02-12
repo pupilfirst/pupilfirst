@@ -33,6 +33,8 @@
           - elsif meet.requested? || meet.accepted?
             button.btn.btn-xs.btn-danger  type="button" data-toggle="modal" data-target="#cancel-#{meet.id}"
               ' Cancel Meeting
+          - elsif meet.started?
+              = link_to 'Rejoin Room', mentor_meetings_live_url(meet.id),  class: 'btn btn-xs btn-success'
 
         .modal.fade tabindex="-1" role="dialog" id="reject-#{meet.id}"
             .modal-dialog

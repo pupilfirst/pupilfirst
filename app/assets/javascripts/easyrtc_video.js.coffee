@@ -101,7 +101,6 @@ loadOnClicks = ->
   $('#start-meeting-button').click startMeeting
 
 startMeeting = ->
-  $('#note-over-guest-video').addClass 'hidden'
   performCall getEasyrtcIdOfPeer()
 
 getEasyrtcIdOfPeer = ->
@@ -118,6 +117,8 @@ onCallCB = (easyrtcid, slot) ->
   $('#start-meeting').submit()
   # change meeting status
   resetView()
+
+  $('#note-over-guest-video').addClass 'hidden'
   $('#end-meeting-button').removeClass 'hidden'
 
 hangUpCB = ->

@@ -1,6 +1,6 @@
-p Hi #{@mentor_meeting.user.fullname}!
+p Hi #{@recipient.fullname}!
 
-p #{@mentor_meeting.mentor.user.fullname} has accepted your request for meeting!
+p #{@mentor_meeting.guest(@recipient).fullname} has agreed to the meeting!
 
 p Please login to svlabs.in at the scheduled time (#{@mentor_meeting.meeting_at.strftime('%d-%m-%Y %H:%M')}) and head
   to the meeting room.

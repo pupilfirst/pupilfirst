@@ -13,8 +13,6 @@ Svapp::Application.routes.draw do
     end
   end
 
-  resources :news
-
   resources :events
 
   resources :startup_links, only: :destroy

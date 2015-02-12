@@ -1,0 +1,11 @@
+.btn.btn-success
+  = link_to 'back to events list', events_path
+h2.page-header.margin-top-0 #{@event.title}
+= image_tag @event.picture, size: "360x360"
+p #{@event.description}
+p
+  span class="glyphicon glyphicon-time"
+  b  #{@event.start_at.strftime('%d/%m/%Y')} :#{@event.start_at.strftime('%I:%M%p')} &mdash; #{@event.end_at.strftime('%d/%m/%Y')} : #{@event.end_at.strftime('%I:%M%p')}
+p
+  span class="glyphicon glyphicon-map-marker"
+  b  #{@location.title}

@@ -1,5 +1,6 @@
 - if @role == "user"
   h1 Hi ! How would you rate the mentoring experience? 
+  small Your feedback will remain confidential and will not be shared with the mentor.
   p
     = simple_form_for @mentor_meeting , url: mentor_meetings_feedbacksave_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|    
       = f.input :user_rating, collection: user_rating_list, label: "Rating: "
@@ -10,6 +11,7 @@
         = f.submit "Later", class: "btn btn-success"
 - else 
   h1 Hi ! Your take on the startup? 
+  small Your feedback will remain confidential and will not be shared with the startup without prior consent.
   p
     = simple_form_for @mentor_meeting , url: mentor_meetings_feedbacksave_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|    
       = f.input :mentor_rating, collection: mentor_rating_list, label: "Rating: "

@@ -57,14 +57,13 @@ class MentorMeeting < ActiveRecord::Base
     end
   end
 
-  # REWRITE FOR rejection by mentor and startup
-  # validate :reject_with_comment
+  validate :reject_with_comment
 
-  # def reject_with_comment
-  #   if rejected? && mentor_comments.blank?
-  #     errors[:base] << 'Mentor must write comment to reject meeting request'
-  #   end
-  # end
+  def reject_with_comment
+    if rejected? && (mentor_comments.blank? && mentor_comments.blank?)
+      errors[:base] << 'Comments required to reject meeting request'
+    end
+  end
 
   validate :accept_with_meeting_at
 

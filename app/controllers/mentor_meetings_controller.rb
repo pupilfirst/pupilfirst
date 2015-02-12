@@ -97,6 +97,13 @@ class MentorMeetingsController < ApplicationController
     end
   end
 
+  def cancel
+    mentor_meeting = MentorMeeting.find(params[:id])
+    mentor_meeting.cancel!(params[:mentor_meeting],role(mentor_meeting))
+    flash[:notice] = '#{guest(mentor_meeting).fullname}  will be notified of the cancellation.'
+    redirect_to mentoring_path
+  end
+
   private
 
   def meeting_params

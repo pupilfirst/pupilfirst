@@ -16,6 +16,12 @@ class UserMailer < ActionMailer::Base
     mail to:@mentor_meeting.mentor.user.email, subject: 'Reminder: Feedback on mentoring session' 
   end
 
+  def meeting_request_cancelled(mentor_meeting,recipient)
+    @mentor_meeting = mentor_meeting
+    @recipient = recipient
+    mail to:recipient.email, subject: 'Meeting cancelled by ' + @mentor_meeting.guest(recipient).fullname
+  end
+
   def meeting_request_rejected(mentor_meeting,recipient)
     @mentor_meeting = mentor_meeting
     @recipient = recipient

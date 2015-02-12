@@ -30,6 +30,9 @@
             | &nbsp;
             button.btn.btn-xs.btn-danger  type="button" data-toggle="modal" data-target="#reject-#{meet.id}"
                 ' Reject
+          - elsif meet.requested? || meet.accepted?
+            button.btn.btn-xs.btn-danger  type="button" data-toggle="modal" data-target="#cancel-#{meet.id}"
+              ' Cancel Meeting
 
         .modal.fade tabindex="-1" role="dialog" id="reject-#{meet.id}"
             .modal-dialog
@@ -38,6 +41,18 @@
                   .modal-body
                     .alert.alert-danger.hidden role="alert" id="comments-empty-alert-#{meet.id}" Please supply reason for rejecting meeting reschedule.
                     = f.input :user_comments, label: 'Reason for rejection', input_html: { id: "user-comments-#{meet.id}" }
+                  .modal-footer
+                    button.btn.btn-primary type="button"  data-dismiss="modal"
+                      ' Close
+                    = f.submit 'Submit', class: 'btn btn-primary'
+
+        .modal.fade tabindex="-1" role="dialog" id="cancel-#{meet.id}"
+            .modal-dialog
+              .modal-content
+                = simple_form_for meet, url: mentor_meetings_cancel_url(meet.id), html: { onsubmit: "return require_comments_for_cancel('#{meet.id}');"} do |f|
+                  .modal-body
+                    .alert.alert-danger.hidden role="alert" id="comments-empty-alert-#{meet.id}" Please supply reason for cancellng the meeting.
+                    = f.input :user_comments, label: 'Reason for cancellation', input_html: { id: "user-comments-#{meet.id}" }
                   .modal-footer
                     button.btn.btn-primary type="button"  data-dismiss="modal"
                       ' Close

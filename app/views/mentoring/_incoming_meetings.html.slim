@@ -31,6 +31,9 @@
               = link_to 'Join Room', mentor_meetings_live_url(meet.id),  class: 'btn btn-xs btn-primary'
             - elsif meet.completed? && meet.did_not_give_feedback?(current_mentor)
               = link_to 'Give Feedback', mentor_meetings_feedback_url(meet.id),  class: 'btn btn-xs btn-primary'
+            - elsif meet.accepted? || meet.rescheduled?
+              button.btn.btn-xs.btn-danger  type="button" data-toggle="modal" data-target="#cancel-#{meet.id}"
+                ' Cancel Meeting
 
           .modal.fade tabindex="-1" role="dialog" id="reject-#{meet.id}"
             .modal-dialog
@@ -39,6 +42,18 @@
                   .modal-body
                     .alert.alert-danger.hidden role="alert" id="comments-empty-alert-#{meet.id}" Please supply reason for rejecting meeting request.
                     = f.input :mentor_comments, label: 'Reason for rejection', input_html: { id: "mentor-comments-#{meet.id}" }
+                  .modal-footer
+                    button.btn.btn-primary type="button"  data-dismiss="modal"
+                      ' Close
+                    = f.submit 'Submit', class: 'btn btn-primary'
+
+          .modal.fade tabindex="-1" role="dialog" id="cancel-#{meet.id}"
+            .modal-dialog
+              .modal-content
+                = simple_form_for meet, url: mentor_meetings_cancel_url(meet.id), html: { onsubmit: "return require_comments_for_cancel('#{meet.id}');"} do |f|
+                  .modal-body
+                    .alert.alert-danger.hidden role="alert" id="comments-empty-alert-#{meet.id}" Please supply reason for Cancellng the meeting.
+                    = f.input :mentor_comments, label: 'Reason for cancellation', input_html: { id: "mentor-comments-#{meet.id}" }
                   .modal-footer
                     button.btn.btn-primary type="button"  data-dismiss="modal"
                       ' Close

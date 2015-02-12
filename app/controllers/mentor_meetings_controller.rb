@@ -41,7 +41,7 @@ class MentorMeetingsController < ApplicationController
   def accept
     mentor_meeting = MentorMeeting.find(params[:id])
     mentor_meeting.accept!(mentor_meeting,role(mentor_meeting))
-    flash[:notice] = '#{guest(mentor_meeting).fullname} will be notified of your acceptance.'
+    flash[:notice] = "#{guest(mentor_meeting).fullname} will be notified of your acceptance."
     redirect_to mentoring_url
   end
 
@@ -49,7 +49,7 @@ class MentorMeetingsController < ApplicationController
   def reject
     mentor_meeting = MentorMeeting.find(params[:id])
     mentor_meeting.reject!(params[:mentor_meeting],role(mentor_meeting))
-    flash[:notice] = '#{guest(mentor_meeting).fullname}  will be notified of your response.'
+    flash[:notice] = "#{guest(mentor_meeting).fullname}  will be notified of your response."
     redirect_to mentoring_url
   end
 
@@ -100,7 +100,7 @@ class MentorMeetingsController < ApplicationController
   def cancel
     mentor_meeting = MentorMeeting.find(params[:id])
     mentor_meeting.cancel!(params[:mentor_meeting],role(mentor_meeting))
-    flash[:notice] = '#{guest(mentor_meeting).fullname}  will be notified of the cancellation.'
+    flash[:notice] = "#{guest(mentor_meeting).fullname}  will be notified of the cancellation."
     redirect_to mentoring_path
   end
 

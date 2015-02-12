@@ -1,5 +1,7 @@
 # TODO: Spec rake mentor_meetings:expire
 namespace :mentor_meetings do
+  # TODO: This should probably be mentor_meetings#cleanup. See https://trello.com/c/2zlqndRC
+
   desc 'Set meetings that are more than one day past agreed date to expired'
   task expire: [:environment] do
     non_expired_meetings = MentorMeeting.where.not(status: MentorMeeting::STATUS_EXPIRED)

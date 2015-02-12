@@ -10,7 +10,7 @@ initializer = ->
   easyrtc.setUsername shared.userName
   easyrtc.dontAddCloseButtons()
   # Remove default close buttons on videos
-  easyrtc.easyApp shared.appName, 'self', [ 'caller' ], appSuccessCB
+  easyrtc.easyApp shared.appName, 'self', [ 'guest' ], appSuccessCB
   # initialize easyrtc app
   easyrtc.joinRoom shared.roomName
   easyrtc.setPeerListener hangupOnMsg, 'manualHangup'
@@ -101,6 +101,7 @@ loadOnClicks = ->
   $('#start-meeting-button').click startMeeting
 
 startMeeting = ->
+  $('#note-over-guest-video').addClass 'hidden'
   performCall getEasyrtcIdOfPeer()
 
 getEasyrtcIdOfPeer = ->

@@ -39,10 +39,10 @@ h1.page-header.margin-top-0
         span.glyphicon.glyphicon-stop
         | &nbsp;End Meeting
   .row
-    p
-    video#self.col-md-4 style="float:left" width="300" height="200"
-    #callerdiv.col-md-8 style="position:relative;float:left;width:300px"
-      video#caller width="450" height="300"
+    #video-container
+      video#self
+      #note-over-guest-video #{guest_title(@mentor_meeting).capitalize}'s video will appear here when available.
+      video#guest
 
 / hidden form to invoke POST upon end call
 form#end-call.hidden action=mentor_meetings_feedback_path(@mentor_meeting)

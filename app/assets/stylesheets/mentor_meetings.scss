@@ -1,3 +1,37 @@
 // Place all the styles related to the MentorMeetings controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+#video-container {
+  position: relative;
+  @extend .col-md-6;
+  @extend .col-md-offset-3;
+}
+
+video#guest {
+  width: 100%;
+  background: rgba(0,0,0,1);/* Old Browsers */
+  background: -moz-radial-gradient(center, ellipse cover, rgba(0,0,0,1) 0%, rgba(69,69,69,1) 100%); /* FF3.6+ */
+  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(0,0,0,1)), color-stop(100%, rgba(69,69,69,1)));/* Chrome, Safari4+ */
+  background: -webkit-radial-gradient(center, ellipse cover, rgba(0,0,0,1) 0%, rgba(69,69,69,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-radial-gradient(center, ellipse cover, rgba(0,0,0,1) 0%, rgba(69,69,69,1) 100%); /* Opera 11.10+ */
+  background: -ms-radial-gradient(center, ellipse cover, rgba(0,0,0,1) 0%, rgba(69,69,69,1) 100%); /* IE 10+ */
+  background: radial-gradient(ellipse at center, rgba(0,0,0,1) 0%, rgba(69,69,69,1) 100%);/* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#454545', GradientType=1 );/* IE6-9 fallback on horizontal gradient */
+}
+
+#note-over-guest-video {
+  color: grey;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  margin-left:-170px;
+}
+
+video#self {
+  width: 20%;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 999;
+}

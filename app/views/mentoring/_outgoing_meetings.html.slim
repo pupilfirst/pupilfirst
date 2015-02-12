@@ -30,6 +30,8 @@
             | &nbsp;
             button.btn.btn-xs.btn-danger  type="button" data-toggle="modal" data-target="#reject-#{meet.id}"
                 ' Reject
+          - elsif meet.requested? || meet.accepted?
+            = link_to 'Cancel Meeting', '#',  class: 'btn btn-xs btn-danger' 
 
         .modal.fade tabindex="-1" role="dialog" id="reject-#{meet.id}"
             .modal-dialog

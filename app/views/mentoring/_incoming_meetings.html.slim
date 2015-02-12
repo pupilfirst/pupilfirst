@@ -31,6 +31,8 @@
               = link_to 'Join Room', mentor_meetings_live_url(meet.id),  class: 'btn btn-xs btn-primary'
             - elsif meet.completed? && meet.did_not_give_feedback?(current_mentor)
               = link_to 'Give Feedback', mentor_meetings_feedback_url(meet.id),  class: 'btn btn-xs btn-primary'
+            - elsif meet.accepted? || meet.rescheduled?
+              = link_to 'Cancel Meeting', '#',  class: 'btn btn-xs btn-danger'
 
           .modal.fade tabindex="-1" role="dialog" id="reject-#{meet.id}"
             .modal-dialog

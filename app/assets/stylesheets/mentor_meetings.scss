@@ -4,8 +4,8 @@
 
 #video-container {
   position: relative;
-  @extend .col-md-6;
-  @extend .col-md-offset-3;
+  @extend .col-md-8;
+  @extend .col-md-offset-2;
 }
 
 video#guest {

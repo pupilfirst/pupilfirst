@@ -16,7 +16,7 @@
         td = meet.meeting_at.present? ? meet.meeting_at.to_date : meet.suggested_meeting_at.to_date
         td = meet.meeting_at.present? ? meet.meeting_at.strftime('%l:%M %P') : meet.suggested_meeting_at.strftime('%l:%M %P')
         td
-          - if meet.rejected?
+          - if meet.rejected? && meet.mentor_comments.present?
             a href="#" class="popovers" data-toggle="popover" data-trigger="focus" data-content="#{meet.mentor_comments}" tabindex="0" #{meeting_status_html meet.status}
           - else
             = meeting_status_html meet.status

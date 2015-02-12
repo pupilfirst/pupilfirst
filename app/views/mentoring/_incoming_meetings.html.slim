@@ -15,7 +15,11 @@
           td = meet.user.fullname
           td = meet.meeting_at.present? ? meet.meeting_at.to_date : meet.suggested_meeting_at.to_date
           td = meet.meeting_at.present? ? meet.meeting_at.strftime("%l:%M %P") : meet.suggested_meeting_at.strftime("%l:%M %P")
-          td = meeting_status_html meet.status
+          td 
+            - if meet.rejected? && meet.user_comments.present?
+              a href="#" class="popovers" data-toggle="popover" data-trigger="focus" data-content="#{meet.user_comments}" tabindex="0" #{meeting_status_html meet.status}
+            - else
+              = meeting_status_html meet.status
           td
             - if meet.requested?
               button.btn.btn-xs.btn-success  type="button" data-toggle="modal" data-target="#review-#{meet.id}"
@@ -55,3 +59,6 @@
                     button.btn.btn-primary type="button"  data-dismiss="modal"
                       ' Close
                     = f.submit 'Accept', class: 'btn btn-primary'
+
+javascript:
+  $('[data-toggle="popover"]').popover();

@@ -1,9 +1,9 @@
 p Hi #{@mentor_meeting.user.fullname}!
 
-p #{@mentor_meeting.mentor.user.fullname} has accepted your request for meeting!
+p #{@mentor_meeting.mentor.user.fullname} has provisionally accepted your request for meeting with a reschedule to #{@mentor_meeting.suggested_meeting_at.strftime('%d-%m-%Y %H:%M')}.
 
-p However, the meeting has been rescheduled to #{@mentor_meeting.meeting_at.strftime('%d-%m-%Y %H:%M')} by the mentor.
+p To accept or decline the new schedule, #{link_to 'click here', mentoring_url}.
 
-p Please login to svlabs.in at the scheduled time and head to the meeting room.
+p If the above link does not work for you, please copy and paste the following into your browser's address bar:
 
-strong Please login using chrome/firefox/opera browsers for the meeting.
+pre #{mentoring_url}

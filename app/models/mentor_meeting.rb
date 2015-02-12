@@ -57,14 +57,13 @@ class MentorMeeting < ActiveRecord::Base
     end
   end
 
-  # REWRITE FOR rejection by mentor and startup
-  # validate :reject_with_comment
+  validate :reject_with_comment
 
-  # def reject_with_comment
-  #   if rejected? && mentor_comments.blank?
-  #     errors[:base] << 'Mentor must write comment to reject meeting request'
-  #   end
-  # end
+  def reject_with_comment
+    if rejected? && (mentor_comments.blank? && mentor_comments.blank?)
+      errors[:base] << 'Comments required to reject meeting request'
+    end
+  end
 
   validate :accept_with_meeting_at
 
@@ -115,18 +114,14 @@ class MentorMeeting < ActiveRecord::Base
     update!(status: STATUS_STARTED)
   end
 
-  def accept!(accepted_meeting_at)
-    update!(status: STATUS_ACCEPTED, meeting_at: accepted_meeting_at)
-    # TO BE CORRECTED
-    # send_acceptance_message
+  def accept!(mentor_meeting,role)
+    update!(status: STATUS_ACCEPTED, meeting_at: mentor_meeting["suggested_meeting_at"])
+    send_acceptance_message(role)
   end
 
-  def send_acceptance_message
-    if rescheduled?
-      UserMailer.meeting_request_rescheduled(self).deliver_now
-    else
-      UserMailer.meeting_request_accepted(self).deliver_now
-    end
+  def send_acceptance_message(role)
+    recipient = role == "user" ? self.mentor.user : self.user
+    UserMailer.meeting_request_accepted(self,recipient).deliver_now
   end
 
   def reject!(mentor_meeting,role)
@@ -135,12 +130,21 @@ class MentorMeeting < ActiveRecord::Base
     else
       update!(status: STATUS_REJECTED, user_comments: mentor_meeting["user_comments"])
     end
-    # TO BE CORRECTED
-    # send_rejection_message
+    send_rejection_message(role)
   end
 
-  def send_rejection_message
-    UserMailer.meeting_request_rejected(self).deliver_now
+  def send_rejection_message(role)
+    recipient = role == "user" ? self.mentor.user : self.user
+    UserMailer.meeting_request_rejected(self,recipient).deliver_now
+  end
+
+  def reschedule!(new_time)
+    update!(status: MentorMeeting::STATUS_RESCHEDULED, suggested_meeting_at: new_time)
+    send_reschedule_message
+  end
+
+  def send_reschedule_message
+    UserMailer.meeting_request_rescheduled(self).deliver_now
   end
 
   def complete!
@@ -205,7 +209,7 @@ class MentorMeeting < ActiveRecord::Base
   end
 
   def guest(currentuser)
-    currentuser == self.user ? self.mentor.user.fullname : self.user.fullname
+    currentuser == self.user ? self.mentor.user : self.user
   end
 
   def to_be_rescheduled?(new_suggested_time)

@@ -35,3 +35,21 @@ video#self {
   right: 0;
   z-index: 999;
 }
+
+#controls-container {
+  height: 52px;
+}
+
+.controls-align-bottom {
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+#control-buttons {
+  margin-bottom: 10px;
+}
+
+.max-height {
+  height: 100%;
+}

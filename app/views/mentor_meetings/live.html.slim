@@ -11,33 +11,36 @@ h1.page-header.margin-top-0
 
 / for simple audio-video chat ***
 #mentor-meeting-container
-  .row
-    .col-md-6
-      p.connecting-to-server Please wait while we establish a connection to our server...
-      p.hidden.awaiting-guest
-        | It looks like the #{guest_title(@mentor_meeting)} hasn't arrived yet.
-      p.hidden.guest-available
-        | The #{guest_title(@mentor_meeting)} is now in the <em>room</em>. You may now start the meeting.
-      p.hidden.awaiting-guest
-        - if @mentor_meeting.recent_sms_sent?(current_user)
-          | Please wait for the #{guest_title(@mentor_meeting)} to arrive.
-        - else
-          | If you wish to, you can send an SMS, to remind the #{guest_title(@mentor_meeting)} of this meeting.
-
-    .col-md-6
-      button.btn.btn-default.hidden#leave-room-button
-        span.glyphicon.glyphicon-time
-        | &nbsp;Come back later
-      button.btn.btn-success.hidden#start-meeting-button
-        span.glyphicon.glyphicon-play
-        | &nbsp;Start Meeting
-      | &nbsp;
-      button.btn.btn-primary.hidden#send-reminder-button
-        span.glyphicon.glyphicon-envelope
-        | &nbsp;Send Reminder
-      button.btn.btn-danger.hidden#end-meeting-button
-        span.glyphicon.glyphicon-stop
-        | &nbsp;End Meeting
+  .row#controls-container
+    .col-md-5.col-md-offset-2.max-height
+      .controls-align-bottom
+        p.connecting-to-server Please wait while we establish a connection to our server...
+        p.hidden.awaiting-guest
+          ' It looks like the #{guest_title(@mentor_meeting)} hasn't arrived yet.
+          - if @mentor_meeting.recent_sms_sent?(current_user)
+            | Please wait for the #{guest_title(@mentor_meeting)} to arrive.
+          - else
+            | If you wish to, you can send an SMS, to remind the #{guest_title(@mentor_meeting)} of this meeting.
+        p.hidden.guest-available
+          | The #{guest_title(@mentor_meeting)} is now in the <em>room</em>. You may now start the meeting.
+        p.hidden.awaiting-guest
+    .col-md-3.max-height
+      .pull-right.max-height
+        .controls-align-bottom
+          #control-buttons
+            button.btn.btn-sm.btn-default.hidden#leave-room-button
+              span.glyphicon.glyphicon-time
+              | &nbsp;Come back later
+            button.btn.btn-sm.btn-success.hidden#start-meeting-button
+              span.glyphicon.glyphicon-play
+              | &nbsp;Start Meeting
+            | &nbsp;
+            button.btn.btn-sm.btn-primary.hidden#send-reminder-button
+              span.glyphicon.glyphicon-envelope
+              | &nbsp;Send Reminder
+            button.btn.btn-sm.btn-danger.hidden#end-meeting-button
+              span.glyphicon.glyphicon-stop
+              | &nbsp;End Meeting
   .row
     #video-container
       video#self

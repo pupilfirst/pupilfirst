@@ -14,9 +14,9 @@ h1.page-header.margin-top-0 Events
             = image_tag event.picture
             div class="info"
               - if event.title.length < 35
-                  h2.title #{event.title}
+                h2.title = link_to event.title, event_path(event.id)
               - else
-                  h2.scaled-title #{event.title}
+                h2.scaled-title = link_to event.title, event_path(event.id)
 
               p class="desc"
                 b VENUE:
@@ -24,24 +24,8 @@ h1.page-header.margin-top-0 Events
                 = event.location.address
               ul
                 li style="width:30%;"
-                  = "#{event.start_at.strftime('%d/%m/%Y')} : #{event.start_at.strftime('%I:%M%p')}"
+                  = "#{event.start_at.strftime('%d/%m/%Y')} : #{event.start_at.strftime('%H:%M')}"
                 li class="till" style="width:10%;"
                   div till
                 li style="width:30%;"
-                  = "#{event.end_at.strftime('%d/%m/%Y')} : #{event.end_at.strftime('%I:%M%p')}"
-
-  <!-- Button trigger modal
-  button class="btn btn-link" data-toggle="modal" data-target="#todo-1-notes"
-    View notes-->
-
-  <!-- Modal -->
-  div class="modal fade" id="todo-#{event.id}-notes" tabindex="-1" role="dialog" aria-labelledby="todo-#{event.id}-label" aria-hidden="true"
-    div class="modal-dialog"
-      div class="modal-content"
-        div class="modal-header"
-          h4 class="modal-title" id="todo-#{event.id}-label" = event.title
-        div class="modal-body"
-          = image_tag event.picture, size: "260x180"
-          = simple_format(event.description)
-        div class="modal-footer"
-          button type="button" class="btn btn-primary" data-dismiss="modal" Close
+                  = "#{event.end_at.strftime('%d/%m/%Y')} : #{event.end_at.strftime('%H:%M')}"

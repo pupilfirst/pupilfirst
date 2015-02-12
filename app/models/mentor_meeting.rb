@@ -61,8 +61,16 @@ class MentorMeeting < ActiveRecord::Base
   validate :reject_with_comment
 
   def reject_with_comment
-    if rejected? && (mentor_comments.blank? && mentor_comments.blank?)
+    if rejected? && (mentor_comments.blank? && user_comments.blank?)
       errors[:base] << 'Comments required to reject meeting request'
+    end
+  end
+
+  validate :cancel_with_comment
+
+  def cancel_with_comment
+    if cancelled? && (mentor_comments.blank? && user_comments.blank?)
+      errors[:base] << 'Comments required to cancel meeting request'
     end
   end
 
@@ -148,6 +156,21 @@ class MentorMeeting < ActiveRecord::Base
     UserMailer.meeting_request_rescheduled(self).deliver_now
   end
 
+  def cancel!(mentor_meeting,role)
+    binding.pry
+    if role == "mentor"
+      update!(status: STATUS_CANCELLED, mentor_comments: mentor_meeting["mentor_comments"])
+    else
+      update!(status: STATUS_CANCELLED, user_comments: mentor_meeting["user_comments"])
+    end
+    send_cancel_message(role)
+  end
+
+  def send_cancel_message(role)
+    recipient = role == "user" ? self.mentor.user : self.user
+    UserMailer.meeting_request_cancelled(self,recipient).deliver_now
+  end
+
   def complete!
     update!(status: STATUS_COMPLETED)
   end
@@ -170,6 +193,10 @@ class MentorMeeting < ActiveRecord::Base
 
   def completed?
     status == STATUS_COMPLETED
+  end
+
+  def cancelled?
+    status == STATUS_CANCELLED
   end
 
   def starts_soon?

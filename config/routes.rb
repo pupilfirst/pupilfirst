@@ -53,6 +53,7 @@ Svapp::Application.routes.draw do
     patch ':id/feedbacksave', action: 'feedbacksave', as: 'feedbacksave'
     get ':id/reminder', action: 'reminder', as: 'reminder'
     patch ':id/reschedule', action: 'reschedule', as: 'reschedule'
+    patch ':id/cancel', action: 'cancel', as: 'cancel'
   end
 
   scope 'mentoring', as: 'mentoring', controller: 'mentoring' do

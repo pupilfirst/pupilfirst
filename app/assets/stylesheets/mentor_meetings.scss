@@ -6,6 +6,8 @@
   position: relative;
   @extend .col-md-8;
   @extend .col-md-offset-2;
+  @extend .col-sm-10;
+  @extend .col-sm-offset-1;
 }
 
 video#guest {

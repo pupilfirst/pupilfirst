@@ -50,7 +50,6 @@ singleOccupancyView = (otherPeers) ->
   console.log 'Single occupancy in room'
   resetView()
   $('.awaiting-guest').removeClass 'hidden'
-  $('#leave-room-button').removeClass 'hidden'
   if not shared.callStarted and not shared.reminderSent
     $('#send-reminder-button').removeClass 'hidden'
 
@@ -62,7 +61,7 @@ multipleOccupancyView = (otherPeers) ->
 
 #function to reset view to blank - hide only conditional elements
 resetView = ->
-  $('.connecting-to-server, .awaiting-guest, .guest-available, #leave-room-button, #start-meeting-button, #send-reminder-button, #end-meeting-button').addClass 'hidden'
+  $('.connecting-to-server, .awaiting-guest, .guest-available, #start-meeting-button, #send-reminder-button, #end-meeting-button').addClass 'hidden'
 
 performCall = (easyrtcid) ->
   easyrtc.call easyrtcid, callSuccessCB, callerrorCB, callAcceptCB
@@ -88,9 +87,6 @@ loadOnClicks = ->
       console.log 'Couldn\'t send hang up to peer'
     easyrtc.hangupAll()
     $('#end-call').submit()
-  $('#leave-room-button').click ->
-    if window.confirm('Are you sure you want to leave the chat room ?')
-      window.location.assign '/mentoring'
   $('#send-reminder-button').click ->
     if window.confirm('Are you sure you want to send an SMS reminder to the guest ?')
       $.ajax(url: "/mentor_meetings/#{shared.meetingId}/reminder").done(->

@@ -35,4 +35,12 @@ module MentoringHelper
       "<span class='badge'>#{day[0..2].upcase}</span>"
     end.join(' ').html_safe
   end
+
+  def user_name_link_to_startup(meet)
+    if meet.user.present? && meet.user.startup.present?
+      link_to "#{meet.user.fullname}, #{meet.user.startup.name}", meet.user.startup
+    else
+      '<em>Unavailable</em>'.html_safe
+    end
+  end
 end

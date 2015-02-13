@@ -1,8 +1,8 @@
 .btn.btn-success
   = link_to '<< View All Events', events_path, class: 'btn-success btn-margin'
 h2.page-header.margin-top-0 #{@event.title}
-= image_tag @event.picture, size: "360x360"
-p #{@event.description}
+= image_tag @event.picture
+p #{simple_format(@event.description)}
 p
   span class="glyphicon glyphicon-time"
   b  #{@event.start_at.strftime('%d/%m/%Y')} :#{@event.start_at.strftime('%H:%M')} &mdash; #{@event.end_at.strftime('%d/%m/%Y')} : #{@event.end_at.strftime('%H:%M')}

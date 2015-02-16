@@ -20,8 +20,7 @@ h1.page-header.margin-top-0 Events
 
               p class="desc"
                 b VENUE:
-                = "#{event.location.title}, "
-                = event.location.address
+                = event.location
               ul
                 li style="width:30%;"
                   = "#{event.start_at.strftime('%d/%m/%Y')} : #{event.start_at.strftime('%H:%M')}"

@@ -19,7 +19,10 @@ ActiveAdmin.register Event do
   end
 
   form :partial => "form"
-  permit_params :title, :description, :featured, :approved, :start_at_date, :start_at_time_hour, :start_at_time_minute, :end_at_date, :end_at_time_hour, :end_at_time_minute, :location_id, :category_id, :remote_picture_url, :picture, :user_id, :_wysihtml5_mode, :time_zone
+  permit_params :title, :description, :featured, :approved, :start_at_date, :start_at_time_hour, :start_at_time_minute, :end_at_date, :end_at_time_hour, :end_at_time_minute, :location, :category_id, :remote_picture_url, :picture, :user_id, :_wysihtml5_mode, :time_zone
+
+  preserve_default_filters!
+  filter :id
 
   show do
     h3 event.title
@@ -31,9 +34,10 @@ ActiveAdmin.register Event do
     div event.start_at
     div event.end_at
     div event.author
-    div event.location.try :name
+    div event.location
   end
   index do
+    column :id
     column :title
     column :description do |event|
       event.description[0..100] rescue nil
@@ -53,6 +57,7 @@ ActiveAdmin.register Event do
 
     show do |event|
       attributes_table do
+        row :id
         row :title
         row :description do
           simple_format event.description

@@ -8,4 +8,4 @@ p
   b  #{@event.start_at.strftime('%d/%m/%Y')} :#{@event.start_at.strftime('%H:%M')} &mdash; #{@event.end_at.strftime('%d/%m/%Y')} : #{@event.end_at.strftime('%H:%M')}
 p
   span class="glyphicon glyphicon-map-marker"
-  b  #{@event.location.title}, #{@event.location.address}
+  b  = @event.location

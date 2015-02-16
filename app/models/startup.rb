@@ -56,6 +56,7 @@ class Startup < ActiveRecord::Base
   scope :agreement_live, -> { where('agreement_ends_at > ?', Time.now) }
   scope :physically_incubated, -> { agreement_live.where(physical_incubatee: true) }
   scope :without_founders, -> { where.not(id: (User.pluck(:startup_id).uniq - [nil])) }
+  scope :student_startups, -> { joins(:founders).where('is_student = ?', true)}
 
   has_many :founders, -> { where('is_founder = ?', true) }, class_name: 'User', foreign_key: 'startup_id' do
     def <<(founder)

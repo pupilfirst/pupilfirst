@@ -175,6 +175,10 @@ class MentorMeeting < ActiveRecord::Base
     update!(status: STATUS_COMPLETED)
   end
 
+  def expire!
+    update!(status: STATUS_EXPIRED)
+  end
+
   def rescheduled?
     status == STATUS_RESCHEDULED
   end

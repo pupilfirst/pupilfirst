@@ -5,7 +5,7 @@ FactoryGirl.define do
     description { Faker::Lorem.paragraph }
     picture { fixture_file_upload(Rails.root.join(*%w[ spec fixtures files example.jpg ]), 'image/jpg') }
     end_at { start_at + rand(1000) }
-    location
+    location { Faker::Lorem.paragraph }
     author
     posters_name { Faker::Name.name }
     posters_email { Faker::Internet.email }

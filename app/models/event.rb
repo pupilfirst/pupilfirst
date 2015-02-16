@@ -2,7 +2,6 @@ class Event < ActiveRecord::Base
 
   phony_normalize :posters_phone_number, default_country_code: 'IN'
 
-  belongs_to :location
   belongs_to :category
   belongs_to :author, class_name: 'AdminUser', foreign_key: :user_id
 
@@ -14,7 +13,7 @@ class Event < ActiveRecord::Base
 
   normalize_attributes :title, :description, :start_at, :end_at, :featured, :picture, :notification_sent
 
-  validates_presence_of :title, :description, :location_id, :category_id, :picture, :start_at, :end_at, :posters_name
+  validates_presence_of :title, :description, :location, :category_id, :picture, :start_at, :end_at, :posters_name
   validates_length_of :title, maximum: 50
 
   validates :posters_email, presence: true, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, on: :create }

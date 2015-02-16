@@ -20,12 +20,11 @@ h1.page-header.margin-top-0 Events
 
               p class="desc"
                 b VENUE:
-                = "#{event.location.title}, "
-                = event.location.address
+                = event.location
               ul
                 li style="width:30%;"
-                  = "#{event.start_at.strftime('%d/%m/%Y')} : #{event.start_at.strftime('%I:%M%p')}"
+                  = "#{event.start_at.strftime('%d/%m/%Y')} : #{event.start_at.strftime('%H:%M')}"
                 li class="till" style="width:10%;"
                   div till
                 li style="width:30%;"
-                  = "#{event.end_at.strftime('%d/%m/%Y')} : #{event.end_at.strftime('%I:%M%p')}"
+                  = "#{event.end_at.strftime('%d/%m/%Y')} : #{event.end_at.strftime('%H:%M')}"

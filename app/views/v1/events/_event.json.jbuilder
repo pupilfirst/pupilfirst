@@ -15,7 +15,7 @@ json.location {
   json.title event.location
   json.latitude nil
   json.longitude nil
-  json.address nil
+  json.address event.location
 }
 
 path = "#{__FILE__.match(/v\d/)[0]}/users/author"

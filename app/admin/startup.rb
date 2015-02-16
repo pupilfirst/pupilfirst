@@ -17,6 +17,7 @@ ActiveAdmin.register Startup do
   scope :all
   scope :without_founders
   scope :agreement_live
+  scope :student_startups
 
   controller do
     newrelic_ignore

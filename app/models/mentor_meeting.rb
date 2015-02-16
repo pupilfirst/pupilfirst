@@ -82,6 +82,9 @@ class MentorMeeting < ActiveRecord::Base
     end
   end
 
+  scope :requested, -> {where(status: STATUS_REQUESTED)}
+  scope :rescheduled, -> {where(status: STATUS_RESCHEDULED)}
+
   before_save do
     if @suggested_meeting_time
       self.suggested_meeting_at = self.suggested_meeting_at.change @suggested_meeting_time

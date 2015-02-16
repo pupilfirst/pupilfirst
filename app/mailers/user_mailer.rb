@@ -1,6 +1,16 @@
 class UserMailer < ActionMailer::Base
   default from: "SV App <no-reply@svlabs.in>", cc: "outgoing@svlabs.in"
 
+  def remind_user_to_accept(mentor_meeting)
+    @mentor_meeting = mentor_meeting
+    mail to:@mentor_meeting.user.email, subject: 'Reminder: Meeting Reschedule pending confirmation' 
+  end
+
+  def remind_mentor_to_accept(mentor_meeting)
+    @mentor_meeting = mentor_meeting
+    mail to:@mentor_meeting.mentor.user.email, subject: 'Reminder: Meeting Request pending acceptance' 
+  end
+
   def mentor_verified(mentor)
     @mentor = mentor
     mail to:@mentor.user.email, subject: 'Your mentor account has been verified'

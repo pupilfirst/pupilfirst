@@ -37,7 +37,7 @@ class User < ActiveRecord::Base
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :invitable, :database_authenticatable, #:registerable, #:confirmable,
+  devise :invitable, :database_authenticatable, :confirmable, #:registerable, 
     :recoverable, :rememberable, :trackable, :validatable, :omniauthable
 
   has_many :requests
@@ -356,4 +356,5 @@ class User < ActiveRecord::Base
       !phone_verified?
     end
   end
+
 end

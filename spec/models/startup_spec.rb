@@ -37,6 +37,18 @@ describe Startup do
     expect { startup.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
+  describe '.student_startups' do
+    it "should return only students startups" do
+      startup_1 = create :startup
+      startup_2 = create :startup
+
+      student_founder = create :user_with_out_password, is_student: true
+      startup_2.founders << student_founder
+
+      expect(Startup.student_startups).to eq([startup_2])
+    end
+  end
+
   it "validates the size of pitch" do
     startup = build(:startup, pitch: Faker::Lorem.words(200).join(' '))
     expect { startup.save! }.to raise_error(ActiveRecord::RecordInvalid)

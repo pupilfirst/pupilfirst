@@ -10,7 +10,7 @@ ActiveAdmin.register Event do
   end
 
   form :partial => "form"
-  permit_params :title, :description, :featured, :approved, :start_at_date, :start_at_time_hour, :start_at_time_minute, :end_at_date, :end_at_time_hour, :end_at_time_minute, :location, :category_id, :remote_picture_url, :picture, :user_id, :_wysihtml5_mode, :time_zone, :posters_name, :posters_email, :posters_phone_number
+  permit_params :title, :description, :featured, :approved, :start_at_date, :start_at_time_hour, :start_at_time_minute, :end_at_date, :end_at_time_hour, :end_at_time_minute, :location, :category_id, :picture, :user_id, :_wysihtml5_mode, :time_zone, :posters_name, :posters_email, :posters_phone_number
 
   preserve_default_filters!
   filter :id

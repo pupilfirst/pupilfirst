@@ -15,6 +15,8 @@ initializer = ->
   easyrtc.joinRoom shared.roomName
   easyrtc.setPeerListener hangupOnMsg, 'manualHangup'
   # listener for hangup message from guest
+  easyrtc.setPeerListener chatListener, 'peerChat'
+  # listener for chats from peer
   easyrtc.setOnCall onCallCB
   easyrtc.setOnHangup hangUpCB
 
@@ -66,6 +68,15 @@ resetView = ->
 performCall = (easyrtcid) ->
   easyrtc.call easyrtcid, callSuccessCB, callerrorCB, callAcceptCB
 
+# function to respond to chats from peer
+chatListener = (easyrtcid, msgType, msgData, targeting) ->
+  addToConversation(easyrtc.idToName(easyrtcid),msgData)
+
+addToConversation = (from,chat) ->
+  chat = chat.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  chat = chat.replace(/\n/g, '<br />');
+  $('#conversation')[0].innerHTML +=  '<b>' + from + ':</b>&nbsp;' + chat + '<br />'  
+
 callSuccessCB = (easyrtcid) ->
   console.log "completed call to #{easyrtcid}"
 
@@ -95,6 +106,14 @@ loadOnClicks = ->
       ).fail ->
         alert 'Could not sent SMS!'
   $('#start-meeting-button').click startMeeting
+  $('#send-chat-button').click sendChat
+
+sendChat = ->
+  msgData = $('#chat-to-send')[0].value
+  return if msgData.replace(/\s/g, "").length == 0
+  easyrtc.sendPeerMessage(getEasyrtcIdOfPeer(), "peerChat", msgData, chatSuccessCB, chatFailureCB)
+  addToConversation("Me",msgData)
+  $('#chat-to-send')[0].value = ""
 
 startMeeting = ->
   performCall getEasyrtcIdOfPeer()
@@ -119,6 +138,12 @@ onCallCB = (easyrtcid, slot) ->
 
 hangUpCB = ->
   $('#end-meeting-button').addClass 'hidden'
+
+chatSuccessCB = ->
+  console.log 'chat sent successfully'
+
+chatFailureCB = ->
+  console.log 'chat failed'
 
 $(document).ready ->
   initializer()

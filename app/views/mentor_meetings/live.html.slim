@@ -49,3 +49,9 @@ form#end-call.hidden action=mentor_meetings_feedback_path(@mentor_meeting)
 
 / hidden form to change meeting status to 'started'
 = form_tag mentor_meetings_start_url(@mentor_meeting.id), method: :patch, remote: true, id: 'start-meeting'
+
+#conversation.panel.panel-primary.col-md-12
+  .panel-heading Chat History:
+textarea#chat-to-send.col-md-12
+button.btn.btn-primary#send-chat-button
+  | Send Chat

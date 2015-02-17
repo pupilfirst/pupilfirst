@@ -9,7 +9,6 @@
       <%= f.input :location %>
       <%= f.input :category, collection: Category.event_category, prompt: "Choose a event" %>
       <%= f.input :picture, as: :file %>
-      <%= f.input :remote_picture_url, placeholder: "publicly accesable url" %>
       <%= f.input :start_at, :as => :just_datetime_picker %>
       <%= f.input :end_at, :as => :just_datetime_picker %>
       <%= f.input :posters_name %>

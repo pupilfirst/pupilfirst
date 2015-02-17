@@ -7,18 +7,15 @@
       <%= f.input :featured %>
       <%= f.input :approved %>
       <%= f.input :location %>
-      <%= f.input :author %>
       <%= f.input :category, collection: Category.event_category, prompt: "Choose a event" %>
       <%= f.input :picture, as: :file %>
       <%= f.input :remote_picture_url, placeholder: "publicly accesable url" %>
+      <%= f.input :start_at, :as => :just_datetime_picker %>
+      <%= f.input :end_at, :as => :just_datetime_picker %>
+      <%= f.input :posters_name %>
+      <%= f.input :posters_email %>
+      <%= f.input :posters_phone_number %>
+      <%= f.action :submit, :as => :button %>
     <% end %>
-    <%= f.inputs :name => "Time" do %>
-      <%= f.input :time_zone, collection: ActiveSupport::TimeZone.all.map { |e| [e.to_s, e.name, data: {offset: e.to_s.match(/\((.*)\).*/).captures.first} ] } , include_blank: false, selected: "Mumbai"%>
-      <% Time.use_zone('Mumbai') do  %>
-        <%= f.input :start_at, :label => "Start Date Time", as: :just_datetime_picker, :hint => "Time in 24hr format" %>
-        <%= f.input :end_at, label: "End Date Time", as: :just_datetime_picker, :hint => "Time in 24hr format" %>
-      <% end %>
-    <% end %>
-    <%= f.action :submit, :as => :button %>
   <% end %>
 </div>

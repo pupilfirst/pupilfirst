@@ -4,7 +4,7 @@ describe "Event Requests" do
   include V1ApiSpecHelper
 
   it "fetch events on index" do
-    n = create(:event)
+    n = create(:event, approved: true)
     get "/api/events", {},version_header
     expect(response).to render_template(:index)
     expect(response.body).to have_json_path("0/id")

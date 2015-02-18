@@ -8,10 +8,13 @@ initializer = ->
   easyrtc.setRoomOccupantListener loggedInListener
   console.log "Entered room as: #{shared.userName}"
   easyrtc.setUsername shared.userName
-  easyrtc.dontAddCloseButtons()
+
   # Remove default close buttons on videos
-  easyrtc.easyApp shared.appName, 'self', [ 'guest' ], appSuccessCB
+  easyrtc.dontAddCloseButtons()
+
   # initialize easyrtc app
+  easyrtc.easyApp shared.appName, 'self', [ 'guest' ], appSuccessCB
+
   easyrtc.joinRoom shared.roomName
   easyrtc.setPeerListener hangupOnMsg, 'manualHangup'
   # listener for hangup message from guest
@@ -144,6 +147,9 @@ chatSuccessCB = ->
 
 chatFailureCB = ->
   console.log 'chat failed'
+
+chatBot = -> (message)
+
 
 $(document).ready ->
   initializer()

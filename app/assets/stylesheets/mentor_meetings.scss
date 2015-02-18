@@ -1,14 +1,20 @@
-// Place all the styles related to the MentorMeetings controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+// Add chat box styling.
+@import "chat_box";
 
-#video-container {
-  position: relative;
-  @extend .col-md-8;
-  @extend .col-md-offset-2;
-  @extend .col-sm-10;
-  @extend .col-sm-offset-1;
+#video-container { position: relative; }
+
+#chat-container .panel-body { background-color: #dddddd; }
+
+#chat-container .panel-body, #chat-container .panel-footer {
+  padding: 5px;
 }
+
+#send-chat-button, #send-reminder-button, #start-meeting-button, #end-meeting-button {
+  margin-left: 5px;
+}
+
+#flex-controls { display: flex; }
+#chat-input { flex-grow: 1; padding-left: 10px; padding-right: 10px; }
 
 video#guest {
   width: 100%;
@@ -57,10 +63,6 @@ video#self {
   height: 100%;
   display: flex;
   align-items: flex-end;
-}
-
-#control-buttons {
-  margin-bottom: 10px;
 }
 
 .max-height {

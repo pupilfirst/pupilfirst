@@ -3,6 +3,7 @@ shared = {}
 
 initializer = ->
   shared.callStarted = false
+  shared.metInRoom = false
   loadChatData()
   easyrtc.setSocketUrl shared.chatData.data('easyrtc-socket-url')
   easyrtc.setRoomOccupantListener loggedInListener
@@ -60,17 +61,21 @@ singleOccupancyView = (otherPeers) ->
   console.log 'Single occupancy in room'
   resetView()
   $('.awaiting-guest').removeClass 'hidden'
-  botPost("waiting for guest to join .. ")
-  if not shared.callStarted and not shared.reminderSent
-    $('#send-reminder-button').removeClass 'hidden'
-    botPost("you may send the guest a reminder SMS while you wait.. ")
+  if not shared.metInRoom
+    botPost("It seems your guest is yet to arrive. Please wait ..  ")
+    if not shared.reminderSent
+      $('#send-reminder-button').removeClass 'hidden'
+      botPost("You may send the guest a reminder SMS while you wait.. ")
+  else
+    botPost("It appears your guest has left/disconnected.. ")
 
 multipleOccupancyView = (otherPeers) ->
+  shared.metInRoom = true
+  botPost("Your guest is now available... ")
   for easyrtcid of otherPeers
     resetView()
     $('#send-chat-button').removeClass 'disabled'
     $('.guest-available').removeClass 'hidden'
-    botPost("Your guest is now available... ")
     $('#start-meeting-button').removeClass 'hidden'
 
 #function to reset view to blank - hide only conditional elements

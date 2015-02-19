@@ -137,6 +137,12 @@ loadOnClicks = ->
         alert 'Could not sent SMS!'
   $('#start-meeting-button').click startMeeting
   $('#send-chat-button').click sendChat
+  #SEND CHAT ON HITTING ENTER
+  $('#chat-to-send').keyup (e) ->
+    key = e.which
+    if key == 13
+      $('#send-chat-button').click()
+
 
 sendChat = ->
   msgData = $('#chat-to-send')[0].value

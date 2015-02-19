@@ -14,8 +14,8 @@
 }
 
 #flex-controls { display: flex; }
-#chat-input { flex-grow: 1; padding-left: 10px; padding-right: 10px; }
-#chat-body { max-height: 135px; overflow: scroll; }
+#chat-to-send { flex-grow: 1; padding-left: 10px; padding-right: 10px; }
+#chat-body { max-height: 135px; overflow-y: scroll; }
 
 video#guest {
   width: 100%;

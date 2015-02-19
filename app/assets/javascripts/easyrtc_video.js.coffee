@@ -65,6 +65,7 @@ singleOccupancyView = (otherPeers) ->
 multipleOccupancyView = (otherPeers) ->
   for easyrtcid of otherPeers
     resetView()
+    $('#send-chat-button').removeClass 'disabled'
     $('.guest-available').removeClass 'hidden'
     $('#start-meeting-button').removeClass 'hidden'
 

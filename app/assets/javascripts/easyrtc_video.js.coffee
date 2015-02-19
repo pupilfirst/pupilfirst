@@ -101,6 +101,7 @@ addToConversation = (who,text) ->
   newChat.find('.message-box').find('.picture').children()[0].src = avatarUrl
   $('#chat-body').append(newChat)
   newChat.removeClass 'hidden'
+  $("#chat-body").animate({scrollTop:$("#chat-body")[0].scrollHeight}, 1000);
 
 botPost = (message) ->
   addToConversation("bot",message)

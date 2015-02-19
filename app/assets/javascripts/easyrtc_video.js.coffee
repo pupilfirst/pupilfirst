@@ -35,6 +35,7 @@ loadChatData = ->
   shared.chatTemplate = $('#message-box-template')
   shared.selfAvatarUrl = shared.chatData.data('self-avatar-url')
   shared.guestAvatarUrl = shared.chatData.data('guest-avatar-url')
+  shared.botAvatarUrl = shared.chatData.data('bot-avatar-url')
 
 # function to respond to manual hangup by peer
 hangupOnMsg = (easyrtcid, msgType, msgData, targeting) ->
@@ -59,14 +60,17 @@ singleOccupancyView = (otherPeers) ->
   console.log 'Single occupancy in room'
   resetView()
   $('.awaiting-guest').removeClass 'hidden'
+  botPost("waiting for guest to join .. ")
   if not shared.callStarted and not shared.reminderSent
     $('#send-reminder-button').removeClass 'hidden'
+    botPost("you may send the guest a reminder SMS while you wait.. ")
 
 multipleOccupancyView = (otherPeers) ->
   for easyrtcid of otherPeers
     resetView()
     $('#send-chat-button').removeClass 'disabled'
     $('.guest-available').removeClass 'hidden'
+    botPost("Your guest is now available... ")
     $('#start-meeting-button').removeClass 'hidden'
 
 #function to reset view to blank - hide only conditional elements
@@ -92,6 +96,9 @@ addToConversation = (who,text) ->
   newChat.find('.message-box').find('.picture').children()[0].src = avatarUrl
   $('#chat-body').append(newChat)
   newChat.removeClass 'hidden'
+
+botPost = (message) ->
+  addToConversation("bot",message)
 
 
 callSuccessCB = (easyrtcid) ->

@@ -1,5 +1,5 @@
-.btn.btn-success
-  = link_to '<< View All Events', events_path, class: 'btn-success btn-margin'
+a.btn.btn-success.btn-margin href=events_path See all events
+
 h2.page-header.margin-top-0 #{@event.title}
 = image_tag @event.picture
 p #{simple_format(@event.description)}

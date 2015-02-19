@@ -31,6 +31,10 @@ loadChatData = ->
   shared.userName = shared.chatData.data('current-user-name')
   shared.reminderSent = shared.chatData.data('reminder-sent')
   shared.meetingId = shared.chatData.data('meeting-id')
+  #load chat-box template and avatars
+  shared.chatTemplate = $('#message-box-template')
+  shared.selfAvatarUrl = shared.chatData.data('self-avatar-url')
+  shared.guestAvatarUrl = shared.chatData.data('guest-avatar-url')
 
 # function to respond to manual hangup by peer
 hangupOnMsg = (easyrtcid, msgType, msgData, targeting) ->
@@ -73,12 +77,21 @@ performCall = (easyrtcid) ->
 
 # function to respond to chats from peer
 chatListener = (easyrtcid, msgType, msgData, targeting) ->
-  addToConversation(easyrtc.idToName(easyrtcid),msgData)
+  addToConversation("guest",msgData)
 
-addToConversation = (from,chat) ->
-  chat = chat.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  chat = chat.replace(/\n/g, '<br />');
-  $('#conversation')[0].innerHTML +=  '<b>' + from + ':</b>&nbsp;' + chat + '<br />'  
+addToConversation = (who,text) ->
+  newChat = shared.chatTemplate.clone()
+  newChat.find('.message-box').find('.message>span').html(text) 
+  time = new Date();
+  newChat.find('.message-box').find('.picture>span').html(time.getHours() + ":" + time.getMinutes())
+  avatarUrl = switch who
+    when "self" then shared.selfAvatarUrl
+    when "guest" then shared.guestAvatarUrl
+    else shared.botAvatarUrl
+  newChat.find('.message-box').find('.picture').children()[0].src = avatarUrl
+  $('#chat-body').append(newChat)
+  newChat.removeClass 'hidden'
+
 
 callSuccessCB = (easyrtcid) ->
   console.log "completed call to #{easyrtcid}"
@@ -115,7 +128,7 @@ sendChat = ->
   msgData = $('#chat-to-send')[0].value
   return if msgData.replace(/\s/g, "").length == 0
   easyrtc.sendPeerMessage(getEasyrtcIdOfPeer(), "peerChat", msgData, chatSuccessCB, chatFailureCB)
-  addToConversation("Me",msgData)
+  addToConversation("self",msgData)
   $('#chat-to-send')[0].value = ""
 
 startMeeting = ->
@@ -149,7 +162,6 @@ chatFailureCB = ->
   console.log 'chat failed'
 
 chatBot = -> (message)
-
 
 $(document).ready ->
   initializer()

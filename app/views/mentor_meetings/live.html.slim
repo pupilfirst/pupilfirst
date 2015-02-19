@@ -1,7 +1,7 @@
 
 = javascript_include_tag 'easyrtc_video'
 
-#chat-data.hidden data-easyrtc-socket-url=APP_CONFIG[:easyrtc_socket_url] data-current-user-name=current_user.fullname data-reminder-sent=@mentor_meeting.recent_sms_sent?(current_user).to_s data-meeting-id=@mentor_meeting.id
+#chat-data.hidden data-easyrtc-socket-url=APP_CONFIG[:easyrtc_socket_url] data-current-user-name=current_user.fullname data-reminder-sent=@mentor_meeting.recent_sms_sent?(current_user).to_s data-meeting-id=@mentor_meeting.id data-self-avatar-url=current_user.avatar_url data-guest-avatar-url=@mentor_meeting.guest(current_user).avatar_url
 
 h1.page-header.margin-top-0
   ' Meeting with #{@mentor_meeting.guest(current_user).fullname}
@@ -16,35 +16,19 @@ h1.page-header.margin-top-0
       .panel.panel-default
         .panel-body
           #chat-body
-            .message-box
-              .picture
-                = image_tag current_user.avatar_url
-                span.time #{Time.now.strftime '%H:%M' }
-              .message
-                span Requesting permission to your computer's camera and mic, and connecting to our server...
-            .message-spacer
-            .message-box
-              .picture
-                = image_tag current_user.avatar_url
-                span.time #{Time.now.strftime '%H:%M' }
-              .message
-                span
-                  ' It looks like the #{guest_title(@mentor_meeting)} isn't in the room with you.
-                  - if @mentor_meeting.recent_sms_sent?(current_user)
-                    | Please wait for the #{guest_title(@mentor_meeting)} to arrive.
-                  - else
-                    | If you wish to, you can send an SMS, to remind the #{guest_title(@mentor_meeting)} of this meeting.
-            .message-spacer
-            .message-box
-              .picture
-                = image_tag current_user.avatar_url
-                span.time #{Time.now.strftime '%H:%M' }
-              .message
-                span The #{guest_title(@mentor_meeting)} is now in the <em>room</em>. You may now start the meeting.
+            #message-box-template.hidden
+              .message-box
+                .picture
+                  = image_tag current_user.avatar_url
+                  span.time #{Time.now.strftime '%H:%M' }
+                .message
+                  span Requesting permission to your computer's camera and mic, and connecting to our server...
+              .message-spacer
+            
 
         .panel-footer
           #flex-controls style="display: flex;"
-            input#chat-input type="text" placeholder="Say something..."
+            input#chat-to-send type="text" placeholder="Say something..."
 
             button.btn.btn-sm.btn-primary#send-chat-button
               span.glyphicon.glyphicon-send
@@ -70,8 +54,3 @@ form#end-call.hidden action=mentor_meetings_feedback_path(@mentor_meeting)
 / hidden form to change meeting status to 'started'
 = form_tag mentor_meetings_start_url(@mentor_meeting.id), method: :patch, remote: true, id: 'start-meeting'
 
-#conversation.panel.panel-primary.col-md-12
-  .panel-heading Chat History:
-textarea#chat-to-send.col-md-12
-button.btn.btn-primary#send-chat-button.disabled
-  | Send Chat

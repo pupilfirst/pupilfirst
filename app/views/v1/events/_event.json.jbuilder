@@ -9,7 +9,7 @@ category_block = -> {
 }
 event.category.present? ? json.category {category_block.call} : json.category(nil)
 
-# TODO: Rest of location attributes will be sent as nil until the how location is represented is clarified.
+# TODO: Rest of location attributes will be sent as nil until how location is represented is clarified.
 json.location {
   json.id nil
   json.title event.location
@@ -18,7 +18,9 @@ json.location {
   json.address event.location
 }
 
-path = "#{__FILE__.match(/v\d/)[0]}/users/author"
+# TODO: Rest of author attributes will be sent as nil until how location is represented clarified.
 json.author do
-  json.partial! path, user: event.author
+  json.id nil
+  json.avatar_url nil
+  json.fullname event.posters_name
 end

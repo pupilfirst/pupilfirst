@@ -30,9 +30,12 @@ class FeedImageUploader < CarrierWave::Uploader::Base
   # def scale(width, height)
   #   # do something
   # end
-  process :resize_to_fit => [1024, 1024]
+
+  # process :resize_to_fit => [] if large_dimensions?
 
   # Create different versions of your uploaded files:
+  process resize_to_limit: [850, nil]
+
   version :thumb do
     process :resize_to_fit => [100, 100]
   end
@@ -40,6 +43,9 @@ class FeedImageUploader < CarrierWave::Uploader::Base
   version :mid do
     process :resize_to_fit => [600, 600]
   end
+
+
+
 
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:

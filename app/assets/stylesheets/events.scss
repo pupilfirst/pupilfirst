@@ -1,3 +1,14 @@
-// Place all the styles related to the Events controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+#event-image {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.event-image {
+  width: 120px;
+  height: 120px;
+  display: inline-block;
+  background-size: cover;
+  background-position: center;
+  float: left;
+  /* Background image should be set via the view */
+}

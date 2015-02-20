@@ -1,11 +1,18 @@
-a.btn.btn-success.btn-margin href=events_path See all events
+h2.page-header.margin-top-0
+  ' #{@event.title}
+  small = @event.start_at.strftime('%b %-d')
 
-h2.page-header.margin-top-0 #{@event.title}
-= image_tag @event.picture
-p #{simple_format(@event.description)}
-p
-  span class="glyphicon glyphicon-time"
-  b  #{@event.start_at.strftime('%d/%m/%Y')} :#{@event.start_at.strftime('%H:%M')} &mdash; #{@event.end_at.strftime('%d/%m/%Y')} : #{@event.end_at.strftime('%H:%M')}
-p
-  span class="glyphicon glyphicon-map-marker"
-  b  = @event.location
+.row
+  .col-sm-4
+    = image_tag @event.picture, id: 'event-image'
+  .col-sm-8
+    p #{simple_format(@event.description)}
+    p
+      span.glyphicon.glyphicon-time
+      ' &nbsp;From
+      strong #{@event.start_at.strftime('%b %-d %Y, %l:%M %p')}
+      ' &nbsp;to
+      strong #{@event.end_at.strftime('%b %-d %Y, %l:%M %p')}
+    p
+      span.glyphicon.glyphicon-map-marker
+      strong &nbsp;#{@event.location}

@@ -143,7 +143,6 @@ loadOnClicks = ->
     if key == 13
       $('#send-chat-button').click()
 
-
 sendChat = ->
   msgData = $('#chat-to-send')[0].value
   return if msgData.replace(/\s/g, "").length == 0
@@ -180,8 +179,6 @@ chatSuccessCB = ->
 
 chatFailureCB = ->
   console.log 'chat failed'
-
-chatBot = -> (message)
 
 $(document).ready ->
   initializer()

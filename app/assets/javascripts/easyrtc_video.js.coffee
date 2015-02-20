@@ -134,23 +134,8 @@ callAcceptCB = (accepted, bywho) ->
 
 #ONCLICK FUNCTIONS FOR BUTTONS
 loadOnClicks = ->
-  $('#end-meeting-button').click ->
-    occupants = easyrtc.getRoomOccupantsAsArray(shared.roomName)
-    destination = occupants.filter(notMyself(easyrtc.myEasyrtcid))[0]
-    console.log "Destination to send: #{destination}"
-    easyrtc.sendPeerMessage destination, 'manualHangup', { hangup_method: 'button' }, ((msgType, msgBody) ->
-      console.log 'manual hangup was sent'
-    ), (errorCode, errorText) ->
-      console.log 'Couldn\'t send hang up to peer'
-    easyrtc.hangupAll()
-    $('#end-call').submit()
-  $('#send-reminder-button').click ->
-    if window.confirm('Are you sure you want to send an SMS reminder to the guest ?')
-      $.ajax(url: "/mentor_meetings/#{shared.meetingId}/reminder").done(->
-        alert 'SMS sent'
-        $('#send-reminder-button').addClass 'hidden'
-      ).fail ->
-        alert 'Could not sent SMS!'
+  $('#end-meeting-button').click endMeeting
+  $('#send-reminder-button').click sendReminder
   $('#start-meeting-button').click startMeeting
   $('#send-chat-button').click sendChat
 
@@ -159,6 +144,25 @@ loadOnClicks = ->
     key = e.which
     if key == 13 and shared.metInRoom
       $('#send-chat-button').click()
+
+endMeeting = ->
+  occupants = easyrtc.getRoomOccupantsAsArray(shared.roomName)
+  destination = occupants.filter(notMyself(easyrtc.myEasyrtcid))[0]
+  console.log "Destination to send: #{destination}"
+  easyrtc.sendPeerMessage destination, 'manualHangup', { hangup_method: 'button' }, ((msgType, msgBody) ->
+    console.log 'manual hangup was sent'
+  ), (errorCode, errorText) ->
+    console.log 'Couldn\'t send hang up to peer'
+  easyrtc.hangupAll()
+  $('#end-call').submit()
+
+sendReminder = ->
+  if window.confirm('Are you sure you want to send an SMS reminder to the guest ?')
+    $.ajax(url: "/mentor_meetings/#{shared.meetingId}/reminder").done(->
+      alert 'SMS sent'
+      $('#send-reminder-button').addClass 'hidden'
+    ).fail ->
+      alert 'Could not sent SMS!'
 
 sendChat = ->
   msgData = $('#chat-to-send')[0].value

@@ -3,28 +3,28 @@ h1.page-header.margin-top-0 Events
 = link_to 'Interested in hosting an event?', new_event_path(@event), class: 'btn btn-lg btn-success btn-margin'
 
 - @events.each do |event|
-  div class="container"
-    div class="row"
-      div class="[ col-xs-12 col-sm-offset-2 col-sm-8 ]"
-        ul class="event-list" data-toggle="modal" data-target="#todo-#{event.id}-notes"
-          li
-            time datetime="#{event.start_at}"
-              span class="day" = event.start_at.strftime('%d')
-              span class="month" = event.start_at.strftime('%b')
-            = image_tag event.picture
-            div class="info"
-              - if event.title.length < 35
-                h2.title = link_to event.title, event_path(event.id)
-              - else
-                h2.scaled-title = link_to event.title, event_path(event.id)
+  .row
+    .col-sm-offset-2.col-sm-8
+      ul.event-list data-toggle="modal" data-target="#todo-#{event.id}-notes"
+        li
+          time datetime="#{event.start_at}"
+            span.day = event.start_at.strftime('%d')
+            span.month = event.start_at.strftime('%b')
+          /= image_tag event.picture
+          .event-image style="background-image: url('#{event.picture_url}');"
+          .info
+            - if event.title.length < 35
+              h2.title = link_to event.title, event_path(event.id)
+            - else
+              h2.scaled-title = link_to event.title, event_path(event.id)
 
-              p class="desc"
-                b VENUE:
-                = event.location
-              ul
-                li style="width:30%;"
-                  = "#{event.start_at.strftime('%d/%m/%Y')} : #{event.start_at.strftime('%H:%M')}"
-                li class="till" style="width:10%;"
-                  div till
-                li style="width:30%;"
-                  = "#{event.end_at.strftime('%d/%m/%Y')} : #{event.end_at.strftime('%H:%M')}"
+            p.desc
+              b VENUE:
+              = event.location
+            ul
+              li style="width:30%;"
+                = "#{event.start_at.strftime('%d/%m/%Y')} : #{event.start_at.strftime('%H:%M')}"
+              li.till style="width:10%;"
+                div till
+              li style="width:30%;"
+                = "#{event.end_at.strftime('%d/%m/%Y')} : #{event.end_at.strftime('%H:%M')}"

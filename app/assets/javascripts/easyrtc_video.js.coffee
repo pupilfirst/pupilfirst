@@ -30,6 +30,7 @@ loadChatData = ->
   shared.appName = "SVMentoringEasyRTCApp"
   shared.roomName = "chatRoom#{shared.chatData.data('meeting-id')}"
   shared.userName = shared.chatData.data('current-user-name')
+  shared.guestUserName = shared.chatData.data('guest-user-name')
   shared.reminderSent = shared.chatData.data('reminder-sent')
   shared.meetingId = shared.chatData.data('meeting-id')
   #load chat-box template and avatars
@@ -94,11 +95,22 @@ addToConversation = (who,text) ->
   newChat.find('.message-box').find('.message>span').html(text) 
   time = new Date();
   newChat.find('.message-box').find('.picture>span').html(time.getHours() + ":" + time.getMinutes())
-  avatarUrl = switch who
-    when "self" then shared.selfAvatarUrl
-    when "guest" then shared.guestAvatarUrl
-    else shared.botAvatarUrl
-  newChat.find('.message-box').find('.picture').children()[0].src = avatarUrl
+  switch who
+    when "self" 
+      avatarUrl = shared.selfAvatarUrl
+      altText = getInitials(shared.userName)
+    when "guest" 
+      avatarUrl = shared.guestAvatarUrl
+      altText = getInitials(shared.guestUserName)
+    else 
+      avatarUrl = shared.botAvatarUrl
+      altText = "BOT"
+  if avatarUrl
+    newChat.find('.message-box').find('.picture').find('.image').children()[0].src = avatarUrl
+  else
+    newChat.find('.message-box').find('.picture').find('.image').addClass('hidden')
+    newChat.find('.message-box').find('.picture').find('.initial').html(altText)
+    newChat.find('.message-box').find('.picture').find('.initial').removeClass('hidden')
   $('#chat-body').append(newChat)
   newChat.removeClass 'hidden'
   $("#chat-body").animate({scrollTop:$("#chat-body")[0].scrollHeight}, 1000);
@@ -106,6 +118,10 @@ addToConversation = (who,text) ->
 botPost = (message) ->
   addToConversation("bot",message)
 
+getInitials = (fullname) ->
+  fullname.split(' ').map((s) ->
+    s.charAt 0
+  ).join('').toUpperCase()
 
 callSuccessCB = (easyrtcid) ->
   console.log "completed call to #{easyrtcid}"
@@ -137,6 +153,7 @@ loadOnClicks = ->
         alert 'Could not sent SMS!'
   $('#start-meeting-button').click startMeeting
   $('#send-chat-button').click sendChat
+
   #SEND CHAT ON HITTING ENTER
   $('#chat-to-send').keyup (e) ->
     key = e.which

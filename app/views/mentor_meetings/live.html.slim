@@ -1,7 +1,7 @@
 
 = javascript_include_tag 'easyrtc_video'
 
-#chat-data.hidden data-easyrtc-socket-url=APP_CONFIG[:easyrtc_socket_url] data-current-user-name=current_user.fullname data-reminder-sent=@mentor_meeting.recent_sms_sent?(current_user).to_s data-meeting-id=@mentor_meeting.id data-self-avatar-url=current_user.avatar_url data-guest-avatar-url=@mentor_meeting.guest(current_user).avatar_url data-bot-avatar-url=image_url('bot.jpeg')
+#chat-data.hidden data-easyrtc-socket-url=APP_CONFIG[:easyrtc_socket_url] data-current-user-name=current_user.fullname data-guest-user-name=@mentor_meeting.guest(current_user).fullname data-reminder-sent=@mentor_meeting.recent_sms_sent?(current_user).to_s data-meeting-id=@mentor_meeting.id data-self-avatar-url=current_user.avatar_url data-guest-avatar-url=@mentor_meeting.guest(current_user).avatar_url data-bot-avatar-url=image_url('bot.jpeg')
 
 h1.page-header.margin-top-0
   ' Meeting with #{@mentor_meeting.guest(current_user).fullname}
@@ -19,7 +19,9 @@ h1.page-header.margin-top-0
             #message-box-template
               .message-box
                 .picture
-                  = image_tag 'bot.jpeg'
+                  .image
+                    = image_tag 'bot.jpeg'
+                  .initial.hidden BOT
                   span.time #{Time.now.strftime '%H:%M' }
                 .message
                   span Requesting permission to your computer's camera and mic, and connecting to our server...

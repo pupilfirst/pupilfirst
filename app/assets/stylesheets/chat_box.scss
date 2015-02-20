@@ -16,10 +16,18 @@
   padding-right: 10px;
 }
 
-.picture img {
+.picture .image img {
   width: 30px;
   height: 30px;
   border-radius: 5px;
+}
+
+.picture .initial {
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+  display: table-cell;
+  vertical-align: middle;
 }
 
 .picture span {

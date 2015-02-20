@@ -2,6 +2,7 @@ class MentorMeetingsController < ApplicationController
   before_filter :authenticate_user!
   before_filter :meeting_started, only: [:feedback]
   before_filter :meeting_completed, only: [:feedbacksave]
+  before_filter :meeting_room_accessible, only: [:live]
   
   def live
     @mentor_meeting = MentorMeeting.find(params[:id])
@@ -112,6 +113,14 @@ class MentorMeetingsController < ApplicationController
 
   def feedback_params
     params.require(:mentor_meeting).permit(:user_rating,:mentor_rating,:user_comments,:mentor_comments)
+  end
+
+  def meeting_room_accessible
+    raise_not_found if !(MentorMeeting.find(params[:id]).status == MentorMeeting::STATUS_STARTED || accepted_and_today?(MentorMeeting.find(params[:id])))
+  end
+
+  def accepted_and_today?(mentor_meeting)
+    mentor_meeting.status == MentorMeeting::STATUS_ACCEPTED && mentor_meeting.meeting_at.between?(1.day.ago,1.day.from_now)
   end
 
   def meeting_started

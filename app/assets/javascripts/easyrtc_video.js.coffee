@@ -140,7 +140,7 @@ loadOnClicks = ->
   #SEND CHAT ON HITTING ENTER
   $('#chat-to-send').keyup (e) ->
     key = e.which
-    if key == 13
+    if key == 13 and shared.metInRoom
       $('#send-chat-button').click()
 
 sendChat = ->

@@ -45,7 +45,7 @@ gem 'paper_trail' # Logs changes in critical tables, and displays changelog in A
 gem 'phony_rails' # Phone number validation and normalization. TODO: Get rid of phony_rails if isn't updated. Last updated was 18/3/2014.
 gem 'select2-rails' # Select2 javascript select box improvement library, using in ActiveAdmin interface.
 gem 'nilify_blanks' # Sets database fields to nil if blank values are supplied.
-gem 'bootstrap-sass', '~> 3.2.0' # Official Sass port of Bootstrap.
+gem 'bootstrap-sass', '~> 3.3.3' # Official Sass port of Bootstrap.
 gem 'autoprefixer-rails' # Autoprefixer for Ruby and Ruby on Rails.
 gem 'simple_form', '~> 3.1.0.rc2' # Simple-form RC2 with support for Bootstrap 3. TODO: Update simple_form to stable when available.
 gem 'react-rails', github: 'reactjs/react-rails' # React JS!

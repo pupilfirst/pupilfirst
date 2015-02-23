@@ -58,6 +58,8 @@ gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: '
 gem 'momentjs-rails', '>= 2.8.1',  :github => 'derekprior/momentjs-rails'
 gem 'wysihtml-rails', :git => 'https://github.com/Voog/wysihtml-rails.git'
 
+gem 'apipie-rails'
+
 
 group :development do
   gem "letter_opener"

@@ -120,33 +120,33 @@ describe "Startup Requests" do
     expect(response.body).to have_json_path("0/logo_url")
   end
 
-  context "request to add new founder to a startup" do
-    let(:startup) { create :startup }
-    let(:new_employee) { create :user_with_out_password }
+  # context "request to add new founder to a startup" do
+  #   let(:startup) { create :startup }
+  #   # let(:new_employee) { create :user_with_out_password }
 
-    before(:each) do
-      ActionMailer::Base.deliveries = []
-      allow(UserPushNotifyJob).to receive_message_chain(:new, :async, :perform).and_return(true)
-    end
+  #   before(:each) do
+  #     ActionMailer::Base.deliveries = []
+  #     allow(UserPushNotifyJob).to receive_message_chain(:new, :async, :perform).and_return(true)
+  #   end
 
-    context 'if auth_token is not given' do
-      it 'returns error with code AuthTokenInvalid' do
-        post "/api/startups/#{startup.id}/link_employee", { employee_id: new_employee.id }, {}
-        expect(parse_json(response.body, 'code')).to eq 'AuthTokenInvalid'
-      end
-    end
+  #   context 'if auth_token is not given' do
+  #     it 'returns error with code AuthTokenInvalid' do
+  #       post "/api/startups/#{startup.id}/link_employee", { employee_id: new_employee.id }, {}
+  #       expect(parse_json(response.body, 'code')).to eq 'AuthTokenInvalid'
+  #     end
+  #   end
 
-    it "sends email to all existing co-founders" do
-      post "/api/startups/#{startup.id}/link_employee", { position: 'startup ceo' }, version_header(new_employee)
-      new_employee.reload
-      expect(emails_sent.last.body.to_s).to include(confirm_employee_startup_url(startup, token: new_employee.startup_verifier_token))
-      expect(new_employee.startup_link_verifier_id).to eql(nil)
-      expect(new_employee.title).to eql('startup ceo')
-      expect(new_employee.reload.startup_id).to eql(startup.id)
-      expect(response).to be_success
-      have_user_object(response, 'user')
-    end
-  end
+  #   it "sends email to all existing co-founders" do
+  #     post "/api/startups/#{startup.id}/link_employee", { position: 'startup ceo' }, version_header(new_employee)
+  #     new_employee.reload
+  #     expect(emails_sent.last.body.to_s).to include(confirm_employee_startup_url(startup, token: new_employee.startup_verifier_token))
+  #     expect(new_employee.startup_link_verifier_id).to eql(nil)
+  #     expect(new_employee.title).to eql('startup ceo')
+  #     expect(new_employee.reload.startup_id).to eql(startup.id)
+  #     expect(response).to be_success
+  #     have_user_object(response, 'user')
+  #   end
+  # end
 
   describe 'POST /startups/:id/founders' do
     let(:user) { create :user_with_out_password, startup: startup }

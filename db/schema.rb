@@ -11,7 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20150213073042) do
+=======
+ActiveRecord::Schema.define(version: 20150218074207) do
+>>>>>>> Additional_job_field
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -272,7 +276,7 @@ ActiveRecord::Schema.define(version: 20150213073042) do
 
   create_table "startup_jobs", force: :cascade do |t|
     t.integer  "startup_id"
-    t.string   "title"
+    t.string   "title",          limit: 255
     t.text     "description"
     t.integer  "salary_max"
     t.integer  "salary_min"
@@ -284,6 +288,11 @@ ActiveRecord::Schema.define(version: 20150213073042) do
     t.datetime "updated_at"
     t.datetime "expires_on"
     t.string   "location"
+    t.string   "skills"
+    t.string   "experience"
+    t.string   "qualification"
+    t.string   "contact_name"
+    t.string   "contact_number"
   end
 
   add_index "startup_jobs", ["startup_id"], name: "index_startup_jobs_on_startup_id", using: :btree

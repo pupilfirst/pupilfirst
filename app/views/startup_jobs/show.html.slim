@@ -1,23 +1,78 @@
-.well
-  .page-header.margin-top-0
-    h3 #{@startup_job.title} at #{link_to @startup_job.startup.name, startup_path(@startup)}
+.page-header.margin-top-0
+  h3 #{@startup_job.title} at #{link_to @startup_job.startup.name, startup_path(@startup)}
+  -if @startup_job.contact_name.present?
+    p posted #{@startup_job.created_at.strftime('%d/%m/%Y')} by #{@startup_job.contact_name}
+.col-md-6
   p
-    -if @startup_job.salary_max.present? 
+    -if @startup_job.description.present?
       strong
-        ' Salary range:
-      | &#8377; #{number_with_delimiter @startup_job.salary_max} &mdash; &#8377; #{number_with_delimiter @startup_job.salary_min}
-    -else 
-      strong
-        ' Salary:
-      | ~ &#8377; #{number_with_delimiter @startup_job.salary_min}
+        ' Job details:
+      .justify-description
+        | #{@startup_job.description}
+    -else
+      -if (@startup_job.skills.empty? && @startup_job.experience.empty? && @startup_job.equity_max.nil?)
+        p  Job details are not provided.Please contact the company for more details
     br
-
-    -if @startup_job.equity_max.present?
+    -if @startup_job.skills.present?
       strong
-        ' Equity range:
-      ' #{@startup_job.equity_min}% &mdash; #{@startup_job.equity_max}%
-      | (#{@startup_job.equity_vest} year vest and  #{@startup_job.equity_cliff} year cliff)
-      br
-    strong
-      ' Job details:
-    | #{@startup_job.description}
+        ' Skills Required:
+      | #{@startup_job.skills}
+    br
+    -if @startup_job.experience.present?
+      strong
+        ' Experience:
+    | #{@startup_job.experience}
+    br
+    -if @startup_job.equity_max.present?
+        strong
+          ' Equity range:
+        ' #{@startup_job.equity_min}% &mdash; #{@startup_job.equity_max}%
+        | (#{@startup_job.equity_vest} year vest and  #{@startup_job.equity_cliff} year cliff)
+
+.col-md-4
+  .list-group
+    -if @startup_job.salary_max.present?
+      p.list-group-item
+        strong
+          ' Salary range:
+        | &#8377; #{number_with_delimiter @startup_job.salary_max} &mdash; &#8377; #{number_with_delimiter @startup_job.salary_min}
+    -else
+      p.list-group-item
+        strong
+          ' Salary:
+        | ~ &#8377; #{number_with_delimiter @startup_job.salary_min}
+
+    -if @startup_job.qualification.present?
+      p.list-group-item
+        strong
+          ' Qualification:
+        | #{@startup_job.qualification}
+    br
+    -if @startup_job.contact_name.present?
+      p.list-group-item
+        strong
+          ' Contact name:
+        | #{@startup_job.contact_name}
+    -if @startup_job.contact_number
+      p.list-group-item
+        span class= 'glyphicon glyphicon-earphone'
+        |  #{@startup_job.contact_number}
+    p.list-group-item
+      span class= 'glyphicon glyphicon-map-marker'
+      |  #{@startup_job.location}
+
+.col-md-2
+  p
+    a href="http://www.facebook.com/sharer.php?u=#{ request.original_url }"
+      i class="fa fa-fw fa-facebook"
+      | Share on Facebook
+  hr
+  p
+    a href="http://twitter.com/home?status=#{ request.original_url }"
+      i class="fa fa-fw fa-twitter"
+      |  Tweet this
+  hr
+  p
+    a href="https://plus.google.com/share?url=#{ request.original_url }"
+      i class="fa fa-google-plus"
+      |  Share on Google +

@@ -1,6 +1,8 @@
 - if current_user.try(:mentor_meetings).present?
+  .row
+    .col-sm-6
+      h3 Meeting requests sent
   table.table.table-striped
-    caption Meeting requests sent
     thead
       tr
         th Purpose

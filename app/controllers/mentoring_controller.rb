@@ -7,7 +7,8 @@ class MentoringController < ApplicationController
 
   # GET /mentoring
   def index
-    @startups = Startup.agreement_live
+    @startups = Startup.paginate(page: params[:startups_page], per_page: 10)
+    # @startups = Startup.agreement_live
     @mentors = Mentor.listed_mentors(exclude: current_user)
   end
 

@@ -550,6 +550,9 @@ GEM
     webmock (1.20.4)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
+    will_paginate (3.0.7)
+    will_paginate-bootstrap (1.0.1)
+      will_paginate (>= 3.0.3)
     yard (0.8.7.6)
     zeus (0.15.3)
       method_source (>= 0.6.7)
@@ -635,5 +638,6 @@ DEPENDENCIES
   versionist
   web-console (~> 2.0)
   webmock
+  will_paginate-bootstrap
   wysihtml-rails!
   zeus

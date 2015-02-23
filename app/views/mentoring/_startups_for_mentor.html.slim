@@ -1,6 +1,11 @@
 - if current_mentor.try(:verified?) && @startups.present?
+  .row
+    .col-sm-6
+      h3 Currently incubated startups
+    .col-sm-6
+      .pull-right
+        = will_paginate @startups, param_name: 'startups_page', renderer: BootstrapPagination::Rails
   table.table.table-striped
-    caption Currently incubated startups
     thead
       tr
         th Name

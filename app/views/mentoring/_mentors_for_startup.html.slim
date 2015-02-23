@@ -1,6 +1,8 @@
 - if current_user.try(:member_of_startup?) && @mentors.present?
+  .row
+    .col-sm-6
+      h3 List of mentors
   table.table.table-striped
-    caption List of mentors
     thead
       tr
         th Name

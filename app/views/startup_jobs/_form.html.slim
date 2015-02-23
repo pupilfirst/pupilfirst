@@ -2,15 +2,36 @@
   = j.error_notification
   = j.input :title
   = j.input :location, hint: '"Kochi", "Kozhikode", "Vishakpatnam", etc. or "Anywhere" (without quotes)'
+  div.form-inline.col-sm-offset-2.col-sm-10
+    = j.input :salary_min
+    = j.input :salary_max
+  = j.input :contact_name
+  = j.input :contact_number
+  hr
+  br
   = j.input :description
-  = j.input :salary_max
-  = j.input :salary_min
-  = j.input :equity_max
-  = j.input :equity_min
-  = j.input :equity_vest
-  = j.input :equity_cliff
+  = j.input :skills, hint: '"Rails", "Django", "Android developement", etc.'
+  = j.input :experience, hint:'"1 year","2 years" etc. '
+  = j.input :qualification, hint: "B.Tech, BCA, etc.  "
+
+  .form-inline.col-sm-offset-2.col-sm-10
+      = j.input :equity_max, label: '<a data-toggle="modal" data-target= "#equity_modal"><sup>?</sup></a> Equity Max.'.html_safe, hint: "In percentage"
+      = j.input :equity_min, hint: "In percentage"
+  = j.input :equity_vest, hint: "Year"
+  = j.input :equity_cliff, hint: "Year"
 
 
   div class = "form-group"
     div class = "col-sm-offset-2 col-sm-10"
       = j.button :submit, 'Post job listing', class: 'btn btn-primary'
+
+<!-- Modal -->
+  div class="modal fade" id="equity_modal" tabindex="-1" role="dialog" aria-labelledby="equity_modalLabel" aria-hidden="true"
+    div class="modal-dialog"
+      div class="modal-content"
+        div class="modal-header"
+          h4 class="modal-title" id="equity_modalLabel" Equity
+        div class="modal-body"
+          p The process by which employees earn the right to receive full benefits from the employee's qualified retirement plan account at a specified date, rather than becoming vested gradually over a given period of time. Cliff vesting happens when employees are considered vested in an employer benefits plan once they have earned the right to receive plan benefits. Vesting can occur gradually, where the employee becomes partially vested after each X years of service. For example, the employee could be 20% vested after two years of employment, 30% vested after three years of employment and so on until becoming fully vesting.
+        div class="modal-footer"
+          button type="button" class="btn btn-primary" data-dismiss="modal" Close

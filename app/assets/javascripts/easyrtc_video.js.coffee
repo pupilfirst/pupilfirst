@@ -134,7 +134,7 @@ botPost = (message) ->
 getInitials = (fullname) ->
   fullname.split(' ').map((s) ->
     s.charAt 0
-  ).join('').toUpperCase()
+  ).join('').toUpperCase().substr(0,2)
 
 callSuccessCB = (easyrtcid) ->
   console.log "completed call to #{easyrtcid}"

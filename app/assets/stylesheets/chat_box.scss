@@ -23,11 +23,14 @@
 }
 
 .picture .initial {
+  background: white;
   width: 30px;
   height: 30px;
   border-radius: 5px;
   display: table-cell;
   vertical-align: middle;
+  text-align: center;
+  font-weight: bold;
 }
 
 .picture span {

@@ -17,6 +17,9 @@ initializer = ->
 
   # initialize easyrtc app
   easyrtc.easyApp shared.appName, 'self', [ 'guest' ], appSuccessCB
+  easyrtc.setGotMedia gotMediaCB
+  easyrtc.setGotConnection gotConnectionCB
+
 
   easyrtc.joinRoom shared.roomName
   easyrtc.setPeerListener hangupOnMsg, 'manualHangup'
@@ -144,6 +147,13 @@ callerrorCB = (errorMessage) ->
 
 callAcceptCB = (accepted, bywho) ->
   console.log "#{accepted ? 'accepted' : 'rejected'} by #{bywho}"
+
+gotMediaCB = ->
+  botPost("Connected to your camera and mic")
+  botPost("Connecting to server .. ")
+
+gotConnectionCB = ->
+  botPost("Connected to server")
 
 #ONCLICK FUNCTIONS FOR BUTTONS
 loadOnClicks = ->

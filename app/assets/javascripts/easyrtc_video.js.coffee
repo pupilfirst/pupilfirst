@@ -74,12 +74,13 @@ singleOccupancyView = (otherPeers) ->
   resetView()
   $('.awaiting-guest').removeClass 'hidden'
   if not shared.metInRoom
-    botPost("It seems your guest is yet to arrive. Please wait ..  ")
+    botText = "It seems your guest is yet to arrive."
     if not shared.reminderSent
       $('#send-reminder-button').removeClass 'hidden'
-      botPost("You may send the guest a reminder SMS while you wait.. ")
+      botText += "You may send the guest a reminder SMS while you wait.. "
+      botPost botText
   else
-    botPost("It appears your guest has left/disconnected.. ")
+    botPost "It appears your guest has left/disconnected.. "
 
 multipleOccupancyView = (otherPeers) ->
   if shared.occupants is 2
@@ -88,7 +89,7 @@ multipleOccupancyView = (otherPeers) ->
     shared.occupants = 2
 
   shared.metInRoom = true
-  botPost("Your guest is now available... ")
+  botPost "Your guest is now available... "
   for easyrtcid of otherPeers
     resetView()
     $('#send-chat-button').removeClass 'disabled'
@@ -149,11 +150,11 @@ callAcceptCB = (accepted, bywho) ->
   console.log "#{accepted ? 'accepted' : 'rejected'} by #{bywho}"
 
 gotMediaCB = ->
-  botPost("Connected to your camera and mic")
-  botPost("Connecting to server .. ")
+  console.log "Local media initialized"
+  botPost "Connecting to server .. "
 
 gotConnectionCB = ->
-  botPost("Connected to server")
+  console.log "Connected to server"
 
 #ONCLICK FUNCTIONS FOR BUTTONS
 loadOnClicks = ->

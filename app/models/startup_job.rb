@@ -3,16 +3,16 @@ class StartupJob < ActiveRecord::Base
 
   belongs_to :startup
 
-  validates_presence_of :title, :salary_min, :location
+  validates_presence_of :title, :salary_min, :location, :contact_name, :contact_number
   validates_length_of :location, maximum: 50
-  validates_length_of :description, maximum: 500, allow_nil: true 
-  validates_presence_of :equity_min, if: :equity_max 
+  validates_length_of :description, maximum: 500, allow_nil: true
+  validates_presence_of :equity_min, if: :equity_max
   validates_presence_of :equity_max, if: :equity_min
   validates_presence_of :equity_vest, if: :equity_min || :equity_cliff
   validates_presence_of :equity_cliff, if: :equity_min || :equity_vest
-  
+
   validate :equity_min_less_than_max
-  
+
   def equity_min_less_than_max
     if self.equity_min && self.equity_max
       if self.equity_min >= self.equity_max
@@ -30,7 +30,7 @@ class StartupJob < ActiveRecord::Base
         errors.add :equity_vest, 'must be greater than equity cliff'
         errors.add :equity_cliff, 'must be less than equity vest'
       end
-    end  
+    end
   end
 
   validate :salary_min_less_than_max

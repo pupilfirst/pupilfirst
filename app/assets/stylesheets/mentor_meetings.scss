@@ -1,6 +1,10 @@
 // Add chat box styling.
 @import "chat_box";
 
+.pagination {
+  margin-bottom: 0px;
+}
+
 #video-container { position: relative; }
 
 #chat-container .panel-body { background-color: #dddddd; }

@@ -1,5 +1,7 @@
 # Holder for shared settings.
-shared = {}
+shared = {
+  occupants: 0
+}
 
 initializer = ->
   shared.callStarted = false
@@ -59,7 +61,13 @@ loggedInListener = (roomName, otherPeers) ->
     multipleOccupancyView otherPeers
 
 singleOccupancyView = (otherPeers) ->
+  if shared.occupants is 1
+    return
+  else
+    shared.occupants = 1
+
   console.log 'Single occupancy in room'
+
   resetView()
   $('.awaiting-guest').removeClass 'hidden'
   if not shared.metInRoom
@@ -71,6 +79,11 @@ singleOccupancyView = (otherPeers) ->
     botPost("It appears your guest has left/disconnected.. ")
 
 multipleOccupancyView = (otherPeers) ->
+  if shared.occupants is 2
+    return
+  else
+    shared.occupants = 2
+
   shared.metInRoom = true
   botPost("Your guest is now available... ")
   for easyrtcid of otherPeers

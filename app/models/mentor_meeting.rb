@@ -82,6 +82,14 @@ class MentorMeeting < ActiveRecord::Base
     end
   end
 
+  # validate :not_scheduled_to_meet
+
+  def not_scheduled_to_meet
+    if MentorMeeting.scheduled_to_meet?(self.user,self.mentor)
+      errors[:base] << 'There already exists a meeting between the specified user and mentor'
+    end
+  end
+
   scope :requested, -> {where(status: STATUS_REQUESTED)}
   scope :rescheduled, -> {where(status: STATUS_RESCHEDULED)}
 
@@ -160,7 +168,6 @@ class MentorMeeting < ActiveRecord::Base
   end
 
   def cancel!(mentor_meeting,role)
-    binding.pry
     if role == "mentor"
       update!(status: STATUS_CANCELLED, mentor_comments: mentor_meeting["mentor_comments"])
     else
@@ -253,6 +260,10 @@ class MentorMeeting < ActiveRecord::Base
 
   def to_be_rescheduled?(new_suggested_time)
     self.suggested_meeting_at != Time.zone.parse(new_suggested_time).to_datetime
+  end
+
+  def self.scheduled_to_meet?(currentuser,mentor)
+    MentorMeeting.where(user: currentuser).where(mentor: mentor).where(status: [STATUS_REQUESTED,STATUS_ACCEPTED,STATUS_RESCHEDULED,STATUS_STARTED]).present?
   end
 end
  

@@ -10,8 +10,13 @@ class MentorMeetingsController < ApplicationController
 
   def new
     if current_user.startup.agreement_live?
-  	 mentor = Mentor.find params[:mentor_id]
-  	 @mentor_meeting = mentor.mentor_meetings.new
+  	   mentor = Mentor.find params[:mentor_id]
+      if MentorMeeting.scheduled_to_meet?(current_user,mentor)
+        flash[:alert]="You already have a pending meeting with this mentor"
+        redirect_to mentoring_url
+      else
+  	   @mentor_meeting = mentor.mentor_meetings.new
+     end
     else 
       flash[:alert]="Please sign/renew your agreement with SV to meet our mentors!"
       redirect_to mentoring_url

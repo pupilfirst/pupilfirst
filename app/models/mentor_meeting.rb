@@ -230,17 +230,17 @@ class MentorMeeting < ActiveRecord::Base
     mentor_sms_sent_at.present? && mentor_sms_sent_at > 30.minutes.ago
   end
 
-  def sent_sms(user)
-    if is_mentor?(user)
-      guest = self.user
-      phone_number = self.mentor.user.phone
-      self.update(mentor_sms_sent_at: Time.now)
-    else
-      guest = self.mentor.user
-      phone_number = self.user.phone
-      self.update(user_sms_sent_at: Time.now)
+  def sent_sms(currentuser)
+    if !recent_sms_sent?(currentuser)
+      if is_mentor?(currentuser)
+        phone_number = self.user.phone
+        self.update(mentor_sms_sent_at: Time.now)
+      else
+        phone_number = self.mentor.user.phone
+        self.update(user_sms_sent_at: Time.now)
+      end
+      RestClient.post(APP_CONFIG[:sms_provider_url], text: "#{currentuser.fullname} is ready and waiting for todays mentoring session", msisdn: phone_number)
     end
-    # RestClient.post(APP_CONFIG[:sms_provider_url], text: "#{guest.fullname} is ready and waiting for todays mentoring session", msisdn: phone_number)
   end
 
   def is_mentor?(currentuser)

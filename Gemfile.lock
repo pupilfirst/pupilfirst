@@ -122,6 +122,8 @@ GEM
     acts-as-taggable-on (3.4.2)
       activerecord (>= 3.2, < 5)
     addressable (2.3.6)
+    apipie-rails (0.3.1)
+      json
     arbre (1.0.3)
       activesupport (>= 3.0.0)
     arel (6.0.0)
@@ -562,6 +564,7 @@ DEPENDENCIES
   active_admin_editor!
   activeadmin!
   acts-as-taggable-on
+  apipie-rails
   attribute_normalizer (~> 1.2.0.b)
   autoprefixer-rails
   better_errors

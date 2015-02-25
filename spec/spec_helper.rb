@@ -51,7 +51,7 @@ RSpec.configure do |config|
 
   config.include Devise::TestHelpers, type: :controller
   config.include ControllerMacros, type: :controller
-  # config.include DeviseHelpers, type: :request
+  config.include DeviseHelpers, type: :request
   # config.include JsonSpec::Helpers, type: :request
   config.include FactoryGirl::Syntax::Methods
   config.include(JsonSpec::Helpers)

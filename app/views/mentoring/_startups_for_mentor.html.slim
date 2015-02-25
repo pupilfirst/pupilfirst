@@ -4,7 +4,7 @@
       h3 Currently incubated startups
     .col-sm-6
       .pull-right
-        = will_paginate @startups, param_name: 'startups_page', renderer: BootstrapPagination::Rails
+        = will_paginate @startups, param_name: 'startups_page', renderer: BootstrapPagination::Rails, :outer_window => 1, :inner_window => 0
   table.table.table-striped
     thead
       tr

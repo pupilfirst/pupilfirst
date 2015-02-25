@@ -1,0 +1,65 @@
+// Adapted from source available here:
+// http://www.bypeople.com/chat-box/
+
+.message-box {
+  display: flex;
+}
+
+.message-spacer {
+  margin-top: 5px;
+  clear: both;
+}
+
+.message-box .picture {
+  float: left;
+  display: block;
+  padding-right: 10px;
+}
+
+.picture .image img {
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+}
+
+.picture .initial {
+  background: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  font-weight: bold;
+}
+
+.picture span {
+  font-weight: bold;
+  font-size: 9px;
+  clear: both;
+  display: block;
+  text-align: center;
+  margin-top: 3px;
+}
+
+.message {
+  flex-grow: 1;
+  background: #fff;
+  display: inline-block;
+  padding: 8px;
+  border-radius: 2px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
+  position: relative;
+}
+
+.message:before {
+  content: "";
+  position: absolute;
+  display: block;
+  left: 0;
+  border-right: 6px solid #fff;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  top: 10px;
+  margin-left: -6px;
+}

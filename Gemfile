@@ -10,6 +10,7 @@ gem 'active_admin_editor', git: 'https://github.com/ejholmes/active_admin_editor
 gem 'activeadmin', github: 'activeadmin'
 gem 'inherited_resources'
 
+
 gem 'acts-as-taggable-on'
 gem 'attribute_normalizer', '~> 1.2.0.b'
 gem 'carrierwave'
@@ -52,13 +53,19 @@ gem 'sprockets-coffee-react' # Sprockets preprocessor.
 gem 'js-routes' # Routes inside JS.
 gem 'validate_url' # URL validation.
 gem 'chartkick' # Pretty charts!
+gem 'will_paginate-bootstrap' # Paginated tables with Bootstrap
 
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'momentjs-rails', '>= 2.8.1',  :github => 'derekprior/momentjs-rails'
 gem 'wysihtml-rails', :git => 'https://github.com/Voog/wysihtml-rails.git'
+gem 'social-share-button'
+
+gem 'apipie-rails'
+gem "bullet", :group => "development"
 
 
 group :development do
+  gem 'bullet'
   gem "letter_opener"
   gem 'seed-fu', github: 'mbleigh/seed-fu' # check and remove
   gem 'guard'
@@ -68,6 +75,7 @@ group :development do
   gem 'guard-livereload'
   gem 'childprocess'
   gem 'terminal-notifier-guard'
+
 end
 
 group :test do
@@ -100,6 +108,9 @@ group :development, :test do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+
+  # Let's try testing Javascript!
+  gem 'jasmine-rails'
 end
 
 group :production do

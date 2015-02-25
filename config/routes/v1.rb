@@ -23,7 +23,9 @@ Svapp::Application.routes.draw do
       resources :events
       resources :news
 
+      resources :startup_jobs
       resources :startups do
+
         resources :banks
         collection do
           get :load_suggestions

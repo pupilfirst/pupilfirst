@@ -1,0 +1,22 @@
+h1 Request meeting with #{@mentor_meeting.mentor.user.fullname}
+
+p Let's schedule a one-on-one video chat session with the mentor!
+
+p The mentor has indicated that he is usually available during the following time period:
+
+p
+  ' #{badges_for_days @mentor_meeting.mentor.availability['days']} between
+  | #{@mentor_meeting.mentor.availability['time']['after']}:00 and #{@mentor_meeting.mentor.availability['time']['before']}:00.
+
+p Please fill up the following form and submit it. We'll contact the mentor for approval once that's done.
+
+= simple_form_for @mentor_meeting, url: mentor_mentor_meetings_path(@mentor_meeting.mentor), html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
+  = f.error_notification
+  = f.input :purpose, label: 'Purpose', hint: 'Just a little message indicating what you expect from the meeting.'
+  = f.input :suggested_meeting_at, as: :string, label: 'Suggested Date', input_html: { data: { provide: 'datepicker', 'date-format' => 'yyyy-mm-dd', 'date-start-date' => '+1d' } }
+  = f.input :suggested_meeting_time, collection: time_list, label: 'Suggested Time', required: true, hint: 'Please try to set up meeting for when mentor has indicated that he is free.'
+  = f.input :duration, collection: durations_list, label: 'Enter Duration', hint: "How long do you think you'll need?"
+  .form-group
+    .col-sm-offset-3.col-sm-10
+      = f.button :submit, 'Request', class: 'btn btn-primary'
+

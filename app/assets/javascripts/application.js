@@ -19,7 +19,9 @@
 //= require bootstrap-select
 //= require bootstrap-datepicker
 //= require application_routes
-//= require partnerships
+//= require activate_datepicker
+//= require easyrtc.js
+//= require socket.io.js
 
 //= require moment
 //= require bootstrap-datetimepicker
@@ -31,3 +33,9 @@
 
 //= require_tree ./react
 //= require google_analytics.js.erb
+//= require mentor_meetings
+
+//= require moment
+//= require bootstrap-datetimepicker
+//= require pickers
+//= require social-share-button

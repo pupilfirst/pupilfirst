@@ -37,7 +37,7 @@ class User < ActiveRecord::Base
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :invitable, :database_authenticatable, #:registerable, #:confirmable,
+  devise :invitable, :database_authenticatable, :confirmable, #:registerable, 
     :recoverable, :rememberable, :trackable, :validatable, :omniauthable
 
   has_many :requests
@@ -54,6 +54,7 @@ class User < ActiveRecord::Base
   belongs_to :startup_link_verifier, class_name: "User", foreign_key: "startup_link_verifier_id"
   has_and_belongs_to_many :categories
   has_many :partnerships
+  has_many :mentor_meetings
 
   scope :non_employees, -> { where("startup_id IS NULL") }
   scope :non_founders, -> { where("is_founder = ? or is_founder IS NULL", false) }
@@ -331,4 +332,29 @@ class User < ActiveRecord::Base
       raise Exceptions::PhoneNumberVerificationFailed, 'Supplied phone number or verification code do not match stored values.'
     end
   end
+
+  def member_of_startup?
+    startup.present?
+  end
+
+  def not_a_mentor?
+    !mentor?
+  end
+
+  def mentor?
+    mentor.present?
+  end
+
+  def mentor_pending_verification?
+    mentor.try(:verified_at).blank?
+  end
+
+  # Phone verification is the final step of the registration process. If that isn't complete, then the mentor is still
+  # going through the registration process.
+  def mentor_registration_going_on?
+    if mentor.present?
+      !phone_verified?
+    end
+  end
+
 end

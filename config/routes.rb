@@ -1,11 +1,12 @@
 Svapp::Application.routes.draw do
-
-
+  apipie
+  mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
   devise_for :users, controllers: { passwords: 'users/passwords', invitations: 'users/invitations', sessions: 'users/sessions' }
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
   resources :users, only: [:show, :edit, :update] do
+    resources :mentor_meetings, only: ['index']
     collection do
       patch 'update_password'
       get 'invite'
@@ -38,6 +39,22 @@ Svapp::Application.routes.draw do
     end
   end
 
+  resources :mentors do 
+    resources :mentor_meetings, only: %w(new create)
+  end
+
+  scope 'mentor_meetings', as: 'mentor_meetings', controller: 'mentor_meetings' do
+    patch ':id/start', action: 'start', as: 'start'
+    patch ':id/reject', action: 'reject', as: 'reject'
+    patch ':id/accept', action: 'accept', as: 'accept'
+    get ':id', action: 'live', as: 'live'
+    get ':id/feedback', action: 'feedback', as: 'feedback'
+    patch ':id/feedbacksave', action: 'feedbacksave', as: 'feedbacksave'
+    get ':id/reminder', action: 'reminder', as: 'reminder'
+    patch ':id/reschedule', action: 'reschedule', as: 'reschedule'
+    patch ':id/cancel', action: 'cancel', as: 'cancel'
+  end
+
   scope 'mentoring', as: 'mentoring', controller: 'mentoring' do
     get '/', action: 'index'
     get 'register', action: 'new_step1'
@@ -62,6 +79,8 @@ Svapp::Application.routes.draw do
   get 'jobs', to: 'startup_jobs#list_all'
   get 'privacy_policy', to: 'welcome#privacy_policy'
   get 'faq', to: 'welcome#faq'
+
+  # get 'mentor_meetings/:id/feedback', to: 'mentor_meetings#feedback'
 
   root 'welcome#index'
 end

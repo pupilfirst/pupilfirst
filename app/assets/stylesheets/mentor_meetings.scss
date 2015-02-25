@@ -1,0 +1,75 @@
+// Add chat box styling.
+@import "chat_box";
+
+.pagination {
+  margin-bottom: 0px;
+}
+
+#video-container { position: relative; }
+
+#chat-container .panel-body { background-color: #dddddd; }
+
+#chat-container .panel-body, #chat-container .panel-footer {
+  padding: 5px;
+}
+
+#send-chat-button, #send-reminder-button, #start-meeting-button, #end-meeting-button {
+  margin-left: 5px;
+}
+
+#flex-controls { display: flex; }
+#chat-to-send { flex-grow: 1; padding-left: 10px; padding-right: 10px; }
+#chat-body { max-height: 135px; overflow-y: scroll; }
+
+video#guest {
+  width: 100%;
+
+  background: rgba(0,0,0,1);
+  background: -moz-radial-gradient(center, ellipse cover, rgba(0,0,0,1) 0%, rgba(85,85,85,1) 100%);
+  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(0,0,0,1)), color-stop(100%, rgba(85,85,85,1)));
+  background: -webkit-radial-gradient(center, ellipse cover, rgba(0,0,0,1) 0%, rgba(85,85,85,1) 100%);
+  background: -o-radial-gradient(center, ellipse cover, rgba(0,0,0,1) 0%, rgba(85,85,85,1) 100%);
+  background: -ms-radial-gradient(center, ellipse cover, rgba(0,0,0,1) 0%, rgba(85,85,85,1) 100%);
+  background: radial-gradient(ellipse at center, rgba(0,0,0,1) 0%, rgba(85,85,85,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#555555', GradientType=1 );
+}
+
+#note-over-guest-video {
+  color: grey;
+  position: absolute;
+  top: 50%;
+  margin-top: -10px;
+  width: 100%;
+  text-align: center;
+}
+
+video#self {
+  width: 20%;
+  position: absolute;
+  bottom: -10px;
+  right: 0;
+  z-index: 999;
+
+  background: rgba(66,65,66,1);
+  background: -moz-radial-gradient(center, ellipse cover, rgba(66,65,66,1) 0%, rgba(5,5,5,1) 100%);
+  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(66,65,66,1)), color-stop(100%, rgba(5,5,5,1)));
+  background: -webkit-radial-gradient(center, ellipse cover, rgba(66,65,66,1) 0%, rgba(5,5,5,1) 100%);
+  background: -o-radial-gradient(center, ellipse cover, rgba(66,65,66,1) 0%, rgba(5,5,5,1) 100%);
+  background: -ms-radial-gradient(center, ellipse cover, rgba(66,65,66,1) 0%, rgba(5,5,5,1) 100%);
+  background: radial-gradient(ellipse at center, rgba(66,65,66,1) 0%, rgba(5,5,5,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#424142', endColorstr='#050505', GradientType=1 );
+}
+
+#controls-container {
+  height: 52px;
+}
+
+.controls-align-bottom {
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.max-height {
+  height: 100%;
+}

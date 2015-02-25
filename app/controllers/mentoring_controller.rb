@@ -7,6 +7,9 @@ class MentoringController < ApplicationController
 
   # GET /mentoring
   def index
+    @startups = Startup.paginate(page: params[:startups_page], per_page: 10)
+    # @startups = Startup.agreement_live
+    @mentors = Mentor.listed_mentors(exclude: current_user)
   end
 
   # GET /mentoring/register
@@ -113,8 +116,8 @@ class MentoringController < ApplicationController
   end
 
   def mentor_params
-    params.require(:mentor).permit({ user_attributes: [:id, :fullname, :title] }, :company_id,
-      :company_level, :cost_to_company, :time_donate_percentage, :days_available, :time_available
+    params.require(:mentor).permit({ user_attributes: [:id, :fullname, :title] }, :company,
+      :company_level, :days_available, :time_available
     )
   end
 

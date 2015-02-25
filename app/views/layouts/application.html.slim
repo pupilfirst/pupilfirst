@@ -27,7 +27,11 @@ html
 
             li = link_to 'Events', '/events'
             li = link_to 'Jobs', '/jobs'
-            li = link_to 'Mentoring', mentoring_url
+            li
+              a href=mentoring_url
+                ' Mentoring
+                span.badge
+                  | &beta;eta
             li = link_to 'Featured Startup', featured_startups_path
             - if current_user
               li.dropdown

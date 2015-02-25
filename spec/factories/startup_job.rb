@@ -4,5 +4,7 @@ FactoryGirl.define do
     j.title { Faker::Lorem.words(2).join ' ' }
     j.location { Faker::Address.city }
     j.salary_min { rand 100000 }
+    j.contact_name { Faker::Name.name }
+    sequence(:contact_number) { |n| "#{9876543210 + n}" }
   end
 end

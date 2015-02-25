@@ -1,0 +1,83 @@
+- if current_mentor.try(:mentor_meetings).present?
+  .row
+    .col-sm-6
+      h3 Meeting requests received
+  table.table.table-striped
+    thead
+      tr
+        th Purpose
+        th From
+        th Date
+        th Time
+        th Status
+    tbody
+      - current_mentor.mentor_meetings.order('id DESC').each do |meet|
+        tr
+          td = meet.purpose
+          td = user_name_link_to_startup(meet)
+          td = meet.meeting_at.present? ? meet.meeting_at.to_date : meet.suggested_meeting_at.to_date
+          td = meet.meeting_at.present? ? meet.meeting_at.strftime("%l:%M %P") : meet.suggested_meeting_at.strftime("%l:%M %P")
+          td 
+            - if meet.rejected? && meet.user_comments.present?
+              a href="#" class="popovers" data-toggle="popover" data-trigger="focus" data-content="#{meet.user_comments}" tabindex="0" #{meeting_status_html meet.status}
+            - else
+              = meeting_status_html meet.status
+          td
+            - if meet.requested?
+              button.btn.btn-xs.btn-success  type="button" data-toggle="modal" data-target="#review-#{meet.id}"
+                ' Review and accept
+              | &nbsp;
+              button.btn.btn-xs.btn-danger  type="button" data-toggle="modal" data-target="#reject-#{meet.id}"
+                ' Reject
+            - elsif meet.starts_soon?
+              = link_to 'Join Room', mentor_meetings_live_url(meet.id),  class: 'btn btn-xs btn-primary'
+            - elsif meet.completed? && meet.did_not_give_feedback?(current_mentor)
+              = link_to 'Give Feedback', mentor_meetings_feedback_url(meet.id),  class: 'btn btn-xs btn-primary'
+            - elsif meet.accepted? || meet.rescheduled?
+              button.btn.btn-xs.btn-danger  type="button" data-toggle="modal" data-target="#cancel-#{meet.id}"
+                ' Cancel Meeting
+            - elsif meet.started?
+              = link_to 'Rejoin Room', mentor_meetings_live_url(meet.id),  class: 'btn btn-xs btn-success'
+
+          .modal.fade tabindex="-1" role="dialog" id="reject-#{meet.id}"
+            .modal-dialog
+              .modal-content
+                = simple_form_for meet, url: mentor_meetings_reject_url(meet.id), html: { onsubmit: "return require_comments_for_reject('#{meet.id}');"} do |f|
+                  .modal-body
+                    .alert.alert-danger.hidden role="alert" id="comments-empty-alert-#{meet.id}" Please supply reason for rejecting meeting request.
+                    = f.input :mentor_comments, label: 'Reason for rejection', input_html: { id: "mentor-comments-#{meet.id}" }
+                  .modal-footer
+                    button.btn.btn-primary type="button"  data-dismiss="modal"
+                      ' Close
+                    = f.submit 'Submit', class: 'btn btn-primary'
+
+          .modal.fade tabindex="-1" role="dialog" id="cancel-#{meet.id}"
+            .modal-dialog
+              .modal-content
+                = simple_form_for meet, url: mentor_meetings_cancel_url(meet.id), html: { onsubmit: "return require_comments_for_cancel('#{meet.id}');"} do |f|
+                  .modal-body
+                    .alert.alert-danger.hidden role="alert" id="comments-empty-alert-#{meet.id}" Please supply reason for Cancellng the meeting.
+                    = f.input :mentor_comments, label: 'Reason for cancellation', input_html: { id: "mentor-comments-#{meet.id}" }
+                  .modal-footer
+                    button.btn.btn-primary type="button"  data-dismiss="modal"
+                      ' Close
+                    = f.submit 'Submit', class: 'btn btn-primary'
+
+          .modal.fade tabindex="-1" role="dialog" id="review-#{meet.id}"
+            .modal-dialog
+              .modal-content
+                = simple_form_for meet, url: mentor_meetings_reschedule_url(meet.id) do |f|
+                  .modal-header
+                    button.close type="button" data-dismiss="modal" aria-label="Close"
+                      span aria-hidden="true"
+                        ' &times;
+                    ' You may reschedule the meeting before acceptance, if required
+                  .modal-body
+                    = f.input :suggested_meeting_at, :as => :datetime_picker, :input_html => { :value => meet.suggested_meeting_at.strftime('%d-%m-%Y %H:%M')}
+                  .modal-footer
+                    button.btn.btn-primary type="button"  data-dismiss="modal"
+                      ' Close
+                    = f.submit 'Accept', class: 'btn btn-primary'
+
+javascript:
+  $('[data-toggle="popover"]').popover();

@@ -60,12 +60,9 @@ gem 'momentjs-rails', '>= 2.8.1',  :github => 'derekprior/momentjs-rails'
 gem 'wysihtml-rails', :git => 'https://github.com/Voog/wysihtml-rails.git'
 gem 'social-share-button'
 
-gem 'apipie-rails'
-gem "bullet", :group => "development"
-
+gem 'apipie-rails' # API documentation, served straight from the app.
 
 group :development do
-  gem 'bullet'
   gem "letter_opener"
   gem 'seed-fu', github: 'mbleigh/seed-fu' # check and remove
   gem 'guard'
@@ -75,7 +72,7 @@ group :development do
   gem 'guard-livereload'
   gem 'childprocess'
   gem 'terminal-notifier-guard'
-
+  gem 'bullet' # Detect N+1 queries.
 end
 
 group :test do

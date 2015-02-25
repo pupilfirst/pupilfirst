@@ -54,6 +54,7 @@ gem 'js-routes' # Routes inside JS.
 gem 'validate_url' # URL validation.
 gem 'chartkick' # Pretty charts!
 gem 'will_paginate-bootstrap' # Paginated tables with Bootstrap
+gem 'logstash-logger' # A better logger.
 
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'momentjs-rails', '>= 2.8.1',  :github => 'derekprior/momentjs-rails'

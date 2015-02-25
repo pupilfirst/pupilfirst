@@ -23,7 +23,7 @@ Svapp::Application.routes.draw do
       resources :events
       resources :news
 
-      resources :startup_jobs only: [:index, :show]
+      resources :startup_jobs, only: [:index, :show]
       resources :startups do
 
         resources :banks

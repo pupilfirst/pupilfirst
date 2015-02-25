@@ -4,9 +4,9 @@
     p posted #{@startup_job.created_at.strftime('%d/%m/%Y')} by #{@startup_job.contact_name}
 .col-md-6
   p
+    strong
+        ' Job details
     -if @startup_job.description.present?
-      strong
-        ' Job details:
       .justify-description
         | #{@startup_job.description}
     -else
@@ -17,17 +17,24 @@
       strong
         ' Skills Required:
       | #{@startup_job.skills}
-    br
+      br
     -if @startup_job.experience.present?
       strong
         ' Experience:
-    | #{@startup_job.experience}
-    br
+      | #{@startup_job.experience}
+      br
     -if @startup_job.equity_max.present?
-        strong
-          ' Equity range:
-        ' #{@startup_job.equity_min}% &mdash; #{@startup_job.equity_max}%
-        | (#{@startup_job.equity_vest} year vest and  #{@startup_job.equity_cliff} year cliff)
+      strong
+        ' Equity range:
+      ' #{ @startup_job.equity_min }% &mdash; #{ @startup_job.equity_max }%
+      -if (@startup_job.equity_vest.present? && @startup_job.equity_cliff.present?)
+        | (#{ @startup_job.equity_vest } year vest and  #{ @startup_job.equity_cliff } year cliff)
+    -elsif @startup_job.equity_min.present?
+      strong
+        'Equity:
+      ' #{ @startup_job.equity_min }%
+      -if (@startup_job.equity_vest.present? && @startup_job.equity_cliff.present?)
+        | (#{ @startup_job.equity_vest } year vest and  #{ @startup_job.equity_cliff } year cliff)
 
 .col-md-4
   .list-group
@@ -35,7 +42,7 @@
       p.list-group-item
         strong
           ' Salary range:
-        | &#8377; #{number_with_delimiter @startup_job.salary_max} &mdash; &#8377; #{number_with_delimiter @startup_job.salary_min}
+        | &#8377; #{number_with_delimiter @startup_job.salary_min} &mdash; &#8377; #{number_with_delimiter @startup_job.salary_max}
     -else
       p.list-group-item
         strong

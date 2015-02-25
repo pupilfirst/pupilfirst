@@ -11,27 +11,34 @@
         - if job.salary_max.present?
           strong
             ' Salary range:
-          | &#8377;#{number_with_delimiter job.salary_min} &mdash; &#8377;#{number_with_delimiter job.salary_max}
+          | &#8377;#{ number_with_delimiter job.salary_min } &mdash; &#8377;#{ number_with_delimiter job.salary_max }
         - else
           strong
             ' Salary:
-          | ~ &#8377;#{number_with_delimiter job.salary_min}
+          | ~ &#8377;#{ number_with_delimiter job.salary_min }
         br
-        - if job.equity_vest.present?
+
+        - if (job.equity_vest.present? && job.equity_cliff.present?)
           strong
             ' Equity:
-          a href="#" data-toggle="tooltip" data-placement='right' title="#{job.equity_vest} year vest and #{job.equity_cliff} year cliff"
-            | #{job.equity_min}% &mdash; #{job.equity_max}%
-        - elsif job.equity_max.present?
+          a href="#" data-toggle="tooltip" data-placement='right' title="#{ job.equity_vest } year vest and #{ job.equity_cliff } year cliff"
+            -if job.equity_max.present?
+              | #{job.equity_min}% &mdash; #{job.equity_max}%
+            -elsif job.equity_min.present?
+              | #{job.equity_min}%
+        - else
           strong
             ' Equity:
-            | #{job.equity_min}% &mdash; #{job.equity_max}%
+            -if job.equity_max.present?
+              | #{job.equity_min}% &mdash; #{job.equity_max}%
+            -elsif job.equity_min.present?
+              | #{job.equity_min}%
 
         - if job.can_be_modified_by?(current_user)
           - if job.expired?
             = form_tag startup_startup_job_repost_url(job.startup, job),method: :patch, data: { confirm: 'Are you sure you want to repost this job?' }
               = button_tag ' Repost ', class: "btn btn-success  pull-left"
-          
+
           = form_tag startup_startup_job_url(job.startup, job), method: :delete, data: { confirm: 'Are you sure you want to remove this job?' }
             = button_tag '', class: "btn btn-danger glyphicon glyphicon-trash pull-right button-margin"
           = form_tag edit_startup_startup_job_url(job.startup, job), method: :get

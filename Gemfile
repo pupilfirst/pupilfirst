@@ -61,9 +61,11 @@ gem 'wysihtml-rails', :git => 'https://github.com/Voog/wysihtml-rails.git'
 gem 'social-share-button'
 
 gem 'apipie-rails'
+gem "bullet", :group => "development"
 
 
 group :development do
+  gem 'bullet'
   gem "letter_opener"
   gem 'seed-fu', github: 'mbleigh/seed-fu' # check and remove
   gem 'guard'

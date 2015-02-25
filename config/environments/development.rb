@@ -47,6 +47,14 @@ Rails.application.configure do
   config.carrier_wave_storage = :file
 
   config.action_mailer.delivery_method = :letter_opener
+
+  # for detecting n + 1 queries using Bullet
+  Bullet.enable = true
+  Bullet.alert = true
+  Bullet.bullet_logger = true
+  Bullet.console = true
+  Bullet.rails_logger = true
+  Bullet.add_footer = true
 end
 
 

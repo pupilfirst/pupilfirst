@@ -144,6 +144,9 @@ GEM
       sass (~> 3.3)
       thor
     builder (3.2.2)
+    bullet (4.14.4)
+      activesupport (>= 3.0.0)
+      uniform_notifier (>= 1.6.0)
     cancancan (1.9.2)
     carrierwave (0.10.0)
       activemodel (>= 3.2.0)
@@ -534,6 +537,7 @@ GEM
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
+    uniform_notifier (1.7.0)
     urbanairship (2.4.1)
       json
     validate_url (1.0.0)
@@ -573,6 +577,7 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   bootstrap-sass (~> 3.3.3)
+  bullet
   cancancan (~> 1.8)
   carrierwave
   carrierwave_backgrounder!

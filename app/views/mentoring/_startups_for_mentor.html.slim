@@ -19,7 +19,7 @@
           td
             strong
               = link_to startup.name, startup
-          td = startup.incubation_location.capitalize
+          td = startup.incubation_location.try(:capitalize)
           td = startup.team_size
           td = startup.product_name
           td = product_progress_html startup.product_progress

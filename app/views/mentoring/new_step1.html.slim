@@ -6,7 +6,7 @@ h1.page-header.margin-top-0
   = f.error_notification
   = f.simple_fields_for :user, @mentor.user do |u|
     = u.input :fullname, label: 'Full Name', required: true
-    = u.input :title, required: true
+    = u.input :title, required: true, hint: 'Your present job title?'
   = f.input :company
   = f.input :days_available, hint: 'On which days are you available for mentoring?', required: true, include_blank: false, collection: availability_days_collection
   = f.input :time_available, hint: 'During which time are you generally available?', required: true, include_blank: false, collection: availability_time_collection

@@ -20,7 +20,7 @@ class FoundersController < ApplicationController
       elsif @user.startup
         flash[:alert] = 'This user is associated with another startup.'
       else
-        UserMailer.request_to_be_a_founder(@user, current_user.startup, current_user).deliver_now
+        UserMailer.request_to_be_a_founder(@user, current_user.startup, current_user).deliver_later
         flash[:notice] = 'An email has been sent to the user to join your startup as a founder.'
       end
     else

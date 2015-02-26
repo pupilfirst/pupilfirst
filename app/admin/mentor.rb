@@ -59,8 +59,8 @@ ActiveAdmin.register Mentor do
   member_action :verify do
     mentor = Mentor.find params[:id]
     mentor.update(verified_at: Time.now)
-    UserMailer.mentor_verified(mentor).deliver_now
-    redirect_to admin_mentor_url, notice: "Mentor verified"
+    UserMailer.mentor_verified(mentor).deliver_later
+    redirect_to admin_mentor_url, notice: 'Mentor verified'
   end
 
   form do |f|

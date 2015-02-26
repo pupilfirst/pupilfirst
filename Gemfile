@@ -61,8 +61,7 @@ gem 'wysihtml-rails', :git => 'https://github.com/Voog/wysihtml-rails.git'
 gem 'social-share-button'
 
 gem 'apipie-rails'
-gem "bullet", :group => "development"
-
+gem 'roadie'
 
 group :development do
   gem 'bullet'

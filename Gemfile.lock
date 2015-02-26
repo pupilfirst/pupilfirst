@@ -176,6 +176,11 @@ GEM
       safe_yaml (~> 1.0.0)
     currencies (0.4.2)
     debug_inspector (0.0.2)
+    delayed_job (4.0.6)
+      activesupport (>= 3.0, < 5.0)
+    delayed_job_active_record (4.0.3)
+      activerecord (>= 3.0, < 5.0)
+      delayed_job (>= 3.0, < 4.1)
     devise (3.4.1)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -588,6 +593,7 @@ DEPENDENCIES
   cocoon
   coffee-rails (~> 4.1.0)
   datetimepicker-rails!
+  delayed_job_active_record
   devise_invitable
   dotenv
   email_spec

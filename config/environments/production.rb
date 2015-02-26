@@ -84,6 +84,9 @@ Rails.application.configure do
 
   # In production and staging, let's have carrierwave store using fog.
   config.carrier_wave_storage = :fog
+
+  # Let's use delayed job in production to process background jobs.
+  config.active_job.queue_adapter = :delayed_job
 end
 
 ActionMailer::Base.smtp_settings = {

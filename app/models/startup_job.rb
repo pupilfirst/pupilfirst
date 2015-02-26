@@ -3,7 +3,7 @@ class StartupJob < ActiveRecord::Base
 
   belongs_to :startup
 
-  validates_presence_of :title, :salary_min, :location, :contact_name, :contact_number, :description
+  validates_presence_of :title, :salary_min, :location, :contact_name, :contact_email, :description
   validates_length_of :location, :title, maximum: 50
   validates_length_of :description, maximum: 500
   validates_presence_of :equity_min, if: :equity_max

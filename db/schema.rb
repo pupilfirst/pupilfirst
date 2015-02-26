@@ -302,6 +302,7 @@ ActiveRecord::Schema.define(version: 20150226094832) do
     t.string   "qualification"
     t.string   "contact_name"
     t.string   "contact_number"
+    t.string   "contact_email"
   end
 
   add_index "startup_jobs", ["startup_id"], name: "index_startup_jobs_on_startup_id", using: :btree

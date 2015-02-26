@@ -26,12 +26,13 @@
               | #{job.equity_min}% &mdash; #{job.equity_max}%
             -elsif job.equity_min.present?
               | #{job.equity_min}%
-        - else
+        - elsif job.equity_max.present?
           strong
             ' Equity:
-            -if job.equity_max.present?
               | #{job.equity_min}% &mdash; #{job.equity_max}%
-            -elsif job.equity_min.present?
+        -elsif job.equity_min.present?
+          strong
+            ' Equity:
               | #{job.equity_min}%
 
         - if job.can_be_modified_by?(current_user)

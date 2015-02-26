@@ -1,4 +1,3 @@
-# TODO: Rename this file. remAinder is a typo.
 namespace :meeting_alert do
   desc 'Send out e-mails to user and mentor on the day of a scheduled meeting'
   task meeting_day: [:environment] do

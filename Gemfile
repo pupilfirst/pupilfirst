@@ -63,6 +63,9 @@ gem 'social-share-button'
 
 gem 'apipie-rails' # API documentation, served straight from the app.
 
+gem 'puma' # Let's use Puma webserver. https://devcenter.heroku.com/changelog-items/594
+gem 'rack-timeout' # Puma won't timeout, so we need this.
+
 group :development do
   gem "letter_opener"
   gem 'seed-fu', github: 'mbleigh/seed-fu' # check and remove
@@ -113,7 +116,6 @@ end
 
 group :production do
   gem 'rails_12factor'
-  gem 'unicorn'
   # gem 'pdftk-heroku', git: "https://github.com/gouthamvel/pdftk-heroku.git"
 end
 
@@ -121,8 +123,6 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
-# Use unicorn as the app server
-# gem 'unicorn'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

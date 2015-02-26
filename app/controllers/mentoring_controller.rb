@@ -89,7 +89,7 @@ class MentoringController < ApplicationController
 
     flash[:notice] = 'You have successfully registered as a mentor!'
     UserMailer.mentor_verification_ongoing(current_user).deliver
-    redirect_to current_user
+    redirect_to mentoring_url
   end
 
   # GET /mentoring/sign_up

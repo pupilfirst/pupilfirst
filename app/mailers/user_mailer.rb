@@ -8,12 +8,12 @@ class UserMailer < ActionMailer::Base
 
   def remind_user_to_accept(mentor_meeting)
     @mentor_meeting = mentor_meeting
-    mail to:@mentor_meeting.user.email, subject: 'Reminder: Meeting Reschedule pending confirmation' 
+    mail to:@mentor_meeting.user.email, subject: 'Reminder: Meeting Reschedule pending confirmation'
   end
 
   def remind_mentor_to_accept(mentor_meeting)
     @mentor_meeting = mentor_meeting
-    mail to:@mentor_meeting.mentor.user.email, subject: 'Reminder: Meeting Request pending acceptance' 
+    mail to:@mentor_meeting.mentor.user.email, subject: 'Reminder: Meeting Request pending acceptance'
   end
 
   def mentor_verified(mentor)
@@ -23,12 +23,12 @@ class UserMailer < ActionMailer::Base
 
   def meeting_feedback_user(mentor_meeting)
     @mentor_meeting = mentor_meeting
-    mail to:@mentor_meeting.user.email, subject: 'Reminder: Feedback on mentoring session' 
+    mail to:@mentor_meeting.user.email, subject: 'Reminder: Feedback on mentoring session'
   end
 
   def meeting_feedback_mentor(mentor_meeting)
     @mentor_meeting = mentor_meeting
-    mail to:@mentor_meeting.mentor.user.email, subject: 'Reminder: Feedback on mentoring session' 
+    mail to:@mentor_meeting.mentor.user.email, subject: 'Reminder: Feedback on mentoring session'
   end
 
   def meeting_request_cancelled(mentor_meeting,recipient)
@@ -66,7 +66,7 @@ class UserMailer < ActionMailer::Base
 
   def meeting_request_to_mentor(mentor_meeting)
     @mentor_meeting = mentor_meeting
-    mail to: @mentor_meeting.mentor.user.email, subject: 'Request for mentoring'  
+    mail to: @mentor_meeting.mentor.user.email, subject: 'Request for mentoring'
   end
 
   def reminder_to_complete_founder_profile(user)
@@ -121,11 +121,11 @@ class UserMailer < ActionMailer::Base
     mail(to: user.email, body: "PFA", subject: "SEP from Startup Village")
   end
 
-  def accepted_as_employee(user, startup)
-    @startup = startup
-    @user = user
-    mail(to: user.email, subject: "You're approved at #{@startup.name}")
-  end
+  # def accepted_as_employee(user, startup)
+  #   @startup = startup
+  #   @user = user
+  #   mail(to: user.email, subject: "You're approved at #{@startup.name}")
+  # end
 
   def password_changed(user)
     @user = user

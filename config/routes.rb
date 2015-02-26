@@ -29,8 +29,8 @@ Svapp::Application.routes.draw do
     end
 
     member do
-      post :confirm_employee
-      get :confirm_employee
+      # post :confirm_employee
+      # get :confirm_employee
       get :confirm_startup_link
     end
 
@@ -39,7 +39,7 @@ Svapp::Application.routes.draw do
     end
   end
 
-  resources :mentors do 
+  resources :mentors do
     resources :mentor_meetings, only: %w(new create)
   end
 

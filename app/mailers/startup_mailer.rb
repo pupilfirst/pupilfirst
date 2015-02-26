@@ -65,13 +65,13 @@ class StartupMailer < ActionMailer::Base
     mail(to: admin_contact, cc: "incoming@svlabs.in", subject: "Incubation Application")
   end
 
-  def respond_to_new_employee(startup, new_employee)
-    @new_employee = new_employee
-    @startup = startup
-    send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
-    substitute '-founder_full_name-', startup.founders.map(&:fullname)
-    mail(to: send_to, subject: "Approve #{@new_employee.fullname} at #{@startup.name}")
-  end
+  # def respond_to_new_employee(startup, new_employee)
+  #   @new_employee = new_employee
+  #   @startup = startup
+  #   send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
+  #   substitute '-founder_full_name-', startup.founders.map(&:fullname)
+  #   mail(to: send_to, subject: "Approve #{@new_employee.fullname} at #{@startup.name}")
+  # end
 
   private
 

@@ -50,7 +50,6 @@ Rails.application.configure do
 
   # for detecting n + 1 queries using Bullet
   Bullet.enable = true
-  Bullet.alert = true
   Bullet.bullet_logger = true
   Bullet.console = true
   Bullet.rails_logger = true

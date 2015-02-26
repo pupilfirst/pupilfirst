@@ -42,10 +42,9 @@ class User < ActiveRecord::Base
 
   has_many :requests
   has_many :news, class_name: "News", foreign_key: :user_id
-  has_many :events
   has_many :social_ids
   has_one :student_entrepreneur_policy
-  has_one :mentor
+  has_one :mentor, dependent: :destroy
   belongs_to :bank
   belongs_to :father, class_name: 'Name'
   belongs_to :address

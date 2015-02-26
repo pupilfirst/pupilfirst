@@ -1,25 +1,44 @@
 = simple_form_for @startup_job, url: path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: {check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_file_input, boolean: :horizontal_boolean } do |j|
   = j.error_notification
-  = j.input :title
-  = j.input :location, hint: '"Kochi", "Kozhikode", "Vishakpatnam", etc. or "Anywhere" (without quotes)'
-  div.form-inline.col-sm-offset-2.col-sm-10
-    = j.input :salary_min
-    = j.input :salary_max
-  = j.input :contact_name
-  = j.input :contact_email
-  = j.input :contact_number, required: false
-  = j.input :description
-  hr
+  .row
+    .col-md-6
+      = j.input :title, placeholder: 'Web designer, Backend developer, etc.'
+      = j.input :description, input_html: { style: 'height: 150px;' }, placeholder: 'The responsibilities of this role include...'
+    
+      
+    .col-md-6
+      = j.input :location, placeholder: 'Kochi, Vishakaptnam ..'
+      = j.input :contact_name
+      = j.input :contact_email, placeholder: 'jobs@ourawesomestartup.com'
+  h4.page-header You may also provide ...
   br
-  = j.input :skills, hint: '"Rails", "Django", "Android developement", etc.'
-  = j.input :experience, hint:'"1 year","2 years" etc. '
-  = j.input :qualification, hint: "B.Tech, BCA, etc.  "
+  .row
+    .col-md-6
+      = j.input :salary_min, label: "Salary", placeholder: '5.5 L.P.A, Negotiable ..'
+    .col-md-6   
+      = j.input :contact_number, required: false, placeholder: '+91-9876543210'  
+  .row
+    .col-md-6
+      = j.input :experience, placeholder:'1 year,2-5 years ... '
+    .col-md-6  
+      = j.input :qualification, placeholder: 'B.Tech, BCA ...  '
+    .col-md-10
+     = j.input :skills, placeholder: 'Rails, Adobe Illustrator ...'
 
-  .form-inline.col-sm-offset-2.col-sm-10
-      = j.input :equity_max, label: '<a data-toggle="modal" data-target= "#equity_modal"><sup>?</sup></a> Equity Max.'.html_safe, hint: "In percentage"
-      = j.input :equity_min, hint: "In percentage"
-  = j.input :equity_vest, hint: "In Year"
-  = j.input :equity_cliff, hint: "In Year"
+  .row
+    .col-md-2
+      h5.pull-right
+        ' Equity 
+        a data-toggle="modal" data-target= "#equity_modal"
+              sup ?
+    .col-md-2
+      = j.input :equity_min, label: 'Min(%)', placeholder: '1'
+    .col-md-2
+      = j.input :equity_max, label: 'Max(%)', placeholder: '3'
+    .col-md-2
+      = j.input :equity_vest, label: 'Vest (years)',placeholder: 4
+    .col-md-2
+      = j.input :equity_cliff, label: 'Cliff (years)', placeholder: 1
 
 
   div class = "form-group"

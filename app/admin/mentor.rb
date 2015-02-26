@@ -5,14 +5,47 @@ ActiveAdmin.register Mentor do
     newrelic_ignore
   end
 
+  index do
+    selectable_column
+    actions
+
+    column :name do |mentor|
+      mentor.user.fullname
+    end
+
+    column :availability do |mentor|
+      availability_as_string mentor.availability
+    end
+
+    column :company
+
+    column :title do |mentor|
+      mentor.user.title
+    end
+
+    column :verified_at
+  end
+
   show do
     attributes_table do
       row :user
+
+      row :name do |mentor|
+        mentor.user.fullname
+      end
+
       row :company
+
+      row :title do |mentor|
+        mentor.user.title
+      end
+
       row :availability do |mentor|
         availability_as_string(mentor.availability)
       end
+
       row :company_level
+
       row :verified? do |mentor|
         if mentor.verified?
           "Verified at #{mentor.verified_at}"

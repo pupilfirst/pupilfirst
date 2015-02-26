@@ -349,6 +349,10 @@ GEM
       celluloid (>= 0.15.2)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
+    logstash-event (1.2.02)
+    logstash-logger (0.8.0)
+      logstash-event (~> 1.2)
+      stud
     loofah (2.0.1)
       nokogiri (>= 1.5.9)
     lumberjack (1.0.9)
@@ -518,6 +522,7 @@ GEM
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
     sqlite3 (1.3.10)
+    stud (0.0.19)
     sucker_punch (1.3.2)
       celluloid (~> 0.16.0)
     temple (0.7.4)
@@ -605,6 +610,7 @@ DEPENDENCIES
   json_spec!
   just-datetime-picker
   letter_opener
+  logstash-logger
   mini_magick
   momentjs-rails (>= 2.8.1)!
   newrelic_rpm

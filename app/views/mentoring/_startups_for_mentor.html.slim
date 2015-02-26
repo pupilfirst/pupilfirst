@@ -7,23 +7,24 @@
 
         = will_paginate @startups, param_name: 'startups_page', renderer: BootstrapPagination::Rails, :outer_window => 1, :inner_window => 0
 
-  table.table.table-striped
-    thead
-      tr
-        th Name
-        th Incubated At
-        th Team size
-        th Product Name
-        th Product Progress
-    tbody
-      - @startups.each do |startup|
+  .table-responsive
+    table.table.table-striped
+      thead
         tr
-          td
-            strong
-              = link_to startup.name, startup
-          td = startup.incubation_location.try(:capitalize)
-          td = startup.team_size
-          td = startup.product_name
-          td = product_progress_html startup.product_progress
+          th Name
+          th Incubated At
+          th Team size
+          th Product Name
+          th Product Progress
+      tbody
+        - @startups.each do |startup|
+          tr
+            td
+              strong
+                = link_to startup.name, startup
+            td = startup.incubation_location.try(:capitalize)
+            td = startup.team_size
+            td = startup.product_name
+            td = product_progress_html startup.product_progress
 
   hr.col-xs-12

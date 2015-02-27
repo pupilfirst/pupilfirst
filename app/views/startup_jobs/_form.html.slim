@@ -4,8 +4,8 @@
     .col-md-6
       = j.input :title, placeholder: 'Web designer, Backend developer, etc.'
       = j.input :description, input_html: { style: 'height: 150px;' }, placeholder: 'The responsibilities of this role include...'
-    
-      
+
+
     .col-md-6
       = j.input :location, placeholder: 'Kochi, Vishakaptnam ..'
       = j.input :contact_name
@@ -15,30 +15,34 @@
   .row
     .col-md-6
       = j.input :salary_min, label: "Salary", placeholder: '5.5 L.P.A, Negotiable ..'
-    .col-md-6   
-      = j.input :contact_number, required: false, placeholder: '+91-9876543210'  
+    .col-md-6
+      = j.input :contact_number, required: false, placeholder: '+91-9876543210'
   .row
     .col-md-6
       = j.input :experience, placeholder:'1 year,2-5 years ... '
-    .col-md-6  
+    .col-md-6
       = j.input :qualification, placeholder: 'B.Tech, BCA ...  '
-    .col-md-10
-     = j.input :skills, placeholder: 'Rails, Adobe Illustrator ...'
-
   .row
-    .col-md-2
-      h5.pull-right
-        ' Equity 
-        a data-toggle="modal" data-target= "#equity_modal"
-              sup ?
-    .col-md-2
-      = j.input :equity_min, label: 'Min(%)', placeholder: '1'
-    .col-md-2
-      = j.input :equity_max, label: 'Max(%)', placeholder: '3'
-    .col-md-2
-      = j.input :equity_vest, label: 'Vest (years)',placeholder: 4
-    .col-md-2
-      = j.input :equity_cliff, label: 'Cliff (years)', placeholder: 1
+    .col-md-12
+     = j.input :skills, placeholder: 'Rails, Adobe Illustrator ...'
+  .row
+    / h5
+    /   a data-toggle="modal" data-target= "#equity_modal"
+    /     sup ?
+    /   strong
+    /     | Equity
+  a data-toggle="modal" data-target= "#equity_modal"
+    sup ?
+  strong Equity:
+  .row
+    .col-md-3
+      = j.input :equity_min, label: 'Min', placeholder: '1 (%)'
+    .col-md-3
+      = j.input :equity_max, label: 'Max', placeholder: '3 (%)'
+    .col-md-3
+      = j.input :equity_vest, label: 'Vest'.html_safe,placeholder: '4 (years)'
+    .col-md-3
+      = j.input :equity_cliff, label: 'Cliff'.html_safe, placeholder: '1 (years)'
 
 
   div class = "form-group"

@@ -8,14 +8,10 @@
       - if show_startup_name ||= false
         h5 = link_to job.startup.name, startup_path(job.startup)
       p
-        - if job.salary_max.present?
-          strong
-            ' Salary range:
-          | &#8377;#{ number_with_delimiter job.salary_min } &mdash; &#8377;#{ number_with_delimiter job.salary_max }
-        - else
+        - if job.salary.present?
           strong
             ' Salary:
-          | ~ &#8377;#{ number_with_delimiter job.salary_min }
+          | #{job.salary}
         br
 
         - if (job.equity_vest.present? && job.equity_cliff.present?)

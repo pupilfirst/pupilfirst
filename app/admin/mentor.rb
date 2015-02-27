@@ -40,6 +40,10 @@ ActiveAdmin.register Mentor do
         mentor.user.title
       end
 
+      row :skills do |mentor|
+        mentor_skills_as_string(mentor.skills)
+      end
+
       row :availability do |mentor|
         availability_as_string(mentor.availability)
       end

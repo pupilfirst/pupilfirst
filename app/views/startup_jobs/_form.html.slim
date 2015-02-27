@@ -10,33 +10,44 @@
       = j.input :location, placeholder: 'Kochi, Vishakaptnam ..'
       = j.input :contact_name
       = j.input :contact_email, placeholder: 'jobs@ourawesomestartup.com'
-  a data-toggle="collapse" data-target="#optionalCollapse" + Tell them more ..
+
+  .col-sm-offset-1
+    a.btn.btn-info#add-more-job-info data-toggle="collapse" data-target="#optionalCollapse"
+      span.glyphicon.glyphicon-plus
+      | &nbsp; Add more information
+    span#quick-post-job
+      ' &nbsp; or, if you think that's enough,
+      = j.button :submit, 'Post job listing', class: 'btn btn-success'
+
   br
   .collapse#optionalCollapse
     .row
       .col-md-6
-        = j.input :salary_min, label: "Salary", placeholder: '5.5 L.P.A, Negotiable ..'
+        = j.input :salary_min, label: "Salary", placeholder: '20-25K per month, 5.5L CTC, Negotiable, etc.'
       .col-md-6
-        = j.input :contact_number, required: false, placeholder: '+91-9876543210'
+        = j.input :contact_number, required: false, placeholder: '+919876543210'
     .row
       .col-md-6
-        = j.input :experience, placeholder:'1 year,2-5 years ... '
+        = j.input :experience, placeholder:'1 year, 2-5 years, etc. '
       .col-md-6
-        = j.input :qualification, placeholder: 'B.Tech, BCA ...  '
+        = j.input :qualification, placeholder: 'B.Tech, BCA, etc.  '
     .row
-      .col-md-12
-       = j.input :skills, placeholder: 'Rails, Adobe Illustrator ...'
+      .col-md-6
+        = j.input :skills, placeholder: 'Ruby-on-Rails, Content Editing, Sales & Marketing, etc.'
     / .row
       / h5
       /   a data-toggle="modal" data-target= "#equity_modal"
       /     sup ?
       /   strong
       /     | Equity
-    a data-toggle="collapse" data-target="#equityCollapse" + Offer some equity !
+    .col-sm-offset-1
+      a.btn.btn-info.margin-bottom-20 data-toggle="collapse" data-target="#equityCollapse"
+        span.glyphicon.glyphicon-scissors
+        | &nbsp; Are you offering equity?
+      | &nbsp;
+      a.btn.btn-default.margin-bottom-20 data-toggle='modal' data-target='#equity_modal'
+        span.glyphicon.glyphicon-question-sign
 
-    / a data-toggle="modal" data-target= "#equity_modal"
-    /   sup ?
-    / strong Equity:
     .collapse#equityCollapse
       .row
         .col-md-3
@@ -47,26 +58,25 @@
           = j.input :equity_vest, label: 'Vest'.html_safe,placeholder: '4 (years)'
         .col-md-3
           = j.input :equity_cliff, label: 'Cliff'.html_safe, placeholder: '1 (years)'
-    div class = "form-group"
-      div class = "col-sm-offset-2 col-sm-10"
-        = j.button :submit, 'Post job listing', class: 'btn btn-primary'
+    .form-group
+      .col-sm-offset-1.col-sm-11
+        = j.button :submit, 'Post with more information', class: 'btn btn-success'
 
-<!-- Modal -->
-  div class="modal fade" id="equity_modal" tabindex="-1" role="dialog" aria-labelledby="equity_modalLabel" aria-hidden="true"
-    div class="modal-dialog"
-      div class="modal-content"
-        div class="modal-header"
-          h4 class="modal-title" id="equity_modalLabel" Equity
-        div class="modal-body"
-          dl.justify-description
-            dt Suppose you are giving stock to an employee with a 4 year vest and 1 year cliff.What does that mean you ask?
-            dt  The vest is the period over which the stock promised to the person is transfered to him. So, if a person leaves before the said time, he won't get the full stock promised.
-            dt  Suppose an employee or a founder was promised 10% equity, with a vest of 4 years. So, he will get the full 10% of the stock after 4 years only. If he leaves after 6 months, he will get only 1/8th of the 10% promised. If he leaves after 2 years he will get only 1/2 of the 10%.
-            dt  So vesting is a good way to incentivise your employee or co-founder to stay on. Also you won't have to pay someone, who doesn't commit to your company in the long term, significant amount of the promised stock.
-            dt  Suppose a 1 year cliff was also there as part of the agreement. This means that if the person left before 1 year, he won't get any stock. After 1 year, he will have 25% of the 10% promised stock, as per the normal vesting agreement.
-            dt  Now the thing to notice here is that, vests and cliffs are not common in India and you need to add them to your agreements when you make them. Also implementing vesting is hard, as it involves share buyback. Share buy back is not allowed in India. So you have to talk with your lawyers or chartered accountant on how to implement it.
-            a.pull-right href="http://thenextweb.com/entrepreneur/2013/07/21/startup-founders-heres-why-vesting-is-your-best-friend/" Read more..
+/ Modal
+.modal.fade#equity_modal tabindex="-1" role="dialog" aria-labelledby="equity_modalLabel" aria-hidden="true"
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h4.modal-title#equity_modalLabel Equity
+      .modal-body
+        dt Suppose you are giving stock to an employee with a 4 year vest and 1 year cliff.What does that mean you ask?
+        dt  The vest is the period over which the stock promised to the person is transfered to him. So, if a person leaves before the said time, he won't get the full stock promised.
+        dt  Suppose an employee or a founder was promised 10% equity, with a vest of 4 years. So, he will get the full 10% of the stock after 4 years only. If he leaves after 6 months, he will get only 1/8th of the 10% promised. If he leaves after 2 years he will get only 1/2 of the 10%.
+        dt  So vesting is a good way to incentivise your employee or co-founder to stay on. Also you won't have to pay someone, who doesn't commit to your company in the long term, significant amount of the promised stock.
+        dt  Suppose a 1 year cliff was also there as part of the agreement. This means that if the person left before 1 year, he won't get any stock. After 1 year, he will have 25% of the 10% promised stock, as per the normal vesting agreement.
+        dt  Now the thing to notice here is that, vests and cliffs are not common in India and you need to add them to your agreements when you make them. Also implementing vesting is hard, as it involves share buyback. Share buy back is not allowed in India. So you have to talk with your lawyers or chartered accountant on how to implement it.
+        a.pull-right href="http://thenextweb.com/entrepreneur/2013/07/21/startup-founders-heres-why-vesting-is-your-best-friend/" Read more..
 
-        div class="modal-footer"
-          a.pull-left href="http://thestartuptoolkit.com/blog/2013/02/equity-basics-vesting-cliffs-acceleration-and-exits/" still confused ?
-          button type="button" class="btn btn-primary" data-dismiss="modal" Close
+      .modal-footer
+        a.pull-left href="http://thestartuptoolkit.com/blog/2013/02/equity-basics-vesting-cliffs-acceleration-and-exits/" still confused ?
+        button.btn.btn-primary type="button" data-dismiss="modal" Close

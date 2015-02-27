@@ -10,44 +10,46 @@
       = j.input :location, placeholder: 'Kochi, Vishakaptnam ..'
       = j.input :contact_name
       = j.input :contact_email, placeholder: 'jobs@ourawesomestartup.com'
-  h4.page-header You may also provide ...
+  a data-toggle="collapse" data-target="#optionalCollapse" + Tell them more ..
   br
-  .row
-    .col-md-6
-      = j.input :salary_min, label: "Salary", placeholder: '5.5 L.P.A, Negotiable ..'
-    .col-md-6
-      = j.input :contact_number, required: false, placeholder: '+91-9876543210'
-  .row
-    .col-md-6
-      = j.input :experience, placeholder:'1 year,2-5 years ... '
-    .col-md-6
-      = j.input :qualification, placeholder: 'B.Tech, BCA ...  '
-  .row
-    .col-md-12
-     = j.input :skills, placeholder: 'Rails, Adobe Illustrator ...'
-  .row
-    / h5
-    /   a data-toggle="modal" data-target= "#equity_modal"
-    /     sup ?
-    /   strong
-    /     | Equity
-  a data-toggle="modal" data-target= "#equity_modal"
-    sup ?
-  strong Equity:
-  .row
-    .col-md-3
-      = j.input :equity_min, label: 'Min', placeholder: '1 (%)'
-    .col-md-3
-      = j.input :equity_max, label: 'Max', placeholder: '3 (%)'
-    .col-md-3
-      = j.input :equity_vest, label: 'Vest'.html_safe,placeholder: '4 (years)'
-    .col-md-3
-      = j.input :equity_cliff, label: 'Cliff'.html_safe, placeholder: '1 (years)'
+  .collapse#optionalCollapse
+    .row
+      .col-md-6
+        = j.input :salary_min, label: "Salary", placeholder: '5.5 L.P.A, Negotiable ..'
+      .col-md-6
+        = j.input :contact_number, required: false, placeholder: '+91-9876543210'
+    .row
+      .col-md-6
+        = j.input :experience, placeholder:'1 year,2-5 years ... '
+      .col-md-6
+        = j.input :qualification, placeholder: 'B.Tech, BCA ...  '
+    .row
+      .col-md-12
+       = j.input :skills, placeholder: 'Rails, Adobe Illustrator ...'
+    / .row
+      / h5
+      /   a data-toggle="modal" data-target= "#equity_modal"
+      /     sup ?
+      /   strong
+      /     | Equity
+    a data-toggle="collapse" data-target="#equityCollapse" + Offer some equity !
 
-
-  div class = "form-group"
-    div class = "col-sm-offset-2 col-sm-10"
-      = j.button :submit, 'Post job listing', class: 'btn btn-primary'
+    / a data-toggle="modal" data-target= "#equity_modal"
+    /   sup ?
+    / strong Equity:
+    .collapse#equityCollapse
+      .row
+        .col-md-3
+          = j.input :equity_min, label: 'Min', placeholder: '1 (%)'
+        .col-md-3
+          = j.input :equity_max, label: 'Max', placeholder: '3 (%)'
+        .col-md-3
+          = j.input :equity_vest, label: 'Vest'.html_safe,placeholder: '4 (years)'
+        .col-md-3
+          = j.input :equity_cliff, label: 'Cliff'.html_safe, placeholder: '1 (years)'
+    div class = "form-group"
+      div class = "col-sm-offset-2 col-sm-10"
+        = j.button :submit, 'Post job listing', class: 'btn btn-primary'
 
 <!-- Modal -->
   div class="modal fade" id="equity_modal" tabindex="-1" role="dialog" aria-labelledby="equity_modalLabel" aria-hidden="true"

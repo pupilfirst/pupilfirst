@@ -88,8 +88,8 @@ class MentoringController < ApplicationController
     end
 
     flash[:notice] = 'You have successfully registered as a mentor!'
-
-    redirect_to current_user
+    UserMailer.mentor_verification_ongoing(current_user).deliver
+    redirect_to mentoring_url
   end
 
   # GET /mentoring/sign_up
@@ -102,6 +102,7 @@ class MentoringController < ApplicationController
     @user = User.new user_params
 
     if @user.save
+      Rails.llog.info event: :mentor_signup, email: @user.email
       flash[:notice] = 'Your SV account has been created. Please login with your SV ID and password.'
       redirect_to mentoring_url
     else

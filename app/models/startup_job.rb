@@ -3,14 +3,12 @@ class StartupJob < ActiveRecord::Base
 
   belongs_to :startup
 
-  validates_presence_of :title, :salary_min, :location, :contact_name, :contact_number
-  validates_length_of :location, maximum: 50
-  validates_length_of :description, maximum: 500, allow_nil: true
+  validates_presence_of :title, :salary_min, :location, :contact_name, :contact_number, :description
+  validates_length_of :location, :title, maximum: 50
+  validates_length_of :description, maximum: 500
   validates_presence_of :equity_min, if: :equity_max
-  validates_presence_of :equity_max, if: :equity_min
-  validates_presence_of :equity_vest, if: :equity_min || :equity_cliff
-  validates_presence_of :equity_cliff, if: :equity_min || :equity_vest
-
+  validates_presence_of :equity_min, :equity_vest, if: :equity_cliff
+  validates_presence_of :equity_min, :equity_cliff, if: :equity_vest
   validate :equity_min_less_than_max
 
   def equity_min_less_than_max

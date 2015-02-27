@@ -54,6 +54,7 @@ gem 'js-routes' # Routes inside JS.
 gem 'validate_url' # URL validation.
 gem 'chartkick' # Pretty charts!
 gem 'will_paginate-bootstrap' # Paginated tables with Bootstrap
+gem 'logstash-logger' # A better logger.
 
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'momentjs-rails', '>= 2.8.1',  :github => 'derekprior/momentjs-rails'
@@ -62,9 +63,9 @@ gem 'social-share-button'
 
 gem 'apipie-rails'
 gem 'roadie'
+gem 'roadie-rails'
 
 group :development do
-  gem 'bullet'
   gem "letter_opener"
   gem 'seed-fu', github: 'mbleigh/seed-fu' # check and remove
   gem 'guard'
@@ -74,7 +75,7 @@ group :development do
   gem 'guard-livereload'
   gem 'childprocess'
   gem 'terminal-notifier-guard'
-
+  gem 'bullet' # Detect N+1 queries.
 end
 
 group :test do
@@ -122,7 +123,6 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
-
 # Use unicorn as the app server
 # gem 'unicorn'
 

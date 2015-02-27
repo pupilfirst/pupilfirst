@@ -2,23 +2,24 @@
   .row
     .col-sm-6
       h3 List of mentors
-  table.table.table-striped
-    thead
-      tr
-        th Name
-        th Available on
-        th Between
-        th Skills
+  .table-responsive
+    table.table.table-striped
+      thead
+        tr
+          th Name
+          th Available on
+          th Between
+          th Skills
 
-    tbody
-    - @mentors.each do |mentor|
-      tr
-        td
-          strong #{mentor.user.fullname}
-        td #{badges_for_days mentor.availability['days']}
-        td #{mentor.availability['time']['after']}:00 and #{mentor.availability['time']['before']}:00
-        td
-          = mentor.skills.map { |skill| "#{skill.skill.name} (#{skill.expertise})" }.join ', '
-        td = link_to 'Request Meeting', new_mentor_mentor_meeting_path(mentor), class: 'btn btn-xs btn-success'
+      tbody
+      - @mentors.each do |mentor|
+        tr
+          td
+            strong #{mentor.user.fullname}
+          td #{badges_for_days mentor.availability['days']}
+          td #{mentor.availability['time']['after']}:00 and #{mentor.availability['time']['before']}:00
+          td
+            = mentor.skills.map { |skill| "#{skill.skill.name} (#{skill.expertise})" }.join ', '
+          td = link_to 'Request Meeting', new_mentor_mentor_meeting_path(mentor), class: 'btn btn-xs btn-success'
          
   hr.col-xs-12

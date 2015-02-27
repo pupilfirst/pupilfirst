@@ -60,4 +60,9 @@ class StartupJob < ActiveRecord::Base
     return false unless user
     startup.is_founder?(user)
   end
+
+  def salary_to_string(min,max)
+    self.salary = max.present? "&#8377; #{min} - #{max}" : "~ &#8377;#{min}"
+  end
+
 end

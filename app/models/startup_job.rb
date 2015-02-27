@@ -61,8 +61,18 @@ class StartupJob < ActiveRecord::Base
     startup.is_founder?(user)
   end
 
-  def salary_to_string(min,max)
-    self.salary = max.present? "&#8377; #{min} - #{max}" : "~ &#8377;#{min}"
+  def salary_to_string
+    self.salary = self.salary_max.present? ? "#{self.salary_min} - #{self.salary_max}" : "~ #{self.salary_min}"
+  end
+
+  def fix_description_and_email
+    if self.description.nil?
+      self.description = 'Not supplied'
+    end
+
+    if self.contact_email.nil?
+      self.contact_email = startup.founders.first.email
+    end
   end
 
 end

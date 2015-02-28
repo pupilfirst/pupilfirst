@@ -265,4 +265,13 @@ class MentorMeeting < ActiveRecord::Base
   def self.scheduled_to_meet?(currentuser,mentor)
     MentorMeeting.where(user: currentuser).where(mentor: mentor).where(status: [STATUS_REQUESTED,STATUS_ACCEPTED,STATUS_RESCHEDULED,STATUS_STARTED]).present?
   end
+
+  def self.user_feedback_pending
+    MentorMeeting.where(status: STATUS_COMPLETED).where('meeting_at < ?', 7.days.ago).where(user_rating: nil)
+  end
+
+  def self.mentor_feedback_pending
+    MentorMeeting.where(status: STATUS_COMPLETED).where('meeting_at < ?', 7.days.ago).where(mentor_rating: nil)
+  end
+
 end

@@ -4,10 +4,10 @@ h1 style="margin-bottom: 30px;" A great way for startups to meet professional me
 - if current_user
   - if current_user.not_a_mentor?
     p #{link_to 'Are you an interested mentor?', mentoring_register_url, class: 'btn btn-primary btn-lg'}
-  - elsif current_user.mentor_pending_verification?
-    p Your mentor account is being verified by the team at Startup Village.
   - elsif current_user.mentor_registration_going_on?
     p #{link_to 'Continue registration process', mentoring_register_url, class: 'btn btn-primary btn-lg'}
+  - elsif current_user.mentor_pending_verification?
+    p Your mentor account is being verified by the team at Startup Village.
 - else
   p
     ' #{link_to 'Login to get started!', new_user_session_path(referer: mentoring_url), class: 'btn btn-primary btn-lg'}

@@ -141,7 +141,7 @@ class MentorMeeting < ActiveRecord::Base
 
   def send_acceptance_message(role)
     recipient = role == "user" ? self.mentor.user : self.user
-    UserMailer.meeting_request_accepted(self,recipient).deliver_now
+    MentoringMailer.meeting_request_accepted(self,recipient).deliver_later
   end
 
   def reject!(mentor_meeting,role)
@@ -155,7 +155,7 @@ class MentorMeeting < ActiveRecord::Base
 
   def send_rejection_message(role)
     recipient = role == "user" ? self.mentor.user : self.user
-    UserMailer.meeting_request_rejected(self,recipient).deliver_now
+    MentoringMailer.meeting_request_rejected(self,recipient).deliver_later
   end
 
   def reschedule!(new_time)
@@ -164,7 +164,7 @@ class MentorMeeting < ActiveRecord::Base
   end
 
   def send_reschedule_message
-    UserMailer.meeting_request_rescheduled(self).deliver_now
+    MentoringMailer.meeting_request_rescheduled(self).deliver_later
   end
 
   def cancel!(mentor_meeting,role)
@@ -178,7 +178,7 @@ class MentorMeeting < ActiveRecord::Base
 
   def send_cancel_message(role)
     recipient = role == "user" ? self.mentor.user : self.user
-    UserMailer.meeting_request_cancelled(self,recipient).deliver_now
+    MentoringMailer.meeting_request_cancelled(self,recipient).deliver_later
   end
 
   def complete!
@@ -265,5 +265,13 @@ class MentorMeeting < ActiveRecord::Base
   def self.scheduled_to_meet?(currentuser,mentor)
     MentorMeeting.where(user: currentuser).where(mentor: mentor).where(status: [STATUS_REQUESTED,STATUS_ACCEPTED,STATUS_RESCHEDULED,STATUS_STARTED]).present?
   end
+
+  def self.user_feedback_pending
+    MentorMeeting.where(status: STATUS_COMPLETED).where('meeting_at < ?', 7.days.ago).where(user_rating: nil)
+  end
+
+  def self.mentor_feedback_pending
+    MentorMeeting.where(status: STATUS_COMPLETED).where('meeting_at < ?', 7.days.ago).where(mentor_rating: nil)
+  end
+
 end
- 

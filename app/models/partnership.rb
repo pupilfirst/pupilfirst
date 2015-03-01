@@ -21,7 +21,7 @@ class Partnership < ActiveRecord::Base
     generate_confirmation_token!
 
     # TODO: Defer mailing of partnership confirmation email.
-    UserMailer.confirm_partnership_formation(self, requesting_user).deliver_now
+    UserMailer.confirm_partnership_formation(self, requesting_user).deliver_later
   end
 
   # Generate a confirmation_token which allows visitor to edit user fields and set partnership as confirmed.

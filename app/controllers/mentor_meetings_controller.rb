@@ -3,7 +3,7 @@ class MentorMeetingsController < ApplicationController
   before_filter :meeting_started, only: [:feedback]
   before_filter :meeting_completed, only: [:feedbacksave]
   before_filter :meeting_room_accessible, only: [:live]
-  
+
   def live
     @mentor_meeting = MentorMeeting.find(params[:id])
   end
@@ -17,7 +17,7 @@ class MentorMeetingsController < ApplicationController
       else
   	   @mentor_meeting = mentor.mentor_meetings.new
      end
-    else 
+    else
       flash[:alert]="Please sign/renew your agreement with SV to meet our mentors!"
       redirect_to mentoring_url
     end
@@ -30,7 +30,7 @@ class MentorMeetingsController < ApplicationController
   	@mentor_meeting = mentor.mentor_meetings.new(meeting_params)
   	@mentor_meeting.user = current_user
   	if @mentor_meeting.save
-  		UserMailer.meeting_request_to_mentor(@mentor_meeting).deliver
+  		MentoringMailer.meeting_request_to_mentor(@mentor_meeting).deliver
       flash[:notice]="Meeting request sent"
   		redirect_to mentoring_path(current_user)
   	else

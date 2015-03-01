@@ -31,7 +31,7 @@ class SendSepJob
         university_registration_number: sep.university_registration_number,
         address: sep.address
       })
-      UserMailer.send_sep_certificate(sep.user, tmp_out).deliver_now
+      UserMailer.send_sep_certificate(sep.user, tmp_out).deliver_later
     end
   end
 end

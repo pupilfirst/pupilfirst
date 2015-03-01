@@ -2,5 +2,8 @@ p Hi #{@recipient.fullname}!
 
 p Unfortunately #{@mentor_meeting.guest(@recipient).fullname} had to decline the meeting! Please refer to his/her comments below:
 
-p 
+p
   i &ldquo;#{@mentor_meeting.is_mentor?(@recipient) ? @mentor_meeting.user_comments : @mentor_meeting.mentor_comments}&rdquo;
+
+p Cheers,
+p Team Startup Village

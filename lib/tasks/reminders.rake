@@ -15,7 +15,7 @@ namespace :reminders do
       end
 
       # Email
-      StartupMailer.agreement_expiring_soon(startup, expires_in, renew_within).deliver_now
+      StartupMailer.agreement_expiring_soon(startup, expires_in, renew_within).deliver_later
     end
   end
 end

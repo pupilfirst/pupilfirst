@@ -67,6 +67,7 @@ Svapp::Application.routes.draw do
     post 'register_4'
     get 'sign_up', action: 'sign_up_form'
     post 'sign_up'
+    patch 'resend', action: 'resend'
   end
 
   scope 'partnerships', controller: 'partnerships', as: 'partnerships' do

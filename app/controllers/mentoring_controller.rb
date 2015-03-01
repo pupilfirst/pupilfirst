@@ -63,10 +63,8 @@ class MentoringController < ApplicationController
       current_user.generate_phone_number_verification_code(params[:mentor_phone_number])
     rescue Exceptions::InvalidPhoneNumber => e
       @failed_to_add_phone_number = e.message
-
       render 'new_step3' and return
     end
-
     # SMS the code to the phone number. Currently uses FA format.
     RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV Mentoring platform: #{code}", msisdn: phone_number)
 
@@ -83,13 +81,22 @@ class MentoringController < ApplicationController
       current_user.verify_phone_number(current_user.phone, params[:mentor_phone_verification_code])
     rescue Exceptions::PhoneNumberVerificationFailed
       @failed_to_verify_phone_number = true
-
       render 'new_step4' and return
     end
-
     flash[:notice] = 'You have successfully registered as a mentor!'
     UserMailer.mentor_verification_ongoing(current_user).deliver
     redirect_to mentoring_url
+  end
+
+  def resend
+    if (current_user.updated_at <= 5.minute.ago)
+      @retry_after_some_time = false
+      code, phone_number = current_user.generate_phone_number_verification_code(current_user.phone)
+      RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV Mentoring platform: #{code}", msisdn: phone_number)
+    else
+      @retry_after_some_time = true
+    end
+    render 'new_step4' and return
   end
 
   # GET /mentoring/sign_up

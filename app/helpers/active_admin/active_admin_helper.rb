@@ -26,4 +26,9 @@ module ActiveAdmin::ActiveAdminHelper
     "#{day} , #{time}"
   end
 
+  def mentor_skills_as_string(mentor_skills)
+    mentor_skills.map do |mentor_skill|
+      "#{mentor_skill.skill.name} (#{mentor_skill.expertise})"
+    end.join ', '
+  end
 end

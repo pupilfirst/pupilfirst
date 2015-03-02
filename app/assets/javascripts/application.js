@@ -39,3 +39,5 @@
 //= require bootstrap-datetimepicker
 //= require pickers
 //= require social-share-button
+
+//= require startup_jobs

@@ -33,7 +33,7 @@ class V1::StartupsController < V1::BaseController
     current_user.verify_self!
     current_user.update_attributes!(is_founder: true, startup_admin: true)
     @startup.save(validate: false)
-    StartupMailer.apply_now(@startup).deliver_now
+    StartupMailer.apply_now(@startup).deliver_later
 
     respond_with @startup, status: :created
   end
@@ -62,7 +62,7 @@ class V1::StartupsController < V1::BaseController
     @new_employee = current_user
     startup = Startup.find(params[:id])
     @new_employee.update_attributes!(startup: startup, startup_link_verifier_id: nil, title: params[:position])
-    StartupMailer.respond_to_new_employee(startup, @new_employee).deliver_now
+    StartupMailer.respond_to_new_employee(startup, @new_employee).deliver_later
     message = "#{@new_employee.fullname} wants to be linked with #{startup.name or "your startup"}. Please check your email to approve."
     startup.founders.each do |f|
       UserPushNotifyJob.new.async.perform(f.id, :fill_personal_info, message)
@@ -75,7 +75,7 @@ class V1::StartupsController < V1::BaseController
       render json: { error: "Already applied for Partnership" }, status: :bad_request
     else
       current_user.startup.update_attributes!(partnership_application: true)
-      StartupMailer.partnership_application(current_user.startup, current_user).deliver_now
+      StartupMailer.partnership_application(current_user.startup, current_user).deliver_later
       render nothing: true, status: :created
     end
   end
@@ -109,7 +109,7 @@ class V1::StartupsController < V1::BaseController
     user.save_unregistered_user!
 
     # Send email with co-founder invite message.
-    UserMailer.cofounder_request(user.email, current_user).deliver_now
+    UserMailer.cofounder_request(user.email, current_user).deliver_later
 
     render nothing: true
   end
@@ -157,7 +157,7 @@ class V1::StartupsController < V1::BaseController
     startup.save!
 
     # Send mail to requester about successful submission of incubation request.
-    UserMailer.incubation_request_submitted(current_user).deliver_now
+    UserMailer.incubation_request_submitted(current_user).deliver_later
 
     render nothing: true
   end

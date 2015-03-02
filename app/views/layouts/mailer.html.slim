@@ -1,34 +1,34 @@
 html
+  head
+    = stylesheet_link_tag 'mails'
   body
-    = yield
+    table.mail-table
+      tbody
+        tr
+          td
+            table.mail-logo-table
+              tbody
+                tr
+                  td.mail-logo-td
+                    a.mail-logo-link href="https://www.svlabs.in" title="Startup Village" target="_blank"
+                      = image_tag 'logo.png', class: 'mail-logo-img'
 
-table.mail-table
-  tbody
-    tr
-      td
-        table.mail-logo-table
-          tbody
-            tr
-              td.mail-logo-td
-                a.mail-logo-link href="https://www.svlabs.in" title="Startup Village" target="_blank"
-                  = image_tag 'logo.png', class: 'mail-logo-img'
+            table.mail-body-table
+              tbody
+                tr
+                  td
+                    h1.mail-heading #{yield :heading}
+                    p.mail-salutation #{yield :salutation}
+                    = yield :body
+                    p.mail-signature
+                      span.il
+                        ' Startup Village
+                      | team
 
-        table.mail-body-table
-          tbody
-            tr
-              td
-                h1.mail-heading #{yield :heading}
-                p.mail-salutation #{yield :salutation}
-                = yield :body
-                p.mail-signature
-                  span.il
-                    ' Startup Village
-                  | team
-
-        table.mail-footer
-          tbody
-            tr
-              td
-                p style="margin:0;padding:0px"
-                  ' This email has been sent to you by
-                  span.il Startup Village
+            table.mail-footer
+              tbody
+                tr
+                  td
+                    p style="margin:0;padding:0px"
+                      ' This email has been sent to you by
+                      span.il Startup Village

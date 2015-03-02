@@ -14,7 +14,11 @@ h1.page-header.margin-top-0
     label.col-sm-2.control-label for='mentor_phone_verification_code' Verification code
     .col-sm-10
       = text_field_tag 'mentor_phone_verification_code', '', class: 'form-control', required: true, placeholder: ''
-  .col-sm-offset-2.col-sm-2
-    = submit_tag 'Proceed to final step', class: 'btn btn-primary', style: 'margin-top: 10px;'
+  .form-group
+    .col-sm-offset-2.col-sm-10
+      = submit_tag 'Proceed to final step', class: 'btn btn-primary', style: 'margin-top: 10px;'
+
 = form_tag mentoring_resend_url, style: 'margin-top: 10px;', method: :patch
-  =button_tag 'Resend verification code', class: 'btn btn-success', style: 'margin-top: 10px;'
+  .form-group
+    .col-sm-offset-2.col-sm-10
+      = button_tag 'Resend verification code', class: 'btn btn-success', style: 'margin-top: 10px;'

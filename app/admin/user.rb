@@ -33,7 +33,7 @@ ActiveAdmin.register User do
     UserPushNotifyJob.new.async.perform(user.id, :founder_profile_reminder, push_message)
 
     # Send email.
-    UserMailer.reminder_to_complete_founder_profile(user).deliver_now
+    UserMailer.reminder_to_complete_founder_profile(user).deliver_later
 
     redirect_to action: :show
   end

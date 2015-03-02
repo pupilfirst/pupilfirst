@@ -1,5 +1,5 @@
 class StartupsController < InheritedResources::Base
-  before_filter :authenticate_user!, except: [:confirm_employee, :confirm_startup_link, :show, :featured]
+  before_filter :authenticate_user!, except: [:confirm_startup_link, :show, :featured]
   before_filter :restrict_to_startup_founders, only: [:edit, :update]
   before_filter :disallow_unready_startup, only: [:edit, :update]
   after_filter only: [:create] do
@@ -23,7 +23,7 @@ class StartupsController < InheritedResources::Base
     if @startup.save
       # flash[:notice] = "Your startup Application is submited and in pending for approval."
       render :post_create
-      StartupMailer.apply_now(@startup).deliver_now
+      StartupMailer.apply_now(@startup).deliver_later
     end
   end
 
@@ -60,22 +60,22 @@ class StartupsController < InheritedResources::Base
     @self.confirm_employee! true
   end
 
-  def confirm_employee
-    @startup = Startup.find(params[:id])
-    @new_employee = User.find_by_startup_verifier_token(params[:token])
-    raise_not_found unless @new_employee
-    if request.post?
-      flash[:notice] = "User was already accepted as startup employee." if @new_employee.startup_link_verifier_id
-      @new_employee.confirm_employee! params[:is_founder]
-      message = "Congratulations! You've been approved as #{@new_employee.title} at #{@startup.name}."
-      UserMailer.accepted_as_employee(@new_employee, @startup).deliver_now
-      UserPushNotifyJob.new.async.perform(@new_employee.id, :confirm_employee, message)
-      render :confirm_employee_done
-    else
-      @token = params[:token]
-      render :confirm_employee
-    end
-  end
+  # def confirm_employee
+  #   @startup = Startup.find(params[:id])
+  #   @new_employee = User.find_by_startup_verifier_token(params[:token])
+  #   raise_not_found unless @new_employee
+  #   if request.post?
+  #     flash[:notice] = "User was already accepted as startup employee." if @new_employee.startup_link_verifier_id
+  #     @new_employee.confirm_employee! params[:is_founder]
+  #     message = "Congratulations! You've been approved as #{@new_employee.title} at #{@startup.name}."
+  #     UserMailer.accepted_as_employee(@new_employee, @startup).deliver_later
+  #     UserPushNotifyJob.new.async.perform(@new_employee.id, :confirm_employee, message)
+  #     render :confirm_employee_done
+  #   else
+  #     @token = params[:token]
+  #     render :confirm_employee
+  #   end
+  # end
 
   # GET /startups/featured
   def featured

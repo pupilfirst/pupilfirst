@@ -14,8 +14,8 @@ class EventsController < ApplicationController
   def create
     @event = Event.new(event_params)
     if @event.save
-      EventMailer.event_registered_email(@event).deliver_now
-      redirect_to events_path, :notice => "Your Event has been submitted for approval, please check your mail for further details"
+      EventMailer.event_registered_email(@event).deliver_later
+      redirect_to events_path, :notice => 'Your event has been submitted for review. Please check your mail for further details.'
     else
       event_categories
       render :new

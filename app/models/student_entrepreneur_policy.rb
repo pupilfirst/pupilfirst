@@ -9,6 +9,6 @@ class StudentEntrepreneurPolicy < ActiveRecord::Base
   validates_presence_of :address
 
   after_create do
-    UserMailer.new_sep_notification(user).deliver_now
+    UserMailer.new_sep_notification(user).deliver_later
   end
 end

@@ -3,7 +3,7 @@ class StartupJob < ActiveRecord::Base
 
   belongs_to :startup
 
-  validates_presence_of :title, :salary_min, :location, :contact_name, :contact_number, :description
+  validates_presence_of :title, :location, :contact_name, :contact_email, :description
   validates_length_of :location, :title, maximum: 50
   validates_length_of :description, maximum: 500
   validates_presence_of :equity_min, if: :equity_max
@@ -60,4 +60,19 @@ class StartupJob < ActiveRecord::Base
     return false unless user
     startup.is_founder?(user)
   end
+
+  def salary_to_string
+    self.salary = self.salary_max.present? ? "#{self.salary_min} - #{self.salary_max}" : "~ #{self.salary_min}"
+  end
+
+  def fix_description_and_email
+    if self.description.nil?
+      self.description = 'Not supplied'
+    end
+
+    if self.contact_email.nil?
+      self.contact_email = startup.founders.first.email
+    end
+  end
+
 end

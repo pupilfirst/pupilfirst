@@ -5,14 +5,51 @@ ActiveAdmin.register Mentor do
     newrelic_ignore
   end
 
+  index do
+    selectable_column
+    actions
+
+    column :name do |mentor|
+      mentor.user.fullname
+    end
+
+    column :availability do |mentor|
+      availability_as_string mentor.availability
+    end
+
+    column :company
+
+    column :title do |mentor|
+      mentor.user.title
+    end
+
+    column :verified_at
+  end
+
   show do
     attributes_table do
       row :user
+
+      row :name do |mentor|
+        mentor.user.fullname
+      end
+
       row :company
+
+      row :title do |mentor|
+        mentor.user.title
+      end
+
+      row :skills do |mentor|
+        mentor_skills_as_string(mentor.skills)
+      end
+
       row :availability do |mentor|
         availability_as_string(mentor.availability)
       end
+
       row :company_level
+
       row :verified? do |mentor|
         if mentor.verified?
           "Verified at #{mentor.verified_at}"
@@ -26,8 +63,8 @@ ActiveAdmin.register Mentor do
   member_action :verify do
     mentor = Mentor.find params[:id]
     mentor.update(verified_at: Time.now)
-    UserMailer.mentor_verified(mentor).deliver_now
-    redirect_to admin_mentor_url, notice: "Mentor verified"
+    MentoringMailer.mentor_verified(mentor).deliver_later
+    redirect_to admin_mentor_url, notice: 'Mentor verified'
   end
 
   form do |f|

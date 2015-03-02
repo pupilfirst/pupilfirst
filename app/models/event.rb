@@ -56,7 +56,7 @@ class Event < ActiveRecord::Base
   end
 
   def send_approval_notification!
-    EventMailer.event_approved_email(self).deliver_now
+    EventMailer.event_approved_email(self).deliver_later
     update!(approval_notification_sent: true)
   end
 end

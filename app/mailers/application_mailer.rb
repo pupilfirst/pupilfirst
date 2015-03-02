@@ -1,4 +1,6 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "from@example.com"
+  # include Roadie::Rails::Automatic
+  include Roadie::Rails::Mailer
+  default from: 'SV App <no-reply@svlabs.in>'
   layout 'mailer'
 end

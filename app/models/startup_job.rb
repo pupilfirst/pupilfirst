@@ -9,6 +9,11 @@ class StartupJob < ActiveRecord::Base
   validates_presence_of :equity_min, if: :equity_max
   validates_presence_of :equity_min, :equity_vest, if: :equity_cliff
   validates_presence_of :equity_min, :equity_cliff, if: :equity_vest
+  validates_numericality_of :equity_min, greater_than_or_equal_to: 0, allow_nil: true
+  validates_numericality_of :equity_max, greater_than_or_equal_to: 0, allow_nil: true
+  validates_numericality_of :equity_vest, greater_than_or_equal_to: 0, allow_nil: true
+  validates_numericality_of :equity_cliff, greater_than_or_equal_to: 0, allow_nil: true
+
   validate :equity_min_less_than_max
 
   def equity_min_less_than_max

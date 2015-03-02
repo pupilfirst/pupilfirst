@@ -36,17 +36,6 @@ class StartupJob < ActiveRecord::Base
     end
   end
 
-  validate :salary_min_less_than_max
-
-  def salary_min_less_than_max
-    if self.salary_max && self.salary_min
-      if self.salary_min >= self.salary_max
-        errors.add :salary_min, 'must be less than maximum salary'
-        errors.add :salary_max, 'must be greater than minimum salary'
-      end
-    end
-  end
-
   scope :not_expired, -> { where('expires_on > ?', Time.now) }
 
   def reset_expiry!

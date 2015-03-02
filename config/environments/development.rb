@@ -46,7 +46,7 @@ Rails.application.configure do
   # In development and test, let's have carrierwave store everything on local disk.
   config.carrier_wave_storage = :file
 
-  config.action_mailer.delivery_method = :letter_opener
+  # config.action_mailer.delivery_method = :letter_opener
 
   # for detecting n + 1 queries using Bullet
   Bullet.enable = true

@@ -26,7 +26,7 @@ describe StartupJob do
   end
 
   describe '#expired?' do
-    context "when job is expired" do
+    context 'when job is expired' do
       subject { create :startup_job, expires_on: StartupJob::EXPIRY_DURATION.ago  }
 
       it 'returns true' do
@@ -61,16 +61,6 @@ describe StartupJob do
       it 'invalidates record' do
         expect(subject).to_not be_valid
       end
-    end
-  end
-
-  describe "#salary_min_less_than_max" do
-    context "when salary min greater than max" do
-      subject { build :startup_job, salary_max: 20000, salary_min: 25000 }
-
-        it 'invalid record' do
-          expect(subject).to_not be_valid
-        end
     end
   end
 end

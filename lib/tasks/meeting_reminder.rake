@@ -1,10 +1,7 @@
-namespace :meeting_alert do
+  namespace :meeting_alert do
   desc 'Send out e-mails to user and mentor on the day of a scheduled meeting'
   task meeting_day: [:environment] do
-    MentorMeeting.where('meeting_at > ? AND meeting_at < ?' , Time.now-1.day, 1.day.from_now).each do |meet|
-      MentoringMailer.meeting_today_user(meet).deliver_later
-      MentoringMailer.meeting_today_mentor(meet).deliver_later
-    end
+    MeetingDayReminderJob.perform_later
   end
 
   task remind_to_accept: [:environment] do

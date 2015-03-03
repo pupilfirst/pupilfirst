@@ -5,11 +5,6 @@
   end
 
   task remind_to_accept: [:environment] do
-  	MentorMeeting.requested.where('meeting_at < ?', 2.days.from_now).each do |meet|
-      MentoringMailer.remind_mentor_to_accept(meet).deliver_later
-    end
-    MentorMeeting.rescheduled.where('meeting_at < ?', 2.days.from_now).each do |meet|
-      MentoringMailer.remind_user_to_accept(meet).deliver_later
-    end
+    RemindToAcceptJob.perform_later
   end
 end

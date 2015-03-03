@@ -1,7 +1,7 @@
-/ - link = link_to "here", confirm_startup_link_startup_url(id: @startup.id, token: @user.startup_verifier_token)
+= content_for :heading
+  | = link_to "here", confirm_startup_link_startup_url(id: @startup.id, token: @user.startup_verifier_token)
 
-p #{@current_user.fullname} has listed you as a founder at #{@startup.name}. To accept & link yourself, please head over #{link} or sign up on the mobile app.
+= content_for :body
+  p #{@current_user.fullname} has listed you as a founder at #{@startup.name}. To accept & link yourself, please head over #{link} or sign up on the mobile app.
 
-p We are available on #{ link_to "Android", "https://play.google.com/store/apps/details?id=in.svlabs.android"} & #{ link_to "iOS","https://itunes.apple.com/in/app/startup-village-app/id804638121?mt=8"}.
-
-p - Team SV App
+	p We are available on #{ link_to "Android", "https://play.google.com/store/apps/details?id=in.svlabs.android"} & #{ link_to "iOS","https://itunes.apple.com/in/app/startup-village-app/id804638121?mt=8"}.

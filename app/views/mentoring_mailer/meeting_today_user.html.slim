@@ -1,8 +1,9 @@
-p Hi #{@mentor_meeting.user.fullname} !
+= content_for :salutation
+  | Hi #{@mentor_meeting.user.fullname} !
 
-p You have a scheduled meeting with #{link_to @mentor_meeting.mentor.user.fullname, @mentor_meeting.mentor.user} today at #{@mentor_meeting.suggested_meeting_at.strftime("%l:%M %P")} for #{@mentor_meeting.purpose}. Please visit #{link_to 'your meeting page', mentoring_url} as per schedule.
-
-strong Please login using chrome/firefox/opera browsers for the meeting. Other browsers are not supported.
-
-p Cheers,
-p Team Startup Village
+= content_for :body
+  p
+    ' You have a scheduled meeting with #{link_to @mentor_meeting.mentor.user.fullname, @mentor_meeting.mentor.user} today at 
+    ' #{@mentor_meeting.suggested_meeting_at.strftime("%l:%M %P")} for #{@mentor_meeting.purpose}. Please visit 
+    ' #{link_to 'your meeting page', mentoring_url} as per schedule.
+  strong Please login using chrome/firefox/opera browsers for the meeting. Other browsers are not supported.

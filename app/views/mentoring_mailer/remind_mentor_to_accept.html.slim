@@ -1,15 +1,14 @@
-p Hi #{@mentor_meeting.mentor.user.fullname} !
+= content_for :salutation
+  | Hi #{@mentor_meeting.mentor.user.fullname} !
 
-p You have a pending meeting request from #{link_to @mentor_meeting.user.fullname, @mentor_meeting.user} of #{link_to @mentor_meeting.user.startup.name, @mentor_meeting.user.startup} on #{@mentor_meeting.suggested_meeting_at.to_date} at #{@mentor_meeting.suggested_meeting_at.strftime("%l:%M %P")}. The purpose of the meeting is:
+= content_for :body
+  p You have a pending meeting request from #{link_to @mentor_meeting.user.fullname, @mentor_meeting.user} of #{link_to @mentor_meeting.user.startup.name, @mentor_meeting.user.startup} on #{@mentor_meeting.suggested_meeting_at.to_date} at #{@mentor_meeting.suggested_meeting_at.strftime("%l:%M %P")}. The purpose of the meeting is:
 
-p
-  em #{@mentor_meeting.purpose}.
+  p
+    em #{@mentor_meeting.purpose}.
 
-p To accept or decline this request, #{link_to 'click here', mentoring_url}.
+  p To accept or decline this request, #{link_to 'click here', mentoring_url}.
 
-p If the above link does not work for you, please copy and paste the following into your browser's address bar:
+  p If the above link does not work for you, please copy and paste the following into your browser's address bar:
 
-pre #{mentoring_url}
-
-p Cheers,
-p Team Startup Village
+  pre #{mentoring_url}

@@ -1,4 +1,2 @@
-p #{@startup.name} has filled out & submitted the detailed web form. Please have a #{link_to "look", admin_startup_url(@startup)} & approve.
-
-p - Team SV App
-
+= content_for :body
+  p #{@startup.name} has filled out & submitted the detailed web form. Please have a #{link_to "look", admin_startup_url(@startup)} & approve.

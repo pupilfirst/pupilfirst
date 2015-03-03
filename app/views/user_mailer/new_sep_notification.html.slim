@@ -2,3 +2,8 @@ p Hey,
 
 p To review & approve new applicant #{link_to "click here", admin_student_entrepreneur_policy_url(@user.student_entrepreneur_policy)}
 
+= content_for :salutation
+  | Hey,
+
+= content_for :body
+  p To review & approve new applicant #{link_to "click here", admin_student_entrepreneur_policy_url(@user.student_entrepreneur_policy)}

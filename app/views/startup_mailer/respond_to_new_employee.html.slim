@@ -1,7 +1,8 @@
-- link = link_to("clicking here", confirm_employee_startup_url(@startup, token: @new_employee.startup_verifier_token))
+= content_for :heading
+  | = link_to("clicking here", confirm_employee_startup_url(@startup, token: @new_employee.startup_verifier_token))
 
-p Hi -founder_full_name-,
+= content_for :salutation
+  | Hi -founder_full_name-,
 
-p #{@new_employee.fullname} wants to be approved as #{@new_employee.title} at #{@startup.name or "your startup"}. Please approve or reject by #{link}.
-
-p - Team SV App
+= content_for :body
+  p #{@new_employee.fullname} wants to be approved as #{@new_employee.title} at #{@startup.name or "your startup"}. Please approve or reject by #{link}.

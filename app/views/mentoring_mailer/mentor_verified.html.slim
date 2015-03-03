@@ -1,5 +1,5 @@
-p Hi #{@mentor.fullname}!
-p Welcome abroad! Your mentor account has been verified. Please log-in to svlabs.in to connect with aspiring startups.
+= content_for :salutation
+  | Hi #{@mentor.fullname}!
 
-p Cheers,
-p Team Startup Village
+= content_for :body
+  p Welcome abroad! Your mentor account has been verified. Please log-in to svlabs.in to connect with aspiring startups.

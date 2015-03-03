@@ -1,18 +1,14 @@
-p Congratulations! You have been invited to join #{@current_user.fullname}'s startup as a co-founder.
+= content_for :heading
+  | Congratulations! You have been invited to join #{@current_user.fullname}'s startup as a co-founder.
 
-p
+= content_for :body
+  p
   | Please download the Startup Village mobile application (
   a href="https://play.google.com/store/apps/details?id=in.svlabs.android" Android
   | ,
   a href="https://itunes.apple.com/in/app/startup-village-enabling-entrepreneurship/id804638121"  iOS
   | ), and sign up as a user using this email id to either accept or reject this request.
 
-p Please contact #{mail_to @current_user.email, @current_user.fullname} directly for any kind of clarifications.
+  p Please contact #{mail_to @current_user.email, @current_user.fullname} directly for any kind of clarifications.
 
-p Good luck, and have fun!
-
-p Team Startup Village.
-
-p #{link_to 'svlabs.in', 'http://www.startupvillage.in'}
-
-
+  p Good luck, and have fun!

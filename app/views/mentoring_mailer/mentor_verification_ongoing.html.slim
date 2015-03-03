@@ -1,5 +1,5 @@
-p Hi #{@current_user.fullname}!
-p The Startup Village team is going through your profile. We will let you know as soon as your profile has been approved for mentorship.
+= content_for :salutation
+  | Hi #{@current_user.fullname}!
 
-p Cheers,
-p Team Startup Village
+= content_for :body
+  p The Startup Village team is going through your profile. We will let you know as soon as your profile has been approved for mentorship.

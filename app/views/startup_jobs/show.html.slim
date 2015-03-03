@@ -2,39 +2,31 @@
   h3 #{@startup_job.title} at #{link_to @startup_job.startup.name, startup_path(@startup)}
   - if @startup_job.contact_name.present?
     p posted #{@startup_job.created_at.strftime('%d/%m/%Y')} by #{@startup_job.contact_name}
-.col-md-6
+.col-md-5
   p
-    strong
-        ' Job details
-    - if @startup_job.description.present?
-      .justify-description
-        | #{@startup_job.description}
-    - else
-      - if (@startup_job.skills.empty? && @startup_job.experience.empty? && @startup_job.equity_max.nil?)
-        p  Job details are not provided.Please contact the company for more details
-    br
-    - if @startup_job.skills.present?
+    strong Description
+
+  p
+    = value_or_not_available @startup_job.description
+
+  - if @startup_job.skills.present?
+    p
       strong
         ' Skills Required:
       | #{@startup_job.skills}
-      br
-    - if @startup_job.experience.present?
+
+  - if @startup_job.experience.present?
+    p
       strong
         ' Experience:
       | #{@startup_job.experience}
-      br
-    - if @startup_job.equity_max.present?
+
+  - if @startup_job.equity_min.present?
+    p
       strong
-        ' Equity range:
-      ' #{ @startup_job.equity_min }% &mdash; #{ @startup_job.equity_max }%
-      - if (@startup_job.equity_vest.present? && @startup_job.equity_cliff.present?)
-        | (#{ @startup_job.equity_vest } year vest and  #{ @startup_job.equity_cliff } year cliff)
-    - elsif @startup_job.equity_min.present?
-      strong
-        'Equity:
-      ' #{ @startup_job.equity_min }%
-      - if (@startup_job.equity_vest.present? && @startup_job.equity_cliff.present?)
-        | (#{ @startup_job.equity_vest } year vest and  #{ @startup_job.equity_cliff } year cliff)
+        ' Equity offered:
+
+      = equity_html @startup_job
 
 .col-md-4
   .list-group
@@ -55,15 +47,19 @@
         strong
           ' Contact name:
         | #{@startup_job.contact_name}
-    - if @startup_job.contact_number
+    - if @startup_job.contact_email.present?
       p.list-group-item
-        span class= 'glyphicon glyphicon-earphone'
+        span class= 'glyphicon glyphicon-envelope'
+        |  #{mail_to @startup_job.contact_email}
+    - if @startup_job.contact_number.present?
+      p.list-group-item
+        span class= 'glyphicon glyphicon-phone'
         |  #{@startup_job.contact_number}
     p.list-group-item
       span class= 'glyphicon glyphicon-map-marker'
       |  #{@startup_job.location}
 
-.col-md-2
+.col-md-3
   p
     a href="http://www.facebook.com/sharer.php?u=#{ request.original_url }"
       i class="fa fa-fw fa-facebook"

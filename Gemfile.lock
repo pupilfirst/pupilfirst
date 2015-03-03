@@ -387,6 +387,9 @@ GEM
     paper_trail (3.0.6)
       activerecord (>= 3.0, < 5.0)
       activesupport (>= 3.0, < 5.0)
+    passenger (5.0.0.rc2)
+      rack
+      rake (>= 0.8.1)
     pdf-core (0.4.0)
     pg (0.17.1)
     phantomjs (1.9.8.0)
@@ -407,12 +410,9 @@ GEM
       slop (~> 3.4)
     pry-rails (0.3.2)
       pry (>= 0.9.10)
-    puma (2.11.1)
-      rack (>= 1.1, < 2.0)
     rack (1.6.0)
     rack-test (0.6.3)
       rack (>= 1.0)
-    rack-timeout (0.2.0)
     rails (4.2.0)
       actionmailer (= 4.2.0)
       actionpack (= 4.2.0)
@@ -621,13 +621,12 @@ DEPENDENCIES
   nokogiri
   omniauth (~> 1.2.1)
   paper_trail
+  passenger (= 5.0.0.rc2)
   pg
   phony_rails
   prawn
   prawn-table
   pry-rails
-  puma
-  rack-timeout
   rails (= 4.2.0)
   rails_12factor
   rb-fchange

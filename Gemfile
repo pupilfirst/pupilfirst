@@ -63,8 +63,7 @@ gem 'social-share-button'
 
 gem 'apipie-rails' # API documentation, served straight from the app.
 
-gem 'puma' # Let's use Puma webserver. https://devcenter.heroku.com/changelog-items/594
-gem 'rack-timeout' # Puma won't timeout, so we need this.
+gem 'passenger', '= 5.0.0.rc2' # Let's try using Passenger (Raptor) instead of Puma.
 
 gem 'delayed_job_active_record' # Delayed Job to manage jobs. Let's migrate away from SuckerPunch.
 

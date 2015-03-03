@@ -4,10 +4,10 @@ body {
 }
 
 table {
-  border-spacing: 0px;
+  border-spacing: 0;
 
   td {
-    padding: 0px;
+    padding: 0;
   }
 }
 
@@ -27,7 +27,7 @@ table {
     width: 100%;
 
     td {
-      padding: 15px;
+      padding: 15px 15px 0 15px;
     }
   }
 

@@ -9,6 +9,11 @@ class StartupJob < ActiveRecord::Base
   validates_presence_of :equity_min, if: :equity_max
   validates_presence_of :equity_min, :equity_vest, if: :equity_cliff
   validates_presence_of :equity_min, :equity_cliff, if: :equity_vest
+  validates_numericality_of :equity_min, greater_than_or_equal_to: 0, allow_nil: true
+  validates_numericality_of :equity_max, greater_than_or_equal_to: 0, allow_nil: true
+  validates_numericality_of :equity_vest, greater_than_or_equal_to: 0, allow_nil: true
+  validates_numericality_of :equity_cliff, greater_than_or_equal_to: 0, allow_nil: true
+
   validate :equity_min_less_than_max
 
   def equity_min_less_than_max
@@ -27,17 +32,6 @@ class StartupJob < ActiveRecord::Base
       if self.equity_vest < self.equity_cliff
         errors.add :equity_vest, 'must be greater than equity cliff'
         errors.add :equity_cliff, 'must be less than equity vest'
-      end
-    end
-  end
-
-  validate :salary_min_less_than_max
-
-  def salary_min_less_than_max
-    if self.salary_max && self.salary_min
-      if self.salary_min >= self.salary_max
-        errors.add :salary_min, 'must be less than maximum salary'
-        errors.add :salary_max, 'must be greater than minimum salary'
       end
     end
   end

@@ -62,7 +62,7 @@ namespace :statistics do
     # @see https://trello.com/c/SzqE6l8U
     Statistic.create!(
       parameter: Statistic::PARAMETER_COUNT_STARTUPS_AGREEMENT_SIGNED,
-      statistic: (849 + Startup.where(incubation_location: Startup::INCUBATION_LOCATION_KOCHI).agreement_signed_filtered.count),
+      statistic: (Startup::LEGACY_STARTUPS_COUNT + Startup.where(incubation_location: Startup::INCUBATION_LOCATION_KOCHI).agreement_signed_filtered.count),
       incubation_location: Startup::INCUBATION_LOCATION_KOCHI
     )
 

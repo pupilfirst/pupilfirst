@@ -1,4 +1,7 @@
 class Startup < ActiveRecord::Base
+  # @see https://trello.com/c/SzqE6l8U
+  LEGACY_STARTUPS_COUNT = 849
+
   REGISTRATION_TYPE_PRIVATE_LIMITED = 'private_limited'
   REGISTRATION_TYPE_PARTNERSHIP = 'partnership'
   REGISTRATION_TYPE_LLP = 'llp' # Limited Liability Partnership

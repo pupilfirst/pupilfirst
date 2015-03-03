@@ -14,6 +14,6 @@ ActiveAdmin.register StartupJob do
     column :expires_on
   end
 
-  permit_params :title, :description, :salary_max, :salary_min, :equity_max, :equity_min, :equity_vest, :equity_cliff,
-    :expires_on, :startup_id, :skills, :experience, :qualification, :contact_number, :contact_name
+  permit_params :title, :description, :equity_max, :equity_min, :equity_vest, :equity_cliff, :expires_on, :startup_id,
+    :skills, :experience, :qualification, :contact_number, :contact_name
 end

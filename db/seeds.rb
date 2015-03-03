@@ -16,8 +16,9 @@ if Rails.env.development?
   )
   super_startup.founders << someone
   super_startup.save!
+
   # Job listed by Super Startup.
-  super_startup_job = super_startup.jobs.create!(title: 'Hacker', location: 'Cochin', salary_min: 10000)
+  super_startup_job = super_startup.jobs.create!(title: 'Hacker', location: 'Cochin', contact_name: 'Some One', contact_number: '9876543210', description: 'This is the job description')
 
   # Startup partnership with User
   startup_partnership = Partnership.new(startup_id: 1, share_percentage: 20, salary: 12000, cash_contribution: 20000)

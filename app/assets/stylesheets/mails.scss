@@ -1,131 +1,51 @@
+body {
+  background-color: #EEEEEE;
+  padding: 15px;
+}
+
+table {
+  border-spacing: 0px;
+
+  td {
+    padding: 0px;
+  }
+}
+
 .mail-table {
-  width: 584px;
-  margin-top: 0;
-  margin-right: auto;
-  margin-bottom: 0;
-  margin-left: auto;
-  max-width: 584px;
-}
+  font-family: sans-serif;
+  background-color: white;
+  width: 100%;
+  max-width: 720px;
 
-.mail-maintable {
-	width: 584px;
-	margin-top: 0;
-	margin-right: auto;
-	margin-bottom: 0;
-	margin-left: auto;
-	max-width: 584px;
-}
+  h1 {
+    font-size: 200%;
+    line-height: 100%;
+  }
 
-.mail-innertable-logo {
-	width: 584px;
-	background-color: #ccc7cb;
-	width:584px;
-	min-width:584px;
-}
+  .mail-logo-table { 
+    width: 100%;
 
-.mail-td-logo {
-	height:32px;
-	padding-top:6px;
-	padding-bottom:6px;
-	padding-left:8px;
-}
+    td {
+      padding: 15px;
+    }
+  }
 
-.mail-sv-link {
-	color:#5fb336;
-	text-decoration:none;
-}
+  .mail-body-table {
+    width: 100%;
+    td {
+     padding: 15px;
+    }
+  }
 
-.mail-sv-logo {
-	width: 148px;
-	height: 32px;
-	outline:none;
-	text-decoration:none;
-	display:block;
-	color:white;
-	border-style:none
-}
+  .mail-footer-table {
+    td {
+      padding: 15px;
+    }
 
-.mail-innertable-instruction {
-	cellpadding:30ppx;
-	background:#fff;
-	border:1px solid #e6e5e3;
-	width:584px;
-	border-top:none;
-	color:#65646a;
-}
-
-.mail-button-instruction {
-	font-size:18px;
-	line-height:24px;
-	margin-top:0;
-	margin-bottom:27px;
-}
-
-.mail-innertable-button {
-	border-collapse:separate;
-	margin-bottom:27px;
-	cellpadding:0px;
-	cellspacing:0px;
-}
-.mail-button-td{
-	color:#ffffff;
-	font-weight:normal;
-	white-space:nowrap;
-	background-repeat:repeat-x;
-	background-color:#4f2959;
-	border-right-width:1px;
-	border-bottom-width:1px;
-	border-top-width:1px;
-	border-left-style:solid;
-	border-bottom-style:solid;
-	border-top-style:solid;
-	border-right-style:solid;
-	border-top-color:#4f2959;
-	border-right-color:#4f2959;
-	border-bottom-color:#4f2959;
-	border-left-color:#4f2959;
-	border-left-width:1px;
-	border-radius:6px;
-	height:41px;
-	bgcolor:#4F2959;
-}
-
-.mail-button-td a {
-	color:white;
-	text-decoration:none;
-	font-size:14px;
-	font-weight:bold;
-	text-align:center;
-	vertical-align:baseline;
-}
-
-.mail-button-td a span {
-	color:white;
-	padding-right:27px;
-	padding-top:10px;
-	padding-bottom:10px;
-	padding-left:27px
-}
-
-.mail-info {
-	font-size:14px;
-	line-height:20px;
-	margin-top:0;
-	margin-bottom:22px;
-}
-
-.mail-svlabs-team {
-	font-size:14px;
-	line-height:20px;
-	margin-top:0;
-	margin-bottom:0;
-}
-
-.mail-footer{
-	width:584px;
-	cellpadding:32px;
-	color:#747778;
-	font-size:11px;
-	line-height:15px;
-	text-align:center;
+    background-color: #EEEEEE;
+    width: 100%;
+    color: #747778;
+    font-size: 11px;
+    text-align: center;
+  }
 }

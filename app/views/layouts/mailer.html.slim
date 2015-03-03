@@ -20,15 +20,12 @@ html
                     h1.mail-heading #{yield :heading}
                     p.mail-salutation #{yield :salutation}
                     = yield :body
-                    p.mail-signature
-                      span.il
-                        ' Startup Village
-                      | team
+                    p.mail-signature Team Startup Village
 
-            table.mail-footer
+            table.mail-footer-table
               tbody
                 tr
                   td
-                    p style="margin:0;padding:0px"
+                    p
                       ' This email has been sent to you by
-                      span.il Startup Village
+                      = link_to 'Startup Village', root_url

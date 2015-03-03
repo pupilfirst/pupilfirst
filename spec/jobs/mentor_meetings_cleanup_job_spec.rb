@@ -1,19 +1,21 @@
 require 'spec_helper'
 
-RSpec.describe MentorMeetingsCleanupJob, :type => :job do
+RSpec.describe MentorMeetingsCleanupJob, type: :job do
+  describe '.perform' do
+    context 'when a meeting request has timed out' do
+      let!(:meeting) { create :mentor_meeting, suggested_meeting_at: 1.minute.ago, status: MentorMeeting::STATUS_REQUESTED }
 
-  before(:each) do
-    Delayed::Worker.delay_jobs = false
-    @meeting = FactoryGirl.create(:mentor_meeting)
-    @id = @meeting.id
-  end
+      it 'expires the meeting' do
+        MentorMeetingsCleanupJob.perform_now
+        meeting.reload
+        expect(meeting.status).to eq(MentorMeeting::STATUS_EXPIRED)
+      end
+    end
 
-  describe "expire" do
-  	it "expires a meeting whose request timed out" do
- 		@meeting.update_attributes(status: MentorMeeting::STATUS_REQUESTED, suggested_meeting_at: 1.minute.ago)
- 		MentorMeetingsCleanupJob.perform_later
-    @meeting = MentorMeeting.find(@id)
- 		expect(@meeting.status).to eq(MentorMeeting::STATUS_EXPIRED)
- 	  end
+    context 'when a meeting request was started last day' do
+      let!(:meeting) { create :mentor_meeting, meeting_at: 1.day.ago, status: MentorMeeting::STATUS_STARTED }
+
+      it 'sets meeting to completed'
+    end
   end
 end

@@ -5,7 +5,9 @@ h1.page-header.margin-top-0
 - if @failed_to_verify_phone_number
   .alert.alert-danger role='alert' The verification code you supplied does not match the code sent to your mobile number. Please check and re-enter the code.
 - elsif @retry_after_some_time
-  .alert.alert-warning role='alert' A Mentor verification code has been sent to your mobile number. Please try after 5 minutes
+  .alert.alert-warning role='alert' A verification code was sent to your mobile number less than 5 minutes ago. Please wait a while before trying to re-send.
+- elsif @resent_verification_code
+  .alert.alert-info role='alert' A new SMS verification code has been sent to your mobile number. Please supply this code to complete the registration process.
 - else
   .alert.alert-info role='alert' An SMS containing a verification code has been sent to your mobile number. Please supply this code to complete the registration process.
 
@@ -14,7 +16,11 @@ h1.page-header.margin-top-0
     label.col-sm-2.control-label for='mentor_phone_verification_code' Verification code
     .col-sm-10
       = text_field_tag 'mentor_phone_verification_code', '', class: 'form-control', required: true, placeholder: ''
-  .col-sm-offset-2.col-sm-2
-    = submit_tag 'Proceed to final step', class: 'btn btn-primary', style: 'margin-top: 10px;'
+  .form-group
+    .col-sm-offset-2.col-sm-10
+      = submit_tag 'Proceed to final step', class: 'btn btn-primary', style: 'margin-top: 10px;'
+
 = form_tag mentoring_resend_url, style: 'margin-top: 10px;', method: :patch
-  =button_tag 'Resend verification code', class: 'btn btn-success', style: 'margin-top: 10px;'
+  .form-group
+    .col-sm-offset-2.col-sm-10
+      = button_tag 'Resend verification code', class: 'btn btn-success', style: 'margin-top: 10px;'

@@ -1,6 +1,4 @@
-class StartupMailer < ActionMailer::Base
-  default from: "SV App <no-reply@svlabs.in>", cc: "outgoing@svlabs.in"
-
+class StartupMailer < ApplicationMailer
   def agreement_expiring_soon(startup, expires_in, renew_within)
     @startup = startup
     @expires_in = expires_in

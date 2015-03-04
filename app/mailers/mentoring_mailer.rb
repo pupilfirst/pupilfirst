@@ -35,34 +35,34 @@ class MentoringMailer < ApplicationMailer
   def meeting_request_cancelled(mentor_meeting,recipient)
     @mentor_meeting = mentor_meeting
     @recipient = recipient
-    mail to:recipient.email, subject: 'Meeting cancelled by ' + @mentor_meeting.guest(recipient).fullname
+    mail to:recipient.email, subject: "Meeting cancelled by #{@mentor_meeting.guest(recipient).fullname}"
   end
 
   def meeting_request_rejected(mentor_meeting,recipient)
     @mentor_meeting = mentor_meeting
     @recipient = recipient
-    mail to:recipient.email, subject: 'Meeting rejected by ' + @mentor_meeting.guest(recipient).fullname
+    mail to:recipient.email, subject: "Meeting rejected by #{@mentor_meeting.guest(recipient).fullname}"
   end
 
   def meeting_request_accepted(mentor_meeting,recipient)
     @mentor_meeting = mentor_meeting
     @recipient = recipient
-    mail to:recipient.email, subject: 'Meeting accepted by ' + @mentor_meeting.guest(recipient).fullname
+    mail to:recipient.email, subject: "Meeting accepted by #{@mentor_meeting.guest(recipient).fullname}"
   end
 
   def meeting_request_rescheduled(mentor_meeting)
     @mentor_meeting = mentor_meeting
-    mail to:@mentor_meeting.user.email, subject: 'Meeting request rescheduled by ' + @mentor_meeting.mentor.user.fullname
+    mail to:@mentor_meeting.user.email, subject: "Meeting request rescheduled by #{@mentor_meeting.mentor.user.fullname}"
   end
 
   def meeting_today_user(mentor_meeting)
     @mentor_meeting = mentor_meeting
-    mail to:@mentor_meeting.user.email, subject: 'Reminder: Meeting with' + @mentor_meeting.mentor.user.fullname
+    mail to:@mentor_meeting.user.email, subject: "Reminder: Meeting with #{@mentor_meeting.mentor.user.fullname}"
   end
 
   def meeting_today_mentor(mentor_meeting)
     @mentor_meeting = mentor_meeting
-    mail to:@mentor_meeting.mentor.user.email, subject: 'Reminder: Meeting with #{@mentor_meeting.user.fullname}@#{@mentor_meeting.user.startup.name}'
+    mail to:@mentor_meeting.mentor.user.email, subject: "Reminder: Meeting with #{@mentor_meeting.user.fullname}@#{@mentor_meeting.user.startup.name}"
   end
 
   def meeting_request_to_mentor(mentor_meeting)

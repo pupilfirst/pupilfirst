@@ -1,6 +1,4 @@
-class UserMailer < ActionMailer::Base
-  default from: "SV App <no-reply@svlabs.in>", cc: "outgoing@svlabs.in"
-
+class UserMailer < ApplicationMailer
   def reminder_to_complete_founder_profile(user)
     @user = user
     mail to: @user.email, subject: 'Reminder to fill up founder profile'

@@ -1,7 +1,4 @@
 class MentoringMailer < ApplicationMailer
-
-  default from: "SV App <no-reply@svlabs.in>", cc: "outgoing@svlabs.in"
-
   def mentor_verification_ongoing(current_user)
     @current_user = current_user
     mail to:@current_user.email, subject: 'Mentor profile being verified'

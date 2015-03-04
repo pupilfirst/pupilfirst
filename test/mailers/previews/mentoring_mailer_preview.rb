@@ -25,7 +25,31 @@ class MentoringMailerPreview < ActionMailer::Preview
   end
 
   def meeting_request_cancelled
-    MentorMeeting.meeting_request_cancelled(MentorMeeting.first, User.first)
+    MentoringMailer.meeting_request_cancelled(MentorMeeting.first, User.first)
+  end
+
+  def meeting_request_rejected
+    MentoringMailer.meeting_request_rejected(MentorMeeting.first, User.first)
+  end
+
+  def meeting_request_accepted
+    MentoringMailer.meeting_request_accepted(MentorMeeting.first, User.first)  
+  end
+
+  def meeting_request_rescheduled
+    MentoringMailer.meeting_request_rescheduled(MentorMeeting.first)    
+  end
+
+  def meeting_today_user
+    MentoringMailer.meeting_today_user(MentorMeeting.first)
+  end
+
+  def meeting_today_mentor
+    MentoringMailer.meeting_today_mentor(MentorMeeting.first)
+  end
+
+  def meeting_request_to_mentor
+    MentoringMailer.meeting_request_to_mentor(MentorMeeting.first)
   end
 
 end

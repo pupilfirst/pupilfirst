@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Connection do
   before do
     # Let's disable User notifications for specs.
-    allow(UserPushNotifyJob).to receive_message_chain(:new, :async, :perform)
+    allow(UserPushNotifyJob).to receive(:perform)
   end
 
   context 'when a SV to User connection is created' do

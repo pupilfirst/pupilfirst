@@ -1,7 +1,6 @@
 require 'open-uri'
 
-class SendSepJob
-  include SuckerPunch::Job
+class SendSepJob < ActiveJob::Base
   include UsersHelper
 
   def perform(sep_id)

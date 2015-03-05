@@ -2,7 +2,7 @@
   | Your account has been locked.
 
 = content_for :salutation
-  | Hello <%= @resource.email %>!
+  | Hello #{@resource.fullname}!
 
 = content_for :body
   p Your account has been locked due to an excessive number of unsuccessful sign in attempts.

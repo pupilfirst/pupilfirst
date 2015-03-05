@@ -32,5 +32,4 @@ class UserMailer < ApplicationMailer
     @user = user
     mail(to: user.email, subject: "Your password has been changed")
   end
-
 end

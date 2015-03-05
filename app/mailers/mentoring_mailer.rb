@@ -66,5 +66,4 @@ class MentoringMailer < ApplicationMailer
     @mentor_meeting = mentor_meeting
     mail to: @mentor_meeting.mentor.user.email, subject: 'Request for mentoring'
   end
-
 end

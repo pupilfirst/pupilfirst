@@ -1,12 +1,15 @@
-p Hi #{@mentor_meeting.user.fullname} !
+= content_for :heading
+  | Reminder: Meeting Reschedule pending confirmation
 
-p You are yet to accept the rescheduling of your meeting with #{link_to @mentor_meeting.mentor.user.fullname, @mentor_meeting.mentor.user}. The revised timing suggested by the mentor was #{@mentor_meeting.suggested_meeting_at.to_date} at #{@mentor_meeting.suggested_meeting_at.strftime("%l:%M %P")}.
+= content_for :salutation
+  | Hi #{@mentor_meeting.user.fullname} !
 
-p To accept or decline, #{link_to 'click here', mentoring_url}.
+= content_for :body
+  p You are yet to accept the rescheduling of your meeting with #{link_to @mentor_meeting.mentor.user.fullname, @mentor_meeting.mentor.user}. The revised timing suggested by the mentor was #{@mentor_meeting.suggested_meeting_at.to_date} at #{@mentor_meeting.suggested_meeting_at.strftime("%l:%M %P")}.
 
-p If the above link does not work for you, please copy and paste the following into your browser's address bar:
+  p To accept or decline, #{link_to 'click here', mentoring_url}.
 
-pre #{mentoring_url}
+  p If the above link does not work for you, please copy and paste the following into your browser's address bar:
 
-p Cheers,
-p Team Startup Village
+  pre #{mentoring_url}
+

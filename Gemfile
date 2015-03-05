@@ -60,7 +60,8 @@ gem 'momentjs-rails', '>= 2.8.1',  :github => 'derekprior/momentjs-rails'
 gem 'wysihtml-rails', :git => 'https://github.com/Voog/wysihtml-rails.git'
 gem 'social-share-button'
 
-gem 'apipie-rails' # API documentation, served straight from the app.
+gem 'apipie-rails'
+gem 'roadie-rails'
 
 gem 'passenger', '= 5.0.0.rc2' # Let's try using Passenger (Raptor) instead of Puma.
 

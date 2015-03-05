@@ -1,6 +1,10 @@
-p Hi,
+= content_for :heading
+  | Reminder to renew your incubation agreement
 
-p Your incubation agreement with Startup Village expires in #{@expires_in} days. To continue enjoying the services
-  offered by Startup Village, please make sure that you renew your incubation agreement within #{@renew_within} days.
+= content_for :salutation
+  | Hi,
 
-p Team Startup Village
+= content_for :body
+  p
+    ' Your incubation agreement with Startup Village expires in #{@expires_in} days. To continue enjoying the services
+    | offered by Startup Village, please make sure that you renew your incubation agreement within #{@renew_within} days.

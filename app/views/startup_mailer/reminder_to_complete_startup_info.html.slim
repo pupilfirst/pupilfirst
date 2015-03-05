@@ -1,9 +1,12 @@
-p Hi,
+= content_for :heading
+  | Reminder to complete incubation application to Startup Village.
 
-p Thank you for showing interest in Startup Village. To complete your incubation process, please fill in all necessary
+= content_for :salutation
+  | Hi,
+
+= content_for :body
+  p Thank you for showing interest in Startup Village. To complete your incubation process, please fill in all necessary
   details about your startup using the app and submit the incubation request. Make sure you complete this at the
   earliest.
 
-p Feel free to reach out to us at #{mail_to 'support@svlabs.in'} in case of any queries related to the app.
-
-p Team Startup Village.
+	p Feel free to reach out to us at #{mail_to 'support@svlabs.in'} in case of any queries related to the app.

@@ -2,7 +2,7 @@ Svapp::Application.routes.draw do
   scope '/api' do
     api_version(:module => "V1", :header => {:name => "Accept", :value => "application/vnd.svapp.v1"}, :defaults => {:format => "json"}, :default => true) do
       resources :users do
-        resource :student_entrepreneur_policy
+        # resource :student_entrepreneur_policy
 
         member do
           post 'phone_number', action: :generate_phone_number_verification_code

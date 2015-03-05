@@ -1,0 +1,52 @@
+body {
+  background-color: #EEEEEE;
+  padding: 15px;
+}
+
+table {
+  border-spacing: 0;
+
+  td {
+    padding: 0;
+  }
+}
+
+.mail-table {
+  font-size: 13px;
+  font-family: sans-serif;
+  background-color: white;
+  width: 100%;
+  max-width: 720px;
+
+  h1 {
+    font-size: 170%;
+    line-height: 100%;
+  }
+
+  .mail-logo-table { 
+    width: 100%;
+
+    td {
+      padding: 15px 15px 0 15px;
+    }
+  }
+
+  .mail-body-table {
+    width: 100%;
+    td {
+     padding: 15px;
+    }
+  }
+
+  .mail-footer-table {
+    td {
+      padding: 15px;
+    }
+
+    background-color: #EEEEEE;
+    width: 100%;
+    color: #747778;
+    font-size: 11px;
+    text-align: center;
+  }
+}

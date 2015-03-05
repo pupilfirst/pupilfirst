@@ -4,52 +4,45 @@ class StartupMailer < ApplicationMailer
     @expires_in = expires_in
     @renew_within = renew_within
 
-    send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
+    send_to = @startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
     mail(to: send_to, subject: 'Reminder to renew your incubation agreement with Startup Village')
   end
 
   def partnership_application(startup, current_user)
     @startup = startup
     @current_user = current_user
-    send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" } + ["incoming <incoming@svlabs.in>"]
+    send_to = @startup.founders.map { |e| "#{e.fullname} <#{e.email}>" } + ["incoming <incoming@svlabs.in>"]
     mail(to: [secretary_contact] + send_to, subject: "Request for registering a Partnership")
   end
 
   def startup_approved(startup)
     @startup = startup
-    send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
+    send_to = @startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
     mail(to: send_to, subject: 'You are now part of Startup Village!')
   end
 
   def startup_rejected(startup)
     @startup = startup
-    send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
+    send_to = @startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
     mail(to: send_to, subject: 'Incubation Request update.')
   end
 
-  def incorporation_approved(startup)
-    @startup = startup
-    send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
-    substitute '-founder_full_name-', startup.founders.map(&:fullname)
-    mail(to: send_to, subject: "Your startup's has been approved")
-  end
-
-  def bank_approved(startup)
-    @startup = startup
-    send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
-    substitute '-founder_full_name-', startup.founders.map(&:fullname)
-    mail(to: send_to, subject: "Your startup's has been approved")
-  end
+  # def bank_approved(startup)
+  #   @startup = startup
+  #   send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
+  #   substitute '-founder_full_name-', startup.founders.map(&:fullname)
+  #   mail(to: send_to, subject: "Your startup's has been approved")
+  # end
 
   def reminder_to_complete_startup_profile(startup)
     @startup = startup
-    send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
+    send_to = @startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
     mail(to: send_to, subject: 'Reminder to complete your startup profile')
   end
 
   def reminder_to_complete_startup_info(startup)
     @startup = startup
-    send_to = startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
+    send_to = @startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
     mail(to: send_to, subject: 'Reminder to complete incubation application to Startup Village.')
   end
 

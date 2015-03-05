@@ -399,5 +399,19 @@ class Startup < ActiveRecord::Base
     self.founders + User.non_founders 
   end
 
+  # E-mail address of person to contact in case startup is rejected.
+  def rejection_contact
+    case incubation_location
+      when INCUBATION_LOCATION_VISAKHAPATNAM
+        'vasu@startupvillage.in'
+      when INCUBATION_LOCATION_KOCHI
+        'kiran@startupvillage.in'
+      when INCUBATION_LOCATION_KOZHIKODE
+        'kiran@startupvillage.in'
+      else
+        'kiran@startupvillage.in'
+    end
+  end
+
   # TODO: Remove incorporation_status boolean field.
 end

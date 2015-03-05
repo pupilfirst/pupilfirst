@@ -1,6 +1,15 @@
-p Hi #{@mentor_meeting.mentor.user.fullname} !
+= content_for :heading
+  | Reminder: Feedback on mentoring session
 
-p We are still waiting to hear your feedback on the meeting with #{@mentor_meeting.user.fullname} (on #{@mentor_meeting.meeting_at.to_date} at #{@mentor_meeting.meeting_at.strftime("%l:%M %P")}). Kindly visit your #{link_to 'meetings page', mentor_meetings_feedback_url(@mentor_meeting)} to record your feedback.
+= content_for :salutation
+  | Hi #{@mentor_meeting.mentor.user.fullname}!
 
-p Cheers,
-p Team Startup Village
+= content_for :body
+  p
+    ' We are still waiting to hear your feedback on the meeting with #{@mentor_meeting.user.fullname} 
+    ' (on #{@mentor_meeting.meeting_at.to_date} at #{@mentor_meeting.meeting_at.strftime("%l:%M %P")}). It would be a
+    | great help to us if you could #{link_to 'record your feedback', mentor_meetings_feedback_url(@mentor_meeting)}.
+
+  p If the above link does not work for you, please copy and paste the following into your browser's address bar:
+
+  pre #{mentor_meetings_feedback_url(@mentor_meeting)}

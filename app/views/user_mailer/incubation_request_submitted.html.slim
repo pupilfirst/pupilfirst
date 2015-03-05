@@ -1,24 +1,27 @@
-p Hi,
+= content_for :heading
+  | You have successfully submitted your request for incubation at Startup Village.
 
-p
+= content_for :salutation
+  | Hi,
+
+= content_for :body
+  p
   ' You are one step closer to getting incubated at Startup Village. Your SV ID is #{@current_user.email} . If you
   ' haven’t attended an
   em Open House
   '  session already, please come down to Startup Village for one. Open House takes place every Saturday at 10.30 AM.
   | You can also check the Events tab on the app for the schedule.
 
-p
-  | We have also opened up an online profile (#{link_to @current_user.startup.name, startup_url(@current_user.startup)})
-  ', where you can fill in additional details concerning your startup. You can login using your SV ID. Make sure you
-  | complete this at the earliest as these details will also be considered while processing your incubation request.
+  p
+    | We have also opened up an online profile (#{link_to @current_user.startup.name, startup_url(@current_user.startup)})
+    ', where you can fill in additional details concerning your startup. You can login using your SV ID. Make sure you
+    | complete this at the earliest as these details will also be considered while processing your incubation request.
 
-p If you're unable to click on the link to your startup profile (above), then please copy and paste the following link
-  into your browser's address bar:
+  p If you're unable to click on the link to your startup profile (above), then please copy and paste the following link
+    into your browser's address bar:
 
-pre = startup_url(@current_user.startup)
+  pre = startup_url(@current_user.startup)
 
-p Also note that, the Startup Village team takes a call on your requests on Wednesdays and Fridays.
+  p Also note that, the Startup Village team takes a call on your requests on Wednesdays and Fridays.
 
-p Reach out to us at #{mail_to 'support@svlabs.in'} in case of any queries.
-
-p Team Startup Village.
+  p Reach out to us at #{mail_to 'support@svlabs.in'} in case of any queries.

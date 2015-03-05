@@ -1,0 +1,12 @@
+= content_for :heading
+  | Event posted by you has been approved.
+
+= content_for :salutation
+  | Hi #{@event.posters_name},
+
+= content_for :body
+  p Your Event with ID ##{@event.id} has been approved.
+
+  p
+    ' To make any changes to the event, please drop in a mail to #{mail_to "daniel@startupvillage.in"}. Please remember
+    | to quote your event id in all further communication.

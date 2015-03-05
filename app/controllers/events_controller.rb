@@ -1,7 +1,6 @@
 class EventsController < ApplicationController
-
   def index
-    @events =  Event.approved_events.where('start_at <= ? and start_at > ?', 30.days.from_now, Date.today)
+    @events = Event.approved_events.where('start_at <= ? and start_at > ?', 30.days.from_now, Date.today)
   end
 
   def new

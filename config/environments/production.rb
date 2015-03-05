@@ -87,6 +87,9 @@ Rails.application.configure do
 
   # Let's use delayed job in production to process background jobs.
   config.active_job.queue_adapter = :delayed_job
+
+  # Roadie asset URL.
+  config.roadie.url_options = { host: 'www.svlabs.in', scheme: 'https' }
 end
 
 ActionMailer::Base.smtp_settings = {

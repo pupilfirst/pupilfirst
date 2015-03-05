@@ -84,6 +84,9 @@ Rails.application.configure do
 
   # In production and staging, let's have carrierwave store using fog.
   config.carrier_wave_storage = :fog
+
+  # Roadie asset URL.
+  config.roadie.url_options = { host: 'staging.svlabs.in', scheme: 'https' }
 end
 
 ActionMailer::Base.smtp_settings = {

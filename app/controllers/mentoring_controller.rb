@@ -130,6 +130,8 @@ class MentoringController < ApplicationController
     )
   end
 
+  #  TODO refactor the code
+
   def redirect_registration_steps(step)
     if current_user.mentor.present?
       if current_user.mentor.skills.present?

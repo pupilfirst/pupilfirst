@@ -71,13 +71,7 @@ ActiveAdmin.register Startup do
         startup.founders.each do |user|
           UserPushNotifyJob.new.async.perform(user.id, :startup_rejection, push_message)
         end
-      when :incorporation
-        StartupMailer.incorporation_approved(startup).deliver_later
-      when :bank
-        StartupMailer.bank_approved(startup).deliver_later
-      when :sep
     end
-
     redirect_to action: :show
   end
 

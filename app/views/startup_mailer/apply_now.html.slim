@@ -1,3 +1,10 @@
-p #{@startup.founders.first.fullname} has joined the SV community. Please contact on #{@startup.phone} to guide the applicant through the incubation process.
+= content_for :heading
+  | Incubation Application
 
-p - Team SV App
+= content_for :salutation
+  | Hi,
+
+= content_for :body
+  p
+    ' #{@startup.founders.first.fullname} has joined the SV community. Please contact founder at #{@startup.phone} to
+    | guide the applicant through the incubation process.

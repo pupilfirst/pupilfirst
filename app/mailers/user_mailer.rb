@@ -1,6 +1,4 @@
-class UserMailer < ActionMailer::Base
-  default from: "SV App <no-reply@svlabs.in>", cc: "outgoing@svlabs.in"
-
+class UserMailer < ApplicationMailer
   def reminder_to_complete_founder_profile(user)
     @user = user
     mail to: @user.email, subject: 'Reminder to fill up founder profile'
@@ -13,19 +11,14 @@ class UserMailer < ActionMailer::Base
     mail to: @partnership.user.email, subject: 'Request to form partnership'
   end
 
-  def cofounder_request(cofounder, current_user)
+  def cofounder_request(cofounder_mail, current_user)
     @current_user = current_user
-    mail(to: cofounder, subject: 'SVApp: You have been invited to join a Startup!')
+    mail(to: cofounder_mail, subject: 'SVApp: You have been invited to join a Startup!')
   end
 
   def incubation_request_submitted(current_user)
     @current_user = current_user
     mail(to: current_user.email, subject: 'You have successfully submitted your request for incubation at Startup Village.')
-  end
-
-  def inform_sep_submition(user)
-    @user = user
-    mail(to: student_contact, subject: "sep submited")
   end
 
   def request_to_be_a_founder(user, startup, current_user)
@@ -35,38 +28,9 @@ class UserMailer < ActionMailer::Base
     mail(to: user.email, subject: "Founder at #{@startup.name}? Please approve")
   end
 
-  def inform_student_contact
-
-  end
-
-  def inform_student
-
-  end
-
-  def new_sep_notification(user)
-    @user = user
-    mail(to: student_contact, cc: "incoming@svlabs.in", subject: "New SEP applicant.")
-  end
-
-  def send_sep_certificate(user, file_path)
-    attachments['sep_certificate.pdf'] = File.read(file_path)
-    mail(to: user.email, body: "PFA", subject: "SEP from Startup Village")
-  end
-
-  # def accepted_as_employee(user, startup)
-  #   @startup = startup
-  #   @user = user
-  #   mail(to: user.email, subject: "You're approved at #{@startup.name}")
-  # end
-
   def password_changed(user)
     @user = user
     mail(to: user.email, subject: "Your password has been changed")
-  end
-
-private
-  def student_contact
-    I18n.t("startup_village.student_contact.#{Rails.env}") or 'info@svlabs.in'
   end
 
 end

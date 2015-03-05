@@ -32,7 +32,6 @@ gem 'sass-rails', '~> 5.0'
 gem 'sendgrid_smtpapi'
 gem 'sentry-raven'
 gem 'slim'
-gem 'sucker_punch'
 # gem 'turbolinks' # Disabled, because it is a pain in the ass.
 gem 'uglifier'
 gem 'urbanairship'
@@ -67,7 +66,7 @@ gem 'puma' # Let's use Puma webserver. https://devcenter.heroku.com/changelog-it
 gem 'rack-timeout' # Puma won't timeout, so we need this.
 
 gem 'delayed_job_active_record' # Delayed Job to manage jobs. Let's migrate away from SuckerPunch.
-
+gem 'sucker_punch'
 group :development do
   gem "letter_opener"
   gem 'seed-fu', github: 'mbleigh/seed-fu' # check and remove

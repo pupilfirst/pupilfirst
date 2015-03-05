@@ -3,7 +3,7 @@ ActiveAdmin.register StudentEntrepreneurPolicy do
 
   member_action :sep_email, method: :post do
     sep = StudentEntrepreneurPolicy.find params[:id]
-    SendSepJob.new.async.perform(sep.id)
+    Delayed::Job.enqueue SendSepJob.new(sep.id)
     sep.update_attributes!({status: true})
     redirect_to action: :show
   end

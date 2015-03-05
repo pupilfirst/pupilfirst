@@ -1,8 +1,6 @@
+Class PushNotifyJob < ActiveJob::Base
 
-class PushNotifyJob
-  include SuckerPunch::Job
-
-  def perform(klass, id)
+  def perform
     ActiveRecord::Base.connection_pool.with_connection do
       klass_const = klass.capitalize.constantize
       instance = klass_const.find(id)

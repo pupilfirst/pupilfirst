@@ -5,5 +5,12 @@
   | Hi,
 
 = content_for :body
-  p #{@current_user.fullname} has listed you as a founder at #{@startup.name}. To accept click #{link_to "here", confirm_startup_link_startup_url(id: @startup.id, token: @user.startup_verifier_token)}.
-  ' We are available at #{link_to "here", confirm_startup_link_startup_url(id: @startup.id, token: @user.startup_verifier_token)} on #{ link_to "Android", "https://play.google.com/store/apps/details?id=in.svlabs.android"} & #{ link_to "iOS","https://itunes.apple.com/in/app/startup-village-app/id804638121?mt=8"}.
+  p
+    ' #{@current_user.fullname} has listed you as a founder at #{link_to @startup.name, @startup}. To accept click
+    | #{link_to "here", confirm_startup_link_startup_url(id: @startup.id, token: @user.startup_verifier_token)}.
+
+  p
+    ' We are available at
+    ' #{link_to "here", confirm_startup_link_startup_url(id: @startup.id, token: @user.startup_verifier_token)} on
+    ' #{ link_to "Android", "https://play.google.com/store/apps/details?id=in.svlabs.android"}
+    | &amp; #{ link_to "iOS","https://itunes.apple.com/in/app/startup-village-app/id804638121?mt=8"}.

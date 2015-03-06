@@ -261,7 +261,9 @@ ActiveAdmin.register Startup do
       row :startup_before
       row :help_from_sv
       row :product_name
-      row :product_description
+      row :product_description do |startup|
+        simple_format startup.product_description
+      end
 
       row :startup_status do |startup|
         if startup.pending?

@@ -288,7 +288,7 @@ ActiveRecord::Schema.define(version: 20150306114912) do
 
   create_table "startup_jobs", force: :cascade do |t|
     t.integer  "startup_id"
-    t.string   "title",          limit: 255
+    t.string   "title"
     t.text     "description"
     t.integer  "equity_max"
     t.integer  "equity_min"
@@ -327,7 +327,6 @@ ActiveRecord::Schema.define(version: 20150306114912) do
     t.string   "website"
     t.text     "about"
     t.string   "email"
-    t.string   "phone"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "facebook_link"

@@ -52,6 +52,21 @@ ActiveAdmin.register Startup do
     column :website
   end
 
+  csv do
+    column :name
+    column :pitch
+    column :email
+    column :incorporation_status
+    column :bank_status
+    column :company_names
+    column :registration_type
+    column :approval_status
+    column :website
+    column :about
+    column :district
+    column(:founders) { |startup| startup.founders.pluck(:fullname).join(",").gsub(",", ":") }
+  end
+
   member_action :custom_update, method: :put do
     startup = Startup.find params[:id]
     startup.update_attributes!(permitted_params[:startup])

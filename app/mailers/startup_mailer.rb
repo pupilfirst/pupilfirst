@@ -8,13 +8,6 @@ class StartupMailer < ApplicationMailer
     mail(to: send_to, subject: 'Reminder to renew your incubation agreement with Startup Village')
   end
 
-  def partnership_application(startup, current_user)
-    @startup = startup
-    @current_user = current_user
-    send_to = @startup.founders.map { |e| "#{e.fullname} <#{e.email}>" } + ["incoming <incoming@svlabs.in>"]
-    mail(to: [secretary_contact] + send_to, subject: "Request for registering a Partnership")
-  end
-
   def startup_approved(startup)
     @startup = startup
     send_to = @startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }

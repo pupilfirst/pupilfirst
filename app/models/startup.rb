@@ -381,7 +381,7 @@ class Startup < ActiveRecord::Base
 
   def agreement_live?
     agreement_ends_at.present? && agreement_ends_at > Time.now
-  end  
+  end
 
   def is_agreement_live?
     try(:agreement_ends_at).to_i > Time.now.to_i
@@ -396,7 +396,7 @@ class Startup < ActiveRecord::Base
   end
 
   def possible_founders
-    self.founders + User.non_founders 
+    self.founders + User.non_founders
   end
 
   # E-mail address of person to contact in case startup is rejected.

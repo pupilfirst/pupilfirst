@@ -72,7 +72,7 @@ class V1::UsersController < V1::BaseController
     render nothing: true
   end
 
-  # PUT /api/users/self/accept_invitation
+  # PUT /api/users/self/cofounder_invitation
   def accept_cofounder_invitation
     raise Exceptions::UserHasNoPendingStartupInvite, 'User has no pending invite to accept.' unless current_user.pending_startup_id
 
@@ -94,7 +94,7 @@ class V1::UsersController < V1::BaseController
     render nothing: true
   end
 
-  # DELETE /api/users/self/accept_invitation
+  # DELETE /api/users/self/cofounder_invitation
   def reject_cofounder_invitation
     raise Exceptions::UserHasNoPendingStartupInvite, 'User has no pending invite to delete.' unless current_user.pending_startup_id
 

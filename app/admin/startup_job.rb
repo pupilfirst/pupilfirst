@@ -15,5 +15,5 @@ ActiveAdmin.register StartupJob do
   end
 
   permit_params :title, :description, :equity_max, :equity_min, :equity_vest, :equity_cliff, :expires_on, :startup_id,
-    :skills, :experience, :qualification, :contact_number, :contact_name, :contact_email
+    :skills, :experience, :qualification, :contact_number, :contact_name, :contact_email, :location, :salary
 end

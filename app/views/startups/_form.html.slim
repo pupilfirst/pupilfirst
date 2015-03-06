@@ -43,7 +43,7 @@ p
       hint: "Pitch your product in less than #{Startup::MAX_PITCH_CHARACTERS} characters.",
       input_html: { maxlength: Startup::MAX_PITCH_CHARACTERS }
 
-  = f.input :product_description, input_html: { maxlength: 255 }
+  = f.input :product_description, input_html: { maxlength: 1000 }
   = f.input :product_progress, collection: Startup.valid_product_progress_values, label_method: ->(obj) { product_progress_html(obj) }, input_html: { class: 'selectpicker' }
   = f.association :categories, hint: 'Categories that describe your startup. Max 3.', collection: Category.startup_category, as: :select, input_html: { class: 'span4 selectpicker', 'data-live-search' => 'true', 'data-max-options' => "#{Startup::MAX_CATEGORY_COUNT}" }
   = f.input :revenue_generated, hint: 'How much cumulative revenue have you generated till date?', input_html: { max: 999999999, 'data-max-int-length' => 9 }

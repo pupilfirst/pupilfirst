@@ -7,12 +7,11 @@ FactoryGirl.define do
     f.about { Faker::Lorem.paragraph(7) }
     f.website { Faker::Internet.domain_name }
     f.email { Faker::Internet.email }
-    f.phone { Faker::PhoneNumber.cell_phone }
     f.incubation_location Startup::INCUBATION_LOCATION_KOCHI
     # f.founders {[create(:founder), create(:founder)]}
     # f.category_ids {[create(:startup_category).id]}
     after(:build) do |startup|
-      startup.founders << create(:founder, startup: startup)
+      startup.founders << create(:founder, startup: startup, startup_admin: true)
       startup.founders << create(:founder, startup: startup)
       startup.categories = [create(:startup_category)]
     end
@@ -29,7 +28,6 @@ FactoryGirl.define do
     f.name { Faker::Lorem.characters(20) }
     f.pitch { Faker::Lorem.words(6).join(' ') }
     f.website { Faker::Internet.domain_name }
-    f.phone { Faker::PhoneNumber.cell_phone }
   end
 
   factory :incorporation, class: Startup do |f|

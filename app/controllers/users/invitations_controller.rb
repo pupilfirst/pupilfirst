@@ -1,6 +1,5 @@
 class Users::InvitationsController < Devise::InvitationsController
 
-
   private
 
   # this is called when creating invitation

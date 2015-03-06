@@ -51,7 +51,7 @@ class Event < ActiveRecord::Base
   end
 
   def send_push_notification!
-    Delayed::Job.enqueue PushNotifyJob.new(self.class.to_s.downcase, self.id)
+    PushNotifyJob.perform_later(self.class.to_s.downcase, self.id)
     update!(notification_sent: true)
   end
 

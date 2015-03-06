@@ -63,7 +63,7 @@ gem 'social-share-button'
 gem 'apipie-rails'
 gem 'roadie-rails'
 
-gem 'passenger', '= 5.0.0.rc2' # Let's try using Passenger (Raptor) instead of Puma.
+gem 'passenger', '~> 5.0.1' # Back to Passenger! Woohoo!
 
 gem 'delayed_job_active_record' # Delayed Job to manage jobs. Let's migrate away from SuckerPunch.
 gem 'sucker_punch'
@@ -128,4 +128,4 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-ruby '2.2.0'
+ruby '2.2.1'

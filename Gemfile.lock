@@ -389,7 +389,7 @@ GEM
     paper_trail (3.0.6)
       activerecord (>= 3.0, < 5.0)
       activesupport (>= 3.0, < 5.0)
-    passenger (5.0.0.rc2)
+    passenger (5.0.1)
       rack
       rake (>= 0.8.1)
     pdf-core (0.4.0)
@@ -629,7 +629,7 @@ DEPENDENCIES
   nokogiri
   omniauth (~> 1.2.1)
   paper_trail
-  passenger (= 5.0.0.rc2)
+  passenger (~> 5.0.1)
   pg
   phony_rails
   prawn

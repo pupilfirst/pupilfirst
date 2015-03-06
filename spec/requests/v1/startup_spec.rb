@@ -153,7 +153,7 @@ describe "Startup Requests" do
 
     before(:each) do
       ActionMailer::Base.deliveries = []
-      allow(UserPushNotifyJob).to receive_message_chain(:new, :async, :perform).and_return(true)
+      allow(UserPushNotifyJob).to receive(:perform_later)
     end
 
     context "when requested startup does not match authorized user's startup" do

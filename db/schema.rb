@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150227112900) do
+ActiveRecord::Schema.define(version: 20150305071022) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -285,10 +285,8 @@ ActiveRecord::Schema.define(version: 20150227112900) do
 
   create_table "startup_jobs", force: :cascade do |t|
     t.integer  "startup_id"
-    t.string   "title",          limit: 255
+    t.string   "title"
     t.text     "description"
-    t.integer  "salary_max"
-    t.integer  "salary_min"
     t.integer  "equity_max"
     t.integer  "equity_min"
     t.integer  "equity_vest"
@@ -381,18 +379,6 @@ ActiveRecord::Schema.define(version: 20150227112900) do
   end
 
   add_index "statistics", ["parameter"], name: "index_statistics_on_parameter", using: :btree
-
-  create_table "student_entrepreneur_policies", force: :cascade do |t|
-    t.string   "certificate_pic",                limit: 255
-    t.text     "address"
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "university_registration_number", limit: 255
-    t.boolean  "status"
-  end
-
-  add_index "student_entrepreneur_policies", ["user_id"], name: "index_student_entrepreneur_policies_on_user_id", using: :btree
 
   create_table "taggings", force: :cascade do |t|
     t.integer  "tag_id"

@@ -30,7 +30,7 @@ class News < ActiveRecord::Base
   end
 
   def send_push_notification
-    Delayed::Job.enqueue PushNotifyJob.new(self.class.to_s.downcase, self.id)
+    PushNotifyJob.perform_later(self.class.to_s.downcase, self.id)
   end
 
   def youtube_thumbnail_url(size = :high)

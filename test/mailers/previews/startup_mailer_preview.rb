@@ -15,10 +15,6 @@ class StartupMailerPreview < ActionMailer::Preview
     StartupMailer.reminder_to_complete_startup_info(Startup.first)    
   end
 
-  def partnership_application
-    StartupMailer.partnership_application(Startup.first, User.first)    
-  end
-
   def notify_svrep_about_startup_update
     StartupMailer.notify_svrep_about_startup_update(Startup.first)    
   end

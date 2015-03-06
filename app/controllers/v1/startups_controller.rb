@@ -70,16 +70,6 @@ class V1::StartupsController < V1::BaseController
     # render nothing: true, status: :created
   end
 
-  def partnership_application
-    if current_user.startup.partnership_application?
-      render json: { error: "Already applied for Partnership" }, status: :bad_request
-    else
-      current_user.startup.update_attributes!(partnership_application: true)
-      StartupMailer.partnership_application(current_user.startup, current_user).deliver_later
-      render nothing: true, status: :created
-    end
-  end
-
   # POST /api/startups/:id/registration
   def registration
     if current_user.startup.registration_type

@@ -72,7 +72,7 @@ class V1::UsersController < V1::BaseController
     render nothing: true
   end
 
-  # PUT /api/users/self/accept_invitation
+  # PUT /api/users/self/cofounder_invitation
   def accept_cofounder_invitation
     raise Exceptions::UserHasNoPendingStartupInvite, 'User has no pending invite to accept.' unless current_user.pending_startup_id
 
@@ -89,12 +89,12 @@ class V1::UsersController < V1::BaseController
     # Send out notification to all OTHER founders. Unspec-d.
     founder_ids = startup.founders.map(&:id) - [current_user.id]
     message = "#{current_user.fullname} has accepted your request to become one of the co-founders in your startup!"
-    UserPushNotifyJob.new.async.perform_batch(founder_ids, :accept_cofounder_invitation, message, email: current_user.email)
+    BatchPushNotifyJob.perform_later(founder_ids, :accept_cofounder_invitation, message, email: current_user.email)
 
     render nothing: true
   end
 
-  # DELETE /api/users/self/accept_invitation
+  # DELETE /api/users/self/cofounder_invitation
   def reject_cofounder_invitation
     raise Exceptions::UserHasNoPendingStartupInvite, 'User has no pending invite to delete.' unless current_user.pending_startup_id
 
@@ -106,7 +106,7 @@ class V1::UsersController < V1::BaseController
     # Send out notification to all other founders. Unspec-d.
     founder_ids = Startup.find(temp_startup_id).founders.map(&:id)
     message = "We’re sorry, but #{current_user.fullname} has rejected your request to become one of the co-founders in your startup."
-    UserPushNotifyJob.new.async.perform_batch(founder_ids, :reject_cofounder_invitation, message, email: current_user.email)
+    BatchPushNotifyJob.perform_later(founder_ids, :reject_cofounder_invitation, message, email: current_user.email)
 
     render nothing: true
   end

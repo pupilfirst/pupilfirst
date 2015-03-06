@@ -11,7 +11,7 @@ namespace :reminders do
       push_message = "Your incubation agreement expires in #{expires_in} days. To continue enjoying the services provided by Startup Village, please renew your agreement within #{renew_within} days."
 
       startup.founders.each do |user|
-        UserPushNotifyJob.new.async.perform(user.id, :startup_agreement_expiry, push_message)
+        UserPushNotifyJob.perform_later(user.id, :startup_agreement_expiry, push_message)
       end
 
       # Email

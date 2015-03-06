@@ -32,7 +32,6 @@ gem 'sass-rails', '~> 5.0'
 gem 'sendgrid_smtpapi'
 gem 'sentry-raven'
 gem 'slim'
-gem 'sucker_punch'
 # gem 'turbolinks' # Disabled, because it is a pain in the ass.
 gem 'uglifier'
 gem 'urbanairship'
@@ -64,10 +63,10 @@ gem 'social-share-button'
 gem 'apipie-rails'
 gem 'roadie-rails'
 
-gem 'passenger', '= 5.0.0.rc2' # Let's try using Passenger (Raptor) instead of Puma.
+gem 'passenger', '~> 5.0.1' # Back to Passenger! Woohoo!
 
 gem 'delayed_job_active_record' # Delayed Job to manage jobs. Let's migrate away from SuckerPunch.
-
+gem 'sucker_punch'
 group :development do
   gem "letter_opener"
   gem 'seed-fu', github: 'mbleigh/seed-fu' # check and remove
@@ -129,4 +128,4 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-ruby '2.2.0'
+ruby '2.2.1'

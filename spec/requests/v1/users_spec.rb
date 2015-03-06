@@ -207,7 +207,7 @@ describe V1::UsersController do
     let(:user) { create :user_with_password }
 
     before do
-      allow(UserPushNotifyJob).to receive_message_chain(:new, :async, :perform_batch).and_return(true)
+      allow(BatchPushNotifyJob).to receive(:perform_later)
     end
 
     context 'when user does not have pending invitation' do
@@ -244,7 +244,7 @@ describe V1::UsersController do
     let(:user) { create :user_with_password }
 
     before do
-      allow(UserPushNotifyJob).to receive_message_chain(:new, :async, :perform_batch).and_return(true)
+      allow(BatchPushNotifyJob).to receive(:perform_later)
     end
 
     context 'when user does not have pending invitation' do
@@ -308,7 +308,7 @@ describe V1::UsersController do
     let!(:contact_3) { create :user_as_contact }
 
     before do
-      allow(UserPushNotifyJob).to receive_message_chain(:new, :async, :perform)
+      allow(UserPushNotifyJob).to receive(:perform_later)
     end
 
     it 'returns all connections supplied by SV to user' do

@@ -69,7 +69,7 @@ class StartupsController < InheritedResources::Base
   #     @new_employee.confirm_employee! params[:is_founder]
   #     message = "Congratulations! You've been approved as #{@new_employee.title} at #{@startup.name}."
   #     UserMailer.accepted_as_employee(@new_employee, @startup).deliver_later
-  #     UserPushNotifyJob.new.async.perform(@new_employee.id, :confirm_employee, message)
+  #     UserPushNotifyJob.perform_later(@new_employee.id, :confirm_employee, message)
   #     render :confirm_employee_done
   #   else
   #     @token = params[:token]

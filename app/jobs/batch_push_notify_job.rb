@@ -1,5 +1,8 @@
-class BatchPushNotififyJob < ActiveJob::Base
-
+class BatchPushNotifyJob < ActiveJob::Base
+  # @param [Array<Integer>] user_ids ID-s of users to send notifications to.
+  # @param [Symbol] type Type of push, so that device can identify it.
+  # @param [String] message Message to show the user.
+  # @param [Hash] extras (Optional) Extra information in payload.
   def perform(user_ids, type, message, extras={})
     ActiveRecord::Base.connection_pool.with_connection do
       notifications = user_ids.map do |user_id|

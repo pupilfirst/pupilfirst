@@ -399,6 +399,10 @@ class Startup < ActiveRecord::Base
     self.founders + User.non_founders
   end
 
+  def phone
+    self.admin.phone
+  end
+
   # E-mail address of person to contact in case startup is rejected.
   def rejection_contact
     case incubation_location

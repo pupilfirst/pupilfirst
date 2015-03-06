@@ -288,7 +288,7 @@ ActiveRecord::Schema.define(version: 20150306114912) do
 
   create_table "startup_jobs", force: :cascade do |t|
     t.integer  "startup_id"
-    t.string   "title"
+    t.string   "title",          limit: 255
     t.text     "description"
     t.integer  "equity_max"
     t.integer  "equity_min"

@@ -83,7 +83,7 @@ class StartupsController < InheritedResources::Base
   end
 
   def apply_now_params
-    params.require(:startup).permit(:name, :phone, :pitch, :website, :email, :registration_type)
+    params.require(:startup).permit(:name, :pitch, :website, :email, :registration_type)
   end
 
   def startup_params

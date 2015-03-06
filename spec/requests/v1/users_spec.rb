@@ -207,7 +207,7 @@ describe V1::UsersController do
     let(:user) { create :user_with_password }
 
     before do
-      allow(PushNotifyJob).to receive(:perform_later)
+      allow(BatchPushNotifyJob).to receive(:perform_later)
     end
 
     context 'when user does not have pending invitation' do
@@ -244,7 +244,7 @@ describe V1::UsersController do
     let(:user) { create :user_with_password }
 
     before do
-      allow(UserPushNotifyJob).to receive(:perform_later)
+      allow(BatchPushNotifyJob).to receive(:perform_later)
     end
 
     context 'when user does not have pending invitation' do

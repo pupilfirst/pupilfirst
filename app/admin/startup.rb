@@ -54,17 +54,29 @@ ActiveAdmin.register Startup do
 
   csv do
     column :name
+    column :incubation_location
+    column :physical_incubatee
+    column(:founders) { |startup| startup.founders.pluck(:fullname).join ', ' }
     column :pitch
-    column :email
-    column :incorporation_status
-    column :bank_status
-    column :company_names
-    column :registration_type
-    column :approval_status
     column :website
+    column :approval_status
+    column :email
+    column :registration_type
     column :about
     column :district
-    column(:founders) { |startup| startup.founders.pluck(:fullname).join(",").gsub(",", ":") }
+    column :pin
+    column :cool_fact
+    column :product_name
+    column :product_progress
+    column :product_description
+    column :presentation_link
+    column :revenue_generated
+    column :team_size
+    column :women_employees
+    column :agreement_sent
+    column :agreement_first_signed_at
+    column :agreement_last_signed_at
+    column :agreement_ends_at
   end
 
   member_action :custom_update, method: :put do

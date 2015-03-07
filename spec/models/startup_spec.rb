@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Startup do
+  subject { create :startup }
+
   context 'when startup is destroyed' do
     let(:startup) { create :startup }
 
@@ -113,6 +115,12 @@ describe Startup do
     it "remains unchanged if the url is valid" do
       startup = create(:startup, facebook_link: "http://facebook.com/gouthamvel")
       expect(startup.facebook_link).to eq("http://facebook.com/gouthamvel")
+    end
+  end
+
+  describe '#phone' do
+    it "returns startup admin's phone number" do
+      expect(subject.phone).to eq subject.admin.phone
     end
   end
 end

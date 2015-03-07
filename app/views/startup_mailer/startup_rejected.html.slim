@@ -10,12 +10,18 @@
 
   p
     ' However, this is not the end of the road for your startup. The reason for the speed bump is that your startup
-    ' profile is not complete and updated. Feel free to fill in more details about your startup in the startup profile
-    ' page (both app and web version). Once done, please send a mail to #{mail_to @startup.rejection_contact} mentioning
+    ' profile is not complete and updated. Feel free to fill in more details about your startup in the
+    ' #{link_to 'startup profile page', @startup}
+    ' (both app and web version). Once done, please send a mail to #{mail_to @startup.rejection_contact} mentioning
     | that you have updated your startup profile page.
 
+  p If you're unable to click on the link to your startup profile (above), then please copy and paste the following link
+      into your browser's address bar:
+
+  pre = startup_url(@startup)
+
   p
-    ' Note that your SV ID (your registered email ID) will serve as the primary ID concerning all things Startup
+    ' Note that your SV ID (your registered email address) will serve as the primary ID concerning all things Startup
     | Village &mdash; please remember to quote it during all communication.
 
   p

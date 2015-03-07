@@ -1,9 +1,10 @@
 require 'spec_helper'
 
 describe Startup do
+  subject { create :startup }
+
   context 'when startup is destroyed' do
     let(:startup) { create :startup }
-    subject { create :startup }
 
     it 'clears association from users' do
       user = create :user_with_out_password, startup: startup
@@ -117,9 +118,9 @@ describe Startup do
     end
   end
 
-  describe '#phone'
+  describe '#phone' do
     it "returns startup admin's phone number" do
-      expect(startup.phone).to eq startup.admin.phone
+      expect(subject.phone).to eq subject.admin.phone
     end
   end
 end

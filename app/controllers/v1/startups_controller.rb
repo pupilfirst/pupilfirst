@@ -65,7 +65,7 @@ class V1::StartupsController < V1::BaseController
     StartupMailer.respond_to_new_employee(startup, @new_employee).deliver_later
     message = "#{@new_employee.fullname} wants to be linked with #{startup.name or "your startup"}. Please check your email to approve."
     startup.founders.each do |f|
-      UserPushNotifyJob.perform_later(f.id, :fill_personal_info, message)
+      UserPushNotifyJob.perform_later(f.id, 'fill_personal_info', message)
     end
     # render nothing: true, status: :created
   end
@@ -92,7 +92,7 @@ class V1::StartupsController < V1::BaseController
       message = "#{@current_user.fullname} wants you to become one of the co-founders of a Startup that #{@current_user.gender == User::GENDER_MALE ? "he's" : "she's"} in the process of creating!"
 
       # TODO: Spec UserPushNotifyJob.new.async.perform
-      UserPushNotifyJob.perform_later(user.id, :cofounder_invite, message)
+      UserPushNotifyJob.perform_later(user.id, 'cofounder_invite', message)
     end
 
     # Save the record.

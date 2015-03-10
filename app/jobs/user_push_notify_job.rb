@@ -20,6 +20,8 @@ class UserPushNotifyJob < ActiveJob::Base
       }
 
       Urbanairship.push(notification)
+
+      Rails.llog.info event: :user_push_notify, user_id: user_id, type: type
     end
   end
 end

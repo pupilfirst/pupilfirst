@@ -14,7 +14,7 @@ class News < ActiveRecord::Base
   just_define_datetime_picker :published_at
 
   validates_presence_of :author
-  validates_presence_of :picture, unless: Proc.new { |user| user.youtube_id.present? }
+  validates_presence_of :picture, unless: Proc.new { |news| news.youtube_id.present? }
   validates_presence_of :title
   alias_attribute :push_title, :title
   PUSH_TYPE = 'news' unless defined?(PUSH_TYPE)

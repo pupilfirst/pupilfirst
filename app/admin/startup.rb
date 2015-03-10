@@ -100,6 +100,7 @@ ActiveAdmin.register Startup do
           UserPushNotifyJob.perform_later(user.id, :startup_rejection, push_message)
         end
     end
+
     redirect_to action: :show
   end
 
@@ -234,7 +235,6 @@ ActiveAdmin.register Startup do
       row :agreement_last_signed_at
       row :agreement_ends_at
       row :email
-      row :phone
       row :logo do |startup|
         link_to(image_tag(startup.logo_url(:thumb)), startup.logo_url)
       end

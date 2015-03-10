@@ -89,7 +89,7 @@ ActiveAdmin.register Startup do
         push_message = 'Congratulations! Your request for incubation at Startup Village has been approved.'
 
         startup.founders.each do |user|
-          UserPushNotifyJob.perform_later(user.id, :startup_approval, push_message)
+          UserPushNotifyJob.perform_later(user.id, 'startup_approval', push_message)
         end
 
       when :rejection
@@ -97,7 +97,7 @@ ActiveAdmin.register Startup do
         push_message = "We're sorry, but your request for incubation at Startup Village has been rejected."
 
         startup.founders.each do |user|
-          UserPushNotifyJob.perform_later(user.id, :startup_rejection, push_message)
+          UserPushNotifyJob.perform_later(user.id, 'startup_rejection', push_message)
         end
     end
 
@@ -109,7 +109,7 @@ ActiveAdmin.register Startup do
     push_message = 'Please complete the incubation process by following the steps in the Startup Village application!'
 
     startup.founders.each do |user|
-      UserPushNotifyJob.perform_later(user.id, :startup_approval, push_message)
+      UserPushNotifyJob.perform_later(user.id, 'startup_approval', push_message)
     end
 
     StartupMailer.reminder_to_complete_startup_info(startup).deliver_later
@@ -123,7 +123,7 @@ ActiveAdmin.register Startup do
     push_message = 'Please make sure you complete your startup profile to get noticed by mentors and investors.'
 
     startup.founders.each do |user|
-      UserPushNotifyJob.perform_later(user.id, :startup_profile_reminder, push_message)
+      UserPushNotifyJob.perform_later(user.id, 'startup_profile_reminder', push_message)
     end
 
     StartupMailer.reminder_to_complete_startup_profile(startup).deliver_later

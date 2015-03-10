@@ -58,7 +58,6 @@ gem 'logstash-logger' # A better logger.
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'momentjs-rails', '>= 2.8.1',  :github => 'derekprior/momentjs-rails'
 gem 'wysihtml-rails', :git => 'https://github.com/Voog/wysihtml-rails.git'
-gem 'social-share-button'
 
 gem 'apipie-rails'
 gem 'roadie-rails'

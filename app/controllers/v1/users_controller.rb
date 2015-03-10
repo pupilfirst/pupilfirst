@@ -105,7 +105,7 @@ class V1::UsersController < V1::BaseController
 
     # Send out notification to all other founders. Unspec-d.
     founder_ids = Startup.find(temp_startup_id).founders.map(&:id)
-    message = "We’re sorry, but #{current_user.fullname} has rejected your request to become one of the co-founders in your startup."
+    message = "We're sorry, but #{current_user.fullname} has rejected your request to become one of the co-founders in your startup."
     BatchPushNotifyJob.perform_later(founder_ids, 'reject_cofounder_invitation', message, email: current_user.email)
 
     render nothing: true

@@ -392,7 +392,7 @@ class Startup < ActiveRecord::Base
   end
 
   def is_founder?(user)
-    founders.include? user
+    user.is_founder? && user.startup_id == self.id
   end
 
   def possible_founders

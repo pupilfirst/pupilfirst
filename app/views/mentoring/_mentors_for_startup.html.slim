@@ -19,7 +19,7 @@
           td #{badges_for_days mentor.availability['days']}
           td #{mentor.availability['time']['after']}:00 and #{mentor.availability['time']['before']}:00
           td
-            = mentor.skills.map { |skill| "#{skill.skill.name} (#{skill.expertise})" }.join ', '
+            = mentor.skills.includes(:skill).map { |skill| "#{skill.skill.name} (#{skill.expertise})" }.join ', '
           td = link_to 'Request Meeting', new_mentor_mentor_meeting_path(mentor), class: 'btn btn-xs btn-success'
          
   hr.col-xs-12

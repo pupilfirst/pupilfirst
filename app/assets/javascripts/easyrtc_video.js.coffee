@@ -80,7 +80,7 @@ singleOccupancyView = (otherPeers) ->
       botText += "You may send the guest a reminder SMS while you wait.. "
       botPost botText
   else
-    botPost "It appears your guest has left/disconnected.. "
+    botPost "Your meeting has ended, please wait while you are redirected to the feedback page. Your feedback will help us serve you better. Thank you"
 
 multipleOccupancyView = (otherPeers) ->
   if shared.occupants is 2

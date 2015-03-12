@@ -30,24 +30,16 @@ Job query is managed by the sucker_punch gem, which runs in Rails process, proce
 switched to Resque easily.
 
 ## Deployment
-Deployment is taken care by git push(on master/development) using circlCI hook.
-Specific instructions can be found in circle.yml
 
-For manual push to heroku use:
+Add heroku remotes:
 
-Edit ``.git/config``:
+      $ git remote add heroku-production git@heroku.com:svapp.git
+      $ git remote add heroku-staging git@heroku.com:svapp-staging.git
 
-      [remote "heroku-staging"]
-        url = git@heroku.com:svapp-staging.git
-        fetch = +refs/heads/*:refs/remotes/heroku-staging/*
-      [remote ""heroku-production"]
-        url = git@heroku.com:svapp.git
-        fetch = +refs/heads/*:refs/remotes/heroku-production/*
+Then, to deploy:
 
-Then:
-
-* `git push heroku-production master:master` will push local master to production (svlabs.in)
-* `git push heroku-staging development:master` will push local development to staging (staging.svlabs.in)
+* From `master` branch, `git push heroku-production` will push local master to production (svlabs.in)
+* From `development` branch, `git push heroku-staging development:master` will push local development to staging (staging.svlabs.in)
 
 ## API Documentation
 

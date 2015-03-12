@@ -1,6 +1,7 @@
 # Holder for shared settings.
 shared = {
   occupants: 0
+  manualPeerHangup: false
 }
 
 initializer = ->
@@ -19,7 +20,6 @@ initializer = ->
   easyrtc.easyApp shared.appName, 'self', [ 'guest' ], appSuccessCB
   easyrtc.setGotMedia gotMediaCB
   easyrtc.setGotConnection gotConnectionCB
-
 
   easyrtc.joinRoom shared.roomName
   easyrtc.setPeerListener hangupOnMsg, 'manualHangup'
@@ -43,10 +43,12 @@ loadChatData = ->
   shared.selfAvatarUrl = shared.chatData.data('self-avatar-url')
   shared.guestAvatarUrl = shared.chatData.data('guest-avatar-url')
   shared.botAvatarUrl = shared.chatData.data('bot-avatar-url')
+  shared.guestTitle = shared.chatData.data('guest-title')
 
 # function to respond to manual hangup by peer
 hangupOnMsg = (easyrtcid, msgType, msgData, targeting) ->
   console.log 'Manual hangup msg received'
+  shared.manualPeerHangup = true
   easyrtc.hangupAll()
   $('#end-call').submit()
 
@@ -73,14 +75,20 @@ singleOccupancyView = (otherPeers) ->
 
   resetView()
   $('.awaiting-guest').removeClass 'hidden'
-  if not shared.metInRoom
-    botText = "It seems your guest is yet to arrive."
-    if not shared.reminderSent
-      $('#send-reminder-button').removeClass 'hidden'
-      botText += "You may send the guest a reminder SMS while you wait.. "
-      botPost botText
+
+  if shared.metInRoom
+    if shared.manualPeerHangup
+      botPost "Your meeting has ended, please wait while you are redirected to the feedback page."
+    else
+      botPost "Seems like the #{shared.guestTitle} got disconnneted. Please wait for the #{shared.guestTitle} to reconnect."
   else
-    botPost "Your meeting has ended, please wait while you are redirected to the feedback page. Your feedback will help us serve you better. Thank you"
+    botText = "It seems the #{shared.guestTitle} is yet to arrive."
+
+    if shared.reminderSent
+      $('#send-reminder-button').removeClass 'hidden'
+      botText += " You may send the #{shared.guestTitle} a reminder SMS while you wait."
+
+    botPost botText
 
 multipleOccupancyView = (otherPeers) ->
   if shared.occupants is 2
@@ -89,7 +97,7 @@ multipleOccupancyView = (otherPeers) ->
     shared.occupants = 2
 
   shared.metInRoom = true
-  botPost "Your guest is now available... "
+  botPost "The #{shared.guestTitle} is now available... "
   for easyrtcid of otherPeers
     resetView()
     $('#send-chat-button').removeClass 'disabled'
@@ -151,7 +159,7 @@ callAcceptCB = (accepted, bywho) ->
 
 gotMediaCB = ->
   console.log "Local media initialized"
-  botPost "Connecting to server .. "
+  botPost "Connecting to server..."
 
 gotConnectionCB = ->
   console.log "Connected to server"
@@ -181,7 +189,7 @@ endMeeting = ->
   $('#end-call').submit()
 
 sendReminder = ->
-  if window.confirm('Are you sure you want to send an SMS reminder to the guest ?')
+  if window.confirm("Are you sure you want to send an SMS reminder to the #{shared.guestTitle}?")
     $.ajax(url: "/mentor_meetings/#{shared.meetingId}/reminder").done(->
       alert 'SMS sent'
       $('#send-reminder-button').addClass 'hidden'

@@ -1,7 +1,7 @@
-require 'spec_helper'
+require 'spec_helpers/v1/api_spec_helper'
 
 describe 'Category Requests' do
-  include V1ApiSpecHelper
+  include ApiSpecHelper
 
   describe 'GET /api/categories' do
     before do

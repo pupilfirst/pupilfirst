@@ -1,9 +1,9 @@
-require_relative 'v1_api_helper'
-require_relative 'startup_spec'
+require_relative 'api_spec_helper'
+require_relative 'startups_spec_helper'
 
 module UserSpecHelper
-  include V1ApiSpecHelper
-  include StartupSpecHelper
+  include ApiSpecHelper
+  include StartupsSpecHelper
 
   def have_user_object(response, prefix = '', opt = {})
     opt[:also_check] ||= []

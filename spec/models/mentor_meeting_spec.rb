@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe MentorMeeting do
   describe '#start!' do
@@ -46,7 +46,6 @@ describe MentorMeeting do
       expect(subject).to receive(:send_rejection_message)
       subject.reject!(meeting_for_user,"user")
     end
-
   end
 
   describe '#accept' do
@@ -78,6 +77,5 @@ describe MentorMeeting do
       expect(subject).to receive(:send_acceptance_message)
       subject.accept!(meeting,"user")
     end
-
   end
 end

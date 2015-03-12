@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe MentorMeetingsCleanupJob, type: :job do
   describe '.perform' do

@@ -55,6 +55,4 @@ RSpec.configure do |config|
   # config.include JsonSpec::Helpers, type: :request
   config.include FactoryGirl::Syntax::Methods
   config.include(JsonSpec::Helpers)
-  config.include(EmailSpec::Helpers)
-  config.include(EmailSpec::Matchers)
 end

@@ -26,8 +26,8 @@ To execute all tests manually, run:
     bin/rake spec
 
 ## Services
-Job query is managed by the sucker_punch gem, which runs in Rails process, processing between requests. This can be
-switched to Resque easily.
+
+Background jobs are written as Rails ActiveJob-s, and deferred using Delayed::Job in the production environment.
 
 ## Deployment
 

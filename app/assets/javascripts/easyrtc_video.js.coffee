@@ -1,6 +1,7 @@
 # Holder for shared settings.
 shared = {
   occupants: 0
+  manualPeerHangup: false
 }
 
 initializer = ->
@@ -19,7 +20,6 @@ initializer = ->
   easyrtc.easyApp shared.appName, 'self', [ 'guest' ], appSuccessCB
   easyrtc.setGotMedia gotMediaCB
   easyrtc.setGotConnection gotConnectionCB
-
 
   easyrtc.joinRoom shared.roomName
   easyrtc.setPeerListener hangupOnMsg, 'manualHangup'
@@ -47,6 +47,7 @@ loadChatData = ->
 # function to respond to manual hangup by peer
 hangupOnMsg = (easyrtcid, msgType, msgData, targeting) ->
   console.log 'Manual hangup msg received'
+  shared.manualPeerHangup = true
   easyrtc.hangupAll()
   $('#end-call').submit()
 
@@ -79,6 +80,8 @@ singleOccupancyView = (otherPeers) ->
       $('#send-reminder-button').removeClass 'hidden'
       botText += "You may send the guest a reminder SMS while you wait.. "
       botPost botText
+  else if shared.manualPeerHangup isnt true
+    botPost "Seems like your peer got disconnneted, would you like to wait till he reconnects?"
   else
     botPost "Your meeting has ended, please wait while you are redirected to the feedback page. Your feedback will help us serve you better. Thank you"
 
@@ -155,6 +158,9 @@ gotMediaCB = ->
 
 gotConnectionCB = ->
   console.log "Connected to server"
+
+disconnectedPeer = ->
+  botPost "You got disconnected from the server, Please check your internet connectivity"
 
 #ONCLICK FUNCTIONS FOR BUTTONS
 loadOnClicks = ->

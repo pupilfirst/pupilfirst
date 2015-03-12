@@ -571,8 +571,6 @@ GEM
     will_paginate-bootstrap (1.0.1)
       will_paginate (>= 3.0.3)
     yard (0.8.7.6)
-    zeus (0.15.3)
-      method_source (>= 0.6.7)
 
 PLATFORMS
   ruby
@@ -660,4 +658,3 @@ DEPENDENCIES
   webmock
   will_paginate-bootstrap
   wysihtml-rails!
-  zeus

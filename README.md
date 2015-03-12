@@ -20,22 +20,10 @@
 Now start the server with `bin/rails s`
 
 ## Testing
-### Manual
+
 To execute all tests manually, run:
 
-    bundle exec rake spec
-
-### RubyMine
-To execute tests from within RubyMine, create a shell script `/script/startzeus` (gitignored) with the following
-contents and execute it:
-
-    env RUBYLIB=/path/to/RubyMine-6.x/rb/testing/patch/common:/path/to/RubyMine-6.x/rb/testing/patch/bdd zeus start
-
-Then, in RubyMine, go to *Run* >> *Edit Configurations* >> *Defaults* >> *RSpec*, and turn on *Use custom RSpec Runner
-Script* and point it to `/script/rspec_runner.rb`.
-
-Now right-click on either the spec directory in the Project view (or any inner directory / file), and choose the
-*Run Specs* option.
+    bin/rake spec
 
 ## Services
 Job query is managed by the sucker_punch gem, which runs in Rails process, processing between requests. This can be

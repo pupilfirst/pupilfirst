@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'sms:statistics' do
   include_context 'rake'
@@ -15,7 +15,7 @@ describe 'sms:statistics' do
     APP_CONFIG[:sms_provider_url] = 'https://mobme.in'
   end
 
-  # # ...and return them to originals after the tests are run.
+  # ...and return them to originals after the tests are run.
   after(:all) do
     APP_CONFIG[:sms_provider_url] = ENV['SMS_PROVIDER_URL']
   end

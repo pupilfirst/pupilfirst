@@ -1,7 +1,7 @@
-require "spec_helper"
+require 'spec_helpers/v1/startups_spec_helper'
 
-describe "Startup Requests" do
-  include V1ApiSpecHelper
+describe 'Startup Requests' do
+  include ApiSpecHelper
   include UserSpecHelper
   include Rails.application.routes.url_helpers
 
@@ -14,62 +14,62 @@ describe "Startup Requests" do
     ActionMailer::Base.deliveries
   end
 
-  it "fetch startups on index" do
-    get "/api/startups", {}, version_header
+  it 'fetch startups on index' do
+    get '/api/startups', {}, version_header
     expect(response).to render_template(:index)
-    expect(response.body).to have_json_path("0/id")
-    expect(response.body).to have_json_path("0/name")
-    expect(response.body).to have_json_path("0/logo_url")
-    expect(response.body).to have_json_path("0/pitch")
-    expect(response.body).to have_json_path("0/website")
-    expect(response.body).to have_json_path("0/created_at")
+    expect(response.body).to have_json_path('0/id')
+    expect(response.body).to have_json_path('0/name')
+    expect(response.body).to have_json_path('0/logo_url')
+    expect(response.body).to have_json_path('0/pitch')
+    expect(response.body).to have_json_path('0/website')
+    expect(response.body).to have_json_path('0/created_at')
   end
 
-  it "fetch startups within a category" do
-    get "/api/startups", { category: startup1.categories.first.name }, version_header
+  it 'fetch startups within a category' do
+    get '/api/startups', { category: startup1.categories.first.name }, version_header
     expect(response).to render_template(:index)
-    expect(response.body).to have_json_size(1).at_path("/")
-    expect(response.body).to have_json_path("0/id")
-    expect(response.body).to have_json_path("0/name")
-    expect(response.body).to have_json_path("0/logo_url")
-    expect(response.body).to have_json_path("0/pitch")
-    expect(response.body).to have_json_path("0/website")
-    expect(response.body).to have_json_path("0/created_at")
+    expect(response.body).to have_json_size(1).at_path('/')
+    expect(response.body).to have_json_path('0/id')
+    expect(response.body).to have_json_path('0/name')
+    expect(response.body).to have_json_path('0/logo_url')
+    expect(response.body).to have_json_path('0/pitch')
+    expect(response.body).to have_json_path('0/website')
+    expect(response.body).to have_json_path('0/created_at')
   end
 
-  it "fetches related startups when searched for" do
-    get "/api/startups", { search_term: 'foobar' }, version_header
+  it 'fetches related startups when searched for' do
+    get '/api/startups', { search_term: 'foobar' }, version_header
     expect(response).to render_template(:index)
-    expect(response.body).to have_json_size(2).at_path("/")
-    expect(response.body).to have_json_path("0/id")
-    expect(response.body).to have_json_path("0/name")
-    expect(response.body).to have_json_path("0/logo_url")
-    expect(response.body).to have_json_path("0/pitch")
-    expect(response.body).to have_json_path("0/website")
-    expect(response.body).to have_json_path("0/created_at")
+    expect(response.body).to have_json_size(2).at_path('/')
+    expect(response.body).to have_json_path('0/id')
+    expect(response.body).to have_json_path('0/name')
+    expect(response.body).to have_json_path('0/logo_url')
+    expect(response.body).to have_json_path('0/pitch')
+    expect(response.body).to have_json_path('0/website')
+    expect(response.body).to have_json_path('0/created_at')
   end
 
-  it "fetches one startup with " do
+  it 'fetches one startup with' do
     get "/api/startups/#{startup.id}", {}, version_header
     expect(response).to render_template(:show)
-    expect(response.body).to have_json_path("id")
-    expect(response.body).to have_json_path("name")
-    expect(response.body).to have_json_path("logo_url")
-    expect(response.body).to have_json_path("pitch")
-    expect(response.body).to have_json_path("website")
-    expect(response.body).to have_json_path("about")
-    expect(response.body).to have_json_path("email")
-    expect(response.body).to have_json_path("phone")
-    expect(response.body).to have_json_path("twitter_link")
-    expect(response.body).to have_json_path("facebook_link")
-    expect(response.body).to have_json_type(Array).at_path("categories")
-    expect(response.body).to have_json_type(Array).at_path("founders")
-    expect(response.body).to have_json_path("founders/0/id")
-    expect(response.body).to have_json_path("founders/0/name")
-    expect(response.body).to have_json_path("founders/0/title")
-    expect(response.body).to have_json_path("founders/0/picture_url")
-    expect(response.body).to have_json_path("founders/0/linkedin_url")
-    expect(response.body).to have_json_path("founders/0/twitter_url")
+    expect(response.body).to have_json_path('id')
+    expect(response.body).to have_json_path('name')
+    expect(response.body).to have_json_path('logo_url')
+    expect(response.body).to have_json_path('pitch')
+    expect(response.body).to have_json_path('website')
+    expect(response.body).to have_json_path('about')
+    expect(response.body).to have_json_path('email')
+    expect(response.body).to have_json_path('phone')
+    expect(response.body).to have_json_path('twitter_link')
+    expect(response.body).to have_json_path('facebook_link')
+    expect(response.body).to have_json_type(Array).at_path('categories')
+    expect(response.body).to have_json_type(Array).at_path('founders')
+    expect(response.body).to have_json_path('founders/0/id')
+    expect(response.body).to have_json_path('founders/0/name')
+    expect(response.body).to have_json_path('founders/0/title')
+    expect(response.body).to have_json_path('founders/0/picture_url')
+    expect(response.body).to have_json_path('founders/0/linkedin_url')
+    expect(response.body).to have_json_path('founders/0/twitter_url')
   end
 
   describe 'POST /startups' do
@@ -112,12 +112,12 @@ describe "Startup Requests" do
     end
   end
 
-  it "fetches suggestions based on given term" do
-    get "/api/startups/load_suggestions", { term: 'fo' }, version_header
-    expect(response.body).to have_json_size(2).at_path("/")
-    expect(response.body).to have_json_path("0/id")
-    expect(response.body).to have_json_path("0/name")
-    expect(response.body).to have_json_path("0/logo_url")
+  it 'fetches suggestions based on given term' do
+    get '/api/startups/load_suggestions', { term: 'fo' }, version_header
+    expect(response.body).to have_json_size(2).at_path('/')
+    expect(response.body).to have_json_path('0/id')
+    expect(response.body).to have_json_path('0/name')
+    expect(response.body).to have_json_path('0/logo_url')
   end
 
   # context "request to add new founder to a startup" do

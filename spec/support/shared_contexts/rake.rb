@@ -1,4 +1,3 @@
-# spec/support/shared_contexts/rake.rb
 require 'rake'
 
 shared_context 'rake' do

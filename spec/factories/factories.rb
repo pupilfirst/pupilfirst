@@ -31,6 +31,9 @@ FactoryGirl.define do
     born_on   { Date.current.to_s }
     title   { Faker::Lorem.characters(9) }
     communication_address { "#{Faker::Address.secondary_address},\n#{Faker::Address.street_address},\n#{Faker::Address.city},\n#{Faker::Address.state}" }
+    address { "#{Faker::Address.secondary_address},\n#{Faker::Address.street_address},\n#{Faker::Address.city}" }
+    district { Faker::Address.district }
+    state { Faker::Address.state }
     pin { (rand(899999) + 100000).to_s }
     avatar { fixture_file_upload(Rails.root.join(*%w[ spec fixtures files example.jpg ]), 'image/jpg') }
 

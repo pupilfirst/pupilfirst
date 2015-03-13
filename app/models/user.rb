@@ -45,6 +45,7 @@ class User < ActiveRecord::Base
   has_many :social_ids
   # has_one :student_entrepreneur_policy
   has_one :mentor, dependent: :destroy
+  belongs_to :college
   belongs_to :bank
   belongs_to :father, class_name: 'Name'
   belongs_to :address
@@ -111,7 +112,7 @@ class User < ActiveRecord::Base
   validates_presence_of :current_occupation, if: ->(user) { user.validate_partnership_essential_fields }
   validates_presence_of :educational_qualification, if: ->(user) { user.validate_partnership_essential_fields }
   validates_presence_of :religion, if: ->(user) { user.validate_partnership_essential_fields }
-  validates_presence_of :communication_address, if: ->(user) { user.validate_partnership_essential_fields }
+  # validates_presence_of :communication_address, if: ->(user) { user.validate_partnership_essential_fields }
 
   validates_numericality_of :pin, allow_nil: true, greater_than_or_equal_to: 100000, less_than_or_equal_to: 999999 # PIN Code is always 6 digits
 
@@ -147,6 +148,9 @@ class User < ActiveRecord::Base
     end
   end
 
+  def communication_address
+    "#{address}, #{district}, #{state}, Pin: #{pin}"
+  end
   # Returns fields relevant to a 'contact' User.
   def contact_fields
     attributes.slice('fullname', 'phone', 'email', 'company', 'designation')

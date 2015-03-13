@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150306114912) do
+ActiveRecord::Schema.define(version: 20150313101555) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,6 +91,14 @@ ActiveRecord::Schema.define(version: 20150306114912) do
   create_table "categories_users", id: false, force: :cascade do |t|
     t.integer "category_id"
     t.integer "user_id"
+  end
+
+  create_table "colleges", force: :cascade do |t|
+    t.string   "name"
+    t.string   "city"
+    t.string   "state"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "connections", force: :cascade do |t|
@@ -451,14 +459,13 @@ ActiveRecord::Schema.define(version: 20150306114912) do
     t.integer  "guardian_id"
     t.string   "salutation"
     t.boolean  "is_student"
-    t.string   "college"
     t.string   "university"
     t.string   "course"
     t.string   "semester"
     t.boolean  "startup_form_link_sent_status"
     t.string   "gender"
     t.string   "phone"
-    t.text     "communication_address"
+    t.text     "address"
     t.boolean  "phone_verified",                default: false
     t.string   "phone_verification_code"
     t.integer  "pending_startup_id"
@@ -468,6 +475,11 @@ ActiveRecord::Schema.define(version: 20150306114912) do
     t.boolean  "startup_admin"
     t.string   "father_or_husband_name"
     t.string   "pin"
+    t.string   "district"
+    t.string   "state"
+    t.integer  "years_of_work_experience"
+    t.integer  "year_of_graduation"
+    t.integer  "college_id"
   end
 
   add_index "users", ["address_id"], name: "index_users_on_address_id", using: :btree

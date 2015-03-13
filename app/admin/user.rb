@@ -63,7 +63,9 @@ ActiveAdmin.register User do
       row :current_occupation
       row :phone
       row :phone_verified
-      row :communication_address
+      row :address
+      row :district
+      row :state
       row 'PIN Code' do
         user.pin
       end
@@ -102,7 +104,7 @@ ActiveAdmin.register User do
   form partial: 'admin/users/form'
 
   permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url,
-    :title, :skip_password, :born_on, :startup_admin, :communication_address,
+    :title, :skip_password, :born_on, :startup_admin, :address, :district, :state, :pin,
     :is_contact, :phone, :phone_verified, :company, :designation, :invitation_token, #:confirmed_at,
     { category_ids: [] }
 end

@@ -1,6 +1,5 @@
 class V1::UsersController < V1::BaseController
 
-  alias_attribute :address, :communication_address
   respond_to :json
   skip_before_filter :require_token, only: [:create, :forgot_password]
   before_filter :require_self, only: [:update, :generate_phone_number_verification_code, :verify_phone_number,
@@ -133,7 +132,7 @@ class V1::UsersController < V1::BaseController
   end
 
   def user_params
-    params.require(:user).permit(:gender,:communication_address, :address, :district, :state, :pin,
+    params.require(:user).permit(:gender,:communication_address, :street_address, :district, :state, :pin,
       :email, :fullname, :password, :password_confirmation, :avatar, :remote_avatar_url, :born_on,
       :pan, :din, :aadhaar, :mother_maiden_name, :married, :salutation,
       :is_student, :college, :university, :course, :semester, :title,

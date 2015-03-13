@@ -40,6 +40,8 @@ class User < ActiveRecord::Base
   devise :invitable, :database_authenticatable, :confirmable, #:registerable,
     :recoverable, :rememberable, :trackable, :validatable, :omniauthable
 
+  # alias_attribute :communication_address, :address  # 13/03/2015 to accomodate change in user address field for older api, need to be removed after sometime
+
   has_many :requests
   has_many :news, class_name: "News", foreign_key: :user_id
   has_many :social_ids
@@ -48,7 +50,7 @@ class User < ActiveRecord::Base
   belongs_to :college
   belongs_to :bank
   belongs_to :father, class_name: 'Name'
-  belongs_to :address
+  # belongs_to :address
   belongs_to :guardian
   belongs_to :startup
   belongs_to :startup_link_verifier, class_name: "User", foreign_key: "startup_link_verifier_id"
@@ -65,7 +67,7 @@ class User < ActiveRecord::Base
   #### missing startups ???? whats the use now.
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
 
-  accepts_nested_attributes_for :social_ids, :father, :address, :guardian
+  accepts_nested_attributes_for :social_ids, :father, :guardian
 
   # Complicated connections linkage for user-to-user relationship. Destroys the connection when either user or contact are deleted.
   has_many :connections, foreign_key: 'user_id', dependent: :destroy
@@ -149,7 +151,7 @@ class User < ActiveRecord::Base
   end
 
   def communication_address
-    "#{address}, #{district}, #{state}, Pin: #{pin}"
+    "#{street_address}, #{district}, #{state}, Pin: #{pin}"
   end
   # Returns fields relevant to a 'contact' User.
   def contact_fields

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150313101555) do
+ActiveRecord::Schema.define(version: 20150313114533) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -448,7 +448,6 @@ ActiveRecord::Schema.define(version: 20150313101555) do
     t.string   "pan"
     t.string   "din"
     t.string   "aadhaar"
-    t.integer  "address_id"
     t.integer  "father_id"
     t.string   "mother_maiden_name"
     t.boolean  "married"
@@ -465,7 +464,7 @@ ActiveRecord::Schema.define(version: 20150313101555) do
     t.boolean  "startup_form_link_sent_status"
     t.string   "gender"
     t.string   "phone"
-    t.text     "address"
+    t.text     "street_address"
     t.boolean  "phone_verified",                default: false
     t.string   "phone_verification_code"
     t.integer  "pending_startup_id"
@@ -482,7 +481,6 @@ ActiveRecord::Schema.define(version: 20150313101555) do
     t.integer  "college_id"
   end
 
-  add_index "users", ["address_id"], name: "index_users_on_address_id", using: :btree
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["father_id"], name: "index_users_on_father_id", using: :btree
   add_index "users", ["guardian_id"], name: "index_users_on_guardian_id", using: :btree

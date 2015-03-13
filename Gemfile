@@ -81,16 +81,14 @@ end
 
 group :test do
   gem 'sqlite3'
-  gem 'email_spec'
   gem 'factory_girl', require: false
   gem 'factory_girl_rails', '~> 4.0'
   gem 'faker'
   gem 'json_spec', github: 'collectiveidea/json_spec'
-  gem 'zeus'
 end
 
 group :development, :test do
-  gem 'rspec-rails', '~> 3.1.0'
+  gem 'rspec-rails', '~> 3.2.0'
   gem 'rb-inotify', :require => false
   gem 'rb-fsevent', :require => false
   gem 'rb-fchange', :require => false

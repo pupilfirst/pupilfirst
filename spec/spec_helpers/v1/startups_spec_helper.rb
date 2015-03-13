@@ -1,7 +1,7 @@
-require_relative 'v1_api_helper'
+require_relative 'api_spec_helper'
 
-module StartupSpecHelper
-  include V1ApiSpecHelper
+module StartupsSpecHelper
+  include ApiSpecHelper
 
   def have_startup_object(response, prefix = '', opt = {})
     opt[:also_check] ||= []

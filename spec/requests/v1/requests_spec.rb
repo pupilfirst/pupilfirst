@@ -1,7 +1,7 @@
-require 'spec_helper'
+require 'spec_helpers/v1/api_spec_helper'
 
 describe 'Request requests' do # :-)
-  include V1ApiSpecHelper
+  include ApiSpecHelper
 
   describe 'POST /api/requests' do
     let(:user) { create :founder, startup: create(:startup) }

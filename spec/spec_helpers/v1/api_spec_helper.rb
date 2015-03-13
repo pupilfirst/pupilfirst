@@ -1,8 +1,6 @@
-require_relative '../api_spec_helper'
+require 'rails_helper'
 
-module V1ApiSpecHelper
-  include ApiSpecHelper
-
+module ApiSpecHelper
   def check_path(response, path)
     expect(response.body).to have_json_path(path)
   end

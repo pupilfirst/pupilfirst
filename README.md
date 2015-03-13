@@ -20,46 +20,30 @@
 Now start the server with `bin/rails s`
 
 ## Testing
-### Manual
+
 To execute all tests manually, run:
 
-    bundle exec rake spec
+    bin/rake spec
 
-### RubyMine
-To execute tests from within RubyMine, create a shell script `/script/startzeus` (gitignored) with the following
-contents and execute it:
+or just:
 
-    env RUBYLIB=/path/to/RubyMine-6.x/rb/testing/patch/common:/path/to/RubyMine-6.x/rb/testing/patch/bdd zeus start
-
-Then, in RubyMine, go to *Run* >> *Edit Configurations* >> *Defaults* >> *RSpec*, and turn on *Use custom RSpec Runner
-Script* and point it to `/script/rspec_runner.rb`.
-
-Now right-click on either the spec directory in the Project view (or any inner directory / file), and choose the
-*Run Specs* option.
+    rspec
 
 ## Services
-Job query is managed by the sucker_punch gem, which runs in Rails process, processing between requests. This can be
-switched to Resque easily.
+
+Background jobs are written as Rails ActiveJob-s, and deferred using Delayed::Job in the production environment.
 
 ## Deployment
-Deployment is taken care by git push(on master/development) using circlCI hook.
-Specific instructions can be found in circle.yml
 
-For manual push to heroku use:
+Add heroku remotes:
 
-Edit ``.git/config``:
+    $ git remote add heroku-production git@heroku.com:svapp.git
+    $ git remote add heroku-staging git@heroku.com:svapp-staging.git
 
-      [remote "heroku-staging"]
-        url = git@heroku.com:svapp-staging.git
-        fetch = +refs/heads/*:refs/remotes/heroku-staging/*
-      [remote ""heroku-production"]
-        url = git@heroku.com:svapp.git
-        fetch = +refs/heads/*:refs/remotes/heroku-production/*
+Then, to deploy:
 
-Then:
-
-* `git push heroku-production master:master` will push local master to production (svlabs.in)
-* `git push heroku-staging development:master` will push local development to staging (staging.svlabs.in)
+* From `master` branch, `git push heroku-production` will push local master to production (svlabs.in)
+* From `development` branch, `git push heroku-staging development:master` will push local development to staging (staging.svlabs.in)
 
 ## API Documentation
 

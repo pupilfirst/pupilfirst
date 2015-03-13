@@ -44,6 +44,13 @@ ActiveAdmin.register Startup do
     column :categories do |startup|
       startup.categories.pluck(:name).join ', '
     end
+    column :cofounders do |startup|
+      startup.founders.count
+    end
+    column :women_cofounders do |startup|
+      startup.founders.where(gender: "female").count
+    end
+
     # column :facebook_link
     # column :twitter_link
     # column :pitch do |startup|

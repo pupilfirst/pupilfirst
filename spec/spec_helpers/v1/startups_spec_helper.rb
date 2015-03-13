@@ -1,4 +1,5 @@
 require_relative 'api_spec_helper'
+require_relative 'users_spec_helper'
 
 module StartupsSpecHelper
   include ApiSpecHelper

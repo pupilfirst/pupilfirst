@@ -25,6 +25,10 @@ To execute all tests manually, run:
 
     bin/rake spec
 
+or just:
+
+    rspec
+
 ## Services
 
 Background jobs are written as Rails ActiveJob-s, and deferred using Delayed::Job in the production environment.
@@ -33,8 +37,8 @@ Background jobs are written as Rails ActiveJob-s, and deferred using Delayed::Jo
 
 Add heroku remotes:
 
-      $ git remote add heroku-production git@heroku.com:svapp.git
-      $ git remote add heroku-staging git@heroku.com:svapp-staging.git
+    $ git remote add heroku-production git@heroku.com:svapp.git
+    $ git remote add heroku-staging git@heroku.com:svapp-staging.git
 
 Then, to deploy:
 

@@ -15,7 +15,11 @@ RSpec.describe MentorMeetingsCleanupJob, type: :job do
     context 'when a meeting request was started last day' do
       let!(:meeting) { create :mentor_meeting, meeting_at: 1.day.ago, status: MentorMeeting::STATUS_STARTED }
 
-      it 'sets meeting to completed'
+      it 'sets meeting to completed' do
+        MentorMeetingsCleanupJob.perform_now
+        meeting.reload
+        expect(meeting.status).to eq(MentorMeeting::STATUS_COMPLETED)
+      end
     end
   end
 end

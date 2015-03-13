@@ -3,7 +3,6 @@ require_relative 'startups_spec_helper'
 
 module UserSpecHelper
   include ApiSpecHelper
-  include StartupsSpecHelper
 
   def have_user_object(response, prefix = '', opt = {})
     opt[:also_check] ||= []

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe MentorMeetingsCleanupJob, type: :job do
-  describe '.perform' do
+  describe '#perform_now' do
     context 'when a meeting request has timed out' do
       let!(:meeting) { create :mentor_meeting, suggested_meeting_at: 1.minute.ago, status: MentorMeeting::STATUS_REQUESTED }
 

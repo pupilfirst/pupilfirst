@@ -400,7 +400,7 @@ class Startup < ActiveRecord::Base
   end
 
   def phone
-    self.admin.phone
+    self.admin.try(:phone)
   end
 
   # E-mail address of person to contact in case startup is rejected.

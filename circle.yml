@@ -1,0 +1,5 @@
+deployment:
+  staging:
+    branch: development
+    heroku:
+      appname: svapp-staging

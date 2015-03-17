@@ -95,6 +95,7 @@ ActiveRecord::Schema.define(version: 20150313114533) do
 
   create_table "colleges", force: :cascade do |t|
     t.string   "name"
+    t.string   "university"
     t.string   "city"
     t.string   "state"
     t.datetime "created_at", null: false
@@ -458,13 +459,12 @@ ActiveRecord::Schema.define(version: 20150313114533) do
     t.integer  "guardian_id"
     t.string   "salutation"
     t.boolean  "is_student"
-    t.string   "university"
     t.string   "course"
     t.string   "semester"
     t.boolean  "startup_form_link_sent_status"
     t.string   "gender"
     t.string   "phone"
-    t.text     "street_address"
+    t.text     "communication_address"
     t.boolean  "phone_verified",                default: false
     t.string   "phone_verification_code"
     t.integer  "pending_startup_id"

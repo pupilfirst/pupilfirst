@@ -149,7 +149,7 @@ ActiveAdmin.register Startup do
       users = User.joins(:partnerships).order('partnerships.id').where('partnerships.startup_id = ?', startup.id)
       data = [
         ['Partner Name'] + users.pluck(:fullname),
-        ['Address'] + users.pluck(:street_address),
+        ['Address'] + users.pluck(:communication_address),
         ['Gender'] + users.pluck(:gender).map { |g| g.try :capitalize },
         ['Date of Birth'] + users.pluck(:born_on).map { |bo| bo.try(:strftime, '%B %d, %Y') },
         ['PAN'] + users.pluck(:pan),

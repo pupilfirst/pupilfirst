@@ -49,7 +49,7 @@ p.margin-bottom-20 Before confirming your position as partner, please confirm so
   = f.input :current_occupation, collection: User.valid_current_occupation_values, include_blank: false, label_method: ->(obj) { current_occupation_html(obj) }
   = f.input :educational_qualification, collection: User.valid_educational_qualificiations, include_blank: false, label_method: ->(obj) { educational_qualification_html(obj) }
   = f.input :religion, collection: User.valid_religions, include_blank: false, label_method: ->(obj) { religion_html(obj) }
-  = f.input :communication_address, input_html: { maxlength: 1000, rows: 5 }, required: true
+  = f.input :communication_address, input_html: { rows: 5 }, required: true
 
   .form-group
     .col-sm-offset-3.col-sm-10

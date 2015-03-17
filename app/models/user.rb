@@ -150,9 +150,9 @@ class User < ActiveRecord::Base
     end
   end
 
-  def communication_address
-    "#{street_address}, #{district}, #{state}, Pin: #{pin}"
-  end
+  # def address
+  #   "#{communication_address}, #{district}, #{state}, Pin: #{pin}"
+  # end
   # Returns fields relevant to a 'contact' User.
   def contact_fields
     attributes.slice('fullname', 'phone', 'email', 'company', 'designation')

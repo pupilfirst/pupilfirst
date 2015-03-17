@@ -30,7 +30,7 @@ FactoryGirl.define do
     email     { Faker::Internet.email }
     born_on   { Date.current.to_s }
     title   { Faker::Lorem.characters(9) }
-    street_address { "#{Faker::Address.secondary_address},\n#{Faker::Address.street_address},\n#{Faker::Address.city}" }
+    communication_address { Faker::Address.secondary_address }
     district { Faker::Address.city }
     state { Faker::Address.state }
     pin { (rand(899999) + 100000).to_s }

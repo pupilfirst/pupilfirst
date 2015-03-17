@@ -1,5 +1,10 @@
 # SVLabs Web + API
 
+## Build status
+
+**Staging:** [![Circle CI](https://circleci.com/gh/SVLabs/api-backend/tree/development.svg?style=svg)](https://circleci.com/gh/SVLabs/api-backend/tree/development)
+**Production:** [![Circle CI](https://circleci.com/gh/SVLabs/api-backend/tree/master.svg?style=svg)](https://circleci.com/gh/SVLabs/api-backend/tree/master)
+
 ## Setup for development
 
 ### Install Dependencies

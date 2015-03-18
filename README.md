@@ -8,13 +8,13 @@
 ## Setup for development
 
 ### Install Dependencies
-  *  Ruby (version specified in .ruby-version)
-  *  imagemagick (apt-get install imagemagick)
-  *  postgresql (apt-get install postgresql postgresql-contrib libpq-dev)
+  *  Ruby - Use RVM to install version specified in `.ruby-version`
+  *  imagemagick - `apt-get install imagemagick`
+  *  postgresql - `apt-get install postgresql postgresql-contrib libpq-dev`
 
 ### Configure
-  *  Setup database.yml for postgresql
-  *  copy example.env to .env and set the variables as required
+  *  Setup `database.yml` for postgresql.
+  *  copy `example.env` to `.env` and set the variables as required.
 
 ### Bundle
     $ bundle install
@@ -52,17 +52,12 @@ Then, to deploy:
 
 ## API Documentation
 
-API documentation is maintained using Apiary.
+API documentation is being migrated from Apiary (apiary.io) to locally generated ApiPie (`/apipie`).
 
-http://docs.startupvillage.apiary.io/
+Most of the documentation is still at Apiary, with new entries being added to `/apipie`.
 
-## Web resources considered for dev
-*  http://matthewlehner.net/rails-api-testing-guidelines/
-*  https://github.com/joshbuddy/jsonpath
-*  http://pivotallabs.com/api-versioning/
-
-## Known Issues
-*  n + 1 query optimization need to be added as required.
+**Apiary**: http://docs.startupvillage.apiary.io/
+**ApiPie**: https://github.com/Apipie/apipie-rails
 
 ## Code quirks
 * Mostly uses rspec request specs for integration test. Model, Controller specs are sparingly written.
@@ -89,3 +84,8 @@ http://docs.startupvillage.apiary.io/
 ### CSS
 
 * Naming: Dash-separated ID-s and classes - `.some-class, #some-id`
+
+## Web resources considered for development
+*  http://matthewlehner.net/rails-api-testing-guidelines/
+*  https://github.com/joshbuddy/jsonpath
+*  http://pivotallabs.com/api-versioning/

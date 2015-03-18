@@ -83,7 +83,7 @@ class MentoringController < ApplicationController
       render 'new_step4' and return
     end
     flash[:notice] = 'You have successfully registered as a mentor!'
-    MentoringMailer.mentor_verification_ongoing(current_user).deliver
+    MentoringMailer.mentor_verification_ongoing(current_user).deliver_later
     redirect_to mentoring_url
   end
 

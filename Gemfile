@@ -14,7 +14,7 @@ gem 'inherited_resources'
 gem 'acts-as-taggable-on'
 gem 'attribute_normalizer', '~> 1.2.0.b'
 gem 'carrierwave'
-gem 'carrierwave_backgrounder', git: 'https://github.com/glhewett/carrierwave_backgrounder.git' # https://github.com/lardawge/carrierwave_backgrounder not updated for sucker_punch v1.0 api changes
+gem 'carrierwave_backgrounder'
 gem 'cocoon'
 gem 'coffee-rails', '~> 4.1.0'
 gem 'devise_invitable'

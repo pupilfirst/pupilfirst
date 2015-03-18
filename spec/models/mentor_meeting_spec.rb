@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe MentorMeeting do
+  subject { create :mentor_meeting }
+
   describe '#start!' do
     subject { create :mentor_meeting, status: MentorMeeting::STATUS_ACCEPTED, meeting_at: 10.minutes.from_now }
 
@@ -11,8 +13,6 @@ describe MentorMeeting do
   end
 
   describe '#reject' do
-    subject { create :mentor_meeting }
-
     let(:meeting_for_mentor) {
       {
         mentor_comments: Faker::Lorem.words(5).join(' ')
@@ -49,7 +49,6 @@ describe MentorMeeting do
   end
 
   describe '#accept' do
-    subject { create :mentor_meeting }
     let(:meeting) {
       {
         suggested_meeting_at: Time.now
@@ -76,6 +75,12 @@ describe MentorMeeting do
     it 'sends acceptance message as user' do
       expect(subject).to receive(:send_acceptance_message)
       subject.accept!(meeting,"user")
+    end
+  end
+
+  describe '#mentor_name' do
+    it "returns mentor's full name" do
+      expect(subject.mentor_name).to eq(subject.mentor.user.fullname)
     end
   end
 end

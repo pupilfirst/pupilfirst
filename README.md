@@ -1,5 +1,10 @@
 # SVLabs Web + API
 
+## Build status
+
+**Staging:** [![Circle CI](https://circleci.com/gh/SVLabs/api-backend/tree/development.svg?style=svg)](https://circleci.com/gh/SVLabs/api-backend/tree/development)
+**Production:** [![Circle CI](https://circleci.com/gh/SVLabs/api-backend/tree/master.svg?style=svg)](https://circleci.com/gh/SVLabs/api-backend/tree/master)
+
 ## Setup for development
 
 ### Install Dependencies
@@ -58,8 +63,6 @@ http://docs.startupvillage.apiary.io/
 
 ## Known Issues
 *  n + 1 query optimization need to be added as required.
-*  User of sucker_punch may not be best choice, migration to Resque with additional working is recommended
-*  Currently Email are sent during the request, moving them to background process can optimize alot.
 
 ## Code quirks
 * Mostly uses rspec request specs for integration test. Model, Controller specs are sparingly written.

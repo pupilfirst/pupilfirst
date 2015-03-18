@@ -22,6 +22,7 @@ Svapp::Application.routes.draw do
       resources :requests, only: [:index, :create]
       resources :events
       resources :news
+      resources :colleges, only: [:index]
 
       resources :startup_jobs, only: [:index, :show]
       resources :startups do

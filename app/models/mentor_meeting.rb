@@ -274,4 +274,7 @@ class MentorMeeting < ActiveRecord::Base
     MentorMeeting.where(status: STATUS_COMPLETED).where('meeting_at < ?', 7.days.ago).where(mentor_rating: nil)
   end
 
+  def mentor_name
+    mentor.try(:name)
+  end
 end

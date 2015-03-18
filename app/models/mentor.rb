@@ -46,6 +46,10 @@ class Mentor < ActiveRecord::Base
     user.email || user.fullname
   end
 
+  def name
+    user.fullname
+  end
+
   def to_s
     display_name
   end

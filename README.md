@@ -2,8 +2,11 @@
 
 ## Build status
 
-**Staging:** [![Circle CI](https://circleci.com/gh/SVLabs/api-backend/tree/development.png?style=shield)](https://circleci.com/gh/SVLabs/api-backend/tree/development)
-**Production:** [![Circle CI](https://circleci.com/gh/SVLabs/api-backend/tree/master.png?style=shield)](https://circleci.com/gh/SVLabs/api-backend/tree/master)
+### Staging
+[![Circle CI](https://circleci.com/gh/SVLabs/api-backend/tree/development.png?circle-token=823bb16f00598ed9373b661212008b5fae4e48e1)](https://circleci.com/gh/SVLabs/api-backend/tree/development)
+
+### Production
+[![Circle CI](https://circleci.com/gh/SVLabs/api-backend/tree/master.png?circle-token=823bb16f00598ed9373b661212008b5fae4e48e1)](https://circleci.com/gh/SVLabs/api-backend/tree/master)
 
 ## Setup for development
 

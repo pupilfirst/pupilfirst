@@ -83,11 +83,6 @@ FactoryGirl.define do
     pin "pin"
   end
 
-  factory :guardian do
-    association :name, factory: :name, strategy: :build
-    association :address, factory: :address, strategy: :build
-  end
-
   factory :user_category, class: Category do |f|
     f.name {Faker::Lorem.words(2).join(' ')}
     f.category_type :user
@@ -125,12 +120,6 @@ FactoryGirl.define do
   factory :bank do |f|
     f.is_joint true
     startup
-  end
-
-  factory :connection do
-    user
-    contact
-    direction Connection::DIRECTION_USER_TO_SV
   end
 
   factory :request  do

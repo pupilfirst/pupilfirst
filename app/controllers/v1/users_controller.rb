@@ -112,18 +112,20 @@ class V1::UsersController < V1::BaseController
     render nothing: true
   end
 
+
+  ## TODO: Check if the following code is relevant anymore
   # GET /api/users/self/contacts
-  def connected_contacts
-    # Fetch all user connections that were created by SV for user. Also, preload contact (User) data.
-    @connections = current_user.connections.where(direction: Connection::DIRECTION_SV_TO_USER).includes(:contact)
-  end
+  # def connected_contacts
+  #   # Fetch all user connections that were created by SV for user. Also, preload contact (User) data.
+  #   @connections = current_user.connections.where(direction: Connection::DIRECTION_SV_TO_USER).includes(:contact)
+  # end
 
-  # POST /api/users/self/contacts
-  def connect_contact
-    User.create_contact!(current_user, contact_params, Connection::DIRECTION_USER_TO_SV)
+  # # POST /api/users/self/contacts
+  # def connect_contact
+  #   User.create_contact!(current_user, contact_params, Connection::DIRECTION_USER_TO_SV)
 
-    render nothing: true
-  end
+  #   render nothing: true
+  # end
 
   private
 
@@ -138,10 +140,7 @@ class V1::UsersController < V1::BaseController
       :is_student, :college_id, :course, :semester, :title,
       :religion, :current_occupation, :educational_qualification, :place_of_birth,
       address_attributes: [:flat, :building, :street, :area, :town, :state, :pin],
-      father_attributes: [:first_name, :last_name, :middle_name],
-      guardian_attributes: [
-        name_attributes: [:salutation, :first_name, :middle_name, :last_name],
-        address_attributes: [:flat, :building, :street, :area, :town, :state, :pin]]
+      father_attributes: [:first_name, :last_name, :middle_name]
     )
   end
 end

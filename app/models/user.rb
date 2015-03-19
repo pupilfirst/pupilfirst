@@ -51,7 +51,6 @@ class User < ActiveRecord::Base
   belongs_to :bank
   belongs_to :father, class_name: 'Name'
   # belongs_to :address
-  belongs_to :guardian
   belongs_to :startup
   belongs_to :startup_link_verifier, class_name: "User", foreign_key: "startup_link_verifier_id"
   has_and_belongs_to_many :categories
@@ -61,17 +60,10 @@ class User < ActiveRecord::Base
   scope :non_employees, -> { where("startup_id IS NULL") }
   scope :non_founders, -> { where("is_founder = ? or is_founder IS NULL", false) }
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }
-  scope :contacts, -> { where is_contact: true }
   scope :student_entrepreneurs, -> { where(is_student: true, is_founder: true) }
 
   #### missing startups ???? whats the use now.
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
-
-  accepts_nested_attributes_for :social_ids, :father, :guardian
-
-  # Complicated connections linkage for user-to-user relationship. Destroys the connection when either user or contact are deleted.
-  has_many :connections, foreign_key: 'user_id', dependent: :destroy
-  has_many :occurrences_as_connection, class_name: 'Connection', foreign_key: 'contact_id', dependent: :destroy
 
   # TODO: Remove born_on, title, and salutation columns if unneccessary.
   # validates_presence_of :born_on
@@ -95,15 +87,13 @@ class User < ActiveRecord::Base
 
   # Email is not required for an unregistered 'contact' user.
   def email_required?
-    !(is_contact? && invitation_token.present?)
+    !(invitation_token.present?)
   end
 
   # Validate presence of e-mail for everyone except contacts with invitation token (unregistered contacts).
-  validates_uniqueness_of :email, unless: ->(user) { user.is_contact? && user.invitation_token.present? }
+  validates_uniqueness_of :email, unless: ->(user) { user.invitation_token.present? }
 
   # Validate the mobile number
-  validates_presence_of :phone, if: ->(user) { user.is_contact? }
-  validates_uniqueness_of :phone, if: ->(user) { user.is_contact? }
 
   # Couple of fields essential to forming partnerships. These are validated when partner confirms intent to form partnership.
   validates_presence_of :born_on, if: ->(user) { user.validate_partnership_essential_fields }
@@ -252,11 +242,8 @@ class User < ActiveRecord::Base
     end
 
     # Create the user
-    user = new(contact_params.merge(is_contact: true))
+    user = new(contact_params)
     user.save_unregistered_user!
-
-    # Create the connection
-    Connection.create! user_id: sv_user.id, contact_id: user.id, direction: direction
   end
 
   # Skips setting password and sets invitation_token to allow later registration.

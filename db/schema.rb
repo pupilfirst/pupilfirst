@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150319085212) do
+ActiveRecord::Schema.define(version: 20150319101559) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -156,16 +156,6 @@ ActiveRecord::Schema.define(version: 20150319085212) do
   add_index "events", ["category_id"], name: "index_events_on_category_id", using: :btree
   add_index "events", ["location"], name: "index_events_on_location", using: :btree
   add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
-
-  create_table "guardians", force: :cascade do |t|
-    t.integer  "name_id"
-    t.integer  "address_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "guardians", ["address_id"], name: "index_guardians_on_address_id", using: :btree
-  add_index "guardians", ["name_id"], name: "index_guardians_on_name_id", using: :btree
 
   create_table "locations", force: :cascade do |t|
     t.decimal  "latitude"
@@ -452,7 +442,6 @@ ActiveRecord::Schema.define(version: 20150319085212) do
     t.text     "educational_qualification"
     t.string   "place_of_birth"
     t.string   "religion"
-    t.integer  "guardian_id"
     t.string   "salutation"
     t.boolean  "is_student"
     t.string   "course"
@@ -466,7 +455,6 @@ ActiveRecord::Schema.define(version: 20150319085212) do
     t.integer  "pending_startup_id"
     t.string   "company"
     t.string   "designation"
-    t.boolean  "is_contact"
     t.boolean  "startup_admin"
     t.string   "father_or_husband_name"
     t.string   "pin"
@@ -479,7 +467,6 @@ ActiveRecord::Schema.define(version: 20150319085212) do
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["father_id"], name: "index_users_on_father_id", using: :btree
-  add_index "users", ["guardian_id"], name: "index_users_on_guardian_id", using: :btree
   add_index "users", ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
   add_index "users", ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree

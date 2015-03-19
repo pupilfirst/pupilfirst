@@ -44,8 +44,6 @@ class User < ActiveRecord::Base
 
   has_many :requests
   has_many :news, class_name: "News", foreign_key: :user_id
-  has_many :social_ids
-  # has_one :student_entrepreneur_policy
   has_one :mentor, dependent: :destroy
   belongs_to :college
   belongs_to :bank
@@ -130,14 +128,6 @@ class User < ActiveRecord::Base
   before_create do
     self.auth_token = SecureRandom.hex(30)
     self.startup_verifier_token = SecureRandom.hex(30)
-  end
-
-  class << self
-    def find_by_social_record(network, social_id)
-      social_record = SocialId.find_by_provider_and_social_id(network.to_s, social_id.to_s)
-      return nil if social_record.nil?
-      social_record.user
-    end
   end
 
   # def address

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150319101559) do
+ActiveRecord::Schema.define(version: 20150319113621) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -255,22 +255,6 @@ ActiveRecord::Schema.define(version: 20150319101559) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  create_table "social_ids", force: :cascade do |t|
-    t.string   "provider"
-    t.integer  "user_id"
-    t.string   "social_id"
-    t.string   "social_token", limit: 500
-    t.boolean  "primary"
-    t.string   "permission"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "social_ids", ["primary"], name: "index_social_ids_on_primary", using: :btree
-  add_index "social_ids", ["provider"], name: "index_social_ids_on_provider", using: :btree
-  add_index "social_ids", ["social_id"], name: "index_social_ids_on_social_id", using: :btree
-  add_index "social_ids", ["user_id"], name: "index_social_ids_on_user_id", using: :btree
 
   create_table "startup_applications", force: :cascade do |t|
     t.string   "name"

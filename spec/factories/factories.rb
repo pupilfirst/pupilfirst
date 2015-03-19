@@ -12,17 +12,6 @@ FactoryGirl.define do
     password_confirmation "password"
   end
 
-  factory :social_id do
-    social_id       {Faker::Number.number(8)}
-    social_token    {Faker::Lorem.characters(256)}
-    permission      []
-    # association :user, factory: :user_with_out_password, strategy: :build
-    factory :facebook_social_id do
-      provider :facebook
-      primary  true
-    end
-  end
-
   factory :user do
     fullname { Faker::Name.name }
     username  { Faker::Lorem.characters(9) }

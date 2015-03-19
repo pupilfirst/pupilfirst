@@ -288,7 +288,6 @@ ActiveAdmin.register Startup do
       row :approval_status
       row :incorporation_status
       row :bank_status
-      row :sep_status
       row :company_names
       row :address
       row :pre_funds
@@ -340,17 +339,6 @@ ActiveAdmin.register Startup do
         end
       end
 
-      row :sep_status do |startup|
-        if startup.sep_status
-          'Approved'
-        elsif startup.sep_submited?
-          link_to("Approve Sep",
-            custom_update_admin_startup_path(startup: { sep_status: true }, email_to_send: :sep),
-            { method: :put, data: { confirm: "Are you sure?" } })
-        else
-          'Waiting for Submission'
-        end
-      end
     end
 
     panel 'Partnership Details' do
@@ -382,9 +370,8 @@ ActiveAdmin.register Startup do
   form :partial => "admin/startups/form"
   permit_params :name, :pitch, :website, :about, :email, :logo, :facebook_link, :twitter_link, :cool_fact,
     { category_ids: [] }, { founder_ids: [] }, { founders_attributes: [:id, :fullname, :email, :username, :avatar, :remote_avatar_url, :title, :linkedin_url, :twitter_url, :skip_password] },
-    :created_at, :updated_at, :approval_status, :incorporation_status, :bank_status, :sep_status, :dsc,
+    :created_at, :updated_at, :approval_status, :incorporation_status, :bank_status, :dsc,
     :authorized_capital, :share_holding_pattern, :moa, :police_station, :approval_status, :incorporation_status,
-    :bank_status, :sep_status, :company_names, :address, :pre_funds, :startup_before, :product_name,
     :product_description, :registration_type, :incubation_location, { help_from_sv: [] }, :agreement_sent,
     :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration, :physical_incubatee
 end

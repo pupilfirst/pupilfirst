@@ -1,10 +1,10 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe News do
-  context 'Createing news' do
-    it "will strips youtube url to id" do
-      news = build(:news)
+  let(:news) { build :news }
 
+  context 'Creating news' do
+    it 'will strip youtube URL to ID' do
       news.youtube_id = 'https://www.youtube.com/watch?v=foobar'
       expect(news.youtube_id).to eq('foobar')
       news.youtube_id = 'http://www.youtube.com/watch?v=foobar'
@@ -19,17 +19,14 @@ describe News do
       expect(news.youtube_id).to eq('Xvq6gOKkow8')
     end
 
-    it "will normalize youtube_id to nil if empty string is passed" do
-      news = build(:news)
-
+    it 'will normalize youtube_ID to nil if empty string is passed' do
       news.youtube_id = ' '
       expect(news.youtube_id).to eq(nil)
       news.youtube_id = nil
       expect(news.youtube_id).to eq(nil)
     end
 
-    it "will give youtube thumbnail urls for respective id" do
-      news = build(:news)
+    it 'will give youtube thumbnail URLs for respective ID' do
       youtube_id = 'foobar'
       news.youtube_id = youtube_id
       expect(news.youtube_thumbnail_url).to eq("http://img.youtube.com/vi/#{youtube_id}/hqdefault.jpg")
@@ -44,8 +41,7 @@ describe News do
       expect(news.youtube_thumbnail_url(:xyz)).to eq("http://img.youtube.com/vi/#{youtube_id}/default.jpg")
     end
 
-    it "will assign published_at before_create" do
-      news = build(:news)
+    it 'will assign published_at before_create' do
       news.youtube_id = 'foobar'
       news.save!
       expect(news.published_at.to_s).to eq(news.created_at.to_s)
@@ -53,18 +49,24 @@ describe News do
   end
 
   context 'update a News as featured' do
-    it "sends push if assign news item as featured for first time" do
-      news = create(:news, youtube_id: 'foobar')
-      allow(news).to receive(:send_push_notification).and_return(true)
+    let(:news) { create(:news, youtube_id: 'foobar') }
+
+    before do
+      allow(news).to receive(:send_push_notification)
+    end
+
+    it 'sends push if assign news item as featured for first time' do
       expect(news).to receive(:send_push_notification)
       news.update_attributes!(featured: true)
     end
 
-    it "dosn't sends push if news item is re-asigned as featured" do
-      news = create(:news, youtube_id: 'foobar', notification_sent: true)
-      allow(news).to receive(:send_push_notification).and_return(true)
-      expect(news).not_to receive(:send_push_notification)
-      news.update_attributes!(featured: true)
+    context 'if news item is re-asigned as featured' do
+      let(:news) { create(:news, youtube_id: 'foobar', notification_sent: true) }
+
+      it 'does not send push message' do
+        expect(news).not_to receive(:send_push_notification)
+        news.update_attributes!(featured: true)
+      end
     end
   end
 end

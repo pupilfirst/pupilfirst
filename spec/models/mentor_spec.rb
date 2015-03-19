@@ -1,5 +1,11 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Mentor do
-  pending "add some examples to (or delete) #{__FILE__}"
+  subject { create :mentor }
+
+  describe '#name' do
+    it "returns user's full name" do
+      expect(subject.name).to eq subject.user.fullname
+    end
+  end
 end

@@ -30,7 +30,7 @@ ActiveAdmin.register User do
     push_message = 'Please make sure you complete your profile to help us connect you to mentors and investors.'
 
     # Send push message.
-    UserPushNotifyJob.new.async.perform(user.id, :founder_profile_reminder, push_message)
+    UserPushNotifyJob.perform_later(user.id, 'founder_profile_reminder', push_message)
 
     # Send email.
     UserMailer.reminder_to_complete_founder_profile(user).deliver_later
@@ -64,6 +64,8 @@ ActiveAdmin.register User do
       row :phone
       row :phone_verified
       row :communication_address
+      row :district
+      row :state
       row 'PIN Code' do
         user.pin
       end
@@ -102,7 +104,7 @@ ActiveAdmin.register User do
   form partial: 'admin/users/form'
 
   permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url,
-    :title, :skip_password, :born_on, :startup_admin, :communication_address,
+    :title, :skip_password, :born_on, :startup_admin, :communication_address, :district, :state, :pin,
     :is_contact, :phone, :phone_verified, :company, :designation, :invitation_token, #:confirmed_at,
     { category_ids: [] }
 end

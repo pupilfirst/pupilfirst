@@ -15,7 +15,6 @@
     = f.input :twitter_link
     = f.input :facebook_link
     = f.input :email
-    = f.input :phone
     = f.input :categories, collection: Category.startup_category, hint: "Max: 3, Min: 1", input_html: {style: "width: 400px;"}
     = f.input :founders, collection: Hash[@startup.possible_founders.map{|b| [b.to_s,b.id]}], input_html: {style: "width: 400px;"}
     = f.input :registration_type, collection: Startup.valid_registration_types
@@ -27,7 +26,6 @@
     = f.input :approval_status, collection: Startup.valid_approval_status_values, include_blank: false
     = f.input :incorporation_status
     = f.input :bank_status
-    = f.input :sep_status
     = f.input :company_names
     = f.input :address
     = f.input :incubation_location, collection: Startup.valid_incubation_location_values

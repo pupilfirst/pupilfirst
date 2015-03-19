@@ -1,7 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe PartnershipsController do
-
   describe "GET 'confirm'" do
     context 'when passed an invalid confirmation token'
     it 'returns HTTP Not Found' do

@@ -14,7 +14,7 @@ gem 'inherited_resources'
 gem 'acts-as-taggable-on'
 gem 'attribute_normalizer', '~> 1.2.0.b'
 gem 'carrierwave'
-gem 'carrierwave_backgrounder', git: 'https://github.com/glhewett/carrierwave_backgrounder.git' # https://github.com/lardawge/carrierwave_backgrounder not updated for sucker_punch v1.0 api changes
+gem 'carrierwave_backgrounder'
 gem 'cocoon'
 gem 'coffee-rails', '~> 4.1.0'
 gem 'devise_invitable'
@@ -32,7 +32,6 @@ gem 'sass-rails', '~> 5.0'
 gem 'sendgrid_smtpapi'
 gem 'sentry-raven'
 gem 'slim'
-gem 'sucker_punch'
 # gem 'turbolinks' # Disabled, because it is a pain in the ass.
 gem 'uglifier'
 gem 'urbanairship'
@@ -59,14 +58,14 @@ gem 'logstash-logger' # A better logger.
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'momentjs-rails', '>= 2.8.1',  :github => 'derekprior/momentjs-rails'
 gem 'wysihtml-rails', :git => 'https://github.com/Voog/wysihtml-rails.git'
-gem 'social-share-button'
 
-gem 'apipie-rails' # API documentation, served straight from the app.
+gem 'apipie-rails'
+gem 'roadie-rails'
 
-gem 'passenger', '= 5.0.0.rc2' # Let's try using Passenger (Raptor) instead of Puma.
+gem 'passenger', '~> 5.0.4' # Back to Passenger! Woohoo!
 
 gem 'delayed_job_active_record' # Delayed Job to manage jobs. Let's migrate away from SuckerPunch.
-
+gem 'sucker_punch'
 group :development do
   gem "letter_opener"
   gem 'seed-fu', github: 'mbleigh/seed-fu' # check and remove
@@ -82,16 +81,14 @@ end
 
 group :test do
   gem 'sqlite3'
-  gem 'email_spec'
   gem 'factory_girl', require: false
   gem 'factory_girl_rails', '~> 4.0'
   gem 'faker'
   gem 'json_spec', github: 'collectiveidea/json_spec'
-  gem 'zeus'
 end
 
 group :development, :test do
-  gem 'rspec-rails', '~> 3.1.0'
+  gem 'rspec-rails', '~> 3.2.0'
   gem 'rb-inotify', :require => false
   gem 'rb-fsevent', :require => false
   gem 'rb-fchange', :require => false
@@ -128,4 +125,4 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-ruby '2.2.0'
+ruby '2.2.1'

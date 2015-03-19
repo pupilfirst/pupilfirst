@@ -1,15 +1,30 @@
-p Hello,
+= content_for :heading
+  | Your request for incubation has been rejected.
 
-p We're sorry, we will not be able to go forward with your application at this time. But this is not the end of the road
-  for your startup. The reason for the speed bump is that your startup profile is not complete and updated. Feel free to
-  fill in more details about your startup in the startup profile page (both app and web version). Once done, please send
-  a mail to #{mail_to 'kiran@startupvillage.in'} mentioning that you have updated your startup profile page.
+= content_for :salutation
+  | Hello,
 
-p Note that your SV ID (your registered email ID) will serve as the primary ID concerning all things Startup
-  Village &mdash; please remember to quote it during all communication.
+= content_for :body
+  p
+    ' We're sorry, but we will not be able to go forward with your application at this time.
 
-p Team Startup Village.
+  p
+    ' However, this is not the end of the road for your startup. The reason for the speed bump is that your startup
+    ' profile is not complete and updated. Feel free to fill in more details about your startup in the
+    ' #{link_to 'startup profile page', @startup}
+    ' (both app and web version). Once done, please send a mail to #{mail_to @startup.rejection_contact} mentioning
+    | that you have updated your startup profile page.
 
-p Visit us on #{link_to 'Facebook', 'https://www.facebook.com/startupvillage'},
-    #{link_to 'Twitter', 'https://twitter.com/StartatSV'},
-    and our #{link_to 'SV Blog', 'http://www.startatsv.com/'}.
+  p If you're unable to click on the link to your startup profile (above), then please copy and paste the following link
+      into your browser's address bar:
+
+  pre = startup_url(@startup)
+
+  p
+    ' Note that your SV ID (your registered email address) will serve as the primary ID concerning all things Startup
+    | Village &mdash; please remember to quote it during all communication.
+
+  p
+    ' Visit us on #{link_to 'Facebook', 'https://www.facebook.com/startupvillage'},
+    ' #{link_to 'Twitter', 'https://twitter.com/StartatSV'},
+    ' and our #{link_to 'SV Blog', 'http://www.startatsv.com/'}.

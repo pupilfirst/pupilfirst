@@ -14,7 +14,7 @@ class News < ActiveRecord::Base
   just_define_datetime_picker :published_at
 
   validates_presence_of :author
-  validates_presence_of :picture, unless: Proc.new { |user| user.youtube_id.present? }
+  validates_presence_of :picture, unless: Proc.new { |news| news.youtube_id.present? }
   validates_presence_of :title
   alias_attribute :push_title, :title
   PUSH_TYPE = 'news' unless defined?(PUSH_TYPE)
@@ -30,7 +30,7 @@ class News < ActiveRecord::Base
   end
 
   def send_push_notification
-    PushNotifyJob.new.async.perform(self.class.to_s.downcase, self.id)
+    PushNotifyJob.perform_later(self.class.to_s.downcase, self.id)
   end
 
   def youtube_thumbnail_url(size = :high)

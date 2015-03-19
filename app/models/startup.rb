@@ -282,9 +282,9 @@ class Startup < ActiveRecord::Base
     false
   end
 
-  def sep_submited?
-    false
-  end
+  # def sep_submited?
+  #   false
+  # end
 
   validate :category_count
 
@@ -381,7 +381,7 @@ class Startup < ActiveRecord::Base
 
   def agreement_live?
     agreement_ends_at.present? && agreement_ends_at > Time.now
-  end  
+  end
 
   def is_agreement_live?
     try(:agreement_ends_at).to_i > Time.now.to_i
@@ -392,11 +392,29 @@ class Startup < ActiveRecord::Base
   end
 
   def is_founder?(user)
-    founders.include? user
+    user.is_founder? && user.startup_id == self.id
   end
 
   def possible_founders
-    self.founders + User.non_founders 
+    self.founders + User.non_founders
+  end
+
+  def phone
+    self.admin.try(:phone)
+  end
+
+  # E-mail address of person to contact in case startup is rejected.
+  def rejection_contact
+    case incubation_location
+      when INCUBATION_LOCATION_VISAKHAPATNAM
+        'vasu@startupvillage.in'
+      when INCUBATION_LOCATION_KOCHI
+        'kiran@startupvillage.in'
+      when INCUBATION_LOCATION_KOZHIKODE
+        'kiran@startupvillage.in'
+      else
+        'kiran@startupvillage.in'
+    end
   end
 
   # TODO: Remove incorporation_status boolean field.

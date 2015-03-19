@@ -60,30 +60,13 @@ class StartupsController < InheritedResources::Base
     @self.confirm_employee! true
   end
 
-  # def confirm_employee
-  #   @startup = Startup.find(params[:id])
-  #   @new_employee = User.find_by_startup_verifier_token(params[:token])
-  #   raise_not_found unless @new_employee
-  #   if request.post?
-  #     flash[:notice] = "User was already accepted as startup employee." if @new_employee.startup_link_verifier_id
-  #     @new_employee.confirm_employee! params[:is_founder]
-  #     message = "Congratulations! You've been approved as #{@new_employee.title} at #{@startup.name}."
-  #     UserMailer.accepted_as_employee(@new_employee, @startup).deliver_later
-  #     UserPushNotifyJob.new.async.perform(@new_employee.id, :confirm_employee, message)
-  #     render :confirm_employee_done
-  #   else
-  #     @token = params[:token]
-  #     render :confirm_employee
-  #   end
-  # end
-
   # GET /startups/featured
   def featured
     redirect_to DbConfig.featured_startup
   end
 
   def apply_now_params
-    params.require(:startup).permit(:name, :phone, :pitch, :website, :email, :registration_type)
+    params.require(:startup).permit(:name, :pitch, :website, :email, :registration_type)
   end
 
   def startup_params

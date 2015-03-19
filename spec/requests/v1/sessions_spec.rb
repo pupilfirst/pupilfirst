@@ -1,9 +1,9 @@
-require 'spec_helper'
+require 'spec_helpers/v1/users_spec_helper'
 
 describe V1::SessionsController do
-  include V1ApiSpecHelper
+  include ApiSpecHelper
   include UserSpecHelper
-  include StartupSpecHelper
+  include StartupsSpecHelper
 
   describe 'POST on session' do
     before do
@@ -57,5 +57,4 @@ describe V1::SessionsController do
       end
     end
   end
-
 end

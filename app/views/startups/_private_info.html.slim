@@ -21,7 +21,7 @@ table.table
       td = nil_not_available @startup.pitch
     tr
       th Product Description
-      td = nil_not_available @startup.product_description
+      td = nil_not_available @startup.product_description, output_simple_format: true
     tr
       th Product Progress
       td = product_progress_html(@startup.product_progress)

@@ -2,7 +2,7 @@ Svapp::Application.routes.draw do
   scope '/api' do
     api_version(:module => "V1", :header => {:name => "Accept", :value => "application/vnd.svapp.v1"}, :defaults => {:format => "json"}, :default => true) do
       resources :users do
-        resource :student_entrepreneur_policy
+        # resource :student_entrepreneur_policy
 
         member do
           post 'phone_number', action: :generate_phone_number_verification_code
@@ -22,6 +22,7 @@ Svapp::Application.routes.draw do
       resources :requests, only: [:index, :create]
       resources :events
       resources :news
+      resources :colleges, only: [:index]
 
       resources :startup_jobs, only: [:index, :show]
       resources :startups do
@@ -32,8 +33,6 @@ Svapp::Application.routes.draw do
         end
 
         member do
-          # post :link_employee
-          post :partnership_application
           post :founders, action: :add_founder
           delete :founders, action: :delete_founder
           get :founders, action: :retrieve_founder

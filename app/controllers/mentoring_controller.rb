@@ -8,8 +8,7 @@ class MentoringController < ApplicationController
   # GET /mentoring
   def index
     @startups = Startup.paginate(page: params[:startups_page], per_page: 10)
-    # @startups = Startup.agreement_live
-    @mentors = Mentor.listed_mentors(exclude: current_user)
+    @mentors = Mentor.listed_mentors(exclude: current_user).includes(:skills, :user)
   end
 
   # GET /mentoring/register
@@ -84,7 +83,7 @@ class MentoringController < ApplicationController
       render 'new_step4' and return
     end
     flash[:notice] = 'You have successfully registered as a mentor!'
-    MentoringMailer.mentor_verification_ongoing(current_user).deliver
+    MentoringMailer.mentor_verification_ongoing(current_user).deliver_later
     redirect_to mentoring_url
   end
 
@@ -129,6 +128,8 @@ class MentoringController < ApplicationController
       :company_level, :days_available, :time_available
     )
   end
+
+  #  TODO refactor the code
 
   def redirect_registration_steps(step)
     if current_user.mentor.present?

@@ -10,7 +10,7 @@ Rails.application.configure do
   config.eager_load = false
 
   # Show full error reports and disable caching.
-  config.consider_all_requests_local       = true
+  config.consider_all_requests_local = true
   config.action_controller.perform_caching = false
 
   # Don't care if the mailer can't send.
@@ -31,7 +31,7 @@ Rails.application.configure do
 
   # Asset digests allow you to set far-future HTTP expiration dates on all assets,
   # yet still be able to expire them through the digest params.
-  config.assets.digest = true
+  config.assets.digest = false
 
   # Adds additional error checking when serving assets at runtime.
   # Checks for improperly declared sprockets dependencies.
@@ -46,7 +46,7 @@ Rails.application.configure do
   # In development and test, let's have carrierwave store everything on local disk.
   config.carrier_wave_storage = :file
 
-  config.action_mailer.delivery_method = :letter_opener
+  # config.action_mailer.delivery_method = :letter_opener
 
   # for detecting n + 1 queries using Bullet
   Bullet.enable = true
@@ -54,6 +54,9 @@ Rails.application.configure do
   Bullet.console = true
   Bullet.rails_logger = true
   Bullet.add_footer = true
+
+  # Roadie asset host.
+  config.roadie.url_options = { host: 'localhost', scheme: 'http', port: 3000 }
 end
 
 

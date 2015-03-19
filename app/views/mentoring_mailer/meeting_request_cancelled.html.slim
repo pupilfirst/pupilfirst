@@ -1,9 +1,11 @@
-p Hi #{@recipient.fullname}!
+= content_for :heading
+  | #{@mentor_meeting.guest(@recipient).fullname} has agreed to the meeting!
 
-p Unfortunately #{@mentor_meeting.guest(@recipient).fullname} has cancelled the meeting with you! Please refer to his/her comments below:
+= content_for :salutation
+  | Hi #{@recipient.fullname}!
 
-p
-  i &ldquo;#{@mentor_meeting.is_mentor?(@recipient) ? @mentor_meeting.user_comments : @mentor_meeting.mentor_comments}&rdquo;
-
-p Cheers,
-p Team Startup Village
+= content_for :body
+  p
+    ' Unfortunately #{@mentor_meeting.guest(@recipient).fullname} has cancelled the meeting with you! Please refer to his/her comments below:
+  p
+    i &ldquo;#{@mentor_meeting.is_mentor?(@recipient) ? @mentor_meeting.user_comments : @mentor_meeting.mentor_comments}&rdquo;

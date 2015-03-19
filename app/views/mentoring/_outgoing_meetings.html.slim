@@ -12,10 +12,10 @@
           th Time
           th Status
       tbody
-      - current_user.mentor_meetings.order('id DESC').each do |meet|
+      - current_user.mentor_meetings.includes(:mentor).order('id DESC').each do |meet|
         tr
           td = meet.purpose
-          td = meet.mentor.user.fullname
+          td = meet.mentor_name
           td = meet.meeting_at.present? ? meet.meeting_at.to_date : meet.suggested_meeting_at.to_date
           td = meet.meeting_at.present? ? meet.meeting_at.strftime('%l:%M %P') : meet.suggested_meeting_at.strftime('%l:%M %P')
           td

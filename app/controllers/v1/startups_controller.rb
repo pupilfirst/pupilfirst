@@ -65,19 +65,9 @@ class V1::StartupsController < V1::BaseController
     StartupMailer.respond_to_new_employee(startup, @new_employee).deliver_later
     message = "#{@new_employee.fullname} wants to be linked with #{startup.name or "your startup"}. Please check your email to approve."
     startup.founders.each do |f|
-      UserPushNotifyJob.new.async.perform(f.id, :fill_personal_info, message)
+      UserPushNotifyJob.perform_later(f.id, 'fill_personal_info', message)
     end
     # render nothing: true, status: :created
-  end
-
-  def partnership_application
-    if current_user.startup.partnership_application?
-      render json: { error: "Already applied for Partnership" }, status: :bad_request
-    else
-      current_user.startup.update_attributes!(partnership_application: true)
-      StartupMailer.partnership_application(current_user.startup, current_user).deliver_later
-      render nothing: true, status: :created
-    end
   end
 
   # POST /api/startups/:id/registration
@@ -102,7 +92,7 @@ class V1::StartupsController < V1::BaseController
       message = "#{@current_user.fullname} wants you to become one of the co-founders of a Startup that #{@current_user.gender == User::GENDER_MALE ? "he's" : "she's"} in the process of creating!"
 
       # TODO: Spec UserPushNotifyJob.new.async.perform
-      UserPushNotifyJob.new.async.perform(user.id, :cofounder_invite, message)
+      UserPushNotifyJob.perform_later(user.id, 'cofounder_invite', message)
     end
 
     # Save the record.
@@ -165,9 +155,9 @@ class V1::StartupsController < V1::BaseController
   private
   def startup_params
     if params[:startup]
-      params[:startup].permit(:name, :phone, :pitch, :website, :dsc, :transaction_details, :registration_type,
+      params[:startup].permit(:name, :pitch, :website, :dsc, :transaction_details, :registration_type,
         :address, :state, :district, :incubation_location,
-        :logo, :about, :phone, :facebook_link, :twitter_link, :product_name, :product_description, :categories, :cool_fact,
+        :logo, :about, :facebook_link, :twitter_link, :product_name, :product_description, :categories, :cool_fact,
         company_names: [:justification, :name],
         police_station: [:city, :line1, :line2, :name, :pin],
         registered_address_attributes: [:flat, :building, :street, :area, :town, :state, :pin]
@@ -187,7 +177,7 @@ class V1::StartupsController < V1::BaseController
 
   def require_user_startup_match
     # Requested startup must match the authorized user's startup.
-    if params[:id].to_i != current_user.startup.id
+    if params[:id].to_i != current_user.startup_id
       raise Exceptions::AuthorizedUserStartupMismatch, "Selected startup does not match User's startup."
     end
   end

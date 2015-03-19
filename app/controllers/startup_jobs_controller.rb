@@ -29,7 +29,7 @@ class StartupJobsController < ApplicationController
   end
 
   def list_all
-    @startup_jobs = StartupJob.order('updated_at DESC')
+    @startup_jobs = StartupJob.includes(:startup).order('updated_at DESC')
   end
 
   def edit

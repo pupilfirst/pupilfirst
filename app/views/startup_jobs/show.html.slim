@@ -2,7 +2,7 @@
   h3 #{@startup_job.title} at #{link_to @startup_job.startup.name, startup_path(@startup)}
   - if @startup_job.contact_name.present?
     p posted #{@startup_job.created_at.strftime('%d/%m/%Y')} by #{@startup_job.contact_name}
-.col-md-5
+.col-sm-7.col-md-8
   p
     strong Description
 
@@ -28,7 +28,7 @@
 
       = equity_html @startup_job
 
-.col-md-4
+.col-sm-5.col-md-4
   .list-group
     - if @startup_job.salary.present?
       p.list-group-item
@@ -59,18 +59,22 @@
       span class= 'glyphicon glyphicon-map-marker'
       |  #{@startup_job.location}
 
-.col-md-3
   p
-    a href="http://www.facebook.com/sharer.php?u=#{ request.original_url }"
-      i class="fa fa-fw fa-facebook"
-      |  Share on Facebook
-  hr
-  p
-    a href="http://twitter.com/home?status=#{ request.original_url }"
-      i class="fa fa-fw fa-twitter"
-      |  Tweet this
-  hr
-  p
-    a href="https://plus.google.com/share?url=#{ request.original_url }"
-      i class="fa fa-google-plus"
-      |  Share on Google +
+    .btn-group
+      button.btn.btn-primary.dropdown-toggle type="button" data-toggle="dropdown" aria-expanded="false"
+        span.glyphicon.glyphicon-share-alt
+        '  Share this page!&nbsp;
+        span.caret
+      ul.dropdown-menu role="menu"
+        li
+          a href="http://www.facebook.com/sharer.php?u=#{request.original_url}"
+            i.fa.fa-fw.fa-facebook
+            |  Facebook
+        li
+          a href="http://twitter.com/home?status=#{request.original_url}"
+            i.fa.fa-fw.fa-twitter
+            |  Twitter
+        li
+          a href="https://plus.google.com/share?url=#{request.original_url}"
+            i.fa.fa-fw.fa-google-plus
+            |  Google+

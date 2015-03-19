@@ -1,11 +1,11 @@
-require 'spec_helper'
+require 'spec_helpers/v1/users_spec_helper'
 
 describe V1::UsersController do
-  include V1ApiSpecHelper
+  include ApiSpecHelper
   include JsonSpec::Helpers
-  describe "GET on user" do
-    context "fetches details of user when id is provided" do
-      xit "returns http success with details" do
+  describe 'GET on user' do
+    context 'fetches details of user when id is provided' do
+      it 'returns http success with details' do
         user = create(:user_with_out_password)
         get "/api/users/#{user.id}", {}, version_header
         expect(response).to be_success
@@ -16,7 +16,7 @@ describe V1::UsersController do
     context 'when id is self' do
       it 'returns extra details' do
         @startup = create :startup
-        get "/api/users/self", {}, version_header(@startup.founders.first)
+        get '/api/users/self', {}, version_header(@startup.founders.first)
         expect(response).to be_success
         check_path(response, 'phone')
         check_path(response, 'phone_verified')
@@ -207,7 +207,7 @@ describe V1::UsersController do
     let(:user) { create :user_with_password }
 
     before do
-      allow(UserPushNotifyJob).to receive_message_chain(:new, :async, :perform_batch).and_return(true)
+      allow(BatchPushNotifyJob).to receive(:perform_later)
     end
 
     context 'when user does not have pending invitation' do
@@ -244,7 +244,7 @@ describe V1::UsersController do
     let(:user) { create :user_with_password }
 
     before do
-      allow(UserPushNotifyJob).to receive_message_chain(:new, :async, :perform_batch).and_return(true)
+      allow(BatchPushNotifyJob).to receive(:perform_later)
     end
 
     context 'when user does not have pending invitation' do
@@ -308,7 +308,7 @@ describe V1::UsersController do
     let!(:contact_3) { create :user_as_contact }
 
     before do
-      allow(UserPushNotifyJob).to receive_message_chain(:new, :async, :perform)
+      allow(UserPushNotifyJob).to receive(:perform_later)
     end
 
     it 'returns all connections supplied by SV to user' do

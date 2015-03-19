@@ -16,4 +16,23 @@ h2.page-header.margin-top-0
     p
       span.glyphicon.glyphicon-map-marker
       strong &nbsp;#{@event.location}
-      = social_share_button_tag(@event.title)
+
+    p
+      .btn-group
+        button.btn.btn-primary.dropdown-toggle type="button" data-toggle="dropdown" aria-expanded="false"
+          span.glyphicon.glyphicon-share-alt
+          '  Share this page!&nbsp;
+          span.caret
+        ul.dropdown-menu role="menu"
+          li
+            a href="http://www.facebook.com/sharer.php?u=#{request.original_url}"
+              i.fa.fa-fw.fa-facebook
+              |  Facebook
+          li
+            a href="http://twitter.com/home?status=#{request.original_url}"
+              i.fa.fa-fw.fa-twitter
+              |  Twitter
+          li
+            a href="https://plus.google.com/share?url=#{request.original_url}"
+              i.fa.fa-fw.fa-google-plus
+              |  Google+

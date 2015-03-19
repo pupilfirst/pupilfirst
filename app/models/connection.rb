@@ -20,7 +20,7 @@ class Connection < ActiveRecord::Base
 
   def send_notification_for_sv_connection
     if direction == DIRECTION_SV_TO_USER
-      UserPushNotifyJob.new.async.perform(user.id, :create_connection, I18n.t('notifications.create_connection', fullname: contact.fullname),
+      UserPushNotifyJob.perform_later(user.id, 'create_connection', I18n.t('notifications.create_connection', fullname: contact.fullname),
         contact.contact_fields
       )
     end

@@ -44,12 +44,46 @@ ActiveAdmin.register Startup do
     column :categories do |startup|
       startup.categories.pluck(:name).join ', '
     end
+    column :cofounders do |startup|
+      startup.founders.count
+    end
+    column :women_cofounders do |startup|
+      startup.founders.where(gender: "female").count
+    end
+
     # column :facebook_link
     # column :twitter_link
     # column :pitch do |startup|
     #   startup.pitch.truncate(50) rescue nil
     # end
     column :website
+  end
+
+  csv do
+    column :name
+    column :incubation_location
+    column :physical_incubatee
+    column(:founders) { |startup| startup.founders.pluck(:fullname).join ', ' }
+    column :pitch
+    column :website
+    column :approval_status
+    column :email
+    column :registration_type
+    column :about
+    column :district
+    column :pin
+    column :cool_fact
+    column :product_name
+    column :product_progress
+    column :product_description
+    column :presentation_link
+    column :revenue_generated
+    column :team_size
+    column :women_employees
+    column :agreement_sent
+    column :agreement_first_signed_at
+    column :agreement_last_signed_at
+    column :agreement_ends_at
   end
 
   member_action :custom_update, method: :put do
@@ -62,20 +96,16 @@ ActiveAdmin.register Startup do
         push_message = 'Congratulations! Your request for incubation at Startup Village has been approved.'
 
         startup.founders.each do |user|
-          UserPushNotifyJob.new.async.perform(user.id, :startup_approval, push_message)
+          UserPushNotifyJob.perform_later(user.id, 'startup_approval', push_message)
         end
+
       when :rejection
         StartupMailer.startup_rejected(startup).deliver_later
         push_message = "We're sorry, but your request for incubation at Startup Village has been rejected."
 
         startup.founders.each do |user|
-          UserPushNotifyJob.new.async.perform(user.id, :startup_rejection, push_message)
+          UserPushNotifyJob.perform_later(user.id, 'startup_rejection', push_message)
         end
-      when :incorporation
-        StartupMailer.incorporation_approved(startup).deliver_later
-      when :bank
-        StartupMailer.bank_approved(startup).deliver_later
-      when :sep
     end
 
     redirect_to action: :show
@@ -86,7 +116,7 @@ ActiveAdmin.register Startup do
     push_message = 'Please complete the incubation process by following the steps in the Startup Village application!'
 
     startup.founders.each do |user|
-      UserPushNotifyJob.new.async.perform(user.id, :startup_approval, push_message)
+      UserPushNotifyJob.perform_later(user.id, 'startup_approval', push_message)
     end
 
     StartupMailer.reminder_to_complete_startup_info(startup).deliver_later
@@ -100,7 +130,7 @@ ActiveAdmin.register Startup do
     push_message = 'Please make sure you complete your startup profile to get noticed by mentors and investors.'
 
     startup.founders.each do |user|
-      UserPushNotifyJob.new.async.perform(user.id, :startup_profile_reminder, push_message)
+      UserPushNotifyJob.perform_later(user.id, 'startup_profile_reminder', push_message)
     end
 
     StartupMailer.reminder_to_complete_startup_profile(startup).deliver_later
@@ -212,7 +242,6 @@ ActiveAdmin.register Startup do
       row :agreement_last_signed_at
       row :agreement_ends_at
       row :email
-      row :phone
       row :logo do |startup|
         link_to(image_tag(startup.logo_url(:thumb)), startup.logo_url)
       end
@@ -266,7 +295,9 @@ ActiveAdmin.register Startup do
       row :startup_before
       row :help_from_sv
       row :product_name
-      row :product_description
+      row :product_description do |startup|
+        simple_format startup.product_description
+      end
 
       row :startup_status do |startup|
         if startup.pending?
@@ -349,7 +380,7 @@ ActiveAdmin.register Startup do
   end
 
   form :partial => "admin/startups/form"
-  permit_params :name, :pitch, :website, :about, :email, :phone, :logo, :facebook_link, :twitter_link, :cool_fact,
+  permit_params :name, :pitch, :website, :about, :email, :logo, :facebook_link, :twitter_link, :cool_fact,
     { category_ids: [] }, { founder_ids: [] }, { founders_attributes: [:id, :fullname, :email, :username, :avatar, :remote_avatar_url, :title, :linkedin_url, :twitter_url, :skip_password] },
     :created_at, :updated_at, :approval_status, :incorporation_status, :bank_status, :sep_status, :dsc,
     :authorized_capital, :share_holding_pattern, :moa, :police_station, :approval_status, :incorporation_status,

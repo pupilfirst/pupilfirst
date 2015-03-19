@@ -63,15 +63,6 @@ FactoryGirl.define do
     middle_name  "middle_name"
   end
 
-  factory :address do
-    flat  "flat"
-    building  "building"
-    area  "area"
-    town  "town"
-    state "state"
-    pin "pin"
-  end
-
   factory :user_category, class: Category do |f|
     f.name {Faker::Lorem.words(2).join(' ')}
     f.category_type :user

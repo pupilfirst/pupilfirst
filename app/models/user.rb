@@ -48,7 +48,6 @@ class User < ActiveRecord::Base
   belongs_to :college
   belongs_to :bank
   belongs_to :father, class_name: 'Name'
-  # belongs_to :address
   belongs_to :startup
   belongs_to :startup_link_verifier, class_name: "User", foreign_key: "startup_link_verifier_id"
   has_and_belongs_to_many :categories

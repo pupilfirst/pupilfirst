@@ -159,8 +159,7 @@ class V1::StartupsController < V1::BaseController
         :address, :state, :district, :incubation_location,
         :logo, :about, :facebook_link, :twitter_link, :product_name, :product_description, :categories, :cool_fact,
         company_names: [:justification, :name],
-        police_station: [:city, :line1, :line2, :name, :pin],
-        registered_address_attributes: [:flat, :building, :street, :area, :town, :state, :pin]
+        police_station: [:city, :line1, :line2, :name, :pin]
       )
     else
       {}

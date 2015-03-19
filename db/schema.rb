@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150319113621) do
+ActiveRecord::Schema.define(version: 20150319114307) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,18 +31,6 @@ ActiveRecord::Schema.define(version: 20150319113621) do
   add_index "active_admin_comments", ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
   add_index "active_admin_comments", ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
   add_index "active_admin_comments", ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
-
-  create_table "addresses", force: :cascade do |t|
-    t.string   "flat"
-    t.string   "building"
-    t.string   "street"
-    t.string   "area"
-    t.string   "town"
-    t.string   "state"
-    t.string   "pin"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "admin_users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -323,7 +311,6 @@ ActiveRecord::Schema.define(version: 20150319113621) do
     t.string   "pre_funds"
     t.text     "startup_before"
     t.string   "help_from_sv"
-    t.integer  "registered_address_id"
     t.string   "pre_investers_name"
     t.string   "transaction_details"
     t.boolean  "partnership_application"
@@ -348,8 +335,6 @@ ActiveRecord::Schema.define(version: 20150319113621) do
     t.datetime "agreement_ends_at"
     t.boolean  "physical_incubatee"
   end
-
-  add_index "startups", ["registered_address_id"], name: "index_startups_on_registered_address_id", using: :btree
 
   create_table "statistics", force: :cascade do |t|
     t.string   "parameter"

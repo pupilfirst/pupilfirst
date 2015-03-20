@@ -285,9 +285,9 @@ class Startup < ActiveRecord::Base
     false
   end
 
-  def sep_submited?
-    false
-  end
+  # def sep_submited?
+  #   false
+  # end
 
   validate :category_count
 

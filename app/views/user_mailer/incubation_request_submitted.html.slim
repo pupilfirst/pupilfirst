@@ -13,14 +13,15 @@
   | You can also check the Events tab on the app for the schedule.
 
   p
-    | We have also opened up an online profile (#{link_to @current_user.startup.name, startup_url(@current_user.startup)})
-    ', where you can fill in additional details concerning your startup. You can login using your SV ID. Make sure you
-    | complete this at the earliest as these details will also be considered while processing your incubation request.
+    ' We have also opened up an online profile
+    ' (#{link_to @current_user.startup.name, startup_url(@current_user.startup)}), where you can fill in additional
+    ' details concerning your startup. You can login using your SV ID. Make sure you complete this at the earliest as
+    | these details will also be considered while processing your incubation request.
 
   p If you're unable to click on the link to your startup profile (above), then please copy and paste the following link
     into your browser's address bar:
 
-  pre = startup_url(@current_user.startup)
+  p.monospace = startup_url(@current_user.startup)
 
   p Also note that, the Startup Village team takes a call on your requests on Wednesdays and Fridays.
 

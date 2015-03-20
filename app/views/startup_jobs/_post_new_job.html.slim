@@ -1,5 +1,4 @@
 - if current_user.try(:is_founder?)
-  .btn-add-job.col-lg-3.col-md-4.col-sm-6.col-xs-12
-    a.btn.btn-success href="#{new_startup_startup_job_path(current_user.startup)}"
-      span.glyphicon.glyphicon-plus
-      |  Post a new job
+  .job-card.col-lg-2
+  	.postnew
+    	a href="#{new_startup_startup_job_path(current_user.startup)}" +

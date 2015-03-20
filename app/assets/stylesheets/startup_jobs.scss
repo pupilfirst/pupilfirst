@@ -2,26 +2,142 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.job-card h3 {
-  margin-top: 5px;
+
+.job-card {
+	border: solid LightGrey 2px;
+	border-radius: 2px;
+	margin: 1%;
+	height: 150px;
+
+  &:hover {
+    border: solid grey 2px;
+    border-radius: 0px;
+  }
+
+  .title {
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0px;
+
+    a{
+      color: grey;
+    }
+  }
+
+  .exp {
+    text-align: center;
+    font-size: small;
+    color: LightGrey;
+  }
+
+  .logo {
+    width: 100%;
+    height: 50%;
+
+    img{
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      max-height:100%;
+      max-width: 100%;
+    }
+
+    .startupname{
+      font-size: large;
+      padding: 10px;
+      text-align: center;
+    }
+
+  }
+
+  .postdate {
+    color: LightGrey;
+    font-size: small;
+  }
+
+  .postnew {
+    font-size: xx-large;
+    text-align: center;
+  }
+
 }
 
-.job-card .fix-height {
-  height: 192px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.card-container {
+    -webkit-perspective: 800px;
+   -moz-perspective: 800px;
+     -o-perspective: 800px;
+        perspective: 800px;
 }
 
-.btn-add-job {
-  height: 192px;
+.card-container:hover .card{
+  -webkit-transform: rotateY( 180deg );
+-moz-transform: rotateY( 180deg );
+ -o-transform: rotateY( 180deg );
+    transform: rotateY( 180deg );
 }
 
-.btn-add-job .btn {
-  padding-top: 86px;
-  width: 100%;
-  height: 100%;
+.card {
+   -webkit-transition: -webkit-transform .5s;
+   -moz-transition: -moz-transform .5s;
+     -o-transition: -o-transform .5s;
+        transition: transform .5s;
+-webkit-transform-style: preserve-3d;
+   -moz-transform-style: preserve-3d;
+     -o-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+
+  -webkit-backface-visibility: hidden;
+   -moz-backface-visibility: hidden;
+     -o-backface-visibility: hidden;
+        backface-visibility: hidden;
 }
 
-.button-margin {
-  margin-left: 3px;
+.back {
+  -webkit-backface-visibility: hidden;
+   -moz-backface-visibility: hidden;
+     -o-backface-visibility: hidden;
+        backface-visibility: hidden;
 }
+
+.front {
+  z-index: 2;
+  -webkit-backface-visibility: hidden;
+   -moz-backface-visibility: hidden;
+     -o-backface-visibility: hidden;
+        backface-visibility: hidden;
+}
+
+.back {
+    -webkit-transform: rotateY( 180deg );
+   -moz-transform: rotateY( 180deg );
+     -o-transform: rotateY( 180deg );
+        transform: rotateY( 180deg );
+        z-index: 3;
+}
+
+
+//.job-card h3 {
+//  margin-top: 5px;
+//}
+
+//.job-card .fix-height {
+//  height: 192px;
+//  overflow: hidden;
+//  text-overflow: ellipsis;
+//}
+
+//.btn-add-job {
+//  height: 192px;
+//}
+
+//.btn-add-job .btn {
+//  padding-top: 86px;
+//  width: 100%;
+// height: 100%;
+//}
+
+//.button-margin {
+//  margin-left: 3px;
+//}

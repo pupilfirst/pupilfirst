@@ -5,7 +5,6 @@ FactoryGirl.define do
     purpose { Faker::Lorem.words(5).join ' ' }
     duration { MentorMeeting.valid_durations.sample }
     suggested_meeting_at { 3.days.from_now }
-    suggested_meeting_time Mentor::AVAILABILITY_TIME_MORNING
 
     after :build do |meeting|
       startup = create :startup

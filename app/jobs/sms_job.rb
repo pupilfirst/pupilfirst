@@ -21,10 +21,10 @@ class SmsJob < ActiveJob::Base
     startups_at_kochi = Startup.where(incubation_location: Startup::INCUBATION_LOCATION_KOCHI)
 
     statistics_for_kochi = "Kochi statistics\n" +
-      "Total incubation Requests: #{startups_at_kochi.incubation_requested.count}\n" +
+      "Total incubation Requests: #{5281 + startups_at_kochi.incubation_requested.count}\n" +
       "Incubated startups: #{startups_at_kochi.agreement_live.count}\n" +
       "On Campus: #{startups_at_kochi.physically_incubated.count}\n" +
-      "Incubated startups (cumulative): #{startups_at_kochi.agreement_signed.count}\n" + "#{Startup::SV_STATS_LINK}"
+      "Incubated startups (cumulative): #{849 + startups_at_kochi.agreement_signed.count}\n" + "#{Startup::SV_STATS_LINK}"
 
     msisdns_total =  DbConfig.where(key: ['sms_statistics_all', 'sms_statistics_total']).pluck(:value).join(",").split(",")
     msisdns_visakhapatnam = DbConfig.where(key: ['sms_statistics_all', 'sms_statistics_visakhapatnam']).pluck(:value).join(",").split(",")

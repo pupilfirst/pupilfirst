@@ -1,6 +1,9 @@
 class Startup < ActiveRecord::Base
+  # For an explanation of these legacy values, see linked trello card.
+  #
   # @see https://trello.com/c/SzqE6l8U
   LEGACY_STARTUPS_COUNT = 849
+  LEGACY_INCUBATION_REQUESTS = 5281
 
   REGISTRATION_TYPE_PRIVATE_LIMITED = 'private_limited'
   REGISTRATION_TYPE_PARTNERSHIP = 'partnership'

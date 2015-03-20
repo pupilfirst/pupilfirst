@@ -3,12 +3,12 @@ class SmsJob < ActiveJob::Base
 
   def perform
     statistics_total = "Total statistics\n" +
-      "Total incubation requests: #{5281 + Startup.incubation_requested.count}\n" +
+      "Total incubation requests: #{Startup::LEGACY_INCUBATION_REQUESTS + Startup.incubation_requested.count}\n" +
       "Incubated startups: #{Startup.agreement_live.count}\n" +
       "Community: #{User.count}\n" +
       "Student entrepreneurs: #{User.student_entrepreneurs.count}\n" +
       "On Campus: #{Startup.physically_incubated.count}\n" +
-      "Incubated startups (cumulative): #{849 + Startup.agreement_signed_filtered.count}\n" + "#{Startup::SV_STATS_LINK}"
+      "Incubated startups (cumulative): #{Startup::LEGACY_STARTUPS_COUNT + Startup.agreement_signed_filtered.count}\n" + "#{Startup::SV_STATS_LINK}"
 
     startups_at_visakhapatnam = Startup.where(incubation_location: Startup::INCUBATION_LOCATION_VISAKHAPATNAM)
 
@@ -21,10 +21,10 @@ class SmsJob < ActiveJob::Base
     startups_at_kochi = Startup.where(incubation_location: Startup::INCUBATION_LOCATION_KOCHI)
 
     statistics_for_kochi = "Kochi statistics\n" +
-      "Total incubation Requests: #{startups_at_kochi.incubation_requested.count}\n" +
+      "Total incubation Requests: #{Startup::LEGACY_INCUBATION_REQUESTS + startups_at_kochi.incubation_requested.count}\n" +
       "Incubated startups: #{startups_at_kochi.agreement_live.count}\n" +
       "On Campus: #{startups_at_kochi.physically_incubated.count}\n" +
-      "Incubated startups (cumulative): #{startups_at_kochi.agreement_signed.count}\n" + "#{Startup::SV_STATS_LINK}"
+      "Incubated startups (cumulative): #{Startup::LEGACY_STARTUPS_COUNT + startups_at_kochi.agreement_signed.count}\n" + "#{Startup::SV_STATS_LINK}"
 
     msisdns_total =  DbConfig.where(key: ['sms_statistics_all', 'sms_statistics_total']).pluck(:value).join(",").split(",")
     msisdns_visakhapatnam = DbConfig.where(key: ['sms_statistics_all', 'sms_statistics_visakhapatnam']).pluck(:value).join(",").split(",")

@@ -10,7 +10,8 @@ class DbConfig < ActiveRecord::Base
     featured_startup_id: 'Featured Startup ID',
     sms_statistics_all: 'SMS Statistics All',
     sms_statistics_total: 'SMS Statistics Total',
-    sms_statistics_visakhapatnam: 'SMS Statistics Visakhapatnam'
+    sms_statistics_visakhapatnam: 'SMS Statistics Visakhapatnam',
+    sms_statistics_kochi: 'SMS Statistics Kochi'
   }
 
   def self.stats_application

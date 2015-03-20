@@ -1,22 +1,21 @@
 - if display_card? job
-    .job-card.card-container.col-lg-2
-      .card
-        .front
-          h4.title = link_to job.title, startup_startup_job_path(job.startup, job)
-          .exp
-            - if job.experience?
-                '( #{job.experience})
-            - else
-                ' .
-          .logo
-            - if job.startup.logo?
-             =link_to image_tag(job.startup.logo), startup_path(job.startup)
-            - else
-              .startupname =link_to job.startup.name.upcase, startup_path(job.startup)
-          .postdate.pull-right
-            ' #{job.updated_at.strftime('%^b &ndash; %d').html_safe}
-        .back
-          h4.title Backside
-          p blabla
-          p blablabla
+  .job-card
+    .card
+      .front
+        h5.title #{job.title}
+        .exp
+          - if job.experience?
+              '( #{job.experience})
+          - else
+              '
+        .logo
+          - if job.startup.logo?
+            = image_tag job.startup.logo
+          - else
+            .startupname #{job.startup.name.upcase}
+        .location
+          ' #{job.location.upcase}
+
+      .back
+        ' Backside
 

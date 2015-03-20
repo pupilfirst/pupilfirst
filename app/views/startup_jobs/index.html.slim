@@ -5,5 +5,7 @@ h2.page-header Jobs at #{link_to @startup.name, startup_path(@startup)}
 - if @startup_jobs.empty?
   p #{@startup.name} hasn't listed any jobs at the moment. Check again, later!
 - else
-  - @startup_jobs.each do |job|
-    = render 'job_card_new', job: job
+  .joblist
+    - @startup_jobs.each do |job|
+      .job
+        = render 'job_card_new', job: job

@@ -339,18 +339,7 @@ ActiveAdmin.register Startup do
           'Waiting for Submission'
         end
       end
-
-      row :sep_status do |startup|
-        if startup.sep_status
-          'Approved'
-        elsif startup.sep_submited?
-          link_to("Approve Sep",
-            custom_update_admin_startup_path(startup: { sep_status: true }, email_to_send: :sep),
-            { method: :put, data: { confirm: "Are you sure?" } })
-        else
-          'Waiting for Submission'
-        end
-      end
+      
     end
 
     panel 'Partnership Details' do

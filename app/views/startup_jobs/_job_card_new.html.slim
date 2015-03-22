@@ -17,5 +17,15 @@
           ' #{job.location.upcase}
 
       .back
-        ' Backside
-
+        p.strong
+          | Position:
+          '
+          ' #{job.title}
+        p
+          b Experience:
+          '
+          ' #{job.experience? ? job.experience : "Not specified"}
+        p
+          b Salary:
+          '
+          ' #{job.salary? ? job.salary : "Not specified"}

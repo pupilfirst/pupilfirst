@@ -20,20 +20,20 @@
         .job-details
           p
             .field-name Position:
-            .field-detail #{job.title}
+            .field-detail &nbsp;#{job.title}
           p
             .field-name Experience:
-            .field-detail #{job.experience? ? job.experience : "Not specified"}
+            .field-detail &nbsp;#{job.experience? ? job.experience : "Not specified"}
           - if job.skills?
             p
               .field-name Skills:
-              .field-detail #{job.skills}
+              .field-detail &nbsp;#{job.skills}
           - if job.qualification?
             p
               .field-name Qualification:
-              .field-detail #{job.qualification}
+              .field-detail &nbsp;#{job.qualification}
           p
             .field-name Salary:
-            .field-detail #{job.salary? ? job.salary : "Not specified"}
+            .field-detail &nbsp;#{job.salary? ? job.salary : "Not specified"}
         .job-postdate
           p style="color:grey" #{job.updated_at.strftime('%b\' %d').html_safe}

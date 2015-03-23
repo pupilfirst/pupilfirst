@@ -2,11 +2,9 @@ h1 Request meeting with #{@mentor_meeting.mentor.user.fullname}
 
 p Let's schedule a one-on-one video chat session with the mentor!
 
-p The mentor has indicated that he is usually available during the following time period:
-
 p
-  ' #{badges_for_days @mentor_meeting.mentor.availability['days']} between
-  | #{@mentor_meeting.mentor.availability['time']['after']}:00 and #{@mentor_meeting.mentor.availability['time']['before']}:00.
+  ' The mentor has indicated that he is usually available during the following time period:
+  strong #{availability_as_string @mentor_meeting.mentor.availability}.
 
 p Please fill up the following form and submit it. We'll contact the mentor for approval once that's done.
 

@@ -1,6 +1,37 @@
 module MentorMeetingsHelper
   include MentoringHelper
 
+  def availability_as_string(availability)
+    day = case availability['days']
+      when Date::DAYNAMES then
+        'Everyday'
+      when Date::DAYNAMES[1..5] then
+        'Weekdays'
+      when Date::DAYNAMES - Date::DAYNAMES[1..5] then
+        'Weekends'
+      else availability['days']
+    end
+
+    time = case availability['time']['after']
+      when 8
+        if availability['time']['after'] == 11
+          'Morning'
+        else
+          'All day'
+        end
+      when 11
+        'Midday'
+      when 14
+        'Afternoon'
+      when 17
+        'Evening'
+      else
+        'All day'
+    end
+
+    "#{day}, #{time}"
+  end
+
   def mentor_rating_list
     {
       "Not my Expertise" => MentorMeeting::RATING_0,

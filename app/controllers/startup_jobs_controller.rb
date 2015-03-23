@@ -69,7 +69,7 @@ class StartupJobsController < ApplicationController
   def startup_job_params
     params.require(:startup_job).permit(
       :title, :location, :description, :equity_max, :equity_min, :equity_vest, :equity_cliff, :skills, :experience,
-      :qualification, :contact_name, :contact_number, :contact_email
+      :qualification, :contact_name, :contact_number, :contact_email, :salary
     )
   end
 

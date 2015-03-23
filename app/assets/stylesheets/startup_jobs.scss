@@ -64,7 +64,7 @@
 
       .title{
         padding:10px;margin:0;
-        width: 100%;height: 20%;
+        width: 100%;height: 25%;
         text-align: center;
         white-space: nowrap;
         overflow: hidden;
@@ -80,7 +80,7 @@
       }
 
       .logo{
-        width:100%;height: 50%;
+        width:100%;height: 60%;
 
 
         img{
@@ -114,6 +114,26 @@
       width:100%;height: 100%;
       padding: 2px;
       font-size: x-small;
+      display: flex;
+      flex-flow: column nowrap;
+
+      .job-details{
+        flex:9;
+        .field-name{
+          display: inline-block;
+          color: cadetblue;
+
+        }
+        .field-detail{
+          display: inline-block;
+          color:grey;
+        }
+      }
+      .job-postdate{
+        flex:1;
+        text-align: right;
+        color: LightGrey;
+      }
     }
   }
 }

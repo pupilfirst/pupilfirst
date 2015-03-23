@@ -2,22 +2,37 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.job-card h3 {
-  margin-top: 5px;
+.job-card {
+  perspective: 800px;
+
+  &:hover .card{
+    transform: rotateY( 180deg );
+  }
 }
 
-.job-card .fix-height {
-  height: 192px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.card {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    transition: transform .5s;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
 }
 
-.btn-add-job {
-  height: 192px;
+.back {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  z-index: 3;
+  backface-visibility: hidden;
+  transform: rotateY( 180deg );
 }
 
-.btn-add-job .btn {
-  padding-top: 86px;
+.front {
+  position: absolute;
+  top: 0px;
+  left: 0px;
   width: 100%;
   z-index: 2;
   backface-visibility: hidden;
@@ -123,6 +138,24 @@
   }
 }
 
-.button-margin {
-  margin-left: 3px;
+.jobcardsparentflex{
+  width:800px;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+  margin: auto;
 }
+
+@media all and (max-width: 768px) {
+    .jobcardsparentflex{
+      width:600px;
+    }
+}
+
+@media all and (max-width: 480px) {
+    .jobcardsparentflex{
+      width:200px;
+    }
+}
+

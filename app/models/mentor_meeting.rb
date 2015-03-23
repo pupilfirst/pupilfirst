@@ -52,7 +52,7 @@ class MentorMeeting < ActiveRecord::Base
   def suggested_meeting_time_required
     # When creating a mentor meeting request, don't allow it to be done without specific time being selected.
     unless persisted?
-      if @suggested_meeting_time.blank?
+      if @suggested_meeting_time.blank? && suggested_meeting_at.blank?
         errors.add(:suggested_meeting_time, 'cannot be blank')
       end
     end

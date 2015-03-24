@@ -28,9 +28,9 @@
             span.glyphicon.glyphicon-education style="#{colorify_presence(job.qualification,"cadetblue","lightgrey")}"
           a.job-icon.fitlargest data-toggle="tooltip" data-placement="top" title="#{job.salary}"
             span.glyphicon.glyphicon-usd style="#{colorify_presence(job.salary,"cadetblue","lightgrey")}"
-          a.job-icon.fitlargest data-toggle="tooltip" data-placement="top" title="#{job.skills}"
+          a.job-icon.fitlargest data-toggle="tooltip" data-placement="bottom" title="#{job.skills}"
             span.glyphicon.glyphicon-check style="#{colorify_presence(job.skills,"cadetblue","lightgrey")}"
-          a.job-icon.fitlargest
+          a.job-icon.fitlargest data-toggle="tooltip" data-placement="bottom" title="#{job.equity_summary}"
             span.glyphicon.glyphicon-scissors style="#{colorify_presence(job.equity_min,"cadetblue","lightgrey")}"
           button.job-icon.fitlargest.btn
             span.glyphicon.glyphicon-new-window style="color:cornflowerblue"

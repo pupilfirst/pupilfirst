@@ -65,4 +65,12 @@ class StartupJob < ActiveRecord::Base
     end
   end
 
+  def equity_summary
+    summary = "min: "+self.equity_min.to_s if self.equity_min?
+    summary += " | max: "+self.equity_max.to_s if self.equity_max?
+    summary += " | vest: "+self.equity_vest.to_s if self.equity_vest?
+    summary += " | cliff: "+self.equity_cliff.to_s if self.equity_cliff?
+    summary
+  end
+
 end

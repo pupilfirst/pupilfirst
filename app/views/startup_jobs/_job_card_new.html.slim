@@ -2,7 +2,8 @@
   .card-container
     .card
       .front
-        h5.title #{job.title}
+        .title
+          span #{job.title}
         / .exp
         /   - if job.experience?
         /       '( #{job.experience})
@@ -10,30 +11,31 @@
         /       '
         .logo
           - if job.startup.logo?
-            = image_tag job.startup.logo
+            .startup-logo style="background-image: url(#{job.startup.logo_url})"
           - else
-            .startupname #{job.startup.name.upcase}
+            .startup-name
+              span #{job.startup.name.upcase}
         .location
           ' #{job.location.upcase}
 
       .back
         .job-details
           p
-            .field-name Position:
-            .field-detail &nbsp;#{job.title}
+            .field-name Position:&nbsp;
+            .field-detail #{job.title}
           p
-            .field-name Experience:
-            .field-detail &nbsp;#{job.experience? ? job.experience : "Not specified"}
+            .field-name Experience:&nbsp;
+            .field-detail #{job.experience? ? job.experience : "Not specified"}
           - if job.skills?
             p
-              .field-name Skills:
-              .field-detail &nbsp;#{job.skills}
+              .field-name Skills:&nbsp;
+              .field-detail #{job.skills}
           - if job.qualification?
             p
-              .field-name Qualification:
-              .field-detail &nbsp;#{job.qualification}
+              .field-name Qualification:&nbsp;
+              .field-detail #{job.qualification}
           p
-            .field-name Salary:
-            .field-detail &nbsp;#{job.salary? ? job.salary : "Not specified"}
+            .field-name Salary:&nbsp;
+            .field-detail #{job.salary? ? job.salary : "Not specified"}
         .job-postdate
           p style="color:grey" #{job.updated_at.strftime('%b\' %d').html_safe}

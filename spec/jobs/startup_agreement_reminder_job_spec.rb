@@ -9,7 +9,7 @@ RSpec.describe StartupAgreementReminderJob, :type => :job do
     context 'when startup expires in 1 month' do
       let!(:startup) { create :startup, agreement_first_signed_at: 1.year.ago, agreement_last_signed_at: 1.year.ago, agreement_ends_at: 1.month.from_now }
 
-      it 'sends expiry notification with days to renew', focus: true do
+      it 'sends expiry notification with days to renew' do
         StartupAgreementReminderJob.perform_now
 
         last_mail_subject = ActionMailer::Base.deliveries.last.subject
@@ -24,7 +24,7 @@ RSpec.describe StartupAgreementReminderJob, :type => :job do
     context 'when startup expires in 20 days' do
       let!(:startup) { create :startup, agreement_first_signed_at: 1.year.ago, agreement_last_signed_at: 1.year.ago, agreement_ends_at: 20.days.from_now }
 
-      it 'sends expiry notification with days to renew', focus: true do
+      it 'sends expiry notification with days to renew' do
         StartupAgreementReminderJob.perform_now
 
         last_mail_subject = ActionMailer::Base.deliveries.last.subject

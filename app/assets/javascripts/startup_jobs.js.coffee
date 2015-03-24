@@ -2,5 +2,7 @@ $ ->
   $('#add-more-job-info').click ->
     $('#quick-post-job').toggleClass('hidden')
 
-  $('.startup-name').textfill()
+  $('.fitlimited').textfill(maxFontPixels:12)
+
+  $('.fitlargest').textfill()
 

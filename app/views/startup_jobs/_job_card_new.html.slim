@@ -13,29 +13,26 @@
           - if job.startup.logo?
             .startup-logo style="background-image: url(#{job.startup.logo_url})"
           - else
-            .startup-name
+            .startup-name.fitlimited
               span #{job.startup.name.upcase}
         .location
           ' #{job.location.upcase}
 
       .back
-        .job-details
-          p
-            .field-name Position:&nbsp;
-            .field-detail #{job.title}
-          p
-            .field-name Experience:&nbsp;
-            .field-detail #{job.experience? ? job.experience : "Not specified"}
-          - if job.skills?
-            p
-              .field-name Skills:&nbsp;
-              .field-detail #{job.skills}
-          - if job.qualification?
-            p
-              .field-name Qualification:&nbsp;
-              .field-detail #{job.qualification}
-          p
-            .field-name Salary:&nbsp;
-            .field-detail #{job.salary? ? job.salary : "Not specified"}
+        .title.fitlimited
+          span #{job.title}
+        .icons-grid
+          .job-icon.fitlargest
+            span.glyphicon.glyphicon-briefcase style="color:LightGrey"
+          .job-icon.fitlargest
+            span.glyphicon.glyphicon-education style="color:cadetblue"
+          .job-icon.fitlargest
+            span.glyphicon.glyphicon-usd style="color:LightGrey"
+          .job-icon.fitlargest
+            span.glyphicon.glyphicon-check style="color:cadetblue"
+          .job-icon.fitlargest
+            span.glyphicon.glyphicon-scissors style="color:cadetblue"
+          .job-icon.fitlargest
+            span.glyphicon.glyphicon-new-window style="color:LightGrey"
         .job-postdate
           p style="color:grey" #{job.updated_at.strftime('%b\' %d').html_safe}

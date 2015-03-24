@@ -41,4 +41,9 @@ module ApplicationHelper
         '<em>Not Known</em>'.html_safe
     end
   end
+
+  def colorify_presence(property,presentcolor,absentcolor)
+    property.present? ? 'color:'+presentcolor : 'color:'+absentcolor
+  end
+
 end

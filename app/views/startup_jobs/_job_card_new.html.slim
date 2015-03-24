@@ -23,16 +23,16 @@
           span #{job.title}
         .icons-grid
           .job-icon.fitlargest
-            span.glyphicon.glyphicon-briefcase style="color:LightGrey"
+            span.glyphicon.glyphicon-briefcase style="#{colorify_presence(job.experience,"cadetblue","lightgrey")}"
           .job-icon.fitlargest
-            span.glyphicon.glyphicon-education style="color:cadetblue"
+            span.glyphicon.glyphicon-education style="#{colorify_presence(job.qualification,"cadetblue","lightgrey")}"
           .job-icon.fitlargest
-            span.glyphicon.glyphicon-usd style="color:LightGrey"
+            span.glyphicon.glyphicon-usd style="#{colorify_presence(job.salary,"cadetblue","lightgrey")}"
           .job-icon.fitlargest
-            span.glyphicon.glyphicon-check style="color:cadetblue"
+            span.glyphicon.glyphicon-check style="#{colorify_presence(job.skills,"cadetblue","lightgrey")}"
           .job-icon.fitlargest
-            span.glyphicon.glyphicon-scissors style="color:cadetblue"
-          .job-icon.fitlargest.btn class="hjgjhgk"
+            span.glyphicon.glyphicon-scissors style="#{colorify_presence(job.equity_min,"cadetblue","lightgrey")}"
+          .job-icon.fitlargest.btn
             span.glyphicon.glyphicon-new-window style="color:cornflowerblue"
         .job-postdate
           p style="color:grey" #{job.updated_at.strftime('%^B %d').html_safe}

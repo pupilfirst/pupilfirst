@@ -1,4 +1,9 @@
 class StartupMailer < ApplicationMailer
+  # Mail sent to startup whose agreement with SV is expiring soon.
+  #
+  # @param startup [Startup] Startup whose agreement is expiring
+  # @param expires_in [Fixnum] Days till expiry
+
   def agreement_expiring_soon(startup, expires_in, renew_within)
     @startup = startup
     @expires_in = expires_in

@@ -60,6 +60,7 @@ class Startup < ActiveRecord::Base
   scope :incubation_requested, -> { where(approval_status: [APPROVAL_STATUS_PENDING, APPROVAL_STATUS_REJECTED, APPROVAL_STATUS_APPROVED])}
   scope :agreement_signed, -> { where 'agreement_first_signed_at IS NOT NULL' }
   scope :agreement_live, -> { where('agreement_ends_at > ?', Time.now) }
+  scope :agreement_expired, -> { where('agreement_ends_at < ?', Time.now) }
   scope :physically_incubated, -> { agreement_live.where(physical_incubatee: true) }
   scope :without_founders, -> { where.not(id: (User.pluck(:startup_id).uniq - [nil])) }
   scope :student_startups, -> { joins(:founders).where('is_student = ?', true)}

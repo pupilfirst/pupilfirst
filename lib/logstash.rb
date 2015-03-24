@@ -4,7 +4,11 @@ class Logstash
   attr_reader :logstash_logger
 
   def initialize
-    @logstash_logger = LogStashLogger.new(type: :stdout)
+    @logstash_logger = if Rails.env.test?
+      Logger.new '/dev/null'
+    else
+      LogStashLogger.new(type: :stdout)
+    end
   end
 
   def self.llog

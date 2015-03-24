@@ -147,3 +147,9 @@
 
 }
 
+@media all and (max-width: 480px){
+  .card-container {
+    float: none;
+    margin: 10px auto;
+  }
+}

@@ -4,7 +4,8 @@ namespace :sms do
     SmsJob.perform_later
   end
 
-  task approved_startups_without_agreement: [:environment] do
-    SmsExpiredStartupsJob.perform_later
+  desc 'Send out counts of expired startups'
+  task expired_startup_agreements: [:environment] do
+    SmsExpiredStartupAgreementsJob.perform_later
   end
 end

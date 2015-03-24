@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe SmsExpiredStartupsJob, :type => :job do
+describe SmsExpiredStartupAgreementsJob, :type => :job do
   before(:each) do
     sms_statistics_visakhapatnam = create(:db_config, key: 'sms_statistics_visakhapatnam', value: '917896543210')
     sms_statistics_kochi = create(:db_config, key: 'sms_statistics_kochi', value: '919012345678')
@@ -23,6 +23,6 @@ describe SmsExpiredStartupsJob, :type => :job do
     expect(RestClient).to receive(:post).with('https://mobme.in', hash_including(text: vizag_text, msisdn: '917896543210'))
     expect(RestClient).to receive(:post).with('https://mobme.in', hash_including(text: kochi_text, msisdn: '919012345678'))
 
-    SmsExpiredStartupsJob.perform_now
+    SmsExpiredStartupAgreementsJob.perform_now
   end
 end

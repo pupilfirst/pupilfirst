@@ -12,7 +12,7 @@ This application performs custom logging with the following format:
 
 ### SMS
 
-* `sms_approved_startups_without_agreement` - Daily SMS.
+* `sms_expired_startup_agreements` - Daily SMS.
 
 ### Reminders
 

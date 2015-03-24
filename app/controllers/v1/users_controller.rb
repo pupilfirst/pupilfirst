@@ -10,38 +10,38 @@ class V1::UsersController < V1::BaseController
     @user = (params[:id] == 'self') ? current_user : User.find(params[:id])
   end
 
-  def_param_group :user do
-    param :user, Hash, :action_aware => true do
-      param :username, String
-      param :email, String
-      param :fullname, String
-      param :avatar, String
-      param :startup_id, Integer
-      param :title, String
-      param :linkedin_url, String
-      param :twitter_url, String
-      param :born_on, Date
-      param :is_founder, [true, false]
-      param :din, String
-      param :aadhaar, String
-      param :is_student, [true, false]
-      param :course, String
-      param :semester, String
-      param :gender, String
-      param :phone, Integer
-      param :designation, String
-      param :pin, String
-      param :communication_address, String
-      param :district, String
-      param :state, String
-      param :years_of_work_experience, Integer
-      param :year_of_graduation, Integer
-      param :college_id, Integer
-    end
-  end
-
-  api :POST, "/users", "Create an user"
-  param_group :user#
+  # def_param_group :user do
+  #   param :user, Hash do
+  #     param :username, String
+  #     param :email, String
+  #     param :fullname, String
+  #     param :avatar, String
+  #     param :startup_id, Integer
+  #     param :title, String
+  #     param :linkedin_url, String
+  #     param :twitter_url, String
+  #     param :born_on, Date
+  #     param :is_founder, [true, false]
+  #     param :din, String
+  #     param :aadhaar, String
+  #     param :is_student, [true, false]
+  #     param :course, String
+  #     param :semester, String
+  #     param :gender, String
+  #     param :phone, Integer
+  #     param :designation, String
+  #     param :pin, String
+  #     param :communication_address, String
+  #     param :district, String
+  #     param :state, String
+  #     param :years_of_work_experience, Integer
+  #     param :year_of_graduation, Integer
+  #     param :college_id, Integer
+  #   end
+  # end
+  #
+  # api :POST, "/users", "Create an user"
+  # param_group :user
   # Creates a new user entry, or updates a temporarily created one.
   def create
     @user = User.find_by(email: user_params[:email])

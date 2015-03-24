@@ -64,6 +64,8 @@ class Startup < ActiveRecord::Base
   scope :physically_incubated, -> { agreement_live.where(physical_incubatee: true) }
   scope :without_founders, -> { where.not(id: (User.pluck(:startup_id).uniq - [nil])) }
   scope :student_startups, -> { joins(:founders).where('is_student = ?', true)}
+  scope :kochi, -> { where incubation_location: INCUBATION_LOCATION_KOCHI }
+  scope :visakhapatnam, -> { where incubation_location: INCUBATION_LOCATION_VISAKHAPATNAM }
 
   has_many :founders, -> { where('is_founder = ?', true) }, class_name: 'User', foreign_key: 'startup_id' do
     def <<(founder)

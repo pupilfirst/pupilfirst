@@ -54,6 +54,7 @@ class Startup < ActiveRecord::Base
   has_paper_trail
 
   scope :unready, -> { where(approval_status: [APPROVAL_STATUS_UNREADY, nil]) }
+  scope :not_unready, -> { where.not(approval_status: [APPROVAL_STATUS_UNREADY, nil]) }
   scope :pending, -> { where(approval_status: APPROVAL_STATUS_PENDING) }
   scope :approved, -> { where(approval_status: APPROVAL_STATUS_APPROVED) }
   scope :rejected, -> { where(approval_status: APPROVAL_STATUS_REJECTED) }

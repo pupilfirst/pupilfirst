@@ -18,7 +18,7 @@ ActiveAdmin.register Startup do
   scope :without_founders
   scope :agreement_live
   scope :agreement_expired
-  scope :student_startups
+  scope('Student Startups') { |scope| scope.student_startups.not_unready }
 
   controller do
     newrelic_ignore

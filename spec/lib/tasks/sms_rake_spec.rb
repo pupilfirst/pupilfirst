@@ -9,6 +9,7 @@ describe 'sms:statistics' do
     sms_statistics_all = create(:db_config, key: 'sms_statistics_all', value: '919876543210,919876543211')
     sms_statistics_total = create(:db_config, key: 'sms_statistics_total', value: '918976543210')
     sms_statistics_visakhapatnam = create(:db_config, key: 'sms_statistics_visakhapatnam', value: '917896543210')
+    sms_statistics_kochi = create(:db_config, key: 'sms_statistics_kochi', value: '919012345678')
   end
 
   before(:all) do
@@ -24,9 +25,10 @@ describe 'sms:statistics' do
     expect(subject.prerequisites).to include('environment')
   end
 
-  it 'does something' do
+  it 'sends out three SMS-s' do
     total_statistics = "Total statistics\nTotal incubation requests: 5281\nIncubated startups: 0\nCommunity: 0\nStudent entrepreneurs: 0\nOn Campus: 0\nIncubated startups (cumulative): 849\n#{Startup::SV_STATS_LINK}"
     visakhapatnam_statistics = "Visakhapatnam statistics\nTotal incubation Requests: 0\nIncubated startups: 0\nOn Campus: 0\nIncubated startups (cumulative): 0\n#{Startup::SV_STATS_LINK}"
+    kochi_statistics = "Kochi statistics\nTotal incubation Requests: 5281\nIncubated startups: 0\nOn Campus: 0\nIncubated startups (cumulative): 849\n#{Startup::SV_STATS_LINK}"
 
     expect(RestClient).to receive(:post).with('https://mobme.in', hash_including(text: total_statistics, msisdn: '919876543210'))
     expect(RestClient).to receive(:post).with('https://mobme.in', hash_including(text: total_statistics, msisdn: '919876543211'))
@@ -34,6 +36,9 @@ describe 'sms:statistics' do
     expect(RestClient).to receive(:post).with('https://mobme.in', hash_including(text: visakhapatnam_statistics, msisdn: '919876543210'))
     expect(RestClient).to receive(:post).with('https://mobme.in', hash_including(text: visakhapatnam_statistics, msisdn: '919876543211'))
     expect(RestClient).to receive(:post).with('https://mobme.in', hash_including(text: visakhapatnam_statistics, msisdn: '917896543210'))
+    expect(RestClient).to receive(:post).with('https://mobme.in', hash_including(text: kochi_statistics, msisdn: '919876543210'))
+    expect(RestClient).to receive(:post).with('https://mobme.in', hash_including(text: kochi_statistics, msisdn: '919876543211'))
+    expect(RestClient).to receive(:post).with('https://mobme.in', hash_including(text: kochi_statistics, msisdn: '919012345678'))
 
     subject.invoke
   end

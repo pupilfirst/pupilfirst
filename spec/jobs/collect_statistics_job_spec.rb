@@ -1,5 +1,5 @@
 require 'rails_helper'
 
-RSpec.describe College, :type => :model do
+RSpec.describe CollectStatisticsJob, :type => :job do
   pending "add some examples to (or delete) #{__FILE__}"
 end

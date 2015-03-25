@@ -50,6 +50,10 @@ class Mentor < ActiveRecord::Base
     user.fullname
   end
 
+  def title
+    user.title
+  end
+
   def to_s
     display_name
   end

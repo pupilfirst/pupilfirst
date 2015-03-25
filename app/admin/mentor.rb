@@ -5,6 +5,20 @@ ActiveAdmin.register Mentor do
     newrelic_ignore
   end
 
+  csv do
+    column :name
+    column(:phone_number) { |mentor| mentor.user.phone }
+    column(:phone_verified) { |mentor| mentor.user.phone_verified }
+    column(:email) { |mentor| mentor.user.email }
+    column(:email_verified) { |mentor| mentor.user.confirmed_at.present? }
+    column :verified_at
+    column(:availability) { |mentor| availability_as_string mentor.availability }
+    column :company
+    column :title
+    column(:skills) { |mentor| mentor_skills_as_string(mentor.skills) }
+    column :company_level
+  end
+
   index do
     selectable_column
     actions

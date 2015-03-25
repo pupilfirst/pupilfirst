@@ -24,10 +24,9 @@ class StartupMailerPreview < ActionMailer::Preview
   end
 
   def agreement_expiring_soon
-    startup = Startup.first
-    expires_in = ((startup.agreement_ends_at - Time.zone.now) / 1.day).round
-    renew_within = expires_in - 15
-    StartupMailer.agreement_expiring_soon(startup, expires_in, renew_within)    
+    startup = Startup.firstr
+    expires_in = 30
+    renew_within = 15
+    StartupMailer.agreement_expiring_soon(startup, expires_in, renew_within)
   end
-  
 end

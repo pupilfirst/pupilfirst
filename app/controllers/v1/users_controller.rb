@@ -1,5 +1,4 @@
 class V1::UsersController < V1::BaseController
-
   respond_to :json
   skip_before_filter :require_token, only: [:create, :forgot_password]
   before_filter :require_self, only: [:update, :generate_phone_number_verification_code, :verify_phone_number,
@@ -10,8 +9,38 @@ class V1::UsersController < V1::BaseController
     @user = (params[:id] == 'self') ? current_user : User.find(params[:id])
   end
 
-  # POST /api/users
+  # def_param_group :user do
+  #   param :user, Hash do
+  #     param :username, String
+  #     param :email, String
+  #     param :fullname, String
+  #     param :avatar, String
+  #     param :startup_id, Integer
+  #     param :title, String
+  #     param :linkedin_url, String
+  #     param :twitter_url, String
+  #     param :born_on, Date
+  #     param :is_founder, [true, false]
+  #     param :din, String
+  #     param :aadhaar, String
+  #     param :is_student, [true, false]
+  #     param :course, String
+  #     param :semester, String
+  #     param :gender, String
+  #     param :phone, Integer
+  #     param :designation, String
+  #     param :pin, String
+  #     param :communication_address, String
+  #     param :district, String
+  #     param :state, String
+  #     param :years_of_work_experience, Integer
+  #     param :year_of_graduation, Integer
+  #     param :college_id, Integer
+  #   end
+  # end
   #
+  # api :POST, "/users", "Create an user"
+  # param_group :user
   # Creates a new user entry, or updates a temporarily created one.
   def create
     @user = User.find_by(email: user_params[:email])
@@ -52,7 +81,6 @@ class V1::UsersController < V1::BaseController
       render json: { error: "No user found with that email" }, status: :unprocessable_entity
     end
   end
-
 
   # POST /self/phone_number
   def generate_phone_number_verification_code
@@ -112,26 +140,7 @@ class V1::UsersController < V1::BaseController
     render nothing: true
   end
 
-
-  ## TODO: Check if the following code is relevant anymore
-  # GET /api/users/self/contacts
-  # def connected_contacts
-  #   # Fetch all user connections that were created by SV for user. Also, preload contact (User) data.
-  #   @connections = current_user.connections.where(direction: Connection::DIRECTION_SV_TO_USER).includes(:contact)
-  # end
-
-  # # POST /api/users/self/contacts
-  # def connect_contact
-  #   User.create_contact!(current_user, contact_params, Connection::DIRECTION_USER_TO_SV)
-
-  #   render nothing: true
-  # end
-
   private
-
-  # def contact_params
-  #   params.require(:user).permit(:fullname, :email, :phone, :company, :designation, category_ids: [])
-  # end
 
   def user_params
     params.require(:user).permit(:gender,:communication_address, :district, :state, :pin,

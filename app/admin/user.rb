@@ -13,7 +13,6 @@ ActiveAdmin.register User do
     column :fullname
     column :phone
     column :is_founder
-    column :is_contact
     column :is_student
     column :startup_admin
     column :phone_verified
@@ -69,7 +68,6 @@ ActiveAdmin.register User do
       row 'PIN Code' do
         user.pin
       end
-      row :is_contact
       row :company
       row :designation
     end
@@ -93,7 +91,6 @@ ActiveAdmin.register User do
   filter :phone
   filter :is_founder
   filter :is_student
-  filter :is_contact
   filter :phone_verified
   # TODO: The check_boxes filter is disabled because of some bug with activeadmin. Check and enable when required.
   # filter :categories, as: :check_boxes, collection: proc { Category.user_category }
@@ -105,6 +102,6 @@ ActiveAdmin.register User do
 
   permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url,
     :title, :skip_password, :born_on, :startup_admin, :communication_address, :district, :state, :pin,
-    :is_contact, :phone, :phone_verified, :company, :designation, :invitation_token, #:confirmed_at,
+    :phone, :phone_verified, :company, :designation, :invitation_token, #:confirmed_at,
     { category_ids: [] }
 end

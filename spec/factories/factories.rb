@@ -12,17 +12,6 @@ FactoryGirl.define do
     password_confirmation "password"
   end
 
-  factory :social_id do
-    social_id       {Faker::Number.number(8)}
-    social_token    {Faker::Lorem.characters(256)}
-    permission      []
-    # association :user, factory: :user_with_out_password, strategy: :build
-    factory :facebook_social_id do
-      provider :facebook
-      primary  true
-    end
-  end
-
   factory :user do
     fullname { Faker::Name.name }
     username  { Faker::Lorem.characters(9) }
@@ -74,20 +63,6 @@ FactoryGirl.define do
     middle_name  "middle_name"
   end
 
-  factory :address do
-    flat  "flat"
-    building  "building"
-    area  "area"
-    town  "town"
-    state "state"
-    pin "pin"
-  end
-
-  factory :guardian do
-    association :name, factory: :name, strategy: :build
-    association :address, factory: :address, strategy: :build
-  end
-
   factory :user_category, class: Category do |f|
     f.name {Faker::Lorem.words(2).join(' ')}
     f.category_type :user
@@ -125,12 +100,6 @@ FactoryGirl.define do
   factory :bank do |f|
     f.is_joint true
     startup
-  end
-
-  factory :connection do
-    user
-    contact
-    direction Connection::DIRECTION_USER_TO_SV
   end
 
   factory :request  do

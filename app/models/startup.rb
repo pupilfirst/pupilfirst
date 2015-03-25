@@ -84,7 +84,6 @@ class Startup < ActiveRecord::Base
   end
 
   has_one :bank
-  belongs_to :registered_address, class_name: 'Address'
   has_many :partnerships
   has_many :startup_links, dependent: :destroy
 
@@ -218,7 +217,6 @@ class Startup < ActiveRecord::Base
 
   mount_uploader :logo, AvatarUploader
   process_in_background :logo
-  accepts_nested_attributes_for :founders, :registered_address
   accepts_nested_attributes_for :startup_links
   normalize_attribute :name, :pitch, :about, :email, :phone
   attr_accessor :full_validation

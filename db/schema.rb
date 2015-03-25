@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150313114533) do
+ActiveRecord::Schema.define(version: 20150319115910) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,18 +31,6 @@ ActiveRecord::Schema.define(version: 20150313114533) do
   add_index "active_admin_comments", ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
   add_index "active_admin_comments", ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
   add_index "active_admin_comments", ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
-
-  create_table "addresses", force: :cascade do |t|
-    t.string   "flat"
-    t.string   "building"
-    t.string   "street"
-    t.string   "area"
-    t.string   "town"
-    t.string   "state"
-    t.string   "pin"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "admin_users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -157,25 +145,6 @@ ActiveRecord::Schema.define(version: 20150313114533) do
   add_index "events", ["location"], name: "index_events_on_location", using: :btree
   add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
 
-  create_table "guardians", force: :cascade do |t|
-    t.integer  "name_id"
-    t.integer  "address_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "guardians", ["address_id"], name: "index_guardians_on_address_id", using: :btree
-  add_index "guardians", ["name_id"], name: "index_guardians_on_name_id", using: :btree
-
-  create_table "locations", force: :cascade do |t|
-    t.decimal  "latitude"
-    t.decimal  "longitude"
-    t.string   "title"
-    t.text     "address"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "mentor_meetings", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "mentor_id"
@@ -213,11 +182,8 @@ ActiveRecord::Schema.define(version: 20150313114533) do
     t.string   "availability"
     t.string   "company_level"
     t.datetime "verified_at"
-    t.integer  "company_id"
     t.string   "company"
   end
-
-  add_index "mentors", ["company_id"], name: "index_mentors_on_company_id", using: :btree
 
   create_table "names", force: :cascade do |t|
     t.string   "first_name"
@@ -268,22 +234,6 @@ ActiveRecord::Schema.define(version: 20150313114533) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  create_table "social_ids", force: :cascade do |t|
-    t.string   "provider"
-    t.integer  "user_id"
-    t.string   "social_id"
-    t.string   "social_token", limit: 500
-    t.boolean  "primary"
-    t.string   "permission"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "social_ids", ["primary"], name: "index_social_ids_on_primary", using: :btree
-  add_index "social_ids", ["provider"], name: "index_social_ids_on_provider", using: :btree
-  add_index "social_ids", ["social_id"], name: "index_social_ids_on_social_id", using: :btree
-  add_index "social_ids", ["user_id"], name: "index_social_ids_on_user_id", using: :btree
 
   create_table "startup_applications", force: :cascade do |t|
     t.string   "name"
@@ -347,13 +297,11 @@ ActiveRecord::Schema.define(version: 20150313114533) do
     t.text     "police_station"
     t.boolean  "incorporation_status",      default: false
     t.boolean  "bank_status",               default: false
-    t.boolean  "sep_status",                default: false
     t.text     "company_names"
     t.text     "address"
     t.string   "pre_funds"
     t.text     "startup_before"
     t.string   "help_from_sv"
-    t.integer  "registered_address_id"
     t.string   "pre_investers_name"
     t.string   "transaction_details"
     t.boolean  "partnership_application"
@@ -378,8 +326,6 @@ ActiveRecord::Schema.define(version: 20150313114533) do
     t.datetime "agreement_ends_at"
     t.boolean  "physical_incubatee"
   end
-
-  add_index "startups", ["registered_address_id"], name: "index_startups_on_registered_address_id", using: :btree
 
   create_table "statistics", force: :cascade do |t|
     t.string   "parameter"
@@ -456,7 +402,6 @@ ActiveRecord::Schema.define(version: 20150313114533) do
     t.text     "educational_qualification"
     t.string   "place_of_birth"
     t.string   "religion"
-    t.integer  "guardian_id"
     t.string   "salutation"
     t.boolean  "is_student"
     t.string   "course"
@@ -470,7 +415,6 @@ ActiveRecord::Schema.define(version: 20150313114533) do
     t.integer  "pending_startup_id"
     t.string   "company"
     t.string   "designation"
-    t.boolean  "is_contact"
     t.boolean  "startup_admin"
     t.string   "father_or_husband_name"
     t.string   "pin"
@@ -483,7 +427,6 @@ ActiveRecord::Schema.define(version: 20150313114533) do
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["father_id"], name: "index_users_on_father_id", using: :btree
-  add_index "users", ["guardian_id"], name: "index_users_on_guardian_id", using: :btree
   add_index "users", ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
   add_index "users", ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree

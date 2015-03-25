@@ -22,7 +22,6 @@
     /= f.input :confirmed_at, as: :hidden, input_html: { value: Time.now.utc.to_s }
 
   = f.inputs 'Contact Details'
-    = f.input :is_contact
     = f.input :phone
     = f.input :company
     = f.input :designation

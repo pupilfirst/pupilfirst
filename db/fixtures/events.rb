@@ -9,7 +9,6 @@ images = images * 2
     e.start_at = Time.now
     e.end_at = Time.now
     e.featured = rand(4) > 2 ? true : false
-    e.location_id = 1
     e.remote_picture_url = images[t-1]
   end
 end

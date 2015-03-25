@@ -14,7 +14,7 @@ ActiveAdmin.register Startup do
   filter :physical_incubatee
   filter :categories, collection: proc { Category.startup_category }
 
-  scope :all
+  scope :all, default: true
   scope :without_founders
   scope :agreement_live
   scope :agreement_expired

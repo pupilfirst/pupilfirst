@@ -14,11 +14,11 @@ ActiveAdmin.register Startup do
   filter :physical_incubatee
   filter :categories, collection: proc { Category.startup_category }
 
-  scope :all
+  scope :all, default: true
   scope :without_founders
   scope :agreement_live
   scope :agreement_expired
-  scope :student_startups
+  scope('Student Startups') { |scope| scope.student_startups.not_unready }
 
   controller do
     newrelic_ignore
@@ -26,14 +26,14 @@ ActiveAdmin.register Startup do
 
   index do
     actions
+
     column :status do |startup|
       startup.approval_status.capitalize
     end
+
     column :agreement_sent
     column :name
-    column :presentation_link do |startup|
-      link_to startup.presentation_link, startup.presentation_link if startup.presentation_link.present?
-    end
+
     column :founders do |startup|
       table_for startup.founders.order('id ASC') do
         column do |founder|
@@ -45,18 +45,11 @@ ActiveAdmin.register Startup do
     column :categories do |startup|
       startup.categories.pluck(:name).join ', '
     end
-    column :cofounders do |startup|
-      startup.founders.count
-    end
+
     column :women_cofounders do |startup|
       startup.founders.where(gender: "female").count
     end
 
-    # column :facebook_link
-    # column :twitter_link
-    # column :pitch do |startup|
-    #   startup.pitch.truncate(50) rescue nil
-    # end
     column :website
   end
 
@@ -289,7 +282,6 @@ ActiveAdmin.register Startup do
       row :approval_status
       row :incorporation_status
       row :bank_status
-      row :sep_status
       row :company_names
       row :address
       row :pre_funds
@@ -372,9 +364,8 @@ ActiveAdmin.register Startup do
   form :partial => "admin/startups/form"
   permit_params :name, :pitch, :website, :about, :email, :logo, :facebook_link, :twitter_link, :cool_fact,
     { category_ids: [] }, { founder_ids: [] }, { founders_attributes: [:id, :fullname, :email, :username, :avatar, :remote_avatar_url, :title, :linkedin_url, :twitter_url, :skip_password] },
-    :created_at, :updated_at, :approval_status, :incorporation_status, :bank_status, :sep_status, :dsc,
+    :created_at, :updated_at, :approval_status, :incorporation_status, :bank_status, :dsc,
     :authorized_capital, :share_holding_pattern, :moa, :police_station, :approval_status, :incorporation_status,
-    :bank_status, :sep_status, :company_names, :address, :pre_funds, :startup_before, :product_name,
     :product_description, :registration_type, :incubation_location, { help_from_sv: [] }, :agreement_sent,
     :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration, :physical_incubatee
 end

@@ -12,12 +12,12 @@ class SmsExpiredStartupAgreementsJob < ActiveJob::Base
       RestClient.post(APP_CONFIG[:sms_provider_url], text: message % { location: 'Kochi', count: kochi_expired_count }, msisdn: msisdn)
     end
 
-    Rails.llog.info event: :sms_expired_startup_agreements, incubation_location: 'kochi'
+    Rails.llog.info event: :sms_expired_startup_agreements, incubation_location: 'kochi', expired_count: kochi_expired_count
 
     msisdns_visakhapatnam.each do |msisdn|
       RestClient.post(APP_CONFIG[:sms_provider_url], text: message % { location: 'Visakhapatnam', count: vizag_expired_count }, msisdn: msisdn)
     end
 
-    Rails.llog.info event: :sms_expired_startup_agreements, incubation_location: 'visakhapatnam'
+    Rails.llog.info event: :sms_expired_startup_agreements, incubation_location: 'visakhapatnam', expired_count: vizag_expired_count
   end
 end

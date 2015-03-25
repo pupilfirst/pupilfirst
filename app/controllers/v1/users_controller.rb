@@ -1,9 +1,8 @@
 class V1::UsersController < V1::BaseController
-
   respond_to :json
   skip_before_filter :require_token, only: [:create, :forgot_password]
   before_filter :require_self, only: [:update, :generate_phone_number_verification_code, :verify_phone_number,
-    :accept_cofounder_invitation, :reject_cofounder_invitation, :connected_contacts, :connect_contact]
+    :accept_cofounder_invitation, :reject_cofounder_invitation]#, :connected_contacts, :connect_contact]
 
   def show
     @extra_info = (params[:id] == 'self') ? true : false
@@ -83,7 +82,6 @@ class V1::UsersController < V1::BaseController
     end
   end
 
-
   # POST /self/phone_number
   def generate_phone_number_verification_code
     # Generate a 6-digit verification code to send to the phone number.
@@ -142,24 +140,7 @@ class V1::UsersController < V1::BaseController
     render nothing: true
   end
 
-  # GET /api/users/self/contacts
-  def connected_contacts
-    # Fetch all user connections that were created by SV for user. Also, preload contact (User) data.
-    @connections = current_user.connections.where(direction: Connection::DIRECTION_SV_TO_USER).includes(:contact)
-  end
-
-  # POST /api/users/self/contacts
-  def connect_contact
-    User.create_contact!(current_user, contact_params, Connection::DIRECTION_USER_TO_SV)
-
-    render nothing: true
-  end
-
   private
-
-  def contact_params
-    params.require(:user).permit(:fullname, :email, :phone, :company, :designation, category_ids: [])
-  end
 
   def user_params
     params.require(:user).permit(:gender,:communication_address, :district, :state, :pin,
@@ -168,10 +149,7 @@ class V1::UsersController < V1::BaseController
       :is_student, :college_id, :course, :semester, :title,
       :religion, :current_occupation, :educational_qualification, :place_of_birth,
       address_attributes: [:flat, :building, :street, :area, :town, :state, :pin],
-      father_attributes: [:first_name, :last_name, :middle_name],
-      guardian_attributes: [
-        name_attributes: [:salutation, :first_name, :middle_name, :last_name],
-        address_attributes: [:flat, :building, :street, :area, :town, :state, :pin]]
+      father_attributes: [:first_name, :last_name, :middle_name]
     )
   end
 end

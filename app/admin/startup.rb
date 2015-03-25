@@ -26,14 +26,14 @@ ActiveAdmin.register Startup do
 
   index do
     actions
+
     column :status do |startup|
       startup.approval_status.capitalize
     end
+
     column :agreement_sent
     column :name
-    column :presentation_link do |startup|
-      link_to startup.presentation_link, startup.presentation_link if startup.presentation_link.present?
-    end
+
     column :founders do |startup|
       table_for startup.founders.order('id ASC') do
         column do |founder|
@@ -45,18 +45,11 @@ ActiveAdmin.register Startup do
     column :categories do |startup|
       startup.categories.pluck(:name).join ', '
     end
-    column :cofounders do |startup|
-      startup.founders.count
-    end
+
     column :women_cofounders do |startup|
       startup.founders.where(gender: "female").count
     end
 
-    # column :facebook_link
-    # column :twitter_link
-    # column :pitch do |startup|
-    #   startup.pitch.truncate(50) rescue nil
-    # end
     column :website
   end
 

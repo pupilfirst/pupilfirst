@@ -269,36 +269,36 @@ describe V1::UsersController do
     end
   end
 
-  describe 'POST /api/users/self/contacts' do
-    let(:user) { create :user_with_password }
+  # describe 'POST /api/users/self/contacts' do
+  #   let(:user) { create :user_with_password }
 
-    context 'when a bad phone number is supplied' do
-      it 'responds with 422 InvalidPhoneNumber' do
-        post '/api/users/self/contacts', { user: { phone: '123456', fullname: 'Mike Wazowski' } }, version_header(user)
-        expect(response.code).to eq '422'
-        expect(parse_json response.body, 'code').to eq 'InvalidPhoneNumber'
-      end
-    end
+  #   context 'when a bad phone number is supplied' do
+  #     it 'responds with 422 InvalidPhoneNumber' do
+  #       post '/api/users/self/contacts', { user: { phone: '123456', fullname: 'Mike Wazowski' } }, version_header(user)
+  #       expect(response.code).to eq '422'
+  #       expect(parse_json response.body, 'code').to eq 'InvalidPhoneNumber'
+  #     end
+  #   end
 
-    it 'creates user as a contact' do
-      user_category = create :user_category
-      post '/api/users/self/contacts', { user: { phone: '+919876543210', fullname: 'Mike Wazowski', company: 'Monsters, Inc.', designation: 'Scarer', category_ids: [user_category.id] } }, version_header(user)
-      expect(response).to be_success
-      last_user = User.last
-      expect(last_user.fullname).to eq 'Mike Wazowski'
-      expect(last_user.company).to eq 'Monsters, Inc.'
-      expect(last_user.designation).to eq 'Scarer'
-      expect(last_user.phone).to eq '919876543210'
-      expect(last_user.categories.count).to eq 1
-      expect(last_user.categories.first).to eq user_category
-    end
+  #   # it 'creates user as a contact' do
+  #   #   user_category = create :user_category
+  #   #   post '/api/users/self/contacts', { user: { phone: '+919876543210', fullname: 'Mike Wazowski', company: 'Monsters, Inc.', designation: 'Scarer', category_ids: [user_category.id] } }, version_header(user)
+  #   #   expect(response).to be_success
+  #   #   last_user = User.last
+  #   #   expect(last_user.fullname).to eq 'Mike Wazowski'
+  #   #   expect(last_user.company).to eq 'Monsters, Inc.'
+  #   #   expect(last_user.designation).to eq 'Scarer'
+  #   #   expect(last_user.phone).to eq '919876543210'
+  #   #   expect(last_user.categories.count).to eq 1
+  #   #   expect(last_user.categories.first).to eq user_category
+  #   # end
 
-    it 'creates a connection between current user and contact' do
-      post '/api/users/self/contacts', { user: { phone: '9876543210', fullname: 'Mike Wazowski' } }, version_header(user)
-      user_connections = user.connections.includes(:contact)
-      expect(user_connections.last.contact.id).to eq User.last.id
-    end
-  end
+  #   # it 'creates a connection between current user and contact' do
+  #   #   post '/api/users/self/contacts', { user: { phone: '9876543210', fullname: 'Mike Wazowski' } }, version_header(user)
+  #   #   user_connections = user.connections.includes(:contact)
+  #   #   expect(user_connections.last.contact.id).to eq User.last.id
+  #   # end
+  # end
 
   describe 'GET /api/users/self/contacts' do
     let(:user) { create :user_with_out_password }
@@ -310,16 +310,16 @@ describe V1::UsersController do
       allow(UserPushNotifyJob).to receive(:perform_later)
     end
 
-    it 'returns all connections supplied by SV to user' do
-      create :connection, user: user, contact: contact_1, direction: Connection::DIRECTION_SV_TO_USER
-      create :connection, user: user, contact: contact_2, direction: Connection::DIRECTION_USER_TO_SV
-      create :connection, user: user, contact: contact_3, direction: Connection::DIRECTION_SV_TO_USER
+    # it 'returns all connections supplied by SV to user' do
+    #   create :connection, user: user, contact: contact_1, direction: Connection::DIRECTION_SV_TO_USER
+    #   create :connection, user: user, contact: contact_2, direction: Connection::DIRECTION_USER_TO_SV
+    #   create :connection, user: user, contact: contact_3, direction: Connection::DIRECTION_SV_TO_USER
 
-      get '/api/users/self/contacts', {}, version_header(user)
+    #   get '/api/users/self/contacts', {}, version_header(user)
 
-      expect((parse_json response.body).length).to eq 2
-      expect(parse_json response.body, '0/fullname').to eq contact_1.fullname
-      expect(parse_json response.body, '1/fullname').to eq contact_3.fullname
-    end
+    #   expect((parse_json response.body).length).to eq 2
+    #   expect(parse_json response.body, '0/fullname').to eq contact_1.fullname
+    #   expect(parse_json response.body, '1/fullname').to eq contact_3.fullname
+    # end
   end
 end

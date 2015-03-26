@@ -74,6 +74,6 @@ module MentorMeetingsHelper
   end
 
   def guest_title(mentor_meeting)
-    mentor_meeting.is_mentor?(current_user) ? 'startup founder' : 'mentor'
+    mentor_meeting.mentor?(current_user) ? 'startup founder' : 'mentor'
   end
 end

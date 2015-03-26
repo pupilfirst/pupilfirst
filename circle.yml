@@ -3,3 +3,7 @@ deployment:
     branch: job-styling
     heroku:
       appname: svapp-staging
+  production:
+    branch: master
+    heroku:
+      appname: svapp

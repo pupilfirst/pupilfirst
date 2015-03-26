@@ -222,7 +222,7 @@ class MentorMeeting < ActiveRecord::Base
   end
 
   def recent_sms_sent?(user)
-    if is_mentor?(user)
+    if mentor?(user)
       recent_mentor_sms?
     else
       recent_user_sms?
@@ -239,7 +239,7 @@ class MentorMeeting < ActiveRecord::Base
 
   def sent_sms(currentuser)
     if !recent_sms_sent?(currentuser)
-      if is_mentor?(currentuser)
+      if mentor?(currentuser)
         phone_number = self.user.phone
         self.update(mentor_sms_sent_at: Time.now)
       else
@@ -250,12 +250,16 @@ class MentorMeeting < ActiveRecord::Base
     end
   end
 
-  def is_mentor?(currentuser)
-    currentuser == self.user ? false : true
+  def founder?(user)
+    user == self.user
   end
 
-  def guest(currentuser)
-    currentuser == self.user ? self.mentor.user : self.user
+  def mentor?(user)
+    !founder?(user)
+  end
+
+  def guest(user)
+    founder?(user) ? self.mentor.user : self.user
   end
 
   def to_be_rescheduled?(new_suggested_time)

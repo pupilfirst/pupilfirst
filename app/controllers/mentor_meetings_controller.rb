@@ -3,6 +3,7 @@ class MentorMeetingsController < ApplicationController
   before_filter :meeting_started, only: [:feedback]
   before_filter :meeting_completed, only: [:feedbacksave]
   before_filter :meeting_room_accessible, only: [:live]
+  before_filter :accept_reject_rights, only: [:accept, :reject]
 
   def live
     @mentor_meeting = MentorMeeting.find(params[:id])
@@ -144,6 +145,11 @@ class MentorMeetingsController < ApplicationController
 
   def guest(mentormeeting)
     current_user == mentormeeting.user ? mentormeeting.mentor.user : mentormeeting.user
+  end
+
+  def accept_reject_rights
+    meeting = MentorMeeting.find(params[:id])
+    raise_not_found unless (meeting.requested? && meeting.mentor?(current_user)) || (meeting.rescheduled? && meeting.founder?(current_user))
   end
 
 end

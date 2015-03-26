@@ -8,3 +8,5 @@ $ ->
 
   $('[data-toggle="tooltip"]').tooltip()
 
+
+

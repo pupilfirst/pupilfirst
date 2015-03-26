@@ -69,9 +69,12 @@ class MentorMeetingsController < ApplicationController
 
   def feedback
     @mentor_meeting = MentorMeeting.find(params[:id])
-    @role = role(@mentor_meeting)
-    flash.now[:notice] = "Your meeting with #{guest(@mentor_meeting).fullname} has ended"
+    flash.now[:notice] = "Your meeting with #{guest(@mentor_meeting).fullname} has been completed"
     @mentor_meeting.complete!
+    if @mentor_meeting.founder?(current_user)
+      render 'feedback_for_user'
+    else render 'feedback_for_mentor'
+    end
   end
 
   def feedbacksave

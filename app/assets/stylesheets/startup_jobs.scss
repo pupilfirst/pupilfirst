@@ -139,11 +139,34 @@
     margin: 0;
     position: relative;
 }
-.postnew{
+
+.post-new {
   @extend .common-card-properties;
   text-align: center;
-  color:cadetblue;
+  padding-top: 40px;
+  transition: transform .3s;
 
+  p span {
+    color: lightgray;
+    transition: color .3s;
+  }
+
+  &:hover p span {
+    color: green;
+  }
+
+  .text {
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+  }
+
+  &:hover {
+    transform: scale(1.1, 1.1);
+  }
+
+  &:hover .text {
+    opacity: 100;
+  }
 }
 
 @media all and (max-width: 480px){

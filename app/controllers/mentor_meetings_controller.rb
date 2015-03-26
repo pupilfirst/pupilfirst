@@ -97,6 +97,7 @@ class MentorMeetingsController < ApplicationController
 
   def reschedule
     @mentor_meeting = MentorMeeting.find(params[:id])
+    raise_not_found unless @mentor_meeting.mentor?(current_user) && @mentor_meeting.requested?
     new_time = params[:mentor_meeting][:suggested_meeting_at]
     if @mentor_meeting.to_be_rescheduled?(new_time)
       @mentor_meeting.reschedule!(new_time)
@@ -139,10 +140,6 @@ class MentorMeetingsController < ApplicationController
 
   def meeting_completed
     raise_not_found if MentorMeeting.find(params[:id]).status != MentorMeeting::STATUS_COMPLETED
-  end
-
-  def role(mentormeeting)
-    current_user == mentormeeting.user ? "user" : "mentor"
   end
 
   def guest(mentormeeting)

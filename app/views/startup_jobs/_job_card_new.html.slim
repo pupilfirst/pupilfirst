@@ -18,16 +18,16 @@
           span #{job.title}
         .icons-grid
           a.job-icon.fitlargest data-toggle="tooltip" data-placement="top" data-trigger="hover focus" title="#{job.experience}"
-            span.glyphicon.glyphicon-briefcase style="#{colorify_presence(job.experience,"cadetblue","lightgrey")}"
+            span.fa.fa-briefcase style="#{colorify_presence(job.experience,"cadetblue","lightgrey")}"
           a.job-icon.fitlargest data-toggle="tooltip" data-placement="top" data-trigger="hover focus" title="#{job.qualification}"
-            span.glyphicon.glyphicon-education style="#{colorify_presence(job.qualification,"cadetblue","lightgrey")}"
+            span.fa.fa-graduation-cap style="#{colorify_presence(job.qualification,"cadetblue","lightgrey")}"
           a.job-icon.fitlargest data-toggle="tooltip" data-placement="top" data-trigger="hover focus" title="#{job.salary}"
-            span.glyphicon.glyphicon-usd style="#{colorify_presence(job.salary,"cadetblue","lightgrey")}"
+            span.fa.fa-inr style="#{colorify_presence(job.salary,"cadetblue","lightgrey")}"
           a.job-icon.fitlargest data-toggle="tooltip" data-placement="bottom" data-trigger="hover focus" title="#{job.skills}"
-            span.glyphicon.glyphicon-check style="#{colorify_presence(job.skills,"cadetblue","lightgrey")}"
+            span.fa.fa-check-square-o style="#{colorify_presence(job.skills,"cadetblue","lightgrey")}"
           a.job-icon.fitlargest data-toggle="tooltip" data-placement="bottom" data-trigger="hover focus" title="#{job.equity_summary}"
-            span.glyphicon.glyphicon-scissors style="#{colorify_presence(job.equity_min,"cadetblue","lightgrey")}"
+            span.fa.fa-pie-chart style="#{colorify_presence(job.equity_min,"cadetblue","lightgrey")}"
           a.job-icon.fitlargest
-            span.glyphicon.glyphicon-new-window style="color:cornflowerblue"
+            span.fa.fa-external-link style="color:cornflowerblue"
         .job-postdate
           p style="color:grey" #{job.updated_at.strftime('%^B %d').html_safe}

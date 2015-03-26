@@ -15,7 +15,7 @@
 
       .back
         .title.fitlimited
-          span #{job.title}
+          span = link_to job.title, startup_startup_job_url(job.startup, job)
         .icons-grid
           a.job-icon.fitlargest data-toggle="tooltip" data-placement="top" data-trigger="hover focus" title="#{job.experience}"
             span.fa.fa-briefcase style="#{colorify_presence(job.experience,"cadetblue","lightgrey")}"

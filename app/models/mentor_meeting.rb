@@ -134,27 +134,27 @@ class MentorMeeting < ActiveRecord::Base
     update!(status: STATUS_STARTED)
   end
 
-  def accept!(mentor_meeting,role)
+  def accept!(mentor_meeting,accepted_by)
     update!(status: STATUS_ACCEPTED, meeting_at: mentor_meeting["suggested_meeting_at"])
-    send_acceptance_message(role)
+    send_acceptance_message(accepted_by)
   end
 
-  def send_acceptance_message(role)
-    recipient = role == "user" ? self.mentor.user : self.user
+  def send_acceptance_message(accepted_by)
+    recipient = founder?(accepted_by) ? self.mentor.user : self.user
     MentoringMailer.meeting_request_accepted(self,recipient).deliver_later
   end
 
-  def reject!(mentor_meeting,role)
-    if role == "mentor"
+  def reject!(mentor_meeting,rejected_by)
+    if mentor?(rejected_by)
       update!(status: STATUS_REJECTED, mentor_comments: mentor_meeting["mentor_comments"])
     else
       update!(status: STATUS_REJECTED, user_comments: mentor_meeting["user_comments"])
     end
-    send_rejection_message(role)
+    send_rejection_message(rejected_by)
   end
 
-  def send_rejection_message(role)
-    recipient = role == "user" ? self.mentor.user : self.user
+  def send_rejection_message(rejected_by)
+    recipient = founder?(rejected_by) ? self.mentor.user : self.user
     MentoringMailer.meeting_request_rejected(self,recipient).deliver_later
   end
 
@@ -167,17 +167,17 @@ class MentorMeeting < ActiveRecord::Base
     MentoringMailer.meeting_request_rescheduled(self).deliver_later
   end
 
-  def cancel!(mentor_meeting,role)
-    if role == "mentor"
+  def cancel!(mentor_meeting,cancelled_by)
+    if mentor?(cancelled_by)
       update!(status: STATUS_CANCELLED, mentor_comments: mentor_meeting["mentor_comments"])
     else
       update!(status: STATUS_CANCELLED, user_comments: mentor_meeting["user_comments"])
     end
-    send_cancel_message(role)
+    send_cancel_message(cancelled_by)
   end
 
-  def send_cancel_message(role)
-    recipient = role == "user" ? self.mentor.user : self.user
+  def send_cancel_message(cancelled_by)
+    recipient = founder?(cancelled_by) ? self.mentor.user : self.user
     MentoringMailer.meeting_request_cancelled(self,recipient).deliver_later
   end
 

@@ -46,15 +46,16 @@ class MentorMeetingsController < ApplicationController
   # POST /mentor_meetings/:id/accept
   def accept
     mentor_meeting = MentorMeeting.find(params[:id])
-    mentor_meeting.accept!(mentor_meeting,role(mentor_meeting))
+    mentor_meeting.accept!(params[:mentor_meeting],current_user)
     flash[:notice] = "#{guest(mentor_meeting).fullname} will be notified of your acceptance."
     redirect_to mentoring_url
   end
 
   # POST /mentor_meetings/:id/reject
   def reject
+    binding.pry
     mentor_meeting = MentorMeeting.find(params[:id])
-    mentor_meeting.reject!(params[:mentor_meeting],role(mentor_meeting))
+    mentor_meeting.reject!(params[:mentor_meeting],current_user)
     flash[:notice] = "#{guest(mentor_meeting).fullname}  will be notified of your response."
     redirect_to mentoring_url
   end
@@ -104,8 +105,9 @@ class MentorMeetingsController < ApplicationController
   end
 
   def cancel
+    binding.pry
     mentor_meeting = MentorMeeting.find(params[:id])
-    mentor_meeting.cancel!(params[:mentor_meeting],role(mentor_meeting))
+    mentor_meeting.cancel!(params[:mentor_meeting],current_user)
     flash[:notice] = "#{guest(mentor_meeting).fullname}  will be notified of the cancellation."
     redirect_to mentoring_path
   end

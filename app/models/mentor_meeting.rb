@@ -281,4 +281,8 @@ class MentorMeeting < ActiveRecord::Base
   def mentor_name
     mentor.try(:name)
   end
+
+  def remind?
+    accepted? && meeting_at > 1.day.ago && meeting_at < Time.now
+  end
 end

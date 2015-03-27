@@ -92,6 +92,7 @@ class MentorMeetingsController < ApplicationController
 
   def reminder
     @mentor_meeting = MentorMeeting.find(params[:id])
+    raise_not_found unless @mentor_meeting.remind?
     @mentor_meeting.sent_sms(current_user)
     head :ok
   end

@@ -285,4 +285,8 @@ class MentorMeeting < ActiveRecord::Base
   def remind?
     accepted? && meeting_at > 1.day.ago && meeting_at < Time.now
   end
+
+  def cancellable?
+    requested? || accepted? || rescheduled?
+  end
 end

@@ -111,10 +111,13 @@ class MentorMeetingsController < ApplicationController
   end
 
   def cancel
-    binding.pry
     mentor_meeting = MentorMeeting.find(params[:id])
-    mentor_meeting.cancel!(params[:mentor_meeting],current_user)
-    flash[:notice] = "#{guest(mentor_meeting).fullname}  will be notified of the cancellation."
+    if mentor_meeting.cancellable?
+      mentor_meeting.cancel!(params[:mentor_meeting],current_user)
+      flash[:notice] = "#{guest(mentor_meeting).fullname}  will be notified of the cancellation."
+    else
+      flash[:notice] = "The meeting can no longer be cancelled"
+    end
     redirect_to mentoring_path
   end
 

@@ -319,6 +319,16 @@ ActiveRecord::Schema.define(version: 20150325111317) do
     t.boolean  "physical_incubatee"
   end
 
+  create_table "statistics", force: :cascade do |t|
+    t.string   "parameter"
+    t.text     "statistic"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "incubation_location"
+  end
+
+  add_index "statistics", ["parameter"], name: "index_statistics_on_parameter", using: :btree
+
   create_table "taggings", force: :cascade do |t|
     t.integer  "tag_id"
     t.integer  "taggable_id"

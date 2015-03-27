@@ -1,6 +1,5 @@
 class MentorMeetingsController < ApplicationController
   before_filter :authenticate_user!
-  before_filter :meeting_completed, only: [:feedbacksave]
   before_filter :meeting_room_accessible, only: [:live]
   before_filter :accept_reject_rights, only: [:accept, :reject]
   before_filter :meeting_member, except: [:new, :create, :index]
@@ -81,7 +80,7 @@ class MentorMeetingsController < ApplicationController
 
   def feedbacksave
     @mentor_meeting = MentorMeeting.find(params[:id])
-
+    raise_not_found unless @mentor_meeting.completed?
     if @mentor_meeting.update(feedback_params)
       flash[:notice] = 'Thank you for your feedback!'
       redirect_to mentoring_path
@@ -134,10 +133,6 @@ class MentorMeetingsController < ApplicationController
 
   def accepted_and_today?(mentor_meeting)
     mentor_meeting.status == MentorMeeting::STATUS_ACCEPTED && mentor_meeting.meeting_at.between?(1.day.ago,1.day.from_now)
-  end
-
-  def meeting_completed
-    raise_not_found if MentorMeeting.find(params[:id]).status != MentorMeeting::STATUS_COMPLETED
   end
 
   def guest(mentormeeting)

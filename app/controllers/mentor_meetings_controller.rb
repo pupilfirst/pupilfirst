@@ -1,12 +1,11 @@
 class MentorMeetingsController < ApplicationController
   before_filter :authenticate_user!
-  before_filter :meeting_started, only: [:feedback]
-  before_filter :meeting_completed, only: [:feedbacksave]
-  before_filter :meeting_room_accessible, only: [:live]
+  before_filter :accept_reject_rights, only: [:accept, :reject]
   before_filter :meeting_member, except: [:new, :create, :index]
 
   def live
     @mentor_meeting = MentorMeeting.find(params[:id])
+    raise_not_found unless @mentor_meeting.room_accessible?
   end
 
   def new
@@ -47,7 +46,7 @@ class MentorMeetingsController < ApplicationController
   # POST /mentor_meetings/:id/accept
   def accept
     mentor_meeting = MentorMeeting.find(params[:id])
-    mentor_meeting.accept!(mentor_meeting,role(mentor_meeting))
+    mentor_meeting.accept!(mentor_meeting,current_user)
     flash[:notice] = "#{guest(mentor_meeting).fullname} will be notified of your acceptance."
     redirect_to mentoring_url
   end
@@ -55,7 +54,7 @@ class MentorMeetingsController < ApplicationController
   # POST /mentor_meetings/:id/reject
   def reject
     mentor_meeting = MentorMeeting.find(params[:id])
-    mentor_meeting.reject!(params[:mentor_meeting],role(mentor_meeting))
+    mentor_meeting.reject!(params[:mentor_meeting],current_user)
     flash[:notice] = "#{guest(mentor_meeting).fullname}  will be notified of your response."
     redirect_to mentoring_url
   end
@@ -63,20 +62,24 @@ class MentorMeetingsController < ApplicationController
   # POST /mentor_meetings/:id/start
   def start
     mentor_meeting = MentorMeeting.find(params[:id])
-    mentor_meeting.start!
+    mentor_meeting.start! if mentor_meeting.startable?
     render nothing: true
   end
 
   def feedback
     @mentor_meeting = MentorMeeting.find(params[:id])
-    @role = role(@mentor_meeting)
-    flash.now[:notice] = "Your meeting with #{guest(@mentor_meeting).fullname} has ended"
+    raise_not_found unless @mentor_meeting.started? || @mentor_meeting.completed?
+    flash.now[:notice] = "Your meeting with #{guest(@mentor_meeting).fullname} has been completed"
     @mentor_meeting.complete!
+    if @mentor_meeting.founder?(current_user)
+      render 'feedback_for_user'
+    else render 'feedback_for_mentor'
+    end
   end
 
   def feedbacksave
     @mentor_meeting = MentorMeeting.find(params[:id])
-
+    raise_not_found unless @mentor_meeting.completed?
     if @mentor_meeting.update(feedback_params)
       flash[:notice] = 'Thank you for your feedback!'
       redirect_to mentoring_path
@@ -88,12 +91,14 @@ class MentorMeetingsController < ApplicationController
 
   def reminder
     @mentor_meeting = MentorMeeting.find(params[:id])
+    raise_not_found unless @mentor_meeting.remind?
     @mentor_meeting.sent_sms(current_user)
     head :ok
   end
 
   def reschedule
     @mentor_meeting = MentorMeeting.find(params[:id])
+    raise_not_found unless @mentor_meeting.mentor?(current_user) && @mentor_meeting.requested?
     new_time = params[:mentor_meeting][:suggested_meeting_at]
     if @mentor_meeting.to_be_rescheduled?(new_time)
       @mentor_meeting.reschedule!(new_time)
@@ -106,8 +111,12 @@ class MentorMeetingsController < ApplicationController
 
   def cancel
     mentor_meeting = MentorMeeting.find(params[:id])
-    mentor_meeting.cancel!(params[:mentor_meeting],role(mentor_meeting))
-    flash[:notice] = "#{guest(mentor_meeting).fullname}  will be notified of the cancellation."
+    if mentor_meeting.cancellable?
+      mentor_meeting.cancel!(params[:mentor_meeting],current_user)
+      flash[:notice] = "#{guest(mentor_meeting).fullname}  will be notified of the cancellation."
+    else
+      flash[:notice] = "The meeting can no longer be cancelled"
+    end
     redirect_to mentoring_path
   end
 
@@ -121,28 +130,18 @@ class MentorMeetingsController < ApplicationController
     params.require(:mentor_meeting).permit(:user_rating,:mentor_rating,:user_comments,:mentor_comments)
   end
 
-  def meeting_room_accessible
-    raise_not_found if !(MentorMeeting.find(params[:id]).status == MentorMeeting::STATUS_STARTED || accepted_and_today?(MentorMeeting.find(params[:id])))
-  end
-
-  def accepted_and_today?(mentor_meeting)
-    mentor_meeting.status == MentorMeeting::STATUS_ACCEPTED && mentor_meeting.meeting_at.between?(1.day.ago,1.day.from_now)
-  end
-
-  def meeting_started
-    raise_not_found if !(MentorMeeting.find(params[:id]).status == MentorMeeting::STATUS_STARTED || MentorMeeting.find(params[:id]).status == MentorMeeting::STATUS_COMPLETED)
-  end
-
-  def meeting_completed
-    raise_not_found if MentorMeeting.find(params[:id]).status != MentorMeeting::STATUS_COMPLETED
-  end
-
-  def role(mentormeeting)
-    current_user == mentormeeting.user ? "user" : "mentor"
-  end
-
   def guest(mentormeeting)
     current_user == mentormeeting.user ? mentormeeting.mentor.user : mentormeeting.user
+  end
+
+  def accept_reject_rights
+    meeting = MentorMeeting.find(params[:id])
+    raise_not_found unless (meeting.requested? && meeting.mentor?(current_user)) || (meeting.rescheduled? && meeting.founder?(current_user))
+  end
+
+  def meeting_member
+    meeting = MentorMeeting.find(params[:id])
+    raise_not_found unless meeting.founder?(current_user) || meeting.mentor?(current_user)
   end
 
   def meeting_member

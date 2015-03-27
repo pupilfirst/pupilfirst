@@ -283,10 +283,14 @@ class MentorMeeting < ActiveRecord::Base
   end
 
   def remind?
-    accepted? && meeting_at > 1.day.ago && meeting_at < Time.now
+    accepted? && meeting_at.between?(1.day.ago,Time.now)
   end
 
   def cancellable?
     requested? || accepted? || rescheduled?
+  end
+
+  def room_accessible?
+    (started? || accepted?) && meeting_at.between?(1.day.ago,1.day.from_now)
   end
 end

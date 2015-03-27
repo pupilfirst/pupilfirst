@@ -46,7 +46,7 @@ class MentorMeetingsController < ApplicationController
   # POST /mentor_meetings/:id/accept
   def accept
     mentor_meeting = MentorMeeting.find(params[:id])
-    mentor_meeting.accept!(params[:mentor_meeting],current_user)
+    mentor_meeting.accept!(mentor_meeting,current_user)
     flash[:notice] = "#{guest(mentor_meeting).fullname} will be notified of your acceptance."
     redirect_to mentoring_url
   end

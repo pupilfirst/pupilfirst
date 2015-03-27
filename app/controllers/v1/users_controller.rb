@@ -147,9 +147,6 @@ class V1::UsersController < V1::BaseController
       :email, :fullname, :password, :password_confirmation, :avatar, :remote_avatar_url, :born_on,
       :pan, :din, :aadhaar, :mother_maiden_name, :married, :salutation,
       :is_student, :college_id, :course, :semester, :title,
-      :religion, :current_occupation, :educational_qualification, :place_of_birth,
-      address_attributes: [:flat, :building, :street, :area, :town, :state, :pin],
-      father_attributes: [:first_name, :last_name, :middle_name]
-    )
+      :religion, :current_occupation, :educational_qualification, :place_of_birth)
   end
 end

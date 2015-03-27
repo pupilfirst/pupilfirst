@@ -62,7 +62,7 @@ class MentorMeetingsController < ApplicationController
   # POST /mentor_meetings/:id/start
   def start
     mentor_meeting = MentorMeeting.find(params[:id])
-    mentor_meeting.start!
+    mentor_meeting.start! if mentor_meeting.startable?
     render nothing: true
   end
 

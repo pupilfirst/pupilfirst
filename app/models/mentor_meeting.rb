@@ -293,4 +293,8 @@ class MentorMeeting < ActiveRecord::Base
   def room_accessible?
     (started? || accepted?) && meeting_at.between?(1.day.ago,1.day.from_now)
   end
+
+  def startable?
+    accepted? && meeting_at <= Time.now
+  end
 end

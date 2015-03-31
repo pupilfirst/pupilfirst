@@ -5,14 +5,12 @@
 .card-container {
   width: 175px;
   height: 250px;
-  margin: 20px;
+  margin: 30px;
   padding: 0;
   float: left;
   font-family: "Helvetica Nueue", Arial, Verdana, sans-serif;
+  transition: transform .3s;
 
-  &:hover .card {
-    border: solid lightgrey 2px;
-  }
 }
 
 .common-card-properties {
@@ -30,7 +28,7 @@
   .title {
     width: 100%;
     height: 10%;
-    padding: 5px;
+    padding: 4%;
     margin: 0;
     text-align: center;
     white-space: nowrap;
@@ -89,22 +87,22 @@
   .footer {
     width: 100%;
     height: 10%;
+    padding-bottom: 4%;
 
     .job-postdate{
       float: left;
-      margin-left: 10px;
+      padding-left: 8%;
       width: 50%;
       height: 100%;
-      padding: 2px;
       color: grey;
     }
 
     .external-link{
       float: right;
-      margin-right: 10px;
-      widows: 30%;
+      padding-right: 8%;
+      text-align: right;
+      width: 50%;
       height: 100%;
-      padding: 2px;
 
     }
   }
@@ -153,3 +151,10 @@
   }
 }
 
+@media all and (min-width: 481px){
+  .card-container {
+    &:hover {
+      transform: scale(1.1, 1.1);
+    }
+  }
+}

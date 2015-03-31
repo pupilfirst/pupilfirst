@@ -87,6 +87,8 @@ class User < ActiveRecord::Base
     !(invitation_token.present?)
   end
 
+  nilify_blanks only: [:invitation_token, :twitter_url, :linkedin_url, :pin]
+
   # Validate presence of e-mail for everyone except contacts with invitation token (unregistered contacts).
   validates_uniqueness_of :email, unless: ->(user) { user.invitation_token.present? }
 
@@ -103,7 +105,7 @@ class User < ActiveRecord::Base
   validates_presence_of :religion, if: ->(user) { user.validate_partnership_essential_fields }
   # validates_presence_of :communication_address, if: ->(user) { user.validate_partnership_essential_fields }
 
-  validates :pin, numericality: {only_integer: true, allow_blank: true, greater_than_or_equal_to: 100000, less_than_or_equal_to: 999999} # PIN Code is always 6 digits
+  validates_numericality_of :pin, allow_blank: true, greater_than_or_equal_to: 100000, less_than_or_equal_to: 999999 # PIN Code is always 6 digits
 
   # Title is essential if user is a mentor.
   validates_presence_of :title, if: Proc.new { |user| user.mentor.present? }
@@ -119,10 +121,8 @@ class User < ActiveRecord::Base
     value.is_a?(String) ? value.downcase == 'true' : value
   end
 
-  validates :twitter_url, url: { allow_nil: true, allow_blank: true }
-  validates :linkedin_url, url: { allow_blank: true, allow_nil: true }
-
-  nilify_blanks only: [:invitation_token, :twitter_url, :linkedin_url]
+  validates :twitter_url, url: { allow_blank: true }
+  validates :linkedin_url, url: { allow_blank: true }
 
   before_create do
     self.auth_token = SecureRandom.hex(30)

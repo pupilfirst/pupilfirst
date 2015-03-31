@@ -28,5 +28,5 @@
         .job-postdate
           p style="color:grey" #{job.updated_at.strftime('%^B %d').html_safe}
         .external-link
-          a.job-icon.fitlargest
+          a.job-icon.fitlargest href=startup_startup_job_path(job.startup,job)
             span.fa.fa-external-link style="color:cornflowerblue"

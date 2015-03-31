@@ -39,7 +39,7 @@ class Event < ActiveRecord::Base
     end
   end
 
-  scope :approved_events, -> {where(approved: true)}
+  scope :approved_events, -> { where(approved: true) }
 
   alias_attribute :push_title, :title
 

@@ -134,27 +134,27 @@ class MentorMeeting < ActiveRecord::Base
     update!(status: STATUS_STARTED)
   end
 
-  def accept!(mentor_meeting,role)
+  def accept!(mentor_meeting,accepted_by)
     update!(status: STATUS_ACCEPTED, meeting_at: mentor_meeting["suggested_meeting_at"])
-    send_acceptance_message(role)
+    send_acceptance_message(accepted_by)
   end
 
-  def send_acceptance_message(role)
-    recipient = role == "user" ? self.mentor.user : self.user
+  def send_acceptance_message(accepted_by)
+    recipient = founder?(accepted_by) ? self.mentor.user : self.user
     MentoringMailer.meeting_request_accepted(self,recipient).deliver_later
   end
 
-  def reject!(mentor_meeting,role)
-    if role == "mentor"
+  def reject!(mentor_meeting,rejected_by)
+    if mentor?(rejected_by)
       update!(status: STATUS_REJECTED, mentor_comments: mentor_meeting["mentor_comments"])
     else
       update!(status: STATUS_REJECTED, user_comments: mentor_meeting["user_comments"])
     end
-    send_rejection_message(role)
+    send_rejection_message(rejected_by)
   end
 
-  def send_rejection_message(role)
-    recipient = role == "user" ? self.mentor.user : self.user
+  def send_rejection_message(rejected_by)
+    recipient = founder?(rejected_by) ? self.mentor.user : self.user
     MentoringMailer.meeting_request_rejected(self,recipient).deliver_later
   end
 
@@ -167,17 +167,17 @@ class MentorMeeting < ActiveRecord::Base
     MentoringMailer.meeting_request_rescheduled(self).deliver_later
   end
 
-  def cancel!(mentor_meeting,role)
-    if role == "mentor"
+  def cancel!(mentor_meeting,cancelled_by)
+    if mentor?(cancelled_by)
       update!(status: STATUS_CANCELLED, mentor_comments: mentor_meeting["mentor_comments"])
     else
       update!(status: STATUS_CANCELLED, user_comments: mentor_meeting["user_comments"])
     end
-    send_cancel_message(role)
+    send_cancel_message(cancelled_by)
   end
 
-  def send_cancel_message(role)
-    recipient = role == "user" ? self.mentor.user : self.user
+  def send_cancel_message(cancelled_by)
+    recipient = founder?(cancelled_by) ? self.mentor.user : self.user
     MentoringMailer.meeting_request_cancelled(self,recipient).deliver_later
   end
 
@@ -222,7 +222,7 @@ class MentorMeeting < ActiveRecord::Base
   end
 
   def recent_sms_sent?(user)
-    if is_mentor?(user)
+    if mentor?(user)
       recent_mentor_sms?
     else
       recent_user_sms?
@@ -239,7 +239,7 @@ class MentorMeeting < ActiveRecord::Base
 
   def sent_sms(currentuser)
     if !recent_sms_sent?(currentuser)
-      if is_mentor?(currentuser)
+      if mentor?(currentuser)
         phone_number = self.user.phone
         self.update(mentor_sms_sent_at: Time.now)
       else
@@ -250,12 +250,16 @@ class MentorMeeting < ActiveRecord::Base
     end
   end
 
-  def is_mentor?(currentuser)
-    currentuser == self.user ? false : true
+  def founder?(user)
+    user == self.user
   end
 
-  def guest(currentuser)
-    currentuser == self.user ? self.mentor.user : self.user
+  def mentor?(user)
+    !founder?(user)
+  end
+
+  def guest(user)
+    founder?(user) ? self.mentor.user : self.user
   end
 
   def to_be_rescheduled?(new_suggested_time)
@@ -276,5 +280,21 @@ class MentorMeeting < ActiveRecord::Base
 
   def mentor_name
     mentor.try(:name)
+  end
+
+  def remind?
+    accepted? && meeting_at.between?(1.day.ago,Time.now)
+  end
+
+  def cancellable?
+    requested? || accepted? || rescheduled?
+  end
+
+  def room_accessible?
+    (started? || accepted?) && meeting_at.between?(1.day.ago,1.day.from_now)
+  end
+
+  def startable?
+    accepted? && meeting_at <= Time.now
   end
 end

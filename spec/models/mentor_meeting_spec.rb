@@ -26,25 +26,25 @@ describe MentorMeeting do
     }
 
     it 'sets stores rejected status and comment as mentor' do
-      subject.reject!(meeting_for_mentor,"mentor")
+      subject.reject!(meeting_for_mentor,subject.mentor.user)
       expect(subject.status).to eq(MentorMeeting::STATUS_REJECTED)
       expect(subject.mentor_comments).to eq(meeting_for_mentor["mentor_comments"])
     end
 
     it 'sends rejection message as mentor' do
       expect(subject).to receive(:send_rejection_message)
-      subject.reject!(meeting_for_mentor,"mentor")
+      subject.reject!(meeting_for_mentor,subject.mentor.user)
     end
 
     it 'sets stores rejected status and comment as user' do
-      subject.reject!(meeting_for_user,"user")
+      subject.reject!(meeting_for_user,subject.user)
       expect(subject.status).to eq(MentorMeeting::STATUS_REJECTED)
       expect(subject.user_comments).to eq(meeting_for_user["user_comments"])
     end
 
     it 'sends rejection message as user' do
       expect(subject).to receive(:send_rejection_message)
-      subject.reject!(meeting_for_user,"user")
+      subject.reject!(meeting_for_user,subject.user)
     end
   end
 
@@ -56,25 +56,25 @@ describe MentorMeeting do
     }
 
     it 'sets stores accepted status and meeting time as user' do
-      subject.accept!(meeting,"user")
+      subject.accept!(meeting,subject.user)
       expect(subject.status).to eq(MentorMeeting::STATUS_ACCEPTED)
       expect(subject.meeting_at).to eq(meeting["suggested_meeting_at"])
     end
 
     it 'sets stores accepted status and meeting time as mentor' do
-      subject.accept!(meeting,"mentor")
+      subject.accept!(meeting,subject.mentor.user)
       expect(subject.status).to eq(MentorMeeting::STATUS_ACCEPTED)
       expect(subject.meeting_at).to eq(meeting["suggested_meeting_at"])
     end
 
     it 'sends acceptance message as mentor' do
       expect(subject).to receive(:send_acceptance_message)
-      subject.accept!(meeting,"mentor")
+      subject.accept!(meeting,subject.mentor.user)
     end
 
     it 'sends acceptance message as user' do
       expect(subject).to receive(:send_acceptance_message)
-      subject.accept!(meeting,"user")
+      subject.accept!(meeting,subject.user)
     end
   end
 

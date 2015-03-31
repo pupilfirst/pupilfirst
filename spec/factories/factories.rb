@@ -7,35 +7,27 @@ FactoryGirl.define do
   factory :admin_user, aliases: [:author] do
     fullname { "#{Faker::Name.first_name} #{Faker::Name.last_name}" }
     username  { Faker::Name.first_name }
-    email     { Faker::Internet.email }
+    email { Faker::Internet.email }
     password  "password"
     password_confirmation "password"
   end
 
-  factory :social_id do
-    social_id       {Faker::Number.number(8)}
-    social_token    {Faker::Lorem.characters(256)}
-    permission      []
-    # association :user, factory: :user_with_out_password, strategy: :build
-    factory :facebook_social_id do
-      provider :facebook
-      primary  true
-    end
-  end
-
   factory :user do
     fullname { Faker::Name.name }
-    username  { Faker::Lorem.characters(9) }
+    username { Faker::Lorem.characters(9) }
     salutation { %w(Mr Miss Mrs).sample }
-    email     { Faker::Internet.email }
-    born_on   { Date.current.to_s }
-    title   { Faker::Lorem.characters(9) }
+    email { Faker::Internet.email }
+    born_on { Date.current.to_s }
+    gender { %w(male female).sample }
+    title { Faker::Lorem.characters(9) }
     communication_address { Faker::Address.secondary_address }
     district { Faker::Address.city }
     state { Faker::Address.state }
     pin { (rand(899999) + 100000).to_s }
     avatar { fixture_file_upload(Rails.root.join(*%w[ spec fixtures files example.jpg ]), 'image/jpg') }
-
+    twitter_url { 'http://' + Faker::Internet.domain_name }
+    linkedin_url { 'http://' + Faker::Internet.domain_name }
+    college {create(:college)}
     factory :user_with_out_password do
       skip_password true
       # factory :employee do
@@ -72,20 +64,6 @@ FactoryGirl.define do
     first_name  "first_name"
     last_name  "last_name"
     middle_name  "middle_name"
-  end
-
-  factory :address do
-    flat  "flat"
-    building  "building"
-    area  "area"
-    town  "town"
-    state "state"
-    pin "pin"
-  end
-
-  factory :guardian do
-    association :name, factory: :name, strategy: :build
-    association :address, factory: :address, strategy: :build
   end
 
   factory :user_category, class: Category do |f|
@@ -125,12 +103,6 @@ FactoryGirl.define do
   factory :bank do |f|
     f.is_joint true
     startup
-  end
-
-  factory :connection do
-    user
-    contact
-    direction Connection::DIRECTION_USER_TO_SV
   end
 
   factory :request  do

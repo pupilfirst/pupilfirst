@@ -1,4 +1,4 @@
-class SmsJob < ActiveJob::Base
+class SmsStatisticsJob < ActiveJob::Base
   queue_as :default
 
   def perform

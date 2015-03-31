@@ -1,5 +1,5 @@
 = content_for :heading
-  | #{@mentor_meeting.guest(@recipient).fullname} has agreed to the meeting!
+  | #{@mentor_meeting.guest(@recipient).fullname} has cancelled the meeting!
 
 = content_for :salutation
   | Hi #{@recipient.fullname}!
@@ -8,4 +8,4 @@
   p
     ' Unfortunately #{@mentor_meeting.guest(@recipient).fullname} has cancelled the meeting with you! Please refer to his/her comments below:
   p
-    i &ldquo;#{@mentor_meeting.is_mentor?(@recipient) ? @mentor_meeting.user_comments : @mentor_meeting.mentor_comments}&rdquo;
+    i &ldquo;#{@mentor_meeting.mentor?(@recipient) ? @mentor_meeting.user_comments : @mentor_meeting.mentor_comments}&rdquo;

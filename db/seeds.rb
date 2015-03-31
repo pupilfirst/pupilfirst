@@ -1,14 +1,21 @@
 # Create an admin user for the /admin interface. This user is a 'superadmin', who can do everything possible from the
 # ActiveAdmin interface.
-AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password', admin_type: 'superadmin')
+admin_user = AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password', admin_type: 'superadmin')
 
 if Rails.env.development?
+  # Let's activate Faker.
+  require 'faker'
+  I18n.reload!
+
+  # Disable emails.
+  ActionMailer::Base.perform_deliveries = false
+
   # A user who is founder of Super Startup.
   someone = User.create!(email: 'someone@mobme.in', fullname: 'Some One', password: 'password', password_confirmation: 'password')
 
   # Startup with live agreement.
   super_startup = Startup.new(
-    name: "Super Startup",
+    name: 'Super Startup',
     agreement_first_signed_at: 18.months.ago,
     agreement_last_signed_at: 6.months.ago,
     agreement_ends_at: 6.months.since,
@@ -18,30 +25,35 @@ if Rails.env.development?
   super_startup.save!
 
   # Job listed by Super Startup.
-  super_startup_job = super_startup.jobs.create!(title: 'Hacker', location: 'Cochin', contact_name: 'Some One', contact_number: '9876543210', description: 'This is the job description')
+  super_startup_job = super_startup.startup_jobs.create!(
+    title: 'Hacker',
+    location: 'Cochin',
+    contact_name: 'Some One',
+    contact_email: 'someone@mobme.in',
+    description: 'This is the job description'
+  )
 
-  # Startup partnership with User
-  startup_partnership = Partnership.new(startup_id: 1, share_percentage: 20, salary: 12000, cash_contribution: 20000)
-  startup_partnership.user_id = someone.id
-  startup_partnership.save!
+  # Startups news posted by admin
+  news = News.create!(
+    title: 'Example news title',
+    remote_picture_url: Faker::Avatar.image,
+    author: admin_user
+  )
 
-  startup_category = Category.create!(name: "startup_catagory")
-  startup_location = Location.create!(title: "Kochi", latitude: Faker::Address.latitude, longitude: Faker::Address.longitude)
+  event_category = Category.event_category.create!(name: 'Meetup')
 
-  # Startups news posted by user
-  startups_news = News.new(title: "example_news_head", picture: Faker::Avatar.image)
-  startup_news.user_id = someone.id
-  startup_news.save!
-
-  # Events @ startup
-  startup_event = Event.new(title: 'Super event',picture: Faker::Avatar.image("my-own-slug"))
-  startup_event.location_id = startup_location.id
-  startup_event.category_id = startup_category.id
-  startup_event.save!
-
-  # startup requests
-  startup_request = Request.new(body: "Startup request")
-  startup_request.user_id = someone.id
-  startup_request.save!
-
+  # Pre-approved event
+  startup_event = Event.create!(
+    title: 'Super event',
+    description: 'This is the event description',
+    start_at: 1.year.from_now,
+    end_at: 2.years.from_now,
+    posters_name: Faker::Name.first_name,
+    posters_email: 'someone@mobme.in',
+    posters_phone_number: '9876543210',
+    remote_picture_url: Faker::Avatar.image('my-own-slug'),
+    location: 'Startup Village, Kochi',
+    category: event_category,
+    approved: true
+  )
 end

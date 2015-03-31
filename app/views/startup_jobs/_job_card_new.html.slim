@@ -1,8 +1,7 @@
 - if display_card? job
   .card-container
     .card
-      .title
-        span #{job.title}
+      .title #{job.title}
       .logo
         - if job.startup.logo?
           .startup-logo style="background-image: url(#{job.startup.logo_url})"

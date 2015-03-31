@@ -5,10 +5,14 @@
 .card-container {
   width: 175px;
   height: 250px;
-  margin: 10px;
+  margin: 20px;
   padding: 0;
   float: left;
   font-family: "Helvetica Nueue", Arial, Verdana, sans-serif;
+
+  &:hover .card {
+    border: solid lightgrey 2px;
+  }
 }
 
 .common-card-properties {

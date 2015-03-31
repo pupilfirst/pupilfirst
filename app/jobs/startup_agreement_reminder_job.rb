@@ -3,7 +3,7 @@ class StartupAgreementReminderJob < ActiveJob::Base
 
   def perform
     # Reminders for expiry in 1 month, and 20 days.
-    one_month_from_now = 1.month.from_now.beginning_of_day..1.month.from_now.end_of_day
+    one_month_from_now = 30.days.from_now.beginning_of_day..30.days.from_now.end_of_day
     twenty_days_from_now = 20.days.from_now.beginning_of_day..20.days.from_now.end_of_day
 
     Startup.where(agreement_ends_at: [one_month_from_now, twenty_days_from_now]).each do |startup|

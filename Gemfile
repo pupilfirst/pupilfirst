@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.0'
+gem 'rails', '4.2.1'
 
 # Pulling active_admin_editor from git, since it's latest rubygems release is before an essential patch added on Jun 25.
 gem 'active_admin_editor', git: 'https://github.com/ejholmes/active_admin_editor.git'
@@ -9,7 +9,6 @@ gem 'active_admin_editor', git: 'https://github.com/ejholmes/active_admin_editor
 # ActiveAdmin doesn't like 4.2 at all (for the moment). Switch this to stable when available.
 gem 'activeadmin', github: 'activeadmin'
 gem 'inherited_resources'
-
 
 gem 'acts-as-taggable-on'
 gem 'attribute_normalizer', '~> 1.2.0.b'
@@ -68,7 +67,6 @@ gem 'delayed_job_active_record' # Delayed Job to manage jobs. Let's migrate away
 gem 'sucker_punch'
 group :development do
   gem "letter_opener"
-  gem 'seed-fu', github: 'mbleigh/seed-fu' # check and remove
   gem 'guard'
   gem 'guard-shell'
   gem 'guard-rspec'

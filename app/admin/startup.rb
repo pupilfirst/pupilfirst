@@ -132,62 +132,6 @@ ActiveAdmin.register Startup do
     redirect_to action: :show
   end
 
-  member_action :generate_partnerships_pdf, method: :get do
-    require 'prawn'
-    require 'prawn/measurement_extensions'
-
-    startup = Startup.find params[:id]
-
-    generated_pdf = Prawn::Document.new do
-      partners = startup.partnerships.order('id')
-      users = User.joins(:partnerships).order('partnerships.id').where('partnerships.startup_id = ?', startup.id)
-      data = [
-        ['Partner Name'] + users.pluck(:fullname),
-        ['Address'] + users.pluck(:communication_address),
-        ['Gender'] + users.pluck(:gender).map { |g| g.try :capitalize },
-        ['Date of Birth'] + users.pluck(:born_on).map { |bo| bo.try(:strftime, '%B %d, %Y') },
-        ['PAN'] + users.pluck(:pan),
-        ["Father's / Husband's Name"] + users.pluck(:father_or_husband_name),
-        ['Current Occupation'] + users.pluck(:current_occupation).map { |co| co.blank? ? '-' : co.gsub('_', ' ').capitalize },
-        ['Religion'] + users.pluck(:religion).map { |r| r.try :capitalize },
-        ['Marital Status'] + users.pluck(:married).map { |m| m ? 'Married' : 'Single' },
-        ['Educational Qualification'] + users.pluck(:educational_qualification).map { |eq| eq.blank? ? '-' : eq.gsub('_', ' ').capitalize },
-        ['Salary (INR)'] + partners.pluck(:salary),
-        ['Cash Contribution (INR)'] + partners.pluck(:cash_contribution),
-        ['Managing Partner?'] + partners.pluck(:managing_partner).map { |mp| mp ? 'Yes' : 'No' },
-        ['Eligible to operate bank account?'] + partners.pluck(:operate_bank_account).map { |oba| oba ? 'Yes' : 'No' },
-        ['Operational limit on bank account'] + partners.pluck(:bank_account_operation_limit),
-        ['Profit / Loss sharing percentage'] + partners.pluck(:share_percentage).map { |sp| "#{sp}%" },
-        ['Email Address'] + users.pluck(:email),
-        ['Phone Number'] + users.pluck(:phone)
-      ]
-
-      table(data, {
-          row_colors: %w(EEEEEE FFFFFF),
-          cell_style: {
-            border_color: '999999'
-          }
-        }) do
-        columns(0).background_color = 'EEEEEE'
-        columns(0).font_style = :bold
-        rows(0).background_color = 'CCCCCC'
-        rows(0).font_style = :bold
-      end
-
-      move_down 5.mm
-      text 'Partnership', style: :bold
-      move_down 3.mm
-      text "<strong>Name:</strong> #{startup.name}", inline_format: true
-      move_down 3.mm
-      text "<strong>Objective:</strong> #{startup.pitch}", inline_format: true
-      move_down 3.mm
-      text 'Address:', style: :bold
-      text startup.address
-    end.render
-
-    send_data generated_pdf, filename: "#{startup.name}.pdf", type: 'application/pdf'
-  end
-
   member_action :generate_bank_account_pdf, method: :get do
     require 'prawn'
     require 'prawn/measurement_extensions'
@@ -334,27 +278,6 @@ ActiveAdmin.register Startup do
       end
       
     end
-
-    panel 'Partnership Details' do
-      startup.partnerships.order('share_percentage DESC').each do |partner|
-        div(class: 'admin_startup_partnership') do
-          attributes_table_for partner do
-            row :user do
-              link_to partner.user.fullname, [:admin, partner.user]
-            end
-            [:share_percentage, :salary, :cash_contribution, :managing_partner, :operate_bank_account].each do |column|
-              row column
-            end
-          end
-        end
-      end
-
-      div class: 'clear-both'
-
-      div { link_to 'Manage these entries in Partnership section.', admin_partnerships_path(q: { startup_id_eq: startup.id }) }
-      div { link_to 'Download partnership details as PDF', generate_partnerships_pdf_admin_startup_path }
-      # div { link_to 'Download bank account opening form as PDF', generate_bank_account_pdf_admin_startup_path }
-    end if startup.partnerships.present?
 
     panel 'Emails and Notifications' do
       link_to('Reminder to complete startup profile', send_startup_profile_reminder_admin_startup_path, method: :post, data: { confirm: 'Are you sure you wish to send notification and email?' })

@@ -94,8 +94,8 @@ class User < ActiveRecord::Base
 
   # Couple of fields essential to forming partnerships. These are validated when partner confirms intent to form partnership.
   validates_presence_of :born_on, if: ->(user) { user.validate_partnership_essential_fields }
-  validates_presence_of :pan, if: ->(user) { user.validate_partnership_essential_fields }
-  validates_presence_of :father_or_husband_name, if: ->(user) { user.validate_partnership_essential_fields }
+  # validates_presence_of :pan, if: ->(user) { user.validate_partnership_essential_fields }
+  # validates_presence_of :father_or_husband_name, if: ->(user) { user.validate_partnership_essential_fields }
   validates_presence_of :mother_maiden_name, if: ->(user) { user.validate_partnership_essential_fields }
   validates_inclusion_of :married, in: [true, false], if: ->(user) { user.validate_partnership_essential_fields }
   validates_presence_of :current_occupation, if: ->(user) { user.validate_partnership_essential_fields }

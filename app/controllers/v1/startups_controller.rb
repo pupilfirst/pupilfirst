@@ -70,16 +70,6 @@ class V1::StartupsController < V1::BaseController
     # render nothing: true, status: :created
   end
 
-  # POST /api/startups/:id/registration
-  def registration
-    if current_user.startup.registration_type
-      raise Exceptions::StartupAlreadyRegistered, "Startup is already registered as #{current_user.startup.registration_type}."
-    else
-      current_user.startup.register(registration_params, current_user)
-      render nothing: true
-    end
-  end
-
   # POST /api/startups/:id/founders
   def add_founder
     user = User.find_or_initialize_cofounder params[:email]

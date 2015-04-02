@@ -6,7 +6,7 @@ class Ability
       when AdminUser::TYPE_SUPERADMIN
         can :manage, :all
       when AdminUser::TYPE_INCUBATION_TEAM
-        can :read, [User, Partnership]
+        can :read, [User]
         can :manage, [Startup, DbConfig, News, Event, StartupJob]
       when AdminUser::TYPE_EDITOR
         can :read, Startup

@@ -70,12 +70,6 @@ Svapp::Application.routes.draw do
     patch 'resend', action: 'resend'
   end
 
-  scope 'partnerships', controller: 'partnerships', as: 'partnerships' do
-    get 'confirm/:confirmation_token', action: 'show_confirmation', as: 'show_confirmation'
-    post 'confirm/:confirmation_token', action: 'submit_confirmation', as: 'submit_confirmation'
-    get 'confirmation_success'
-  end
-
   # get 'team' => 'welcome#team'
   get 'jobs', to: 'startup_jobs#list_all'
   get 'privacy_policy', to: 'welcome#privacy_policy'

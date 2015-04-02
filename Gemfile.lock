@@ -488,6 +488,7 @@ GEM
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
+    seedbank (0.3.0)
     select2-rails (3.5.9.1)
       thor (~> 0.14)
     sendgrid_smtpapi (0.0.2)
@@ -626,6 +627,7 @@ DEPENDENCIES
   rubypress
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
+  seedbank
   select2-rails
   sendgrid_smtpapi
   sentry-raven

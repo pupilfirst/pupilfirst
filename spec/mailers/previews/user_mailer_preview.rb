@@ -1,12 +1,6 @@
 # require 'mailer_preview_helper'
 
 class UserMailerPreview < ActionMailer::Preview
-  # def confirm_partnership_formation
-  #   partnership = FactoryGirl.create :partnership
-  #   UserMailer.confirm_partnership_formation(partnership, partnership.startup.founders.first)
-  #   partnership.destroy!
-  # end
-
   def reminder_to_complete_founder_profile
     UserMailer.reminder_to_complete_founder_profile(User.first)
   end
@@ -26,5 +20,4 @@ class UserMailerPreview < ActionMailer::Preview
   def password_changed
     UserMailer.password_changed(User.first)
   end
-
 end

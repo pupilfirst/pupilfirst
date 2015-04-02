@@ -31,5 +31,4 @@ module Exceptions
   class PhoneNumberVerificationFailed < ApiRequestError; end
   class LoginCredentialsInvalid < ApiRequestError; end
   class UserDoesNotBelongToStartup < ApiRequestError; end
-  class StartupAlreadyRegistered < ApiRequestError; end
 end

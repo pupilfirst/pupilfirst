@@ -51,7 +51,6 @@ class User < ActiveRecord::Base
   belongs_to :startup
   belongs_to :startup_link_verifier, class_name: "User", foreign_key: "startup_link_verifier_id"
   has_and_belongs_to_many :categories
-  has_many :partnerships
   has_many :mentor_meetings
 
   scope :non_employees, -> { where("startup_id IS NULL") }
@@ -73,7 +72,6 @@ class User < ActiveRecord::Base
   validates :gender, inclusion: { in: [GENDER_FEMALE, GENDER_MALE, GENDER_OTHER] }, allow_nil: true
 
   attr_reader :skip_password
-  attr_reader :validate_partnership_essential_fields
   # hack
   attr_accessor :inviter_name
   attr_accessor :accept_startup
@@ -87,23 +85,13 @@ class User < ActiveRecord::Base
     !(invitation_token.present?)
   end
 
+  nilify_blanks only: [:invitation_token, :twitter_url, :linkedin_url, :pin]
+
   # Validate presence of e-mail for everyone except contacts with invitation token (unregistered contacts).
   validates_uniqueness_of :email, unless: ->(user) { user.invitation_token.present? }
 
-  # Validate the mobile number
-
-  # Couple of fields essential to forming partnerships. These are validated when partner confirms intent to form partnership.
-  validates_presence_of :born_on, if: ->(user) { user.validate_partnership_essential_fields }
-  validates_presence_of :pan, if: ->(user) { user.validate_partnership_essential_fields }
-  validates_presence_of :father_or_husband_name, if: ->(user) { user.validate_partnership_essential_fields }
-  validates_presence_of :mother_maiden_name, if: ->(user) { user.validate_partnership_essential_fields }
-  validates_inclusion_of :married, in: [true, false], if: ->(user) { user.validate_partnership_essential_fields }
-  validates_presence_of :current_occupation, if: ->(user) { user.validate_partnership_essential_fields }
-  validates_presence_of :educational_qualification, if: ->(user) { user.validate_partnership_essential_fields }
-  validates_presence_of :religion, if: ->(user) { user.validate_partnership_essential_fields }
-  # validates_presence_of :communication_address, if: ->(user) { user.validate_partnership_essential_fields }
-
-  validates :pin, numericality: {only_integer: true, allow_blank: true, greater_than_or_equal_to: 100000, less_than_or_equal_to: 999999} # PIN Code is always 6 digits
+  # Validate user's PIN (address).
+  validates_numericality_of :pin, allow_blank: true, greater_than_or_equal_to: 100000, less_than_or_equal_to: 999999 # PIN Code is always 6 digits
 
   # Title is essential if user is a mentor.
   validates_presence_of :title, if: Proc.new { |user| user.mentor.present? }
@@ -119,10 +107,8 @@ class User < ActiveRecord::Base
     value.is_a?(String) ? value.downcase == 'true' : value
   end
 
-  validates :twitter_url, url: { allow_nil: true, allow_blank: true }
-  validates :linkedin_url, url: { allow_blank: true, allow_nil: true }
-
-  nilify_blanks only: [:invitation_token, :twitter_url, :linkedin_url]
+  validates :twitter_url, url: { allow_blank: true }
+  validates :linkedin_url, url: { allow_blank: true }
 
   before_create do
     self.auth_token = SecureRandom.hex(30)
@@ -267,12 +253,6 @@ class User < ActiveRecord::Base
     else
       COFOUNDER_REJECTED
     end
-  end
-
-  def update_partnership_fields(partnership_essential_user_params)
-    @validate_partnership_essential_fields = true
-
-    update(partnership_essential_user_params)
   end
 
   def generate_phone_number_verification_code(incoming_phone_number)

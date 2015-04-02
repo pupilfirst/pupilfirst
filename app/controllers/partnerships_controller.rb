@@ -29,7 +29,7 @@ class PartnershipsController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:fullname, :born_on, :pan, :father_or_husband_name, :mother_maiden_name, :married,
+    params.require(:user).permit(:fullname, :born_on,
       :current_occupation, :educational_qualification, :religion, :communication_address)
   end
 

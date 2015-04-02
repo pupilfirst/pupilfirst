@@ -53,13 +53,9 @@ ActiveAdmin.register User do
       row :startup_admin
       row :is_founder
       row :born_on
-      row :father_or_husband_name, label: "Father of Husband's name"
-      row :mother_maiden_name, label: "Mother's maiden name"
-      row :pan
       row :religion
       row :educational_qualification
       row :married
-      row :current_occupation
       row :phone
       row :phone_verified
       row :communication_address

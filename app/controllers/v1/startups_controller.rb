@@ -145,11 +145,9 @@ class V1::StartupsController < V1::BaseController
   private
   def startup_params
     if params[:startup]
-      params[:startup].permit(:name, :pitch, :website, :dsc, :transaction_details, :registration_type,
-        :address, :state, :district, :incubation_location,
-        :logo, :about, :facebook_link, :twitter_link, :product_name, :product_description, :categories, :cool_fact,
-        company_names: [:justification, :name],
-        police_station: [:city, :line1, :line2, :name, :pin]
+      params[:startup].permit(
+        :name, :pitch, :website, :registration_type, :address, :state, :district, :incubation_location, :logo, :about,
+        :facebook_link, :twitter_link, :product_name, :product_description, :categories, :cool_fact
       )
     else
       {}
@@ -158,9 +156,11 @@ class V1::StartupsController < V1::BaseController
 
   def registration_params
     params.permit(
-      :registration_type, :address, :state, :district, :pin, :pitch, :total_shares, :name,
-      partners: [:fullname, :email, :share_percentage, :cash_contribution, :salary, :managing_partner,
-        :operate_bank_account, :bank_account_operation_limit, :managing_director]
+      :registration_type, :address, :state, :district, :pin, :pitch, :name,
+      partners: [
+        :fullname, :email, :share_percentage, :cash_contribution, :salary, :managing_partner, :operate_bank_account,
+        :bank_account_operation_limit, :managing_director
+      ]
     )
   end
 

@@ -218,19 +218,8 @@ ActiveAdmin.register Startup do
         end
       end
       row :registration_type
-      row :dsc
-      row :authorized_capital
-      row :share_holding_pattern
-      row :moa
-      row :police_station
       row :approval_status
-      row :incorporation_status
-      row :bank_status
-      row :company_names
       row :address
-      row :pre_funds
-      row :startup_before
-      row :help_from_sv
       row :product_name
       row :product_description do |startup|
         simple_format startup.product_description
@@ -252,31 +241,6 @@ ActiveAdmin.register Startup do
           startup.approval_status.capitalize
         end
       end
-
-      row :incorporation_status do |startup|
-        if startup.incorporation_status
-          'Approved'
-        elsif startup.incorporation_submited?
-          link_to("Approve Incorporation",
-            custom_update_admin_startup_path(startup: { incorporation_status: true }, email_to_send: :incorporation),
-            { method: :put, data: { confirm: "Are you sure?" } })
-        else
-          'Waiting for Submission'
-        end
-      end
-
-      row :bank_status do |startup|
-        if startup.bank_status
-          'Approved'
-        elsif startup.bank_details_submited?
-          link_to("Approve Bank",
-            custom_update_admin_startup_path(startup: { bank_status: true }, email_to_send: :bank),
-            { method: :put, data: { confirm: "Are you sure?" } })
-        else
-          'Waiting for Submission'
-        end
-      end
-      
     end
 
     panel 'Emails and Notifications' do
@@ -287,8 +251,7 @@ ActiveAdmin.register Startup do
   form :partial => "admin/startups/form"
   permit_params :name, :pitch, :website, :about, :email, :logo, :facebook_link, :twitter_link, :cool_fact,
     { category_ids: [] }, { founder_ids: [] }, { founders_attributes: [:id, :fullname, :email, :username, :avatar, :remote_avatar_url, :title, :linkedin_url, :twitter_url, :skip_password] },
-    :created_at, :updated_at, :approval_status, :incorporation_status, :bank_status, :dsc,
-    :authorized_capital, :share_holding_pattern, :moa, :police_station, :approval_status, :incorporation_status,
-    :product_description, :registration_type, :incubation_location, { help_from_sv: [] }, :agreement_sent,
-    :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration, :physical_incubatee
+    :created_at, :updated_at, :approval_status, :approval_status, :product_description, :registration_type,
+    :incubation_location, :agreement_sent, :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration,
+    :physical_incubatee
 end

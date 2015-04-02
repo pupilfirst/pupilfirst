@@ -29,13 +29,4 @@ FactoryGirl.define do
     f.pitch { Faker::Lorem.words(6).join(' ') }
     f.website { Faker::Internet.domain_name }
   end
-
-  factory :incorporation, class: Startup do |f|
-    f.dsc 'dsc'
-    f.company_names [{name: 'company1', description: 'desc'}]
-    f.authorized_capital 'authorized_capital'
-    f.share_holding_pattern 'share_holding_pattern'
-    f.moa 'moa'
-    f.police_station 'police_station'
-  end
 end

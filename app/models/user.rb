@@ -153,24 +153,6 @@ class User < ActiveRecord::Base
     false
   end
 
-  def personal_info_enabled?
-    return false if startup.try(:incorporation_status?)
-    return false unless is_founder
-    true
-  end
-
-  def incorporation_enabled?
-    return false if startup.try(:incorporation_status?)
-    return true if is_founder and personal_info_submitted?
-    false
-  end
-
-  def bank_details_enabled?
-    return false if startup.try(:bank_status?)
-    return true if is_founder and startup.try(:incorporation_submited?) and personal_info_submitted?
-    false
-  end
-
   # def sep_enabled?
   #   is_student?
   # end

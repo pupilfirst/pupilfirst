@@ -85,13 +85,7 @@ class Startup < ActiveRecord::Base
 
   has_one :bank
   has_many :startup_links, dependent: :destroy
-
   has_many :startup_jobs
-
-  serialize :company_names, JSON
-  serialize :startup_before, JSON
-  serialize :police_station, JSON
-  serialize :help_from_sv, Array
 
   attr_accessor :validate_frontend_mandatory_fields
   attr_reader :validate_registration_type
@@ -105,7 +99,6 @@ class Startup < ActiveRecord::Base
 
   validate :valid_founders?
   validates_associated :founders
-  # validates_length_of :help_from_sv, minimum: 1, too_short: 'must select atleast one', if: ->(startup){@full_validation }
 
   # Registration type should be one of Pvt. Ltd., Partnership, or LLC.
   validates :registration_type,
@@ -127,9 +120,6 @@ class Startup < ActiveRecord::Base
   # validates_presence_of :address, if: ->(startup){@full_validation }
   # validates_presence_of :email
   # validates_presence_of :phone
-
-  validates_presence_of :pre_funds, if: ->(startup) { startup.pre_investers_name.present? }
-  validates_presence_of :pre_investers_name, if: ->(startup) { startup.pre_funds.present? }
 
   # Only accept both agreement dates together.
   validates_presence_of :agreement_first_signed_at, if: ->(startup) { startup.agreement_last_signed_at.present? || startup.agreement_duration.present? }
@@ -205,11 +195,6 @@ class Startup < ActiveRecord::Base
     approval_status == APPROVAL_STATUS_UNREADY
   end
 
-  def valid_help_from_sv?
-    self.errors.add(:help_from_sv, "must select at least one") if help_from_sv.empty?
-    true
-  end
-
   def valid_founders?
     self.errors.add(:founders, "should have at least one founder") if founders.nil? or founders.size < 1
   end
@@ -223,10 +208,6 @@ class Startup < ActiveRecord::Base
   after_initialize ->() {
     @full_validation = true
   }
-
-  normalize_attribute :help_from_sv do |value|
-    value.select { |e| e.present? }.map { |e| e.to_i }
-  end
 
   normalize_attribute :website do |value|
     case value
@@ -276,20 +257,6 @@ class Startup < ActiveRecord::Base
     users_list.each { |u| founders << u }
   end
 
-  def incorporation_submited?
-    return true if company_names.present?
-    false
-  end
-
-  def bank_details_submited?
-    return true if self.bank
-    false
-  end
-
-  # def sep_submited?
-  #   false
-  # end
-
   validate :category_count
 
   def category_count
@@ -316,10 +283,6 @@ class Startup < ActiveRecord::Base
     else
       super parsed_categories
     end
-  end
-
-  def update_startup_parameters(startup_params)
-    self.update_attributes(startup_params.slice(:name, :address, :state, :district, :pin, :pitch, :total_shares))
   end
 
   def self.current_startups_split
@@ -383,6 +346,4 @@ class Startup < ActiveRecord::Base
         'kiran@startupvillage.in'
     end
   end
-
-  # TODO: Remove incorporation_status boolean field.
 end

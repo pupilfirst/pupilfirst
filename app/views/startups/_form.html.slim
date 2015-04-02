@@ -53,26 +53,6 @@ p
   = f.input :twitter_link, input_html: { placeholder: 'https://twitter.com/username', maxlength: 255 }
   = f.input :facebook_link, input_html: { placeholder: 'https://facebook.com/username', maxlength: 255 }
 
-  /#pre_funds.optional.checkbox
-    /label
-    /  = check_box_tag "pre_funds"
-    /  p Have you raised funds yet?
-    /.content
-    /  = f.input :pre_funds, label: "How much have you raised", input_html: {placeholder: 'Amount in INR'}
-    /  = f.input :pre_investers_name, label: "Name of investors", input_html: {placeholder: ''}
-  /#startup_before.optional.checkbox
-    /label
-    /  = check_box_tag "startup_history"
-    /  p Have you run a startup before?
-    /.content
-    /  .control-group.string.optional
-    /    label.string.optional.control-label Name of your previous startup
-    /    .controls
-    /      = text_field_tag "startup[startup_before][startup_name]", (@startup.startup_before['startup_name'] rescue nil), placeholder: "", class: "string"
-    /  .control-group.string.optional
-    /    label.string.optional.control-label Describe that startup
-    /    .controls
-    /      = text_area_tag "startup[startup_before][startup_descripition]", (@startup.startup_before['startup_descripition'] rescue nil), placeholder: "startup_descripition", class: "form-control span5", placeholder: '', rows: 5
   .form-group
     .col-sm-offset-3.col-sm-9
       = f.submit class: 'btn btn-success', value: 'Update startup profile'

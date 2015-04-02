@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150402060930) do
+ActiveRecord::Schema.define(version: 20150402063557) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -255,21 +255,7 @@ ActiveRecord::Schema.define(version: 20150402060930) do
     t.datetime "updated_at"
     t.string   "facebook_link"
     t.string   "twitter_link"
-    t.boolean  "dsc"
-    t.string   "authorized_capital"
-    t.string   "share_holding_pattern"
-    t.string   "moa"
-    t.text     "police_station"
-    t.boolean  "incorporation_status",      default: false
-    t.boolean  "bank_status",               default: false
-    t.text     "company_names"
     t.text     "address"
-    t.string   "pre_funds"
-    t.text     "startup_before"
-    t.string   "help_from_sv"
-    t.string   "pre_investers_name"
-    t.string   "transaction_details"
-    t.boolean  "partnership_application"
     t.string   "registration_type"
     t.string   "approval_status",           default: "unready"
     t.string   "product_name"
@@ -277,7 +263,6 @@ ActiveRecord::Schema.define(version: 20150402060930) do
     t.string   "cool_fact"
     t.string   "state"
     t.string   "district"
-    t.integer  "total_shares"
     t.string   "product_progress"
     t.string   "presentation_link"
     t.integer  "revenue_generated"

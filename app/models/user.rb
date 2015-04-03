@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  extend Forwardable
+
   GENDER_MALE = 'male'
   GENDER_FEMALE = 'female'
   GENDER_OTHER = 'other'
@@ -278,17 +280,9 @@ class User < ActiveRecord::Base
     end
   end
 
-  def member_of_startup?
-    startup.present?
-  end
-
-  def not_a_mentor?
-    !mentor?
-  end
-
-  def mentor?
-    mentor.present?
-  end
+  def_delegator :startup, :present?, :member_of_startup?
+  def_delegator :mentor, :nil?, :not_a_mentor?
+  def_delegator :mentor, :present?, :mentor?
 
   def mentor_pending_verification?
     mentor.try(:verified_at).blank?
@@ -301,5 +295,4 @@ class User < ActiveRecord::Base
       !phone_verified?
     end
   end
-
 end

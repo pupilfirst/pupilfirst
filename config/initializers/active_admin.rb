@@ -200,7 +200,6 @@ ActiveAdmin.setup do |config|
     admin.build_menu do |menu|
       #menu.add :label => "Startup", :priority => 0
       menu.add label: 'Mentoring'
-      menu.add label: 'Defunct'
       menu.add label: 'Statistics'
     end
   end

@@ -4,13 +4,6 @@ class UserMailer < ApplicationMailer
     mail to: @user.email, subject: 'Reminder to fill up founder profile'
   end
 
-  def confirm_partnership_formation(partnership, requesting_user)
-    @partnership = partnership
-    @requesting_user = requesting_user
-
-    mail to: @partnership.user.email, subject: 'Request to form partnership'
-  end
-
   def cofounder_request(cofounder_mail, current_user)
     @current_user = current_user
     mail(to: cofounder_mail, subject: 'SVApp: You have been invited to join a Startup!')

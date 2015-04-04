@@ -61,10 +61,13 @@ gem 'wysihtml-rails', :git => 'https://github.com/Voog/wysihtml-rails.git'
 gem 'apipie-rails'
 gem 'roadie-rails'
 
-gem 'passenger', '~> 5.0.5' # Back to Passenger! Woohoo!
+gem 'passenger', '~> 5.0.6' # Back to Passenger! Woohoo!
 
 gem 'delayed_job_active_record' # Delayed Job to manage jobs. Let's migrate away from SuckerPunch.
 gem 'sucker_punch'
+
+gem 'seedbank' # Better organized seed data.
+
 group :development do
   gem "letter_opener"
   gem 'guard'

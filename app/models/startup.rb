@@ -84,15 +84,8 @@ class Startup < ActiveRecord::Base
   end
 
   has_one :bank
-  has_many :partnerships
   has_many :startup_links, dependent: :destroy
-
   has_many :startup_jobs
-
-  serialize :company_names, JSON
-  serialize :startup_before, JSON
-  serialize :police_station, JSON
-  serialize :help_from_sv, Array
 
   attr_accessor :validate_frontend_mandatory_fields
   attr_reader :validate_registration_type
@@ -106,7 +99,6 @@ class Startup < ActiveRecord::Base
 
   validate :valid_founders?
   validates_associated :founders
-  # validates_length_of :help_from_sv, minimum: 1, too_short: 'must select atleast one', if: ->(startup){@full_validation }
 
   # Registration type should be one of Pvt. Ltd., Partnership, or LLC.
   validates :registration_type,
@@ -128,9 +120,6 @@ class Startup < ActiveRecord::Base
   # validates_presence_of :address, if: ->(startup){@full_validation }
   # validates_presence_of :email
   # validates_presence_of :phone
-
-  validates_presence_of :pre_funds, if: ->(startup) { startup.pre_investers_name.present? }
-  validates_presence_of :pre_investers_name, if: ->(startup) { startup.pre_funds.present? }
 
   # Only accept both agreement dates together.
   validates_presence_of :agreement_first_signed_at, if: ->(startup) { startup.agreement_last_signed_at.present? || startup.agreement_duration.present? }
@@ -206,11 +195,6 @@ class Startup < ActiveRecord::Base
     approval_status == APPROVAL_STATUS_UNREADY
   end
 
-  def valid_help_from_sv?
-    self.errors.add(:help_from_sv, "must select at least one") if help_from_sv.empty?
-    true
-  end
-
   def valid_founders?
     self.errors.add(:founders, "should have at least one founder") if founders.nil? or founders.size < 1
   end
@@ -224,10 +208,6 @@ class Startup < ActiveRecord::Base
   after_initialize ->() {
     @full_validation = true
   }
-
-  normalize_attribute :help_from_sv do |value|
-    value.select { |e| e.present? }.map { |e| e.to_i }
-  end
 
   normalize_attribute :website do |value|
     case value
@@ -277,20 +257,6 @@ class Startup < ActiveRecord::Base
     users_list.each { |u| founders << u }
   end
 
-  def incorporation_submited?
-    return true if company_names.present?
-    false
-  end
-
-  def bank_details_submited?
-    return true if self.bank
-    false
-  end
-
-  # def sep_submited?
-  #   false
-  # end
-
   validate :category_count
 
   def category_count
@@ -316,47 +282,6 @@ class Startup < ActiveRecord::Base
       @category_count_exceeded = true
     else
       super parsed_categories
-    end
-  end
-
-  def register(registration_params, requesting_user)
-    update_startup_parameters(registration_params)
-    create_or_update_partnerships(registration_params[:partners], requesting_user)
-
-    # Make sure registration_type value is sent. Don't allow nil to be set on this route.
-    @validate_registration_type = true
-
-    # Finish off registration by marking startup's registration_type
-    self.registration_type = registration_params[:registration_type]
-    save!
-
-    # Send email to partners asking for confirmation.
-    partnerships.each do |partnership|
-      partnership.send_confirmation_email(self, requesting_user)
-    end
-  end
-
-  def update_startup_parameters(startup_params)
-    self.update_attributes(startup_params.slice(:name, :address, :state, :district, :pin, :pitch, :total_shares))
-  end
-
-  def create_or_update_partnerships(partners_params, requesting_user)
-    partners_params.each do |partner_params|
-      user = User.find_or_initialize_by(email: partner_params[:email])
-      user.fullname = partner_params[:fullname]
-      user.save_unregistered_user!
-
-      partnership_params = partner_params.slice(:share_percentage, :cash_contribution, :salary, :managing_partner, :operate_bank_account, :bank_account_operation_limit)
-
-      # Backwards compatibility - use value for managing_director if its present...
-      partnership_params[:managing_partner] = partner_params[:managing_director] if partner_params.include?(:managing_director)
-
-      # Confirm partnership for requesting user.
-      partnership_params.merge!(confirmed_at: Time.now) if requesting_user == user
-
-      # Check for existing partnership entry. Let's not try to recreate if it's there.
-      partnership = partnerships.find_or_initialize_by user: user
-      partnership.update!(partnership_params)
     end
   end
 
@@ -421,6 +346,4 @@ class Startup < ActiveRecord::Base
         'kiran@startupvillage.in'
     end
   end
-
-  # TODO: Remove incorporation_status boolean field.
 end

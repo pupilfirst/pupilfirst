@@ -71,11 +71,10 @@ class StartupsController < InheritedResources::Base
 
   def startup_params
     params.require(:startup).permit(
-      :name, :address, :pitch, :website, :about, :email, :phone, :logo, { help_from_sv: [] },
-      :remote_logo_url, :facebook_link, :twitter_link, :pre_funds, :pre_investers_name, :product_name, :product_description,
-      :cool_fact, :help_from_sv, { category_ids: [] }, { founders_attributes: [:id, :title] },
-      { startup_before: [:startup_name, :startup_descripition] }, :registration_type,
-      :revenue_generated, :presentation_link, :product_progress, :team_size, :women_employees, :incubation_location
+      :name, :address, :pitch, :website, :about, :email, :phone, :logo, :remote_logo_url, :facebook_link, :twitter_link,
+      :product_name, :product_description, :cool_fact, { category_ids: [] }, { founders_attributes: [:id, :title] },
+      :registration_type, :revenue_generated, :presentation_link, :product_progress, :team_size, :women_employees,
+      :incubation_location
     )
   end
 

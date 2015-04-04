@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150325111317) do
+ActiveRecord::Schema.define(version: 20150402063557) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -177,15 +177,6 @@ ActiveRecord::Schema.define(version: 20150325111317) do
     t.string   "company"
   end
 
-  create_table "names", force: :cascade do |t|
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "middle_name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "salutation"
-  end
-
   create_table "news", force: :cascade do |t|
     t.string   "title"
     t.text     "body"
@@ -201,24 +192,6 @@ ActiveRecord::Schema.define(version: 20150325111317) do
   end
 
   add_index "news", ["user_id"], name: "index_news_on_user_id", using: :btree
-
-  create_table "partnerships", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "startup_id"
-    t.integer  "salary"
-    t.integer  "cash_contribution"
-    t.boolean  "managing_partner"
-    t.boolean  "operate_bank_account"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.decimal  "share_percentage",             precision: 5, scale: 2
-    t.datetime "confirmed_at"
-    t.string   "confirmation_token"
-    t.integer  "bank_account_operation_limit"
-  end
-
-  add_index "partnerships", ["startup_id"], name: "index_partnerships_on_startup_id", using: :btree
-  add_index "partnerships", ["user_id"], name: "index_partnerships_on_user_id", using: :btree
 
   create_table "requests", force: :cascade do |t|
     t.text     "body"
@@ -282,21 +255,7 @@ ActiveRecord::Schema.define(version: 20150325111317) do
     t.datetime "updated_at"
     t.string   "facebook_link"
     t.string   "twitter_link"
-    t.boolean  "dsc"
-    t.string   "authorized_capital"
-    t.string   "share_holding_pattern"
-    t.string   "moa"
-    t.text     "police_station"
-    t.boolean  "incorporation_status",      default: false
-    t.boolean  "bank_status",               default: false
-    t.text     "company_names"
     t.text     "address"
-    t.string   "pre_funds"
-    t.text     "startup_before"
-    t.string   "help_from_sv"
-    t.string   "pre_investers_name"
-    t.string   "transaction_details"
-    t.boolean  "partnership_application"
     t.string   "registration_type"
     t.string   "approval_status",           default: "unready"
     t.string   "product_name"
@@ -304,7 +263,6 @@ ActiveRecord::Schema.define(version: 20150325111317) do
     t.string   "cool_fact"
     t.string   "state"
     t.string   "district"
-    t.integer  "total_shares"
     t.string   "product_progress"
     t.string   "presentation_link"
     t.integer  "revenue_generated"

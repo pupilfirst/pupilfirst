@@ -70,6 +70,11 @@ ActiveAdmin.register User do
       end
       row :company
       row :designation
+      row :is_student
+      row :college
+      row :year_of_graduation
+      row :title
+      row :years_of_work_experience
     end
 
     attributes_table do
@@ -102,6 +107,7 @@ ActiveAdmin.register User do
 
   permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url,
     :title, :skip_password, :born_on, :startup_admin, :communication_address, :district, :state, :pin,
-    :phone, :phone_verified, :company, :designation, :invitation_token, #:confirmed_at,
+    :phone, :phone_verified, :company, :designation, :invitation_token, :is_student, :college_id, :year_of_graduation,
+    :years_of_work_experience, #:confirmed_at,
     { category_ids: [] }
 end

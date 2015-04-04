@@ -1,4 +1,6 @@
 class Mentor < ActiveRecord::Base
+  extend Forwardable
+
   MAX_SKILL_COUNT = 3
 
   AVAILABILITY_DAYS_EVERYDAY = 'everyday'
@@ -46,13 +48,8 @@ class Mentor < ActiveRecord::Base
     user.email || user.fullname
   end
 
-  def name
-    user.fullname
-  end
-
-  def title
-    user.title
-  end
+  def_delegator :user, :fullname, :name
+  def_delegators :user, :title
 
   def to_s
     display_name

@@ -4,7 +4,7 @@
     = f.input :fullname
     = f.input :categories, collection: Category.user_category, input_html: { style: 'width: 400px;' }
     = f.input :title
-    = f.input :born_on, as: :date_select
+    = f.input :born_on, as: :date_select, :start_year => 1920, :end_year => Date.today.year - 10
     = f.input :startup
     = f.input :startup_admin
     = f.input :communication_address
@@ -14,6 +14,10 @@
     = f.input :twitter_url
     = f.input :linkedin_url
     = f.input :avatar, as: :file
+    = f.input :is_student
+    = f.input :college_id, :as => :select, :collection => College.select(:name, :id)
+    = f.input :year_of_graduation
+    = f.input :years_of_work_experience
 
     / When creating a user manually, let's not ask for a password.
     = f.input :skip_password, as: :hidden, input_html: { value: true }

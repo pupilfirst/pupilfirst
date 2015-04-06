@@ -55,7 +55,6 @@ ActiveAdmin.register User do
       row :born_on
       row :religion
       row :educational_qualification
-      row :married
       row :phone
       row :phone_verified
       row :communication_address

@@ -15,26 +15,6 @@ module UsersHelper
     end
   end
 
-  def married_html(married_boolean)
-    case married_boolean
-      when true
-        'Married'
-      when false
-        'Unmarried'
-      else
-        '<em>Unknown</em>'.html_safe
-    end
-  end
-
-  def current_occupation_html(occupation)
-    case occupation
-      when User::CURRENT_OCCUPATION_SELF_EMPLOYED
-        'Self-employed'
-      else
-        '<em>Unknown</em>'.html_safe
-    end
-  end
-
   def educational_qualification_html(qualification)
     case qualification
       when User::EDUCATIONAL_QUALIFICATION_BELOW_MATRICULATION

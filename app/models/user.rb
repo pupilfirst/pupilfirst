@@ -7,12 +7,6 @@ class User < ActiveRecord::Base
   COFOUNDER_ACCEPTED = 'accepted'
   COFOUNDER_REJECTED = 'rejected'
 
-  CURRENT_OCCUPATION_SELF_EMPLOYED = 'self_employed'
-
-  def self.valid_current_occupation_values
-    [CURRENT_OCCUPATION_SELF_EMPLOYED]
-  end
-
   EDUCATIONAL_QUALIFICATION_BELOW_MATRICULATION = 'below_matriculation'
   EDUCATIONAL_QUALIFICATION_MATRICULATION = 'matriculation'
   EDUCATIONAL_QUALIFICATION_HIGHER_SECONDARY = 'higher_secondary'
@@ -98,7 +92,7 @@ class User < ActiveRecord::Base
   # validates_presence_of :father_or_husband_name, if: ->(user) { user.validate_partnership_essential_fields }
   # validates_presence_of :mother_maiden_name, if: ->(user) { user.validate_partnership_essential_fields }
   # validates_inclusion_of :married, in: [true, false], if: ->(user) { user.validate_partnership_essential_fields }
-  validates_presence_of :current_occupation, if: ->(user) { user.validate_partnership_essential_fields }
+  # validates_presence_of :current_occupation, if: ->(user) { user.validate_partnership_essential_fields }
   validates_presence_of :educational_qualification, if: ->(user) { user.validate_partnership_essential_fields }
   validates_presence_of :religion, if: ->(user) { user.validate_partnership_essential_fields }
   # validates_presence_of :communication_address, if: ->(user) { user.validate_partnership_essential_fields }

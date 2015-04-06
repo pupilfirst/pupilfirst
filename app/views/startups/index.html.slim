@@ -1,42 +1,21 @@
-<h1>Startups</h1>
+h1 Startups
 
-table.table.table-hover.table-striped.table-bordered
-  thead
-    tr
-      th Name
-      th Logo
-      th Pitch
-      th Website
-      th About
-      th Categories
-      th Email
-      th Phone
-      th Facebook Link
-      th Twitter Link
-  tbody
-    - @startups.each do |startup|
-      tr
-        td
-          = startup.name
-        td
-          = image_tag startup.logo_url(:thumb)
-        td
-          = startup.pitch
-        td
-          = startup.website
-        td
-          = startup.about.nil? ? nil : startup.about[0..50]
-        td
-          = startup.categories.map &:name
-        td
-          = startup.email
-        td
-          = startup.phone
-        td
-          = startup.facebook_link
-        td
-          = startup.twitter_link
-        td
-          = link_to 'Edit', edit_startup_path(startup)
+- @startups.each do |startup|
+  .startup-card-container
+    .startup-card
+      =link_to startup do
+        span data-toggle="tooltip" data-placement="right" data-html="true" title="<div class='startup-details'>#{render 'startup_details', startup: startup}</div>"
+          .startups-logo
+            -if startup.logo.present?
+              .logo-startup style="background-image: url(#{startup.logo_url})"
+            -else
+              .logo-name.fitlimited
+                span #{startup.name.upcase}
 
-= link_to 'New Startup', new_startup_path if @current_user.startup.nil?
+javascript:
+  if(isTouchDevice()===false) {
+    $('[data-toggle="tooltip"]').tooltip();
+  }
+  function isTouchDevice(){
+    return true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
+  }

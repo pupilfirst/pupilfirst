@@ -8,12 +8,7 @@ class StartupsController < InheritedResources::Base
   end
 
   def index
-    @current_user = current_user
-    if current_user.startup.present?
-      redirect_to action: :show, id: current_user.startup.id
-    else
-      redirect_to action: :new
-    end
+    @startups = Startup.agreement_live
   end
 
   def create

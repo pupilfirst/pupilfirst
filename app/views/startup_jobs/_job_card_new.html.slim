@@ -1,0 +1,38 @@
+- if display_card? job
+  .card-container
+    .card
+      .front
+        .title
+          span #{job.title}
+        / .exp
+        /   - if job.experience?
+        /       '( #{job.experience})
+        /   - else
+        /       '
+        .logo
+          - if job.startup.logo?
+            .startup-logo style="background-image: url(#{job.startup.logo_url})"
+          - else
+            .startup-name.fitlimited
+              span #{job.startup.name.upcase}
+        .location
+          ' #{job.location.upcase}
+
+      .back
+        .title.fitlimited
+          span #{job.title}
+        .icons-grid
+          .job-icon.fitlargest
+            span.glyphicon.glyphicon-briefcase style="color:LightGrey"
+          .job-icon.fitlargest
+            span.glyphicon.glyphicon-education style="color:cadetblue"
+          .job-icon.fitlargest
+            span.glyphicon.glyphicon-usd style="color:LightGrey"
+          .job-icon.fitlargest
+            span.glyphicon.glyphicon-check style="color:cadetblue"
+          .job-icon.fitlargest
+            span.glyphicon.glyphicon-scissors style="color:cadetblue"
+          .job-icon.fitlargest.btn class="hjgjhgk"
+            span.glyphicon.glyphicon-new-window style="color:cornflowerblue"
+        .job-postdate
+          p style="color:grey" #{job.updated_at.strftime('%^B %d').html_safe}

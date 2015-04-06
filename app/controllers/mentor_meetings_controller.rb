@@ -144,4 +144,9 @@ class MentorMeetingsController < ApplicationController
     raise_not_found unless meeting.founder?(current_user) || meeting.mentor?(current_user)
   end
 
+  def meeting_member
+    meeting = MentorMeeting.find(params[:id])
+    raise_not_found unless current_user == meeting.user || current_user == meeting.mentor.user
+  end
+
 end

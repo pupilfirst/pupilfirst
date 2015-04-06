@@ -6,3 +6,7 @@ $ ->
 
   $('.fitlargest').textfill()
 
+  $('[data-toggle="tooltip"]').tooltip()
+
+
+

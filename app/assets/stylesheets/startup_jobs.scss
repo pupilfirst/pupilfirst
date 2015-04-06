@@ -4,64 +4,45 @@
 
 .card-container {
   width: 175px;
-  height: 175px;
-  margin: 10px;
+  height: 250px;
+  margin: 30px;
   padding: 0;
   float: left;
   font-family: "Helvetica Nueue", Arial, Verdana, sans-serif;
+  transition: transform .3s;
 
-  // For flip transform
-  perspective: 800px;
-  &:hover .card{
-    transform: rotateY( 180deg );
-  }
-}
-
-.card {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    position: relative;
-
-    // For flip transform
-    transition: transform .5s;
-    transform-style: preserve-3d;
-    backface-visibility: hidden;
 }
 
 .common-card-properties {
   width: 100%;
   height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 10px;
   border: solid LightGrey 1px;
   border-radius: 2px;
 }
 
-.front {
+.card {
   @extend .common-card-properties;
-
-  // For flip transform
-  z-index: 2;
-  backface-visibility: hidden;
+  margin: 0;
+  position: relative;
 
   .title {
     width: 100%;
-    height: 25%;
-    padding: 10px;
+    height: 10%;
+    padding: 4%;
     margin: 0;
     text-align: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: grey;
+    a {
+      color: grey;
+    }
   }
 
   .logo {
     width: 100%;
-    height: 60%;
+    height: 40%;
+    padding: 10px;
     display: flex;
 
     .startup-logo {
@@ -82,68 +63,65 @@
     }
   }
 
-  .location {
-    width:100%;
-    height: 15%;
-    padding: 2px;
-    text-align: center;
-    color: grey;
-    font-size: small;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
-
-.back {
-  @extend .common-card-properties;
-
-  // For flip transform
-  z-index: 3;
-  backface-visibility: hidden;
-  transform: rotateY( 180deg );
-
-  .title {
+  .blank-row {
     width: 100%;
-    height: 25%;
-    padding: 0;
-    margin: 0;
-    text-align: center;
-    color: grey;
+    height: 5%;
   }
-
-  .icons-grid {
+  .icons-band{
     width: 100%;
-    height: 60%;
-    display: flex;
-    flex-flow: row wrap;
-    .job-icon {
+    height: 30%;
+    background-color: whitesmoke;
+    .icons-grid {
+      width: 70%;
+      height: 100%;
       margin: auto;
-      height: 50%;width: 30%;
-      text-align: center;
-      padding: 12px;
+      display: flex;
+      flex-flow: row wrap;
+      .job-icon {
+        margin: auto;
+        height: 50%;width: 30%;
+        text-align: center;
+        padding: 7px;
+      }
     }
   }
-  .job-postdate{
+
+  .footer {
     width: 100%;
-    height: 15%;
-    padding: 2px;
-    text-align: center;
-    color: grey;
+    height: 10%;
+    padding-bottom: 4%;
+
+    .job-postdate{
+      float: left;
+      padding-left: 8%;
+      width: 50%;
+      height: 100%;
+      color: grey;
+    }
+
+    .external-link{
+      float: right;
+      padding-right: 8%;
+      text-align: right;
+      width: 50%;
+      height: 100%;
+
+    }
   }
 }
 
-
-.card-no-flip {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    position: relative;
-}
-.postnew{
+.post-new {
   @extend .common-card-properties;
   text-align: center;
-  color:cadetblue;
+  padding-top: 45%;
+  transition: transform .3s;
+  margin: 0;
+  position: relative;
+
+  a p span {
+    color: lightgray;
+    transition: color .3s;
+  }
 
 }
 
@@ -152,4 +130,28 @@
     float: none;
     margin: 10px auto;
   }
+}
+
+@media all and (min-width: 481px){
+  .card-container {
+    &:hover {
+      transform: scale(1.1, 1.1);
+    }
+  }
+
+  .post-new{
+    &:hover a p span {
+      color: green;
+    }
+
+    a .text {
+      opacity: 0;
+      transition: opacity .3s ease-in-out;
+    }
+
+    &:hover a .text {
+      opacity: 100;
+    }
+  }
+
 }

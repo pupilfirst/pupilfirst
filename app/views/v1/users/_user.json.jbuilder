@@ -1,4 +1,5 @@
-json.(user, :id, :avatar_url, :fullname, :email, :pending_startup_id, :is_student, :communication_address, :gender, :twitter_url, :linkedin_url, :state, :district, :pin)
+json.(user, :id, :avatar_url, :fullname, :email, :born_on, :gender, :pending_startup_id, :is_student, :communication_address, :state, :district, :pin, :phone, :twitter_url, :linkedin_url)
+
 json.categories user.categories, :id, :name, :category_type
 
 if user.college

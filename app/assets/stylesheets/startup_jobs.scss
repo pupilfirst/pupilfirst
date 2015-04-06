@@ -2,26 +2,154 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.job-card h3 {
-  margin-top: 5px;
+.card-container {
+  width: 175px;
+  height: 175px;
+  margin: 10px;
+  padding: 0;
+  float: left;
+  font-family: "Helvetica Nueue", Arial, Verdana, sans-serif;
+
+  // For flip transform
+  perspective: 800px;
+  &:hover .card{
+    transform: rotateY( 180deg );
+  }
 }
 
-.job-card .fix-height {
-  height: 192px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.card {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    position: relative;
+
+    // For flip transform
+    transition: transform .5s;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
 }
 
-.btn-add-job {
-  height: 192px;
-}
-
-.btn-add-job .btn {
-  padding-top: 86px;
+.common-card-properties {
   width: 100%;
   height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px;
+  border: solid LightGrey 1px;
+  border-radius: 2px;
 }
 
-.button-margin {
-  margin-left: 3px;
+.front {
+  @extend .common-card-properties;
+
+  // For flip transform
+  z-index: 2;
+  backface-visibility: hidden;
+
+  .title {
+    width: 100%;
+    height: 25%;
+    padding: 10px;
+    margin: 0;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: grey;
+  }
+
+  .logo {
+    width: 100%;
+    height: 60%;
+    display: flex;
+
+    .startup-logo {
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      min-width: 100%;
+      min-height: 100%;
+    }
+
+    .startup-name {
+      max-width: 100%;
+      max-height: 100%;
+      margin: auto;
+      font-size: large;
+      text-align: center;
+      color: cadetblue;
+    }
+  }
+
+  .location {
+    width:100%;
+    height: 15%;
+    padding: 2px;
+    text-align: center;
+    color: grey;
+    font-size: small;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.back {
+  @extend .common-card-properties;
+
+  // For flip transform
+  z-index: 3;
+  backface-visibility: hidden;
+  transform: rotateY( 180deg );
+
+  .title {
+    width: 100%;
+    height: 25%;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    color: grey;
+  }
+
+  .icons-grid {
+    width: 100%;
+    height: 60%;
+    display: flex;
+    flex-flow: row wrap;
+    .job-icon {
+      margin: auto;
+      height: 50%;width: 30%;
+      text-align: center;
+      padding: 12px;
+    }
+  }
+  .job-postdate{
+    width: 100%;
+    height: 15%;
+    padding: 2px;
+    text-align: center;
+    color: grey;
+  }
+}
+
+
+.card-no-flip {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    position: relative;
+}
+.postnew{
+  @extend .common-card-properties;
+  text-align: center;
+  color:cadetblue;
+
+}
+
+@media all and (max-width: 480px){
+  .card-container {
+    float: none;
+    margin: 10px auto;
+  }
 }

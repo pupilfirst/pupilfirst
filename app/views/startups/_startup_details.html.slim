@@ -1,0 +1,22 @@
+h4 #{startup.name}
+p
+  strong Location:
+  |  #{startup.incubation_location.try(:capitalize)}
+- if startup.team_size.present?
+  p
+    strong Team size:
+    |  #{startup.team_size}
+- if startup.about.present?
+  p
+    strong About us:
+    |  #{startup.about}
+
+- if startup.product_name.present?
+  p
+    strong Product name:
+    |  #{startup.product_name}
+
+- if startup.agreement_live?
+  p
+    strong Incubated since:
+    |  #{startup.agreement_first_signed_at.strftime('%m/%Y')}

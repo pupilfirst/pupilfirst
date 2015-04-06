@@ -54,7 +54,6 @@ ActiveAdmin.register User do
       row :is_founder
       row :born_on
       row :religion
-      row :educational_qualification
       row :phone
       row :phone_verified
       row :communication_address

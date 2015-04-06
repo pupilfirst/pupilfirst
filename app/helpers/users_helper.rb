@@ -15,23 +15,6 @@ module UsersHelper
     end
   end
 
-  def educational_qualification_html(qualification)
-    case qualification
-      when User::EDUCATIONAL_QUALIFICATION_BELOW_MATRICULATION
-        'Below matriculation (< 10th)'
-      when User::EDUCATIONAL_QUALIFICATION_MATRICULATION
-        'Matriculation (10th)'
-      when User::EDUCATIONAL_QUALIFICATION_HIGHER_SECONDARY
-        'Higher Secondary (12th)'
-      when User::EDUCATIONAL_QUALIFICATION_GRADUATE
-        'Graduate'
-      when User::EDUCATIONAL_QUALIFICATION_POSTGRADUATE
-        'Postgraduate'
-      else
-        '<em>Unknown</em>'.html_safe
-    end
-  end
-
   def religion_html(religion)
     case religion
       when User::RELIGION_HINDU

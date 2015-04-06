@@ -7,16 +7,6 @@ class User < ActiveRecord::Base
   COFOUNDER_ACCEPTED = 'accepted'
   COFOUNDER_REJECTED = 'rejected'
 
-  EDUCATIONAL_QUALIFICATION_BELOW_MATRICULATION = 'below_matriculation'
-  EDUCATIONAL_QUALIFICATION_MATRICULATION = 'matriculation'
-  EDUCATIONAL_QUALIFICATION_HIGHER_SECONDARY = 'higher_secondary'
-  EDUCATIONAL_QUALIFICATION_GRADUATE = 'graduate'
-  EDUCATIONAL_QUALIFICATION_POSTGRADUATE = 'postgraduate'
-
-  def self.valid_educational_qualificiations
-    [EDUCATIONAL_QUALIFICATION_BELOW_MATRICULATION, EDUCATIONAL_QUALIFICATION_MATRICULATION, EDUCATIONAL_QUALIFICATION_HIGHER_SECONDARY, EDUCATIONAL_QUALIFICATION_GRADUATE, EDUCATIONAL_QUALIFICATION_POSTGRADUATE]
-  end
-
   RELIGION_HINDU = 'hindu'
   RELIGION_MUSLIM = 'muslim'
   RELIGION_CHRISTIAN = 'christian'
@@ -93,7 +83,7 @@ class User < ActiveRecord::Base
   # validates_presence_of :mother_maiden_name, if: ->(user) { user.validate_partnership_essential_fields }
   # validates_inclusion_of :married, in: [true, false], if: ->(user) { user.validate_partnership_essential_fields }
   # validates_presence_of :current_occupation, if: ->(user) { user.validate_partnership_essential_fields }
-  validates_presence_of :educational_qualification, if: ->(user) { user.validate_partnership_essential_fields }
+  # validates_presence_of :educational_qualification, if: ->(user) { user.validate_partnership_essential_fields }
   validates_presence_of :religion, if: ->(user) { user.validate_partnership_essential_fields }
   # validates_presence_of :communication_address, if: ->(user) { user.validate_partnership_essential_fields }
 

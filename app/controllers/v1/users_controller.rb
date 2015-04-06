@@ -146,6 +146,6 @@ class V1::UsersController < V1::BaseController
     params.require(:user).permit(:gender,:communication_address, :district, :state, :pin,
       :email, :fullname, :password, :password_confirmation, :avatar, :remote_avatar_url, :born_on,
       :din, :aadhaar, :salutation, :is_student, :college_id, :course, :semester, :title,
-      :religion, :educational_qualification, :place_of_birth)
+      :religion, :place_of_birth)
   end
 end

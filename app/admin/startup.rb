@@ -147,7 +147,6 @@ ActiveAdmin.register Startup do
         ['Gender'] + users.pluck(:gender).map { |g| g.try :capitalize },
         ['Date of Birth'] + users.pluck(:born_on).map { |bo| bo.try(:strftime, '%B %d, %Y') },
         ['Religion'] + users.pluck(:religion).map { |r| r.try :capitalize },
-        ['Educational Qualification'] + users.pluck(:educational_qualification).map { |eq| eq.blank? ? '-' : eq.gsub('_', ' ').capitalize },
         ['Salary (INR)'] + partners.pluck(:salary),
         ['Cash Contribution (INR)'] + partners.pluck(:cash_contribution),
         ['Managing Partner?'] + partners.pluck(:managing_partner).map { |mp| mp ? 'Yes' : 'No' },

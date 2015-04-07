@@ -85,26 +85,6 @@ class User < ActiveRecord::Base
 
   before_create do
     self.auth_token = SecureRandom.hex(30)
-    self.startup_verifier_token = SecureRandom.hex(30)
-  end
-
-  # def address
-  #   "#{communication_address}, #{district}, #{state}, Pin: #{pin}"
-  # end
-  # Returns fields relevant to a 'contact' User.
-  def contact_fields
-    attributes.slice('fullname', 'phone', 'email', 'company')
-  end
-
-  def verify(user)
-    return false if user.startup.nil?
-    raise "#{fullname} not allowed to verify founders yet" if startup_link_verifier.nil?
-    raise "#{fullname} not allowed to verify founders of #{user.startup.name}" if startup != user.startup
-    user.update_attributes!(startup_link_verifier: self)
-  end
-
-  def verify_self!
-    update_attributes!(startup_link_verifier: self)
   end
 
   def display_name

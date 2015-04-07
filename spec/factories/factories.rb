@@ -45,7 +45,6 @@ FactoryGirl.define do
         is_contact true
         sequence(:phone) { |n| "#{9876543210 + n}" }
         company { "#{Faker::Name.last_name} Ltd." }
-        designation { Faker::Lorem.word }
         invitation_token { Faker::Lorem.characters 10 }
       end
     end

@@ -9,34 +9,6 @@ class User < ActiveRecord::Base
   COFOUNDER_ACCEPTED = 'accepted'
   COFOUNDER_REJECTED = 'rejected'
 
-  CURRENT_OCCUPATION_SELF_EMPLOYED = 'self_employed'
-
-  def self.valid_current_occupation_values
-    [CURRENT_OCCUPATION_SELF_EMPLOYED]
-  end
-
-  EDUCATIONAL_QUALIFICATION_BELOW_MATRICULATION = 'below_matriculation'
-  EDUCATIONAL_QUALIFICATION_MATRICULATION = 'matriculation'
-  EDUCATIONAL_QUALIFICATION_HIGHER_SECONDARY = 'higher_secondary'
-  EDUCATIONAL_QUALIFICATION_GRADUATE = 'graduate'
-  EDUCATIONAL_QUALIFICATION_POSTGRADUATE = 'postgraduate'
-
-  def self.valid_educational_qualificiations
-    [EDUCATIONAL_QUALIFICATION_BELOW_MATRICULATION, EDUCATIONAL_QUALIFICATION_MATRICULATION, EDUCATIONAL_QUALIFICATION_HIGHER_SECONDARY, EDUCATIONAL_QUALIFICATION_GRADUATE, EDUCATIONAL_QUALIFICATION_POSTGRADUATE]
-  end
-
-  RELIGION_HINDU = 'hindu'
-  RELIGION_MUSLIM = 'muslim'
-  RELIGION_CHRISTIAN = 'christian'
-  RELIGION_SIKH = 'sikh'
-  RELIGION_BUDDHIST = 'buddhist'
-  RELIGION_JAIN = 'jain'
-  RELIGION_OTHER = 'other'
-
-  def self.valid_religions
-    [RELIGION_HINDU, RELIGION_MUSLIM, RELIGION_CHRISTIAN, RELIGION_SIKH, RELIGION_BUDDHIST, RELIGION_JAIN, RELIGION_OTHER]
-  end
-
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :invitable, :database_authenticatable, :confirmable, #:registerable,
@@ -113,6 +85,26 @@ class User < ActiveRecord::Base
 
   before_create do
     self.auth_token = SecureRandom.hex(30)
+    self.startup_verifier_token = SecureRandom.hex(30)
+  end
+
+  # def address
+  #   "#{communication_address}, #{district}, #{state}, Pin: #{pin}"
+  # end
+  # Returns fields relevant to a 'contact' User.
+  def contact_fields
+    attributes.slice('fullname', 'phone', 'email', 'company')
+  end
+
+  def verify(user)
+    return false if user.startup.nil?
+    raise "#{fullname} not allowed to verify founders yet" if startup_link_verifier.nil?
+    raise "#{fullname} not allowed to verify founders of #{user.startup.name}" if startup != user.startup
+    user.update_attributes!(startup_link_verifier: self)
+  end
+
+  def verify_self!
+    update_attributes!(startup_link_verifier: self)
   end
 
   def display_name

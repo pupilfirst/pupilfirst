@@ -51,7 +51,6 @@ class User < ActiveRecord::Base
   belongs_to :bank
   belongs_to :father, class_name: 'Name'
   belongs_to :startup
-  belongs_to :startup_link_verifier, class_name: "User", foreign_key: "startup_link_verifier_id"
   has_and_belongs_to_many :categories
   has_many :mentor_meetings
 
@@ -114,59 +113,7 @@ class User < ActiveRecord::Base
 
   before_create do
     self.auth_token = SecureRandom.hex(30)
-    self.startup_verifier_token = SecureRandom.hex(30)
   end
-
-  # def address
-  #   "#{communication_address}, #{district}, #{state}, Pin: #{pin}"
-  # end
-  # Returns fields relevant to a 'contact' User.
-  def contact_fields
-    attributes.slice('fullname', 'phone', 'email', 'company', 'designation')
-  end
-
-  def verify(user)
-    return false if user.startup.nil?
-    raise "#{fullname} not allowed to verify founders yet" if startup_link_verifier.nil?
-    raise "#{fullname} not allowed to verify founders of #{user.startup.name}" if startup != user.startup
-    user.update_attributes!(startup_link_verifier: self)
-  end
-
-  def verify_self!
-    update_attributes!(startup_link_verifier: self)
-  end
-
-  def confirm_employee!(is_founder)
-    self.update_attributes!(startup_link_verifier_id: self.id, is_founder: is_founder)
-  end
-
-  def verified?
-    return true if startup_link_verifier
-  end
-
-  def approved_message
-    return nil if startup.try(:approval_status) and verified?
-    return I18n.t('startup_village.messages.startup_approval.link_startup', company_name: startup.try(:name)) unless verified?
-    I18n.t('startup_village.messages.startup_approval.from_startup_village', company_name: startup.try(:name))
-  end
-
-  def personal_info_submitted?
-    return true if self.father
-    false
-  end
-
-  # def sep_enabled?
-  #   is_student?
-  # end
-
-  #
-  # def gender
-  #   if salutation == 'Mr'
-  #     :male
-  #   else
-  #     :female
-  #   end
-  # end
 
   def display_name
     email || fullname
@@ -183,26 +130,6 @@ class User < ActiveRecord::Base
     raise Exceptions::UserHasPendingStartupInvite, 'User has a pending startup invite, and cannot be invited right now.' if cofounder.pending_startup_id
 
     cofounder
-  end
-
-  # Creates a contact user, from given sv_user with contact_params and supplied direction of contact.
-  #
-  # @param [User] sv_user User for / from whom contact is created
-  # @param [Hash] contact_params Parameters with which to create contact User.
-  # @param [String] direction Direction of connection. See Connection::DIRECTION_*
-  # @return [User] Newly created contact user
-  def self.create_contact!(sv_user, contact_params, direction)
-    # Normalize incoming phone number.
-    unverified_phone_number = contact_params[:phone].length <= 10 ? "91#{contact_params[:phone]}" : contact_params[:phone]
-
-    # Pass only plausible phone numbers.
-    unless Phony.plausible?(unverified_phone_number, cc: '91')
-      raise Exceptions::InvalidPhoneNumber, 'Supplied phone number could not be parsed. Please check and try again.'
-    end
-
-    # Create the user
-    user = new(contact_params)
-    user.save_unregistered_user!
   end
 
   # Skips setting password and sets invitation_token to allow later registration.

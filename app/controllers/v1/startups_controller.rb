@@ -30,7 +30,6 @@ class V1::StartupsController < V1::BaseController
     @startup.full_validation = false
     @startup.save
 
-    current_user.verify_self!
     current_user.update_attributes!(is_founder: true, startup_admin: true)
     @startup.save(validate: false)
     StartupMailer.apply_now(@startup).deliver_later
@@ -61,7 +60,7 @@ class V1::StartupsController < V1::BaseController
   def link_employee
     @new_employee = current_user
     startup = Startup.find(params[:id])
-    @new_employee.update_attributes!(startup: startup, startup_link_verifier_id: nil, title: params[:position])
+    @new_employee.update_attributes!(startup: startup, title: params[:position])
     StartupMailer.respond_to_new_employee(startup, @new_employee).deliver_later
     message = "#{@new_employee.fullname} wants to be linked with #{startup.name or "your startup"}. Please check your email to approve."
     startup.founders.each do |f|

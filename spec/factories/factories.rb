@@ -30,15 +30,11 @@ FactoryGirl.define do
     college {create(:college)}
     factory :user_with_out_password do
       skip_password true
-      # factory :employee do
-      #   startup_link_verifier_id 1
-      #   startup_verifier_token { SecureRandom.hex(30) }
-      # end
+
       factory :founder do
         is_founder true
-        startup_link_verifier_id 1
-        startup_verifier_token { SecureRandom.hex(30) }
       end
+
       factory :user_with_facebook do
         after(:create) do |user, evaluator|
           create_list(:facebook_social_id, 1, user: user)

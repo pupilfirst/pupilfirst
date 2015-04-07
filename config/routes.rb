@@ -28,12 +28,6 @@ Svapp::Application.routes.draw do
     # end
     end
 
-    member do
-      # post :confirm_employee
-      # get :confirm_employee
-      get :confirm_startup_link
-    end
-
     collection do
       get 'featured'
     end

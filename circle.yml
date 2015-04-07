@@ -1,6 +1,6 @@
 deployment:
   staging:
-    branch: job-styling
+    branch: development
     heroku:
       appname: svapp-staging
   production:

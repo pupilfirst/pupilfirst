@@ -2,8 +2,6 @@ h2.page-header Edit details related to your startup
 
 = simple_form_for user, :html => { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
   = f.error_notification
-  = f.input :religion, collection: User.valid_religions, include_blank: false, label_method: ->(obj) { religion_html(obj) }
-
   .form-group
     .col-sm-offset-3.col-sm-10
       = f.button :submit, 'Update details related to startup', class: 'btn btn-primary'

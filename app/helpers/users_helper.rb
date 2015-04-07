@@ -15,27 +15,6 @@ module UsersHelper
     end
   end
 
-  def religion_html(religion)
-    case religion
-      when User::RELIGION_HINDU
-        'Hindu'
-      when User::RELIGION_MUSLIM
-        'Muslim'
-      when User::RELIGION_CHRISTIAN
-        'Christian'
-      when User::RELIGION_SIKH
-        'Sikh'
-      when User::RELIGION_BUDDHIST
-        'Buddhist'
-      when User::RELIGION_JAIN
-        'Jain'
-      when User::RELIGION_OTHER
-        'Other'
-      else
-        '<em>Unknown</em>'.html_safe
-    end
-  end
-
   def generate_sep_pdf(out_file, profile_pic, signature, data={})
     require "prawn"
 
@@ -70,7 +49,6 @@ module UsersHelper
       text "<u>Concerning Authority at Nodal Agency/Incubator</u>", inline_format: true
       text "Name of the NOdal Agency : Startup Village"
       text "Name of the Concerned Authority :"
-      text "Designation :"
       text "<br /><br />", inline_format: true
       bounding_box([10, cursor], :width => 150, :height => 150) do |position|
         image signature, position: position, scale: 0.5

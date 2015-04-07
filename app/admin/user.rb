@@ -53,7 +53,6 @@ ActiveAdmin.register User do
       row :startup_admin
       row :is_founder
       row :born_on
-      row :religion
       row :phone
       row :phone_verified
       row :communication_address
@@ -63,7 +62,6 @@ ActiveAdmin.register User do
         user.pin
       end
       row :company
-      row :designation
     end
 
     attributes_table do
@@ -96,6 +94,6 @@ ActiveAdmin.register User do
 
   permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url,
     :title, :skip_password, :born_on, :startup_admin, :communication_address, :district, :state, :pin,
-    :phone, :phone_verified, :company, :designation, :invitation_token, #:confirmed_at,
+    :phone, :phone_verified, :company, :invitation_token, #:confirmed_at,
     { category_ids: [] }
 end

@@ -145,7 +145,6 @@ class V1::UsersController < V1::BaseController
   def user_params
     params.require(:user).permit(:gender,:communication_address, :district, :state, :pin,
       :email, :fullname, :password, :password_confirmation, :avatar, :remote_avatar_url, :born_on,
-      :din, :aadhaar, :salutation, :is_student, :college_id, :course, :semester, :title,
-      :religion, :place_of_birth)
+      :din, :aadhaar, :salutation, :is_student, :college_id, :course, :semester, :title, :place_of_birth)
   end
 end

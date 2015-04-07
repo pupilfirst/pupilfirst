@@ -7,18 +7,6 @@ class User < ActiveRecord::Base
   COFOUNDER_ACCEPTED = 'accepted'
   COFOUNDER_REJECTED = 'rejected'
 
-  RELIGION_HINDU = 'hindu'
-  RELIGION_MUSLIM = 'muslim'
-  RELIGION_CHRISTIAN = 'christian'
-  RELIGION_SIKH = 'sikh'
-  RELIGION_BUDDHIST = 'buddhist'
-  RELIGION_JAIN = 'jain'
-  RELIGION_OTHER = 'other'
-
-  def self.valid_religions
-    [RELIGION_HINDU, RELIGION_MUSLIM, RELIGION_CHRISTIAN, RELIGION_SIKH, RELIGION_BUDDHIST, RELIGION_JAIN, RELIGION_OTHER]
-  end
-
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :invitable, :database_authenticatable, :confirmable, #:registerable,
@@ -78,14 +66,6 @@ class User < ActiveRecord::Base
 
   # Couple of fields essential to forming partnerships. These are validated when partner confirms intent to form partnership.
   validates_presence_of :born_on, if: ->(user) { user.validate_partnership_essential_fields }
-  # validates_presence_of :pan, if: ->(user) { user.validate_partnership_essential_fields }
-  # validates_presence_of :father_or_husband_name, if: ->(user) { user.validate_partnership_essential_fields }
-  # validates_presence_of :mother_maiden_name, if: ->(user) { user.validate_partnership_essential_fields }
-  # validates_inclusion_of :married, in: [true, false], if: ->(user) { user.validate_partnership_essential_fields }
-  # validates_presence_of :current_occupation, if: ->(user) { user.validate_partnership_essential_fields }
-  # validates_presence_of :educational_qualification, if: ->(user) { user.validate_partnership_essential_fields }
-  validates_presence_of :religion, if: ->(user) { user.validate_partnership_essential_fields }
-  # validates_presence_of :communication_address, if: ->(user) { user.validate_partnership_essential_fields }
 
   validates :pin, numericality: {only_integer: true, allow_blank: true, greater_than_or_equal_to: 100000, less_than_or_equal_to: 999999} # PIN Code is always 6 digits
 
@@ -118,7 +98,7 @@ class User < ActiveRecord::Base
   # end
   # Returns fields relevant to a 'contact' User.
   def contact_fields
-    attributes.slice('fullname', 'phone', 'email', 'company', 'designation')
+    attributes.slice('fullname', 'phone', 'email', 'company')
   end
 
   def verify(user)

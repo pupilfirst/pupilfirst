@@ -18,7 +18,11 @@
         = link_to 'Forgot your password?', new_password_path(resource_name), class: 'btn btn-default'
       br
       br
-      p To sign up, download our iOS or Android application.
+      p
+        'New at SV?
+        a href= new_user_registration_path
+          'Sign up now!
+      p You may also sign up using our Android/iOS apps
       a href="https://play.google.com/store/apps/details?id=in.svlabs.android"
         = image_tag 'google_play.png', alt: 'Android app on Google Play'
       | &nbsp;

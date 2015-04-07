@@ -24,6 +24,7 @@
   @extend .common-card-properties;
   margin: 0;
   position: relative;
+  padding: 0;
 
   .title {
     width: 100%;
@@ -94,7 +95,7 @@
     .job-postdate{
       float: left;
       padding-left: 8%;
-      width: 50%;
+      width: 70%;
       height: 100%;
       color: grey;
     }
@@ -103,7 +104,7 @@
       float: right;
       padding-right: 8%;
       text-align: right;
-      width: 50%;
+      width: 30%;
       height: 100%;
 
     }

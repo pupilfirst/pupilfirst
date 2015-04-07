@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150331095957) do
+ActiveRecord::Schema.define(version: 20150407094346) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -384,16 +384,9 @@ ActiveRecord::Schema.define(version: 20150331095957) do
     t.integer  "startup_link_verifier_id"
     t.string   "startup_verifier_token"
     t.boolean  "is_founder"
-    t.string   "pan"
     t.string   "din"
     t.string   "aadhaar"
-    t.integer  "father_id"
-    t.string   "mother_maiden_name"
-    t.boolean  "married"
-    t.string   "current_occupation"
-    t.text     "educational_qualification"
     t.string   "place_of_birth"
-    t.string   "religion"
     t.string   "salutation"
     t.boolean  "is_student"
     t.string   "course"
@@ -406,7 +399,6 @@ ActiveRecord::Schema.define(version: 20150331095957) do
     t.string   "phone_verification_code"
     t.integer  "pending_startup_id"
     t.string   "company"
-    t.string   "designation"
     t.boolean  "startup_admin"
     t.string   "father_or_husband_name"
     t.string   "pin"
@@ -418,7 +410,6 @@ ActiveRecord::Schema.define(version: 20150331095957) do
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
-  add_index "users", ["father_id"], name: "index_users_on_father_id", using: :btree
   add_index "users", ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
   add_index "users", ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree

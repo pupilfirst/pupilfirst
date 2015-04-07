@@ -12,4 +12,4 @@
   - else
     p
       ' #{link_to 'Login to get started', new_user_session_path(referer: mentoring_url), class: 'btn btn-primary btn-lg'}
-      | #{link_to 'Sign up as a mentor', mentoring_sign_up_path, class: 'btn btn-primary btn-lg'}
+      | #{link_to 'Sign up as a mentor', new_user_registration_path(referer: mentoring_url), class: 'btn btn-primary btn-lg'}

@@ -200,6 +200,9 @@ ActiveAdmin.register Startup do
       row :categories do |startup|
         startup.categories.map(&:name).join(', ')
       end
+      row :phone do |startup|
+        startup.admin.try(:phone)
+      end
       row :address
       row :district
       row :state
@@ -216,6 +219,12 @@ ActiveAdmin.register Startup do
             link_to founder.fullname, [:admin, founder]
           end
         end
+      end
+      row :cofounders do |startup|
+        startup.founders.count
+      end
+      row :women_cofounders do |startup|
+        startup.founders.where(gender: "female").count
       end
       row :registration_type
       row :approval_status
@@ -255,3 +264,4 @@ ActiveAdmin.register Startup do
     :incubation_location, :agreement_sent, :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration,
     :physical_incubatee
 end
+

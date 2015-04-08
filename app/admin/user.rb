@@ -53,13 +53,6 @@ ActiveAdmin.register User do
       row :startup_admin
       row :is_founder
       row :born_on
-      row :father_or_husband_name, label: "Father of Husband's name"
-      row :mother_maiden_name, label: "Mother's maiden name"
-      row :pan
-      row :religion
-      row :educational_qualification
-      row :married
-      row :current_occupation
       row :phone
       row :phone_verified
       row :communication_address
@@ -107,7 +100,7 @@ ActiveAdmin.register User do
 
   permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url,
     :title, :skip_password, :born_on, :startup_admin, :communication_address, :district, :state, :pin,
-    :phone, :phone_verified, :company, :designation, :invitation_token, :is_student, :college_id, :year_of_graduation,
+    :phone, :phone_verified, :company, :invitation_token, :is_student, :college_id, :year_of_graduation,
     :years_of_work_experience, #:confirmed_at,
     { category_ids: [] }
 end

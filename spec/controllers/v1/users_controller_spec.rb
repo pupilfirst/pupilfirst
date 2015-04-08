@@ -5,7 +5,7 @@ describe V1::UsersController do
     context 'with an invalid email id' do
       it 'returns http status 422' do
         post :forgot_password, email: 'wrong email'
-        expect(response.status).to equal(422)
+        expect(response.status).to equal(404)
       end
     end
 

@@ -68,8 +68,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:fullname, :twitter_url, :linkedin_url, :avatar, :title, :pan, :mother_maiden_name,
-      :married, :current_occupation, :educational_qualification, :religion, :father_or_husband_name)
+    params.require(:user).permit(:fullname, :twitter_url, :linkedin_url, :avatar, :title)
   end
 
   def restrict_to_current_user

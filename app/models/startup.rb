@@ -75,8 +75,6 @@ class Startup < ActiveRecord::Base
     end
   end
 
-  has_many :employees, -> { where("startup_link_verifier_id IS NOT NULL") }, :class_name => "User", :foreign_key => "startup_id"
-
   has_and_belongs_to_many :categories do
     def <<(category)
       raise StandardError, 'Use categories= to enforce startup category limit'

@@ -1,5 +1,5 @@
 class StartupsController < InheritedResources::Base
-  before_filter :authenticate_user!, except: [:confirm_startup_link, :show, :featured]
+  before_filter :authenticate_user!, except: [:show, :featured]
   before_filter :restrict_to_startup_founders, only: [:edit, :update]
   before_filter :disallow_unready_startup, only: [:edit, :update]
   after_filter only: [:create] do
@@ -45,14 +45,6 @@ class StartupsController < InheritedResources::Base
     else
       render 'startups/edit'
     end
-  end
-
-  def confirm_startup_link
-    @startup = Startup.find(params[:id])
-    @self = User.find_by_startup_verifier_token(params[:token])
-    raise_not_found unless @self
-    @startup.founders << @self
-    @self.confirm_employee! true
   end
 
   # GET /startups/featured

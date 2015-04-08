@@ -348,6 +348,7 @@ GEM
     lumberjack (1.0.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
+    maruku (0.7.2)
     method_source (0.8.2)
     mime-types (2.4.3)
     mini_magick (4.0.1)
@@ -602,6 +603,7 @@ DEPENDENCIES
   just-datetime-picker
   letter_opener
   logstash-logger
+  maruku
   mini_magick
   momentjs-rails (>= 2.8.1)!
   newrelic_rpm

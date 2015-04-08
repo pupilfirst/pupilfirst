@@ -29,4 +29,8 @@ module StartupJobsHelper
 
     equity.html_safe
   end
+
+  def colorify_presence(property, present_color, absent_color)
+    property.present? ? "color: #{present_color};" : "color: #{absent_color};"
+  end
 end

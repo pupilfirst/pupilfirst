@@ -57,18 +57,6 @@ class V1::StartupsController < V1::BaseController
     @suggestions = Startup.where("name ilike ?", "#{params[:term]}%")
   end
 
-  def link_employee
-    @new_employee = current_user
-    startup = Startup.find(params[:id])
-    @new_employee.update_attributes!(startup: startup, title: params[:position])
-    StartupMailer.respond_to_new_employee(startup, @new_employee).deliver_later
-    message = "#{@new_employee.fullname} wants to be linked with #{startup.name or "your startup"}. Please check your email to approve."
-    startup.founders.each do |f|
-      UserPushNotifyJob.perform_later(f.id, 'fill_personal_info', message)
-    end
-    # render nothing: true, status: :created
-  end
-
   # POST /api/startups/:id/founders
   def add_founder
     user = User.find_or_initialize_cofounder params[:email]

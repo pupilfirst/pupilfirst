@@ -26,12 +26,9 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :categories
   has_many :mentor_meetings
 
-  scope :non_employees, -> { where("startup_id IS NULL") }
   scope :non_founders, -> { where("is_founder = ? or is_founder IS NULL", false) }
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }
   scope :student_entrepreneurs, -> { where(is_student: true, is_founder: true) }
-
-  #### missing startups ???? whats the use now.
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
 
   # TODO: Remove born_on, title, and salutation columns if unneccessary.

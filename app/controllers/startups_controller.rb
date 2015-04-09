@@ -37,7 +37,7 @@ class StartupsController < InheritedResources::Base
     @current_user = current_user
     @startup = Startup.find params[:id]
     @startup.founders.each { |f| f.full_validation = true }
-    @startup.validate_frontend_mandatory_fields = true
+    @startup.validate_web_mandatory_fields = true
 
     if @startup.update(startup_params)
       flash[:notice] = 'Startup details have been updated.'

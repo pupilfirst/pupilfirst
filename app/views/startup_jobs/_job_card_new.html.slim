@@ -2,7 +2,7 @@
   .card-container
     .card
       .title
-        = link_to(job.title, startup_startup_job_path(job.startup, job))
+        = link_to(job.title.titleize, startup_startup_job_path(job.startup, job))
       .logo
         - if job.startup.logo?
           .startup-logo style="background-image: url(#{job.startup.logo_url})"

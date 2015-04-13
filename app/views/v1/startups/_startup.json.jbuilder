@@ -1,4 +1,4 @@
-json.(startup, :id, :logo_url, :pitch, :cool_fact, :website, :about, :email, :phone, :twitter_link, :facebook_link, :approval_status, :product_name, :product_description, :registration_type, :address, :state, :district, :incubation_location, :revenue_generated, :team_size)
+json.(startup, :id, :logo_url, :pitch, :cool_fact, :website, :about, :email, :phone, :twitter_link, :facebook_link, :approval_status, :product_name, :product_description, :registration_type, :address, :state, :district, :incubation_location, :revenue_generated, :team_size, :women_employees)
 json.name  (startup.name or "My Startup")
 json.number_of_founders  startup.founders.count
 json.number_of_women_founders startup.founders.where(gender: 'female').count

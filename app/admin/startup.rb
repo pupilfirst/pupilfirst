@@ -259,7 +259,7 @@ ActiveAdmin.register Startup do
 
   form :partial => "admin/startups/form"
   permit_params :name, :pitch, :website, :about, :email, :logo, :facebook_link, :twitter_link, :cool_fact,
-    { category_ids: [] }, { founder_ids: [] }, { founders_attributes: [:id, :fullname, :email, :username, :avatar, :remote_avatar_url, :title, :linkedin_url, :twitter_url, :skip_password] },
+    { category_ids: [] }, { founder_ids: [] }, { founders_attributes: [:id, :fullname, :email, :avatar, :remote_avatar_url, :title, :linkedin_url, :twitter_url, :skip_password] },
     :created_at, :updated_at, :approval_status, :approval_status, :product_description, :registration_type,
     :incubation_location, :agreement_sent, :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration,
     :physical_incubatee

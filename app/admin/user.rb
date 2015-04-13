@@ -55,6 +55,7 @@ ActiveAdmin.register User do
       row :born_on
       row :phone
       row :phone_verified
+      row :phone_verification_code
       row :communication_address
       row :district
       row :state

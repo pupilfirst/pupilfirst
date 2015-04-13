@@ -14,7 +14,6 @@ FactoryGirl.define do
 
   factory :user do
     fullname { Faker::Name.name }
-    username { Faker::Lorem.characters(9) }
     salutation { %w(Mr Miss Mrs).sample }
     email { Faker::Internet.email }
     born_on { Date.current.to_s }

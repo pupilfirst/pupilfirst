@@ -68,11 +68,10 @@ Most of the documentation is still at Apiary, with new entries being added to `/
 
 ## Coding style conventions
 
+Basic coding conventions are defined in the .editorconfig file. Download plugin for your editor of choice. http://editorconfig.org/
+
 ### General
 
-* Tabbing - 2 spaces.
-* One blank line at the end of all files.
-* No trailing spaces at the end of any line.
 * One blank line between discrete blocks of code.
 * No more than one blank line between blocks / segments of code.
 

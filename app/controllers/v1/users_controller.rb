@@ -206,8 +206,9 @@ Clears `pending_startup_id`.'
   private
 
   def user_params
-    params.require(:user).permit(:gender,:communication_address, :district, :state, :pin,
+    params.require(:user).permit(:gender,:communication_address, :district, :state, :pin, :linkedin_url, :twitter_url,
       :email, :fullname, :password, :password_confirmation, :avatar, :remote_avatar_url, :born_on,
-      :din, :aadhaar, :salutation, :is_student, :college_id, :course, :semester, :title, :place_of_birth)
+      :din, :aadhaar, :salutation, :is_student, :college_id, :course, :semester, :title, :place_of_birth,
+      :years_of_work_experience, :year_of_graduation)
   end
 end

@@ -10,7 +10,7 @@ class AdminUser < ActiveRecord::Base
 
   mount_uploader :avatar, AvatarUploader
   process_in_background :avatar
-  normalize_attribute :password, :password_confirmation, :username, :fullname, :avatar
+  normalize_attribute :password, :password_confirmation, :fullname, :avatar
 
   def self.admin_user_types
     [TYPE_SUPERADMIN, TYPE_INCUBATION_TEAM, TYPE_EDITOR]
@@ -19,6 +19,6 @@ class AdminUser < ActiveRecord::Base
   validates :admin_type, inclusion: { in: admin_user_types }, allow_nil: true
 
   def to_s
-    fullname or username
+    fullname
   end
 end

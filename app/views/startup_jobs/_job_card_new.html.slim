@@ -2,7 +2,7 @@
   .card-container
     .card
       .title
-        = link_to(job.title, startup_startup_job_path(job.startup, job))
+        = link_to(job.title.titleize, startup_startup_job_path(job.startup, job))
       .logo
         - if job.startup.logo?
           .startup-logo style="background-image: url(#{job.startup.logo_url})"
@@ -12,17 +12,17 @@
       .blank-row
       .icons-band
         .icons-grid
-          a.job-icon.fitlargest data-toggle="tooltip" data-placement="top" data-trigger="hover" title="#{job.location}"
+          a.job-icon.fitlargest data-toggle="tooltip" data-placement="top" data-trigger="hover" title="#{truncate(job.location)}"
             span.fa.fa-globe style="#{colorify_presence(job.location, "cadetblue", "lightgrey")}"
-          a.job-icon.fitlargest data-toggle="tooltip" data-placement="top" data-trigger="hover" title="#{job.experience}"
+          a.job-icon.fitlargest data-toggle="tooltip" data-placement="top" data-trigger="hover" title="#{truncate(job.experience)}"
             span.fa.fa-briefcase style="#{colorify_presence(job.experience, "cadetblue", "lightgrey")}"
-          a.job-icon.fitlargest data-toggle="tooltip" data-placement="top" data-trigger="hover" title="#{job.qualification}"
+          a.job-icon.fitlargest data-toggle="tooltip" data-placement="top" data-trigger="hover" title="#{truncate(job.qualification)}"
             span.fa.fa-graduation-cap style="#{colorify_presence(job.qualification, "cadetblue", "lightgrey")}"
-          a.job-icon.fitlargest data-toggle="tooltip" data-placement="top" data-trigger="hover" title="#{job.salary}"
+          a.job-icon.fitlargest data-toggle="tooltip" data-placement="top" data-trigger="hover" title="#{truncate(job.salary)}"
             span.fa.fa-inr style="#{colorify_presence(job.salary, "cadetblue", "lightgrey")}"
-          a.job-icon.fitlargest data-toggle="tooltip" data-placement="bottom" data-trigger="hover" title="#{job.skills}"
+          a.job-icon.fitlargest data-toggle="tooltip" data-placement="bottom" data-trigger="hover" title="#{truncate(job.skills)}"
             span.fa.fa-check-square-o style="#{colorify_presence(job.skills, "cadetblue", "lightgrey")}"
-          a.job-icon.fitlargest data-toggle="tooltip" data-placement="bottom" data-trigger="hover" title="#{job.equity_summary}"
+          a.job-icon.fitlargest data-toggle="tooltip" data-placement="bottom" data-trigger="hover" title="#{truncate(job.equity_summary)}"
             span.fa.fa-pie-chart style="#{colorify_presence(job.equity_min, "cadetblue", "lightgrey")}"
       .blank-row
       .footer

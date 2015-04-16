@@ -85,12 +85,13 @@ class Startup < ActiveRecord::Base
   has_many :startup_links, dependent: :destroy
   has_many :startup_jobs
 
-  attr_accessor :validate_frontend_mandatory_fields
+  attr_accessor :validate_web_mandatory_fields
   attr_reader :validate_registration_type
 
-  # Some fields are mandatory when editing from the front-end.
-  validates_presence_of :about, if: ->(startup) { startup.validate_frontend_mandatory_fields }
-  validates_presence_of :team_size, if: ->(startup) { startup.validate_frontend_mandatory_fields }
+  # Some fields are mandatory when editing from web.
+  validates_presence_of :about, if: ->(startup) { startup.validate_web_mandatory_fields }
+  validates_presence_of :team_size, if: ->(startup) { startup.validate_web_mandatory_fields }
+  validates_presence_of :presentation_link, if: ->(startup) { startup.validate_web_mandatory_fields }
 
   # Registration type is required when registering.
   validates_presence_of :registration_type, if: ->(startup) { startup.validate_registration_type }

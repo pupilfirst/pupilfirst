@@ -2,6 +2,12 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.flex-container {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content: center;
+}
+
 .card-container {
   width: 175px;
   height: 250px;
@@ -124,13 +130,6 @@
     transition: color .3s;
   }
 
-}
-
-@media all and (max-width: 480px){
-  .card-container {
-    float: none;
-    margin: 10px auto;
-  }
 }
 
 @media all and (min-width: 481px){

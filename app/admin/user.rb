@@ -55,6 +55,7 @@ ActiveAdmin.register User do
       row :born_on
       row :phone
       row :phone_verified
+      row :phone_verification_code
       row :communication_address
       row :district
       row :state
@@ -98,7 +99,7 @@ ActiveAdmin.register User do
 
   form partial: 'admin/users/form'
 
-  permit_params :username, :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url,
+  permit_params :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url,
     :title, :skip_password, :born_on, :startup_admin, :communication_address, :district, :state, :pin,
     :phone, :phone_verified, :company, :invitation_token, :is_student, :college_id, :year_of_graduation,
     :years_of_work_experience, #:confirmed_at,

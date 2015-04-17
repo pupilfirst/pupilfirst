@@ -34,8 +34,6 @@ gem 'slim'
 # gem 'turbolinks' # Disabled, because it is a pain in the ass.
 gem 'uglifier'
 gem 'urbanairship'
-gem 'prawn'
-gem 'prawn-table' # For drawing tables in PDF-s.
 gem 'versionist'
 gem 'rest-client'
 gem 'cancancan', '~> 1.8' # Used to manage administrator types and roles in the ActiveAdmin interface.
@@ -128,4 +126,4 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-ruby '2.2.1'
+ruby '2.2.2'

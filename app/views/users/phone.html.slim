@@ -6,11 +6,11 @@ h1.page-header.margin-top-0
 - else
   .alert.alert-info role='alert' Please supply your phone number to continue. You will be asked to verify it in the next step.
 
-= form_tag mentoring_register_3_url, class: 'form-horizontal', role: 'form' do
+= form_tag code_user_url(current_user), class: 'form-horizontal', role: 'form' do
   .form-group
-    label.col-sm-2.control-label for='mentor_phone_number' Your phone number
+    label.col-sm-2.control-label for='phone_number' Your phone number
     .col-sm-10
-      = text_field_tag 'mentor_phone_number', '', class: 'form-control', required: true, placeholder: '10-digit mobile phone number'
+      = text_field_tag 'phone_number', '', class: 'form-control', required: true, placeholder: '10-digit mobile phone number'
   .form-group
     .col-sm-offset-2.col-sm-10
       = submit_tag 'Proceed to phone number verification', class: 'btn btn-primary'

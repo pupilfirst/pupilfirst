@@ -7,6 +7,14 @@ Svapp::Application.routes.draw do
 
   resources :users, only: [:show, :edit, :update] do
     resources :mentor_meetings, only: ['index']
+
+    member do
+      get 'phone'
+      post 'code'
+      patch 'resend'
+      post 'verify'
+    end
+
     collection do
       patch 'update_password'
       get 'invite'
@@ -63,8 +71,6 @@ Svapp::Application.routes.draw do
     post 'sign_up'
     patch 'resend', action: 'resend'
   end
-
-  get '/users/:id/enter_phone', to: 'users#enter_phone'
 
   # get 'team' => 'welcome#team'
   get 'jobs', to: 'startup_jobs#list_all'

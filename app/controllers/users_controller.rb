@@ -60,6 +60,41 @@ class UsersController < ApplicationController
   def enter_phone
   end
 
+  def code
+    # Generate a 6-digit verification code to send to the phone number.
+    code, phone_number = begin
+      current_user.generate_phone_number_verification_code(params[:phone_number])
+    rescue Exceptions::InvalidPhoneNumber => e
+      @failed_to_add_phone_number = e.message
+      render 'phone' and return
+    end
+    # SMS the code to the phone number. Currently uses FA format.
+    RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV: #{code}", msisdn: phone_number)
+  end
+
+  def resend
+    if (current_user.updated_at <= 5.minute.ago)
+      @retry_after_some_time = false
+      code, phone_number = current_user.generate_phone_number_verification_code(current_user.phone)
+      RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV: #{code}", msisdn: phone_number)
+      @resent_verification_code = true
+    else
+      @retry_after_some_time = true
+    end
+    render 'code' and return
+  end
+
+  def verify
+    begin
+      current_user.verify_phone_number(current_user.phone, params[:phone_verification_code])
+    rescue Exceptions::PhoneNumberVerificationFailed
+      @failed_to_verify_phone_number = true
+      render 'code' and return
+    end
+    flash[:notice] = 'Your phone number is now verified!'
+    redirect_to root_url
+  end
+
   private
 
   def invite_params

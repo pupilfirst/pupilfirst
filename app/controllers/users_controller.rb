@@ -57,6 +57,9 @@ class UsersController < ApplicationController
   def create
   end
 
+  def enter_phone
+  end
+
   private
 
   def invite_params

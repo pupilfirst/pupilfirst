@@ -64,6 +64,8 @@ Svapp::Application.routes.draw do
     patch 'resend', action: 'resend'
   end
 
+  get '/users/:id/enter_phone', to: 'users#enter_phone'
+
   # get 'team' => 'welcome#team'
   get 'jobs', to: 'startup_jobs#list_all'
   get 'privacy_policy', to: 'welcome#privacy_policy'

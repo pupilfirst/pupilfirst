@@ -5,7 +5,7 @@
   | Welcome #{@resource.fullname.present? ? @resource.fullname : @resource.email}!
 
 = content_for :body
-  p Thank you for signing up with Startup Village. To help us serve you better, kindly confirm your email through the link below:
+  p Thank you for signing up with Startup Village. To complete your registration process and gain access to SV, kindly confirm your email through the link below:
   p = link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token)
   p If the above link does not work for you, please copy and paste the following into your browser's address bar:
   p.monospace = confirmation_url(@resource, confirmation_token: @token)

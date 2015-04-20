@@ -5,53 +5,79 @@ p
 
 = simple_form_for @startup, :html => { :class => 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
   = f.error_notification
+  .panel-group#startupform role="tablist"
+    .panel.panel-default
+      .panel-heading role="tab"
+        .panel-title
+          a data-toggle="collapse" data-parent="#startupform" href="#basicdetails" Basic Details
+      #basicdetails.panel-collapse.collapse.in role="tabpanel"
+        .panel-body
+          = f.input :name, label: "Startup's Name", required: true, input_html: { placeholder: '', maxlength: 255 }
+          = f.input :logo, as: :file, required: false
+          = f.input :incubation_location, required: true, collection: Startup.valid_incubation_location_values, label_method: ->(obj) { obj.capitalize }, input_html: { class: 'selectpicker' }
 
-  = f.input :name, label: "Startup's Name", required: true, input_html: { placeholder: '', maxlength: 255 }
+    .panel.panel-default
+      .panel-heading role="tab"
+        .panel-title
+          a data-toggle="collapse" data-parent="#startupform" href="#description" Description
+      #description.panel-collapse.collapse role="tabpanel"
+        .panel-body
+          = f.input :about, label: 'About your Startup', as: :text,
+              hint: "Describe your startup in less than #{Startup::MAX_ABOUT_CHARACTERS} characters.",
+              input_html: { rows: 10, class:'span5', placeholder: 'Description in less than 1000 characters', maxlength: Startup::MAX_ABOUT_CHARACTERS },
+              required: true
+          = f.input :cool_fact, input_html: { maxlength: 255 },
+            placeholder: 'Something cool about your startup or product.'
+          = f.input :presentation_link,
+              hint: 'Share the link to a presentation that showcases your company, core products in fair detail.',
+              input_html: { placeholder: 'URL to presentation', class: 'span5', maxlength: 255 }
+          = f.association :categories, hint: 'Categories that describe your startup. Max 3.', collection: Category.startup_category, as: :select, input_html: { class: 'span4 selectpicker', 'data-live-search' => 'true', 'data-max-options' => "#{Startup::MAX_CATEGORY_COUNT}" }
 
-  = f.input :email, input_html: { maxlength: 255 }
-  /= f.input :phone, label: "Contact number"
+    .panel.panel-default
+      .panel-heading role="tab"
+        .panel-title
+          a data-toggle="collapse" data-parent="#startupform" href="#contactinfo" Contact Information
+      #contactinfo.panel-collapse.collapse role="tabpanel"
+        .panel-body
+          = f.input :email, input_html: { maxlength: 255 }
+          /= f.input :phone, label: "Contact number"
+          = f.input :website, input_html: { placeholder: "You startup's website URL, if any.", maxlength: 255 }
+          = f.input :twitter_link, input_html: { placeholder: 'https://twitter.com/username', maxlength: 255 }
+          = f.input :facebook_link, input_html: { placeholder: 'https://facebook.com/username', maxlength: 255 }
 
-  = f.input :website, input_html: { placeholder: "You startup's website URL, if any.", maxlength: 255 }
+    .panel.panel-default
+      .panel-heading role="tab"
+        .panel-title
+          a data-toggle="collapse" data-parent="#startupform" href="#products" Products
+      #products.panel-collapse.collapse role="tabpanel"
+        .panel-body
+          = f.input :product_name, input_html: { maxlength: 255 }
+          = f.input :pitch,
+              hint: "Pitch your product in less than #{Startup::MAX_PITCH_CHARACTERS} characters.",
+              input_html: { maxlength: Startup::MAX_PITCH_CHARACTERS }
+          = f.input :product_description, input_html: { maxlength: 1000 }
+          = f.input :product_progress, collection: Startup.valid_product_progress_values, label_method: ->(obj) { product_progress_html(obj) }, input_html: { class: 'selectpicker' }
+          /- user = @startup.founders.select{|f| f.id == @current_user.id}
+          /= f.fields_for :founders, user do |p|
+          /  = p.input :id, as: :hidden
+          /  = p.input :title, label: "Your role at the company", input_html: {placeholder: "Eg. Co-founder & CEO, VP Engineering, COO", class: 'span4'}, required: true
 
-  /- user = @startup.founders.select{|f| f.id == @current_user.id}
-  /= f.fields_for :founders, user do |p|
-  /  = p.input :id, as: :hidden
-  /  = p.input :title, label: "Your role at the company", input_html: {placeholder: "Eg. Co-founder & CEO, VP Engineering, COO", class: 'span4'}, required: true
 
-  = f.input :logo, as: :file, required: false
 
-  /= f.input :pitch, label: 'Idea', as: :text, hint: "max 140 characters",  input_html: {class:'span5', placeholder: 'Your Elevator Pitch: It reflects the concept of being able to explain your product in the time span of an elevator ride', maxlength: 140, rows: 3}, required: true
-  /= f.input :address, label: 'Residential address', as: :text, input_html: {rows: 4, class:'span5', placeholder: ''}, required: true
+          /= f.input :pitch, label: 'Idea', as: :text, hint: "max 140 characters",  input_html: {class:'span5', placeholder: 'Your Elevator Pitch: It reflects the concept of being able to explain your product in the time span of an elevator ride', maxlength: 140, rows: 3}, required: true
+          /= f.input :address, label: 'Residential address', as: :text, input_html: {rows: 4, class:'span5', placeholder: ''}, required: true
 
-  = f.input :about, label: 'About your Startup', as: :text,
-      hint: "Describe your startup in less than #{Startup::MAX_ABOUT_CHARACTERS} characters.",
-      input_html: { rows: 10, class:'span5', placeholder: 'Description in less than 1000 characters', maxlength: Startup::MAX_ABOUT_CHARACTERS },
-      required: true
+    .panel.panel-default
+      .panel-heading role="tab"
+        .panel-title
+          a data-toggle="collapse" data-parent="#startupform" href="#misc" Miscellaneous
+      #misc.panel-collapse.collapse role="tabpanel"
+        .panel-body
+          = f.input :revenue_generated, hint: 'How much cumulative revenue have you generated till date?', input_html: { max: 999999999, 'data-max-int-length' => 9 }
+          = f.input :team_size, label: 'Total Team Size', input_html: { max: 9999, 'data-max-int-length' => 4 }, required: true
+          = f.input :women_employees, label: 'Number of Women Employees', input_html: { max: 9999, 'data-max-int-length' => 4 }
+          = f.input :registration_type, collection: Startup.valid_registration_types, label_method: ->(obj) { registration_type_html(obj) }, include_blank: 'Not Registered'
 
-  = f.input :incubation_location, required: true, collection: Startup.valid_incubation_location_values, label_method: ->(obj) { obj.capitalize }, input_html: { class: 'selectpicker' }
-
-  = f.input :presentation_link,
-      hint: 'Share the link to a presentation that showcases your company, core products in fair detail.',
-      input_html: { placeholder: 'URL to presentation', class: 'span5', maxlength: 255 }
-
-  = f.input :cool_fact, input_html: { maxlength: 255 },
-    placeholder: 'Something cool about your startup or product.'
-
-  = f.input :product_name, input_html: { maxlength: 255 }
-
-  = f.input :pitch,
-      hint: "Pitch your product in less than #{Startup::MAX_PITCH_CHARACTERS} characters.",
-      input_html: { maxlength: Startup::MAX_PITCH_CHARACTERS }
-
-  = f.input :product_description, input_html: { maxlength: 1000 }
-  = f.input :product_progress, collection: Startup.valid_product_progress_values, label_method: ->(obj) { product_progress_html(obj) }, input_html: { class: 'selectpicker' }
-  = f.association :categories, hint: 'Categories that describe your startup. Max 3.', collection: Category.startup_category, as: :select, input_html: { class: 'span4 selectpicker', 'data-live-search' => 'true', 'data-max-options' => "#{Startup::MAX_CATEGORY_COUNT}" }
-  = f.input :revenue_generated, hint: 'How much cumulative revenue have you generated till date?', input_html: { max: 999999999, 'data-max-int-length' => 9 }
-  = f.input :team_size, label: 'Total Team Size', input_html: { max: 9999, 'data-max-int-length' => 4 }, required: true
-  = f.input :women_employees, label: 'Number of Women Employees', input_html: { max: 9999, 'data-max-int-length' => 4 }
-  = f.input :registration_type, collection: Startup.valid_registration_types, label_method: ->(obj) { registration_type_html(obj) }, include_blank: 'Not Registered'
-  = f.input :twitter_link, input_html: { placeholder: 'https://twitter.com/username', maxlength: 255 }
-  = f.input :facebook_link, input_html: { placeholder: 'https://facebook.com/username', maxlength: 255 }
 
   .form-group
     .col-sm-offset-3.col-sm-9

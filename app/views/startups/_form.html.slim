@@ -24,7 +24,7 @@ p
         .panel-body
           = f.input :about, label: 'About your Startup', as: :text,
               hint: "Describe your startup in less than #{Startup::MAX_ABOUT_CHARACTERS} characters.",
-              input_html: { rows: 10, class:'span5', placeholder: 'Description in less than 1000 characters', maxlength: Startup::MAX_ABOUT_CHARACTERS },
+              input_html: { rows: 5, class:'span5', placeholder: 'Description in less than 1000 characters', maxlength: Startup::MAX_ABOUT_CHARACTERS },
               required: true
           = f.input :cool_fact, input_html: { maxlength: 255 },
             placeholder: 'Something cool about your startup or product.'

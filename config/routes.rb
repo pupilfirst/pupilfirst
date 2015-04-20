@@ -30,6 +30,7 @@ Svapp::Application.routes.draw do
 
     collection do
       get 'featured'
+      get 'itraveller'
     end
   end
 

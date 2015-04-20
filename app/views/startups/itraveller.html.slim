@@ -33,7 +33,8 @@
   .col-md-8.col-md-pull-4
     p.text-center
       ' Timeline of 4<sup>th</sup> iteration.
-      a href='#' See previous iterations.
+      a#read-from-beginning href='#'
+        ' Read from the beginning.
 
     ul.timeline
       li
@@ -194,3 +195,11 @@
 
     p.text-center
       a href='#' See timeline of 3<sup>rd</sup> iteration.
+
+javascript:
+  $(document).ready(function () {
+    $('#read-from-beginning').click(function () {
+      $('html, body').animate({scrollTop: $(document).height()}, 'slow');
+      return false;
+    });
+  });

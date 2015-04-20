@@ -11,7 +11,7 @@ h1.page-header.margin-top-0 iTraveller
             p We are not a travel agent and we don't charge any commissions from you. The idea is to cut the intermediaries, thereby bringing the best prices and value to the travellers.
       .col-sm-6.col-md-12
         .panel.panel-default
-          .panel-heading Useful data
+          .panel-heading Data
           .panel-body style="padding: 5px;"
             table.table.table-borderless.startup-attributes-table
               tr
@@ -19,10 +19,10 @@ h1.page-header.margin-top-0 iTraveller
                 td Holidays, Business Automation
               tr
                 th Website
-                td = link_to 'http://itraveller.com'
+                td = link_to 'http://itraveller.com', 'http://itraveller.com', target: '_blank'
               tr
                 th Startup <em>Deck</em>
-                td = link_to 'http://slideshare.net/itraveller/deck'
+                td = link_to 'http://slideshare.net/itraveller/deck', 'http://slideshare.net/itraveller/deck', target: '_blank'
               tr
                 th Team Size
                 td 20+
@@ -100,7 +100,7 @@ h1.page-header.margin-top-0 iTraveller
             p Amit Singh. Something about the person who joined (and a profile image, maybe?)
 
       li.timeline-inverted
-        .timeline-badge.danger
+        .timeline-badge
           = icon 'newspaper-o'
         .timeline-panel
           .timeline-heading
@@ -139,7 +139,7 @@ h1.page-header.margin-top-0 iTraveller
             p Pooja Pande. Something about the person who joined (and a profile image, maybe?)
 
       li
-        .timeline-badge.success
+        .timeline-badge.info
           = icon 'rocket'
         .timeline-panel
           .timeline-heading
@@ -151,7 +151,7 @@ h1.page-header.margin-top-0 iTraveller
             p Experience scaling up, and such.
 
       li.timeline-inverted
-        .timeline-badge.danger
+        .timeline-badge.info
           = icon 'send'
         .timeline-panel
           .timeline-heading

@@ -69,7 +69,7 @@ gem 'sucker_punch'
 gem 'seedbank' # Better organized seed data.
 
 group :development do
-  gem "letter_opener"
+  gem 'letter_opener'
   gem 'guard'
   gem 'guard-shell'
   gem 'guard-rspec'

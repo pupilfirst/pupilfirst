@@ -3,6 +3,8 @@ $navbar-default-bg: white;
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import "font-awesome-sprockets";
+@import "font-awesome";
 @import "bootstrap-select";
 @import "datepicker";
 @import "global";
@@ -17,3 +19,4 @@ $navbar-default-bg: white;
 @import "bootstrap-datetimepicker";
 @import "wysihtml";
 @import "mentor_meetings";
+@import "timeline";

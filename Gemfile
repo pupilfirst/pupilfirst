@@ -68,6 +68,8 @@ gem 'sucker_punch'
 
 gem 'seedbank' # Better organized seed data.
 
+gem 'font-awesome-sass', '~> 4.3.0' # Icons from font-awesome!
+
 group :development do
   gem 'letter_opener'
   gem 'guard'

@@ -50,13 +50,36 @@
                   i.fa.fa-star
                   i.fa.fa-star
                   i.fa.fa-star
-                  i.fa.fa-star-half-empty
+                  i.fa.fa-star-half-o
+    .row
+      / Not sure what should be in these sections, so I'm leaving it blank. Simply images with a hover popover should
+      / be sufficient.
+      .col-sm-4.col-md-12
+        .panel.panel-default
+          .panel-heading Founders
+          .panel-body
+            div style="display: inline-block; width: 72px; height: 72px; border: grey; background: whitesmoke; margin-right: 10px;"
+            div style="display: inline-block; width: 72px; height: 72px; border: grey; background: whitesmoke; margin-right: 10px;"
+      .col-sm-4.col-md-12
+        .panel.panel-default
+          .panel-heading Mentors
+          .panel-body
+            div style="display: inline-block; width: 72px; height: 72px; border: grey; background: whitesmoke; margin-right: 10px;"
+            div style="display: inline-block; width: 72px; height: 72px; border: grey; background: whitesmoke; margin-right: 10px;"
+      .col-sm-4.col-md-12
+        .panel.panel-default
+          .panel-heading Investors
+          .panel-body
+            div style="display: inline-block; width: 72px; height: 72px; border: grey; background: whitesmoke; margin-right: 10px;"
+            div style="display: inline-block; width: 72px; height: 72px; border: grey; background: whitesmoke; margin-right: 10px;"
 
   .col-md-8.col-md-pull-4
-    p.text-center
-      ' Timeline of 4<sup>th</sup> iteration.
-      a#read-from-beginning href='#'
-        ' Read from the beginning.
+    .timeline-pivot
+      ul.list-group
+        li.list-group-item
+          ' Timeline of 4<sup>th</sup> iteration.
+          a#read-from-beginning href='#'
+            ' Read from the beginning.
 
     ul.timeline
       li
@@ -122,23 +145,24 @@
         .timeline-badge.danger
           i.fa.fa-user-plus
         .timeline-panel
-          .timeline-image.pull-left
-            img src='https://media.licdn.com/mpr/mpr/shrink_200_200/p/8/005/0b1/08c/183563c.jpg' width='100px'
-          .timeline-content
-            .timeline-heading
-              h4.timeline-title Co-founder joins
-              p
-                small.text-muted
-                  i.fa.fa-clock-o
-                  |  January 2015
+          .media
+            .media-left
+              img.media-object src='https://media.licdn.com/mpr/mpr/shrink_200_200/p/8/005/0b1/08c/183563c.jpg' width='72px'
+            .media-body
+              .timeline-heading
+                h4.timeline-title Co-founder joins
+                p
+                  small.text-muted
+                    i.fa.fa-clock-o
+                    |  January 2015
 
-            .timeline-body
-              p
-                ' Amit Singh joins as CMO at iTraveller. He brings with him 12 years of experience in ed-tech and
-                ' e-commerce domains. At iTraveller he will be responsible for branding and overall marketing strategy.
-            .timeline-footer
-              a.source-link href='https://in.linkedin.com/pub/amit-singh/10/795/952'
-                | LinkedIn
+              .timeline-body
+                p
+                  ' Amit Singh joins as CMO at iTraveller. He brings with him 12 years of experience in ed-tech and
+                  ' e-commerce domains. At iTraveller he will be responsible for branding and overall marketing strategy.
+              .timeline-footer
+                a.source-link href='https://in.linkedin.com/pub/amit-singh/10/795/952'
+                  | LinkedIn
 
       li.timeline-inverted
         .timeline-badge
@@ -164,23 +188,24 @@
         .timeline-badge.danger
           i.fa.fa-user-plus
         .timeline-panel
-          .timeline-image.pull-left
-            img src='http://itraveller.com/images/mteam/RK_image.jpg' width='100px'
-          .timeline-content
-            .timeline-heading
-              h4.timeline-title Co-founder joins
-              p
-                small.text-muted
-                  i.fa.fa-clock-o
-                  |  August 2014
+          .media
+            .media-left
+              img.media-object src='http://itraveller.com/images/mteam/RK_image.jpg' width='72px'
+            .media-body
+              .timeline-heading
+                h4.timeline-title Co-founder joins
+                p
+                  small.text-muted
+                    i.fa.fa-clock-o
+                    |  August 2014
 
-            .timeline-body
-              p
-                ' Rachna will be responsible for the revenue and customer engagement at iTraveller. With over 8 years of
-                ' industry experience, in her previous stint, she has worked for Dreamworks Animation.
-            .timeline-footer
-              a.source-link href='https://in.linkedin.com/pub/rachna-kalra/1/411/428'
-                | LinkedIn
+              .timeline-body
+                p
+                  ' Rachna will be responsible for the revenue and customer engagement at iTraveller. With over 8 years of
+                  ' industry experience, in her previous stint, she has worked for Dreamworks Animation.
+              .timeline-footer
+                a.source-link href='https://in.linkedin.com/pub/rachna-kalra/1/411/428'
+                  | LinkedIn
 
       li.timeline-inverted
         .timeline-badge.danger

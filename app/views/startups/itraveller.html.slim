@@ -23,10 +23,12 @@
                 td Holidays, Business Automation
               tr
                 th Website
-                td = link_to 'http://itraveller.com', 'http://itraveller.com', target: '_blank'
+                td
+                  a href='http://itraveller.com' target='_blank' http://itraveller.com
               tr
                 th Startup Deck
-                td = link_to 'http://slideshare.net/itvlr/deck', 'http://slideshare.net/itvlr/deck', target: '_blank'
+                td
+                  a href='http://slideshare.net/itvlr/deck' target='_blank' http://slideshare.net/itvlr/deck
               tr
                 th Team Size
                 td 20+
@@ -39,26 +41,25 @@
     ul.timeline
       li
         .timeline-badge
-          = icon 'check-square-o'
+          i.fa.fa-check-square-o
         .timeline-panel
           .timeline-heading
-            h4.timeline-title
             p
               small.text-muted
-                = icon 'clock-o'
+                i.fa.fa-clock-o
                 |  April 2015 (Latest update)
 
           .timeline-body
             p Sets mission for USD 100 Million for FY 2016-17.
 
       li.timeline-inverted
-        .timeline-badge.warning
-          = icon 'inr'
+        .timeline-badge.info
+          i.fa.fa-inr
         .timeline-panel
           .timeline-heading
             p
               small.text-muted
-                = icon 'clock-o'
+                i.fa.fa-clock-o
                 |  March 2015
 
           .timeline-body
@@ -66,12 +67,12 @@
 
       li
         .timeline-badge.danger
-          = icon 'users'
+          i.fa.fa-users
         .timeline-panel
           .timeline-heading
             p
               small.text-muted
-                = icon 'clock-o'
+                i.fa.fa-clock-o
                 |  March 2015
 
           .timeline-body
@@ -79,7 +80,7 @@
 
       li.timeline-inverted
         .timeline-badge.success
-          = icon 'graduation-cap'
+          i.fa.fa-graduation-cap
         .timeline-panel
           .timeline-heading
             h4.timeline-title
@@ -88,25 +89,36 @@
 
           .timeline-body
             p
-              ' There should probably be a link to a
-              a href='#' news article
-              |  here, or something like that.
+              ' iTraveller raises $1M in Series A led by ah! Ventures' investment network.
+          .timeline-footer
+            a.source-link href='http://www.livemint.com/Companies/3kzXxAOjm6zYHiNq96dQ2L/Travel-startup-iTraveller-raises-1-million-in-series-A-fun.html'
+              | Live Mint
+            a.source-link href='http://www.nextbigwhat.com/itraveller-funding-ah-ventures-297/'
+              | NextBigWhat
 
       li
         .timeline-badge.danger
-          = icon 'user-plus'
+          i.fa.fa-user-plus
         .timeline-panel
-          .timeline-heading
-            h4.timeline-title
-              ' Co-founder joins
-              small January 2015
+          .timeline-image.pull-left
+            img src='https://media.licdn.com/mpr/mpr/shrink_200_200/p/8/005/0b1/08c/183563c.jpg' width='100px'
+          .timeline-content
+            .timeline-heading
+              h4.timeline-title
+                ' Co-founder joins
+                small January 2015
 
-          .timeline-body
-            p Amit Singh. Something about the person who joined (and a profile image, maybe?)
+            .timeline-body
+              p
+                ' Amit Singh joins as CMO at iTraveller. He brings with him 12 years of experience in ed-tech and
+                ' e-commerce domains. At iTraveller he will be responsible for branding and overall marketing strategy.
+            .timeline-footer
+              a.source-link href='https://in.linkedin.com/pub/amit-singh/10/795/952'
+                | LinkedIn
 
       li.timeline-inverted
         .timeline-badge
-          = icon 'newspaper-o'
+          i.fa.fa-newspaper-o
         .timeline-panel
           .timeline-heading
             h4.timeline-title
@@ -115,25 +127,36 @@
 
           .timeline-body
             p
-              ' Showcased among top 30 global travel technology innovations, in Los Angeles, US. There should be a
-              a href='#' link to an article
-              |  here.
+              ' Showcased among top 30 global travel technology innovations, in Los Angeles, US.
+          .timeline-footer
+            a.source-link href='http://articles.economictimes.indiatimes.com/2014-05-21/news/50002169_1_startup-village-sijo-kuruvilla-george-sanjay-vijayakumar'
+              | India Times
+            a.source-link href='http://www.thehindubusinessline.com/industry-and-economy/travel/itraveller-selected-for-travel-summit/article6033563.ece'
+              | The Hindu Business Line
 
       li
         .timeline-badge.danger
-          = icon 'user-plus'
+          i.fa.fa-user-plus
         .timeline-panel
-          .timeline-heading
-            h4.timeline-title
-              ' Co-founder joins
-              small August 2014
+          .timeline-image.pull-left
+            img src='http://itraveller.com/images/mteam/RK_image.jpg' width='100px'
+          .timeline-content
+            .timeline-heading
+              h4.timeline-title
+                ' Co-founder joins
+                small August 2014
 
-          .timeline-body
-            p Rachna Kalra. Something about the person who joined (and a profile image, maybe?)
+            .timeline-body
+              p
+                ' Rachna will be responsible for the revenue and customer engagement at iTraveller. With over 8 years of
+                ' industry experience, in her previous stint, she has worked for Dreamworks Animation.
+            .timeline-footer
+              a.source-link href='https://in.linkedin.com/pub/rachna-kalra/1/411/428'
+                | LinkedIn
 
       li.timeline-inverted
         .timeline-badge.danger
-          = icon 'user-plus'
+          i.fa.fa-user-plus
         .timeline-panel
           .timeline-heading
             h4.timeline-title
@@ -141,11 +164,13 @@
               small July 2014
 
           .timeline-body
-            p Pooja Pande. Something about the person who joined (and a profile image, maybe?)
+            p Pooja Pande joins as Technology Architect at iTraveller, after interning at Hewlett-Packard for a year.
+        .timeline-footer
+          a.source-link href='https://in.linkedin.com/in/poojapande11'
 
       li
         .timeline-badge.info
-          = icon 'rocket'
+          i.fa.fa-rocket
         .timeline-panel
           .timeline-heading
             h4.timeline-title
@@ -153,11 +178,11 @@
               small April 2014
 
           .timeline-body
-            p Experience scaling up, and such.
+            p Chillr is currently in discussions with more than 15 banks for integration.
 
       li.timeline-inverted
         .timeline-badge.info
-          = icon 'send'
+          i.fa.fa-send
         .timeline-panel
           .timeline-heading
             h4.timeline-title
@@ -165,11 +190,13 @@
               small March 2014
 
           .timeline-body
-            p Details about the first customer.
+            p
+              ' HDFC Bank on Tuesday announced the launch of Chillr, a mobile app which allows users to instantly
+              ' transfer money to any contact in their phone book.
 
       li
         .timeline-badge.success
-          = icon 'cogs'
+          i.fa.fa-cogs
         .timeline-panel
           .timeline-heading
             h4.timeline-title
@@ -177,13 +204,13 @@
               small March 2014
 
           .timeline-body
-            p Some information about the prototype - where it was deployed, who tested it, etc.
-            hr
-            p An image, perhaps?
+            p
+              ' The iTraveller team demos a prototype version of their product, which targets travel agents in the
+              ' Indian market, to the team at Startup Village.
 
       li.timeline-inverted
         .timeline-badge.danger
-          = icon 'users'
+          i.fa.fa-users
         .timeline-panel
           .timeline-heading
             h4.timeline-title
@@ -191,10 +218,256 @@
               small January 2014
 
           .timeline-body
-            p Something about how the team came to be, and what the <em>plan</em> is, at this point.
+            p
+              ' After wrapping up their third iteration of the iTraveller product, the team have reformed, pivoting to
+              ' market place model, aggregating native suppliers, and allow users to discover, plan and book their
+              ' holidays online.
 
-    p.text-center
-      a href='#' See timeline of 3<sup>rd</sup> iteration.
+    .timeline-pivot
+      ul.list-group
+        li.list-group-item
+          ' The team pivots to market place model, aggregating native suppliers, and allow users to discover, plan and
+          ' book their holidays online.
+        li.list-group-item
+          | Third iteration ends as iTraveller fails to secure Series A funding.
+
+    ul.timeline
+      li
+        .timeline-badge
+          i.fa.fa-newspaper-o
+        .timeline-panel
+          .timeline-heading
+            h4.timeline-title
+              ' Runners-up at Conquest 2013
+              small January 2015
+
+          .timeline-body
+            p
+              ' iTraveller takes home Rs. 1 Lakh, as runners up of the grand finale of the decadal edition of the highly
+              ' successful startup competition, Conquest 2013, organized by Center for Entrepreneurial Leadership of
+              ' BITS Pilani.
+          .timeline-footer
+            a.source-link href='https://bitspilanimba.wordpress.com/2013/09/16/grand-finale-of-bits-pilanis-startup-competition-conquest-2013/'
+              | BITS Pilani
+
+      li.timeline-inverted
+        .timeline-badge.info
+          i.fa.fa-plane
+        .timeline-panel
+          .timeline-heading
+            p
+              small.text-muted
+                i.fa.fa-clock-o
+                |  November 2014
+
+          .timeline-body
+            p iTraveller team moves to Bangalore.
+
+      li
+        .timeline-badge.success
+          i.fa.fa-inr
+        .timeline-panel
+          .timeline-heading
+            p
+              small.text-muted
+                i.fa.fa-clock-o
+                |  August 2014
+
+          .timeline-body
+            p Debt fund raised from KFC.
+
+      li.timeline-inverted
+        .timeline-badge.success
+          i.fa.fa-inr
+        .timeline-panel
+          .timeline-heading
+            p
+              small.text-muted
+                i.fa.fa-clock-o
+                |  July 2013
+
+          .timeline-body
+            p First external angel fund.
+
+      li
+        .timeline-badge.info
+          i.fa.fa-rocket
+        .timeline-panel
+          .timeline-heading
+            h4.timeline-title
+              ' Multiple customers
+              small Jul 2013
+
+          .timeline-body
+            p Chillr is currently in discussions with more than 15 banks for integration.
+
+      li.timeline-inverted
+        .timeline-badge.info
+          i.fa.fa-send
+        .timeline-panel
+          .timeline-heading
+            h4.timeline-title
+              ' First customer
+              small Jun 2013
+
+          .timeline-body
+            p
+              ' HDFC Bank on Tuesday announced the launch of Chillr, a mobile app which allows users to instantly
+              ' transfer money to any contact in their phone book.
+
+      li
+        .timeline-badge.success
+          i.fa.fa-cogs
+        .timeline-panel
+          .timeline-heading
+            h4.timeline-title
+              ' First Prototype
+              small May 2013
+
+          .timeline-body
+            p
+              ' The iTraveller team demos a prototype version of their product, which targets travel agents in the
+              ' Indian market, to the team at Startup Village.
+
+      li.timeline-inverted
+        .timeline-badge.danger
+          i.fa.fa-users
+        .timeline-panel
+          .timeline-heading
+            p
+              small.text-muted
+                i.fa.fa-clock-o
+                |  April 2013
+
+          .timeline-body
+            p Team Formation
+
+    .timeline-pivot
+      ul.list-group
+        li.list-group-item
+          | The team pivots to a SaaS platform, moving out of retail facing business.
+        li.list-group-item
+          | Second iteration ends as iTraveller fails to secure early-stage funding.
+
+    ul.timeline
+      li
+        .timeline-badge.info
+          i.fa.fa-rocket
+        .timeline-panel
+          .timeline-heading
+            h4.timeline-title
+              ' Multiple customers
+              small May 2012
+
+          .timeline-body
+            p Chillr is currently in discussions with more than 15 banks for integration.
+
+      li.timeline-inverted
+        .timeline-badge.info
+          i.fa.fa-send
+        .timeline-panel
+          .timeline-heading
+            h4.timeline-title
+              ' First customer
+              small May 2012
+
+          .timeline-body
+            p
+              ' HDFC Bank on Tuesday announced the launch of Chillr, a mobile app which allows users to instantly
+              ' transfer money to any contact in their phone book.
+
+      li
+        .timeline-badge.success
+          i.fa.fa-cogs
+        .timeline-panel
+          .timeline-heading
+            h4.timeline-title
+              ' First Prototype
+              small May 2012
+
+          .timeline-body
+            p
+              ' The iTraveller team demos a prototype version of their product, which targets travel agents in the
+              ' Indian market, to the team at Startup Village.
+
+      li.timeline-inverted
+        .timeline-badge.danger
+          i.fa.fa-users
+        .timeline-panel
+          .timeline-heading
+            p
+              small.text-muted
+                i.fa.fa-clock-o
+                |  May 2012
+
+          .timeline-body
+            p Team Formation
+
+    .timeline-pivot
+      ul.list-group
+        li.list-group-item
+          | The team pivots to add destinations, and customised trip planning.
+        li.list-group-item
+          | First iteration ends as iTraveller fails to secure early-stage funding.
+
+    ul.timeline
+      li
+        .timeline-badge.info
+          i.fa.fa-rocket
+        .timeline-panel
+          .timeline-heading
+            h4.timeline-title
+              ' Multiple customers
+              small December 2011
+
+          .timeline-body
+            p Chillr is currently in discussions with more than 15 banks for integration.
+
+      li.timeline-inverted
+        .timeline-badge.info
+          i.fa.fa-send
+        .timeline-panel
+          .timeline-heading
+            h4.timeline-title
+              ' First customer
+              small October 2011
+
+          .timeline-body
+            p
+              ' HDFC Bank on Tuesday announced the launch of Chillr, a mobile app which allows users to instantly
+              ' transfer money to any contact in their phone book.
+
+      li
+        .timeline-badge.success
+          i.fa.fa-cogs
+        .timeline-panel
+          .timeline-heading
+            h4.timeline-title
+              ' First Prototype
+              small October 2011
+
+          .timeline-body
+            p
+              ' The iTraveller team demos a prototype version of their product.
+
+      li.timeline-inverted
+        .timeline-badge.danger
+          i.fa.fa-users
+        .timeline-panel
+          .timeline-heading
+            p
+              small.text-muted
+                i.fa.fa-clock-o
+                |  October 2011
+
+          .timeline-body
+            p Team Formation
+
+    .timeline-pivot
+      ul.list-group
+        li.list-group-item
+          ' The iTraveller team comes together to build an online portal allowing users to buy holidays online, with
+          | limited set of destinations.
 
 javascript:
   $(document).ready(function () {

@@ -7,18 +7,27 @@ class StartupsController < InheritedResources::Base
     @startup.save
   end
 
-  # def new
-  #   if current_user.phone_not_verified?
-  #     flash[:notice] = "Please enter and verify your phone number to continue"
-  #     session[:referer] = '#'
-  #     redirect_to phone_user_path(current_user)
-  #   elsif current_user.profile_incomplete?
-  #     @creating_startup = true;
-  #     flash[:notice] = "Please complete your user profile first!"
-  #     session[:referer] = '#'
-  #     redirect_to edit_user_path(current_user)
-  #   end
-  # end
+  def new
+    # if current_user.phone_not_verified?
+    #   flash[:notice] = "Please enter and verify your phone number to continue"
+    #   session[:referer] = '#'
+    #   redirect_to phone_user_path(current_user)
+    # elsif current_user.profile_incomplete?
+    #   @creating_startup = true;
+    #   flash[:notice] = "Please complete your user profile first!"
+    #   session[:referer] = '#'
+    #   redirect_to edit_user_path(current_user)
+    # end
+    if current_user.startup.present?
+      @startup = current_user.startup
+      flash[:alert] = "It appears you already have a startup incubated at SV!"
+      render 'show'
+    else
+      @startup = Startup.new
+      # assign current user to startup here?
+      redirect_to onboarding_path(@startup)
+    end
+  end
 
   def index
     @startups = Startup.agreement_live

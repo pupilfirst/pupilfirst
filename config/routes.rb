@@ -26,7 +26,7 @@ Svapp::Application.routes.draw do
 
   resources :startup_links, only: :destroy
 
-  resources :startups, only: [:new, :show, :edit, :update, :index] do
+  resources :startups do
     resources :startup_links, only: [:index, :create]
     resources :startup_jobs do
       patch :repost

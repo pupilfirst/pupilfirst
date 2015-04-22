@@ -85,6 +85,10 @@ class Startup < ActiveRecord::Base
   has_many :startup_links, dependent: :destroy
   has_many :startup_jobs
 
+  # Allow statup to accept nested attributes for users
+  has_many :users
+  accepts_nested_attributes_for :users
+
   attr_accessor :validate_web_mandatory_fields
   attr_reader :validate_registration_type
 

@@ -20,12 +20,14 @@ class StartupsController < InheritedResources::Base
     # end
     if current_user.startup.present?
       @startup = current_user.startup
-      flash[:alert] = "It appears you already have a startup incubated at SV!"
+      flash.now[:alert] = "It appears you already have a startup incubated at SV!"
       render 'show'
     else
       @startup = Startup.new
-      # assign current user to startup here?
-      redirect_to onboarding_path(@startup)
+      @startup.founders << current_user
+      current_user.is_founder = true
+      @startup.save!
+      redirect_to onboarding_path(startup_id: @startup.id, id: :user_profile)
     end
   end
 
@@ -34,14 +36,7 @@ class StartupsController < InheritedResources::Base
   end
 
   def create
-    @startup = Startup.create(apply_now_params.merge({ email: current_user.email }))
-    @startup.full_validation = false
-    @startup.founders << current_user
-    if @startup.save
-      # flash[:notice] = "Your startup Application is submited and in pending for approval."
-      render :post_create
-      StartupMailer.apply_now(@startup).deliver_later
-    end
+
   end
 
   def show
@@ -56,17 +51,17 @@ class StartupsController < InheritedResources::Base
   end
 
   def update
-    @current_user = current_user
-    @startup = Startup.find params[:id]
-    @startup.founders.each { |f| f.full_validation = true }
-    @startup.validate_web_mandatory_fields = true
+    # @current_user = current_user
+    # @startup = Startup.find params[:id]
+    # @startup.founders.each { |f| f.full_validation = true }
+    # @startup.validate_web_mandatory_fields = true
 
-    if @startup.update(startup_params)
-      flash[:notice] = 'Startup details have been updated.'
-      redirect_to @startup
-    else
-      render 'startups/edit'
-    end
+    # if @startup.update(startup_params)
+    #   flash[:notice] = 'Startup details have been updated.'
+    #   redirect_to @startup
+    # else
+    #   render 'startups/edit'
+    # end
   end
 
   # GET /startups/featured

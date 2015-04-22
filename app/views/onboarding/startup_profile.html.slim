@@ -1,0 +1,11 @@
+#progressbar
+  .col-md-3
+    .fa.fa-check style="color:green" &nbsp User Profile
+  .col-md-3
+    .fa.fa-check style="color:#337ab7" &nbsp Startup Profile
+  .col-md-3
+    .fa.fa-check style="color:grey" &nbsp Product
+  .col-md-3
+    .fa.fa-check style="color:grey" &nbsp Launch!
+= simple_form_for @startup, url: wizard_path do |f|
+  = f.button :submit, 'Next', class: 'btn btn-default'

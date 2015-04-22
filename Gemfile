@@ -67,6 +67,7 @@ gem 'delayed_job_active_record' # Delayed Job to manage jobs. Let's migrate away
 gem 'sucker_punch'
 
 gem 'seedbank' # Better organized seed data.
+gem 'wicked' # Multistep form wizard for onboarding
 
 group :development do
   gem "letter_opener"

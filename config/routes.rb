@@ -79,5 +79,9 @@ Svapp::Application.routes.draw do
 
   # get 'mentor_meetings/:id/feedback', to: 'mentor_meetings#feedback'
 
+  scope 'onboarding', as: 'onboarding', controller: 'onboarding' do
+    get 'step1', action: 'step1'
+  end
+
   root 'welcome#index'
 end

@@ -27,6 +27,7 @@ class StartupsController < InheritedResources::Base
       @startup.founders << current_user
       current_user.is_founder = true
       @startup.save!
+      # @user = current_user
       redirect_to onboarding_path(startup_id: @startup.id, id: :user_profile)
     end
   end

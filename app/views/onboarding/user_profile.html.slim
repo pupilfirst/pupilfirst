@@ -9,4 +9,15 @@
     .fa.fa-check style="color:grey" &nbsp Launch!
 
 = simple_form_for @startup, url: wizard_path do |f|
+  = f.input :name
+  = f.simple_fields_for @user do |u|
+    = u.input :gender
+    / = u.input :born_on
+    / = u.input :communication_address
+    / = u.input :district
+    / = u.input :state
+    / = u.input :pin
+    / = u.input :linkedin_url
+    / = u.input :twitter_url
+
   = f.button :submit, 'Next', class: 'btn btn-default'

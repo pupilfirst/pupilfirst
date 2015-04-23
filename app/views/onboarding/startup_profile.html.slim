@@ -8,4 +8,5 @@
   .col-md-3
     .fa.fa-check style="color:grey" &nbsp Launch!
 = simple_form_for @startup, url: wizard_path do |f|
+  = f.input :pitch
   = f.button :submit, 'Next', class: 'btn btn-default'

@@ -89,7 +89,7 @@ class Startup < ActiveRecord::Base
   # has_many :users
   # accepts_nested_attributes_for :users
 
-  has_one :admin, -> { find_by(startup_admin: true) }, class_name: 'User', foreign_key: 'startup_id'
+  has_one :admin, -> { where(startup_admin: true) }, class_name: 'User', foreign_key: 'startup_id'
   accepts_nested_attributes_for :admin
 
   attr_accessor :validate_web_mandatory_fields

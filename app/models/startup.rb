@@ -86,8 +86,11 @@ class Startup < ActiveRecord::Base
   has_many :startup_jobs
 
   # Allow statup to accept nested attributes for users
-  has_many :users
-  accepts_nested_attributes_for :users
+  # has_many :users
+  # accepts_nested_attributes_for :users
+
+  has_one :admin, -> { find_by(startup_admin: true) }, class_name: 'User', foreign_key: 'startup_id'
+  accepts_nested_attributes_for :admin
 
   attr_accessor :validate_web_mandatory_fields
   attr_reader :validate_registration_type
@@ -176,10 +179,6 @@ class Startup < ActiveRecord::Base
     end
 
     self.agreement_ends_at = nil if (self.agreement_first_signed_at.nil? && self.agreement_last_signed_at.nil?)
-  end
-
-  def admin
-    founders.where(startup_admin: true).first
   end
 
   def approval_status
@@ -348,5 +347,14 @@ class Startup < ActiveRecord::Base
       else
         'kiran@startupvillage.in'
     end
+  end
+
+  def self.new_incubation!(user)
+    startup = Startup.new
+    startup.founders << user
+    startup.save!
+
+    user.update!(startup_admin: true)
+    startup
   end
 end

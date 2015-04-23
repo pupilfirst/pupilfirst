@@ -23,11 +23,7 @@ class StartupsController < InheritedResources::Base
       flash.now[:alert] = "It appears you already have a startup incubated at SV!"
       render 'show'
     else
-      @startup = Startup.new
-      @startup.founders << current_user
-      current_user.is_founder = true
-      @startup.save!
-      # @user = current_user
+      @startup = Startup.new_incubation!(current_user)
       redirect_to onboarding_path(startup_id: @startup.id, id: :user_profile)
     end
   end

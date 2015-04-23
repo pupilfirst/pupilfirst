@@ -10,7 +10,7 @@
 
 = simple_form_for @startup, url: wizard_path do |f|
   = f.input :name
-  = f.simple_fields_for @user do |u|
+  = f.simple_fields_for :admin do |u|
     = u.input :gender
     / = u.input :born_on
     / = u.input :communication_address

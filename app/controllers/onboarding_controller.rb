@@ -13,7 +13,8 @@ class OnboardingController < ApplicationController
     # binding.pry
     @startup = current_user.startup
     @user = current_user
-    @startup.attributes = onboarding_startup_params
+    # @startup.attributes = onboarding_startup_params
+    @startup.update_attributes(onboarding_startup_params)
     # current_user.attributes = onboarding_user_params
     render_wizard @startup
   end
@@ -21,7 +22,7 @@ class OnboardingController < ApplicationController
   private
 
   def onboarding_startup_params
-    params.require(:startup).permit(:name, :pitch, :about, users_attributes: [:id, :gender])
+    params.require(:startup).permit(:name, :pitch, :about, admin_attributes: [:gender])
   end
   # def onboarding_user_params
   #   params.require()

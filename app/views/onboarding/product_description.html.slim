@@ -14,4 +14,5 @@
         = f.input :product_description
         = f.input :product_progress, collection: product_progress_collection, :label_method => :first,
         :value_method => :last, include_blank: false
+        a.btn.btn-info href=previous_wizard_path << Prev
         .pull-right = f.button :submit, 'Next >>', class: 'btn btn-info'

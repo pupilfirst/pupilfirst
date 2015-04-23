@@ -1,0 +1,19 @@
+.col-md-1
+#progressbar.col-md-10
+  .panel.panel-info
+    .panel-heading
+      .row
+        .col-md-3.fa.fa-check style="color:green" &nbsp User Profile
+        .col-md-3.fa.fa-check style="color:green" &nbsp Startup Profile
+        .col-md-3.fa.fa-check style="color:green" &nbsp Product Description
+        .col-md-3.fa.fa-check style="color:#337ab7" &nbsp Launch!
+    .panel-body
+      h3 Great! Your are now all set to be incubated at SV !!
+      h5 Got fellow travellers in this journey? Invite your co-founders now!
+      form.form-inline
+        input.col-md-6.form-control type="email" placeholder="myawesomebro@ourstartup.com"
+        ' &nbsp
+        button.btn.btn-primary Invite
+      a href="#" + add co-founder
+      = simple_form_for @startup, url: wizard_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
+        .pull-right = f.button :submit, 'Finish!', class: 'btn btn-success'

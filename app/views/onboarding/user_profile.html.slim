@@ -1,23 +1,29 @@
-#progressbar
-  .col-md-3
-    .fa.fa-check style="color:#337ab7" &nbsp User Profile
-  .col-md-3
-    .fa.fa-check style="color:grey" &nbsp Startup Profile
-  .col-md-3
-    .fa.fa-check style="color:grey" &nbsp Product
-  .col-md-3
-    .fa.fa-check style="color:grey" &nbsp Launch!
+.col-md-1
+#progressbar.col-md-10
+  .panel.panel-info
+    .panel-heading
+      .row
+        .col-md-3.fa.fa-check style="color:#337ab7" &nbsp User Profile
+        .col-md-3.fa.fa-check style="color:grey" &nbsp Startup Profile
+        .col-md-3.fa.fa-check style="color:grey" &nbsp Product Description
+        .col-md-3.fa.fa-check style="color:grey" &nbsp Launch!
+    .panel-body
+      = simple_form_for @startup, url: wizard_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
+        = f.error_notification
+        = f.simple_fields_for :admin do |u|
+          .form-group
+            .col-md-6 = u.input :gender, collection: valid_gender_values,:label_method => :first,
+        :value_method => :last, :as => :radio_buttons
+            / # = u.input :gender, include_blank: false, collection: valid_gender_values
+            .col-md-6 = u.input :born_on, :as => :date_picker
+          .form-group
+            .col-md-12 = u.input :communication_address
+            .col-md-3
+            .col-md-3 = u.input :district
+            .col-md-3 = u.input :state
+            .col-md-3 = u.input :pin
+          .form-group
+            .col-md-6 = u.input :linkedin_url
+            .col-md-6 = u.input :twitter_url
 
-= simple_form_for @startup, url: wizard_path do |f|
-  = f.input :name
-  = f.simple_fields_for :admin do |u|
-    = u.input :gender
-    / = u.input :born_on
-    / = u.input :communication_address
-    / = u.input :district
-    / = u.input :state
-    / = u.input :pin
-    / = u.input :linkedin_url
-    / = u.input :twitter_url
-
-  = f.button :submit, 'Next', class: 'btn btn-default'
+        .pull-right = f.button :submit, 'Next >>', class: 'btn btn-info'

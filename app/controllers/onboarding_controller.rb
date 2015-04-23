@@ -26,7 +26,12 @@ class OnboardingController < ApplicationController
   private
 
   def onboarding_startup_params
-    params.require(:startup).permit(:name, :pitch, :about, admin_attributes: [:id, :gender])
+    params.require(:startup).permit(:name, :registration_type, :pitch, :about,
+     :cool_fact, :incubation_location, :website, :revenue_generated,
+      :presentation_link, :team_size, :women_employees, :product_name,
+      :product_description, :product_progress,
+       admin_attributes: [:id, :gender, :born_on, :communication_address,
+        :district, :state, :pin, :linkedin_url, :twitter_url])
   end
   # def onboarding_user_params
   #   params.require()

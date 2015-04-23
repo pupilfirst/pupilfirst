@@ -1,7 +1,7 @@
 class OnboardingController < ApplicationController
 
   include Wicked::Wizard
-  steps :user_profile, :startup_profile, :product_description
+  steps :user_profile, :startup_profile, :product_description, :finish
 
   def show
     @startup = current_user.startup

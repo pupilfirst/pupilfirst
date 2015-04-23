@@ -19,6 +19,10 @@ class OnboardingController < ApplicationController
     render_wizard @startup
   end
 
+  def finish_wizard_path
+    current_user.startup
+  end
+
   private
 
   def onboarding_startup_params

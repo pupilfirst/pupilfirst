@@ -24,7 +24,7 @@ class StartupsController < InheritedResources::Base
       render 'show'
     else
       @startup = Startup.new_incubation!(current_user)
-      redirect_to onboarding_path(startup_id: @startup.id, id: :user_profile)
+      redirect_to incubation_path(startup_id: @startup.id, id: :user_profile)
     end
   end
 

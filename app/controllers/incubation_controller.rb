@@ -1,4 +1,4 @@
-class OnboardingController < ApplicationController
+class IncubationController < ApplicationController
 
   include Wicked::Wizard
   steps :user_profile, :startup_profile, :product_description, :finish
@@ -13,9 +13,9 @@ class OnboardingController < ApplicationController
     # binding.pry
     @startup = current_user.startup
     @user = current_user
-    # @startup.attributes = onboarding_startup_params
-    @startup.update(onboarding_startup_params)
-    # current_user.attributes = onboarding_user_params
+    # @startup.attributes = incubation_startup_params
+    @startup.update(incubation_startup_params)
+    # current_user.attributes = incubation_user_params
     render_wizard @startup
   end
 
@@ -25,7 +25,7 @@ class OnboardingController < ApplicationController
 
   private
 
-  def onboarding_startup_params
+  def incubation_startup_params
     params.require(:startup).permit(:name, :registration_type, :pitch, :about,
      :cool_fact, :incubation_location, :website, :revenue_generated,
       :presentation_link, :team_size, :women_employees, :product_name,
@@ -33,7 +33,7 @@ class OnboardingController < ApplicationController
        admin_attributes: [:id, :gender, :born_on, :communication_address,
         :district, :state, :pin, :linkedin_url, :twitter_url])
   end
-  # def onboarding_user_params
+  # def incubation_user_params
   #   params.require()
   # end
 

@@ -1,4 +1,4 @@
-module OnboardingHelper
+module IncubationHelper
     def valid_gender_values
     {
       'Male' => User::GENDER_MALE,

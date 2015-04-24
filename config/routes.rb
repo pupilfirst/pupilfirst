@@ -79,7 +79,7 @@ Svapp::Application.routes.draw do
 
   # get 'mentor_meetings/:id/feedback', to: 'mentor_meetings#feedback'
 
-  resources :onboarding
+  resources :incubation
 
   root 'welcome#index'
 end

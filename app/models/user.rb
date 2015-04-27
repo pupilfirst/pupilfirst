@@ -38,6 +38,7 @@ class User < ActiveRecord::Base
 
   # We don't have a full name when we're creating a temporary co-founder account.
   validates_presence_of :fullname, unless: ->(user) { user.pending_startup_id.present? }
+  validates_presence_of :gender, if: ->(user) {user.startup.incubation_step_1?}
 
   def self.valid_gender_values
     [GENDER_FEMALE, GENDER_MALE, GENDER_OTHER]

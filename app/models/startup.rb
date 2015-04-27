@@ -139,6 +139,18 @@ class Startup < ActiveRecord::Base
   validates_length_of :about, maximum: MAX_ABOUT_CHARACTERS,
     message: "must be within #{MAX_ABOUT_CHARACTERS} characters"
 
+  # New set of validations for incubation wizard
+  attr_accessor :updated_from
+  validates_presence_of :name, if: ->(startup) { startup.incubation_step_2? }
+
+  def incubation_step_2?
+    @updated_from.include?('startup')
+  end
+
+  def incubation_step_1?
+    @updated_from.include?('user')
+  end
+
   before_validation do
     # Set registration_type to nil if its set as blank from backend.
     self.registration_type = nil if self.registration_type.blank?

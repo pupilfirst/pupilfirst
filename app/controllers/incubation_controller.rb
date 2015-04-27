@@ -13,6 +13,7 @@ class IncubationController < ApplicationController
     # binding.pry
     @startup = current_user.startup
     @user = current_user
+    @startup.updated_from = step.to_s
     # @startup.attributes = incubation_startup_params
     @startup.update(incubation_startup_params)
     # current_user.attributes = incubation_user_params

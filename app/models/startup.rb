@@ -142,13 +142,18 @@ class Startup < ActiveRecord::Base
   # New set of validations for incubation wizard
   attr_accessor :updated_from
   validates_presence_of :name, if: ->(startup) { startup.incubation_step_2? }
+  validates_presence_of :product_name, :product_description, :product_progress, if: ->(startup) { startup.incubation_step_3? }
 
   def incubation_step_2?
-    @updated_from.include?('startup')
+    @updated_from == 'startup_profile'
   end
 
   def incubation_step_1?
-    @updated_from.include?('user')
+    @updated_from == 'user_profile'
+  end
+
+  def incubation_step_3?
+    @updated_from == 'product_description'
   end
 
   before_validation do

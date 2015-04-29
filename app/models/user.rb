@@ -40,7 +40,7 @@ class User < ActiveRecord::Base
   validates_presence_of :fullname, unless: ->(user) { user.pending_startup_id.present? }
 
   # validations during incubation
-  validates_presence_of :gender, :born_on, :communication_address , if: ->(user) {user.startup.incubation_step_1?}
+  validates_presence_of :gender, :born_on, :communication_address , if: ->(user) {user.startup.present? && user.startup.incubation_step_1?}
 
   def self.valid_gender_values
     [GENDER_FEMALE, GENDER_MALE, GENDER_OTHER]

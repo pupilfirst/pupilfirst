@@ -13,7 +13,7 @@ class IncubationController < ApplicationController
     @startup = current_user.startup
     @user = current_user
     @startup.updated_from = step.to_s
-    # binding.pry
+    @startup.save! #save update_from so as to use for conditional validations during params update
     @startup.update(incubation_startup_params)
     # @startup.updated_from = nil
     render_wizard @startup

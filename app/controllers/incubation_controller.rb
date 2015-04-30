@@ -14,7 +14,8 @@ class IncubationController < ApplicationController
     @user = current_user
 
     # Save update_from so as to use for conditional validations during params update.
-    @startup.update!(updated_from: step)
+    @startup.updated_from = step
+    @startup.save(validate: false)
     # Update startup (and user) with recieved params.
     @startup.update(incubation_startup_params)
 

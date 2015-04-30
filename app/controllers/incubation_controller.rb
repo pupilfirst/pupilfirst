@@ -1,6 +1,6 @@
 class IncubationController < ApplicationController
-
   include Wicked::Wizard
+
   steps :user_profile, :startup_profile, :product_description, :finish
 
   def show
@@ -12,10 +12,13 @@ class IncubationController < ApplicationController
   def update
     @startup = current_user.startup
     @user = current_user
-    @startup.updated_from = step.to_s
-    @startup.save! #save update_from so as to use for conditional validations during params update
+
+    # Save update_from so as to use for conditional validations during params update.
+    @startup.update!(updated_from: step)
+
+    # Update startup (and user) with recieved params.
     @startup.update(incubation_startup_params)
-    # @startup.updated_from = nil
+
     render_wizard @startup
   end
 

@@ -148,7 +148,7 @@ class Startup < ActiveRecord::Base
     updated_from == 'startup_profile'
   end
 
-  def incubation_step_1?
+  def updating_user?
     updated_from == 'user_profile'
   end
 

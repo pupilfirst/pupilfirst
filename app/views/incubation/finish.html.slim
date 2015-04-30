@@ -10,6 +10,8 @@
     .panel-body
       h3 Great! Your are now all set to be incubated at SV !!
       h5 Got fellow travellers in this journey? Invite your co-founders now!
+      - if User.invited_cofounders(current_user.startup).present?
+        ' Invitation sent to: #{User.invited_cofounders(current_user.startup).map{ |u| u.email}.join(", ")}
       = form_tag add_cofounder_incubation_path do
         = text_field_tag 'email', nil, placeholder: 'cofounder@ourstartup.com'
         = submit_tag 'Invite'

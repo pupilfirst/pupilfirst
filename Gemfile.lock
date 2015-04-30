@@ -180,6 +180,8 @@ GEM
     devise_invitable (1.4.0)
       actionmailer (>= 3.2.6, < 5)
       devise (>= 3.2.0)
+    did_you_mean (0.9.8)
+      interception
     diff-lcs (1.2.5)
     dotenv (1.0.2)
     ejs (1.1.1)
@@ -305,6 +307,7 @@ GEM
       has_scope (~> 0.6.0.rc)
       railties (>= 3.2, < 5)
       responders
+    interception (0.5)
     ipaddress (0.8.0)
     jasmine-core (2.2.0)
     jasmine-rails (0.10.6)
@@ -581,6 +584,7 @@ DEPENDENCIES
   datetimepicker-rails!
   delayed_job_active_record
   devise_invitable
+  did_you_mean
   dotenv
   factory_girl
   factory_girl_rails (~> 4.0)

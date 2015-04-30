@@ -112,6 +112,7 @@ group :development, :test do
 
   # Let's try testing Javascript!
   gem 'jasmine-rails'
+  gem 'did_you_mean' # Enough of silly spellinng mistakes ruining the day !
 end
 
 group :production do

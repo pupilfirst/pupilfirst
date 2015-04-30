@@ -26,6 +26,12 @@ class IncubationController < ApplicationController
     current_user.startup
   end
 
+  def add_cofounder
+    # add and invite cofounder here
+    flash[:notice] = "An email has been sent to #{params[:email]} inviting him/her to join as a cofounder"
+    redirect_to incubation_path(:finish)
+  end
+
   private
 
   def incubation_startup_params

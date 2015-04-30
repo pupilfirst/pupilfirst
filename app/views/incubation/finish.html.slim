@@ -10,11 +10,10 @@
     .panel-body
       h3 Great! Your are now all set to be incubated at SV !!
       h5 Got fellow travellers in this journey? Invite your co-founders now!
-      form.form-inline
-        input.col-md-6.form-control type="email" placeholder="myawesomebro@ourstartup.com"
-        ' &nbsp
-        button.btn.btn-primary Invite
-      a href="#" + add co-founder
+      = form_tag add_cofounder_incubation_path do
+        = text_field_tag 'email', nil, placeholder: 'cofounder@ourstartup.com'
+        = submit_tag 'Invite'
+      / a href="#" + add co-founder
       = simple_form_for @startup, url: wizard_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
         = f.input :approval_status, :as => :hidden, :input_html => { :value => "pending" }
         a.btn.btn-info href=previous_wizard_path << Prev

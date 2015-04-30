@@ -40,7 +40,7 @@ class User < ActiveRecord::Base
   validates_presence_of :fullname, unless: ->(user) { user.pending_startup_id.present? }
 
   # validations during incubation
-  validates_presence_of :gender, :born_on, :communication_address , if: ->(user) { user.startup.try(:updating_user?) }
+  # validates_presence_of :gender, :born_on, :communication_address , if: ->(user) { user.startup.try(:updating_user?) }
 
   def self.valid_gender_values
     [GENDER_FEMALE, GENDER_MALE, GENDER_OTHER]
@@ -198,4 +198,11 @@ class User < ActiveRecord::Base
       !phone_verified?
     end
   end
+
+  def self.add_cofounder(email,startup_id)
+    user = find_or_initialize_cofounder(email)
+    user.pending_startup_id = startup_id
+    user.save_unregistered_user!
+  end
+
 end

@@ -61,7 +61,7 @@ gem 'maruku' # Let's use Markdown for markup in Apipie.
 
 gem 'roadie-rails'
 
-gem 'passenger', '~> 5.0.6' # Back to Passenger! Woohoo!
+gem 'passenger', '~> 5.0.8' # Back to Passenger! Woohoo!
 
 gem 'delayed_job_active_record' # Delayed Job to manage jobs. Let's migrate away from SuckerPunch.
 gem 'sucker_punch'

@@ -56,15 +56,6 @@ GIT
     wysihtml-rails (0.5.0.beta4)
       railties (>= 3.1.0)
 
-GIT
-  remote: https://github.com/ejholmes/active_admin_editor.git
-  revision: 86f964be3071cd938c3cd17ad00df94ece3a50c0
-  specs:
-    active_admin_editor (1.1.0)
-      activeadmin (>= 0.4.0)
-      ejs
-      rails (>= 3.0.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -182,7 +173,6 @@ GEM
       devise (>= 3.2.0)
     diff-lcs (1.2.5)
     dotenv (1.0.2)
-    ejs (1.1.1)
     em-websocket (0.5.1)
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0.6.0)
@@ -561,7 +551,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_admin_editor!
   activeadmin!
   acts-as-taggable-on
   apipie-rails

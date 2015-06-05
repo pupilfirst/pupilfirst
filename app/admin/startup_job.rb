@@ -1,4 +1,7 @@
 ActiveAdmin.register StartupJob do
+
+  menu parent: 'Startups'
+
   controller do
     newrelic_ignore
   end

@@ -9,5 +9,7 @@ class TimelineEvent < ActiveRecord::Base
   end
   validates_inclusion_of :type, in: valid_types
 
+  scope :belongs_to_iteration, ->(i) { where(:iteration => i)}
+
 
 end

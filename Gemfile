@@ -10,34 +10,34 @@ gem 'active_admin_editor', git: 'https://github.com/ejholmes/active_admin_editor
 gem 'activeadmin', github: 'activeadmin'
 gem 'inherited_resources'
 
-gem 'acts-as-taggable-on'
-gem 'attribute_normalizer', '~> 1.2.0.b'
+gem 'acts-as-taggable-on' # POSSIBLY-USELESS
+gem 'attribute_normalizer', '~> 1.2.0.b' # POSSIBLY-USELESS
 gem 'carrierwave'
 gem 'carrierwave_backgrounder'
-gem 'cocoon'
+gem 'cocoon' # POSSIBLY-USELESS
 gem 'coffee-rails', '~> 4.1.0'
 gem 'devise_invitable'
 gem 'fog' # required by carrierwave to upload to s3
 gem 'jbuilder', '~> 2.0'
 gem 'jquery-rails'
-gem 'just-datetime-picker'
+gem 'just-datetime-picker' # POSSIBLY-USELESS
 gem 'mini_magick'
-gem 'newrelic_rpm'
+gem 'newrelic_rpm' # POSSIBLY-USELESS
 gem 'nokogiri'
-gem 'omniauth', '~> 1.2.1'
+gem 'omniauth', '~> 1.2.1' # POSSIBLY-USELESS
 gem 'pg'
-gem 'rubypress' # wordpress
+gem 'rubypress' # wordpress # POSSIBLY-USELESS
 gem 'sass-rails', '~> 5.0'
 gem 'sendgrid_smtpapi'
 gem 'sentry-raven'
 gem 'slim'
 # gem 'turbolinks' # Disabled, because it is a pain in the ass.
 gem 'uglifier'
-gem 'urbanairship'
+gem 'urbanairship' # POSSIBLY-USELESS
 gem 'versionist'
 gem 'rest-client'
 gem 'cancancan', '~> 1.8' # Used to manage administrator types and roles in the ActiveAdmin interface.
-gem 'paper_trail' # Logs changes in critical tables, and displays changelog in ActiveAdmin dashboard.
+gem 'paper_trail' # Logs changes in critical tables, and displays changelog in ActiveAdmin dashboard. # POSSIBLY-USELESS
 gem 'phony_rails' # Phone number validation and normalization. TODO: Get rid of phony_rails if isn't updated. Last updated was 18/3/2014.
 gem 'select2-rails' # Select2 javascript select box improvement library, using in ActiveAdmin interface.
 gem 'nilify_blanks' # Sets database fields to nil if blank values are supplied.
@@ -49,22 +49,22 @@ gem 'sprockets-coffee-react' # Sprockets preprocessor.
 gem 'js-routes' # Routes inside JS.
 gem 'validate_url' # URL validation.
 gem 'chartkick' # Pretty charts!
-gem 'will_paginate-bootstrap' # Paginated tables with Bootstrap
+gem 'will_paginate-bootstrap' # Paginated tables with Bootstrap # POSSIBLY-USELESS
 gem 'logstash-logger' # A better logger.
 
-gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
+gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true # POSSIBLY-USELESS
 gem 'momentjs-rails', '>= 2.8.1',  :github => 'derekprior/momentjs-rails'
 gem 'wysihtml-rails', :git => 'https://github.com/Voog/wysihtml-rails.git'
 
 gem 'apipie-rails' # Apipie for API documentation!
 gem 'maruku' # Let's use Markdown for markup in Apipie.
 
-gem 'roadie-rails'
+gem 'roadie-rails' # POSSIBLY-USELESS
 
 gem 'passenger', '~> 5.0.8' # Back to Passenger! Woohoo!
 
 gem 'delayed_job_active_record' # Delayed Job to manage jobs. Let's migrate away from SuckerPunch.
-gem 'sucker_punch'
+gem 'sucker_punch' # POSSIBLY-USELESS
 
 gem 'seedbank' # Better organized seed data.
 
@@ -72,18 +72,18 @@ gem 'font-awesome-sass', '~> 4.3.0' # Icons from font-awesome!
 
 group :development do
   gem 'letter_opener'
-  gem 'guard'
-  gem 'guard-shell'
-  gem 'guard-rspec'
+  gem 'guard' # POSSIBLY-USELESS
+  gem 'guard-shell' # POSSIBLY-USELESS
+  gem 'guard-rspec' # POSSIBLY-USELESS
   # gem "guard-spork"
-  gem 'guard-livereload'
-  gem 'childprocess'
-  gem 'terminal-notifier-guard'
+  gem 'guard-livereload' # POSSIBLY-USELESS
+  gem 'childprocess' # POSSIBLY-USELESS
+  gem 'terminal-notifier-guard' # POSSIBLY-USELESS
   gem 'bullet' # Detect N+1 queries.
 end
 
 group :test do
-  gem 'sqlite3'
+  gem 'sqlite3' # POSSIBLY-USELESS
   gem 'factory_girl', require: false
   gem 'factory_girl_rails', '~> 4.0'
   gem 'faker'
@@ -92,9 +92,9 @@ end
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.2.0'
-  gem 'rb-inotify', :require => false
-  gem 'rb-fsevent', :require => false
-  gem 'rb-fchange', :require => false
+  gem 'rb-inotify', :require => false # POSSIBLY-USELESS
+  gem 'rb-fsevent', :require => false # POSSIBLY-USELESS
+  gem 'rb-fchange', :require => false # POSSIBLY-USELESS
   gem 'dotenv'
   gem 'pry-rails'
   gem 'webmock', require: false
@@ -112,7 +112,7 @@ group :development, :test do
   gem 'spring'
 
   # Let's try testing Javascript!
-  gem 'jasmine-rails'
+  gem 'jasmine-rails' # POSSIBLY-USELESS
 end
 
 group :production do

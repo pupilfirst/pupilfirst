@@ -317,7 +317,7 @@ ActiveRecord::Schema.define(version: 20150608102429) do
     t.text     "links"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.date     "event_at"
+    t.date     "event_on"
   end
 
   add_index "timeline_events", ["startup_id"], name: "index_timeline_events_on_startup_id", using: :btree

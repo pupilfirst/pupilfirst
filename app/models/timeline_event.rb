@@ -2,7 +2,7 @@ class TimelineEvent < ActiveRecord::Base
   belongs_to :startup
   mount_uploader :image, TimelineImageUploader
   serialize :links
-  validates_presence_of :title, :type, :event_at, :startup_id, :iteration
+  validates_presence_of :title, :type, :event_on, :startup_id, :iteration
 
   def self.valid_types
     ["a","c","e"]

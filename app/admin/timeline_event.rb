@@ -1,10 +1,9 @@
 ActiveAdmin.register TimelineEvent do
-
   menu parent: 'Startups'
   # See permitted parameters documentation:
   # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
   #
-  permit_params :title, :description, :iteration, :type, :image, :links
+  permit_params :title, :description, :iteration, :type, :image, :links, :event_on
   #
   # or
   #
@@ -13,6 +12,4 @@ ActiveAdmin.register TimelineEvent do
   #   permitted << :other if resource.something?
   #   permitted
   # end
-
-
 end

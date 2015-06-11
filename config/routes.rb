@@ -71,6 +71,9 @@ Svapp::Application.routes.draw do
   get 'faq', to: 'welcome#faq'
 
   # get 'mentor_meetings/:id/feedback', to: 'mentor_meetings#feedback'
+  scope 'demo', as: 'demo', controller: 'home' do
+    get '/', action: 'index', as: 'root'
+  end
 
   root 'welcome#index'
 end

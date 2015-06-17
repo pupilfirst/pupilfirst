@@ -7,7 +7,7 @@ html
     meta name="viewport" content="width=device-width, initial-scale=1"
     // The above 3 meta tags *must* come first in the head; any other head
     // content must come *after* these tags.
-    
+
     title sv.co
 
     // Local Styles
@@ -15,10 +15,10 @@ html
     = stylesheet_link_tag 'demo/owl-carousel/owl.carousel'
     = stylesheet_link_tag 'demo/style'
     = stylesheet_link_tag 'demo/icon/component'
-    
+
     // Remote styles
     = stylesheet_link_tag '//dimsemenov-static.s3.amazonaws.com/dist/magnific-popup.css'
-    
+
     // Fonts
     = stylesheet_link_tag '//fonts.googleapis.com/css?family=Roboto:400,300'
     = stylesheet_link_tag '//fonts.googleapis.com/css?family=Ubuntu:300,400,700,400italic'
@@ -27,18 +27,18 @@ html
     // Scripts
     = javascript_include_tag 'application'
     = javascript_include_tag 'demo/icon/modernizr.custom'
-    
+
     // Remote scripts
     /![if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
       <![endif]
-    
+
     = csrf_meta_tags
     = yield :head
-  
+
   body
-    .header#header
+    section.header.landing_header#header
       nav.navbar.navbar-default.navbar-fixed-top role="navigation"
         .container
           .navbar-header
@@ -50,7 +50,7 @@ html
             a.navbar-brand href="#"
               img.SiteLogo#SiteLogo src="#{image_url 'logo_transparent.png'}" width="150" style="display:none;"
               img.SiteLogo#SiteLogoWhite src="#{image_url 'logo_white.png'}" width="150"
-         
+
           #sv-navbar.collapse.navbar-collapse
             ul.nav.navbar-nav.navbar-right
               li
@@ -67,7 +67,7 @@ html
                 a href="#" CONTACT
       .container
         #carousel-example-generic.carousel.slide data-ride="carousel"
-          // Indicators
+          / Indicators
           ol.carousel-indicators
             li.active data-target="#carousel-example-generic" data-slide-to="0"
               a href="#"
@@ -76,8 +76,7 @@ html
             li data-target="#carousel-example-generic" data-slide-to="2"
               a href="#"
 
-                  <!-- Wrapper for slides -->
-                  
+          / Wrapper for slides
           .carousel-inner role="listbox"
             .item.active
               .carousel-caption
@@ -91,12 +90,12 @@ html
                   i.fa
                     img src="#{image_url 'play.png'}" width="20"
                     |  Watch video
-                
+
 
             .item
               .carousel-caption
                 h4
-                  ' We help first-time 
+                  ' We help first-time
                   span style="font-weight:300;" founders
                   br
                   | build great products.
@@ -109,7 +108,7 @@ html
             .item
               .carousel-caption
                 h4
-                  ' We help first-time 
+                  ' We help first-time
                   span style="font-weight:300;" founders
                   br
                   | build great products.
@@ -120,7 +119,7 @@ html
                     |  Watch video
 
     == yield
-    
+
     footer#footer
       .container
         .row

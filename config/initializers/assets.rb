@@ -9,4 +9,5 @@ Rails.application.config.assets.precompile += %w(
   demo/style.css
   demo/icon/component.css
   demo/icon/modernizr.custom.js
+  demo/home.js
 )

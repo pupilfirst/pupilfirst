@@ -1,5 +1,8 @@
 == content_for :head
   = javascript_include_tag 'demo/home'
+  = javascript_include_tag 'demo/owl-carousel/owl.carousel.js'
+  <script src="lib/owl.carousel/owl-carousel/owl.carousel.js"></script>
+  = javascript_include_tag '//dimsemenov-static.s3.amazonaws.com/dist/jquery.magnific-popup.min.js'
 
 / About section.
 section#about-section
@@ -72,7 +75,7 @@ section#showcase
       .showcase-heading
         .col-md-6.success
           h1 Success Scenerios
-          img src="img/line.jpg"
+          = image_tag 'line.jpg'
           br
           p
             | Success varies with startup.
@@ -107,26 +110,27 @@ section#showcase
                 span Wow Makers
         .col-md-6.sucess-video align="center"
           div style=("max-width:450px; margin:0 auto;")
-            img.showcase_company.img-responsive src="img/startup_showcase1.jpg"
+            = image_tag 'startup_showcase1.jpg', class: 'showcase_company img-responsive'
             br
-          img.showcase_logo.img-responsive src="img/itraveller-logo.png"
+          = image_tag 'itraveller-logo.png', class: 'showcase_logo img-responsive'
           br
           #inline-popups
             a.view data-effect="mfp-zoom-in" href="#test-popup"
-              img src="img/view.png" /
+              = image_tag 'view.png'
               | View The iTraveler's Story
           #test-popup.row.white-popup.mfp-with-anim.mfp-hide
-            img.img-responsive src="img/itravel.jpg"
+            = image_tag 'itravel.jpg', class: 'img-responsive'
 
 / Startups showcase.
 section#companies
+  #startups-showcase-data.hidden data-arrow-right-url="#{image_url 'arrow2_r.png'}" data-arrow-left-url="#{image_url 'arrow2_l.png'}"
   .container
     .row
       .company-details
         .col-md-12.lista
           .col-md-6.lista-heading
             h1 Startups
-            img src="img/line.jpg" /
+            = image_tag 'line.jpg'
             p
               | These are the startups who are currently enrolled with us.Lorem ipsum dolor sit amet, te sit aeque minimum splendide,
               | per et novum imperdiet voluptatibus, verear vivendo inciderint ei duo.
@@ -136,43 +140,55 @@ section#companies
             br
             #owl-demo1.owl-carousel.owl-theme
               .item
-                img src="img/startups/company1.png"
+                = image_tag 'startups/company1.png'
               .item
-                img src="img/startups/company2.png"
+                = image_tag 'startups/company2.png'
               .item
-                img src="img/startups/company3.png"
+                = image_tag 'startups/company3.png'
     br
     .row
       .short-list
         .col-md-2.col-sm-3.liste
           div
-            img.img-responsive align="middle" src="img/startups/logo1.jpg"
+            = image_tag 'startups/logo1.jpg', class: 'img-responsive'
         .col-sm-3.liste
-          img.img-responsive src="img/startups/logo2.jpg"
+          div
+            = image_tag 'startups/logo2.jpg', class: 'img-responsive'
         .col-sm-3.liste
-          img.img-responsive src="img/startups/logo3.jpg"
+          div
+            = image_tag 'startups/logo3.jpg', class: 'img-responsive'
         .col-sm-3.liste
-          img.img-responsive src="img/startups/logo4.jpg"
+          div
+            = image_tag 'startups/logo4.jpg', class: 'img-responsive'
         .col-sm-3.liste
-          img.img-responsive src="img/startups/logo1.jpg"
+          div
+            = image_tag 'startups/logo1.jpg', class: 'img-responsive'
         .col-sm-3.liste
-          img.img-responsive src="img/startups/logo2.jpg"
+          div
+            = image_tag 'startups/logo2.jpg', class: 'img-responsive'
         .col-sm-3.liste
-          img.img-responsive src="img/startups/logo3.jpg"
+          div
+            = image_tag 'startups/logo3.jpg', class: 'img-responsive'
         .col-sm-3.liste
-          img.img-responsive src="img/startups/logo4.jpg"
+          div
+            = image_tag 'startups/logo4.jpg', class: 'img-responsive'
         .col-sm-3.liste
-          img.img-responsive src="img/startups/logo1.jpg"
+          div
+            = image_tag 'startups/logo1.jpg', class: 'img-responsive'
         .col-sm-3.liste
-          img.img-responsive src="img/startups/logo2.jpg"
+          div
+            = image_tag 'startups/logo2.jpg', class: 'img-responsive'
         .col-sm-3.liste
-          img.img-responsive src="img/startups/logo3.jpg"
+          div
+            = image_tag 'startups/logo3.jpg', class: 'img-responsive'
         .col-sm-3.liste
-          img.img-responsive src="img/startups/logo4.jpg"
+          div
+            = image_tag 'startups/logo4.jpg', class: 'img-responsive'
+
     .row.learnmore style="margin-top:20px;"
       a href="#"
         | LEARN MORE ABOUT STARTUP COMMUNITY &nbsp;
-        img.img-animation src="img/cont.png"
+        = image_tag 'cont.png', class: 'img-animation'
 
 / Testimonials
 section#testimonial

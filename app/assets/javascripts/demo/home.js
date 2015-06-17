@@ -15,8 +15,7 @@ var navigateStagesAndLearning = function() {
 };
 
 var giveWhiteBackgroundToTopNav = function() {
-  $(window).scroll(function()
-  {
+  $(window).scroll(function() {
     if ($(document).scrollTop() > 300)
     {
       $("#SiteLogoWhite").hide();
@@ -30,17 +29,47 @@ var giveWhiteBackgroundToTopNav = function() {
   });
 };
 
+var popupStartupTimeline = function() {
+  $('#inline-popups').magnificPopup({
+    delegate: 'a',
+    removalDelay: 500, //delay removal by X to allow out-animation
+    callbacks: {
+      beforeOpen: function () {
+        this.st.mainClass = this.st.el.attr('data-effect');
+      }
+    },
+    midClick: true // allow opening popup on middle mouse click. Always set it to true if you don't provide alternative source.
+  });
+};
+
+var startupsShowcaseSlide = function() {
+  var dataFromView = $("#startups-showcase-data");
+
+  $("#owl-demo1").owlCarousel({
+    navigation : true,
+    navigationText: [
+      "<img src='" + dataFromView.data('arrow-left-url') + "'/>",
+      "<img src='" + dataFromView.data('arrow-right-url') + "'/>"
+    ],// Show next and prev buttons
+    slideSpeed : 300,
+    paginationSpeed : 400,
+    singleItem:true
+  });
+};
+
 $(document).ready(navigateStagesAndLearning);
 $(document).ready(giveWhiteBackgroundToTopNav);
+$(document).ready(popupStartupTimeline);
+$(document).ready(startupsShowcaseSlide);
 
 $(document).ready(function() {
-  [].slice.call( document.querySelectorAll( '.carousel-indicators > ol' ) ).forEach( function( nav ) {
-    new DotNav( nav, {
+  [].slice.call(document.querySelectorAll('.carousel-indicators > ol')).forEach(function(nav) {
+    new DotNav(nav, {
       callback : function( idx ) {
         //console.log( idx )
       }
-    } );
-  } );
+    });
+  });
 });
 
 $(document).ready(function() {
@@ -66,30 +95,6 @@ $(document).ready(function() {
   }
 });
 
-$(document).ready(function() {
-
-  $("#owl-demo1").owlCarousel({
-
-    navigation : true,
-    navigationText: [
-      "<img src='img/arrow2_l.png'/>",
-      "<img src='img/arrow2_r.png'/>"
-    ],// Show next and prev buttons
-    slideSpeed : 300,
-    paginationSpeed : 400,
-    singleItem:true
-
-    // "singleItem:true" is a shortcut for:
-    // items : 1,
-    // itemsDesktop : false,
-    // itemsDesktopSmall : false,
-    // itemsTablet: false,
-    // itemsMobile : false
-
-  });
-
-});
-
 $(document).ready(function ()
 {
   var carousel = $("#owl-demo");
@@ -102,18 +107,5 @@ $(document).ready(function ()
     ],
   });
 
-
-});
-
-$(document).ready(function() {
-
-  var h1=$("#owl-demo1 .item").height();
-  var h2=$("#owl-demo1 .owl-next img").height();
-  var h2_new=Math.round(h2/2);
-  var h1_new=Math.round(h1/2);
-  var new_h=h1_new-h2_new;
-  //alert(new_h);
-  $("#owl-demo1 .owl-next img").css({"margin-top":"81px !important", "position":"relative"});
-  //$("#owl-demo1 .owl-next img").hide();
 
 });

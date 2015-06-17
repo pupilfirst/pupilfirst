@@ -10,4 +10,5 @@ Rails.application.config.assets.precompile += %w(
   demo/icon/component.css
   demo/icon/modernizr.custom.js
   demo/home.js
+  demo/owl-carousel/owl.carousel.js
 )

@@ -1,3 +1,4 @@
+/ About section.
 section#about-section
   .container
     .row
@@ -12,3 +13,364 @@ section#about-section
         br
       .about-circle.col-md-2.col-md-offset-1
         /! <img src="img/comming.png" width="200" style="margin-top:-30px;">
+
+/ Stages and learning.
+section#stages
+  .container
+    .row
+      .stages-detail style="text-align:center;" 
+        h1 Stages + Learning
+        /! <img src="img/line.jpg"
+        p
+          | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+          br
+        	| industry's standard dummy text ever since the 1500s
+        br/
+        #stage_imgs
+          center
+            img#stage_img1.img-responsive src="img/stage1.png" /
+            img#stage_img2.img-responsive src="img/stage2.png" /
+            img#stage_img3.img-responsive src="img/stage3.png" /
+            img#stage_img4.img-responsive src="img/stage4.png" /
+            img#stage_img5.img-responsive src="img/stage5.png" /
+        br/
+        br/
+        div
+          ol.progtrckr data-progtrckr-steps="5" 
+            li.active title=("PRODUCT DISCOVERY") 
+              .stage_name val="img1" 
+                .bbr PRODUCT DISCOVERY
+                .dimmer
+              i
+            li title=("PRODUCT PROTOTYPE") 
+              .stage_name val="img2" 
+                | PRODUCT PROTOTYPE
+                .dimmer
+              i
+            li title=("CUSTOMER VALIDATION") 
+              .stage_name val="img3" 
+                | CUSTOMER VALIDATION
+                .dimmer
+              i
+            li title="EFFICIENCY" 
+              .stage_name val="img4" 
+                | EFFICIENCY
+                .dimmer
+              i
+            li title="SCALING" 
+              .stage_name val="img5" 
+                | SCALING
+                .dimmer
+              i
+
+/ Success scenarios.
+section#showcase
+  .container
+    .row
+      .showcase-heading
+        .col-md-6.success
+          h1 Success Scenerios
+          img src="img/line.jpg" /
+          br/
+          p
+            | Success varies with startup.
+            br/
+            | Here are the different Success scenarios of our startups.
+          br/
+          div
+            ul.list
+              li.list-item
+                .li-icon
+                h2 Getting Acquired
+                span to be find
+              li.list-item
+                .li-icon
+                h2 Getting Admission for Higher Studies
+                span to be find
+              li.list-item
+                .li-icon
+                h2 Getting Funded
+                span ITraveller
+              li.list-item
+                .li-icon
+                h2 Getting Great Job
+                span to be find
+              li.list-item
+                .li-icon
+                h2 Getting into Accelerator
+                span Profoundis
+              li.list-item
+                .li-icon
+                h2 Getting to Self Sustainability
+                span Wow Makers
+        .col-md-6.sucess-video align="center" 
+          div style=("max-width:450px; margin:0 auto;") 
+            img.showcase_company.img-responsive src="img/itraveller.jpg" /
+            br/
+          img.showcase_logo.img-responsive src="img/itraveller-logo.png" /
+          br/
+          #inline-popups
+            a.view data-effect="mfp-zoom-in" href="#test-popup" 
+              img src="img/view.png" /
+              | View The iTraveler's Story
+          #test-popup.row.white-popup.mfp-with-anim.mfp-hide
+            img.img-responsive src="img/itravel.jpg" /
+
+/ Startups showcase.
+section#companies
+  .container
+    .row
+      .company-details
+        .col-md-12.lista
+          .col-md-6.lista-heading
+            h1 Startups
+            img src="img/line.jpg" /
+            p
+              | These are the startups who are currently enrolled with us.Lorem ipsum dolor sit amet, te sit aeque minimum splendide,
+              | per et novum imperdiet voluptatibus, verear vivendo inciderint ei duo.
+          .col-md-6
+            br/
+            br/
+            br/
+            #owl-demo1.owl-carousel.owl-theme
+              .item
+                img src="img/startup1.jpg" /
+              .item
+                img src="img/startup2.png" /
+              .item
+                img src="img/startup3.png" /
+    br/
+    .row
+      .short-list
+        .col-md-2.col-sm-3.col-xs-2.liste
+          img.img-responsive src="img/pic1.png" /
+        .col-md-2.col-sm-3.col-xs-2.liste
+          img.img-responsive src="img/pic2.png" /
+        .col-md-2.col-sm-3.col-xs-2.liste
+          img.img-responsive src="img/pic3.png" /
+        .col-md-2.col-sm-3.col-xs-2.liste
+          img.img-responsive src="img/pic4.png" /
+        .col-md-2.col-sm-3.col-xs-2.liste
+          img.img-responsive src="img/pic5.png" /
+        .col-md-2.col-sm-3.col-xs-2.liste
+          img.img-responsive src="img/pic1.png" /
+        .col-md-2.col-sm-3.col-xs-2.liste
+          img.img-responsive src="img/pic2.png" /
+        .col-md-2.col-sm-3.col-xs-2.liste
+          img.img-responsive src="img/pic3.png" /
+        .col-md-2.col-sm-3.col-xs-2.liste
+          img.img-responsive src="img/pic4.png" /
+        .col-md-2.col-sm-3.col-xs-2.liste
+          img.img-responsive src="img/pic5.png" /
+    .row.learnmore
+      a href="#" 
+        | LEARN MORE ABOUT STARTUP COMMUNITY &nbsp;
+        img.img-animation src="img/cont.png" /
+
+/ Testimonials
+section#testimonial
+  .container
+    .cd-testimonials-wrapper.cd-container align="center" 
+      ul.cd-testimonials
+        li
+          p
+            span.tm_ex “
+            | Its amazing to see that Kerala,
+            br/
+            | which had some of the
+            | most wonderful people but never utilized the same, Kerala is on the march
+            span.tm_ex ”
+          .cd-author
+            ul.cd-author-info
+              li
+                img alt=("Author image") src="img/test1.png" title="img3" /
+              li.tm_name
+                span Adi Godrej
+              li.tm_comp CEO, CompanyName
+        li
+          p
+            span.tm_ex “
+            | Its amazing to see that Kerala,
+            br/
+            | which had some of the
+            | most wonderful people but never utilized the same, Kerala is on the march
+            span.tm_ex ”
+          .cd-author
+            ul.cd-author-info
+              li
+                img alt=("Author image") src="img/test1.png" title="img3" /
+              li.tm_name
+                span Adi Godrej
+              li.tm_comp CEO, CompanyName
+        li
+          p
+            span.tm_ex “
+            | Its amazing to see that Kerala,
+            br/
+            | which had some of the
+            | most wonderful people but never utilized the same, Kerala is on the march
+            span.tm_ex ”
+          .cd-author
+            ul.cd-author-info
+              li
+                img alt=("Author image") src="img/test1.png" title="img3" /
+              li.tm_name
+                span Adi Godrej
+              li.tm_comp CEO, CompanyName
+
+/ Blog posts.
+.row.blog
+  .container.heading
+    h1 Blog Post
+    img src="img/line.jpg" /
+    p Latest article from our blog
+  .container
+    a href="" 
+    .col-md-4.post
+      .post-content
+        img height="100%;" src="img/blogpost1.jpg" width="100%" /
+        h5 Startup Village bags Award for Technology Business Incubator
+        img.line height="100%;" src="img/line2.png" width="100%" /
+        p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+        .continue-reading
+          a href="#" 
+            | continue reading &nbsp;
+            img.img-animation src="img/cont.png" /
+    a href="" 
+    .col-md-4.post
+      .post-content
+        img height="100%;" src="img/blogpost1.jpg" width="100%" /
+        h5 Startup Village bags Award for Technology Business Incubator
+        img.line height="100%;" src="img/line2.png" width="100%" /
+        p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+        .continue-reading
+          a href="#" 
+            | continue reading &nbsp;
+            img.img-animation src="img/cont.png" /
+    a href="" 
+    .col-md-4.post
+      .post-content
+        img height="100%;" src="img/blogpost1.jpg" width="100%" /
+        h5 Startup Village bags Award for Technology Business Incubator
+        img.line height="100%;" src="img/line2.png" width="100%" /
+        p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+        .continue-reading
+          a href="#" 
+            | continue reading &nbsp;
+            img.img-animation src="img/cont.png" /
+
+/ In the media.
+section#media
+  .container
+    .row
+      .media-details
+        .media-heading.hdstyle
+          br/
+          h1 SV.CO in Media
+          img src="img/line.jpg" /
+          p A few mentions about startup village in the media
+          br/
+        .wrapper-with-margin
+          #owl-demo.owl-carousel
+            .primary1
+              img src="img/comp1.png" /
+            .primary1
+              img src="img/comp2.png" /
+            .primary1
+              img src="img/comp3.png" /
+            .primary1
+              img src="img/comp4.png" /
+            .primary1
+              img src="img/comp5.png" /
+            .primary1
+              img src="img/comp2.png" /
+            .primary1
+              img src="img/comp1.png" /
+            .primary1
+              img src="img/comp2.png" /
+            .primary1
+              img src="img/comp1.png" /
+            .primary1
+              img src="img/comp1.png" /
+
+/ Prefooter.
+section#prefooter
+  .container
+    .row
+      .col-md-3.sv
+        img src="img/logo_white.png" style="opacity:.7;" width="150" /
+        br/
+        br/
+        p At SV, entrepreneur Build, Break & Innovate to create finest technology produts.
+        br/
+        .img-opacity
+          ul style="display:inline-flex;" 
+            li
+              a href="" 
+                img height="20" src="img/fb.png" /
+            li
+              a href="" 
+                img height="20" src="img/tw.png" /
+            li
+              a href="" 
+                img height="20" src="img/gplus.png" /
+            li
+              a href="" 
+                img height="20" src="img/yt.png" /
+      .col-md-6.address-list
+        .col-md-6
+          address
+            strong Sillicon Valley.
+            br/
+            p
+              | 444 Castro St Suite 1200
+              br/
+              | Mountain View, CA 94041
+              br/
+          br/
+        .col-md-6
+          address
+            strong Startup Village, Kochi
+            br/
+            | Kinfra High Tech Park
+            br/
+            | Kalamaserry, Kochi, Kerala, INDIA
+            br/
+          br/
+        .col-md-6
+          address
+            strong Startup Village, Kozhikode
+            br/
+            | 7Kinfra High Tech Park
+            br/
+            | Kalamaserry, Kochi, Kerala, INDIA
+            br/
+          br/
+        .col-md-6
+          address
+            strong Startup Village, Vishakapattanam
+            br/
+            | 7Kinfra High Tech Park
+            br/
+            | Kalamaserry, Kochi, Kerala, INDIA
+            br/
+          br/
+      .col-md-3
+        .menu-list
+          ul
+            li
+              a href="#" 
+                | About
+                span.sr-only (current)
+            li
+              a href="#"  Startups
+            li
+              a href="#"  Startup Timeline
+            li
+              a href="#"  Resource
+            li
+              a href="#"  Media
+            li
+              a href="#"  Blog
+            li
+              a href="#"  Contact

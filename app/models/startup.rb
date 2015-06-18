@@ -84,7 +84,7 @@ class Startup < ActiveRecord::Base
   has_one :bank
   has_many :startup_links, dependent: :destroy
   has_many :startup_jobs
-  has_one :timeline_event
+  has_many :timeline_event
 
   attr_accessor :validate_web_mandatory_fields
   attr_reader :validate_registration_type

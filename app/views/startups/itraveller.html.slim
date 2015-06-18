@@ -1,0 +1,69 @@
+== content_for :head
+  = stylesheet_link_tag 'demo/TimelineStyle'
+/Company Name Header
+.container
+  .row
+    .col-md-12.clearfix
+      .col-sm-6
+        h1.page-header.tl_company_name
+          | iTraveller
+          a#verified.tooltip-right data-tooltip=("Timeline verified by Startup Village.") href="#"
+            img src='#{image_url 'timeline/verified.gif'}' width="25"
+      .col-sm-6 style=("padding-bottom: 9px;\nmargin: 60px 0px 20px; text-align:right;")
+        img#company_logo.img-responsive.startup-logo src="http://itraveller.com/about_us/imgs/logo.png" style="float:right"
+  .row
+    .col-md-12.tl_about
+      p.content
+        | iTraveller is a technology enabled market place for holidays. We have burned thousands of candles, spending hundreds of nights in crafting the philosophy of iTraveller, which is an utmost fine blend of travel and technology. iTraveller automates the native suppliers (sellers) at the backend and you at the front end, get to book your trips online.
+
+        | We are not a travel agent and we don't charge any commissions from you. The idea is to cut the intermediaries, thereby bringing the best prices and value to the travellers.
+  br
+  br
+  .row style=("border-bottom:2px solid green;padding-bottom:50px;")
+    .col-md-12.tl_data style="padding-bottom:50px;"
+      .col-md-4.col-sm-6.timeline_icon
+        .media.tl_data
+          img.media-object.pull-left alt="industry" src="img/itraveller/data1.png"
+          .media-body
+            p.tittle Industry
+            p.content Holidays, Business Automation
+      .col-md-4.col-sm-6.timeline_icon
+        .media.tl_data
+          img.media-object.pull-left alt="industry" src="img/itraveller/data2.png"
+          .media-body
+            p.tittle Website
+            p.content
+              a href="http://itraveller.com" target="_blank"
+                | www.itraveller.com
+                img src="img/itraveller/link.png"
+      .col-md-4.col-sm-6.timeline_icon
+        .media.tl_data
+          img.media-object.pull-left alt="industry" src="img/itraveller/data3.png"
+          .media-body
+            p.tittle Startup Deck
+            p.content
+              a href="http://slideshare.net/itvlr/deck" target="_blank"
+                | itraveller deck
+                img src="img/itraveller/link.png"
+      .col-md-4.col-sm-6.timeline_icon
+        .media.tl_data
+          img.media-object.pull-left alt="industry" src="img/itraveller/data4.png"
+          .media-body
+            p.tittle Team Size
+            p.content 20+
+      .col-md-4.col-sm-6.timeline_icon
+        .media.tl_data
+          img.media-object.pull-left alt="industry" src="img/itraveller/data5.png"
+          .media-body
+            p.tittle Stage of Company
+            p.content Scaling
+      .col-md-4.col-sm-6.timeline_icon
+        .media.tl_data
+          img.media-object.pull-left alt="industry" src="img/itraveller/data6.png"
+          .media-body
+            p.tittle Product Iteration
+            p.content Fourth
+    br
+    br
+
+

@@ -1,8 +1,9 @@
 == content_for :head
-  = javascript_include_tag 'demo/home'
-  = javascript_include_tag 'demo/owl-carousel/owl.carousel.js'
-  <script src="lib/owl.carousel/owl-carousel/owl.carousel.js"></script>
+  = javascript_include_tag 'demo/owl-carousel/owl.carousel'
+  = javascript_include_tag 'demo/ct-carousel/masonry.pkgd.min'
+  = javascript_include_tag 'demo/ct-carousel/jquery.flexslider-min'
   = javascript_include_tag '//dimsemenov-static.s3.amazonaws.com/dist/jquery.magnific-popup.min.js'
+  = javascript_include_tag 'demo/home'
 
 / About section.
 section#about-section
@@ -117,7 +118,7 @@ section#showcase
           #inline-popups
             a.view data-effect="mfp-zoom-in" href="#test-popup"
               = image_tag 'view.png'
-              | View The iTraveler's Story
+              |  View iTraveler's Story
           #test-popup.row.white-popup.mfp-with-anim.mfp-hide
             = image_tag 'itravel.jpg', class: 'img-responsive'
 
@@ -197,46 +198,46 @@ section#testimonial
       ul.cd-testimonials
         li
           p
-            span.tm_ex “
+            span.tm_ex &ldquo;
             | Its amazing to see that Kerala,
             br
             | which had some of the
             | most wonderful people but never utilized the same, Kerala is on the march
-            span.tm_ex ”
+            span.tm_ex &rdquo;
           .cd-author
             ul.cd-author-info
               li
-                img alt=("Author image") src="img/test1.png" title="img3"
+                = image_tag 'test1.png'
               li.tm_name
                 span Adi Godrej
               li.tm_comp CEO, CompanyName
         li
           p
-            span.tm_ex “
+            span.tm_ex &ldquo;
             | Its amazing to see that Kerala,
             br
             | which had some of the
             | most wonderful people but never utilized the same, Kerala is on the march
-            span.tm_ex ”
+            span.tm_ex &rdquo;
           .cd-author
             ul.cd-author-info
               li
-                img alt=("Author image") src="img/test1.png" title="img3"
+                = image_tag 'test1.png'
               li.tm_name
                 span Adi Godrej
               li.tm_comp CEO, CompanyName
         li
           p
-            span.tm_ex “
+            span.tm_ex &ldquo;
             | Its amazing to see that Kerala,
             br
             | which had some of the
             | most wonderful people but never utilized the same, Kerala is on the march
-            span.tm_ex ”
+            span.tm_ex &rdquo;
           .cd-author
             ul.cd-author-info
               li
-                img alt=("Author image") src="img/test1.png" title="img3"
+                = image_tag 'test1.png'
               li.tm_name
                 span Adi Godrej
               li.tm_comp CEO, CompanyName
@@ -245,140 +246,134 @@ section#testimonial
 section.container.blog
   .row.heading
     h1 Blog Post
-    img src="img/line.jpg" /
+    = image_tag 'line.jpg'
     p Latest article from our blog
 
   .row
     a href=""
     .col-lg-3.col-md-4.col-sm-6.col-xs-12.post
       .post-content
-        img height="100%;" src="img/blogpost1.jpg" width="100%"
+        img height="100%;" src="#{image_url 'blogpost1.jpg'}" width="100%"
         h5 Startup Village bags Award for Technology Business Incubator
-        img.line height="100%;" src="img/line2.png" width="100%"
+        img.line height="100%;" src="#{image_url 'line2.png'}" width="100%"
         p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
         .continue-reading
           a href="#"
             | continue reading &nbsp;
-            img.img-animation src="img/cont.png"
+            = image_tag 'cont.png', class: 'img-animation'
 
     a href=""
     .col-lg-3.col-md-4.col-sm-6.col-xs-12.post
       .post-content
-        img height="100%;" src="img/blogpost1.jpg" width="100%"
+        img height="100%;" src="#{image_url 'blogpost1.jpg'}" width="100%"
         h5 Startup Village bags Award for Technology Business Incubator
-        img.line height="100%;" src="img/line2.png" width="100%"
+        img.line height="100%;" src="#{image_url 'line2.png'}" width="100%"
         p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
         .continue-reading
           a href="#"
             | continue reading &nbsp;
-            img.img-animation src="img/cont.png"
+            = image_tag 'cont.png', class: 'img-animation'
 
     a href=""
     .col-lg-3.col-md-4.col-sm-6.col-xs-12.post
       .post-content
-        img height="100%;" src="img/blogpost1.jpg" width="100%"
+        img height="100%;" src="#{image_url 'blogpost1.jpg'}" width="100%"
         h5 Startup Village bags Award for Technology Business Incubator
-        img.line height="100%;" src="img/line2.png" width="100%"
+        img.line height="100%;" src="#{image_url 'line2.png'}" width="100%"
         p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
         .continue-reading
           a href="#"
             | continue reading &nbsp;
-            img.img-animation src="img/cont.png"
+            = image_tag 'cont.png', class: 'img-animation'
 
     a href=""
     .col-lg-3.col-md-4.col-sm-6.col-xs-12.post
       .post-content
-        img height="100%;" src="img/blogpost1.jpg" width="100%"
+        img height="100%;" src="#{image_url 'blogpost1.jpg'}" width="100%"
         h5 Startup Village bags Award for Technology Business Incubator
-        img.line height="100%;" src="img/line2.png" width="100%"
+        img.line height="100%;" src="#{image_url 'line2.png'}" width="100%"
         p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
         .continue-reading
           a href="#"
             | continue reading &nbsp;
-            img.img-animation src="img/cont.png"
+            = image_tag 'cont.png', class: 'img-animation'
 
     a href=""
     .col-lg-3.col-md-4.col-sm-6.col-xs-12.post
       .post-content
-        img height="100%;" src="img/blogpost1.jpg" width="100%"
+        img height="100%;" src="#{image_url 'blogpost1.jpg'}" width="100%"
         h5 Startup Village bags Award for Technology Business Incubator
-        img.line height="100%;" src="img/line2.png" width="100%"
+        img.line height="100%;" src="#{image_url 'line2.png'}" width="100%"
         p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
         .continue-reading
           a href="#"
             | continue reading &nbsp;
-            img.img-animation src="img/cont.png"
+            = image_tag 'cont.png', class: 'img-animation'
 
     a href=""
     .col-lg-3.col-md-4.col-sm-6.col-xs-12.post
       .post-content
-        img height="100%;" src="img/blogpost1.jpg" width="100%"
+        img height="100%;" src="#{image_url 'blogpost1.jpg'}" width="100%"
         h5 Startup Village bags Award for Technology Business Incubator
-        img.line height="100%;" src="img/line2.png" width="100%"
+        img.line height="100%;" src="#{image_url 'line2.png'}" width="100%"
         p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
         .continue-reading
           a href="#"
             | continue reading &nbsp;
-            img.img-animation src="img/cont.png"
+            = image_tag 'cont.png', class: 'img-animation'
 
 / In the media.
 section#media
+  #media-showcase-data.hidden data-arrow-right-url="#{image_url 'arrow2_r.png'}" data-arrow-left-url="#{image_url 'arrow2_l.png'}"
   .container
     .row
       .media-details
         .media-heading.hdstyle
           br
           h1 SV.CO in Media
-          img src="img/line.jpg"
+          = image_tag 'line.jpg'
           p A few mentions about startup village in the media
           br
         .wrapper-with-margin
           #owl-demo.owl-carousel
             .primary1
-              img src="img/media1.png"
+              = image_tag 'media_logos/comp2.png'
             .primary1
-              img src="img/comp2.png"
+              = image_tag 'media_logos/comp3.png'
             .primary1
-              img src="img/comp3.png"
+              = image_tag 'media_logos/comp4.png'
             .primary1
-              img src="img/comp4.png"
+              = image_tag 'media_logos/comp2.png'
             .primary1
-              img src="img/comp5.png"
+              = image_tag 'media_logos/comp3.png'
             .primary1
-              img src="img/comp2.png"
-            .primary1
-              img src="img/comp1.png"
-            .primary1
-              img src="img/comp2.png"
-            .primary1
-              img src="img/comp1.png"
-            .primary1
-              img src="img/comp1.png"
+              = image_tag 'media_logos/comp4.png'
 
-/ Prefooter.
+/ Pre-footer.
 section#prefooter
   .container
     .row
       .col-md-3.sv
-        img src="img/logo_white.png" style="opacity:.7;" width="150"
+        img src="#{image_url 'logo_white.png'}" style="opacity:.7;" width="150"
         br
         br
-        p At SV, entrepreneurs Build, Break &amp; Innovate to create finest technology products.
+        p At SV, entrepreneurs Build, Break &amp; Innovate to create the finest technology products.
         br
         .img-opacity
           ul style="display:inline-flex;"
             li
               a href=""
-                img height="20" src="img/fb.png"
+                = image_tag 'fb.png', height: '20'
             li
               a href=""
-                img height="20" src="img/tw.png"
+                = image_tag 'tw.png', height: '20'
             li
               a href=""
-                img height="20" src="img/gplus.png"
+                = image_tag 'gplus.png', height: '20'
             li
               a href=""
-                img height="20" src="img/yt.png"
+                = image_tag 'yt.png', height: '20'
+
       .col-md-6.address-list
         .col-md-6
           address

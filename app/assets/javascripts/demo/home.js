@@ -57,6 +57,20 @@ var startupsShowcaseSlide = function() {
   });
 };
 
+var mediaShowcaseSlide = function() {
+  var dataFromView = $("#media-showcase-data");
+  var carousel = $("#owl-demo");
+
+  carousel.owlCarousel({
+    navigation:true,
+    pagination:true,
+    navigationText: [
+      "<img src='" + dataFromView.data('arrow-left-url') + "'/>",
+      "<img src='" + dataFromView.data('arrow-right-url') + "'/>"
+    ]
+  });
+};
+
 var prepareTestimonials = function() {
   //create the slider
   $('.cd-testimonials-wrapper').flexslider({
@@ -99,6 +113,7 @@ $(document).ready(navigateStagesAndLearning);
 $(document).ready(giveWhiteBackgroundToTopNav);
 $(document).ready(popupStartupTimeline);
 $(document).ready(startupsShowcaseSlide);
+$(document).ready(mediaShowcaseSlide);
 $(document).ready(prepareTestimonials);
 
 $(document).ready(function() {
@@ -132,19 +147,4 @@ $(document).ready(function() {
     current = idx;
     el.className = 'current-demo';
   }
-});
-
-$(document).ready(function ()
-{
-  var carousel = $("#owl-demo");
-  carousel.owlCarousel({
-    navigation:true,
-    pagination:true,
-    navigationText: [
-      "<img src='img/arrow2_l.png'/>",
-      "<img src='img/arrow2_r.png'/>"
-    ],
-  });
-
-
 });

@@ -324,62 +324,56 @@ section.container.blog
 
 / In the media.
 section#media
+  #media-showcase-data.hidden data-arrow-right-url="#{image_url 'arrow2_r.png'}" data-arrow-left-url="#{image_url 'arrow2_l.png'}"
   .container
     .row
       .media-details
         .media-heading.hdstyle
           br
           h1 SV.CO in Media
-          img src="img/line.jpg"
+          = image_tag 'line.jpg'
           p A few mentions about startup village in the media
           br
         .wrapper-with-margin
           #owl-demo.owl-carousel
             .primary1
-              img src="img/media1.png"
+              = image_tag 'media_logos/comp2.png'
             .primary1
-              img src="img/comp2.png"
+              = image_tag 'media_logos/comp3.png'
             .primary1
-              img src="img/comp3.png"
+              = image_tag 'media_logos/comp4.png'
             .primary1
-              img src="img/comp4.png"
+              = image_tag 'media_logos/comp2.png'
             .primary1
-              img src="img/comp5.png"
+              = image_tag 'media_logos/comp3.png'
             .primary1
-              img src="img/comp2.png"
-            .primary1
-              img src="img/comp1.png"
-            .primary1
-              img src="img/comp2.png"
-            .primary1
-              img src="img/comp1.png"
-            .primary1
-              img src="img/comp1.png"
+              = image_tag 'media_logos/comp4.png'
 
-/ Prefooter.
+/ Pre-footer.
 section#prefooter
   .container
     .row
       .col-md-3.sv
-        img src="img/logo_white.png" style="opacity:.7;" width="150"
+        img src="#{image_url 'logo_white.png'}" style="opacity:.7;" width="150"
         br
         br
-        p At SV, entrepreneurs Build, Break &amp; Innovate to create finest technology products.
+        p At SV, entrepreneurs Build, Break &amp; Innovate to create the finest technology products.
         br
         .img-opacity
           ul style="display:inline-flex;"
             li
               a href=""
-                img height="20" src="img/fb.png"
+                = image_tag 'fb.png', height: '20'
             li
               a href=""
-                img height="20" src="img/tw.png"
+                = image_tag 'tw.png', height: '20'
             li
               a href=""
-                img height="20" src="img/gplus.png"
+                = image_tag 'gplus.png', height: '20'
             li
               a href=""
-                img height="20" src="img/yt.png"
+                = image_tag 'yt.png', height: '20'
+
       .col-md-6.address-list
         .col-md-6
           address

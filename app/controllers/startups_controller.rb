@@ -6,6 +6,7 @@ class StartupsController < InheritedResources::Base
     @startup.founders << current_user
     @startup.save
   end
+  layout 'demo', only: [:itraveller]
 
   def index
     @startups = Startup.agreement_live

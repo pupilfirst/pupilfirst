@@ -2,7 +2,7 @@ class TimelineEvent < ActiveRecord::Base
   belongs_to :startup
   mount_uploader :image, TimelineImageUploader
   serialize :links
-  validates_presence_of :title, :type, :event_on, :startup_id, :iteration
+  validates_presence_of :title, :event_type, :event_on, :startup_id, :iteration
 
   TYPE_LAUNCH = "Launch"
   TYPE_AWARD = "Award"

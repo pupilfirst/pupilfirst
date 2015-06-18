@@ -14,4 +14,5 @@ Rails.application.config.assets.precompile += %w(
   demo/ct-carousel/masonry.pkgd.min.js
   demo/ct-carousel/jquery.flexslider-min.js
   demo/TimelineStyle.css
+  demo/itraveller.js
 )

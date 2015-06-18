@@ -161,34 +161,23 @@
         br
         a#read-from-beginning href="#begin"  Read from the beginning.
       ul.timeline
-        li
-          .timeline-badge.color1
-            img src=("#{ image_url 'timeline/set mission.png'}") width="70"
-          .timeline-panel
-            .timeline-heading
-              h4.timeline-title.tl_heading
-                | Sets Mission
-              p.tl_date
-                small
-                  img src="#{ image_url 'timeline/date.png'}"
-                  | April 2015 (Latest update)
-            .timeline-body
-              p.tl_body
-                | Sets mission for USD 100 Million for FY 2016-17.
-        li.timeline-inverted
-          .timeline-badge.color2
-            img src="#{ image_url 'timeline/monthely_revanue.png'}" width="70"
-          .timeline-panel
-            .timeline-heading
-              h4.timeline-title.tl_heading
-                | Monthly revenue crossed
-              p.tl_date
-                small
-                  img src="#{ image_url 'timeline/date.png'}"
-                  | March 2015
-            .timeline-body
-              p.tl_body
-                | Monthly revenue crosses INR 50 lakh.
+        - @events.each.with_index(1) do |event,index|
+          li class="timeline#{index%2 == 1 ? "" : "-inverted"}"
+            .timeline-badge class="color#{index%14}"
+              img src=("#{ image_url 'timeline/badges/'+event.event_type.to_s+'.png'}") width="70"
+            .timeline-panel
+              .timeline-heading
+                h4.timeline-title.tl_heading
+                  | #{event.title}
+                p.tl_date
+                  small
+                    img src="#{ image_url 'timeline/date.png'}"
+                    | #{event.event_on.strftime("%B %Y")}
+              .timeline-body
+                p.tl_body
+                  | #{event.description}
+
+
 
 
 javascript:

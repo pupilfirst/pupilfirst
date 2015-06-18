@@ -6,7 +6,7 @@ class StartupsController < InheritedResources::Base
     @startup.founders << current_user
     @startup.save
   end
-  layout 'demo', only: [:itraveller]
+  layout 'demo', only: [:itraveller, :show]
 
   def index
     @startups = Startup.agreement_live
@@ -24,7 +24,7 @@ class StartupsController < InheritedResources::Base
   end
 
   def show
-    @startup = Startup.find(params[:id])
+    # @startup = Startup.find(params[:id])
   end
 
   def edit

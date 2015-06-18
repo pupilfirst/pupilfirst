@@ -3,8 +3,8 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.1'
 
-# Pulling active_admin_editor from git, since it's latest rubygems release is before an essential patch added on Jun 25.
-gem 'active_admin_editor', git: 'https://github.com/ejholmes/active_admin_editor.git'
+# # active_admin_editor from git, since it's latest rubygems release is before an essential patch added on Jun 25.
+# gem 'active_admin_editor', git: 'https://github.com/ejholmes/active_admin_editor.git'
 
 # ActiveAdmin doesn't like 4.2 at all (for the moment). Switch this to stable when available.
 gem 'activeadmin', github: 'activeadmin'

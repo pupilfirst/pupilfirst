@@ -23,7 +23,7 @@ ActiveAdmin.register News do
   form do |f|
     f.inputs "Details" do
       f.input :title
-      f.input :body, as: :html_editor
+      f.input :body
       f.input :author
       f.input :featured
       f.input :category, collection: Category.news_category , prompt: 'Choose a Category'

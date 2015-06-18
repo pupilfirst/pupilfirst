@@ -1,8 +1,9 @@
 == content_for :head
-  = javascript_include_tag 'demo/home'
-  = javascript_include_tag 'demo/owl-carousel/owl.carousel.js'
-  <script src="lib/owl.carousel/owl-carousel/owl.carousel.js"></script>
+  = javascript_include_tag 'demo/owl-carousel/owl.carousel'
+  = javascript_include_tag 'demo/ct-carousel/masonry.pkgd.min'
+  = javascript_include_tag 'demo/ct-carousel/jquery.flexslider-min'
   = javascript_include_tag '//dimsemenov-static.s3.amazonaws.com/dist/jquery.magnific-popup.min.js'
+  = javascript_include_tag 'demo/home'
 
 / About section.
 section#about-section
@@ -117,7 +118,7 @@ section#showcase
           #inline-popups
             a.view data-effect="mfp-zoom-in" href="#test-popup"
               = image_tag 'view.png'
-              | View The iTraveler's Story
+              |  View iTraveler's Story
           #test-popup.row.white-popup.mfp-with-anim.mfp-hide
             = image_tag 'itravel.jpg', class: 'img-responsive'
 
@@ -206,7 +207,7 @@ section#testimonial
           .cd-author
             ul.cd-author-info
               li
-                img alt=("Author image") src="img/test1.png" title="img3"
+                = image_tag 'test1.png'
               li.tm_name
                 span Adi Godrej
               li.tm_comp CEO, CompanyName
@@ -221,7 +222,7 @@ section#testimonial
           .cd-author
             ul.cd-author-info
               li
-                img alt=("Author image") src="img/test1.png" title="img3"
+                = image_tag 'test1.png'
               li.tm_name
                 span Adi Godrej
               li.tm_comp CEO, CompanyName
@@ -236,7 +237,7 @@ section#testimonial
           .cd-author
             ul.cd-author-info
               li
-                img alt=("Author image") src="img/test1.png" title="img3"
+                = image_tag 'test1.png'
               li.tm_name
                 span Adi Godrej
               li.tm_comp CEO, CompanyName

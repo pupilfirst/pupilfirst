@@ -148,6 +148,47 @@
               p.name Amit Singh
               p.desig Chief Technology Officer
               p.firm Facebook Inc.
+    / Container right end
+
+    / Timeline starts
+    .col-md-8.col-md-pull-4.main_timeline style=(" border-right: 1px solid #ccc; padding-right:25px;")
+      #iteration4.tl_iteration
+        p
+          | Timeline of 4
+          sup th
+          | iteration.
+        img src="#{ image_url 'timeline/dash.png'}"
+        br
+        a#read-from-beginning href="#begin"  Read from the beginning.
+      ul.timeline
+        li
+          .timeline-badge.color1
+            img src=("#{ image_url 'timeline/set mission.png'}") width="70"
+          .timeline-panel
+            .timeline-heading
+              h4.timeline-title.tl_heading
+                | Sets Mission
+              p.tl_date
+                small
+                  img src="#{ image_url 'timeline/date.png'}"
+                  | April 2015 (Latest update)
+            .timeline-body
+              p.tl_body
+                | Sets mission for USD 100 Million for FY 2016-17.
+        li.timeline-inverted
+          .timeline-badge.color2
+            img src="#{ image_url 'timeline/monthely_revanue.png'}" width="70"
+          .timeline-panel
+            .timeline-heading
+              h4.timeline-title.tl_heading
+                | Monthly revenue crossed
+              p.tl_date
+                small
+                  img src="#{ image_url 'timeline/date.png'}"
+                  | March 2015
+            .timeline-body
+              p.tl_body
+                | Monthly revenue crosses INR 50 lakh.
 
 
 javascript:

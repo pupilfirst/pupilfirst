@@ -28,15 +28,17 @@
           .media-body
             p.tittle Industry
             p.content Holidays, Business Automation
-      .col-md-4.col-sm-6.timeline_icon
-        .media.tl_data
-          img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data2.png'}"
-          .media-body
-            p.tittle Website
-            p.content
-              a href="http://itraveller.com" target="_blank"
-                | www.itraveller.com
-                img src="#{ image_url 'timeline/link.png'}"
+      - if @startup.website?
+        .col-md-4.col-sm-6.timeline_icon
+          .media.tl_data
+            / img.media-object.pull-left alt="website" src="#{ image_url 'timeline/data2.png'}"
+            = image_tag "timeline/data2.png", class: "media-object pull-left", alt: "website"
+            .media-body
+              p.tittle Website
+              p.content
+                a href="#{@startup.website}" target="_blank"
+                  | #{@startup.website}
+                  - image_tag 'timeline/link.png'
       .col-md-4.col-sm-6.timeline_icon
         .media.tl_data
           img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data3.png'}"
@@ -46,12 +48,13 @@
               a href="http://slideshare.net/itvlr/deck" target="_blank"
                 | itraveller deck
                 img src="#{ image_url 'timeline/link.png'}"
-      .col-md-4.col-sm-6.timeline_icon
-        .media.tl_data
-          img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data4.png'}"
-          .media-body
-            p.tittle Team Size
-            p.content 20+
+      - if @startup.team_size?
+        .col-md-4.col-sm-6.timeline_icon
+          .media.tl_data
+            = image_tag "timeline/data4.png", class: "media-object pull-left", alt: "team size"
+            .media-body
+              p.tittle Team Size
+              p.content #{@startup.team_size}
       .col-md-4.col-sm-6.timeline_icon
         .media.tl_data
           img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data5.png'}"
@@ -60,10 +63,10 @@
             p.content Scaling
       .col-md-4.col-sm-6.timeline_icon
         .media.tl_data
-          img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data6.png'}"
+          = image_tag "timeline/data6.png", class: "media-object pull-left", alt: "team size"
           .media-body
             p.tittle Product Iteration
-            p.content Fourth
+            p.content #{@events.maximum(:iteration).ordinalize}
     br
     br
   br

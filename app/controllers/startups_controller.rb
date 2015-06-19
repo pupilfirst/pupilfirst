@@ -25,7 +25,7 @@ class StartupsController < InheritedResources::Base
 
   def show
     @startup = Startup.find(params[:id])
-    @events = @startup.timeline_event
+    @events = @startup.timeline_events
   end
 
   def edit

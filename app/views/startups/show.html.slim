@@ -7,17 +7,17 @@
     .col-md-12.clearfix
       .col-sm-6
         h1.page-header.tl_company_name
-          | iTraveller
+          | #{@startup.name}
           a#verified.tooltip-right data-tooltip=("Timeline verified by Startup Village.") href="#"
             img src='#{image_url 'timeline/verified.gif'}' width="25"
-      .col-sm-6 style=("padding-bottom: 9px;\nmargin: 60px 0px 20px; text-align:right;")
-        img#company_logo.img-responsive.startup-logo src="http://itraveller.com/about_us/imgs/logo.png" style="float:right"
+      - if @startup.logo?
+        .col-sm-6 style=("padding-bottom: 9px;\nmargin: 60px 0px 20px; text-align:right;")
+          = image_tag "#{@startup.logo_url}", style: "float:right", class: 'img-responsive startup-logo', id: "company_logo"
+
   .row
     .col-md-12.tl_about
       p.content
-        | iTraveller is a technology enabled market place for holidays. We have burned thousands of candles, spending hundreds of nights in crafting the philosophy of iTraveller, which is an utmost fine blend of travel and technology. iTraveller automates the native suppliers (sellers) at the backend and you at the front end, get to book your trips online.
-
-        | We are not a travel agent and we don't charge any commissions from you. The idea is to cut the intermediaries, thereby bringing the best prices and value to the travellers.
+        | #{@startup.about}
   br
   br
   .row style=("border-bottom:2px solid green;padding-bottom:50px;")
@@ -162,16 +162,16 @@
         a#read-from-beginning href="#begin"  Read from the beginning.
       ul.timeline
         - @events.each.with_index(1) do |event,index|
-          li class="timeline#{index%2 == 1 ? "" : "-inverted"}"
+          li class="timeline#{index.odd? ? "" : "-inverted"}"
             .timeline-badge class="color#{index%14}"
-              img src=("#{ image_url 'timeline/badges/'+event.event_type.to_s+'.png'}") width="70"
+              = image_tag "timeline/badges/#{event.event_type.to_s}.png", width: "70"
             .timeline-panel
               .timeline-heading
                 h4.timeline-title.tl_heading
                   | #{event.title}
                 p.tl_date
                   small
-                    img src="#{ image_url 'timeline/date.png'}"
+                    = image_tag "timeline/date.png"
                     | #{event.event_on.strftime("%B %Y")}
               .timeline-body
                 p.tl_body

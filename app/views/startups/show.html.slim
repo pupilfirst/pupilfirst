@@ -155,30 +155,37 @@
 
     / Timeline starts
     .col-md-8.col-md-pull-4.main_timeline style=(" border-right: 1px solid #ccc; padding-right:25px;")
-      #iteration4.tl_iteration
+      .tl_iteration
         p
-          | Timeline of 4
-          sup th
-          | iteration.
-        img src="#{ image_url 'timeline/dash.png'}"
+          | Timeline of #{@events.maximum(:iteration).ordinalize} iteration.
+        = image_tag 'timeline/dash.png'
         br
         a#read-from-beginning href="#begin"  Read from the beginning.
-      ul.timeline
+      ul
         - @events.each.with_index(1) do |event,index|
-          li class="timeline#{index.odd? ? "" : "-inverted"}"
-            .timeline-badge class="color#{index%14}"
-              = image_tag "timeline/badges/#{event.event_type.to_s}.png", width: "70"
-            .timeline-panel
-              .timeline-heading
-                h4.timeline-title.tl_heading
-                  | #{event.title}
-                p.tl_date
-                  small
-                    = image_tag "timeline/date.png"
-                    | #{event.event_on.strftime("%B %Y")}
-              .timeline-body
-                p.tl_body
-                  | #{event.description}
+          - if event.event_type == TimelineEvent::TYPE_ENDITERATION
+            .tl_iteration
+              .buttons End of Iteration #{event.iteration}
+              p #{event.title}
+              = image_tag 'timeline/dash.png'
+              p #{event.description}
+              br
+          - else
+            .timeline
+              li class="timeline#{index.odd? ? "" : "-inverted"}"
+                .timeline-badge class="color#{index%14}"
+                  = image_tag "timeline/badges/#{event.event_type.to_s}.png", width: "70"
+                .timeline-panel
+                  .timeline-heading
+                    h4.timeline-title.tl_heading
+                      | #{event.title}
+                    p.tl_date
+                      small
+                        = image_tag "timeline/date.png"
+                        | #{event.event_on.strftime("%B %Y")}
+                  .timeline-body
+                    p.tl_body
+                      | #{event.description}
 
 
 

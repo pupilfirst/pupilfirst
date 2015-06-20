@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.1'
+gem 'rails', '4.2.2'
 
 # # active_admin_editor from git, since it's latest rubygems release is before an essential patch added on Jun 25.
 # gem 'active_admin_editor', git: 'https://github.com/ejholmes/active_admin_editor.git'
@@ -38,7 +38,7 @@ gem 'versionist'
 gem 'rest-client'
 gem 'cancancan', '~> 1.8' # Used to manage administrator types and roles in the ActiveAdmin interface.
 gem 'paper_trail' # Logs changes in critical tables, and displays changelog in ActiveAdmin dashboard. # POSSIBLY-USELESS
-gem 'phony_rails' # Phone number validation and normalization. TODO: Get rid of phony_rails if isn't updated. Last updated was 18/3/2014.
+gem 'phony_rails' # Phone number validation and normalization.
 gem 'select2-rails' # Select2 javascript select box improvement library, using in ActiveAdmin interface.
 gem 'nilify_blanks' # Sets database fields to nil if blank values are supplied.
 gem 'bootstrap-sass', '~> 3.3.3' # Official Sass port of Bootstrap.

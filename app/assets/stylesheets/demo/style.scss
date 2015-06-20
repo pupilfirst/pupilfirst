@@ -577,9 +577,12 @@ ol.progtrckr[data-progtrckr-steps="9"] li {
 /* Companies */
 .nav-footer a {
   text-decoration: none;
-  text-transform: lowercase; }
+  text-transform: initial;
+}
+
 .nav-footer a:hover {
-  opacity: .8; }
+  opacity: .8;
+}
 
 /* blog */
 .blog {

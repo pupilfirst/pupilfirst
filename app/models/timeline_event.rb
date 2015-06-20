@@ -4,45 +4,45 @@ class TimelineEvent < ActiveRecord::Base
   serialize :links
   validates_presence_of :title, :event_type, :event_on, :startup_id, :iteration
 
-  TYPE_LAUNCH = "Launch"
-  TYPE_AWARD = "Award"
-  TYPE_TEAM_SIZE = "TeamSize"
-  TYPE_TEAM_FORM = "TeamForm"
-  TYPE_SHOWCASE = "Showcase"
-  TYPE_MISSION = "Mission"
-  TYPE_SERIESA = "SeriesA"
-  TYPE_SEED = "SeedFund"
-  TYPE_LOCATION = "Relocate"
-  TYPE_ENDITERATION = "EndIteration"
-  TYPE_PIVOT = "Pivot"
-  TYPE_PATENT = "Patent"
-  TYPE_REVENUE = "Revenue"
-  TYPE_MENTOR = "Mentor"
-  TYPE_NCUSTOMERS = "NCustomers"
-  TYPE_INVESTOR = "Investor"
-  TYPE_INCORPORATED = "Incorporated"
-  TYPE_INCUBATE = "Incubated"
-  TYPE_GRADUATE = "Graduated"
-  TYPE_1CUSTOMER = "1Customer"
-  TYPE_DEBTFUND = "DebtFunding"
-  TYPE_CROWDFUND = "CrowdFunding"
-  TYPE_COFOUNDER = "Cofounder"
-  TYPE_BANK = "Bank"
-  TYPE_ATTENDED = "Attended"
-  TYPE_ANGELFUND = "AngelFunding"
-  TYPE_ACQUIRED = "Acquired"
-  TYPE_ACCELERATER = "Accelerator"
-  TYPE_PROTOTYPE = "Prototype"
+  TYPE_LAUNCH = 'launch'
+  TYPE_AWARD = 'award'
+  TYPE_TEAM_SIZE = 'team_size'
+  TYPE_TEAM_FORMATION = 'team_formation'
+  TYPE_SHOWCASE = 'showcase'
+  TYPE_MISSION = 'mission'
+  TYPE_SERIES_A = 'series_a'
+  TYPE_SEED = 'seed_fund'
+  TYPE_RELOCATE = 'relocate'
+  TYPE_END_ITERATION = 'end_iteration'
+  TYPE_PIVOT = 'pivot'
+  TYPE_PATENT = 'patent'
+  TYPE_REVENUE = 'revenue'
+  TYPE_MENTOR = 'mentor'
+  TYPE_N_CUSTOMERS = 'n_customers'
+  TYPE_INVESTOR = 'investor'
+  TYPE_INCORPORATED = 'incorporated'
+  TYPE_INCUBATED = 'incubated'
+  TYPE_GRADUATED = 'graduated'
+  TYPE_ONE_CUSTOMER = 'one_customer'
+  TYPE_DEBT_FUND = 'debt_fund'
+  TYPE_CROWD_FUND = 'crowd_fund'
+  TYPE_CO_FOUNDER = 'co_founder'
+  TYPE_BANK = 'bank'
+  TYPE_ATTENDED = 'attended'
+  TYPE_ANGEL_FUND = 'angel_fund'
+  TYPE_ACQUIRED = 'acquired'
+  TYPE_ACCELERATOR = 'accelerator'
+  TYPE_PROTOTYPE = 'prototype'
 
-
-  def self.valid_types
-    [ TYPE_LAUNCH, TYPE_AWARD, TYPE_TEAM_SIZE ,TYPE_TEAM_FORM, TYPE_SHOWCASE, TYPE_MISSION, TYPE_SERIESA, \
- TYPE_SEED, TYPE_LOCATION, TYPE_ENDITERATION, TYPE_PIVOT, TYPE_PATENT, TYPE_REVENUE, TYPE_MENTOR, \
- TYPE_NCUSTOMERS, TYPE_INVESTOR, TYPE_INCORPORATED, TYPE_INCUBATE, TYPE_GRADUATE, TYPE_1CUSTOMER, \
- TYPE_DEBTFUND, TYPE_CROWDFUND, TYPE_COFOUNDER, TYPE_BANK, TYPE_ATTENDED, TYPE_ANGELFUND, TYPE_ACQUIRED, \
- TYPE_ACCELERATER, TYPE_PROTOTYPE ]
+  def self.valid_event_types
+    [
+      TYPE_LAUNCH, TYPE_AWARD, TYPE_TEAM_SIZE, TYPE_TEAM_FORMATION, TYPE_SHOWCASE, TYPE_MISSION, TYPE_SERIES_A,
+      TYPE_SEED, TYPE_RELOCATE, TYPE_END_ITERATION, TYPE_PIVOT, TYPE_PATENT, TYPE_REVENUE, TYPE_MENTOR,
+      TYPE_N_CUSTOMERS, TYPE_INVESTOR, TYPE_INCORPORATED, TYPE_INCUBATED, TYPE_GRADUATED, TYPE_ONE_CUSTOMER,
+      TYPE_DEBT_FUND, TYPE_CROWD_FUND, TYPE_CO_FOUNDER, TYPE_BANK, TYPE_ATTENDED, TYPE_ANGEL_FUND, TYPE_ACQUIRED,
+      TYPE_ACCELERATOR, TYPE_PROTOTYPE
+    ]
   end
 
-  validates_inclusion_of :event_type, in: valid_types
-
+  validates_inclusion_of :event_type, in: valid_event_types
 end

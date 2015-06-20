@@ -1,63 +1,62 @@
-== content_for :head
+- content_for :head
   = javascript_include_tag 'demo/owl-carousel/owl.carousel'
   = javascript_include_tag 'demo/ct-carousel/masonry.pkgd.min'
   = javascript_include_tag 'demo/ct-carousel/jquery.flexslider-min'
   = javascript_include_tag '//dimsemenov-static.s3.amazonaws.com/dist/jquery.magnific-popup.min.js'
   = javascript_include_tag 'demo/home'
 
-/ /Carousel
-/ section.header.landing_header#header
-/   .container
-/     #carousel-example-generic.carousel.slide data-ride="carousel"
-/       / Indicators
-/       ol.carousel-indicators
-/         li.active data-target="#carousel-example-generic" data-slide-to="0"
-/           a href="#"
-/         li data-target="#carousel-example-generic" data-slide-to="1"
-/           a href="#"
-/         li data-target="#carousel-example-generic" data-slide-to="2"
-/           a href="#"
+- content_for :header
+  .container
+    #carousel-example-generic.carousel.slide data-ride="carousel"
+      / Indicators
+      ol.carousel-indicators
+        li.active data-target="#carousel-example-generic" data-slide-to="0"
+          a href="#"
+        li data-target="#carousel-example-generic" data-slide-to="1"
+          a href="#"
+        li data-target="#carousel-example-generic" data-slide-to="2"
+          a href="#"
 
-/       / Wrapper for slides
-/       .carousel-inner role="listbox"
-/         .item.active
-/           .carousel-caption
-/             h4
-/               ' We help first-time
-/               span style="font-weight:300;" founders
-/               br
-/               | build great products.
-/             div
-/               button.btn.btn-join type="button" Join SV.CO
-/               i.fa
-/                 img src="#{image_url 'play.png'}" width="20"
-/                 |  Watch video
+      / Wrapper for slides
+      .carousel-inner role="listbox"
+        .item.active
+          .carousel-caption
+            h4
+              ' We help first-time
+              span style="font-weight:300;" founders
+              br
+              | build great products.
+            div
+              button.btn.btn-join type="button" Join SV.CO
+              i.fa
+                img src="#{image_url 'play.png'}" width="20"
+                |  Watch video
 
-/         .item
-/           .carousel-caption
-/             h4
-/               ' We help first-time
-/               span style="font-weight:300;" founders
-/               br
-/               | build great products.
-/             div
-/               button.btn.btn-join type="button" Join SV.CO
-/               i.fa
-/                 img src="#{image_url 'play.png'}" width="20"
-/                 |  Watch video
+        .item
+          .carousel-caption
+            h4
+              ' We help first-time
+              span style="font-weight:300;" founders
+              br
+              | build great products.
+            div
+              button.btn.btn-join type="button" Join SV.CO
+              i.fa
+                img src="#{image_url 'play.png'}" width="20"
+                |  Watch video
 
-/         .item
-/           .carousel-caption
-/             h4
-/               ' We help first-time
-/               span style="font-weight:300;" founders
-/               br
-/               | build great products.
-/             div
-/               button.btn.btn-join type="button" Join SV.CO
-/               i.fa
-/                 img src="#{image_url 'play.png'}" width="20"
-/                 |  Watch video
+        .item
+          .carousel-caption
+            h4
+              ' We help first-time
+              span style="font-weight:300;" founders
+              br
+              | build great products.
+            div
+              button.btn.btn-join type="button" Join SV.CO
+              i.fa
+                img src="#{image_url 'play.png'}" width="20"
+                |  Watch video
 
 / About section.
 section#about-section

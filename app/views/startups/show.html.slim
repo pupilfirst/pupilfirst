@@ -1,49 +1,229 @@
-.row
-  .col-md-12.clearfix
-    .pull-right
-      = logo_image_html(@startup.logo_url(:thumb))
-    h1.page-header.startup-heading
-      ' #{@startup.name}
-      - if @startup.hiring?
-        small
-          = link_to "is hiring!", startup_startup_jobs_url(@startup)
+== content_for :head
+  = stylesheet_link_tag 'demo/TimelineStyle'
+  = javascript_include_tag 'demo/itraveller'
+/Company Name Header
+.container
+  .row
+    .col-md-12.clearfix
+      .col-sm-6
+        h1.page-header.tl_company_name
+          | #{@startup.name}
+          a#verified.tooltip-right data-tooltip=("Timeline verified by Startup Village.") href="#"
+            img src='#{image_url 'timeline/verified.gif'}' width="25"
+      - if @startup.logo?
+        .col-sm-6 style=("padding-bottom: 9px;\nmargin: 60px 0px 20px; text-align:right;")
+          = image_tag "#{@startup.logo_url}", style: "float:right", class: 'img-responsive startup-logo', id: "company_logo"
 
-.row
-  .col-lg-7
-    .well
-      = about_html @startup.about
-  .col-lg-5
-    .well
-      table.table.table-borderless.startup-attributes-table
-        tr
-          th Categories
-          td = categories_html(@startup.categories)
-        tr
-          th Website
-          td = link_html @startup.website
-        tr
-          th Presentation
-          td = link_html(@startup.presentation_link)
-        - if @startup.startup_links.exists?
-          tr
-            td colspan="2"
-              = react_component 'StartupLinksSection', { startup_id: params[:id], allow_edit: false }
+  .row
+    .col-md-12.tl_about
+      p.content
+        | #{@startup.about}
+  br
+  br
+  .row style=("border-bottom:2px solid green;padding-bottom:50px;")
+    .col-md-12.tl_data style="padding-bottom:50px;"
+      .col-md-4.col-sm-6.timeline_icon
+        .media.tl_data
+          img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data1.png'}"
+          .media-body
+            p.tittle Industry
+            p.content Holidays, Business Automation
+      - if @startup.website?
+        .col-md-4.col-sm-6.timeline_icon
+          .media.tl_data
+            / img.media-object.pull-left alt="website" src="#{ image_url 'timeline/data2.png'}"
+            = image_tag "timeline/data2.png", class: "media-object pull-left", alt: "website"
+            .media-body
+              p.tittle Website
+              p.content
+                a href="#{@startup.website}" target="_blank"
+                  | #{@startup.website}
+                  - image_tag 'timeline/link.png'
+      .col-md-4.col-sm-6.timeline_icon
+        .media.tl_data
+          img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data3.png'}"
+          .media-body
+            p.tittle Startup Deck
+            p.content
+              a href="http://slideshare.net/itvlr/deck" target="_blank"
+                | itraveller deck
+                img src="#{ image_url 'timeline/link.png'}"
+      - if @startup.team_size?
+        .col-md-4.col-sm-6.timeline_icon
+          .media.tl_data
+            = image_tag "timeline/data4.png", class: "media-object pull-left", alt: "team size"
+            .media-body
+              p.tittle Team Size
+              p.content #{@startup.team_size}
+      .col-md-4.col-sm-6.timeline_icon
+        .media.tl_data
+          img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data5.png'}"
+          .media-body
+            p.tittle Stage of Company
+            p.content Scaling
+      .col-md-4.col-sm-6.timeline_icon
+        .media.tl_data
+          = image_tag "timeline/data6.png", class: "media-object pull-left", alt: "team size"
+          .media-body
+            p.tittle Product Iteration
+            p.content #{@events.maximum(:iteration).ordinalize}
+    br
+    br
+  br
+  br
 
-h2.margin-bottom-20.margin-top-0 Founders
+  / Company name header ends
 
-.startup-founders-container.clearfix
-  - @startup.founders.order(:id).each do |founder|
-    .startup-founder
-      .pull-left
-        = image_tag founder.avatar_url, class: 'img-rounded user-avatar'
-      .startup-founder-text.pull-left
-        p.startup-founder-name = founder.fullname
-        p.startup-founder-title = founder.title
+  / Container right
+  .row
+    .col-md-4.col-md-push-8
+      .row style="padding-left:15px;"
+        .col-sm-6.col-md-12.tl_founder
+          h4 Founders
+          hr
+          .media.founder
+            a.pull-left href="#"
+              img.media-object alt=("Media Object") src="#{ image_url 'timeline/founder1.jpg'}"
+            .media-body
+              p.name Amit Singh
+              p.desig Chief Executive Officer
+              img.dash src="#{ image_url 'timeline/dash.png'}"
+              ul
+                li
+                  a href="#"
+                    img src="#{ image_url 'timeline/facebook.png'}"
+                li
+                  a href="#"
+                    img src="#{ image_url 'timeline/twitter.png'}"
+                li
+                  a href="#"
+                    img src="#{ image_url 'timeline/linkedin.png'}"
+          .media.founder
+            a.pull-left href="#"
+              img.media-object alt=("Media Object") src="#{ image_url 'timeline/founder2.jpg'}"
+            .media-body
+              p.name Amit Singh
+              p.desig Chief Operations Officer
+              img.dash src="#{ image_url 'timeline/dash.png'}"
+              ul
+                li
+                  a href="#"
+                    img src="#{ image_url 'timeline/facebook.png'}"
+                li
+                  a href="#"
+                    img src="#{ image_url 'timeline/twitter.png'}"
+                li
+                  a href="#"
+                    img src="#{ image_url 'timeline/linkedin.png'}"
 
-        - if founder.linkedin_url.present?
-          .startup-founder-social = link_to image_tag('linkedin.png'), founder.linkedin_url
-        - if founder.twitter_url.present?
-          .startup-founder-social = link_to image_tag('twitter.png'), founder.twitter_url
+        .col-sm-6.col-md-12.tl_mentor
+          h4 Mentor
+          hr/
+          .media.mentor
+            a.pull-left href="#"
+              img.media-object alt=("Media Object") src="#{ image_url 'timeline/mentor1.jpg'}"
+            .media-body
+              p.name Amit Singh
+              p.desig Chief Executive Officer
+              p.firm Google Inc.
+          .media.mentor
+            a.pull-left href="#"
+              img.media-object alt=("Media Object") src="#{ image_url 'timeline/mentor2.jpg'}"
+            .media-body
+              p.name Amit Singh
+              p.desig Chief Technology Officer
+              p.firm Facebook Inc.
 
-- if user_is_startup_founder(@startup)
-  = render 'private_info'
+        .col-sm-6.col-md-12.tl_investor
+          h4 Investors
+          hr/
+          .media.investor
+            a.pull-left href="#"
+              img.media-object alt=("Media Object") src="#{ image_url 'timeline/investor1.jpg'}"
+            .media-body
+              p.name Amit Singh
+              p.desig Chief Executive Officer
+              p.firm Google Inc.
+          .media.investor
+            a.pull-left href="#"
+              img.media-object alt=("Media Object") src="#{ image_url 'timeline/investor2.jpg'}"
+            .media-body
+              p.name Amit Singh
+              p.desig Chief Technology Officer
+              p.firm Facebook Inc.
+    / Container right end
+
+    / Timeline starts
+    .col-md-8.col-md-pull-4.main_timeline style=(" border-right: 1px solid #ccc; padding-right:25px;")
+      .tl_iteration
+        p
+          | Timeline of #{@events.maximum(:iteration).ordinalize} iteration.
+        = image_tag 'timeline/dash.png'
+        br
+        a#read-from-beginning href="#begin"  Read from the beginning.
+      ul
+        - @events.each.with_index(1) do |event,index|
+          - if event.event_type == TimelineEvent::TYPE_ENDITERATION
+            .tl_iteration
+              .buttons End of Iteration #{event.iteration}
+              p #{event.title}
+              = image_tag 'timeline/dash.png'
+              p #{event.description}
+              br
+          - else
+            .timeline
+              li class="timeline#{index.odd? ? "" : "-inverted"}"
+                .timeline-badge class="color#{index%14}"
+                  = image_tag "timeline/badges/#{event.event_type.to_s}.png", width: "70"
+                .timeline-panel
+                  .timeline-heading
+                    h4.timeline-title.tl_heading
+                      | #{event.title}
+                    p.tl_date
+                      small
+                        = image_tag "timeline/date.png"
+                        | #{event.event_on.strftime("%B %Y")}
+                  .timeline-body
+                    p.tl_body
+                      | #{event.description}
+
+
+
+
+javascript:
+  $(document).ready(function () {
+          $('#read-from-beginning').click(function () {
+            $('html, body').animate({scrollTop: $(document).height()}, 'slow');
+            return false;
+          });
+
+          if($(window).width()<767)
+          {
+            $("#verified").removeClass("tooltip-right");
+            $("#verified").removeAttr("data-tooltip");
+          }
+
+          $(window).resize(function(){
+              if($(window).width()<767)
+          {
+            $("#verified").removeClass("tooltip-right");
+            $("#verified").removeAttr("data-tooltip");
+          }
+          });
+
+          $(window).scroll(function()
+           {
+                  if ($(document).scrollTop() > 400)
+                  {
+                    $("#SiteLogoWhite").hide();
+                    $("#SiteLogo").fadeIn();
+                    $('nav').addClass('shrink');
+                  } else {
+                    $("#SiteLogo").hide();
+                    $("#SiteLogoWhite").fadeIn();
+                    $('nav').removeClass('shrink');
+                  }
+          });
+        });
+
+

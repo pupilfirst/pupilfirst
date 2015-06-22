@@ -38,6 +38,7 @@ Svapp::Application.routes.draw do
 
     collection do
       get 'featured'
+      get 'itraveller'
     end
   end
 
@@ -78,6 +79,9 @@ Svapp::Application.routes.draw do
   get 'faq', to: 'welcome#faq'
 
   # get 'mentor_meetings/:id/feedback', to: 'mentor_meetings#feedback'
+  scope 'demo', as: 'demo', controller: 'home' do
+    get '/', action: 'index', as: 'root'
+  end
 
   resources :incubation do
     member do

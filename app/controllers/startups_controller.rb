@@ -1,11 +1,12 @@
 class StartupsController < InheritedResources::Base
-  before_filter :authenticate_user!, except: [:show, :featured]
+  before_filter :authenticate_user!, except: [:show, :featured, :itraveller]
   before_filter :restrict_to_startup_founders, only: [:edit, :update]
   before_filter :disallow_unready_startup, only: [:edit, :update]
   after_filter only: [:create] do
     @startup.founders << current_user
     @startup.save
   end
+  layout 'demo', only: [:itraveller, :show]
 
   def new
     # if current_user.phone_not_verified?
@@ -38,6 +39,7 @@ class StartupsController < InheritedResources::Base
 
   def show
     @startup = Startup.find(params[:id])
+    @events = @startup.timeline_events.order(:event_on, :updated_at).reverse_order
   end
 
   def edit
@@ -66,6 +68,8 @@ class StartupsController < InheritedResources::Base
     redirect_to DbConfig.featured_startup
   end
 
+  private
+
   def apply_now_params
     params.require(:startup).permit(:name, :pitch, :website, :email, :registration_type)
   end
@@ -78,8 +82,6 @@ class StartupsController < InheritedResources::Base
       :incubation_location
     )
   end
-
-  private
 
   def restrict_to_startup_founders
     if current_user.startup.try(:id) != params[:id].to_i || !current_user.is_founder?

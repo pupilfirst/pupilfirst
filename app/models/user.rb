@@ -75,7 +75,7 @@ class User < ActiveRecord::Base
   validates_presence_of :title, if: Proc.new { |user| user.mentor.present? }
 
   # Store mobile number in a standardized form.
-  phony_normalize :phone, default_country_code: 'IN'
+  phony_normalize :phone, default_country_code: 'IN', add_plus: false
 
   mount_uploader :avatar, AvatarUploader
   process_in_background :avatar
@@ -150,7 +150,7 @@ class User < ActiveRecord::Base
     unverified_phone_number = incoming_phone_number.length <= 10 ? "91#{incoming_phone_number}" : incoming_phone_number
 
     phone_number = if Phony.plausible?(unverified_phone_number, cc: '91')
-      PhonyRails.normalize_number incoming_phone_number, country_code: 'IN'
+      PhonyRails.normalize_number incoming_phone_number, country_code: 'IN', add_plus: false
     else
       raise Exceptions::InvalidPhoneNumber, 'Supplied phone number could not be parsed. Please check and try again.'
     end
@@ -169,7 +169,7 @@ class User < ActiveRecord::Base
     unverified_phone_number = incoming_phone_number.length <= 10 ? "91#{incoming_phone_number}" : incoming_phone_number
 
     phone_number = if Phony.plausible?(unverified_phone_number, cc: '91')
-      PhonyRails.normalize_number incoming_phone_number, country_code: 'IN'
+      PhonyRails.normalize_number incoming_phone_number, country_code: 'IN', add_plus: false
     else
       raise Exceptions::InvalidPhoneNumber, 'Supplied phone number could not be parsed. Please check and try again.'
     end

@@ -1,0 +1,229 @@
+.landing_header {
+  background-image: url("../timeline.jpg");}
+
+/*  time  line css */
+
+.timeline {
+  list-style: none;
+  padding: 20px 0 20px;
+  position: relative;
+}
+
+.timeline:before {
+  top: 0;
+  bottom: 0;
+  position: absolute;
+  content: " ";
+  width: 1px;
+  background-color: #d6d6d6;
+  left: 50%;
+  margin-left: -1.5px;
+}
+
+.timeline > li {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.timeline > li:before,
+.timeline > li:after {
+  content: " ";
+  display: table;
+}
+
+.timeline > li:after {
+  clear: both;
+}
+
+.timeline > li:before,
+.timeline > li:after {
+  content: " ";
+  display: table;
+}
+
+.timeline > li:after {
+  clear: both;
+}
+
+.timeline > li > .timeline-panel {
+  width: 42%;
+  float: left;
+  border: 1px solid #ababab;
+  border-radius: 2px;
+  //padding: 20px;
+  padding: 15px 20px 20px 20px;
+  position: relative;
+ /* -webkit-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.175);*/
+  /*box-shadow: 0 1px 6px rgba(0, 0, 0, 0.175);*/
+}
+
+.timeline > li > .timeline-panel:before {
+  position: absolute;
+  top: 26px;
+  right: -15px;
+  display: inline-block;
+  border-top: 15px solid transparent;
+  border-left: 15px solid #666;
+  border-right: 0 solid #666;
+  border-bottom: 15px solid transparent;
+  content: " ";
+}
+
+.timeline > li > .timeline-panel:after {
+  position: absolute;
+  top: 27px;
+  right: -14px;
+  display: inline-block;
+  border-top: 14px solid transparent;
+  border-left: 14px solid #fff;
+  border-right: 0 solid #fff;
+  border-bottom: 14px solid transparent;
+  content: " ";
+}
+
+.timeline > li > .timeline-badge {
+  color: #fff;
+  width: 70px;
+  height: 70px;
+  line-height: 50px;
+  font-size: 1.4em;
+  text-align: center;
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  margin-left: -38px;
+  background-color: #999999;
+  z-index: 100;
+  border-top-right-radius: 50%;
+  border-top-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+}
+
+.timeline > li.timeline-inverted > .timeline-panel {
+  float: right;
+}
+
+.timeline > li.timeline-inverted > .timeline-panel:before {
+  border-left-width: 0;
+  border-right-width: 15px;
+  left: -15px;
+  right: auto;
+}
+
+.timeline > li.timeline-inverted > .timeline-panel:after {
+  border-left-width: 0;
+  border-right-width: 14px;
+  left: -14px;
+  right: auto;
+}
+
+.timeline-badge.color1 {
+  background-color: #6A71E6 !important;
+
+}
+
+.timeline-badge.color2 {
+  background-color: #3498db !important;
+}
+
+.timeline-badge.color3 {
+  background-color: #FF5534 !important;
+}
+
+.timeline-badge.color4 {
+  background-color: #FE4A65 !important;
+}
+
+.timeline-badge.color5 {
+  background-color: #f5ab35 !important;
+}
+
+.timeline-badge.color6 {
+  background-color: #2DBAE7 !important;
+}
+
+.timeline-badge.color7 {
+  background-color: #9babd4 !important;
+}
+
+.timeline-badge.color8 {
+  background-color: #61D2FE !important;
+}
+
+.timeline-badge.color9 {
+  background-color: #48DC6C !important;
+}
+
+.timeline-badge.color10 {
+  background-color: #8BBF53 !important;
+}
+
+.timeline-badge.color11 {
+  background-color: #8BBF53 !important;
+}
+
+.timeline-badge.color12 {
+  background-color: #424953 !important;
+}
+
+.timeline-badge.color13 {
+  background-color: #FA6D52 !important;
+}
+
+.timeline-badge.color14 {
+  background-color: #8BBF53 !important;
+}
+
+.timeline-title {
+  margin-top: 0;
+  color: inherit;
+}
+
+.timeline-body > p,
+.timeline-body > ul {
+  margin-bottom: 0;
+}
+
+.timeline-body > p + p {
+  margin-top: 5px;
+}
+
+@media (max-width: 767px) {
+  ul.timeline:before {
+    left: 40px;
+  }
+
+  ul.timeline > li > .timeline-panel {
+    width: calc(100% - 90px);
+    width: -moz-calc(100% - 90px);
+    width: -webkit-calc(100% - 90px);
+  }
+
+  ul.timeline > li > .timeline-badge {
+    left: 15px;
+    margin-left: 0;
+    top: 16px;
+  }
+
+  ul.timeline > li > .timeline-panel {
+    float: right;
+  }
+
+  ul.timeline > li > .timeline-panel:before {
+    border-left-width: 0;
+    border-right-width: 15px;
+    left: -15px;
+    right: auto;
+  }
+
+  ul.timeline > li > .timeline-panel:after {
+    border-left-width: 0;
+    border-right-width: 14px;
+    left: -14px;
+    right: auto;
+  }
+}
+
+
+/* Time line css */

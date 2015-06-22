@@ -1,0 +1,405 @@
+- content_for :head
+  = javascript_include_tag 'demo/owl-carousel/owl.carousel'
+  = javascript_include_tag 'demo/ct-carousel/masonry.pkgd.min'
+  = javascript_include_tag 'demo/ct-carousel/jquery.flexslider-min'
+  = javascript_include_tag '//dimsemenov-static.s3.amazonaws.com/dist/jquery.magnific-popup.min.js'
+  = javascript_include_tag 'demo/home'
+
+- content_for :header
+  .container
+    #carousel-example-generic.carousel.slide data-ride="carousel"
+      / Indicators
+      ol.carousel-indicators
+        li.active data-target="#carousel-example-generic" data-slide-to="0"
+          a href="#"
+        li data-target="#carousel-example-generic" data-slide-to="1"
+          a href="#"
+        li data-target="#carousel-example-generic" data-slide-to="2"
+          a href="#"
+
+      / Wrapper for slides
+      .carousel-inner role="listbox"
+        .item.active
+          .carousel-caption
+            h4
+              ' We help first-time
+              span style="font-weight:300;" founders
+              br
+              | build great products.
+            div
+              button.btn.btn-join type="button" Join SV.CO
+              i.fa
+                img src="#{image_url 'play.png'}" width="20"
+                |  Watch video
+
+        .item
+          .carousel-caption
+            h4
+              ' We help first-time
+              span style="font-weight:300;" founders
+              br
+              | build great products.
+            div
+              button.btn.btn-join type="button" Join SV.CO
+              i.fa
+                img src="#{image_url 'play.png'}" width="20"
+                |  Watch video
+
+        .item
+          .carousel-caption
+            h4
+              ' We help first-time
+              span style="font-weight:300;" founders
+              br
+              | build great products.
+            div
+              button.btn.btn-join type="button" Join SV.CO
+              i.fa
+                img src="#{image_url 'play.png'}" width="20"
+                |  Watch video
+
+/ About section.
+section#about-section
+  .container
+    .row
+      .about-details.col-md-8
+        h5 Startup Village
+        br
+        img style="margin-top:-5px;" src="#{image_url 'build.png'}"
+        img style="margin-top:-5px;" src="#{image_url 'break.png'}"
+        img style="margin-top:-5px;" src="#{image_url 'innovate.png'}"
+        br
+        h4 At SV, entrepreneurs Build, Break &amp; innovate to create the finest technology.
+        br
+      .about-circle.col-md-2.col-md-offset-1
+        /! <img src="img/comming.png" width="200" style="margin-top:-30px;">
+
+/ Stages and learning.
+section#stages
+  .container
+    .row
+      .stages-detail style="text-align:center;"
+        h1 Stages + Learning
+        p
+          | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+          br
+        	| industry's standard dummy text ever since the 1500s
+        br
+        #stage_imgs
+          center
+            = image_tag 'stage1.png', id: 'stage_img1', class: 'img-responsive'
+            = image_tag 'stage2.png', id: 'stage_img2', class: 'img-responsive'
+            = image_tag 'stage3.png', id: 'stage_img3', class: 'img-responsive'
+            = image_tag 'stage4.png', id: 'stage_img4', class: 'img-responsive'
+            = image_tag 'stage5.png', id: 'stage_img5', class: 'img-responsive'
+        br
+        br
+        div
+          ol.progtrckr data-progtrckr-steps="5"
+            li.active title=("PRODUCT DISCOVERY")
+              .stage_name val="img1"
+                .bbr PRODUCT DISCOVERY
+                .dimmer
+              i
+            li title=("PRODUCT PROTOTYPE")
+              .stage_name val="img2"
+                | PRODUCT PROTOTYPE
+                .dimmer
+              i
+            li title=("CUSTOMER VALIDATION")
+              .stage_name val="img3"
+                | CUSTOMER VALIDATION
+                .dimmer
+              i
+            li title="EFFICIENCY"
+              .stage_name val="img4"
+                | EFFICIENCY
+                .dimmer
+              i
+            li title="SCALING"
+              .stage_name val="img5"
+                | SCALING
+                .dimmer
+              i
+
+/ Success scenarios.
+section#showcase
+  .container
+    .row
+      .showcase-heading
+        .col-md-6.success
+          h1 Success Scenerios
+          = image_tag 'line.jpg'
+          br
+          p
+            | Success varies with startup.
+            br
+            | Here are the different Success scenarios of our startups.
+          br
+          div
+            ul.list
+              li.list-item
+                .li-icon
+                h2 Getting Acquired
+                span to be find
+              li.list-item
+                .li-icon
+                h2 Getting Admission for Higher Studies
+                span to be find
+              li.list-item
+                .li-icon
+                h2 Getting Funded
+                span ITraveller
+              li.list-item
+                .li-icon
+                h2 Getting Great Job
+                span to be find
+              li.list-item
+                .li-icon
+                h2 Getting into Accelerator
+                span Profoundis
+              li.list-item
+                .li-icon
+                h2 Getting to Self Sustainability
+                span Wow Makers
+        .col-md-6.sucess-video align="center"
+          div style=("max-width:450px; margin:0 auto;")
+            = image_tag 'startup_showcase1.jpg', class: 'showcase_company img-responsive'
+            br
+          = image_tag 'itraveller-logo.png', class: 'showcase_logo img-responsive'
+          br
+          #inline-popups
+            a.view data-effect="mfp-zoom-in" href="#test-popup"
+              = image_tag 'view.png'
+              |  View iTraveler's Story
+          #test-popup.row.white-popup.mfp-with-anim.mfp-hide
+            = image_tag 'itravel.jpg', class: 'img-responsive'
+
+/ Startups showcase.
+section#companies
+  #startups-showcase-data.hidden data-arrow-right-url="#{image_url 'arrow2_r.png'}" data-arrow-left-url="#{image_url 'arrow2_l.png'}"
+  .container
+    .row
+      .company-details
+        .col-md-12.lista
+          .col-md-6.lista-heading
+            h1 Startups
+            = image_tag 'line.jpg'
+            p
+              | These are the startups who are currently enrolled with us.Lorem ipsum dolor sit amet, te sit aeque minimum splendide,
+              | per et novum imperdiet voluptatibus, verear vivendo inciderint ei duo.
+          .col-md-6
+            br
+            br
+            br
+            #owl-demo1.owl-carousel.owl-theme
+              .item
+                = image_tag 'startups/company1.png'
+              .item
+                = image_tag 'startups/company2.png'
+              .item
+                = image_tag 'startups/company3.png'
+    br
+    .row
+      .short-list
+        .col-md-2.col-sm-3.liste
+          div
+            = image_tag 'startups/logo1.jpg', class: 'img-responsive'
+        .col-sm-3.liste
+          div
+            = image_tag 'startups/logo2.jpg', class: 'img-responsive'
+        .col-sm-3.liste
+          div
+            = image_tag 'startups/logo3.jpg', class: 'img-responsive'
+        .col-sm-3.liste
+          div
+            = image_tag 'startups/logo4.jpg', class: 'img-responsive'
+        .col-sm-3.liste
+          div
+            = image_tag 'startups/logo1.jpg', class: 'img-responsive'
+        .col-sm-3.liste
+          div
+            = image_tag 'startups/logo2.jpg', class: 'img-responsive'
+        .col-sm-3.liste
+          div
+            = image_tag 'startups/logo3.jpg', class: 'img-responsive'
+        .col-sm-3.liste
+          div
+            = image_tag 'startups/logo4.jpg', class: 'img-responsive'
+        .col-sm-3.liste
+          div
+            = image_tag 'startups/logo1.jpg', class: 'img-responsive'
+        .col-sm-3.liste
+          div
+            = image_tag 'startups/logo2.jpg', class: 'img-responsive'
+        .col-sm-3.liste
+          div
+            = image_tag 'startups/logo3.jpg', class: 'img-responsive'
+        .col-sm-3.liste
+          div
+            = image_tag 'startups/logo4.jpg', class: 'img-responsive'
+
+    .row.learnmore style="margin-top:20px;"
+      a href="#"
+        | LEARN MORE ABOUT STARTUP COMMUNITY &nbsp;
+        = image_tag 'cont.png', class: 'img-animation'
+
+/ Testimonials
+section#testimonial
+  .container
+    .cd-testimonials-wrapper.cd-container align="center"
+      ul.cd-testimonials
+        li
+          p
+            span.tm_ex &ldquo;
+            | Its amazing to see that Kerala,
+            br
+            | which had some of the
+            | most wonderful people but never utilized the same, Kerala is on the march
+            span.tm_ex &rdquo;
+          .cd-author
+            ul.cd-author-info
+              li
+                = image_tag 'test1.png'
+              li.tm_name
+                span Adi Godrej
+              li.tm_comp CEO, CompanyName
+        li
+          p
+            span.tm_ex &ldquo;
+            | Its amazing to see that Kerala,
+            br
+            | which had some of the
+            | most wonderful people but never utilized the same, Kerala is on the march
+            span.tm_ex &rdquo;
+          .cd-author
+            ul.cd-author-info
+              li
+                = image_tag 'test1.png'
+              li.tm_name
+                span Adi Godrej
+              li.tm_comp CEO, CompanyName
+        li
+          p
+            span.tm_ex &ldquo;
+            | Its amazing to see that Kerala,
+            br
+            | which had some of the
+            | most wonderful people but never utilized the same, Kerala is on the march
+            span.tm_ex &rdquo;
+          .cd-author
+            ul.cd-author-info
+              li
+                = image_tag 'test1.png'
+              li.tm_name
+                span Adi Godrej
+              li.tm_comp CEO, CompanyName
+
+/ Blog posts.
+section.container.blog
+  .row.heading
+    h1 Blog Post
+    = image_tag 'line.jpg'
+    p Latest article from our blog
+
+  .row
+    a href=""
+    .col-lg-3.col-md-4.col-sm-6.col-xs-12.post
+      .post-content
+        img height="100%;" src="#{image_url 'blogpost1.jpg'}" width="100%"
+        h5 Startup Village bags Award for Technology Business Incubator
+        img.line height="100%;" src="#{image_url 'line2.png'}" width="100%"
+        p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+        .continue-reading
+          a href="#"
+            | continue reading &nbsp;
+            = image_tag 'cont.png', class: 'img-animation'
+
+    a href=""
+    .col-lg-3.col-md-4.col-sm-6.col-xs-12.post
+      .post-content
+        img height="100%;" src="#{image_url 'blogpost1.jpg'}" width="100%"
+        h5 Startup Village bags Award for Technology Business Incubator
+        img.line height="100%;" src="#{image_url 'line2.png'}" width="100%"
+        p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+        .continue-reading
+          a href="#"
+            | continue reading &nbsp;
+            = image_tag 'cont.png', class: 'img-animation'
+
+    a href=""
+    .col-lg-3.col-md-4.col-sm-6.col-xs-12.post
+      .post-content
+        img height="100%;" src="#{image_url 'blogpost1.jpg'}" width="100%"
+        h5 Startup Village bags Award for Technology Business Incubator
+        img.line height="100%;" src="#{image_url 'line2.png'}" width="100%"
+        p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+        .continue-reading
+          a href="#"
+            | continue reading &nbsp;
+            = image_tag 'cont.png', class: 'img-animation'
+
+    a href=""
+    .col-lg-3.col-md-4.col-sm-6.col-xs-12.post
+      .post-content
+        img height="100%;" src="#{image_url 'blogpost1.jpg'}" width="100%"
+        h5 Startup Village bags Award for Technology Business Incubator
+        img.line height="100%;" src="#{image_url 'line2.png'}" width="100%"
+        p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+        .continue-reading
+          a href="#"
+            | continue reading &nbsp;
+            = image_tag 'cont.png', class: 'img-animation'
+
+    a href=""
+    .col-lg-3.col-md-4.col-sm-6.col-xs-12.post
+      .post-content
+        img height="100%;" src="#{image_url 'blogpost1.jpg'}" width="100%"
+        h5 Startup Village bags Award for Technology Business Incubator
+        img.line height="100%;" src="#{image_url 'line2.png'}" width="100%"
+        p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+        .continue-reading
+          a href="#"
+            | continue reading &nbsp;
+            = image_tag 'cont.png', class: 'img-animation'
+
+    a href=""
+    .col-lg-3.col-md-4.col-sm-6.col-xs-12.post
+      .post-content
+        img height="100%;" src="#{image_url 'blogpost1.jpg'}" width="100%"
+        h5 Startup Village bags Award for Technology Business Incubator
+        img.line height="100%;" src="#{image_url 'line2.png'}" width="100%"
+        p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+        .continue-reading
+          a href="#"
+            | continue reading &nbsp;
+            = image_tag 'cont.png', class: 'img-animation'
+
+/ In the media.
+section#media
+  #media-showcase-data.hidden data-arrow-right-url="#{image_url 'arrow2_r.png'}" data-arrow-left-url="#{image_url 'arrow2_l.png'}"
+  .container
+    .row
+      .media-details
+        .media-heading.hdstyle
+          br
+          h1 SV.CO in Media
+          = image_tag 'line.jpg'
+          p A few mentions about startup village in the media
+          br
+        .wrapper-with-margin
+          #owl-demo.owl-carousel
+            .primary1
+              = image_tag 'media_logos/comp2.png'
+            .primary1
+              = image_tag 'media_logos/comp3.png'
+            .primary1
+              = image_tag 'media_logos/comp4.png'
+            .primary1
+              = image_tag 'media_logos/comp2.png'
+            .primary1
+              = image_tag 'media_logos/comp3.png'
+            .primary1
+              = image_tag 'media_logos/comp4.png'
+
+

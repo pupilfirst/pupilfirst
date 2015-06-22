@@ -1,6 +1,6 @@
 class Event < ActiveRecord::Base
 
-  phony_normalize :posters_phone_number, default_country_code: 'IN'
+  phony_normalize :posters_phone_number, default_country_code: 'IN', add_plus: false
 
   belongs_to :category
   belongs_to :author, class_name: 'AdminUser', foreign_key: :user_id

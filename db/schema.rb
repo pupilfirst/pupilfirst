@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150428122204) do
+ActiveRecord::Schema.define(version: 20150618130229) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -307,6 +307,21 @@ ActiveRecord::Schema.define(version: 20150428122204) do
 
   add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
 
+  create_table "timeline_events", force: :cascade do |t|
+    t.integer  "iteration"
+    t.string   "title"
+    t.text     "description"
+    t.string   "event_type"
+    t.string   "image"
+    t.integer  "startup_id"
+    t.text     "links"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.date     "event_on"
+  end
+
+  add_index "timeline_events", ["startup_id"], name: "index_timeline_events_on_startup_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "email"
     t.string   "fullname"
@@ -382,4 +397,5 @@ ActiveRecord::Schema.define(version: 20150428122204) do
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
+  add_foreign_key "timeline_events", "startups"
 end

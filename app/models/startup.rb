@@ -84,6 +84,7 @@ class Startup < ActiveRecord::Base
   has_one :bank
   has_many :startup_links, dependent: :destroy
   has_many :startup_jobs
+  has_many :timeline_events
 
   # Allow statup to accept nested attributes for users
   # has_many :users

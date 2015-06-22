@@ -61,12 +61,13 @@
           .media-body
             p.tittle Stage of Company
             p.content Scaling
-      .col-md-4.col-sm-6.timeline_icon
-        .media.tl_data
-          = image_tag "timeline/data6.png", class: "media-object pull-left", alt: "team size"
-          .media-body
-            p.tittle Product Iteration
-            p.content #{@events.maximum(:iteration).ordinalize}
+      - if @events.present?
+        .col-md-4.col-sm-6.timeline_icon
+          .media.tl_data
+            = image_tag "timeline/data6.png", class: "media-object pull-left", alt: "team size"
+            .media-body
+              p.tittle Product Iteration
+              p.content #{@events.maximum(:iteration).ordinalize}
     br
     br
   br
@@ -154,46 +155,47 @@
     / Container right end
 
     / Timeline starts
-    .col-md-8.col-md-pull-4.main_timeline style=(" border-right: 1px solid #ccc; padding-right:25px;")
-      .tl_iteration
-        p
-          | Timeline of #{@events.maximum(:iteration).ordinalize} iteration.
-        = image_tag 'timeline/dash.png'
-        br
-        a#read-from-beginning href="#begin"  Read from the beginning.
-      ul
-        - @events.each.with_index(1) do |event,index|
-          - if event.event_type == TimelineEvent::TYPE_END_ITERATION
-            .tl_iteration
-              .buttons End of Iteration #{event.iteration}
-              p #{event.title}
-              = image_tag 'timeline/dash.png'
-              p #{event.description}
-              br
-          - else
-            .timeline
-              li class="timeline#{index.odd? ? "" : "-inverted"}"
-                .timeline-badge class="color#{index%14}"
-                  = image_tag "timeline/badges/#{event.event_type.to_s}.png", width: "70"
-                .timeline-panel
-                  .timeline-heading
-                    h4.timeline-title.tl_heading
-                      | #{event.title}
-                    p.tl_date
-                      small
-                        = image_tag "timeline/date.png"
-                        | #{event.event_on.strftime("%B %Y")}
-                  .timeline-body
-                    .tl_body
-                      - if event.image?
-                        .img-responsive.img_padding.tl-event-image
-                          = image_tag event.image
-                      p #{event.description}
-                    - if event.links?
-                      .timeline-footer.tl_footer
-                        - event.links.each do |link|
-                          a.tl_link_button href="#{link[:url]}"
-                            | #{link[:title]}
+    - if @events.present?
+      .col-md-8.col-md-pull-4.main_timeline style=(" border-right: 1px solid #ccc; padding-right:25px;")
+        .tl_iteration
+          p
+            | Timeline of #{@events.maximum(:iteration).ordinalize} iteration.
+          = image_tag 'timeline/dash.png'
+          br
+          a#read-from-beginning href="#begin"  Read from the beginning.
+        ul
+          - @events.each.with_index(1) do |event,index|
+            - if event.event_type == TimelineEvent::TYPE_END_ITERATION
+              .tl_iteration
+                .buttons End of Iteration #{event.iteration}
+                p #{event.title}
+                = image_tag 'timeline/dash.png'
+                p #{event.description}
+                br
+            - else
+              .timeline
+                li class="timeline#{index.odd? ? "" : "-inverted"}"
+                  .timeline-badge class="color#{index%14}"
+                    = image_tag "timeline/badges/#{event.event_type.to_s}.png", width: "70"
+                  .timeline-panel
+                    .timeline-heading
+                      h4.timeline-title.tl_heading
+                        | #{event.title}
+                      p.tl_date
+                        small
+                          = image_tag "timeline/date.png"
+                          | #{event.event_on.strftime("%B %Y")}
+                    .timeline-body
+                      .tl_body
+                        - if event.image?
+                          .img-responsive.img_padding.tl-event-image
+                            = image_tag event.image
+                        p #{event.description}
+                      - if event.links?
+                        .timeline-footer.tl_footer
+                          - event.links.each do |link|
+                            a.tl_link_button href="#{link[:url]}"
+                              | #{link[:title]}
 
 
 

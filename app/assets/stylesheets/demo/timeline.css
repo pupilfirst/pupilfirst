@@ -227,7 +227,9 @@
 
 .tl-event-image > img{
   max-width: 100%;
-
+}
+.startup-logo {
+  max-height: 100px;
 }
 
 /* Time line css */

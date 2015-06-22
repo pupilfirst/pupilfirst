@@ -236,5 +236,9 @@
   height: 130px;
 }
 
+.landing_header {
+  min-height: 400px;
+}
+
 
 /* Time line css */

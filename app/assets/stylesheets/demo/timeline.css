@@ -225,5 +225,9 @@
   }
 }
 
+.tl-event-image > img{
+  max-width: 100%;
+
+}
 
 /* Time line css */

@@ -92,32 +92,18 @@
                   p.desig Chief Executive Officer
                   img.dash src="#{ image_url 'timeline/dash.png'}"
                   ul
-                    li
-                      a href="#"
-                        img src="#{ image_url 'timeline/facebook.png'}"
-                    li
-                      a href="#"
-                        img src="#{ image_url 'timeline/twitter.png'}"
-                    li
-                      a href="#"
-                        img src="#{ image_url 'timeline/linkedin.png'}"
-            / .media.founder
-            /   a.pull-left href="#"
-            /     img.media-object alt=("Media Object") src="#{ image_url 'timeline/founder2.jpg'}"
-            /   .media-body
-            /     p.name Amit Singh
-            /     p.desig Chief Operations Officer
-            /     img.dash src="#{ image_url 'timeline/dash.png'}"
-            /     ul
-            /       li
-            /         a href="#"
-            /           img src="#{ image_url 'timeline/facebook.png'}"
-            /       li
-            /         a href="#"
-            /           img src="#{ image_url 'timeline/twitter.png'}"
-            /       li
-            /         a href="#"
-            /           img src="#{ image_url 'timeline/linkedin.png'}"
+                    - if false
+                      li
+                        a href="#{founder.facebook_url}"
+                          img src="#{ image_url 'timeline/facebook.png'}"
+                    - if founder.twitter_url?
+                      li
+                        a href="#{founder.twitter_url}"
+                          img src="#{ image_url 'timeline/twitter.png'}"
+                    - if founder.linkedin_url?
+                      li
+                        a href="#{founder.linkedin_url}"
+                          img src="#{ image_url 'timeline/linkedin.png'}"
 
         .col-sm-6.col-md-12.tl_mentor
           h4 Mentors

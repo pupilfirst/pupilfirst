@@ -79,46 +79,48 @@
   .row
     .col-md-4.col-md-push-8
       .row style="padding-left:15px;"
-        .col-sm-6.col-md-12.tl_founder
-          h4 Founders
-          hr
-          .media.founder
-            a.pull-left href="#"
-              img.media-object alt=("Media Object") src="#{ image_url 'timeline/founder1.jpg'}"
-            .media-body
-              p.name Amit Singh
-              p.desig Chief Executive Officer
-              img.dash src="#{ image_url 'timeline/dash.png'}"
-              ul
-                li
-                  a href="#"
-                    img src="#{ image_url 'timeline/facebook.png'}"
-                li
-                  a href="#"
-                    img src="#{ image_url 'timeline/twitter.png'}"
-                li
-                  a href="#"
-                    img src="#{ image_url 'timeline/linkedin.png'}"
-          .media.founder
-            a.pull-left href="#"
-              img.media-object alt=("Media Object") src="#{ image_url 'timeline/founder2.jpg'}"
-            .media-body
-              p.name Amit Singh
-              p.desig Chief Operations Officer
-              img.dash src="#{ image_url 'timeline/dash.png'}"
-              ul
-                li
-                  a href="#"
-                    img src="#{ image_url 'timeline/facebook.png'}"
-                li
-                  a href="#"
-                    img src="#{ image_url 'timeline/twitter.png'}"
-                li
-                  a href="#"
-                    img src="#{ image_url 'timeline/linkedin.png'}"
+        - if @startup.founders.present?
+          .col-sm-6.col-md-12.tl_founder
+            h4 Founders
+            hr
+            - @startup.founders.each do |founder|
+              .media.founder
+                a.pull-left href="#"
+                  img.media-object alt=("Media Object") src="#{ founder.avatar_url }"
+                .media-body
+                  p.name #{founder.fullname}
+                  p.desig Chief Executive Officer
+                  img.dash src="#{ image_url 'timeline/dash.png'}"
+                  ul
+                    li
+                      a href="#"
+                        img src="#{ image_url 'timeline/facebook.png'}"
+                    li
+                      a href="#"
+                        img src="#{ image_url 'timeline/twitter.png'}"
+                    li
+                      a href="#"
+                        img src="#{ image_url 'timeline/linkedin.png'}"
+            / .media.founder
+            /   a.pull-left href="#"
+            /     img.media-object alt=("Media Object") src="#{ image_url 'timeline/founder2.jpg'}"
+            /   .media-body
+            /     p.name Amit Singh
+            /     p.desig Chief Operations Officer
+            /     img.dash src="#{ image_url 'timeline/dash.png'}"
+            /     ul
+            /       li
+            /         a href="#"
+            /           img src="#{ image_url 'timeline/facebook.png'}"
+            /       li
+            /         a href="#"
+            /           img src="#{ image_url 'timeline/twitter.png'}"
+            /       li
+            /         a href="#"
+            /           img src="#{ image_url 'timeline/linkedin.png'}"
 
         .col-sm-6.col-md-12.tl_mentor
-          h4 Mentor
+          h4 Mentors
           hr/
           .media.mentor
             a.pull-left href="#"

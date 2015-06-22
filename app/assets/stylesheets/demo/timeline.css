@@ -232,4 +232,9 @@
   max-height: 100px;
 }
 
+.founder, .founder > a > img {
+  height: 130px;
+}
+
+
 /* Time line css */

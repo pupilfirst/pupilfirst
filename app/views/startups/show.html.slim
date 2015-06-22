@@ -163,7 +163,7 @@
         a#read-from-beginning href="#begin"  Read from the beginning.
       ul
         - @events.each.with_index(1) do |event,index|
-          - if event.event_type == TimelineEvent::TYPE_ENDITERATION
+          - if event.event_type == TimelineEvent::TYPE_END_ITERATION
             .tl_iteration
               .buttons End of Iteration #{event.iteration}
               p #{event.title}

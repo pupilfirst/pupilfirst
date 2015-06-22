@@ -200,40 +200,40 @@
 
 
 
-javascript:
-  $(document).ready(function () {
-          $('#read-from-beginning').click(function () {
-            $('html, body').animate({scrollTop: $(document).height()}, 'slow');
-            return false;
-          });
+/ javascript:
+/   $(document).ready(function () {
+/           $('#read-from-beginning').click(function () {
+/             $('html, body').animate({scrollTop: $(document).height()}, 'slow');
+/             return false;
+/           });
 
-          if($(window).width()<767)
-          {
-            $("#verified").removeClass("tooltip-right");
-            $("#verified").removeAttr("data-tooltip");
-          }
+/           if($(window).width()<767)
+/           {
+/             $("#verified").removeClass("tooltip-right");
+/             $("#verified").removeAttr("data-tooltip");
+/           }
 
-          $(window).resize(function(){
-              if($(window).width()<767)
-          {
-            $("#verified").removeClass("tooltip-right");
-            $("#verified").removeAttr("data-tooltip");
-          }
-          });
+/           $(window).resize(function(){
+/               if($(window).width()<767)
+/           {
+/             $("#verified").removeClass("tooltip-right");
+/             $("#verified").removeAttr("data-tooltip");
+/           }
+/           });
 
-          $(window).scroll(function()
-           {
-                  if ($(document).scrollTop() > 400)
-                  {
-                    $("#SiteLogoWhite").hide();
-                    $("#SiteLogo").fadeIn();
-                    $('nav').addClass('shrink');
-                  } else {
-                    $("#SiteLogo").hide();
-                    $("#SiteLogoWhite").fadeIn();
-                    $('nav').removeClass('shrink');
-                  }
-          });
-        });
+/           $(window).scroll(function()
+/            {
+/                   if ($(document).scrollTop() > 400)
+/                   {
+/                     $("#SiteLogoWhite").hide();
+/                     $("#SiteLogo").fadeIn();
+/                     $('nav').addClass('shrink');
+/                   } else {
+/                     $("#SiteLogo").hide();
+/                     $("#SiteLogoWhite").fadeIn();
+/                     $('nav').removeClass('shrink');
+/                   }
+/           });
+/         });
 
 

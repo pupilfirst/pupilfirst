@@ -89,5 +89,5 @@ Svapp::Application.routes.draw do
     end
   end
 
-  root 'welcome#index'
+  root 'home#index'
 end

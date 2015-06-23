@@ -28,7 +28,7 @@
             img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data1.png'}"
             .media-body
               p.tittle Industry
-              p.content Holidays, Business Automation
+              p.content #{@startup.categories.pluck(:name).join(', ')}
       - if @startup.website?
         .col-md-4.col-sm-6.timeline_icon
           .media.tl_data

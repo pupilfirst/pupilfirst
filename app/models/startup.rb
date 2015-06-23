@@ -29,6 +29,12 @@ class Startup < ActiveRecord::Base
   INCUBATION_LOCATION_VISAKHAPATNAM = 'visakhapatnam'
   INCUBATION_LOCATION_KOZHIKODE = 'kozhikode'
 
+  STAGE_DISCOVERY = 'discovery'
+  STAGE_PROTOTYPE= 'prototype'
+  STAGE_CUSTOMER_VALIDATION= 'customer_validation'
+  STAGE_EFFICIENCY= 'efficiency'
+  STAGE_SCALING= 'scaling'
+
   SV_STATS_LINK = "bit.ly/svstats2"
 
   def self.valid_agreement_durations
@@ -49,6 +55,10 @@ class Startup < ActiveRecord::Base
 
   def self.valid_approval_status_values
     [APPROVAL_STATUS_UNREADY, APPROVAL_STATUS_PENDING, APPROVAL_STATUS_APPROVED, APPROVAL_STATUS_REJECTED]
+  end
+
+  def self.valid_stages
+    [STAGE_SCALING, STAGE_EFFICIENCY, STAGE_CUSTOMER_VALIDATION, STAGE_PROTOTYPE, STAGE_DISCOVERY]
   end
 
   has_paper_trail

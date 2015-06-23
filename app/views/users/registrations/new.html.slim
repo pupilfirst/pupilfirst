@@ -1,4 +1,4 @@
-= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html=>{ class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean }) do |f|
+= simple_form_for resource, as: resource_name, url: registration_path(resource_name), html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
   legend Sign up
 
   = f.error_notification

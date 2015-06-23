@@ -1,12 +1,15 @@
-h1 Sign up
 = simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html=>{ class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean }) do |f|
+  legend Sign up
+
   = f.error_notification
 
-  = f.input :fullname, label: 'Full Name'
-  = f.input :email, hint: 'This will be your SV ID.'
-  = f.input :password
-  = f.input :password_confirmation
+  = f.input :fullname, label: 'Full Name', required: true
+  = f.input :email, hint: 'This will be your SV ID.', required: true, label: 'Email Address'
+  = f.input :password, required: true
+  = f.input :password_confirmation, required: true
 
   .form-group
     .col-sm-offset-3.col-sm-10
       = f.button :submit, 'Sign up', class: 'btn btn-primary'
+
+br

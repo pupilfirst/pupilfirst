@@ -280,4 +280,6 @@ end
 
 Rails.application.config.to_prepare do
   Devise::Mailer.layout 'mailer'
+  Devise::RegistrationsController.layout 'demo_generic_inner'
+  Devise::SessionsController.layout 'demo_generic_inner'
 end

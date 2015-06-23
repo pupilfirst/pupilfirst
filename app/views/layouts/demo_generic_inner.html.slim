@@ -12,6 +12,7 @@ html
 
     // Local Styles
     = stylesheet_link_tag 'demo/application'
+    = stylesheet_link_tag 'demo/pnotify'
     = stylesheet_link_tag 'demo/owl-carousel/owl.carousel'
     = stylesheet_link_tag 'demo/style'
     = stylesheet_link_tag 'demo/icon/component'
@@ -26,6 +27,7 @@ html
 
     // Scripts
     = javascript_include_tag 'application'
+    = javascript_include_tag 'demo/application'
     = javascript_include_tag 'demo/icon/modernizr.custom'
 
     // Remote scripts
@@ -70,26 +72,7 @@ html
 
       == yield :header
 
-    - if notice
-      .container
-        .alert.alert-info.alert-dismissible role="alert"
-          button.close type="button" data-dismiss="alert"
-            span aria-hidden="true" &times;
-            span.sr-only Close
-          strong = notice
-    - if alert.present?
-      .container
-        .alert.alert-danger.alert-dismissible role="alert"
-          button.close type="button" data-dismiss="alert"
-            span aria-hidden="true" &times;
-            span.sr-only Close
-          strong = alert
-
-    - if @full_width
-      .container-fluid.container-without-horizontal-padding
-        == yield
-    - else
-      .container
-        == yield
+    .container
+      == yield
 
     == render 'layouts/footer'

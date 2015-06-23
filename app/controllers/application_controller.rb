@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_filter :configure_permitted_parameters, if: :devise_controller?
+  after_filter :prepare_unobtrusive_flash
 
   def raise_not_found
     raise ActionController::RoutingError.new('Not Found')

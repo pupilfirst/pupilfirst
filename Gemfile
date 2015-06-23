@@ -71,6 +71,9 @@ gem 'wicked' # Multistep form wizard for incubation
 
 gem 'font-awesome-sass', '~> 4.3.0' # Icons from font-awesome!
 
+gem 'pnotify-rails' # Superb notifications library. http://sciactive.github.io/pnotify/
+gem 'unobtrusive_flash', '>=3' # Let's not deal with flash messages, yeah? https://github.com/leonid-shevtsov/unobtrusive_flash
+
 group :development do
   gem 'letter_opener'
   gem 'guard' # POSSIBLY-USELESS

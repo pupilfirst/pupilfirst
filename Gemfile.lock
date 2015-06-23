@@ -422,6 +422,7 @@ GEM
       activesupport (>= 3.0)
       countries (~> 0.8, >= 0.8.2)
       phony (~> 2.12)
+    pnotify-rails (2.0.1.1)
     polyamorous (1.2.0)
       activerecord (>= 3.0)
     pry (0.10.1)
@@ -570,6 +571,8 @@ GEM
       unf_ext
     unf_ext (0.0.7.1)
     uniform_notifier (1.9.0)
+    unobtrusive_flash (3.1.0)
+      railties
     urbanairship (2.4.1)
       json
     validate_url (1.0.0)
@@ -650,6 +653,7 @@ DEPENDENCIES
   passenger (~> 5.0.8)
   pg
   phony_rails
+  pnotify-rails
   pry-rails
   rails (= 4.2.2)
   rails_12factor
@@ -675,6 +679,7 @@ DEPENDENCIES
   sucker_punch
   terminal-notifier-guard
   uglifier
+  unobtrusive_flash (>= 3)
   urbanairship
   validate_url
   versionist

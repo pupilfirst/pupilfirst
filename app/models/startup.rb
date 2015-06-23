@@ -143,6 +143,8 @@ class Startup < ActiveRecord::Base
   validates_length_of :about, maximum: MAX_ABOUT_CHARACTERS,
     message: "must be within #{MAX_ABOUT_CHARACTERS} characters"
 
+  validates_inclusion_of :stage, in: valid_stages, allow_nil: true
+
   before_validation do
     # Set registration_type to nil if its set as blank from backend.
     self.registration_type = nil if self.registration_type.blank?

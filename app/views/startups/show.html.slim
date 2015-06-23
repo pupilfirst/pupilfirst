@@ -63,7 +63,7 @@
             img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data5.png'}"
             .media-body
               p.tittle Stage of Company
-              p.content #{@startup.stage}
+              p.content #{@startup.stage.capitalize}
       - if @events.present?
         .col-md-4.col-sm-6.timeline_icon
           .media.tl_data

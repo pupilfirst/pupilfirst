@@ -40,15 +40,16 @@
                 a href="#{@startup.website}" target="_blank"
                   | #{@startup.website}
                   - image_tag 'timeline/link.png'
-      .col-md-4.col-sm-6.timeline_icon
-        .media.tl_data
-          img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data3.png'}"
-          .media-body
-            p.tittle Startup Deck
-            p.content
-              a href="http://slideshare.net/itvlr/deck" target="_blank"
-                | itraveller deck
-                img src="#{ image_url 'timeline/link.png'}"
+      - if @startup.presentation_link?
+        .col-md-4.col-sm-6.timeline_icon
+          .media.tl_data
+            img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data3.png'}"
+            .media-body
+              p.tittle Startup Deck
+              p.content
+                a href="#{@startup.presentation_link}" target="_blank"
+                  | #{@startup.name} deck
+                  img src="#{ image_url 'timeline/link.png'}"
       - if @startup.team_size?
         .col-md-4.col-sm-6.timeline_icon
           .media.tl_data

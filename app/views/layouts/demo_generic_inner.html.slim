@@ -38,8 +38,8 @@ html
     = yield :head
 
   body
-    section.header.landing_header#header
-      nav.navbar.navbar-default.navbar-fixed-top role="navigation"
+    section.header.header-generic#header
+      nav.navbar.navbar-default role="navigation"
         .container
           .navbar-header
             button.navbar-toggle.collapsed type="button" data-toggle="collapse" data-target="#sv-navbar"
@@ -70,6 +70,7 @@ html
 
       == yield :header
 
-    == yield
+    .container
+      == yield
 
     == render 'layouts/footer'

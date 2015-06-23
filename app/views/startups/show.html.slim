@@ -100,42 +100,29 @@
                       li
                         a href="#{founder.linkedin_url}"
                           img src="#{ image_url 'timeline/linkedin.png'}"
+        - if @startup.mentors?
+          .col-sm-6.col-md-12.tl_mentor
+            h4 Mentors
+            hr/
+            .media.mentor
+              a.pull-left href="#"
+                img.media-object alt=("Media Object") src="#{ image_url 'timeline/mentor1.jpg'}"
+              .media-body
+                p.name Amit Singh
+                p.desig Chief Executive Officer
+                p.firm Google Inc.
+        - if @startup.investors?
+          .col-sm-6.col-md-12.tl_investor
+            h4 Investors
+            hr/
+            .media.investor
+              a.pull-left href="#"
+                img.media-object alt=("Media Object") src="#{ image_url 'timeline/investor1.jpg'}"
+              .media-body
+                p.name Amit Singh
+                p.desig Chief Executive Officer
+                p.firm Google Inc.
 
-        .col-sm-6.col-md-12.tl_mentor
-          h4 Mentors
-          hr/
-          .media.mentor
-            a.pull-left href="#"
-              img.media-object alt=("Media Object") src="#{ image_url 'timeline/mentor1.jpg'}"
-            .media-body
-              p.name Amit Singh
-              p.desig Chief Executive Officer
-              p.firm Google Inc.
-          .media.mentor
-            a.pull-left href="#"
-              img.media-object alt=("Media Object") src="#{ image_url 'timeline/mentor2.jpg'}"
-            .media-body
-              p.name Amit Singh
-              p.desig Chief Technology Officer
-              p.firm Facebook Inc.
-
-        .col-sm-6.col-md-12.tl_investor
-          h4 Investors
-          hr/
-          .media.investor
-            a.pull-left href="#"
-              img.media-object alt=("Media Object") src="#{ image_url 'timeline/investor1.jpg'}"
-            .media-body
-              p.name Amit Singh
-              p.desig Chief Executive Officer
-              p.firm Google Inc.
-          .media.investor
-            a.pull-left href="#"
-              img.media-object alt=("Media Object") src="#{ image_url 'timeline/investor2.jpg'}"
-            .media-body
-              p.name Amit Singh
-              p.desig Chief Technology Officer
-              p.firm Facebook Inc.
     / Container right end
 
     / Timeline starts

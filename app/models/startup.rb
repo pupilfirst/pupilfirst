@@ -346,4 +346,14 @@ class Startup < ActiveRecord::Base
         'kiran@startupvillage.in'
     end
   end
+
+  # Temporary mentor and investor checks which always return false
+
+  def mentors?
+    false
+  end
+
+  def investors?
+    false
+  end
 end

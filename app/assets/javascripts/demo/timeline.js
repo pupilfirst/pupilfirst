@@ -43,7 +43,7 @@ $(document).ready(function () {
 
           $(window).scroll(function()
            {
-                  if ($(document).scrollTop() > 400)
+                  if ($(document).scrollTop() > 300)
                   {
                     $("#SiteLogoWhite").hide();
                     $("#SiteLogo").fadeIn();

@@ -1,5 +1,7 @@
 .landing_header {
-  background-image: url("../timeline.jpg");}
+  background-image: image-url("timeline.jpg");
+  min-height: 400px;
+}
 
 /*  time  line css */
 
@@ -236,9 +238,6 @@
   height: 130px;
 }
 
-.landing_header {
-  min-height: 400px;
-}
 
 
 /* Time line css */

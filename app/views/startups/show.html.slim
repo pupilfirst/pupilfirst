@@ -89,7 +89,7 @@
             - @startup.founders.each do |founder|
               .media.founder
                 a.pull-left href="#"
-                  img.media-object alt=("Media Object") src="#{ founder.avatar_url }"
+                  = image_tag founder.avatar_url, alt: "Image of #{founder.fullname}", class: 'media-object'
                 .media-body
                   p.name #{founder.fullname}
                   p.desig Chief Executive Officer

@@ -3,7 +3,8 @@ $(document).ready(function() {
     new PNotify({
       title: (params.type.charAt(0).toUpperCase() + params.type.substring(1)),
       text: params.message,
-      type: params.type
+      type: params.type,
+      mouse_reset: false
     });
   });
 });

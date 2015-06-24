@@ -1,9 +1,9 @@
-h2.page-header Edit basic details
-
 = simple_form_for user, :html => { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
+  legend Edit basic details
+
   = f.error_notification
 
-  = f.input :fullname, input_html: { maxlength: 255 }
+  = f.input :fullname, input_html: { maxlength: 255 }, required: true
   = f.input :avatar, as: :file
   = f.input :title, hint: 'Position at startup / company', input_html: { maxlength: 255 }
   = f.input :linkedin_url, label: 'LinkedIn Profile URL', input_html: { maxlength: 255 }

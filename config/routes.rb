@@ -78,11 +78,6 @@ Svapp::Application.routes.draw do
   get 'privacy_policy', to: 'welcome#privacy_policy'
   get 'faq', to: 'welcome#faq'
 
-  # get 'mentor_meetings/:id/feedback', to: 'mentor_meetings#feedback'
-  scope 'demo', as: 'demo', controller: 'home' do
-    get '/', action: 'index', as: 'root'
-  end
-
   resources :incubation do
     member do
       post 'add_cofounder'

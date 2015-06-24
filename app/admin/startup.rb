@@ -147,6 +147,7 @@ ActiveAdmin.register Startup do
         link_to(image_tag(startup.logo_url(:thumb)), startup.logo_url)
       end
       row :pitch
+      row :stage
       row :website
       row :presentation_link do |startup|
         link_to startup.presentation_link, startup.presentation_link if startup.presentation_link.present?

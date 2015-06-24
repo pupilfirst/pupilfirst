@@ -1,6 +1,6 @@
 == content_for :head
-  = stylesheet_link_tag 'demo/TimelineStyle'
-  = javascript_include_tag 'demo/itraveller'
+  = stylesheet_link_tag 'demo/timeline'
+  = javascript_include_tag 'demo/timeline'
 /Company Name Header
 .container
   .row
@@ -12,22 +12,23 @@
             img src='#{image_url 'timeline/verified.gif'}' width="25"
       - if @startup.logo?
         .col-sm-6 style=("padding-bottom: 9px;\nmargin: 60px 0px 20px; text-align:right;")
-          = image_tag "#{@startup.logo_url}", style: "float:right", class: 'img-responsive startup-logo', id: "company_logo"
+          = image_tag "#{@startup.logo_url}", style: "float:right", class: 'img-responsive startup-logo'
 
   .row
     .col-md-12.tl_about
       p.content
-        | #{@startup.about}
+        | #{@startup.about? ? @startup.about : "This startup is yet to provide an about section"}
   br
   br
   .row style=("border-bottom:2px solid green;padding-bottom:50px;")
     .col-md-12.tl_data style="padding-bottom:50px;"
-      .col-md-4.col-sm-6.timeline_icon
-        .media.tl_data
-          img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data1.png'}"
-          .media-body
-            p.tittle Industry
-            p.content Holidays, Business Automation
+      - if @startup.categories.present?
+        .col-md-4.col-sm-6.timeline_icon
+          .media.tl_data
+            img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data1.png'}"
+            .media-body
+              p.tittle Industry
+              p.content #{@startup.categories.pluck(:name).join(', ')}
       - if @startup.website?
         .col-md-4.col-sm-6.timeline_icon
           .media.tl_data
@@ -39,15 +40,16 @@
                 a href="#{@startup.website}" target="_blank"
                   | #{@startup.website}
                   - image_tag 'timeline/link.png'
-      .col-md-4.col-sm-6.timeline_icon
-        .media.tl_data
-          img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data3.png'}"
-          .media-body
-            p.tittle Startup Deck
-            p.content
-              a href="http://slideshare.net/itvlr/deck" target="_blank"
-                | itraveller deck
-                img src="#{ image_url 'timeline/link.png'}"
+      - if @startup.presentation_link?
+        .col-md-4.col-sm-6.timeline_icon
+          .media.tl_data
+            img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data3.png'}"
+            .media-body
+              p.tittle Startup Deck
+              p.content
+                a href="#{@startup.presentation_link}" target="_blank"
+                  | #{@startup.name} deck
+                  img src="#{ image_url 'timeline/link.png'}"
       - if @startup.team_size?
         .col-md-4.col-sm-6.timeline_icon
           .media.tl_data
@@ -55,18 +57,20 @@
             .media-body
               p.tittle Team Size
               p.content #{@startup.team_size}
-      .col-md-4.col-sm-6.timeline_icon
-        .media.tl_data
-          img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data5.png'}"
-          .media-body
-            p.tittle Stage of Company
-            p.content Scaling
-      .col-md-4.col-sm-6.timeline_icon
-        .media.tl_data
-          = image_tag "timeline/data6.png", class: "media-object pull-left", alt: "team size"
-          .media-body
-            p.tittle Product Iteration
-            p.content #{@events.maximum(:iteration).ordinalize}
+      - if @startup.stage?
+        .col-md-4.col-sm-6.timeline_icon
+          .media.tl_data
+            img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data5.png'}"
+            .media-body
+              p.tittle Stage of Company
+              p.content #{@startup.stage.capitalize}
+      - if @events.present?
+        .col-md-4.col-sm-6.timeline_icon
+          .media.tl_data
+            = image_tag "timeline/data6.png", class: "media-object pull-left", alt: "team size"
+            .media-body
+              p.tittle Product Iteration
+              p.content #{@events.maximum(:iteration).ordinalize}
     br
     br
   br
@@ -78,152 +82,138 @@
   .row
     .col-md-4.col-md-push-8
       .row style="padding-left:15px;"
-        .col-sm-6.col-md-12.tl_founder
-          h4 Founders
-          hr
-          .media.founder
-            a.pull-left href="#"
-              img.media-object alt=("Media Object") src="#{ image_url 'timeline/founder1.jpg'}"
-            .media-body
-              p.name Amit Singh
-              p.desig Chief Executive Officer
-              img.dash src="#{ image_url 'timeline/dash.png'}"
-              ul
-                li
-                  a href="#"
-                    img src="#{ image_url 'timeline/facebook.png'}"
-                li
-                  a href="#"
-                    img src="#{ image_url 'timeline/twitter.png'}"
-                li
-                  a href="#"
-                    img src="#{ image_url 'timeline/linkedin.png'}"
-          .media.founder
-            a.pull-left href="#"
-              img.media-object alt=("Media Object") src="#{ image_url 'timeline/founder2.jpg'}"
-            .media-body
-              p.name Amit Singh
-              p.desig Chief Operations Officer
-              img.dash src="#{ image_url 'timeline/dash.png'}"
-              ul
-                li
-                  a href="#"
-                    img src="#{ image_url 'timeline/facebook.png'}"
-                li
-                  a href="#"
-                    img src="#{ image_url 'timeline/twitter.png'}"
-                li
-                  a href="#"
-                    img src="#{ image_url 'timeline/linkedin.png'}"
+        - if @startup.founders.present?
+          .col-sm-6.col-md-12.tl_founder
+            h4 Founders
+            hr
+            - @startup.founders.each do |founder|
+              .media.founder
+                a.pull-left href="#"
+                  img.media-object alt=("Media Object") src="#{ founder.avatar_url }"
+                .media-body
+                  p.name #{founder.fullname}
+                  p.desig Chief Executive Officer
+                  img.dash src="#{ image_url 'timeline/dash.png'}"
+                  ul
+                    - if founder.twitter_url?
+                      li
+                        a href="#{founder.twitter_url}"
+                          img src="#{ image_url 'timeline/twitter.png'}"
+                    - if founder.linkedin_url?
+                      li
+                        a href="#{founder.linkedin_url}"
+                          img src="#{ image_url 'timeline/linkedin.png'}"
+        - if @startup.mentors?
+          .col-sm-6.col-md-12.tl_mentor
+            h4 Mentors
+            hr/
+            .media.mentor
+              a.pull-left href="#"
+                img.media-object alt=("Media Object") src="#{ image_url 'timeline/mentor1.jpg'}"
+              .media-body
+                p.name Amit Singh
+                p.desig Chief Executive Officer
+                p.firm Google Inc.
+        - if @startup.investors?
+          .col-sm-6.col-md-12.tl_investor
+            h4 Investors
+            hr/
+            .media.investor
+              a.pull-left href="#"
+                img.media-object alt=("Media Object") src="#{ image_url 'timeline/investor1.jpg'}"
+              .media-body
+                p.name Amit Singh
+                p.desig Chief Executive Officer
+                p.firm Google Inc.
 
-        .col-sm-6.col-md-12.tl_mentor
-          h4 Mentor
-          hr/
-          .media.mentor
-            a.pull-left href="#"
-              img.media-object alt=("Media Object") src="#{ image_url 'timeline/mentor1.jpg'}"
-            .media-body
-              p.name Amit Singh
-              p.desig Chief Executive Officer
-              p.firm Google Inc.
-          .media.mentor
-            a.pull-left href="#"
-              img.media-object alt=("Media Object") src="#{ image_url 'timeline/mentor2.jpg'}"
-            .media-body
-              p.name Amit Singh
-              p.desig Chief Technology Officer
-              p.firm Facebook Inc.
-
-        .col-sm-6.col-md-12.tl_investor
-          h4 Investors
-          hr/
-          .media.investor
-            a.pull-left href="#"
-              img.media-object alt=("Media Object") src="#{ image_url 'timeline/investor1.jpg'}"
-            .media-body
-              p.name Amit Singh
-              p.desig Chief Executive Officer
-              p.firm Google Inc.
-          .media.investor
-            a.pull-left href="#"
-              img.media-object alt=("Media Object") src="#{ image_url 'timeline/investor2.jpg'}"
-            .media-body
-              p.name Amit Singh
-              p.desig Chief Technology Officer
-              p.firm Facebook Inc.
     / Container right end
 
     / Timeline starts
-    .col-md-8.col-md-pull-4.main_timeline style=(" border-right: 1px solid #ccc; padding-right:25px;")
-      .tl_iteration
-        p
-          | Timeline of #{@events.maximum(:iteration).ordinalize} iteration.
-        = image_tag 'timeline/dash.png'
-        br
-        a#read-from-beginning href="#begin"  Read from the beginning.
-      ul
-        - @events.each.with_index(1) do |event,index|
-          - if event.event_type == TimelineEvent::TYPE_ENDITERATION
-            .tl_iteration
-              .buttons End of Iteration #{event.iteration}
-              p #{event.title}
-              = image_tag 'timeline/dash.png'
-              p #{event.description}
-              br
-          - else
-            .timeline
-              li class="timeline#{index.odd? ? "" : "-inverted"}"
-                .timeline-badge class="color#{index%14}"
-                  = image_tag "timeline/badges/#{event.event_type.to_s}.png", width: "70"
-                .timeline-panel
-                  .timeline-heading
-                    h4.timeline-title.tl_heading
-                      | #{event.title}
-                    p.tl_date
-                      small
-                        = image_tag "timeline/date.png"
-                        | #{event.event_on.strftime("%B %Y")}
-                  .timeline-body
-                    p.tl_body
-                      | #{event.description}
+    - if @events.present?
+      .col-md-8.col-md-pull-4.main_timeline style=(" border-right: 1px solid #ccc; padding-right:25px;")
+        .tl_iteration
+          p
+            | Timeline of #{@events.maximum(:iteration).ordinalize} iteration.
+          = image_tag 'timeline/dash.png'
+          br
+          a#read-from-beginning href="#begin"  Read from the beginning.
+        ul
+          - @events.each.with_index(1) do |event,index|
+            - if event.event_type == TimelineEvent::TYPE_END_ITERATION
+              .tl_iteration
+                .buttons End of Iteration #{event.iteration}
+                p #{event.title}
+                = image_tag 'timeline/dash.png'
+                p #{event.description}
+                br
+            - else
+              .timeline
+                li class="timeline#{index.odd? ? "" : "-inverted"}"
+                  .timeline-badge class="color#{index%14}"
+                    = image_tag "timeline/badges/#{event.event_type.to_s}.png", width: "70"
+                  .timeline-panel
+                    .timeline-heading
+                      h4.timeline-title.tl_heading
+                        | #{event.title}
+                      p.tl_date
+                        small
+                          = image_tag "timeline/date.png"
+                          | #{event.event_on.strftime("%B %Y")}
+                    .timeline-body
+                      .tl_body
+                        - if event.image?
+                          .img-responsive.img_padding.tl-event-image
+                            = image_tag event.image
+                        p #{event.description}
+                      - if event.links?
+                        .timeline-footer.tl_footer
+                          - event.links.each do |link|
+                            a.tl_link_button href="#{link[:url]}"
+                              | #{link[:title]}
+    - else
+      .col-md-8.col-md-pull-4.main_timeline style=(" border-right: 1px solid #ccc; padding-right:25px;")
+        .tl_iteration
+          p
+            | No timeline events to show!
+          = image_tag 'timeline/dash.png'
 
 
 
 
-javascript:
-  $(document).ready(function () {
-          $('#read-from-beginning').click(function () {
-            $('html, body').animate({scrollTop: $(document).height()}, 'slow');
-            return false;
-          });
+/ javascript:
+/   $(document).ready(function () {
+/           $('#read-from-beginning').click(function () {
+/             $('html, body').animate({scrollTop: $(document).height()}, 'slow');
+/             return false;
+/           });
 
-          if($(window).width()<767)
-          {
-            $("#verified").removeClass("tooltip-right");
-            $("#verified").removeAttr("data-tooltip");
-          }
+/           if($(window).width()<767)
+/           {
+/             $("#verified").removeClass("tooltip-right");
+/             $("#verified").removeAttr("data-tooltip");
+/           }
 
-          $(window).resize(function(){
-              if($(window).width()<767)
-          {
-            $("#verified").removeClass("tooltip-right");
-            $("#verified").removeAttr("data-tooltip");
-          }
-          });
+/           $(window).resize(function(){
+/               if($(window).width()<767)
+/           {
+/             $("#verified").removeClass("tooltip-right");
+/             $("#verified").removeAttr("data-tooltip");
+/           }
+/           });
 
-          $(window).scroll(function()
-           {
-                  if ($(document).scrollTop() > 400)
-                  {
-                    $("#SiteLogoWhite").hide();
-                    $("#SiteLogo").fadeIn();
-                    $('nav').addClass('shrink');
-                  } else {
-                    $("#SiteLogo").hide();
-                    $("#SiteLogoWhite").fadeIn();
-                    $('nav').removeClass('shrink');
-                  }
-          });
-        });
+/           $(window).scroll(function()
+/            {
+/                   if ($(document).scrollTop() > 400)
+/                   {
+/                     $("#SiteLogoWhite").hide();
+/                     $("#SiteLogo").fadeIn();
+/                     $('nav').addClass('shrink');
+/                   } else {
+/                     $("#SiteLogo").hide();
+/                     $("#SiteLogoWhite").fadeIn();
+/                     $('nav').removeClass('shrink');
+/                   }
+/           });
+/         });
 
 

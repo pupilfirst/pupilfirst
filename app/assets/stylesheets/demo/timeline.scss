@@ -1,5 +1,7 @@
 .landing_header {
-  background-image: url("../timeline.jpg");}
+  background-image: image-url("timeline.jpg");
+  min-height: 400px;
+}
 
 /*  time  line css */
 
@@ -224,6 +226,18 @@
     right: auto;
   }
 }
+
+.tl-event-image > img{
+  max-width: 100%;
+}
+.startup-logo {
+  max-height: 100px;
+}
+
+.founder, .founder > a > img {
+  height: 130px;
+}
+
 
 
 /* Time line css */

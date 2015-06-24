@@ -13,7 +13,7 @@ Rails.application.config.assets.precompile += %w(
   demo/owl-carousel/owl.carousel.js
   demo/ct-carousel/masonry.pkgd.min.js
   demo/ct-carousel/jquery.flexslider-min.js
-  demo/TimelineStyle.css
-  demo/itraveller.js
+  demo/timeline.css
+  demo/timeline.js
   demo/pnotify.css
 )

@@ -29,6 +29,12 @@ class Startup < ActiveRecord::Base
   INCUBATION_LOCATION_VISAKHAPATNAM = 'visakhapatnam'
   INCUBATION_LOCATION_KOZHIKODE = 'kozhikode'
 
+  STAGE_DISCOVERY = 'discovery'
+  STAGE_PROTOTYPE= 'prototype'
+  STAGE_CUSTOMER_VALIDATION= 'customer_validation'
+  STAGE_EFFICIENCY= 'efficiency'
+  STAGE_SCALING= 'scaling'
+
   SV_STATS_LINK = "bit.ly/svstats2"
 
   def self.valid_agreement_durations
@@ -49,6 +55,10 @@ class Startup < ActiveRecord::Base
 
   def self.valid_approval_status_values
     [APPROVAL_STATUS_UNREADY, APPROVAL_STATUS_PENDING, APPROVAL_STATUS_APPROVED, APPROVAL_STATUS_REJECTED]
+  end
+
+  def self.valid_stages
+    [STAGE_SCALING, STAGE_EFFICIENCY, STAGE_CUSTOMER_VALIDATION, STAGE_PROTOTYPE, STAGE_DISCOVERY]
   end
 
   has_paper_trail
@@ -156,6 +166,8 @@ class Startup < ActiveRecord::Base
   def incubation_step_3?
     updated_from == 'product_description'
   end
+
+  validates_inclusion_of :stage, in: valid_stages, allow_nil: true
 
   before_validation do
     # Set registration_type to nil if its set as blank from backend.
@@ -374,5 +386,16 @@ class Startup < ActiveRecord::Base
 
     user.update!(startup_admin: true)
     startup
+  end
+
+  ####
+  # Temporary mentor and investor checks which always return false
+  ####
+  def mentors?
+    false
+  end
+
+  def investors?
+    false
   end
 end

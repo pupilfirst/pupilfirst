@@ -11,6 +11,7 @@
     = f.input :pitch, input_html: {maxlength: nil}
     = f.input :cool_fact, input_html: {maxlength: 255}
     = f.input :website, input_html: {maxlength: nil}
+    = f.input :stage, collection: Startup.valid_stages
     = f.input :about
     = f.input :twitter_link
     = f.input :facebook_link

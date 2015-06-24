@@ -1,0 +1,22 @@
+- unless timeline_event.links.empty?
+  ul
+    - timeline_event.links.each_with_index do |link, index|
+      li
+        = link_to link[:title], link[:url]
+        | &nbsp;(
+        = link_to 'Delete', delete_link_admin_timeline_event_path(link_index: index), { method: :put, data: { confirm: 'Are you sure?' }}
+        | )
+
+br
+
+= form_tag(add_link_admin_timeline_event_path, method: :put) do
+  = label_tag 'title'
+  | &nbsp;
+  = text_field_tag 'link_title'
+  br
+  = label_tag 'url', 'URL'
+  | &nbsp;
+  = text_field_tag 'link_url'
+  br
+  br
+  = submit_tag 'Add Link'

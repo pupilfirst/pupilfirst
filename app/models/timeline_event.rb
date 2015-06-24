@@ -45,4 +45,10 @@ class TimelineEvent < ActiveRecord::Base
   end
 
   validates_inclusion_of :event_type, in: valid_event_types
+
+  before_save :make_links_an_array
+
+  def make_links_an_array
+    self.links = [] if links.nil?
+  end
 end

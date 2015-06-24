@@ -29,7 +29,7 @@ class TimelineEvent < ActiveRecord::Base
   TYPE_CO_FOUNDER = 'co_founder'
   TYPE_BANK = 'bank'
   TYPE_ATTENDED = 'attended'
-  TYPE_ANGEL_FUND = 'angel_fund'
+  TYPE_ANGEL_FUND = 'angel_funding'
   TYPE_ACQUIRED = 'acquired'
   TYPE_ACCELERATOR = 'accelerator'
   TYPE_PROTOTYPE = 'prototype'

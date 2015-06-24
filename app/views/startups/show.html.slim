@@ -7,7 +7,7 @@
     .col-md-12.clearfix
       .col-sm-6
         h1.page-header.tl_company_name
-          | #{@startup.name}
+          ' #{@startup.name}
           a#verified.tooltip-right data-tooltip=("Timeline verified by Startup Village.") href="#"
             img src='#{image_url 'timeline/verified.gif'}' width="25"
       - if @startup.logo?

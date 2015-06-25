@@ -1,12 +1,16 @@
-.col-md-1
-#progressbar.col-md-10
-  .panel.panel-info
+#progressbar.col-md-10.col-md-offset-1
+  .panel.panel-default
     .panel-heading
       .row
-        .col-md-3.fa.fa-check style="color:#337ab7" &nbsp User Profile
-        .col-md-3.fa.fa-check style="color:grey" &nbsp Startup Profile
-        .col-md-3.fa.fa-check style="color:grey" &nbsp Product Description
-        .col-md-3.fa.fa-check style="color:grey" &nbsp Launch!
+        .col-sm-4.text-center style="color: #337ab7"
+          .fa.fa-circle-o-notch.fa-spin
+          | &nbsp; User Profile
+        .col-sm-4.text-center style="color: grey"
+          .fa.fa-circle-o
+          | &nbsp; Startup Profile
+        .col-sm-4.text-center style="color: grey"
+          .fa.fa-circle-o
+          | &nbsp; Launch!
     .panel-body
       = simple_form_for @startup, url: wizard_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
         = f.error_notification

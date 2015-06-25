@@ -9,23 +9,23 @@ class StartupsController < InheritedResources::Base
   layout 'demo', only: [:itraveller, :show]
 
   def new
-    # if current_user.phone_not_verified?
-    #   flash[:notice] = "Please enter and verify your phone number to continue"
-    #   session[:referer] = '#'
-    #   redirect_to phone_user_path(current_user)
-    # elsif current_user.profile_incomplete?
-    #   @creating_startup = true;
-    #   flash[:notice] = "Please complete your user profile first!"
-    #   session[:referer] = '#'
-    #   redirect_to edit_user_path(current_user)
-    # end
+    if !current_user.phone_verified?
+      flash[:notice] = 'Please enter and verify your phone number to continue.'
+
+      session[:referer] = new_startup_url
+      redirect_to phone_user_path(current_user) and return
+    end
+
     if current_user.startup.present?
-      @startup = current_user.startup
-      flash.now[:alert] = "It appears you already have a startup incubated at SV!"
-      render 'show'
+      if current_user.startup.unready?
+        redirect_to incubation_path(id: :user_profile) and return
+      else
+        flash[:alert] = "You've already submitted an application for incubation."
+        redirect_to root_url and return
+      end
     else
-      @startup = Startup.new_incubation!(current_user)
-      redirect_to incubation_path(startup_id: @startup.id, id: :user_profile)
+      Startup.new_incubation!(current_user)
+      redirect_to incubation_path(id: :user_profile)
     end
   end
 

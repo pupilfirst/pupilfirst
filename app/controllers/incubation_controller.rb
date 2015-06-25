@@ -1,7 +1,7 @@
 class IncubationController < ApplicationController
   include Wicked::Wizard
 
-  steps 'user_profile', 'startup_profile', 'product_description', 'finish'
+  steps 'user_profile', 'startup_profile', 'launch'
 
   def show
     @startup = current_user.startup
@@ -22,15 +22,18 @@ class IncubationController < ApplicationController
     render_wizard @startup
   end
 
+  # Wicked uses this method to find out where to redirect to once the wizard finishes.
   def finish_wizard_path
     current_user.startup
   end
 
+  # Attempt to a co-founder, and return to the launch page.
   def add_cofounder
     User.add_cofounder(params[:email],current_user.startup.id)
     UserMailer.cofounder_request(params[:email], current_user).deliver_later
     flash[:notice] = "An email has been sent to #{params[:email]} inviting him/her to join as a cofounder"
-    redirect_to incubation_path(:finish)
+
+    redirect_to incubation_path(:launch)
   end
 
   private
@@ -43,8 +46,8 @@ class IncubationController < ApplicationController
        admin_attributes: [:id, :gender, :born_on, :communication_address,
         :district, :state, :pin, :linkedin_url, :twitter_url])
   end
+
   # def incubation_user_params
   #   params.require()
   # end
-
 end

@@ -141,7 +141,8 @@
           - @events.each.with_index(1) do |event,index|
             - if event.event_type == TimelineEvent::TYPE_END_ITERATION
               .tl_iteration
-                .buttons End of Iteration #{event.iteration}
+                .buttons style="display:inline" End of Iteration #{event.iteration}
+                br
                 p #{event.title}
                 = image_tag 'timeline/dash.png'
                 p #{event.description}

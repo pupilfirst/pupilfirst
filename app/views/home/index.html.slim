@@ -8,50 +8,14 @@
 - content_for :header
   .container
     #carousel-example-generic.carousel.slide data-ride="carousel"
-      / Indicators
-      ol.carousel-indicators
-        li.active data-target="#carousel-example-generic" data-slide-to="0"
-          a href="#"
-        li data-target="#carousel-example-generic" data-slide-to="1"
-          a href="#"
-        li data-target="#carousel-example-generic" data-slide-to="2"
-          a href="#"
-
       / Wrapper for slides
       .carousel-inner role="listbox"
         .item.active
           .carousel-caption
             h4
-              ' We help first-time
-              span style="font-weight:300;" founders
-              br
-              | build great products.
-            div
-              button.btn.btn-join type="button" Join SV.CO
-              i.fa
-                img src="#{image_url 'play.png'}" width="20"
-                |  Watch video
-
-        .item
-          .carousel-caption
-            h4
-              ' We help first-time
-              span style="font-weight:300;" founders
-              br
-              | build great products.
-            div
-              button.btn.btn-join type="button" Join SV.CO
-              i.fa
-                img src="#{image_url 'play.png'}" width="20"
-                |  Watch video
-
-        .item
-          .carousel-caption
-            h4
-              ' We help first-time
-              span style="font-weight:300;" founders
-              br
-              | build great products.
+              | We're building a great
+              br learning platform for
+              span style="font-weight:600;" first-time founders.
             div
               button.btn.btn-join type="button" Join SV.CO
               i.fa

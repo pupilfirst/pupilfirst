@@ -30,7 +30,6 @@ class User < ActiveRecord::Base
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }
   scope :student_entrepreneurs, -> { where(is_student: true, is_founder: true) }
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
-  scope :invited_cofounders, ->(startup_id) { where(pending_startup_id: startup_id)}
 
   # TODO: Remove born_on, title, and salutation columns if unneccessary.
   # validates_presence_of :born_on

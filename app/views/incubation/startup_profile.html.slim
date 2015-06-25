@@ -4,7 +4,8 @@
       .row
         .col-sm-4.text-center style="color: green"
           .fa.fa-check-circle-o
-          | &nbsp User Profile
+          | &nbsp;
+          = link_to 'User Profile', incubation_path(:user_profile)
         .col-sm-4.text-center style="color: #337ab7"
           .fa.fa-circle-o-notch.fa-spin
           | &nbsp Startup Profile
@@ -14,25 +15,20 @@
     .panel-body
       = simple_form_for @startup, url: wizard_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
         = f.error_notification
-        .row
-          .col-md-6 = f.input :name, placeholder: "Tesla Motors"
-          .col-md-6 = f.input :registration_type, collection: valid_registration_types,:label_method => :first,
-        :value_method => :last, include_blank: false
-        .row
-          .col-md-6 = f.input :about, placeholder: "Tesla Motors, Inc. is an American company that designs, manufactures, and sells electric cars and electric vehicle powertrain components. Tesla first gained widespread attention following their production of the Tesla Roadster, the first fully electric sports car."
-          .col-md-6
-            = f.input :pitch, placeholder: "We make the best electric cars in the world !!"
-            = f.input :cool_fact, placeholder: "We just removed the patent wall at our HQ as part of our recent open source movement!"
-        .row
-          .col-md-6 = f.input :incubation_location, collection: incubation_locations, :label_method => :first, :value_method => :last, include_blank: false
-          .col-md-6 = f.input :website, placeholder: "www.teslamotors.com"
-        .row
-          .col-md-6 = f.association :categories, collection: Category.startup_category
-          .col-md-6
-            = f.input :revenue_generated
-            = f.input :presentation_link
-        .row
-          .col-md-6 = f.input :team_size
-          .col-md-6 = f.input :women_employees
-        a.btn.btn-info href=previous_wizard_path << Prev
-        .pull-right = f.button :submit, 'Next >>', class: 'btn btn-info'
+
+        legend Mandatory fields
+        = f.input :name, placeholder: "Your startup's name.", required: true
+        = f.input :about, placeholder: "A few words describing what your startup is about - its goals and dreams.", required: true
+        = f.input :presentation_link, placeholder: 'https://slideshare.net/YourUsername/your-startup-deck', label: 'Startup Deck', required: true
+        = f.input :incubation_location, collection: incubation_locations, :label_method => :first, :value_method => :last, include_blank: false, required: true
+
+        legend Optional fields
+        = f.input :website, placeholder: 'www.your-website.com'
+        = f.input :registration_type, collection: valid_registration_types,:label_method => :first, :value_method => :last, include_blank: 'Unregistered'
+        = f.association :categories, collection: Category.startup_category
+        = f.input :team_size
+        = f.input :women_employees, label: 'No. of women employees'
+
+        .form-group
+          .col-sm-offset-3.col-sm-10
+            = f.button :submit, 'Request incubation', class: 'btn btn-primary'

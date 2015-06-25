@@ -12,15 +12,21 @@
           .fa.fa-circle-o-notch.fa-spin
           | &nbsp Launch!
     .panel-body
-      h3 Great! Your are now all set to be incubated at SV !!
-      h5 Got fellow travellers in this journey? Invite your co-founders now!
-      - if User.invited_cofounders(current_user.startup).present?
-        ' Invitation sent to: #{User.invited_cofounders(current_user.startup).map{ |u| u.email}.join(", ")}
-      = form_tag add_cofounder_incubation_path do
-        = text_field_tag 'email', nil, placeholder: 'cofounder@ourstartup.com'
-        = submit_tag 'Invite'
-      / a href="#" + add co-founder
-      = simple_form_for @startup, url: wizard_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
-        = f.input :approval_status, :as => :hidden, :input_html => { :value => "pending" }
-        a.btn.btn-info href=previous_wizard_path << Prev
-        .pull-right = f.button :submit, 'Finish!', class: 'btn btn-success'
+      h3.page-header.margin-top-0 That's it! You're done.
+      p Your request for incubation has been submitted.
+      p
+        ' Our team will review your request, and will contact you within a week's time. If you have any doubts about the
+        | process, please contact us at #{mail_to 'help@sv.co'}
+
+      h3.page-header Add co-founders
+      p Got fellow travellers in this journey? Tell them to sign up on <em>sv.co</em>, and then enter their SV ID-s below.
+
+      - if @startup.founders.count > 1
+        | Already added: #{@startup.cofounders(@user).map { |u| u.email }.join ', '}
+
+      = simple_form_for :adding_cofounder_during_incubation, url: add_cofounder_incubation_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
+        = f.input :email, placeholder: 'co-founder@yourstartup.com', label: "Co-founder's SV ID"
+
+        .form-group
+          .col-sm-offset-3.col-sm-10
+            = f.button :submit, 'Add as co-founder', class: 'btn btn-primary'

@@ -11,7 +11,7 @@ module IncubationHelper
       {
         'Private Limited' => Startup::REGISTRATION_TYPE_PRIVATE_LIMITED,
         'Partnership' => Startup::REGISTRATION_TYPE_PARTNERSHIP,
-        'LLP' => Startup::REGISTRATION_TYPE_LLP
+        'Limited Liability Partnership' => Startup::REGISTRATION_TYPE_LLP
       }
     end
 

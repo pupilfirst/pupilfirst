@@ -101,7 +101,14 @@ class UsersController < ApplicationController
       render 'code' and return
     end
     flash[:notice] = 'Your phone number is now verified!'
-    redirect_to root_url
+
+    if session[:referer]
+      session[:referer] = nil
+    end
+
+    referer = session.delete :referer
+
+    redirect_to referer || root_url
   end
 
   private

@@ -175,6 +175,8 @@ GEM
     devise_invitable (1.5.1)
       actionmailer (>= 3.2.6, < 5)
       devise (>= 3.2.0)
+    did_you_mean (0.9.10)
+      interception
     diff-lcs (1.2.5)
     domain_name (0.5.24)
       unf (>= 0.0.5, < 1.0.0)
@@ -337,6 +339,7 @@ GEM
       has_scope (~> 0.6.0.rc)
       railties (>= 3.2, < 5)
       responders
+    interception (0.5)
     ipaddress (0.8.0)
     jasmine-core (2.3.4)
     jasmine-rails (0.10.8)
@@ -419,6 +422,7 @@ GEM
       activesupport (>= 3.0)
       countries (~> 0.8, >= 0.8.2)
       phony (~> 2.12)
+    pnotify-rails (2.0.1.1)
     polyamorous (1.2.0)
       activerecord (>= 3.0)
     pry (0.10.1)
@@ -567,6 +571,8 @@ GEM
       unf_ext
     unf_ext (0.0.7.1)
     uniform_notifier (1.9.0)
+    unobtrusive_flash (3.1.0)
+      railties
     urbanairship (2.4.1)
       json
     validate_url (1.0.0)
@@ -586,6 +592,8 @@ GEM
     webmock (1.21.0)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
+    wicked (1.1.1)
+      rails (>= 3.0.7)
     will_paginate (3.0.7)
     will_paginate-bootstrap (1.0.1)
       will_paginate (>= 3.0.3)
@@ -614,6 +622,7 @@ DEPENDENCIES
   datetimepicker-rails!
   delayed_job_active_record
   devise_invitable
+  did_you_mean
   dotenv
   factory_girl
   factory_girl_rails (~> 4.0)
@@ -644,6 +653,7 @@ DEPENDENCIES
   passenger (~> 5.0.8)
   pg
   phony_rails
+  pnotify-rails
   pry-rails
   rails (= 4.2.2)
   rails_12factor
@@ -669,10 +679,12 @@ DEPENDENCIES
   sucker_punch
   terminal-notifier-guard
   uglifier
+  unobtrusive_flash (>= 3)
   urbanairship
   validate_url
   versionist
   web-console (~> 2.0)
   webmock
+  wicked
   will_paginate-bootstrap
   wysihtml-rails!

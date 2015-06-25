@@ -7,6 +7,14 @@ Svapp::Application.routes.draw do
 
   resources :users, only: [:show, :edit, :update] do
     resources :mentor_meetings, only: ['index']
+
+    member do
+      get 'phone'
+      post 'code'
+      patch 'resend'
+      post 'verify'
+    end
+
     collection do
       patch 'update_password'
       get 'invite'
@@ -18,7 +26,7 @@ Svapp::Application.routes.draw do
 
   resources :startup_links, only: :destroy
 
-  resources :startups, only: [:show, :edit, :update, :index] do
+  resources :startups do
     resources :startup_links, only: [:index, :create]
     resources :startup_jobs do
       patch :repost
@@ -70,10 +78,11 @@ Svapp::Application.routes.draw do
   get 'privacy_policy', to: 'welcome#privacy_policy'
   get 'faq', to: 'welcome#faq'
 
-  # get 'mentor_meetings/:id/feedback', to: 'mentor_meetings#feedback'
-  scope 'demo', as: 'demo', controller: 'home' do
-    get '/', action: 'index', as: 'root'
+  resources :incubation do
+    member do
+      post 'add_cofounder'
+    end
   end
 
-  root 'welcome#index'
+  root 'home#index'
 end

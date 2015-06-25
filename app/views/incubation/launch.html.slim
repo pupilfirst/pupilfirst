@@ -1,0 +1,32 @@
+#progressbar.col-md-10.col-md-offset-1
+  .panel.panel-default
+    .panel-heading
+      .row
+        .col-sm-4.text-center style="color: green"
+          .fa.fa-check-circle-o
+          | &nbsp; User Profile
+        .col-sm-4.text-center style="color: green"
+          .fa.fa-check-circle-o
+          | &nbsp Startup Profile
+        .col-sm-4.text-center style="color: #337ab7"
+          .fa.fa-circle-o-notch.fa-spin
+          | &nbsp Launch!
+    .panel-body
+      h3.page-header.margin-top-0 That's it! You're done.
+      p Your request for incubation has been submitted.
+      p
+        ' Our team will review your request, and will contact you within a week's time. If you have any doubts about the
+        | process, please contact us at #{mail_to 'help@sv.co'}
+
+      h3.page-header Add co-founders
+      p Got fellow travellers in this journey? Tell them to sign up on <em>sv.co</em>, and then enter their SV ID-s below.
+
+      - if @startup.founders.count > 1
+        | Already added: #{@startup.cofounders(@user).map { |u| u.email }.join ', '}
+
+      = simple_form_for :adding_cofounder_during_incubation, url: add_cofounder_incubation_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
+        = f.input :email, placeholder: 'co-founder@yourstartup.com', label: "Co-founder's SV ID"
+
+        .form-group
+          .col-sm-offset-3.col-sm-10
+            = f.button :submit, 'Add as co-founder', class: 'btn btn-primary'

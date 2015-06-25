@@ -15,4 +15,5 @@ Rails.application.config.assets.precompile += %w(
   demo/ct-carousel/jquery.flexslider-min.js
   demo/timeline.css
   demo/timeline.js
+  demo/pnotify.css
 )

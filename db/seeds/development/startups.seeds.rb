@@ -4,6 +4,7 @@ after 'development:users' do
   # Startup with live agreement.
   super_startup = Startup.new(
     name: 'Super Startup',
+    approval_status: Startup::APPROVAL_STATUS_APPROVED,
     agreement_first_signed_at: 18.months.ago,
     agreement_last_signed_at: 6.months.ago,
     agreement_ends_at: 6.months.since,

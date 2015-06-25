@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :invitable, :database_authenticatable, :confirmable, #:registerable,
+  devise :invitable, :database_authenticatable, :confirmable, :registerable,
     :recoverable, :rememberable, :trackable, :validatable, :omniauthable
 
   # alias_attribute :communication_address, :address  # 13/03/2015 to accomodate change in user address field for older api, need to be removed after sometime
@@ -38,6 +38,9 @@ class User < ActiveRecord::Base
 
   # We don't have a full name when we're creating a temporary co-founder account.
   validates_presence_of :fullname, unless: ->(user) { user.pending_startup_id.present? }
+
+  # validations during incubation
+  # validates_presence_of :gender, :born_on, :communication_address , if: ->(user) { user.startup.try(:updating_user?) }
 
   def self.valid_gender_values
     [GENDER_FEMALE, GENDER_MALE, GENDER_OTHER]
@@ -195,4 +198,11 @@ class User < ActiveRecord::Base
       !phone_verified?
     end
   end
+
+  def self.add_cofounder(email,startup_id)
+    user = find_or_initialize_cofounder(email)
+    user.pending_startup_id = startup_id
+    user.save_unregistered_user!
+  end
+
 end

@@ -1,0 +1,17 @@
+= simple_form_for resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post, class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
+  legend Resend confirmation instructions
+
+  = f.error_notification
+  = f.full_error :confirmation_token
+
+  = f.input :email, label: 'SV ID', required: true, placeholder: 'Your registered email address'
+
+  .form-group
+    .col-sm-offset-3.col-sm-10
+      = f.button :submit, 'Resend confirmation instructions', class: 'btn btn-primary'
+
+  hr
+
+  .form-group
+    .col-sm-offset-3.col-sm-10
+      = render "users/shared/links"

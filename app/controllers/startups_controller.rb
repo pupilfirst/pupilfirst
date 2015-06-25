@@ -8,19 +8,33 @@ class StartupsController < InheritedResources::Base
   end
   layout 'demo', only: [:itraveller, :show]
 
+  def new
+    if !current_user.phone_verified?
+      flash[:notice] = 'Please enter and verify your phone number to continue.'
+
+      session[:referer] = new_startup_url
+      redirect_to phone_user_path(current_user) and return
+    end
+
+    if current_user.startup.present?
+      if current_user.startup.unready?
+        redirect_to incubation_path(id: :user_profile) and return
+      else
+        flash[:alert] = "You've already submitted an application for incubation."
+        redirect_to root_url and return
+      end
+    else
+      Startup.new_incubation!(current_user)
+      redirect_to incubation_path(id: :user_profile)
+    end
+  end
+
   def index
     @startups = Startup.agreement_live
   end
 
   def create
-    @startup = Startup.create(apply_now_params.merge({ email: current_user.email }))
-    @startup.full_validation = false
-    @startup.founders << current_user
-    if @startup.save
-      # flash[:notice] = "Your startup Application is submited and in pending for approval."
-      render :post_create
-      StartupMailer.apply_now(@startup).deliver_later
-    end
+
   end
 
   def show
@@ -36,17 +50,17 @@ class StartupsController < InheritedResources::Base
   end
 
   def update
-    @current_user = current_user
-    @startup = Startup.find params[:id]
-    @startup.founders.each { |f| f.full_validation = true }
-    @startup.validate_web_mandatory_fields = true
+    # @current_user = current_user
+    # @startup = Startup.find params[:id]
+    # @startup.founders.each { |f| f.full_validation = true }
+    # @startup.validate_web_mandatory_fields = true
 
-    if @startup.update(startup_params)
-      flash[:notice] = 'Startup details have been updated.'
-      redirect_to @startup
-    else
-      render 'startups/edit'
-    end
+    # if @startup.update(startup_params)
+    #   flash[:notice] = 'Startup details have been updated.'
+    #   redirect_to @startup
+    # else
+    #   render 'startups/edit'
+    # end
   end
 
   # GET /startups/featured

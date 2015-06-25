@@ -67,8 +67,12 @@ gem 'delayed_job_active_record' # Delayed Job to manage jobs. Let's migrate away
 gem 'sucker_punch' # POSSIBLY-USELESS
 
 gem 'seedbank' # Better organized seed data.
+gem 'wicked' # Multistep form wizard for incubation
 
 gem 'font-awesome-sass', '~> 4.3.0' # Icons from font-awesome!
+
+gem 'pnotify-rails' # Superb notifications library. http://sciactive.github.io/pnotify/
+gem 'unobtrusive_flash', '>=3' # Let's not deal with flash messages, yeah? https://github.com/leonid-shevtsov/unobtrusive_flash
 
 group :development do
   gem 'letter_opener'
@@ -113,6 +117,7 @@ group :development, :test do
 
   # Let's try testing Javascript!
   gem 'jasmine-rails' # POSSIBLY-USELESS
+  gem 'did_you_mean' # Enough of silly spellinng mistakes ruining the day !
 end
 
 group :production do

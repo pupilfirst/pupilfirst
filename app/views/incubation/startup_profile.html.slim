@@ -1,0 +1,34 @@
+#progressbar.col-md-10.col-md-offset-1
+  .panel.panel-default
+    .panel-heading
+      .row
+        .col-sm-4.text-center style="color: green"
+          .fa.fa-check-circle-o
+          | &nbsp;
+          = link_to 'User Profile', incubation_path(:user_profile)
+        .col-sm-4.text-center style="color: #337ab7"
+          .fa.fa-circle-o-notch.fa-spin
+          | &nbsp Startup Profile
+        .col-sm-4.text-center style="color: grey"
+          .fa.fa-circle-o
+          | &nbsp Launch!
+    .panel-body
+      = simple_form_for @startup, url: wizard_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
+        = f.error_notification
+
+        legend Mandatory fields
+        = f.input :name, placeholder: "Your startup's name.", required: true
+        = f.input :about, placeholder: "A few words describing what your startup is about - its goals and dreams.", required: true
+        = f.input :presentation_link, placeholder: 'https://slideshare.net/YourUsername/your-startup-deck', label: 'Startup Deck', required: true
+        = f.input :incubation_location, collection: incubation_locations, :label_method => :first, :value_method => :last, include_blank: false, required: true
+
+        legend Optional fields
+        = f.input :website, placeholder: 'www.your-website.com'
+        = f.input :registration_type, collection: valid_registration_types,:label_method => :first, :value_method => :last, include_blank: 'Unregistered'
+        = f.association :categories, collection: Category.startup_category
+        = f.input :team_size
+        = f.input :women_employees, label: 'No. of women employees'
+
+        .form-group
+          .col-sm-offset-3.col-sm-10
+            = f.button :submit, 'Request incubation', class: 'btn btn-primary'

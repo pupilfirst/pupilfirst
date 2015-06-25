@@ -1,9 +1,6 @@
-/.login-block
-
-/h3 Sign in
-
-= simple_form_for resource, as: resource_name, url: session_path(resource_name), html: {class: 'form-horizontal'}, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_fize_input, boolean: :horizontal_boolean } do |f|
+= simple_form_for resource, as: resource_name, url: session_path(resource_name), html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_file_input, boolean: :horizontal_boolean } do |f|
   legend Login with your SV ID!
+
   = f.error_notification
 
   = f.input :email, required: true, autofocus: true, label: 'SV ID (email)', div_html: { class: 'col-sm-4' }
@@ -15,12 +12,11 @@
       = f.button :submit, 'Sign in', class: 'btn btn-primary'
       - if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations'
         | &nbsp;
-        = link_to 'Forgot your password?', new_password_path(resource_name), class: 'btn btn-default'
-      br
-      br
-      p To sign up, download our iOS or Android application.
-      a href="https://play.google.com/store/apps/details?id=in.svlabs.android"
-        = image_tag 'google_play.png', alt: 'Android app on Google Play'
-      | &nbsp;
-      a href="https://itunes.apple.com/in/app/startup-village-enabling-entrepreneurship/id804638121"
-        = image_tag 'app_store.svg', alt: 'iOS app on App Store'
+        = link_to 'Forgot your password?', new_password_path(resource_name), class: 'btn btn-info'
+
+  hr
+
+  .form-group
+    .col-sm-offset-3.col-sm-10
+      = render 'users/shared/links'
+

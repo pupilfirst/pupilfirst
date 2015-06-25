@@ -265,13 +265,12 @@ section.container.blog
 
   .row
     - @blogs.each do |blog|
-      a href=""
       .col-lg-3.col-md-4.col-sm-6.col-xs-12.post
         .post-content
-          img height="100%;" src="#{image_url 'blogpost1.jpg'}" width="100%"
-          h5 Startup Village bags Award for Technology Business Incubator
+          img height="100%;" src="#{blog["post_thumbnail"]["link"]}" width="100%"
+          h5 #{blog["post_title"]}
           img.line height="100%;" src="#{image_url 'line2.png'}" width="100%"
-          p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+          p #{truncate(strip_tags(blog["post_content"]),length: 150)}
           .continue-reading
             a href="#"
               | continue reading &nbsp;

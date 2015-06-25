@@ -272,7 +272,7 @@ section.container.blog
           img.line height="100%;" src="#{image_url 'line2.png'}" width="100%"
           p #{truncate(strip_tags(blog["post_content"]),length: 150)}
           .continue-reading
-            a href="#"
+            a href="#{blog["link"]}"
               | continue reading &nbsp;
               = image_tag 'cont.png', class: 'img-animation'
 

@@ -8,82 +8,30 @@
 - content_for :header
   .container
     #carousel-example-generic.carousel.slide data-ride="carousel"
-      / Indicators
-      ol.carousel-indicators
-        li.active data-target="#carousel-example-generic" data-slide-to="0"
-          a href="#"
-        li data-target="#carousel-example-generic" data-slide-to="1"
-          a href="#"
-        li data-target="#carousel-example-generic" data-slide-to="2"
-          a href="#"
-
       / Wrapper for slides
       .carousel-inner role="listbox"
         .item.active
           .carousel-caption
             h4
-              ' We help first-time
-              span style="font-weight:300;" founders
-              br
-              | build great products.
+              | We're building a great
+              br learning platform for
+              span style="font-weight:600;" first-time founders.
             div
               button.btn.btn-join type="button" Join SV.CO
               i.fa
                 img src="#{image_url 'play.png'}" width="20"
                 |  Watch video
-
-        .item
-          .carousel-caption
-            h4
-              ' We help first-time
-              span style="font-weight:300;" founders
-              br
-              | build great products.
-            div
-              button.btn.btn-join type="button" Join SV.CO
-              i.fa
-                img src="#{image_url 'play.png'}" width="20"
-                |  Watch video
-
-        .item
-          .carousel-caption
-            h4
-              ' We help first-time
-              span style="font-weight:300;" founders
-              br
-              | build great products.
-            div
-              button.btn.btn-join type="button" Join SV.CO
-              i.fa
-                img src="#{image_url 'play.png'}" width="20"
-                |  Watch video
-
-/ About section.
-section#about-section
-  .container
-    .row
-      .about-details.col-md-8
-        h5 Startup Village
-        br
-        img style="margin-top:-5px;" src="#{image_url 'build.png'}"
-        img style="margin-top:-5px;" src="#{image_url 'break.png'}"
-        img style="margin-top:-5px;" src="#{image_url 'innovate.png'}"
-        br
-        h4 At SV, entrepreneurs Build, Break &amp; innovate to create the finest technology.
-        br
-      .about-circle.col-md-2.col-md-offset-1
-        /! <img src="img/comming.png" width="200" style="margin-top:-30px;">
 
 / Stages and learning.
 section#stages
   .container
     .row
       .stages-detail style="text-align:center;"
-        h1 Stages + Learning
+        h1 Stages & Learning
         p
-          | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+          | At Startup Village, we're guiding startups through
           br
-        	| industry's standard dummy text ever since the 1500s
+        	| five stages of creating a great startup.
         br
         #stage_imgs
           center
@@ -96,72 +44,84 @@ section#stages
         br
         div
           ol.progtrckr data-progtrckr-steps="5"
-            li.active title=("PRODUCT DISCOVERY")
+            li.active data-description=("This is where the startup discovers a product idea that solves a clear user need.")
               .stage_name val="img1"
-                .bbr PRODUCT DISCOVERY
+                .bbr IDEA DISCOVERY
                 .dimmer
               i
-            li title=("PRODUCT PROTOTYPE")
+            li data-description=("This is when the team develops a prototype that is a solution to the product idea.")
               .stage_name val="img2"
-                | PRODUCT PROTOTYPE
+                | PROTOTYPE
                 .dimmer
               i
-            li title=("CUSTOMER VALIDATION")
+            li data-description=("This is when customers either use or pay for the product.")
               .stage_name val="img3"
                 | CUSTOMER VALIDATION
                 .dimmer
               i
-            li title="EFFICIENCY"
+            li data-description=("This is where customer acquisition is refined and a sound business model is discovered.")
               .stage_name val="img4"
                 | EFFICIENCY
                 .dimmer
               i
-            li title="SCALING"
+            li data-description=("At this stage, startups aggresively grow.")
               .stage_name val="img5"
-                | SCALING
+                | SCALE
                 .dimmer
               i
 
-/ Success scenarios.
+/ Success Scenarios.
 section#showcase
   .container
     .row
       .showcase-heading
         .col-md-6.success
-          h1 Success Scenerios
+          h1 Success Scenarios
           = image_tag 'line.jpg'
           br
           p
-            | Success varies with startup.
-            br
-            | Here are the different Success scenarios of our startups.
+            | At Startup Village, we have six perfectly happy outcomes. We think the much hyped story of a founder striking it big from his garage is good press, but building a startup can be about much more than a good exit. If you are one of those few founders who make it big, great! But building a great startup can help you with all of these six different journeys.
           br
           div
             ul.list
               li.list-item
                 .li-icon
-                h2 Getting Acquired
-                span to be find
+                h2 Get funded
+                span 
+                  ' Shiju of 
+                  em iTraveller 
+                  ' talks about multiple iterations of his product and how he raised Series A funding.
               li.list-item
                 .li-icon
-                h2 Getting Admission for Higher Studies
-                span to be find
+                h2 Get into a Startup Accelerator
+                span 
+                  em Profoundis 
+                  ' founder Joffin talks about his product Vibe and selection into a startup accelerator.
               li.list-item
                 .li-icon
-                h2 Getting Funded
-                span ITraveller
+                h2 Get Aqqui-Hired
+                span 
+                  ' Kali who founded 
+                  em Mindhelix 
+                  ' talks about the many product iterations he went through and how his team finally got acquired.
               li.list-item
                 .li-icon
-                h2 Getting Great Job
-                span to be find
+                h2 Become Self Sustainable
+                span 
+                  em Wowmakers 
+                  ' founder Vivek talks about how his design startup became cash-positive and
+                  ' funded his product Crowdstudio.
               li.list-item
                 .li-icon
-                h2 Getting into Accelerator
-                span Profoundis
+                h2 Get a Job
+                span
+                  ' Utsav was hired by Uber because of the skills he acquired while
+                  ' building his startup 
+                  em nwplyng.
               li.list-item
                 .li-icon
-                h2 Getting to Self Sustainability
-                span Wow Makers
+                h2 Go for Higher Education
+                span Sharan Thampi TBD.
         .col-md-6.sucess-video align="center"
           div style=("max-width:450px; margin:0 auto;")
             = image_tag 'startup_showcase1.jpg', class: 'showcase_company img-responsive'
@@ -186,8 +146,9 @@ section#companies
             h1 Startups
             = image_tag 'line.jpg'
             p
-              | These are the startups who are currently enrolled with us.Lorem ipsum dolor sit amet, te sit aeque minimum splendide,
-              | per et novum imperdiet voluptatibus, verear vivendo inciderint ei duo.
+              ' The Startup Village community is rich and vibrant with a ton of startups across sectors and in different stages of maturity. For our launch, we're presenting 
+              em verified timelines 
+              ' of selected startups who we've helped through the years.
           .col-md-6
             br
             br
@@ -241,7 +202,7 @@ section#companies
 
     .row.learnmore style="margin-top:20px;"
       a href="#"
-        | LEARN MORE ABOUT STARTUP COMMUNITY &nbsp;
+        | VIEW OUR FULL LIST OF VERIFIED TIMELINES &nbsp;
         = image_tag 'cont.png', class: 'img-animation'
 
 / Testimonials
@@ -375,31 +336,5 @@ section.container.blog
             | continue reading &nbsp;
             = image_tag 'cont.png', class: 'img-animation'
 
-/ In the media.
-section#media
-  #media-showcase-data.hidden data-arrow-right-url="#{image_url 'arrow2_r.png'}" data-arrow-left-url="#{image_url 'arrow2_l.png'}"
-  .container
-    .row
-      .media-details
-        .media-heading.hdstyle
-          br
-          h1 SV.CO in Media
-          = image_tag 'line.jpg'
-          p A few mentions about startup village in the media
-          br
-        .wrapper-with-margin
-          #owl-demo.owl-carousel
-            .primary1
-              = image_tag 'media_logos/comp2.png'
-            .primary1
-              = image_tag 'media_logos/comp3.png'
-            .primary1
-              = image_tag 'media_logos/comp4.png'
-            .primary1
-              = image_tag 'media_logos/comp2.png'
-            .primary1
-              = image_tag 'media_logos/comp3.png'
-            .primary1
-              = image_tag 'media_logos/comp4.png'
 
 

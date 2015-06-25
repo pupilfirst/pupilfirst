@@ -58,13 +58,7 @@ html
               li
                 a href="#" STARTUPS
               li
-                a href="#" RESOURCES
-              li
-                a href="#" MEDIA
-              li
                 a href="#" BLOG
-              li
-                a href="#" CONTACT
               - if current_user
                 li = link_to 'YOU', current_user
                 li = link_to 'LOGOUT', destroy_user_session_path, method: :delete

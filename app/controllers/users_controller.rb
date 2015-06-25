@@ -70,15 +70,22 @@ class UsersController < ApplicationController
       @failed_to_add_phone_number = e.message
       render 'phone' and return
     end
+
     # SMS the code to the phone number. Currently uses FA format.
-    RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV: #{code}", msisdn: phone_number)
+    unless Rails.env.development?
+      RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV: #{code}", msisdn: phone_number)
+    end
   end
 
   def resend
     if (current_user.updated_at <= 5.minute.ago)
       @retry_after_some_time = false
       code, phone_number = current_user.generate_phone_number_verification_code(current_user.phone)
-      RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV: #{code}", msisdn: phone_number)
+
+      unless Rails.env.development?
+        RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV: #{code}", msisdn: phone_number)
+      end
+
       @resent_verification_code = true
     else
       @retry_after_some_time = true

@@ -11,11 +11,10 @@ html
     title sv.co
 
     // Local Styles
-    = stylesheet_link_tag 'demo/application'
-    = stylesheet_link_tag 'demo/pnotify'
-    = stylesheet_link_tag 'demo/owl-carousel/owl.carousel'
-    = stylesheet_link_tag 'demo/style'
-    = stylesheet_link_tag 'demo/icon/component'
+    = stylesheet_link_tag 'application'
+    = stylesheet_link_tag 'pnotify'
+    = stylesheet_link_tag 'owl-carousel/owl.carousel'
+    = stylesheet_link_tag 'icon/component'
 
     // Remote styles
     = stylesheet_link_tag '//dimsemenov-static.s3.amazonaws.com/dist/magnific-popup.css'
@@ -27,8 +26,7 @@ html
 
     // Scripts
     = javascript_include_tag 'application'
-    = javascript_include_tag 'demo/application'
-    = javascript_include_tag 'demo/icon/modernizr.custom'
+    = javascript_include_tag 'icon/modernizr.custom'
 
     // Remote scripts
     /![if lt IE 9]>
@@ -53,17 +51,7 @@ html
               img.SiteLogo#SiteLogo src="#{image_url 'logo_transparent.png'}" width="150" style="display:none;"
               img.SiteLogo#SiteLogoWhite src="#{image_url 'logo_white.png'}" width="150"
 
-          #sv-navbar.collapse.navbar-collapse
-            ul.nav.navbar-nav.navbar-right
-              li
-                a href="#" STARTUPS
-              li
-                a href="#" BLOG
-              - if current_user
-                li = link_to 'YOU', current_user
-                li = link_to 'LOGOUT', destroy_user_session_path, method: :delete
-              - else
-                li = link_to 'LOGIN', new_user_session_path
+          = render 'layouts/nav_links'
 
       == yield :header
 

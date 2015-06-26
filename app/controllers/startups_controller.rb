@@ -6,7 +6,8 @@ class StartupsController < InheritedResources::Base
     @startup.founders << current_user
     @startup.save
   end
-  layout 'demo', only: [:itraveller, :show]
+
+  layout 'homepage', only: [:itraveller, :show]
 
   def new
     if !current_user.phone_verified?

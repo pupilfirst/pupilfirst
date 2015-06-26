@@ -3,8 +3,6 @@ class IncubationController < ApplicationController
 
   steps 'user_profile', 'startup_profile', 'launch'
 
-  layout 'demo_generic_inner'
-
   def show
     @startup = current_user.startup
     @user = current_user

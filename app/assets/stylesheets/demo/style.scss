@@ -604,7 +604,10 @@ ol.progtrckr[data-progtrckr-steps="9"] li {
     margin-bottom: 30px; }
     .blog .post .post-content {
       border: 1px solid #d2d2d2; }
-      .blog .post .post-content h5 {
+      .blog .post .post-content .blog-body {
+        height: 400px;
+      }
+      .blog .post .post-content .blog-body h5 {
         font-family: 'Roboto', sans-serif;
         font-size: 16px;
         font-weight: 500;
@@ -612,18 +615,18 @@ ol.progtrckr[data-progtrckr-steps="9"] li {
         padding-left: 15px;
         padding-right: 15px;
         line-height: 26px; }
-      .blog .post .post-content p {
+      .blog .post .post-content .blog-body p {
         font-size: 14px;
         font-weight: 400;
         color: #828282;
         padding-left: 15px;
         padding-right: 15px;
         line-height: 26px; }
-      .blog .post .post-content .line {
+      .blog .post .post-content .blog-body .line {
         margin-top: -15px;
         padding-left: 15px;
         padding-right: 15px; }
-      .blog .post .post-content .continue-reading {
+      .blog .post .post-content  .blog-footer .continue-reading {
         padding-left: 15px;
         padding-right: 15px;
         text-align: right;

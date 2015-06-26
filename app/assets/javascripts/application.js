@@ -41,3 +41,7 @@
 //= require pickers
 
 //= require startup_jobs
+
+//= require pnotify
+//= require unobtrusive_flash
+//= require flashes.js

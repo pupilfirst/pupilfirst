@@ -5,15 +5,15 @@ Rails.application.config.assets.precompile += %w(
   select2.png
   wysihtml.css
   mails.css
-  demo/owl-carousel/owl.carousel.css
-  demo/style.css
-  demo/icon/component.css
-  demo/icon/modernizr.custom.js
-  demo/home.js
-  demo/owl-carousel/owl.carousel.js
-  demo/ct-carousel/masonry.pkgd.min.js
-  demo/ct-carousel/jquery.flexslider-min.js
-  demo/timeline.css
-  demo/timeline.js
-  demo/pnotify.css
+  pnotify.css
+  timeline.css
+  owl-carousel/owl.carousel.css
+  general_style.css
+  icon/component.css
+  icon/modernizr.custom.js
+  homepage.js
+  timeline.js
+  owl-carousel/owl.carousel.js
+  ct-carousel/masonry.pkgd.min.js
+  ct-carousel/jquery.flexslider-min.js
 )

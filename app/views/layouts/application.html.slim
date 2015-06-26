@@ -1,81 +1,54 @@
 doctype html
 html
   head
-    title SVLabs.in
-    meta name="keywords" content="startup village, kerala, svapp, svlabs"
+    // Begin critial tags.
+    meta charset="utf-8"
+    meta http-equiv="X-UA-Compatible" content="IE=edge"
     meta name="viewport" content="width=device-width, initial-scale=1"
-    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
-    = stylesheet_link_tag '//fonts.googleapis.com/css?family=Roboto:400,300,700,100'
-    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    // The above 3 meta tags *must* come first in the head; any other head
+    // content must come *after* these tags.
+
+    title sv.co
+
+    // Local Styles
+    = stylesheet_link_tag 'application'
+    = stylesheet_link_tag 'pnotify'
+
+    // Fonts
+    = stylesheet_link_tag '//fonts.googleapis.com/css?family=Roboto:400,300'
+    = stylesheet_link_tag '//fonts.googleapis.com/css?family=Ubuntu:300,400,700,400italic'
+    = stylesheet_link_tag '//fonts.googleapis.com/css?family=Oswald:400,300,700'
+
+    // Scripts
+    = javascript_include_tag 'application'
+
+    // Remote scripts
+    /![if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]
+
     = csrf_meta_tags
     = yield :head
 
   body
-    .navbar.navbar-default role="navigation"
-      .container
-        .navbar-header
-          button.navbar-toggle.collapsed type="button" data-toggle="collapse" data-target="#sv-navbar-collapse"
-            span.sr-only Toggle Navigation
-            span.icon-bar
-            span.icon-bar
-            span.icon-bar
-          a.navbar-brand.navbar-brand-without-vertical-padding href="#{root_url}" = image_tag('logo.png')
+    section.header#header
+      nav.navbar.navbar-default.shrink role="navigation"
+        .container
+          .navbar-header
+            button.navbar-toggle.collapsed type="button" data-toggle="collapse" data-target="#sv-navbar"
+              span.sr-only Toggle navigation
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
+            a.navbar-brand href="#{root_url}"
+              img.SiteLogo#SiteLogo src="#{image_url 'logo_transparent.png'}" width="150"
 
-        .collapse.navbar-collapse#sv-navbar-collapse
-          ul.nav.navbar-nav.navbar-right
-            /li = link_to 'Team', '/team'
+          = render 'layouts/nav_links'
 
-            li = link_to 'Events', '/events'
-            li = link_to 'Jobs', '/jobs'
-            li
-              a href=mentoring_url
-                ' Mentoring
-                span.badge
-                  | &beta;eta
-            / li = link_to 'Startups', startups_path
-            li = link_to 'Featured Startup', featured_startups_path
-            - if current_user
-              li.dropdown
-                a.dropdown-toggle href="#" data-toggle="dropdown"
-                  | Account
-                  span.caret
-                ul.dropdown-menu role="menu"
-                  li = link_to 'Profile', user_url(current_user)
-                  - if current_user.startup
-                    li = link_to 'Your Startup', current_user.startup
-                  li = link_to('Logout', destroy_user_session_path, :method => :delete)
-            - else current_user
-              li = link_to 'Login', new_user_session_path
+      == yield :header
 
     .container
-      - if notice
-        .alert.alert-info.alert-dismissible role="alert"
-          button.close type="button" data-dismiss="alert"
-            span aria-hidden="true" &times;
-            span.sr-only Close
-          strong = notice
-      - if alert.present?
-        .alert.alert-danger.alert-dismissible role="alert"
-          button.close type="button" data-dismiss="alert"
-            span aria-hidden="true" &times;
-            span.sr-only Close
-          strong = alert
+      == yield
 
-    - if @full_width
-      .container-fluid.container-without-horizontal-padding
-        == yield
-    - else
-      .container
-        == yield
-
-    footer
-      .container
-        .pull-left
-          ' &copy; SV Labs. All rights reserved. |
-          ' #{link_to 'Privacy Policy', privacy_policy_path} |
-          | #{link_to 'Frequently Asked Questions', faq_path}
-
-        .pull-right
-          = link_to image_tag('facebook.png'), 'https://www.facebook.com/startupvillage'
-          = link_to image_tag('twitter.png'), 'https://twitter.com/StartatSV'
-          = link_to image_tag('linkedin.png'), 'http://www.linkedin.com/company/startup-village'
+    == render 'layouts/footer'

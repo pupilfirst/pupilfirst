@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-  layout 'demo'
+  layout 'homepage'
 
   def index
     @blogs = get_latest_blogs

@@ -1,0 +1,11 @@
+#sv-navbar.collapse.navbar-collapse
+  ul.nav.navbar-nav.navbar-right
+    li
+      a href="#" STARTUPS
+    li
+      a href="#" BLOG
+    - if current_user
+      li = link_to 'YOU', current_user
+      li = link_to 'LOGOUT', destroy_user_session_path, method: :delete
+    - else
+      li = link_to 'LOGIN', new_user_session_path

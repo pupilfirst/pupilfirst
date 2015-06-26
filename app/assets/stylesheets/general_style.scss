@@ -1209,13 +1209,15 @@ iframe {
   width: 100%;
   height: auto; }
 
-.fa {
+.watch-view-button {
   color: #fff;
   font-family: "Roboto", sans-serif;
   padding-left: 30px;
   font-weight: 400;
   font-size: 14px;
-  margin-top: 30px; }
+  margin-top: 30px;
+  display: inline-block;
+}
 
 .btn {
   display: inline-block;

@@ -383,6 +383,10 @@ class Startup < ActiveRecord::Base
     startup
   end
 
+  def cofounders(user)
+    founders - [user]
+  end
+
   ####
   # Temporary mentor and investor checks which always return false
   ####

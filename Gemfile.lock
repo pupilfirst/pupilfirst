@@ -431,6 +431,8 @@ GEM
       slop (~> 3.4)
     pry-rails (0.3.4)
       pry (>= 0.9.10)
+    quiet_assets (1.1.0)
+      railties (>= 3.1, < 5.0)
     rack (1.6.4)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -655,6 +657,7 @@ DEPENDENCIES
   phony_rails
   pnotify-rails
   pry-rails
+  quiet_assets
   rails (= 4.2.2)
   rails_12factor
   rb-fchange

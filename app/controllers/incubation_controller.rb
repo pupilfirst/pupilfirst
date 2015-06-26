@@ -15,9 +15,15 @@ class IncubationController < ApplicationController
 
     # Save update_from so as to use for conditional validations during params update.
     @startup.updated_from = step
-    @startup.save(validate: false)
-    # Update startup (and user) with recieved params.
-    @startup.update(incubation_startup_params)
+    @startup.save! validate: false
+
+    # Update startup (and user) with received params.
+    if @startup.update(incubation_startup_params)
+      # When updating from startup_profile step, also set approval status to pending.
+      if step == 'startup_profile'
+        @startup.update!(approval_status: Startup::APPROVAL_STATUS_PENDING)
+      end
+    end
 
     render_wizard @startup
   end

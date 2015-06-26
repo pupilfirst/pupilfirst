@@ -5,7 +5,7 @@
     .panel-body
       p
         ' If your startup has more than one founder, please make sure that
-        strong only one of you applies for incubation&nbsp;
+        strong only one of you applies for incubation.&nbsp;
         ' You can add co-founders after you've submitted your incubation request.
       p
         ' For more information regarding applying for incubation, check out the corresponding section in the Startup
@@ -30,7 +30,7 @@
         = f.simple_fields_for :admin do |u|
           legend Mandatory fields
           = u.input :gender, collection: valid_gender_values, label_method: :first, value_method: :last, as: :radio_buttons, required: true
-          = u.input :born_on, as: :date_picker, required: true, label: 'Date of birth'
+          = u.input :born_on, as: :date_picker, required: true, label: 'Date of birth', placeholder: 'DD/MM/YYYY'
 
           legend Optional fields
           = u.input :communication_address

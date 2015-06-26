@@ -118,6 +118,8 @@ group :development, :test do
   # Let's try testing Javascript!
   gem 'jasmine-rails' # POSSIBLY-USELESS
   gem 'did_you_mean' # Enough of silly spellinng mistakes ruining the day !
+
+  gem 'quiet_assets' # Let's not see asset serving messages in the development log!
 end
 
 group :production do

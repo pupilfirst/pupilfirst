@@ -199,10 +199,20 @@ class User < ActiveRecord::Base
     end
   end
 
-  def self.add_cofounder(email,startup_id)
-    user = find_or_initialize_cofounder(email)
-    user.pending_startup_id = startup_id
-    user.save_unregistered_user!
-  end
+  # Add user with given email as co-founder if possible.
+  def self.add_as_founder_to_startup!(email, startup)
+    user = User.find_by email: email
 
+    raise Exceptions::UserNotFound unless user
+
+    if user.startup.present?
+      if user.startup == startup
+        raise Exceptions::UserAlreadyMemberOfStartup
+      else
+        raise Exceptions:: UserAlreadyHasStartup
+      end
+    else
+      startup.founders << user
+    end
+  end
 end

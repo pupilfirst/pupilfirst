@@ -3,6 +3,8 @@ class IncubationController < ApplicationController
 
   steps 'user_profile', 'startup_profile', 'launch'
 
+  layout 'demo_generic_inner'
+
   def show
     @startup = current_user.startup
     @user = current_user
@@ -35,9 +37,18 @@ class IncubationController < ApplicationController
 
   # Attempt to a co-founder, and return to the launch page.
   def add_cofounder
-    User.add_cofounder(params[:email],current_user.startup.id)
-    UserMailer.cofounder_request(params[:email], current_user).deliver_later
-    flash[:notice] = "An email has been sent to #{params[:email]} inviting him/her to join as a cofounder"
+    begin
+      User.add_as_founder_to_startup!(params[:cofounder][:email], current_user.startup)
+    rescue Exceptions::UserNotFound
+      flash[:error] = "Couldn't find a user with the SV ID you supplied. Please verify founder's registered email address."
+    rescue Exceptions::UserAlreadyMemberOfStartup
+      flash[:info] = 'The SV ID you supplied is already linked to your startup!'
+    rescue Exceptions:: UserAlreadyHasStartup
+      flash[:notice] = 'The SV ID you supplied is already linked to another startup. Are you sure you have the right e-mail address?'
+    else
+      # UserMailer.cofounder_request(params[:email], current_user).deliver_later
+      flash[:success] = "SV ID #{params[:email]} has been linked to your startup as founder"
+    end
 
     redirect_to incubation_path(:launch)
   end

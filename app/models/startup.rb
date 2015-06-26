@@ -152,19 +152,14 @@ class Startup < ActiveRecord::Base
 
   # New set of validations for incubation wizard
   store :metadata, :accessors => [:updated_from]
-  validates_presence_of :name, if: ->(startup) { startup.incubation_step_2? }
-  validates_presence_of :product_name, :product_description, :product_progress, if: ->(startup) { startup.incubation_step_3? }
+  validates_presence_of :name, :presentation_link, :about, :incubation_location, if: :incubation_step_2?
 
-  def incubation_step_2?
-    updated_from == 'startup_profile'
-  end
-
-  def updating_user?
+  def incubation_step_1?
     updated_from == 'user_profile'
   end
 
-  def incubation_step_3?
-    updated_from == 'product_description'
+  def incubation_step_2?
+    updated_from == 'startup_profile'
   end
 
   validates_inclusion_of :stage, in: valid_stages, allow_nil: true

@@ -45,15 +45,10 @@ class IncubationController < ApplicationController
   private
 
   def incubation_startup_params
-    params.require(:startup).permit(:name, :registration_type, :pitch, :about,
-     :cool_fact, :incubation_location, :website, :revenue_generated,
-      :presentation_link, :team_size, :women_employees, :product_name,
-      :product_description, :product_progress, :updated_from,
-       admin_attributes: [:id, :gender, :born_on, :communication_address,
-        :district, :state, :pin, :linkedin_url, :twitter_url])
+    params.require(:startup).permit(:name, :registration_type, :about, :incubation_location, :website,
+      :presentation_link, :team_size, :women_employees, :updated_from, admin_attributes: [
+        :id, :gender, :born_on, :communication_address, :district, :state, :pin, :linkedin_url, :twitter_url
+      ]
+    )
   end
-
-  # def incubation_user_params
-  #   params.require()
-  # end
 end

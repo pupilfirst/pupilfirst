@@ -44,4 +44,4 @@
 
 //= require pnotify
 //= require unobtrusive_flash
-//= require flashes.js
+//= require flashes

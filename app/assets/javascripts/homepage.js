@@ -3,7 +3,6 @@ var navigateStagesAndLearning = function() {
 
   $("#stage_"+val1).fadeIn();
 
-
   $(".progtrckr li").on('click', function()
   {
     $(".progtrckr li").removeClass("active");
@@ -11,6 +10,12 @@ var navigateStagesAndLearning = function() {
     var val=$(this).find(".stage_name").attr('val');
     $("#stage_imgs img").hide();
     $("#stage_"+val).fadeIn();
+
+    // Change the stage description.
+    var stageDescription = $(this).data('description');
+    $('p#stage-description').fadeOut(500, function() {
+      $(this).text(stageDescription).fadeIn(500);
+    });
   });
 };
 

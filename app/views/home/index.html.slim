@@ -280,13 +280,9 @@ section.container.blog
             img src="#{blog["post_thumbnail"]["link"]}" width="100%"
             h5 #{blog["post_title"]}
             img.line src="#{image_url 'line2.png'}" width="100%"
-            p #{truncate(strip_tags(blog["post_content"]),length: 200)}
+            p #{truncate(strip_tags(blog["post_content"]), length: 200, escape: false)}
           .blog-footer
             .continue-reading
               a href="#{blog["link"]}"
                 | continue reading &nbsp;
                 = image_tag 'cont.png', class: 'img-animation'
-
-
-
-

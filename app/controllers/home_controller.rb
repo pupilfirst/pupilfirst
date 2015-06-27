@@ -13,6 +13,4 @@ class HomeController < ApplicationController
     fields_array = ["post_title","post_content","post_thumbnail","link"]
     wp.getPosts(filter: filter_hash,fields: fields_array)
   end
-
 end
-

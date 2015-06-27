@@ -8,6 +8,15 @@
 - content_for :header
   .container
     #carousel-example-generic.carousel.slide data-ride="carousel"
+      / Indicators - they have been disabled since we don't have anything to iterate over, right now.
+      /ol.carousel-indicators
+      /  li.active data-target="#carousel-example-generic" data-slide-to="0"
+      /    a href="#"
+      /  li data-target="#carousel-example-generic" data-slide-to="1"
+      /    a href="#"
+      /  li data-target="#carousel-example-generic" data-slide-to="2"
+      /    a href="#"
+
       / Wrapper for slides
       .carousel-inner role="listbox"
         .item.active

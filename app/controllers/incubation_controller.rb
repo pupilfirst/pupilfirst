@@ -6,12 +6,16 @@ class IncubationController < ApplicationController
   steps 'user_profile', 'startup_profile', 'launch'
 
   def show
+    return if prevent_repeat!
+
     @startup = current_user.startup
     @user = current_user
     render_wizard
   end
 
   def update
+    return if prevent_repeat!
+
     @startup = current_user.startup
     @user = current_user
 
@@ -61,5 +65,16 @@ class IncubationController < ApplicationController
         :id, :gender, :born_on, :communication_address, :district, :state, :pin, :linkedin_url, :twitter_url
       ]
     )
+  end
+
+  def prevent_repeat!
+    unless current_user.startup.unready?
+      if step != 'launch'
+        flash[:info] = "You've already completed the incubation process. You don't need to repeat that!"
+        redirect_to root_url and return true
+      end
+    end
+
+    false
   end
 end

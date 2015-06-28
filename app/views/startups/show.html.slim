@@ -48,7 +48,7 @@
               p.tittle Startup Deck
               p.content
                 a href="#{@startup.presentation_link}" target="_blank"
-                  | #{@startup.name} deck
+                  ' #{@startup.name} deck
                   img src="#{ image_url 'timeline/link.png'}"
       - if @startup.team_size?
         .col-md-4.col-sm-6.timeline_icon

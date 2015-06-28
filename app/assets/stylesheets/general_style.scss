@@ -227,24 +227,22 @@ nav a:focus {
     position: relative;
     bottom: 20px; }
 
+@media screen and (min-width: 992px) and (max-width: 1199px) {
+  .header-video { height: 258px; }
+  .caption-text-heading { margin-top: 23px; } }
+@media screen and (min-width: 1200px) {
+  .caption-text-heading { margin-top: 80px; }
+  .header-video { height: 315px; } }
 @media screen and (min-width: 1200px) and (max-width: 1919px) {
   .landing_header {
     min-height: 500px; }
-    .landing_header .carousel-caption {
-      padding-top: 300px !important; } }
-@media screen and (min-width: 1200px) and (max-width: 1919px) {
-  .landing_header {
-    min-height: 500px; }
-    .landing_header .carousel-caption {
-      padding-top: 300px !important; } }
+  .landing_header .carousel-caption {
+    padding-top: 200px !important; } }
 @media screen and (min-width: 1920px) {
   .landing_header {
     min-height: 600px; }
-    .landing_header .carousel-caption {
-      padding-top: 350px !important; } }
-.header-video {
-  position: relative;
-  overflow: hidden; }
+  .landing_header .carousel-caption {
+    padding-top: 350px !important; } }
 
 @media screen and (max-width: 767px) {
   .carousel h4 {
@@ -1217,6 +1215,15 @@ iframe {
   font-size: 14px;
   margin-top: 30px;
   display: inline-block;
+
+  a {
+    color: lightgrey;
+  }
+
+  a:hover {
+    color: white;
+    text-decoration: none;
+  }
 }
 
 .btn {

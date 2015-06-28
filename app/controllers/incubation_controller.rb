@@ -1,4 +1,6 @@
 class IncubationController < ApplicationController
+  before_filter :authenticate_user!
+
   include Wicked::Wizard
 
   steps 'user_profile', 'startup_profile', 'launch'

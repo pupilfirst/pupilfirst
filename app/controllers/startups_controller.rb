@@ -34,10 +34,6 @@ class StartupsController < InheritedResources::Base
     @startups = Startup.agreement_live
   end
 
-  def create
-
-  end
-
   def show
     @startup = Startup.find(params[:id])
     @events = @startup.timeline_events.order(:event_on, :updated_at).reverse_order

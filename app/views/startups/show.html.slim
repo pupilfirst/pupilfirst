@@ -89,7 +89,7 @@
             hr
             - @startup.founders.each do |founder|
               .media.founder
-                a.pull-left href="#"
+                .founder-avatar.pull-left
                   = image_tag founder.avatar_url, alt: "Image of #{founder.fullname}", class: 'media-object'
                 .media-body
                   p.name #{founder.fullname}

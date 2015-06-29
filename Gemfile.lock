@@ -447,6 +447,12 @@ GEM
       bundler (>= 1.3.0, < 2.0)
       railties (= 4.2.2)
       sprockets-rails
+    rails-assets-bootstrap (3.3.5)
+      rails-assets-jquery (>= 1.9.1)
+    rails-assets-bootstrap-multiselect (0.9.13)
+      rails-assets-bootstrap (>= 2.3.2)
+      rails-assets-jquery (>= 1.11.0)
+    rails-assets-jquery (2.1.4)
     rails-assets-pnotify (2.0.1)
     rails-deprecated_sanitizer (1.0.3)
       activesupport (>= 4.2.0.alpha)
@@ -659,6 +665,7 @@ DEPENDENCIES
   pry-rails
   quiet_assets
   rails (= 4.2.2)
+  rails-assets-bootstrap-multiselect!
   rails-assets-pnotify!
   rails_12factor
   rb-fchange

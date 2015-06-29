@@ -11,11 +11,12 @@ class StartupLinksController < ApplicationController
   # POST /startup_links
   def create
     startup = Startup.find(params[:startup_id])
-
     startup_link = startup.startup_links.new(startup_link_params)
 
-    unless startup_link.save
-      flash[:alert] = "Failed to create new startup link. Reason: #{startup_link.errors.full_messages.join ', '}"
+    if startup_link.save
+      flash[:success] = "Added new link."
+    else
+      flash[:error] = "Failed to create new startup link. Reason: #{startup_link.errors.full_messages.join ', '}"
     end
 
     redirect_to edit_startup_path(startup)

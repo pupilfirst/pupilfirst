@@ -36,5 +36,7 @@ module Svapp
     Dir.glob('config/routes/*.rb').each do |file|
       config.paths['config/routes.rb'] << Rails.root.join(file)
     end
+
+    config.cache_store = :memory_store, { size: 64.megabytes }
   end
 end

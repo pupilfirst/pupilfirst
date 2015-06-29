@@ -40,7 +40,7 @@ table.table.table-hover.table-bordered.table-striped
 
 = link_to 'Edit your profile', edit_user_url(@user), class: 'btn btn-primary'
 
-- if @user.startup.present?
+- if @user.startup.present? && !@user.startup.unready?
   | &nbsp;
   = link_to 'View startup timeline', @user.startup, class: 'btn btn-info'
   | &nbsp;

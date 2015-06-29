@@ -1,6 +1,6 @@
 class StartupsController < InheritedResources::Base
   before_filter :authenticate_user!, except: [:show, :featured, :itraveller]
-  before_filter :restrict_to_startup_founders, only: [:edit, :update]
+  before_filter :restrict_to_startup_founders, only: [:edit, :update, :add_founder]
   before_filter :disallow_unready_startup, only: [:edit, :update]
   after_filter only: [:create] do
     @startup.founders << current_user
@@ -41,9 +41,6 @@ class StartupsController < InheritedResources::Base
 
   def edit
     @startup = Startup.find(params[:id])
-    @current_user = current_user
-    raise_not_found unless current_user.startup.try(:id) == @startup.id
-    raise_not_found unless current_user.is_founder?
   end
 
   def update
@@ -63,6 +60,23 @@ class StartupsController < InheritedResources::Base
   # GET /startups/featured
   def featured
     redirect_to DbConfig.featured_startup
+  end
+
+  # POST /add_founder
+  def add_founder
+    begin
+      current_user.add_as_founder_to_startup!(params[:cofounder][:email])
+    rescue Exceptions::UserNotFound
+      flash[:error] = "Couldn't find a user with the SV ID you supplied. Please verify founder's registered email address."
+    rescue Exceptions::UserAlreadyMemberOfStartup
+      flash[:info] = 'The SV ID you supplied is already linked to your startup!'
+    rescue Exceptions:: UserAlreadyHasStartup
+      flash[:notice] = 'The SV ID you supplied is already linked to another startup. Are you sure you have the right e-mail address?'
+    else
+      flash[:success] = "SV ID #{params[:email]} has been linked to your startup as founder"
+    end
+
+    redirect_to edit_startup_path(current_user.startup)
   end
 
   private

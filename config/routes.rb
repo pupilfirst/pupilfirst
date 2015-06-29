@@ -36,6 +36,10 @@ Svapp::Application.routes.draw do
     # end
     end
 
+    member do
+      post :add_founder
+    end
+
     collection do
       get 'featured'
       get 'itraveller'

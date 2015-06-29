@@ -1,4 +1,13 @@
-h1 Edit your startup profile
+h2.page-header.margin-top-0 Modify founders
+
+= simple_form_for :cofounder, url: add_founder_startup_path(current_user.startup), html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
+  = f.input :email, placeholder: 'founder@yourstartup.com', label: "Founder's SV ID", hint: cofounders_hint(@startup)
+
+  .form-group
+    .col-sm-offset-3.col-sm-10
+      = f.button :submit, 'Add as founder', class: 'btn btn-primary'
+
+h2.page-header Edit your startup profile
 
 = render 'form'
 

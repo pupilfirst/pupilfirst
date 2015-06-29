@@ -43,3 +43,5 @@ table.table.table-hover.table-bordered.table-striped
 - if @user.startup.present?
   | &nbsp;
   = link_to 'View startup timeline', @user.startup, class: 'btn btn-info'
+  | &nbsp;
+  = link_to 'Edit startup details', edit_startup_url(@user.startup), class: 'btn btn-info'

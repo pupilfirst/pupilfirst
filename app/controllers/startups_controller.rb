@@ -95,8 +95,8 @@ class StartupsController < InheritedResources::Base
   # @see https://trello.com/c/y4ReClzt
   def disallow_unready_startup
     if current_user.startup.unready?
-      flash[:alert] = "Please submit your incubation application via our Mobile app before attempting to edit your startup's details."
-      redirect_to startup_path(current_user.startup)
+      flash[:error] = "You haven't completed the incubation process yet. Please complete it before attempting to edit your startup's profile."
+      redirect_to current_user
     end
   end
 end

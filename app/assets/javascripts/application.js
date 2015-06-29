@@ -28,10 +28,6 @@
 //= require bootstrap-datetimepicker
 //= require pickers
 
-//= require wysihtml-toolbar
-
-//= require parser_rules/advanced_unwrap
-
 //= require_tree ./react
 //= require google_analytics.js.erb
 //= require mentor_meetings

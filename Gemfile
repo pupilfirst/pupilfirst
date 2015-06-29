@@ -54,7 +54,6 @@ gem 'logstash-logger' # A better logger.
 
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true # POSSIBLY-USELESS
 gem 'momentjs-rails', '>= 2.8.1',  :github => 'derekprior/momentjs-rails'
-gem 'wysihtml-rails', :git => 'https://github.com/Voog/wysihtml-rails.git'
 
 gem 'apipie-rails' # Apipie for API documentation!
 gem 'maruku' # Let's use Markdown for markup in Apipie.

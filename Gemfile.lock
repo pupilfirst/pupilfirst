@@ -51,13 +51,6 @@ GIT
     datetimepicker-rails (4.7.16)
       momentjs-rails (>= 2.9.0)
 
-GIT
-  remote: https://github.com/Voog/wysihtml-rails.git
-  revision: 61476ad6c652bb867d0d5e1496d09415d99f4693
-  specs:
-    wysihtml-rails (0.5.0.beta10)
-      railties (>= 3.1.0)
-
 GEM
   remote: https://rubygems.org/
   remote: https://rails-assets.org/
@@ -698,4 +691,3 @@ DEPENDENCIES
   webmock
   wicked
   will_paginate-bootstrap
-  wysihtml-rails!

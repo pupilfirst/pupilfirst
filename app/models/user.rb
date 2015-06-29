@@ -200,7 +200,7 @@ class User < ActiveRecord::Base
   end
 
   # Add user with given email as co-founder if possible.
-  def self.add_as_founder_to_startup!(email, startup)
+  def add_as_founder_to_startup!(email)
     user = User.find_by email: email
 
     raise Exceptions::UserNotFound unless user
@@ -213,6 +213,8 @@ class User < ActiveRecord::Base
       end
     else
       startup.founders << user
+
+      UserMailer.cofounder_addition(email, self).deliver_later
     end
   end
 end

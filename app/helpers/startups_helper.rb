@@ -1,4 +1,10 @@
 module StartupsHelper
+  def cofounders_hint(startup)
+    "Current list: #{@startup.founders.map do
+      |u| "#{u.email}#{u == current_user ? ' (you)' : nil}"
+    end.join ', '}"
+  end
+
   def encode_startup_id
 
   end

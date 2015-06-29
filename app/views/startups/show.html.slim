@@ -93,7 +93,8 @@
                   = image_tag founder.avatar_url, alt: "Image of #{founder.fullname}", class: 'media-object'
                 .media-body
                   p.name #{founder.fullname}
-                  p.desig Chief Executive Officer
+                  - if founder.title?
+                    p.desig #{founder.title}
                   img.dash src="#{ image_url 'timeline/dash.png'}"
                   ul
                     - if founder.twitter_url?

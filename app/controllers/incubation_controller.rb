@@ -50,7 +50,7 @@ class IncubationController < ApplicationController
     rescue Exceptions:: UserAlreadyHasStartup
       flash[:notice] = 'The SV ID you supplied is already linked to another startup. Are you sure you have the right e-mail address?'
     else
-      # UserMailer.cofounder_request(params[:email], current_user).deliver_later
+      UserMailer.cofounder_addition(params[:email], current_user).deliver_later
       flash[:success] = "SV ID #{params[:email]} has been linked to your startup as founder"
     end
 

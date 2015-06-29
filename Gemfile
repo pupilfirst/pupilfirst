@@ -76,6 +76,7 @@ gem 'unobtrusive_flash', '>=3' # Let's not deal with flash messages, yeah? https
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify' # Superb notifications library. http://sciactive.github.io/pnotify/
+  gem 'rails-assets-bootstrap-multiselect' # http://davidstutz.github.io/bootstrap-multiselect/
 end
 
 group :development do

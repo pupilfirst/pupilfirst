@@ -47,17 +47,17 @@ class StartupsController < InheritedResources::Base
   end
 
   def update
-    # @current_user = current_user
-    # @startup = Startup.find params[:id]
-    # @startup.founders.each { |f| f.full_validation = true }
-    # @startup.validate_web_mandatory_fields = true
+    @current_user = current_user
+    @startup = Startup.find params[:id]
+    @startup.founders.each { |f| f.full_validation = true }
+    @startup.validate_web_mandatory_fields = true
 
-    # if @startup.update(startup_params)
-    #   flash[:notice] = 'Startup details have been updated.'
-    #   redirect_to @startup
-    # else
-    #   render 'startups/edit'
-    # end
+    if @startup.update(startup_params)
+      flash[:success] = 'Startup details have been updated.'
+      redirect_to @startup
+    else
+      render 'startups/edit'
+    end
   end
 
   # GET /startups/featured
@@ -73,9 +73,9 @@ class StartupsController < InheritedResources::Base
 
   def startup_params
     params.require(:startup).permit(
-      :name, :address, :pitch, :website, :about, :email, :phone, :logo, :remote_logo_url, :facebook_link, :twitter_link,
-      :product_name, :product_description, :cool_fact, { category_ids: [] }, { founders_attributes: [:id, :title] },
-      :registration_type, :revenue_generated, :presentation_link, :product_progress, :team_size, :women_employees,
+      :name, :address, :pitch, :website, :about, :email, :logo, :remote_logo_url, :facebook_link, :twitter_link,
+      { category_ids: [] }, { founders_attributes: [:id, :title] },
+      :registration_type, :revenue_generated, :presentation_link, :team_size, :women_employees,
       :incubation_location
     )
   end

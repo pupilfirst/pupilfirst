@@ -120,6 +120,7 @@ describe 'Startup Requests' do
     expect(response.body).to have_json_path('0/logo_url')
   end
 
+  # TODO: This whole section should be rewritten.
   describe 'POST /startups/:id/founders' do
     let(:user) { create :user_with_out_password, startup: startup }
 
@@ -139,16 +140,16 @@ describe 'Startup Requests' do
     end
 
     shared_examples_for 'new cofounder' do
-      it 'sends an email to cofounder address' do
-        post "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in', fullname: 'James P Sullivan' }, version_header(user)
-        expect(emails_sent.last.body.to_s).to include "invited to join #{user.fullname}'s startup as a co-founder"
-      end
+      # it 'sends an email to cofounder address' do
+      #   post "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in', fullname: 'James P Sullivan' }, version_header(user)
+      #   expect(emails_sent.last.body.to_s).to include "invited to join #{user.fullname}'s startup as a co-founder"
+      # end
 
-      it 'sets the user pending_startup_id' do
-        post "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
-        cofounder = User.find_by(email: 'james.p.sullivan@mobme.in')
-        expect(cofounder.pending_startup_id).to eq startup.id
-      end
+      # it 'sets the user pending_startup_id' do
+      #   post "/api/startups/#{startup.id}/founders", { email: 'james.p.sullivan@mobme.in' }, version_header(user)
+      #   cofounder = User.find_by(email: 'james.p.sullivan@mobme.in')
+      #   expect(cofounder.pending_startup_id).to eq startup.id
+      # end
     end
 
     context 'when cofounder does not exist' do

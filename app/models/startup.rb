@@ -224,7 +224,7 @@ class Startup < ActiveRecord::Base
     self.errors.add(:founders, "should have at least one founder") if founders.nil? or founders.size < 1
   end
 
-  mount_uploader :logo, AvatarUploader
+  mount_uploader :logo, LogoUploader
   process_in_background :logo
   accepts_nested_attributes_for :startup_links
   normalize_attribute :name, :pitch, :about, :email, :phone

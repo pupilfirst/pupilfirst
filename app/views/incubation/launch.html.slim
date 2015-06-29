@@ -29,6 +29,8 @@
         .form-group
           .col-sm-offset-3.col-sm-10
             = f.button :submit, 'Add as co-founder', class: 'btn btn-primary'
+            | &nbsp;
+            = link_to 'Finish', startup_url(@startup), class: 'btn btn-success'
 
       p <strong>Note:</strong> You can modify list of founders later, as well.
 

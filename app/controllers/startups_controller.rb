@@ -10,7 +10,7 @@ class StartupsController < InheritedResources::Base
   layout 'homepage', only: [:itraveller, :show]
 
   def new
-    if !current_user.phone_verified?
+    unless current_user.phone_verified?
       flash[:notice] = 'Please enter and verify your phone number to continue.'
 
       session[:referer] = new_startup_url

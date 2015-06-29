@@ -239,5 +239,24 @@
 }
 
 
+.startup-logo > img {
+  padding-bottom: 9px;
+}
+
+  @media screen and (max-width: 767px) {
+    .startup-logo > img {
+      float: left;
+      margin: 0;
+    }
+    }
+
+    @media screen and (min-width: 770px) {
+    .startup-logo > img {
+      float: right;
+      margin: 20px 0px 00px;
+    }
+    }
+
+
 
 /* Time line css */

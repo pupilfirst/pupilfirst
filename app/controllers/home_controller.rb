@@ -17,6 +17,8 @@ class HomeController < ApplicationController
       end
     rescue Net::ReadTimeout
       []
+    rescue XMLRPC::FaultException #For incorrect username & password
+      []
     end
   end
 end

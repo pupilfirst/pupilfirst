@@ -12,8 +12,8 @@
             a#verified.tooltip-right data-tooltip=("Timeline verified by Startup Village.") href="#"
               img src='#{image_url 'timeline/verified.gif'}' width="25"
       - if @startup.logo?
-        .col-sm-6 style=("padding-bottom: 9px;\nmargin: 60px 0px 20px; text-align:right;")
-          = image_tag "#{@startup.logo_url}", style: "float:right", class: 'img-responsive startup-logo'
+        .col-sm-6.startup-logo
+          = image_tag "#{@startup.logo_url}", class: 'img-responsive startup-logo'
 
   .row
     .col-md-12.tl_about
@@ -89,7 +89,7 @@
             hr
             - @startup.founders.each do |founder|
               .media.founder
-                a.pull-left href="#"
+                .founder-avatar.pull-left
                   = image_tag founder.avatar_url, alt: "Image of #{founder.fullname}", class: 'media-object'
                 .media-body
                   p.name #{founder.fullname}

@@ -133,7 +133,7 @@
     / Timeline starts
     - if @events.present?
       .col-md-8.col-md-pull-4.main_timeline style=(" border-right: 1px solid #ccc; padding-right:25px;")
-        .tl_iteration
+        .tl_iteration style="margin-left: 20px"
           p
             | Timeline of #{@events.maximum(:iteration).ordinalize} iteration.
           = image_tag 'timeline/dash.png'
@@ -145,7 +145,7 @@
               .tl_iteration
                 .buttons style="display:inline" End of Iteration #{event.iteration}
                 br
-                p #{event.title}
+                p style="margin-top: 10px" #{event.title}
                 = image_tag 'timeline/dash.png'
                 p #{event.description}
                 br

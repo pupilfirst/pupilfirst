@@ -123,7 +123,7 @@ section#showcase
               li.list-item
                 .li-icon
                 h2 Go for Higher Education
-                span 
+                span
                   ' Sharan Thampi shares his roller coaster startup ride from a college class room to finally a great admission for M.Sc in Business and Finance at Birmingham, UK.
         .col-md-6.sucess-video align="center"
           div style=("max-width:450px; margin:0 auto;")
@@ -265,16 +265,17 @@ section.container.blog
     p Latest articles from our blog
 
   .row
-    - @blogs.each do |blog|
-      .col-lg-3.col-md-4.col-sm-6.col-xs-12.post
-        .post-content
-          .blog-body
-            img src="#{blog["post_thumbnail"]["link"]}" width="100%"
-            h5 #{blog["post_title"]}
-            img.line src="#{image_url 'line2.png'}" width="100%"
-            p #{truncate(strip_tags(blog["post_content"]), length: 200, escape: false)}
-          .blog-footer
-            .continue-reading
-              a href="#{blog["link"]}"
-                | continue reading &nbsp;
-                = image_tag 'cont.png', class: 'img-animation'
+    .flex-container style="displey:flex;justify-content:center;flex-wrap:wrap;"
+      - @blogs.each do |blog|
+        .post
+          .post-content
+            .blog-body
+              img src="#{blog["post_thumbnail"]["link"]}" width="100%"
+              h5 #{blog["post_title"]}
+              img.line src="#{image_url 'line2.png'}" width="100%"
+              p #{truncate(strip_tags(blog["post_content"]), length: 200, escape: false)}
+            .blog-footer
+              .continue-reading
+                a href="#{blog["link"]}"
+                  | continue reading &nbsp;
+                  = image_tag 'cont.png', class: 'img-animation'

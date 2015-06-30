@@ -151,7 +151,7 @@
                 br
             - else
               .timeline
-                li class="timeline#{index.odd? ? "" : "-inverted"}"
+                li style="padding:0" class="timeline#{index.odd? ? "" : "-inverted"}"
                   .timeline-badge class="color#{index%14}"
                     = image_tag "timeline/badges/#{event.event_type.to_s}.png", width: "70"
                   .timeline-panel

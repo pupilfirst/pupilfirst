@@ -39,11 +39,6 @@ Svapp::Application.routes.draw do
     member do
       post :add_founder
     end
-
-    collection do
-      get 'featured'
-      get 'itraveller'
-    end
   end
 
   resources :mentors do

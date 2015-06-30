@@ -25,9 +25,9 @@ class IncubationController < ApplicationController
 
     # Update startup (and user) with received params.
     if @startup.update(incubation_startup_params)
-      # When updating from startup_profile step, also set approval status to pending.
+      # Finish the incubation flow if submitting from startup profile page.
       if step == 'startup_profile'
-        @startup.update!(approval_status: Startup::APPROVAL_STATUS_PENDING)
+        @startup.finish_incubation_flow!
       end
     end
 

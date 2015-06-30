@@ -72,6 +72,8 @@ gem 'font-awesome-sass', '~> 4.3.0' # Icons from font-awesome!
 
 gem 'unobtrusive_flash', '>=3' # Let's not deal with flash messages, yeah? https://github.com/leonid-shevtsov/unobtrusive_flash
 
+gem 'friendly_id' # Slugs for links. http://norman.github.io/friendly_id
+
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify' # Superb notifications library. http://sciactive.github.io/pnotify/

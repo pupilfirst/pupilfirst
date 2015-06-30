@@ -21,6 +21,7 @@
     = f.input :approval_status, collection: Startup.valid_approval_status_values, include_blank: false
     = f.input :address
     = f.input :incubation_location, collection: Startup.valid_incubation_location_values
+    = f.input :slug
     = f.submit
 
 javascript:

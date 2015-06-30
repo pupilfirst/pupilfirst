@@ -932,7 +932,9 @@ a.source-link:hover {
   width: 100%;
   margin-bottom: 10px;
   text-align: center;
-  padding: 20px; }
+  padding: 20px;
+  margin-left: 20px;
+   }
   .tl_iteration a {
     text-decoration: none; }
   .tl_iteration p {
@@ -1124,6 +1126,7 @@ a.source-link:hover {
   min-height: 400px; }
 
 .timeline_icon {
+  height: 90px;
   margin-bottom: 30px; }
 
 /* Landing page */

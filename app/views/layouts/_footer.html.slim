@@ -2,68 +2,49 @@
 section#prefooter
   .container
     .row
-      .col-md-3.sv
-        img src="#{image_url 'logo_white.png'}" style="opacity:.7;" width="150"
-        br
-        br
-        p At SV, entrepreneurs Build, Break &amp; Innovate to create the finest technology products.
-        br
+      .col-md-3.col-sm-6.footer-column
+        img src="#{image_url 'logo_white.png'}" style="opacity:.7; margin-bottom: 15px;" width="150"
+
+      .col-md-3.col-sm-6.footer-column
+        .sitemap
+          div
+            a href="http://playbook.sv.co" Playbook
+          div
+            a href="http://blog.sv.co" Blog
         .img-opacity
-          ul style="display:inline-flex;"
-            li
-              a href=""
-                = image_tag 'fb.png', height: '20'
-            li
-              a href=""
-                = image_tag 'tw.png', height: '20'
-            li
-              a href=""
-                = image_tag 'gplus.png', height: '20'
-            li
-              a href=""
-                = image_tag 'yt.png', height: '20'
+          span.social-link
+            a href="#"
+              = image_tag 'fb.png', height: '20'
+          span.social-link
+            a href="#"
+              = image_tag 'tw.png', height: '20'
+          span.social-link
+            a href="#"
+              = image_tag 'gplus.png', height: '20'
+          span.social-link
+            a href="#"
+              = image_tag 'yt.png', height: '20'
 
-      .col-md-6.address-list
-        .col-md-6
-          address
-            strong Startup Village, Kochi
-            br
-            p
-              | Kinfra Hi-Tech Park, Kalamassery
-              br
-              | Kochi, Kerala: 683503
-              br
+      .col-md-3.col-sm-6.footer-column
+        address
+          strong Startup Village, Kochi
           br
-        .col-md-6
-          address
-            strong Startup Village, Visakhapatnam
+          p
+            | Kinfra Hi-Tech Park,
             br
-            | Sunrise Startups, Hill No 3,
+            | Kalamassery, Kochi,
             br
-            | Cyber Hills, IT SEZ, Madhuruwada,
-            br
-            | Visakhapatnam: 530048
+            | Kerala &mdash; 683503.
+      .col-md-3.col-sm-6.footer-column
+        address
+          strong Startup Village, Visakhapatnam
           br
+          | Sunrise Startups, Hill No. 3,
+          br
+          | Cyber Hills, IT SEZ, Madhuruwada,
+          br
+          | Visakhapatnam &mdash; 530048.
 
-      .col-md-3
-        .menu-list
-          ul
-            li
-              a href="#"
-                | About
-                span.sr-only (current)
-            li
-              a href="#"  Startups
-            li
-              a href="#"  Startup Timeline
-            li
-              a href="#"  Resource
-            li
-              a href="#"  Media
-            li
-              a href="#"  Blog
-            li
-              a href="#"  Contact
 / Real footer.
 footer#footer
   .container

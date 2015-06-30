@@ -4,8 +4,7 @@ ActiveAdmin.register Startup do
   filter :email
   filter :website
   filter :registration_type, as: :select, collection: proc { Startup.valid_registration_types }
-  filter :product_name
-  filter :product_progress, as: :select, collection: proc { Startup.valid_product_progress_values }
+  filter :stage, as: :select, collection: proc { Startup.valid_stages }
   filter :team_size
   filter :team_size_blank, as: :boolean, label: 'Team size not set'
   filter :incubation_location, as: :select, collection: proc { Startup.valid_incubation_location_values }
@@ -31,6 +30,7 @@ ActiveAdmin.register Startup do
       startup.approval_status.capitalize
     end
 
+    column :stage
     column :agreement_sent
     column :name
 
@@ -46,10 +46,6 @@ ActiveAdmin.register Startup do
       startup.categories.pluck(:name).join ', '
     end
 
-    column :women_cofounders do |startup|
-      startup.founders.where(gender: "female").count
-    end
-
     column :website
   end
 
@@ -58,6 +54,7 @@ ActiveAdmin.register Startup do
     column :incubation_location
     column :physical_incubatee
     column(:founders) { |startup| startup.founders.pluck(:fullname).join ', ' }
+    column(:women_cofounders) { |startup| startup.founders.where(gender: User::GENDER_FEMALE).count }
     column :pitch
     column :website
     column :approval_status
@@ -146,17 +143,14 @@ ActiveAdmin.register Startup do
       row :logo do |startup|
         link_to(image_tag(startup.logo_url(:thumb)), startup.logo_url)
       end
-      row :pitch
       row :stage
       row :website
       row :presentation_link do |startup|
         link_to startup.presentation_link, startup.presentation_link if startup.presentation_link.present?
       end
-      row :product_progress
       row :revenue_generated
       row :team_size
       row :women_employees
-      row :cool_fact
       row :incubation_location
       row :about do |startup|
         simple_format startup.about
@@ -193,10 +187,6 @@ ActiveAdmin.register Startup do
       row :registration_type
       row :approval_status
       row :address
-      row :product_name
-      row :product_description do |startup|
-        simple_format startup.product_description
-      end
 
       row :startup_status do |startup|
         if startup.pending?
@@ -221,11 +211,12 @@ ActiveAdmin.register Startup do
     end
   end
 
-  form :partial => "admin/startups/form"
-  permit_params :name, :pitch, :website, :about, :email, :logo, :facebook_link, :twitter_link, :cool_fact,
+  form :partial => 'admin/startups/form'
+
+  permit_params :name, :website, :about, :email, :logo, :facebook_link, :twitter_link,
     { category_ids: [] }, { founder_ids: [] }, { founders_attributes: [:id, :fullname, :email, :avatar, :remote_avatar_url, :title, :linkedin_url, :twitter_url, :skip_password] },
-    :created_at, :updated_at, :approval_status, :approval_status, :product_description, :registration_type,
+    :created_at, :updated_at, :approval_status, :approval_status, :registration_type,
     :incubation_location, :agreement_sent, :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration,
-    :physical_incubatee
+    :physical_incubatee, :presentation_link
 end
 

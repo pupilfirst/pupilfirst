@@ -14,5 +14,6 @@ Rails.application.config.assets.precompile += %w(
   timeline.js
   owl-carousel/owl.carousel.js
   ct-carousel/masonry.pkgd.min.js
-  ct-carousel/jquery.flexslider-min.js
+  flexslider/jquery.flexslider-min.js
+  flexslider/flexslider.css
 )

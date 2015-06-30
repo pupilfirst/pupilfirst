@@ -1,3 +1,4 @@
+
 @import url("//fonts.googleapis.com/css?family=Roboto:500,100,300,700,400");
 /* Header */
 /* Header */
@@ -1416,26 +1417,25 @@ iframe {
 .cd-testimonials {
   color: #ffffff;
   text-align: center;
-  display: inline-block;
-  list-style: none; }
+  }
 
-.cd-testimonials::after {
-  clear: both;
-  content: "";
-  display: table; }
+//.cd-testimonials::after {
+//  clear: both;
+//  content: "";
+//  display: table; }
 
-.cd-testimonials > li {
-  width: 100%;
-  position: absolute;
-  left: -40px;
-  opacity: 0;
-  margin: 0px;
-  padding: 0px; }
-
-.cd-testimonials > li:first-child {
-  position: relative;
-  opacity: 1;
-  display: none !important; }
+//.cd-testimonials > li {
+//  width: 100%;
+//  position: absolute;
+//  left: -40px;
+//  opacity: 0;
+//  margin: 0px;
+//  padding: 0px; }
+//
+//.cd-testimonials > li:first-child {
+//  position: relative;
+//  opacity: 1;
+//  display: none !important; }
 
 .cd-testimonials p {
   text-align: center;
@@ -1510,11 +1510,11 @@ iframe {
   min-height: 180px; }
 
 /* Testimonial */
-.flex-direction-nav li {
-  position: absolute;
-  height: 100%;
-  width: 40px;
-  top: 0; }
+//.flex-direction-nav li {
+//  position: absolute;
+//  height: 100%;
+//  width: 40px;
+//  top: 0; }
 
 .flex-direction-nav li:first-child {
   left: 50px; }

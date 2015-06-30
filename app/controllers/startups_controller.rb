@@ -1,5 +1,5 @@
 class StartupsController < InheritedResources::Base
-  before_filter :authenticate_user!, except: [:show, :featured, :itraveller]
+  before_filter :authenticate_user!, except: [:show]
   before_filter :restrict_to_startup_founders, only: [:edit, :update, :add_founder]
   before_filter :disallow_unready_startup, only: [:edit, :update]
   after_filter only: [:create] do
@@ -7,7 +7,7 @@ class StartupsController < InheritedResources::Base
     @startup.save
   end
 
-  layout 'homepage', only: [:itraveller, :show]
+  layout 'homepage', only: [:show]
 
   def new
     unless current_user.phone_verified?
@@ -35,17 +35,17 @@ class StartupsController < InheritedResources::Base
   end
 
   def show
-    @startup = Startup.find(params[:id])
+    @startup = Startup.friendly.find(params[:id])
     @events = @startup.timeline_events.order(:event_on, :updated_at).reverse_order
   end
 
   def edit
-    @startup = Startup.find(params[:id])
+    @startup = Startup.friendly.find(params[:id])
   end
 
   def update
     @current_user = current_user
-    @startup = Startup.find params[:id]
+    @startup = Startup.friendly.find params[:id]
     @startup.founders.each { |f| f.full_validation = true }
     @startup.validate_web_mandatory_fields = true
 
@@ -55,11 +55,6 @@ class StartupsController < InheritedResources::Base
     else
       render 'startups/edit'
     end
-  end
-
-  # GET /startups/featured
-  def featured
-    redirect_to DbConfig.featured_startup
   end
 
   # POST /add_founder
@@ -90,12 +85,14 @@ class StartupsController < InheritedResources::Base
       :name, :address, :pitch, :website, :about, :email, :logo, :remote_logo_url, :facebook_link, :twitter_link,
       { category_ids: [] }, { founders_attributes: [:id, :title] },
       :registration_type, :revenue_generated, :presentation_link, :team_size, :women_employees,
-      :incubation_location
+      :incubation_location, :slug
     )
   end
 
   def restrict_to_startup_founders
-    if current_user.startup.try(:id) != params[:id].to_i || !current_user.is_founder?
+    startup = Startup.friendly.find(params[:id])
+
+    if current_user.startup != startup || !current_user.is_founder?
       raise_not_found
     end
   end

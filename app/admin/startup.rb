@@ -21,6 +21,10 @@ ActiveAdmin.register Startup do
 
   controller do
     newrelic_ignore
+
+    def find_resource
+      scoped_collection.friendly.find(params[:id])
+    end
   end
 
   index do
@@ -217,6 +221,6 @@ ActiveAdmin.register Startup do
     { category_ids: [] }, { founder_ids: [] }, { founders_attributes: [:id, :fullname, :email, :avatar, :remote_avatar_url, :title, :linkedin_url, :twitter_url, :skip_password] },
     :created_at, :updated_at, :approval_status, :approval_status, :registration_type,
     :incubation_location, :agreement_sent, :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration,
-    :physical_incubatee, :presentation_link
+    :physical_incubatee, :presentation_link, :slug
 end
 

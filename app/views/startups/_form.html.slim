@@ -48,18 +48,23 @@ p
           = f.input :twitter_link, input_html: { placeholder: 'https://twitter.com/username', maxlength: 255 }
           = f.input :facebook_link, input_html: { placeholder: 'https://facebook.com/username', maxlength: 255 }
 
-    /.panel.panel-default
-    /  .panel-heading role="tab"
-    /    .panel-title
-    /      a data-toggle="collapse" data-parent="#startupform" href="#products" Products
-    /  #products.panel-collapse.collapse role="tabpanel"
-    /    .panel-body
-    /      = f.input :product_name, input_html: { maxlength: 255 }
-    /      = f.input :pitch,
-    /          hint: "Pitch your product in less than #{Startup::MAX_PITCH_CHARACTERS} characters.",
-    /          input_html: { maxlength: Startup::MAX_PITCH_CHARACTERS }
-    /      = f.input :product_description, input_html: { maxlength: 1000 }
-    /      = f.input :product_progress, collection: Startup.valid_product_progress_values, label_method: ->(obj) { product_progress_html(obj) }, input_html: { class: 'selectpicker' }
+    .panel.panel-default
+      .panel-heading role="tab"
+        .panel-title
+          a data-toggle="collapse" data-parent="#startupform" href="#startup-slug" URL Slug
+      #startup-slug.panel-collapse.collapse role="tabpanel"
+        .panel-body
+          p
+            ' The URL to your timeline is currently:
+            code
+              = startup_url(@startup)
+          p
+            ' You can change the last part of the URL, the <em>slug</em>, to something you prefer (as long as it is unique).
+          = f.input :slug,
+            label: 'URL Slug',
+            input_html: { maxlength: 255 },
+            placeholder: 'your-desired-link',
+            hint: 'Slug should only contain letters, numbers, and dashes.'
 
     .panel.panel-default
       .panel-heading role="tab"

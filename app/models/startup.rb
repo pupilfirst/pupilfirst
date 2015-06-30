@@ -1,4 +1,6 @@
 class Startup < ActiveRecord::Base
+  include FriendlyId
+
   # For an explanation of these legacy values, see linked trello card.
   #
   # @see https://trello.com/c/SzqE6l8U
@@ -180,6 +182,10 @@ class Startup < ActiveRecord::Base
   end
 
   nilify_blanks only: [:revenue_generated, :team_size, :women_employees, :approval_status, :product_progress]
+
+  # Friendly ID!
+  friendly_id :slug
+  validates_format_of :slug, with: /\A[a-z0-9\-]+\z/i, allow_nil: true
 
   # Backend users will see agreement duration as being nil when attempting to edit. This allows them to save edits
   # without picking a value.
@@ -383,6 +389,26 @@ class Startup < ActiveRecord::Base
 
   def cofounders(user)
     founders - [user]
+  end
+
+  def finish_incubation_flow!
+    # Set approval status to pending to end incubation flow.
+    self.approval_status = Startup::APPROVAL_STATUS_PENDING
+
+    regenerate_slug!
+  end
+
+  def regenerate_slug!
+    # Create slug from name.
+    self.slug = self.name.parameterize
+
+    begin
+      save!
+    rescue ActiveRecord::RecordNotUnique
+      # If it's taken, try adding a random number.
+      self.slug = "#{self.name.parameterize}-#{rand 1000}"
+      retry
+    end
   end
 
   ####

@@ -117,7 +117,7 @@
                 {
                   //console.log('They were open tags');
                   //console.log(openTags);
-                  for (j = 0; j < openTags.length; j++) {
+                  for (var j = 0; j < openTags.length; j++) {
                     //console.log('Cierro tag ' + openTags[j]);
                     bag += '</' + openTags[j] + '>'; // Close all tags that were opened
 

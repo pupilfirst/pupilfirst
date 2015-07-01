@@ -174,9 +174,9 @@ section#showcase
             #test-popup4.row.white-popup.mfp-with-anim.mfp-hide
               = image_tag 'landing/showcase/showcased_timelines/wowmakers.jpg', class: 'img-responsive'
           .showcase-stories#Nwplyng-story
-            div style=("max-width:450px; margin:0 auto;")
-              = image_tag 'startup_showcase1.jpg', class: 'showcase_company img-responsive'
-              br
+            .inline-popups
+              a.timeline_preview data-effect="mfp-zoom-in" href="#test-popup5"
+                = image_tag 'landing/showcase/nwplyng_tl_thumb.jpg', class: 'showcase_company img-responsive'
             = image_tag 'landing/showcase/showcased_logos/nwplyng_logo.png', class: 'showcase_logo img-responsive'
             br
             .inline-popups
@@ -185,10 +185,11 @@ section#showcase
                 |  View the Nwplyng Story
             #test-popup5.row.white-popup.mfp-with-anim.mfp-hide
               = image_tag 'landing/showcase/showcased_timelines/nwplyng.jpg', class: 'img-responsive'
+
           .showcase-stories#Sharan-story
-            div style=("max-width:450px; margin:0 auto;")
-              = image_tag 'startup_showcase1.jpg', class: 'showcase_company img-responsive'
-              br
+            .inline-popups
+              a.timeline_preview data-effect="mfp-zoom-in" href="#test-popup6"
+                = image_tag 'landing/showcase/sharan_tl_thumb.jpg', class: 'showcase_company img-responsive'
             = image_tag 'landing/showcase/showcased_logos/sharan_logo.jpg', class: 'showcase_logo img-responsive'
             br
             .inline-popups

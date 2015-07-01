@@ -74,6 +74,8 @@ gem 'unobtrusive_flash', '>=3' # Let's not deal with flash messages, yeah? https
 
 gem 'friendly_id' # Slugs for links. http://norman.github.io/friendly_id
 
+gem 'flexslider', :git => 'https://github.com/constantm/Flexslider-2-Rails-Gem.git' # Flexslider on homepage.
+
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify' # Superb notifications library. http://sciactive.github.io/pnotify/

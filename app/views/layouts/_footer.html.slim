@@ -4,6 +4,8 @@ section#prefooter
     .row
       .col-md-3.col-sm-6.footer-column
         img src="#{image_url 'logo_white.png'}" style="opacity:.7; margin-bottom: 15px;" width="150"
+        br
+        ' Reach us at <strong>#{link_to 'help@sv.co', 'mailto:help@sv.co'}</strong>.
 
       .col-md-3.col-sm-6.footer-column
         .sitemap
@@ -46,14 +48,13 @@ section#prefooter
 footer#footer
   .container
     .row
-      .col-md-6
-        nav
-          p.footer-font &copy; 2015 SV.CO All Right Reserved
-      .col-md-6
-        nav.text-right.nav-footer
-          a.footer-font data-toggle="modal" data-target="#privacy" Privacy Policy
+      .col-sm-6
+        p &copy; 2015 SV.CO. All rights reserved.
+      .col-sm-6
+        .footer-right
+          a data-toggle="modal" data-target="#privacy" Privacy Policy
           | &nbsp;|&nbsp;
-          a.footer-font data-toggle="modal" data-target="#terms" Terms of Use
+          a data-toggle="modal" data-target="#terms" Terms of Use
 
 #privacy.modal.fade role="dialog"
   .modal-dialog

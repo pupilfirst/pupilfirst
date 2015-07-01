@@ -77,7 +77,7 @@ Svapp::Application.routes.draw do
   get 'privacy_policy', to: 'welcome#privacy_policy'
   get 'faq', to: 'welcome#faq'
 
-  resources :incubation do
+  resources :incubation, only: %w(show update) do
     member do
       post 'add_cofounder'
     end

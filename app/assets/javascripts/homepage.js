@@ -121,6 +121,7 @@ $(document).ready(startupsShowcaseSlide);
 $(document).ready(mediaShowcaseSlide);
 $(document).ready(prepareTestimonials);
 
+
 $(document).ready(function() {
   [].slice.call(document.querySelectorAll('.carousel-indicators > ol')).forEach(function(nav) {
     new DotNav(nav, {
@@ -152,4 +153,12 @@ $(document).ready(function() {
     current = idx;
     el.className = 'current-demo';
   }
+});
+
+// Changing success stories according to selected success scenarios
+
+$(document).ready(functon(){
+  $("#iTraveller-story").click(function(){
+    // alert( "Handler for .click() called." );
+  });
 });

@@ -38,7 +38,7 @@
               p.tittle Website
               p.content
                 a href="#{@startup.website}" target="_blank"
-                  | #{@startup.website}
+                  ' #{@startup.website}
                   = image_tag 'timeline/link.png'
         - if @startup.presentation_link?
           .media.tl_data

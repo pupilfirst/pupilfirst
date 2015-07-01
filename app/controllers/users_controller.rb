@@ -54,12 +54,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def create
-  end
-
-  def enter_phone
-  end
-
   def code
     # Generate a 6-digit verification code to send to the phone number.
     code, phone_number = begin

@@ -573,14 +573,22 @@ ol.progtrckr[data-progtrckr-steps="9"] li {
     #companies .short-list .liste:nth-child(-n+12) {
       display: block; } }
 
-/* Companies */
-.nav-footer a {
-  text-decoration: none;
-  text-transform: initial;
-}
+.footer-right {
+  text-align: right;
 
-.nav-footer a:hover {
-  opacity: .8;
+  @media screen and (max-width: 767px) {
+    text-align: left;
+  }
+
+  a {
+    text-decoration: none;
+    text-transform: initial;
+  }
+
+  a:hover {
+    opacity: .8;
+    cursor: pointer;
+  }
 }
 
 /* blog */

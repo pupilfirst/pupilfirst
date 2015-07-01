@@ -435,7 +435,8 @@ ol.progtrckr[data-progtrckr-steps="9"] li {
   #showcase a {
     text-decoration: none; }
   #showcase .showcase_company {
-    margin-top: 200px; }
+    margin-top: 200px;
+    overflow: hidden; }
   #showcase .showcase_logo {
     margin-top: 30px;
     margin-bottom: 15px;
@@ -480,6 +481,13 @@ ol.progtrckr[data-progtrckr-steps="9"] li {
       cursor: pointer; }
       #showcase .list li:hover .glyphicon {
         color: #00ce78; }
+
+.timeline_preview{
+  max-width:450px;
+  max-height:265px;
+  margin:0 auto;
+  cursor: zoom-in;
+}
 
 /* showcase */
 /* Companies */

@@ -26,7 +26,8 @@
                 br learning platform for
                 span style="font-weight:600;" first-time founders.
               div
-                button.btn.btn-join type="button" Join SV.CO
+                - unless current_user
+                  a.btn.btn-join href=new_registration_path(User.new) type="button" Join SV.CO
                 .watch-view-button.hidden-md.hidden-lg
                   a href="https://www.youtube.com/watch?v=f5xSZfIKh_E" target="_blank"
                     img src="#{image_url 'play.png'}" width="20"

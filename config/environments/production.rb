@@ -80,7 +80,7 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  config.action_mailer.default_url_options = { :host => 'http://svlabs.in' }
+  config.action_mailer.default_url_options = { :host => 'https://sv.co' }
 
   # In production and staging, let's have carrierwave store using fog.
   config.carrier_wave_storage = :fog

@@ -21,8 +21,8 @@
         | #{@startup.about? ? @startup.about : "This startup is yet to provide an about section"}
   br
   br
-  .row style=("border-bottom:2px solid green;padding-bottom:50px;")
-    .col-md-12.tl_data style="padding-bottom:50px;"
+  .row
+    .col-md-12.tl_data
       - if @startup.categories.present?
         .col-md-4.col-sm-6.timeline_icon
           .media.tl_data

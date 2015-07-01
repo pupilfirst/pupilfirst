@@ -17,8 +17,8 @@
 
   .row
     .col-md-12.tl_about
-      p.content
-        | #{@startup.about? ? @startup.about : "This startup is yet to provide an about section"}
+      p.content.shorten
+        | #{ @startup.about? ? @startup.about : 'This startup is yet to provide an about section' }
   br
   br
   .row

@@ -11,9 +11,8 @@ Rails.application.config.assets.precompile += %w(
   icon/component.css
   icon/modernizr.custom.js
   homepage.js
+  homepage.css
   timeline.js
   owl-carousel/owl.carousel.js
   ct-carousel/masonry.pkgd.min.js
-  flexslider/jquery.flexslider-min.js
-  flexslider/flexslider.css
 )

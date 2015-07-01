@@ -1,3 +1,5 @@
+//= require jquery.flexslider
+
 var navigateStagesAndLearning = function() {
   var val1=$(".progtrckr li.active .stage_name").attr("val");
 

@@ -482,7 +482,7 @@ ol.progtrckr[data-progtrckr-steps="9"] li {
       #showcase .list li:hover .glyphicon {
         color: #00ce78; }
 
-.timeline_preview{
+.timeline-preview, .timeline-preview > img{
   max-width:450px;
   max-height:265px;
   margin:0 auto;

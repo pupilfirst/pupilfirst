@@ -47,13 +47,13 @@
         var $this = $(this);
         if ($this.hasClass('less')) {
           $this.removeClass('less');
-          $this.html('&nbsp;' + config.moreText);
+          $this.html(config.moreText);
           //$this.parent().prev().animate({'height':'0'+'%'}, function () { $this.parent().prev().prev().show(); }).hide('fast');
           $this.parent().prev().hide();
           $this.parent().prev().prev().show();
         } else {
           $this.addClass('less');
-          $this.html('&nbsp;' + config.lessText);
+          $this.html(config.lessText);
           //$this.parent().prev().animate({'height':'100'+'%'}, function () { $this.parent().prev().prev().hide(); }).show('fast');
           $this.parent().prev().show();
           $this.parent().prev().prev().hide();
@@ -135,7 +135,7 @@
 
         var html = '<span class="shortcontent">' + c +
           '</span><span class="allcontent">' + content +
-          '</span><span><a href="javascript://nop/" class="morelink">&nbsp;' + config.moreText + '</a></span>';
+          '</span><span>&nbsp;<a href="javascript://nop/" class="morelink">' + config.moreText + '</a></span>';
 
         $this.html(html);
         $this.find(".allcontent").hide(); // Hide all text

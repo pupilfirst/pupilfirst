@@ -1,3 +1,13 @@
+//= require shorten/jquery.shorten
+
+var shortenText = function() {
+  $('.shorten').shorten({
+    showChars: 200
+  });
+};
+
+$(document).ready(shortenText);
+
 $(function(){
     var ink, d, x, y;
     $(".tl_link_button").click(function(e){

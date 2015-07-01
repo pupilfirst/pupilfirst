@@ -35,7 +35,7 @@ var giveWhiteBackgroundToTopNav = function() {
 };
 
 var popupStartupTimeline = function() {
-  $('#inline-popups').magnificPopup({
+  $('.inline-popups').magnificPopup({
     delegate: 'a',
     removalDelay: 500, //delay removal by X to allow out-animation
     callbacks: {
@@ -114,6 +114,20 @@ var prepareTestimonials = function() {
   });
 };
 
+// Function to swap success stories for different success scenarios
+var swapSuccessStories = function(){
+  $('.showcase-stories').hide();
+  $("#iTraveller-story").fadeIn();
+  $('.list-item').click(function(){$('.showcase-stories').hide();});
+  $("#get-funded").click(function(){$("#iTraveller-story").fadeIn();});
+  $("#get-accelerator").click(function(){$("#Profoundis-story").fadeIn();});
+  $("#get-hired").click(function(){$("#Mindhelix-story").fadeIn();});
+  $("#get-sustain").click(function(){$("#Wowmakers-story").fadeIn();});
+  $("#get-job").click(function(){$("#Nwplyng-story").fadeIn();});
+  $("#get-education").click(function(){$("#Sharan-story").fadeIn();});
+}
+
+$(document).ready(swapSuccessStories);
 $(document).ready(navigateStagesAndLearning);
 $(document).ready(giveWhiteBackgroundToTopNav);
 $(document).ready(popupStartupTimeline);
@@ -157,8 +171,4 @@ $(document).ready(function() {
 
 // Changing success stories according to selected success scenarios
 
-$(document).ready(functon(){
-  $("#iTraveller-story").click(function(){
-    // alert( "Handler for .click() called." );
-  });
-});
+

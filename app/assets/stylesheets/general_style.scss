@@ -439,7 +439,8 @@ ol.progtrckr[data-progtrckr-steps="9"] li {
   #showcase .showcase_logo {
     margin-top: 30px;
     margin-bottom: 15px;
-    width: 200px; }
+    max-width: 150px;
+    max-height: 150px; }
   #showcase .view {
     color: #646464;
     text-decoration: none;

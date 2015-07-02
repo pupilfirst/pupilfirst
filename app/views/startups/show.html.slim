@@ -5,14 +5,18 @@
 .container
   .row
     .col-md-12.clearfix
-      .col-sm-6
-        h1.tl_company_name
+      .col-sm-8
+        h1.tl_company_name style="display:inline-block;"
           ' #{@startup.name}
           - if @events.present?
             a#verified.tooltip-right data-tooltip=("Timeline verified by Startup Village.") href="#"
               img src='#{image_url 'timeline/verified.gif'}' width="25"
+        | &nbsp;
+        - if current_user && @startup.is_founder?(current_user)
+          a.btn-danger href="#{edit_startup_path(@startup)}"
+            .fa.fa-pencil Edit your Startup
       - if @startup.logo?
-        .col-sm-6.startup-logo
+        .col-sm-4.startup-logo
           = image_tag "#{@startup.logo_url}", class: 'img-responsive startup-logo'
 
   .row

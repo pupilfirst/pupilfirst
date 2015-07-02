@@ -53,7 +53,7 @@ $(document).ready(function () {
 
           $(window).scroll(function()
            {
-                  if ($(document).scrollTop() > 150)
+                  if ($(document).scrollTop() > 75)
                   {
                     $("#SiteLogoWhite").hide();
                     $("#SiteLogo").fadeIn();

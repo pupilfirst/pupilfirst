@@ -108,7 +108,8 @@ nav .shrink .navbar-toggle {
   padding: 4px 5px;
   margin: 8px 15px 8px 0; }
 nav #SiteLogo, nav .SiteLogo {
-  position: relative; }
+  position: relative;
+  max-height: 60px;}
 @media screen and (max-width: 767px) {
   nav .nav {
     background-color: #fff !important;

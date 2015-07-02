@@ -121,12 +121,30 @@ var swapSuccessStories = function(){
   $('.showcase-stories').hide();
   $("#iTraveller-story").fadeIn();
   $('.list-item').click(function(){$('.showcase-stories').hide();});
-  $("#get-funded").click(function(){$("#iTraveller-story").fadeIn();});
-  $("#get-accelerator").click(function(){$("#Profoundis-story").fadeIn();});
-  $("#get-hired").click(function(){$("#Mindhelix-story").fadeIn();});
-  $("#get-sustain").click(function(){$("#Wowmakers-story").fadeIn();});
-  $("#get-job").click(function(){$("#Nwplyng-story").fadeIn();});
-  $("#get-education").click(function(){$("#Sharan-story").fadeIn();});
+  $("#get-funded").click(function(){
+    $("#iTraveller-story").fadeIn();
+    $("#iTraveller-story")[0].scrollIntoView({block: "end", behavior: "smooth"});
+  });
+  $("#get-accelerator").click(function(){
+    $("#Profoundis-story").fadeIn();
+    $("#Profoundis-story")[0].scrollIntoView({block: "end", behavior: "smooth"});
+  });
+  $("#get-hired").click(function(){
+    $("#Mindhelix-story").fadeIn();
+    $("#Mindhelix-story")[0].scrollIntoView({block: "end", behavior: "smooth"});
+  });
+  $("#get-sustain").click(function(){
+    $("#Wowmakers-story").fadeIn();
+    $("#Wowmakers-story")[0].scrollIntoView({block: "end", behavior: "smooth"});
+  });
+  $("#get-job").click(function(){
+    $("#Nwplyng-story").fadeIn();
+    $("#Nwplyng-story")[0].scrollIntoView({block: "end", behavior: "smooth"});
+  });
+  $("#get-education").click(function(){
+    $("#Sharan-story").fadeIn();
+    $("#Sharan-story")[0].scrollIntoView({block: "end", behavior: "smooth"});
+  });
 }
 
 $(document).ready(swapSuccessStories);

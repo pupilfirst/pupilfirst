@@ -435,7 +435,6 @@ ol.progtrckr[data-progtrckr-steps="9"] li {
   #showcase a {
     text-decoration: none; }
   #showcase .showcase_company {
-    margin-top: 200px;
     overflow: hidden; }
   #showcase .showcase_logo {
     margin-top: 30px;
@@ -481,6 +480,17 @@ ol.progtrckr[data-progtrckr-steps="9"] li {
       cursor: pointer; }
       #showcase .list li:hover .glyphicon {
         color: #00ce78; }
+
+  @media screen and (max-width: 991px) {
+    .showcase_company {
+    margin-top: 20px;
+    }
+  }
+    @media screen and (min-width: 992px) {
+    .showcase_company {
+    margin-top: 200px;
+    }
+  }
 
 .timeline-preview, .timeline-preview > img{
   max-width:450px;

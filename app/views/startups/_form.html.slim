@@ -83,24 +83,6 @@ p
       | &nbsp;
       = link_to 'Cancel', startup_path(@startup), class: 'btn btn-default'
 
-h2.page-header.margin-bottom-20
-  ' Other Links
-  small Add links to other web-pages related to your startup
-
-= react_component 'StartupLinksSection', { startup_id: params[:id], allow_edit: true }
-
-= simple_form_for @startup.startup_links.new, url: startup_startup_links_path(@startup), wrapper: :inline_form, html: { class: 'form-inline' }, wrapper_mappings: { boolean: :vertical_booelan } do |f|
-  = f.error_notification
-  = f.input :name, placeholder: 'Name'
-  | &nbsp;
-  = f.input :url, placeholder: 'URL'
-  | &nbsp;
-  = f.input :description, placeholder: 'Description (optional)'
-  | &nbsp;
-  button type="submit" class="btn btn-primary"
-    span class="glyphicon glyphicon-plus"
-    |  Add a link
-
 javascript:
   $("#startup_category_ids").multiselect({
     onChange: function (option, checked) {

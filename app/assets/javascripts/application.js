@@ -13,8 +13,6 @@
 //= require jquery
 //= require bootstrap-sprockets
 //= require jquery_ujs
-//= require react
-//= require react_ujs
 //= require cocoon
 //= require bootstrap-select
 //= require bootstrap-datepicker
@@ -28,7 +26,6 @@
 //= require bootstrap-datetimepicker
 //= require pickers
 
-//= require_tree ./react
 //= require google_analytics.js.erb
 //= require mentor_meetings
 

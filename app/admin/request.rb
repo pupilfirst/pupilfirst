@@ -14,10 +14,6 @@ ActiveAdmin.register Request do
       sv_id_link(request.user)
     end
 
-    column :startup do |request|
-      startup_link(request.user.try(:startup))
-    end
-
     column :body do |request|
       simple_format request.body
     end

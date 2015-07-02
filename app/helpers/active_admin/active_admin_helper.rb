@@ -7,14 +7,6 @@ module ActiveAdmin::ActiveAdminHelper
     end
   end
 
-  def startup_link(startup)
-    if startup.present?
-      link_to startup.name, admin_startup_path(startup)
-    else
-      '<em>Unknown</em>'.html_safe
-    end
-  end
-
   def availability_as_string(availability)
     day = case availability["days"]
       when Date::DAYNAMES then "Everyday"

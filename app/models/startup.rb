@@ -94,7 +94,6 @@ class Startup < ActiveRecord::Base
   end
 
   has_one :bank
-  has_many :startup_links, dependent: :destroy
   has_many :startup_jobs
   has_many :timeline_events
 
@@ -232,7 +231,6 @@ class Startup < ActiveRecord::Base
 
   mount_uploader :logo, LogoUploader
   process_in_background :logo
-  accepts_nested_attributes_for :startup_links
   normalize_attribute :name, :pitch, :about, :email, :phone
   attr_accessor :full_validation
 

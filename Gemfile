@@ -45,7 +45,6 @@ gem 'bootstrap-sass', '~> 3.3.3' # Official Sass port of Bootstrap.
 gem 'autoprefixer-rails' # Autoprefixer for Ruby and Ruby on Rails.
 gem 'simple_form', '~> 3.1.0.rc2' # Simple-form RC2 with support for Bootstrap 3. TODO: Update simple_form to stable when available.
 gem 'sprockets-coffee-react' # Sprockets preprocessor.
-gem 'js-routes' # Routes inside JS.
 gem 'validate_url' # URL validation.
 gem 'chartkick' # Pretty charts!
 gem 'will_paginate-bootstrap' # Paginated tables with Bootstrap # POSSIBLY-USELESS

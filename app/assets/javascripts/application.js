@@ -16,7 +16,6 @@
 //= require cocoon
 //= require bootstrap-select
 //= require bootstrap-datepicker
-//= require application_routes
 //= require activate_datepicker
 //= require easyrtc.js
 //= require socket.io.js

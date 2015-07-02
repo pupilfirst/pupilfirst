@@ -33,10 +33,8 @@ Svapp::Application.routes.draw do
 
   resources :events
 
-  resources :startup_links, only: :destroy
 
   resources :startups, except: [:create, :index] do
-    resources :startup_links, only: [:index, :create]
     resources :startup_jobs do
       patch :repost
     # resources :founders do

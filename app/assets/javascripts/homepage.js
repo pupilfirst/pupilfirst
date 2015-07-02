@@ -93,27 +93,6 @@ var prepareTestimonials = function() {
     //  });
     //}
   });
-
-  //open the testimonials modal page
-  $('.cd-see-all').on('click', function(){
-    $('.cd-testimonials-all').addClass('is-visible');
-  });
-
-  //close the testimonials modal page
-  $('.cd-testimonials-all .close-btn').on('click', function(){
-    $('.cd-testimonials-all').removeClass('is-visible');
-  });
-  $(document).keyup(function(event){
-    //check if user has pressed 'Esc'
-    if(event.which=='27'){
-      $('.cd-testimonials-all').removeClass('is-visible');
-    }
-  });
-
-  //build the grid for the testimonials modal page
-  $('.cd-testimonials-all-wrapper').children('ul').masonry({
-    itemSelector: '.cd-testimonials-item'
-  });
 };
 
 // Function to swap success stories for different success scenarios
@@ -165,30 +144,3 @@ $(document).ready(function() {
     });
   });
 });
-
-$(document).ready(function() {
-  var hash = window.location.hash,
-    current = 0,
-    demos = Array.prototype.slice.call( document.querySelectorAll( '#codrops-demos > a' ) );
-
-  if( hash === '' ) hash = '#set-1';
-  setDemo( demos[ parseInt( hash.match(/#set-(\d+)/)[1] ) - 1 ] );
-
-  demos.forEach( function( el, i ) {
-    el.addEventListener( 'click', function() { setDemo( this ); } );
-  } );
-
-  function setDemo( el ) {
-    var idx = demos.indexOf( el );
-    if( current !== idx ) {
-      var currentDemo = demos[ current ];
-      currentDemo.className = currentDemo.className.replace(new RegExp("(^|\\s+)" + 'current-demo' + "(\\s+|$)"), ' ');
-    }
-    current = idx;
-    el.className = 'current-demo';
-  }
-});
-
-// Changing success stories according to selected success scenarios
-
-

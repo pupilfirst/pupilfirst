@@ -44,7 +44,6 @@ gem 'nilify_blanks' # Sets database fields to nil if blank values are supplied.
 gem 'bootstrap-sass', '~> 3.3.3' # Official Sass port of Bootstrap.
 gem 'autoprefixer-rails' # Autoprefixer for Ruby and Ruby on Rails.
 gem 'simple_form', '~> 3.1.0.rc2' # Simple-form RC2 with support for Bootstrap 3. TODO: Update simple_form to stable when available.
-gem 'react-rails', github: 'reactjs/react-rails' # React JS!
 gem 'sprockets-coffee-react' # Sprockets preprocessor.
 gem 'js-routes' # Routes inside JS.
 gem 'validate_url' # URL validation.

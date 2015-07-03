@@ -522,16 +522,16 @@ ol.progtrckr[data-progtrckr-steps="9"] li {
     color: #0A9C59; }
   #companies .company-details #owl-demo1 .item img {
     display: block;
-    width: 70%;
-    height: auto;
+    max-width: 70%;
+    height: 100px;
     text-align: center;
     padding: 20px; }
   #companies .company-details .owl-theme .owl-controls .owl-buttons div {
     background: none !important; }
   #companies .company-details .owl-theme .owl-controls .owl-buttons .owl-next {
-    top: 30px; }
+    top: -10px; }
   #companies .company-details .owl-theme .owl-controls .owl-buttons .owl-prev {
-    top: 30px; }
+    top: -10px; }
   #companies .company-details .owl-prev {
     left: 20px;
     vertical-align: middle; }

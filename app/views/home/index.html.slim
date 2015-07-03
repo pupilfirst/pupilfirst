@@ -224,42 +224,12 @@ section#companies
     br
     .row
       .short-list
-        .col-md-2.col-sm-3.liste
-          div
-            = image_tag 'startups/logo1.jpg', class: 'img-responsive'
-        .col-sm-3.liste
-          div
-            = image_tag 'startups/logo2.jpg', class: 'img-responsive'
-        .col-sm-3.liste
-          div
-            = image_tag 'startups/logo3.jpg', class: 'img-responsive'
-        .col-sm-3.liste
-          div
-            = image_tag 'startups/logo4.jpg', class: 'img-responsive'
-        .col-sm-3.liste
-          div
-            = image_tag 'startups/logo1.jpg', class: 'img-responsive'
-        .col-sm-3.liste
-          div
-            = image_tag 'startups/logo2.jpg', class: 'img-responsive'
-        .col-sm-3.liste
-          div
-            = image_tag 'startups/logo3.jpg', class: 'img-responsive'
-        .col-sm-3.liste
-          div
-            = image_tag 'startups/logo4.jpg', class: 'img-responsive'
-        .col-sm-3.liste
-          div
-            = image_tag 'startups/logo1.jpg', class: 'img-responsive'
-        .col-sm-3.liste
-          div
-            = image_tag 'startups/logo2.jpg', class: 'img-responsive'
-        .col-sm-3.liste
-          div
-            = image_tag 'startups/logo3.jpg', class: 'img-responsive'
-        .col-sm-3.liste
-          div
-            = image_tag 'startups/logo4.jpg', class: 'img-responsive'
+        - if @featured_startups.present?
+          - @featured_startups.each do |startup|
+            .col-sm-3.liste
+              span.center-helper
+              = image_tag "#{startup.logo_url}"
+
 
     .row.learnmore style="margin-top:20px;"
       a href="#"
@@ -363,7 +333,7 @@ section.container.blog
     p Latest picks from our blog
 
   .row
-    .flex-container style="displey:flex;justify-content:center;flex-wrap:wrap;"
+    .flex-container style="display:flex;justify-content:center;flex-wrap:wrap;"
       - @blogs.each do |blog|
         .post
           .post-content

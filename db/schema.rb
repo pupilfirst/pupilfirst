@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150630064926) do
+ActiveRecord::Schema.define(version: 20150703094303) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -233,17 +233,6 @@ ActiveRecord::Schema.define(version: 20150630064926) do
 
   add_index "startup_jobs", ["startup_id"], name: "index_startup_jobs_on_startup_id", using: :btree
 
-  create_table "startup_links", force: :cascade do |t|
-    t.integer  "startup_id"
-    t.string   "name"
-    t.string   "url"
-    t.string   "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "startup_links", ["startup_id"], name: "index_startup_links_on_startup_id", using: :btree
-
   create_table "startups", force: :cascade do |t|
     t.string   "name"
     t.string   "logo"
@@ -278,6 +267,7 @@ ActiveRecord::Schema.define(version: 20150630064926) do
     t.text     "metadata"
     t.string   "stage"
     t.string   "slug"
+    t.boolean  "featured"
   end
 
   add_index "startups", ["slug"], name: "index_startups_on_slug", unique: true, using: :btree

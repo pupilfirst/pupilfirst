@@ -79,6 +79,12 @@ class Startup < ActiveRecord::Base
   scope :student_startups, -> { joins(:founders).where('is_student = ?', true).uniq }
   scope :kochi, -> { where incubation_location: INCUBATION_LOCATION_KOCHI }
   scope :visakhapatnam, -> { where incubation_location: INCUBATION_LOCATION_VISAKHAPATNAM }
+  scope :timeline_verified, -> { joins(:timeline_events).distinct }
+
+  # Find all by specific category.
+  def self.category(category)
+    joins(:categories).where(categories: { id: category.id })
+  end
 
   has_many :founders, -> { where('is_founder = ?', true) }, class_name: 'User', foreign_key: 'startup_id' do
     def <<(founder)

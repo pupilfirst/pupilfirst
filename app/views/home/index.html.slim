@@ -217,12 +217,10 @@ section#companies
             br
             br
             #owl-demo1.owl-carousel.owl-theme
-              .item
-                = image_tag 'startups/company1.png'
-              .item
-                = image_tag 'startups/company2.png'
-              .item
-                = image_tag 'startups/company3.png'
+              - if @featured_startups.present?
+                - @featured_startups.each do |startup|
+                  .item
+                    = image_tag "#{startup.logo_url}"
     br
     .row
       .short-list

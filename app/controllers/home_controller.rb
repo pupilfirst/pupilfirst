@@ -3,6 +3,7 @@ class HomeController < ApplicationController
 
   def index
     @blogs = get_latest_blogs
+    @featured_startups = Startup.where(featured: true)
   end
 
   private

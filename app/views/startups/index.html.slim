@@ -1,21 +1,97 @@
-h1 Startups
+= content_for :head
+  = stylesheet_link_tag 'startups_index'
 
-- @startups.each do |startup|
-  .startup-card-container
-    .startup-card
-      =link_to startup do
-        span data-toggle="tooltip" data-placement="right" data-html="true" title="<div class='startup-details'>#{render 'startup_details', startup: startup}</div>"
-          .startups-logo
-            -if startup.logo.present?
-              .logo-startup style="background-image: url(#{startup.logo_url})"
-            -else
-              .logo-name.fitlimited
-                span #{startup.name.upcase}
+#startups
+  .container#startups_cover
+    .row
+      .col-md-9
+        = image_tag 'startups/cover.png', class: 'img-responsive'
+      .col-md-3
+        h2 Build
+        h2 Break
+        h2 Innovate
+        p At startup village people do.
+        p These are the startups who are currently enrolled with us.
 
-javascript:
-  if(isTouchDevice()===false) {
-    $('[data-toggle="tooltip"]').tooltip();
-  }
-  function isTouchDevice(){
-    return true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
-  }
+  section#sp_nav
+    .container data-spy="scroll"
+      .startups_nav
+        ul.nav.nav-pills
+          li role="presentation" style="background-color:#00E794"
+            a href="#hardware"
+              .micon
+                = image_tag 'startups/icons/hardware_black.png', class: 'img-responsive'
+              .mcont Hardware
+          li role="presentation" style="background-color:#00D1B0"
+            a href="#e-commerce"
+              .micon
+                = image_tag 'startups/icons/e_commerce_black.png', class: 'img-resposive'
+              .mcont
+                | Online Commerce
+          li role="presentation" style="background-color:#70B9DC"
+            a href="#media"
+              .micon
+                = image_tag 'startups/icons/media_black.png', class: 'img-responsive'
+              .mcont
+                | Media &amp;
+                br
+                | Entertainment
+          li role="presentation" style="background-color:#5C8FD5"
+            a href="#education"
+              .micon
+                = image_tag 'startups/icons/education_black.png', class: 'img-responsive'
+              .mcont Education
+          li role="presentation" style="background-color:#986FEC"
+            a href="#logistics"
+              .micon
+                = image_tag 'startups/icons/logistics_black.png', class: 'img-responsive'
+              .mcont Logistics
+          li role="presentation" style="background-color:#565770"
+            a href="#travel"
+              .micon
+                = image_tag 'startups/icons/holidays_black.png', class: 'img-responsive'
+              .mcont Travel & Holiday
+          li role="presentation" style="background-color:#FF6A54"
+            a href="#big-data"
+              .micon
+                = image_tag 'startups/icons/big_data_black.png', class: 'img-responsive'
+              .mcont
+                | Big Data &amp;
+                br
+                | Business
+          li role="presentation" style="background-color:#FFB923"
+            a href="#artificial-inteligence"
+              .micon
+                = image_tag 'startups/icons/artificial_intelligence_black.png', class: 'img-responsive'
+              .mcont Artificial Inteligence
+          li role="presentation" style="background-color:#F88272"
+            a href="#social"
+              .micon
+                = image_tag 'startups/icons/social_black.png', class: 'img-responsive'
+              .mcont Social
+
+- Category.startup_category.each do |startup_category|
+  - verified_startups = Startup.timeline_verified.category(startup_category)
+  - if verified_startups.present?
+    - underscored_name = startup_category.name.gsub(/[\s-]/, '').underscore
+    section.showcase id=underscored_name.dasherize
+      .container
+        .row
+          .col-sm-3.cat
+            .thumbnail
+              .imgdiv
+                = image_tag "startups/icons/#{underscored_name}_colored.png", class: 'img-responsive'
+              .caption
+                h3 #{startup_category.name}
+          .col-sm-9.cat_cont
+            .row
+              - verified_startups.each do |startup|
+                .col-md-4.sbox
+                  .thumbnail
+                    .imgdiv
+                      = image_tag startup.logo_url, class: 'img-responsive'
+                    .caption
+                      p #{startup.name}
+                    .overdiv
+                      div #{image_tag 'startups/view.png'}
+                      h4 View Timeline

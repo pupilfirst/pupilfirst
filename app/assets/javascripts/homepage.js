@@ -64,6 +64,21 @@ var startupsShowcaseSlide = function() {
   });
 };
 
+var storiesSlide = function() {
+  var dataFromView = $("#startups-showcase-data");// using the same arrows
+
+  $("#stories-carousel").owlCarousel({
+    navigation : true,
+    navigationText: [
+      "<img src='" + dataFromView.data('arrow-left-url') + "'/>",
+      "<img src='" + dataFromView.data('arrow-right-url') + "'/>"
+    ],// Show next and prev buttons
+    slideSpeed : 300,
+    paginationSpeed : 400,
+    singleItem:true
+  });
+};
+
 var mediaShowcaseSlide = function() {
   var dataFromView = $("#media-showcase-data");
   var carousel = $("#owl-demo");
@@ -131,6 +146,7 @@ $(document).ready(navigateStagesAndLearning);
 $(document).ready(giveWhiteBackgroundToTopNav);
 $(document).ready(popupStartupTimeline);
 $(document).ready(startupsShowcaseSlide);
+$(document).ready(storiesSlide);
 $(document).ready(mediaShowcaseSlide);
 $(document).ready(prepareTestimonials);
 

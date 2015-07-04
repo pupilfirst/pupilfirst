@@ -18,6 +18,11 @@ p.caption-text-heading {
 
   .overdiv {
     display: none !important;
+
+    &:hover {
+      text-decoration: none;
+      color: black;
+    }
   }
 
   .thumbnail {

@@ -46,6 +46,6 @@
                       = image_tag startup.logo_url, class: 'img-responsive'
                     .caption
                       p #{startup.name}
-                    .overdiv
+                    a.overdiv href='#{startup_url startup}'
                       div #{image_tag 'startups/icons/view.png'}
                       h4 View Timeline

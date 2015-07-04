@@ -16,4 +16,5 @@ Rails.application.config.assets.precompile += %w(
   owl-carousel/owl.carousel.js
   ct-carousel/masonry.pkgd.min.js
   startups_index.css
+  startups_index.js
 )

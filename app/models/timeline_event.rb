@@ -4,43 +4,60 @@ class TimelineEvent < ActiveRecord::Base
   serialize :links
   validates_presence_of :title, :event_type, :event_on, :startup_id, :iteration
 
-  TYPE_LAUNCH = 'launch'
-  TYPE_AWARD = 'award'
-  TYPE_TEAM_SIZE = 'team_size'
   TYPE_TEAM_FORMATION = 'team_formation'
-  TYPE_SHOWCASE = 'showcase'
-  TYPE_MISSION = 'mission'
-  TYPE_SERIES_A = 'series_a'
-  TYPE_SEED = 'seed_fund'
-  TYPE_RELOCATE = 'relocate'
-  TYPE_END_ITERATION = 'end_iteration'
-  TYPE_PIVOT = 'pivot'
-  TYPE_PATENT = 'patent'
-  TYPE_REVENUE = 'revenue'
-  TYPE_MENTOR = 'mentor'
-  TYPE_N_CUSTOMERS = 'n_customers'
-  TYPE_INVESTOR = 'investor'
-  TYPE_INCORPORATED = 'incorporated'
+  TYPE_PROSPECTIVE_CUSTOMER = 'prospective_customer'
+  TYPE_IDEA = 'idea'
   TYPE_INCUBATED = 'incubated'
-  TYPE_GRADUATED = 'graduated'
-  TYPE_ONE_CUSTOMER = 'one_customer'
-  TYPE_DEBT_FUND = 'debt_fund'
-  TYPE_CROWD_FUND = 'crowd_fund'
-  TYPE_CO_FOUNDER = 'co_founder'
-  TYPE_BANK = 'bank'
-  TYPE_ATTENDED = 'attended'
-  TYPE_ANGEL_FUND = 'angel_funding'
-  TYPE_ACQUIRED = 'acquired'
   TYPE_ACCELERATOR = 'accelerator'
+
+  TYPE_MENTOR = 'mentor'
+  TYPE_PATENT = 'patent'
+  TYPE_TECH_STACK = 'tech_stack'
   TYPE_PROTOTYPE = 'prototype'
+  TYPE_SEED = 'seed_fund'
+
+  TYPE_LAUNCH = 'launch'
+  TYPE_KEY_EMPLOYEE = 'key_employee'
+  TYPE_CO_FOUNDER = 'co_founder'
+  TYPE_KEY_TEAM_MEMBER_LEAVES = 'key_team_member_leaves'
+  TYPE_CO_FOUNDER_LEAVES = 'co_founder_leaves'
+
+  TYPE_USER_GROWTH = 'user_growth'
+  TYPE_PIVOT = 'pivot'
+  TYPE_FIRST_PAYING_CUSTOMER = 'first_paying_customer'
+  TYPE_ANGEL_FUND = 'angel_funding'
+  TYPE_SERIES_A = 'series_a'
+
+  TYPE_MASSIVE_CUSTOMER_GROWTH = 'massive_customer_growth'
+  TYPE_TECH_SCALING = 'tech_scaling'
+  TYPE_END_ITERATION = 'end_iteration'
+  TYPE_INCORPORATED = 'incorporated'
+  TYPE_ACQUIRED = 'acquired'
+
+  TYPE_ATTENDED = 'attended'
+  TYPE_REVENUE = 'revenue'
+  TYPE_DEBT_FUND = 'debt_fund'
+  TYPE_RELOCATE = 'relocate'
+  TYPE_SHOWCASE = 'showcase'
+
+  TYPE_AWARD = 'award'
+  TYPE_MISSION = 'mission'
+  TYPE_TEAM_SIZE = 'team_size'
+  TYPE_CROWD_FUND = 'crowd_fund'
+  TYPE_BANK_LOAN = 'bank_loan'
+
+  TYPE_GRADUATED = 'graduated'
 
   def self.valid_event_types
     [
-      TYPE_LAUNCH, TYPE_AWARD, TYPE_TEAM_SIZE, TYPE_TEAM_FORMATION, TYPE_SHOWCASE, TYPE_MISSION, TYPE_SERIES_A,
-      TYPE_SEED, TYPE_RELOCATE, TYPE_END_ITERATION, TYPE_PIVOT, TYPE_PATENT, TYPE_REVENUE, TYPE_MENTOR,
-      TYPE_N_CUSTOMERS, TYPE_INVESTOR, TYPE_INCORPORATED, TYPE_INCUBATED, TYPE_GRADUATED, TYPE_ONE_CUSTOMER,
-      TYPE_DEBT_FUND, TYPE_CROWD_FUND, TYPE_CO_FOUNDER, TYPE_BANK, TYPE_ATTENDED, TYPE_ANGEL_FUND, TYPE_ACQUIRED,
-      TYPE_ACCELERATOR, TYPE_PROTOTYPE
+      TYPE_TEAM_FORMATION, TYPE_PROSPECTIVE_CUSTOMER, TYPE_IDEA, TYPE_INCUBATED, TYPE_ACCELERATOR,
+      TYPE_MENTOR, TYPE_PATENT, TYPE_TECH_STACK, TYPE_PROTOTYPE, TYPE_SEED,
+      TYPE_LAUNCH, TYPE_KEY_EMPLOYEE, TYPE_CO_FOUNDER, TYPE_KEY_TEAM_MEMBER_LEAVES, TYPE_CO_FOUNDER_LEAVES,
+      TYPE_USER_GROWTH, TYPE_PIVOT, TYPE_FIRST_PAYING_CUSTOMER, TYPE_ANGEL_FUND, TYPE_SERIES_A,
+      TYPE_MASSIVE_CUSTOMER_GROWTH, TYPE_TECH_SCALING, TYPE_END_ITERATION, TYPE_INCORPORATED, TYPE_ACQUIRED,
+      TYPE_ATTENDED, TYPE_REVENUE, TYPE_DEBT_FUND, TYPE_RELOCATE, TYPE_SHOWCASE,
+      TYPE_AWARD, TYPE_MISSION, TYPE_TEAM_SIZE, TYPE_CROWD_FUND, TYPE_BANK_LOAN,
+      TYPE_GRADUATED
     ]
   end
 

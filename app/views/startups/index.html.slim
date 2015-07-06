@@ -28,7 +28,7 @@
   - verified_startups = Startup.timeline_verified.category(startup_category)
   - if verified_startups.present?
     - underscored_name = startup_category.name.gsub(/[\s-]/, '').underscore
-    section.startups-category-row id=underscored_name.dasherize
+    section.startups-category-row id="category-#{underscored_name.dasherize}"
       .container
         .row
           .col-sm-3.startup-category-title

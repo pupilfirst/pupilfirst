@@ -435,7 +435,7 @@ ol.progtrckr[data-progtrckr-steps="9"] li {
     line-height: 30px; }
   #showcase a {
     text-decoration: none; }
-/*  #showcase .showcase_company {
+/*  #showcase .showcase-company {
     overflow: hidden; }*/
   #showcase .showcase_logo {
     margin-top: 30px;
@@ -495,10 +495,35 @@ ol.progtrckr[data-progtrckr-steps="9"] li {
     }
   }
 
-.showcase-stories .owl-theme .owl-controls .owl-buttons .owl-next {
+  @media screen and (max-width: 480px) {
+    .showcase-company {
+      margin-top: 50px;
+    }
+    .showcase-stories .owl-theme .owl-controls .owl-buttons .owl-next {
+    top: 150px; }
+    .showcase-stories .owl-theme .owl-controls .owl-buttons .owl-prev {
+    top: 150px; }
+  }
+  @media screen and (min-width: 481px) and (max-width: 991px) {
+    .showcase-company {
+      margin-top: 50px;
+    }
+    .showcase-stories .owl-theme .owl-controls .owl-buttons .owl-next {
+    top: 300px; }
+    .showcase-stories .owl-theme .owl-controls .owl-buttons .owl-prev {
+    top: 300px; }
+  }
+    @media screen and (min-width: 992px) {
+    .showcase-company {
+      margin-top: 200px;
+    }
+    .showcase-stories .owl-theme .owl-controls .owl-buttons .owl-next {
     top: 450px; }
-.showcase-stories .owl-theme .owl-controls .owl-buttons .owl-prev {
+    .showcase-stories .owl-theme .owl-controls .owl-buttons .owl-prev {
     top: 450px; }
+  }
+
+
 
 .timeline-preview, .timeline-preview > img{
   max-width:450px;

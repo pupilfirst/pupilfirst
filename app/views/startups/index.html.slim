@@ -40,7 +40,10 @@
             .startup-boxes-container
               - verified_startups.each do |startup|
                 .startup-box
-                  = image_tag startup.logo_url
+                  - if startup.logo?
+                    = image_tag startup.logo_url
+                  - else
+                    .startup-logo-name #{startup.name}
                   a.startup-box-cover href="#{startup_url startup}"
                     .startup-name #{startup.name}
                     = image_tag 'startups/icons/view.png'

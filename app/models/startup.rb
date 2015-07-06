@@ -213,6 +213,9 @@ class Startup < ActiveRecord::Base
     end
 
     self.agreement_ends_at = nil if (self.agreement_first_signed_at.nil? && self.agreement_last_signed_at.nil?)
+
+    # If slug isn't supplied, set one.
+    self.slug = generate_randomized_slug if self.slug.blank?
   end
 
   def approval_status
@@ -400,6 +403,14 @@ class Startup < ActiveRecord::Base
     self.approval_status = Startup::APPROVAL_STATUS_PENDING
 
     regenerate_slug!
+  end
+
+  def generate_randomized_slug
+    if self.name.present?
+      "#{self.name.parameterize}-#{rand 1000}"
+    else
+      "nameless-#{SecureRandom.urlsafe_base64(6)}"
+    end
   end
 
   def regenerate_slug!

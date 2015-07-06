@@ -60,6 +60,10 @@ section.startups-category-row {
     max-height: 90%;
   }
 
+  .startup-logo-name {
+    font-size: 130%;
+  }
+
   .startup-box-cover {
     display: none;
     background-color: lightgreen;
@@ -84,6 +88,10 @@ section.startups-category-row {
 
   &:hover {
     img {
+      display: none;
+    }
+
+    .startup-logo-name {
       display: none;
     }
 

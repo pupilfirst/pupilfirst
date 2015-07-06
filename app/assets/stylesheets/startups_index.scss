@@ -13,217 +13,89 @@ p.caption-text-heading {
   font-size: 200%;
 }
 
-.sbox {
-  padding: 0 30px 30px 0;
+section.startups-category-row {
+  padding: 30px 0 15px 0;
 
-  .overdiv {
-    display: none !important;
+  &:nth-child(odd) {
+    background-color: #f9f9f9;
+  }
+}
 
-    &:hover {
-      text-decoration: none;
-      color: black;
+.startup-category-title {
+  margin-bottom: 15px;
+
+  .startup-category-name {
+    margin: 15px 0 0 5px;
+    font-size: 175%;
+    font-weight: 300;
+  }
+}
+
+.startup-boxes-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.startup-box {
+  height: 190px;
+  width: 190px;
+  border: 1px solid lightgrey;
+  margin: 0 15px 15px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media screen and (max-width: 767px) {
+    height: 165px;
+    width: 165px;
+  }
+
+  a {
+    text-decoration: none;
+    color: black;
+  }
+
+  img {
+    max-width: 90%;
+    max-height: 90%;
+  }
+
+  .startup-box-cover {
+    display: none;
+    background-color: lightgreen;
+    width: 100%;
+    height: 100%;
+
+    .startup-name {
+      font-size: 130%;
+      margin-bottom: 10px;
+    }
+
+    .view-timeline {
+      font-size: 80%;
+      margin-top: 10px;
+    }
+
+    img {
+      width: 40px;
+      height: 40px;
     }
   }
 
-  .thumbnail {
-    border-radius: 1px !important;
-    padding: 0px !important;
-    background: none !important;
-    position: relative;
+  &:hover {
+    img {
+      display: none;
+    }
 
-    .imgdiv {
-      padding: 30px;
-      min-height: 150px;
-      line-height: 40px;
+    .startup-box-cover {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
 
       img {
-        display: inline-block;
-        vertical-align: middle;
-      }
-    }
-
-    &:hover {
-      cursor: pointer;
-
-      .overdiv {
-        width: 100% !important;
-        height: 100% !important;
-        position: absolute;
-        z-index: 100;
-        top: 0px;
-        background: rgba(0, 229, 145, 0.9);
-        display: block !important;
-
-        h4 {
-          position: relative;
-          text-align: center;
-          top: 45% !important;
-          vertical-align: middle;
-          font-weight: 300 !important;
-        }
-
-        div {
-          text-align: center;
-          position: relative;
-          top: 40%;
-
-          img {
-            width: 40px;
-          }
-        }
+        display: initial;
       }
     }
   }
-
-  .caption {
-    border-top: 1px solid #ccc;
-    margin: 0px !important;
-    text-align: center;
-    padding: 20px 20px 10px 20px !important;
-    vertical-align: middle;
-    font-size: 13px;
-  }
-}
-
-.cat {
-  .thumbnail {
-    border: 0px !important;
-    background: none !important;
-
-    .imgdiv {
-      padding: 0px;
-    }
-
-    h3 {
-      font-size: 26px;
-      font-weight: 300 !important;
-      line-height: 34px !important;
-      margin-bottom: 0px !important;
-
-      @media screen and (min-width: 992px) {
-        font-size: 26px !important;
-      }
-    }
-
-    h5 {
-      font-size: 16px;
-      font-weight: 600 !important;
-      margin-top: 0px !important;
-    }
-  }
-}
-
-@media screen and (min-width: 768px) and (max-width: 991px) {
-  .sbox {
-    width: 32% !important;
-    display: inline-block;
-    padding: 10px !important;
-  }
-  .sbox .imgdiv {
-    padding: 10px !important;
-  }
-  .cat h3 {
-    font-size: 18px !important;
-  }
-  .cat h5 {
-    font-size: 14px !important;
-  }
-}
-
-@media screen and (min-width: 581px) and (max-width: 767px) {
-  .sbox {
-    width: 49% !important;
-    display: inline-block;
-    padding: 10px !important;
-  }
-  .cat {
-    display: inline-block;
-    width: 19% !important;
-    vertical-align: top;
-  }
-  .cat .imgdiv {
-    padding: 20px !important;
-  }
-  .cat h3 {
-    font-size: 16px !important;
-  }
-  .cat h5 {
-    font-size: 13px !important;
-  }
-  .cat_cont {
-    display: inline-block;
-    width: 79% !important;
-    vertical-align: top;
-  }
-}
-
-@media screen and (min-width: 481px) and (max-width: 580px) {
-  .sbox {
-    width: 49% !important;
-    display: inline-block;
-    padding: 10px !important;
-  }
-  .cat {
-    display: inline-block;
-    width: 33% !important;
-    vertical-align: top;
-  }
-  .cat .imgdiv {
-    padding: 10px !important;
-  }
-  .cat h3 {
-    font-size: 16px !important;
-  }
-  .cat h5 {
-    font-size: 12px !important;
-  }
-  .cat_cont {
-    display: inline-block;
-    width: 66% !important;
-    vertical-align: top;
-  }
-}
-
-@media screen and (min-width: 321px) and (max-width: 480px) {
-  .sbox {
-    width: 49% !important;
-    display: inline-block;
-    padding: 10px !important;
-  }
-  .sbox .imgdiv {
-    padding: 15px !important;
-  }
-  .cat h3 {
-    font-size: 16px !important;
-  }
-  .cat h5 {
-    font-size: 12px !important;
-  }
-}
-
-@media screen and (max-width: 320px) {
-  .sbox {
-    width: 100% !important;
-    display: inline-block;
-    padding: 0px !important;
-  }
-  .sbox .imgdiv {
-    padding: 20px !important;
-  }
-  .cat h3 {
-    font-size: 16px !important;
-  }
-  .cat h5 {
-    font-size: 12px !important;
-  }
-}
-
-.showcase {
-  padding-top: 50px;
-  padding-bottom: 50px;
-  position: relative;
-}
-
-.showcase:nth-child(odd) {
-  background-color: #f9f9f9 !important;
 }

@@ -28,24 +28,20 @@
   - verified_startups = Startup.timeline_verified.category(startup_category)
   - if verified_startups.present?
     - underscored_name = startup_category.name.gsub(/[\s-]/, '').underscore
-    section.showcase id=underscored_name.dasherize
+    section.startups-category-row id=underscored_name.dasherize
       .container
         .row
-          .col-sm-3.cat
-            .thumbnail
-              .imgdiv
-                = image_tag "startups/icons/#{underscored_name}_colored.png", class: 'img-responsive'
-              .caption
-                h3 #{startup_category.name}
-          .col-sm-9.cat_cont
-            .row
+          .col-sm-3.startup-category-title
+            - if Rails.application.assets.find_asset("startups/icons/#{underscored_name}_colored.png")
+              .startup-category-image
+                = image_tag "startups/icons/#{underscored_name}_colored.png"
+            .startup-category-name #{startup_category.name}
+          .col-sm-9.startup-category-startups
+            .startup-boxes-container
               - verified_startups.each do |startup|
-                .col-md-4.sbox
-                  .thumbnail
-                    .imgdiv
-                      = image_tag startup.logo_url, class: 'img-responsive'
-                    .caption
-                      p #{startup.name}
-                    a.overdiv href='#{startup_url startup}'
-                      div #{image_tag 'startups/icons/view.png'}
-                      h4 View Timeline
+                .startup-box
+                  = image_tag startup.logo_url
+                  a.startup-box-cover href="#{startup_url startup}"
+                    .startup-name #{startup.name}
+                    = image_tag 'startups/icons/view.png'
+                    .view-timeline View Timeline

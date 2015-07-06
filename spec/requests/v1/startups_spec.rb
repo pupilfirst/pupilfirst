@@ -1,6 +1,6 @@
 require 'spec_helpers/v1/startups_spec_helper'
 
-describe 'Startup Requests' do
+describe 'Startup Requests', disabled: true do
   include ApiSpecHelper
   include UserSpecHelper
   include Rails.application.routes.url_helpers

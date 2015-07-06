@@ -435,8 +435,8 @@ ol.progtrckr[data-progtrckr-steps="9"] li {
     line-height: 30px; }
   #showcase a {
     text-decoration: none; }
-  #showcase .showcase_company {
-    overflow: hidden; }
+/*  #showcase .showcase_company {
+    overflow: hidden; }*/
   #showcase .showcase_logo {
     margin-top: 30px;
     margin-bottom: 15px;
@@ -482,14 +482,16 @@ ol.progtrckr[data-progtrckr-steps="9"] li {
       #showcase .list li:hover .glyphicon {
         color: #00ce78; }
 
-  @media screen and (max-width: 991px) {
-    .showcase_company {
-    margin-top: 20px;
+  @media screen and (max-width: 480px) {
+    #showcase iframe{
+      width: 227px;
+      height: 128px;
     }
   }
-    @media screen and (min-width: 992px) {
-    .showcase_company {
-    margin-top: 200px;
+    @media screen and (min-width: 481px) {
+    #showcase iframe{
+      width: 455px;
+      height: 258px;
     }
   }
 

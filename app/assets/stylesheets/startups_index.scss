@@ -1,11 +1,18 @@
 .landing_header {
   background-image: image-url("startups/header.jpg");
-  min-height: 500px;
-}
+  min-height: 313px;
 
-@media screen and (max-width: 1199px) {
-  .landing_header {
-    min-height: 400px;
+  .carousel-caption {
+    // Can't avoid using a !important here since there a rule from general_style which claims it is important. :(
+    padding-top: 120px !important;
+
+    @media screen and (max-width: 767px) {
+      padding-top: 160px !important;
+    }
+
+    @media screen and (min-width: 768px) and (max-width: 1199px) {
+      padding-top: 180px !important;
+    }
   }
 }
 

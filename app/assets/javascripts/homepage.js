@@ -67,7 +67,7 @@ var startupsShowcaseSlide = function() {
 var storiesSlide = function() {
   var dataFromView = $("#startups-showcase-data");// using the same arrows
 
-  $("#stories-carousel").owlCarousel({
+  $(".stories-carousel").owlCarousel({
     navigation : true,
     navigationText: [
       "<img src='" + dataFromView.data('arrow-left-url') + "'/>",
@@ -120,16 +120,16 @@ var swapSuccessStories = function(){
     $("#get-funded-stories")[0].scrollIntoView({block: "end", behavior: "smooth"});
   });
   $("#get-accelerator").click(function(){
-    $("#Profoundis-story").fadeIn();
-    $("#Profoundis-story")[0].scrollIntoView({block: "end", behavior: "smooth"});
+    $("#accelerator-stories").fadeIn();
+    $("#accelerator-stories")[0].scrollIntoView({block: "end", behavior: "smooth"});
   });
   $("#get-hired").click(function(){
-    $("#Mindhelix-story").fadeIn();
-    $("#Mindhelix-story")[0].scrollIntoView({block: "end", behavior: "smooth"});
+    $("#get-hired-stories").fadeIn();
+    $("#get-hired-stories")[0].scrollIntoView({block: "end", behavior: "smooth"});
   });
   $("#get-sustain").click(function(){
-    $("#Wowmakers-story").fadeIn();
-    $("#Wowmakers-story")[0].scrollIntoView({block: "end", behavior: "smooth"});
+    $("#self-sustain-stories").fadeIn();
+    $("#self-sustain-stories")[0].scrollIntoView({block: "end", behavior: "smooth"});
   });
   $("#get-job").click(function(){
     $("#Nwplyng-story").fadeIn();

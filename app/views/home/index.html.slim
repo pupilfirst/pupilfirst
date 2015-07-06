@@ -127,8 +127,8 @@ section#showcase
                   ' Sharan Thampi shares his roller coaster startup ride from a college class room to finally a great admission for M.Sc in Business and Finance at Birmingham, UK.
         .col-md-6.sucess-video align="center"
           .showcase-stories#get-funded-stories
-            #stories-carousel.owl-carousel
-              div
+            .stories-carousel.owl-carousel
+              div#iTraveller-story
                 div style=("max-width:450px; margin:0 auto;")
                   iframe.header-video.showcase_company src="https://www.youtube.com/embed/KufIL6ZS1lk?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allowfullscreen="allowfullscreen"
                     br
@@ -152,42 +152,60 @@ section#showcase
                     |  View the Fin Robotics Story
                 #test-popup7.row.white-popup.mfp-with-anim.mfp-hide
                   = image_tag 'landing/showcase/showcased_timelines/finrobotics.jpg', class: 'img-responsive'
-          .showcase-stories#Profoundis-story
-            div style=("max-width:450px; margin:0 auto;")
-              = image_tag 'startup_showcase1.jpg', class: 'showcase_company img-responsive'
-              br
-            = image_tag 'landing/showcase/showcased_logos/profoundis_logo.jpg', class: 'showcase_logo img-responsive'
-            br
-            .inline-popups
-              a.view data-effect="mfp-zoom-in" href="#test-popup2"
-                = image_tag 'view.png'
-                |  View the Profoundis Story
-            #test-popup2.row.white-popup.mfp-with-anim.mfp-hide
-              = image_tag 'landing/showcase/showcased_timelines/profoundis.jpg', class: 'img-responsive'
-          .showcase-stories#Mindhelix-story
-            div style=("max-width:450px; margin:0 auto;")
-              = image_tag 'startup_showcase1.jpg', class: 'showcase_company img-responsive'
-              br
-            = image_tag 'landing/showcase/showcased_logos/mindhelix_logo.png', class: 'showcase_logo img-responsive'
-            br
-            .inline-popups
-              a.view data-effect="mfp-zoom-in" href="#test-popup3"
-                = image_tag 'view.png'
-                |  View the Mindhelix Story
-            #test-popup3.row.white-popup.mfp-with-anim.mfp-hide
-              = image_tag 'landing/showcase/showcased_timelines/mindhelix.jpg', class: 'img-responsive'
-          .showcase-stories#Wowmakers-story
-            div style=("max-width:450px; margin:0 auto;")
-              = image_tag 'startup_showcase1.jpg', class: 'showcase_company img-responsive'
-              br
-            = image_tag 'landing/showcase/showcased_logos/wowmakers_logo.jpg', class: 'showcase_logo img-responsive'
-            br
-            .inline-popups
-              a.view data-effect="mfp-zoom-in" href="#test-popup4"
-                = image_tag 'view.png'
-                |  View the Wowmakers Story
-            #test-popup4.row.white-popup.mfp-with-anim.mfp-hide
-              = image_tag 'landing/showcase/showcased_timelines/wowmakers.jpg', class: 'img-responsive'
+              div#reckone-story
+                div style=("max-width:450px; margin:0 auto;")
+                  iframe.header-video.showcase_company src="https://www.youtube.com/embed/7ilVAFmR7kw?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allowfullscreen="allowfullscreen"
+                    br
+                = image_tag 'landing/showcase/showcased_logos/reckone_logo.png', class: 'showcase_logo img-responsive'
+                br
+                .inline-popups
+                  a.view data-effect="mfp-zoom-in" href="#test-popup8"
+                    = image_tag 'view.png'
+                    |  View the Reckone Story
+                #test-popup8.row.white-popup.mfp-with-anim.mfp-hide
+                  = image_tag 'landing/showcase/showcased_timelines/reckone.jpg', class: 'img-responsive'
+          .showcase-stories#accelerator-stories
+            .stories-carousel.owl-carousel
+              div#profoundis-story
+                div style=("max-width:450px; margin:0 auto;")
+                  iframe.header-video.showcase_company src="https://www.youtube.com/embed/WD3pdWMFj-0?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allowfullscreen="allowfullscreen"
+                    br
+                = image_tag 'landing/showcase/showcased_logos/profoundis_logo.jpg', class: 'showcase_logo img-responsive'
+                br
+                .inline-popups
+                  a.view data-effect="mfp-zoom-in" href="#test-popup2"
+                    = image_tag 'view.png'
+                    |  View the Profoundis Story
+                #test-popup2.row.white-popup.mfp-with-anim.mfp-hide
+                  = image_tag 'landing/showcase/showcased_timelines/profoundis.jpg', class: 'img-responsive'
+          .showcase-stories#get-hired-stories
+            .stories-carousel.owl-carousel
+              div#Mindhelix-story
+                div style=("max-width:450px; margin:0 auto;")
+                  iframe.header-video.showcase_company src="https://www.youtube.com/embed/ToHZ08FKK48?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allowfullscreen="allowfullscreen"
+                    br
+                = image_tag 'landing/showcase/showcased_logos/mindhelix_logo.png', class: 'showcase_logo img-responsive'
+                br
+                .inline-popups
+                  a.view data-effect="mfp-zoom-in" href="#test-popup3"
+                    = image_tag 'view.png'
+                    |  View the Mindhelix Story
+                #test-popup3.row.white-popup.mfp-with-anim.mfp-hide
+                  = image_tag 'landing/showcase/showcased_timelines/mindhelix.jpg', class: 'img-responsive'
+          .showcase-stories#self-sustain-stories
+            .stories-carousel.owl-carousel
+              div#wowmakers-story
+                div style=("max-width:450px; margin:0 auto;")
+                  iframe.header-video.showcase_company src="https://www.youtube.com/embed/R8LhGtoeaUc?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allowfullscreen="allowfullscreen"
+                    br
+                = image_tag 'landing/showcase/showcased_logos/wowmakers_logo.jpg', class: 'showcase_logo img-responsive'
+                br
+                .inline-popups
+                  a.view data-effect="mfp-zoom-in" href="#test-popup4"
+                    = image_tag 'view.png'
+                    |  View the Wowmakers Story
+                #test-popup4.row.white-popup.mfp-with-anim.mfp-hide
+                  = image_tag 'landing/showcase/showcased_timelines/wowmakers.jpg', class: 'img-responsive'
           .showcase-stories#Nwplyng-story
             .inline-popups
               a.timeline-preview data-effect="mfp-zoom-in" href="#test-popup5"

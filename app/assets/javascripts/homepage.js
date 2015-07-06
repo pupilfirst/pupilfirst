@@ -113,11 +113,11 @@ var prepareTestimonials = function() {
 // Function to swap success stories for different success scenarios
 var swapSuccessStories = function(){
   $('.showcase-stories').hide();
-  $("#iTraveller-story").fadeIn();
+  $("#get-funded-stories").fadeIn();
   $('.list-item').click(function(){$('.showcase-stories').hide();});
   $("#get-funded").click(function(){
-    $("#iTraveller-story").fadeIn();
-    $("#iTraveller-story")[0].scrollIntoView({block: "end", behavior: "smooth"});
+    $("#get-funded-stories").fadeIn();
+    $("#get-funded-stories")[0].scrollIntoView({block: "end", behavior: "smooth"});
   });
   $("#get-accelerator").click(function(){
     $("#Profoundis-story").fadeIn();

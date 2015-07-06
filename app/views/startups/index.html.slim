@@ -1,97 +1,47 @@
 = content_for :head
   = stylesheet_link_tag 'startups_index'
+  = javascript_include_tag 'startups_index'
 
-#startups
-  .container#startups_cover
-    .row
-      .col-md-9
-        = image_tag 'startups/cover.png', class: 'img-responsive'
-      .col-md-3
-        h2 Build
-        h2 Break
-        h2 Innovate
-        p At startup village people do.
-        p These are the startups who are currently enrolled with us.
+- content_for :header
+  .container
+    #carousel-startups-index.carousel.slide data-ride="carousel"
+      / Wrapper for slides
+      .carousel-inner role="listbox"
+        .item.active
+          .carousel-caption
+            p.caption-text-heading
+              | &ldquo;If everything seems under control, you're not going fast enough.&rdquo;
+            p.quote-author &mdash; Mario Andretti
+        .item
+          .carousel-caption
+            p.caption-text-heading
+              | &ldquo;We’re here to put a dent in the universe. Otherwise why else even be here?&rdquo;
+            p.quote-author &mdash; Steve Jobs
+        .item
+          .carousel-caption
+            p.caption-text-heading
+              | &ldquo;Entrepreneurs see what others can't, do what others won't, and accomplish what others dream.&rdquo;
+            p.quote-author &mdash; Ryan Lilly
 
-  section#sp_nav
-    .container data-spy="scroll"
-      .startups_nav
-        ul.nav.nav-pills
-          li role="presentation" style="background-color:#00E794"
-            a href="#hardware"
-              .micon
-                = image_tag 'startups/icons/hardware_black.png', class: 'img-responsive'
-              .mcont Hardware
-          li role="presentation" style="background-color:#00D1B0"
-            a href="#e-commerce"
-              .micon
-                = image_tag 'startups/icons/e_commerce_black.png', class: 'img-resposive'
-              .mcont
-                | Online Commerce
-          li role="presentation" style="background-color:#70B9DC"
-            a href="#media"
-              .micon
-                = image_tag 'startups/icons/media_black.png', class: 'img-responsive'
-              .mcont
-                | Media &amp;
-                br
-                | Entertainment
-          li role="presentation" style="background-color:#5C8FD5"
-            a href="#education"
-              .micon
-                = image_tag 'startups/icons/education_black.png', class: 'img-responsive'
-              .mcont Education
-          li role="presentation" style="background-color:#986FEC"
-            a href="#logistics"
-              .micon
-                = image_tag 'startups/icons/logistics_black.png', class: 'img-responsive'
-              .mcont Logistics
-          li role="presentation" style="background-color:#565770"
-            a href="#travel"
-              .micon
-                = image_tag 'startups/icons/holidays_black.png', class: 'img-responsive'
-              .mcont Travel & Holiday
-          li role="presentation" style="background-color:#FF6A54"
-            a href="#big-data"
-              .micon
-                = image_tag 'startups/icons/big_data_black.png', class: 'img-responsive'
-              .mcont
-                | Big Data &amp;
-                br
-                | Business
-          li role="presentation" style="background-color:#FFB923"
-            a href="#artificial-inteligence"
-              .micon
-                = image_tag 'startups/icons/artificial_intelligence_black.png', class: 'img-responsive'
-              .mcont Artificial Inteligence
-          li role="presentation" style="background-color:#F88272"
-            a href="#social"
-              .micon
-                = image_tag 'startups/icons/social_black.png', class: 'img-responsive'
-              .mcont Social
 
 - Category.startup_category.each do |startup_category|
   - verified_startups = Startup.timeline_verified.category(startup_category)
   - if verified_startups.present?
     - underscored_name = startup_category.name.gsub(/[\s-]/, '').underscore
-    section.showcase id=underscored_name.dasherize
+    section.startups-category-row id="category-#{underscored_name.dasherize}"
       .container
         .row
-          .col-sm-3.cat
-            .thumbnail
-              .imgdiv
-                = image_tag "startups/icons/#{underscored_name}_colored.png", class: 'img-responsive'
-              .caption
-                h3 #{startup_category.name}
-          .col-sm-9.cat_cont
-            .row
+          .col-sm-3.startup-category-title
+            - if Rails.application.assets.find_asset("startups/icons/#{underscored_name}_colored.png")
+              .startup-category-image
+                = image_tag "startups/icons/#{underscored_name}_colored.png"
+            .startup-category-name #{startup_category.name}
+          .col-sm-9.startup-category-startups
+            .startup-boxes-container
               - verified_startups.each do |startup|
-                .col-md-4.sbox
-                  .thumbnail
-                    .imgdiv
-                      = image_tag startup.logo_url, class: 'img-responsive'
-                    .caption
-                      p #{startup.name}
-                    .overdiv
-                      div #{image_tag 'startups/view.png'}
-                      h4 View Timeline
+                .startup-box
+                  = image_tag startup.logo_url
+                  a.startup-box-cover href="#{startup_url startup}"
+                    .startup-name #{startup.name}
+                    = image_tag 'startups/icons/view.png'
+                    .view-timeline View Timeline

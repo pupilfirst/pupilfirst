@@ -7,7 +7,7 @@ class StartupsController < InheritedResources::Base
     @startup.save
   end
 
-  layout 'homepage', only: [:show]
+  layout 'homepage', only: [:show, :index]
 
   def new
     unless current_user.phone_verified?
@@ -31,7 +31,6 @@ class StartupsController < InheritedResources::Base
   end
 
   def index
-    @startups = Startup.agreement_live
   end
 
   def show

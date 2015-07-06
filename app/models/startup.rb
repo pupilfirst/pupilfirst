@@ -178,6 +178,9 @@ class Startup < ActiveRecord::Base
 
     # If supplied \r\n for line breaks, replace those with just \n so that length validation works.
     self.about = about.gsub("\r\n", "\n") if self.about
+
+    # If slug isn't supplied, set one.
+    self.slug = generate_randomized_slug if self.slug.blank?
   end
 
   before_destroy do
@@ -213,9 +216,6 @@ class Startup < ActiveRecord::Base
     end
 
     self.agreement_ends_at = nil if (self.agreement_first_signed_at.nil? && self.agreement_last_signed_at.nil?)
-
-    # If slug isn't supplied, set one.
-    self.slug = generate_randomized_slug if self.slug.blank?
   end
 
   def approval_status

@@ -90,8 +90,6 @@ GEM
     acts-as-taggable-on (3.5.0)
       activerecord (>= 3.2, < 5)
     addressable (2.3.8)
-    apipie-rails (0.3.4)
-      json
     arbre (1.0.3)
       activesupport (>= 3.0.0)
     arel (6.0.0)
@@ -369,7 +367,6 @@ GEM
     lumberjack (1.0.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
-    maruku (0.7.2)
     method_source (0.8.2)
     mime-types (2.6.1)
     mini_magick (4.2.7)
@@ -567,10 +564,6 @@ GEM
     validate_url (1.0.0)
       activemodel (>= 3.0.0)
       addressable
-    versionist (1.4.1)
-      activesupport (>= 3)
-      railties (>= 3)
-      yard (~> 0.7)
     warden (1.2.3)
       rack (>= 1.0)
     web-console (2.1.3)
@@ -586,7 +579,6 @@ GEM
     will_paginate (3.0.7)
     will_paginate-bootstrap (1.0.1)
       will_paginate (>= 3.0.3)
-    yard (0.8.7.6)
 
 PLATFORMS
   ruby
@@ -594,7 +586,6 @@ PLATFORMS
 DEPENDENCIES
   activeadmin!
   acts-as-taggable-on
-  apipie-rails
   attribute_normalizer (~> 1.2.0.b)
   autoprefixer-rails
   better_errors
@@ -632,7 +623,6 @@ DEPENDENCIES
   just-datetime-picker
   letter_opener
   logstash-logger
-  maruku
   mini_magick
   momentjs-rails (>= 2.8.1)!
   newrelic_rpm
@@ -672,7 +662,6 @@ DEPENDENCIES
   unobtrusive_flash (>= 3)
   urbanairship
   validate_url
-  versionist
   web-console (~> 2.0)
   webmock
   wicked

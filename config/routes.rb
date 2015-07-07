@@ -1,5 +1,4 @@
 Svapp::Application.routes.draw do
-  apipie
   mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
 
   devise_for(:users,

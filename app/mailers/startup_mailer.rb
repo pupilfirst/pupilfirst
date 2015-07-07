@@ -37,24 +37,4 @@ class StartupMailer < ApplicationMailer
     send_to = @startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
     mail(to: send_to, subject: 'Reminder to complete incubation application to Startup Village.')
   end
-
-  def notify_svrep_about_startup_update(startup)
-    @startup = startup
-    mail(to: admin_contact, cc: "incoming@svlabs.in", subject: "Detailed form submitted")
-  end
-
-  def apply_now(startup)
-    @startup = startup
-    mail(to: admin_contact, cc: "incoming@svlabs.in", subject: "Incubation Application")
-  end
-
-  private
-
-  def secretary_contact
-    I18n.t("startup_village.secretary_contact.#{Rails.env}") or 'info@svlabs.in'
-  end
-
-  def admin_contact
-    I18n.t("startup_village.admin_contact.#{Rails.env}") or 'info@svlabs.in'
-  end
 end

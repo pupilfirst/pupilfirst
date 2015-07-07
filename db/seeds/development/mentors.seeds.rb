@@ -1,7 +1,7 @@
 require_relative 'helper'
 
 after 'development:users' do
-  mentor_user = User.find_by email: 'mentor@svlabs.in'
+  mentor_user = User.find_by email: 'mentor@sv.co'
 
   Mentor.create!(
     user: mentor_user,

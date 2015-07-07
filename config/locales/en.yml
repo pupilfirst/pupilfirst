@@ -23,14 +23,6 @@ en:
   notifications:
     create_connection: "You have a new connection: %{fullname}!"
   startup_village:
-    admin_contact:
-      development: "gautham@mobme.in"
-      staging: "utsav@nwplyng.com"
-      production: "utsav@nwplyng.com"
-    secretary_contact:
-      development: "gautham@mobme.in"
-      staging: "utsav@nwplyng.com"
-      production: "utsav@nwplyng.com"
     messages:
       personal_info:
         no_incorporation: |

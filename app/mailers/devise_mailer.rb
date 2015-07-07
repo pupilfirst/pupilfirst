@@ -5,5 +5,5 @@ class DeviseMailer < Devise::Mailer
   include Roadie::Rails::Automatic
   include Devise::Controllers::UrlHelpers
 
-  default from: 'Startup Village <no-reply@svlabs.in>', bcc: 'outgoing@svlabs.in'
+  default from: 'Startup Village <no-reply@sv.co>', bcc: 'outgoing@svlabs.in'
 end

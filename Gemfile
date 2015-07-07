@@ -36,7 +36,6 @@ gem 'uglifier'
 gem 'urbanairship' # POSSIBLY-USELESS
 gem 'rest-client'
 gem 'cancancan', '~> 1.8' # Used to manage administrator types and roles in the ActiveAdmin interface.
-gem 'paper_trail' # Logs changes in critical tables, and displays changelog in ActiveAdmin dashboard. # POSSIBLY-USELESS
 gem 'phony_rails' # Phone number validation and normalization.
 gem 'select2-rails' # Select2 javascript select box improvement library, using in ActiveAdmin interface.
 gem 'nilify_blanks' # Sets database fields to nil if blank values are supplied.

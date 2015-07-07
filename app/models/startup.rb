@@ -63,8 +63,6 @@ class Startup < ActiveRecord::Base
     [STAGE_SCALING, STAGE_EFFICIENCY, STAGE_CUSTOMER_VALIDATION, STAGE_PROTOTYPE, STAGE_DISCOVERY]
   end
 
-  has_paper_trail
-
   scope :unready, -> { where(approval_status: [APPROVAL_STATUS_UNREADY, nil]) }
   scope :not_unready, -> { where.not(approval_status: [APPROVAL_STATUS_UNREADY, nil]) }
   scope :pending, -> { where(approval_status: APPROVAL_STATUS_PENDING) }

@@ -392,9 +392,6 @@ GEM
       hashie (>= 1.2, < 4)
       rack (~> 1.0)
     orm_adapter (0.5.0)
-    paper_trail (3.0.8)
-      activerecord (>= 3.0, < 5.0)
-      activesupport (>= 3.0, < 5.0)
     passenger (5.0.10)
       rack
       rake (>= 0.8.1)
@@ -629,7 +626,6 @@ DEPENDENCIES
   nilify_blanks
   nokogiri
   omniauth (~> 1.2.1)
-  paper_trail
   passenger (~> 5.0.8)
   pg
   phony_rails

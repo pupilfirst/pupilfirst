@@ -30,9 +30,6 @@ Svapp::Application.routes.draw do
     end
   end
 
-  resources :events
-
-
   resources :startups, except: [:create] do
     resources :startup_jobs do
       patch :repost

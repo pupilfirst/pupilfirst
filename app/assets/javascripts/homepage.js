@@ -118,6 +118,7 @@ var swapSuccessStories = function(){
   $('.list-item').click(function(){
     $('.showcase-stories').fadeOut(200);
     $('.list-item').removeClass("story-clicked");
+    pauseAllVideos();
   });
   $("#get-funded").click(function(){
     $("#get-funded-stories").fadeIn(400);
@@ -149,6 +150,21 @@ var swapSuccessStories = function(){
     $("#get-education").addClass("story-clicked");
     // $("#Sharan-story")[0].scrollIntoView({block: "end", behavior: "smooth"});
   });
+}
+
+var pauseAllVideos = function(){
+  pauseVideoWithId("iTraveller-story");
+  pauseVideoWithId("fin-story");
+  pauseVideoWithId("reckone-story");
+  pauseVideoWithId("profoundis-story");
+  pauseVideoWithId("Mindhelix-story");
+  pauseVideoWithId("wowmakers-story");
+}
+
+var pauseVideoWithId = function (videoId){
+  var div = document.getElementById(videoId);
+  var iframe = div.getElementsByTagName("iframe")[0].contentWindow;
+  iframe.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
 }
 
 $(document).ready(swapSuccessStories);

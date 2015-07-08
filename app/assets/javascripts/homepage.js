@@ -113,31 +113,40 @@ var prepareTestimonials = function() {
 // Function to swap success stories for different success scenarios
 var swapSuccessStories = function(){
   $('.showcase-stories').hide();
-  $("#get-funded-stories").fadeIn();
-  $('.list-item').click(function(){$('.showcase-stories').hide();});
+  $("#get-funded-stories").fadeIn(400);
+  $('.list-item').click(function(){
+    $('.showcase-stories').fadeOut(200);
+    $('.list-item').removeClass("story-clicked");
+  });
   $("#get-funded").click(function(){
-    $("#get-funded-stories").fadeIn();
-    $("#get-funded-stories")[0].scrollIntoView({block: "end", behavior: "smooth"});
+    $("#get-funded-stories").fadeIn(400);
+    $("#get-funded").addClass("story-clicked");
+    // $("#get-funded-stories")[0].scrollIntoView({block: "end", behavior: "smooth"});
   });
   $("#get-accelerator").click(function(){
-    $("#accelerator-stories").fadeIn();
-    $("#accelerator-stories")[0].scrollIntoView({block: "end", behavior: "smooth"});
+    $("#accelerator-stories").fadeIn(400);
+    $("#get-accelerator").addClass("story-clicked");
+    // $("#accelerator-stories")[0].scrollIntoView({block: "end", behavior: "smooth"});
   });
   $("#get-hired").click(function(){
-    $("#get-hired-stories").fadeIn();
-    $("#get-hired-stories")[0].scrollIntoView({block: "end", behavior: "smooth"});
+    $("#get-hired-stories").fadeIn(400);
+    $("#get-hired").addClass("story-clicked");
+    // $("#get-hired-stories")[0].scrollIntoView({block: "end", behavior: "smooth"});
   });
   $("#get-sustain").click(function(){
-    $("#self-sustain-stories").fadeIn();
-    $("#self-sustain-stories")[0].scrollIntoView({block: "end", behavior: "smooth"});
+    $("#self-sustain-stories").fadeIn(400);
+    $("#get-sustain").addClass("story-clicked");
+    // $("#self-sustain-stories")[0].scrollIntoView({block: "end", behavior: "smooth"});
   });
   $("#get-job").click(function(){
-    $("#Nwplyng-story").fadeIn();
-    $("#Nwplyng-story")[0].scrollIntoView({block: "end", behavior: "smooth"});
+    $("#Nwplyng-story").fadeIn(400);
+    $("#get-job").addClass("story-clicked");
+    // $("#Nwplyng-story")[0].scrollIntoView({block: "end", behavior: "smooth"});
   });
   $("#get-education").click(function(){
-    $("#Sharan-story").fadeIn();
-    $("#Sharan-story")[0].scrollIntoView({block: "end", behavior: "smooth"});
+    $("#Sharan-story").fadeIn(400);
+    $("#get-education").addClass("story-clicked");
+    // $("#Sharan-story")[0].scrollIntoView({block: "end", behavior: "smooth"});
   });
 }
 

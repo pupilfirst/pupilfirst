@@ -10,7 +10,6 @@ class Ability
         can :manage, [Startup, DbConfig, StartupJob]
       when AdminUser::TYPE_EDITOR
         can :read, Startup
-        can [:read, :create], Location
         can :manage, [DbConfig, StartupJob]
     end
 

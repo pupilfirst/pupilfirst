@@ -70,13 +70,6 @@ FactoryGirl.define do
     f.category_type :startup
   end
 
-  factory :location do |f|
-    f.latitude { Faker::Number.number(8) }
-    f.longitude { Faker::Number.number(8) }
-    f.title { Faker::Lorem.characters }
-    f.address { Faker::Lorem.paragraph }
-  end
-
   factory :bank do |f|
     f.is_joint true
     startup

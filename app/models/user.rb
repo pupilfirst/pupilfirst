@@ -17,7 +17,6 @@ class User < ActiveRecord::Base
   # alias_attribute :communication_address, :address  # 13/03/2015 to accomodate change in user address field for older api, need to be removed after sometime
 
   has_many :requests
-  has_many :news, class_name: "News", foreign_key: :user_id
   has_one :mentor, dependent: :destroy
   belongs_to :college
   belongs_to :bank

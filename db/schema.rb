@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150707100056) do
+ActiveRecord::Schema.define(version: 20150708114429) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -176,22 +176,6 @@ ActiveRecord::Schema.define(version: 20150707100056) do
     t.datetime "verified_at"
     t.string   "company"
   end
-
-  create_table "news", force: :cascade do |t|
-    t.string   "title"
-    t.text     "body"
-    t.integer  "user_id"
-    t.boolean  "featured"
-    t.string   "youtube_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "picture"
-    t.boolean  "notification_sent"
-    t.datetime "published_at"
-    t.integer  "category_id"
-  end
-
-  add_index "news", ["user_id"], name: "index_news_on_user_id", using: :btree
 
   create_table "requests", force: :cascade do |t|
     t.text     "body"

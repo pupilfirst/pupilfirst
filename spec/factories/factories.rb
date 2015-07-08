@@ -65,11 +65,6 @@ FactoryGirl.define do
     f.category_type :user
   end
 
-  factory :news_category,  class: Category do |f|
-    f.name {Faker::Lorem.words(2).join(' ')}
-    f.category_type :news
-  end
-
   factory :event_category,  class: Category do |f|
     f.name {Faker::Lorem.words(2).join(' ')}
     f.category_type :event
@@ -78,13 +73,6 @@ FactoryGirl.define do
   factory :startup_category,  class: Category do |f|
     f.name {Faker::Lorem.words(2).join(' ')}
     f.category_type :startup
-  end
-
-  factory :news do |f|
-    author
-    association :category, factory: :news_category, strategy: :build
-    f.title { Faker::Lorem.characters }
-    f.body {Faker::Lorem.paragraph}
   end
 
   factory :location do |f|

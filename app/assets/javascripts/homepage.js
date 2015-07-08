@@ -114,6 +114,7 @@ var prepareTestimonials = function() {
 var swapSuccessStories = function(){
   $('.showcase-stories').hide();
   $("#get-funded-stories").fadeIn(400);
+  $("#get-funded").addClass("story-clicked");
   $('.list-item').click(function(){
     $('.showcase-stories').fadeOut(200);
     $('.list-item').removeClass("story-clicked");

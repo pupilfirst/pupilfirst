@@ -532,6 +532,10 @@ ol.progtrckr[data-progtrckr-steps="9"] li {
     top: 150px; }
     .showcase-stories .owl-theme .owl-controls .owl-buttons .owl-prev {
     top: 150px; }
+
+    .success-videos {
+      display: none;
+    }
   }
   @media screen and (min-width: 481px) and (max-width: 991px) {
     .showcase-company, .timeline-preview {
@@ -541,6 +545,11 @@ ol.progtrckr[data-progtrckr-steps="9"] li {
     top: 300px; }
     .showcase-stories .owl-theme .owl-controls .owl-buttons .owl-prev {
     top: 300px; }
+
+    .success-videos {
+      display: none;
+    }
+
   }
     @media screen and (min-width: 992px) {
     .showcase-company, .timeline-preview {

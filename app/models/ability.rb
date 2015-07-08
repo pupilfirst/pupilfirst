@@ -7,12 +7,10 @@ class Ability
         can :manage, :all
       when AdminUser::TYPE_INCUBATION_TEAM
         can :read, [User]
-        can :manage, [Startup, DbConfig, Event, StartupJob]
+        can :manage, [Startup, DbConfig, StartupJob]
       when AdminUser::TYPE_EDITOR
         can :read, Startup
-        can [:read, :create], Category
-        can [:read, :create], Location
-        can :manage, [DbConfig, Event, StartupJob]
+        can :manage, [DbConfig, StartupJob]
     end
 
     can :read, ActiveAdmin::Page, :name => 'Dashboard'

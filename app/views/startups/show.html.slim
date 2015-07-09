@@ -6,7 +6,7 @@
   .row
     .col-md-12.clearfix
       .col-sm-8
-        h1.tl_company_name style="display:inline-block;"
+        h1.tl_company_name
           ' #{@startup.name}
           - if @events.present?
             a#verified.tooltip-right data-tooltip=("Timeline verified by Startup Village.") href="#"
@@ -20,7 +20,7 @@
           = image_tag "#{@startup.logo_url}", class: 'img-responsive startup-logo'
 
   .row
-    .col-md-12.tl_about
+    .col-md-12.tl-about
       p.content.shorten
         | #{ @startup.about? ? @startup.about : 'This startup is yet to provide an about section' }
 
@@ -30,13 +30,13 @@
   .row
     .col-md-4.col-md-push-8
       - if @startup.categories.present?
-        .media.tl_data
+        .media.tl-data
           img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data1.png'}"
           .media-body
             p.tittle Industry
             p.content #{@startup.categories.pluck(:name).join(', ')}
         - if @startup.website?
-          .media.tl_data
+          .media.tl-data
             = image_tag "timeline/data2.png", class: "media-object pull-left", alt: "website"
             .media-body
               p.tittle Website
@@ -45,7 +45,7 @@
                   ' #{@startup.website}
                   = image_tag 'timeline/link.png'
         - if @startup.presentation_link?
-          .media.tl_data
+          .media.tl-data
             img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data3.png'}"
             .media-body
               p.tittle Startup Deck
@@ -54,26 +54,26 @@
                   ' #{@startup.name} deck
                   = image_tag 'timeline/link.png'
         - if @startup.team_size?
-          .media.tl_data
+          .media.tl-data
             = image_tag "timeline/data4.png", class: "media-object pull-left", alt: "team size"
             .media-body
               p.tittle Team Size
               p.content #{@startup.team_size}
         - if @startup.stage?
-          .media.tl_data
+          .media.tl-data
             img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data5.png'}"
             .media-body
               p.tittle Stage of Company
               p.content #{@startup.stage.capitalize}
         - if @events.present?
-          .media.tl_data
+          .media.tl-data
             = image_tag "timeline/data6.png", class: "media-object pull-left", alt: "team size"
             .media-body
               p.tittle Product Iteration
               p.content #{@events.maximum(:iteration).ordinalize}
       .row style="padding-left:15px;"
         - if @startup.founders.present?
-          .col-sm-6.col-md-12.tl_founder
+          .col-sm-6.col-md-12.tl-founder
             h4 Founders
             hr
             - @startup.founders.each do |founder|
@@ -95,7 +95,7 @@
                         a href="#{founder.linkedin_url}"
                           img src="#{ image_url 'timeline/linkedin.png'}"
         - if @startup.mentors?
-          .col-sm-6.col-md-12.tl_mentor
+          .col-sm-6.col-md-12.tl-mentor
             h4 Mentors
             hr/
             .media.mentor
@@ -106,7 +106,7 @@
                 p.desig Chief Executive Officer
                 p.firm Google Inc.
         - if @startup.investors?
-          .col-sm-6.col-md-12.tl_investor
+          .col-sm-6.col-md-12.tl-investor
             h4 Investors
             hr/
             .media.investor
@@ -121,8 +121,8 @@
 
     / Timeline starts
     - if @events.present?
-      .col-md-8.col-md-pull-4.main_timeline style=(" border-right: 1px solid #ccc; padding-right:25px;")
-        .tl_iteration style="margin-left: 20px"
+      .col-md-8.col-md-pull-4.main-timeline
+        .tl-iteration style="margin-left: 20px"
           p
             | Timeline of #{@events.maximum(:iteration).ordinalize} iteration.
           = image_tag 'timeline/dash.png'
@@ -131,7 +131,7 @@
         ul
           - @events.each.with_index(1) do |event,index|
             - if event.event_type == TimelineEvent::TYPE_END_ITERATION
-              .tl_iteration
+              .tl-iteration
                 .buttons style="display:inline" End of Iteration #{event.iteration}
                 br
                 p style="margin-top: 10px" #{event.title}
@@ -145,26 +145,26 @@
                     = image_tag "timeline/badges/#{event.event_type.to_s}.png", width: "70"
                   .timeline-panel
                     .timeline-heading
-                      h4.timeline-title.tl_heading
+                      h4.timeline-title
                         | #{event.title}
-                      p.tl_date
+                      p.tl-date
                         small
                           = image_tag "timeline/date.png"
                           | #{event.event_on.strftime("%B %Y")}
                     .timeline-body
-                      .tl_body
+                      .tl-body
                         - if event.image?
-                          .img-responsive.img_padding.tl-event-image
+                          .img-responsive.img-padding.tl-event-image
                             = image_tag event.image
                         p #{event.description}
                       - if event.links?
-                        .timeline-footer.tl_footer
+                        .timeline-footer.tl-footer
                           - event.links.each do |link|
-                            a.tl_link_button href="#{link[:url]}"
+                            a.tl-link-button href="#{link[:url]}"
                               | #{link[:title]}
     - else
-      .col-md-8.col-md-pull-4.main_timeline style=(" border-right: 1px solid #ccc; padding-right:25px;")
-        .tl_iteration
+      .col-md-8.col-md-pull-4.main-timeline
+        .tl-iteration
           p
             | No timeline events to show!
           = image_tag 'timeline/dash.png'

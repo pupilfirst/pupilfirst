@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.2'
+gem 'rails', '4.2.3'
 
 gem 'activeadmin', github: 'activeadmin' # ActiveAdmin doesn't like 4.2 at all (for the moment). Switch this to stable when available.
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.

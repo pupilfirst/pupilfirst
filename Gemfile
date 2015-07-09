@@ -14,7 +14,6 @@ gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check 
 gem 'carrierwave' # One uploader to rule them all.
 gem 'carrierwave_backgrounder' # Backgrounder for carrierwave.
 gem 'fog' # required by carrierwave to upload to S3.
-gem 'cocoon' # POSSIBLY-USELESS TODO: Figure out what this thing does, and whether it's in use.
 gem 'coffee-rails', '~> 4.1.0'
 gem 'devise_invitable'
 gem 'jbuilder', '~> 2.0'

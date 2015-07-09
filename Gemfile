@@ -20,18 +20,20 @@ gem 'devise_invitable'
 gem 'jbuilder', '~> 2.0'
 gem 'jquery-rails'
 gem 'just-datetime-picker' # POSSIBLY-USELESS
-gem 'mini_magick'
-gem 'newrelic_rpm' # POSSIBLY-USELESS
+gem 'mini_magick' # Image processing.
+gem 'newrelic_rpm' # Reporter for Newrelic Heroku add-on.
 gem 'nokogiri'
 gem 'pg'
 gem 'rubypress' # Wordpress
 gem 'sass-rails', '~> 5.0'
-gem 'sendgrid_smtpapi'
-gem 'sentry-raven'
+gem 'sendgrid_smtpapi' # Sendgrid handles our e-mails.
+gem 'sentry-raven' # Reporter for Sentry Heroku add-on.
 gem 'slim'
+
 # gem 'turbolinks' # Disabled, because it is a pain in the ass.
+
 gem 'uglifier'
-gem 'rest-client'
+gem 'rest-client' # Used to contact Fast Alerts' API.
 gem 'cancancan', '~> 1.8' # Used to manage administrator types and roles in the ActiveAdmin interface.
 gem 'phony_rails' # Phone number validation and normalization.
 gem 'select2-rails' # Select2 javascript select box improvement library, using in ActiveAdmin interface.
@@ -63,7 +65,7 @@ source 'https://rails-assets.org' do
 end
 
 group :development do
-  gem 'letter_opener'
+  gem 'letter_opener' # In development, open mails sent in browser.
   gem 'bullet' # Detect N+1 queries.
 end
 

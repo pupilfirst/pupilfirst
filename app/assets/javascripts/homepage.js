@@ -112,44 +112,51 @@ var prepareTestimonials = function() {
 
 // Function to swap success stories for different success scenarios
 var swapSuccessStories = function(){
+  $('.collapse').collapse();
   $('.showcase-stories').hide();
-  $("#get-funded-stories").fadeIn(400);
+  $('.story-accordion').collapse('hide');
   $("#get-funded").addClass("story-clicked");
-  $('.list-item').click(function(){
-    $('.showcase-stories').fadeOut(200);
-    $('.list-item').removeClass("story-clicked");
-    pauseAllVideos();
-  });
-  $("#get-funded").click(function(){
+  var width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+  if (width > 991) {
     $("#get-funded-stories").fadeIn(400);
-    $("#get-funded").addClass("story-clicked");
-    // $("#get-funded-stories")[0].scrollIntoView({block: "end", behavior: "smooth"});
-  });
-  $("#get-accelerator").click(function(){
-    $("#accelerator-stories").fadeIn(400);
-    $("#get-accelerator").addClass("story-clicked");
-    // $("#accelerator-stories")[0].scrollIntoView({block: "end", behavior: "smooth"});
-  });
-  $("#get-hired").click(function(){
-    $("#get-hired-stories").fadeIn(400);
-    $("#get-hired").addClass("story-clicked");
-    // $("#get-hired-stories")[0].scrollIntoView({block: "end", behavior: "smooth"});
-  });
-  $("#get-sustain").click(function(){
-    $("#self-sustain-stories").fadeIn(400);
-    $("#get-sustain").addClass("story-clicked");
-    // $("#self-sustain-stories")[0].scrollIntoView({block: "end", behavior: "smooth"});
-  });
-  $("#get-job").click(function(){
-    $("#Nwplyng-story").fadeIn(400);
-    $("#get-job").addClass("story-clicked");
-    // $("#Nwplyng-story")[0].scrollIntoView({block: "end", behavior: "smooth"});
-  });
-  $("#get-education").click(function(){
-    $("#Sharan-story").fadeIn(400);
-    $("#get-education").addClass("story-clicked");
-    // $("#Sharan-story")[0].scrollIntoView({block: "end", behavior: "smooth"});
-  });
+  } else {
+    $("#get-funded-accordion").collapse('hide');
+  }
+    $('.list-item').click(function(){
+      $('.showcase-stories').fadeOut(200);
+      $('.list-item').removeClass("story-clicked");
+      pauseAllVideos();
+    });
+    $("#get-funded").click(function(){
+      $("#get-funded-stories").fadeIn(400);
+      $("#get-funded").addClass("story-clicked");
+      // $("#get-funded-stories")[0].scrollIntoView({block: "end", behavior: "smooth"});
+    });
+    $("#get-accelerator").click(function(){
+      $("#accelerator-stories").fadeIn(400);
+      $("#get-accelerator").addClass("story-clicked");
+      // $("#accelerator-stories")[0].scrollIntoView({block: "end", behavior: "smooth"});
+    });
+    $("#get-hired").click(function(){
+      $("#get-hired-stories").fadeIn(400);
+      $("#get-hired").addClass("story-clicked");
+      // $("#get-hired-stories")[0].scrollIntoView({block: "end", behavior: "smooth"});
+    });
+    $("#get-sustain").click(function(){
+      $("#self-sustain-stories").fadeIn(400);
+      $("#get-sustain").addClass("story-clicked");
+      // $("#self-sustain-stories")[0].scrollIntoView({block: "end", behavior: "smooth"});
+    });
+    $("#get-job").click(function(){
+      $("#Nwplyng-story").fadeIn(400);
+      $("#get-job").addClass("story-clicked");
+      // $("#Nwplyng-story")[0].scrollIntoView({block: "end", behavior: "smooth"});
+    });
+    $("#get-education").click(function(){
+      $("#Sharan-story").fadeIn(400);
+      $("#get-education").addClass("story-clicked");
+      // $("#Sharan-story")[0].scrollIntoView({block: "end", behavior: "smooth"});
+    });
 }
 
 var pauseAllVideos = function(){

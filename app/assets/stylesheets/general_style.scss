@@ -536,9 +536,7 @@ ol.progtrckr[data-progtrckr-steps="9"] li {
     .success-videos {
       display: none;
     }
-    .story-accordion {
-      display: block;
-    }
+
   }
   @media screen and (min-width: 481px) and (max-width: 991px) {
     .showcase-company, .timeline-preview {
@@ -552,9 +550,7 @@ ol.progtrckr[data-progtrckr-steps="9"] li {
     .success-videos {
       display: none;
     }
-    .story-accordion {
-      display: block;
-    }
+
 
   }
     @media screen and (min-width: 992px) {
@@ -565,11 +561,8 @@ ol.progtrckr[data-progtrckr-steps="9"] li {
     top: 400px; }
     .showcase-stories .owl-theme .owl-controls .owl-buttons .owl-prev {
     top: 400px; }
-
-    .story-accordion {
-      display: none;
-    }
   }
+
 
 
 

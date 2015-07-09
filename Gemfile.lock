@@ -518,7 +518,6 @@ DEPENDENCIES
   fog
   font-awesome-sass (~> 4.3.0)
   friendly_id
-  inherited_resources
   jbuilder (~> 2.0)
   jquery-rails
   letter_opener

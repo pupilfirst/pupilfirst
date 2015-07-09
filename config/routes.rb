@@ -75,10 +75,7 @@ Svapp::Application.routes.draw do
     patch 'resend', action: 'resend'
   end
 
-  # get 'team' => 'welcome#team'
   get 'jobs', to: 'startup_jobs#list_all'
-  get 'privacy_policy', to: 'welcome#privacy_policy'
-  get 'faq', to: 'welcome#faq'
 
   resources :incubation, only: %w(show update) do
     member do

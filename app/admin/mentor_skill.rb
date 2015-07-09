@@ -1,4 +1,4 @@
-ActiveAdmin.register MentorSkill do
+# ActiveAdmin.register MentorSkill do
   # menu parent: 'Mentoring'
 
   # controller do
@@ -16,4 +16,4 @@ ActiveAdmin.register MentorSkill do
   # end
 
   # permit_params :mentor_id, :skill_id, :expertise
-end
+# end

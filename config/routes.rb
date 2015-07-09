@@ -31,13 +31,13 @@ Svapp::Application.routes.draw do
   end
 
   resources :startups, except: [:create] do
-    resources :startup_jobs do
-      patch :repost
-    # resources :founders do
-    # collection do
-    #   post :invite
+    # resources :startup_jobs do
+    #   patch :repost
+    # # resources :founders do
+    # # collection do
+    # #   post :invite
+    # # end
     # end
-    end
 
     member do
       post :add_founder
@@ -75,7 +75,7 @@ Svapp::Application.routes.draw do
     patch 'resend', action: 'resend'
   end
 
-  get 'jobs', to: 'startup_jobs#list_all'
+  # get 'jobs', to: 'startup_jobs#list_all'
 
   resources :incubation, only: %w(show update) do
     member do

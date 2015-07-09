@@ -1,4 +1,4 @@
-ActiveAdmin.register StartupJob do
+# ActiveAdmin.register StartupJob do
 
   # menu parent: 'Startups'
 
@@ -19,4 +19,4 @@ ActiveAdmin.register StartupJob do
 
   # permit_params :title, :description, :equity_max, :equity_min, :equity_vest, :equity_cliff, :expires_on, :startup_id,
   #   :skills, :experience, :qualification, :contact_number, :contact_name, :contact_email, :location, :salary
-end
+# end

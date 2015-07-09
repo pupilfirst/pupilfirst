@@ -1,4 +1,4 @@
-ActiveAdmin.register MentorMeeting do
+# ActiveAdmin.register MentorMeeting do
   # menu parent: 'Mentoring'
   # actions :all, except: [:new]
 
@@ -15,4 +15,4 @@ ActiveAdmin.register MentorMeeting do
   # end
 
   # permit_params :status
-end
+# end

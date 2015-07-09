@@ -1,4 +1,4 @@
-ActiveAdmin.register Mentor do
+# ActiveAdmin.register Mentor do
   # menu parent: 'Mentoring'
 
   # controller do
@@ -96,4 +96,4 @@ ActiveAdmin.register Mentor do
 
 
   # permit_params :user_id, :company, :days_available, :time_available, :company_level, :verified_at
-end
+# end

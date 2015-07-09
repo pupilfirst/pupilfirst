@@ -17,14 +17,6 @@ GIT
       sass-rails
 
 GIT
-  remote: git://github.com/collectiveidea/json_spec.git
-  revision: 00855fdd9c2f8a8794eb418419202dc85ce0fa23
-  specs:
-    json_spec (1.1.4)
-      multi_json (~> 1.0)
-      rspec (>= 2.0, < 4.0)
-
-GIT
   remote: git://github.com/derekprior/momentjs-rails.git
   revision: e02512db27ff9fc25a8856ef5a9830d97ce8e818
   specs:
@@ -415,10 +407,6 @@ GEM
     roadie-rails (1.0.6)
       railties (>= 3.0, < 4.3)
       roadie (~> 3.0)
-    rspec (3.2.0)
-      rspec-core (~> 3.2.0)
-      rspec-expectations (~> 3.2.0)
-      rspec-mocks (~> 3.2.0)
     rspec-core (3.2.3)
       rspec-support (~> 3.2.0)
     rspec-expectations (3.2.1)
@@ -538,7 +526,6 @@ DEPENDENCIES
   inherited_resources
   jbuilder (~> 2.0)
   jquery-rails
-  json_spec!
   just-datetime-picker
   letter_opener
   logstash-logger

@@ -71,7 +71,6 @@ group :test do
   gem 'factory_girl', require: false
   gem 'factory_girl_rails', '~> 4.0'
   gem 'faker'
-  gem 'json_spec', github: 'collectiveidea/json_spec'
 end
 
 group :development, :test do

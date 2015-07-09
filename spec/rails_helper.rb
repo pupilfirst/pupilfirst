@@ -53,7 +53,4 @@ RSpec.configure do |config|
 
   # Include Factory Girl's helpers.
   config.include FactoryGirl::Syntax::Methods
-
-  # Include JsonSpec helpers.
-  config.include JsonSpec::Helpers, type: :request
 end

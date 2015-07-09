@@ -19,7 +19,6 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'devise_invitable'
 gem 'jbuilder', '~> 2.0'
 gem 'jquery-rails'
-gem 'just-datetime-picker' # POSSIBLY-USELESS
 gem 'mini_magick' # Image processing.
 gem 'newrelic_rpm' # Reporter for Newrelic Heroku add-on.
 gem 'nokogiri'

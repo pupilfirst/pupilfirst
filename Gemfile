@@ -3,12 +3,7 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.2'
 
-# # active_admin_editor from git, since it's latest rubygems release is before an essential patch added on Jun 25.
-# gem 'active_admin_editor', git: 'https://github.com/ejholmes/active_admin_editor.git'
-
-# ActiveAdmin doesn't like 4.2 at all (for the moment). Switch this to stable when available.
-gem 'activeadmin', github: 'activeadmin'
-
+gem 'activeadmin', github: 'activeadmin' # ActiveAdmin doesn't like 4.2 at all (for the moment). Switch this to stable when available.
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
 gem 'carrierwave' # One uploader to rule them all.
 gem 'carrierwave_backgrounder' # Backgrounder for carrierwave.

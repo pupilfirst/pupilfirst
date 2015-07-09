@@ -25,7 +25,7 @@ gem 'mini_magick'
 gem 'newrelic_rpm' # POSSIBLY-USELESS
 gem 'nokogiri'
 gem 'pg'
-gem 'rubypress' # wordpress # POSSIBLY-USELESS
+gem 'rubypress' # Wordpress
 gem 'sass-rails', '~> 5.0'
 gem 'sendgrid_smtpapi'
 gem 'sentry-raven'

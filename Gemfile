@@ -10,7 +10,6 @@ gem 'rails', '4.2.2'
 gem 'activeadmin', github: 'activeadmin'
 gem 'inherited_resources'
 
-gem 'acts-as-taggable-on' # POSSIBLY-USELESS
 gem 'attribute_normalizer', '~> 1.2.0.b' # POSSIBLY-USELESS
 gem 'carrierwave'
 gem 'carrierwave_backgrounder'

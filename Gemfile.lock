@@ -87,8 +87,6 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
-    acts-as-taggable-on (3.5.0)
-      activerecord (>= 3.2, < 5)
     addressable (2.3.8)
     arbre (1.0.3)
       activesupport (>= 3.0.0)
@@ -582,7 +580,6 @@ PLATFORMS
 
 DEPENDENCIES
   activeadmin!
-  acts-as-taggable-on
   attribute_normalizer (~> 1.2.0.b)
   autoprefixer-rails
   better_errors

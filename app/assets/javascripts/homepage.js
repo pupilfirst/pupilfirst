@@ -114,13 +114,19 @@ var prepareTestimonials = function() {
 var swapSuccessStories = function(){
   $('.collapse').collapse();
   $('.showcase-stories').hide();
-  $('.story-accordion').collapse('hide');
+  $('.story-accordion').collapse("hide");
   $("#get-funded").addClass("story-clicked");
+  $('#get-funded-accordion').on('hide.bs.collapse', function () {
+    console.log('hide called on get-funded-accordion');
+  });
+  $('#get-funded-accordion').on('show.bs.collapse', function () {
+    console.log('show called on get-funded-accordion');
+  });
   var width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
   if (width > 991) {
     $("#get-funded-stories").fadeIn(400);
   } else {
-    $("#get-funded-accordion").collapse('hide');
+    $("#get-funded-accordion").collapse("show");
   }
     $('.list-item').click(function(){
       $('.showcase-stories').fadeOut(200);

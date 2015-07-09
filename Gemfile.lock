@@ -313,7 +313,6 @@ GEM
     has_scope (0.6.0)
       actionpack (>= 3.2, < 5)
       activesupport (>= 3.2, < 5)
-    hashie (3.4.2)
     hitimes (1.2.2)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
@@ -388,9 +387,6 @@ GEM
     notiffany (0.0.6)
       nenv (~> 0.1)
       shellany (~> 0.0)
-    omniauth (1.2.2)
-      hashie (>= 1.2, < 4)
-      rack (~> 1.0)
     orm_adapter (0.5.0)
     passenger (5.0.10)
       rack
@@ -625,7 +621,6 @@ DEPENDENCIES
   newrelic_rpm
   nilify_blanks
   nokogiri
-  omniauth (~> 1.2.1)
   passenger (~> 5.0.8)
   pg
   phony_rails

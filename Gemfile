@@ -24,7 +24,6 @@ gem 'just-datetime-picker' # POSSIBLY-USELESS
 gem 'mini_magick'
 gem 'newrelic_rpm' # POSSIBLY-USELESS
 gem 'nokogiri'
-gem 'omniauth', '~> 1.2.1' # POSSIBLY-USELESS
 gem 'pg'
 gem 'rubypress' # wordpress # POSSIBLY-USELESS
 gem 'sass-rails', '~> 5.0'

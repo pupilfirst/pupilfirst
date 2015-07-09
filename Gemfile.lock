@@ -552,8 +552,6 @@ GEM
     uniform_notifier (1.9.0)
     unobtrusive_flash (3.1.0)
       railties
-    urbanairship (2.4.1)
-      json
     validate_url (1.0.0)
       activemodel (>= 3.0.0)
       addressable
@@ -651,7 +649,6 @@ DEPENDENCIES
   terminal-notifier-guard
   uglifier
   unobtrusive_flash (>= 3)
-  urbanairship
   validate_url
   web-console (~> 2.0)
   webmock

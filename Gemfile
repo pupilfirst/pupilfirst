@@ -32,7 +32,6 @@ gem 'sentry-raven'
 gem 'slim'
 # gem 'turbolinks' # Disabled, because it is a pain in the ass.
 gem 'uglifier'
-gem 'urbanairship' # POSSIBLY-USELESS
 gem 'rest-client'
 gem 'cancancan', '~> 1.8' # Used to manage administrator types and roles in the ActiveAdmin interface.
 gem 'phony_rails' # Phone number validation and normalization.

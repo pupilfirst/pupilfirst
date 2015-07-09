@@ -28,9 +28,6 @@ ActiveAdmin.register User do
     user = User.find params[:id]
     push_message = 'Please make sure you complete your profile to help us connect you to mentors and investors.'
 
-    # Send push message.
-    UserPushNotifyJob.perform_later(user.id, 'founder_profile_reminder', push_message)
-
     # Send email.
     UserMailer.reminder_to_complete_founder_profile(user).deliver_later
 

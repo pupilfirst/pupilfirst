@@ -64,18 +64,10 @@ end
 
 group :development do
   gem 'letter_opener'
-  gem 'guard' # POSSIBLY-USELESS
-  gem 'guard-shell' # POSSIBLY-USELESS
-  gem 'guard-rspec' # POSSIBLY-USELESS
-  # gem "guard-spork"
-  gem 'guard-livereload' # POSSIBLY-USELESS
-  gem 'childprocess' # POSSIBLY-USELESS
-  gem 'terminal-notifier-guard' # POSSIBLY-USELESS
   gem 'bullet' # Detect N+1 queries.
 end
 
 group :test do
-  gem 'sqlite3' # POSSIBLY-USELESS
   gem 'factory_girl', require: false
   gem 'factory_girl_rails', '~> 4.0'
   gem 'faker'
@@ -84,13 +76,9 @@ end
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.2.0'
-  gem 'rb-inotify', :require => false # POSSIBLY-USELESS
-  gem 'rb-fsevent', :require => false # POSSIBLY-USELESS
-  gem 'rb-fchange', :require => false # POSSIBLY-USELESS
   gem 'dotenv'
   gem 'pry-rails'
   gem 'webmock', require: false
-
   gem 'better_errors'
   gem 'binding_of_caller'
 
@@ -106,15 +94,8 @@ end
 
 group :production do
   gem 'rails_12factor'
-  # gem 'pdftk-heroku', git: "https://github.com/gouthamvel/pdftk-heroku.git"
 end
 
 gem 'sdoc', '~> 0.4.0', group: :doc
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
 
 ruby '2.2.2'

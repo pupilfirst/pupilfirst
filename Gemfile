@@ -23,16 +23,14 @@ gem 'just-datetime-picker' # POSSIBLY-USELESS
 gem 'mini_magick'
 gem 'newrelic_rpm' # POSSIBLY-USELESS
 gem 'nokogiri'
-gem 'omniauth', '~> 1.2.1' # POSSIBLY-USELESS
 gem 'pg'
-gem 'rubypress' # wordpress # POSSIBLY-USELESS
+gem 'rubypress' # Wordpress
 gem 'sass-rails', '~> 5.0'
 gem 'sendgrid_smtpapi'
 gem 'sentry-raven'
 gem 'slim'
 # gem 'turbolinks' # Disabled, because it is a pain in the ass.
 gem 'uglifier'
-gem 'urbanairship' # POSSIBLY-USELESS
 gem 'rest-client'
 gem 'cancancan', '~> 1.8' # Used to manage administrator types and roles in the ActiveAdmin interface.
 gem 'phony_rails' # Phone number validation and normalization.
@@ -48,12 +46,9 @@ gem 'logstash-logger' # A better logger.
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true # POSSIBLY-USELESS
 gem 'momentjs-rails', '>= 2.8.1',  :github => 'derekprior/momentjs-rails'
 
-gem 'roadie-rails' # POSSIBLY-USELESS
-
-gem 'passenger', '~> 5.0.8' # Back to Passenger! Woohoo!
-
-gem 'delayed_job_active_record' # Delayed Job to manage jobs. Let's migrate away from SuckerPunch.
-gem 'sucker_punch' # POSSIBLY-USELESS
+gem 'roadie-rails' # CSS management for e-mails.
+gem 'passenger', '~> 5.0.8' # Passenger webserver.
+gem 'delayed_job_active_record' # Delayed Job for deferring tasks.
 
 gem 'seedbank' # Better organized seed data.
 gem 'wicked' # Multistep form wizard for incubation

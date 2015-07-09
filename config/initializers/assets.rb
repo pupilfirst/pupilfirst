@@ -16,4 +16,5 @@ Rails.application.config.assets.precompile += %w(
   ct-carousel/masonry.pkgd.min.js
   startups_index.css
   startups_index.js
+  showcase.css
 )

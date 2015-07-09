@@ -89,7 +89,7 @@ Rails.application.configure do
   config.active_job.queue_adapter = :delayed_job
 
   # Roadie asset URL.
-  config.roadie.url_options = { host: 'www.svlabs.in', scheme: 'https' }
+  config.roadie.url_options = { host: 'www.sv.co', scheme: 'https' }
 end
 
 ActionMailer::Base.smtp_settings = {

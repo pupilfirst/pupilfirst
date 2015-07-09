@@ -76,10 +76,11 @@ end
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.2.0'
-  gem 'dotenv'
-  gem 'pry-rails'
-  gem 'webmock', require: false
-  gem 'better_errors'
+  gem 'dotenv' # Load environment variables from .env file.
+  gem 'pry-rails' # Pry debugger.
+  gem 'webmock', require: false # Mocking web requests.
+
+  gem 'better_errors' # Better error info on the front-end.
   gem 'binding_of_caller'
 
   # Access an IRB console on exception pages or by using <%= console %> in views

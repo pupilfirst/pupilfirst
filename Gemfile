@@ -10,7 +10,7 @@ gem 'rails', '4.2.2'
 gem 'activeadmin', github: 'activeadmin'
 gem 'inherited_resources'
 
-gem 'attribute_normalizer', '~> 1.2.0.b' # POSSIBLY-USELESS
+gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
 gem 'carrierwave'
 gem 'carrierwave_backgrounder'
 gem 'cocoon' # POSSIBLY-USELESS
@@ -37,7 +37,6 @@ gem 'rest-client'
 gem 'cancancan', '~> 1.8' # Used to manage administrator types and roles in the ActiveAdmin interface.
 gem 'phony_rails' # Phone number validation and normalization.
 gem 'select2-rails' # Select2 javascript select box improvement library, using in ActiveAdmin interface.
-gem 'nilify_blanks' # Sets database fields to nil if blank values are supplied.
 gem 'bootstrap-sass', '~> 3.3.3' # Official Sass port of Bootstrap.
 gem 'autoprefixer-rails' # Autoprefixer for Ruby and Ruby on Rails.
 gem 'simple_form', '~> 3.1.0.rc2' # Simple-form RC2 with support for Bootstrap 3. TODO: Update simple_form to stable when available.

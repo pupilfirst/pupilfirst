@@ -378,9 +378,6 @@ GEM
     net-ssh (2.9.2)
     netrc (0.10.3)
     newrelic_rpm (3.12.0.288)
-    nilify_blanks (1.2.1)
-      activerecord (>= 3.0.0)
-      activesupport (>= 3.0.0)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
     notiffany (0.0.6)
@@ -620,7 +617,6 @@ DEPENDENCIES
   mini_magick
   momentjs-rails (>= 2.8.1)!
   newrelic_rpm
-  nilify_blanks
   nokogiri
   omniauth (~> 1.2.1)
   passenger (~> 5.0.8)

@@ -61,8 +61,6 @@ class User < ActiveRecord::Base
     !(invitation_token.present?)
   end
 
-  nilify_blanks only: [:invitation_token, :twitter_url, :linkedin_url, :pin]
-
   # Validate presence of e-mail for everyone except contacts with invitation token (unregistered contacts).
   validates_uniqueness_of :email, unless: ->(user) { user.invitation_token.present? }
 
@@ -77,7 +75,7 @@ class User < ActiveRecord::Base
 
   mount_uploader :avatar, AvatarUploader
   process_in_background :avatar
-  normalize_attribute :startup_id, :title
+  normalize_attribute :startup_id, :title, :invitation_token, :twitter_url, :linkedin_url, :pin
 
   normalize_attribute :skip_password do |value|
     value.is_a?(String) ? value.downcase == 'true' : value

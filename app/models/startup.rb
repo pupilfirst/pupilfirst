@@ -187,7 +187,7 @@ class Startup < ActiveRecord::Base
     User.where(pending_startup_id: self.id).update_all(pending_startup_id: nil)
   end
 
-  nilify_blanks only: [:revenue_generated, :team_size, :women_employees, :approval_status, :product_progress]
+
 
   # Friendly ID!
   friendly_id :slug
@@ -238,7 +238,9 @@ class Startup < ActiveRecord::Base
 
   mount_uploader :logo, LogoUploader
   process_in_background :logo
-  normalize_attribute :name, :pitch, :about, :email, :phone
+
+  normalize_attribute :name, :pitch, :about, :email, :phone, :revenue_generated, :team_size, :women_employees, :approval_status
+
   attr_accessor :full_validation
 
   after_initialize ->() {

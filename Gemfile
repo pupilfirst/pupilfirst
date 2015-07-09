@@ -48,7 +48,7 @@ gem 'logstash-logger' # A better logger.
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true # POSSIBLY-USELESS
 gem 'momentjs-rails', '>= 2.8.1',  :github => 'derekprior/momentjs-rails'
 
-gem 'roadie-rails' # POSSIBLY-USELESS
+gem 'roadie-rails'
 
 gem 'passenger', '~> 5.0.8' # Back to Passenger! Woohoo!
 

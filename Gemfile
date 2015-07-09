@@ -48,12 +48,9 @@ gem 'logstash-logger' # A better logger.
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true # POSSIBLY-USELESS
 gem 'momentjs-rails', '>= 2.8.1',  :github => 'derekprior/momentjs-rails'
 
-gem 'roadie-rails'
-
-gem 'passenger', '~> 5.0.8' # Back to Passenger! Woohoo!
-
-gem 'delayed_job_active_record' # Delayed Job to manage jobs. Let's migrate away from SuckerPunch.
-gem 'sucker_punch' # POSSIBLY-USELESS
+gem 'roadie-rails' # CSS management for e-mails.
+gem 'passenger', '~> 5.0.8' # Passenger webserver.
+gem 'delayed_job_active_record' # Delayed Job for deferring tasks.
 
 gem 'seedbank' # Better organized seed data.
 gem 'wicked' # Multistep form wizard for incubation

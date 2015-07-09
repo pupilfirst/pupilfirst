@@ -91,11 +91,8 @@ group :development, :test do
   gem 'pry-rails'
   gem 'webmock', require: false
 
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  # gem 'byebug'
   gem 'better_errors'
   gem 'binding_of_caller'
-
 
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
@@ -103,10 +100,7 @@ group :development, :test do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 
-  # Let's try testing Javascript!
-  gem 'jasmine-rails' # POSSIBLY-USELESS
   gem 'did_you_mean' # Enough of silly spellinng mistakes ruining the day !
-
   gem 'quiet_assets' # Let's not see asset serving messages in the development log!
 end
 

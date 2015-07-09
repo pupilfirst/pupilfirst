@@ -709,16 +709,6 @@ a.source-link:hover {
   background-color: whitesmoke;
   text-decoration: none; }
 
-.timeline-pivot {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%; }
-
-.timeline-pivot > ul {
-  max-width: 600px;
-  text-align: center; }
-
 .btn-verification {
   width: 100%;
   margin-bottom: 10px; }
@@ -750,16 +740,6 @@ a.source-link:hover {
 .tl_next a:hover {
   opacity: 0.7; }
 
-.timeline_header {
-  background-image: image-url("timeline.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  min-height: 400px; }
-
-.timeline_icon {
-  height: 90px;
-  margin-bottom: 30px; }
 
 /* Landing page */
 body {

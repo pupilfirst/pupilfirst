@@ -11,12 +11,12 @@ gem 'activeadmin', github: 'activeadmin'
 gem 'inherited_resources'
 
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
-gem 'carrierwave'
-gem 'carrierwave_backgrounder'
-gem 'cocoon' # POSSIBLY-USELESS
+gem 'carrierwave' # One uploader to rule them all.
+gem 'carrierwave_backgrounder' # Backgrounder for carrierwave.
+gem 'fog' # required by carrierwave to upload to S3.
+gem 'cocoon' # POSSIBLY-USELESS TODO: Figure out what this thing does, and whether it's in use.
 gem 'coffee-rails', '~> 4.1.0'
 gem 'devise_invitable'
-gem 'fog' # required by carrierwave to upload to s3
 gem 'jbuilder', '~> 2.0'
 gem 'jquery-rails'
 gem 'just-datetime-picker' # POSSIBLY-USELESS
@@ -44,21 +44,16 @@ gem 'will_paginate-bootstrap' # Paginated tables with Bootstrap # POSSIBLY-USELE
 gem 'logstash-logger' # A better logger.
 
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true # POSSIBLY-USELESS
-gem 'momentjs-rails', '>= 2.8.1',  :github => 'derekprior/momentjs-rails'
+gem 'momentjs-rails', '>= 2.8.1',  :github => 'derekprior/momentjs-rails' # POSSIBLY-USELESS
 
 gem 'roadie-rails' # CSS management for e-mails.
-gem 'passenger', '~> 5.0.8' # Passenger webserver.
+gem 'passenger', '~> 5.0.8' # Passenger web-server.
 gem 'delayed_job_active_record' # Delayed Job for deferring tasks.
-
 gem 'seedbank' # Better organized seed data.
 gem 'wicked' # Multistep form wizard for incubation
-
 gem 'font-awesome-sass', '~> 4.3.0' # Icons from font-awesome!
-
 gem 'unobtrusive_flash', '>=3' # Let's not deal with flash messages, yeah? https://github.com/leonid-shevtsov/unobtrusive_flash
-
 gem 'friendly_id' # Slugs for links. http://norman.github.io/friendly_id
-
 gem 'flexslider', :git => 'https://github.com/constantm/Flexslider-2-Rails-Gem.git' # Flexslider on homepage.
 
 # Rails assets!

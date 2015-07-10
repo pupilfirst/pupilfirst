@@ -12,6 +12,7 @@ ActiveAdmin.register Startup do
   filter :agreement_sent
   filter :physical_incubatee
   filter :categories, collection: proc { Category.startup_category }
+  filter :featured
 
   scope :all, default: true
   scope :without_founders
@@ -51,6 +52,7 @@ ActiveAdmin.register Startup do
     end
 
     column :website
+    column :featured
   end
 
   csv do
@@ -122,6 +124,7 @@ ActiveAdmin.register Startup do
       row :status do |startup|
         startup.approval_status.capitalize
       end
+      row :featured
       row :physical_incubatee
       row :agreement_sent
       row :agreement_first_signed_at
@@ -205,6 +208,6 @@ ActiveAdmin.register Startup do
     { category_ids: [] }, { founder_ids: [] }, { founders_attributes: [:id, :fullname, :email, :avatar, :remote_avatar_url, :title, :linkedin_url, :twitter_url, :skip_password] },
     :created_at, :updated_at, :approval_status, :approval_status, :registration_type,
     :incubation_location, :agreement_sent, :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration,
-    :physical_incubatee, :presentation_link, :slug
+    :physical_incubatee, :presentation_link, :slug, :featured
 end
 

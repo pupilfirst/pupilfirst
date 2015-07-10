@@ -22,10 +22,11 @@
     = f.input :address
     = f.input :incubation_location, collection: Startup.valid_incubation_location_values
     = f.input :slug
+    = f.input :featured
     = f.submit
 
 javascript:
   $(function(){
       $('#startup_founder_ids').select2({ placeholder : 'Add Founder' });
       $('#startup_category_ids').select2({ placeholder : 'Select Category' });
-  })
+  });

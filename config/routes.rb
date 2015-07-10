@@ -24,7 +24,7 @@ Svapp::Application.routes.draw do
     collection do
       patch 'update_password'
       # get 'invite'
-      post 'send_invite'
+      # post 'send_invite'
     end
   end
 

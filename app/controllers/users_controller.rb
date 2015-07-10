@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_filter :authenticate_user!, only: [:show, :edit, :update]
-  before_filter :restrict_to_current_user, only: [:show, :edit, :update]
+  before_filter :authenticate_user!
+  before_filter :restrict_to_current_user, only: [:show, :edit, :update, :code, :resend, :verify, :phone]
 
   def show
     @user = User.find(params[:id])

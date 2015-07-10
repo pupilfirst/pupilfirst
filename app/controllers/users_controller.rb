@@ -36,21 +36,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def invite
-    render layout: false
-  end
-
-  def send_invite
-    @user = User.find_by_email(params[:user][:email]) rescue nil
-    if @user.try(:startup).nil?
-      @user = User.invite!(invite_params)
-      @user.startup = Startup.find(session[:startup_id])
-      @user.save!
-    else
-      @user.errors[:exist] = "this user is associated with other startup"
-    end
-  end
-
   def code
     # Generate a 6-digit verification code to send to the phone number.
     code, phone_number = begin

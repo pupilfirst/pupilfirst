@@ -22,13 +22,13 @@ class UsersController < ApplicationController
   end
 
   def update_password
-    @user = User.find current_user.id
+    @user = current_user
 
     if @user.update_with_password(user_password_change_params)
       # Sign in the user by passing validation in case his password changed
       sign_in @user, bypass: true
 
-      flash[:notice] = 'Password updated'
+      flash[:success] = 'Password updated'
 
       redirect_to @user
     else

@@ -36,9 +36,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def new
-  end
-
   def invite
     render layout: false
   end

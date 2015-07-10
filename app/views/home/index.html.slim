@@ -291,9 +291,9 @@ section#companies
 
 
     .row.learnmore style="margin-top:20px;"
-      a href="#"
-        | VIEW OUR FULL LIST OF VERIFIED TIMELINES &nbsp;
-        = image_tag 'cont.png', class: 'img-animation'
+      = link_to 'VIEW OUR FULL LIST OF VERIFIED STARTUPS', startups_url
+      | &nbsp;
+      = image_tag 'cont.png', class: 'img-animation'
 
 / Testimonials
 section#testimonial

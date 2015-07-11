@@ -276,7 +276,7 @@ section#companies
             br
             br
             #owl-demo1.owl-carousel.owl-theme
-              - if @featured_startups.present?
+              - if @featured_startups.present? && @featured_startups.count > 1
                 - @featured_startups.each do |startup|
                   .item
                     = image_tag "#{startup.logo_url}"

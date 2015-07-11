@@ -34,11 +34,11 @@ gem 'autoprefixer-rails' # Autoprefixer for Ruby and Ruby on Rails.
 gem 'simple_form', '~> 3.1.0.rc2' # Simple-form RC2 with support for Bootstrap 3. TODO: Update simple_form to stable when available.
 gem 'validate_url' # URL validation.
 gem 'chartkick' # Pretty charts!
-gem 'will_paginate-bootstrap' # Paginated tables with Bootstrap # POSSIBLY-USELESS
+gem 'will_paginate-bootstrap' # Paginated tables with Bootstrap. TODO: Used in disabled Mentors section. Remove if stale (20150711).
 gem 'logstash-logger' # A better logger.
 
-gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true # POSSIBLY-USELESS
-gem 'momentjs-rails', '>= 2.8.1',  :github => 'derekprior/momentjs-rails' # POSSIBLY-USELESS
+gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true # Used for picking date and time fields in a few places.
+gem 'momentjs-rails', '>= 2.8.1',  :github => 'derekprior/momentjs-rails' # Required by datetimepicker-rails.
 
 gem 'roadie-rails' # CSS management for e-mails.
 gem 'passenger', '~> 5.0.8' # Passenger web-server.

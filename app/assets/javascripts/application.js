@@ -2,8 +2,6 @@
 //= require bootstrap-sprockets
 //= require jquery_ujs
 //= require bootstrap-select
-//= require bootstrap-datepicker
-//= require activate_datepicker
 //= require easyrtc.js
 //= require socket.io.js
 //= require jquery.textfill.js

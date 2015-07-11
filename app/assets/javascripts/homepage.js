@@ -120,6 +120,9 @@ var swapSuccessStories = function(){
     $('.list-item').removeClass("story-clicked");
     pauseAllVideos();
   });
+  $("#get-funded-stories").click(function(){
+    pauseAllVideos();
+  });
   $("#get-funded").click(function(){
     $("#get-funded-stories").fadeIn(400);
     $("#get-funded").addClass("story-clicked");

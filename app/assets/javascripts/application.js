@@ -1,7 +1,6 @@
 //= require jquery
 //= require bootstrap-sprockets
 //= require jquery_ujs
-//= require bootstrap-select
 //= require easyrtc.js
 //= require socket.io.js
 //= require jquery.textfill.js

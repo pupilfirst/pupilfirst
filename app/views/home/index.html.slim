@@ -285,7 +285,7 @@ section#companies
       .short-list
         - if @featured_startups.present?
           - @featured_startups.each do |startup|
-            .col-sm-3.liste
+            a.col-sm-3.liste href="#{startup_url(startup)}"
               span.center-helper
               = image_tag "#{startup.logo_url}"
 

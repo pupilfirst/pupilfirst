@@ -386,6 +386,14 @@ section#testimonial
               li.tm_comp Country Manager, LinkedIn India & Chairman, IAMAI
 / Blog posts.
 section.container.blog
+
+  /attempting to use javascript API
+  = javascript_include_tag 'wpcom.js'
+  javascript:
+    var wpcom = WPCOM();
+    var blog = wpcom.site('startatsv.com');
+    blog.posts({ number: 1 }, function(err, list) {});
+
   .row.heading
     h1 Buzz
     = image_tag 'line.jpg'

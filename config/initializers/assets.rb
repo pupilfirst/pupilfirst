@@ -17,5 +17,4 @@ Rails.application.config.assets.precompile += %w(
   startups_index.css
   startups_index.js
   showcase.css
-  wpcom.js
 )

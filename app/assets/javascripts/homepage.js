@@ -159,7 +159,6 @@ var pauseVideoWithId = function (videoId){
 $(document).ready(swapSuccessStories);
 $(document).ready(navigateStagesAndLearning);
 $(document).ready(giveWhiteBackgroundToTopNav);
-$(document).ready(popupStartupTimeline);
 $(document).ready(startupsShowcaseSlide);
 $(document).ready(storiesSlide);
 $(document).ready(mediaShowcaseSlide);

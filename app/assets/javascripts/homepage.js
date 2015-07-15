@@ -139,7 +139,7 @@ var swapSuccessStories = function(){
     $("#get-education").addClass("story-clicked");
     // $("#Sharan-story")[0].scrollIntoView({block: "end", behavior: "smooth"});
   });
-}
+};
 
 var pauseAllVideos = function(){
   pauseVideoWithId("iTraveller-story");
@@ -148,13 +148,13 @@ var pauseAllVideos = function(){
   pauseVideoWithId("profoundis-story");
   pauseVideoWithId("Mindhelix-story");
   pauseVideoWithId("wowmakers-story");
-}
+};
 
 var pauseVideoWithId = function (videoId){
   var div = document.getElementById(videoId);
   var iframe = div.getElementsByTagName("iframe")[0].contentWindow;
   iframe.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
-}
+};
 
 $(document).ready(swapSuccessStories);
 $(document).ready(navigateStagesAndLearning);

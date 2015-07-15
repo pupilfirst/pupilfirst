@@ -7,7 +7,7 @@ function stripHTML(dirtyString) {
 }
 
 var loadBlogPosts = function() {
-  $.get("http://startatsv.com?json=get_recent_posts&count=4", function(data) {
+  $.get("https://blog.sv.co?json=get_recent_posts&count=4", function(data) {
     var blogPostsContainer = $("#blog-posts-container");
     var postScaffold = $("#post-scaffold");
 

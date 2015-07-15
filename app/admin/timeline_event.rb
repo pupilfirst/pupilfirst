@@ -13,6 +13,17 @@ ActiveAdmin.register TimelineEvent do
   #   permitted
   # end
 
+  index do
+    selectable_column
+
+    column :iteration
+    column :title
+    column :event_type
+    column :event_on
+
+    actions
+  end
+
   member_action :delete_link, method: :put do
     timeline_event = TimelineEvent.find params[:id]
     timeline_event.links.delete_at(params[:link_index].to_i)

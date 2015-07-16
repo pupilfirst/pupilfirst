@@ -41,7 +41,9 @@ gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: '
 gem 'momentjs-rails', '>= 2.8.1',  :github => 'derekprior/momentjs-rails' # Required by datetimepicker-rails.
 
 gem 'roadie-rails' # CSS management for e-mails.
-gem 'passenger', '~> 5.0.8' # Passenger web-server.
+
+gem 'puma' # Puma webserver.
+
 gem 'delayed_job_active_record' # Delayed Job for deferring tasks.
 gem 'seedbank' # Better organized seed data.
 gem 'wicked' # Multistep form wizard for incubation

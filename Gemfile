@@ -16,7 +16,6 @@ gem 'mini_magick' # Image processing.
 gem 'newrelic_rpm' # Reporter for Newrelic Heroku add-on.
 gem 'nokogiri'
 gem 'pg'
-gem 'rubypress' # Wordpress
 gem 'sass-rails', '~> 5.0'
 gem 'sendgrid_smtpapi' # Sendgrid handles our e-mails.
 gem 'sentry-raven' # Reporter for Sentry Heroku add-on.

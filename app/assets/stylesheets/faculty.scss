@@ -1,0 +1,56 @@
+$faculty-bg-color: #f8f8f8;
+
+// The navbar shouldn't have any margin on this page.
+.navbar { margin-bottom: 0; }
+
+// The prefooter shouldn't have any margin either;
+section#prefooter { margin-top: 0; }
+
+#faculty {
+  font-family: Roboto, sans-serif;
+  background-color: $faculty-bg-color;
+
+  h1 {
+    font-weight: 100;
+  }
+
+  p.introduction {
+    margin-top: 30px;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 200%;
+  }
+
+  #tabbed-content {
+    margin-top: 30px;
+
+    a.tab-title {
+      text-transform: uppercase;
+    }
+
+    li.active {
+      a.tab-title {
+        border: 0 solid green;
+        border-bottom: 3px solid limegreen;
+        background-color: $faculty-bg-color
+      }
+    }
+
+    a.inactive-spacer {
+      height: 100%;
+      user-select: none;
+      color: $faculty-bg-color;
+
+      &:hover {
+        cursor: default;
+        background-color: initial;
+        border: 1px solid $faculty-bg-color;
+        border-bottom: 1px solid #ddd;
+
+        @media screen and (max-width: 767px) {
+          border-bottom: 1px solid $faculty-bg-color;
+        }
+      }
+    }
+  }
+}

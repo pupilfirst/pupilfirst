@@ -42,7 +42,10 @@ html
 
       == yield :header
 
-    .container
+    - if @skip_container
       == yield
+    - else
+      .container
+        == yield
 
     == render 'layouts/footer'

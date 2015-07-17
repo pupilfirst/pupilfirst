@@ -13,17 +13,17 @@
       ul#faculty-nav.nav.nav-tabs.nav-justified
         li role="presentation"
           a.inactive-spacer #{('. ' * 12).html_safe}
-        li.active role="presentation" class="active"
-          a.tab-title href="#visiting-faculty" aria-controls="visiting-faculty" role="tab" data-toggle="tab" Visiting faculty
-        li role="presentation"
+        li.active role="presentation"
           a.tab-title href="#permanent-faculty" aria-controls="permanent-faculty" role="tab" data-toggle="tab" Permanent faculty
+        li role="presentation"
+          a.tab-title href="#visiting-faculty" aria-controls="visiting-faculty" role="tab" data-toggle="tab" Visiting faculty
         li role="presentation"
           a.tab-title href="#entrepreneurs-in-residence" aria-controls="entrepreneurs-in-residence" role="tab" data-toggle="tab" Entrepreneurs in residence
         li role="presentation"
           a.inactive-spacer #{('. ' * 12).html_safe}
 
       .tab-content
-        .tab-pane.active#visiting-faculty role="tabpanel"
+        .tab-pane.active#permanent-faculty role="tabpanel"
           .faculty-cards-container
             .faculty-card
               = image_tag 'faculty/kris_gopalakrishnan.png'
@@ -105,7 +105,7 @@
                     i.fa.fa-linkedin
                   a href='#'
                     i.fa.fa-twitter
-        .tab-pane#permanent-faculty role="tabpanel"
+        .tab-pane#visiting-faculty role="tabpanel"
           .faculty-cards-container
             .faculty-card
               = image_tag 'faculty/kris_gopalakrishnan.png'

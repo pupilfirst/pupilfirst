@@ -22,7 +22,10 @@ section#prefooter { margin-top: 0; }
   #tabbed-content {
     margin-top: 30px;
 
-    a.tab-title { text-transform: uppercase; }
+    a.tab-title {
+      text-transform: uppercase;
+      font-weight: 500;
+    }
 
     li.active {
       a.tab-title {

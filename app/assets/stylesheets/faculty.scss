@@ -40,15 +40,13 @@ section#prefooter { margin-top: 0; }
         user-select: none;
         color: $faculty-bg-color;
 
+        @media screen and (max-width: 767px) { display: none; }
+
         &:hover {
           cursor: default;
           background-color: initial;
           border: 1px solid $faculty-bg-color;
           border-bottom: 1px solid #ddd;
-
-          @media screen and (max-width: 767px) {
-            border-bottom: 1px solid $faculty-bg-color;
-          }
         }
       }
     }

@@ -10,9 +10,7 @@ section#prefooter { margin-top: 0; }
   font-family: Roboto, sans-serif;
   background-color: $faculty-bg-color;
 
-  h1 {
-    font-weight: 100;
-  }
+  h1 { font-weight: 100; }
 
   p.introduction {
     margin-top: 30px;
@@ -24,31 +22,75 @@ section#prefooter { margin-top: 0; }
   #tabbed-content {
     margin-top: 30px;
 
-    a.tab-title {
-      text-transform: uppercase;
-    }
+    a.tab-title { text-transform: uppercase; }
 
     li.active {
       a.tab-title {
-        border: 0 solid green;
+        border: 1px solid $faculty-bg-color;
         border-bottom: 3px solid limegreen;
         background-color: $faculty-bg-color
       }
     }
 
-    a.inactive-spacer {
-      height: 100%;
-      user-select: none;
-      color: $faculty-bg-color;
+    #faculty-nav {
+      margin-bottom: 30px;
 
-      &:hover {
-        cursor: default;
-        background-color: initial;
-        border: 1px solid $faculty-bg-color;
-        border-bottom: 1px solid #ddd;
+      a.inactive-spacer {
+        height: 100%;
+        user-select: none;
+        color: $faculty-bg-color;
 
-        @media screen and (max-width: 767px) {
-          border-bottom: 1px solid $faculty-bg-color;
+        &:hover {
+          cursor: default;
+          background-color: initial;
+          border: 1px solid $faculty-bg-color;
+          border-bottom: 1px solid #ddd;
+
+          @media screen and (max-width: 767px) {
+            border-bottom: 1px solid $faculty-bg-color;
+          }
+        }
+      }
+    }
+
+    .faculty-cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      .faculty-card {
+        background-color: white;
+        width: 200px;
+        height: 340px;
+        border-bottom: 2px solid darkblue;
+        margin: 0 45px 45px 0;
+
+        img {
+          width: 200px;
+          height: 240px;
+        }
+
+        .faculty-info {
+          text-align: center;
+
+          .faculty-name {
+            text-transform: uppercase;
+            margin-top: 15px;
+            font-weight: 500;
+          }
+
+          .faculty-title {
+            margin-top: 6px;
+            font-size: 11px;
+            font-weight: 300;
+          }
+
+          .faculty-links {
+            margin-top: 6px;
+
+            a { margin-right: 10px; }
+            :last-child { margin-right: 0; }
+          }
         }
       }
     }

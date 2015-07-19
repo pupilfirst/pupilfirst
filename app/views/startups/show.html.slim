@@ -10,7 +10,7 @@
           ' #{@startup.name}
           - if current_user && @startup.is_founder?(current_user)
             small
-              a href=edit_startup_path(@startup)
+              a href=edit_user_startup_path(current_user)
                 i.fa.fa-pencil
           - if @events.present?
             a#verified.tooltip-right data-tooltip=("Timeline verified by Startup Village.") href="#"

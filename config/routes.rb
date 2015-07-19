@@ -24,9 +24,13 @@ Svapp::Application.routes.draw do
     collection do
       patch 'update_password'
     end
+
+    resource :startup, only: [:new, :edit, :update] do
+      post :add_founder
+    end
   end
 
-  resources :startups, except: [:create] do
+  resources :startups, only: [:index, :show] do
     # resources :startup_jobs do
     #   patch :repost
     # # resources :founders do
@@ -35,9 +39,9 @@ Svapp::Application.routes.draw do
     # # end
     # end
 
-    member do
-      post :add_founder
-    end
+    # member do
+    #   post :add_founder
+    # end
   end
 
   # resources :mentors do

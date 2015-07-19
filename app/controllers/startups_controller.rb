@@ -13,7 +13,7 @@ class StartupsController < InheritedResources::Base
     unless current_user.phone_verified?
       flash[:notice] = 'Please enter and verify your phone number to continue.'
 
-      session[:referer] = new_startup_url
+      session[:referer] = new_user_startup_url(current_user)
       redirect_to phone_user_path(current_user) and return
     end
 
@@ -39,12 +39,12 @@ class StartupsController < InheritedResources::Base
   end
 
   def edit
-    @startup = Startup.friendly.find(params[:id])
+    @startup = current_user.startup
   end
 
   def update
     @current_user = current_user
-    @startup = Startup.friendly.find params[:id]
+    @startup = @current_user.startup
     @startup.founders.each { |f| f.full_validation = true }
     @startup.validate_web_mandatory_fields = true
 
@@ -70,7 +70,7 @@ class StartupsController < InheritedResources::Base
       flash[:success] = "SV ID #{params[:email]} has been linked to your startup as founder"
     end
 
-    redirect_to edit_startup_path(current_user.startup)
+    redirect_to edit_user_startup_path(current_user)
   end
 
   private
@@ -89,9 +89,7 @@ class StartupsController < InheritedResources::Base
   end
 
   def restrict_to_startup_founders
-    startup = Startup.friendly.find(params[:id])
-
-    if current_user.startup != startup || !current_user.is_founder?
+    unless current_user.is_founder?
       raise_not_found
     end
   end

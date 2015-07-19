@@ -1,5 +1,5 @@
 - if current_user.startup.blank? || current_user.startup.try(:unready?)
-  = link_to 'Incubate your startup at SV!', new_startup_path , class: 'btn btn-success'
+  = link_to 'Incubate your startup at SV!', new_user_startup_path(current_user) , class: 'btn btn-success'
 
 .row
   .col-lg-12.clearfix
@@ -44,4 +44,4 @@ table.table.table-hover.table-bordered.table-striped
   | &nbsp;
   = link_to 'View startup timeline', @user.startup, class: 'btn btn-info'
   | &nbsp;
-  = link_to 'Edit startup details', edit_startup_url(@user.startup), class: 'btn btn-info'
+  = link_to 'Edit startup details', edit_user_startup_url(@user), class: 'btn btn-info'

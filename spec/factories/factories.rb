@@ -69,9 +69,4 @@ FactoryGirl.define do
     f.name {Faker::Lorem.words(2).join(' ')}
     f.category_type :startup
   end
-
-  factory :bank do |f|
-    f.is_joint true
-    startup
-  end
 end

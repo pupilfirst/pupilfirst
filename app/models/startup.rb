@@ -97,7 +97,6 @@ class Startup < ActiveRecord::Base
     end
   end
 
-  has_one :bank
   has_many :startup_jobs
   has_many :timeline_events
 

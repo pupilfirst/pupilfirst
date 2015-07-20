@@ -1,5 +1,7 @@
 class IncubationController < ApplicationController
-  before_filter :authenticate_user!
+  before_action :authenticate_user!
+  before_action :ready_for_incubation_wizard?
+  before_action :authorize_step!
 
   include Wicked::Wizard
 
@@ -75,5 +77,28 @@ class IncubationController < ApplicationController
     end
 
     false
+  end
+
+  def ready_for_incubation_wizard?
+    redirect_to new_user_startup_url(current_user) and return unless current_user.ready_for_incubation_wizard?
+  end
+
+  def authorize_step!
+    case params[:id]
+    when 'startup_profile'
+      unless current_user.step_1_completed?
+        flash[:info] = "Please complete your user profile first!"
+        redirect_to incubation_path(:user_profile) and return
+      end
+    when 'launch'
+      unless current_user.step_1_completed?
+        flash[:info] = "Please complete your user profile first!"
+        redirect_to incubation_path(:user_profile) and return
+      end
+      unless current_user.step_2_completed?
+        flash[:info] = "Please complete your startup profile first!"
+        redirect_to incubation_path(:startup_profile) and return
+      end
+    end
   end
 end

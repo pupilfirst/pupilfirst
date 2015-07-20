@@ -213,4 +213,17 @@ class User < ActiveRecord::Base
       UserMailer.cofounder_addition(email, self).deliver_later
     end
   end
+
+  def ready_for_incubation_wizard?
+    phone_verified? && self.startup.present?
+  end
+
+  def step_1_completed?
+    gender.present? && born_on.present?
+  end
+
+  def step_2_completed?
+    self.startup.name.present? && self.startup.about.present? && self.startup.presentation_link.present? && self.startup.incubation_location.present?
+  end
+
 end

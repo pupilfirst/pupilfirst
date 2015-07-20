@@ -86,16 +86,16 @@ class IncubationController < ApplicationController
   def authorize_step!
     case params[:id]
     when 'startup_profile'
-      unless current_user.step_1_completed?
+      unless current_user.incubation_parameters_available?
         flash[:info] = "Please complete your user profile first!"
         redirect_to incubation_path(:user_profile) and return
       end
     when 'launch'
-      unless current_user.step_1_completed?
+      unless current_user.incubation_parameters_available?
         flash[:info] = "Please complete your user profile first!"
         redirect_to incubation_path(:user_profile) and return
       end
-      unless current_user.step_2_completed?
+      unless current_user.startup.incubation_parameters_available?
         flash[:info] = "Please complete your startup profile first!"
         redirect_to incubation_path(:startup_profile) and return
       end

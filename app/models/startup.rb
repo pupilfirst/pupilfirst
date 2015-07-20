@@ -425,6 +425,13 @@ class Startup < ActiveRecord::Base
     end
   end
 
+  def incubation_parameters_available?
+    name.present? &&
+    about.present? &&
+    presentation_link.present? &&
+    incubation_location.present?
+  end
+
   ####
   # Temporary mentor and investor checks which always return false
   ####

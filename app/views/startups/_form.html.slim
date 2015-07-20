@@ -84,75 +84,7 @@ p
       = link_to 'Cancel', startup_path(@startup), class: 'btn btn-default btn-flat'
 
 javascript:
-  $("#startup_category_ids").multiselect({
-    onChange: function (option, checked) {
-      // Get selected options.
-      var selectedOptions = $('#startup_category_ids option:selected');
-
-      if (selectedOptions.length >= 3) {
-        // Disable all other checkboxes.
-        var nonSelectedOptions = $('#startup_category_ids option').filter(function () {
-          return !$(this).is(':selected');
-        });
-
-        nonSelectedOptions.each(function () {
-          var input = $('input[value="' + $(this).val() + '"]');
-          input.prop('disabled', true);
-          input.parent('li').addClass('disabled');
-        });
-      }
-      else {
-        // Enable all checkboxes.
-        $('#startup_category_ids option').each(function () {
-          var input = $('input[value="' + $(this).val() + '"]');
-          input.prop('disabled', false);
-          input.parent('li').addClass('disabled');
-        });
-      }
-    },
-    onDropdownShow: function(option, checked) {
-      // Get selected options.
-      var selectedOptions = $('#startup_category_ids option:selected');
-
-      if(selectedOptions.length >= 3) {
-        // Disable all other checkboxes.
-        var nonSelectedOptions = $('#startup_category_ids option').filter(function () {
-          return !$(this).is(':selected');
-        });
-
-        nonSelectedOptions.each(function () {
-          var input = $('input[value="' + $(this).val() + '"]');
-          input.prop('disabled', true);
-          input.parent('li').addClass('disabled');
-        });
-      }
-    }
-  });
-
   $(function () {
-    $(".optional .content").hide();
-    $(".optional input:checkbox").click(function () {
-      var $this = $(this);
-      var optional = $($this).parent().parent();
-      if ($this.is(':checked')) {
-        $(".content", optional).show()
-      } else {
-        $(".content", optional).hide()
-      }
-    });
-    // $(".bootstrap-select .dropdown-menu ul", $("#startup_category_ids").parent()).on('click', function(e){
-    //   ul_ele = $(".bootstrap-select .dropdown-menu ul", $("#startup_category_ids").parent())
-    //   selected = $("li.selected", ul_ele)
-    //   if(selected.size() > 3){
-    //     // $(selected[0]).removeClass("selected")
-    //     e.preventDefault()
-    //   }
-    // })
-
-    // $('#startup_category_ids').select2({ placeholder : 'Select Category' });
-
-    // This method counts characters (or words) in an element, and updates that into the help element, displaying
-    // current count and max allowed count.
     counter = function (ele, help_ele, max_chars, is_words) {
       var value = $(ele).val();
 
@@ -163,17 +95,10 @@ javascript:
 
       var regex = /\s+/gi;
       var wordCount = value.trim().replace(regex, ' ').split(' ').length;
-      // var totalChars = value.length;
       var charCount = value.trim().length;
-      // var charCountNoSpace = value.replace(regex, '').length;
+
 
       $(help_ele).html((is_words ? wordCount : charCount) + "/" + max_chars + " characters");
-    };
-
-    update_pitch = function () {
-       var help_ele = $(".startup_pitch .help-block");
-       var ele = $(".startup_pitch #startup_pitch");
-       counter(ele, help_ele, #{Startup::MAX_PITCH_CHARACTERS})
     };
 
     update_about = function () {
@@ -182,7 +107,6 @@ javascript:
       counter(ele, help_ele, #{Startup::MAX_ABOUT_CHARACTERS})
     };
 
-    $(".startup_pitch #startup_pitch").click(update_pitch).change(update_pitch).keydown(update_pitch).keypress(update_pitch).keyup(update_pitch).blur(update_pitch).focus(update_pitch);
     $(".startup_about #startup_about").click(update_about).change(update_about).keydown(update_about).keypress(update_about).keyup(update_about).blur(update_about).focus(update_about);
 
     limit_length = function(element, length) {

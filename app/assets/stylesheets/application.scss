@@ -2,11 +2,13 @@
 @import "bootstrap";
 @import "font-awesome-sprockets";
 @import "font-awesome";
+@import "bootstrap-datetimepicker";
 
-// Rails Assets
+// Rails Assets.
 @import "pnotify";
 @import "bootstrap-multiselect";
 
+// Local.
 @import 'remote_fonts';
 @import "users";
 @import "general_style";

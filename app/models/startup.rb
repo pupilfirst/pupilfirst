@@ -408,7 +408,7 @@ class Startup < ActiveRecord::Base
     if self.name.present?
       "#{self.name.parameterize}-#{rand 1000}"
     else
-      "nameless-#{SecureRandom.urlsafe_base64(6)}"
+      "nameless-#{SecureRandom.hex(2)}"
     end
   end
 

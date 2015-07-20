@@ -824,20 +824,13 @@ iframe {
 }
 
 .btn-flat {
-  display: inline-block;
   padding: 10px 15px;
   left: 0%;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.42857;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  cursor: pointer;
-  -moz-user-select: none;
-  background-image: none;
   border: 1px solid transparent;
-  border-radius: 0px; }
+}
 
 .btn-join {
   color: #fff !important;

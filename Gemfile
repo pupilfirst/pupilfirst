@@ -52,7 +52,6 @@ gem 'flexslider', :git => 'https://github.com/constantm/Flexslider-2-Rails-Gem.g
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify' # Superb notifications library. http://sciactive.github.io/pnotify/
-  gem 'rails-assets-bootstrap-multiselect' # http://davidstutz.github.io/bootstrap-multiselect/
 end
 
 group :development do

@@ -20,7 +20,6 @@
 
 // Rails Assets
 //= require pnotify
-//= require bootstrap-multiselect
 
 //= require unobtrusive_flash
 //= require flashes

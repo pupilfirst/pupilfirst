@@ -9,10 +9,10 @@
 
   .form-group
     .col-sm-offset-3.col-sm-10
-      = f.button :submit, 'Sign in', class: 'btn btn-primary'
+      = f.button :submit, 'Sign in', class: 'btn btn-primary btn-flat'
       - if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations'
         | &nbsp;
-        = link_to 'Forgot your password?', new_password_path(resource_name), class: 'btn btn-info'
+        = link_to 'Forgot your password?', new_password_path(resource_name), class: 'btn btn-info btn-flat'
 
   hr
 

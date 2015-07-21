@@ -5,6 +5,8 @@ class HomeController < ApplicationController
   end
 
   def faculty
+    raise_not_found unless DbConfig.feature_active? :faculty_page, current_user
+
     @skip_container = true
     render layout: 'application'
   end

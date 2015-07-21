@@ -56,10 +56,20 @@ class DbConfig < ActiveRecord::Base
       return false
     end
 
+    return true if feature_value[:active].present?
+
     if user
-      feature_value[:users].include? user.email
-    else
-      feature_value[:active].present?
+      if feature_value.include? :email_regexes
+        feature_value[:email_regexes].each do |email_regex|
+          return true if Regexp.new(email_regex).match(user.email)
+        end
+      end
+
+      if feature_value.include? :emails
+        return true if feature_value[:emails].include? user.email
+      end
     end
+
+    false
   end
 end

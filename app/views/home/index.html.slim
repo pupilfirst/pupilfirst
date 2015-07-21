@@ -6,17 +6,7 @@
 
 - content_for :header
   .container
-    #carousel-example-generic.carousel.slide data-ride="carousel"
-      / Indicators - they have been disabled since we don't have anything to iterate over, right now.
-      /ol.carousel-indicators
-      /  li.active data-target="#carousel-example-generic" data-slide-to="0"
-      /    a href="#"
-      /  li data-target="#carousel-example-generic" data-slide-to="1"
-      /    a href="#"
-      /  li data-target="#carousel-example-generic" data-slide-to="2"
-      /    a href="#"
-
-      / Wrapper for slides
+    .carousel.slide
       .carousel-inner role="listbox"
         .item.active
           .carousel-caption
@@ -33,7 +23,7 @@
                     img src="#{image_url 'play.png'}" width="20"
                     | &nbsp;Watch video
             .col-md-6.hidden-sm.hidden-xs
-              iframe.header-video src="https://www.youtube.com/embed/EdToj9nviYA?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
+              iframe.embedded-video src="https://www.youtube.com/embed/EdToj9nviYA?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
 
 / Stages and learning.
 section#stages
@@ -157,7 +147,7 @@ section#showcase
           .showcase-stories#get-funded-stories
             .stories-carousel.owl-carousel
               div#iTraveller-story
-                iframe.header-video.showcase-company src="https://www.youtube.com/embed/KufIL6ZS1lk?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
+                iframe.embedded-video.showcase-company src="https://www.youtube.com/embed/KufIL6ZS1lk?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
                 div.story-description
                   ' Shiju Radhakrishnan of <em>iTraveller</em>, Rohildev NV of <em>Fin</em> and Juhaim Ibnu Abdul Jabbar of <em>Rickone</em> share their stories about getting funded.
                 = image_tag 'landing/showcase/showcased_logos/itraveller_logo.png', class: 'showcase_logo img-responsive'
@@ -166,7 +156,7 @@ section#showcase
                   |  View the iTraveler Story
 
               div#fin-story
-                iframe.header-video.showcase-company src="https://www.youtube.com/embed/QmavQDI3SV4?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
+                iframe.embedded-video.showcase-company src="https://www.youtube.com/embed/QmavQDI3SV4?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
                 div.story-description
                   ' Shiju Radhakrishnan of <em>iTraveller</em>, Rohildev NV of <em>Fin</em> and Juhaim Ibnu Abdul Jabbar of <em>Rickone</em> share their stories about getting funded.
                 = image_tag 'landing/showcase/showcased_logos/finrobotics_logo.png', class: 'showcase_logo img-responsive'
@@ -175,7 +165,7 @@ section#showcase
                   |  View the Fin Robotics Story
 
               div#reckone-story
-                iframe.header-video.showcase-company src="https://www.youtube.com/embed/ljwxLrSpcFM?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
+                iframe.embedded-video.showcase-company src="https://www.youtube.com/embed/ljwxLrSpcFM?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
                 div.story-description
                   ' Shiju Radhakrishnan of <em>iTraveller</em>, Rohildev NV of <em>Fin</em> and Juhaim Ibnu Abdul Jabbar of <em>Rickone</em> share their stories about getting funded.
                 = image_tag 'landing/showcase/showcased_logos/reckone_logo.png', class: 'showcase_logo img-responsive'
@@ -186,7 +176,7 @@ section#showcase
           .showcase-stories#accelerator-stories
             .stories-carousel.owl-carousel
               div#profoundis-story
-                iframe.header-video.showcase-company src="https://www.youtube.com/embed/vjDdSdfitKY?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
+                iframe.embedded-video.showcase-company src="https://www.youtube.com/embed/vjDdSdfitKY?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
                 div.story-description
                   ' <em>Profoundis</em> co-founder Joffin Joseph talks about their awesome product Vibe and selection into the Microsoft startup accelerator.
                 = image_tag 'landing/showcase/showcased_logos/profoundis_logo.png', class: 'showcase_logo img-responsive'
@@ -197,7 +187,7 @@ section#showcase
           .showcase-stories#get-hired-stories
             .stories-carousel.owl-carousel
               div#Mindhelix-story
-                iframe.header-video.showcase-company src="https://www.youtube.com/embed/bgjwCh56qUU?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
+                iframe.embedded-video.showcase-company src="https://www.youtube.com/embed/bgjwCh56qUU?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
                 div.story-description
                   ' Kalidas who founded <em>Mindhelix</em> talks about exciting adventures and learning from the many product iterations he went through and how his team finally got acquired by ASKME.COM.
                 = image_tag 'landing/showcase/showcased_logos/mindhelix_logo.png', class: 'showcase_logo img-responsive'
@@ -208,7 +198,7 @@ section#showcase
           .showcase-stories#self-sustain-stories
             .stories-carousel.owl-carousel
               div#wowmakers-story
-                iframe.header-video.showcase-company src="https://www.youtube.com/embed/R8LhGtoeaUc?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
+                iframe.embedded-video.showcase-company src="https://www.youtube.com/embed/R8LhGtoeaUc?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
                 div.story-description
                   ' <em>Wowmakers</em> co-founder Vivek Raghavan talks about how his design startup became cash-positive and funded his awesome experiment in creating a product called Crowdstudio.
                 = image_tag 'landing/showcase/showcased_logos/wowmakers_logo.png', class: 'showcase_logo img-responsive'

@@ -166,6 +166,7 @@ nav a:focus {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center; }
+
   .landing_header .carousel-caption {
     position: relative;
     right: 15%;
@@ -221,11 +222,11 @@ nav a:focus {
     bottom: 20px; }
 
 @media screen and (min-width: 992px) and (max-width: 1199px) {
-  .header-video { height: 258px; }
+  .embedded-video { height: 258px; }
   .caption-text-heading { margin-top: 23px; } }
 @media screen and (min-width: 1200px) {
   .caption-text-heading { margin-top: 80px; }
-  .header-video { height: 315px; } }
+  .embedded-video { height: 315px; } }
 @media screen and (min-width: 1200px) and (max-width: 1919px) {
   .landing_header {
     min-height: 500px; }

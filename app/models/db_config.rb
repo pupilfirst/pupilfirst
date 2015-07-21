@@ -4,7 +4,8 @@ class DbConfig < ActiveRecord::Base
     sms_statistics_total: 'SMS Statistics Total',
     sms_statistics_visakhapatnam: 'SMS Statistics Visakhapatnam',
     sms_statistics_kochi: 'SMS Statistics Kochi',
-    feature_faculty_page: '(dev) Toggle Faculty Page'
+    feature_faculty_page: '(dev) Toggle Faculty Page',
+    feature_foundation_page: '(dev) Toggle Foundation Page'
   }
 
   # To use feature flags, add a key with name 'feature_FEATURE_NAME' and store JSON value with key 'users', or 'active'.

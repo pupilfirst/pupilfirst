@@ -10,4 +10,10 @@ class HomeController < ApplicationController
     @skip_container = true
     render layout: 'application'
   end
+
+  def foundation
+    raise_not_found unless DbConfig.feature_active? :foundation_page, current_user
+
+    render layout: 'application'
+  end
 end

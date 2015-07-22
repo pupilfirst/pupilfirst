@@ -27,17 +27,22 @@ class ApplicationController < ActionController::Base
   end
 
   def set_content_security_policy
-    script_sources = "script-src 'self' https://ajax.googleapis.com https://www.google-analytics.com " +
-      'https://blog.sv.co https://www.youtube.com;'
-    image_sources = "img-src 'self' https://www.google-analytics.com https://blog.sv.co https://www.startatsv.com " +
-      'http://svapp.assets.svlabs.in http://svapp-staging.assets.svlabs.in;'
-    style_sources = "style-src 'self' 'unsafe-inline' fonts.googleapis.com;"
-    connection_sources = "connect-src 'self';"
-    font_sources = "font-src 'self' fonts.gstatic.com;"
-    report_uri = "report-uri #{content_security_policy_report_url};"
+    image_sources = "img-src 'self' https://www.google-analytics.com https://blog.sv.co https://www.startatsv.com"
+    image_sources += ' http://svapp.assets.svlabs.in' if Rails.env.production?
+    image_sources += ' http://svapp-staging.assets.svlabs.in' if Rails.env == 'staging'
+    image_sources += ';'
 
-    response.headers['Content-Security-Policy'] = "default-src 'none'; " +
-      script_sources + image_sources + style_sources + connection_sources + font_sources + report_uri
-    response.headers['Content-Security-Policy-Report-Only']
+    csp_directives = [
+      image_sources,
+      "script-src 'self' https://ajax.googleapis.com https://www.google-analytics.com " +
+        'https://blog.sv.co https://www.youtube.com;',
+      "style-src 'self' 'unsafe-inline' fonts.googleapis.com;",
+      "connect-src 'self';",
+      "font-src 'self' fonts.gstatic.com;",
+      'child-src https://www.youtube.com;',
+      "report-uri #{content_security_policy_report_url};"
+    ]
+
+    response.headers['Content-Security-Policy'] = "default-src 'none'; " + csp_directives.join(' ')
   end
 end

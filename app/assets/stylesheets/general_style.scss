@@ -11,7 +11,7 @@
     -ms-transition: all 0.3s;
     -o-transition: all 0.3s;
     transition: all 0.3s; }
-  @media screen and (min-width: 767px) {
+  @media screen and (min-width: 768px) {
     #header .shrink .nav a {
       padding-top: 5px !important;
       padding-bottom: 5px !important;
@@ -29,7 +29,7 @@
 #header .navbar-header {
   padding-left: 15px;
   padding-right: 15px; }
-@media screen and (max-width: 771px) {
+@media screen and (max-width: 767px) {
   #header .navbar-collapse {
     background-color: #fff !important;
     margin-top: 10px; }

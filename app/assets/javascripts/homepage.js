@@ -64,10 +64,12 @@ var giveWhiteBackgroundToTopNav = function() {
   $(window).scroll(function() {
     if ($(document).scrollTop() > 300)
     {
+      $("#SiteLogoWhite").stop(true, true);
       $("#SiteLogoWhite").hide();
       $("#SiteLogo").fadeIn();
       $('nav').addClass('shrink');
     } else {
+      $("#SiteLogo").stop(true, true);
       $("#SiteLogo").hide();
       $("#SiteLogoWhite").fadeIn();
       $('nav').removeClass('shrink');

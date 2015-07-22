@@ -36,7 +36,7 @@ class ApplicationController < ActionController::Base
     font_sources = "font-src 'self' fonts.gstatic.com;"
     report_uri = "report-uri #{content_security_policy_report_url};"
 
-    response.headers['Content-Security-Policy'] = "default-src 'none'" +
+    response.headers['Content-Security-Policy'] = "default-src 'none'; " +
       script_sources + image_sources + style_sources + connection_sources + font_sources + report_uri
     response.headers['Content-Security-Policy-Report-Only']
   end

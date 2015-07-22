@@ -6,6 +6,9 @@
       a href="http://blog.sv.co" BLOG
     li
       a href="http://playbook.sv.co" PLAYBOOK
+    - if DbConfig.feature_active? :foundation_page, current_user
+      li
+        = link_to 'FOUNDATION', foundation_path
     - if DbConfig.feature_active? :faculty_page, current_user
       li
         = link_to 'FACULTY', faculty_path

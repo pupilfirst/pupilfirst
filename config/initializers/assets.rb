@@ -19,4 +19,5 @@ Rails.application.config.assets.precompile += %w(
   showcase.css
   faculty.css
   homepage_header.css
+  foundation.css
 )

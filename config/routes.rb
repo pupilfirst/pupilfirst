@@ -83,6 +83,7 @@ Svapp::Application.routes.draw do
     end
   end
 
+  get 'foundation', to: 'home#foundation'
   get 'faculty', to: 'home#faculty'
   root 'home#index'
 end

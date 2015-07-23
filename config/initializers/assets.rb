@@ -21,4 +21,5 @@ Rails.application.config.assets.precompile += %w(
   homepage_header.css
   foundation.css
   navbar.css
+  stages.css
 )

@@ -14,16 +14,16 @@
         li role="presentation"
           a.inactive-spacer #{('. ' * 12).html_safe}
         li.active role="presentation"
-          a.tab-title href="#permanent-faculty" aria-controls="permanent-faculty" role="tab" data-toggle="tab" Permanent faculty
+          a.tab-title href="#team" aria-controls="team" role="tab" data-toggle="tab" Team
         li role="presentation"
           a.tab-title href="#visiting-faculty" aria-controls="visiting-faculty" role="tab" data-toggle="tab" Visiting faculty
         li role="presentation"
-          a.tab-title href="#entrepreneurs-in-residence" aria-controls="entrepreneurs-in-residence" role="tab" data-toggle="tab" Entrepreneurs in residence
+          a.tab-title href="#advisory-board" aria-controls="advisory-board" role="tab" data-toggle="tab" Advisory board
         li role="presentation"
           a.inactive-spacer #{('. ' * 12).html_safe}
 
       .tab-content
-        .tab-pane.active#permanent-faculty role="tabpanel"
+        .tab-pane.active#team role="tabpanel"
           .faculty-cards-container
             .faculty-card
               = image_tag 'faculty/kris_gopalakrishnan.png'
@@ -127,7 +127,7 @@
                     i.fa.fa-linkedin
                   a href='#'
                     i.fa.fa-twitter
-        .tab-pane#entrepreneurs-in-residence role="tabpanel"
+        .tab-pane#advisory-board role="tabpanel"
           .faculty-cards-container
             .faculty-card
               = image_tag 'faculty/kiran_karnik.png'

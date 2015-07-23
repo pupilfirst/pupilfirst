@@ -198,6 +198,7 @@ http {
             passenger_enabled on;
         }
         server_tokens off;
+        remove_header X-Powered-By;
     }
     passenger_show_version_in_header off;
     passenger_pre_start http://<%= nginx_listen_address(app) %>;

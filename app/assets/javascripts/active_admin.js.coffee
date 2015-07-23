@@ -1,5 +1,10 @@
-#= require active_admin/base
+# external libraries
 #= require select2
 #= require pnotify
 #= require unobtrusive_flash
-#= require active_admin_flashes
+
+# local files
+#= require active_admin/base
+#= require active_admin/flashes
+#= require active_admin/startup
+#= require active_admin/user

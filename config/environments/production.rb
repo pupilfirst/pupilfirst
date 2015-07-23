@@ -90,6 +90,9 @@ Rails.application.configure do
 
   # Roadie asset URL.
   config.roadie.url_options = { host: 'www.sv.co', scheme: 'https' }
+
+  # Do not display runtime information in production.
+  config.middleware.delete(Rack::Runtime)
 end
 
 ActionMailer::Base.smtp_settings = {

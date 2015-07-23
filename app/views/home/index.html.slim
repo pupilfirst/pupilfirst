@@ -8,20 +8,21 @@
 
 - content_for :header
   .container.homepage-header
-    .col-md-6
-      h4.caption-text-heading
-        | We&#8217;re building a great
-        br learning platform for
-        span style="font-weight:600;" first-time founders.
-      div
-        - unless current_user
-          a.btn.btn-flat.btn-join href=new_registration_path(User.new) type="button" Join SV.CO
-        .watch-view-button.hidden-md.hidden-lg
-          a href="https://www.youtube.com/watch?v=EdToj9nviYA" target="_blank"
-            img src="#{image_url 'play.png'}" width="20"
-            | &nbsp;Watch video
-    .col-md-6.hidden-sm.hidden-xs
-      iframe.embedded-video src="https://www.youtube.com/embed/EdToj9nviYA?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
+    .row
+      .col-md-6
+        h4.caption-text-heading
+          | We&#8217;re building a great
+          br learning platform for
+          span style="font-weight:600;" first-time founders.
+        div
+          - unless current_user
+            a.btn.btn-flat.btn-join href=new_registration_path(User.new) type="button" Join SV.CO
+          .watch-view-button.hidden-md.hidden-lg
+            a href="https://www.youtube.com/watch?v=EdToj9nviYA" target="_blank"
+              img src="#{image_url 'play.png'}" width="20"
+              | &nbsp;Watch video
+      .col-md-6.hidden-sm.hidden-xs
+        iframe.embedded-video src="https://www.youtube.com/embed/EdToj9nviYA?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
 
 / Stages and learning.
 section#stages
@@ -90,7 +91,7 @@ section#showcase
               li.list-item#get-accelerator
                 .showcase-badge
                   = image_tag "timeline/badges/accelerator.png", width: "40"
-                h2 Get into a Startup Accelerator
+                h2 Join a Startup Accelerator
               li.list-item#get-hired
                 .showcase-badge
                   = image_tag "timeline/badges/team_formation.png", width: "40"
@@ -119,7 +120,7 @@ section#showcase
                 a href="https://www.youtube.com/watch?v=vjDdSdfitKY" target="_blank"
                   .showcase-badge
                     = image_tag "timeline/badges/accelerator.png", width: "40"
-                  h2 Get into a Startup Accelerator
+                  h2 Join a Startup Accelerator
               li.list-item
                 a href="https://www.youtube.com/watch?v=bgjwCh56qUU" target="_blank"
                   .showcase-badge

@@ -55,9 +55,11 @@
     .navbar-default {
       height: 70px;
     }
+
     .SiteLogo {
-    top: -5px;
+      top: -5px;
     }
+
     .navbar-collapse {
       background-color: #fff;
       margin-top: 10px;
@@ -65,16 +67,21 @@
       box-shadow: 3px 3px 10px #ccc;
       margin-left: 0px;
       margin-right: 0px;
+
       ul {
         margin: 0px;
       }
     }
+
     .shrink .nav a {
-      width: 100%; }
+      width: 100%;
+    }
+
     .nav {
       background-color: #fff;
       box-shadow: 0px 2px 5px -7px black;
       border-top: 1px solid #f9f9f9;
+
       a {
         color: #000;
       }
@@ -88,13 +95,16 @@
       padding-top: 5px;
       padding-bottom: 5px;
       margin-top: 20px;
+
       &::before, &::after {
-      background: #000;
+        background: #000;
       }
+
       .SiteLogo {
-      top: -8px;
+        top: -8px;
       }
     }
+
     .nav li a {
       float: right;
       position: relative;
@@ -105,6 +115,7 @@
       font-family: 'Source Sans Pro', sans-serif;
       font-size: 14px;
       transition: all 0.3s;
+
       &::before, &::after {
         position: absolute;
         top: 100%;
@@ -116,20 +127,24 @@
         transition: transform 0.3s;
         transform: scale(0.85);
       }
+
       &::after {
         opacity: 0;
         transition: top 0.3s, opacity 0.3s, transform 0.3s;
       }
-      &:hover::before,&:hover::after,&:focus::before,&:focus::after {
+
+      &:hover::before, &:hover::after, &:focus::before, &:focus::after {
         transform: scale(1);
       }
-      &:hover::after,&:focus::after {
+
+      &:hover::after, &:focus::after {
         top: 0%;
         opacity: 1;
       }
+
       &:focus, &:hover {
         text-decoration: none;
-        background-color: transparent; }
+        background-color: transparent;
       }
     }
   }

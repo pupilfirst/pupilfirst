@@ -40,6 +40,7 @@ class ApplicationController < ActionController::Base
       "connect-src 'self';",
       "font-src 'self' fonts.gstatic.com;",
       'child-src https://www.youtube.com;',
+      'frame-src https://www.youtube.com;',
       "report-uri #{content_security_policy_report_url};"
     ]
 

@@ -22,4 +22,5 @@ Rails.application.config.assets.precompile += %w(
   foundation.css
   navbar.css
   stages.css
+  above_the_fold.js
 )

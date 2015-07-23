@@ -20,4 +20,5 @@ Rails.application.config.assets.precompile += %w(
   faculty.css
   homepage_header.css
   foundation.css
+  navbar.css
 )

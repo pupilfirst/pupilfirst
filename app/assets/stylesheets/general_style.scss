@@ -4,14 +4,14 @@
   -moz-box-shadow: 0px 2px 5px -3px rgba(0, 0, 0, 0.56);
   box-shadow: 0px 2px 5px -3px rgba(0, 0, 0, 0.56);
   height: 70px; }
-  #header .shrink .nav a {
+/*  #header .shrink .nav a {
     color: #000 !important;
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
     -ms-transition: all 0.3s;
     -o-transition: all 0.3s;
-    transition: all 0.3s; }
-  @media screen and (min-width: 768px) {
+    transition: all 0.3s; }*/
+/*  @media screen and (min-width: 768px) {
     #header .shrink .nav a {
       padding-top: 5px !important;
       padding-bottom: 5px !important;
@@ -22,11 +22,11 @@
       top: -8px !important; } }
   @media screen and (max-width: 767px) {
     #header .shrink .nav a {
-      width: 100%; } }
+      width: 100%; } }*/
 #header .container {
   padding-right: 0px !important;
   padding-left: 0px !important; }
-#header .navbar-header {
+/*#header .navbar-header {
   padding-left: 15px;
   padding-right: 15px; }
 @media screen and (max-width: 767px) {
@@ -34,13 +34,13 @@
     background-color: #fff !important;
     margin-top: 10px; }
   #header .navbar-default {
-    height: 70px; } }
+    height: 70px; } }*/
 
-.navbar, .navbar-default {
+/*.navbar, .navbar-default {
   background: none !important;
-  border: none !important; }
+  border: none !important; }*/
 
-@media screen and (min-width: 768px) {
+/*@media screen and (min-width: 768px) {
   nav .nav li a {
     float: right;
     position: relative;
@@ -122,7 +122,7 @@ nav #SiteLogo, nav .SiteLogo {
     margin-left: 0px !important;
     margin-right: 0px !important; }
     nav .navbar-collapse ul {
-      margin: 0px !important; } }
+      margin: 0px !important; } }*/
 
 .header-media {
   width: 100%;
@@ -133,7 +133,7 @@ nav #SiteLogo, nav .SiteLogo {
   margin: auto;
   width: 100%; }
 
-nav a {
+/*nav a {
   position: relative;
   display: inline-block;
   outline: none;
@@ -146,9 +146,9 @@ nav a {
 
 nav a:hover,
 nav a:focus {
-  outline: none; }
+  outline: none; }*/
 
-@media screen and (min-width: 767px) {
+/*@media screen and (min-width: 767px) {
   #header .shrink2 .nav a {
     padding-top: 5px !important;
     padding-bottom: 5px !important;
@@ -157,7 +157,7 @@ nav a:focus {
     background: #333; } }
 @media screen and (max-width: 767px) {
   #header .shrink2 .nav a {
-    width: 100%; } }
+    width: 100%; } }*/
 
 /* Header */
 /* landing page */

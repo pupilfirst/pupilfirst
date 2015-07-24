@@ -2,14 +2,23 @@
   .navbar, .navbar-default {
     background: none;
     border: none;
+    .container {
+      padding-right: 0px;
+      padding-left: 0px;
+    }
   }
   .navbar-header {
     padding-left: 15px;
     padding-right: 15px;
   }
-  .shrink .nav a {
-    color: #000;
-    transition: all 0.3s;
+  .shrink {
+    background-color: #fff;
+    box-shadow: 0px 2px 5px -3px rgba(0, 0, 0, 0.56);
+    height: 70px;
+    .nav a {
+      color: #000;
+      transition: all 0.3s;
+    }
   }
   nav {
     .navbar-toggle {
@@ -149,6 +158,3 @@
     }
   }
 }
-
-
-

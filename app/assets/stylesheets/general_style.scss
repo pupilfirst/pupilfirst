@@ -1,98 +1,9 @@
-#header .shrink {
-  background-color: #fff !important;
-  -webkit-box-shadow: 0px 2px 5px -3px rgba(0, 0, 0, 0.56);
-  -moz-box-shadow: 0px 2px 5px -3px rgba(0, 0, 0, 0.56);
-  box-shadow: 0px 2px 5px -3px rgba(0, 0, 0, 0.56);
-  height: 70px; }
-#header .container {
-  padding-right: 0px !important;
-  padding-left: 0px !important; }
 .header-media {
   width: 100%;
   height: auto; }
-.header {
-  z-index: 1;
-  margin: auto;
-  width: 100%; }
 
 /* Header */
 /* landing page */
-.landing_header {
-  background-image: image-url("landing/headerbg2.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center; }
-
-  .landing_header .carousel-caption {
-    position: relative;
-    right: 15%;
-    bottom: 25px;
-    left: 0%;
-    z-index: 20;
-    padding-top: 200px;
-    color: #FFF;
-    text-align: justify; }
-    .landing_header .carousel-caption h4 {
-      font-family: 'Roboto', sans-serif;
-      font-size: 42px;
-      font-weight: 100;
-      line-height: 50px; }
-    .landing_header .carousel-caption button {
-      margin-top: 5px; }
-  .landing_header .carousel-indicators {
-    position: absolute;
-    display: inline-block;
-    bottom: 20px;
-    left: 90%;
-    z-index: 30;
-    margin-left: 0px !important;
-    width: auto;
-    padding-left: 0px;
-    list-style: outside none none; }
-    .landing_header .carousel-indicators li {
-      border-radius: 50%;
-      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0);
-      -webkit-transition: box-shadow 0.3s ease;
-      transition: box-shadow 0.3s ease; }
-      .landing_header .carousel-indicators li a {
-        background-color: rgba(255, 255, 255, 0.7);
-        -webkit-transition: background-color 0.3s ease, -webkit-transform 0.3s ease;
-        transition: background-color 0.3s ease, transform 0.3s ease; }
-      .landing_header .carousel-indicators li a:hover, .landing_header .carousel-indicators li a:focus {
-        background-color: white; }
-    .landing_header .carousel-indicators li.active {
-      background-color: #fff; }
-  @media screen and (max-width: 480px) {
-    .landing_header .carousel-indicators {
-      left: 0px;
-      display: block;
-      margin: 0 auto;
-      width: 100%;
-      bottom: 20px; }
-    .landing_header .carousel-caption i {
-      display: block;
-      padding-left: 0px;
-      margin-bottom: 10px; } }
-  .landing_header .carousel {
-    position: relative;
-    bottom: 20px; }
-
-@media screen and (min-width: 992px) and (max-width: 1199px) {
-  .embedded-video { height: 258px; }
-  .caption-text-heading { margin-top: 23px; } }
-@media screen and (min-width: 1200px) {
-  .caption-text-heading { margin-top: 80px; }
-  .embedded-video { height: 315px; } }
-@media screen and (min-width: 1200px) and (max-width: 1919px) {
-  .landing_header {
-    min-height: 500px; }
-  .landing_header .carousel-caption {
-    padding-top: 200px !important; } }
-@media screen and (min-width: 1920px) {
-  .landing_header {
-    min-height: 600px; }
-  .landing_header .carousel-caption {
-    padding-top: 350px !important; } }
 
 @media screen and (max-width: 767px) {
   .carousel h4 {
@@ -1020,4 +931,3 @@ iframe {
   filter: none; }
 
 /*# sourceMappingURL=style.css.map */
-

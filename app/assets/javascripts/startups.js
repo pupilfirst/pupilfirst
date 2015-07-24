@@ -1,2 +1,1 @@
-//= require startups/form
-//= require startups/index
+//= require_tree ./startups

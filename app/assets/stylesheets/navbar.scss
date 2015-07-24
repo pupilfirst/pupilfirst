@@ -1,4 +1,8 @@
 #header {
+  .nav-spacer {
+    padding-top: 80px;
+  }
+
   .navbar, .navbar-default {
     background: none;
     border: none;
@@ -7,41 +11,41 @@
       padding-left: 0px;
     }
   }
+
   .navbar-header {
     padding-left: 15px;
     padding-right: 15px;
   }
+
   .shrink {
     background-color: #fff;
     box-shadow: 0px 2px 5px -3px rgba(0, 0, 0, 0.56);
-    height: 70px;
+    height: 80px;
+
     .nav a {
       color: #000;
       transition: all 0.3s;
     }
   }
+
   nav {
     .navbar-toggle {
       margin: 13px 15px 13px 0;
     }
-    .navbar-brand {
-      font-size: 30px;
-    }
+
     .shrink {
       min-height: 35px;
       .navbar-toggle {
         padding: 4px 5px;
         margin: 8px 15px 8px 0;
       }
-      .navbar-brand {
-        font-size: 25px;
-      }
     }
+
     .SiteLogo {
       position: relative;
       max-height: 50px;
-      margin-bottom: 10px;
     }
+
     a {
       position: relative;
       display: inline-block;
@@ -63,6 +67,10 @@
   #header {
     .navbar-default {
       height: 70px;
+    }
+
+    .nav-spacer {
+      padding-top: 70px;
     }
 
     .SiteLogo {
@@ -103,7 +111,7 @@
     .shrink .nav a {
       padding-top: 5px;
       padding-bottom: 5px;
-      margin-top: 20px;
+      margin-top: 25px;
 
       &::before, &::after {
         background: #000;

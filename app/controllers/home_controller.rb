@@ -3,20 +3,18 @@ class HomeController < ApplicationController
 
   def index
     @featured_startups = Startup.where(featured: true)
-    render layout: 'homepage'
+    @navbar_start_transparent = true
+    @skip_container = true
   end
 
   def faculty
     raise_not_found unless DbConfig.feature_active? :faculty_page, current_user
 
     @skip_container = true
-    render layout: 'application'
   end
 
   def foundation
     raise_not_found unless DbConfig.feature_active? :foundation_page, current_user
-
-    render layout: 'application'
   end
 
   def csp_report

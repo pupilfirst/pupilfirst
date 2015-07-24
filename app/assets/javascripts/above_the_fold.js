@@ -1,2 +1,2 @@
-//= require homepage/navbar
+//= require navbar.js
 //= reqiure homepage/stages

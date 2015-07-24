@@ -2,7 +2,6 @@
 //= require owl-carousel/owl.carousel
 //= require ct-carousel/masonry.pkgd.min
 //= require icon/modernizr.custom
-//= require homepage/navbar
 //= require homepage/stages
 
 function stripHTML(dirtyString) {

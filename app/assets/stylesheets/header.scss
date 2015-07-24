@@ -4,8 +4,8 @@
   width: 100%;
 }
 
-.landing_header {
-  background-image: image-url("landing/headerbg2.jpg");
+.large-header {
+  // background-image: image-url("should/be/set/from/page/css.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -55,20 +55,20 @@
         background-color: rgba(255, 255, 255, 0.7);
         transition: background-color 0.3s ease, transform 0.3s ease;
 
-        &:hover,&:focus {
+        &:hover, &:focus {
           background-color: white;
         }
       }
     }
 
     li.active {
-        background-color: #fff;
+      background-color: #fff;
     }
   }
 }
 
 @media screen and (max-width: 480px) {
-  .landing_header {
+  .large-header {
     .carousel-indicators {
       left: 0px;
       display: block;
@@ -85,25 +85,37 @@
 }
 
 @media screen and (min-width: 992px) and (max-width: 1199px) {
-  .embedded-video { height: 258px; }
-  .caption-text-heading { margin-top: 23px; }
+  .embedded-video {
+    height: 258px;
+  }
+  .caption-text-heading {
+    margin-top: 23px;
+  }
 }
 
 @media screen and (min-width: 1200px) {
-  .caption-text-heading { margin-top: 80px; }
-  .embedded-video { height: 315px; }
+  .caption-text-heading {
+    margin-top: 80px;
+  }
+  .embedded-video {
+    height: 315px;
+  }
 }
 
 @media screen and (min-width: 1200px) and (max-width: 1919px) {
-  .landing_header {
-    min-height: 500px; }
-  .landing_header .carousel-caption {
-    padding-top: 200px !important; }
+  .large-header {
+    min-height: 500px;
+  }
+  .large-header .carousel-caption {
+    padding-top: 200px !important;
+  }
 }
 
 @media screen and (min-width: 1920px) {
-  .landing_header {
-    min-height: 600px; }
-  .landing_header .carousel-caption {
-    padding-top: 350px !important; }
+  .large-header {
+    min-height: 600px;
+  }
+  .large-header .carousel-caption {
+    padding-top: 350px !important;
+  }
 }

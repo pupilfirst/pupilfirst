@@ -7,8 +7,6 @@ class StartupsController < InheritedResources::Base
     @startup.save
   end
 
-  layout 'homepage', only: [:show, :index]
-
   def new
     unless current_user.phone_verified?
       flash[:notice] = 'Please enter and verify your phone number to continue.'
@@ -31,9 +29,14 @@ class StartupsController < InheritedResources::Base
   end
 
   def index
+    @navbar_start_transparent = true
+    @skip_container = true
   end
 
   def show
+    @navbar_start_transparent = true
+    @skip_container = true
+
     @startup = Startup.friendly.find(params[:id])
     @events = @startup.timeline_events.order(:event_on, :updated_at).reverse_order
   end

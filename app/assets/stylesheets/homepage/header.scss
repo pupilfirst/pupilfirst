@@ -1,10 +1,9 @@
 .homepage-header {
-  text-align: justify;
   position: relative;
   bottom: 45px;
   right: 15%;
   left: 0%;
-  padding-top: 200px;
+  padding-top: 120px;
   color: #FFF;
   h4 {
     font-family: 'Roboto', sans-serif;
@@ -12,13 +11,37 @@
     font-weight: 100;
     line-height: 50px;
   }
-  button { margin-top: 5px; }
+  button {
+    margin-top: 5px;
+  }
 }
 
-@media screen and (min-width: 1920px){ .homepage-header { padding-top: 350px; } }
-@media screen and (max-width: 767px) { .homepage-header h4 { font-size: 32px; }}
-@media screen and (max-width: 767px) { .homepage-header { text-align: center; }}
-@media screen and (max-width: 480px) { .homepage-header h4 { font-size: 22px; }}
-@media screen and (max-width: 320px) { .homepage-header h4 { font-size: 16px; }}
+.large-header {
+  background-image: image-url("landing/headerbg2.jpg");
+}
+
+@media screen and (max-width: 767px) {
+  .homepage-header h4 {
+    font-size: 32px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .homepage-header {
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .homepage-header h4 {
+    font-size: 22px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .homepage-header h4 {
+    font-size: 16px;
+  }
+}
 
 

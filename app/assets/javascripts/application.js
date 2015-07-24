@@ -23,5 +23,5 @@
 
 //= require unobtrusive_flash
 //= require flashes
-
+//= require navbar
 //= require_tree ./startups

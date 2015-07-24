@@ -1,8 +1,4 @@
 ActiveAdmin.register AdminUser do
-  controller do
-    newrelic_ignore
-  end
-
   permit_params :email, :password, :password_confirmation, :fullname, :avatar, :admin_type
 
   index do
@@ -24,7 +20,7 @@ ActiveAdmin.register AdminUser do
       f.input :password_confirmation
       f.input :fullname
       f.input :avatar, as: :file
-      f.input :admin_type, as: :select, collection: AdminUser.admin_user_types 
+      f.input :admin_type, as: :select, collection: AdminUser.admin_user_types
     end
     f.actions
   end

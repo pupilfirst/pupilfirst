@@ -1,8 +1,4 @@
 ActiveAdmin.register_page "Dashboard" do
-  controller do
-    newrelic_ignore
-  end
-
   page_action :users_count_total do
     render json: Statistic.chartkick_parameter_by_date(Statistic::PARAMETER_COUNT_USERS, from: params[:from], to: params[:to])
   end

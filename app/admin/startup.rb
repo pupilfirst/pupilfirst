@@ -21,8 +21,6 @@ ActiveAdmin.register Startup do
   scope('Student Startups') { |scope| scope.student_startups.not_unready }
 
   controller do
-    newrelic_ignore
-
     def find_resource
       scoped_collection.friendly.find(params[:id])
     end

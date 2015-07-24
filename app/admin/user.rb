@@ -1,8 +1,4 @@
 ActiveAdmin.register User do
-  controller do
-    newrelic_ignore
-  end
-
   menu label: 'SV Users'
 
   # Customize the index. Let's show only a small subset of the tons of fields.

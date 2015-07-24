@@ -1,10 +1,6 @@
 # ActiveAdmin.register Mentor do
   # menu parent: 'Mentoring'
 
-  # controller do
-  #   newrelic_ignore
-  # end
-
   # csv do
   #   column :name
   #   column(:phone_number) { |mentor| mentor.user.phone }

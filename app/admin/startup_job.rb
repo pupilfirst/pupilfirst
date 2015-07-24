@@ -2,10 +2,6 @@
 
   # menu parent: 'Startups'
 
-  # controller do
-  #   newrelic_ignore
-  # end
-
   # index do
   #   selectable_column
   #   actions

@@ -2,10 +2,6 @@ ActiveAdmin.register Category do
   filter :name
   filter :category_type, as: :select, collection: proc { Category::TYPES }
 
-  controller do
-    newrelic_ignore
-  end
-
   index do
     selectable_column
 

@@ -1,10 +1,6 @@
 # ActiveAdmin.register MentorSkill do
   # menu parent: 'Mentoring'
 
-  # controller do
-  #   newrelic_ignore
-  # end
-
   # form do |f|
   #   f.inputs 'Skill' do
   #     f.input :mentor

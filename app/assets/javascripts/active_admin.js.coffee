@@ -1,9 +1,16 @@
-# external libraries
+# Basics
+
+#= require jquery
+#= require jquery_ujs
+
+# External libraries
+
 #= require select2
 #= require pnotify
 #= require unobtrusive_flash
 
-# local files
+# Local files
+
 #= require active_admin/base
 #= require active_admin/flashes
 #= require active_admin/startup

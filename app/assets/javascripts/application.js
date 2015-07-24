@@ -23,3 +23,5 @@
 
 //= require unobtrusive_flash
 //= require flashes
+
+//= require_tree ./startups

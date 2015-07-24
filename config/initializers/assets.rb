@@ -5,8 +5,8 @@ Rails.application.config.assets.precompile += %w(
   homepage.css
   timeline.css
   timeline.js
-  startups_index.css
-  startups_index.js
+  startups.css
+  startups.js
   faculty.css
   foundation.css
 )

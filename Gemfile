@@ -13,7 +13,6 @@ gem 'devise_invitable'
 gem 'jbuilder', '~> 2.0'
 gem 'jquery-rails'
 gem 'mini_magick' # Image processing.
-gem 'newrelic_rpm' # Reporter for Newrelic Heroku add-on.
 gem 'nokogiri'
 gem 'pg'
 gem 'sass-rails', '~> 5.0'

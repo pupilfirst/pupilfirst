@@ -12,10 +12,6 @@
 //= require google_analytics.js.erb
 //= require mentor_meetings
 
-//= require moment
-//= require bootstrap-datetimepicker
-//= require pickers
-
 //= require startup_jobs
 
 // Rails Assets

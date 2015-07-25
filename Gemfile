@@ -44,7 +44,11 @@ gem 'delayed_job_active_record' # Delayed Job for deferring tasks.
 gem 'seedbank' # Better organized seed data.
 gem 'wicked' # Multistep form wizard for incubation
 gem 'font-awesome-sass', '~> 4.3.0' # Icons from font-awesome!
-gem 'unobtrusive_flash', '>=3' # Let's not deal with flash messages, yeah? https://github.com/leonid-shevtsov/unobtrusive_flash
+
+# Let's not deal with flash messages, yeah? Tracking modified github master with early rendering fix. See link below.
+# https://github.com/mobmewireless/unobtrusive_flash/commit/24e7787d16db66f7956747444433a4e47278193a
+gem 'unobtrusive_flash', github: 'mobmewireless/unobtrusive_flash', branch: 'master'
+
 gem 'friendly_id' # Slugs for links. http://norman.github.io/friendly_id
 gem 'flexslider', :git => 'https://github.com/constantm/Flexslider-2-Rails-Gem.git' # Flexslider on homepage.
 

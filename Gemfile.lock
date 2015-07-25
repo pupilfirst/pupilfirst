@@ -24,6 +24,14 @@ GIT
       railties (>= 3.1)
 
 GIT
+  remote: git://github.com/mobmewireless/unobtrusive_flash.git
+  revision: 24e7787d16db66f7956747444433a4e47278193a
+  branch: master
+  specs:
+    unobtrusive_flash (3.1.0)
+      railties
+
+GIT
   remote: git://github.com/zpaulovics/datetimepicker-rails.git
   revision: 36d21cec5da7f5b214925804f60e63c61c747023
   branch: master
@@ -470,8 +478,6 @@ GEM
       unf_ext
     unf_ext (0.0.7.1)
     uniform_notifier (1.9.0)
-    unobtrusive_flash (3.1.0)
-      railties
     validate_url (1.0.0)
       activemodel (>= 3.0.0)
       addressable
@@ -548,7 +554,7 @@ DEPENDENCIES
   slim
   spring
   uglifier
-  unobtrusive_flash (>= 3)
+  unobtrusive_flash!
   validate_url
   web-console (~> 2.0)
   webmock

@@ -8,5 +8,5 @@ Rails.application.config.assets.precompile += %w(
   startups.css
   startups.js
   faculty.css
-  foundation.css
+  about.css
 )

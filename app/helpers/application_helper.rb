@@ -41,4 +41,8 @@ module ApplicationHelper
         '<em>Not Known</em>'.html_safe
     end
   end
+  
+  def feature_active?
+    
+  end
 end

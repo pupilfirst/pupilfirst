@@ -13,8 +13,9 @@ footer
               a href="http://playbook.sv.co" Playbook
             div
               a href="http://blog.sv.co" Blog
-            div
-              a href="https://www.sv.co/startups" Startups
+            - if feature_active?("startups")
+              div
+                a href="https://www.sv.co/startups" Startups
           .img-opacity
             span.social-link
               a href='https://www.facebook.com/startupvillage' target='_blank'

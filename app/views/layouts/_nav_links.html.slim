@@ -1,7 +1,8 @@
 #sv-navbar.collapse.navbar-collapse
   ul.nav.navbar-nav.navbar-right
-    li
-      a href="#{startups_url}" STARTUPS
+    - if feature_active?("startups")
+      li
+        a href="#{startups_url}" STARTUPS
     li
       a href="http://blog.sv.co" BLOG
     li

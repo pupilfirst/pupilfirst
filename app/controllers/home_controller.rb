@@ -8,8 +8,6 @@ class HomeController < ApplicationController
   end
 
   def faculty
-    raise_not_found unless feature_active? :faculty_page
-    
     @faculty = {
       advisory_board: [
         { name: "Kris Gopalakrishnan", title: "Chief Mentor, Co-Founder Infosys" },
@@ -49,6 +47,7 @@ class HomeController < ApplicationController
         { name: "Pranav Suresh", title: "CEO" },
         { name: "Vishnu Gopal", title: "CTO" },
         { name: "Gautham", title: "COO" },
+        { name: "Joby Joseph", title: "Operations" },
         { name: "Naveen Narayanan", title: "Academic Relations" },
         { name: "Daniel Jeevan", title: "Digital Strategist" },
         { name: "Aditya Nair", title: "Governance & Strategic Initiatives" },
@@ -62,7 +61,6 @@ class HomeController < ApplicationController
   end
 
   def about
-    raise_not_found unless feature_active? :about_page
   end
 
   def csp_report

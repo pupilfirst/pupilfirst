@@ -10,6 +10,9 @@ h1.page-header.margin-top-0
 - else
   .alert.alert-info role='alert' An SMS containing a verification code has been sent to your mobile number. Please supply this code to complete the registration process.
 
+- if Rails.env.development?
+  .alert.alert-info role='alert' Development hack: Code = #{current_user.phone_verification_code}
+
 = form_tag verify_user_url, class: 'form-vertical', role: 'form' do
   .form-group
     label.col-sm-2.control-label for='phone_verification_code' Verification code

@@ -26,7 +26,7 @@ class HomeController < ApplicationController
       ],
       visiting_faculty: [
         { name: "Abhishek Goyal", title: "Co-Founder, Traxcn Labs", key_skills: "Business Ideas", linked_in: "https://www.linkedin.com/in/abhishekgoyal" },
-        { name: "Nishant Verman", title: "Director of Corporate Development, Flipkart", key_skills: "Aqqusitions", linked_in: "https://in.linkedin.com/in/nishantverman" },
+        { name: "Nishant Verman", title: "Director of Corporate Development, Flipkart", key_skills: "Acquisitions", linked_in: "https://in.linkedin.com/in/nishantverman" },
         { name: "Sharad Sharma", title: "Co-Founder, Ispirt", key_skills: "Angel Investments", linked_in: "https://www.linkedin.com/in/sharadsharma" },
         { name: "Karan Mohla", title: "Executive Director, IDG Ventures", key_skills: "Angel Investments", linked_in: "https://in.linkedin.com/pub/karan-mohla/0/998/153" },
         { name: "Sunil Kalra", title: "Professional Angel Investor", key_skills: "Angel Investments", linked_in: "https://www.linkedin.com/pub/sunil-kalra/21/9a6/a12" },
@@ -43,6 +43,18 @@ class HomeController < ApplicationController
         { name: "Amit Gupta", title: "Co-Founder InMobi", key_skills: "Startup Revenues", linked_in: "https://www.linkedin.com/in/amitgupta007" },
         { name: "Freeman Murray", title: "Founder, Jaaga", key_skills: "Startup Prototyping", linked_in: "http://in.linkedin.com/in/freemanmurray" },
         { name: "Shashi Dharan", title: "Founder of BE Group", key_skills: "Public Relations", linked_in: "https://www.linkedin.com/pub/shashi-dharan/9/583/396" }
+      ],
+      team: [
+        { name: "Sanjay Vijayakumar", title: "Chairman" },
+        { name: "Pranav Suresh", title: "CEO" },
+        { name: "Vishnu Gopal", title: "CTO" },
+        { name: "Gautham", title: "COO" },
+        { name: "Naveen Narayanan", title: "Academic Relations" },
+        { name: "Daniel Jeevan", title: "Digital Strategist" },
+        { name: "Aditya Nair", title: "Governance & Strategic Initiatives" },
+        { name: "Sreerag Dileep", title: "Governance & Operations" },
+        { name: "Dinnu Nijo", title: "Incubation" },
+        { name: "Sebin John Mathew", title: "Communications & Operations" }
       ]
     }
 

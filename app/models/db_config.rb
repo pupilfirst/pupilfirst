@@ -5,10 +5,11 @@ class DbConfig < ActiveRecord::Base
     sms_statistics_visakhapatnam: 'SMS Statistics Visakhapatnam',
     sms_statistics_kochi: 'SMS Statistics Kochi',
     feature_faculty_page: '(dev) Toggle Faculty Page',
-    feature_about_page: '(dev) Toggle About Page'
+    feature_about_page: '(dev) Toggle About Page',
+    feature_startups: '(dev) Toggle Startups'
   }
 
-  # To use feature flags, add a key with name 'feature_FEATURE_NAME' and store JSON value with key 'users', or 'active'.
+  # To use feature flags, add a VAR with name 'feature_FEATURE_NAME' and store JSON value with key 'users', or 'active'.
   # 'users' key should contain an array of allowed user e-mails, OR 'active' should be set to affect all users.
   def self.feature_active?(key, user=nil)
     feature = where(key: "feature_#{key}").first

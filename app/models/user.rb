@@ -45,6 +45,7 @@ class User < ActiveRecord::Base
 
   # Validations during incubation
   validates_presence_of :gender, :born_on, if: ->(user) { user.startup.try(:incubation_step_1?) }
+  validates_presence_of :roll_number, if: :is_student
 
   attr_reader :skip_password
   # hack

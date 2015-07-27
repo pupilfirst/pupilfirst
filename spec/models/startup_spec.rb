@@ -44,7 +44,7 @@ describe Startup do
       startup_1 = create :startup
       startup_2 = create :startup
 
-      student_founder = create :user_with_out_password, is_student: true
+      student_founder = create :user_with_out_password, is_student: true, roll_number: rand(10000).to_s
       startup_2.founders << student_founder
 
       expect(Startup.student_startups).to eq([startup_2])

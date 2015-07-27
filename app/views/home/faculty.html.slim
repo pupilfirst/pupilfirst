@@ -7,7 +7,7 @@
     h1.page-header.header-light Faculty
 
     p.introduction
-      | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+      | We've assembled some of the best entrepreneurs and domain experts to help you learn about entrepreneurship and what it means to become a founder. In addition to our <a href="http://playbook.sv.co/">Playbook</a>, if you join SV.CO, you'll have access to the best startup talent in India.
 
     #tabbed-content
       ul#faculty-nav.nav.nav-tabs.nav-justified
@@ -129,23 +129,16 @@
                     i.fa.fa-twitter
         .tab-pane#advisory-board role="tabpanel"
           .faculty-cards-container
-            .faculty-card
-              = image_tag 'faculty/kiran_karnik.png'
-              .faculty-info
-                .faculty-name Kiran Karnik
-                .faculty-title Former President, NASSCOM
-                .faculty-links
-                  a href='#'
-                    i.fa.fa-linkedin
-                  a href='#'
-                    i.fa.fa-twitter
-            .faculty-card
-              = image_tag 'faculty/kris_gopalakrishnan.png'
-              .faculty-info
-                .faculty-name Kris Gopalakrishnan
-                .faculty-title Infosys (Chief of Advisory Board)
-                .faculty-links
-                  a href='#'
-                    i.fa.fa-linkedin
-                  a href='#'
-                    i.fa.fa-twitter
+            - @faculty[:advisory_board].each do |advisory_member|
+              .faculty-card
+                = image_tag image_name_from_faculty(:advisory_board, advisory_member[:name])
+                .faculty-info
+                  .faculty-name 
+                    = advisory_member[:name]
+                  .faculty-title 
+                    = advisory_member[:title]
+                  .faculty-links
+                    a href='#'
+                      i.fa.fa-linkedin
+                    a href='#'
+                      i.fa.fa-twitter

@@ -17,6 +17,12 @@ class ApplicationController < ActionController::Base
   end
 
   protected
+  
+  def feature_active?(feature)
+    (Rails.env == "development") ||
+      (DbConfig.feature_active? feature, current_user)
+  end
+  helper_method :feature_active?
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:accept_invitation).concat [:avatar, :twitter_url, :linkedin_url]

@@ -8,13 +8,13 @@ class HomeController < ApplicationController
   end
 
   def faculty
-    raise_not_found unless DbConfig.feature_active? :faculty_page, current_user
+    raise_not_found unless feature_active? :faculty_page
 
     @skip_container = true
   end
 
-  def foundation
-    raise_not_found unless DbConfig.feature_active? :foundation_page, current_user
+  def about
+    raise_not_found unless feature_active? :about_page
   end
 
   def csp_report

@@ -41,7 +41,7 @@
         .tab-pane#visiting-faculty role="tabpanel"
           .faculty-cards-container
             - @faculty[:visiting_faculty].each do |member|
-              .faculty-card
+              .faculty-card.visiting-faculty
                 = image_tag faculty_image_path(:visiting_faculty, member[:name])
                 .faculty-info
                   .faculty-name 

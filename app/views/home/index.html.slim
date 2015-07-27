@@ -7,9 +7,9 @@
     .row
       .col-md-6
         h4.caption-text-heading
-          | We&#8217;re building a 
-          span style="font-weight:600;" learning platform 
-          | for first time founders backed by 
+          | We&#8217;re building a
+          span style="font-weight:600;" learning platform
+          | for first time founders backed by
           span style="font-weight:600;" real Universities.
         div
           - unless current_user
@@ -347,40 +347,8 @@ section#testimonial
               li.tm_name
                 span Nishant Rao
               li.tm_comp Country Manager, LinkedIn India & Chairman, IAMAI
-/ Blog posts.
-section.container.blog
-  .row.heading
-    h1 Buzz
-    = image_tag 'line.jpg'
-    p Latest picks from our blog
 
-  .row
-    #blog-posts-container.flex-container style="display:flex;justify-content:center;flex-wrap:wrap;"
-      #blog-posts-loading
-        p.text-center
-          i.fa.fa-refresh.fa-spin
-          | &nbsp; Loading blog posts...
-      #blog-posts-loading-failed.hide
-        p.text-center
-          i.fa.fa-warning
-          ' &nbsp; Couldn't load blog posts!
-        p.text-center
-          ' We're sorry. :-( You could try
-          a href="https://blog.sv.co" visiting our blog
-          | &nbsp;instead...
-      #post-scaffold.hide
-        .post-content
-          .blog-body
-            img.blog-post-image width="100%" src="#"
-            h5.blog-post-title
-            img.line src="#{image_url 'line2.png'}" width="100%"
-            p.blog-post-content
-          .blog-footer
-            .continue-reading
-              a.blog-post-link href="#"
-                | continue reading &nbsp;
-                = image_tag 'cont.png', class: 'img-animation'
-
+== render 'blog_posts'
 
 .modal.fade#itraveller-popup role="dialog"
   .modal-dialog.modal-lg

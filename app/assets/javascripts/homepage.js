@@ -26,7 +26,7 @@ var loadBlogPosts = function() {
       postClone.find('.blog-post-title').html(post.title_plain);
 
       // Reduce length of post content if title is long.
-      var contentLength = post.title_plain.length > 30 ? (200 - Math.round((post.title_plain.length - 30) * 1.5)) : 200;
+      var contentLength = post.title_plain.length > 30 ? (220 - Math.round((post.title_plain.length - 30) * 1.2)) : 210;
       postClone.find('.blog-post-content').html(stripHTML(post.content).substring(0, contentLength) + "...");
 
       postClone.find('.blog-post-link').attr('href', post.url);

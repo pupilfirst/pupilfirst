@@ -1,62 +1,61 @@
-/ Pre-footer.
-section#prefooter
-  .container
-    .row
-      .col-md-3.col-sm-6.footer-column
-        img src="#{image_url 'logo_white.png'}" style="opacity:.7; margin-bottom: 15px;" width="150"
-        br
-        ' Reach us at <strong>#{link_to 'help@sv.co', 'mailto:help@sv.co'}</strong>.
-
-      .col-md-3.col-sm-6.footer-column
-        .sitemap
-          div
-            a href="http://playbook.sv.co" Playbook
-          div
-            a href="http://blog.sv.co" Blog
-          div
-            a href="https://www.sv.co/startups" Startups
-        .img-opacity
-          span.social-link
-            a href='https://www.facebook.com/startupvillage' target='_blank'
-              = image_tag 'fb.png', height: '20'
-          span.social-link
-            a href='https://twitter.com/StartatSV' target='_blank'
-              = image_tag 'tw.png', height: '20'
-          span.social-link
-            a href='https://www.youtube.com/user/TheStartupVillage' target='_blank'
-              = image_tag 'yt.png', height: '20'
-
-      .col-md-3.col-sm-6.footer-column
-        address
-          strong Startup Village, Kochi
+footer
+  section#footer-top
+    .container
+      .row
+        .col-md-3.col-sm-6.footer-column
+          img src="#{image_url 'logo_white.png'}" style="opacity:.7; margin-bottom: 15px;" width="150"
           br
-          p
-            | Kinfra Hi-Tech Park, Kalamassery,
+          ' Reach us at <strong>#{link_to 'help@sv.co', 'mailto:help@sv.co'}</strong>.
+
+        .col-md-3.col-sm-6.footer-column
+          .sitemap
+            div
+              a href="http://playbook.sv.co" Playbook
+            div
+              a href="http://blog.sv.co" Blog
+            div
+              a href="https://www.sv.co/startups" Startups
+          .img-opacity
+            span.social-link
+              a href='https://www.facebook.com/startupvillage' target='_blank'
+                = image_tag 'fb.png', height: '20'
+            span.social-link
+              a href='https://twitter.com/StartatSV' target='_blank'
+                = image_tag 'tw.png', height: '20'
+            span.social-link
+              a href='https://www.youtube.com/user/TheStartupVillage' target='_blank'
+                = image_tag 'yt.png', height: '20'
+
+        .col-md-3.col-sm-6.footer-column
+          address
+            strong Startup Village, Kochi
             br
-            | Kochi &mdash; 683503.
+            p
+              | Kinfra Hi-Tech Park, Kalamassery,
+              br
+              | Kochi &mdash; 683503.
+              br
+              | #{icon('phone')} #{link_to '+91 484 2110799', 'tel:+914842110799'}
+        .col-md-3.col-sm-6.footer-column
+          address
+            strong Startup Village, Visakhapatnam
             br
-            | #{icon('phone')} #{link_to '+91 484 2110799', 'tel:+914842110799'}
-      .col-md-3.col-sm-6.footer-column
-        address
-          strong Startup Village, Visakhapatnam
-          br
-          | Sunrise Startups, Hill No. 3,
-          br
-          | Cyber Hills, IT SEZ, Madhuruwada,
-          br
-          | Visakhapatnam &mdash; 530048.
+            | Sunrise Startups, Hill No. 3,
+            br
+            | Cyber Hills, IT SEZ, Madhuruwada,
+            br
+            | Visakhapatnam &mdash; 530048.
 
-/ Real footer.
-footer#footer
-  .container
-    .row
-      .col-sm-6
-        p &copy; 2015 SV.CO. All rights reserved.
-      .col-sm-6
-        .footer-right
-          a data-toggle="modal" data-target="#privacy" Privacy Policy
-          | &nbsp;|&nbsp;
-          a data-toggle="modal" data-target="#terms" Terms of Use
+  #footer-bottom
+    .container
+      .row
+        .col-sm-6
+          p &copy; 2015 SV.CO. All rights reserved.
+        .col-sm-6
+          .footer-right
+            a data-toggle="modal" data-target="#privacy" Privacy Policy
+            | &nbsp;|&nbsp;
+            a data-toggle="modal" data-target="#terms" Terms of Use
 
 #privacy.modal.fade role="dialog"
   .modal-dialog

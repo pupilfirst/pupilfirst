@@ -107,31 +107,26 @@
                     i.fa.fa-twitter
         .tab-pane#visiting-faculty role="tabpanel"
           .faculty-cards-container
-            .faculty-card
-              = image_tag 'faculty/kris_gopalakrishnan.png'
-              .faculty-info
-                .faculty-name Kris Gopalakrishnan
-                .faculty-title Infosys (Chief of Advisory Board)
-                .faculty-links
-                  a href='#'
-                    i.fa.fa-linkedin
-                  a href='#'
-                    i.fa.fa-twitter
-            .faculty-card
-              = image_tag 'faculty/kiran_karnik.png'
-              .faculty-info
-                .faculty-name Kiran Karnik
-                .faculty-title Former President, NASSCOM
-                .faculty-links
-                  a href='#'
-                    i.fa.fa-linkedin
-                  a href='#'
-                    i.fa.fa-twitter
+            - @faculty[:visiting_faculty].each do |advisory_member|
+              .faculty-card
+                = image_tag faculty_image_path(:visiting_faculty, advisory_member[:name])
+                .faculty-info
+                  .faculty-name 
+                    = advisory_member[:name]
+                  .faculty-title 
+                    = advisory_member[:title]
+                  .faculty-key-skills
+                    = advisory_member[:key_skills]
+                  .faculty-links
+                    a href="#{advisory_member[:linked_in]}"
+                      i.fa.fa-linkedin
+                    a href='#'
+                      i.fa.fa-twitter
         .tab-pane#advisory-board role="tabpanel"
           .faculty-cards-container
             - @faculty[:advisory_board].each do |advisory_member|
               .faculty-card
-                = image_tag image_name_from_faculty(:advisory_board, advisory_member[:name])
+                = image_tag faculty_image_path(:advisory_board, advisory_member[:name])
                 .faculty-info
                   .faculty-name 
                     = advisory_member[:name]

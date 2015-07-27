@@ -20,7 +20,7 @@ class HomeController < ApplicationController
         { name: "Dr. K.C.C. Nair", title: "Ex CFO, Technopark" },
         { name: "Dr. Jayasankar Prasad", title: "CEO, Kerala Startup Mission" },
         { name: "K.T. Rajagopalan", title: "Ex Director, State Bank of Travancore" },
-        { name: "Dr. B. Anil", title: "Principal, Government Engineering College,Barton Hill" }
+        { name: "Dr. B. Anil", title: "Principal, Government Engineering College, Barton Hill" }
       ],
       visiting_faculty: [
         { name: "Abhishek Goyal", title: "Co-Founder, Traxcn Labs", key_skills: "Business Ideas", linked_in: "https://www.linkedin.com/in/abhishekgoyal" },

@@ -63,7 +63,7 @@ class IncubationController < ApplicationController
   def incubation_startup_params
     params.require(:startup).permit(:name, :registration_type, :about, :incubation_location, :website,
       :presentation_link, :team_size, :women_employees, :updated_from, admin_attributes: [
-        :id, :gender, :born_on, :communication_address, :district, :state, :pin, :linkedin_url, :twitter_url
+        :id, :gender, :born_on, :is_student, :roll_number, :communication_address, :district, :state, :pin, :linkedin_url, :twitter_url
       ]
     )
   end

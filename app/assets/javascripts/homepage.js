@@ -19,7 +19,7 @@ var loadBlogPosts = function() {
       var postClone = postScaffold.clone();
 
       // Make it a regular post.
-      postClone.removeAttr('id').addClass('post');
+      postClone.removeAttr('id');
 
       // Add post title, image, content and link.
       postClone.find('.blog-post-image').attr('src', post.thumbnail_images.full.url);

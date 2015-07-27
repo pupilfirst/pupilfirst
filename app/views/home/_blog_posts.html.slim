@@ -18,15 +18,14 @@ section.container#blog-posts
           ' We're sorry. :-( You could try
           a href="https://blog.sv.co" visiting our blog
           | &nbsp;instead...
-      #post-scaffold.hide
-        .post-content
-          .blog-top
-            img.blog-post-image width="100%" src="#"
-            .blog-body
-              h5.blog-post-title
-              img.line src="#{image_url 'line2.png'}" width="100%"
-              p.blog-post-content
-          .blog-footer
-            a.blog-post-link href="#"
-              | continue reading &nbsp;
-              = image_tag 'cont.png', class: 'img-animation'
+      #post-scaffold.blog-post.hide
+        .blog-post-top
+          img.blog-post-image width="100%" src="#"
+          .blog-body
+            h5.blog-post-title
+            img.line src="#{image_url 'line2.png'}" width="100%"
+            p.blog-post-content
+        .blog-post-bottom
+          a.blog-post-link href="#"
+            | continue reading &nbsp;
+            = image_tag 'cont.png', class: 'img-animation'

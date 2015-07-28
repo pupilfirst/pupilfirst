@@ -11,7 +11,8 @@ function stripHTML(dirtyString) {
 }
 
 var loadBlogPosts = function() {
-  $.get("https://blog.sv.co?json=get_recent_posts&count=4", function(data) {
+  // TODO: Load JS and images from https://blog.sv.co when it's available.
+  $.get("http://www.startatsv.com?json=get_recent_posts&count=4", function(data) {
     var blogPostsContainer = $("#blog-posts-container");
     var postScaffold = $("#post-scaffold");
 

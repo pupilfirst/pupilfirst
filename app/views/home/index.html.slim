@@ -78,7 +78,7 @@ section#showcase
       .showcase-heading
         .col-md-6.success
           h1 Success Scenarios
-          = image_tag 'line.jpg'
+          img data-src='#{image_url 'line.jpg'}'
           br
           p
             | At Startup Village, we believe that everyone living today has the opportunity to explore human life's fullest potential. We believe that when small groups of young people share a dream and attempt to change the world, a lot of exciting new doors are opened for them. There are six different paths for your future that are possible once you begin your startup journey through Startup Village:
@@ -150,7 +150,7 @@ section#showcase
                 iframe.embedded-video.showcase-company src="https://www.youtube.com/embed/KufIL6ZS1lk?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
                 div.story-description
                   ' Shiju Radhakrishnan of <em>iTraveller</em>, Rohildev NV of <em>Fin</em> and Juhaim Ibnu Abdul Jabbar of <em>Rickone</em> share their stories about getting funded.
-                = image_tag 'landing/showcase/showcased_logos/itraveller_logo.png', class: 'showcase_logo img-responsive'
+                img.showcase_logo.img-responsive#abcde data-src='#{image_url 'landing/showcase/showcased_logos/itraveller_logo.png'}'
                 a.view data-toggle="modal" href="#itraveller-popup"
                   = image_tag 'view.png'
                   |  View the iTraveler Story
@@ -236,7 +236,7 @@ section#showcase
           .col-md-12.lista
             .col-md-6.lista-heading
               h1 Startups
-              = image_tag 'line.jpg'
+              img data-src='#{image_url 'line.jpg'}'
               p
                 ' At Startup Village, our community is rich and vibrant with exciting startups who are trying to change the world in many different areas. For our launch, we're presenting <em>verified timelines</em> of selected startups who we've helped through the years.
             .col-md-6
@@ -247,7 +247,7 @@ section#showcase
                 - if @featured_startups.present? && @featured_startups.count > 1
                   - @featured_startups.each do |startup|
                     .item
-                      = image_tag "#{startup.logo_url}"
+                      img data-src='#{startup.logo_url}'
       br
       .row
         .short-list
@@ -256,13 +256,13 @@ section#showcase
               a.col-sm-3.liste href="#{startup_url(startup)}"
                 span.center-helper
                 img data-src="#{startup.logo_url}"
-                / = image_tag "#{startup.logo_url}"
+
 
 
       .row.learnmore style="margin-top:20px;"
         = link_to 'VIEW OUR FULL LIST OF VERIFIED STARTUPS', startups_url
         | &nbsp;
-        = image_tag 'cont.png', class: 'img-animation'
+        img.img-animation data-src='#{image_url 'cont.png'}'
 
 / Testimonials
 section#testimonial
@@ -277,7 +277,7 @@ section#testimonial
           .cd-author
             ul.cd-author-info
               li
-                = image_tag 'testimonials/richard_verma.png'
+                img data-src='#{image_url 'testimonials/richard_verma.png'}'
               li.tm_name
                 span Richard Verma
               li.tm_comp United States Ambassador to India
@@ -291,7 +291,7 @@ section#testimonial
           .cd-author
             ul.cd-author-info
               li
-                = image_tag 'testimonials/rajan_anandan.png'
+                img data-src='#{image_url 'testimonials/rajan_anandan.png'}'
               li.tm_name
                 span Rajan Anandan
               li.tm_comp Vice President & Managing Director of Google, South East Asia & India
@@ -303,7 +303,7 @@ section#testimonial
           .cd-author
             ul.cd-author-info
               li
-                = image_tag 'testimonials/philip_a_min.png'
+                img data-src='#{image_url 'testimonials/philip_a_min.png'}'
               li.tm_name
                 span Philip A. Min
               li.tm_comp United States Consul General, Chennai
@@ -319,7 +319,7 @@ section#testimonial
           .cd-author
             ul.cd-author-info
               li
-                = image_tag 'testimonials/krithiga_reddy.png'
+                img data-src='#{image_url 'testimonials/krithiga_reddy.png'}'
               li.tm_name
                 span Krithiga Reddy
               li.tm_comp Director of Online Operations and Head of Office, Facebook India
@@ -333,7 +333,7 @@ section#testimonial
           .cd-author
             ul.cd-author-info
               li
-                = image_tag 'testimonials/chakrapani_g_k.png'
+                img data-src='#{image_url 'testimonials/chakrapani_g_k.png'}'
               li.tm_name
                 span Chakrapani G. K.
               li.tm_comp Head, Microsoft Consumer Channel Group
@@ -349,7 +349,7 @@ section#testimonial
           .cd-author
             ul.cd-author-info
               li
-                = image_tag 'testimonials/nishant_rao.png'
+                img data-src='#{image_url 'testimonials/nishant_rao.png'}'
               li.tm_name
                 span Nishant Rao
               li.tm_comp Country Manager, LinkedIn India & Chairman, IAMAI
@@ -369,7 +369,7 @@ section#testimonial
     .modal-content
       .modal-header style="display:none"
       .modal-body
-        = image_tag 'landing/showcase/showcased_timelines/finrobotics.jpg', class: 'img-responsive'
+        img.img-responsive data-src='#{image_url 'landing/showcase/showcased_timelines/finrobotics.jpg'}'
       .modal-footer style="display:none"
 
 .modal.fade#reckone-popup role="dialog"
@@ -377,7 +377,7 @@ section#testimonial
     .modal-content
       .modal-header style="display:none"
       .modal-body
-        = image_tag 'landing/showcase/showcased_timelines/reckone.jpg', class: 'img-responsive'
+        img.img-responsive data-src='#{image_url 'landing/showcase/showcased_timelines/reckone.jpg'}'
       .modal-footer style="display:none"
 
 .modal.fade#profoundis-popup role="dialog"
@@ -385,7 +385,7 @@ section#testimonial
     .modal-content
       .modal-header style="display:none"
       .modal-body
-        = image_tag 'landing/showcase/showcased_timelines/profoundis.jpg', class: 'img-responsive'
+        img.img-responsive data-src='#{image_url 'landing/showcase/showcased_timelines/profoundis.jpg'}'
       .modal-footer style="display:none"
 
 .modal.fade#mindhelix-popup role="dialog"
@@ -393,7 +393,7 @@ section#testimonial
     .modal-content
       .modal-header style="display:none"
       .modal-body
-        = image_tag 'landing/showcase/showcased_timelines/mindhelix.jpg', class: 'img-responsive'
+        img.img-responsive data-src='#{image_url 'landing/showcase/showcased_timelines/mindhelix.jpg'}'
       .modal-footer style="display:none"
 
 .modal.fade#wowmakers-popup role="dialog"
@@ -401,7 +401,7 @@ section#testimonial
     .modal-content
       .modal-header style="display:none"
       .modal-body
-        = image_tag 'landing/showcase/showcased_timelines/wowmakers.jpg', class: 'img-responsive'
+        img.img-responsive data-src='#{image_url 'landing/showcase/showcased_timelines/wowmakers.jpg'}'
       .modal-footer style="display:none"
 
 .modal.fade#nwplyng-popup role="dialog"
@@ -417,5 +417,5 @@ section#testimonial
     .modal-content
       .modal-header style="display:none"
       .modal-body
-        = image_tag 'landing/showcase/showcased_timelines/sharan.jpg', class: 'img-responsive'
+        img.img-responsive data-src='#{image_url 'landing/showcase/showcased_timelines/sharan.jpg'}'
       .modal-footer style="display:none"

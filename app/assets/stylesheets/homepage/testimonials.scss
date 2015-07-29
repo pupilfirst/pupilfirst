@@ -24,28 +24,20 @@ section#testimonials {
           justify-content: center;
         }
 
-        .quote-author-image {
-          margin: 10px auto;
-
-        }
+        .quote-author-image { margin: 10px auto; }
 
         .quote-text {
           font-size: 18px;
           line-height: 30px;
 
-          &:before {
+          &:before, &:after {
             font-size: 25px;
             font-weight: 500;
             color: #00ce78;
-            content: '\201C';
           }
 
-          &:after {
-            font-size: 25px;
-            font-weight: 500;
-            color: #00ce78;
-            content: '\201D';
-          }
+          &:before { content: '\201C'; }
+          &:after { content: '\201D'; }
         }
 
         .quote-author-name {

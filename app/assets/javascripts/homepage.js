@@ -165,12 +165,20 @@ var pauseVideoWithId = function (videoId){
   iframe.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
 };
 
+// var lazyloadmodalimages = function(){
+//   $('#nwplyng-popup').on('shown.bs.modal', function (e) {
+//     console.log('popup shown');
+//     $("#nwplyng-timeline-img").lazyLoadXT();
+//   });
+// };
+
 $(document).ready(swapSuccessStories);
 $(document).ready(startupsShowcaseSlide);
 $(document).ready(storiesSlide);
 $(document).ready(mediaShowcaseSlide);
 $(document).ready(prepareTestimonials);
 $(document).ready(loadBlogPosts);
+// $(document).ready(lazyloadmodalimages);
 
 $(document).ready(function() {
   [].slice.call(document.querySelectorAll('.carousel-indicators > ol')).forEach(function(nav) {

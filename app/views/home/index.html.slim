@@ -33,10 +33,14 @@ section#stages
         #stage_imgs
           center
             = image_tag 'stage1.png', id: 'stage_img1', class: 'img-responsive'
-            = image_tag 'stage2.png', id: 'stage_img2', class: 'img-responsive'
-            = image_tag 'stage3.png', id: 'stage_img3', class: 'img-responsive'
-            = image_tag 'stage4.png', id: 'stage_img4', class: 'img-responsive'
-            = image_tag 'stage5.png', id: 'stage_img5', class: 'img-responsive'
+            img.img-responsive#stage_img2 data-src='#{image_url 'stage2.png'}'
+            img.img-responsive#stage_img3 data-src='#{image_url 'stage3.png'}'
+            img.img-responsive#stage_img4 data-src='#{image_url 'stage4.png'}'
+            img.img-responsive#stage_img5 data-src='#{image_url 'stage5.png'}'
+            / = image_tag 'stage2.png', id: 'stage_img2', class: 'img-responsive'
+            / = image_tag 'stage3.png', id: 'stage_img3', class: 'img-responsive'
+            / = image_tag 'stage4.png', id: 'stage_img4', class: 'img-responsive'
+            / = image_tag 'stage5.png', id: 'stage_img5', class: 'img-responsive'
         br
         br
         div
@@ -251,7 +255,8 @@ section#showcase
             - @featured_startups.each do |startup|
               a.col-sm-3.liste href="#{startup_url(startup)}"
                 span.center-helper
-                = image_tag "#{startup.logo_url}"
+                img data-src="#{startup.logo_url}"
+                / = image_tag "#{startup.logo_url}"
 
 
       .row.learnmore style="margin-top:20px;"
@@ -356,7 +361,7 @@ section#testimonial
     .modal-content
       .modal-header style="display:none"
       .modal-body
-        = image_tag 'landing/showcase/showcased_timelines/itravel.jpg', class: 'img-responsive'
+        img.img-responsive#itraveller-timeline-img data-src='#{image_url 'landing/showcase/showcased_timelines/itravel.jpg'}'
       .modal-footer style="display:none"
 
 .modal.fade#fin-popup role="dialog"
@@ -404,7 +409,7 @@ section#testimonial
     .modal-content
       .modal-header style="display:none"
       .modal-body
-        = image_tag 'landing/showcase/showcased_timelines/nwplyng.jpg', class: 'img-responsive'
+        img#nwplyng-timeline-img.img-responsive data-src='#{image_url 'landing/showcase/showcased_timelines/nwplyng.jpg'}'
       .modal-footer style="display:none"
 
 .modal.fade#sharan-popup role="dialog"

@@ -50,7 +50,6 @@ gem 'font-awesome-sass', '~> 4.3.0' # Icons from font-awesome!
 gem 'unobtrusive_flash', github: 'mobmewireless/unobtrusive_flash', branch: 'master'
 
 gem 'friendly_id' # Slugs for links. http://norman.github.io/friendly_id
-gem 'flexslider', :git => 'https://github.com/constantm/Flexslider-2-Rails-Gem.git' # Flexslider on homepage.
 
 # Rails assets!
 source 'https://rails-assets.org' do

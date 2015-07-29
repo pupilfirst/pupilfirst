@@ -1,0 +1,80 @@
+section#testimonials
+  .container
+    #testimonials-carousel.carousel.slide data-ride='carousel'
+      / Indicators
+      ol.carousel-indicators
+        li.active data-target="#testimonials-carousel" data-slide-to="0"
+        li data-target="#testimonials-carousel" data-slide-to="1"
+        li data-target="#testimonials-carousel" data-slide-to="2"
+        li data-target="#testimonials-carousel" data-slide-to="3"
+        li data-target="#testimonials-carousel" data-slide-to="4"
+        li data-target="#testimonials-carousel" data-slide-to="5"
+
+      .carousel-inner role='listbox'
+        .item.active
+          .item-flex-center
+            div
+              .quote-text Awesome place &amp; great ideas with terrific people.
+              = image_tag 'testimonials/richard_verma.png', class: 'quote-author-image'
+              .quote-author-name Richard Verma
+              .quote-author-title United States Ambassador to India
+        .item
+          .item-flex-center
+            div
+              .quote-text
+                | Changing India! Amazed to see Startup Village. What impressed me is two things:
+                br
+                | 1. How young the founders are. 2. The variety in startups.
+              = image_tag 'testimonials/rajan_anandan.png', class: 'quote-author-image'
+              .quote-author-name Rajan Anandan
+              .quote-author-title Vice President & Managing Director of Google, South East Asia & India
+        .item
+          .item-flex-center
+            div
+              .quote-text Truly Incredible. Continue to Create, Inspire &amp; Lead the world!
+              = image_tag 'testimonials/philip_a_min.png', class: 'quote-author-image'
+              .quote-author-name Philip A. Min
+              .quote-author-title United States Consul General, Chennai
+        .item
+          .item-flex-center
+            div
+              .quote-text
+                | I think Startup Village is phenomenal.
+                br
+                | When we have the next billion dollar company from India,
+                br
+                | we will look back to the seats that started at Startup Village.
+              = image_tag 'testimonials/krithiga_reddy.png', class: 'quote-author-image'
+              .quote-author-name Krithiga Reddy
+              .quote-author-title Director of Online Operations and Head of Office, Facebook India
+        .item
+          .item-flex-center
+            div
+              .quote-text
+                | What an awesome experience! The passion from people, young entrepreneurs...
+                br
+                | The real Silicon Valley in the making.
+              = image_tag 'testimonials/chakrapani_g_k.png', class: 'quote-author-image'
+              .quote-author-name Chakrapani G. K.
+              .quote-author-title Head, Microsoft Consumer Channel Group
+        .item
+          .item-flex-center
+            div
+              .quote-text
+                | Lots of passion... lots of energy.
+                br
+                | What I really loved is the diversity of ideas
+                br
+                | and trying to curate that kind of an ecosystem is a fantastic idea.
+              = image_tag 'testimonials/nishant_rao.png', class: 'quote-author-image'
+              .quote-author-name Nishant Rao
+              .quote-author-title Country Manager, LinkedIn India & Chairman, IAMAI
+
+      / Controls
+      a.left.carousel-control href="#testimonials-carousel" role="button" data-slide="prev"
+        span.glyphicon.glyphicon-chevron-left aria-hidden="true"
+        span.sr-only Previous
+
+      a.right.carousel-control href="#testimonials-carousel" role="button" data-slide="next"
+        span.glyphicon.glyphicon-chevron-right aria-hidden="true"
+        span.sr-only Next

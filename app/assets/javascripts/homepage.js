@@ -23,7 +23,7 @@ var loadBlogPosts = function() {
       postClone.removeAttr('id');
 
       // Add post title, image, content and link.
-      postClone.find('.blog-post-image').attr('src', post.thumbnail_images.full.url);
+      postClone.find('.blog-post-image').attr('data-src', post.thumbnail_images.full.url);
       postClone.find('.blog-post-title').html(post.title_plain);
 
       // Reduce length of post content if title is long.

@@ -23,7 +23,7 @@ var loadBlogPosts = function() {
       postClone.removeAttr('id');
 
       // Add post title, image, content and link.
-      postClone.find('.blog-post-image').attr('data-src', post.thumbnail_images.full.url);
+      postClone.find('.blog-post-image').attr('src', post.thumbnail_images.full.url);
       postClone.find('.blog-post-title').html(post.title_plain);
 
       // Reduce length of post content if title is long.
@@ -148,16 +148,19 @@ var pauseVideoWithId = function (videoId){
   iframe.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
 };
 
-// var lazyloadmodalimages = function(){
-//   $('#nwplyng-popup').on('shown.bs.modal', function (e) {
-//     console.log('popup shown');
-//     $("#nwplyng-timeline-img").lazyLoadXT();
-//   });
-// };
-
 $(document).ready(swapSuccessStories);
 $(document).ready(startupsShowcaseSlide);
 $(document).ready(storiesSlide);
 $(document).ready(mediaShowcaseSlide);
 $(document).ready(loadBlogPosts);
-// $(document).ready(lazyloadmodalimages);
+
+$(document).ready(function() {
+  [].slice.call(document.querySelectorAll('.carousel-indicators > ol')).forEach(function(nav) {
+    new DotNav(nav, {
+      callback : function( idx ) {
+        //console.log( idx )
+      }
+    });
+  });
+});
+

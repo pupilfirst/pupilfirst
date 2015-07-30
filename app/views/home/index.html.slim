@@ -33,14 +33,10 @@ section#stages
         #stage_imgs
           center
             = image_tag 'stage1.png', id: 'stage_img1', class: 'img-responsive'
-            img.img-responsive#stage_img2 data-src='#{image_url 'stage2.png'}'
-            img.img-responsive#stage_img3 data-src='#{image_url 'stage3.png'}'
-            img.img-responsive#stage_img4 data-src='#{image_url 'stage4.png'}'
-            img.img-responsive#stage_img5 data-src='#{image_url 'stage5.png'}'
-            / = image_tag 'stage2.png', id: 'stage_img2', class: 'img-responsive'
-            / = image_tag 'stage3.png', id: 'stage_img3', class: 'img-responsive'
-            / = image_tag 'stage4.png', id: 'stage_img4', class: 'img-responsive'
-            / = image_tag 'stage5.png', id: 'stage_img5', class: 'img-responsive'
+            = image_tag 'stage2.png', id: 'stage_img2', class: 'img-responsive'
+            = image_tag 'stage3.png', id: 'stage_img3', class: 'img-responsive'
+            = image_tag 'stage4.png', id: 'stage_img4', class: 'img-responsive'
+            = image_tag 'stage5.png', id: 'stage_img5', class: 'img-responsive'
         br
         br
         div
@@ -78,7 +74,7 @@ section#showcase
       .showcase-heading
         .col-md-6.success
           h1 Success Scenarios
-          img data-src='#{image_url 'line.jpg'}'
+          = image_tag 'line.jpg'
           br
           p
             | At Startup Village, we believe that everyone living today has the opportunity to explore human life's fullest potential. We believe that when small groups of young people share a dream and attempt to change the world, a lot of exciting new doors are opened for them. There are six different paths for your future that are possible once you begin your startup journey through Startup Village:
@@ -147,16 +143,16 @@ section#showcase
           .showcase-stories#get-funded-stories
             .stories-carousel.owl-carousel
               div#iTraveller-story
-                iframe.embedded-video.showcase-company data-src="https://www.youtube.com/embed/KufIL6ZS1lk?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
+                iframe.embedded-video.showcase-company src="https://www.youtube.com/embed/KufIL6ZS1lk?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
                 div.story-description
                   ' Shiju Radhakrishnan of <em>iTraveller</em>, Rohildev NV of <em>Fin</em> and Juhaim Ibnu Abdul Jabbar of <em>Rickone</em> share their stories about getting funded.
-                img.showcase_logo.img-responsive#abcde data-src='#{image_url 'landing/showcase/showcased_logos/itraveller_logo.png'}'
+                = image_tag 'landing/showcase/showcased_logos/itraveller_logo.png', class: 'showcase_logo img-responsive'
                 a.view data-toggle="modal" href="#itraveller-popup"
                   = image_tag 'view.png'
                   |  View the iTraveler Story
 
               div#fin-story
-                iframe.embedded-video.showcase-company data-src="https://www.youtube.com/embed/QmavQDI3SV4?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
+                iframe.embedded-video.showcase-company src="https://www.youtube.com/embed/QmavQDI3SV4?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
                 div.story-description
                   ' Shiju Radhakrishnan of <em>iTraveller</em>, Rohildev NV of <em>Fin</em> and Juhaim Ibnu Abdul Jabbar of <em>Rickone</em> share their stories about getting funded.
                 = image_tag 'landing/showcase/showcased_logos/finrobotics_logo.png', class: 'showcase_logo img-responsive'
@@ -165,7 +161,7 @@ section#showcase
                   |  View the Fin Robotics Story
 
               div#reckone-story
-                iframe.embedded-video.showcase-company data-src="https://www.youtube.com/embed/ljwxLrSpcFM?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
+                iframe.embedded-video.showcase-company src="https://www.youtube.com/embed/ljwxLrSpcFM?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
                 div.story-description
                   ' Shiju Radhakrishnan of <em>iTraveller</em>, Rohildev NV of <em>Fin</em> and Juhaim Ibnu Abdul Jabbar of <em>Rickone</em> share their stories about getting funded.
                 = image_tag 'landing/showcase/showcased_logos/reckone_logo.png', class: 'showcase_logo img-responsive'
@@ -176,7 +172,7 @@ section#showcase
           .showcase-stories#accelerator-stories
             .stories-carousel.owl-carousel
               div#profoundis-story
-                iframe.embedded-video.showcase-company data-src="https://www.youtube.com/embed/vjDdSdfitKY?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
+                iframe.embedded-video.showcase-company src="https://www.youtube.com/embed/vjDdSdfitKY?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
                 div.story-description
                   ' <em>Profoundis</em> co-founder Joffin Joseph talks about their awesome product Vibe and selection into the Microsoft startup accelerator.
                 = image_tag 'landing/showcase/showcased_logos/profoundis_logo.png', class: 'showcase_logo img-responsive'
@@ -187,7 +183,7 @@ section#showcase
           .showcase-stories#get-hired-stories
             .stories-carousel.owl-carousel
               div#Mindhelix-story
-                iframe.embedded-video.showcase-company data-src="https://www.youtube.com/embed/bgjwCh56qUU?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
+                iframe.embedded-video.showcase-company src="https://www.youtube.com/embed/bgjwCh56qUU?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
                 div.story-description
                   ' Kalidas who founded <em>Mindhelix</em> talks about exciting adventures and learning from the many product iterations he went through and how his team finally got acquired by ASKME.COM.
                 = image_tag 'landing/showcase/showcased_logos/mindhelix_logo.png', class: 'showcase_logo img-responsive'
@@ -198,7 +194,7 @@ section#showcase
           .showcase-stories#self-sustain-stories
             .stories-carousel.owl-carousel
               div#wowmakers-story
-                iframe.embedded-video.showcase-company data-src="https://www.youtube.com/embed/R8LhGtoeaUc?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
+                iframe.embedded-video.showcase-company src="https://www.youtube.com/embed/R8LhGtoeaUc?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
                 div.story-description
                   ' <em>Wowmakers</em> co-founder Vivek Raghavan talks about how his design startup became cash-positive and funded his awesome experiment in creating a product called Crowdstudio.
                 = image_tag 'landing/showcase/showcased_logos/wowmakers_logo.png', class: 'showcase_logo img-responsive'
@@ -236,7 +232,7 @@ section#showcase
           .col-md-12.lista
             .col-md-6.lista-heading
               h1 Startups
-              img data-src='#{image_url 'line.jpg'}'
+              = image_tag 'line.jpg'
               p
                 ' At Startup Village, our community is rich and vibrant with exciting startups who are trying to change the world in many different areas. For our launch, we're presenting <em>verified timelines</em> of selected startups who we've helped through the years.
             .col-md-6
@@ -247,7 +243,7 @@ section#showcase
                 - if @featured_startups.present? && @featured_startups.count > 1
                   - @featured_startups.each do |startup|
                     .item
-                      img data-src='#{startup.logo_url}'
+                      = image_tag "#{startup.logo_url}"
       br
       .row
         .short-list
@@ -255,16 +251,16 @@ section#showcase
             - @featured_startups.each do |startup|
               a.col-sm-3.liste href="#{startup_url(startup)}"
                 span.center-helper
-                img data-src="#{startup.logo_url}"
-
+                = image_tag "#{startup.logo_url}"
 
 
       .row.learnmore style="margin-top:20px;"
         = link_to 'VIEW OUR FULL LIST OF VERIFIED STARTUPS', startups_url
         | &nbsp;
-        img.img-animation data-src='#{image_url 'cont.png'}'
+        = image_tag 'cont.png', class: 'img-animation'
 
 == render 'testimonials'
+
 == render 'blog_posts'
 
 .modal.fade#itraveller-popup role="dialog"
@@ -272,7 +268,7 @@ section#showcase
     .modal-content
       .modal-header style="display:none"
       .modal-body
-        img.img-responsive#itraveller-timeline-img data-src='#{image_url 'landing/showcase/showcased_timelines/itravel.jpg'}'
+        = image_tag 'landing/showcase/showcased_timelines/itravel.jpg', class: 'img-responsive'
       .modal-footer style="display:none"
 
 .modal.fade#fin-popup role="dialog"
@@ -280,7 +276,7 @@ section#showcase
     .modal-content
       .modal-header style="display:none"
       .modal-body
-        img.img-responsive data-src='#{image_url 'landing/showcase/showcased_timelines/finrobotics.jpg'}'
+        = image_tag 'landing/showcase/showcased_timelines/finrobotics.jpg', class: 'img-responsive'
       .modal-footer style="display:none"
 
 .modal.fade#reckone-popup role="dialog"
@@ -288,7 +284,7 @@ section#showcase
     .modal-content
       .modal-header style="display:none"
       .modal-body
-        img.img-responsive data-src='#{image_url 'landing/showcase/showcased_timelines/reckone.jpg'}'
+        = image_tag 'landing/showcase/showcased_timelines/reckone.jpg', class: 'img-responsive'
       .modal-footer style="display:none"
 
 .modal.fade#profoundis-popup role="dialog"
@@ -296,7 +292,7 @@ section#showcase
     .modal-content
       .modal-header style="display:none"
       .modal-body
-        img.img-responsive data-src='#{image_url 'landing/showcase/showcased_timelines/profoundis.jpg'}'
+        = image_tag 'landing/showcase/showcased_timelines/profoundis.jpg', class: 'img-responsive'
       .modal-footer style="display:none"
 
 .modal.fade#mindhelix-popup role="dialog"
@@ -304,7 +300,7 @@ section#showcase
     .modal-content
       .modal-header style="display:none"
       .modal-body
-        img.img-responsive data-src='#{image_url 'landing/showcase/showcased_timelines/mindhelix.jpg'}'
+        = image_tag 'landing/showcase/showcased_timelines/mindhelix.jpg', class: 'img-responsive'
       .modal-footer style="display:none"
 
 .modal.fade#wowmakers-popup role="dialog"
@@ -312,7 +308,7 @@ section#showcase
     .modal-content
       .modal-header style="display:none"
       .modal-body
-        img.img-responsive data-src='#{image_url 'landing/showcase/showcased_timelines/wowmakers.jpg'}'
+        = image_tag 'landing/showcase/showcased_timelines/wowmakers.jpg', class: 'img-responsive'
       .modal-footer style="display:none"
 
 .modal.fade#nwplyng-popup role="dialog"
@@ -320,7 +316,7 @@ section#showcase
     .modal-content
       .modal-header style="display:none"
       .modal-body
-        img#nwplyng-timeline-img.img-responsive data-src='#{image_url 'landing/showcase/showcased_timelines/nwplyng.jpg'}'
+        = image_tag 'landing/showcase/showcased_timelines/nwplyng.jpg', class: 'img-responsive'
       .modal-footer style="display:none"
 
 .modal.fade#sharan-popup role="dialog"
@@ -328,5 +324,5 @@ section#showcase
     .modal-content
       .modal-header style="display:none"
       .modal-body
-        img.img-responsive data-src='#{image_url 'landing/showcase/showcased_timelines/sharan.jpg'}'
+        = image_tag 'landing/showcase/showcased_timelines/sharan.jpg', class: 'img-responsive'
       .modal-footer style="display:none"

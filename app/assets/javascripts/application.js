@@ -16,4 +16,3 @@
 //= require navbar
 //= require_tree ./startups
 //= require incubation
-//= require jquery.lazyloadxt.extra.min.js

@@ -1,0 +1,83 @@
+section#showcase-new
+  .container
+    h1 Six Ways to Graduate!
+    ul.nav.nav-tabs
+      li.active role="presentation"
+        a.tab-title href="#showcase-get-funded" aria-controls="get-funded" role="tab" data-toggle="tab" Get funded
+      li role="presentation"
+        a.tab-title href="#join-startup-accelerator" aria-controls="join-startup-accelerator" role="tab" data-toggle="tab" Join a Startup Accelerator
+      li role="presentation"
+        a.tab-title href="#get-aqui-hired" aria-controls="get-aqui-hired" role="tab" data-toggle="tab" Get Acqui-Hired
+      li role="presentation"
+        a.tab-title href="#become-self-sustainable" aria-controls="become-self-sustainable" role="tab" data-toggle="tab" Become Self Sustainable
+      li role="presentation"
+        a.tab-title href="#get-a-job" aria-controls="get-a-job" role="tab" data-toggle="tab" Get a Job
+      li role="presentation"
+        a.tab-title href="#go-for-higher-education" aria-controls="go-for-higher-education" role="tab" data-toggle="tab" Go for Higher Education
+
+    .tab-content
+      .tab-pane.active#showcase-get-funded role="tabpanel"
+        .container
+          .row
+            = render partial: 'showcase_thumbnail', locals: { name: "Shiju Radhakrishnan", startup: "iTraveller",  description: "Shiju Radhakrishnan of <em>iTraveller</em> talks about how his company raised funding and built a great team.", video: "https://www.youtube.com/embed/KufIL6ZS1lk?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" }
+            = render partial: 'showcase_thumbnail', locals: { name: "Rohildev NV", startup: "Fin Robotics",  description: "Rohildev NV of <em>Fin</em> speaks convincingly of building a hardware startup out of India and raising funding.", video: "https://www.youtube.com/embed/QmavQDI3SV4?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" }
+            = render partial: 'showcase_thumbnail', locals: { name: "Juhaim Ibnu Abdul Jabbar", startup: "Reckone",  description: "Juhaim Ibnu Abdul Jabbar of <em>Reckone</em> talks about how his company raised funding and built a great team.", video: "https://www.youtube.com/embed/ljwxLrSpcFM?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" }
+          
+      .tab-pane#join-startup-accelerator role="tabpanel"
+        .container
+          .row
+            = render partial: 'showcase_thumbnail', locals: { name: "Jofin Joseph", startup: "Profoundis",  description: "<em>Profoundis</em> co-founder Jofin Joseph talks about their awesome product Vibe and selection into the Microsoft startup accelerator.", video: "https://www.youtube.com/embed/vjDdSdfitKY?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" }
+            = render partial: 'showcase_thumbnail', locals: { more: true }
+
+      .tab-pane#get-aqui-hired role="tabpanel"
+        .container
+          .row
+            = render partial: 'showcase_thumbnail', locals: { name: "Kallidil Kalidasan", startup: "Mindhelix",  description: "Kalidas who founded <em>Mindhelix</em> talks about exciting adventures and learning from the many product iterations he went through and how his team finally got acquired by ASKME.COM.", video: "https://www.youtube.com/embed/bgjwCh56qUU?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1"}
+            = render partial: 'showcase_thumbnail', locals: { more: true }
+          
+      .tab-pane#become-self-sustainable role="tabpanel"
+        .container
+          .row
+            = render partial: 'showcase_thumbnail', locals: { name: "Vivek Raghavan", startup: "Wowmakers",  description: "<em>Wowmakers</em> co-founder Vivek Raghavan talks about how his design startup became cash-positive and funded his awesome experiment in creating a product called Crowdstudio.", video: "https://www.youtube.com/embed/R8LhGtoeaUc?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" }
+            = render partial: 'showcase_thumbnail', locals: { more: true }
+
+      .tab-pane#get-a-job role="tabpanel"
+        .container
+          .row
+            = render partial: 'showcase_thumbnail', locals: { name: "Utsav Agarwal", startup: "nwplyng",  description: "Utsav Aggarwal was hired by Uber because of the skills he acquired while building his startup <em>nwplyng</em>. Best MBA ever!" }
+            = render partial: 'showcase_thumbnail', locals: { more: true }
+
+      .tab-pane#go-for-higher-education role="tabpanel"
+        .container
+          .row
+            = render partial: 'showcase_thumbnail', locals: { name: "Sharan Thampi", startup: "Tiny Mail",  description: "Sharan Thampi of <em>Tiny Mail</em> shares his rollercoaster startup ride from a college class room to finally a great admission for M.Sc in Business and Finance at Birmingham, UK." }
+            = render partial: 'showcase_thumbnail', locals: { more: true }
+            
+      /The modal to play video
+      #showcase-video.modal.fade
+        .modal-dialog
+          .modal-content
+            .modal-header
+              button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                span aria-hidden="true" &times;
+              h4 class="modal-title" Graduation
+            .modal-body
+              .embed-responsive.embed-responsive-16by9
+                iframe src="" frameborder="0" allowfullscreen="allowfullscreen"
+            .modal-footer
+              button type="button" class="btn btn-default" data-dismiss="modal" Close
+              
+      /The modal to view timelines
+      #showcase-timeline.modal.fade
+        .modal-dialog
+          .modal-content
+            .modal-header
+              button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                span aria-hidden="true" &times;
+              h4 class="modal-title" Graduation Story
+            .modal-body
+                img.img-responsive src=""
+            .modal-footer
+              button type="button" class="btn btn-default" data-dismiss="modal" Close
+      
+

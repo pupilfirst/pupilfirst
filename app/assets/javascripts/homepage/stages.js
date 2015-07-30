@@ -13,7 +13,7 @@ var navigateStagesAndLearning = function() {
     // Change the stage description.
     var stageDescription = $(this).data('description');
     $('p#stage-description').fadeOut(500, function() {
-      $(this).text(stageDescription).fadeIn(500);
+      $(this).html(stageDescription).fadeIn(500);
     });
   });
 };

@@ -26,6 +26,18 @@ var showcaseEmbeds = function() {
     var modal = $(this);
     modal.find('.modal-body img').attr('src', '');
   })
+  
+  //Make the thumbnails trigger the right modal
+  $('.showcase-activate').on('click', function(event) {
+    var video = $(this).parent('.thumbnail').find('.showcase-video-trigger');
+    var timeline = $(this).parent('.thumbnail').find('.showcase-timeline-trigger');
+    if(video.length) {
+      video.click();
+    } else {
+      timeline.click();
+    }
+    return false;
+  })
 }
 
 $(document).ready(showcaseEmbeds);

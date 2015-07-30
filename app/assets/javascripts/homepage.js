@@ -153,3 +153,14 @@ $(document).ready(startupsShowcaseSlide);
 $(document).ready(storiesSlide);
 $(document).ready(mediaShowcaseSlide);
 $(document).ready(loadBlogPosts);
+
+$(document).ready(function() {
+  [].slice.call(document.querySelectorAll('.carousel-indicators > ol')).forEach(function(nav) {
+    new DotNav(nav, {
+      callback : function( idx ) {
+        //console.log( idx )
+      }
+    });
+  });
+});
+

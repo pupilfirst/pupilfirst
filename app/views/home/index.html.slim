@@ -24,46 +24,11 @@
 / Stages and learning.
 == render 'stages'
 
-/ Success Scenarios.
+/ Six Ways to Graduate!
 == render 'showcase'
 
-/ Startups showcase.
-- if feature_active?("startups")
-  section#companies
-    #startups-showcase-data.hidden data-arrow-right-url="#{image_url 'arrow2_r.png'}" data-arrow-left-url="#{image_url 'arrow2_l.png'}"
-    .container
-      .row
-        .company-details
-          .col-md-12.lista
-            .col-md-6.lista-heading
-              h1 Startups
-              = image_tag 'line.jpg'
-              p
-                ' At Startup Village, our community is rich and vibrant with exciting startups who are trying to change the world in many different areas. For our launch, we're presenting <em>verified timelines</em> of selected startups who we've helped through the years.
-            .col-md-6
-              br
-              br
-              br
-              #owl-demo1.owl-carousel.owl-theme
-                - if @featured_startups.present? && @featured_startups.count > 1
-                  - @featured_startups.each do |startup|
-                    .item
-                      = image_tag "#{startup.logo_url}"
-      br
-      .row
-        .short-list
-          - if @featured_startups.present?
-            - @featured_startups.each do |startup|
-              a.col-sm-3.liste href="#{startup_url(startup)}"
-                span.center-helper
-                = image_tag "#{startup.logo_url}"
-
-
-      .row.learnmore style="margin-top:20px;"
-        = link_to 'VIEW OUR FULL LIST OF VERIFIED STARTUPS', startups_url
-        | &nbsp;
-        = image_tag 'cont.png', class: 'img-animation'
-
+/ Testimonials
 == render 'testimonials'
 
+/ Blog Posts
 == render 'blog_posts'

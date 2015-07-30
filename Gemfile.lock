@@ -40,13 +40,6 @@ GIT
     datetimepicker-rails (4.7.16)
       momentjs-rails (>= 2.9.0)
 
-GIT
-  remote: https://github.com/constantm/Flexslider-2-Rails-Gem.git
-  revision: 3a87fd2250bc60659b0a3c494bb5a246d3b85395
-  specs:
-    flexslider (2.2.0)
-      sass-rails (>= 3.1.0)
-
 GEM
   remote: https://rubygems.org/
   remote: https://rails-assets.org/
@@ -521,7 +514,6 @@ DEPENDENCIES
   factory_girl
   factory_girl_rails (~> 4.0)
   faker
-  flexslider!
   fog
   font-awesome-sass (~> 4.3.0)
   friendly_id

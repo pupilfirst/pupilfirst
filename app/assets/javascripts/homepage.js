@@ -1,8 +1,8 @@
-//= require jquery.flexslider
 //= require owl-carousel/owl.carousel
 //= require ct-carousel/masonry.pkgd.min
 //= require icon/modernizr.custom
-//= require homepage/stages
+
+//= require_tree ./homepage
 
 function stripHTML(dirtyString) {
   var container = document.createElement('div');
@@ -89,23 +89,6 @@ var mediaShowcaseSlide = function() {
   });
 };
 
-var prepareTestimonials = function() {
-  //create the slider
-  $('.cd-testimonials-wrapper').flexslider({
-    selector: ".cd-testimonials > li",
-    //animation: "slide",
-    controlNav: false,
-    //slideshow: false,
-    //smoothHeight: true,
-    //start: function(){
-    //  $('.cd-testimonials').children('li').css({
-    //    'opacity': 1,
-    //    'position': 'relative'
-    //  });
-    //}
-  });
-};
-
 // Function to swap success stories for different success scenarios
 var swapSuccessStories = function(){
   $('.showcase-stories').hide();
@@ -176,16 +159,5 @@ $(document).ready(swapSuccessStories);
 $(document).ready(startupsShowcaseSlide);
 $(document).ready(storiesSlide);
 $(document).ready(mediaShowcaseSlide);
-$(document).ready(prepareTestimonials);
 $(document).ready(loadBlogPosts);
 // $(document).ready(lazyloadmodalimages);
-
-$(document).ready(function() {
-  [].slice.call(document.querySelectorAll('.carousel-indicators > ol')).forEach(function(nav) {
-    new DotNav(nav, {
-      callback : function( idx ) {
-        //console.log( idx )
-      }
-    });
-  });
-});

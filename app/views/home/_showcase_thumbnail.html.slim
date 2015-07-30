@@ -13,5 +13,5 @@
         = description.html_safe
       p
         - if defined? video
-          a href="#{video}" class="btn btn-primary" Watch Video
-        a href="landing/showcase/timelines/#{startup.gsub(/\s+/, '').downcase}.png" class="btn btn-default" See Timeline
+          button class="btn btn-primary" data-toggle="modal" data-target="#showcase-video" data-video="#{video}" data-title="#{startup} Graduation" Watch Video
+        button data-toggle="modal" data-target="#showcase-timeline" data-timeline="#{ image_path "landing/showcase/timelines/#{startup.gsub(/\s+/, '').downcase}.jpg" }" data-title="Graduation Story of #{startup}" class="btn btn-default" See Timeline

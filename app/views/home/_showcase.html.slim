@@ -34,7 +34,7 @@ section#showcase-new
           .row
             = render partial: 'showcase_thumbnail', locals: { name: "Kallidil Kalidasan", startup: "Mindhelix",  description: "Kallidil Kalidas who founded <em>Mindhelix</em> talks about exciting adventures and learning from the many product iterations he went through and how his team finally got acquired by ASKME.COM.", video: "https://www.youtube.com/embed/bgjwCh56qUU?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1"}
             = render partial: 'showcase_thumbnail', locals: { more: true }
-          
+
       .tab-pane#become-self-sustainable role="tabpanel"
         .container
           .row
@@ -52,7 +52,7 @@ section#showcase-new
           .row
             = render partial: 'showcase_thumbnail', locals: { name: "Sharan Thampi", startup: "Tiny Mail",  description: "Sharan Thampi of <em>Tiny Mail</em> shares his rollercoaster startup ride from a college class room to a great admission for M.Sc in Business and Finance at Birmingham, UK." }
             = render partial: 'showcase_thumbnail', locals: { more: true }
-            
+
       /The modal to play video
       #showcase-video.modal.fade
         .modal-dialog
@@ -66,10 +66,10 @@ section#showcase-new
                 iframe src="" frameborder="0" allowfullscreen="allowfullscreen"
             .modal-footer
               button type="button" class="btn btn-default" data-dismiss="modal" Close
-              
+
       /The modal to view timelines
       #showcase-timeline.modal.fade
-        .modal-dialog
+        .modal-dialog.modal-lg
           .modal-content
             .modal-header
               button type="button" class="close" data-dismiss="modal" aria-label="Close"
@@ -79,5 +79,5 @@ section#showcase-new
                 img.img-responsive src=""
             .modal-footer
               button type="button" class="btn btn-default" data-dismiss="modal" Close
-      
+
 

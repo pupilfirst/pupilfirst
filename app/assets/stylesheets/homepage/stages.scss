@@ -77,7 +77,7 @@ ol.progtrckr {
   ol.progtrckr li.active .stage_name {
     color: #005838;
     border-bottom: 1px solid #FFF; }
-  ol.progtrckr .stage_name .dimmer {
+/*  ol.progtrckr .stage_name .dimmer {
     display: block;
     position: absolute;
     right: 0;
@@ -88,7 +88,7 @@ ol.progtrckr {
     background-color: #01bf7b;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=1 );
     background: linear-gradient(left, rgba(1, 191, 123, 0) 0%, #01bf7b 56%, #01bf7b 100%);
-    content: ""; }
+    content: ""; }*/
 
 ol.progtrckr[data-progtrckr-steps="2"] li {
   width: 49%; }

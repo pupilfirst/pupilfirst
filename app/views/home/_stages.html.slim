@@ -1,7 +1,7 @@
 section#stages
   .container
     .row
-      .stages-detail style="text-align:center;"
+      .stages-detail
         h1 Stages & Learning
         p At Startup Village, we're guiding startups through five stages of creating a great startup.
         #stage_imgs
@@ -12,18 +12,18 @@ section#stages
             = image_tag 'stage4.png', id: 'stage_img4', class: 'img-responsive'
             = image_tag 'stage5.png', id: 'stage_img5', class: 'img-responsive'
         p#stage-description
-          | <strong>IDEA DISCOVERY</strong> is about discovering a product idea that solves a clear user need.
+          | At <strong>IDEA DISCOVERY</strong>, startups discover a product idea that solves a clear user need.
 
         br
         br
         div
           ol.progtrckr data-progtrckr-steps="5"
-            li.active data-description=("<strong>IDEA DISCOVERY</strong> is about discovering a product idea that solves a clear user need.")
+            li.active data-description=("At <strong>IDEA DISCOVERY</strong>, startups discover a product idea that solves a clear user need.")
               .stage_name val="img1"
                 .bbr I
                 .dimmer
               i
-            li data-description=("<strong>PROTOTYPING</strong> is where startups develop a working application that's a solution to the product idea.")
+            li data-description=("Then at <strong>PROTOTYPING</strong>, startups develop a working application that's a solution to the idea.")
               .stage_name val="img2"
                 | II
                 .dimmer
@@ -43,3 +43,5 @@ section#stages
                 | V
                 .dimmer
               i
+          a.btn.btn-flat.btn-playbook href="http://playbook.sv.co/" type="button"
+            | Read our Playbook

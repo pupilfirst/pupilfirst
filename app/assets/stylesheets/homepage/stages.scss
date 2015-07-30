@@ -26,7 +26,31 @@
     font-weight: 300;
     color: #FFF;
     font-family: 'Roboto', sans-serif;
-    opacity: .9; }
+    opacity: .9; 
+  }
+    
+  .stages-detail {
+    text-align: center;
+  }
+  
+  a.btn-playbook {
+    color: #fff;
+    width: 150px;
+    background: transparent;
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    border: solid 1px #FFF;
+    -webkit-transition: all 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75);
+    -moz-transition: all 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75);
+    -o-transition: all 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75);
+    transition: all 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75);
+    /* linear */ }
+
+  a.btn-playbook:hover {
+    background-color: white;
+    border: solid 1px white;
+    color: black; }
 }
 
 ol.progtrckr {
@@ -71,7 +95,7 @@ ol.progtrckr {
     white-space: nowrap;
     overflow-x: hidden;
     color: #08754f;
-    font-size: 13px !important;
+    font-size: 13px;
     text-transform: uppercase;
     font-weight: 500; }
   ol.progtrckr li.active .stage_name {

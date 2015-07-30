@@ -21,14 +21,10 @@ var showcaseEmbeds = function() {
     var modal = $(this);
     modal.find('.modal-title').text(title);
     modal.find('.modal-body img').attr('src', timeline);
-    modal.find('.modal-body img').on('load', function(event) {
-      modal.find('p.loading-text').hide();
-    });
   })
   $('#showcase-timeline').on('hidden.bs.modal', function(event) {
     var modal = $(this);
     modal.find('.modal-body img').attr('src', '');
-    modal.find('p.loading-text').show();
   })
   
   //Make the thumbnails trigger the right modal

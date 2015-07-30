@@ -45,6 +45,8 @@ var loadBlogPosts = function() {
   });
 };
 
+$(loadBlogPosts);
+
 //TODO: What is this for?
 $(document).ready(function() {
   [].slice.call(document.querySelectorAll('.carousel-indicators > ol')).forEach(function(nav) {

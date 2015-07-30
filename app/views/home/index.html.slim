@@ -28,8 +28,6 @@ section#stages
       .stages-detail style="text-align:center;"
         h1 Stages & Learning
         p At Startup Village, we're guiding startups through five stages of creating a great startup.
-        p#stage-description
-          | Idea Discovery is when the founders discover a product idea that solves a clear user need.
         #stage_imgs
           center
             = image_tag 'stage1.png', id: 'stage_img1', class: 'img-responsive'
@@ -37,33 +35,36 @@ section#stages
             = image_tag 'stage3.png', id: 'stage_img3', class: 'img-responsive'
             = image_tag 'stage4.png', id: 'stage_img4', class: 'img-responsive'
             = image_tag 'stage5.png', id: 'stage_img5', class: 'img-responsive'
+        p#stage-description
+          | IDEA DISCOVERY: discover a product idea that solves a clear user need.
+
         br
         br
         div
           ol.progtrckr data-progtrckr-steps="5"
-            li.active data-description=("Idea Discovery is when the founders discover a product idea that solves a clear user need.")
+            li.active data-description=("IDEA DISCOVERY: discover a product idea that solves a clear user need.")
               .stage_name val="img1"
-                .bbr IDEA DISCOVERY
+                .bbr I
                 .dimmer
               i
-            li data-description=("At the Prototyping Stage, you develop a working prototype that is a solution to your product idea.")
+            li data-description=("PROTOTYPING: develop a working prototype as a solution to the product idea.")
               .stage_name val="img2"
-                | PROTOTYPING
+                | II
                 .dimmer
               i
-            li data-description=("At the Customer Validation Stage, you find early customers who pay for your product through money or attention.")
+            li data-description=("CUSTOMER VALIDATION: find early customers who pay for the product through money or attention.")
               .stage_name val="img3"
-                | CUSTOMER VALIDATION
+                | III
                 .dimmer
               i
-            li data-description=("In the Efficiency Stage, you are finding a way to efficiently get more customers for your product that can lead to a predictable business model.")
+            li data-description=("EFFICIENCY: get more customers leading to a predictable business model.")
               .stage_name val="img4"
-                | EFFICIENCY
+                | IV
                 .dimmer
               i
-            li data-description=("In the Scaling stage, you are trying to aggressively expand and grow your startup.")
+            li data-description=("SCALING: try to aggressively expand and grow the startup.")
               .stage_name val="img5"
-                | SCALE
+                | V
                 .dimmer
               i
 

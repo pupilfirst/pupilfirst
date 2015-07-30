@@ -114,3 +114,114 @@ section.startups-category-row {
     }
   }
 }
+
+//.large-header {
+//  .carousel {
+//    position: relative;
+//    bottom: 20px;
+//  }
+//
+//  .carousel-caption {
+//    position: relative;
+//    right: 15%;
+//    bottom: 25px;
+//    left: 0%;
+//    z-index: 20;
+//    padding-top: 200px;
+//    color: #FFF;
+//    text-align: justify;
+//
+//    h4 {
+//      font-family: 'Roboto', sans-serif;
+//      font-size: 42px;
+//      font-weight: 100;
+//      line-height: 50px;
+//    }
+//    button {
+//      margin-top: 5px;
+//    }
+//  }
+//  .carousel-indicators {
+//    position: absolute;
+//    display: inline-block;
+//    bottom: 20px;
+//    left: 90%;
+//    z-index: 30;
+//    margin-left: 0px !important;
+//    width: auto;
+//    padding-left: 0px;
+//    list-style: outside none none;
+//
+//    li {
+//      border-radius: 50%;
+//      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0);
+//      transition: box-shadow 0.3s ease;
+//
+//      a {
+//        background-color: rgba(255, 255, 255, 0.7);
+//        transition: background-color 0.3s ease, transform 0.3s ease;
+//
+//        &:hover, &:focus {
+//          background-color: white;
+//        }
+//      }
+//    }
+//
+//    li.active {
+//      background-color: #fff;
+//    }
+//  }
+//}
+//
+//@media screen and (max-width: 480px) {
+//  .large-header {
+//    .carousel-indicators {
+//      left: 0px;
+//      display: block;
+//      margin: 0 auto;
+//      width: 100%;
+//      bottom: 20px;
+//    }
+//    .carousel-caption i {
+//      display: block;
+//      padding-left: 0px;
+//      margin-bottom: 10px;
+//    }
+//  }
+//}
+//
+//@media screen and (min-width: 992px) and (max-width: 1199px) {
+//  .embedded-video {
+//    height: 258px;
+//  }
+//  .caption-text-heading {
+//    margin-top: 23px;
+//  }
+//}
+//
+//@media screen and (min-width: 1200px) {
+//  .caption-text-heading {
+//    margin-top: 80px;
+//  }
+//  .embedded-video {
+//    height: 315px;
+//  }
+//}
+//
+//@media screen and (min-width: 1200px) and (max-width: 1919px) {
+//  .large-header {
+//    min-height: 500px;
+//  }
+//  .large-header .carousel-caption {
+//    padding-top: 200px !important;
+//  }
+//}
+//
+//@media screen and (min-width: 1920px) {
+//  .large-header {
+//    min-height: 600px;
+//  }
+//  .large-header .carousel-caption {
+//    padding-top: 350px !important;
+//  }
+//}

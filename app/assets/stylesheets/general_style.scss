@@ -331,29 +331,6 @@ iframe {
   }
 }
 
-.btn-flat {
-  padding: 10px 15px;
-  border: 1px solid transparent;
-}
-
-.btn-join {
-  color: #fff !important;
-  width: 150px;
-  background: transparent;
-  font-size: 14px;
-  font-family: 'Roboto', sans-serif;
-  font-weight: 500;
-  border: solid 1px #FFF;
-  -webkit-transition: all 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75);
-  -moz-transition: all 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75);
-  -o-transition: all 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75);
-  transition: all 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75);
-  /* linear */ }
-
-.btn-join:hover {
-  background-color: #00CD79;
-  border: solid 1px #00CD79; }
-
 .side-content {
   padding-top: 18%; }
 

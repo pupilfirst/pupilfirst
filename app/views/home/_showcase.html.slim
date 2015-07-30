@@ -1,12 +1,9 @@
 section#showcase-new
   .container
-    h1 Success Scenarios
+    h1 Successful Graduates
     = image_tag 'line.jpg'
     p
-      ' At Startup Village, we believe that everyone living today has the opportunity to explore human life's fullest
-      ' potential. We believe that when small groups of young people share a dream and attempt to change the world, a lot
-      ' of exciting new doors are opened for them. There are six different paths for your future that are possible once
-      | you begin your startup journey through Startup Village:
+      ' At SV.CO, there are six ways to graduate!
 
     ul.nav.nav-tabs
       li.active role="presentation"
@@ -24,42 +21,39 @@ section#showcase-new
 
     .tab-content
       .tab-pane.active#showcase-get-funded role="tabpanel"
-        .row
-          .col-md-6
-            .story-description ' Shiju Radhakrishnan of <em>iTraveller</em>, Rohildev NV of <em>Fin</em> and Juhaim Ibnu Abdul Jabbar of <em>Rickone</em> share their stories about getting funded.
-            .showcase-startup-links
-              = image_tag 'landing/showcase/showcased_logos/itraveller_logo.png'
-              | PLAY | VIEW
-          .col-md-6
+        .container
+          .row
+            = render partial: 'showcase_thumbnail', locals: { name: "Shiju Radhakrishnan", startup: "iTraveller",  description: "Shiju Radhakrishnan of <em>iTraveller</em> talks about how his company raised funding and built a great team.", video: "", timeline: "" }
+            = render partial: 'showcase_thumbnail', locals: { name: "Rohildev NV", startup: "Fin Robotics",  description: "Rohildev NV of <em>Fin</em> speaks convincingly of building a hardware startup out of India and raising funding.", video: "", timeline: "" }
+            = render partial: 'showcase_thumbnail', locals: { name: "Juhaim Ibnu Abdul Jabbar", startup: "Reckone",  description: "Juhaim Ibnu Abdul Jabbar of <em>Reckone</em> talks about how his company raised funding and built a great team.", video: "", timeline: "" }
+          
       .tab-pane#join-startup-accelerator role="tabpanel"
-        iframe.embedded-video.showcase-company src="https://www.youtube.com/embed/vjDdSdfitKY?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1&amp;vq=hd720" frameborder="0" allowfullscreen="allowfullscreen"
-        .story-description
-          ' <em>Profoundis</em> co-founder Joffin Joseph talks about their awesome product Vibe and selection into the Microsoft startup accelerator.
-        = image_tag 'landing/showcase/showcased_logos/profoundis_logo.png', class: 'showcase_logo img-responsive'
-        a.view data-toggle="modal" href="#profoundis-popup"
-          = image_tag 'view.png'
-          |  View the Profoundis Story
+        .container
+          .row
+            = render partial: 'showcase_thumbnail', locals: { name: "Jofin Joseph", startup: "Profoundis",  description: "<em>Profoundis</em> co-founder Jofin Joseph talks about their awesome product Vibe and selection into the Microsoft startup accelerator.", video: "", timeline: "" }
+            = render partial: 'showcase_thumbnail', locals: { more: true }
 
       .tab-pane#get-aqui-hired role="tabpanel"
-        .row
-          .col-md-4
-            iframe.showcase-funded-video src="https://www.youtube.com/embed/KufIL6ZS1lk?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
-            = image_tag 'landing/showcase/showcased_logos/itraveller_logo.png', class: 'showcase-funded-logo'
-          .col-md-4
-            iframe.showcase-funded-video src="https://www.youtube.com/embed/QmavQDI3SV4?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
-            = image_tag 'landing/showcase/showcased_logos/finrobotics_logo.png', class: 'showcase-funded-logo'
-          .col-md-4
-            iframe.showcase-funded-video src="https://www.youtube.com/embed/ljwxLrSpcFM?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
-            = image_tag 'landing/showcase/showcased_logos/reckone_logo.png', class: 'showcase-funded-logo'
+        .container
+          .row
+            = render partial: 'showcase_thumbnail', locals: { name: "Kallidil Kalidasan", startup: "Mindhelix",  description: "Kalidas who founded <em>Mindhelix</em> talks about exciting adventures and learning from the many product iterations he went through and how his team finally got acquired by ASKME.COM.", video: "", timeline: "" }
+            = render partial: 'showcase_thumbnail', locals: { more: true }
+          
       .tab-pane#become-self-sustainable role="tabpanel"
-        iframe.showcase-funding-video src="https://www.youtube.com/embed/R8LhGtoeaUc?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
-        .story-description
-          ' <em>Wowmakers</em> co-founder Vivek Raghavan talks about how his design startup became cash-positive and funded his awesome experiment in creating a product called Crowdstudio.
-        = image_tag 'landing/showcase/showcased_logos/wowmakers_logo.png'
-        a.view data-toggle="modal" href="#wowmakers-popup"
-          = image_tag 'view.png'
-          |  View the Wowmakers Story
+        .container
+          .row
+            = render partial: 'showcase_thumbnail', locals: { name: "Vivek Raghavan", startup: "Wowmakers",  description: "<em>Wowmakers</em> co-founder Vivek Raghavan talks about how his design startup became cash-positive and funded his awesome experiment in creating a product called Crowdstudio.", video: "", timeline: "" }
+            = render partial: 'showcase_thumbnail', locals: { more: true }
+
       .tab-pane#get-a-job role="tabpanel"
-        | get-a-job
+        .container
+          .row
+            = render partial: 'showcase_thumbnail', locals: { name: "Utsav Agarwal", startup: "nwplyng",  description: "Utsav Aggarwal was hired by Uber because of the skills he acquired while building his startup <em>nwplyng</em>. Best MBA ever!", timeline: "" }
+            = render partial: 'showcase_thumbnail', locals: { more: true }
+
       .tab-pane#go-for-higher-education role="tabpanel"
-        | go-for-higher-education
+        .container
+          .row
+            = render partial: 'showcase_thumbnail', locals: { name: "Sharan Thampi", startup: "Tiny Mail",  description: "Sharan Thampi of <em>Tiny Mail</em> shares his rollercoaster startup ride from a college class room to finally a great admission for M.Sc in Business and Finance at Birmingham, UK.", timeline: "" }
+            = render partial: 'showcase_thumbnail', locals: { more: true }
+

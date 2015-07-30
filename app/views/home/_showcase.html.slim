@@ -24,54 +24,13 @@ section#showcase-new
 
     .tab-content
       .tab-pane.active#showcase-get-funded role="tabpanel"
-        #showcase-funded-carousel.carousel.slide data-ride='carousel'
-          / Indicators
-          ol.carousel-indicators
-            li.active data-target="#showcase-funded-carousel" data-slide-to="0"
-            li data-target="#showcase-funded-carousel" data-slide-to="1"
-            li data-target="#showcase-funded-carousel" data-slide-to="2"
-
-          .carousel-inner role='listbox'
-            .item.active
-              .item-flex-center
-                div
-                  iframe.embedded-video.showcase-company src="https://www.youtube.com/embed/KufIL6ZS1lk?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1&amp;vq=hd720" frameborder="0" allowfullscreen="allowfullscreen"
-                  .story-description
-                    ' Shiju Radhakrishnan of <em>iTraveller</em>, Rohildev NV of <em>Fin</em> and Juhaim Ibnu Abdul Jabbar of <em>Rickone</em> share their stories about getting funded.
-                  = image_tag 'landing/showcase/showcased_logos/itraveller_logo.png', class: 'showcase_logo img-responsive'
-                  a.view data-toggle="modal" href="#itraveller-popup"
-                    = image_tag 'view.png'
-                    |  View the iTraveler Story
-            .item
-              .item-flex-center
-                div
-                  iframe.embedded-video.showcase-company src="https://www.youtube.com/embed/QmavQDI3SV4?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1&amp;vq=hd720" frameborder="0" allowfullscreen="allowfullscreen"
-                  .story-description
-                    ' Shiju Radhakrishnan of <em>iTraveller</em>, Rohildev NV of <em>Fin</em> and Juhaim Ibnu Abdul Jabbar of <em>Rickone</em> share their stories about getting funded.
-                  = image_tag 'landing/showcase/showcased_logos/finrobotics_logo.png', class: 'showcase_logo img-responsive'
-                  a.view data-toggle="modal" href="#fin-popup"
-                    = image_tag 'view.png'
-                    |  View the Fin Robotics Story
-            .item
-              .item-flex-center
-                div
-                  iframe.embedded-video.showcase-company src="https://www.youtube.com/embed/ljwxLrSpcFM?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1&amp;vq=hd720" frameborder="0" allowfullscreen="allowfullscreen"
-                  .story-description
-                    ' Shiju Radhakrishnan of <em>iTraveller</em>, Rohildev NV of <em>Fin</em> and Juhaim Ibnu Abdul Jabbar of <em>Rickone</em> share their stories about getting funded.
-                  = image_tag 'landing/showcase/showcased_logos/reckone_logo.png', class: 'showcase_logo img-responsive'
-                  a.view data-toggle="modal" href="#fin-popup"
-                    = image_tag 'view.png'
-                    |  View the Reckone Story
-
-          / Controls
-          a.left.carousel-control href="#showcase-funded-carousel" role="button" data-slide="prev"
-            span.glyphicon.glyphicon-chevron-left aria-hidden="true"
-            span.sr-only Previous
-
-          a.right.carousel-control href="#showcase-funded-carousel" role="button" data-slide="next"
-            span.glyphicon.glyphicon-chevron-right aria-hidden="true"
-            span.sr-only Next
-
+        .row
+          .col-md-6
+            .story-description ' Shiju Radhakrishnan of <em>iTraveller</em>, Rohildev NV of <em>Fin</em> and Juhaim Ibnu Abdul Jabbar of <em>Rickone</em> share their stories about getting funded.
+            .showcase-startup-links
+              = image_tag 'landing/showcase/showcased_logos/itraveller_logo.png'
+              | PLAY | VIEW
+          .col-md-6
       .tab-pane#join-startup-accelerator role="tabpanel"
         iframe.embedded-video.showcase-company src="https://www.youtube.com/embed/vjDdSdfitKY?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1&amp;vq=hd720" frameborder="0" allowfullscreen="allowfullscreen"
         .story-description
@@ -84,13 +43,22 @@ section#showcase-new
       .tab-pane#get-aqui-hired role="tabpanel"
         .row
           .col-md-4
-            iframe.showcase-funded-video src="https://www.youtube.com/embed/KufIL6ZS1lk?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1&amp" frameborder="0" allowfullscreen="allowfullscreen"
+            iframe.showcase-funded-video src="https://www.youtube.com/embed/KufIL6ZS1lk?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
+            = image_tag 'landing/showcase/showcased_logos/itraveller_logo.png', class: 'showcase-funded-logo'
           .col-md-4
-            iframe.showcase-funded-video src="https://www.youtube.com/embed/QmavQDI3SV4?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1&amp" frameborder="0" allowfullscreen="allowfullscreen"
+            iframe.showcase-funded-video src="https://www.youtube.com/embed/QmavQDI3SV4?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
+            = image_tag 'landing/showcase/showcased_logos/finrobotics_logo.png', class: 'showcase-funded-logo'
           .col-md-4
             iframe.showcase-funded-video src="https://www.youtube.com/embed/ljwxLrSpcFM?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
+            = image_tag 'landing/showcase/showcased_logos/reckone_logo.png', class: 'showcase-funded-logo'
       .tab-pane#become-self-sustainable role="tabpanel"
-        | become-self-sustainable
+        iframe.showcase-funding-video src="https://www.youtube.com/embed/R8LhGtoeaUc?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
+        .story-description
+          ' <em>Wowmakers</em> co-founder Vivek Raghavan talks about how his design startup became cash-positive and funded his awesome experiment in creating a product called Crowdstudio.
+        = image_tag 'landing/showcase/showcased_logos/wowmakers_logo.png'
+        a.view data-toggle="modal" href="#wowmakers-popup"
+          = image_tag 'view.png'
+          |  View the Wowmakers Story
       .tab-pane#get-a-job role="tabpanel"
         | get-a-job
       .tab-pane#go-for-higher-education role="tabpanel"

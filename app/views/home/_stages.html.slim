@@ -19,6 +19,9 @@ section#stages
               | IV
             li data-target="#stages-carousel" data-slide-to="4"
               | V
+            li data-target="#stages-carousel" data-slide-to="5"
+              i.fa.fa-book
+
           / slides
           .carousel-inner role='listbox'
             .item.active
@@ -36,6 +39,11 @@ section#stages
             .item
               = image_tag 'stage5.png', class: 'img-responsive'
               p And finally startups <strong>SCALE</strong> when they try to aggressively expand and grow.
+
+            .item
+              a href="http://playbook.sv.co/"
+                = image_tag 'playbook-cover.png', class: 'img-responsive'
+              p Our Startup Playbook is a guide to all founders through these startup stages.
 
           / Controls
           a.left.carousel-control href="#stages-carousel" role="button" data-slide="prev"

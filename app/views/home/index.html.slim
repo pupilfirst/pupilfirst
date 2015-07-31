@@ -14,7 +14,12 @@
         div
           .header-buttons
             - unless current_user
-              a.btn.btn-flat.btn-join href=new_registration_path(User.new) type="button" Join SV.CO
+                a.btn.btn-flat.btn-join href=new_registration_path(User.new) type="button" Join SV.CO
+            - if current_user and !current_user.startup
+                a.btn.btn-flat.btn-join href=new_user_startup_path(current_user) type="button" Start Application
+            - if current_user and current_user.try(:startup, :unready?)
+                a.btn.btn-flat.btn-join href=new_user_startup_path(current_user) type="button" Continue Application
+                
             a.watch-video-button.hidden-md.hidden-lg href="https://www.youtube.com/watch?v=EdToj9nviYA" target="_blank"
               img src="#{image_url 'play.png'}" width="20"
               | &nbsp;Watch video

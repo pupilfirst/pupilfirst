@@ -7,13 +7,6 @@ section#stages
 
         /stages as carousel
         #stages-carousel.carousel.slide data-ride='carousel'
-          / Indicators
-          ol.carousel-indicators
-            li.active data-target="#stages-carousel" data-slide-to="0"
-            li data-target="#stages-carousel" data-slide-to="1"
-            li data-target="#stages-carousel" data-slide-to="2"
-            li data-target="#stages-carousel" data-slide-to="3"
-            li data-target="#stages-carousel" data-slide-to="4"
           / slides
           .carousel-inner role='listbox'
             .item.active
@@ -31,6 +24,11 @@ section#stages
             .item
               = image_tag 'stage5.png', class: 'img-responsive'
               p And finally startups <strong>SCALE</strong> when they try to aggressively expand and grow.
+              
+            .item
+              a href="http://playbook.sv.co/"
+                = image_tag 'playbook-cover.png', class: 'img-responsive'
+              p Our Startup Playbook is a guide to all founders through these startup stages.
 
           / Controls
           a.left.carousel-control href="#stages-carousel" role="button" data-slide="prev"

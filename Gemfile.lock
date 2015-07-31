@@ -263,6 +263,8 @@ GEM
       nokogiri (~> 1.5, >= 1.5.11)
     font-awesome-sass (4.3.2.1)
       sass (~> 3.2)
+    font_assets (0.1.11)
+      rack
     formatador (0.2.5)
     formtastic (3.1.3)
       actionpack (>= 3.2.13)
@@ -516,6 +518,7 @@ DEPENDENCIES
   faker
   fog
   font-awesome-sass (~> 4.3.0)
+  font_assets
   friendly_id
   jbuilder (~> 2.0)
   jquery-rails

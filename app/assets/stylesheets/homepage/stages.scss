@@ -53,24 +53,5 @@
   .carousel-control.left, .carousel-control.right {
     background-image: none
   }
-  .carousel-indicators {
-    top: 0px;
-    li {
-      border: 0;
-      margin: 0 2px;
-      height: 20px;
-      text-indent: 0;
-      font-size: 20px;
-      font-weight: 300;
-      width:15%;
-    }
-    li.active {
-      color: #FFF;
-      background-color: transparent;
-      font-size: 25px;
-      font-weight: 500;
-    }
-  }
-
 }
 

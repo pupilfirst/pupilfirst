@@ -1,31 +1,30 @@
-section.container#blog-posts
-  .row.heading
+section#blog-posts
+  .heading
     h1 Buzz
     = image_tag 'line.jpg'
     p Latest picks from our blog
 
-  .row
-    #blog-posts-container
-      #blog-posts-loading
-        p.text-center
-          i.fa.fa-refresh.fa-spin
-          | &nbsp; Loading blog posts...
-      #blog-posts-loading-failed.hide
-        p.text-center
-          i.fa.fa-warning
-          ' &nbsp; Couldn't load blog posts!
-        p.text-center
-          ' We're sorry. :-( You could try
-          a href="https://blog.sv.co" visiting our blog
-          | &nbsp;instead...
-      #post-scaffold.blog-post.hide
-        .blog-post-top
-          img.blog-post-image width="100%" src="#"
-          .blog-body
-            h5.blog-post-title
-            img.line src="#{image_url 'line2.png'}" width="100%"
-            p.blog-post-content
-        .blog-post-bottom
-          a.blog-post-link href="#"
-            | continue reading &nbsp;
-            = image_tag 'cont.png', class: 'img-animation'
+  #blog-posts-container
+    #blog-posts-loading
+      p.text-center
+        i.fa.fa-refresh.fa-spin
+        | &nbsp; Loading blog posts...
+    #blog-posts-loading-failed.hide
+      p.text-center
+        i.fa.fa-warning
+        ' &nbsp; Couldn't load blog posts!
+      p.text-center
+        ' We're sorry. :-( You could try
+        a href="https://blog.sv.co" visiting our blog
+        | &nbsp;instead...
+    #post-scaffold.blog-post.hide
+      .blog-post-top
+        img.blog-post-image width="100%" src="#"
+        .blog-body
+          h5.blog-post-title
+          img.line src="#{image_url 'line2.png'}" width="100%"
+          p.blog-post-content
+      .blog-post-bottom
+        a.blog-post-link href="#"
+          | continue reading &nbsp;
+          = image_tag 'cont.png', class: 'img-animation'

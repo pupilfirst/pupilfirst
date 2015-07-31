@@ -1,7 +1,14 @@
 @import 'bootstrap/variables';
 
-section#showcase-new {
-  margin-top: 50px;
+section#showcase {
+  margin-top: 40px;
+
+  // Override some bootstrap styling.
+  .thumbnail {
+    background-color: #f7f7f7;
+    border: 1px solid #f7f7f7;
+    padding: 0;
+  }
 
   h1 {
     font-size: 48px;
@@ -9,7 +16,7 @@ section#showcase-new {
   }
 
   p {
-    padding-top: 15px;
+    padding: 15px 15px 0 15px;
     font-size: 15px;
     color: #565656;
     line-height: 30px;
@@ -50,7 +57,7 @@ section#showcase-new {
       }
     }
   }
-  
+
   ul.nav.nav-tabs {
     margin-top: 10px;
   }
@@ -64,6 +71,17 @@ section#showcase-new {
       height: 30px;
       margin-top: 10px;
     }
+  }
+
+  .showcase-more {
+    i.fa {
+      font-size: 220%;
+      margin-top: 10px;
+    }
+
+    p { padding-top: 13px; }
+    button { margin-bottom: 10px; }
+    a {margin-bottom: 15px;}
   }
 }
 

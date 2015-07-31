@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
 
   def set_content_security_policy
     image_sources = "img-src 'self' https://www.google-analytics.com https://blog.sv.co https://www.startatsv.com " +
-      'http://www.startatsv.com https://assets.sv.co https://d1efte8jdj3b9e.cloudfront.net'
+      'http://www.startatsv.com https://assets.sv.co'
     image_sources += ' http://svapp.assets.svlabs.in' if Rails.env.production?
     image_sources += ' http://svapp-staging.assets.svlabs.in' if Rails.env == 'staging'
     image_sources += ';'
@@ -43,10 +43,10 @@ class ApplicationController < ActionController::Base
     csp_directives = [
       image_sources,
       "script-src 'self' https://ajax.googleapis.com https://www.google-analytics.com " +
-        'https://blog.sv.co https://www.youtube.com http://www.startatsv.com https://assets.sv.co https://d1efte8jdj3b9e.cloudfront.net;',
-      "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://assets.sv.co https://d1efte8jdj3b9e.cloudfront.net;",
+        'https://blog.sv.co https://www.youtube.com http://www.startatsv.com https://assets.sv.co;',
+      "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://assets.sv.co;",
       "connect-src 'self';",
-      "font-src 'self' fonts.gstatic.com https://assets.sv.co https://d1efte8jdj3b9e.cloudfront.net;",
+      "font-src 'self' fonts.gstatic.com https://assets.sv.co;",
       'child-src https://www.youtube.com;',
       'frame-src https://www.youtube.com;',
       "report-uri #{content_security_policy_report_url};"

@@ -50,6 +50,7 @@ gem 'font-awesome-sass', '~> 4.3.0' # Icons from font-awesome!
 gem 'unobtrusive_flash', github: 'mobmewireless/unobtrusive_flash', branch: 'master'
 
 gem 'friendly_id' # Slugs for links. http://norman.github.io/friendly_id
+gem 'font_assets' # Helps with serving font assets with Rails. https://github.com/ericallam/font_assets
 
 # Rails assets!
 source 'https://rails-assets.org' do

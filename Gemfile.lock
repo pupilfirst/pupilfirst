@@ -24,6 +24,14 @@ GIT
       railties (>= 3.1)
 
 GIT
+  remote: git://github.com/ericallam/font_assets.git
+  revision: 457dcfddc4318e83679e9a0935612924b7717085
+  branch: master
+  specs:
+    font_assets (0.1.11)
+      rack
+
+GIT
   remote: git://github.com/mobmewireless/unobtrusive_flash.git
   revision: 24e7787d16db66f7956747444433a4e47278193a
   branch: master
@@ -263,8 +271,6 @@ GEM
       nokogiri (~> 1.5, >= 1.5.11)
     font-awesome-sass (4.3.2.1)
       sass (~> 3.2)
-    font_assets (0.1.11)
-      rack
     formatador (0.2.5)
     formtastic (3.1.3)
       actionpack (>= 3.2.13)
@@ -518,7 +524,7 @@ DEPENDENCIES
   faker
   fog
   font-awesome-sass (~> 4.3.0)
-  font_assets
+  font_assets!
   friendly_id
   jbuilder (~> 2.0)
   jquery-rails

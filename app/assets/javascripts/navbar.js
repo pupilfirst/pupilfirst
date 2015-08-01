@@ -1,12 +1,12 @@
 var toggleNavbarBackground = function() {
   if ($(document).scrollTop() > 50)
   {
-    $("#SiteLogoWhite").stop(true, true).hide();
-    $("#SiteLogo").removeClass('hide').fadeIn();
+    $("#site-logo-white").stop(true, true).hide();
+    $("#site-logo").removeClass('hide').fadeIn();
     $('nav').addClass('shrink');
   } else {
-    $("#SiteLogo").stop(true, true).hide();
-    $("#SiteLogoWhite").fadeIn();
+    $("#site-logo").stop(true, true).hide();
+    $("#site-logo-white").fadeIn();
     $('nav').removeClass('shrink');
   }
 };

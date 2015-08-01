@@ -193,6 +193,14 @@ http {
             expires max;
             add_header Cache-Control public;
             add_header ETag "";
+
+            if ($request_filename ~* ^.*?/([^/]*?)$) {
+              set $filename $1;
+            }
+
+            if ($filename ~* ^.*?\.(eot)|(ttf)|(woff)|(woff2)|(svg)|(otf)$) {
+              add_header Access-Control-Allow-Origin *;
+            }
         }
         location @dynamic_request {
             passenger_enabled on;

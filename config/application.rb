@@ -35,8 +35,5 @@ module Svapp
     end
 
     config.cache_store = :memory_store, { size: 64.megabytes }
-
-    # Set CORS header for fonts served.
-    config.font_assets.origin = '*'
   end
 end

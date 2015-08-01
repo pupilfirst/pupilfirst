@@ -46,10 +46,18 @@
     color: black; }
   }
 
-  .carousel-inner img {
-    margin: auto;
-    padding-top: 30px;
+  .carousel-inner { 
+      .item img {
+        margin: auto;
+        padding-top: 20px;
+        padding-bottom: 20px;
+      }
+      
+      .item p {
+        margin-bottom: 20px;
+      }
   }
+  
   .carousel-control.left, .carousel-control.right {
     background-image: none
   }

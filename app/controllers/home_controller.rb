@@ -47,13 +47,25 @@ class HomeController < ApplicationController
         { name: "Pranav Suresh", title: "CEO" },
         { name: "Vishnu Gopal", title: "CTO" },
         { name: "Gautham", title: "COO" },
-        { name: "Joby Joseph", title: "Operations" },
+        { name: "Rohan Kalani", title: "AVP Operations & Finance"},
+        { name: "Hari Gopal", title: "Engineering Architect"},
+        { name: "Joby Joseph", title: "Product" },
         { name: "Naveen Narayanan", title: "Academic Relations" },
         { name: "Daniel Jeevan", title: "Digital Strategist" },
         { name: "Aditya Nair", title: "Governance & Strategic Initiatives" },
+        { name: "Abdul Jaleel", title: "Software Engineer"},
         { name: "Sreerag Dileep", title: "Governance & Operations" },
         { name: "Dinnu Nijo", title: "Incubation" },
-        { name: "Sebin John Mathew", title: "Communications & Operations" }
+        { name: "Sebin John Mathew", title: "Communications & Operations" },
+        { name: "Shameem P", title: "Client Relations"},
+        { name: "Kiran Baby", title:	"Client Relations" },
+        { name: "Manoj Krishnan", title: "Startup Studio Lead" },
+        { name: "Varun M", title: "Academic & Client Relations" },
+        { name: "Vasudeva Rao Thumati", title: "Operations"},
+        { name: "Kireeti Varma", title: "Operations"},
+        { name: "Bharath Binnam", title: "Operations"},
+        { name: "Mini M", title: "Administration"},
+        { name: "Shajahan Ibrahim", title: "Administration" }
       ]
     }
 

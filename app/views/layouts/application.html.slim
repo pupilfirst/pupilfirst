@@ -19,6 +19,8 @@ html
     = csrf_meta_tags
     = yield :head
 
+    link rel="icon" href="#{image_url 'favicon.png'}"
+
   body
     section#header class="#{@navbar_start_transparent ? 'large-header navbar-start-transparent' : ''}"
       nav.navbar.navbar-default.navbar-fixed-top role="navigation" class="#{@navbar_start_transparent ? '' : 'shrink'}"

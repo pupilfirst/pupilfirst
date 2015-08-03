@@ -48,8 +48,7 @@ class ApplicationController < ActionController::Base
       "connect-src 'self';",
       "font-src 'self' fonts.gstatic.com https://assets.sv.co;",
       'child-src https://www.youtube.com;',
-      'frame-src https://www.youtube.com;',
-      "report-uri #{content_security_policy_report_url};"
+      'frame-src https://www.youtube.com;'
     ]
 
     response.headers['Content-Security-Policy'] = "default-src 'none'; " + csp_directives.join(' ')

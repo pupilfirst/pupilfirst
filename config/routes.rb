@@ -86,5 +86,4 @@ Svapp::Application.routes.draw do
   get 'about', to: 'home#about'
   get 'faculty', to: 'home#faculty'
   root 'home#index'
-  post 'content_security_policy_report', to: 'home#csp_report'
 end

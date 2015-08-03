@@ -63,14 +63,8 @@ class HomeController < ApplicationController
   def about
   end
 
-  def csp_report
-    report = JSON.parse(request.body.read)
-    Rails.llog.warn({ event: :csp_report }.merge(report['csp-report'].slice('blocked-uri', 'violated-directive', 'source-file')))
-    Rails.llog.debug({ event: :full_csp_report }.merge(report))
-    render nothing: true
-  end
-  
   private
+
   def faculty_image_path(type, image)
     "faculty/#{type}/". #Images are stored in a subfolder in faculty/
       +(image).
@@ -81,6 +75,6 @@ class HomeController < ApplicationController
       gsub(/_+/, '_'). #Convert multiple underscores to one
       +(".png") #PNG image
   end
+
   helper_method :faculty_image_path
-  
 end

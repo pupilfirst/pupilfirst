@@ -1,7 +1,3 @@
-//= require owl-carousel/owl.carousel
-//= require ct-carousel/masonry.pkgd.min
-//= require icon/modernizr.custom
-
 //= require_tree ./homepage
 
 function stripHTML(dirtyString) {
@@ -46,14 +42,3 @@ var loadBlogPosts = function() {
 };
 
 $(loadBlogPosts);
-
-//TODO: What is this for?
-$(document).ready(function() {
-  [].slice.call(document.querySelectorAll('.carousel-indicators > ol')).forEach(function(nav) {
-    new DotNav(nav, {
-      callback : function( idx ) {
-        //console.log( idx )
-      }
-    });
-  });
-});

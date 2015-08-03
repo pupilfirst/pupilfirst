@@ -59,7 +59,7 @@ class HomeController < ApplicationController
         { name: "Sebin John Mathew", title: "Communications & Operations" },
         { name: "Shameem P", title: "Client Relations"},
         { name: "Kiran Baby", title:	"Client Relations" },
-        { name: "Manoj Krishnan", title: "Startup Studio Lead" },
+        { name: "Manoj Krishnan", title: "Head, Startup Studio" },
         { name: "Varun M", title: "Academic & Client Relations" },
         { name: "Vasudeva Rao Thumati", title: "Operations"},
         { name: "Kireeti Varma", title: "Operations"},

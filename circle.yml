@@ -2,8 +2,8 @@ deployment:
   staging:
     branch: development
     heroku:
-      appname: svapp-staging
+      appname: svlabs-in
   production:
     branch: master
     heroku:
-      appname: svapp
+      appname: sv-co

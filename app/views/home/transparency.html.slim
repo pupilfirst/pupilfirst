@@ -1,6 +1,12 @@
 - content_for :head
   = stylesheet_link_tag 'about'
 
+<ol class="breadcrumb">
+  <li><a href="#{root_path}">Home</a></li>
+  <li><a href="#{about_path}">About</a></li>
+  <li class="active">Transparency</li>
+</ol>
+
 h1.page-header.header-light Transparency
 
 .row

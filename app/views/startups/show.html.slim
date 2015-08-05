@@ -2,8 +2,8 @@
   = stylesheet_link_tag 'startups'
   = javascript_include_tag 'startups.js'
 
-/Company Name Header
 .container
+  / Company Name Header
   .row
     .col-sm-8
       h1.startup-name
@@ -21,7 +21,7 @@
         = image_tag "#{@startup.logo_url}", class: 'startup-logo'
 
   p.about-startup.shorten
-    | #{ @startup.about? ? @startup.about : 'This startup is yet to provide an about section' }
+    | #{ @startup.about? ? @startup.about : 'This startup is yet to provide an about section.' }
 
   / Container right
   .row

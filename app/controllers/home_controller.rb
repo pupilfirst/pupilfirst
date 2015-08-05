@@ -63,7 +63,7 @@ class HomeController < ApplicationController
         { name: "Varun M", title: "Academic & Client Relations" },
         { name: "Vasudeva Rao Thumati", title: "Operations"},
         { name: "Kireeti Varma", title: "Operations"},
-        { name: "Bharath Binnam", title: "Operations"},
+        { name: "Bharat Pinnam", title: "Operations", linked_in: "https://in.linkedin.com/pub/pinnam-bharat/64/a6a/3a2" },
         { name: "Mini M", title: "Administration"},
         { name: "Shajahan Ibrahim", title: "Administration" }
       ]
@@ -73,6 +73,9 @@ class HomeController < ApplicationController
   end
 
   def about
+  end
+  
+  def transparency
   end
 
   private

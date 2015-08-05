@@ -1,3 +1,10 @@
+// Customize the large-header at the top.
+.large-header {
+  background-image: image-url("timeline.jpg");
+  min-height: 150px;
+  background-position: 50% 37%;
+}
+
 h1.startup-name {
   font-family: 'Roboto', sans-serif;
   font-weight: 100;
@@ -28,10 +35,21 @@ p.about-startup {
 }
 
 #data-points {
-  h4.media-heading {
-    font-size: 13px;
-    margin-top: 0;
+  font-family: Roboto, sans-serif;
+
+  .data-icons {
+    h4.media-heading {
+      font-size: 90%;
+      margin-top: 5px;
+    }
   }
+
+  h3 {
+    font-size: 120%;
+    margin-bottom: 0;
+  }
+
+  hr { margin: 10px 0 10px 0; }
 
   p.data-content {
     font-size: 18px;
@@ -46,6 +64,45 @@ p.about-startup {
       }
     }
   }
+
+  .data-founder {
+    height: 128px;
+    background-color: #fafafa;
+    margin: 10px 0;
+    box-shadow: 2px 2px 2px lightgrey;
+
+    .founder-image {
+      width: 128px;
+      height: 128px;
+      background-size: cover;
+    }
+
+    h4.media-heading {
+      margin: 15px 0 10px 0;
+      text-transform: uppercase;
+      font-size: 110%;
+      font-weight: 600;
+    }
+
+    p.designation {
+      font-size: 90%;
+      font-style: italic;
+    }
+
+    img.dash { margin-top: -10px; }
+
+    ul {
+      padding: 0;
+
+      li {
+        display: inline-block;
+        list-style-type: none;
+        margin-right: 5px;
+      }
+
+      li:last-of-type { margin-right: 0; }
+    }
+  }
 }
 
 //.
@@ -56,118 +113,11 @@ p.about-startup {
 ////
 //
 
-.tl-founder {
-  padding-bottom: 50px;
-  h4 {
-    font-size: 20px;
-    text-transform: uppercase;
-    color: #000;
-    font-weight: 300;
-  }
-  .founder {
-    text-align: center;
-    border: 1px #ccc solid;
-    .name {
-      font-weight: 700;
-      font-size: 18px;
-      text-transform: uppercase !important;
-      color: #000;
-      padding-top: 30px;
-    }
-    .desig {
-      font-style: italic;
-      line-height: 10px;
-      color: #757575;
-    }
-    .dash {
-      margin-top: -15px;
-    }
-    ul {
-      list-style: none;
-      padding-left: 0px;
-      margin-top: -5px;
-    }
-    li {
-      display: inline-block;
-    }
-  }
-}
-
-.tl-mentor {
-  padding-bottom: 50px;
-  h4 {
-    font-size: 20px;
-    color: #000;
-    font-weight: 300;
-    text-transform: uppercase;
-  }
-  img {
-    border: 0px solid #000000;
-    border-radius: 5px 5px 5px 5px;
-  }
-  .mentor {
-    border-bottom: 1px #0085ba solid;
-    padding-bottom: 10px;
-    .name {
-      font-weight: 700;
-      font-size: 16px;
-      text-transform: uppercase !important;
-      color: #000;
-      padding-top: 15px;
-    }
-    .desig {
-      font-style: italic;
-      line-height: 10px;
-      color: #757575;
-    }
-    .firm {
-      line-height: 10px;
-      color: #000;
-      font-weight: 500;
-      font-size: 14px;
-    }
-  }
-}
-
-.tl-investor {
-  padding-bottom: 50px;
-  h4 {
-    font-size: 20px;
-    color: #000;
-    font-weight: 300;
-    text-transform: uppercase;
-  }
-  img {
-    border: 0px solid #000000;
-    border-radius: 5px 5px 5px 5px;
-  }
-  .investor {
-    border-bottom: 1px #0f9d58 solid;
-    padding-bottom: 10px;
-    .name {
-      font-weight: 700;
-      font-size: 16px;
-      text-transform: uppercase !important;
-      color: #000;
-      padding-top: 15px;
-    }
-    .desig {
-      font-style: italic;
-      line-height: 10px;
-      color: #757575;
-    }
-    .firm {
-      line-height: 10px;
-      color: #000;
-      font-weight: 500;
-      font-size: 14px;
-    }
-  }
-}
-
 .main-timeline {
   border-right: 1px solid #ccc;
   padding-right: 25px;
+
+  ul { padding: 0; }
 }
 
 .tl-iteration {
@@ -220,12 +170,6 @@ p.about-startup {
 
   #company_logo {
     float: left !important; }
-}
-
-.large-header {
-  background-image: image-url("timeline.jpg");
-  min-height: 150px;
-  background-position: 50% 37%;
 }
 
 /*  time  line css */

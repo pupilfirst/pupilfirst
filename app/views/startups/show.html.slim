@@ -1,121 +1,126 @@
 == content_for :head
-  = stylesheet_link_tag 'timeline'
-  = javascript_include_tag 'timeline'
+  = stylesheet_link_tag 'startups'
+  = javascript_include_tag 'startups.js'
+
 /Company Name Header
 .container
   .row
-    .col-md-12.clearfix
-      .col-sm-8
-        h1.tl_company_name
-          ' #{@startup.name}
-          - if current_user && @startup.is_founder?(current_user)
-            small
-              a href=edit_user_startup_path(current_user)
-                i.fa.fa-pencil
-          - if @events.present?
-            a#verified.tooltip-right data-tooltip=("Timeline verified by Startup Village.") href="#"
-              img src='#{image_url 'timeline/verified.gif'}' width="25"
-      - if @startup.logo?
-        .col-sm-4.startup-logo
-          = image_tag "#{@startup.logo_url}", class: 'img-responsive startup-logo'
+    .col-sm-8
+      h1.startup-name
+        ' #{@startup.name}
+        /- if @events.present?
+        a data-tooltip="Timeline verified by Startup Village." href="#"
+          img.timeline-verified src='#{image_url 'timeline/verified.gif'}'
 
-  .row
-    .col-md-12.tl-about
-      p.content.shorten
-        | #{ @startup.about? ? @startup.about : 'This startup is yet to provide an about section' }
+        - if current_user && @startup.is_founder?(current_user)
+          small.edit-startup-link
+            a href=edit_user_startup_path(current_user)
+              i.fa.fa-pencil
+    - if @startup.logo?
+      .col-sm-4.visible-md-block.visible-lg-block
+        = image_tag "#{@startup.logo_url}", class: 'startup-logo'
 
-  / Company name header ends
+  p.about-startup.shorten
+    | #{ @startup.about? ? @startup.about : 'This startup is yet to provide an about section' }
 
   / Container right
   .row
-    .col-md-4.col-md-push-8
-      - if @startup.categories.present?
-        .media.tl-data
-          img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data1.png'}"
-          .media-body
-            p.tittle Industry
-            p.content #{@startup.categories.pluck(:name).join(', ')}
-        - if @startup.website?
-          .media.tl-data
-            = image_tag "timeline/data2.png", class: "media-object pull-left", alt: "website"
+    #data-points
+      .col-md-4.col-md-push-8
+        - if @startup.categories.present?
+          .media
+            .media-left
+              img.media-object alt="Industry icon" src="#{image_url 'timeline/icons/industry.png'}"
             .media-body
-              p.tittle Website
-              p.content
+              h4.media-heading Industry
+              p.data-content #{@startup.categories.pluck(:name).join(', ')}
+        - if @startup.website?
+          .media
+            .media-left
+              img.media-object alt="Website icon" src="#{image_url 'timeline/icons/website.png'}"
+            .media-body
+              h4.media-heading Website
+              p.data-content
                 a href="#{@startup.website}" target="_blank"
                   ' #{@startup.website}
                   = image_tag 'timeline/link.png'
         - if @startup.presentation_link?
-          .media.tl-data
-            img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data3.png'}"
+          .media
+            .media-left
+              img.media-object alt="Startup Deck icon" src="#{image_url 'timeline/icons/startup_deck.png'}"
             .media-body
-              p.tittle Startup Deck
-              p.content
+              h4.media-heading Startup Deck
+              p.data-content
                 a href="#{@startup.presentation_link}" target="_blank"
                   ' #{@startup.name} deck
                   = image_tag 'timeline/link.png'
         - if @startup.team_size?
-          .media.tl-data
-            = image_tag "timeline/data4.png", class: "media-object pull-left", alt: "team size"
+          .media
+            .media-left
+              img.media-object alt="Team Size icon" src="#{image_url 'timeline/icons/team_size.png'}"
             .media-body
-              p.tittle Team Size
-              p.content #{@startup.team_size}
+              h4.media-heading Team Size
+              p.data-content #{@startup.team_size}
         - if @startup.stage?
-          .media.tl-data
-            img.media-object.pull-left alt="industry" src="#{ image_url 'timeline/data5.png'}"
+          .media
+            .media-left
+              img.media-object alt="Stage icon" src="#{image_url 'timeline/icons/stage.png'}"
             .media-body
-              p.tittle Stage of Company
-              p.content #{@startup.stage.capitalize}
+              h4.media-heading Stage of Company
+              p.data-content #{@startup.stage.capitalize}
         - if @events.present?
-          .media.tl-data
-            = image_tag "timeline/data6.png", class: "media-object pull-left", alt: "team size"
+          .media
+            .media-left
+              img.media-object alt="Iteration icon" src="#{image_url 'timeline/icons/iteration.png'}"
+              = image_tag "timeline/icons/data6.png", class: "media-object pull-left", alt: "team size"
             .media-body
-              p.tittle Product Iteration
-              p.content #{@events.maximum(:iteration).ordinalize}
-      .row style="padding-left:15px;"
-        - if @startup.founders.present?
-          .col-sm-6.col-md-12.tl-founder
-            h4 Founders
-            hr
-            - @startup.founders.each do |founder|
-              .media.founder
-                .founder-avatar.pull-left
-                  = image_tag founder.avatar_url, alt: "Image of #{founder.fullname}", class: 'media-object'
+              h4.media-heading Product Iteration
+              p.data-content #{@events.maximum(:iteration).ordinalize}
+        .row style="padding-left:15px;"
+          - if @startup.founders.present?
+            .col-sm-6.col-md-12.tl-founder
+              h4 Founders
+              hr
+              - @startup.founders.each do |founder|
+                .media.founder
+                  .founder-avatar.pull-left
+                    = image_tag founder.avatar_url, alt: "Image of #{founder.fullname}", class: 'media-object'
+                  .media-body
+                    p.name #{founder.fullname}
+                    - if founder.title?
+                      p.desig #{founder.title}
+                    img.dash src="#{ image_url 'timeline/dash.png'}"
+                    ul
+                      - if founder.twitter_url?
+                        li
+                          a href="#{founder.twitter_url}"
+                            img src="#{ image_url 'timeline/twitter.png'}"
+                      - if founder.linkedin_url?
+                        li
+                          a href="#{founder.linkedin_url}"
+                            img src="#{ image_url 'timeline/linkedin.png'}"
+          - if @startup.mentors?
+            .col-sm-6.col-md-12.tl-mentor
+              h4 Mentors
+              hr/
+              .media.mentor
+                a.pull-left href="#"
+                  img.media-object alt=("Media Object") src="#{ image_url 'timeline/mentor1.jpg'}"
                 .media-body
-                  p.name #{founder.fullname}
-                  - if founder.title?
-                    p.desig #{founder.title}
-                  img.dash src="#{ image_url 'timeline/dash.png'}"
-                  ul
-                    - if founder.twitter_url?
-                      li
-                        a href="#{founder.twitter_url}"
-                          img src="#{ image_url 'timeline/twitter.png'}"
-                    - if founder.linkedin_url?
-                      li
-                        a href="#{founder.linkedin_url}"
-                          img src="#{ image_url 'timeline/linkedin.png'}"
-        - if @startup.mentors?
-          .col-sm-6.col-md-12.tl-mentor
-            h4 Mentors
-            hr/
-            .media.mentor
-              a.pull-left href="#"
-                img.media-object alt=("Media Object") src="#{ image_url 'timeline/mentor1.jpg'}"
-              .media-body
-                p.name Amit Singh
-                p.desig Chief Executive Officer
-                p.firm Google Inc.
-        - if @startup.investors?
-          .col-sm-6.col-md-12.tl-investor
-            h4 Investors
-            hr/
-            .media.investor
-              a.pull-left href="#"
-                img.media-object alt=("Media Object") src="#{ image_url 'timeline/investor1.jpg'}"
-              .media-body
-                p.name Amit Singh
-                p.desig Chief Executive Officer
-                p.firm Google Inc.
+                  p.name Amit Singh
+                  p.desig Chief Executive Officer
+                  p.firm Google Inc.
+          - if @startup.investors?
+            .col-sm-6.col-md-12.tl-investor
+              h4 Investors
+              hr/
+              .media.investor
+                a.pull-left href="#"
+                  img.media-object alt=("Media Object") src="#{ image_url 'timeline/investor1.jpg'}"
+                .media-body
+                  p.name Amit Singh
+                  p.desig Chief Executive Officer
+                  p.firm Google Inc.
 
     / Container right end
 

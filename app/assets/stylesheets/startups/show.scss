@@ -1,12 +1,60 @@
-.tl_company_name {
-  display:inline-block;
-  font-family: 'Roboto';
-  font-style: normal;
+h1.startup-name {
+  font-family: 'Roboto', sans-serif;
   font-weight: 100;
   font-size: 50px;
   color: #2458a1;
-  padding: 10px 0;
+  margin: 20px 0;
 }
+
+img.timeline-verified {
+  width: 25px;
+}
+
+small.edit-startup-link {
+  margin-left: 10px;
+}
+
+img.startup-logo {
+  float: right;
+  max-height: 100px;
+  margin-top: 20px;
+}
+
+p.about-startup {
+  line-height: 40px;
+  color: #757575;
+  font-size: 16px;
+  margin: 10px 0 10px 0;
+}
+
+#data-points {
+  h4.media-heading {
+    font-size: 13px;
+    margin-top: 0;
+  }
+
+  p.data-content {
+    font-size: 18px;
+    font-weight: 300;
+
+    a {
+      text-decoration: none;
+      color: black;
+
+      &:hover {
+        color: cornflowerblue;
+      }
+    }
+  }
+}
+
+//.
+////.
+//////.
+//////// OLD CSS.
+//////
+////
+//
 
 /**
  * Tooltips!
@@ -99,32 +147,6 @@
 .tooltip-right:after {
   margin-left: 0;
   margin-bottom: -16px; }
-
-.tl-about .content {
-  line-height: 40px;
-  color: #757575;
-  font-size: 16px;
-  padding: 10px; }
-
-.tl-data {
-  .tittle {
-    font-size: 13px;
-    font-weight: 500;
-    margin-top: 5px;
-  }
-  .content {
-    font-size: 18px;
-    font-weight: 300;
-    margin-top: -10px;
-  }
-  a {
-    text-decoration: none;
-    color: #000;
-    &:hover {
-      color: #0076aa;
-    }
-  }
-}
 
 .tl-founder {
   padding-bottom: 50px;
@@ -237,7 +259,7 @@
 
 .main-timeline {
   border-right: 1px solid #ccc;
-  padding-right:25px;
+  padding-right: 25px;
 }
 
 .tl-iteration {
@@ -277,7 +299,8 @@
 
 @media screen and (max-width: 991px) {
   .main-timeline {
-    border-right: 0px !important; } }
+    border-right: 0px !important; }
+}
 
 @media screen and (max-width: 767px) {
   .timeline-panel {
@@ -288,7 +311,8 @@
     left: 5px !important; }
 
   #company_logo {
-    float: left !important; } }
+    float: left !important; }
+}
 
 .large-header {
   background-image: image-url("timeline.jpg");
@@ -315,7 +339,7 @@
   li {
     margin-bottom: 20px;
     position: relative;
-    &:before,&:after {
+    &:before, &:after {
       content: " ";
       display: table;
     }
@@ -390,22 +414,21 @@
 }
 
 .timeline-badge {
-  &.color1 { background-color: #6A71E6 !important;}
-  &.color2 { background-color: #3498db !important;}
-  &.color3 { background-color: #FF5534 !important;}
-  &.color4 { background-color: #FE4A65 !important;}
-  &.color5 { background-color: #f5ab35 !important;}
-  &.color6 { background-color: #2DBAE7 !important;}
-  &.color7 { background-color: #9babd4 !important;}
-  &.color8 { background-color: #61D2FE !important;}
-  &.color9 { background-color: #48DC6C !important;}
-  &.color10 { background-color: #8BBF53 !important;}
-  &.color11 { background-color: #8BBF53 !important;}
-  &.color12 { background-color: #424953 !important;}
-  &.color12 { background-color: #FA6D52 !important;}
-  &.color14 { background-color: #8BBF53 !important;}
+  &.color1 { background-color: #6A71E6 !important; }
+  &.color2 { background-color: #3498db !important; }
+  &.color3 { background-color: #FF5534 !important; }
+  &.color4 { background-color: #FE4A65 !important; }
+  &.color5 { background-color: #f5ab35 !important; }
+  &.color6 { background-color: #2DBAE7 !important; }
+  &.color7 { background-color: #9babd4 !important; }
+  &.color8 { background-color: #61D2FE !important; }
+  &.color9 { background-color: #48DC6C !important; }
+  &.color10 { background-color: #8BBF53 !important; }
+  &.color11 { background-color: #8BBF53 !important; }
+  &.color12 { background-color: #424953 !important; }
+  &.color12 { background-color: #FA6D52 !important; }
+  &.color14 { background-color: #8BBF53 !important; }
 }
-
 
 .timeline-title {
   margin-top: 0;
@@ -510,27 +533,12 @@
   }
 }
 
-.tl-event-image > img{
+.tl-event-image > img {
   max-width: 100%;
 }
-.startup-logo {
-  max-height: 100px;
-}
-.founder, .founder-avatar >                                                                     img {
+
+.founder, .founder-avatar > img {
   height: 130px;
 }
-.startup-logo > img {
-  padding-bottom: 9px;
-}
-@media screen and (max-width: 767px) {
-  .startup-logo > img {
-    display: none;
-  }
-}
-@media screen and (min-width: 770px) {
-  .startup-logo > img {
-    float: right;
-    margin: 20px 0px 00px;
-  }
-}
+
 

@@ -1,12 +1,12 @@
 //= require shorten/jquery.shorten
 
 var shortenText = function () {
-  $('.shorten').shorten({
+  $('.about-startup').shorten({
     showChars: 200
   });
 };
 
-$(document).ready(shortenText);
+$(shortenText);
 
 $(function () {
   var ink, d, x, y;

@@ -3,6 +3,12 @@
   = javascript_include_tag 'startups.js'
 
 .container
+  - if @startup.pending?
+    .alert.alert-info.margin-top-20 role='alert'
+      button.close type="button" data-dismiss="alert" aria-label="Close"
+        span aria-hidden="true" &times;
+      p Your startup has not been approved yet. Please write to #{mail_to 'help@sv.co'} if you'd like help!
+
   / Company Name Header
   .row
     .col-sm-8

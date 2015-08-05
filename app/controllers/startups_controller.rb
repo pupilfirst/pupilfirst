@@ -9,8 +9,6 @@ class StartupsController < InheritedResources::Base
 
   def new
     unless current_user.phone_verified?
-      flash[:notice] = 'Please enter and verify your phone number to continue.'
-
       session[:referer] = new_user_startup_url(current_user)
       redirect_to phone_user_path(current_user) and return
     end

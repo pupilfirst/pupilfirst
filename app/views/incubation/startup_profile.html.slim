@@ -35,7 +35,7 @@
         legend Optional fields
         = f.input :website, placeholder: 'www.your-website.com'
         = f.input :registration_type, collection: valid_registration_types,:label_method => :first, :value_method => :last, include_blank: 'Unregistered'
-        = f.association :categories, collection: Category.startup_category
+        = f.input :category_ids, collection: Category.startup_category
         = f.input :team_size
         = f.input :women_employees, label: 'No. of women employees'
 

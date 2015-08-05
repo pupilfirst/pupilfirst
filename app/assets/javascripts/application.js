@@ -16,3 +16,4 @@
 //= require navbar
 //= require_tree ./startups
 //= require incubation
+//= require select2

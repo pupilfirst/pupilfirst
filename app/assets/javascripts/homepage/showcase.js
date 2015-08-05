@@ -12,7 +12,7 @@ var showcaseEmbeds = function() {
     var modal = $(this);
     modal.find('.modal-body iframe').attr('src', '');
   })
-  
+
   // Configure timeline modals
   $('#showcase-timeline').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget); // Button that triggered the modal
@@ -20,13 +20,23 @@ var showcaseEmbeds = function() {
     var timeline = button.data('timeline');
     var modal = $(this);
     modal.find('.modal-title').text(title);
-    modal.find('.modal-body img').attr('src', timeline);
-  })
+    // TODO: Refactor using jQuery
+    var image = document.createElement("img");
+    image.src = timeline;
+    image.setAttribute('class','img-responsive');
+    image.setAttribute('id','timeline-image');
+    var parent = document.getElementById("timeline-image-wrapper");
+    parent.appendChild(image);
+    $("#spinner-image").hide();
+  });
   $('#showcase-timeline').on('hidden.bs.modal', function(event) {
     var modal = $(this);
-    modal.find('.modal-body img').attr('src', '');
+    var parent = document.getElementById("timeline-image-wrapper");
+    var child = document.getElementById("timeline-image");
+    parent.removeChild(child);
+    $("#spinner-image").show();
   })
-  
+
   //Make the thumbnails trigger the right modal
   $('.showcase-activate').on('click', function(event) {
     var video = $(this).parent('.thumbnail').find('.showcase-video-trigger');

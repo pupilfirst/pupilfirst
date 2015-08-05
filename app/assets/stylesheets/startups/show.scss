@@ -1,3 +1,10 @@
+// Customize the large-header at the top.
+.large-header {
+  background-image: image-url("timeline.jpg");
+  min-height: 150px;
+  background-position: 50% 37%;
+}
+
 h1.startup-name {
   font-family: 'Roboto', sans-serif;
   font-weight: 100;
@@ -163,12 +170,6 @@ p.about-startup {
 
   #company_logo {
     float: left !important; }
-}
-
-.large-header {
-  background-image: image-url("timeline.jpg");
-  min-height: 150px;
-  background-position: 50% 37%;
 }
 
 /*  time  line css */

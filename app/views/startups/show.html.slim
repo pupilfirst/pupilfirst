@@ -9,7 +9,7 @@
       h1.startup-name
         ' #{@startup.name}
         /- if @events.present?
-        a data-tooltip="Timeline verified by Startup Village." href="#"
+        a#verified-icon data-toggle="tooltip" data-placement="top" title="Timeline verified by Startup Village." href="#"
           img.timeline-verified src='#{image_url 'timeline/verified.gif'}'
 
         - if current_user && @startup.is_founder?(current_user)

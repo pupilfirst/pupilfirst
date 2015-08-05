@@ -19,8 +19,8 @@
       .col-sm-4.visible-md-block.visible-lg-block
         = image_tag "#{@startup.logo_url}", class: 'startup-logo'
 
-  p.about-startup.shorten
-    | #{ @startup.about? ? @startup.about : 'This startup is yet to provide an about section.' }
+  - if @startup.about?
+    p.about-startup.shorten #{@startup.about}
 
   / Container right
   .row

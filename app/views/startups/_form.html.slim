@@ -13,7 +13,13 @@ p
       #basicdetails.panel-collapse.collapse.in role="tabpanel"
         .panel-body
           = f.input :name, label: "Startup's Name", required: true, input_html: { placeholder: '', maxlength: 255 }
-          = f.input :logo, as: :file, required: false
+          = f.input :logo, label: false, input_html: { class:'hidden'}
+          .form-group
+            label.string.col-sm-3.control-label Logo
+            .col-sm-9
+              input#file-name.uneditable-input type="text"
+              a#upload-btn.btn.btn-primary.btn-sm
+                span.glyphicon.glyphicon-upload Upload
           = f.input :incubation_location, required: true, collection: Startup.valid_incubation_location_values, label_method: ->(obj) { obj.capitalize }, include_blank: false
 
     .panel.panel-default

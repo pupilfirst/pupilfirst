@@ -147,7 +147,7 @@
     / Timeline starts
     - if @events.present?
       .col-md-8.col-md-pull-4.main-timeline
-        .tl-iteration style="margin-left: 20px"
+        .tl-iteration
           p
             | Timeline of #{@events.maximum(:iteration).ordinalize} iteration.
           = image_tag 'timeline/dash.png'

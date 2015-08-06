@@ -13,4 +13,7 @@ $ ->
     $('.startup_admin_roll_number').toggle(this.checked)
 
 $ ->
-  $('#startup_category_ids').select2({ placeholder : 'Select Category' })
+  $('#startup_category_ids').select2(
+    placeholder : 'Select Category',
+    maximumSelectionSize: 3
+  )

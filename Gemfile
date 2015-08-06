@@ -26,7 +26,11 @@ gem 'uglifier'
 gem 'rest-client' # Used to contact Fast Alerts' API.
 gem 'cancancan', '~> 1.8' # Used to manage administrator types and roles in the ActiveAdmin interface.
 gem 'phony_rails' # Phone number validation and normalization.
-gem 'select2-rails' # Select2 javascript select box improvement library, using in ActiveAdmin interface.
+
+# Select2 javascript select box improvement library, using in ActiveAdmin interface.
+# TODO: This gem currently serves version 3.x of select2. Version 4 (released) has breaking changes. Take care when upgrading.
+gem 'select2-rails'
+
 gem 'bootstrap-sass', '~> 3.3.3' # Official Sass port of Bootstrap.
 gem 'autoprefixer-rails' # Autoprefixer for Ruby and Ruby on Rails.
 gem 'simple_form', '~> 3.1.0.rc2' # Simple-form RC2 with support for Bootstrap 3. TODO: Update simple_form to stable when available.

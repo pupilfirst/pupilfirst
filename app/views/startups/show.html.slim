@@ -94,7 +94,7 @@
                   .media
                     .media-left
                       .media-object
-                        .founder-image style="background-image: url('#{image_url founder.avatar_url}');"
+                        .founder-image style="background-image: url('#{profile_image_url founder, size: 128}');"
                     .media-body
                       h4.media-heading #{founder.fullname}
                       - if founder.title?

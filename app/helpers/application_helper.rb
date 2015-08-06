@@ -41,4 +41,12 @@ module ApplicationHelper
         '<em>Not Known</em>'.html_safe
     end
   end
+
+  def profile_image_url(user, size: 100)
+    if user.avatar?
+      user.avatar_url
+    else
+      user.gravatar_url(size: size, default: 'identicon')
+    end
+  end
 end

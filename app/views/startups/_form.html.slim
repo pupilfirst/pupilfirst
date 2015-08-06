@@ -3,7 +3,7 @@
 p
   em Please note that you can come back and change these details anytime.
 
-= simple_form_for @startup, url: user_startup_path(current_user), :html => { :class => 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
+= simple_form_for @startup, url: user_startup_path(current_user), :html => { :class => 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean, file: :horizontal_file_input } do |f|
   = f.error_notification
   .panel-group#startupform role="tablist"
     .panel.panel-default
@@ -13,13 +13,7 @@ p
       #basicdetails.panel-collapse.collapse.in role="tabpanel"
         .panel-body
           = f.input :name, label: "Startup's Name", required: true, input_html: { placeholder: '', maxlength: 255 }
-          = f.input :logo, label: false, input_html: { class:'hidden'}
-          .form-group
-            label.string.col-sm-3.control-label Logo
-            .col-sm-9
-              input#file-name.uneditable-input type="text"
-              a#upload-btn.btn.btn-primary.btn-sm
-                span.glyphicon.glyphicon-upload Upload
+          = f.input :logo, as: :file, required: false
           = f.input :incubation_location, required: true, collection: Startup.valid_incubation_location_values, label_method: ->(obj) { obj.capitalize }, include_blank: false
 
     .panel.panel-default

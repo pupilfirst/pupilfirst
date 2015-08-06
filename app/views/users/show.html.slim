@@ -1,5 +1,5 @@
 - if current_user.startup.blank? || current_user.startup.try(:unready?)
-  = link_to 'Incubate your startup at SV!', new_user_startup_path(current_user) , class: 'btn btn-success btn-flat'
+  = link_to 'Incubate your startup at SV!', new_user_startup_path(current_user) , class: 'btn btn-success btn-flat margin-top-20'
 
 .row
   .col-lg-12.clearfix
@@ -38,10 +38,11 @@ table.table.table-hover.table-bordered.table-striped
 
 = render('mentor_info', mentor: @user.mentor) if @user.mentor.present?
 
-= link_to 'Edit your profile', edit_user_url(@user), class: 'btn btn-primary btn-flat'
+.margin-bottom-20
+  = link_to 'Edit your profile', edit_user_url(@user), class: 'btn btn-primary btn-flat'
 
-- if @user.startup.present? && !@user.startup.unready?
-  | &nbsp;
-  = link_to 'View startup timeline', @user.startup, class: 'btn btn-info btn-flat'
-  | &nbsp;
-  = link_to 'Edit startup details', edit_user_startup_url(@user), class: 'btn btn-info btn-flat'
+  - if @user.startup.present? && !@user.startup.unready?
+    | &nbsp;
+    = link_to 'View startup timeline', @user.startup, class: 'btn btn-info btn-flat'
+    | &nbsp;
+    = link_to 'Edit startup details', edit_user_startup_url(@user), class: 'btn btn-info btn-flat'

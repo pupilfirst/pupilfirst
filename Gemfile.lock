@@ -271,6 +271,7 @@ GEM
       activerecord (>= 4.0.0)
     globalid (0.3.5)
       activesupport (>= 4.1.0)
+    gravtastic (3.2.6)
     has_scope (0.6.0)
       actionpack (>= 3.2, < 5)
       activesupport (>= 3.2, < 5)
@@ -517,6 +518,7 @@ DEPENDENCIES
   fog
   font-awesome-sass (~> 4.3.0)
   friendly_id
+  gravtastic
   jbuilder (~> 2.0)
   jquery-rails
   letter_opener

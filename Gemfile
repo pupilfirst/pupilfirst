@@ -51,6 +51,8 @@ gem 'unobtrusive_flash', github: 'mobmewireless/unobtrusive_flash', branch: 'mas
 
 gem 'friendly_id' # Slugs for links. http://norman.github.io/friendly_id
 
+gem 'gravtastic' # Use gravatars as fallback avatars
+
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify' # Superb notifications library. http://sciactive.github.io/pnotify/

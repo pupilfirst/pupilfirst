@@ -34,10 +34,13 @@ class ApplicationController < ActionController::Base
   end
 
   def set_content_security_policy
-    image_sources = "img-src 'self' https://www.google-analytics.com https://blog.sv.co https://www.startatsv.com " +
-      'http://www.startatsv.com https://assets.sv.co https://secure.gravatar.com'
-    image_sources += 'http://upload.assets.sv.co' if Rails.env.production?
-    image_sources += 'http://svapp.assets.svlabs.in' if Rails.env == 'staging'
+    image_sources = "img-src 'self' " + [
+      'https://www.google-analytics.com https://blog.sv.co https://www.startatsv.com http://www.startatsv.com',
+      'https://assets.sv.co https://secure.gravatar.com'
+    ].join(' ')
+
+    image_sources += ' http://upload.assets.sv.co' if Rails.env.production?
+    image_sources += ' http://svapp.assets.svlabs.in' if Rails.env == 'staging'
     image_sources += ';'
 
     csp_directives = [

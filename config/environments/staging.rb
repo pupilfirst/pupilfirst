@@ -80,13 +80,13 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  config.action_mailer.default_url_options = { :host => 'http://svlabs.in' }
+  config.action_mailer.default_url_options = { :host => 'https://www.svlabs.in' }
 
   # In production and staging, let's have carrierwave store using fog.
   config.carrier_wave_storage = :fog
 
   # Roadie asset URL.
-  config.roadie.url_options = { host: 'svlabs.in', scheme: 'https' }
+  config.roadie.url_options = { host: 'www.svlabs.in', scheme: 'https' }
 end
 
 ActionMailer::Base.smtp_settings = {

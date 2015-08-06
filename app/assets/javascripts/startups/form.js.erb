@@ -47,14 +47,3 @@ $(function () {
     }, 100);
   });
 });
-
-$(function () {
-  var hiddenfield = $('#startup_logo');
-  hiddenfield.change(function(){
-    $('#file-name').val($(this).val().replace(/^.*[\\\/]/, ''));
-  });
-  $('#upload-btn').click(function(){
-    hiddenfield.click();
-  });
-});
-

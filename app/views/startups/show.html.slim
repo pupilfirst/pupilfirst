@@ -3,7 +3,7 @@
   = javascript_include_tag 'startups.js'
 
 .container
-  - if @startup.pending?
+  - if @startup.pending? && current_user && @startup.is_founder?(current_user)
     .alert.alert-info.margin-top-20 role='alert'
       button.close type="button" data-dismiss="alert" aria-label="Close"
         span aria-hidden="true" &times;

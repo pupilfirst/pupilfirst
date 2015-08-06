@@ -24,7 +24,7 @@ class AvatarUploader < CarrierWave::Uploader::Base
     # Without the asset pipeine...
     # "/images/fallback/" + [version_name, "default.png"].compact.join('_')
 
-    [version_name, 'defaultdp.png'].compact.join('_')
+    # [version_name, 'defaultdp.png'].compact.join('_')
   end
 
   # Process files as they are uploaded:

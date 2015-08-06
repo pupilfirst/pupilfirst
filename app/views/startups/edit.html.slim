@@ -1,12 +1,21 @@
 = content_for :head
   = javascript_include_tag 'startups'
+  = stylesheet_link_tag 'startups'
 
 .margin-top-20
 
 h2.page-header.margin-top-0 Modify founders
 
+.row#current-founders-list
+  .col-sm-9.col-sm-offset-3
+    strong Current list of founders:&nbsp;
+    span.label.label-info #{current_user.email} (you)
+    - @startup.cofounders(current_user).each do |cofounder|
+      | &nbsp;
+      span.label.label-info #{cofounder.email}
+
 = simple_form_for :cofounder, url: add_founder_user_startup_path(current_user.startup), html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
-  = f.input :email, placeholder: 'founder@yourstartup.com', label: "Founder's SV ID", hint: cofounders_hint(@startup)
+  = f.input :email, placeholder: 'founder@yourstartup.com', label: "Founder's SV ID"
 
   .form-group
     .col-sm-offset-3.col-sm-10

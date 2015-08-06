@@ -81,7 +81,20 @@ section#showcase {
 
     p { padding-top: 13px; }
     button { margin-bottom: 10px; }
-    a {margin-bottom: 15px;}
+    a { margin-bottom: 15px; }
   }
+
+  #timeline-image-wrapper {
+    min-height: 130px;
+  }
+
+  #spinner-image {
+    text-align: center;
+    width: 100%;
+    position: absolute;
+    top: 20px;
+  }
+
+  #timeline-image { z-index: 10; position: relative; }
 }
 

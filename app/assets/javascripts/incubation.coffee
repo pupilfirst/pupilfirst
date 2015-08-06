@@ -10,4 +10,7 @@ $ ->
       $('.startup_admin_roll_number').hide()
 $ ->
   $("#startup_admin_attributes_is_student").change ->
-    $('.startup_admin_roll_number').toggle(this.checked);
+    $('.startup_admin_roll_number').toggle(this.checked)
+
+$ ->
+  $('#startup_category_ids').select2({ placeholder : 'Select Category' })

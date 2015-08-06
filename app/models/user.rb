@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
   extend Forwardable
+  include Gravtastic
+  gravtastic
 
   GENDER_MALE = 'male'
   GENDER_FEMALE = 'female'

@@ -21,5 +21,7 @@
             button.btn.btn-primary.showcase-video-trigger data-toggle="modal" data-target="#showcase-video" data-video="#{video}" data-title="#{startup} Graduation"
               i.fa.fa-youtube-play
               | &nbsp;Watch Video
-          button.btn.btn-default.margin-left-10.showcase-timeline-trigger data-toggle="modal" data-target="#showcase-timeline" data-timeline="#{ image_path "landing/showcase/timelines/#{startup.gsub(/\s+/, '').downcase}.jpg" }" data-title="Graduation Story of #{startup}"
+          button.btn.btn-default.margin-left-10.showcase-timeline-trigger.hidden-xs.hidden-sm data-toggle="modal" data-target="#showcase-timeline" data-timeline="#{ image_path "landing/showcase/timelines/#{startup.gsub(/\s+/, '').downcase}.jpg" }" data-title="Graduation Story of #{startup}"
+            | See Timeline
+          a.btn.btn-default.margin-left-10.showcase-timeline-trigger.visible-xs.visible-sm type="button" href="#{ image_path "landing/showcase/timelines/#{startup.gsub(/\s+/, '').downcase}.jpg" }"
             | See Timeline

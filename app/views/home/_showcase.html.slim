@@ -69,8 +69,11 @@ section#showcase
               button type="button" class="close" data-dismiss="modal" aria-label="Close"
                 span aria-hidden="true" &times;
               h4 class="modal-title" Graduation Story
-            .modal-body
-              img.img-responsive src=""
+            .modal-body#timeline-image-wrapper
+              #spinner-image
+                | Loading story...
+                br
+                i.fa.fa-refresh.fa-spin.fa-2x
             .modal-footer
               button type="button" class="btn btn-default" data-dismiss="modal" Close
 

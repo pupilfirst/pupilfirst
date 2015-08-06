@@ -1,49 +1,50 @@
-.col-md-4
-  .panel.panel-danger
-    .panel-heading
-      | Important Information
-    .panel-body
-      p
-        ' If your startup has more than one founder, please make sure that
-        strong only one of you applies for incubation.&nbsp;
-        ' You can add co-founders after you've submitted your incubation request.
-      p
-        ' For more information regarding applying for incubation, check out the corresponding section in the Startup
-        | Playbook.
-#progressbar.col-md-8
-  .panel.panel-default
-    .panel-heading
-      .row
-        .col-sm-4.text-center style="color: #337ab7"
-          .fa.fa-circle-o-notch.fa-spin
-          | &nbsp; User Profile
-        .col-sm-4.text-center style="color: grey"
-          .fa.fa-circle-o
-          | &nbsp; Startup Profile
-        .col-sm-4.text-center style="color: grey"
-          .fa.fa-circle-o
-          | &nbsp; Launch!
-    .panel-body
-      = simple_form_for @startup, url: wizard_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
-        = f.error_notification
+.row.margin-top-20
+  .col-md-4
+    .panel.panel-danger
+      .panel-heading
+        | Important Information
+      .panel-body
+        p
+          ' If your startup has more than one founder, please make sure that
+          strong only one of you applies for incubation.&nbsp;
+          ' You can add co-founders after you've submitted your incubation request.
+        p
+          ' For more information regarding applying for incubation, check out the corresponding section in the Startup
+          | Playbook.
+  #progressbar.col-md-8
+    .panel.panel-default
+      .panel-heading
+        .row
+          .col-sm-4.text-center style="color: #337ab7"
+            .fa.fa-circle-o-notch.fa-spin
+            | &nbsp; User Profile
+          .col-sm-4.text-center style="color: grey"
+            .fa.fa-circle-o
+            | &nbsp; Startup Profile
+          .col-sm-4.text-center style="color: grey"
+            .fa.fa-circle-o
+            | &nbsp; Launch!
+      .panel-body
+        = simple_form_for @startup, url: wizard_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
+          = f.error_notification
 
-        = f.simple_fields_for :admin do |u|
-          legend Mandatory fields
-          = u.input :gender, collection: valid_gender_values, label_method: :first, value_method: :last, as: :radio_buttons, required: true
-          = u.input :born_on, as: :date_picker, required: true, label: 'Date of birth', placeholder: 'DD/MM/YYYY'
-          .form-group
-            .col-sm-9.col-sm-offset-3
-              = u.input_field :is_student, inline_label: 'I am a student at Gujarat Technical University'
-          = u.input :roll_number, label: 'University Roll Number',required: true
-          
-          legend Optional fields
-          = u.input :communication_address
-          = u.input :district
-          = u.input :state
-          = u.input :pin, label: 'PIN Code'
-          = u.input :linkedin_url, label: 'LinkedIn URL'
-          = u.input :twitter_url, label: 'Twitter URL'
+          = f.simple_fields_for :admin do |u|
+            legend Mandatory fields
+            = u.input :gender, collection: valid_gender_values, label_method: :first, value_method: :last, as: :radio_buttons, required: true
+            = u.input :born_on, as: :date_picker, required: true, label: 'Date of birth', placeholder: 'DD/MM/YYYY'
+            .form-group
+              .col-sm-9.col-sm-offset-3
+                = u.input_field :is_student, inline_label: 'I am a student at Gujarat Technical University'
+            = u.input :roll_number, label: 'University Roll Number',required: true
 
-          .form-group
-            .col-sm-offset-3.col-sm-10
-              = f.button :submit, 'Next Step', class: 'btn btn-primary btn-flat'
+            legend Optional fields
+            = u.input :communication_address
+            = u.input :district
+            = u.input :state
+            = u.input :pin, label: 'PIN Code'
+            = u.input :linkedin_url, label: 'LinkedIn URL'
+            = u.input :twitter_url, label: 'Twitter URL'
+
+            .form-group
+              .col-sm-offset-3.col-sm-10
+                = f.button :submit, 'Next Step', class: 'btn btn-primary btn-flat'

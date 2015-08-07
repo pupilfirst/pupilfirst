@@ -36,7 +36,12 @@ class StartupsController < InheritedResources::Base
     @skip_container = true
 
     @startup = Startup.friendly.find(params[:id])
-    @events = @startup.timeline_events.order(:event_on, :updated_at).reverse_order
+    @new_timeline_event = @startup.timeline_events.new
+    if current_user && @startup == current_user.startup
+      @events = @startup.timeline_events.order(:event_on, :updated_at).reverse_order
+    else
+      @events = @startup.timeline_events.where(status: TimelineEvent::STATUS_APPROVED).order(:event_on, :updated_at).reverse_order
+    end
   end
 
   def edit

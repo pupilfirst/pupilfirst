@@ -1,6 +1,6 @@
 == content_for :head
   = stylesheet_link_tag 'startups'
-  = javascript_include_tag 'startups.js'
+  = javascript_include_tag 'startups'
 
 .container
   - if @startup.pending? && current_user && @startup.is_founder?(current_user)
@@ -149,16 +149,10 @@
     /             = f.button :submit, 'Submit for approval', class: 'btn btn-primary btn-flat'
 
     / Timeline starts
-    - if @events.present?
+    - if current_user && @startup.is_founder?(current_user)
       .col-md-8.col-md-pull-4.main-timeline
         .tl-iteration
-          p
-            | Timeline of #{@events.maximum(:iteration).ordinalize} iteration.
-          = image_tag 'timeline/dash.png'
-          br
-          a#read-from-beginning href="#begin"  Read from the beginning.
-        ul
-          - if current_user && @startup.is_founder?(current_user)
+          ul
             .timeline
               li style="padding:0" class="timeline-inverted"
                 .timeline-badge class="color6"
@@ -173,6 +167,15 @@
                     .timeline-footer.tl-footer
                       a.tl-link-button data-toggle="modal" data-target="#new_event"
                         | Submit Now
+    - if @events.present?
+      .col-md-8.col-md-pull-4.main-timeline
+        .tl-iteration
+          p
+            | Timeline of #{@events.maximum(:iteration).ordinalize} iteration.
+          = image_tag 'timeline/dash.png'
+          br
+          a#read-from-beginning href="#begin"  Read from the beginning.
+        ul
           - @events.each.with_index(1) do |event,index|
             - if event.event_type == TimelineEvent::TYPE_END_ITERATION
               .tl-iteration

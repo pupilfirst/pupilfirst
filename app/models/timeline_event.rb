@@ -61,6 +61,13 @@ class TimelineEvent < ActiveRecord::Base
     ]
   end
 
+  STATUS_SUBMITTED = 'submitted'
+  STATUS_APPROVED = 'approved'
+  def self.valid_status
+    [STATUS_SUBMITTED, STATUS_APPROVED]
+  end
+  validates_inclusion_of :status, in: valid_status
+
   validates_inclusion_of :event_type, in: valid_event_types
 
   before_save :make_links_an_array

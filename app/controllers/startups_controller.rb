@@ -79,6 +79,21 @@ class StartupsController < InheritedResources::Base
     redirect_to edit_user_startup_path(current_user)
   end
 
+  # POST /add_timeline_event
+  def add_timeline_event
+    @current_user = current_user
+    @startup = @current_user.startup
+    @timeline_event = @startup.timeline_events.new timeline_event_params
+    # if @timeline_event.save
+      # render js: 'console.log("done");'
+      # flash[:info] = 'Your new timeline event has been submitted to the SV team for approval!'
+    # else
+      # render js: 'console.log("error");'
+      # flash[:error] = 'There seems to be an error in your submission. Please try again!'
+    # end
+    # redirect_to @startup
+  end
+
   private
 
   def apply_now_params
@@ -92,6 +107,10 @@ class StartupsController < InheritedResources::Base
       :registration_type, :revenue_generated, :presentation_link, :team_size, :women_employees,
       :incubation_location, :slug
     )
+  end
+
+  def timeline_event_params
+    params.require(:timeline_event).permit(:title)
   end
 
   def restrict_to_startup_founders

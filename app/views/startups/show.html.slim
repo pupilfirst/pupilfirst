@@ -194,7 +194,7 @@
                     .timeline-heading
                       h4.timeline-title
                         | #{event.title}
-                      - if event.status == TimelineEvent::STATUS_SUBMITTED
+                      - if event.verified?
                         i.fa.fa-anchor
                       p.tl-date
                         small

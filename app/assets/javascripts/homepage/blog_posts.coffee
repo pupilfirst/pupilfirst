@@ -32,14 +32,14 @@ loadBlogPosts = ->
       postClone.find('.blog-post-link').attr('href', post.url)
 
       # Unhide the post, and append it to list of posts.
-      postClone.removeClass('hide')
+      postClone.removeClass('hidden')
       postClone.appendTo(blogPostsContainer)
   , "jsonp").fail(->
     # Show the failed text.
-    $("#blog-posts-loading-failed").removeClass('hide')
+    $("#blog-posts-loading-failed").removeClass('hidden')
   ).always(->
     # Hide the loading text.
-    $("#blog-posts-loading").addClass('hide')
+    $("#blog-posts-loading").addClass('hidden')
   )
 
 $(loadBlogPosts)

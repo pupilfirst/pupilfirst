@@ -61,13 +61,6 @@ class TimelineEvent < ActiveRecord::Base
     ]
   end
 
-  STATUS_SUBMITTED = 'submitted'
-  STATUS_APPROVED = 'approved'
-  def self.valid_status
-    [STATUS_SUBMITTED, STATUS_APPROVED]
-  end
-  validates_inclusion_of :status, in: valid_status
-
   validates_inclusion_of :event_type, in: valid_event_types
 
   before_save :make_links_an_array
@@ -75,4 +68,10 @@ class TimelineEvent < ActiveRecord::Base
   def make_links_an_array
     self.links = [] if links.nil?
   end
+
+  def verified?
+    verified_at.present?
+  end
+
+  scope :verified, -> { where.not(verified_at: nil) }
 end

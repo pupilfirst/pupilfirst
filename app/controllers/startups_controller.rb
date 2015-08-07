@@ -84,14 +84,14 @@ class StartupsController < InheritedResources::Base
     @current_user = current_user
     @startup = @current_user.startup
     @timeline_event = @startup.timeline_events.new timeline_event_params
-    # if @timeline_event.save
-      # render js: 'console.log("done");'
+
+    if @timeline_event.save
+      render json: @timeline_event,status: :created
       # flash[:info] = 'Your new timeline event has been submitted to the SV team for approval!'
-    # else
-      # render js: 'console.log("error");'
+    else
+      render json: @timeline_event.errors, status: :unprocessable_entity
       # flash[:error] = 'There seems to be an error in your submission. Please try again!'
-    # end
-    # redirect_to @startup
+    end
   end
 
   private

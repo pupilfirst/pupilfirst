@@ -39,9 +39,9 @@ Svapp::Application.routes.draw do
     # # end
     # end
 
-    # member do
-    #   post :add_founder
-    # end
+    member do
+      post :add_timeline_event
+    end
   end
 
   # resources :mentors do

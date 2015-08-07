@@ -49,9 +49,9 @@ $(->
 
 $(->
   $("#new_timeline_event").on("ajax:success", (e, data, status, xhr) ->
-    console.log 'form handler success'
+    console.log data
     $("#new_timeline_event").append xhr.responseText
   ).on "ajax:error", (e, xhr, status, error) ->
-    console.log 'form handler error'
+    console.log xhr
     $("#new_timeline_event").append "<p>ERROR</p>"
 )

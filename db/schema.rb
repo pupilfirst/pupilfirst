@@ -238,7 +238,7 @@ ActiveRecord::Schema.define(version: 20150807054635) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.date     "event_on"
-    t.string   "status"
+    t.datetime "verified_at"
   end
 
   add_index "timeline_events", ["startup_id"], name: "index_timeline_events_on_startup_id", using: :btree

@@ -19,7 +19,7 @@ loadBlogPosts = ->
       blogPostImage = document.createElement 'img'
       blogPostImage.src = post.thumbnail_images.full.url
       blogPostImage.className = 'blog-post-image'
-      postClone.find('.blog-post-top').prepend(blogPostImage)
+      postClone.find('.blog-post-image-link').prepend(blogPostImage)
 
       # Add title.
       postClone.find('.blog-post-title').html(post.title_plain)
@@ -28,8 +28,10 @@ loadBlogPosts = ->
       contentLength = if (post.title_plain.length > 30) then (220 - Math.round((post.title_plain.length - 30) * 1.2)) else 210
       postClone.find('.blog-post-content').html(stripHTML(post.content).substring(0, contentLength) + "...")
 
-      # Add link to original post.
+      # Add link to continue button, post image and post title
+      postClone.find('.blog-post-image-link').attr('href', post.url)
       postClone.find('.blog-post-link').attr('href', post.url)
+      postClone.find('.blog-post-title-link').attr('href', post.url)
 
       # Unhide the post, and append it to list of posts.
       postClone.removeClass('hidden')

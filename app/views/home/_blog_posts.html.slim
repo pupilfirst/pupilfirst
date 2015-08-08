@@ -19,12 +19,13 @@ section#blog-posts
         | &nbsp;instead...
     #post-scaffold.blog-post.hidden
       .blog-post-top
-        /img.blog-post-image src="#add-this-tag-through-javascript"
+        a.blog-post-image-link href="#"
+          /img.blog-post-image src="#add-this-tag-through-javascript"
         .blog-body
-          h5.blog-post-title
+          a.blog-post-title-link href="#"
+            h5.blog-post-title
           img.line src="#{image_url 'line2.png'}" width="100%"
           p.blog-post-content
-      .blog-post-bottom
-        a.blog-post-link href="#"
-          | continue reading &nbsp;
-          = image_tag 'cont.png', class: 'img-animation'
+      .blog-post-bottom.flex-center
+        a.blog-post-link.btn.btn-default href="#"
+          | Continue Reading &raquo;

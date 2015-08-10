@@ -36,7 +36,7 @@ class StartupsController < InheritedResources::Base
     @skip_container = true
 
     @startup = Startup.friendly.find(params[:id])
-    @new_timeline_event = @startup.timeline_events.new
+    @timeline_event = @startup.timeline_events.new
     if current_user && @startup == current_user.startup
       @events = @startup.timeline_events.order(:event_on, :updated_at).reverse_order
     else
@@ -86,11 +86,13 @@ class StartupsController < InheritedResources::Base
     @timeline_event = @startup.timeline_events.new timeline_event_params
 
     if @timeline_event.save
-      render json: @timeline_event,status: :created
-      # flash[:info] = 'Your new timeline event has been submitted to the SV team for approval!'
+      # render json: @timeline_event,status: :created
+      flash[:info] = 'Your new timeline event has been submitted to the SV team for approval!'
+      redirect_to @startup
     else
-      render json: @timeline_event.errors, status: :unprocessable_entity
-      # flash[:error] = 'There seems to be an error in your submission. Please try again!'
+      # render json: @timeline_event.errors, status: :unprocessable_entity
+      flash[:error] = 'There seems to be an error in your submission. Please try again!'
+      render 'startups/show'
     end
   end
 
@@ -110,7 +112,7 @@ class StartupsController < InheritedResources::Base
   end
 
   def timeline_event_params
-    params.require(:timeline_event).permit(:title)
+    params.require(:timeline_event).permit(:event_type, :event_on, :description, :image, :link_url)
   end
 
   def restrict_to_startup_founders

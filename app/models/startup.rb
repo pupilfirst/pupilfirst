@@ -450,7 +450,7 @@ class Startup < ActiveRecord::Base
     if self.latest_end_of_iteration
       self.latest_end_of_iteration.iteration + 1
     else
-      self.timeline_events.maximum(:iteration)
+      1
     end
   end
 

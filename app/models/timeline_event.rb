@@ -68,7 +68,7 @@ class TimelineEvent < ActiveRecord::Base
   LINK_URL_MATCHER = /(?:https?\/\/)?(?:www\.)?(?<domain>[\w-]+)\./
 
   def link_url_format
-    if link_url && link_url !~ LINK_URL_MATCHER
+    if link_url.present? && link_url !~ LINK_URL_MATCHER
       self.errors.add(:link_url, 'does not look like a valid URL')
     end
   end

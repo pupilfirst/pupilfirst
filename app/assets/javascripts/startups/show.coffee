@@ -48,10 +48,9 @@ $(->
 )
 
 $(->
-  $("#new_timeline_event").on("ajax:success", (e, data, status, xhr) ->
-    console.log data
-    $("#new_timeline_event").append xhr.responseText
-  ).on "ajax:error", (e, xhr, status, error) ->
-    console.log xhr
-    $("#new_timeline_event").append "<p>ERROR</p>"
+  $("#new-event-form .panel-heading").click(->
+    $("#new-event-form .panel-body").collapse('toggle')
+    $("#new-event-form .fa-plus").toggleClass("hidden")
+    $("#new-event-form .fa-minus").toggleClass("hidden")
+  )
 )

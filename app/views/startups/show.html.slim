@@ -83,7 +83,7 @@
                     img.media-object alt="Iteration icon" src="#{image_url 'timeline/icons/iteration.png'}"
                   .media-body
                     h4.media-heading Product Iteration
-                    p.data-content #{@events.maximum(:iteration).ordinalize}
+                    p.data-content #{@startup.current_iteration.ordinalize}
         .row
           - if @startup.founders.present?
             .col-sm-6.col-md-12

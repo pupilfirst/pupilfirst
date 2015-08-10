@@ -14,7 +14,6 @@ p
         .panel-body
           = f.input :name, label: "Startup's Name", required: true, input_html: { placeholder: '', maxlength: 255 }
           = f.input :logo, as: :file, required: false
-          = f.input :incubation_location, required: true, collection: Startup.valid_incubation_location_values, label_method: ->(obj) { obj.capitalize }, include_blank: false
 
     .panel.panel-default
       .panel-heading role="tab"

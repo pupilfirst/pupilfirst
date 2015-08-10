@@ -445,4 +445,17 @@ class Startup < ActiveRecord::Base
   def investors?
     false
   end
+
+  def current_iteration
+    if self.latest_end_of_iteration
+      self.latest_end_of_iteration.iteration + 1
+    else
+      self.timeline_events.maximum(:iteration)
+    end
+  end
+
+  def latest_end_of_iteration
+    self.timeline_events.where(event_type: TimelineEvent::TYPE_END_ITERATION).order(event_on: :desc).first
+  end
+
 end

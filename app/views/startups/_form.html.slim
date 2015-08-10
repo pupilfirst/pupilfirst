@@ -14,13 +14,6 @@ p
         .panel-body
           = f.input :name, label: "Startup's Name", required: true, input_html: { placeholder: '', maxlength: 255 }
           = f.input :logo, as: :file, required: false
-
-    .panel.panel-default
-      .panel-heading role="tab"
-        .panel-title
-          a data-toggle="collapse" data-parent="#startupform" href="#description" Description
-      #description.panel-collapse.collapse role="tabpanel"
-        .panel-body
           = f.input :about, label: 'About your Startup', as: :text,
             hint: "Describe your startup in less than #{Startup::MAX_ABOUT_CHARACTERS} characters.",
             input_html: { rows: 5, class:'span5', placeholder: 'Description in less than 1000 characters', maxlength: Startup::MAX_ABOUT_CHARACTERS },

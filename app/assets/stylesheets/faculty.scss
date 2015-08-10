@@ -7,7 +7,7 @@ $faculty-bg-color: #f8f8f8;
 section#prefooter { margin-top: 0; }
 
 #faculty {
-  font-family: Roboto, sans-serif;
+  //font-family: Roboto, sans-serif;
   background-color: $faculty-bg-color;
 
   p.introduction {
@@ -22,7 +22,7 @@ section#prefooter { margin-top: 0; }
 
     a.tab-title {
       text-transform: uppercase;
-      font-weight: 500;
+      font-weight: 600;
     }
 
     li.active {
@@ -75,7 +75,7 @@ section#prefooter { margin-top: 0; }
           .faculty-name {
             text-transform: uppercase;
             margin-top: 15px;
-            font-weight: 500;
+            font-weight: 600;
           }
 
           .faculty-title {

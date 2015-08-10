@@ -3,12 +3,12 @@
   background-color: #01bf7b;
   padding: 50px 0px;
   margin: 0px 0px;
-  font-family: 'Roboto', sans-serif;
+  //font-family: 'Roboto', sans-serif;
   text-align: center;
 
   h1 {
     font-size: 48px;
-    font-weight: 100;
+    font-weight: 200;
     color: #005838;
     &::after {
       content: " ";
@@ -26,7 +26,7 @@
     font-size: 18px;
     font-weight: 300;
     color: #FFF;
-    font-family: 'Roboto', sans-serif;
+    //font-family: 'Roboto', sans-serif;
     opacity: .9;
   }
 
@@ -35,8 +35,8 @@
     width: 150px;
     background: transparent;
     font-size: 14px;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 500;
+    //font-family: 'Roboto', sans-serif;
+    font-weight: 600;
     border: solid 1px #FFF;
     transition: all 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75);
 
@@ -46,18 +46,18 @@
     color: black; }
   }
 
-  .carousel-inner { 
+  .carousel-inner {
       .item img {
         margin: auto;
         padding-top: 20px;
         padding-bottom: 20px;
       }
-      
+
       .item p {
         margin-bottom: 20px;
       }
   }
-  
+
   .carousel-control.left, .carousel-control.right {
     background-image: none
   }

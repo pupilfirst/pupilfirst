@@ -19,9 +19,9 @@
   }
 
   h4 {
-    font-family: 'Roboto', sans-serif;
+    //font-family: 'Roboto', sans-serif;
     font-size: 42px;
-    font-weight: 100;
+    font-weight: 200;
     line-height: 50px;
 
     @media (min-width: $screen-lg-min) { padding-top: 50px; }
@@ -49,8 +49,8 @@
   .btn-join {
     color: white;
     font-size: 14px;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 500;
+    //font-family: 'Roboto', sans-serif;
+    font-weight: 600;
     border: solid 1px white;
     transition: all 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75);
 
@@ -68,7 +68,7 @@
     }
 
     a.watch-video-button {
-      font-family: "Roboto", sans-serif;
+      //font-family: "Roboto", sans-serif;
       padding-left: 30px;
       color: lightgrey;
 

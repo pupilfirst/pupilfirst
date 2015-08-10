@@ -6,8 +6,8 @@
 }
 
 h1.startup-name {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 100;
+  //font-family: 'Roboto', sans-serif;
+  font-weight: 200;
   font-size: 50px;
   color: #2458a1;
   margin: 20px 0;
@@ -35,7 +35,7 @@ p.about-startup {
 }
 
 #data-points {
-  font-family: Roboto, sans-serif;
+  //font-family: Roboto, sans-serif;
 
   .data-icons {
     h4.media-heading {
@@ -132,7 +132,7 @@ p.about-startup {
   p {
     width: 90%;
     margin: auto;
-    font-family: 'Roboto';
+    //font-family: 'Roboto';
     font-style: normal;
     font-weight: 300;
     font-size: 22px;
@@ -141,12 +141,13 @@ p.about-startup {
   .tl-iteration:last-child {
     border-bottom: 0px;
   }
+
   .buttons {
     border: 1px solid #0f9d58;
     padding: 5px;
     padding-left: 10px;
     padding-right: 10px;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 14px;
     color: #0f9d58;
     background-color: #fff;
@@ -284,7 +285,7 @@ p.about-startup {
 
 .timeline-title {
   margin-top: 0;
-  font-family: 'Roboto';
+  //font-family: 'Roboto';
   font-style: normal;
   font-weight: 300;
   font-size: 20px;
@@ -293,9 +294,9 @@ p.about-startup {
 }
 
 .tl-date {
-  font-family: 'Roboto';
+  //font-family: 'Roboto';
   font-style: normal;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 14px;
   color: #2458a1 !important;
   margin-top: -5px; }
@@ -321,9 +322,9 @@ p.about-startup {
   border-top: solid 1px #9f9f9f;
   a {
     border: 1px solid #0f9d58 !important;
-    font-family: 'Roboto';
+    //font-family: 'Roboto';
     font-style: normal;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 12px;
     text-decoration: none !important;
     padding: 8px;

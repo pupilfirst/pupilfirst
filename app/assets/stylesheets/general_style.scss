@@ -10,183 +10,44 @@
     font-size: 40px !important;
     text-align: center !important; }
   .carousel .item div {
-    text-align: center !important; } }
+    text-align: center !important; }
+}
+
 @media screen and (max-width: 767px) {
   .carousel h4 {
     font-size: 32px !important;
     text-align: center !important; }
   .carousel .item {
-    text-align: center !important; } }
+    text-align: center !important; }
+}
+
 @media screen and (max-width: 480px) {
   .carousel h4 {
     font-size: 22px !important;
     text-align: center !important; }
   .carousel .item {
-    text-align: center !important; } }
+    text-align: center !important; }
+}
+
 @media screen and (max-width: 320px) {
   .carousel h4 {
     font-size: 16px !important;
     text-align: center !important; }
   .carousel .item {
-    text-align: center !important; } }
+    text-align: center !important; }
+}
 
-/* About section */
-#about-section {
-  padding-top: 80px; }
-  #about-section h5 {
-    font-size: 16px;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 500;
-    color: #0f9d58; }
-  #about-section h4 {
-    font-size: 20px;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 300;
-    color: #565656;
-    line-height: 40px; }
-  #about-section .circle {
-    margin-top: 20px;
-    border: 1px solid  #00ce78;
-    text-align: center;
-    padding: 45px;
-    border-radius: 80px;
-    background-color: #00ce78; }
+.short-list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
 
-/* About section */
-
-/* showcase */
-/* Companies */
-#companies {
-  background-color: #F7F7F7;
-  padding-top: 40px;
-  padding-bottom: 60px; }
-  #companies .learnmore a {
-    text-transform: uppercase;
-    margin-bottom: -50px;
-    padding-left: 10px;
-    text-decoration: none;
-    font-weight: 400;
-    color: #0054a6;
-    -webkit-transition: all 300ms cubic-bezier(0.25, 0.25, 0.75, 0.75);
-    -moz-transition: all 300ms cubic-bezier(0.25, 0.25, 0.75, 0.75);
-    -o-transition: all 300ms cubic-bezier(0.25, 0.25, 0.75, 0.75);
-    transition: all 300ms cubic-bezier(0.25, 0.25, 0.75, 0.75);
-    /* linear */ }
-  #companies .learnmore a:hover {
-    color: #0A9C59; }
-  #companies .company-details #owl-demo1 .item img {
-    display: block;
-    max-width: 70%;
-    height: 100px;
-    text-align: center;
-    padding: 20px; }
-  #companies .company-details .owl-theme .owl-controls .owl-buttons div {
-    background: none !important; }
-  #companies .company-details .owl-theme .owl-controls .owl-buttons .owl-next {
-    top: -10px; }
-  #companies .company-details .owl-theme .owl-controls .owl-buttons .owl-prev {
-    top: -10px; }
-  #companies .company-details .owl-prev {
-    left: 20px;
-    vertical-align: middle; }
-  #companies .company-details .owl-next {
-    right: 20px;
-    vertical-align: middle; }
-  #companies .company-details .owl-wrapper .owl-item .item img {
-    margin: 0 auto !important; }
-    .short-list {
-      display:flex;
-      justify-content:center;
-      flex-wrap:wrap;
-    }
-  #companies .short-list .liste {
-    margin: auto;
-    text-align: center; }
-    #companies .short-list .liste {
-      border: 1px solid #ddd;
-      margin: 20px;
-      vertical-align: middle;
-      background-color: #fff; }
-      .center-helper{
-        display: inline-block;
-        height: 100%;
-        vertical-align: middle;
-      }
-      #companies .short-list .liste img {
-        margin: auto;
-        max-height: 100%;
-        max-width: 100%;
-        vertical-align: middle; }
-  @media screen and (max-width: 240px) {
-    #companies .short-list .liste {
-      width: 100%;
-      height: 100vw;
-      display: none; }
-    #companies .short-list .liste:nth-child(-n+4) {
-      display: block;
-      margin: auto; } }
-  @media screen and (min-width: 241px) and (max-width: 480px) {
-    #companies .short-list .liste {
-      width: 50%;
-      height: 50vw;
-      float: left;
-      padding-left: 5px;
-      padding-right: 5px;
-      display: none; }
-    #companies .short-list .liste:nth-child(-n+4) {
-      display: block; } }
-  @media screen and (min-width: 481px) and (max-width: 767px) {
-    #companies .short-list .liste {
-      width: 33.3%;
-      height: 33.3vw;
-      float: left;
-      display: none; }
-    #companies .short-list .liste:nth-child(-n+6) {
-      display: block; } }
-  @media screen and (min-width: 768px) and (max-width: 991px) {
-    #companies .short-list .liste {
-      width: 25%;
-      height: 25vw;
-      float: left;
-      display: none; }
-    #companies .short-list .liste:nth-child(-n+8) {
-      display: block; } }
-  @media screen and (min-width: 992px) and (max-width: 1199px) {
-    #companies .short-list .liste {
-      width: 20%;
-      height: 20vw;
-      float: left;
-      display: none; }
-    #companies .short-list .liste:nth-child(-n+10) {
-      display: block; } }
-  @media screen and (min-width: 1200px) {
-    #companies .short-list .liste {
-      width: 16.6%;
-      height: 16.6vw;
-      float: left;
-      display: none; }
-    #companies .short-list .liste:nth-child(-n+12) {
-      display: block; } }
-
-/* Media */
-#media {
-  background-color: #f7f7f7; }
-  #media .owl-buttons .owl-prev {
-    left: -1px; }
-  #media .owl-buttons .owl-next {
-    right: -1px; }
-
-/* Media */
-/* Landing page */
-/* landing page */
-/* time-line  page style :) */
-body {
-  font-family: 'Roboto';
- /* font-style: normal;
-  font-weight: 100;
-  font-size: 14px;
-font-family: 'Source Sans Pro', sans-serif;
-  */ }
+.center-helper {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
 
 /* Remove the top and bottom margin for navbar-brand. */
 .navbar-brand-without-vertical-padding {
@@ -216,23 +77,21 @@ a.source-link:hover {
 
 /*---------------------- new styles -------------------------------*/
 
-
-
-
 .iteration_link img {
   vertical-align: middle; }
+
 .iteration_link li {
   margin-left: -40px;
   list-style-type: none; }
+
 .iteration_link a {
   text-decoration: none;
   margin-left: 5px;
   color: #757575;
   font-weight: 400; }
+
 .iteration_link a:hover {
   color: #0f9d58; }
-
-
 
 /* Landing page */
 body {
@@ -312,25 +171,6 @@ iframe {
   width: 100%;
   height: auto; }
 
-.watch-view-button {
-  color: #fff;
-  font-family: "Roboto", sans-serif;
-  padding-left: 30px;
-  font-weight: 400;
-  font-size: 14px;
-  margin-top: 30px;
-  display: inline-block;
-
-  a {
-    color: lightgrey;
-  }
-
-  a:hover {
-    color: white;
-    text-decoration: none;
-  }
-}
-
 .side-content {
   padding-top: 18%; }
 
@@ -354,121 +194,11 @@ iframe {
   display: block;
   border-bottom: 1px solid #ddd; }
 
-.lista a {
-  float: left;
-  padding-top: 25px;
-  text-decoration: none;
-  color: #0054a6;
-  font-size: 15px;
-  font-family: 'Roboto', sans-serif;
-  font-weight: 400; }
-.lista a:hover {
-  color: #0f9d58; }
-
-.owl-theme .owl-controls {
-  margin-top: 10px;
-  text-align: center; }
-
 .hdstyle {
   text-align: center; }
 
 #bdstyle {
   border-bottom: 2px solid #00ce78; }
-
-/*.test-slider
-{
-  background:url("../img/bg.jpg") no-repeat;
-  .carousel slide
-  {
-    z-index:100;
-  }
-}*/
-#media, #companies {
-  font-family: 'Roboto', sans-serif; }
-  #media h1, #companies h1 {
-    font-size: 48px;
-    font-weight: 100; }
-  #media p, #companies p {
-    padding-top: 15px;
-    font-size: 16px;
-    color: #565656; }
-
-/* Owl slider common style */
-/* Styling Next and Prev buttons */
-.owl-theme .owl-controls .owl-buttons div {
-  display: inline-block;
-  zoom: 1;
-  *display: inline;
-  /*IE7 life-saver */
-  margin: 5px;
-  padding: 3px 10px;
-  font-size: 60px;
-  -webkit-border-radius: 30px;
-  -moz-border-radius: 30px;
-  border-radius: 30px;
-  background: #f7f7f7;
-  filter: Alpha(Opacity=50);
-  /*IE7 fix*/
-  opacity: 0.5; }
-
-/* Clickable class fix problem with hover on touch devices */
-/* Use it for non-touch hover action */
-.owl-theme .owl-controls.clickable .owl-buttons div:hover {
-  filter: Alpha(Opacity=100);
-  /*IE7 fix*/
-  opacity: 1;
-  text-decoration: none; }
-
-/* Styling Pagination*/
-.owl-theme .owl-controls .owl-page {
-  display: inline-block;
-  zoom: 1;
-  *display: inline;
-  /*IE7 life-saver */ }
-
-.owl-theme .owl-controls .owl-page.active span,
-.owl-theme .owl-controls.clickable .owl-page:hover span {
-  filter: Alpha(Opacity=100);
-  /*IE7 fix*/
-  opacity: 1; }
-
-/* If PaginationNumbers is true */
-.owl-theme .owl-controls .owl-page span.owl-numbers {
-  height: auto;
-  width: auto;
-  color: #FFF;
-  padding: 2px 10px;
-  font-size: 40px;
-  -webkit-border-radius: 30px;
-  -moz-border-radius: 30px;
-  border-radius: 30px; }
-
-#owl-demo .owl-item > div img {
-  display: block;
-  width: 100%;
-  height: auto;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-  margin-bottom: 4px; }
-
-#owl-demo .owl-item > div {
-  background: #f7f7f7;
-  margin: 50px; }
-
-.wrapper-with-margin {
-  margin: 0px auto; }
-
-.owl-theme .owl-controls .owl-buttons div {
-  position: absolute; }
-
-.owl-theme .owl-controls .owl-buttons .owl-prev {
-  left: -45px;
-  top: 15px; }
-
-.owl-theme .owl-controls .owl-buttons .owl-next {
-  right: -45px;
-  top: 15px; }
 
 /* Chrome, Safari, Opera */
 @-webkit-keyframes example {
@@ -483,7 +213,9 @@ iframe {
   100% {
     color: #0F9D58;
     left: 0px;
-    top: 0px; } }
+    top: 0px; }
+}
+
 /* Standard syntax */
 @keyframes example {
   0% {
@@ -497,25 +229,5 @@ iframe {
   100% {
     color: #0F9D58;
     left: 0px;
-    top: 0px; } }
-.primary1 {
-  cursor: pointer; }
-
-.primary1 img {
-  filter: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='grayscale'><feColorMatrix type='matrix' values='0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0'/></filter></svg>#grayscale");
-  /* Firefox 10+, Firefox on Android */
-  -webkit-filter: grayscale(100%);
-  filter: grayscale(100%);
-  filter: gray;
-  /* IE 6-9 */
-  -moz-transition: all 0.2s ease-in;
-  -o-transition: all 0.2s ease-in;
-  -webkit-transition: all 0.2s ease-in;
-  transition: all 0.2s ease-in; }
-
-.primary1:hover img {
-  filter: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='grayscale'><feColorMatrix type='matrix' values='1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0'/></filter></svg>#grayscale");
-  -webkit-filter: none;
-  filter: none; }
-
-/*# sourceMappingURL=style.css.map */
+    top: 0px; }
+}

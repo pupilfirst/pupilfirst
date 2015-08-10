@@ -129,6 +129,9 @@ p.about-startup {
   a {
     text-decoration: none;
   }
+  .pending {
+    color: #FF0000;
+  }
   p {
     width: 90%;
     margin: auto;
@@ -207,6 +210,10 @@ p.about-startup {
       //padding: 20px;
       padding: 15px 20px 20px 20px;
       position: relative;
+      .timeline-heading a {
+        text-decoration: none;
+        color: #FF0000;
+      }
     }
     .timeline-panel:before {
       position: absolute;

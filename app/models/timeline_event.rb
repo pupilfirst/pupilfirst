@@ -3,6 +3,7 @@ class TimelineEvent < ActiveRecord::Base
   mount_uploader :image, TimelineImageUploader
   serialize :links
   validates_presence_of :title, :event_type, :event_on, :startup_id, :iteration
+  attr_accessor :link_url
 
   TYPE_TEAM_FORMATION = 'team_formation'
   TYPE_PROSPECTIVE_CUSTOMER = 'prospective_customer'
@@ -62,10 +63,42 @@ class TimelineEvent < ActiveRecord::Base
   end
 
   validates_inclusion_of :event_type, in: valid_event_types
+  validate :link_url_format
 
-  before_save :make_links_an_array
+  LINK_URL_MATCHER = /(?:https?\/\/)?(?:www\.)?(?<domain>[\w-]+)\./
+
+  def link_url_format
+    if link_url.present? && link_url !~ LINK_URL_MATCHER
+      self.errors.add(:link_url, 'does not look like a valid URL')
+    end
+  end
+
+
+  before_save :make_links_an_array, :build_link_json
+  before_validation :build_title_from_type, :record_iteration
+
+  def build_title_from_type
+    self.title = event_type.gsub('_',' ').capitalize
+  end
+
+  def record_iteration
+    self.iteration = self.startup.current_iteration
+  end
+
+  def build_link_json
+    if @link_url.present?
+      title = LINK_URL_MATCHER.match(@link_url)[:domain]
+      self.links = [{title: title, url: link_url}]
+    end
+  end
 
   def make_links_an_array
     self.links = [] if links.nil?
   end
+
+  def verified?
+    verified_at.present?
+  end
+
+  scope :verified, -> { where.not(verified_at: nil) }
 end

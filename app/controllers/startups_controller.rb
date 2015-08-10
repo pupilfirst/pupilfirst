@@ -36,7 +36,12 @@ class StartupsController < InheritedResources::Base
     @skip_container = true
 
     @startup = Startup.friendly.find(params[:id])
-    @events = @startup.timeline_events.order(:event_on, :updated_at).reverse_order
+    @timeline_event = @startup.timeline_events.new
+    if current_user && @startup == current_user.startup
+      @events = @startup.timeline_events.order(:event_on, :updated_at).reverse_order
+    else
+      @events = @startup.timeline_events.where(status: TimelineEvent::STATUS_APPROVED).order(:event_on, :updated_at).reverse_order
+    end
   end
 
   def edit
@@ -74,6 +79,23 @@ class StartupsController < InheritedResources::Base
     redirect_to edit_user_startup_path(current_user)
   end
 
+  # POST /add_timeline_event
+  def add_timeline_event
+    @current_user = current_user
+    @startup = @current_user.startup
+    @timeline_event = @startup.timeline_events.new timeline_event_params
+
+    if @timeline_event.save
+      # render json: @timeline_event,status: :created
+      flash[:info] = 'Your new timeline event has been submitted to the SV team for approval!'
+      redirect_to @startup
+    else
+      # render json: @timeline_event.errors, status: :unprocessable_entity
+      flash[:error] = 'There seems to be an error in your submission. Please try again!'
+      render 'startups/show'
+    end
+  end
+
   private
 
   def apply_now_params
@@ -86,6 +108,10 @@ class StartupsController < InheritedResources::Base
       { category_ids: [] }, { founders_attributes: [:id, :title] },
       :registration_type, :revenue_generated, :presentation_link, :team_size, :women_employees, :slug
     )
+  end
+
+  def timeline_event_params
+    params.require(:timeline_event).permit(:event_type, :event_on, :description, :image, :link_url)
   end
 
   def restrict_to_startup_founders

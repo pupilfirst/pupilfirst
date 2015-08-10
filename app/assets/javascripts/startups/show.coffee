@@ -46,3 +46,11 @@ $(->
       $("#verified").removeAttr("data-tooltip")
   )
 )
+
+$(->
+  $("#new-event-form .panel-heading").click(->
+    $("#new-event-form .panel-body").collapse('toggle')
+    $("#new-event-form .fa-plus").toggleClass("hidden")
+    $("#new-event-form .fa-minus").toggleClass("hidden")
+  )
+)

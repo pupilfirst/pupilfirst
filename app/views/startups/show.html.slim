@@ -1,6 +1,6 @@
 == content_for :head
   = stylesheet_link_tag 'startups'
-  = javascript_include_tag 'startups.js'
+  = javascript_include_tag 'startups'
 
 .container
   - if @startup.pending? && current_user && @startup.is_founder?(current_user)
@@ -83,7 +83,7 @@
                     img.media-object alt="Iteration icon" src="#{image_url 'timeline/icons/iteration.png'}"
                   .media-body
                     h4.media-heading Product Iteration
-                    p.data-content #{@events.maximum(:iteration).ordinalize}
+                    p.data-content #{@startup.current_iteration.ordinalize}
         .row
           - if @startup.founders.present?
             .col-sm-6.col-md-12
@@ -134,55 +134,82 @@
 
     / Container right end
 
-    / Timeline starts
-    - if @events.present?
-      .col-md-8.col-md-pull-4.main-timeline
-        .tl-iteration
-          p
-            | Timeline of #{@events.maximum(:iteration).ordinalize} iteration.
-          = image_tag 'timeline/dash.png'
-          br
-          a#read-from-beginning href="#begin"  Read from the beginning.
-        ul
-          - @events.each.with_index(1) do |event,index|
-            - if event.event_type == TimelineEvent::TYPE_END_ITERATION
-              .tl-iteration
-                .buttons style="display:inline" End of Iteration #{event.iteration}
-                br
-                p style="margin-top: 10px" #{event.title}
-                = image_tag 'timeline/dash.png'
-                p #{event.description}
-                br
-            - else
-              .timeline
-                li style="padding:0" class="timeline#{index.odd? ? "" : "-inverted"}"
-                  .timeline-badge class="color#{index%14}"
-                    = image_tag "timeline/badges/#{event.event_type.to_s}.png", width: "70"
-                  .timeline-panel
-                    .timeline-heading
-                      h4.timeline-title
-                        | #{event.title}
-                      p.tl-date
-                        small
-                          = image_tag "timeline/date.png"
-                          | #{event.event_on.strftime("%B %Y")}
-                    .timeline-body
-                      .tl-body
-                        - if event.image?
-                          .img-responsive.img-padding.tl-event-image
-                            = image_tag event.image
-                        p #{event.description}
-                      - if event.links?
-                        .timeline-footer.tl-footer
-                          - event.links.each do |link|
-                            a.tl-link-button href="#{link[:url]}"
-                              | #{link[:title]}
-    - else
-      .col-md-8.col-md-pull-4.main-timeline
-        .tl-iteration
-          p
-            | No timeline events to show!
-          = image_tag 'timeline/dash.png'
+    /Form to post new timeline event
+    - if current_user && @startup.is_founder?(current_user)
+      .col-md-8.col-md-pull-4
+        #new-event-form.panel.panel-primary
+          .panel-heading.text-uppercase
+              | Submit new timeline event
+              .pull-right
+                i.fa.fa-plus
+                i.fa.fa-minus.hidden
+          .panel-body.collapse
+            = simple_form_for @timeline_event, url: add_timeline_event_startup_path(@startup), html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean, file: :horizontal_file_input } do |f|
+              = f.input :event_type, collection: TimelineEvent.valid_event_types
+              = f.input :event_on, as: :date_picker, placeholder: 'DD/MM/YYYY'
+              = f.input :description
+              = f.input :image
+              = f.input :link_url
+              .form-group
+                .col-sm-offset-3.col-sm-9
+                  = f.button :submit, 'Submit for approval', class: 'btn btn-primary btn-flat'
+        - if @events.present?
+          .main-timeline
+            .tl-iteration
+              p
+                | Timeline of #{@events.maximum(:iteration).ordinalize} iteration.
+              = image_tag 'timeline/dash.png'
+              br
+              a#read-from-beginning href="#begin"  Read from the beginning.
+            ul
+              - @events.each.with_index(1) do |event,index|
+                - if event.event_type == TimelineEvent::TYPE_END_ITERATION
+                  .tl-iteration
+                    .buttons style="display:inline" End of Iteration #{event.iteration}
+                    br
+                    p style="margin-top: 10px" #{event.title}
+                    - if !event.verified?
+                      a.pending href="#" data-toggle="tooltip" title="This event is not yet verified by SV and hence not visible to the public!"
+                        i.fa.fa-exclamation-circle
+                        | &nbsp;Pending verification
+                    br
+                    = image_tag 'timeline/dash.png'
+                    p #{event.description}
+                    br
+                - else
+                  .timeline
+                    li style="padding:0" class="timeline#{index.odd? ? "" : "-inverted"}"
+                      .timeline-badge class="color#{index%14}"
+                        = image_tag "timeline/badges/#{event.event_type.to_s}.png", width: "70"
+                      .timeline-panel
+                        .timeline-heading
+                          - if !event.verified?
+                            a href="#" data-toggle="tooltip" title="This event is not yet verified by SV and hence not visible to the public!"
+                              i.fa.fa-exclamation-circle
+                              | &nbsp;Pending verification
+                          h4.timeline-title
+                            | #{event.title}
+                          p.tl-date
+                            small
+                              = image_tag "timeline/date.png"
+                              | #{event.event_on.strftime("%B %Y")}
+                        .timeline-body
+                          .tl-body
+                            - if event.image?
+                              .img-responsive.img-padding.tl-event-image
+                                = image_tag event.image
+                            p #{event.description}
+                          - if event.links?
+                            .timeline-footer.tl-footer
+                              - event.links.each do |link|
+                                a.tl-link-button href="#{link[:url]}"
+                                  | #{link[:title].capitalize}
+        - else
+          .main-timeline
+            .tl-iteration
+              p
+                | No timeline events to show!
+              = image_tag 'timeline/dash.png'
 
 
 

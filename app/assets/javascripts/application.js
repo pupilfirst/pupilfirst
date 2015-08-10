@@ -14,6 +14,5 @@
 
 //= require google_analytics.js.erb
 //= require navbar
-//= require_tree ./startups
 //= require incubation
 

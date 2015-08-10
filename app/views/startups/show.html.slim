@@ -168,6 +168,11 @@
                     .buttons style="display:inline" End of Iteration #{event.iteration}
                     br
                     p style="margin-top: 10px" #{event.title}
+                    - if !event.verified?
+                      a.pending href="#" data-toggle="tooltip" title="This event is not yet verified by SV and hence not visible to the public!"
+                        i.fa.fa-exclamation-circle
+                        | &nbsp;Pending verification
+                    br
                     = image_tag 'timeline/dash.png'
                     p #{event.description}
                     br

@@ -178,10 +178,12 @@
                         = image_tag "timeline/badges/#{event.event_type.to_s}.png", width: "70"
                       .timeline-panel
                         .timeline-heading
+                          - if !event.verified?
+                            a href="#" data-toggle="tooltip" title="This event is not yet verified by SV and hence not visible to the public!"
+                              i.fa.fa-exclamation-circle
+                              | &nbsp;Pending verification
                           h4.timeline-title
                             | #{event.title}
-                          - if event.verified?
-                            i.fa.fa-anchor
                           p.tl-date
                             small
                               = image_tag "timeline/date.png"

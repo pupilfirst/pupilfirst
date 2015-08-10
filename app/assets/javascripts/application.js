@@ -7,13 +7,13 @@
 //= require pnotify
 //= require flashes
 //= require unobtrusive_flash
-
 //= require moment
 //= require bootstrap-datetimepicker
 //= require pickers
+//= require select2
 
 //= require google_analytics.js.erb
 //= require navbar
 //= require_tree ./startups
 //= require incubation
-//= require select2
+

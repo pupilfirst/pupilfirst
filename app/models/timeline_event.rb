@@ -74,11 +74,15 @@ class TimelineEvent < ActiveRecord::Base
   end
 
 
-  before_save :make_links_an_array, :build_link_json
+  before_save :make_links_an_array, :build_link_json, :record_iteration
   before_validation :build_title_from_type
 
   def build_title_from_type
     self.title = event_type.gsub('_',' ').capitalize
+  end
+
+  def record_iteration
+    iteration = self.startup.current_iteration
   end
 
   def build_link_json

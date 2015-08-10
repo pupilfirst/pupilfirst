@@ -20,6 +20,7 @@ ActiveAdmin.register TimelineEvent do
     column :title
     column :event_type
     column :event_on
+    column :verified_at
 
     actions
   end

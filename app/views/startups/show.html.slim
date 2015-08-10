@@ -203,7 +203,7 @@
                             .timeline-footer.tl-footer
                               - event.links.each do |link|
                                 a.tl-link-button href="#{link[:url]}"
-                                  | #{link[:title]}
+                                  | #{link[:title].capitalize}
         - else
           .main-timeline
             .tl-iteration

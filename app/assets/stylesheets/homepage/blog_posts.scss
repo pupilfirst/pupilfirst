@@ -1,5 +1,7 @@
+@import 'variables';
+
 #blog-posts {
-  padding: 20px 0 60px 0;
+  padding: 20px 0 60px;
 
   .heading {
     text-align: center;
@@ -10,26 +12,27 @@
     }
 
     p {
-      padding-top: 10px;
+      color: $dark-grey-text;
       font-size: 15px;
-      color: #565656;
+      padding-top: 10px;
     }
   }
 
   #blog-posts-container {
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
+    justify-content: center;
+
 
     .blog-post {
-      border: 1px solid #d2d2d2;
+      border: 1px solid $grey-border;
       margin: 20px 15px 0 0;
       width: 270px;
 
       .blog-post-top {
         height: 400px;
 
-        img.blog-post-image {
+        .blog-post-image {
           width: 100%;
         }
 
@@ -38,17 +41,17 @@
           //font-family: 'Roboto', sans-serif;
 
           h5 {
+            color: $black;
             font-size: 16px;
             font-weight: 300;
-            color: black;
             line-height: 26px;
             margin-bottom: 0;
           }
 
           p {
+            color: $light-grey-text;
             font-size: 14px;
             line-height: 24px;
-            color: #828282;
             margin-top: 5px;
           }
         }

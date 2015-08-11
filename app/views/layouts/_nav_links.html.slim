@@ -1,18 +1,29 @@
 #sv-navbar.collapse.navbar-collapse
   ul.nav.navbar-nav.navbar-right
     - if feature_active?('startups')
-      li
-        a href="#{startups_url}" Startups
-    li
-      a href="http://blog.sv.co" Blog
-    li
-      a href="http://playbook.sv.co" Playbook
-    li
-      = link_to 'About', about_path
-    li
-      = link_to 'Faculty', faculty_path
+      li role="presentation"
+        a.top-nav-link href="#{startups_url}" Startups
+    li role="presentation"
+      a.top-nav-link href="http://blog.sv.co" Blog
+    li role="presentation"
+      a.top-nav-link href="http://playbook.sv.co" Playbook
+    li role="presentation"
+      = link_to 'About', about_path, class: 'top-nav-link'
+    li role="presentation"
+      = link_to 'Faculty', faculty_path, class: 'top-nav-link'
     - if current_user
-      li = link_to 'You', current_user
-      li = link_to 'Logout', destroy_user_session_path, method: :delete
+      li role="presentation" class="dropdown"
+        a.dropdown-toggle.logged-in-avatar-link data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
+          = image_tag profile_image_url(current_user, size: 40), class: 'logged-in-user-link'
+        ul.dropdown-menu
+          li role="presentation"
+            = link_to current_user, class: 'dropdown-toggle', 'data-toggle' => 'dropdown' do
+              i.fa.fa-list-ul
+              | &nbsp;Profile
+          li role="presentation"
+            = link_to destroy_user_session_path, method: :delete do
+              i.fa.fa-sign-out
+              | &nbsp;Logout
+
     - else
-      li = link_to 'Login', new_user_session_path
+      li role="presentation" = link_to 'Login', new_user_session_path, class: 'top-nav-link'

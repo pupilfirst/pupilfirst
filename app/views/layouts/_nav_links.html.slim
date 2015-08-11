@@ -14,7 +14,7 @@
     - if current_user
       li role="presentation" class="dropdown"
         a.dropdown-toggle.logged-in-avatar-link data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
-          = image_tag profile_image_url(current_user, size: 40), class: 'logged-in-user-link'
+          = image_tag profile_image_url(current_user, size: 40, version: :thumb), class: 'logged-in-user-link'
         ul.dropdown-menu
           li role="presentation"
             = link_to current_user do

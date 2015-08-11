@@ -14,7 +14,7 @@
     .col-sm-8
       h1.startup-name
         ' #{@startup.name}
-        - if @startup.timeline_verified??
+        - if @startup.timeline_verified?
           a#verified-icon data-toggle="tooltip" data-placement="top" title="Timeline verified by Startup Village." href="#"
             img.timeline-verified src='#{image_url 'timeline/verified.gif'}'
         - if current_user && @startup.is_founder?(current_user)

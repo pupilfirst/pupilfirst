@@ -7,3 +7,10 @@
     line-height: 200%;
   }
 }
+
+iframe.slack {
+  border: 0;
+  overflow-y: hidden;
+  width: 400px;
+  height: 400px;
+}

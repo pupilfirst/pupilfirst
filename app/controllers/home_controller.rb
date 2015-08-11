@@ -77,6 +77,9 @@ class HomeController < ApplicationController
   
   def transparency
   end
+  
+  def slack
+  end
 
   private
 

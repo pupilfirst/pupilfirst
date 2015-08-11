@@ -80,6 +80,11 @@
   }
 
   a.logged-in-avatar-link {
+    img {
+      max-width: 40px;
+      max-height: 40px;
+    }
+
     // Push down the logo a 10px since default padding plus height of image is 10px short of header height (centers it).
     @media (min-width: $screen-sm-min) { margin-top: 10px; }
   }

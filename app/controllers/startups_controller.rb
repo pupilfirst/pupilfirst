@@ -40,7 +40,7 @@ class StartupsController < InheritedResources::Base
     if current_user && @startup == current_user.startup
       @events = @startup.timeline_events.order(:event_on, :updated_at).reverse_order
     else
-      @events = @startup.timeline_events.where(status: TimelineEvent::STATUS_APPROVED).order(:event_on, :updated_at).reverse_order
+      @events = @startup.timeline_events.verified.order(:event_on, :updated_at).reverse_order
     end
   end
 

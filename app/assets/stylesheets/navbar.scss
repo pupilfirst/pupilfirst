@@ -17,75 +17,88 @@
     @media (max-width: $screen-xs-max) { height: 70px; }
   }
 
+  // Move the logo up a little bit to center it in shrunken state (xs).
+  .navbar-brand {
+    @media (max-width: $screen-xs-max) {
+      padding-top: 10px;
+    }
+  }
+
+  // Move the navbar toggle (xs) button a little lower to center it in shrunken state.
+  button.navbar-toggle { margin-top: 18px; }
+
   .shrink {
     background-color: white;
     box-shadow: 0 2px 5px -3px rgba(0, 0, 0, 0.56);
 
-    .nav {
-      li {
-        a {
-          color: black;
-          transition: all 0.3s;
+    a.top-nav-link {
+      color: black;
+      transition: all 0.5s;
 
-          &::before, &::after {
-            background: black;
-          }
-
-          @media (min-width: $screen-sm-min) { margin-top: 25px; }
-        }
+      &::before, &::after {
+        background: black;
       }
     }
   }
 
-  nav {
-    li {
-      a {
-        text-transform: uppercase;
+  a.top-nav-link {
+    text-transform: uppercase;
 
-        @media (min-width: $screen-sm-min) {
-          float: right;
-          position: relative;
-          color: white;
-          padding: 5px 0;
-          margin: 30px 15px 15px 15px;
+    @media (min-width: $screen-sm-min) {
+      float: right;
+      position: relative;
+      color: white;
+      padding: 5px 0;
+      margin: 25px 15px 15px 15px;
 
-          &::before, &::after {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: #fff;
-            content: '';
-            transition: transform 0.3s;
-            transform: scale(0.85);
-          }
+      &::before, &::after {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background: #fff;
+        content: '';
+        transition: transform 0.3s;
+        transform: scale(0.85);
+      }
 
-          &::after {
-            opacity: 0;
-            transition: top 0.3s, opacity 0.3s, transform 0.3s;
-          }
+      &::after {
+        opacity: 0;
+        transition: top 0.3s, opacity 0.3s, transform 0.3s;
+      }
 
-          &:hover::before, &:hover::after, &:focus::before, &:focus::after {
-            transform: scale(1);
-          }
+      &:hover::before, &:hover::after, &:focus::before, &:focus::after {
+        transform: scale(1);
+      }
 
-          &:hover::after, &:focus::after {
-            top: 0;
-            opacity: 1;
-          }
-        }
+      &:hover::after, &:focus::after {
+        top: 0;
+        opacity: 1;
       }
     }
+  }
 
-    .navbar-toggle { margin: 13px 15px 13px 0; }
-
-    .site-logo {
-      position: relative;
-      max-height: 50px;
-
-      @media (max-width: $screen-xs-max) { top: -5px; }
+  a.logged-in-avatar-link {
+    img {
+      max-width: 40px;
+      max-height: 40px;
     }
+
+    // Push down the logo a 10px since default padding plus height of image is 10px short of header height (centers it).
+    @media (min-width: $screen-sm-min) { margin-top: 10px; }
+  }
+
+  ul.dropdown-menu {
+    @media (min-width: $screen-sm-min) {
+      border-radius: 0;
+      border: 1px solid #E7E7E7;
+      background: #E7E7E7;
+    }
+  }
+
+  nav {
+    .site-logo { max-height: 50px; }
 
     .navbar-collapse {
       @media (max-width: $screen-xs-max) {

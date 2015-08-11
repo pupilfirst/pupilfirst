@@ -68,7 +68,7 @@ class Startup < ActiveRecord::Base
   scope :pending, -> { where(approval_status: APPROVAL_STATUS_PENDING) }
   scope :approved, -> { where(approval_status: APPROVAL_STATUS_APPROVED) }
   scope :rejected, -> { where(approval_status: APPROVAL_STATUS_REJECTED) }
-  scope :incubation_requested, -> { where(approval_status: [APPROVAL_STATUS_PENDING, APPROVAL_STATUS_REJECTED, APPROVAL_STATUS_APPROVED])}
+  scope :incubation_requested, -> { where(approval_status: [APPROVAL_STATUS_PENDING, APPROVAL_STATUS_REJECTED, APPROVAL_STATUS_APPROVED]) }
   scope :agreement_signed, -> { where 'agreement_first_signed_at IS NOT NULL' }
   scope :agreement_live, -> { where('agreement_ends_at > ?', Time.now) }
   scope :agreement_expired, -> { where('agreement_ends_at < ?', Time.now) }
@@ -77,7 +77,7 @@ class Startup < ActiveRecord::Base
   scope :student_startups, -> { joins(:founders).where('is_student = ?', true).uniq }
   scope :kochi, -> { where incubation_location: INCUBATION_LOCATION_KOCHI }
   scope :visakhapatnam, -> { where incubation_location: INCUBATION_LOCATION_VISAKHAPATNAM }
-  scope :timeline_verified, -> { joins(:timeline_events).distinct }
+  scope :timeline_verified, -> { joins(:timeline_events).where.not(timeline_events: { verified_at: nil }).distinct }
 
   # Find all by specific category.
   def self.category(category)
@@ -185,7 +185,6 @@ class Startup < ActiveRecord::Base
     User.where(startup_id: self.id).update_all(startup_id: nil)
     User.where(pending_startup_id: self.id).update_all(pending_startup_id: nil)
   end
-
 
 
   # Friendly ID!
@@ -430,9 +429,9 @@ class Startup < ActiveRecord::Base
 
   def incubation_parameters_available?
     name.present? &&
-    about.present? &&
-    presentation_link.present? &&
-    incubation_location.present?
+      about.present? &&
+      presentation_link.present? &&
+      incubation_location.present?
   end
 
   ####

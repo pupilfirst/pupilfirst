@@ -457,4 +457,8 @@ class Startup < ActiveRecord::Base
     self.timeline_events.where(event_type: TimelineEvent::TYPE_END_ITERATION).order(event_on: :desc).first
   end
 
+  def timeline_verified?
+    self.timeline_events.verified.present?
+  end
+
 end

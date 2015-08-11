@@ -4,6 +4,8 @@
 
 .container
   - if @startup.pending? && current_user && @startup.is_founder?(current_user)
+    .alert.alert-warning.margin-top-20
+      p Please note that SV.CO is currently under beta! Your submissions might not be processed immediately.
     .alert.alert-info.margin-top-20 role='alert'
       button.close type="button" data-dismiss="alert" aria-label="Close"
         span aria-hidden="true" &times;

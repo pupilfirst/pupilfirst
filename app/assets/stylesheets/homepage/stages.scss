@@ -1,65 +1,68 @@
-#stages {
+@import 'variables';
+
+.stages {
+  background-color: $theme-light-green;
   min-height: 400px;
-  background-color: #01bf7b;
-  padding: 50px 0px;
-  margin: 0px 0px;
-  //font-family: 'Roboto', sans-serif;
+  padding: 50px 0;
   text-align: center;
+  //font-family: 'Roboto', sans-serif;
 
   h1 {
+    color: $dark-grey-text;
     font-size: 48px;
     font-weight: 200;
-    color: #005838;
+
     &::after {
-      content: " ";
+      background-color: white;
+      content: ' ';
       display: block;
-      width: 100px;
       height: 1px;
-      background-color: #fff;
       margin: auto;
       margin-top: 10px;
+      width: 100px;
     }
   }
 
   p {
-    padding-top: 15px;
+    color: white;
     font-size: 18px;
     font-weight: 300;
-    color: #FFF;
-    //font-family: 'Roboto', sans-serif;
     opacity: .9;
+    padding-top: 15px;
+    //font-family: 'Roboto', sans-serif;
   }
 
-  a.btn-playbook {
-    color: #fff;
-    width: 150px;
+  .btn-playbook {
     background: transparent;
+    border: solid 1px white;
+    color: #fff;
     font-size: 14px;
-    //font-family: 'Roboto', sans-serif;
     font-weight: 600;
-    border: solid 1px #FFF;
-    transition: all 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75);
+    transition: all 200ms cubic-bezier(.25, .25, .75, .75);
+    width: 150px;
+    //font-family: 'Roboto', sans-serif;
 
     &:hover {
-    background-color: white;
-    border: solid 1px white;
-    color: black; }
+      background-color: white;
+      border: solid 1px white;
+      color: black; }
   }
 
   .carousel-inner {
-      .item img {
-        margin: auto;
-        padding-top: 20px;
-        padding-bottom: 20px;
-      }
+    .item img {
+      margin: auto;
+      padding-bottom: 20px;
+      padding-top: 20px;
+    }
 
-      .item p {
-        margin-bottom: 20px;
-      }
+    .item p {
+      margin-bottom: 20px;
+    }
   }
 
-  .carousel-control.left, .carousel-control.right {
-    background-image: none
+  .carousel-control.left,
+  .carousel-control.right {
+    background-image: none;
   }
 }
 

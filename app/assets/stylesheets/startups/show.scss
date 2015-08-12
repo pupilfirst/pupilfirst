@@ -105,6 +105,51 @@ p.about-startup {
   }
 }
 
+.timeline-builder {
+  border: 1px solid lightgrey;
+  margin: 5px 0 20px;
+
+  .top-row {
+    background-color: whitesmoke;
+    padding: 7px;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  .border-right { border-right: 1px solid grey; }
+
+  .description {
+    width: 100%;
+    border: 0;
+    min-height: 100px;
+    outline: none;
+    padding-top: 10px;
+    resize: none;
+    font-size: 125%;
+  }
+
+  .date-of-event {
+    width: 126px;
+    cursor: default;
+  }
+
+  .reduce-padding {
+    padding: 6px 12px;
+  }
+
+  .bottom-row {
+    background-color: lightgray;
+    padding: 7px;
+  }
+
+  .select2-container {
+    width: 208px;
+    margin-right: 10px;
+  }
+}
+
 //.
 ////.
 //////.

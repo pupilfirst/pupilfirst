@@ -54,3 +54,9 @@ $(->
     $("#new-event-form .fa-minus").toggleClass("hidden")
   )
 )
+
+$(->
+  $('#timeline_event_event_type').select2(
+    placeholder: "Type of Event"
+  )
+)

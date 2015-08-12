@@ -140,22 +140,35 @@
     .col-md-8.col-md-pull-4
       - if feature_active?(:timeline_form)
         - if current_user && @startup.is_founder?(current_user)
-          #new-event-form.panel.panel-primary
-            .panel-heading.text-uppercase
-                | Submit new timeline event
-                .pull-right
-                  i.fa.fa-plus
-                  i.fa.fa-minus.hidden
-            .panel-body.collapse
-              = simple_form_for @timeline_event, url: add_timeline_event_startup_path(@startup), html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean, file: :horizontal_file_input } do |f|
-                = f.input :event_type, collection: TimelineEvent.valid_event_types
-                = f.input :event_on, as: :date_picker, placeholder: 'DD/MM/YYYY'
-                = f.input :description
-                = f.input :image
-                = f.input :link_url
-                .form-group
-                  .col-sm-offset-3.col-sm-9
-                    = f.button :submit, 'Submit for approval', class: 'btn btn-primary btn-flat'
+          .timeline-builder
+            = form_for @timeline_event, url: add_timeline_event_startup_path(@startup) do |f|
+              .container-fluid
+                .row.top-row.text-center
+                  .top-bar-option.col-sm-4.col-xs-8.border-right
+                    i.fa.fa-plus
+                    | &nbsp;Add a Timeline Event
+                  .top-bar-option.col-sm-4.col-xs-2.border-right
+                    a href='#'
+                      i.fa.fa-picture-o
+                      | &nbsp;
+                      span.hidden-xs href='#' Upload an Image
+                  .top-bar-option.col-sm-4.col-xs-2
+                    a href='#'
+                      i.fa.fa-link
+                      | &nbsp;
+                      span.hidden-xs href='#' Add a URL
+                div
+                  = f.text_area :description, class: 'description', placeholder: "What's been happening?"
+                .row.bottom-row
+                  .pull-right
+                    = f.select :event_type, options_for_select(TimelineEvent.valid_event_types.map { |event| [event.gsub('_', ' ').split.map(&:capitalize).join(' '), event] }), { include_blank: true }
+                    button.btn.btn-default.btn-flat.reduce-padding.margin-right-10
+                      i.fa.fa-calendar
+                      span.hidden-xs &nbsp;Date of Event
+                    button.btn.btn-success.btn-flat.reduce-padding type='submit'
+                      i.fa.fa-plus
+                      span.hidden-xs &nbsp;Submit for Review
+
       - if @events.present?
         .main-timeline
           .tl-iteration
@@ -165,7 +178,7 @@
             br
             a#read-from-beginning href="#begin"  Read from the beginning.
           ul
-            - @events.each.with_index(1) do |event,index|
+            - @events.each.with_index(1) do |event, index|
               - if event.event_type == TimelineEvent::TYPE_END_ITERATION
                 .tl-iteration
                   .buttons style="display:inline" End of Iteration #{event.iteration}

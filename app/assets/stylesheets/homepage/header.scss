@@ -36,15 +36,15 @@
   button {
     margin-top: 5px;
   }
-}
 
-.homepage-header-video {
-  @media (min-width: $screen-lg-min) {
-    height: 315px;
-  }
+  .homepage-header-video {
+    @media (min-width: $screen-lg-min) {
+      height: 315px;
+    }
 
-  @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
-    height: 258px;
+    @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+      height: 258px;
+    }
   }
 }
 

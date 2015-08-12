@@ -1,12 +1,13 @@
 @import 'bootstrap/variables';
+@import 'variables';
 
-section#showcase {
+.showcase {
   margin-top: 40px;
 
   // Override some bootstrap styling.
   .thumbnail {
-    background-color: #f7f7f7;
-    border: 1px solid #f7f7f7;
+    background-color: $light-grey-background;
+    border: 1px solid $light-grey-background;
     padding: 0;
   }
 
@@ -16,64 +17,62 @@ section#showcase {
   }
 
   p {
-    padding: 15px 15px 0 15px;
+    color: $dark-grey-text;
     font-size: 15px;
-    color: #565656;
     line-height: 30px;
+    padding: 15px 15px 0;
   }
 
-  ul.nav {
+  .nav {
+    margin-top: 10px;
+
     li {
       @media (max-width: $screen-md-min) {
         width: 100%;
       }
-
-      a.tab-title {
-        text-transform: uppercase;
-        border-bottom: 3px solid transparent;
-
-        &:hover {
-          background-color: transparent;
-          border: 1px solid transparent;
-          border-bottom: 3px solid darkgrey;
-        }
-
-        @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
-          font-size: 90%;
-        }
-
-        @media (max-width: $screen-xs-max) {
-          width: 100%;
-        }
-      }
-    }
-
-    li.active {
-      a.tab-title {
-        border: 1px solid white;
-        border-bottom: 3px solid limegreen;
-        background-color: white;
-      }
     }
   }
 
-  ul.nav.nav-tabs {
-    margin-top: 10px;
+  .tab-title {
+    border-bottom: 3px solid transparent;
+    text-transform: uppercase;
+
+
+    &:hover {
+      background-color: transparent;
+      border: 1px solid transparent;
+      border-bottom: 3px solid $dark-grey-border;
+    }
+
+    @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+      font-size: 90%;
+    }
+
+    @media (max-width: $screen-xs-max) {
+      width: 100%;
+    }
   }
+
+  li.active a.tab-title {
+    background-color: $white;
+    border: 1px solid $white;
+    border-bottom: 3px solid $active-tab-limegreen;
+  }
+
 
   .tab-content {
     margin-top: 10px;
 
-    img.showcase-funded-logo {
-      margin: 0 auto;
+    .showcase-funded-logo {
       display: block;
       height: 30px;
+      margin: 0 auto;
       margin-top: 10px;
     }
   }
 
   .showcase-more {
-    i.fa {
+    .fa {
       font-size: 220%;
       margin-top: 10px;
     }
@@ -88,12 +87,12 @@ section#showcase {
   }
 
   #spinner-image {
-    text-align: center;
-    width: 100%;
     position: absolute;
+    text-align: center;
     top: 20px;
+    width: 100%;
   }
 
-  #timeline-image { z-index: 10; position: relative; }
+  #timeline-image {position: relative;  z-index: 10; }
 }
 

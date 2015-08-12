@@ -1,4 +1,5 @@
 @import 'bootstrap/variables';
+@import 'variables';
 
 .large-header {
   background-image: image-url('landing/headerbg2.jpg');
@@ -35,48 +36,49 @@
   button {
     margin-top: 5px;
   }
+}
 
-  .homepage-header-video {
-    @media (min-width: $screen-lg-min) {
-      height: 315px;
-    }
-
-    @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
-      height: 258px;
-    }
+.homepage-header-video {
+  @media (min-width: $screen-lg-min) {
+    height: 315px;
   }
 
-  .btn-join {
-    border: solid 1px $white;
-    color: $white;
-    font-size: 14px;
-    //font-family: 'Roboto', sans-serif;
-    font-weight: 600;
-    transition: all 200ms cubic-bezier(.25, .25, .75, .75);
-
-    &:hover {
-      background-color: $theme-light-green;
-      border: solid 1px $theme-light-green;
-    }
-  }
-
-  .header-buttons {
-    @media (max-width: $screen-xs-max) {
-      align-items: center;
-      display: flex;
-      justify-content: center;
-    }
-
-    .watch-video-button {
-      //font-family: "Roboto", sans-serif;
-      color: lightgrey;
-      padding-left: 30px;
-
-
-      &:hover {
-        color: $white;
-        text-decoration: none;
-      }
-    }
+  @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+    height: 258px;
   }
 }
+
+.btn-join {
+  border: solid 1px $white;
+  color: $white;
+  font-size: 14px;
+  //font-family: 'Roboto', sans-serif;
+  font-weight: 600;
+  transition: all 200ms cubic-bezier(.25, .25, .75, .75);
+
+  &:hover {
+    background-color: $theme-light-green;
+    border: solid 1px $theme-light-green;
+  }
+}
+
+.header-buttons {
+  @media (max-width: $screen-xs-max) {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.watch-video-button {
+  //font-family: "Roboto", sans-serif;
+  color: $light-grey-text;
+  padding-left: 30px;
+
+  &:hover {
+    color: $white;
+    text-decoration: none;
+  }
+}
+
+

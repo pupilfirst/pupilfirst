@@ -80,6 +80,10 @@ class HomeController < ApplicationController
   
   def slack
   end
+  
+  def press_kit
+    @press_kit_url = "https://drive.google.com/folderview?id=0B9--SdQuJvHpfjJiam1nTnJCNnVIYkY2NVFXWTQwbXNpWUFoQU1oc1RZSHJraG4yb2Y1cDA&usp=sharing"
+  end
 
   private
 

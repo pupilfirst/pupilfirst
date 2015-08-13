@@ -7,7 +7,9 @@
   h4.header-light Contact
   .list-group
     a.list-group-item href="#{about_slack_path}" Slack
-    a.list-group-item href="mailto:help@mobme.in" Email help@mobme.in
+    a.list-group-item href="mailto:help@sv.co" Email help@sv.co
+    - if feature_active? :about_press_kit
+      a.list-group-item href="#{about_press_kit_path}" Press Kit
   
   h4.header-light Social Media
   .list-group 

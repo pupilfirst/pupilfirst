@@ -21,6 +21,11 @@
 .btn-flat {
   padding: 10px 15px;
   border: 1px solid transparent;
+  border-radius: 0;
+}
+
+.btn-with-default-padding {
+  padding: 6px 12px;
 }
 
 .margin-left-10 {

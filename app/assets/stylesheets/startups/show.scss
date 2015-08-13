@@ -1,3 +1,5 @@
+@import "bootstrap-datepicker";
+
 // Customize the large-header at the top.
 .large-header {
   background-image: image-url("timeline.jpg");
@@ -135,10 +137,6 @@ p.about-startup {
     cursor: default;
   }
 
-  .reduce-padding {
-    padding: 6px 12px;
-  }
-
   .bottom-row {
     background-color: lightgray;
     padding: 7px;
@@ -147,6 +145,48 @@ p.about-startup {
   .select2-container {
     width: 208px;
     margin-right: 10px;
+  }
+
+  #timeline-builder-date-button {
+    position: relative;
+
+    .fa-calendar-check-o {
+      color: green;
+    }
+
+    .datepicker-container {
+      position: absolute;
+      right: 0;
+      top: 35px;
+      border: 1px solid grey;
+      background-color: white;
+      z-index: 1000;
+      display: none;
+
+      &:after, &:before {
+        bottom: 100%;
+        right: 23px;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+      }
+
+      &:after {
+        border-color: rgba(255, 255, 255, 0);
+        border-bottom-color: #ffffff;
+        border-width: 5px;
+      }
+
+      &:before {
+        border-color: rgba(166, 166, 166, 0);
+        border-bottom-color: #a6a6a6;
+        border-width: 6px;
+        right: 22px;
+      }
+    }
   }
 }
 

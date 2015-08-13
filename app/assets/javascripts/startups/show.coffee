@@ -1,4 +1,7 @@
 #= require shorten/jquery.shorten
+#= require bootstrap-datepicker
+
+exports = this
 
 shortenText = ->
   $('.about-startup').shorten(
@@ -55,8 +58,35 @@ $(->
   )
 )
 
+setNewEventDate = (e) ->
+  timelineBuilderDateButton = $('#timeline-builder-date-button')
+
+  # Store the time in form field.
+  timelineBuilderDateButton.find('input').val(e.date.toISOString())
+
+  # Hide the datepicker.
+  exports.timelineBuilderDatepicker.toggle()
+
+  # Indicate that a date has been picked.
+  timelineBuilderDateButton.find('.fa-calendar').addClass('hidden')
+  timelineBuilderDateButton.find('.fa-calendar-check-o').removeClass('hidden')
+
 $(->
   $('#timeline_event_event_type').select2(
     placeholder: "Type of Event"
+  )
+
+  exports.timelineBuilderDatepicker = null
+
+  $('#timeline-builder-date-button a').click(->
+    timelineBuilderDateButton = $('#timeline-builder-date-button')
+
+    if exports.timelineBuilderDatepicker
+      exports.timelineBuilderDatepicker.toggle()
+    else
+      datepickerContainer = timelineBuilderDateButton.find('.datepicker-container')
+      datepickerContainer.css('display', 'block')
+      exports.timelineBuilderDatepicker = datepickerContainer.datepicker()
+      exports.timelineBuilderDatepicker.on('changeDate', setNewEventDate)
   )
 )

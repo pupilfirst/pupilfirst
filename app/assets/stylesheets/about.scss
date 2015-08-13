@@ -1,9 +1,17 @@
 .about-text {
   padding-bottom: 20px;
-  
+
   p {
-    font-weight: 300;
     font-size: 16px;
+    font-weight: 300;
     line-height: 200%;
   }
+}
+
+iframe.slack {
+  border: 0;
+  height: 400px;
+  margin-left: -50px;
+  overflow-y: hidden;
+  width: 400px;
 }

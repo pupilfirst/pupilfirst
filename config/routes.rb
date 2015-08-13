@@ -85,6 +85,8 @@ Svapp::Application.routes.draw do
 
   get 'about', to: 'home#about', as: :about
   get 'about/transparency', to: 'home#transparency', as: :about_transparency
+  get 'about/slack', to: 'home#slack', as: :about_slack
+  
   get 'faculty', to: 'home#faculty'
   root 'home#index'
 end

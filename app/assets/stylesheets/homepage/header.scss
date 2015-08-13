@@ -1,13 +1,14 @@
 @import 'bootstrap/variables';
+@import 'variables';
 
 .large-header {
-  background-image: image-url("landing/headerbg2.jpg");
+  background-image: image-url('landing/headerbg2.jpg');
 }
 
 .homepage-header {
-  padding-top: 80px;
-  color: #FFF;
+  color: white;
   padding-bottom: 45px;
+  padding-top: 80px;
 
   @media (max-width: $screen-xs-max) {
     padding-top: 40px;
@@ -45,37 +46,39 @@
       height: 258px;
     }
   }
+}
 
-  .btn-join {
-    color: white;
-    font-size: 14px;
-    //font-family: 'Roboto', sans-serif;
-    font-weight: 600;
-    border: solid 1px white;
-    transition: all 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75);
+.btn-join {
+  border: solid 1px white;
+  color: white;
+  font-size: 14px;
+  //font-family: 'Roboto', sans-serif;
+  font-weight: 600;
+  transition: all 200ms cubic-bezier(.25, .25, .75, .75);
 
-    &:hover {
-      background-color: #00CD79;
-      border: solid 1px #00CD79;
-    }
-  }
-
-  .header-buttons {
-    @media (max-width: $screen-xs-max) {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    a.watch-video-button {
-      //font-family: "Roboto", sans-serif;
-      padding-left: 30px;
-      color: lightgrey;
-
-      &:hover {
-        color: white;
-        text-decoration: none;
-      }
-    }
+  &:hover {
+    background-color: $theme-light-green;
+    border: solid 1px $theme-light-green;
   }
 }
+
+.header-buttons {
+  @media (max-width: $screen-xs-max) {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.watch-video-button {
+  //font-family: "Roboto", sans-serif;
+  color: $light-grey-text;
+  padding-left: 30px;
+
+  &:hover {
+    color: white;
+    text-decoration: none;
+  }
+}
+
+

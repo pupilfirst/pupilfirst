@@ -1,4 +1,5 @@
 @import 'bootstrap/variables';
+@import 'variables';
 
 #header {
   .nav-spacer {
@@ -7,9 +8,10 @@
     @media (max-width: $screen-xs-max) { padding-top: 70px; }
   }
 
-  .navbar, .navbar-default {
+  .navbar,
+  .navbar-default {
     background: none;
-    border: none;
+    border: 0;
     height: 80px;
   }
 
@@ -29,19 +31,20 @@
 
   .shrink {
     background-color: white;
-    box-shadow: 0 2px 5px -3px rgba(0, 0, 0, 0.56);
+    box-shadow: 0 2px 5px -3px rgba(0, 0, 0, .56);
 
-    a.top-nav-link {
+    .top-nav-link {
       color: black;
-      transition: all 0.5s;
+      transition: all .5s;
 
-      &::before, &::after {
+      &::before,
+      &::after {
         background: black;
       }
     }
   }
 
-  a.top-nav-link {
+  .top-nav-link {
     text-transform: uppercase;
 
     @media (min-width: $screen-sm-min) {
@@ -49,40 +52,46 @@
       position: relative;
       color: white;
       padding: 5px 0;
-      margin: 25px 15px 15px 15px;
+      margin: 25px 15px 15px;
 
-      &::before, &::after {
+      &::before,
+      &::after {
         position: absolute;
         top: 100%;
         left: 0;
         width: 100%;
         height: 1px;
-        background: #fff;
+        background: white;
         content: '';
-        transition: transform 0.3s;
-        transform: scale(0.85);
+        transition: transform .3s;
+        transform: scale(.85);
       }
 
       &::after {
         opacity: 0;
-        transition: top 0.3s, opacity 0.3s, transform 0.3s;
+        transition: top .3s, opacity .3s, transform .3s;
       }
 
-      &:hover::before, &:hover::after, &:focus::before, &:focus::after {
+      &:hover::before,
+      &:hover::after,
+      &:focus::before,
+      &:focus::after {
         transform: scale(1);
       }
 
-      &:hover::after, &:focus::after {
+      &:hover::after,
+      &:focus::after {
         top: 0;
         opacity: 1;
       }
     }
   }
 
-  a.logged-in-avatar-link {
+  .logged-in-avatar-link {
     img {
       max-width: 40px;
       max-height: 40px;
+      border: 1px solid #a0a0a0;
     }
 
     // Push down the logo a 10px since default padding plus height of image is 10px short of header height (centers it).
@@ -92,8 +101,8 @@
   ul.dropdown-menu {
     @media (min-width: $screen-sm-min) {
       border-radius: 0;
-      border: 1px solid #E7E7E7;
-      background: #E7E7E7;
+      border: 1px solid $navbar-dropdown-bkg;
+      background: $navbar-dropdown-bkg;
     }
   }
 
@@ -103,18 +112,18 @@
     .navbar-collapse {
       @media (max-width: $screen-xs-max) {
         margin-top: 10px;
-        border-top: 1px solid lightgray;
+        border-top: 1px solid $dark-grey-border;
       }
 
       ul {
         @media (max-width: $screen-xs-max) {
-          border: 1px solid lightgray;
+          border: 1px solid $dark-grey-border;
           margin: 0;
           background-color: white;
         }
       }
     }
 
-    @media (max-width: $screen-xs-max) { background-color: #fff; }
+    @media (max-width: $screen-xs-max) { background-color: white; }
   }
 }

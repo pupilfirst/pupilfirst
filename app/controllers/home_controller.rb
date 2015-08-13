@@ -80,6 +80,10 @@ class HomeController < ApplicationController
   
   def slack
   end
+  
+  def press_kit
+    @press_kit_url = ""
+  end
 
   private
 

@@ -27,8 +27,9 @@ h1.page-header.header-light Press Kit
         li 
           p Product screenshots
       p
-        a class="btn btn-primary" href="#{@press_kit_url}" 
-         span class="glyphicon glyphicon-download-alt"  Download
+        a class="btn btn-primary" href="#{@press_kit_url}" target="_blank"
+         span class="glyphicon glyphicon-download-alt" 
+           '  Download
 
   .col-sm-3
     = render partial: 'about_links'

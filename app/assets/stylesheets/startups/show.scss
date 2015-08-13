@@ -162,6 +162,26 @@ p.about-startup {
       background-color: white;
       z-index: 1000;
       display: none;
+      padding: 4px;
+
+      .datepicker {
+        padding: 0;
+
+        table {
+          width: 100%;
+
+          tr td {
+            padding: 0;
+            //width: 33px;
+
+            span {
+              margin: 0;
+              width: 25%;
+            }
+          }
+        }
+      }
+      .datepicker-inline { width: 210px; }
 
       &:after, &:before {
         bottom: 100%;

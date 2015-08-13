@@ -1,16 +1,16 @@
-$faculty-bg-color: #f8f8f8;
+@import 'variables';
 
 // The navbar shouldn't have any margin on this page.
 .navbar { margin-bottom: 0; }
 
-// The prefooter shouldn't have any margin either;
-section#prefooter { margin-top: 0; }
+// The prefooter shouldn't have any margin either; - appears to be unused ?
+// section#prefooter { margin-top: 0; }
 
 #faculty {
   //font-family: Roboto, sans-serif;
   background-color: $faculty-bg-color;
 
-  p.introduction {
+  .introduction {
     margin-top: 30px;
     font-weight: 300;
     font-size: 16px;
@@ -20,15 +20,15 @@ section#prefooter { margin-top: 0; }
   #tabbed-content {
     margin-top: 30px;
 
-    a.tab-title {
+    .tab-title {
       text-transform: uppercase;
       font-weight: 600;
     }
 
     li.active {
-      a.tab-title {
+      .tab-title {
         border: 1px solid $faculty-bg-color;
-        border-bottom: 3px solid limegreen;
+        border-bottom: 3px solid $active-tab-highlight;
         background-color: $faculty-bg-color;
       }
     }
@@ -36,7 +36,7 @@ section#prefooter { margin-top: 0; }
     #faculty-nav {
       margin-bottom: 30px;
 
-      a.inactive-spacer {
+      .inactive-spacer {
         height: 100%;
         user-select: none;
         color: $faculty-bg-color;
@@ -47,7 +47,7 @@ section#prefooter { margin-top: 0; }
           cursor: default;
           background-color: initial;
           border: 1px solid $faculty-bg-color;
-          border-bottom: 1px solid #ddd;
+          border-bottom: 1px solid $bootstrap-tab-underline;
         }
       }
     }
@@ -61,8 +61,8 @@ section#prefooter { margin-top: 0; }
         background-color: white;
         width: 200px;
         height: 340px;
-        border-bottom: 2px solid darkblue;
-        margin: 0 22px 45px 22px;
+        border-bottom: 2px solid $faculty-card-bottom-border;
+        margin: 0 22px 45px;
 
         img {
           width: 200px;
@@ -98,6 +98,7 @@ section#prefooter { margin-top: 0; }
           }
         }
       }
+
       .visiting-faculty {
         height: 370px;
       }

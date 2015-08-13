@@ -1,8 +1,9 @@
 @import "bootstrap-datepicker";
+@import 'variables';
 
 // Customize the large-header at the top.
 .large-header {
-  background-image: image-url("timeline.jpg");
+  background-image: image-url('timeline.jpg');
   min-height: 150px;
   background-position: 50% 37%;
 }
@@ -15,32 +16,32 @@ h1.startup-name {
   margin: 20px 0;
 }
 
-img.timeline-verified {
+.timeline-verified {
   width: 25px;
 }
 
-small.edit-startup-link {
+.edit-startup-link {
   margin-left: 10px;
 }
 
-img.startup-logo {
+.startup-logo {
   float: right;
   max-height: 70px;
   margin-top: 20px;
 }
 
-p.about-startup {
+.about-startup {
   line-height: 40px;
-  color: #757575;
+  color: $dark-grey-text;
   font-size: 16px;
-  margin: 10px 0 10px 0;
+  margin: 10px 0;
 }
 
 #data-points {
   //font-family: Roboto, sans-serif;
 
   .data-icons {
-    h4.media-heading {
+    .media-heading {
       font-size: 90%;
       margin-top: 5px;
     }
@@ -51,9 +52,9 @@ p.about-startup {
     margin-bottom: 0;
   }
 
-  hr { margin: 10px 0 10px 0; }
+  hr { margin: 10px 0; }
 
-  p.data-content {
+  .data-content {
     font-size: 18px;
     font-weight: 300;
 
@@ -69,9 +70,9 @@ p.about-startup {
 
   .data-founder {
     height: 128px;
-    background-color: #fafafa;
+    background-color: $light-grey-background;
     margin: 10px 0;
-    box-shadow: 2px 2px 2px lightgrey;
+    box-shadow: 2px 2px 2px $grey-border;
 
     .founder-image {
       width: 128px;
@@ -79,19 +80,19 @@ p.about-startup {
       background-size: cover;
     }
 
-    h4.media-heading {
-      margin: 15px 0 10px 0;
+    .media-heading {
+      margin: 15px 0 10px;
       text-transform: uppercase;
       font-size: 110%;
       font-weight: 600;
     }
 
-    p.designation {
+    .designation {
       font-size: 90%;
       font-style: italic;
     }
 
-    img.dash { margin-top: -10px; }
+    .dash { margin-top: -10px; }
 
     ul {
       padding: 0;
@@ -219,24 +220,27 @@ p.about-startup {
 //
 
 .main-timeline {
-  border-right: 1px solid #ccc;
+  border-right: 1px solid $grey-border;
   padding-right: 25px;
 
   ul { padding: 0; }
 }
 
 .tl-iteration {
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid black;
   width: 100%;
   margin-bottom: 10px;
   text-align: center;
   padding: 20px;
+
   a {
     text-decoration: none;
   }
+
   .pending {
-    color: #FF0000;
+    color: #ff0000;
   }
+
   p {
     width: 90%;
     margin: auto;
@@ -244,21 +248,22 @@ p.about-startup {
     font-style: normal;
     font-weight: 300;
     font-size: 22px;
-    color: #666;
+    color: $dark-grey-text;
   }
+
   .tl-iteration:last-child {
-    border-bottom: 0px;
+    border-bottom: 0;
   }
 
   .buttons {
-    border: 1px solid #0f9d58;
+    border: 1px solid $theme-dark-green;
     padding: 5px;
     padding-left: 10px;
     padding-right: 10px;
     font-weight: 600;
     font-size: 14px;
-    color: #0f9d58;
-    background-color: #fff;
+    color: $theme-dark-green;
+    background-color: white;
     margin-top: 15px;
     margin-bottom: 10px;
   }
@@ -266,7 +271,7 @@ p.about-startup {
 
 @media screen and (max-width: 991px) {
   .main-timeline {
-    border-right: 0px !important; }
+    border-right: 0 !important; }
 }
 
 @media screen and (max-width: 767px) {
@@ -285,65 +290,73 @@ p.about-startup {
 
 .timeline {
   list-style: none;
-  padding: 20px 0 20px;
+  padding: 20px 0;
   position: relative;
+
   &:before {
     top: 0;
     bottom: 0;
     position: absolute;
-    content: " ";
+    content: ' ';
     width: 1px;
-    background-color: #d6d6d6;
+    background-color: $grey-border;
     left: 50%;
     margin-left: -1.5px;
   }
+
   li {
     margin-bottom: 20px;
     position: relative;
+
     &:before, &:after {
-      content: " ";
+      content: ' ';
       display: table;
     }
+
     &:after {
       clear: both;
     }
+
     .timeline-panel {
       width: 42%;
       float: left;
-      border: 1px solid #ababab;
+      border: 1px solid $dark-grey-border;
       border-radius: 2px;
       //padding: 20px;
-      padding: 15px 20px 20px 20px;
+      padding: 15px 20px 20px;
       position: relative;
+
       .timeline-heading a {
         text-decoration: none;
-        color: #FF0000;
+        color: red;
       }
     }
+
     .timeline-panel:before {
       position: absolute;
       top: 26px;
       right: -15px;
       display: inline-block;
       border-top: 15px solid transparent;
-      border-left: 15px solid #666;
-      border-right: 0 solid #666;
+      border-left: 15px solid $dark-grey-border;
+      border-right: 0 solid $dark-grey-border;
       border-bottom: 15px solid transparent;
       content: " ";
     }
+
     .timeline-panel:after {
       position: absolute;
       top: 27px;
       right: -14px;
       display: inline-block;
       border-top: 14px solid transparent;
-      border-left: 14px solid #fff;
-      border-right: 0 solid #fff;
+      border-left: 14px solid white;
+      border-right: 0 solid white;
       border-bottom: 14px solid transparent;
-      content: " ";
+      content: ' ';
     }
     .timeline-badge {
-      color: #fff;
+      color: white;
       width: 70px;
       height: 70px;
       line-height: 50px;
@@ -353,22 +366,25 @@ p.about-startup {
       top: 5px;
       left: 50%;
       margin-left: -38px;
-      background-color: #999999;
+      background-color: $dark-grey-bg;
       z-index: 100;
       border-top-right-radius: 50%;
       border-top-left-radius: 50%;
       border-bottom-right-radius: 50%;
       border-bottom-left-radius: 50%;
     }
+
     &.timeline-inverted > .timeline-panel {
       float: right;
     }
+
     &.timeline-inverted > .timeline-panel:before {
       border-left-width: 0;
       border-right-width: 15px;
       left: -15px;
       right: auto;
     }
+
     &.timeline-inverted > .timeline-panel:after {
       border-left-width: 0;
       border-right-width: 14px;
@@ -401,7 +417,7 @@ p.about-startup {
   font-style: normal;
   font-weight: 300;
   font-size: 20px;
-  color: #000;
+  color: black;
   line-height: 40px;
 }
 
@@ -410,7 +426,7 @@ p.about-startup {
   font-style: normal;
   font-weight: 600;
   font-size: 14px;
-  color: #2458a1 !important;
+  color: $timeline-blue-text;
   margin-top: -5px; }
 
 .tl-body {
@@ -419,7 +435,7 @@ p.about-startup {
   font-weight: 400;
   font-size: 14px;
   line-height: 25px;
-  color: #666;
+  color: $dark-grey-text;
   padding-bottom: 5px; }
 
 .img-padding {
@@ -431,23 +447,25 @@ p.about-startup {
 
 .tl-footer {
   padding-top: 15px;
-  border-top: solid 1px #9f9f9f;
+  border-top: solid 1px $dark-grey-border;
+
   a {
-    border: 1px solid #0f9d58 !important;
+    border: 1px solid $theme-dark-green;
     //font-family: 'Roboto';
     font-style: normal;
     font-weight: 600;
     font-size: 12px;
-    text-decoration: none !important;
+    text-decoration: none;
     padding: 8px;
-    color: #2458a1;
+    color: $timeline-blue-text;
     margin-right: 10px;
     transition: all 300ms ease-out;
+
     &:hover {
-      background: #0f9d58;
-      color: #ffffff;
+      background: $theme-dark-green;
+      color: white;
       z-index: 1000;
-      box-shadow: rgba(0, 0, 0, 0.3) 0 16px 16px 0;
+      box-shadow: rgba(0, 0, 0, .3) 0 16px 16px 0;
     }
   }
 }
@@ -470,24 +488,29 @@ p.about-startup {
     &:before {
       left: 40px;
     }
+
     li {
       .timeline-panel {
         width: calc(100% - 90px);
       }
+
       .timeline-badge {
         left: 15px;
         margin-left: 0;
         top: 16px;
       }
+
       .timeline-panel {
         float: right;
       }
+
       .timeline-panel:before {
         border-left-width: 0;
         border-right-width: 15px;
         left: -15px;
         right: auto;
       }
+
       .timeline-panel:after {
         border-left-width: 0;
         border-right-width: 14px;
@@ -505,5 +528,3 @@ p.about-startup {
 .founder, .founder-avatar > img {
   height: 130px;
 }
-
-

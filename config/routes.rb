@@ -27,6 +27,7 @@ Svapp::Application.routes.draw do
 
     resource :startup, only: [:new, :edit, :update] do
       post :add_founder
+      post :add_timeline_event
     end
   end
 
@@ -38,10 +39,6 @@ Svapp::Application.routes.draw do
     # #   post :invite
     # # end
     # end
-
-    member do
-      post :add_timeline_event
-    end
   end
 
   # resources :mentors do
@@ -87,7 +84,7 @@ Svapp::Application.routes.draw do
   get 'about/transparency', to: 'home#transparency', as: :about_transparency
   get 'about/slack', to: 'home#slack', as: :about_slack
   get 'about/press-kit', to: 'home#press_kit', as: :about_press_kit
-  
+
   get 'faculty', to: 'home#faculty'
   root 'home#index'
 end

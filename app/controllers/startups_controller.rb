@@ -1,6 +1,6 @@
 class StartupsController < InheritedResources::Base
   before_filter :authenticate_user!, except: [:show, :index]
-  before_filter :restrict_to_startup_founders, only: [:edit, :update, :add_founder]
+  before_filter :restrict_to_startup_founders, only: [:edit, :update, :add_founder, :add_timeline_event]
   before_filter :disallow_unready_startup, only: [:edit, :update]
   after_filter only: [:create] do
     @startup.founders << current_user

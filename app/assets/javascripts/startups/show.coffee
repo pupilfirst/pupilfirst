@@ -73,6 +73,9 @@ setNewEventDate = (e) ->
   # Indicate that a date has been picked.
   timelineBuilderDateButton.find('.fa-calendar').addClass('hidden')
   timelineBuilderDateButton.find('.fa-calendar-check-o').removeClass('hidden')
+  timelineBuilderDateButton.find('a').addClass('green')
+  timelineBuilderDateButton.find('span').html('&nbsp;' + moment(e.date).format('DD/MM/YYYY'))
+
 
 timelineBuilderSubmitChecks = ->
   $('#new_timeline_event').submit( (event)->

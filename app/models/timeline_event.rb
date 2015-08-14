@@ -3,7 +3,7 @@ class TimelineEvent < ActiveRecord::Base
   mount_uploader :image, TimelineImageUploader
   serialize :links
   validates_presence_of :title, :event_type, :event_on, :startup_id, :iteration
-  attr_accessor :link_url
+  attr_accessor :link_url, :link_title
 
   TYPE_TEAM_FORMATION = 'team_formation'
   TYPE_PROSPECTIVE_CUSTOMER = 'prospective_customer'

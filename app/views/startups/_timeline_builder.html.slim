@@ -12,13 +12,13 @@
             span.hidden-xs href='#' Upload an Image
           = f.file_field :image, class: 'hidden'
         .col-sm-4.col-xs-2
-          a href='#'
+          a data-toggle="modal" data-target="#add-link"
             i.fa.fa-link
             | &nbsp;
             span.hidden-xs href='#' Add a URL
       div
         = f.text_area :description, class: 'description', placeholder: "What's been happening?"
-      #append-text
+      #append-file-name
       .row.bottom-row
         .pull-right
           = f.select :event_type, options_for_select(TimelineEvent.valid_event_types.map { |event| [event.gsub('_', ' ').split.map(&:capitalize).join(' '), event] }), { include_blank: true }
@@ -33,3 +33,23 @@
           button.btn.btn-primary.btn-flat.btn-with-default-padding type='submit'
             i.fa.fa-plus
             span.hidden-xs &nbsp;Submit for Review
+
+    #add-link.modal.fade role="dialog"
+      .modal-dialog
+        .modal-content
+          .modal-header
+            button.close data-dismiss="modal" type="button"  &times;
+            h4.modal-title Add a relevant link
+          .modal-body
+            .form-horizontal
+              .form-group
+                = f.label :link_title, "Title", class: "col-sm-2 control-label"
+                .col-sm-10
+                  = f.text_field :link_title, class: "form-control"
+              .form-group
+                = f.label :link_url, "Url", class: "col-sm-2 control-label"
+                .col-sm-10
+                  = f.text_field :link_url, class: "form-control"
+          .modal-footer
+            button.btn.btn-default data-dismiss="modal" type="button"  Close
+            button.btn.btn-success type="button"  Add

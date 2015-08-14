@@ -106,6 +106,6 @@ $(->
   )
 
   $('#timeline_event_image').change(->
-    $('#append-text')[0].innerHTML = 'attachment: ' +$(this).val().replace(/^.*[\\\/]/, '')
+    $('#append-file-name')[0].innerHTML = 'attachment: ' +$(this).val().replace(/^.*[\\\/]/, '')
   )
 )

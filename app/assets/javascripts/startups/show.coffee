@@ -71,6 +71,42 @@ setNewEventDate = (e) ->
   timelineBuilderDateButton.find('.fa-calendar').addClass('hidden')
   timelineBuilderDateButton.find('.fa-calendar-check-o').removeClass('hidden')
 
+timelineBuilderSubmitChecks = ->
+  $('#new_timeline_event').submit( (event)->
+    form = $(event.target)
+
+    typeOfEventPresent = !!form.find('select#timeline_event_event_type').val()
+    dateOfEventPresent = !!form.find('input#timeline_event_event_on').val()
+
+    unless dateOfEventPresent
+      $('#timeline-builder-date-button > a').removeClass('btn-default').addClass('btn-danger')
+      timelineBuilderDateButton = $('#timeline-builder-date-button')
+
+      timelineBuilderDateButton.tooltip(
+        placement: 'top',
+        title: 'When did this event occur?',
+        trigger: 'manual'
+      )
+
+      timelineBuilderDateButton.tooltip('show')
+
+    unless typeOfEventPresent
+      select2Container = form.find('.select2-container')
+      select2Container.addClass('has-error')
+
+      select2Container.tooltip(
+        placement: 'bottom',
+        title: 'What type of event is this?',
+        trigger: 'manual'
+      )
+
+      select2Container.tooltip('show')
+
+    return false unless typeOfEventPresent && dateOfEventPresent
+  )
+
+$(timelineBuilderSubmitChecks)
+
 $(->
   $('#timeline_event_event_type').select2(
     placeholder: "Type of Event"
@@ -80,6 +116,10 @@ $(->
 
   $('#timeline-builder-date-button a').click(->
     timelineBuilderDateButton = $('#timeline-builder-date-button')
+
+    # Remove error class and tooltip on it if its present
+    timelineBuilderDateButton.find('a').removeClass('btn-danger').addClass('btn-default')
+    timelineBuilderDateButton.tooltip('destroy')
 
     if exports.timelineBuilderDatepicker
       exports.timelineBuilderDatepicker.toggle()

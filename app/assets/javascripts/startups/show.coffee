@@ -105,7 +105,17 @@ timelineBuilderSubmitChecks = ->
     return false unless typeOfEventPresent && dateOfEventPresent
   )
 
+clearErrorsOnOpeningSelect2 = ->
+  $('#timeline_event_event_type').on('select2-opening', ->
+    console.log 'here'
+
+    select2Container = $('#new_timeline_event .select2-container')
+    select2Container.removeClass('has-error')
+    select2Container.tooltip('destroy')
+  )
+
 $(timelineBuilderSubmitChecks)
+$(clearErrorsOnOpeningSelect2)
 
 $(->
   $('#timeline_event_event_type').select2(

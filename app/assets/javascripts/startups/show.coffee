@@ -93,9 +93,10 @@ $(->
   $(document).on('click', (event) ->
     eventTarget = $(event.target)
 
-    unless eventTarget.hasClass('month') or eventTarget.hasClass('day') or eventTarget.hasClass('year')
-      unless $(event.target).closest('#timeline-builder-date-button').length
-        exports.timelineBuilderDatepicker.toggle(false)
+    if exports.timelineBuilderDatepicker
+      unless eventTarget.hasClass('month') or eventTarget.hasClass('day') or eventTarget.hasClass('year')
+        unless $(event.target).closest('#timeline-builder-date-button').length
+          exports.timelineBuilderDatepicker.toggle(false)
   )
 )
 

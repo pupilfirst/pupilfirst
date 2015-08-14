@@ -136,7 +136,7 @@ $(->
     else
       datepickerContainer = timelineBuilderDateButton.find('.datepicker-container')
       datepickerContainer.css('display', 'block')
-      exports.timelineBuilderDatepicker = datepickerContainer.datepicker()
+      exports.timelineBuilderDatepicker = datepickerContainer.datepicker(endDate: '0d')
       exports.timelineBuilderDatepicker.on('changeDate', setNewEventDate)
   )
 

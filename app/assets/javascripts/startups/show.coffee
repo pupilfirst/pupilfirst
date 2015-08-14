@@ -1,7 +1,10 @@
 #= require shorten/jquery.shorten
 #= require bootstrap-datepicker
 
-exports = this
+exports = {
+  timelineBuilderDatepicker: null
+  addButtonClicked: null
+}
 
 shortenText = ->
   $('.about-startup').shorten(
@@ -114,16 +117,12 @@ clearErrorsOnOpeningSelect2 = ->
     select2Container.tooltip('destroy')
   )
 
-$(timelineBuilderSubmitChecks)
-$(clearErrorsOnOpeningSelect2)
-
-$(->
+setupSelect2ForEventType = ->
   $('#timeline_event_event_type').select2(
     placeholder: "Type of Event"
   )
 
-  exports.timelineBuilderDatepicker = null
-
+handleDateButtonClick = ->
   $('#timeline-builder-date-button a').click(->
     timelineBuilderDateButton = $('#timeline-builder-date-button')
 
@@ -140,6 +139,7 @@ $(->
       exports.timelineBuilderDatepicker.on('changeDate', setNewEventDate)
   )
 
+closeDatePickerOnExternalClick = ->
   $(document).on('click', (event) ->
     eventTarget = $(event.target)
 
@@ -148,7 +148,12 @@ $(->
         unless $(event.target).closest('#timeline-builder-date-button').length
           exports.timelineBuilderDatepicker.toggle(false)
   )
-)
+
+$(timelineBuilderSubmitChecks)
+$(setupSelect2ForEventType)
+$(clearErrorsOnOpeningSelect2)
+$(handleDateButtonClick)
+$(closeDatePickerOnExternalClick)
 
 $(->
   $('#upload-image').click(->

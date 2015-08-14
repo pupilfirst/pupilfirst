@@ -42,14 +42,16 @@
           /   h4.modal-title Add a relevant link
           .modal-body
             .form-horizontal
-              .form-group
+              .form-group#link-title-group
                 = f.label :link_title, "Title", class: "col-sm-2 control-label"
                 .col-sm-10
-                  = f.text_field :link_title, class: "form-control"
-              .form-group
-                = f.label :link_url, "Url", class: "col-sm-2 control-label"
+                  = f.text_field :link_title, class: "form-control", placeholder: "(required)"
+                  span.glyphicon.glyphicon-remove.form-control-feedback.hidden
+              .form-group#link-url-group
+                = f.label :link_url, "URL", class: "col-sm-2 control-label"
                 .col-sm-10
-                  = f.text_field :link_url, class: "form-control"
+                  = f.text_field :link_url, class: "form-control", placeholder: "(required)"
+                  span.glyphicon.glyphicon-remove.form-control-feedback.hidden
           .modal-footer
             button#close-link-modal-button.btn.btn-default data-dismiss="modal" type="button"  Close
             button#add-link-button.btn.btn-success type="button"  Add

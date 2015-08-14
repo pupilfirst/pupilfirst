@@ -160,13 +160,38 @@ $(->
   )
 
   $('#add-link-button').click(->
-    exports.addButtonClicked = true
-    $('#add-link-modal').modal('hide')
+    if $('#timeline_event_link_title').val() and $('#timeline_event_link_url').val()
+      exports.addButtonClicked = true
+      $('#add-link-modal').modal('hide')
+    else
+      unless $('#timeline_event_link_title').val()
+        addErrorMarkers('#link-title-group')
+      unless $('#timeline_event_link_url').val()
+        addErrorMarkers('#link-url-group')
+  )
+
+  $('#timeline_event_link_title').focus(->
+    clearErrorMarkers('#link-title-group')
+  )
+
+  $('#timeline_event_link_url').focus(->
+    clearErrorMarkers('#link-url-group')
   )
 
   $('#add-link-modal').on('hidden.bs.modal', (e) ->
     unless exports.addButtonClicked
       $('#timeline_event_link_title').val("")
       $('#timeline_event_link_url').val("")
+      exports.addButtonClicked = false
+    clearErrorMarkers('#link-title-group')
+    clearErrorMarkers('#link-url-group')
   )
+
+  clearErrorMarkers = (formGroup) ->
+    $(formGroup).removeClass('has-error has-feedback')
+    $(formGroup).find('span').addClass('hidden')
+
+  addErrorMarkers = (formGroup) ->
+    $(formGroup).addClass('has-error has-feedback')
+    $(formGroup).find('span').removeClass('hidden')
 )

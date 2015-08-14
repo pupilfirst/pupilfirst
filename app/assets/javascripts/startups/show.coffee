@@ -98,3 +98,9 @@ $(->
         exports.timelineBuilderDatepicker.toggle(false)
   )
 )
+
+$(->
+  $('#upload-image').click(->
+    $('#timeline_event_image').click()
+  )
+)

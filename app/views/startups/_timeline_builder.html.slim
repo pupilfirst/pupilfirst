@@ -6,10 +6,11 @@
           i.fa.fa-plus
           | &nbsp;Add a Timeline Event
         .col-sm-4.col-xs-2.border-right
-          a href='#'
+          a#upload-image
             i.fa.fa-picture-o
             | &nbsp;
             span.hidden-xs href='#' Upload an Image
+          = f.file_field :image, class: 'hidden'
         .col-sm-4.col-xs-2
           a href='#'
             i.fa.fa-link

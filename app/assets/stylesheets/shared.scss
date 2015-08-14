@@ -21,11 +21,18 @@
 .btn-flat {
   padding: 10px 15px;
   border: 1px solid transparent;
+  border-radius: 0;
+}
+
+.btn-with-default-padding {
+  padding: 6px 12px;
 }
 
 .margin-left-10 {
   margin-left: 10px;
 }
+
+.margin-right-10 { margin-right: 10px; }
 
 .flex-center {
   display: flex;
@@ -39,4 +46,8 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 
 body {
   font-family: 'Source Sans Pro', sans-serif;
+}
+
+.green-text {
+  color: green !important;
 }

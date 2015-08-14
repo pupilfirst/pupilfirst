@@ -1,4 +1,6 @@
+@import "bootstrap-datepicker";
 @import 'variables';
+
 // Customize the large-header at the top.
 .large-header {
   background-image: image-url('timeline.jpg');
@@ -102,6 +104,120 @@ h1.startup-name {
       }
 
       li:last-of-type { margin-right: 0; }
+    }
+  }
+}
+
+.timeline-builder {
+  border: 1px solid lightgrey;
+  margin: 5px 0 20px;
+
+  .top-row {
+    background-color: whitesmoke;
+    padding: 7px;
+
+    .ellipsis-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  a {
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .border-right { border-right: 1px solid grey; }
+
+  .description {
+    width: 100%;
+    border: 0;
+    min-height: 100px;
+    outline: none;
+    padding: 10px 15px;
+    resize: none;
+    font-size: 125%;
+  }
+
+  .date-of-event {
+    width: 126px;
+    cursor: default;
+  }
+
+  .bottom-row {
+    background-color: lightgray;
+    padding: 7px;
+  }
+
+  .select2-container {
+    width: 208px;
+    margin-right: 10px;
+
+    a.select2-choice {
+      border-radius: 0;
+    }
+  }
+
+  #timeline-builder-date-button {
+    position: relative;
+
+    a.green {
+      color: green;
+    }
+
+    .datepicker-container {
+      position: absolute;
+      right: 0;
+      top: 35px;
+      border: 1px solid grey;
+      background-color: white;
+      z-index: 1000;
+      display: none;
+      padding: 4px;
+
+      .datepicker {
+        padding: 0;
+
+        table {
+          width: 100%;
+
+          tr td {
+            padding: 0;
+            //width: 33px;
+
+            span {
+              margin: 0;
+              width: 25%;
+            }
+          }
+        }
+      }
+      .datepicker-inline { width: 210px; }
+
+      &:after, &:before {
+        bottom: 100%;
+        right: 23px;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+      }
+
+      &:after {
+        border-color: rgba(255, 255, 255, 0);
+        border-bottom-color: #ffffff;
+        border-width: 5px;
+      }
+
+      &:before {
+        border-color: rgba(166, 166, 166, 0);
+        border-bottom-color: #a6a6a6;
+        border-width: 6px;
+        right: 22px;
+      }
     }
   }
 }
@@ -423,5 +539,3 @@ h1.startup-name {
 .founder, .founder-avatar > img {
   height: 130px;
 }
-
-

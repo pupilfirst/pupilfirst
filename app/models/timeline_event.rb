@@ -3,7 +3,7 @@ class TimelineEvent < ActiveRecord::Base
   mount_uploader :image, TimelineImageUploader
   serialize :links
   validates_presence_of :title, :event_type, :event_on, :startup_id, :iteration
-  attr_accessor :link_url
+  attr_accessor :link_url, :link_title
 
   TYPE_TEAM_FORMATION = 'team_formation'
   TYPE_PROSPECTIVE_CUSTOMER = 'prospective_customer'
@@ -50,19 +50,47 @@ class TimelineEvent < ActiveRecord::Base
   TYPE_GRADUATED = 'graduated'
 
   def self.valid_event_types
-    [
-      TYPE_TEAM_FORMATION, TYPE_PROSPECTIVE_CUSTOMER, TYPE_IDEA, TYPE_INCUBATED, TYPE_ACCELERATOR,
-      TYPE_MENTOR, TYPE_PATENT, TYPE_TECH_STACK, TYPE_PROTOTYPE, TYPE_SEED,
-      TYPE_LAUNCH, TYPE_KEY_EMPLOYEE, TYPE_CO_FOUNDER, TYPE_KEY_TEAM_MEMBER_LEAVES, TYPE_CO_FOUNDER_LEAVES,
-      TYPE_USER_GROWTH, TYPE_PIVOT, TYPE_FIRST_PAYING_CUSTOMER, TYPE_ANGEL_FUND, TYPE_SERIES_A,
-      TYPE_MASSIVE_CUSTOMER_GROWTH, TYPE_TECH_SCALING, TYPE_END_ITERATION, TYPE_INCORPORATED, TYPE_ACQUIRED,
-      TYPE_ATTENDED, TYPE_REVENUE, TYPE_DEBT_FUND, TYPE_RELOCATE, TYPE_SHOWCASE,
-      TYPE_AWARD, TYPE_MISSION, TYPE_TEAM_SIZE, TYPE_CROWD_FUND, TYPE_BANK_LOAN,
-      TYPE_GRADUATED
-    ]
+    {
+      TYPE_TEAM_FORMATION => 'Team Formed',
+      TYPE_PROSPECTIVE_CUSTOMER => 'Found Prospective Customer',
+      TYPE_IDEA => 'Had a great Idea',
+      TYPE_INCUBATED => 'Incubated at Startup Village',
+      TYPE_ACCELERATOR => 'Joined an Accelerator',
+      TYPE_MENTOR => 'Found a Mentor',
+      TYPE_PATENT => 'Patent Granted',
+      TYPE_TECH_STACK => 'Decided on Tech Stack',
+      TYPE_PROTOTYPE => 'Demo-ed Prototype',
+      TYPE_SEED => 'Received Seed Funding',
+      TYPE_LAUNCH => 'Launched Product',
+      TYPE_KEY_EMPLOYEE => 'Key Employee Joined',
+      TYPE_CO_FOUNDER => 'Co-founder Joined',
+      TYPE_KEY_TEAM_MEMBER_LEAVES => 'Team Member left',
+      TYPE_CO_FOUNDER_LEAVES => 'Co-founder left',
+      TYPE_USER_GROWTH => 'User counts increased',
+      TYPE_PIVOT => 'Pivoted',
+      TYPE_FIRST_PAYING_CUSTOMER => 'Sold to First Customer',
+      TYPE_ANGEL_FUND => 'Received Angel Funding',
+      TYPE_SERIES_A => 'Raised Series A Funding',
+      TYPE_MASSIVE_CUSTOMER_GROWTH => 'Massive Customer Growth',
+      TYPE_TECH_SCALING =>  'Improved Scalability across Stack',
+      TYPE_END_ITERATION => 'End of current Iteration',
+      TYPE_INCORPORATED => 'Incorporated Company',
+      TYPE_ACQUIRED => 'Acquired by another Company',
+      TYPE_ATTENDED => 'Attended an event',
+      TYPE_REVENUE => 'Revenue threshold crossed',
+      TYPE_DEBT_FUND => 'Received Debt Funding',
+      TYPE_RELOCATE => 'Team Relocated',
+      TYPE_SHOWCASE => 'Showcased in media',
+      TYPE_AWARD => 'Won an Award',
+      TYPE_MISSION => 'Set new Mission',
+      TYPE_TEAM_SIZE => 'Team size increased',
+      TYPE_CROWD_FUND => 'Raised Crowd Funding',
+      TYPE_BANK_LOAN => 'Received Bank Loan',
+      TYPE_GRADUATED => 'Graduated from Startup Village'
+    }
   end
 
-  validates_inclusion_of :event_type, in: valid_event_types
+  validates_inclusion_of :event_type, in: valid_event_types.keys
   validate :link_url_format
 
   LINK_URL_MATCHER = /(?:https?\/\/)?(?:www\.)?(?<domain>[\w-]+)\./

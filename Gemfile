@@ -47,7 +47,7 @@ gem 'passenger', '~> 5.0.14' # Passenger web-server.
 gem 'delayed_job_active_record' # Delayed Job for deferring tasks.
 gem 'seedbank' # Better organized seed data.
 gem 'wicked' # Multistep form wizard for incubation
-gem 'font-awesome-sass', '~> 4.3.0' # Icons from font-awesome!
+gem 'font-awesome-rails' # Icons from font-awesome!
 
 # Let's not deal with flash messages, yeah? Tracking modified github master with early rendering fix. See link below.
 # https://github.com/mobmewireless/unobtrusive_flash/commit/24e7787d16db66f7956747444433a4e47278193a
@@ -60,6 +60,7 @@ gem 'gravtastic' # Use gravatars as fallback avatars
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify' # Superb notifications library. http://sciactive.github.io/pnotify/
+  gem 'rails-assets-bootstrap-datepicker' # Forced to add Eternicode's datepicker since Eonasdan's datetimepicker's inline mode is non-functional.
 end
 
 group :development do

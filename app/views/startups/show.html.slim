@@ -140,22 +140,8 @@
     .col-md-8.col-md-pull-4
       - if feature_active?(:timeline_form)
         - if current_user && @startup.is_founder?(current_user)
-          #new-event-form.panel.panel-primary
-            .panel-heading.text-uppercase
-                | Submit new timeline event
-                .pull-right
-                  i.fa.fa-plus
-                  i.fa.fa-minus.hidden
-            .panel-body.collapse
-              = simple_form_for @timeline_event, url: add_timeline_event_startup_path(@startup), html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean, file: :horizontal_file_input } do |f|
-                = f.input :event_type, collection: TimelineEvent.valid_event_types
-                = f.input :event_on, as: :date_picker, placeholder: 'DD/MM/YYYY'
-                = f.input :description
-                = f.input :image
-                = f.input :link_url
-                .form-group
-                  .col-sm-offset-3.col-sm-9
-                    = f.button :submit, 'Submit for approval', class: 'btn btn-primary btn-flat'
+          == render 'timeline_builder'
+
       - if @events.present?
         .main-timeline
           .tl-iteration
@@ -165,7 +151,7 @@
             br
             a#read-from-beginning href="#begin"  Read from the beginning.
           ul
-            - @events.each.with_index(1) do |event,index|
+            - @events.each.with_index(1) do |event, index|
               - if event.event_type == TimelineEvent::TYPE_END_ITERATION
                 .tl-iteration
                   .buttons style="display:inline" End of Iteration #{event.iteration}

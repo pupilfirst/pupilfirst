@@ -103,4 +103,8 @@ $(->
   $('#upload-image').click(->
     $('#timeline_event_image').click()
   )
+
+  $('#timeline_event_image').change(->
+    $('#append-text')[0].innerHTML = 'attachment: ' +$(this).val().replace(/^.*[\\\/]/, '')
+  )
 )

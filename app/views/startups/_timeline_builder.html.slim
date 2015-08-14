@@ -18,6 +18,7 @@
             span.hidden-xs href='#' Add a URL
       div
         = f.text_area :description, class: 'description', placeholder: "What's been happening?"
+      #append-text
       .row.bottom-row
         .pull-right
           = f.select :event_type, options_for_select(TimelineEvent.valid_event_types.map { |event| [event.gsub('_', ' ').split.map(&:capitalize).join(' '), event] }), { include_blank: true }

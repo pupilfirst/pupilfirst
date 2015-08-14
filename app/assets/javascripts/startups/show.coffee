@@ -108,4 +108,9 @@ $(->
   $('#timeline_event_image').change(->
     $('#append-file-name')[0].innerHTML = 'attachment: ' +$(this).val().replace(/^.*[\\\/]/, '')
   )
+
+  $('#close-link-modal-button').click(->
+    $('#timeline_event_link_title')[0].value = ""
+    $('#timeline_event_link_url')[0].value = ""
+  )
 )

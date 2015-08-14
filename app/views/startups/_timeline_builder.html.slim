@@ -37,9 +37,9 @@
     #add-link.modal.fade role="dialog"
       .modal-dialog
         .modal-content
-          .modal-header
-            button.close data-dismiss="modal" type="button"  &times;
-            h4.modal-title Add a relevant link
+          / .modal-header
+          /   button.close data-dismiss="modal" type="button"  &times;
+          /   h4.modal-title Add a relevant link
           .modal-body
             .form-horizontal
               .form-group
@@ -51,5 +51,5 @@
                 .col-sm-10
                   = f.text_field :link_url, class: "form-control"
           .modal-footer
-            button.btn.btn-default data-dismiss="modal" type="button"  Close
-            button.btn.btn-success type="button"  Add
+            button#close-link-modal-button.btn.btn-default data-dismiss="modal" type="button"  Close
+            button#add-link-button.btn.btn-success type="button"  Add

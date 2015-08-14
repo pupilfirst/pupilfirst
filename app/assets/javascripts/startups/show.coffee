@@ -161,13 +161,17 @@ $(->
   )
 
   $('#timeline_event_image').change(->
-    $('#append-file-name').html('attachment: ' +$(this).val().replace(/^.*[\\\/]/, ''))
+    $('#upload-image').find('span').html($(this).val().replace(/^.*[\\\/]/, ''))
+    $('#upload-image').addClass('green-text')
   )
 
   $('#add-link-button').click(->
     if $('#timeline_event_link_title').val() and $('#timeline_event_link_url').val()
       exports.addButtonClicked = true
       $('#add-link-modal').modal('hide')
+      $('#add-link').find('span').html($('#timeline_event_link_title').val())
+      $('#add-link').addClass('green-text')
+
     else
       unless $('#timeline_event_link_title').val()
         addErrorMarkers('#link-title-group')

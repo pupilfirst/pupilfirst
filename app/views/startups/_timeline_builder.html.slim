@@ -5,14 +5,14 @@
         .col-sm-4.col-xs-8.border-right
           i.fa.fa-plus
           | &nbsp;Add a Timeline Event
-        .col-sm-4.col-xs-2.border-right
+        .col-sm-4.col-xs-2.border-right.ellipsis-text
           a#upload-image
             i.fa.fa-picture-o
             | &nbsp;
             span.hidden-xs href='#' Upload an Image
           = f.file_field :image, class: 'hidden'
-        .col-sm-4.col-xs-2
-          a data-toggle="modal" data-target="#add-link-modal"
+        .col-sm-4.col-xs-2.ellipsis-text
+          a#add-link data-toggle="modal" data-target="#add-link-modal"
             i.fa.fa-link
             | &nbsp;
             span.hidden-xs href='#' Add a URL

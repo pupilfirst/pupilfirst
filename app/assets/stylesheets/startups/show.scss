@@ -115,6 +115,12 @@ h1.startup-name {
   .top-row {
     background-color: whitesmoke;
     padding: 7px;
+
+    .ellipsis-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   a {

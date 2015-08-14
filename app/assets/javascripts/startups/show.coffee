@@ -106,11 +106,17 @@ $(->
   )
 
   $('#timeline_event_image').change(->
-    $('#append-file-name')[0].innerHTML = 'attachment: ' +$(this).val().replace(/^.*[\\\/]/, '')
+    $('#append-file-name').html('attachment: ' +$(this).val().replace(/^.*[\\\/]/, ''))
   )
 
-  $('#close-link-modal-button').click(->
-    $('#timeline_event_link_title')[0].value = ""
-    $('#timeline_event_link_url')[0].value = ""
+  $('#add-link-button').click(->
+    exports.addButtonClicked = true
+    $('#add-link-modal').modal('hide')
+  )
+
+  $('#add-link-modal').on('hidden.bs.modal', (e) ->
+    unless exports.addButtonClicked
+      $('#timeline_event_link_title').val("")
+      $('#timeline_event_link_url').val("")
   )
 )

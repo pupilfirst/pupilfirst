@@ -12,7 +12,7 @@
             span.hidden-xs href='#' Upload an Image
           = f.file_field :image, class: 'hidden'
         .col-sm-4.col-xs-2
-          a data-toggle="modal" data-target="#add-link"
+          a data-toggle="modal" data-target="#add-link-modal"
             i.fa.fa-link
             | &nbsp;
             span.hidden-xs href='#' Add a URL
@@ -34,7 +34,7 @@
             i.fa.fa-plus
             span.hidden-xs &nbsp;Submit for Review
 
-    #add-link.modal.fade role="dialog"
+    #add-link-modal.modal.fade role="dialog"
       .modal-dialog
         .modal-content
           / .modal-header

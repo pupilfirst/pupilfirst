@@ -147,6 +147,10 @@ h1.startup-name {
   .select2-container {
     width: 208px;
     margin-right: 10px;
+
+    a.select2-choice {
+      border-radius: 0;
+    }
   }
 
   #timeline-builder-date-button {

@@ -10,6 +10,9 @@
             i.fa.fa-picture-o
             | &nbsp;
             span.hidden-xs href='#' Upload an Image
+          a#remove-selected-image.hidden
+            | &nbsp;
+            i.fa.fa-times-circle
           = f.file_field :image, class: 'hidden'
         .col-sm-4.col-xs-2.ellipsis-text
           a#add-link data-toggle="modal" data-target="#add-link-modal"
@@ -18,7 +21,6 @@
             span.hidden-xs href='#' Add a URL
       .row
         = f.text_area :description, class: 'description', placeholder: "What's been happening?"
-      #append-file-name
       .row.bottom-row
         .pull-right
           = f.select :event_type, options_for_select(TimelineEvent.valid_event_types.invert.to_a), { include_blank: true }

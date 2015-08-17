@@ -152,22 +152,44 @@ closeDatePickerOnExternalClick = ->
           exports.timelineBuilderDatepicker.toggle(false)
   )
 
-$(timelineBuilderSubmitChecks)
-$(setupSelect2ForEventType)
-$(clearErrorsOnOpeningSelect2)
-$(handleDateButtonClick)
-$(closeDatePickerOnExternalClick)
+removeSelectedImage = ->
+  uploadImage = $('#upload-image')
+  uploadImage.removeClass('green-text')
+  uploadImage.find('span').html('Upload an Image')
+  $('#timeline_event_image').val('')
+  $('#remove-selected-image').addClass('hidden')
 
-$(->
+handleImageUpload = ->
   $('#upload-image').click(->
     $('#timeline_event_image').click()
   )
 
   $('#timeline_event_image').change(->
-    $('#upload-image').find('span').html($(this).val().replace(/^.*[\\\/]/, ''))
-    $('#upload-image').addClass('green-text')
+    newValue = $(this).val()
+
+    unless newValue
+      removeSelectedImage()
+      return
+
+    uploadImage = $('#upload-image')
+
+    # Remove path info from filename before inserting it into view.
+    uploadImage.find('span').html(newValue.replace(/^.*[\\\/]/, ''))
+
+    uploadImage.addClass('green-text')
+    $('#remove-selected-image').removeClass('hidden')
   )
 
+  $('#remove-selected-image').click(removeSelectedImage)
+
+$(timelineBuilderSubmitChecks)
+$(setupSelect2ForEventType)
+$(clearErrorsOnOpeningSelect2)
+$(handleDateButtonClick)
+$(closeDatePickerOnExternalClick)
+$(handleImageUpload)
+
+$(->
   $('#add-link-button').click(->
     if $('#timeline_event_link_title').val() and $('#timeline_event_link_url').val()
       exports.addButtonClicked = true

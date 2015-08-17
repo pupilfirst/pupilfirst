@@ -121,6 +121,14 @@ h1.startup-name {
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
+    #upload-image > span {
+      max-width: 70%;
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: bottom;
+    }
   }
 
   a {

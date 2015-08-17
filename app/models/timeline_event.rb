@@ -106,7 +106,7 @@ class TimelineEvent < ActiveRecord::Base
   before_validation :build_title_from_type, :record_iteration
 
   def build_title_from_type
-    self.title = event_type.gsub('_',' ').capitalize
+    self.title = TimelineEventType.find_by(key: self.event_type).title
   end
 
   def record_iteration

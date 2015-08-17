@@ -21,7 +21,7 @@
       #append-file-name
       .row.bottom-row
         .pull-right
-          = f.select :event_type, options_for_select(TimelineEvent.valid_event_types.invert.to_a), { include_blank: true }
+          = f.select :event_type, options_for_select(TimelineEventType.pluck(:title,:key), selected: nil), { include_blank: true }
           span#timeline-builder-date-button
             = f.hidden_field :event_on
             a.btn.btn-default.btn-flat.btn-with-default-padding.margin-right-10

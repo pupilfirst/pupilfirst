@@ -81,6 +81,12 @@ class HomeController < ApplicationController
   def slack
   end
   
+  def leaderboards
+    if params[:year]
+      @leaderboard_partial = "home/leaderboards/l#{params[:year]}_#{params[:month]}_#{params[:day]}"
+    end
+  end
+  
   def press_kit
     @press_kit_url = "https://drive.google.com/folderview?id=0B9--SdQuJvHpfjJiam1nTnJCNnVIYkY2NVFXWTQwbXNpWUFoQU1oc1RZSHJraG4yb2Y1cDA&usp=sharing"
   end
@@ -97,6 +103,11 @@ class HomeController < ApplicationController
       gsub(/_+/, '_'). #Convert multiple underscores to one
       +(".png") #PNG image
   end
+  
+  rescue_from ActionView::MissingTemplate do |exception|
+    raise_not_found
+  end
 
+  helper_method :render_and_rescue
   helper_method :faculty_image_path
 end

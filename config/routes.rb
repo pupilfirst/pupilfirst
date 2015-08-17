@@ -84,6 +84,9 @@ Svapp::Application.routes.draw do
   get 'about/transparency', to: 'home#transparency', as: :about_transparency
   get 'about/slack', to: 'home#slack', as: :about_slack
   get 'about/press-kit', to: 'home#press_kit', as: :about_press_kit
+  get 'about/leaderboards', to: 'home#leaderboards', as: :about_leaderboards
+  get 'about/leaderboards/:year/:month/:day', to: 'home#leaderboards', 
+    as: :about_leaderboard, constraints: { year: /\d{4,4}/, month: /\d{2,2}/, day: /\d{2,2}/ }
 
   get 'faculty', to: 'home#faculty'
   root 'home#index'

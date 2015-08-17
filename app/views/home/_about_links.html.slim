@@ -10,11 +10,9 @@
     a.list-group-item href="mailto:help@sv.co" Email help@sv.co
     - if feature_active? :about_press_kit
       a.list-group-item href="#{about_press_kit_path}" Press Kit
-  
-  - if feature_active? :about_leaderboards
-    h4.header-light Startups
-    .list-group
-      a.list-group-item href="#{about_leaderboards_path}" Leaderboards
+  h4.header-light Startups
+  .list-group
+    a.list-group-item href="#{about_leaderboards_path}" Leaderboards
   
   h4.header-light Social Media
   .list-group 

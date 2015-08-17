@@ -83,8 +83,36 @@ class HomeController < ApplicationController
   
   def leaderboards
     if params[:year]
-      @leaderboard_partial = "home/leaderboards/l#{params[:year]}_#{params[:month]}_#{params[:day]}"
+      @leaderboard_chunk = :"l#{params[:year]}_#{params[:month]}_#{params[:day]}"
+      @leaderboard_partial = "home/leaderboards/#{@leaderboard_chunk}"
     end
+    
+    @leaderboard = {
+      l2015_08_17: [
+        { college: "Federal Institute of Science and Technology", team_lead: "Aravind Murali" },
+        { college: "M.A. College of Engineering Kothamangalam", team_lead: "Stenal P Jolly" },
+        { college: "Government College of Engineering Thrissur", team_lead: "Arya Murali" },
+        { college: "Government College of Engineering Thrissur", team_lead: "Felix Josemon" },
+        { college: "Saintgits College of Engineering Pathamuttom", team_lead: "Nakendra Kumar S." },
+        { college: "Rajagiri School Of Engineering & Technology", team_lead: "Akash C A" },
+        { college: "Saintgits College of Engineering Pathamuttom", team_lead: "Sherin Antony" },
+        { college: "NSS College of Engineering, Palakkad", team_lead: "Hanzal Salim" },
+        { college: "Sahrdaya College Of Engineering And Technology Kodakara", team_lead: "Anik Raj" },
+        { college: "Model Engineering College", team_lead: "Ajmal Azeez" },
+        { college: "Govt. Model Engineering College Thrikkakara ", team_lead: "Mohammed Akhil P R" },
+        { college: "School Of Engineering, CUSAT", team_lead: "Athul B Raj" },
+        { college: "Sree Chitra Thirunal College of Engineering Trivandrum", team_lead: "Varghese George" },
+        { college: "NSS College Of Engineering, Palakkad", team_lead: "Aravind Sai.V" },
+        { college: "Amal Jyothi College of Engineeering", team_lead: "Francis Alexander" },
+        { college: "Sree Narayana Gurukulam college of Engineering Kadayiruppu", team_lead: "Anand B" },
+        { college: "Rajagiri School of Engineering and Technology", team_lead: "Geordin Jose" },
+        { college: "College of Engineering Chengannur", team_lead: "Sachu S" },
+        { college: "Adi Shankara Institute of Engineering and Technology", team_lead: "A N Sreeram" },
+        { college: "College of Engineering Vadakara", team_lead: "Tashrif Yusuf" },
+        { college: "Muthoot Institute of Technology and Science, Varikoli", team_lead: "Aravind Muraleedharan" },
+        { college: "AWH Engineering College", team_lead: "Alen Thomas" }
+      ]
+    }
   end
   
   def press_kit

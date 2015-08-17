@@ -12,10 +12,13 @@ h1.page-header.header-light Leaderboards
 .row
   .col-sm-7
     .about-text
-      p Leaderboards are how we track progress for our startups. They <strong>don't show</strong> the best startups at SV.CO. Rather, they show <strong>which ones have improved the most</strong> compared to the previous leaderboard.
+      p Leaderboards are how we track progress for our startups. They <strong>don't show</strong> the best startups at SV.CO. Rather, they show <strong>startups that have improved the most</strong> compared to the previous leaderboard.
       p Ranking is based on a multitide of factors, most of them unique to the startup and the <a href="http://playbook.sv.co/5-startup-stages.html">stage</a> they are in.
       - if @leaderboard_partial
-        = render @leaderboard_partial
+        = render partial: @leaderboard_partial, locals: { \
+            chunk: @leaderboard_chunk,  \
+            leaderboard: @leaderboard[@leaderboard_chunk]  \
+          }
       - else
         p 
           a class="btn btn-primary" href="#{about_leaderboard_path('2015', '08', '17')}" View the latest leaderboard

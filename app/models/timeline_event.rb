@@ -90,7 +90,7 @@ class TimelineEvent < ActiveRecord::Base
     }
   end
 
-  validates_inclusion_of :event_type, in: valid_event_types.keys
+  # validates_inclusion_of :event_type, in: TimelineEventType.pluck(:key)
   validate :link_url_format
 
   LINK_URL_MATCHER = /(?:https?\/\/)?(?:www\.)?(?<domain>[\w-]+)\./

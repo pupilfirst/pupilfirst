@@ -182,26 +182,39 @@ handleImageUpload = ->
 
   $('#remove-selected-image').click(removeSelectedImage)
 
-$(timelineBuilderSubmitChecks)
-$(setupSelect2ForEventType)
-$(clearErrorsOnOpeningSelect2)
-$(handleDateButtonClick)
-$(closeDatePickerOnExternalClick)
-$(handleImageUpload)
+isUrlValid = (url) ->
+  /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url)
 
-$(->
+clearErrorMarkers = (formGroupFinder) ->
+  formGroup = $(formGroupFinder)
+  formGroup.removeClass('has-error has-feedback')
+  formGroup.find('span').addClass('hidden')
+
+addErrorMarkers = (formGroupFinder, errorHint) ->
+  formGroup = $(formGroupFinder)
+  formGroup.addClass('has-error has-feedback')
+  formGroup.find('span.form-control-feedback').removeClass('hidden')
+
+  if errorHint
+    $('#url-help').removeClass('hidden').html(errorHint)
+
+handleLinkAddition = ->
   $('#add-link-button').click(->
-    if $('#timeline_event_link_title').val() and $('#timeline_event_link_url').val()
+    linkTitle = $('#timeline_event_link_title').val()
+    linkURL = $('#timeline_event_link_url').val()
+    linkURLValid = isUrlValid(linkURL)
+
+    if linkURL and linkURLValid and linkTitle
       exports.addButtonClicked = true
       $('#add-link-modal').modal('hide')
-      $('#add-link').find('span').html($('#timeline_event_link_title').val())
+      $('#add-link').find('span').html(linkTitle)
       $('#add-link').addClass('green-text')
-
     else
-      unless $('#timeline_event_link_title').val()
+      unless linkURL and linkURLValid
+        addErrorMarkers('#link-url-group', "Please make sure you've supplied a full URL, starting with http(s).")
+
+      unless linkTitle
         addErrorMarkers('#link-title-group')
-      unless $('#timeline_event_link_url').val()
-        addErrorMarkers('#link-url-group')
   )
 
   $('#timeline_event_link_title').focus(->
@@ -221,11 +234,10 @@ $(->
     clearErrorMarkers('#link-url-group')
   )
 
-  clearErrorMarkers = (formGroup) ->
-    $(formGroup).removeClass('has-error has-feedback')
-    $(formGroup).find('span').addClass('hidden')
-
-  addErrorMarkers = (formGroup) ->
-    $(formGroup).addClass('has-error has-feedback')
-    $(formGroup).find('span').removeClass('hidden')
-)
+$(timelineBuilderSubmitChecks)
+$(setupSelect2ForEventType)
+$(clearErrorsOnOpeningSelect2)
+$(handleDateButtonClick)
+$(closeDatePickerOnExternalClick)
+$(handleImageUpload)
+$(handleLinkAddition)

@@ -42,15 +42,16 @@
           .modal-body
             .form-horizontal
               .form-group#link-title-group
-                = f.label :link_title, "Title", class: "col-sm-2 control-label"
+                = f.label :link_title, 'Title', class: 'col-sm-2 control-label'
                 .col-sm-10
-                  = f.text_field :link_title, class: "form-control", placeholder: "(required)"
+                  = f.text_field :link_title, class: 'form-control', placeholder: '(required)'
                   span.glyphicon.glyphicon-remove.form-control-feedback.hidden
               .form-group#link-url-group
-                = f.label :link_url, "URL", class: "col-sm-2 control-label"
+                = f.label :link_url, 'URL', class: 'col-sm-2 control-label'
                 .col-sm-10
-                  = f.text_field :link_url, class: "form-control", placeholder: "(required)"
+                  = f.text_field :link_url, class: 'form-control', placeholder: '(required)', 'aria-describedby' => 'url-help'
                   span.glyphicon.glyphicon-remove.form-control-feedback.hidden
+                  span#url-help.help-block.hidden
           .modal-footer
             button#close-link-modal-button.btn.btn-default data-dismiss="modal" type="button"  Close
             button#add-link-button.btn.btn-success type="button"  Add

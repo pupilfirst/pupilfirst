@@ -20,7 +20,10 @@
             | &nbsp;
             span.hidden-xs href='#' Add a URL
       .row
-        = f.text_area :description, class: 'description', placeholder: "What's been happening?"
+        .text-area-container
+          span.text-area-overlay.common-properties
+          = f.text_area :description, class: 'description common-properties', placeholder: "What's been happening?", maxlength: 300
+
       .row.bottom-row
         .pull-right
           = f.select :event_type, options_for_select(TimelineEvent.valid_event_types.invert.to_a), { include_blank: true }

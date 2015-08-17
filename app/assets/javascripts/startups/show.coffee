@@ -234,6 +234,36 @@ handleLinkAddition = ->
     clearErrorMarkers('#link-url-group')
   )
 
+matchDescriptionScroll = (target) ->
+  $('span.text-area-overlay').scrollTop(target.scrollTop())
+
+limitDescriptionLength = ->
+  $('#timeline_event_description').on('input', (event) ->
+    description = $(event.target)
+
+    # Change the contents of overlay span.
+    descriptionText = description.val()
+    span_contents = descriptionText
+
+    if span_contents
+      span_contents += " &mdash; (#{descriptionText.length}/300)"
+
+      if descriptionText.length >= 250
+        $('span.text-area-overlay').addClass 'length-warning'
+      else
+        $('span.text-area-overlay').removeClass 'length-warning'
+
+    # Replace contents of overlay span.
+    $('span.text-area-overlay').html(span_contents)
+
+    # Match scroll of overlay with textbox, in case it has scrolled to a new line.
+    matchDescriptionScroll($(description))
+  )
+
+  $("#timeline_event_description").scroll((event) ->
+    matchDescriptionScroll($(event.target))
+  )
+
 $(timelineBuilderSubmitChecks)
 $(setupSelect2ForEventType)
 $(clearErrorsOnOpeningSelect2)
@@ -241,3 +271,4 @@ $(handleDateButtonClick)
 $(closeDatePickerOnExternalClick)
 $(handleImageUpload)
 $(handleLinkAddition)
+$(limitDescriptionLength)

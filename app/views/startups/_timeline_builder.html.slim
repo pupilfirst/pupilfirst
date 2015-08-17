@@ -18,10 +18,11 @@
             span.hidden-xs href='#' Add a URL
       .row
         = f.text_area :description, class: 'description', placeholder: "What's been happening?"
-      #append-file-name
       .row.bottom-row
         .pull-right
-          = f.select :event_type, options_for_select(TimelineEventType.pluck(:title,:key), selected: nil), { include_blank: true }
+          = f.select :event_type do
+            - TimelineEventType.all.each do |t|
+              option value='#{t.key}' data-sample-text='#{t.sample}' #{t.title}
           span#timeline-builder-date-button
             = f.hidden_field :event_on
             a.btn.btn-default.btn-flat.btn-with-default-padding.margin-right-10

@@ -113,8 +113,6 @@ timelineBuilderSubmitChecks = ->
 
 clearErrorsOnOpeningSelect2 = ->
   $('#timeline_event_event_type').on('select2-opening', ->
-    console.log 'here'
-
     select2Container = $('#new_timeline_event .select2-container')
     select2Container.removeClass('has-error')
     select2Container.tooltip('destroy')
@@ -123,6 +121,12 @@ clearErrorsOnOpeningSelect2 = ->
 setupSelect2ForEventType = ->
   $('#timeline_event_event_type').select2(
     placeholder: "Type of Event"
+  )
+
+matchSampleTextToEventType = ->
+  $('#timeline_event_event_type').on('select2-selected', (e) ->
+    newPlaceHolder = $('#timeline_event_event_type :selected').attr("data-sample-text")
+    $('#timeline_event_description').attr("placeholder",newPlaceHolder)
   )
 
 handleDateButtonClick = ->
@@ -157,6 +161,7 @@ $(setupSelect2ForEventType)
 $(clearErrorsOnOpeningSelect2)
 $(handleDateButtonClick)
 $(closeDatePickerOnExternalClick)
+$(matchSampleTextToEventType)
 
 $(->
   $('#upload-image').click(->

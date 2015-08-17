@@ -241,12 +241,13 @@ limitDescriptionLength = ->
   $('#timeline_event_description').on('input', (event) ->
     description = $(event.target)
 
-    # Change the contents of overlay span.
-    descriptionText = description.val()
+    # Let's escape the incoming text, before manipulating it.
+    unescapedDescriptionText = description.val()
+    descriptionText = $('<div/>').text(unescapedDescriptionText).html();
     span_contents = descriptionText
 
     if span_contents
-      span_contents += " &mdash; (#{descriptionText.length}/300)"
+      span_contents += " &mdash; (#{unescapedDescriptionText.length}/300)"
 
       if descriptionText.length >= 250
         $('span.text-area-overlay').addClass 'length-warning'

@@ -20,9 +20,9 @@
         = f.text_area :description, class: 'description', placeholder: "What's been happening?"
       .row.bottom-row
         .pull-right
-          = f.select :event_type do
+          = f.select :timeline_event_type_id do
             - TimelineEventType.all.each do |t|
-              option value='#{t.key}' data-sample-text='#{t.sample}' #{t.title}
+              option value='#{t.id}' data-sample-text='#{t.sample}' #{t.title}
           span#timeline-builder-date-button
             = f.hidden_field :event_on
             a.btn.btn-default.btn-flat.btn-with-default-padding.margin-right-10

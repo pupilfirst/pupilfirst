@@ -253,7 +253,10 @@ h1.startup-name {
   }
 }
 
-.pending-verification { color: red; }
+.pending-verification {
+  color: red;
+  cursor: help;
+}
 
 //.
 ////.

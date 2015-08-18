@@ -237,7 +237,7 @@ handleLinkAddition = ->
 matchDescriptionScroll = (target) ->
   $('span.text-area-overlay').scrollTop(target.scrollTop())
 
-limitDescriptionLength = ->
+measureDescriptionLength = ->
   $('#timeline_event_description').on('input', (event) ->
     description = $(event.target)
 
@@ -254,11 +254,15 @@ limitDescriptionLength = ->
       else
         $('span.text-area-overlay').removeClass 'length-warning'
 
+    textAreaOverlay = $('span.text-area-overlay')
+
     # Replace contents of overlay span.
-    $('span.text-area-overlay').html(span_contents)
+    textAreaOverlay.html(span_contents)
 
     # Match scroll of overlay with textbox, in case it has scrolled to a new line.
     matchDescriptionScroll($(description))
+
+    # TODO: Match height of textbox with overlay, in case overlay (which is has a few extra text characters) has line-break-ed, and textbox has not (which would hide the extra overlay content outside scroll area).
   )
 
   $("#timeline_event_description").scroll((event) ->
@@ -275,5 +279,5 @@ $(handleDateButtonClick)
 $(closeDatePickerOnExternalClick)
 $(handleImageUpload)
 $(handleLinkAddition)
-$(limitDescriptionLength)
+$(measureDescriptionLength)
 $(setPendingTooltips)

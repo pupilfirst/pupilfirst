@@ -2,9 +2,7 @@
   = javascript_include_tag 'startups'
   = stylesheet_link_tag 'startups'
 
-.margin-top-20
-
-h2.page-header.margin-top-0 Modify founders
+h2.page-header Modify founders
 
 .row#current-founders-list
   .col-sm-9.col-sm-offset-3
@@ -25,3 +23,33 @@ h2.page-header Edit your startup profile
 
 = render 'form'
 
+h2.page-header Delete my Startup
+
+- if @startup.admin?(current_user)
+  .alert.alert-danger
+    strong Warning!
+    ' &nbsp;Deleting this startup is an irreversible action.
+
+  p
+    ' Deleting your startup's will:
+    ul
+      li Disassociate all other founders (including yourself) from this startup.
+      li Delete all associated timeline events.
+      li Delete all information related to this startup.
+
+  p
+    ' If you're absolutely sure you want to continue, please supply your login password to authorize this action:
+
+  = simple_form_for @startup, url: user_startup_url, method: :delete, html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
+    = f.input :password, label: 'Your Password'
+
+    .form-group
+      .col-sm-9.col-sm-offset-3
+        = f.submit 'Confirm Startup Deletion', class: 'btn btn-danger btn-flat btn-with-default-padding'
+
+- else
+  p Only the team leader can delete a startup's profile.
+
+  p.margin-bottom-20
+    ' Our records indicate that the team leader of your startup is
+    code #{@startup.admin.email}

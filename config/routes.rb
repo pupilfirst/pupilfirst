@@ -25,13 +25,17 @@ Svapp::Application.routes.draw do
       patch 'update_password'
     end
 
-    resource :startup, only: [:new, :edit, :update] do
+    resource :startup, only: [:new, :edit, :update, :destroy] do
       post :add_founder
       post :add_timeline_event
     end
   end
 
   resources :startups, only: [:index, :show] do
+    collection do
+      post 'team_leader_consent'
+    end
+
     # resources :startup_jobs do
     #   patch :repost
     # # resources :founders do
@@ -85,7 +89,7 @@ Svapp::Application.routes.draw do
   get 'about/slack', to: 'home#slack', as: :about_slack
   get 'about/press-kit', to: 'home#press_kit', as: :about_press_kit
   get 'about/leaderboards', to: 'home#leaderboards', as: :about_leaderboards
-  get 'about/leaderboards/:year/:month/:day', to: 'home#leaderboards', 
+  get 'about/leaderboards/:year/:month/:day', to: 'home#leaderboards',
     as: :about_leaderboard, constraints: { year: /\d{4,4}/, month: /\d{2,2}/, day: /\d{2,2}/ }
 
   get 'faculty', to: 'home#faculty'

@@ -21,6 +21,7 @@
       .row.bottom-row
         .pull-right
           = f.select :timeline_event_type_id do
+            option value='' selected=true
             - TimelineEventType.all.each do |t|
               option value='#{t.id}' data-sample-text='#{t.sample}' #{t.title}
           span#timeline-builder-date-button

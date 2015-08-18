@@ -6,6 +6,6 @@ class TimelineEventType < ActiveRecord::Base
   mount_uploader :badge, BadgeUploader
 
   def sample
-    sample_text.present? ? sample_text : 'What\'s been happening?'
+    sample_text.present? ? sample_text : "What's been happening?"
   end
 end

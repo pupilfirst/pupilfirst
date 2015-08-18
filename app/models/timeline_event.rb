@@ -91,7 +91,6 @@ class TimelineEvent < ActiveRecord::Base
     }
   end
 
-  # validates_inclusion_of :event_type, in: TimelineEventType.pluck(:key)
   validate :link_url_format
 
   LINK_URL_MATCHER = /(?:https?\/\/)?(?:www\.)?(?<domain>[\w-]+)\./
@@ -104,10 +103,12 @@ class TimelineEvent < ActiveRecord::Base
 
 
   before_save :make_links_an_array, :build_link_json
-  before_validation :build_title_from_type, :record_iteration
+  before_validation :build_default_title_from_type, :record_iteration
 
-  def build_title_from_type
-    self.title = TimelineEventType.find_by(key: self.event_type).title
+  def build_default_title_from_type
+    unless title.present?
+      self.title = self.timeline_event_type.title
+    end
   end
 
   def record_iteration
@@ -115,9 +116,8 @@ class TimelineEvent < ActiveRecord::Base
   end
 
   def build_link_json
-    if @link_url.present?
-      title = LINK_URL_MATCHER.match(@link_url)[:domain]
-      self.links = [{title: title, url: link_url}]
+    if link_title.present? && link_url.present?
+      self.links = [{title: link_title, url: link_url}]
     end
   end
 

@@ -22,7 +22,7 @@
         .pull-right
           = f.select :timeline_event_type_id do
             option value='' selected=true
-            - TimelineEventType.all.each do |t|
+            - TimelineEventType.order(:title).each do |t|
               option value='#{t.id}' data-sample-text='#{t.sample}' #{t.title}
           span#timeline-builder-date-button
             = f.hidden_field :event_on

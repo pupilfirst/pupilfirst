@@ -253,6 +253,8 @@ h1.startup-name {
   }
 }
 
+.pending-verification { color: red; }
+
 //.
 ////.
 //////.
@@ -275,13 +277,7 @@ h1.startup-name {
   text-align: center;
   padding: 20px;
 
-  a {
-    text-decoration: none;
-  }
-
-  .pending {
-    color: #ff0000;
-  }
+  a { text-decoration: none; }
 
   p {
     width: 90%;

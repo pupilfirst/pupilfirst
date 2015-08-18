@@ -158,7 +158,7 @@
                   br
                   p style="margin-top: 10px" #{event.title}
                   - if !event.verified?
-                    a.pending href="#" data-toggle="tooltip" title="This event is not yet verified by SV and hence not visible to the public!"
+                    .pending-verification href="#" data-toggle="tooltip" title="This event has not yet been verified by SV.CO, and is hidden from the public."
                       i.fa.fa-exclamation-circle
                       | &nbsp;Pending verification
                   br
@@ -173,7 +173,7 @@
                     .timeline-panel
                       .timeline-heading
                         - if !event.verified?
-                          a href="#" data-toggle="tooltip" title="This event is not yet verified by SV and hence not visible to the public!"
+                          .pending-verification data-toggle="tooltip" title="This event has not yet been verified by SV.CO, and is hidden from the public."
                             i.fa.fa-exclamation-circle
                             | &nbsp;Pending verification
                         h4.timeline-title

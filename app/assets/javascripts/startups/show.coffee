@@ -265,6 +265,9 @@ limitDescriptionLength = ->
     matchDescriptionScroll($(event.target))
   )
 
+setPendingTooltips = ->
+  $('.pending-verification').tooltip()
+
 $(timelineBuilderSubmitChecks)
 $(setupSelect2ForEventType)
 $(clearErrorsOnOpeningSelect2)
@@ -273,3 +276,4 @@ $(closeDatePickerOnExternalClick)
 $(handleImageUpload)
 $(handleLinkAddition)
 $(limitDescriptionLength)
+$(setPendingTooltips)

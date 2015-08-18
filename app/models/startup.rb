@@ -188,7 +188,7 @@ class Startup < ActiveRecord::Base
 
   # Friendly ID!
   friendly_id :slug
-  validates_format_of :slug, with: /\A[a-z0-9\-]+\z/i, allow_nil: true
+  validates_format_of :slug, with: /\A[a-z0-9\-_]+\z/i, allow_nil: true
 
   # Backend users will see agreement duration as being nil when attempting to edit. This allows them to save edits
   # without picking a value.

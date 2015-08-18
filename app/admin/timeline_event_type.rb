@@ -3,7 +3,7 @@ menu parent: 'Startups'
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #
-permit_params :key, :title, :sample_text
+permit_params :key, :title, :sample_text, :badge
 #
 # or
 #
@@ -17,6 +17,7 @@ permit_params :key, :title, :sample_text
     selectable_column
     column :key
     column :title
+    column :badge
     actions
   end
 

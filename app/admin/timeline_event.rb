@@ -3,7 +3,7 @@ ActiveAdmin.register TimelineEvent do
   # See permitted parameters documentation:
   # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
   #
-  permit_params :title, :description, :iteration, :event_type, :image, :links, :event_on, :startup_id, :verified_at
+  permit_params :title, :description, :iteration, :timeline_event_type_id, :image, :links, :event_on, :startup_id, :verified_at
   #
   # or
   #
@@ -18,7 +18,7 @@ ActiveAdmin.register TimelineEvent do
 
     column :iteration
     column :title
-    column :event_type
+    column :timeline_event_type
     column :event_on
     column :verified_at
 
@@ -45,7 +45,7 @@ ActiveAdmin.register TimelineEvent do
     f.inputs 'Event Details' do
       f.input :startup
       f.input :title
-      f.input :event_type, collection: TimelineEvent.valid_event_types.invert, include_blank: false
+      f.input :timeline_event_type
       f.input :description
       f.input :iteration
       f.input :image
@@ -60,7 +60,7 @@ ActiveAdmin.register TimelineEvent do
     attributes_table do
       row :startup
       row :title
-      row :event_type
+      row :timeline_event_type
       row :description
       row :iteration
       row :image

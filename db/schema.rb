@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150807054635) do
+ActiveRecord::Schema.define(version: 20150818070048) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -227,6 +227,15 @@ ActiveRecord::Schema.define(version: 20150807054635) do
 
   add_index "statistics", ["parameter"], name: "index_statistics_on_parameter", using: :btree
 
+  create_table "timeline_event_types", force: :cascade do |t|
+    t.string   "key"
+    t.string   "title"
+    t.text     "sample_text"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.string   "badge"
+  end
+
   create_table "timeline_events", force: :cascade do |t|
     t.integer  "iteration"
     t.string   "title"
@@ -235,13 +244,15 @@ ActiveRecord::Schema.define(version: 20150807054635) do
     t.string   "image"
     t.integer  "startup_id"
     t.text     "links"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
     t.date     "event_on"
     t.datetime "verified_at"
+    t.integer  "timeline_event_type_id"
   end
 
   add_index "timeline_events", ["startup_id"], name: "index_timeline_events_on_startup_id", using: :btree
+  add_index "timeline_events", ["timeline_event_type_id"], name: "index_timeline_events_on_timeline_event_type_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email"

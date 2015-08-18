@@ -111,7 +111,7 @@ class StartupsController < InheritedResources::Base
   end
 
   def timeline_event_params
-    params.require(:timeline_event).permit(:event_type, :event_on, :description, :image, :link_url)
+    params.require(:timeline_event).permit(:timeline_event_type_id, :event_on, :description, :image, :link_url, :link_title)
   end
 
   def restrict_to_startup_founders

@@ -81,7 +81,7 @@ timelineBuilderSubmitChecks = ->
   $('#new_timeline_event').submit( (event)->
     form = $(event.target)
 
-    typeOfEventPresent = !!form.find('select#timeline_event_event_type').val()
+    typeOfEventPresent = !!form.find('select#timeline_event_timeline_event_type_id').val()
     dateOfEventPresent = !!form.find('input#timeline_event_event_on').val()
 
     unless dateOfEventPresent
@@ -112,17 +112,21 @@ timelineBuilderSubmitChecks = ->
   )
 
 clearErrorsOnOpeningSelect2 = ->
-  $('#timeline_event_event_type').on('select2-opening', ->
-    console.log 'here'
-
+  $('#timeline_event_timeline_event_type_id').on('select2-opening', ->
     select2Container = $('#new_timeline_event .select2-container')
     select2Container.removeClass('has-error')
     select2Container.tooltip('destroy')
   )
 
 setupSelect2ForEventType = ->
-  $('#timeline_event_event_type').select2(
+  $('#timeline_event_timeline_event_type_id').select2(
     placeholder: "Type of Event"
+  )
+
+matchSampleTextToEventType = ->
+  $('#timeline_event_timeline_event_type_id').on('select2-selected', (e) ->
+    newPlaceHolder = $('#timeline_event_timeline_event_type_id :selected').attr("data-sample-text")
+    $('#timeline_event_description').attr("placeholder",newPlaceHolder)
   )
 
 handleDateButtonClick = ->
@@ -281,3 +285,4 @@ $(handleImageUpload)
 $(handleLinkAddition)
 $(measureDescriptionLength)
 $(setPendingTooltips)
+$(matchSampleTextToEventType)

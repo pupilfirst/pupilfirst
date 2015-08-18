@@ -23,10 +23,12 @@
         .text-area-container
           span.text-area-overlay.common-properties
           = f.text_area :description, class: 'description common-properties', placeholder: "What's been happening?", maxlength: 300
-
       .row.bottom-row
         .pull-right
-          = f.select :event_type, options_for_select(TimelineEvent.valid_event_types.invert.to_a), { include_blank: true }
+          = f.select :timeline_event_type_id do
+            option value='' selected=true
+            - TimelineEventType.order(:title).each do |t|
+              option value='#{t.id}' data-sample-text='#{t.sample}' #{t.title}
           span#timeline-builder-date-button
             = f.hidden_field :event_on
             a.btn.btn-default.btn-flat.btn-with-default-padding.margin-right-10

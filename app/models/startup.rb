@@ -98,7 +98,7 @@ class Startup < ActiveRecord::Base
   end
 
   has_many :startup_jobs
-  has_many :timeline_events
+  has_many :timeline_events, dependent: :destroy
 
   # Allow statup to accept nested attributes for users
   # has_many :users
@@ -185,7 +185,6 @@ class Startup < ActiveRecord::Base
     User.where(startup_id: self.id).update_all(startup_id: nil, startup_admin: nil, is_founder: nil)
     User.where(pending_startup_id: self.id).update_all(pending_startup_id: nil)
   end
-
 
   # Friendly ID!
   friendly_id :slug
@@ -461,4 +460,7 @@ class Startup < ActiveRecord::Base
     self.timeline_events.verified.present?
   end
 
+  def admin?(user)
+    admin == user
+  end
 end

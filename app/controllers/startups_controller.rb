@@ -20,6 +20,13 @@ class StartupsController < InheritedResources::Base
         flash[:alert] = "You've already submitted an application for incubation."
         redirect_to root_url and return
       end
+    end
+  end
+
+  # POST /startups/team_leader_consent
+  def team_leader_consent
+    if current_user.startup.present? || !current_user.phone_verified?
+      redirect_to action: 'new'
     else
       Startup.new_incubation!(current_user)
       redirect_to incubation_path(id: :user_profile)

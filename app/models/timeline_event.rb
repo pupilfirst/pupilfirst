@@ -1,5 +1,6 @@
 class TimelineEvent < ActiveRecord::Base
   belongs_to :startup
+  belongs_to :timeline_event_type
   mount_uploader :image, TimelineImageUploader
   serialize :links
   validates_presence_of :title, :event_type, :event_on, :startup_id, :iteration

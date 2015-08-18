@@ -17,6 +17,10 @@ class ApplicationController < ActionController::Base
   end
 
   protected
+  
+  def raise_not_found
+    raise ActionController::RoutingError.new('Not Found')
+  end
 
   def feature_active?(feature)
     (Rails.env == "development") ||

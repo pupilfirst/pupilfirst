@@ -83,8 +83,8 @@ class User < ActiveRecord::Base
     value.is_a?(String) ? value.downcase == 'true' : value
   end
 
-  validates :twitter_url, url: { allow_blank: true }
-  validates :linkedin_url, url: { allow_blank: true }
+  validates :twitter_url, :url => true, allow_nil: true
+  validates :linkedin_url, :url => true, allow_nil: true
 
   before_create do
     self.auth_token = SecureRandom.hex(30)

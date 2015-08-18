@@ -1,5 +1,5 @@
 class TimelineEventType < ActiveRecord::Base
-  validates_presence_of :key, :title
+  validates_presence_of :key, :title, :badge
   validates_uniqueness_of :key
 
   mount_uploader :badge, BadgeUploader

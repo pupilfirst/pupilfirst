@@ -45,7 +45,7 @@ ActiveAdmin.register TimelineEvent do
     f.inputs 'Event Details' do
       f.input :startup
       f.input :title
-      f.input :event_type, collection: TimelineEvent.valid_event_types.invert, include_blank: false
+      f.input :event_type, collection: TimelineEventType.all.pluck(:title,:key), include_blank: false
       f.input :description
       f.input :iteration
       f.input :image

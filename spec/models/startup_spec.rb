@@ -12,13 +12,6 @@ describe Startup do
       user.reload
       expect(user.startup_id).to eq nil
     end
-
-    it 'clears association from pending users' do
-      user = create :user_with_out_password, pending_startup_id: startup.id
-      startup.destroy!
-      user.reload
-      expect(user.pending_startup_id).to eq nil
-    end
   end
 
   it "can't have more than 3 categories" do

@@ -25,6 +25,7 @@ class User < ActiveRecord::Base
   belongs_to :startup
   has_and_belongs_to_many :categories
   has_many :mentor_meetings
+  belongs_to :university
 
   scope :non_founders, -> { where("is_founder = ? or is_founder IS NULL", false) }
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }

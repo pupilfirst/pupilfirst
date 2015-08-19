@@ -1,4 +1,11 @@
 ActiveAdmin.register User do
+
+  controller do
+    def scoped_collection
+      super.includes :university
+    end
+  end
+
   menu label: 'SV Users'
 
   # Customize the index. Let's show only a small subset of the tons of fields.

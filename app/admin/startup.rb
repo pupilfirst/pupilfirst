@@ -103,7 +103,6 @@ ActiveAdmin.register Startup do
     push_message = 'Please complete the incubation process by following the steps in the Startup Village application!'
 
     StartupMailer.reminder_to_complete_startup_info(startup).deliver_later
-    startup.founders.each { |user| user.update_attributes!({ startup_form_link_sent_status: true }) }
     redirect_to action: :show
   end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150819054023) do
+ActiveRecord::Schema.define(version: 20150819063045) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -260,11 +260,11 @@ ActiveRecord::Schema.define(version: 20150819054023) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "avatar"
-    t.string   "encrypted_password",            default: ""
+    t.string   "encrypted_password",       default: ""
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                 default: 0,     null: false
+    t.integer  "sign_in_count",            default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -294,11 +294,10 @@ ActiveRecord::Schema.define(version: 20150819054023) do
     t.boolean  "is_student"
     t.string   "course"
     t.string   "semester"
-    t.boolean  "startup_form_link_sent_status"
     t.string   "gender"
     t.string   "phone"
     t.text     "communication_address"
-    t.boolean  "phone_verified",                default: false
+    t.boolean  "phone_verified",           default: false
     t.string   "phone_verification_code"
     t.integer  "pending_startup_id"
     t.string   "company"

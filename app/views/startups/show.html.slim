@@ -169,7 +169,7 @@
                       method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',
                       data: { confirm: 'This action cannot be reversed. Are you sure?' } do
                       i.fa.fa-times
-                      | &nbsp; Delete this event
+                      | &nbsp; Delete
                     = link_to startup_path(@startup, event_id: event.id),
                       class: 'btn btn-info btn-sm btn-flat btn-with-default-padding' do
                       i.fa.fa-pencil
@@ -207,7 +207,7 @@
                             method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',
                             data: { confirm: 'This action cannot be reversed. Are you sure?' } do
                             i.fa.fa-times
-                            | &nbsp;Delete this event
+                            | &nbsp;Delete
                           = link_to startup_path(@startup, event_id: event.id), class: 'btn btn-info btn-sm btn-flat btn-with-default-padding' do
                             i.fa.fa-pencil
                             | &nbsp;Edit

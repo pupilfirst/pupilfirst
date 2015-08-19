@@ -152,7 +152,7 @@
             a#read-from-beginning href="#begin"  Read from the beginning.
           ul
             - @events.each.with_index(1) do |event, index|
-              - if event.event_type == TimelineEvent::TYPE_END_ITERATION
+              - if event.end_iteration?
                 .tl-iteration
                   .buttons style="display:inline" End of Iteration #{event.iteration}
                   br

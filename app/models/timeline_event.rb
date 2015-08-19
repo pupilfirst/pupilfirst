@@ -130,4 +130,8 @@ class TimelineEvent < ActiveRecord::Base
   end
 
   scope :verified, -> { where.not(verified_at: nil) }
+
+  def end_iteration?
+    timeline_event_type.end_iteration?
+  end
 end

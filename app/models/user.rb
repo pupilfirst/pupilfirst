@@ -36,8 +36,7 @@ class User < ActiveRecord::Base
   # validates_presence_of :title, if: ->(user){ user.full_validation }
   # validates_presence_of :salutation, message: ''
 
-  # We don't have a full name when we're creating a temporary co-founder account.
-  validates_presence_of :fullname, unless: ->(user) { user.pending_startup_id.present? }
+  validates_presence_of :fullname
 
   def self.valid_gender_values
     [GENDER_FEMALE, GENDER_MALE, GENDER_OTHER]
@@ -98,14 +97,6 @@ class User < ActiveRecord::Base
     display_name
   end
 
-  def self.find_or_initialize_cofounder(email)
-    cofounder = find_or_initialize_by(email: email)
-
-    raise Exceptions::UserAlreadyMemberOfStartup, 'User already belongs to a startup, and cannot be added again.' if cofounder.startup
-    raise Exceptions::UserHasPendingStartupInvite, 'User has a pending startup invite, and cannot be invited right now.' if cofounder.pending_startup_id
-
-    cofounder
-  end
 
   # Skips setting password and sets invitation_token to allow later registration.
   def save_unregistered_user!
@@ -128,17 +119,6 @@ class User < ActiveRecord::Base
     self.startup_admin = nil
     self.is_founder = nil
     save!
-  end
-
-  # Returns status of cofounder addition to a supplied startup.
-  def cofounder_status(for_startup)
-    if pending_startup_id
-      COFOUNDER_PENDING
-    elsif startup == for_startup
-      COFOUNDER_ACCEPTED
-    else
-      COFOUNDER_REJECTED
-    end
   end
 
   def generate_phone_number_verification_code(incoming_phone_number)

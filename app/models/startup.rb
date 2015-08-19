@@ -183,7 +183,6 @@ class Startup < ActiveRecord::Base
   before_destroy do
     # Clear out associations from associated Users (and pending ones).
     User.where(startup_id: self.id).update_all(startup_id: nil, startup_admin: nil, is_founder: nil)
-    User.where(pending_startup_id: self.id).update_all(pending_startup_id: nil)
   end
 
   # Friendly ID!

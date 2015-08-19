@@ -35,7 +35,6 @@ ActiveAdmin.register User do
       row :id
       row :email
       row :fullname
-      row :pending_startup
 
       row :startup do |f|
         if f.startup

@@ -161,10 +161,14 @@
                     .pending-verification href="#" data-toggle="tooltip" title="This event has not yet been verified by SV.CO, and is hidden from the public."
                       i.fa.fa-exclamation-circle
                       | &nbsp;Pending verification
-                  br
                   = image_tag 'timeline/dash.png'
                   p #{event.description}
-                  br
+
+                  = button_to user_startup_timeline_event_url(current_user, event),
+                    method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',
+                    data: { confirm: 'This action cannot be reversed. Are you sure?' } do
+                    i.fa.fa-times
+                    | &nbsp; Delete this event
               - else
                 .timeline
                   li style="padding:0" class="timeline#{index.odd? ? "" : "-inverted"}"
@@ -193,12 +197,18 @@
                             - event.links.each do |link|
                               a.tl-link-button href="#{link[:url]}"
                                 | #{link[:title].capitalize}
+                        - if current_user && @startup.is_founder?(current_user)
+                          = button_to user_startup_timeline_event_url(current_user, event),
+                            method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',
+                            data: { confirm: 'This action cannot be reversed. Are you sure?' } do
+                            i.fa.fa-times
+                            | &nbsp;Delete this event
+                          /= link_to root_url, class: 'btn btn-info btn-sm btn-flat btn-with-default-padding' do
+                          /  i.fa.fa-pencil
+                          /  | &nbsp;Edit
       - else
         .main-timeline
           .tl-iteration
             p
               | No timeline events to show!
             = image_tag 'timeline/dash.png'
-
-
-

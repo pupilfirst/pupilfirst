@@ -27,7 +27,7 @@ Svapp::Application.routes.draw do
 
     resource :startup, only: [:new, :edit, :update, :destroy] do
       post :add_founder
-      post :add_timeline_event
+      resources :timeline_events, only: [:create, :destroy]
     end
   end
 

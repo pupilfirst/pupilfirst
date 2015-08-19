@@ -1,5 +1,5 @@
 .timeline-builder
-  = form_for @timeline_event, url: add_timeline_event_user_startup_path(@startup) do |f|
+  = form_for @timeline_event, url: user_startup_timeline_events_url(current_user) do |f|
     .container-fluid
       .row.top-row.text-center
         .col-sm-4.col-xs-8.border-right

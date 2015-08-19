@@ -1,6 +1,6 @@
 class StartupsController < InheritedResources::Base
   before_filter :authenticate_user!, except: [:show, :index]
-  before_filter :restrict_to_startup_founders, only: [:edit, :update, :add_founder, :add_timeline_event]
+  before_filter :restrict_to_startup_founders, only: [:edit, :update, :add_founder]
   before_filter :disallow_unready_startup, only: [:edit, :update]
   after_filter only: [:create] do
     @startup.founders << current_user
@@ -86,23 +86,6 @@ class StartupsController < InheritedResources::Base
     redirect_to edit_user_startup_path(current_user)
   end
 
-  # POST /add_timeline_event
-  def add_timeline_event
-    @current_user = current_user
-    @startup = @current_user.startup
-    @timeline_event = @startup.timeline_events.new timeline_event_params
-
-    if @timeline_event.save
-      # render json: @timeline_event,status: :created
-      flash[:info] = 'Your new timeline event has been submitted to the SV team for approval!'
-      redirect_to @startup
-    else
-      # render json: @timeline_event.errors, status: :unprocessable_entity
-      flash[:error] = 'There seems to be an error in your submission. Please try again!'
-      render 'startups/show'
-    end
-  end
-
   # DELETE /users/:id/startup/destroy
   def destroy
     @startup = current_user.startup
@@ -138,10 +121,6 @@ class StartupsController < InheritedResources::Base
 
   def startup_destroy_params
     params.require(:startup).permit(:password)
-  end
-
-  def timeline_event_params
-    params.require(:timeline_event).permit(:timeline_event_type_id, :event_on, :description, :image, :link_url, :link_title)
   end
 
   def restrict_to_startup_founders

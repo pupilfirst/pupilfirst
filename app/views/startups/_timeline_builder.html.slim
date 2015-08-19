@@ -16,7 +16,10 @@
           a#upload-image
             i.fa.fa-picture-o
             | &nbsp;
-            span.hidden-xs href='#' Upload an Image
+            - if event.persisted? && event.image.present?
+              span.hidden-xs href='#' Change Image
+            - else
+              span.hidden-xs href='#' Upload an Image
           a#remove-selected-image.hidden
             | &nbsp;
             i.fa.fa-times-circle

@@ -48,7 +48,10 @@
             .datepicker-container
               / Eternicode datepicker shows up here.
           button.btn.btn-primary.btn-flat.btn-with-default-padding type='submit'
-            i.fa.fa-plus
+            - if event.persisted?
+              i.fa.fa-pencil
+            - else
+              i.fa.fa-plus
             span.hidden-xs &nbsp;Submit for Review
 
     #add-link-modal.modal.fade role="dialog"

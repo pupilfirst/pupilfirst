@@ -1,5 +1,5 @@
 .timeline-builder
-  = form_for [current_user, :startup, event] do |f|
+  = form_for [current_user, :startup, event], html: event.persisted? ? { 'data-persisted' => 'true' } : {} do |f|
     - event_link = (event.persisted? && event.links.present? ? event.links.first : {})
     = f.hidden_field :link_title, value: event_link[:title]
     = f.hidden_field :link_url, value: event_link[:url]

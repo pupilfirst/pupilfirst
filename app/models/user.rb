@@ -29,7 +29,7 @@ class User < ActiveRecord::Base
 
   scope :non_founders, -> { where("is_founder = ? or is_founder IS NULL", false) }
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }
-  scope :student_entrepreneurs, -> { where(is_student: true, is_founder: true) }
+  scope :student_entrepreneurs, -> { where(is_founder: true).where.not(university_id: nil) }
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
 
   # TODO: Remove born_on, title, and salutation columns if unneccessary.

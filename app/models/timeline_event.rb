@@ -101,7 +101,6 @@ class TimelineEvent < ActiveRecord::Base
     end
   end
 
-
   before_save :make_links_an_array, :build_link_json
   before_validation :build_default_title_from_type, :record_iteration
 
@@ -133,5 +132,10 @@ class TimelineEvent < ActiveRecord::Base
 
   def end_iteration?
     timeline_event_type.end_iteration?
+  end
+
+  def update_and_require_reverification(params)
+    params[:verified_at] = nil
+    update(params)
   end
 end

@@ -79,7 +79,7 @@
                   .media-body
                     h4.media-heading Stage of Company
                     p.data-content #{@startup.stage.capitalize}
-              - if @events.present?
+              - if @startup.timeline_events_for_display(current_user).present?
                 .media
                   .media-left
                     img.media-object alt="Iteration icon" src="#{image_url 'timeline/icons/iteration.png'}"
@@ -140,18 +140,18 @@
     .col-md-8.col-md-pull-4
       - if feature_active?(:timeline_form)
         - if current_user && @startup.is_founder?(current_user)
-          == render 'timeline_builder'
+          == render 'startups/timeline_builder', event: @timeline_event
 
-      - if @events.present?
+      - if @startup.timeline_events_for_display(current_user).present?
         .main-timeline
           .tl-iteration
             p
-              | Timeline of #{@events.maximum(:iteration).ordinalize} iteration.
+              | Timeline of #{@startup.timeline_events_for_display(current_user).maximum(:iteration).ordinalize} iteration.
             = image_tag 'timeline/dash.png'
             br
             a#read-from-beginning href="#begin"  Read from the beginning.
           ul
-            - @events.each.with_index(1) do |event, index|
+            - @startup.timeline_events_for_display(current_user).each.with_index(1) do |event, index|
               - if event.end_iteration?
                 .tl-iteration
                   .buttons style="display:inline" End of Iteration #{event.iteration}
@@ -164,11 +164,16 @@
                   = image_tag 'timeline/dash.png'
                   p #{event.description}
 
-                  = button_to user_startup_timeline_event_url(current_user, event),
-                    method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',
-                    data: { confirm: 'This action cannot be reversed. Are you sure?' } do
-                    i.fa.fa-times
-                    | &nbsp; Delete this event
+                  - if current_user && @startup.is_founder?(current_user)
+                    = button_to user_startup_timeline_event_url(current_user, event),
+                      method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',
+                      data: { confirm: 'This action cannot be reversed. Are you sure?' } do
+                      i.fa.fa-times
+                      | &nbsp; Delete this event
+                    = link_to startup_path(@startup, event_id: event.id),
+                      class: 'btn btn-info btn-sm btn-flat btn-with-default-padding' do
+                      i.fa.fa-pencil
+                      | &nbsp;Edit
               - else
                 .timeline
                   li style="padding:0" class="timeline#{index.odd? ? "" : "-inverted"}"
@@ -203,9 +208,9 @@
                             data: { confirm: 'This action cannot be reversed. Are you sure?' } do
                             i.fa.fa-times
                             | &nbsp;Delete this event
-                          /= link_to root_url, class: 'btn btn-info btn-sm btn-flat btn-with-default-padding' do
-                          /  i.fa.fa-pencil
-                          /  | &nbsp;Edit
+                          = link_to startup_path(@startup, event_id: event.id), class: 'btn btn-info btn-sm btn-flat btn-with-default-padding' do
+                            i.fa.fa-pencil
+                            | &nbsp;Edit
       - else
         .main-timeline
           .tl-iteration

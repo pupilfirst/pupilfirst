@@ -39,15 +39,12 @@ class StartupsController < InheritedResources::Base
   end
 
   def show
-    @navbar_start_transparent = true
-    @skip_container = true
-
     @startup = Startup.friendly.find(params[:id])
-    @timeline_event = @startup.timeline_events.new
-    if current_user && @startup == current_user.startup
-      @events = @startup.timeline_events.order(:event_on, :updated_at).reverse_order
+
+    @timeline_event = if params[:event_id]
+      @startup.timeline_events.find(params[:event_id])
     else
-      @events = @startup.timeline_events.verified.order(:event_on, :updated_at).reverse_order
+      @startup.timeline_events.new
     end
   end
 

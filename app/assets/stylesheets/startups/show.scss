@@ -258,7 +258,8 @@ h1.startup-name {
   cursor: help;
 }
 
-.timeline-body .button_to {
+// Make the two button_two uses inline blocks.
+.timeline-body .button_to, .tl-iteration .button_to {
   display: inline-block;
   margin-right: 5px;
 }

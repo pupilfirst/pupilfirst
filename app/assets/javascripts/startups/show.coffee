@@ -3,7 +3,6 @@
 
 exports = {
   timelineBuilderDatepicker: null
-  addButtonClicked: null
 }
 
 shortenText = ->
@@ -61,24 +60,19 @@ $(->
   )
 )
 
-setNewEventDate = (e) ->
+handleDatepickerChangeDate = (e) ->
   timelineBuilderDateButton = $('#timeline-builder-date-button')
 
   # Store the time in form field.
-  timelineBuilderDateButton.find('input').val(e.date.toISOString())
+  timelineBuilderDateButton.find('input').val(moment(e.date).format('YYYY-MM-DD'))
 
   # Hide the datepicker.
   exports.timelineBuilderDatepicker.toggle()
 
-  # Indicate that a date has been picked.
-  timelineBuilderDateButton.find('.fa-calendar').addClass('hidden')
-  timelineBuilderDateButton.find('.fa-calendar-check-o').removeClass('hidden')
-  timelineBuilderDateButton.find('a').addClass('green')
-  timelineBuilderDateButton.find('span').html('&nbsp;' + moment(e.date).format('DD/MM/YYYY'))
-
+  setNewDateOnDatepickerButton(timelineBuilderDateButton, moment(e.date).format('DD/MM/YYYY'))
 
 timelineBuilderSubmitChecks = ->
-  $('#new_timeline_event').submit( (event)->
+  $('form.new_timeline_event, form.edit_timeline_event').submit((event) ->
     form = $(event.target)
 
     typeOfEventPresent = !!form.find('select#timeline_event_timeline_event_type_id').val()
@@ -113,7 +107,7 @@ timelineBuilderSubmitChecks = ->
 
 clearErrorsOnOpeningSelect2 = ->
   $('#timeline_event_timeline_event_type_id').on('select2-opening', ->
-    select2Container = $('#new_timeline_event .select2-container')
+    select2Container = $('form.new_timeline_event .select2-container, form.edit_timeline_event .select2-container')
     select2Container.removeClass('has-error')
     select2Container.tooltip('destroy')
   )
@@ -137,13 +131,8 @@ handleDateButtonClick = ->
     timelineBuilderDateButton.find('a').removeClass('btn-danger').addClass('btn-default')
     timelineBuilderDateButton.tooltip('destroy')
 
-    if exports.timelineBuilderDatepicker
-      exports.timelineBuilderDatepicker.toggle()
-    else
-      datepickerContainer = timelineBuilderDateButton.find('.datepicker-container')
-      datepickerContainer.css('display', 'block')
-      exports.timelineBuilderDatepicker = datepickerContainer.datepicker()
-      exports.timelineBuilderDatepicker.on('changeDate', setNewEventDate)
+    # Toggle the datepicker itself.
+    exports.timelineBuilderDatepicker.toggle()
   )
 
 closeDatePickerOnExternalClick = ->
@@ -202,17 +191,41 @@ addErrorMarkers = (formGroupFinder, errorHint) ->
   if errorHint
     $('#url-help').removeClass('hidden').html(errorHint)
 
+markSelectedLink = (linkTitle) ->
+  $('#add-link').find('span').html(linkTitle)
+  $('#add-link').addClass('green-text')
+
+# If link title and URL are set on load (editing), then we start with selected values.
+markSelectedLinksOnEdit = ->
+  linkTitle = $('#timeline_event_link_title').val()
+  linkURL = $('#timeline_event_link_url').val()
+
+  # Check if both are available on page load - which means we're editing, so set the title on builder link.
+  if linkURL and linkTitle
+    markSelectedLink(linkTitle)
+
 handleLinkAddition = ->
-  $('#add-link-button').click(->
+  # When the modal opens, load value saved in actual hidden inputs.
+  $('#add-link-modal').on('show.bs.modal', (e) ->
     linkTitle = $('#timeline_event_link_title').val()
     linkURL = $('#timeline_event_link_url').val()
+
+    $('#link_title_front').val(linkTitle)
+    $('#link_url_front').val(linkURL)
+  )
+
+  # When the add button is clicked, validate and store if it passes. Show errors otherwise.
+  $('#add-link-button').click(->
+    linkTitle = $('#link_title_front').val()
+    linkURL = $('#link_url_front').val()
     linkURLValid = isUrlValid(linkURL)
 
     if linkURL and linkURLValid and linkTitle
-      exports.addButtonClicked = true
+      # Store values in hidden inputs, close modal, and show title on builder link.
+      $('#timeline_event_link_title').val(linkTitle)
+      $('#timeline_event_link_url').val(linkURL)
       $('#add-link-modal').modal('hide')
-      $('#add-link').find('span').html(linkTitle)
-      $('#add-link').addClass('green-text')
+      markSelectedLink(linkTitle)
     else
       unless linkURL and linkURLValid
         addErrorMarkers('#link-url-group', "Please make sure you've supplied a full URL, starting with http(s).")
@@ -221,19 +234,15 @@ handleLinkAddition = ->
         addErrorMarkers('#link-title-group')
   )
 
-  $('#timeline_event_link_title').focus(->
+  $('#link_title_front').focus(->
     clearErrorMarkers('#link-title-group')
   )
 
-  $('#timeline_event_link_url').focus(->
+  $('#link_url_front').focus(->
     clearErrorMarkers('#link-url-group')
   )
 
-  $('#add-link-modal').on('hidden.bs.modal', (e) ->
-    unless exports.addButtonClicked
-      $('#timeline_event_link_title').val("")
-      $('#timeline_event_link_url').val("")
-      exports.addButtonClicked = false
+  $('#add-link-modal').on('hide.bs.modal', (e) ->
     clearErrorMarkers('#link-title-group')
     clearErrorMarkers('#link-url-group')
   )
@@ -276,6 +285,45 @@ measureDescriptionLength = ->
 setPendingTooltips = ->
   $('.pending-verification').tooltip()
 
+setNewDateOnDatepickerButton = (dateButton, dateString) ->
+  # Indicate that a date has been picked.
+  dateButton.find('.fa-calendar').addClass('hidden')
+  dateButton.find('.fa-calendar-check-o').removeClass('hidden')
+  dateButton.find('a').addClass('green')
+  dateButton.find('span').html('&nbsp;' + dateString)
+
+pad = (val, length, padChar = '0') ->
+  val += ''
+  numPads = length - val.length
+  if (numPads > 0) then new Array(numPads + 1).join(padChar) + val else val
+
+setupTimelineBuilderDatepicker = ->
+  timelineBuilderDateButton = $('#timeline-builder-date-button')
+
+  if timelineBuilderDateButton
+    datepickerContainer = timelineBuilderDateButton.find('.datepicker-container')
+    exports.timelineBuilderDatepicker = datepickerContainer.datepicker()
+    exports.timelineBuilderDatepicker.on('changeDate', handleDatepickerChangeDate)
+
+    eventDate = $('#timeline_event_event_on').val()
+
+    # If an event date is already set (editing), set that in the datepicker, and in the button.
+    if eventDate
+      dateComponents = (parseInt(num) for num in eventDate.split('-'))
+
+      year = dateComponents[0]
+      month = dateComponents[1]
+      day = dateComponents[2]
+
+      # Date() is weird in that it counts months from zero onwards.
+      the_date = new Date(year, month - 1, day)
+
+      # Change the date inside datepicker.
+      datepickerContainer.datepicker('update', the_date)
+
+      # Change date on date button.
+      setNewDateOnDatepickerButton(timelineBuilderDateButton, "#{pad day, 2}/#{pad month, 2}/#{year}")
+
 $(timelineBuilderSubmitChecks)
 $(setupSelect2ForEventType)
 $(clearErrorsOnOpeningSelect2)
@@ -283,6 +331,8 @@ $(handleDateButtonClick)
 $(closeDatePickerOnExternalClick)
 $(handleImageUpload)
 $(handleLinkAddition)
+$(markSelectedLinksOnEdit)
 $(measureDescriptionLength)
 $(setPendingTooltips)
 $(matchSampleTextToEventType)
+$(setupTimelineBuilderDatepicker)

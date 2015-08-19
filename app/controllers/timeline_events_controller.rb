@@ -4,12 +4,12 @@ class TimelineEventsController < ApplicationController
 
   # POST /users/:user_id/startup/timeline_events
   def create
-    startup = current_user.startup
-    timeline_event = startup.timeline_events.new timeline_event_params
+    @startup = current_user.startup
+    @timeline_event = @startup.timeline_events.new timeline_event_params
 
-    if timeline_event.save
+    if @timeline_event.save
       flash[:success] = 'Your new timeline event has been submitted to the SV team for approval!'
-      redirect_to startup
+      redirect_to @startup
     else
       flash[:error] = 'There seems to be an error in your submission. Please try again!'
       render 'startups/show'
@@ -18,14 +18,28 @@ class TimelineEventsController < ApplicationController
 
   # DELETE /users/:user_id/startup/timeline_events/:id
   def destroy
-    startup = current_user.startup
-    timeline_event = startup.timeline_events.find(params[:id])
+    @startup = current_user.startup
+    @timeline_event = @startup.timeline_events.find(params[:id])
 
-    if timeline_event.destroy
+    if @timeline_event.destroy
       flash[:success] = 'Timeline event deleted!'
-      redirect_to startup
+      redirect_to @startup
     else
       flash[:error] = "Something went wrong, and we couldn't delete the timeline event! :("
+      render 'startups/show'
+    end
+  end
+
+  # POST /users/:user_id/startup/timeline_events/:id
+  def update
+    @startup = current_user.startup
+    @timeline_event = @startup.timeline_events.find(params[:id])
+
+    if @timeline_event.update_and_require_reverification(timeline_event_params)
+      flash[:success] = 'Timeline event updated!'
+      redirect_to @startup
+    else
+      flash[:error] = "Something went wrong, and we couldn't update the timeline event! :("
       render 'startups/show'
     end
   end

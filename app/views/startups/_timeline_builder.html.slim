@@ -1,10 +1,17 @@
 .timeline-builder
-  = form_for @timeline_event, url: user_startup_timeline_events_url(current_user) do |f|
+  = form_for [current_user, :startup, event] do |f|
+    - event_link = (event.persisted? && event.links.present? ? event.links.first : {})
+    = f.hidden_field :link_title, value: event_link[:title]
+    = f.hidden_field :link_url, value: event_link[:url]
     .container-fluid
       .row.top-row.text-center
         .col-sm-4.col-xs-8.border-right
-          i.fa.fa-plus
-          | &nbsp;Add a Timeline Event
+          - if event.persisted?
+            i.fa.fa-pencil
+            | &nbsp;Edit existing event
+          - else
+            i.fa.fa-plus
+            | &nbsp;Add a Timeline Event
         .col-sm-4.col-xs-2.border-right.ellipsis-text
           a#upload-image
             i.fa.fa-picture-o
@@ -26,9 +33,9 @@
       .row.bottom-row
         .pull-right
           = f.select :timeline_event_type_id do
-            option value='' selected=true
+            option value='' selected=(event.persisted? ? nil : true)
             - TimelineEventType.order(:title).each do |t|
-              option value='#{t.id}' data-sample-text='#{t.sample}' #{t.title}
+              option value='#{t.id}' data-sample-text='#{t.sample}' selected=(t == event.timeline_event_type ? true : nil) #{t.title}
           span#timeline-builder-date-button
             = f.hidden_field :event_on
             a.btn.btn-default.btn-flat.btn-with-default-padding.margin-right-10
@@ -42,19 +49,20 @@
             span.hidden-xs &nbsp;Submit for Review
 
     #add-link-modal.modal.fade role="dialog"
+      - event_link = (event.persisted? && event.links.present? ? event.links.first : {})
       .modal-dialog
         .modal-content
           .modal-body
             .form-horizontal
               .form-group#link-title-group
-                = f.label :link_title, 'Title', class: 'col-sm-2 control-label'
+                = f.label :link_title_front, 'Title', class: 'col-sm-2 control-label'
                 .col-sm-10
-                  = f.text_field :link_title, class: 'form-control', placeholder: '(required)'
+                  = text_field_tag :link_title_front, nil, class: 'form-control', placeholder: '(required)'
                   span.glyphicon.glyphicon-remove.form-control-feedback.hidden
               .form-group#link-url-group
-                = f.label :link_url, 'URL', class: 'col-sm-2 control-label'
+                = f.label :link_url_front, 'URL', class: 'col-sm-2 control-label'
                 .col-sm-10
-                  = f.text_field :link_url, class: 'form-control', placeholder: '(required)', 'aria-describedby' => 'url-help'
+                  = text_field_tag :link_url_front, nil, class: 'form-control', placeholder: '(required)', 'aria-describedby' => 'url-help'
                   span.glyphicon.glyphicon-remove.form-control-feedback.hidden
                   span#url-help.help-block.hidden
           .modal-footer

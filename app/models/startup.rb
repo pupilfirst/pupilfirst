@@ -462,4 +462,12 @@ class Startup < ActiveRecord::Base
   def admin?(user)
     admin == user
   end
+
+  def timeline_events_for_display(viewer)
+    if viewer && self == viewer.startup
+      timeline_events.order(:event_on, :updated_at).reverse_order
+    else
+      timeline_events.verified.order(:event_on, :updated_at).reverse_order
+    end
+  end
 end

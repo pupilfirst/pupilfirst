@@ -98,7 +98,7 @@ class Startup < ActiveRecord::Base
   end
 
   has_many :startup_jobs
-  has_many :timeline_events
+  has_many :timeline_events, dependent: :destroy
 
   # Allow statup to accept nested attributes for users
   # has_many :users
@@ -186,10 +186,9 @@ class Startup < ActiveRecord::Base
     User.where(pending_startup_id: self.id).update_all(pending_startup_id: nil)
   end
 
-
   # Friendly ID!
   friendly_id :slug
-  validates_format_of :slug, with: /\A[a-z0-9\-]+\z/i, allow_nil: true
+  validates_format_of :slug, with: /\A[a-z0-9\-_]+\z/i, allow_nil: true
 
   # Backend users will see agreement duration as being nil when attempting to edit. This allows them to save edits
   # without picking a value.
@@ -461,4 +460,7 @@ class Startup < ActiveRecord::Base
     self.timeline_events.verified.present?
   end
 
+  def admin?(user)
+    admin == user
+  end
 end

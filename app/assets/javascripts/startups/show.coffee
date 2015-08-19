@@ -81,7 +81,7 @@ timelineBuilderSubmitChecks = ->
   $('#new_timeline_event').submit( (event)->
     form = $(event.target)
 
-    typeOfEventPresent = !!form.find('select#timeline_event_event_type').val()
+    typeOfEventPresent = !!form.find('select#timeline_event_timeline_event_type_id').val()
     dateOfEventPresent = !!form.find('input#timeline_event_event_on').val()
 
     unless dateOfEventPresent
@@ -112,17 +112,21 @@ timelineBuilderSubmitChecks = ->
   )
 
 clearErrorsOnOpeningSelect2 = ->
-  $('#timeline_event_event_type').on('select2-opening', ->
-    console.log 'here'
-
+  $('#timeline_event_timeline_event_type_id').on('select2-opening', ->
     select2Container = $('#new_timeline_event .select2-container')
     select2Container.removeClass('has-error')
     select2Container.tooltip('destroy')
   )
 
 setupSelect2ForEventType = ->
-  $('#timeline_event_event_type').select2(
+  $('#timeline_event_timeline_event_type_id').select2(
     placeholder: "Type of Event"
+  )
+
+matchSampleTextToEventType = ->
+  $('#timeline_event_timeline_event_type_id').on('select2-selected', (e) ->
+    newPlaceHolder = $('#timeline_event_timeline_event_type_id :selected').attr("data-sample-text")
+    $('#timeline_event_description').attr("placeholder",newPlaceHolder)
   )
 
 handleDateButtonClick = ->
@@ -152,34 +156,69 @@ closeDatePickerOnExternalClick = ->
           exports.timelineBuilderDatepicker.toggle(false)
   )
 
-$(timelineBuilderSubmitChecks)
-$(setupSelect2ForEventType)
-$(clearErrorsOnOpeningSelect2)
-$(handleDateButtonClick)
-$(closeDatePickerOnExternalClick)
+removeSelectedImage = ->
+  uploadImage = $('#upload-image')
+  uploadImage.removeClass('green-text')
+  uploadImage.find('span').html('Upload an Image')
+  $('#timeline_event_image').val('')
+  $('#remove-selected-image').addClass('hidden')
 
-$(->
+handleImageUpload = ->
   $('#upload-image').click(->
     $('#timeline_event_image').click()
   )
 
   $('#timeline_event_image').change(->
-    $('#upload-image').find('span').html($(this).val().replace(/^.*[\\\/]/, ''))
-    $('#upload-image').addClass('green-text')
+    newValue = $(this).val()
+
+    unless newValue
+      removeSelectedImage()
+      return
+
+    uploadImage = $('#upload-image')
+
+    # Remove path info from filename before inserting it into view.
+    uploadImage.find('span').html(newValue.replace(/^.*[\\\/]/, ''))
+
+    uploadImage.addClass('green-text')
+    $('#remove-selected-image').removeClass('hidden')
   )
 
+  $('#remove-selected-image').click(removeSelectedImage)
+
+isUrlValid = (url) ->
+  /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url)
+
+clearErrorMarkers = (formGroupFinder) ->
+  formGroup = $(formGroupFinder)
+  formGroup.removeClass('has-error has-feedback')
+  formGroup.find('span').addClass('hidden')
+
+addErrorMarkers = (formGroupFinder, errorHint) ->
+  formGroup = $(formGroupFinder)
+  formGroup.addClass('has-error has-feedback')
+  formGroup.find('span.form-control-feedback').removeClass('hidden')
+
+  if errorHint
+    $('#url-help').removeClass('hidden').html(errorHint)
+
+handleLinkAddition = ->
   $('#add-link-button').click(->
-    if $('#timeline_event_link_title').val() and $('#timeline_event_link_url').val()
+    linkTitle = $('#timeline_event_link_title').val()
+    linkURL = $('#timeline_event_link_url').val()
+    linkURLValid = isUrlValid(linkURL)
+
+    if linkURL and linkURLValid and linkTitle
       exports.addButtonClicked = true
       $('#add-link-modal').modal('hide')
-      $('#add-link').find('span').html($('#timeline_event_link_title').val())
+      $('#add-link').find('span').html(linkTitle)
       $('#add-link').addClass('green-text')
-
     else
-      unless $('#timeline_event_link_title').val()
+      unless linkURL and linkURLValid
+        addErrorMarkers('#link-url-group', "Please make sure you've supplied a full URL, starting with http(s).")
+
+      unless linkTitle
         addErrorMarkers('#link-title-group')
-      unless $('#timeline_event_link_url').val()
-        addErrorMarkers('#link-url-group')
   )
 
   $('#timeline_event_link_title').focus(->
@@ -199,11 +238,51 @@ $(->
     clearErrorMarkers('#link-url-group')
   )
 
-  clearErrorMarkers = (formGroup) ->
-    $(formGroup).removeClass('has-error has-feedback')
-    $(formGroup).find('span').addClass('hidden')
+matchDescriptionScroll = (target) ->
+  $('span.text-area-overlay').scrollTop(target.scrollTop())
 
-  addErrorMarkers = (formGroup) ->
-    $(formGroup).addClass('has-error has-feedback')
-    $(formGroup).find('span').removeClass('hidden')
-)
+measureDescriptionLength = ->
+  $('#timeline_event_description').on('input', (event) ->
+    description = $(event.target)
+
+    # Let's escape the incoming text, before manipulating it.
+    unescapedDescriptionText = description.val()
+    descriptionText = $('<div/>').text(unescapedDescriptionText).html();
+    span_contents = descriptionText
+
+    if span_contents
+      span_contents += " &mdash; (#{unescapedDescriptionText.length}/300)"
+
+      if descriptionText.length >= 250
+        $('span.text-area-overlay').addClass 'length-warning'
+      else
+        $('span.text-area-overlay').removeClass 'length-warning'
+
+    textAreaOverlay = $('span.text-area-overlay')
+
+    # Replace contents of overlay span.
+    textAreaOverlay.html(span_contents)
+
+    # Match scroll of overlay with textbox, in case it has scrolled to a new line.
+    matchDescriptionScroll($(description))
+
+    # TODO: Match height of textbox with overlay, in case overlay (which is has a few extra text characters) has line-break-ed, and textbox has not (which would hide the extra overlay content outside scroll area).
+  )
+
+  $("#timeline_event_description").scroll((event) ->
+    matchDescriptionScroll($(event.target))
+  )
+
+setPendingTooltips = ->
+  $('.pending-verification').tooltip()
+
+$(timelineBuilderSubmitChecks)
+$(setupSelect2ForEventType)
+$(clearErrorsOnOpeningSelect2)
+$(handleDateButtonClick)
+$(closeDatePickerOnExternalClick)
+$(handleImageUpload)
+$(handleLinkAddition)
+$(measureDescriptionLength)
+$(setPendingTooltips)
+$(matchSampleTextToEventType)

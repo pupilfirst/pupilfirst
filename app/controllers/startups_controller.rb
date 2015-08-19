@@ -77,7 +77,7 @@ class StartupsController < InheritedResources::Base
       flash[:error] = "Couldn't find a user with the SV ID you supplied. Please verify founder's registered email address."
     rescue Exceptions::UserAlreadyMemberOfStartup
       flash[:info] = 'The SV ID you supplied is already linked to your startup!'
-    rescue Exceptions:: UserAlreadyHasStartup
+    rescue Exceptions::UserAlreadyHasStartup
       flash[:notice] = 'The SV ID you supplied is already linked to another startup. Are you sure you have the right e-mail address?'
     else
       flash[:success] = "SV ID #{params[:email]} has been linked to your startup as founder"
@@ -103,6 +103,25 @@ class StartupsController < InheritedResources::Base
     end
   end
 
+  # DELETE /users/:id/startup/destroy
+  def destroy
+    @startup = current_user.startup
+
+    if current_user.startup_admin
+      if current_user.startup_admin && current_user.valid_password?(startup_destroy_params[:password])
+        @startup.destroy!
+        flash[:success] = 'Your startup profile and all associated data has been deleted.'
+        redirect_to root_url and return
+      else
+        flash.now[:error] = 'Authentication failed!'
+      end
+    else
+      flash.now[:error] = 'You are not allowed to perform this action!'
+    end
+
+    render 'edit'
+  end
+
   private
 
   def apply_now_params
@@ -117,8 +136,12 @@ class StartupsController < InheritedResources::Base
     )
   end
 
+  def startup_destroy_params
+    params.require(:startup).permit(:password)
+  end
+
   def timeline_event_params
-    params.require(:timeline_event).permit(:event_type, :event_on, :description, :image, :link_url)
+    params.require(:timeline_event).permit(:timeline_event_type_id, :event_on, :description, :image, :link_url, :link_title)
   end
 
   def restrict_to_startup_founders

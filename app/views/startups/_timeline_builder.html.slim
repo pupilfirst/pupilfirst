@@ -10,6 +10,9 @@
             i.fa.fa-picture-o
             | &nbsp;
             span.hidden-xs href='#' Upload an Image
+          a#remove-selected-image.hidden
+            | &nbsp;
+            i.fa.fa-times-circle
           = f.file_field :image, class: 'hidden'
         .col-sm-4.col-xs-2.ellipsis-text
           a#add-link data-toggle="modal" data-target="#add-link-modal"
@@ -17,11 +20,15 @@
             | &nbsp;
             span.hidden-xs href='#' Add a URL
       .row
-        = f.text_area :description, class: 'description', placeholder: "What's been happening?"
-      #append-file-name
+        .text-area-container
+          span.text-area-overlay.common-properties
+          = f.text_area :description, class: 'description common-properties', placeholder: "What's been happening?", maxlength: 300
       .row.bottom-row
         .pull-right
-          = f.select :event_type, options_for_select(TimelineEvent.valid_event_types.invert.to_a), { include_blank: true }
+          = f.select :timeline_event_type_id do
+            option value='' selected=true
+            - TimelineEventType.order(:title).each do |t|
+              option value='#{t.id}' data-sample-text='#{t.sample}' #{t.title}
           span#timeline-builder-date-button
             = f.hidden_field :event_on
             a.btn.btn-default.btn-flat.btn-with-default-padding.margin-right-10
@@ -40,15 +47,16 @@
           .modal-body
             .form-horizontal
               .form-group#link-title-group
-                = f.label :link_title, "Title", class: "col-sm-2 control-label"
+                = f.label :link_title, 'Title', class: 'col-sm-2 control-label'
                 .col-sm-10
-                  = f.text_field :link_title, class: "form-control", placeholder: "(required)"
+                  = f.text_field :link_title, class: 'form-control', placeholder: '(required)'
                   span.glyphicon.glyphicon-remove.form-control-feedback.hidden
               .form-group#link-url-group
-                = f.label :link_url, "URL", class: "col-sm-2 control-label"
+                = f.label :link_url, 'URL', class: 'col-sm-2 control-label'
                 .col-sm-10
-                  = f.text_field :link_url, class: "form-control", placeholder: "(required)"
+                  = f.text_field :link_url, class: 'form-control', placeholder: '(required)', 'aria-describedby' => 'url-help'
                   span.glyphicon.glyphicon-remove.form-control-feedback.hidden
+                  span#url-help.help-block.hidden
           .modal-footer
             button#close-link-modal-button.btn.btn-default data-dismiss="modal" type="button"  Close
             button#add-link-button.btn.btn-success type="button"  Add

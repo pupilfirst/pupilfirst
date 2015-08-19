@@ -13,6 +13,7 @@
     = f.input :pin
     = f.input :twitter_url
     = f.input :linkedin_url
+    = f.input :slack_username
     = f.input :avatar, as: :file
     = f.input :is_student
     = f.input :college_id, :as => :select, :collection => College.select(:name, :id)

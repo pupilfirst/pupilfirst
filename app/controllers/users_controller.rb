@@ -91,7 +91,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:fullname, :twitter_url, :linkedin_url, :avatar, :title)
+    params.require(:user).permit(:fullname, :twitter_url, :linkedin_url, :avatar, :title, :slack_username)
   end
 
   def restrict_to_current_user

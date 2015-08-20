@@ -21,10 +21,10 @@
         /p Your request for incubation has been submitted.
         p
           ' Our team will review your request. If you have any doubts about the process, please contact us at
-          | #{mail_to 'help@sv.co'} with your <em>sv.co</em> ID.
+          | #{mail_to 'help@sv.co'} with your <em>SV.CO</em> ID.
 
         h3.page-header Add co-founders.
-        p Got fellow travellers on this journey? Tell them to sign up at <em>sv.co</em>, and then enter their SV ID-s below.
+        p Got fellow travellers on this journey? Tell them to sign up at <em>SV.CO</em>, and then enter their SV ID-s below.
 
         - cofounders_hint = @startup.founders.count > 1 ? "Current list: #{@startup.cofounders(@user).map { |u| u.email }.join ', '}" : nil
 

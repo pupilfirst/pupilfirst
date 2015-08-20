@@ -30,7 +30,7 @@ module IncubationHelper
       {
         'Kochi' => Startup::INCUBATION_LOCATION_KOCHI,
         'Kozhikode' => Startup::INCUBATION_LOCATION_KOZHIKODE,
-        'Vishakapatnam' => Startup::INCUBATION_LOCATION_VISAKHAPATNAM
+        'Visakhapatnam' => Startup::INCUBATION_LOCATION_VISAKHAPATNAM
       }
     end
 

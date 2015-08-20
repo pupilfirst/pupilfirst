@@ -42,6 +42,7 @@ ActiveAdmin.register User do
       row :id
       row :email
       row :fullname
+      row :title
 
       row :startup do |f|
         if f.startup
@@ -64,10 +65,7 @@ ActiveAdmin.register User do
       row :company
       row :designation
       row :university
-      row :college
-      row :year_of_graduation
-      row :title
-      row :years_of_work_experience
+      row :roll_number
     end
 
     attributes_table do
@@ -100,7 +98,7 @@ ActiveAdmin.register User do
 
   permit_params :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url, :slack_username,
     :title, :skip_password, :born_on, :startup_admin, :communication_address, :district, :state, :pin,
-    :phone, :phone_verified, :company, :invitation_token, :university_id, :college_id, :year_of_graduation,
+    :phone, :phone_verified, :company, :invitation_token, :university_id, :roll_number, :year_of_graduation,
     :years_of_work_experience, #:confirmed_at,
     { category_ids: [] }
 end

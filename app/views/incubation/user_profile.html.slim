@@ -49,5 +49,12 @@
             = u.input :slack_username, label: 'Public Slack Username'
 
             .form-group
-              .col-sm-offset-3.col-sm-10
+              .col-sm-offset-3.col-sm-9
                 = f.button :submit, 'Next Step', class: 'btn btn-primary btn-flat'
+
+        hr
+
+        .row
+          .col-sm-9.col-sm-offset-3
+            = button_to 'Cancel Application', cancel_incubation_index_url, class: 'btn btn-danger btn-flat',
+              data: { confirm: 'Are you sure you want to cancel the application?' }

@@ -79,6 +79,10 @@ Svapp::Application.routes.draw do
   # get 'jobs', to: 'startup_jobs#list_all'
 
   resources :incubation, only: %w(show update) do
+    collection do
+      post 'cancel'
+    end
+
     member do
       post 'add_cofounder'
     end

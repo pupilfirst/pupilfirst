@@ -36,6 +36,20 @@ class IncubationController < ApplicationController
     render_wizard @startup
   end
 
+  # POST /incubation/cancel
+  def cancel
+    @user = current_user
+    @startup = current_user.startup
+
+    if @startup.destroy
+      flash[:info] = 'Incubation process has been cancelled.'
+      redirect_to root_url
+    else
+      flash.now[:error] = 'Oops! Something went wrong. :('
+      render_wizard @startup
+    end
+  end
+
   # Wicked uses this method to find out where to redirect to once the wizard finishes.
   def finish_wizard_path
     current_user.startup

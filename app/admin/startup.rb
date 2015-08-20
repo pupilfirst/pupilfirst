@@ -33,9 +33,10 @@ ActiveAdmin.register Startup do
       startup.approval_status.capitalize
     end
 
-    column :stage
     column :agreement_sent
-    column :name
+    column :name do |startup|
+      link_to startup.name, startup, target: "_blank"
+    end
 
     column :founders do |startup|
       table_for startup.founders.order('id ASC') do

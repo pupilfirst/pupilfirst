@@ -54,23 +54,23 @@
               i.fa.fa-plus
             span.hidden-xs &nbsp;Submit for Review
 
-    #add-link-modal.modal.fade role="dialog"
-      - event_link = (event.persisted? && event.links.present? ? event.links.first : {})
-      .modal-dialog
-        .modal-content
-          .modal-body
-            .form-horizontal
-              .form-group#link-title-group
-                = f.label :link_title_front, 'Title', class: 'col-sm-2 control-label'
-                .col-sm-10
-                  = text_field_tag :link_title_front, nil, class: 'form-control', placeholder: '(required)'
-                  span.glyphicon.glyphicon-remove.form-control-feedback.hidden
-              .form-group#link-url-group
-                = f.label :link_url_front, 'URL', class: 'col-sm-2 control-label'
-                .col-sm-10
-                  = text_field_tag :link_url_front, nil, class: 'form-control', placeholder: '(required)', 'aria-describedby' => 'url-help'
-                  span.glyphicon.glyphicon-remove.form-control-feedback.hidden
-                  span#url-help.help-block.hidden
-          .modal-footer
-            button#close-link-modal-button.btn.btn-default data-dismiss="modal" type="button"  Close
-            button#add-link-button.btn.btn-success type="button"  Add
+  #add-link-modal.modal.fade role="dialog"
+    - event_link = (event.persisted? && event.links.present? ? event.links.first : {})
+    .modal-dialog
+      .modal-content
+        .modal-body
+          .form-horizontal
+            .form-group#link-title-group
+              = label_tag :link_title_front, 'Title', class: 'col-sm-2 control-label'
+              .col-sm-10
+                = text_field_tag :link_title_front, nil, class: 'form-control', placeholder: '(required)'
+                span.glyphicon.glyphicon-remove.form-control-feedback.hidden
+            .form-group#link-url-group
+              = label_tag :link_url_front, 'URL', class: 'col-sm-2 control-label'
+              .col-sm-10
+                = text_field_tag :link_url_front, nil, class: 'form-control', placeholder: '(required)', 'aria-describedby' => 'url-help'
+                span.glyphicon.glyphicon-remove.form-control-feedback.hidden
+                span#url-help.help-block.hidden
+        .modal-footer
+          button#close-link-modal-button.btn.btn-default data-dismiss="modal" type="button"  Close
+          button#add-link-button.btn.btn-success type="button"  Add

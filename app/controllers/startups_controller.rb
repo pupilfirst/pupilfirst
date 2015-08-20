@@ -1,4 +1,4 @@
-class StartupsController < InheritedResources::Base
+class StartupsController < ApplicationController
   before_filter :authenticate_user!, except: [:show, :index]
   before_filter :restrict_to_startup_founders, only: [:edit, :update, :add_founder]
   before_filter :disallow_unready_startup, only: [:edit, :update]

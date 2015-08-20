@@ -23,6 +23,7 @@ class ApplicationController < ActionController::Base
       (Rails.env == "staging") ||
       (DbConfig.feature_active? feature, current_user)
   end
+
   helper_method :feature_active?
 
   def configure_permitted_parameters

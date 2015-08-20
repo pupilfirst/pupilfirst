@@ -92,6 +92,7 @@ group :development, :test do
 
   gem 'did_you_mean' # Enough of silly spellinng mistakes ruining the day !
   gem 'quiet_assets' # Let's not see asset serving messages in the development log!
+  gem 'capybara' # For RSpec feature tests.
 end
 
 group :production do

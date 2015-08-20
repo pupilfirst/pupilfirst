@@ -46,7 +46,7 @@
             = u.input :pin, label: 'PIN Code'
             = u.input :linkedin_url, label: 'LinkedIn URL'
             = u.input :twitter_url, label: 'Twitter URL'
-            = u.input :slack_username, label: 'Public Slack Username'
+            = u.input :slack_username, label: (link_to 'Public Slack Username<sup>?</sup></a>'.html_safe, about_slack_url, target: '_blank')
 
             .form-group
               .col-sm-offset-3.col-sm-9

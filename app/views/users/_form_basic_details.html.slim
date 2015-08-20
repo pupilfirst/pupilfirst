@@ -9,6 +9,8 @@
   = f.input :linkedin_url, label: 'LinkedIn Profile URL', input_html: { maxlength: 255 }
   = f.input :twitter_url, label: 'Twitter Profile URL', input_html: { maxlength: 255 }
   = f.input :slack_username, label: (link_to 'Public Slack Username<sup>?</sup></a>'.html_safe, about_slack_url, target: '_blank')
+  = f.association :university, include_blank: 'Not a student'
+  = f.input :roll_number, label: 'University Roll Number',required: true
 
   .form-group
     .col-sm-offset-3.col-sm-10

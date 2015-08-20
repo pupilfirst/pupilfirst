@@ -38,6 +38,13 @@ table.table.table-hover.table-bordered.table-striped
     tr
       th Public Slack Username
       td = value_or_not_available @user.slack_username
+    tr
+      th University
+      td #{@user.university.present? ? @user.university.name : 'Not a student'}
+    tr
+      th Roll Number
+      td = value_or_not_available @user.roll_number
+
 
 = render('mentor_info', mentor: @user.mentor) if @user.mentor.present?
 

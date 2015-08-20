@@ -49,6 +49,10 @@ class User < ActiveRecord::Base
   validates_presence_of :gender, :born_on, if: ->(user) { user.startup.try(:incubation_step_1?) }
   validates_presence_of :roll_number, if: :university_id
 
+  before_validation do
+    self.roll_number = nil unless self.university.present?
+  end
+
   attr_reader :skip_password
   # hack
   attr_accessor :inviter_name

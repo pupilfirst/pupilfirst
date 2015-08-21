@@ -54,5 +54,19 @@ feature 'Incubation' do
     select 'Visakhapatnam', from: 'Incubation location'
     click_on 'Request Invite'
     expect(page).to have_text("That's it! You're done")
+
+    # Now check whether the data we entered is in place.
+    user.reload
+
+    expect(user.phone).to eq('919876543210')
+    expect(user.phone_verified).to eq(true)
+    expect(user.gender).to eq(User::GENDER_FEMALE)
+    expect(user.born_on).to eq(Date.parse('1982-03-03'))
+
+    startup = user.startup
+    expect(startup.name).to eq('Test Startup')
+    expect(startup.about).to eq('About Test Startup')
+    expect(startup.presentation_link).to eq('https://sv.co')
+    expect(startup.incubation_location).to eq(Startup::INCUBATION_LOCATION_VISAKHAPATNAM)
   end
 end

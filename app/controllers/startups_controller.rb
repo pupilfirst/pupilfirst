@@ -8,7 +8,7 @@ class StartupsController < ApplicationController
   end
 
   def new
-    unless current_user.phone_verified?
+    unless current_user.phone?
       session[:referer] = new_user_startup_url(current_user)
       redirect_to phone_user_path(current_user) and return
     end
@@ -25,7 +25,7 @@ class StartupsController < ApplicationController
 
   # POST /startups/team_leader_consent
   def team_leader_consent
-    if current_user.startup.present? || !current_user.phone_verified?
+    if current_user.startup.present? || !current_user.phone?
       redirect_to action: 'new'
     else
       Startup.new_incubation!(current_user)

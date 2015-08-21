@@ -59,7 +59,6 @@ feature 'Incubation' do
     user.reload
 
     expect(user.phone).to eq('919876543210')
-    expect(user.phone_verified).to eq(true)
     expect(user.gender).to eq(User::GENDER_FEMALE)
     expect(user.born_on).to eq(Date.parse('1982-03-03'))
 
@@ -71,7 +70,7 @@ feature 'Incubation' do
   end
 
   context 'when user has verified phone number' do
-    let(:user) { create :user, password: 'thisisatest', password_confirmation: 'thisisatest', confirmed_at: Time.now, phone: '9876543210', phone_verified: true }
+    let(:user) { create :user, password: 'thisisatest', password_confirmation: 'thisisatest', confirmed_at: Time.now, phone: '9876543210' }
 
     scenario 'User cancels application to SV.CO' do
       visit root_path

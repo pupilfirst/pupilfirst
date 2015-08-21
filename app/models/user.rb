@@ -139,31 +139,22 @@ class User < ActiveRecord::Base
     end
 
     # Store the phone number and verification code.
-    self.phone = phone_number
-    self.phone_verified = false
+    self.unconfirmed_phone = phone_number
     self.phone_verification_code = code
     self.save
 
     return code, phone_number
   end
 
-  def verify_phone_number(incoming_phone_number, verification_code)
-    # Normalize incoming phone number.
-    unverified_phone_number = incoming_phone_number.length <= 10 ? "91#{incoming_phone_number}" : incoming_phone_number
-
-    phone_number = if Phony.plausible?(unverified_phone_number, cc: '91')
-      PhonyRails.normalize_number incoming_phone_number, country_code: 'IN', add_plus: false
-    else
-      raise Exceptions::InvalidPhoneNumber, 'Supplied phone number could not be parsed. Please check and try again.'
-    end
-
-    if self.phone == phone_number && verification_code == self.phone_verification_code
-      # Set the phone number to verified.
-      self.phone_verified = true
+  def verify_phone_number(verification_code)
+    if unconfirmed_phone? && (verification_code == self.phone_verification_code)
+      # Store 'verified' phone number
+      self.phone = unconfirmed_phone
+      self.unconfirmed_phone = nil
       self.phone_verification_code = nil
       self.save
     else
-      raise Exceptions::PhoneNumberVerificationFailed, 'Supplied phone number or verification code do not match stored values.'
+      raise Exceptions::PhoneNumberVerificationFailed, 'Supplied verification code does not match stored values.'
     end
   end
 
@@ -179,7 +170,7 @@ class User < ActiveRecord::Base
   # going through the registration process.
   def mentor_registration_going_on?
     if mentor.present?
-      !phone_verified?
+      !phone
     end
   end
 
@@ -203,7 +194,7 @@ class User < ActiveRecord::Base
   end
 
   def ready_for_incubation_wizard?
-    phone_verified? && self.startup.present?
+    phone? && self.startup.present?
   end
 
   def incubation_parameters_available?

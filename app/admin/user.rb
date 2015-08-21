@@ -18,7 +18,7 @@ ActiveAdmin.register User do
     column :is_founder
     column :university
     column :startup_admin
-    column :phone_verified
+    column :unconfirmed_phone
   end
 
   member_action :remove_from_startup, method: :post do
@@ -54,7 +54,7 @@ ActiveAdmin.register User do
       row :is_founder
       row :born_on
       row :phone
-      row :phone_verified
+      row :unconfirmed_phone
       row :phone_verification_code
       row :communication_address
       row :district
@@ -85,9 +85,10 @@ ActiveAdmin.register User do
   filter :email
   filter :fullname
   filter :phone
+  filter :unconfirmed_phone
   filter :is_founder
   filter :university
-  filter :phone_verified
+  filter :roll_number
   # TODO: The check_boxes filter is disabled because of some bug with activeadmin. Check and enable when required.
   # filter :categories, as: :check_boxes, collection: proc { Category.user_category }
   filter :categories, collection: proc { Category.user_category }
@@ -98,7 +99,7 @@ ActiveAdmin.register User do
 
   permit_params :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url, :slack_username,
     :title, :skip_password, :born_on, :startup_admin, :communication_address, :district, :state, :pin,
-    :phone, :phone_verified, :company, :invitation_token, :university_id, :roll_number, :year_of_graduation,
-    :years_of_work_experience, #:confirmed_at,
+    :phone, :company, :invitation_token, :university_id, :roll_number, :year_of_graduation,
+    :years_of_work_experience
     { category_ids: [] }
 end

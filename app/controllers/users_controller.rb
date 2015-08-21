@@ -36,6 +36,12 @@ class UsersController < ApplicationController
     end
   end
 
+  def phone
+    if params[:referer].present?
+      session[:referer] = params[:referer]
+    end
+  end
+
   def code
     # Generate a 6-digit verification code to send to the phone number.
     code, phone_number = begin
@@ -69,7 +75,7 @@ class UsersController < ApplicationController
 
   def verify
     begin
-      current_user.verify_phone_number(current_user.phone, params[:phone_verification_code])
+      current_user.verify_phone_number(params[:phone_verification_code])
     rescue Exceptions::PhoneNumberVerificationFailed
       @failed_to_verify_phone_number = true
       render 'code' and return
@@ -91,7 +97,10 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:fullname, :twitter_url, :linkedin_url, :avatar, :title, :slack_username, :university_id, :roll_number)
+    params.require(:user).permit(
+      :fullname, :twitter_url, :linkedin_url, :avatar, :title, :slack_username,
+      :university_id, :roll_number, :born_on, :communication_address
+    )
   end
 
   def restrict_to_current_user

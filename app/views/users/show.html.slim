@@ -1,13 +1,6 @@
-- if current_user.startup.blank? || current_user.startup.try(:unready?)
-  = link_to 'Incubate your startup at SV!', new_user_startup_path(current_user) , class: 'btn btn-success btn-flat margin-top-20'
-
-.row
-  .col-lg-12.clearfix
-    .pull-right
-      = image_tag @user.avatar_url, class: 'img-rounded user-avatar'
-    h1.page-header
-      ' #{@user.fullname}
-      small Your basic details.
+h2.page-header
+  ' #{@user.fullname}
+  small Your basic details.
 
 table.table.table-hover.table-bordered.table-striped
   tbody
@@ -18,17 +11,25 @@ table.table.table-hover.table-bordered.table-striped
     tr
       th Phone Number
       td
-        ' #{@user.phone}
-        | (#{@user.phone_verified? ? 'V' : 'Unv'}erified)
+        - if @user.phone?
+          = @user.phone
+        - elsif @user.unconfirmed_phone?
+          | #{@user.unconfirmed_phone} (Unverified)
+        - else
+          = link_to 'Save phone number', phone_user_path(refer: user_url(current_user))
     tr
       th Title
       td = value_or_not_available @user.title
     tr
       th Date of Birth
-      td = value_or_not_available @user.born_on
+      td
+        - if @user.born_on?
+          = @user.born_on.to_s(:long)
+        - else
+          em Not Available
     tr
       th Communication Address
-      td = value_or_not_available @user.communication_address
+      td = value_or_not_available @user.communication_address, simple_format: true
     tr
       th LinkedIn URL
       td = value_or_not_available @user.linkedin_url
@@ -48,7 +49,7 @@ table.table.table-hover.table-bordered.table-striped
 
 = render('mentor_info', mentor: @user.mentor) if @user.mentor.present?
 
-.margin-bottom-20
+.margin-bottom-40
   = link_to 'Edit your profile', edit_user_url(@user), class: 'btn btn-primary btn-flat'
 
   - if @user.startup.present? && !@user.startup.unready?

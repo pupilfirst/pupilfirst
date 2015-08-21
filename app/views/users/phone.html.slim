@@ -1,10 +1,17 @@
-h1.page-header.margin-top-0
-  ' Phone verification
+h2.page-header
+  - if current_user.phone?
+    ' Change phone number
+  - else
+    ' Set your phone number
 
 - if @failed_to_add_phone_number
   .alert.alert-danger role='alert' The phone number you supplied does not appear to be correct. Please re-enter a valid 10-digit mobile number.
 - else
-  .alert.alert-info role='alert' Please supply your phone number to continue. You will be asked to verify it in the next step.
+  .alert.alert-info role='alert'
+    ' Please supply your
+    - if current_user.phone?
+      ' <em>new</em>
+    ' phone number to continue. You will be asked to verify it in the next step.
 
 = form_tag code_user_url(current_user), class: 'form-horizontal', role: 'form' do
   .form-group
@@ -15,3 +22,4 @@ h1.page-header.margin-top-0
     .col-sm-offset-2.col-sm-10
       = submit_tag 'Proceed to phone number verification', class: 'btn btn-primary btn-flat'
 
+.margin-bottom-40

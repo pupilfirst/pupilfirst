@@ -7,9 +7,9 @@ module UsersHelper
     end
   end
 
-  def value_or_not_available(value)
+  def value_or_not_available(value, placeholder: 'Not Available')
     if value.blank?
-      '<em>Not Available</em>'.html_safe
+      "<em>#{placeholder}</em>".html_safe
     else
       value
     end

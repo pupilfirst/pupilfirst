@@ -43,7 +43,7 @@ table.table.table-hover.table-bordered.table-striped
       td #{@user.university.present? ? @user.university.name : 'Not a student'}
     tr
       th Roll Number
-      td = value_or_not_available @user.roll_number
+      td = value_or_not_available @user.roll_number, placeholder: 'Not Applicable'
 
 
 = render('mentor_info', mentor: @user.mentor) if @user.mentor.present?

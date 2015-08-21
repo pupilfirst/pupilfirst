@@ -41,6 +41,16 @@ ActiveAdmin.register TimelineEvent do
     redirect_to action: :show
   end
 
+  member_action :verify, method: :post do
+    TimelineEvent.find(params[:id]).verify!
+    redirect_to action: :show
+  end
+
+  member_action :unverify, method: :post do
+    TimelineEvent.find(params[:id]).unverify!
+    redirect_to action: :show
+  end
+
   form do |f|
     f.inputs 'Event Details' do
       f.input :startup
@@ -65,7 +75,13 @@ ActiveAdmin.register TimelineEvent do
       row :iteration
       row :image
       row :event_on
-      row :verified_at
+      row :verified_at do
+        if timeline_event.verified_at.present?
+          "#{timeline_event.verified_at} (#{link_to 'Unverify', unverify_admin_timeline_event_path, method: :post, data: {confirm: 'Are you sure?'}})".html_safe
+        else
+          button_to('Unverified. Click to verify this event.', verify_admin_timeline_event_path)
+        end
+      end
     end
 
     panel 'Links' do

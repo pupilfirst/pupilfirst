@@ -138,4 +138,12 @@ class TimelineEvent < ActiveRecord::Base
     params[:verified_at] = nil
     update(params)
   end
+
+  def verify!
+    update!(verified_at: Time.now)
+  end
+
+  def unverify!
+    update!(verified_at: nil)
+  end
 end

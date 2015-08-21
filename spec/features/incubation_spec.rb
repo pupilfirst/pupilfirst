@@ -69,4 +69,30 @@ feature 'Incubation' do
     expect(startup.presentation_link).to eq('https://sv.co')
     expect(startup.incubation_location).to eq(Startup::INCUBATION_LOCATION_VISAKHAPATNAM)
   end
+
+  context 'when user has verified phone number' do
+    let(:user) { create :user, password: 'thisisatest', password_confirmation: 'thisisatest', confirmed_at: Time.now, phone: '9876543210', phone_verified: true }
+
+    scenario 'User cancels application to SV.CO' do
+      visit root_path
+      click_on 'Start Application'
+
+      check 'team-leader-consent'
+      click_on 'Start incubation!'
+
+      choose 'Female'
+      fill_in 'Date of birth', with: '03/03/1982'
+      click_on 'Next Step'
+
+      click_on 'Cancel Application'
+      expect(page).to have_text('Start Application')
+
+      # Now check whether data is in shape.
+      user.reload
+
+      expect(user.startup).to eq(nil)
+      expect(user.startup_admin).to be_falsey
+      expect(user.is_founder).to be_falsey
+    end
+  end
 end

@@ -32,7 +32,7 @@
       .row
         .text-area-container
           span.text-area-overlay.common-properties
-          = f.text_area :description, class: 'description common-properties', placeholder: "What's been happening?", maxlength: 140
+          = f.text_area :description, class: 'description common-properties', placeholder: "What's been happening?", maxlength: 300
       .row.bottom-row
         .pull-right
           = f.select :timeline_event_type_id do

@@ -205,7 +205,7 @@
                           .timeline-footer.tl-footer
                             - event.links.each do |link|
                               a.tl-link-button href="#{link[:url]}"
-                                | #{link[:title].capitalize}
+                                | #{link[:title]}
                         - if current_user && @startup.is_founder?(current_user)
                           = button_to user_startup_timeline_event_url(current_user, event),
                             method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',

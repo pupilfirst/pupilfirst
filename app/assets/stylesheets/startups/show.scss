@@ -1,4 +1,3 @@
-@import "bootstrap-datepicker";
 @import 'variables';
 
 // Customize the large-header at the top.
@@ -216,25 +215,7 @@ h1.startup-name {
       z-index: 1000;
       display: none;
       padding: 4px;
-
-      .datepicker {
-        padding: 0;
-
-        table {
-          width: 100%;
-
-          tr td {
-            padding: 0;
-            //width: 33px;
-
-            span {
-              margin: 0;
-              width: 25%;
-            }
-          }
-        }
-      }
-      .datepicker-inline { width: 210px; }
+      width: 250px;
 
       &:after, &:before {
         bottom: 100%;

@@ -61,7 +61,6 @@ gem 'gravtastic' # Use gravatars as fallback avatars
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify' # Superb notifications library. http://sciactive.github.io/pnotify/
-  gem 'rails-assets-bootstrap-datepicker' # Forced to add Eternicode's datepicker since Eonasdan's datetimepicker's inline mode is non-functional.
 end
 
 group :development do

@@ -1,5 +1,3 @@
-#= require bootstrap-datepicker
-
 exports = {
   timelineBuilderDatepicker: null
 }
@@ -56,12 +54,16 @@ handleDatepickerChangeDate = (e) ->
   timelineBuilderDateButton = $('#timeline-builder-date-button')
 
   # Store the time in form field.
-  timelineBuilderDateButton.find('input').val(moment(e.date).format('YYYY-MM-DD'))
+  timelineBuilderDateButton.find('input').val(e.date.format('YYYY-MM-DD'))
 
   # Hide the datepicker.
-  exports.timelineBuilderDatepicker.toggle()
+  exports.timelineBuilderDatepicker.hide()
 
-  setNewDateOnDatepickerButton(timelineBuilderDateButton, moment(e.date).format('DD/MM/YYYY'))
+  # Set new date on datepicker button.
+  timelineBuilderDateButton.find('.fa-calendar').addClass('hidden')
+  timelineBuilderDateButton.find('.fa-calendar-check-o').removeClass('hidden')
+  timelineBuilderDateButton.find('a').addClass('green')
+  timelineBuilderDateButton.find('#date-of-event').html('&nbsp;' + e.date.format('DD/MM/YYYY'))
 
 timelineBuilderSubmitChecks = ->
   $('form.new_timeline_event, form.edit_timeline_event').submit((event) ->
@@ -143,9 +145,8 @@ closeDatePickerOnExternalClick = ->
     eventTarget = $(event.target)
 
     if exports.timelineBuilderDatepicker
-      unless eventTarget.hasClass('month') or eventTarget.hasClass('day') or eventTarget.hasClass('year')
-        unless $(event.target).closest('#timeline-builder-date-button').length
-          exports.timelineBuilderDatepicker.toggle(false)
+      unless $(event.target).closest('#timeline-builder-date-button').length
+        exports.timelineBuilderDatepicker.toggle(false)
   )
 
 removeSelectedLink = ->
@@ -304,13 +305,6 @@ measureDescriptionLength = ->
 setPendingTooltips = ->
   $('.pending-verification').tooltip()
 
-setNewDateOnDatepickerButton = (dateButton, dateString) ->
-  # Indicate that a date has been picked.
-  dateButton.find('.fa-calendar').addClass('hidden')
-  dateButton.find('.fa-calendar-check-o').removeClass('hidden')
-  dateButton.find('a').addClass('green')
-  dateButton.find('span').html('&nbsp;' + dateString)
-
 pad = (val, length, padChar = '0') ->
   val += ''
   numPads = length - val.length
@@ -321,8 +315,14 @@ setupTimelineBuilderDatepicker = ->
 
   if timelineBuilderDateButton
     datepickerContainer = timelineBuilderDateButton.find('.datepicker-container')
-    exports.timelineBuilderDatepicker = datepickerContainer.datepicker()
-    exports.timelineBuilderDatepicker.on('changeDate', handleDatepickerChangeDate)
+
+    exports.timelineBuilderDatepicker = datepickerContainer.datetimepicker(
+      format: 'DD/MM/YYYY',
+      maxDate: moment(),
+      inline: true
+    )
+
+    exports.timelineBuilderDatepicker.on('dp.change', handleDatepickerChangeDate)
 
     eventDate = $('#timeline_event_event_on').val()
 
@@ -335,13 +335,10 @@ setupTimelineBuilderDatepicker = ->
       day = dateComponents[2]
 
       # Date() is weird in that it counts months from zero onwards.
-      the_date = new Date(year, month - 1, day)
+      dateFromServer = new Date(year, month - 1, day)
 
-      # Change the date inside datepicker.
-      datepickerContainer.datepicker('update', the_date)
-
-      # Change date on date button.
-      setNewDateOnDatepickerButton(timelineBuilderDateButton, "#{pad day, 2}/#{pad month, 2}/#{year}")
+      # Change the date inside datepicker (this will emit dp.change event).
+      datepickerContainer.data("DateTimePicker").date(dateFromServer)
 
 $(timelineBuilderSubmitChecks)
 $(setupSelect2ForEventType)

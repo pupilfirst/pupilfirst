@@ -265,9 +265,9 @@ measureDescriptionLength = ->
     span_contents = descriptionText
 
     if span_contents
-      span_contents += " &mdash; (#{unescapedDescriptionText.length}/300)"
+      span_contents += " &mdash; (#{unescapedDescriptionText.length}/140)"
 
-      if descriptionText.length >= 250
+      if descriptionText.length >= 120
         $('span.text-area-overlay').addClass 'length-warning'
       else
         $('span.text-area-overlay').removeClass 'length-warning'

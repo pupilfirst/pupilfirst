@@ -123,7 +123,7 @@ h1.startup-name {
       text-overflow: ellipsis;
     }
 
-    #upload-image > span {
+    #upload-image > span, #add-link > span {
       max-width: 70%;
       display: inline-block;
       overflow: hidden;

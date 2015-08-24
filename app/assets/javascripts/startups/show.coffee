@@ -148,6 +148,11 @@ closeDatePickerOnExternalClick = ->
           exports.timelineBuilderDatepicker.toggle(false)
   )
 
+removeSelectedLink = ->
+  $('#timeline_event_link_title').val('')
+  $('#timeline_event_link_url').val('')
+  markSelectedLink('Add a URL', true)
+
 removeSelectedImage = ->
   uploadImage = $('#upload-image')
   uploadImage.removeClass('green-text')
@@ -194,9 +199,15 @@ addErrorMarkers = (formGroupFinder, errorHint) ->
   if errorHint
     $('#url-help').removeClass('hidden').html(errorHint)
 
-markSelectedLink = (linkTitle) ->
+markSelectedLink = (linkTitle, unmark=false) ->
   $('#add-link').find('span').html(linkTitle)
-  $('#add-link').addClass('green-text')
+
+  if unmark
+    $('#add-link').removeClass('green-text')
+    $('#remove-selected-link').addClass('hidden')
+  else
+    $('#add-link').addClass('green-text')
+    $('#remove-selected-link').removeClass('hidden')
 
 # If link title and URL are set on load (editing), then we start with selected values.
 markSelectedLinksOnEdit = ->
@@ -249,6 +260,8 @@ handleLinkAddition = ->
     clearErrorMarkers('#link-title-group')
     clearErrorMarkers('#link-url-group')
   )
+
+  $('#remove-selected-link').click(removeSelectedLink)
 
 matchDescriptionScroll = (target) ->
   $('span.text-area-overlay').scrollTop(target.scrollTop())

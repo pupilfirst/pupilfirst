@@ -142,9 +142,8 @@
 
     /Form to post new timeline event
     .col-md-8.col-md-pull-4
-      - if feature_active?(:timeline_form)
-        - if current_user && @startup.is_founder?(current_user)
-          == render 'startups/timeline_builder', event: @timeline_event
+      - if current_user && @startup.is_founder?(current_user)
+        == render 'startups/timeline_builder', event: @timeline_event
 
       - if @startup.timeline_events_for_display(current_user).present?
         .main-timeline

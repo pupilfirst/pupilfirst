@@ -12,7 +12,7 @@
     .col-sm-9
       .phone-number-controls #{user.phone} (#{link_to 'Change?', phone_user_path(referer: edit_user_url(current_user))})
 
-  = f.input :avatar, as: :file
+  = f.input :avatar, as: :file, input_html: { accept: 'image/*' }
   = f.input :title, hint: 'Position at startup / company', input_html: { maxlength: 255 }
   = f.input :linkedin_url, label: 'LinkedIn Profile URL', input_html: { maxlength: 255 }
   = f.input :twitter_url, label: 'Twitter Profile URL', input_html: { maxlength: 255 }

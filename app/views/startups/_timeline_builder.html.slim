@@ -23,7 +23,7 @@
           a#remove-selected-image.hidden
             | &nbsp;
             i.fa.fa-times-circle
-          = f.file_field :image, class: 'hidden'
+          = f.file_field :image, class: 'hidden', accept: 'image/*'
         .col-sm-4.col-xs-2.ellipsis-text
           a#add-link data-toggle="modal" data-target="#add-link-modal"
             i.fa.fa-link

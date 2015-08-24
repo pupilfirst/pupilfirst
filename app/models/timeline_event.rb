@@ -106,12 +106,12 @@ class TimelineEvent < ActiveRecord::Base
 
   def build_default_title_from_type
     unless title.present?
-      self.title = self.timeline_event_type.title
+      self.title = self.timeline_event_type.try(:title)
     end
   end
 
   def record_iteration
-    self.iteration = self.startup.current_iteration
+    self.iteration = self.startup.try(:current_iteration)
   end
 
   def build_link_json

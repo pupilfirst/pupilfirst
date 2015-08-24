@@ -453,7 +453,7 @@ class Startup < ActiveRecord::Base
   end
 
   def latest_end_of_iteration
-    self.timeline_events.where(event_type: TimelineEvent::TYPE_END_ITERATION).order(event_on: :desc).first
+    self.timeline_events.where(timeline_event_type: TimelineEventType.end_iteration).order(event_on: :desc).first
   end
 
   def timeline_verified?

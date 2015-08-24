@@ -444,6 +444,18 @@ class Startup < ActiveRecord::Base
     false
   end
 
+  def latest_change_of_stage
+    self.timeline_events.where(timeline_event_type: TimelineEventType.end_of_stage).order(event_on: :desc).first
+  end
+
+  def current_stage
+    if self.latest_change_of_stage
+      self.latest_change_of_stage.title
+    else
+      'Idea Discovery'
+    end
+  end
+
   def current_iteration
     if self.latest_end_of_iteration
       self.latest_end_of_iteration.iteration + 1

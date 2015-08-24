@@ -139,12 +139,15 @@ h1.startup-name {
 
   .text-area-container {
     position: relative;
+    height: 120px;
 
     .common-properties {
       width: 100%;
-      padding: 10px 15px;
+      padding: 10px;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
       font-size: 110%;
-      height: 100px;
+      height: 120px;
       overflow: scroll;
     }
 
@@ -163,10 +166,16 @@ h1.startup-name {
 
     .description {
       position: relative;
-      border: 0;
+      border-top: 0;
+      border-bottom: 0;
       outline: none;
       resize: none;
       background: transparent;
+
+      &.has-error {
+        border-left: 5px solid crimson;
+        border-right: 5px solid crimson;
+      }
     }
   }
 

@@ -69,6 +69,12 @@ timelineBuilderSubmitChecks = ->
 
     typeOfEventPresent = !!form.find('select#timeline_event_timeline_event_type_id').val()
     dateOfEventPresent = !!form.find('input#timeline_event_event_on').val()
+    descriptionPresent = !!form.find('#timeline_event_description').val()
+
+    unless descriptionPresent
+      timelineEventDescription = $('#timeline_event_description')
+      timelineEventDescription.attr('placeholder', 'You must supply a description!')
+      timelineEventDescription.addClass('has-error')
 
     unless dateOfEventPresent
       $('#timeline-builder-date-button > a').removeClass('btn-default').addClass('btn-danger')
@@ -99,7 +105,7 @@ timelineBuilderSubmitChecks = ->
     else
       confirmedByUser = true
 
-    return false unless typeOfEventPresent && dateOfEventPresent && confirmedByUser
+    return false unless typeOfEventPresent && dateOfEventPresent && descriptionPresent && confirmedByUser
   )
 
 clearErrorsOnOpeningSelect2 = ->
@@ -250,6 +256,9 @@ matchDescriptionScroll = (target) ->
 measureDescriptionLength = ->
   $('#timeline_event_description').on('input', (event) ->
     description = $(event.target)
+
+    # Remove error class on it, if present.
+    description.removeClass('has-error')
 
     # Let's escape the incoming text, before manipulating it.
     unescapedDescriptionText = description.val()

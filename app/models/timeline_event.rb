@@ -3,8 +3,13 @@ class TimelineEvent < ActiveRecord::Base
   belongs_to :timeline_event_type
   mount_uploader :image, TimelineImageUploader
   serialize :links
-  validates_presence_of :title, :event_on, :startup_id, :iteration, :timeline_event_type
+  validates_presence_of :title, :event_on, :startup_id, :iteration, :timeline_event_type, :description
   attr_accessor :link_url, :link_title
+
+  MAX_DESCRIPTION_CHARACTERS = 300
+
+  validates_length_of :description, maximum: MAX_DESCRIPTION_CHARACTERS,
+    message: "must be within #{MAX_DESCRIPTION_CHARACTERS} characters"
 
   TYPE_TEAM_FORMATION = 'team_formation'
   TYPE_PROSPECTIVE_CUSTOMER = 'prospective_customer'

@@ -7,6 +7,12 @@ class TimelineEventType < ActiveRecord::Base
 
   mount_uploader :badge, BadgeUploader
 
+  attr_accessor :copy_badge_from
+
+  before_validation do
+    self.badge = TimelineEventType.find(self.copy_badge_from).badge if self.copy_badge_from.present?
+  end
+
   def sample
     sample_text.present? ? sample_text : "What's been happening?"
   end

@@ -111,6 +111,30 @@ class HomeController < ApplicationController
         { college: "College of Engineering Vadakara", team_lead: "Tashrif Yusuf" },
         { college: "Muthoot Institute of Technology and Science, Varikoli", team_lead: "Aravind Muraleedharan" },
         { college: "AWH Engineering College", team_lead: "Alen Thomas" }
+      ],
+      l2015_08_24: [
+        { rank: '1', change_from_last_leaderboard: '', startup_name: 'Codesap Tech LLP', startup_timeline: 'codesap', team_lead: 'Alen Thomas' },
+        { rank: '2', change_from_last_leaderboard: '', startup_name: 'Creazone', startup_timeline: 'creazone-415', team_lead: 'Felix Josemon' },
+        { rank: '3', change_from_last_leaderboard: '', startup_name: '10s', startup_timeline: '10s', team_lead: 'Arya Murali' },
+        { rank: '3', change_from_last_leaderboard: '', startup_name: '(College) Saintgits College of Engineering', startup_timeline: '', team_lead: 'Nakendra Kumar S.' },
+        { rank: '5', change_from_last_leaderboard: '', startup_name: '(College) Sree Chitra Thirunal College of Engineering, Trivandrum', startup_timeline: '', team_lead: 'Varghese George' },
+        { rank: '6', change_from_last_leaderboard: '', startup_name: '(College) School Of Engineering, CUSAT', startup_timeline: '', team_lead: 'Athul B Raj' },
+        { rank: '7', change_from_last_leaderboard: '', startup_name: 'HandMe', startup_timeline: 'handme', team_lead: 'Arun P' },
+        { rank: '7', change_from_last_leaderboard: '', startup_name: '(College) Rajagiri School of Engineering and Technology', startup_timeline: '', team_lead: 'Geordin Jose' },
+        { rank: '7', change_from_last_leaderboard: '', startup_name: '(College) Adi Shankara Institute of Engineering and Technology', startup_timeline: '', team_lead: 'A N Sreeram' },
+        { rank: '7', change_from_last_leaderboard: '', startup_name: 'CreditoFlux', startup_timeline: 'creditoflux', team_lead: 'Sachu S' },
+        { rank: '11', change_from_last_leaderboard: '', startup_name: 'Semantica', startup_timeline: 'semantica', team_lead: 'Stenal P Jolly' },
+        { rank: '11', change_from_last_leaderboard: '', startup_name: 'Tapiko', startup_timeline: 'tapiko', team_lead: 'Anik Raj' },
+        { rank: '11', change_from_last_leaderboard: '', startup_name: 'Grey Codes', startup_timeline: 'greycodes', team_lead: 'Ajmal Azeez' },
+        { rank: '11', change_from_last_leaderboard: '', startup_name: '(College) Saintgits College of Engineering Pathamuttom', startup_timeline: '', team_lead: 'Sherin Antony' },
+        { rank: '11', change_from_last_leaderboard: '', startup_name: '(College) Govt. Model Engineering College, Thrikkakara', startup_timeline: '', team_lead: 'Mohammed Akhil P R' },
+        { rank: '11', change_from_last_leaderboard: '', startup_name: 'Investo', startup_timeline: 'investo', team_lead: 'Tashrif Yusuf' },
+        { rank: '11', change_from_last_leaderboard: '', startup_name: 'Openloop Labs', startup_timeline: 'openloop', team_lead: 'Francis Alexander' },
+        { rank: '18', change_from_last_leaderboard: '', startup_name: '(College) Sree Narayana Gurukulam college of Engineering, Kadayiruppu', startup_timeline: '', team_lead: 'Anand B' },
+        { rank: '19', change_from_last_leaderboard: '', startup_name: 'Bash', startup_timeline: 'bash', team_lead: 'Hanzal Salim' },
+        { rank: '20', change_from_last_leaderboard: '', startup_name: 'Tega', startup_timeline: 'tega', team_lead: 'Aravind Muraleedharan' },
+        { rank: '21', change_from_last_leaderboard: '', startup_name: '(College) NSS College Of Engineering, Palakkad', startup_timeline: '', team_lead: 'Aravind Sai.V' },
+        { rank: '22', change_from_last_leaderboard: '', startup_name: '(College) Rajagiri School Of Engineering & Technology', startup_timeline: '', team_lead: 'Joseph Biju Cadavil' }
       ]
     }
   end

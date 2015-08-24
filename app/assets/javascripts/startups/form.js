@@ -18,7 +18,9 @@ $(function () {
   update_about = function () {
     var help_ele = $(".startup_about p.help-block");
     var ele = $(".startup_about #startup_about");
-    counter(ele, help_ele, <%= Startup::MAX_ABOUT_CHARACTERS %>)
+
+    // The value of max_chars should match the one in Startup::MAX_ABOUT_CHARACTERS
+    counter(ele, help_ele, 150)
   };
 
   $("#startup_about").click(update_about)

@@ -12,7 +12,7 @@ class Startup < ActiveRecord::Base
   REGISTRATION_TYPE_LLP = 'llp' # Limited Liability Partnership
 
   MAX_PITCH_CHARACTERS = 140 unless defined?(MAX_PITCH_CHARACTERS)
-  MAX_ABOUT_CHARACTERS = 1000
+  MAX_ABOUT_CHARACTERS = 150
   MAX_CATEGORY_COUNT = 3
 
   APPROVAL_STATUS_UNREADY = 'unready'

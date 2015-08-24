@@ -4,7 +4,7 @@ FactoryGirl.define do
     f.logo { fixture_file_upload(Rails.root.join(*%w[ spec fixtures files example.jpg ]), 'image/jpg') }
     f.pitch { Faker::Lorem.words(6).join(' ') }
     f.address { Faker::Lorem.words(6).join(' ') }
-    f.about { Faker::Lorem.paragraph(7) }
+    f.about { Faker::Lorem.words(12).join(' ').truncate(Startup::MAX_ABOUT_CHARACTERS) }
     f.website { Faker::Internet.domain_name }
     f.email { Faker::Internet.email }
     f.incubation_location Startup::INCUBATION_LOCATION_KOCHI

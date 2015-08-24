@@ -5,7 +5,9 @@ end
 timeline_event_types = [
   ['graduated', 'Graduated from Startup Village', "Our [team/team member] has graduated from Startup Village by [being hired/being acqui-hired/becoming sustainable/getting admission to higher studies/getting funded/joining an accelerator]. We're now an alumni, and happy to help other startups!\nProof: Of Graduation method. Offer Letter, Admission Letter, Letter of Intent to Acquire, Funding Proof, Accelerator Invitation Letter."],
   ['bank_loan', 'Received Bank Loan', "We've received a Bank Loan from [KSIDC/Federal Bank/...] to execute our project with very favourable repayment terms.\nProof: Email/Letter from Loan Agency. Bank Account Statement."],
-  ['end_iteration', 'End of Current Iteration', "We've worked hard on our product, and we're ready with [a new iteration]. Our primary learning from this iteration was [...].\nProof: Not Needed"]
+  ['end_iteration', 'End of Current Iteration', "We've worked hard on our product, and we're ready with [a new iteration]. Our primary learning from this iteration was [...].\nProof: Not Needed"],
+  ['end_of_idea_stage','End of Idea Discovery Stage', "We've finally shortlisted a great idea to work with! We will be trying to [build/change] .. \nProof: Not Needed"],
+  ['end_of_prototype_stage','End of Prototyping Stage', "We succesfully build the first working prototype of our [Product/Platform] .. Proof: Link to prototype drafts or demos"]
 ]
 
 timeline_event_types.each do |event_type|

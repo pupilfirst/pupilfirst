@@ -1,16 +1,8 @@
-#= require shorten/jquery.shorten
 #= require bootstrap-datepicker
 
 exports = {
   timelineBuilderDatepicker: null
 }
-
-shortenText = ->
-  $('.about-startup').shorten(
-    showChars: 200
-  )
-
-$(shortenText)
 
 $(->
   $('a#verified-icon').tooltip()

@@ -28,7 +28,7 @@
         = image_tag "#{@startup.logo_url}", class: 'startup-logo'
 
   - if @startup.about?
-    p.about-startup.shorten #{@startup.about}
+    p.about-startup #{@startup.about}
 
   / Container right
   .row

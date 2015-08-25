@@ -19,9 +19,8 @@ ActiveAdmin.register TimelineEvent do
   index do
     selectable_column
 
-    column :iteration
-    column :title
     column :timeline_event_type
+    column :startup
     column :event_on
     column :verified_at
 

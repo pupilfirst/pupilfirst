@@ -96,10 +96,12 @@ ActiveAdmin.register Startup do
         push_message = 'Congratulations! Your request for incubation at Startup Village has been approved.'
 
       when :rejection
+        startup.metadata[:rejections] ||= []
+        startup.metadata[:rejections] << Time.now
+        startup.save!
         StartupMailer.startup_rejected(startup).deliver_later
         push_message = "We're sorry, but your request for incubation at Startup Village has been rejected."
     end
-
     redirect_to action: :show
   end
 
@@ -187,7 +189,7 @@ ActiveAdmin.register Startup do
             custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_APPROVED }, email_to_send: :approval),
             { method: :put, data: { confirm: 'Are you sure?' } })} / #{
           link_to('Reject Startup',
-            custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_REJECTED }, email_to_send: :rejection),
+            custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_UNREADY }, email_to_send: :rejection),
             { method: :put, data: { confirm: 'Are you sure?' } })}".html_safe
         elsif startup.unready?
           link_to('Waiting for Completion. Send reminder e-mail with links to mobile applications.',

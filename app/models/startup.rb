@@ -31,11 +31,11 @@ class Startup < ActiveRecord::Base
   INCUBATION_LOCATION_VISAKHAPATNAM = 'visakhapatnam'
   INCUBATION_LOCATION_KOZHIKODE = 'kozhikode'
 
-  STAGE_DISCOVERY = 'discovery'
-  STAGE_PROTOTYPE= 'prototype'
-  STAGE_CUSTOMER_VALIDATION= 'customer_validation'
-  STAGE_EFFICIENCY= 'efficiency'
-  STAGE_SCALING= 'scaling'
+  STAGE_DISCOVERY = 'Idea discovery'
+  STAGE_PROTOTYPE= 'Prototyping'
+  STAGE_CUSTOMER_VALIDATION= 'Customer Validation'
+  STAGE_EFFICIENCY= 'Efficiency'
+  STAGE_SCALING= 'Scaling'
 
   SV_STATS_LINK = "bit.ly/svstats2"
 
@@ -179,6 +179,9 @@ class Startup < ActiveRecord::Base
 
     # If slug isn't supplied, set one.
     self.slug = generate_randomized_slug if self.slug.blank?
+
+    # save result of current_stage as the stage
+    self.stage = self.current_stage
   end
 
   before_destroy do
@@ -464,7 +467,7 @@ class Startup < ActiveRecord::Base
     when 'moved_to_prototyping'
       'Prototyping'
     when 'moved_to_customer_validation'
-      'Customer validation'
+      'Customer Validation'
     when 'moved_to_efficiency'
       'Efficiency'
     when 'moved_to_scale'

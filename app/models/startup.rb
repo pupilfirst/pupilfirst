@@ -31,12 +31,6 @@ class Startup < ActiveRecord::Base
   INCUBATION_LOCATION_VISAKHAPATNAM = 'visakhapatnam'
   INCUBATION_LOCATION_KOZHIKODE = 'kozhikode'
 
-  STAGE_DISCOVERY = 'Idea discovery'
-  STAGE_PROTOTYPE= 'Prototyping'
-  STAGE_CUSTOMER_VALIDATION= 'Customer Validation'
-  STAGE_EFFICIENCY= 'Efficiency'
-  STAGE_SCALING= 'Scaling'
-
   SV_STATS_LINK = "bit.ly/svstats2"
 
   def self.valid_agreement_durations
@@ -59,9 +53,6 @@ class Startup < ActiveRecord::Base
     [APPROVAL_STATUS_UNREADY, APPROVAL_STATUS_PENDING, APPROVAL_STATUS_APPROVED, APPROVAL_STATUS_REJECTED]
   end
 
-  def self.valid_stages
-    [STAGE_SCALING, STAGE_EFFICIENCY, STAGE_CUSTOMER_VALIDATION, STAGE_PROTOTYPE, STAGE_DISCOVERY]
-  end
 
   scope :batched, -> { where.not(batch: nil) }
   scope :unready, -> { where(approval_status: [APPROVAL_STATUS_UNREADY, nil]) }
@@ -165,7 +156,6 @@ class Startup < ActiveRecord::Base
     updated_from == 'startup_profile'
   end
 
-  validates_inclusion_of :stage, in: valid_stages, allow_nil: true
 
   before_validation do
     # Set registration_type to nil if its set as blank from backend.
@@ -179,9 +169,6 @@ class Startup < ActiveRecord::Base
 
     # If slug isn't supplied, set one.
     self.slug = generate_randomized_slug if self.slug.blank?
-
-    # save result of current_stage as the stage
-    self.stage = self.current_stage
   end
 
   before_destroy do

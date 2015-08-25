@@ -76,13 +76,12 @@
                   .media-body
                     h4.media-heading Team Size
                     p.data-content #{@startup.team_size}
-              - if @startup.stage?
-                .media
-                  .media-left
-                    img.media-object alt="Stage icon" src="#{image_url 'timeline/icons/stage.png'}"
-                  .media-body
-                    h4.media-heading Stage Startup is In
-                    p.data-content #{@startup.stage.capitalize}
+              .media
+                .media-left
+                  img.media-object alt="Stage icon" src="#{image_url 'timeline/icons/stage.png'}"
+                .media-body
+                  h4.media-heading Stage Startup is In
+                  p.data-content #{@startup.current_stage.capitalize}
               - if @startup.timeline_events_for_display(current_user).present?
                 .media
                   .media-left

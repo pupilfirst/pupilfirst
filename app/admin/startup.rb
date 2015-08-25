@@ -5,7 +5,6 @@ ActiveAdmin.register Startup do
   filter :email
   filter :website
   filter :registration_type, as: :select, collection: proc { Startup.valid_registration_types }
-  filter :stage, as: :select, collection: proc { Startup.valid_stages }
   filter :team_size
   filter :team_size_blank, as: :boolean, label: 'Team size not set'
   filter :incubation_location, as: :select, collection: proc { Startup.valid_incubation_location_values }
@@ -138,7 +137,6 @@ ActiveAdmin.register Startup do
       row :logo do |startup|
         link_to(image_tag(startup.logo_url(:thumb)), startup.logo_url)
       end
-      row :stage
       row :website
       row :presentation_link do |startup|
         link_to startup.presentation_link, startup.presentation_link if startup.presentation_link.present?

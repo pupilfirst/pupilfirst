@@ -119,7 +119,13 @@ clearErrorsOnOpeningSelect2 = ->
 
 setupSelect2ForEventType = ->
   $('#timeline_event_timeline_event_type_id').select2(
-    placeholder: "Type of Event"
+    placeholder: "Type of Event",
+    matcher: (term, text, opt) ->
+      # This matcher has been picked up from SO. It lets the Select2 finder search for optgroup labels as well.
+      # TODO: This custom finder will probably break with Select2 is updated to v4.
+      # See http://stackoverflow.com/questions/21992727/display-result-matching-optgroup-using-select2#comment50370609_21996758
+      element = $('#timeline_event_timeline_event_type_id')
+      element.select2.defaults.matcher(term, text) || element.select2.defaults.matcher(term, opt.parent("optgroup").attr("label"))
   )
 
 matchSampleTextToEventType = ->

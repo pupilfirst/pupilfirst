@@ -109,7 +109,9 @@ class Startup < ActiveRecord::Base
   validates_presence_of :registration_type, if: ->(startup) { startup.validate_registration_type }
 
   validate :valid_founders?
-  validates_associated :founders, unless: ->(startup) { startup.incubation_step_1? }
+
+  # TODO: Ensure this is take care of when rewriting incubation without wizard
+  # validates_associated :founders, unless: ->(startup) { startup.incubation_step_1? }
 
   # Registration type should be one of Pvt. Ltd., Partnership, or LLC.
   validates :registration_type,

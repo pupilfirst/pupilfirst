@@ -5,5 +5,10 @@ deployment:
       appname: svlabs-in
   production:
     branch: master
-    heroku:
-      appname: sv-co
+    commands:
+      - heroku maintenance:on --app sv-co
+      - heroku scale worker=0 --app sv-co
+      - git push git@heroku.com:sv-co.git $CIRCLE_SHA1:refs/heads/master
+      - heroku run rake db:migrate --app sv-co
+      - heroku scale worker=1 --app sv-co
+      - heroku maintenance:off --app sv-co

@@ -53,7 +53,6 @@ class Startup < ActiveRecord::Base
     [APPROVAL_STATUS_UNREADY, APPROVAL_STATUS_PENDING, APPROVAL_STATUS_APPROVED, APPROVAL_STATUS_REJECTED]
   end
 
-
   scope :batched, -> { where.not(batch: nil) }
   scope :unready, -> { where(approval_status: [APPROVAL_STATUS_UNREADY, nil]) }
   scope :not_unready, -> { where.not(approval_status: [APPROVAL_STATUS_UNREADY, nil]) }

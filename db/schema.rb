@@ -235,7 +235,10 @@ ActiveRecord::Schema.define(version: 20150825095627) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.string   "badge"
+    t.string   "role"
   end
+
+  add_index "timeline_event_types", ["role"], name: "index_timeline_event_types_on_role", using: :btree
 
   create_table "timeline_events", force: :cascade do |t|
     t.integer  "iteration"

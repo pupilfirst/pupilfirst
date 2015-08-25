@@ -40,8 +40,10 @@
         .pull-right
           = f.select :timeline_event_type_id do
             option value='' selected=(event.persisted? ? nil : true)
-            - TimelineEventType.order(:title).each do |t|
-              option value='#{t.id}' data-sample-text='#{t.sample}' selected=(t == event.timeline_event_type ? true : nil) #{t.title}
+            - TimelineEventType.uniq(:role).pluck(:role).each do |role|
+              optgroup label=role
+                - TimelineEventType.where(role: role).order(:title).each do |t|
+                  option value='#{t.id}' data-sample-text='#{t.sample}' selected=(t == event.timeline_event_type ? true : nil) #{t.title}
           span#timeline-builder-date-button
             = f.hidden_field :event_on
             a.btn.btn-default.btn-flat.btn-with-default-padding.margin-right-10

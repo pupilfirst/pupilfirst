@@ -13,6 +13,9 @@ ActiveAdmin.register TimelineEvent do
   #   permitted
   # end
 
+  scope :all
+  scope :batched
+
   index do
     selectable_column
 

@@ -78,7 +78,7 @@ class TimelineEvent < ActiveRecord::Base
       TYPE_ANGEL_FUND => 'Received Angel Funding',
       TYPE_SERIES_A => 'Raised Series A Funding',
       TYPE_MASSIVE_CUSTOMER_GROWTH => 'Massive Customer Growth',
-      TYPE_TECH_SCALING =>  'Improved Scalability across Stack',
+      TYPE_TECH_SCALING => 'Improved Scalability across Stack',
       TYPE_END_ITERATION => 'End of current Iteration',
       TYPE_INCORPORATED => 'Incorporated Company',
       TYPE_ACQUIRED => 'Acquired by another Company',
@@ -95,6 +95,9 @@ class TimelineEvent < ActiveRecord::Base
       TYPE_GRADUATED => 'Graduated from Startup Village'
     }
   end
+
+  scope :batched, -> { joins(:startup).where.not(startups: { batch: nil }) }
+  scope :verified, -> { where.not(verified_at: nil) }
 
   validate :link_url_format
 
@@ -121,7 +124,7 @@ class TimelineEvent < ActiveRecord::Base
 
   def build_link_json
     if link_title.present? && link_url.present?
-      self.links = [{title: link_title, url: link_url}]
+      self.links = [{ title: link_title, url: link_url }]
     end
   end
 
@@ -132,8 +135,6 @@ class TimelineEvent < ActiveRecord::Base
   def verified?
     verified_at.present?
   end
-
-  scope :verified, -> { where.not(verified_at: nil) }
 
   def end_iteration?
     timeline_event_type.end_iteration?

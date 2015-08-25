@@ -1,14 +1,14 @@
+# Configuration keys in Use (clean this up frequently).
+#
+# sms_statistics_all: SMS Statistics All
+# sms_statistics_total: SMS Statistics Total
+# sms_statistics_visakhapatnam: SMS Statistics Visakhapatnam
+# sms_statistics_kochi: SMS Statistics Kochi
+# feature_faculty_page: Toggle Faculty Page
+# feature_about_page: (dev) Toggle About Page
+# feature_startups: (dev) Toggle Startups
+#
 class DbConfig < ActiveRecord::Base
-  VARS = {
-    sms_statistics_all: 'SMS Statistics All',
-    sms_statistics_total: 'SMS Statistics Total',
-    sms_statistics_visakhapatnam: 'SMS Statistics Visakhapatnam',
-    sms_statistics_kochi: 'SMS Statistics Kochi',
-    feature_faculty_page: '(dev) Toggle Faculty Page',
-    feature_about_page: '(dev) Toggle About Page',
-    feature_startups: '(dev) Toggle Startups'
-  }
-
   # {"email_regexes": ["\S*(@mobme.in|sv.co)$"], "emails": ["someone@sv.co"]}
   #     OR
   # {"active": true}

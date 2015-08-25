@@ -63,6 +63,7 @@ class Startup < ActiveRecord::Base
     [STAGE_SCALING, STAGE_EFFICIENCY, STAGE_CUSTOMER_VALIDATION, STAGE_PROTOTYPE, STAGE_DISCOVERY]
   end
 
+  scope :batched, -> { where.not(batch: nil) }
   scope :unready, -> { where(approval_status: [APPROVAL_STATUS_UNREADY, nil]) }
   scope :not_unready, -> { where.not(approval_status: [APPROVAL_STATUS_UNREADY, nil]) }
   scope :pending, -> { where(approval_status: APPROVAL_STATUS_PENDING) }
@@ -74,7 +75,7 @@ class Startup < ActiveRecord::Base
   scope :agreement_expired, -> { where('agreement_ends_at < ?', Time.now) }
   scope :physically_incubated, -> { agreement_live.where(physical_incubatee: true) }
   scope :without_founders, -> { where.not(id: (User.pluck(:startup_id).uniq - [nil])) }
-  scope :student_startups, -> { joins(:founders).where.not(users: {university_id: nil}).uniq }
+  scope :student_startups, -> { joins(:founders).where.not(users: { university_id: nil }).uniq }
   scope :kochi, -> { where incubation_location: INCUBATION_LOCATION_KOCHI }
   scope :visakhapatnam, -> { where incubation_location: INCUBATION_LOCATION_VISAKHAPATNAM }
   scope :timeline_verified, -> { joins(:timeline_events).where.not(timeline_events: { verified_at: nil }).distinct }

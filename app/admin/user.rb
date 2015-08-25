@@ -1,5 +1,4 @@
 ActiveAdmin.register User do
-
   controller do
     def scoped_collection
       super.includes :university
@@ -8,6 +7,10 @@ ActiveAdmin.register User do
 
   menu label: 'SV Users'
 
+  scope :all
+  scope :batched
+  scope :missing_startups
+
   # Customize the index. Let's show only a small subset of the tons of fields.
   index do
     selectable_column
@@ -15,10 +18,10 @@ ActiveAdmin.register User do
     column :email
     column :fullname
     column :phone
+    column :startup
     column :is_founder
     column :university
     column :startup_admin
-    column :unconfirmed_phone
   end
 
   member_action :remove_from_startup, method: :post do
@@ -92,8 +95,6 @@ ActiveAdmin.register User do
   # TODO: The check_boxes filter is disabled because of some bug with activeadmin. Check and enable when required.
   # filter :categories, as: :check_boxes, collection: proc { Category.user_category }
   filter :categories, collection: proc { Category.user_category }
-
-  scope :missing_startups
 
   form partial: 'admin/users/form'
 

@@ -1,6 +1,7 @@
 ActiveAdmin.register Startup do
   filter :approval_status, as: :select, collection: proc { Startup.valid_approval_status_values}
   filter :name
+  filter :batch, as: :select, collection: (1..10)
   filter :email
   filter :website
   filter :registration_type, as: :select, collection: proc { Startup.valid_registration_types }
@@ -15,6 +16,7 @@ ActiveAdmin.register Startup do
   filter :featured
 
   scope :all, default: true
+  scope :batched
   scope :without_founders
   scope :agreement_live
   scope :agreement_expired
@@ -33,7 +35,9 @@ ActiveAdmin.register Startup do
       startup.approval_status.capitalize
     end
 
+    column :batch
     column :agreement_sent
+
     column :name do |startup|
       link_to startup.name, startup, target: "_blank"
     end
@@ -56,6 +60,7 @@ ActiveAdmin.register Startup do
 
   csv do
     column :name
+    column :batch
     column :incubation_location
     column :physical_incubatee
     column(:founders) { |startup| startup.founders.pluck(:fullname).join ', ' }
@@ -117,11 +122,12 @@ ActiveAdmin.register Startup do
     redirect_to action: :show
   end
 
-  show do |ad|
+  show do
     attributes_table do
       row :status do |startup|
         startup.approval_status.capitalize
       end
+      row :batch
       row :featured
       row :physical_incubatee
       row :agreement_sent
@@ -206,6 +212,6 @@ ActiveAdmin.register Startup do
     { category_ids: [] }, { founder_ids: [] }, { founders_attributes: [:id, :fullname, :email, :avatar, :remote_avatar_url, :title, :linkedin_url, :twitter_url, :skip_password] },
     :created_at, :updated_at, :approval_status, :approval_status, :registration_type,
     :incubation_location, :agreement_sent, :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration,
-    :physical_incubatee, :presentation_link, :slug, :featured
+    :physical_incubatee, :presentation_link, :slug, :featured, :batch
 end
 

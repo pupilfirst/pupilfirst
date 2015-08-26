@@ -1,5 +1,8 @@
-names = ['Gujarat Technical University', 'Kerala University']
+universities = [
+  ['Gujarat Technical University', 'Gujarat'],
+  ['Kerala University', 'Kerala']
+]
 
-names.each do |name|
-  University.create! name: name
+universities.each do |university|
+  University.create! name: university[0], location: university[1]
 end

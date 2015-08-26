@@ -19,7 +19,9 @@ class TimelineEventType < ActiveRecord::Base
   end
 
   def sample
-    sample_text.present? ? sample_text : "What's been happening?"
+    placeholder_text = sample_text.present? ? sample_text : "What's been happening?"
+    placeholder_text += "\n\nProof Required: #{proof_required}" if proof_required.present?
+    placeholder_text
   end
 
   def end_iteration?
@@ -28,5 +30,4 @@ class TimelineEventType < ActiveRecord::Base
 
   scope :end_iteration, -> {where(key: TYPE_END_ITERATION)}
   scope :moved_to_stage, -> {where(key: [TYPE_IDEA_STAGE, TYPE_PROTOTYPE_STAGE, TYPE_CUSTOMER_STAGE, TYPE_EFFICIENCY_STAGE, TYPE_SCALE_STAGE])}
-
 end

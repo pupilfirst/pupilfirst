@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150825095627) do
+ActiveRecord::Schema.define(version: 20150826081844) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -232,10 +232,11 @@ ActiveRecord::Schema.define(version: 20150825095627) do
     t.string   "key"
     t.string   "title"
     t.text     "sample_text"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.string   "badge"
     t.string   "role"
+    t.string   "proof_required"
   end
 
   add_index "timeline_event_types", ["role"], name: "index_timeline_event_types_on_role", using: :btree

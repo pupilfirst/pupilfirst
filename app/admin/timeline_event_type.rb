@@ -16,6 +16,7 @@ ActiveAdmin.register TimelineEventType do
       f.input :role
       f.input :title
       f.input :sample_text
+      f.input :proof_required
     end
 
     f.inputs 'Upload new badge OR re-use existing badge' do
@@ -26,5 +27,5 @@ ActiveAdmin.register TimelineEventType do
     f.actions
   end
 
-  permit_params :key, :role, :title, :sample_text, :badge, :copy_badge_from
+  permit_params :key, :role, :title, :sample_text, :badge, :copy_badge_from, :proof_required
 end

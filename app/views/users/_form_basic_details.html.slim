@@ -18,7 +18,7 @@
   = f.input :twitter_url, label: 'Twitter Profile URL', input_html: { maxlength: 255 }
   = f.input :slack_username, label: (link_to 'Public Slack Username<sup>?</sup></a>'.html_safe, about_slack_url, target: '_blank')
   = f.input :communication_address
-  = f.association :university, include_blank: 'Not a student'
+  = f.association :university, include_blank: 'Not a student', collection: University.all.group_by(&:location), as: :grouped_select, group_method: :last
   = f.input :roll_number, label: 'University Roll Number',required: true
 
   .form-group

@@ -35,7 +35,7 @@
             legend Mandatory fields
             = u.input :gender, collection: valid_gender_values, label_method: :first, value_method: :last, as: :radio_buttons, required: true
             = u.input :born_on, as: :date_picker, required: true, label: 'Date of birth', placeholder: 'DD/MM/YYYY'
-            = u.association :university, include_blank: 'Not a student'
+            = u.association :university, include_blank: 'Not a student', collection: University.all.group_by(&:location), as: :grouped_select, group_method: :last
             = u.input :roll_number, label: 'University Roll Number',required: true
 
 

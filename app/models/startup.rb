@@ -447,7 +447,7 @@ class Startup < ActiveRecord::Base
     end
   end
 
-# TO DO: Rewrite in a cleaner way
+  # TODO: Rewrite in a cleaner way.
   def stage_name(timeline_entry)
     case timeline_entry.timeline_event_type.key
     when 'moved_to_idea_discovery'

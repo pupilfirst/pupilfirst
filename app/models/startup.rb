@@ -436,7 +436,7 @@ class Startup < ActiveRecord::Base
   end
 
   def latest_change_of_stage
-    self.timeline_events.where(timeline_event_type: TimelineEventType.moved_to_stage).where.not(verified_at: nil).order(event_on: :desc).first
+    self.timeline_events.verified.where(timeline_event_type: TimelineEventType.moved_to_stage).order(event_on: :desc).first
   end
 
   def current_stage

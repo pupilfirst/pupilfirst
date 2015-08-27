@@ -60,7 +60,7 @@ class UsersController < ApplicationController
   def resend
     if (current_user.updated_at <= 5.minute.ago)
       @retry_after_some_time = false
-      code, phone_number = current_user.generate_phone_number_verification_code(current_user.phone)
+      code, phone_number = current_user.generate_phone_number_verification_code(current_user.unconfirmed_phone)
 
       unless Rails.env.development?
         RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV: #{code}", msisdn: phone_number)
@@ -70,7 +70,8 @@ class UsersController < ApplicationController
     else
       @retry_after_some_time = true
     end
-    render 'code' and return
+
+    render 'code'
   end
 
   def verify

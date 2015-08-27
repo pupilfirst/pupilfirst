@@ -26,7 +26,7 @@ class StartupsController < ApplicationController
   # POST /startups/team_leader_consent
   def team_leader_consent
     if current_user.startup.present? || !current_user.phone?
-      redirect_to action: 'new'
+      redirect_to new_user_startup_path(current_user)
     else
       Startup.new_incubation!(current_user)
       redirect_to incubation_path(id: :user_profile)

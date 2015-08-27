@@ -1,5 +1,6 @@
 Rails.application.config.assets.precompile += %w(
-  active_admin_custom.css
+  active_admin.css
+  active_admin.js
   mails.css
   homepage.js
   homepage.css

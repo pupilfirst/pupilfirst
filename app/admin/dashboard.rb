@@ -3,7 +3,7 @@ ActiveAdmin.register_page 'Dashboard' do
 
   content do
     div do
-      para 'Hey. Use top menu-s to navigate!'
+      para 'Hey. Use top menu to navigate!'
     end
   end
 end

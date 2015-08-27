@@ -16,9 +16,12 @@
 //
 //   .status_tag { background: #6090DB; }
 
+// Rails Assets.
+@import "pnotify";
+
 // Select2
 @import "select2";
 @import "select2-bootstrap";
 
-// PNotify
-@import "pnotify";
+// Local
+@import "active_admin/*";

@@ -440,8 +440,10 @@ class Startup < ActiveRecord::Base
   end
 
   def current_stage
-    if self.latest_change_of_stage
-      stage_name(self.latest_change_of_stage)
+    changed_stage = latest_change_of_stage
+
+    if changed_stage
+      stage_name changed_stage
     else
       'Idea Discovery'
     end

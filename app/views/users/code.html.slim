@@ -26,7 +26,7 @@ h2.page-header
 
 .row
   .col-sm-10.col-sm-offset-2
-    = button_to 'Resend verification code', resend_user_url, method: :patch, class: 'btn btn-info btn-flat margin-top-10'
+    = button_to 'Resend verification code', resend_user_url(current_user), method: :patch, class: 'btn btn-info btn-flat margin-top-10'
 
 /= form_tag resend_user_url, style: 'margin-top: 10px;', method: :patch
   .form-group

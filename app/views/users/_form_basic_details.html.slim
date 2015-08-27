@@ -10,7 +10,7 @@
     .control-label.col-sm-3
       strong Phone number
     .col-sm-9
-      .phone-number-controls #{user.phone} (#{link_to 'Change?', phone_user_path(referer: edit_user_url(current_user))})
+      .phone-number-controls #{user.phone} (#{link_to 'Change?', phone_user_path(current_user, referer: edit_user_url(current_user))})
 
   = f.input :avatar, as: :file, input_html: { accept: 'image/*' }
   = f.input :title, hint: 'Position at startup / company', input_html: { maxlength: 255 }

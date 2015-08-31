@@ -14,7 +14,7 @@ table.table.table-striped
     - leaderboard.each_with_index do |entry, index|
       tr
         td 
-          = index + 1
+          = entry[:rank]
         td 
           = entry[:startup_timeline].blank? ? entry[:startup_name] : \
               link_to(entry[:startup_name], startup_url(entry[:startup_timeline]))

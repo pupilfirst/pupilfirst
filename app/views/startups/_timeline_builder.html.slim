@@ -40,9 +40,14 @@
         .pull-right
           = f.select :timeline_event_type_id do
             option value='' selected=(event.persisted? ? nil : true)
+            - suggested = TimelineEventType.where(suggested_stage: event.startup.current_stage)
+            - if suggested
+              optgroup label="Suggested"
+                - suggested.each do |s_t|
+                  option value='#{s_t.id}' data-sample-text='#{s_t.sample}' selected=(s_t == event.timeline_event_type ? true : nil) #{s_t.title}
             - TimelineEventType.uniq(:role).pluck(:role).each do |role|
               optgroup label=role
-                - TimelineEventType.where(role: role).order(:title).each do |t|
+                - TimelineEventType.where(role: role).order(:title).where.not(id: suggested.pluck(:id)).each do |t|
                   option value='#{t.id}' data-sample-text='#{t.sample}' selected=(t == event.timeline_event_type ? true : nil) #{t.title}
           span#timeline-builder-date-button
             = f.hidden_field :event_on

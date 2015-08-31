@@ -13,6 +13,7 @@ ActiveAdmin.register TimelineEventType do
   form do |f|
     f.inputs 'Event Details' do
       f.input :key
+      f.input :suggested_stage, collection: stages_collection, include_blank: true
       f.input :role
       f.input :title
       f.input :sample_text
@@ -27,5 +28,5 @@ ActiveAdmin.register TimelineEventType do
     f.actions
   end
 
-  permit_params :key, :role, :title, :sample_text, :badge, :copy_badge_from, :proof_required
+  permit_params :key, :role, :title, :sample_text, :badge, :copy_badge_from, :proof_required, :suggested_stage
 end

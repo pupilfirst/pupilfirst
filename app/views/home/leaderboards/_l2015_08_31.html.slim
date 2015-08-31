@@ -1,0 +1,22 @@
+h2.header-light 
+  ' Leaderboard for 
+  = params[:year]
+  = params[:month]
+  = params[:day]
+
+table.table.table-striped
+  thead
+    tr
+      td Rank
+      td Startup Name
+      td Team Lead
+  tbody
+    - leaderboard.each_with_index do |entry, index|
+      tr
+        td 
+          = index + 1
+        td 
+          = entry[:startup_timeline].blank? ? entry[:startup_name] : \
+              link_to(entry[:startup_name], startup_url(entry[:startup_timeline]))
+        td 
+          = entry[:team_lead]

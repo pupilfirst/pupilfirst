@@ -74,19 +74,19 @@ class HomeController < ApplicationController
 
   def about
   end
-  
+
   def transparency
   end
-  
+
   def slack
   end
-  
+
   def leaderboards
     if params[:year]
       @leaderboard_chunk = :"l#{params[:year]}_#{params[:month]}_#{params[:day]}"
       @leaderboard_partial = "home/leaderboards/#{@leaderboard_chunk}"
     end
-    
+
     @leaderboard = {
       l2015_08_17: [
         { college: "Federal Institute of Science and Technology", team_lead: "Aravind Murali" },
@@ -138,7 +138,7 @@ class HomeController < ApplicationController
       ]
     }
   end
-  
+
   def press_kit
     @press_kit_url = "https://drive.google.com/folderview?id=0B9--SdQuJvHpfjJiam1nTnJCNnVIYkY2NVFXWTQwbXNpWUFoQU1oc1RZSHJraG4yb2Y1cDA&usp=sharing"
   end
@@ -155,7 +155,7 @@ class HomeController < ApplicationController
       gsub(/_+/, '_'). #Convert multiple underscores to one
       +(".png") #PNG image
   end
-  
+
   rescue_from ActionView::MissingTemplate do |exception|
     raise_not_found
   end

@@ -10,13 +10,11 @@ ActiveAdmin.register TimelineEvent do
 
   index do
     selectable_column
-
+    actions
     column :timeline_event_type
     column :startup
     column :event_on
     column :verified_at
-
-    actions
   end
 
   member_action :delete_link, method: :put do

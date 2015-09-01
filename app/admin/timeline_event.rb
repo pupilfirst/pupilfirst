@@ -77,5 +77,10 @@ ActiveAdmin.register TimelineEvent do
     panel 'Links' do
       render partial: 'links', locals: {timeline_event: timeline_event}
     end
+
+    panel 'Feedback on TimelineEvent' do
+      link_to('Record new feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: TimelineEvent.find(params[:id]).startup.id, reference_url: startup_url(TimelineEvent.find(params[:id]).startup, anchor: "event-#{params[:id]}")}))
+    end
+
   end
 end

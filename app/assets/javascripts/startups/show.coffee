@@ -27,7 +27,7 @@ $(->
 
 $(->
   $('#read-from-beginning').click(->
-    document.getElementById("timeline-list").lastChild.scrollIntoView( false )
+    document.getElementById("timeline-list").lastChild.scrollIntoView(false)
     return false
   )
 
@@ -125,13 +125,14 @@ setupSelect2ForEventType = ->
       # TODO: This custom finder will probably break with Select2 is updated to v4.
       # See http://stackoverflow.com/questions/21992727/display-result-matching-optgroup-using-select2#comment50370609_21996758
       element = $('#timeline_event_timeline_event_type_id')
-      element.select2.defaults.matcher(term, text) || element.select2.defaults.matcher(term, opt.parent("optgroup").attr("label"))
+      element.select2.defaults.matcher(term, text) || element.select2.defaults.matcher(term,
+        opt.parent("optgroup").attr("label"))
   )
 
 matchSampleTextToEventType = ->
   $('#timeline_event_timeline_event_type_id').on('select2-selected', (e) ->
     newPlaceHolder = $('#timeline_event_timeline_event_type_id :selected').attr("data-sample-text")
-    $('#timeline_event_description').attr("placeholder",newPlaceHolder)
+    $('#timeline_event_description').attr("placeholder", newPlaceHolder)
   )
 
 handleDateButtonClick = ->
@@ -206,7 +207,7 @@ addErrorMarkers = (formGroupFinder, errorHint) ->
   if errorHint
     $('#url-help').removeClass('hidden').html(errorHint)
 
-markSelectedLink = (linkTitle, unmark=false) ->
+markSelectedLink = (linkTitle, unmark = false) ->
   $('#add-link').find('span').html(linkTitle)
 
   if unmark

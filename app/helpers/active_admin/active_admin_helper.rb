@@ -23,4 +23,11 @@ module ActiveAdmin::ActiveAdminHelper
       "#{mentor_skill.skill.name} (#{mentor_skill.expertise})"
     end.join ', '
   end
+
+  def stages_collection
+    TimelineEventType::STAGES.inject({}) do |hash, stage|
+      hash[TimelineEventType::STAGE_NAMES[stage]] = stage
+      hash
+    end
+  end
 end

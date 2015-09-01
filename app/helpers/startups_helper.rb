@@ -11,4 +11,12 @@ module StartupsHelper
         '<em>Not Registered</em>'.html_safe
     end
   end
+
+  def stage_link(stage)
+    text, link = [TimelineEventType::STAGE_NAMES[stage], TimelineEventType::STAGE_LINKS[stage]]
+
+    link_to link, target: '_blank' do
+      "#{text} #{image_tag 'timeline/link.png'}".html_safe
+    end
+  end
 end

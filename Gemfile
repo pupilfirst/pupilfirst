@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.3'
+gem 'rails', '4.2.4'
 
 gem 'activeadmin', github: 'activeadmin' # ActiveAdmin doesn't like 4.2 at all (for the moment). Switch this to stable when available.
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
@@ -66,6 +66,11 @@ end
 group :development do
   gem 'letter_opener' # In development, open mails sent in browser.
   gem 'bullet' # Detect N+1 queries.
+  gem 'better_errors' # Better error info on the front-end.
+  gem 'binding_of_caller' # For advanced better_errors features - REPL, local/instance variable inspection etc.
+
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'spring'
 end
 
 group :test do
@@ -75,28 +80,17 @@ group :test do
 end
 
 group :development, :test do
-  gem 'rspec-rails', '~> 3.2.0'
+  gem 'rspec-rails', '~> 3.2.0' # Duh.
   gem 'dotenv' # Load environment variables from .env file.
   gem 'pry-rails' # Pry debugger.
   gem 'webmock', require: false # Mocking web requests.
-
-  gem 'better_errors' # Better error info on the front-end.
-  gem 'binding_of_caller'
-
-  # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
-
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
-
-  gem 'did_you_mean' # Enough of silly spellinng mistakes ruining the day !
+  gem 'did_you_mean' # Enough of silly spellinng mistakes ruining the day!
   gem 'quiet_assets' # Let's not see asset serving messages in the development log!
   gem 'capybara' # For RSpec feature tests.
 end
 
 group :production do
   gem 'rails_12factor'
-  gem 'librato-rails'
 end
 
 gem 'sdoc', '~> 0.4.0', group: :doc

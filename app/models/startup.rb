@@ -437,35 +437,12 @@ class Startup < ActiveRecord::Base
   end
 
   def latest_change_of_stage
-    self.timeline_events.verified.where(timeline_event_type: TimelineEventType.moved_to_stage).order(event_on: :desc).first
+    self.timeline_events.verified.where(timeline_event_type: TimelineEventType.moved_to_stage).order(event_on: :desc).includes(:timeline_event_type).first
   end
 
   def current_stage
-    changed_stage = latest_change_of_stage
-
-    if changed_stage
-      stage_name changed_stage
-    else
-      'Idea Discovery'
-    end
-  end
-
-  # TODO: Rewrite in a cleaner way.
-  def stage_name(timeline_entry)
-    case timeline_entry.timeline_event_type.key
-    when 'moved_to_idea_discovery'
-      'Idea discovery'
-    when 'moved_to_prototyping'
-      'Prototyping'
-    when 'moved_to_customer_validation'
-      'Customer Validation'
-    when 'moved_to_efficiency'
-      'Efficiency'
-    when 'moved_to_scale'
-      'Scaling'
-    else
-      'Undefined'
-    end
+    changed_stage_event = latest_change_of_stage
+    changed_stage_event ? changed_stage_event.timeline_event_type.key : TimelineEventType::TYPE_STAGE_IDEA
   end
 
   def current_iteration

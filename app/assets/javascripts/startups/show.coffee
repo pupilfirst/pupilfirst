@@ -102,7 +102,7 @@ timelineBuilderSubmitChecks = ->
 
       select2Container.tooltip('show')
 
-    if form.data('persisted')
+    if form.data('verified')
       confirmedByUser = confirm('This will hide event from public until change is verified by SV.CO team. Continue?')
     else
       confirmedByUser = true

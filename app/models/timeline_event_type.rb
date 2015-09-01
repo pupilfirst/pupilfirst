@@ -4,11 +4,30 @@ class TimelineEventType < ActiveRecord::Base
   validates_uniqueness_of :key
 
   TYPE_END_ITERATION = 'end_iteration'
-  TYPE_IDEA_STAGE = 'moved_to_idea_discovery'
-  TYPE_PROTOTYPE_STAGE = 'moved_to_prototyping'
-  TYPE_CUSTOMER_STAGE = 'moved_to_customer_validation'
-  TYPE_EFFICIENCY_STAGE = 'moved_to_efficiency'
-  TYPE_SCALE_STAGE = 'moved_to_scale'
+
+  TYPE_STAGE_IDEA = 'moved_to_idea_discovery'
+  TYPE_STAGE_PROTOTYPE = 'moved_to_prototyping'
+  TYPE_STAGE_CUSTOMER = 'moved_to_customer_validation'
+  TYPE_STAGE_EFFICIENCY = 'moved_to_efficiency'
+  TYPE_STAGE_SCALE = 'moved_to_scale'
+
+  STAGES = [TYPE_STAGE_IDEA, TYPE_STAGE_PROTOTYPE, TYPE_STAGE_CUSTOMER, TYPE_STAGE_EFFICIENCY, TYPE_STAGE_SCALE]
+
+  STAGE_NAMES = {
+    TYPE_STAGE_IDEA => 'Idea Discovery',
+    TYPE_STAGE_PROTOTYPE => 'Prototyping',
+    TYPE_STAGE_CUSTOMER => 'Customer Validation',
+    TYPE_STAGE_EFFICIENCY => 'Efficiency',
+    TYPE_STAGE_SCALE => 'Scale'
+  }
+
+  STAGE_LINKS = {
+    TYPE_STAGE_IDEA => 'http://playbook.sv.co/stages/5.1-idea-discovery.html',
+    TYPE_STAGE_PROTOTYPE => 'http://playbook.sv.co/stages/5.2-prototyping.html',
+    TYPE_STAGE_CUSTOMER => 'http://playbook.sv.co/stages/5.3-customer-validation.html',
+    TYPE_STAGE_EFFICIENCY => 'http://playbook.sv.co/stages/5.4-efficiency.html',
+    TYPE_STAGE_SCALE => 'http://playbook.sv.co/stages/5.5-scale.html'
+  }
 
   mount_uploader :badge, BadgeUploader
 
@@ -29,5 +48,5 @@ class TimelineEventType < ActiveRecord::Base
   end
 
   scope :end_iteration, -> {where(key: TYPE_END_ITERATION)}
-  scope :moved_to_stage, -> {where(key: [TYPE_IDEA_STAGE, TYPE_PROTOTYPE_STAGE, TYPE_CUSTOMER_STAGE, TYPE_EFFICIENCY_STAGE, TYPE_SCALE_STAGE])}
+  scope :moved_to_stage, -> {where(key: [TYPE_STAGE_IDEA, TYPE_STAGE_PROTOTYPE, TYPE_STAGE_CUSTOMER, TYPE_STAGE_EFFICIENCY, TYPE_STAGE_SCALE])}
 end

@@ -224,6 +224,10 @@ class Startup < ActiveRecord::Base
     approval_status == APPROVAL_STATUS_UNREADY
   end
 
+  def rejected?
+    approval_status == APPROVAL_STATUS_REJECTED
+  end
+
   def valid_founders?
     self.errors.add(:founders, "should have at least one founder") if founders.nil? or founders.size < 1
   end

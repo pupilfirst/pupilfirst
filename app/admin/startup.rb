@@ -1,5 +1,5 @@
 ActiveAdmin.register Startup do
-  filter :approval_status, as: :select, collection: proc { Startup.valid_approval_status_values}
+  filter :approval_status, as: :select, collection: proc { Startup.valid_approval_status_values }
   filter :name
   filter :batch, as: :select, collection: (1..10)
   filter :website
@@ -89,12 +89,10 @@ ActiveAdmin.register Startup do
         push_message = 'Congratulations! Your request for incubation at Startup Village has been approved.'
 
       when :rejection
-        startup.metadata[:rejections] ||= []
-        startup.metadata[:rejections] << Time.now
-        startup.save!
         StartupMailer.startup_rejected(startup).deliver_later
         push_message = "We're sorry, but your request for incubation at Startup Village has been rejected."
     end
+
     redirect_to action: :show
   end
 
@@ -118,9 +116,38 @@ ActiveAdmin.register Startup do
 
   show do
     attributes_table do
-      row :status do |startup|
-        startup.approval_status.capitalize
+      row :approval_status do |startup|
+        div class: 'startup-status' do
+          if startup.unready?
+            'Waiting for completion'
+          else
+            startup.approval_status
+          end
+        end
+
+        div class: 'startup-status-buttons' do
+          if startup.pending? || startup.rejected?
+            span do
+              button_to('Approve Startup',
+                custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_APPROVED }, email_to_send: :approval),
+                method: :put, data: { confirm: 'Are you sure?' })
+            end
+
+            unless startup.rejected?
+              span do
+                button_to('Reject Startup',
+                  custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_REJECTED }, email_to_send: :rejection),
+                  { method: :put, data: { confirm: 'Are you sure?' } })
+              end
+            end
+          elsif startup.unready?
+            span do
+              button_to('Send reminder e-mail', send_form_email_admin_startup_path(startup_id: startup.id))
+            end
+          end
+        end
       end
+
       row :batch
       row :featured
       row :physical_incubatee
@@ -129,23 +156,30 @@ ActiveAdmin.register Startup do
       row :agreement_last_signed_at
       row :agreement_ends_at
       row :email
+
       row :logo do |startup|
         link_to(image_tag(startup.logo_url(:thumb)), startup.logo_url)
       end
+
       row :website
+
       row :presentation_link do |startup|
         link_to startup.presentation_link, startup.presentation_link if startup.presentation_link.present?
       end
+
       row :revenue_generated
       row :team_size
       row :women_employees
       row :incubation_location
+
       row :about do |startup|
         simple_format startup.about
       end
+
       row :categories do |startup|
         startup.categories.map(&:name).join(', ')
       end
+
       row :phone do |startup|
         startup.admin.try(:phone)
       end
@@ -159,6 +193,7 @@ ActiveAdmin.register Startup do
 
       row :facebook_link
       row :twitter_link
+
       row :founders do |startup|
         table_for startup.founders.order('id ASC') do
           column do |founder|
@@ -166,36 +201,21 @@ ActiveAdmin.register Startup do
           end
         end
       end
+
       row :cofounders do |startup|
         startup.founders.count
       end
-      row :women_cofounders do |startup|
-        startup.founders.where(gender: "female").count
-      end
-      row :registration_type
-      row :approval_status
-      row :address
 
-      row :startup_status do |startup|
-        if startup.pending?
-          "#{link_to('Approve Startup',
-            custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_APPROVED }, email_to_send: :approval),
-            { method: :put, data: { confirm: 'Are you sure?' } })} / #{
-          link_to('Reject Startup',
-            custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_UNREADY }, email_to_send: :rejection),
-            { method: :put, data: { confirm: 'Are you sure?' } })}".html_safe
-        elsif startup.unready?
-          link_to('Waiting for Completion. Send reminder e-mail with links to mobile applications.',
-            send_form_email_admin_startup_path(startup_id: startup.id),
-            { method: :post })
-        else
-          startup.approval_status.capitalize
-        end
+      row :women_cofounders do |startup|
+        startup.founders.where(gender: User::GENDER_FEMALE).count
       end
+
+      row :registration_type
+      row :address
     end
 
     panel 'Feedback on Startup' do
-      link_to('Record new feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: Startup.friendly.find(params[:id]).id, reference_url: startup_url(Startup.friendly.find(params[:id]))}))
+      link_to('Record new feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: Startup.friendly.find(params[:id]).id, reference_url: startup_url(Startup.friendly.find(params[:id])) }))
     end
 
     panel 'Emails and Notifications' do

@@ -3,7 +3,8 @@ class StartupFeedback < ActiveRecord::Base
   attr_accessor :send_email
 
   before_save do
-    if send_email == '1'
+    if send_email == '1' && !send_at.present?
+      send_at = Time.now
       StartupMailer.feedback_as_email(self).deliver_later
     end
   end

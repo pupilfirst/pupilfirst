@@ -5,3 +5,8 @@
 .active-admin-notification {
   background-color: white;
 }
+
+/* Hide the completely useless footer */
+#footer {
+  display: none;
+}

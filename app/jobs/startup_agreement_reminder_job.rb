@@ -10,10 +10,6 @@ class StartupAgreementReminderJob < ActiveJob::Base
       expires_in = ((startup.agreement_ends_at - Time.zone.now) / 1.day).round
       renew_within = expires_in - 15
 
-      # Push notification
-      push_message = "Your incubation agreement expires in #{expires_in} days. To continue enjoying the services " +
-        "provided by Startup Village, please renew your agreement within #{renew_within} days."
-
       # Email
       StartupMailer.agreement_expiring_soon(startup, expires_in, renew_within).deliver_later
 

@@ -86,11 +86,8 @@ ActiveAdmin.register Startup do
     case params[:email_to_send].to_sym
       when :approval
         StartupMailer.startup_approved(startup).deliver_later
-        push_message = 'Congratulations! Your request for incubation at Startup Village has been approved.'
-
       when :rejection
         StartupMailer.startup_rejected(startup).deliver_later
-        push_message = "We're sorry, but your request for incubation at Startup Village has been rejected."
     end
 
     redirect_to action: :show
@@ -98,19 +95,13 @@ ActiveAdmin.register Startup do
 
   member_action :send_form_email, method: :post do
     startup = Startup.friendly.find params[:startup_id]
-    push_message = 'Please complete the incubation process by following the steps in the Startup Village application!'
-
     StartupMailer.reminder_to_complete_startup_info(startup).deliver_later
     redirect_to action: :show
   end
 
   member_action :send_startup_profile_reminder, method: :post do
     startup = Startup.friendly.find params[:id]
-
-    push_message = 'Please make sure you complete your startup profile to get noticed by mentors and investors.'
-
     StartupMailer.reminder_to_complete_startup_profile(startup).deliver_later
-
     redirect_to action: :show
   end
 

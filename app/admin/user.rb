@@ -32,7 +32,6 @@ ActiveAdmin.register User do
 
   member_action :send_founder_profile_reminder, method: :post do
     user = User.find params[:id]
-    push_message = 'Please make sure you complete your profile to help us connect you to mentors and investors.'
 
     # Send email.
     UserMailer.reminder_to_complete_founder_profile(user).deliver_later

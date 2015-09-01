@@ -4,7 +4,7 @@ class StartupFeedback < ActiveRecord::Base
 
   before_save do
     if send_email == '1'
-      # send email here
+      StartupMailer.feedback_as_email(self).deliver_later
     end
   end
 end

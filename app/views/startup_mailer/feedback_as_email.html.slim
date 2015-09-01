@@ -1,0 +1,12 @@
+= content_for :heading
+  | Feedback on your recent startup updates.
+
+= content_for :salutation
+  | Hi,
+
+= content_for :body
+  p
+    ' We hope your startup journey is going great! Here is some feedback from Team SV on your #{link_to 'recent updates', @startup_feedback.reference_url} we think will help you :
+  p #{@startup_feedback.feedback}
+
+  p Feel free to reach out to us at #{mail_to 'help@sv.co'} in case of any queries.

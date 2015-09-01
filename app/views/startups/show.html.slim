@@ -162,7 +162,7 @@
                 .tl-iteration
                   .buttons style="display:inline" End of Iteration #{event.iteration}
                   br
-                  p style="margin-top: 10px" #{event.title}
+                  p style="margin-top: 10px" #{event.timeline_event_type.title}
                   - if !event.verified?
                     .pending-verification href="#" data-toggle="tooltip" title="This event has not yet been verified by SV.CO, and is hidden from the public."
                       i.fa.fa-exclamation-circle
@@ -192,7 +192,7 @@
                             i.fa.fa-exclamation-circle
                             | &nbsp;Pending verification
                         h4.timeline-title
-                          | #{event.title}
+                          | #{event.timeline_event_type.title}
                         p.tl-date
                           small
                             = image_tag "timeline/date.png"

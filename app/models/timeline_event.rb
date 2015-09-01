@@ -3,7 +3,7 @@ class TimelineEvent < ActiveRecord::Base
   belongs_to :timeline_event_type
   mount_uploader :image, TimelineImageUploader
   serialize :links
-  validates_presence_of :title, :event_on, :startup_id, :iteration, :timeline_event_type, :description
+  validates_presence_of :event_on, :startup_id, :iteration, :timeline_event_type, :description
   attr_accessor :link_url, :link_title
 
   MAX_DESCRIPTION_CHARACTERS = 300
@@ -25,13 +25,7 @@ class TimelineEvent < ActiveRecord::Base
   end
 
   before_save :make_links_an_array, :build_link_json
-  before_validation :build_default_title_from_type, :record_iteration
-
-  def build_default_title_from_type
-    unless title.present?
-      self.title = self.timeline_event_type.try(:title)
-    end
-  end
+  before_validation :record_iteration
 
   def record_iteration
     self.iteration = self.startup.try(:current_iteration)

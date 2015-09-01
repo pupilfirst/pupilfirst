@@ -1,7 +1,7 @@
 ActiveAdmin.register User do
   controller do
     def scoped_collection
-      super.includes :university
+      super.includes :university, :startup
     end
   end
 
@@ -17,11 +17,17 @@ ActiveAdmin.register User do
     actions
     column :email
     column :fullname
-    column :phone
     column :startup
-    column :is_founder
     column :university
-    column :startup_admin
+
+    column :karma_points do |user|
+      points = user.karma_points.where('created_at > ?', Date.today.beginning_of_week).sum(:points)
+      link_to points, admin_karma_points_path(q: { user_id_eq: user.id })
+    end
+  end
+
+  index do
+    h1 'something'
   end
 
   member_action :remove_from_startup, method: :post do
@@ -79,7 +85,7 @@ ActiveAdmin.register User do
     end
 
     panel 'Feedback on User' do
-      link_to('Record new feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: User.find(params[:id]).startup.id, reference_url: startup_url(User.find(params[:id]).startup)}))
+      link_to('Record new feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: User.find(params[:id]).startup.id, reference_url: startup_url(User.find(params[:id]).startup) }))
     end
 
     panel 'Emails and Notifications' do
@@ -105,5 +111,4 @@ ActiveAdmin.register User do
     :title, :skip_password, :born_on, :startup_admin, :communication_address, :district, :state, :pin,
     :phone, :company, :invitation_token, :university_id, :roll_number, :year_of_graduation,
     :years_of_work_experience
-    { category_ids: [] }
 end

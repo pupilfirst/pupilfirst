@@ -42,12 +42,11 @@ ActiveAdmin.register Startup do
       end
     end
 
-    column :categories do |startup|
-      startup.categories.pluck(:name).join ', '
-    end
-
     column :website
-    column :featured
+
+    column :karma_points do |startup|
+      startup.karma_points.where('karma_points.created_at > ?', Date.today.beginning_of_week).sum(:points)
+    end
   end
 
   csv do
@@ -186,15 +185,17 @@ ActiveAdmin.register Startup do
       row :twitter_link
 
       row :founders do |startup|
-        table_for startup.founders.order('id ASC') do
-          column do |founder|
-            link_to founder.fullname, [:admin, founder]
+        startup.founders.each do |founder|
+          div do
+            span do
+              link_to founder.fullname, [:admin, founder]
+            end
+
+            span do
+              " &mdash; #{link_to 'Karma++'.html_safe, new_admin_karma_point_path(karma_point: { user_id: founder.id })}".html_safe
+            end
           end
         end
-      end
-
-      row :cofounders do |startup|
-        startup.founders.count
       end
 
       row :women_cofounders do |startup|

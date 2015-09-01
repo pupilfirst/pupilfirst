@@ -1,0 +1,37 @@
+h1 Leaderboards
+
+= simple_form_for :filter, url: admin_dashboard_path, method: :get do |f|
+  legend Supply both, or this form will crash.
+  = f.input :after, as: :string, placeholder: 'DD/MM/YYYY'
+  = f.input :before, as: :string, placeholder: 'DD/MM/YYYY'
+  = f.submit 'Filter'
+
+h2 Startup Karma
+
+table
+  thead
+    tr
+      th Name
+      th Karma Points
+  tbody
+    - startups_by_karma(params[:filter]).each do |startup_id, points|
+      - startup = Startup.find(startup_id)
+      tr
+        td = link_to startup.name, admin_startup_path(startup)
+        td = points
+
+h2 Founder Karma
+
+table
+  thead
+    tr
+      th Full Name
+      th Startup
+      th Karma Points
+  tbody
+    - users_by_karma(params[:filter]).each do |user_id, points|
+      - user = User.includes(:startup).find(user_id)
+      tr
+        td = link_to user.fullname, admin_user_path(user)
+        td = link_to user.startup.name, admin_startup_path(user.startup)
+        td = points

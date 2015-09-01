@@ -26,6 +26,7 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :categories
   has_many :mentor_meetings
   belongs_to :university
+  has_many :karma_points, dependent: :destroy
 
   scope :batched, -> { joins(:startup).where.not(startups: { batch: nil }) }
   scope :non_founders, -> { where("is_founder = ? or is_founder IS NULL", false) }

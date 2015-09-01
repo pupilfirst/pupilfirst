@@ -91,6 +91,7 @@ class Startup < ActiveRecord::Base
   has_many :startup_jobs
   has_many :timeline_events, dependent: :destroy
   has_many :startup_feedbacks
+  has_many :karma_points, through: :founders
 
   # Allow statup to accept nested attributes for users
   # has_many :users

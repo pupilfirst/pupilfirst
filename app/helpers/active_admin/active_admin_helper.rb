@@ -9,10 +9,14 @@ module ActiveAdmin::ActiveAdminHelper
 
   def availability_as_string(availability)
     day = case availability["days"]
-      when Date::DAYNAMES then "Everyday"
-      when Date::DAYNAMES[1..5] then "Weekdays"
-      when Date::DAYNAMES - Date::DAYNAMES[1..5] then "Weekends"
-      else availability["days"]
+      when Date::DAYNAMES then
+        "Everyday"
+      when Date::DAYNAMES[1..5] then
+        "Weekdays"
+      when Date::DAYNAMES - Date::DAYNAMES[1..5] then
+        "Weekends"
+      else
+        availability["days"]
     end
     time = "#{availability["time"]["after"]}:00 to #{availability["time"]["before"]}:00 hrs"
     "#{day} , #{time}"
@@ -28,6 +32,22 @@ module ActiveAdmin::ActiveAdminHelper
     TimelineEventType::STAGES.inject({}) do |hash, stage|
       hash[TimelineEventType::STAGE_NAMES[stage]] = stage
       hash
+    end
+  end
+
+  def startups_by_karma(filter)
+    if filter
+      Startup.joins(:karma_points).where(karma_points: { created_at: (Date.parse(filter[:after])..Date.parse(filter[:before])) }).group(:startup_id).sum(:points)
+    else
+      Startup.joins(:karma_points).where('karma_points.created_at > ?', Date.today.beginning_of_week).group(:startup_id).sum(:points)
+    end
+  end
+
+  def users_by_karma(filter)
+    if filter
+      User.joins(:karma_points).where(karma_points: { created_at: (Date.parse(filter[:after])..Date.parse(filter[:before])) }).group(:user_id).sum(:points)
+    else
+      User.joins(:karma_points).where('karma_points.created_at > ?', Date.today.beginning_of_week).group(:user_id).sum(:points)
     end
   end
 end

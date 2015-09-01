@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150901105402) do
+ActiveRecord::Schema.define(version: 20150901200342) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -104,6 +104,16 @@ ActiveRecord::Schema.define(version: 20150901105402) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+
+  create_table "karma_points", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "points"
+    t.string   "activity_type"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "karma_points", ["user_id"], name: "index_karma_points_on_user_id", using: :btree
 
   create_table "mentor_meetings", force: :cascade do |t|
     t.integer  "user_id"
@@ -338,5 +348,6 @@ ActiveRecord::Schema.define(version: 20150901105402) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["university_id"], name: "index_users_on_university_id", using: :btree
 
+  add_foreign_key "karma_points", "users"
   add_foreign_key "timeline_events", "startups"
 end

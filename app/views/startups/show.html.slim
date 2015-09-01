@@ -159,7 +159,7 @@
           ul#timeline-list
             - @startup.timeline_events_for_display(current_user).each.with_index(1) do |event, index|
               - if event.end_iteration?
-                .tl-iteration
+                .tl-iteration id="event-#{event.id}"
                   .buttons style="display:inline" End of Iteration #{event.iteration}
                   br
                   p style="margin-top: 10px" #{event.timeline_event_type.title}
@@ -181,7 +181,7 @@
                       i.fa.fa-pencil
                       | &nbsp;Edit
               - else
-                .timeline
+                .timeline id="event-#{event.id}"
                   li style="padding:0" class="timeline#{index.odd? ? "" : "-inverted"}"
                     .timeline-badge class="color#{index%14}"
                       = image_tag "#{event.timeline_event_type.badge_url}", width: "70"

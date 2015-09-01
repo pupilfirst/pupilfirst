@@ -16,3 +16,11 @@ $(function() {
     $(window).scroll(toggleNavbarBackground);
   }
 });
+
+// Shift the window to account for height of fixed navbar.
+var shiftWindow = function() { scrollBy(0, -80) };
+window.addEventListener("hashchange", shiftWindow);
+
+$(window).load(function() {
+  if (location.hash) shiftWindow();
+});

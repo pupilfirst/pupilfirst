@@ -159,7 +159,7 @@ closeDatePickerOnExternalClick = ->
 removeSelectedLink = ->
   $('#timeline_event_link_title').val('')
   $('#timeline_event_link_url').val('')
-  markSelectedLink('Add a URL', true)
+  markSelectedLink('Add a Link', true)
 
 removeSelectedImage = ->
   uploadImage = $('#upload-image')

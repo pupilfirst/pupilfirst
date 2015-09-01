@@ -16,4 +16,4 @@
 //= require navbar
 //= require incubation
 //= require users
-
+//= require limit_max_int

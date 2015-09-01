@@ -150,6 +150,10 @@ class Startup < ActiveRecord::Base
   store :metadata, :accessors => [:updated_from]
   validates_presence_of :name, :presentation_link, :about, :incubation_location, if: :incubation_step_2?
 
+  validates_numericality_of :team_size, greater_than: 0, allow_blank: true
+  validates_numericality_of :women_employees, greater_than: 0, allow_blank: true
+  validates_numericality_of :revenue_generated, greater_than: 0, allow_blank: true
+
   def incubation_step_1?
     updated_from == 'user_profile'
   end
@@ -157,7 +161,6 @@ class Startup < ActiveRecord::Base
   def incubation_step_2?
     updated_from == 'startup_profile'
   end
-
 
   before_validation do
     # Set registration_type to nil if its set as blank from backend.

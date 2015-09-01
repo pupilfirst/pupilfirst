@@ -30,22 +30,4 @@ $(function () {
     .keyup(update_about)
     .blur(update_about)
     .focus(update_about);
-
-  limit_length = function(element, length) {
-    if (element.value.length > length)
-      element.value = element.value.slice(0, length);
-  };
-
-  $('input[data-max-int-length]').keyup(function() {
-    var maxIntLength = parseInt(this.getAttribute("data-max-int-length"));
-    limit_length(this, maxIntLength);
-  });
-
-  $('input[data-max-int-length]').on('paste', function () {
-    var element = this;
-    var maxIntLength = parseInt(this.getAttribute("data-max-int-length"));
-    setTimeout(function () {
-      limit_length(element, maxIntLength);
-    }, 100);
-  });
 });

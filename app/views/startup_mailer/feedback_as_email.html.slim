@@ -6,7 +6,11 @@
 
 = content_for :body
   p
-    ' We hope your startup journey is going great! Here is some feedback from Team SV on your #{link_to 'recent updates', @startup_feedback.reference_url} we think will help you :
-  p #{@startup_feedback.feedback}
+    ' We hope your startup journey is going great! Here is some feedback from
+    ' #{@send_by.fullname.present? ? @send_by.fullname+' of' : ''}
+    ' Team SV on your #{link_to 'recent updates', @startup_feedback.reference_url}
+    ' that might help you:
+
+  | #{simple_format(@startup_feedback.feedback)}
 
   p Feel free to reach out to us at #{mail_to 'help@sv.co'} in case of any queries.

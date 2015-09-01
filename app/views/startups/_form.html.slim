@@ -66,7 +66,7 @@ p
         .panel-body
           = f.input :revenue_generated, hint: 'How much cumulative revenue have you generated till date?', input_html: { min: 1, max: 999999999, 'data-max-int-length' => 9 }
           = f.input :team_size, label: 'Total Team Size', input_html: { min: 1, max: 9999, 'data-max-int-length' => 4 }
-          = f.input :women_employees, label: 'Number of Women Employees', input_html: { min: 1, max: 9999, 'data-max-int-length' => 4 }
+          = f.input :women_employees, label: 'Number of Women Employees', input_html: { min: 0, max: 9999, 'data-max-int-length' => 4 }
           = f.input :registration_type, collection: Startup.valid_registration_types, label_method: ->(obj) { registration_type_html(obj) }, include_blank: 'Not Registered'
 
   .form-group

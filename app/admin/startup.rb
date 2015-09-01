@@ -194,6 +194,10 @@ ActiveAdmin.register Startup do
       end
     end
 
+    panel 'Feedback on Startup' do
+      link_to('Record new feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: Startup.friendly.find(params[:id]).id}))
+    end
+
     panel 'Emails and Notifications' do
       link_to('Reminder to complete startup profile', send_startup_profile_reminder_admin_startup_path, method: :post, data: { confirm: 'Are you sure you wish to send notification and email?' })
     end

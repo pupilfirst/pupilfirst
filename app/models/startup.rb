@@ -151,8 +151,8 @@ class Startup < ActiveRecord::Base
   validates_presence_of :name, :presentation_link, :about, :incubation_location, if: :incubation_step_2?
 
   validates_numericality_of :team_size, greater_than: 0, allow_blank: true
-  validates_numericality_of :women_employees, greater_than: 0, allow_blank: true
-  validates_numericality_of :revenue_generated, greater_than: 0, allow_blank: true
+  validates_numericality_of :women_employees, greater_than_or_equal_to: 0, allow_blank: true
+  validates_numericality_of :revenue_generated, greater_than_or_equal_to: 0, allow_blank: true
 
   def incubation_step_1?
     updated_from == 'user_profile'

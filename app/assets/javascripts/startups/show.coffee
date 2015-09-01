@@ -164,7 +164,7 @@ removeSelectedLink = ->
 removeSelectedImage = ->
   uploadImage = $('#upload-image')
   uploadImage.removeClass('green-text')
-  uploadImage.find('span').html('Upload an Image')
+  uploadImage.find('span').html('Add an Image')
   $('#timeline_event_image').val('')
   $('#remove-selected-image').addClass('hidden')
 

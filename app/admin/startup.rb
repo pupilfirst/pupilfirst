@@ -195,7 +195,7 @@ ActiveAdmin.register Startup do
     end
 
     panel 'Feedback on Startup' do
-      link_to('Record new feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: Startup.friendly.find(params[:id]).id}))
+      link_to('Record new feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: Startup.friendly.find(params[:id]).id, reference_url: startup_url(Startup.friendly.find(params[:id]))}))
     end
 
     panel 'Emails and Notifications' do

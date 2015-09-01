@@ -80,7 +80,7 @@ ActiveAdmin.register User do
     end
 
     panel 'Feedback on User' do
-      link_to('Record new feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: User.find(params[:id]).startup.id}))
+      link_to('Record new feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: User.find(params[:id]).startup.id, reference_url: startup_url(User.find(params[:id]).startup)}))
     end
 
     panel 'Emails and Notifications' do

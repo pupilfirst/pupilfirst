@@ -25,12 +25,8 @@ class BadgeUploader < CarrierWave::Uploader::Base
   #   "/images/fallback/" + [version_name, "default.png"].compact.join('_')
   # end
 
-  # Process files as they are uploaded:
-  # process :scale => [200, 300]
-  #
-  # def scale(width, height)
-  #   # do something
-  # end
+  # Uploaded file shouldn't be greater than 200x200
+  process resize_to_limit: [200, 200]
 
   # Create different versions of your uploaded files:
   # version :thumb do

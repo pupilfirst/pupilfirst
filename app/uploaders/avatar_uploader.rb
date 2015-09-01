@@ -27,12 +27,8 @@ class AvatarUploader < CarrierWave::Uploader::Base
     # [version_name, 'defaultdp.png'].compact.join('_')
   end
 
-  # Process files as they are uploaded:
+  # Uploaded file shouldn't be greater than 500x500
   process :resize_to_fit => [500, 500]
-  #
-  # def scale(width, height)
-  #   # do something
-  # end
 
   # Create different versions of your uploaded files:
   version :thumb do

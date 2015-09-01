@@ -16,6 +16,12 @@
 //
 //   .status_tag { background: #6090DB; }
 
+// Customize ActiveSkin before importing it.
+$skinLogo: url("logo_40.png") no-repeat 0 0;
+
+// ActiveSkin
+@import "active_skin";
+
 // Rails Assets.
 @import "pnotify";
 

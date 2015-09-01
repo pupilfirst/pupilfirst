@@ -27,7 +27,7 @@ $(->
 
 $(->
   $('#read-from-beginning').click(->
-    $('html, body').animate({scrollTop: $(document).height()}, 'slow')
+    document.getElementById("timeline-list").lastChild.scrollIntoView( false )
     return false
   )
 

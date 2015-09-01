@@ -55,6 +55,10 @@ class TimelineEvent < ActiveRecord::Base
     timeline_event_type.end_iteration?
   end
 
+  def new_deck?
+    timeline_event_type.new_deck?
+  end
+
   def update_and_require_reverification(params)
     params[:verified_at] = nil
     update(params)
@@ -62,6 +66,7 @@ class TimelineEvent < ActiveRecord::Base
 
   def verify!
     update!(verified_at: Time.now)
+    self.startup.update!(presentation_link: self.links[0][:url]) if new_deck?
   end
 
   def unverify!

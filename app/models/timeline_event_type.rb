@@ -4,6 +4,7 @@ class TimelineEventType < ActiveRecord::Base
   validates_uniqueness_of :key
 
   TYPE_END_ITERATION = 'end_iteration'
+  TYPE_NEW_DECK = 'new_product_deck'
 
   TYPE_STAGE_IDEA = 'moved_to_idea_discovery'
   TYPE_STAGE_PROTOTYPE = 'moved_to_prototyping'
@@ -45,6 +46,10 @@ class TimelineEventType < ActiveRecord::Base
 
   def end_iteration?
     key == TYPE_END_ITERATION
+  end
+
+  def new_deck?
+    key == TYPE_NEW_DECK
   end
 
   scope :end_iteration, -> {where(key: TYPE_END_ITERATION)}

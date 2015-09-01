@@ -8,8 +8,29 @@ index do
   column :startup
   column :feedback
   column :reference_url
-  column :send_at
+  column :send_at do |startup_feedback|
+    if startup_feedback.send_at.present?
+      startup_feedback.send_at
+    else
+      link_to('Email Now!', email_feedback_admin_startup_feedback_path(startup_feedback), method: :put, data: { confirm: 'Are you sure you want to email this feedback to the founders?' })
+    end
+  end
   actions
+end
+
+show do
+  attributes_table do
+    row :startup
+    row :feedback
+    row :reference_url
+    row :send_at do |startup_feedback|
+      if startup_feedback.send_at.present?
+        startup_feedback.send_at
+      else
+        link_to('Email Now!', email_feedback_admin_startup_feedback_path(startup_feedback), method: :put, data: { confirm: 'Are you sure you want to email this feedback to the founders?' })
+      end
+    end
+  end
 end
 
 form do |f|
@@ -17,9 +38,17 @@ form do |f|
       f.input :startup
       f.input :feedback
       f.input :reference_url
-      f.input :send_email, :as => :boolean, :label => "Send as email to founders" unless f.object.send_at.present?
     end
     f.actions
 end
+
+member_action :email_feedback, method: :put do
+  startup_feedback = StartupFeedback.find params[:id]
+  startup_feedback.update(send_at: Time.now)
+  StartupMailer.feedback_as_email(startup_feedback,current_admin_user).deliver_later
+  flash[:alert] = 'Your feedback has been sent to the startup founders!'
+  redirect_to action: :index
+end
+
 
 end

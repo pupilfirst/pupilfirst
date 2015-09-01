@@ -13,7 +13,8 @@ ActiveAdmin.register TimelineEventType do
   form do |f|
     f.inputs 'Event Details' do
       f.input :key
-      f.input :suggested_stage, collection: stages_collection, include_blank: true
+      f.input :suggested_stages, as: :check_boxes, collection: stages_collection, label: 'Suggested on stages'
+      f.input :suggested_stage, as: :hidden
       f.input :role
       f.input :title
       f.input :sample_text

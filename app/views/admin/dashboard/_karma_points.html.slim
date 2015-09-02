@@ -1,6 +1,6 @@
 h1 Leaderboards
 
-= simple_form_for :filter, url: admin_dashboard_path, method: :get do |f|
+= simple_form_for :filter, url: admin_leaderboards_path, method: :get do |f|
   legend Supply both, or this form will crash.
   = f.input :after, as: :string, placeholder: 'DD/MM/YYYY'
   = f.input :before, as: :string, placeholder: 'DD/MM/YYYY'

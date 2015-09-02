@@ -6,7 +6,6 @@ ActiveAdmin.register TimelineEventType do
     column :key
     column :role
     column :title
-    column :badge
     actions
   end
 

@@ -1,25 +1,5 @@
 h1 Leaderboards
 
-= form_for :karma_points_filter, url: admin_leaderboards_path, method: :get do |f|
-  fieldset.inputs
-    legend
-      span Supply both before and after dates.
-    ol
-      li.input.required
-        = f.label :after, 'After'
-        = f.text_field :after, value: params[:karma_points_filter].try(:[], :after)
-      li.input.required
-        = f.label :before, 'Before'
-        = f.text_field :before, value: params[:karma_points_filter].try(:[], :before)
-
-  fieldset.actions
-    ol
-      li.action.input_action
-        = submit_tag 'Filter'
-      - if params[:karma_points_filter]
-        li.cancel
-          = link_to 'Clear Filter', admin_leaderboards_path
-
 h2 Startup Karma
 
 table

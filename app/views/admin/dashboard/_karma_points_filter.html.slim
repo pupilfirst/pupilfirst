@@ -1,0 +1,12 @@
+= form_for :karma_points_filter, url: admin_leaderboards_path, method: :get, html: { class: 'filter_form' } do |f|
+  div.filter_form_field.filter_date_range
+    = f.label :after, 'After'
+    = f.text_field :after, value: params[:karma_points_filter].try(:[], :after)
+  div.filter_form_field.filter_date_range
+    = f.label :before, 'Before'
+    = f.text_field :before, value: params[:karma_points_filter].try(:[], :before)
+
+  div.buttons
+    = submit_tag 'Filter'
+    - if params[:karma_points_filter]
+      = link_to 'Clear Filter', admin_leaderboards_path, class: 'clear_filters_btn'

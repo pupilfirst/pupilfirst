@@ -35,7 +35,7 @@ end
 
 form do |f|
     f.inputs 'Event Details' do
-      f.input :startup
+      f.input :startup, collection: Startup.where.not(name: nil), include_blank: false
       f.input :feedback
       f.input :reference_url
     end

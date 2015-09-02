@@ -33,14 +33,7 @@ show do
   end
 end
 
-form do |f|
-    f.inputs 'Event Details' do
-      f.input :startup, collection: Startup.where.not(name: nil), include_blank: false
-      f.input :feedback
-      f.input :reference_url
-    end
-    f.actions
-end
+form partial: 'admin/startup_feedbacks/form'
 
 member_action :email_feedback, method: :put do
   startup_feedback = StartupFeedback.find params[:id]

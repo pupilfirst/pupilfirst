@@ -25,7 +25,22 @@ class TimelineEvent < ActiveRecord::Base
   end
 
   before_save :make_links_an_array, :build_link_json
-  before_validation :record_iteration
+  before_validation :record_iteration, :build_description
+
+  attr_accessor :auto_populated
+  def build_description
+    if !description.present? && auto_populated
+      case timeline_event_type.key
+      when 'team_formed'
+        self.description = 'The founder formed his initial team'
+      when 'new_product_deck'
+        self.description = 'The team created a new product deck introducing their startup'
+      when 'one_liner'
+        self.description = about
+      end
+    end
+    binding.pry
+  end
 
   def record_iteration
     self.iteration = self.startup.try(:current_iteration)

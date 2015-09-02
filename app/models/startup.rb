@@ -480,4 +480,23 @@ class Startup < ActiveRecord::Base
       timeline_events.verified.order(:event_on, :updated_at).reverse_order
     end
   end
+
+  after_save do
+    if self.approval_status_changed? && self.approved?
+      unless self.timeline_events.present?
+        self.prepopulate_timeline!
+      end
+    end
+  end
+
+  def prepopulate_timeline!
+    self.create_default_event(['team_formed','new_product_deck','one_liner'])
+  end
+
+  def create_default_event(types)
+    types.each do |type|
+      self.timeline_events.create(timeline_event_type: TimelineEventType.find_by(key: type), auto_populated: true, verified_at: Time.now, event_on: Time.now)
+    end
+  end
+
 end

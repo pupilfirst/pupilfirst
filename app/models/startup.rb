@@ -466,7 +466,7 @@ class Startup < ActiveRecord::Base
   end
 
   def timeline_verified?
-    self.timeline_events.verified.present?
+    self.approved? && self.timeline_events.verified.present?
   end
 
   def admin?(user)

@@ -25,7 +25,7 @@
       h1.startup-name
         ' #{@startup.name}
         - if @startup.timeline_verified?
-          a#verified-icon data-toggle="tooltip" data-placement="top" title="Timeline verified by Startup Village." href="#"
+          a#verified-icon data-toggle="tooltip" data-placement="top" title="Timeline verified by SV.CO" href="#"
             img.timeline-verified src='#{image_url 'timeline/verified.gif'}'
         - if current_user && @startup.is_founder?(current_user)
           small.edit-startup-link

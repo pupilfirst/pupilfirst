@@ -39,7 +39,6 @@ class TimelineEvent < ActiveRecord::Base
         self.description = about
       end
     end
-    binding.pry
   end
 
   def record_iteration

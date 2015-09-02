@@ -1,6 +1,4 @@
-# Basics
-#= require jquery
-#= require jquery_ujs
+#= require active_admin/base
 
 # External libraries
 #= require select2

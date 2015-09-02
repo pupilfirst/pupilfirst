@@ -60,7 +60,7 @@ class TimelineEvent < ActiveRecord::Base
 
   def verify!
     update!(verified_at: Time.now)
-    self.startup.update!(presentation_link: self.links[0][:url]) if new_deck? && self.links[0].try([:url]).present?
+    self.startup.update!(presentation_link: self.links[0][:url]) if new_deck? && self.links[0].try(:[],:url).present?
   end
 
   def unverify!

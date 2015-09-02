@@ -2,30 +2,32 @@ h1 Leaderboards
 
 h2 Startup Karma
 
-table
+table.index_table
   thead
     tr
       th Name
       th Karma Points
   tbody
-    - startups_by_karma(params[:karma_points_filter]).each do |startup_id, points|
+    - startups_by_karma(params[:karma_points_filter]).each_with_index do |points_array, idx|
+      - startup_id, points = points_array
       - startup = Startup.find(startup_id)
-      tr
+      tr class="#{(idx + 1).even? ? 'even' : 'odd'}"
         td = link_to startup.name, admin_startup_path(startup)
         td = points
 
 h2 Founder Karma
 
-table
+table.index_table
   thead
     tr
       th Full Name
       th Startup
       th Karma Points
   tbody
-    - users_by_karma(params[:karma_points_filter]).each do |user_id, points|
+    - users_by_karma(params[:karma_points_filter]).each_with_index do |points_array, idx|
+      - user_id, points = points_array
       - user = User.includes(:startup).find(user_id)
-      tr
+      tr class="#{(idx + 1).even? ? 'even' : 'odd'}"
         td = link_to user.fullname, admin_user_path(user)
         td = link_to user.startup.name, admin_startup_path(user.startup)
         td = points

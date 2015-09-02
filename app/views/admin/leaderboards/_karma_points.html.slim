@@ -22,6 +22,7 @@ table.index_table
   thead
     tr
       th Full Name
+      th Title
       th Startup
       th.sorted-desc.sortable
         a.not-a-link href='#' Karma Points
@@ -31,5 +32,6 @@ table.index_table
       - user = User.includes(:startup).find(user_id)
       tr class="#{(idx + 1).even? ? 'even' : 'odd'}"
         td = link_to user.fullname, admin_user_path(user)
+        td = user.title
         td = link_to user.startup.name, admin_startup_path(user.startup)
         td = points

@@ -37,7 +37,7 @@ module ActiveAdmin::ActiveAdminHelper
 
   def startups_by_karma(filter)
     if filter
-      Startup.joins(:karma_points).where(karma_points: { created_at: (Date.parse(filter[:after])..Date.parse(filter[:before])) }).group(:startup_id).sum(:points)
+      Startup.joins(:karma_points).where(karma_points: { created_at: (Date.parse(filter[:after]).beginning_of_day..Date.parse(filter[:before]).end_of_day) }).group(:startup_id).sum(:points)
     else
       Startup.joins(:karma_points).where('karma_points.created_at > ?', Date.today.beginning_of_week).group(:startup_id).sum(:points)
     end
@@ -45,7 +45,7 @@ module ActiveAdmin::ActiveAdminHelper
 
   def users_by_karma(filter)
     if filter
-      User.joins(:karma_points).where(karma_points: { created_at: (Date.parse(filter[:after])..Date.parse(filter[:before])) }).group(:user_id).sum(:points)
+      User.joins(:karma_points).where(karma_points: { created_at: (Date.parse(filter[:after]).beginning_of_day..Date.parse(filter[:before]).end_of_day) }).group(:user_id).sum(:points)
     else
       User.joins(:karma_points).where('karma_points.created_at > ?', Date.today.beginning_of_week).group(:user_id).sum(:points)
     end

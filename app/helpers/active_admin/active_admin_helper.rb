@@ -40,7 +40,7 @@ module ActiveAdmin::ActiveAdminHelper
       Startup.joins(:karma_points).where(karma_points: { created_at: (Date.parse(filter[:after]).beginning_of_day..Date.parse(filter[:before]).end_of_day) }).group(:startup_id).sum(:points)
     else
       Startup.joins(:karma_points).where('karma_points.created_at > ?', Date.today.beginning_of_week).group(:startup_id).sum(:points)
-    end.sort_by {|startup_id, points| points}
+    end.sort_by {|startup_id, points| points}.reverse
   end
 
   def users_by_karma(filter)
@@ -48,6 +48,6 @@ module ActiveAdmin::ActiveAdminHelper
       User.joins(:karma_points).where(karma_points: { created_at: (Date.parse(filter[:after]).beginning_of_day..Date.parse(filter[:before]).end_of_day) }).group(:user_id).sum(:points)
     else
       User.joins(:karma_points).where('karma_points.created_at > ?', Date.today.beginning_of_week).group(:user_id).sum(:points)
-    end.sort_by {|user_id, points| points}
+    end.sort_by {|user_id, points| points}.reverse
   end
 end

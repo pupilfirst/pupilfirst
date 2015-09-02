@@ -6,7 +6,8 @@ table.index_table
   thead
     tr
       th Name
-      th Karma Points
+      th.sorted-desc.sortable
+        a href='#' Karma Points
   tbody
     - startups_by_karma(params[:karma_points_filter]).each_with_index do |points_array, idx|
       - startup_id, points = points_array
@@ -22,7 +23,8 @@ table.index_table
     tr
       th Full Name
       th Startup
-      th Karma Points
+      th.sorted-desc.sortable
+        a href='#' Karma Points
   tbody
     - users_by_karma(params[:karma_points_filter]).each_with_index do |points_array, idx|
       - user_id, points = points_array

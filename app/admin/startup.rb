@@ -22,17 +22,14 @@ ActiveAdmin.register Startup do
   end
 
   index do
-    actions
+
+    column :name
 
     column :status do |startup|
       startup.approval_status.capitalize
     end
 
     column :batch
-
-    column :name do |startup|
-      link_to startup.name, startup, target: "_blank"
-    end
 
     column :founders do |startup|
       table_for startup.founders.order('id ASC') do
@@ -47,6 +44,11 @@ ActiveAdmin.register Startup do
     column :karma_points do |startup|
       startup.karma_points.where('karma_points.created_at > ?', Date.today.beginning_of_week).sum(:points)
     end
+
+    actions do |startup|
+      link_to "View Timeline", startup, target: "_blank"
+    end
+
   end
 
   csv do

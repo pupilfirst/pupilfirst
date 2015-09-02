@@ -7,7 +7,7 @@ ActiveAdmin.register KarmaPoint do
     f.inputs 'Basics'
 
     f.inputs 'Extra' do
-      f.input :created_at, as: :date_select
+      f.input :created_at, as: :datepicker
     end
 
     f.actions

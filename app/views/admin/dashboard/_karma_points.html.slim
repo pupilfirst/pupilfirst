@@ -16,6 +16,9 @@ h1 Leaderboards
     ol
       li.action.input_action
         = submit_tag 'Filter'
+      - if params[:karma_points_filter]
+        li.cancel
+          = link_to 'Clear Filter', admin_leaderboards_path
 
 h2 Startup Karma
 

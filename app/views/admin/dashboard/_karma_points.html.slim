@@ -1,10 +1,21 @@
 h1 Leaderboards
 
-= simple_form_for :filter, url: admin_leaderboards_path, method: :get do |f|
-  legend Supply both, or this form will crash.
-  = f.input :after, as: :string, placeholder: 'DD/MM/YYYY'
-  = f.input :before, as: :string, placeholder: 'DD/MM/YYYY'
-  = f.submit 'Filter'
+= form_for :karma_points_filter, url: admin_leaderboards_path, method: :get do |f|
+  fieldset.inputs
+    legend
+      span Supply both before and after dates.
+    ol
+      li.input.required
+        = f.label :after, 'After'
+        = f.text_field :after, value: params[:karma_points_filter].try(:[], :after)
+      li.input.required
+        = f.label :before, 'Before'
+        = f.text_field :before, value: params[:karma_points_filter].try(:[], :before)
+
+  fieldset.actions
+    ol
+      li.action.input_action
+        = submit_tag 'Filter'
 
 h2 Startup Karma
 
@@ -14,7 +25,7 @@ table
       th Name
       th Karma Points
   tbody
-    - startups_by_karma(params[:filter]).each do |startup_id, points|
+    - startups_by_karma(params[:karma_points_filter]).each do |startup_id, points|
       - startup = Startup.find(startup_id)
       tr
         td = link_to startup.name, admin_startup_path(startup)
@@ -29,7 +40,7 @@ table
       th Startup
       th Karma Points
   tbody
-    - users_by_karma(params[:filter]).each do |user_id, points|
+    - users_by_karma(params[:karma_points_filter]).each do |user_id, points|
       - user = User.includes(:startup).find(user_id)
       tr
         td = link_to user.fullname, admin_user_path(user)

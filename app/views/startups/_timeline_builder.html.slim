@@ -40,7 +40,7 @@
         .pull-right
           = f.select :timeline_event_type_id do
             option value='' selected=(event.persisted? ? nil : true)
-            - suggested = TimelineEventType.where('suggested_stage LIKE ?', "%#{event.startup.current_stage}%")
+            - suggested = TimelineEventType.where('suggested_stage LIKE ?', "%#{event.startup.current_stage}%").where.not(id: event.startup.current_stage_event_types.map(&:id))
             - if suggested
               optgroup label="Suggested"
                 - suggested.each do |s_t|

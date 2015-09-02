@@ -29,6 +29,7 @@ class User < ActiveRecord::Base
   has_many :karma_points, dependent: :destroy
 
   scope :batched, -> { joins(:startup).where.not(startups: { batch: nil }) }
+  scope :founders, -> { where(is_founder: true).includes(:startup) }
   scope :non_founders, -> { where("is_founder = ? or is_founder IS NULL", false) }
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }
   scope :student_entrepreneurs, -> { where(is_founder: true).where.not(university_id: nil) }

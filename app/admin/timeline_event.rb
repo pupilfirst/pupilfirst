@@ -17,6 +17,10 @@ ActiveAdmin.register TimelineEvent do
     column :verified_at
   end
 
+  action_item :view, only: :show do
+    link_to('Record new feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: timeline_event.startup.id, reference_url: startup_url(timeline_event.startup, anchor: "event-#{timeline_event.id}") }))
+  end
+
   member_action :delete_link, method: :delete do
     timeline_event = TimelineEvent.find params[:id]
     timeline_event.links.delete_at(params[:link_index].to_i)
@@ -90,9 +94,5 @@ ActiveAdmin.register TimelineEvent do
     end
 
     render partial: 'links', locals: { timeline_event: timeline_event }
-
-    panel 'Feedback on TimelineEvent' do
-      link_to('Record new feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: TimelineEvent.find(params[:id]).startup.id, reference_url: startup_url(TimelineEvent.find(params[:id]).startup, anchor: "event-#{params[:id]}") }))
-    end
   end
 end

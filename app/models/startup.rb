@@ -444,12 +444,12 @@ class Startup < ActiveRecord::Base
     false
   end
 
-# returns the latest 'moved_to_x_stage' timeline entry
+  # returns the latest 'moved_to_x_stage' timeline entry
   def latest_change_of_stage
     self.timeline_events.verified.where(timeline_event_type: TimelineEventType.moved_to_stage).order(event_on: :desc).includes(:timeline_event_type).first
   end
 
-# returns all timeline entries posted in the current stage i.e after the last 'moved_to_x_stage' timeline entry
+  # returns all timeline entries posted in the current stage i.e after the last 'moved_to_x_stage' timeline entry
   def current_stage_events
     if self.latest_change_of_stage.present?
       self.timeline_events.where("event_on > ?", self.latest_change_of_stage.event_on)
@@ -458,7 +458,7 @@ class Startup < ActiveRecord::Base
     end
   end
 
-# returns a distinct array of timeline_event_types of all timeline entries posted in the current stage
+  # returns a distinct array of timeline_event_types of all timeline entries posted in the current stage
   def current_stage_event_types
     TimelineEventType.find(self.current_stage_events.pluck(:timeline_event_type_id).uniq)
   end

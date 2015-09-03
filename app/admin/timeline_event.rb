@@ -8,6 +8,13 @@ ActiveAdmin.register TimelineEvent do
   scope :all
   scope :batched
 
+  controller do
+    def index
+      params[:order] = "updated_at_desc"
+      super
+    end
+  end
+
   index do
     selectable_column
     actions

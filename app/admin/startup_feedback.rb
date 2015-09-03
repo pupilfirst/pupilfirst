@@ -6,8 +6,15 @@ permit_params :feedback, :reference_url, :startup_id, :send_email
 index do
   selectable_column
   column :startup
-  column :feedback
+
+  column :feedback do |startup_feedback|
+    pre class: 'startup-feedback' do
+      startup_feedback.feedback
+    end
+  end
+
   column :reference_url
+
   column :send_at do |startup_feedback|
     if startup_feedback.send_at.present?
       startup_feedback.send_at
@@ -15,6 +22,7 @@ index do
       link_to('Email Now!', email_feedback_admin_startup_feedback_path(startup_feedback), method: :put, data: { confirm: 'Are you sure you want to email this feedback to the founders?' })
     end
   end
+
   actions
 end
 

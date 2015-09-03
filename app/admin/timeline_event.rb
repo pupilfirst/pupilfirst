@@ -17,18 +17,32 @@ ActiveAdmin.register TimelineEvent do
     column :verified_at
   end
 
-  member_action :delete_link, method: :put do
+  member_action :delete_link, method: :delete do
     timeline_event = TimelineEvent.find params[:id]
     timeline_event.links.delete_at(params[:link_index].to_i)
     timeline_event.save!
 
+    flash[:notice] = 'Link Deleted!'
+
     redirect_to action: :show
   end
 
-  member_action :add_link, method: :put do
+  member_action :add_link, method: :post do
     timeline_event = TimelineEvent.find params[:id]
     timeline_event.links << { title: params[:link_title], url: params[:link_url] }
     timeline_event.save!
+
+    flash[:success] = 'Link Added!'
+
+    redirect_to action: :show
+  end
+
+  member_action :edit_link, method: :put do
+    timeline_event = TimelineEvent.find params[:id]
+    timeline_event.links[params[:link_index].to_i] = { title: params[:link_title], url: params[:link_url] }
+    timeline_event.save!
+
+    flash[:success] = 'Link Updated!'
 
     redirect_to action: :show
   end
@@ -65,22 +79,20 @@ ActiveAdmin.register TimelineEvent do
       row :iteration
       row :image
       row :event_on
+
       row :verified_at do
         if timeline_event.verified_at.present?
-          "#{timeline_event.verified_at} (#{link_to 'Unverify', unverify_admin_timeline_event_path, method: :post, data: {confirm: 'Are you sure?'}})".html_safe
+          "#{timeline_event.verified_at} (#{link_to 'Unverify', unverify_admin_timeline_event_path, method: :post, data: { confirm: 'Are you sure?' }})".html_safe
         else
           button_to('Unverified. Click to verify this event.', verify_admin_timeline_event_path)
         end
       end
     end
 
-    panel 'Links' do
-      render partial: 'links', locals: {timeline_event: timeline_event}
-    end
+    render partial: 'links', locals: { timeline_event: timeline_event }
 
     panel 'Feedback on TimelineEvent' do
-      link_to('Record new feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: TimelineEvent.find(params[:id]).startup.id, reference_url: startup_url(TimelineEvent.find(params[:id]).startup, anchor: "event-#{params[:id]}")}))
+      link_to('Record new feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: TimelineEvent.find(params[:id]).startup.id, reference_url: startup_url(TimelineEvent.find(params[:id]).startup, anchor: "event-#{params[:id]}") }))
     end
-
   end
 end

@@ -22,7 +22,7 @@ ActiveAdmin.register Startup do
   end
 
   index do
-
+    selectable_column
     column :name
 
     column :status do |startup|

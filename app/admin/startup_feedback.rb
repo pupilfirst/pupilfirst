@@ -46,7 +46,7 @@ ActiveAdmin.register StartupFeedback do
     end
   end
 
-  form partial: 'admin/startup_feedbacks/form'
+  form partial: 'admin/startup_feedback/form'
 
   member_action :email_feedback, method: :put do
     startup_feedback = StartupFeedback.find params[:id]

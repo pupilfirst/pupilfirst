@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 feature 'Incubation' do
-  let(:user) { create :user, password: 'thisisatest', password_confirmation: 'thisisatest', confirmed_at: Time.now }
+  let(:user) { create :user_with_password, confirmed_at: Time.now }
 
   before :all do
     APP_CONFIG[:sms_provider_url] = 'http://mobme.in'
@@ -11,7 +11,7 @@ feature 'Incubation' do
     # Login the user.
     visit new_user_session_path
     fill_in 'user_email', with: user.email
-    fill_in 'user_password', with: 'thisisatest'
+    fill_in 'user_password', with: 'password'
     click_on 'Sign in'
 
     # Block all RestClient POST-s.
@@ -69,20 +69,25 @@ feature 'Incubation' do
     expect(startup.incubation_location).to eq(Startup::INCUBATION_LOCATION_VISAKHAPATNAM)
   end
 
-  context 'when user has verified phone number' do
-    let(:user) { create :user, password: 'thisisatest', password_confirmation: 'thisisatest', confirmed_at: Time.now, phone: '9876543210' }
+  context 'User has started Application' do
+    let(:user) { create :user_with_password, confirmed_at: Time.now, phone: '9876543210' }
 
-    scenario 'User cancels application to SV.CO' do
+    before do
       visit root_path
       click_on 'Start Application'
 
       check 'team-leader-consent'
       click_on 'Start incubation!'
+    end
 
-      choose 'Female'
-      fill_in 'Date of birth', with: '03/03/1982'
+    scenario 'User attempts to submit User profile without mandatory fields' do
       click_on 'Next Step'
 
+      expect(page.find('.startup_admin_gender')[:class]).to include('has-error')
+      expect(page.find('.startup_admin_born_on')[:class]).to include('has-error')
+    end
+
+    scenario 'User cancels application to SV.CO' do
       click_on 'Cancel Application'
       expect(page).to have_text('Start Application')
 
@@ -92,6 +97,34 @@ feature 'Incubation' do
       expect(user.startup).to eq(nil)
       expect(user.startup_admin).to be_falsey
       expect(user.is_founder).to be_falsey
+    end
+
+    scenario 'User, student at a university, does not supply roll number' do
+
+    end
+
+    context 'when User has submitted User profile' do
+      before do
+        choose 'Female'
+        fill_in 'Date of birth', with: '03/03/1982'
+        click_on 'Next Step'
+      end
+
+      scenario 'User cancels application to SV.CO' do
+        click_on 'Cancel Application'
+        expect(page).to have_text('Start Application')
+
+        # Now check whether data is in shape.
+        user.reload
+
+        expect(user.startup).to eq(nil)
+        expect(user.startup_admin).to be_falsey
+        expect(user.is_founder).to be_falsey
+      end
+
+      scenario 'User attempts to submit Startup profile with out-of-bound optional fields' do
+
+      end
     end
   end
 end

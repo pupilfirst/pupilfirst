@@ -54,3 +54,6 @@ RSpec.configure do |config|
   # Include Factory Girl's helpers.
   config.include FactoryGirl::Syntax::Methods
 end
+
+# TODO: Use capybara-webkit.
+# Capybara.javascript_driver = :webkit

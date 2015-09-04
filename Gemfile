@@ -78,6 +78,9 @@ group :test do
   gem 'factory_girl', require: false
   gem 'factory_girl_rails', '~> 4.0'
   gem 'faker'
+  gem 'capybara' # For RSpec feature tests.
+  gem 'poltergeist' # Headless WebKit browser, provided by PhantomJS.
+  gem 'database_cleaner' # Database cleaner can handle complex DB cleanup strategies for test (feature vs regular tests).
 end
 
 group :development, :test do
@@ -87,7 +90,6 @@ group :development, :test do
   gem 'webmock', require: false # Mocking web requests.
   gem 'did_you_mean' # Enough of silly spellinng mistakes ruining the day!
   gem 'quiet_assets' # Let's not see asset serving messages in the development log!
-  gem 'capybara' # For RSpec feature tests.
 end
 
 group :production do

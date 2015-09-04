@@ -10,5 +10,10 @@ FactoryGirl.define do
         is_founder true
       end
     end
+
+    factory :user_with_password do
+      password 'password'
+      password_confirmation 'password'
+    end
   end
 end

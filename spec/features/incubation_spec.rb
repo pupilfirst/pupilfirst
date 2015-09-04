@@ -5,6 +5,9 @@ require 'rails_helper'
 feature 'Incubation' do
   let(:user) { create :user_with_password, confirmed_at: Time.now }
   let!(:university) { create :university }
+  let!(:startup_category_1) { create :startup_category }
+  let!(:startup_category_2) { create :startup_category }
+  let!(:startup_category_3) { create :startup_category }
 
   before :all do
     WebMock.allow_net_connect!
@@ -48,6 +51,13 @@ feature 'Incubation' do
 
     choose 'Female'
     fill_in 'Date of birth', with: '03/03/1982'
+    fill_in 'Communication address', with: "This is\nwhere I live."
+    fill_in 'District', with: 'district_name'
+    fill_in 'State', with: 'state_name'
+    fill_in 'PIN Code', with: 600001
+    fill_in 'LinkedIn URL', with: 'https://linkedin.com/url'
+    fill_in 'Twitter URL', with: 'https://twitter.com/url'
+    fill_in 'Public Slack Username', with: 'public_slack_username'
     click_on 'Next Step'
     expect(page).to have_text('Incubation location')
 
@@ -55,6 +65,11 @@ feature 'Incubation' do
     fill_in 'About', with: 'About Test Startup'
     fill_in 'Startup Deck', with: 'https://sv.co'
     select 'Visakhapatnam', from: 'Incubation location'
+    fill_in 'Website', with: 'https://startupwebsite.com'
+    select 'Partnership', from: 'Registration type'
+    select startup_category_1.name, from: 'Categories'
+    select startup_category_2.name, from: 'Categories'
+    select startup_category_3.name, from: 'Categories'
     fill_in 'Team size', with: 1
     fill_in 'No. of women employees', with: 0
     click_on 'Request Invite'
@@ -67,12 +82,23 @@ feature 'Incubation' do
     expect(user.phone).to eq('919876543210')
     expect(user.gender).to eq(User::GENDER_FEMALE)
     expect(user.born_on).to eq(Date.parse('1982-03-03'))
+    expect(user.communication_address).to eq("This is\r\nwhere I live.")
+    expect(user.district).to eq('district_name')
+    expect(user.state).to eq('state_name')
+    expect(user.pin).to eq('600001')
+    expect(user.linkedin_url).to eq('https://linkedin.com/url')
+    expect(user.twitter_url).to eq('https://twitter.com/url')
+    expect(user.slack_username).to eq('public_slack_username')
 
     startup = user.startup
     expect(startup.name).to eq('Test Startup')
     expect(startup.about).to eq('About Test Startup')
     expect(startup.presentation_link).to eq('https://sv.co')
     expect(startup.incubation_location).to eq(Startup::INCUBATION_LOCATION_VISAKHAPATNAM)
+    expect(startup.website).to eq('https://startupwebsite.com')
+    expect(startup.registration_type).to eq(Startup::REGISTRATION_TYPE_PARTNERSHIP)
+    expect(startup.categories.count).to eq(3)
+    expect(startup.categories.to_a - [startup_category_1, startup_category_2, startup_category_3]).to be_empty
     expect(startup.team_size).to eq 1
     expect(startup.women_employees).to eq 0
   end
@@ -154,10 +180,6 @@ feature 'Incubation' do
       end
 
       scenario 'User attempts to submit Startup profile with out-of-bound optional fields' do
-        fill_in 'Name', with: 'Test Startup'
-        fill_in 'About', with: 'About Test Startup'
-        fill_in 'Startup Deck', with: 'https://sv.co'
-        select 'Visakhapatnam', from: 'Incubation location'
         fill_in 'Team size', with: 0
         fill_in 'No. of women employees', with: -1
         click_on 'Request Invite'

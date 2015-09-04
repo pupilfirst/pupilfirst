@@ -80,6 +80,14 @@ ActiveAdmin.register Startup do
     column :agreement_ends_at
   end
 
+  action_item :view, only: :show do
+    link_to('Record new feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: Startup.friendly.find(params[:id]).id, reference_url: startup_url(Startup.friendly.find(params[:id])) }))
+  end
+
+  action_item :view, only: :show do
+    link_to('View Timeline', startup_url(startup), target: '_blank')
+  end
+
   member_action :custom_update, method: :put do
     startup = Startup.friendly.find params[:id]
     startup.update_attributes!(permitted_params[:startup])
@@ -206,10 +214,6 @@ ActiveAdmin.register Startup do
 
       row :registration_type
       row :address
-    end
-
-    panel 'Feedback on Startup' do
-      link_to('Record new feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: Startup.friendly.find(params[:id]).id, reference_url: startup_url(Startup.friendly.find(params[:id])) }))
     end
 
     panel 'Emails and Notifications' do

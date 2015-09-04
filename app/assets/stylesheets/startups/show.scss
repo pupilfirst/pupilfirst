@@ -457,6 +457,15 @@ h1.startup-name {
   font-size: 20px;
   color: black;
   line-height: 40px;
+  .fa-link {
+    display: none;
+    color: grey;
+  }
+  &:hover {
+    .fa-link{
+      display: inline;
+    }
+  }
 }
 
 .tl-date {

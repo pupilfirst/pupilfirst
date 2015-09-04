@@ -191,8 +191,10 @@
                           .pending-verification data-toggle="tooltip" title="This event has not yet been verified by SV.CO, and is hidden from the public."
                             i.fa.fa-exclamation-circle
                             | &nbsp;Pending verification
-                        h4.timeline-title
-                          | #{event.timeline_event_type.title}
+                        a href="#{startup_url(event.startup, anchor: "event-#{event.id}")}"
+                          h4.timeline-title
+                            ' #{event.timeline_event_type.title}
+                            i.fa.fa-link
                         p.tl-date
                           small
                             = image_tag "timeline/date.png"

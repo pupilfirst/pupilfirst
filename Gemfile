@@ -79,8 +79,8 @@ group :test do
   gem 'factory_girl_rails', '~> 4.0'
   gem 'faker'
   gem 'capybara' # For RSpec feature tests.
-  # gem 'capybara-webkit' # For RSpec feature tests (with webkit support).
-  # gem 'database_cleaner' # Database cleaner can handle complex DB cleanup strategies for test (feature vs regular tests).
+  gem 'poltergeist' # Headless WebKit browser, provided by PhantomJS.
+  gem 'database_cleaner' # Database cleaner can handle complex DB cleanup strategies for test (feature vs regular tests).
 end
 
 group :development, :test do

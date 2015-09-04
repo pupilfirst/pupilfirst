@@ -1,10 +1,13 @@
 require 'rails_helper'
 
+# WARNING: The following tests run with Webmock disabled - i.e., URL calls are let through. Make sure you mock possible
+# requests unless you want to let them through. This is required for JS tests to work.
 feature 'Incubation' do
   let(:user) { create :user_with_password, confirmed_at: Time.now }
+  let!(:university) { create :university }
 
   before :all do
-    APP_CONFIG[:sms_provider_url] = 'http://mobme.in'
+    WebMock.allow_net_connect!
   end
 
   before :each do
@@ -19,7 +22,7 @@ feature 'Incubation' do
   end
 
   after :all do
-    APP_CONFIG[:sms_provider_url] = ENV['SMS_PROVIDER_URL']
+    WebMock.disable_net_connect!
   end
 
   scenario 'User applies to SV.CO' do
@@ -52,7 +55,10 @@ feature 'Incubation' do
     fill_in 'About', with: 'About Test Startup'
     fill_in 'Startup Deck', with: 'https://sv.co'
     select 'Visakhapatnam', from: 'Incubation location'
+    fill_in 'Team size', with: 1
+    fill_in 'No. of women employees', with: 0
     click_on 'Request Invite'
+
     expect(page).to have_text("That's it! You're done")
 
     # Now check whether the data we entered is in place.
@@ -67,6 +73,8 @@ feature 'Incubation' do
     expect(startup.about).to eq('About Test Startup')
     expect(startup.presentation_link).to eq('https://sv.co')
     expect(startup.incubation_location).to eq(Startup::INCUBATION_LOCATION_VISAKHAPATNAM)
+    expect(startup.team_size).to eq 1
+    expect(startup.women_employees).to eq 0
   end
 
   context 'User has started Application' do
@@ -99,8 +107,31 @@ feature 'Incubation' do
       expect(user.is_founder).to be_falsey
     end
 
-    scenario 'User, student at a university, does not supply roll number' do
+    context 'User is a student' do
+      scenario 'User picks University and supplies roll number', js: true do
+        choose 'Female'
+        fill_in 'Date of birth', with: '03/03/1982'
+        expect(page).to_not have_selector('.startup_admin_roll_number')
+        select university.name, from: 'University'
+        expect(page).to have_selector('.startup_admin_roll_number')
+        fill_in 'University Roll Number', with: 'R1234'
+        click_on 'Next Step'
 
+        # Now test data.
+        user.reload
+
+        expect(user.university).to eq(university)
+        expect(user.roll_number).to eq('R1234')
+      end
+
+      scenario 'User picks University, but does not supply roll number' do
+        choose 'Female'
+        fill_in 'Date of birth', with: '03/03/1982'
+        select university.name, from: 'University'
+        click_on 'Next Step'
+
+        expect(page.find('.startup_admin_roll_number')[:class]).to include('has-error')
+      end
     end
 
     context 'when User has submitted User profile' do
@@ -123,7 +154,16 @@ feature 'Incubation' do
       end
 
       scenario 'User attempts to submit Startup profile with out-of-bound optional fields' do
+        fill_in 'Name', with: 'Test Startup'
+        fill_in 'About', with: 'About Test Startup'
+        fill_in 'Startup Deck', with: 'https://sv.co'
+        select 'Visakhapatnam', from: 'Incubation location'
+        fill_in 'Team size', with: 0
+        fill_in 'No. of women employees', with: -1
+        click_on 'Request Invite'
 
+        expect(page.find('.startup_team_size')[:class]).to include('has-error')
+        expect(page.find('.startup_women_employees')[:class]).to include('has-error')
       end
     end
   end

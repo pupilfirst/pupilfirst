@@ -1,7 +1,6 @@
 FactoryGirl.define do
   factory :startup do |f|
     f.name { Faker::Lorem.words(rand(3) + 1).join ' ' }
-    f.logo { fixture_file_upload(Rails.root.join(*%w[ spec fixtures files example.jpg ]), 'image/jpg') }
     f.pitch { Faker::Lorem.words(6).join(' ') }
     f.address { Faker::Lorem.words(6).join(' ') }
     f.about { Faker::Lorem.words(12).join(' ').truncate(Startup::MAX_ABOUT_CHARACTERS) }

@@ -9,7 +9,7 @@
               tr
                 th.link-title = link[:title]
                 td
-                  ' #{link_to link[:url]}
+                  ' #{link_to link[:url], link[:url], target: "_blank"}
                   ' (#{link_to 'Delete', delete_link_admin_timeline_event_path(link_index: index), { method: :delete, data: { confirm: 'Are you sure?' } }}
                   ' / #{link_to 'Edit', '#edit-existing-link-form', class: 'edit-existing-link', 'data-index' => index, 'data-title' => link[:title], 'data-url' => link[:url]})
 

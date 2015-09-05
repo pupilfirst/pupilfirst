@@ -1,5 +1,5 @@
 ActiveAdmin.register StartupFeedback do
-  menu parent: 'Startups'
+  menu parent: 'Startups', label: 'Startup Feedback'
   permit_params :feedback, :reference_url, :startup_id, :send_email
 
   controller do

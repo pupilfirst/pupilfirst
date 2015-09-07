@@ -36,7 +36,7 @@ class TimelineEvent < ActiveRecord::Base
       when 'new_product_deck'
         self.description = 'The team created a new product deck introducing their startup'
       when 'one_liner'
-        self.description = about
+        self.description = self.startup.about
       end
     end
   end

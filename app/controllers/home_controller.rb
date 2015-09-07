@@ -85,8 +85,5 @@ class HomeController < ApplicationController
       +(".png") #PNG image
   end
 
-
-
-  helper_method :render_and_rescue
   helper_method :faculty_image_path
 end

@@ -17,8 +17,10 @@ ActiveAdmin.register KarmaPoint do
         link_to karma_point.user.fullname, karma_point.user
       end
 
-      span do
-        " (#{link_to karma_point.startup.name, karma_point.startup})".html_safe
+      if karma_point.startup
+        span do
+          " (#{link_to karma_point.startup.name, karma_point.startup})".html_safe
+        end
       end
     end
 

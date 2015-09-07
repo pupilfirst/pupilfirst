@@ -38,20 +38,22 @@ module AboutHelper
     )
   end
 
+  # Starts on the week before last's Monday 6 PM IST.
   def leaderboard_start_date
     if monday? && before_evening?
       8.days.ago.beginning_of_week
     else
       7.days.ago.beginning_of_week
-    end
+    end.in_time_zone('Asia/Calcutta') + 18.hours
   end
 
+  # Ends on last week's Monday 6 PM IST.
   def leaderboard_end_date
     if monday? && before_evening?
       8.days.ago.end_of_week
     else
       7.days.ago.end_of_week
-    end
+    end.in_time_zone('Asia/Calcutta') + 18.hours
   end
 
   private

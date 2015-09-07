@@ -12,6 +12,11 @@ after 'development:users' do
   )
 
   # ...whose founder is Some One.
-  super_startup.founders << User.find_by(email: 'someone@mobme.in')
+  founder = User.find_by(email: 'someone@mobme.in')
+  super_startup.founders << founder
   super_startup.save!
+
+  # Make founder the startup admin.
+  founder.startup_admin = true
+  founder.save!
 end

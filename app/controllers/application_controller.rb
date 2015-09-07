@@ -52,7 +52,7 @@ class ApplicationController < ActionController::Base
       "connect-src 'self';",
       "font-src 'self' fonts.gstatic.com https://assets.sv.co;",
       'child-src https://www.youtube.com;',
-      'frame-src https://www.youtube.com https://svlabs-public.herokuapp.com;'
+      'frame-src https://www.youtube.com https://svlabs-public.herokuapp.com https://www.google.com;'
     ]
 
     response.headers['Content-Security-Policy'] = "default-src 'none'; " + csp_directives.join(' ')

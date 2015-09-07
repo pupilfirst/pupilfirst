@@ -51,6 +51,6 @@ module AboutHelper
   end
 
   def before_evening?
-    Time.now.in_time_zone('Asia/Calcutta').hour < 20
+    Time.now.in_time_zone('Asia/Calcutta').hour < 18
   end
 end

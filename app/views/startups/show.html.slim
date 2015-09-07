@@ -98,7 +98,7 @@
                   .media-left
                     img.media-object alt="Days Lapsed icon" src="#{image_url 'timeline/icons/iteration.png'}"
                   .media-body
-                    h4.media-heading Days Lapsed
+                    h4.media-heading Days Elapsed
                     p.data-content
                       ' #{(Date.today - @startup.earliest_event_date).to_i}
                       span.data-subcontent
@@ -211,8 +211,8 @@
                           small
                             = image_tag "timeline/date.png"
                             ' #{event.event_on.strftime("%B %Y")}
-                            - if @startup.earliest_event_date.present?
-                              ' (#{(event.event_on- @startup.earliest_event_date).to_i.ordinalize} day)
+                            - if @startup.earliest_event_date.present? && event.verified?
+                              ' (#{((event.event_on- @startup.earliest_event_date).to_i + 1).ordinalize} day)
                       .timeline-body
                         .tl-body
                           - if event.image?

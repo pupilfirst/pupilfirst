@@ -27,11 +27,11 @@ h1.page-header.header-light
             th Startup Name
             th Team Lead
         tbody
-          - startups_for_leaderboard.each_with_index do |points_array, index|
-            - startup_id, points = points_array
+          - startups_for_leaderboard.each_with_index do |rank_array, index|
+            - startup_id, rank = rank_array
             - startup = Startup.find(startup_id)
             tr
-              td #{index + 1}
+              td = rank
               td = link_to startup.name, startup_path(startup)
               td = startup.admin.try(:fullname)
 

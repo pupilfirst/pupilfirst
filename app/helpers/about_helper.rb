@@ -1,10 +1,28 @@
 module AboutHelper
   def startups_for_leaderboard
-    Startup.joins(:karma_points)
+    startups_by_points = Startup.joins(:karma_points)
       .where('karma_points.created_at > ?', leaderboard_date)
       .group(:startup_id)
       .sum(:points)
       .sort_by {|startup_id, points| points}.reverse
+
+    last_points = nil
+    last_rank = nil
+
+    startups_by_points.each_with_index.map do |startup_points, index|
+      startup_id, points = startup_points
+
+      if last_points == points
+        rank = last_rank
+      else
+        rank = index + 1
+        last_rank = rank
+      end
+
+      last_points = points
+
+      [startup_id, rank]
+    end
   end
 
   def leaderboard_date

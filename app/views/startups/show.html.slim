@@ -93,6 +93,18 @@
                   .media-body
                     h4.media-heading Product Iteration
                     p.data-content #{@startup.current_iteration.ordinalize}
+              - if @startup.earliest_event_date.present?
+                .media
+                  .media-left
+                    img.media-object alt="Days Lapsed icon" src="#{image_url 'timeline/icons/iteration.png'}"
+                  .media-body
+                    h4.media-heading Days Lapsed
+                    p.data-content
+                      ' #{(Date.today - @startup.earliest_event_date).to_i}
+                      span.data-subcontent
+                        ' (last update:
+                        - @no_of_days = (Date.today - @startup.latest_event_date).to_i
+                        ' #{@no_of_days} #{'day'.pluralize(@no_of_days)} ago)
         .row
           - if @startup.founders.present?
             .col-sm-6.col-md-12

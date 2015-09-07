@@ -38,9 +38,9 @@ module AboutHelper
 
   def leaderboard_date
     if monday? && before_evening?
-      Date.yesterday.beginning_of_week
+      8.days.ago.beginning_of_week
     else
-      Date.today.beginning_of_week
+      7.days.ago.beginning_of_week
     end
   end
 

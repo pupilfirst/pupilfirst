@@ -1,10 +1,11 @@
 module AboutHelper
   def startups_for_leaderboard
-    startups_by_points = Startup.joins(:karma_points)
+    startups_by_points = Startup.where(batch: 1)
+      .joins(:karma_points)
       .where('karma_points.created_at > ?', leaderboard_date)
       .group(:startup_id)
       .sum(:points)
-      .sort_by {|startup_id, points| points}.reverse
+      .sort_by { |startup_id, points| points }.reverse
 
     last_points = nil
     last_rank = nil
@@ -23,6 +24,16 @@ module AboutHelper
 
       [startup_id, rank]
     end
+  end
+
+  def unranked_startups
+    Startup.approved.where(batch: 1)
+      .where.not(
+      id: Startup.where(batch: 1)
+        .joins(:karma_points)
+        .where('karma_points.created_at > ?', leaderboard_date)
+        .pluck(:startup_id).uniq
+    )
   end
 
   def leaderboard_date

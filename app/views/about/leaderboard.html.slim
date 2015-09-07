@@ -35,5 +35,11 @@ h1.page-header.header-light
               td = link_to startup.name, startup_path(startup)
               td = startup.admin.try(:fullname)
 
+          - unranked_startups.each do |startup|
+            tr
+              td &mdash;
+              td = link_to startup.name, startup_path(startup)
+              td = startup.admin.try(:fullname)
+
   .col-md-3.col-md-offset-1.col-sm-4
     = render partial: 'about_links'

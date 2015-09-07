@@ -2,7 +2,8 @@ module AboutHelper
   def startups_for_leaderboard
     startups_by_points = Startup.where(batch: 1)
       .joins(:karma_points)
-      .where('karma_points.created_at > ?', leaderboard_date)
+      .where('karma_points.created_at > ?', leaderboard_start_date)
+      .where('karma_points.created_at < ?', leaderboard_end_date)
       .group(:startup_id)
       .sum(:points)
       .sort_by { |startup_id, points| points }.reverse
@@ -31,16 +32,25 @@ module AboutHelper
       .where.not(
       id: Startup.where(batch: 1)
         .joins(:karma_points)
-        .where('karma_points.created_at > ?', leaderboard_date)
+        .where('karma_points.created_at > ?', leaderboard_start_date)
+        .where('karma_points.created_at < ?', leaderboard_end_date)
         .pluck(:startup_id).uniq
     )
   end
 
-  def leaderboard_date
+  def leaderboard_start_date
     if monday? && before_evening?
       8.days.ago.beginning_of_week
     else
       7.days.ago.beginning_of_week
+    end
+  end
+
+  def leaderboard_end_date
+    if monday? && before_evening?
+      8.days.ago.end_of_week
+    else
+      7.days.ago.end_of_week
     end
   end
 

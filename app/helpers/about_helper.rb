@@ -28,7 +28,7 @@ module AboutHelper
   end
 
   def unranked_startups
-    Startup.approved.where(batch: 1)
+    Startup.where(batch: 1)
       .where.not(
       id: Startup.where(batch: 1)
         .joins(:karma_points)

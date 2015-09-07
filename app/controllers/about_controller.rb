@@ -17,11 +17,12 @@ class AboutController < ApplicationController
   def leaderboard
   end
 
+  # GET /about/press-kit
   def press_kit
     @press_kit_url = "https://drive.google.com/folderview?id=0B9--SdQuJvHpfjJiam1nTnJCNnVIYkY2NVFXWTQwbXNpWUFoQU1oc1RZSHJraG4yb2Y1cDA&usp=sharing"
   end
 
-  def officehours
+  # GET /about/office-hours
+  def office_hours
   end
-
 end

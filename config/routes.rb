@@ -88,13 +88,14 @@ Svapp::Application.routes.draw do
     end
   end
 
-  get 'about', to: 'home#about', as: :about
-  get 'about/transparency', to: 'home#transparency', as: :about_transparency
-  get 'about/slack', to: 'home#slack', as: :about_slack
-  get 'about/press-kit', to: 'home#press_kit', as: :about_press_kit
-  get 'about/leaderboards', to: 'home#leaderboards', as: :about_leaderboards
-  get 'about/leaderboards/:year/:month/:day', to: 'home#leaderboards',
-    as: :about_leaderboard, constraints: { year: /\d{4,4}/, month: /\d{2,2}/, day: /\d{2,2}/ }
+  scope 'about', as: 'about', controller: 'about' do
+    get '/', action: 'index'
+    get 'transparency'
+    get 'slack'
+    get 'press-kit'
+    get 'leaderboards'
+    get 'leaderboards/:year/:month/:day', action: 'leaderboards', constraints: { year: /\d{4,4}/, month: /\d{2,2}/, day: /\d{2,2}/ }, as: 'leaderboard'
+  end
 
   get 'faculty', to: 'home#faculty'
   root 'home#index'

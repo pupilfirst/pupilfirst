@@ -1,6 +1,6 @@
 - content_for :head
   = stylesheet_link_tag 'about'
-  
+
 <ol class="breadcrumb">
   <li><a href="#{root_path}">Home</a></li>
   <li><a href="#{about_path}">About</a></li>
@@ -14,22 +14,22 @@ h1.page-header.header-light Press Kit
     .about-text
       p The following press kit contains:
       ul
-        li 
+        li
           p High-quality logo
-        li 
+        li
           p High-quality photographs of founders
-        li 
+        li
           p High-quality photos of team
-        li 
+        li
           p High-quality photographs of SV Kochi location
-        li 
+        li
           p High-quality photographs of the SV Vizag location
-        li 
+        li
           p Product screenshots
       p
         a class="btn btn-primary" href="#{@press_kit_url}" target="_blank"
-         span class="glyphicon glyphicon-download-alt" 
-           '  Download
+          span class="glyphicon glyphicon-download-alt"
+            '  Download
 
   .col-sm-3
     = render partial: 'about_links'

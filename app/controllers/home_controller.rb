@@ -1,6 +1,4 @@
 class HomeController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [:csp_report]
-
   def index
     @featured_startups = Startup.where(featured: true)
     @navbar_start_transparent = true

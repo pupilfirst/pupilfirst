@@ -446,12 +446,12 @@ class Startup < ActiveRecord::Base
 
   # returns the date of the earliest verified timeline entry
   def earliest_event_date
-    self.timeline_events.verified.order(:event_on).first.event_on
+    self.timeline_events.verified.order(:event_on).first.try(:event_on)
   end
 
   # returns the date of the latest verified timeline entry
   def latest_event_date
-    self.timeline_events.verified.order(:event_on).last.event_on
+    self.timeline_events.verified.order(:event_on).last.try(:event_on)
   end
 
   # returns the latest 'moved_to_x_stage' timeline entry

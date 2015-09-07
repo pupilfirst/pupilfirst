@@ -94,7 +94,7 @@ Svapp::Application.routes.draw do
     get 'slack'
     get 'press-kit'
     get 'leaderboard'
-    get 'officehours'
+    get 'office-hours', action: 'officehours'
   end
 
   get 'faculty', to: 'home#faculty'

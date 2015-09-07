@@ -34,7 +34,11 @@ ActiveAdmin.register StartupFeedback do
   show do
     attributes_table do
       row :startup
-      row :feedback
+      row :feedback do |startup_feedback|
+        pre class: 'startup-feedback' do
+          startup_feedback.feedback
+        end
+      end
       row :reference_url
       row :send_at do |startup_feedback|
         if startup_feedback.send_at.present?

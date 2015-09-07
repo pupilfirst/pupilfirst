@@ -1,16 +1,15 @@
 - content_for :head
   = stylesheet_link_tag 'about'
 
-<ol class="breadcrumb">
-  <li><a href="#{root_path}">Home</a></li>
-  <li><a href="#{about_path}">About</a></li>
-  <li class="active">Transparency</li>
-</ol>
+ol.breadcrumb.margin-top-20
+  li = link_to 'Home', root_path
+  li = link_to 'About', about_path
+  li.active Public Slack
 
 h1.page-header.header-light Transparency
 
 .row
-  .col-sm-7
+  .col-sm-8
     #transparency-intiative.about-text
       p Through our not-for-profit incubator, we receive access to Government and Private funds as grants. As part of a public-private partnership with state and national governments, we also steward entrepreneurship-development and founder-training programs across India. This receives understandable scrutiny from the media and general public, and through our transparency initiative, we want to proactively share  information about Startup Village.
       p This is still a work-in-progress. If you'd like to see more information here, please write to <a href="mailto:help@sv.co">help@sv.co</a>.
@@ -40,5 +39,5 @@ h1.page-header.header-light Transparency
         li
           p <em>November 11, 2013:</em> An RTI <a href="https://drive.google.com/open?id=0By0XSg1Yx0GKWnBvTV8yTHIwejQ">requesting information about the SV Square program</a> was filed at Technopark, Trivandrum and forwarded to Startup Village. A response was sent back on December 11, 2013.
 
-  .col-sm-3
+  .col-md-3.col-md-offset-1.col-sm-4
     = render partial: 'about_links'

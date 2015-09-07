@@ -1,16 +1,15 @@
 - content_for :head
   = stylesheet_link_tag 'about'
 
-<ol class="breadcrumb">
-  <li><a href="#{root_path}">Home</a></li>
-  <li><a href="#{about_path}">About</a></li>
-  <li class="active">Press Kit</li>
-</ol>
+ol.breadcrumb.margin-top-20
+  li = link_to 'Home', root_path
+  li = link_to 'About', about_path
+  li.active Press Kit
 
 h1.page-header.header-light Press Kit
 
 .row
-  .col-sm-7
+  .col-sm-8
     .about-text
       p The following press kit contains:
       ul
@@ -31,5 +30,5 @@ h1.page-header.header-light Press Kit
           span class="glyphicon glyphicon-download-alt"
             '  Download
 
-  .col-sm-3
+  .col-md-3.col-md-offset-1.col-sm-4
     = render partial: 'about_links'

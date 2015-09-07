@@ -1,0 +1,39 @@
+- content_for :head
+  = stylesheet_link_tag 'about'
+
+ol.breadcrumb.margin-top-20
+  li = link_to 'Home', root_path
+  li = link_to 'About', about_path
+  li.active Leaderboards
+
+h1.page-header.header-light
+  | Leaderboard
+  small &nbsp;for week beginning #{leaderboard_date.strftime('%B %-d')}
+
+.row
+  .col-sm-8
+    .about-text
+      p
+        ' Leaderboards are how we track progress for our startups. They <strong>don't show</strong> the best startups at
+        ' SV.CO. Rather, they show <strong>startups that have improved the most</strong> compared to the previous
+        | leaderboard.
+
+      p Please read the <a href="http://playbook.sv.co/3.1-leaderboards.html">Leaderboards</a> page on the Playbook.
+
+      table.table.table-striped
+        thead
+          tr
+            td Rank
+            td Startup Name
+            td Team Lead
+        tbody
+          - startups_for_leaderboard.each_with_index do |points_array, index|
+            - startup_id, points = points_array
+            - startup = Startup.find(startup_id)
+            tr
+              td #{index + 1}
+              td = link_to startup.name, startup_path(startup)
+              td = startup.admin.try(:fullname)
+
+  .col-md-3.col-md-offset-1.col-sm-4
+    = render partial: 'about_links'

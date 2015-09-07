@@ -1,16 +1,15 @@
 - content_for :head
   = stylesheet_link_tag 'about'
 
-<ol class="breadcrumb">
-  <li><a href="#{root_path}">Home</a></li>
-  <li><a href="#{about_path}">About</a></li>
-  <li class="active">Public Slack</li>
-</ol>
+ol.breadcrumb.margin-top-20
+  li = link_to 'Home', root_path
+  li = link_to 'About', about_path
+  li.active Public Slack
 
 h1.page-header.header-light Public Slack Forum
 
 .row
-  .col-sm-7
+  .col-sm-8
     #transparency-intiative.about-text
       p SV.CO has a public slack forum for discussion by the community. Members from the SV.CO team are often online and you'll get quick answers to your queries. Almost all our communication with registered members of SV.CO is also through this channel, so you'll get a feel for how our community works.
 
@@ -18,5 +17,5 @@ h1.page-header.header-light Public Slack Forum
 
       iframe class="slack" src="https://svlabs-public.herokuapp.com" scrolling="no" seamless="seamless"
 
-  .col-sm-3
+  .col-md-3.col-md-offset-1.col-sm-4
     = render partial: 'about_links'

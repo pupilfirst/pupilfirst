@@ -93,8 +93,7 @@ Svapp::Application.routes.draw do
     get 'transparency'
     get 'slack'
     get 'press-kit'
-    get 'leaderboards'
-    get 'leaderboards/:year/:month/:day', action: 'leaderboards', constraints: { year: /\d{4,4}/, month: /\d{2,2}/, day: /\d{2,2}/ }, as: 'leaderboard'
+    get 'leaderboard'
   end
 
   get 'faculty', to: 'home#faculty'

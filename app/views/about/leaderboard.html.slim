@@ -23,9 +23,9 @@ h1.page-header.header-light
       table.table.table-striped
         thead
           tr
-            td Rank
-            td Startup Name
-            td Team Lead
+            th Rank
+            th Startup Name
+            th Team Lead
         tbody
           - startups_for_leaderboard.each_with_index do |points_array, index|
             - startup_id, points = points_array

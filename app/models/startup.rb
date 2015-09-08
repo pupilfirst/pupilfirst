@@ -19,6 +19,7 @@ class Startup < ActiveRecord::Base
   APPROVAL_STATUS_PENDING = 'pending'
   APPROVAL_STATUS_APPROVED = 'approved'
   APPROVAL_STATUS_REJECTED = 'rejected'
+  APPROVAL_STATUS_DROPPED_OUT = 'dropped-out'
 
   PRODUCT_PROGRESS_IDEA = 'idea'
   PRODUCT_PROGRESS_MOCKUP = 'mockup'
@@ -50,7 +51,7 @@ class Startup < ActiveRecord::Base
   end
 
   def self.valid_approval_status_values
-    [APPROVAL_STATUS_UNREADY, APPROVAL_STATUS_PENDING, APPROVAL_STATUS_APPROVED, APPROVAL_STATUS_REJECTED]
+    [APPROVAL_STATUS_UNREADY, APPROVAL_STATUS_PENDING, APPROVAL_STATUS_APPROVED, APPROVAL_STATUS_REJECTED, APPROVAL_STATUS_DROPPED_OUT]
   end
 
   scope :batched, -> { where.not(batch: nil) }
@@ -59,6 +60,7 @@ class Startup < ActiveRecord::Base
   scope :pending, -> { where(approval_status: APPROVAL_STATUS_PENDING) }
   scope :approved, -> { where(approval_status: APPROVAL_STATUS_APPROVED) }
   scope :rejected, -> { where(approval_status: APPROVAL_STATUS_REJECTED) }
+  scope :dropped_out, -> { where(approval_status: APPROVAL_STATUS_DROPPED_OUT) }
   scope :incubation_requested, -> { where(approval_status: [APPROVAL_STATUS_PENDING, APPROVAL_STATUS_REJECTED, APPROVAL_STATUS_APPROVED]) }
   scope :agreement_signed, -> { where 'agreement_first_signed_at IS NOT NULL' }
   scope :agreement_live, -> { where('agreement_ends_at > ?', Time.now) }
@@ -229,6 +231,10 @@ class Startup < ActiveRecord::Base
     approval_status == APPROVAL_STATUS_REJECTED
   end
 
+  def dropped_out?
+    approval_status == APPROVAL_STATUS_DROPPED_OUT
+  end
+
   def valid_founders?
     self.errors.add(:founders, "should have at least one founder") if founders.nil? or founders.size < 1
   end
@@ -325,7 +331,8 @@ class Startup < ActiveRecord::Base
       'Unready' => unready.count,
       'Pending' => pending.count,
       'Approved' => approved.count,
-      'Rejected' => rejected.count
+      'Rejected' => rejected.count,
+      'Dropped-out' => dropped_out.count
     }
   end
 
@@ -333,7 +340,8 @@ class Startup < ActiveRecord::Base
     {
       'Pending' => pending.where(incubation_location: incubation_location).count,
       'Approved' => approved.where(incubation_location: incubation_location).count,
-      'Rejected' => rejected.where(incubation_location: incubation_location).count
+      'Rejected' => rejected.where(incubation_location: incubation_location).count,
+      'Dropped-out' => dropped_out.where(incubation_location: incubation_location).count
     }
   end
 

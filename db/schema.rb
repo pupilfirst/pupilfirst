@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150904194013) do
+ActiveRecord::Schema.define(version: 20150908062028) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -232,10 +232,12 @@ ActiveRecord::Schema.define(version: 20150904194013) do
     t.string   "slug"
     t.boolean  "featured"
     t.integer  "batch"
+    t.string   "stage"
   end
 
   add_index "startups", ["batch"], name: "index_startups_on_batch", using: :btree
   add_index "startups", ["slug"], name: "index_startups_on_slug", unique: true, using: :btree
+  add_index "startups", ["stage"], name: "index_startups_on_stage", using: :btree
 
   create_table "timeline_event_types", force: :cascade do |t|
     t.string   "key"

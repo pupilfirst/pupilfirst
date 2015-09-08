@@ -2,6 +2,7 @@ ActiveAdmin.register Startup do
   filter :approval_status, as: :select, collection: proc { Startup.valid_approval_status_values }
   filter :name
   filter :batch, as: :select, collection: (1..10)
+  filter :stage, as: :select, collection: proc { stages_collection }
   filter :website
   filter :registration_type, as: :select, collection: proc { Startup.valid_registration_types }
   filter :incubation_location, as: :select, collection: proc { Startup.valid_incubation_location_values }

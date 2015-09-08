@@ -27,7 +27,12 @@ class TimelineEvent < ActiveRecord::Base
   before_save :make_links_an_array, :build_link_json
   before_validation :record_iteration, :build_description
 
+  after_commit do
+    startup.update_stage! if timeline_event_type.stage_change?
+  end
+
   attr_accessor :auto_populated
+
   def build_description
     if !description.present? && auto_populated
       case timeline_event_type.key

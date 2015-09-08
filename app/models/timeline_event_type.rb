@@ -52,7 +52,15 @@ class TimelineEventType < ActiveRecord::Base
     key == TYPE_NEW_DECK
   end
 
+  def self.stage_keys
+    [TYPE_STAGE_IDEA, TYPE_STAGE_PROTOTYPE, TYPE_STAGE_CUSTOMER, TYPE_STAGE_EFFICIENCY, TYPE_STAGE_SCALE]
+  end
+
+  def stage_change?
+    TimelineEventType.stage_keys.include?(key)
+  end
+
   scope :end_iteration, -> {where(key: TYPE_END_ITERATION)}
-  scope :moved_to_stage, -> {where(key: [TYPE_STAGE_IDEA, TYPE_STAGE_PROTOTYPE, TYPE_STAGE_CUSTOMER, TYPE_STAGE_EFFICIENCY, TYPE_STAGE_SCALE])}
+  scope :moved_to_stage, -> {where(key: stage_keys)}
   scope :suggested_for, ->(startup) {where('suggested_stage LIKE ?', "%#{startup.current_stage}%").where.not(id: startup.current_stage_event_types.map(&:id))}
 end

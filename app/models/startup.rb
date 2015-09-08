@@ -524,4 +524,11 @@ class Startup < ActiveRecord::Base
     end
   end
 
+  # Update stage whenever startup is updated. Note that this is also triggered from TimelineEvent after_commit.
+  after_save :update_stage!
+
+  # Update stage stored in database. Do not trigger callbacks, to avoid callback loop.
+  def update_stage!
+    update_column(:stage, current_stage)
+  end
 end

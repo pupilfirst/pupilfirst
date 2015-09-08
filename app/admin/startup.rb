@@ -98,6 +98,8 @@ ActiveAdmin.register Startup do
         StartupMailer.startup_approved(startup).deliver_later
       when :rejection
         StartupMailer.startup_rejected(startup).deliver_later
+      when :dropped_out
+        StartupMailer.startup_dropped_out(startup).deliver_later
     end
 
     redirect_to action: :show
@@ -127,21 +129,28 @@ ActiveAdmin.register Startup do
         end
 
         div class: 'startup-status-buttons' do
-          if startup.pending? || startup.rejected?
+          unless startup.approved? || startup.unready?
             span do
               button_to('Approve Startup',
                 custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_APPROVED }, email_to_send: :approval),
-                method: :put, data: { confirm: 'Are you sure?' })
+                method: :put, data: { confirm: 'Are you sure you want to approve this startup?' })
             end
-
-            unless startup.rejected?
-              span do
-                button_to('Reject Startup',
-                  custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_REJECTED }, email_to_send: :rejection),
-                  { method: :put, data: { confirm: 'Are you sure?' } })
-              end
+          end
+          unless startup.rejected? || startup.unready?
+            span do
+              button_to('Reject Startup',
+                custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_REJECTED }, email_to_send: :rejection),
+                { method: :put, data: { confirm: 'Are you sure you want to reject this startup?' } })
             end
-          elsif startup.unready?
+          end
+          if startup.approved?
+            span do
+              button_to('Drop-out Startup',
+                custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_DROPPED_OUT }, email_to_send: :dropped_out),
+                { method: :put, data: { confirm: 'Are you sure you want to drop out this startup?' } })
+            end
+          end
+          if startup.unready?
             span do
               button_to('Send reminder e-mail', send_form_email_admin_startup_path(startup_id: startup.id))
             end

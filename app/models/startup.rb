@@ -61,6 +61,7 @@ class Startup < ActiveRecord::Base
   scope :approved, -> { where(approval_status: APPROVAL_STATUS_APPROVED) }
   scope :rejected, -> { where(approval_status: APPROVAL_STATUS_REJECTED) }
   scope :dropped_out, -> { where(approval_status: APPROVAL_STATUS_DROPPED_OUT) }
+  scope :not_dropped_out, -> { where.not(approval_status: APPROVAL_STATUS_DROPPED_OUT) }
   scope :incubation_requested, -> { where(approval_status: [APPROVAL_STATUS_PENDING, APPROVAL_STATUS_REJECTED, APPROVAL_STATUS_APPROVED]) }
   scope :agreement_signed, -> { where 'agreement_first_signed_at IS NOT NULL' }
   scope :agreement_live, -> { where('agreement_ends_at > ?', Time.now) }

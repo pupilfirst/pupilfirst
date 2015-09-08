@@ -143,7 +143,7 @@ ActiveAdmin.register Startup do
                 { method: :put, data: { confirm: 'Are you sure you want to reject this startup?' } })
             end
           end
-          if startup.approved?
+          unless startup.dropped_out?
             span do
               button_to('Drop-out Startup',
                 custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_DROPPED_OUT }, email_to_send: :dropped_out),

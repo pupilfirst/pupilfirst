@@ -376,29 +376,6 @@ h1.startup-name {
       }
     }
 
-    .timeline-panel:before {
-      position: absolute;
-      top: 26px;
-      right: -15px;
-      display: inline-block;
-      border-top: 15px solid transparent;
-      border-left: 15px solid $dark-grey-border;
-      border-right: 0 solid $dark-grey-border;
-      border-bottom: 15px solid transparent;
-      content: " ";
-    }
-
-    .timeline-panel:after {
-      position: absolute;
-      top: 27px;
-      right: -14px;
-      display: inline-block;
-      border-top: 14px solid transparent;
-      border-left: 14px solid white;
-      border-right: 0 solid white;
-      border-bottom: 14px solid transparent;
-      content: ' ';
-    }
     .timeline-badge {
       color: white;
       width: 70px;
@@ -420,20 +397,6 @@ h1.startup-name {
 
     &.timeline-inverted > .timeline-panel {
       float: right;
-    }
-
-    &.timeline-inverted > .timeline-panel:before {
-      border-left-width: 0;
-      border-right-width: 15px;
-      left: -15px;
-      right: auto;
-    }
-
-    &.timeline-inverted > .timeline-panel:after {
-      border-left-width: 0;
-      border-right-width: 14px;
-      left: -14px;
-      right: auto;
     }
   }
 }
@@ -555,20 +518,6 @@ h1.startup-name {
 
       .timeline-panel {
         float: right;
-      }
-
-      .timeline-panel:before {
-        border-left-width: 0;
-        border-right-width: 15px;
-        left: -15px;
-        right: auto;
-      }
-
-      .timeline-panel:after {
-        border-left-width: 0;
-        border-right-width: 14px;
-        left: -14px;
-        right: auto;
       }
     }
   }

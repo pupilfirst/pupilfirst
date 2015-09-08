@@ -3,9 +3,6 @@
     - if current_user && current_user.startup.present? && !current_user.startup.unready?
       li role="presentation"
         a.top-nav-link href="#{startup_url(current_user.startup)}" Timeline
-    - if feature_active?('startups')
-      li role="presentation"
-        a.top-nav-link href="#{startups_url}" Startups
     li role="presentation"
       a.top-nav-link href="http://blog.sv.co" Blog
     li role="presentation"

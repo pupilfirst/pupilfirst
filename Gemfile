@@ -34,7 +34,7 @@ gem 'select2-rails'
 
 gem 'bootstrap-sass', '~> 3.3.3' # Official Sass port of Bootstrap.
 gem 'autoprefixer-rails' # Autoprefixer for Ruby and Ruby on Rails.
-gem 'simple_form', '~> 3.1.0.rc2' # Simple-form RC2 with support for Bootstrap 3. TODO: Update simple_form to stable when available.
+gem 'simple_form', '~> 3.1.1' # Simple-form with support for Bootstrap 3.
 # gem 'validate_url' # URL validation. - appears to be only supported on Rails 3
 gem 'valid_url' # New url validataion gem
 gem 'chartkick' # Pretty charts!

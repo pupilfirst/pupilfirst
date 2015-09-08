@@ -31,7 +31,7 @@ Svapp::Application.routes.draw do
     end
   end
 
-  resources :startups, only: [:index, :show] do
+  resources :startups, only: [:show] do
     collection do
       post 'team_leader_consent'
     end

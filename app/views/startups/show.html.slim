@@ -198,6 +198,9 @@
                     .timeline-badge class="color#{index%14}"
                       = image_tag "#{event.timeline_event_type.badge_url}", width: "70"
                     .timeline-panel
+                      - if event.image?
+                        .img-responsive.img-padding.tl-event-image
+                          = image_tag event.image
                       .timeline-heading
                         - if !event.verified?
                           .pending-verification data-toggle="tooltip" title="This event has not yet been verified by SV.CO, and is hidden from the public."
@@ -215,9 +218,6 @@
                               ' (#{((event.event_on- @startup.earliest_event_date).to_i + 1).ordinalize} day)
                       .timeline-body
                         .tl-body
-                          - if event.image?
-                            .img-responsive.img-padding.tl-event-image
-                              = image_tag event.image
                           p #{event.description}
                         - if event.links?
                           .timeline-footer.tl-footer

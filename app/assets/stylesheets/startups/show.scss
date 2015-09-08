@@ -367,7 +367,7 @@ h1.startup-name {
       border: 1px solid $dark-grey-border;
       border-radius: 2px;
       //padding: 20px;
-      padding: 15px 20px 20px;
+      padding: 0 20px 20px;
       position: relative;
 
       .timeline-heading a {
@@ -575,7 +575,8 @@ h1.startup-name {
 }
 
 .tl-event-image > img {
-  max-width: 100%;
+  width: calc(100% + 40px);
+  margin-left: -20px;
 }
 
 .founder, .founder-avatar > img {

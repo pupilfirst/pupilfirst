@@ -97,6 +97,9 @@ Svapp::Application.routes.draw do
     get 'office-hours'
   end
 
-  get 'faculty', to: 'home#faculty'
+  scope 'faculty', as: 'faculty', controller: 'faculty' do
+    get '/', action: 'index'
+  end
+
   root 'home#index'
 end

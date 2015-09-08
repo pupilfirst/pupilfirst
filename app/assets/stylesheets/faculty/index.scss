@@ -1,0 +1,107 @@
+@import 'variables';
+
+// The navbar shouldn't have any margin on this page.
+.navbar { margin-bottom: 0; }
+
+// The prefooter shouldn't have any margin either; - appears to be unused ?
+// section#prefooter { margin-top: 0; }
+
+#faculty {
+  //font-family: Roboto, sans-serif;
+  background-color: $faculty-bg-color;
+
+  .introduction {
+    margin-top: 30px;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 200%;
+  }
+
+  #tabbed-content {
+    margin-top: 30px;
+
+    .tab-title {
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    li.active {
+      .tab-title {
+        border: 1px solid $faculty-bg-color;
+        border-bottom: 3px solid $active-tab-highlight;
+        background-color: $faculty-bg-color;
+      }
+    }
+
+    #faculty-nav {
+      margin-bottom: 30px;
+
+      .inactive-spacer {
+        height: 100%;
+        user-select: none;
+        color: $faculty-bg-color;
+
+        @media screen and (max-width: 767px) { display: none; }
+
+        &:hover {
+          cursor: default;
+          background-color: initial;
+          border: 1px solid $faculty-bg-color;
+          border-bottom: 1px solid $bootstrap-tab-underline;
+        }
+      }
+    }
+
+    .faculty-cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      .faculty-card {
+        background-color: white;
+        width: 200px;
+        height: 340px;
+        border-bottom: 2px solid $faculty-card-bottom-border;
+        margin: 0 22px 45px;
+
+        img {
+          width: 200px;
+          height: 240px;
+        }
+
+        .faculty-info {
+          text-align: center;
+
+          .faculty-name {
+            text-transform: uppercase;
+            margin-top: 15px;
+            font-weight: 600;
+          }
+
+          .faculty-title {
+            margin-top: 6px;
+            font-size: 11px;
+            font-weight: 300;
+          }
+
+          .faculty-key-skills {
+            margin-top: 6px;
+            font-size: 11px;
+            font-style: italic;
+          }
+
+          .faculty-links {
+            margin-top: 6px;
+
+            a { margin-right: 10px; }
+            :last-child { margin-right: 0; }
+          }
+        }
+      }
+
+      .visiting-faculty {
+        height: 370px;
+      }
+    }
+  }
+}

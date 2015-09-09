@@ -84,13 +84,13 @@ ActiveAdmin.register User do
       row :last_sign_in_at
     end
 
-    panel 'Feedback on User' do
-      link_to('Record new feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: User.find(params[:id]).startup.id, reference_url: startup_url(User.find(params[:id]).startup) }))
-    end
-
     panel 'Emails and Notifications' do
       link_to('Reminder to complete founder profile', send_founder_profile_reminder_admin_user_path, method: :post, data: { confirm: 'Are you sure you wish to send notification and email?' })
     end
+  end
+
+  action_item :feedback, only: :show do
+    link_to 'Record New Feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: User.find(params[:id]).startup.id, reference_url: startup_url(User.find(params[:id]).startup) })
   end
 
   # Customize the filter options to reduce the size.

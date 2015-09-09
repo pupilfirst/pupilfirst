@@ -59,4 +59,9 @@ ActiveAdmin.register StartupFeedback do
     flash[:alert] = 'Your feedback has been sent to the startup founders!'
     redirect_to action: :index
   end
+
+  action_item :email, only: :show do
+  link_to 'Email Now!', email_feedback_admin_startup_feedback_path(startup_feedback), method: :put, data: { confirm: 'Are you sure you want to email this feedback to the founders?' } unless startup_feedback.send_at.present?
+  end
+
 end

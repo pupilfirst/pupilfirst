@@ -12,11 +12,16 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    referer = session.delete :referer
-    if referer
-      referer
-    elsif current_user.present? && current_user.startup.present? && !current_user.startup.unready?
-      startup_url(current_user.startup)
+    if resource.is_a?(User)
+      referer = session.delete :referer
+
+      if referer
+        referer
+      elsif current_user.startup.present? && !current_user.startup.unready?
+        startup_url(current_user.startup)
+      else
+        super
+      end
     else
       super
     end

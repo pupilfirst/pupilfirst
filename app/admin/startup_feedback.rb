@@ -8,7 +8,7 @@ ActiveAdmin.register StartupFeedback do
     end
   end
 
-  index do
+  index :title => 'Startup Feedback' do
     selectable_column
     column :startup
 

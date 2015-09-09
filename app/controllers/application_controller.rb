@@ -25,8 +25,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def feature_active?(feature)
-    (Rails.env == "development") ||
-      (Rails.env == "staging") ||
+    (Rails.env == 'development') ||
       (DbConfig.feature_active? feature, current_user)
   end
 
@@ -43,12 +42,8 @@ class ApplicationController < ActionController::Base
   def set_content_security_policy
     image_sources = "img-src 'self' " + [
       'https://www.google-analytics.com https://blog.sv.co https://www.startatsv.com http://www.startatsv.com',
-      'https://assets.sv.co https://secure.gravatar.com'
-    ].join(' ')
-
-    image_sources += ' https://uploaded-assets.sv.co' if Rails.env.production?
-    image_sources += ' http://svapp.assets.svlabs.in' if Rails.env == 'staging'
-    image_sources += ';'
+      'https://assets.sv.co https://secure.gravatar.com https://uploaded-assets.sv.co'
+    ].join(' ') + ';'
 
     csp_directives = [
       image_sources,

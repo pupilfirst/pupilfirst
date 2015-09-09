@@ -13,7 +13,7 @@ ActiveAdmin.register StartupFeedback do
     column :startup
 
     column :feedback do |startup_feedback|
-      pre class: 'startup-feedback' do
+      pre class: 'startup-feedback max-width-200' do
         startup_feedback.feedback
       end
     end
@@ -35,7 +35,7 @@ ActiveAdmin.register StartupFeedback do
     attributes_table do
       row :startup
       row :feedback do |startup_feedback|
-        pre class: 'startup-feedback' do
+        pre class: 'startup-feedback max-width-600' do
           startup_feedback.feedback
         end
       end

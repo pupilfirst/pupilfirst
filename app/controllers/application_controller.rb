@@ -46,7 +46,7 @@ class ApplicationController < ActionController::Base
       'https://assets.sv.co https://secure.gravatar.com'
     ].join(' ')
 
-    image_sources += ' http://uploaded-assets.sv.co' if Rails.env.production?
+    image_sources += ' https://uploaded-assets.sv.co' if Rails.env.production?
     image_sources += ' http://svapp.assets.svlabs.in' if Rails.env == 'staging'
     image_sources += ';'
 

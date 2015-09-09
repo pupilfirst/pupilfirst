@@ -202,7 +202,7 @@
                       = image_tag "#{event.timeline_event_type.badge_url}", width: "70"
                     .timeline-panel
                       - if event.image?
-                        .img-responsive.img-padding.tl-event-image
+                        .img-responsive.tl-event-image
                           = image_tag event.image
                       .timeline-heading
                         - if !event.verified?

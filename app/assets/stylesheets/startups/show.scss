@@ -370,9 +370,12 @@ h1.startup-name {
       padding: 0 20px 20px;
       position: relative;
 
-      .timeline-heading a {
-        text-decoration: none;
-        color: red;
+      .timeline-heading {
+        padding-top: 15px;
+        a {
+          text-decoration: none;
+          color: red;
+        }
       }
     }
 
@@ -453,9 +456,6 @@ h1.startup-name {
   line-height: 25px;
   color: $dark-grey-text;
   padding-bottom: 5px; }
-
-.img-padding {
-  margin-bottom: 12px; }
 
 .timeline-footer {
   margin-top: 12px;

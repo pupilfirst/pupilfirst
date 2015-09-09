@@ -216,7 +216,7 @@
                         p.tl-date
                           small
                             = image_tag "timeline/date.png"
-                            ' #{event.event_on.strftime("%B %Y")}
+                            ' #{event.event_on.strftime("%B %e, %Y")}
                             - if @startup.earliest_event_date.present? && event.verified?
                               ' (#{((event.event_on- @startup.earliest_event_date).to_i + 1).ordinalize} day)
                       .timeline-body

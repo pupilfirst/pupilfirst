@@ -30,3 +30,15 @@ en:
 
   date:
     datepicker: "dd/mm/yyyy"
+
+  errors:
+    messages:
+      not_found: 'Could not find an account with supplied email address.'
+
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              blank: "Please supply your registered email address."

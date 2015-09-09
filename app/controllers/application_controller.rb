@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
     referer = session.delete :referer
     if referer
       referer
-    elsif current_user.startup.present? && !current_user.startup.unready?
+    elsif current_user.present? && current_user.startup.present? && !current_user.startup.unready?
       startup_url(current_user.startup)
     else
       super

@@ -232,6 +232,20 @@ h1.startup-name {
   }
 }
 
+// Datepicker customizations
+.dtpicker-buttonCont .dtpicker-button { background: $theme-light-green; }
+.dtpicker-content { max-width: 360px; }
+
+.dtpicker-header {
+  .dtpicker-value {
+    color: $theme-dark-green;
+  }
+
+  .dtpicker-close {
+    color: $theme-dark-green;
+  }
+}
+
 //.
 ////.
 //////.

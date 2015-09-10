@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
 
   def feature_active?(feature)
     (Rails.env == 'development') ||
-      (DbConfig.feature_active? feature, current_user)
+      (Feature.feature_active? feature, current_user)
   end
 
   helper_method :feature_active?

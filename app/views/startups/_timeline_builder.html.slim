@@ -49,20 +49,15 @@
               optgroup label=role
                 - TimelineEventType.where(role: role).order(:title).where.not(id: suggested.pluck(:id)).each do |t|
                   option value='#{t.id}' data-sample-text='#{t.sample}' selected=(t == event.timeline_event_type ? true : nil) #{t.title}
-          span#timeline-builder-date-button
-            = f.hidden_field :event_on
-            a.btn.btn-default.btn-flat.btn-with-default-padding.margin-right-10
-              i.fa.fa-calendar
-              i.fa.fa-calendar-check-o.hidden
-              span#date-of-event.hidden-xs &nbsp;Date of Event
-            .datepicker-container
-              / Eternicode datepicker shows up here.
-          button.btn.btn-primary.btn-flat.btn-with-default-padding type='submit'
+
+          = f.text_field :event_on, 'data-field' => 'date', readonly: true, placeholder: 'Date'
+
+          button#timeline-builder-submit-button.btn.btn-primary.btn-flat.btn-with-default-padding type='submit'
             - if event.persisted?
               i.fa.fa-pencil
             - else
               i.fa.fa-plus
-            span.hidden-xs &nbsp;Submit for Review
+            span &nbsp;Submit for Review
 
   #add-link-modal.modal.fade role="dialog"
     - event_link = (event.persisted? && event.links.present? ? event.links.first : {})
@@ -84,3 +79,6 @@
         .modal-footer
           button#close-link-modal-button.btn.btn-default data-dismiss="modal" type="button"  Close
           button#add-link-button.btn.btn-success type="button"  Add
+
+/ Populated by JS from CuriousSolution's DatePicker.
+#timeline-builder-datepicker-box

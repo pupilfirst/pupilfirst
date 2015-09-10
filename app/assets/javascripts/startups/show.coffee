@@ -1,7 +1,3 @@
-exports = {
-  timelineBuilderDatepicker: null
-}
-
 $(->
   $('a#verified-icon').tooltip()
 )
@@ -50,21 +46,6 @@ $(->
   )
 )
 
-handleDatepickerChangeDate = (e) ->
-  timelineBuilderDateButton = $('#timeline-builder-date-button')
-
-  # Store the time in form field.
-  timelineBuilderDateButton.find('input').val(e.date.format('YYYY-MM-DD'))
-
-  # Hide the datepicker.
-  exports.timelineBuilderDatepicker.hide()
-
-  # Set new date on datepicker button.
-  timelineBuilderDateButton.find('.fa-calendar').addClass('hidden')
-  timelineBuilderDateButton.find('.fa-calendar-check-o').removeClass('hidden')
-  timelineBuilderDateButton.find('a').addClass('green')
-  timelineBuilderDateButton.find('#date-of-event').html('&nbsp;' + e.date.format('DD/MM/YYYY'))
-
 timelineBuilderSubmitChecks = ->
   $('form.new_timeline_event, form.edit_timeline_event').submit((event) ->
     form = $(event.target)
@@ -79,23 +60,23 @@ timelineBuilderSubmitChecks = ->
       timelineEventDescription.addClass('has-error')
 
     unless dateOfEventPresent
-      $('#timeline-builder-date-button > a').removeClass('btn-default').addClass('btn-danger')
-      timelineBuilderDateButton = $('#timeline-builder-date-button')
+      timelineEventDateField = $('#timeline_event_event_on')
+      timelineEventDateField.addClass('has-error')
 
-      timelineBuilderDateButton.tooltip(
-        placement: 'top',
+      timelineEventDateField.tooltip(
+        placement: 'bottom',
         title: 'When did this event occur?',
         trigger: 'manual'
       )
 
-      timelineBuilderDateButton.tooltip('show')
+      timelineEventDateField.tooltip('show')
 
     unless typeOfEventPresent
       select2Container = form.find('.select2-container')
       select2Container.addClass('has-error')
 
       select2Container.tooltip(
-        placement: 'bottom',
+        placement: 'top',
         title: 'What type of event is this?',
         trigger: 'manual'
       )
@@ -133,27 +114,6 @@ matchSampleTextToEventType = ->
   $('#timeline_event_timeline_event_type_id').on('select2-selected', (e) ->
     newPlaceHolder = $('#timeline_event_timeline_event_type_id :selected').attr("data-sample-text")
     $('#timeline_event_description').attr("placeholder", newPlaceHolder)
-  )
-
-handleDateButtonClick = ->
-  $('#timeline-builder-date-button a').click(->
-    timelineBuilderDateButton = $('#timeline-builder-date-button')
-
-    # Remove error class and tooltip on it if its present
-    timelineBuilderDateButton.find('a').removeClass('btn-danger').addClass('btn-default')
-    timelineBuilderDateButton.tooltip('destroy')
-
-    # Toggle the datepicker itself.
-    exports.timelineBuilderDatepicker.toggle()
-  )
-
-closeDatePickerOnExternalClick = ->
-  $(document).on('click', (event) ->
-    eventTarget = $(event.target)
-
-    if exports.timelineBuilderDatepicker
-      unless $(event.target).closest('#timeline-builder-date-button').length
-        exports.timelineBuilderDatepicker.toggle(false)
   )
 
 removeSelectedLink = ->
@@ -318,40 +278,19 @@ pad = (val, length, padChar = '0') ->
   if (numPads > 0) then new Array(numPads + 1).join(padChar) + val else val
 
 setupTimelineBuilderDatepicker = ->
-  timelineBuilderDateButton = $('#timeline-builder-date-button')
-
-  if timelineBuilderDateButton
-    datepickerContainer = timelineBuilderDateButton.find('.datepicker-container')
-
-    exports.timelineBuilderDatepicker = datepickerContainer.datetimepicker(
-      format: 'DD/MM/YYYY',
-      maxDate: moment(),
-      inline: true
-    )
-
-    exports.timelineBuilderDatepicker.on('dp.change', handleDatepickerChangeDate)
-
-    eventDate = $('#timeline_event_event_on').val()
-
-    # If an event date is already set (editing), set that in the datepicker, and in the button.
-    if eventDate
-      dateComponents = (parseInt(num) for num in eventDate.split('-'))
-
-      year = dateComponents[0]
-      month = dateComponents[1]
-      day = dateComponents[2]
-
-      # Date() is weird in that it counts months from zero onwards.
-      dateFromServer = new Date(year, month - 1, day)
-
-      # Change the date inside datepicker (this will emit dp.change event).
-      datepickerContainer.data("DateTimePicker").date(dateFromServer)
+  $("#timeline-builder-datepicker-box").DateTimePicker(
+    dateFormat: "YYYY-MM-DD",
+    maxDate: moment().format('YYYY-MM-DD'),
+    afterShow: ->
+      # Remove error class and tooltip on it if its present
+      timelineEventDateField = $('#timeline_event_event_on')
+      timelineEventDateField.removeClass('has-error')
+      timelineEventDateField.tooltip('destroy')
+  )
 
 $(timelineBuilderSubmitChecks)
 $(setupSelect2ForEventType)
 $(clearErrorsOnOpeningSelect2)
-$(handleDateButtonClick)
-$(closeDatePickerOnExternalClick)
 $(handleImageUpload)
 $(handleLinkAddition)
 $(markSelectedLinksOnEdit)

@@ -81,11 +81,15 @@ ActiveAdmin.register Startup do
     column :agreement_ends_at
   end
 
-  action_item :view, only: :show do
-    link_to('Record new feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: Startup.friendly.find(params[:id]).id, reference_url: startup_url(Startup.friendly.find(params[:id])) }))
+  action_item :view_feedback, only: :show do
+    link_to('View All Feedback', admin_startup_feedback_index_url("q[startup_id_eq]" => Startup.friendly.find(params[:id]).id,"commit" => "Filter"))
   end
 
-  action_item :view, only: :show do
+  action_item :record_feedback, only: :show do
+    link_to('Record New Feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: Startup.friendly.find(params[:id]).id, reference_url: startup_url(Startup.friendly.find(params[:id])) }))
+  end
+
+  action_item :view_timeline, only: :show do
     link_to('View Timeline', startup_url(startup), target: '_blank')
   end
 

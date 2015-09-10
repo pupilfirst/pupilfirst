@@ -8,7 +8,7 @@
 # feature_about_page: (dev) Toggle About Page
 # feature_startups: (dev) Toggle Startups
 #
-class DbConfig < ActiveRecord::Base
+class Feature < ActiveRecord::Base
   # {"email_regexes": ["\S*(@mobme.in|sv.co)$"], "emails": ["someone@sv.co"]}
   #     OR
   # {"active": true}

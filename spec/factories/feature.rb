@@ -1,3 +1,3 @@
 FactoryGirl.define do
-  factory :db_config
+  factory :feature
 end

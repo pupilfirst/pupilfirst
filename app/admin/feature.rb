@@ -1,4 +1,4 @@
-ActiveAdmin.register DbConfig do
+ActiveAdmin.register Feature do
   form do |f|
     f.inputs "Details" do
       f.input :key

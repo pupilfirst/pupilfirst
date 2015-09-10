@@ -50,7 +50,7 @@
                 - TimelineEventType.where(role: role).order(:title).where.not(id: suggested.pluck(:id)).each do |t|
                   option value='#{t.id}' data-sample-text='#{t.sample}' selected=(t == event.timeline_event_type ? true : nil) #{t.title}
 
-          = f.text_field :event_on, 'data-field' => 'date', readonly: true, placeholder: 'Date'
+          = f.text_field :event_on, 'data-field' => 'date', readonly: true, placeholder: '🕘 Date'
 
           button#timeline-builder-submit-button.btn.btn-primary.btn-flat.btn-with-default-padding type='submit'
             - if event.persisted?

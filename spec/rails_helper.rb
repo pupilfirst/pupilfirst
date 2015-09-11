@@ -58,3 +58,7 @@ end
 # Use poltergeist as JS driver.
 require 'capybara/poltergeist'
 Capybara.javascript_driver = :poltergeist
+
+# Save screenshots on failure (and more).
+require 'capybara-screenshot/rspec'
+Capybara::Screenshot.prune_strategy = { keep: 20 }

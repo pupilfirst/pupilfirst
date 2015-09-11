@@ -48,6 +48,10 @@ feature 'Timeline Builder' do
       page.find('.select2-result-label', text: 'Team Formed').click
       page.find('#timeline_event_event_on').click
       page.find('.dtpicker-buttonSet').click
+
+      # TODO: File attachment doesn't seem to work. Might be because of https://github.com/ariya/phantomjs/issues/12506
+      page.attach_file('timeline_event_image', File.join(Rails.root, '/app/assets/images/favicon.png'), visible: false)
+
       click_on 'Submit for Review'
 
       latest_timeline_event_panel = page.first('.timeline-panel')

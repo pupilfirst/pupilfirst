@@ -225,7 +225,7 @@
                         - if event.links?
                           .timeline-footer.tl-footer
                             - event.links.each do |link|
-                              a.tl-link-button href="#{link[:url]}"
+                              a.tl-link-button href="#{link[:url]}" target="_blank"
                                 | #{link[:title]}
                         - if current_user && @startup.is_founder?(current_user)
                           = button_to user_startup_timeline_event_url(current_user, event),

@@ -68,7 +68,7 @@ h1.startup-name {
     }
 
     .data-subcontent {
-      color:grey;
+      color: grey;
       font-size: 12px;
       font-style: italic;
     }
@@ -186,11 +186,6 @@ h1.startup-name {
 
   .border-right { border-right: 1px solid grey; }
 
-  .date-of-event {
-    width: 126px;
-    cursor: default;
-  }
-
   .bottom-row {
     background-color: lightgray;
     padding: 7px;
@@ -204,50 +199,6 @@ h1.startup-name {
       border-radius: 0;
     }
   }
-
-  #timeline-builder-date-button {
-    position: relative;
-
-    a.green {
-      color: green;
-    }
-
-    .datepicker-container {
-      position: absolute;
-      right: 0;
-      top: 35px;
-      border: 1px solid grey;
-      background-color: white;
-      z-index: 1000;
-      display: none;
-      padding: 4px;
-      width: 250px;
-
-      &:after, &:before {
-        bottom: 100%;
-        right: 23px;
-        border: solid transparent;
-        content: " ";
-        height: 0;
-        width: 0;
-        position: absolute;
-        pointer-events: none;
-      }
-
-      &:after {
-        border-color: rgba(255, 255, 255, 0);
-        border-bottom-color: #ffffff;
-        border-width: 5px;
-      }
-
-      &:before {
-        border-color: rgba(166, 166, 166, 0);
-        border-bottom-color: #a6a6a6;
-        border-width: 6px;
-        right: 22px;
-      }
-    }
-  }
 }
 
 .pending-verification {
@@ -255,10 +206,45 @@ h1.startup-name {
   cursor: help;
 }
 
-// Make the two button_two uses inline blocks.
+// Make the two button_to uses inline blocks.
 .timeline-body .button_to, .tl-iteration .button_to {
   display: inline-block;
   margin-right: 5px;
+}
+
+#timeline_event_event_on {
+  font-family: 'Source Sans Pro', FontAwesome, sans-serif;
+  display: inline-block;
+  vertical-align: bottom;
+  width: 100px;
+  margin-right: 10px;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid lightgray;
+
+  &.has-error {
+    border-color: #a94442;
+  }
+}
+
+#timeline-builder-submit-button {
+  @media (max-width: $screen-xs-max) {
+    margin-top: 8px;
+  }
+}
+
+// Datepicker customizations
+.dtpicker-buttonCont .dtpicker-button { background: $theme-light-green; }
+.dtpicker-content { max-width: 360px; }
+
+.dtpicker-header {
+  .dtpicker-value {
+    color: $theme-dark-green;
+  }
+
+  .dtpicker-close {
+    color: $theme-dark-green;
+  }
 }
 
 //.
@@ -434,7 +420,7 @@ h1.startup-name {
     color: grey;
   }
   &:hover {
-    .fa-link{
+    .fa-link {
       display: inline;
     }
   }

@@ -62,6 +62,7 @@ gem 'gravtastic' # Use gravatars as fallback avatars
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify' # Superb notifications library. http://sciactive.github.io/pnotify/
+  gem 'rails-assets-curioussolutions-datetimepicker' # Responsive datetimepicker for timeline builder form.
 end
 
 group :development do

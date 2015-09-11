@@ -43,14 +43,25 @@ feature 'Timeline Builder' do
 
   context 'Founder visits Timeline page of verified startup' do
     scenario 'Founder submits new timeline event', js: true, focus: true do
+      # Type in description.
       fill_in 'timeline_event_description', with: event_description
+
+      # Choose type of event.
       click_on 'Type of Event'
       page.find('.select2-result-label', text: 'Team Formed').click
+
+      # Pick date.
       page.find('#timeline_event_event_on').click
       page.find('.dtpicker-buttonSet').click
 
       # TODO: File attachment doesn't seem to work. Might be because of https://github.com/ariya/phantomjs/issues/12506
       page.attach_file('timeline_event_image', File.join(Rails.root, '/app/assets/images/favicon.png'), visible: false)
+
+      # Add Link.
+      page.find('a', text: 'Add a Link').click
+      fill_in 'Title', with: 'SV.CO'
+      fill_in 'URL', with: 'https://sv.co'
+      click_on 'Add'
 
       click_on 'Submit for Review'
 
@@ -59,6 +70,7 @@ feature 'Timeline Builder' do
       expect(latest_timeline_event_panel).to have_text('Pending verification')
       expect(latest_timeline_event_panel).to have_text('Team Formed')
       expect(latest_timeline_event_panel).to have_text(event_description)
+      expect(latest_timeline_event_panel).to have_link('SV.CO', href: 'https://sv.co')
     end
   end
 

@@ -34,7 +34,8 @@ function appendRow (index,feedback) {
   if (feedback.send_at == null) {
     var send_at_entry = "Not yet sent!";
   } else {
-    var send_at_entry = feedback.send_at;
+    // jquery-ui already has a formatDate. Hence, using that
+    var send_at_entry = $.datepicker.formatDate('dd MM yy',new Date(feedback.send_at));
   }
   var sendAtHTML = "<td>"+send_at_entry+"</td>";
   var trHTML = "<tr>"+feedbackHTML+referenceUrlHTML+sendAtHTML+"</tr>";

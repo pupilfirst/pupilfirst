@@ -29,8 +29,9 @@ function onSuccess (data,status) {
 }
 
 function appendRow (index,feedback) {
+  var viewLinkHTML = "<td><a href='https://sv.co/admin/startup_feedback/"+feedback.id+"'>View</a></td>"; //works only in production!
   var feedbackHTML = "<td><pre class='startup-feedback'>"+feedback.feedback+"</pre></td>";
-  var referenceUrlHTML = "<td>"+feedback.reference_url+"</td>";
+  var referenceUrlHTML = "<td><a href='"+feedback.reference_url+"'>Link</a></td>";
   if (feedback.send_at == null) {
     var send_at_entry = "Not yet sent!";
   } else {
@@ -38,6 +39,6 @@ function appendRow (index,feedback) {
     var send_at_entry = $.datepicker.formatDate('dd MM yy',new Date(feedback.send_at));
   }
   var sendAtHTML = "<td>"+send_at_entry+"</td>";
-  var trHTML = "<tr>"+feedbackHTML+referenceUrlHTML+sendAtHTML+"</tr>";
+  var trHTML = "<tr>"+viewLinkHTML+feedbackHTML+referenceUrlHTML+sendAtHTML+"</tr>";
   $("#feedback-table-body").append(trHTML);
 }

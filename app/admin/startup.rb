@@ -121,6 +121,16 @@ ActiveAdmin.register Startup do
     redirect_to action: :show
   end
 
+  member_action :get_all_startup_feedback do
+    startup = Startup.friendly.find params[:id]
+    feedback = startup.startup_feedback.order('updated_at desc')
+    respond_to do |format|
+      format.json {
+        render json: {:feedback => feedback, :startup_name => startup.name}
+      }
+    end
+  end
+
   show do
     attributes_table do
       row :approval_status do |startup|

@@ -8,11 +8,30 @@ class TimelineEvent < ActiveRecord::Base
 
   MAX_DESCRIPTION_CHARACTERS = 300
 
+  VERIFIED_STATUS_PENDING = "Pending"
+  VERIFIED_STATUS_NEEDS_IMPROVEMENT = "Needs Improvement"
+  VERIFIED_STATUS_VERIFIED = "Verified"
+
+  def self.valid_verified_status
+    [VERIFIED_STATUS_PENDING, VERIFIED_STATUS_NEEDS_IMPROVEMENT, VERIFIED_STATUS_VERIFIED]
+  end
+
+  validates_inclusion_of :verified_status, in: valid_verified_status
+
+  before_validation do
+    # default verified_status to pending unless verified_at is present
+    if self.verified_at.present?
+      self.verified_status = VERIFIED_STATUS_VERIFIED
+    else
+      self.verified_status ||= VERIFIED_STATUS_PENDING
+    end
+  end
+
   validates_length_of :description, maximum: MAX_DESCRIPTION_CHARACTERS,
     message: "must be within #{MAX_DESCRIPTION_CHARACTERS} characters"
 
   scope :batched, -> { joins(:startup).where.not(startups: { batch: nil }) }
-  scope :verified, -> { where.not(verified_at: nil) }
+  scope :verified, -> { where(verified_status: VERIFIED_STATUS_VERIFIED) }
 
   validate :link_url_format
 
@@ -60,10 +79,6 @@ class TimelineEvent < ActiveRecord::Base
     self.links = [] if links.nil?
   end
 
-  def verified?
-    verified_at.present?
-  end
-
   def end_iteration?
     timeline_event_type.end_iteration?
   end
@@ -74,15 +89,33 @@ class TimelineEvent < ActiveRecord::Base
 
   def update_and_require_reverification(params)
     params[:verified_at] = nil
+    params[:verified_status] = VERIFIED_STATUS_PENDING
     update(params)
   end
 
   def verify!
-    update!(verified_at: Time.now)
+    update!(verified_status: VERIFIED_STATUS_VERIFIED, verified_at: Time.now)
     self.startup.update!(presentation_link: self.links[0][:url]) if new_deck? && self.links[0].try(:[],:url).present?
   end
 
   def unverify!
-    update!(verified_at: nil)
+    update!(verified_status: VERIFIED_STATUS_PENDING, verified_at: nil)
   end
+
+  def mark_needs_improvement!
+    update!(verified_status: VERIFIED_STATUS_NEEDS_IMPROVEMENT, verified_at: nil)
+  end
+
+  def verified?
+    self.verified_status == VERIFIED_STATUS_VERIFIED
+  end
+
+  def pending?
+    self.verified_status == VERIFIED_STATUS_PENDING
+  end
+
+  def needs_improvement?
+    self.verified_status == VERIFIED_STATUS_NEEDS_IMPROVEMENT
+  end
+
 end

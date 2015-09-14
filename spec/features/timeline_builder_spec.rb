@@ -60,6 +60,14 @@ feature 'Timeline Builder' do
       expect(latest_timeline_event_panel).to have_link('SV.CO', href: 'https://sv.co')
     end
 
+    scenario 'Founder attempts to add link without supplying title or URL', js: true do
+      page.find('a', text: 'Add a Link').click
+      click_on 'Add'
+
+      expect(page.find('#link-title-group')[:class]).to include('has-error')
+      expect(page.find('#link-url-group')[:class]).to include('has-error')
+    end
+
     scenario 'Founder attempts to submit builder without essential fields', js: true do
       click_on 'Submit for Review'
 

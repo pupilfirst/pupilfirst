@@ -32,10 +32,6 @@ ActiveAdmin.register TimelineEvent do
     link_to('Record New Feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: timeline_event.startup.id, reference_url: startup_url(timeline_event.startup, anchor: "event-#{timeline_event.id}") }))
   end
 
-  action_item :improvement, only: :show do
-    link_to 'Mark As Needs Improvement', mark_needs_improvement_admin_timeline_event_path, method: :post if timeline_event.pending?
-  end
-
   member_action :delete_link, method: :delete do
     timeline_event = TimelineEvent.find params[:id]
     timeline_event.links.delete_at(params[:link_index].to_i)
@@ -109,7 +105,7 @@ ActiveAdmin.register TimelineEvent do
         if timeline_event.verified?
           "#{timeline_event.verified_at} (#{link_to 'Unverify', unverify_admin_timeline_event_path, method: :post, data: { confirm: 'Are you sure?' }})".html_safe
         elsif timeline_event.pending?
-          button_to('Unverified. Click to verify this event.', verify_admin_timeline_event_path)
+          "#{button_to('Unverified. Click to verify this event.', verify_admin_timeline_event_path, {form_class: 'inline-button'})} #{button_to('Mark As Needs Improvement', mark_needs_improvement_admin_timeline_event_path, {form_class: 'inline-button'})}".html_safe
         end
       end
     end

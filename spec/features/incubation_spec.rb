@@ -30,9 +30,9 @@ feature 'Incubation' do
 
   scenario 'User applies to SV.CO' do
     visit root_path
-    expect(page).to have_text('Start Application')
+    expect(page).to have_text('Apply for an Invite!')
 
-    click_on 'Start Application'
+    click_on 'Apply for an Invite!'
     expect(page).to have_text('Please supply your phone number to continue')
 
     fill_in 'Your phone number', with: '9876543210'
@@ -108,7 +108,7 @@ feature 'Incubation' do
 
     before do
       visit root_path
-      click_on 'Start Application'
+      click_on 'Apply for an Invite!'
 
       check 'team-leader-consent'
       click_on 'Start incubation!'
@@ -123,7 +123,7 @@ feature 'Incubation' do
 
     scenario 'User cancels application to SV.CO' do
       click_on 'Cancel Application'
-      expect(page).to have_text('Start Application')
+      expect(page).to have_text('Apply for an Invite!')
 
       # Now check whether data is in shape.
       user.reload
@@ -169,7 +169,7 @@ feature 'Incubation' do
 
       scenario 'User cancels application to SV.CO' do
         click_on 'Cancel Application'
-        expect(page).to have_text('Start Application')
+        expect(page).to have_text('Apply for an Invite!')
 
         # Now check whether data is in shape.
         user.reload

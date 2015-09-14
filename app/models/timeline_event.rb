@@ -8,9 +8,9 @@ class TimelineEvent < ActiveRecord::Base
 
   MAX_DESCRIPTION_CHARACTERS = 300
 
-  VERIFIED_STATUS_PENDING = "pending"
-  VERIFIED_STATUS_NEEDS_IMPROVEMENT = "needs improvement"
-  VERIFIED_STATUS_VERIFIED = "verified"
+  VERIFIED_STATUS_PENDING = "Pending"
+  VERIFIED_STATUS_NEEDS_IMPROVEMENT = "Needs Improvement"
+  VERIFIED_STATUS_VERIFIED = "Verified"
 
   def self.valid_verified_status
     [VERIFIED_STATUS_PENDING, VERIFIED_STATUS_NEEDS_IMPROVEMENT, VERIFIED_STATUS_VERIFIED]
@@ -97,11 +97,28 @@ class TimelineEvent < ActiveRecord::Base
   end
 
   def verify!
-    update!(verified_at: Time.now)
+    update!(verified_status: VERIFIED_STATUS_VERIFIED, verified_at: Time.now)
     self.startup.update!(presentation_link: self.links[0][:url]) if new_deck? && self.links[0].try(:[],:url).present?
   end
 
   def unverify!
-    update!(verified_at: nil)
+    update!(verified_status: VERIFIED_STATUS_PENDING, verified_at: nil)
   end
+
+  def mark_needs_improvement!
+    update!(verified_status: VERIFIED_STATUS_NEEDS_IMPROVEMENT, verified_at: nil)
+  end
+
+  def verified_status_verified?
+    self.verified_status == VERIFIED_STATUS_VERIFIED
+  end
+
+  def verified_status_pending?
+    self.verified_status == VERIFIED_STATUS_PENDING
+  end
+
+  def verified_status_needs_improvement?
+    self.verified_status == VERIFIED_STATUS_NEEDS_IMPROVEMENT
+  end
+
 end

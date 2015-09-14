@@ -25,6 +25,10 @@ ActiveAdmin.register TimelineEvent do
   end
 
   action_item :view, only: :show do
+    link_to('View Timeline Entry', startup_url(timeline_event.startup, anchor: "event-#{timeline_event.id}"), target: "_blank")
+  end
+
+  action_item :view, only: :show do
     link_to('Record new feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: timeline_event.startup.id, reference_url: startup_url(timeline_event.startup, anchor: "event-#{timeline_event.id}") }))
   end
 

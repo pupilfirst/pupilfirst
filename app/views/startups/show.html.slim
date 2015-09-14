@@ -178,10 +178,14 @@
                   .buttons style="display:inline" End of Iteration #{event.iteration}
                   br
                   p style="margin-top: 10px" #{event.timeline_event_type.title}
-                  - if !event.verified?
+                  - if event.pending?
                     .pending-verification href="#" data-toggle="tooltip" title="This event has not yet been verified by SV.CO, and is hidden from the public."
                       i.fa.fa-exclamation-circle
                       | &nbsp;Pending verification
+                  - if event.needs_improvement?
+                    .pending-verification href="#" data-toggle="tooltip" title="This event needs to be improved and resubmitted for approval"
+                      i.fa.fa-exclamation-circle
+                      | &nbsp;Needs Improvement
                   = image_tag 'timeline/dash.png'
                   p #{event.description}
 
@@ -205,10 +209,14 @@
                         .img-responsive.tl-event-image
                           = image_tag event.image
                       .timeline-heading
-                        - if !event.verified?
-                          .pending-verification data-toggle="tooltip" title="This event has not yet been verified by SV.CO, and is hidden from the public."
+                        - if event.pending?
+                          .pending-verification href="#" data-toggle="tooltip" title="This event has not yet been verified by SV.CO, and is hidden from the public."
                             i.fa.fa-exclamation-circle
                             | &nbsp;Pending verification
+                        - elsif event.needs_improvement?
+                          .pending-verification href="#" data-toggle="tooltip" title="This event needs to be improved and resubmitted for approval"
+                            i.fa.fa-exclamation-circle
+                            | &nbsp;Needs Improvement
                         a href="#{startup_url(event.startup, anchor: "event-#{event.id}")}"
                           h4.timeline-title
                             ' #{event.timeline_event_type.title}

@@ -31,7 +31,7 @@ class TimelineEvent < ActiveRecord::Base
     message: "must be within #{MAX_DESCRIPTION_CHARACTERS} characters"
 
   scope :batched, -> { joins(:startup).where.not(startups: { batch: nil }) }
-  scope :verified, -> { where.not(verified_at: nil) }
+  scope :verified, -> { where(verified_status: VERIFIED_STATUS_VERIFIED) }
 
   validate :link_url_format
 
@@ -79,10 +79,6 @@ class TimelineEvent < ActiveRecord::Base
     self.links = [] if links.nil?
   end
 
-  def verified?
-    verified_at.present?
-  end
-
   def end_iteration?
     timeline_event_type.end_iteration?
   end
@@ -110,15 +106,15 @@ class TimelineEvent < ActiveRecord::Base
     update!(verified_status: VERIFIED_STATUS_NEEDS_IMPROVEMENT, verified_at: nil)
   end
 
-  def verified_status_verified?
+  def verified?
     self.verified_status == VERIFIED_STATUS_VERIFIED
   end
 
-  def verified_status_pending?
+  def pending?
     self.verified_status == VERIFIED_STATUS_PENDING
   end
 
-  def verified_status_needs_improvement?
+  def needs_improvement?
     self.verified_status == VERIFIED_STATUS_NEEDS_IMPROVEMENT
   end
 

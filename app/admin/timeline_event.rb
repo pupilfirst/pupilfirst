@@ -33,7 +33,7 @@ ActiveAdmin.register TimelineEvent do
   end
 
   action_item :improvement, only: :show do
-    link_to 'Mark As Needs Improvement', mark_needs_improvement_admin_timeline_event_path, method: :post if timeline_event.verified_status_pending?
+    link_to 'Mark As Needs Improvement', mark_needs_improvement_admin_timeline_event_path, method: :post if timeline_event.pending?
   end
 
   member_action :delete_link, method: :delete do
@@ -106,9 +106,9 @@ ActiveAdmin.register TimelineEvent do
       row :verified_status
 
       row :verified_at do
-        if timeline_event.verified_status_verified?
+        if timeline_event.verified?
           "#{timeline_event.verified_at} (#{link_to 'Unverify', unverify_admin_timeline_event_path, method: :post, data: { confirm: 'Are you sure?' }})".html_safe
-        elsif timeline_event.verified_status_pending?
+        elsif timeline_event.pending?
           button_to('Unverified. Click to verify this event.', verify_admin_timeline_event_path)
         end
       end

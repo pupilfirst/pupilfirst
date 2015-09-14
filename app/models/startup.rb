@@ -71,7 +71,7 @@ class Startup < ActiveRecord::Base
   scope :student_startups, -> { joins(:founders).where.not(users: { university_id: nil }).uniq }
   scope :kochi, -> { where incubation_location: INCUBATION_LOCATION_KOCHI }
   scope :visakhapatnam, -> { where incubation_location: INCUBATION_LOCATION_VISAKHAPATNAM }
-  scope :timeline_verified, -> { joins(:timeline_events).where.not(timeline_events: { verified_at: nil }).distinct }
+  scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED }).distinct }
 
   # Find all by specific category.
   def self.category(category)

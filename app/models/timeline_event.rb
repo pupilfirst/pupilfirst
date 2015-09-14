@@ -8,6 +8,25 @@ class TimelineEvent < ActiveRecord::Base
 
   MAX_DESCRIPTION_CHARACTERS = 300
 
+  VERIFIED_STATUS_PENDING = "pending"
+  VERIFIED_STATUS_NEEDS_IMPROVEMENT = "needs improvement"
+  VERIFIED_STATUS_VERIFIED = "verified"
+
+  def self.valid_verified_status
+    [VERIFIED_STATUS_PENDING, VERIFIED_STATUS_NEEDS_IMPROVEMENT, VERIFIED_STATUS_VERIFIED]
+  end
+
+  validates_inclusion_of :verified_status, in: valid_verified_status
+
+  before_validation do
+    # default verified_status to pending unless verified_at is present
+    if self.verified_at.present?
+      self.verified_status = VERIFIED_STATUS_VERIFIED
+    else
+      self.verified_status ||= VERIFIED_STATUS_PENDING
+    end
+  end
+
   validates_length_of :description, maximum: MAX_DESCRIPTION_CHARACTERS,
     message: "must be within #{MAX_DESCRIPTION_CHARACTERS} characters"
 

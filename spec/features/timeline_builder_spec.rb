@@ -73,6 +73,48 @@ feature 'Timeline Builder' do
 
       expect(page.find('textarea.description').value.length).to eq(TimelineEvent::MAX_DESCRIPTION_CHARACTERS)
     end
+
+    context 'Founder has a existing unverified timeline event' do
+      let!(:unverified_timeline_event) { create :timeline_event, startup: startup }
+      let(:new_description) { Faker::Lorem.words(10).join ' ' }
+
+      scenario 'Founder edits existing event', js: true do
+        visit startup_path(startup)
+
+        page.find("#event-#{unverified_timeline_event.id} .edit-link").click
+        fill_in 'timeline_event_description', with: new_description
+        click_on 'Submit for Review'
+
+        new_timeline_event_panel = page.find("#event-#{unverified_timeline_event.id}")
+        expect(new_timeline_event_panel).to have_text(new_description)
+      end
+    end
+
+    context 'Founder has a existing verified timeline event' do
+      let!(:verified_timeline_event) { create :timeline_event, startup: startup, verified_at: Time.now }
+      let(:new_description) { Faker::Lorem.words(10).join ' ' }
+
+      scenario 'Founder edits existing event', js: true do
+        visit startup_path(startup)
+
+        page.find("#event-#{verified_timeline_event.id} .edit-link").click
+        fill_in 'timeline_event_description', with: new_description
+
+        # TODO: Can't test confirmation dialogues with Poltergeist, for the moment. https://github.com/teampoltergeist/poltergeist/pull/516
+        # page.accept_confirm do
+        #   click_on 'Submit for Review'
+        # end
+
+        click_on 'Submit for Review'
+
+        new_timeline_event_panel = page.find("#event-#{verified_timeline_event.id}")
+        expect(new_timeline_event_panel).to have_text(new_description)
+
+        verified_timeline_event.reload
+
+        expect(verified_timeline_event.verified_at).to be_nil
+      end
+    end
   end
 
   after :all do

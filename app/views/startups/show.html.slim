@@ -233,7 +233,7 @@
                             data: { confirm: 'This action cannot be reversed. Are you sure?' } do
                             i.fa.fa-times
                             | &nbsp;Delete
-                          = link_to startup_path(@startup, event_id: event.id), class: 'btn btn-info btn-sm btn-flat btn-with-default-padding' do
+                          = link_to startup_path(@startup, event_id: event.id), class: 'btn btn-info btn-sm btn-flat btn-with-default-padding edit-link' do
                             i.fa.fa-pencil
                             | &nbsp;Edit
       - else

@@ -3,6 +3,9 @@ FactoryGirl.define do
     sample_text { Faker::Lorem.words(10).join ' ' }
     proof_required { Faker::Lorem.words(10).join ' ' }
     badge File.open(File.join(Rails.root, '/app/assets/images/seeds/timeline_event_types/default.png'))
+    key { Faker::Lorem.word }
+    role { Faker::Lorem.word }
+    title { Faker::Lorem.words(2).join ' ' }
 
     factory :tet_team_formed do
       key 'team_formed'

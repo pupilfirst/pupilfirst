@@ -42,7 +42,7 @@ feature 'Timeline Builder' do
   end
 
   context 'Founder visits Timeline page of verified startup' do
-    scenario 'Founder submits new timeline event', js: true, focus: true do
+    scenario 'Founder submits new timeline event', js: true do
       # Type in description.
       fill_in 'timeline_event_description', with: event_description
 
@@ -71,6 +71,14 @@ feature 'Timeline Builder' do
       expect(latest_timeline_event_panel).to have_text('Team Formed')
       expect(latest_timeline_event_panel).to have_text(event_description)
       expect(latest_timeline_event_panel).to have_link('SV.CO', href: 'https://sv.co')
+    end
+
+    scenario 'Founder attempts to submit builder without essential fields', js: true do
+      click_on 'Submit for Review'
+
+      expect(page.find('textarea.description')[:class]).to include('has-error')
+      expect(page.find('#timeline_event_event_on')[:class]).to include('has-error')
+      expect(page.find('.select2-container')[:class]).to include('has-error')
     end
   end
 

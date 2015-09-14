@@ -67,9 +67,13 @@ feature 'Timeline Builder' do
       expect(page.find('#timeline_event_event_on')[:class]).to include('has-error')
       expect(page.find('.select2-container')[:class]).to include('has-error')
     end
-  end
 
-  # TODO: Test limiting of description.
+    scenario "Founder attempts to enter description larger than #{TimelineEvent::MAX_DESCRIPTION_CHARACTERS} characters", js: true do
+      fill_in 'timeline_event_description', with: Faker::Lorem.words(TimelineEvent::MAX_DESCRIPTION_CHARACTERS / 2).join(' ')
+
+      expect(page.find('textarea.description').value.length).to eq(TimelineEvent::MAX_DESCRIPTION_CHARACTERS)
+    end
+  end
 
   after :all do
     WebMock.disable_net_connect!

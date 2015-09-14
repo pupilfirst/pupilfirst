@@ -5,27 +5,14 @@ require 'rails_helper'
 feature 'Timeline Builder' do
   let(:user) { create :user_with_password, confirmed_at: Time.now }
   let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
+  let!(:tet_one_liner) { create :tet_one_liner }
+  let!(:tet_new_product_deck) { create :tet_new_product_deck }
+  let!(:tet_team_formed) { create :tet_team_formed }
 
   let(:event_description) { Faker::Lorem.words(10).join ' ' }
 
   before :all do
     WebMock.allow_net_connect!
-
-    [
-      ['team_formed','Governance','Team Formed','We are a bunch of [Technology/Music/...] enthusiasts from [College/City] and we are excited to start! Our team has Name (Role), Name 2 (Role 2), ...','Not Needed',nil,'team_formation'],
-      ['new_product_deck','Product','New Product Deck','We just updated our Product Deck, do take a look!','Link to new deck','moved_to_idea_discovery','idea'],
-      ['one_liner','Governance','Set New One-Liner','We have set a new one-line mission for our product! We want to [organize the worlds information/...]. We think this mission is great because [...].','Not Needed','moved_to_idea_discovery,moved_to_customer_validation','mission']
-    ].each do |event_type|
-      TimelineEventType.create!(
-        key: event_type[0],
-        role: event_type[1],
-        title: event_type[2],
-        sample_text: event_type[3],
-        proof_required: event_type[4],
-        suggested_stage: event_type[5],
-        badge: File.open(File.join(Rails.root, '/app/assets/images/seeds/timeline_event_types/default.png')),
-      )
-    end
   end
 
   before :each do

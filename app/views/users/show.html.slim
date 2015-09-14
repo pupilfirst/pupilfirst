@@ -1,3 +1,7 @@
+= content_for :head
+  = stylesheet_link_tag 'users'
+  = javascript_include_tag 'users'
+
 h2.page-header
   ' #{@user.fullname}
   small Your basic details.

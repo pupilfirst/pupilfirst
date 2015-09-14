@@ -1,3 +1,7 @@
+= content_for :head
+  = stylesheet_link_tag 'users'
+  = javascript_include_tag 'users'
+
 .margin-top-20
 h2 Editing #{@user.fullname}'s profile...
 = render 'form_basic_details', user: @user

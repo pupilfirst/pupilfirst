@@ -2,14 +2,17 @@ class UsersController < ApplicationController
   before_filter :authenticate_user!
   before_filter :restrict_to_current_user, only: [:show, :edit, :update, :code, :resend, :verify, :phone]
 
+  # GET /users/:id
   def show
     @user = User.find(params[:id])
   end
 
+  # GET /users/:id/edit
   def edit
     @user = params[:id].present? ? User.find(params[:id]) : current_user
   end
 
+  # PATCH /users/:id
   def update
     @user = User.find current_user.id
 
@@ -21,6 +24,7 @@ class UsersController < ApplicationController
     end
   end
 
+  # PATCH /users/update_password
   def update_password
     @user = current_user
 
@@ -36,12 +40,14 @@ class UsersController < ApplicationController
     end
   end
 
+  # GET /users/:id/phone
   def phone
     if params[:referer].present?
       session[:referer] = params[:referer]
     end
   end
 
+  # POST /users/:id/code
   def code
     # Generate a 6-digit verification code to send to the phone number.
     code, phone_number = begin
@@ -57,6 +63,7 @@ class UsersController < ApplicationController
     end
   end
 
+  # PATCH /users/:id/resend
   def resend
     if (current_user.updated_at <= 5.minute.ago)
       @retry_after_some_time = false
@@ -74,6 +81,7 @@ class UsersController < ApplicationController
     render 'code'
   end
 
+  # POST /users/:id/verify
   def verify
     begin
       current_user.verify_phone_number(params[:phone_verification_code])

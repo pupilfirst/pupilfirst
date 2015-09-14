@@ -5,7 +5,7 @@
 #= require pnotify
 
 # Local files
-#= require_tree ./active_admin
+#= require_tree ./admin
 
 # IMPORTANT: Unobtrusive flash must be loaded AFTER flash event handlers are set, because of customization.
 # See: https://github.com/harigopal/unobtrusive_flash/commit/24e7787d16db66f7956747444433a4e47278193a

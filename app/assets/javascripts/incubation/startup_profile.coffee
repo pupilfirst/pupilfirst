@@ -12,3 +12,9 @@ updateAbout = ->
 
 $ ->
   $("#startup_about").click(updateAbout).on('input', updateAbout)
+
+$ ->
+  $('#startup_category_ids').select2(
+    placeholder : 'Select Category',
+    maximumSelectionSize: 3
+  )

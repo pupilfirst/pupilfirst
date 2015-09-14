@@ -93,6 +93,7 @@ class TimelineEvent < ActiveRecord::Base
 
   def update_and_require_reverification(params)
     params[:verified_at] = nil
+    params[:verified_status] = VERIFIED_STATUS_PENDING
     update(params)
   end
 

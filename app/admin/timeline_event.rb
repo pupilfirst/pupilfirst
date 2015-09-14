@@ -106,6 +106,8 @@ ActiveAdmin.register TimelineEvent do
           "#{timeline_event.verified_at} (#{link_to 'Unverify', unverify_admin_timeline_event_path, method: :post, data: { confirm: 'Are you sure?' }})".html_safe
         elsif timeline_event.pending?
           "#{button_to('Unverified. Click to verify this event.', verify_admin_timeline_event_path, {form_class: 'inline-button'})} #{button_to('Mark As Needs Improvement', mark_needs_improvement_admin_timeline_event_path, {form_class: 'inline-button'})}".html_safe
+        elsif timeline_event.needs_improvement?
+          "#{button_to('Unverified. Click to verify this event.', verify_admin_timeline_event_path)}".html_safe
         end
       end
     end

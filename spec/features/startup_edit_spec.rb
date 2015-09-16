@@ -2,7 +2,14 @@ require 'rails_helper'
 
 feature 'Startup Edit' do
   let(:user) { create :user_with_password, confirmed_at: Time.now }
-  let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
+  let!(:tet_one_liner) { create :tet_one_liner }
+  let!(:tet_new_product_deck) { create :tet_new_product_deck }
+  let!(:tet_team_formed) { create :tet_team_formed }
+  let!(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
+
+  let(:new_name) { Faker::Lorem.words(rand(3) + 1).join ' ' }
+  let(:new_about) { Faker::Lorem.words(12).join(' ').truncate(Startup::MAX_ABOUT_CHARACTERS) }
+  let(:new_deck) { Faker::Internet.domain_name }
 
   before :each do
     # Add user as founder of startup.
@@ -19,9 +26,33 @@ feature 'Startup Edit' do
   end
 
   context 'Founder visits edit page of his startup' do
-    scenario 'Founder stares at edit page' do
-      expect(page).to have_text('Edit your startup profile')
+    scenario 'Founder updates all required fields' do
+
+      fill_in 'startup_name', with: new_name
+      fill_in 'startup_about', with: new_about
+      fill_in 'startup_presentation_link', with: new_deck
+      click_on 'Update startup profile'
+
+      startup.reload
+      expect(startup.name).to eq(new_name)
+      expect(startup.about).to eq(new_about)
+      expect(startup.presentation_link).to eq(new_deck)
     end
+
+    scenario 'Founder clears all required fields' do
+
+      fill_in 'startup_name', with: ""
+      fill_in 'startup_about', with: ""
+      fill_in 'startup_presentation_link', with: ""
+      click_on 'Update startup profile'
+
+      expect(page).to have_text('Please review the problems below')
+      expect(page.find('div.form-group.startup_name')[:class]).to include('has-error')
+      expect(page.find('div.form-group.startup_about')[:class]).to include('has-error')
+      expect(page.find('div.form-group.startup_presentation_link')[:class]).to include('has-error')
+
+    end
+
   end
 
 end

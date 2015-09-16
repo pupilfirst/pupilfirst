@@ -10,4 +10,9 @@ handleLinkEditing = ->
   $('a#cancel-edit').click ->
     $('#edit-existing-link-form').slideUp()
 
+betterFormControls = ->
+  $('#timeline_event_startup_id').select2()
+  $('#timeline_event_timeline_event_type_id').select2()
+
 $(handleLinkEditing)
+$(betterFormControls)

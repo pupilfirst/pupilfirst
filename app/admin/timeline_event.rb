@@ -79,8 +79,8 @@ ActiveAdmin.register TimelineEvent do
 
   form do |f|
     f.inputs 'Event Details' do
-      f.input :startup
-      f.input :timeline_event_type
+      f.input :startup, include_blank: false
+      f.input :timeline_event_type, include_blank: false
       f.input :description
       f.input :iteration
       f.input :image

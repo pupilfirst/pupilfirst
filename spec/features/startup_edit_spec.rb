@@ -2,6 +2,7 @@ require 'rails_helper'
 
 feature 'Startup Edit' do
   let(:user) { create :user_with_password, confirmed_at: Time.now }
+  let(:co_founder) { create :user_with_password, confirmed_at: Time.now }
   let!(:tet_one_liner) { create :tet_one_liner }
   let!(:tet_new_product_deck) { create :tet_new_product_deck }
   let!(:tet_team_formed) { create :tet_team_formed }
@@ -26,8 +27,8 @@ feature 'Startup Edit' do
   end
 
   context 'Founder visits edit page of his startup' do
-    scenario 'Founder updates all required fields' do
 
+    scenario 'Founder updates all required fields' do
       fill_in 'startup_name', with: new_name
       fill_in 'startup_about', with: new_about
       fill_in 'startup_presentation_link', with: new_deck
@@ -40,7 +41,6 @@ feature 'Startup Edit' do
     end
 
     scenario 'Founder clears all required fields' do
-
       fill_in 'startup_name', with: ""
       fill_in 'startup_about', with: ""
       fill_in 'startup_presentation_link', with: ""
@@ -50,7 +50,26 @@ feature 'Startup Edit' do
       expect(page.find('div.form-group.startup_name')[:class]).to include('has-error')
       expect(page.find('div.form-group.startup_about')[:class]).to include('has-error')
       expect(page.find('div.form-group.startup_presentation_link')[:class]).to include('has-error')
+    end
 
+    scenario 'Founder adds a valid co-founder to the startup' do
+      fill_in 'cofounder_email', with: co_founder.email
+      click_on 'Add as co-founder'
+
+      expect(page.find('#current-founders-list')).to have_text(co_founder.email)
+      co_founder.reload
+      expect(co_founder.startup).to eq(startup)
+      # TODO: Rewrite after including capybara-email gem ?
+      # expect(ActionMailer::Base.deliveries.last.subject).to eq('SVApp: You have been added as startup cofounder!')
+      # expect(ActionMailer::Base.deliveries.last.to).to eq([co_founder.email])
+    end
+
+    scenario 'Founder adds a random non-SV email as cofounder' do
+      fill_in 'cofounder_email', with: Faker::Internet.email
+      click_on 'Add as co-founder'
+
+      expect(page.find('#current-founders-list')).not_to have_text(co_founder.email)
+      # expect(page.find('.ui-pnotify-text')).to have_content('Please verify founder\'s registered email address')
     end
 
   end

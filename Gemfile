@@ -92,6 +92,7 @@ group :development, :test do
   gem 'webmock', require: false # Mocking web requests.
   gem 'did_you_mean' # Enough of silly spellinng mistakes ruining the day!
   gem 'quiet_assets' # Let's not see asset serving messages in the development log!
+  gem 'rubocop', require: false # Ruby Style Guide.
 end
 
 group :production do

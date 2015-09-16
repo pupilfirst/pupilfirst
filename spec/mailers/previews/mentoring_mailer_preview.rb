@@ -1,5 +1,4 @@
 class MentoringMailerPreview < ActionMailer::Preview
-
   def mentor_verification_ongoing
     MentoringMailer.mentor_verification_ongoing(User.first)
   end
@@ -21,7 +20,7 @@ class MentoringMailerPreview < ActionMailer::Preview
   end
 
   def meeting_feedback_mentor
-    MentoringMailer.meeting_feedback_mentor(MentorMeeting.first)    
+    MentoringMailer.meeting_feedback_mentor(MentorMeeting.first)
   end
 
   def meeting_request_cancelled
@@ -33,11 +32,11 @@ class MentoringMailerPreview < ActionMailer::Preview
   end
 
   def meeting_request_accepted
-    MentoringMailer.meeting_request_accepted(MentorMeeting.first, User.first)  
+    MentoringMailer.meeting_request_accepted(MentorMeeting.first, User.first)
   end
 
   def meeting_request_rescheduled
-    MentoringMailer.meeting_request_rescheduled(MentorMeeting.first)    
+    MentoringMailer.meeting_request_rescheduled(MentorMeeting.first)
   end
 
   def meeting_today_user
@@ -51,5 +50,4 @@ class MentoringMailerPreview < ActionMailer::Preview
   def meeting_request_to_mentor
     MentoringMailer.meeting_request_to_mentor(MentorMeeting.first)
   end
-
 end

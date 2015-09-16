@@ -34,11 +34,11 @@ describe Startup do
 
   describe '.student_startups' do
     it "should return only students startups" do
-      startup_1 = create :startup
+      create :startup
       startup_2 = create :startup
       university = create :university
 
-      student_founder = create :user_with_out_password, university: university, roll_number: rand(10000).to_s
+      student_founder = create :user_with_out_password, university: university, roll_number: rand(10_000).to_s
       startup_2.founders << student_founder
 
       expect(Startup.student_startups).to eq([startup_2])

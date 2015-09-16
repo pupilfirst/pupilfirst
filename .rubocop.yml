@@ -1,0 +1,20 @@
+Metrics/LineLength:
+  Max: 160
+AllCops:
+  Include:
+    - '**/Rakefile'
+    - '**/config.ru'
+  Exclude:
+    - 'db/**/*'
+StringLiterals:
+  Enabled: false
+Documentation:
+  Enabled: false
+Style/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+Style/MultilineOperationIndentation:
+  EnforcedStyle: indented
+Style/HashSyntax:
+  EnforcedStyle: ruby19_no_mixed_keys
+Lint/EndAlignment:
+  AlignWith: variable

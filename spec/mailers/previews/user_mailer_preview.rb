@@ -14,7 +14,7 @@ class UserMailerPreview < ActionMailer::Preview
   end
 
   def request_to_be_a_founder
-    UserMailer.request_to_be_a_founder(User.first, Startup.first, User.second)   
+    UserMailer.request_to_be_a_founder(User.first, Startup.first, User.second)
   end
 
   def password_changed

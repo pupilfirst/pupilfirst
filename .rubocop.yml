@@ -6,6 +6,8 @@ AllCops:
     - '**/config.ru'
   Exclude:
     - 'db/**/*'
+    - 'app/models/mentor_meeting.rb'
+    - 'app/models/mentor.rb'
 StringLiterals:
   Enabled: false
 Documentation:

@@ -1,42 +1,37 @@
-# Configuration keys in Use (clean this up frequently).
-#
-# sms_statistics_all: SMS Statistics All
-# sms_statistics_total: SMS Statistics Total
-# sms_statistics_visakhapatnam: SMS Statistics Visakhapatnam
-# sms_statistics_kochi: SMS Statistics Kochi
-# feature_faculty_page: Toggle Faculty Page
-# feature_about_page: (dev) Toggle About Page
-# feature_startups: (dev) Toggle Startups
-#
+# Feature flags! Set any key and check for it with Feature.active?(key, [current_user])
+# See documentation of method to see how to store the JSON value.
 class Feature < ActiveRecord::Base
   # {"email_regexes": ["\S*(@mobme.in|sv.co)$"], "emails": ["someone@sv.co"]}
   #     OR
   # {"active": true}
-  def self.feature_active?(key, user=nil)
-    feature = where(key: "feature_#{key}").first
+  def self.active?(key, user = nil)
+    feature = where(key: key).first
 
     return false unless feature
 
-    feature_value = begin
+    parsed_value = begin
       JSON.load(feature.value).with_indifferent_access
     rescue JSON::ParserError
       return false
     end
 
-    return true if feature_value[:active].present?
+    return true if parsed_value[:active].present?
+    return true if feature.active_for_user?(user, parsed_value)
 
-    if user
-      if feature_value.include? :email_regexes
-        feature_value[:email_regexes].each do |email_regex|
-          return true if Regexp.new(email_regex).match(user.email)
-        end
-      end
+    false
+  end
 
-      if feature_value.include? :emails
-        return true if feature_value[:emails].include? user.email
+  def active_for_user?(user, parsed_value)
+    return false unless user
+
+    if parsed_value.include? :email_regexes
+      parsed_value[:email_regexes].each do |email_regex|
+        return true if Regexp.new(email_regex).match(user.email)
       end
     end
 
-    false
+    if parsed_value.include? :emails
+      return true if feature_value[:emails].include? user.email
+    end
   end
 end

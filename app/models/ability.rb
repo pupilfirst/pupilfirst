@@ -5,12 +5,10 @@ class Ability
     case user.admin_type
       when AdminUser::TYPE_SUPERADMIN
         can :manage, :all
-      when AdminUser::TYPE_INCUBATION_TEAM
-        can :read, [User]
-        can :manage, [Startup, Feature, StartupJob]
-      when AdminUser::TYPE_EDITOR
-        can :read, Startup
-        can :manage, [Feature, StartupJob]
+      when AdminUser::TYPE_TIMELINE_REVIEWER
+        can :read, :all
+        can :manage, [StartupFeedback]
+        can :update, [TimelineEvent]
     end
 
     can :read, ActiveAdmin::Page, :name => 'Dashboard'

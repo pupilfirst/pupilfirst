@@ -19,4 +19,14 @@ module StartupsHelper
       "#{text} #{image_tag 'timeline/link.png'}".html_safe
     end
   end
+
+  def truncated_founder_name(name)
+    truncated_name = truncate name, length: 20, separator: ' '
+
+    if truncated_name != name
+      link_to truncated_name, '#', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: name, class: 'truncated-founder-name'
+    else
+      name
+    end
+  end
 end

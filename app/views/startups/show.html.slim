@@ -124,7 +124,7 @@
                       .media-object
                         .founder-image style="background-image: url('#{profile_image_url founder, gravatar_size: 128, avatar_version: :mid}');"
                     .media-body
-                      h4.media-heading #{truncate(founder.fullname, length: 20, separator: ' ')}
+                      h4.media-heading #{truncated_founder_name founder.fullname}
                       - if founder.title?
                         p.designation #{truncate(founder.title, length: 20)}
                       = image_tag 'timeline/dash.png', class: 'dash'

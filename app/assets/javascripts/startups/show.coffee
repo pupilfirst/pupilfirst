@@ -1,5 +1,6 @@
 $(->
-  $('a#verified-icon').tooltip()
+  $('#verified-icon').tooltip()
+  $('.truncated-founder-name').tooltip()
 )
 
 $(->

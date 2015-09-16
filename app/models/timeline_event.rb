@@ -20,14 +20,15 @@ class TimelineEvent < ActiveRecord::Base
 
   before_validation do
     # default verified_status to pending unless verified_at is present
-    if self.verified_at.present?
+    if verified_at.present?
       self.verified_status = VERIFIED_STATUS_VERIFIED
     else
       self.verified_status ||= VERIFIED_STATUS_PENDING
     end
   end
 
-  validates_length_of :description, maximum: MAX_DESCRIPTION_CHARACTERS,
+  validates_length_of :description,
+    maximum: MAX_DESCRIPTION_CHARACTERS,
     message: "must be within #{MAX_DESCRIPTION_CHARACTERS} characters"
 
   scope :batched, -> { joins(:startup).where.not(startups: { batch: nil }) }
@@ -35,12 +36,11 @@ class TimelineEvent < ActiveRecord::Base
 
   validate :link_url_format
 
-  LINK_URL_MATCHER = /(?:https?\/\/)?(?:www\.)?(?<domain>[\w-]+)\./
+  LINK_URL_MATCHER = %r{(?:https?//)?(?:www\.)?(?<domain>[\w-]+)\.}
 
   def link_url_format
-    if link_url.present? && link_url !~ LINK_URL_MATCHER
-      self.errors.add(:link_url, 'does not look like a valid URL')
-    end
+    return unless link_url.present? && link_url !~ LINK_URL_MATCHER
+    errors.add(:link_url, 'does not look like a valid URL')
   end
 
   before_save :make_links_an_array, :build_link_json
@@ -53,26 +53,25 @@ class TimelineEvent < ActiveRecord::Base
   attr_accessor :auto_populated
 
   def build_description
-    if !description.present? && auto_populated
-      case timeline_event_type.key
+    return unless !description.present? && auto_populated
+
+    self.description = case timeline_event_type.key
       when 'team_formed'
-        self.description = 'The founder formed his initial team'
+        'The founder formed his initial team'
       when 'new_product_deck'
-        self.description = 'The team created a new product deck introducing their startup'
+        'The team created a new product deck introducing their startup'
       when 'one_liner'
-        self.description = self.startup.about
-      end
+        startup.about
     end
   end
 
   def record_iteration
-    self.iteration = self.startup.try(:current_iteration)
+    self.iteration = startup.try(:current_iteration)
   end
 
   def build_link_json
-    if link_title.present? && link_url.present?
-      self.links = [{ title: link_title, url: link_url }]
-    end
+    return unless link_title.present? && link_url.present?
+    self.links = [{ title: link_title, url: link_url }]
   end
 
   def make_links_an_array
@@ -95,7 +94,7 @@ class TimelineEvent < ActiveRecord::Base
 
   def verify!
     update!(verified_status: VERIFIED_STATUS_VERIFIED, verified_at: Time.now)
-    self.startup.update!(presentation_link: self.links[0][:url]) if new_deck? && self.links[0].try(:[],:url).present?
+    startup.update!(presentation_link: links[0][:url]) if new_deck? && links[0].try(:[], :url).present?
   end
 
   def unverify!
@@ -117,5 +116,4 @@ class TimelineEvent < ActiveRecord::Base
   def needs_improvement?
     self.verified_status == VERIFIED_STATUS_NEEDS_IMPROVEMENT
   end
-
 end

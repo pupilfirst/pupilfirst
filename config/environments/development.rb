@@ -58,6 +58,3 @@ Rails.application.configure do
   # Roadie asset host.
   config.roadie.url_options = { host: 'localhost', scheme: 'http', port: 3000 }
 end
-
-
-

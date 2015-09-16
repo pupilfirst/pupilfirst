@@ -1,5 +1,5 @@
 class TimelineEventType < ActiveRecord::Base
-  has_many :timeline_events, :dependent => :restrict_with_exception
+  has_many :timeline_events, dependent: :restrict_with_exception
   validates_presence_of :key, :title, :badge
   validates_uniqueness_of :key
 
@@ -35,7 +35,7 @@ class TimelineEventType < ActiveRecord::Base
   attr_accessor :copy_badge_from
 
   before_validation do
-    self.badge = TimelineEventType.find(self.copy_badge_from).badge if self.copy_badge_from.present?
+    self.badge = TimelineEventType.find(copy_badge_from).badge if copy_badge_from.present?
   end
 
   def sample
@@ -60,7 +60,7 @@ class TimelineEventType < ActiveRecord::Base
     TimelineEventType.stage_keys.include?(key)
   end
 
-  scope :end_iteration, -> {where(key: TYPE_END_ITERATION)}
-  scope :moved_to_stage, -> {where(key: stage_keys)}
-  scope :suggested_for, ->(startup) {where('suggested_stage LIKE ?', "%#{startup.current_stage}%").where.not(id: startup.current_stage_event_types.map(&:id))}
+  scope :end_iteration, -> { where(key: TYPE_END_ITERATION) }
+  scope :moved_to_stage, -> { where(key: stage_keys) }
+  scope :suggested_for, ->(startup) { where('suggested_stage LIKE ?', "%#{startup.current_stage}%").where.not(id: startup.current_stage_event_types.map(&:id)) }
 end

@@ -1,8 +1,10 @@
 #!/usr/bin/env ruby
 begin
-  load File.expand_path("../spring", __FILE__)
+  load File.expand_path('../spring', __FILE__)
 rescue LoadError
+  puts 'WARNING: Continuing without spring...'
 end
+
 require_relative '../config/boot'
 require 'rake'
 Rake.application.run

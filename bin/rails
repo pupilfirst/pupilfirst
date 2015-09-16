@@ -2,7 +2,9 @@
 begin
   load File.expand_path("../spring", __FILE__)
 rescue LoadError
+  puts 'WARNING: Continuing without spring...'
 end
+
 APP_PATH = File.expand_path('../../config/application', __FILE__)
 require_relative '../config/boot'
 require 'rails/commands'

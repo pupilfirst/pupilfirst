@@ -1,6 +1,7 @@
 CarrierWave.configure do |config|
   if Rails.env.production? || Rails.env == 'staging'
     config.storage = :fog
+
     config.fog_credentials = {
       provider: 'AWS', # required
       aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'], # required
@@ -14,7 +15,7 @@ CarrierWave.configure do |config|
     config.fog_public = true # optional, defaults to true
     config.fog_attributes = { 'Cache-Control' => 'max-age=315576000' } # optional, defaults to {}
     config.cache_dir = "#{Rails.root}/tmp/uploads" # To let CarrierWave work on heroku
-    config.fog_directory = ENV['S3_BUCKET_NAME'] || "svapp-#{Rails.env.to_s}"
+    config.fog_directory = ENV['S3_BUCKET_NAME'] || "svapp-#{Rails.env}"
     # config.asset_host       = "https://#{ENV["S3_BUCKET_NAME"]}.s3.amazonaws.com/#{ENV['S3_BUCKET_NAME']}"
     config.asset_host = ENV['ASSET_HOST']
   elsif Rails.env.test?
@@ -25,10 +26,4 @@ CarrierWave.configure do |config|
     config.storage = :file
     config.root = "#{Rails.root}/public"
   end
-end
-
-if Rails.env.test? || Rails.env.cucumber?
-  # Make sure our uploader is auto-loaded.
-  AvatarUploader
-  FeedImageUploader
 end

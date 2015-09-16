@@ -18,3 +18,10 @@ Style/HashSyntax:
   EnforcedStyle: ruby19_no_mixed_keys
 Lint/EndAlignment:
   AlignWith: variable
+Metrics/MethodLength:
+  Max: 20 # default was 10.
+Metrics/ClassLength:
+  Max: 150 # default was 100.
+Style/CaseIndentation:
+  IndentWhenRelativeTo: end
+  IndentOneStep: true

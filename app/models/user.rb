@@ -53,7 +53,7 @@ class User < ActiveRecord::Base
   validates_presence_of :roll_number, if: :university_id
 
   before_validation do
-    self.roll_number = nil unless self.university.present?
+    self.roll_number = nil unless university.present?
   end
 
   attr_reader :skip_password
@@ -61,9 +61,8 @@ class User < ActiveRecord::Base
   attr_accessor :inviter_name
   attr_accessor :accept_startup
   attr_accessor :full_validation
-  after_initialize ->() {
-    @full_validation = false
-  }
+
+  after_initialize ->() { @full_validation = false }
 
   # Email is not required for an unregistered 'contact' user.
   def email_required?
@@ -74,10 +73,10 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email, unless: ->(user) { user.invitation_token.present? }
 
   # Validate user's PIN (address).
-  validates_numericality_of :pin, allow_blank: true, greater_than_or_equal_to: 100000, less_than_or_equal_to: 999999 # PIN Code is always 6 digits
+  validates_numericality_of :pin, allow_blank: true, greater_than_or_equal_to: 100_000, less_than_or_equal_to: 999_999 # PIN Code is always 6 digits
 
   # Title is essential if user is a mentor.
-  validates_presence_of :title, if: Proc.new { |user| user.mentor.present? }
+  validates_presence_of :title, if: proc { |user| user.mentor.present? }
 
   # Store mobile number in a standardized form.
   phony_normalize :phone, default_country_code: 'IN', add_plus: false
@@ -90,8 +89,8 @@ class User < ActiveRecord::Base
     value.is_a?(String) ? value.downcase == 'true' : value
   end
 
-  validates :twitter_url, :url => true, allow_nil: true
-  validates :linkedin_url, :url => true, allow_nil: true
+  validates :twitter_url, url: true, allow_nil: true
+  validates :linkedin_url, url: true, allow_nil: true
 
   before_create do
     self.auth_token = SecureRandom.hex(30)
@@ -105,7 +104,6 @@ class User < ActiveRecord::Base
     display_name
   end
 
-
   # Skips setting password and sets invitation_token to allow later registration.
   def save_unregistered_user!
     unless self.persisted?
@@ -117,7 +115,7 @@ class User < ActiveRecord::Base
     end
 
     # When saving unregistered users, let's not send out a confirmation e-mail.
-    #skip_confirmation!
+    # skip_confirmation!
 
     save!
   end
@@ -130,7 +128,7 @@ class User < ActiveRecord::Base
   end
 
   def generate_phone_number_verification_code(incoming_phone_number)
-    code = SecureRandom.random_number(1000000).to_s.ljust(6, '0')
+    code = SecureRandom.random_number(1_000_000).to_s.ljust(6, '0')
 
     # Normalize incoming phone number.
     unverified_phone_number = incoming_phone_number.length <= 10 ? "91#{incoming_phone_number}" : incoming_phone_number
@@ -138,26 +136,26 @@ class User < ActiveRecord::Base
     phone_number = if Phony.plausible?(unverified_phone_number, cc: '91')
       PhonyRails.normalize_number incoming_phone_number, country_code: 'IN', add_plus: false
     else
-      raise Exceptions::InvalidPhoneNumber, 'Supplied phone number could not be parsed. Please check and try again.'
+      fail Exceptions::InvalidPhoneNumber, 'Supplied phone number could not be parsed. Please check and try again.'
     end
 
     # Store the phone number and verification code.
     self.unconfirmed_phone = phone_number
     self.phone_verification_code = code
-    self.save
+    save
 
-    return code, phone_number
+    [code, phone_number]
   end
 
   def verify_phone_number(verification_code)
-    if unconfirmed_phone? && (verification_code == self.phone_verification_code)
+    if unconfirmed_phone? && (verification_code == phone_verification_code)
       # Store 'verified' phone number
       self.phone = unconfirmed_phone
       self.unconfirmed_phone = nil
       self.phone_verification_code = nil
-      self.save
+      save
     else
-      raise Exceptions::PhoneNumberVerificationFailed, 'Supplied verification code does not match stored values.'
+      fail Exceptions::PhoneNumberVerificationFailed, 'Supplied verification code does not match stored values.'
     end
   end
 
@@ -172,22 +170,21 @@ class User < ActiveRecord::Base
   # Phone verification is the final step of the registration process. If that isn't complete, then the mentor is still
   # going through the registration process.
   def mentor_registration_going_on?
-    if mentor.present?
-      !phone
-    end
+    return unless mentor.present?
+    !phone
   end
 
   # Add user with given email as co-founder if possible.
   def add_as_founder_to_startup!(email)
     user = User.find_by email: email
 
-    raise Exceptions::UserNotFound unless user
+    fail Exceptions::UserNotFound unless user
 
     if user.startup.present?
       if user.startup == startup
-        raise Exceptions::UserAlreadyMemberOfStartup
+        fail Exceptions::UserAlreadyMemberOfStartup
       else
-        raise Exceptions::UserAlreadyHasStartup
+        fail Exceptions::UserAlreadyHasStartup
       end
     else
       startup.founders << user
@@ -197,11 +194,10 @@ class User < ActiveRecord::Base
   end
 
   def ready_for_incubation_wizard?
-    phone? && self.startup.present?
+    phone? && startup.present?
   end
 
   def incubation_parameters_available?
     gender.present? && born_on.present?
   end
-
 end

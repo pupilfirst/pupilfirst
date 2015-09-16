@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class FeedImageUploader < CarrierWave::Uploader::Base
-
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
   include ::CarrierWave::Backgrounder::Delay
@@ -37,11 +36,11 @@ class FeedImageUploader < CarrierWave::Uploader::Base
   process resize_to_limit: [850, nil]
 
   version :thumb do
-    process :resize_to_fit => [100, 100]
+    process resize_to_fit: [100, 100]
   end
 
   version :mid do
-    process :resize_to_fit => [600, 600]
+    process resize_to_fit: [600, 600]
   end
 
   # Add a white list of extensions which are allowed to be uploaded.

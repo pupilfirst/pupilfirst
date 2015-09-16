@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class TimelineImageUploader < CarrierWave::Uploader::Base
-
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
   include ::CarrierWave::Backgrounder::Delay
@@ -44,5 +43,4 @@ class TimelineImageUploader < CarrierWave::Uploader::Base
   # def filename
   #   "something.jpg" if original_filename
   # end
-
 end

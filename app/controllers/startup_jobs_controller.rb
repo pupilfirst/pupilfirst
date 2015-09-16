@@ -77,7 +77,7 @@ class StartupJobsController < ApplicationController
   def restrict_to_startup_founders_with_live_agreement
     if current_user.startup.try(:id) != params[:startup_id].to_i || !current_user.is_founder?
       raise_not_found
-    elsif !current_user.startup.is_agreement_live?
+    elsif !current_user.startup.agreement_live?
       flash[:alert] = 'Your do have an active agreement with Startup Village. Please enter into agreement with SV to post jobs listings.'
       redirect_to current_user.startup
     end

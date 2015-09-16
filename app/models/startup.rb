@@ -32,7 +32,7 @@ class Startup < ActiveRecord::Base
   INCUBATION_LOCATION_VISAKHAPATNAM = 'visakhapatnam'
   INCUBATION_LOCATION_KOZHIKODE = 'kozhikode'
 
-  SV_STATS_LINK = "bit.ly/svstats2"
+  SV_STATS_LINK = 'bit.ly/svstats2'
 
   def self.valid_agreement_durations
     { '1 year' => 1.year, '2 years' => 2.years, '5 years' => 5.years }
@@ -43,7 +43,10 @@ class Startup < ActiveRecord::Base
   end
 
   def self.valid_product_progress_values
-    [PRODUCT_PROGRESS_IDEA, PRODUCT_PROGRESS_MOCKUP, PRODUCT_PROGRESS_PROTOTYPE, PRODUCT_PROGRESS_PRIVATE_BETA, PRODUCT_PROGRESS_PUBLIC_BETA, PRODUCT_PROGRESS_LAUNCHED]
+    [
+      PRODUCT_PROGRESS_IDEA, PRODUCT_PROGRESS_MOCKUP, PRODUCT_PROGRESS_PROTOTYPE, PRODUCT_PROGRESS_PRIVATE_BETA,
+      PRODUCT_PROGRESS_PUBLIC_BETA, PRODUCT_PROGRESS_LAUNCHED
+    ]
   end
 
   def self.valid_registration_types
@@ -51,7 +54,10 @@ class Startup < ActiveRecord::Base
   end
 
   def self.valid_approval_status_values
-    [APPROVAL_STATUS_UNREADY, APPROVAL_STATUS_PENDING, APPROVAL_STATUS_APPROVED, APPROVAL_STATUS_REJECTED, APPROVAL_STATUS_DROPPED_OUT]
+    [
+      APPROVAL_STATUS_UNREADY, APPROVAL_STATUS_PENDING, APPROVAL_STATUS_APPROVED, APPROVAL_STATUS_REJECTED,
+      APPROVAL_STATUS_DROPPED_OUT
+    ]
   end
 
   scope :batched, -> { where.not(batch: nil) }
@@ -86,8 +92,8 @@ class Startup < ActiveRecord::Base
   end
 
   has_and_belongs_to_many :categories do
-    def <<(category)
-      raise StandardError, 'Use categories= to enforce startup category limit'
+    def <<(_category)
+      fail 'Use categories= to enforce startup category limit'
     end
   end
 
@@ -142,16 +148,18 @@ class Startup < ActiveRecord::Base
   validates_presence_of :agreement_first_signed_at, if: ->(startup) { startup.agreement_last_signed_at.present? || startup.agreement_duration.present? }
   validates_presence_of :agreement_last_signed_at, if: ->(startup) { startup.agreement_first_signed_at.present? || startup.agreement_duration.present? }
 
-  validates_numericality_of :pin, allow_nil: true, greater_than_or_equal_to: 100000, less_than_or_equal_to: 999999 # PIN Code is always 6 digits
+  validates_numericality_of :pin, allow_nil: true, greater_than_or_equal_to: 100_000, less_than_or_equal_to: 999_999 # PIN Code is always 6 digits
 
-  validates_length_of :pitch, maximum: MAX_PITCH_CHARACTERS,
+  validates_length_of :pitch,
+    maximum: MAX_PITCH_CHARACTERS,
     message: "must be within #{MAX_PITCH_CHARACTERS} characters"
 
-  validates_length_of :about, maximum: MAX_ABOUT_CHARACTERS,
+  validates_length_of :about,
+    maximum: MAX_ABOUT_CHARACTERS,
     message: "must be within #{MAX_ABOUT_CHARACTERS} characters"
 
   # New set of validations for incubation wizard
-  store :metadata, :accessors => [:updated_from]
+  store :metadata, accessors: [:updated_from]
   validates_presence_of :name, :presentation_link, :about, :incubation_location, if: :incubation_step_2?
 
   validates_numericality_of :team_size, greater_than: 0, allow_blank: true
@@ -168,21 +176,18 @@ class Startup < ActiveRecord::Base
 
   before_validation do
     # Set registration_type to nil if its set as blank from backend.
-    self.registration_type = nil if self.registration_type.blank?
-
-    # Hack to fix incorrect registration_type sent by iOS build 2.0.
-    self.registration_type = REGISTRATION_TYPE_PRIVATE_LIMITED if self.registration_type == 'pvt. ltd.'
+    self.registration_type = nil if registration_type.blank?
 
     # If supplied \r\n for line breaks, replace those with just \n so that length validation works.
-    self.about = about.gsub("\r\n", "\n") if self.about
+    self.about = about.gsub("\r\n", "\n") if about
 
     # If slug isn't supplied, set one.
-    self.slug = generate_randomized_slug if self.slug.blank?
+    self.slug = generate_randomized_slug if slug.blank?
   end
 
   before_destroy do
     # Clear out associations from associated Users (and pending ones).
-    User.where(startup_id: self.id).update_all(startup_id: nil, startup_admin: nil, is_founder: nil)
+    User.where(startup_id: id).update_all(startup_id: nil, startup_admin: nil, is_founder: nil)
   end
 
   # Friendly ID!
@@ -206,10 +211,10 @@ class Startup < ActiveRecord::Base
   before_save do
     # If agreement duration is available, store that as agreement_ends_at.
     if agreement_duration
-      self.agreement_ends_at = (self.agreement_last_signed_at + agreement_duration.to_i).to_date
+      self.agreement_ends_at = (agreement_last_signed_at + agreement_duration.to_i).to_date
     end
 
-    self.agreement_ends_at = nil if (self.agreement_first_signed_at.nil? && self.agreement_last_signed_at.nil?)
+    self.agreement_ends_at = nil if agreement_first_signed_at.nil? && agreement_last_signed_at.nil?
   end
 
   def approval_status
@@ -237,7 +242,7 @@ class Startup < ActiveRecord::Base
   end
 
   def valid_founders?
-    self.errors.add(:founders, "should have at least one founder") if founders.nil? or founders.size < 1
+    errors.add(:founders, 'should have at least one founder') if founders.nil? || founders.size < 1
   end
 
   mount_uploader :logo, LogoUploader
@@ -247,9 +252,7 @@ class Startup < ActiveRecord::Base
 
   attr_accessor :full_validation
 
-  after_initialize ->() {
-    @full_validation = true
-  }
+  after_initialize ->() { @full_validation = true }
 
   normalize_attribute :website do |value|
     case value
@@ -257,7 +260,7 @@ class Startup < ActiveRecord::Base
         nil
       when nil then
         nil
-      when /^https?:\/\/.*/ then
+      when %r{^https?://.*} then
         value
       else
         "http://#{value}"
@@ -266,7 +269,7 @@ class Startup < ActiveRecord::Base
 
   normalize_attribute :twitter_link do |value|
     case value
-      when /^https?:\/\/(www\.)?twitter.com.*/ then
+      when %r{^https?://(www\.)?twitter.com.*} then
         value
       when /^(www\.)?twitter\.com.*/ then
         "https://#{value}"
@@ -281,7 +284,7 @@ class Startup < ActiveRecord::Base
 
   normalize_attribute :facebook_link do |value|
     case value
-      when /^https?:\/\/(www\.)?facebook.com.*/ then
+      when %r{^https?://(www\.)?facebook.com.*} then
         value
       when /^(www\.)?facebook\.com.*/ then
         "https://#{value}"
@@ -295,16 +298,15 @@ class Startup < ActiveRecord::Base
   end
 
   def founder_ids=(list_of_ids)
-    users_list = User.find list_of_ids.map { |e| e.to_i }.select { |e| e.is_a?(Integer) and e > 0 }
+    users_list = User.find list_of_ids.map(&:to_i).select { |e| e.is_a?(Integer) && e > 0 }
     users_list.each { |u| founders << u }
   end
 
   validate :category_count
 
   def category_count
-    if @category_count_exceeded || self.categories.count > MAX_CATEGORY_COUNT
-      self.errors.add(:categories, "Can't have more than 3 categories")
-    end
+    return unless @category_count_exceeded || categories.count > MAX_CATEGORY_COUNT
+    errors.add(:categories, "Can't have more than 3 categories")
   end
 
   # Custom setter for startup categories.
@@ -354,10 +356,6 @@ class Startup < ActiveRecord::Base
   end
 
   def agreement_live?
-    agreement_ends_at.present? && agreement_ends_at > Time.now
-  end
-
-  def is_agreement_live?
     try(:agreement_ends_at).to_i > Time.now.to_i
   end
 
@@ -365,16 +363,16 @@ class Startup < ActiveRecord::Base
     startup_jobs.not_expired.present?
   end
 
-  def is_founder?(user)
-    user.is_founder? && user.startup_id == self.id
+  def founder?(user)
+    user.is_founder? && user.startup_id == id
   end
 
   def possible_founders
-    self.founders + User.non_founders
+    founders + User.non_founders
   end
 
   def phone
-    self.admin.try(:phone)
+    admin.try(:phone)
   end
 
   # E-mail address of person to contact in case startup is rejected.
@@ -415,8 +413,8 @@ class Startup < ActiveRecord::Base
   end
 
   def generate_randomized_slug
-    if self.name.present?
-      "#{self.name.parameterize}-#{rand 1000}"
+    if name.present?
+      "#{name.parameterize}-#{rand 1000}"
     else
       "nameless-#{SecureRandom.hex(2)}"
     end
@@ -424,13 +422,13 @@ class Startup < ActiveRecord::Base
 
   def regenerate_slug!
     # Create slug from name.
-    self.slug = self.name.parameterize
+    self.slug = name.parameterize
 
     begin
       save!
     rescue ActiveRecord::RecordNotUnique
       # If it's taken, try adding a random number.
-      self.slug = "#{self.name.parameterize}-#{rand 1000}"
+      self.slug = "#{name.parameterize}-#{rand 1000}"
       retry
     end
   end
@@ -455,31 +453,31 @@ class Startup < ActiveRecord::Base
 
   # returns the date of the earliest verified timeline entry
   def earliest_event_date
-    self.timeline_events.verified.order(:event_on).first.try(:event_on)
+    timeline_events.verified.order(:event_on).first.try(:event_on)
   end
 
   # returns the date of the latest verified timeline entry
   def latest_event_date
-    self.timeline_events.verified.order(:event_on).last.try(:event_on)
+    timeline_events.verified.order(:event_on).last.try(:event_on)
   end
 
   # returns the latest 'moved_to_x_stage' timeline entry
   def latest_change_of_stage
-    self.timeline_events.verified.where(timeline_event_type: TimelineEventType.moved_to_stage).order(event_on: :desc).includes(:timeline_event_type).first
+    timeline_events.verified.where(timeline_event_type: TimelineEventType.moved_to_stage).order(event_on: :desc).includes(:timeline_event_type).first
   end
 
   # returns all timeline entries posted in the current stage i.e after the last 'moved_to_x_stage' timeline entry
   def current_stage_events
-    if self.latest_change_of_stage.present?
-      self.timeline_events.where("event_on > ?", self.latest_change_of_stage.event_on)
+    if latest_change_of_stage.present?
+      timeline_events.where('event_on > ?', latest_change_of_stage.event_on)
     else
-      self.timeline_events
+      timeline_events
     end
   end
 
   # returns a distinct array of timeline_event_types of all timeline entries posted in the current stage
   def current_stage_event_types
-    TimelineEventType.find(self.current_stage_events.pluck(:timeline_event_type_id).uniq)
+    TimelineEventType.find(current_stage_events.pluck(:timeline_event_type_id).uniq)
   end
 
   def current_stage
@@ -488,19 +486,19 @@ class Startup < ActiveRecord::Base
   end
 
   def current_iteration
-    if self.latest_end_of_iteration
-      self.latest_end_of_iteration.iteration + 1
+    if latest_end_of_iteration
+      latest_end_of_iteration.iteration + 1
     else
       1
     end
   end
 
   def latest_end_of_iteration
-    self.timeline_events.where(timeline_event_type: TimelineEventType.end_iteration).where.not(verified_at: nil).order(event_on: :desc).first
+    timeline_events.where(timeline_event_type: TimelineEventType.end_iteration).where.not(verified_at: nil).order(event_on: :desc).first
   end
 
   def timeline_verified?
-    self.approved? && self.timeline_events.verified.present?
+    approved? && timeline_events.verified.present?
   end
 
   def admin?(user)
@@ -516,20 +514,18 @@ class Startup < ActiveRecord::Base
   end
 
   after_save do
-    if self.approval_status_changed? && self.approved?
-      unless self.timeline_events.present?
-        self.prepopulate_timeline!
-      end
+    if approval_status_changed? && approved? && timeline_events.blank?
+      self.prepopulate_timeline!
     end
   end
 
   def prepopulate_timeline!
-    self.create_default_event(['team_formed','new_product_deck','one_liner'])
+    create_default_event %w(team_formed new_product_deck one_liner)
   end
 
   def create_default_event(types)
     types.each do |type|
-      self.timeline_events.create(timeline_event_type: TimelineEventType.find_by(key: type), auto_populated: true, verified_at: Time.now, event_on: Time.now)
+      timeline_events.create(timeline_event_type: TimelineEventType.find_by(key: type), auto_populated: true, verified_at: Time.now, event_on: Time.now)
     end
   end
 

@@ -48,7 +48,7 @@ class StartupJob < ActiveRecord::Base
 
   def can_be_modified_by?(user)
     return false unless user
-    startup.is_founder?(user)
+    startup.founder?(user)
   end
 
   def equity_summary

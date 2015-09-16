@@ -5,7 +5,7 @@
 .container
   /TO DO: probably rewrite this in a cleaner way
   - if @startup.pending? || @startup.unready?
-    - if current_user && @startup.is_founder?(current_user)
+    - if current_user && @startup.founder?(current_user)
       .alert.alert-warning.margin-top-20
         p Please note that SV.CO is currently under beta! Your submissions might not be processed immediately.
       - if @startup.pending?
@@ -34,7 +34,7 @@
         - if @startup.timeline_verified?
           a#verified-icon data-toggle="tooltip" data-placement="top" title="Timeline verified by SV.CO" href="#"
             img.timeline-verified src='#{image_url 'timeline/verified.gif'}'
-        - if current_user && @startup.is_founder?(current_user)
+        - if current_user && @startup.founder?(current_user)
           small.edit-startup-link
             a href=edit_user_startup_path(current_user)
               i.fa.fa-pencil
@@ -164,7 +164,7 @@
 
     /Form to post new timeline event
     .col-md-8.col-md-pull-4
-      - if current_user && @startup.is_founder?(current_user)
+      - if current_user && @startup.founder?(current_user)
         == render 'startups/timeline_builder', event: @timeline_event
 
       - if @startup.timeline_events_for_display(current_user).present?
@@ -193,7 +193,7 @@
                   = image_tag 'timeline/dash.png'
                   p #{event.description}
 
-                  - if current_user && @startup.is_founder?(current_user)
+                  - if current_user && @startup.founder?(current_user)
                     = button_to user_startup_timeline_event_url(current_user, event),
                       method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',
                       data: { confirm: 'This action cannot be reversed. Are you sure?' } do
@@ -239,7 +239,7 @@
                             - event.links.each do |link|
                               a.tl-link-button href="#{link[:url]}" target="_blank"
                                 | #{link[:title]}
-                        - if current_user && @startup.is_founder?(current_user)
+                        - if current_user && @startup.founder?(current_user)
                           = button_to user_startup_timeline_event_url(current_user, event),
                             method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',
                             data: { confirm: 'This action cannot be reversed. Are you sure?' } do

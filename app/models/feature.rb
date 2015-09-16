@@ -30,8 +30,6 @@ class Feature < ActiveRecord::Base
       end
     end
 
-    if parsed_value.include? :emails
-      return true if feature_value[:emails].include? user.email
-    end
+    true if parsed_value.include?(:emails) && parsed_value[:emails].include?(user.email)
   end
 end

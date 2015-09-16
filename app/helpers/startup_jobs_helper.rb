@@ -18,10 +18,7 @@ module StartupJobsHelper
 
   def equity_html(job)
     equity = "#{job.equity_min}%"
-
-    if job.equity_max.present?
-      equity += " &ndash; #{job.equity_max}%"
-    end
+    equity += " &ndash; #{job.equity_max}%" if job.equity_max.present?
 
     if job.equity_vest.present? && job.equity_cliff.present?
       equity += " (#{job.equity_vest} year vest with #{job.equity_cliff} year cliff)"

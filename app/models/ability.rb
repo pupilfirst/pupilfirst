@@ -11,7 +11,7 @@ class Ability
         can :update, [TimelineEvent]
     end
 
-    can :read, ActiveAdmin::Page, :name => 'Dashboard'
+    can :read, ActiveAdmin::Page, name: 'Dashboard'
 
     # Define abilities for the passed in user here. For example:
     #

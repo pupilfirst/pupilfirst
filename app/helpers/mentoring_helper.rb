@@ -18,16 +18,18 @@ module MentoringHelper
   end
 
   def mentor_skills_expertise_options
-    options_for_select([
+    options_for_select(
+      [
         ['Intermediate', MentorSkill::EXPERTISE_INTERMEDIATE],
         ['Advanced', MentorSkill::EXPERTISE_ADVANCED],
         ['Expert', MentorSkill::EXPERTISE_EXPERT]
-      ])
+      ]
+    )
   end
 
   def meeting_status_html(status)
-    status = "Rescheduled (to be confirmed)" if status == MentorMeeting::STATUS_RESCHEDULED
-    status.gsub('_', ' ').capitalize
+    status = 'Rescheduled (to be confirmed)' if status == MentorMeeting::STATUS_RESCHEDULED
+    status.tr('_', ' ').capitalize
   end
 
   def badges_for_days(days)

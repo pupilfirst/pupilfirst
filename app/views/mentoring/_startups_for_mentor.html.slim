@@ -15,7 +15,7 @@
           th Incubated At
           th Team size
           th Product Name
-          th Product Progress
+          /th Product Progress
       tbody
         - @startups.each do |startup|
           tr
@@ -25,6 +25,6 @@
             td = startup.incubation_location.try(:capitalize)
             td = startup.team_size
             td = startup.product_name
-            td = product_progress_html startup.product_progress
+            /td = product_progress_html startup.product_progress
 
   hr.col-xs-12

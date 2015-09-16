@@ -6,7 +6,7 @@ module AboutHelper
       .where('karma_points.created_at < ?', leaderboard_end_date)
       .group(:startup_id)
       .sum(:points)
-      .sort_by { |startup_id, points| points }.reverse
+      .sort_by { |_startup_id, points| points }.reverse
 
     last_points = nil
     last_rank = nil
@@ -35,9 +35,7 @@ module AboutHelper
       .pluck(:startup_id).uniq
 
     unranked_startups = Startup.not_dropped_out.where(batch: 1)
-      .where.not(
-      id: ranked_startup_ids
-    )
+      .where.not(id: ranked_startup_ids)
 
     [unranked_startups, ranked_startup_ids.count + 1]
   end

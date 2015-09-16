@@ -17,7 +17,7 @@ Style/AlignParameters:
 Style/MultilineOperationIndentation:
   EnforcedStyle: indented
 Style/HashSyntax:
-  EnforcedStyle: ruby19_no_mixed_keys
+  EnforcedStyle: ruby19
 Lint/EndAlignment:
   AlignWith: variable
 Metrics/MethodLength:
@@ -28,4 +28,4 @@ Style/CaseIndentation:
   IndentWhenRelativeTo: end
   IndentOneStep: true
 Metrics/AbcSize:
-  Max: 20 # default is 15.
+  Max: 30 # default is 15.

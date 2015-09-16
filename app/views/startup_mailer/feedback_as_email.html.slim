@@ -5,12 +5,26 @@
   | Hi,
 
 = content_for :body
-  p
-    ' We hope your startup journey is going great! Here is some feedback from
-    ' #{@send_by.fullname.present? ? @send_by.fullname+' of' : ''}
-    ' Team SV on your #{link_to 'recent updates', @startup_feedback.reference_url}
-    ' that might help you:
+  - if @startup_feedback.for_timeline_event?
+    p
+      ' We hope your startup journey is going great! Here is some feedback from
+      ' #{@send_by.fullname.present? ? @send_by.fullname+' of' : ''}
+      ' Team SV on your #{link_to 'recent timeline entry', @startup_feedback.reference_url}
+      ' that might help you:
 
-  | #{simple_format(@startup_feedback.feedback)}
+    p Your entry is:
+    | #{simple_format(@startup_feedback.timeline_event.description)}
+
+    p The faculty feedback is:
+    | #{simple_format(@startup_feedback.feedback)}
+
+  - else
+    p
+      ' We hope your startup journey is going great! Here is some feedback from
+      ' #{@send_by.fullname.present? ? @send_by.fullname+' of' : ''}
+      ' Team SV on your #{link_to 'recent updates', @startup_feedback.reference_url}
+      ' that might help you:
+
+    | #{simple_format(@startup_feedback.feedback)}
 
   p Feel free to reach out to us at #{mail_to 'help@sv.co'} in case of any queries.

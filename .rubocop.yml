@@ -25,3 +25,5 @@ Metrics/ClassLength:
 Style/CaseIndentation:
   IndentWhenRelativeTo: end
   IndentOneStep: true
+Metrics/AbcSize:
+  Max: 20 # default is 15.

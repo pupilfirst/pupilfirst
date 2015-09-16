@@ -17,23 +17,19 @@ class StartupJob < ActiveRecord::Base
   validate :equity_min_less_than_max
 
   def equity_min_less_than_max
-    if self.equity_min && self.equity_max
-      if self.equity_min >= self.equity_max
-        errors.add :equity_min, 'must be less than maximum equity.'
-        errors.add :equity_max, 'must be greater than minimum equity.'
-      end
-    end
+    return unless equity_min && equity_max
+    return unless equity_min >= equity_max
+    errors.add :equity_min, 'must be less than maximum equity.'
+    errors.add :equity_max, 'must be greater than minimum equity.'
   end
 
   validate :equity_vest_greater_than_cliff
 
   def equity_vest_greater_than_cliff
-    if self.equity_vest && self.equity_cliff
-      if self.equity_vest < self.equity_cliff
-        errors.add :equity_vest, 'must be greater than equity cliff'
-        errors.add :equity_cliff, 'must be less than equity vest'
-      end
-    end
+    return unless equity_vest && equity_cliff
+    return unless equity_vest < equity_cliff
+    errors.add :equity_vest, 'must be greater than equity cliff'
+    errors.add :equity_cliff, 'must be less than equity vest'
   end
 
   scope :not_expired, -> { where('expires_on > ?', Time.now) }
@@ -43,11 +39,11 @@ class StartupJob < ActiveRecord::Base
   end
 
   before_create do
-    reset_expiry! if self.expires_on.nil?
+    reset_expiry! if expires_on.nil?
   end
 
   def expired?
-    Time.now > self.expires_on
+    Time.now > expires_on
   end
 
   def can_be_modified_by?(user)
@@ -55,23 +51,12 @@ class StartupJob < ActiveRecord::Base
     startup.is_founder?(user)
   end
 
-  def fix_description_and_email
-    if self.description.nil?
-      self.description = 'Not supplied'
-    end
-
-    if self.contact_email.nil?
-      self.contact_email = startup.founders.first.email
-    end
-  end
-
   def equity_summary
     summary = ''
-    summary = "min: "+self.equity_min.to_s if self.equity_min?
-    summary += " | max: "+self.equity_max.to_s if self.equity_max?
-    summary += " | vest: "+self.equity_vest.to_s if self.equity_vest?
-    summary += " | cliff: "+self.equity_cliff.to_s if self.equity_cliff?
+    summary = 'min: ' + equity_min.to_s if equity_min?
+    summary += ' | max: ' + equity_max.to_s if equity_max?
+    summary += ' | vest: ' + equity_vest.to_s if equity_vest?
+    summary += ' | cliff: ' + equity_cliff.to_s if equity_cliff?
     summary
   end
-
 end

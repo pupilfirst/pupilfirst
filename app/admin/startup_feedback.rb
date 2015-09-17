@@ -72,7 +72,7 @@ ActiveAdmin.register StartupFeedback do
     redirect_to action: :index
   end
 
-  action_item only: :show, if: proc { startup_feedback.send_at.blank? } do
+  action_item :email_feedback, only: :show, if: proc { startup_feedback.send_at.blank? } do
     link_to(
       'Email Now!',
       email_feedback_admin_startup_feedback_path(startup_feedback),

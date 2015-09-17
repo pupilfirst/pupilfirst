@@ -1,5 +1,3 @@
-Metrics/LineLength:
-  Max: 160
 AllCops:
   Include:
     - '**/Rakefile'
@@ -9,24 +7,30 @@ AllCops:
     - 'app/models/mentor_meeting.rb'
     - 'app/models/mentor.rb'
     - 'app/controllers/mentoring_controller.rb'
-StringLiterals:
-  Enabled: false
-Documentation:
-  Enabled: false
+
+# Project styling
+
 Style/AlignParameters:
   EnforcedStyle: with_fixed_indentation
 Style/MultilineOperationIndentation:
   EnforcedStyle: indented
-Style/HashSyntax:
-  EnforcedStyle: ruby19
+Style/CaseIndentation:
+  IndentWhenRelativeTo: end
+  IndentOneStep: true
 Lint/EndAlignment:
   AlignWith: variable
+
+# Concessions (remove these if possible / appropriate).
+
+Metrics/LineLength:
+  Max: 160 # default was 80.
+StringLiterals:
+  Enabled: false
+Documentation:
+  Enabled: false
 Metrics/MethodLength:
   Max: 20 # default was 10.
 Metrics/ClassLength:
   Max: 400 # default was 100.
-Style/CaseIndentation:
-  IndentWhenRelativeTo: end
-  IndentOneStep: true
 Metrics/AbcSize:
   Max: 30 # default is 15.

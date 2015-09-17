@@ -63,15 +63,6 @@ feature 'Startup Edit' do
       expect(current_email.subject).to eq('SVApp: You have been added as startup cofounder!')
     end
 
-    scenario 'Founder adds a random non-SV email as cofounder' do
-      fill_in 'cofounder_email', with: Faker::Internet.email
-      click_on 'Add as co-founder'
-
-      expect(page.find('#current-founders-list')).not_to have_text(co_founder.email)
-      co_founder.reload
-      expect(co_founder.startup).to be_nil
-    end
-
     scenario 'Non-admin founder views delete startup section' do
       expect(page).to have_text('Only the team leader can delete a startup\'s profile')
     end

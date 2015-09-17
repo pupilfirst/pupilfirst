@@ -59,9 +59,8 @@ feature 'Startup Edit' do
       expect(page.find('#current-founders-list')).to have_text(co_founder.email)
       co_founder.reload
       expect(co_founder.startup).to eq(startup)
-      # TODO: Rewrite after including capybara-email gem ?
-      # expect(ActionMailer::Base.deliveries.last.subject).to eq('SVApp: You have been added as startup cofounder!')
-      # expect(ActionMailer::Base.deliveries.last.to).to eq([co_founder.email])
+      open_email('dummy@email.com')
+      expect(current_email.subject).to eq('SVApp: You have been added as startup cofounder!')
     end
 
     scenario 'Founder adds a random non-SV email as cofounder' do

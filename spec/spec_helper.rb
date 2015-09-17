@@ -76,4 +76,9 @@ RSpec.configure do |config|
   # test failures related to randomization by passing the same `--seed` value
   # as the one that triggered the failure.
   Kernel.srand config.seed
+
+  # Run RuboCop first.
+  rubocop_output = `rubocop`
+  print rubocop_output
+  fail 'RuboCop Errors' unless rubocop_output.match(/files inspected, no offenses detected/)
 end

@@ -82,3 +82,5 @@ RSpec.configure do |config|
   print rubocop_output
   fail 'RuboCop Errors' unless rubocop_output.match(/files inspected, no offenses detected/)
 end
+
+require 'capybara/email/rspec'

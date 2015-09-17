@@ -116,6 +116,9 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    capybara-email (2.4.0)
+      capybara (~> 2.4)
+      mail
     capybara-screenshot (1.0.11)
       capybara (>= 1.0, < 3)
       launchy
@@ -526,6 +529,7 @@ DEPENDENCIES
   bullet
   cancancan (~> 1.8)
   capybara
+  capybara-email
   capybara-screenshot
   carrierwave
   carrierwave_backgrounder

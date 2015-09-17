@@ -47,9 +47,8 @@ ActiveAdmin.register Startup do
     end
 
     actions do |startup|
-      link_to "View Timeline", startup, target: "_blank"
+      link_to 'View Timeline', startup, target: '_blank'
     end
-
   end
 
   csv do
@@ -82,11 +81,22 @@ ActiveAdmin.register Startup do
   end
 
   action_item :view_feedback, only: :show do
-    link_to('View All Feedback', admin_startup_feedback_index_url("q[startup_id_eq]" => Startup.friendly.find(params[:id]).id,"commit" => "Filter"))
+    link_to(
+      'View All Feedback',
+      admin_startup_feedback_index_url('q[startup_id_eq]' => Startup.friendly.find(params[:id]).id, commit: 'Filter')
+    )
   end
 
   action_item :record_feedback, only: :show do
-    link_to('Record New Feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: Startup.friendly.find(params[:id]).id, reference_url: startup_url(Startup.friendly.find(params[:id])) }))
+    link_to(
+      'Record New Feedback',
+      new_admin_startup_feedback_path(
+        startup_feedback: {
+          startup_id: Startup.friendly.find(params[:id]).id,
+          reference_url: startup_url(Startup.friendly.find(params[:id]))
+        }
+      )
+    )
   end
 
   action_item :view_timeline, only: :show do
@@ -124,10 +134,11 @@ ActiveAdmin.register Startup do
   member_action :get_all_startup_feedback do
     startup = Startup.friendly.find params[:id]
     feedback = startup.startup_feedback.order('updated_at desc')
+
     respond_to do |format|
-      format.json {
-        render json: {:feedback => feedback, :startup_name => startup.name}
-      }
+      format.json do
+        render json: { feedback: feedback, startup_name: startup.name }
+      end
     end
   end
 
@@ -145,23 +156,29 @@ ActiveAdmin.register Startup do
         div class: 'startup-status-buttons' do
           unless startup.approved? || startup.unready?
             span do
-              button_to('Approve Startup',
+              button_to(
+                'Approve Startup',
                 custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_APPROVED }, email_to_send: :approval),
-                method: :put, data: { confirm: 'Are you sure you want to approve this startup?' })
+                method: :put, data: { confirm: 'Are you sure you want to approve this startup?' }
+              )
             end
           end
           unless startup.rejected? || startup.unready?
             span do
-              button_to('Reject Startup',
+              button_to(
+                'Reject Startup',
                 custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_REJECTED }, email_to_send: :rejection),
-                { method: :put, data: { confirm: 'Are you sure you want to reject this startup?' } })
+                method: :put, data: { confirm: 'Are you sure you want to reject this startup?' }
+              )
             end
           end
           unless startup.dropped_out?
             span do
-              button_to('Drop-out Startup',
+              button_to(
+                'Drop-out Startup',
                 custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_DROPPED_OUT }, email_to_send: :dropped_out),
-                { method: :put, data: { confirm: 'Are you sure you want to drop out this startup?' } })
+                method: :put, data: { confirm: 'Are you sure you want to drop out this startup?' }
+              )
             end
           end
           if startup.unready?
@@ -241,16 +258,20 @@ ActiveAdmin.register Startup do
     end
 
     panel 'Emails and Notifications' do
-      link_to('Reminder to complete startup profile', send_startup_profile_reminder_admin_startup_path, method: :post, data: { confirm: 'Are you sure you wish to send notification and email?' })
+      link_to(
+        'Reminder to complete startup profile',
+        send_startup_profile_reminder_admin_startup_path,
+        method: :post, data: { confirm: 'Are you sure you wish to send notification and email?' }
+      )
     end
   end
 
-  form :partial => 'admin/startups/form'
+  form partial: 'admin/startups/form'
 
   permit_params :name, :website, :about, :email, :logo, :facebook_link, :twitter_link,
-    { category_ids: [] }, { founder_ids: [] }, { founders_attributes: [:id, :fullname, :email, :avatar, :remote_avatar_url, :title, :linkedin_url, :twitter_url, :skip_password] },
+    { category_ids: [] }, { founder_ids: [] },
+    { founders_attributes: [:id, :fullname, :email, :avatar, :remote_avatar_url, :title, :linkedin_url, :twitter_url, :skip_password] },
     :created_at, :updated_at, :approval_status, :approval_status, :registration_type,
     :incubation_location, :agreement_sent, :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration,
     :physical_incubatee, :presentation_link, :slug, :featured, :batch
 end
-

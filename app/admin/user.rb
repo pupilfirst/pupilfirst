@@ -54,7 +54,13 @@ ActiveAdmin.register User do
 
       row :startup do |f|
         if f.startup
-          "#{link_to f.startup.name, admin_startup_path(f.startup)} (#{link_to 'Remove from Startup', remove_from_startup_admin_user_path, { method: :post, data: { confirm: 'Are you sure?' } }})".html_safe
+          span do
+            link_to f.startup.name, admin_startup_path(f.startup)
+          end
+
+          span class: 'wrap-with-paranthesis' do
+            link_to 'Remove from Startup', remove_from_startup_admin_user_path, method: :post, data: { confirm: 'Are you sure?' }
+          end
         end
       end
 
@@ -67,9 +73,11 @@ ActiveAdmin.register User do
       row :communication_address
       row :district
       row :state
+
       row 'PIN Code' do
         user.pin
       end
+
       row :company
       row :designation
       row :university
@@ -85,12 +93,22 @@ ActiveAdmin.register User do
     end
 
     panel 'Emails and Notifications' do
-      link_to('Reminder to complete founder profile', send_founder_profile_reminder_admin_user_path, method: :post, data: { confirm: 'Are you sure you wish to send notification and email?' })
+      link_to(
+        'Reminder to complete founder profile',
+        send_founder_profile_reminder_admin_user_path,
+        method: :post,
+        data: { confirm: 'Are you sure you wish to send notification and email?' }
+      )
     end
   end
 
   action_item :feedback, only: :show do
-    link_to 'Record New Feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: User.find(params[:id]).startup.id, reference_url: startup_url(User.find(params[:id]).startup) })
+    link_to(
+      'Record New Feedback',
+      new_admin_startup_feedback_path(
+        startup_feedback: { startup_id: User.find(params[:id]).startup.id, reference_url: startup_url(User.find(params[:id]).startup) }
+      )
+    )
   end
 
   # Customize the filter options to reduce the size.

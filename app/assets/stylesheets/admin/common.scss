@@ -10,3 +10,8 @@
 #footer {
   display: none;
 }
+
+.wrap-with-paranthesis {
+  &:before { content: '(' }
+  &:after { content: ')' }
+}

@@ -8,7 +8,7 @@ ActiveAdmin.register StartupFeedback do
     end
   end
 
-  index :title => 'Startup Feedback' do
+  index title: 'Startup Feedback' do
     selectable_column
     column :startup
 
@@ -28,7 +28,11 @@ ActiveAdmin.register StartupFeedback do
       if startup_feedback.send_at.present?
         startup_feedback.send_at
       else
-        link_to('Email Now!', email_feedback_admin_startup_feedback_path(startup_feedback), method: :put, data: { confirm: 'Are you sure you want to email this feedback to the founders?' })
+        link_to(
+          'Email Now!',
+          email_feedback_admin_startup_feedback_path(startup_feedback),
+          method: :put, data: { confirm: 'Are you sure you want to email this feedback to the founders?' }
+        )
       end
     end
 
@@ -48,7 +52,11 @@ ActiveAdmin.register StartupFeedback do
         if startup_feedback.send_at.present?
           startup_feedback.send_at
         else
-          link_to('Email Now!', email_feedback_admin_startup_feedback_path(startup_feedback), method: :put, data: { confirm: 'Are you sure you want to email this feedback to the founders?' })
+          link_to(
+            'Email Now!',
+            email_feedback_admin_startup_feedback_path(startup_feedback),
+            method: :put, data: { confirm: 'Are you sure you want to email this feedback to the founders?' }
+          )
         end
       end
     end
@@ -64,8 +72,11 @@ ActiveAdmin.register StartupFeedback do
     redirect_to action: :index
   end
 
-  action_item :email, only: :show do
-  link_to 'Email Now!', email_feedback_admin_startup_feedback_path(startup_feedback), method: :put, data: { confirm: 'Are you sure you want to email this feedback to the founders?' } unless startup_feedback.send_at.present?
+  action_item only: :show, if: proc { startup_feedback.send_at.blank? } do
+    link_to(
+      'Email Now!',
+      email_feedback_admin_startup_feedback_path(startup_feedback),
+      method: :put, data: { confirm: 'Are you sure you want to email this feedback to the founders?' }
+    )
   end
-
 end

@@ -10,7 +10,7 @@ ActiveAdmin.register TimelineEvent do
 
   controller do
     def index
-      params[:order] = "updated_at_desc"
+      params[:order] = 'updated_at_desc'
       super
     end
   end
@@ -25,11 +25,19 @@ ActiveAdmin.register TimelineEvent do
   end
 
   action_item :view, only: :show do
-    link_to('View Timeline Entry', startup_url(timeline_event.startup, anchor: "event-#{timeline_event.id}"), target: "_blank")
+    link_to('View Timeline Entry', startup_url(timeline_event.startup, anchor: "event-#{timeline_event.id}"), target: '_blank')
   end
 
   action_item :feedback, only: :show do
-    link_to('Record New Feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: timeline_event.startup.id, reference_url: startup_url(timeline_event.startup, anchor: "event-#{timeline_event.id}") }))
+    link_to(
+      'Record New Feedback',
+      new_admin_startup_feedback_path(
+        startup_feedback: {
+          startup_id: timeline_event.startup.id,
+          reference_url: startup_url(timeline_event.startup, anchor: "event-#{timeline_event.id}")
+        }
+      )
+    )
   end
 
   member_action :delete_link, method: :delete do
@@ -103,11 +111,23 @@ ActiveAdmin.register TimelineEvent do
 
       row :verified_at do
         if timeline_event.verified?
-          "#{timeline_event.verified_at} (#{link_to 'Unverify', unverify_admin_timeline_event_path, method: :post, data: { confirm: 'Are you sure?' }})".html_safe
+          span do
+            "#{timeline_event.verified_at} "
+          end
+
+          span class: 'wrap-with-paranthesis' do
+            link_to 'Unverify', unverify_admin_timeline_event_path, method: :post, data: { confirm: 'Are you sure?' }
+          end
         elsif timeline_event.pending?
-          "#{button_to('Unverified. Click to verify this event.', verify_admin_timeline_event_path, {form_class: 'inline-button'})} #{button_to('Mark As Needs Improvement', mark_needs_improvement_admin_timeline_event_path, {form_class: 'inline-button'})}".html_safe
+          span do
+            button_to('Unverified. Click to verify this event.', verify_admin_timeline_event_path, form_class: 'inline-button')
+          end
+
+          span do
+            button_to('Mark As Needs Improvement', mark_needs_improvement_admin_timeline_event_path, form_class: 'inline-button')
+          end
         elsif timeline_event.needs_improvement?
-          "#{button_to('Unverified. Click to verify this event.', verify_admin_timeline_event_path)}".html_safe
+          button_to('Unverified. Click to verify this event.', verify_admin_timeline_event_path)
         end
       end
     end

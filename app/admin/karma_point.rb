@@ -4,7 +4,7 @@ ActiveAdmin.register KarmaPoint do
   permit_params :user_id, :points, :activity_type, :created_at
 
   preserve_default_filters!
-  filter :user_startup_id_eq, label: 'Startup from Batch 1', as: :select, collection: Proc.new { Startup.where(batch: 1) }
+  filter :user_startup_id_eq, label: 'Startup from Batch 1', as: :select, collection: proc { Startup.where(batch: 1) }
 
   controller do
     def scoped_collection
@@ -36,9 +36,13 @@ ActiveAdmin.register KarmaPoint do
 
   form do |f|
     f.inputs 'Extra' do
-      f.input :user, collection: User.founders,
-        member_label: Proc.new { |u| "#{u.fullname} - #{u.title.present? ? (u.title + ', ') : ''}#{u.startup.name}" },
+      f.input(
+        :user,
+        collection: User.founders,
+        member_label: proc { |u| "#{u.fullname} - #{u.title.present? ? (u.title + ', ') : ''}#{u.startup.name}" },
         input_html: { style: 'width: calc(80% - 22px);' }
+      )
+
       f.input :points
       f.input :activity_type
       f.input :created_at, as: :datepicker

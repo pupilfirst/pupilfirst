@@ -4,6 +4,9 @@ AllCops:
     - '**/config.ru'
   Exclude:
     - 'db/**/*'
+    - "tmp/**/*"
+    - "vendor/**/*"
+    - "log/**/*"
     - 'app/models/mentor_meeting.rb'
     - 'app/models/mentor.rb'
     - 'app/controllers/mentoring_controller.rb'

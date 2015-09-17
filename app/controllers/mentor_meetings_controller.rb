@@ -10,15 +10,15 @@ class MentorMeetingsController < ApplicationController
 
   def new
     if current_user.startup.agreement_live?
-  	   mentor = Mentor.find params[:mentor_id]
-      if MentorMeeting.scheduled_to_meet?(current_user,mentor)
-        flash[:alert]="You already have a pending meeting with this mentor"
+      mentor = Mentor.find params[:mentor_id]
+      if MentorMeeting.scheduled_to_meet?(current_user, mentor)
+        flash[:alert] = 'You already have a pending meeting with this mentor'
         redirect_to mentoring_url
       else
-  	   @mentor_meeting = mentor.mentor_meetings.new
-     end
+        @mentor_meeting = mentor.mentor_meetings.new
+      end
     else
-      flash[:alert]="Please sign/renew your agreement with SV to meet our mentors!"
+      flash[:alert] = 'Please sign/renew your agreement with SV to meet our mentors!'
       redirect_to mentoring_url
     end
   end
@@ -26,27 +26,27 @@ class MentorMeetingsController < ApplicationController
   # TODO: Refactor fat MentorMeetingsController#create
   def create
     raise_not_found unless current_user.startup.present?
-  	mentor = Mentor.find params[:mentor_id]
-  	@mentor_meeting = mentor.mentor_meetings.new(meeting_params)
-  	@mentor_meeting.user = current_user
-  	if @mentor_meeting.save
-  		MentoringMailer.meeting_request_to_mentor(@mentor_meeting).deliver
-      flash[:notice]="Meeting request sent"
-  		redirect_to mentoring_path(current_user)
-  	else
-  		flash[:alert]="Failed to create new meeting request"
-  		render 'new'
-  	end
+    mentor = Mentor.find params[:mentor_id]
+    @mentor_meeting = mentor.mentor_meetings.new(meeting_params)
+    @mentor_meeting.user = current_user
+    if @mentor_meeting.save
+      MentoringMailer.meeting_request_to_mentor(@mentor_meeting).deliver
+      flash[:notice] = 'Meeting request sent'
+      redirect_to mentoring_path(current_user)
+    else
+      flash[:alert] = 'Failed to create new meeting request'
+      render 'new'
+    end
   end
 
   def index
-  	@mentor_meetings = MentorMeeting.all
+    @mentor_meetings = MentorMeeting.all
   end
 
   # POST /mentor_meetings/:id/accept
   def accept
     mentor_meeting = MentorMeeting.find(params[:id])
-    mentor_meeting.accept!(mentor_meeting,current_user)
+    mentor_meeting.accept!(mentor_meeting, current_user)
     flash[:notice] = "#{guest(mentor_meeting).fullname} will be notified of your acceptance."
     redirect_to mentoring_url
   end
@@ -54,7 +54,7 @@ class MentorMeetingsController < ApplicationController
   # POST /mentor_meetings/:id/reject
   def reject
     mentor_meeting = MentorMeeting.find(params[:id])
-    mentor_meeting.reject!(params[:mentor_meeting],current_user)
+    mentor_meeting.reject!(params[:mentor_meeting], current_user)
     flash[:notice] = "#{guest(mentor_meeting).fullname}  will be notified of your response."
     redirect_to mentoring_url
   end
@@ -73,7 +73,8 @@ class MentorMeetingsController < ApplicationController
     @mentor_meeting.complete!
     if @mentor_meeting.founder?(current_user)
       render 'feedback_for_user'
-    else render 'feedback_for_mentor'
+    else
+      render 'feedback_for_mentor'
     end
   end
 
@@ -112,7 +113,7 @@ class MentorMeetingsController < ApplicationController
   def cancel
     mentor_meeting = MentorMeeting.find(params[:id])
     if mentor_meeting.cancellable?
-      mentor_meeting.cancel!(params[:mentor_meeting],current_user)
+      mentor_meeting.cancel!(params[:mentor_meeting], current_user)
       flash[:notice] = "#{guest(mentor_meeting).fullname}  will be notified of the cancellation."
     else
       flash[:notice] = "The meeting can no longer be cancelled"
@@ -123,11 +124,11 @@ class MentorMeetingsController < ApplicationController
   private
 
   def meeting_params
-    params.require(:mentor_meeting).permit(:purpose,:suggested_meeting_at,:suggested_meeting_time,:duration)
+    params.require(:mentor_meeting).permit(:purpose, :suggested_meeting_at, :suggested_meeting_time, :duration)
   end
 
   def feedback_params
-    params.require(:mentor_meeting).permit(:user_rating,:mentor_rating,:user_comments,:mentor_comments)
+    params.require(:mentor_meeting).permit(:user_rating, :mentor_rating, :user_comments, :mentor_comments)
   end
 
   def guest(mentormeeting)
@@ -141,12 +142,6 @@ class MentorMeetingsController < ApplicationController
 
   def meeting_member
     meeting = MentorMeeting.find(params[:id])
-    raise_not_found unless meeting.founder?(current_user) || meeting.mentor?(current_user)
-  end
-
-  def meeting_member
-    meeting = MentorMeeting.find(params[:id])
     raise_not_found unless current_user == meeting.user || current_user == meeting.mentor.user
   end
-
 end

@@ -8,18 +8,19 @@ class StartupsController < ApplicationController
   end
 
   def new
-    unless current_user.phone?
+    if current_user.phone.blank?
       session[:referer] = new_user_startup_url(current_user)
-      redirect_to phone_user_path(current_user) and return
+      redirect_to phone_user_path(current_user)
+      return
     end
 
-    if current_user.startup.present?
-      if current_user.startup.unready?
-        redirect_to incubation_path(id: :user_profile) and return
-      else
-        flash[:alert] = "You've already submitted an application for incubation."
-        redirect_to root_url and return
-      end
+    return unless current_user.startup.present?
+
+    if current_user.startup.unready?
+      redirect_to incubation_path(id: :user_profile)
+    else
+      flash[:alert] = "You've already submitted an application for incubation."
+      redirect_to root_url
     end
   end
 
@@ -91,7 +92,8 @@ class StartupsController < ApplicationController
       if current_user.startup_admin && current_user.valid_password?(startup_destroy_params[:password])
         @startup.destroy!
         flash[:success] = 'Your startup profile and all associated data has been deleted.'
-        redirect_to root_url and return
+        redirect_to root_url
+        return
       else
         flash.now[:error] = 'Authentication failed!'
       end
@@ -121,18 +123,16 @@ class StartupsController < ApplicationController
   end
 
   def restrict_to_startup_founders
-    unless current_user.is_founder?
-      raise_not_found
-    end
+    return if current_user.is_founder?
+    raise_not_found
   end
 
   # A startup that is in unready state shouldn't be allowed to edit its details.
   #
   # @see https://trello.com/c/y4ReClzt
   def disallow_unready_startup
-    if current_user.startup.unready?
-      flash[:error] = "You haven't completed the incubation process yet. Please complete it before attempting to edit your startup's profile."
-      redirect_to current_user
-    end
+    return unless current_user.startup.unready?
+    flash[:error] = "You haven't completed the incubation process yet. Please complete it before attempting to edit your startup's profile."
+    redirect_to current_user
   end
 end

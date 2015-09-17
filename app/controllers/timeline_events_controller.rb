@@ -51,8 +51,7 @@ class TimelineEventsController < ApplicationController
   end
 
   def restrict_to_startup_founders
-    unless current_user.is_founder?
-      raise_not_found
-    end
+    return if current_user.is_founder?
+    raise_not_found
   end
 end

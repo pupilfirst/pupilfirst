@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   before_filter :set_content_security_policy
 
   def raise_not_found
-    raise ActionController::RoutingError.new('Not Found')
+    fail ActionController::RoutingError, 'Not Found'
   end
 
   def after_sign_in_path_for(resource)
@@ -36,13 +36,18 @@ class ApplicationController < ActionController::Base
   helper_method :feature_active?
 
   def configure_permitted_parameters
+    # TODO: Clean this method up. What is this about, anyway?!
     devise_parameter_sanitizer.for(:accept_invitation).concat [:avatar, :twitter_url, :linkedin_url]
-    # TODO
     # Unpermitted parameters: salutation, fullname, born_on(1i), born_on(2i), born_on(3i), is_student, college, course, semester
     devise_parameter_sanitizer.for(:sign_up).concat [:fullname]
-    devise_parameter_sanitizer.for(:accept_invitation).concat [:salutation, :fullname, :email, :born_on, :is_student, :college_id, :course, :semester, :startup, :accept_startup]
+    devise_parameter_sanitizer.for(:accept_invitation).concat(
+      [
+        :salutation, :fullname, :email, :born_on, :is_student, :college_id, :course, :semester, :startup, :accept_startup
+      ]
+    )
   end
 
+  # Set headers for CSP. Be careful when changing this.
   def set_content_security_policy
     image_sources = "img-src 'self' " + [
       'https://www.google-analytics.com https://blog.sv.co https://www.startatsv.com http://www.startatsv.com',
@@ -51,7 +56,7 @@ class ApplicationController < ActionController::Base
 
     csp_directives = [
       image_sources,
-      "script-src 'self' https://ajax.googleapis.com https://www.google-analytics.com " +
+      "script-src 'self' https://ajax.googleapis.com https://www.google-analytics.com " \
         'https://blog.sv.co https://www.youtube.com http://www.startatsv.com https://assets.sv.co;',
       "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://assets.sv.co;",
       "connect-src 'self';",

@@ -73,7 +73,6 @@ class StartupJobsController < ApplicationController
     )
   end
 
-
   def restrict_to_startup_founders_with_live_agreement
     if current_user.startup.try(:id) != params[:startup_id].to_i || !current_user.is_founder?
       raise_not_found

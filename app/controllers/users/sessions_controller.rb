@@ -1,9 +1,11 @@
-class Users::SessionsController < Devise::SessionsController
-  # GET /resource/sign_in
-  def new
-    # Store referer in session if it's sent.
-    session[:referer] = params[:referer] if params[:referer].present?
+module Users
+  class SessionsController < Devise::SessionsController
+    # GET /resource/sign_in
+    def new
+      # Store referer in session if it's sent.
+      session[:referer] = params[:referer] if params[:referer]
 
-    super
+      super
+    end
   end
 end

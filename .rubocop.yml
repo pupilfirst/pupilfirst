@@ -8,6 +8,7 @@ AllCops:
     - 'db/**/*'
     - 'app/models/mentor_meeting.rb'
     - 'app/models/mentor.rb'
+    - 'app/controllers/mentoring_controller.rb'
 StringLiterals:
   Enabled: false
 Documentation:

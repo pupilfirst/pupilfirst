@@ -42,9 +42,7 @@ class UsersController < ApplicationController
 
   # GET /users/:id/phone
   def phone
-    if params[:referer].present?
-      session[:referer] = params[:referer]
-    end
+    session[:referer] = params[:referer] if params[:referer]
   end
 
   # POST /users/:id/code
@@ -54,13 +52,14 @@ class UsersController < ApplicationController
       current_user.generate_phone_number_verification_code(params[:phone_number])
     rescue Exceptions::InvalidPhoneNumber => e
       @failed_to_add_phone_number = e.message
-      render 'phone' and return
+      render 'phone'
+      return
     end
 
+    return if Rails.env.development?
+
     # SMS the code to the phone number. Currently uses FA format.
-    unless Rails.env.development?
-      RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV: #{code}", msisdn: phone_number)
-    end
+    RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV: #{code}", msisdn: phone_number)
   end
 
   # PATCH /users/:id/resend
@@ -87,8 +86,10 @@ class UsersController < ApplicationController
       current_user.verify_phone_number(params[:phone_verification_code])
     rescue Exceptions::PhoneNumberVerificationFailed
       @failed_to_verify_phone_number = true
-      render 'code' and return
+      render 'code'
+      return
     end
+
     flash[:notice] = 'Your phone number is now verified!'
 
     referer = session.delete :referer

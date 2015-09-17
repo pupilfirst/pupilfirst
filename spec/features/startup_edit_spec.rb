@@ -68,7 +68,29 @@ feature 'Startup Edit' do
       click_on 'Add as co-founder'
 
       expect(page.find('#current-founders-list')).not_to have_text(co_founder.email)
-      # expect(page.find('.ui-pnotify-text')).to have_content('Please verify founder\'s registered email address')
+      co_founder.reload
+      expect(co_founder.startup).to be_nil
+    end
+
+    scenario 'Non-admin founder views delete startup section' do
+      expect(page).to have_text('Only the team leader can delete a startup\'s profile')
+    end
+
+    scenario 'Founder deletes his startup as startup_admin' do
+      # change startup admin to this user
+      startup.admin.update(startup_admin: false)
+      user.update(startup_admin: true)
+      startup.reload
+      user.reload
+
+      visit edit_user_startup_path(user)
+      expect(page).to have_text('Deleting this startup is an irreversible action.')
+
+      startup_id = startup.id
+      fill_in 'startup_password', with: user.password
+      click_on 'Confirm Startup Deletion'
+      expect{Startup.find(startup_id)}.to raise_error ActiveRecord::RecordNotFound
+      expect(user.startup).to be_nil
     end
 
   end

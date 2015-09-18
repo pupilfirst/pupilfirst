@@ -501,9 +501,6 @@ GEM
     seedbank (0.3.0)
     select2-rails (3.5.9.3)
       thor (~> 0.14)
-    sendgrid_smtpapi (0.0.2)
-      actionmailer (>= 3.0.0)
-      activesupport (>= 2.1.0)
     sentry-raven (0.13.3)
       faraday (>= 0.7.6)
     simple_form (3.1.1)
@@ -621,7 +618,6 @@ DEPENDENCIES
   sdoc (~> 0.4.0)
   seedbank
   select2-rails
-  sendgrid_smtpapi
   sentry-raven
   simple_form (~> 3.1.1)
   slim

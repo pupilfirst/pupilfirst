@@ -187,9 +187,18 @@
                       i.fa.fa-exclamation-circle
                       | &nbsp;Pending verification
                   - if event.needs_improvement?
-                    .pending-verification href="#" data-toggle="tooltip" title="This event needs to be improved and resubmitted for approval"
-                      i.fa.fa-exclamation-circle
-                      | &nbsp;Needs Improvement
+                    - latest_feedback = StartupFeedback.where(reference_url: startup_url(event.startup, anchor: "event-#{event.id}")).order('updated_at desc').first
+                    - if latest_feedback.present?
+                      - feedback = latest_feedback.feedback
+                      - author = latest_feedback.feedback_by.present? ? (latest_feedback.feedback_by.fullname + ' of Team SV') : 'Team SV'
+                      a data-toggle="modal" data-target="#improvement-modal" data-feedback="#{latest_feedback.feedback}" data-author="#{author}"
+                        .pending-verification href="#" data-toggle="tooltip" title="Click to see feedback from Team SV to improve this entry!"
+                          i.fa.fa-exclamation-circle
+                          | &nbsp;Needs Improvement
+                    - else
+                      .pending-verification href="#" data-toggle="tooltip" title="This event needs to be improved and resubmitted for approval."
+                        i.fa.fa-exclamation-circle
+                        | &nbsp;Needs Improvement
                   = image_tag 'timeline/dash.png'
                   p #{event.description}
 
@@ -218,9 +227,18 @@
                             i.fa.fa-exclamation-circle
                             | &nbsp;Pending verification
                         - elsif event.needs_improvement?
-                          .pending-verification href="#" data-toggle="tooltip" title="This event needs to be improved and resubmitted for approval"
-                            i.fa.fa-exclamation-circle
-                            | &nbsp;Needs Improvement
+                          - latest_feedback = StartupFeedback.where(reference_url: startup_url(event.startup, anchor: "event-#{event.id}")).order('updated_at desc').first
+                          - if latest_feedback.present?
+                            - feedback = latest_feedback.feedback
+                            - author = latest_feedback.feedback_by.present? ? (latest_feedback.feedback_by.fullname + ' of Team SV') : 'Team SV'
+                            a data-toggle="modal" data-target="#improvement-modal" data-feedback="#{latest_feedback.feedback}" data-author="#{author}"
+                              .pending-verification.pointer-cursor href="#" data-toggle="tooltip" title="Click to see feedback from Team SV to improve this entry!"
+                                i.fa.fa-exclamation-circle
+                                | &nbsp;Needs Improvement
+                          - else
+                            .pending-verification href="#" data-toggle="tooltip" title="This event needs to be improved and resubmitted for approval."
+                              i.fa.fa-exclamation-circle
+                              | &nbsp;Needs Improvement
                         a href="#{startup_url(event.startup, anchor: "event-#{event.id}")}"
                           h4.timeline-title
                             ' #{event.timeline_event_type.title}
@@ -254,3 +272,13 @@
             p
               | No timeline events to show!
             = image_tag 'timeline/dash.png'
+
+#improvement-modal.modal.fade role="dialog"
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close data-dismiss="modal" type="button"  &times;
+        h4.modal-title
+      .modal-body style="overflow:auto;"
+      .modal-footer
+        button.btn.btn-default data-dismiss="modal" type="button"  Close

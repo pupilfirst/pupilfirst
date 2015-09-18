@@ -17,7 +17,6 @@ gem 'mini_magick' # Image processing.
 gem 'nokogiri'
 gem 'pg'
 gem 'sass-rails', '~> 5.0'
-gem 'sendgrid_smtpapi' # Sendgrid handles our e-mails.
 gem 'sentry-raven' # Reporter for Sentry Heroku add-on.
 gem 'slim'
 

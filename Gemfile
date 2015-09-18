@@ -62,8 +62,8 @@ gem 'friendly_id' # Slugs for links. http://norman.github.io/friendly_id
 gem 'gravtastic' # Use gravatars as fallback avatars
 gem 'require_all' # Easier folder require-s.
 
-gem 'lita' # Lita, Chat-ops bot.
-gem 'lita-slack' # Lita adapter for Slack.
+gem 'lita', require: false # Lita, Chat-ops bot.
+gem 'lita-slack', require: false # Lita adapter for Slack.
 
 # Rails assets!
 source 'https://rails-assets.org' do

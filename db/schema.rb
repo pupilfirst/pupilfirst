@@ -179,7 +179,10 @@ ActiveRecord::Schema.define(version: 20150918102334) do
     t.datetime "updated_at",    null: false
     t.integer  "startup_id"
     t.datetime "send_at"
+    t.integer  "feedback_by"
   end
+
+  add_index "startup_feedback", ["feedback_by"], name: "index_startup_feedback_on_feedback_by", using: :btree
 
   create_table "startup_jobs", force: :cascade do |t|
     t.integer  "startup_id"

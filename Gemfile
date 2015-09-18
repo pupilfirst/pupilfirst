@@ -48,6 +48,7 @@ gem 'momentjs-rails', '>= 2.8.1', github: 'derekprior/momentjs-rails' # Required
 gem 'roadie-rails' # CSS management for e-mails.
 gem 'passenger', '~> 5.0.14' # Passenger web-server.
 gem 'delayed_job_active_record' # Delayed Job for deferring tasks.
+gem 'delayed_job_web' # Web interface for delayed_job
 gem 'seedbank' # Better organized seed data.
 gem 'wicked' # Multistep form wizard for incubation
 gem 'font-awesome-rails' # Icons from font-awesome!

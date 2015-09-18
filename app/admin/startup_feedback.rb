@@ -2,6 +2,10 @@ ActiveAdmin.register StartupFeedback do
   menu parent: 'Startups', label: 'Startup Feedback'
   permit_params :feedback, :reference_url, :startup_id, :send_email
 
+  before_create do |startup_feedback|
+    startup_feedback.feedback_by = current_admin_user
+  end
+
   controller do
     def scoped_collection
       super.includes :startup
@@ -22,6 +26,10 @@ ActiveAdmin.register StartupFeedback do
       if startup_feedback.reference_url.present?
         link_to 'Link', startup_feedback.reference_url
       end
+    end
+
+    column :feedback_by do |startup_feedback|
+      startup_feedback.feedback_by.try(:email)
     end
 
     column :send_at do |startup_feedback|
@@ -48,6 +56,9 @@ ActiveAdmin.register StartupFeedback do
         end
       end
       row :reference_url
+      row :feedback_by do |startup_feedback|
+        startup_feedback.feedback_by.try(:email)
+      end
       row :send_at do |startup_feedback|
         if startup_feedback.send_at.present?
           startup_feedback.send_at

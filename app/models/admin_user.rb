@@ -3,6 +3,8 @@ class AdminUser < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
+  has_many :startup_feedback, foreign_key: 'feedback_by'
+
   TYPE_SUPERADMIN = 'superadmin'
   TYPE_TIMELINE_REVIEWER = 'timeline_reviewer'
 

@@ -289,6 +289,13 @@ setupTimelineBuilderDatepicker = ->
       timelineEventDateField.tooltip('destroy')
   )
 
+setImprovementModalContent = ->
+  $('#improvement-modal').on 'show.bs.modal', (event) ->
+    feedback = $(event.relatedTarget).data('feedback')
+    author = $(event.relatedTarget).data('author')
+    $('#improvement-modal').find('.modal-body').html("<pre>#{feedback}</pre>")
+    $('#improvement-modal').find('.modal-title').html("Feedback from #{author}")
+
 $(timelineBuilderSubmitChecks)
 $(setupSelect2ForEventType)
 $(clearErrorsOnOpeningSelect2)
@@ -299,3 +306,6 @@ $(measureDescriptionLength)
 $(setPendingTooltips)
 $(matchSampleTextToEventType)
 $(setupTimelineBuilderDatepicker)
+$(setImprovementModalContent)
+
+

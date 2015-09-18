@@ -1,6 +1,7 @@
 class StartupsController < ApplicationController
   before_filter :authenticate_user!, except: [:show, :index]
   before_filter :restrict_to_startup_founders, only: [:edit, :update, :add_founder]
+  before_filter :restrict_to_startup_admin, only: [:remove_founder]
   before_filter :disallow_unready_startup, only: [:edit, :update]
   after_filter only: [:create] do
     @startup.founders << current_user
@@ -84,6 +85,18 @@ class StartupsController < ApplicationController
     redirect_to edit_user_startup_path(current_user)
   end
 
+  # PATCH /remove_founder
+  def remove_founder
+    founder_to_remove = current_user.startup.founders.find_by id: params[:founder_id]
+    if founder_to_remove.present?
+      founder_to_remove.update(is_founder: false, startup_id: nil)
+      flash.now[:success] = "The founder was successfully removed from your startup!"
+    else
+      flash.now[:error] = "There was an error in removing the founder!"
+    end
+    redirect_to edit_user_startup_path(current_user)
+  end
+
   # DELETE /users/:id/startup/destroy
   def destroy
     @startup = current_user.startup
@@ -124,6 +137,11 @@ class StartupsController < ApplicationController
 
   def restrict_to_startup_founders
     return if current_user.is_founder?
+    raise_not_found
+  end
+
+  def restrict_to_startup_admin
+    return if current_user.startup_admin?
     raise_not_found
   end
 

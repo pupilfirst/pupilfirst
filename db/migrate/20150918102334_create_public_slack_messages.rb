@@ -3,6 +3,7 @@ class CreatePublicSlackMessages < ActiveRecord::Migration
     create_table :public_slack_messages do |t|
       t.text :body
       t.string :slack_username
+      t.references :user, index: true
 
       t.timestamps null: false
     end

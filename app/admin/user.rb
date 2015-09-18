@@ -111,6 +111,10 @@ ActiveAdmin.register User do
     )
   end
 
+  action_item :public_slack_messages, only: :show, if: proc { User.find(params[:id]).slack_username.present? } do
+    link_to 'Public Slack Messages', admin_public_slack_messages_path(q: { user_id_eq: params[:id] })
+  end
+
   # Customize the filter options to reduce the size.
   filter :email
   filter :fullname

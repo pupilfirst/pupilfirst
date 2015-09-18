@@ -158,9 +158,12 @@ ActiveRecord::Schema.define(version: 20150918102334) do
   create_table "public_slack_messages", force: :cascade do |t|
     t.text     "body"
     t.string   "slack_username"
+    t.integer  "user_id"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
   end
+
+  add_index "public_slack_messages", ["user_id"], name: "index_public_slack_messages_on_user_id", using: :btree
 
   create_table "startup_applications", force: :cascade do |t|
     t.string   "name"

@@ -18,6 +18,7 @@ class User < ActiveRecord::Base
 
   # alias_attribute :communication_address, :address  # 13/03/2015 to accomodate change in user address field for older api, need to be removed after sometime
 
+  has_many :public_slack_messages
   has_many :requests
   has_one :mentor, dependent: :destroy
   belongs_to :college

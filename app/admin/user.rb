@@ -102,7 +102,7 @@ ActiveAdmin.register User do
     end
   end
 
-  action_item :feedback, only: :show do
+  action_item :feedback, only: :show, if: proc { User.find(params[:id]).startup.present? } do
     link_to(
       'Record New Feedback',
       new_admin_startup_feedback_path(

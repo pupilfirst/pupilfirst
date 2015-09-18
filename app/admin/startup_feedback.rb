@@ -24,6 +24,10 @@ ActiveAdmin.register StartupFeedback do
       end
     end
 
+    column :feedback_by do |startup_feedback|
+      startup_feedback.feedback_by.try(:fullname)
+    end
+
     column :send_at do |startup_feedback|
       if startup_feedback.send_at.present?
         startup_feedback.send_at
@@ -48,6 +52,9 @@ ActiveAdmin.register StartupFeedback do
         end
       end
       row :reference_url
+      row :feedback_by do |startup_feedback|
+        startup_feedback.feedback_by.try(:fullname)
+      end
       row :send_at do |startup_feedback|
         if startup_feedback.send_at.present?
           startup_feedback.send_at

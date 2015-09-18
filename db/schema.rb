@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150914064807) do
+ActiveRecord::Schema.define(version: 20150918102334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -153,6 +153,13 @@ ActiveRecord::Schema.define(version: 20150914064807) do
     t.string   "company_level"
     t.datetime "verified_at"
     t.string   "company"
+  end
+
+  create_table "public_slack_messages", force: :cascade do |t|
+    t.text     "body"
+    t.string   "slack_username"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
   create_table "startup_applications", force: :cascade do |t|

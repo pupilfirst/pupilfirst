@@ -58,7 +58,7 @@ feature 'Startup Edit' do
       expect(page.find('#current-founders-list')).to have_text(co_founder.email)
       co_founder.reload
       expect(co_founder.startup).to eq(startup)
-      open_email('dummy@email.com')
+      open_email(co_founder.email)
       expect(current_email.subject).to eq('SVApp: You have been added as startup cofounder!')
     end
 

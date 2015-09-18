@@ -12,6 +12,8 @@ Svapp::Application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
+  match '/delayed_job' => DelayedJobWeb, anchor: false, via: [:get, :post]
+
   resources :users, only: [:show, :edit, :update] do
     # resources :mentor_meetings, only: ['index']
 

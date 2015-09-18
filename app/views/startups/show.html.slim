@@ -232,7 +232,7 @@
                             - feedback = latest_feedback.feedback
                             - author = latest_feedback.feedback_by.present? ? (latest_feedback.feedback_by.fullname + ' of Team SV') : 'Team SV'
                             a data-toggle="modal" data-target="#improvement-modal" data-feedback="#{latest_feedback.feedback}" data-author="#{author}"
-                              .pending-verification href="#" data-toggle="tooltip" title="Click to see feedback from Team SV to improve this entry!"
+                              .pending-verification.pointer-cursor href="#" data-toggle="tooltip" title="Click to see feedback from Team SV to improve this entry!"
                                 i.fa.fa-exclamation-circle
                                 | &nbsp;Needs Improvement
                           - else

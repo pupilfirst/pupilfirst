@@ -26,10 +26,18 @@
         h3.page-header Add co-founders.
         p Got fellow travellers on this journey? Tell them to sign up at <em>SV.CO</em>, and then enter their SV ID-s below.
 
-        - cofounders_hint = @startup.founders.count > 1 ? "Current list: #{@startup.cofounders(@user).map { |u| u.email }.join ', '}" : nil
+        .col-sm-9.col-sm-offset-3.margin-bottom-10
+          strong Current list of founders:&nbsp;
+          span.label.label-info #{current_user.email} (you)
+          - @startup.cofounders(current_user).each do |cofounder|
+            | &nbsp;
+            span.label.label-info
+              ' #{cofounder.email}
+              - if @startup.admin?(current_user)
+              | #{link_to 'x', remove_founder_user_startup_path(current_user, founder_id: cofounder.id), method: :patch, data: { confirm: 'Are you sure you want to remove this founder from your startup?' } }
 
         = simple_form_for :cofounder, url: add_cofounder_incubation_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
-          = f.input :email, placeholder: 'co-founder@yourstartup.com', label: "Co-founder's SV ID", hint: cofounders_hint
+          = f.input :email, placeholder: 'co-founder@yourstartup.com', label: "Co-founder's SV ID"
 
           .form-group
             .col-sm-offset-3.col-sm-10

@@ -94,7 +94,7 @@ class StartupsController < ApplicationController
     else
       flash.now[:error] = "There was an error in removing the founder!"
     end
-    redirect_to edit_user_startup_path(current_user)
+    redirect_to :back
   end
 
   # DELETE /users/:id/startup/destroy

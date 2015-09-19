@@ -3,6 +3,9 @@ module Lita
     class Backup < Handler
       on :unhandled_message do |payload|
         message = payload[:message]
+
+        next if message.private_message?
+
         message_author_slack_username = message.user.mention_name
         message_author = ::User.find_by slack_username: message_author_slack_username
 

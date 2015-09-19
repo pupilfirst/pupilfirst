@@ -4,6 +4,7 @@ class CreatePublicSlackMessages < ActiveRecord::Migration
       t.text :body
       t.string :slack_username
       t.references :user, index: true
+      t.string :channel
 
       t.timestamps null: false
     end

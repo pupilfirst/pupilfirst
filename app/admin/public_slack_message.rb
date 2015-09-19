@@ -5,9 +5,7 @@ ActiveAdmin.register PublicSlackMessage do
   index do
     # selectable_column
 
-    column :body do |message|
-      simple_format message.body
-    end
+    column(:body) { |message| simple_format message.body }
 
     column :author do |message|
       if message.user.present?
@@ -16,6 +14,8 @@ ActiveAdmin.register PublicSlackMessage do
         "@#{message.slack_username}"
       end
     end
+
+    column(:channel) { |message| "##{message.channel}" }
 
     column :created_at
 

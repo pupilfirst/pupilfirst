@@ -159,6 +159,7 @@ ActiveRecord::Schema.define(version: 20150918102334) do
     t.text     "body"
     t.string   "slack_username"
     t.integer  "user_id"
+    t.string   "channel"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
   end

@@ -2,10 +2,14 @@ ActiveAdmin.register PublicSlackMessage do
   menu parent: 'Users'
   actions :all, except: [:show, :new, :create, :edit, :update, :destroy]
 
+  controller do
+    def scoped_collection
+      super.includes :user
+    end
+  end
+
   index do
     # selectable_column
-
-    column(:body) { |message| simple_format message.body }
 
     column :author do |message|
       if message.user.present?
@@ -16,6 +20,12 @@ ActiveAdmin.register PublicSlackMessage do
     end
 
     column(:channel) { |message| "##{message.channel}" }
+
+    column(:body) do |message|
+      pre class: 'max-width-pre' do
+        message.body
+      end
+    end
 
     column :created_at
 

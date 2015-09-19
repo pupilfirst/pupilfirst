@@ -15,3 +15,9 @@
   &:before { content: '(' }
   &:after { content: ')' }
 }
+
+.max-width-pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}

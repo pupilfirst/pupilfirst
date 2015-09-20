@@ -16,9 +16,7 @@
 !/log/.keep
 /tmp
 
-config/*.yml
-!config/secrets.yml
-.env
+.env*
 .rspec
 tags
 coverage

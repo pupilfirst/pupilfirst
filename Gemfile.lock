@@ -173,7 +173,10 @@ GEM
     diff-lcs (1.2.5)
     domain_name (0.5.24)
       unf (>= 0.0.5, < 1.0.0)
-    dotenv (2.0.1)
+    dotenv (2.0.2)
+    dotenv-rails (2.0.2)
+      dotenv (= 2.0.2)
+      railties (~> 4.0)
     erubis (2.7.0)
     eventmachine (1.0.8)
     excon (0.45.3)
@@ -582,7 +585,7 @@ DEPENDENCIES
   delayed_job_web
   devise_invitable
   did_you_mean
-  dotenv
+  dotenv-rails
   factory_girl
   factory_girl_rails (~> 4.0)
   faker

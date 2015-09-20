@@ -3,6 +3,8 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.4'
 
+gem 'dotenv-rails', :groups => [:development, :test]
+
 gem 'activeadmin', github: 'activeadmin' # ActiveAdmin doesn't like 4.2 at all (for the moment). Switch this to stable when available.
 gem 'active_skin' # Better lookin' active admin!
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
@@ -93,7 +95,6 @@ end
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.2.0' # Duh.
-  gem 'dotenv' # Load environment variables from .env file.
   gem 'pry-rails' # Pry debugger.
   gem 'webmock', require: false # Mocking web requests.
   gem 'did_you_mean' # Enough of silly spellinng mistakes ruining the day!

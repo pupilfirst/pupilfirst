@@ -1,0 +1,17 @@
+common: &common
+  adapter: postgresql
+  host: <%= ENV['DB_HOST'] %>
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
+  reconnect: true
+
+development:
+  <<: *common
+  database: <%= ENV['DB_NAME'] %>
+
+test:
+  <<: *common
+  database: <%= ENV['DB_NAME'] %>
+
+production:
+  pool: <%= ENV["DB_POOL"] || ENV['MAX_THREADS'] || 5 %>

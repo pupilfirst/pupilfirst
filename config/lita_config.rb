@@ -3,7 +3,7 @@ Lita.configure do |config|
   config.robot.name = 'Vocalist'
   config.robot.mention_name = 'vocalist'
 
-  config.robot.alias = '\\'
+  config.robot.alias = '!'
 
   config.robot.adapter = :slack
   config.adapters.slack.token = ENV['SLACK_TOKEN']

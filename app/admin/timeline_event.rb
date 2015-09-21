@@ -21,7 +21,14 @@ ActiveAdmin.register TimelineEvent do
     column :timeline_event_type
     column :startup
     column :event_on
-    column :verified_status
+
+    column :verified_status do |timeline_event|
+      if timeline_event.verified?
+        "Verified on #{timeline_event.verified_at.strftime('%d/%m/%y')}"
+      else
+        timeline_event.verified_status
+      end
+    end
   end
 
   action_item :view, only: :show do

@@ -1,6 +1,6 @@
 ActiveAdmin.register TimelineEvent do
   menu parent: 'Startups'
-  permit_params :description, :iteration, :timeline_event_type_id, :image, :links, :event_on, :startup_id, :verified_at
+  permit_params :description, :timeline_event_type_id, :image, :links, :event_on, :startup_id, :verified_at
 
   preserve_default_filters!
   filter :startup_batch, as: :select, collection: (1..10)
@@ -97,7 +97,6 @@ ActiveAdmin.register TimelineEvent do
       f.input :startup, include_blank: false
       f.input :timeline_event_type, include_blank: false
       f.input :description
-      f.input :iteration
       f.input :image
       f.input :event_on, as: :datepicker
       f.input :verified_at, as: :datepicker
@@ -109,9 +108,9 @@ ActiveAdmin.register TimelineEvent do
   show do |timeline_event|
     attributes_table do
       row :startup
+      row :iteration
       row :timeline_event_type
       row :description
-      row :iteration
       row :image
       row :event_on
       row :verified_status

@@ -99,7 +99,7 @@
                     img.media-object alt="Iteration icon" src="#{image_url 'timeline/icons/iteration.png'}"
                   .media-body
                     h4.media-heading Product Iteration
-                    p.data-content #{@startup.current_iteration.ordinalize}
+                    p.data-content #{@startup.iteration.ordinalize}
               - if @startup.earliest_event_date.present?
                 .media
                   .media-left
@@ -171,7 +171,7 @@
         .main-timeline
           .tl-iteration
             p
-              | Timeline of #{@startup.timeline_events_for_display(current_user).maximum(:iteration).ordinalize} iteration.
+              | Timeline of #{@startup.iteration.ordinalize} iteration.
             = image_tag 'timeline/dash.png'
             br
             a#read-from-beginning href="#begin"  Read from the beginning.

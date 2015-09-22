@@ -190,6 +190,7 @@ ActiveAdmin.register Startup do
       end
 
       row :batch
+      row :iteration
       row :featured
       row :physical_incubatee
       row :agreement_sent

@@ -486,16 +486,14 @@ class Startup < ActiveRecord::Base
     changed_stage_event ? changed_stage_event.timeline_event_type.key : TimelineEventType::TYPE_STAGE_IDEA
   end
 
-  def current_iteration
-    if latest_end_of_iteration
-      latest_end_of_iteration.iteration + 1
+  # Returns current iteration, counting end-of-iteration events. If at_event is supplied, it calculates iteration during
+  # that event.
+  def iteration(at_event: nil)
+    if at_event
+      timeline_events.where('created_at < ?', at_event.created_at)
     else
-      1
-    end
-  end
-
-  def latest_end_of_iteration
-    timeline_events.where(timeline_event_type: TimelineEventType.end_iteration).where.not(verified_at: nil).order(event_on: :desc).first
+      timeline_events
+    end.end_of_iteration_events.verified.count + 1
   end
 
   def timeline_verified?

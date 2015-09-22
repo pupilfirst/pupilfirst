@@ -13,6 +13,7 @@ p
       #basicdetails.panel-collapse.collapse.in role="tabpanel"
         .panel-body
           = f.input :name, label: "Startup's Name", required: true, input_html: { placeholder: '', maxlength: 255 }
+          = f.input :legal_registered_name, label: "Legal Registered Name", hint: "The name of your registered legal entity. Partnership/Pvt. Ltd./LLP etc."
           = f.input :logo, as: :file, required: false, input_html: { accept: 'image/*' }
           = f.input :about, label: 'About your Startup', as: :text,
             hint: "Describe your startup in less than #{Startup::MAX_ABOUT_CHARACTERS} characters.",

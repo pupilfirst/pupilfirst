@@ -59,7 +59,7 @@ ActiveAdmin.register TimelineEvent do
 
   member_action :add_link, method: :post do
     timeline_event = TimelineEvent.find params[:id]
-    timeline_event.links << { title: params[:link_title], url: params[:link_url] }
+    timeline_event.links << { title: params[:link_title], url: params[:link_url], private: params[:link_private] }
     timeline_event.save!
 
     flash[:success] = 'Link Added!'
@@ -69,7 +69,7 @@ ActiveAdmin.register TimelineEvent do
 
   member_action :edit_link, method: :put do
     timeline_event = TimelineEvent.find params[:id]
-    timeline_event.links[params[:link_index].to_i] = { title: params[:link_title], url: params[:link_url] }
+    timeline_event.links[params[:link_index].to_i] = { title: params[:link_title], url: params[:link_url], private: params[:link_private] }
     timeline_event.save!
 
     flash[:success] = 'Link Updated!'

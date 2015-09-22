@@ -364,6 +364,7 @@ class Startup < ActiveRecord::Base
   end
 
   def founder?(user)
+    return false unless user
     user.is_founder? && user.startup_id == id
   end
 

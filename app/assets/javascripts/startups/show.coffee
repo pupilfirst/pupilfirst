@@ -192,21 +192,33 @@ handleLinkAddition = ->
   $('#add-link-modal').on('show.bs.modal', (e) ->
     linkTitle = $('#timeline_event_link_title').val()
     linkURL = $('#timeline_event_link_url').val()
+    linkPrivate = $('#timeline_event_link_private').val()
 
-    $('#link_title_front').val(linkTitle)
-    $('#link_url_front').val(linkURL)
+    $('#link_title').val(linkTitle)
+    $('#link_url').val(linkURL)
+
+    if linkPrivate == 'true'
+      $('#link_private').prop('checked', true)
+    else
+      $('#link_private').prop('checked', false)
   )
 
   # When the add button is clicked, validate and store if it passes. Show errors otherwise.
   $('#add-link-button').click(->
-    linkTitle = $('#link_title_front').val()
-    linkURL = $('#link_url_front').val()
+    linkTitle = $('#link_title').val()
+    linkURL = $('#link_url').val()
     linkURLValid = isUrlValid(linkURL)
 
     if linkURL and linkURLValid and linkTitle
       # Store values in hidden inputs, close modal, and show title on builder link.
       $('#timeline_event_link_title').val(linkTitle)
       $('#timeline_event_link_url').val(linkURL)
+
+      if $('#link_private').prop('checked')
+        $('#timeline_event_link_private').val(true)
+      else
+        $('#timeline_event_link_private').val(false)
+
       $('#add-link-modal').modal('hide')
       markSelectedLink(linkTitle)
     else
@@ -217,11 +229,11 @@ handleLinkAddition = ->
         addErrorMarkers('#link-title-group')
   )
 
-  $('#link_title_front').focus(->
+  $('#link_title').focus(->
     clearErrorMarkers('#link-title-group')
   )
 
-  $('#link_url_front').focus(->
+  $('#link_url').focus(->
     clearErrorMarkers('#link-url-group')
   )
 
@@ -296,6 +308,9 @@ setImprovementModalContent = ->
     $('#improvement-modal').find('.modal-body').html("<pre>#{feedback}</pre>")
     $('#improvement-modal').find('.modal-title').html("Feedback from #{author}")
 
+addTooltipToHideCheckbox = ->
+  $("#hide-from-public").tooltip()
+
 $(timelineBuilderSubmitChecks)
 $(setupSelect2ForEventType)
 $(clearErrorsOnOpeningSelect2)
@@ -307,5 +322,4 @@ $(setPendingTooltips)
 $(matchSampleTextToEventType)
 $(setupTimelineBuilderDatepicker)
 $(setImprovementModalContent)
-
-
+$(addTooltipToHideCheckbox)

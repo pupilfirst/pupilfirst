@@ -48,6 +48,7 @@ feature 'Timeline Builder' do
       page.find('a', text: 'Add a Link').click
       fill_in 'Title', with: 'SV.CO'
       fill_in 'URL', with: 'https://sv.co'
+      page.find('#link_private').click
       click_on 'Add'
 
       click_on 'Submit for Review'
@@ -58,6 +59,7 @@ feature 'Timeline Builder' do
       expect(latest_timeline_event_panel).to have_text('Team Formed')
       expect(latest_timeline_event_panel).to have_text(event_description)
       expect(latest_timeline_event_panel).to have_link('SV.CO', href: 'https://sv.co')
+      expect(latest_timeline_event_panel).to have_selector('i.fa.fa-user-secret')
     end
 
     scenario 'Founder attempts to add link without supplying title or URL', js: true do
@@ -95,6 +97,33 @@ feature 'Timeline Builder' do
 
         new_timeline_event_panel = page.find("#event-#{unverified_timeline_event.id}")
         expect(new_timeline_event_panel).to have_text(new_description)
+      end
+
+      context 'Timeline event has a private link' do
+        let!(:unverified_timeline_event) do
+          create :timeline_event,
+            startup: startup,
+            link_title: 'Link to Google',
+            link_url: 'https://google.com',
+            link_private: 'true'
+        end
+
+        scenario 'Founder makes link public', js: true do
+          visit startup_path(startup)
+
+          page.find("#event-#{unverified_timeline_event.id} .edit-link").click
+
+          within '.timeline-builder' do
+            page.find('a', text: 'Link to Google').click
+          end
+
+          page.find('#link_private').click
+          click_on 'Add'
+          click_on 'Submit for Review'
+
+          unverified_timeline_event.reload
+          expect(unverified_timeline_event.links.first[:private]).to be_falsey
+        end
       end
     end
 

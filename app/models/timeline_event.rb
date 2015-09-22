@@ -4,7 +4,7 @@ class TimelineEvent < ActiveRecord::Base
   mount_uploader :image, TimelineImageUploader
   serialize :links
   validates_presence_of :event_on, :startup_id, :iteration, :timeline_event_type, :description
-  attr_accessor :link_url, :link_title
+  attr_accessor :link_url, :link_title, :link_private
 
   MAX_DESCRIPTION_CHARACTERS = 300
 
@@ -71,7 +71,7 @@ class TimelineEvent < ActiveRecord::Base
 
   def build_link_json
     return unless link_title.present? && link_url.present?
-    self.links = [{ title: link_title, url: link_url }]
+    self.links = [{ title: link_title, url: link_url, private: (link_private.present? && link_private != 'false') }]
   end
 
   def make_links_an_array

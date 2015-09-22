@@ -216,7 +216,7 @@
                 .timeline id="event-#{event.id}"
                   li style="padding:0" class="timeline#{index.odd? ? "" : "-inverted"}"
                     .timeline-badge class="color#{index%14}"
-                      = image_tag "#{event.timeline_event_type.badge_url}", width: "70"
+                      = image_tag "#{event.timeline_event_type.badge_url}", width: '70'
                     .timeline-panel
                       - if event.image?
                         .img-responsive.tl-event-image
@@ -245,18 +245,22 @@
                             i.fa.fa-link
                         p.tl-date
                           small
-                            = image_tag "timeline/date.png"
+                            = image_tag 'timeline/date.png'
                             ' #{event.event_on.strftime("%B %e, %Y")}
                             - if @startup.earliest_event_date.present? && event.verified?
                               ' (#{((event.event_on- @startup.earliest_event_date).to_i + 1).ordinalize} day)
                       .timeline-body
                         .tl-body
                           p #{event.description}
-                        - if event.links?
+                        - if event.links? && (!event.links.first[:private] || @startup.founder?(current_user))
                           .timeline-footer.tl-footer
                             - event.links.each do |link|
-                              a.tl-link-button href="#{link[:url]}" target="_blank"
-                                | #{link[:title]}
+                              - if !link[:private] || @startup.founder?(current_user)
+                                a.tl-link-button href="#{link[:url]}" target="_blank"
+                                  - if link[:private]
+                                    i.fa.fa-user-secret
+                                    | &nbsp;
+                                  | #{link[:title]}
                         - if current_user && @startup.founder?(current_user)
                           = button_to user_startup_timeline_event_url(current_user, event),
                             method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',

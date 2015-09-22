@@ -29,15 +29,18 @@
   / Company Name Header
   .row
     .col-sm-8
-      h1.startup-name
-        ' #{@startup.name}
+      h1.product-name
+        = @startup.product_name.present? ? @startup.product_name : 'Untitled Product'
         - if @startup.timeline_verified?
           a#verified-icon data-toggle="tooltip" data-placement="top" title="Timeline verified by SV.CO" href="#"
-            img.timeline-verified src='#{image_url 'timeline/verified.gif'}'
-        - if current_user && @startup.founder?(current_user)
-          small.edit-startup-link
-            a href=edit_user_startup_path(current_user)
-              i.fa.fa-pencil
+            img.timeline-verified.margin-left-10 src='#{image_url 'timeline/verified.gif'}'
+      .startup-name
+        - if @startup.name.present?
+          ' (by #{@startup.name})
+          - if current_user && @startup.founder?(current_user)
+            small.edit-startup-link
+              a href=edit_user_startup_path(current_user)
+                i.fa.fa-pencil
     - if @startup.logo?
       .col-sm-4.visible-md-block.visible-lg-block
         = image_tag "#{@startup.logo_url}", class: 'startup-logo'

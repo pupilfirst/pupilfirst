@@ -166,6 +166,8 @@ class Startup < ActiveRecord::Base
   validates_numericality_of :women_employees, greater_than_or_equal_to: 0, allow_blank: true
   validates_numericality_of :revenue_generated, greater_than_or_equal_to: 0, allow_blank: true
 
+  validates_presence_of :product_name
+
   def incubation_step_1?
     updated_from == 'user_profile'
   end
@@ -183,6 +185,9 @@ class Startup < ActiveRecord::Base
 
     # If slug isn't supplied, set one.
     self.slug = generate_randomized_slug if slug.blank?
+
+    # Default product name to 'Untitled Product' if absent
+    self.product_name ||= 'Untitled Product'
   end
 
   before_destroy do

@@ -89,7 +89,8 @@ timelineBuilderSubmitChecks = ->
     else
       confirmedByUser = true
 
-    return false unless typeOfEventPresent && dateOfEventPresent && descriptionPresent && confirmedByUser
+    unless typeOfEventPresent && dateOfEventPresent && descriptionPresent && confirmedByUser
+      event.preventDefault()
   )
 
 clearErrorsOnOpeningSelect2 = ->
@@ -204,12 +205,12 @@ handleLinkAddition = ->
   )
 
   # When the add button is clicked, validate and store if it passes. Show errors otherwise.
-  $('#add-link-button').click(->
+  $('#add-link-button').click((event) ->
     linkTitle = $('#link_title').val()
     linkURL = $('#link_url').val()
     linkURLValid = isUrlValid(linkURL)
 
-    if linkURL and linkURLValid and linkTitle
+    if linkURLValid and linkTitle
       # Store values in hidden inputs, close modal, and show title on builder link.
       $('#timeline_event_link_title').val(linkTitle)
       $('#timeline_event_link_url').val(linkURL)
@@ -222,11 +223,13 @@ handleLinkAddition = ->
       $('#add-link-modal').modal('hide')
       markSelectedLink(linkTitle)
     else
-      unless linkURL and linkURLValid
+      unless linkURLValid
         addErrorMarkers('#link-url-group', "Please make sure you've supplied a full URL, starting with http(s).")
 
       unless linkTitle
         addErrorMarkers('#link-title-group')
+
+      event.preventDefault()
   )
 
   $('#link_title').focus(->

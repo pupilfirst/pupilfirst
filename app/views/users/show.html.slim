@@ -21,9 +21,10 @@ table.table.table-hover.table-bordered.table-striped
           | #{@user.unconfirmed_phone} (Unverified)
         - else
           = link_to 'Save phone number', phone_user_path(refer: user_url(current_user))
-    tr
-      th Role at Startup
-      td = founder_roles @user.roles
+    - if @user.startup.present?
+      tr
+        th Role at Startup
+        td = founder_roles @user.roles
     tr
       th Date of Birth
       td

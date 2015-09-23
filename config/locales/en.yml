@@ -20,6 +20,12 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  user:
+    product: Product
+    marketing: 'Marketing & Sales'
+    engineering: Engineering
+    design: Design
+    governance: Governance
   datepicker:
     dformat: '%d/%m/%Y'        # display format of the date (this is the default, can be ommited)
     pformat: 'DD/MM/YYYY'      # picking format of the date (this is the default, can be ommited)

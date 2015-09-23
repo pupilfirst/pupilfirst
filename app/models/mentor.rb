@@ -49,7 +49,6 @@ class Mentor < ActiveRecord::Base
   end
 
   def_delegator :user, :fullname, :name
-  def_delegators :user, :title
 
   def to_s
     display_name

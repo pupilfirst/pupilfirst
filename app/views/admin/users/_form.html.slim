@@ -2,9 +2,7 @@
   = f.inputs 'Basic Details'
     = f.input :email
     = f.input :fullname
-    = f.input :title
-    = f.input :categories, collection: Category.user_category, input_html: { style: 'width: 400px;' }
-    = f.input :title
+    = f.input :roles, as: :check_boxes, collection: User.valid_roles
     = f.input :born_on, as: :date_select, :start_year => 1920, :end_year => Date.today.year - 10
     = f.input :startup
     = f.input :startup_admin

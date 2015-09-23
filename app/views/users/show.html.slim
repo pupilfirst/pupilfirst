@@ -22,8 +22,8 @@ table.table.table-hover.table-bordered.table-striped
         - else
           = link_to 'Save phone number', phone_user_path(refer: user_url(current_user))
     tr
-      th Title
-      td = value_or_not_available @user.title
+      th Role at Startup
+      td = founder_roles @user.roles
     tr
       th Date of Birth
       td

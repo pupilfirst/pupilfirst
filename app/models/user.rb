@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
   devise :invitable, :database_authenticatable, :confirmable, :registerable,
     :recoverable, :rememberable, :trackable, :validatable
 
-  # alias_attribute :communication_address, :address  # 13/03/2015 to accomodate change in user address field for older api, need to be removed after sometime
+  serialize :roles
 
   has_many :public_slack_messages
   has_many :requests
@@ -36,9 +36,8 @@ class User < ActiveRecord::Base
   scope :student_entrepreneurs, -> { where(is_founder: true).where.not(university_id: nil) }
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
 
-  # TODO: Remove born_on, title, and salutation columns if unneccessary.
+  # TODO: Remove born_on, and salutation columns if unneccessary.
   # validates_presence_of :born_on
-  # validates_presence_of :title, if: ->(user){ user.full_validation }
   # validates_presence_of :salutation, message: ''
 
   validates_presence_of :fullname
@@ -55,6 +54,9 @@ class User < ActiveRecord::Base
 
   before_validation do
     self.roll_number = nil unless university.present?
+
+    # Remove blank roles, if any.
+    roles.delete('')
   end
 
   attr_reader :skip_password
@@ -76,15 +78,12 @@ class User < ActiveRecord::Base
   # Validate user's PIN (address).
   validates_numericality_of :pin, allow_blank: true, greater_than_or_equal_to: 100_000, less_than_or_equal_to: 999_999 # PIN Code is always 6 digits
 
-  # Title is essential if user is a mentor.
-  validates_presence_of :title, if: proc { |user| user.mentor.present? }
-
   # Store mobile number in a standardized form.
   phony_normalize :phone, default_country_code: 'IN', add_plus: false
 
   mount_uploader :avatar, AvatarUploader
   process_in_background :avatar
-  normalize_attribute :startup_id, :title, :invitation_token, :twitter_url, :linkedin_url, :pin
+  normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :pin
 
   normalize_attribute :skip_password do |value|
     value.is_a?(String) ? value.downcase == 'true' : value
@@ -92,6 +91,16 @@ class User < ActiveRecord::Base
 
   validates :twitter_url, url: true, allow_nil: true
   validates :linkedin_url, url: true, allow_nil: true
+
+  validate :role_must_be_valid
+
+  def role_must_be_valid
+    roles.each do |role|
+      unless User.valid_roles.include? role
+        errors.add(:roles, 'contained unrecognized value')
+      end
+    end
+  end
 
   before_create do
     self.auth_token = SecureRandom.hex(30)
@@ -200,5 +209,13 @@ class User < ActiveRecord::Base
 
   def incubation_parameters_available?
     gender.present? && born_on.present?
+  end
+
+  def self.valid_roles
+    %w(product engineering marketing governance design)
+  end
+
+  def roles
+    super || []
   end
 end

@@ -18,4 +18,14 @@ module ApplicationHelper
       user.gravatar_url(size: gravatar_size, default: 'identicon')
     end
   end
+
+  def founder_roles(roles)
+    if roles.blank?
+      '<em>No Role Selected</em>'.html_safe
+    else
+      roles.map do |role|
+        t("user.#{role}")
+      end.join ', '
+    end
+  end
 end

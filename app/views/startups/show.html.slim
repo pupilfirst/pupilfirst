@@ -68,7 +68,7 @@
                     p.data-content
                       a href="#{@startup.website}" target="_blank"
                         ' #{@startup.website}
-                        = image_tag 'timeline/link.png'
+                        i.fa.fa-external-link
               - if @startup.presentation_link?
                 .media
                   .media-left
@@ -78,7 +78,7 @@
                     p.data-content
                       a href="#{@startup.presentation_link}" target="_blank"
                         ' #{@startup.name} deck
-                        = image_tag 'timeline/link.png'
+                        i.fa.fa-external-link
             .col-sm-6.col-md-12
               - if @startup.team_size?
                 .media
@@ -126,15 +126,15 @@
                     .media-body
                       h4.media-heading #{truncated_founder_name founder.fullname}
                       p.designation #{founder_roles(founder.roles)}
-                      ul
+                      ul.social-links
                         - if founder.twitter_url?
                           li
-                            a href="#{founder.twitter_url}"
-                              = image_tag 'timeline/twitter.png'
+                            a href="#{founder.twitter_url}" target='_blank'
+                              i.fa.fa-twitter-square
                         - if founder.linkedin_url?
                           li
-                            a href="#{founder.linkedin_url}"
-                              = image_tag 'timeline/linkedin.png'
+                            a href="#{founder.linkedin_url}" target='_blank'
+                              i.fa.fa-linkedin-square
           /- if @startup.mentors?
             .col-sm-6.col-md-12
               h3 Mentors
@@ -243,8 +243,8 @@
                             i.fa.fa-link
                         p.tl-date
                           small
-                            = image_tag 'timeline/date.png'
-                            ' #{event.event_on.strftime("%B %e, %Y")}
+                            i.fa.fa-calendar
+                            ' &nbsp;#{event.event_on.strftime("%B %e, %Y")}
                             - if @startup.earliest_event_date.present? && event.verified?
                               ' (#{((event.event_on- @startup.earliest_event_date).to_i + 1).ordinalize} day)
                       .timeline-body

@@ -65,6 +65,11 @@ h1.startup-name {
       &:hover {
         color: cornflowerblue;
       }
+
+      .fa-external-link {
+        font-size: 13px;
+        color: $theme-dark-green;
+      }
     }
 
     .data-subcontent {
@@ -252,6 +257,22 @@ h1.startup-name {
   color: black;
 
   &:hover { text-decoration: none; }
+}
+
+.media-body {
+  position: relative;
+
+  ul.social-links {
+    position: absolute;
+    margin: 0;
+    bottom: 5px;
+    right: 10px;
+    font-size: 133%;
+
+    @media screen and (max-width: $screen-xs-max) {
+      font-size: 200%;
+    }
+  }
 }
 
 //.

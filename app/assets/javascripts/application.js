@@ -14,6 +14,5 @@
 
 //= require google_analytics.js.erb
 //= require navbar
-//= require incubation
 //= require users
 //= require limit_max_int

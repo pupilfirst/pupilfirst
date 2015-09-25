@@ -1,3 +1,7 @@
+= content_for :head
+  = stylesheet_link_tag 'incubation'
+  = javascript_include_tag 'incubation'
+
 .alert.alert-warning.margin-top-20
   p Please note that <strong>SV.CO is in beta</strong>, and <strong>invite-only</strong>, at the moment!
 
@@ -31,10 +35,14 @@
           span.label.label-info #{current_user.email} (you)
           - @startup.cofounders(current_user).each do |cofounder|
             | &nbsp;
-            span.label.label-info
-              ' #{cofounder.email}
-              - if @startup.admin?(current_user)
-              | #{link_to 'x', remove_founder_user_startup_path(current_user, founder_id: cofounder.id), method: :patch, data: { confirm: 'Are you sure you want to remove this founder from your startup?' } }
+            .cofounder-label
+              span.label.label-info class="#{'padding-right-reduce' if @startup.admin?(current_user)}"
+                ' #{cofounder.email}
+                - if @startup.admin?(current_user)
+                  = link_to(remove_founder_user_startup_path(current_user, founder_id: cofounder.id), method: :patch, data: { confirm: 'Are you sure you want to remove this founder from your startup?' }) do
+                    span.fa-stack.fa-lg
+                      i.fa.fa-circle.fa-stack-2x
+                      i.fa.fa-times.fa-stack-1x.fa-inverse
 
         = simple_form_for :cofounder, url: add_cofounder_incubation_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
           = f.input :email, placeholder: 'co-founder@yourstartup.com', label: "Co-founder's SV ID"

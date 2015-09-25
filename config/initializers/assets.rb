@@ -10,4 +10,6 @@ Rails.application.config.assets.precompile += %w(
   about.css
   users.css
   users.js
+  incubation.css
+  incubation.js
 )

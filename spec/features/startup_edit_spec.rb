@@ -55,7 +55,7 @@ feature 'Startup Edit' do
       fill_in 'cofounder_email', with: co_founder.email
       click_on 'Add as co-founder'
 
-      expect(page.find('#current-founders-list')).to have_text(co_founder.email)
+      expect(page.find('.founders-table')).to have_text(co_founder.email)
       co_founder.reload
       expect(co_founder.startup).to eq(startup)
       open_email(co_founder.email)

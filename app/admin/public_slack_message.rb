@@ -8,9 +8,9 @@ ActiveAdmin.register PublicSlackMessage do
     def index
       index! do |format|
         format.txt do
-          messages = collection.pluck(:created_at, :channel, :slack_username, :body).each_with_object([]) do |message, messages_array|
+          messages = collection.limit(100_000).pluck(:created_at, :channel, :slack_username, :body).each_with_object([]) do |message, messages_array|
             messages_array << "#{message[0].in_time_zone('Asia/Calcutta')} ##{message[1]} @#{message[2]}: #{message[3]}"
-          end.join "\n"
+          end.reverse.join "\n"
           render text: messages
         end
       end

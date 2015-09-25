@@ -1,6 +1,6 @@
 require_relative 'helper'
 
-after 'development:users' do
+after 'development:users', 'development:timeline_event_types' do
   # Startup with live agreement.
   super_startup = Startup.new(
     name: 'Super Startup',

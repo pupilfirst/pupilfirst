@@ -55,9 +55,13 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
 end
 
-# Use poltergeist as JS driver.
-require 'capybara/poltergeist'
-Capybara.javascript_driver = :poltergeist
+# Use cabpybara-webkit as JS driver.
+Capybara.javascript_driver = :webkit
+
+# rubocop:disable Style/SymbolProc
+Capybara::Webkit.configure do |config|
+  config.block_unknown_urls
+end
 
 # Save screenshots on failure (and more).
 require 'capybara-screenshot/rspec'

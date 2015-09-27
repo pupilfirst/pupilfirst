@@ -140,12 +140,9 @@ feature 'Timeline Builder' do
         page.find("#event-#{verified_timeline_event.id} .edit-link").click
         fill_in 'timeline_event_description', with: new_description
 
-        # TODO: Can't test confirmation dialogues with Poltergeist, for the moment. https://github.com/teampoltergeist/poltergeist/pull/516
-        # page.accept_confirm do
-        #   click_on 'Submit for Review'
-        # end
-
-        click_on 'Submit for Review'
+        page.accept_confirm do
+          click_on 'Submit for Review'
+        end
 
         new_timeline_event_panel = page.find("#event-#{verified_timeline_event.id}")
         expect(new_timeline_event_panel).to have_text(new_description)

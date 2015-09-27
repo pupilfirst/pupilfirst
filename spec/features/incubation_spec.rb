@@ -143,6 +143,9 @@ feature 'Incubation' do
         fill_in 'University Roll Number', with: 'R1234'
         click_on 'Next Step'
 
+        # Make sure startup profile page has loaded.
+        expect(page).to have_text('Incubation location')
+
         # Now test data.
         user.reload
 

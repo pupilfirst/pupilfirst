@@ -121,6 +121,9 @@ feature 'Timeline Builder' do
           click_on 'Add'
           click_on 'Submit for Review'
 
+          # Wait for page to load.
+          expect(page).to have_content(unverified_timeline_event.description)
+
           unverified_timeline_event.reload
           expect(unverified_timeline_event.links.first[:private]).to be_falsey
         end

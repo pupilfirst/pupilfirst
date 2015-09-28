@@ -35,12 +35,12 @@
           = f.error_notification
 
           legend Mandatory fields
-          = f.input :product_name, placeholder: "Your product name.", required: true
-          = f.input :product_description, placeholder: "A few words describing what your product is all about.",
+          = f.input :product_name, placeholder: 'Your product name.', required: true
+          = f.input :product_description, placeholder: 'A few words describing what your product is all about.',
             required: true, label: 'About your Product',
             hint: "Describe your product in less than #{Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS} characters.",
             input_html: { rows: 3, maxlength: Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS }
-          = f.input :presentation_link, placeholder: 'https://slideshare.net/YourUsername/your-startup-deck', label: 'Startup Deck', required: true
+          = f.input :presentation_link, placeholder: 'https://slideshare.net/YourUsername/your-product-deck', label: 'Product Deck', required: true
           = f.input :incubation_location, collection: incubation_locations, :label_method => :first, :value_method => :last, include_blank: false, required: true
 
           legend Optional fields

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150918102334) do
+ActiveRecord::Schema.define(version: 20150923081332) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -247,6 +247,7 @@ ActiveRecord::Schema.define(version: 20150918102334) do
     t.boolean  "featured"
     t.integer  "batch"
     t.string   "stage"
+    t.string   "legal_registered_name"
   end
 
   add_index "startups", ["batch"], name: "index_startups_on_batch", using: :btree
@@ -268,7 +269,6 @@ ActiveRecord::Schema.define(version: 20150918102334) do
   add_index "timeline_event_types", ["role"], name: "index_timeline_event_types_on_role", using: :btree
 
   create_table "timeline_events", force: :cascade do |t|
-    t.integer  "iteration"
     t.text     "description"
     t.string   "image"
     t.integer  "startup_id"
@@ -347,6 +347,7 @@ ActiveRecord::Schema.define(version: 20150918102334) do
     t.string   "slack_username"
     t.integer  "university_id"
     t.string   "unconfirmed_phone"
+    t.string   "roles"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

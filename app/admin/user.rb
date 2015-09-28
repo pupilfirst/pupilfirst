@@ -50,7 +50,12 @@ ActiveAdmin.register User do
       row :id
       row :email
       row :fullname
-      row :title
+
+      row :roles do |user|
+        user.roles.map do |role|
+          t("user.#{role}")
+        end.join ', '
+      end
 
       row :startup do |f|
         if f.startup
@@ -129,8 +134,8 @@ ActiveAdmin.register User do
 
   form partial: 'admin/users/form'
 
-  permit_params :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url, :slack_username,
-    :title, :skip_password, :born_on, :startup_admin, :communication_address, :district, :state, :pin,
+  permit_params :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url,
+    :slack_username, :skip_password, :born_on, :startup_admin, :communication_address, :district, :state, :pin,
     :phone, :company, :invitation_token, :university_id, :roll_number, :year_of_graduation,
-    :years_of_work_experience
+    :years_of_work_experience, roles: []
 end

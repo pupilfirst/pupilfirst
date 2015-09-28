@@ -2,6 +2,9 @@ ActiveAdmin.register StartupFeedback do
   menu parent: 'Startups', label: 'Startup Feedback'
   permit_params :feedback, :reference_url, :startup_id, :send_email
 
+  preserve_default_filters!
+  filter :feedback_by, collection: AdminUser.all
+
   before_create do |startup_feedback|
     startup_feedback.feedback_by = current_admin_user
   end

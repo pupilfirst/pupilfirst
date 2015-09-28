@@ -1,11 +1,19 @@
 handleLinkEditing = ->
   $('a.edit-existing-link').click (event) ->
     link = $(event.target)
-    form = $('#edit-existing-link-form')
-    form.slideDown()
-    form.find('input[name=link_index]').val(link.data('index'))
-    form.find('input[name=link_title]').val(link.data('title'))
-    form.find('input[name=link_url]').val(link.data('url'))
+
+    # Slide down the form.
+    $('#edit-existing-link-form').slideDown()
+
+    # Set index, title, URL, and private (checkbox).
+    $('#link_index').val(link.data('index'))
+    $('#link_title').val(link.data('title'))
+    $('#link_url').val(link.data('url'))
+
+    if link.data('private')
+      $('#link_private').prop('checked', true)
+    else
+      $('#link_private').prop('checked', false)
 
   $('a#cancel-edit').click ->
     $('#edit-existing-link-form').slideUp()

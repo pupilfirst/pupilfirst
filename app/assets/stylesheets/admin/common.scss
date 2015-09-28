@@ -21,3 +21,11 @@
   white-space: pre-wrap;
   word-wrap: break-word;
 }
+
+table > caption {
+  background: #f0f4f5;
+  color: #5E6469;
+  padding: 8px 15px;
+  font-weight: bold;
+  border: 1px solid #d3d8dc;
+}

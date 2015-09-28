@@ -122,6 +122,9 @@ GEM
     capybara-screenshot (1.0.11)
       capybara (>= 1.0, < 3)
       launchy
+    capybara-webkit (1.7.1)
+      capybara (>= 2.3.0, < 2.6.0)
+      json
     carrierwave (0.10.0)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
@@ -130,7 +133,6 @@ GEM
     carrierwave_backgrounder (0.4.1)
       carrierwave (~> 0.5)
     chartkick (1.3.2)
-    cliver (0.3.2)
     coderay (1.1.0)
     coffee-rails (4.1.0)
       coffee-script (>= 2.2.0)
@@ -387,11 +389,6 @@ GEM
       activesupport (>= 3.0)
       countries (~> 0.8, >= 0.8.2)
       phony (~> 2.12)
-    poltergeist (1.6.0)
-      capybara (~> 2.1)
-      cliver (~> 0.3.1)
-      multi_json (~> 1.0)
-      websocket-driver (>= 0.2.0)
     polyamorous (1.2.0)
       activerecord (>= 3.0)
     powerpack (0.1.1)
@@ -575,6 +572,7 @@ DEPENDENCIES
   capybara
   capybara-email
   capybara-screenshot
+  capybara-webkit
   carrierwave
   carrierwave_backgrounder
   chartkick
@@ -605,7 +603,6 @@ DEPENDENCIES
   passenger (~> 5.0.14)
   pg
   phony_rails
-  poltergeist
   pry-rails
   quiet_assets
   rails (= 4.2.4)

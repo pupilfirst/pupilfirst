@@ -3,14 +3,14 @@ class TimelineEvent < ActiveRecord::Base
   belongs_to :timeline_event_type
   mount_uploader :image, TimelineImageUploader
   serialize :links
-  validates_presence_of :event_on, :startup_id, :iteration, :timeline_event_type, :description
-  attr_accessor :link_url, :link_title
+  validates_presence_of :event_on, :startup_id, :timeline_event_type, :description
+  attr_accessor :link_url, :link_title, :link_private
 
   MAX_DESCRIPTION_CHARACTERS = 300
 
-  VERIFIED_STATUS_PENDING = "Pending"
-  VERIFIED_STATUS_NEEDS_IMPROVEMENT = "Needs Improvement"
-  VERIFIED_STATUS_VERIFIED = "Verified"
+  VERIFIED_STATUS_PENDING = 'Pending'
+  VERIFIED_STATUS_NEEDS_IMPROVEMENT = 'Needs Improvement'
+  VERIFIED_STATUS_VERIFIED = 'Verified'
 
   def self.valid_verified_status
     [VERIFIED_STATUS_PENDING, VERIFIED_STATUS_NEEDS_IMPROVEMENT, VERIFIED_STATUS_VERIFIED]
@@ -31,6 +31,7 @@ class TimelineEvent < ActiveRecord::Base
     maximum: MAX_DESCRIPTION_CHARACTERS,
     message: "must be within #{MAX_DESCRIPTION_CHARACTERS} characters"
 
+  scope :end_of_iteration_events, -> { where(timeline_event_type: TimelineEventType.end_iteration) }
   scope :batched, -> { joins(:startup).where.not(startups: { batch: nil }) }
   scope :verified, -> { where(verified_status: VERIFIED_STATUS_VERIFIED) }
 
@@ -44,7 +45,7 @@ class TimelineEvent < ActiveRecord::Base
   end
 
   before_save :make_links_an_array, :build_link_json
-  before_validation :record_iteration, :build_description
+  before_validation :build_description
 
   after_commit do
     startup.update_stage! if timeline_event_type.stage_change?
@@ -65,17 +66,17 @@ class TimelineEvent < ActiveRecord::Base
     end
   end
 
-  def record_iteration
-    self.iteration = startup.try(:current_iteration)
-  end
-
   def build_link_json
     return unless link_title.present? && link_url.present?
-    self.links = [{ title: link_title, url: link_url }]
+    self.links = [{ title: link_title, url: link_url, private: (link_private.present? && link_private != 'false') }]
   end
 
   def make_links_an_array
     self.links = [] if links.nil?
+  end
+
+  def iteration
+    startup.iteration(at_event: self)
   end
 
   def end_iteration?

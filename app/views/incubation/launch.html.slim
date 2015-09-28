@@ -1,3 +1,7 @@
+= content_for :head
+  = stylesheet_link_tag 'incubation'
+  = javascript_include_tag 'incubation'
+
 .alert.alert-warning.margin-top-20
   p Please note that <strong>SV.CO is in beta</strong>, and <strong>invite-only</strong>, at the moment!
 
@@ -27,14 +31,20 @@
         p Got fellow travellers on this journey? Tell them to sign up at <em>SV.CO</em>, and then enter their SV ID-s below.
 
         .col-sm-9.col-sm-offset-3.margin-bottom-10
-          strong Current list of founders:&nbsp;
-          span.label.label-info #{current_user.email} (you)
-          - @startup.cofounders(current_user).each do |cofounder|
-            | &nbsp;
-            span.label.label-info
-              ' #{cofounder.email}
-              - if @startup.admin?(current_user)
-              | #{link_to 'x', remove_founder_user_startup_path(current_user, founder_id: cofounder.id), method: :patch, data: { confirm: 'Are you sure you want to remove this founder from your startup?' } }
+          table.table.founders-table
+            caption Current list of founders
+            tbody
+              tr
+                td colspan="2"
+                  ' #{current_user.email}
+                  strong
+                    | (you)
+              - @startup.cofounders(current_user).each do |cofounder|
+                tr
+                  td #{cofounder.email}
+                  td
+                    - if @startup.admin?(current_user)
+                      = button_to 'Remove', remove_founder_user_startup_path(current_user, founder_id: cofounder.id), method: :patch, class: 'btn btn-danger btn-xs', data: { confirm: 'Are you sure you want to remove this founder from your startup?' }
 
         = simple_form_for :cofounder, url: add_cofounder_incubation_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
           = f.input :email, placeholder: 'co-founder@yourstartup.com', label: "Co-founder's SV ID"

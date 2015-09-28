@@ -108,8 +108,8 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(
-      :fullname, :twitter_url, :linkedin_url, :avatar, :title, :slack_username,
-      :university_id, :roll_number, :born_on, :communication_address
+      :fullname, :twitter_url, :linkedin_url, :avatar, :slack_username,
+      :university_id, :roll_number, :born_on, :communication_address, roles: []
     )
   end
 

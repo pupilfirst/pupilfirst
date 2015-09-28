@@ -7,11 +7,14 @@
           tbody
             - timeline_event.links.each_with_index do |link, index|
               tr
-                th.link-title = link[:title]
+                th.link-title
+                  - if link[:private]
+                    ' (Private)
+                  | #{link[:title]}
                 td
                   ' #{link_to link[:url], link[:url], target: "_blank"}
                   ' (#{link_to 'Delete', delete_link_admin_timeline_event_path(link_index: index), { method: :delete, data: { confirm: 'Are you sure?' } }}
-                  ' / #{link_to 'Edit', '#edit-existing-link-form', class: 'edit-existing-link', 'data-index' => index, 'data-title' => link[:title], 'data-url' => link[:url]})
+                  ' / #{link_to 'Edit', '#edit-existing-link-form', class: 'edit-existing-link', 'data-index' => index, 'data-title' => link[:title], 'data-url' => link[:url], 'data-private' => link[:private]})
 
 = form_tag(edit_link_admin_timeline_event_path, method: :put, style: 'display: none;', id: 'edit-existing-link-form') do
   = hidden_field_tag :link_index
@@ -22,9 +25,12 @@
       li.input.required
         = label_tag :link_title, 'Title', class: 'label'
         = text_field_tag :link_title
-      li.input.requried
+      li.input.required
         = label_tag :link_url, 'URL', class: 'label'
         = text_field_tag :link_url
+      li.input
+        = label_tag :link_private, 'Hidden from public?', class: 'label'
+        = check_box_tag :link_private, true
   fieldset.actions
     ol
       li.action.input_action
@@ -43,6 +49,9 @@
       li.input.requried
         = label_tag :link_url, 'URL', class: 'label'
         = text_field_tag :link_url
+      li.input
+        = label_tag :link_private, 'Hidden from public?', class: 'label'
+        = check_box_tag :link_private, true
   fieldset.actions
     ol
       li.action.input_action

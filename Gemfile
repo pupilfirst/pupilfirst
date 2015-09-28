@@ -88,7 +88,7 @@ group :test do
   gem 'faker'
   gem 'capybara' # For RSpec feature tests.
   gem 'capybara-email' # Test ActionMailer and Mailer messages with Capybara
-  gem 'poltergeist' # Headless WebKit browser, provided by PhantomJS.
+  gem 'capybara-webkit' # Headless WebKit browser, provided by Webkit (QT).
   gem 'capybara-screenshot' # Save screenshots on failure!
   gem 'database_cleaner' # Database cleaner can handle complex DB cleanup strategies for test (feature vs regular tests).
 end

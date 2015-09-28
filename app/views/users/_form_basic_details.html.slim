@@ -1,4 +1,4 @@
-= simple_form_for user, :html => { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
+= simple_form_for user, :html => { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean, file: :horizontal_file_input } do |f|
   legend Basic details
 
   = f.error_notification
@@ -13,13 +13,16 @@
       .phone-number-controls #{user.phone} (#{link_to 'Change?', phone_user_path(current_user, referer: edit_user_url(current_user))})
 
   = f.input :avatar, as: :file, input_html: { accept: 'image/*' }
-  = f.input :title, hint: 'Position at startup / company', input_html: { maxlength: 255 }
+
+  - if user.startup.present?
+    = f.input :roles, label: 'Role at Startup', as: :select, collection: User.valid_roles, label_method: ->(role) { t "user.#{role}" }, include_hidden: false, input_html: { multiple: true }
+
   = f.input :linkedin_url, label: 'LinkedIn Profile URL', input_html: { maxlength: 255 }
   = f.input :twitter_url, label: 'Twitter Profile URL', input_html: { maxlength: 255 }
   = f.input :slack_username, label: (link_to 'Public Slack Username<sup>?</sup></a>'.html_safe, about_slack_url, target: '_blank')
   = f.input :communication_address
   = f.association :university, include_blank: 'Not a student', collection: University.all.group_by(&:location), as: :grouped_select, group_method: :last
-  = f.input :roll_number, label: 'University Roll Number',required: true
+  = f.input :roll_number, label: 'University Roll Number', required: true
 
   .form-group
     .col-sm-offset-3.col-sm-10

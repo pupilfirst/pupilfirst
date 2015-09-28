@@ -17,7 +17,7 @@ module StartupsHelper
     link = TimelineEventType::STAGE_LINKS[stage]
 
     link_to link, target: '_blank' do
-      "#{text} #{image_tag 'timeline/link.png'}".html_safe
+      "#{text} <i class='fa fa-external-link'></i>".html_safe
     end
   end
 

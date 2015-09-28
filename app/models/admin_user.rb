@@ -18,7 +18,7 @@ class AdminUser < ActiveRecord::Base
 
   validates :admin_type, inclusion: { in: admin_user_types }, allow_nil: true
 
-  def to_s
-    fullname
+  def to_label
+    email
   end
 end

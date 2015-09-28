@@ -1,6 +1,6 @@
 ActiveAdmin.register TimelineEvent do
   menu parent: 'Startups'
-  permit_params :description, :iteration, :timeline_event_type_id, :image, :links, :event_on, :startup_id, :verified_at
+  permit_params :description, :timeline_event_type_id, :image, :links, :event_on, :startup_id, :verified_at
 
   preserve_default_filters!
   filter :startup_batch, as: :select, collection: (1..10)
@@ -21,7 +21,14 @@ ActiveAdmin.register TimelineEvent do
     column :timeline_event_type
     column :startup
     column :event_on
-    column :verified_status
+
+    column :verified_status do |timeline_event|
+      if timeline_event.verified?
+        "Verified on #{timeline_event.verified_at.strftime('%d/%m/%y')}"
+      else
+        timeline_event.verified_status
+      end
+    end
   end
 
   action_item :view, only: :show do
@@ -52,7 +59,7 @@ ActiveAdmin.register TimelineEvent do
 
   member_action :add_link, method: :post do
     timeline_event = TimelineEvent.find params[:id]
-    timeline_event.links << { title: params[:link_title], url: params[:link_url] }
+    timeline_event.links << { title: params[:link_title], url: params[:link_url], private: params[:link_private] }
     timeline_event.save!
 
     flash[:success] = 'Link Added!'
@@ -62,7 +69,7 @@ ActiveAdmin.register TimelineEvent do
 
   member_action :edit_link, method: :put do
     timeline_event = TimelineEvent.find params[:id]
-    timeline_event.links[params[:link_index].to_i] = { title: params[:link_title], url: params[:link_url] }
+    timeline_event.links[params[:link_index].to_i] = { title: params[:link_title], url: params[:link_url], private: params[:link_private] }
     timeline_event.save!
 
     flash[:success] = 'Link Updated!'
@@ -90,7 +97,6 @@ ActiveAdmin.register TimelineEvent do
       f.input :startup, include_blank: false
       f.input :timeline_event_type, include_blank: false
       f.input :description
-      f.input :iteration
       f.input :image
       f.input :event_on, as: :datepicker
       f.input :verified_at, as: :datepicker
@@ -102,9 +108,9 @@ ActiveAdmin.register TimelineEvent do
   show do |timeline_event|
     attributes_table do
       row :startup
+      row :iteration
       row :timeline_event_type
       row :description
-      row :iteration
       row :image
       row :event_on
       row :verified_status
@@ -133,5 +139,25 @@ ActiveAdmin.register TimelineEvent do
     end
 
     render partial: 'links', locals: { timeline_event: timeline_event }
+
+    feedback = StartupFeedback.for_timeline_event(timeline_event)
+
+    if feedback.present?
+      div do
+        table_for feedback do
+          caption 'Previous Feedback'
+          column(:link) { |feedback_entry| link_to 'View', admin_startup_feedback_path(feedback_entry) }
+          column(:author) { |feedback_entry| feedback_entry.feedback_by.email }
+
+          column(:feedback) do |feedback_entry|
+            pre class: 'max-width-pre' do
+              feedback_entry.feedback
+            end
+          end
+
+          column(:created_at)
+        end
+      end
+    end
   end
 end

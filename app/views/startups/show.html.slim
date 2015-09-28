@@ -71,7 +71,7 @@
                     p.data-content
                       a href="#{@startup.website}" target="_blank"
                         ' #{@startup.website}
-                        = image_tag 'timeline/link.png'
+                        i.fa.fa-external-link
               - if @startup.presentation_link?
                 .media
                   .media-left
@@ -81,7 +81,7 @@
                     p.data-content
                       a href="#{@startup.presentation_link}" target="_blank"
                         ' #{@startup.name} deck
-                        = image_tag 'timeline/link.png'
+                        i.fa.fa-external-link
             .col-sm-6.col-md-12
               - if @startup.team_size?
                 .media
@@ -102,7 +102,7 @@
                     img.media-object alt="Iteration icon" src="#{image_url 'timeline/icons/iteration.png'}"
                   .media-body
                     h4.media-heading Product Iteration
-                    p.data-content #{@startup.current_iteration.ordinalize}
+                    p.data-content #{@startup.iteration.ordinalize}
               - if @startup.earliest_event_date.present?
                 .media
                   .media-left
@@ -128,18 +128,16 @@
                         .founder-image style="background-image: url('#{profile_image_url founder, gravatar_size: 128, avatar_version: :mid}');"
                     .media-body
                       h4.media-heading #{truncated_founder_name founder.fullname}
-                      - if founder.title?
-                        p.designation #{truncate(founder.title, length: 20)}
-                      = image_tag 'timeline/dash.png', class: 'dash'
-                      ul
+                      p.designation #{founder_roles(founder.roles)}
+                      ul.social-links
                         - if founder.twitter_url?
                           li
-                            a href="#{founder.twitter_url}"
-                              = image_tag 'timeline/twitter.png'
+                            a href="#{founder.twitter_url}" target='_blank'
+                              i.fa.fa-twitter-square
                         - if founder.linkedin_url?
                           li
-                            a href="#{founder.linkedin_url}"
-                              = image_tag 'timeline/linkedin.png'
+                            a href="#{founder.linkedin_url}" target='_blank'
+                              i.fa.fa-linkedin-square
           /- if @startup.mentors?
             .col-sm-6.col-md-12
               h3 Mentors
@@ -174,7 +172,7 @@
         .main-timeline
           .tl-iteration
             p
-              | Timeline of #{@startup.timeline_events_for_display(current_user).maximum(:iteration).ordinalize} iteration.
+              | Timeline of #{@startup.iteration.ordinalize} iteration.
             = image_tag 'timeline/dash.png'
             br
             a#read-from-beginning href="#begin"  Read from the beginning.
@@ -219,7 +217,7 @@
                 .timeline id="event-#{event.id}"
                   li style="padding:0" class="timeline#{index.odd? ? "" : "-inverted"}"
                     .timeline-badge class="color#{index%14}"
-                      = image_tag "#{event.timeline_event_type.badge_url}", width: "70"
+                      = image_tag "#{event.timeline_event_type.badge_url}", width: '70'
                     .timeline-panel
                       - if event.image?
                         .img-responsive.tl-event-image
@@ -230,10 +228,10 @@
                             i.fa.fa-exclamation-circle
                             | &nbsp;Pending verification
                         - elsif event.needs_improvement?
-                          - latest_feedback = StartupFeedback.where(reference_url: startup_url(event.startup, anchor: "event-#{event.id}")).order('updated_at desc').first
+                          - latest_feedback = StartupFeedback.for_timeline_event(event).first
                           - if latest_feedback.present?
                             - feedback = latest_feedback.feedback
-                            - author = latest_feedback.feedback_by.present? ? (latest_feedback.feedback_by.fullname + ' of Team SV') : 'Team SV'
+                            - author = latest_feedback.feedback_by.present? ? ("#{latest_feedback.feedback_by.fullname} of Team SV") : 'Team SV'
                             a data-toggle="modal" data-target="#improvement-modal" data-feedback="#{latest_feedback.feedback}" data-author="#{author}"
                               .pending-verification.pointer-cursor href="#" data-toggle="tooltip" title="Click to see feedback from Team SV to improve this entry!"
                                 i.fa.fa-exclamation-circle
@@ -248,18 +246,22 @@
                             i.fa.fa-link
                         p.tl-date
                           small
-                            = image_tag "timeline/date.png"
-                            ' #{event.event_on.strftime("%B %e, %Y")}
+                            i.fa.fa-calendar
+                            ' &nbsp;#{event.event_on.strftime("%B %e, %Y")}
                             - if @startup.earliest_event_date.present? && event.verified?
                               ' (#{((event.event_on- @startup.earliest_event_date).to_i + 1).ordinalize} day)
                       .timeline-body
                         .tl-body
                           p #{event.description}
-                        - if event.links?
+                        - if event.links? && (!event.links.first[:private] || @startup.founder?(current_user))
                           .timeline-footer.tl-footer
                             - event.links.each do |link|
-                              a.tl-link-button href="#{link[:url]}" target="_blank"
-                                | #{link[:title]}
+                              - if !link[:private] || @startup.founder?(current_user)
+                                a.tl-link-button href="#{link[:url]}" target="_blank"
+                                  - if link[:private]
+                                    i.fa.fa-user-secret
+                                    | &nbsp;
+                                  | #{link[:title]}
                         - if current_user && @startup.founder?(current_user)
                           = button_to user_startup_timeline_event_url(current_user, event),
                             method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',

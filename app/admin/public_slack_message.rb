@@ -2,7 +2,20 @@ ActiveAdmin.register PublicSlackMessage do
   menu parent: 'Users'
   actions :all, except: [:show, :new, :create, :edit, :update, :destroy]
 
+  index download_links: [:txt, :xml, :json]
+
   controller do
+    def index
+      index! do |format|
+        format.txt do
+          messages = collection.limit(100_000).pluck(:created_at, :channel, :slack_username, :body).each_with_object([]) do |message, messages_array|
+            messages_array << "#{message[0].in_time_zone('Asia/Calcutta')} ##{message[1]} @#{message[2]}: #{message[3]}"
+          end.reverse.join "\n"
+          render text: messages
+        end
+      end
+    end
+
     def scoped_collection
       super.includes :user
     end

@@ -1,7 +1,7 @@
 .col-sm-4
   .thumbnail class="#{if defined? more then 'thumbnail-more' else ''}"
     - if defined? more
-      = image_tag "landing/showcase/founders/more.png"
+      = image_tag 'home/showcase/founders/more.png'
       .showcase-more
         .text-center
           i.fa.fa-question-circle
@@ -10,9 +10,9 @@
           a href="#{new_user_registration_path}" class="btn btn-primary" Join SV.CO
     - else
       a.showcase-activate href=""
-        = image_tag "landing/showcase/founders/#{name.gsub(/\s+/, '').underscore}.png" if defined? video
-        = image_tag "landing/showcase/timelines/thumbnails/#{startup.gsub(/\s+/, '').downcase}.png" unless defined? video
-      = image_tag "landing/showcase/logos/#{startup.gsub(/\s+/, '').downcase}.png", class: 'showcase-funded-logo'
+        = image_tag "home/showcase/founders/#{name.gsub(/\s+/, '').underscore}.png" if defined? video
+        = image_tag "home/showcase/timelines/thumbnails/#{startup.gsub(/\s+/, '').downcase}.png" unless defined? video
+      = image_tag "home/showcase/logos/#{startup.gsub(/\s+/, '').downcase}.png", class: 'showcase-funded-logo'
       p.showcase-description
         = description.html_safe
       p
@@ -21,7 +21,7 @@
             button.btn.btn-primary.showcase-video-trigger data-toggle="modal" data-target="#showcase-video" data-video="#{video}" data-title="#{startup} Graduation"
               i.fa.fa-youtube-play
               | &nbsp;Watch Video
-          button.btn.btn-default.margin-left-10.showcase-timeline-trigger.hidden-xs.hidden-sm data-toggle="modal" data-target="#showcase-timeline" data-timeline="#{ image_path "landing/showcase/timelines/#{startup.gsub(/\s+/, '').downcase}.jpg" }" data-title="Graduation Story of #{startup}"
+          button.btn.btn-default.margin-left-10.showcase-timeline-trigger.hidden-xs.hidden-sm data-toggle="modal" data-target="#showcase-timeline" data-timeline="#{ image_path "home/showcase/timelines/#{startup.gsub(/\s+/, '').downcase}.jpg" }" data-title="Graduation Story of #{startup}"
             | See Timeline
-          a.btn.btn-default.margin-left-10.showcase-timeline-trigger.visible-xs.visible-sm type="button" href="#{ image_path "landing/showcase/timelines/#{startup.gsub(/\s+/, '').downcase}.jpg" }"
+          a.btn.btn-default.margin-left-10.showcase-timeline-trigger.visible-xs.visible-sm type="button" href="#{ image_path "home/showcase/timelines/#{startup.gsub(/\s+/, '').downcase}.jpg" }"
             | See Timeline

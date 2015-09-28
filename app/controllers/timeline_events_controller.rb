@@ -47,7 +47,7 @@ class TimelineEventsController < ApplicationController
   private
 
   def timeline_event_params
-    params.require(:timeline_event).permit(:timeline_event_type_id, :event_on, :description, :image, :link_url, :link_title)
+    params.require(:timeline_event).permit(:timeline_event_type_id, :event_on, :description, :image, :link_url, :link_title, :link_private)
   end
 
   def restrict_to_startup_founders

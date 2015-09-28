@@ -60,6 +60,12 @@ class User < ActiveRecord::Base
   end
 
   attr_reader :skip_password
+
+  attr_reader :fullname
+  def fullname
+    @fullname = first_name + ' ' + last_name
+  end
+
   # hack
   attr_accessor :inviter_name
   attr_accessor :accept_startup

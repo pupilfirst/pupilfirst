@@ -67,7 +67,6 @@ ActiveAdmin.register Startup do
     column :approval_status
     column :email
     column :registration_type
-    column :about
     column :district
     column :pin
     column :cool_fact

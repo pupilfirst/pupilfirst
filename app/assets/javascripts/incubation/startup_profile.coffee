@@ -4,14 +4,14 @@ counter = (textBox, helpBlock, maxCharacters) ->
   helpBlock.html "#{characterCount}/#{maxCharacters} characters"
 
 updateAbout = ->
-  helpBlock = $(".startup_about p.help-block")
-  textBox = $("#startup_about")
+  helpBlock = $(".startup_product_description p.help-block")
+  textBox = $("#startup_product_description")
 
   # The value of max_chars should match the one in Startup::MAX_ABOUT_CHARACTERS
   counter(textBox, helpBlock, 150)
 
 $ ->
-  $("#startup_about").click(updateAbout).on('input', updateAbout)
+  $("#startup_product_description").click(updateAbout).on('input', updateAbout)
 
 $ ->
   $('#startup_category_ids').select2(

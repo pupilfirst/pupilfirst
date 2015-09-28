@@ -444,8 +444,8 @@ class Startup < ActiveRecord::Base
   end
 
   def incubation_parameters_available?
-    name.present? &&
-      about.present? &&
+    product_name.present? &&
+      product_description.present? &&
       presentation_link.present? &&
       incubation_location.present?
   end

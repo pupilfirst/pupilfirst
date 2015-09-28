@@ -34,13 +34,14 @@
         - if @startup.timeline_verified?
           a#verified-icon data-toggle="tooltip" data-placement="top" title="Timeline verified by SV.CO" href="#"
             img.timeline-verified.margin-left-10 src='#{image_url 'timeline/verified.gif'}'
+        - if current_user && @startup.founder?(current_user)
+          small.edit-startup-link
+            a href=edit_user_startup_path(current_user)
+              i.fa.fa-pencil
       .startup-name
         - if @startup.name.present?
           ' (by #{@startup.name})
-          - if current_user && @startup.founder?(current_user)
-            small.edit-startup-link
-              a href=edit_user_startup_path(current_user)
-                i.fa.fa-pencil
+
     - if @startup.logo?
       .col-sm-4.visible-md-block.visible-lg-block
         = image_tag "#{@startup.logo_url}", class: 'startup-logo'
@@ -75,12 +76,12 @@
               - if @startup.presentation_link?
                 .media
                   .media-left
-                    img.media-object alt="Startup Deck icon" src="#{image_url 'timeline/icons/startup_deck.png'}"
+                    img.media-object alt="Product Deck icon" src="#{image_url 'timeline/icons/startup_deck.png'}"
                   .media-body
-                    h4.media-heading Startup Deck
+                    h4.media-heading Product Deck
                     p.data-content
                       a href="#{@startup.presentation_link}" target="_blank"
-                        ' #{@startup.name} deck
+                        ' #{@startup.product_name} deck
                         i.fa.fa-external-link
             .col-sm-6.col-md-12
               - if @startup.team_size?

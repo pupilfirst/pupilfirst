@@ -161,7 +161,7 @@ class Startup < ActiveRecord::Base
 
   # New set of validations for incubation wizard
   store :metadata, accessors: [:updated_from]
-  validates_presence_of :name, :presentation_link, :about, :incubation_location, if: :incubation_step_2?
+  validates_presence_of :product_name, :presentation_link, :product_description, :incubation_location, if: :incubation_step_2?
 
   validates_numericality_of :team_size, greater_than: 0, allow_blank: true
   validates_numericality_of :women_employees, greater_than_or_equal_to: 0, allow_blank: true
@@ -183,6 +183,7 @@ class Startup < ActiveRecord::Base
 
     # If supplied \r\n for line breaks, replace those with just \n so that length validation works.
     self.about = about.gsub("\r\n", "\n") if about
+    self.product_description = product_description.gsub("\r\n", "\n") if product_description
 
     # If slug isn't supplied, set one.
     self.slug = generate_randomized_slug if slug.blank?
@@ -422,6 +423,8 @@ class Startup < ActiveRecord::Base
   def generate_randomized_slug
     if name.present?
       "#{name.parameterize}-#{rand 1000}"
+    elsif product_name.present?
+      "#{product_name.parameterize}-#{rand 1000}"
     else
       "nameless-#{SecureRandom.hex(2)}"
     end
@@ -429,13 +432,13 @@ class Startup < ActiveRecord::Base
 
   def regenerate_slug!
     # Create slug from name.
-    self.slug = name.parameterize
+    self.slug = product_name.parameterize
 
     begin
       save!
     rescue ActiveRecord::RecordNotUnique
       # If it's taken, try adding a random number.
-      self.slug = "#{name.parameterize}-#{rand 1000}"
+      self.slug = "#{product_name.parameterize}-#{rand 1000}"
       retry
     end
   end

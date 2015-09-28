@@ -8,6 +8,9 @@ require 'rspec/rails'
 require 'webmock/rspec'
 WebMock.disable_net_connect! # Disable all net connections
 
+# Let's spec emails.
+require 'capybara/email/rspec'
+
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
 # run as spec files by default. This means that files in spec/support that end
@@ -53,6 +56,11 @@ RSpec.configure do |config|
 
   # Include Factory Girl's helpers.
   config.include FactoryGirl::Syntax::Methods
+
+  # Run RuboCop first.
+  rubocop_output = `rubocop`
+  print rubocop_output
+  fail 'RuboCop Errors' unless rubocop_output.match(/files inspected, no offenses detected/)
 end
 
 # Use cabpybara-webkit as JS driver.

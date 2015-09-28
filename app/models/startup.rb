@@ -114,7 +114,7 @@ class Startup < ActiveRecord::Base
   attr_reader :validate_registration_type
 
   # Some fields are mandatory when editing from web.
-  validates_presence_of :name, :presentation_link, :about, :incubation_location, if: :validate_web_mandatory_fields
+  validates_presence_of :product_name, :presentation_link, :product_description, :incubation_location, if: :validate_web_mandatory_fields
 
   # Registration type is required when registering.
   validates_presence_of :registration_type, if: ->(startup) { startup.validate_registration_type }

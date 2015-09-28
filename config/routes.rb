@@ -31,6 +31,7 @@ Svapp::Application.routes.draw do
     resource :startup, only: [:new, :edit, :update, :destroy] do
       post :add_founder
       patch :remove_founder
+      patch :change_admin
       resources :timeline_events, only: [:create, :destroy, :update]
     end
   end

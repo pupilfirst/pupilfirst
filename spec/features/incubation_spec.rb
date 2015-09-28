@@ -61,9 +61,9 @@ feature 'Incubation' do
     click_on 'Next Step'
     expect(page).to have_text('Incubation location')
 
-    fill_in 'Name', with: 'Test Startup'
-    fill_in 'About', with: 'About Test Startup'
-    fill_in 'Startup Deck', with: 'https://sv.co'
+    fill_in 'Product Name', with: 'Test product'
+    fill_in 'About your Product', with: "About\nTest\nproduct"
+    fill_in 'Product Deck', with: 'https://sv.co'
     select 'Visakhapatnam', from: 'Incubation location'
     fill_in 'Website', with: 'https://startupwebsite.com'
     select 'Partnership', from: 'Registration type'
@@ -91,8 +91,8 @@ feature 'Incubation' do
     expect(user.slack_username).to eq('public_slack_username')
 
     startup = user.startup
-    expect(startup.name).to eq('Test Startup')
-    expect(startup.about).to eq('About Test Startup')
+    expect(startup.product_name).to eq('Test product')
+    expect(startup.product_description).to eq("About\nTest\nproduct")
     expect(startup.presentation_link).to eq('https://sv.co')
     expect(startup.incubation_location).to eq(Startup::INCUBATION_LOCATION_VISAKHAPATNAM)
     expect(startup.website).to eq('https://startupwebsite.com')

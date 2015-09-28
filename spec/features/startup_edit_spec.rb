@@ -8,8 +8,8 @@ feature 'Startup Edit' do
   let!(:tet_team_formed) { create :tet_team_formed }
   let!(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
 
-  let(:new_name) { Faker::Lorem.words(rand(3) + 1).join ' ' }
-  let(:new_about) { Faker::Lorem.words(12).join(' ').truncate(Startup::MAX_ABOUT_CHARACTERS) }
+  let(:new_product_name) { Faker::Lorem.words(rand(3) + 1).join ' ' }
+  let(:new_product_description) { Faker::Lorem.words(12).join(' ').truncate(Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS) }
   let(:new_deck) { Faker::Internet.domain_name }
 
   before :each do
@@ -28,26 +28,31 @@ feature 'Startup Edit' do
 
   context 'Founder visits edit page of his startup' do
     scenario 'Founder updates all required fields' do
-      fill_in 'startup_name', with: new_name
-      fill_in 'startup_about', with: new_about
+      fill_in 'startup_product_name', with: new_product_name
+      fill_in 'startup_product_description', with: new_product_description
       fill_in 'startup_presentation_link', with: new_deck
+
       click_on 'Update startup profile'
 
+      # Wait for page to load before checking database.
+      expect(page).to have_content(new_product_name)
+
       startup.reload
-      expect(startup.name).to eq(new_name)
-      expect(startup.about).to eq(new_about)
+
+      expect(startup.product_name).to eq(new_product_name)
+      expect(startup.product_description).to eq(new_product_description)
       expect(startup.presentation_link).to eq(new_deck)
     end
 
     scenario 'Founder clears all required fields' do
-      fill_in 'startup_name', with: ""
-      fill_in 'startup_about', with: ""
+      fill_in 'startup_product_name', with: ''
+      fill_in 'startup_product_description', with: ''
       fill_in 'startup_presentation_link', with: ""
       click_on 'Update startup profile'
 
       expect(page).to have_text('Please review the problems below')
-      expect(page.find('div.form-group.startup_name')[:class]).to include('has-error')
-      expect(page.find('div.form-group.startup_about')[:class]).to include('has-error')
+      expect(page.find('div.form-group.startup_product_name')[:class]).to include('has-error')
+      expect(page.find('div.form-group.startup_product_description')[:class]).to include('has-error')
       expect(page.find('div.form-group.startup_presentation_link')[:class]).to include('has-error')
     end
 

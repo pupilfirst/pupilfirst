@@ -7,12 +7,19 @@
   background-position: 50% 37%;
 }
 
-h1.startup-name {
+h1.product-name {
   //font-family: 'Roboto', sans-serif;
   font-weight: 200;
   font-size: 50px;
   color: #2458a1;
-  margin: 20px 0;
+  margin: 20px 0 0;
+}
+
+.startup-name {
+  color: $dark-grey-text;
+  font-size: 20px;
+  font-weight: 300;
+  margin-bottom: 20px;
 }
 
 .timeline-verified {

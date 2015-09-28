@@ -125,7 +125,8 @@ class StartupsController < ApplicationController
 
   def startup_params
     params.require(:startup).permit(
-      :name, :legal_registered_name, :address, :pitch, :website, :about, :email, :logo, :remote_logo_url, :facebook_link, :twitter_link,
+      :name, :legal_registered_name, :address, :pitch, :website, :email, :logo, :remote_logo_url, :facebook_link,
+      :twitter_link, :product_name, :product_description,
       { category_ids: [] }, { founders_attributes: [:id] },
       :registration_type, :revenue_generated, :presentation_link, :team_size, :women_employees, :slug
     )

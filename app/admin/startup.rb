@@ -1,5 +1,6 @@
 ActiveAdmin.register Startup do
   filter :approval_status, as: :select, collection: proc { Startup.valid_approval_status_values }
+  filter :product_name
   filter :name
   filter :batch, as: :select, collection: (1..10)
   filter :stage, as: :select, collection: proc { stages_collection }
@@ -24,7 +25,7 @@ ActiveAdmin.register Startup do
 
   index do
     selectable_column
-    column :name
+    column :product_name
 
     column :status do |startup|
       startup.approval_status.capitalize
@@ -148,7 +149,7 @@ ActiveAdmin.register Startup do
     redirect_to action: :show
   end
 
-  show do
+  show title: :product_name do
     attributes_table do
       row :legal_registered_name
       row :approval_status do |startup|
@@ -285,7 +286,7 @@ ActiveAdmin.register Startup do
 
   form partial: 'admin/startups/form'
 
-  permit_params :name, :legal_registered_name, :website, :about, :email, :logo, :facebook_link, :twitter_link,
+  permit_params :name, :product_name, :legal_registered_name, :website, :about, :email, :logo, :facebook_link, :twitter_link,
     { category_ids: [] }, { founder_ids: [] },
     { founders_attributes: [:id, :first_name, :last_name, :email, :avatar, :remote_avatar_url, :linkedin_url, :twitter_url, :skip_password] },
     :created_at, :updated_at, :approval_status, :approval_status, :registration_type,

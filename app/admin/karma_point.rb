@@ -39,7 +39,7 @@ ActiveAdmin.register KarmaPoint do
       f.input(
         :user,
         collection: User.founders,
-        member_label: proc { |u| "#{u.fullname} - #{u.roles.present? ? (u.roles_string + ', ') : ''}#{u.startup.name}" },
+        member_label: proc { |u| "#{u.fullname}#{u.roles.present? ? " (#{founder_roles(u.roles)})" : ''} - #{u.startup.name}" },
         input_html: { style: 'width: calc(80% - 22px);' }
       )
 

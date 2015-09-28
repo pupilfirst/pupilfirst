@@ -3,7 +3,8 @@
 
   = f.error_notification
 
-  = f.input :fullname, input_html: { maxlength: 255 }, required: true
+  = f.input :first_name, input_html: { maxlength: 255 }, required: true
+  = f.input :last_name, input_html: { maxlength: 255 }, required: true
   = f.input :born_on, as: :date_picker, required: true, label: 'Date of birth', placeholder: 'DD/MM/YYYY'
 
   .form-group

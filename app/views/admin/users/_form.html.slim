@@ -1,7 +1,8 @@
 = semantic_form_for [:admin, @user] do |f|
   = f.inputs 'Basic Details'
     = f.input :email
-    = f.input :fullname
+    = f.input :first_name
+    = f.input :last_name
     = f.input :roles, as: :check_boxes, collection: User.valid_roles
     = f.input :born_on, as: :date_select, :start_year => 1920, :end_year => Date.today.year - 10
     = f.input :startup

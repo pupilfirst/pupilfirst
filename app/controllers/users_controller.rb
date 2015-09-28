@@ -99,7 +99,7 @@ class UsersController < ApplicationController
   private
 
   def invite_params
-    params.require(:user).permit(:email, :fullname)
+    params.require(:user).permit(:email, :first_name, :last_name)
   end
 
   def user_password_change_params
@@ -108,7 +108,7 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(
-      :fullname, :twitter_url, :linkedin_url, :avatar, :slack_username,
+      :first_name, :last_name, :twitter_url, :linkedin_url, :avatar, :slack_username,
       :university_id, :roll_number, :born_on, :communication_address, roles: []
     )
   end

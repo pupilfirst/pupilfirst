@@ -122,7 +122,8 @@ ActiveAdmin.register User do
 
   # Customize the filter options to reduce the size.
   filter :email
-  filter :fullname
+  filter :first_name
+  filter :last_name
   filter :phone
   filter :unconfirmed_phone
   filter :is_founder
@@ -134,7 +135,7 @@ ActiveAdmin.register User do
 
   form partial: 'admin/users/form'
 
-  permit_params :fullname, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url,
+  permit_params :first_name, :last_name, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url,
     :slack_username, :skip_password, :born_on, :startup_admin, :communication_address, :district, :state, :pin,
     :phone, :company, :invitation_token, :university_id, :roll_number, :year_of_graduation,
     :years_of_work_experience, roles: []

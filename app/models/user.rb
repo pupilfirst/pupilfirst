@@ -40,7 +40,7 @@ class User < ActiveRecord::Base
   # validates_presence_of :born_on
   # validates_presence_of :salutation, message: ''
 
-  validates_presence_of :fullname
+  validates_presence_of :first_name, :last_name
 
   def self.valid_gender_values
     [GENDER_FEMALE, GENDER_MALE, GENDER_OTHER]

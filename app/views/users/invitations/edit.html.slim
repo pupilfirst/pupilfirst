@@ -7,7 +7,8 @@ h3= t 'devise.invitations.edit.header'
   .form-inputs
     = f.input :avatar, :label => "Profile pic"
     = f.input :salutation, collection: ['Mr', 'Miss', 'Mrs'], required: true
-    = f.input :fullname, :required => true
+    = f.input :first_name, :required => true
+    = f.input :last_name, :required => true
     = f.input :email, :required => true, :autofocus => true
     = f.input :born_on, as: :custom_datepicker, start_year: Date.today.year - 100, required: true
     = f.input :password, :required => true

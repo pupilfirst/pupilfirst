@@ -39,10 +39,10 @@ class ApplicationController < ActionController::Base
     # TODO: Clean this method up. What is this about, anyway?!
     devise_parameter_sanitizer.for(:accept_invitation).concat [:avatar, :twitter_url, :linkedin_url]
     # Unpermitted parameters: salutation, fullname, born_on(1i), born_on(2i), born_on(3i), is_student, college, course, semester
-    devise_parameter_sanitizer.for(:sign_up).concat [:fullname]
+    devise_parameter_sanitizer.for(:sign_up).concat [:first_name, :last_name]
     devise_parameter_sanitizer.for(:accept_invitation).concat(
       [
-        :salutation, :fullname, :email, :born_on, :is_student, :college_id, :course, :semester, :startup, :accept_startup
+        :salutation, :first_name, :last_name, :email, :born_on, :is_student, :college_id, :course, :semester, :startup, :accept_startup
       ]
     )
   end

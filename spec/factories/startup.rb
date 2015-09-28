@@ -1,14 +1,13 @@
 FactoryGirl.define do
   factory :startup do |f|
+    f.product_name { Faker::Lorem.words(rand(3) + 1).join ' ' }
+    f.product_description { Faker::Lorem.words(12).join(' ').truncate(Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS) }
     f.name { Faker::Lorem.words(rand(3) + 1).join ' ' }
-    f.pitch { Faker::Lorem.words(6).join(' ') }
     f.address { Faker::Lorem.words(6).join(' ') }
-    f.about { Faker::Lorem.words(12).join(' ').truncate(Startup::MAX_ABOUT_CHARACTERS) }
     f.website { Faker::Internet.domain_name }
     f.email { Faker::Internet.email }
     f.incubation_location Startup::INCUBATION_LOCATION_KOCHI
-    # f.founders {[create(:founder), create(:founder)]}
-    # f.category_ids {[create(:startup_category).id]}
+
     after(:build) do |startup|
       startup.founders << create(:founder, startup: startup, startup_admin: true)
       startup.founders << create(:founder, startup: startup)

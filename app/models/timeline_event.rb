@@ -62,7 +62,7 @@ class TimelineEvent < ActiveRecord::Base
       when 'new_product_deck'
         'The team created a new product deck introducing their startup'
       when 'one_liner'
-        startup.about
+        startup.product_description
     end
   end
 

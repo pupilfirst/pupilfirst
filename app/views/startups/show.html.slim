@@ -46,8 +46,8 @@
       .col-sm-4.visible-md-block.visible-lg-block
         = image_tag "#{@startup.logo_url}", class: 'startup-logo'
 
-  - if @startup.about?
-    p.about-startup #{@startup.about}
+  - if @startup.product_description?
+    p.product-description #{@startup.product_description}
 
   / Container right
   .row

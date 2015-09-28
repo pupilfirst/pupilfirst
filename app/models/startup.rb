@@ -12,7 +12,6 @@ class Startup < ActiveRecord::Base
   REGISTRATION_TYPE_LLP = 'llp' # Limited Liability Partnership
 
   MAX_PITCH_CHARACTERS = 140 unless defined?(MAX_PITCH_CHARACTERS)
-  MAX_ABOUT_CHARACTERS = 150
   MAX_PRODUCT_DESCRIPTION_CHARACTERS = 150
   MAX_CATEGORY_COUNT = 3
 
@@ -155,10 +154,6 @@ class Startup < ActiveRecord::Base
     maximum: MAX_PITCH_CHARACTERS,
     message: "must be within #{MAX_PITCH_CHARACTERS} characters"
 
-  validates_length_of :about,
-    maximum: MAX_ABOUT_CHARACTERS,
-    message: "must be within #{MAX_ABOUT_CHARACTERS} characters"
-
   # New set of validations for incubation wizard
   store :metadata, accessors: [:updated_from]
   validates_presence_of :product_name, :presentation_link, :product_description, :incubation_location, if: :incubation_step_2?
@@ -182,7 +177,6 @@ class Startup < ActiveRecord::Base
     self.registration_type = nil if registration_type.blank?
 
     # If supplied \r\n for line breaks, replace those with just \n so that length validation works.
-    self.about = about.gsub("\r\n", "\n") if about
     self.product_description = product_description.gsub("\r\n", "\n") if product_description
 
     # If slug isn't supplied, set one.
@@ -255,7 +249,7 @@ class Startup < ActiveRecord::Base
   mount_uploader :logo, LogoUploader
   process_in_background :logo
 
-  normalize_attribute :name, :pitch, :about, :email, :phone, :revenue_generated, :team_size, :women_employees, :approval_status
+  normalize_attribute :name, :pitch, :product_description, :email, :phone, :revenue_generated, :team_size, :women_employees, :approval_status
 
   attr_accessor :full_validation
 

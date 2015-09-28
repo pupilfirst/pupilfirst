@@ -53,6 +53,9 @@ ActiveAdmin.register Startup do
   end
 
   csv do
+    column :product_name
+    column :product_description
+    column :presentation_link
     column :name
     column :batch
     column :incubation_location
@@ -68,10 +71,7 @@ ActiveAdmin.register Startup do
     column :district
     column :pin
     column :cool_fact
-    column :product_name
     column :product_progress
-    column :product_description
-    column :presentation_link
     column :revenue_generated
     column :team_size
     column :women_employees
@@ -151,6 +151,11 @@ ActiveAdmin.register Startup do
 
   show title: :product_name do
     attributes_table do
+      row :product_description do |startup|
+        simple_format startup.product_description
+      end
+
+      row :name
       row :legal_registered_name
       row :approval_status do |startup|
         div class: 'startup-status' do
@@ -221,10 +226,6 @@ ActiveAdmin.register Startup do
       row :team_size
       row :women_employees
       row :incubation_location
-
-      row :about do |startup|
-        simple_format startup.about
-      end
 
       row :categories do |startup|
         startup.categories.map(&:name).join(', ')

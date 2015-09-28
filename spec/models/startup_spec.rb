@@ -50,11 +50,6 @@ describe Startup do
     expect { startup.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
-  it 'validates the size of about' do
-    startup = build(:startup, about: Faker::Lorem.characters(1003))
-    expect { startup.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
-
   # it "validates the presence of reqired params" do
   #   startup = build(:startup)
   #   expect { startup.update_attributes!(name: nil) }.to raise_error(ActiveRecord::RecordInvalid)

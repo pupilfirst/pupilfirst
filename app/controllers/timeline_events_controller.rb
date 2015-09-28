@@ -8,7 +8,7 @@ class TimelineEventsController < ApplicationController
     @timeline_event = @startup.timeline_events.new timeline_event_params
 
     if @timeline_event.save
-      flash[:success] = 'Your new timeline event has been submitted to the SV team for approval!'
+      flash[:success] = 'Your new timeline event has been submitted to the SV.CO team for approval!'
       redirect_to @startup
     else
       flash[:error] = 'There seems to be an error in your submission. Please try again!'

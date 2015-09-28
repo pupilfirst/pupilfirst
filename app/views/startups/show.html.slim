@@ -15,7 +15,7 @@
           p Your startup has not been approved yet. Please write to #{mail_to 'help@sv.co'} if you'd like help!
       - elsif @startup.unready?
         .alert.alert-info.margin-top-20 role='alert'
-          p It appears that your startup application is not yet complete! Please head #{link_to('here', new_user_startup_path(current_user))} and complete your application at the earliest for SV approval.
+          p It appears that your startup application is not yet complete! Please head #{link_to('here', new_user_startup_path(current_user))} and complete your application at the earliest for SV.CO approval.
     - else
       .alert.alert-info.margin-top-20
         p This startup has submitted an application to SV.CO. They have not been approved yet.

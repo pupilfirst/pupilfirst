@@ -59,7 +59,7 @@ class UsersController < ApplicationController
     return if Rails.env.development?
 
     # SMS the code to the phone number. Currently uses FA format.
-    RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV: #{code}", msisdn: phone_number)
+    RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV.CO: #{code}", msisdn: phone_number)
   end
 
   # PATCH /users/:id/resend
@@ -69,7 +69,7 @@ class UsersController < ApplicationController
       code, phone_number = current_user.generate_phone_number_verification_code(current_user.unconfirmed_phone)
 
       unless Rails.env.development?
-        RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV: #{code}", msisdn: phone_number)
+        RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV.CO: #{code}", msisdn: phone_number)
       end
 
       @resent_verification_code = true

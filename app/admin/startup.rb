@@ -143,6 +143,12 @@ ActiveAdmin.register Startup do
     end
   end
 
+  member_action :change_admin, method: :patch do
+    Startup.friendly.find(params[:id]).admin.update(startup_admin: nil)
+    User.find(params[:founder_id]).update(startup_admin: true)
+    redirect_to action: :show
+  end
+
   show title: :product_name do
     attributes_table do
       row :legal_registered_name
@@ -247,6 +253,15 @@ ActiveAdmin.register Startup do
 
             span do
               " &mdash; #{link_to 'Karma++'.html_safe, new_admin_karma_point_path(karma_point: { user_id: founder.id })}".html_safe
+            end
+
+            span do
+              if founder.startup_admin?
+                " &mdash; (Current Admin)".html_safe
+              else
+                " &mdash; #{link_to('Make Admin', change_admin_admin_startup_path(founder_id: founder),
+                  method: :patch, data: { confirm: 'Are you sure you want to change the admin for this startup?' })}".html_safe
+              end
             end
           end
         end

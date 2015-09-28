@@ -28,7 +28,7 @@
           | #{mail_to 'help@sv.co'} with your <em>SV.CO</em> ID.
 
         h3.page-header Add co-founders.
-        p Got fellow travellers on this journey? Tell them to sign up at <em>SV.CO</em>, and then enter their SV ID-s below.
+        p Got fellow travellers on this journey? Tell them to sign up at <em>SV.CO</em>, and then enter their SV.CO ID-s below.
 
         .col-sm-9.col-sm-offset-3.margin-bottom-10
           table.table.founders-table
@@ -47,7 +47,7 @@
                       = button_to 'Remove', remove_founder_user_startup_path(current_user, founder_id: cofounder.id), method: :patch, class: 'btn btn-danger btn-xs', data: { confirm: 'Are you sure you want to remove this founder from your startup?' }
 
         = simple_form_for :cofounder, url: add_cofounder_incubation_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
-          = f.input :email, placeholder: 'co-founder@yourstartup.com', label: "Co-founder's SV ID"
+          = f.input :email, placeholder: 'co-founder@yourstartup.com', label: "Co-founder's SV.CO ID"
 
           .form-group
             .col-sm-offset-3.col-sm-10

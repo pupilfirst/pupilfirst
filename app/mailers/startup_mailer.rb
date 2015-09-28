@@ -1,6 +1,6 @@
 # Mails sent out to startups, as a whole.
 class StartupMailer < ApplicationMailer
-  # Mail sent to startup whose agreement with SV is expiring soon.
+  # Mail sent to startup whose agreement with SV.CO is expiring soon.
   #
   # @param startup [Startup] Startup whose agreement is expiring
   # @param expires_in [Fixnum] Days till expiry

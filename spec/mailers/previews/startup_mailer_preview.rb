@@ -21,4 +21,9 @@ class StartupMailerPreview < ActionMailer::Preview
     renew_within = 15
     StartupMailer.agreement_expiring_soon(startup, expires_in, renew_within)
   end
+
+  def feedback_as_email
+    startup_feedback = StartupFeedback.first
+    StartupMailer.feedback_as_email(startup_feedback)
+  end
 end

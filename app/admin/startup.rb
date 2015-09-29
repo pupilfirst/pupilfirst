@@ -257,10 +257,10 @@ ActiveAdmin.register Startup do
 
             span do
               if founder.startup_admin?
-                " &mdash; (Current Admin)".html_safe
+                " &mdash; (Current Team Lead)".html_safe
               else
-                " &mdash; #{link_to('Make Admin', change_admin_admin_startup_path(founder_id: founder),
-                  method: :patch, data: { confirm: 'Are you sure you want to change the admin for this startup?' })}".html_safe
+                " &mdash; #{link_to('Make Team Lead', change_admin_admin_startup_path(founder_id: founder),
+                  method: :patch, data: { confirm: 'Are you sure you want to change the team lead for this startup?' })}".html_safe
               end
             end
           end

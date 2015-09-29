@@ -1,16 +1,14 @@
 = content_for :heading
-  | Invitation to become a founder
+  | Invitation to join SV.CO
 
 = content_for :salutation
   | Hello,
 
 = content_for :body
   p
-    ' #{@resource.inviter_name} has listed you as a founder at #{@resource.startup.name}.
+    ' You have been invited to join SV.CO as a founder.
 
   p
-    ' If you haven't created a profile, please do so
-    ' #{link_to 'here', accept_invitation_url(@resource, :invitation_token => @token)} or join us on the mobile app.
-    ' We are available on
-    ' #{link_to "Android","https://play.google.com/store/apps/details?id=in.svlabs.android"} &amp;
-    ' #{link_to "iOS", "https://itunes.apple.com/in/app/startup-village-app/id804638121?mt=8"}
+    ' Please
+    ' #{link_to 'sign-up at SV.CO', accept_invitation_url(@resource, :invitation_token => @token)} and complete your profile at the earliest. Team Leaders are also advised to submit their startup's incubation request.
+

@@ -124,8 +124,14 @@ ActiveAdmin.register User do
   end
 
   collection_action :send_invite, method: :post do
-    User.invite!(:email => params[:user][:email])
-    redirect_to action: :index
+    email = params[:user][:email]
+    if email =~ /@/ and User.invite!(email: email)
+      flash.now[:success] = "Invitation successfully sent!"
+      redirect_to action: :index
+    else
+      flash.now[:error] = "Error in sending invitation! Please ensure the email id is valid and try again."
+      redirect_to :back
+    end
   end
 
   # Customize the filter options to reduce the size.

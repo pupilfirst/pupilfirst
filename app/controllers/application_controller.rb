@@ -51,15 +51,16 @@ class ApplicationController < ActionController::Base
   def set_content_security_policy
     image_sources = "img-src 'self' " + [
       'https://www.google-analytics.com https://blog.sv.co https://www.startatsv.com http://www.startatsv.com',
-      'https://assets.sv.co https://secure.gravatar.com https://uploaded-assets.sv.co'
+      'https://assets.sv.co https://secure.gravatar.com https://uploaded-assets.sv.co hn.inspectlet.com'
     ].join(' ') + ';'
 
     csp_directives = [
       image_sources,
       "script-src 'self' https://ajax.googleapis.com https://www.google-analytics.com " \
-        'https://blog.sv.co https://www.youtube.com http://www.startatsv.com https://assets.sv.co;',
+        'https://blog.sv.co https://www.youtube.com http://www.startatsv.com https://assets.sv.co ' \
+        'cdn.inspectlet.com;',
       "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://assets.sv.co;",
-      "connect-src 'self';",
+      "connect-src 'self' hn.inspectlet.com wss://inspectletws.herokuapp.com;",
       "font-src 'self' fonts.gstatic.com https://assets.sv.co;",
       'child-src https://www.youtube.com;',
       'frame-src https://www.youtube.com https://svlabs-public.herokuapp.com https://www.google.com;'

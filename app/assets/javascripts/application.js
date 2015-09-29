@@ -16,3 +16,4 @@
 //= require navbar
 //= require users
 //= require limit_max_int
+//= require inspectlet.js.erb

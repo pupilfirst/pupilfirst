@@ -39,7 +39,6 @@ gem 'simple_form', '~> 3.1.1' # Simple-form with support for Bootstrap 3.
 # gem 'validate_url' # URL validation. - appears to be only supported on Rails 3
 gem 'valid_url' # New url validataion gem
 gem 'chartkick' # Pretty charts!
-gem 'will_paginate-bootstrap' # Paginated tables with Bootstrap. TODO: Used in disabled Mentors section. Remove if stale (20150711).
 gem 'logstash-logger' # A better logger.
 
 # Used for picking date and time fields in a few places.

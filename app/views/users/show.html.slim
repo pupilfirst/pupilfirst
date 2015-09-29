@@ -51,9 +51,6 @@ table.table.table-hover.table-bordered.table-striped
       th Roll Number
       td = value_or_not_available @user.roll_number, placeholder: 'Not Applicable'
 
-
-= render('mentor_info', mentor: @user.mentor) if @user.mentor.present?
-
 .margin-bottom-40
   = link_to 'Edit your profile', edit_user_url(@user), class: 'btn btn-primary btn-flat'
 

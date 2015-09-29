@@ -20,12 +20,10 @@ class User < ActiveRecord::Base
 
   has_many :public_slack_messages
   has_many :requests
-  has_one :mentor, dependent: :destroy
   belongs_to :college
   belongs_to :father, class_name: 'Name'
   belongs_to :startup
   has_and_belongs_to_many :categories
-  has_many :mentor_meetings
   belongs_to :university
   has_many :karma_points, dependent: :destroy
 
@@ -176,19 +174,6 @@ class User < ActiveRecord::Base
   end
 
   def_delegator :startup, :present?, :member_of_startup?
-  def_delegator :mentor, :nil?, :not_a_mentor?
-  def_delegator :mentor, :present?, :mentor?
-
-  def mentor_pending_verification?
-    mentor.try(:verified_at).blank?
-  end
-
-  # Phone verification is the final step of the registration process. If that isn't complete, then the mentor is still
-  # going through the registration process.
-  def mentor_registration_going_on?
-    return unless mentor.present?
-    !phone
-  end
 
   # Add user with given email as co-founder if possible.
   def add_as_founder_to_startup!(email)

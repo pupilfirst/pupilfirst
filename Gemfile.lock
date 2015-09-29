@@ -550,9 +550,6 @@ GEM
     websocket-extensions (0.1.2)
     wicked (1.1.1)
       rails (>= 3.0.7)
-    will_paginate (3.0.7)
-    will_paginate-bootstrap (1.0.1)
-      will_paginate (>= 3.0.3)
     xpath (2.0.0)
       nokogiri (~> 1.3)
 
@@ -627,7 +624,6 @@ DEPENDENCIES
   valid_url
   webmock
   wicked
-  will_paginate-bootstrap
 
 BUNDLED WITH
    1.10.6

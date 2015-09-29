@@ -1,4 +1,3 @@
-
 = semantic_form_for [:admin, @startup_feedback] do |f|
   = f.inputs
     legend
@@ -6,6 +5,7 @@
     = f.input :startup, collection: Startup.where.not(name: nil)
     = f.input :feedback
     = f.input :reference_url
+    = f.input :author, include_blank: (@startup_feedback.persisted? ? false : 'Leave this be to assign yourself.')
 
   = f.submit
 br

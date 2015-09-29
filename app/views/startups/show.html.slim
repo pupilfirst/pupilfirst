@@ -192,7 +192,7 @@
                     - latest_feedback = StartupFeedback.where(reference_url: startup_url(event.startup, anchor: "event-#{event.id}")).order('updated_at desc').first
                     - if latest_feedback.present?
                       - feedback = latest_feedback.feedback
-                      - author = latest_feedback.feedback_by.present? ? (latest_feedback.feedback_by.fullname + ' of Team SV') : 'Team SV'
+                      - author = latest_feedback.author.present? ? (latest_feedback.author.fullname + ' of Team SV') : 'Team SV'
                       a data-toggle="modal" data-target="#improvement-modal" data-feedback="#{latest_feedback.feedback}" data-author="#{author}"
                         .pending-verification href="#" data-toggle="tooltip" title="Click to see feedback from Team SV to improve this entry!"
                           i.fa.fa-exclamation-circle
@@ -232,7 +232,7 @@
                           - latest_feedback = StartupFeedback.for_timeline_event(event).first
                           - if latest_feedback.present?
                             - feedback = latest_feedback.feedback
-                            - author = latest_feedback.feedback_by.present? ? ("#{latest_feedback.feedback_by.fullname} of Team SV") : 'Team SV'
+                            - author = latest_feedback.author.present? ? ("#{latest_feedback.author.fullname} of Team SV") : 'Team SV'
                             a data-toggle="modal" data-target="#improvement-modal" data-feedback="#{latest_feedback.feedback}" data-author="#{author}"
                               .pending-verification.pointer-cursor href="#" data-toggle="tooltip" title="Click to see feedback from Team SV to improve this entry!"
                                 i.fa.fa-exclamation-circle

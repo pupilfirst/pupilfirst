@@ -1,12 +1,12 @@
 ActiveAdmin.register StartupFeedback do
   menu parent: 'Startups', label: 'Startup Feedback'
-  permit_params :feedback, :reference_url, :startup_id, :send_email
+  permit_params :feedback, :reference_url, :startup_id, :send_email, :author_id
 
   preserve_default_filters!
-  filter :feedback_by, collection: AdminUser.all
+  filter :author, collection: AdminUser.all
 
   before_create do |startup_feedback|
-    startup_feedback.feedback_by = current_admin_user
+    startup_feedback.author = current_admin_user if startup_feedback.author.blank?
   end
 
   controller do
@@ -31,9 +31,7 @@ ActiveAdmin.register StartupFeedback do
       end
     end
 
-    column :feedback_by do |startup_feedback|
-      startup_feedback.feedback_by.try(:email)
-    end
+    column :author
 
     column :send_at do |startup_feedback|
       if startup_feedback.send_at.present?
@@ -53,15 +51,16 @@ ActiveAdmin.register StartupFeedback do
   show do
     attributes_table do
       row :startup
+
       row :feedback do |startup_feedback|
         pre class: 'max-width-pre' do
           startup_feedback.feedback
         end
       end
+
       row :reference_url
-      row :feedback_by do |startup_feedback|
-        startup_feedback.feedback_by.try(:email)
-      end
+      row :author
+
       row :send_at do |startup_feedback|
         if startup_feedback.send_at.present?
           startup_feedback.send_at
@@ -81,7 +80,7 @@ ActiveAdmin.register StartupFeedback do
   member_action :email_feedback, method: :put do
     startup_feedback = StartupFeedback.find params[:id]
     startup_feedback.update(send_at: Time.now)
-    StartupMailer.feedback_as_email(startup_feedback, current_admin_user).deliver_later
+    StartupMailer.feedback_as_email(startup_feedback).deliver_later
     flash[:alert] = 'Your feedback has been sent to the startup founders!'
     redirect_to action: :index
   end

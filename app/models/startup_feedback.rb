@@ -1,6 +1,6 @@
 class StartupFeedback < ActiveRecord::Base
   belongs_to :startup
-  belongs_to :feedback_by, foreign_key: 'feedback_by', class_name: 'AdminUser'
+  belongs_to :author, class_name: 'AdminUser'
   attr_accessor :send_email
 
   REGEX_TIMELINE_EVENT_URL = %r{startups/.*event-(?<event_id>[\d]+)}

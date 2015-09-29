@@ -3,7 +3,7 @@ class AdminUser < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
-  has_many :startup_feedback, foreign_key: 'feedback_by'
+  has_many :startup_feedback, foreign_key: 'author_id'
 
   TYPE_SUPERADMIN = 'superadmin'
   TYPE_TIMELINE_REVIEWER = 'timeline_reviewer'
@@ -18,7 +18,7 @@ class AdminUser < ActiveRecord::Base
 
   validates :admin_type, inclusion: { in: admin_user_types }, allow_nil: true
 
-  def to_label
+  def display_name
     email
   end
 end

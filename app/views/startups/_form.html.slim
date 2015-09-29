@@ -66,6 +66,11 @@ p
           a data-toggle="collapse" data-parent="#startup-form" href="#misc" Miscellaneous
       #misc.panel-collapse.collapse role="tabpanel"
         .panel-body
+          = f.input :prototype_link,
+            hint: 'Link to your product prototype, if available and public.',
+            input_html: { maxlength: 255 },
+            required: true,
+            label: 'Product Prototype'
           = f.input :wireframe_link,
             hint: 'Link to your product wireframe, if available and public.',
             input_html: { maxlength: 255 },

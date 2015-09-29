@@ -57,6 +57,7 @@ ActiveAdmin.register Startup do
     column :product_description
     column :presentation_link
     column :wireframe_link
+    column :prototype_link
     column :name
     column :batch
     column :incubation_location
@@ -226,6 +227,10 @@ ActiveAdmin.register Startup do
         link_to startup.wireframe_link, startup.wireframe_link if startup.wireframe_link.present?
       end
 
+      row :prototype_link do |startup|
+        link_to startup.prototype_link, startup.prototype_link if startup.prototype_link.present?
+      end
+
       row :revenue_generated
       row :team_size
       row :women_employees
@@ -296,5 +301,5 @@ ActiveAdmin.register Startup do
     { founders_attributes: [:id, :first_name, :last_name, :email, :avatar, :remote_avatar_url, :linkedin_url, :twitter_url, :skip_password] },
     :created_at, :updated_at, :approval_status, :approval_status, :registration_type,
     :incubation_location, :agreement_sent, :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration,
-    :physical_incubatee, :presentation_link, :wireframe_link, :slug, :featured, :batch
+    :physical_incubatee, :presentation_link, :wireframe_link, :prototype_link, :slug, :featured, :batch
 end

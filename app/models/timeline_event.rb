@@ -87,6 +87,10 @@ class TimelineEvent < ActiveRecord::Base
     timeline_event_type.new_deck?
   end
 
+  def new_wireframe?
+    timeline_event_type.new_wireframe?
+  end
+
   def update_and_require_reverification(params)
     params[:verified_at] = nil
     params[:verified_status] = VERIFIED_STATUS_PENDING
@@ -96,6 +100,7 @@ class TimelineEvent < ActiveRecord::Base
   def verify!
     update!(verified_status: VERIFIED_STATUS_VERIFIED, verified_at: Time.now)
     startup.update!(presentation_link: links[0][:url]) if new_deck? && links[0].try(:[], :url).present?
+    startup.update!(wireframe_link: links[0][:url]) if new_wireframe? && links[0].try(:[], :url).present?
   end
 
   def unverify!

@@ -66,6 +66,11 @@ p
           a data-toggle="collapse" data-parent="#startup-form" href="#misc" Miscellaneous
       #misc.panel-collapse.collapse role="tabpanel"
         .panel-body
+          = f.input :wireframe_link,
+            hint: 'Link to your product wireframe, if available and public.',
+            input_html: { maxlength: 255 },
+            required: true,
+            label: 'Design Wireframe'
           = f.input :revenue_generated, hint: 'How much cumulative revenue have you generated till date?', input_html: { min: 1, max: 999999999, 'data-max-int-length' => 9 }
           = f.input :team_size, label: 'Total Team Size', input_html: { min: 1, max: 9999, 'data-max-int-length' => 4 }
           = f.input :women_employees, label: 'Number of Women Employees', input_html: { min: 0, max: 9999, 'data-max-int-length' => 4 }

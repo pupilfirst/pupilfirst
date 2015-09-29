@@ -83,6 +83,16 @@
                       a href="#{@startup.presentation_link}" target="_blank"
                         ' #{@startup.product_name} deck
                         i.fa.fa-external-link
+              - if @startup.wireframe_link?
+                .media
+                  .media-left
+                    img.media-object alt="Wireframe icon" src="#{image_url 'timeline/icons/startup_deck.png'}"
+                  .media-body
+                    h4.media-heading Design Wireframe
+                    p.data-content
+                      a href="#{@startup.wireframe_link}" target="_blank"
+                        ' #{@startup.product_name} design
+                        i.fa.fa-external-link
             .col-sm-6.col-md-12
               - if @startup.team_size?
                 .media

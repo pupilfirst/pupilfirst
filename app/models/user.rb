@@ -59,9 +59,8 @@ class User < ActiveRecord::Base
 
   attr_reader :skip_password
 
-  attr_reader :fullname
   def fullname
-    @fullname = first_name + ' ' + last_name
+    [first_name, last_name] * ' '
   end
 
   # hack

@@ -209,4 +209,9 @@ class User < ActiveRecord::Base
   def roles
     super || []
   end
+
+  # A simple flag, which returns true if the user signed in less than 15 seconds ago.
+  def just_signed_in
+    current_sign_in_at > 15.seconds.ago
+  end
 end

@@ -126,10 +126,10 @@ ActiveAdmin.register User do
   collection_action :send_invite, method: :post do
     email = params[:user][:email]
     if email =~ /@/ && User.invite!(email: email)
-      flash.now[:success] = "Invitation successfully sent!"
+      flash.now[:success] = 'Invitation successfully sent!'
       redirect_to action: :index
     else
-      flash.now[:error] = "Error in sending invitation! Please ensure the email id is valid and try again."
+      flash.now[:error] = 'Error in sending invitation! Please ensure the Email address is valid and try again.'
       redirect_to :back
     end
   end

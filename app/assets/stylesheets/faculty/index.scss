@@ -101,3 +101,12 @@
     }
   }
 }
+
+.faculty-availability {
+  margin-top: 6px;
+
+  span.badge {
+    background-color: $theme-dark-green;
+    margin-right: 6px;
+  }
+}

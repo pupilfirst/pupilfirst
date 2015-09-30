@@ -7,6 +7,7 @@ Rails.application.config.assets.precompile += %w(
   startups.css
   startups.js
   faculty.css
+  faculty.js
   about.css
   users.css
   users.js

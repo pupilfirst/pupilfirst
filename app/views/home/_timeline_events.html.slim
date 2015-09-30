@@ -4,7 +4,7 @@ section.timeline-events
     = image_tag 'home/line.jpg'
 
   #timeline-events-container
-    - timeline_events = TimelineEvent.ready_for_showcase.limit(4)
+    - timeline_events = TimelineEvent.ready_for_showcase.order(verified_at: :desc).limit(4)
     - timeline_events.each do |event|
       .timeline-event
         .timeline-event-top

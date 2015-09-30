@@ -47,3 +47,6 @@ html
         == yield
 
     == render 'layouts/footer'
+
+    - if current_user.try(:just_signed_in)
+      == render 'layouts/inspectlet'

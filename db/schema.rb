@@ -98,6 +98,22 @@ ActiveRecord::Schema.define(version: 20150929140558) do
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
+  create_table "faculty", force: :cascade do |t|
+    t.string   "name"
+    t.string   "title"
+    t.string   "key_skills"
+    t.string   "linkedin_url"
+    t.string   "category"
+    t.boolean  "available_for_connect"
+    t.string   "availability"
+    t.string   "image"
+    t.integer  "sort_index"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
+
+  add_index "faculty", ["category"], name: "index_faculty_on_category", using: :btree
+
   create_table "features", force: :cascade do |t|
     t.string   "key"
     t.string   "value"

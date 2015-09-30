@@ -1,0 +1,21 @@
+.faculty-card
+  = image_tag member.image_url
+  .faculty-info
+    .faculty-name
+      = member.name
+    .faculty-title
+      = member.title
+    - if member.key_skills.present?
+      .faculty-key-skills
+        = member.key_skills
+    - if member.linkedin_url.present?
+      .faculty-links
+        = link_to member.linkedin_url, target: '_blank' do
+          i.fa.fa-linkedin
+    - if member.available_for_connect
+      .faculty-availability
+        span.badge data-toggle="tooltip" data-placement="top" title="#{member.availability}"
+          ' Available
+          i.fa.fa-question-circle
+        a.btn.btn-primary.btn-xs href="#{about_office_hours_url}" data-toggle="tooltip" data-placement="top" title="Schedule three days in advance by speaking to your SV.CO representative."
+          | Connect

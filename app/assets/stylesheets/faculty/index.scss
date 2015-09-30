@@ -60,9 +60,9 @@
       .faculty-card {
         background-color: white;
         width: 200px;
-        height: 340px;
         border-bottom: 2px solid $faculty-card-bottom-border;
         margin: 0 22px 45px;
+        padding-bottom: 15px;
 
         img {
           width: 200px;
@@ -98,10 +98,15 @@
           }
         }
       }
-
-      .visiting-faculty {
-        height: 370px;
-      }
     }
+  }
+}
+
+.faculty-availability {
+  margin-top: 6px;
+
+  span.badge {
+    background-color: $theme-dark-green;
+    margin-right: 6px;
   }
 }

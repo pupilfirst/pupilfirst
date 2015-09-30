@@ -2,10 +2,6 @@
   = link_to 'Login', new_session_path(resource_name), class: 'btn btn-default btn-flat'
   | &nbsp;
 
-- if devise_mapping.registerable? && controller_name != 'registrations'
-  = link_to 'Register', new_registration_path(resource_name), class: 'btn btn-default btn-flat'
-  | &nbsp;
-
 - if devise_mapping.confirmable? && controller_name != 'confirmations'
   = link_to "Didn't receive confirmation instructions?", new_confirmation_path(resource_name), class: 'btn btn-default btn-flat'
   | &nbsp;

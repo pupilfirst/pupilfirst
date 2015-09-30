@@ -2,7 +2,6 @@ section.timeline-events
   .timeline-event-heading
     h1 Latest Verified Events
     = image_tag 'home/line.jpg'
-    p Latest timeline entries from our startups ... verified by SV.CO!
 
   #timeline-events-container
     - timeline_events = TimelineEvent.ready_for_showcase.limit(4)
@@ -17,8 +16,8 @@ section.timeline-events
         .timeline-event-bottom.flex-center
           a.timeline-event-link.btn.btn-default href="#{startup_url(event.startup, anchor:"event-#{event.id}")}"  target="_blank"
             | View on Timeline
-    .timeline-event-message
-      p Every startup gets a Timeline where they can submit events that are verified by SV.CO Faculty.
+  .timeline-event-message
+    p Every startup gets a Timeline where they can submit events that are verified by SV.CO Faculty.
 
-      a.btn.btn-flat.btn-playbook-timeline href="http://playbook.sv.co/3-verified-timelines.html" type="button"
-        | Read More
+    a.btn.btn-flat.btn-playbook-timeline href="http://playbook.sv.co/3-verified-timelines.html" type="button"
+      | Read More

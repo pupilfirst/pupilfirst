@@ -39,7 +39,7 @@ h1.page-header.header-light
           - startups_without_karma.each do |startup|
             tr
               td = rank
-              td = link_to startup.name, startup_path(startup)
+              td = link_to "#{startup.product_name} #{startup.name.present? ? "(#{startup.name})" : ''}", startup_path(startup)
               td = startup.admin.try(:fullname)
 
   .col-md-3.col-md-offset-1.col-sm-4

@@ -34,8 +34,8 @@ class TimelineEvent < ActiveRecord::Base
   scope :end_of_iteration_events, -> { where(timeline_event_type: TimelineEventType.end_iteration) }
   scope :batched, -> { joins(:startup).where.not(startups: { batch: nil }) }
   scope :verified, -> { where(verified_status: VERIFIED_STATUS_VERIFIED) }
-  scope :has_image, -> { where.not(image: nil)}
-  scope :from_approved_startups, -> { joins(:startup).where(startups: {approval_status: Startup::APPROVAL_STATUS_APPROVED}) }
+  scope :has_image, -> { where.not(image: nil) }
+  scope :from_approved_startups, -> { joins(:startup).where(startups: { approval_status: Startup::APPROVAL_STATUS_APPROVED }) }
   scope :ready_for_showcase, -> { from_approved_startups.batched.has_image }
 
   validate :link_url_format

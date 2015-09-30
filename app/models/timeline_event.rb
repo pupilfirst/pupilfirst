@@ -124,16 +124,19 @@ class TimelineEvent < ActiveRecord::Base
 
   def add_link_for_new_deck!
     return unless timeline_event_type.new_deck? && links[0].try(:[], :url).present?
+    return if links[0].try(:[], :private)
     startup.update!(presentation_link: links[0][:url])
   end
 
   def add_link_for_new_wireframe!
     return unless timeline_event_type.new_wireframe? && links[0].try(:[], :url).present?
+    return if links[0].try(:[], :private)
     startup.update!(wireframe_link: links[0][:url])
   end
 
   def add_link_for_new_prototype!
     return unless timeline_event_type.new_prototype? && links[0].try(:[], :url).present?
+    return if links[0].try(:[], :private)
     startup.update!(prototype_link: links[0][:url])
   end
 end

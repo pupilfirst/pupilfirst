@@ -24,7 +24,7 @@ h1.page-header.header-light
         thead
           tr
             th Rank
-            th Startup Name
+            th Product
             th Team Lead
         tbody
           - startups_for_leaderboard.each_with_index do |rank_array, index|
@@ -32,7 +32,7 @@ h1.page-header.header-light
             - startup = Startup.find(startup_id)
             tr
               td = rank
-              td = link_to startup.name, startup_path(startup)
+              td = link_to "#{startup.product_name} #{startup.name.present? ? "(#{startup.name})" : ''}", startup_path(startup)
               td = startup.admin.try(:fullname)
 
           - startups_without_karma, rank = startups_without_karma_and_rank

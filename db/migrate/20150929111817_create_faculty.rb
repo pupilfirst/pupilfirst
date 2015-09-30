@@ -8,6 +8,7 @@ class CreateFaculty < ActiveRecord::Migration
       t.string :category
       t.boolean :available_for_connect
       t.string :availability
+      t.string :image
 
       t.timestamps null: false
     end

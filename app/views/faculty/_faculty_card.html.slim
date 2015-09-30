@@ -1,0 +1,14 @@
+.faculty-card
+  = image_tag member.image_url
+  .faculty-info
+    .faculty-name
+      = member.name
+    .faculty-title
+      = member.title
+    - if member.key_skills.present?
+      .faculty-key-skills
+        = member.key_skills
+    .faculty-links
+      - if member.linkedin_url.present?
+        = link_to member.linkedin_url, target: '_blank' do
+          i.fa.fa-linkedin

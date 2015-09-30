@@ -65,4 +65,8 @@ class FacultyController < ApplicationController
     @faculty = FACULTY
     @skip_container = true
   end
+
+  def dynamic_index
+    @skip_container = true
+  end
 end

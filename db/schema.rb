@@ -107,9 +107,12 @@ ActiveRecord::Schema.define(version: 20150929140558) do
     t.boolean  "available_for_connect"
     t.string   "availability"
     t.string   "image"
+    t.integer  "sort_index"
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
   end
+
+  add_index "faculty", ["category"], name: "index_faculty_on_category", using: :btree
 
   create_table "features", force: :cascade do |t|
     t.string   "key"

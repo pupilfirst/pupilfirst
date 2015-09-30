@@ -9,8 +9,11 @@ class CreateFaculty < ActiveRecord::Migration
       t.boolean :available_for_connect
       t.string :availability
       t.string :image
+      t.integer :sort_index
 
       t.timestamps null: false
     end
+
+    add_index :faculty, :category
   end
 end

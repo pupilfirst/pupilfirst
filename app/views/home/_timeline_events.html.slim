@@ -1,0 +1,21 @@
+section.timeline-events
+  .timeline-event-heading
+    h1 Startup Updates!
+    = image_tag 'home/line.jpg'
+    p Latest timeline entries from our startups
+
+  #timeline-events-container
+    - timeline_events = TimelineEvent.ready_for_showcase.limit(4)
+    - timeline_events.each do |event|
+      .timeline-event
+        .timeline-event-top
+          a.timeline-event-image-link href="#"
+            img.timeline-event-image src="#{event.image_url}"
+          .timeline-event-body
+            a.timeline-event-title-link href="#"
+              h5.timeline-event-title #{event.startup.product_name}: #{event.timeline_event_type.title}
+            img.line src="#{image_url 'home/line2.png'}" width="100%"
+            p.timeline-event-content #{event.description}
+        .timeline-event-bottom.flex-center
+          a.timeline-event-link.btn.btn-default href="#{startup_url(event.startup, anchor:"event-#{event.id}")}"  target="_blank"
+            | View on TimeLine

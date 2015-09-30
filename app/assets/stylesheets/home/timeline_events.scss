@@ -1,0 +1,67 @@
+@import 'variables';
+
+.timeline-events {
+  padding: 20px 0 60px;
+}
+
+.timeline-event-heading {
+  text-align: center;
+
+  h1 {
+    font-size: 48px;
+    font-weight: 200;
+  }
+
+  p {
+    color: $dark-grey-text;
+    font-size: 15px;
+    padding-top: 10px;
+  }
+}
+
+#timeline-events-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.timeline-event {
+  border: 1px solid $grey-border;
+  margin: 20px 15px 0 0;
+  width: 270px;
+}
+
+.timeline-event-top {
+  height: 400px;
+}
+
+.timeline-event-image {
+  width: 100%;
+}
+
+.timeline-event-body {
+  padding: 0 15px;
+  //font-family: 'Roboto', sans-serif;
+
+  h5 {
+    color: black;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 26px;
+    margin-bottom: 0;
+  }
+
+  p {
+    color: $dark-grey-text;
+    font-size: 14px;
+    line-height: 24px;
+    margin-top: 5px;
+  }
+}
+
+.timeline-event-bottom {
+  padding: 0 15px 10px 0;
+}
+
+
+

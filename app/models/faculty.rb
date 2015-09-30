@@ -13,6 +13,14 @@ class Faculty < ActiveRecord::Base
   end
 
   validates_inclusion_of :category, in: valid_categories
+  validate :availability_check
+
+  # When available_for_connect is set, availability must be mentioned.
+  def availability_check
+    return unless available_for_connect
+    return unless availability.blank?
+    errors.add(:availability, 'must be set to mark faculty member as available')
+  end
 
   scope :team, -> { where(category: CATEGORY_TEAM).order('sort_index ASC') }
   scope :visiting_faculty, -> { where(category: CATEGORY_VISITING_FACULTY).order('sort_index ASC') }

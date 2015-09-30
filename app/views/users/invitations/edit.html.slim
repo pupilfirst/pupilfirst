@@ -1,43 +1,15 @@
-h3= t 'devise.invitations.edit.header'
-= simple_form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => { :method => :put, :class => "form-horizontal" } do |f|
+= simple_form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean, file: :horizontal_file_input } do |f|
+  legend.margin-top-20 Set Name and Password
+
   = f.hidden_field :invitation_token
-  - if f.error_notification
-    p style="color:#b94a48;" Error (please review the problems below)
+  = f.error_notification
 
-  .form-inputs
-    = f.input :avatar, :label => "Profile pic"
-    = f.input :salutation, collection: ['Mr', 'Miss', 'Mrs'], required: true
-    = f.input :first_name, :required => true
-    = f.input :last_name, :required => true
-    = f.input :email, :required => true, :autofocus => true
-    = f.input :born_on, as: :custom_datepicker, start_year: Date.today.year - 100, required: true
-    = f.input :password, :required => true
-    = f.input :password_confirmation, :required => true
-    #is_student.optional.checkbox
-      = f.input :is_student, as: :boolean, label: "Are you a student?"
-      .content
-        / = f.input :university, collection: {"Calicut University"=>"Calicut University","CUSAT"=>"CUSAT","Kannur University"=>"Kannur University","M.G University"=>"M.G University","University of Kerala"=>"University of Kerala", "Other"=>"Other"}
-        = f.input :college, collection: College.all(order: 'name'), prompt: "Select your college"
-        = f.input :course, collection: {"Polymer Engineering" => "Polymer Engineering", "Mechanical Engineering (production)" => "Mechanical Engineering (production)", "Mechanical (Automobile)" => "Mechanical (Automobile)", "Information Technology" => "Information Technology", "Computer engineering" => "Computer engineering", "Electronics Engineering" => "Electronics Engineering", "Bio Medical Engineering" => "Bio Medical Engineering", "Instrumentation and Control Engineering" => "Instrumentation and Control Engineering", "Electronics and Instrumentation" => "Electronics and Instrumentation", "Production Engineering" => "Production Engineering", "Production cum Plant Engineering" => "Production cum Plant Engineering", "Industrial Engineering" => "Industrial Engineering", "Architecture" => "Architecture", "Chemical Engineering" => "Chemical Engineering", "Electronics and Communication Engineering" => "Electronics and Communication Engineering", "Computer Science and Engineering" => "Computer Science and Engineering", "Applied Electronics and Instrumentation Engineering" => "Applied Electronics and Instrumentation Engineering", "Electrical and Electronics Engineering" => "Electrical and Electronics Engineering", "Mechanical Engineering" => "Mechanical Engineering", "Civil Engineering" => "Civil Engineering", "Other" => "Other"}, input_html:{"data-live-search"=>"true"}
-        = f.input :semester, collection: {"1st"=>"1st","2nd"=>"2nd","3rd"=>"3rd","4th"=>"4th","5th"=>"5th","6th"=>"6th","7th"=>"7th","8th"=>"8th"}
-    - if resource.startup
-      = f.input :accept_startup, label: "Link to #{resource.startup.name}", as: :boolean, :required => true
+  = f.input :first_name, :required => true
+  = f.input :last_name, :required => true
+  = f.input :password, label: 'New password', autocomplete: 'off', required: true
+  = f.input :password_confirmation, label: 'Confirm new password', required: true
 
-  .signin-pad
-    = f.button :submit, "Sign up", :class=>'btn btn-success'
+  .form-group
+    .col-sm-offset-3.col-sm-10
+      = f.button :submit, 'Sign Me Up!', class: 'btn btn-primary btn-flat'
 
-javascript:
-  $(function(){
-    $(".custom_datepicker_selector").datepicker()
-    student_div = $("#is_student.optional")
-    $(".content", student_div).hide()
-    $("input:checkbox", student_div).click(function() {
-      var $this = $(this);
-      if ($this.is(':checked')) {
-        $(".content",student_div).show()
-      } else {
-        $(".content",student_div).hide()
-      }
-    });
-
-  });

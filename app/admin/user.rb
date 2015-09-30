@@ -26,10 +26,6 @@ ActiveAdmin.register User do
     end
   end
 
-  index do
-    h1 'something'
-  end
-
   member_action :remove_from_startup, method: :post do
     user = User.find params[:id]
     user.remove_from_startup!
@@ -118,6 +114,24 @@ ActiveAdmin.register User do
 
   action_item :public_slack_messages, only: :show, if: proc { User.find(params[:id]).slack_username.present? } do
     link_to 'Public Slack Messages', admin_public_slack_messages_path(q: { user_id_eq: params[:id] })
+  end
+
+  action_item :new_invite, only: :index do
+    link_to 'Send New Invite', invite_form_admin_users_path
+  end
+
+  collection_action :invite_form do
+  end
+
+  collection_action :send_invite, method: :post do
+    email = params[:user][:email]
+    if email =~ /@/ && User.invite!(email: email)
+      flash.now[:success] = 'Invitation successfully sent!'
+      redirect_to action: :index
+    else
+      flash.now[:error] = 'Error in sending invitation! Please ensure the Email address is valid and try again.'
+      redirect_to :back
+    end
   end
 
   # Customize the filter options to reduce the size.

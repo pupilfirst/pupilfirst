@@ -62,5 +62,31 @@
   padding: 0 15px 10px 0;
 }
 
+.timeline-event-message {
+  color: #464545;
+  font-size: 18px;
+  font-weight: 300;
+  opacity: .9;
+  padding-top: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.btn-playbook-timeline {
+  background: $theme-light-green;
+  border: solid 1px white;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 200ms cubic-bezier(.25, .25, .75, .75);
+
+
+  &:hover {
+    background-color: white;
+    border: solid 1px black;
+    color: black; }
+}
+
 
 

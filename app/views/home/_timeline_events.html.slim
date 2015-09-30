@@ -16,4 +16,9 @@ section.timeline-events
             p.timeline-event-content #{event.description.truncate(140)}
         .timeline-event-bottom.flex-center
           a.timeline-event-link.btn.btn-default href="#{startup_url(event.startup, anchor:"event-#{event.id}")}"  target="_blank"
-            | View on TimeLine
+            | View on Timeline
+    .timeline-event-message
+      p Every startup gets a Timeline where they can submit events that are verified by SV.CO Faculty.
+
+      a.btn.btn-flat.btn-playbook-timeline href="http://playbook.sv.co/3-verified-timelines.html" type="button"
+        | Read More

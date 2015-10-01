@@ -476,7 +476,8 @@ h1.product-name {
   font-size: 14px;
   line-height: 25px;
   color: $dark-grey-text;
-  padding-bottom: 5px; }
+  padding-bottom: 5px;
+  word-wrap: break-word; }
 
 .timeline-footer {
   margin-top: 12px;

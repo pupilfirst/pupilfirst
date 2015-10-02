@@ -1,5 +1,5 @@
 $ ->
-  $('#startup_feedback_startup_id').select2({ placeholder : 'Select Startup' })
+  $('#startup_feedback_startup_id').select2({ placeholder : 'Select Product' })
   $('#startup_feedback_startup_id').change(showStartupFeedback)
   showStartupFeedback()
 

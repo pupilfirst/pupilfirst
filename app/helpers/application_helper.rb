@@ -24,7 +24,7 @@ module ApplicationHelper
       '<em>No Role Selected</em>'.html_safe
     else
       roles.map do |role|
-        t("user.#{role}")
+        t("role.#{role}")
       end.join ', '
     end
   end

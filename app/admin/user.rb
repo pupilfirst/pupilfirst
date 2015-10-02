@@ -65,7 +65,7 @@ ActiveAdmin.register User do
 
       row :roles do |user|
         user.roles.map do |role|
-          t("user.#{role}")
+          t("role.#{role}")
         end.join ', '
       end
 

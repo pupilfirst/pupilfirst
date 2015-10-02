@@ -20,12 +20,18 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  user:
+  role:
+    team: Team
     product: Product
     marketing: 'Marketing & Sales'
     engineering: Engineering
     design: Design
     governance: Governance
+  target:
+    status:
+      pending: Pending
+      in_progress: 'In Progress'
+      completed: Completed
   datepicker:
     dformat: '%d/%m/%Y'        # display format of the date (this is the default, can be ommited)
     pformat: 'DD/MM/YYYY'      # picking format of the date (this is the default, can be ommited)

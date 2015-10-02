@@ -58,6 +58,7 @@
       justify-content: center;
 
       .faculty-card {
+        position: relative;
         background-color: white;
         width: 200px;
         border-bottom: 2px solid $faculty-card-bottom-border;
@@ -102,11 +103,18 @@
   }
 }
 
-.faculty-availability {
-  margin-top: 6px;
-
-  span.badge {
-    background-color: $theme-dark-green;
-    margin-right: 6px;
-  }
+.available-marker {
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  top: 202px;
+  left: 31px;
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 20px;
+  border: 1px solid $theme-dark-green;
+  background-color: $theme-dark-green;
+  color: whitesmoke;
+  font-size: 85%;
 }
+
+.connect-link { margin-top: 8px; }

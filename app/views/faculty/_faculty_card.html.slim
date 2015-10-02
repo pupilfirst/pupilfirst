@@ -13,9 +13,8 @@
         = link_to member.linkedin_url, target: '_blank' do
           i.fa.fa-linkedin
     - if member.available_for_connect
-      .faculty-availability
-        span.badge data-toggle="tooltip" data-placement="top" title="#{member.availability}"
-          ' Available
-          i.fa.fa-question-circle
-        a.btn.btn-primary.btn-xs href="#{about_office_hours_url}" data-toggle="tooltip" data-placement="top" title="Schedule three days in advance by speaking to your SV.CO representative."
-          | Connect
+      .available-marker data-toggle="tooltip" data-placement="top" title="#{member.availability}"
+        i.fa.fa-check-circle
+        | &nbsp;Available for Connect
+      a.btn.btn-primary.btn-sm.connect-link href="#{about_office_hours_url}" data-toggle="tooltip" data-placement="top" title="Schedule three days in advance by speaking to your SV.CO representative."
+        | Connect

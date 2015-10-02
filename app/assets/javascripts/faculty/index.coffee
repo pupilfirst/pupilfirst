@@ -1,6 +1,5 @@
 setupAvailabilityTooltips = ->
-  facultyAvailability = $('.faculty-availability')
-  facultyAvailability.find('span.badge').tooltip()
-  facultyAvailability.find('a').tooltip()
+  $('.available-marker').tooltip()
+  $('.connect-link').tooltip()
 
 $(setupAvailabilityTooltips)

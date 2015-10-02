@@ -112,7 +112,10 @@ ActiveAdmin.register TimelineEvent do
 
   form do |f|
     f.inputs 'Event Details' do
-      f.input :startup, include_blank: false, label: 'Product', member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}"}
+      f.input :startup,
+        include_blank: false,
+        label: 'Product',
+        member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }
       f.input :timeline_event_type, include_blank: false
       f.input :description
       f.input :image

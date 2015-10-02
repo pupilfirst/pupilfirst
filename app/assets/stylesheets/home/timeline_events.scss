@@ -26,17 +26,22 @@
 }
 
 .timeline-event {
+  position: relative;
   border: 1px solid $grey-border;
   margin: 20px 15px 0 0;
   width: 304px;
 }
 
 .timeline-event-top {
-  height: 400px;
+  min-height: 400px;
 }
 
 .timeline-event-image {
   width: 100%;
+  height: 200px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
 }
 
 .timeline-event-body {
@@ -58,8 +63,11 @@
   }
 }
 
-.timeline-event-bottom {
-  padding: 0 15px 10px 0;
+a.timeline-event-link {
+  position: absolute;
+  width: 124px;
+  bottom: 10px;
+  left: 90px;
 }
 
 .timeline-event-message {

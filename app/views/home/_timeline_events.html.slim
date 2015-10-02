@@ -8,14 +8,13 @@ section.timeline-events
     - timeline_events.each do |event|
       .timeline-event
         .timeline-event-top
-          img.timeline-event-image src="#{event.image_url}"
+          .timeline-event-image style="background-image: url(#{event.image_url});"
           .timeline-event-body
             h5.timeline-event-title #{event.startup.product_name}: #{event.timeline_event_type.title}
             img.line src="#{image_url 'home/line2.png'}" width="100%"
-            p.timeline-event-content #{event.description.truncate(140)}
-        .timeline-event-bottom.flex-center
-          a.timeline-event-link.btn.btn-default href="#{startup_url(event.startup, anchor:"event-#{event.id}")}"  target="_blank"
-            | View on Timeline
+            p.timeline-event-content #{event.description.truncate(140, separator: ' ')}
+        a.timeline-event-link.btn.btn-default href="#{startup_url(event.startup, anchor:"event-#{event.id}")}"  target="_blank"
+          | View on Timeline
   .timeline-event-message
     p Every startup gets a Timeline where they can submit events that are verified by SV.CO Faculty.
 

@@ -3,7 +3,7 @@ h2 Startup Karma
 table.index_table
   thead
     tr
-      th Name
+      th Product
       th.sorted-desc.sortable
         a.not-a-link href='#' Karma Points
   tbody
@@ -11,7 +11,7 @@ table.index_table
       - startup_id, points = points_array
       - startup = Startup.find(startup_id)
       tr class="#{(idx + 1).even? ? 'even' : 'odd'}"
-        td = link_to startup.name, admin_startup_path(startup)
+        td = link_to "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}", admin_startup_path(startup)
         td = points
 
 h2 Founder Karma

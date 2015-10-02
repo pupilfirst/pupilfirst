@@ -139,7 +139,7 @@ ActiveAdmin.register Startup do
 
     respond_to do |format|
       format.json do
-        render json: { feedback: feedback, startup_name: startup.name }
+        render json: { feedback: feedback, product_name: startup.product_name }
       end
     end
   end

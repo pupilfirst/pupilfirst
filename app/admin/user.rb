@@ -17,7 +17,23 @@ ActiveAdmin.register User do
     actions
     column :email
     column :fullname
-    column :startup
+
+    column :product_name do |user|
+      if user.startup.present?
+        a href: admin_startup_path(user.startup) do
+          span do
+            user.startup.try(:product_name)
+          end
+
+          if user.startup.name.present?
+            span do
+              " (#{user.startup.name})"
+            end
+          end
+        end
+      end
+    end
+
     column :university
 
     column :karma_points do |user|
@@ -53,14 +69,24 @@ ActiveAdmin.register User do
         end.join ', '
       end
 
-      row :startup do |f|
-        if f.startup
-          span do
-            link_to f.startup.name, admin_startup_path(f.startup)
-          end
+      row :product_name do |user|
+        if user.startup.present?
+          if user.startup.present?
+            a href: admin_startup_path(user.startup) do
+              span do
+                user.startup.try(:product_name)
+              end
 
-          span class: 'wrap-with-paranthesis' do
-            link_to 'Remove from Startup', remove_from_startup_admin_user_path, method: :post, data: { confirm: 'Are you sure?' }
+              if user.startup.name.present?
+                span do
+                  " (#{user.startup.name})"
+                end
+              end
+            end
+
+            span class: 'wrap-with-paranthesis' do
+              link_to 'Remove from Startup', remove_from_startup_admin_user_path, method: :post, data: { confirm: 'Are you sure?' }
+            end
           end
         end
       end

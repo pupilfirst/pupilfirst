@@ -13,7 +13,7 @@ showStartupFeedback = ->
 onSuccess = (data, status) ->
   if data.feedback
     $("#feedback-table").show()
-    $("#feedback-list-title").html("Previous Feedback for #{data.startup_name}")
+    $("#feedback-list-title").html("Previous Feedback for #{data.product_name}")
     $("#feedback-table-body").html("")
     $.each(data.feedback, appendRow)
     $( "tr:odd" ).addClass("odd")

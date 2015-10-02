@@ -11,13 +11,27 @@ ActiveAdmin.register StartupFeedback do
 
   controller do
     def scoped_collection
-      super.includes :startup
+      super.includes :startup, :author
     end
   end
 
   index title: 'Startup Feedback' do
     selectable_column
-    column :startup
+    column :product do |startup_feedback|
+      startup = startup_feedback.startup
+
+      if startup
+        a href: admin_startup_path(startup) do
+          span startup.product_name
+
+          if startup.name.present?
+            span class: 'wrap-with-paranthesis' do
+              startup.name
+            end
+          end
+        end
+      end
+    end
 
     column :feedback do |startup_feedback|
       pre class: 'max-width-pre' do
@@ -50,7 +64,21 @@ ActiveAdmin.register StartupFeedback do
 
   show do
     attributes_table do
-      row :startup
+      row :product do |startup_feedback|
+        startup = startup_feedback.startup
+
+        if startup
+          a href: admin_startup_path(startup) do
+            span startup.product_name
+
+            if startup.name.present?
+              span class: 'wrap-with-paranthesis' do
+                startup.name
+              end
+            end
+          end
+        end
+      end
 
       row :feedback do |startup_feedback|
         pre class: 'max-width-pre' do

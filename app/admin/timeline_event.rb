@@ -13,13 +13,31 @@ ActiveAdmin.register TimelineEvent do
       params[:order] = 'updated_at_desc'
       super
     end
+
+    def scoped_collection
+      super.includes :startup, :timeline_event_type
+    end
   end
 
   index do
     selectable_column
     actions
     column :timeline_event_type
-    column :startup
+
+    column :product do |timeline_event|
+      startup = timeline_event.startup
+
+      a href: admin_startup_path(startup) do
+        span startup.product_name
+
+        if startup.name.present?
+          span class: 'wrap-with-paranthesis' do
+            startup.name
+          end
+        end
+      end
+    end
+
     column :event_on
 
     column :verified_status do |timeline_event|
@@ -94,7 +112,7 @@ ActiveAdmin.register TimelineEvent do
 
   form do |f|
     f.inputs 'Event Details' do
-      f.input :startup, include_blank: false
+      f.input :startup, include_blank: false, label: 'Product', member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}"}
       f.input :timeline_event_type, include_blank: false
       f.input :description
       f.input :image
@@ -107,7 +125,20 @@ ActiveAdmin.register TimelineEvent do
 
   show do |timeline_event|
     attributes_table do
-      row :startup
+      row :product do |startup|
+        startup = timeline_event.startup
+
+        a href: admin_startup_path(startup) do
+          span startup.product_name
+
+          if startup.name.present?
+            span class: 'wrap-with-paranthesis' do
+              startup.name
+            end
+          end
+        end
+      end
+
       row :iteration
       row :timeline_event_type
       row :description

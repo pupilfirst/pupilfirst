@@ -2,7 +2,7 @@
   = f.inputs
     legend
       span Feedback details
-    = f.input :startup, collection: Startup.where.not(name: nil)
+    = f.input :startup, collection: Startup.where.not(product_name: nil), member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }, label: 'Product'
     = f.input :feedback
     = f.input :reference_url
     = f.input :author, include_blank: (@startup_feedback.persisted? ? false : 'Leave this be to assign yourself.')

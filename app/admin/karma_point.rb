@@ -21,8 +21,8 @@ ActiveAdmin.register KarmaPoint do
       end
 
       if karma_point.startup
-        span do
-          " (#{link_to karma_point.startup.name, karma_point.startup})".html_safe
+        span class: 'wrap-with-paranthesis' do
+          link_to karma_point.startup.product_name, karma_point.startup
         end
       end
     end
@@ -39,7 +39,7 @@ ActiveAdmin.register KarmaPoint do
       f.input(
         :user,
         collection: User.founders,
-        member_label: proc { |u| "#{u.fullname}#{u.roles.present? ? " (#{founder_roles(u.roles)})" : ''} - #{u.startup.name}" },
+        member_label: proc { |u| "#{u.fullname}#{u.roles.present? ? " (#{founder_roles(u.roles)})" : ''} - #{u.startup.product_name}" },
         input_html: { style: 'width: calc(80% - 22px);' }
       )
 

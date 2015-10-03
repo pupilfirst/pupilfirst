@@ -8,20 +8,17 @@
       member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}"},
       include_blank: false
 
+    = f.input :timeline_event_type, include_blank: false
+
     = f.input :role,
       as: :select,
       collection: Target.valid_roles,
       include_blank: false,
       member_label: proc { |role| t("role.#{role}") }
 
-    = f.input :status,
-      as: :select,
-      collection: Target.valid_statuses,
-      member_label: proc { |status| t("target.status.#{status}") },
-      include_blank: false
-
     = f.input :title
     = f.input :short_description
     = f.input :resource_url
+    = f.input :assigner, include_blank: (@target.persisted? ? false : 'Leave this be to assign yourself.')
 
   = f.submit

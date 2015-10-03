@@ -53,7 +53,7 @@
   .row
     #data-points
       .col-md-4.col-md-push-8
-        - if current_user && @startup.founder?(current_user) && feature_active?(:targets)
+        - if current_user && @startup.founder?(current_user) && feature_active?(:targets) && @startup.targets.present?
           #targets
             h3.targets-title Targets
             hr
@@ -73,9 +73,13 @@
                             | #{target.title}
                         .target-description
                           ' #{target.short_description}
-                          = link_to target.resource_url, class: 'learn-more', target: '_blank' do
-                            i.fa.fa-external-link-square
-                            | &nbsp;LEARN MORE
+                          .learn-more
+                            = link_to target.resource_url, class: 'btn btn-primary btn-sm pull-right', target: '_blank' do
+                              i.fa.fa-external-link-square
+                              | &nbsp; LEARN MORE
+                            .assigner
+                              em &mdash; Assigned by #{target.assigner.fullname}
+                            .clearfix
 
         .data-icons
           .row

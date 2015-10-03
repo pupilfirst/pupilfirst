@@ -1,7 +1,8 @@
 ActiveAdmin.register Target do
   menu parent: 'Startups'
 
-  permit_params :startup_id, :role, :status, :title, :short_description, :resource_url
+  permit_params :startup_id, :assigner_id, :timeline_event_type_id, :role, :status, :title, :short_description,
+    :resource_url
 
   preserve_default_filters!
   filter :startup,
@@ -10,7 +11,10 @@ ActiveAdmin.register Target do
     member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : 's'}" }
 
   filter :role, as: :select, collection: Target.valid_roles
-  filter :status, as: :select, collection: Target.valid_statuses
+
+  before_create do |target|
+    target.assigner = current_admin_user if target.assigner.blank?
+  end
 
   index do
     selectable_column
@@ -38,6 +42,7 @@ ActiveAdmin.register Target do
     end
 
     column :title
+    column :assigner
     actions
   end
 
@@ -66,6 +71,8 @@ ActiveAdmin.register Target do
       end
 
       row :title
+      row :assigner
+      row :timeline_event_type
       row :short_description
       row :resource_url
       row :created_at

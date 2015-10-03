@@ -3,7 +3,8 @@ class CreateTargets < ActiveRecord::Migration
     create_table :targets do |t|
       t.string :role
       t.references :startup, index: true
-      t.string :status
+      t.references :assigner, index: true # AdminUser
+      t.references :timeline_event_type, index: true
       t.string :title
       t.string :short_description
       t.string :resource_url

@@ -4,6 +4,7 @@ class AdminUser < ActiveRecord::Base
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
   has_many :startup_feedback, foreign_key: 'author_id'
+  has_many :targets, dependent: :restrict_with_exception
 
   TYPE_SUPERADMIN = 'superadmin'
   TYPE_TIMELINE_REVIEWER = 'timeline_reviewer'

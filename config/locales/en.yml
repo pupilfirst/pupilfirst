@@ -30,7 +30,7 @@ en:
   target:
     status:
       pending: Pending
-      in_progress: 'In Progress'
+      in_progress: 'In-Progress'
       completed: Completed
   datepicker:
     dformat: '%d/%m/%Y'        # display format of the date (this is the default, can be ommited)

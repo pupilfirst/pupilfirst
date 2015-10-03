@@ -55,12 +55,8 @@ h1.product-name {
     }
   }
 
-  h3 {
-    font-size: 120%;
-    margin-bottom: 0;
-  }
-
   hr { margin: 10px 0; }
+  h3 { font-size: 120%; }
 
   .data-content {
     font-size: 18px;
@@ -127,6 +123,8 @@ h1.product-name {
     }
   }
 }
+
+h3.founders-title { margin-bottom: 0; }
 
 .timeline-builder {
   border: 1px solid lightgrey;
@@ -249,6 +247,7 @@ h1.product-name {
 
 // Datepicker customizations
 .dtpicker-buttonCont .dtpicker-button { background: $theme-light-green; }
+
 .dtpicker-content { max-width: 360px; }
 
 .dtpicker-header {
@@ -281,6 +280,38 @@ h1.product-name {
       font-size: 200%;
     }
   }
+}
+
+#targets { margin-bottom: 25px; }
+
+h3.targets-title { margin: 0 0 10px 0; }
+
+.target-container {
+  background-color: #f7f7f7;
+  box-shadow: 2px 2px 2px #d2d2d2;
+  margin-bottom: 15px;
+
+  h4 {
+    margin: 0;
+    font-size: 110%;
+  }
+}
+
+.target-title {
+  background-color: #EFEFEF;
+  padding: 8px 10px;
+
+  .labels {
+    float: right;
+    margin: -4px -5px 10px 10px;
+  }
+}
+
+.target-description {
+  margin-bottom: 10px;
+  padding: 10px;
+
+  .learn-more { display: inline-block; }
 }
 
 //.

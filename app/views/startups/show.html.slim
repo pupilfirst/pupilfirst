@@ -53,6 +53,30 @@
   .row
     #data-points
       .col-md-4.col-md-push-8
+        - if current_user && @startup.founder?(current_user) && feature_active?(:targets)
+          #targets
+            h3.targets-title Targets
+            hr
+            .row
+              - Target.valid_roles.each do |role|
+                - targets_for_role = @startup.targets.where(role: role)
+                - if targets_for_role.present?
+                  .col-sm-6.col-md-12
+                    - targets_for_role.each do |target|
+                      .target-container
+                        .target-title
+                          .labels.text-uppercase
+                            span.label.label-primary #{t("role.#{role}")}
+                            | &nbsp;
+                            span.label.label-default #{t("target.status.#{target.status}")}
+                          h4
+                            | #{target.title}
+                        .target-description
+                          ' #{target.short_description}
+                          = link_to target.resource_url, class: 'learn-more', target: '_blank' do
+                            i.fa.fa-external-link-square
+                            | &nbsp;LEARN MORE
+
         .data-icons
           .row
             - if @startup.categories.present?
@@ -146,7 +170,7 @@
         .row
           - if @startup.founders.present?
             .col-sm-6.col-md-12
-              h3 Founders
+              h3.founders-title Founders
               hr
               - @startup.founders.each do |founder|
                 .data-founder

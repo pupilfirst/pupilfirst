@@ -4,12 +4,11 @@
     .list-group
       a.list-group-item href="#{about_transparency_path}" Founding Agreements
       a.list-group-item href="#{about_transparency_path}#rtis-received" RTIs Received
-  h4.header-light Contact
+  h4.header-light Press & Media
   .list-group
+    a.list-group-item href="#{about_media_kit_path}" Media Kit
     a.list-group-item href="#{about_slack_path}" Slack
     a.list-group-item href="mailto:help@sv.co" Email help@sv.co
-    - if feature_active? :about_press_kit
-      a.list-group-item href="#{about_media_kit_path}" Media Kit
   h4.header-light Startups
   .list-group
     a.list-group-item href="#{about_leaderboard_path}" Leaderboard

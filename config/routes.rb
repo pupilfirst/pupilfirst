@@ -64,7 +64,7 @@ Svapp::Application.routes.draw do
     get '/', action: 'index'
     get 'transparency'
     get 'slack'
-    get 'press-kit'
+    get 'media-kit'
     get 'leaderboard'
     get 'office-hours'
   end

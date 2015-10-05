@@ -15,4 +15,8 @@ class Target < ActiveRecord::Base
   validates_presence_of :startup_id, :assigner_id, :role, :title, :short_description, :status, :resource_url
   validates_inclusion_of :role, in: valid_roles
   validates_inclusion_of :status, in: valid_statuses
+
+  def pending?
+    status == 'pending'
+  end
 end

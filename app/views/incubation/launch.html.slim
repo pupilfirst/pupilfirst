@@ -46,12 +46,16 @@
                     - if @startup.admin?(current_user)
                       = button_to 'Remove', remove_founder_user_startup_path(current_user, founder_id: cofounder.id), method: :patch, class: 'btn btn-danger btn-xs', data: { confirm: 'Are you sure you want to remove this founder from your startup?' }
 
-        = simple_form_for :cofounder, url: add_cofounder_incubation_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
-          = f.input :email, placeholder: 'co-founder@yourstartup.com', label: "Co-founder's SV.CO ID"
+        - if @startup.founders.size < 5
+          = simple_form_for :cofounder, url: add_cofounder_incubation_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
+            = f.input :email, placeholder: 'co-founder@yourstartup.com', label: "Co-founder's SV.CO ID"
 
-          .form-group
-            .col-sm-offset-3.col-sm-10
-              = f.button :submit, 'Add as co-founder', class: 'btn btn-primary btn-flat'
+            .form-group
+              .col-sm-offset-3.col-sm-10
+                = f.button :submit, 'Add as co-founder', class: 'btn btn-primary btn-flat'
+        - else
+          .alert.alert-danger.col-sm-offset-3.col-sm-9
+            ' You have reached the maximum number of founders allowed!
 
         p <strong>Note:</strong> You can modify list of founders later, as well.
 

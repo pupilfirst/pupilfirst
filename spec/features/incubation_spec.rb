@@ -72,7 +72,7 @@ feature 'Incubation' do
     select startup_category_3.name, from: 'Categories'
     fill_in 'Team size', with: 1
     fill_in 'No. of women employees', with: 0
-    click_on 'Request Invite'
+    click_on 'Submit Application'
 
     expect(page).to have_text("That's it! You're done")
 
@@ -185,7 +185,7 @@ feature 'Incubation' do
       scenario 'User attempts to submit Startup profile with out-of-bound optional fields' do
         fill_in 'Team size', with: 0
         fill_in 'No. of women employees', with: -1
-        click_on 'Request Invite'
+        click_on 'Submit Application'
 
         expect(page.find('.startup_team_size')[:class]).to include('has-error')
         expect(page.find('.startup_women_employees')[:class]).to include('has-error')

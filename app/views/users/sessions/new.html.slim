@@ -1,3 +1,5 @@
+.alert.alert-warning.margin-top-20 role="alert" Looking to sign up? We're sorry! SV.CO is currently invite-only & in closed beta. We expect a wait time until <b>January 2016</b> when we'll send out invites next.
+
 = simple_form_for resource, as: resource_name, url: session_path(resource_name), html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_file_input, boolean: :horizontal_boolean } do |f|
   legend.margin-top-20 Login with your SV.CO ID!
 
@@ -22,4 +24,4 @@
     .col-sm-offset-3.col-sm-10
       = render 'users/shared/links'
 
-  .alert.alert-warning role="alert" Looking to sign up? We're sorry! SV.CO is currently invite-only & in closed beta.
+

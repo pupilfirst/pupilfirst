@@ -87,7 +87,7 @@ ActiveAdmin.register Target do
     f.inputs 'Target details' do
       f.input :startup,
         label: 'Product',
-        member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}"},
+        member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" },
         include_blank: false
 
       f.input :status,

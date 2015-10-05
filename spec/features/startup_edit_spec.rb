@@ -71,8 +71,20 @@ feature 'Startup Edit' do
       expect(page).to have_text('Only the team leader can delete a startup\'s profile')
     end
 
-    scenario 'Founder deletes his startup as startup_admin' do
+    scenario 'Founder looks to delete his approved startup as startup_admin' do
       # change startup admin to this user
+      startup.admin.update(startup_admin: false)
+      user.update(startup_admin: true)
+      startup.reload
+      user.reload
+
+      visit edit_user_startup_path(user)
+      expect(page).to have_text('To delete your startup timeline, contact your SV.CO representative.')
+    end
+
+    scenario 'Founder deletes his rejected startup as startup_admin' do
+      # change startup admin to this user
+      startup.update(approval_status: Startup::APPROVAL_STATUS_REJECTED)
       startup.admin.update(startup_admin: false)
       user.update(startup_admin: true)
       startup.reload

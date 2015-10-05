@@ -1,5 +1,14 @@
 h2 Startup Karma
 
+ul
+  - collection = startups_by_karma(params[:karma_points_filter])
+  li
+    strong Active teams:
+    | &nbsp;#{collection.count}
+  li
+    strong Inactive teams:
+    | &nbsp;#{Startup.not_dropped_out.batched.count - collection.count}
+
 table.index_table
   thead
     tr

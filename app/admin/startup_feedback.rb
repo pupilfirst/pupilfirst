@@ -4,6 +4,7 @@ ActiveAdmin.register StartupFeedback do
 
   preserve_default_filters!
   filter :author, collection: AdminUser.all
+  filter :startup_product_name, as: :select, collection: proc { Startup.all.pluck(:product_name).uniq }
 
   before_create do |startup_feedback|
     startup_feedback.author = current_admin_user if startup_feedback.author.blank?

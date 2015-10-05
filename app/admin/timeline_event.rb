@@ -4,6 +4,7 @@ ActiveAdmin.register TimelineEvent do
 
   preserve_default_filters!
   filter :startup_batch, as: :select, collection: (1..10)
+  filter :startup_product_name, as: :select, collection: proc { Startup.all.pluck(:product_name).uniq }
 
   scope :all
   scope :batched

@@ -2,8 +2,6 @@ ActiveAdmin.register PublicSlackMessage do
   menu parent: 'Users'
   actions :all, except: [:show, :new, :create, :edit, :update, :destroy]
 
-  index download_links: [:txt, :xml, :json]
-
   controller do
     def index
       index! do |format|
@@ -21,7 +19,7 @@ ActiveAdmin.register PublicSlackMessage do
     end
   end
 
-  index do
+  index download_links: [:txt, :json, :xml] do
     # selectable_column
 
     column :author do |message|

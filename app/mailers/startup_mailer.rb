@@ -47,6 +47,6 @@ class StartupMailer < ApplicationMailer
   def feedback_as_email(startup_feedback)
     @startup_feedback = startup_feedback
     send_to = startup_feedback.startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
-    mail(to: send_to, reply_to: startup_feedback.author.email, subject: 'Feedback from Team SV.')
+    mail(to: send_to, subject: 'Feedback from Team SV.')
   end
 end

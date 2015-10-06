@@ -17,6 +17,22 @@ ActiveAdmin.register Target do
     target.assigner = current_admin_user if target.assigner.blank?
   end
 
+  member_action :duplicate, method: :get do
+    target = Target.find(params[:id])
+
+    redirect_to(
+      new_admin_target_path(
+        target: target.attributes.slice(
+          'role', 'title', 'short_description', 'resource_url', 'completion_instructions', 'due_date'
+        )
+      )
+    )
+  end
+
+  action_item :duplicate, only: :show do
+    link_to 'Duplicate', duplicate_admin_target_path(id: params[:id])
+  end
+
   index do
     selectable_column
 
@@ -44,7 +60,10 @@ ActiveAdmin.register Target do
 
     column :title
     column :assigner
-    actions
+
+    actions defaults: true do |target|
+      link_to 'Duplicate', duplicate_admin_target_path(target)
+    end
   end
 
   show do
@@ -87,8 +106,7 @@ ActiveAdmin.register Target do
     f.inputs 'Target details' do
       f.input :startup,
         label: 'Product',
-        member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" },
-        include_blank: false
+        member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }
 
       f.input :status,
         as: :select,

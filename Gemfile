@@ -66,6 +66,8 @@ gem 'require_all' # Easier folder require-s.
 gem 'lita', require: false # Lita, Chat-ops bot.
 gem 'lita-slack', require: false # Lita adapter for Slack.
 
+gem 'gaffe' # Custom error pages. https://github.com/mirego/gaffe
+
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify' # Superb notifications library. http://sciactive.github.io/pnotify/

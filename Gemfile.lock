@@ -299,6 +299,8 @@ GEM
     formtastic_i18n (0.4.1)
     friendly_id (5.1.0)
       activerecord (>= 4.0.0)
+    gaffe (1.0.2)
+      rails (>= 3.2.0)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
     gravtastic (3.2.6)
@@ -590,6 +592,7 @@ DEPENDENCIES
   fog
   font-awesome-rails
   friendly_id
+  gaffe
   gravtastic
   jbuilder (~> 2.0)
   jquery-rails

@@ -16,6 +16,8 @@ class Target < ActiveRecord::Base
   validates_inclusion_of :role, in: valid_roles
   validates_inclusion_of :status, in: valid_statuses
 
+  just_define_datetime_picker :due_date
+
   def pending?
     status == 'pending'
   end

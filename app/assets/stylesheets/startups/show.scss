@@ -307,18 +307,14 @@ h3.targets-title { margin: 0 0 10px 0; }
   }
 }
 
-.target-description {
-  margin-bottom: 10px;
-  padding: 10px;
-}
+.target-description { padding: 8px 10px; }
 
 .learn-more {
-  margin-top: 10px;
+  background-color: #EFEFEF;
+  padding: 8px 10px;
 
-  .assigner {
-    font-size: 85%;
-    padding-top: 5px;
-  }
+  .assigner { font-size: 80%; }
+  .assigner-center { padding-top: 7px; }
 }
 
 //.

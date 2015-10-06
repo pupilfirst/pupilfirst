@@ -6,6 +6,7 @@ gem 'rails', '4.2.4'
 gem 'dotenv-rails', :groups => [:development, :test]
 
 gem 'activeadmin', github: 'activeadmin' # ActiveAdmin doesn't like 4.2 at all (for the moment). Switch this to stable when available.
+gem 'just-datetime-picker' # Date/Time picker support for active admin.
 gem 'active_skin' # Better lookin' active admin!
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
 gem 'carrierwave' # One uploader to rule them all.

@@ -2,7 +2,7 @@ ActiveAdmin.register Target do
   menu parent: 'Startups'
 
   permit_params :startup_id, :assigner_id, :role, :status, :title, :short_description, :status, :resource_url,
-    :completion_instructions, :due_date
+    :completion_instructions, :due_date_date, :due_date_time_hour, :due_date_time_minute
 
   preserve_default_filters!
   filter :startup,
@@ -124,7 +124,7 @@ ActiveAdmin.register Target do
       f.input :short_description
       f.input :resource_url
       f.input :completion_instructions
-      f.input :due_date, as: :datepicker
+      f.input :due_date, as: :just_datetime_picker
       f.input :assigner, include_blank: f.object.persisted? ? false : 'Leave this be to assign yourself.'
     end
 

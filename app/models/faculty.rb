@@ -2,6 +2,8 @@ class Faculty < ActiveRecord::Base
   mount_uploader :image, FacultyImageUploader
   process_in_background :image
 
+  has_many :startup_feedback, dependent: :restrict_with_exception
+
   CATEGORY_TEAM = 'team'
   CATEGORY_VISITING_FACULTY = 'visiting_faculty'
   CATEGORY_ADVISORY_BOARD = 'advisory_board'
@@ -25,4 +27,8 @@ class Faculty < ActiveRecord::Base
   scope :team, -> { where(category: CATEGORY_TEAM).order('sort_index ASC') }
   scope :visiting_faculty, -> { where(category: CATEGORY_VISITING_FACULTY).order('sort_index ASC') }
   scope :advisory_board, -> { where(category: CATEGORY_ADVISORY_BOARD).order('sort_index ASC') }
+
+  def display_name
+    name
+  end
 end

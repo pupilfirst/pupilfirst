@@ -1,18 +1,13 @@
 ActiveAdmin.register StartupFeedback do
-  menu parent: 'Startups', label: 'Startup Feedback'
-  permit_params :feedback, :reference_url, :startup_id, :send_email, :author_id
+  menu parent: 'Startups', label: 'Feedback'
+  permit_params :feedback, :reference_url, :startup_id, :send_email, :faculty_id
 
   preserve_default_filters!
-  filter :author, collection: AdminUser.all
   filter :startup_product_name, as: :select, collection: proc { Startup.all.pluck(:product_name).uniq }
-
-  before_create do |startup_feedback|
-    startup_feedback.author = current_admin_user if startup_feedback.author.blank?
-  end
 
   controller do
     def scoped_collection
-      super.includes :startup, :author
+      super.includes :startup, :faculty
     end
   end
 
@@ -46,7 +41,7 @@ ActiveAdmin.register StartupFeedback do
       end
     end
 
-    column :author
+    column :faculty
 
     column :send_at do |startup_feedback|
       if startup_feedback.send_at.present?
@@ -88,7 +83,7 @@ ActiveAdmin.register StartupFeedback do
       end
 
       row :reference_url
-      row :author
+      row :faculty
 
       row :send_at do |startup_feedback|
         if startup_feedback.send_at.present?

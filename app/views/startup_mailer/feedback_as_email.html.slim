@@ -9,9 +9,8 @@
 
   p
     ' We hope your startup journey is going great! Here is some feedback from
-    ' #{@startup_feedback.author.try(:fullname).present? ? "#{@startup_feedback.author.fullname} of" : ''}
-    ' Team SV on your #{link_to update_for, @startup_feedback.reference_url}
-    ' that might help you:
+    ' #{@startup_feedback.faculty.name} of Team SV on your #{link_to update_for, @startup_feedback.reference_url} that
+    | might help you:
 
   - if @startup_feedback.for_timeline_event?
     p Your entry is:

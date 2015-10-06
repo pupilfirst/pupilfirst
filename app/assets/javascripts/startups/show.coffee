@@ -307,9 +307,9 @@ setupTimelineBuilderDatepicker = ->
 setImprovementModalContent = ->
   $('#improvement-modal').on 'show.bs.modal', (event) ->
     feedback = $(event.relatedTarget).data('feedback')
-    author = $(event.relatedTarget).data('author')
+    faculty = $(event.relatedTarget).data('faculty')
     $('#improvement-modal').find('.modal-body').html("<pre>#{feedback}</pre>")
-    $('#improvement-modal').find('.modal-title').html("Feedback from #{author}")
+    $('#improvement-modal').find('.modal-title').html("Feedback from #{faculty}")
 
 addTooltipToHideCheckbox = ->
   $("#hide-from-public").tooltip()

@@ -3,7 +3,6 @@ class AdminUser < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
-  has_many :startup_feedback, foreign_key: 'author_id'
   has_many :targets, dependent: :restrict_with_exception
 
   TYPE_SUPERADMIN = 'superadmin'

@@ -182,7 +182,7 @@ ActiveAdmin.register TimelineEvent do
         table_for feedback do
           caption 'Previous Feedback'
           column(:link) { |feedback_entry| link_to 'View', admin_startup_feedback_path(feedback_entry) }
-          column(:author) { |feedback_entry| feedback_entry.author.email }
+          column(:faculty) { |feedback_entry| feedback_entry.faculty.name }
 
           column(:feedback) do |feedback_entry|
             pre class: 'max-width-pre' do

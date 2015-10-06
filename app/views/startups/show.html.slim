@@ -251,9 +251,8 @@
                   - if event.needs_improvement?
                     - latest_feedback = StartupFeedback.where(reference_url: startup_url(event.startup, anchor: "event-#{event.id}")).order('updated_at desc').first
                     - if latest_feedback.present?
-                      - feedback = latest_feedback.feedback
-                      - author = latest_feedback.author.present? ? (latest_feedback.author.fullname + ' of Team SV') : 'Team SV'
-                      a data-toggle="modal" data-target="#improvement-modal" data-feedback="#{latest_feedback.feedback}" data-author="#{author}"
+                      - faculty = "#{latest_feedback.faculty.name} of Team SV"
+                      a data-toggle="modal" data-target="#improvement-modal" data-feedback="#{latest_feedback.feedback}" data-faculty="#{faculty}"
                         .pending-verification href="#" data-toggle="tooltip" title="Click to see feedback from Team SV to improve this entry!"
                           i.fa.fa-exclamation-circle
                           | &nbsp;Needs Improvement
@@ -292,8 +291,8 @@
                           - latest_feedback = StartupFeedback.for_timeline_event(event).first
                           - if latest_feedback.present?
                             - feedback = latest_feedback.feedback
-                            - author = latest_feedback.author.present? ? ("#{latest_feedback.author.fullname} of Team SV") : 'Team SV'
-                            a data-toggle="modal" data-target="#improvement-modal" data-feedback="#{latest_feedback.feedback}" data-author="#{author}"
+                            - faculty = "#{latest_feedback.faculty.name} of Team SV"
+                            a data-toggle="modal" data-target="#improvement-modal" data-feedback="#{latest_feedback.feedback}" data-faculty="#{faculty}"
                               .pending-verification.pointer-cursor href="#" data-toggle="tooltip" title="Click to see feedback from Team SV to improve this entry!"
                                 i.fa.fa-exclamation-circle
                                 | &nbsp;Needs Improvement

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151005093842) do
+ActiveRecord::Schema.define(version: 20151006054439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -200,9 +200,11 @@ ActiveRecord::Schema.define(version: 20151005093842) do
     t.integer  "startup_id"
     t.datetime "send_at"
     t.integer  "author_id"
+    t.integer  "faculty_id"
   end
 
   add_index "startup_feedback", ["author_id"], name: "index_startup_feedback_on_author_id", using: :btree
+  add_index "startup_feedback", ["faculty_id"], name: "index_startup_feedback_on_faculty_id", using: :btree
 
   create_table "startup_jobs", force: :cascade do |t|
     t.integer  "startup_id"
@@ -392,5 +394,6 @@ ActiveRecord::Schema.define(version: 20151005093842) do
   add_index "users", ["university_id"], name: "index_users_on_university_id", using: :btree
 
   add_foreign_key "karma_points", "users"
+  add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "timeline_events", "startups"
 end

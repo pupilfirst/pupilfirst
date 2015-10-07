@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class ResourceThumbnailUploader < CarrierWave::Uploader::Base
-  include ::CarrierWave::Backgrounder::Delay
   include CarrierWave::MiniMagick
 
   # Override the directory where uploaded files will be stored.

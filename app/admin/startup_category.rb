@@ -1,4 +1,4 @@
-ActiveAdmin.register Category do
+ActiveAdmin.register StartupCategory do
   filter :name
 
   index do

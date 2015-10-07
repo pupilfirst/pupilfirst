@@ -60,7 +60,8 @@ ActiveAdmin.register Resource do
     f.inputs 'Resource details' do
       f.input :startups,
         as: :select,
-        member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }
+        member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" },
+        collection: Startup.approved
       f.input :file, as: :file
       f.input :thumbnail, as: :file
       f.input :title

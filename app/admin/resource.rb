@@ -51,10 +51,6 @@ ActiveAdmin.register Resource do
         img src: resource.thumbnail_url
       end
 
-      row :file do |resource|
-        resource.file.file.filename # Looks like a mistake, doesn't it? It isn't.
-      end
-
       row :created_at
       row :updated_at
     end

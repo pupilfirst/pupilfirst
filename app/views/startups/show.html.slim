@@ -53,7 +53,7 @@
   .row
     #data-points
       .col-md-4.col-md-push-8
-        - if current_user && @startup.founder?(current_user) && feature_active?(:targets) && @startup.targets.present?
+        - if current_user && @startup.founder?(current_user) && @startup.targets.present?
           #targets
             h3.targets-title Targets
             hr

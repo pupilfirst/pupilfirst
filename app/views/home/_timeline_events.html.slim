@@ -4,8 +4,7 @@ section.timeline-events
     = image_tag 'home/line.jpg'
 
   #timeline-events-container
-    - timeline_events = TimelineEvent.showcase.order(verified_at: :desc).limit(3)
-    - timeline_events.each do |event|
+    - timeline_events_to_showcase(3).each do |event|
       .timeline-event
         .timeline-event-top
           .timeline-event-image style="background-image: url(#{event.image_url});"

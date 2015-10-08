@@ -24,8 +24,8 @@
             p.quote-author &mdash; Ryan Lilly
 
 
-- Category.startup_category.each do |startup_category|
-  - verified_startups = Startup.timeline_verified.category(startup_category)
+- StartupCategory.each do |startup_category|
+  - verified_startups = Startup.timeline_verified.startup_category(startup_category)
   - if verified_startups.present?
     - underscored_name = startup_category.name.gsub(/[\s-]/, '').underscore
     section.startups-category-row id="category-#{underscored_name.dasherize}"

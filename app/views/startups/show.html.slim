@@ -89,14 +89,14 @@
 
         .data-icons
           .row
-            - if @startup.categories.present?
+            - if @startup.startup_categories.present?
               .col-sm-6.col-md-12
                 .media
                   .media-left
                     img.media-object alt="Industry icon" src="#{image_url 'timeline/icons/industry.png'}"
                   .media-body
                     h4.media-heading Industry
-                    p.data-content #{@startup.categories.pluck(:name).join(', ')}
+                    p.data-content #{@startup.startup_categories.pluck(:name).join(', ')}
             - if @startup.website?
               .col-sm-6.col-md-12
                 .media

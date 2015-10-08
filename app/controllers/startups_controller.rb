@@ -127,7 +127,7 @@ class StartupsController < ApplicationController
     params.require(:startup).permit(
       :name, :legal_registered_name, :address, :pitch, :website, :email, :logo, :remote_logo_url, :facebook_link,
       :twitter_link, :product_name, :product_description,
-      { category_ids: [] }, { founders_attributes: [:id] },
+      { startup_category_ids: [] }, { founders_attributes: [:id] },
       :registration_type, :revenue_generated, :presentation_link, :wireframe_link, :prototype_link, :team_size, :women_employees, :slug
     )
   end

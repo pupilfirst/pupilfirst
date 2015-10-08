@@ -14,7 +14,7 @@ $ ->
   $("#startup_product_description").click(updateProductDescription).on('input', updateProductDescription)
 
 $ ->
-  $('#startup_category_ids').select2(
+  $('#startup_startup_category_ids').select2(
     placeholder : 'Select Category',
     maximumSelectionSize: 3
   )

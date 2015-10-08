@@ -11,7 +11,7 @@ FactoryGirl.define do
     after(:build) do |startup|
       startup.founders << create(:founder, startup: startup, startup_admin: true)
       startup.founders << create(:founder, startup: startup)
-      startup.categories = [create(:startup_category)]
+      startup.startup_categories = [create(:startup_category)]
     end
 
     factory :incubated_startup do

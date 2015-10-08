@@ -7,7 +7,7 @@ ActiveAdmin.register Startup do
   filter :website
   filter :registration_type, as: :select, collection: proc { Startup.valid_registration_types }
   filter :incubation_location, as: :select, collection: proc { Startup.valid_incubation_location_values }
-  filter :categories, collection: proc { Category.startup_category }
+  filter :startup_categories
   filter :featured
 
   scope :all, default: true
@@ -236,8 +236,8 @@ ActiveAdmin.register Startup do
       row :women_employees
       row :incubation_location
 
-      row :categories do |startup|
-        startup.categories.map(&:name).join(', ')
+      row :startup_categories do |startup|
+        startup.startup_categories.map(&:name).join(', ')
       end
 
       row :phone do |startup|
@@ -297,7 +297,7 @@ ActiveAdmin.register Startup do
   form partial: 'admin/startups/form'
 
   permit_params :name, :product_name, :product_description, :legal_registered_name, :website, :email, :logo, :facebook_link, :twitter_link,
-    { category_ids: [] }, { founder_ids: [] },
+    { startup_category_ids: [] }, { founder_ids: [] },
     { founders_attributes: [:id, :first_name, :last_name, :email, :avatar, :remote_avatar_url, :linkedin_url, :twitter_url, :skip_password] },
     :created_at, :updated_at, :approval_status, :approval_status, :registration_type,
     :incubation_location, :agreement_sent, :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration,

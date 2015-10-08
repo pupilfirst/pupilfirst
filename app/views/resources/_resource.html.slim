@@ -4,6 +4,16 @@
     .title = resource.title
     .description = simple_format resource.description
     .download-button-spacer
-    button.btn.btn-primary.download-resource data-resource-id="#{resource.id}"
-      i.fa.fa-download
-      | &nbsp; Download
+    button.btn.btn-primary.download-resource data-generator-url="#{generate_download_url_resource_url(resource)}"
+      .download
+        i.fa.fa-download
+        | &nbsp; Download
+      .preparing-download.hide
+        i.fa.fa-spinner.fa-pulse.hide
+        | &nbsp; Preparing Download
+      .download-started.hide
+        i.fa.fa-check
+        | &nbsp; Download Started
+      .download-failed.hide
+        i.fa.fa-alert
+        | &nbsp; Failed! :-(

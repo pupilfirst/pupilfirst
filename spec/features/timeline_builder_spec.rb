@@ -37,7 +37,7 @@ feature 'Timeline Builder' do
       click_on 'Type of Event'
       page.find('.select2-result-label', text: 'Team Formed').click
 
-      # Pick date.
+      # Pick date. There's a gotcha with QT4 here, it doesn't reliably pick today's date, unlike QT5.
       page.find('#timeline_event_event_on').click
       page.find('.dtpicker-buttonSet').click
 
@@ -53,13 +53,18 @@ feature 'Timeline Builder' do
 
       click_on 'Submit for Review'
 
-      latest_timeline_event_panel = page.find('.timeline-panel', match: :first)
+      # Wait for page to load.
+      expect(page).to have_text(startup.name)
 
-      expect(latest_timeline_event_panel).to have_text('Pending verification')
-      expect(latest_timeline_event_panel).to have_text('Team Formed')
-      expect(latest_timeline_event_panel).to have_text(event_description)
-      expect(latest_timeline_event_panel).to have_link('SV.CO', href: 'https://sv.co')
-      expect(latest_timeline_event_panel).to have_selector('i.fa.fa-user-secret')
+      # Get the timeline entry for last created event.
+      last_timeline_event = TimelineEvent.order('id DESC').first
+      latest_timeline_event_entry = page.find("#event-#{last_timeline_event.id}", match: :first)
+
+      expect(latest_timeline_event_entry).to have_text('Pending verification')
+      expect(latest_timeline_event_entry).to have_text('Team Formed')
+      expect(latest_timeline_event_entry).to have_text(event_description)
+      expect(latest_timeline_event_entry).to have_link('SV.CO', href: 'https://sv.co')
+      expect(latest_timeline_event_entry).to have_selector('i.fa.fa-user-secret')
     end
 
     scenario 'Founder attempts to add link without supplying title or URL', js: true do

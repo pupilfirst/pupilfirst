@@ -74,3 +74,6 @@ end
 # Save screenshots on failure (and more).
 require 'capybara-screenshot/rspec'
 Capybara::Screenshot.prune_strategy = { keep: 20 }
+
+# Faker should use India as locale.
+Faker::Config.locale = 'en-IND'

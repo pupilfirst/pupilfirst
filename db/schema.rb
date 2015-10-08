@@ -163,6 +163,23 @@ ActiveRecord::Schema.define(version: 20151007141330) do
 
   add_index "public_slack_messages", ["user_id"], name: "index_public_slack_messages_on_user_id", using: :btree
 
+  create_table "resources", force: :cascade do |t|
+    t.string   "file"
+    t.string   "thumbnail"
+    t.string   "title"
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "resources_startups", force: :cascade do |t|
+    t.integer "resource_id"
+    t.integer "startup_id"
+  end
+
+  add_index "resources_startups", ["resource_id"], name: "index_resources_startups_on_resource_id", using: :btree
+  add_index "resources_startups", ["startup_id"], name: "index_resources_startups_on_startup_id", using: :btree
+
   create_table "startup_applications", force: :cascade do |t|
     t.string   "name"
     t.string   "email"

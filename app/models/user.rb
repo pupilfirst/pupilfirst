@@ -215,4 +215,8 @@ class User < ActiveRecord::Base
   def just_signed_in
     current_sign_in_at > 15.seconds.ago
   end
+
+  def founder?
+    is_founder && startup.present? && startup.approved?
+  end
 end

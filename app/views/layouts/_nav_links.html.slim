@@ -12,6 +12,9 @@
     li role="presentation"
       = link_to 'Faculty', faculty_path, class: 'top-nav-link'
     - if current_user
+      - if current_user.founder? && current_user.startup.resources.present? && feature_active?(:resources)
+        li role="presentation"
+          a.top-nav-link href="#{resources_url}" Resources
       li role="presentation" class="dropdown"
         a.dropdown-toggle.logged-in-avatar-link data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
           = image_tag profile_image_url(current_user, gravatar_size: 40, avatar_version: :thumb), class: 'logged-in-user-link'

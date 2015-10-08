@@ -74,5 +74,11 @@ Svapp::Application.routes.draw do
     get '/dynamic', action: 'dynamic_index'
   end
 
+  resources :resources, only: %w(index show) do
+    member do
+      get 'generate_download_url'
+    end
+  end
+
   root 'home#index'
 end

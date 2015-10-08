@@ -1,19 +1,29 @@
 ActiveAdmin.register Resource do
   menu parent: 'Startups'
 
-  permit_params :title, :description, :file, :thumbnail, startup_ids: []
+  permit_params :title, :description, :file, :thumbnail, :share_status, :shared_with_batch
 
   preserve_default_filters!
+
   filter :startup,
     collection: Startup.batched,
     label: 'Product',
     member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : 's'}" }
 
+  filter :share_status,
+    collection: Resource.valid_share_statuses
+
   index do
     selectable_column
 
-    column 'Share count' do |resource|
-      resource.startups.count
+    column :share_status
+
+    column :shared_with_batch do |resource|
+      if resource.shared_with_batch.present?
+        resource.shared_with_batch
+      else
+        'All batches'
+      end
     end
 
     column :title
@@ -22,25 +32,13 @@ ActiveAdmin.register Resource do
 
   show do
     attributes_table do
-      row 'Shared with' do |resource|
-        if resource.startups.present?
-          table do
-            resource.startups.each do |startup|
-              tr do
-                td do
-                  a href: admin_startup_url(startup) do
-                    span startup.product_name
+      row :share_status
 
-                    if startup.name.present?
-                      span(class: 'wrap-with-paranthesis') { startup.name }
-                    end
-                  end
-                end
-              end
-            end
-          end
+      row :shared_with_batch do |resource|
+        if resource.shared_with_batch.present?
+          resource.shared_with_batch
         else
-          em 'Not shared'
+          'All batches'
         end
       end
 
@@ -58,10 +56,11 @@ ActiveAdmin.register Resource do
 
   form do |f|
     f.inputs 'Resource details' do
-      f.input :startups,
+      f.input :share_status,
         as: :select,
-        member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" },
-        collection: Startup.approved
+        collection: Resource.valid_share_statuses,
+        member_label: proc { |share_status| share_status.capitalize }
+      f.input :shared_with_batch, placeholder: 'Leave this blank to share with all batches.'
       f.input :file, as: :file
       f.input :thumbnail, as: :file
       f.input :title

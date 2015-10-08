@@ -1,4 +1,5 @@
 ActiveAdmin.register StartupCategory do
+  menu parent: 'Startups', label: 'Categories'
   filter :name
 
   index do

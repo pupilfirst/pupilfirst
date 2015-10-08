@@ -1,0 +1,8 @@
+- content_for :head
+  = stylesheet_link_tag 'resources'
+
+h1.page-header.header-light Resources
+
+.resources
+  - @resources.each do |resource|
+    = render 'resource', resource: resource

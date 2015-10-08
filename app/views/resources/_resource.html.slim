@@ -1,0 +1,9 @@
+.resource
+  = image_tag resource.thumbnail.url
+  .resource-content
+    .title = resource.title
+    .description = simple_format resource.description
+    .download-button-spacer
+    button.btn.btn-primary.download-resource data-resource-id="#{resource.id}"
+      i.fa.fa-download
+      | &nbsp; Download

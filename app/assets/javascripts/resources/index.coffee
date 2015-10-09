@@ -22,8 +22,6 @@ resourceDownloadManager = ->
     # Retrieve actual download URL.
     generatorUrl = downloadButton.data('generatorUrl')
 
-    console.log generatorUrl
-
     $.get(generatorUrl, (data) ->
       setButtonState(downloadButton, 'started')
       window.location.href = data.resource_download_url

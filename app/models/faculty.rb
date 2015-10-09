@@ -2,7 +2,7 @@ class Faculty < ActiveRecord::Base
   mount_uploader :image, FacultyImageUploader
   process_in_background :image
 
-  has_many :startup_feedback, dependent: :restrict_with_exception
+  has_many :startup_feedback, dependent: :restrict_with_error
 
   CATEGORY_TEAM = 'team'
   CATEGORY_VISITING_FACULTY = 'visiting_faculty'

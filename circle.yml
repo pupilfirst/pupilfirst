@@ -9,6 +9,3 @@ deployment:
       - git push git@heroku.com:sv-co.git $CIRCLE_SHA1:refs/heads/master
       - heroku run rake db:migrate --app sv-co
       - heroku restart --app sv-co
-machine:
-   post:
-     - ./$CIRCLE_PROJECT_REPONAME/ci/install_qt5.sh

@@ -1,2 +1,30 @@
-h1.page-header Resource #{@resource.id}
-p We list details of a single resource here.
+- content_for :head
+  = stylesheet_link_tag 'resources'
+  = javascript_include_tag 'resources'
+
+h1.page-header.header-light #{@resource.title}
+
+.resource-show.clearfix.margin-bottom-20
+  = image_tag @resource.thumbnail.url
+  .content
+    .content-inner
+      .description = simple_format @resource.description
+      button.btn.btn-primary.download-resource data-generator-url="#{generate_download_url_resource_url(@resource)}"
+        .download
+          i.fa.fa-download
+          | &nbsp; Download
+        .preparing-download.hide
+          i.fa.fa-spinner.fa-pulse.hide
+          | &nbsp; Preparing Download
+        .download-started.hide
+          i.fa.fa-check
+          | &nbsp; Download Started
+        .download-failed.hide
+          i.fa.fa-alert
+          | &nbsp; Failed! :-(
+
+hr.margin-top-20
+
+= link_to resources_path, class: 'btn btn-default margin-bottom-40' do
+  i.fa.fa-chevron-left
+  | &nbsp; See all available resources

@@ -1,7 +1,8 @@
 .resource
   = image_tag resource.thumbnail.url
   .resource-content
-    .title = resource.title
+    .title
+      = link_to resource.title, resource
     .description = simple_format resource.description
     .download-button-spacer
     button.btn.btn-primary.download-resource data-generator-url="#{generate_download_url_resource_url(resource)}"

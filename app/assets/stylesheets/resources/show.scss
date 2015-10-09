@@ -1,0 +1,38 @@
+@import 'bootstrap/variables';
+
+.resource-show {
+  img {
+    float: left;
+
+    @media (max-width: $screen-xs-max) { float: none; }
+  }
+
+  .content {
+    float: left;
+    margin-left: 20px;
+    height: 200px;
+    width: 500px;
+    position: relative;
+
+    @media (max-width: $screen-xs-max) {
+      float: none;
+      height: auto;
+      width: auto;
+      margin: 10px 0 0 0;
+    }
+  }
+
+  .content-inner {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    @media (max-width: $screen-xs-max) {
+      position: static;
+    }
+  }
+
+  .description {
+    font-size: 120%;
+  }
+}

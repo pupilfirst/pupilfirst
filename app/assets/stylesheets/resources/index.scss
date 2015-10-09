@@ -17,24 +17,27 @@
   margin: 0 20px 20px 0;
   background-color: #f7f7f7;
   box-shadow: 2px 2px 2px #d2d2d2;
-}
 
-.resource-content {
-  padding: 10px;
-}
+  .resource-content {
+    padding: 10px;
+  }
 
-.download-button-spacer {
-  height: 34px;
-}
+  .download-button-spacer {
+    height: 34px;
+  }
 
-.download-resource {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-}
+  .download-resource {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+  }
 
-.title {
-  font-weight: bold;
-  font-size: 120%;
-  margin-bottom: 5px;
+  .title {
+    font-size: 120%;
+    margin-bottom: 5px;
+
+    a:hover {
+      text-decoration: none;
+    }
+  }
 }

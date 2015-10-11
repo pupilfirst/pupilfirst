@@ -54,23 +54,6 @@ ActiveRecord::Schema.define(version: 20151008194643) do
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
 
-  create_table "categories", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "category_type"
-  end
-
-  create_table "categories_startups", id: false, force: :cascade do |t|
-    t.integer "startup_id"
-    t.integer "category_id"
-  end
-
-  create_table "categories_users", id: false, force: :cascade do |t|
-    t.integer "category_id"
-    t.integer "user_id"
-  end
-
   create_table "colleges", force: :cascade do |t|
     t.string   "name"
     t.string   "university"
@@ -201,6 +184,17 @@ ActiveRecord::Schema.define(version: 20151008194643) do
     t.string   "website"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "startup_categories", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "startup_categories_startups", id: false, force: :cascade do |t|
+    t.integer "startup_id"
+    t.integer "startup_category_id"
   end
 
   create_table "startup_feedback", force: :cascade do |t|

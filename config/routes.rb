@@ -71,7 +71,6 @@ Svapp::Application.routes.draw do
 
   scope 'faculty', as: 'faculty', controller: 'faculty' do
     get '/', action: 'index'
-    get '/dynamic', action: 'dynamic_index'
   end
 
   resources :resources, only: %w(index show) do

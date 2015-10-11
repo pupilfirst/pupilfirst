@@ -1,12 +1,15 @@
 - content_for :head
   = stylesheet_link_tag 'faculty'
+  = javascript_include_tag 'faculty'
 
 #faculty
   .container
     h1.page-header.header-light Faculty
 
     p.introduction
-      | We've assembled some of the best entrepreneurs and domain experts to help you learn about entrepreneurship and what it means to become a founder. In addition to our <a href="http://playbook.sv.co/">Playbook</a>, if you join SV.CO, you'll have access to the best startup talent in India.
+      ' We've assembled some of the best entrepreneurs and domain experts to help you learn about entrepreneurship and
+      ' what it means to become a founder. In addition to our <a href="http://playbook.sv.co/">Playbook</a>, if you
+      | join SV.CO, you'll have access to the best startup talent in India.
 
     #tabbed-content
       ul#faculty-nav.nav.nav-tabs.nav-justified
@@ -24,49 +27,13 @@
       .tab-content
         .tab-pane.active#team role="tabpanel"
           .faculty-cards-container
-            - @faculty[:team].each do |member|
-              - if Rails.application.assets.find_asset(faculty_image_path(:team, member[:name]))
-                .faculty-card
-                  = image_tag faculty_image_path(:team, member[:name])
-                  .faculty-info
-                    .faculty-name
-                      = member[:name]
-                    .faculty-title
-                      = member[:title]
-                    .faculty-links
-                      a href="#"
-                        i.fa.fa-linkedin
-                      a href='#'
-                        i.fa.fa-twitter
+            - Faculty.team.each do |member|
+              = render 'faculty_card', member: member
         .tab-pane#visiting-faculty role="tabpanel"
           .faculty-cards-container
-            - @faculty[:visiting_faculty].each do |member|
-              .faculty-card.visiting-faculty
-                = image_tag faculty_image_path(:visiting_faculty, member[:name])
-                .faculty-info
-                  .faculty-name
-                    = member[:name]
-                  .faculty-title
-                    = member[:title]
-                  .faculty-key-skills
-                    = member[:key_skills]
-                  .faculty-links
-                    a href="#{member[:linked_in]}"
-                      i.fa.fa-linkedin
-                    a href='#'
-                      i.fa.fa-twitter
+            - Faculty.visiting_faculty.each do |member|
+              = render 'faculty_card', member: member
         .tab-pane#advisory-board role="tabpanel"
           .faculty-cards-container
-            - @faculty[:advisory_board].each do |member|
-              .faculty-card
-                = image_tag faculty_image_path(:advisory_board, member[:name])
-                .faculty-info
-                  .faculty-name
-                    = member[:name]
-                  .faculty-title
-                    = member[:title]
-                  .faculty-links
-                    a href='#'
-                      i.fa.fa-linkedin
-                    a href='#'
-                      i.fa.fa-twitter
+            - Faculty.advisory_board.each do |member|
+              = render 'faculty_card', member: member

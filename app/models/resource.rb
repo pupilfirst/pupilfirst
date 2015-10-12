@@ -31,4 +31,8 @@ class Resource < ActiveRecord::Base
       public_resources
     end
   end
+
+  def for_approved?
+    share_status == SHARE_STATUS_APPROVED
+  end
 end

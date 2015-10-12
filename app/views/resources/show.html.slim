@@ -14,6 +14,10 @@ h1.page-header.header-light #{@resource.title}
     = image_tag @resource.thumbnail.url
   - else
     = image_tag 'resources/thumbnail_default.png'
+  - if @resource.for_approved?
+    .batch-exclusive
+      .badge Batch Exclusive
+
   .content
     .content-inner
       .description = simple_format @resource.description

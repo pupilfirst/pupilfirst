@@ -1,4 +1,5 @@
 @import 'bootstrap/variables';
+@import 'variables';
 
 .resources {
   display: flex;
@@ -39,5 +40,22 @@
     a:hover {
       text-decoration: none;
     }
+  }
+}
+
+.batch-exclusive {
+  width: 200px;
+  text-align: center;
+  position: absolute;
+  top: 165px;
+
+  .badge {
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+    padding: 3px 9px;
+    border-radius: 20px;
+    border: 1px solid $theme-dark-green;
+    background-color: $theme-dark-green;
+    color: whitesmoke;
+    font-size: 100%;
   }
 }

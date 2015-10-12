@@ -115,6 +115,7 @@ ActiveAdmin.register Target do
         include_blank: false,
         member_label: proc { |status| t("target.status.#{status}") }
 
+      f.input :completed_at, as: :datepicker
       f.input :role,
         as: :select,
         collection: Target.valid_roles,

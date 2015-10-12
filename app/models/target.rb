@@ -27,6 +27,6 @@ class Target < ActiveRecord::Base
   end
 
   before_save do
-    self.completed_at = (status_changed? && done?) ? Time.now : nil
+    self.completed_at = (status_changed? && done?) ? self.completed_at||Time.now : nil
   end
 end

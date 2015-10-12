@@ -8,6 +8,11 @@ ol.breadcrumb.margin-top-20
 
 h1.page-header.header-light Resources
 
+- if @resources.count > Resource.public_resources.count
+  .alert.alert-warning
+    ' You currently have access to exclusive resources that are marked clearly by a <strong>Batch Exclusive</strong>
+    | badge. Please do not share these resources outside your founding team. Thank you!
+
 .resources
   - @resources.each do |resource|
     = render 'resource', resource: resource

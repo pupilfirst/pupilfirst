@@ -1,4 +1,4 @@
-$(->
+$(document).on('ready page:load', ->
   $('#team-leader-consent').click((event) ->
     teamLeaderConsentButton = $('#team-leader-consent-button')
 

@@ -1,4 +1,4 @@
-$ ->
+$(document).on('ready page:load', ->
   $('#add-more-job-info').click ->
     $('#quick-post-job').toggleClass('hidden')
 
@@ -7,6 +7,4 @@ $ ->
   $('.fitlargest').textfill()
 
   $('[data-toggle="tooltip"]').tooltip()
-
-
-
+)

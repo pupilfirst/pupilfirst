@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).on('ready page:load', function() {
   $(window).bind('rails:flash', function(e, params) {
     new PNotify({
       title: (params.type.charAt(0).toUpperCase() + params.type.substring(1)),

@@ -12,4 +12,4 @@ sendUserDataToInspectlet = ->
     if productName || startupBatch
       __insp.push ['tagSession', {email: emailAddress, productName: productName, startupBatch: startupBatch}]
 
-$(sendUserDataToInspectlet)
+$(document).on('ready page:load', sendUserDataToInspectlet)

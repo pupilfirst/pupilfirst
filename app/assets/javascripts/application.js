@@ -2,6 +2,8 @@
 //= require bootstrap-sprockets
 //= require jquery_ujs
 
+//= require turbolinks
+
 // Require PNotify (rails asset), unobtrusive flash (rubygems), and flashes (local code) early so that notifications
 // render as quickly as possible.
 //= require pnotify

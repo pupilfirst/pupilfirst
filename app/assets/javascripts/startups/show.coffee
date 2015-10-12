@@ -1,9 +1,9 @@
-$(->
+$(document).on('ready page:load', ->
   $('#verified-icon').tooltip()
   $('.truncated-founder-name').tooltip()
 )
 
-$(->
+$(document).on('ready page:load', ->
   $(".tl_link_button").click((e) ->
     if ($(this).find(".ink").length == 0)
       $(this).prepend("<span class='ink'></span>")
@@ -22,7 +22,7 @@ $(->
   )
 )
 
-$(->
+$(document).on('ready page:load', ->
   $('#read-from-beginning').click(->
     document.getElementById("timeline-list").lastChild.scrollIntoView(false)
     return false
@@ -39,7 +39,7 @@ $(->
   )
 )
 
-$(->
+$(document).on('ready page:load', ->
   $("#new-event-form .panel-heading").click(->
     $("#new-event-form .panel-body").collapse('toggle')
     $("#new-event-form .fa-plus").toggleClass("hidden")
@@ -314,15 +314,15 @@ setImprovementModalContent = ->
 addTooltipToHideCheckbox = ->
   $("#hide-from-public").tooltip()
 
-$(timelineBuilderSubmitChecks)
-$(setupSelect2ForEventType)
-$(clearErrorsOnOpeningSelect2)
-$(handleImageUpload)
-$(handleLinkAddition)
-$(markSelectedLinksOnEdit)
-$(measureDescriptionLength)
-$(setPendingTooltips)
-$(matchSampleTextToEventType)
-$(setupTimelineBuilderDatepicker)
-$(setImprovementModalContent)
-$(addTooltipToHideCheckbox)
+$(document).on('ready page:load', timelineBuilderSubmitChecks)
+$(document).on('ready page:load', setupSelect2ForEventType)
+$(document).on('ready page:load', clearErrorsOnOpeningSelect2)
+$(document).on('ready page:load', handleImageUpload)
+$(document).on('ready page:load', handleLinkAddition)
+$(document).on('ready page:load', markSelectedLinksOnEdit)
+$(document).on('ready page:load', measureDescriptionLength)
+$(document).on('ready page:load', setPendingTooltips)
+$(document).on('ready page:load', matchSampleTextToEventType)
+$(document).on('ready page:load', setupTimelineBuilderDatepicker)
+$(document).on('ready page:load', setImprovementModalContent)
+$(document).on('ready page:load', addTooltipToHideCheckbox)

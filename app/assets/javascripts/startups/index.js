@@ -29,7 +29,7 @@ if ($(document).scrollTop() > 450) {
 //   });
 // });
 
-$(document).ready(function() {
+$(document).on('ready page:load', function() {
   $('body').scrollspy(
     {
       target: '.startups_nav',

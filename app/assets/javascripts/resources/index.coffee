@@ -30,4 +30,4 @@ resourceDownloadManager = ->
     )
   )
 
-$(resourceDownloadManager)
+$(document).on('ready page:load', resourceDownloadManager)

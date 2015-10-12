@@ -23,7 +23,7 @@ gem 'sass-rails', '~> 5.0'
 gem 'sentry-raven' # Reporter for Sentry Heroku add-on.
 gem 'slim'
 
-# gem 'turbolinks' # Disabled, because it is a pain in the ass.
+gem 'turbolinks' # Disabled, because it is a pain in the ass.
 
 gem 'uglifier'
 gem 'rest-client' # Used to contact Fast Alerts' API.

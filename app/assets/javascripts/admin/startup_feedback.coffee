@@ -1,7 +1,8 @@
-$ ->
+$(document).on('ready page:load', ->
   $('#startup_feedback_startup_id').select2({ placeholder : 'Select Product' })
   $('#startup_feedback_startup_id').change(showStartupFeedback)
   showStartupFeedback()
+)
 
 showStartupFeedback = ->
   startup_id = $('#startup_feedback_startup_id').val()

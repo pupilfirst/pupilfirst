@@ -11,7 +11,7 @@ var toggleNavbarBackground = function() {
   }
 };
 
-$(function() {
+$(document).on('ready page:load', function() {
   if ($(".navbar-start-transparent").length) {
     $(window).scroll(toggleNavbarBackground);
   }
@@ -22,5 +22,9 @@ var shiftWindow = function() { scrollBy(0, -80) };
 window.addEventListener("hashchange", shiftWindow);
 
 $(window).load(function() {
+  if (location.hash) shiftWindow();
+});
+
+$(document).on('page:load', function() {
   if (location.hash) shiftWindow();
 });

@@ -2,6 +2,11 @@
   = stylesheet_link_tag 'resources'
   = javascript_include_tag 'resources'
 
+ol.breadcrumb.margin-top-20
+  li = link_to 'Home', root_path
+  li = link_to 'Resources', resources_path
+  li.active = @resource.title
+
 h1.page-header.header-light #{@resource.title}
 
 .resource-show.clearfix.margin-bottom-20

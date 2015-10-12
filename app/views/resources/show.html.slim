@@ -5,7 +5,10 @@
 h1.page-header.header-light #{@resource.title}
 
 .resource-show.clearfix.margin-bottom-20
-  = image_tag @resource.thumbnail.url
+  - if @resource.thumbnail.present?
+    = image_tag @resource.thumbnail.url
+  - else
+    = image_tag 'resources/thumbnail_default.png'
   .content
     .content-inner
       .description = simple_format @resource.description

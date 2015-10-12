@@ -6,7 +6,7 @@ class Resource < ActiveRecord::Base
     [SHARE_STATUS_PUBLIC, SHARE_STATUS_APPROVED]
   end
 
-  validates_presence_of :file, :thumbnail, :title, :description, :share_status
+  validates_presence_of :file, :title, :description, :share_status
   validates_inclusion_of :share_status, in: valid_share_statuses
   validates_numericality_of :shared_with_batch, allow_blank: true
 

@@ -46,7 +46,11 @@ ActiveAdmin.register Resource do
       row :description
 
       row :thumbnail do |resource|
-        img src: resource.thumbnail_url
+        if resource.thumbnail.present?
+          img src: resource.thumbnail_url
+        else
+          image_tag 'resources/thumbnail_default.png'
+        end
       end
 
       row :created_at

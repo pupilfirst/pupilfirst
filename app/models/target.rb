@@ -21,4 +21,12 @@ class Target < ActiveRecord::Base
   def pending?
     status == 'pending'
   end
+
+  def done?
+    status == 'done'
+  end
+
+  before_save do
+    self.completed_at = (status_changed? && done?) ? Time.now : nil
+  end
 end

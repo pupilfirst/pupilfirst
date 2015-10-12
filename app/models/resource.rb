@@ -15,7 +15,7 @@ class Resource < ActiveRecord::Base
   mount_uploader :file, ResourceFileUploader
   mount_uploader :thumbnail, ResourceThumbnailUploader
 
-  scope :public_resources, -> { where(share_status: SHARE_STATUS_PUBLIC) }
+  scope :public_resources, -> { where(share_status: SHARE_STATUS_PUBLIC).order('title') }
 
   def self.for(user)
     if user.present? && user.founder?
@@ -26,7 +26,7 @@ class Resource < ActiveRecord::Base
         nil,
         SHARE_STATUS_APPROVED,
         user.startup.try(:batch)
-      )
+      ).order('title')
     else
       public_resources
     end

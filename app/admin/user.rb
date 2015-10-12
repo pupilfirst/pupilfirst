@@ -169,9 +169,6 @@ ActiveAdmin.register User do
   filter :is_founder
   filter :university
   filter :roll_number
-  # TODO: The check_boxes filter is disabled because of some bug with activeadmin. Check and enable when required.
-  # filter :categories, as: :check_boxes, collection: proc { Category.user_category }
-  filter :categories, collection: proc { Category.user_category }
 
   form partial: 'admin/users/form'
 

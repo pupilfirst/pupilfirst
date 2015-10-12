@@ -6,7 +6,7 @@ class Resource < ActiveRecord::Base
     [SHARE_STATUS_PUBLIC, SHARE_STATUS_APPROVED]
   end
 
-  validates_presence_of :file, :thumbnail, :title, :description, :share_status
+  validates_presence_of :file, :title, :description, :share_status
   validates_inclusion_of :share_status, in: valid_share_statuses
   validates_numericality_of :shared_with_batch, allow_blank: true
 
@@ -15,7 +15,7 @@ class Resource < ActiveRecord::Base
   mount_uploader :file, ResourceFileUploader
   mount_uploader :thumbnail, ResourceThumbnailUploader
 
-  scope :public_resources, -> { where(share_status: SHARE_STATUS_PUBLIC) }
+  scope :public_resources, -> { where(share_status: SHARE_STATUS_PUBLIC).order('title') }
 
   def self.for(user)
     if user.present? && user.founder?
@@ -26,9 +26,13 @@ class Resource < ActiveRecord::Base
         nil,
         SHARE_STATUS_APPROVED,
         user.startup.try(:batch)
-      )
+      ).order('title')
     else
       public_resources
     end
+  end
+
+  def for_approved?
+    share_status == SHARE_STATUS_APPROVED
   end
 end

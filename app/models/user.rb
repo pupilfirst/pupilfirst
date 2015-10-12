@@ -13,8 +13,7 @@ class User < ActiveRecord::Base
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :invitable, :database_authenticatable, :confirmable, :registerable,
-    :recoverable, :rememberable, :trackable, :validatable
+  devise :invitable, :database_authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable
 
   serialize :roles
 
@@ -23,7 +22,6 @@ class User < ActiveRecord::Base
   belongs_to :college
   belongs_to :father, class_name: 'Name'
   belongs_to :startup
-  has_and_belongs_to_many :categories
   belongs_to :university
   has_many :karma_points, dependent: :destroy
 

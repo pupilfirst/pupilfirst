@@ -80,8 +80,8 @@ class Startup < ActiveRecord::Base
   scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED }).distinct }
 
   # Find all by specific category.
-  def self.category(category)
-    joins(:categories).where(categories: { id: category.id })
+  def self.startup_category(category)
+    joins(:startup_categories).where(startup_categories: { id: category.id })
   end
 
   has_many :founders, -> { where('is_founder = ?', true) }, class_name: 'User', foreign_key: 'startup_id' do
@@ -91,9 +91,9 @@ class Startup < ActiveRecord::Base
     end
   end
 
-  has_and_belongs_to_many :categories do
+  has_and_belongs_to_many :startup_categories do
     def <<(_category)
-      fail 'Use categories= to enforce startup category limit'
+      fail 'Use startup_categories= to enforce startup category limit'
     end
   end
 
@@ -307,17 +307,17 @@ class Startup < ActiveRecord::Base
   validate :category_count
 
   def category_count
-    return unless @category_count_exceeded || categories.count > MAX_CATEGORY_COUNT
-    errors.add(:categories, "Can't have more than 3 categories")
+    return unless @category_count_exceeded || startup_categories.count > MAX_CATEGORY_COUNT
+    errors.add(:startup_categories, "Can't have more than 3 categories")
   end
 
   # Custom setter for startup categories.
   #
   # @param [String, Array] category_entries Array of Categories or comma-separated Category ID-s.
-  def categories=(category_entries)
+  def startup_categories=(category_entries)
     parsed_categories = if category_entries.is_a? String
       category_entries.split(',').map do |category_id|
-        Category.find(category_id)
+        StartupCategory.find(category_id)
       end
     else
       category_entries

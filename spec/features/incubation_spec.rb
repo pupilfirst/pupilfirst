@@ -67,9 +67,9 @@ feature 'Incubation' do
     select 'Visakhapatnam', from: 'Incubation location'
     fill_in 'Website', with: 'https://startupwebsite.com'
     select 'Partnership', from: 'Registration type'
-    select startup_category_1.name, from: 'Categories'
-    select startup_category_2.name, from: 'Categories'
-    select startup_category_3.name, from: 'Categories'
+    select startup_category_1.name, from: 'Startup categories'
+    select startup_category_2.name, from: 'Startup categories'
+    select startup_category_3.name, from: 'Startup categories'
     fill_in 'Team size', with: 1
     fill_in 'No. of women employees', with: 0
     click_on 'Submit Application'
@@ -97,8 +97,8 @@ feature 'Incubation' do
     expect(startup.incubation_location).to eq(Startup::INCUBATION_LOCATION_VISAKHAPATNAM)
     expect(startup.website).to eq('https://startupwebsite.com')
     expect(startup.registration_type).to eq(Startup::REGISTRATION_TYPE_PARTNERSHIP)
-    expect(startup.categories.count).to eq(3)
-    expect(startup.categories.to_a - [startup_category_1, startup_category_2, startup_category_3]).to be_empty
+    expect(startup.startup_categories.count).to eq(3)
+    expect(startup.startup_categories.to_a - [startup_category_1, startup_category_2, startup_category_3]).to be_empty
     expect(startup.team_size).to eq 1
     expect(startup.women_employees).to eq 0
   end

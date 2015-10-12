@@ -6,8 +6,8 @@
         .text-center
           i.fa.fa-question-circle
         p.showcase-description We'll be soon profiling more startups and sharing their success stories. Meanwhile join SV.CO and you can also be one of our graduates! If you'd like to be featured, write to <a href="mailto:help@sv.co">help@sv.co</a>.
-        .flex-center
-          a href="#{new_user_registration_path}" class="btn btn-primary" Join SV.CO
+        / .flex-center
+        /   a href="#{new_user_registration_path}" class="btn btn-primary" Join SV.CO
     - else
       a.showcase-activate href=""
         = image_tag "home/showcase/founders/#{name.gsub(/\s+/, '').underscore}.png" if defined? video

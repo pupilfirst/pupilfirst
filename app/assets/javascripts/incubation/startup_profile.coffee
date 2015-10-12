@@ -15,7 +15,7 @@ $(document).on('ready page:load', ->
 )
 
 $(document).on('ready page:load', ->
-  $('#startup_category_ids').select2(
+  $('#startup_startup_category_ids').select2(
     placeholder : 'Select Category',
     maximumSelectionSize: 3
   )

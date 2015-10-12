@@ -1,5 +1,12 @@
 .resource
-  = image_tag resource.thumbnail.url
+  - if resource.thumbnail.present?
+    = image_tag resource.thumbnail.url
+  - else
+    = image_tag 'resources/thumbnail_default.png'
+  - if resource.for_approved?
+    .batch-exclusive
+      .badge Batch Exclusive
+
   .resource-content
     .title
       = link_to resource.title, resource

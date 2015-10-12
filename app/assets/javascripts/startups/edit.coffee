@@ -12,5 +12,5 @@ updateProductDescription = ->
 
 $(document).on('ready page:load', ->
   $("#startup_product_description").click(updateProductDescription).on('input', updateProductDescription)
-  $('#startup_category_ids').select2({ placeholder : 'Select Industries' })
+  $('#startup_startup_category_ids').select2({ placeholder : 'Select Industries' })
 )

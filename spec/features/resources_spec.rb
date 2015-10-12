@@ -34,6 +34,11 @@ feature 'Resources' do
     expect(page).to have_text(public_resource_2.title)
   end
 
+  scenario 'User visits resource page' do
+    visit resources_path
+    expect(page).to have_text('Approved Startups get access to exclusive content produced by Faculty')
+  end
+
   scenario 'User downloads resource', js: true do
     visit resources_path
 

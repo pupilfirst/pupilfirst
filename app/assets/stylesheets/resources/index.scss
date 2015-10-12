@@ -11,6 +11,13 @@
   @media (max-width: $screen-xs-max) { justify-content: center; }
 }
 
+p.resources-intro {
+  margin: 10px 0 25px 0;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 200%;
+}
+
 .resource {
   position: relative;
   flex: none;

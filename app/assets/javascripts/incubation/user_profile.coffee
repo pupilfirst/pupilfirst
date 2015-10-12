@@ -1,10 +1,12 @@
 toggleRollNumber = ->
-  if $("#startup_admin_attributes_university_id").val()
-    $('.startup_admin_roll_number').show()
-  else
-    $('.startup_admin_roll_number').hide()
+  adminUniversityId = $("#startup_admin_attributes_university_id")
 
-$(document).on('ready page:load', ->
+  if adminUniversityId
+    if adminUniversityId.val()
+      $('.startup_admin_roll_number').show()
+    else
+      $('.startup_admin_roll_number').hide()
+
+$(document).on 'page:change', ->
   toggleRollNumber()
   $("#startup_admin_attributes_university_id").change toggleRollNumber
-)

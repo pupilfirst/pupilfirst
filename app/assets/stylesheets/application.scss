@@ -17,6 +17,15 @@
 @import "footer";
 @import "errors";
 
+// Controller-specific
+@import 'home';
+@import 'about';
+@import 'faculty';
+@import 'resources';
+@import 'incubation';
+@import 'startups';
+@import 'users';
+
 // Select2
 @import "select2";
 @import "select2-bootstrap";

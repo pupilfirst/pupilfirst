@@ -1,3 +1,2 @@
-$(document).on('ready page:load', ->
+$(document).on 'page:change', ->
   $('#user_startup_id').select2()
-)

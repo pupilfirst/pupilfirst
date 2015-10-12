@@ -22,5 +22,5 @@ betterFormControls = ->
   $('#timeline_event_startup_id').select2()
   $('#timeline_event_timeline_event_type_id').select2()
 
-$(document).on('ready page:load', handleLinkEditing)
-$(document).on('ready page:load', betterFormControls)
+$(document).on 'page:change', handleLinkEditing
+$(document).on 'page:change', betterFormControls

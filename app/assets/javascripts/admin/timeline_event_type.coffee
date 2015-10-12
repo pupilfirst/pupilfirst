@@ -28,5 +28,5 @@ updateSuggestedStageOnCheckboxUpdate = ->
 
       suggestedStagesElement.val(suggestedStages.join ',')
 
-$(document).on('ready page:load', populateSuggestedStagesOnLoad)
-$(document).on('ready page:load', updateSuggestedStageOnCheckboxUpdate)
+$(document).on 'page:change', populateSuggestedStagesOnLoad
+$(document).on 'page:change', updateSuggestedStageOnCheckboxUpdate

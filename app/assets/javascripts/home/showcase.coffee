@@ -53,4 +53,4 @@ showcaseEmbeds = ->
     false
   )
 
-$(document).on('ready page:load', showcaseEmbeds)
+$(document).on 'page:change', showcaseEmbeds

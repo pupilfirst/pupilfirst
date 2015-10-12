@@ -19,3 +19,11 @@
 //= require users
 //= require limit_max_int
 //= require inspectlet
+
+// Controller-specific
+//= require home
+//= require faculty
+//= require resources
+//= require incubation
+//= require startups
+//= require users

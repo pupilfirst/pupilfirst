@@ -4,8 +4,7 @@ Svapp::Application.routes.draw do
     controllers: {
       passwords: 'users/passwords',
       invitations: 'users/invitations',
-      sessions: 'users/sessions',
-      registrations: 'users/registrations'
+      sessions: 'users/sessions'
     }
   )
 

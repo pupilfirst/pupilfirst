@@ -36,7 +36,7 @@ class StartupsController < ApplicationController
   end
 
   def index
-    @navbar_start_transparent = true
+    @large_header_class = 'startups-index'
     @skip_container = true
   end
 

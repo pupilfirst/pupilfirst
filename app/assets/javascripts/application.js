@@ -16,6 +16,7 @@
 
 //= require google_analytics.js.erb
 //= require navbar
+//= require shift_for_hash
 //= require users
 //= require limit_max_int
 //= require inspectlet

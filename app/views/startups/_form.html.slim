@@ -65,6 +65,10 @@ p
           a data-toggle="collapse" data-parent="#startup-form" href="#misc" Miscellaneous
       #misc.panel-collapse.collapse role="tabpanel"
         .panel-body
+          = f.input :product_video,
+            hint: 'Link to your product video, if available and public.',
+            input_html: { maxlength: 255 },
+            label: 'Product Video'
           = f.input :prototype_link,
             hint: 'Link to your product prototype, if available and public.',
             input_html: { maxlength: 255 },

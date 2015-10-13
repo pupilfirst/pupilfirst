@@ -20,6 +20,7 @@ class Target < ActiveRecord::Base
   validates_inclusion_of :status, in: valid_statuses
 
   just_define_datetime_picker :due_date
+  just_define_datetime_picker :completed_at
 
   def pending?
     status == 'pending'
@@ -34,6 +35,6 @@ class Target < ActiveRecord::Base
   end
 
   before_save do
-    self.completed_at = (status_changed? && done?) ? completed_at || Time.now : nil
+    self.completed_at = done? ? completed_at || Time.now : nil
   end
 end

@@ -13,3 +13,8 @@ $(document).on 'page:change', ->
     $(window).scroll(toggleNavbarBackground)
   else
     $(window).off("scroll", toggleNavbarBackground);
+
+# Enable the progressbar that shows up at top of page. This needs to be done only once per session.
+# TODO: Remove this when upgrading to Rails 5 (Turbolinks 3), where this progressbar is active by default.
+$ ->
+  Turbolinks.enableProgressBar();

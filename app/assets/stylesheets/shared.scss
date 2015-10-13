@@ -71,8 +71,3 @@ body {
 h1.page-header, h2.page-header {
   @media (max-width: $screen-xs-max) { margin-top: 20px; }
 }
-
-html.turbolinks-progress-bar::before {
-  background-color: red !important;
-  height: 5px !important;
-}

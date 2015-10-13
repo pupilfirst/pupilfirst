@@ -43,9 +43,9 @@ ActiveAdmin.register StartupFeedback do
 
     column :faculty
 
-    column :send_at do |startup_feedback|
-      if startup_feedback.send_at.present?
-        startup_feedback.send_at
+    column :sent_at do |startup_feedback|
+      if startup_feedback.sent_at.present?
+        startup_feedback.sent_at
       else
         link_to(
           'Email Now!',
@@ -85,9 +85,9 @@ ActiveAdmin.register StartupFeedback do
       row :reference_url
       row :faculty
 
-      row :send_at do |startup_feedback|
-        if startup_feedback.send_at.present?
-          startup_feedback.send_at
+      row :sent_at do |startup_feedback|
+        if startup_feedback.sent_at.present?
+          startup_feedback.sent_at
         else
           link_to(
             'Email Now!',
@@ -103,13 +103,13 @@ ActiveAdmin.register StartupFeedback do
 
   member_action :email_feedback, method: :put do
     startup_feedback = StartupFeedback.find params[:id]
-    startup_feedback.update(send_at: Time.now)
+    startup_feedback.update(sent_at: Time.now)
     StartupMailer.feedback_as_email(startup_feedback).deliver_later
     flash[:alert] = 'Your feedback has been sent to the startup founders!'
     redirect_to action: :index
   end
 
-  action_item :email_feedback, only: :show, if: proc { startup_feedback.send_at.blank? } do
+  action_item :email_feedback, only: :show, if: proc { startup_feedback.sent_at.blank? } do
     link_to(
       'Email Now!',
       email_feedback_admin_startup_feedback_path(startup_feedback),

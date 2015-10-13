@@ -27,12 +27,12 @@ appendRow = (index, feedback) ->
   feedbackHTML = "<td><pre class='startup-feedback'>#{feedback.feedback}</pre></td>"
   referenceUrlHTML = "<td><a href='#{feedback.reference_url}'>Link</a></td>"
 
-  if feedback.send_at
+  if feedback.sent_at
     # jquery-ui already has a formatDate. Hence, using that
-    send_at_entry = $.datepicker.formatDate('dd MM yy',new Date(feedback.send_at))
+    sent_at_entry = $.datepicker.formatDate('dd MM yy',new Date(feedback.sent_at))
   else
-    send_at_entry = "Not yet sent!"
+    sent_at_entry = "Not yet sent!"
 
-  sendAtHTML = "<td>#{send_at_entry}</td>"
+  sendAtHTML = "<td>#{sent_at_entry}</td>"
   trHTML = "<tr>#{viewLinkHTML}#{feedbackHTML}#{referenceUrlHTML}#{sendAtHTML}</tr>"
   $("#feedback-table-body").append(trHTML)

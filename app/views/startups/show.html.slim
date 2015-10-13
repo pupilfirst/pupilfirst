@@ -98,7 +98,10 @@
                         .labels.text-uppercase
                           span.label.label-primary #{t("role.#{target.role}")}
                           | &nbsp;
-                          span.label.label-success #{t("target.status.#{target.status}")}
+                          span.label.label-success
+                            ' #{t("target.status.#{target.status}")}
+                            - if target.completion_comment?
+                              a.fa.fa-exclamation-triangle.white-text href='#' data-toggle="tooltip" title="#{target.completion_comment}"
                         h4
                           | #{target.title}
                       .target-description

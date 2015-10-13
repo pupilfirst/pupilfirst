@@ -97,6 +97,10 @@ feature 'Timeline Builder' do
         visit startup_path(startup)
 
         page.find("#event-#{unverified_timeline_event.id} .edit-link").click
+
+        # Turbolinks is in effect, so wait for event to load.
+        expect(page).to have_selector('textarea', text: unverified_timeline_event.description)
+
         fill_in 'timeline_event_description', with: new_description
         click_on 'Submit for Review'
 
@@ -117,6 +121,9 @@ feature 'Timeline Builder' do
           visit startup_path(startup)
 
           page.find("#event-#{unverified_timeline_event.id} .edit-link").click
+
+          # Turbolinks is in effect, so wait for event to load.
+          expect(page).to have_selector('textarea', text: unverified_timeline_event.description)
 
           within '.timeline-builder' do
             page.find('a', text: 'Link to Google').click
@@ -143,6 +150,10 @@ feature 'Timeline Builder' do
         visit startup_path(startup)
 
         page.find("#event-#{verified_timeline_event.id} .edit-link").click
+
+        # Turbolinks is in effect, so wait for event to load.
+        expect(page).to have_selector('textarea', text: verified_timeline_event.description)
+
         fill_in 'timeline_event_description', with: new_description
 
         page.accept_confirm do

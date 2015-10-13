@@ -11,9 +11,8 @@
       = link_to 'About', about_path, class: 'top-nav-link'
     li role="presentation"
       = link_to 'Faculty', faculty_path, class: 'top-nav-link'
-    - if feature_active?(:resources)
-      li role="presentation"
-        = link_to 'Resources', resources_path, class: 'top-nav-link'
+    li role="presentation"
+      = link_to 'Resources', resources_path, class: 'top-nav-link'
     - if current_user
       li role="presentation" class="dropdown"
         a.dropdown-toggle.logged-in-avatar-link data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"

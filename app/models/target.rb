@@ -2,6 +2,9 @@ class Target < ActiveRecord::Base
   belongs_to :startup
   belongs_to :assigner, class_name: 'AdminUser'
 
+  scope :recently_pending, -> { where(status: 'pending').where('due_date >= ? OR due_date IS NULL', 2.days.ago).order(due_date: 'desc') }
+  scope :recently_completed, -> { where(status: 'done').order(completed_at: 'desc').limit(3) }
+
   # See en.yml's role
   def self.valid_roles
     %w(team) + User.valid_roles
@@ -20,5 +23,17 @@ class Target < ActiveRecord::Base
 
   def pending?
     status == 'pending'
+  end
+
+  def done?
+    status == 'done'
+  end
+
+  def expired?
+    pending? && due_date? && due_date < Time.now
+  end
+
+  before_save do
+    self.completed_at = (status_changed? && done?) ? completed_at || Time.now : nil
   end
 end

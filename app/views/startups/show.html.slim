@@ -54,34 +54,66 @@
             h3.targets-title Targets
             hr
             .row
-              - Target.valid_roles.each do |role|
-                - targets_for_role = @startup.targets.where(role: role)
-                - if targets_for_role.present?
-                  .col-sm-6.col-md-12
-                    - targets_for_role.each do |target|
-                      .target-container
-                        .target-title
-                          .labels.text-uppercase
-                            span.label.label-primary #{t("role.#{role}")}
-                            | &nbsp;
+              - pending_targets = @startup.targets.recently_pending
+              - if pending_targets.present?
+                .col-sm-6.col-md-12
+                  - pending_targets.each do |target|
+                    .target-container
+                      .target-title
+                        .labels.text-uppercase
+                          span.label.label-primary #{t("role.#{target.role}")}
+                          | &nbsp;
+                          - if target.expired?
+                            span.label.label-danger Expired
+                          - else
                             span.label.label-default #{t("target.status.#{target.status}")}
-                          h4
-                            | #{target.title}
-                        .target-description
-                          p = target.short_description
-                          - if target.pending? && target.completion_instructions.present?
-                            = target.completion_instructions
-                        .learn-more
-                          = link_to target.resource_url, class: 'btn btn-primary btn-sm pull-right', target: '_blank' do
-                            i.fa.fa-external-link-square
-                            | &nbsp; LEARN MORE
-                          .assigner class="#{target.due_date.present? ? '' : 'assigner-center'}"
-                            em
-                              ' Assigned by <strong>#{target.assigner.fullname}</strong>.
-                              - if target.due_date.present?
-                                br
-                                | Due date: <strong>#{target.due_date.in_time_zone('Asia/Calcutta').strftime('%b %-d at %I:%M %p')}</strong>.
-                          .clearfix
+                        h4
+                          | #{target.title}
+                      .target-description
+                        p = target.short_description
+                        - if target.pending? && target.completion_instructions.present?
+                          = target.completion_instructions
+                      .learn-more
+                        = link_to target.resource_url, class: 'btn btn-primary btn-sm pull-right', target: '_blank' do
+                          i.fa.fa-external-link-square
+                          | &nbsp; LEARN MORE
+                        .assigner class="#{target.due_date.present? ? '' : 'assigner-center'}"
+                          em
+                            ' Assigned by <strong>#{target.assigner.fullname}</strong>.
+                            - if target.due_date.present?
+                              br
+                              | Due date: <strong>#{target.due_date.in_time_zone('Asia/Calcutta').strftime('%b %-d at %I:%M %p')}</strong>.
+                        .clearfix
+              / Append the last 3 completed targets
+              - completed_targets = @startup.targets.recently_completed
+              - if completed_targets.present?
+                .col-sm-6.col-md-12
+                  - completed_targets.each do |target|
+                    .target-container
+                      .target-title
+                        .labels.text-uppercase
+                          span.label.label-primary #{t("role.#{target.role}")}
+                          | &nbsp;
+                          span.label.label-success #{t("target.status.#{target.status}")}
+                        h4
+                          | #{target.title}
+                      .target-description
+                        p = target.short_description
+                        - if target.pending? && target.completion_instructions.present?
+                          = target.completion_instructions
+                      .learn-more
+                        = link_to target.resource_url, class: 'btn btn-primary btn-sm pull-right', target: '_blank' do
+                          i.fa.fa-external-link-square
+                          | &nbsp; LEARN MORE
+                        .assigner class="#{target.due_date.present? ? '' : 'assigner-center'}"
+                          em
+                            ' Assigned by <strong>#{target.assigner.fullname}</strong>.
+                            - if target.due_date.present?
+                              br
+                              | Due date: <strong>#{target.due_date.in_time_zone('Asia/Calcutta').strftime('%b %-d at %I:%M %p')}</strong>.
+                        .clearfix
+
+
 
         .data-icons
           .row

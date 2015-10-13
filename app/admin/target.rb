@@ -2,7 +2,7 @@ ActiveAdmin.register Target do
   menu parent: 'Startups'
 
   permit_params :startup_id, :assigner_id, :role, :status, :title, :short_description, :status, :resource_url,
-    :completion_instructions, :due_date_date, :due_date_time_hour, :due_date_time_minute
+    :completion_instructions, :due_date_date, :due_date_time_hour, :due_date_time_minute, :completed_at
 
   preserve_default_filters!
   filter :startup,
@@ -97,6 +97,7 @@ ActiveAdmin.register Target do
       row :resource_url
       row :completion_instructions
       row :due_date
+      row :completed_at
       row :created_at
       row :updated_at
     end
@@ -114,6 +115,7 @@ ActiveAdmin.register Target do
         include_blank: false,
         member_label: proc { |status| t("target.status.#{status}") }
 
+      f.input :completed_at, as: :datepicker
       f.input :role,
         as: :select,
         collection: Target.valid_roles,

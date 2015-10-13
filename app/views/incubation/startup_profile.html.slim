@@ -45,6 +45,7 @@
 
           legend Optional fields
           = f.input :website, placeholder: 'www.your-website.com'
+          = f.input :product_video, placeholder: 'www.youtube.com/yourproductvideo'
           = f.input :registration_type, collection: valid_registration_types, :label_method => :first, :value_method => :last, include_blank: 'Unregistered'
           = f.association :startup_categories
           = f.input :team_size, input_html: { min: 1, max: 9999, 'data-max-int-length' => 4 }

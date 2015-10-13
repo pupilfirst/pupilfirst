@@ -8,6 +8,7 @@ class TimelineEventType < ActiveRecord::Base
   TYPE_NEW_DECK = 'new_product_deck'
   TYPE_NEW_WIREFRAME = 'new_wireframe'
   TYPE_NEW_PROTOTYPE = 'new_prototype'
+  TYPE_NEW_VIDEO = 'new_video'
 
   TYPE_STAGE_IDEA = 'moved_to_idea_discovery'
   TYPE_STAGE_PROTOTYPE = 'moved_to_prototyping'
@@ -61,6 +62,10 @@ class TimelineEventType < ActiveRecord::Base
 
   def new_prototype?
     key == TYPE_NEW_PROTOTYPE
+  end
+
+  def new_video?
+    key == TYPE_NEW_VIDEO
   end
 
   def self.stage_keys

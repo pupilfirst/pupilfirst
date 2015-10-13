@@ -98,6 +98,7 @@ class TimelineEvent < ActiveRecord::Base
     add_link_for_new_deck!
     add_link_for_new_wireframe!
     add_link_for_new_prototype!
+    add_link_for_new_video!
   end
 
   def unverify!
@@ -138,5 +139,11 @@ class TimelineEvent < ActiveRecord::Base
     return unless timeline_event_type.new_prototype? && links[0].try(:[], :url).present?
     return if links[0].try(:[], :private)
     startup.update!(prototype_link: links[0][:url])
+  end
+
+  def add_link_for_new_video!
+    return unless timeline_event_type.new_video? && links[0].try(:[], :url).present?
+    return if links[0].try(:[], :private)
+    startup.update!(product_video: links[0][:url])
   end
 end

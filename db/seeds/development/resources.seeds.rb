@@ -11,7 +11,7 @@ Resource.create!(
 
 Resource.create!(
   file: Rails.root.join(pdf_path).open,
-  title: 'Public PDF File',
+  title: 'PDF for approved startups',
   description: 'This is a restricted PDF file, meant to be accessible by approved startups!',
   share_status: Resource::SHARE_STATUS_APPROVED
 )
@@ -19,7 +19,7 @@ Resource.create!(
 Resource.create!(
   file: Rails.root.join(pdf_path).open,
   thumbnail: Rails.root.join(thumbnail_path).open,
-  title: 'Public PDF File',
+  title: 'PDF for batch 1 startups',
   description: 'This is a restricted PDF file, meant to be accessible by approved startups of batch 1.',
   share_status: Resource::SHARE_STATUS_APPROVED,
   shared_with_batch: 1

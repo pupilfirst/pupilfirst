@@ -41,7 +41,7 @@
         .pull-right
           = f.select :timeline_event_type_id do
             option value='' selected=(event.persisted? ? nil : true)
-            - suggested = TimelineEventType.suggested_for(event.startup)
+            - suggested = TimelineEventType.suggested_for(event.startup).order(:title)
             - if suggested
               optgroup label="Suggested"
                 - suggested.each do |s_t|

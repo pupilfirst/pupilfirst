@@ -1,2 +1,2 @@
-//= require navbar.js
+//= require navbar.coffee
 //= reqiure home/stages

@@ -1,9 +1,8 @@
-$(->
+$(document).on 'page:change', ->
   $('#verified-icon').tooltip()
   $('.truncated-founder-name').tooltip()
-)
 
-$(->
+$(document).on 'page:change', ->
   $(".tl_link_button").click((e) ->
     if ($(this).find(".ink").length == 0)
       $(this).prepend("<span class='ink'></span>")
@@ -20,9 +19,8 @@ $(->
 
     ink.css({top: y + 'px', left: x + 'px'}).addClass("animate")
   )
-)
 
-$(->
+$(document).on 'page:change', ->
   $('#read-from-beginning').click(->
     document.getElementById("timeline-list").lastChild.scrollIntoView(false)
     return false
@@ -37,15 +35,13 @@ $(->
       $("#verified").removeClass("tooltip-right")
       $("#verified").removeAttr("data-tooltip")
   )
-)
 
-$(->
+$(document).on 'page:change', ->
   $("#new-event-form .panel-heading").click(->
     $("#new-event-form .panel-body").collapse('toggle')
     $("#new-event-form .fa-plus").toggleClass("hidden")
     $("#new-event-form .fa-minus").toggleClass("hidden")
   )
-)
 
 timelineBuilderSubmitChecks = ->
   $('form.new_timeline_event, form.edit_timeline_event').submit((event) ->
@@ -314,15 +310,15 @@ setImprovementModalContent = ->
 addTooltipToHideCheckbox = ->
   $("#hide-from-public").tooltip()
 
-$(timelineBuilderSubmitChecks)
-$(setupSelect2ForEventType)
-$(clearErrorsOnOpeningSelect2)
-$(handleImageUpload)
-$(handleLinkAddition)
-$(markSelectedLinksOnEdit)
-$(measureDescriptionLength)
-$(setPendingTooltips)
-$(matchSampleTextToEventType)
-$(setupTimelineBuilderDatepicker)
-$(setImprovementModalContent)
-$(addTooltipToHideCheckbox)
+$(document).on 'page:change', timelineBuilderSubmitChecks
+$(document).on 'page:change', setupSelect2ForEventType
+$(document).on 'page:change', clearErrorsOnOpeningSelect2
+$(document).on 'page:change', handleImageUpload
+$(document).on 'page:change', handleLinkAddition
+$(document).on 'page:change', markSelectedLinksOnEdit
+$(document).on 'page:change', measureDescriptionLength
+$(document).on 'page:change', setPendingTooltips
+$(document).on 'page:change', matchSampleTextToEventType
+$(document).on 'page:change', setupTimelineBuilderDatepicker
+$(document).on 'page:change', setImprovementModalContent
+$(document).on 'page:change', addTooltipToHideCheckbox

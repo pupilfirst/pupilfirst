@@ -30,4 +30,4 @@ resourceDownloadManager = ->
     )
   )
 
-$(resourceDownloadManager)
+$(document).on 'page:change', resourceDownloadManager

@@ -53,4 +53,4 @@ showcaseEmbeds = ->
     false
   )
 
-$(showcaseEmbeds)
+$(document).on 'page:change', showcaseEmbeds

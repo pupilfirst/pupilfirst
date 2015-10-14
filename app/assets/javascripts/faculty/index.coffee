@@ -2,4 +2,4 @@ setupAvailabilityTooltips = ->
   $('.available-marker').tooltip()
   $('.connect-link').tooltip()
 
-$(setupAvailabilityTooltips)
+$(document).on 'page:change', setupAvailabilityTooltips

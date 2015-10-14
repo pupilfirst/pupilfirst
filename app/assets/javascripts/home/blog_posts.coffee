@@ -44,4 +44,4 @@ loadBlogPosts = ->
     $("#blog-posts-loading").addClass('hidden')
   )
 
-$(loadBlogPosts)
+$(document).on 'page:change', loadBlogPosts

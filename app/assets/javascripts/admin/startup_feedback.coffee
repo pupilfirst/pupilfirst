@@ -1,4 +1,4 @@
-$ ->
+$(document).on 'page:change', ->
   $('#startup_feedback_startup_id').select2({ placeholder : 'Select Product' })
   $('#startup_feedback_startup_id').change(showStartupFeedback)
   showStartupFeedback()

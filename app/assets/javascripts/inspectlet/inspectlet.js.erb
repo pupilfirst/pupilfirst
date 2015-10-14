@@ -6,4 +6,15 @@ __insp.push(['wid', 986143149]);
   document.readyState != "complete" ? (window.attachEvent ? window.attachEvent('onload', ldinsp) : window.addEventListener('load', ldinsp, false)) : ldinsp();
 
 })();
+<% else %>
+window.__insp = {
+  push: function() {
+    var params = Array.prototype.slice.call(arguments);
+    console.log("Inspectlet: " + params);
+  }
+};
 <% end %>
+
+$(document).on('page:load', function() {
+  __insp.push(["virtualPage"]);
+});

@@ -1,5 +1,7 @@
 #= require active_admin/base
 
+#= require turbolinks
+
 # External libraries
 #= require select2
 #= require pnotify

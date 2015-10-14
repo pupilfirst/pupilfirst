@@ -42,6 +42,7 @@ ActiveAdmin.register StartupFeedback do
     end
 
     column :faculty
+    column :created_at
 
     column :sent_at do |startup_feedback|
       if startup_feedback.sent_at.present?

@@ -49,6 +49,9 @@
   .row
     #data-points
       .col-md-4.col-md-push-8
+        - if @startup.latest_help_wanted.present?
+          .alert.alert-danger
+            .fa.fa-exclamation-triangle href='#' data-toggle="tooltip" title="#{@startup.latest_help_wanted.description}" &nbsp;HELP WANTED!
         - if current_user && @startup.founder?(current_user) && @startup.targets.present?
           #targets
             h3.targets-title Targets

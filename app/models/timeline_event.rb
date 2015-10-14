@@ -37,6 +37,7 @@ class TimelineEvent < ActiveRecord::Base
   scope :has_image, -> { where.not(image: nil) }
   scope :from_approved_startups, -> { joins(:startup).where(startups: { approval_status: Startup::APPROVAL_STATUS_APPROVED }) }
   scope :showcase, -> { includes(:timeline_event_type, :startup).verified.from_approved_startups.batched.has_image.order('timeline_events.event_on DESC') }
+  scope :help_wanted, -> { where(timeline_event_type: TimelineEventType.help_wanted) }
 
   validate :link_url_format
 

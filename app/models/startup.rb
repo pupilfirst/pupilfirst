@@ -539,4 +539,8 @@ class Startup < ActiveRecord::Base
   def update_stage!
     update_column(:stage, current_stage)
   end
+
+  def latest_help_wanted
+    timeline_events.verified.help_wanted.order(created_at: 'desc').first
+  end
 end

@@ -9,6 +9,7 @@ class TimelineEventType < ActiveRecord::Base
   TYPE_NEW_WIREFRAME = 'new_wireframe'
   TYPE_NEW_PROTOTYPE = 'new_prototype'
   TYPE_NEW_VIDEO = 'new_video'
+  TYPE_HELP_WANTED = 'help_wanted'
 
   TYPE_STAGE_IDEA = 'moved_to_idea_discovery'
   TYPE_STAGE_PROTOTYPE = 'moved_to_prototyping'
@@ -79,4 +80,5 @@ class TimelineEventType < ActiveRecord::Base
   scope :end_iteration, -> { where(key: TYPE_END_ITERATION) }
   scope :moved_to_stage, -> { where(key: stage_keys) }
   scope :suggested_for, ->(startup) { where('suggested_stage LIKE ?', "%#{startup.current_stage}%").where.not(id: startup.current_stage_event_types.map(&:id)) }
+  scope :help_wanted, -> { where(key: TYPE_HELP_WANTED) }
 end

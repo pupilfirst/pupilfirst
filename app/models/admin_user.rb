@@ -3,7 +3,7 @@ class AdminUser < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
-  has_many :targets, dependent: :restrict_with_error
+  has_many :targets, dependent: :restrict_with_error, foreign_key: 'assigner_id'
 
   TYPE_SUPERADMIN = 'superadmin'
   TYPE_TIMELINE_REVIEWER = 'timeline_reviewer'

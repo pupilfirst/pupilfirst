@@ -331,22 +331,20 @@
                             i.fa.fa-exclamation-circle
                             | &nbsp;Pending verification
                         - elsif event.needs_improvement?
-                          - latest_feedback = StartupFeedback.for_timeline_event(event).first
-                          - if latest_feedback.present?
-                            - feedback = latest_feedback.feedback
-                            - faculty = "#{latest_feedback.faculty.name} of Team SV"
-                            a data-toggle="modal" data-target="#improvement-modal" data-feedback="#{latest_feedback.feedback}" data-faculty="#{faculty}"
-                              .pending-verification.pointer-cursor href="#" data-toggle="tooltip" title="Click to see feedback from Team SV to improve this entry!"
-                                i.fa.fa-exclamation-circle
-                                | &nbsp;Needs Improvement
-                          - else
-                            .pending-verification href="#" data-toggle="tooltip" title="This event needs to be improved and resubmitted for approval."
-                              i.fa.fa-exclamation-circle
-                              | &nbsp;Needs Improvement
-                        a href="#{startup_url(event.startup, anchor: "event-#{event.id}")}"
-                          h4.timeline-title
+                          .pending-verification href="#" data-toggle="tooltip" title="This event needs to be improved and resubmitted for approval."
+                            i.fa.fa-exclamation-circle
+                            | &nbsp;Needs Improvement
+                        h4.timeline-title-panel
+                          a.timeline-title href="#{startup_url(event.startup, anchor: "event-#{event.id}")}"
                             ' #{event.timeline_event_type.title}
                             i.fa.fa-link
+                          / display info icon if founder
+                          - if !event.verified? && current_user && @startup.founder?(current_user)
+                            - latest_feedback = StartupFeedback.for_timeline_event(event).first
+                            - if latest_feedback.present?
+                              - feedback = latest_feedback.feedback
+                              - faculty = "#{latest_feedback.faculty.name} of Team SV"
+                              a.fa.fa-info-circle.pull-right.pointer-cursor data-toggle="modal" data-target="#improvement-modal" data-feedback="#{latest_feedback.feedback}" data-faculty="#{faculty}"
                         p.tl-date
                           small
                             i.fa.fa-calendar

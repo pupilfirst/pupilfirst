@@ -421,10 +421,6 @@ h3.targets-title { margin: 0 0 10px 0; }
 
       .timeline-heading {
         padding-top: 15px;
-        a {
-          text-decoration: none;
-          color: red;
-        }
       }
     }
 
@@ -470,7 +466,7 @@ h3.targets-title { margin: 0 0 10px 0; }
   &.color14 { background-color: #8BBF53 !important; }
 }
 
-.timeline-title {
+.timeline-title-panel {
   margin-top: 0;
   //font-family: 'Roboto';
   font-style: normal;
@@ -478,14 +474,21 @@ h3.targets-title { margin: 0 0 10px 0; }
   font-size: 20px;
   color: black;
   line-height: 40px;
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
   .fa-link {
     display: none;
     color: grey;
   }
-  &:hover {
+  .timeline-title:hover {
     .fa-link {
       display: inline;
     }
+  }
+  .fa-info-circle{
+    color: $timeline-blue-text;
   }
 }
 

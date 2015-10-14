@@ -289,23 +289,23 @@
                 .tl-iteration id="event-#{event.id}"
                   .buttons style="display:inline" End of Iteration #{event.iteration}
                   br
-                  p style="margin-top: 10px" #{event.timeline_event_type.title}
+                  p style="margin-top: 10px"
+                    ' #{event.timeline_event_type.title}
+                    / display info icon if founder
+                    - if !event.verified? && current_user && @startup.founder?(current_user)
+                      - latest_feedback = StartupFeedback.for_timeline_event(event).first
+                      - if latest_feedback.present?
+                        - feedback = latest_feedback.feedback
+                        - faculty = "#{latest_feedback.faculty.name} of Team SV"
+                        a.fa.fa-comment.pull-right.pointer-cursor data-toggle="modal" data-target="#improvement-modal" data-feedback="#{latest_feedback.feedback}" data-faculty="#{faculty}"
                   - if event.pending?
                     .pending-verification href="#" data-toggle="tooltip" title="This event has not yet been verified by SV.CO, and is hidden from the public."
                       i.fa.fa-exclamation-circle
                       | &nbsp;Pending verification
                   - if event.needs_improvement?
-                    - latest_feedback = StartupFeedback.where(reference_url: startup_url(event.startup, anchor: "event-#{event.id}")).order('updated_at desc').first
-                    - if latest_feedback.present?
-                      - faculty = "#{latest_feedback.faculty.name} of Team SV"
-                      a data-toggle="modal" data-target="#improvement-modal" data-feedback="#{latest_feedback.feedback}" data-faculty="#{faculty}"
-                        .pending-verification href="#" data-toggle="tooltip" title="Click to see feedback from Team SV to improve this entry!"
-                          i.fa.fa-exclamation-circle
-                          | &nbsp;Needs Improvement
-                    - else
-                      .pending-verification href="#" data-toggle="tooltip" title="This event needs to be improved and resubmitted for approval."
-                        i.fa.fa-exclamation-circle
-                        | &nbsp;Needs Improvement
+                    .pending-verification href="#" data-toggle="tooltip" title="This event needs to be improved and resubmitted for approval."
+                      i.fa.fa-exclamation-circle
+                      | &nbsp;Needs Improvement
                   = image_tag 'timeline/dash.png'
                   p #{event.description}
 
@@ -347,7 +347,7 @@
                             - if latest_feedback.present?
                               - feedback = latest_feedback.feedback
                               - faculty = "#{latest_feedback.faculty.name} of Team SV"
-                              a.fa.fa-info-circle.pull-right.pointer-cursor data-toggle="modal" data-target="#improvement-modal" data-feedback="#{latest_feedback.feedback}" data-faculty="#{faculty}"
+                              a.fa.fa-comment.pull-right.pointer-cursor data-toggle="modal" data-target="#improvement-modal" data-feedback="#{latest_feedback.feedback}" data-faculty="#{faculty}"
                         p.tl-date
                           small
                             i.fa.fa-calendar

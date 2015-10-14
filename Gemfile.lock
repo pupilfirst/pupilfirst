@@ -388,7 +388,7 @@ GEM
     passenger (5.0.14)
       rack
       rake (>= 0.8.1)
-    pg (0.18.2)
+    pg (0.18.3)
     phony (2.14.5)
     phony_rails (0.12.7)
       activesupport (>= 3.0)

@@ -29,10 +29,6 @@ Now start the server with `bin/rails s`
 
 To execute all tests manually, run:
 
-    bin/rake spec
-
-or just:
-
     rspec
 
 ## Services

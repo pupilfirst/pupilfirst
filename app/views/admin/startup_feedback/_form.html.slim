@@ -4,6 +4,7 @@
       span Feedback details
     = f.input :startup, collection: Startup.where.not(product_name: nil), member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }, label: 'Product'
     = f.input :feedback
+    = f.input :activity_type
     = f.input :reference_url
     = f.input :faculty, placeholder: 'Select faculty member'
 

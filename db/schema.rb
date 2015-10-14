@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151013185528) do
+ActiveRecord::Schema.define(version: 20151014121505) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -205,6 +205,7 @@ ActiveRecord::Schema.define(version: 20151013185528) do
     t.integer  "startup_id"
     t.datetime "sent_at"
     t.integer  "faculty_id"
+    t.string   "activity_type"
   end
 
   add_index "startup_feedback", ["faculty_id"], name: "index_startup_feedback_on_faculty_id", using: :btree

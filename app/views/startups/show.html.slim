@@ -51,10 +51,10 @@
       .col-md-4.col-md-push-8
         - if @startup.latest_help_wanted.present?
           .alert.alert-info
-            a href="#{startup_url(@startup, anchor: "event-#{@startup.latest_help_wanted.id}")}"
-              .fa.fa-question-circle &nbsp;
-              strong Help Wanted:
-              | &nbsp;#{@startup.latest_help_wanted.description}
+            strong Help Wanted:
+            ' &nbsp;#{@startup.latest_help_wanted.description}
+            - if @startup.email?
+              | Please reach out to us at #{mail_to @startup.email}
         - if current_user && @startup.founder?(current_user) && @startup.targets.present?
           #targets
             h3.targets-title Targets

@@ -292,7 +292,7 @@
                   p style="margin-top: 10px"
                     ' #{event.timeline_event_type.title}
                     / display info icon if founder
-                    - if !event.verified? && current_user && @startup.founder?(current_user)
+                    - if current_user && @startup.founder?(current_user)
                       - latest_feedback = StartupFeedback.for_timeline_event(event).first
                       - if latest_feedback.present?
                         - feedback = latest_feedback.feedback
@@ -342,7 +342,7 @@
                             ' #{event.timeline_event_type.title}
                             i.fa.fa-link
                           / display info icon if founder
-                          - if !event.verified? && current_user && @startup.founder?(current_user)
+                          - if current_user && @startup.founder?(current_user)
                             - latest_feedback = StartupFeedback.for_timeline_event(event).first
                             - if latest_feedback.present?
                               - feedback = latest_feedback.feedback

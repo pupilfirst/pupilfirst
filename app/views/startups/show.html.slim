@@ -50,8 +50,11 @@
     #data-points
       .col-md-4.col-md-push-8
         - if @startup.latest_help_wanted.present?
-          .alert.alert-danger
-            .fa.fa-exclamation-triangle href='#' data-toggle="tooltip" title="#{@startup.latest_help_wanted.description}" &nbsp;HELP WANTED!
+          .alert.alert-info
+            a href="#{startup_url(@startup, anchor: "event-#{@startup.latest_help_wanted.id}")}"
+              .fa.fa-question-circle &nbsp;
+              strong Help Wanted:
+              | &nbsp;#{@startup.latest_help_wanted.description}
         - if current_user && @startup.founder?(current_user) && @startup.targets.present?
           #targets
             h3.targets-title Targets

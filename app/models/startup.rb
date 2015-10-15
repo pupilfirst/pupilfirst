@@ -102,6 +102,7 @@ class Startup < ActiveRecord::Base
   has_many :startup_feedback, dependent: :destroy
   has_many :karma_points, through: :founders
   has_many :targets, dependent: :destroy
+  has_many :connect_requests, dependent: :destroy
 
   # Allow statup to accept nested attributes for users
   # has_many :users
@@ -542,5 +543,11 @@ class Startup < ActiveRecord::Base
 
   def latest_help_wanted
     timeline_events.verified.help_wanted.order(created_at: 'desc').first
+  end
+
+  def display_name
+    label = product_name
+    label += " (#{name})" if name.present?
+    label
   end
 end

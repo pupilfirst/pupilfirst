@@ -29,3 +29,8 @@ table > caption {
   font-weight: bold;
   border: 1px solid #d3d8dc;
 }
+
+// Use with form_class on button_to-s in AA views.
+.inline-button {
+  display: inline;
+}

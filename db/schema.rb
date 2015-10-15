@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151014121505) do
+ActiveRecord::Schema.define(version: 20151015080120) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,6 +62,28 @@ ActiveRecord::Schema.define(version: 20151014121505) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "connect_requests", force: :cascade do |t|
+    t.integer  "connect_slot_id"
+    t.integer  "startup_id"
+    t.text     "questions"
+    t.string   "status"
+    t.string   "meeting_link"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "connect_requests", ["connect_slot_id"], name: "index_connect_requests_on_connect_slot_id", using: :btree
+  add_index "connect_requests", ["startup_id"], name: "index_connect_requests_on_startup_id", using: :btree
+
+  create_table "connect_slots", force: :cascade do |t|
+    t.integer  "faculty_id"
+    t.datetime "slot_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "connect_slots", ["faculty_id"], name: "index_connect_slots_on_faculty_id", using: :btree
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -400,6 +422,9 @@ ActiveRecord::Schema.define(version: 20151014121505) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["university_id"], name: "index_users_on_university_id", using: :btree
 
+  add_foreign_key "connect_requests", "connect_slots"
+  add_foreign_key "connect_requests", "startups"
+  add_foreign_key "connect_slots", "faculty"
   add_foreign_key "karma_points", "users"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "timeline_events", "startups"

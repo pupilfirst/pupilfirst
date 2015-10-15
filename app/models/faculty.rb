@@ -3,6 +3,7 @@ class Faculty < ActiveRecord::Base
   process_in_background :image
 
   has_many :startup_feedback, dependent: :restrict_with_error
+  has_many :connect_slots, dependent: :destroy
 
   CATEGORY_TEAM = 'team'
   CATEGORY_VISITING_FACULTY = 'visiting_faculty'

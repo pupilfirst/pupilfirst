@@ -5,7 +5,7 @@ stripHTML = (dirtyString) ->
 
 loadBlogPosts = ->
   # TODO: Load JS and images from https://blog.sv.co when it's available.
-  $.get("http://www.startatsv.com?json=get_recent_posts&count=4", (data) ->
+  $.get("https://blog.sv.co?json=get_recent_posts&count=4", (data) ->
     blogPostsContainer = $("#blog-posts-container")
     postScaffold = $("#post-scaffold")
 

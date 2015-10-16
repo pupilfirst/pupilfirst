@@ -38,8 +38,8 @@
         a.btn.btn-primary.btn-sm.connect-link data-toggle="modal" data-target="#faculty-connect-modal-#{member.id}"
           | Connect
       - elsif current_user.try(:can_view_connect?)
-        .btn.btn-primary.btn-sm.connect-link data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available to #{current_user.startup.admin.fullname} (your team lead)"
+        .disabled.btn.btn-primary.btn-sm.connect-link data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available to #{current_user.startup.admin.fullname} (your team lead)"
           | Connect
       - else
-        .btn.btn-primary.btn-sm.connect-link data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available once you are a selected founder"
+        .disabled.btn.btn-primary.btn-sm.connect-link data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available once you are a selected founder"
           | Connect

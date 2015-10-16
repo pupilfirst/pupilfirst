@@ -218,4 +218,14 @@ class User < ActiveRecord::Base
   def founder?
     is_founder && startup.present? && startup.approved?
   end
+
+  # The option to create connect requests is restricted to team leads of batched, approved startups.
+  def can_connect?
+    startup.present? && startup.approved? && startup.batched? && startup_admin?
+  end
+
+  # The option to view some info about creating connect requests is restricted to non-lead members of batched, approved startups.
+  def can_view_connect?
+    startup.present? && startup.approved? && startup.batched? && !startup_admin?
+  end
 end

@@ -27,6 +27,12 @@ class ConnectRequest < ActiveRecord::Base
 
   validate :require_meeting_link_for_confirmed
 
+  before_validation :set_status_for_nil
+
+  def set_status_for_nil
+    self.status = STATUS_REQUESTED if status.nil?
+  end
+
   # Set status to confirmed.
   def confirm!
     update!(status: STATUS_CONFIRMED)

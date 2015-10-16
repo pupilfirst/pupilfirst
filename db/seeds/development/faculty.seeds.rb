@@ -6,8 +6,6 @@ Faculty.create!(
   key_skills: Faker::Lorem.words(3).join(', '),
   linkedin_url: 'https://linkedin.com',
   category: 'team',
-  available_for_connect: true,
-  availability: Faker::Lorem.words(4).join(' '),
   image: Rails.root.join('spec/support/uploads/faculty/mickey_mouse.jpg').open,
   sort_index: 1
 )
@@ -18,8 +16,6 @@ Faculty.create!(
   key_skills: Faker::Lorem.words(3).join(', '),
   linkedin_url: 'https://linkedin.com',
   category: 'team',
-  available_for_connect: true,
-  availability: Faker::Lorem.words(4).join(' '),
   image: Rails.root.join('spec/support/uploads/faculty/minnie_mouse.jpg').open,
   sort_index: 2
 )
@@ -30,8 +26,6 @@ Faculty.create!(
   key_skills: Faker::Lorem.words(3).join(', '),
   linkedin_url: 'https://linkedin.com',
   category: 'team',
-  available_for_connect: false,
-  availability: Faker::Lorem.words(4).join(' '),
   image: Rails.root.join('spec/support/uploads/faculty/donald_duck.jpg').open,
   sort_index: 3
 )

@@ -68,8 +68,10 @@ Svapp::Application.routes.draw do
     get 'office-hours'
   end
 
-  scope 'faculty', as: 'faculty', controller: 'faculty' do
-    get '/', action: 'index'
+  resources :faculty, only: %w(index) do
+    member do
+      post 'connect'
+    end
   end
 
   resources :resources, only: %w(index show) do

@@ -21,6 +21,9 @@
 //= require limit_max_int
 //= require inspectlet
 
+// Shared
+//= require _shared
+
 // Controller-specific
 //= require home
 //= require faculty

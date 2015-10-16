@@ -248,6 +248,10 @@ class Startup < ActiveRecord::Base
     errors.add(:founders, 'should have at least one founder') if founders.nil? || founders.size < 1
   end
 
+  def batched?
+    batch.present?
+  end
+
   mount_uploader :logo, LogoUploader
   process_in_background :logo
 

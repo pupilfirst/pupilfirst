@@ -28,12 +28,12 @@
             .modal-content
               .modal-header
                 button.close data-dismiss="modal" type="button"  &times;
-                h4.modal-title Request Faculty Connect
+                h4.modal-title Connect with #{member.name}
               .modal-body
                 = simple_form_for current_user.startup.connect_requests.new, url: connect_faculty_url(member) do |f|
                   = f.input :connect_slot, as: :select, collection: connect_slots, include_blank: false, label: 'Pick a slot.'
                   = f.input :questions, label: 'What questions would you like to ask the faculty member?', input_html: { maxlength: ConnectRequest::MAX_QUESTIONS_LENGTH, rows: 6 }
-                  = f.submit 'Submit', class: 'btn btn-primary'
+                  = f.submit 'Submit Request', class: 'btn btn-primary'
 
         a.btn.btn-primary.btn-sm.connect-link data-toggle="modal" data-target="#faculty-connect-modal-#{member.id}"
           | Connect

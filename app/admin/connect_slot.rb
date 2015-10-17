@@ -24,21 +24,25 @@ ActiveAdmin.register ConnectSlot do
 
     new_slots = []
 
-    params[:connect_slots][:slots].split(',').each do |slot|
-      hour = slot.to_i
-      minute = (((slot.to_f) - hour) * 60).to_s.delete('.')[0..1]
+    begin
+      params[:connect_slots][:slots].split(',').each do |slot|
+        hour = slot.to_i
+        minute = (((slot.to_f) - hour) * 60).to_s.delete('.')[0..1]
 
-      connect_slot = faculty.connect_slots.find_or_initialize_by(
-        slot_at: Time.parse("#{params[:connect_slots][:date]} #{hour.to_s.rjust(2, '0')}:#{minute}:00 +0530")
-      )
+        connect_slot = faculty.connect_slots.find_or_initialize_by(
+          slot_at: Time.parse("#{params[:connect_slots][:date]} #{hour.to_s.rjust(2, '0')}:#{minute}:00 +0530")
+        )
 
-      unless connect_slot.persisted?
-        connect_slot.save!
-        new_slots << connect_slot
+        unless connect_slot.persisted?
+          connect_slot.save!
+          new_slots << connect_slot
+        end
       end
+    rescue ActiveRecord::RecordInvalid => e
+      flash[:error] = e.message
+    else
+      flash[:success] = "#{new_slots.count} slots have been created for #{faculty.name}"
     end
-
-    flash[:success] = "#{new_slots.count} slots have been created for #{faculty.name}"
 
     redirect_to admin_connect_slots_path
   end

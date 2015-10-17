@@ -2,6 +2,8 @@ class ConnectRequest < ActiveRecord::Base
   belongs_to :connect_slot
   belongs_to :startup
 
+  delegate :faculty, :slot_at, to: :connect_slot
+
   validates_presence_of :connect_slot_id, :startup_id, :questions, :status
   validates_uniqueness_of :connect_slot_id
 
@@ -31,6 +33,14 @@ class ConnectRequest < ActiveRecord::Base
 
   def set_status_for_nil
     self.status = STATUS_REQUESTED if status.nil?
+  end
+
+  after_save :send_mails_for_confirmed
+
+  def send_mails_for_confirmed
+    return unless status_changed? && confirmed?
+    FacultyMailer.connect_request_confirmed(self).deliver_later
+    StartupMailer.connect_request_confirmed(self).deliver_later
   end
 
   # Set status to confirmed.

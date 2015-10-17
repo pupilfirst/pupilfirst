@@ -1,0 +1,20 @@
+= content_for :heading
+  | Connect Request with #{@connect_request.startup.product_name} team has been confirmed.
+
+= content_for :salutation
+  | Hello #{@connect_request.faculty.name},
+
+= content_for :body
+  p
+    ' The connect request created by #{@connect_request.startup.admin.fullname} of
+    ' #{@connect_request.startup.display_name} has just been confirmed for
+    strong #{@connect_request.connect_slot} IST.
+
+  p
+    ' Meeting link:
+    = link_to @connect_request.meeting_link do
+      span.monospace #{@connect_request.meeting_link}
+
+  p The team lead at #{@connect_request.startup.product_name} has asked the following questions:
+
+  = simple_format @connect_request.questions, class: 'monospace'

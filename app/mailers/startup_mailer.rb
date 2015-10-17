@@ -49,4 +49,13 @@ class StartupMailer < ApplicationMailer
     send_to = startup_feedback.startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
     mail(to: send_to, subject: 'Feedback from Team SV.')
   end
+
+  # Mail sent to startup founders once a connect request is confirmed.
+  #
+  # @param connect_request [ConnectRequest] Request that was just confirmed
+  def connect_request_confirmed(connect_request)
+    @connect_request = connect_request
+    send_to = connect_request.startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
+    mail(to: send_to, subject: 'Connect Request confirmed.')
+  end
 end

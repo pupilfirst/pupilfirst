@@ -23,7 +23,7 @@ table {
     line-height: 100%;
   }
 
-  .mail-logo-table { 
+  .mail-logo-table {
     width: 100%;
 
     td {
@@ -52,6 +52,11 @@ table {
 }
 
 p.monospace {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 90%;
+}
+
+span.monospace {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 90%;
 }

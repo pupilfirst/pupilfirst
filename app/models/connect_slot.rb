@@ -7,6 +7,13 @@ class ConnectSlot < ActiveRecord::Base
   validates_presence_of :faculty_id, :slot_at
   validates_uniqueness_of :slot_at, scope: [:faculty_id]
 
+  validate :faculty_must_have_email
+
+  def faculty_must_have_email
+    return if faculty.email.present?
+    errors[:faculty] << 'must have email address to create connect slot.'
+  end
+
   just_define_datetime_picker :slot_at
 
   # Used by AA to form label.

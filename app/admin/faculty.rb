@@ -1,5 +1,5 @@
 ActiveAdmin.register Faculty do
-  permit_params :name, :title, :key_skills, :linkedin_url, :category, :image, :sort_index
+  permit_params :name, :email, :title, :key_skills, :linkedin_url, :category, :image, :sort_index
 
   config.sort_order = 'sort_index_asc'
 
@@ -7,6 +7,7 @@ ActiveAdmin.register Faculty do
     selectable_column
     column :category
     column :name
+    column :email
     column :title
     column :sort_index
     actions
@@ -16,6 +17,7 @@ ActiveAdmin.register Faculty do
     f.inputs 'Faculty Details' do
       f.input :category, as: :select, collection: Faculty.valid_categories
       f.input :name
+      f.input :email
       f.input :title
       f.input :image, as: :file
       f.input :key_skills

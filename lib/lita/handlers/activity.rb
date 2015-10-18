@@ -1,7 +1,7 @@
 module Lita
   module Handlers
     class Activity < Handler
-      route(/\Aactivity?\z/, :greet, command: true)
+      route(/\Aactivity\?\z/, :greet, command: true)
 
       def greet(response)
         count = PublicSlackMessage.active_last_hour

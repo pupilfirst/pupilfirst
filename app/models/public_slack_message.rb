@@ -1,6 +1,6 @@
 class PublicSlackMessage < ActiveRecord::Base
   belongs_to :user
-  def self.active_last_hour
-    PublicSlackMessage.where('created_at > ?', 1.hour.ago).select(:slack_username).distinct.count
+  def self.users_active_last_hour
+    User.where(id: PublicSlackMessage.where('created_at > ?', 1.hour.ago).select(:user).distinct.pluck(:user_id))
   end
 end

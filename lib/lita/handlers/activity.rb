@@ -4,8 +4,12 @@ module Lita
       route(/\Aactivity\?\z/, :greet, command: true)
 
       def greet(response)
-        count = PublicSlackMessage.active_last_hour
-        response.reply_privately("There were " + count.to_s + " active users in the last hour!")
+        active_users = PublicSlackMessage.users_active_last_hour.batched
+        active_startups = Startup.find active_users.select(:startup).distinct.pluck(:startup_id)
+        response.reply_privately(
+          "Here's activity for the last hour:",
+          "batch founders active: " + active_users.count.to_s,
+          "batch startups active: " + active_startups.count.to_s)
       end
     end
 

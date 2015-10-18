@@ -1,7 +1,7 @@
 module Lita
   module Handlers
     class Activity < Handler
-      route(/\Ahello\z/, :greet, command: true
+      route(/\Ahello\z/, :greet, command: true)
 
       def greet(response)
         response.reply("Hello there, I am the vocalist!")

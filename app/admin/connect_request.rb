@@ -14,14 +14,6 @@ ActiveAdmin.register ConnectRequest do
     actions
   end
 
-  member_action :confirm, method: :post do
-    connect_request = ConnectRequest.find params[:id]
-    connect_request.confirm!
-
-    flash[:success] = "Confirmed request from #{connect_request.startup.display_name}."
-    redirect_to admin_connect_request_path(connect_request)
-  end
-
   show do
     attributes_table do
       row :id

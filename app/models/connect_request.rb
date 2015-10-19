@@ -43,13 +43,6 @@ class ConnectRequest < ActiveRecord::Base
     StartupMailer.connect_request_confirmed(self).deliver_later
   end
 
-  # Set status to confirmed.
-  def confirm!
-    update!(status: STATUS_CONFIRMED)
-
-    # TODO: Mails should be sent out.
-  end
-
   def requested?
     status == STATUS_REQUESTED
   end

@@ -14,7 +14,6 @@ ActiveAdmin.register Startup do
   scope :batched
   scope :all
 
-
   controller do
     def find_resource
       scoped_collection.friendly.find(params[:id])
@@ -47,22 +46,22 @@ ActiveAdmin.register Startup do
 
     actions do |startup|
       link_to('View Timeline', startup, target: '_blank') +
-      link_to(
-        'View All Feedback',
-        admin_startup_feedback_index_url(
-          'q[startup_id_eq]' => startup.id,
-          commit: 'Filter'
+        link_to(
+          'View All Feedback',
+          admin_startup_feedback_index_url(
+            'q[startup_id_eq]' => startup.id,
+            commit: 'Filter'
           )
         ) +
-      link_to(
-        'Record New Feedback',
-        new_admin_startup_feedback_path(
-          startup_feedback: {
-            startup_id: startup.id,
-            reference_url: startup_url(startup)
-          }
+        link_to(
+          'Record New Feedback',
+          new_admin_startup_feedback_path(
+            startup_feedback: {
+              startup_id: startup.id,
+              reference_url: startup_url(startup)
+            }
+          )
         )
-      )
     end
   end
 

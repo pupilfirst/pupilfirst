@@ -24,7 +24,7 @@ resourceDownloadManager = ->
 
     $.get(generatorUrl, (data) ->
       setButtonState(downloadButton, 'started')
-      window.location.href = data.resource_download_url
+      window.open data.resource_download_url, "_blank"
     ).fail(->
       setButtonState(downloadButton, 'failed')
     )

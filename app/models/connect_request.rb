@@ -1,4 +1,7 @@
 class ConnectRequest < ActiveRecord::Base
+  MEETING_DURATION = 20.minutes
+  MAX_QUESTIONS_LENGTH = 600
+
   belongs_to :connect_slot
   belongs_to :startup
 
@@ -15,8 +18,6 @@ class ConnectRequest < ActiveRecord::Base
   end
 
   validates_inclusion_of :status, in: valid_statuses
-
-  MAX_QUESTIONS_LENGTH = 600
 
   validates_length_of :questions, maximum: MAX_QUESTIONS_LENGTH
 
@@ -35,12 +36,33 @@ class ConnectRequest < ActiveRecord::Base
     self.status = STATUS_REQUESTED if status.nil?
   end
 
-  after_save :send_mails_for_confirmed
+  after_save :post_confirmation_tasks
+
+  def post_confirmation_tasks
+    return unless status_changed? && confirmed? && confirmed_at.blank?
+    create_google_calendar_event
+    send_mails_for_confirmed
+    update!(confirmed_at: Time.now)
+  end
 
   def send_mails_for_confirmed
-    return unless status_changed? && confirmed?
     FacultyMailer.connect_request_confirmed(self).deliver_later
     StartupMailer.connect_request_confirmed(self).deliver_later
+  end
+
+  def create_google_calendar_event
+    google_calendar.create_event do |e|
+      e.title = calendar_event_title
+      e.start_time = slot_at.iso8601
+      e.end_time = (slot_at + MEETING_DURATION).iso8601
+      e.attendees = attendees
+      e.description = calendar_event_description
+      e.guests_can_invite_others = false
+      e.guests_can_see_other_guests = false
+
+      # Default visibility should be sufficient since it equals calendar's setting.
+      # e.visibility = 'public'
+    end
   end
 
   def requested?
@@ -49,5 +71,40 @@ class ConnectRequest < ActiveRecord::Base
 
   def confirmed?
     status == STATUS_CONFIRMED
+  end
+
+  private
+
+  def attendees
+    [{ 'email' => faculty.email, 'displayName' => faculty.name, 'responseStatus' => 'needsAction' }] + startup.founders.map do |founder|
+      {
+        'email' => founder.email,
+        'displayName' => founder.fullname,
+        'responseStatus' => 'needsAction'
+      }
+    end
+  end
+
+  def calendar_event_description
+    "Meeting Link: #{meeting_link}\\n" \
+    "Product: #{startup.display_name}\\n" \
+    "Timeline: #{Rails.application.routes.url_helpers.startup_url(startup, host: 'https://sv.co')}\\n" \
+    "Team lead: #{startup.admin.fullname}\\n\\n" \
+    "Questions Asked:\\n\\n" \
+    "#{questions.delete("\r").to_json[1..-2]}" # Remove \r-s and quotes introduced by to_json.
+  end
+
+  def google_calendar
+    Google::Calendar.new(
+      client_id: ENV['GOOGLE_CLIENT_ID'],
+      client_secret: ENV['GOOGLE_CLIENT_SECRET'],
+      redirect_url: ENV['GOOGLE_OAUTH_REDIRECT_URL'],
+      calendar: ENV['GOOGLE_CALENDAR_ID'],
+      refresh_token: ENV['GOOGLE_REFRESH_TOKEN']
+    )
+  end
+
+  def calendar_event_title
+    "Faculty Connect: #{startup.product_name} / #{faculty.name}"
   end
 end

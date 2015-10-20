@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151017072150) do
+ActiveRecord::Schema.define(version: 20151020095110) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 20151017072150) do
     t.string   "meeting_link"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.datetime "confirmed_at"
   end
 
   add_index "connect_requests", ["connect_slot_id"], name: "index_connect_requests_on_connect_slot_id", using: :btree

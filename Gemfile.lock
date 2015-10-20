@@ -24,6 +24,15 @@ GIT
       railties (>= 3.1)
 
 GIT
+  remote: git://github.com/harigopal/google_calendar.git
+  revision: 0202a03144ae7a18304f96349b5093e4e51ec5e9
+  specs:
+    google_calendar (0.5.1)
+      TimezoneParser (~> 0.2.0)
+      json (~> 1.8)
+      signet (~> 0.6)
+
+GIT
   remote: git://github.com/mobmewireless/unobtrusive_flash.git
   revision: 24e7787d16db66f7956747444433a4e47278193a
   branch: master
@@ -45,6 +54,9 @@ GEM
   remote: https://rails-assets.org/
   specs:
     CFPropertyList (2.3.1)
+    TimezoneParser (0.2.0)
+      insensitive_hash
+      tzinfo
     actionmailer (4.2.4)
       actionpack (= 4.2.4)
       actionview (= 4.2.4)
@@ -183,6 +195,7 @@ GEM
     eventmachine (1.0.8)
     excon (0.45.3)
     execjs (2.6.0)
+    extlib (0.9.16)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
     factory_girl_rails (4.5.0)
@@ -321,6 +334,7 @@ GEM
       has_scope (~> 0.6.0.rc)
       railties (>= 3.2, < 5)
       responders
+    insensitive_hash (0.3.3)
     interception (0.5)
     ipaddress (0.8.0)
     jbuilder (2.3.0)
@@ -336,6 +350,7 @@ GEM
     just-datetime-picker (0.0.6)
       activeadmin (>= 0.4.4)
       formtastic (>= 2.0.0)
+    jwt (1.5.1)
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -508,6 +523,12 @@ GEM
       thor (~> 0.14)
     sentry-raven (0.13.3)
       faraday (>= 0.7.6)
+    signet (0.6.1)
+      addressable (~> 2.3)
+      extlib (~> 0.9)
+      faraday (~> 0.9)
+      jwt (~> 1.5)
+      multi_json (~> 1.10)
     simple_form (3.1.1)
       actionpack (~> 4.0)
       activemodel (~> 4.0)
@@ -595,6 +616,7 @@ DEPENDENCIES
   font-awesome-rails
   friendly_id
   gaffe
+  google_calendar!
   gravtastic
   jbuilder (~> 2.0)
   jquery-rails

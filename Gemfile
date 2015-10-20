@@ -67,6 +67,7 @@ gem 'lita', require: false # Lita, Chat-ops bot.
 gem 'lita-slack', require: false # Lita adapter for Slack.
 
 gem 'gaffe' # Custom error pages. https://github.com/mirego/gaffe
+gem 'google_calendar', github: 'harigopal/google_calendar' # Thin wrapper over Google Calendar API. https://github.com/northworld/google_calendar
 
 # Rails assets!
 source 'https://rails-assets.org' do

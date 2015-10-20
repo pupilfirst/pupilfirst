@@ -10,12 +10,9 @@ ActiveAdmin.register Startup do
   filter :startup_categories
   filter :featured
 
-  scope :all, default: true
+  scope :approved, default: true
   scope :batched
-  scope :without_founders
-  scope :agreement_live
-  scope :agreement_expired
-  scope('Student Startups') { |scope| scope.student_startups.not_unready }
+  scope :all
 
   controller do
     def find_resource
@@ -31,24 +28,58 @@ ActiveAdmin.register Startup do
       startup.approval_status.capitalize
     end
 
-    column :batch
-
-    column :founders do |startup|
-      table_for startup.founders.order('id ASC') do
-        column do |founder|
-          link_to founder.fullname, [:admin, founder]
+    column :targets do |startup|
+      ol do
+        startup.targets.order('due_date DESC').limit(5).each do |target|
+          fa_icon = if target.done?
+            'fa-check'
+          elsif target.expired?
+            'fa-times'
+          else
+            'fa-circle-o'
+          end
+          li do
+            link_to " #{target.title}", [:admin, target], class: "fa #{fa_icon}"
+          end
         end
       end
     end
 
-    column :website
-
-    column :karma_points do |startup|
-      startup.karma_points.where('karma_points.created_at > ?', Date.today.beginning_of_week).sum(:points)
+    column :timeline_events do |startup|
+      ol do
+        startup.timeline_events.order('created_at DESC').limit(5).each do |event|
+          fa_icon = if event.verified?
+            'fa-check'
+          elsif event.needs_improvement?
+            'fa-times'
+          else
+            'fa-circle-o'
+          end
+          li do
+            link_to " #{event.timeline_event_type.title}", [:admin, event], class: "fa #{fa_icon}"
+          end
+        end
+      end
     end
 
     actions do |startup|
-      link_to 'View Timeline', startup, target: '_blank'
+      link_to('View Timeline', startup, target: '_blank') +
+        link_to(
+          'View All Feedback',
+          admin_startup_feedback_index_url(
+            'q[startup_id_eq]' => startup.id,
+            commit: 'Filter'
+          )
+        ) +
+        link_to(
+          'Record New Feedback',
+          new_admin_startup_feedback_path(
+            startup_feedback: {
+              startup_id: startup.id,
+              reference_url: startup_url(startup)
+            }
+          )
+        )
     end
   end
 

@@ -29,17 +29,23 @@ ActiveAdmin.register Startup do
     end
 
     column :targets do |startup|
-      table_for startup.targets.order('due_date DESC').limit(5) do
-        column do |target|
-          link_to target.title, [:admin, target]
+      ol do
+        startup.targets.order('due_date DESC').limit(5).each do |target|
+          fa_icon = target.done? ? 'fa-check' : (target.expired? ? 'fa-times' : 'fa-circle-o')
+          li do
+            link_to " #{target.title}", [:admin, target], class: "fa #{fa_icon}"
+          end
         end
       end
     end
 
     column :timeline_events do |startup|
-      table_for startup.timeline_events.order('created_at DESC').limit(5) do
-        column do |event|
-          link_to event.timeline_event_type.title, [:admin, event]
+      ol do
+        startup.timeline_events.order('created_at DESC').limit(5).each do |event|
+          fa_icon = event.verified? ? 'fa-check' : (event.needs_improvement? ? 'fa-times' : 'fa-circle-o')
+          li do
+            link_to " #{event.timeline_event_type.title}", [:admin, event], class: "fa #{fa_icon}"
+          end
         end
       end
     end

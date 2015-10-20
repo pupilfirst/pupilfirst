@@ -21,8 +21,4 @@ class AboutController < ApplicationController
   def media_kit
     @media_kit_url = 'https://drive.google.com/folderview?id=0B9--SdQuJvHpfjJiam1nTnJCNnVIYkY2NVFXWTQwbXNpWUFoQU1oc1RZSHJraG4yb2Y1cDA&usp=sharing'
   end
-
-  # GET /about/office-hours
-  def office_hours
-  end
 end

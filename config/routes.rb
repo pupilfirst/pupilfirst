@@ -65,7 +65,6 @@ Svapp::Application.routes.draw do
     get 'slack'
     get 'media-kit'
     get 'leaderboard'
-    get 'office-hours'
   end
 
   resources :faculty, only: %w(index) do

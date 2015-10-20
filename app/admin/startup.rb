@@ -31,7 +31,13 @@ ActiveAdmin.register Startup do
     column :targets do |startup|
       ol do
         startup.targets.order('due_date DESC').limit(5).each do |target|
-          fa_icon = target.done? ? 'fa-check' : (target.expired? ? 'fa-times' : 'fa-circle-o')
+          fa_icon = if target.done?
+            'fa-check'
+          elsif target.expired?
+            'fa-times'
+          else
+            'fa-circle-o'
+          end
           li do
             link_to " #{target.title}", [:admin, target], class: "fa #{fa_icon}"
           end
@@ -42,7 +48,13 @@ ActiveAdmin.register Startup do
     column :timeline_events do |startup|
       ol do
         startup.timeline_events.order('created_at DESC').limit(5).each do |event|
-          fa_icon = event.verified? ? 'fa-check' : (event.needs_improvement? ? 'fa-times' : 'fa-circle-o')
+          fa_icon = if event.verified?
+            'fa-check'
+          elsif event.needs_improvement?
+            'fa-times'
+          else
+            'fa-circle-o'
+          end
           li do
             link_to " #{event.timeline_event_type.title}", [:admin, event], class: "fa #{fa_icon}"
           end

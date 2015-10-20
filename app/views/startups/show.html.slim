@@ -83,9 +83,10 @@
                         - if target.pending? && target.completion_instructions.present?
                           = target.completion_instructions
                       .learn-more
-                        = link_to target.resource_url, class: 'btn btn-primary btn-sm pull-right', target: '_blank' do
-                          i.fa.fa-external-link-square
-                          | &nbsp; LEARN MORE
+                        - if target.resource_url.present?
+                          = link_to target.resource_url, class: 'btn btn-primary btn-sm pull-right', target: '_blank' do
+                            i.fa.fa-external-link-square
+                            | &nbsp; LEARN MORE
                         .assigner class="#{target.due_date.present? ? '' : 'assigner-center'}"
                           em
                             ' Assigned by <strong>#{target.assigner.fullname}</strong>.

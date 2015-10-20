@@ -228,4 +228,8 @@ class User < ActiveRecord::Base
   def can_view_connect?
     startup.present? && startup.approved? && startup.batched? && !startup_admin?
   end
+
+  def pending_connect_request_for?(faculty)
+    startup.connect_requests.joins(:connect_slot).where(connect_slots: { faculty_id: faculty.id }, status: ConnectRequest::STATUS_REQUESTED).exists?
+  end
 end

@@ -4,6 +4,10 @@ feature 'Faculty Connect' do
   let!(:faculty_1) { create :faculty }
   let!(:faculty_2) { create :faculty }
 
+  let!(:tet_one_liner) { create :tet_one_liner }
+  let!(:tet_new_product_deck) { create :tet_new_product_deck }
+  let!(:tet_team_formed) { create :tet_team_formed }
+
   # Two connect slots
   let!(:connect_slot_1) { create :connect_slot, faculty: faculty_1, slot_at: 4.days.from_now }
   let!(:connect_slot_2) { create :connect_slot, faculty: faculty_1, slot_at: 4.5.days.from_now }
@@ -25,10 +29,6 @@ feature 'Faculty Connect' do
   context 'User is founder of batched-approved startup' do
     let(:user) { create :user_with_password, confirmed_at: Time.now }
     let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED, batch: 1 }
-
-    let!(:tet_one_liner) { create :tet_one_liner }
-    let!(:tet_new_product_deck) { create :tet_new_product_deck }
-    let!(:tet_team_formed) { create :tet_team_formed }
 
     before :each do
       # Add user as founder of startup.
@@ -64,6 +64,19 @@ feature 'Faculty Connect' do
         # Make our 'user' the admin.
         startup.admin.update(startup_admin: false)
         user.update(startup_admin: true)
+      end
+
+      context 'Admin has a pending request with faculty' do
+        let!(:connect_request) { create :connect_request, connect_slot: connect_slot_1, startup: startup }
+
+        scenario 'Founder visits faculty page' do
+          visit faculty_index_path
+
+          # One of the two cards should have a disabled connect button with a special message for non-admins.
+          expect(page.find('.faculty-card', text: faculty_1.name)).to have_selector('.available-marker', count: 1)
+          expect(page).to have_selector(".disabled.connect-link[title='You already have a pending connect request " \
+            "with this faculty member. Please write to help@sv.co if you would like to reschedule']", count: 1)
+        end
       end
 
       scenario 'Admin of batched-approved startup creates connect request', js: true do

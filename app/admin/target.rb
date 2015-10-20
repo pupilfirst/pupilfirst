@@ -20,12 +20,13 @@ ActiveAdmin.register Target do
 
   member_action :duplicate, method: :get do
     target = Target.find(params[:id])
-
     redirect_to(
       new_admin_target_path(
-        target: target.attributes.slice(
-          'role', 'title', 'short_description', 'resource_url', 'completion_instructions', 'due_date'
-        )
+        target: { role: target.role, title: target.title, short_description: target.short_description,
+          resource_url: target.resource_url, completion_instructions: target.completion_instructions,
+          due_date_date: target.due_date_date, due_date_time_hour: target.due_date.hour,
+          due_date_time_minute: target.due_date.min
+        }
       )
     )
   end

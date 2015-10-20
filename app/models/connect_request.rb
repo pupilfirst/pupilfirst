@@ -105,6 +105,6 @@ class ConnectRequest < ActiveRecord::Base
   end
 
   def calendar_event_title
-    "Faculty Connect: #{startup.product_name} / #{faculty.name}"
+    "#{startup.product_name} / #{faculty.name} (Faculty Connect)"
   end
 end

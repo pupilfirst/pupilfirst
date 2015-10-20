@@ -1,3 +1,6 @@
+- content_for :head
+  title #{@startup.product_name} | SV.CO
+
 .container
   /TO DO: probably rewrite this in a cleaner way
   - if @startup.pending? || @startup.unready?

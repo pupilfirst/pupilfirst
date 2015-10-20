@@ -1,3 +1,6 @@
+- content_for :head
+  title Confirmation | SV.CO
+
 = simple_form_for resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post, class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
   legend Resend confirmation instructions
 

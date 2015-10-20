@@ -9,7 +9,7 @@
 
   .resource-content
     .title
-      = link_to resource.title, resource
+      = link_to resource.title, resource, target: '_blank'
     .description = simple_format resource.description
     .download-button-spacer
     button.btn.btn-primary.download-resource data-generator-url="#{generate_download_url_resource_url(resource)}"

@@ -23,9 +23,9 @@ ActiveAdmin.register Target do
     redirect_to(
       new_admin_target_path(
         target: { role: target.role, title: target.title, short_description: target.short_description,
-          resource_url: target.resource_url, completion_instructions: target.completion_instructions,
-          due_date_date: target.due_date_date, due_date_time_hour: target.due_date.hour,
-          due_date_time_minute: target.due_date.min
+                  resource_url: target.resource_url, completion_instructions: target.completion_instructions,
+                  due_date_date: target.due_date_date, due_date_time_hour: target.due_date.hour,
+                  due_date_time_minute: target.due_date.min
         }
       )
     )

@@ -30,7 +30,7 @@ ActiveAdmin.register Startup do
 
     column :targets do |startup|
       ol do
-        startup.targets.order('due_date DESC').limit(5).each do |target|
+        startup.targets.order('updated_at DESC').limit(5).each do |target|
           fa_icon = if target.done?
             'fa-check'
           elsif target.expired?
@@ -39,7 +39,7 @@ ActiveAdmin.register Startup do
             'fa-circle-o'
           end
           li do
-            link_to " #{target.title}", [:admin, target], class: "fa #{fa_icon}"
+            link_to " #{target.title}", [:admin, target], class: "fa #{fa_icon} no-text-decoration"
           end
         end
       end
@@ -47,7 +47,7 @@ ActiveAdmin.register Startup do
 
     column :timeline_events do |startup|
       ol do
-        startup.timeline_events.order('created_at DESC').limit(5).each do |event|
+        startup.timeline_events.order('updated_at DESC').limit(5).each do |event|
           fa_icon = if event.verified?
             'fa-check'
           elsif event.needs_improvement?
@@ -56,7 +56,7 @@ ActiveAdmin.register Startup do
             'fa-circle-o'
           end
           li do
-            link_to " #{event.timeline_event_type.title}", [:admin, event], class: "fa #{fa_icon}"
+            link_to " #{event.timeline_event_type.title}", [:admin, event], class: "fa #{fa_icon} no-text-decoration"
           end
         end
       end

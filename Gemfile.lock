@@ -24,21 +24,21 @@ GIT
       railties (>= 3.1)
 
 GIT
-  remote: git://github.com/harigopal/google_calendar.git
-  revision: 0202a03144ae7a18304f96349b5093e4e51ec5e9
-  specs:
-    google_calendar (0.5.1)
-      TimezoneParser (~> 0.2.0)
-      json (~> 1.8)
-      signet (~> 0.6)
-
-GIT
   remote: git://github.com/mobmewireless/unobtrusive_flash.git
   revision: 24e7787d16db66f7956747444433a4e47278193a
   branch: master
   specs:
     unobtrusive_flash (3.1.0)
       railties
+
+GIT
+  remote: git://github.com/northworld/google_calendar.git
+  revision: b56fb3050b926fdf945db333cdc3b14b70dbb212
+  specs:
+    google_calendar (0.5.1)
+      TimezoneParser (~> 0.2.0)
+      json (~> 1.8)
+      signet (~> 0.6)
 
 GIT
   remote: git://github.com/zpaulovics/datetimepicker-rails.git

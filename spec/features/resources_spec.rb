@@ -42,10 +42,12 @@ feature 'Resources' do
   scenario 'User downloads resource', js: true do
     visit resources_path
 
-    click_on 'Download', match: :first
+    new_window = window_opened_by { click_on 'Download', match: :first }
     wait_for_ajax
 
-    expect(page.response_headers['Content-Type']).to eq('application/pdf')
+    within_window new_window do
+      expect(page.response_headers['Content-Type']).to eq('application/pdf')
+    end
   end
 
   context 'User is a logged in founder' do

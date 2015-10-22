@@ -20,6 +20,9 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  recaptcha:
+    errors:
+      verification_failed: Verification of Recaptcha failed. Please try again.
   role:
     team: Team
     product: Product

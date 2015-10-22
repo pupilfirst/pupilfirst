@@ -9,6 +9,7 @@
 //= require pnotify
 //= require flashes
 //= require unobtrusive_flash
+
 //= require moment
 //= require bootstrap-datetimepicker
 //= require pickers
@@ -31,3 +32,4 @@
 //= require incubation
 //= require startups
 //= require users
+//= require about

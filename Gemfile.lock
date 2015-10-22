@@ -467,6 +467,7 @@ GEM
       polyamorous (~> 1.2)
     rb-readline (0.5.3)
     rdoc (4.2.0)
+    recaptcha (0.4.0)
     redis (3.2.1)
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
@@ -637,6 +638,7 @@ DEPENDENCIES
   rails-assets-curioussolutions-datetimepicker!
   rails-assets-pnotify!
   rails_12factor
+  recaptcha
   require_all
   rest-client
   roadie-rails

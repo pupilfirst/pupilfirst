@@ -65,6 +65,8 @@ Svapp::Application.routes.draw do
     get 'slack'
     get 'media-kit'
     get 'leaderboard'
+    get 'contact'
+    post 'contact', action: 'send_contact_email'
   end
 
   resources :faculty, only: %w(index) do

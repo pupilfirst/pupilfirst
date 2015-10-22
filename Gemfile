@@ -68,6 +68,7 @@ gem 'lita-slack', require: false # Lita adapter for Slack.
 
 gem 'gaffe' # Custom error pages. https://github.com/mirego/gaffe
 gem 'google_calendar', github: 'northworld/google_calendar' # Thin wrapper over Google Calendar API.
+gem 'recaptcha', require: 'recaptcha/rails' # ReCaptcha helpers for ruby apps http://github.com/ambethia/recaptcha
 
 # Rails assets!
 source 'https://rails-assets.org' do

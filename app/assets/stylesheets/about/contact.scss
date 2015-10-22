@@ -1,0 +1,20 @@
+@import "variables";
+
+.contact-submit-button { margin-top: 10px; }
+
+.contact-container { margin-bottom: 20px; }
+
+.contact-google-map { width: 100%; height: 200px; }
+
+.contact-location {
+  background-color: $theme-light-gray;
+  box-shadow: 1px 1px 1px $theme-dark-gray;
+
+  iframe { pointer-events: none; }
+
+  address {
+    padding: 10px;
+    font-size: 115%;
+    text-align: right;
+  }
+}

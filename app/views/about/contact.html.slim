@@ -1,0 +1,70 @@
+ol.breadcrumb.margin-top-20
+  li = link_to 'Home', root_path
+  li = link_to 'About', about_path
+  li.active Contact
+
+h1.page-header.header-light Contact
+
+.row
+  .col-sm-8
+    .contact-container
+      p
+        ' Send us an e-mail at #{mail_to 'help@sv.co'}, and we'll get back to you as soon as we can. The
+        a href="#new_contact_form" <em>form</em> at the bottom of this page
+        | &nbsp;can help with that!
+
+      p.margin-bottom-20
+        ' Alternatively, join our #{link_to 'Public Slack Form', about_slack_path}, to get in contact with both the
+        | SV.CO team, and the community.
+
+      .row.margin-bottom-10
+        .col-md-6
+          .contact-location
+            .google-maps-iframe-container
+              iframe.contact-google-map frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/view?zoom=16&center=10.0552%2C76.3520&key=#{ENV['GOOGLE_BROWSER_KEY']}" allowfullscreen=true
+            address
+              strong Startup Village, Kochi
+              br
+              | Kinfra Hi-Tech Park, Kalamassery,
+              br
+              | Kochi &mdash; 683503.
+              br
+              i.fa.fa-phone
+              | &nbsp;#{link_to '+91 484 2110799', 'tel:+914842110799'}
+        .col-md-6
+          .contact-location
+            .google-maps-iframe-container
+              iframe.contact-google-map frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/view?zoom=17&center=17.8095%2C83.3876&key=#{ENV['GOOGLE_BROWSER_KEY']}" allowfullscreen=true
+            address
+              strong Startup Village, Visakhapatnam
+              br
+              | Sunrise Startups, Hill No. 3,
+              br
+              | Cyber Hills, IT SEZ, Madhuruwada,
+              br
+              | Visakhapatnam &mdash; 530048.
+
+      = simple_form_for @contact_form,
+        url: about_contact_url,
+        method: :post,
+        html: { class: 'form-horizontal' },
+        wrapper: :horizontal_form,
+        wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_file_input, boolean: :horizontal_boolean } do |f|
+
+        legend Contact Form
+
+        = f.input :name, label: 'Your name', input_html: { maxlength: 50 }
+        = f.input :email, type: 'email', label: 'Email address', input_html: { maxlength: 50 }
+        = f.input :mobile, label: 'Mobile phone number', input_html: { maxlength: 20 }
+        = f.input :company, label: 'Company you represent', input_html: { maxlength: 50 }
+        = f.input :query_type, label: 'Type of query', as: :select, include_blank: false, collection: ContactForm.valid_query_types
+        = f.input :query, as: :text, input_html: { rows: 5, maxlength: 600 }
+
+        .form-group
+          .col-sm-9.col-sm-offset-3
+            = recaptcha_tags
+            = button_tag type: :submit, class: 'btn btn-primary contact-submit-button' do
+              i.fa.fa-send
+              | &nbsp;Submit
+  .col-md-3.col-md-offset-1.col-sm-4
+    = render 'about_links'

@@ -34,7 +34,7 @@ class ConnectSlot < ActiveRecord::Base
       where("id NOT in (SELECT DISTINCT(connect_slot_id) FROM connect_requests) OR id = #{optional_id}")
     else
       where('id NOT in (SELECT DISTINCT(connect_slot_id) FROM connect_requests)')
-    end
+    end.order('slot_at ASC')
   end
 
   # Available slots, 3 to 5 days from now.

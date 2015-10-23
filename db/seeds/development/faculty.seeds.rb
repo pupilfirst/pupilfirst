@@ -29,3 +29,11 @@ Faculty.create!(
   image: Rails.root.join('spec/support/uploads/faculty/donald_duck.jpg').open,
   sort_index: 3
 )
+
+Faculty.create!(
+  name: 'Jack Sparrow',
+  title: 'El Capitan, The Black Pearl',
+  key_skills: 'Looting, pillaging, etc.',
+  category: 'visiting_faculty',
+  image: Rails.root.join('spec/support/uploads/faculty/jack_sparrow.jpg').open
+)

@@ -20,6 +20,7 @@ class Faculty < ActiveRecord::Base
   scope :team, -> { where(category: CATEGORY_TEAM).order('sort_index ASC') }
   scope :visiting_faculty, -> { where(category: CATEGORY_VISITING_FACULTY).order('sort_index ASC') }
   scope :advisory_board, -> { where(category: CATEGORY_ADVISORY_BOARD).order('sort_index ASC') }
+  scope :available_for_connect, -> { where(category: [CATEGORY_TEAM, CATEGORY_VISITING_FACULTY]) }
 
   # This method sets the label used for object by Active Admin.
   def display_name

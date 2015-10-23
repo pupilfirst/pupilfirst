@@ -16,7 +16,7 @@ ActiveAdmin.register ConnectSlot do
 
   collection_action :add_multiple, method: :get do
     @connect_slot = ConnectSlot.new
-    @faculty = Faculty.team
+    @faculty = Faculty.available_for_connect
   end
 
   collection_action :create_multiple, method: :post do
@@ -53,7 +53,7 @@ ActiveAdmin.register ConnectSlot do
 
   form do |f|
     f.inputs 'Connect Slot Details' do
-      f.input :faculty, collection: Faculty.team
+      f.input :faculty, collection: Faculty.available_for_connect
       f.input :slot_at, as: :just_datetime_picker
     end
 

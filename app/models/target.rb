@@ -2,8 +2,11 @@ class Target < ActiveRecord::Base
   belongs_to :startup
   belongs_to :assigner, class_name: 'AdminUser'
 
-  scope :recently_pending, -> { where(status: 'pending').where('due_date >= ? OR due_date IS NULL', 2.days.ago).order(due_date: 'desc') }
-  scope :recently_completed, -> { where(status: 'done').order(completed_at: 'desc').limit(3) }
+  STATUS_PENDING = 'pending'
+  STATUS_DONE = 'done'
+
+  scope :recently_pending, -> { where(status: STATUS_PENDING).where('due_date >= ? OR due_date IS NULL', 2.days.ago).order(due_date: 'desc') }
+  scope :recently_completed, -> { where(status: STATUS_DONE).order(completed_at: 'desc').limit(3) }
 
   # See en.yml's role
   def self.valid_roles
@@ -23,11 +26,11 @@ class Target < ActiveRecord::Base
   just_define_datetime_picker :completed_at
 
   def pending?
-    status == 'pending'
+    status == STATUS_PENDING
   end
 
   def done?
-    status == 'done'
+    status == STATUS_DONE
   end
 
   def expired?

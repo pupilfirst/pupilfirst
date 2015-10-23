@@ -3,6 +3,10 @@ ActiveAdmin.register ConnectRequest do
 
   menu parent: 'Faculty'
 
+  scope :all, default: true
+  scope :confirmed
+  scope :requested
+
   index do
     selectable_column
 

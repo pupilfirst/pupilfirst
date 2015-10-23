@@ -34,6 +34,6 @@ Documentation:
 Metrics/MethodLength:
   Max: 20 # default was 10.
 Metrics/ClassLength:
-  Max: 400 # default was 100.
+  Max: 500 # default was 100.
 Metrics/AbcSize:
   Max: 30 # default is 15.

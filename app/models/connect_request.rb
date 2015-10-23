@@ -40,7 +40,7 @@ class ConnectRequest < ActiveRecord::Base
 
   def post_confirmation_tasks
     return unless status_changed? && confirmed? && confirmed_at.blank?
-    create_google_calendar_event
+    create_google_calendar_event if Rails.env.production?
     send_mails_for_confirmed
     update!(confirmed_at: Time.now)
   end
@@ -72,6 +72,9 @@ class ConnectRequest < ActiveRecord::Base
   def confirmed?
     status == STATUS_CONFIRMED
   end
+
+  scope :requested, -> { where(status: STATUS_REQUESTED) }
+  scope :confirmed, -> { where(status: STATUS_CONFIRMED) }
 
   private
 

@@ -79,6 +79,20 @@ class Startup < ActiveRecord::Base
   scope :visakhapatnam, -> { where incubation_location: INCUBATION_LOCATION_VISAKHAPATNAM }
   scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED }).distinct }
 
+  def self.without_live_targets
+    startup_ids_with_live_targets = joins(:targets).where(targets: { status: Target::STATUS_PENDING }).pluck(:id)
+
+    where.not(id: startup_ids_with_live_targets)
+  end
+
+  def self.with_targets_completed_last_week
+    with_completed_targets.where('targets.completed_at > ?', 1.week.ago)
+  end
+
+  def self.with_completed_targets
+    joins(:targets).where(targets: { status: Target::STATUS_DONE })
+  end
+
   # Find all by specific category.
   def self.startup_category(category)
     joins(:startup_categories).where(startup_categories: { id: category.id })

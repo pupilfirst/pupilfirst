@@ -24,7 +24,7 @@
 
       - if current_user.try(:can_connect?)
         - if current_user.pending_connect_request_for?(member)
-          .disabled.btn.btn-primary.btn-sm.connect-link data-toggle='tooltip' data-placement='top' title="You already have a pending connect request with this faculty member. Please write to help@sv.co if you would like to reschedule"
+          .disabled.btn.btn-primary.btn-sm.connect-link data-toggle='tooltip' data-placement='top' title="You already have a pending connect request with this faculty member. Please write to help@sv.co if you would like to reschedule."
             | Connect
         - else
           .modal.fade.faculty-connect-modal role="dialog" id="faculty-connect-modal-#{member.id}"
@@ -39,8 +39,8 @@
                     = f.input :questions, label: 'What questions would you like to ask the faculty member?', input_html: { maxlength: ConnectRequest::MAX_QUESTIONS_LENGTH, rows: 6 }
                     = f.submit 'Submit Request', class: 'btn btn-primary'
 
-        a.btn.btn-primary.btn-sm.connect-link data-toggle="modal" data-target="#faculty-connect-modal-#{member.id}"
-          | Connect
+          a.btn.btn-primary.btn-sm.connect-link data-toggle="modal" data-target="#faculty-connect-modal-#{member.id}"
+            | Connect
       - elsif current_user.try(:can_view_connect?)
         .disabled.btn.btn-primary.btn-sm.connect-link data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available to #{current_user.startup.admin.fullname} (your team lead)"
           | Connect

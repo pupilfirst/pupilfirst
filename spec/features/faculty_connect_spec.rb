@@ -75,7 +75,7 @@ feature 'Faculty Connect' do
           # One of the two cards should have a disabled connect button with a special message for non-admins.
           expect(page.find('.faculty-card', text: faculty_1.name)).to have_selector('.available-marker', count: 1)
           expect(page).to have_selector(".disabled.connect-link[title='You already have a pending connect request " \
-            "with this faculty member. Please write to help@sv.co if you would like to reschedule']", count: 1)
+            "with this faculty member. Please write to help@sv.co if you would like to reschedule.']", count: 1)
         end
       end
 

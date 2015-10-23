@@ -96,7 +96,7 @@ feature 'Faculty Connect' do
         click_on 'Submit Request'
 
         # Wait for the page to load.
-        expect(page).to have_text 'Faculty'
+        expect(page.status_code).to eq(200)
 
         # Verify data.
         connect_request = startup.connect_requests.last

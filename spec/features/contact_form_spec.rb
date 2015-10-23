@@ -4,6 +4,13 @@ feature 'About / Contact Spec' do
   let(:user) { create :user_with_password, confirmed_at: Time.now, phone: '9876543210' }
   let(:startup) { create :startup }
 
+  before :all do
+    Recaptcha.configure do |config|
+      config.public_key  = '6Lc6BAAAAAAAAChqRbQZcn_yyyyyyyyyyyyyyyyy'
+      config.private_key = '6Lc6BAAAAAAAAKN3DRm6VA_xxxxxxxxxxxxxxxxx'
+    end
+  end
+
   context 'Founder is logged in' do
     before :each do
       # Add user as founder of startup.

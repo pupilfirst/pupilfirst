@@ -79,10 +79,16 @@ class Startup < ActiveRecord::Base
   scope :visakhapatnam, -> { where incubation_location: INCUBATION_LOCATION_VISAKHAPATNAM }
   scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED }).distinct }
 
+  # Batched & approved startups that don't have un-expired targets.
   def self.without_live_targets
-    startup_ids_with_live_targets = joins(:targets).where(targets: { status: Target::STATUS_PENDING }).pluck(:id)
+    # Where status is pending.
+    without_live_targets_ids = joins(:targets).where(targets: { status: Target::STATUS_PENDING })
 
-    where.not(id: startup_ids_with_live_targets)
+    # Where due date isn't set, or hasn't expired.
+    without_live_targets_ids = without_live_targets_ids.where('targets.due_date IS NULL OR targets.due_date > ?', Time.now)
+
+    # All except the above.
+    batched.approved.where.not(id: without_live_targets_ids)
   end
 
   def self.with_targets_completed_last_week

@@ -39,7 +39,6 @@ gem 'autoprefixer-rails' # Autoprefixer for Ruby and Ruby on Rails.
 gem 'simple_form', '~> 3.1.1' # Simple-form with support for Bootstrap 3.
 # gem 'validate_url' # URL validation. - appears to be only supported on Rails 3
 gem 'valid_url' # New url validataion gem
-gem 'chartkick' # Pretty charts!
 gem 'logstash-logger' # A better logger.
 
 # Used for picking date and time fields in a few places.
@@ -69,6 +68,8 @@ gem 'lita-slack', require: false # Lita adapter for Slack.
 gem 'gaffe' # Custom error pages. https://github.com/mirego/gaffe
 gem 'google_calendar', github: 'northworld/google_calendar' # Thin wrapper over Google Calendar API.
 gem 'recaptcha', require: 'recaptcha/rails' # ReCaptcha helpers for ruby apps http://github.com/ambethia/recaptcha
+gem 'groupdate' # The simplest way to group temporal data. https://github.com/ankane/groupdate
+gem 'sparkr' # Sparklines with Ruby. https://github.com/rrrene/sparkr
 
 # Rails assets!
 source 'https://rails-assets.org' do

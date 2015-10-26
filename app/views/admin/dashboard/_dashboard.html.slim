@@ -1,0 +1,145 @@
+/= javascript_include_tag '//www.google.com/jsapi', 'chartkick'
+
+.dashboard-container
+  .dashboard-item
+    - timeline_events_verified = TimelineEvent.verified.order('verified_at DESC').includes(:timeline_event_type, :startup)
+    .heading Timeline Events - Verified
+
+    .content
+      ol
+        - timeline_events_verified.limit(10).each do |timeline_event|
+          li = link_to "#{timeline_event.startup.product_name} - #{timeline_event.timeline_event_type.title}", admin_timeline_event_path(timeline_event)
+
+    .footer-spacer
+
+    - trend = TimelineEvent.verified.group_by_week(:verified_at, range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
+
+    .left-of-button title="Trend: #{trend.join(', ')}"
+      = Sparkr.sparkline trend
+
+    a.button.view-all href=admin_timeline_events_path(q: { verified_status_equals: TimelineEvent::VERIFIED_STATUS_VERIFIED })
+      | View All (#{timeline_events_verified.count})
+
+  .dashboard-item
+    - timeline_events_pending = TimelineEvent.pending.order('created_at DESC').includes(:timeline_event_type, :startup)
+    .heading Timeline Events - Pending
+
+    .content
+      ol
+        - timeline_events_pending.limit(10).each do |timeline_event|
+          li = link_to "#{timeline_event.startup.product_name} - #{timeline_event.timeline_event_type.title}", admin_timeline_event_path(timeline_event)
+
+    .footer-spacer
+
+    - trend = TimelineEvent.group_by_week(:created_at, range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
+
+    .left-of-button title="Trend (total): #{trend.join(', ')}"
+      = Sparkr.sparkline trend
+
+    a.button.view-all href=admin_timeline_events_path(q: { verified_status_equals: TimelineEvent::VERIFIED_STATUS_PENDING })
+      | View All (#{timeline_events_pending.count})
+
+  .dashboard-item
+    - startups_without_live_targets = Startup.without_live_targets
+
+    .heading Startups without Live Team Targets
+
+    .content
+      ol
+        - startups_without_live_targets.limit(10).each do |startup|
+          li = link_to startup.display_name, admin_startup_path(startup)
+
+    .footer-spacer
+
+    a.button.view-all href=admin_startups_path(scope: 'without_live_targets')
+      | View All (#{startups_without_live_targets.count})
+
+  .dashboard-item
+    - startups_with_targets_completed_last_week = Startup.with_targets_completed_last_week.order('targets.completed_at DESC')
+
+    .heading Startups with Targets Completed Last Week
+
+    .content
+      ol
+        - startups_with_targets_completed_last_week.limit(10).each do |startup|
+          li = link_to startup.display_name, admin_startup_path(startup)
+
+    .footer-spacer
+
+    - trend = Startup.with_completed_targets.group_by_week('targets.completed_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
+
+    .left-of-button title="Trend: #{trend.join(', ')}"
+      = Sparkr.sparkline trend
+
+    a.button.view-all href=admin_startups_path(scope: 'with_targets_completed_last_week')
+      | View All (#{startups_with_targets_completed_last_week.count})
+
+  .dashboard-item
+    - startup_feedback_from_last_week = StartupFeedback.where('created_at > ?', 1.week.ago).order('created_at DESC')
+
+    .heading Feedback Submitted Last Week
+
+    .content
+      ol
+        - startup_feedback_from_last_week.limit(10).each do |startup_feedback|
+          li = link_to "#{startup_feedback.faculty.name} - #{startup_feedback.startup.product_name}", admin_startup_feedback_path(startup_feedback)
+
+    .footer-spacer
+
+    - trend = StartupFeedback.group_by_week(:created_at, range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
+
+    .left-of-button title="Trend: #{trend.join(', ')}"
+      = Sparkr.sparkline trend
+
+    a.button.view-all href=admin_startup_feedback_index_path(q: { created_at_gteq: 1.week.ago.strftime('%Y-%m-%d') })
+      | View All (#{startup_feedback_from_last_week.count})
+
+  .dashboard-item
+    - connect_requests_confirmed = ConnectRequest.confirmed.order('confirmed_at DESC')
+
+    .heading Connect Requests - Confirmed
+
+    .content
+      ol
+        - connect_requests_confirmed.limit(10).each do |connect_request|
+          li = link_to "#{connect_request.startup.product_name} - #{connect_request.faculty.name}", admin_connect_request_path(connect_request)
+
+    .footer-spacer
+
+    - past_trend = ConnectRequest.confirmed.joins(:connect_slot).group_by_week('connect_slots.slot_at', range: 4.weeks.ago..1.week.ago).count.map { |c| c[1] }
+    - future_trend = ConnectRequest.confirmed.joins(:connect_slot).group_by_week('connect_slots.slot_at', range: Time.now..3.weeks.from_now).count.map { |c| c[1] }
+
+    .left-of-button
+      span title="Trend (past): #{past_trend.join(', ')}" = Sparkr.sparkline past_trend
+      | &nbsp;
+      i.fa.fa-dot-circle-o
+      | &nbsp;
+      span title="Trend (future): #{future_trend.join(', ')}" = Sparkr.sparkline future_trend
+
+    a.button.view-all href=admin_connect_requests_path(scope: 'confirmed')
+      | View All (#{connect_requests_confirmed.count})
+
+  .dashboard-item
+    - connect_requests_requested = ConnectRequest.requested
+
+    .heading Connect Requests - Requested
+
+    .content
+      ol
+        - connect_requests_requested.limit(10).each do |connect_request|
+          li = link_to "#{connect_request.startup.product_name} - #{connect_request.faculty.name}", admin_connect_request_path(connect_request)
+
+    .footer-spacer
+
+    - past_trend = ConnectRequest.joins(:connect_slot).group_by_week('connect_slots.slot_at', range: 4.weeks.ago..1.week.ago).count.map { |c| c[1] }
+    - future_trend = ConnectRequest.joins(:connect_slot).group_by_week('connect_slots.slot_at', range: Time.now..3.weeks.from_now).count.map { |c| c[1] }
+
+    .left-of-button
+      span title="Trend (past): #{past_trend.join(', ')}" = Sparkr.sparkline past_trend
+      | &nbsp;
+      i.fa.fa-dot-circle-o
+      | &nbsp;
+      span title="Trend (future): #{future_trend.join(', ')}" = Sparkr.sparkline future_trend
+
+    a.button.view-all href=admin_connect_requests_path(scope: 'requested')
+      | View All (#{connect_requests_requested.count})

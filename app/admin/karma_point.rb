@@ -12,6 +12,20 @@ ActiveAdmin.register KarmaPoint do
     end
   end
 
+  member_action :duplicate, method: :get do
+    karma_point = KarmaPoint.find(params[:id])
+
+    redirect_to(
+      new_admin_karma_point_path(
+        karma_point: { points: karma_point.points, activity_type: karma_point.activity_type, created_at: karma_point.created_at }
+      )
+    )
+  end
+
+  action_item :duplicate, only: :show do
+    link_to 'Duplicate', duplicate_admin_karma_point_path(id: params[:id])
+  end
+
   index do
     selectable_column
 
@@ -31,7 +45,9 @@ ActiveAdmin.register KarmaPoint do
     column :activity_type
     column :created_at
 
-    actions
+    actions defaults: true do |target|
+      link_to 'Duplicate', duplicate_admin_karma_point_path(target)
+    end
   end
 
   form do |f|

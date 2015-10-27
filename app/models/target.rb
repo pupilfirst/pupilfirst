@@ -7,6 +7,8 @@ class Target < ActiveRecord::Base
 
   scope :recently_pending, -> { where(status: STATUS_PENDING).where('due_date >= ? OR due_date IS NULL', 2.days.ago).order(due_date: 'desc') }
   scope :recently_completed, -> { where(status: STATUS_DONE).order(completed_at: 'desc').limit(3) }
+  scope :for_team, -> { where(role: 'team') }
+  scope :not_for_team, -> { where.not(role: 'team') }
 
   # See en.yml's role
   def self.valid_roles

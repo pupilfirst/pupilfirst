@@ -79,6 +79,18 @@ class Startup < ActiveRecord::Base
   scope :visakhapatnam, -> { where incubation_location: INCUBATION_LOCATION_VISAKHAPATNAM }
   scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED }).distinct }
 
+  # Returns startups that have accrued no karma points for last week (starting monday). If supplied a date, it
+  # calculates for week bounded by that date.
+  def self.inactive(date: 1.week.ago)
+    # First, find everyone who doesn't fit the criteria.
+    startups_with_karma_ids = joins(:karma_points)
+      .where(karma_points: { created_at: date.beginning_of_week..date.end_of_week })
+      .pluck(:id)
+
+    # Filter them out.
+    batched.approved.where.not(id: startups_with_karma_ids)
+  end
+
   # Batched & approved startups that don't have un-expired targets.
   def self.without_live_targets
     # Where status is pending.

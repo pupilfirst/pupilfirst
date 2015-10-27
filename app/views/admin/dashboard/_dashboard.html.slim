@@ -133,3 +133,23 @@
 
     a.button.view-all href=admin_connect_requests_path(scope: 'requested')
       | View All (#{connect_requests_requested.count})
+
+  .dashboard-item
+    - inactive_startups = Startup.inactive
+
+    .heading Inactive Startups last week
+
+    .content
+      ol
+        - inactive_startups.limit(10).each do |inactive_startup|
+          li = link_to inactive_startup.display_name, admin_startup_path(inactive_startup)
+
+    .footer-spacer
+
+    - trend = [3.weeks.ago, 2.weeks.ago, 1.week.ago, Time.now].map { |time| Startup.inactive(date: time).count }
+
+    .left-of-button
+      span title="Trend: #{trend.join(', ')}" = Sparkr.sparkline trend
+
+    a.button.view-all href=admin_startups_path(scope: 'inactive')
+      | View All (#{inactive_startups.count})

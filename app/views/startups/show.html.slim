@@ -317,15 +317,24 @@
                   p #{event.description}
 
                   - if current_user && @startup.founder?(current_user)
-                    = button_to user_startup_timeline_event_url(current_user, event),
-                      method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',
-                      data: { confirm: 'This action cannot be reversed. Are you sure?' } do
-                      i.fa.fa-times
-                      | &nbsp; Delete
-                    = link_to startup_path(@startup, event_id: event.id),
-                      class: 'btn btn-info btn-sm btn-flat btn-with-default-padding' do
-                      i.fa.fa-pencil
-                      | &nbsp;Edit
+                    - if event.month_old?
+                      .old-to-edit href="#" data-toggle="tooltip" title="To edit/delete this event, please write to help@sv.co."
+                        button.btn.btn-danger.btn-sm.btn-flat.btn-with-default-padding.disabled.margin-right-5
+                          i.fa.fa-times
+                          | &nbsp;Delete
+                        button.btn.btn-info.btn-sm.btn-flat.btn-with-default-padding.edit-link.disabled
+                          i.fa.fa-pencil
+                          | &nbsp;Edit
+                    - else
+                      = button_to user_startup_timeline_event_url(current_user, event),
+                        method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',
+                        data: { confirm: 'This action cannot be reversed. Are you sure?' } do
+                        i.fa.fa-times
+                        | &nbsp; Delete
+                      = link_to startup_path(@startup, event_id: event.id),
+                        class: 'btn btn-info btn-sm btn-flat btn-with-default-padding' do
+                        i.fa.fa-pencil
+                        | &nbsp;Edit
               - else
                 .timeline id="event-#{event.id}"
                   li style="padding:0" class="timeline#{index.odd? ? "" : "-inverted"}"
@@ -374,14 +383,23 @@
                                     | &nbsp;
                                   | #{link[:title]}
                         - if current_user && @startup.founder?(current_user)
-                          = button_to user_startup_timeline_event_url(current_user, event),
-                            method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',
-                            data: { confirm: 'This action cannot be reversed. Are you sure?' } do
-                            i.fa.fa-times
-                            | &nbsp;Delete
-                          = link_to startup_path(@startup, event_id: event.id), class: 'btn btn-info btn-sm btn-flat btn-with-default-padding edit-link' do
-                            i.fa.fa-pencil
-                            | &nbsp;Edit
+                          - if event.month_old?
+                            .old-to-edit href="#" data-toggle="tooltip" title="To edit/delete this event, please write to help@sv.co."
+                              button.btn.btn-danger.btn-sm.btn-flat.btn-with-default-padding.disabled.margin-right-5
+                                i.fa.fa-times
+                                | &nbsp;Delete
+                              button.btn.btn-info.btn-sm.btn-flat.btn-with-default-padding.edit-link.disabled
+                                i.fa.fa-pencil
+                                | &nbsp;Edit
+                          - else
+                            = button_to user_startup_timeline_event_url(current_user, event),
+                              method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',
+                              data: { confirm: 'This action cannot be reversed. Are you sure?' } do
+                              i.fa.fa-times
+                              | &nbsp;Delete
+                            = link_to startup_path(@startup, event_id: event.id), class: 'btn btn-info btn-sm btn-flat btn-with-default-padding edit-link' do
+                              i.fa.fa-pencil
+                              | &nbsp;Edit
       - else
         .main-timeline
           .tl-iteration

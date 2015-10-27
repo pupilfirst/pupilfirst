@@ -123,6 +123,10 @@ class TimelineEvent < ActiveRecord::Base
     self.verified_status == VERIFIED_STATUS_NEEDS_IMPROVEMENT
   end
 
+  def month_old?
+    created_at < 1.month.ago
+  end
+
   private
 
   def add_link_for_new_deck!

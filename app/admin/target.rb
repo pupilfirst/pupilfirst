@@ -14,10 +14,6 @@ ActiveAdmin.register Target do
   filter :role, as: :select, collection: Target.valid_roles
   filter :status, as: :select, collection: Target.valid_statuses
 
-  before_create do |target|
-    target.assigner = current_admin_user if target.assigner.blank?
-  end
-
   member_action :duplicate, method: :get do
     target = Target.find(params[:id])
     redirect_to(
@@ -131,7 +127,7 @@ ActiveAdmin.register Target do
       f.input :resource_url
       f.input :completion_instructions
       f.input :due_date, as: :just_datetime_picker
-      f.input :assigner, include_blank: f.object.persisted? ? false : 'Leave this be to assign yourself.'
+      f.input :assigner, include_blank: false
     end
 
     f.actions

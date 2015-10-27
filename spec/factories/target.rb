@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :target do
     role { Target.valid_roles.sample }
-    assigner { create :admin_user }
+    assigner { create :faculty }
     startup
     status { 'pending' }
     title { Faker::Lorem.words(6).join ' ' }

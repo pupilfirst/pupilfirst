@@ -1,6 +1,6 @@
 class Target < ActiveRecord::Base
   belongs_to :startup
-  belongs_to :assigner, class_name: 'AdminUser'
+  belongs_to :assigner, class_name: 'Faculty'
 
   STATUS_PENDING = 'pending'
   STATUS_DONE = 'done'

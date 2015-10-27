@@ -1,5 +1,5 @@
 - content_for :head
-  title Forgot Password | SV.CO
+  title SV.CO Forgot Password
 
 = simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: 'form-horizontal margin-top-20' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_fize_input, boolean: :horizontal_boolean }) do |f|
   legend Forgot your password?

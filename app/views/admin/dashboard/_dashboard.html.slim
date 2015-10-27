@@ -106,15 +106,10 @@
 
     .footer-spacer
 
-    - past_trend = ConnectRequest.confirmed.joins(:connect_slot).group_by_week('connect_slots.slot_at', range: 4.weeks.ago..1.week.ago).count.map { |c| c[1] }
-    - future_trend = ConnectRequest.confirmed.joins(:connect_slot).group_by_week('connect_slots.slot_at', range: Time.now..3.weeks.from_now).count.map { |c| c[1] }
+    - trend = ConnectRequest.confirmed.group_by_week(:created_at, range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
 
     .left-of-button
-      span title="Trend (past): #{past_trend.join(', ')}" = Sparkr.sparkline past_trend
-      | &nbsp;
-      i.fa.fa-dot-circle-o
-      | &nbsp;
-      span title="Trend (future): #{future_trend.join(', ')}" = Sparkr.sparkline future_trend
+      span title="Trend (past): #{trend.join(', ')}" = Sparkr.sparkline trend
 
     a.button.view-all href=admin_connect_requests_path(scope: 'confirmed')
       | View All (#{connect_requests_confirmed.count})
@@ -131,15 +126,10 @@
 
     .footer-spacer
 
-    - past_trend = ConnectRequest.joins(:connect_slot).group_by_week('connect_slots.slot_at', range: 4.weeks.ago..1.week.ago).count.map { |c| c[1] }
-    - future_trend = ConnectRequest.joins(:connect_slot).group_by_week('connect_slots.slot_at', range: Time.now..3.weeks.from_now).count.map { |c| c[1] }
+    - trend = ConnectRequest.group_by_week(:created_at, range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
 
     .left-of-button
-      span title="Trend (past): #{past_trend.join(', ')}" = Sparkr.sparkline past_trend
-      | &nbsp;
-      i.fa.fa-dot-circle-o
-      | &nbsp;
-      span title="Trend (future): #{future_trend.join(', ')}" = Sparkr.sparkline future_trend
+      span title="Trend (total): #{trend.join(', ')}" = Sparkr.sparkline trend
 
     a.button.view-all href=admin_connect_requests_path(scope: 'requested')
       | View All (#{connect_requests_requested.count})

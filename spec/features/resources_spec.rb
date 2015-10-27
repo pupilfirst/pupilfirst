@@ -74,9 +74,8 @@ feature 'Resources' do
       end
 
       scenario 'Founder visits approved resource page' do
-        expect do
-          visit resource_path(approved_resource_for_all)
-        end.to raise_error(ActiveRecord::RecordNotFound) # This will translate to a 404 in production.
+        visit resource_path(approved_resource_for_all)
+        expect(page.status_code).to eq(404)
       end
     end
 
@@ -110,9 +109,8 @@ feature 'Resources' do
         end
 
         scenario 'Founder visits approved resource for batch 2 page' do
-          expect do
-            visit resource_path(approved_resource_for_batch_2)
-          end.to raise_error(ActiveRecord::RecordNotFound) # This will translate to a 404 in production.
+          visit resource_path(approved_resource_for_batch_2)
+          expect(page.status_code).to eq(404)
         end
       end
 

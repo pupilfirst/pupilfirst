@@ -10,7 +10,7 @@ ActiveAdmin.register Startup do
   filter :startup_categories
   filter :featured
 
-  scope :approved, default: true
+  scope :batched_and_approved, default: true
   scope :batched
   scope :without_live_targets
   scope :with_targets_completed_last_week

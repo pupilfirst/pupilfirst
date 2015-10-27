@@ -78,6 +78,7 @@ class Startup < ActiveRecord::Base
   scope :kochi, -> { where incubation_location: INCUBATION_LOCATION_KOCHI }
   scope :visakhapatnam, -> { where incubation_location: INCUBATION_LOCATION_VISAKHAPATNAM }
   scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED }).distinct }
+  scope :batched_and_approved, -> { batched.approved }
 
   # Returns startups that have accrued no karma points for last week (starting monday). If supplied a date, it
   # calculates for week bounded by that date.

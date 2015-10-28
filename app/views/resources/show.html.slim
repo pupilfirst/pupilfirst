@@ -8,31 +8,56 @@ ol.breadcrumb.margin-top-20
 
 h1.page-header.header-light #{@resource.title}
 
-.resource-show.clearfix.margin-bottom-20
-  - if @resource.thumbnail.present?
-    = image_tag @resource.thumbnail.url
-  - else
-    = image_tag 'resources/thumbnail_default.png'
-  - if @resource.for_approved?
-    .batch-exclusive
-      .badge Batch Exclusive
+- if @stream_video
+  .resource-play.margin-bottom-20
+  = videojs_rails sources: { mp4: @stream_video}, class: 'img-responsive resource-show-video'
+  .resource-show-description = simple_format @resource.description
 
-  .content
-    .content-inner
-      .description = simple_format @resource.description
-      button.btn.btn-primary.download-resource data-generator-url="#{generate_download_url_resource_url(@resource)}"
-        .download
-          i.fa.fa-download
-          | &nbsp; Download
-        .preparing-download.hide
-          i.fa.fa-spinner.fa-pulse.hide
-          | &nbsp; Preparing Download
-        .download-started.hide
-          i.fa.fa-check
-          | &nbsp; Download Started
-        .download-failed.hide
-          i.fa.fa-alert
-          | &nbsp; Failed! :-(
+  button.btn.btn-primary.download-resource data-generator-url="#{generate_download_url_resource_url(@resource)}"
+    .download
+      i.fa.fa-download
+      | &nbsp; Download
+    .preparing-download.hide
+      i.fa.fa-spinner.fa-pulse.hide
+      | &nbsp; Preparing Download
+    .download-started.hide
+      i.fa.fa-check
+      | &nbsp; Download Started
+    .download-failed.hide
+      i.fa.fa-alert
+      | &nbsp; Failed! :-(
+- else
+  .resource-show.clearfix.margin-bottom-20
+    - if @resource.thumbnail.present?
+      = image_tag @resource.thumbnail.url
+    - else
+      = image_tag 'resources/thumbnail_default.png'
+    - if @resource.for_approved?
+      .batch-exclusive
+        .badge Batch Exclusive
+
+    .content class="#{@stream_video ? 'stream' : nil}"
+      .content-inner
+        .resource-show-description = simple_format @resource.description
+
+        - if @resource.stream?
+          = link_to resource_url(@resource, watch: true), class: 'btn btn-success stream-resource' do
+            i.fa.fa-play
+            | &nbsp; Play
+
+        button.btn.btn-primary.download-resource data-generator-url="#{generate_download_url_resource_url(@resource)}"
+          .download
+            i.fa.fa-download
+            | &nbsp; Download
+          .preparing-download.hide
+            i.fa.fa-spinner.fa-pulse.hide
+            | &nbsp; Preparing Download
+          .download-started.hide
+            i.fa.fa-check
+            | &nbsp; Download Started
+          .download-failed.hide
+            i.fa.fa-alert
+            | &nbsp; Failed! :-(
 
 hr.margin-top-20
 

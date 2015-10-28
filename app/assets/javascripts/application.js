@@ -21,6 +21,7 @@
 //= require users
 //= require limit_max_int
 //= require inspectlet
+//= require video
 
 // Shared
 //= require _shared

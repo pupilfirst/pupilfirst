@@ -53,6 +53,7 @@ ActiveAdmin.register Resource do
         end
       end
 
+      row :content_type
       row :created_at
       row :updated_at
     end

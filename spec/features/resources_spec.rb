@@ -50,6 +50,18 @@ feature 'Resources' do
     end
   end
 
+  context 'With a video resource' do
+    let!(:public_resource_2) { create :video_resource }
+
+    scenario 'User can stream resource' do
+      visit resources_path
+
+      page.find('.stream-resource').click
+
+      expect(page).to have_selector('video')
+    end
+  end
+
   context 'User is a logged in founder' do
     before :each do
       # Make the user a founder of approved startup.

@@ -9,19 +9,26 @@
 
   .resource-content
     .title
-      = link_to resource.title, resource, target: '_blank'
+      = link_to resource.title, resource
     .description = simple_format resource.description
     .download-button-spacer
-    button.btn.btn-primary.download-resource data-generator-url="#{generate_download_url_resource_url(resource)}"
-      .download
-        i.fa.fa-download
-        | &nbsp; Download
-      .preparing-download.hide
-        i.fa.fa-spinner.fa-pulse.hide
-        | &nbsp; Preparing Download
-      .download-started.hide
-        i.fa.fa-check
-        | &nbsp; Download Started
-      .download-failed.hide
-        i.fa.fa-alert
-        | &nbsp; Failed! :-(
+
+    .links
+      - if resource.stream?
+        = link_to resource_url(resource, watch: true), class: 'btn btn-success stream-resource' do
+          i.fa.fa-play
+          | &nbsp; Play
+
+      button.btn.btn-primary.download-resource data-generator-url="#{generate_download_url_resource_url(resource)}"
+        .download
+          i.fa.fa-download
+          | &nbsp; Download
+        .preparing-download.hide
+          i.fa.fa-spinner.fa-pulse.hide
+          | &nbsp; Preparing Download
+        .download-started.hide
+          i.fa.fa-check
+          | &nbsp; Download Started
+        .download-failed.hide
+          i.fa.fa-alert
+          | &nbsp; Failed! :-(

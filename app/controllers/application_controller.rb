@@ -67,7 +67,8 @@ class ApplicationController < ActionController::Base
       "connect-src 'self' hn.inspectlet.com wss://inspectletws.herokuapp.com;",
       "font-src 'self' fonts.gstatic.com https://assets.sv.co;",
       'child-src https://www.youtube.com;',
-      'frame-src https://www.youtube.com https://svlabs-public.herokuapp.com https://www.google.com;'
+      'frame-src https://www.youtube.com https://svlabs-public.herokuapp.com https://www.google.com;',
+      "media-src 'self';"
     ]
 
     response.headers['Content-Security-Policy'] = "default-src 'none'; " + csp_directives.join(' ')

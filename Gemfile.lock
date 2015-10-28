@@ -571,6 +571,7 @@ GEM
     valid_url (0.0.4)
       addressable
       rails
+    videojs_rails (4.12.14)
     warden (1.2.3)
       rack (>= 1.0)
     webmock (1.21.0)
@@ -659,6 +660,7 @@ DEPENDENCIES
   uglifier
   unobtrusive_flash!
   valid_url
+  videojs_rails
   webmock
   wicked
 

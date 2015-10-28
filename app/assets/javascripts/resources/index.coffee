@@ -17,6 +17,9 @@ resourceDownloadManager = ->
     # Switch to loading state.
     downloadButton = $(event.target).closest('.download-resource')
 
+    # Hide play button, if it exists.
+    downloadButton.siblings('.stream-resource').hide()
+
     setButtonState(downloadButton, 'preparing')
 
     # Retrieve actual download URL.

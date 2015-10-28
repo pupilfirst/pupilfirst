@@ -17,6 +17,8 @@ class Resource < ActiveRecord::Base
 
   scope :public_resources, -> { where(share_status: SHARE_STATUS_PUBLIC).order('title') }
 
+  delegate :content_type, to: :file
+
   def self.for(user)
     if user.present? && user.founder?
       where(
@@ -34,5 +36,9 @@ class Resource < ActiveRecord::Base
 
   def for_approved?
     share_status == SHARE_STATUS_APPROVED
+  end
+
+  def stream?
+    content_type.end_with? '/mp4'
   end
 end

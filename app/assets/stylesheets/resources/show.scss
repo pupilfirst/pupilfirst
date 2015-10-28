@@ -3,6 +3,10 @@
 .resource-show {
   position: relative;
 
+  .stream-resource {
+    margin-right: 10px;
+  }
+
   img {
     float: left;
 
@@ -33,8 +37,23 @@
       position: static;
     }
   }
+}
 
-  .description {
-    font-size: 120%;
+.resource-show-description {
+  font-size: 120%;
+}
+
+.resource-show-video {
+  margin-bottom: 20px;
+}
+
+.content.stream {
+  position: static;
+  height: auto;
+
+  .content-inner {
+    position: static;
+    bottom: auto;
+    left: auto;
   }
 }

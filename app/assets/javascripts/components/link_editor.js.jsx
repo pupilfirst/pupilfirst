@@ -22,6 +22,7 @@ var LinkEditor = React.createClass({
           )
           }
         </div>
+        <LinkForm></LinkForm>
       </div>
     );
   }

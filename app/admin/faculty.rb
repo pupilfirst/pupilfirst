@@ -3,6 +3,13 @@ ActiveAdmin.register Faculty do
 
   config.sort_order = 'sort_index_asc'
 
+  filter :category, as: :select, collection: Faculty.valid_categories
+  filter :name
+  filter :email
+  filter :title
+  filter :key_skills
+  filter :linkedin_url
+
   index do
     selectable_column
     column :category

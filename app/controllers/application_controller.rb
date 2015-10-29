@@ -54,9 +54,8 @@ class ApplicationController < ActionController::Base
       'https://assets.sv.co https://secure.gravatar.com https://uploaded-assets.sv.co hn.inspectlet.com'
     ].join(' ') + ';'
 
-    recaptcha = {
-      script: 'www.google.com www.gstatic.com apis.google.com'
-    }
+    recaptcha = { script: 'www.google.com www.gstatic.com apis.google.com' }
+    resource = { media: 's3.amazonaws.com/upload.assets.sv.co' }
 
     csp_directives = [
       image_sources,
@@ -68,7 +67,7 @@ class ApplicationController < ActionController::Base
       "font-src 'self' fonts.gstatic.com https://assets.sv.co;",
       'child-src https://www.youtube.com;',
       'frame-src https://www.youtube.com https://svlabs-public.herokuapp.com https://www.google.com;',
-      "media-src 'self';"
+      "media-src 'self' #{resource[:media]};"
     ]
 
     response.headers['Content-Security-Policy'] = "default-src 'none'; " + csp_directives.join(' ')

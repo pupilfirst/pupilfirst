@@ -41,4 +41,9 @@ class Resource < ActiveRecord::Base
   def stream?
     content_type.end_with? '/mp4'
   end
+
+  def increment_downloads!
+    self.downloads += 1
+    save!
+  end
 end

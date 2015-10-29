@@ -6,11 +6,16 @@ class ResourcesController < ApplicationController
 
   def show
     @resource = Resource.for(current_user).find(params[:id])
-    @stream_video = @resource.file.url if params[:watch].present? && @resource.stream?
+
+    return unless params[:watch].present? && @resource.stream?
+
+    @resource.increment_downloads!
+    @stream_video = @resource.file.url
   end
 
   def generate_download_url
     resource = Resource.for(current_user).find(params[:id])
+    resource.increment_downloads!
     render json: { resource_download_url: resource.file.url }
   end
 end

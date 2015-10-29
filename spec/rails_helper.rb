@@ -57,6 +57,9 @@ RSpec.configure do |config|
   # Include Factory Girl's helpers.
   config.include FactoryGirl::Syntax::Methods
 
+  # Devise includes some test helpers for functional specs.
+  config.include Devise::TestHelpers, type: :controller
+
   # Run RuboCop first.
   rubocop_output = `rubocop`
   print rubocop_output

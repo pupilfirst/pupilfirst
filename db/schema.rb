@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151020095110) do
+ActiveRecord::Schema.define(version: 20151029090606) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -190,10 +190,11 @@ ActiveRecord::Schema.define(version: 20151020095110) do
     t.string   "thumbnail"
     t.string   "title"
     t.text     "description"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
     t.string   "share_status"
     t.integer  "shared_with_batch"
+    t.integer  "downloads",         default: 0
   end
 
   add_index "resources", ["share_status", "shared_with_batch"], name: "index_resources_on_share_status_and_shared_with_batch", using: :btree

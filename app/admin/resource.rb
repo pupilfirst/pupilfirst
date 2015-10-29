@@ -27,6 +27,7 @@ ActiveAdmin.register Resource do
     end
 
     column :title
+    column :downloads
     actions
   end
 
@@ -43,6 +44,7 @@ ActiveAdmin.register Resource do
       end
 
       row :title
+      row :downloads
       row :description
 
       row :thumbnail do |resource|

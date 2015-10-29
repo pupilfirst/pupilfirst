@@ -172,6 +172,9 @@ ActiveAdmin.register TimelineEvent do
           button_to('Unverified. Click to verify this event.', verify_admin_timeline_event_path)
         end
       end
+
+      row :created_at
+      row :updated_at
     end
 
     render partial: 'links', locals: { timeline_event: timeline_event }

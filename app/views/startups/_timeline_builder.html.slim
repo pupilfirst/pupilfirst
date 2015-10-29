@@ -65,7 +65,7 @@
     .modal-dialog
       .modal-content
         .modal-body
-          = react_component 'Link', {title: 'Title', url: 'www.google.com', private: true}
+          = react_component 'LinkEditor', {linksJSON: event.links.to_json }
           .form-horizontal
             .form-group#link-title-group
               = label_tag :link_title, 'Title', class: 'col-sm-2 control-label'

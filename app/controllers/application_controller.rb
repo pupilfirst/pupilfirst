@@ -55,7 +55,7 @@ class ApplicationController < ActionController::Base
     ].join(' ') + ';'
 
     recaptcha = { script: 'www.google.com www.gstatic.com apis.google.com' }
-    resource = { media: 's3.amazonaws.com/upload.assets.sv.co' }
+    resource = { media: 'https://s3.amazonaws.com/upload.assets.sv.co/' }
 
     csp_directives = [
       image_sources,

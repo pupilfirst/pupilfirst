@@ -5,13 +5,11 @@ var LinkList = React.createClass({
 
   render: function() {
     var links = JSON.parse(this.props.linksJSON);
-    var viewList=[];
-    for (var i = 0; i < links.length; i++) {
-      viewList.push(<Link title={links[i].title} url={links[i].url} private={links[i].private}></Link>);
-    }
     return (
           <ul className="list-group">
-            { viewList }
+            { links.map(function(link,i){
+              return (<Link title={link.title} url={link.url} private={links.private} key={i}></Link>)
+            })}
           </ul>
     );
   }

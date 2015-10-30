@@ -38,6 +38,9 @@ var LinkForm = React.createClass({
                     </label>
                   </div>
                 </div>
+                <div className="col-sm-offset-2 col-sm-10">
+                  <button onClick={this.saveLink} className="btn btn-success" ><i className="fa fa-plus"></i> Save Link</button>
+                </div>
               </div>
             </div>
           </div>

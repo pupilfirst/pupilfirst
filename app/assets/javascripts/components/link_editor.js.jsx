@@ -2,8 +2,18 @@ var LinkEditor = React.createClass({
   propTypes: {
     linksJSON: React.PropTypes.string
   },
+
+  getInitialState: function() {
+    return {links: this.props.linksJSON, showLinkForm: false, showAddButton:true};
+  },
+
+  addLinksClicked: function() {
+    console.log('Add link clicked');
+    this.setState({showLinkForm: true, showAddButton: false})
+  },
+
   render: function() {
-    var links = JSON.parse(this.props.linksJSON);
+    var links = JSON.parse(this.state.links);
     return (
       <div>
         <h4>Current Links</h4>
@@ -22,10 +32,10 @@ var LinkEditor = React.createClass({
               <p>No links added!</p>
             )
             }
-            { links && links.length < 3 ? (<button className="btn btn-success" >Add Link</button>) : (null) }
+            { this.state.showAddButton && links && links.length < 3 ? (<button onClick={this.addLinksClicked} className="btn btn-default" ><i className="fa fa-plus"></i> Add More Links</button>) : (null) }
           </div>
         </div>
-        <LinkForm></LinkForm>
+        { this.state.showLinkForm ? (<LinkForm></LinkForm>) : null }
       </div>
     );
   }

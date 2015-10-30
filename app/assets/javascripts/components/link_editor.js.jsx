@@ -8,19 +8,22 @@ var LinkEditor = React.createClass({
       <div>
         <h4>Current Links</h4>
         <div className="row">
-          { links && links.length > 0 ?
-          (
-            <div className="col-sm-offset-2 col-sm-10">
-              <LinkList linksJSON={ this.props.linksJSON }></LinkList>
-            </div>
-          )
-          :
-          (
-            <div className="col-sm-offset-2 col-sm-10">
+          <div className="col-sm-offset-2 col-sm-10">
+            { links && links.length > 0 ?
+            (
+              <ul className="list-group">
+                { links.map(function(link,i){
+                  return (<Link title={link.title} url={link.url} private={links.private} key={i}></Link>)
+                })}
+              </ul>
+            )
+            :
+            (
               <p>No links added!</p>
-            </div>
-          )
-          }
+            )
+            }
+            { links && links.length < 3 ? (<button className="btn btn-success" >Add Link</button>) : (null) }
+          </div>
         </div>
         <LinkForm></LinkForm>
       </div>

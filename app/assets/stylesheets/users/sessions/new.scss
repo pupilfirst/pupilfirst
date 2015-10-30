@@ -1,0 +1,93 @@
+@import 'bootstrap/variables';
+
+.devise-user-form {
+  margin: 60px 0;
+
+  .title {
+    font-size: 28px;
+    font-weight: 200;
+    margin-bottom: 30px;
+    color: #666666;
+  }
+
+  .wrapped-input {
+    position: relative;
+    width: 400px;
+    margin: 0 auto 20px auto;
+
+    @media (max-width: $screen-xs-max) {
+      width: 100%;
+    }
+
+    img {
+      position: absolute;
+      left: 8px;
+      top: 6px;
+      padding-right: 6px;
+      width: 40px;
+      border-right: 1px solid #e3e3e3;
+    }
+
+    input {
+      height: 45px;
+      padding: 5px 5px 5px 55px;
+      border: 1px solid #e3e3e3;
+      border-radius: 3px;
+      width: 100%;
+    }
+  }
+
+  .login-option {
+    width: 200px;
+    display: inline-block;
+
+    @media (max-width: $screen-xs-max) {
+      width: auto;
+      display: block;
+    }
+
+    &.border-right {
+      border-right: 1px solid #dddddd;
+
+      @media (max-width: $screen-xs-max) {
+        border-right: none;
+        margin-bottom: 10px;
+      }
+    }
+  }
+
+  .forgot-password {
+    vertical-align: middle;
+  }
+
+  input[type=checkbox].css-checkbox {
+    position: absolute; z-index: -1000; left: -1000px; overflow: hidden; clip: rect(0 0 0 0); height: 1px; width: 1px; margin: -1px; padding: 0; border: 0;
+  }
+
+  input[type=checkbox].css-checkbox + label.css-label {
+    padding-left: 25px;
+    height: 18px;
+    display: inline-block;
+    line-height: 18px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    vertical-align: middle;
+    cursor: pointer;
+    color: #666666;
+    font-weight: normal;
+    margin-bottom: 0;
+  }
+
+  input[type=checkbox].css-checkbox:checked + label.css-label {
+    background-position: 0 -18px;
+  }
+
+  label.css-label {
+    background-image: image-url('users/sessions/css_checkbox.png');
+    user-select: none;
+  }
+
+  .footer {
+    margin-top: 40px;
+  }
+}

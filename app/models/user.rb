@@ -70,6 +70,7 @@ class User < ActiveRecord::Base
   attr_accessor :full_validation
 
   after_initialize ->() { @full_validation = false }
+  after_update :send_password_change_email, if: :needs_password_change_email?
 
   # Email is not required for an unregistered 'contact' user.
   def email_required?
@@ -231,5 +232,15 @@ class User < ActiveRecord::Base
 
   def pending_connect_request_for?(faculty)
     startup.connect_requests.joins(:connect_slot).where(connect_slots: { faculty_id: faculty.id }, status: ConnectRequest::STATUS_REQUESTED).exists?
+  end
+
+  private
+
+  def needs_password_change_email?
+    encrypted_password_changed? && persisted?
+  end
+
+  def send_password_change_email
+    UserMailer.password_changed(self).deliver_later
   end
 end

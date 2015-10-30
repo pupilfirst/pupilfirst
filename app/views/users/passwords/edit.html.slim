@@ -1,16 +1,33 @@
 - content_for :head
   title SV.CO Password Reset
 
-= simple_form_for resource, as: resource_name, url: password_path(resource_name), html: { method: :put, class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_fize_input, boolean: :horizontal_boolean } do |f|
-  legend Change your password
+.text-center.devise-user-form
+  h1.title Set a new password
 
-  = f.error_notification
-  = f.input :reset_password_token, as: :hidden
-  = f.full_error :reset_password_token
+  = form_for resource, url: password_path(resource_name), html: { method: :put } do |f|
+    = f.hidden_field :reset_password_token
 
-  = f.input :password, label: 'New password', required: true, autofocus: true
-  = f.input :password_confirmation, label: 'Confirm your new password', required: true
+    - if resource.errors[:reset_password_token].any?
+      p.general-error
+        i.fa.fa-exclamation-circle
+        | &nbsp; Reset password token: #{resource.errors[:reset_password_token].first}.
 
-  .form-group
-    .col-sm-offset-3.col-sm-10
-      = f.button :submit, 'Change my password', class: 'btn btn-primary btn-flat'
+    .wrapped-input
+      = image_tag 'users/sessions/password.png'
+      = f.password_field :password, required: true, placeholder: 'New password'
+
+      - if resource.errors[:password].any?
+        p.error-under-input
+          i.fa.fa-exclamation-circle
+          | &nbsp; Password: #{resource.errors[:password].first}.
+
+    .wrapped-input
+      = image_tag 'users/sessions/password.png'
+      = f.password_field :password_confirmation, required: true, placeholder: 'Type new password again'
+
+      - if resource.errors[:password_confirmation].any?
+        p.error-under-input
+          i.fa.fa-exclamation-circle
+          | &nbsp; Password confirmation: #{resource.errors[:password_confirmation].first}.
+
+    = f.submit 'Change my password', class: 'btn btn-primary btn-flat'

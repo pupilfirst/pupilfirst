@@ -3,28 +3,28 @@
 
 .alert.alert-warning.margin-top-20 role="alert" Looking to sign up? We're sorry! SV.CO is currently invite-only & in closed beta. We expect a wait time until <b>January 2016</b> when we'll send out invites next.
 
-= simple_form_for resource, as: resource_name, url: session_path(resource_name), html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_file_input, boolean: :horizontal_boolean } do |f|
-  legend.margin-top-20 Login with your SV.CO ID!
+.text-center.devise-user-form
+  h1.title Login with your SV.CO ID!
 
-  = f.error_notification
+  = form_for resource, url: session_path(resource_name) do |f|
+    .wrapped-input
+      = image_tag 'users/sessions/email.png'
+      = f.text_field :email, required: true, placeholder: 'SV.CO ID (email)'
 
-  = f.input :email, required: true, autofocus: true, label: 'SV.CO ID (email)', div_html: { class: 'col-sm-4' }
-  = f.input :password, required: true, class: 'col-sm-6'
-  .form-group
-    .col-sm-9.col-sm-offset-3
-      = f.input_field :remember_me, as: :boolean, inline_label: true, label: false if devise_mapping.rememberable?
+    .wrapped-input
+      = image_tag 'users/sessions/password.png'
+      = f.password_field :password, required: true, placeholder: 'Password'
 
-  .form-group
-    .col-sm-offset-3.col-sm-10
-      = f.button :submit, 'Sign in', class: 'btn btn-primary btn-flat'
+    = f.submit 'Sign in', class: 'btn btn-lg btn-primary btn-flat margin-bottom-20'
+
+    div
+      .login-option.border-right
+        = f.check_box :remember_me, class: 'css-checkbox' if devise_mapping.rememberable?
+        = f.label :remember_me, 'Remember Me', class: 'css-label'
+
       - if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations'
-        | &nbsp;
-        = link_to 'Forgot your password?', new_password_path(resource_name), class: 'btn btn-info btn-flat'
+        .login-option
+          = link_to 'Forgot your password?', new_password_path(resource_name), class: 'forgot-password'
 
-  hr
-
-  .form-group
-    .col-sm-offset-3.col-sm-10
-      = render 'users/shared/links'
-
-
+  .footer
+    = render 'users/shared/links'

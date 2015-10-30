@@ -1,0 +1,27 @@
+.confirmation-links {
+  display: flex;
+  width: 400px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+
+  @media (max-width: $screen-xs-max) {
+    display: block;
+    width: auto;
+  }
+
+  input {
+    flex-grow: 1;
+    margin-right: 20px;
+
+    @media (max-width: $screen-xs-max) {
+      display: block;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+  }
+
+  a {
+    flex-grow: 1;
+    border: 1px solid #dddddd;
+  }
+}

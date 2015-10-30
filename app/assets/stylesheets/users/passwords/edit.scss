@@ -1,0 +1,18 @@
+@import 'bootstrap/variables';
+
+.devise-user-form {
+  .wrapped-input .field_with_errors input {
+    border: 1px solid $state-danger-text;
+  }
+
+  p.error-under-input {
+    color: $state-danger-text;
+    width: 400px;
+    text-align: left;
+    margin-top: 5px;
+  }
+
+  p.general-error {
+    color: $state-danger-text;
+  }
+}

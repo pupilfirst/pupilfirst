@@ -1,19 +1,20 @@
 - content_for :head
   title SV.CO Forgot Password
 
-= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: 'form-horizontal margin-top-20' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_fize_input, boolean: :horizontal_boolean }) do |f|
-  legend Forgot your password?
+.text-center.devise-user-form
+  h1.title Forgot your password?
 
-  = f.error_notification
+  = form_for resource, url: password_path(resource_name) do |f|
+    - if resource.errors[:email].any?
+      p.general-error
+        i.fa.fa-exclamation-circle
+        | &nbsp; Email: #{resource.errors[:email].first}.
 
-  = f.input :email, label: 'SV.CO ID', hint: 'Your SV.CO ID is the email address that you registered with.', required: true, autofocus: true
+    .wrapped-input
+      = image_tag 'users/sessions/email.png'
+      = f.text_field :email, required: true, placeholder: 'SV.CO ID (your registered email address)'
 
-  .form-group
-    .col-sm-offset-3.col-sm-10
-      = f.button :submit, 'Recover account', class: 'btn btn-primary btn-flat'
+    = f.submit 'Recover Account', class: 'btn btn-primary btn-flat'
 
-  hr
-
-  .form-group
-    .col-sm-offset-3.col-sm-10
-      = render 'users/shared/links'
+  .footer
+    = render 'users/shared/links'

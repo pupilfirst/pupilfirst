@@ -47,7 +47,7 @@ en:
 
   errors:
     messages:
-      not_found: 'Could not find an account with supplied email address.'
+      not_found: 'Could not find an account with supplied email address'
 
   activerecord:
     errors:

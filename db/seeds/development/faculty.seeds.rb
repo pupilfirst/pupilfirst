@@ -35,5 +35,5 @@ Faculty.create!(
   title: 'El Capitan, The Black Pearl',
   key_skills: 'Looting, pillaging, etc.',
   category: 'visiting_faculty',
-  image: Rails.root.join('spec/support/uploads/faculty/jack_sparrow.jpg').open
+  image: Rails.root.join('spec/support/uploads/faculty/jack_sparrow.png').open
 )

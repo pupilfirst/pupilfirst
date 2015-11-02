@@ -8,9 +8,9 @@ var LinkForm = React.createClass({
   },
 
   saveLink: function() {
-    new_title = document.getElementById('link_title').value
-    new_url = document.getElementById('link_url').value
-    new_private = document.getElementById('link_private').checked
+    var new_title = $('#link_title').val();
+    var new_url = $('#link_url').val();
+    var new_private = ('#link_private').prop('checked');
     this.props.linkAddedCallBack(new_title, new_url, new_private);
   },
 
@@ -20,7 +20,7 @@ var LinkForm = React.createClass({
             { this.props.link ? (<h4>Edit Link</h4>) : (<h4>Add Link</h4>)}
             <div className="form-horizontal">
               <div className="form-group" id="link-title-group">
-                <label for="link_title" className="col-sm-2 control-label">Title</label>
+                <label htmlFor="link_title" className="col-sm-2 control-label">Title</label>
                 <div className="col-sm-10">
                   <input id="link_title" className="form-control" type="text" placeholder="(required)" name="link_title" value={this.state.title}>
                   </input>
@@ -29,7 +29,7 @@ var LinkForm = React.createClass({
                 </div>
               </div>
               <div className="form-group" id="link-url-group">
-                <label for="link_url" className="col-sm-2 control-label">URL</label>
+                <label htmlFor="link_url" className="col-sm-2 control-label">URL</label>
                 <div className="col-sm-10">
                   <input id="link_url" className="form-control" type="text" placeholder="(required)" name="link_url" value={this.state.url}>
                   </input>

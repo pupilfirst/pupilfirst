@@ -80,6 +80,10 @@ class TimelineEvent < ActiveRecord::Base
     self.links = [] if links.nil?
   end
 
+  def links
+    super || []
+  end
+
   def iteration
     startup.iteration(at_event: self)
   end

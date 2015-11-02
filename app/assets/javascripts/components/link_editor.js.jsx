@@ -4,18 +4,22 @@ var LinkEditor = React.createClass({
   },
 
   getInitialState: function() {
-    return {links: JSON.parse(this.props.linksJSON), showLinkForm: false, showAddButton:true};
+    return {links: JSON.parse(this.props.linksJSON), showLinkForm: false};
   },
 
   addLinksClicked: function() {
-    this.setState({showLinkForm: true, showAddButton: false});
+    this.setState({showLinkForm: true});
   },
 
   newLinkAdded: function(title, url, private) {
     var newLink = {"title": title,"url": url,"private": private};
     var presentLinks = this.state.links;
     presentLinks.push(newLink);
-    this.setState({links: presentLinks, showLinkForm: false, showAddButton: true});
+    this.setState({links: presentLinks, showLinkForm: false});
+  },
+
+  showAddButton: function() {
+    return this.state.links.length < 3 && !this.state.showLinkForm;
   },
 
   render: function() {
@@ -38,7 +42,7 @@ var LinkEditor = React.createClass({
               <p>No links added!</p>
             )
             }
-            { this.state.showAddButton && links.length < 3 ? (<button onClick={this.addLinksClicked} className="btn btn-default" ><i className="fa fa-plus"></i> Add Links</button>) : (null) }
+            { this.showAddButton() ? (<button onClick={this.addLinksClicked} className="btn btn-default" ><i className="fa fa-plus"></i> Add Links</button>) : (null) }
           </div>
         </div>
         { this.state.showLinkForm ? (<LinkForm linkAddedCallBack={this.newLinkAdded}></LinkForm>) : null }

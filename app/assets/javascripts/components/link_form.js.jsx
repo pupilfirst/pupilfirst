@@ -10,7 +10,7 @@ var LinkForm = React.createClass({
   saveLink: function() {
     var new_title = $('#link_title').val();
     var new_url = $('#link_url').val();
-    var new_private = ('#link_private').prop('checked');
+    var new_private = $('#link_private').prop('checked');
     this.props.linkAddedCallBack(new_title, new_url, new_private);
   },
 

@@ -1,8 +1,7 @@
-# SVLabs Web + API
+# SV.CO
 
 ## Build status
 
-### Production
 [![Circle CI](https://circleci.com/gh/svlabs/sv.co.svg?style=svg&circle-token=823bb16f00598ed9373b661212008b5fae4e48e1)](https://circleci.com/gh/svlabs/sv.co)
 
 ## Setup for development
@@ -21,9 +20,9 @@
     $ bundle install
 
 ### Database setup
-    $ bin/rake db:setup
+    $ rake db:setup
 
-Now start the server with `bin/rails s`
+Now start the server with `rails s`
 
 ## Testing
 
@@ -35,30 +34,19 @@ To execute all tests manually, run:
 
 Background jobs are written as Rails ActiveJob-s, and deferred using Delayed::Job in the production environment.
 
+To run any jobs in the development environment, simply run:
+
+    rake jobs:workoff
+
 ## Deployment
 
 Add heroku remotes:
 
-    $ git remote add heroku-production git@heroku.com:svapp.git
-    $ git remote add heroku-staging git@heroku.com:svapp-staging.git
+    $ git remote add heroku-production git@heroku.com:sv-co.git
 
 Then, to deploy:
 
-* From `master` branch, `git push heroku-production` will push local master to production (svlabs.in)
-* From `development` branch, `git push heroku-staging development:master` will push local development to staging (staging.svlabs.in)
-
-## API Documentation
-
-API documentation is being migrated from Apiary (apiary.io) to locally generated ApiPie (`/apipie`).
-
-Most of the documentation is still at Apiary, with new entries being added to `/apipie`.
-
-**Apiary**: http://docs.startupvillage.apiary.io/
-**ApiPie**: https://github.com/Apipie/apipie-rails
-
-## Code quirks
-* Mostly uses rspec request specs for integration test. Model, Controller specs are sparingly written.
-* Most of the code written post March 20th, 2014 has not been tested to fullest extent. One might wanna start from there while taking up project from here on.
+* From `master` branch, `git push heroku-production` will push local master to production (sv.co)
 
 ## Coding style conventions
 
@@ -75,13 +63,10 @@ Basic coding conventions are defined in the .editorconfig file. Download plugin 
 
 ### Javascript
 
+* Use Coffeescript wherever possible.
 * Naming: CamelCase variables and function - `someVariable, someFunction`
 
 ### CSS
 
+* Use SCSS everywhere.
 * Naming: Dash-separated ID-s and classes - `.some-class, #some-id`
-
-## Web resources considered for development
-*  http://matthewlehner.net/rails-api-testing-guidelines/
-*  https://github.com/joshbuddy/jsonpath
-*  http://pivotallabs.com/api-versioning/

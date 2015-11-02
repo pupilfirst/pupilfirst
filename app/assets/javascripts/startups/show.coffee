@@ -149,21 +149,21 @@ handleImageUpload = ->
 
   $('#remove-selected-image').click(removeSelectedImage)
 
-isUrlValid = (url) ->
-  /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url)
-
-clearErrorMarkers = (formGroupFinder) ->
-  formGroup = $(formGroupFinder)
-  formGroup.removeClass('has-error has-feedback')
-  formGroup.find('span').addClass('hidden')
-
-addErrorMarkers = (formGroupFinder, errorHint) ->
-  formGroup = $(formGroupFinder)
-  formGroup.addClass('has-error has-feedback')
-  formGroup.find('span.form-control-feedback').removeClass('hidden')
-
-  if errorHint
-    $('#url-help').removeClass('hidden').html(errorHint)
+#isUrlValid = (url) ->
+#  /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url)
+#
+#clearErrorMarkers = (formGroupFinder) ->
+#  formGroup = $(formGroupFinder)
+#  formGroup.removeClass('has-error has-feedback')
+#  formGroup.find('span').addClass('hidden')
+#
+#addErrorMarkers = (formGroupFinder, errorHint) ->
+#  formGroup = $(formGroupFinder)
+#  formGroup.addClass('has-error has-feedback')
+#  formGroup.find('span.form-control-feedback').removeClass('hidden')
+#
+#  if errorHint
+#    $('#url-help').removeClass('hidden').html(errorHint)
 
 markSelectedLink = (linkTitle, unmark = false) ->
   $('#add-link').find('span').html(linkTitle)
@@ -201,40 +201,40 @@ handleLinkAddition = ->
   )
 
   # When the add button is clicked, validate and store if it passes. Show errors otherwise.
-  $('#add-link-button').click((event) ->
-    linkTitle = $('#link_title').val()
-    linkURL = $('#link_url').val()
-    linkURLValid = isUrlValid(linkURL)
+#  $('#add-link-button').click((event) ->
+#    linkTitle = $('#link_title').val()
+#    linkURL = $('#link_url').val()
+#    linkURLValid = isUrlValid(linkURL)
+#
+#    if linkURLValid and linkTitle
+#      # Store values in hidden inputs, close modal, and show title on builder link.
+#      $('#timeline_event_link_title').val(linkTitle)
+#      $('#timeline_event_link_url').val(linkURL)
+#
+#      if $('#link_private').prop('checked')
+#        $('#timeline_event_link_private').val(true)
+#      else
+#        $('#timeline_event_link_private').val(false)
+#
+#      $('#add-link-modal').modal('hide')
+#      markSelectedLink(linkTitle)
+#    else
+#      unless linkURLValid
+#        addErrorMarkers('#link-url-group', "Please make sure you've supplied a full URL, starting with http(s).")
+#
+#      unless linkTitle
+#        addErrorMarkers('#link-title-group')
+#
+#      event.preventDefault()
+#  )
 
-    if linkURLValid and linkTitle
-      # Store values in hidden inputs, close modal, and show title on builder link.
-      $('#timeline_event_link_title').val(linkTitle)
-      $('#timeline_event_link_url').val(linkURL)
-
-      if $('#link_private').prop('checked')
-        $('#timeline_event_link_private').val(true)
-      else
-        $('#timeline_event_link_private').val(false)
-
-      $('#add-link-modal').modal('hide')
-      markSelectedLink(linkTitle)
-    else
-      unless linkURLValid
-        addErrorMarkers('#link-url-group', "Please make sure you've supplied a full URL, starting with http(s).")
-
-      unless linkTitle
-        addErrorMarkers('#link-title-group')
-
-      event.preventDefault()
-  )
-
-  $('#link_title').focus(->
-    clearErrorMarkers('#link-title-group')
-  )
-
-  $('#link_url').focus(->
-    clearErrorMarkers('#link-url-group')
-  )
+#  $('#link_title').focus(->
+#    clearErrorMarkers('#link-title-group')
+#  )
+#
+#  $('#link_url').focus(->
+#    clearErrorMarkers('#link-url-group')
+#  )
 
   $('#add-link-modal').on('hide.bs.modal', (e) ->
     clearErrorMarkers('#link-title-group')

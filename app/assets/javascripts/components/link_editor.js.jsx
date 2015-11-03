@@ -22,6 +22,11 @@ var LinkEditor = React.createClass({
     return this.state.links.length < 3 && !this.state.showLinkForm;
   },
 
+  deleteLink: function (i) {
+    console.log('Deleting link '+i);
+    this.setState({links: this.state.links.splice(i,1)});
+  },
+
   render: function() {
     var links = this.state.links;
     return (
@@ -29,7 +34,7 @@ var LinkEditor = React.createClass({
         <h4>Current Links</h4>
         <div className="row">
           <div className="col-sm-offset-2 col-sm-10">
-            <LinkList links={ links }></LinkList>
+            <LinkList links={ links } deleteLinkCB={ this.deleteLink }></LinkList>
             { this.showAddButton() ? (<button onClick={this.addLinksClicked} className="btn btn-default" ><i className="fa fa-plus"></i> Add Links</button>) : (null) }
           </div>
         </div>

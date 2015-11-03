@@ -5,6 +5,10 @@ var Link = React.createClass({
     private: React.PropTypes.bool
   },
 
+  deleteLink: function(){
+    this.props.deleteLinkCB();
+  },
+
   render: function() {
     return (
       <li className="list-group-item">
@@ -14,7 +18,7 @@ var Link = React.createClass({
         </a>
         <div className="pull-right">
           <a className="margin-right-10" href='#'>Edit</a>
-          <a href='#'>Delete</a>
+          <a onClick={this.deleteLink} >Delete</a>
         </div>
         <p className="grey-text margin-bottom-0">{ this.props.url }</p>
       </li>

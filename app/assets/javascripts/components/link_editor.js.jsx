@@ -31,11 +31,7 @@ var LinkEditor = React.createClass({
           <div className="col-sm-offset-2 col-sm-10">
             { links.length > 0 ?
             (
-              <ul className="list-group">
-                { links.map(function(link,i){
-                  return (<Link title={link.title} url={link.url} private={link.private} key={i}></Link>)
-                })}
-              </ul>
+              <LinkList links={ links }></LinkList>
             )
             :
             (

@@ -1,5 +1,5 @@
 def self.seed_image(image_name)
-  File.open(File.join(Rails.root, "/app/assets/images/seeds/timeline_event_types/#{image_name}.png"))
+  File.open(File.join(Rails.root, "/spec/support/uploads/timeline_event_types/#{image_name}.png"))
 end
 
 timeline_event_types = [

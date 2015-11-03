@@ -1,46 +1,32 @@
-- content_for :header
-  .container
-    #carousel-startups-index.carousel.slide data-ride="carousel"
-      / Wrapper for slides
-      .carousel-inner role="listbox"
-        .item.active
-          .carousel-caption
-            p.caption-text-heading
-              | &ldquo;If everything seems under control, you're not going fast enough.&rdquo;
-            p.quote-author &mdash; Mario Andretti
-        .item
-          .carousel-caption
-            p.caption-text-heading
-              | &ldquo;We’re here to put a dent in the universe. Otherwise why else even be here?&rdquo;
-            p.quote-author &mdash; Steve Jobs
-        .item
-          .carousel-caption
-            p.caption-text-heading
-              | &ldquo;Entrepreneurs see what others can't, do what others won't, and accomplish what others dream.&rdquo;
-            p.quote-author &mdash; Ryan Lilly
+- content_for :head
+  title SV.CO Startups
 
+h1.page-header.header-light Startups
 
-- StartupCategory.each do |startup_category|
-  - verified_startups = Startup.timeline_verified.startup_category(startup_category)
-  - if verified_startups.present?
-    - underscored_name = startup_category.name.gsub(/[\s-]/, '').underscore
-    section.startups-category-row id="category-#{underscored_name.dasherize}"
-      .container
-        .row
-          .col-sm-3.startup-category-title
-            - if Rails.application.assets.find_asset("startups/icons/#{underscored_name}_colored.png")
-              .startup-category-image
-                = image_tag "startups/icons/#{underscored_name}_colored.png"
-            .startup-category-name #{startup_category.name}
-          .col-sm-9.startup-category-startups
-            .startup-boxes-container
-              - verified_startups.each do |startup|
-                .startup-box
-                  - if startup.logo?
-                    = image_tag startup.logo_url
-                  - else
-                    .startup-logo-name #{startup.name}
-                  a.startup-box-cover href="#{startup_url startup}"
-                    .startup-name #{startup.name}
-                    = image_tag 'startups/icons/view.png'
-                    .view-timeline View Timeline
+p.startups-introduction
+  ' Every startup gets a Timeline where they can submit events that are verified by SV.CO Faculty.
+
+.startups-index-container
+  - @startups.each do |startup|
+    - event = startup.showcase_timeline_event
+    - if event
+      .startup-card
+        .startup-card-image style="background-image: url(#{event.image_url});"
+        .startup-card-body
+          h5 #{startup.product_name}: #{event.timeline_event_type.title}
+          p #{event.description.truncate(140, separator: ' ')}
+        .startup-footer-spacer
+        .startup-footer
+          .clearfix.footer-body
+            .left
+              .startup-block-logo-container class="#{startup.logo.present? ? '' : 'with-name'}"
+                - if startup.logo.present?
+                  = image_tag startup.logo.url
+                - else
+                  = startup.name || startup.product_name
+            .right
+              - if startup.product_description.present?
+                = startup.product_description
+              - else
+                | Every startup gets a Timeline where they can submit events that are verified by SV.CO Faculty.
+          = link_to 'See full timeline', startup, class: 'timeline-link'

@@ -80,6 +80,13 @@ class Startup < ActiveRecord::Base
   scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED }).distinct }
   scope :batched_and_approved, -> { batched.approved }
 
+  # Returns the latest verified timeline event that has an image attached to it.
+  #
+  # @return TimelineEvent
+  def showcase_timeline_event
+    timeline_events.verified.has_image.order('verified_at DESC').first
+  end
+
   # Returns startups that have accrued no karma points for last week (starting monday). If supplied a date, it
   # calculates for week bounded by that date.
   def self.inactive(date: 1.week.ago)
@@ -184,6 +191,10 @@ class Startup < ActiveRecord::Base
   validates_presence_of :agreement_last_signed_at, if: ->(startup) { startup.agreement_first_signed_at.present? || startup.agreement_duration.present? }
 
   validates_numericality_of :pin, allow_nil: true, greater_than_or_equal_to: 100_000, less_than_or_equal_to: 999_999 # PIN Code is always 6 digits
+
+  validates_length_of :product_description,
+    maximum: MAX_PRODUCT_DESCRIPTION_CHARACTERS,
+    message: "must be within #{MAX_PRODUCT_DESCRIPTION_CHARACTERS} characters"
 
   validates_length_of :pitch,
     maximum: MAX_PITCH_CHARACTERS,

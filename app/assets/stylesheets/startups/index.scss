@@ -1,118 +1,144 @@
 @import 'variables';
 
-.large-header.startups-index {
-  background-image: image-url('startups/header.jpg');
-  min-height: 313px;
-
-  .carousel-caption {
-    // Can't avoid using a !important here since there a rule from general_style which claims it is important. :(
-    padding-top: 40px !important;
-
-    @media screen and (max-width: 767px) {
-      padding-top: 80px !important;
-    }
-
-    @media screen and (min-width: 768px) and (max-width: 1199px) {
-      padding-top: 100px !important;
-    }
-  }
+p.startups-introduction {
+  margin: 10px 0 25px 0;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 200%;
 }
 
-p.caption-text-heading {
-  font-size: 200%;
-}
-
-.startups-category-row {
-  padding: 30px 0 15px;
-
-  &:nth-child(odd) {
-    background-color: $light-grey-background;
-  }
-}
-
-.startup-category-title {
-  margin-bottom: 15px;
-
-  .startup-category-name {
-    margin: 15px 0 0 5px;
-    font-size: 175%;
-    font-weight: 300;
-  }
-}
-
-.startup-boxes-container {
+.startups-index-container {
   display: flex;
   flex-wrap: wrap;
-}
+  margin-bottom: 40px;
 
-.startup-box {
-  height: 190px;
-  width: 190px;
-  border: 1px solid $grey-border;
-  margin: 0 15px 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @media (max-width: $screen-xs-max) { justify-content: center; }
 
-  @media screen and (max-width: 767px) {
-    height: 165px;
-    width: 165px;
+  .startup-card {
+    position: relative;
+    border: 1px solid #d2d2d2;
+    box-shadow: 1px 1px 1px #d2d2d2;
+    margin: 20px 20px 0 0;
+    width: 304px;
+
+    // Fit three cards per row on md.
+    @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+     margin-right: 9px;
+    }
+
+    // Uniform horizontal margin on xs to ensure centralization.
+    @media (max-width: $screen-xs-max) {
+      margin-left: 5px; margin-right: 5px;
+    }
   }
 
-  a {
-    text-decoration: none;
-    color: black;
-  }
-
-  img {
-    max-width: 90%;
-    max-height: 90%;
-  }
-
-  .startup-logo-name {
-    font-size: 130%;
-  }
-
-  .startup-box-cover {
-    display: none;
-    background-color: $theme-light-green;
+  .startup-card-image {
     width: 100%;
-    height: 100%;
+    height: 200px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+  }
 
-    .startup-name {
-      font-size: 130%;
-      margin-bottom: 10px;
+  .startup-card-body {
+    padding: 0 15px;
+
+    h5 {
+      color: black;
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 26px;
+      margin-bottom: 0;
     }
 
-    .view-timeline {
-      font-size: 80%;
-      margin-top: 10px;
-    }
-
-    img {
-      width: 40px;
-      height: 40px;
+    p {
+      color: #565656;
+      font-size: 14px;
+      line-height: 24px;
+      margin-top: 5px;
     }
   }
 
-  &:hover {
-    img {
-      display: none;
+  a.timeline-link {
+    clear: both;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+    background-color: #E7E7E7;
+    padding: 5px 0 5px 0;
+    color: black;
+
+    &:hover {
+      text-decoration: none;
+      color: $theme-dark-green;
+    }
+  }
+
+  .startup-footer-spacer {
+    height: 175px;
+  }
+
+  .startup-footer {
+    border-top: 1px solid #DFDFDF;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 302px;
+
+    .footer-body {
+      padding: 15px;
+      background-color: white;
     }
 
-    .startup-logo-name {
-      display: none;
-    }
+    .left {
+      width: 85px;
+      float: left;
 
-    .startup-box-cover {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
+      .startup-block-logo-container {
+        width: 100%;
+        height: 85px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .startup-block-logo-container.with-name {
+        text-align: center;
+        font-weight: bold;
+        text-transform: uppercase;
+        background-color: #EFEFEF;
+        font-size: 12px;
+        padding: 5px;
+      }
 
       img {
-        display: initial;
+        max-height: 100%;
+        max-width: 100%;
       }
+
+      a {
+        margin-top: 15px;
+        text-align: center;
+        display: inline-block;
+        width: 100%;
+        height: 65px;
+        border: 1px solid lightgrey;
+        padding: 10px;
+
+        &:hover {
+          text-decoration: none;
+          background-color: #eeeeee;
+        }
+      }
+    }
+
+    .right {
+      padding-left: 15px;
+      float: left;
+      width: 185px;
     }
   }
 }

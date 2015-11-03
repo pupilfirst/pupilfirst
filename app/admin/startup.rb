@@ -25,7 +25,7 @@ ActiveAdmin.register Startup do
 
   index do
     selectable_column
-    column :product_name
+    column(:product, &:display_name)
 
     column :status do |startup|
       startup.approval_status.capitalize

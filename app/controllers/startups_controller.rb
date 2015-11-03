@@ -3,9 +3,15 @@ class StartupsController < ApplicationController
   before_filter :restrict_to_startup_founders, only: [:edit, :update, :add_founder]
   before_filter :restrict_to_startup_admin, only: [:remove_founder]
   before_filter :disallow_unready_startup, only: [:edit, :update]
+
   after_filter only: [:create] do
     @startup.founders << current_user
     @startup.save
+  end
+
+  # GET /startups
+  def index
+    @startups = Startup.batched_and_approved
   end
 
   def new
@@ -33,11 +39,6 @@ class StartupsController < ApplicationController
       Startup.new_incubation!(current_user)
       redirect_to incubation_path(id: :user_profile)
     end
-  end
-
-  def index
-    @large_header_class = 'startups-index'
-    @skip_container = true
   end
 
   def show

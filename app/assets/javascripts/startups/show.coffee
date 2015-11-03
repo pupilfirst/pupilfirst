@@ -236,10 +236,10 @@ handleLinkAddition = ->
 #    clearErrorMarkers('#link-url-group')
 #  )
 
-  $('#add-link-modal').on('hide.bs.modal', (e) ->
-    clearErrorMarkers('#link-title-group')
-    clearErrorMarkers('#link-url-group')
-  )
+#  $('#add-link-modal').on('hide.bs.modal', (e) ->
+#    clearErrorMarkers('#link-title-group')
+#    clearErrorMarkers('#link-url-group')
+#  )
 
   $('#remove-selected-link').click(removeSelectedLink)
 

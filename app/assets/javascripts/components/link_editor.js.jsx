@@ -29,15 +29,7 @@ var LinkEditor = React.createClass({
         <h4>Current Links</h4>
         <div className="row">
           <div className="col-sm-offset-2 col-sm-10">
-            { links.length > 0 ?
-            (
-              <LinkList links={ links }></LinkList>
-            )
-            :
-            (
-              <p>No links added!</p>
-            )
-            }
+            <LinkList links={ links }></LinkList>
             { this.showAddButton() ? (<button onClick={this.addLinksClicked} className="btn btn-default" ><i className="fa fa-plus"></i> Add Links</button>) : (null) }
           </div>
         </div>

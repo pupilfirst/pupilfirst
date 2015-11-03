@@ -1,9 +1,6 @@
 .timeline-builder
   = form_for [current_user, :startup, event], html: event.verified? ? { 'data-verified' => 'true' } : {} do |f|
-    - event_link = (event.persisted? && event.links.present? ? event.links.first : {})
-    = f.hidden_field :link_title, value: event_link[:title]
-    = f.hidden_field :link_url, value: event_link[:url]
-    = f.hidden_field :link_private, value: event_link[:private]
+    = f.hidden_field :links
     .container-fluid
       .row.top-row.text-center
         .col-sm-4.col-xs-8.border-right
@@ -61,7 +58,6 @@
             span &nbsp;Submit for Review
 
   #add-link-modal.modal.fade role="dialog"
-    - event_link = (event.persisted? && event.links.present? ? event.links.first : {})
     .modal-dialog
       .modal-content
         .modal-body

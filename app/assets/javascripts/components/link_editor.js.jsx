@@ -23,9 +23,12 @@ var LinkEditor = React.createClass({
   },
 
   deleteLink: function (i) {
-    console.log('Deleting link '+i);
-    this.setState({links: this.state.links.splice(i,1)});
+    var updatedLinks = this.state.links;
+    updatedLinks.splice(i,1);
+    this.setState({links: updatedLinks});
+
   },
+
 
   render: function() {
     var links = this.state.links;

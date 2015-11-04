@@ -186,19 +186,19 @@ markSelectedLinksOnEdit = ->
 
 handleLinkAddition = ->
   # When the modal opens, load value saved in actual hidden inputs.
-  $('#add-link-modal').on('show.bs.modal', (e) ->
-    linkTitle = $('#timeline_event_link_title').val()
-    linkURL = $('#timeline_event_link_url').val()
-    linkPrivate = $('#timeline_event_link_private').val()
-
-    $('#link_title').val(linkTitle)
-    $('#link_url').val(linkURL)
-
-    if linkPrivate == 'true'
-      $('#link_private').prop('checked', true)
-    else
-      $('#link_private').prop('checked', false)
-  )
+#  $('#add-link-modal').on('show.bs.modal', (e) ->
+#    linkTitle = $('#timeline_event_link_title').val()
+#    linkURL = $('#timeline_event_link_url').val()
+#    linkPrivate = $('#timeline_event_link_private').val()
+#
+#    $('#link_title').val(linkTitle)
+#    $('#link_url').val(linkURL)
+#
+#    if linkPrivate == 'true'
+#      $('#link_private').prop('checked', true)
+#    else
+#      $('#link_private').prop('checked', false)
+#  )
 
   # When the add button is clicked, validate and store if it passes. Show errors otherwise.
 #  $('#add-link-button').click((event) ->

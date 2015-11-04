@@ -534,6 +534,10 @@ GEM
     simple_form (3.1.1)
       actionpack (~> 4.0)
       activemodel (~> 4.0)
+    simple_form_fancy_uploads (0.2.0)
+      carrierwave
+      rails (>= 4.0.0)
+      simple_form (~> 3.1)
     sinatra (1.4.6)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -653,6 +657,7 @@ DEPENDENCIES
   select2-rails
   sentry-raven
   simple_form (~> 3.1.1)
+  simple_form_fancy_uploads
   slim
   sparkr
   spring

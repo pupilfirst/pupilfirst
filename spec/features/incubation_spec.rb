@@ -141,6 +141,7 @@ feature 'Incubation' do
         select university.name, from: 'University'
         expect(page).to have_selector('.startup_admin_roll_number')
         fill_in 'University Roll Number', with: 'R1234'
+        attach_file 'startup_admin_attributes_college_identification', File.join(Rails.root, 'spec', 'support', 'uploads', 'users', 'college_id.jpg')
         click_on 'Next Step'
 
         # Make sure startup profile page has loaded.
@@ -151,6 +152,7 @@ feature 'Incubation' do
 
         expect(user.university).to eq(university)
         expect(user.roll_number).to eq('R1234')
+        expect(user.college_identification).to be_present
       end
 
       scenario 'User picks University, but does not supply roll number' do

@@ -6,7 +6,7 @@ var Link = React.createClass({
   },
 
   deleteLink: function(){
-    this.props.deleteLinkCB();
+    this.props.deleteLinkCB(this.props.index);
   },
 
   render: function() {

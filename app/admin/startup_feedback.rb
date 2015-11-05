@@ -51,7 +51,7 @@ ActiveAdmin.register StartupFeedback do
         link_to(
           'Email Now!',
           email_feedback_admin_startup_feedback_path(startup_feedback),
-          method: :put, data: { confirm: 'Are you sure you want to email this feedback to the founders?' }
+          method: :put, data: { confirm: 'Are you sure you want to email this feedback to all founders?' }
         )
       end
     end
@@ -91,11 +91,22 @@ ActiveAdmin.register StartupFeedback do
         if startup_feedback.sent_at.present?
           startup_feedback.sent_at
         else
-          link_to(
-            'Email Now!',
-            email_feedback_admin_startup_feedback_path(startup_feedback),
-            method: :put, data: { confirm: 'Are you sure you want to email this feedback to the founders?' }
-          )
+          div do
+            link_to(
+              'Send Email to all founders.',
+              email_feedback_admin_startup_feedback_path(startup_feedback),
+              method: :put, data: { confirm: 'Are you sure you want to email this feedback to all founders?' },
+              class: 'button'
+            )
+          end
+
+          div(class: 'admin-startup-feedback-show-or') { 'OR' }
+
+          div do
+            render 'admin/startup_feedback/email_feedback_to_founder',
+              form_path: email_feedback_to_founder_admin_startup_feedback_path,
+              startup_feedback: startup_feedback
+          end
         end
       end
     end
@@ -111,11 +122,23 @@ ActiveAdmin.register StartupFeedback do
     redirect_to action: :index
   end
 
+  member_action :email_feedback_to_founder, method: :put do
+    startup_feedback = StartupFeedback.find params[:id]
+    user = User.find(params[:user_id])
+    StartupMailer.feedback_as_email(startup_feedback, user: user).deliver_later
+    flash[:alert] = "Your feedback has been sent to #{user.email}"
+
+    # Mark feedback as sent.
+    startup_feedback.update(sent_at: Time.now)
+
+    redirect_to action: :show
+  end
+
   action_item :email_feedback, only: :show, if: proc { startup_feedback.sent_at.blank? } do
     link_to(
       'Email Now!',
       email_feedback_admin_startup_feedback_path(startup_feedback),
-      method: :put, data: { confirm: 'Are you sure you want to email this feedback to the founders?' }
+      method: :put, data: { confirm: 'Are you sure you want to email this feedback to all founders?' }
     )
   end
 end

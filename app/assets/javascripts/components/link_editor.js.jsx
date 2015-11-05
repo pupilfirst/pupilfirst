@@ -1,10 +1,6 @@
 var LinkEditor = React.createClass({
-  propTypes: {
-    linksJSON: React.PropTypes.string
-  },
-
   getInitialState: function() {
-    return {links: JSON.parse(this.props.linksJSON), showLinkForm: false};
+    return {links: ( this.props.linksJSON.length>0 ? JSON.parse(this.props.linksJSON) : []), showLinkForm: false};
   },
 
   addLinksClicked: function() {
@@ -25,11 +21,11 @@ var LinkEditor = React.createClass({
     var updatedLinks = this.state.links;
     updatedLinks.splice(i,1);
     this.setState({links: updatedLinks});
-
   },
 
   editLinkClicked: function(i) {
-    var linkToEdit = this.state.links[i];
+    //clone the object to a new one, else it will be passed by reference
+    var linkToEdit = $.extend({},this.state.links[i]);
     linkToEdit.index = i;
     this.setState({linkToEdit: linkToEdit, showLinkForm: true});
   },

@@ -8,7 +8,7 @@ var LinkList = React.createClass({
   },
 
   componentDidUpdate: function () {
-    $('#timeline_event_links').val(JSON.stringify(this.state.links));
+    $('#timeline_event_links').val(JSON.stringify(this.state.links)).trigger('change');
   },
 
   render: function () {

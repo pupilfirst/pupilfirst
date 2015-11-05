@@ -114,11 +114,6 @@ matchSampleTextToEventType = ->
     $('#timeline_event_description').attr("placeholder", newPlaceHolder)
   )
 
-removeSelectedLink = ->
-  $('#timeline_event_link_title').val('')
-  $('#timeline_event_link_url').val('')
-  markSelectedLink('Add a Link', true)
-
 removeSelectedImage = ->
   uploadImage = $('#upload-image')
   uploadImage.removeClass('green-text')
@@ -149,99 +144,25 @@ handleImageUpload = ->
 
   $('#remove-selected-image').click(removeSelectedImage)
 
-#isUrlValid = (url) ->
-#  /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url)
-#
-#clearErrorMarkers = (formGroupFinder) ->
-#  formGroup = $(formGroupFinder)
-#  formGroup.removeClass('has-error has-feedback')
-#  formGroup.find('span').addClass('hidden')
-#
-#addErrorMarkers = (formGroupFinder, errorHint) ->
-#  formGroup = $(formGroupFinder)
-#  formGroup.addClass('has-error has-feedback')
-#  formGroup.find('span.form-control-feedback').removeClass('hidden')
-#
-#  if errorHint
-#    $('#url-help').removeClass('hidden').html(errorHint)
+markSelectedLinks = ->
+  $('#timeline_event_links').change(->
+    getLinksTabTitle()
+  )
 
-markSelectedLink = (linkTitle, unmark = false) ->
-  $('#add-link').find('span').html(linkTitle)
-
-  if unmark
-    $('#add-link').removeClass('green-text')
-    $('#remove-selected-link').addClass('hidden')
-  else
+getLinksTabTitle = ->
+  console.log('i was called')
+  links = if !$('#timeline_event_links').val() then [] else JSON.parse $('#timeline_event_links').val()
+  if links.length > 0
+    title = links[0].title
+    unless links.length == 1
+      title += ' (+' + (links.length-1) + ')'
     $('#add-link').addClass('green-text')
-    $('#remove-selected-link').removeClass('hidden')
+  else
+    title = 'Add Links'
+    $('#add-link').removeClass('green-text')
+  $('#add-link').find('span').html(title)
 
-# If link title and URL are set on load (editing), then we start with selected values.
-markSelectedLinksOnEdit = ->
-  linkTitle = $('#timeline_event_link_title').val()
-  linkURL = $('#timeline_event_link_url').val()
 
-  # Check if both are available on page load - which means we're editing, so set the title on builder link.
-  if linkURL and linkTitle
-    markSelectedLink(linkTitle)
-
-handleLinkAddition = ->
-  # When the modal opens, load value saved in actual hidden inputs.
-#  $('#add-link-modal').on('show.bs.modal', (e) ->
-#    linkTitle = $('#timeline_event_link_title').val()
-#    linkURL = $('#timeline_event_link_url').val()
-#    linkPrivate = $('#timeline_event_link_private').val()
-#
-#    $('#link_title').val(linkTitle)
-#    $('#link_url').val(linkURL)
-#
-#    if linkPrivate == 'true'
-#      $('#link_private').prop('checked', true)
-#    else
-#      $('#link_private').prop('checked', false)
-#  )
-
-  # When the add button is clicked, validate and store if it passes. Show errors otherwise.
-#  $('#add-link-button').click((event) ->
-#    linkTitle = $('#link_title').val()
-#    linkURL = $('#link_url').val()
-#    linkURLValid = isUrlValid(linkURL)
-#
-#    if linkURLValid and linkTitle
-#      # Store values in hidden inputs, close modal, and show title on builder link.
-#      $('#timeline_event_link_title').val(linkTitle)
-#      $('#timeline_event_link_url').val(linkURL)
-#
-#      if $('#link_private').prop('checked')
-#        $('#timeline_event_link_private').val(true)
-#      else
-#        $('#timeline_event_link_private').val(false)
-#
-#      $('#add-link-modal').modal('hide')
-#      markSelectedLink(linkTitle)
-#    else
-#      unless linkURLValid
-#        addErrorMarkers('#link-url-group', "Please make sure you've supplied a full URL, starting with http(s).")
-#
-#      unless linkTitle
-#        addErrorMarkers('#link-title-group')
-#
-#      event.preventDefault()
-#  )
-
-#  $('#link_title').focus(->
-#    clearErrorMarkers('#link-title-group')
-#  )
-#
-#  $('#link_url').focus(->
-#    clearErrorMarkers('#link-url-group')
-#  )
-
-#  $('#add-link-modal').on('hide.bs.modal', (e) ->
-#    clearErrorMarkers('#link-title-group')
-#    clearErrorMarkers('#link-url-group')
-#  )
-
-  $('#remove-selected-link').click(removeSelectedLink)
 
 matchDescriptionScroll = (target) ->
   $('span.text-area-overlay').scrollTop(target.scrollTop())
@@ -314,11 +235,11 @@ $(document).on 'page:change', timelineBuilderSubmitChecks
 $(document).on 'page:change', setupSelect2ForEventType
 $(document).on 'page:change', clearErrorsOnOpeningSelect2
 $(document).on 'page:change', handleImageUpload
-$(document).on 'page:change', handleLinkAddition
-$(document).on 'page:change', markSelectedLinksOnEdit
 $(document).on 'page:change', measureDescriptionLength
 $(document).on 'page:change', setPendingTooltips
 $(document).on 'page:change', matchSampleTextToEventType
 $(document).on 'page:change', setupTimelineBuilderDatepicker
 $(document).on 'page:change', setImprovementModalContent
 $(document).on 'page:change', addTooltipToHideCheckbox
+$(document).on 'page:change', markSelectedLinks
+$(document).on 'page:change', getLinksTabTitle

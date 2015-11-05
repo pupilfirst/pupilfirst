@@ -26,7 +26,7 @@
           a#add-link data-toggle="modal" data-target="#add-link-modal"
             i.fa.fa-link
             | &nbsp;
-            span.hidden-xs href='#' Add a Link
+            span.hidden-xs href='#' Add Links
           a#remove-selected-link.hidden
             | &nbsp;
             i.fa.fa-times-circle
@@ -61,25 +61,8 @@
     .modal-dialog
       .modal-content
         .modal-body
-          = react_component 'LinkEditor', {linksJSON: event.links.to_json }
-          / .form-horizontal
-          /   .form-group#link-title-group
-          /     = label_tag :link_title, 'Title', class: 'col-sm-2 control-label'
-          /     .col-sm-10
-          /       = text_field_tag :link_title, nil, class: 'form-control', placeholder: '(required)'
-          /       span.glyphicon.glyphicon-remove.form-control-feedback.hidden
-          /   .form-group#link-url-group
-          /     = label_tag :link_url, 'URL', class: 'col-sm-2 control-label'
-          /     .col-sm-10
-          /       = text_field_tag :link_url, nil, class: 'form-control', placeholder: '(required)', 'aria-describedby' => 'url-help'
-          /       span.glyphicon.glyphicon-remove.form-control-feedback.hidden
-          /       span#url-help.help-block.hidden
-          /   .form-group
-          /     .col-sm-offset-2.col-sm-10
-          /       .checkbox
-          /         label
-          /           = check_box_tag :link_private, true, false
-          /           span#hide-from-public data-toggle="tooltip" data-placement="bottom" title="If checked, this link will be visible only to you, co-founders, and SV.CO Team members." href='#' Hide from public?
+          = react_component 'LinkEditor', {linksJSON: event.links }
+       span#hide-from-public data-toggle="tooltip" data-placement="bottom" title="If checked, this link will be visible only to you, co-founders, and SV.CO Team members." href='#' Hide from public?
         .modal-footer
           button#close-link-modal-button.btn.btn-default data-dismiss="modal" type="button"  Close
           / button#add-link-button.btn.btn-success type="button"  Add

@@ -4,13 +4,7 @@ var LinkForm = React.createClass({
   },
 
   getInitialState: function () {
-    return {
-      title: this.props.title,
-      url: this.props.url,
-      private: this.props.private,
-      titleError: false,
-      urlError: false
-    };
+    return {title: this.props.title, url: this.props.url, private: this.props.private, titleError: false, urlError: false};
   },
 
   saveLink: function () {
@@ -20,10 +14,10 @@ var LinkForm = React.createClass({
     if (new_title && this.isUrlValid(new_url)) {
       this.props.linkAddedCallBack(new_title, new_url, new_private);
     } else {
-      if (!new_title) {
+      if ( !new_title ) {
         this.setState({titleError: true});
       }
-      if (!this.isUrlValid(new_url)) {
+      if ( !this.isUrlValid(new_url) ) {
         this.setState({urlError: true});
       }
     }
@@ -33,10 +27,10 @@ var LinkForm = React.createClass({
     return /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url);
   },
 
-  clearErrorMarkers: function (event) {
-    if (event.target.id == "link_title") {
+  clearErrorMarkers: function(event) {
+    if ( event.target.id == "link_title" ) {
       this.setState({titleError: false});
-    } else if (event.target.id == "link_url") {
+    } else if ( event.target.id == "link_url" ) {
       this.setState({urlError: false});
     }
   },
@@ -46,16 +40,14 @@ var LinkForm = React.createClass({
       <div>
         { this.props.link ? (<h4>Edit Link</h4>) : (<h4>Add Link</h4>)}
         <div className="form-horizontal">
-          <div className={ (this.state.titleError ? 'has-error has-feedback ' : '') + 'form-group' }
-               id="link-title-group">
+          <div className={ (this.state.titleError ? 'has-error has-feedback ' : '') + 'form-group' } id="link-title-group">
             <label htmlFor="link_title" className="col-sm-2 control-label">Title</label>
 
             <div className="col-sm-10">
               <input id="link_title" className="form-control" type="text" placeholder="(required)" name="link_title"
-                     value={this.state.title} onFocus={this.clearErrorMarkers}>
+                     value={this.state.title} onFocus={this.clearErrorMarkers} >
               </input>
-                  <span
-                    className={ (this.state.titleError ? '' : 'hidden ') + "glyphicon glyphicon-remove form-control-feedback" }>
+                  <span className={ (this.state.titleError ? '' : 'hidden ') + "glyphicon glyphicon-remove form-control-feedback" }>
                   </span>
             </div>
           </div>
@@ -64,12 +56,11 @@ var LinkForm = React.createClass({
 
             <div className="col-sm-10">
               <input id="link_url" className="form-control" type="text" placeholder="(required)" name="link_url"
-                     value={this.state.url} onFocus={this.clearErrorMarkers}>
+                     value={this.state.url} onFocus={this.clearErrorMarkers} >
               </input>
-                  <span
-                    className={ (this.state.urlError ? '' : 'hidden ') + "glyphicon glyphicon-remove form-control-feedback" }>
+                  <span className={ (this.state.urlError ? '' : 'hidden ') + "glyphicon glyphicon-remove form-control-feedback" }>
                   </span>
-              <span id="url-help" className={ (this.state.urlError ? '' : 'hidden ') +'help-block' }>
+              <span id="url-help" className={ (this.state.urlError ? '' : 'hidden  ') +'help-block' }>
                 Please make sure you've supplied a full URL, starting with http(s).
               </span>
             </div>

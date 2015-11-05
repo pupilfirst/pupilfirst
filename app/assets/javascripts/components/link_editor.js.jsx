@@ -11,7 +11,7 @@ var LinkEditor = React.createClass({
     this.setState({showLinkForm: true});
   },
 
-  newLinkAdded: function(title, url, private) {
+  addNewLink: function(title, url, private) {
     var newLink = {"title": title,"url": url,"private": private};
     var presentLinks = this.state.links;
     presentLinks.push(newLink);
@@ -29,6 +29,10 @@ var LinkEditor = React.createClass({
 
   },
 
+  editLink: function(i) {
+    console.log('Need to edit link '+ i)
+  },
+
 
   render: function() {
     var links = this.state.links;
@@ -37,11 +41,11 @@ var LinkEditor = React.createClass({
         <h4>Current Links</h4>
         <div className="row">
           <div className="col-sm-offset-2 col-sm-10">
-            <LinkList links={ links } deleteLinkCB={ this.deleteLink }></LinkList>
+            <LinkList links={ links } deleteLinkCB={ this.deleteLink } editLinkCB={ this.editLink } ></LinkList>
             { this.showAddButton() ? (<button onClick={this.addLinksClicked} className="btn btn-default" ><i className="fa fa-plus"></i> Add Links</button>) : (null) }
           </div>
         </div>
-        { this.state.showLinkForm ? (<LinkForm linkAddedCallBack={this.newLinkAdded}></LinkForm>) : null }
+        { this.state.showLinkForm ? (<LinkForm linkAddedCallBack={this.addNewLink} ></LinkForm>) : null }
       </div>
     );
   }

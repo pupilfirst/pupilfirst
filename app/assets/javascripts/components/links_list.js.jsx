@@ -16,7 +16,7 @@ var LinkList = React.createClass({
       return (
         <ul className="list-group">
           { this.state.links.map(function (link, i) {
-            return (<Link title={link.title} url={link.url} private={link.private} index={i} deleteLinkCB={this.props.deleteLinkCB} key={link.url}></Link>);
+            return (<Link title={link.title} url={link.url} private={link.private} index={i} editLinkCB={this.props.editLinkCB} deleteLinkCB={this.props.deleteLinkCB} key={link.url}></Link>);
           }.bind(this))
           }
         </ul>

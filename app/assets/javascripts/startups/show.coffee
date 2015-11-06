@@ -150,7 +150,6 @@ markSelectedLinks = ->
   )
 
 getLinksTabTitle = ->
-  console.log('i was called')
   links = if !$('#timeline_event_links').val() then [] else JSON.parse $('#timeline_event_links').val()
   if links.length > 0
     title = links[0].title

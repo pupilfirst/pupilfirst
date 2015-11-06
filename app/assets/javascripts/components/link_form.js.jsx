@@ -4,7 +4,32 @@ var LinkForm = React.createClass({
   },
 
   getInitialState: function () {
-    return {link: this.props.link, titleError: false, urlError: false};
+    if (!this.props.link) {
+      var initialLink = {"title": "", "url": "", "private": false};
+    } else {
+      var initialLink = this.props.link;
+    }
+    return {link: initialLink, titleError: false, urlError: false};
+  },
+
+  componentWillReceiveProps: function (newProps) {
+    this.setState({link: newProps.link})
+  },
+
+  handleInputChange: function (event) {
+    var presentLink = $.extend({},this.state.link);
+    switch(event.target.id) {
+      case "link_title":
+        presentLink.title = event.target.value;
+        break;
+      case "link_url":
+        presentLink.url = event.target.value;
+        break;
+      case "link_private":
+        presentLink.private = event.target.checked;
+        break;
+    }
+    this.setState({link: presentLink});
   },
 
   saveLink: function () {
@@ -40,21 +65,21 @@ var LinkForm = React.createClass({
   },
 
   linkProvided: function() {
-    return this.state.link != null;
+    return typeof(this.state.link.index) == "number";
   },
 
 
   render: function () {
     return (
       <div>
-        { this.props.link ? (<h4>Edit Link</h4>) : (<h4>Add Link</h4>)}
+        { this.linkProvided() ? (<h4>Edit Link</h4>) : (<h4>Add Link</h4>)}
         <div className="form-horizontal">
           <div className={ (this.state.titleError ? 'has-error has-feedback ' : '') + 'form-group' } id="link-title-group">
             <label htmlFor="link_title" className="col-sm-2 control-label">Title</label>
 
             <div className="col-sm-10">
               <input id="link_title" className="form-control" type="text" placeholder="(required)" name="link_title"
-                     defaultValue={( this.linkProvided() ? this.state.link.title : '' )} onFocus={this.clearErrorMarkers} >
+                     value={ this.state.link.title } onFocus={this.clearErrorMarkers} onChange={ this.handleInputChange }>
               </input>
                   <span className={ (this.state.titleError ? '' : 'hidden ') + "glyphicon glyphicon-remove form-control-feedback" }>
                   </span>
@@ -65,7 +90,7 @@ var LinkForm = React.createClass({
 
             <div className="col-sm-10">
               <input id="link_url" className="form-control" type="text" placeholder="(required)" name="link_url"
-                     defaultValue={( this.linkProvided() ? this.state.link.url : '' )} onFocus={this.clearErrorMarkers} >
+                     value={ this.state.link.url } onFocus={this.clearErrorMarkers} onChange={ this.handleInputChange }>
               </input>
                   <span className={ (this.state.urlError ? '' : 'hidden ') + "glyphicon glyphicon-remove form-control-feedback" }>
                   </span>
@@ -78,7 +103,7 @@ var LinkForm = React.createClass({
             <div className="col-sm-offset-2 col-sm-10">
               <div className="checkbox">
                 <label>
-                  <input id="link_private" type="checkbox" name="link_private" defaultChecked={( this.linkProvided() ? this.state.link.private : false )}></input>
+                  <input id="link_private" type="checkbox" name="link_private" checked={ this.state.link.private } onChange={ this.handleInputChange }></input>
                       <span id="hide-from-public" data-toggle="tooltip" data-placement="bottom"
                             title="If checked, this link will be visible only to you, co-founders, and SV.CO Team members."
                             href='#'>

@@ -4,7 +4,6 @@ class TimelineEvent < ActiveRecord::Base
   mount_uploader :image, TimelineImageUploader
   serialize :links
   validates_presence_of :event_on, :startup_id, :timeline_event_type, :description
-  attr_accessor :link_url, :link_title, :link_private
 
   MAX_DESCRIPTION_CHARACTERS = 300
 
@@ -40,16 +39,7 @@ class TimelineEvent < ActiveRecord::Base
   scope :showcase, -> { includes(:timeline_event_type, :startup).verified.from_approved_startups.batched.has_image.order('timeline_events.event_on DESC') }
   scope :help_wanted, -> { where(timeline_event_type: TimelineEventType.help_wanted) }
 
-  validate :link_url_format
-
-  LINK_URL_MATCHER = %r{(?:https?//)?(?:www\.)?(?<domain>[\w-]+)\.}
-
-  def link_url_format
-    return unless link_url.present? && link_url !~ LINK_URL_MATCHER
-    errors.add(:link_url, 'does not look like a valid URL')
-  end
-
-  before_save :make_links_an_array, :build_link_json
+  before_save :make_links_an_array
   before_validation :build_description
 
   after_commit do
@@ -71,13 +61,12 @@ class TimelineEvent < ActiveRecord::Base
     end
   end
 
-  def build_link_json
-    return unless link_title.present? && link_url.present?
-    self.links = [{ title: link_title, url: link_url, private: (link_private.present? && link_private != 'false') }]
-  end
-
   def make_links_an_array
     self.links = [] if links.nil?
+  end
+
+  def links
+    super || []
   end
 
   def iteration

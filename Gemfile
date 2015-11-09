@@ -73,6 +73,8 @@ gem 'groupdate' # The simplest way to group temporal data. https://github.com/an
 gem 'sparkr' # Sparklines with Ruby. https://github.com/rrrene/sparkr
 gem 'videojs_rails' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com/seanbehan/videojs_rails
 
+gem 'react-rails' # react for creating link editor in timeline builder
+
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify' # Superb notifications library. http://sciactive.github.io/pnotify/

@@ -5,6 +5,7 @@ var LinkForm = React.createClass({
 
   getInitialState: function () {
     if (!this.props.link) {
+      //if no links received, initialize an empty object so that we can still call link.title etc
       var initialLink = {"title": "", "url": "", "private": false};
     } else {
       var initialLink = this.props.link;
@@ -12,11 +13,13 @@ var LinkForm = React.createClass({
     return {link: initialLink, titleError: false, urlError: false};
   },
 
+  //updates the open form if user changes its role (by clicking edit on another link for eg)
   componentWillReceiveProps: function (newProps) {
     this.setState({link: newProps.link})
   },
 
   handleInputChange: function (event) {
+    //copy links to a new object to avoid pass by reference
     var presentLink = $.extend({},this.state.link);
     switch(event.target.id) {
       case "link_title":
@@ -56,6 +59,7 @@ var LinkForm = React.createClass({
     return /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url);
   },
 
+  //upon focus, clear error markers, if any
   clearErrorMarkers: function(event) {
     if ( event.target.id == "link_title" ) {
       this.setState({titleError: false});
@@ -65,6 +69,7 @@ var LinkForm = React.createClass({
   },
 
   linkProvided: function() {
+    //link.index will be 'undefined' for 'Add Link'
     return typeof(this.state.link.index) == "number";
   },
 

@@ -8,6 +8,7 @@ var LinkList = React.createClass({
   },
 
   componentDidUpdate: function () {
+    //always copy latest links to the hidden field, trigger change to update the link tab's title
     $('#timeline_event_links').val(JSON.stringify(this.state.links)).trigger('change');
   },
 

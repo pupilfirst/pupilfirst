@@ -6,10 +6,12 @@ var Link = React.createClass({
   },
 
   deleteLink: function(){
+    //handle passed all the way from linkEditor
     this.props.deleteLinkCB(this.props.index);
   },
 
   editLinkClicked: function(){
+    //handle passed all the way from linkEditor
     this.props.editLinkClickedCB(this.props.index);
   },
 

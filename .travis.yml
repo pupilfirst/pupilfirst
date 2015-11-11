@@ -1,5 +1,5 @@
 # We don't need sudo, so let's try the container-based infrastructure.
-sudo: false
+sudo: required
 
 language: ruby
 

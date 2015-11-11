@@ -1,6 +1,6 @@
 sudo: required
 language: ruby
-#cache: bundler
+cache: bundler
 
 addons:
   postgresql: "9.4"

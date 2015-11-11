@@ -1,9 +1,6 @@
-# We don't need sudo, so let's try the container-based infrastructure.
 sudo: required
-
 language: ruby
-
-cache: bundler
+#cache: bundler
 
 addons:
   postgresql: "9.4"
@@ -20,7 +17,6 @@ before_install:
 before_script:
   - cp config/database.travis.yml config/database.yml
   - psql -c 'create database travis_ci_test;' -U postgres
-#  - bundle exec rake db:migrate --trace
-#  - bundle exec rake db:test:prepare --trace
+
 script:
   - RAILS_ENV=test xvfb-run -a bundle exec rspec

@@ -22,3 +22,6 @@ deploy:
   app: sv-co
   api_key:
     secure: YvI5115jfYUO0iNMqk5kyxI9FQCXuKlqLvAQ0Q4M5diu7LVGx/M/f0mS+RBpN0vD1Hm1QrTfjSI1SuDuf3UhYS0whl53lcZhAE6VkQlhXhoXbiyAKwysoF1N1VK8vWcVejLKlrO2EkX9cLhcKfuLnMZqjxzsD4jCUWlYhcVjqRs=
+  run:
+  - "rake db:migrate"
+  - "restart"

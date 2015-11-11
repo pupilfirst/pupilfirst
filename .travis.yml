@@ -20,3 +20,6 @@ before_script:
 
 script:
   - RAILS_ENV=test xvfb-run -a bundle exec rspec
+
+notifications:
+  slack: svlabs:yHBLUeB6YRk600x88YxeonwL

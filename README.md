@@ -28,7 +28,7 @@ Now start the server with `rails s`
 
 To execute all tests manually, run:
 
-    rspec
+    $ rspec
 
 ## Services
 
@@ -36,7 +36,7 @@ Background jobs are written as Rails ActiveJob-s, and deferred using Delayed::Jo
 
 To run any jobs in the development environment, simply run:
 
-    rake jobs:workoff
+    $ rake jobs:workoff
 
 ## Deployment
 
@@ -47,6 +47,10 @@ Add heroku remotes:
 Then, to deploy:
 
 * From `master` branch, `git push heroku-production` will push local master to production (sv.co)
+
+To safely deploy:
+
+    $ git push heroku-production && heroku run rake db:migrate --app sv-co && heroku restart --app sv-co
 
 ## Coding style conventions
 

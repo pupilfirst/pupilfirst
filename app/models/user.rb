@@ -88,6 +88,10 @@ class User < ActiveRecord::Base
 
   mount_uploader :avatar, AvatarUploader
   process_in_background :avatar
+
+  mount_uploader :college_identification, CollegeIdentificationUploader
+  process_in_background :college_identification
+
   normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :pin, :first_name, :last_name
 
   normalize_attribute :skip_password do |value|

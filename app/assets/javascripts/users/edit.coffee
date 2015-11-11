@@ -3,12 +3,14 @@ $(document).on 'page:change', ->
     placeholder: 'Select roles at startup'
   )
 
-toggleUserRollNumber = ->
+toggleUniversityFields = ->
   if $("#user_university_id").val()
     $('.user_roll_number').show()
+    $('.user_college_identification').show()
   else
     $('.user_roll_number').hide()
+    $('.user_college_identification').hide()
 
 $(document).on 'page:change', ->
-  toggleUserRollNumber()
-  $("#user_university_id").change toggleUserRollNumber
+  toggleUniversityFields()
+  $("#user_university_id").change toggleUniversityFields

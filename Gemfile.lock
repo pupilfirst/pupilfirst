@@ -104,6 +104,10 @@ GEM
     autoprefixer-rails (5.2.0.1)
       execjs
       json
+    babel-source (5.8.33)
+    babel-transpiler (0.7.0)
+      babel-source (>= 4.0, < 6)
+      execjs (~> 2.0)
     bcrypt (3.1.10)
     better_errors (2.1.1)
       coderay (>= 1.0.0)
@@ -152,6 +156,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.9.1.1)
+    connection_pool (2.2.0)
     countries (0.11.4)
       currencies (~> 0.4.2)
       i18n_data (~> 0.7.0)
@@ -468,6 +473,13 @@ GEM
       polyamorous (~> 1.2)
     rb-readline (0.5.3)
     rdoc (4.2.0)
+    react-rails (1.4.1)
+      babel-transpiler (>= 0.7.0)
+      coffee-script-source (~> 1.8)
+      connection_pool
+      execjs
+      rails (>= 3.2)
+      tilt
     recaptcha (0.4.0)
     redis (3.2.1)
     redis-namespace (1.5.2)
@@ -534,6 +546,10 @@ GEM
     simple_form (3.1.1)
       actionpack (~> 4.0)
       activemodel (~> 4.0)
+    simple_form_fancy_uploads (0.2.0)
+      carrierwave
+      rails (>= 4.0.0)
+      simple_form (~> 3.1)
     sinatra (1.4.6)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -641,6 +657,7 @@ DEPENDENCIES
   rails-assets-curioussolutions-datetimepicker!
   rails-assets-pnotify!
   rails_12factor
+  react-rails
   recaptcha
   require_all
   rest-client
@@ -653,6 +670,7 @@ DEPENDENCIES
   select2-rails
   sentry-raven
   simple_form (~> 3.1.1)
+  simple_form_fancy_uploads
   slim
   sparkr
   spring

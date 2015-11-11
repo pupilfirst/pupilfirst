@@ -109,6 +109,14 @@ ActiveAdmin.register User do
       row :designation
       row :university
       row :roll_number
+
+      row :college_identification do
+        if user.college_identification.present?
+          link_to user.college_identification.url do
+            image_tag user.college_identification.thumb.url
+          end
+        end
+      end
     end
 
     attributes_table do

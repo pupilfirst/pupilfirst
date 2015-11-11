@@ -1,5 +1,6 @@
 - content_for :head
   title SV.CO Verified Timeline for #{@startup.product_name}
+  meta name="description" content="#{@startup.display_name}: #{@startup.product_description}"
 
 .container
   /TO DO: probably rewrite this in a cleaner way
@@ -373,15 +374,15 @@
                       .timeline-body
                         .tl-body
                           p #{event.description}
-                        - if event.links? && (!event.links.first[:private] || @startup.founder?(current_user))
+                        - if event.links?
                           .timeline-footer.tl-footer
-                            - event.links.each do |link|
-                              - if !link[:private] || @startup.founder?(current_user)
-                                a.tl-link-button href="#{link[:url]}" target="_blank"
-                                  - if link[:private]
+                            - JSON.parse(event.links).each do |link|
+                              - if !link['private'] || @startup.founder?(current_user)
+                                a.tl-link-button href="#{link['url']}" target="_blank"
+                                  - if link['private']
                                     i.fa.fa-user-secret
                                     | &nbsp;
-                                  | #{link[:title]}
+                                  | #{link['title']}
                         - if current_user && @startup.founder?(current_user)
                           - if event.month_old?
                             .old-to-edit href="#" data-toggle="tooltip" title="To edit/delete this event, please write to help@sv.co."

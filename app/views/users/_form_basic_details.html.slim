@@ -13,7 +13,7 @@
     .col-sm-9
       .phone-number-controls #{user.phone} (#{link_to 'Change?', phone_user_path(current_user, referer: edit_user_url(current_user))})
 
-  = f.input :avatar, as: :file, input_html: { accept: 'image/*' }
+  = f.input :avatar, as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }
 
   - if user.startup.present?
     = f.input :roles, label: 'Role at Startup', as: :select, collection: User.valid_roles, label_method: ->(role) { t "user.#{role}" }, include_hidden: false, input_html: { multiple: true }
@@ -24,6 +24,7 @@
   = f.input :communication_address
   = f.association :university, include_blank: 'Not a student', collection: University.all.group_by(&:location), as: :grouped_select, group_method: :last
   = f.input :roll_number, label: 'University Roll Number', required: true
+  = f.input :college_identification, label: 'College ID', as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }
 
   .form-group
     .col-sm-offset-3.col-sm-10

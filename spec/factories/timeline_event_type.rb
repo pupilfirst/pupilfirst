@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :timeline_event_type do
     sample_text { Faker::Lorem.words(10).join ' ' }
     proof_required { Faker::Lorem.words(10).join ' ' }
-    badge File.open(File.join(Rails.root, '/app/assets/images/seeds/timeline_event_types/default.png'))
+    badge File.open(File.join(Rails.root, '/spec/support/uploads/timeline_event_types/default.png'))
     key { Faker::Lorem.word }
     role { Faker::Lorem.word }
     title { Faker::Lorem.words(2).join ' ' }

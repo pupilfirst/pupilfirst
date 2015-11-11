@@ -1,6 +1,6 @@
 .timeline-builder
   = form_for [current_user, :startup, event], html: event.verified? ? { 'data-verified' => 'true' } : {} do |f|
-    = f.hidden_field :links
+    = f.hidden_field :links, :value => event.links.to_json
     .container-fluid
       .row.top-row.text-center
         .col-sm-4.col-xs-8.border-right
@@ -61,7 +61,7 @@
     .modal-dialog
       .modal-content
         .modal-body
-          = react_component 'LinkEditor', {linksJSON: event.links }
+          = react_component 'LinkEditor', {linksJSON: event.links.to_json }
         .modal-footer
           button#close-link-modal-button.btn.btn-default data-dismiss="modal" type="button"  Close
 

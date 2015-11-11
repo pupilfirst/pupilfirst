@@ -5,7 +5,7 @@ class TimelineEventsController < ApplicationController
   # POST /users/:user_id/startup/timeline_events
   def create
     @startup = current_user.startup
-    @timeline_event = @startup.timeline_events.new timeline_event_params
+    @timeline_event = @startup.timeline_events.new timeline_event_params.merge(links: JSON.parse(timeline_event_params[:links]))
 
     if @timeline_event.save
       flash[:success] = 'Your new timeline event has been submitted to the SV.CO team for approval!'
@@ -35,7 +35,7 @@ class TimelineEventsController < ApplicationController
     @startup = current_user.startup
     @timeline_event = @startup.timeline_events.find(params[:id])
 
-    if @timeline_event.update_and_require_reverification(timeline_event_params)
+    if @timeline_event.update_and_require_reverification(timeline_event_params.merge(links: JSON.parse(timeline_event_params[:links])))
       flash[:success] = 'Timeline event updated!'
       redirect_to @startup
     else

@@ -11,6 +11,7 @@ class StartupsController < ApplicationController
 
   # GET /startups
   def index
+    raise_not_found unless feature_active?(:startups_index)
     @startups = Startup.batched_and_approved
   end
 

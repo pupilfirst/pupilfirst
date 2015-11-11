@@ -15,6 +15,10 @@ feature 'Timeline Builder' do
     WebMock.allow_net_connect!
   end
 
+  after :all do
+    WebMock.disable_net_connect!
+  end
+
   before :each do
     # Add user as founder of startup.
     startup.founders << user
@@ -44,13 +48,14 @@ feature 'Timeline Builder' do
       # Can't figure out how to attach files to hidden file fields.
       # page.attach_file('timeline_event_image', File.join(Rails.root, '/app/assets/images/favicon.png'), visible: false)
 
-      # Add Link.
-      # page.find('a', text: 'Add a Link').click
-      # fill_in 'Title', with: 'SV.CO'
-      # fill_in 'URL', with: 'https://sv.co'
-      # page.find('#link_private').click
-      # click_on 'Add'
-
+      # Add a single Link.
+      page.find('a', text: 'Add Links').click
+      click_on 'Add Links'
+      fill_in 'Title', with: 'SV.CO'
+      fill_in 'URL', with: 'https://sv.co'
+      page.find('#link_private').click
+      click_on 'Save Link'
+      click_on 'Close'
       click_on 'Submit for Review'
 
       # Wait for page to load.
@@ -63,17 +68,18 @@ feature 'Timeline Builder' do
       expect(latest_timeline_event_entry).to have_text('Pending verification')
       expect(latest_timeline_event_entry).to have_text('Team Formed')
       expect(latest_timeline_event_entry).to have_text(event_description)
-      # expect(latest_timeline_event_entry).to have_link('SV.CO', href: 'https://sv.co')
-      # expect(latest_timeline_event_entry).to have_selector('i.fa.fa-user-secret')
+      expect(latest_timeline_event_entry).to have_link('SV.CO', href: 'https://sv.co')
+      expect(latest_timeline_event_entry).to have_selector('i.fa.fa-user-secret')
     end
 
-    # scenario 'Founder attempts to add link without supplying title or URL', js: true do
-    #   page.find('a', text: 'Add a Link').click
-    #   click_on 'Add'
-    #
-    #   expect(page.find('#link-title-group')[:class]).to include('has-error')
-    #   expect(page.find('#link-url-group')[:class]).to include('has-error')
-    # end
+    scenario 'Founder attempts to add link without supplying title or URL', js: true do
+      page.find('a', text: 'Add Links').click
+      click_on 'Add Links'
+      click_on 'Save Link'
+
+      expect(page.find('#link-title-group')[:class]).to include('has-error')
+      expect(page.find('#link-url-group')[:class]).to include('has-error')
+    end
 
     scenario 'Founder attempts to submit builder without essential fields', js: true do
       click_on 'Submit for Review'
@@ -89,88 +95,184 @@ feature 'Timeline Builder' do
       expect(page.find('textarea.description').value.length).to eq(TimelineEvent::MAX_DESCRIPTION_CHARACTERS)
     end
 
-    # context 'Founder has a existing unverified timeline event' do
-    #   let!(:unverified_timeline_event) { create :timeline_event, startup: startup }
-    #   let(:new_description) { Faker::Lorem.words(10).join ' ' }
-    #
-    #   scenario 'Founder edits existing event', js: true do
-    #     visit startup_path(startup)
-    #
-    #     page.find("#event-#{unverified_timeline_event.id} .edit-link").click
-    #
-    #     # Turbolinks is in effect, so wait for event to load.
-    #     expect(page).to have_selector('textarea', text: unverified_timeline_event.description)
-    #
-    #     fill_in 'timeline_event_description', with: new_description
-    #     click_on 'Submit for Review'
-    #
-    #     new_timeline_event_panel = page.find("#event-#{unverified_timeline_event.id}")
-    #     expect(new_timeline_event_panel).to have_text(new_description)
-    #   end
-    #
-    #   context 'Timeline event has a private link' do
-    #     let!(:unverified_timeline_event) do
-    #       create :timeline_event,
-    #         startup: startup,
-    #         link_title: 'Link to Google',
-    #         link_url: 'https://google.com',
-    #         link_private: 'true'
-    #     end
-    #
-    #     scenario 'Founder makes link public', js: true do
-    #       visit startup_path(startup)
-    #
-    #       page.find("#event-#{unverified_timeline_event.id} .edit-link").click
-    #
-    #       # Turbolinks is in effect, so wait for event to load.
-    #       expect(page).to have_selector('textarea', text: unverified_timeline_event.description)
-    #
-    #       within '.timeline-builder' do
-    #         page.find('a', text: 'Link to Google').click
-    #       end
-    #
-    #       page.find('#link_private').click
-    #       click_on 'Add'
-    #       click_on 'Submit for Review'
-    #
-    #       # Wait for page to load.
-    #       expect(page).to have_content(unverified_timeline_event.description)
-    #
-    #       unverified_timeline_event.reload
-    #       expect(unverified_timeline_event.links.first[:private]).to be_falsey
-    #     end
-    #   end
-    # end
+    context 'Founder has a existing unverified timeline event' do
+      let!(:unverified_timeline_event) { create :timeline_event, startup: startup }
+      let(:new_description) { Faker::Lorem.words(10).join ' ' }
 
-    # context 'Founder has a existing verified timeline event' do
-    #   let!(:verified_timeline_event) { create :timeline_event, startup: startup, verified_at: Time.now }
-    #   let(:new_description) { Faker::Lorem.words(10).join ' ' }
-    #
-    #   scenario 'Founder edits existing event', js: true do
-    #     visit startup_path(startup)
-    #
-    #     page.find("#event-#{verified_timeline_event.id} .edit-link").click
-    #
-    #     # Turbolinks is in effect, so wait for event to load.
-    #     expect(page).to have_selector('textarea', text: verified_timeline_event.description)
-    #
-    #     fill_in 'timeline_event_description', with: new_description
-    #
-    #     page.accept_confirm do
-    #       click_on 'Submit for Review'
-    #     end
-    #
-    #     new_timeline_event_panel = page.find("#event-#{verified_timeline_event.id}")
-    #     expect(new_timeline_event_panel).to have_text(new_description)
-    #
-    #     verified_timeline_event.reload
-    #
-    #     expect(verified_timeline_event.verified_at).to be_nil
-    #   end
-    # end
-  end
+      scenario 'Founder edits existing event', js: true do
+        visit startup_path(startup)
 
-  after :all do
-    WebMock.disable_net_connect!
+        page.find("#event-#{unverified_timeline_event.id} .edit-link").click
+
+        # Turbolinks is in effect, so wait for event to load.
+        expect(page).to have_selector('textarea', text: unverified_timeline_event.description)
+
+        fill_in 'timeline_event_description', with: new_description
+        click_on 'Submit for Review'
+
+        new_timeline_event_panel = page.find("#event-#{unverified_timeline_event.id}")
+        expect(new_timeline_event_panel).to have_text(new_description)
+      end
+    end
+
+    context 'Founder has a existing verified timeline event' do
+      let!(:verified_timeline_event) { create :timeline_event, startup: startup, verified_at: Time.now }
+      let(:new_description) { Faker::Lorem.words(10).join ' ' }
+
+      scenario 'Founder edits existing event', js: true do
+        visit startup_path(startup)
+
+        page.find("#event-#{verified_timeline_event.id} .edit-link").click
+
+        # Turbolinks is in effect, so wait for event to load.
+        expect(page).to have_selector('textarea', text: verified_timeline_event.description)
+
+        fill_in 'timeline_event_description', with: new_description
+
+        page.accept_confirm do
+          click_on 'Submit for Review'
+        end
+
+        new_timeline_event_panel = page.find("#event-#{verified_timeline_event.id}")
+        expect(new_timeline_event_panel).to have_text(new_description)
+        expect(new_timeline_event_panel).to have_text('Pending verification')
+
+        verified_timeline_event.reload
+
+        expect(verified_timeline_event.verified_at).to be_nil
+      end
+
+      scenario 'Founder adds multiple links', js: true do
+        visit startup_path(startup)
+        page.find("#event-#{verified_timeline_event.id} .edit-link").click
+
+        # Wait for page to load.
+        expect(page).to have_selector('textarea', text: verified_timeline_event.description)
+        # Add two links, one private and one public.
+        page.find("#add-link").click
+        click_on 'Add Links'
+        fill_in 'Title', with: 'SV.CO'
+        fill_in 'URL', with: 'https://sv.co'
+        page.find('#link_private').click
+        click_on 'Save Link'
+        click_on 'Add Links'
+        fill_in 'Title', with: 'Google'
+        fill_in 'URL', with: 'https://www.google.com'
+        click_on 'Save Link'
+        click_on 'Close'
+
+        # Test if link tab's title reflects links added
+        expect(page.find("#add-link")).to have_text('SV.CO (+1)')
+
+        click_on 'Submit for Review'
+
+        # Wait for page to load.
+        expect(page).to have_text(startup.name)
+
+        # Get the timeline entry for last created event.
+        last_timeline_event = TimelineEvent.order('id DESC').first
+        latest_timeline_event_entry = page.find("#event-#{last_timeline_event.id}", match: :first)
+
+        expect(latest_timeline_event_entry).to have_link('SV.CO', href: 'https://sv.co')
+        expect(latest_timeline_event_entry).to have_link('Google', href: 'https://www.google.com')
+        expect(latest_timeline_event_entry.find('.tl-link-button', match: :first)).to have_selector('i.fa.fa-user-secret')
+        expect(latest_timeline_event_entry.find('.tl-link-button', text: 'Google')).to_not have_selector('i.fa.fa-user-secret')
+      end
+
+      context 'Founder has a existing timeline event with multiple links' do
+        let!(:timeline_event) do
+          create :timeline_event, startup: startup, links: [{ title: 'Google', url: 'https://google.com', private: true },
+                                                            { title: 'Yahoo', url: 'https://yahoo.com', private: false }]
+        end
+
+        scenario 'Founder deletes first link', js: true do
+          visit startup_path(startup)
+          page.find("#event-#{timeline_event.id} .edit-link").click
+          expect(page.find("#add-link")).to have_text('Google (+1)')
+          page.find("#add-link").click
+          expect(page).to have_text('Current Links')
+          first_link = page.find('.list-group-item', match: :first)
+          expect(first_link).to have_text('Google')
+          first_link.find('a', text: 'Delete').click
+
+          # Test if link list was updated
+          expect(page).to have_selector('.list-group-item', count: 1)
+          new_first_link = page.find('.list-group-item', match: :first)
+          expect(new_first_link).to have_text('Yahoo')
+
+          click_on 'Close'
+          expect(page.find("#add-link")).to have_text('Yahoo')
+
+          click_on 'Submit for Review'
+          expect(page.find("#event-#{timeline_event.id} .tl-footer")).to_not have_text('Google')
+          timeline_event.reload
+          expect(timeline_event.links.length).to eq(1)
+        end
+
+        scenario 'Founder edits one of the links', js: true do
+          visit startup_path(startup)
+          page.find("#event-#{timeline_event.id} .edit-link").click
+          expect(page.find("#add-link")).to have_text('Google (+1)')
+          page.find("#add-link").click
+          first_link = page.find('.list-group-item', match: :first)
+          expect(first_link).to have_text('Google')
+          first_link.find('a', text: 'Edit').click
+
+          # Test if form was pre-populated with existing details
+          expect(page).to have_selector('#link_title')
+          expect(page.find('#link_title').value).to eq(timeline_event.links.first[:title])
+          expect(page).to have_selector('#link_url')
+          expect(page.find('#link_url').value).to eq(timeline_event.links.first[:url])
+          expect(page).to have_selector('#link_private')
+          expect(page.find('#link_private')).to be_checked
+
+          # update all three fields
+          new_title = 'Facebook'
+          new_url = 'https://www.facebook.com'
+          fill_in 'Title', with: new_title
+          fill_in 'URL', with: new_url
+          page.find('#link_private').set(false)
+          click_on 'Save Link'
+
+          # Test if link list was updated
+          expect(page).to have_selector('.list-group-item', count: 2)
+          expect(page.find('.list-group-item', match: :first)).to have_text('Facebook')
+          click_on 'Close'
+          expect(page.find("#add-link")).to have_text('Facebook')
+
+          click_on 'Submit for Review'
+          expect(page.find("#event-#{timeline_event.id} .tl-footer")).to_not have_text('Google')
+          expect(page.find("#event-#{timeline_event.id} .tl-footer")).to have_text('Facebook')
+          timeline_event.reload
+          expect(timeline_event.links.length).to eq(2)
+          expect(timeline_event.links.first[:title]).to eq('Facebook')
+        end
+
+        scenario 'Founder adds a third and final link', js: true do
+          visit startup_path(startup)
+          page.find("#event-#{timeline_event.id} .edit-link").click
+          expect(page.find("#add-link")).to have_text('Google (+1)')
+          page.find("#add-link").click
+          click_on 'Add Links'
+          fill_in 'Title', with: 'SV.CO'
+          fill_in 'URL', with: 'https://sv.co'
+          page.find('#link_private').click
+          click_on 'Save Link'
+
+          # Test if link list was updated
+          expect(page).to have_selector('.list-group-item', count: 3)
+          # Ensure 'Add Links' button is not shown
+          expect(page).to_not have_selector('button', text: 'Add Links')
+          click_on 'Close'
+          expect(page.find("#add-link")).to have_text('Google (+2)')
+
+          click_on 'Submit for Review'
+          expect(page.find("#event-#{timeline_event.id} .tl-footer")).to have_text('SV.CO')
+          timeline_event.reload
+          expect(timeline_event.links.length).to eq(3)
+          expect(timeline_event.links.last[:title]).to eq('SV.CO')
+        end
+      end
+    end
   end
 end

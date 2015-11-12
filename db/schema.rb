@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151104090253) do
+ActiveRecord::Schema.define(version: 20151112043511) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -195,9 +195,11 @@ ActiveRecord::Schema.define(version: 20151104090253) do
     t.string   "share_status"
     t.integer  "shared_with_batch"
     t.integer  "downloads",         default: 0
+    t.string   "slug"
   end
 
   add_index "resources", ["share_status", "shared_with_batch"], name: "index_resources_on_share_status_and_shared_with_batch", using: :btree
+  add_index "resources", ["slug"], name: "index_resources_on_slug", using: :btree
 
   create_table "startup_applications", force: :cascade do |t|
     t.string   "name"

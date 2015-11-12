@@ -1,4 +1,15 @@
 class Resource < ActiveRecord::Base
+  include FriendlyId
+  friendly_id :slug_candidates, use: [:slugged, :finders]
+
+  def slug_candidates
+    [:title, [:title, :updated_at]]
+  end
+
+  def should_generate_new_friendly_id?
+    title_changed? || super
+  end
+
   SHARE_STATUS_PUBLIC = 'public'
   SHARE_STATUS_APPROVED = 'approved'
 

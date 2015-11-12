@@ -3,6 +3,8 @@ ActiveAdmin.register ConnectSlot do
 
   menu parent: 'Faculty'
 
+  scope :available_for_founder
+
   index do
     selectable_column
 

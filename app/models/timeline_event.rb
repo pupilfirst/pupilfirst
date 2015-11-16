@@ -116,6 +116,10 @@ class TimelineEvent < ActiveRecord::Base
     created_at < 1.month.ago
   end
 
+  def public_link?
+    links.select { |l| !l[:private] }.present?
+  end
+
   private
 
   def add_link_for_new_deck!

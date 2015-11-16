@@ -374,7 +374,7 @@
                       .timeline-body
                         .tl-body
                           p #{event.description}
-                        - if event.links?
+                        - if event.links? && ( event.public_link? || @startup.founder?(current_user) )
                           .timeline-footer.tl-footer
                             - event.links.each do |link|
                               - if !link[:private] || @startup.founder?(current_user)

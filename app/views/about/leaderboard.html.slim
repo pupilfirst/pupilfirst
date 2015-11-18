@@ -21,27 +21,62 @@ h1.page-header.header-light
 
       p Please read the <a href="http://playbook.sv.co/3.1-leaderboards.html">Leaderboards</a> page on the Playbook.
 
-      table.table.table-striped
-        thead
-          tr
-            th Rank
-            th Product
-            th Team Lead
-        tbody
-          - startups_for_leaderboard.each_with_index do |rank_array, index|
-            - startup_id, rank = rank_array
-            - startup = Startup.find(startup_id)
-            tr
-              td = rank
-              td = link_to "#{startup.product_name} #{startup.name.present? ? "(#{startup.name})" : ''}", startup_path(startup)
-              td = startup.admin.try(:fullname)
+      div
+        ul.nav.nav-tabs role="tablist"
+          li.active role="presentation"
+            a href="#batch1" aria-controls="batch1" role="tab" data-toggle="tab" Batch 1
+          li role="presentation"
+            a href="#batch2" aria-controls="batch2" role="tab" data-toggle="tab" Batch 2
 
-          - startups_without_karma, rank = startups_without_karma_and_rank
-          - startups_without_karma.each do |startup|
-            tr
-              td = rank
-              td = link_to "#{startup.product_name} #{startup.name.present? ? "(#{startup.name})" : ''}", startup_path(startup)
-              td = startup.admin.try(:fullname)
+        .tab-content
+          #batch1.tab-pane.active role="tabpanel"
+            table.table.table-striped
+              thead
+                tr
+                  th Rank
+                  th Product
+                  th Team Lead
+              tbody
+                - startups_for_leaderboard(1).each_with_index do |rank_array, index|
+                  - startup_id, rank = rank_array
+                  - startup = Startup.find(startup_id)
+                  tr
+                    td = rank
+                    td = link_to "#{startup.product_name} #{startup.name.present? ? "(#{startup.name})" : ''}", startup_path(startup)
+                    td = startup.admin.try(:fullname)
+
+                - startups_without_karma, rank = startups_without_karma_and_rank(1)
+                - startups_without_karma.each do |startup|
+                  tr
+                    td = rank
+                    td = link_to "#{startup.product_name} #{startup.name.present? ? "(#{startup.name})" : ''}", startup_path(startup)
+                    td = startup.admin.try(:fullname)
+
+          #batch2.tab-pane role="tabpanel"
+            table.table.table-striped
+              thead
+                tr
+                  th Rank
+                  th Product
+                  th Team Lead
+              tbody
+                - startups_for_leaderboard(2).each_with_index do |rank_array, index|
+                  - startup_id, rank = rank_array
+                  - startup = Startup.find(startup_id)
+                  tr
+                    td = rank
+                    td = link_to "#{startup.product_name} #{startup.name.present? ? "(#{startup.name})" : ''}", startup_path(startup)
+                    td = startup.admin.try(:fullname)
+
+                - startups_without_karma, rank = startups_without_karma_and_rank(2)
+                - startups_without_karma.each do |startup|
+                  tr
+                    td = rank
+                    td = link_to "#{startup.product_name} #{startup.name.present? ? "(#{startup.name})" : ''}", startup_path(startup)
+                    td = startup.admin.try(:fullname)
+
+
+
 
   .col-md-3.col-md-offset-1.col-sm-4
     = render partial: 'about_links'

@@ -1,6 +1,6 @@
 module AboutHelper
-  def startups_for_leaderboard
-    startups_by_points = Startup.not_dropped_out.where(batch: 1)
+  def startups_for_leaderboard(batch_number)
+    startups_by_points = Startup.not_dropped_out.where(batch: batch_number)
       .joins(:karma_points)
       .where('karma_points.created_at > ?', leaderboard_start_date)
       .where('karma_points.created_at < ?', leaderboard_end_date)
@@ -27,14 +27,14 @@ module AboutHelper
     end
   end
 
-  def startups_without_karma_and_rank
-    ranked_startup_ids = Startup.not_dropped_out.where(batch: 1)
+  def startups_without_karma_and_rank(batch_number)
+    ranked_startup_ids = Startup.not_dropped_out.where(batch: batch_number)
       .joins(:karma_points)
       .where('karma_points.created_at > ?', leaderboard_start_date)
       .where('karma_points.created_at < ?', leaderboard_end_date)
       .pluck(:startup_id).uniq
 
-    unranked_startups = Startup.not_dropped_out.where(batch: 1)
+    unranked_startups = Startup.not_dropped_out.where(batch: batch_number)
       .where.not(id: ranked_startup_ids)
 
     [unranked_startups, ranked_startup_ids.count + 1]

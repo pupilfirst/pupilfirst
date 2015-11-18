@@ -1,4 +1,5 @@
-h2 Startup Karma
+- batch_number = params[:karma_points_filter].present? ? params[:karma_points_filter][:batch] : 1
+h2 Startup Karma for Batch #{batch_number}
 
 ul
   - collection = startups_by_karma(params[:karma_points_filter])
@@ -7,7 +8,7 @@ ul
     | &nbsp;#{collection.count}
   li
     strong Inactive teams:
-    | &nbsp;#{Startup.not_dropped_out.batched.count - collection.count}
+    | &nbsp;#{Startup.not_dropped_out.where(batch: batch_number).count - collection.count}
 
 table.index_table
   thead
@@ -23,7 +24,7 @@ table.index_table
         td = link_to "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}", admin_startup_path(startup)
         td = points
 
-h2 Founder Karma
+h2 Founder Karma for Batch #{batch_number}
 
 table.index_table
   thead

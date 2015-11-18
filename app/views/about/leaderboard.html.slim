@@ -29,7 +29,7 @@ h1.page-header.header-light
             a href="#batch2" aria-controls="batch2" role="tab" data-toggle="tab" Batch 2
 
         .tab-content
-          #batch1.tab-pane.active role="tabpanel"
+          #batch1.tab-pane.fade.in.active role="tabpanel"
             table.table.table-striped
               thead
                 tr
@@ -52,7 +52,7 @@ h1.page-header.header-light
                     td = link_to "#{startup.product_name} #{startup.name.present? ? "(#{startup.name})" : ''}", startup_path(startup)
                     td = startup.admin.try(:fullname)
 
-          #batch2.tab-pane role="tabpanel"
+          #batch2.tab-pane.fade role="tabpanel"
             table.table.table-striped
               thead
                 tr

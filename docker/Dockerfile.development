@@ -1,0 +1,17 @@
+FROM ruby:2.2.3
+
+# Dependencies for Capybara Webkit
+RUN apt-get update && apt-get install -y libqt5webkit5-dev qt5-default xvfb
+
+# for a JS runtime
+RUN apt-get install -y nodejs
+
+RUN mkdir /sv_co
+WORKDIR /sv_co
+
+COPY Gemfile /sv_co/Gemfile
+COPY Gemfile.lock /sv_co/Gemfile.lock
+
+RUN bundle install
+
+COPY . /sv_co

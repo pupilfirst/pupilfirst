@@ -1,0 +1,15 @@
+development: &default
+  adapter: postgresql
+  encoding: unicode
+  database: postgres
+  pool: 5
+  username: postgres
+  password:
+  host: herokuPostgresql
+
+test:
+  <<: *default
+  database: myapp_test
+
+production:
+  pool: <%= ENV["DB_POOL"] || ENV['MAX_THREADS'] || 5 %>

@@ -1,0 +1,18 @@
+web:
+  build: .
+  command: 'bash -c ''bundle exec passenger start -p 3000 --nginx-config-template config/nginx.conf.erb --max-pool-size 1'''
+  working_dir: /app/user
+  environment:
+    DATABASE_URL: 'postgres://postgres:@herokuPostgresql:5432/postgres'
+    REDIS_URL: 'redis://herokuRedis:6379'
+  ports:
+    - '3000:3000'
+  links:
+    - herokuPostgresql
+    - herokuRedis
+  volumes:
+    - .:/app/user
+herokuPostgresql:
+  image: postgres
+herokuRedis:
+  image: redis

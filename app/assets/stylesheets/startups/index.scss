@@ -11,8 +11,7 @@ p.startups-introduction {
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 40px;
-
-  @media (max-width: $screen-xs-max) { justify-content: center; }
+  justify-content: center;
 
   .startup-card {
     position: relative;

@@ -19,7 +19,7 @@ p.startups-introduction
         .startup-footer
           .clearfix.footer-body
             .left
-              .startup-block-logo-container class="#{startup.logo.present? ? '' : 'with-name'}"
+              a.startup-block-logo-container href=startup_url(startup) class="#{startup.logo.present? ? '' : 'with-name'}"
                 - if startup.logo.present?
                   = image_tag startup.logo.url
                 - else

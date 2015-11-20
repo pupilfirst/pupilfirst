@@ -14,7 +14,7 @@ p.startups-introduction
         .startup-card-image style="background-image: url(#{event.image_url});"
         .startup-card-body
           h5 #{startup.product_name}: #{event.timeline_event_type.title}
-          p #{event.description.truncate(140, separator: ' ')}
+          p = event.description
         .startup-footer-spacer
         .startup-footer
           .clearfix.footer-body

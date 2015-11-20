@@ -12,7 +12,7 @@ class StartupsController < ApplicationController
   # GET /startups
   def index
     raise_not_found unless feature_active?(:startups_index)
-    @startups = Startup.batched_and_approved
+    @startups_with_dupes = Startup.batched_and_approved.joins(:timeline_events).merge(TimelineEvent.verified.has_image).order('timeline_events.event_on ASC')
   end
 
   def new

@@ -7,26 +7,27 @@ p.startups-introduction
   ' These are latest verified events from our amazing startups in Batch 1, enrolled from August 17, 2015 &mdash; February 1, 2016.
 
 .startups-index-container
-  - @startups.each do |startup|
+  - displayed_startups = []
+  - @startups_with_dupes.each do |startup|
+    - next if displayed_startups.include?(startup.id)
+    - displayed_startups << startup.id
     - event = startup.showcase_timeline_event
-    - if event
-      .startup-card
-        .startup-card-image style="background-image: url(#{event.image_url});"
-        .startup-card-body
-          h5 #{startup.product_name}: #{event.timeline_event_type.title}
-          p = event.description
-        .startup-footer-spacer
-        .startup-footer
-          .clearfix.footer-body
-            .left
-              a.startup-block-logo-container href=startup_url(startup) class="#{startup.logo.present? ? '' : 'with-name'}"
-                - if startup.logo.present?
-                  = image_tag startup.logo.url
-                - else
-                  = startup.name || startup.product_name
-            .right
-              - if startup.product_description.present?
-                = startup.product_description
+    .startup-card
+      .startup-card-image style="background-image: url(#{event.image_url});"
+      .startup-card-body
+        h5
+          ' #{startup.product_name}: #{event.timeline_event_type.title}
+          small.break-together
+            | (#{time_ago_in_words(event.event_on)} ago)
+        p = event.description
+      .startup-footer-spacer
+      .startup-footer
+        .clearfix.footer-body
+          .left
+            a.startup-block-logo-container href=startup_url(startup) class="#{startup.logo.present? ? '' : 'with-name'}"
+              - if startup.logo.present?
+                = image_tag startup.logo.url
               - else
-                | Every startup gets a Timeline where they can submit events that are verified by SV.CO Faculty.
-          = link_to 'See full timeline', startup, class: 'timeline-link'
+                = startup.name || startup.product_name
+          .right = startup.product_description
+        = link_to 'See full timeline', startup, class: 'timeline-link'

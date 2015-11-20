@@ -103,7 +103,8 @@ group :test do
 end
 
 group :development, :test do
-  gem 'rspec-rails', '~> 3.2.0' # Duh.
+  gem 'rspec-rails', '~> 3.4.0' # Duh.
+  gem 'coderay' # Pretty syntax highlighting on rspec failure snippets.
   gem 'pry-rails' # Pry debugger.
   gem 'webmock', require: false # Mocking web requests.
   gem 'did_you_mean' # Enough of silly spellinng mistakes ruining the day!

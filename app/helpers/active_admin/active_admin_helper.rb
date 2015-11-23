@@ -14,27 +14,19 @@ module ActiveAdmin
       end
     end
 
-    def startups_by_karma(filter)
-      # set default constraints if not supplied by filter
-      batch_number = filter.try(:[], :batch).present? ? filter[:batch] : 1
-      start_date = filter.try(:[], :after).present? ? Date.parse(filter[:after]) : Date.today.beginning_of_week
-      end_date = filter.try(:[], :before).present? ? Date.parse(filter[:before]) : Date.today
+    def startups_by_karma(batch:, after:, before:)
       Startup.joins(:karma_points)
-        .where(batch: batch_number)
-        .where(karma_points: { created_at: (start_date.beginning_of_day..end_date.end_of_day) })
+        .where(batch: batch)
+        .where(karma_points: { created_at: (after.beginning_of_day..before.end_of_day) })
         .group(:startup_id)
         .sum(:points)
         .sort_by { |_startup_id, points| points }.reverse
     end
 
-    def users_by_karma(filter)
-      # set default constraints if not supplied by filter
-      batch_number = filter.try(:[], :batch).present? ? filter[:batch] : 1
-      start_date = filter.try(:[], :after).present? ? Date.parse(filter[:after]) : Date.today.beginning_of_week
-      end_date = filter.try(:[], :before).present? ? Date.parse(filter[:before]) : Date.today
+    def users_by_karma(batch: , after:, before:)
       User.joins(:startup, :karma_points)
-        .where(startups: { batch: batch_number })
-        .where(karma_points: { created_at: (start_date.beginning_of_day..end_date.end_of_day) })
+        .where(startups: { batch: batch })
+        .where(karma_points: { created_at: (after.beginning_of_day..before.end_of_day) })
         .group(:user_id)
         .sum(:points)
         .sort_by { |_user_id, points| points }.reverse

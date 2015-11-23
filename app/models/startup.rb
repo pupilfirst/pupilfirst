@@ -602,5 +602,4 @@ class Startup < ActiveRecord::Base
   def self.available_batches
     Startup.all.pluck(:batch).compact.uniq.sort
   end
-
 end

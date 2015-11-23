@@ -97,6 +97,59 @@ ActiveAdmin.register TimelineEvent do
     redirect_to action: :show
   end
 
+  member_action :verify_with_controls, method: :post do
+    timeline_event = TimelineEvent.find params[:id]
+
+    messages = []
+
+    # If a target has been picked, complete it.
+    if params[:target_id].present?
+      target = timeline_event.startup.targets.find(params[:target_id])
+
+      # Link the target to event.
+      timeline_event.update(target: target)
+
+      Rails.logger.info event: :verify_with_controls_target_linked, target_id: target.id
+
+      if params[:target_completed]
+        target.complete!
+        messages << 'Target has been linked and marked completed.'
+
+        Rails.logger.info event: :verify_with_controls_target_completed, target_id: target.id
+      else
+        messages << 'Target has been linked.'
+      end
+    end
+
+    # If a grade has been picked, add that and create Karma Points.
+    if params[:grade].present?
+      timeline_event.update!(grade: params[:grade])
+
+      begin
+        karma_point = KarmaPoint.create!(
+          source: timeline_event,
+          user: timeline_event.startup.admin,
+          activity_type: "Added a new Timeline event - #{timeline_event.timeline_event_type.title}",
+          points: timeline_event.points_for_grade
+        )
+      rescue ActiveRecord::RecordInvalid
+        flash[:error] = "Karma points weren't created because there is a duplicate entry for this event."
+      else
+        messages << "Karma points (#{timeline_event.points_for_grade}) have been assigned to startup admin."
+        Rails.logger.info event: :verify_with_controls_karma_point_created, karma_point_id: karma_point.id
+      end
+    end
+
+    # Finally, set the timeline event as verified.
+    timeline_event.verify!
+
+    messages << 'Timeline Event has been marked verified.'
+    Rails.logger.info event: :verify_with_controls_timeline_event_verified, timeline_event_id: timeline_event.id
+
+    flash[:success] = messages.join ' '
+    redirect_to action: :show
+  end
+
   member_action :verify, method: :post do
     TimelineEvent.find(params[:id]).verify!
     redirect_to action: :show
@@ -173,8 +226,13 @@ ActiveAdmin.register TimelineEvent do
         end
       end
 
+      row('Linked Target') { timeline_event.target }
       row :created_at
       row :updated_at
+    end
+
+    if timeline_event.pending?
+      render partial: 'verification_controls', locals: { timeline_event: timeline_event }
     end
 
     render partial: 'links', locals: { timeline_event: timeline_event }

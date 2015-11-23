@@ -34,6 +34,13 @@ en:
     status:
       pending: Pending
       done: Done
+  timeline_event:
+    stage:
+      moved_to_idea_discovery: 'Idea Discovery'
+      moved_to_prototyping: 'Prototyping'
+      moved_to_customer_validation: 'Customer Validation'
+      moved_to_efficiency: 'Efficiency'
+      moved_to_scale: 'Scale'
   datepicker:
     dformat: '%d/%m/%Y'        # display format of the date (this is the default, can be ommited)
     pformat: 'DD/MM/YYYY'      # picking format of the date (this is the default, can be ommited)

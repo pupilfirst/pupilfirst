@@ -43,6 +43,7 @@ ActiveAdmin.register KarmaPoint do
 
     column :points
     column :activity_type
+    column :source
     column :created_at
 
     actions defaults: true do |target|

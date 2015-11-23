@@ -1,6 +1,10 @@
 class TimelineEvent < ActiveRecord::Base
   belongs_to :startup
   belongs_to :timeline_event_type
+  belongs_to :target
+
+  has_one :karma_point, as: :source
+
   mount_uploader :image, TimelineImageUploader
   serialize :links
   validates_presence_of :event_on, :startup_id, :timeline_event_type, :description
@@ -16,6 +20,16 @@ class TimelineEvent < ActiveRecord::Base
   end
 
   validates_inclusion_of :verified_status, in: valid_verified_status
+
+  GRADE_GOOD = 'good'
+  GRADE_GREAT = 'great'
+  GRADE_WOW = 'wow'
+
+  def self.valid_grades
+    [GRADE_GOOD, GRADE_GREAT, GRADE_WOW]
+  end
+
+  validates_inclusion_of :grade, in: valid_grades, allow_nil: true
 
   before_validation do
     # default verified_status to pending unless verified_at is present
@@ -118,6 +132,14 @@ class TimelineEvent < ActiveRecord::Base
 
   def public_link?
     links.select { |l| !l[:private] }.present?
+  end
+
+  def points_for_grade
+    {
+      GRADE_GOOD => 10,
+      GRADE_GREAT => 20,
+      GRADE_WOW => 40
+    }.with_indifferent_access[grade]
   end
 
   private

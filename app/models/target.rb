@@ -1,6 +1,7 @@
 class Target < ActiveRecord::Base
   belongs_to :startup
   belongs_to :assigner, class_name: 'Faculty'
+  has_many :timeline_events
 
   STATUS_PENDING = 'pending'
   STATUS_DONE = 'done'
@@ -27,6 +28,8 @@ class Target < ActiveRecord::Base
   just_define_datetime_picker :due_date
   just_define_datetime_picker :completed_at
 
+  scope :pending, -> { where status: STATUS_PENDING }
+
   def pending?
     status == STATUS_PENDING
   end
@@ -41,5 +44,9 @@ class Target < ActiveRecord::Base
 
   before_save do
     self.completed_at = done? ? completed_at || Time.now : nil
+  end
+
+  def complete!
+    update!(status: STATUS_DONE)
   end
 end

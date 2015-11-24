@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151123210014) do
+ActiveRecord::Schema.define(version: 20151124062345) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,15 @@ ActiveRecord::Schema.define(version: 20151123210014) do
 
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "batches", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "colleges", force: :cascade do |t|
     t.string   "name"
@@ -294,15 +303,17 @@ ActiveRecord::Schema.define(version: 20151123210014) do
     t.text     "metadata"
     t.string   "slug"
     t.boolean  "featured"
-    t.integer  "batch"
+    t.integer  "batch_number"
     t.string   "stage"
     t.string   "legal_registered_name"
     t.string   "wireframe_link"
     t.string   "prototype_link"
     t.string   "product_video"
+    t.integer  "batch_id"
   end
 
-  add_index "startups", ["batch"], name: "index_startups_on_batch", using: :btree
+  add_index "startups", ["batch_id"], name: "index_startups_on_batch_id", using: :btree
+  add_index "startups", ["batch_number"], name: "index_startups_on_batch_number", using: :btree
   add_index "startups", ["slug"], name: "index_startups_on_slug", unique: true, using: :btree
   add_index "startups", ["stage"], name: "index_startups_on_stage", using: :btree
 

@@ -38,7 +38,7 @@ class Resource < ActiveRecord::Base
         SHARE_STATUS_APPROVED,
         nil,
         SHARE_STATUS_APPROVED,
-        user.startup.try(:batch)
+        user.startup.try(:batch_number)
       ).order('title')
     else
       public_resources

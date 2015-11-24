@@ -1,13 +1,13 @@
-h2 Startup Karma
+h2 Startup Karma for Batch #{@batch}
 
 ul
-  - collection = startups_by_karma(params[:karma_points_filter])
+  - collection = startups_by_karma(batch: @batch, after: @after, before: @before)
   li
     strong Active teams:
     | &nbsp;#{collection.count}
   li
     strong Inactive teams:
-    | &nbsp;#{Startup.not_dropped_out.batched.count - collection.count}
+    | &nbsp;#{Startup.not_dropped_out.where(batch_number: @batch).count - collection.count}
 
 table.index_table
   thead
@@ -16,14 +16,14 @@ table.index_table
       th.sorted-desc.sortable
         a.not-a-link href='#' Karma Points
   tbody
-    - startups_by_karma(params[:karma_points_filter]).each_with_index do |points_array, idx|
+    - startups_by_karma(batch: @batch, after: @after, before: @before).each_with_index do |points_array, idx|
       - startup_id, points = points_array
       - startup = Startup.find(startup_id)
       tr class="#{(idx + 1).even? ? 'even' : 'odd'}"
         td = link_to "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}", admin_startup_path(startup)
         td = points
 
-h2 Founder Karma
+h2 Founder Karma for Batch #{@batch}
 
 table.index_table
   thead
@@ -34,7 +34,7 @@ table.index_table
       th.sorted-desc.sortable
         a.not-a-link href='#' Karma Points
   tbody
-    - users_by_karma(params[:karma_points_filter]).each_with_index do |points_array, idx|
+    - users_by_karma(batch: @batch, after: @after, before: @before).each_with_index do |points_array, idx|
       - user_id, points = points_array
       - user = User.includes(:startup).find(user_id)
       tr class="#{(idx + 1).even? ? 'even' : 'odd'}"

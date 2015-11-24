@@ -60,7 +60,7 @@ class Startup < ActiveRecord::Base
     ]
   end
 
-  scope :batched, -> { where.not(batch: nil) }
+  scope :batched, -> { where.not(batch_number: nil) }
   scope :unready, -> { where(approval_status: [APPROVAL_STATUS_UNREADY, nil]) }
   scope :not_unready, -> { where.not(approval_status: [APPROVAL_STATUS_UNREADY, nil]) }
   scope :pending, -> { where(approval_status: APPROVAL_STATUS_PENDING) }
@@ -150,6 +150,8 @@ class Startup < ActiveRecord::Base
 
   has_one :admin, -> { where(startup_admin: true) }, class_name: 'User', foreign_key: 'startup_id'
   accepts_nested_attributes_for :admin
+
+  belongs_to :batch
 
   attr_accessor :validate_web_mandatory_fields
   attr_reader :validate_registration_type
@@ -293,7 +295,7 @@ class Startup < ActiveRecord::Base
   end
 
   def batched?
-    batch.present?
+    batch_number.present?
   end
 
   mount_uploader :logo, LogoUploader
@@ -597,5 +599,9 @@ class Startup < ActiveRecord::Base
     label = product_name
     label += " (#{name})" if name.present?
     label
+  end
+
+  def self.available_batches
+    Startup.all.pluck(:batch_number).compact.uniq.sort
   end
 end

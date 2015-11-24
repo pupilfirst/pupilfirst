@@ -2,7 +2,7 @@ ActiveAdmin.register Startup do
   filter :approval_status, as: :select, collection: proc { Startup.valid_approval_status_values }
   filter :product_name
   filter :name
-  filter :batch, as: :select, collection: (1..10)
+  filter :batch_number, as: :select, collection: (1..10)
   filter :stage, as: :select, collection: proc { stages_collection }
   filter :website
   filter :registration_type, as: :select, collection: proc { Startup.valid_registration_types }
@@ -94,7 +94,7 @@ ActiveAdmin.register Startup do
     column :wireframe_link
     column :prototype_link
     column :name
-    column :batch
+    column :batch_number
     column :incubation_location
     column :physical_incubatee
     column(:founders) { |startup| startup.founders.pluck(:first_name).join ', ' }
@@ -238,7 +238,7 @@ ActiveAdmin.register Startup do
         end
       end
 
-      row :batch
+      row :batch_number
       row :iteration
       row :featured
       row :physical_incubatee
@@ -340,5 +340,5 @@ ActiveAdmin.register Startup do
     { founders_attributes: [:id, :first_name, :last_name, :email, :avatar, :remote_avatar_url, :linkedin_url, :twitter_url, :skip_password] },
     :created_at, :updated_at, :approval_status, :approval_status, :registration_type,
     :incubation_location, :agreement_sent, :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration,
-    :physical_incubatee, :presentation_link, :product_video, :wireframe_link, :prototype_link, :slug, :featured, :batch
+    :physical_incubatee, :presentation_link, :product_video, :wireframe_link, :prototype_link, :slug, :featured, :batch_number
 end

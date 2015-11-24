@@ -34,7 +34,7 @@ RSpec.describe Resource, type: :model do
     end
 
     context 'when user is founder of batched startup' do
-      let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED, batch: 1 }
+      let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED, batch_number: 1 }
 
       it 'returns public resources, shared resources and batch-specific resources for approved startups' do
         resources = Resource.for(startup.founders.first)

@@ -14,32 +14,22 @@ module ActiveAdmin
       end
     end
 
-    def startups_by_karma(filter)
-      if filter
-        Startup.joins(:karma_points)
-          .where(karma_points: { created_at: (Date.parse(filter[:after]).beginning_of_day..Date.parse(filter[:before]).end_of_day) })
-          .group(:startup_id)
-          .sum(:points)
-      else
-        Startup.joins(:karma_points)
-          .where('karma_points.created_at > ?', Date.today.beginning_of_week)
-          .group(:startup_id)
-          .sum(:points)
-      end.sort_by { |_startup_id, points| points }.reverse
+    def startups_by_karma(batch:, after:, before:)
+      Startup.joins(:karma_points)
+        .where(batch_number: batch)
+        .where(karma_points: { created_at: (after.beginning_of_day..before.end_of_day) })
+        .group(:startup_id)
+        .sum(:points)
+        .sort_by { |_startup_id, points| points }.reverse
     end
 
-    def users_by_karma(filter)
-      if filter
-        User.joins(:karma_points)
-          .where(karma_points: { created_at: (Date.parse(filter[:after]).beginning_of_day..Date.parse(filter[:before]).end_of_day) })
-          .group(:user_id)
-          .sum(:points)
-      else
-        User.joins(:karma_points)
-          .where('karma_points.created_at > ?', Date.today.beginning_of_week)
-          .group(:user_id)
-          .sum(:points)
-      end.sort_by { |_user_id, points| points }.reverse
+    def users_by_karma(batch:, after:, before:)
+      User.joins(:startup, :karma_points)
+        .where(startups: { batch_number: batch })
+        .where(karma_points: { created_at: (after.beginning_of_day..before.end_of_day) })
+        .group(:user_id)
+        .sum(:points)
+        .sort_by { |_user_id, points| points }.reverse
     end
   end
 end

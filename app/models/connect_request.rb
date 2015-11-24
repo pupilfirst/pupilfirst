@@ -5,6 +5,8 @@ class ConnectRequest < ActiveRecord::Base
   belongs_to :connect_slot
   belongs_to :startup
 
+  scope :for_batch, -> (batch_number) { joins(:startup).where(startups: { batch_number: batch_number }) }
+
   delegate :faculty, :slot_at, to: :connect_slot
 
   validates_presence_of :connect_slot_id, :startup_id, :questions, :status

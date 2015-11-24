@@ -2,10 +2,9 @@
 - batch_number = params[:batch].present? ? params[:batch] : '1'
 .table_tools
   ul.scopes.table_tools_segmented_control style="width: calc((100% - 10px)); float: right;"
-    li class="#{ (batch_number == '1' ? 'selected':'') + ' scope'}"
-      a.table_tools_button href=admin_dashboard_path(batch: 1) Batch 1
-    li class="#{ (batch_number == '2' ? 'selected':'') + ' scope'}"
-      a.table_tools_button href=admin_dashboard_path(batch: 2) Batch 2
+    - Startup.available_batches.each do |batch|
+      li class="#{ (batch == batch_number ? 'selected':'') + ' scope' }"
+        a.table_tools_button href=admin_dashboard_path(batch: batch) Batch #{batch}
 .dashboard-container
   .dashboard-item
     - timeline_events_verified = TimelineEvent.for_batch(batch_number).verified.order('verified_at DESC').includes(:timeline_event_type, :startup)

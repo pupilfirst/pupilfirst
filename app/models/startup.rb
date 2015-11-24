@@ -60,7 +60,7 @@ class Startup < ActiveRecord::Base
     ]
   end
 
-  scope :batched, -> { where.not(batch_number: nil) }
+  scope :batched, -> { where.not(batch_id: nil) }
   scope :unready, -> { where(approval_status: [APPROVAL_STATUS_UNREADY, nil]) }
   scope :not_unready, -> { where.not(approval_status: [APPROVAL_STATUS_UNREADY, nil]) }
   scope :pending, -> { where(approval_status: APPROVAL_STATUS_PENDING) }
@@ -602,6 +602,6 @@ class Startup < ActiveRecord::Base
   end
 
   def self.available_batches
-    Startup.all.pluck(:batch_number).compact.uniq.sort
+    Batch.find Startup.batched.pluck(:batch_id).uniq
   end
 end

@@ -114,7 +114,7 @@
                       i.fa.fa-exclamation-triangle
                       h5 style="display: inline" &nbsp;You have #{expired_targets.count} expired #{'target'.pluralize(expired_targets.count)}!
                     - expired_targets.each do |target|
-                      li.list-group-item
+                      li.list-group-item.clearfix
                         ' #{target.title}
                         .pull-right.grey-text
                           = target.due_date.in_time_zone('Asia/Calcutta').strftime('%b %-d at %I:%M %p')

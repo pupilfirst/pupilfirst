@@ -306,6 +306,17 @@ ActiveRecord::Schema.define(version: 20151123210014) do
   add_index "startups", ["slug"], name: "index_startups_on_slug", unique: true, using: :btree
   add_index "startups", ["stage"], name: "index_startups_on_stage", using: :btree
 
+  create_table "target_templates", force: :cascade do |t|
+    t.integer  "days_from_start"
+    t.string   "role"
+    t.string   "title"
+    t.string   "short_description"
+    t.string   "completion_instructions"
+    t.string   "resource_url"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
   create_table "targets", force: :cascade do |t|
     t.string   "role"
     t.integer  "startup_id"

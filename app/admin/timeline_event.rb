@@ -1,6 +1,6 @@
 ActiveAdmin.register TimelineEvent do
   menu parent: 'Startups'
-  permit_params :description, :timeline_event_type_id, :image, :links, :event_on, :startup_id, :verified_at
+  permit_params :description, :timeline_event_type_id, :image, :links, :event_on, :startup_id, :verified_at, :grade
 
   preserve_default_filters!
   filter :startup_batch_number, as: :select, collection: (1..10)
@@ -181,6 +181,7 @@ ActiveAdmin.register TimelineEvent do
       f.input :image
       f.input :event_on, as: :datepicker
       f.input :verified_at, as: :datepicker
+      f.input :grade, as: :select, collection: TimelineEvent.valid_grades
     end
 
     f.actions
@@ -244,7 +245,13 @@ ActiveAdmin.register TimelineEvent do
       end
 
       row :karma_point
-      row(:grade) { t("timeline_event.grade.#{timeline_event.grade}") }
+
+      row(:grade) do
+        if timeline_event.grade.present?
+          t("timeline_event.grade.#{timeline_event.grade}")
+        end
+      end
+
       row :created_at
       row :updated_at
     end

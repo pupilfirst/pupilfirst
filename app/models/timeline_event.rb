@@ -29,6 +29,7 @@ class TimelineEvent < ActiveRecord::Base
     [GRADE_GOOD, GRADE_GREAT, GRADE_WOW]
   end
 
+  normalize_attribute :grade
   validates_inclusion_of :grade, in: valid_grades, allow_nil: true
 
   before_validation do

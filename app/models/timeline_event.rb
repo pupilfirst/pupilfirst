@@ -31,14 +31,14 @@ class TimelineEvent < ActiveRecord::Base
     message: "must be within #{MAX_DESCRIPTION_CHARACTERS} characters"
 
   scope :end_of_iteration_events, -> { where(timeline_event_type: TimelineEventType.end_iteration) }
-  scope :batched, -> { joins(:startup).where.not(startups: { batch: nil }) }
+  scope :batched, -> { joins(:startup).where.not(startups: { batch_number: nil }) }
   scope :verified, -> { where(verified_status: VERIFIED_STATUS_VERIFIED) }
   scope :pending, -> { where(verified_status: VERIFIED_STATUS_PENDING) }
   scope :has_image, -> { where.not(image: nil) }
   scope :from_approved_startups, -> { joins(:startup).where(startups: { approval_status: Startup::APPROVAL_STATUS_APPROVED }) }
   scope :showcase, -> { includes(:timeline_event_type, :startup).verified.from_approved_startups.batched.has_image.order('timeline_events.event_on DESC') }
   scope :help_wanted, -> { where(timeline_event_type: TimelineEventType.help_wanted) }
-  scope :for_batch, -> (batch_number) { joins(:startup).where(startups: { batch: batch_number }) }
+  scope :for_batch, -> (batch_number) { joins(:startup).where(startups: { batch_number: batch_number }) }
 
   before_save :make_links_an_array
   before_validation :build_description

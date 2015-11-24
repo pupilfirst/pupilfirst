@@ -11,7 +11,7 @@ after 'development:users', 'development:timeline_event_types' do
     agreement_last_signed_at: 6.months.ago,
     agreement_ends_at: 6.months.since,
     incubation_location: Startup::INCUBATION_LOCATION_KOCHI,
-    batch: 1
+    batch_number: 1
   )
 
   # ...whose founder is Some One.

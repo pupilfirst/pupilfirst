@@ -16,16 +16,16 @@ module ActiveAdmin
 
     def startups_by_karma(batch:, after:, before:)
       Startup.joins(:karma_points)
-        .where(batch: batch)
+        .where(batch_number: batch)
         .where(karma_points: { created_at: (after.beginning_of_day..before.end_of_day) })
         .group(:startup_id)
         .sum(:points)
         .sort_by { |_startup_id, points| points }.reverse
     end
 
-    def users_by_karma(batch: , after:, before:)
+    def users_by_karma(batch:, after:, before:)
       User.joins(:startup, :karma_points)
-        .where(startups: { batch: batch })
+        .where(startups: { batch_number: batch })
         .where(karma_points: { created_at: (after.beginning_of_day..before.end_of_day) })
         .group(:user_id)
         .sum(:points)

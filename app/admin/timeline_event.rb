@@ -3,7 +3,7 @@ ActiveAdmin.register TimelineEvent do
   permit_params :description, :timeline_event_type_id, :image, :links, :event_on, :startup_id, :verified_at
 
   preserve_default_filters!
-  filter :startup_batch, as: :select, collection: (1..10)
+  filter :startup_batch_number, as: :select, collection: (1..10)
   filter :startup_product_name, as: :select, collection: proc { Startup.all.pluck(:product_name).uniq }
   filter :timeline_event_type, collection: proc { TimelineEventType.all.order(:title) }
 

@@ -103,7 +103,7 @@ feature 'Resources' do
       end
 
       context "Founder's startup is from batch 1" do
-        let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED, batch: 1 }
+        let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED, batch_number: 1 }
 
         scenario 'Founder visits resources page' do
           visit resources_path

@@ -7,7 +7,7 @@ ul
     | &nbsp;#{collection.count}
   li
     strong Inactive teams:
-    | &nbsp;#{Startup.not_dropped_out.where(batch: @batch).count - collection.count}
+    | &nbsp;#{Startup.not_dropped_out.where(batch_number: @batch).count - collection.count}
 
 table.index_table
   thead

@@ -3,7 +3,7 @@ class StartupFeedback < ActiveRecord::Base
   belongs_to :faculty
   attr_accessor :send_email
 
-  scope :for_batch, -> (batch_number) { joins(:startup).where(startups: { batch: batch_number }) }
+  scope :for_batch, -> (batch_number) { joins(:startup).where(startups: { batch_number: batch_number }) }
 
   validates_presence_of :faculty, :feedback
 

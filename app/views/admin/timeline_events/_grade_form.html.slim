@@ -1,0 +1,11 @@
+= form_tag(grade_admin_timeline_event_path, method: :post) do
+  fieldset.inputs
+    legend
+      span Assign grade and create karma points.
+    ol
+      li.input.select.required
+        = label_tag :grade, 'Assign Grade', class: 'label'
+        = select_tag :grade, options_for_select(TimelineEvent.valid_grades), include_blank: true
+    ol
+      li.action.input_action
+        = submit_tag 'Assign Grade and add Karma Points'

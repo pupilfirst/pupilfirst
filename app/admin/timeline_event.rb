@@ -97,10 +97,15 @@ ActiveAdmin.register TimelineEvent do
     redirect_to action: :show
   end
 
-  member_action :verify_with_controls, method: :post do
+  member_action :unlink_target, method: :post do
     timeline_event = TimelineEvent.find params[:id]
+    timeline_event.update! target: nil
+    flash[:success] = 'Target unlinked.'
+    redirect_to action: :show
+  end
 
-    messages = []
+  member_action :link_target, method: :post do
+    timeline_event = TimelineEvent.find params[:id]
 
     # If a target has been picked, complete it.
     if params[:target_id].present?
@@ -109,44 +114,44 @@ ActiveAdmin.register TimelineEvent do
       # Link the target to event.
       timeline_event.update(target: target)
 
-      Rails.logger.info event: :verify_with_controls_target_linked, target_id: target.id
+      Rails.logger.info event: :timeline_event_target_linked, target_id: target.id
 
       if params[:target_completed]
         target.complete!
-        messages << 'Target has been linked and marked completed.'
+        flash[:success] = 'Target has been linked and marked completed.'
 
-        Rails.logger.info event: :verify_with_controls_target_completed, target_id: target.id
+        Rails.logger.info event: :timeline_event_target_completed, target_id: target.id
       else
-        messages << 'Target has been linked.'
+        flash[:success] = 'Target has been linked.'
       end
+    else
+      flash[:error] = 'A target must be picked for linking.'
     end
+
+    redirect_to action: :show
+  end
+
+  member_action :grade, method: :post do
+    timeline_event = TimelineEvent.find params[:id]
 
     # If a grade has been picked, add that and create Karma Points.
     if params[:grade].present?
       timeline_event.update!(grade: params[:grade])
 
-      begin
-        karma_point = KarmaPoint.create!(
-          source: timeline_event,
-          user: timeline_event.startup.admin,
-          activity_type: "Added a new Timeline event - #{timeline_event.timeline_event_type.title}",
-          points: timeline_event.points_for_grade
-        )
-      rescue ActiveRecord::RecordInvalid
-        flash[:error] = "Karma points weren't created because there is a duplicate entry for this event."
-      else
-        messages << "Karma points (#{timeline_event.points_for_grade}) have been assigned to startup admin."
-        Rails.logger.info event: :verify_with_controls_karma_point_created, karma_point_id: karma_point.id
-      end
+      karma_point = KarmaPoint.create!(
+        source: timeline_event,
+        user: timeline_event.startup.admin,
+        activity_type: "Added a new Timeline event - #{timeline_event.timeline_event_type.title}",
+        points: timeline_event.points_for_grade
+      )
+
+      flash[:success] = "Karma points (#{timeline_event.points_for_grade}) have been assigned to startup admin."
+
+      Rails.logger.info event: :timeline_event_karma_point_created, karma_point_id: karma_point.id
+    else
+      flash[:error] = 'A grade is required for processing.'
     end
 
-    # Finally, set the timeline event as verified.
-    timeline_event.verify!
-
-    messages << 'Timeline Event has been marked verified.'
-    Rails.logger.info event: :verify_with_controls_timeline_event_verified, timeline_event_id: timeline_event.id
-
-    flash[:success] = messages.join ' '
     redirect_to action: :show
   end
 
@@ -226,14 +231,29 @@ ActiveAdmin.register TimelineEvent do
         end
       end
 
-      row('Linked Target') { timeline_event.target }
+      row('Linked Target') do
+        if timeline_event.target.present?
+          a href: admin_target_url(timeline_event.target) do
+            timeline_event.target.title
+          end
+
+          span class: 'wrap-with-paranthesis' do
+            link_to 'Unlink', unlink_target_admin_timeline_event_path, method: :post, data: { confirm: 'Are you sure?' }
+          end
+        end
+      end
+
+      row :karma_point
+      row(:grade) { t("timeline_event.grade.#{timeline_event.grade}") }
       row :created_at
       row :updated_at
     end
 
-    if timeline_event.pending?
-      render partial: 'verification_controls', locals: { timeline_event: timeline_event }
+    if timeline_event.verified? && timeline_event.karma_point.blank?
+      render partial: 'grade_form', locals: { timeline_event: timeline_event }
     end
+
+    render partial: 'target_form', locals: { timeline_event: timeline_event }
 
     render partial: 'links', locals: { timeline_event: timeline_event }
 

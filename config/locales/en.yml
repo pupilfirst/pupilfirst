@@ -35,6 +35,10 @@ en:
       pending: Pending
       done: Done
   timeline_event:
+    grade:
+      good: 'Good'
+      great: 'Great'
+      wow: 'Wow!'
     stage:
       moved_to_idea_discovery: 'Idea Discovery'
       moved_to_prototyping: 'Prototyping'

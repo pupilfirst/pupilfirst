@@ -53,7 +53,7 @@ class TimelineEvent < ActiveRecord::Base
   scope :from_approved_startups, -> { joins(:startup).where(startups: { approval_status: Startup::APPROVAL_STATUS_APPROVED }) }
   scope :showcase, -> { includes(:timeline_event_type, :startup).verified.from_approved_startups.batched.has_image.order('timeline_events.event_on DESC') }
   scope :help_wanted, -> { where(timeline_event_type: TimelineEventType.help_wanted) }
-  scope :for_batch, -> (batch_number) { joins(:startup).where(startups: { batch_number: batch_number }) }
+  scope :for_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch }) }
 
   before_save :make_links_an_array
   before_validation :build_description

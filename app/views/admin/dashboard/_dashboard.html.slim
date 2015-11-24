@@ -1,13 +1,13 @@
 /= javascript_include_tag '//www.google.com/jsapi', 'chartkick'
-- batch_number = params[:batch].present? ? params[:batch] : '1'
+- batch_selected = params[:batch].present? ? params[:batch] : Batch.first.id
 .table_tools
   ul.scopes.table_tools_segmented_control style="width: calc((100% - 10px)); float: right;"
     - Startup.available_batches.each do |batch|
-      li class="#{ (batch == batch_number ? 'selected':'') + ' scope' }"
-        a.table_tools_button href=admin_dashboard_path(batch: batch) Batch #{batch}
+      li class="#{ (batch.id == batch_selected.to_i ? 'selected':'') + ' scope' }"
+        a.table_tools_button href=admin_dashboard_path(batch: batch) #{batch.name} Batch
 .dashboard-container
   .dashboard-item
-    - timeline_events_verified = TimelineEvent.for_batch(batch_number).verified.order('verified_at DESC').includes(:timeline_event_type, :startup)
+    - timeline_events_verified = TimelineEvent.for_batch(batch_selected).verified.order('verified_at DESC').includes(:timeline_event_type, :startup)
     .heading Timeline Events - Verified
 
     .content
@@ -17,16 +17,16 @@
 
     .footer-spacer
 
-    - trend = TimelineEvent.for_batch(batch_number).verified.group_by_week(:verified_at, range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
+    - trend = TimelineEvent.for_batch(batch_selected).verified.group_by_week(:verified_at, range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
 
     .left-of-button title="Trend: #{trend.join(', ')}"
       = Sparkr.sparkline trend
 
-    a.button.view-all href=admin_timeline_events_path(q: { verified_status_equals: TimelineEvent::VERIFIED_STATUS_VERIFIED, startup_batch_number_equals: batch_number })
+    a.button.view-all href=admin_timeline_events_path(q: { verified_status_equals: TimelineEvent::VERIFIED_STATUS_VERIFIED, startup_batch_id_equals: batch_selected })
       | View All (#{timeline_events_verified.count})
 
   .dashboard-item
-    - timeline_events_pending = TimelineEvent.for_batch(batch_number).pending.order('timeline_events.created_at DESC').includes(:timeline_event_type, :startup)
+    - timeline_events_pending = TimelineEvent.for_batch(batch_selected).pending.order('timeline_events.created_at DESC').includes(:timeline_event_type, :startup)
     .heading Timeline Events - Pending
 
     .content
@@ -36,16 +36,16 @@
 
     .footer-spacer
 
-    - trend = TimelineEvent.for_batch(batch_number).group_by_week('timeline_events.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
+    - trend = TimelineEvent.for_batch(batch_selected).group_by_week('timeline_events.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
 
     .left-of-button title="Trend (total): #{trend.join(', ')}"
       = Sparkr.sparkline trend
 
-    a.button.view-all href=admin_timeline_events_path(q: { verified_status_equals: TimelineEvent::VERIFIED_STATUS_PENDING, startup_batch_number_equals: batch_number  })
+    a.button.view-all href=admin_timeline_events_path(q: { verified_status_equals: TimelineEvent::VERIFIED_STATUS_PENDING, startup_batch_id_equals: batch_selected  })
       | View All (#{timeline_events_pending.count})
 
   .dashboard-item
-    - startups_without_live_targets = Startup.where(batch_number: batch_number).without_live_targets
+    - startups_without_live_targets = Startup.where(batch: batch_selected).without_live_targets
 
     .heading Startups without Live Team Targets
 
@@ -56,11 +56,11 @@
 
     .footer-spacer
 
-    a.button.view-all href=admin_startups_path(scope: 'without_live_targets', q: {batch_number_equals: batch_number})
+    a.button.view-all href=admin_startups_path(scope: 'without_live_targets', q: {batch_id_equals: batch_selected})
       | View All (#{startups_without_live_targets.count})
 
   .dashboard-item
-    - startups_with_targets_completed_last_week = Startup.where(batch_number: batch_number).with_targets_completed_last_week.order('targets.completed_at DESC')
+    - startups_with_targets_completed_last_week = Startup.where(batch: batch_selected).with_targets_completed_last_week.order('targets.completed_at DESC')
 
     .heading Startups with Targets Completed Last Week
 
@@ -71,16 +71,16 @@
 
     .footer-spacer
 
-    - trend = Startup.where(batch_number: batch_number).with_completed_targets.group_by_week('targets.completed_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
+    - trend = Startup.where(batch: batch_selected).with_completed_targets.group_by_week('targets.completed_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
 
     .left-of-button title="Trend: #{trend.join(', ')}"
       = Sparkr.sparkline trend
 
-    a.button.view-all href=admin_startups_path(scope: 'with_targets_completed_last_week', q: {batch_number_equals: batch_number})
+    a.button.view-all href=admin_startups_path(scope: 'with_targets_completed_last_week', q: {batch_id_equals: batch_selected})
       | View All (#{startups_with_targets_completed_last_week.count})
 
   .dashboard-item
-    - startup_feedback_from_last_week = StartupFeedback.for_batch(batch_number).where('startup_feedback.created_at > ?', 1.week.ago).order('startup_feedback.created_at DESC')
+    - startup_feedback_from_last_week = StartupFeedback.for_batch(batch_selected).where('startup_feedback.created_at > ?', 1.week.ago).order('startup_feedback.created_at DESC')
 
     .heading Feedback Submitted Last Week
 
@@ -91,16 +91,16 @@
 
     .footer-spacer
 
-    - trend = StartupFeedback.for_batch(batch_number).group_by_week('startup_feedback.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
+    - trend = StartupFeedback.for_batch(batch_selected).group_by_week('startup_feedback.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
 
     .left-of-button title="Trend: #{trend.join(', ')}"
       = Sparkr.sparkline trend
 
-    a.button.view-all href=admin_startup_feedback_index_path(q: { created_at_gteq: 1.week.ago.strftime('%Y-%m-%d'), startup_batch_number_equals: batch_number })
+    a.button.view-all href=admin_startup_feedback_index_path(q: { created_at_gteq: 1.week.ago.strftime('%Y-%m-%d'), startup_batch_id_equals: batch_selected })
       | View All (#{startup_feedback_from_last_week.count})
 
   .dashboard-item
-    - connect_requests_confirmed = ConnectRequest.for_batch(batch_number).confirmed.order('connect_requests.confirmed_at DESC')
+    - connect_requests_confirmed = ConnectRequest.for_batch(batch_selected).confirmed.order('connect_requests.confirmed_at DESC')
 
     .heading Connect Requests - Confirmed
 
@@ -111,16 +111,16 @@
 
     .footer-spacer
 
-    - trend = ConnectRequest.for_batch(batch_number).confirmed.group_by_week('connect_requests.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
+    - trend = ConnectRequest.for_batch(batch_selected).confirmed.group_by_week('connect_requests.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
 
     .left-of-button
       span title="Trend (past): #{trend.join(', ')}" = Sparkr.sparkline trend
 
-    a.button.view-all href=admin_connect_requests_path(scope: 'confirmed', q: {startup_batch_number_equals: batch_number})
+    a.button.view-all href=admin_connect_requests_path(scope: 'confirmed', q: {startup_batch_id_equals: batch_selected})
       | View All (#{connect_requests_confirmed.count})
 
   .dashboard-item
-    - connect_requests_requested = ConnectRequest.for_batch(batch_number).requested
+    - connect_requests_requested = ConnectRequest.for_batch(batch_selected).requested
 
     .heading Connect Requests - Requested
 
@@ -131,12 +131,12 @@
 
     .footer-spacer
 
-    - trend = ConnectRequest.for_batch(batch_number).group_by_week('connect_requests.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
+    - trend = ConnectRequest.for_batch(batch_selected).group_by_week('connect_requests.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
 
     .left-of-button
       span title="Trend (total): #{trend.join(', ')}" = Sparkr.sparkline trend
 
-    a.button.view-all href=admin_connect_requests_path(scope: 'requested', q: {batch_number_equals: batch_number})
+    a.button.view-all href=admin_connect_requests_path(scope: 'requested', q: {batch_id_equals: batch_selected})
       | View All (#{connect_requests_requested.count})
 
   .dashboard-item
@@ -162,7 +162,7 @@
 
 
   .dashboard-item
-    - inactive_startups = Startup.where(batch_number: batch_number).inactive
+    - inactive_startups = Startup.where(batch: batch_selected).inactive
 
     .heading Inactive Startups last week
 
@@ -173,10 +173,10 @@
 
     .footer-spacer
 
-    - trend = [3.weeks.ago, 2.weeks.ago, 1.week.ago, Time.now].map { |time| Startup.where(batch_number: batch_number).inactive(date: time).count }
+    - trend = [3.weeks.ago, 2.weeks.ago, 1.week.ago, Time.now].map { |time| Startup.where(batch: batch_selected).inactive(date: time).count }
 
     .left-of-button
       span title="Trend: #{trend.join(', ')}" = Sparkr.sparkline trend
 
-    a.button.view-all href=admin_startups_path(scope: 'inactive', q: {batch_number_equals: batch_number})
+    a.button.view-all href=admin_startups_path(scope: 'inactive', q: {batch_id_equals: batch_selected})
       | View All (#{inactive_startups.count})

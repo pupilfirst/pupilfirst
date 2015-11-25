@@ -14,7 +14,7 @@ class Target < ActiveRecord::Base
 
   # See en.yml's role
   def self.valid_roles
-    %w(team) + User.valid_roles
+    %w(team founder) + User.valid_roles
   end
 
   # See en.yml's target.status

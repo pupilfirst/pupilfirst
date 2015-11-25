@@ -310,6 +310,14 @@ h3.targets-title { margin: 0 0 10px 0; }
   .assigner-center { padding-top: 7px; }
 }
 
+.timeline-panel .hidden-marker {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  background-color: $theme-dark-gray;
+}
+
 //.
 ////.
 //////.

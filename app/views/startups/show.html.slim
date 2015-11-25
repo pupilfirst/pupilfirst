@@ -283,6 +283,9 @@
             a#read-from-beginning href="#begin"  Read from the beginning.
           ul#timeline-list
             - @startup.timeline_events_for_display(current_user).each.with_index(1) do |event, index|
+              / Do not display hidden events to public.
+              - next if event.hidden_from?(current_user)
+
               - if event.end_iteration?
                 .tl-iteration id="event-#{event.id}"
                   .buttons style="display:inline" End of Iteration #{event.iteration}
@@ -332,6 +335,9 @@
                     .timeline-badge class="color#{index%14}"
                       = image_tag "#{event.timeline_event_type.badge_url}", width: '70'
                     .timeline-panel
+                      - if event.hidden?
+                        .hidden-marker href="#" data-toggle="tooltip" title="This event is visible only to other founders, and the SV.CO team."
+                          i.fa.fa-user-secret
                       - if event.image?
                         .img-responsive.tl-event-image
                           = image_tag event.image

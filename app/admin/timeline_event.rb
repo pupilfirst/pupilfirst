@@ -1,6 +1,7 @@
 ActiveAdmin.register TimelineEvent do
   menu parent: 'Startups'
-  permit_params :description, :timeline_event_type_id, :image, :links, :event_on, :startup_id, :verified_at, :grade
+  permit_params :description, :timeline_event_type_id, :image, :links, :event_on, :startup_id, :verified_at, :grade,
+    :user_id
 
   preserve_default_filters!
   filter :startup_batch_number, as: :select, collection: (1..10)
@@ -40,6 +41,7 @@ ActiveAdmin.register TimelineEvent do
       end
     end
 
+    column 'Founder', :user
     column :event_on
 
     column :verified_status do |timeline_event|
@@ -176,6 +178,7 @@ ActiveAdmin.register TimelineEvent do
         include_blank: false,
         label: 'Product',
         member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }
+      f.input :user, label: 'Founder', as: :select, collection: f.object.startup.founders, include_blank: false
       f.input :timeline_event_type, include_blank: false
       f.input :description
       f.input :image
@@ -203,6 +206,7 @@ ActiveAdmin.register TimelineEvent do
         end
       end
 
+      row('Founder') { timeline_event.user }
       row :iteration
       row :timeline_event_type
       row :description

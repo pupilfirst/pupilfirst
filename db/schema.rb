@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151125065054) do
+ActiveRecord::Schema.define(version: 20151125171155) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -375,11 +375,13 @@ ActiveRecord::Schema.define(version: 20151125065054) do
     t.string   "verified_status"
     t.string   "grade"
     t.integer  "target_id"
+    t.integer  "user_id"
   end
 
   add_index "timeline_events", ["startup_id"], name: "index_timeline_events_on_startup_id", using: :btree
   add_index "timeline_events", ["target_id"], name: "index_timeline_events_on_target_id", using: :btree
   add_index "timeline_events", ["timeline_event_type_id"], name: "index_timeline_events_on_timeline_event_type_id", using: :btree
+  add_index "timeline_events", ["user_id"], name: "index_timeline_events_on_user_id", using: :btree
 
   create_table "universities", force: :cascade do |t|
     t.string   "name"

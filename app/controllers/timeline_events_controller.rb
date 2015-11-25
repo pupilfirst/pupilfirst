@@ -5,7 +5,10 @@ class TimelineEventsController < ApplicationController
   # POST /users/:user_id/startup/timeline_events
   def create
     @startup = current_user.startup
-    @timeline_event = @startup.timeline_events.new timeline_event_params.merge(links: JSON.parse(timeline_event_params[:links]))
+    @timeline_event = @startup.timeline_events.new timeline_event_params.merge(
+      links: JSON.parse(timeline_event_params[:links]),
+      user: current_user
+    )
 
     if @timeline_event.save
       flash[:success] = 'Your new timeline event has been submitted to the SV.CO team for approval!'

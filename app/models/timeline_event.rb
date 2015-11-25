@@ -1,5 +1,6 @@
 class TimelineEvent < ActiveRecord::Base
   belongs_to :startup
+  belongs_to :user
   belongs_to :timeline_event_type
   belongs_to :target
 

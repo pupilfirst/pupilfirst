@@ -18,10 +18,11 @@ ActiveAdmin.register Target do
     target = Target.find(params[:id])
     redirect_to(
       new_admin_target_path(
-        target: { role: target.role, title: target.title, short_description: target.short_description,
-                  resource_url: target.resource_url, completion_instructions: target.completion_instructions,
-                  due_date_date: target.due_date_date, due_date_time_hour: target.due_date.hour,
-                  due_date_time_minute: target.due_date.min
+        target: {
+          role: target.role, title: target.title, short_description: target.short_description,
+          resource_url: target.resource_url, completion_instructions: target.completion_instructions,
+          due_date_date: target.due_date_date, due_date_time_hour: target.due_date.hour,
+          due_date_time_minute: target.due_date.min
         }
       )
     )
@@ -64,9 +65,25 @@ ActiveAdmin.register Target do
     end
   end
 
-  show do
+  show do |target|
+    if target.timeline_events.present?
+      panel 'Linked Timeline Events' do
+        table_for target.timeline_events.includes(:timeline_event_type) do
+          column 'Timeline Event' do |timeline_event|
+            a href: admin_timeline_event_path(timeline_event) do
+              "##{timeline_event.id} #{timeline_event.timeline_event_type.title}"
+            end
+          end
+
+          column :description
+          column :verified?
+          column :created_at
+        end
+      end
+    end
+
     attributes_table do
-      row :product do |target|
+      row :product do
         startup = target.startup
 
         a href: admin_startup_path(startup) do
@@ -80,11 +97,11 @@ ActiveAdmin.register Target do
         end
       end
 
-      row :role do |target|
+      row :role do
         t("role.#{target.role}")
       end
 
-      row :status do |target|
+      row :status do
         t("target.status.#{target.status}")
       end
 

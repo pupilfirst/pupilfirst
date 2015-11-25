@@ -1,6 +1,6 @@
 require_relative 'helper'
 
-after 'development:users', 'development:timeline_event_types' do
+after 'development:users', 'development:timeline_event_types', 'development:batches' do
   # Startup with live agreement.
   super_startup = Startup.new(
     name: 'Super Startup',
@@ -11,7 +11,7 @@ after 'development:users', 'development:timeline_event_types' do
     agreement_last_signed_at: 6.months.ago,
     agreement_ends_at: 6.months.since,
     incubation_location: Startup::INCUBATION_LOCATION_KOCHI,
-    batch_number: 1
+    batch: Batch.first
   )
 
   # ...whose founder is Some One.

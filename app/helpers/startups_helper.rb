@@ -30,4 +30,40 @@ module StartupsHelper
       name
     end
   end
+
+  def targets_for_display
+    # The split retrieval of targets is so that founder and team targets appear above others.
+    pending_targets = @startup.targets.pending
+    split_pending_targets = pending_targets.founder + pending_targets.team + pending_targets.not_target_roles
+
+    completed_targets = @startup.targets.recently_completed
+    split_completed_targets = completed_targets.founder + completed_targets.team + completed_targets.not_target_roles
+
+    completed_by_viewer = []
+
+    # If any of the pending targets are completed for a viewer, show that separately.
+    split_pending_targets = split_pending_targets.select do |target|
+      if target.done_for_viewer?(current_user)
+        completed_by_viewer << target
+        false
+      else
+        true
+      end
+    end
+
+    [
+      [split_pending_targets, { pending: true, done: false }],
+      [completed_by_viewer, { pending: false, done: true }],
+      [split_completed_targets, { pending: false, done: true }]
+    ]
+  end
+
+  # Only show expired targets that haven't been completed by user already.
+  def expired_targets
+    expired_targets = @startup.targets.expired
+
+    expired_targets.select do |target|
+      !target.done_for_viewer?(current_user)
+    end
+  end
 end

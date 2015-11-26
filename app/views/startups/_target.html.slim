@@ -1,0 +1,30 @@
+.target-container
+  .target-title
+    .labels.text-uppercase
+      span.label.label-primary #{t("role.#{target.role}")}
+      | &nbsp;
+      - if done
+        span.label.label-success
+          ' #{t('target.status.done')}
+          - if target.completion_comment?
+            a.fa.fa-check-square-o.white-text href='#' data-toggle="tooltip" title="#{target.completion_comment}"
+      - else
+        span.label.label-default #{t('target.status.pending')}
+    h4
+      | #{target.title}
+  .target-description
+    p = target.short_description
+    - if pending && target.completion_instructions.present?
+      = target.completion_instructions
+  .learn-more
+    - if target.resource_url.present?
+      = link_to target.resource_url, class: 'btn btn-primary btn-sm pull-right', target: '_blank' do
+        i.fa.fa-external-link-square
+        | &nbsp; LEARN MORE
+    .assigner class="#{target.due_date.present? ? '' : 'assigner-center'}"
+      em
+        ' Assigned by <strong>#{target.assigner.name}</strong>.
+        - if target.due_date.present?
+          br
+          | Due date: <strong>#{target.due_date.in_time_zone('Asia/Calcutta').strftime('%b %-d at %I:%M %p')}</strong>.
+    .clearfix

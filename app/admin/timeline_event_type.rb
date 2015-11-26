@@ -6,7 +6,7 @@ ActiveAdmin.register TimelineEventType do
     column :key
     column :role
     column :title
-    column :hidden
+    column :private
     actions
   end
 
@@ -16,7 +16,7 @@ ActiveAdmin.register TimelineEventType do
       f.input :suggested_stages, as: :check_boxes, collection: stages_collection, label: 'Suggested on stages'
       f.input :suggested_stage, as: :hidden
       f.input :role
-      f.input :hidden, label: 'Hide events of this type from public?'
+      f.input :private, label: 'Private user event?'
       f.input :title
       f.input :sample_text
       f.input :proof_required
@@ -30,5 +30,5 @@ ActiveAdmin.register TimelineEventType do
     f.actions
   end
 
-  permit_params :key, :role, :title, :sample_text, :badge, :copy_badge_from, :proof_required, :suggested_stage, :hidden
+  permit_params :key, :role, :title, :sample_text, :badge, :copy_badge_from, :proof_required, :suggested_stage, :private
 end

@@ -1,5 +1,6 @@
 class Batch < ActiveRecord::Base
   has_many :startups
-  validates_presence_of :name
-  validates_uniqueness_of :name
+
+  validates :name, presence: true, uniqueness: true
+  validates_presence_of :start_date, :end_date
 end

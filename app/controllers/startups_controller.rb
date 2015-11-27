@@ -11,7 +11,7 @@ class StartupsController < ApplicationController
 
   # GET /startups
   def index
-    @startups_with_dupes = Startup.batched_and_approved.joins(:timeline_events).merge(TimelineEvent.verified.has_image).order('timeline_events.event_on ASC')
+    @batches = Startup.available_batches
   end
 
   def new

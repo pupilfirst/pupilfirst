@@ -66,4 +66,19 @@ module StartupsHelper
       !target.done_for_viewer?(current_user)
     end
   end
+
+  def showcase_events_for_batch(batch)
+    processed_startups = []
+    showcase_events_startups = []
+
+    batch.startups.approved
+      .joins(:timeline_events).merge(TimelineEvent.verified.has_image)
+      .order('timeline_events.event_on ASC').each do |startup|
+      next if processed_startups.include? startup.id
+      showcase_events_startups << [startup.showcase_timeline_event, startup]
+      processed_startups << startup.id
+    end
+
+    showcase_events_startups
+  end
 end

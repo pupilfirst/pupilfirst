@@ -40,7 +40,14 @@ To run any jobs in the development environment, simply run:
 
 ## Deployment
 
-Add heroku remotes:
+Travis CI takes care of deploying after running tests. Simply push to master branch, and Travis will take care of the
+rest.
+
+### Manual deployment.
+
+Set up heroku to have access to sv-co app.
+
+Add heroku remote:
 
     $ git remote add heroku-production git@heroku.com:sv-co.git
 
@@ -50,7 +57,7 @@ Then, to deploy:
 
 To safely deploy:
 
-    $ git push heroku-production && heroku run rake db:migrate --app sv-co && heroku restart --app sv-co
+    $ rspec && git push heroku-production && heroku run rake db:migrate --app sv-co && heroku restart --app sv-co
 
 ## Coding style conventions
 

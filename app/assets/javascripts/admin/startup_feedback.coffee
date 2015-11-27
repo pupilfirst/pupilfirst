@@ -3,6 +3,8 @@ $(document).on 'page:change', ->
   $('#startup_feedback_startup_id').change(showStartupFeedback)
   showStartupFeedback()
 
+  $('#startup_feedback_faculty_id').select2({ placeholder : 'Select Faculty' })
+
 showStartupFeedback = ->
   startup_id = $('#startup_feedback_startup_id').val()
   if startup_id

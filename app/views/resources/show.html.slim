@@ -13,19 +13,9 @@ h1.page-header.header-light #{@resource.title}
   = videojs_rails sources: { mp4: @stream_video}, class: 'img-responsive resource-show-video'
   .resource-show-description = simple_format @resource.description
 
-  button.btn.btn-primary.download-resource data-generator-url="#{generate_download_url_resource_url(@resource)}"
-    .download
-      i.fa.fa-download
-      | &nbsp; Download
-    .preparing-download.hide
-      i.fa.fa-spinner.fa-pulse.hide
-      | &nbsp; Preparing Download
-    .download-started.hide
-      i.fa.fa-check
-      | &nbsp; Download Started
-    .download-failed.hide
-      i.fa.fa-alert
-      | &nbsp; Failed! :-(
+  a.btn.btn-primary href=download_resource_url(@resource) target='_blank'
+    i.fa.fa-download
+    | &nbsp; Download
 - else
   .resource-show.clearfix.margin-bottom-20
     - if @resource.thumbnail.present?
@@ -45,19 +35,9 @@ h1.page-header.header-light #{@resource.title}
             i.fa.fa-play
             | &nbsp; Play
 
-        button.btn.btn-primary.download-resource data-generator-url="#{generate_download_url_resource_url(@resource)}"
-          .download
-            i.fa.fa-download
-            | &nbsp; Download
-          .preparing-download.hide
-            i.fa.fa-spinner.fa-pulse.hide
-            | &nbsp; Preparing Download
-          .download-started.hide
-            i.fa.fa-check
-            | &nbsp; Download Started
-          .download-failed.hide
-            i.fa.fa-alert
-            | &nbsp; Failed! :-(
+        a.btn.btn-primary href=download_resource_url(@resource) target='_blank'
+          i.fa.fa-download
+          | &nbsp; Download
 
 hr.margin-top-20
 

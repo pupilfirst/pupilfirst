@@ -32,7 +32,6 @@
 // Controller-specific
 //= require home
 //= require faculty
-//= require resources
 //= require incubation
 //= require startups
 //= require users

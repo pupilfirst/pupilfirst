@@ -76,7 +76,7 @@ Svapp::Application.routes.draw do
 
   resources :resources, only: %w(index show) do
     member do
-      get 'generate_download_url'
+      get 'download'
     end
   end
 

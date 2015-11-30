@@ -13,9 +13,9 @@ class ResourcesController < ApplicationController
     @stream_video = @resource.file.url
   end
 
-  def generate_download_url
+  def download
     resource = Resource.for(current_user).find(params[:id])
     resource.increment_downloads!
-    render json: { resource_download_url: resource.file.url }
+    redirect_to resource.file.url
   end
 end

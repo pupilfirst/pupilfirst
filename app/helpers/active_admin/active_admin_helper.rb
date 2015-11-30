@@ -25,7 +25,7 @@ module ActiveAdmin
 
     def users_by_karma(batch:, after:, before:)
       User.joins(:startup, :karma_points)
-        .where(startups: { batch: batch })
+        .where(startups: { batch_id: batch.id })
         .where(karma_points: { created_at: (after.beginning_of_day..before.end_of_day) })
         .group(:user_id)
         .sum(:points)

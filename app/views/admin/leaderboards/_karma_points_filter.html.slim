@@ -1,7 +1,7 @@
 = form_for :karma_points_filter, url: admin_leaderboards_path, method: :get, html: { class: 'filter_form' } do |f|
   div.filter_form_field.filter_select
     = f.label :batch, 'Batch'
-    = f.select :batch, [1,2], selected: params[:karma_points_filter].try(:[], :batch)
+    = f.select :batch, options_for_select(Batch.all.map { |batch| [batch.name, batch.id] }, params[:karma_points_filter].try(:[], :batch))
   div.filter_form_field.filter_date_range
     = f.label :after, 'After'
     = f.text_field :after, value: params[:karma_points_filter].try(:[], :after)

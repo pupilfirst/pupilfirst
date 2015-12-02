@@ -9,7 +9,7 @@ ol.breadcrumb.margin-top-20
 
 h1.page-header.header-light
   | Leaderboard
-  small &nbsp;#{leaderboard_start_date.strftime('%B %-d')} to #{leaderboard_end_date.strftime('%B %-d')}
+  small &nbsp;#{Startup.leaderboard_start_date.strftime('%B %-d')} to #{Startup.leaderboard_end_date.strftime('%B %-d')}
 
 .row
   .col-sm-8
@@ -37,7 +37,7 @@ h1.page-header.header-light
                     th Product
                     th Team Lead
                 tbody
-                  - startups_for_leaderboard_of_batch(batch).each_with_index do |rank_array, index|
+                  - Startup.leaderboard_of_batch(batch).each_with_index do |rank_array, index|
                     - startup_id, rank = rank_array
                     - startup = Startup.find(startup_id)
                     tr
@@ -45,7 +45,7 @@ h1.page-header.header-light
                       td = link_to "#{startup.product_name} #{startup.name.present? ? "(#{startup.name})" : ''}", startup_path(startup)
                       td = startup.admin.try(:fullname)
 
-                  - startups_without_karma, rank = startups_without_karma_and_rank_for_batch(batch)
+                  - startups_without_karma, rank = Startup.without_karma_and_rank_for_batch(batch)
                   - startups_without_karma.each do |startup|
                     tr
                       td = rank

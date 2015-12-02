@@ -25,14 +25,14 @@ p.startups-introduction {
   .inactive-spacer {
     height: 100%;
     user-select: none;
-    color: $faculty-bg-color;
+    color: white;
 
     @media screen and (max-width: 767px) { display: none; }
 
     &:hover {
       cursor: default;
       background-color: initial;
-      border: 1px solid $faculty-bg-color;
+      border: 1px solid white;
       border-bottom: 1px solid $bootstrap-tab-underline;
     }
   }

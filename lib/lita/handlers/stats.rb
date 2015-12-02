@@ -12,8 +12,6 @@ module Lita
         end
       end
 
-      private
-
       def self.ranked_list_of_startups
         rank_list = ''
         ranked_startups = Startup.leaderboard_of_batch Batch.first
@@ -22,11 +20,10 @@ module Lita
         end
         unranked_startups = Startup.without_karma_and_rank_for_batch Batch.first
         unranked_startups[0].each do |startup|
-          rank_list += "#{ranked_startups.length+1}.#{startup.product_name} "
+          rank_list += "#{ranked_startups.length + 1}.#{startup.product_name} "
         end
         rank_list
       end
-
     end
 
     Lita.register_handler(Stats)

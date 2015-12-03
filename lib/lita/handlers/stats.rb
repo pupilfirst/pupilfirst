@@ -18,9 +18,10 @@ module Lita
         ranked_startups.each do |startup_id, rank|
           rank_list += "#{rank}.#{Startup.find(startup_id).product_name} "
         end
+        last_rank_with_karma = ranked_startups.last[1]
         unranked_startups = Startup.without_karma_and_rank_for_batch Batch.first
         unranked_startups[0].each do |startup|
-          rank_list += "#{ranked_startups.length + 1}.#{startup.product_name} "
+          rank_list += "#{last_rank_with_karma + 1}.#{startup.product_name} "
         end
         rank_list
       end

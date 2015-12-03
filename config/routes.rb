@@ -72,6 +72,7 @@ Svapp::Application.routes.draw do
     member do
       post 'connect'
       get 'weekly_slots'
+      post 'save_weekly_slots'
     end
   end
 

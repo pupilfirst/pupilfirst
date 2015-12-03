@@ -24,11 +24,14 @@
             .connect-slots
               - counter = 0
               - (14..45).each do |slot|
-                .connect-slot data-slot=(slot.to_f / 2)
+                .connect-slot data-day="#{day}" data-time="#{slot.to_f / 2}"
                   - hour = (slot.to_f / 2).to_i
                   - minute = (((slot.to_f / 2) - hour) * 60).to_s.gsub('.', '')[0..1]
                   ' #{hour.to_s.rjust(2, '0')}:#{minute}
 
     .panel-footer
+      = form_tag save_weekly_slots_faculty_path(@faculty, token: params[:token]), method: :post do
+        = hidden_field_tag 'list_of_slots', value=@slot_list
+        = submit_tag 'Save'
       button.btn.btn-success.pull-right Save
       .clearfix

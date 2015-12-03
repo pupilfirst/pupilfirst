@@ -326,6 +326,8 @@ GEM
     has_scope (0.6.0)
       actionpack (>= 3.2, < 5)
       activesupport (>= 3.2, < 5)
+    has_secure_token (1.0.0)
+      activerecord (>= 3.0)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     http_router (0.11.2)
@@ -639,6 +641,7 @@ DEPENDENCIES
   google_calendar!
   gravtastic
   groupdate
+  has_secure_token
   jbuilder (~> 2.0)
   jquery-rails
   just-datetime-picker

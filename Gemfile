@@ -75,6 +75,8 @@ gem 'videojs_rails' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com
 
 gem 'react-rails' # react for creating link editor in timeline builder
 
+gem 'has_secure_token' # used to create tokens for models (eg: for Faculty). Will be included with ActiveRecord in Rails 5
+
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify' # Superb notifications library. http://sciactive.github.io/pnotify/

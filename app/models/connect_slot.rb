@@ -2,6 +2,8 @@ class ConnectSlot < ActiveRecord::Base
   belongs_to :faculty
   has_one :connect_request
 
+  scope :next_week, -> { where('slot_at > ? AND slot_at < ?', next_week_start, next_week_end) }
+
   before_destroy :check_for_connect_request
 
   validates_presence_of :faculty_id, :slot_at
@@ -49,5 +51,13 @@ class ConnectSlot < ActiveRecord::Base
     return if connect_request.blank?
     errors[:base] << 'Cannot delete connect slot that has a request associated with it'
     false
+  end
+
+  def self.next_week_start
+    7.days.from_now.beginning_of_week.in_time_zone('Asia/Calcutta')
+  end
+
+  def self.next_week_end
+    7.days.from_now.end_of_week.in_time_zone('Asia/Calcutta')
   end
 end

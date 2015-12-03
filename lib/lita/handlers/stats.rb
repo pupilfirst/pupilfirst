@@ -12,7 +12,7 @@ module Lita
         end
       end
 
-      def self.ranked_list_of_startups
+      def ranked_list_of_startups
         rank_list = ''
         ranked_startups = Startup.leaderboard_of_batch Batch.first
         ranked_startups.each do |startup_id, rank|

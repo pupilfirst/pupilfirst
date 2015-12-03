@@ -9,3 +9,20 @@
     p.introduction
       ' Let us know when you are available next week!
 
+    .panel.panel-primary
+      .panel-heading #{next_week_start} - #{next_week_end}
+
+      .panel-body
+        ul.nav.nav-pills role="tablist"
+          - for day in day_names
+            li class="#{day == 'Mon' ? 'active' : ''}" role="presentation"
+              a href="##{day}" role="tab" data-toggle="tab" #{day}
+
+        .tab-content
+          - for day in day_names
+            .tab-pane.fade class="#{day == 'Mon' ? 'active in' : ''}" id="#{day}" role='tabpanel'
+              br
+              ' Slots for #{day} here
+      .panel-footer
+        button.btn.btn-success.pull-right Save
+        .clearfix

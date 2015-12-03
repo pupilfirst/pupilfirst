@@ -71,6 +71,7 @@ Svapp::Application.routes.draw do
   resources :faculty, only: %w(index) do
     member do
       post 'connect'
+      get 'weekly_slots'
     end
   end
 

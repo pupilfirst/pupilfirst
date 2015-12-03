@@ -19,4 +19,12 @@ class FacultyController < ApplicationController
 
     redirect_to faculty_index_path
   end
+
+  # GET /faculty/:id/weekly_slots(token)
+  def weekly_slots
+    raise_not_found unless params[:token]
+    @faculty = Faculty.find_by token: params[:token]
+    raise_not_found unless @faculty
+  end
+
 end

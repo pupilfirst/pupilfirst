@@ -13,6 +13,7 @@ ActiveAdmin.register TimelineEventType do
   form do |f|
     f.inputs 'Event Details' do
       f.input :key
+      f.input :major
       f.input :suggested_stages, as: :check_boxes, collection: stages_collection, label: 'Suggested on stages'
       f.input :suggested_stage, as: :hidden
       f.input :role
@@ -30,5 +31,5 @@ ActiveAdmin.register TimelineEventType do
     f.actions
   end
 
-  permit_params :key, :role, :title, :sample_text, :badge, :copy_badge_from, :proof_required, :suggested_stage, :private
+  permit_params :key, :role, :title, :sample_text, :badge, :copy_badge_from, :proof_required, :suggested_stage, :private, :major
 end

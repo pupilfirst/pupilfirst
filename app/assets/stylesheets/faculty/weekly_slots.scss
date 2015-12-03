@@ -1,0 +1,13 @@
+.connect-slot {
+  display: inline-block;
+  padding: 6px;
+  border: 1px solid grey;
+  margin: 3px;
+  cursor: pointer;
+
+  &.selected {
+    background-color: green;
+    color: white;
+  }
+}
+

@@ -26,10 +26,4 @@ module FacultyHelper
   def next_week_end
     7.days.from_now.end_of_week.in_time_zone('Asia/Calcutta').strftime('%b %d')
   end
-
-  def day_names
-    # day names starting from 'Mon'
-    Date::ABBR_DAYNAMES[1..6] << Date::ABBR_DAYNAMES[0]
-  end
-
 end

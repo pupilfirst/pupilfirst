@@ -26,5 +26,4 @@ class FacultyController < ApplicationController
     @faculty = Faculty.find_by token: params[:token]
     raise_not_found unless @faculty
   end
-
 end

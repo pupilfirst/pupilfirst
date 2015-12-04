@@ -24,7 +24,7 @@ class FacultyController < ApplicationController
   def weekly_slots
     raise_not_found unless params[:token]
     @faculty = Faculty.find_by token: params[:token]
-    raise_not_found unless @faculty
+    raise_not_found unless @faculty && @faculty.email?
 
     @slot_list = create_slot_list_for @faculty
   end
@@ -34,7 +34,7 @@ class FacultyController < ApplicationController
     raise_not_found unless params[:token]
 
     @faculty = Faculty.find_by token: params[:token]
-    raise_not_found unless @faculty
+    raise_not_found unless @faculty && @faculty.email?
 
     list_of_slots = JSON.parse(params[:list_of_slots])
     save_slots_in_list list_of_slots, @faculty

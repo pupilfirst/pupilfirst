@@ -21,6 +21,7 @@ slotsClickHandler = ->
 
     $('#list_of_slots').val(JSON.stringify(current_slots))
     console.log $('#list_of_slots').val()
+    updateCommitment()
 
 findSlot = (list, slotValue) ->
   i = 0
@@ -36,8 +37,12 @@ markPresentSlots = ->
     for slot in current_slots
       $(".connect-slot[data-day='"+slot[0]+"'][data-time='"+slot[1].toFixed(1)+"']").addClass('selected')
 
+updateCommitment = ->
+  slot_count = JSON.parse($('#list_of_slots').val()).length
+  $('#commitment-message').html('Each time slot is of 20 minutes duration. Please choose enough timeslots to meet or exceed your commitment to SV.CO. You current commitment is <strong>'+slot_count*20+' minutes</strong>.')
 
 
 $(document).on 'page:change', slotsClickHandler
 $(document).on 'page:change', findSlot
-$(window).load(markPresentSlots)
+$(window).load markPresentSlots
+$(window).load updateCommitment

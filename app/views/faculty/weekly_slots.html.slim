@@ -31,7 +31,7 @@
 
     .panel-footer
       #commitment-message
-      = form_tag save_weekly_slots_faculty_path(@faculty, token: params[:token]), method: :post do
+      = form_tag save_weekly_slots_faculty_index_path(params[:token]), method: :post do
         = hidden_field_tag 'list_of_slots', value=@slot_list
         = submit_tag 'Save', class: 'btn btn-success pull-right'
       .clearfix

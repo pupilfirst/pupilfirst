@@ -69,10 +69,10 @@ Svapp::Application.routes.draw do
   end
 
   resources :faculty, only: %w(index) do
-    member do
-      post 'connect'
-      get 'weekly_slots'
-      post 'save_weekly_slots'
+    post 'connect', on: :member
+    collection do
+      get 'weekly_slots/:token', to: 'faculty#weekly_slots', as: 'weekly_slots'
+      post 'save_weekly_slots/:token', to: 'faculty#save_weekly_slots', as: 'save_weekly_slots'
     end
   end
 

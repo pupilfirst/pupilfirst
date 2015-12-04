@@ -27,6 +27,8 @@ class FacultyController < ApplicationController
     raise_not_found unless @faculty && @faculty.email?
 
     @slot_list = create_slot_list_for @faculty
+
+    @skip_navbar = true
   end
 
   # POST /faculty/save_weekly_slots/:token

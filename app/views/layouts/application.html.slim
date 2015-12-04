@@ -22,23 +22,24 @@ html
     link rel="icon" href="#{image_url 'favicon.png'}"
 
   body
-    section#header class="#{@large_header_class ? "large-header #{@large_header_class} navbar-start-transparent" : ''}"
-      nav.navbar.navbar-default.navbar-fixed-top role="navigation" class="#{@large_header_class ? '' : 'shrink'}"
-        .container
-          .navbar-header
-            button.navbar-toggle.collapsed type="button" data-toggle="collapse" data-target="#sv-navbar"
-              span.sr-only Toggle navigation
-              span.icon-bar
-              span.icon-bar
-              span.icon-bar
-            a.navbar-brand href="#{root_url}"
-              img.site-logo#site-logo src="#{image_url 'logo.png'}" class="#{@large_header_class ? 'hide' : ''}"
-              img.site-logo#site-logo-white src="#{image_url 'logo_white.png'}" class="#{@large_header_class ? '' : 'hide'}"
+    - unless @skip_navbar
+      section#header class="#{@large_header_class ? "large-header #{@large_header_class} navbar-start-transparent" : ''}"
+        nav.navbar.navbar-default.navbar-fixed-top role="navigation" class="#{@large_header_class ? '' : 'shrink'}"
+          .container
+            .navbar-header
+              button.navbar-toggle.collapsed type="button" data-toggle="collapse" data-target="#sv-navbar"
+                span.sr-only Toggle navigation
+                span.icon-bar
+                span.icon-bar
+                span.icon-bar
+              a.navbar-brand href="#{root_url}"
+                img.site-logo#site-logo src="#{image_url 'logo.png'}" class="#{@large_header_class ? 'hide' : ''}"
+                img.site-logo#site-logo-white src="#{image_url 'logo_white.png'}" class="#{@large_header_class ? '' : 'hide'}"
 
-          = render 'layouts/nav_links'
+            = render 'layouts/nav_links'
 
-      .nav-spacer
-      == yield :header
+        .nav-spacer
+        == yield :header
 
     - if @skip_container
       == yield

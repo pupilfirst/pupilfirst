@@ -45,4 +45,4 @@ updateCommitment = ->
 $(document).on 'page:change', slotsClickHandler
 $(document).on 'page:change', findSlot
 $(window).load markPresentSlots
-$(window).load updateCommitment
+

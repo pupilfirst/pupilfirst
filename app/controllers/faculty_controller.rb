@@ -22,7 +22,6 @@ class FacultyController < ApplicationController
 
   # GET /faculty/weekly_slots/:token
   def weekly_slots
-    raise_not_found unless params[:token]
     @faculty = Faculty.find_by token: params[:token]
     raise_not_found unless @faculty && @faculty.email?
 
@@ -33,8 +32,6 @@ class FacultyController < ApplicationController
 
   # POST /faculty/save_weekly_slots/:token
   def save_weekly_slots
-    raise_not_found unless params[:token]
-
     @faculty = Faculty.find_by token: params[:token]
     raise_not_found unless @faculty && @faculty.email?
 

@@ -30,7 +30,7 @@
                   ' #{hour.to_s.rjust(2, '0')}:#{minute}
 
     .panel-footer
-      #commitment-message
+      #commitment-message Each time slot is of 20 minutes duration. Please choose enough timeslots to meet or exceed your commitment to SV.CO. You current commitment is <strong>#{JSON.parse(@slot_list).length*20} minutes</strong>.
       = form_tag save_weekly_slots_faculty_index_path(params[:token]), method: :post do
         = hidden_field_tag 'list_of_slots', value=@slot_list
         = submit_tag 'Save', class: 'btn btn-success pull-right'

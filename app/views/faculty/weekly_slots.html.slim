@@ -32,6 +32,5 @@
     .panel-footer
       = form_tag save_weekly_slots_faculty_path(@faculty, token: params[:token]), method: :post do
         = hidden_field_tag 'list_of_slots', value=@slot_list
-        = submit_tag 'Save'
-      button.btn.btn-success.pull-right Save
+        = submit_tag 'Save', class: 'btn btn-success pull-right'
       .clearfix

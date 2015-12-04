@@ -4,7 +4,7 @@ slotsClickHandler = ->
 
     # Mark (or unmark) selected class.
     slot.toggleClass('selected')
-    slotValue = [slot.data('day'),slot.data('time')]
+    slotValue = [slot.data('day'),parseFloat(slot.data('time'))]
 
     if $('#list_of_slots').val().length > 0
       current_slots = JSON.parse($('#list_of_slots').val())
@@ -33,10 +33,11 @@ findSlot = (list, slotValue) ->
 markPresentSlots = ->
   if $('#list_of_slots').val().length > 0
     current_slots = JSON.parse($('#list_of_slots').val())
-    console.log current_slots
+    for slot in current_slots
+      $(".connect-slot[data-day='"+slot[0]+"'][data-time='"+slot[1].toFixed(1)+"']").addClass('selected')
 
 
 
 $(document).on 'page:change', slotsClickHandler
 $(document).on 'page:change', findSlot
-$(document).on 'page:change', markPresentSlots
+$(window).load(markPresentSlots)

@@ -47,15 +47,17 @@ class FacultyController < ApplicationController
 
   def save_slots_in_list(list, faculty)
     start_date = 7.days.from_now.beginning_of_week.to_date
+
+    # reset next week slots to empty
+    faculty.connect_slots.next_week.delete_all
+
     list.each do |slot|
       date = start_date + slot[0] - 1 # index of dates start at 1
       hour = slot[1].to_i
       minute = (((slot[1].to_f) - hour) * 60).to_s.delete('.')[0..1]
-
-      connect_slot = faculty.connect_slots.find_or_initialize_by(
-        slot_at: Time.parse("#{date} #{hour.to_s.rjust(2, '0')}:#{minute}:00 +0530")
-      )
-      connect_slot.save!
+      # save submitted week slots
+      ConnectSlot.create(
+        faculty: faculty, slot_at: Time.parse("#{date} #{hour.to_s.rjust(2, '0')}:#{minute}:00 +0530"))
     end
   end
 

@@ -119,6 +119,10 @@ class User < ActiveRecord::Base
     email || fullname
   end
 
+  def fullname_and_email
+    fullname + (email? ? ' (' + email + ')' : '')
+  end
+
   def to_s
     display_name
   end

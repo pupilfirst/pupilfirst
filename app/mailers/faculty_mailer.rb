@@ -7,4 +7,9 @@ class FacultyMailer < ApplicationMailer
     @connect_request = connect_request
     mail(to: connect_request.faculty.email, subject: 'Connect Request confirmed.')
   end
+
+  def request_next_week_slots(faculty)
+    @faculty = faculty
+    mail(to: faculty.email, subject: 'Connect slots for the upcoming week')
+  end
 end

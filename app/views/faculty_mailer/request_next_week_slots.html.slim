@@ -1,0 +1,20 @@
+= content_for :heading
+  | Connect Slots for the upcoming week!
+
+= content_for :salutation
+  | Hello #{@faculty.name},
+
+= content_for :body
+  p
+    ' It would be great if you can let us know the slots you are available next week to connect with our startups.
+    ' #{link_to 'Click here', weekly_slots_faculty_index_url(@faculty.token)} to record your slots now.
+
+  p
+    ' If you're unable to click on the link above, then please copy and paste the following link
+    ' into your browser's address bar:
+
+  p.monospace = weekly_slots_faculty_index_url(@faculty.token)
+
+  p
+    ' Please note that the above url is a private link and should not be shared with others.
+    ' Reach out to us at #{mail_to 'help@sv.co'} in case of any queries.

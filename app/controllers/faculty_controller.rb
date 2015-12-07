@@ -19,4 +19,54 @@ class FacultyController < ApplicationController
 
     redirect_to faculty_index_path
   end
+
+  # GET /faculty/weekly_slots/:token
+  def weekly_slots
+    @faculty = Faculty.find_by token: params[:token]
+    raise_not_found unless @faculty && @faculty.email?
+
+    @slot_list = create_slot_list_for @faculty
+
+    @skip_navbar = true
+  end
+
+  # POST /faculty/save_weekly_slots/:token
+  def save_weekly_slots
+    @faculty = Faculty.find_by token: params[:token]
+    raise_not_found unless @faculty && @faculty.email?
+
+    list_of_slots = JSON.parse(params[:list_of_slots])
+    save_slots_in_list list_of_slots, @faculty
+
+    flash.now[:success] = "Your slots have been saved succesfully!"
+    redirect_to :back
+  end
+
+  private
+
+  def save_slots_in_list(list, faculty)
+    start_date = 7.days.from_now.beginning_of_week.to_date
+
+    # reset next week slots to empty
+    faculty.connect_slots.next_week.delete_all
+
+    list.each do |slot|
+      date = start_date + slot[0] - 1 # index of dates start at 1
+      hour = slot[1].to_i
+      minute = (((slot[1].to_f) - hour) * 60).to_s.delete('.')[0..1]
+      # save submitted week slots
+      ConnectSlot.create(
+        faculty: faculty, slot_at: Time.parse("#{date} #{hour.to_s.rjust(2, '0')}:#{minute}:00 +0530"))
+    end
+  end
+
+  def create_slot_list_for(faculty)
+    slots = faculty.connect_slots.next_week
+    list = slots.map do |slot|
+      day = (slot.slot_at.to_date - 7.days.from_now.beginning_of_week.to_date).to_i + 1
+      time = slot.slot_at.hour + slot.slot_at.min.to_f / 60
+      "[#{day},#{time}]"
+    end.join(',')
+    "[#{list}]"
+  end
 end

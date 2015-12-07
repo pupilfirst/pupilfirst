@@ -2,6 +2,8 @@ class Faculty < ActiveRecord::Base
   mount_uploader :image, FacultyImageUploader
   process_in_background :image
 
+  has_secure_token
+
   has_many :startup_feedback, dependent: :restrict_with_error
   has_many :targets, dependent: :restrict_with_error, foreign_key: 'assigner_id'
   has_many :connect_slots, dependent: :destroy

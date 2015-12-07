@@ -1,0 +1,37 @@
+- content_for :head
+  title SV.CO Faculty: The Best Startup Talent in India
+  meta name="description" content="Startup Village has assembled some of the best entrepreneurs and domain experts to help you learn what it means to become a founder. Join SV.CO to gain access."
+
+.container
+  h1.page-header.header-light Slots for #{@faculty.name}
+
+  p.introduction
+    ' Let us know when you are available next week!
+
+  .panel.panel-primary
+    .panel-heading #{next_week_start} - #{next_week_end}
+
+    .panel-body
+      ul.nav.nav-pills role="tablist"
+        - for day in 1..7
+          li class="#{day == 1 ? 'active' : ''}" role="presentation"
+            a href="#day#{day}" role="tab" data-toggle="tab" #{Date::ABBR_DAYNAMES[day%7]}
+
+      .tab-content
+        - for day in 1..7
+          .tab-pane.fade class="#{day == 1 ? 'active in' : ''}" id="day#{day}" role='tabpanel'
+            br
+            .connect-slots
+              - counter = 0
+              - (14..45).each do |slot|
+                .connect-slot data-day="#{day}" data-time="#{slot.to_f / 2}"
+                  - hour = (slot.to_f / 2).to_i
+                  - minute = (((slot.to_f / 2) - hour) * 60).to_s.gsub('.', '')[0..1]
+                  ' #{hour.to_s.rjust(2, '0')}:#{minute}
+
+    .panel-footer
+      #commitment-message Each time slot is of 20 minutes duration. Please choose enough timeslots to meet or exceed your commitment to SV.CO. You current commitment is <strong>#{JSON.parse(@slot_list).length*20} minutes</strong>.
+      = form_tag save_weekly_slots_faculty_index_path(params[:token]), method: :post do
+        = hidden_field_tag 'list_of_slots', value=@slot_list
+        = submit_tag 'Save', class: 'btn btn-success pull-right'
+      .clearfix

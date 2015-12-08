@@ -24,6 +24,7 @@ class User < ActiveRecord::Base
   belongs_to :startup
   belongs_to :university
   has_many :karma_points, dependent: :destroy
+  has_many :timeline_events
 
   scope :batched, -> { joins(:startup).where.not(startups: { batch_number: nil }) }
   scope :founders, -> { where(is_founder: true).includes(:startup) }

@@ -60,8 +60,8 @@
             - if @startup.email?
               | Please reach out to us at #{mail_to @startup.email}
         - if current_user && @startup.founder?(current_user) && @startup.targets.present?
-          #targets
-            h3.targets-title Targets
+          #targets.margin-bottom-20
+            h3.margin-top-0 Targets
             hr
             .row
               - targets_for_display.each do |targets, target_locals|
@@ -186,7 +186,7 @@
         .row
           - if @startup.founders.present?
             .col-sm-6.col-md-12
-              h3.founders-title Founders
+              h3 Founders
               hr
               - @startup.founders.each do |founder|
                 .data-founder
@@ -206,6 +206,20 @@
                           li
                             a href="#{founder.linkedin_url}" target='_blank'
                               i.fa.fa-linkedin-square
+        .row
+          - if @startup.team_members.present?
+            .col-sm-6.col-md-12
+              h3 Team
+              hr
+              - @startup.team_members.each do |team_member|
+                .data-founder
+                  .media
+                    .media-left
+                      .media-object
+                        .founder-image style="background-image: url('#{profile_image_url team_member, gravatar_size: 128, avatar_version: :mid}');"
+                    .media-body
+                      h4.media-heading #{truncated_founder_name team_member.name}
+                      p.designation #{founder_roles(team_member.roles)}
           /- if @startup.mentors?
             .col-sm-6.col-md-12
               h3 Mentors

@@ -1,0 +1,14 @@
+- content_for :head
+  title SV.CO #{current_user.startup.product_name} team members
+
+h2.page-header#modify-team-members Modify Team members
+
+= render 'table', team_members: @team_members, team_member_being_edited: @team_member
+= render 'form', team_member: @team_member
+
+hr
+
+.margin-bottom-40
+  = link_to edit_user_startup_url(current_user), class: 'btn btn-default' do
+    i.fa.fa-chevron-left
+    ' &nbsp; Back to editing startup profile.

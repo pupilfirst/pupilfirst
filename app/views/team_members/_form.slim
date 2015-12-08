@@ -1,0 +1,17 @@
+= simple_form_for [current_user, :startup, team_member], html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, file: :horizontal_file_input } do |f|
+  legend
+    - if team_member.persisted?
+      ' Edit team member '#{team_member.name}'
+    - else
+      ' List new team member
+
+  = f.input :name
+  = f.input :roles, as: :check_boxes, collection: User.valid_roles, label_method: proc { |role| t("role.#{role}") }, required: true
+  = f.input :email, label: 'Email address'
+  = f.input :avatar, as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }
+
+  .form-group
+    .col-sm-9.col-sm-offset-3
+      ' #{f.submit team_member.persisted? ? 'Update team member entry' : 'List new team member', class: 'btn btn-success'}
+      - if team_member.persisted?
+        = link_to 'Cancel', new_user_startup_team_member_url(current_user), class: 'btn btn-default'

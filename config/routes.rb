@@ -28,7 +28,9 @@ Svapp::Application.routes.draw do
       post :add_founder
       patch :remove_founder
       patch :change_admin
+
       resources :timeline_events, only: [:create, :destroy, :update]
+      resources :team_members, except: [:index]
     end
   end
 

@@ -98,6 +98,7 @@ ActiveAdmin.register Startup do
     column :incubation_location
     column :physical_incubatee
     column(:founders) { |startup| startup.founders.pluck(:first_name).join ', ' }
+    column(:team_members) { |startup| startup.team_members.pluck(:name).join ', ' }
     column(:women_cofounders) { |startup| startup.founders.where(gender: User::GENDER_FEMALE).count }
     column :pitch
     column :website
@@ -311,6 +312,16 @@ ActiveAdmin.register Startup do
                 " &mdash; #{link_to('Make Team Lead', change_admin_admin_startup_path(founder_id: founder),
                   method: :patch, data: { confirm: 'Are you sure you want to change the team lead for this startup?' })}".html_safe
               end
+            end
+          end
+        end
+      end
+
+      row :team_members do |startup|
+        if startup.team_members.present?
+          startup.team_members.each do |team_member|
+            div do
+              link_to team_member.name, [:admin, team_member]
             end
           end
         end

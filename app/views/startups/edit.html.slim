@@ -31,6 +31,15 @@ h2.page-header Modify founders
   .alert.alert-danger.col-sm-offset-3.col-sm-9
     ' You have reached the maximum number of founders allowed!
 
+- if feature_active? :team_members
+  h2.page-header#modify-team-members Modify team members
+
+  = render 'team_members/table', team_members: @startup.team_members, team_member_being_edited: nil
+
+  = link_to new_user_startup_team_member_url(current_user), class: 'btn btn-primary' do
+    i.fa.fa-plus
+    | &nbsp; Add new team member
+
 h2.page-header Edit your startup profile
 
 = render 'form'

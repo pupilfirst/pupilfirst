@@ -326,6 +326,18 @@ ActiveRecord::Schema.define(version: 20151208064639) do
   add_index "targets", ["assigner_id"], name: "index_targets_on_assigner_id", using: :btree
   add_index "targets", ["startup_id"], name: "index_targets_on_startup_id", using: :btree
 
+  create_table "team_members", force: :cascade do |t|
+    t.string   "name"
+    t.string   "email"
+    t.string   "roles"
+    t.string   "avatar"
+    t.integer  "startup_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "team_members", ["startup_id"], name: "index_team_members_on_startup_id", using: :btree
+
   create_table "timeline_event_types", force: :cascade do |t|
     t.string   "key"
     t.string   "title"
@@ -442,5 +454,6 @@ ActiveRecord::Schema.define(version: 20151208064639) do
   add_foreign_key "connect_slots", "faculty"
   add_foreign_key "karma_points", "users"
   add_foreign_key "startup_feedback", "faculty"
+  add_foreign_key "team_members", "startups"
   add_foreign_key "timeline_events", "startups"
 end

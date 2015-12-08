@@ -36,17 +36,7 @@ Svapp::Application.routes.draw do
     collection do
       post 'team_leader_consent'
     end
-
-    # resources :startup_jobs do
-    #   patch :repost
-    # # resources :founders do
-    # # collection do
-    # #   post :invite
-    # # end
-    # end
   end
-
-  # get 'jobs', to: 'startup_jobs#list_all'
 
   resources :incubation, only: %w(show update) do
     collection do

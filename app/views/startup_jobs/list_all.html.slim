@@ -1,8 +1,0 @@
-h1.page-header.margin-top-0 Our startups are hiring !
-.flex-container
-  = render 'post_new_job'
-  - if @startup_jobs.empty?
-    p There are no listings here, at the moment. Please check back later! :-)
-  - else
-    - @startup_jobs.each do |job|
-      = render 'job_card_new', job: job

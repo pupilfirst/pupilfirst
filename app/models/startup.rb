@@ -137,7 +137,6 @@ class Startup < ActiveRecord::Base
     end
   end
 
-  has_many :startup_jobs
   has_many :timeline_events, dependent: :destroy
   has_many :startup_feedback, dependent: :destroy
   has_many :karma_points, through: :founders
@@ -410,10 +409,6 @@ class Startup < ActiveRecord::Base
 
   def agreement_live?
     try(:agreement_ends_at).to_i > Time.now.to_i
-  end
-
-  def hiring?
-    startup_jobs.not_expired.present?
   end
 
   def founder?(user)

@@ -6,43 +6,25 @@
       li class="#{ (batch.id == batch_selected.to_i ? 'selected':'') + ' scope' }"
         a.table_tools_button href=admin_dashboard_path(batch: batch) #{batch.name} Batch
 .dashboard-container
-  .dashboard-item
-    - timeline_events_verified = TimelineEvent.for_batch(batch_selected).verified.order('verified_at DESC').includes(:timeline_event_type, :startup)
-    .heading Timeline Events - Verified
+  - TimelineEvent.valid_verified_status.each do |verified_status|
+    .dashboard-item
+      - timeline_events = TimelineEvent.for_batch(batch_selected).where(verified_status: verified_status).order('verified_at DESC').includes(:timeline_event_type, :startup)
+      .heading Timeline Events - #{verified_status}
 
-    .content
-      ol
-        - timeline_events_verified.limit(10).each do |timeline_event|
-          li = link_to "#{timeline_event.startup.product_name} - #{timeline_event.timeline_event_type.title}", admin_timeline_event_path(timeline_event)
+      .content
+        ol
+          - timeline_events.limit(10).each do |timeline_event|
+            li = link_to "#{timeline_event.startup.product_name} - #{timeline_event.timeline_event_type.title}", admin_timeline_event_path(timeline_event)
 
-    .footer-spacer
+      .footer-spacer
 
-    - trend = TimelineEvent.for_batch(batch_selected).verified.group_by_week(:verified_at, range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
+      - trend = TimelineEvent.for_batch(batch_selected).where(verified_status: verified_status).group_by_week('timeline_events.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
 
-    .left-of-button title="Trend: #{trend.join(', ')}"
-      = Sparkr.sparkline trend
+      .left-of-button title="Trend: #{trend.join(', ')}"
+        = Sparkr.sparkline trend
 
-    a.button.view-all href=admin_timeline_events_path(q: { verified_status_equals: TimelineEvent::VERIFIED_STATUS_VERIFIED, startup_batch_id_equals: batch_selected })
-      | View All (#{timeline_events_verified.count})
-
-  .dashboard-item
-    - timeline_events_pending = TimelineEvent.for_batch(batch_selected).pending.order('timeline_events.created_at DESC').includes(:timeline_event_type, :startup)
-    .heading Timeline Events - Pending
-
-    .content
-      ol
-        - timeline_events_pending.limit(10).each do |timeline_event|
-          li = link_to "#{timeline_event.startup.product_name} - #{timeline_event.timeline_event_type.title}", admin_timeline_event_path(timeline_event)
-
-    .footer-spacer
-
-    - trend = TimelineEvent.for_batch(batch_selected).group_by_week('timeline_events.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
-
-    .left-of-button title="Trend (total): #{trend.join(', ')}"
-      = Sparkr.sparkline trend
-
-    a.button.view-all href=admin_timeline_events_path(q: { verified_status_equals: TimelineEvent::VERIFIED_STATUS_PENDING, startup_batch_id_equals: batch_selected  })
-      | View All (#{timeline_events_pending.count})
+      a.button.view-all href=admin_timeline_events_path(q: { verified_status_equals: verified_status, startup_batch_id_equals: batch_selected })
+        | View All (#{timeline_events.count})
 
   .dashboard-item
     - startups_without_live_targets = Startup.where(batch: batch_selected).without_live_targets

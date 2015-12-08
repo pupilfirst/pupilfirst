@@ -1,7 +1,7 @@
 ActiveAdmin.register Target do
   menu parent: 'Startups'
 
-  permit_params :startup_id, :assigner_id, :role, :status, :title, :short_description, :status, :resource_url,
+  permit_params :startup_id, :assigner_id, :role, :status, :title, :description, :status, :resource_url,
     :completion_instructions, :due_date_date, :due_date_time_hour, :due_date_time_minute,
     :completed_at_date, :completed_at_time_hour, :completed_at_time_minute, :completion_comment
 
@@ -19,7 +19,7 @@ ActiveAdmin.register Target do
     redirect_to(
       new_admin_target_path(
         target: {
-          role: target.role, title: target.title, short_description: target.short_description,
+          role: target.role, title: target.title, description: target.description,
           resource_url: target.resource_url, completion_instructions: target.completion_instructions,
           due_date_date: target.due_date_date, due_date_time_hour: target.due_date.hour,
           due_date_time_minute: target.due_date.min
@@ -108,7 +108,7 @@ ActiveAdmin.register Target do
       row :title
       row :assigner
       row :timeline_event_type
-      row :short_description
+      row :description
       row :resource_url
       row :completion_instructions
       row :due_date
@@ -140,7 +140,7 @@ ActiveAdmin.register Target do
         member_label: proc { |role| t("role.#{role}") }
 
       f.input :title
-      f.input :short_description
+      f.input :description
       f.input :resource_url
       f.input :completion_instructions
       f.input :due_date, as: :just_datetime_picker

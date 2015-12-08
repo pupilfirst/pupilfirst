@@ -5,7 +5,7 @@ FactoryGirl.define do
     startup
     status { 'pending' }
     title { Faker::Lorem.words(6).join ' ' }
-    short_description { Faker::Lorem.words(12).join ' ' }
+    description { Faker::Lorem.words(200).join ' ' }
     resource_url { Faker::Internet.url }
   end
 end

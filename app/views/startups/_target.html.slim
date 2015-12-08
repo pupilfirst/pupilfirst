@@ -13,7 +13,7 @@
     h4
       | #{target.title}
   .target-description
-    p = target.short_description
+    p = target.description
     - if pending && target.completion_instructions.present?
       = target.completion_instructions
   .learn-more

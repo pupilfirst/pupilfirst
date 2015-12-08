@@ -9,7 +9,7 @@ ActiveAdmin.register TargetTemplate do
     redirect_to(
       new_admin_target_path(
         target: {
-          role: target_template.role, title: target_template.title, short_description: target_template.short_description,
+          role: target_template.role, title: target_template.title, description: target_template.description,
           resource_url: target_template.resource_url, completion_instructions: target_template.completion_instructions,
           due_date_date: target_template.due_date, due_date_time_hour: 23,
           due_date_time_minute: 59
@@ -38,7 +38,7 @@ ActiveAdmin.register TargetTemplate do
       f.input :days_from_start
       f.input :title
       f.input :role, as: :select, collection: Target.valid_roles, include_blank: false
-      f.input :short_description
+      f.input :description
       f.input :completion_instructions
       f.input :resource_url
     end
@@ -46,5 +46,5 @@ ActiveAdmin.register TargetTemplate do
     f.actions
   end
 
-  permit_params :days_from_start, :title, :role, :short_description, :completion_instructions, :resource_url
+  permit_params :days_from_start, :title, :role, :description, :completion_instructions, :resource_url
 end

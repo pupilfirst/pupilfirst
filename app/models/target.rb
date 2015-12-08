@@ -33,7 +33,7 @@ class Target < ActiveRecord::Base
     %w(pending done)
   end
 
-  validates_presence_of :startup_id, :assigner_id, :role, :title, :short_description, :status
+  validates_presence_of :startup_id, :assigner_id, :role, :title, :description, :status
   validates_inclusion_of :role, in: valid_roles
   validates_inclusion_of :status, in: valid_statuses
 

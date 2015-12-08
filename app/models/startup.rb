@@ -633,6 +633,11 @@ class Startup < ActiveRecord::Base
     end
   end
 
+  def self.leaderboard_toppers_for_batch(batch, count: 3)
+    # returns ids of n toppers on the leaderboard
+    leaderboard_of_batch(batch)[0..count - 1].map { |id_and_rank| id_and_rank[0] }
+  end
+
   def self.without_karma_and_rank_for_batch(batch)
     ranked_startup_ids = Startup.not_dropped_out.where(batch: batch)
       .joins(:karma_points)

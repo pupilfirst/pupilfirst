@@ -34,10 +34,10 @@ module StartupsHelper
   def targets_for_display
     # The split retrieval of targets is so that founder and team targets appear above others.
     pending_targets = @startup.targets.pending
-    split_pending_targets = pending_targets.founder + pending_targets.team + pending_targets.not_target_roles
+    split_pending_targets = pending_targets.founder + pending_targets.not_target_roles
 
     completed_targets = @startup.targets.recently_completed
-    split_completed_targets = completed_targets.founder + completed_targets.team + completed_targets.not_target_roles
+    split_completed_targets = completed_targets.founder + completed_targets.not_target_roles
 
     completed_by_viewer = []
 

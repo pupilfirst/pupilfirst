@@ -12,15 +12,13 @@ class Target < ActiveRecord::Base
   scope :expired, -> { where(status: STATUS_PENDING).where('due_date < ?', Time.now).order(due_date: 'desc') }
 
   scope :recently_completed, -> { where(status: STATUS_DONE).order(completed_at: 'desc').limit(3) }
-  scope :team, -> { where(role: ROLE_TEAM) }
   scope :founder, -> { where(role: ROLE_FOUNDER) }
   scope :not_target_roles, -> { where.not(role: target_roles) }
 
   ROLE_FOUNDER = 'founder'
-  ROLE_TEAM = 'team'
 
   def self.target_roles
-    [ROLE_TEAM, ROLE_FOUNDER]
+    [ROLE_FOUNDER]
   end
 
   # See en.yml's target.role

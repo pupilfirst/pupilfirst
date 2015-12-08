@@ -6,7 +6,7 @@ ActiveAdmin.register_page 'Leaderboards' do
       @batch = if params[:karma_points_filter].try(:[], :batch).present?
         Batch.find params[:karma_points_filter][:batch].to_i
       else
-        Batch.last
+        Batch.current
       end
 
       @after = params[:karma_points_filter].try(:[], :after).present? ? Date.parse(params[:karma_points_filter][:after]) : Date.today.beginning_of_week

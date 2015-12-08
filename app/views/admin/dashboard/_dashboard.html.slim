@@ -144,7 +144,7 @@
 
 
   .dashboard-item
-    - inactive_startups = Startup.where(batch: batch_selected).inactive
+    - inactive_startups = Startup.where(batch: batch_selected).inactive_for_week
 
     .heading Inactive Startups last week
 
@@ -155,10 +155,32 @@
 
     .footer-spacer
 
-    - trend = [3.weeks.ago, 2.weeks.ago, 1.week.ago, Time.now].map { |time| Startup.where(batch: batch_selected).inactive(date: time).count }
+    - trend = [3.weeks.ago, 2.weeks.ago, 1.week.ago, Time.now].map { |time| Startup.where(batch: batch_selected).inactive_for_week(date: time).count }
 
     .left-of-button
       span title="Trend: #{trend.join(', ')}" = Sparkr.sparkline trend
 
     a.button.view-all href=admin_startups_path(scope: 'inactive', q: {batch_id_equals: batch_selected})
       | View All (#{inactive_startups.count})
+
+  .dashboard-item
+    - endangered_startups = Startup.where(batch: batch_selected).endangered
+
+    .heading Startups in Danger Zone
+
+    .content
+      ol
+        - endangered_startups.limit(10).each do |endangered_startup|
+          li = link_to endangered_startup.display_name, admin_startup_path(endangered_startup)
+
+    .footer-spacer
+
+    - trend = [3.weeks.ago, 2.weeks.ago, 1.week.ago, Time.now].map { |time| Startup.where(batch: batch_selected).endangered.count }
+
+    .left-of-button
+      span title="Trend: #{trend.join(', ')}" = Sparkr.sparkline trend
+
+    a.button.view-all href=admin_startups_path(scope: 'endangered', q: {batch_id_equals: batch_selected})
+      | View All (#{inactive_startups.count})
+
+

@@ -172,19 +172,26 @@ ActiveAdmin.register TimelineEvent do
     redirect_to action: :show
   end
 
+  collection_action :founders_for_startup do
+    @startup = Startup.find params[:startup_id]
+    render 'founders_for_startup.json.erb'
+  end
+
   form do |f|
+    div id: 'timeline-event-founders-for-startup-url', 'data-url' => founders_for_startup_admin_timeline_events_url
+
     f.inputs 'Event Details' do
       f.input :startup,
-        include_blank: false,
+        include_blank: true,
         label: 'Product',
         member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }
-      f.input :user, label: 'Founder', as: :select, collection: f.object.startup.founders, include_blank: false
+      f.input :user, label: 'Founder', as: :select, collection: f.object.persisted? ? f.object.startup.founders : [], include_blank: false
       f.input :timeline_event_type, include_blank: false
       f.input :description
       f.input :image
       f.input :event_on, as: :datepicker
       f.input :verified_at, as: :datepicker
-      f.input :grade, as: :select, collection: TimelineEvent.valid_grades
+      f.input :grade, as: :select, collection: TimelineEvent.valid_grades, required: false
     end
 
     f.actions

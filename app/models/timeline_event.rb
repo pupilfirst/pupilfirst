@@ -8,7 +8,7 @@ class TimelineEvent < ActiveRecord::Base
 
   mount_uploader :image, TimelineImageUploader
   serialize :links
-  validates_presence_of :event_on, :startup_id, :timeline_event_type, :description
+  validates_presence_of :event_on, :startup_id, :user_id, :timeline_event_type, :description
   delegate :private?, to: :timeline_event_type
 
   MAX_DESCRIPTION_CHARACTERS = 300

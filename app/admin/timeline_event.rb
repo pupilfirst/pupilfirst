@@ -217,7 +217,15 @@ ActiveAdmin.register TimelineEvent do
       row :iteration
       row :timeline_event_type
       row :description
-      row :image
+
+      row :image do
+        if timeline_event.image.present?
+          link_to timeline_event.image.url do
+            image_tag timeline_event.image.url, width: '200px'
+          end
+        end
+      end
+
       row :event_on
       row :verified_status
 

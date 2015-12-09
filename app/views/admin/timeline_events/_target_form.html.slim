@@ -1,7 +1,7 @@
 = form_tag(link_target_admin_timeline_event_path, method: :post) do
   fieldset.inputs
     legend
-      span Link target (and optionally complete it).
+      span Link target #{timeline_event.timeline_event_type.private? ? '' : '(and optionally complete it).'}
     ol
       li.input.select.required
         = label_tag :target_id, 'Link Pending Target', class: 'label'

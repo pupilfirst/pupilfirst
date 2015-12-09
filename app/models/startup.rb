@@ -582,7 +582,13 @@ class Startup < ActiveRecord::Base
 
   def create_default_event(types)
     types.each do |type|
-      timeline_events.create(timeline_event_type: TimelineEventType.find_by(key: type), auto_populated: true, verified_at: Time.now, event_on: Time.now)
+      timeline_events.create(
+        user: admin,
+        timeline_event_type: TimelineEventType.find_by(key: type),
+        auto_populated: true,
+        verified_at: Time.now,
+        event_on: Time.now
+      )
     end
   end
 

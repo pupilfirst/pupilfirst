@@ -81,6 +81,7 @@ gem 'has_secure_token' # used to create tokens for models (eg: for Faculty). Wil
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify' # Superb notifications library. http://sciactive.github.io/pnotify/
   gem 'rails-assets-curioussolutions-datetimepicker' # Responsive datetimepicker for timeline builder form.
+  gem 'rails-assets-trix' # rich text editor from basecamp ( used for eg in the description for targets)
 end
 
 group :development do

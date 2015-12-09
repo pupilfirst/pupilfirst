@@ -49,7 +49,7 @@ class ApplicationController < ActionController::Base
 
   # Set headers for CSP. Be careful when changing this.
   def set_content_security_policy
-    image_sources = "img-src 'self' " + [
+    image_sources = "img-src 'self' data: " + [
       'https://www.google-analytics.com https://blog.sv.co https://www.startatsv.com http://www.startatsv.com',
       'https://assets.sv.co https://secure.gravatar.com https://uploaded-assets.sv.co hn.inspectlet.com'
     ].join(' ') + ';'

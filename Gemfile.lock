@@ -447,6 +447,7 @@ GEM
       sprockets-rails
     rails-assets-curioussolutions-datetimepicker (0.1.11)
     rails-assets-pnotify (2.0.1)
+    rails-assets-trix (0.9.2)
     rails-deprecated_sanitizer (1.0.3)
       activesupport (>= 4.2.0.alpha)
     rails-dom-testing (1.0.7)
@@ -660,6 +661,7 @@ DEPENDENCIES
   rails (= 4.2.4)
   rails-assets-curioussolutions-datetimepicker!
   rails-assets-pnotify!
+  rails-assets-trix!
   rails_12factor
   react-rails
   recaptcha

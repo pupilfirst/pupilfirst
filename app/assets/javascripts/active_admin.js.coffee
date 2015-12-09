@@ -5,6 +5,7 @@
 # External libraries
 #= require select2
 #= require pnotify
+#= require trix
 
 # Local files
 #= require_tree ./admin

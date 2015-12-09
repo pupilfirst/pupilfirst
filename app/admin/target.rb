@@ -119,34 +119,5 @@ ActiveAdmin.register Target do
     end
   end
 
-  form do |f|
-    f.inputs 'Target details' do
-      f.input :startup,
-        label: 'Product',
-        member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }
-
-      f.input :status,
-        as: :select,
-        collection: Target.valid_statuses,
-        include_blank: false,
-        member_label: proc { |status| t("target.status.#{status}") }
-
-      f.input :completed_at, as: :just_datetime_picker
-      f.input :completion_comment
-      f.input :role,
-        as: :select,
-        collection: Target.valid_roles,
-        include_blank: false,
-        member_label: proc { |role| t("role.#{role}") }
-
-      f.input :title
-      f.input :description
-      f.input :resource_url
-      f.input :completion_instructions
-      f.input :due_date, as: :just_datetime_picker
-      f.input :assigner, include_blank: false
-    end
-
-    f.actions
-  end
+  form partial: 'admin/targets/form'
 end

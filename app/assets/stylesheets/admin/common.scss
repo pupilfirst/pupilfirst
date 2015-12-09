@@ -38,3 +38,23 @@ table > caption {
 .no-text-decoration {
   text-decoration: none !important;
 }
+
+.label-replica {
+  padding-top: 7px;
+  text-transform: uppercase;
+  display: block;
+  width: 20%;
+  float: left;
+  font-size: 1.0em;
+  font-weight: bold;
+  color: #5E6469;
+  padding-left: 10px;
+}
+
+.input-replica {
+  padding: 5px 10px;
+  width: calc(80% - 40px);
+  margin-left: calc(20% + 7px);
+  border-radius: 0;
+  border: 1px solid #c9d0d6
+}

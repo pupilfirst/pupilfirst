@@ -30,7 +30,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def feature_active?(feature)
-    Rails.env.development? || Feature.active?(feature, current_user)
+    Rails.env.development? || Rails.env.test? || Feature.active?(feature, current_user)
   end
 
   helper_method :feature_active?

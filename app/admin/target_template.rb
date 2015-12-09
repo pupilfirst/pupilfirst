@@ -33,18 +33,7 @@ ActiveAdmin.register TargetTemplate do
     end
   end
 
-  form do |f|
-    f.inputs 'Target Template Details' do
-      f.input :days_from_start
-      f.input :title
-      f.input :role, as: :select, collection: Target.valid_roles, include_blank: false
-      f.input :description
-      f.input :completion_instructions
-      f.input :resource_url
-    end
-
-    f.actions
-  end
+  form partial: 'admin/target_templates/form'
 
   permit_params :days_from_start, :title, :role, :description, :completion_instructions, :resource_url
 end

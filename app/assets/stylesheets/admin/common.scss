@@ -39,6 +39,7 @@ table > caption {
   text-decoration: none !important;
 }
 
+// Use with trix-editor within forms
 .label-replica {
   padding-top: 7px;
   text-transform: uppercase;
@@ -57,4 +58,8 @@ table > caption {
   margin-left: calc(20% + 7px);
   border-radius: 0;
   border: 1px solid #c9d0d6
+}
+
+trix-toolbar .button_group {
+  border: 0;
 }

@@ -37,9 +37,14 @@ class User < ActiveRecord::Base
   # validates_presence_of :born_on
   # validates_presence_of :salutation, message: ''
 
-  validates :first_name, presence: true, format: { with: /\A[a-z]+\z/i, message: "should be a single name with no special characters or numbers" },
+  validates :first_name,
+    presence: true,
+    format: { with: /\A[a-z]+\z/i, message: "should be a single name with no special characters or numbers" },
     length: { minimum: 2 }
-  validates :last_name, presence: true, format: { with: /\A[a-z]+\z/i, message: "should be a single name with no special characters or numbers" },
+
+  validates :last_name,
+    presence: true,
+    format: { with: /\A[a-z]+\z/i, message: "should be a single name with no special characters or numbers" },
     length: { minimum: 2 }
 
   def self.valid_gender_values

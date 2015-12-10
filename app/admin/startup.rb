@@ -187,15 +187,15 @@ ActiveAdmin.register Startup do
     redirect_to action: :show
   end
 
-  show title: :product_name do
+  show title: :product_name do |startup|
     attributes_table do
-      row :product_description do |startup|
+      row :product_description do
         simple_format startup.product_description
       end
 
       row :name
       row :legal_registered_name
-      row :approval_status do |startup|
+      row :approval_status do
         div class: 'startup-status' do
           if startup.unready?
             'Waiting for completion'
@@ -250,25 +250,25 @@ ActiveAdmin.register Startup do
       row :agreement_ends_at
       row :email
 
-      row :logo do |startup|
+      row :logo do
         link_to(image_tag(startup.logo_url(:thumb)), startup.logo_url)
       end
 
       row :website
 
-      row :presentation_link do |startup|
+      row :presentation_link do
         link_to startup.presentation_link, startup.presentation_link if startup.presentation_link.present?
       end
 
-      row :product_video do |startup|
+      row :product_video do
         link_to startup.product_video, startup.product_video if startup.product_video.present?
       end
 
-      row :wireframe_link do |startup|
+      row :wireframe_link do
         link_to startup.wireframe_link, startup.wireframe_link if startup.wireframe_link.present?
       end
 
-      row :prototype_link do |startup|
+      row :prototype_link do
         link_to startup.prototype_link, startup.prototype_link if startup.prototype_link.present?
       end
 
@@ -277,13 +277,14 @@ ActiveAdmin.register Startup do
       row :women_employees
       row :incubation_location
 
-      row :startup_categories do |startup|
+      row :startup_categories do
         startup.startup_categories.map(&:name).join(', ')
       end
 
-      row :phone do |startup|
+      row :phone do
         startup.admin.try(:phone)
       end
+
       row :address
       row :district
       row :state
@@ -295,7 +296,7 @@ ActiveAdmin.register Startup do
       row :facebook_link
       row :twitter_link
 
-      row :founders do |startup|
+      row :founders do
         startup.founders.each do |founder|
           div do
             span do
@@ -318,7 +319,7 @@ ActiveAdmin.register Startup do
         end
       end
 
-      row :team_members do |startup|
+      row :team_members do
         if startup.team_members.present?
           startup.team_members.each do |team_member|
             div do
@@ -328,7 +329,7 @@ ActiveAdmin.register Startup do
         end
       end
 
-      row :women_cofounders do |startup|
+      row :women_cofounders do
         startup.founders.where(gender: User::GENDER_FEMALE).count
       end
 
@@ -342,6 +343,29 @@ ActiveAdmin.register Startup do
         send_startup_profile_reminder_admin_startup_path,
         method: :post, data: { confirm: 'Are you sure you wish to send notification and email?' }
       )
+    end
+
+    if startup.targets.present?
+      panel 'Targets' do
+        table_for startup.targets.order('created_at DESC') do
+          column 'Target' do |target|
+            a href: admin_target_path(target) do
+              "#{target.title}"
+            end
+          end
+
+          column :role do |target|
+            t("role.#{target.role}")
+          end
+
+          column :status do |target|
+            t("target.status.#{target.status}")
+          end
+
+          column :assigner
+          column :created_at
+        end
+      end
     end
   end
 

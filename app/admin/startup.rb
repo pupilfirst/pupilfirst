@@ -351,7 +351,15 @@ ActiveAdmin.register Startup do
           end
 
           column :status do |target|
-            t("target.status.#{target.status}")
+            if target.founder?
+              'N/A'
+            else
+              if target.expired?
+                'Expired'
+              else
+                t("target.status.#{target.status}")
+              end
+            end
           end
 
           column :assigner

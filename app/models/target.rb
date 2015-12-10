@@ -68,4 +68,8 @@ class Target < ActiveRecord::Base
   def complete!
     update!(status: STATUS_DONE)
   end
+
+  def founder?
+    role == Target::ROLE_FOUNDER
+  end
 end

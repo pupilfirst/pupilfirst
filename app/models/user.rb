@@ -38,9 +38,9 @@ class User < ActiveRecord::Base
   # validates_presence_of :salutation, message: ''
 
   validates :first_name, presence: true, format: { with: /\A[a-z]+\z/i, message: "should be a single name with no special characters or numbers" },
-                         length: { minimum: 2 }
+    length: { minimum: 2 }
   validates :last_name, presence: true, format: { with: /\A[a-z]+\z/i, message: "should be a single name with no special characters or numbers" },
-                        length: { minimum: 2 }
+    length: { minimum: 2 }
 
   def self.valid_gender_values
     [GENDER_FEMALE, GENDER_MALE, GENDER_OTHER]
@@ -93,7 +93,7 @@ class User < ActiveRecord::Base
   mount_uploader :college_identification, CollegeIdentificationUploader
   process_in_background :college_identification
 
-  normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :pin, :first_name, :last_name
+  normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :pin, :first_name, :last_name, :slack_username
 
   normalize_attribute :skip_password do |value|
     value.is_a?(String) ? value.downcase == 'true' : value
@@ -114,6 +114,23 @@ class User < ActiveRecord::Base
 
   before_create do
     self.auth_token = SecureRandom.hex(30)
+  end
+
+  before_validation :remove_at_symbol_from_slack_username
+
+  def remove_at_symbol_from_slack_username
+    return unless slack_username.present? && slack_username.starts_with?('@')
+    self.slack_username = slack_username[1..-1]
+  end
+
+  validates_uniqueness_of :slack_username, allow_blank: true
+  validate :slack_username_format
+
+  def slack_username_format
+    return if slack_username.blank?
+    username_match = slack_username.match(/^@?([a-z0-9_]+)$/i)
+    return if username_match.present?
+    errors.add(:slack_username, 'is not valid. Should only contain letters, numbers, and underscores.')
   end
 
   def display_name

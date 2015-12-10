@@ -337,14 +337,6 @@ ActiveAdmin.register Startup do
       row :address
     end
 
-    panel 'Emails and Notifications' do
-      link_to(
-        'Reminder to complete startup profile',
-        send_startup_profile_reminder_admin_startup_path,
-        method: :post, data: { confirm: 'Are you sure you wish to send notification and email?' }
-      )
-    end
-
     if startup.targets.present?
       panel 'Targets' do
         table_for startup.targets.order('created_at DESC') do
@@ -366,6 +358,14 @@ ActiveAdmin.register Startup do
           column :created_at
         end
       end
+    end
+
+    panel 'Emails and Notifications' do
+      link_to(
+        'Reminder to complete startup profile',
+        send_startup_profile_reminder_admin_startup_path,
+        method: :post, data: { confirm: 'Are you sure you wish to send notification and email?' }
+      )
     end
   end
 

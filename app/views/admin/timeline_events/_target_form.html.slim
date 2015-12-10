@@ -4,13 +4,14 @@
       span Link target #{timeline_event.timeline_event_type.private? ? '' : '(and optionally complete it).'}
     ol
       li.input.select.required
-        = label_tag :target_id, 'Link Pending Target', class: 'label'
-        = select_tag :target_id, options_from_collection_for_select(timeline_event.startup.targets.pending, :id, :title), include_blank: true
+        = label_tag :target_id, 'Link Target', class: 'label'
+        = select_tag :target_id, options_from_collection_for_select(timeline_event.startup.targets.order('created_at DESC'), :id, :title), include_blank: true
       - unless timeline_event.timeline_event_type.private?
         li.boolean.input.optional
           label for=:target_completed
             = check_box_tag :target_completed
-            ' Mark Target as completed? Once marked, it will be unavailable for creating more links.
+            ' Mark Target as completed?
+            /' Mark Target as completed? Once marked, it will be unavailable for creating more links.
     ol
       li.action.input_action
         = submit_tag 'Link Target'

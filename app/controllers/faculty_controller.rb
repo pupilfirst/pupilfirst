@@ -1,4 +1,5 @@
 class FacultyController < ApplicationController
+  before_filter :validate_faculty, except: [:index, :connect]
   # GET /faculty
   def index
     @skip_container = true
@@ -22,9 +23,6 @@ class FacultyController < ApplicationController
 
   # GET /faculty/weekly_slots/:token
   def weekly_slots
-    @faculty = Faculty.find_by token: params[:token]
-    raise_not_found unless @faculty && @faculty.email?
-
     @slot_list = create_slot_list_for @faculty
 
     @skip_navbar = true
@@ -32,9 +30,6 @@ class FacultyController < ApplicationController
 
   # POST /faculty/save_weekly_slots/:token
   def save_weekly_slots
-    @faculty = Faculty.find_by token: params[:token]
-    raise_not_found unless @faculty && @faculty.email?
-
     list_of_slots = JSON.parse(params[:list_of_slots])
     save_slots_in_list list_of_slots, @faculty
 
@@ -43,6 +38,11 @@ class FacultyController < ApplicationController
   end
 
   private
+
+  def validate_faculty
+    @faculty = Faculty.find_by token: params[:token]
+    raise_not_found unless @faculty && @faculty.email?
+  end
 
   def save_slots_in_list(list, faculty)
     start_date = 7.days.from_now.beginning_of_week.to_date

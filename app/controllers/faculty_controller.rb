@@ -1,4 +1,5 @@
 class FacultyController < ApplicationController
+  layout 'error', except: [:index, :connect]
   before_filter :validate_faculty, except: [:index, :connect]
   # GET /faculty
   def index

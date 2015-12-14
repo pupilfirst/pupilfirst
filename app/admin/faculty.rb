@@ -1,5 +1,5 @@
 ActiveAdmin.register Faculty do
-  permit_params :name, :email, :title, :key_skills, :linkedin_url, :category, :image, :sort_index, :self_service
+  permit_params :name, :email, :title, :key_skills, :linkedin_url, :category, :image, :sort_index, :self_service, :current_commitment
 
   config.sort_order = 'sort_index_asc'
 
@@ -31,6 +31,7 @@ ActiveAdmin.register Faculty do
       f.input :linkedin_url
       f.input :sort_index
       f.input :self_service
+      f.input :current_commitment
     end
 
     f.actions

@@ -31,7 +31,7 @@ findSlot = (list, slotValue) ->
   -1
 
 markPresentSlots = ->
-  if $('#list_of_slots').val().length > 0
+  if $('#list_of_slots').length and $('#list_of_slots').val().length > 0
     current_slots = JSON.parse($('#list_of_slots').val())
     for slot in current_slots
       $(".connect-slot[data-day='"+slot[0]+"'][data-time='"+slot[1].toFixed(1)+"']").addClass('selected')

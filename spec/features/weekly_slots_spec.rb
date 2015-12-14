@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 feature 'Faculty Weekly Slots' do
-  let!(:faculty) { create :faculty }
+  let!(:faculty) { create :faculty, current_commitment: '20 mins per week for the first 6 months this year' }
 
   before :all do
     WebMock.allow_net_connect!
@@ -30,7 +30,7 @@ feature 'Faculty Weekly Slots' do
     scenario 'User uses the correct token of a valid faculty with no connection slots' do
       visit weekly_slots_faculty_index_path(faculty.token)
       expect(page).to have_text("Slots for #{faculty.name}")
-      expect(page).to have_text("You current commitment is 0 minutes.")
+      expect(page).to have_text("20 mins per week for the first 6 months this year")
     end
   end
 
@@ -40,7 +40,7 @@ feature 'Faculty Weekly Slots' do
     scenario 'User verifies present slots and commitment' do
       visit weekly_slots_faculty_index_path(faculty.token)
       expect(page).to have_text("Slots for #{faculty.name}")
-      expect(page).to have_text("You current commitment is 40 minutes.")
+      expect(page).to have_text("20 mins per week for the first 6 months this year")
       expect(page).to have_selector('.connect-slot.selected', count: 1)
       expect(page.find('.connect-slot.selected', match: :first)).to have_text('07:00')
 
@@ -59,7 +59,7 @@ feature 'Faculty Weekly Slots' do
       first_slot.click
       expect(first_slot[:class]).to_not include('selected')
       click_on 'Save'
-      expect(page).to have_text("You current commitment is 20 minutes.")
+      expect(page).to have_text("We have successfully recorded your availability for the upcoming week")
       faculty.reload
       expect(faculty.connect_slots.count).to eq(1)
     end
@@ -71,7 +71,6 @@ feature 'Faculty Weekly Slots' do
       expect(page.find('.connect-slot[data-day="1"][data-time="11.5"]')[:class]).to_not include('selected')
       page.find('.connect-slot[data-day="1"][data-time="11.5"]').click
       expect(page.find('.connect-slot[data-day="1"][data-time="11.5"]')[:class]).to include('selected')
-      expect(page).to have_text("You current commitment is 60 minutes.")
 
       # Add a fourth slot on Tuesday 22:00
       click_on 'Tue'
@@ -79,10 +78,9 @@ feature 'Faculty Weekly Slots' do
       expect(page.find('.connect-slot[data-day="2"][data-time="22.0"]')[:class]).to_not include('selected')
       page.find('.connect-slot[data-day="2"][data-time="22.0"]').click
       expect(page.find('.connect-slot[data-day="2"][data-time="22.0"]')[:class]).to include('selected')
-      expect(page).to have_text("You current commitment is 80 minutes.")
       click_on 'Save'
 
-      expect(page).to have_text("You current commitment is 80 minutes.")
+      expect(page).to have_text("We have successfully recorded your availability for the upcoming week")
       faculty.reload
       expect(faculty.connect_slots.count).to eq(4)
       expect(faculty.connect_slots.third.slot_at).to eq(ConnectSlot.next_week_start + 11.hours + 30.minutes)

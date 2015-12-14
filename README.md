@@ -8,8 +8,8 @@
 
 ### Install Dependencies
   *  Ruby - Use RVM to install version specified in `.ruby-version`
-  *  imagemagick - `apt-get install imagemagick`
-  *  postgresql - `apt-get install postgresql postgresql-contrib libpq-dev`
+  *  imagemagick - `brew install imagemagick`
+  *  postgresql - Install postgres from http://postgresapp.com
   *  (OSX) Xcode, and qt5 - `brew install qt5`, followed by `brew link --force qt5`
 
 ### Configure

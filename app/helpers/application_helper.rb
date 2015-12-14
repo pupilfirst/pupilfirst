@@ -6,13 +6,17 @@ module ApplicationHelper
 
   def profile_image_url(user, gravatar_size: 100, avatar_version: :full)
     if user.avatar?
-      case avatar_version
-        when :thumb
-          user.avatar.thumb.url
-        when :mid
-          user.avatar.mid.url
-        else
-          user.avatar_url
+      if user.avatar_processing?
+        user.avatar_url
+      else
+        case avatar_version
+          when :thumb
+            user.avatar.thumb.url
+          when :mid
+            user.avatar.mid.url
+          else
+            user.avatar_url
+        end
       end
     else
       user.gravatar_url(size: gravatar_size, default: 'identicon')

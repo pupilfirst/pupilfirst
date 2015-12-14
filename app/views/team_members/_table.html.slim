@@ -10,7 +10,7 @@
     tbody
       - team_members.each do |team_member|
         tr
-          td = image_tag profile_image_url(team_member, gravatar_size: 50, avatar_version: :thumb), class: 'startups-show-team-member-avatar'
+          td = image_tag profile_image_url(team_member, gravatar_size: 50, avatar_version: :thumb), class: 'team-member-avatar-thumb'
           td = team_member.name
           td = team_member.email
           td = founder_roles(team_member.roles)

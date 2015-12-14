@@ -1,6 +1,1 @@
-table.team-member-table {
-  vertical-align: middle;
-  tr > td { line-height: 50px; }
-
-  .avatar-heading { width: 60px; }
-}
+@import "team_members/**/*";

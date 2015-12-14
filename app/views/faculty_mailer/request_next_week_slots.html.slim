@@ -7,7 +7,15 @@
 = content_for :body
   p
     ' It would be great if you can let us know the slots you are available next week to connect with our startups.
-    ' #{link_to 'Click here', weekly_slots_faculty_index_url(@faculty.token)} to record your slots now.
+    - if @faculty.connect_slots.next_week.present?
+      ' We have already created your slots for next week (based on your last available week) as follows:
+      p
+        ' #{@faculty.connect_slots.next_week.map { |slot| slot.slot_at.strftime('%a %d %b %H:%M') }.join(', ')}
+      p
+        ' If you'd like to change them or are temporarily unavailable, #{link_to 'click here', weekly_slots_faculty_index_url(@faculty.token)}.
+    - else
+      p
+        ' #{link_to 'Click here', weekly_slots_faculty_index_url(@faculty.token)} to record your slots now.
 
   p
     ' If you're unable to click on the link above, then please copy and paste the following link

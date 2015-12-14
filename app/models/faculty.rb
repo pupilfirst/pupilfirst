@@ -29,4 +29,14 @@ class Faculty < ActiveRecord::Base
   def display_name
     name
   end
+
+  def copy_weekly_slots!
+    last_available_date = connect_slots.order('slot_at DESC').first.try(:slot_at)
+    return unless last_available_date
+    last_weekly_slots = connect_slots.where(slot_at: (last_available_date.beginning_of_week..last_available_date.end_of_week))
+    days_to_skip = (7.days.from_now.beginning_of_week.to_date - last_available_date.beginning_of_week.to_date).to_i
+    last_weekly_slots.each do |slot|
+      connect_slots.create!(slot_at: slot.slot_at + days_to_skip.days)
+    end
+  end
 end

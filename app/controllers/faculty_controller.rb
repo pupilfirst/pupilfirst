@@ -36,6 +36,13 @@ class FacultyController < ApplicationController
 
     flash.now[:success] = "Your slots have been saved succesfully!"
     redirect_to :back
+
+  # GET /faculty/mark_unavailable/:token
+  def mark_unavailable
+    @faculty.connect_slots.next_week.destroy_all
+    flash.now[:success] = "Your have been marked unavailable for next week!"
+    redirect_to action: 'slots_saved'
+  end
   end
 
   private

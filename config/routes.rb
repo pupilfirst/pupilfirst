@@ -66,6 +66,7 @@ Svapp::Application.routes.draw do
       get 'weekly_slots/:token', to: 'faculty#weekly_slots', as: 'weekly_slots'
       post 'save_weekly_slots/:token', to: 'faculty#save_weekly_slots', as: 'save_weekly_slots'
       get 'mark_unavailable/:token', to: 'faculty#mark_unavailable', as: 'mark_unavailable'
+      get 'slots_saved/:token', to: 'faculty#slots_saved', as: 'slots_saved'
     end
   end
 

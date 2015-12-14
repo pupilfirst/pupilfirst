@@ -1,6 +1,7 @@
 class FacultyController < ApplicationController
   layout 'error', except: [:index, :connect]
   before_filter :validate_faculty, except: [:index, :connect]
+
   # GET /faculty
   def index
     @skip_container = true
@@ -25,17 +26,15 @@ class FacultyController < ApplicationController
   # GET /faculty/weekly_slots/:token
   def weekly_slots
     @slot_list = create_slot_list_for @faculty
-
-    @skip_navbar = true
   end
 
   # POST /faculty/save_weekly_slots/:token
   def save_weekly_slots
     list_of_slots = JSON.parse(params[:list_of_slots])
     save_slots_in_list list_of_slots, @faculty
-
     flash.now[:success] = "Your slots have been saved succesfully!"
-    redirect_to :back
+    redirect_to action: 'slots_saved'
+  end
 
   # GET /faculty/mark_unavailable/:token
   def mark_unavailable
@@ -43,6 +42,9 @@ class FacultyController < ApplicationController
     flash.now[:success] = "Your have been marked unavailable for next week!"
     redirect_to action: 'slots_saved'
   end
+
+  # GET /faculty/slots_saved/:token
+  def slots_saved
   end
 
   private

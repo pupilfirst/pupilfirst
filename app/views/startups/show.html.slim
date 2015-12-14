@@ -188,7 +188,7 @@
             .col-sm-6.col-md-12
               h3 Founders
               hr
-              - @startup.founders.each do |founder|
+              - @startup.founders.order(:first_name).each do |founder|
                 .data-founder
                   .media
                     .media-left
@@ -211,7 +211,7 @@
             .col-sm-6.col-md-12
               h3 Team
               hr
-              - @startup.team_members.each do |team_member|
+              - @startup.team_members.order(:name).each do |team_member|
                 .data-founder
                   .media
                     .media-left

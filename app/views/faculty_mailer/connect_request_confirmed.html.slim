@@ -1,5 +1,5 @@
 = content_for :heading
-  | Connect Request with #{@connect_request.startup.product_name} team has been confirmed.
+  | Connect Request with #{link_to @connect_request.startup.product_name, @connect_request.startup} team has been confirmed.
 
 = content_for :salutation
   | Hello #{@connect_request.faculty.name},
@@ -7,7 +7,7 @@
 = content_for :body
   p
     ' The connect request created by #{@connect_request.startup.admin.fullname} of
-    ' #{@connect_request.startup.display_name} has just been confirmed for
+    ' #{link_to @connect_request.startup.display_name, @connect_request.startup} has just been confirmed for
     strong #{@connect_request.connect_slot} IST.
 
   p

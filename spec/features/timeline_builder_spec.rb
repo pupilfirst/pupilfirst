@@ -56,6 +56,10 @@ feature 'Timeline Builder' do
       page.find('#link_private').click
       click_on 'Save Link'
       click_on 'Close'
+
+      # HACK: Our slow CI servers often fail to click submit since the modal is still disappearing.
+      sleep(0.5)
+
       click_on 'Submit for Review'
 
       # Wait for page to load.
@@ -164,6 +168,9 @@ feature 'Timeline Builder' do
         # Test if link tab's title reflects links added
         expect(page.find("#add-link")).to have_text('SV.CO (+1)')
 
+        # HACK: Our slow CI servers often fail to click submit since the modal is still disappearing.
+        sleep(0.5)
+
         click_on 'Submit for Review'
 
         # Wait for page to load.
@@ -203,6 +210,9 @@ feature 'Timeline Builder' do
           click_on 'Close'
           expect(page.find("#add-link")).to have_text('Yahoo')
 
+          # HACK: Our slow CI servers often fail to click submit since the modal is still disappearing.
+          sleep(0.5)
+
           click_on 'Submit for Review'
           expect(page.find("#event-#{timeline_event.id} .tl-footer")).to_not have_text('Google')
           timeline_event.reload
@@ -240,6 +250,9 @@ feature 'Timeline Builder' do
           click_on 'Close'
           expect(page.find("#add-link")).to have_text('Facebook')
 
+          # HACK: Our slow CI servers often fail to click submit since the modal is still disappearing.
+          sleep(0.5)
+
           click_on 'Submit for Review'
           expect(page.find("#event-#{timeline_event.id} .tl-footer")).to_not have_text('Google')
           expect(page.find("#event-#{timeline_event.id} .tl-footer")).to have_text('Facebook')
@@ -265,6 +278,9 @@ feature 'Timeline Builder' do
           expect(page).to_not have_selector('button', text: 'Add Links')
           click_on 'Close'
           expect(page.find("#add-link")).to have_text('Google (+2)')
+
+          # HACK: Our slow CI servers often fail to click submit since the modal is still disappearing.
+          sleep(0.5)
 
           click_on 'Submit for Review'
           expect(page.find("#event-#{timeline_event.id} .tl-footer")).to have_text('SV.CO')

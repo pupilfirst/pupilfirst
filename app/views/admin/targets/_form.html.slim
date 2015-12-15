@@ -20,8 +20,12 @@
 
     = f.input :title
     = f.hidden_field :description
-    .label-replica description
-    trix-editor.input-replica input="target_description"
+    .label-replica
+      ' description
+      abbr title="required" *
+    trix-editor.input-replica input="target_description" class="#{'error-replica' if @target.errors[:description].present?}"
+    - if @target.errors[:description].present?
+      p.inline-errors-replica #{@target.errors[:description][0]}
     = f.input :resource_url
     = f.input :completion_instructions
     = f.input :due_date, as: :just_datetime_picker

@@ -60,6 +60,17 @@ table > caption {
   border: 1px solid #c9d0d6
 }
 
+.inline-errors-replica {
+  color: #932419;
+  font-weight: bold;
+  margin-left: calc(20% + 7px);
+  margin-top: 0.3em;
+}
+
+.error-replica {
+  border: 1px solid #932419;
+}
+
 trix-toolbar .button_group {
   border: 0;
 }

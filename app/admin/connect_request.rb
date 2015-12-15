@@ -7,13 +7,21 @@ ActiveAdmin.register ConnectRequest do
   scope :confirmed
   scope :requested
 
+  controller do
+    def scoped_collection
+      super.includes :connect_slot
+    end
+  end
+
   index do
     selectable_column
 
     column :connect_slot
     column :startup, label: 'Product'
     column :status
-    column :created_at
+    column :slot_date, sortable: 'connect_slots.slot_at' do |connect_request|
+      connect_request.connect_slot.slot_at.in_time_zone('Asia/Calcutta').strftime('%b %-d, %-I:%M %p')
+    end
 
     actions
   end

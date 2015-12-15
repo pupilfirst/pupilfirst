@@ -20,7 +20,7 @@ module Lita
         end
         unranked_startups = Startup.without_karma_and_rank_for_batch Batch.current
         unranked_startups[0].each do |startup|
-          rank_list += "#{ranked_startups.length + 1}. <#{Rails.application.routes.url_helpers.startup_url(startup, host: 'sv.co')}|#{startup.product_name}>\n"
+          rank_list += "#{ranked_startups.length + 1}. #{startup.product_name}\n"
         end
         rank_list
       end

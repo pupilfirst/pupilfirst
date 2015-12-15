@@ -42,6 +42,7 @@ ActiveAdmin.register ConnectRequest do
         end
       end
 
+      row :meeting_link
       row :confirmed_at
       row :created_at
       row :updated_at

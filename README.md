@@ -8,9 +8,18 @@
 
 ### Install Dependencies
   *  Ruby - Use RVM to install version specified in `.ruby-version`
+
+#### OSX
+
   *  imagemagick - `brew install imagemagick`
   *  postgresql - Install postgres from http://postgresapp.com
   *  (OSX) Xcode, and qt5 - `brew install qt5`, followed by `brew link --force qt5`
+
+#### Ubuntu (14.04 CI)
+
+  * `sudo apt-get install build-essential libgmp-dev`
+  * PostgreSQL - `sudo apt-get install postgresql postgresql-contrib libpq-dev`
+  * Capybara-webkit deps - `sudo apt-get install xvfb gstreamer1.0-plugins-base gstreamer1.0-tools gstreamer1.0-x`
 
 ### Configure
   *  Setup `database.yml` for postgresql.
@@ -25,6 +34,8 @@
 Now start the server with `rails s`
 
 ## Testing
+
+You _might_ need to create the test database that you've configured with environment variables.
 
 To execute all tests manually, run:
 

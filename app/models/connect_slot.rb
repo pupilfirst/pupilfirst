@@ -39,9 +39,9 @@ class ConnectSlot < ActiveRecord::Base
     end.order('slot_at ASC')
   end
 
-  # Available slots, 3 to 5 days from now.
+  # Available slots, 3 to 11 days from now.
   def self.available_for_founder
-    available.where(slot_at: (3.days.from_now.beginning_of_day..5.days.from_now.end_of_day))
+    available.where(slot_at: (3.days.from_now.beginning_of_day..11.days.from_now.end_of_day))
   end
 
   private

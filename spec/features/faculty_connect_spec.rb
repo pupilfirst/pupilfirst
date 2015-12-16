@@ -8,9 +8,10 @@ feature 'Faculty Connect' do
   let!(:tet_new_product_deck) { create :tet_new_product_deck }
   let!(:tet_team_formed) { create :tet_team_formed }
 
-  # Two connect slots
+  # Three valid connect slots
   let!(:connect_slot_1) { create :connect_slot, faculty: faculty_1, slot_at: 4.days.from_now }
   let!(:connect_slot_2) { create :connect_slot, faculty: faculty_1, slot_at: 4.5.days.from_now }
+  let!(:connect_slot_3) { create :connect_slot, faculty: faculty_1, slot_at: 6.days.from_now }
 
   # One connect request using up one of the slots.
   let!(:connect_request) { create :connect_request, connect_slot: connect_slot_1 }
@@ -95,8 +96,8 @@ feature 'Faculty Connect' do
 
         click_on 'Submit Request'
 
-        # Wait for the page to load.
-        expect(page.status_code).to eq(200)
+        # The connect button should now be disabled.
+        expect(page.find('.connect-link')[:class]).to include('disabled')
 
         # Verify data.
         connect_request = startup.connect_requests.last

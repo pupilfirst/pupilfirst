@@ -13,7 +13,6 @@
 
 ActiveRecord::Schema.define(version: 20151214054251) do
 
-
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pg_trgm"

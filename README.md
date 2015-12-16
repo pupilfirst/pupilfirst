@@ -51,8 +51,13 @@ To run any jobs in the development environment, simply run:
 
 ## Deployment
 
-Travis CI takes care of deploying after running tests. Simply push to master branch, and Travis will take care of the
-rest.
+[StriderCD](https://strider.sv.co) takes care of deploying after running tests. Simply push to master branch, and
+Strider will take care of the rest.
+
+There are two buildpacks
+
+  1. Heroku's default ruby buildpack: https://github.com/heroku/heroku-buildpack-ruby
+  2. Custom rake tasks (for migrations): https://github.com/gunpowderlabs/buildpack-ruby-rake-deploy-tasks
 
 ### Manual deployment.
 

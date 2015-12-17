@@ -4,4 +4,8 @@ class HomeController < ApplicationController
     @large_header_class = 'home-index'
     @skip_container = true
   end
+
+  def cached_404
+    render 'errors/not_found', layout: 'error'
+  end
 end

@@ -76,5 +76,7 @@ Svapp::Application.routes.draw do
     end
   end
 
+  get '404', to: 'home#cached_404'
+
   root 'home#index'
 end

@@ -4,6 +4,9 @@ stripHTML = (dirtyString) ->
   container.textContent || container.innerText;
 
 loadBlogPosts = ->
+  # Don't do anything unless we're on the home page.
+  return unless $('#blog-posts-container').length
+
   # TODO: Load JS and images from https://blog.sv.co when it's available.
   $.get("https://blog.sv.co?json=get_recent_posts&count=4", (data) ->
     blogPostsContainer = $("#blog-posts-container")

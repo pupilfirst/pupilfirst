@@ -120,28 +120,27 @@ class User < ActiveRecord::Base
 
   def slack_username_must_exist
     return if slack_username.blank?
-    response = RestClient.get "https://slack.com/api/users.list?token=#{ENV['VOCALIST_API_TOKEN']}"
-    unless JSON.parse(response)['ok']
+    return unless slack_username_changed?
+    response_json = JSON.parse(RestClient.get "https://slack.com/api/users.list?token=#{ENV['VOCALIST_API_TOKEN']}")
+    unless response_json['ok']
       errors.add(:slack_username, 'unable to validate username from slack. Please try again')
       return
     end
-    valid_names = JSON.parse(response)['members'].map { |m| m['name'] }
-    return if valid_names.include? slack_username
-    errors.add(:slack_username, 'a user with this mention name does not exist on SV.CO Public Slack')
+    valid_names = response_json['members'].map { |m| m['name'] }
+    index = valid_names.index slack_username
+    if index.present?
+      @new_slack_user_id = response_json['members'][index]['id']
+      return
+    else
+      errors.add(:slack_username, 'a user with this mention name does not exist on SV.CO Public Slack')
+    end
   end
 
   before_save :fetch_slack_user_id
 
   def fetch_slack_user_id
     return unless slack_username_changed?
-    if slack_username.present?
-      response = RestClient.get "https://slack.com/api/users.list?token=#{ENV['VOCALIST_API_TOKEN']}"
-      member_names = JSON.parse(response)['members'].map { |m| m['name'] }
-      index = member_names.index slack_username
-      self.slack_user_id = JSON.parse(response)['members'][index]['id']
-    else
-      self.slack_user_id = nil
-    end
+    self.slack_user_id = slack_username.present? ? @new_slack_user_id : nil
   end
 
   before_create do

@@ -87,7 +87,6 @@ feature 'Incubation' do
     expect(user.pin).to eq('600001')
     expect(user.linkedin_url).to eq('https://linkedin.com/url')
     expect(user.twitter_url).to eq('https://twitter.com/url')
-    expect(user.slack_username).to eq('public_slack_username')
 
     startup = user.startup
     expect(startup.product_name).to eq('Test product')

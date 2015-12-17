@@ -126,8 +126,21 @@ class User < ActiveRecord::Base
       return
     end
     valid_names = JSON.parse(response)['members'].map { |m| m['name'] }
-    unless valid_names.include? slack_username
-      errors.add(:slack_username, 'a user with this mention name does not exist on SV.CO Public Slack')
+    return if valid_names.include? slack_username
+    errors.add(:slack_username, 'a user with this mention name does not exist on SV.CO Public Slack')
+  end
+
+  before_save :fetch_slack_user_id
+
+  def fetch_slack_user_id
+    return unless slack_username_changed?
+    if slack_username.present?
+      response = RestClient.get "https://slack.com/api/users.list?token=#{ENV['VOCALIST_API_TOKEN']}"
+      member_names = JSON.parse(response)['members'].map { |m| m['name'] }
+      index = member_names.index slack_username
+      self.slack_user_id = JSON.parse(response)['members'][index]['id']
+    else
+      self.slack_user_id = nil
     end
   end
 

@@ -108,12 +108,26 @@ class User < ActiveRecord::Base
   validates :linkedin_url, url: true, allow_nil: true
 
   validate :role_must_be_valid
+  validate :slack_username_must_exist
 
   def role_must_be_valid
     roles.each do |role|
       unless User.valid_roles.include? role
         errors.add(:roles, 'contained unrecognized value')
       end
+    end
+  end
+
+  def slack_username_must_exist
+    return if slack_username.blank?
+    response = RestClient.get "https://slack.com/api/users.list?token=#{ENV['VOCALIST_API_TOKEN']}"
+    unless JSON.parse(response)['ok']
+      errors.add(:slack_username, 'unable to validate username from slack. Please try again')
+      return
+    end
+    valid_names = JSON.parse(response)['members'].map { |m| m['name'] }
+    unless valid_names.include? slack_username
+      errors.add(:slack_username, 'a user with this mention name does not exist on SV.CO Public Slack')
     end
   end
 

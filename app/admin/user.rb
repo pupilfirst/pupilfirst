@@ -94,6 +94,7 @@ ActiveAdmin.register User do
       row :startup_admin
       row :is_founder
       row :born_on
+      row :slack_username
       row :phone
       row :unconfirmed_phone
       row :phone_verification_code

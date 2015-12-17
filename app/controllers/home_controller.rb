@@ -5,7 +5,6 @@ class HomeController < ApplicationController
     @skip_container = true
   end
 
-
   def apply
     @skip_container = true
   end

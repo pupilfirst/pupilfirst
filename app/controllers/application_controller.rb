@@ -54,22 +54,32 @@ class ApplicationController < ActionController::Base
       'https://assets.sv.co https://secure.gravatar.com https://uploaded-assets.sv.co hn.inspectlet.com'
     ].join(' ') + ';'
 
-    recaptcha = { script: 'www.google.com www.gstatic.com apis.google.com' }
     resource = { media: 'https://s3.amazonaws.com/upload.assets.sv.co/' }
+    typeform = { frame: 'https://svdotco.typeform.com' }
 
     csp_directives = [
       image_sources,
-      "script-src 'self' https://ajax.googleapis.com https://www.google-analytics.com " \
-        'https://blog.sv.co https://www.youtube.com http://www.startatsv.com https://assets.sv.co ' \
-        "cdn.inspectlet.com #{recaptcha[:script]};",
+      script_sources,
       "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://assets.sv.co;",
       "connect-src 'self' hn.inspectlet.com wss://inspectletws.herokuapp.com;",
       "font-src 'self' fonts.gstatic.com https://assets.sv.co;",
       'child-src https://www.youtube.com;',
-      'frame-src https://www.youtube.com https://svlabs-public.herokuapp.com https://www.google.com;',
+      'frame-src https://www.youtube.com https://svlabs-public.herokuapp.com https://www.google.com ' \
+        "#{typeform[:frame]};",
       "media-src 'self' #{resource[:media]};"
     ]
 
     response.headers['Content-Security-Policy'] = "default-src 'none'; " + csp_directives.join(' ')
+  end
+
+  private
+
+  def script_sources
+    typeform = 'https://s3-eu-west-1.amazonaws.com/share.typeform.com/widget.js'
+    recaptcha = 'www.google.com www.gstatic.com apis.google.com'
+
+    "script-src 'self' https://ajax.googleapis.com https://www.google-analytics.com " \
+      'https://blog.sv.co https://www.youtube.com http://www.startatsv.com https://assets.sv.co ' \
+      "cdn.inspectlet.com #{recaptcha} #{typeform};"
   end
 end

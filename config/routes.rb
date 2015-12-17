@@ -76,5 +76,7 @@ Svapp::Application.routes.draw do
     end
   end
 
+  get 'apply', to: 'home#apply'
+
   root 'home#index'
 end

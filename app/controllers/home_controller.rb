@@ -4,4 +4,8 @@ class HomeController < ApplicationController
     @large_header_class = 'home-index'
     @skip_container = true
   end
+
+  def apply
+    @skip_container = true
+  end
 end

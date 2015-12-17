@@ -1,0 +1,322 @@
+@import 'variables';
+
+.apply-banner {
+  height: 305px;
+  padding: 75px 0;
+  margin: 10px 0;
+  background-image: asset-url('home/apply/apply-banner.png');
+  background-position: right center;
+  background-repeat: no-repeat;
+
+  @media (max-width: $screen-xs-max) {
+    background-size: contain;
+    background-position: bottom center;
+    padding: 0;
+  }
+
+  h1 {
+    color: #0c86be;
+    font-size: 32px;
+    font-weight: 400;
+    border-bottom: 1px solid #e6e6e6;
+    padding-bottom: 15px;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 18px;
+  }
+}
+
+.apply-container {
+  background-color: #f5f5f5;
+  padding: 30px 0;
+}
+
+.apply-form {
+  background-color: #fff;
+  padding: 15px;
+
+  @media (max-width: $screen-xs-max) {
+    padding:0;
+  }
+}
+
+.graduate-details {
+  background-color: #fff;
+
+  @media (max-width: $screen-sm-max) {
+    margin-top: 20px;
+  }
+
+  i {
+    font-size: 24px;
+    padding-right: 10px;
+    color: #289dd2;
+  }
+
+  h2 {
+    font-size: 21px;
+    padding: 30px 30px 0;
+    margin: 0;
+    line-height: 33px;
+
+    @media (max-width: $screen-xs-max) {
+      padding: 15px 15px 0;
+    }
+  }
+
+  .students-steps {
+    padding: 30px;
+    border-bottom: 1px solid #e6e6e6;
+
+    @media (max-width: $screen-xs-max) {
+      padding: 15px;
+    }
+
+    h3 {
+      font-size: 26px;
+      font-weight: 600;
+      margin: 0 0 30px;
+
+      @media (max-width: $screen-xs-max) {
+        font-size: 20px;
+      }
+    }
+  }
+
+  ul {
+    &.apply-step-list {
+      li {
+        display: block;
+        height: 65px;
+        margin-bottom: 15px;
+
+        .apply-icon {
+          width: 65px;
+          height: 65px;
+          display: block;
+          float: left;
+          background-position: center center;
+          background-repeat: no-repeat;
+
+          &.deck-icon {
+            background-image: asset-url('home/apply/product-deck-icon.png');
+          }
+
+          &.prototype-icon {
+            background-image: asset-url('home/apply/prototype-icon.png');
+          }
+
+          &.launch-icon {
+            background-image: asset-url('home/apply/launch-icon.png');
+          }
+
+          &.iterate-icon {
+            background-image: asset-url('home/apply/iterate-icon.png');
+          }
+
+          &.job-offer-icon {
+            background-image: asset-url('home/apply/job-offer-icon.png');
+          }
+
+          &.investor-icon {
+            background-image: asset-url('home/apply/investor-icon.png');
+          }
+
+          &.entry-icon {
+            background-image: asset-url('home/apply/entry-icon.png');
+          }
+        }
+
+        .get-text {
+          display: table-cell;
+          height: 65px;
+          padding-left: 25px;
+          font-size: 18px;
+          letter-spacing: 0.03em;
+          vertical-align: middle;
+
+          @media (max-width: $screen-xs-max) {
+            font-size: 15px;
+          }
+        }
+      }
+    }
+  }
+
+  .highlight-blue {
+    background-color: #0c86be;
+    padding: 30px;
+    color: white;
+    font-size: 23px;
+    line-height: 28px;
+
+    @media (max-width: $screen-xs-max) {
+      font-size: 20px;
+      padding: 15px;
+    }
+  }
+
+  .second-batch {
+    padding: 30px;
+    border-bottom: 1px solid #e6e6e6;
+
+    @media (max-width: $screen-xs-max) {
+      padding: 15px;
+    }
+
+    h3 {
+      font-size: 23px;
+
+      @media (max-width: $screen-xs-max) {
+        font-size: 20px;
+      }
+    }
+
+    p {
+      font-size: 20px;
+      display: inline-block;
+      font-weight: 200;
+
+      @media (max-width: $screen-xs-max) {
+        font-size: 16px;
+      }
+    }
+
+    a {
+      color: #0c86be;
+      font-size: 20px;
+      font-weight: 400;
+      transition: all 200ms cubic-bezier(.25, .25, .75, .75);
+
+      &:hover {
+        color: $theme-light-green;
+      }
+
+      @media (max-width: $screen-xs-max) {
+        font-size: 16px;
+      }
+    }
+  }
+
+  .important-dates {
+    padding: 30px;
+    border-bottom: 1px solid #e6e6e6;
+
+    @media (max-width: $screen-xs-max) {
+      padding: 15px;
+    }
+
+    h3 {
+      margin: 0 0 25px;
+    }
+
+    ul.important-date-list {
+      li {
+        display: block;
+        height: 90px;
+        margin-bottom: 15px;
+        background-color: #f7f7f7;
+        border: 1px solid #dfe2df;
+        border-radius: 6px;
+
+        .date-colum {
+          width: 90px;
+          height: 90px;
+          display:table-cell;
+          vertical-align: middle;
+          text-align: center;
+          color: white;
+          background-color: #289dd2;
+          border: 1px solid #0c86be;
+          @include border-left-radius(6px);
+
+          .important-month {
+            font-size: 14px;
+            display: block;
+          }
+
+          .important-date {
+            font-size: 23px;
+            font-weight: 600;
+            line-height: 20px;
+            display: block;
+          }
+
+          .important-year{
+            font-size: 15px;
+            display: block;
+            font-weight: 400;
+          }
+        }
+
+        .date-event {
+          display: table-cell;
+          height: 90px;
+          padding-left: 25px;
+          padding-right: 15px;
+          font-size: 18px;
+          letter-spacing: 0.03em;
+          vertical-align: middle;
+
+          @media (max-width: $screen-xs-max) {
+            font-size: 15px;
+          }
+        }
+      }
+    }
+  }
+
+  .startup-box {
+    padding: 30px;
+    border-bottom: 1px solid #e6e6e6;
+
+    @media (max-width: $screen-xs-max) {
+      padding: 15px;
+    }
+
+    h3 {
+      font-size: 26px;
+
+      @media (max-width: $screen-xs-max) {
+        font-size: 20px;
+      }
+    }
+
+    p {
+      font-size: 20px;
+      font-weight: 200;
+
+      @media (max-width: $screen-xs-max) {
+        font-size: 17px;
+      }
+    }
+    .gadgets-names {
+      color: $timeline-blue-text;
+    }
+  }
+
+  .faq {
+    padding: 30px;
+    font-size: 20px;
+
+    @media (max-width: $screen-xs-max) {
+      padding: 15px;
+      font-size: 18px;
+    }
+
+    h3 {
+      margin: 0;
+    }
+
+    .faq-question {
+      font-weight: 400;
+      padding: 25px 0 15px;
+    }
+    .faq-answer {
+      font-weight: 300;
+      padding: 0 0 15px;
+    }
+  }
+}

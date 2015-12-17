@@ -57,7 +57,6 @@ feature 'Incubation' do
     fill_in 'PIN Code', with: 600_001
     fill_in 'LinkedIn URL', with: 'https://linkedin.com/url'
     fill_in 'Twitter URL', with: 'https://twitter.com/url'
-    fill_in 'Public Slack Username', with: 'public_slack_username'
     click_on 'Next Step'
     expect(page).to have_text('Incubation location')
 

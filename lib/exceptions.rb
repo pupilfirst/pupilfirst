@@ -1,5 +1,7 @@
 module Exceptions
   class ApiStandardError < StandardError; end
+  class InvalidSlackUser < StandardError; end
+  class BadSlackConnection < StandardError; end
 
   class ApiRequestError < ApiStandardError
     def status

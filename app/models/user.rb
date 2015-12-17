@@ -291,6 +291,19 @@ class User < ActiveRecord::Base
     startup.connect_requests.joins(:connect_slot).where(connect_slots: { faculty_id: faculty.id }, status: ConnectRequest::STATUS_REQUESTED).exists?
   end
 
+  def ping_on_slack!(text)
+    im_list_json = JSON.parse(RestClient.get "https://slack.com/api/im.list?token=#{ENV['VOCALIST_API_TOKEN']}")
+    fail Exceptions::BadSlackConnection, "Could not establish connection with slack" unless im_list_json['ok']
+    user_ids = im_list_json['ims'].map { |im| im['user'] }
+    index = user_ids.index slack_user_id
+    if index.present?
+      im_id = im_list_json['ims'][index]['id']
+      RestClient.get "https://slack.com/api/chat.postMessage?token=#{ENV['VOCALIST_API_TOKEN']}&channel=#{im_id}&text=#{text}&as_user=true"
+    else
+      fail Exceptions::InvalidSlackUser, "Could not find corresponding slack user"
+    end
+  end
+
   private
 
   def needs_password_change_email?

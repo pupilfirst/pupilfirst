@@ -6,6 +6,10 @@ describe User do
     APP_CONFIG[:vocalist_api_token] = 'xxxxxx'
   end
 
+  after :all do
+    APP_CONFIG[:vocalist_api_token] = ENV['VOCALIST_API_TOKEN']
+  end
+
   before :each do
     stub_request(:get, "https://slack.com/api/users.list?token=xxxxxx")
       .to_return(body: '{"ok":true,"members":[{"id":"UABCDEFGH","name":"slackuser"}]}')

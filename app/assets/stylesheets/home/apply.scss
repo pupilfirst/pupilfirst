@@ -22,11 +22,18 @@
     padding-bottom: 15px;
     margin-bottom: 10px;
     margin-left: 30px;
+
+    @media (max-width: $screen-xs-max) {
+        margin-left: 15px;
+    }
   }
 
   p {
     font-size: 18px;
     padding-left: 30px;
+    @media (max-width: $screen-xs-max) {
+        padding-left: 15px;
+    }
   }
 }
 

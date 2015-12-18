@@ -21,10 +21,12 @@
     border-bottom: 1px solid #e6e6e6;
     padding-bottom: 15px;
     margin-bottom: 10px;
+    margin-left: 30px;
   }
 
   p {
     font-size: 18px;
+    padding-left: 30px;
   }
 }
 
@@ -36,6 +38,7 @@
 .apply-form {
   background-color: #fff;
   padding: 15px;
+  height:550px;
 
   @media (max-width: $screen-xs-max) {
     padding:0;

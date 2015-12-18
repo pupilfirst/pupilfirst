@@ -75,11 +75,10 @@ class ApplicationController < ActionController::Base
   private
 
   def script_sources
-    typeform = 'https://s3-eu-west-1.amazonaws.com/share.typeform.com/widget.js'
     recaptcha = 'www.google.com www.gstatic.com apis.google.com'
 
     "script-src 'self' https://ajax.googleapis.com https://www.google-analytics.com " \
       'https://blog.sv.co https://www.youtube.com http://www.startatsv.com https://assets.sv.co ' \
-      "cdn.inspectlet.com #{recaptcha} #{typeform};"
+      "cdn.inspectlet.com #{recaptcha};"
   end
 end

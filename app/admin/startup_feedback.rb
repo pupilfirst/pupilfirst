@@ -49,9 +49,9 @@ ActiveAdmin.register StartupFeedback do
         startup_feedback.sent_at
       else
         link_to(
-          'Email Now!',
+          'Email & DM Now!',
           email_feedback_admin_startup_feedback_path(startup_feedback),
-          method: :put, data: { confirm: 'Are you sure you want to email this feedback to all founders?' }
+          method: :put, data: { confirm: 'Are you sure you want to email & DM this feedback to all founders?' }
         )
       end
     end
@@ -93,9 +93,9 @@ ActiveAdmin.register StartupFeedback do
         else
           div do
             link_to(
-              'Send Email to all founders.',
+              'Send Email and DM to all founders.',
               email_feedback_admin_startup_feedback_path(startup_feedback),
-              method: :put, data: { confirm: 'Are you sure you want to email this feedback to all founders?' },
+              method: :put, data: { confirm: 'Are you sure you want to email and DM this feedback to all founders?' },
               class: 'button'
             )
           end
@@ -142,9 +142,9 @@ ActiveAdmin.register StartupFeedback do
 
   action_item :email_feedback, only: :show, if: proc { startup_feedback.sent_at.blank? } do
     link_to(
-      'Email Now!',
+      'Email and DM Now!',
       email_feedback_admin_startup_feedback_path(startup_feedback),
-      method: :put, data: { confirm: 'Are you sure you want to email this feedback to all founders?' }
+      method: :put, data: { confirm: 'Are you sure you want to email and DM this feedback to all founders?' }
     )
   end
 end

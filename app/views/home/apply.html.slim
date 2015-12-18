@@ -11,19 +11,16 @@
         | collect feedback from early customers.
 .apply-container
   .container
-    .col-md-5
-      .apply-form
-        .typeform-widget data-url="https://svdotco.typeform.com/to/OfwEDn" data-text="SV.CO" style="width:100%;height:500px;"
-        div style="font-family: Sans-Serif;font-size: 12px;color: #999;opacity: 0.5; padding-top: 5px;"
-          ' Powered by
-          a href="http://www.typeform.com/?utm_campaign=OfwEDn&amp;utm_source=typeform.com-1422622-Basic&amp;utm_medium=typeform&amp;utm_content=typeform-embedded&amp;utm_term=EN" style="color: #999" target="_blank"
-            | Typeform
     .col-md-7
       .graduate-details
         h2.header-light
-          ' SV.CO is a six month "Build a Startup" program for college students.
+          ' SV.CO is a six month &#8220;Build a Startup&#8221; program for college students.
           ' We help a team of students develop an idea, build a prototype and
           | collect feedback from early customers.
+          
+        h2.header-light
+          ' Every SV.CO batch has a theme: an industry sector where all selected startups focus. The theme of this batch is 
+          a href="https://en.wikipedia.org/wiki/Software_as_a_service" Software as a Service (SaaS).
 
         .students-steps
           h3
@@ -61,21 +58,13 @@
 
         .second-batch
           h3 This is the 2nd batch intake for the SV.CO program.
-          p You can see the first batch #{link_to 'here', startups_path}.
-          p Videos of previous graduates and a program overview #{link_to 'here', resources_path}.
+          p You can see the first batch #{link_to 'here', startups_path} & videos of previous graduates and a program overview #{link_to 'on our home page', root_path}.
 
         .important-dates
           h3.font-weight-400 
             i.fa.fa-calendar-check-o 
             | Important Dates
           ul.important-date-list.list-unstyled.header-light
-            li
-              span.date-colum
-                span.important-month December
-                span.important-date 25
-                span.important-year 2015
-              .date-event
-                | Create a great product deck
             li
               span.date-colum
                 span.important-month January
@@ -124,7 +113,7 @@
             | FAQ
           ul.list-unstyled
             li
-              .faq-question 1.How much time do I have to commit to the program?
+              .faq-question 1. How much time do I have to commit to the program?
               .faq-answer 
                 ' At least 10 hours a week. The program is intended to be 
                 ' completed while you are still in college, and we'll make
@@ -139,10 +128,10 @@
             li
               .faq-question 3. Who can apply?
               .faq-answer
-                ' Currently, applications are open to students of JNTU
+                ' Currently, applications are open to all college students in Andhra Pradesh. The programme is offered in partnership with JNTU
                 ' <strong>#{link_to 'Anantpur', 'http://jntua.ac.in', target: '_blank'}</strong>
                 ' and 
-                ' <strong>#{link_to 'Kakinada.', 'http://jntuk.edu.in', target: '_blank'}</strong>
+                ' <strong>#{link_to 'Kakinada.', 'http://jntuk.edu.in', target: '_blank'}</strong> and successful graduates will get a Specialisation in Entrepreneurship degree from the University.
                 ' Founders have to be in <strong>Semester 5 or above</strong> to apply.
             li
               .faq-question 4. Do I need to have a product idea to join?
@@ -164,3 +153,10 @@
           p
             ' To learn more about the program, visit our #{link_to 'Website', root_url}
             ' and #{link_to 'Playbook', 'https://playbook.sv.co/'}
+    .col-md-5
+      .apply-form
+        .typeform-widget data-url="https://svdotco.typeform.com/to/OfwEDn" data-text="SV.CO" style="width:100%;height:500px;"
+        div style="font-family: Sans-Serif;font-size: 12px;color: #999;opacity: 0.5; padding-top: 5px;"
+          ' Powered by
+          a href="http://www.typeform.com/?utm_campaign=OfwEDn&amp;utm_source=typeform.com-1422622-Basic&amp;utm_medium=typeform&amp;utm_content=typeform-embedded&amp;utm_term=EN" style="color: #999" target="_blank"
+            | Typeform

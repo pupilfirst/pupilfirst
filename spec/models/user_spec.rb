@@ -3,11 +3,11 @@ require 'webmock/rspec'
 
 describe User do
   before :all do
-    APP_CONFIG[:vocalist_api_token] = 'xxxxxx'
+    APP_CONFIG[:slack_token] = 'xxxxxx'
   end
 
   after :all do
-    APP_CONFIG[:vocalist_api_token] = ENV['VOCALIST_API_TOKEN']
+    APP_CONFIG[:slack_token] = ENV['SLACK_TOKEN']
   end
 
   before :each do

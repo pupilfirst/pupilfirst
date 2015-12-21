@@ -121,16 +121,19 @@ class User < ActiveRecord::Base
   def slack_username_must_exist
     return if slack_username.blank?
     return unless slack_username_changed?
-    response_json = JSON.parse(RestClient.get "https://slack.com/api/users.list?token=#{APP_CONFIG[:vocalist_api_token]}")
+
+    response_json = JSON.parse(RestClient.get "https://slack.com/api/users.list?token=#{APP_CONFIG[:slack_token]}")
+
     unless response_json['ok']
       errors.add(:slack_username, 'unable to validate username from slack. Please try again')
       return
     end
+
     valid_names = response_json['members'].map { |m| m['name'] }
     index = valid_names.index slack_username
+
     if index.present?
       @new_slack_user_id = response_json['members'][index]['id']
-      return
     else
       errors.add(:slack_username, 'a user with this mention name does not exist on SV.CO Public Slack')
     end
@@ -292,13 +295,13 @@ class User < ActiveRecord::Base
   end
 
   def ping_on_slack!(text)
-    im_list_json = JSON.parse(RestClient.get "https://slack.com/api/im.list?token=#{APP_CONFIG[:vocalist_api_token]}")
+    im_list_json = JSON.parse(RestClient.get "https://slack.com/api/im.list?token=#{APP_CONFIG[:slack_token]}")
     fail Exceptions::BadSlackConnection, "Could not establish connection with slack" unless im_list_json['ok']
     user_ids = im_list_json['ims'].map { |im| im['user'] }
     index = user_ids.index slack_user_id
     if index.present?
       im_id = im_list_json['ims'][index]['id']
-      RestClient.get "https://slack.com/api/chat.postMessage?token=#{APP_CONFIG[:vocalist_api_token]}&channel=#{im_id}&text=#{text}&as_user=true"
+      RestClient.get "https://slack.com/api/chat.postMessage?token=#{APP_CONFIG[:slack_token]}&channel=#{im_id}&text=#{text}&as_user=true"
     else
       fail Exceptions::InvalidSlackUser, "Could not find corresponding slack user"
     end

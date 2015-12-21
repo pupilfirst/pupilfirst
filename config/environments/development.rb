@@ -41,7 +41,7 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  config.action_mailer.default_url_options = { host: '192.168.1.195:3000' }
+  config.action_mailer.default_url_options = { host: 'localhost:3000' }
 
   # In development and test, let's have carrierwave store everything on local disk.
   config.carrier_wave_storage = :file
@@ -58,3 +58,5 @@ Rails.application.configure do
   # Roadie asset host.
   config.roadie.url_options = { host: 'localhost', scheme: 'http', port: 3000 }
 end
+
+Rails.application.default_url_options = Svapp::Application.config.action_mailer.default_url_options

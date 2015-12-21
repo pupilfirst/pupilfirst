@@ -106,3 +106,5 @@ ActionMailer::Base.smtp_settings = {
 }
 
 ActionMailer::Base.delivery_method = :smtp
+
+Rails.application.default_url_options = Svapp::Application.config.action_mailer.default_url_options

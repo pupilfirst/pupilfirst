@@ -120,7 +120,7 @@ ActiveAdmin.register StartupFeedback do
     StartupMailer.feedback_as_email(startup_feedback).deliver_later
     startup_feedback.startup.founders.each do |user|
       if user.slack_user_id.present?
-        user.ping_on_slack! startup_feedback.as_slack_message
+        user.ping_on_slack startup_feedback.as_slack_message
       end
     end
     flash[:alert] = 'Your feedback has been sent to the startup founders!'
@@ -132,7 +132,7 @@ ActiveAdmin.register StartupFeedback do
     user = User.find(params[:user_id])
     StartupMailer.feedback_as_email(startup_feedback, user: user).deliver_later
     if user.slack_user_id.present?
-      user.ping_on_slack! startup_feedback.as_slack_message
+      user.ping_on_slack startup_feedback.as_slack_message
     end
     # Mark feedback as sent.
     startup_feedback.update(sent_at: Time.now)

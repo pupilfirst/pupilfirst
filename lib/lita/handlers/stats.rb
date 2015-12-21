@@ -8,8 +8,9 @@ module Lita
           response.reply('Please wait while I fetch the leaderboard for you :simple_smile:')
           begin
             message = "Here is the latest published leaderboard:%0A#{ranked_list_of_startups}"
-            RestClient.get "https://slack.com/api/chat.postMessage?token=#{APP_CONFIG[:slack_token]}
-              &channel=#{response.message.source.room}&text=#{message}&as_user=true"
+            RestClient.get "https://slack.com/api/chat.postMessage?"\
+            "token=#{APP_CONFIG[:slack_token]}&channel=#{response.message.source.room}"\
+            "&text=#{message}&as_user=true"
           rescue
             response.reply(':confused: Oops! Something seems wrong. Please try again later!')
           end

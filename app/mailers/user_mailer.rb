@@ -14,13 +14,6 @@ class UserMailer < ApplicationMailer
     mail(to: current_user.email, subject: 'You have successfully submitted your request for incubation at Startup Village.')
   end
 
-  def request_to_be_a_founder(user, startup, current_user)
-    @startup = startup
-    @user = user
-    @current_user = current_user
-    mail(to: user.email, subject: "Founder at #{@startup.name}? Please approve")
-  end
-
   def password_changed(user)
     @user = user
     mail(to: user.email, subject: "Your password has been changed")

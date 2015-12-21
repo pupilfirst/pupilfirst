@@ -120,10 +120,6 @@ class StartupsController < ApplicationController
 
   private
 
-  def apply_now_params
-    params.require(:startup).permit(:name, :pitch, :website, :email, :registration_type)
-  end
-
   def startup_params
     params.require(:startup).permit(
       :name, :legal_registered_name, :address, :pitch, :website, :email, :logo, :remote_logo_url, :facebook_link,

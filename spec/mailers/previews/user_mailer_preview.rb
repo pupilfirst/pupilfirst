@@ -13,10 +13,6 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.incubation_request_submitted(User.first)
   end
 
-  def request_to_be_a_founder
-    UserMailer.request_to_be_a_founder(User.first, Startup.first, User.second)
-  end
-
   def password_changed
     UserMailer.password_changed(User.first)
   end

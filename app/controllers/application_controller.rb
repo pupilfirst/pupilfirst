@@ -55,7 +55,7 @@ class ApplicationController < ActionController::Base
     ].join(' ') + ';'
 
     resource = { media: 'https://s3.amazonaws.com/upload.assets.sv.co/' }
-    typeform = { frame: 'https://svdotco.typeform.com' }
+    typeform = { frame: 'https://svlabs.typeform.com' }
 
     csp_directives = [
       image_sources,

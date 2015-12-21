@@ -295,16 +295,20 @@ class User < ActiveRecord::Base
   end
 
   def ping_on_slack(text)
-    fail Exceptions::InvalidSlackUser, "No slack username available for user" unless slack_username.present?
+    fail Exceptions::InvalidSlackUser, 'No slack username available for user' unless slack_username.present?
+
     im_list_json = JSON.parse(RestClient.get "https://slack.com/api/im.list?token=#{APP_CONFIG[:slack_token]}")
-    fail Exceptions::BadSlackConnection, "Could not establish connection with slack" unless im_list_json['ok']
+
+    fail Exceptions::BadSlackConnection, 'Could not establish connection with slack' unless im_list_json['ok']
+
     user_ids = im_list_json['ims'].map { |im| im['user'] }
     index = user_ids.index slack_user_id
+
     if index.present?
       im_id = im_list_json['ims'][index]['id']
       RestClient.get "https://slack.com/api/chat.postMessage?token=#{APP_CONFIG[:slack_token]}&channel=#{im_id}&text=#{text}&as_user=true"
     else
-      fail Exceptions::InvalidSlackUser, "Could not find corresponding slack user"
+      fail Exceptions::InvalidSlackUser, 'Could not find corresponding slack user'
     end
   end
 

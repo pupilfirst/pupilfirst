@@ -158,7 +158,18 @@ ActiveAdmin.register TimelineEvent do
   end
 
   member_action :verify, method: :post do
-    TimelineEvent.find(params[:id]).verify!
+    timeline_event = TimelineEvent.find(params[:id])
+    startup = timeline_event.startup
+    timeline_event.verify!
+
+    unless timeline_event.timeline_event_type.private
+      startup_url = Rails.application.routes.url_helpers.startup_url(startup)
+      timeline_event_url = startup_url + "%23event-#{timeline_event.id}"
+      slack_message = "Hurray! <#{startup_url}|#{startup.product_name}> has a new verified timeline entry:"\
+      " <#{timeline_event_url}|#{timeline_event.timeline_event_type.title}> :clap:"
+      RestClient.get "https://slack.com/api/chat.postMessage?token=#{APP_CONFIG[:slack_token]}&channel=%23general&text=#{slack_message}&as_user=true"
+    end
+
     redirect_to action: :show
   end
 
@@ -240,14 +251,17 @@ ActiveAdmin.register TimelineEvent do
           end
         elsif timeline_event.pending?
           span do
-            button_to('Unverified. Click to verify this event.', verify_admin_timeline_event_path, form_class: 'inline-button')
+            button_to 'Unverified. Click to verify this event.', verify_admin_timeline_event_path,
+              form_class: 'inline-button',
+              data: { confirm: 'Are you sure you want to verify this event? Verification of public events will be announced on Public Slack' }
           end
 
           span do
             button_to('Mark As Needs Improvement', mark_needs_improvement_admin_timeline_event_path, form_class: 'inline-button')
           end
         elsif timeline_event.needs_improvement?
-          button_to('Unverified. Click to verify this event.', verify_admin_timeline_event_path)
+          button_to 'Unverified. Click to verify this event.', verify_admin_timeline_event_path,
+            data: { confirm: 'Are you sure you want to verify this event? Verification of public events will be announced on Public Slack' }
         end
       end
 

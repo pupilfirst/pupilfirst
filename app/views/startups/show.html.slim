@@ -259,7 +259,9 @@
             br
             a#read-from-beginning href="#begin"  Read from the beginning.
           ul#timeline-list
-            - @startup.timeline_events_for_display(current_user).each.with_index(1) do |event, index|
+            - index = 1
+
+            - @startup.timeline_events_for_display(current_user).each do |event|
               / Do not display hidden events to public.
               - next if event.hidden_from?(current_user)
 
@@ -374,6 +376,8 @@
                             = link_to startup_path(@startup, event_id: event.id), class: 'btn btn-info btn-sm btn-flat btn-with-default-padding edit-link' do
                               i.fa.fa-pencil
                               | &nbsp;Edit
+
+              - index += 1
       - else
         .main-timeline
           .tl-iteration

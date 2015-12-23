@@ -158,10 +158,11 @@ ActiveAdmin.register StartupFeedback do
         else
           slack_usernames[:not_sent] << user.fullname
         end
-      rescue
+      rescue Exceptions::InvalidSlackUser, Exceptions::BadSlackConnection
         slack_usernames[:not_sent] << user.fullname
       end
     end
+
     success = slack_users[:sent].present? ? "Your feedback has been sent as DM to: #{slack_users[:sent].split.join(', ')} \n" : ''
     failure = slack_users[:not_sent].present? ? "Failed to ping: #{slack_users[:not_sent].split.join(', ')}" : ''
 

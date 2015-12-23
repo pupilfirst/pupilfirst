@@ -294,7 +294,7 @@ class User < ActiveRecord::Base
     startup.connect_requests.joins(:connect_slot).where(connect_slots: { faculty_id: faculty.id }, status: ConnectRequest::STATUS_REQUESTED).exists?
   end
 
-  def ping_on_slack(text)
+  def ping_on_slack(text, unfurl: false)
     fail Exceptions::InvalidSlackUser, 'No slack username available for user' unless slack_username.present?
 
     im_list_json = JSON.parse(RestClient.get "https://slack.com/api/im.list?token=#{APP_CONFIG[:slack_token]}")
@@ -306,7 +306,8 @@ class User < ActiveRecord::Base
 
     if index.present?
       im_id = im_list_json['ims'][index]['id']
-      RestClient.get "https://slack.com/api/chat.postMessage?token=#{APP_CONFIG[:slack_token]}&channel=#{im_id}&text=#{text}&as_user=true"
+      RestClient.get "https://slack.com/api/chat.postMessage?token=#{APP_CONFIG[:slack_token]}&channel=#{im_id}"\
+      "&text=#{text}&as_user=true&unfurl_links=#{unfurl}"
     else
       fail Exceptions::InvalidSlackUser, 'Could not find corresponding slack user'
     end

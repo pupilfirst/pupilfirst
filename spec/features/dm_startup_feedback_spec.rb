@@ -27,8 +27,6 @@ feature 'DM Startup Feedback' do
       .to_return(body: '{"ok":true,"members":[{"id":"UABCDEF","name":"founder1"},{"id":"U123456","name":"founder2"}]}')
     stub_request(:get, "https://slack.com/api/im.list?token=xxxxxx")
       .to_return(body: '{"ok":true,"ims":[{"id":"D123456","user":"U123456"},{"id":"DABCDEF","user":"UABCDEF"}]}')
-    stub_request(:get, "https://slack.com/api/chat.postMessage?token=xxxxxx&channel=/.*/&text=/.*/&as_user=true")
-      .to_return(body: '{"ok":true}')
   end
 
   context 'Admin visits startup feedback index page in AA' do
@@ -46,10 +44,10 @@ feature 'DM Startup Feedback' do
       expect(startup.founders.where.not(slack_user_id: nil).count).to eq(2)
 
       founder_1_request = stub_request(:get, 'https://slack.com/api/chat.postMessage?as_user=true&channel=DABCDEF'\
-        "&text=#{startup_feedback.as_slack_message}&token=xxxxxx")
+        "&text=#{startup_feedback.as_slack_message}&token=xxxxxx&unfurl_links=false")
 
       founder_2_request = stub_request(:get, 'https://slack.com/api/chat.postMessage?as_user=true&channel=D123456'\
-        "&text=#{startup_feedback.as_slack_message}&token=xxxxxx")
+        "&text=#{startup_feedback.as_slack_message}&token=xxxxxx&unfurl_links=false")
 
       visit admin_startup_feedback_index_path
       expect(page).to have_text(startup_feedback.feedback)

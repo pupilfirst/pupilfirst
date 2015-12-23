@@ -167,7 +167,8 @@ ActiveAdmin.register TimelineEvent do
       timeline_event_url = startup_url + "%23event-#{timeline_event.id}"
       slack_message = "Hurray! <#{startup_url}|#{startup.product_name}> has a new verified timeline entry:"\
       " <#{timeline_event_url}|#{timeline_event.timeline_event_type.title}> :clap:"
-      RestClient.get "https://slack.com/api/chat.postMessage?token=#{APP_CONFIG[:slack_token]}&channel=%23general&text=#{slack_message}&as_user=true"
+      RestClient.get "https://slack.com/api/chat.postMessage?token=#{APP_CONFIG[:slack_token]}&channel=%23general"\
+      "&text=#{slack_message}&as_user=true&unfurl_links=false"
     end
 
     redirect_to action: :show

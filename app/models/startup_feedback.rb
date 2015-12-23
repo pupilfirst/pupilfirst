@@ -30,7 +30,7 @@ class StartupFeedback < ActiveRecord::Base
   def as_slack_message
     salutation = "Hey! You have some feedback from #{faculty.name} on your <#{reference_url}|recent update.>%0AHere is what he had to say:%0A"
     # make transforms required by slack
-    feedback_text = "\"_" + feedback.gsub(/[<>&]/, '<' => '&lt', '>' => '&gt', '&' => '&amp') + "_\"%0A"
+    feedback_text = "\"_" + CGI.escape(feedback) + "_\"%0A"
     footer = "A copy of this feedback has been emailed to you."
     salutation + feedback_text + footer
   end

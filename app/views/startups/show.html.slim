@@ -259,8 +259,6 @@
             br
             a#read-from-beginning href="#begin"  Read from the beginning.
           ul#timeline-list
-            - index = 1
-
             - @startup.timeline_events_for_display(current_user).each do |event|
               / Do not display hidden events to public.
               - next if event.hidden_from?(current_user)
@@ -310,8 +308,8 @@
                         | &nbsp;Edit
               - else
                 .timeline id="event-#{event.id}"
-                  li style="padding:0" class="timeline#{index.odd? ? "" : "-inverted"}"
-                    .timeline-badge class="color#{index%14}"
+                  li style="padding:0" class="timeline#{cycle '', '-inverted', name: 'card_position'}"
+                    .timeline-badge class="color#{cycle *((1..14).to_a + [{name: 'badge-color'}])}"
                       = image_tag "#{event.timeline_event_type.badge_url}", width: '70'
                     .timeline-panel
                       - if event.private?
@@ -376,8 +374,6 @@
                             = link_to startup_path(@startup, event_id: event.id), class: 'btn btn-info btn-sm btn-flat btn-with-default-padding edit-link' do
                               i.fa.fa-pencil
                               | &nbsp;Edit
-
-              - index += 1
       - else
         .main-timeline
           .tl-iteration

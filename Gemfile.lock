@@ -41,6 +41,12 @@ GIT
       signet (~> 0.6)
 
 GIT
+  remote: git://github.com/sachin87/week-of-month.git
+  revision: 85b1ec1289cd1a2289c2114523e563c64d01a2ee
+  specs:
+    week_of_month (1.2.3.4)
+
+GIT
   remote: git://github.com/zpaulovics/datetimepicker-rails.git
   revision: 36d21cec5da7f5b214925804f60e63c61c747023
   branch: master
@@ -686,6 +692,7 @@ DEPENDENCIES
   valid_url
   videojs_rails
   webmock
+  week_of_month!
   wicked
 
 BUNDLED WITH

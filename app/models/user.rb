@@ -313,7 +313,50 @@ class User < ActiveRecord::Base
     end
   end
 
+  def activity_timeline
+    start_date, end_date = if startup.present? && startup.batch.present?
+      [startup.batch.start_date, startup.batch.end_date]
+    else
+      [created_at, Time.now]
+    end
+
+    karma_points_by_week = karma_points.where(created_at: [start_date..end_date]).group_by_week(:created_at).count
+    timeline_events_by_week = timeline_events.where(created_at: [start_date..end_date]).group_by_week(:created_at).count
+    public_slack_message_by_week = public_slack_messages.where(created_at: [start_date..end_date]).group_by_week(:created_at).count
+
+    total_activity = hash_sum(karma_points_by_week, timeline_events_by_week, public_slack_message_by_week)
+    parsed_activity total_activity
+  end
+
   private
+
+  def hash_sum(*hashes)
+    result_hash = {}
+
+    hashes.each do |hash|
+      hash.each do |key, value|
+        if result_hash[key]
+          result_hash[key] = result_hash[key] + value
+        else
+          result_hash[key] = value
+        end
+      end
+    end
+
+    result_hash
+  end
+
+  def parsed_activity(total_activity)
+    total_activity.sort.each_with_object({}) do |activity, result|
+      count = activity.last
+      next if count == 0 # Skip empty values from groupdate.
+
+      date = activity.first
+
+      result[date.strftime('%B')] ||= {}
+      result[date.strftime('%B')][date.week_of_month] = count
+    end
+  end
 
   def needs_password_change_email?
     encrypted_password_changed? && persisted?

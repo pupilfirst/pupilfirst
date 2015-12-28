@@ -71,24 +71,38 @@ describe User do
       startup = create :startup, batch: batch
       user = startup.founders.first
 
-      create :timeline_event, startup: startup
-      create :timeline_event, startup: startup, created_at: 2.weeks.ago
+      te_now = create :timeline_event, startup: startup
+      te_2_weeks_ago = create :timeline_event, startup: startup, created_at: 2.weeks.ago
 
       10.times { create :public_slack_message, user: user }
       5.times { create :public_slack_message, user: user, created_at: 1.month.ago }
 
-      create :karma_point, user: user
-      create :karma_point, user: user, created_at: 2.weeks.ago
+      kp_now = create :karma_point, user: user
+      kp_2_weeks_ago = create :karma_point, user: user, created_at: 2.weeks.ago
 
       # We won't expect the following events to be counted, since it's outside batch timing.
       create :timeline_event, startup: startup, created_at: 3.months.ago
       create :public_slack_message, user: user, created_at: 5.months.from_now
 
-      expected_activity = { 1.month.ago.strftime('%B') => { 1.month.ago.week_of_month => 5 } }
-      expected_activity[2.weeks.ago.strftime('%B')] ||= {}
-      expected_activity[2.weeks.ago.strftime('%B')][2.weeks.ago.week_of_month] = 2
-      expected_activity[Time.now.strftime('%B')] ||= {}
-      expected_activity[Time.now.strftime('%B')][Time.now.week_of_month] = 12
+      expected_activity = { 1.month.ago.strftime('%B') => { counts: { 1.month.ago.week_of_month => 5 }, list: [{ type: :public_slack_message, count: 5 }] } }
+      expected_activity[2.weeks.ago.strftime('%B')] ||= { counts: {} }
+      expected_activity[2.weeks.ago.strftime('%B')][:counts][2.weeks.ago.week_of_month] = 2
+
+      expected_activity[2.weeks.ago.strftime('%B')][:list] ||= []
+      expected_activity[2.weeks.ago.strftime('%B')][:list] += [
+        { type: :timeline_event, timeline_event: te_2_weeks_ago },
+        { type: :karma_point, karma_point: kp_2_weeks_ago }
+      ]
+
+      expected_activity[Time.now.strftime('%B')] ||= { counts: {} }
+      expected_activity[Time.now.strftime('%B')][:counts][Time.now.week_of_month] = 12
+
+      expected_activity[2.weeks.ago.strftime('%B')][:list] ||= []
+      expected_activity[Time.now.strftime('%B')][:list] += [
+        { type: :timeline_event, timeline_event: te_now },
+        { type: :public_slack_message, count: 10 },
+        { type: :karma_point, karma_point: kp_now }
+      ]
 
       expect(user.activity_timeline).to eq(expected_activity)
     end

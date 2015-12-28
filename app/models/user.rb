@@ -313,49 +313,74 @@ class User < ActiveRecord::Base
     end
   end
 
+  # Returns data required to populate /founders/:slug
   def activity_timeline
+    all_activity = karma_points.where(created_at: batch_date_range) +
+      timeline_events.where(created_at: batch_date_range) +
+      public_slack_messages.where(created_at: batch_date_range)
+
+    sorted_activity = all_activity.sort_by(&:created_at)
+
+    sorted_activity.each_with_object({}) do |activity, timeline|
+      if activity.is_a? PublicSlackMessage
+        add_public_slack_message_to_timeline(activity, timeline)
+      elsif activity.is_a? TimelineEvent
+        add_timeline_event_to_timeline(activity, timeline)
+      elsif activity.is_a? KarmaPoint
+        add_karma_point_to_timeline(activity, timeline)
+      end
+    end
+  end
+
+  # If user is part of a batched startup, it returns batch's date range - otherwise user creation time to 'now'.
+  def batch_date_range
     start_date, end_date = if startup.present? && startup.batch.present?
       [startup.batch.start_date, startup.batch.end_date]
     else
       [created_at, Time.now]
     end
 
-    karma_points_by_week = karma_points.where(created_at: [start_date..end_date]).group_by_week(:created_at).count
-    timeline_events_by_week = timeline_events.where(created_at: [start_date..end_date]).group_by_week(:created_at).count
-    public_slack_message_by_week = public_slack_messages.where(created_at: [start_date..end_date]).group_by_week(:created_at).count
-
-    total_activity = hash_sum(karma_points_by_week, timeline_events_by_week, public_slack_message_by_week)
-    parsed_activity total_activity
+    (start_date..end_date)
   end
 
   private
 
-  def hash_sum(*hashes)
-    result_hash = {}
+  def add_public_slack_message_to_timeline(activity, timeline)
+    month = activity.created_at.strftime('%B')
 
-    hashes.each do |hash|
-      hash.each do |key, value|
-        if result_hash[key]
-          result_hash[key] = result_hash[key] + value
-        else
-          result_hash[key] = value
-        end
-      end
+    increment_activity_count(timeline, month, activity.created_at.week_of_month)
+
+    if timeline[month][:list] && timeline[month][:list].last[:type] == :public_slack_message
+      timeline[month][:list].last[:count] += 1
+    else
+      timeline[month][:list] ||= []
+      timeline[month][:list] << { type: :public_slack_message, count: 1 }
     end
-
-    result_hash
   end
 
-  def parsed_activity(total_activity)
-    total_activity.sort.each_with_object({}) do |activity, result|
-      count = activity.last
-      next if count == 0 # Skip empty values from groupdate.
+  def add_timeline_event_to_timeline(activity, timeline)
+    month = activity.created_at.strftime('%B')
 
-      date = activity.first
+    increment_activity_count(timeline, month, activity.created_at.week_of_month)
 
-      result[date.strftime('%B')] ||= {}
-      result[date.strftime('%B')][date.week_of_month] = count
-    end
+    timeline[month][:list] ||= []
+    timeline[month][:list] << { type: :timeline_event, timeline_event: activity }
+  end
+
+  def add_karma_point_to_timeline(activity, timeline)
+    month = activity.created_at.strftime('%B')
+
+    increment_activity_count(timeline, month, activity.created_at.week_of_month)
+
+    timeline[month][:list] ||= []
+    timeline[month][:list] << { type: :karma_point, karma_point: activity }
+  end
+
+  def increment_activity_count(timeline, month, week)
+    timeline[month] ||= {}
+    timeline[month][:counts] ||= {}
+    timeline[month][:counts][week] ||= 0
+    timeline[month][:counts][week] += 1
   end
 
   def needs_password_change_email?

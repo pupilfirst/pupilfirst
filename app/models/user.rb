@@ -315,13 +315,13 @@ class User < ActiveRecord::Base
 
   # Returns data required to populate /founders/:slug
   def activity_timeline
-    all_activity = karma_points.where(created_at: batch_date_range) +
-      timeline_events.where(created_at: batch_date_range) +
-      public_slack_messages.where(created_at: batch_date_range)
+    all_activity = karma_points.where(created_at: activity_date_range) +
+      timeline_events.where(created_at: activity_date_range) +
+      public_slack_messages.where(created_at: activity_date_range)
 
     sorted_activity = all_activity.sort_by(&:created_at)
 
-    sorted_activity.each_with_object({}) do |activity, timeline|
+    sorted_activity.each_with_object(blank_activity_timeline) do |activity, timeline|
       if activity.is_a? PublicSlackMessage
         add_public_slack_message_to_timeline(activity, timeline)
       elsif activity.is_a? TimelineEvent
@@ -333,17 +333,27 @@ class User < ActiveRecord::Base
   end
 
   # If user is part of a batched startup, it returns batch's date range - otherwise user creation time to 'now'.
-  def batch_date_range
-    start_date, end_date = if startup.present? && startup.batch.present?
-      [startup.batch.start_date, startup.batch.end_date]
-    else
-      [created_at, Time.now]
-    end
-
-    (start_date..end_date)
+  def activity_date_range
+    (batch_start_date..batch_end_date)
   end
 
   private
+
+  def batch_start_date
+    startup.present? && startup.batch.present? ? startup.batch.start_date : created_at
+  end
+
+  def batch_end_date
+    startup.present? && startup.batch.present? ? startup.batch.end_date : Time.now
+  end
+
+  def blank_activity_timeline
+    first_day_of_each_month = (batch_start_date..batch_end_date).select { |d| d.day == 1 }
+
+    first_day_of_each_month.each_with_object({}) do |first_day_of_month, blank_timeline|
+      blank_timeline[first_day_of_month.strftime('%B')] = { counts: (1..first_day_of_month.total_weeks).each_with_object({}) { |w, o| o[w] = 0 } }
+    end
+  end
 
   def add_public_slack_message_to_timeline(activity, timeline)
     month = activity.created_at.strftime('%B')
@@ -377,8 +387,6 @@ class User < ActiveRecord::Base
   end
 
   def increment_activity_count(timeline, month, week)
-    timeline[month] ||= {}
-    timeline[month][:counts] ||= {}
     timeline[month][:counts][week] ||= 0
     timeline[month][:counts][week] += 1
   end

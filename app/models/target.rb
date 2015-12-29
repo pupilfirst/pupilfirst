@@ -72,4 +72,37 @@ class Target < ActiveRecord::Base
   def founder?
     role == Target::ROLE_FOUNDER
   end
+
+  # Notify founders about a new or revised target on public slack
+  after_create :notify_new_target
+  after_update :notify_revision, if: :crucial_revision?
+
+  def notify_new_target
+    PublicSlackTalk.post_message message: details_as_slack_message, users: startup.founders
+  end
+
+  def notify_revision
+    PublicSlackTalk.post_message message: revision_as_slack_message, users: startup.founders
+  end
+
+  def crucial_revision?
+    title_changed? || description_changed? || completion_instructions_changed? || due_date_changed?
+  end
+
+  def details_as_slack_message
+    message = "Hey! #{assigner.name} has assigned your startup, #{startup.product_name} a new target: *#{title}*\n"
+    message += "Description: \"#{ApplicationController.helpers.strip_tags description}\"\n"
+    message += "He has also provided <#{resource_url}|a useful link> to assist you.\n" if resource_url.present?
+    message += "The due date to complete this target is :exclamation: *#{due_date.strftime('%A, %d %b %Y %l:%M %p')}*" if due_date.present?
+    message
+  end
+
+  def revision_as_slack_message
+    message = "Hey! #{assigner.name} has revised the target (#{title}) he recently assigned to your startup, #{startup.product_name}\n"
+    message += "The revised title is: #{title}" if title_changed?
+    message += "The description now reads: \"#{ApplicationController.helpers.strip_tags description}\"\n" if description_changed?
+    message += "Completion Instructions were modified to: \"#{completion_instructions}\"\n" if completion_instructions_changed?
+    message += ":exclamation: The due date has been modified to *#{due_date.strftime('%A, %d %b %Y %l:%M %p')}* :exclamation:" if due_date_changed?
+    message
+  end
 end

@@ -240,7 +240,7 @@ ActiveAdmin.register Startup do
         end
       end
 
-      row :batch_number
+      row :batch
       row :iteration
       row :featured
       row :physical_incubatee
@@ -384,5 +384,5 @@ ActiveAdmin.register Startup do
     { founders_attributes: [:id, :first_name, :last_name, :email, :avatar, :remote_avatar_url, :linkedin_url, :twitter_url, :skip_password] },
     :created_at, :updated_at, :approval_status, :approval_status, :registration_type,
     :incubation_location, :agreement_sent, :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration,
-    :physical_incubatee, :presentation_link, :product_video, :wireframe_link, :prototype_link, :slug, :featured, :batch_number
+    :physical_incubatee, :presentation_link, :product_video, :wireframe_link, :prototype_link, :slug, :featured, :batch_id
 end

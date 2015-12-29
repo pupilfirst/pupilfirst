@@ -9,7 +9,7 @@ class PublicSlackTalk
     @token = APP_CONFIG[:slack_token]
     @as_user = true
     @unfurl = false
-    @errors = []
+    @errors = {}
   end
 
   # Call this method to post a new message on slack
@@ -49,9 +49,9 @@ class PublicSlackTalk
   def post_to_channel
     response_json = JSON.parse RestClient.get("https://slack.com/api/chat.postMessage?token=#{@token}&channel=#{@channel}"\
       "&text=#{@message}&as_user=#{@as_user}&unfurl_links=#{@unfurl}")
-    @errors << { "Slack" => response_json['error'] } unless response_json['ok']
+    @errors["Slack"] = response_json['error'] unless response_json['ok']
   rescue RestClient::Exception => err
-    @errors << { "RestClient" => err.response.body }
+    @errors["RestClient"] = err.response.body
   end
 
   def channel_valid?
@@ -67,14 +67,14 @@ class PublicSlackTalk
   def fetch_im_id
     # verify user has slack_user_id
     unless @user.slack_user_id
-      errors << { @user.id => 'slack_user_id missing for user' }
+      @errors[@user.id] = 'slack_user_id missing for user'
       return false
     end
 
     # fetch im_ids of all users
     ims_list = JSON.parse RestClient.get("https://slack.com/api/im.list?token=#{@token}")
     unless ims_list['ok']
-      errors << { @user.id => ims_list['error'] }
+      @errors[@user.id] = ims_list['error']
       return false
     end
 
@@ -82,7 +82,7 @@ class PublicSlackTalk
     user_ids = ims_list['ims'].map { |i| i['user'] }
     index = user_ids.index @user.slack_user_id
     unless index
-      errors << { @user.id => 'could not find im id for user' }
+      @errors[@user.id] = 'could not find im id for user'
       return false
     end
 

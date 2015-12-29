@@ -149,24 +149,18 @@ ActiveAdmin.register StartupFeedback do
 
   member_action :slack_feedback, method: :put do
     startup_feedback = StartupFeedback.find params[:id]
+    founders = startup_feedback.startup.founders
 
-    slack_users = startup_feedback.startup.founders.each_with_object(sent: [], not_sent: []) do |user, slack_usernames|
-      begin
-        if user.slack_user_id.present?
-          user.ping_on_slack startup_feedback.as_slack_message
-          slack_usernames[:sent] << user.slack_username
-        else
-          slack_usernames[:not_sent] << user.fullname
-        end
-      rescue Exceptions::InvalidSlackUser, Exceptions::BadSlackConnection
-        slack_usernames[:not_sent] << user.fullname
-      end
-    end
+    # post to slack
+    response = PublicSlackTalk.post_message message: startup_feedback.as_slack_message, users: founders
 
-    success = slack_users[:sent].present? ? "Your feedback has been sent as DM to: #{slack_users[:sent].split.join(', ')} \n" : ''
-    failure = slack_users[:not_sent].present? ? "Failed to ping: #{slack_users[:not_sent].split.join(', ')}" : ''
+    # form appropriate flash message with details from response
+    success_names = User.find(founders.ids - response.errors.keys).map(&:slack_username).join(', ')
+    failure_names = User.find(founders.ids & response.errors.keys).map(&:fullname).join(', ')
+    success_message = success_names.present? ? "Your feedback has been sent as DM to: #{success_names} \n" : ''
+    failure_message = failure_names.present? ? "Failed to ping: #{failure_names}" : ''
+    flash[:alert] = success_message + failure_message
 
-    flash[:alert] = success + failure
     redirect_to :back
   end
 
@@ -183,11 +177,14 @@ ActiveAdmin.register StartupFeedback do
   member_action :slack_feedback_to_founder, method: :put do
     startup_feedback = StartupFeedback.find params[:id]
     user = User.find(params[:user_id])
-    begin
-      user.ping_on_slack startup_feedback.as_slack_message if user.slack_user_id.present?
-      flash[:alert] = "Your feedback has been sent as a DM to #{user.slack_username} on slack"
-    rescue
-      flash[:alert] = "Could not ping #{user.slack_username} on slack. Please try again"
+
+    # post to slack
+    response = PublicSlackTalk.post_message message: startup_feedback.as_slack_message, user: user
+
+    flash[:alert] = if response.errors.any?
+      "Could not ping #{user.slack_username} on slack. Please try again"
+    else
+      "Your feedback has been sent as a DM to #{user.slack_username} on slack"
     end
     redirect_to action: :show
   end

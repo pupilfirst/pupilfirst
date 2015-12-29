@@ -49,9 +49,11 @@ class PublicSlackTalk
   def post_to_channel
     response_json = JSON.parse RestClient.get("https://slack.com/api/chat.postMessage?token=#{@token}&channel=#{@channel}"\
       "&text=#{@message}&as_user=#{@as_user}&unfurl_links=#{@unfurl}")
-    @errors["Slack"] = response_json['error'] unless response_json['ok']
+    error_key = @user.present? ? @user.id : 'Slack'
+    @errors[error_key] = response_json['error'] unless response_json['ok']
   rescue RestClient::Exception => err
-    @errors["RestClient"] = err.response.body
+    error_key = @user.present? ? @user.id : 'RestClient'
+    @errors[error_key] = err.response.body
   end
 
   def channel_valid?

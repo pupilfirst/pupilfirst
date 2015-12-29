@@ -10,10 +10,12 @@ feature 'DM Startup Feedback' do
   let!(:founder_1_request) do
     stub_request(:get, 'https://slack.com/api/chat.postMessage?as_user=true&channel=DABCDEF'\
     "&text=#{startup_feedback.as_slack_message}&token=xxxxxx&unfurl_links=false")
+      .to_return(body: '{"ok":true}')
   end
   let!(:founder_2_request) do
     stub_request(:get, 'https://slack.com/api/chat.postMessage?as_user=true&channel=D123456'\
     "&text=#{startup_feedback.as_slack_message}&token=xxxxxx&unfurl_links=false")
+      .to_return(body: '{"ok":true}')
   end
 
   before :all do

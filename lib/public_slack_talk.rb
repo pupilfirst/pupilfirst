@@ -1,12 +1,15 @@
 class PublicSlackTalk
+  attr_reader :errors
+
   def initialize(message:, channel: nil, user: nil, users: nil)
     @channel = channel
     @user = user
-    @message = message
+    @message = CGI.escape message
     @users = users
     @token = APP_CONFIG[:slack_token]
     @as_user = true
     @unfurl = false
+    @errors = []
   end
 
   # Call this method to post a new message on slack
@@ -21,7 +24,7 @@ class PublicSlackTalk
   def process
     # post message to appropriate channel
     if @channel.present?
-      return false unless channel_valid?
+      fail 'could not validate channel specified' unless channel_valid?
       @channel = ['%23', @channel].join # prepend '#' to channel name
       post_to_channel
     end
@@ -44,8 +47,11 @@ class PublicSlackTalk
   end
 
   def post_to_channel
-    RestClient.get "https://slack.com/api/chat.postMessage?token=#{@token}&channel=#{@channel}"\
-      "&text=#{@message}&as_user=#{@as_user}&unfurl_links=#{@unfurl}"
+    response_json = JSON.parse RestClient.get("https://slack.com/api/chat.postMessage?token=#{@token}&channel=#{@channel}"\
+      "&text=#{@message}&as_user=#{@as_user}&unfurl_links=#{@unfurl}")
+    @errors << { "Slack" => response_json['error'] } unless response_json['ok']
+  rescue RestClient::Exception => err
+    @errors << { "RestClient" => err.response.body }
   end
 
   def channel_valid?
@@ -55,22 +61,30 @@ class PublicSlackTalk
 
     # verify channel with given name exists
     channel_names = channel_list['channels'].map { |c| c['name'] }
-    return false unless channel_names.include? @channel
-    true
+    channel_names.include? @channel
   end
 
   def fetch_im_id
     # verify user has slack_user_id
-    return false unless @user.slack_user_id
+    unless @user.slack_user_id
+      errors << { @user.id => 'slack_user_id missing for user' }
+      return false
+    end
 
     # fetch im_ids of all users
     ims_list = JSON.parse RestClient.get("https://slack.com/api/im.list?token=#{@token}")
-    return false unless ims_list['ok']
+    unless ims_list['ok']
+      errors << { @user.id => ims_list['error'] }
+      return false
+    end
 
     # verify user has im_id
     user_ids = ims_list['ims'].map { |i| i['user'] }
     index = user_ids.index @user.slack_user_id
-    return false unless index
+    unless index
+      errors << { @user.id => 'could not find im id for user' }
+      return false
+    end
 
     # return im_id of user
     ims_list['ims'][index]['id']

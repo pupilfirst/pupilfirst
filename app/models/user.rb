@@ -348,7 +348,7 @@ class User < ActiveRecord::Base
   end
 
   def blank_activity_timeline
-    first_day_of_each_month = (batch_start_date..batch_end_date).select { |d| d.day == 1 }
+    first_day_of_each_month = (batch_start_date.beginning_of_month..batch_end_date).select { |d| d.day == 1 }
 
     first_day_of_each_month.each_with_object({}) do |first_day_of_month, blank_timeline|
       blank_timeline[first_day_of_month.strftime('%B')] = { counts: (1..first_day_of_month.total_weeks).each_with_object({}) { |w, o| o[w] = 0 } }

@@ -67,7 +67,7 @@ describe User do
 
   describe '#activity_timeline' do
     it 'returns activity count by month and week' do
-      batch = create :batch, start_date: 2.months.ago, end_date: 4.months.from_now
+      batch = create :batch, start_date: 1.month.ago, end_date: 5.months.from_now
       startup = create :startup, batch: batch
       user = startup.founders.first
 
@@ -85,7 +85,7 @@ describe User do
       create :public_slack_message, user: user, created_at: 5.months.from_now
 
       # Fill out expected activity counts with zero-es first.
-      first_day_of_each_month = (batch.start_date..batch.end_date).select { |d| d.day == 1 }
+      first_day_of_each_month = (batch.start_date.beginning_of_month..batch.end_date).select { |d| d.day == 1 }
 
       expected_activity = first_day_of_each_month.each_with_object({}) do |first_day_of_month, hash|
         hash[first_day_of_month.strftime('%B')] = { counts: (1..first_day_of_month.total_weeks).each_with_object({}) { |w, o| o[w] = 0 } }

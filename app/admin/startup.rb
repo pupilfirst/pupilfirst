@@ -33,17 +33,23 @@ ActiveAdmin.register Startup do
     end
 
     column :targets do |startup|
-      ol do
-        startup.targets.order('updated_at DESC').limit(5).each do |target|
-          fa_icon = if target.done?
-            'fa-check'
-          elsif target.expired?
-            'fa-times'
-          else
-            'fa-circle-o'
-          end
-          li do
-            link_to " #{target.title}", [:admin, target], class: "fa #{fa_icon} no-text-decoration"
+      if startup.targets.present?
+        button type: 'button', class: 'admin-startup-targets-show-button', 'data-startup-id' => startup.id do
+          'Show targets'
+        end
+
+        ol class: 'hide', id: "admin-startup-#{startup.id}-targets-list" do
+          startup.targets.order('updated_at DESC').each do |target|
+            fa_icon = if target.done?
+              'fa-check'
+            elsif target.expired?
+              'fa-times'
+            else
+              'fa-circle-o'
+            end
+            li do
+              link_to " #{target.title}", [:admin, target], class: "fa #{fa_icon} no-text-decoration"
+            end
           end
         end
       end

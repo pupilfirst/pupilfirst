@@ -18,8 +18,6 @@
   - if user.startup.present?
     = f.input :roles, label: 'Role at Startup', as: :select, collection: User.valid_roles, label_method: ->(role) { t "user.#{role}" }, include_hidden: false, input_html: { multiple: true }
 
-  = f.input :linkedin_url, label: 'LinkedIn Profile URL', input_html: { maxlength: 255 }
-  = f.input :twitter_url, label: 'Twitter Profile URL', input_html: { maxlength: 255 }
   = f.input :slack_username, label: (link_to 'Public Slack Username<sup>?</sup></a>'.html_safe, about_slack_url, target: '_blank'), placeholder: 'mention_name (excluding @)'
   = f.input :communication_address
   = f.association :university, include_blank: 'Not a student', collection: University.all.group_by(&:location), as: :grouped_select, group_method: :last
@@ -29,3 +27,21 @@
   .form-group
     .col-sm-offset-3.col-sm-10
       = f.button :submit, 'Update basic details', class: 'btn btn-primary btn-flat'
+
+= simple_form_for user, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean, file: :horizontal_file_input } do |f|
+  legend Social Links
+
+  = f.error_notification
+
+  = f.input :twitter_url, label: 'Twitter Profile URL', input_html: { maxlength: 255 }
+  = f.input :facebook_url, label: 'Facebook Profile URL', input_html: { maxlength: 255 }
+  = f.input :linkedin_url, label: 'LinkedIn Profile URL', input_html: { maxlength: 255 }
+  = f.input :personal_website_url, label: 'Personal Website URL', input_html: { maxlength: 255 }
+  = f.input :blog_url, label: 'Blog URL', input_html: { maxlength: 255 }
+  = f.input :angel_co_url, label: 'AngelList Profile URL', input_html: { maxlength: 255 }
+  = f.input :github_url, label: 'Github Profile URL', input_html: { maxlength: 255 }
+  = f.input :behance_url, label: 'Behance Portfolio URL', input_html: { maxlength: 255 }
+
+  .form-group
+    .col-sm-offset-3.col-sm-10
+      = f.button :submit, 'Update social links', class: 'btn btn-primary btn-flat'

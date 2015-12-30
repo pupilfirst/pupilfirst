@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151217075727) do
+ActiveRecord::Schema.define(version: 20151229104244) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -445,6 +445,12 @@ ActiveRecord::Schema.define(version: 20151217075727) do
     t.string   "college_identification"
     t.boolean  "avatar_processing",        default: false
     t.string   "slack_user_id"
+    t.string   "personal_website_url"
+    t.string   "blog_url"
+    t.string   "facebook_url"
+    t.string   "angel_co_url"
+    t.string   "github_url"
+    t.string   "behance_url"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

@@ -3,6 +3,7 @@
     = f.input :email
     = f.input :first_name
     = f.input :last_name
+    = f.input :phone
     = f.input :roles, as: :check_boxes, collection: User.valid_roles
     = f.input :born_on, as: :date_select, :start_year => 1920, :end_year => Date.today.year - 10
     = f.input :startup, label: 'Product', member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }
@@ -11,8 +12,6 @@
     = f.input :district
     = f.input :state
     = f.input :pin
-    = f.input :twitter_url
-    = f.input :linkedin_url
     = f.input :slack_username
     = f.input :avatar, as: :file
     = f.input :university
@@ -24,10 +23,15 @@
     / When creating a user manually, let's skip the e-mail confirmation step.
     /= f.input :confirmed_at, as: :hidden, input_html: { value: Time.now.utc.to_s }
 
-  = f.inputs 'Contact Details'
-    = f.input :phone
-    = f.input :company
-    = f.input :invitation_token, input_html: {data: { registered: @user.encrypted_password.blank? ? 'false' : 'true' }}
+  = f.inputs 'Social links'
+    = f.input :twitter_url
+    = f.input :facebook_url
+    = f.input :linkedin_url
+    = f.input :personal_website_url
+    = f.input :blog_url
+    = f.input :angel_co_url
+    = f.input :github_url
+    = f.input :behance_url
 
   = f.submit
 

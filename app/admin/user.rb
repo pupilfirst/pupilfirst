@@ -121,12 +121,27 @@ ActiveAdmin.register User do
       end
     end
 
-    attributes_table do
-      row :confirmed_at
-      row :reset_password_sent_at
-      row :sign_in_count
-      row :current_sign_in_at
-      row :last_sign_in_at
+    panel 'Social links' do
+      attributes_table_for user do
+        row :twitter_url
+        row :facebook_url
+        row :linkedin_url
+        row :personal_website_url
+        row :blog_url
+        row :angel_co_url
+        row :github_url
+        row :behance_url
+      end
+    end
+
+    panel 'Devise details' do
+      attributes_table_for user do
+        row :confirmed_at
+        row :reset_password_sent_at
+        row :sign_in_count
+        row :current_sign_in_at
+        row :last_sign_in_at
+      end
     end
 
     panel 'Emails and Notifications' do
@@ -182,8 +197,9 @@ ActiveAdmin.register User do
 
   form partial: 'admin/users/form'
 
-  permit_params :first_name, :last_name, :email, :remote_avatar_url, :avatar, :startup_id, :twitter_url, :linkedin_url,
+  permit_params :first_name, :last_name, :email, :remote_avatar_url, :avatar, :startup_id,
     :slack_username, :skip_password, :born_on, :startup_admin, :communication_address, :district, :state, :pin,
     :phone, :company, :invitation_token, :university_id, :roll_number, :year_of_graduation,
+    :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :facebook_url, :angel_co_url, :github_url, :behance_url,
     :years_of_work_experience, roles: []
 end

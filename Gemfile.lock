@@ -24,6 +24,13 @@ GIT
       railties (>= 3.1)
 
 GIT
+  remote: git://github.com/harigopal/active_skin.git
+  revision: b746f47a444cd8c9f41041ff3f4a80a6874c83f9
+  branch: patch-1
+  specs:
+    active_skin (0.0.12)
+
+GIT
   remote: git://github.com/mobmewireless/unobtrusive_flash.git
   revision: 24e7787d16db66f7956747444433a4e47278193a
   branch: master
@@ -82,7 +89,6 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
-    active_skin (0.0.12)
     activejob (4.2.5)
       activesupport (= 4.2.5)
       globalid (>= 0.3.0)
@@ -616,7 +622,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_skin
+  active_skin!
   activeadmin!
   attribute_normalizer (~> 1.2.0.b)
   autoprefixer-rails

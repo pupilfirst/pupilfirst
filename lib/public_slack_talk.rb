@@ -15,8 +15,12 @@ class PublicSlackTalk
   # Call this method to post a new message on slack
   # Specify either the channel name (eg: 'general'), user or an array of users
   def self.post_message(message:, **target)
+    # skip if in development environment
+    return if Rails.env.development?
+
     # ensure one and only one target is specified
     fail ArgumentError, 'specify one of channel, user or users' unless [target[:channel], target[:user], target[:users]].compact.length == 1
+
     # create a new PublicSlackTalk instance and process it
     new(channel: target[:channel], user: target[:user], users: target[:users], message: message).tap(&:process)
   end

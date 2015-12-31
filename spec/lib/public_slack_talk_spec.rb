@@ -1,6 +1,67 @@
 require 'rails_helper'
 
 describe 'Public Slack Talk', focus: true do
+  subject { PublicSlackTalk }
+
+  describe '.post_message' do
+    let(:user_1) { create :user_with_out_password }
+    let(:user_2) { create :user_with_out_password }
+
+    it 'raises ArgumentError if no target specified' do
+      expect { subject.post_message message: 'Hello' }.to raise_error(ArgumentError)
+    end
+
+    it 'raises ArgumentError if multiple targets specified' do
+      expect { PublicSlackTalk.post_message message: 'Hello', channel: 'general', user: user_1 }.to raise_error(ArgumentError)
+      expect { PublicSlackTalk.post_message message: 'Hello', user: user_1, users: [user_1, user_2] }.to raise_error(ArgumentError)
+      expect { PublicSlackTalk.post_message message: 'Hello', channel: 'general', users: [user_1, user_2] }.to raise_error(ArgumentError)
+    end
+
+    context 'when targets are correctly specified' do
+      context 'when channel is supplied' do
+        it 'sends message to channel' do
+          pending 'by calling https://slack.com/api/chat.postMessage?token=#{@token}&channel=#{@channel}'
+          expect(1).to eq(2)
+        end
+
+        context 'when supplied channel is invalid' do
+          it 'fails' do
+            pending 'expect to raise RuntimeError'
+            expect(1).to eq(2)
+          end
+        end
+      end
+
+      context 'when single user is supplied' do
+        it 'send message to user' do
+          pending 'by calling https://slack.com/api/chat.postMessage?token=#{@token}&channel=#{@channel}'
+          expect(1).to eq(2)
+        end
+      end
+
+      context 'when multiple users are supplied' do
+        it 'send messages to all users' do
+          pending 'with multiple calls to https://slack.com/api/chat.postMessage?token=#{@token}&channel=#{@channel}'
+          expect(1).to eq(2)
+        end
+      end
+
+      context 'when slack responds with an error' do
+        it 'records the error' do
+          pending 'by responding with a certain error response'
+          expect(1).to eq(2)
+        end
+      end
+
+      context 'when an HTTP error occurs' do
+        it 'records the error' do
+          pending 'by responding with a certain error response'
+          expect(1).to eq(2)
+        end
+      end
+    end
+  end
+
   context '.post_message' do
     let(:user) { create :user_with_out_password }
 

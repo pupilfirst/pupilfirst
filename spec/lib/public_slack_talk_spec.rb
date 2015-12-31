@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'Public Slack Talk', focus: true do
+describe 'Public Slack Talk' do
   subject { PublicSlackTalk }
 
   describe '.post_message' do

@@ -5,6 +5,10 @@ ActiveAdmin.register Target do
     :completion_instructions, :due_date_date, :due_date_time_hour, :due_date_time_minute,
     :completed_at_date, :completed_at_time_hour, :completed_at_time_minute, :completion_comment
 
+  scope :all
+  scope :pending
+  scope :expired
+
   preserve_default_filters!
   filter :startup,
     collection: Startup.batched,

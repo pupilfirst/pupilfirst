@@ -34,12 +34,10 @@ ActiveAdmin.register Startup do
 
     column :targets do |startup|
       if startup.targets.present?
-        button type: 'button', class: 'admin-startup-targets-show-button', 'data-startup-id' => startup.id do
-          'Show targets'
-        end
+        ol do
+          hide_some_targets = startup.targets.count >= 5
 
-        ol class: 'hide', id: "admin-startup-#{startup.id}-targets-list" do
-          startup.targets.order('updated_at DESC').each do |target|
+          startup.targets.order('updated_at DESC').each_with_index do |target, index|
             fa_icon = if target.done?
               'fa-check'
             elsif target.expired?
@@ -47,8 +45,17 @@ ActiveAdmin.register Startup do
             else
               'fa-circle-o'
             end
-            li do
+
+            li class: "#{index >= 3 && hide_some_targets ? "hide admin-startup-#{startup.id}-hidden-target" : ''}" do
               link_to " #{target.title}", [:admin, target], class: "fa #{fa_icon} no-text-decoration"
+            end
+          end
+
+          if hide_some_targets
+            li do
+              a class: 'admin-startup-targets-show-link fa fa-chevron-circle-down', 'data-startup-id' => startup.id do
+                ' Show all targets'
+              end
             end
           end
         end

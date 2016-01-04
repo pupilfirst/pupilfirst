@@ -112,7 +112,6 @@ group :development, :test do
   gem 'coderay' # Pretty syntax highlighting on rspec failure snippets.
   gem 'pry-rails' # Pry debugger.
   gem 'webmock', require: false # Mocking web requests.
-  gem 'did_you_mean' # Enough of silly spellinng mistakes ruining the day!
   gem 'quiet_assets' # Let's not see asset serving messages in the development log!
   gem 'rubocop', require: false # Ruby Style Guide.
 end
@@ -123,4 +122,4 @@ end
 
 gem 'sdoc', '~> 0.4.0', group: :doc
 
-ruby '2.2.4'
+ruby '2.3.0'

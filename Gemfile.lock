@@ -193,8 +193,6 @@ GEM
     devise_invitable (1.5.1)
       actionmailer (>= 3.2.6, < 5)
       devise (>= 3.2.0)
-    did_you_mean (0.9.10)
-      interception
     diff-lcs (1.2.5)
     domain_name (0.5.24)
       unf (>= 0.0.5, < 1.0.0)
@@ -350,7 +348,6 @@ GEM
       railties (>= 3.2, < 5)
       responders
     insensitive_hash (0.3.3)
-    interception (0.5)
     ipaddress (0.8.0)
     jbuilder (2.3.0)
       activesupport (>= 3.0.0, < 5)
@@ -638,7 +635,6 @@ DEPENDENCIES
   delayed_job_active_record
   delayed_job_web
   devise_invitable
-  did_you_mean
   dotenv-rails
   factory_girl
   factory_girl_rails (~> 4.0)

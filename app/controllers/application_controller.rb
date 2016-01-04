@@ -51,7 +51,7 @@ class ApplicationController < ActionController::Base
   def set_content_security_policy
     image_sources = "img-src 'self' data: " + [
       'https://www.google-analytics.com https://blog.sv.co https://www.startatsv.com http://www.startatsv.com',
-      'https://assets.sv.co https://secure.gravatar.com https://uploaded-assets.sv.co hn.inspectlet.com'
+      'https://sv-assets.sv.co https://secure.gravatar.com https://uploaded-assets.sv.co hn.inspectlet.com'
     ].join(' ') + ';'
 
     resource = { media: 'https://s3.amazonaws.com/upload.assets.sv.co/' }
@@ -60,9 +60,9 @@ class ApplicationController < ActionController::Base
     csp_directives = [
       image_sources,
       script_sources,
-      "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://assets.sv.co;",
+      "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://sv-assets.sv.co;",
       "connect-src 'self' hn.inspectlet.com wss://inspectletws.herokuapp.com;",
-      "font-src 'self' fonts.gstatic.com https://assets.sv.co;",
+      "font-src 'self' fonts.gstatic.com https://sv-assets.sv.co;",
       'child-src https://www.youtube.com;',
       'frame-src https://www.youtube.com https://svlabs-public.herokuapp.com https://www.google.com ' \
         "#{typeform[:frame]};",
@@ -78,7 +78,7 @@ class ApplicationController < ActionController::Base
     recaptcha = 'www.google.com www.gstatic.com apis.google.com'
 
     "script-src 'self' https://ajax.googleapis.com https://www.google-analytics.com " \
-      'https://blog.sv.co https://www.youtube.com http://www.startatsv.com https://assets.sv.co ' \
+      'https://blog.sv.co https://www.youtube.com http://www.startatsv.com https://sv-assets.sv.co ' \
       "cdn.inspectlet.com #{recaptcha};"
   end
 end

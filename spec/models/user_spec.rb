@@ -105,7 +105,7 @@ describe User do
 
       expected_activity[Time.now.strftime('%B')][:counts][Time.now.week_of_month] = 12
 
-      expected_activity[2.weeks.ago.strftime('%B')][:list] ||= []
+      expected_activity[Time.now.strftime('%B')][:list] ||= []
 
       expected_activity[Time.now.strftime('%B')][:list] += [
         { type: :timeline_event, timeline_event: te_now },

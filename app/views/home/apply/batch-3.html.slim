@@ -1,0 +1,149 @@
+- content_for :head
+  title SV.CO Apply Now
+  meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
+
+.container
+  .apply-banner
+    .row
+      .col-md-4
+        h1 Apply Now
+        p.header-light
+          ' We help teams of students develop an idea, build a prototype and
+          | collect feedback from early customers.
+.apply-container
+  .container
+    .row
+      .col-md-7
+        .alert.alert-info
+          h4 
+            ' This is the Application page for Batch 3, exclusively for Gujarat Students.
+          a.btn.btn-primary href="#{apply_path}"
+            ' Visit Batch 2 Application Page (Closed)
+        .graduate-details
+          h2.header-light
+            ' SV.CO is a six month &#8220;Build a Startup&#8221; program for college students.
+            ' We help teams of students develop an idea, build a prototype and
+            | collect feedback from early customers.
+            
+          h2.header-light
+            ' Every SV.CO batch has a theme: an industry sector where all selected startups focus. The theme of this batch is 
+            a href="https://en.wikipedia.org/wiki/Software_as_a_service" Software as a Service (SaaS).
+
+          .students-steps
+            h3
+              ' At the end of the program, students will:
+            ul.apply-step-list.list-unstyled.header-light
+              li
+                span.apply-icon.deck-icon
+                .get-text Create a great product deck
+              li
+                span.apply-icon.prototype-icon
+                .get-text Build a functional &amp; usable prototype
+              li
+                span.apply-icon.launch-icon
+                .get-text Launch a product to customers
+              li
+                span.apply-icon.iterate-icon
+                .get-text Iterate or pivot based on customer feedback
+
+          .students-steps
+            h3 Graduating Students will:
+            ul.apply-step-list.list-unstyled.header-light
+              li
+                span.apply-icon.job-offer-icon
+                .get-text Get potential acquihire &amp; job offers from great startups
+              li
+                span.apply-icon.investor-icon
+                .get-text Get funding from the best angel investors in the country
+              li
+                span.apply-icon.entry-icon
+                .get-text Have an opportunity to get direct entry into product accelerators
+
+          .highlight-blue.header-light
+            | This is the first program of its kind in India where you can learn to build a great startup
+            span.font-weight-400>  even while you are still in college.
+
+          .second-batch
+            h3 This is the 2nd batch intake for the SV.CO program.
+            p We had some amazing Startups in our #{link_to 'first batch', startups_path}. Videos of previous graduates and a program overview is available #{link_to 'on our home page', root_path}.
+
+          .important-dates
+            h3.font-weight-400 
+              i.fa.fa-calendar-check-o 
+              | Important Dates
+            ul.important-date-list.list-unstyled.header-light
+              li
+                span.date-colum
+                  span.important-month January
+                  span.important-date 25
+                  span.important-year 2016
+                .date-event 
+                  | Deadline for Application
+              li
+                span.date-colum
+                  span.important-month February
+                  span.important-date 5
+                  span.important-year 2016
+                .date-event
+                  | Deadline for Video and Code Submission 
+              li
+                span.date-colum
+                  spanspan.important-month February
+                  span.important-date 15
+                  span.important-year 2016
+                .date-event
+                  | Team Interview 
+              li
+                span.date-colum
+                  spanspan.important-month March
+                  span.important-date 01
+                  span.important-year 2016
+                .date-event 
+                  | On Boarding of Teams 
+
+          .faq
+            h3.font-weight-400 
+              i.fa.fa-question-circle
+              | FAQ
+            ul.list-unstyled
+              li
+                .faq-question 1. How much time do I have to commit to the program?
+                .faq-answer 
+                  ' At least 10 hours a week. The program is intended to be 
+                  ' completed while you are still in college, and we'll make
+                  ' allowances for your regular academic schedule,  exams
+                  ' and assignment submissions.
+              li
+                .faq-question 2. Can I join as an individual founder?
+                .faq-answer
+                  ' No. Only teams of founders can apply and will be selected on merit.
+                  ' At least <strong> 3 founders and a maximum of 5</strong> per team. Founders
+                  ' should have a mix of engineering ability and speaking &amp; hustling skills.
+              li
+                .faq-question 3. Who can apply?
+                .faq-answer
+                  ' Currently, applications <strong>are open to all college students in Gujarat</strong> with University partners #{link_to 'Gujarat Technological University', 'http://www.gtu.ac.in', target: '_blank'} and #{link_to 'Gujarat Law Society', 'http://www.gujaratlawsociety.org', target: '_blank'}. Successful graduates will get a Specialisation in Entrepreneurship degree from these Universities.
+                  ' Founders have to be in <strong>Semester 5 (third year) or above</strong> to apply.
+              li
+                .faq-question 4. Do I need to have a product idea to join?
+                .faq-answer
+                  ' No you do not. Teams will be selected based on engineering and
+                  ' speaking/hustling ability and <strong>not on the merit of their product
+                  ' idea</strong>. SV.CO has partnered with 
+                  ' <strong>#{link_to 'Tracxn Labs', 'http://tracxn.com', target: '_blank'}</strong>
+                  ' to provide 50 viable product ideas in the SaaS sector for this
+                  ' batch that teams can select after admission.
+              li
+                .faq-question 5. How much do I have to pay for the program?
+                .faq-answer
+                  ' Selected teams in this batch get a full scholarship
+                  ' (usually a ₹15,000/founder/semester fee). All selected founders
+                  ' will have to sign 
+                  ' <strong>#{link_to 'legal agreements with SV.CO', 'https://playbook.sv.co/2-legal-agreement.html'}</strong>
+                  ' to join the program.
+            p
+              ' To learn more about the program, visit our #{link_to 'Website', root_url}
+              ' and our #{link_to 'Startup Playbook', 'https://playbook.sv.co/'}.
+      .col-md-5
+        .apply-form
+          <iframe id="typeform-full" width="100%" height="100%" frameborder="0" src="https://svlabs.typeform.com/to/pdtIY4"></iframe>

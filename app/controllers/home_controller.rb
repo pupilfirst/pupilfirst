@@ -8,7 +8,7 @@ class HomeController < ApplicationController
   def apply
     batch = params[:batch] || 'default'
     @skip_container = true
-    
+
     render "home/apply/batch-#{batch}"
   end
 end

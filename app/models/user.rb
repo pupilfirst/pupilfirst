@@ -318,8 +318,6 @@ class User < ActiveRecord::Base
     (batch_start_date..batch_end_date)
   end
 
-  private
-
   def batch_start_date
     startup.present? && startup.batch.present? ? startup.batch.start_date : created_at
   end
@@ -327,6 +325,8 @@ class User < ActiveRecord::Base
   def batch_end_date
     startup.present? && startup.batch.present? ? startup.batch.end_date : Time.now
   end
+
+  private
 
   def blank_activity_timeline
     first_day_of_each_month = (batch_start_date.beginning_of_month..batch_end_date).select { |d| d.day == 1 }

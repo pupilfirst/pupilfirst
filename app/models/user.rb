@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  extend FriendlyId
   extend Forwardable
   include Gravtastic
   gravtastic
@@ -62,6 +63,19 @@ class User < ActiveRecord::Base
 
     # Remove blank roles, if any.
     roles.delete('')
+  end
+
+  friendly_id :slug_candidates, use: :slugged
+
+  def slug_candidates
+    [
+      [:first_name, :last_name],
+      [:first_name, :last_name, :id]
+    ]
+  end
+
+  def should_generate_new_friendly_id?
+    first_name_changed? || last_name_changed? || super
   end
 
   attr_reader :skip_password

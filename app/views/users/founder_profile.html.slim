@@ -1,0 +1,156 @@
+- content_for :head
+  title Founder Profile
+  meta name="description" content="Founder Profile"
+
+.user-data-container
+  .container
+    .user-data-card
+      .row.row-eq-height
+        .col-md-2
+          .profile
+            = image_tag profile_image_url(current_user, gravatar_size: 140, avatar_version: :thumb), class: 'img-responsive'
+        .col-md-7
+          .row.profile-head
+            .col-md-6.profile-name
+              h2
+                | Some One
+                span Engineering at Z-pay
+            .col-md-6.social-connect
+              a href="#"
+                i.fa.fa-globe
+              a href="#"
+                i.fa.fa-linkedin
+              a href="#"
+                i.fa.fa-facebook
+              a href="#"
+                i.fa.fa-twitter
+              a href="#"
+                i.fa.fa-behance
+              a href="#"
+                i.fa.fa-github
+              a href="#"
+                i.fa.fa-angellist
+
+          .row.profile-detail.row-eq-height
+            .col-md-8.profile-description
+              p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed doeiusmod tempor incididunt ut labore et dolore.
+              a.founder-email href="#"
+                i.fa.fa-envelope
+                | someone@mobme.in
+              span.phone-number
+                i.fa.fa-phone
+                | someone@mobme.in
+            .col-md-4.resume-link-section
+              a.btn.btn-flat.btn-resume-link href="#" type="button" 
+                = image_tag 'users/profile/resume-icon.png'
+                  #code
+                end
+                span.resume-title Some One's Resume
+        .col-md-3.startup-logo-profile.row-eq-height
+          a.startup-logo-box href="http://localhost:3000/startups/super-startup-184" 
+            img.img-responsive alt="Logo" src="/uploads/startup/logo/1/logo.png"
+.profile-bg
+  .container
+    .activity-section
+      .activity-head.clearfix
+        h3.panel-title.pull-left Activity
+        .activity-legend.pull-right title="A summary of Timeline Events, Public Slack Messages and Karma Points." 
+          span Less
+          ul.legend.list-unstyled
+            li.activity-blank
+            li.activity-low
+            li.activity-medium
+            li.activity-high
+          span More
+      .panel-body
+        .activity-calendar
+          ul#activityTab.month-section.list-unstyled.nav.hidden-xs
+            li.active
+              a.clearfix data-toggle="tab" href="#August"
+                .month-name August
+                .week-section.activity-blank
+                  span.week-name W1
+                .week-section.activity-blank
+                  span.week-name W2
+                .week-section.activity-blank
+                  span.week-name W3
+                .week-section.activity-medium
+                  span.week-name W4
+                .week-section.activity-blank
+                  span.week-name W5
+                .week-section.activity-high
+                  span.week-name W6
+                .arrow.visible-sm.visible-xs
+            li
+              a.clearfix data-toggle="tab" href="#September"
+                .month-name September
+                .week-section.activity-blank
+                  span.week-name W1
+                .week-section.activity-blank
+                  span.week-name W2
+                .week-section.activity-high
+                  span.week-name W3
+                .week-section.activity-medium
+                  span.week-name W4
+                .week-section.activity-low
+                  span.week-name W5
+                .arrow.visible-sm.visible-xs
+            li
+              a.clearfix data-toggle="tab" href="#October"
+                .month-name October
+                .week-section.activity-blank
+                  span.week-name W1
+                .week-section.activity-blank
+                  span.week-name W2
+                .week-section.activity-high
+                  span.week-name W3
+                .week-section.activity-medium
+                  span.week-name W4
+                .week-section.activity-low
+                  span.week-name W5
+                .arrow.visible-sm.visible-xs
+        .row
+          .col-md-8.tab-content.hidden-xs
+            #August.timeline.tab-pane.fade.in.active
+              .timeline-data
+                .timeline-box
+                  .timeline-date
+                    span.font-weight-600 1-Dec-2015
+                  .timeline-badge-custom
+                  .timeline-panel
+                    .timeline-body
+                      p Updated Startup Timeline - Received Bank Loan
+            #September.timeline.tab-pane.fade
+              .timeline-data
+                .timeline-box
+                  .timeline-date
+                    span.font-weight-600 29-Dec-2015
+                  .timeline-badge-custom
+                  .timeline-panel
+                    .timeline-body
+                      p Updated Startup Timeline - Received Bank Loan
+            #October.tab-pane.fade
+              .inactive-month
+                p User was inactive during this month.
+
+          .col-md-4.all-activity-counts
+            .all-activity-head.blue-head
+              h3.font-weight-400 Slack Messages
+            .all-activity-body.clearfix
+              .logo-block.pull-left
+                = image_tag 'users/profile/slack-logo.png', class: 'img-responsive'
+              .activity-count-block.pull-left
+                h2.font-weight-300
+                  | 26
+                  span Messages
+                p Aug 17, 2015 - Feb 17, 2016
+            .all-activity-head.green-head
+              h3.font-weight-400 Karma Points
+            .all-activity-body.clearfix
+              .logo-block.pull-left
+                = image_tag 'users/profile/karma-logo.png', class: 'img-responsive'
+              .activity-count-block.pull-left
+                h2.font-weight-300
+                  | 1
+                  span Points
+                p Aug 17, 2015 - Feb 17, 2016

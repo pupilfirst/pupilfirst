@@ -10,6 +10,7 @@ class UsersController < ApplicationController
   def founder_profile
     @user = User.find(params[:slug])
     @timeline = @user.activity_timeline
+    @skip_container = true
   end
 
   # GET /users/:id/edit

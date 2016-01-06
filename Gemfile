@@ -84,6 +84,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify' # Superb notifications library. http://sciactive.github.io/pnotify/
   gem 'rails-assets-curioussolutions-datetimepicker' # Responsive datetimepicker for timeline builder form.
   gem 'rails-assets-trix' # rich text editor from basecamp ( used for eg in the description for targets)
+  gem 'rails-assets-bootstrap-tabcollapse' # Bootstrap plugin that switches bootstrap tabs component to collapse component for small screens.
 end
 
 group :development do

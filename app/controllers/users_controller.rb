@@ -7,6 +7,11 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
 
+  def founder_profile
+    @user = User.find(params[:slug])
+    @timeline = @user.activity_timeline
+  end
+
   # GET /users/:id/edit
   def edit
     @user = params[:id].present? ? User.find(params[:id]) : current_user

@@ -330,3 +330,66 @@
     }
   }
 }
+.task-details {
+
+  .engineering-task {
+    background-color: #fff;
+    padding: 25px;
+    margin-bottom: 15px;
+
+    h4,h5 {
+      color: #449a43;
+    }
+  }
+
+  .product-task {
+    background-color: #fff;
+    padding: 25px;
+    margin-bottom: 15px;
+
+    h4,h5 {
+      color: #0c86be;
+    }
+  }
+  .task-head {
+
+    h5 {
+      border-bottom: 1px solid $grey-border;
+      display: inline-block;
+      padding-bottom: 8px;
+      padding-right: 5px;
+      margin: 0;
+
+      i {
+        margin-right: 10px;
+      }
+    }
+    h4 {
+      font-size: 20px;
+      line-height: 27px;
+    }
+  }
+
+  .requirements-section, .judgement-section  {
+    border-bottom: 1px solid $grey-border;
+    margin-top: 15px;
+
+    p {
+      font-size: 13px;
+    }
+
+    ol {
+      padding-left: 35px;
+      font-size: 16px;
+
+      li {
+        padding-bottom: 10px;
+        font-weight:300;
+      }
+    }
+  }
+  .task-notes {
+    margin-top: 10px;
+    font-size: 16px;
+  }
+}

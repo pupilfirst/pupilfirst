@@ -21,7 +21,7 @@
           = image_tag profile_image_url(current_user, gravatar_size: 40, avatar_version: :thumb), class: 'logged-in-user-link'
         ul.dropdown-menu
           li role="presentation"
-            = link_to current_user do
+            = link_to user_path do
               i.fa.fa-list-ul
               | &nbsp;Profile
           li role="presentation"

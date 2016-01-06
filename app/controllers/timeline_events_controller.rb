@@ -2,7 +2,7 @@ class TimelineEventsController < ApplicationController
   before_filter :authenticate_user!
   before_filter :restrict_to_startup_founders
 
-  # POST /users/:user_id/startup/timeline_events
+  # POST /user/startup/timeline_events
   def create
     @startup = current_user.startup
     @timeline_event = @startup.timeline_events.new timeline_event_params.merge(
@@ -19,7 +19,7 @@ class TimelineEventsController < ApplicationController
     end
   end
 
-  # DELETE /users/:user_id/startup/timeline_events/:id
+  # DELETE /user/startup/timeline_events/:id
   def destroy
     @startup = current_user.startup
     @timeline_event = @startup.timeline_events.find(params[:id])
@@ -33,7 +33,7 @@ class TimelineEventsController < ApplicationController
     end
   end
 
-  # POST /users/:user_id/startup/timeline_events/:id
+  # POST /user/startup/timeline_events/:id
   def update
     @startup = current_user.startup
     @timeline_event = @startup.timeline_events.find(params[:id])

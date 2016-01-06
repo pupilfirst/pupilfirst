@@ -12,7 +12,7 @@ Svapp::Application.routes.draw do
 
   match '/delayed_job' => DelayedJobWeb, anchor: false, via: [:get, :post]
 
-  resources :users, only: [:show, :edit, :update] do
+  resource :user, only: [:show, :edit, :update] do
     member do
       get 'phone'
       post 'code'

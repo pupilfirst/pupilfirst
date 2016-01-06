@@ -43,7 +43,7 @@
                   td #{cofounder.email}
                   td
                     - if @startup.admin?(current_user)
-                      = button_to 'Remove', remove_founder_user_startup_path(current_user, founder_id: cofounder.id), method: :patch, class: 'btn btn-danger btn-xs', data: { confirm: 'Are you sure you want to remove this founder from your startup?' }
+                      = button_to 'Remove', remove_founder_user_startup_path(founder_id: cofounder.id), method: :patch, class: 'btn btn-danger btn-xs', data: { confirm: 'Are you sure you want to remove this founder from your startup?' }
 
         - if @startup.founders.size < 5
           = simple_form_for :cofounder, url: add_cofounder_incubation_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
@@ -60,7 +60,7 @@
 
         h3.page-header Add more information.
         p
-          ' Feel free to add more details to your #{link_to 'personal profile', edit_user_url(current_user)}, or your
-          | #{link_to "startup's profile", edit_user_startup_url(current_user)}.
+          ' Feel free to add more details to your #{link_to 'personal profile', edit_user_url}, or your
+          | #{link_to "startup's profile", edit_user_startup_url}.
         p
           = link_to 'Checkout your startup timeline!', startup_url(@startup), class: 'btn btn-success btn-flat'

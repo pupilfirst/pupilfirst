@@ -16,8 +16,8 @@ class StartupsController < ApplicationController
 
   def new
     if current_user.phone.blank?
-      session[:referer] = new_user_startup_url(current_user)
-      redirect_to phone_user_path(current_user)
+      session[:referer] = new_user_startup_url
+      redirect_to phone_user_path
       return
     end
 
@@ -34,7 +34,7 @@ class StartupsController < ApplicationController
   # POST /startups/team_leader_consent
   def team_leader_consent
     if current_user.startup.present? || !current_user.phone?
-      redirect_to new_user_startup_path(current_user)
+      redirect_to new_user_startup_path
     else
       Startup.new_incubation!(current_user)
       redirect_to incubation_path(id: :user_profile)
@@ -83,7 +83,7 @@ class StartupsController < ApplicationController
       flash[:success] = "SV.CO ID #{params[:email]} has been linked to your startup as founder"
     end
 
-    redirect_to edit_user_startup_path(current_user)
+    redirect_to edit_user_startup_path
   end
 
   # PATCH /remove_founder

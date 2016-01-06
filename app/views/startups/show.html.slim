@@ -15,7 +15,7 @@
           p Your startup has not been approved yet. Please write to #{mail_to 'help@sv.co'} if you'd like help!
       - elsif @startup.unready?
         .alert.alert-info.margin-top-20 role='alert'
-          p It appears that your startup application is not yet complete! Please head #{link_to('here', new_user_startup_path(current_user))} and complete your application at the earliest for SV.CO approval.
+          p It appears that your startup application is not yet complete! Please head #{link_to('here', new_user_startup_path)} and complete your application at the earliest for SV.CO approval.
     - else
       .alert.alert-info.margin-top-20
         p This startup has submitted an application to SV.CO. They have not been approved yet.
@@ -36,7 +36,7 @@
             img.timeline-verified.margin-left-10 src='#{image_url 'timeline/verified.gif'}'
         - if current_user && @startup.founder?(current_user)
           small.edit-startup-link
-            a href=edit_user_startup_path(current_user)
+            a href=edit_user_startup_path
               i.fa.fa-pencil
       .startup-name
         - if @startup.name.present?
@@ -297,7 +297,7 @@
                           i.fa.fa-pencil
                           | &nbsp;Edit
                     - else
-                      = button_to user_startup_timeline_event_url(current_user, event),
+                      = button_to user_startup_timeline_event_url(event),
                         method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',
                         data: { confirm: 'This action cannot be reversed. Are you sure?' } do
                         i.fa.fa-times
@@ -366,7 +366,7 @@
                                 i.fa.fa-pencil
                                 | &nbsp;Edit
                           - else
-                            = button_to user_startup_timeline_event_url(current_user, event),
+                            = button_to user_startup_timeline_event_url(event),
                               method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',
                               data: { confirm: 'This action cannot be reversed. Are you sure?' } do
                               i.fa.fa-times

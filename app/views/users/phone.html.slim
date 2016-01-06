@@ -16,7 +16,7 @@ h2.page-header
       ' <em>new</em>
     ' phone number to continue. You will be asked to verify it in the next step.
 
-= form_tag code_user_url(current_user), class: 'form-horizontal', role: 'form' do
+= form_tag code_user_url, class: 'form-horizontal', role: 'form' do
   .form-group
     label.col-sm-2.control-label for='phone_number' Your phone number
     .col-sm-10

@@ -1,15 +1,14 @@
 class UsersController < ApplicationController
   before_filter :authenticate_user!
-  before_filter :restrict_to_current_user, only: [:show, :edit, :update, :code, :resend, :verify, :phone]
 
   # GET /users/:id
   def show
-    @user = User.find(params[:id])
+    @user = current_user
   end
 
   # GET /users/:id/edit
   def edit
-    @user = params[:id].present? ? User.find(params[:id]) : current_user
+    @user = current_user
   end
 
   # PATCH /users/:id
@@ -18,7 +17,7 @@ class UsersController < ApplicationController
 
     if @user.update_attributes(user_params)
       flash[:notice] = 'Profile updated'
-      redirect_to @user
+      redirect_to user_path
     else
       render 'edit'
     end
@@ -34,7 +33,7 @@ class UsersController < ApplicationController
 
       flash[:success] = 'Password updated'
 
-      redirect_to @user
+      redirect_to user_path
     else
       render 'edit'
     end
@@ -98,10 +97,6 @@ class UsersController < ApplicationController
 
   private
 
-  def invite_params
-    params.require(:user).permit(:email, :first_name, :last_name)
-  end
-
   def user_password_change_params
     params.required(:user).permit(:current_password, :password, :password_confirmation)
   end
@@ -112,9 +107,5 @@ class UsersController < ApplicationController
       :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :facebook_url, :angel_co_url, :github_url, :behance_url,
       :university_id, :roll_number, :born_on, :communication_address, roles: []
     )
-  end
-
-  def restrict_to_current_user
-    raise_not_found if current_user.id != params[:id].to_i
   end
 end

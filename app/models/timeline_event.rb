@@ -58,14 +58,19 @@ class TimelineEvent < ActiveRecord::Base
   scope :help_wanted, -> { where(timeline_event_type: TimelineEventType.help_wanted) }
   scope :for_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch }) }
 
-  before_save :make_links_an_array
-  before_validation :build_description
+  after_initialize :make_links_an_array
 
-  after_commit do
-    startup.update_stage! if timeline_event_type.stage_change?
+  def make_links_an_array
+    self.links ||= []
   end
 
-  attr_accessor :auto_populated
+  before_save :ensure_links_is_an_array
+
+  def ensure_links_is_an_array
+    self.links = [] if links.nil?
+  end
+
+  before_validation :build_description
 
   def build_description
     return unless !description.present? && auto_populated
@@ -80,13 +85,11 @@ class TimelineEvent < ActiveRecord::Base
     end
   end
 
-  def make_links_an_array
-    self.links = [] if links.nil?
+  after_commit do
+    startup.update_stage! if timeline_event_type.stage_change?
   end
 
-  def links
-    super || []
-  end
+  attr_accessor :auto_populated
 
   def iteration
     startup.iteration(at_event: self)

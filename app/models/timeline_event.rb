@@ -112,6 +112,7 @@ class TimelineEvent < ActiveRecord::Base
     add_link_for_new_wireframe!
     add_link_for_new_prototype!
     add_link_for_new_video!
+    add_link_for_new_resume!
   end
 
   def unverify!
@@ -158,6 +159,11 @@ class TimelineEvent < ActiveRecord::Base
   end
 
   private
+
+  def add_link_for_new_resume!
+    return unless timeline_event_type.resume_submission? && links[0].try(:[], :url).present?
+    user.update!(resume_url: links[0][:url])
+  end
 
   def add_link_for_new_deck!
     return unless timeline_event_type.new_deck? && links[0].try(:[], :url).present?

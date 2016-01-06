@@ -1,3 +1,4 @@
+
 - unless timeline_event.links.empty?
   .panel
     h3 Existing Links
@@ -14,7 +15,10 @@
                 td
                   ' #{link_to link[:url], link[:url], target: "_blank"}
                   ' (#{link_to 'Delete', delete_link_admin_timeline_event_path(link_index: index), { method: :delete, data: { confirm: 'Are you sure?' } }}
-                  ' / #{link_to 'Edit', '#edit-existing-link-form', class: 'edit-existing-link', 'data-index' => index, 'data-title' => link[:title], 'data-url' => link[:url], 'data-private' => link[:private]})
+                  | / #{link_to 'Edit', '#edit-existing-link-form', class: 'edit-existing-link', 'data-index' => index, 'data-title' => link[:title], 'data-url' => link[:url], 'data-private' => link[:private]}
+                  - if timeline_event.timeline_event_type.resume_submission?
+                    | &nbsp;/ #{link_to 'Save', save_resume_url_admin_timeline_event_path(index: index), method: :post, data: { confirm: 'Are you sure?' }}
+                  | )
 
 = form_tag(edit_link_admin_timeline_event_path, method: :put, style: 'display: none;', id: 'edit-existing-link-form') do
   = hidden_field_tag :link_index

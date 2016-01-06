@@ -96,6 +96,11 @@ ActiveAdmin.register User do
       row :born_on
       row :slack_username
       row :slack_user_id
+
+      row :resume_url do
+        link_to user.resume_url if user.resume_url.present?
+      end
+
       row :phone
       row :unconfirmed_phone
       row :phone_verification_code

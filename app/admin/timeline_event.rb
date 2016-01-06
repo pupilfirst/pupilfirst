@@ -185,6 +185,13 @@ ActiveAdmin.register TimelineEvent do
     redirect_to action: :show
   end
 
+  member_action :save_resume_url, method: :post do
+    timeline_event = TimelineEvent.find(params[:id])
+    timeline_event.user.update!(resume_url: timeline_event.links[params[:index].to_i][:url])
+    flash[:success] = "Successfully updated user's resume URL."
+    redirect_to action: :show
+  end
+
   collection_action :founders_for_startup do
     @startup = Startup.find params[:startup_id]
     render 'founders_for_startup.json.erb'

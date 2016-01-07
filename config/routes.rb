@@ -76,6 +76,11 @@ Svapp::Application.routes.draw do
     end
   end
 
+  scope 'connect_request', controller: 'connect_request', as: 'connect_request' do
+    get ':id/feedback/from_team/:token', action: 'feedback_from_team', as: 'feedback_from_team'
+    get ':id/feedback/from_faculty/:token', action: 'feedback_from_faculty', as: 'feedback_from_faculty'
+  end
+
   get 'apply(/:batch)', as: 'apply', to: 'home#apply'
 
   root 'home#index'

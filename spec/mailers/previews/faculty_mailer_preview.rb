@@ -19,4 +19,8 @@ class FacultyMailerPreview < ActionMailer::Preview
   def request_next_week_slots
     FacultyMailer.request_next_week_slots(Faculty.first)
   end
+
+  def connect_request_feedback
+    FacultyMailer.connect_request_feedback(ConnectRequest.first)
+  end
 end

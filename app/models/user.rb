@@ -161,9 +161,7 @@ class User < ActiveRecord::Base
     self.slack_user_id = slack_username.present? ? @new_slack_user_id : nil
   end
 
-  before_create do
-    self.auth_token = SecureRandom.hex(30)
-  end
+  has_secure_token :auth_token
 
   before_validation :remove_at_symbol_from_slack_username
 

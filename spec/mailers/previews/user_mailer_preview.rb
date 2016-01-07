@@ -16,4 +16,8 @@ class UserMailerPreview < ActionMailer::Preview
   def password_changed
     UserMailer.password_changed(User.first)
   end
+
+  def connect_request_feedback
+    UserMailer.connect_request_feedback(ConnectRequest.first)
+  end
 end

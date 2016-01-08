@@ -5,53 +5,54 @@
 .user-data-container
   .container
     .user-data-card
-      .row
+      .row.row-eq-height
         .col-md-2
           .profile
             = image_tag profile_image_url(@user, gravatar_size: 140, avatar_version: :mid), class: 'img-responsive'
         div class="col-md-#{@user.startup.logo.present? ? 7 : 10}"
-          .row.profile-head
-            .col-md-6.profile-name
-              h2
-                = @user.fullname
-                span
-                  - if @user.roles.present?
-                    = @user.roles.map { |role| t("role.#{role}") }.join ', '
-                    ' &nbsp;at
-                  = @user.startup.product_name
-            - if @user.social_url_present?
-              .col-md-6.social-connect
-                - if @user.personal_website_url.present?
-                  a href=@user.personal_website_url target='_blank'
-                    i.fa.fa-globe
-                - if @user.linkedin_url.present?
-                  a href=@user.linkedin_url target='_blank'
-                    i.fa.fa-linkedin
-                - if @user.facebook_url.present?
-                  a href=@user.facebook_url target='_blank'
-                    i.fa.fa-facebook
-                - if @user.twitter_url.present?
-                  a href=@user.twitter_url target='_blank'
-                    i.fa.fa-twitter
-                - if @user.behance_url.present?
-                  a href=@user.behance_url target='_blank'
-                    i.fa.fa-behance
-                - if @user.github_url.present?
-                  a href=@user.github_url target='_blank'
-                    i.fa.fa-github
-                - if @user.angel_co_url.present?
-                  a href=@user.angel_co_url target='_blank'
-                    i.fa.fa-angellist
-                - if @user.blog_url.present?
-                  a href=@user.blog_url target='_blank'
-                    i.fa.fa-rss
+          .row.profile-data
+            .profile-head.clearfix
+              .col-md-6.profile-name
+                h2
+                  = @user.fullname
+                  span
+                    - if @user.roles.present?
+                      = @user.roles.map { |role| t("role.#{role}") }.join ', '
+                      ' &nbsp;at
+                    = @user.startup.product_name
+              - if @user.social_url_present?
+                .col-md-6.social-connect
+                  - if @user.personal_website_url.present?
+                    a href=@user.personal_website_url target='_blank'
+                      i.fa.fa-globe
+                  - if @user.linkedin_url.present?
+                    a href=@user.linkedin_url target='_blank'
+                      i.fa.fa-linkedin
+                  - if @user.facebook_url.present?
+                    a href=@user.facebook_url target='_blank'
+                      i.fa.fa-facebook
+                  - if @user.twitter_url.present?
+                    a href=@user.twitter_url target='_blank'
+                      i.fa.fa-twitter
+                  - if @user.behance_url.present?
+                    a href=@user.behance_url target='_blank'
+                      i.fa.fa-behance
+                  - if @user.github_url.present?
+                    a href=@user.github_url target='_blank'
+                      i.fa.fa-github
+                  - if @user.angel_co_url.present?
+                    a href=@user.angel_co_url target='_blank'
+                      i.fa.fa-angellist
+                  - if @user.blog_url.present?
+                    a href=@user.blog_url target='_blank'
+                      i.fa.fa-rss
 
-          .row.profile-detail
-            .col-lg-8.col-md-7.profile-description
-              p
-                = @user.about
-            .col-lg-4.col-md-5.resume-link-section
-              - if @user.resume_url.present?
+            .profile-detail.clearfix
+              .col-lg-8.col-md-7.profile-description
+                p
+                  = @user.about
+              .col-lg-4.col-md-5.resume-link-section
+                / - if @user.resume_url.present?
                 a.btn.btn-flat.btn-resume-link href=@user.resume_url type="button"
                   = image_tag 'users/profile/resume-icon.png'
                   span.resume-title #{@user.fullname}'s Resume

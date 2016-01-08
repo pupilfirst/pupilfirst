@@ -341,6 +341,19 @@ class User < ActiveRecord::Base
     startup.present? && startup.batch.present? ? startup.batch.end_date : Time.now
   end
 
+  # Returns true if any of the social URL are stored. Used on profile page.
+  # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
+  def social_url_present?
+    facebook_url.present? ||
+      twitter_url.present? ||
+      linkedin_url.present? ||
+      personal_website_url.present? ||
+      github_url.present? ||
+      blog_url.present? ||
+      angel_co_url.present? ||
+      behance_url.present?
+  end
+
   private
 
   def blank_activity_timeline

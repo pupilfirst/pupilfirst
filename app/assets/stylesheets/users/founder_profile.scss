@@ -7,15 +7,17 @@
     padding: 45px 0;
 
     .profile {
-      display: flex;
-      justify-content: center;
-
+      text-align: center;
+      
       img {
         border: 1px solid #aaaaaa;
         border-radius: 5px;
       }
     }
 
+    .profile-data {
+      border-right: 1px solid #d2d2d2;
+    }
     .profile-head {
       border-bottom: 1px solid #d2d2d2;
       padding: 5px 0 15px;
@@ -150,24 +152,14 @@
       }
     }
     .startup-logo-profile {
+
       .startup-logo-box {
         display: inline-block;
-        border-left: 1px solid #d2d2d2;
         padding-left: 15px;
         align-items: center;
         justify-content: center;
         max-width: 200px;
         outline: 0;
-
-        @media (min-width: $screen-md-min) {
-          img {
-            position: relative;
-            top: 50%;
-            -webkit-transform: translateY(-50%);
-            -ms-transform: translateY(-50%);
-            transform: translateY(-50%);
-          }
-        }
 
         @media (max-width: $screen-md-min) {
           max-width: 180px;
@@ -375,7 +367,7 @@
             height: 20px;
             display: inline-block;
             text-align: center;
-            box-shadow: 0 0 0 0.9px #fff inset;
+            box-shadow: 0 0 0 1px #fff inset;
 
             .week-name {
               display: block;

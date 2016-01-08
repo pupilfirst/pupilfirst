@@ -5,11 +5,11 @@
 .user-data-container
   .container
     .user-data-card
-      .row.row-eq-height
+      .row
         .col-md-2
           .profile
-            = image_tag profile_image_url(current_user, gravatar_size: 140, avatar_version: :thumb), class: 'img-responsive'
-        div class="col-md-#{@user.startup.logo.present? ? 7 : 10}"
+            = image_tag profile_image_url(@user, gravatar_size: 140, avatar_version: :thumb), class: 'img-responsive'
+        div.profile-data class="col-md-#{@user.startup.logo.present? ? 7 : 10}"
           .row.profile-head
             .col-md-6.profile-name
               h2
@@ -46,23 +46,17 @@
                   a href=@user.blog_url target='_blank'
                     i.fa.fa-rss
 
-          .row.profile-detail.row-eq-height
+          .row.profile-detail
             .col-lg-8.col-md-7.profile-description
               p
                 = @user.about
-              a.founder-email href="mailto:#{@user.email}"
-                i.fa.fa-envelope
-                = @user.email
-              span.phone-number
-                i.fa.fa-phone
-                = @user.phone
             .col-lg-4.col-md-5.resume-link-section
               - if @user.resume_url.present?
                 a.btn.btn-flat.btn-resume-link href=@user.resume_url type="button"
                   = image_tag 'users/profile/resume-icon.png'
                   span.resume-title #{@user.fullname}'s Resume
         - if @user.startup.logo.present?
-          .col-md-3.startup-logo-profile.row-eq-height
+          .col-md-3.startup-logo-profile
             a.startup-logo-box href=startup_url(@user.startup)
               = image_tag @user.startup.logo.url, alt: 'Startup logo', class: 'img-responsive'
 .profile-bg

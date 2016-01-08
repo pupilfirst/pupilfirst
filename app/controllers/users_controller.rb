@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, except: :founder_profile
 
   # GET /users/:id
   def show
@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   end
 
   def founder_profile
-    @user = User.find(params[:slug])
+    @user = User.friendly.find(params[:slug])
     @timeline = @user.activity_timeline
     @skip_container = true
   end

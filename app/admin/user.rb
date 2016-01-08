@@ -3,6 +3,10 @@ ActiveAdmin.register User do
     def scoped_collection
       super.includes :university, :startup
     end
+
+    def find_resource
+      scoped_collection.friendly.find(params[:id])
+    end
   end
 
   menu label: 'SV Users'
@@ -43,13 +47,13 @@ ActiveAdmin.register User do
   end
 
   member_action :remove_from_startup, method: :post do
-    user = User.find params[:id]
+    user = User.friendly.find params[:id]
     user.remove_from_startup!
     redirect_to action: :show
   end
 
   member_action :send_founder_profile_reminder, method: :post do
-    user = User.find params[:id]
+    user = User.friendly.find params[:id]
 
     # Send email.
     UserMailer.reminder_to_complete_founder_profile(user).deliver_later
@@ -59,7 +63,7 @@ ActiveAdmin.register User do
 
   show do
     attributes_table do
-      row :id
+      row :slug
       row :email
       row :fullname
 
@@ -159,16 +163,16 @@ ActiveAdmin.register User do
     end
   end
 
-  action_item :feedback, only: :show, if: proc { User.find(params[:id]).startup.present? } do
+  action_item :feedback, only: :show, if: proc { User.friendly.find(params[:id]).startup.present? } do
     link_to(
       'Record New Feedback',
       new_admin_startup_feedback_path(
-        startup_feedback: { startup_id: User.find(params[:id]).startup.id, reference_url: startup_url(User.find(params[:id]).startup) }
+        startup_feedback: { startup_id: User.friendly.find(params[:id]).startup.id, reference_url: startup_url(User.friendly.find(params[:id]).startup) }
       )
     )
   end
 
-  action_item :public_slack_messages, only: :show, if: proc { User.find(params[:id]).slack_username.present? } do
+  action_item :public_slack_messages, only: :show, if: proc { User.friendly.find(params[:id]).slack_username.present? } do
     link_to 'Public Slack Messages', admin_public_slack_messages_path(q: { user_id_eq: params[:id] })
   end
 
@@ -202,7 +206,7 @@ ActiveAdmin.register User do
 
   form partial: 'admin/users/form'
 
-  permit_params :first_name, :last_name, :email, :remote_avatar_url, :avatar, :startup_id,
+  permit_params :first_name, :last_name, :email, :remote_avatar_url, :avatar, :startup_id, :slug,
     :slack_username, :skip_password, :born_on, :startup_admin, :communication_address, :district, :state, :pin,
     :phone, :company, :invitation_token, :university_id, :roll_number, :year_of_graduation,
     :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :facebook_url, :angel_co_url, :github_url, :behance_url,

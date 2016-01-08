@@ -21,7 +21,7 @@ feature 'Startup Edit' do
     fill_in 'user_email', with: user.email
     fill_in 'user_password', with: 'password'
     click_on 'Sign in'
-    visit edit_user_startup_path(user)
+    visit edit_user_startup_path
 
     # User should now be on his startup edit page.
   end
@@ -78,7 +78,7 @@ feature 'Startup Edit' do
       startup.reload
       user.reload
 
-      visit edit_user_startup_path(user)
+      visit edit_user_startup_path
       expect(page).to have_text('To delete your startup timeline, contact your SV.CO representative.')
     end
 
@@ -90,7 +90,7 @@ feature 'Startup Edit' do
       startup.reload
       user.reload
 
-      visit edit_user_startup_path(user)
+      visit edit_user_startup_path
       expect(page).to have_text('Deleting this startup is an irreversible action.')
 
       startup_id = startup.id

@@ -19,7 +19,7 @@ table.table.table-hover.table-bordered.table-striped
         - elsif @user.unconfirmed_phone?
           | #{@user.unconfirmed_phone} (Unverified)
         - else
-          = link_to 'Save phone number', phone_user_path(refer: user_url(current_user))
+          = link_to 'Save phone number', phone_user_path(referer: user_url)
     - if @user.startup.present?
       tr
         th Role at Startup
@@ -51,10 +51,10 @@ table.table.table-hover.table-bordered.table-striped
       td = value_or_not_available @user.roll_number, placeholder: 'Not Applicable'
 
 .margin-bottom-40
-  = link_to 'Edit your profile', edit_user_url(@user), class: 'btn btn-primary btn-flat'
+  = link_to 'Edit your profile', edit_user_url, class: 'btn btn-primary btn-flat'
 
   - if @user.startup.present? && !@user.startup.unready?
     | &nbsp;
     = link_to 'View startup timeline', @user.startup, class: 'btn btn-info btn-flat'
     | &nbsp;
-    = link_to 'Edit startup details', edit_user_startup_url(@user), class: 'btn btn-info btn-flat'
+    = link_to 'Edit startup details', edit_user_startup_url, class: 'btn btn-info btn-flat'

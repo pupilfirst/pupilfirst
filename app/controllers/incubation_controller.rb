@@ -94,7 +94,7 @@ class IncubationController < ApplicationController
 
   def ready_for_incubation_wizard?
     return if current_user.ready_for_incubation_wizard?
-    redirect_to new_user_startup_url(current_user)
+    redirect_to new_user_startup_url
   end
 
   def authorize_step!

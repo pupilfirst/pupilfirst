@@ -1,5 +1,5 @@
 .timeline-builder
-  = form_for [current_user, :startup, event], html: event.verified? ? { 'data-verified' => 'true' } : {} do |f|
+  = form_for [:user, :startup, event], html: event.verified? ? { 'data-verified' => 'true' } : {} do |f|
     = f.hidden_field :links, :value => event.links.to_json
     .container-fluid
       .row.top-row.text-center

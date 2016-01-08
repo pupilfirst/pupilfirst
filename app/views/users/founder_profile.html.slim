@@ -52,10 +52,10 @@
                 p
                   = @user.about
               .col-lg-4.col-md-5.resume-link-section
-                / - if @user.resume_url.present?
-                a.btn.btn-flat.btn-resume-link href=@user.resume_url type="button"
-                  = image_tag 'users/profile/resume-icon.png'
-                  span.resume-title #{@user.fullname}'s Resume
+                - if @user.resume_url.present?
+                  a.btn.btn-flat.btn-resume-link href=@user.resume_url type="button"
+                    = image_tag 'users/profile/resume-icon.png'
+                    span.resume-title #{@user.fullname}'s Resume
         - if @user.startup.logo.present?
           .col-md-3.startup-logo-profile
             a.startup-logo-box href=startup_url(@user.startup)

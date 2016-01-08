@@ -32,19 +32,17 @@
                 i.fa.fa-angellist
 
           .row.profile-detail.row-eq-height
-            .col-md-8.profile-description
+            .col-lg-8.col-md-7.profile-description
               p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed doeiusmod tempor incididunt ut labore et dolore.
               a.founder-email href="#"
                 i.fa.fa-envelope
                 | someone@mobme.in
               span.phone-number
                 i.fa.fa-phone
-                | someone@mobme.in
-            .col-md-4.resume-link-section
+                | +91 9823465784
+            .col-lg-4.col-md-5.resume-link-section
               a.btn.btn-flat.btn-resume-link href="#" type="button" 
                 = image_tag 'users/profile/resume-icon.png'
-                  #code
-                end
                 span.resume-title Some One's Resume
         .col-md-3.startup-logo-profile.row-eq-height
           a.startup-logo-box href="http://localhost:3000/startups/super-startup-184" 
@@ -62,9 +60,9 @@
             li.activity-medium
             li.activity-high
           span More
-      .panel-body
+      .activity-content
         .activity-calendar
-          ul#activityTab.month-section.list-unstyled.nav.hidden-xs
+          ul#activityTab.month-section.list-unstyled.nav
             li.active
               a.clearfix data-toggle="tab" href="#August"
                 .month-name August
@@ -110,25 +108,27 @@
                   span.week-name W5
                 .arrow.visible-sm.visible-xs
         .row
-          .col-md-8.tab-content.hidden-xs
-            #August.timeline.tab-pane.fade.in.active
-              .timeline-data
-                .timeline-box
-                  .timeline-date
-                    span.font-weight-600 1-Dec-2015
-                  .timeline-badge-custom
-                  .timeline-panel
-                    .timeline-body
-                      p Updated Startup Timeline - Received Bank Loan
-            #September.timeline.tab-pane.fade
-              .timeline-data
-                .timeline-box
-                  .timeline-date
-                    span.font-weight-600 29-Dec-2015
-                  .timeline-badge-custom
-                  .timeline-panel
-                    .timeline-body
-                      p Updated Startup Timeline - Received Bank Loan
+          .col-md-8.tab-content.hidden-sm.hidden-xs
+            #August.tab-pane.fade.in.active
+              .timeline
+                .timeline-data
+                  .timeline-box
+                    .timeline-date
+                      span.font-weight-600 1-Dec-2015
+                    .timeline-badge-custom
+                    .timeline-panel
+                      .timeline-body
+                        p Updated Startup Timeline - Received Bank Loan
+            #September.tab-pane.fade
+              .timeline
+                .timeline-data
+                  .timeline-box
+                    .timeline-date
+                      span.font-weight-600 29-Dec-2015
+                    .timeline-badge-custom
+                    .timeline-panel
+                      .timeline-body
+                        p Updated Startup Timeline - Received Bank Loan
             #October.tab-pane.fade
               .inactive-month
                 p User was inactive during this month.

@@ -1,12 +1,15 @@
 .user-data-container {
-  background-image: asset-url('users/profile/profile-bg.png');
+  background-image: asset-url("users/profile/profile-bg.png");
   background-repeat: repeat-x;
   background-position: center bottom;
+
   .user-data-card {
     padding: 45px 0;
+
     .profile {
       display: flex;
       justify-content: center;
+
       img {
         border: 1px solid #aaaaaa;
         border-radius: 5px;
@@ -15,26 +18,40 @@
     .profile-head {
       border-bottom: 1px solid #d2d2d2;
       padding: 5px 0 15px;
+
       .profile-name {
 
-        @media (min-width: $screen-sm-max) {
-            padding-left: 0;
-        }
         h2 {
           color: #2a6db6;
           font-size: 23px;
           margin: 0;
+
+          @media (max-width: $screen-sm-max) {
+            padding: 5px 0 20px;
+          }
+          @media (max-width: $screen-xs-max) {
+            padding: 0 0 20px;
+          }
+
           span {
             color: #333333;
             font-size: 13px;
             font-weight: 300;
             margin-left: 5px;
+
+            @media (max-width: $screen-sm-max) {
+              display: block;
+            }
           }
+        }
+        @media (min-width: $screen-sm-max) {
+            padding-left: 0;
         }
       }
       .social-connect {
         padding: 3px 0 0;
-        text-align: center;
+        text-align: right;
+
         a {
           color: #fff;
           font-size: 16px;
@@ -44,19 +61,32 @@
           height: 25px;
           margin: 0 5px;
           line-height: 24px;
+          text-align: center;
           background-color: #bbbbbb;
+          transition: all .2s;
           i {
             color: #fff;
           }
           &:hover {
             background-color: #333333;
           }
+          @media (max-width: $screen-sm-max) {
+            width: 35px;
+            height: 35px;
+            line-height: 34px;
+          }
+        }
+        @media (max-width: $screen-sm-max) {
+          border-top: 1px solid #d2d2d2;
+          padding-top: 15px;
+          text-align: center;
         }
       }
     }
     .profile-detail {
       padding-top: 20px;
       padding-bottom: 0;
+
       .profile-description {
         p {
           color: #6b6b6b;
@@ -65,22 +95,47 @@
           font-size: 14px;
           color: #6b6b6b;
           margin-right: 25px;
+
+          @media (max-width: $screen-md-max) {
+            margin-right: 5px;
+          }
         }
         .founder-email i, .phone-number i {
           margin-right: 10px;
           font-size: 16px;
         }
+        @media (min-width: $screen-sm-max) {
+          padding-left: 0;
+        }
       }
       .resume-link-section {
         border: 1px solid #d2d2d2;
         border-width: 0 0 0 1px;
+
         .btn-resume-link {
           border-color: #2a6db6;
           color: #2a6db6;
           border-radius: 5px;
+          transition: all .2s;
+
           .resume-title {
             padding: 5px 0 0 15px;
           }
+          @media (min-width: $screen-md-min) {
+            position: relative;
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+          }
+          &:hover, &:focus {
+            color: #51a443;
+            border-color: #51a443;
+          }
+        }
+        @media (max-width: $screen-md-min) {
+          padding: 15px 0;
+          border-width: 0 0 1px 0;
         }
       }
     }
@@ -91,92 +146,26 @@
       align-items: center;
       justify-content: center;
       max-width: 200px;
+
+      @media (min-width: $screen-md-min) {
+        img {
+          position: relative;
+          top: 50%;
+          -webkit-transform: translateY(-50%);
+          -ms-transform: translateY(-50%);
+          transform: translateY(-50%);
+        }
+      }
+      @media (max-width: $screen-md-min) {
+        max-width: 180px;
+        border: 0;
+        padding: 15px 0 0;
+      }
     }
-  }
-}
-
-
-
-@media (max-width: 767px) {
-  .user-data-container .user-data-card .profile-head .profile-name h2 {
-    padding: 5px 0 20px;
-  }
-}
-
-@media (max-width: 767px) {
-  .user-data-container .user-data-card .profile-head .profile-name h2 span {
-    display: block;
-  }
-}
-
-@media (max-width: 767px) {
-  .user-data-container .user-data-card .profile-head .social-connect a {
-    width: 35px;
-    height: 35px;
-    line-height: 34px;
-  }
-}
-
-@media (max-width: 767px) {
-  .user-data-container .user-data-card .profile-head .social-connect {
-    border-top: 1px solid #d2d2d2;
-    padding-top: 15px;
-  }
-}
-
-@media (min-width: 767px) {
-  .user-data-container .user-data-card .profile-detail .profile-description {
-    padding-left: 0;
-  }
-}
-
-@media (max-width: 767px) {
-  .user-data-container .user-data-card .profile-detail .profile-description {
-    .founder-email, .phone-number {
-      margin-right: 10px;
+    @media (max-width: $screen-sm-max) {
+      text-align: center;
+      padding-bottom: 15px;
     }
-  }
-}
-
-@media (min-width: 991px) {
-  .user-data-container .user-data-card .profile-detail .resume-link-section .btn-resume-link {
-    position: relative;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-  }
-}
-
-@media (max-width: 991px) {
-  .user-data-container .user-data-card .profile-detail .resume-link-section {
-    padding: 15px 0;
-    border-width: 0 0 1px 0;
-  }
-}
-
-@media (min-width: 991px) {
-  .user-data-container .user-data-card .startup-logo-profile .startup-logo-box img {
-    position: relative;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-  }
-}
-
-@media (max-width: 991px) {
-  .user-data-container .user-data-card .startup-logo-profile .startup-logo-box {
-    max-width: 180px;
-    border: 0;
-    padding: 15px 0 0;
-  }
-}
-
-@media (max-width: 991px) {
-  .user-data-container .user-data-card {
-    text-align: center;
-    padding-bottom: 15px;
   }
 }
 
@@ -216,10 +205,11 @@
           width: 14px;
         }
       }
+      @media (max-width: $screen-sm-max) {
+        padding: 20px;
+      }
     }
-    .panel-body {
-      padding: 30px;
-    }
+
     .all-activity-counts {
       border-left: 1px solid #d2d2d2;
 
@@ -246,6 +236,11 @@
         .logo-block {
           border-right: 1px solid #d2d2d2;
           padding: 15px 15px 15px 0;
+
+          @media (max-width: $screen-md-max) {
+            padding: 15px 10px 15px 0;
+            width: 55px;
+          }
         }
         .activity-count-block {
           padding-left: 25px;
@@ -253,6 +248,7 @@
           h2 {
             font-size: 53px;
             margin: 0;
+            color: #828282;
 
             span {
               font-size: 12px;
@@ -261,107 +257,142 @@
           p {
             margin: 0;
             font-size: 12px;
+            color: #9b9b9b;
+          }
+          @media (max-width: $screen-sm-max) {
+            padding-left: 15px;
           }
         }
+        @media (max-width: $screen-xs-max) {
+          padding: 20px 15px;
+        }
+      }
+      @media (min-width: $screen-sm-min) and (max-width:$screen-sm-max) {
+        border: 0;
+        margin-top: 0;
+        margin-bottom: 20px;
       }
     }
   }
-  .activity-calendar {
-    margin: 15px 0 30px;
+  .activity-content {
+    border-top: 0;
+    border-bottom: 1px solid #d2d2d2;
+    list-style: none;
+    padding: 20px 30px;
     position: relative;
 
-    .month-section {
-      font-size: 0;
+    .activity-calendar {
+      margin: 15px 0 30px;
+      position: relative;
 
-      &:before {
-        border: 1px solid #dddddd;
-        border-radius: 20px;
-        content: "";
-        height: 20px;
-        left: 0;
-        position: absolute;
-        top: 25px;
-        width: 100%;
-      }
-      li {
-        display: inline-block;
-        position: relative;
-        margin: 25px 0;
-        z-index: 1;
-        cursor: pointer;
-        -webkit-transition: all .2s;
-        transition: all .2s;
+      .month-section {
+        font-size: 0;
 
         &:before {
-          box-shadow: 1px 0px 0px 0px #56bfe7;
+          border: 1px solid #dddddd;
+          border-radius: 20px;
           content: "";
-          height: 60px;
-          left: -0.5px;
-          position: absolute;
-          top: -20px;
-          width: 100%;
-          z-index: -10;
-        }
-
-        &:first-child:before {
-          border-left: 0;
-        }
-
-        .month-name {
-          font-size: 12px;
-          color: #333333;
-          position: absolute;
-          top: -22px;
-          padding-left: 5px;
-          padding-bottom: 5px;
-          left: 0;
-          right: 0;
-        }
-
-        .week-section {
-          width: 25px;
           height: 20px;
-          display: inline-block;
-          text-align: center;
-          box-shadow: 0 0 0 0.9px #fff inset;
+          left: 0;
+          position: absolute;
+          top: 25px;
+          width: 100%;
 
-          .week-name {
-            display: block;
-            font-size: 10px;
-            color: #333333;
-            position: relative;
-            top: 20px;
-            height: 30px;
-            padding-top: 5px;
+          @media (max-width: $screen-md-max) {
+            height: 15px;
           }
         }
-        a {
-          padding: 0;
-          outline: none;
-        }
-        &:hover, &:focus, &.active {
-          box-shadow: 0 0 0 4px #b8ceeb, 1px 1px 10px #b8ceeb;
+        li {
+          display: inline-block;
           position: relative;
-          z-index: 1000;
-        }
-        &:hover {
-          .month-name, .week-name {
-            color: #2a6db6;
+          margin: 25px 0;
+          z-index: 1;
+          cursor: pointer;
+          transition: all .2s;
+
+          &:before {
+            box-shadow: 1px 0px 0px 0px #56bfe7;
+            content: "";
+            height: 60px;
+            left: -0.5px;
+            position: absolute;
+            top: -20px;
+            width: 100%;
+            z-index: -10;
           }
-        }
-        &:focus {
-          .month-name, .week-name {
-            color: #2a6db6;
+
+          &:first-child:before {
+            border-left: 0;
           }
-        }
-        &.active {
-          .month-name, .week-name {
-            color: #2a6db6;
+
+          .month-name {
+            font-size: 12px;
+            color: #333333;
+            position: absolute;
+            top: -22px;
+            padding-left: 5px;
+            padding-bottom: 5px;
+            left: 0;
+            right: 0;
+          }
+
+          .week-section {
+            width: 25px;
+            height: 20px;
+            display: inline-block;
+            text-align: center;
+            box-shadow: 0 0 0 0.9px #fff inset;
+
+            .week-name {
+              display: block;
+              font-size: 10px;
+              color: #333333;
+              position: relative;
+              top: 20px;
+              height: 30px;
+              padding-top: 5px;
+            }
+            @media (max-width: $screen-md-max) {
+              width: 20px;
+              height: 15px;
+            }
+          }
+          a {
+            padding: 0;
+            outline: none;
+          }
+          &:hover, &:focus, &.active {
+            box-shadow: 0 0 0 4px #b8ceeb, 1px 1px 10px #b8ceeb;
+            position: relative;
+            z-index: 1000;
+          }
+          &:hover {
+            .month-name, .week-name {
+              color: #2a6db6;
+            }
+          }
+          &:focus {
+            .month-name, .week-name {
+              color: #2a6db6;
+            }
+          }
+          &.active {
+            .month-name, .week-name {
+              color: #2a6db6;
+            }
           }
         }
       }
+      @media (max-width: $screen-sm-max) {
+        border: 1px solid #d2d2d2;
+        border-radius: 5px;
+      }
+    }
+    @media (max-width: $screen-sm-max) {
+      padding: 0 15px;
     }
   }
+
   .activity-blank {
     background-color: #ebebeb;
   }
@@ -392,6 +423,12 @@
       background-color: #d2d2d2;
       left: 103px;
       margin-left: -1px;
+
+      @media (max-width: $screen-xs-max) {
+        left: 92px;
+        margin-left: -1px;
+        display: block;
+      }
     }
   }
   .timeline-data .timeline-box {
@@ -420,12 +457,19 @@
         box-shadow: 0;
         width: calc(100% - 135px);
         width: -webkit-calc(100% - 135px);
+
         .timeline-body {
           padding: 0;
+
           p {
             margin: 0;
             font-size: 14px;
           }
+        }
+        @media (max-width: $screen-xs-max) {
+          margin-top: 0;
+          width: calc(100% - 105px);
+          width: -webkit-calc(100% - 105px);
         }
       }
       .timeline-badge-custom {
@@ -446,6 +490,10 @@
         border-top-left-radius: 50%;
         border-bottom-right-radius: 50%;
         border-bottom-left-radius: 50%;
+
+        @media (max-width: $screen-xs-max) {
+          left: 84px;
+        }
       }
     }
   }
@@ -513,102 +561,36 @@
               padding-top: 5px;
             }
           }
+
+          @media (max-width: $screen-xs-max) {
+            width: 80%;
+          }
+          @media (min-width: $screen-sm-min) {
+            width: 90%;
+          }
         }
       }
     }
     .panel-body {
       border-top: 0;
       border-bottom: 1px solid #d2d2d2;
+      list-style: none;
+      position: relative;
+
+      @media (max-width: $screen-xs-max) {
+        padding: 15px;
+      }
     }
   }
 }
-
-@media (max-width: 991px) {
-  .profile-bg .activity-section .panel-body {
-    padding: 20px;
-  }
+.panel-group {
+  margin: 0
 }
-
-@media (max-width: 991px) {
-  .profile-bg .activity-section .all-activity-counts .all-activity-body .logo-block {
-    padding: 15px 10px 15px 0;
-    width: 55px;
-  }
-}
-
-@media (max-width: 991px) {
-  .profile-bg .activity-section .all-activity-counts .all-activity-body .activity-count-block {
-    padding-left: 15px;
-  }
-}
-
-@media (max-width: 991px) {
-  .profile-bg .activity-section .all-activity-counts .all-activity-body {
-    padding: 20px 15px;
-  }
-}
-
-@media (max-width: 1199px) {
-  .profile-bg .activity-calendar .month-section:before {
-    height: 15px;
-  }
-}
-
-@media (max-width: 1199px) {
-  .profile-bg .activity-calendar .month-section li .week-section {
-    width: 20px;
-    height: 15px;
-  }
-}
-
-@media (max-width: 991px) {
-  .profile-bg .activity-calendar {
-    border: 1px solid #d2d2d2;
-    border-radius: 5px;
-  }
-}
-
-@media (max-width: 991px) {
-  .profile-bg .timeline:before {
-    left: 110px;
-    margin-left: -1px;
-    display: block;
-  }
-}
-
-@media (max-width: 991px) {
-  .profile-bg .timeline-data .timeline-box > .timeline-panel {
-    margin-top: 0;
-    width: calc(100% - 105px);
-    width: -webkit-calc(100% - 105px);
-  }
-}
-
-@media (max-width: 991px) {
-  .profile-bg .timeline-data .timeline-box > .timeline-badge-custom {
-    left: 87px;
-  }
-}
-
-@media (max-width: 991px) {
-  .profile-bg .panel .panel-heading .panel-title a {
-    width: 90%;
-  }
-}
-
-@media (max-width: 767px) {
-  .profile-bg .panel .panel-heading .panel-title a {
-    width: 80%;
-  }
-}
-
 .row-eq-height {
   display: flex;
-}
 
-@media (max-width: 991px) {
-  .row-eq-height {
-    display: block;
+  @media (max-width: $screen-sm-max) {
+      display: block;
   }
 }
 

@@ -1,4 +1,6 @@
-//= require bootstrap-tabcollapse
+# //= require bootstrap-tabcollapse
 
 $(document).on 'page:change', ->
-  $('#activityTab').tabCollapse()
+  $('#activityTab').tabCollapse
+    tabsClass: 'hidden-sm hidden-xs',
+    accordionClass: 'visible-sm visible-xs'

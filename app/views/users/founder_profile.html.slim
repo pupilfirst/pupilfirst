@@ -49,8 +49,7 @@
           .row.profile-detail.row-eq-height
             .col-lg-8.col-md-7.profile-description
               p
-                ' Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                | doeiusmod tempor incididunt ut labore et dolore.
+                = @user.about
               a.founder-email href="mailto:#{@user.email}"
                 i.fa.fa-envelope
                 = @user.email

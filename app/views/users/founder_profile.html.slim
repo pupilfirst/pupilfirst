@@ -8,7 +8,7 @@
       .row.row-eq-height
         .col-md-2
           .profile
-            = image_tag profile_image_url(@user, gravatar_size: 140, avatar_version: :thumb), class: 'img-responsive'
+            = image_tag profile_image_url(@user, gravatar_size: 140, avatar_version: :mid), class: 'img-responsive'
         div class="col-md-#{@user.startup.logo.present? ? 7 : 10}"
           .row.profile-head
             .col-md-6.profile-name

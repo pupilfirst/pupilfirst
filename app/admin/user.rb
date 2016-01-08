@@ -97,6 +97,7 @@ ActiveAdmin.register User do
 
       row :startup_admin
       row :is_founder
+      row :about
       row :born_on
       row :slack_username
       row :slack_user_id
@@ -206,7 +207,7 @@ ActiveAdmin.register User do
 
   form partial: 'admin/users/form'
 
-  permit_params :first_name, :last_name, :email, :remote_avatar_url, :avatar, :startup_id, :slug,
+  permit_params :first_name, :last_name, :email, :remote_avatar_url, :avatar, :startup_id, :slug, :about,
     :slack_username, :skip_password, :born_on, :startup_admin, :communication_address, :district, :state, :pin,
     :phone, :company, :invitation_token, :university_id, :roll_number, :year_of_graduation,
     :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :facebook_url, :angel_co_url, :github_url, :behance_url,

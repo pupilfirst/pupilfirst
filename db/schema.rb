@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160106102251) do
+ActiveRecord::Schema.define(version: 20160108085717) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,9 +78,12 @@ ActiveRecord::Schema.define(version: 20160106102251) do
     t.text     "questions"
     t.string   "status"
     t.string   "meeting_link"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
     t.datetime "confirmed_at"
+    t.datetime "feedback_mails_sent_at"
+    t.integer  "rating_of_faculty"
+    t.integer  "rating_of_team"
   end
 
   add_index "connect_requests", ["connect_slot_id"], name: "index_connect_requests_on_connect_slot_id", using: :btree
@@ -453,6 +456,7 @@ ActiveRecord::Schema.define(version: 20160106102251) do
     t.string   "behance_url"
     t.string   "resume_url"
     t.string   "slug"
+    t.string   "about"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

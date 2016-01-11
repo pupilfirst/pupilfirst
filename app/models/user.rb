@@ -357,7 +357,7 @@ class User < ActiveRecord::Base
   private
 
   def blank_activity_timeline
-    end_date = batch_end_date > Time.now ? Time.now.end_of_month : batch_end_date
+    end_date = batch_end_date > Date.today ? Date.today.end_of_month : batch_end_date
 
     first_day_of_each_month = (batch_start_date.beginning_of_month..end_date).select { |d| d.day == 1 }
 

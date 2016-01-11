@@ -360,14 +360,14 @@ class User < ActiveRecord::Base
     first_day_of_each_month = (batch_start_date.beginning_of_month..batch_end_date).select { |d| d.day == 1 }
 
     first_day_of_each_month.each_with_object({}) do |first_day_of_month, blank_timeline|
-      blank_timeline[first_day_of_month.strftime('%B')] = { counts: (1..first_day_of_month.total_weeks).each_with_object({}) { |w, o| o[w] = 0 } }
+      blank_timeline[first_day_of_month.strftime('%B')] = { counts: (1..WeekOfMonth.total_weeks(first_day_of_month)).each_with_object({}) { |w, o| o[w] = 0 } }
     end
   end
 
   def add_public_slack_message_to_timeline(activity, timeline)
     month = activity.created_at.strftime('%B')
 
-    increment_activity_count(timeline, month, activity.created_at.week_of_month)
+    increment_activity_count(timeline, month, WeekOfMonth.week_of_month(activity.created_at))
 
     if timeline[month][:list] && timeline[month][:list].last[:type] == :public_slack_message
       timeline[month][:list].last[:count] += 1
@@ -380,7 +380,7 @@ class User < ActiveRecord::Base
   def add_timeline_event_to_timeline(activity, timeline)
     month = activity.created_at.strftime('%B')
 
-    increment_activity_count(timeline, month, activity.created_at.week_of_month)
+    increment_activity_count(timeline, month, WeekOfMonth.week_of_month(activity.created_at))
 
     timeline[month][:list] ||= []
     timeline[month][:list] << { type: :timeline_event, timeline_event: activity }
@@ -389,7 +389,7 @@ class User < ActiveRecord::Base
   def add_karma_point_to_timeline(activity, timeline)
     month = activity.created_at.strftime('%B')
 
-    increment_activity_count(timeline, month, activity.created_at.week_of_month)
+    increment_activity_count(timeline, month, WeekOfMonth.week_of_month(activity.created_at))
 
     timeline[month][:list] ||= []
     timeline[month][:list] << { type: :karma_point, karma_point: activity }

@@ -88,13 +88,13 @@ describe User do
       first_day_of_each_month = (batch.start_date.beginning_of_month..batch.end_date).select { |d| d.day == 1 }
 
       expected_activity = first_day_of_each_month.each_with_object({}) do |first_day_of_month, hash|
-        hash[first_day_of_month.strftime('%B')] = { counts: (1..first_day_of_month.total_weeks).each_with_object({}) { |w, o| o[w] = 0 } }
+        hash[first_day_of_month.strftime('%B')] = { counts: (1..WeekOfMonth.total_weeks(first_day_of_month)).each_with_object({}) { |w, o| o[w] = 0 } }
       end
 
       # Then fill in expected data:
-      expected_activity[1.month.ago.strftime('%B')][:counts][1.month.ago.week_of_month] = 5
+      expected_activity[1.month.ago.strftime('%B')][:counts][WeekOfMonth.week_of_month(1.month.ago)] = 5
       expected_activity[1.month.ago.strftime('%B')][:list] = [{ type: :public_slack_message, count: 5 }]
-      expected_activity[2.weeks.ago.strftime('%B')][:counts][2.weeks.ago.week_of_month] = 2
+      expected_activity[2.weeks.ago.strftime('%B')][:counts][WeekOfMonth.week_of_month(2.weeks.ago)] = 2
 
       expected_activity[2.weeks.ago.strftime('%B')][:list] ||= []
 
@@ -103,7 +103,7 @@ describe User do
         { type: :karma_point, karma_point: kp_2_weeks_ago }
       ]
 
-      expected_activity[Time.now.strftime('%B')][:counts][Time.now.week_of_month] = 12
+      expected_activity[Time.now.strftime('%B')][:counts][WeekOfMonth.week_of_month(Time.now)] = 12
 
       expected_activity[Time.now.strftime('%B')][:list] ||= []
 

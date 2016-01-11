@@ -338,7 +338,7 @@ class User < ActiveRecord::Base
   end
 
   def batch_end_date
-    startup.present? && startup.batch.present? ? startup.batch.end_date : Time.now
+    startup.present? && startup.batch.present? ? startup.batch.end_date : Date.today
   end
 
   # Returns true if any of the social URL are stored. Used on profile page.

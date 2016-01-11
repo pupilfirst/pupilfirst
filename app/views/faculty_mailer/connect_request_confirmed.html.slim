@@ -11,9 +11,10 @@
     strong #{@connect_request.connect_slot} IST.
 
   p
-    ' Meeting link:
-    = link_to @connect_request.meeting_link do
-      span.monospace #{@connect_request.meeting_link}
+    - if @connect_request.meeting_link
+      ' Meeting link:
+      = link_to @connect_request.meeting_link do
+        span.monospace #{@connect_request.meeting_link}
 
   p The team lead at #{@connect_request.startup.product_name} has asked the following questions:
 

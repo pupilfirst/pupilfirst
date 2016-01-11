@@ -1,5 +1,5 @@
 = content_for :heading
-  | Feedback on your recent startup updates.
+  | Feedback from Faculty!
 
 = content_for :salutation
   | Hi,
@@ -8,15 +8,11 @@
   - update_for = @startup_feedback.for_timeline_event? ? 'recent timeline entry' : 'recent updates'
 
   p
-    ' We hope your startup journey is going great! Here is some feedback from
-    ' #{@startup_feedback.faculty.name} of Team SV on your #{link_to update_for, @startup_feedback.reference_url} that
+    ' Here is some feedback from
+    ' #{@startup_feedback.faculty.name} on your #{link_to update_for, @startup_feedback.reference_url} that
     | might help you:
 
-  - if @startup_feedback.for_timeline_event?
-    p Your entry is:
-    | #{simple_format(@startup_feedback.timeline_event.description)}
-
-  p The faculty feedback is:
-  | #{simple_format(@startup_feedback.feedback)}
+  p 
+    | #{simple_format(@startup_feedback.feedback)}
 
   p Feel free to reach out to us at #{mail_to 'help@sv.co'} in case of any queries.

@@ -334,7 +334,7 @@ class User < ActiveRecord::Base
   end
 
   def batch_start_date
-    startup.present? && startup.batch.present? ? startup.batch.start_date : created_at
+    startup.present? && startup.batch.present? ? startup.batch.start_date : created_at.to_date
   end
 
   def batch_end_date

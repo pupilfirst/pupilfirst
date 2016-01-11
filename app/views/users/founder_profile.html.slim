@@ -1,0 +1,153 @@
+- content_for :head
+  title Founder Profile
+  meta name="description" content="Founder Profile"
+
+.user-data-container
+  .container
+    .user-data-card
+      .row.row-eq-height
+        .col-md-2
+          .profile
+            = image_tag profile_image_url(@user, gravatar_size: 140, avatar_version: :mid), class: 'img-responsive'
+        div class="col-md-#{@user.startup.logo.present? ? 7 : 10}"
+          .row.profile-data
+            .profile-head.clearfix
+              .col-md-6.profile-name
+                h2
+                  = @user.fullname
+                  span
+                    - if @user.roles.present?
+                      = @user.roles.map { |role| t("role.#{role}") }.join ', '
+                      ' &nbsp;at
+                    = @user.startup.product_name
+              - if @user.social_url_present?
+                .col-md-6.social-connect
+                  - if @user.personal_website_url.present?
+                    a href=@user.personal_website_url target='_blank'
+                      i.fa.fa-globe
+                  - if @user.linkedin_url.present?
+                    a href=@user.linkedin_url target='_blank'
+                      i.fa.fa-linkedin
+                  - if @user.facebook_url.present?
+                    a href=@user.facebook_url target='_blank'
+                      i.fa.fa-facebook
+                  - if @user.twitter_url.present?
+                    a href=@user.twitter_url target='_blank'
+                      i.fa.fa-twitter
+                  - if @user.behance_url.present?
+                    a href=@user.behance_url target='_blank'
+                      i.fa.fa-behance
+                  - if @user.github_url.present?
+                    a href=@user.github_url target='_blank'
+                      i.fa.fa-github
+                  - if @user.angel_co_url.present?
+                    a href=@user.angel_co_url target='_blank'
+                      i.fa.fa-angellist
+                  - if @user.blog_url.present?
+                    a href=@user.blog_url target='_blank'
+                      i.fa.fa-rss
+
+            .profile-detail.clearfix
+              .col-lg-8.col-md-7.profile-description
+                p
+                  = @user.about
+              .col-lg-4.col-md-5.resume-link-section
+                - if @user.resume_url.present?
+                  a.btn.btn-flat.btn-resume-link href=@user.resume_url type="button"
+                    = image_tag 'users/profile/resume-icon.png'
+                    span.resume-title #{@user.fullname}'s Resume
+        - if @user.startup.logo.present?
+          .col-md-3.startup-logo-profile
+            a.startup-logo-box href=startup_url(@user.startup)
+              = image_tag @user.startup.logo.url, alt: 'Startup logo', class: 'img-responsive'
+.profile-bg
+  .container
+    .activity-section
+      .activity-head.clearfix
+        h3.pull-left Activity
+        .activity-legend.pull-right title="A summary of Timeline Events, Public Slack Messages and Karma Points."
+          span Less
+          ul.legend.list-unstyled
+            li.activity-blank
+            li.activity-low
+            li.activity-medium
+            li.activity-high
+          span More
+      .activity-content
+        .activity-calendar
+          ul#activityTab.month-section.list-unstyled.nav
+            - @timeline.each do |month, data|
+              li class="#{month == @timeline.keys.last ? 'active' : ''}"
+                a.clearfix data-toggle="tab" href="##{month}"
+                  .month-name = month
+                  - data[:counts].each do |week_number, count_for_week|
+                    .week-section class=activity_class_for_count(count_for_week)
+                      span.week-name W#{week_number}
+                  .arrow.visible-sm.visible-xs
+        .row
+          .col-md-8.tab-content.hidden-sm.hidden-xs
+            - @timeline.each do |month, data|
+              .tab-pane.fade id=month class="#{month == @timeline.keys.last ? 'active in' : ''}"
+                - if data[:list].present?
+                  .timeline
+                    - data[:list].each do |data_entry|
+                      .timeline-data
+                        .timeline-box
+                          - if data_entry[:type] == :karma_point
+                            .timeline-date
+                              span.font-weight-600 = data_entry[:karma_point].created_at.strftime('%b %d, %Y')
+                            .timeline-badge-custom
+                            .timeline-panel
+                              .timeline-body
+                                p
+                                  ' Received #{data_entry[:karma_point].points}
+                                  ' Karma Points for #{data_entry[:karma_point].activity_type}
+                          - elsif data_entry[:type] == :public_slack_message
+                            .timeline-date
+                            .timeline-badge-custom
+                            .timeline-panel
+                              .timeline-body
+                                p
+                                  ' Posted #{data_entry[:count]}
+                                  ' message#{data_entry[:count] > 1 ? 's' : ''} on Public Slack.
+                          - else
+                            .timeline-date
+                              span.font-weight-600 = data_entry[:timeline_event].created_at.strftime('%b %d, %Y')
+                            .timeline-badge-custom
+                            .timeline-panel
+                              .timeline-body
+                                p
+                                  ' Updated timeline: #{data_entry[:timeline_event].timeline_event_type.title}.
+                - else
+                  .inactive-month
+                    p User was inactive during this month.
+
+          .col-md-4.all-activity-counts.clearfix
+            .col-md-12.col-sm-6.col-xs-12.slack-messages
+              .all-activity-head.blue-head
+                h3.font-weight-400 Slack Messages
+              .all-activity-body.clearfix
+                .logo-block.pull-left
+                  = image_tag 'users/profile/slack-logo.png', class: 'img-responsive'
+                .activity-count-block.pull-left
+                  h2.font-weight-300
+                    = @user.public_slack_messages.where(created_at: @user.activity_date_range).count
+                    span messages
+                  p
+                    = @user.batch_start_date.strftime '%b %d, %Y'
+                    ' &nbsp;&mdash;
+                    = (@user.batch_end_date.past? ? @user.batch_end_date : Time.now).strftime '%b %d, %Y'
+            .col-md-12.col-sm-6.col-xs-12.karma-points
+              .all-activity-head.green-head
+                h3.font-weight-400 Karma Points
+              .all-activity-body.clearfix
+                .logo-block.pull-left
+                  = image_tag 'users/profile/karma-logo.png', class: 'img-responsive'
+                .activity-count-block.pull-left
+                  h2.font-weight-300
+                    = @user.karma_points.where(created_at: @user.activity_date_range).sum(:points)
+                    span points
+                  p
+                    = @user.batch_start_date.strftime '%b %d, %Y'
+                    ' &nbsp;&mdash;
+                    = (@user.batch_end_date.past? ? @user.batch_end_date : Time.now).strftime '%b %d, %Y'

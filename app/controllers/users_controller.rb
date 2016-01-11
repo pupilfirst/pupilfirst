@@ -1,9 +1,15 @@
 class UsersController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, except: :founder_profile
 
   # GET /users/:id
   def show
     @user = current_user
+  end
+
+  def founder_profile
+    @user = User.friendly.find(params[:slug])
+    @timeline = @user.activity_timeline
+    @skip_container = true
   end
 
   # GET /users/:id/edit
@@ -103,7 +109,7 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(
-      :first_name, :last_name, :avatar, :slack_username, :college_identification,
+      :first_name, :last_name, :avatar, :slack_username, :college_identification, :about,
       :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :facebook_url, :angel_co_url, :github_url, :behance_url,
       :university_id, :roll_number, :born_on, :communication_address, roles: []
     )

@@ -8,41 +8,46 @@ describe 'Public Slack Talk' do
     let(:user_2) { create :user_with_out_password }
 
     it 'raises ArgumentError if no target specified' do
-      expect { subject.post_message message: 'Hello' }.to raise_error(ArgumentError)
+      expect { subject.post_message message: 'Hello' }.to raise_error(ArgumentError, 'specify one of channel, user or users')
     end
 
     it 'raises ArgumentError if multiple targets specified' do
-      expect { PublicSlackTalk.post_message message: 'Hello', channel: 'general', user: user_1 }.to raise_error(ArgumentError)
-      expect { PublicSlackTalk.post_message message: 'Hello', user: user_1, users: [user_1, user_2] }.to raise_error(ArgumentError)
-      expect { PublicSlackTalk.post_message message: 'Hello', channel: 'general', users: [user_1, user_2] }.to raise_error(ArgumentError)
+      expect { PublicSlackTalk.post_message message: 'Hello', channel: 'general', user: user_1 }.to raise_error(
+        ArgumentError, 'specify one of channel, user or users')
+      expect { PublicSlackTalk.post_message message: 'Hello', user: user_1, users: [user_1, user_2] }.to raise_error(
+        ArgumentError, 'specify one of channel, user or users')
+      expect { PublicSlackTalk.post_message message: 'Hello', channel: 'general', users: [user_1, user_2] }.to raise_error(
+        ArgumentError, 'specify one of channel, user or users')
     end
 
     context 'when targets are correctly specified' do
-      context 'when channel is supplied' do
+      context 'when valid channel is supplied' do
         it 'sends message to channel' do
-          pending 'by calling https://slack.com/api/chat.postMessage?token=#{@token}&channel=#{@channel}'
-          expect(1).to eq(2)
+          expect_any_instance_of(PublicSlackTalk).to receive(:channel_valid?).and_return(true)
+          expect_any_instance_of(PublicSlackTalk).to receive(:post_to_channel)
+          PublicSlackTalk.post_message message: 'Hello', channel: 'general'
         end
 
         context 'when supplied channel is invalid' do
           it 'fails' do
-            pending 'expect to raise RuntimeError'
-            expect(1).to eq(2)
+            expect_any_instance_of(PublicSlackTalk).to receive(:channel_valid?).and_return(false)
+            expect { PublicSlackTalk.post_message message: 'Hello', channel: 'general' }.to raise_error(
+              'could not validate channel specified')
           end
         end
       end
 
       context 'when single user is supplied' do
         it 'send message to user' do
-          pending 'by calling https://slack.com/api/chat.postMessage?token=#{@token}&channel=#{@channel}'
-          expect(1).to eq(2)
+          expect_any_instance_of(PublicSlackTalk).to receive(:post_to_user).once
+          PublicSlackTalk.post_message message: 'Hello', user: user_1
         end
       end
 
       context 'when multiple users are supplied' do
         it 'send messages to all users' do
-          pending 'with multiple calls to https://slack.com/api/chat.postMessage?token=#{@token}&channel=#{@channel}'
-          expect(1).to eq(2)
+          expect_any_instance_of(PublicSlackTalk).to receive(:post_to_users).once
+          PublicSlackTalk.post_message message: 'Hello', users: [user_1, user_2]
         end
       end
 

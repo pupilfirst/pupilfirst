@@ -47,7 +47,7 @@
   .top-nav-link {
     text-transform: uppercase;
 
-    @media (min-width: $screen-sm-min) {
+    @media (min-width: $screen-sm-max) {
       float: right;
       position: relative;
       color: white;
@@ -84,6 +84,10 @@
         top: 0;
         opacity: 1;
       }
+    }
+    @media (max-width: $screen-sm-max) {
+      margin: 25px 10px 15px;
+      padding: 5px 0;
     }
   }
 

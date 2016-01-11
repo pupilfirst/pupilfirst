@@ -83,5 +83,7 @@ Svapp::Application.routes.draw do
 
   get 'apply(/:batch)', as: 'apply', to: 'home#apply'
 
+  get 'founders/:slug', to: 'users#founder_profile'
+
   root 'home#index'
 end

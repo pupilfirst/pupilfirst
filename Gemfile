@@ -76,14 +76,13 @@ gem 'videojs_rails' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com
 gem 'react-rails' # react for creating link editor in timeline builder
 
 gem 'has_secure_token' # used to create tokens for models (eg: for Faculty). Will be included with ActiveRecord in Rails 5
-gem 'week_of_month', github: 'sachin87/week-of-month' # gives a week of month as per given date. https://github.com/sachin87/week-of-month
-
 
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify' # Superb notifications library. http://sciactive.github.io/pnotify/
   gem 'rails-assets-curioussolutions-datetimepicker' # Responsive datetimepicker for timeline builder form.
   gem 'rails-assets-trix' # rich text editor from basecamp ( used for eg in the description for targets)
+  gem 'rails-assets-bootstrap-tabcollapse' # Bootstrap plugin that switches bootstrap tabs component to collapse component for small screens.
 end
 
 group :development do

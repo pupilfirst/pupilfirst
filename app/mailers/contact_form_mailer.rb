@@ -9,6 +9,6 @@ class ContactFormMailer < ApplicationMailer
     @query_type = contact_params[:query_type]
     @query = contact_params[:query]
 
-    mail(to: 'help@sv.co', subject: "Contact Form: #{@query_type}", reply_to: @email)
+    mail(to: 'help@sv.co', subject: "#{@query_type} (by #{@name})", reply_to: @email)
   end
 end

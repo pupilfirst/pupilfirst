@@ -23,6 +23,22 @@ ActiveAdmin.register ConnectRequest do
       connect_request.connect_slot.slot_at.in_time_zone('Asia/Calcutta').strftime('%b %-d, %-I:%M %p')
     end
 
+    column :rating_of_faculty do |connect_request|
+      if connect_request.rating_of_faculty.present?
+        connect_request.rating_of_faculty.times do
+          i class: 'fa fa-star'
+        end
+      end
+    end
+
+    column :rating_of_team do |connect_request|
+      if connect_request.rating_of_team.present?
+        connect_request.rating_of_team.times do
+          i class: 'fa fa-star'
+        end
+      end
+    end
+
     actions
   end
 
@@ -43,6 +59,23 @@ ActiveAdmin.register ConnectRequest do
       end
 
       row :meeting_link
+
+      row :rating_of_faculty do |connect_request|
+        if connect_request.rating_of_faculty.present?
+          connect_request.rating_of_faculty.times do
+            i class: 'fa fa-star'
+          end
+        end
+      end
+
+      row :rating_of_team do |connect_request|
+        if connect_request.rating_of_team.present?
+          connect_request.rating_of_team.times do
+            i class: 'fa fa-star'
+          end
+        end
+      end
+
       row :confirmed_at
       row :created_at
       row :updated_at

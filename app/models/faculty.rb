@@ -7,6 +7,7 @@ class Faculty < ActiveRecord::Base
   has_many :startup_feedback, dependent: :restrict_with_error
   has_many :targets, dependent: :restrict_with_error, foreign_key: 'assigner_id'
   has_many :connect_slots, dependent: :destroy
+  has_many :connect_requests, through: :connect_slots
 
   CATEGORY_TEAM = 'team'
   CATEGORY_VISITING_FACULTY = 'visiting_faculty'

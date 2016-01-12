@@ -103,6 +103,8 @@ class ConnectRequest < ActiveRecord::Base
   scope :requested, -> { where(status: STATUS_REQUESTED) }
   scope :confirmed, -> { where(status: STATUS_CONFIRMED) }
 
+  validates_numericality_of :rating_of_faculty, :rating_of_team, greater_than: 0, less_than: 6, allow_nil: true
+
   private
 
   def attendees

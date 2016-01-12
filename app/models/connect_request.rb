@@ -53,7 +53,11 @@ class ConnectRequest < ActiveRecord::Base
   end
 
   def create_faculty_connect_session_rating_job
-    FacultyConnectSessionRatingJob.set(wait_until: connect_slot.slot_at + 45.minutes).perform_later(self)
+    if Rails.env.production?
+      FacultyConnectSessionRatingJob.set(wait_until: connect_slot.slot_at + 45.minutes).perform_later(self)
+    else
+      FacultyConnectSessionRatingJob.perform_later(self)
+    end
   end
 
   def time_for_feedback_mail?

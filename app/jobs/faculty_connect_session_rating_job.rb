@@ -9,7 +9,7 @@ class FacultyConnectSessionRatingJob < ActiveJob::Base
     return if connect_request.feedback_mails_sent? || connect_request.unconfirmed?
 
     # Check if the timing is still correct. If meeting had been rescheduled to the future, create a new job, otherwise run immediately.
-    if connect_request.time_for_feedback_mail?
+    if !Rails.env.production? || connect_request.time_for_feedback_mail?
       FacultyMailer.connect_request_feedback(connect_request).deliver_later
       UserMailer.connect_request_feedback(connect_request).deliver_later
     else

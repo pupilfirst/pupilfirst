@@ -6,11 +6,10 @@
 
 = content_for :body
   p
-    ' It would be great if you can let us know the slots you are available next week to connect with our startups.
     - if @faculty.connect_slots.next_week.present?
-      ' We have already created your slots for next week (based on your last available week) as follows:
+      ' We have created your slots for next week (based on your last available week) as follows:
       p
-        ' #{@faculty.connect_slots.next_week.map { |slot| slot.slot_at.strftime('%a %d %b %H:%M') }.join(', ')}
+        ' #{@faculty.connect_slots.next_week.map { |slot| slot.slot_at.strftime('%a %d %b %H:%M') }.join(', ') }
       p
         ' If you'd like to change them or are temporarily unavailable, #{link_to 'click here', weekly_slots_faculty_index_url(@faculty.token)}.
     - else

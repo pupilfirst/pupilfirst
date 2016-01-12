@@ -1,33 +1,21 @@
 = content_for :heading
-  | Important: Your team has been marked as a dropout
+  | Important: Your team has been marked as a Dropout
 
 = content_for :salutation
   | Hello,
 
 = content_for :body
   p
-    ' We're sorry to say this, but because of inactivity, lack of progress, inability to meet targets or unwillingness to sign legal agreements, your startup is now considered a dropout from the SV.CO program.
+    ' We're sorry to say this, but because of inactivity, lack of progress or inability to meet targets, your startup is now considered a dropout from the SV.CO program.
 
   p
-    ' This means that we'll no longer try to actively contact you or help your team. Your startup will also not be listed in any public listings or leaderboards & your timeline will show a prominent notice that you have dropped out.
+    ' This means that we'll no longer try to actively contact you or help your team. Your startup will also not be listed in any public listings or leaderboards &amp; your timeline will show a prominent notice that you have dropped out.
 
   p
-    ' Your team leader may delete your timeline & startup entirely by logging into #{link_to 'SV.CO', 'http://www.sv.co'} with his SV.CO ID.
-
-  p
-    ' To reactivate your timeline, go #{link_to 'here', @startup } & submit a New Product Deck timeline entry. We'll be processing your timeline update as a new startup, and acceptance will be based on our latest availability criteria.
+    ' To reactivate your timeline, go #{link_to 'here', @startup } &amp; submit a New Product Deck timeline entry. We'll be processing your timeline update as a new startup, and acceptance will be based on our latest availability criteria.
 
   p
     ' If you're unable to click on the link to your startup timeline (above), then please copy and paste the following
     | link into your browser's address bar:
 
   p.monospace = startup_url(@startup)
-
-  p
-    ' Note that your SV.CO ID (your registered email address) will serve as the primary ID concerning all things Startup
-    | Village &mdash; please remember to quote it during all communication.
-
-  p
-    ' Visit us on #{link_to 'Facebook', 'https://www.facebook.com/startupvillage'},
-    ' #{link_to 'Twitter', 'https://twitter.com/StartatSV'},
-    ' and our #{link_to 'SV Blog', 'http://www.startatsv.com/'}.

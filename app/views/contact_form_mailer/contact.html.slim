@@ -1,14 +1,11 @@
 = content_for :heading
-  | Contact Form: #{@query_type}
+  | #{@query_type} (by #{@name})
 
 = content_for :salutation
   | Hello,
 
 = content_for :body
-  p
-    ' You have received a message via the contact form at SV.CO. The email address supplied by the author is set as
-    | <code>Reply-To</code>, so feel free to reply to this e-mail. Details follow:
-
+  = simple_format @query, class: 'monospace'
   p
     | <strong>Name:</strong> #{@name}<br/>
     | <strong>Email:</strong> #{@email}<br/>
@@ -16,7 +13,3 @@
       | <strong>Mobile Phone Number:</strong> #{@mobile}<br/>
     - if @company.present?
       | <strong>Company:</strong> #{@company}<br/>
-
-  | Full text of query follows:
-
-  = simple_format @query, class: 'monospace'

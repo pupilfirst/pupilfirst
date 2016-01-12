@@ -85,7 +85,7 @@ describe User do
       create :public_slack_message, user: user, created_at: 5.months.from_now
 
       # Fill out expected activity counts with zero-es first.
-      end_date = batch.end_date > Time.now ? Time.now.end_of_month : batch.end_date
+      end_date = batch.end_date > Time.now ? Date.today.end_of_month : batch.end_date
       first_day_of_each_month = (batch.start_date.beginning_of_month..end_date).select { |d| d.day == 1 }
 
       expected_activity = first_day_of_each_month.each_with_object({}) do |first_day_of_month, hash|

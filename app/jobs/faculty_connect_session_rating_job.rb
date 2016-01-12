@@ -12,11 +12,11 @@ class FacultyConnectSessionRatingJob < ActiveJob::Base
     if !Rails.env.production? || connect_request.time_for_feedback_mail?
       FacultyMailer.connect_request_feedback(connect_request).deliver_later
       UserMailer.connect_request_feedback(connect_request).deliver_later
+
+      # Set feedback mails to sent.
+      connect_request.feedback_mails_sent!
     else
       connect_request.create_faculty_connect_session_rating_job
     end
-
-    # Set feedback mails to sent.
-    connect_request.feedback_mails_sent!
   end
 end

@@ -8,6 +8,8 @@
 
     .profile {
       text-align: center;
+      margin: auto;
+      max-width: 150px;
 
       img {
         border: 1px solid #aaaaaa;
@@ -258,7 +260,7 @@
 
           @media (max-width: $screen-md-max) {
             padding: 15px 10px 15px 0;
-            width: 55px;
+            width: 20%;
           }
         }
         .activity-count-block {
@@ -280,13 +282,17 @@
             color: #9b9b9b;
           }
 
-          @media (max-width: $screen-sm-max) {
+          @media (max-width: $screen-md-max) {
             padding-left: 15px;
+            width: 80%;
           }
         }
 
         @media (max-width: $screen-xs-max) {
           padding: 20px 15px;
+        }
+        @media (max-width: $screen-md-max) {
+          padding: 15px;
         }
       }
 
@@ -337,6 +343,10 @@
           cursor: pointer;
           transition: all .2s;
 
+          &:nth-child(1) {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+          }
           &:before {
             box-shadow: 1px 0px 0px 0px #56bfe7;
             content: "";
@@ -350,6 +360,13 @@
 
           &:first-child:before {
             border-left: 0;
+          }
+          &:first-child {
+
+            .week-section:nth-child(2) {
+              border-top-left-radius: 10px;
+              border-bottom-left-radius: 10px;
+            }
           }
 
           .month-name {
@@ -389,6 +406,10 @@
           a {
             padding: 0;
             outline: none;
+
+            &:hover, &:focus {
+              background-color: transparent
+            }
           }
 
           &:hover, &:focus, &.active {
@@ -559,7 +580,6 @@
           position: relative;
           background-color: #fff;
           border-radius: 20px;
-          border: 1px solid #d2d2d2;
 
           .month-name {
             font-size: 12px;
@@ -576,11 +596,19 @@
             float: left;
             text-align: center;
             box-shadow: 1px 0 0 0 #fff inset;
+            border: 1px solid #d2d2d2;
+            border-width: 1px 0;
 
             &:nth-child(2) {
               border-top-left-radius: 10px;
               border-bottom-left-radius: 10px;
               box-shadow: none;
+              border-left-width: 1px
+            }
+            &:nth-last-child(2) {
+              border-top-right-radius: 10px;
+              border-bottom-right-radius: 10px;
+              border-right-width: 1px
             }
 
             .week-name {
@@ -594,20 +622,11 @@
             }
           }
 
-          @media (max-width: $screen-xs-max) {
-            width: 80%;
-          }
-
-          @media (min-width: $screen-sm-min) {
-            width: 90%;
-          }
-
           .arrow {
             float: right;
             position: relative;
             width: 20px;
             height: 20px;
-            left: 50px;
             border: 1px solid #d2d2d2;
             text-align: center;
             border-radius: 6px;
@@ -634,10 +653,6 @@
                 color: #bbbbbb;
               }
             }
-          }
-
-          @media (max-width: $screen-sm-max) {
-            box-shadow: 0px 0px 5px #d2d2d2;
           }
         }
       }

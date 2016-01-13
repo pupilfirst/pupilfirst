@@ -586,3 +586,95 @@ h1.product-name {
 .founder, .founder-avatar > img {
   height: 130px;
 }
+#target-collapse {
+
+  .expired-target-head {
+    background-color: #e16c6c;
+    color: white;
+
+    h5 {
+      font-size: 16px;
+    }
+  }
+  .target-list {
+    padding: 0;
+    margin: 0 0 -1px 0;
+    border-radius: 0;
+
+    a {
+      display: block;
+      position: relative;
+      outline: 0;
+      padding: 10px 15px;
+      font-size: 16px;
+      font-weight: 300;
+      margin-bottom: -1px;
+      text-decoration: none;
+      color: #333333;
+      border-bottom: 1px solid $grey-border;
+
+      .target-due {
+        display: inline-block;
+        position: absolute;
+        right: 45px;
+        font-size: 14px;
+      }
+      .arrow-target {
+        position: relative;
+        width: 20px;
+        height: 20px;
+        border: 1px solid #d2d2d2;
+        text-align: center;
+        border-radius: 6px;
+        color: #bbbbbb;
+        line-height: 20px;
+        border-color: #bbbbbb;
+        box-shadow: 0px 0px 5px #d2d2d2;
+
+        &:before {
+          content: '\f106';
+          font-family: FontAwesome;
+          color: #bbbbbb;
+        }
+      }
+      &.collapsed {
+
+        .arrow-target {
+          border-color: #e16c6c;
+
+          &:before {
+            content: '\f107';
+            font-family: FontAwesome;
+            color: #e16c6c;
+          }
+        }
+      }
+      &:hover, &:focus, &:active {
+        background-color: $light-grey-background;
+      }
+    }
+  }
+
+  .target-content {
+    padding: 0 15px;
+    color: #333333;
+
+    h2 {
+        margin: 0;
+        padding-top: 10px;
+        padding-bottom: 6px;
+        padding-right: 15px;
+        font-size: 13px;
+        display: inline-block;
+        border-bottom: 1px solid $grey-border;
+    }
+    p {
+      margin: 10px 0;
+      font-weight: 300;
+    }
+    .expired-targets-description {
+      padding: 10px 0;
+      font-weight: 300;
+    }
+  }
+}

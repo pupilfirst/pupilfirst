@@ -72,15 +72,25 @@
 
               - if expired_targets.present?
                 .col-sm-6.col-md-12
-                  ul.list-group
-                    li.list-group-item.list-group-item-danger
+                  ul#target-collapse.list-unstyled
+                    li.list-group-item.list-group-item-danger.expired-target-head
                       i.fa.fa-exclamation-triangle
-                      h5 style="display: inline" &nbsp;You have #{expired_targets.count} expired #{'target'.pluralize(expired_targets.count)}!
+                      h5.font-weight-400 style="display: inline" &nbsp;You have #{expired_targets.count} expired #{'target'.pluralize(expired_targets.count)}!
                     - expired_targets.each do |target|
-                      li.list-group-item.clearfix
-                        ' #{target.title}
-                        .pull-right.grey-text
-                          = target.due_date.in_time_zone('Asia/Calcutta').strftime('%b %-d at %I:%M %p')
+                      li.panel.panel-default.list-group-item.target-list.clearfix
+                        a.collapsed data-parent="#target-collapse" data-toggle="collapse" href="#target-#{target.id}"
+                          ' #{target.title}
+                          .target-due.grey-text
+                            = target.due_date.in_time_zone('Asia/Calcutta').strftime('%b %-d at %I:%M %p')
+                          .arrow-target.pull-right
+                        .collapse.target-content id="target-#{target.id}" 
+                            h2.font-weight-400
+                              ' Description
+                            .expired-targets-description = target.description.html_safe
+                            - if target.completion_instructions.present?
+                              h2.font-weight-400
+                                ' Completion Instructions
+                              p = target.completion_instructions
 
         .data-icons
           .row

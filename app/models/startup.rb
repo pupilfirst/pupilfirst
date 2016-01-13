@@ -90,9 +90,11 @@ class Startup < ActiveRecord::Base
   # Returns startups that have accrued no karma points for last week (starting monday). If supplied a date, it
   # calculates for week bounded by that date.
   def self.inactive_for_week(date: 1.week.ago)
+    date = date.in_time_zone('Asia/Calcutta')
+
     # First, find everyone who doesn't fit the criteria.
     startups_with_karma_ids = joins(:karma_points)
-      .where(karma_points: { created_at: date.beginning_of_week..date.end_of_week })
+      .where(karma_points: { created_at: (date.beginning_of_week + 18.hours)..(date.end_of_week + 18.hours) })
       .pluck(:id)
 
     # Filter them out.

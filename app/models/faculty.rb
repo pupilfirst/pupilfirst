@@ -36,8 +36,9 @@ class Faculty < ActiveRecord::Base
     return unless last_available_connect_date
 
     days_to_offset = days_since_last_available_week
+    slots_to_copy = last_available_weekly_slots
 
-    last_available_weekly_slots.each do |slot|
+    slots_to_copy.each do |slot|
       connect_slots.create!(slot_at: slot.slot_at + days_to_offset)
     end
   end

@@ -77,22 +77,13 @@ class PublicSlackTalk
       return false
     end
 
-    # fetch im_ids of all users
-    ims_list = JSON.parse RestClient.get("https://slack.com/api/im.list?token=#{@token}")
-    unless ims_list['ok']
-      @errors[@user.id] = ims_list['error']
+    # fetch or create im_id for the user
+    im_id_response = JSON.parse RestClient.get("https://slack.com/api/im.open?token=#{@token}&user=#{@user.slack_user_id}")
+    unless im_id_response['ok']
+      @errors[@user.id] = im_id_response['error']
       return false
     end
 
-    # verify user has im_id
-    user_ids = ims_list['ims'].map { |i| i['user'] }
-    index = user_ids.index @user.slack_user_id
-    unless index
-      @errors[@user.id] = 'could not find im id for user'
-      return false
-    end
-
-    # return im_id of user
-    ims_list['ims'][index]['id']
+    im_id_response['channel']['id']
   end
 end

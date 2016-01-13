@@ -36,8 +36,10 @@ feature 'DM Startup Feedback' do
     # stub requests to slack API
     stub_request(:get, "https://slack.com/api/users.list?token=xxxxxx")
       .to_return(body: '{"ok":true,"members":[{"id":"UABCDEF","name":"founder1"},{"id":"U123456","name":"founder2"}]}')
-    stub_request(:get, "https://slack.com/api/im.list?token=xxxxxx")
-      .to_return(body: '{"ok":true,"ims":[{"id":"D123456","user":"U123456"},{"id":"DABCDEF","user":"UABCDEF"}]}')
+    stub_request(:get, "https://slack.com/api/im.open?token=xxxxxx&user=UABCDEF")
+      .to_return(body: '{"ok":true,"channel":{"id":"DABCDEF"}}')
+    stub_request(:get, "https://slack.com/api/im.open?token=xxxxxx&user=U123456")
+      .to_return(body: '{"ok":true,"channel":{"id":"D123456"}}')
 
     # add slack info for founders
     startup.founders.first.update!(slack_username: 'founder1')

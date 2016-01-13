@@ -5,7 +5,12 @@
     ol
       li.input.select.required
         = label_tag :target_id, 'Link Target', class: 'label'
-        = select_tag :target_id, options_from_collection_for_select(timeline_event.startup.targets.order('created_at DESC'), :id, :title), include_blank: true
+        - startup_targets = timeline_event.startup.targets
+        - pending_targets = startup_targets.pending.order('created_at DESC').pluck(:title,:id)
+        - expired_targets = startup_targets.expired.order('created_at DESC').pluck(:title,:id)
+        - completed_targets = startup_targets.where(status: Target::STATUS_DONE).order('created_at DESC').pluck(:title,:id)
+        - grouped_options = {'Live': pending_targets, 'Expired': expired_targets, 'Completed': completed_targets}
+        = select_tag :target_id, grouped_options_for_select(grouped_options), include_blank: true
       - unless timeline_event.timeline_event_type.private?
         li.boolean.input.optional
           label for=:target_completed

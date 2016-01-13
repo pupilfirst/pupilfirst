@@ -78,9 +78,12 @@ ActiveRecord::Schema.define(version: 20160108085717) do
     t.text     "questions"
     t.string   "status"
     t.string   "meeting_link"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
     t.datetime "confirmed_at"
+    t.datetime "feedback_mails_sent_at"
+    t.integer  "rating_of_faculty"
+    t.integer  "rating_of_team"
   end
 
   add_index "connect_requests", ["connect_slot_id"], name: "index_connect_requests_on_connect_slot_id", using: :btree

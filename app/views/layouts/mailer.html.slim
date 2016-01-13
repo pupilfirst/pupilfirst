@@ -10,7 +10,7 @@ html
               tbody
                 tr
                   td.mail-logo-td
-                    a.mail-logo-link href="https://www.svlabs.in" title="Startup Village" target="_blank"
+                    a.mail-logo-link href="https://sv.co/" title="SV.CO" target="_blank"
                       = image_tag 'mailer/logo.png', class: 'mail-logo-img'
 
             table.mail-body-table
@@ -20,7 +20,7 @@ html
                     h1.mail-heading #{yield :heading}
                     p.mail-salutation #{yield :salutation}
                     = yield :body
-                    p.mail-signature Team Startup Village
+                    p.mail-signature Team SV.CO
 
             table.mail-footer-table
               tbody
@@ -28,4 +28,4 @@ html
                   td
                     p
                       ' This email has been sent to you by
-                      = link_to 'Startup Village', root_url
+                      = link_to 'SV.CO', root_url

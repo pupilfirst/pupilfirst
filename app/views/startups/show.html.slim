@@ -202,10 +202,10 @@
                 .data-founder
                   .media
                     .media-left
-                      .media-object
+                      a.media-object href=founder_profile_url(slug: founder.slug)
                         .founder-image style="background-image: url('#{profile_image_url founder, gravatar_size: 128, avatar_version: :mid}');"
                     .media-body
-                      h4.media-heading #{truncated_founder_name founder.fullname}
+                      a.media-heading href=founder_profile_url(slug: founder.slug) #{truncated_founder_name founder.fullname}
                       p.designation #{founder_roles(founder.roles)}
                       ul.social-links
                         - if founder.twitter_url?

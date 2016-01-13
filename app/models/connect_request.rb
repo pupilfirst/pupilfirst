@@ -44,7 +44,36 @@ class ConnectRequest < ActiveRecord::Base
     return unless status_changed? && confirmed? && confirmed_at.blank?
     create_google_calendar_event if Rails.env.production?
     send_mails_for_confirmed
+    save_confirmation_time!
+    create_faculty_connect_session_rating_job
+  end
+
+  def save_confirmation_time!
     update!(confirmed_at: Time.now)
+  end
+
+  def create_faculty_connect_session_rating_job
+    if Rails.env.production?
+      FacultyConnectSessionRatingJob.set(wait_until: connect_slot.slot_at + 45.minutes).perform_later(self)
+    else
+      FacultyConnectSessionRatingJob.perform_later(self)
+    end
+  end
+
+  def time_for_feedback_mail?
+    (connect_slot.slot_at + 40.minutes).past? ? true : false
+  end
+
+  def unconfirmed?
+    !confirmed?
+  end
+
+  def feedback_mails_sent?
+    feedback_mails_sent_at.present?
+  end
+
+  def feedback_mails_sent!
+    update!(feedback_mails_sent_at: Time.now)
   end
 
   def send_mails_for_confirmed
@@ -77,6 +106,8 @@ class ConnectRequest < ActiveRecord::Base
 
   scope :requested, -> { where(status: STATUS_REQUESTED) }
   scope :confirmed, -> { where(status: STATUS_CONFIRMED) }
+
+  validates_numericality_of :rating_of_faculty, :rating_of_team, greater_than: 0, less_than: 6, allow_nil: true
 
   private
 

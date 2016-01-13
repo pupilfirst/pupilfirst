@@ -641,6 +641,7 @@ h1.product-name {
 
         .arrow-target {
           border-color: #e16c6c;
+          box-shadow: none;
 
           &:before {
             content: '\f107';

@@ -613,6 +613,13 @@ h1.product-name {
       color: #333333;
       border-bottom: 1px solid $grey-border;
 
+      .expired-target-title {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;;
+        text-overflow: ellipsis;
+        max-width: 140px;
+      }
       .target-due {
         display: inline-block;
         position: absolute;
@@ -661,10 +668,25 @@ h1.product-name {
     color: #333333;
 
     h2 {
+      margin: 0;
+      padding-top: 10px;
+      padding-bottom: 6px;
+      font-size: 18px;
+      font-weight: 400;
+
+      &:before {
+        border-left: 3px solid #0091c9;
+        position: absolute;
+        content: ' ';
+        left: 0;
+        height: 20px;
+      }
+    }
+    h3 {
         margin: 0;
         padding-top: 10px;
         padding-bottom: 6px;
-        padding-right: 15px;
+        padding-right: 10px;
         font-size: 13px;
         display: inline-block;
         border-bottom: 1px solid $grey-border;

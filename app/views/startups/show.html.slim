@@ -78,13 +78,16 @@
                       h5.font-weight-400 style="display: inline" &nbsp;You have #{expired_targets.count} expired #{'target'.pluralize(expired_targets.count)}!
                     - expired_targets.each do |target|
                       li.panel.panel-default.list-group-item.target-list.clearfix
-                        a.collapsed data-parent="#target-collapse" data-toggle="collapse" href="#target-#{target.id}"
-                          ' #{target.title}
-                          .target-due.grey-text
+                        a.collapsed.clearfix data-parent="#target-collapse" data-toggle="collapse" href="#target-#{target.id}"
+                          span.expired-target-title.pull-left
+                            ' #{target.title}
+                          .target-due.grey-text.pull-left
                             = target.due_date.in_time_zone('Asia/Calcutta').strftime('%b %-d at %I:%M %p')
                           .arrow-target.pull-right
                         .collapse.target-content id="target-#{target.id}" 
-                            h2.font-weight-400
+                            h2
+                              ' #{target.title}
+                            h3.font-weight-400
                               ' Description
                             .expired-targets-description = target.description.html_safe
                             - if target.completion_instructions.present?

@@ -4,14 +4,14 @@ class AdminUser < ActiveRecord::Base
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
   TYPE_SUPERADMIN = 'superadmin'
-  TYPE_TIMELINE_REVIEWER = 'timeline_reviewer'
+  TYPE_FACULTY = 'faculty'
 
   mount_uploader :avatar, AvatarUploader
   process_in_background :avatar
   normalize_attribute :password, :password_confirmation, :fullname, :avatar
 
   def self.admin_user_types
-    [TYPE_SUPERADMIN, TYPE_TIMELINE_REVIEWER]
+    [TYPE_SUPERADMIN, TYPE_FACULTY]
   end
 
   validates :admin_type, inclusion: { in: admin_user_types }, allow_nil: true

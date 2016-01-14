@@ -1,11 +1,6 @@
 class UsersController < ApplicationController
   before_filter :authenticate_user!, except: :founder_profile
 
-  # GET /users/:id
-  def show
-    @user = current_user
-  end
-
   def founder_profile
     @user = User.friendly.find(params[:slug])
     @timeline = @user.activity_timeline
@@ -23,7 +18,7 @@ class UsersController < ApplicationController
 
     if @user.update_attributes(user_params)
       flash[:notice] = 'Profile updated'
-      redirect_to user_path
+      redirect_to founder_profile_path(slug: @user.slug)
     else
       render 'edit'
     end
@@ -39,7 +34,7 @@ class UsersController < ApplicationController
 
       flash[:success] = 'Password updated'
 
-      redirect_to user_path
+      redirect_to founder_profile_path(slug: @user.slug)
     else
       render 'edit'
     end

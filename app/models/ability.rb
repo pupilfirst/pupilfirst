@@ -5,9 +5,9 @@ class Ability
     case user.admin_type
       when AdminUser::TYPE_SUPERADMIN
         can :manage, :all
-      when AdminUser::TYPE_TIMELINE_REVIEWER
+      when AdminUser::TYPE_FACULTY
         can :read, :all
-        can :manage, [StartupFeedback]
+        can :manage, [StartupFeedback, Resource]
         can :update, [TimelineEvent]
     end
 

@@ -1,5 +1,5 @@
 = content_for :heading
-  | You have successfully submitted your Startup Profile to Startup Village!
+  | You have successfully created a timeline at SV.CO!
 
 = content_for :salutation
   | Hi,
@@ -9,17 +9,13 @@
   ' Your SV.CO ID is #{@current_user.email}.
 
   p
-    ' We have also opened up a timeline
+    ' We have opened up a timeline
     ' (#{link_to @current_user.startup.name, startup_url(@current_user.startup)}), where you can fill in additional
-    ' details concerning your startup. You can login using your SV.CO ID. Make sure you complete this at the earliest as
-    | these details will also be considered while processing your application.
+    ' details concerning your startup.
 
   p If you're unable to click on the link to your startup profile (above), then please copy and paste the following link
     into your browser's address bar:
 
   p.monospace = startup_url(@current_user.startup)
-
-  p
-    ' Note that <b>SV.CO is currently in beta and invite only</b>, so your startup might take a while to get approved.
 
   p Reach out to us at #{mail_to 'help@sv.co'} in case of any queries.

@@ -74,6 +74,11 @@ class User < ActiveRecord::Base
     ]
   end
 
+  # Remove dashes separating slug candidates.
+  def normalize_friendly_id(_string)
+    super.delete '-'
+  end
+
   def should_generate_new_friendly_id?
     first_name_changed? || last_name_changed? || super
   end

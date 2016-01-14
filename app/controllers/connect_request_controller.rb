@@ -2,6 +2,9 @@ class ConnectRequestController < ApplicationController
   # GET /connect_request/:id/feedback/from_team/:token
   def feedback_from_team
     admin = User.find_by(auth_token: params[:token])
+
+    raise_not_found if admin.blank?
+
     connect_request = admin.startup.connect_requests.find(params[:id])
 
     if connect_request.update(rating_of_faculty: params[:rating])
@@ -16,6 +19,9 @@ class ConnectRequestController < ApplicationController
   # GET /connect_request/:id/feedback/from_faculty/:token
   def feedback_from_faculty
     faculty = Faculty.find_by(token: params[:token])
+
+    raise_not_found if faculty.blank?
+
     connect_request = faculty.connect_requests.find(params[:id])
 
     if connect_request.update(rating_of_team: params[:rating])

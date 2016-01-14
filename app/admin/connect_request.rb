@@ -77,6 +77,7 @@ ActiveAdmin.register ConnectRequest do
       end
 
       row :confirmed_at
+      row :feedback_mails_sent_at
       row :created_at
       row :updated_at
     end

@@ -12,7 +12,7 @@
         div class="col-md-#{@user.startup.logo.present? ? 7 : 10}"
           .row.profile-data
             .profile-head.clearfix
-              .col-md-6.profile-name
+              .col-lg-7.col-md-12.profile-name
                 h2
                   = @user.fullname
                   span
@@ -20,8 +20,12 @@
                       = @user.roles.map { |role| t("role.#{role}") }.join ', '
                       ' &nbsp;at
                     = @user.startup.product_name
+                  - if current_user == @user
+                    a.profile-edit-button href=edit_user_url
+                      i.fa.fa-pencil
+                      ' Edit
               - if @user.social_url_present?
-                .col-md-6.social-connect
+                .col-lg-5.col-md-12.social-connect
                   - if @user.personal_website_url.present?
                     a href=@user.personal_website_url target='_blank'
                       i.fa.fa-globe

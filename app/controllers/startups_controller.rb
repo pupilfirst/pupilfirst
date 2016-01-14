@@ -12,6 +12,7 @@ class StartupsController < ApplicationController
   # GET /startups
   def index
     @batches = Startup.available_batches
+    @skip_container = true
   end
 
   def new

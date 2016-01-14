@@ -84,7 +84,7 @@
                           .target-due.grey-text.pull-left
                             = target.due_date.in_time_zone('Asia/Calcutta').strftime('%b %-d at %I:%M %p')
                           .arrow-target.pull-right
-                        .collapse.target-content id="target-#{target.id}" 
+                        .collapse.target-content id="target-#{target.id}"
                             h2
                               ' #{target.title}
                             h3.font-weight-400
@@ -208,7 +208,8 @@
                       a.media-object href=founder_profile_url(slug: founder.slug)
                         .founder-image style="background-image: url('#{profile_image_url founder, gravatar_size: 128, avatar_version: :mid}');"
                     .media-body
-                      a.media-heading href=founder_profile_url(slug: founder.slug) #{truncated_founder_name founder.fullname}
+                      .media-heading
+                        = link_to truncated_founder_name(founder.fullname), founder_profile_url(slug: founder.slug)
                       p.designation #{founder_roles(founder.roles)}
                       ul.social-links
                         - if founder.twitter_url?

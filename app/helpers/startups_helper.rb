@@ -22,13 +22,7 @@ module StartupsHelper
   end
 
   def truncated_founder_name(name)
-    truncated_name = truncate name, length: 20, separator: ' '
-
-    if truncated_name != name
-      link_to truncated_name, '#', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: name, class: 'truncated-founder-name'
-    else
-      name
-    end
+    truncate name, length: 20, separator: ' ', omission: ''
   end
 
   def targets_for_display

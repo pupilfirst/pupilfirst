@@ -5,6 +5,8 @@ class ConnectRequest < ActiveRecord::Base
   belongs_to :connect_slot
   belongs_to :startup
 
+  has_one :karma_point, as: :source
+
   scope :for_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch }) }
 
   delegate :faculty, :slot_at, to: :connect_slot
@@ -109,7 +111,26 @@ class ConnectRequest < ActiveRecord::Base
 
   validates_numericality_of :rating_of_faculty, :rating_of_team, greater_than: 0, less_than: 6, allow_nil: true
 
+  def assign_karma_points(rating)
+    rating = rating.to_i
+    return false if rating < 3
+
+    karma_point = KarmaPoint.find_or_initialize_by(source: self)
+    karma_point.user = startup.admin
+    karma_point.points = points_for_rating(rating)
+    karma_point.activity_type = "Connect session with faculty member #{faculty.name}"
+    karma_point.save!
+  end
+
   private
+
+  def points_for_rating(rating)
+    {
+      3 => 10,
+      4 => 20,
+      5 => 40
+    }[rating]
+  end
 
   def attendees
     [{ 'email' => faculty.email, 'displayName' => faculty.name, 'responseStatus' => 'needsAction' }] + startup.founders.map do |founder|

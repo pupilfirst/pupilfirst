@@ -445,6 +445,18 @@ GEM
       sprockets-rails
     rails-assets-bootstrap-tabcollapse (0.2.6)
     rails-assets-curioussolutions-datetimepicker (0.1.11)
+    rails-assets-ev-emitter (1.0.1)
+    rails-assets-fizzy-ui-utils (2.0.0)
+      rails-assets-matches-selector (~> 2.0.0)
+    rails-assets-get-size (2.0.2)
+    rails-assets-masonry (4.0.0)
+      rails-assets-get-size (~> 2.0.2)
+      rails-assets-outlayer (~> 2.0.0)
+    rails-assets-matches-selector (2.0.1)
+    rails-assets-outlayer (2.0.0)
+      rails-assets-ev-emitter (~> 1.0.0)
+      rails-assets-fizzy-ui-utils (~> 2.0.0)
+      rails-assets-get-size (~> 2.0.2)
     rails-assets-pnotify (2.0.1)
     rails-assets-trix (0.9.2)
     rails-deprecated_sanitizer (1.0.3)
@@ -660,6 +672,7 @@ DEPENDENCIES
   rails (= 4.2.5)
   rails-assets-bootstrap-tabcollapse!
   rails-assets-curioussolutions-datetimepicker!
+  rails-assets-masonry!
   rails-assets-pnotify!
   rails-assets-trix!
   rails_12factor

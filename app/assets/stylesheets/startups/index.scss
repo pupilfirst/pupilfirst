@@ -1,14 +1,39 @@
 @import 'variables';
 
-p.startups-introduction {
-  margin: 10px 0 25px 0;
-  font-weight: 300;
-  font-size: 16px;
-  line-height: 200%;
+.startup-index-banner {
+  height: 260px;
+  background-image: asset-url("startup-index-banner.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom center;
+  position: relative;
+
+  .page-header {
+    color: white;
+    display: inline-block;
+    margin-top: 0;
+    font-size: 42px;
+    letter-spacing: 0.04em;
+  }
+  .banner-text {
+    max-width: 500px;
+    position: absolute;
+    text-align: left;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  p.startups-introduction {
+    margin: 0;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 25px;
+    color: white;
+    letter-spacing: 0.04em;
+  }
 }
 
 #startups-index-nav {
-  margin-bottom: 30px;
+  margin: 20px 0 0;
 
   .tab-title {
     font-weight: 600;
@@ -16,8 +41,8 @@ p.startups-introduction {
 
   li.active {
     .tab-title {
-      border: 1px solid white;
-      border-bottom: 3px solid $active-tab-highlight;
+      // border: 1px solid white;
+      border-top: 3px solid $active-tab-highlight;
       background-color: white;
     }
   }
@@ -37,19 +62,31 @@ p.startups-introduction {
     }
   }
 }
-
+.tab-events-data {
+  border: 1px solid #ddd;
+  border-top: 0;
+  margin-bottom: 30px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+.startups-batch-intro {
+  padding: 15px 15px 10px;
+  margin: 0;
+  color: #222222;
+}
 .startups-index-cards-container {
-  display: flex;
-  flex-wrap: wrap;
+  display: block;
   margin-bottom: 40px;
-  justify-content: center;
 
   .startup-card {
     position: relative;
-    border: 1px solid #d2d2d2;
-    box-shadow: 1px 1px 1px #d2d2d2;
-    margin: 20px 20px 0 0;
-    width: 304px;
+    box-shadow: 0 0 5px 0 rgba(0,0,0,0.2);
+    margin: 10px 0;
+    border-radius: 5px;
+    background-color: #fff;
+    overflow: hidden;
+    border-bottom: 2px solid #207ec2;
+
 
     // Fit three cards per row on md.
     @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
@@ -71,14 +108,17 @@ p.startups-introduction {
   }
 
   .startup-card-body {
-    padding: 0 15px;
+    padding: 0 15px 60px;
 
     h5 {
-      color: black;
-      font-size: 16px;
-      font-weight: 300;
-      line-height: 26px;
+      color: #207ec2;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 24px;
       margin-bottom: 0;
+      letter-spacing: 0.04em;
+      display: block;
+      font-weight: 400;
     }
 
     p {
@@ -86,6 +126,11 @@ p.startups-introduction {
       font-size: 14px;
       line-height: 24px;
       margin-top: 5px;
+    }
+    .time-ago {
+      display: block;
+      color: #939393;
+      font-size: 12px;
     }
   }
 
@@ -107,68 +152,78 @@ p.startups-introduction {
     }
   }
 
-  .startup-footer-spacer {
-    height: 175px;
-  }
-
   .startup-footer {
-    border-top: 1px solid #DFDFDF;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 302px;
+    position: relative;
+    border-top: 1px solid #d6d6d6;
+    background-color: #f9f9f9;
+    position: relative;
+    padding: 60px 15px 15px;
 
-    .footer-body {
-      padding: 15px;
-      background-color: white;
-    }
+    .startup-basebox {
+      position: absolute;
+      top: -45px;
+      left: 15px;
+      right: 15px;
 
-    .left {
-      width: 85px;
-      float: left;
+      .startup-event-logo {
+        overflow: hidden;
+        background-color: #fff;
 
-      .startup-block-logo-container {
-        width: 100%;
-        height: 85px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: none;
-        color: initial;
-        margin: 0;
-        padding: 0;
+        .startup-block-logo-container {
+          width: 100%;
+          height: 90px;
+          width: 90px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: none;
+          color: initial;
+          margin: 0;
+          padding: 0;
+          border: 1px solid #d6d6d6;
 
-        &:hover {
-          background-color: initial;
+          &:hover {
+            background-color: initial;
+          }
+        }
+
+        .startup-block-logo-container.with-name {
+          text-align: center;
+          font-weight: bold;
+          text-transform: uppercase;
+          background-color: #EFEFEF;
+          font-size: 12px;
+          padding: 5px;
+        }
+
+        img {
+          width: 100%;
         }
       }
+      .view-timeline-button {
 
-      .startup-block-logo-container.with-name {
-        text-align: center;
-        font-weight: bold;
-        text-transform: uppercase;
-        background-color: #EFEFEF;
-        font-size: 12px;
-        padding: 5px;
-      }
+        a {
+          margin: 24px 0;
+          text-align: center;
+          display: inline-block;
+          width: 100%;
+          border: 1px solid #207ec2;
+          border-radius: 5px;
+          background-color: #fff;
+          color: #207ec2;
+          padding: 10px 30px;
+          transition: all .5s;
 
-      img {
-        max-height: 100%;
-        max-width: 100%;
-      }
+          &:hover {
+            text-decoration: none;
+            background-color: #207ec2;
+            border-color: #207ec2;
+            color: #fff;
+          }
 
-      a {
-        margin-top: 15px;
-        text-align: center;
-        display: inline-block;
-        width: 100%;
-        height: 65px;
-        border: 1px solid lightgrey;
-        padding: 10px;
-
-        &:hover {
-          text-decoration: none;
-          background-color: #eeeeee;
+          @media (max-width: $screen-md-max) {
+            padding: 10px 15px;
+          }
         }
       }
     }

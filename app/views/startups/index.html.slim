@@ -1,45 +1,50 @@
 - content_for :head
   title SV.CO Startups
+  
+.startup-index-banner
+  .container
+    .banner-text
+      h1.page-header.header-light Startups
+      - @batches.each do |batch|
+        p.startups-introduction
+          ' These are latest verified events from our amazing startups in #{batch.name} batch, enrolled from
+          | #{batch.start_date.strftime('%B %-d, %Y')} &mdash; #{batch.end_date.strftime('%B %-d, %Y')}.  
 
-h1.page-header.header-light Startups
+.container
+  .row
+    ul#startups-index-nav.nav.nav-tabs
+      - @batches.each do |batch|
+        li role="presentation" class="#{batch == @batches.first ? 'active' : ''}"
+          a.tab-title href="#batch-#{batch.id}" aria-controls="batch-#{batch.id}" role="tab" data-toggle="tab"
+            ' #{batch.name}
+            small
+              | (#{batch.end_date.strftime('%b %Y')})
 
-ul#startups-index-nav.nav.nav-tabs.nav-justified
-  li role="presentation"
-    a.inactive-spacer #{('. ' * 4).html_safe}
-  - @batches.each do |batch|
-    li role="presentation" class="#{batch == @batches.first ? 'active' : ''}"
-      a.tab-title href="#batch-#{batch.id}" aria-controls="batch-#{batch.id}" role="tab" data-toggle="tab"
-        ' #{batch.name}
-        small
-          | (#{batch.end_date.strftime('%b %Y')})
-  li role="presentation"
-    a.inactive-spacer #{('. ' * 4).html_safe}
+  .tab-content.tab-events-data.row
+    - @batches.each do |batch|
+      .tab-pane role="tabpanel" id="batch-#{batch.id}" class="#{batch == @batches.first ? 'active' : ''}"
+        p.startups-batch-intro
+          ' These are latest verified events from our amazing startups in #{batch.name} batch, enrolled from
+          | #{batch.start_date.strftime('%B %-d, %Y')} &mdash; #{batch.end_date.strftime('%B %-d, %Y')}.
 
-.tab-content
-  - @batches.each do |batch|
-    .tab-pane role="tabpanel" id="batch-#{batch.id}" class="#{batch == @batches.first ? 'active' : ''}"
-      p.startups-introduction
-        ' These are latest verified events from our amazing startups in #{batch.name} batch, enrolled from
-        | #{batch.start_date.strftime('%B %-d, %Y')} &mdash; #{batch.end_date.strftime('%B %-d, %Y')}.
-
-        .startups-index-cards-container
-          - showcase_events_for_batch(batch).each do |event, startup|
-            .startup-card
-              .startup-card-image style="background-image: url(#{event.image_url});"
-              .startup-card-body
-                h5
-                  ' #{startup.product_name}: #{event.timeline_event_type.title}
-                  small.break-together
-                    | (#{time_ago_in_words(event.event_on)} ago)
-                p = event.description
-              .startup-footer-spacer
-              .startup-footer
-                .clearfix.footer-body
-                  .left
-                    a.startup-block-logo-container href=startup_url(startup) class="#{startup.logo.present? ? '' : 'with-name'}"
-                      - if startup.logo.present?
-                        = image_tag startup.logo.url
-                      - else
-                        = startup.name || startup.product_name
-                  .right = startup.product_description
-                = link_to 'See full timeline', startup, class: 'timeline-link'
+          #startup-grid.startups-index-cards-container.clearfix
+            - showcase_events_for_batch(batch).each do |event, startup|
+              .col-md-4.col-sm-6.col-xs-12.startup-event-entry
+                .startup-card
+                  .startup-card-image style="background-image: url(#{event.image_url});"
+                  .startup-card-body
+                    h5
+                      ' #{startup.product_name}: #{event.timeline_event_type.title}
+                      span.time-ago
+                        | (#{time_ago_in_words(event.event_on)} ago)
+                    p = event.description
+                  .startup-footer
+                    .startup-basebox.clearfix
+                      .startup-event-logo.pull-left
+                        a.startup-block-logo-container href=startup_url(startup) class="#{startup.logo.present? ? '' : 'with-name'}"
+                          - if startup.logo.present?
+                            = image_tag startup.logo.url
+                          - else
+                            = startup.name || startup.product_name
+                      .view-timeline-button.pull-right = link_to 'See full timeline', startup, class: 'timeline-link'
+                    p = startup.product_description

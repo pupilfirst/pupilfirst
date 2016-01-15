@@ -83,6 +83,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-curioussolutions-datetimepicker' # Responsive datetimepicker for timeline builder form.
   gem 'rails-assets-trix' # rich text editor from basecamp ( used for eg in the description for targets)
   gem 'rails-assets-bootstrap-tabcollapse' # Bootstrap plugin that switches bootstrap tabs component to collapse component for small screens.
+  gem 'rails-assets-masonry' # Masonry works by placing elements in optimal position based on available vertical space.
 end
 
 group :development do

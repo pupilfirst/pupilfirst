@@ -20,6 +20,10 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  resource:
+    share_status:
+      approved: 'Only with approved startups'
+      public: Public
   recaptcha:
     errors:
       verification_failed: Verification of Recaptcha failed. Please try again.

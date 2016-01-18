@@ -16,7 +16,11 @@ ActiveAdmin.register Resource do
   index do
     selectable_column
 
-    column :share_status
+    column :share_status do |resource|
+      if resource.share_status.present?
+        t("resource.share_status.#{resource.share_status}")
+      end
+    end
 
     column :shared_with_batch do |resource|
       if resource.shared_with_batch.present?
@@ -41,7 +45,11 @@ ActiveAdmin.register Resource do
 
   show do
     attributes_table do
-      row :share_status
+      row :share_status do |resource|
+        if resource.share_status.present?
+          t("resource.share_status.#{resource.share_status}")
+        end
+      end
 
       row :shared_with_batch do |resource|
         if resource.shared_with_batch.present?
@@ -82,7 +90,8 @@ ActiveAdmin.register Resource do
       f.input :share_status,
         as: :select,
         collection: Resource.valid_share_statuses,
-        member_label: proc { |share_status| share_status.capitalize }
+        member_label: proc { |share_status| t("resource.share_status.#{share_status}") }
+
       f.input :shared_with_batch, placeholder: 'Leave this blank to share with all batches.'
       f.input :batch, label: 'Shared with Batch (inactive)'
       f.input :file, as: :file

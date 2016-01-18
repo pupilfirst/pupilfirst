@@ -259,7 +259,7 @@ ActiveAdmin.register TimelineEvent do
           span do
             button_to 'Unverified. Click to verify this event.', verify_admin_timeline_event_path,
               form_class: 'inline-button',
-              data: { confirm: 'Are you sure you want to verify this event? Verification of public events will be announced on Public Slack' }
+              data: { confirm: 'Are you sure you want to verify this event?' }
           end
 
           span do
@@ -267,7 +267,7 @@ ActiveAdmin.register TimelineEvent do
           end
         elsif timeline_event.needs_improvement?
           button_to 'Unverified. Click to verify this event.', verify_admin_timeline_event_path,
-            data: { confirm: 'Are you sure you want to verify this event? Verification of public events will be announced on Public Slack' }
+            data: { confirm: 'Are you sure you want to verify this event?' }
         end
       end
 

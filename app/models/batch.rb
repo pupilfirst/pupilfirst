@@ -3,7 +3,7 @@ class Batch < ActiveRecord::Base
   scope :current, -> { where('start_date <= ? and end_date >= ?', Time.now, Time.now).first }
 
   validates :name, presence: true, uniqueness: true
-  validates_numericality_of :batch_number, uniqueness: true
+  validates :batch_number, presence: true, numericality: true, uniqueness: true
   validates_presence_of :start_date, :end_date
 
   def to_label

@@ -36,6 +36,8 @@ class Faculty < ActiveRecord::Base
     return unless last_available_connect_date
 
     days_to_offset = days_since_last_available_week
+    return if days_to_offset == 0 # return since next week already has slots somehow!
+
     slots_to_copy = last_available_weekly_slots
 
     slots_to_copy.each do |slot|

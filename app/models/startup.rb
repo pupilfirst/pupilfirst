@@ -304,7 +304,7 @@ class Startup < ActiveRecord::Base
   end
 
   def batched?
-    batch_number.present?
+    batch.present?
   end
 
   mount_uploader :logo, LogoUploader

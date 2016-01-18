@@ -4,19 +4,16 @@ ActiveAdmin.register TimelineEvent do
     :user_id
 
   preserve_default_filters!
-  filter :startup_batch_number, as: :select, collection: (1..10)
+  filter :startup_batch
   filter :startup_product_name, as: :select, collection: proc { Startup.all.pluck(:product_name).uniq }
   filter :timeline_event_type, collection: proc { TimelineEventType.all.order(:title) }
 
   scope :all
   scope :batched
 
-  controller do
-    def index
-      params[:order] = 'updated_at_desc'
-      super
-    end
+  config.sort_order = 'updated_at_desc'
 
+  controller do
     def scoped_collection
       super.includes :startup, :timeline_event_type
     end

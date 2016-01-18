@@ -2,6 +2,8 @@ class Resource < ActiveRecord::Base
   include FriendlyId
   friendly_id :slug_candidates, use: [:slugged, :finders]
 
+  belongs_to :batch
+
   def slug_candidates
     [:title, [:title, :updated_at]]
   end
@@ -38,7 +40,7 @@ class Resource < ActiveRecord::Base
         SHARE_STATUS_APPROVED,
         nil,
         SHARE_STATUS_APPROVED,
-        user.startup.try(:batch_number)
+        user.startup&.batch&.batch_number
       ).order('title')
     else
       public_resources

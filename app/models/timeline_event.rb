@@ -48,7 +48,7 @@ class TimelineEvent < ActiveRecord::Base
     message: "must be within #{MAX_DESCRIPTION_CHARACTERS} characters"
 
   scope :end_of_iteration_events, -> { where(timeline_event_type: TimelineEventType.end_iteration) }
-  scope :batched, -> { joins(:startup).where.not(startups: { batch_number: nil }) }
+  scope :batched, -> { joins(:startup).merge(Startup.batched) }
   scope :verified, -> { where(verified_status: VERIFIED_STATUS_VERIFIED) }
   scope :pending, -> { where(verified_status: VERIFIED_STATUS_PENDING) }
   scope :needs_improvement, -> { where(verified_status: VERIFIED_STATUS_NEEDS_IMPROVEMENT) }

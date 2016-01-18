@@ -2,7 +2,7 @@ ActiveAdmin.register Startup do
   filter :approval_status, as: :select, collection: proc { Startup.valid_approval_status_values }
   filter :product_name
   filter :name
-  filter :batch_number, as: :select, collection: (1..10)
+  filter :batch
   filter :stage, as: :select, collection: proc { stages_collection }
   filter :website
   filter :registration_type, as: :select, collection: proc { Startup.valid_registration_types }
@@ -108,7 +108,7 @@ ActiveAdmin.register Startup do
     column :wireframe_link
     column :prototype_link
     column :name
-    column :batch_number
+    column :batch
     column :incubation_location
     column :physical_incubatee
     column(:founders) { |startup| startup.founders.pluck(:first_name).join ', ' }

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160108085717) do
+ActiveRecord::Schema.define(version: 20160118120026) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,8 +59,9 @@ ActiveRecord::Schema.define(version: 20160108085717) do
     t.text     "description"
     t.date     "start_date"
     t.date     "end_date"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "batch_number"
   end
 
   create_table "colleges", force: :cascade do |t|
@@ -214,8 +215,10 @@ ActiveRecord::Schema.define(version: 20160108085717) do
     t.integer  "shared_with_batch"
     t.integer  "downloads",         default: 0
     t.string   "slug"
+    t.integer  "batch_id"
   end
 
+  add_index "resources", ["batch_id"], name: "index_resources_on_batch_id", using: :btree
   add_index "resources", ["share_status", "shared_with_batch"], name: "index_resources_on_share_status_and_shared_with_batch", using: :btree
   add_index "resources", ["slug"], name: "index_resources_on_slug", using: :btree
 
@@ -286,17 +289,16 @@ ActiveRecord::Schema.define(version: 20160108085717) do
     t.text     "metadata"
     t.string   "slug"
     t.boolean  "featured"
-    t.integer  "batch_number"
     t.string   "stage"
     t.string   "legal_registered_name"
     t.string   "wireframe_link"
     t.string   "prototype_link"
     t.string   "product_video"
     t.integer  "batch_id"
+    t.integer  "batch_number"
   end
 
   add_index "startups", ["batch_id"], name: "index_startups_on_batch_id", using: :btree
-  add_index "startups", ["batch_number"], name: "index_startups_on_batch_number", using: :btree
   add_index "startups", ["slug"], name: "index_startups_on_slug", unique: true, using: :btree
   add_index "startups", ["stage"], name: "index_startups_on_stage", using: :btree
 
@@ -470,6 +472,7 @@ ActiveRecord::Schema.define(version: 20160108085717) do
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
   add_foreign_key "karma_points", "users"
+  add_foreign_key "resources", "batches"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "team_members", "startups"
   add_foreign_key "timeline_events", "startups"

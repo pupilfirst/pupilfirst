@@ -64,7 +64,7 @@ class UsersController < ApplicationController
 
   # PATCH /users/:id/resend
   def resend
-    if (current_user.updated_at <= 5.minute.ago)
+    if current_user.updated_at <= 5.minute.ago
       @retry_after_some_time = false
       code, phone_number = current_user.generate_phone_number_verification_code(current_user.unconfirmed_phone)
 

@@ -29,7 +29,7 @@ ActiveAdmin.register ConnectSlot do
     begin
       params[:connect_slots][:slots].split(',').each do |slot|
         hour = slot.to_i
-        minute = (((slot.to_f) - hour) * 60).to_s.delete('.')[0..1]
+        minute = ((slot.to_f - hour) * 60).to_s.delete('.')[0..1]
 
         connect_slot = faculty.connect_slots.find_or_initialize_by(
           slot_at: Time.parse("#{params[:connect_slots][:date]} #{hour.to_s.rjust(2, '0')}:#{minute}:00 +0530")

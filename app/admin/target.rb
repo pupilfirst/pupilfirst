@@ -60,12 +60,10 @@ ActiveAdmin.register Target do
     column :status do |target|
       if target.founder?
         'N/A'
+      elsif target.expired?
+        'Expired'
       else
-        if target.expired?
-          'Expired'
-        else
-          t("target.status.#{target.status}")
-        end
+        t("target.status.#{target.status}")
       end
     end
 
@@ -116,12 +114,10 @@ ActiveAdmin.register Target do
       row :status do
         if target.founder?
           'N/A'
+        elsif target.expired?
+          'Expired'
         else
-          if target.expired?
-            'Expired'
-          else
-            t("target.status.#{target.status}")
-          end
+          t("target.status.#{target.status}")
         end
       end
 

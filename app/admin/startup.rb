@@ -46,7 +46,7 @@ ActiveAdmin.register Startup do
               'fa-circle-o'
             end
 
-            li class: "#{index >= 3 && hide_some_targets ? "hide admin-startup-#{startup.id}-hidden-target" : ''}" do
+            li class: (index >= 3 && hide_some_targets ? "hide admin-startup-#{startup.id}-hidden-target" : '') do
               link_to " #{target.title}", [:admin, target], class: "fa #{fa_icon} no-text-decoration"
             end
           end
@@ -355,7 +355,7 @@ ActiveAdmin.register Startup do
         table_for startup.targets.order('created_at DESC') do
           column 'Target' do |target|
             a href: admin_target_path(target) do
-              "#{target.title}"
+              target.title
             end
           end
 
@@ -366,12 +366,10 @@ ActiveAdmin.register Startup do
           column :status do |target|
             if target.founder?
               'N/A'
+            elsif target.expired?
+              'Expired'
             else
-              if target.expired?
-                'Expired'
-              else
-                t("target.status.#{target.status}")
-              end
+              t("target.status.#{target.status}")
             end
           end
 

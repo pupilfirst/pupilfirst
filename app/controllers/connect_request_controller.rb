@@ -25,10 +25,10 @@ class ConnectRequestController < ApplicationController
     connect_request = faculty.connect_requests.find(params[:id])
 
     if connect_request.update(rating_of_team: params[:rating])
-      if connect_request.assign_karma_points(params[:rating])
-        flash[:success] = 'Thank you! Your rating of the connect session has been saved, and karma points have been assigned.'
+      flash[:success] = if connect_request.assign_karma_points(params[:rating])
+        'Thank you! Your rating of the connect session has been saved, and karma points have been assigned.'
       else
-        flash[:success] = 'Thank you! Your rating of the connect session has been saved.'
+        'Thank you! Your rating of the connect session has been saved.'
       end
     else
       flash[:error] = "We're sorry, but something went wrong when we tried to save that rating."

@@ -3,7 +3,7 @@ namespace :lita do
   task vocalist: [:environment] do
     # Require lita, and adapter.
     require 'lita'
-    require 'lita-slack'
+    require_rel '../../../lita-slack/lita-slack/lib/lita-slack'
 
     # Require all handlers.
     require_rel '../lita/handlers/*'

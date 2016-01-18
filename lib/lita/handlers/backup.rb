@@ -4,6 +4,7 @@ module Lita
       on :unhandled_message do |payload|
         ActiveRecord::Base.connection_pool.with_connection do
           message = payload[:message]
+          binding.pry
 
           next if message.private_message?
 
@@ -12,10 +13,18 @@ module Lita
 
           # TODO: Channel name should be accessible directly from message.room_object.name, but it isn't. Fix when possible.
           # See: https://github.com/kenjij/lita-slack/issues/44
-          channel = Lita::Room.find_by_id(message.room_object.id).name
+          channel = Lita::Room.find_by_id(message.room_object.id).try(:name)
 
-          PublicSlackMessage.create! body: message.body, slack_username: message.user.mention_name, user: message_author, channel: channel
+          # if reaction, fetch message reacted to
+          parent_message = fetch_parent_message(message) if message.is_a? Reaction
+
+          PublicSlackMessage.create! body: message.body, slack_username: message.user.mention_name,
+            user: message_author, channel: channel, parent_message: parent_message, timestamp:
         end
+      end
+
+      def fetch_parent_message(message)
+        PublicSlackMessage.find_by(channel: message.item['channel'], timestamp: message.item['ts'])
       end
 
       Lita.register_handler(self)

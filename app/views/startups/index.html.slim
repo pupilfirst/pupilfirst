@@ -1,6 +1,6 @@
 - content_for :head
   title SV.CO Startups
-  
+
 .startup-index-banner
   .container
     .banner-text
@@ -15,7 +15,7 @@
       - @batches.each do |batch|
         li role="presentation" class="#{batch == @batches.first ? 'active' : ''}"
           a.tab-title href="#batch-#{batch.id}" aria-controls="batch-#{batch.id}" role="tab" data-toggle="tab"
-            ' #{batch.name}
+            ' Batch #{batch.batch_number} &mdash; #{batch.name}
             small
               | (#{batch.end_date.strftime('%b %Y')})
 

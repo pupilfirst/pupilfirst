@@ -613,7 +613,7 @@ class Startup < ActiveRecord::Base
   end
 
   def self.available_batches
-    Batch.find Startup.batched.pluck(:batch_id).uniq
+    Batch.where(id: Startup.batched.pluck(:batch_id).uniq)
   end
 
   def self.leaderboard_of_batch(batch)

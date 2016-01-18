@@ -27,11 +27,15 @@ Resource.create!(
   share_status: Resource::SHARE_STATUS_APPROVED
 )
 
-Resource.create!(
-  file: Rails.root.join(pdf_path).open,
-  thumbnail: Rails.root.join(pdf_thumbnail_path).open,
-  title: 'PDF for batch 1 startups',
-  description: 'This is a restricted PDF file, meant to be accessible by approved startups of batch 1.',
-  share_status: Resource::SHARE_STATUS_APPROVED,
-  shared_with_batch: 1
-)
+after 'development:batches' do
+  fintech_batch = Batch.find_by(name: 'FinTech')
+
+  Resource.create!(
+    file: Rails.root.join(pdf_path).open,
+    thumbnail: Rails.root.join(pdf_thumbnail_path).open,
+    title: 'PDF for batch 1 startups',
+    description: 'This is a restricted PDF file, meant to be accessible by approved startups of batch 1.',
+    share_status: Resource::SHARE_STATUS_APPROVED,
+    batch: fintech_batch
+  )
+end

@@ -14,9 +14,13 @@ feature 'Resources' do
 
   let!(:public_resource_1) { create :resource }
   let!(:public_resource_2) { create :resource }
+
+  let(:batch_1) { create :batch }
+  let(:batch_2) { create :batch }
+
   let!(:approved_resource_for_all) { create :resource, share_status: Resource::SHARE_STATUS_APPROVED }
-  let!(:approved_resource_for_batch_1) { create :resource, share_status: Resource::SHARE_STATUS_APPROVED, shared_with_batch: 1 }
-  let!(:approved_resource_for_batch_2) { create :resource, share_status: Resource::SHARE_STATUS_APPROVED, shared_with_batch: 2 }
+  let!(:approved_resource_for_batch_1) { create :resource, share_status: Resource::SHARE_STATUS_APPROVED, batch: batch_1 }
+  let!(:approved_resource_for_batch_2) { create :resource, share_status: Resource::SHARE_STATUS_APPROVED, batch: batch_2 }
 
   before :all do
     WebMock.allow_net_connect!
@@ -103,8 +107,7 @@ feature 'Resources' do
       end
 
       context "Founder's startup is from batch 1" do
-        let(:batch) { create :batch }
-        let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED, batch: batch }
+        let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED, batch: batch_1 }
 
         scenario 'Founder visits resources page' do
           visit resources_path

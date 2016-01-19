@@ -8,6 +8,7 @@ class ConnectRequest < ActiveRecord::Base
   has_one :karma_point, as: :source
 
   scope :for_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch }) }
+  scope :upcoming, -> { joins(:connect_slot).where('connect_slots.slot_at > ?', Time.now) }
 
   delegate :faculty, :slot_at, to: :connect_slot
 

@@ -63,7 +63,7 @@ RSpec.configure do |config|
   # Run RuboCop first.
   rubocop_output = `rubocop`
   print rubocop_output
-  fail 'RuboCop Errors' unless rubocop_output.match(/files inspected, no offenses detected/)
+  fail 'RuboCop Errors' unless rubocop_output =~ /files inspected, no offenses detected/
 end
 
 # Use cabpybara-webkit as JS driver.

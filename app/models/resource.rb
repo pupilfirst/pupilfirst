@@ -1,3 +1,6 @@
+# encoding: utf-8
+# frozen_string_literal: true
+
 class Resource < ActiveRecord::Base
   include FriendlyId
   friendly_id :slug_candidates, use: [:slugged, :finders]
@@ -12,8 +15,8 @@ class Resource < ActiveRecord::Base
     title_changed? || super
   end
 
-  SHARE_STATUS_PUBLIC = 'public'
-  SHARE_STATUS_APPROVED = 'approved'
+  SHARE_STATUS_PUBLIC = 'public'.freeze
+  SHARE_STATUS_APPROVED = 'approved'.freeze
 
   def self.valid_share_statuses
     [SHARE_STATUS_PUBLIC, SHARE_STATUS_APPROVED]

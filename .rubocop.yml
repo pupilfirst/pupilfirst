@@ -18,6 +18,8 @@ Style/AlignParameters:
   EnforcedStyle: with_fixed_indentation
 Style/MultilineOperationIndentation:
   EnforcedStyle: indented
+Style/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
 Style/CaseIndentation:
   IndentWhenRelativeTo: end
   IndentOneStep: true

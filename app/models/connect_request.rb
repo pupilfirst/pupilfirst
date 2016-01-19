@@ -1,3 +1,6 @@
+# encoding: utf-8
+# frozen_string_literal: true
+
 class ConnectRequest < ActiveRecord::Base
   MEETING_DURATION = 20.minutes
   MAX_QUESTIONS_LENGTH = 600
@@ -15,8 +18,8 @@ class ConnectRequest < ActiveRecord::Base
   validates_presence_of :connect_slot_id, :startup_id, :questions, :status
   validates_uniqueness_of :connect_slot_id
 
-  STATUS_REQUESTED = 'requested'
-  STATUS_CONFIRMED = 'confirmed'
+  STATUS_REQUESTED = 'requested'.freeze
+  STATUS_CONFIRMED = 'confirmed'.freeze
 
   def self.valid_statuses
     [STATUS_REQUESTED, STATUS_CONFIRMED]

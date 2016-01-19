@@ -1,10 +1,13 @@
+# encoding: utf-8
+# frozen_string_literal: true
+
 class Target < ActiveRecord::Base
   belongs_to :startup
   belongs_to :assigner, class_name: 'Faculty'
   has_many :timeline_events
 
-  STATUS_PENDING = 'pending'
-  STATUS_DONE = 'done'
+  STATUS_PENDING = 'pending'.freeze
+  STATUS_DONE = 'done'.freeze
 
   # The following definitions of pending and expired is naive. A correct check requires the use of the done_for_viewer?
   # method on individual targets by supplying the viewer.
@@ -15,7 +18,7 @@ class Target < ActiveRecord::Base
   scope :founder, -> { where(role: ROLE_FOUNDER) }
   scope :not_target_roles, -> { where.not(role: target_roles) }
 
-  ROLE_FOUNDER = 'founder'
+  ROLE_FOUNDER = 'founder'.freeze
 
   def self.target_roles
     [ROLE_FOUNDER]

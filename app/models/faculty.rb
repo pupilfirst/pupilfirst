@@ -1,3 +1,6 @@
+# encoding: utf-8
+# frozen_string_literal: true
+
 class Faculty < ActiveRecord::Base
   mount_uploader :image, FacultyImageUploader
   process_in_background :image
@@ -9,9 +12,9 @@ class Faculty < ActiveRecord::Base
   has_many :connect_slots, dependent: :destroy
   has_many :connect_requests, through: :connect_slots
 
-  CATEGORY_TEAM = 'team'
-  CATEGORY_VISITING_FACULTY = 'visiting_faculty'
-  CATEGORY_ADVISORY_BOARD = 'advisory_board'
+  CATEGORY_TEAM = 'team'.freeze
+  CATEGORY_VISITING_FACULTY = 'visiting_faculty'.freeze
+  CATEGORY_ADVISORY_BOARD = 'advisory_board'.freeze
 
   validates_presence_of :name, :title, :category, :image
 

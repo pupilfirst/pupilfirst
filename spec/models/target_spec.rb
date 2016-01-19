@@ -61,7 +61,7 @@ describe Target do
     it 'contains target details' do
       # default details
       expect(subject.details_as_slack_message).to include("#{subject.assigner.name} has assigned ")
-      expect(subject.details_as_slack_message).to include(ApplicationController.helpers.strip_tags subject.description)
+      expect(subject.details_as_slack_message).to include(ApplicationController.helpers.strip_tags(subject.description))
 
       # conditional details
       expect(subject.details_as_slack_message).to include("<#{subject.resource_url}|a useful link>") # already set from factory

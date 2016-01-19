@@ -1,1 +1,60 @@
 .phone-number-controls { padding: 6px 12px; }
+.onboarding-head-panel {
+  margin: 0;
+  background-color: #f5f5f5;
+  border: 1px solid $grey-border;
+  border-width: 1px 0;
+  border-radius: 0;
+
+  .onboarding-tab {
+    padding: 15px;
+    border-right: 1px solid $grey-border;
+    color: grey;
+
+    &:first-child {
+      border-left: 1px solid $grey-border;
+    }
+    &.current-tab {
+      background-color: #528fcc;
+      color: white;
+    }
+  }
+}
+.onboarding-head-container {
+  max-width:770px;
+  margin: auto;
+}
+.onboarding-body {
+  background-color: #f6f9fb;
+
+  .onboarding-container {
+    max-width:770px;
+    margin: auto;
+
+    .user-registration-box {
+      border: 1px solid #f0f3f4;
+      padding: 40px 70px 20px;
+      margin: 50px 0;
+      background-color: white;
+      background-image: asset-url("users/form-bg.png");
+      background-repeat: no-repeat;
+      background-position: right top;
+    }
+    .form-section-head {
+      font-size: 14px;
+      text-transform: uppercase;
+      margin: 0 0 20px;
+      padding-bottom: 5px;
+    }
+    label {
+      font-weight: 300;
+      color: #565656;
+      padding-left: 0;
+    }
+    input, select {
+      border-radius: 2px;
+      box-shadow: none;
+      border-color: #ebeff3;
+    }
+  }
+}

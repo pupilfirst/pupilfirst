@@ -1,5 +1,10 @@
 module Users
   class InvitationsController < Devise::InvitationsController
+    def edit
+      @skip_container = true
+      super
+    end
+    
     private
 
     # this is called when creating invitation

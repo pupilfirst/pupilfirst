@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Faculty, type: :model do
   let!(:faculty) { create :faculty }
-  let!(:connect_slot) { create :connect_slot}
+  let!(:connect_slot) { create :connect_slot }
 
   describe '.valid_categories' do
     it 'returns valid categories' do

@@ -199,8 +199,7 @@ ActiveAdmin.register User do
   filter :email
   filter :first_name
   filter :last_name
-  filter :phone
-  filter :unconfirmed_phone
+  filter :roles_cont, as: :select, collection: User.valid_roles, label: 'Role'
   filter :is_founder
   filter :university
   filter :roll_number

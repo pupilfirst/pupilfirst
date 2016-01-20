@@ -33,10 +33,8 @@
         = f.association :university, include_blank: 'Not a student', collection: University.all.group_by(&:location), as: :grouped_select, group_method: :last
         = f.input :roll_number, label: 'University Roll Number',required: true
         = f.input :college_identification, label: 'College ID', as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }
-        legend.margin-top-20.form-section-head.font-weight-400 Mobile Number Verification
-
         = f.input :phone, label: 'Mobile Number', :required => true, placeholder: '10-digit mobile phone number'
-      
+
         .form-group
           .col-sm-offset-3.col-sm-10
             = f.button :submit, 'Sign Me Up!', class: 'btn btn-primary btn-flat sign-up-btn font-weight-400'

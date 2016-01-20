@@ -48,6 +48,7 @@ class UsersController < ApplicationController
   # POST /users/:id/code
   def code
     # Generate a 6-digit verification code to send to the phone number.
+    @skip_container = true
     code, phone_number = begin
       current_user.generate_phone_number_verification_code(params[:phone_number])
     rescue Exceptions::InvalidPhoneNumber => e

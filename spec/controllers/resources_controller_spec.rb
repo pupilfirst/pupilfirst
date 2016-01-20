@@ -4,6 +4,14 @@ describe ResourcesController do
   let!(:binary_resource) { create :resource }
   let!(:video_resource) { create :video_resource }
 
+  before :all do
+    PublicSlackTalk.mock = true
+  end
+
+  after :all do
+    PublicSlackTalk.mock = false
+  end
+
   describe 'GET download' do
     it 'increments downloads of resource by 1' do
       downloads = binary_resource.downloads

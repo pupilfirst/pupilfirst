@@ -59,4 +59,20 @@ class Resource < ActiveRecord::Base
     self.downloads += 1
     save!
   end
+
+  after_create :notify_on_slack
+
+  # Notify on slack when a new resource is uploaded
+  def notify_on_slack
+    PublicSlackTalk.post_message message: new_resource_message, channel: 'resources'
+  end
+
+  # message to be send to slack for new resources
+  def new_resource_message
+    message = "*A new #{for_approved? ? 'private resource (for approved startups)' : 'public resource'}"\
+    " has been uploaded to SV.CO*: \n"
+    message += "*Title:* #{title}\n"
+    message += "*Description:* #{description}\n"
+    message + "*Url:* #{Rails.application.routes.url_helpers.resource_url(self, host: 'https://sv.co')}"
+  end
 end

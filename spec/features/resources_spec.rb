@@ -24,10 +24,12 @@ feature 'Resources' do
 
   before :all do
     WebMock.allow_net_connect!
+    PublicSlackTalk.mock = true
   end
 
   after :all do
     WebMock.disable_net_connect!
+    PublicSlackTalk.mock = false
   end
 
   scenario 'User visits resources page' do

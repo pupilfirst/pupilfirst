@@ -36,13 +36,10 @@ class ApplicationController < ActionController::Base
   helper_method :feature_active?
 
   def configure_permitted_parameters
-    # TODO: Clean this method up. What is this about, anyway?!
-    devise_parameter_sanitizer.for(:accept_invitation).concat [:avatar, :twitter_url, :linkedin_url]
-    # Unpermitted parameters: salutation, fullname, born_on(1i), born_on(2i), born_on(3i), is_student, college, course, semester
-    devise_parameter_sanitizer.for(:sign_up).concat [:first_name, :last_name]
+    # allow collecting additional attributes while accepting invitation: https://github.com/scambra/devise_invitable
     devise_parameter_sanitizer.for(:accept_invitation).concat(
       [
-        :salutation, :first_name, :last_name, :email, :born_on, :is_student, :college_id, :course, :semester, :startup, :accept_startup
+        :first_name, :last_name, :gender, :born_on, :university_id, :roll_number, :phone
       ]
     )
   end

@@ -12,7 +12,7 @@
     .col-sm-4.text-center.onboarding-tab
       .fa.fa-circle-o
       | &nbsp; Startup Creation
-        
+
 .onboarding-body
   .onboarding-container.clearfix
     .user-registration-box
@@ -25,17 +25,18 @@
         = f.input :last_name, :required => true
         = f.input :password, label: 'New password', autocomplete: 'off', required: true
         = f.input :password_confirmation, label: 'Confirm new password', required: true
-        
+
         legend.margin-top-20.form-section-head.font-weight-400 User Details
-        
+
         = f.input :gender, collection: valid_gender_values, label_method: :first, value_method: :last, as: :radio_buttons, required: true
         = f.input :born_on, as: :date_picker, required: true, label: 'Date of birth', placeholder: 'DD/MM/YYYY'
         = f.association :university, include_blank: 'Not a student', collection: University.all.group_by(&:location), as: :grouped_select, group_method: :last
-        
+        = f.input :roll_number
+
         legend.margin-top-20.form-section-head.font-weight-400 Mobile Number Verification
 
         = f.input :phone, label: 'Mobile Number', :required => true, placeholder: '10-digit mobile phone number'
-      
+
         .form-group
           .col-sm-offset-3.col-sm-10
             = f.button :submit, 'Sign Me Up!', class: 'btn btn-primary btn-flat'

@@ -62,6 +62,17 @@ class UsersController < ApplicationController
     RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV.CO: #{code}", msisdn: phone_number)
   end
 
+  # GET /users/:id/phone_verification
+  def phone_verification
+    # Generate a 6-digit verification code to send to the phone number.
+    code, phone_number = current_user.generate_phone_number_verification_code
+
+    return if Rails.env.development?
+
+    # SMS the code to the phone number. Currently uses FA format.
+    RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV.CO: #{code}", msisdn: phone_number)
+  end
+
   # PATCH /users/:id/resend
   def resend
     if current_user.updated_at <= 5.minute.ago

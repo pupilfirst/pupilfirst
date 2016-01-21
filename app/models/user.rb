@@ -224,11 +224,13 @@ class User < ActiveRecord::Base
   end
 
   # validate phone number using Phony.plausible?
-  validate :unconfirmed_phone_must_be_plausible
+  validate :unconfirmed_phone_must_be_plausible, if: :unconfirmed_phone
 
   def unconfirmed_phone_must_be_plausible
     unverified_phone_number = unconfirmed_phone.length <= 10 ? "91#{unconfirmed_phone}" : unconfirmed_phone
-    errors.add(:unconfirmed_phone, 'Supplied phone number could not be parsed. Please check and try again.') unless Phony.plausible?(unverified_phone_number, cc: '91')
+    unless Phony.plausible?(unverified_phone_number, cc: '91')
+      errors.add(:unconfirmed_phone, 'Supplied phone number could not be parsed. Please check and try again.')
+    end
   end
 
   def generate_phone_number_verification_code

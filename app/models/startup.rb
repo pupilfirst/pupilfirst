@@ -150,6 +150,31 @@ class Startup < ActiveRecord::Base
   # define founder emails as attributes for easier onboarding implementation
   attr_accessor :cofounder_1_email, :cofounder_2_email, :cofounder_3_email, :cofounder_4_email
 
+  # validate each cofounder email - called during onboarding
+  def validate_cofounder_emails
+    (1..4).each do |n|
+      email = "cofounder_#{n}_email"
+
+      # skip if email is nil
+      next unless send(email)
+
+      # assign appropriate error message if validation fails
+      errors.add(email.to_sym, invalid_cofounder(send(email))) if invalid_cofounder(send(email))
+    end
+  end
+
+  # validates email provided is a sv.co user and does not already have a startup
+  def invalid_cofounder(email)
+    user = User.find_by(email: email)
+
+    return 'need to be a registered user' unless user
+
+    return 'already has a startup' unless user.startup.blank?
+
+    # return false if the email is 'not invalid' i.e valid
+    false
+  end
+
   has_and_belongs_to_many :startup_categories do
     def <<(_category)
       fail 'Use startup_categories= to enforce startup category limit'

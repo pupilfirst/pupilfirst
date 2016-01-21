@@ -44,6 +44,14 @@ class ConnectSlot < ActiveRecord::Base
     available.where(slot_at: (3.days.from_now.beginning_of_day..11.days.from_now.end_of_day))
   end
 
+  def self.next_week_start
+    7.days.from_now.beginning_of_week.in_time_zone('Asia/Calcutta')
+  end
+
+  def self.next_week_end
+    7.days.from_now.end_of_week.in_time_zone('Asia/Calcutta')
+  end
+
   private
 
   # Allow deletion only if there is no associated connect request.
@@ -51,13 +59,5 @@ class ConnectSlot < ActiveRecord::Base
     return if connect_request.blank?
     errors[:base] << 'Cannot delete connect slot that has a request associated with it'
     false
-  end
-
-  def self.next_week_start
-    7.days.from_now.beginning_of_week.in_time_zone('Asia/Calcutta')
-  end
-
-  def self.next_week_end
-    7.days.from_now.end_of_week.in_time_zone('Asia/Calcutta')
   end
 end

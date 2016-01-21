@@ -1,3 +1,6 @@
+# encoding: utf-8
+# frozen_string_literal: true
+
 class Faculty < ActiveRecord::Base
   mount_uploader :image, FacultyImageUploader
   process_in_background :image
@@ -9,9 +12,9 @@ class Faculty < ActiveRecord::Base
   has_many :connect_slots, dependent: :destroy
   has_many :connect_requests, through: :connect_slots
 
-  CATEGORY_TEAM = 'team'
-  CATEGORY_VISITING_FACULTY = 'visiting_faculty'
-  CATEGORY_ADVISORY_BOARD = 'advisory_board'
+  CATEGORY_TEAM = 'team'.freeze
+  CATEGORY_VISITING_FACULTY = 'visiting_faculty'.freeze
+  CATEGORY_ADVISORY_BOARD = 'advisory_board'.freeze
 
   validates_presence_of :name, :title, :category, :image
 
@@ -36,7 +39,7 @@ class Faculty < ActiveRecord::Base
     return unless last_available_connect_date
 
     days_to_offset = days_since_last_available_week
-    return if days_to_offset == 0 # return since next week already has slots somehow!
+    return if days_to_offset <= 0 # return if there is/are slot(s) for next week or later
 
     slots_to_copy = last_available_weekly_slots
 

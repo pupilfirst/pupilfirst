@@ -82,9 +82,9 @@
       | View All (#{startup_feedback_from_last_week.count})
 
   .dashboard-item
-    - connect_requests_confirmed = ConnectRequest.for_batch(batch_selected).confirmed
+    - connect_requests_confirmed = ConnectRequest.for_batch(batch_selected).confirmed.upcoming
 
-    .heading Connect Requests - Confirmed
+    .heading Upcoming Connect Requests
 
     .content
       ol

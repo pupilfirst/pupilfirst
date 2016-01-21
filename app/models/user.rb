@@ -1,16 +1,19 @@
+# encoding: utf-8
+# frozen_string_literal: true
+
 class User < ActiveRecord::Base
   extend FriendlyId
   extend Forwardable
   include Gravtastic
   gravtastic
 
-  GENDER_MALE = 'male'
-  GENDER_FEMALE = 'female'
-  GENDER_OTHER = 'other'
+  GENDER_MALE = 'male'.freeze
+  GENDER_FEMALE = 'female'.freeze
+  GENDER_OTHER = 'other'.freeze
 
-  COFOUNDER_PENDING = 'pending'
-  COFOUNDER_ACCEPTED = 'accepted'
-  COFOUNDER_REJECTED = 'rejected'
+  COFOUNDER_PENDING = 'pending'.freeze
+  COFOUNDER_ACCEPTED = 'accepted'.freeze
+  COFOUNDER_REJECTED = 'rejected'.freeze
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -99,7 +102,7 @@ class User < ActiveRecord::Base
 
   # Email is not required for an unregistered 'contact' user.
   def email_required?
-    !(invitation_token.present?)
+    !invitation_token.present?
   end
 
   # Validate presence of e-mail for everyone except contacts with invitation token (unregistered contacts).
@@ -121,7 +124,7 @@ class User < ActiveRecord::Base
     :slack_username, :resume_url
 
   normalize_attribute :skip_password do |value|
-    value.is_a?(String) ? value.downcase == 'true' : value
+    value.is_a?(String) ? (value.casecmp('true') == 0) : value
   end
 
   validates :twitter_url, url: true, allow_nil: true
@@ -142,7 +145,7 @@ class User < ActiveRecord::Base
     return if slack_username.blank?
     return unless slack_username_changed?
 
-    response_json = JSON.parse(RestClient.get "https://slack.com/api/users.list?token=#{APP_CONFIG[:slack_token]}")
+    response_json = JSON.parse(RestClient.get("https://slack.com/api/users.list?token=#{APP_CONFIG[:slack_token]}"))
 
     unless response_json['ok']
       errors.add(:slack_username, 'unable to validate username from slack. Please try again')
@@ -199,7 +202,7 @@ class User < ActiveRecord::Base
 
   # Skips setting password and sets invitation_token to allow later registration.
   def save_unregistered_user!
-    unless self.persisted?
+    unless persisted?
       # Devise wants a random password, so let's set one for a new user.
       self.skip_password = true
 
@@ -257,11 +260,13 @@ class User < ActiveRecord::Base
     fail Exceptions::UserNotFound unless user
 
     if user.startup.present?
-      if user.startup == startup
-        fail Exceptions::UserAlreadyMemberOfStartup
+      exception_class = if user.startup == startup
+        Exceptions::UserAlreadyMemberOfStartup
       else
-        fail Exceptions::UserAlreadyHasStartup
+        Exceptions::UserAlreadyHasStartup
       end
+
+      fail exception_class
     else
       startup.founders << user
 

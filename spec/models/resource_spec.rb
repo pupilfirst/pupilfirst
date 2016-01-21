@@ -3,6 +3,14 @@ require 'rails_helper'
 RSpec.describe Resource, type: :model do
   subject { create :resource }
 
+  before :all do
+    PublicSlackTalk.mock = true
+  end
+
+  after :all do
+    PublicSlackTalk.mock = false
+  end
+
   let!(:tet_one_liner) { create :tet_one_liner }
   let!(:tet_new_product_deck) { create :tet_new_product_deck }
   let!(:tet_team_formed) { create :tet_team_formed }

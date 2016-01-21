@@ -247,19 +247,21 @@ ActiveAdmin.register TimelineEvent do
       row :verified_status
 
       row :verified_at do
+        verification_confirm = 'Are you sure you want to verify this event?'
+        verification_confirm += ' The Verification will be announced on Public Slack' unless timeline_event.timeline_event_type.private?
         if timeline_event.verified?
           span do
             "#{timeline_event.verified_at} "
           end
 
           span class: 'wrap-with-paranthesis' do
-            link_to 'Unverify', unverify_admin_timeline_event_path, method: :post, data: { confirm: 'Are you sure?' }
+            link_to 'Unverify', unverify_admin_timeline_event_path, method: :post, data: { confirm: 'Are you sure you want to unverify this event?' }
           end
         elsif timeline_event.pending?
           span do
             button_to 'Unverified. Click to verify this event.', verify_admin_timeline_event_path,
               form_class: 'inline-button',
-              data: { confirm: 'Are you sure you want to verify this event?' }
+              data: { confirm:  verification_confirm }
           end
 
           span do
@@ -267,7 +269,7 @@ ActiveAdmin.register TimelineEvent do
           end
         elsif timeline_event.needs_improvement?
           button_to 'Unverified. Click to verify this event.', verify_admin_timeline_event_path,
-            data: { confirm: 'Are you sure you want to verify this event?' }
+            data: { confirm:  verification_confirm }
         end
       end
 

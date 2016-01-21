@@ -35,7 +35,7 @@ feature 'Team members spec' do
       check 'Product'
       check 'Engineering'
       fill_in 'Email address', with: 'jack.sparrow@sv.co'
-      page.attach_file 'team_member_avatar', File.expand_path(Rails.root.join 'spec', 'support', 'uploads', 'faculty', 'jack_sparrow.png')
+      page.attach_file 'team_member_avatar', File.expand_path(Rails.root.join('spec', 'support', 'uploads', 'faculty', 'jack_sparrow.png'))
 
       click_on 'List new team member'
 

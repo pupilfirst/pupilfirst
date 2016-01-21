@@ -1,6 +1,11 @@
 class PublicSlackTalk
   attr_reader :errors
 
+  # add a mock attribute to help disable slack talks during tests
+  class << self
+    attr_accessor :mock
+  end
+
   def initialize(message:, channel: nil, user: nil, users: nil)
     @channel = channel
     @user = user
@@ -17,6 +22,9 @@ class PublicSlackTalk
   def self.post_message(message:, **target)
     # skip if in development environment
     return if Rails.env.development?
+
+    # Skip if in mock mode.
+    return if mock
 
     # ensure one and only one target is specified
     fail ArgumentError, 'specify one of channel, user or users' unless [target[:channel], target[:user], target[:users]].compact.length == 1

@@ -50,15 +50,6 @@ describe Startup do
     expect { startup.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
-  # it "validates the presence of reqired params" do
-  #   startup = build(:startup)
-  #   expect { startup.update_attributes!(name: nil) }.to raise_error(ActiveRecord::RecordInvalid)
-  #   expect { startup.update_attributes!(logo: nil) }.to raise_error(ActiveRecord::RecordInvalid)
-  #   expect { startup.update_attributes!(phone: nil) }.to raise_error(ActiveRecord::RecordInvalid)
-  #   expect { startup.update_attributes!(email: nil) }.to raise_error(ActiveRecord::RecordInvalid)
-  #   expect { startup.update_attributes!(categories: []) }.to raise_error(ActiveRecord::RecordInvalid)
-  # end
-
   context 'normalize twitter_link' do
     it "to link if username is empty/nil" do
       startup = create(:startup, twitter_link: "")
@@ -110,6 +101,26 @@ describe Startup do
   describe '#phone' do
     it "returns startup admin's phone number" do
       expect(subject.phone).to eq subject.admin.phone
+    end
+  end
+
+  describe '#showcase_timeline_event' do
+    it 'returns last non-private verified timeline event with image' do
+      private_timeline_event_type = create :timeline_event_type, private: true
+
+      # Verified event with image.
+      expected_showcase_event = create :timeline_event_with_image, startup: subject, verified_at: 20.minutes.ago
+
+      # Verified event without image.
+      create :timeline_event, startup: subject, verified_at: 10.minutes.ago
+
+      # Verified private event with image.
+      create :timeline_event_with_image, timeline_event_type: private_timeline_event_type, startup: subject, verified_at: 5.minutes.ago
+
+      # Unverified event with image, latest.
+      create :timeline_event_with_image, startup: subject
+
+      expect(subject.showcase_timeline_event).to eq(expected_showcase_event)
     end
   end
 end

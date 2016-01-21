@@ -1,3 +1,6 @@
+# encoding: utf-8
+# frozen_string_literal: true
+
 class Startup < ActiveRecord::Base
   include FriendlyId
 
@@ -7,32 +10,32 @@ class Startup < ActiveRecord::Base
   LEGACY_STARTUPS_COUNT = 849
   LEGACY_INCUBATION_REQUESTS = 5281
 
-  REGISTRATION_TYPE_PRIVATE_LIMITED = 'private_limited'
-  REGISTRATION_TYPE_PARTNERSHIP = 'partnership'
-  REGISTRATION_TYPE_LLP = 'llp' # Limited Liability Partnership
+  REGISTRATION_TYPE_PRIVATE_LIMITED = 'private_limited'.freeze
+  REGISTRATION_TYPE_PARTNERSHIP = 'partnership'.freeze
+  REGISTRATION_TYPE_LLP = 'llp'.freeze # Limited Liability Partnership
 
   MAX_PITCH_CHARACTERS = 140 unless defined?(MAX_PITCH_CHARACTERS)
   MAX_PRODUCT_DESCRIPTION_CHARACTERS = 150
   MAX_CATEGORY_COUNT = 3
 
-  APPROVAL_STATUS_UNREADY = 'unready'
-  APPROVAL_STATUS_PENDING = 'pending'
-  APPROVAL_STATUS_APPROVED = 'approved'
-  APPROVAL_STATUS_REJECTED = 'rejected'
-  APPROVAL_STATUS_DROPPED_OUT = 'dropped-out'
+  APPROVAL_STATUS_UNREADY = 'unready'.freeze
+  APPROVAL_STATUS_PENDING = 'pending'.freeze
+  APPROVAL_STATUS_APPROVED = 'approved'.freeze
+  APPROVAL_STATUS_REJECTED = 'rejected'.freeze
+  APPROVAL_STATUS_DROPPED_OUT = 'dropped-out'.freeze
 
-  PRODUCT_PROGRESS_IDEA = 'idea'
-  PRODUCT_PROGRESS_MOCKUP = 'mockup'
-  PRODUCT_PROGRESS_PROTOTYPE = 'prototype'
-  PRODUCT_PROGRESS_PRIVATE_BETA = 'private_beta'
-  PRODUCT_PROGRESS_PUBLIC_BETA = 'public_beta'
-  PRODUCT_PROGRESS_LAUNCHED = 'launched'
+  PRODUCT_PROGRESS_IDEA = 'idea'.freeze
+  PRODUCT_PROGRESS_MOCKUP = 'mockup'.freeze
+  PRODUCT_PROGRESS_PROTOTYPE = 'prototype'.freeze
+  PRODUCT_PROGRESS_PRIVATE_BETA = 'private_beta'.freeze
+  PRODUCT_PROGRESS_PUBLIC_BETA = 'public_beta'.freeze
+  PRODUCT_PROGRESS_LAUNCHED = 'launched'.freeze
 
-  INCUBATION_LOCATION_KOCHI = 'kochi'
-  INCUBATION_LOCATION_VISAKHAPATNAM = 'visakhapatnam'
-  INCUBATION_LOCATION_KOZHIKODE = 'kozhikode'
+  INCUBATION_LOCATION_KOCHI = 'kochi'.freeze
+  INCUBATION_LOCATION_VISAKHAPATNAM = 'visakhapatnam'.freeze
+  INCUBATION_LOCATION_KOZHIKODE = 'kozhikode'.freeze
 
-  SV_STATS_LINK = 'bit.ly/svstats2'
+  SV_STATS_LINK = 'bit.ly/svstats2'.freeze
 
   def self.valid_agreement_durations
     { '1 year' => 1.year, '2 years' => 2.years, '5 years' => 5.years }
@@ -82,9 +85,13 @@ class Startup < ActiveRecord::Base
 
   # Returns the latest verified timeline event that has an image attached to it.
   #
+  # Do not return private events!
+  #
   # @return TimelineEvent
   def showcase_timeline_event
-    timeline_events.verified.has_image.order('verified_at DESC').first
+    timeline_events.verified.has_image.order('verified_at DESC').detect do |timeline_event|
+      !timeline_event.private?
+    end
   end
 
   # Returns startups that have accrued no karma points for last week (starting monday). If supplied a date, it
@@ -574,7 +581,7 @@ class Startup < ActiveRecord::Base
 
   after_save do
     if approval_status_changed? && approved? && timeline_events.blank?
-      self.prepopulate_timeline!
+      prepopulate_timeline!
     end
   end
 

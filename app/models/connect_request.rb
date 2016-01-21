@@ -1,3 +1,6 @@
+# encoding: utf-8
+# frozen_string_literal: true
+
 class ConnectRequest < ActiveRecord::Base
   MEETING_DURATION = 20.minutes
   MAX_QUESTIONS_LENGTH = 600
@@ -8,14 +11,15 @@ class ConnectRequest < ActiveRecord::Base
   has_one :karma_point, as: :source
 
   scope :for_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch }) }
+  scope :upcoming, -> { joins(:connect_slot).where('connect_slots.slot_at > ?', Time.now) }
 
   delegate :faculty, :slot_at, to: :connect_slot
 
   validates_presence_of :connect_slot_id, :startup_id, :questions, :status
   validates_uniqueness_of :connect_slot_id
 
-  STATUS_REQUESTED = 'requested'
-  STATUS_CONFIRMED = 'confirmed'
+  STATUS_REQUESTED = 'requested'.freeze
+  STATUS_CONFIRMED = 'confirmed'.freeze
 
   def self.valid_statuses
     [STATUS_REQUESTED, STATUS_CONFIRMED]

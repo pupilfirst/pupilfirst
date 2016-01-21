@@ -16,6 +16,7 @@ Svapp::Application.routes.draw do
     member do
       get 'phone'
       get 'phone_verification'
+      get 'consent'
       post 'code'
       patch 'resend'
       post 'verify'

@@ -107,7 +107,11 @@ class UsersController < ApplicationController
     flash[:notice] = 'Your phone number is now verified!'
 
     referer = session.delete :referer
-    redirect_to referer || root_url
+    redirect_to referer || consent_user_path
+  end
+
+  def consent
+
   end
 
   private

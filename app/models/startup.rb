@@ -147,6 +147,9 @@ class Startup < ActiveRecord::Base
     end
   end
 
+  # define founder emails as attributes for easier onboarding implementation
+  attr_accessor :cofounder_1_email, :cofounder_2_email, :cofounder_3_email, :cofounder_4_email
+
   has_and_belongs_to_many :startup_categories do
     def <<(_category)
       fail 'Use startup_categories= to enforce startup category limit'

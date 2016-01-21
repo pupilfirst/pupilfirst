@@ -5,7 +5,7 @@ module Users
       super
     end
 
-    def after_accept_path_for(resource)
+    def after_accept_path_for(_resource)
       phone_verification_user_path
     end
 

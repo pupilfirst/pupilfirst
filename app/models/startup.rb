@@ -10,32 +10,32 @@ class Startup < ActiveRecord::Base
   LEGACY_STARTUPS_COUNT = 849
   LEGACY_INCUBATION_REQUESTS = 5281
 
-  REGISTRATION_TYPE_PRIVATE_LIMITED = 'private_limited'.freeze
-  REGISTRATION_TYPE_PARTNERSHIP = 'partnership'.freeze
-  REGISTRATION_TYPE_LLP = 'llp'.freeze # Limited Liability Partnership
+  REGISTRATION_TYPE_PRIVATE_LIMITED = -'private_limited'
+  REGISTRATION_TYPE_PARTNERSHIP = -'partnership'
+  REGISTRATION_TYPE_LLP = -'llp' # Limited Liability Partnership
 
   MAX_PITCH_CHARACTERS = 140 unless defined?(MAX_PITCH_CHARACTERS)
   MAX_PRODUCT_DESCRIPTION_CHARACTERS = 150
   MAX_CATEGORY_COUNT = 3
 
-  APPROVAL_STATUS_UNREADY = 'unready'.freeze
-  APPROVAL_STATUS_PENDING = 'pending'.freeze
-  APPROVAL_STATUS_APPROVED = 'approved'.freeze
-  APPROVAL_STATUS_REJECTED = 'rejected'.freeze
-  APPROVAL_STATUS_DROPPED_OUT = 'dropped-out'.freeze
+  APPROVAL_STATUS_UNREADY = -'unready'
+  APPROVAL_STATUS_PENDING = -'pending'
+  APPROVAL_STATUS_APPROVED = -'approved'
+  APPROVAL_STATUS_REJECTED = -'rejected'
+  APPROVAL_STATUS_DROPPED_OUT = -'dropped-out'
 
-  PRODUCT_PROGRESS_IDEA = 'idea'.freeze
-  PRODUCT_PROGRESS_MOCKUP = 'mockup'.freeze
-  PRODUCT_PROGRESS_PROTOTYPE = 'prototype'.freeze
-  PRODUCT_PROGRESS_PRIVATE_BETA = 'private_beta'.freeze
-  PRODUCT_PROGRESS_PUBLIC_BETA = 'public_beta'.freeze
-  PRODUCT_PROGRESS_LAUNCHED = 'launched'.freeze
+  PRODUCT_PROGRESS_IDEA = -'idea'
+  PRODUCT_PROGRESS_MOCKUP = -'mockup'
+  PRODUCT_PROGRESS_PROTOTYPE = -'prototype'
+  PRODUCT_PROGRESS_PRIVATE_BETA = -'private_beta'
+  PRODUCT_PROGRESS_PUBLIC_BETA = -'public_beta'
+  PRODUCT_PROGRESS_LAUNCHED = -'launched'
 
-  INCUBATION_LOCATION_KOCHI = 'kochi'.freeze
-  INCUBATION_LOCATION_VISAKHAPATNAM = 'visakhapatnam'.freeze
-  INCUBATION_LOCATION_KOZHIKODE = 'kozhikode'.freeze
+  INCUBATION_LOCATION_KOCHI = -'kochi'
+  INCUBATION_LOCATION_VISAKHAPATNAM = -'visakhapatnam'
+  INCUBATION_LOCATION_KOZHIKODE = -'kozhikode'
 
-  SV_STATS_LINK = 'bit.ly/svstats2'.freeze
+  SV_STATS_LINK = -'bit.ly/svstats2'
 
   def self.valid_agreement_durations
     { '1 year' => 1.year, '2 years' => 2.years, '5 years' => 5.years }

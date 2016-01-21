@@ -16,9 +16,9 @@ class TimelineEvent < ActiveRecord::Base
 
   MAX_DESCRIPTION_CHARACTERS = 300
 
-  VERIFIED_STATUS_PENDING = 'Pending'.freeze
-  VERIFIED_STATUS_NEEDS_IMPROVEMENT = 'Needs Improvement'.freeze
-  VERIFIED_STATUS_VERIFIED = 'Verified'.freeze
+  VERIFIED_STATUS_PENDING = -'Pending'
+  VERIFIED_STATUS_NEEDS_IMPROVEMENT = -'Needs Improvement'
+  VERIFIED_STATUS_VERIFIED = -'Verified'
 
   def self.valid_verified_status
     [VERIFIED_STATUS_VERIFIED, VERIFIED_STATUS_PENDING, VERIFIED_STATUS_NEEDS_IMPROVEMENT]
@@ -26,9 +26,9 @@ class TimelineEvent < ActiveRecord::Base
 
   validates_inclusion_of :verified_status, in: valid_verified_status
 
-  GRADE_GOOD = 'good'.freeze
-  GRADE_GREAT = 'great'.freeze
-  GRADE_WOW = 'wow'.freeze
+  GRADE_GOOD = -'good'
+  GRADE_GREAT = -'great'
+  GRADE_WOW = -'wow'
 
   def self.valid_grades
     [GRADE_GOOD, GRADE_GREAT, GRADE_WOW]

@@ -7,19 +7,19 @@ class TimelineEventType < ActiveRecord::Base
   validates_presence_of :key, :title, :badge
   validates_uniqueness_of :key
 
-  TYPE_END_ITERATION = 'end_iteration'.freeze
-  TYPE_NEW_DECK = 'new_product_deck'.freeze
-  TYPE_NEW_WIREFRAME = 'new_wireframe'.freeze
-  TYPE_NEW_PROTOTYPE = 'new_prototype'.freeze
-  TYPE_NEW_VIDEO = 'new_video'.freeze
-  TYPE_HELP_WANTED = 'help_wanted'.freeze
-  TYPE_RESUME_SUBMISSION = 'resume_submission'.freeze
+  TYPE_END_ITERATION = -'end_iteration'
+  TYPE_NEW_DECK = -'new_product_deck'
+  TYPE_NEW_WIREFRAME = -'new_wireframe'
+  TYPE_NEW_PROTOTYPE = -'new_prototype'
+  TYPE_NEW_VIDEO = -'new_video'
+  TYPE_HELP_WANTED = -'help_wanted'
+  TYPE_RESUME_SUBMISSION = -'resume_submission'
 
-  TYPE_STAGE_IDEA = 'moved_to_idea_discovery'.freeze
-  TYPE_STAGE_PROTOTYPE = 'moved_to_prototyping'.freeze
-  TYPE_STAGE_CUSTOMER = 'moved_to_customer_validation'.freeze
-  TYPE_STAGE_EFFICIENCY = 'moved_to_efficiency'.freeze
-  TYPE_STAGE_SCALE = 'moved_to_scale'.freeze
+  TYPE_STAGE_IDEA = -'moved_to_idea_discovery'
+  TYPE_STAGE_PROTOTYPE = -'moved_to_prototyping'
+  TYPE_STAGE_CUSTOMER = -'moved_to_customer_validation'
+  TYPE_STAGE_EFFICIENCY = -'moved_to_efficiency'
+  TYPE_STAGE_SCALE = -'moved_to_scale'
 
   STAGES = [TYPE_STAGE_IDEA, TYPE_STAGE_PROTOTYPE, TYPE_STAGE_CUSTOMER, TYPE_STAGE_EFFICIENCY, TYPE_STAGE_SCALE].freeze
 

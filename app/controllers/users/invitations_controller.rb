@@ -4,7 +4,11 @@ module Users
       @skip_container = true
       super
     end
-    
+
+    def after_accept_path_for(resource)
+      phone_verification_user_path
+    end
+
     private
 
     # this is called when creating invitation

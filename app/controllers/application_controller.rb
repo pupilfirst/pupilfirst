@@ -39,7 +39,7 @@ class ApplicationController < ActionController::Base
     # allow collecting additional attributes while accepting invitation: https://github.com/scambra/devise_invitable
     devise_parameter_sanitizer.for(:accept_invitation).concat(
       [
-        :first_name, :last_name, :gender, :born_on, :university_id, :roll_number, :phone
+        :first_name, :last_name, :gender, :born_on, :university_id, :roll_number, :unconfirmed_phone
       ]
     )
   end

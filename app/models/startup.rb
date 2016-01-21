@@ -84,10 +84,13 @@ class Startup < ActiveRecord::Base
   scope :batched_and_approved, -> { batched.approved }
 
   # Returns the latest verified timeline event that has an image attached to it.
+  # Do not return private events!
   #
   # @return TimelineEvent
   def showcase_timeline_event
-    timeline_events.verified.has_image.order('verified_at DESC').first
+    timeline_events.verified.has_image.order('verified_at DESC').detect do |timeline_event|
+      !timeline_event.private?
+    end
   end
 
   # Returns startups that have accrued no karma points for last week (starting monday). If supplied a date, it

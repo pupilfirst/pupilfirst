@@ -48,6 +48,7 @@ class UsersController < ApplicationController
   # POST /users/:id/code
   def code
     # Generate a 6-digit verification code to send to the phone number.
+    @skip_container = true
     code, phone_number = begin
       current_user.generate_phone_number_verification_code
     rescue Exceptions::InvalidPhoneNumber => e
@@ -75,6 +76,7 @@ class UsersController < ApplicationController
 
   # PATCH /users/:id/resend
   def resend
+    @skip_container = true
     if current_user.updated_at <= 5.minute.ago
       @retry_after_some_time = false
       code, phone_number = current_user.generate_phone_number_verification_code
@@ -93,6 +95,7 @@ class UsersController < ApplicationController
 
   # POST /users/:id/verify
   def verify
+    @skip_container = true
     begin
       current_user.verify_phone_number(params[:phone_verification_code])
     rescue Exceptions::PhoneNumberVerificationFailed

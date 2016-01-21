@@ -9,6 +9,7 @@
     padding: 15px;
     border-right: 1px solid $grey-border;
     color: grey;
+    background-color: white;
 
     &:first-child {
       border-left: 1px solid $grey-border;
@@ -33,11 +34,33 @@
     .user-registration-box {
       border: 1px solid #f0f3f4;
       padding: 40px 70px 20px;
-      margin: 50px 0;
+      margin: 40px 0;
+      position: relative;
       background-color: white;
-      background-image: asset-url("users/onboarding/form-bg.png");
-      background-repeat: no-repeat;
-      background-position: right top;
+
+      &:before, &:after {
+        background: #fff;
+        content: "";
+        height: 0;
+        border-style: solid;
+        border-width: 22px;
+        position: absolute;
+        width: 0;
+      }
+      &:after {
+        border-color: #f6f9fb #f6f9fb #73b100 #73b100;
+        right: -1px;
+        top: -1px;
+      }
+      &:before {
+        border-color: #eff3f5 #eff3f5 white white;
+        right: 0px;
+        top: 42px;
+      }
+
+      @media (max-width: $screen-xs-max) {
+        padding: 40px 25px 20px;
+      }
     }
     .form-section-head {
       font-size: 14px;
@@ -49,6 +72,10 @@
       font-weight: 300;
       color: #565656;
       padding-left: 0;
+
+      @media (max-width: $screen-xs-max) {
+        padding-left: 15px;
+      }
     }
     input, select {
       border-radius: 2px;
@@ -67,7 +94,7 @@
   }
 }
 .mobile-verification-alert {
-  margin: 35px 0;
+  margin: 35px 0 0;
 
   .verification-icon {
     width: 55px;

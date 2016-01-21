@@ -1,6 +1,18 @@
 - content_for :head
   title SV.CO Verify Mobile Number
 
+.panel.onboarding-head-panel
+  .onboarding-head-container.clearfix
+    .col-sm-4.text-center.onboarding-tab
+      .fa.fa-circle-o
+      | &nbsp; User Profile
+    .col-sm-4.text-center.onboarding-tab.current-tab
+      .fa.fa-circle-o-notch.fa-spin
+      | &nbsp; Phone number verification
+    .col-sm-4.text-center.onboarding-tab
+      .fa.fa-circle-o
+      | &nbsp; Startup Creation
+
 .onboarding-body
   .onboarding-container.clearfix
     - if @failed_to_verify_phone_number
@@ -9,8 +21,8 @@
         .verification-message
           h3.red-text Verification Code Doesn’t Match!
           p
-            ' The verification code you supplied does not match the code sent to your
-            span.font-weight-600 mobile number. Please check and re-enter the code.
+            ' The verification code you supplied does not match the code sent to your mobile number.
+            span.font-weight-600 Please check and re-enter the code.
     - elsif @retry_after_some_time
       .mobile-verification-alert.text-center role='alert'
         .verification-icon.send-wait
@@ -25,8 +37,8 @@
         .verification-message
           h3.green-text New Verification Code Sent!
           p
-            ' A new SMS verification code has been sent to your mobile number. Please
-            span.font-weight-600 supply this code to complete the registration process.
+            ' A new SMS verification code has been sent to your mobile number.
+            span.font-weight-600 Please supply this code to complete the registration process.
     - else
       .mobile-verification-alert.text-center role='alert'
         .verification-icon.send-success

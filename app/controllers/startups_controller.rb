@@ -22,14 +22,12 @@ class StartupsController < ApplicationController
       return
     end
 
-    return unless current_user.startup.present?
-
-    if current_user.startup.unready?
-      redirect_to incubation_path(id: :user_profile)
-    else
+    if current_user.startup.present?
       flash[:alert] = "You've already submitted an application for incubation."
       redirect_to root_url
     end
+
+    @startup = Startup.new
   end
 
   # POST /startups/team_leader_consent

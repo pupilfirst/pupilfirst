@@ -228,24 +228,12 @@ class User < ActiveRecord::Base
     errors.add(:unconfirmed_phone, 'Supplied phone number could not be parsed. Please check and try again.') unless Phony.plausible?(unverified_phone_number, cc: '91')
   end
 
-  def generate_phone_number_verification_code(incoming_phone_number)
-    code = SecureRandom.random_number(1_000_000).to_s.ljust(6, '0')
-
-    # Normalize incoming phone number.
-    unverified_phone_number = incoming_phone_number.length <= 10 ? "91#{incoming_phone_number}" : incoming_phone_number
-
-    phone_number = if Phony.plausible?(unverified_phone_number, cc: '91')
-      PhonyRails.normalize_number incoming_phone_number, country_code: 'IN', add_plus: false
-    else
-      fail Exceptions::InvalidPhoneNumber, 'Supplied phone number could not be parsed. Please check and try again.'
-    end
-
-    # Store the phone number and verification code.
-    self.unconfirmed_phone = phone_number
-    self.phone_verification_code = code
+  def generate_phone_number_verification_code
+    self.phone_verification_code = SecureRandom.random_number(1_000_000).to_s.ljust(6, '0')
+    self.unconfirmed_phone = PhonyRails.normalize_number unconfirmed_phone, country_code: 'IN', add_plus: false
     save
 
-    [code, phone_number]
+    [phone_verification_code, unconfirmed_phone]
   end
 
   def verify_phone_number(verification_code)

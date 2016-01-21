@@ -220,6 +220,14 @@ class User < ActiveRecord::Base
     save!
   end
 
+  # validate phone number using Phony.plausible?
+  validate :unconfirmed_phone_must_be_plausible
+
+  def unconfirmed_phone_must_be_plausible
+    unverified_phone_number = unconfirmed_phone.length <= 10 ? "91#{unconfirmed_phone}" : unconfirmed_phone
+    errors.add(:unconfirmed_phone, 'Supplied phone number could not be parsed. Please check and try again.') unless Phony.plausible?(unverified_phone_number, cc: '91')
+  end
+
   def generate_phone_number_verification_code(incoming_phone_number)
     code = SecureRandom.random_number(1_000_000).to_s.ljust(6, '0')
 

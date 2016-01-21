@@ -84,6 +84,7 @@ class Startup < ActiveRecord::Base
   scope :batched_and_approved, -> { batched.approved }
 
   # Returns the latest verified timeline event that has an image attached to it.
+  #
   # Do not return private events!
   #
   # @return TimelineEvent

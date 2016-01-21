@@ -1,0 +1,24 @@
+- content_for :head
+  title SV.CO Application
+
+h1.page-header Important!
+
+.row
+  .col-md-4
+    .incubation-caution
+      p If your startup has more than one founder, please make sure that only one of you (the team leader) applies for incubation.
+  .col-md-8
+    p You can add co-founders after you've submitted your incubation request.
+    p
+      ' For more information regarding applying for incubation, check out
+      ' #{link_to 'instructions for application', 'http://playbook.sv.co/1.1-application.html', target: '_blank'}
+      | in the Startup Playbook.
+
+    .row
+      .col-sm-6.incubation-consent-checkbox
+        input type='checkbox' id='team-leader-consent'
+        label for='team-leader-consent' &nbsp; Yes, I'm the Team Leader.
+      .col-sm-6
+        = link_to 'Start incubation!', { controller: 'startups', action: 'team_leader_consent' }, method: :post, class: 'btn btn-success btn-lg btn-flat disabled', id: 'team-leader-consent-button'
+
+.margin-bottom-40

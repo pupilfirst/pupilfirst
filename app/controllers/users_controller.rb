@@ -111,7 +111,6 @@ class UsersController < ApplicationController
   end
 
   def consent
-
   end
 
   private

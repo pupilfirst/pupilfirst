@@ -155,8 +155,13 @@ class Startup < ActiveRecord::Base
     (1..4).each do |n|
       email = "cofounder_#{n}_email"
 
-      # skip if email is nil
-      next unless send(email)
+      # if email is nil
+      unless send(email)
+        # first two emails cannot be nil as minimum team size is 3
+        errors.add(email.to_sym, 'cannot be blank') if (1..2).include? n
+
+        next
+      end
 
       # assign appropriate error message if validation fails
       errors.add(email.to_sym, invalid_cofounder(send(email))) if invalid_cofounder(send(email))

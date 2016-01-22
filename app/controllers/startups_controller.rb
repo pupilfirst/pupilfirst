@@ -25,7 +25,7 @@ class StartupsController < ApplicationController
 
     if current_user.startup&.approved?
       flash[:alert] = "You already have an approved startup on SV.CO!"
-      redirect_to root_url
+      redirect_to startup_url
     end
 
     @startup = Startup.new

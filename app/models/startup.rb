@@ -169,11 +169,7 @@ class Startup < ActiveRecord::Base
       email = "cofounder_#{n}_email"
 
       # if email is nil
-      unless send(email).present?
-        # first two emails cannot be nil as minimum team size is 3
-        errors.add(email.to_sym, 'cannot be blank') if (1..2).cover? n
-        next
-      end
+      next unless send(email).present?
 
       # assign appropriate error message if validation fails
       errors.add(email.to_sym, invalid_cofounder(send(email))) if invalid_cofounder(send(email))
@@ -193,6 +189,11 @@ class Startup < ActiveRecord::Base
     # return false if the email is 'not invalid'
     false
   end
+
+  # validate presence of all fields during registration
+  validates_presence_of :name, :team_size, :cofounder_1_email, :cofounder_2_email, if: :being_registered
+  validates_presence_of :cofounder_3_email, if: "team_size > 3"
+  validates_presence_of :cofounder_4_email, if: "team_size > 4"
 
   has_and_belongs_to_many :startup_categories do
     def <<(_category)

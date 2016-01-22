@@ -51,6 +51,7 @@ class StartupsController < ApplicationController
       redirect_to @startup
     else
       # redirect back to startup new form to show errors
+      @skip_container = true
       render 'startups/new'
     end
   end

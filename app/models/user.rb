@@ -38,7 +38,7 @@ class User < ActiveRecord::Base
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
 
   # TODO: Remove born_on, and salutation columns if unneccessary.
-  # validates_presence_of :born_on
+  validates_presence_of :born_on
   # validates_presence_of :salutation, message: ''
 
   validates :first_name,
@@ -55,7 +55,7 @@ class User < ActiveRecord::Base
     [GENDER_FEMALE, GENDER_MALE, GENDER_OTHER]
   end
 
-  validates :gender, inclusion: { in: valid_gender_values }, allow_nil: true
+  validates :gender, inclusion: { in: valid_gender_values }
 
   # Validations during incubation
   validates_presence_of :roll_number, if: :university_id

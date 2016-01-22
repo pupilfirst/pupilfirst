@@ -41,6 +41,12 @@ class StartupsController < ApplicationController
       # add cofounders
       add_cofounders(@startup)
 
+      # mark as approved
+      @startup.approve!
+
+      # generate a more meaningful slug
+      @startup.regenerate_slug!
+
       flash[:success] = "Your startup has been registered successfully!"
       redirect_to @startup
     else

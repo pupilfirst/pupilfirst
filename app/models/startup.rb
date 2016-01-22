@@ -343,6 +343,10 @@ class Startup < ActiveRecord::Base
     batch.present?
   end
 
+  def approve!
+    update!(approval_status: Startup::APPROVAL_STATUS_APPROVED)
+  end
+
   mount_uploader :logo, LogoUploader
   process_in_background :logo
 

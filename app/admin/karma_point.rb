@@ -29,18 +29,15 @@ ActiveAdmin.register KarmaPoint do
   index do
     selectable_column
 
-    column :user do |karma_point|
-      span do
-        link_to karma_point.user.fullname, karma_point.user
-      end
-
-      if karma_point.startup
-        span class: 'wrap-with-paranthesis' do
-          link_to karma_point.startup.product_name, karma_point.startup
+    column 'Founder' do |karma_point|
+      if karma_point.user.present?
+        span do
+          link_to karma_point.user.fullname, karma_point.user
         end
       end
     end
 
+    column :startup
     column :points
     column :activity_type
     column :source

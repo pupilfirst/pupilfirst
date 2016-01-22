@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160122132100) do
+ActiveRecord::Schema.define(version: 20160122151643) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -471,7 +471,6 @@ ActiveRecord::Schema.define(version: 20160122132100) do
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
-  add_foreign_key "karma_points", "startups"
   add_foreign_key "resources", "batches"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "team_members", "startups"

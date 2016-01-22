@@ -1,7 +1,7 @@
 ActiveAdmin.register KarmaPoint do
   menu parent: 'Users'
 
-  permit_params :user_id, :points, :activity_type, :created_at
+  permit_params :startup_id, :user_id, :points, :activity_type, :created_at
 
   preserve_default_filters!
   filter :user_startup_id_eq, label: 'Batched Startup', as: :select, collection: proc { Startup.batched }
@@ -51,14 +51,25 @@ ActiveAdmin.register KarmaPoint do
     end
   end
 
+  collection_action :founders_for_startup do
+    @startup = Startup.find params[:startup_id]
+    render 'founders_for_startup.json.erb'
+  end
+
   form do |f|
+    div id: 'karma-point-founders-for-startup-url', 'data-url' => founders_for_startup_admin_karma_points_url
+
     f.inputs 'Extra' do
-      f.input(
-        :user,
-        collection: User.founders,
-        member_label: proc { |u| "#{u.fullname}#{u.roles.present? ? " (#{founder_roles(u.roles)})" : ''} - #{u.startup.product_name}" },
-        input_html: { style: 'width: calc(80% - 22px);' }
-      )
+      f.input :startup,
+        include_blank: true,
+        label: 'Product',
+        member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }
+
+      f.input :user,
+        label: 'Founder',
+        as: :select,
+        collection: f.object.persisted? ? f.object.startup.founders : [],
+        include_blank: false
 
       f.input :points
       f.input :activity_type

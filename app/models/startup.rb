@@ -628,7 +628,7 @@ class Startup < ActiveRecord::Base
       .joins(:karma_points)
       .where('karma_points.created_at > ?', leaderboard_start_date)
       .where('karma_points.created_at < ?', leaderboard_end_date)
-      .group(:startup_id)
+      .group('startups.id')
       .sum(:points)
       .sort_by { |_startup_id, points| points }.reverse
 

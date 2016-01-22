@@ -139,7 +139,7 @@ ActiveAdmin.register TimelineEvent do
 
       karma_point = KarmaPoint.create!(
         source: timeline_event,
-        user: timeline_event.startup.admin,
+        startup: timeline_event.startup,
         activity_type: "Added a new Timeline event - #{timeline_event.timeline_event_type.title}",
         points: timeline_event.points_for_grade
       )

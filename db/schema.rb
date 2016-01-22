@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160118135842) do
+ActiveRecord::Schema.define(version: 20160122132100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -148,9 +148,11 @@ ActiveRecord::Schema.define(version: 20160118135842) do
     t.datetime "updated_at",    null: false
     t.integer  "source_id"
     t.string   "source_type"
+    t.integer  "startup_id"
   end
 
   add_index "karma_points", ["source_id"], name: "index_karma_points_on_source_id", using: :btree
+  add_index "karma_points", ["startup_id"], name: "index_karma_points_on_startup_id", using: :btree
   add_index "karma_points", ["user_id"], name: "index_karma_points_on_user_id", using: :btree
 
   create_table "mentor_meetings", force: :cascade do |t|
@@ -469,7 +471,7 @@ ActiveRecord::Schema.define(version: 20160118135842) do
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
-  add_foreign_key "karma_points", "users"
+  add_foreign_key "karma_points", "startups"
   add_foreign_key "resources", "batches"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "team_members", "startups"

@@ -23,8 +23,8 @@ class StartupsController < ApplicationController
       return
     end
 
-    if current_user.startup.present?
-      flash[:alert] = "You've already submitted an application for incubation."
+    if current_user.startup&.approved?
+      flash[:alert] = "You already have an approved startup on SV.CO!"
       redirect_to root_url
     end
 

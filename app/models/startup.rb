@@ -155,7 +155,7 @@ class Startup < ActiveRecord::Base
 
   has_many :timeline_events, dependent: :destroy
   has_many :startup_feedback, dependent: :destroy
-  has_many :karma_points, through: :founders
+  has_many :karma_points, dependent: :restrict_with_exception
   has_many :targets, dependent: :destroy
   has_many :connect_requests, dependent: :destroy
   has_many :team_members, dependent: :destroy
@@ -628,7 +628,7 @@ class Startup < ActiveRecord::Base
       .joins(:karma_points)
       .where('karma_points.created_at > ?', leaderboard_start_date)
       .where('karma_points.created_at < ?', leaderboard_end_date)
-      .group('startups.id')
+      .group(:startup_id)
       .sum(:points)
       .sort_by { |_startup_id, points| points }.reverse
 
@@ -661,7 +661,7 @@ class Startup < ActiveRecord::Base
       .joins(:karma_points)
       .where('karma_points.created_at > ?', leaderboard_start_date)
       .where('karma_points.created_at < ?', leaderboard_end_date)
-      .pluck('startups.id').uniq
+      .pluck(:startup_id).uniq
 
     unranked_startups = Startup.not_dropped_out.where(batch: batch)
       .where.not(id: ranked_startup_ids)

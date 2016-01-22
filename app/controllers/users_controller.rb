@@ -72,6 +72,8 @@ class UsersController < ApplicationController
 
     # SMS the code to the phone number. Currently uses FA format.
     RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV.CO: #{code}", msisdn: phone_number)
+
+    @skip_container = true
   end
 
   # PATCH /users/:id/resend
@@ -90,7 +92,7 @@ class UsersController < ApplicationController
       @retry_after_some_time = true
     end
 
-    render 'code'
+    render 'phone_verification'
   end
 
   # POST /users/:id/verify
@@ -100,7 +102,7 @@ class UsersController < ApplicationController
       current_user.verify_phone_number(params[:phone_verification_code])
     rescue Exceptions::PhoneNumberVerificationFailed
       @failed_to_verify_phone_number = true
-      render 'code'
+      render 'phone_verification'
       return
     end
 

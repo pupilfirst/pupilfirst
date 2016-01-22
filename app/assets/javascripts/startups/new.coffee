@@ -7,7 +7,7 @@ $(document).on 'page:change', ->
     else
       teamLeaderConsentButton.addClass 'disabled'
   )
-  
+
   $('#startup_team_size').prop('selectedIndex',0);
   $('.startup_cofounder_3_email').hide()
   $('.startup_cofounder_4_email').hide()

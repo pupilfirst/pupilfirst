@@ -42,6 +42,7 @@ class UsersController < ApplicationController
 
   # GET /users/:id/phone
   def phone
+    @skip_container = true
     session[:referer] = params[:referer] if params[:referer]
   end
 
@@ -113,6 +114,7 @@ class UsersController < ApplicationController
   end
 
   def consent
+    @skip_container = true
   end
 
   private

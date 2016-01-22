@@ -57,6 +57,53 @@
         right: 0px;
         top: 42px;
       }
+      label {
+        font-weight: 300;
+        color: #565656;
+        padding-left: 0;
+
+        @media (max-width: $screen-xs-max) {
+          padding-left: 15px;
+        }
+      }
+      input, select {
+        border-radius: 2px;
+        box-shadow: none;
+        border-color: #ebeff3;
+      }
+      .sign-up-btn, .verify-btn, .resend-code-btn {
+        background-color: #61ba52;
+        border: 0;
+        border-radius: 5px;
+        padding: 10px 30px;
+      }
+      .verify-btn {
+        &:hover {
+          background-color: #3f8f42;
+        }
+      }
+      .resend-code-btn {
+        background-color: #5bc0de;
+
+        &:hover {
+          background-color: #38a7c8;
+        }
+      }
+      .submit-btn {
+        background-color: #61ba52;
+        border: 0;
+        border-radius: 5px;
+        padding: 10px 30px;
+
+        &:hover {
+          background-color: #3f8f42;
+        }
+      }
+      .cancel-application-btn {
+        border: 0;
+        border-radius: 5px;
+        padding: 10px 20px;
+      }
 
       @media (max-width: $screen-xs-max) {
         padding: 40px 25px 20px;
@@ -67,35 +114,6 @@
       text-transform: uppercase;
       margin: 20px 0 20px;
       padding-bottom: 5px;
-    }
-    label {
-      font-weight: 300;
-      color: #565656;
-      padding-left: 0;
-
-      @media (max-width: $screen-xs-max) {
-        padding-left: 15px;
-      }
-    }
-    input, select {
-      border-radius: 2px;
-      box-shadow: none;
-      border-color: #ebeff3;
-    }
-    .sign-up-btn, .verify-btn, .resend-code-btn {
-      background-color: #61ba52;
-      border: 0;
-      border-radius: 5px;
-      padding: 10px 30px;
-    }
-    .resend-code-btn {
-      background-color: #5bc0de;
-    }
-    .submit-btn {
-      background-color: #61ba52;
-      border: 0;
-      border-radius: 5px;
-      padding: 10px 30px;
     }
   }
 }

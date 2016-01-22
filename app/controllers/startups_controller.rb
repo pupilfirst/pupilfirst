@@ -55,16 +55,6 @@ class StartupsController < ApplicationController
     end
   end
 
-  # POST /startups/team_leader_consent
-  def team_leader_consent
-    if current_user.startup.present? || !current_user.phone?
-      redirect_to new_user_startup_path
-    else
-      Startup.new_incubation!(current_user)
-      redirect_to incubation_path(id: :user_profile)
-    end
-  end
-
   def show
     @startup = Startup.friendly.find(params[:id])
 

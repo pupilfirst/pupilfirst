@@ -30,6 +30,12 @@
               = f.input :cofounder_3_email, placeholder: 'Co-founder email', required: true, label: 'Co-founder 3'
               = f.input :cofounder_4_email, placeholder: 'Co-founder email', required: true, label: 'Co-founder 4'
 
+              / store current users i.e team lead's email
+              = f.hidden_field :team_lead_email, value: current_user.email
+
+              / hidden field to set being_registered field
+              = f.hidden_field :being_registered, value: true
+
             .form-group
               .col-sm-offset-3.col-sm-9
                 /= f.button :submit, 'Request incubation', class: 'btn btn-primary btn-flat'

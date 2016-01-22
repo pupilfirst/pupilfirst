@@ -151,6 +151,15 @@ class Startup < ActiveRecord::Base
   attr_accessor :cofounder_1_email, :cofounder_2_email, :cofounder_3_email, :cofounder_4_email
 
   # validate each cofounder email - called during onboarding
+  # flag to identify if the startup is being registered
+  attr_accessor :being_registered
+
+  # email of current user - to validate cofounder emails
+  attr_accessor :team_lead_email
+
+  # validate each cofounder email if startup is being registered
+  validate :validate_cofounder_emails, if: :being_registered
+
   def validate_cofounder_emails
     (1..4).each do |n|
       email = "cofounder_#{n}_email"

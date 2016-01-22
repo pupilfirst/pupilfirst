@@ -176,15 +176,18 @@ class Startup < ActiveRecord::Base
     end
   end
 
-  # validates email provided is 1)not of the team lead, 2) is a valid sv.co user and 3) does not already have a startup
+  # validates email provided is 1)unique 2)not of the team lead, 3) is a valid sv.co user and 4) does not already have a startup
   def invalid_cofounder(email)
     user = User.find_by(email: email)
 
+    return 'must be unique' if cofounder_emails.count(email) > 1
+
     return 'already the team lead' if email == team_lead_email
 
-    return 'need to be a registered user' unless user
+    return 'not a registered user. Please ensure that the co-founder has already accepted '\
+    'his/her invitation to SV.CO and completed his/her registration.' unless user
 
-    return 'already has a startup' unless user.startup.blank?
+    return 'already has a startup. Please ensure that your co-founder has not registered your startup already.' unless user.startup.blank?
 
     # return false if the email is 'not invalid'
     false

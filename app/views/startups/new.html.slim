@@ -41,9 +41,7 @@
                 /= f.button :submit, 'Request incubation', class: 'btn btn-primary btn-flat'
                 = f.button :submit, 'Submit Application', class: 'btn btn-primary btn-flat submit-btn'
 
-          hr
-
           .row
             .col-sm-9.col-sm-offset-3
-              = button_to 'Cancel Application', cancel_incubation_index_url, class: 'btn btn-danger btn-flat',
+              = button_to 'Cancel Application', cancel_incubation_index_url, class: 'btn btn-danger btn-flat cancel-application-btn',
                 data: { confirm: 'Are you sure you want to cancel the application?' }

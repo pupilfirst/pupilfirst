@@ -31,6 +31,24 @@ class StartupsController < ApplicationController
     @startup = Startup.new
   end
 
+  def create
+    @startup = Startup.new startup_registration_params
+
+    if @startup.save
+      # add the team lead
+      add_current_user_as_team_lead(@startup)
+
+      # add cofounders
+      add_cofounders(@startup)
+
+      flash[:success] = "Your startup has been registered successfully!"
+      redirect_to @startup
+    else
+      # redirect back to startup new form to show errors
+      render 'startups/new'
+    end
+  end
+
   # POST /startups/team_leader_consent
   def team_leader_consent
     if current_user.startup.present? || !current_user.phone?
@@ -129,6 +147,11 @@ class StartupsController < ApplicationController
     )
   end
 
+  def startup_registration_params
+    params.require(:startup).permit(:name, :team_size, :cofounder_1_email, :cofounder_2_email, :cofounder_3_email,
+      :cofounder_4_email, :being_registered, :team_lead_email)
+  end
+
   def startup_destroy_params
     params.require(:startup).permit(:password)
   end
@@ -150,5 +173,17 @@ class StartupsController < ApplicationController
     return unless current_user.startup.unready?
     flash[:error] = "You haven't completed the incubation process yet. Please complete it before attempting to edit your startup's profile."
     redirect_to current_user
+  end
+
+  def add_current_user_as_team_lead(startup)
+    startup.founders << current_user
+    current_user.update!(startup_admin: true)
+  end
+
+  def add_cofounders(startup)
+    startup.cofounder_emails.each do |email|
+      next if email.blank?
+      startup.founders << User.find_by(email: email)
+    end
   end
 end

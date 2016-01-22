@@ -150,7 +150,11 @@ class Startup < ActiveRecord::Base
   # define founder emails as attributes for easier onboarding implementation
   attr_accessor :cofounder_1_email, :cofounder_2_email, :cofounder_3_email, :cofounder_4_email
 
-  # validate each cofounder email - called during onboarding
+  # returns an array of cofounder emails
+  def cofounder_emails
+    [cofounder_1_email, cofounder_2_email, cofounder_3_email, cofounder_4_email]
+  end
+
   # flag to identify if the startup is being registered
   attr_accessor :being_registered
 
@@ -165,10 +169,9 @@ class Startup < ActiveRecord::Base
       email = "cofounder_#{n}_email"
 
       # if email is nil
-      unless send(email)
+      unless send(email).present?
         # first two emails cannot be nil as minimum team size is 3
-        errors.add(email.to_sym, 'cannot be blank') if (1..2).include? n
-
+        errors.add(email.to_sym, 'cannot be blank') if (1..2).cover? n
         next
       end
 
@@ -177,15 +180,17 @@ class Startup < ActiveRecord::Base
     end
   end
 
-  # validates email provided is a sv.co user and does not already have a startup
+  # validates email provided is 1)not of the team lead, 2) is a valid sv.co user and 3) does not already have a startup
   def invalid_cofounder(email)
     user = User.find_by(email: email)
+
+    return 'already the team lead' if email == team_lead_email
 
     return 'need to be a registered user' unless user
 
     return 'already has a startup' unless user.startup.blank?
 
-    # return false if the email is 'not invalid' i.e valid
+    # return false if the email is 'not invalid'
     false
   end
 

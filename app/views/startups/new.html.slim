@@ -18,12 +18,12 @@
     .user-registration-box
       .row.margin-top-20
         #progressbar.col-md-12
-          = simple_form_for @startup, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
+          = simple_form_for :startup, url: user_startup_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
             = f.error_notification
-            
+
             = f.input :product_name, placeholder: 'Team Name.', required: true, label: 'Team Name'
             = f.input :team_size, required: true, collection: 3..5, selected: 3
-            
+
             #cofounder-textbox
               = f.input :cofounder_1_email, placeholder: 'Co-founder email', required: true, label: 'Co-founder 1'
               = f.input :cofounder_2_email, placeholder: 'Co-founder email', required: true, label: 'Co-founder 2'

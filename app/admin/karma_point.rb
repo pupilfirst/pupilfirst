@@ -66,7 +66,7 @@ ActiveAdmin.register KarmaPoint do
         label: 'Founder',
         as: :select,
         collection: f.object.persisted? ? f.object.startup.founders : [],
-        include_blank: false
+        include_blank: 'Not linked to founder'
 
       f.input :points
       f.input :activity_type

@@ -16,51 +16,28 @@
 .onboarding-body
   .onboarding-container.clearfix
     .user-registration-box
-      .alert.alert-warning.margin-top-20
-        p Please note that <strong>SV.CO is in beta</strong>, and <strong>invite-only</strong>, at the moment!
-
       .row.margin-top-20
-        .col-md-12
-          .panel.panel-info
-            .panel-heading
-              | The <em>deck</em> is key.
-            .panel-body
-              p
-                ' Your application will be evaluated based on the quality of your <em>deck</em> - a presentation describing
-                ' your startup that you'll have to upload somewhere publicly accessible.
-              p
-                ' The #{link_to 'Playbook page on the SV.CO Application', 'http://playbook.sv.co/1.1-application.html'} is a great starting point.
         #progressbar.col-md-12
-          .panel.panel-default
-            .panel-body
-              = simple_form_for @startup, url: user_startup_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
-                = f.error_notification
+          = simple_form_for @startup, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
+            = f.error_notification
+            
+            = f.input :product_name, placeholder: 'Team Name.', required: true, label: 'Team Name'
+            = f.input :team_size, required: true, collection: 3..5, selected: 3
+            
+            #cofounder-textbox
+              = f.input :cofounder_1_email, placeholder: 'Co-founder email', required: true, label: 'Co-founder 1'
+              = f.input :cofounder_2_email, placeholder: 'Co-founder email', required: true, label: 'Co-founder 2'
+              = f.input :cofounder_3_email, placeholder: 'Co-founder email', required: true, label: 'Co-founder 3'
+              = f.input :cofounder_4_email, placeholder: 'Co-founder email', required: true, label: 'Co-founder 4'
 
-                legend Mandatory fields
-                = f.input :product_name, placeholder: 'Your product name.', required: true, label: 'Product Name'
-                = f.input :product_description, placeholder: 'A few words describing what your product is all about.',
-                  required: true, label: 'About your Product',
-                  hint: "Describe your product in less than #{Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS} characters.",
-                  input_html: { rows: 3, maxlength: Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS }
-                = f.input :presentation_link, placeholder: 'https://slideshare.net/YourUsername/your-product-deck', label: 'Product Deck', required: true
-                = f.input :incubation_location, collection: incubation_locations, :label_method => :first, :value_method => :last, include_blank: false, required: true
+            .form-group
+              .col-sm-offset-3.col-sm-9
+                /= f.button :submit, 'Request incubation', class: 'btn btn-primary btn-flat'
+                = f.button :submit, 'Submit Application', class: 'btn btn-primary btn-flat submit-btn'
 
-                legend Optional fields
-                = f.input :website, placeholder: 'www.your-website.com'
-                = f.input :product_video, placeholder: 'www.youtube.com/yourproductvideo'
-                = f.input :registration_type, collection: valid_registration_types, :label_method => :first, :value_method => :last, include_blank: 'Unregistered'
-                = f.association :startup_categories
-                = f.input :team_size, input_html: { min: 1, max: 9999, 'data-max-int-length' => 4 }
-                = f.input :women_employees, input_html: { min: 0, max: 9999, 'data-max-int-length' => 4 }, label: 'No. of women employees'
+          hr
 
-                .form-group
-                  .col-sm-offset-3.col-sm-9
-                    /= f.button :submit, 'Request incubation', class: 'btn btn-primary btn-flat'
-                    = f.button :submit, 'Submit Application', class: 'btn btn-primary btn-flat'
-
-              hr
-
-              .row
-                .col-sm-9.col-sm-offset-3
-                  = button_to 'Cancel Application', cancel_incubation_index_url, class: 'btn btn-danger btn-flat',
-                    data: { confirm: 'Are you sure you want to cancel the application?' }
+          .row
+            .col-sm-9.col-sm-offset-3
+              = button_to 'Cancel Application', cancel_incubation_index_url, class: 'btn btn-danger btn-flat',
+                data: { confirm: 'Are you sure you want to cancel the application?' }

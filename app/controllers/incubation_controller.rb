@@ -8,7 +8,6 @@ class IncubationController < ApplicationController
   steps 'user_profile', 'startup_profile', 'launch'
 
   def show
-    @skip_container = true
     return if prevent_repeat!
 
     @startup = current_user.startup

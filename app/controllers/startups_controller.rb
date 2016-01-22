@@ -16,6 +16,7 @@ class StartupsController < ApplicationController
   end
 
   def new
+    @skip_container = true
     if current_user.phone.blank?
       session[:referer] = new_user_startup_url
       redirect_to phone_user_path

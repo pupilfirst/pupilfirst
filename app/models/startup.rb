@@ -661,7 +661,7 @@ class Startup < ActiveRecord::Base
       .joins(:karma_points)
       .where('karma_points.created_at > ?', leaderboard_start_date)
       .where('karma_points.created_at < ?', leaderboard_end_date)
-      .pluck(:startup_id).uniq
+      .pluck('startups.id').uniq
 
     unranked_startups = Startup.not_dropped_out.where(batch: batch)
       .where.not(id: ranked_startup_ids)

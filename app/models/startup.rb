@@ -211,11 +211,6 @@ class Startup < ActiveRecord::Base
   # Registration type is required when registering.
   validates_presence_of :registration_type, if: ->(startup) { startup.validate_registration_type }
 
-  validate :valid_founders?
-
-  # TODO: Ensure this is take care of when rewriting incubation without wizard
-  # validates_associated :founders, unless: ->(startup) { startup.incubation_step_1? }
-
   # Registration type should be one of Pvt. Ltd., Partnership, or LLC.
   validates :registration_type,
     inclusion: { in: valid_registration_types },
@@ -253,21 +248,12 @@ class Startup < ActiveRecord::Base
 
   # New set of validations for incubation wizard
   store :metadata, accessors: [:updated_from]
-  validates_presence_of :product_name, :presentation_link, :product_description, :incubation_location, if: :incubation_step_2?
 
   validates_numericality_of :team_size, greater_than: 0, allow_blank: true
   validates_numericality_of :women_employees, greater_than_or_equal_to: 0, allow_blank: true
   validates_numericality_of :revenue_generated, greater_than_or_equal_to: 0, allow_blank: true
 
   validates_presence_of :product_name
-
-  def incubation_step_1?
-    updated_from == 'user_profile'
-  end
-
-  def incubation_step_2?
-    updated_from == 'startup_profile'
-  end
 
   before_validation do
     # Set registration_type to nil if its set as blank from backend.
@@ -337,10 +323,6 @@ class Startup < ActiveRecord::Base
 
   def dropped_out?
     approval_status == APPROVAL_STATUS_DROPPED_OUT
-  end
-
-  def valid_founders?
-    errors.add(:founders, 'should have at least one founder') if founders.nil? || founders.size < 1
   end
 
   def batched?
@@ -488,15 +470,6 @@ class Startup < ActiveRecord::Base
     end
   end
 
-  def self.new_incubation!(user)
-    startup = Startup.new
-    startup.founders << user
-    startup.save!
-
-    user.update!(startup_admin: true)
-    startup
-  end
-
   def cofounders(user)
     founders - [user]
   end
@@ -532,13 +505,6 @@ class Startup < ActiveRecord::Base
       self.slug = "#{product_name.parameterize}-#{rand 1000}"
       retry
     end
-  end
-
-  def incubation_parameters_available?
-    product_name.present? &&
-      product_description.present? &&
-      presentation_link.present? &&
-      incubation_location.present?
   end
 
   ####

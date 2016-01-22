@@ -58,7 +58,6 @@ class User < ActiveRecord::Base
   validates :gender, inclusion: { in: valid_gender_values }, allow_nil: true
 
   # Validations during incubation
-  validates_presence_of :gender, :born_on, if: ->(user) { user.startup.try(:incubation_step_1?) }
   validates_presence_of :roll_number, if: :university_id
 
   before_validation do

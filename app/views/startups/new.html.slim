@@ -22,7 +22,7 @@
             = f.error_notification
 
             = f.input :name, placeholder: 'Team Name.', required: true, label: 'Team Name'
-            = f.input :team_size, required: true, collection: 3..5, selected: 3
+            = f.input :team_size, required: true, collection: 3..5, include_blank: false
 
             #cofounder-textbox
               = f.input :cofounder_1_email, placeholder: 'Co-founder email', required: true, label: 'Co-founder 1'

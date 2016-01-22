@@ -488,16 +488,6 @@ class Startup < ActiveRecord::Base
     founders - [user]
   end
 
-  def finish_incubation_flow!
-    # Set approval status to pending to end incubation flow.
-    self.approval_status = Startup::APPROVAL_STATUS_PENDING
-
-    regenerate_slug!
-
-    # Send e-mail to founder notifying him / her of pending status.
-    UserMailer.incubation_request_submitted(admin).deliver_later
-  end
-
   def generate_randomized_slug
     if name.present?
       "#{name.parameterize}-#{rand 1000}"

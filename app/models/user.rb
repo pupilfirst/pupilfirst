@@ -275,14 +275,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  def ready_for_incubation_wizard?
-    phone? && startup.present?
-  end
-
-  def incubation_parameters_available?
-    gender.present? && born_on.present?
-  end
-
   def self.valid_roles
     %w(product engineering marketing governance design)
   end

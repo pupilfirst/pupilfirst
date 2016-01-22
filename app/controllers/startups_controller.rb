@@ -25,7 +25,7 @@ class StartupsController < ApplicationController
 
     if current_user.startup&.approved?
       flash[:alert] = "You already have an approved startup on SV.CO!"
-      redirect_to startup_url
+      redirect_to startup_url(current_user.startup)
     end
 
     @startup = Startup.new
@@ -182,5 +182,8 @@ class StartupsController < ApplicationController
       next if email.blank?
       startup.founders << User.find_by(email: email)
     end
+
+    # reset being_registered flag to prevent repeating cofounder validations
+    startup.being_registered = false
   end
 end

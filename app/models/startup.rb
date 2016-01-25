@@ -698,6 +698,20 @@ class Startup < ActiveRecord::Base
     end.in_time_zone('Asia/Calcutta') + 18.hours
   end
 
+  # Add a user as team lead
+  def add_team_lead!(user)
+    founders << user
+    user.update!(startup_admin: true)
+  end
+
+  # Add cofounders from given emails
+  def add_cofounders!
+    cofounder_emails.each do |email|
+      next if email.blank?
+      founders << User.find_by(email: email)
+    end
+  end
+
   class << self
     private
 

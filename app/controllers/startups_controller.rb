@@ -35,10 +35,10 @@ class StartupsController < ApplicationController
 
     if @startup.save
       # add the team lead
-      add_current_user_as_team_lead(@startup)
+      @startup.add_team_lead! current_user
 
       # add cofounders
-      add_cofounders(@startup)
+      @startup.add_cofounders!
 
       # mark as approved
       @startup.approve!
@@ -160,20 +160,5 @@ class StartupsController < ApplicationController
   def restrict_to_startup_admin
     return if current_user.startup_admin?
     raise_not_found
-  end
-
-  def add_current_user_as_team_lead(startup)
-    startup.founders << current_user
-    current_user.update!(startup_admin: true)
-  end
-
-  def add_cofounders(startup)
-    startup.cofounder_emails.each do |email|
-      next if email.blank?
-      startup.founders << User.find_by(email: email)
-    end
-
-    # reset being_registered flag to prevent repeating cofounder validations
-    startup.being_registered = false
   end
 end

@@ -24,7 +24,7 @@ class UsersController < ApplicationController
     end
   end
 
-  # PATCH /users/update_password
+  # PATCH /user/update_password
   def update_password
     @user = current_user
 
@@ -40,13 +40,13 @@ class UsersController < ApplicationController
     end
   end
 
-  # GET /users/:id/phone
+  # GET /user/phone
   def phone
     @skip_container = true
     session[:referer] = params[:referer] if params[:referer]
   end
 
-  # POST /users/:id/code
+  # POST /user/code
   def code
     # Generate a 6-digit verification code to send to the phone number.
     @skip_container = true
@@ -64,7 +64,7 @@ class UsersController < ApplicationController
     RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV.CO: #{code}", msisdn: phone_number)
   end
 
-  # GET /users/:id/phone_verification
+  # GET /user/phone_verification
   def phone_verification
     # Generate a 6-digit verification code to send to the phone number.
     code, phone_number = current_user.generate_phone_number_verification_code
@@ -77,7 +77,7 @@ class UsersController < ApplicationController
     @skip_container = true
   end
 
-  # PATCH /users/:id/resend
+  # PATCH /user/resend
   def resend
     @skip_container = true
     if current_user.updated_at <= 5.minute.ago
@@ -96,7 +96,7 @@ class UsersController < ApplicationController
     render 'phone_verification'
   end
 
-  # POST /users/:id/verify
+  # POST /user/verify
   def verify
     @skip_container = true
     begin

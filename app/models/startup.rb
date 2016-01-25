@@ -195,8 +195,8 @@ class Startup < ActiveRecord::Base
 
   # validate presence of all fields during registration
   validates_presence_of :name, :team_size, :cofounder_1_email, :cofounder_2_email, if: :being_registered
-  validates_presence_of :cofounder_3_email, if: "team_size > 3"
-  validates_presence_of :cofounder_4_email, if: "team_size > 4"
+  validates_presence_of :cofounder_3_email, if: proc { |startup| startup.being_registered && startup.team_size > 3 }
+  validates_presence_of :cofounder_4_email, if: proc { |startup| startup.being_registered && startup.team_size > 4 }
 
   has_and_belongs_to_many :startup_categories do
     def <<(_category)
@@ -597,7 +597,7 @@ class Startup < ActiveRecord::Base
   # end
 
   def prepopulate_timeline!
-    create_default_event %w(team_formed new_product_deck one_liner)
+    create_default_event %w(registered_on_sv)
   end
 
   def create_default_event(types)

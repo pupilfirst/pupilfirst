@@ -66,6 +66,8 @@ class UsersController < ApplicationController
 
   # GET /user/phone_verification
   def phone_verification
+    @skip_container = true
+
     # Generate a 6-digit verification code to send to the phone number.
     code, phone_number = current_user.generate_phone_number_verification_code
 
@@ -73,8 +75,6 @@ class UsersController < ApplicationController
 
     # SMS the code to the phone number. Currently uses FA format.
     RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV.CO: #{code}", msisdn: phone_number)
-
-    @skip_container = true
   end
 
   # PATCH /user/resend

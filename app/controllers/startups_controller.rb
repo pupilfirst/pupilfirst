@@ -32,7 +32,10 @@ class StartupsController < ApplicationController
 
   def create
     @startup = Startup.new startup_registration_params
+
+    # setting attributes required for registration-specific validations
     @startup.being_registered = true
+    @startup.team_lead_email = current_user.email
 
     if @startup.save
       # reset being_registered flag to prevent repeating cofounder validations
@@ -149,7 +152,7 @@ class StartupsController < ApplicationController
 
   def startup_registration_params
     params.require(:startup).permit(:name, :team_size, :cofounder_1_email, :cofounder_2_email, :cofounder_3_email,
-      :cofounder_4_email, :being_registered, :team_lead_email)
+      :cofounder_4_email)
   end
 
   def startup_destroy_params

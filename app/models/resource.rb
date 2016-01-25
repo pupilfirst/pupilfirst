@@ -73,6 +73,6 @@ class Resource < ActiveRecord::Base
     " has been uploaded to SV.CO*: \n"
     message += "*Title:* #{title}\n"
     message += "*Description:* #{description}\n"
-    message + "*Url:* #{Rails.application.routes.url_helpers.resource_url(self, host: 'https://sv.co')}"
+    message + "*URL:* #{Rails.application.routes.url_helpers.resource_url(self, host: 'https://sv.co')}"
   end
 end

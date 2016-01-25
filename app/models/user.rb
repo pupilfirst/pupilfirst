@@ -183,7 +183,7 @@ class User < ActiveRecord::Base
 
   def slack_username_format
     return if slack_username.blank?
-    username_match = slack_username.match(/^@?([a-z0-9_]+)$/i)
+    username_match = slack_username.match(/^@?([\w\.]+)$/)
     return if username_match.present?
     errors.add(:slack_username, 'is not valid. Should only contain letters, numbers, and underscores.')
   end

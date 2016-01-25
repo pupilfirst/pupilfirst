@@ -162,8 +162,8 @@ ActiveAdmin.register TimelineEvent do
     unless timeline_event.timeline_event_type.private
       startup_url = Rails.application.routes.url_helpers.startup_url(startup)
       timeline_event_url = startup_url + "#event-#{timeline_event.id}"
-      slack_message = "Hurray! <#{startup_url}|#{startup.product_name}> has a new verified timeline entry:"\
-      " <#{timeline_event_url}|#{timeline_event.timeline_event_type.title}> :clap:"
+      slack_message = "<#{startup_url}|#{startup.product_name}> has a new verified timeline entry:"\
+      " <#{timeline_event_url}|#{timeline_event.timeline_event_type.title}>"
 
       # post to slack
       PublicSlackTalk.post_message message: slack_message, channel: 'general'

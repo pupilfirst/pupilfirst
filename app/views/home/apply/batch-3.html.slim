@@ -13,7 +13,83 @@
 .apply-container
   .container
     .row
-      .col-md-7
+      .col-md-5.col-md-push-7
+        .alert.alert-warning
+          p
+            ' We've now closed applications for Batch 3. Registered applicants have to submit an Engineering and Product Task using information given below.
+          p
+            ' The deadline for this task is January 5, 11:59PM.
+          p
+            ' For any help, write to #{mail_to 'help@sv.co'}.
+        .task-details
+          .engineering-task
+            .task-head
+              h5
+                i.fa.fa-laptop
+                | Engineering Task
+              h4.font-weight-400
+                | Develop a website or an app to do shopping comparison.
+            .requirements-section
+              p.font-weight-600 Requirements:
+              ol
+                li Users must be able to search for any product.
+                li Search results must be displayed from at least two popular Indian eCommerce sites.
+                li
+                  ' A comparison of search results from the sites must be displayed, with
+                  ' the lowest price / most reviewed / most scored items highlighted.
+                li Bonus points for implementing filtering & refining for search results.
+            .judgement-section
+              p.font-weight-600 Submissions will be judged on 4 factors:
+              ol
+                li Code quality, esp. following conventions, hygiene and best practices.
+                li Technology choices, i.e. picking a suitable technology stack and libraries.
+                li UX and UI. i.e. visual and interaction design.
+                li
+                  ' Correctness &amp; Efficiency, i.e. how accurate the results are,
+                  ' and how much better it is to use the app than search manually.
+            .task-notes
+              p
+                ' All submissions should contain a README file that describes
+                ' what to do to build and / or run the app or website.
+              p
+                ' To submit, upload source code to Github / BitBucket / equivalent
+                ' and paste the link in the Round 2 form sent to your email ID used for application.
+
+          .product-task
+            .task-head
+              h5
+                i.fa.fa-file-video-o
+                | Product Task
+              h4.font-weight-400
+                | Develop and present a screencast for a shopping comparison app or website.
+            .requirements-section
+              p Requirements:
+              ol
+                li
+                  ' A presentation deck should be made as per guidelines given here:
+                  | #{link_to 'http://playbook.sv.co/stages/5.1.1-deck.html', 'http://playbook.sv.co/stages/5.1.1-deck.html'}
+                li
+                  ' The presentation submission should be a max 3 minute screencast
+                  | video displaying the presentation deck screen with an audio voiceover.
+            .judgement-section
+              p Video Screencast submissions will be judged on four factors:
+              ol
+                li Legibility of the audio, and clarity of the video.
+                li Completeness of the deck, as per guidelines above.
+                li Creativity of the deck, the voiceover and the video.
+                li Competitor Comparisons presented in the voiceover.
+            .task-notes
+              p
+                ' To learn more about Screencasts go here:
+                | #{link_to 'https://en.wikipedia.org/wiki/Screencast', 'https://en.wikipedia.org/wiki/Screencast', target:'_blank'}
+              p
+                | To submit, upload a completed video to YouTube / Vimeo / equivalent and paste the link in the Round 2 form sent to your email ID used for application.
+
+              p
+                | For any help, write to #{mail_to 'help@sv.co'}.
+      
+      
+      .col-md-7.col-md-pull-5
         .alert.alert-info
           h4 
             ' This is the Application page for Batch 3, exclusively for Gujarat Students.
@@ -144,12 +220,3 @@
             p
               ' To learn more about the program, visit our #{link_to 'Website', root_url}
               ' and our #{link_to 'Startup Playbook', 'https://playbook.sv.co/'}.
-      .col-md-5
-        .alert.alert-warning
-          p
-            ' GTU students interested in a Specialization in Technology Entrepreneurship degree have to start applications at the University form.
-          p
-            a.btn.btn-primary href="https://docs.google.com/a/sv.co/forms/d/1wHEHSG3HsKnYOeu41K5Q3WMPII8O32u0086oDWp1xcI/viewform"
-              ' Visit GTU Application Form
-        .apply-form
-          <iframe id="typeform-full" width="100%" height="100%" frameborder="0" src="https://svlabs.typeform.com/to/pdtIY4"></iframe>

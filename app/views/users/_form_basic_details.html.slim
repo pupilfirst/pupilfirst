@@ -11,7 +11,7 @@
     .control-label.col-sm-3
       strong Phone number
     .col-sm-9
-      .phone-number-controls #{user.phone} (#{link_to 'Change?', phone_user_path(referer: edit_user_url)})
+      .phone-number-controls #{user.phone}
 
   = f.input :avatar, as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }
   = f.input :about, label: 'One-Liner', placeholder: 'One-liner about yourself', input_html: { maxlength: 255 }

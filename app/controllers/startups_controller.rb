@@ -32,8 +32,12 @@ class StartupsController < ApplicationController
 
   def create
     @startup = Startup.new startup_registration_params
+    @startup.being_registered = true
 
     if @startup.save
+      # reset being_registered flag to prevent repeating cofounder validations
+      @startup.being_registered = false
+
       # add the team lead
       @startup.add_team_lead! current_user
 

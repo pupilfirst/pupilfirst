@@ -7,13 +7,13 @@ class User < ActiveRecord::Base
   include Gravtastic
   gravtastic
 
-  GENDER_MALE = 'male'.freeze
-  GENDER_FEMALE = 'female'.freeze
-  GENDER_OTHER = 'other'.freeze
+  GENDER_MALE = -'male'
+  GENDER_FEMALE = -'female'
+  GENDER_OTHER = -'other'
 
-  COFOUNDER_PENDING = 'pending'.freeze
-  COFOUNDER_ACCEPTED = 'accepted'.freeze
-  COFOUNDER_REJECTED = 'rejected'.freeze
+  COFOUNDER_PENDING = -'pending'
+  COFOUNDER_ACCEPTED = -'accepted'
+  COFOUNDER_REJECTED = -'rejected'
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

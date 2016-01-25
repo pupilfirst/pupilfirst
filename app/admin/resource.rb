@@ -85,4 +85,8 @@ ActiveAdmin.register Resource do
 
     f.actions
   end
+
+  action_item :view_resource, only: :show do
+    link_to('View Resource', "/resources/#{resource.slug}", target: '_blank')
+  end
 end

@@ -2,7 +2,6 @@ class StartupsController < ApplicationController
   before_filter :authenticate_user!, except: [:show, :index]
   before_filter :restrict_to_startup_founders, only: [:edit, :update, :add_founder]
   before_filter :restrict_to_startup_admin, only: [:remove_founder]
-  before_filter :disallow_unready_startup, only: [:edit, :update]
 
   after_filter only: [:create] do
     @startup.founders << current_user
@@ -161,15 +160,6 @@ class StartupsController < ApplicationController
   def restrict_to_startup_admin
     return if current_user.startup_admin?
     raise_not_found
-  end
-
-  # A startup that is in unready state shouldn't be allowed to edit its details.
-  #
-  # @see https://trello.com/c/y4ReClzt
-  def disallow_unready_startup
-    return unless current_user.startup.unready?
-    flash[:error] = "You haven't completed the incubation process yet. Please complete it before attempting to edit your startup's profile."
-    redirect_to current_user
   end
 
   def add_current_user_as_team_lead(startup)

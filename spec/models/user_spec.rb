@@ -66,8 +66,7 @@ describe User do
   end
 
   describe '#activity_timeline' do
-    it 'returns activity count by month and week' do
-      pending
+    it 'returns activity count by month and week', disabled: true do
       batch = create :batch, start_date: 1.month.ago, end_date: 5.months.from_now
       startup = create :startup, batch: batch
       user = startup.founders.first

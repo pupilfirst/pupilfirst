@@ -1,9 +1,5 @@
 # SV.CO
 
-## Build status
-
-[![Circle CI](https://circleci.com/gh/svlabs/sv.co.svg?style=svg&circle-token=823bb16f00598ed9373b661212008b5fae4e48e1)](https://circleci.com/gh/svlabs/sv.co)
-
 ## Setup for development
 
 ### Install Dependencies

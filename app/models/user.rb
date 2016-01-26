@@ -338,7 +338,7 @@ class User < ActiveRecord::Base
 
   # If user is part of a batched startup, it returns batch's date range - otherwise user creation time to 'now'.
   def activity_date_range
-    (activity_timeline_start_date..activity_timeline_end_date)
+    (activity_timeline_start_date.beginning_of_day..activity_timeline_end_date.end_of_day)
   end
 
   def activity_timeline_start_date

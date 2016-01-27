@@ -95,6 +95,7 @@ class UsersController < ApplicationController
       current_user.verify_phone_number(params[:phone_verification_code])
     rescue Exceptions::PhoneNumberVerificationFailed
       @failed_to_verify_phone_number = true
+      @registration_ongoing = true if session[:registration_ongoing]
       render 'phone_verification'
       return
     end

@@ -1,17 +1,18 @@
 - content_for :head
   title SV.CO Verify Mobile Number
-
-.panel.onboarding-head-panel
-  .onboarding-head-container.clearfix
-    .col-sm-4.text-center.onboarding-tab
-      .fa.fa-circle-o
-      | &nbsp; User Profile
-    .col-sm-4.text-center.onboarding-tab.current-tab
-      .fa.fa-circle-o-notch.fa-spin
-      | &nbsp; Phone number verification
-    .col-sm-4.text-center.onboarding-tab
-      .fa.fa-circle-o
-      | &nbsp; Startup Creation
+  
+- if @registration_ongoing
+  .panel.onboarding-head-panel
+    .onboarding-head-container.clearfix
+      .col-sm-4.text-center.onboarding-tab
+        .fa.fa-circle-o
+        | &nbsp; User Profile
+      .col-sm-4.text-center.onboarding-tab.current-tab
+        .fa.fa-circle-o-notch.fa-spin
+        | &nbsp; Phone number verification
+      .col-sm-4.text-center.onboarding-tab
+        .fa.fa-circle-o
+        | &nbsp; Startup Creation
 
 .onboarding-body
   .onboarding-container.clearfix

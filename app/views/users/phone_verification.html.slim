@@ -39,7 +39,10 @@
           h3.green-text New Verification Code Sent!
           p
             ' A new SMS verification code has been sent to your mobile number.
-            span.font-weight-600 Please supply this code to complete the registration process.
+            - if @registration_ongoing
+              span.font-weight-600 Please supply this code to complete the registration process.
+            - else
+              span.font-weight-600 Please supply this code to confirm your new phone number.
     - else
       .mobile-verification-alert.text-center role='alert'
         .verification-icon.send-success
@@ -47,7 +50,10 @@
           h3.green-text Verification Code Sent!
           p
             ' An SMS containing a verification code has been sent to your mobile number.
-            span.font-weight-600 Please supply this code to complete the registration process.
+            - if @registration_ongoing
+              span.font-weight-600 Please supply this code to complete the registration process.
+            - else
+              span.font-weight-600 Please supply this code to confirm your new phone number.
 
     - if Rails.env.development?
       .alert.alert-info role='alert'

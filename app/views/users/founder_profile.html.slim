@@ -15,6 +15,7 @@
               .col-lg-7.col-md-12.profile-name
                 h2
                   = @user.fullname
+                  ' &nbsp;
                   - if @user.startup.present?
                     span
                       - if @user.roles.present?
@@ -60,7 +61,7 @@
                 - if @user.resume_url.present?
                   a.btn.btn-flat.btn-resume-link href=@user.resume_url type="button"
                     = image_tag 'users/profile/resume-icon.png'
-                    span.resume-title #{@user.fullname}'s Resume
+                    span.resume-title View Resume
         - if @user.startup&.logo.present?
           .col-md-3.startup-logo-profile
             a.startup-logo-box href=startup_url(@user.startup)

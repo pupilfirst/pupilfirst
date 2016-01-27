@@ -46,26 +46,9 @@ class UsersController < ApplicationController
     session[:referer] = params[:referer] if params[:referer]
   end
 
-  # POST /user/code
-  def code
-    # Generate a 6-digit verification code to send to the phone number.
-    @skip_container = true
-    code, phone_number = begin
-      current_user.generate_phone_number_verification_code
-    rescue Exceptions::InvalidPhoneNumber => e
-      @failed_to_add_phone_number = e.message
-      render 'phone'
-      return
-    end
-
-    return if Rails.env.development?
-
-    # SMS the code to the phone number. Currently uses FA format.
-    RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV.CO: #{code}", msisdn: phone_number)
-  end
-
   # GET /user/phone_verification
   def phone_verification
+    @registration_ongoing = true if session[:registration_ongoing]
     @skip_container = true
 
     # Generate a 6-digit verification code to send to the phone number.
@@ -79,7 +62,9 @@ class UsersController < ApplicationController
 
   # PATCH /user/resend
   def resend
+    @registration_ongoing = true if session[:registration_ongoing]
     @skip_container = true
+
     if current_user.updated_at <= 5.minute.ago
       @retry_after_some_time = false
       code, phone_number = current_user.generate_phone_number_verification_code
@@ -99,6 +84,7 @@ class UsersController < ApplicationController
   # POST /user/verify
   def verify
     @skip_container = true
+
     begin
       current_user.verify_phone_number(params[:phone_verification_code])
     rescue Exceptions::PhoneNumberVerificationFailed
@@ -109,8 +95,13 @@ class UsersController < ApplicationController
 
     flash[:notice] = 'Your phone number is now verified!'
 
-    referer = session.delete :referer
-    redirect_to referer || consent_user_path
+    if session[:registration_ongoing]
+      session[:registration_ongoing] = nil
+      redirect_to consent_user_path
+    else
+      referer = session.delete :referer
+      redirect_to referer || root_url
+    end
   end
 
   def consent

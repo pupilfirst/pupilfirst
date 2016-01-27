@@ -6,6 +6,7 @@ module Users
     end
 
     def after_accept_path_for(_resource)
+      session[:registration_ongoing] = true
       phone_verification_user_path
     end
 

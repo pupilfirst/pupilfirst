@@ -46,6 +46,12 @@ class UsersController < ApplicationController
     session[:referer] = params[:referer] if params[:referer]
   end
 
+  # POST /user/set_unconfirmed_phone
+  def set_unconfirmed_phone
+    current_user.update(unconfirmed_phone: params[:phone_number])
+    redirect_to phone_verification_user_path
+  end
+
   # GET /user/phone_verification
   def phone_verification
     @registration_ongoing = true if session[:registration_ongoing]

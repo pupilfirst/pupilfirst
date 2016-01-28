@@ -60,8 +60,22 @@ class UsersController < ApplicationController
     @registration_ongoing = true if session[:registration_ongoing]
     @skip_container = true
 
+    # warn if the user still has a confirmed 'phone' when reaching here
+    if current_user.phone.present?
+      redirect_to founder_profile_path(current_user.slug), alert: 'You seem to have a confirmed phone number already!'\
+      ' Please visit the Edit Profile page if you wish to modify this'
+      return
+    end
+
+    # ask for a phone number if 'unconfirmed_phone' is missing
+    unless current_user.unconfirmed_phone.present?
+      redirect_to phone_user_path, alert: 'Please provide a phone number to verify!'
+      return
+    end
+
     # avoid code being re-generated if url is repeatedly hit
-    return unless current_user.verification_code_sent_at <= 5.minute.ago
+    code_sent_at = current_user.verification_code_sent_at
+    return if code_sent_at&. > 5.minute.ago
 
     # Generate a 6-digit verification code to send to the phone number.
     code, phone_number = current_user.generate_phone_number_verification_code
@@ -77,7 +91,10 @@ class UsersController < ApplicationController
     @registration_ongoing = true if session[:registration_ongoing]
     @skip_container = true
 
-    if current_user.verification_code_sent_at <= 5.minute.ago
+    code_sent_at = current_user.verification_code_sent_at
+    if code_sent_at&. > 5.minute.ago
+      @retry_after_some_time = true
+    else
       @retry_after_some_time = false
       code, phone_number = current_user.generate_phone_number_verification_code
 
@@ -86,8 +103,6 @@ class UsersController < ApplicationController
       end
 
       @resent_verification_code = true
-    else
-      @retry_after_some_time = true
     end
 
     render 'phone_verification'

@@ -57,6 +57,9 @@ class UsersController < ApplicationController
     @registration_ongoing = true if session[:registration_ongoing]
     @skip_container = true
 
+    # avoid code being re-generated if url is repeatedly hit
+    return unless current_user.verification_code_sent_at <= 5.minute.ago
+
     # Generate a 6-digit verification code to send to the phone number.
     code, phone_number = current_user.generate_phone_number_verification_code
 
@@ -71,7 +74,7 @@ class UsersController < ApplicationController
     @registration_ongoing = true if session[:registration_ongoing]
     @skip_container = true
 
-    if current_user.updated_at <= 5.minute.ago
+    if current_user.verification_code_sent_at <= 5.minute.ago
       @retry_after_some_time = false
       code, phone_number = current_user.generate_phone_number_verification_code
 

@@ -2,6 +2,13 @@
 @import 'variables';
 
 #header {
+  .sitewide-notice {
+    background-color: $theme-light-green;
+    text-align: center;
+
+    p { margin-top: 10px; }
+  }
+
   .nav-spacer {
     padding-top: 80px;
 

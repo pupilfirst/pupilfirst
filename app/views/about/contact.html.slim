@@ -1,8 +1,13 @@
+- if @sitewide_notice
+  - content_for :sitewide_notice
+    ' <strong>SV.CO</strong> is the next phase of the Startup Village story.
+    ' #{link_to 'Read more here', 'https://blog.sv.co/startup-village-to-scale-up-countrywide-after-successful-first-phase', target: '_blank'}.
+
 - content_for :head
   title SV.CO Contact Details
   meta name="description" content="Contact the Startup Village team at help@sv.co. Mingle with the community on our Public Slack Forum. Or drop by at our campuses at Kochi and Visakhapatnam."
 
-ol.breadcrumb.margin-top-20
+ol.breadcrumb class="#{@sitewide_notice.present? ? 'margin-top-60' : 'margin-top-20'}"
   li = link_to 'Home', root_path
   li = link_to 'About', about_path
   li.active Contact

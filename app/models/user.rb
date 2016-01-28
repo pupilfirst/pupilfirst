@@ -235,6 +235,7 @@ class User < ActiveRecord::Base
   def generate_phone_number_verification_code
     self.phone_verification_code = SecureRandom.random_number(1_000_000).to_s.ljust(6, '0')
     self.unconfirmed_phone = PhonyRails.normalize_number unconfirmed_phone, country_code: 'IN', add_plus: false
+    self.verification_code_sent_at = Time.now
     save!
 
     [phone_verification_code, unconfirmed_phone]

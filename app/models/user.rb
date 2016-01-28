@@ -362,6 +362,22 @@ class User < ActiveRecord::Base
       behance_url.present?
   end
 
+  # Returns the percentage of profile completion as an integer
+  def profile_completion_percentage
+    score = 20 # a default score given for required fields during registration
+    score += 20 if startup&.approved? # has an approved startup
+    score += 20 if slack_user_id # has a valid slack account associated
+    score += 20 if resume_url # has uploaded resume
+    score += 10 if social_media_links? # has atleast 2 social media links
+    score += 5 if about
+    score += 5 if communication_address
+    score
+  end
+
+  def social_media_links?
+    [twitter_url, facebook_url, linkedin_url, personal_website_url, blog_url, angel_co_url, github_url, behance_url].delete_if(&:blank?).length > 1
+  end
+
   private
 
   def batch_start_date

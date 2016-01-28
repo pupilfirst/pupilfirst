@@ -12,11 +12,8 @@
   .navbar-default {
     background: none;
     border: 0;
-    height: 80px;
-  }
-
-  .navbar-default {
-    @media (max-width: $screen-xs-max) { height: 70px; }
+    height: auto;
+    padding-bottom: 10px;
   }
 
   // Move the logo up a little bit to center it in shrunken state (xs).

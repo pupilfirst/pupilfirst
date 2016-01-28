@@ -46,10 +46,13 @@ class UsersController < ApplicationController
     session[:referer] = params[:referer] if params[:referer]
   end
 
-  # POST /user/set_unconfirmed_phone
+  # PATCH /user/set_unconfirmed_phone
   def set_unconfirmed_phone
-    current_user.update(unconfirmed_phone: params[:phone_number])
-    redirect_to phone_verification_user_path
+    if current_user.update(unconfirmed_phone: params[:user][:unconfirmed_phone], phone: nil, verification_code_sent_at: nil)
+      redirect_to phone_verification_user_path
+    else
+      render 'phone'
+    end
   end
 
   # GET /user/phone_verification

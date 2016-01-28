@@ -15,7 +15,7 @@ Svapp::Application.routes.draw do
   resource :user, only: [:edit, :update] do
     member do
       get 'phone'
-      post 'set_unconfirmed_phone'
+      patch 'set_unconfirmed_phone'
       get 'phone_verification'
       get 'consent'
       post 'code'

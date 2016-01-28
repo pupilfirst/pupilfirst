@@ -9,6 +9,13 @@
         .col-md-2
           .profile
             = image_tag profile_image_url(@user, gravatar_size: 140, avatar_version: :mid), class: 'img-responsive'
+            - if current_user == @user
+              .progress-container
+                .progress.profile-progress
+                  .progress-bar.profile-progress-bar.progress-bar-success aria-valuemax="100" aria-valuemin="0" aria-valuenow="60" role="progressbar" style="width: 60%;"
+                span.progress-value 60% Completed
+              a.profile-complete-button href=edit_user_url
+                ' Complete Your Profile
         div class="col-md-#{@user.startup&.logo.present? ? 7 : 10}"
           .row.profile-data
             .profile-head.clearfix

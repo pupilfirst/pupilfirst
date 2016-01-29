@@ -5,8 +5,22 @@
   .sitewide-notice {
     background-color: $theme-light-green;
     text-align: center;
+    line-height: 25px;
+    color: white;
 
     p { margin-top: 10px; }
+    a {
+      padding: 2px 5px;
+      color: white;
+      border: 1px solid #fff;
+      border-radius: 5px;
+
+      &:hover, &:focus {
+        background-color: white;
+        color: $theme-light-green;
+        text-decoration: none;
+      }
+    }
   }
 
   .nav-spacer {

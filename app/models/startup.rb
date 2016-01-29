@@ -591,7 +591,7 @@ class Startup < ActiveRecord::Base
   end
 
   after_save do
-    if approval_status_changed? && approved? && timeline_events.blank?
+    if being_registered && approval_status_changed? && approved? && timeline_events.blank?
       prepopulate_timeline!
     end
   end

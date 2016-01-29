@@ -7,6 +7,26 @@ FactoryGirl.define do
     role { Faker::Lorem.word }
     title { Faker::Lorem.words(2).join ' ' }
 
+    factory :tet_team_formed do
+      key 'team_formed'
+      role 'Governance'
+      title 'Team Formed'
+    end
+
+    factory :tet_new_product_deck do
+      key 'new_product_deck'
+      role 'Product'
+      title 'New Product Deck'
+      suggested_stage 'moved_to_idea_discovery'
+    end
+
+    factory :tet_one_liner do
+      key 'one_liner'
+      role 'Governance'
+      title 'Set New One-Liner'
+      suggested_stage 'moved_to_idea_discovery,moved_to_customer_validation'
+    end
+
     factory :tet_registered do
       key 'registered_on_sv'
       role 'Governance'

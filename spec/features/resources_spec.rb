@@ -8,8 +8,6 @@ feature 'Resources' do
   let(:user) { create :user_with_password, confirmed_at: Time.now }
   let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
 
-  let!(:tet_registered) { create :tet_registered }
-
   let!(:public_resource_1) { create :resource }
   let!(:public_resource_2) { create :resource }
 

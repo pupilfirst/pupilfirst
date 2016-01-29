@@ -4,8 +4,6 @@ feature 'Faculty Connect' do
   let!(:faculty_1) { create :faculty }
   let!(:faculty_2) { create :faculty }
 
-  let!(:tet_registered) { create :tet_registered }
-
   # Three valid connect slots
   let!(:connect_slot_1) { create :connect_slot, faculty: faculty_1, slot_at: 4.days.from_now }
   let!(:connect_slot_2) { create :connect_slot, faculty: faculty_1, slot_at: 4.5.days.from_now }

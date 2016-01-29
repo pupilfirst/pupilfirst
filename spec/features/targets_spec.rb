@@ -4,8 +4,6 @@ feature 'Targets spec' do
   let(:user) { create :user_with_password, confirmed_at: Time.now }
   let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
 
-  let!(:tet_registered) { create :tet_registered }
-
   let!(:target) { create :target, startup: startup, role: Target::ROLE_FOUNDER }
 
   before do

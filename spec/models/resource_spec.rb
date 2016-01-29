@@ -11,8 +11,6 @@ RSpec.describe Resource, type: :model do
     PublicSlackTalk.mock = false
   end
 
-  let!(:tet_registered) { create :tet_registered }
-
   let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
   let!(:public_resource) { create :resource }
 

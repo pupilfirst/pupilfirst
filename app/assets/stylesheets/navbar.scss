@@ -20,6 +20,9 @@
         color: $theme-light-green;
         text-decoration: none;
       }
+      @media (max-width: $screen-xs-max) {
+        display: inline-block;
+      }
     }
   }
 

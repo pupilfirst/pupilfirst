@@ -590,11 +590,11 @@ class Startup < ActiveRecord::Base
     end
   end
 
-  # after_save do
-  #   if approval_status_changed? && approved? && timeline_events.blank?
-  #     prepopulate_timeline!
-  #   end
-  # end
+  after_save do
+    if approval_status_changed? && approved? && timeline_events.blank?
+      prepopulate_timeline!
+    end
+  end
 
   def prepopulate_timeline!
     create_default_event %w(registered_on_sv)
@@ -603,11 +603,8 @@ class Startup < ActiveRecord::Base
   def create_default_event(types)
     types.each do |type|
       timeline_events.create(
-        user: admin,
-        timeline_event_type: TimelineEventType.find_by(key: type),
-        auto_populated: true,
-        verified_at: Time.now,
-        event_on: Time.now
+        user: admin, timeline_event_type: TimelineEventType.find_by(key: type), auto_populated: true,
+        verified_at: Time.now, event_on: Time.now
       )
     end
   end

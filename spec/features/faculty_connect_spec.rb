@@ -4,9 +4,7 @@ feature 'Faculty Connect' do
   let!(:faculty_1) { create :faculty }
   let!(:faculty_2) { create :faculty }
 
-  let!(:tet_one_liner) { create :tet_one_liner }
-  let!(:tet_new_product_deck) { create :tet_new_product_deck }
-  let!(:tet_team_formed) { create :tet_team_formed }
+  let!(:tet_registered) { create :tet_registered }
 
   # Three valid connect slots
   let!(:connect_slot_1) { create :connect_slot, faculty: faculty_1, slot_at: 4.days.from_now }

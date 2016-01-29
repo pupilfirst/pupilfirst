@@ -4,9 +4,7 @@ feature 'Team members spec' do
   let(:user) { create :user_with_password, confirmed_at: Time.now }
   let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
 
-  let!(:tet_one_liner) { create :tet_one_liner }
-  let!(:tet_new_product_deck) { create :tet_new_product_deck }
-  let!(:tet_team_formed) { create :tet_team_formed }
+  let!(:tet_registered) { create :tet_registered }
 
   before do
     # Add user as founder of startup.

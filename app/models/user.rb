@@ -182,7 +182,7 @@ class User < ActiveRecord::Base
 
   def slack_username_format
     return if slack_username.blank?
-    username_match = slack_username.match(/^@?([a-z0-9_]+)$/i)
+    username_match = slack_username.match(/^@?([\w\.]+)$/)
     return if username_match.present?
     errors.add(:slack_username, 'is not valid. Should only contain letters, numbers, and underscores.')
   end
@@ -328,15 +328,15 @@ class User < ActiveRecord::Base
 
   # If user is part of a batched startup, it returns batch's date range - otherwise user creation time to 'now'.
   def activity_date_range
-    (batch_start_date..batch_end_date)
+    (activity_timeline_start_date.beginning_of_day..activity_timeline_end_date.end_of_day)
   end
 
-  def batch_start_date
-    startup.present? && startup.batch.present? ? startup.batch.start_date : created_at.to_date
+  def activity_timeline_start_date
+    batch_start_date.future? ? Date.today : batch_start_date
   end
 
-  def batch_end_date
-    startup.present? && startup.batch.present? ? startup.batch.end_date : Date.today
+  def activity_timeline_end_date
+    batch_end_date.future? ? Date.today : batch_end_date
   end
 
   # Returns true if any of the social URL are stored. Used on profile page.
@@ -354,10 +354,19 @@ class User < ActiveRecord::Base
 
   private
 
-  def blank_activity_timeline
-    end_date = batch_end_date > Date.today ? Date.today.end_of_month : batch_end_date
+  def batch_start_date
+    startup.present? && startup.batch.present? ? startup.batch.start_date : created_at.to_date
+  end
 
-    first_day_of_each_month = (batch_start_date.beginning_of_month..end_date).select { |d| d.day == 1 }
+  def batch_end_date
+    startup.present? && startup.batch.present? ? startup.batch.end_date : Date.today
+  end
+
+  def blank_activity_timeline
+    start_date = activity_timeline_start_date.beginning_of_month
+    end_date = activity_timeline_end_date.end_of_month
+
+    first_day_of_each_month = (start_date..end_date).select { |d| d.day == 1 }
 
     first_day_of_each_month.each_with_object({}) do |first_day_of_month, blank_timeline|
       blank_timeline[first_day_of_month.strftime('%B')] = { counts: (1..WeekOfMonth.total_weeks(first_day_of_month)).each_with_object({}) { |w, o| o[w] = 0 } }

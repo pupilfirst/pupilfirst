@@ -36,10 +36,11 @@
             color: #333333;
             font-size: 13px;
             font-weight: 300;
-            margin-left: 5px;
+            display: inline-block;
 
             @media (max-width: $screen-sm-max) {
               display: block;
+              line-height: 20px;
             }
           }
         }
@@ -148,6 +149,8 @@
           color: #2a6db6;
           border-radius: 5px;
           transition: all .2s;
+          width: 100%;
+          text-align: left;
 
           .resume-title {
             padding: 5px 0 0 15px;
@@ -156,6 +159,10 @@
           &:hover, &:focus {
             color: #51a443;
             border-color: #51a443;
+          }
+
+          @media (max-width: $screen-sm-max) {
+            width: auto;
           }
         }
 

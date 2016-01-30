@@ -89,7 +89,7 @@ class Startup < ActiveRecord::Base
   #
   # @return TimelineEvent
   def showcase_timeline_event
-    timeline_events.verified.has_image.order('verified_at DESC').detect do |timeline_event|
+    timeline_events.verified.has_image.order('event_on DESC').detect do |timeline_event|
       !timeline_event.private?
     end
   end

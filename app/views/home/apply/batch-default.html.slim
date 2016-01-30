@@ -13,85 +13,78 @@
 .apply-container
   .container
     .row
-      .col-md-5.col-md-push-7
-        .alert.alert-warning
-          p
-            ' We've <strong>now closed submissions</strong> for the Engineering &amp; Product Task. Please check your emails for submission receipts.
-          p
-            ' For any help, write to #{mail_to 'help@sv.co'}.
-        .task-details
-          .engineering-task
-            .task-head
+      .col-md-7.col-md-push-5
+        .batch-results
+          .result-head.text-center
+            = image_tag 'home/apply/batch-result-icon.png', class: 'img-responsive'
+            h3
+              ' Batch 2 Round 2 Results are out.
+            p
+              | We have shortlisted 25 candidates across 2 states.
+            p.interview-text
+              | Team Interviews for Andhra Pradesh are on February 7. <br />Interview dates for Kerala will be announced shortly.
+          .result-table
+            .row
+              .col-md-6
+                .panel.panel-success
+                  .panel-heading Andhra Pradesh
+                  ul.list-group
+                    li.list-group-item
+                      h3 JNTU Anantapur
+                      ol
+                        li Anna Hareesh
+                        li Mohammad Shameer Khan
+                        li Raja Sai Bhargava
+                        li Chinakonda Chenchu Nikhil
+                        li P Ajay Kumar
+                    li.list-group-item
+                      h3 JNTU Kakinada
+                      ol
+                        li Ayus Kumar
+                        li Ivaturi Chandrashekar
+                        li Veeramachaneni Gnana Naga Bindu
+                        li Shubham Anand Gorthi
+                        li Alapati Naga Susmitha
+                        li Varun Satyam
+                        li Kesanupalli Srivatsava
+                        li Gayatri Tangudu
+                        li Krishna Kumar Yadlapalli
+                    li.list-group-item
+                      h3 GITAM University
+                      ol
+                        li Akhil Pandey
+                        li Kaduru Vimal Raj
+                        li Jagadeesh Vattikonda
+                    li.list-group-item
+                      h3 Others
+                      ol
+                        li Kotlarasmiwilson
+              .col-md-6
+                .panel.panel-success
+                  .panel-heading Kerala
+                  ul.list-group
+                    li.list-group-item
+                      h3 Kerala Technological University
+                      ol
+                        li Jithin Varghese
+                        li Arun Ravi
+                    li.list-group-item
+                      h3 Others
+                      ol
+                        li Akash Bhaskaran
+                        li Itty Jose
+                        li Kuldip Puri Tejaswi
+                        li Praveen Anil
+                        li Adam Shamsudeen
+            .alert.alert-info
               h5
-                i.fa.fa-laptop
-                | Engineering Task
-              h4.font-weight-400
-                | Develop a website or an app to do shopping comparison.
-            .requirements-section
-              p.font-weight-600 Requirements:
-              ol
-                li Users must be able to search for any product.
-                li Search results must be displayed from at least two popular Indian eCommerce sites.
-                li
-                  ' A comparison of search results from the sites must be displayed, with
-                  ' the lowest price / most reviewed / most scored items highlighted.
-                li Bonus points for implementing filtering & refining for search results.
-            .judgement-section
-              p.font-weight-600 Submissions will be judged on 4 factors:
-              ol
-                li Code quality, esp. following conventions, hygiene and best practices.
-                li Technology choices, i.e. picking a suitable technology stack and libraries.
-                li UX and UI. i.e. visual and interaction design.
-                li
-                  ' Correctness &amp; Efficiency, i.e. how accurate the results are,
-                  ' and how much better it is to use the app than search manually.
-            .task-notes
-              p
-                ' All submissions should contain a README file that describes
-                ' what to do to build and / or run the app or website.
-              p
-                ' To submit, upload source code to Github / BitBucket / equivalent
-                ' and paste the link in the Round 2 form sent to your email ID used for application.
-
-          .product-task
-            .task-head
-              h5
-                i.fa.fa-file-video-o
-                | Product Task
-              h4.font-weight-400
-                | Develop and present a screencast for a shopping comparison app or website.
-            .requirements-section
-              p Requirements:
-              ol
-                li
-                  ' A presentation deck should be made as per guidelines given here:
-                  | #{link_to 'http://playbook.sv.co/stages/5.1.1-deck.html', 'http://playbook.sv.co/stages/5.1.1-deck.html'}
-                li
-                  ' The presentation submission should be a max 3 minute screencast
-                  | video displaying the presentation deck screen with an audio voiceover.
-            .judgement-section
-              p Video Screencast submissions will be judged on four factors:
-              ol
-                li Legibility of the audio, and clarity of the video.
-                li Completeness of the deck, as per guidelines above.
-                li Creativity of the deck, the voiceover and the video.
-                li Competitor Comparisons presented in the voiceover.
-            .task-notes
-              p
-                ' To learn more about Screencasts go here:
-                | #{link_to 'https://en.wikipedia.org/wiki/Screencast', 'https://en.wikipedia.org/wiki/Screencast', target:'_blank'}
-              p
-                | To submit, upload a completed video to YouTube / Vimeo / equivalent and paste the link in the Round 2 form sent to your email ID used for application.
-
-              p
-                | For any help, write to #{mail_to 'help@sv.co'}.
-
-      .col-md-7.col-md-pull-5
+                | Selected candidates from Gujarat will be announced alongside Batch 3 interviews.
+      .col-md-5.col-md-pull-7
         .alert.alert-info
           h4
-            ' This is the Application page for Batch 2. Students from Gujarat can still apply for Batch 3.
+            ' This is the Application page for Batch 2.
           a.btn.btn-primary href="#{apply_path(3)}"
-            ' Visit Batch 3 Application Page
+            ' Visit Batch 3 Application Page (Closed)
         .graduate-details
           h2.header-light
             ' SV.CO is a six month &#8220;Build a Startup&#8221; program for college students.
@@ -162,7 +155,7 @@
               li
                 span.date-colum
                   spanspan.important-month February
-                  span.important-date 06
+                  span.important-date 07
                   span.important-year 2016
                 .date-event
                   | Team Interview

@@ -15,6 +15,7 @@
               .col-lg-7.col-md-12.profile-name
                 h2
                   = @user.fullname
+                  ' &nbsp;
                   - if @user.startup.present?
                     span
                       - if @user.roles.present?
@@ -60,7 +61,7 @@
                 - if @user.resume_url.present?
                   a.btn.btn-flat.btn-resume-link href=@user.resume_url type="button"
                     = image_tag 'users/profile/resume-icon.png'
-                    span.resume-title #{@user.fullname}'s Resume
+                    span.resume-title View Resume
         - if @user.startup&.logo.present?
           .col-md-3.startup-logo-profile
             a.startup-logo-box href=startup_url(@user.startup)
@@ -139,9 +140,9 @@
                     = @user.public_slack_messages.where(created_at: @user.activity_date_range).count
                     span messages
                   p
-                    = @user.batch_start_date.strftime '%b %d, %Y'
+                    = @user.activity_timeline_start_date.strftime '%b %d, %Y'
                     ' &nbsp;&mdash;
-                    = (@user.batch_end_date.past? ? @user.batch_end_date : Time.now).strftime '%b %d, %Y'
+                    = @user.activity_timeline_end_date.strftime '%b %d, %Y'
             .col-md-12.col-sm-6.col-xs-12.karma-points
               .all-activity-head.green-head
                 h3.font-weight-400 Karma Points
@@ -153,6 +154,6 @@
                     = @user.karma_points.where(created_at: @user.activity_date_range).sum(:points)
                     span points
                   p
-                    = @user.batch_start_date.strftime '%b %d, %Y'
+                    = @user.activity_timeline_start_date.strftime '%b %d, %Y'
                     ' &nbsp;&mdash;
-                    = (@user.batch_end_date.past? ? @user.batch_end_date : Time.now).strftime '%b %d, %Y'
+                    = @user.activity_timeline_end_date.strftime '%b %d, %Y'

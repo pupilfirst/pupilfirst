@@ -71,7 +71,7 @@ describe User do
       reference_time = Time.parse 'Tue, 26 Jan 2016 02:00:00 IST +05:30'
 
       # Set up the environment.
-      batch = create :batch, start_date: (reference_time - 3.months), end_date: (reference_time + 3.months)
+      batch = create :batch, start_date: (reference_time - 3.months), end_date: (reference_time + 1.month)
       startup = create :startup, batch: batch
       user = startup.founders.first
 
@@ -85,7 +85,7 @@ describe User do
 
       # We won't expect the following events to be counted, since it's outside batch timing.
       create :timeline_event, startup: startup, created_at: (reference_time - 6.months)
-      create :public_slack_message, user: user, created_at: (reference_time + 6.months)
+      create :public_slack_message, user: user, created_at: (reference_time + 2.months)
 
       # The expected response.
       expected_activity_timeline = {
@@ -110,7 +110,8 @@ describe User do
             { type: :public_slack_message, count: 10 },
             { type: :karma_point, karma_point: kp_now }
           ]
-        }
+        },
+        'February' => { counts: { 1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0 } }
       }
 
       expect(user.activity_timeline).to eq(expected_activity_timeline)

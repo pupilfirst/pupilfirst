@@ -112,6 +112,73 @@
         }
       }
     }
+    .progress-container {
+      position: relative;
+      margin: 10px 5px;
+
+      .profile-progress {
+        height: 6px;
+        margin: 0 0 2px;
+
+        .progress-bar {
+          color: #000;
+          line-height: 10px;
+        }
+        @media (max-width: $screen-md-max) {
+          margin: auto;
+          max-width: 145px;
+        }
+      }
+      .progress-value {
+        text-align: center;
+        display: block;
+        font-size: 12px;
+        color: #a4a4a4;
+      }
+    }
+    .profile-complete-button {
+      font-size: 13px;
+      border: 1px solid #a4a4a4;
+      color: #a4a4a4;
+      padding: 3px 5px;
+      border-radius: 5px;
+      margin: 0 5px;
+      background-color: #fff;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+
+      &:hover {
+        color: #0384b6;
+        border-color: #0187ba;
+      }
+      @media (max-width: $screen-md-max) {
+        margin: auto;
+        max-width: 145px;
+      }
+    }
+    .profile-edit-button {
+      font-size: 13px;
+      border: 1px solid #0091c9;
+      color: #0091c9;
+      padding: 3px 5px;
+      border-radius: 5px;
+      margin-left: 10px;
+      background-color: #fff;
+      text-decoration: none;
+
+      i {
+        padding-right: 3px;
+      }
+      &:hover {
+        color: #0384b6;
+        border-color: #0187ba;
+      }
+      @media (max-width: $screen-sm-max) {
+        position: inherit;
+        margin-top: 10px;
+      }
+    }
     .profile-detail {
       padding-top: 20px;
       padding-bottom: 0;

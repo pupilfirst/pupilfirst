@@ -1,28 +1,36 @@
 - content_for :head
   title SV.CO Mobile Number
 
-h2.page-header
-  - if current_user.phone?
-    ' Change phone number
-  - else
-    ' Set your phone number
+.onboarding-body
+  .onboarding-container.clearfix
+    .user-registration-box
+      legend.margin-top-20.form-section-head.font-weight-400
+        - if current_user.phone?
+          ' Change phone number
+        - else
+          ' Set your phone number
 
-- if @failed_to_add_phone_number
-  .alert.alert-danger role='alert' The phone number you supplied does not appear to be correct. Please re-enter a valid 10-digit mobile number.
-- else
-  .alert.alert-info role='alert'
-    ' Please supply your
-    - if current_user.phone?
-      ' <em>new</em>
-    ' phone number to continue. You will be asked to verify it in the next step.
+      - if @failed_to_add_phone_number
+        .alert.alert-danger role='alert' The phone number you supplied does not appear to be correct. Please re-enter a valid 10-digit mobile number.
+      - else
+        .alert.alert-info role='alert'
+          ' Please supply your
+          - if current_user.phone?
+            ' <em>new</em>
+          ' phone number to continue. You will be asked to verify it in the next step.
 
-= form_tag code_user_url, class: 'form-horizontal', role: 'form' do
-  .form-group
-    label.col-sm-2.control-label for='phone_number' Your phone number
-    .col-sm-10
-      = text_field_tag 'phone_number', '', class: 'form-control', required: true, placeholder: '10-digit mobile phone number'
-  .form-group
-    .col-sm-offset-2.col-sm-10
-      = submit_tag 'Proceed to phone number verification', class: 'btn btn-primary btn-flat'
+      = simple_form_for current_user, url: set_unconfirmed_phone_user_url, html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
+        = f.input :unconfirmed_phone, label: 'Your phone number', required: true, placeholder: '10-digit mobile phone number'
+        .col-sm-offset-3
+          = f.submit 'Proceed to phone number verification', class: 'btn btn-primary btn-flat resend-code-btn font-weight-400'
+      /
+      /= form_tag set_unconfirmed_phone_user_url, class: 'form-horizontal', role: 'form' do
+      /  .form-group
+      /    label.col-sm-3.control-label for='phone_number' Your phone number
+      /    .col-sm-9
+      /      = text_field_tag 'phone_number', '', class: 'form-control', required: true, placeholder: '10-digit mobile phone number'
+      /  .form-group
+      /    .col-sm-offset-3.col-sm-9
+      /      = submit_tag 'Proceed to phone number verification', class: 'btn btn-primary btn-flat resend-code-btn font-weight-400'
 
-.margin-bottom-40
+      .margin-bottom-40

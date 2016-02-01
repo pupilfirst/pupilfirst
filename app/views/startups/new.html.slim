@@ -1,24 +1,41 @@
 - content_for :head
   title SV.CO Application
 
-h1.page-header Important!
+.panel.onboarding-head-panel
+  .onboarding-head-container.clearfix
+    .col-sm-4.text-center.onboarding-tab
+      .fa.fa-circle-o
+      | &nbsp; User Profile
+    .col-sm-4.text-center.onboarding-tab
+      .fa.fa-circle-o
+      | &nbsp; Phone number verification
+    .col-sm-4.text-center.onboarding-tab.current-tab
+      .fa.fa-circle-o-notch.fa-spin
+      | &nbsp; Startup Creation
 
-.row
-  .col-md-4
-    .incubation-caution
-      p If your startup has more than one founder, please make sure that only one of you (the team leader) applies for incubation.
-  .col-md-8
-    p You can add co-founders after you've submitted your incubation request.
-    p
-      ' For more information regarding applying for incubation, check out
-      ' #{link_to 'instructions for application', 'http://playbook.sv.co/1.1-application.html', target: '_blank'}
-      | in the Startup Playbook.
+.onboarding-body
+  .onboarding-container.clearfix
+    .user-registration-box
+      .row.margin-top-20
+        #progressbar.col-md-12
+          = simple_form_for @startup, url: user_startup_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
+            = f.error_notification
 
-    .row
-      .col-sm-6.incubation-consent-checkbox
-        input type='checkbox' id='team-leader-consent'
-        label for='team-leader-consent' &nbsp; Yes, I'm the Team Leader.
-      .col-sm-6
-        = link_to 'Start incubation!', { controller: 'startups', action: 'team_leader_consent' }, method: :post, class: 'btn btn-success btn-lg btn-flat disabled', id: 'team-leader-consent-button'
+            = f.input :name, placeholder: 'Team Name.', required: true, label: 'Team Name'
+            = f.input :team_size, required: true, collection: 3..5, include_blank: false
 
-.margin-bottom-40
+            #cofounder-textbox
+              = f.input :cofounder_1_email, placeholder: 'Co-founder email', required: true, label: 'Co-founder 1'
+              = f.input :cofounder_2_email, placeholder: 'Co-founder email', required: true, label: 'Co-founder 2'
+              = f.input :cofounder_3_email, placeholder: 'Co-founder email', required: true, label: 'Co-founder 3'
+              = f.input :cofounder_4_email, placeholder: 'Co-founder email', required: true, label: 'Co-founder 4'
+
+            .form-group
+              .col-sm-offset-3.col-sm-9
+                /= f.button :submit, 'Request incubation', class: 'btn btn-primary btn-flat'
+                = f.button :submit, 'Submit Application', class: 'btn btn-primary btn-flat submit-btn'
+
+          .row
+            .col-sm-9.col-sm-offset-3
+              = button_to 'Cancel Application', cancel_incubation_index_url, class: 'btn btn-danger btn-flat cancel-application-btn',
+                data: { confirm: 'Are you sure you want to cancel the application?' }

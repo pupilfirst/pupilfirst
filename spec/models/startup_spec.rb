@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Startup do
+describe Startup, broken: true do
   subject { create :startup }
 
   context 'when startup is destroyed' do

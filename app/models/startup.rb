@@ -147,6 +147,57 @@ class Startup < ActiveRecord::Base
     end
   end
 
+  # define founder emails as attributes for easier onboarding implementation
+  attr_accessor :cofounder_1_email, :cofounder_2_email, :cofounder_3_email, :cofounder_4_email
+
+  # returns an array of cofounder emails
+  def cofounder_emails
+    [cofounder_1_email, cofounder_2_email, cofounder_3_email, cofounder_4_email]
+  end
+
+  # flag to identify if the startup is being registered
+  attr_accessor :being_registered
+
+  # email of current user - to validate cofounder emails
+  attr_accessor :team_lead_email
+
+  # validate each cofounder email if startup is being registered
+  validate :validate_cofounder_emails, if: :being_registered
+
+  def validate_cofounder_emails
+    (1..4).each do |n|
+      email = "cofounder_#{n}_email"
+
+      # if email is nil
+      next unless send(email).present?
+
+      # assign appropriate error message if validation fails
+      errors.add(email.to_sym, invalid_cofounder(send(email))) if invalid_cofounder(send(email))
+    end
+  end
+
+  # validates email provided is 1)unique 2)not of the team lead, 3) is a valid sv.co user and 4) does not already have a startup
+  def invalid_cofounder(email)
+    user = User.find_by(email: email)
+
+    return 'must be unique' if cofounder_emails.count(email) > 1
+
+    return 'already the team lead' if email == team_lead_email
+
+    return 'not a registered user. Please ensure that the co-founder has already accepted '\
+    'his/her invitation to SV.CO and completed his/her registration.' unless user
+
+    return 'already has a startup. Please ensure that your co-founder has not registered your startup already.' unless user.startup.blank?
+
+    # return false if the email is 'not invalid'
+    false
+  end
+
+  # validate presence of all fields during registration
+  validates_presence_of :name, :team_size, :cofounder_1_email, :cofounder_2_email, if: :being_registered
+  validates_presence_of :cofounder_3_email, if: proc { |startup| startup.being_registered && startup.team_size > 3 }
+  validates_presence_of :cofounder_4_email, if: proc { |startup| startup.being_registered && startup.team_size > 4 }
+
   has_and_belongs_to_many :startup_categories do
     def <<(_category)
       fail 'Use startup_categories= to enforce startup category limit'
@@ -177,11 +228,6 @@ class Startup < ActiveRecord::Base
 
   # Registration type is required when registering.
   validates_presence_of :registration_type, if: ->(startup) { startup.validate_registration_type }
-
-  validate :valid_founders?
-
-  # TODO: Ensure this is take care of when rewriting incubation without wizard
-  # validates_associated :founders, unless: ->(startup) { startup.incubation_step_1? }
 
   # Registration type should be one of Pvt. Ltd., Partnership, or LLC.
   validates :registration_type,
@@ -220,21 +266,12 @@ class Startup < ActiveRecord::Base
 
   # New set of validations for incubation wizard
   store :metadata, accessors: [:updated_from]
-  validates_presence_of :product_name, :presentation_link, :product_description, :incubation_location, if: :incubation_step_2?
 
   validates_numericality_of :team_size, greater_than: 0, allow_blank: true
   validates_numericality_of :women_employees, greater_than_or_equal_to: 0, allow_blank: true
   validates_numericality_of :revenue_generated, greater_than_or_equal_to: 0, allow_blank: true
 
   validates_presence_of :product_name
-
-  def incubation_step_1?
-    updated_from == 'user_profile'
-  end
-
-  def incubation_step_2?
-    updated_from == 'startup_profile'
-  end
 
   before_validation do
     # Set registration_type to nil if its set as blank from backend.
@@ -306,12 +343,12 @@ class Startup < ActiveRecord::Base
     approval_status == APPROVAL_STATUS_DROPPED_OUT
   end
 
-  def valid_founders?
-    errors.add(:founders, 'should have at least one founder') if founders.nil? || founders.size < 1
-  end
-
   def batched?
     batch.present?
+  end
+
+  def approve!
+    update!(approval_status: Startup::APPROVAL_STATUS_APPROVED)
   end
 
   mount_uploader :logo, LogoUploader
@@ -455,27 +492,8 @@ class Startup < ActiveRecord::Base
     end
   end
 
-  def self.new_incubation!(user)
-    startup = Startup.new
-    startup.founders << user
-    startup.save!
-
-    user.update!(startup_admin: true)
-    startup
-  end
-
   def cofounders(user)
     founders - [user]
-  end
-
-  def finish_incubation_flow!
-    # Set approval status to pending to end incubation flow.
-    self.approval_status = Startup::APPROVAL_STATUS_PENDING
-
-    regenerate_slug!
-
-    # Send e-mail to founder notifying him / her of pending status.
-    UserMailer.incubation_request_submitted(admin).deliver_later
   end
 
   def generate_randomized_slug
@@ -499,13 +517,6 @@ class Startup < ActiveRecord::Base
       self.slug = "#{product_name.parameterize}-#{rand 1000}"
       retry
     end
-  end
-
-  def incubation_parameters_available?
-    product_name.present? &&
-      product_description.present? &&
-      presentation_link.present? &&
-      incubation_location.present?
   end
 
   ####
@@ -580,23 +591,20 @@ class Startup < ActiveRecord::Base
   end
 
   after_save do
-    if approval_status_changed? && approved? && timeline_events.blank?
+    if being_registered && approval_status_changed? && approved? && timeline_events.blank?
       prepopulate_timeline!
     end
   end
 
   def prepopulate_timeline!
-    create_default_event %w(team_formed new_product_deck one_liner)
+    create_default_event %w(registered_on_sv)
   end
 
   def create_default_event(types)
     types.each do |type|
       timeline_events.create(
-        user: admin,
-        timeline_event_type: TimelineEventType.find_by(key: type),
-        auto_populated: true,
-        verified_at: Time.now,
-        event_on: Time.now
+        user: admin, timeline_event_type: TimelineEventType.find_by(key: type), auto_populated: true,
+        verified_at: Time.now, event_on: Time.now
       )
     end
   end
@@ -685,6 +693,20 @@ class Startup < ActiveRecord::Base
     else
       7.days.ago.end_of_week
     end.in_time_zone('Asia/Calcutta') + 18.hours
+  end
+
+  # Add a user as team lead
+  def add_team_lead!(user)
+    founders << user
+    user.update!(startup_admin: true)
+  end
+
+  # Add cofounders from given emails
+  def add_cofounders!
+    cofounder_emails.each do |email|
+      next if email.blank?
+      founders << User.find_by(email: email)
+    end
   end
 
   class << self

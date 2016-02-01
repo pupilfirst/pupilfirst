@@ -7,6 +7,7 @@ FactoryGirl.define do
     f.website { Faker::Internet.domain_name }
     f.email { Faker::Internet.email }
     f.incubation_location Startup::INCUBATION_LOCATION_KOCHI
+    f.team_size 3
 
     after(:build) do |startup|
       startup.founders << create(:founder, startup: startup, startup_admin: true)

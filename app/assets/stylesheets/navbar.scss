@@ -2,21 +2,42 @@
 @import 'variables';
 
 #header {
-  .nav-spacer {
-    padding-top: 80px;
+  .sitewide-notice {
+    background-color: $theme-light-green;
+    text-align: center;
+    line-height: 25px;
+    color: white;
 
-    @media (max-width: $screen-xs-max) { padding-top: 70px; }
+    p { margin-top: 10px; }
+    a {
+      padding: 2px 5px;
+      color: white;
+      border: 1px solid #fff;
+      border-radius: 5px;
+
+      &:hover, &:focus {
+        background-color: white;
+        color: $theme-light-green;
+        text-decoration: none;
+      }
+      @media (max-width: $screen-xs-max) {
+        display: inline-block;
+      }
+    }
+  }
+
+  .nav-spacer {
+    padding-top: 110px;
+
+    @media (max-width: $screen-xs-max) { padding-top: 120px; }
   }
 
   .navbar,
   .navbar-default {
     background: none;
     border: 0;
-    height: 80px;
-  }
-
-  .navbar-default {
-    @media (max-width: $screen-xs-max) { height: 70px; }
+    height: auto;
+    padding-bottom: 10px;
   }
 
   // Move the logo up a little bit to center it in shrunken state (xs).

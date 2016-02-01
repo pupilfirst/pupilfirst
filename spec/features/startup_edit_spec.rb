@@ -3,9 +3,6 @@ require 'rails_helper'
 feature 'Startup Edit' do
   let(:user) { create :user_with_password, confirmed_at: Time.now }
   let(:co_founder) { create :user_with_password, confirmed_at: Time.now }
-  let!(:tet_one_liner) { create :tet_one_liner }
-  let!(:tet_new_product_deck) { create :tet_new_product_deck }
-  let!(:tet_team_formed) { create :tet_team_formed }
   let!(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
 
   let(:new_product_name) { Faker::Lorem.words(rand(3) + 1).join ' ' }

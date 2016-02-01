@@ -1,9 +1,0 @@
-@import 'bootstrap/variables';
-
-.incubation-caution { font-size: 150%; }
-
-.incubation-consent-checkbox {
-  font-size: 125%;
-  margin: 10px 0;
-  @media (min-width: $screen-sm-min) { text-align: right; }
-}

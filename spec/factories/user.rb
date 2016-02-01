@@ -4,6 +4,9 @@ FactoryGirl.define do
     first_name { %w(Douglas Oren Arlie Libby Ilene Lorenzo Sebastian Micheal Kari Tina).sample }
     last_name { %w(Simonis Marquardt Torphy McCullough Funk Sporer Heller Yundt McGlynn Lang).sample }
 
+    born_on { 20.years.ago }
+    gender User::GENDER_MALE
+
     email { Faker::Internet.email }
 
     factory :user_with_out_password do

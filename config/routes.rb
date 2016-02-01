@@ -15,6 +15,9 @@ Svapp::Application.routes.draw do
   resource :user, only: [:edit, :update] do
     member do
       get 'phone'
+      patch 'set_unconfirmed_phone'
+      get 'phone_verification'
+      get 'consent'
       post 'code'
       patch 'resend'
       post 'verify'
@@ -24,7 +27,7 @@ Svapp::Application.routes.draw do
       patch 'update_password'
     end
 
-    resource :startup, only: [:new, :edit, :update, :destroy] do
+    resource :startup, only: [:new, :create, :edit, :update, :destroy] do
       post :add_founder
       patch :remove_founder
       patch :change_admin

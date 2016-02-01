@@ -38,7 +38,7 @@ class User < ActiveRecord::Base
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
 
   # TODO: Remove born_on, and salutation columns if unneccessary.
-  # validates_presence_of :born_on
+  validates_presence_of :born_on
   # validates_presence_of :salutation, message: ''
 
   validates :first_name,
@@ -55,10 +55,9 @@ class User < ActiveRecord::Base
     [GENDER_FEMALE, GENDER_MALE, GENDER_OTHER]
   end
 
-  validates :gender, inclusion: { in: valid_gender_values }, allow_nil: true
+  validates :gender, inclusion: { in: valid_gender_values }
 
   # Validations during incubation
-  validates_presence_of :gender, :born_on, if: ->(user) { user.startup.try(:incubation_step_1?) }
   validates_presence_of :roll_number, if: :university_id
 
   before_validation do
@@ -223,24 +222,23 @@ class User < ActiveRecord::Base
     save!
   end
 
-  def generate_phone_number_verification_code(incoming_phone_number)
-    code = SecureRandom.random_number(1_000_000).to_s.ljust(6, '0')
+  # validate phone number using Phony.plausible?
+  validate :unconfirmed_phone_must_be_plausible, if: :unconfirmed_phone
 
-    # Normalize incoming phone number.
-    unverified_phone_number = incoming_phone_number.length <= 10 ? "91#{incoming_phone_number}" : incoming_phone_number
-
-    phone_number = if Phony.plausible?(unverified_phone_number, cc: '91')
-      PhonyRails.normalize_number incoming_phone_number, country_code: 'IN', add_plus: false
-    else
-      fail Exceptions::InvalidPhoneNumber, 'Supplied phone number could not be parsed. Please check and try again.'
+  def unconfirmed_phone_must_be_plausible
+    unverified_phone_number = unconfirmed_phone.length <= 10 ? "91#{unconfirmed_phone}" : unconfirmed_phone
+    unless Phony.plausible?(unverified_phone_number, cc: '91')
+      errors.add(:unconfirmed_phone, 'Supplied phone number could not be parsed. Please check and try again.')
     end
+  end
 
-    # Store the phone number and verification code.
-    self.unconfirmed_phone = phone_number
-    self.phone_verification_code = code
-    save
+  def generate_phone_number_verification_code
+    self.phone_verification_code = SecureRandom.random_number(1_000_000).to_s.ljust(6, '0')
+    self.unconfirmed_phone = PhonyRails.normalize_number unconfirmed_phone, country_code: 'IN', add_plus: false
+    self.verification_code_sent_at = Time.now
+    save!
 
-    [code, phone_number]
+    [phone_verification_code, unconfirmed_phone]
   end
 
   def verify_phone_number(verification_code)
@@ -276,14 +274,6 @@ class User < ActiveRecord::Base
 
       UserMailer.cofounder_addition(email, self).deliver_later
     end
-  end
-
-  def ready_for_incubation_wizard?
-    phone? && startup.present?
-  end
-
-  def incubation_parameters_available?
-    gender.present? && born_on.present?
   end
 
   def self.valid_roles

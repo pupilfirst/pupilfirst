@@ -1,18 +1,39 @@
 - content_for :head
   title SV.CO Sign Up
 
-= simple_form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean, file: :horizontal_file_input } do |f|
-  legend.margin-top-20 Set Name and Password
+.panel.onboarding-head-panel
+  .onboarding-head-container.clearfix
+    .col-sm-4.text-center.onboarding-tab.current-tab
+      .fa.fa-circle-o-notch.fa-spin
+      | &nbsp; User Profile
+    .col-sm-4.text-center.onboarding-tab
+      .fa.fa-circle-o
+      | &nbsp; Phone number verification
+    .col-sm-4.text-center.onboarding-tab
+      .fa.fa-circle-o
+      | &nbsp; Startup Creation
 
-  = f.hidden_field :invitation_token
-  = f.error_notification
+.onboarding-body
+  .onboarding-container.clearfix
+    .user-registration-box
+      = simple_form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean, file: :horizontal_file_input } do |f|
+        legend.margin-top-20.form-section-head.font-weight-400 Set Name and Password
 
-  = f.input :first_name, :required => true
-  = f.input :last_name, :required => true
-  = f.input :password, label: 'New password', autocomplete: 'off', required: true
-  = f.input :password_confirmation, label: 'Confirm new password', required: true
+        = f.hidden_field :invitation_token
+        = f.error_notification
+        = f.input :first_name, :required => true
+        = f.input :last_name, :required => true
+        = f.input :password, label: 'New password', autocomplete: 'off', required: true
+        = f.input :password_confirmation, label: 'Confirm new password', required: true
 
-  .form-group
-    .col-sm-offset-3.col-sm-10
-      = f.button :submit, 'Sign Me Up!', class: 'btn btn-primary btn-flat'
+        legend.margin-top-20.form-section-head.font-weight-400 User Details
 
+        = f.input :gender, collection: valid_gender_values, label_method: :first, value_method: :last, as: :radio_buttons, required: true
+        = f.input :born_on, as: :date_picker, required: true, label: 'Date of birth', placeholder: 'DD/MM/YYYY'
+        = f.association :university, include_blank: 'Not a student', collection: University.all.group_by(&:location), as: :grouped_select, group_method: :last
+        = f.input :roll_number, label: 'University Roll Number',required: true
+        = f.input :unconfirmed_phone, label: 'Mobile Number', :required => true, placeholder: '10-digit mobile phone number'
+
+        .form-group
+          .col-sm-offset-3.col-sm-10
+            = f.button :submit, 'Sign Me Up!', class: 'btn btn-primary btn-flat sign-up-btn font-weight-400'

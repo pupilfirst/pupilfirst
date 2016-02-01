@@ -1,5 +1,15 @@
 module Users
   class InvitationsController < Devise::InvitationsController
+    def edit
+      @skip_container = true
+      super
+    end
+
+    def after_accept_path_for(_resource)
+      session[:registration_ongoing] = true
+      phone_verification_user_path
+    end
+
     private
 
     # this is called when creating invitation

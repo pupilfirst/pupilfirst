@@ -86,6 +86,57 @@ feature 'Incubation' do
       user.reload
       expect(user.unconfirmed_phone).to eq('919876543210')
       expect(user.phone_verification_code).not_to eq(nil)
+
+      fill_in 'Verification code', with: '000'
+      click_on 'Verify'
+      expect(page).to have_text('Verification Code Doesn’t Match!')
+    end
+
+    scenario 'User tries an immediate resend of the code' do
+      # ensure we are on phone verification page
+      expect(page).to have_text('Verification Code Sent!')
+
+      # ensure user has an unverified_phone and verification_code
+      user.reload
+      expect(user.unconfirmed_phone).to eq('919876543210')
+      expect(user.phone_verification_code).not_to eq(nil)
+
+      click_on 'Resend verification code'
+      expect(page).to have_text('Please Wait!')
+    end
+
+    scenario 'User requests resend after more than 5 mins' do
+      # ensure we are on phone verification page
+      expect(page).to have_text('Verification Code Sent!')
+
+      # ensure user has an unverified_phone and verification_code
+      user.reload
+      expect(user.unconfirmed_phone).to eq('919876543210')
+      expect(user.phone_verification_code).not_to eq(nil)
+
+      # take note of old code and modify code_sent_at
+      old_code = user.phone_verification_code
+      user.update(verification_code_sent_at: 10.minute.ago)
+
+      click_on 'Resend verification code'
+      expect(page).to have_text('New Verification Code Sent!')
+      # verify a new code was indeed generated
+      user.reload
+      expect(user.phone_verification_code).to_not eq(old_code)
+    end
+
+    scenario 'User enters the right code' do
+      # ensure we are on phone verification page
+      expect(page).to have_text('Verification Code Sent!')
+
+      # ensure user has an unverified_phone and verification_code
+      user.reload
+      expect(user.unconfirmed_phone).to eq('919876543210')
+      expect(user.phone_verification_code).not_to eq(nil)
+
+      fill_in 'Verification code', with: user.phone_verification_code
+      click_on 'Verify'
+      expect(page).to have_text('Startup Creation!')
     end
   end
 

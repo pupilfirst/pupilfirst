@@ -110,9 +110,6 @@ class User < ActiveRecord::Base
   # Validate user's PIN (address).
   validates_numericality_of :pin, allow_blank: true, greater_than_or_equal_to: 100_000, less_than_or_equal_to: 999_999 # PIN Code is always 6 digits
 
-  # Store mobile number in a standardized form.
-  phony_normalize :phone, default_country_code: 'IN', add_plus: false
-
   mount_uploader :avatar, AvatarUploader
   process_in_background :avatar
 
@@ -222,15 +219,11 @@ class User < ActiveRecord::Base
     save!
   end
 
-  # validate phone number using Phony.plausible?
-  validate :unconfirmed_phone_must_be_plausible, if: :unconfirmed_phone
+  # Store unconfirmed phone number in a standardized form. Confirmed phone number will be copied from this field.
+  phony_normalize :unconfirmed_phone, default_country_code: 'IN', add_plus: false
 
-  def unconfirmed_phone_must_be_plausible
-    unverified_phone_number = unconfirmed_phone.length <= 10 ? "91#{unconfirmed_phone}" : unconfirmed_phone
-    unless Phony.plausible?(unverified_phone_number, cc: '91')
-      errors.add(:unconfirmed_phone, 'Supplied phone number could not be parsed. Please check and try again.')
-    end
-  end
+  # Validate the unconfirmed phone number after it has been normalized.
+  validates_plausible_phone :unconfirmed_phone, normalized_country_code: 'IN', allow_nil: true
 
   def generate_phone_number_verification_code
     self.phone_verification_code = SecureRandom.random_number(1_000_000).to_s.ljust(6, '0')

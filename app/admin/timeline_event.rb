@@ -163,7 +163,8 @@ ActiveAdmin.register TimelineEvent do
       startup_url = Rails.application.routes.url_helpers.startup_url(startup)
       timeline_event_url = startup_url + "#event-#{timeline_event.id}"
       slack_message = "<#{startup_url}|#{startup.product_name}> has a new verified timeline entry:"\
-      " <#{timeline_event_url}|#{timeline_event.timeline_event_type.title}>"
+      " <#{timeline_event_url}|#{timeline_event.timeline_event_type.title}>\n"
+      slack_message += "*Description:* #{timeline_event.description}"
 
       # post to slack
       PublicSlackTalk.post_message message: slack_message, channel: 'general'

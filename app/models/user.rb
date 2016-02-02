@@ -410,7 +410,7 @@ class User < ActiveRecord::Base
   end
 
   def needs_password_change_email?
-    encrypted_password_changed? && persisted?
+    encrypted_password_was.present? && encrypted_password_changed? && persisted?
   end
 
   def send_password_change_email

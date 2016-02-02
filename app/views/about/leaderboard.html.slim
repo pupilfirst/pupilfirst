@@ -9,7 +9,8 @@ ol.breadcrumb.margin-top-20
 
 h1.page-header.header-light
   | Leaderboard
-  small &nbsp;#{Startup.leaderboard_start_date.strftime('%B %-d')} to #{Startup.leaderboard_end_date.strftime('%B %-d')}
+  - if Startup.available_batches.live.present?
+    small &nbsp;#{Startup.leaderboard_start_date.strftime('%B %-d')} to #{Startup.leaderboard_end_date.strftime('%B %-d')}
 
 .row
   .col-sm-8
@@ -22,35 +23,38 @@ h1.page-header.header-light
       p Please read the <a href="http://playbook.sv.co/3.1-leaderboards.html">Leaderboards</a> page on the Playbook.
 
       div
-        ul.nav.nav-tabs role="tablist"
-          - Startup.available_batches.each_with_index do |batch, index|
-            li class="#{index==0 ? "active" : ""}" role="presentation"
-              a href="##{batch.name}" aria-controls="#{batch.name}" role="tab" data-toggle="tab" #{batch.name} Batch
+        - if Startup.available_batches.live.present?
+          ul.nav.nav-tabs role="tablist"
+            - Startup.available_batches.live.each_with_index do |batch, index|
+              li class="#{index==0 ? "active" : ""}" role="presentation"
+                a href="##{batch.name}" aria-controls="#{batch.name}" role="tab" data-toggle="tab" #{batch.name} Batch
 
-        .tab-content
-          - Startup.available_batches.each_with_index do |batch, index|
-            .tab-pane.fade class="#{index==0 ? "in active" : ""}" id="#{batch.name}" role="tabpanel"
-              table.table.table-striped
-                thead
-                  tr
-                    th Rank
-                    th Product
-                    th Team Lead
-                tbody
-                  - Startup.leaderboard_of_batch(batch).each_with_index do |rank_array, index|
-                    - startup_id, rank = rank_array
-                    - startup = Startup.find(startup_id)
+          .tab-content
+            - Startup.available_batches.live.each_with_index do |batch, index|
+              .tab-pane.fade class="#{index==0 ? "in active" : ""}" id="#{batch.name}" role="tabpanel"
+                table.table.table-striped
+                  thead
                     tr
-                      td = rank
-                      td = link_to "#{startup.product_name} #{startup.name.present? ? "(#{startup.name})" : ''}", startup_path(startup)
-                      td = startup.admin.try(:fullname)
+                      th Rank
+                      th Product
+                      th Team Lead
+                  tbody
+                    - Startup.leaderboard_of_batch(batch).each_with_index do |rank_array, index|
+                      - startup_id, rank = rank_array
+                      - startup = Startup.find(startup_id)
+                      tr
+                        td = rank
+                        td = link_to "#{startup.product_name} #{startup.name.present? ? "(#{startup.name})" : ''}", startup_path(startup)
+                        td = startup.admin.try(:fullname)
 
-                  - startups_without_karma, rank = Startup.without_karma_and_rank_for_batch(batch)
-                  - startups_without_karma.each do |startup|
-                    tr
-                      td = rank
-                      td = link_to "#{startup.product_name} #{startup.name.present? ? "(#{startup.name})" : ''}", startup_path(startup)
-                      td = startup.admin.try(:fullname)
+                    - startups_without_karma, rank = Startup.without_karma_and_rank_for_batch(batch)
+                    - startups_without_karma.each do |startup|
+                      tr
+                        td = rank
+                        td = link_to "#{startup.product_name} #{startup.name.present? ? "(#{startup.name})" : ''}", startup_path(startup)
+                        td = startup.admin.try(:fullname)
+        - else
+         p.alert.alert-warning It appears there are no live batches in SV.CO now! Please check back later for leaderboard of our new batches.
 
   .col-md-3.col-md-offset-1.col-sm-4
     = render partial: 'about_links'

@@ -31,7 +31,7 @@ feature 'Incubation' do
   context 'User accepts invitation' do
     before :each do
       # accept invitation and get to registration form
-      visit accept_user_invitation_url(invitation_token: user.raw_invitation_token)
+      visit accept_user_invitation_path(invitation_token: user.raw_invitation_token)
     end
     scenario 'User submits empty registration form' do
       # first make sure we are on the registration page
@@ -64,7 +64,7 @@ feature 'Incubation' do
   context 'User verifies phone number' do
     before :each do
       # accept invitation and submit filled registration form
-      visit accept_user_invitation_url(invitation_token: user.raw_invitation_token)
+      visit accept_user_invitation_path(invitation_token: user.raw_invitation_token)
 
       fill_in 'First name', with: 'Nemo'
       fill_in 'Last name', with: user.last_name
@@ -143,8 +143,7 @@ feature 'Incubation' do
   context 'User reaches consent page', js: true do
     before :each do
       # accept invitation,submit filled registration form and verify phone number
-      visit accept_user_invitation_url(invitation_token: user.raw_invitation_token)
-      find(:css, 'sign-up-btn')
+      visit accept_user_invitation_path(invitation_token: user.raw_invitation_token)
 
       fill_in 'First name', with: 'Nemo'
       fill_in 'Last name', with: user.last_name
@@ -159,9 +158,11 @@ feature 'Incubation' do
       user.reload
       fill_in 'Verification code', with: user.phone_verification_code
       click_on 'Verify'
+      user.reload
     end
 
     scenario 'Non-team-lead follows the \'complete founder profile\' link' do
+      visit consent_user_path
       # Confirm we are on consent page
       expect(page).to have_text('Startup Creation!')
 
@@ -169,12 +170,13 @@ feature 'Incubation' do
       expect(page).to have_text("Editing #{user.fullname}\'s profile")
     end
 
-    scenario 'Team-lead gives consent and heads to startup registration' do
+    scenario 'Team-lead gives consent and heads to startup registration', focus: true do
+      # visit consent_user_path
       # Confirm we are on consent page
       expect(page).to have_text('Startup Creation!')
 
       # Create Startup button should be disabled
-      # expect(page).to
+      # expect(page.find('#team-leader-consent-button')['class']).to include?('.disabled')
 
       check 'team-leader-consent'
       click_on 'Create Startup!'

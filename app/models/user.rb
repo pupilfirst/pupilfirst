@@ -232,7 +232,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  def generate_phone_number_verification_code
+  def generate_phone_number_verification_code!
     self.phone_verification_code = SecureRandom.random_number(1_000_000).to_s.ljust(6, '0')
     self.unconfirmed_phone = PhonyRails.normalize_number unconfirmed_phone, country_code: 'IN', add_plus: false
     self.verification_code_sent_at = Time.now
@@ -241,13 +241,13 @@ class User < ActiveRecord::Base
     [phone_verification_code, unconfirmed_phone]
   end
 
-  def verify_phone_number(verification_code)
+  def verify_phone_number!(verification_code)
     if unconfirmed_phone? && (verification_code == phone_verification_code)
       # Store 'verified' phone number
       self.phone = unconfirmed_phone
       self.unconfirmed_phone = nil
       self.phone_verification_code = nil
-      save
+      save!
     else
       fail Exceptions::PhoneNumberVerificationFailed, 'Supplied verification code does not match stored values.'
     end

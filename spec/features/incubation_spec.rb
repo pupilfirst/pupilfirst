@@ -155,10 +155,10 @@ feature 'Incubation' do
       fill_in 'Mobile Number', with: '9876543210'
       click_on 'Sign Me Up!'
 
-      user.reload
+      expect(page.status_code).to eq(200)
       fill_in 'Verification code', with: user.phone_verification_code
       click_on 'Verify'
-      user.reload
+      expect(page.status_code).to eq(200)
     end
 
     scenario 'Non-team-lead follows the \'complete founder profile\' link' do

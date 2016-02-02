@@ -78,7 +78,7 @@ class UsersController < ApplicationController
     return if code_sent_at&. > 5.minute.ago
 
     # Generate a 6-digit verification code to send to the phone number.
-    code, phone_number = current_user.generate_phone_number_verification_code
+    code, phone_number = current_user.generate_phone_number_verification_code!
 
     return if Rails.env.development?
 
@@ -96,7 +96,7 @@ class UsersController < ApplicationController
       @retry_after_some_time = true
     else
       @retry_after_some_time = false
-      code, phone_number = current_user.generate_phone_number_verification_code
+      code, phone_number = current_user.generate_phone_number_verification_code!
 
       unless Rails.env.development?
         RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV.CO: #{code}", msisdn: phone_number)
@@ -113,7 +113,7 @@ class UsersController < ApplicationController
     @skip_container = true
 
     begin
-      current_user.verify_phone_number(params[:phone_verification_code])
+      current_user.verify_phone_number!(params[:phone_verification_code])
     rescue Exceptions::PhoneNumberVerificationFailed
       @failed_to_verify_phone_number = true
       @registration_ongoing = true if session[:registration_ongoing]

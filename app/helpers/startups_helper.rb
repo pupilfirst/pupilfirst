@@ -30,7 +30,7 @@ module StartupsHelper
     pending_targets = @startup.targets.pending
     split_pending_targets = pending_targets.founder + pending_targets.not_target_roles
 
-    completed_targets = @startup.targets.recently_completed
+    completed_targets = @startup.targets.recently_completed(3)
     split_completed_targets = completed_targets.founder + completed_targets.not_target_roles
 
     completed_by_viewer = []

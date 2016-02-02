@@ -6,9 +6,9 @@ feature 'Incubation' do
   let(:user) { create :user_with_out_password }
   let!(:university) { create :university }
 
-  # before :all do
-  #   WebMock.allow_net_connect!
-  # end
+  before :all do
+    WebMock.allow_net_connect!
+  end
 
   before :each do
     # invite the user
@@ -24,12 +24,12 @@ feature 'Incubation' do
     allow(RestClient).to receive(:post)
   end
 
-  # after :all do
-  #   WebMock.disable_net_connect!
-  # end
+  after :all do
+    WebMock.disable_net_connect!
+  end
 
   context 'User accepts invitation' do
-    before(:each) do
+    before :each do
       # accept invitation and get to registration form
       visit accept_user_invitation_url(invitation_token: user.raw_invitation_token)
     end
@@ -62,7 +62,7 @@ feature 'Incubation' do
   end
 
   context 'User verifies phone number' do
-    before(:each) do
+    before :each do
       # accept invitation and submit filled registration form
       visit accept_user_invitation_url(invitation_token: user.raw_invitation_token)
 
@@ -137,6 +137,48 @@ feature 'Incubation' do
       fill_in 'Verification code', with: user.phone_verification_code
       click_on 'Verify'
       expect(page).to have_text('Startup Creation!')
+    end
+  end
+
+  context 'User reaches consent page', js: true do
+    before :each do
+      # accept invitation,submit filled registration form and verify phone number
+      visit accept_user_invitation_url(invitation_token: user.raw_invitation_token)
+      find(:css, 'sign-up-btn')
+
+      fill_in 'First name', with: 'Nemo'
+      fill_in 'Last name', with: user.last_name
+      fill_in 'New password', with: 'password'
+      fill_in 'Confirm new password', with: 'password'
+      choose 'Male'
+      fill_in 'Date of birth', with: '01/01/1990'
+      select 'Not a student', from: 'University'
+      fill_in 'Mobile Number', with: '9876543210'
+      click_on 'Sign Me Up!'
+
+      user.reload
+      fill_in 'Verification code', with: user.phone_verification_code
+      click_on 'Verify'
+    end
+
+    scenario 'Non-team-lead follows the \'complete founder profile\' link' do
+      # Confirm we are on consent page
+      expect(page).to have_text('Startup Creation!')
+
+      click_on 'Complete your Founder Profile'
+      expect(page).to have_text("Editing #{user.fullname}\'s profile")
+    end
+
+    scenario 'Team-lead gives consent and heads to startup registration' do
+      # Confirm we are on consent page
+      expect(page).to have_text('Startup Creation!')
+
+      # Create Startup button should be disabled
+      # expect(page).to
+
+      check 'team-leader-consent'
+      click_on 'Create Startup!'
+      expect(page).to have_text('Team Name')
     end
   end
 

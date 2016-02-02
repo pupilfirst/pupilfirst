@@ -1,7 +1,9 @@
 - content_for :head
   title SV.CO Login
 
-.alert.alert-warning.margin-top-20 role="alert" Looking to sign up? We're sorry! SV.CO is currently invite-only & in closed beta. We expect a wait time until <b>January 2016</b> when we'll send out invites next.
+.alert.alert-warning.margin-top-20 role="alert"
+  ' Looking to sign up? We're sorry! SV.CO is currently invite-only & in closed beta.
+  ' We are currently processing #{link_to 'applications for Batch 2 and 3', apply_path}.
 
 .text-center.devise-user-form
   h1.title Login with your SV.CO ID!

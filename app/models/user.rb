@@ -55,7 +55,7 @@ class User < ActiveRecord::Base
     [GENDER_FEMALE, GENDER_MALE, GENDER_OTHER]
   end
 
-  validates :gender, inclusion: { in: valid_gender_values }
+  validates :gender, inclusion: { in: valid_gender_values }, allow_nil: true
 
   # Validations during incubation
   validates_presence_of :roll_number, if: :university_id

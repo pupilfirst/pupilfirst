@@ -2,7 +2,7 @@ require 'rails_helper'
 
 # WARNING: The following tests run with Webmock disabled - i.e., URL calls are let through. Make sure you mock possible
 # requests unless you want to let them through. This is required for JS tests to work.
-feature 'Incubation' do
+feature 'Incubation', focus: true do
   let(:user) { create :user_with_out_password }
   let!(:university) { create :university }
 
@@ -155,28 +155,29 @@ feature 'Incubation' do
       fill_in 'Mobile Number', with: '9876543210'
       click_on 'Sign Me Up!'
 
-      user.reload
-      fill_in 'Verification code', with: user.phone_verification_code
-      click_on 'Verify'
-      user.reload
+      within '#phone-verification-form' do
+        user.reload
+        fill_in 'Verification code', with: user.phone_verification_code
+        click_on 'Verify'
+      end
     end
 
-    scenario 'Non-team-lead follows the \'complete founder profile\' link' do
+    scenario "Non-team-lead follows the 'complete founder profile' link" do
       visit consent_user_path
       # Confirm we are on consent page
       expect(page).to have_text('Startup Creation!')
 
       click_on 'Complete your Founder Profile'
-      expect(page).to have_text("Editing #{user.fullname}\'s profile")
+      expect(page).to have_text("Editing #{user.fullname}'s profile")
     end
 
-    scenario 'Team-lead gives consent and heads to startup registration', focus: true do
+    scenario 'Team-lead gives consent and heads to startup registration' do
       # visit consent_user_path
       # Confirm we are on consent page
       expect(page).to have_text('Startup Creation!')
 
       # Create Startup button should be disabled
-      # expect(page.find('#team-leader-consent-button')['class']).to include?('.disabled')
+      expect(page.find('#team-leader-consent-button')['class']).to include('disabled')
 
       check 'team-leader-consent'
       click_on 'Create Startup!'

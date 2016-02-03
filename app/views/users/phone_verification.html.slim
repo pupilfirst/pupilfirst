@@ -1,6 +1,6 @@
 - content_for :head
   title SV.CO Verify Mobile Number
-  
+
 - if @registration_ongoing
   .panel.onboarding-head-panel
     .onboarding-head-container.clearfix
@@ -61,9 +61,9 @@
         code #{current_user.phone_verification_code}
 
     .user-registration-box
-      = form_tag verify_user_url, class: 'form-horizontal', role: 'form' do
+      = form_tag verify_user_url, class: 'form-horizontal', role: 'form', id: 'phone-verification-form' do
 
-        legend.margin-top-20.form-section-head.font-weight-400 
+        legend.margin-top-20.form-section-head.font-weight-400
           ' Phone number verification
         .form-group
           label.col-sm-3.control-label for='phone_verification_code' Verification code

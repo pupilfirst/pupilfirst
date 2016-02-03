@@ -53,6 +53,7 @@ class ApplicationController < ActionController::Base
 
     resource = { media: 'https://s3.amazonaws.com/uploaded-assets-sv-co/' }
     typeform = { frame: 'https://svlabs.typeform.com' }
+    slideshare = { frame: '*.slideshare.net' }
 
     csp_directives = [
       image_sources,
@@ -62,7 +63,7 @@ class ApplicationController < ActionController::Base
       "font-src 'self' fonts.gstatic.com https://sv-assets.sv.co;",
       'child-src https://www.youtube.com;',
       'frame-src https://www.youtube.com https://svlabs-public.herokuapp.com https://www.google.com ' \
-        "#{typeform[:frame]};",
+        "#{typeform[:frame]} #{slideshare[:frame]};",
       "media-src 'self' #{resource[:media]};"
     ]
 

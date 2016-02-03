@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160202101942) do
+ActiveRecord::Schema.define(version: 20160203104048) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -347,6 +347,16 @@ ActiveRecord::Schema.define(version: 20160202101942) do
 
   add_index "team_members", ["startup_id"], name: "index_team_members_on_startup_id", using: :btree
 
+  create_table "timeline_event_files", force: :cascade do |t|
+    t.integer  "timeline_event_id"
+    t.string   "file"
+    t.boolean  "private"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "timeline_event_files", ["timeline_event_id"], name: "index_timeline_event_files_on_timeline_event_id", using: :btree
+
   create_table "timeline_event_types", force: :cascade do |t|
     t.string   "key"
     t.string   "title"
@@ -477,5 +487,6 @@ ActiveRecord::Schema.define(version: 20160202101942) do
   add_foreign_key "resources", "batches"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "team_members", "startups"
+  add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "startups"
 end

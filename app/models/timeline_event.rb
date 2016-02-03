@@ -8,6 +8,7 @@ class TimelineEvent < ActiveRecord::Base
   belongs_to :target
 
   has_one :karma_point, as: :source
+  has_many :timeline_event_files, as: :files
 
   mount_uploader :image, TimelineImageUploader
   serialize :links

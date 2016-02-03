@@ -1,20 +1,11 @@
 module Lita
   module Handlers
     class Stats < Handler
-      route(/\Aleaderboard\? *(\d*)\z/, :leaderboard, command: true)
+      route(/\Aleaderboard\?\z/, :leaderboard, command: true)
 
       def leaderboard(response)
         ActiveRecord::Base.connection_pool.with_connection do
-          # check if a particular batch was requested by parsing the regex matches
-          @batch_requested = response.match_data[1].present? ? response.match_data[1].to_i : nil
-
-          # reply immediately with a relevant 'please wait' message
-          if @batch_requested.present?
-            response.reply("Please wait while I fetch the leaderboard for Batch #{@batch_requested} :simple_smile:")
-          else
-            response.reply('Please wait while I fetch the leaderboards of all current batches for you :simple_smile:')
-          end
-
+          response.reply('Please wait while I fetch the leaderboards of current batches for you :simple_smile:')
           begin
             if response.message.source.private_message
               # respond directly to the user if private message
@@ -35,14 +26,10 @@ module Lita
       # construct the leaderboard response to be send
       def leaderboard_response_message
         return '_There appears to be no live batches on SV.CO now !_' unless Batch.live.present?
-        if @batch_requested && !Batch.live.where(batch_number: @batch_requested).present?
-          return "_There appears to be no live Batch #{@batch_requested} on SV.CO now !_"
-        end
 
-        # Build response considering batch requested, if any
+        # Build response for all live batches
         response = ''
-        batches = @batch_requested.present? ? Batch.where(batch_number: @batch_requested) : Batch.live
-        batches.each do |batch|
+        Batch.live.each do |batch|
           response += "*<#{Rails.application.routes.url_helpers.about_leaderboard_url}\
           |Latest published leaderboard for Batch #{batch.batch_number} (#{batch.name})>:* \n#{ranked_list_for_batch batch}"
         end

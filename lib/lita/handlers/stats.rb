@@ -19,7 +19,7 @@ module Lita
             if response.message.source.private_message
               # respond directly to the user if private message
               slack_username = response.message.source.user.metadata['mention_name']
-              user = ActiveRecord::Base::User.find_by(slack_username: slack_username)
+              user = ::User.find_by(slack_username: slack_username)
               PublicSlackTalk.post_message message: leaderboard_response_message, user: user
             else
               # reply to the source channel if not a private message

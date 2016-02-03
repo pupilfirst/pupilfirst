@@ -167,7 +167,7 @@ ActiveAdmin.register TimelineEvent do
       slack_message += "*Description:* #{timeline_event.description}"
 
       # post to slack
-      PublicSlackTalk.post_message message: slack_message, channel: 'general'
+      PublicSlackTalk.post_message message: slack_message, channel: '#general'
     end
 
     redirect_to action: :show

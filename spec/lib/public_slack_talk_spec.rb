@@ -12,11 +12,11 @@ describe 'Public Slack Talk' do
     end
 
     it 'raises ArgumentError if multiple targets specified' do
-      expect { PublicSlackTalk.post_message message: 'Hello', channel: 'general', user: user_1 }.to raise_error(
+      expect { PublicSlackTalk.post_message message: 'Hello', channel: '#general', user: user_1 }.to raise_error(
         ArgumentError, 'specify one of channel, user or users')
       expect { PublicSlackTalk.post_message message: 'Hello', user: user_1, users: [user_1, user_2] }.to raise_error(
         ArgumentError, 'specify one of channel, user or users')
-      expect { PublicSlackTalk.post_message message: 'Hello', channel: 'general', users: [user_1, user_2] }.to raise_error(
+      expect { PublicSlackTalk.post_message message: 'Hello', channel: '#general', users: [user_1, user_2] }.to raise_error(
         ArgumentError, 'specify one of channel, user or users')
     end
 
@@ -25,13 +25,13 @@ describe 'Public Slack Talk' do
         it 'sends message to channel' do
           expect_any_instance_of(PublicSlackTalk).to receive(:channel_valid?).and_return(true)
           expect_any_instance_of(PublicSlackTalk).to receive(:post_to_channel)
-          PublicSlackTalk.post_message message: 'Hello', channel: 'general'
+          PublicSlackTalk.post_message message: 'Hello', channel: '#general'
         end
 
         context 'when supplied channel is invalid' do
           it 'fails' do
             expect_any_instance_of(PublicSlackTalk).to receive(:channel_valid?).and_return(false)
-            expect { PublicSlackTalk.post_message message: 'Hello', channel: 'general' }.to raise_error(
+            expect { PublicSlackTalk.post_message message: 'Hello', channel: '#general' }.to raise_error(
               'could not validate channel specified')
           end
         end
@@ -76,13 +76,13 @@ describe 'Public Slack Talk' do
     end
 
     it 'raises ArgumentError if multiple targets specified' do
-      expect { PublicSlackTalk.post_message message: 'Hello', channel: 'general', user: user }.to raise_error(
+      expect { PublicSlackTalk.post_message message: 'Hello', channel: '#general', user: user }.to raise_error(
         ArgumentError, 'specify one of channel, user or users')
     end
 
     it 'calls process on a new PublicSlackTalk instance if exactly one target specified' do
       expect_any_instance_of(PublicSlackTalk).to receive(:process)
-      PublicSlackTalk.post_message message: 'Hello', channel: 'general'
+      PublicSlackTalk.post_message message: 'Hello', channel: '#general'
     end
   end
 
@@ -90,13 +90,13 @@ describe 'Public Slack Talk' do
     let(:user1) { create :user_with_out_password }
     let(:user2) { create :user_with_out_password }
     it 'raises exception if target is an invalid channel' do
-      instance = PublicSlackTalk.new channel: 'abcd', message: 'hello'
+      instance = PublicSlackTalk.new channel: '#abcd', message: 'hello'
       expect(instance).to receive(:channel_valid?).and_return(false)
       expect { instance.process }.to raise_error('could not validate channel specified')
     end
 
     it 'calls #post_to_channel if target is valid channel' do
-      instance = PublicSlackTalk.new channel: 'abcd', message: 'hello'
+      instance = PublicSlackTalk.new channel: '#abcd', message: 'hello'
       expect(instance).to receive(:channel_valid?).and_return(true)
       expect(instance).to receive(:post_to_channel)
       instance.process

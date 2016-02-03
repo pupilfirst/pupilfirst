@@ -37,7 +37,6 @@ class PublicSlackTalk
     # post message to appropriate channel
     if @channel.present?
       fail 'could not validate channel specified' unless channel_valid?
-      @channel = ['%23', @channel].join # prepend '#' to channel name
       post_to_channel
     end
     post_to_user if @user.present?
@@ -59,6 +58,9 @@ class PublicSlackTalk
   end
 
   def post_to_channel
+    # make channel name url safe by replacing '#' with '%23' if any
+    @channel = '%23' + @channel[1..-1] if @channel[0] == '#'
+
     response_json = JSON.parse RestClient.get("https://slack.com/api/chat.postMessage?token=#{@token}&channel=#{@channel}"\
       "&text=#{@message}&as_user=#{@as_user}&unfurl_links=#{@unfurl}")
     error_key = @user.present? ? @user.id : 'Slack'
@@ -73,9 +75,10 @@ class PublicSlackTalk
     channel_list = JSON.parse RestClient.get("https://slack.com/api/channels.list?token=#{@token}")
     return false unless channel_list['ok']
 
-    # verify channel with given name exists
-    channel_names = channel_list['channels'].map { |c| c['name'] }
-    channel_names.include? @channel
+    # verify channel with given name or id exists
+    channel_names = channel_list['channels'].map { |c| '#' + c['name'] }
+    channel_ids = channel_list['channels'].map { |c| c['id'] }
+    (channel_names + channel_ids).include? @channel
   end
 
   def fetch_im_id

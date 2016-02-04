@@ -2,7 +2,7 @@ require 'rails_helper'
 
 # WARNING: The following tests run with Webmock disabled - i.e., URL calls are let through. Make sure you mock possible
 # requests unless you want to let them through. This is required for JS tests to work.
-feature 'Incubation' do
+feature 'Incubation', focus: true do
   let(:user) { create :user_with_out_password }
   let!(:university) { create :university }
 
@@ -28,13 +28,14 @@ feature 'Incubation' do
     WebMock.disable_net_connect!
   end
 
-  context 'User accepts invitation' do
-    before :each do
-      # accept invitation and get to registration form
+  context 'when user arrives at accept invitation path' do
+    before do
+      # Visit the accept invitation page.
       visit accept_user_invitation_path(invitation_token: user.raw_invitation_token)
     end
+
     scenario 'User submits empty registration form' do
-      # first make sure we are on the registration page
+      # Make sure we are on the registration page.
       expect(page).to have_text('Set Name and Password')
 
       click_on 'Sign Me Up!'
@@ -42,6 +43,8 @@ feature 'Incubation' do
     end
 
     scenario 'User submits a valid and complete registration form' do
+      # TODO: This should be a js: true scenario, which tests addition of university roll number.
+
       fill_in 'First name', with: 'Nemo'
       fill_in 'Last name', with: user.last_name
       fill_in 'New password', with: 'password'
@@ -52,135 +55,96 @@ feature 'Incubation' do
       fill_in 'Mobile Number', with: '9876543210'
 
       click_on 'Sign Me Up!'
-      # should have reached phone verification code
+
+      # User should be at phone number verification page.
       expect(page).to have_text('Verification Code Sent!')
 
-      # ensure user was updated with the provided details
+      # Let's check whether user entry has been updated.
       user.reload
       expect(user.first_name).to eq('Nemo')
     end
-  end
 
-  context 'User verifies phone number' do
-    before :each do
-      # accept invitation and submit filled registration form
-      visit accept_user_invitation_path(invitation_token: user.raw_invitation_token)
+    context 'when user has registered successfully' do
+      before do
+        fill_in 'First name', with: 'Nemo'
+        fill_in 'Last name', with: user.last_name
+        fill_in 'New password', with: 'password'
+        fill_in 'Confirm new password', with: 'password'
+        choose 'Male'
+        fill_in 'Date of birth', with: '01/01/1990'
+        select 'Not a student', from: 'University'
+        fill_in 'Mobile Number', with: '9876543210'
 
-      fill_in 'First name', with: 'Nemo'
-      fill_in 'Last name', with: user.last_name
-      fill_in 'New password', with: 'password'
-      fill_in 'Confirm new password', with: 'password'
-      choose 'Male'
-      fill_in 'Date of birth', with: '01/01/1990'
-      select 'Not a student', from: 'University'
-      fill_in 'Mobile Number', with: '9876543210'
+        click_on 'Sign Me Up!'
+      end
 
-      click_on 'Sign Me Up!'
-    end
+      scenario 'User enters wrong code' do
+        fill_in 'Verification code', with: '000'
+        click_on 'Verify'
+        expect(page).to have_text('Verification Code Doesn’t Match!')
+      end
 
-    scenario 'User enters wrong code' do
-      # ensure we are on phone verification page
-      expect(page).to have_text('Verification Code Sent!')
+      scenario 'User tries an immediate resend of the code' do
+        click_on 'Resend verification code'
+        expect(page).to have_text('Please Wait!')
+      end
 
-      # ensure user has an unverified_phone and verification_code
-      user.reload
-      expect(user.unconfirmed_phone).to eq('919876543210')
-      expect(user.phone_verification_code).not_to eq(nil)
+      scenario 'User requests resend after more than 5 mins' do
+        # Tweak timing a bit to allow resending of code.
+        old_code = user.phone_verification_code
+        user.update(verification_code_sent_at: 10.minute.ago)
 
-      fill_in 'Verification code', with: '000'
-      click_on 'Verify'
-      expect(page).to have_text('Verification Code Doesn’t Match!')
-    end
+        click_on 'Resend verification code'
+        expect(page).to have_text('New Verification Code Sent!')
 
-    scenario 'User tries an immediate resend of the code' do
-      # ensure we are on phone verification page
-      expect(page).to have_text('Verification Code Sent!')
+        # Verify that a new code was generated.
+        user.reload
+        expect(user.phone_verification_code).to_not eq(old_code)
+      end
 
-      # ensure user has an unverified_phone and verification_code
-      user.reload
-      expect(user.unconfirmed_phone).to eq('919876543210')
-      expect(user.phone_verification_code).not_to eq(nil)
+      scenario 'User enters the right code' do
+        within '#phone-verification-form' do
+          user.reload
+          fill_in 'Verification code', with: user.phone_verification_code
+          click_on 'Verify'
+        end
 
-      click_on 'Resend verification code'
-      expect(page).to have_text('Please Wait!')
-    end
+        expect(page).to have_text('Startup Creation!')
+      end
 
-    scenario 'User requests resend after more than 5 mins' do
-      # ensure we are on phone verification page
-      expect(page).to have_text('Verification Code Sent!')
+      context 'when user has successfully verified phone number' do
+        before do
+          within '#phone-verification-form' do
+            user.reload
+            fill_in 'Verification code', with: user.phone_verification_code
+            click_on 'Verify'
+          end
+        end
 
-      # ensure user has an unverified_phone and verification_code
-      user.reload
-      expect(user.unconfirmed_phone).to eq('919876543210')
-      expect(user.phone_verification_code).not_to eq(nil)
+        scenario "Non-team-lead follows the 'complete founder profile' link" do
+          click_on 'Complete your Founder Profile'
+          expect(page).to have_text("Editing #{user.fullname}'s profile")
+        end
 
-      # take note of old code and modify code_sent_at
-      old_code = user.phone_verification_code
-      user.update(verification_code_sent_at: 10.minute.ago)
+        scenario 'Team-lead gives consent and heads to startup registration', js: true do
+          # Should not be able to click create startup button without supplying consent.
+          expect { click_on 'Create Startup!' }.to raise_error(Capybara::Webkit::ClickFailed)
 
-      click_on 'Resend verification code'
-      expect(page).to have_text('New Verification Code Sent!')
-      # verify a new code was indeed generated
-      user.reload
-      expect(user.phone_verification_code).to_not eq(old_code)
-    end
+          check 'team-leader-consent'
+          click_on 'Create Startup!'
 
-    scenario 'User enters the right code' do
-      # ensure we are on phone verification page
-      expect(page).to have_text('Verification Code Sent!')
+          expect(page).to have_text('Team Name')
+        end
 
-      # ensure user has an unverified_phone and verification_code
-      user.reload
-      expect(user.unconfirmed_phone).to eq('919876543210')
-      expect(user.phone_verification_code).not_to eq(nil)
+        context 'when team leader supplies consent to creation of startup' do
+          before do
+            check 'team-leader-consent'
+            click_on 'Create Startup!'
+          end
 
-      fill_in 'Verification code', with: user.phone_verification_code
-      click_on 'Verify'
-      expect(page).to have_text('Startup Creation!')
-    end
-  end
-
-  context 'User reaches consent page', js: true do
-    before :each do
-      # accept invitation,submit filled registration form and verify phone number
-      visit accept_user_invitation_path(invitation_token: user.raw_invitation_token)
-
-      fill_in 'First name', with: 'Nemo'
-      fill_in 'Last name', with: user.last_name
-      fill_in 'New password', with: 'password'
-      fill_in 'Confirm new password', with: 'password'
-      choose 'Male'
-      fill_in 'Date of birth', with: '01/01/1990'
-      select 'Not a student', from: 'University'
-      fill_in 'Mobile Number', with: '9876543210'
-      click_on 'Sign Me Up!'
-
-      expect(page.status_code).to eq(200)
-      fill_in 'Verification code', with: user.phone_verification_code
-      click_on 'Verify'
-      expect(page.status_code).to eq(200)
-    end
-
-    scenario 'Non-team-lead follows the \'complete founder profile\' link' do
-      visit consent_user_path
-      # Confirm we are on consent page
-      expect(page).to have_text('Startup Creation!')
-
-      click_on 'Complete your Founder Profile'
-      expect(page).to have_text("Editing #{user.fullname}\'s profile")
-    end
-
-    scenario 'Team-lead gives consent and heads to startup registration', focus: true do
-      # visit consent_user_path
-      # Confirm we are on consent page
-      expect(page).to have_text('Startup Creation!')
-
-      # Create Startup button should be disabled
-      # expect(page.find('#team-leader-consent-button')['class']).to include?('.disabled')
-
-      check 'team-leader-consent'
-      click_on 'Create Startup!'
-      expect(page).to have_text('Team Name')
+          # scenario 'something'
+        end
+      end
     end
   end
 

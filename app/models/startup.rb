@@ -597,7 +597,7 @@ class Startup < ActiveRecord::Base
   end
 
   def prepopulate_timeline!
-    create_default_event %w(registered_on_sv)
+    create_default_event %w(joined_svco)
   end
 
   def create_default_event(types)

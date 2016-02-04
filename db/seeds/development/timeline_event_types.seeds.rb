@@ -13,7 +13,7 @@ timeline_event_types = [
   ['team_formed','Governance','Team Formed','We are a bunch of [Technology/Music/...] enthusiasts from [College/City] and we are excited to start! Our team has Name (Role), Name 2 (Role 2), ...','Not Needed',nil,'team_formation'],
   ['new_product_deck','Product','New Product Deck','We just updated our Product Deck, do take a look!','Link to new deck','moved_to_idea_discovery','idea'],
   ['one_liner','Governance','Set New One-Liner','We have set a new one-line mission for our product! We want to [organize the worlds information/...]. We think this mission is great because [...].','Not Needed','moved_to_idea_discovery,moved_to_customer_validation','mission'],
-  ['registered_on_sv', 'Governance', 'Registered on SV.CO', "We just registered our startup on SV.CO. Looking forward to an amazing learning experience", 'Proof: Not Needed', 'moved_to_idea_discovery', 'team_formation']
+  ['joined_svco', 'Governance', 'Joined SV.CO', "We just registered our startup on SV.CO. Looking forward to an amazing learning experience", 'Proof: Not Needed', 'moved_to_idea_discovery', 'team_formation']
 ]
 
 default_image = 'default'

@@ -27,10 +27,10 @@ FactoryGirl.define do
       suggested_stage 'moved_to_idea_discovery,moved_to_customer_validation'
     end
 
-    factory :tet_registered do
-      key 'registered_on_sv'
+    factory :tet_joined do
+      key 'joined_svco'
       role 'Governance'
-      title 'Registered on SV.CO'
+      title 'Joined SV.CO'
       suggested_stage 'moved_to_idea_discovery'
     end
   end

@@ -3,33 +3,54 @@ module Lita
     class Stats < Handler
       route(/\Aleaderboard\? *(\d*)\z/, :leaderboard, command: true)
 
+      # rubocop:disable Metrics/AbcSize
       def leaderboard(response)
         ActiveRecord::Base.connection_pool.with_connection do
           # check if a particular batch was requested by parsing the regex matches
           @batch_requested = response.match_data[1].present? ? response.match_data[1].to_i : nil
 
           # reply immediately with a relevant 'please wait' message
-          if @batch_requested.present?
-            response.reply("Please wait while I fetch the leaderboard for Batch #{@batch_requested} :simple_smile:")
-          else
-            response.reply('Please wait while I fetch the leaderboards of all current batches for you :simple_smile:')
-          end
+          send_wait_message(response)
 
           begin
+            # respond directly to the user if private message
             if response.message.source.private_message
-              # respond directly to the user if private message
               slack_username = response.message.source.user.metadata['mention_name']
               user = ::User.find_by(slack_username: slack_username)
-              PublicSlackTalk.post_message message: leaderboard_response_message, user: user
+
+              # Fallback to using the SLACK postMessage API method for users who are not registered on SV.CO
+              if user
+                PublicSlackTalk.post_message message: leaderboard_response_message, user: user
+              else
+                reply_using_api_post_message channel: response.message.source.room, message: leaderboard_response_message
+              end
+
+            # reply to the source channel if not a private message
             else
-              # reply to the source channel if not a private message
               channel = response.message.source.room
               PublicSlackTalk.post_message message: leaderboard_response_message, channel: channel
             end
+
           rescue
             response.reply(':confused: Oops! Something seems wrong. Please try again later!')
           end
         end
+      end
+      # rubocop:enable Metrics/AbcSize
+
+      # send a relevant please wait method
+      def send_wait_message(response)
+        if @batch_requested.present?
+          response.reply("Please wait while I fetch the leaderboard for Batch #{@batch_requested} :simple_smile:")
+        else
+          response.reply('Please wait while I fetch the leaderboards of all current batches for you :simple_smile:')
+        end
+      end
+
+      # reply to non-SV.CO users using the SLACK API directly
+      def reply_using_api_post_message(channel:, message:)
+        RestClient.get "https://slack.com/api/chat.postMessage?token=#{APP_CONFIG[:slack_token]}&channel=#{channel}"\
+        "&text=#{CGI.escape message}&as_user=true"
       end
 
       # construct the leaderboard response to be send

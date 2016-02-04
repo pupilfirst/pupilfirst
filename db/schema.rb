@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160128060344) do
+ActiveRecord::Schema.define(version: 20160202101942) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -311,6 +311,7 @@ ActiveRecord::Schema.define(version: 20160128060344) do
     t.string   "resource_url"
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.text     "slideshow_embed"
   end
 
   create_table "targets", force: :cascade do |t|
@@ -327,6 +328,7 @@ ActiveRecord::Schema.define(version: 20160128060344) do
     t.datetime "due_date"
     t.datetime "completed_at"
     t.text     "completion_comment"
+    t.text     "slideshow_embed"
   end
 
   add_index "targets", ["assigner_id"], name: "index_targets_on_assigner_id", using: :btree

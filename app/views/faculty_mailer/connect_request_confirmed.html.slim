@@ -19,3 +19,5 @@
   p The team lead at #{@connect_request.startup.product_name} has asked the following questions:
 
   = simple_format @connect_request.questions, class: 'monospace'
+  
+  p For any assistance, please email #{mail_to 'help@sv.co'}

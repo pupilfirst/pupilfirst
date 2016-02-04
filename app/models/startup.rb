@@ -590,12 +590,6 @@ class Startup < ActiveRecord::Base
     end
   end
 
-  after_save do
-    if being_registered && approval_status_changed? && approved? && timeline_events.blank?
-      prepopulate_timeline!
-    end
-  end
-
   def prepopulate_timeline!
     create_default_event %w(joined_svco)
   end

@@ -186,6 +186,14 @@ ActiveAdmin.register User do
 
   collection_action :send_invite, method: :post do
     email = params[:user][:email]
+
+    # do not send invites to already registered users
+    if User.find_by(email: email).present?
+      flash.now[:error] = 'A user with this email id already exists!'
+      redirect_to :back
+      return
+    end
+
     if email =~ /@/ && User.invite!(email: email)
       flash.now[:success] = 'Invitation successfully sent!'
       redirect_to action: :index

@@ -349,6 +349,11 @@ class User < ActiveRecord::Base
     score
   end
 
+  # Return true if the user already has all required fields for registration
+  def already_registered?
+    first_name? && last_name? && encrypted_password? && gender? && born_on?
+  end
+
   private
 
   def batch_start_date

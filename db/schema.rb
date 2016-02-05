@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160108085717) do
+ActiveRecord::Schema.define(version: 20160205100017) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,8 +59,9 @@ ActiveRecord::Schema.define(version: 20160108085717) do
     t.text     "description"
     t.date     "start_date"
     t.date     "end_date"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "batch_number"
   end
 
   create_table "colleges", force: :cascade do |t|
@@ -147,9 +148,11 @@ ActiveRecord::Schema.define(version: 20160108085717) do
     t.datetime "updated_at",    null: false
     t.integer  "source_id"
     t.string   "source_type"
+    t.integer  "startup_id"
   end
 
   add_index "karma_points", ["source_id"], name: "index_karma_points_on_source_id", using: :btree
+  add_index "karma_points", ["startup_id"], name: "index_karma_points_on_startup_id", using: :btree
   add_index "karma_points", ["user_id"], name: "index_karma_points_on_user_id", using: :btree
 
   create_table "mentor_meetings", force: :cascade do |t|
@@ -197,8 +200,10 @@ ActiveRecord::Schema.define(version: 20160108085717) do
     t.string   "slack_username"
     t.integer  "user_id"
     t.string   "channel"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.string   "timestamp"
+    t.integer  "parent_message_id"
   end
 
   add_index "public_slack_messages", ["user_id"], name: "index_public_slack_messages_on_user_id", using: :btree
@@ -208,15 +213,16 @@ ActiveRecord::Schema.define(version: 20160108085717) do
     t.string   "thumbnail"
     t.string   "title"
     t.text     "description"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
     t.string   "share_status"
-    t.integer  "shared_with_batch"
-    t.integer  "downloads",         default: 0
+    t.integer  "downloads",    default: 0
     t.string   "slug"
+    t.integer  "batch_id"
   end
 
-  add_index "resources", ["share_status", "shared_with_batch"], name: "index_resources_on_share_status_and_shared_with_batch", using: :btree
+  add_index "resources", ["batch_id"], name: "index_resources_on_batch_id", using: :btree
+  add_index "resources", ["share_status", "batch_id"], name: "index_resources_on_share_status_and_batch_id", using: :btree
   add_index "resources", ["slug"], name: "index_resources_on_slug", using: :btree
 
   create_table "startup_applications", force: :cascade do |t|
@@ -286,7 +292,6 @@ ActiveRecord::Schema.define(version: 20160108085717) do
     t.text     "metadata"
     t.string   "slug"
     t.boolean  "featured"
-    t.integer  "batch_number"
     t.string   "stage"
     t.string   "legal_registered_name"
     t.string   "wireframe_link"
@@ -296,7 +301,6 @@ ActiveRecord::Schema.define(version: 20160108085717) do
   end
 
   add_index "startups", ["batch_id"], name: "index_startups_on_batch_id", using: :btree
-  add_index "startups", ["batch_number"], name: "index_startups_on_batch_number", using: :btree
   add_index "startups", ["slug"], name: "index_startups_on_slug", unique: true, using: :btree
   add_index "startups", ["stage"], name: "index_startups_on_stage", using: :btree
 
@@ -309,6 +313,7 @@ ActiveRecord::Schema.define(version: 20160108085717) do
     t.string   "resource_url"
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.text     "slideshow_embed"
   end
 
   create_table "targets", force: :cascade do |t|
@@ -325,6 +330,7 @@ ActiveRecord::Schema.define(version: 20160108085717) do
     t.datetime "due_date"
     t.datetime "completed_at"
     t.text     "completion_comment"
+    t.text     "slideshow_embed"
   end
 
   add_index "targets", ["assigner_id"], name: "index_targets_on_assigner_id", using: :btree
@@ -393,11 +399,11 @@ ActiveRecord::Schema.define(version: 20160108085717) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "avatar"
-    t.string   "encrypted_password",       default: ""
+    t.string   "encrypted_password",        default: ""
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",            default: 0,     null: false
+    t.integer  "sign_in_count",             default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -444,9 +450,9 @@ ActiveRecord::Schema.define(version: 20160108085717) do
     t.integer  "university_id"
     t.string   "unconfirmed_phone"
     t.string   "roles"
-    t.string   "last_name",                default: ""
+    t.string   "last_name",                 default: ""
     t.string   "college_identification"
-    t.boolean  "avatar_processing",        default: false
+    t.boolean  "avatar_processing",         default: false
     t.string   "slack_user_id"
     t.string   "personal_website_url"
     t.string   "blog_url"
@@ -457,6 +463,7 @@ ActiveRecord::Schema.define(version: 20160108085717) do
     t.string   "resume_url"
     t.string   "slug"
     t.string   "about"
+    t.datetime "verification_code_sent_at"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
@@ -469,7 +476,7 @@ ActiveRecord::Schema.define(version: 20160108085717) do
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
-  add_foreign_key "karma_points", "users"
+  add_foreign_key "resources", "batches"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "team_members", "startups"
   add_foreign_key "timeline_events", "startups"

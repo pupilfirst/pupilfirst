@@ -56,9 +56,16 @@ class UsersController < ApplicationController
   end
 
   # GET /user/phone_verification
+  # rubocop:disable Metrics/CyclomaticComplexity
   def phone_verification
     @registration_ongoing = true if session[:registration_ongoing]
     @skip_container = true
+
+    # skip to consent page if registration ongoing and user already has a verified phone
+    if @registration_ongoing && current_user.phone.present?
+      redirect_to consent_user_path, alert: 'You already have a verified phone number'
+      return
+    end
 
     # ask for a phone number if 'unconfirmed_phone' is missing
     unless current_user.unconfirmed_phone.present?
@@ -78,6 +85,7 @@ class UsersController < ApplicationController
     # SMS the code to the phone number. Currently uses FA format.
     RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV.CO: #{code}", msisdn: phone_number)
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   # PATCH /user/resend
   def resend

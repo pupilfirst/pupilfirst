@@ -48,7 +48,7 @@ class UsersController < ApplicationController
 
   # PATCH /user/set_unconfirmed_phone
   def set_unconfirmed_phone
-    if current_user.update(unconfirmed_phone: params[:user][:unconfirmed_phone], phone: nil, verification_code_sent_at: nil)
+    if current_user.update(unconfirmed_phone: params[:user][:unconfirmed_phone], verification_code_sent_at: nil)
       redirect_to phone_verification_user_path
     else
       render 'phone'
@@ -59,13 +59,6 @@ class UsersController < ApplicationController
   def phone_verification
     @registration_ongoing = true if session[:registration_ongoing]
     @skip_container = true
-
-    # warn if the user still has a confirmed 'phone' when reaching here
-    if current_user.phone.present?
-      redirect_to founder_profile_path(current_user.slug), alert: 'You seem to have a confirmed phone number already!'\
-      ' Please visit the Edit Profile page if you wish to modify this'
-      return
-    end
 
     # ask for a phone number if 'unconfirmed_phone' is missing
     unless current_user.unconfirmed_phone.present?

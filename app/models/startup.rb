@@ -598,6 +598,7 @@ class Startup < ActiveRecord::Base
     types.each do |type|
       timeline_events.create(
         user: admin, timeline_event_type: TimelineEventType.find_by(key: type), auto_populated: true,
+        image: File.open("#{Rails.root}/app/assets/images/timeline/joined_svco_cover.png"),
         verified_at: Time.now, event_on: Time.now
       )
     end

@@ -16,6 +16,9 @@
     = f.input :avatar, as: :file
     = f.input :university
     = f.input :roll_number
+    = f.input :course
+    = f.input :semester
+    = f.input :year_of_graduation, as: :select, collection: 2014..2020
 
     / When creating a user manually, let's not ask for a password.
     = f.input :skip_password, as: :hidden, input_html: { value: true }

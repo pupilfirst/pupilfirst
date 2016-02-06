@@ -122,6 +122,10 @@ ActiveAdmin.register User do
           end
         end
       end
+
+      row :course
+      row :semester
+      row :year_of_graduation
     end
 
     panel 'Social links' do
@@ -209,7 +213,7 @@ ActiveAdmin.register User do
 
   permit_params :first_name, :last_name, :email, :remote_avatar_url, :avatar, :startup_id, :slug, :about,
     :slack_username, :skip_password, :born_on, :startup_admin, :communication_address,
-    :phone, :invitation_token, :university_id, :roll_number, :year_of_graduation,
+    :phone, :invitation_token, :university_id, :roll_number, :course, :semester, :year_of_graduation,
     :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :facebook_url, :angel_co_url, :github_url, :behance_url,
     roles: []
 end

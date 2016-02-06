@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160202101942) do
+ActiveRecord::Schema.define(version: 20160206052225) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -200,8 +200,10 @@ ActiveRecord::Schema.define(version: 20160202101942) do
     t.string   "slack_username"
     t.integer  "user_id"
     t.string   "channel"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.string   "timestamp"
+    t.integer  "parent_message_id"
   end
 
   add_index "public_slack_messages", ["user_id"], name: "index_public_slack_messages_on_user_id", using: :btree
@@ -424,25 +426,14 @@ ActiveRecord::Schema.define(version: 20160202101942) do
     t.date     "born_on"
     t.string   "auth_token"
     t.boolean  "is_founder"
-    t.string   "din"
-    t.string   "aadhaar"
-    t.string   "place_of_birth"
-    t.string   "salutation"
     t.string   "course"
     t.string   "semester"
     t.string   "gender"
     t.string   "phone"
     t.text     "communication_address"
     t.string   "phone_verification_code"
-    t.string   "company"
     t.boolean  "startup_admin"
-    t.string   "father_or_husband_name"
-    t.string   "pin"
-    t.string   "district"
-    t.string   "state"
-    t.integer  "years_of_work_experience"
     t.integer  "year_of_graduation"
-    t.integer  "college_id"
     t.string   "roll_number"
     t.string   "slack_username"
     t.integer  "university_id"

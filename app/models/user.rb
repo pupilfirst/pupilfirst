@@ -37,9 +37,7 @@ class User < ActiveRecord::Base
   scope :student_entrepreneurs, -> { where(is_founder: true).where.not(university_id: nil) }
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
 
-  # TODO: Remove born_on, and salutation columns if unneccessary.
   validates_presence_of :born_on
-  # validates_presence_of :salutation, message: ''
 
   validates :first_name,
     presence: true,
@@ -107,16 +105,13 @@ class User < ActiveRecord::Base
   # Validate presence of e-mail for everyone except contacts with invitation token (unregistered contacts).
   validates_uniqueness_of :email, unless: ->(user) { user.invitation_token.present? }
 
-  # Validate user's PIN (address).
-  validates_numericality_of :pin, allow_blank: true, greater_than_or_equal_to: 100_000, less_than_or_equal_to: 999_999 # PIN Code is always 6 digits
-
   mount_uploader :avatar, AvatarUploader
   process_in_background :avatar
 
   mount_uploader :college_identification, CollegeIdentificationUploader
   process_in_background :college_identification
 
-  normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :pin, :first_name, :last_name,
+  normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :first_name, :last_name,
     :slack_username, :resume_url
 
   normalize_attribute :skip_password do |value|

@@ -11,9 +11,6 @@
     = f.input :startup, label: 'Product', member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }
     = f.input :startup_admin
     = f.input :communication_address
-    = f.input :district
-    = f.input :state
-    = f.input :pin
     = f.input :slack_username
     = f.input :resume_url
     = f.input :avatar, as: :file

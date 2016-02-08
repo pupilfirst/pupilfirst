@@ -110,14 +110,7 @@ ActiveAdmin.register User do
       row :unconfirmed_phone
       row :phone_verification_code
       row :communication_address
-      row :district
-      row :state
 
-      row 'PIN Code' do
-        user.pin
-      end
-
-      row :company
       row :designation
       row :university
       row :roll_number
@@ -129,6 +122,10 @@ ActiveAdmin.register User do
           end
         end
       end
+
+      row :course
+      row :semester
+      row :year_of_graduation
     end
 
     panel 'Social links' do
@@ -186,6 +183,14 @@ ActiveAdmin.register User do
 
   collection_action :send_invite, method: :post do
     email = params[:user][:email]
+
+    # do not send invites to already registered users
+    if User.find_by(email: email).present?
+      flash.now[:error] = 'A user with this email id already exists!'
+      redirect_to :back
+      return
+    end
+
     if email =~ /@/ && User.invite!(email: email)
       flash.now[:success] = 'Invitation successfully sent!'
       redirect_to action: :index
@@ -207,8 +212,8 @@ ActiveAdmin.register User do
   form partial: 'admin/users/form'
 
   permit_params :first_name, :last_name, :email, :remote_avatar_url, :avatar, :startup_id, :slug, :about,
-    :slack_username, :skip_password, :born_on, :startup_admin, :communication_address, :district, :state, :pin,
-    :phone, :company, :invitation_token, :university_id, :roll_number, :year_of_graduation,
+    :slack_username, :skip_password, :born_on, :startup_admin, :communication_address,
+    :phone, :invitation_token, :university_id, :roll_number, :course, :semester, :year_of_graduation,
     :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :facebook_url, :angel_co_url, :github_url, :behance_url,
-    :years_of_work_experience, roles: []
+    roles: []
 end

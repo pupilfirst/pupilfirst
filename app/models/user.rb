@@ -23,7 +23,6 @@ class User < ActiveRecord::Base
 
   has_many :public_slack_messages
   has_many :requests
-  belongs_to :college
   belongs_to :father, class_name: 'Name'
   belongs_to :startup
   belongs_to :university
@@ -37,9 +36,7 @@ class User < ActiveRecord::Base
   scope :student_entrepreneurs, -> { where(is_founder: true).where.not(university_id: nil) }
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
 
-  # TODO: Remove born_on, and salutation columns if unneccessary.
   validates_presence_of :born_on
-  # validates_presence_of :salutation, message: ''
 
   validates :first_name,
     presence: true,
@@ -107,16 +104,13 @@ class User < ActiveRecord::Base
   # Validate presence of e-mail for everyone except contacts with invitation token (unregistered contacts).
   validates_uniqueness_of :email, unless: ->(user) { user.invitation_token.present? }
 
-  # Validate user's PIN (address).
-  validates_numericality_of :pin, allow_blank: true, greater_than_or_equal_to: 100_000, less_than_or_equal_to: 999_999 # PIN Code is always 6 digits
-
   mount_uploader :avatar, AvatarUploader
   process_in_background :avatar
 
   mount_uploader :college_identification, CollegeIdentificationUploader
   process_in_background :college_identification
 
-  normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :pin, :first_name, :last_name,
+  normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :first_name, :last_name,
     :slack_username, :resume_url
 
   normalize_attribute :skip_password do |value|
@@ -225,7 +219,7 @@ class User < ActiveRecord::Base
   # Validate the unconfirmed phone number after it has been normalized.
   validates_plausible_phone :unconfirmed_phone, normalized_country_code: 'IN', allow_nil: true
 
-  def generate_phone_number_verification_code
+  def generate_phone_number_verification_code!
     self.phone_verification_code = SecureRandom.random_number(1_000_000).to_s.ljust(6, '0')
     self.verification_code_sent_at = Time.now
     save!
@@ -233,13 +227,13 @@ class User < ActiveRecord::Base
     [phone_verification_code, unconfirmed_phone]
   end
 
-  def verify_phone_number(verification_code)
+  def verify_phone_number!(verification_code)
     if unconfirmed_phone? && (verification_code == phone_verification_code)
       # Store 'verified' phone number
       self.phone = unconfirmed_phone
       self.unconfirmed_phone = nil
       self.phone_verification_code = nil
-      save
+      save!
     else
       fail Exceptions::PhoneNumberVerificationFailed, 'Supplied verification code does not match stored values.'
     end
@@ -349,6 +343,11 @@ class User < ActiveRecord::Base
     score
   end
 
+  # Return true if the user already has all required fields for registration
+  def already_registered?
+    first_name? && last_name? && encrypted_password? && gender? && born_on?
+  end
+
   private
 
   def batch_start_date
@@ -407,7 +406,7 @@ class User < ActiveRecord::Base
   end
 
   def needs_password_change_email?
-    encrypted_password_changed? && persisted?
+    encrypted_password_was.present? && encrypted_password_changed? && persisted?
   end
 
   def send_password_change_email

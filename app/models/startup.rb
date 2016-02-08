@@ -590,20 +590,15 @@ class Startup < ActiveRecord::Base
     end
   end
 
-  after_save do
-    if being_registered && approval_status_changed? && approved? && timeline_events.blank?
-      prepopulate_timeline!
-    end
-  end
-
   def prepopulate_timeline!
-    create_default_event %w(registered_on_sv)
+    create_default_event %w(joined_svco)
   end
 
   def create_default_event(types)
     types.each do |type|
       timeline_events.create(
         user: admin, timeline_event_type: TimelineEventType.find_by(key: type), auto_populated: true,
+        image: File.open("#{Rails.root}/app/assets/images/timeline/joined_svco_cover.png"),
         verified_at: Time.now, event_on: Time.now
       )
     end

@@ -1,8 +1,15 @@
 module Users
   class InvitationsController < Devise::InvitationsController
     def edit
-      @skip_container = true
-      super
+      # don't repeat registration if already completed
+      if resource.already_registered?
+        sign_in resource
+        session[:registration_ongoing] = true
+        redirect_to phone_verification_user_path, alert: 'You have already completed your user registration!'
+      else
+        @skip_container = true
+        super
+      end
     end
 
     def after_accept_path_for(_resource)

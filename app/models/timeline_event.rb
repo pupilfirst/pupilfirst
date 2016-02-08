@@ -79,7 +79,7 @@ class TimelineEvent < ActiveRecord::Base
   def build_description
     return unless !description.present? && auto_populated
     self.description = case timeline_event_type.key
-      when 'registered_on_sv'
+      when 'joined_svco'
         'We just registered our startup on SV.CO. Looking forward to an amazing learning experience!'
     end
   end

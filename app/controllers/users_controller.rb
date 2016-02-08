@@ -48,7 +48,7 @@ class UsersController < ApplicationController
 
   # PATCH /user/set_unconfirmed_phone
   def set_unconfirmed_phone
-    if current_user.update(unconfirmed_phone: params[:user][:unconfirmed_phone], phone: nil, verification_code_sent_at: nil)
+    if current_user.update(unconfirmed_phone: params[:user][:unconfirmed_phone], verification_code_sent_at: nil)
       redirect_to phone_verification_user_path
     else
       render 'phone'
@@ -56,14 +56,14 @@ class UsersController < ApplicationController
   end
 
   # GET /user/phone_verification
+  # rubocop:disable Metrics/CyclomaticComplexity
   def phone_verification
     @registration_ongoing = true if session[:registration_ongoing]
     @skip_container = true
 
-    # warn if the user still has a confirmed 'phone' when reaching here
-    if current_user.phone.present?
-      redirect_to founder_profile_path(current_user.slug), alert: 'You seem to have a confirmed phone number already!'\
-      ' Please visit the Edit Profile page if you wish to modify this'
+    # skip to consent page if registration ongoing and user already has a verified phone
+    if @registration_ongoing && current_user.phone.present?
+      redirect_to consent_user_path, alert: 'You already have a verified phone number'
       return
     end
 
@@ -78,13 +78,14 @@ class UsersController < ApplicationController
     return if code_sent_at&. > 5.minute.ago
 
     # Generate a 6-digit verification code to send to the phone number.
-    code, phone_number = current_user.generate_phone_number_verification_code
+    code, phone_number = current_user.generate_phone_number_verification_code!
 
     return if Rails.env.development?
 
     # SMS the code to the phone number. Currently uses FA format.
     RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV.CO: #{code}", msisdn: phone_number)
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   # PATCH /user/resend
   def resend
@@ -96,7 +97,7 @@ class UsersController < ApplicationController
       @retry_after_some_time = true
     else
       @retry_after_some_time = false
-      code, phone_number = current_user.generate_phone_number_verification_code
+      code, phone_number = current_user.generate_phone_number_verification_code!
 
       unless Rails.env.development?
         RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV.CO: #{code}", msisdn: phone_number)
@@ -113,7 +114,7 @@ class UsersController < ApplicationController
     @skip_container = true
 
     begin
-      current_user.verify_phone_number(params[:phone_verification_code])
+      current_user.verify_phone_number!(params[:phone_verification_code])
     rescue Exceptions::PhoneNumberVerificationFailed
       @failed_to_verify_phone_number = true
       @registration_ongoing = true if session[:registration_ongoing]
@@ -144,7 +145,7 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(
-      :first_name, :last_name, :avatar, :slack_username, :college_identification, :about,
+      :first_name, :last_name, :avatar, :slack_username, :college_identification, :course, :semester, :year_of_graduation, :about,
       :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :facebook_url, :angel_co_url, :github_url, :behance_url,
       :university_id, :roll_number, :born_on, :communication_address, roles: []
     )

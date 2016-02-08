@@ -53,6 +53,9 @@ class StartupsController < ApplicationController
       # generate a more meaningful slug
       @startup.regenerate_slug!
 
+      # prepopulate the timeline with a 'Joined SV.CO' entry
+      @startup.prepopulate_timeline!
+
       flash[:success] = "Your startup has been registered successfully!"
       redirect_to @startup
     else

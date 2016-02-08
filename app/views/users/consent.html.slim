@@ -7,7 +7,7 @@
     .startup-creation-head.text-center
       = image_tag 'users/onboarding/startup-create-icon.png', class: 'img-responsive'
       h2.font-weight-300 Startup Creation!
-      p 
+      p
         strong Important!:
         ' &nbsp;If your startup has more than one founder,
         br
@@ -17,7 +17,7 @@
       .row
         .col-sm-6.startup-consent-checkbox
           input type='checkbox' id='team-leader-consent'
-          label.font-weight-600 for='team-leader-consent' 
+          label.font-weight-600 for='team-leader-consent'
             ' &nbsp; Yes, I&#39;m the Team Leader.
         .col-sm-6.startup-consent-btn
           = link_to 'Create Startup!', new_user_startup_path, class: 'btn btn-success btn-lg btn-flat disabled', id: 'team-leader-consent-button'

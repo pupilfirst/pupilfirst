@@ -32,12 +32,16 @@ var TimelineEventAttachmentsEditor = React.createClass({
     return '' + (new Date).getTime();
   },
 
+  attachmentsLimitNotReached: function () {
+    return (this.state.links.length + this.state.files.length) < 3;
+  },
+
   showAddLinkButton: function () {
-    return this.state.links.length < 3 && !this.state.showLinkForm;
+    return this.attachmentsLimitNotReached() && !this.state.showLinkForm;
   },
 
   showAddFileButton: function () {
-    return !this.state.showFileForm
+    return this.attachmentsLimitNotReached() && !this.state.showFileForm
   },
 
   deleteLink: function (i) {

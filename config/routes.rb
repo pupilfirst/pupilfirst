@@ -41,6 +41,14 @@ Svapp::Application.routes.draw do
     collection do
       post 'team_leader_consent'
     end
+
+    resources :timeline_events, only: [] do
+      resources :timeline_event_files, only: [] do
+        member do
+          get 'download'
+        end
+      end
+    end
   end
 
   resources :incubation, only: %w(show update) do

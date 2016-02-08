@@ -199,7 +199,28 @@ class TimelineEvent < ActiveRecord::Base
     user != viewer
   end
 
+  def attachments_for_user(user)
+    privileged = privileged_user?(user)
+    attachments = []
+
+    timeline_event_files.each do |file|
+      next if file.private? && !privileged
+      attachments << { file: file, title: file.file.file.filename }
+    end
+
+    links.each do |link|
+      next if link[:private] && !privileged
+      attachments << link
+    end
+
+    attachments
+  end
+
   private
+
+  def privileged_user?(user)
+    user.present? && startup.founders.include?(user)
+  end
 
   def add_link_for_new_resume!
     return unless timeline_event_type.resume_submission? && links[0].try(:[], :url).present?

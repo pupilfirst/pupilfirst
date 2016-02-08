@@ -8,7 +8,7 @@ class TimelineEvent < ActiveRecord::Base
   belongs_to :target
 
   has_one :karma_point, as: :source
-  has_many :timeline_event_files, as: :files
+  has_many :timeline_event_files
 
   mount_uploader :image, TimelineImageUploader
   serialize :links
@@ -89,6 +89,44 @@ class TimelineEvent < ActiveRecord::Base
   end
 
   attr_accessor :auto_populated
+
+  # Accessors used by timeline builder form to create TimelineEventFile entries.
+  # Should contain a hash: { identifier_key => uploaded_file, ... }
+  attr_accessor :files
+
+  # Writer used by timeline builder form to supply info about new / to-delete files.
+  attr_accessor :files_metadata
+
+  # def files_metadata
+  #   {
+  #     files: timeline_event_files.each_with_object({}) do |file, files_hash|
+  #       files_hash[:id] = file.id
+  #       files_hash[:name] = file.file.file.filename # For real. [table_entry].[column_name].file.filename.
+  #       files_hash[:private] = file.private?
+  #     end
+  #   }.to_json
+  # end
+
+  after_create :update_timeline_event_files
+
+  def update_timeline_event_files
+    # Go through files metadata, and perform create / delete.
+    files_metadata.each do |file_metadata|
+
+      if file_metadata['persisted']
+        # Delete persisted files if they've been flagged.
+        if file_metadata['delete']
+          TimelineEventFile.find(file_metadata['identifier']).destroy!
+        end
+      else
+        # Create non-persisted files.
+        timeline_event_files.create!(
+          file: files[file_metadata['identifier']],
+          private: file_metadata['private']
+        )
+      end
+    end
+  end
 
   def iteration
     startup.iteration(at_event: self)

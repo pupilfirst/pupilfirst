@@ -1,6 +1,7 @@
 .timeline-builder
   = form_for [:user, :startup, event], html: event.verified? ? { 'data-verified' => 'true' } : {} do |f|
     = f.hidden_field :links, :value => event.links.to_json
+    = f.hidden_field :files_metadata
     .container-fluid
       .row.top-row.text-center
         .col-sm-4.col-xs-8.border-right
@@ -26,7 +27,7 @@
           a#add-link data-toggle="modal" data-target="#add-link-modal"
             i.fa.fa-link
             | &nbsp;
-            span.hidden-xs href='#' Add Links
+            span.hidden-xs href='#' Add Links and Files
 
       .row
         .text-area-container
@@ -59,7 +60,7 @@
     .modal-dialog
       .modal-content
         .modal-body
-          = react_component 'LinkEditor', {linksJSON: event.links.to_json }
+          = react_component 'TimelineEventAttachmentsEditor', { linksJSON: event.links.to_json }
         .modal-footer
           button#close-link-modal-button.btn.btn-default data-dismiss="modal" type="button"  Close
 

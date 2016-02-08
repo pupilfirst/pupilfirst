@@ -162,7 +162,7 @@ getLinksTabTitle = ->
       title += ' (+' + (links.length-1) + ')'
     $('#add-link').addClass('green-text')
   else
-    title = 'Add Links'
+    title = 'Add Links and Files'
     $('#add-link').removeClass('green-text')
   $('#add-link').find('span').html(title)
 

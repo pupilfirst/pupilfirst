@@ -7,7 +7,9 @@ class TimelineEventsController < ApplicationController
     @startup = current_user.startup
     @timeline_event = @startup.timeline_events.new timeline_event_params.merge(
       links: JSON.parse(timeline_event_params[:links]),
-      user: current_user
+      user: current_user,
+      files: params[:timeline_event][:files].to_hash,
+      files_metadata: JSON.parse(timeline_event_params[:files_metadata])
     )
 
     if @timeline_event.save
@@ -50,7 +52,9 @@ class TimelineEventsController < ApplicationController
   private
 
   def timeline_event_params
-    params.require(:timeline_event).permit(:timeline_event_type_id, :event_on, :description, :image, :links)
+    params.require(:timeline_event).permit(
+      :timeline_event_type_id, :event_on, :description, :image, :links, :files_metadata
+    )
   end
 
   def restrict_to_startup_founders

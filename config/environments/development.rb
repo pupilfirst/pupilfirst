@@ -53,7 +53,7 @@ Rails.application.configure do
   Bullet.bullet_logger = true
   Bullet.console = true
   Bullet.rails_logger = true
-  Bullet.add_footer = true
+  Bullet.add_footer = false
 
   # Roadie asset host.
   config.roadie.url_options = { host: 'localhost', scheme: 'http', port: 3000 }

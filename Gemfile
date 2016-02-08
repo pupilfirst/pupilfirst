@@ -113,6 +113,7 @@ group :development, :test do
   gem 'webmock', require: false # Mocking web requests.
   gem 'quiet_assets' # Let's not see asset serving messages in the development log!
   gem 'rubocop', require: false # Ruby Style Guide.
+  gem 'bundler-audit', require: false # Audit gems in gemfile.lock for reported vulnerabilities
 end
 
 group :production do

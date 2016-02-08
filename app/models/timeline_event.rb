@@ -95,28 +95,32 @@ class TimelineEvent < ActiveRecord::Base
   attr_accessor :files
 
   # Writer used by timeline builder form to supply info about new / to-delete files.
-  attr_accessor :files_metadata
+  attr_writer :files_metadata
 
-  # def files_metadata
-  #   {
-  #     files: timeline_event_files.each_with_object({}) do |file, files_hash|
-  #       files_hash[:id] = file.id
-  #       files_hash[:name] = file.file.file.filename # For real. [table_entry].[column_name].file.filename.
-  #       files_hash[:private] = file.private?
-  #     end
-  #   }.to_json
-  # end
+  def files_metadata
+    @files_metadata || []
+  end
 
-  after_create :update_timeline_event_files
+  def files_metadata_json
+    timeline_event_files.map do |file|
+      {
+        identifier: file.id,
+        name: file.file.file.filename, # For real. [table_entry].[column_name].file.filename.
+        private: file.private?,
+        persisted: true
+      }
+    end.to_json
+  end
+
+  after_save :update_timeline_event_files
 
   def update_timeline_event_files
     # Go through files metadata, and perform create / delete.
     files_metadata.each do |file_metadata|
-
       if file_metadata['persisted']
         # Delete persisted files if they've been flagged.
         if file_metadata['delete']
-          TimelineEventFile.find(file_metadata['identifier']).destroy!
+          timeline_event_files.find(file_metadata['identifier']).destroy!
         end
       else
         # Create non-persisted files.

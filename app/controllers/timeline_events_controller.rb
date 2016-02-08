@@ -8,7 +8,7 @@ class TimelineEventsController < ApplicationController
     @timeline_event = @startup.timeline_events.new timeline_event_params.merge(
       links: JSON.parse(timeline_event_params[:links]),
       user: current_user,
-      files: params[:timeline_event][:files].to_hash,
+      files: params.dig(:timeline_event, :files),
       files_metadata: JSON.parse(timeline_event_params[:files_metadata])
     )
 
@@ -40,7 +40,13 @@ class TimelineEventsController < ApplicationController
     @startup = current_user.startup
     @timeline_event = @startup.timeline_events.find(params[:id])
 
-    if @timeline_event.update_and_require_reverification(timeline_event_params.merge(links: JSON.parse(timeline_event_params[:links])))
+    merged_params = timeline_event_params.merge(
+      links: JSON.parse(timeline_event_params[:links]),
+      files: params.dig(:timeline_event, :files),
+      files_metadata: JSON.parse(timeline_event_params[:files_metadata])
+    )
+
+    if @timeline_event.update_and_require_reverification(merged_params)
       flash[:success] = 'Timeline event updated!'
       redirect_to @startup
     else

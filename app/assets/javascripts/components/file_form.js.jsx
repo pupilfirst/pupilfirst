@@ -9,16 +9,26 @@ var FileForm = React.createClass({
     var filePrivate = $('#timeline-event-file-private').prop('checked');
 
     if (fileName.length > 0) {
-      // Let parent know.
-      this.props.fileAddedCB({name: fileName, private: filePrivate, identifier: this.props.fileIdentifier});
-
-      // Move the input to parent form, so that file can be submitted.
+      // Move the input to parent form, and set correct attributes, so that file can be uploaded on form submit.
       var timelineEventForm = $('#new_timeline_event');
+
+      if (timelineEventForm.length == 0) {
+        timelineEventForm = $('form.edit_timeline_event');
+      }
+
       fileInput.removeAttr('data-reactid');
       fileInput.attr('id', 'timeline_event_file_' + this.props.fileIdentifier);
       fileInput.attr('name', 'timeline_event[files][' + this.props.fileIdentifier + ']');
       fileInput.addClass('hide');
       fileInput.appendTo(timelineEventForm);
+
+      // Let attachments editor know so it can propagate changes.
+      this.props.fileAddedCB({
+        name: fileName,
+        private: filePrivate,
+        identifier: this.props.fileIdentifier,
+        persisted: false
+      });
     } else {
       this.setState({fileError: true});
     }

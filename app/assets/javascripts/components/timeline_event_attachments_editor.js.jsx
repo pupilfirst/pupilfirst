@@ -2,8 +2,7 @@ var TimelineEventAttachmentsEditor = React.createClass({
   getInitialState: function () {
     return {
       links: (this.props.linksJSON.length > 0 ? JSON.parse(this.props.linksJSON) : []),
-      //files: (this.props.filesJSON.length > 0 ? JSON.parse(this.props.filesJSON) : []),
-      files: [],
+      files: (this.props.filesJSON.length > 0 ? JSON.parse(this.props.filesJSON) : []),
       showLinkForm: false,
       showFileForm: false
     };
@@ -53,6 +52,12 @@ var TimelineEventAttachmentsEditor = React.createClass({
     this.setState({files: updatedFiles});
   },
 
+  markFileForDeletion: function (index) {
+    var updatedFiles = this.state.files;
+    updatedFiles[index]['delete'] = true;
+    this.setState({files: updatedFiles});
+  },
+
   editLinkClicked: function (i) {
     //clone the object to a new one, else it will be passed by reference
     var linkToEdit = $.extend({}, this.state.links[i]);
@@ -75,7 +80,8 @@ var TimelineEventAttachmentsEditor = React.createClass({
             <LinkList links={ this.state.links } deleteLinkCB={ this.deleteLink }
                       editLinkClickedCB={ this.editLinkClicked }/>
 
-            <FileList files={ this.state.files } deleteFileCB={ this.deleteFile }/>
+            <FileList files={ this.state.files } deleteFileCB={ this.deleteFile }
+                      markFileForDeletionCB={ this.markFileForDeletion }/>
 
             { this.showAddLinkButton() &&
             <button onClick={this.addLinksClicked} className="btn btn-default margin-right-5">

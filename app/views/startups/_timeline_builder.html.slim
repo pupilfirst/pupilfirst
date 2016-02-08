@@ -60,7 +60,7 @@
     .modal-dialog
       .modal-content
         .modal-body
-          = react_component 'TimelineEventAttachmentsEditor', { linksJSON: event.links.to_json }
+          = react_component 'TimelineEventAttachmentsEditor', { linksJSON: event.links.to_json, filesJSON: event.files_metadata_json }
         .modal-footer
           button#close-link-modal-button.btn.btn-default data-dismiss="modal" type="button"  Close
 

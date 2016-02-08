@@ -8,6 +8,7 @@ class AboutController < ApplicationController
 
   # GET /about/transparency
   def transparency
+    @skip_container = true
   end
 
   # GET /about/slack

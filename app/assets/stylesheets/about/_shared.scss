@@ -15,3 +15,35 @@ iframe.slack {
   overflow-y: hidden;
   width: 400px;
 }
+
+.transparency-banner {
+  height: 260px;
+  background-image: asset-url("startup-index-banner.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom center;
+  position: relative;
+
+  .page-header {
+    color: white;
+    display: inline-block;
+    margin-top: 0;
+    font-size: 42px;
+    letter-spacing: 0.04em;
+  }
+  .banner-text {
+    max-width: 600px;
+    position: absolute;
+    text-align: left;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  p.transparency-introduction {
+    margin: 0;
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 25px;
+    color: white;
+    letter-spacing: 0.04em;
+  }
+}

@@ -23,7 +23,6 @@ class User < ActiveRecord::Base
 
   has_many :public_slack_messages
   has_many :requests
-  belongs_to :college
   belongs_to :father, class_name: 'Name'
   belongs_to :startup
   belongs_to :university

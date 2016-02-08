@@ -221,14 +221,18 @@ class Startup < ActiveRecord::Base
   belongs_to :batch
 
   attr_accessor :validate_web_mandatory_fields
+
+  # TODO: probable stale attribute
   attr_reader :validate_registration_type
 
   # Some fields are mandatory when editing from web.
   validates_presence_of :product_name, :presentation_link, :product_description, :incubation_location, if: :validate_web_mandatory_fields
 
+  # TODO: probably stale
   # Registration type is required when registering.
   validates_presence_of :registration_type, if: ->(startup) { startup.validate_registration_type }
 
+  # TODO: probably stale
   # Registration type should be one of Pvt. Ltd., Partnership, or LLC.
   validates :registration_type,
     inclusion: { in: valid_registration_types },
@@ -267,7 +271,7 @@ class Startup < ActiveRecord::Base
   # New set of validations for incubation wizard
   store :metadata, accessors: [:updated_from]
 
-  validates_numericality_of :team_size, greater_than: 0, allow_blank: true
+  validates_numericality_of :team_size, greater_than_or_equal_to: 3, less_than_or_equal_to: 5, only_integer: true, allow_blank: true
   validates_numericality_of :women_employees, greater_than_or_equal_to: 0, allow_blank: true
   validates_numericality_of :revenue_generated, greater_than_or_equal_to: 0, allow_blank: true
 

@@ -33,7 +33,16 @@ var TimelineEventAttachmentsEditor = React.createClass({
   },
 
   attachmentsLimitNotReached: function () {
-    return (this.state.links.length + this.state.files.length) < 3;
+    var totalAttachments = this.state.links.length;
+
+    $.each(this.state.files, function (index, file) {
+      // For each file not marked for deletion, increase total attachments count by 1.
+      if (!file.delete) {
+        totalAttachments += 1
+      }
+    });
+
+    return totalAttachments < 3;
   },
 
   showAddLinkButton: function () {

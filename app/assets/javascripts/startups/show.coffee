@@ -183,7 +183,7 @@ updateAttachmentsTabTitle = ->
     title = 'Add Links and Files'
 
   if extraAttachments > 0
-    title += " (+ #{extraAttachments})"
+    title += " (+#{extraAttachments})"
 
   $('#add-link').find('span').html(title)
 

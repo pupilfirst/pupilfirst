@@ -205,7 +205,7 @@ class TimelineEvent < ActiveRecord::Base
 
     timeline_event_files.each do |file|
       next if file.private? && !privileged
-      attachments << { file: file, title: file.file.file.filename }
+      attachments << { file: file, title: file.file.file.filename, private: file.private? }
     end
 
     links.each do |link|

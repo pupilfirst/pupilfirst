@@ -78,23 +78,5 @@ feature 'Startup Edit' do
       visit edit_user_startup_path
       expect(page).to have_text('To delete your startup timeline, contact your SV.CO representative.')
     end
-
-    scenario 'Founder deletes his rejected startup as startup_admin' do
-      # change startup admin to this user
-      startup.update(approval_status: Startup::APPROVAL_STATUS_REJECTED)
-      startup.admin.update(startup_admin: false)
-      user.update(startup_admin: true)
-      startup.reload
-      user.reload
-
-      visit edit_user_startup_path
-      expect(page).to have_text('Deleting this startup is an irreversible action.')
-
-      startup_id = startup.id
-      fill_in 'startup_password', with: user.password
-      click_on 'Confirm Startup Deletion'
-      expect { Startup.find(startup_id) }.to raise_error ActiveRecord::RecordNotFound
-      expect(user.startup).to be_nil
-    end
   end
 end

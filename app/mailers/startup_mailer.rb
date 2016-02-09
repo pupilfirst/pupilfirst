@@ -20,12 +20,6 @@ class StartupMailer < ApplicationMailer
     mail(to: send_to, subject: 'You are now part of Startup Village!')
   end
 
-  def startup_rejected(startup)
-    @startup = startup
-    send_to = @startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
-    mail(to: send_to, subject: 'Incubation Request update.')
-  end
-
   def startup_dropped_out(startup)
     @startup = startup
     send_to = @startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }

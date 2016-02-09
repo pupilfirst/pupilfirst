@@ -162,8 +162,6 @@ ActiveAdmin.register Startup do
     case params[:email_to_send].to_sym
       when :approval
         StartupMailer.startup_approved(startup).deliver_later
-      when :rejection
-        StartupMailer.startup_rejected(startup).deliver_later
       when :dropped_out
         StartupMailer.startup_dropped_out(startup).deliver_later
     end
@@ -224,15 +222,6 @@ ActiveAdmin.register Startup do
                 'Approve Startup',
                 custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_APPROVED }, email_to_send: :approval),
                 method: :put, data: { confirm: 'Are you sure you want to approve this startup?' }
-              )
-            end
-          end
-          unless startup.rejected? || startup.unready?
-            span do
-              button_to(
-                'Reject Startup',
-                custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_REJECTED }, email_to_send: :rejection),
-                method: :put, data: { confirm: 'Are you sure you want to reject this startup?' }
               )
             end
           end

@@ -175,12 +175,6 @@ ActiveAdmin.register Startup do
     redirect_to action: :show
   end
 
-  member_action :send_startup_profile_reminder, method: :post do
-    startup = Startup.friendly.find params[:id]
-    StartupMailer.reminder_to_complete_startup_profile(startup).deliver_later
-    redirect_to action: :show
-  end
-
   member_action :get_all_startup_feedback do
     startup = Startup.friendly.find params[:id]
     feedback = startup.startup_feedback.order('updated_at desc')
@@ -366,14 +360,6 @@ ActiveAdmin.register Startup do
           column :created_at
         end
       end
-    end
-
-    panel 'Emails and Notifications' do
-      link_to(
-        'Reminder to complete startup profile',
-        send_startup_profile_reminder_admin_startup_path,
-        method: :post, data: { confirm: 'Are you sure you wish to send notification and email?' }
-      )
     end
   end
 

@@ -26,12 +26,6 @@ class StartupMailer < ApplicationMailer
     mail(to: send_to, subject: 'Incubation Request update.')
   end
 
-  def reminder_to_complete_startup_profile(startup)
-    @startup = startup
-    send_to = @startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
-    mail(to: send_to, subject: 'Reminder to complete your startup profile')
-  end
-
   def reminder_to_complete_startup_info(startup)
     @startup = startup
     send_to = @startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }

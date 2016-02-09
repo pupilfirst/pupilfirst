@@ -3,10 +3,6 @@ class StartupMailerPreview < ActionMailer::Preview
     StartupMailer.startup_approved(Startup.first)
   end
 
-  def reminder_to_complete_startup_profile
-    StartupMailer.reminder_to_complete_startup_profile(Startup.first)
-  end
-
   def reminder_to_complete_startup_info
     StartupMailer.reminder_to_complete_startup_info(Startup.first)
   end

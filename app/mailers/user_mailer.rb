@@ -1,9 +1,4 @@
 class UserMailer < ApplicationMailer
-  def reminder_to_complete_founder_profile(user)
-    @user = user
-    mail to: @user.email, subject: 'Reminder to fill up founder profile'
-  end
-
   def cofounder_addition(cofounder_mail, current_user)
     @current_user = current_user
     mail(to: cofounder_mail, subject: 'SVApp: You have been added as startup cofounder!')

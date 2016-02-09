@@ -8,6 +8,7 @@
     = f.input :roles, as: :check_boxes, collection: User.valid_roles
     = f.input :about
     = f.input :born_on, as: :date_select, :start_year => 1920, :end_year => Date.today.year - 10
+    = f.input :gender, as: :select, collection: User.valid_gender_values
     = f.input :startup, label: 'Product', member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }
     = f.input :startup_admin
     = f.input :communication_address

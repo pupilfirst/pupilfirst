@@ -162,24 +162,10 @@ ActiveAdmin.register Startup do
     case params[:email_to_send].to_sym
       when :approval
         StartupMailer.startup_approved(startup).deliver_later
-      when :rejection
-        StartupMailer.startup_rejected(startup).deliver_later
       when :dropped_out
         StartupMailer.startup_dropped_out(startup).deliver_later
     end
 
-    redirect_to action: :show
-  end
-
-  member_action :send_form_email, method: :post do
-    startup = Startup.friendly.find params[:startup_id]
-    StartupMailer.reminder_to_complete_startup_info(startup).deliver_later
-    redirect_to action: :show
-  end
-
-  member_action :send_startup_profile_reminder, method: :post do
-    startup = Startup.friendly.find params[:id]
-    StartupMailer.reminder_to_complete_startup_profile(startup).deliver_later
     redirect_to action: :show
   end
 
@@ -227,15 +213,6 @@ ActiveAdmin.register Startup do
               )
             end
           end
-          unless startup.rejected? || startup.unready?
-            span do
-              button_to(
-                'Reject Startup',
-                custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_REJECTED }, email_to_send: :rejection),
-                method: :put, data: { confirm: 'Are you sure you want to reject this startup?' }
-              )
-            end
-          end
           unless startup.dropped_out?
             span do
               button_to(
@@ -243,11 +220,6 @@ ActiveAdmin.register Startup do
                 custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_DROPPED_OUT }, email_to_send: :dropped_out),
                 method: :put, data: { confirm: 'Are you sure you want to drop out this startup?' }
               )
-            end
-          end
-          if startup.unready?
-            span do
-              button_to('Send reminder e-mail', send_form_email_admin_startup_path(startup_id: startup.id))
             end
           end
         end
@@ -377,14 +349,6 @@ ActiveAdmin.register Startup do
           column :created_at
         end
       end
-    end
-
-    panel 'Emails and Notifications' do
-      link_to(
-        'Reminder to complete startup profile',
-        send_startup_profile_reminder_admin_startup_path,
-        method: :post, data: { confirm: 'Are you sure you wish to send notification and email?' }
-      )
     end
   end
 

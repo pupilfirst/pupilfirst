@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160208061619) do
+ActiveRecord::Schema.define(version: 20160209090104) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -146,55 +146,13 @@ ActiveRecord::Schema.define(version: 20160208061619) do
   add_index "karma_points", ["startup_id"], name: "index_karma_points_on_startup_id", using: :btree
   add_index "karma_points", ["user_id"], name: "index_karma_points_on_user_id", using: :btree
 
-  create_table "mentor_meetings", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "mentor_id"
-    t.string   "purpose"
-    t.datetime "meeting_at"
-    t.integer  "duration"
-    t.string   "status",               default: "requested"
-    t.integer  "mentor_rating"
-    t.integer  "user_rating"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.datetime "suggested_meeting_at"
-    t.text     "user_comments"
-    t.text     "mentor_comments"
-    t.datetime "user_sms_sent_at"
-    t.datetime "mentor_sms_sent_at"
-  end
-
-  add_index "mentor_meetings", ["mentor_id"], name: "index_mentor_meetings_on_mentor_id", using: :btree
-  add_index "mentor_meetings", ["user_id"], name: "index_mentor_meetings_on_user_id", using: :btree
-
-  create_table "mentor_skills", force: :cascade do |t|
-    t.integer  "mentor_id"
-    t.integer  "skill_id"
-    t.string   "expertise"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "mentor_skills", ["mentor_id"], name: "index_mentor_skills_on_mentor_id", using: :btree
-  add_index "mentor_skills", ["skill_id"], name: "index_mentor_skills_on_skill_id", using: :btree
-
-  create_table "mentors", force: :cascade do |t|
-    t.integer  "user_id"
-    t.string   "availability"
-    t.string   "company_level"
-    t.datetime "verified_at"
-    t.string   "company"
-  end
-
   create_table "public_slack_messages", force: :cascade do |t|
     t.text     "body"
     t.string   "slack_username"
     t.integer  "user_id"
     t.string   "channel"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-    t.string   "timestamp"
-    t.integer  "parent_message_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
   add_index "public_slack_messages", ["user_id"], name: "index_public_slack_messages_on_user_id", using: :btree
@@ -215,16 +173,6 @@ ActiveRecord::Schema.define(version: 20160208061619) do
   add_index "resources", ["batch_id"], name: "index_resources_on_batch_id", using: :btree
   add_index "resources", ["share_status", "batch_id"], name: "index_resources_on_share_status_and_batch_id", using: :btree
   add_index "resources", ["slug"], name: "index_resources_on_slug", using: :btree
-
-  create_table "startup_applications", force: :cascade do |t|
-    t.string   "name"
-    t.string   "email"
-    t.string   "phone"
-    t.text     "idea"
-    t.string   "website"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "startup_categories", force: :cascade do |t|
     t.string   "name"

@@ -1,18 +1,6 @@
 class StartupMailerPreview < ActionMailer::Preview
-  def startup_rejected
-    StartupMailer.startup_rejected(Startup.first)
-  end
-
   def startup_approved
     StartupMailer.startup_approved(Startup.first)
-  end
-
-  def reminder_to_complete_startup_profile
-    StartupMailer.reminder_to_complete_startup_profile(Startup.first)
-  end
-
-  def reminder_to_complete_startup_info
-    StartupMailer.reminder_to_complete_startup_info(Startup.first)
   end
 
   def agreement_expiring_soon

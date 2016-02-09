@@ -52,15 +52,6 @@ ActiveAdmin.register User do
     redirect_to action: :show
   end
 
-  member_action :send_founder_profile_reminder, method: :post do
-    user = User.friendly.find params[:id]
-
-    # Send email.
-    UserMailer.reminder_to_complete_founder_profile(user).deliver_later
-
-    redirect_to action: :show
-  end
-
   show do
     attributes_table do
       row :slug
@@ -149,15 +140,6 @@ ActiveAdmin.register User do
         row :current_sign_in_at
         row :last_sign_in_at
       end
-    end
-
-    panel 'Emails and Notifications' do
-      link_to(
-        'Reminder to complete founder profile',
-        send_founder_profile_reminder_admin_user_path,
-        method: :post,
-        data: { confirm: 'Are you sure you wish to send notification and email?' }
-      )
     end
   end
 

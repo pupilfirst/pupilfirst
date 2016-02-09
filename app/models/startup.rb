@@ -21,7 +21,6 @@ class Startup < ActiveRecord::Base
   APPROVAL_STATUS_UNREADY = -'unready'
   APPROVAL_STATUS_PENDING = -'pending'
   APPROVAL_STATUS_APPROVED = -'approved'
-  APPROVAL_STATUS_REJECTED = -'rejected'
   APPROVAL_STATUS_DROPPED_OUT = -'dropped-out'
 
   PRODUCT_PROGRESS_IDEA = -'idea'
@@ -58,7 +57,7 @@ class Startup < ActiveRecord::Base
 
   def self.valid_approval_status_values
     [
-      APPROVAL_STATUS_UNREADY, APPROVAL_STATUS_PENDING, APPROVAL_STATUS_APPROVED, APPROVAL_STATUS_REJECTED,
+      APPROVAL_STATUS_UNREADY, APPROVAL_STATUS_PENDING, APPROVAL_STATUS_APPROVED,
       APPROVAL_STATUS_DROPPED_OUT
     ]
   end
@@ -68,10 +67,9 @@ class Startup < ActiveRecord::Base
   scope :not_unready, -> { where.not(approval_status: [APPROVAL_STATUS_UNREADY, nil]) }
   scope :pending, -> { where(approval_status: APPROVAL_STATUS_PENDING) }
   scope :approved, -> { where(approval_status: APPROVAL_STATUS_APPROVED) }
-  scope :rejected, -> { where(approval_status: APPROVAL_STATUS_REJECTED) }
   scope :dropped_out, -> { where(approval_status: APPROVAL_STATUS_DROPPED_OUT) }
   scope :not_dropped_out, -> { where.not(approval_status: APPROVAL_STATUS_DROPPED_OUT) }
-  scope :incubation_requested, -> { where(approval_status: [APPROVAL_STATUS_PENDING, APPROVAL_STATUS_REJECTED, APPROVAL_STATUS_APPROVED]) }
+  scope :incubation_requested, -> { where(approval_status: [APPROVAL_STATUS_PENDING, APPROVAL_STATUS_APPROVED]) }
   scope :agreement_signed, -> { where 'agreement_first_signed_at IS NOT NULL' }
   scope :agreement_live, -> { where('agreement_ends_at > ?', Time.now) }
   scope :agreement_expired, -> { where('agreement_ends_at < ?', Time.now) }
@@ -339,10 +337,6 @@ class Startup < ActiveRecord::Base
     approval_status == APPROVAL_STATUS_UNREADY
   end
 
-  def rejected?
-    approval_status == APPROVAL_STATUS_REJECTED
-  end
-
   def dropped_out?
     approval_status == APPROVAL_STATUS_DROPPED_OUT
   end
@@ -444,7 +438,6 @@ class Startup < ActiveRecord::Base
       'Unready' => unready.count,
       'Pending' => pending.count,
       'Approved' => approved.count,
-      'Rejected' => rejected.count,
       'Dropped-out' => dropped_out.count
     }
   end
@@ -453,7 +446,6 @@ class Startup < ActiveRecord::Base
     {
       'Pending' => pending.where(incubation_location: incubation_location).count,
       'Approved' => approved.where(incubation_location: incubation_location).count,
-      'Rejected' => rejected.where(incubation_location: incubation_location).count,
       'Dropped-out' => dropped_out.where(incubation_location: incubation_location).count
     }
   end
@@ -480,20 +472,6 @@ class Startup < ActiveRecord::Base
 
   def phone
     admin.try(:phone)
-  end
-
-  # E-mail address of person to contact in case startup is rejected.
-  def rejection_contact
-    case incubation_location
-      when INCUBATION_LOCATION_VISAKHAPATNAM
-        'vasu@startupvillage.in'
-      when INCUBATION_LOCATION_KOCHI
-        'kiran@startupvillage.in'
-      when INCUBATION_LOCATION_KOZHIKODE
-        'kiran@startupvillage.in'
-      else
-        'kiran@startupvillage.in'
-    end
   end
 
   def cofounders(user)

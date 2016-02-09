@@ -35,3 +35,5 @@
 //= require startups
 //= require users
 //= require about
+//= require jquery-stickit
+//= require jquery.scrollTo

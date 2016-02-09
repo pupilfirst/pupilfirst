@@ -169,12 +169,6 @@ ActiveAdmin.register Startup do
     redirect_to action: :show
   end
 
-  member_action :send_form_email, method: :post do
-    startup = Startup.friendly.find params[:startup_id]
-    StartupMailer.reminder_to_complete_startup_info(startup).deliver_later
-    redirect_to action: :show
-  end
-
   member_action :get_all_startup_feedback do
     startup = Startup.friendly.find params[:id]
     feedback = startup.startup_feedback.order('updated_at desc')
@@ -226,11 +220,6 @@ ActiveAdmin.register Startup do
                 custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_DROPPED_OUT }, email_to_send: :dropped_out),
                 method: :put, data: { confirm: 'Are you sure you want to drop out this startup?' }
               )
-            end
-          end
-          if startup.unready?
-            span do
-              button_to('Send reminder e-mail', send_form_email_admin_startup_path(startup_id: startup.id))
             end
           end
         end

@@ -17,6 +17,7 @@ class Target < ActiveRecord::Base
   scope :recently_completed, -> (number) { where(status: STATUS_DONE).order(completed_at: 'desc').limit(number) }
   scope :founder, -> { where(role: ROLE_FOUNDER) }
   scope :not_target_roles, -> { where.not(role: target_roles) }
+  scope :due_on, -> (date) { where(due_date: date.beginning_of_day..date.end_of_day) }
 
   ROLE_FOUNDER = -'founder'
 
@@ -107,5 +108,39 @@ class Target < ActiveRecord::Base
     message += "Completion Instructions were modified to: \"#{completion_instructions}\"\n" if completion_instructions_changed?
     message += ":exclamation: The due date has been modified to *#{due_date.strftime('%A, %d %b %Y %l:%M %p')}* :exclamation:" if due_date_changed?
     message
+  end
+
+  # Notify all founders of the startup about expiry in 5 days
+  def send_mild_reminder_on_slack
+    return unless startup.present?
+
+    # notify each founder
+    startup.founders.each do |founder|
+      next unless founder.slack_user_id.present?
+      PublicSlackTalk.post_message message: mild_slack_reminder, user: founder
+    end
+  end
+
+  # Slack message to remind founder of expiry in 5 days
+  def mild_slack_reminder
+    ":timer_clock: *Reminder:* Your startup has a target - _#{title}_ - assigned by #{assigner.name} due in 5 days!"
+  end
+
+  # Notify all founders of the startup about expiry in 2 days
+  def send_strong_reminder_on_slack
+    return unless startup.present?
+
+    # notify each founder
+    startup.founders.each do |founder|
+      next unless founder.slack_user_id.present?
+      PublicSlackTalk.post_message message: strong_slack_reminder, user: founder
+    end
+  end
+
+  # Slack message to remind founder of expiry in 2 days
+  def strong_slack_reminder
+    ":exclamation: *Urgent:* It seems that the target - _#{title}_ - assigned to your startup "\
+    "by #{assigner.name} due in 2 days is not yet complete! Please complete the same at the "\
+    "earliest and submit the corresponding timeline entry for verification!"
   end
 end

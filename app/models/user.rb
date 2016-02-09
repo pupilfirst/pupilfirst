@@ -335,12 +335,22 @@ class User < ActiveRecord::Base
   def profile_completion_percentage
     score = 20 # a default score given for required fields during registration
     score += 20 if startup&.approved? # has an approved startup
-    score += 20 if slack_user_id # has a valid slack account associated
-    score += 20 if resume_url # has uploaded resume
+    score += 20 if slack_user_id.present? # has a valid slack account associated
+    score += 20 if resume_url.present? # has uploaded resume
     score += 10 if social_url_present? # has atleast 1 social media links
-    score += 5 if about
-    score += 5 if communication_address
+    score += 5 if communication_address.present?
+    score += 5 if about.present?
     score
+  end
+
+  # Return the 'next-applicable' profile completion instruction as a string
+  def profile_completion_instruction
+    return 'Complete your startup registraton!' unless startup&.approved?
+    return 'Join the SV.CO Public Slack and update your slack username!' unless slack_user_id.present?
+    return 'Submit a resume to your timeline!' unless resume_url.present?
+    return 'Provide at-least one of your social profiles!' unless social_url_present?
+    return 'Update your communication address!' unless communication_address.present?
+    return 'Write a one-liner about yourself to complete your profile!' unless about.present?
   end
 
   # Return true if the user already has all required fields for registration

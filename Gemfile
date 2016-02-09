@@ -13,6 +13,7 @@ gem 'carrierwave' # One uploader to rule them all.
 gem 'carrierwave_backgrounder' # Backgrounder for carrierwave.
 gem 'fog' # required by carrierwave to upload to S3.
 gem 'coffee-rails', '~> 4.1.0'
+gem 'devise', '>= 3.5.4'
 gem 'devise_invitable'
 gem 'jbuilder', '~> 2.0'
 gem 'jquery-rails'
@@ -25,7 +26,7 @@ gem 'slim'
 
 gem 'turbolinks' # Disabled, because it is a pain in the ass.
 
-gem 'uglifier'
+gem 'uglifier', '>= 2.7.2'
 gem 'rest-client' # Used to contact Fast Alerts' API.
 gem 'cancancan', '~> 1.8' # Used to manage administrator types and roles in the ActiveAdmin interface.
 gem 'phony_rails' # Phone number validation and normalization.
@@ -47,7 +48,7 @@ gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: '
 gem 'momentjs-rails', '>= 2.8.1', github: 'derekprior/momentjs-rails' # Required by datetimepicker-rails.
 
 gem 'roadie-rails' # CSS management for e-mails.
-gem 'passenger', '~> 5.0.14' # Passenger web-server.
+gem 'passenger', '>= 5.0.22' # Passenger web-server.
 gem 'delayed_job_active_record' # Delayed Job for deferring tasks.
 gem 'delayed_job_web' # Web interface for delayed_job
 gem 'seedbank' # Better organized seed data.
@@ -113,6 +114,7 @@ group :development, :test do
   gem 'webmock', require: false # Mocking web requests.
   gem 'quiet_assets' # Let's not see asset serving messages in the development log!
   gem 'rubocop', require: false # Ruby Style Guide.
+  gem 'bundler-audit', require: false # Audit gems in gemfile.lock for reported vulnerabilities
 end
 
 group :production do

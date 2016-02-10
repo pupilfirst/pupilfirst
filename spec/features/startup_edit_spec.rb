@@ -43,14 +43,10 @@ feature 'Startup Edit' do
 
     scenario 'Founder clears all required fields' do
       fill_in 'startup_product_name', with: ''
-      fill_in 'startup_product_description', with: ''
-      fill_in 'startup_presentation_link', with: ""
       click_on 'Update startup profile'
 
       expect(page).to have_text('Please review the problems below')
       expect(page.find('div.form-group.startup_product_name')[:class]).to include('has-error')
-      expect(page.find('div.form-group.startup_product_description')[:class]).to include('has-error')
-      expect(page.find('div.form-group.startup_presentation_link')[:class]).to include('has-error')
     end
 
     scenario 'Founder adds a valid co-founder to the startup' do

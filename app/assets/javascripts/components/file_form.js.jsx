@@ -34,14 +34,26 @@ var FileForm = React.createClass({
     }
   },
 
+  formClasses: function () {
+    if (this.state.fileError) {
+      return 'form-group has-error';
+    } else {
+      return 'form-group';
+    }
+  },
+
   render: function () {
     return (
       <div>
         <h4>Add File</h4>
         <div className="form-horizontal">
-          <div className="form-group">
+          <div className={ this.formClasses() }>
             <div className="col-sm-offset-2 col-sm-10">
               <input type="file" id="timeline-event-file-input"/>
+              {
+                this.state.fileError &&
+                <p className="help-block">Please pick a file!</p>
+              }
             </div>
           </div>
 

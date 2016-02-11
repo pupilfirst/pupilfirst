@@ -99,6 +99,9 @@ class ConnectRequest < ActiveRecord::Base
 
       # Default visibility should be sufficient since it equals calendar's setting.
       # e.visibility = 'public'
+
+      # Send an sms 1 day before the office hour and a pop-up message 1 hour before
+      e.reminders = { 'useDefault' => false, 'overrides' => [{ method: 'popup', minutes: 60 }, { method: 'sms', hours: 24 }] }
     end
   end
 

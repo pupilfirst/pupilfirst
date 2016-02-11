@@ -6,11 +6,6 @@ class AboutController < ApplicationController
     @sitewide_notice = params[:redirect_from] == 'startupvillage.in'
   end
 
-  # GET /about/transparency
-  def transparency
-    @skip_container = true
-  end
-
   # GET /about/slack
   def slack
   end

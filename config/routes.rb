@@ -55,7 +55,6 @@ Svapp::Application.routes.draw do
 
   scope 'about', as: 'about', controller: 'about' do
     get '/', action: 'index'
-    get 'transparency'
     get 'slack'
     get 'media-kit'
     get 'leaderboard'
@@ -87,6 +86,8 @@ Svapp::Application.routes.draw do
   get 'apply(/:batch)', as: 'apply', to: 'home#apply'
 
   get 'founders/:slug', to: 'users#founder_profile', as: 'founder_profile'
+
+  get 'transparency', as: 'transparency', to: 'home#transparency'
 
   root 'home#index'
 end

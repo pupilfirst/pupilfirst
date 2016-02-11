@@ -8,6 +8,7 @@ class TimelineEvent < ActiveRecord::Base
   belongs_to :target
 
   has_one :karma_point, as: :source
+  has_many :timeline_event_files
 
   mount_uploader :image, TimelineImageUploader
   serialize :links
@@ -89,6 +90,48 @@ class TimelineEvent < ActiveRecord::Base
 
   attr_accessor :auto_populated
 
+  # Accessors used by timeline builder form to create TimelineEventFile entries.
+  # Should contain a hash: { identifier_key => uploaded_file, ... }
+  attr_accessor :files
+
+  # Writer used by timeline builder form to supply info about new / to-delete files.
+  attr_writer :files_metadata
+
+  def files_metadata
+    @files_metadata || []
+  end
+
+  def files_metadata_json
+    timeline_event_files.map do |file|
+      {
+        identifier: file.id,
+        name: file.file.file.filename, # For real. [table_entry].[column_name].file.filename.
+        private: file.private?,
+        persisted: true
+      }
+    end.to_json
+  end
+
+  after_save :update_timeline_event_files
+
+  def update_timeline_event_files
+    # Go through files metadata, and perform create / delete.
+    files_metadata.each do |file_metadata|
+      if file_metadata['persisted']
+        # Delete persisted files if they've been flagged.
+        if file_metadata['delete']
+          timeline_event_files.find(file_metadata['identifier']).destroy!
+        end
+      else
+        # Create non-persisted files.
+        timeline_event_files.create!(
+          file: files[file_metadata['identifier']],
+          private: file_metadata['private']
+        )
+      end
+    end
+  end
+
   def iteration
     startup.iteration(at_event: self)
   end
@@ -156,7 +199,28 @@ class TimelineEvent < ActiveRecord::Base
     user != viewer
   end
 
+  def attachments_for_user(user)
+    privileged = privileged_user?(user)
+    attachments = []
+
+    timeline_event_files.each do |file|
+      next if file.private? && !privileged
+      attachments << { file: file, title: file.file.file.filename, private: file.private? }
+    end
+
+    links.each do |link|
+      next if link[:private] && !privileged
+      attachments << link
+    end
+
+    attachments
+  end
+
   private
+
+  def privileged_user?(user)
+    user.present? && startup.founders.include?(user)
+  end
 
   def add_link_for_new_resume!
     return unless timeline_event_type.resume_submission? && links[0].try(:[], :url).present?

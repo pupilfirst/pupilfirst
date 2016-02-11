@@ -358,15 +358,25 @@
                       .timeline-body
                         .tl-body
                           p #{event.description}
-                        - if event.links? && ( event.public_link? || @startup.founder?(current_user) )
+
+                        - attachments = event.attachments_for_user(current_user)
+
+                        - if attachments.present?
                           .timeline-footer.tl-footer
-                            - event.links.each do |link|
-                              - if !link[:private] || @startup.founder?(current_user)
-                                a.tl-link-button href="#{link[:url]}" target="_blank"
-                                  - if link[:private]
+                            - attachments.each do |attachment|
+                              - if attachment[:url]
+                                a.tl-link-button href="#{attachment[:url]}" target="_blank"
+                                  - if attachment[:private]
                                     i.fa.fa-user-secret
                                     | &nbsp;
-                                  | #{link[:title]}
+                                  | #{attachment[:title]}
+                              - else # it is a file
+                                a.tl-link-button href="#{download_startup_timeline_event_timeline_event_file_url(@startup, event, attachment[:file])}" target="_blank"
+                                  - if attachment[:private]
+                                    i.fa.fa-user-secret
+                                    | &nbsp;
+                                  | #{attachment[:title]}
+
                         - if current_user && @startup.founder?(current_user)
                           - if event.month_old?
                             .old-to-edit href="#" data-toggle="tooltip" title="To edit/delete this event, please write to help@sv.co."

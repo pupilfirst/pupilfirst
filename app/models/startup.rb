@@ -223,8 +223,9 @@ class Startup < ActiveRecord::Base
   # TODO: probable stale attribute
   attr_reader :validate_registration_type
 
+  # TODO: is the validate_web_mandatory_fields flag still required?
   # Some fields are mandatory when editing from web.
-  validates_presence_of :product_name, :presentation_link, :product_description, :incubation_location, if: :validate_web_mandatory_fields
+  validates_presence_of :product_name, if: :validate_web_mandatory_fields
 
   # TODO: probably stale
   # Registration type is required when registering.

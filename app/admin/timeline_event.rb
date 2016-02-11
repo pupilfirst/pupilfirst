@@ -137,14 +137,19 @@ ActiveAdmin.register TimelineEvent do
     if params[:grade].present?
       timeline_event.update!(grade: params[:grade])
 
+      # if private event, assign karma points to the founder too
+      user = timeline_event.private? ? timeline_event.user : nil
+      assigned_to = timeline_event.private? ? 'the founder and startup' : 'the startup' # used in flash message
+
       karma_point = KarmaPoint.create!(
         source: timeline_event,
+        user: user,
         startup: timeline_event.startup,
         activity_type: "Added a new Timeline event - #{timeline_event.timeline_event_type.title}",
         points: timeline_event.points_for_grade
       )
 
-      flash[:success] = "Karma points (#{timeline_event.points_for_grade}) have been assigned to startup admin."
+      flash[:success] = "Karma points (#{timeline_event.points_for_grade}) have been assigned to #{assigned_to}."
 
       Rails.logger.info event: :timeline_event_karma_point_created, karma_point_id: karma_point.id
     else

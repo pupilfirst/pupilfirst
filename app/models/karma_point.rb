@@ -23,4 +23,12 @@ class KarmaPoint < ActiveRecord::Base
     return if startup.present? || user.blank?
     self.startup_id = user.startup_id
   end
+
+  # TODO: probably enable this after ensuring existing records are taken care of
+  # validate :founder_present_if_private_event
+  #
+  # def founder_present_if_private_event
+  #   return unless source.is_a? TimelineEvent
+  #   errors.add :user_id, 'a user must be specified when the source is a private event' if source.private?
+  # end
 end

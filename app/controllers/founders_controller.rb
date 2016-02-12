@@ -1,5 +1,5 @@
-class UsersController < ApplicationController
-  before_filter :authenticate_user!, except: :founder_profile
+class FoundersController < ApplicationController
+  before_filter :authenticate_founder!, except: :founder_profile
 
   def founder_profile
     @user = Founder.friendly.find(params[:slug])
@@ -49,7 +49,7 @@ class UsersController < ApplicationController
   # PATCH /user/set_unconfirmed_phone
   def set_unconfirmed_phone
     if current_founder.update(unconfirmed_phone: params[:user][:unconfirmed_phone], verification_code_sent_at: nil)
-      redirect_to phone_verification_user_path
+      redirect_to phone_verification_founder_path
     else
       render 'phone'
     end
@@ -63,13 +63,13 @@ class UsersController < ApplicationController
 
     # skip to consent page if registration ongoing and user already has a verified phone
     if @registration_ongoing && current_founder.phone.present?
-      redirect_to consent_user_path, alert: 'You already have a verified phone number'
+      redirect_to consent_founder_path, alert: 'You already have a verified phone number'
       return
     end
 
     # ask for a phone number if 'unconfirmed_phone' is missing
     unless current_founder.unconfirmed_phone.present?
-      redirect_to phone_user_path, alert: 'Please provide a phone number to verify!'
+      redirect_to phone_founder_path, alert: 'Please provide a phone number to verify!'
       return
     end
 
@@ -126,7 +126,7 @@ class UsersController < ApplicationController
 
     if session[:registration_ongoing]
       session[:registration_ongoing] = nil
-      redirect_to consent_user_path
+      redirect_to consent_founder_path
     else
       referer = session.delete :referer
       redirect_to referer || root_url

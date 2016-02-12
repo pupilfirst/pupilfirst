@@ -11,7 +11,7 @@ gem 'active_skin' # Better lookin' active admin!
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
 gem 'carrierwave' # One uploader to rule them all.
 gem 'carrierwave_backgrounder' # Backgrounder for carrierwave.
-gem 'fog' # required by carrierwave to upload to S3.
+gem 'fog-aws' # required by carrierwave to upload to S3.
 gem 'coffee-rails', '~> 4.1.0'
 gem 'devise', '>= 3.5.4'
 gem 'devise_invitable'

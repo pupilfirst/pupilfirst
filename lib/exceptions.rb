@@ -18,8 +18,6 @@ module Exceptions
   class AuthTokenInvalid < ApiRequestError; end
   class ApplicationTokenInvalid < ApiRequestError; end
   class RestrictedToSelf < ApiRequestError; end
-  class UserAlreadyHasStartup < ApiRequestError; end
-  class UserAlreadyMemberOfStartup < ApiRequestError; end
   class FounderMissing < ApiResourceMissingError; end
   class UserIsNotPendingFounder < ApiRequestError; end
   class AuthorizedUserStartupMismatch < ApiRequestError; end
@@ -30,8 +28,10 @@ module Exceptions
   class AlreadyCreatedUser < ApiRequestError; end
   class ContactAlreadyExists < ApiRequestError; end
   class InvalidPhoneNumber < ApiRequestError; end
+  class FounderAlreadyHasStartup < ApiRequestError; end
+  class FounderAlreadyMemberOfStartup < ApiRequestError; end
   class PhoneNumberVerificationFailed < ApiRequestError; end
   class LoginCredentialsInvalid < ApiRequestError; end
   class UserDoesNotBelongToStartup < ApiRequestError; end
-  class UserNotFound < ApiResourceMissingError; end
+  class FounderNotFound < ApiResourceMissingError; end
 end

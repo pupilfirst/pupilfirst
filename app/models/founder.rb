@@ -246,13 +246,13 @@ class Founder < ActiveRecord::Base
   def add_as_founder_to_startup!(email)
     founder = Founder.find_by email: email
 
-    fail Exceptions::UserNotFound unless founder
+    fail Exceptions::FounderNotFound unless founder
 
     if founder.startup.present?
       exception_class = if founder.startup == startup
-        Exceptions::UserAlreadyMemberOfStartup
+        Exceptions::FounderAlreadyMemberOfStartup
       else
-        Exceptions::UserAlreadyHasStartup
+        Exceptions::FounderAlreadyHasStartup
       end
 
       fail exception_class

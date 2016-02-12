@@ -97,11 +97,11 @@ class StartupsController < ApplicationController
   def add_founder
     begin
       current_user.add_as_founder_to_startup!(params[:cofounder][:email])
-    rescue Exceptions::UserNotFound
+    rescue Exceptions::FounderNotFound
       flash[:error] = "Couldn't find a user with the SV.CO ID you supplied. Please verify founder's registered email address."
-    rescue Exceptions::UserAlreadyMemberOfStartup
+    rescue Exceptions::FounderAlreadyMemberOfStartup
       flash[:info] = 'The SV.CO ID you supplied is already linked to your startup!'
-    rescue Exceptions::UserAlreadyHasStartup
+    rescue Exceptions::FounderAlreadyHasStartup
       flash[:notice] = 'The SV.CO ID you supplied is already linked to another startup. Are you sure you have the right e-mail address?'
     else
       flash[:success] = "SV.CO ID #{params[:email]} has been linked to your startup as founder"

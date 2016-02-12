@@ -1,7 +1,7 @@
 # encoding: utf-8
 # frozen_string_literal: true
 
-class User < ActiveRecord::Base
+class Founder < ActiveRecord::Base
   extend FriendlyId
   extend Forwardable
   include Gravtastic
@@ -96,13 +96,13 @@ class User < ActiveRecord::Base
   after_initialize ->() { @full_validation = false }
   after_update :send_password_change_email, if: :needs_password_change_email?
 
-  # Email is not required for an unregistered 'contact' user.
+  # Email is not required for an unregistered 'contact' founder.
   def email_required?
     !invitation_token.present?
   end
 
   # Validate presence of e-mail for everyone except contacts with invitation token (unregistered contacts).
-  validates_uniqueness_of :email, unless: ->(user) { user.invitation_token.present? }
+  validates_uniqueness_of :email, unless: ->(founder) { founder.invitation_token.present? }
 
   mount_uploader :avatar, AvatarUploader
   process_in_background :avatar
@@ -125,7 +125,7 @@ class User < ActiveRecord::Base
 
   def role_must_be_valid
     roles.each do |role|
-      unless User.valid_roles.include? role
+      unless Founder.valid_roles.include? role
         errors.add(:roles, 'contained unrecognized value')
       end
     end
@@ -190,6 +190,7 @@ class User < ActiveRecord::Base
     display_name
   end
 
+  # TODO: is this used anywhere ?
   # Skips setting password and sets invitation_token to allow later registration.
   def save_unregistered_user!
     unless persisted?
@@ -241,14 +242,14 @@ class User < ActiveRecord::Base
 
   def_delegator :startup, :present?, :member_of_startup?
 
-  # Add user with given email as co-founder if possible.
+  # Add founder with given email as co-founder if possible.
   def add_as_founder_to_startup!(email)
-    user = User.find_by email: email
+    founder = Founder.find_by email: email
 
-    fail Exceptions::UserNotFound unless user
+    fail Exceptions::UserNotFound unless founder
 
-    if user.startup.present?
-      exception_class = if user.startup == startup
+    if founder.startup.present?
+      exception_class = if founder.startup == startup
         Exceptions::UserAlreadyMemberOfStartup
       else
         Exceptions::UserAlreadyHasStartup
@@ -256,7 +257,7 @@ class User < ActiveRecord::Base
 
       fail exception_class
     else
-      startup.founders << user
+      startup.founders << founder
 
       UserMailer.cofounder_addition(email, self).deliver_later
     end
@@ -270,7 +271,7 @@ class User < ActiveRecord::Base
     super || []
   end
 
-  # A simple flag, which returns true if the user signed in less than 15 seconds ago.
+  # A simple flag, which returns true if the founder signed in less than 15 seconds ago.
   def just_signed_in
     current_sign_in_at > 15.seconds.ago
   end
@@ -312,7 +313,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  # If user is part of a batched startup, it returns batch's date range - otherwise user creation time to 'now'.
+  # If founder is part of a batched startup, it returns batch's date range - otherwise founder creation time to 'now'.
   def activity_date_range
     (activity_timeline_start_date.beginning_of_day..activity_timeline_end_date.end_of_day)
   end
@@ -353,7 +354,7 @@ class User < ActiveRecord::Base
     return 'Write a one-liner about yourself to complete your profile!' unless about.present?
   end
 
-  # Return true if the user already has all required fields for registration
+  # Return true if the founder already has all required fields for registration
   def already_registered?
     first_name? && last_name? && encrypted_password? && gender? && born_on?
   end

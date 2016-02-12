@@ -2,5 +2,5 @@
 - options = startup_feedback.startup.founders.map { |founder| [founder.fullname_and_email, founder.id] }
 
 = form_tag form_path, method: :put do
-  = select_tag :user_id, options_for_select(options, startup_feedback.startup.admin.id), class: 'admin-startup-feedback-show-founder-select'
+  = select_tag :founder_id, options_for_select(options, startup_feedback.startup.admin.id), class: 'admin-startup-feedback-show-founder-select'
   = submit_tag 'Send Email'

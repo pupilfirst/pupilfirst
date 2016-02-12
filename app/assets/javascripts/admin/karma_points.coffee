@@ -7,6 +7,6 @@ loadFoundersForStartup = ->
     foundersForStartupUrl = $('#karma-point-founders-for-startup-url').data('url')
 
     $.get(foundersForStartupUrl, { startup_id: selectedStartupId }).success (data) ->
-      $('#karma_point_user_id').html(data.founder_options)
+      $('#karma_point_founder_id').html(data.founder_options)
 
 $(document).on 'page:change', loadFoundersForStartup

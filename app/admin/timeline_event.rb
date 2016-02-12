@@ -1,7 +1,7 @@
 ActiveAdmin.register TimelineEvent do
   menu parent: 'Startups'
   permit_params :description, :timeline_event_type_id, :image, :links, :event_on, :startup_id, :verified_at, :grade,
-    :user_id
+    :founder_id
 
   preserve_default_filters!
   filter :startup_batch

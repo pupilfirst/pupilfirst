@@ -28,7 +28,7 @@ loadFoundersForStartup = ->
     foundersForStartupUrl = $('#timeline-event-founders-for-startup-url').data('url')
 
     $.get(foundersForStartupUrl, { startup_id: selectedStartupId }).success (data) ->
-      $('#timeline_event_user_id').html(data.founder_options)
+      $('#timeline_event_founder_id').html(data.founder_options)
 
 $(document).on 'page:change', handleLinkEditing
 $(document).on 'page:change', betterFormControls

@@ -166,7 +166,7 @@ ActiveAdmin.register StartupFeedback do
 
   member_action :email_feedback_to_founder, method: :put do
     startup_feedback = StartupFeedback.find params[:id]
-    user = Founder.find(params[:user_id])
+    user = Founder.find(params[:founder_id])
     StartupMailer.feedback_as_email(startup_feedback, user: user).deliver_later
     # Mark feedback as sent.
     startup_feedback.update(sent_at: Time.now)
@@ -176,7 +176,7 @@ ActiveAdmin.register StartupFeedback do
 
   member_action :slack_feedback_to_founder, method: :put do
     startup_feedback = StartupFeedback.find params[:id]
-    user = Founder.find(params[:user_id])
+    user = Founder.find(params[:founder_id])
 
     # post to slack
     response = PublicSlackTalk.post_message message: startup_feedback.as_slack_message, user: user

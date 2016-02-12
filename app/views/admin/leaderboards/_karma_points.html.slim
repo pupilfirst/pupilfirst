@@ -35,8 +35,8 @@ table.index_table
         a.not-a-link href='#' Karma Points
   tbody
     - users_by_karma(batch: @batch, after: @after, before: @before).each_with_index do |points_array, idx|
-      - user_id, points = points_array
-      - user = Founder.includes(:startup).find(user_id)
+      - founder_id, points = points_array
+      - user = Founder.includes(:startup).find(founder_id)
       tr class="#{(idx + 1).even? ? 'even' : 'odd'}"
         td = link_to user.fullname, admin_user_path(user)
         td = founder_roles user.roles

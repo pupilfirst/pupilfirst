@@ -1,5 +1,5 @@
 class KarmaPoint < ActiveRecord::Base
-  belongs_to :user
+  belongs_to :founder
   belongs_to :startup
 
   belongs_to :source, polymorphic: true
@@ -13,7 +13,7 @@ class KarmaPoint < ActiveRecord::Base
     if startup.blank? && user.blank?
       message = 'one of product or founder must be selected'
       errors.add :startup_id, message
-      errors.add :user_id, message
+      errors.add :founder_id, message
     end
   end
 
@@ -29,6 +29,6 @@ class KarmaPoint < ActiveRecord::Base
   #
   # def founder_present_if_private_event
   #   return unless source.is_a? TimelineEvent
-  #   errors.add :user_id, 'a user must be specified when the source is a private event' if source.private?
+  #   errors.add :founder_id, 'a user must be specified when the source is a private event' if source.private?
   # end
 end

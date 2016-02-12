@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160212081316) do
+ActiveRecord::Schema.define(version: 20160212105206) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -201,7 +201,7 @@ ActiveRecord::Schema.define(version: 20160212081316) do
   add_index "founders", ["university_id"], name: "index_founders_on_university_id", using: :btree
 
   create_table "karma_points", force: :cascade do |t|
-    t.integer  "user_id"
+    t.integer  "founder_id"
     t.integer  "points"
     t.string   "activity_type"
     t.datetime "created_at",    null: false
@@ -211,14 +211,14 @@ ActiveRecord::Schema.define(version: 20160212081316) do
     t.integer  "startup_id"
   end
 
+  add_index "karma_points", ["founder_id"], name: "index_karma_points_on_founder_id", using: :btree
   add_index "karma_points", ["source_id"], name: "index_karma_points_on_source_id", using: :btree
   add_index "karma_points", ["startup_id"], name: "index_karma_points_on_startup_id", using: :btree
-  add_index "karma_points", ["user_id"], name: "index_karma_points_on_user_id", using: :btree
 
   create_table "public_slack_messages", force: :cascade do |t|
     t.text     "body"
     t.string   "slack_username"
-    t.integer  "user_id"
+    t.integer  "founder_id"
     t.string   "channel"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
@@ -226,7 +226,7 @@ ActiveRecord::Schema.define(version: 20160212081316) do
     t.integer  "parent_message_id"
   end
 
-  add_index "public_slack_messages", ["user_id"], name: "index_public_slack_messages_on_user_id", using: :btree
+  add_index "public_slack_messages", ["founder_id"], name: "index_public_slack_messages_on_founder_id", using: :btree
 
   create_table "resources", force: :cascade do |t|
     t.string   "file"
@@ -398,13 +398,13 @@ ActiveRecord::Schema.define(version: 20160212081316) do
     t.string   "verified_status"
     t.string   "grade"
     t.integer  "target_id"
-    t.integer  "user_id"
+    t.integer  "founder_id"
   end
 
+  add_index "timeline_events", ["founder_id"], name: "index_timeline_events_on_founder_id", using: :btree
   add_index "timeline_events", ["startup_id"], name: "index_timeline_events_on_startup_id", using: :btree
   add_index "timeline_events", ["target_id"], name: "index_timeline_events_on_target_id", using: :btree
   add_index "timeline_events", ["timeline_event_type_id"], name: "index_timeline_events_on_timeline_event_type_id", using: :btree
-  add_index "timeline_events", ["user_id"], name: "index_timeline_events_on_user_id", using: :btree
 
   create_table "universities", force: :cascade do |t|
     t.string   "name"

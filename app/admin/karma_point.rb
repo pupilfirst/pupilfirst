@@ -1,7 +1,7 @@
 ActiveAdmin.register KarmaPoint do
   menu parent: 'Users'
 
-  permit_params :startup_id, :user_id, :points, :activity_type, :created_at
+  permit_params :startup_id, :founder_id, :points, :activity_type, :created_at
 
   preserve_default_filters!
   filter :user_startup_id_eq, label: 'Batched Startup', as: :select, collection: proc { Startup.batched }

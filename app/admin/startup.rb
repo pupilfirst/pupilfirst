@@ -289,7 +289,7 @@ ActiveAdmin.register Startup do
             end
 
             span do
-              " &mdash; #{link_to 'Karma++'.html_safe, new_admin_karma_point_path(karma_point: { user_id: founder.id })}".html_safe
+              " &mdash; #{link_to 'Karma++'.html_safe, new_admin_karma_point_path(karma_point: { founder_id: founder.id })}".html_safe
             end
 
             span do

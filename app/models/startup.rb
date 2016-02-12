@@ -209,10 +209,6 @@ class Startup < ActiveRecord::Base
   has_many :connect_requests, dependent: :destroy
   has_many :team_members, dependent: :destroy
 
-  # Allow statup to accept nested attributes for users
-  # has_many :users
-  # accepts_nested_attributes_for :users
-
   has_one :admin, -> { where(startup_admin: true) }, class_name: 'Founder', foreign_key: 'startup_id'
   accepts_nested_attributes_for :admin
 

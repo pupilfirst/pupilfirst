@@ -42,7 +42,7 @@ ActiveAdmin.register Founder do
 
     column :karma_points do |user|
       points = user.karma_points.where('created_at > ?', Date.today.beginning_of_week).sum(:points)
-      link_to points, admin_karma_points_path(q: { user_id_eq: user.id })
+      link_to points, admin_karma_points_path(q: { founder_id_eq: user.id })
     end
   end
 
@@ -153,7 +153,7 @@ ActiveAdmin.register Founder do
   end
 
   action_item :public_slack_messages, only: :show, if: proc { Founder.friendly.find(params[:id]).slack_username.present? } do
-    link_to 'Public Slack Messages', admin_public_slack_messages_path(q: { user_id_eq: params[:id] })
+    link_to 'Public Slack Messages', admin_public_slack_messages_path(q: { founder_id_eq: params[:id] })
   end
 
   action_item :new_invite, only: :index do

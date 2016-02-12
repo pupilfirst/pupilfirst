@@ -30,7 +30,7 @@ pid '<%= @options[:pid_file] %>';
         user <%= @options[:user] %> <%= default_group_for(@options[:user]) %>;
     <% else %>
         <%# Prevent running Nginx workers as nobody. %>
-        user <%= current_user %> <%= default_group_for(current_user) %>;
+        user <%= current_founder %> <%= default_group_for(current_founder) %>;
     <% end %>
 <% end %>
 
@@ -71,9 +71,9 @@ http {
         passenger_default_user <%= @options[:user] %>;
         passenger_analytics_log_user <%= @options[:user] %>;
     <% else %>
-        passenger_user <%= current_user %>;
-        passenger_default_user <%= current_user %>;
-        passenger_analytics_log_user <%= current_user %>;
+        passenger_user <%= current_founder %>;
+        passenger_default_user <%= current_founder %>;
+        passenger_analytics_log_user <%= current_founder %>;
     <% end %>
     <% if @options[:instance_registry_dir] %>passenger_instance_registry_dir '<%= @options[:instance_registry_dir] %>';<% end %>
     <% if @options[:data_buffer_dir] %>passenger_data_buffer_dir '<%= @options[:data_buffer_dir] %>';<% end %>

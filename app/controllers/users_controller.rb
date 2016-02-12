@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_filter :authenticate_user!, except: :founder_profile
 
   def founder_profile
-    @user = User.friendly.find(params[:slug])
+    @user = Founder.friendly.find(params[:slug])
     @timeline = @user.activity_timeline
     @skip_container = true
   end
@@ -14,7 +14,7 @@ class UsersController < ApplicationController
 
   # PATCH /users/:id
   def update
-    @user = User.find current_user.id
+    @user = Founder.find current_user.id
 
     if @user.update_attributes(user_params)
       flash[:notice] = 'Profile updated'

@@ -155,8 +155,8 @@ ActiveAdmin.register StartupFeedback do
     response = PublicSlackTalk.post_message message: startup_feedback.as_slack_message, users: founders
 
     # form appropriate flash message with details from response
-    success_names = User.find(founders.ids - response.errors.keys).map(&:slack_username).join(', ')
-    failure_names = User.find(founders.ids & response.errors.keys).map(&:fullname).join(', ')
+    success_names = Founder.find(founders.ids - response.errors.keys).map(&:slack_username).join(', ')
+    failure_names = Founder.find(founders.ids & response.errors.keys).map(&:fullname).join(', ')
     success_message = success_names.present? ? "Your feedback has been sent as DM to: #{success_names} \n" : ''
     failure_message = failure_names.present? ? "Failed to ping: #{failure_names}" : ''
     flash[:alert] = success_message + failure_message
@@ -166,7 +166,7 @@ ActiveAdmin.register StartupFeedback do
 
   member_action :email_feedback_to_founder, method: :put do
     startup_feedback = StartupFeedback.find params[:id]
-    user = User.find(params[:user_id])
+    user = Founder.find(params[:user_id])
     StartupMailer.feedback_as_email(startup_feedback, user: user).deliver_later
     # Mark feedback as sent.
     startup_feedback.update(sent_at: Time.now)
@@ -176,7 +176,7 @@ ActiveAdmin.register StartupFeedback do
 
   member_action :slack_feedback_to_founder, method: :put do
     startup_feedback = StartupFeedback.find params[:id]
-    user = User.find(params[:user_id])
+    user = Founder.find(params[:user_id])
 
     # post to slack
     response = PublicSlackTalk.post_message message: startup_feedback.as_slack_message, user: user

@@ -113,7 +113,7 @@ ActiveAdmin.register Startup do
     column :physical_incubatee
     column(:founders) { |startup| startup.founders.pluck(:first_name).join ', ' }
     column(:team_members) { |startup| startup.team_members.pluck(:name).join ', ' }
-    column(:women_cofounders) { |startup| startup.founders.where(gender: User::GENDER_FEMALE).count }
+    column(:women_cofounders) { |startup| startup.founders.where(gender: Founder::GENDER_FEMALE).count }
     column :pitch
     column :website
     column :approval_status
@@ -182,7 +182,7 @@ ActiveAdmin.register Startup do
 
   member_action :change_admin, method: :patch do
     Startup.friendly.find(params[:id]).admin.update(startup_admin: nil)
-    User.find(params[:founder_id]).update(startup_admin: true)
+    Founder.find(params[:founder_id]).update(startup_admin: true)
     redirect_to action: :show
   end
 
@@ -315,7 +315,7 @@ ActiveAdmin.register Startup do
       end
 
       row :women_cofounders do
-        startup.founders.where(gender: User::GENDER_FEMALE).count
+        startup.founders.where(gender: Founder::GENDER_FEMALE).count
       end
 
       row :registration_type

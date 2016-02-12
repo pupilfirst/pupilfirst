@@ -1,9 +1,9 @@
 module IncubationHelper
   def valid_gender_values
     {
-      'Male' => User::GENDER_MALE,
-      'Female' => User::GENDER_FEMALE,
-      'Other' => User::GENDER_OTHER
+      'Male' => Founder::GENDER_MALE,
+      'Female' => Founder::GENDER_FEMALE,
+      'Other' => Founder::GENDER_OTHER
     }
   end
 

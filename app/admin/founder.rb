@@ -1,4 +1,4 @@
-ActiveAdmin.register User do
+ActiveAdmin.register Founder do
   controller do
     def scoped_collection
       super.includes :university, :startup
@@ -9,7 +9,7 @@ ActiveAdmin.register User do
     end
   end
 
-  menu label: 'SV Users'
+  menu label: 'SV Founders'
 
   scope :all
   scope :batched
@@ -47,7 +47,7 @@ ActiveAdmin.register User do
   end
 
   member_action :remove_from_startup, method: :post do
-    user = User.friendly.find params[:id]
+    user = Founder.friendly.find params[:id]
     user.remove_from_startup!
     redirect_to action: :show
   end
@@ -143,16 +143,16 @@ ActiveAdmin.register User do
     end
   end
 
-  action_item :feedback, only: :show, if: proc { User.friendly.find(params[:id]).startup.present? } do
+  action_item :feedback, only: :show, if: proc { Founder.friendly.find(params[:id]).startup.present? } do
     link_to(
       'Record New Feedback',
       new_admin_startup_feedback_path(
-        startup_feedback: { startup_id: User.friendly.find(params[:id]).startup.id, reference_url: startup_url(User.friendly.find(params[:id]).startup) }
+        startup_feedback: { startup_id: Founder.friendly.find(params[:id]).startup.id, reference_url: startup_url(Founder.friendly.find(params[:id]).startup) }
       )
     )
   end
 
-  action_item :public_slack_messages, only: :show, if: proc { User.friendly.find(params[:id]).slack_username.present? } do
+  action_item :public_slack_messages, only: :show, if: proc { Founder.friendly.find(params[:id]).slack_username.present? } do
     link_to 'Public Slack Messages', admin_public_slack_messages_path(q: { user_id_eq: params[:id] })
   end
 
@@ -167,13 +167,13 @@ ActiveAdmin.register User do
     email = params[:user][:email]
 
     # do not send invites to already registered users
-    if User.find_by(email: email).present?
+    if Founder.find_by(email: email).present?
       flash.now[:error] = 'A user with this email id already exists!'
       redirect_to :back
       return
     end
 
-    if email =~ /@/ && User.invite!(email: email)
+    if email =~ /@/ && Founder.invite!(email: email)
       flash.now[:success] = 'Invitation successfully sent!'
       redirect_to action: :index
     else
@@ -186,7 +186,7 @@ ActiveAdmin.register User do
   filter :email
   filter :first_name
   filter :last_name
-  filter :roles_cont, as: :select, collection: User.valid_roles, label: 'Role'
+  filter :roles_cont, as: :select, collection: Founder.valid_roles, label: 'Role'
   filter :is_founder
   filter :university
   filter :roll_number

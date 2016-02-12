@@ -1,7 +1,7 @@
 class ConnectRequestController < ApplicationController
   # GET /connect_request/:id/feedback/from_team/:token
   def feedback_from_team
-    admin = User.find_by(auth_token: params[:token])
+    admin = Founder.find_by(auth_token: params[:token])
 
     raise_not_found if admin.blank?
 

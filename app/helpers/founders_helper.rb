@@ -1,4 +1,4 @@
-module UsersHelper
+module FoundersHelper
   def startup_html(startup)
     if startup.present?
       link_to startup.try(:name), startup_url(startup)

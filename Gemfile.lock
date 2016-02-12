@@ -576,7 +576,6 @@ DEPENDENCIES
   logstash-logger
   mini_magick
   momentjs-rails (>= 2.8.1)!
-  nokogiri
   passenger (>= 5.0.22)
   pg
   phony_rails

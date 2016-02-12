@@ -16,16 +16,13 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'devise', '>= 3.5.4'
 gem 'devise_invitable'
 gem 'jbuilder', '~> 2.0'
-gem 'jquery-rails'
+gem 'jquery-rails' # JQuery on Rails.
 gem 'mini_magick' # Image processing.
-gem 'nokogiri'
-gem 'pg'
+gem 'pg' # PostgreSQL support.
 gem 'sass-rails', '~> 5.0'
 gem 'sentry-raven' # Reporter for Sentry Heroku add-on.
 gem 'slim'
-
-gem 'turbolinks' # Disabled, because it is a pain in the ass.
-
+gem 'turbolinks'
 gem 'uglifier', '>= 2.7.2'
 gem 'rest-client' # Used to contact Fast Alerts' API.
 gem 'cancancan', '~> 1.8' # Used to manage administrator types and roles in the ActiveAdmin interface.

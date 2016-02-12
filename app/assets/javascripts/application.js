@@ -25,6 +25,8 @@
 //= require limit_max_int
 //= require inspectlet
 //= require video
+//= require jquery-stickit
+//= require jquery.scrollTo
 
 // Shared
 //= require _shared
@@ -36,5 +38,3 @@
 //= require users
 //= require about
 //= require transparency
-//= require jquery-stickit
-//= require jquery.scrollTo

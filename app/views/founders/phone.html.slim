@@ -5,7 +5,7 @@
   .onboarding-container.clearfix
     .user-registration-box
       legend.margin-top-20.form-section-head.font-weight-400
-        - if current_user.phone?
+        - if current_founder.phone?
           ' Change phone number
         - else
           ' Set your phone number
@@ -15,11 +15,11 @@
       - else
         .alert.alert-info role='alert'
           ' Please supply your
-          - if current_user.phone?
+          - if current_founder.phone?
             ' <em>new</em>
           ' phone number to continue. You will be asked to verify it in the next step.
 
-      = simple_form_for current_user, url: set_unconfirmed_phone_user_url, html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
+      = simple_form_for current_founder, url: set_unconfirmed_phone_user_url, html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
         = f.input :unconfirmed_phone, label: 'Your phone number', required: true, placeholder: '10-digit mobile phone number'
         .col-sm-offset-3
           = f.submit 'Proceed to phone number verification', class: 'btn btn-primary btn-flat resend-code-btn font-weight-400'

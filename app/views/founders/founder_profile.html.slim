@@ -9,7 +9,7 @@
         .col-md-2
           .profile
             = image_tag profile_image_url(@user, gravatar_size: 140, avatar_version: :mid), class: 'img-responsive'
-            - if current_user == @user
+            - if current_founder == @user
               .progress-container
                 .progress.profile-progress
                   - if @user.profile_completion_percentage >= 80
@@ -39,7 +39,7 @@
                         = @user.roles.map { |role| t("role.#{role}") }.join ', '
                         ' &nbsp;at
                       = @user.startup.product_name
-                  - if current_user == @user
+                  - if current_founder == @user
                     a.profile-edit-button href=edit_user_url
                       i.fa.fa-pencil
                       ' Edit

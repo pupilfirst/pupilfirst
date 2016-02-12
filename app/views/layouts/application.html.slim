@@ -53,5 +53,5 @@ html
 
     == render 'layouts/footer'
 
-    - if current_user.try(:just_signed_in)
+    - if current_founder.try(:just_signed_in)
       == render 'layouts/inspectlet'

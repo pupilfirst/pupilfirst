@@ -19,9 +19,9 @@
           span.font-weight-600 real Universities.
         div
           .header-buttons
-            - if current_user
-              - if current_user.startup.present?
-                a.btn.btn-flat.btn-join href=startup_path(current_user.startup) View Startup Timeline
+            - if current_founder
+              - if current_founder.startup.present?
+                a.btn.btn-flat.btn-join href=startup_path(current_founder.startup) View Startup Timeline
               - else
                 a.btn.btn-flat.btn-join href=new_user_startup_path Apply for Incubation!
             - else

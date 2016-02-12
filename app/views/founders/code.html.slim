@@ -51,7 +51,7 @@
     - if Rails.env.development?
       .alert.alert-info role='alert'
         ' Development mode! Verification code is
-        code #{current_user.phone_verification_code}
+        code #{current_founder.phone_verification_code}
 
     .user-registration-box
       = form_tag verify_user_url, class: 'form-horizontal', role: 'form' do

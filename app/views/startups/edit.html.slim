@@ -10,14 +10,14 @@ h2.page-header Modify founders
       tbody
         tr
           td colspan="2"
-            ' #{current_user.email}
+            ' #{current_founder.email}
             strong
               | (you)
-        - @startup.cofounders(current_user).each do |cofounder|
+        - @startup.cofounders(current_founder).each do |cofounder|
           tr
             td #{cofounder.email}
             td
-              - if @startup.admin?(current_user)
+              - if @startup.admin?(current_founder)
                 = button_to 'Remove', remove_founder_user_startup_path(founder_id: cofounder.id), method: :patch, class: 'btn btn-danger btn-xs', data: { confirm: 'Are you sure you want to remove this founder from your startup?' }
 
 - if @startup.founders.size < 5
@@ -46,7 +46,7 @@ h2.page-header Edit your startup profile
 
 h2.page-header Delete my Startup
 
-- if @startup.admin?(current_user)
+- if @startup.admin?(current_founder)
   - if @startup.approved? || @startup.dropped_out?
     .alert.alert-danger
       ' You are currently #{@startup.approved? ? 'enrolled in' : 'a dropout of'} an SV.CO Batch! To delete your startup timeline, contact your SV.CO representative.

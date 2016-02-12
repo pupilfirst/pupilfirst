@@ -30,10 +30,9 @@ class Founder < ActiveRecord::Base
   has_many :timeline_events
 
   scope :batched, -> { joins(:startup).merge(Startup.batched) }
-  scope :founders, -> { where(is_founder: true).includes(:startup) }
-  scope :non_founders, -> { where("is_founder = ? or is_founder IS NULL", false) }
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }
-  scope :student_entrepreneurs, -> { where(is_founder: true).where.not(university_id: nil) }
+  # TODO: Do we need this anymore ?
+  scope :student_entrepreneurs, -> { where.not(university_id: nil) }
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
 
   validates_presence_of :born_on
@@ -210,7 +209,6 @@ class Founder < ActiveRecord::Base
   def remove_from_startup!
     self.startup_id = nil
     self.startup_admin = nil
-    self.is_founder = nil
     save!
   end
 
@@ -277,7 +275,7 @@ class Founder < ActiveRecord::Base
   end
 
   def founder?
-    is_founder && startup.present? && startup.approved?
+    startup.present? && startup.approved?
   end
 
   # The option to create connect requests is restricted to team leads of batched, approved startups.

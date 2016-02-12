@@ -138,9 +138,8 @@ class Startup < ActiveRecord::Base
     joins(:startup_categories).where(startup_categories: { id: category.id })
   end
 
-  has_many :founders, -> { where('is_founder = ?', true) }, class_name: 'Founder', foreign_key: 'startup_id' do
+  has_many :founders do
     def <<(founder)
-      founder.update_attributes!(is_founder: true)
       super founder
     end
   end
@@ -288,7 +287,7 @@ class Startup < ActiveRecord::Base
 
   before_destroy do
     # Clear out associations from associated Founders (and pending ones).
-    Founder.where(startup_id: id).update_all(startup_id: nil, startup_admin: nil, is_founder: nil)
+    Founder.where(startup_id: id).update_all(startup_id: nil, startup_admin: nil)
   end
 
   # Friendly ID!
@@ -460,7 +459,7 @@ class Startup < ActiveRecord::Base
 
   def founder?(user)
     return false unless user
-    user.is_founder? && user.startup_id == id
+    user.startup_id == id
   end
 
   def possible_founders

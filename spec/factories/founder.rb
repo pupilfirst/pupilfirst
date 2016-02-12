@@ -11,10 +11,6 @@ FactoryGirl.define do
 
     factory :user_with_out_password do
       skip_password true
-
-      factory :founder do
-        is_founder true
-      end
     end
 
     factory :user_with_password do

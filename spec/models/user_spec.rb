@@ -16,7 +16,6 @@ describe User do
       founder.remove_from_startup!
       founder.reload
       expect(founder.startup).to eq nil
-      expect(founder.is_founder).to eq nil
       expect(founder.startup_admin).to eq nil
     end
   end

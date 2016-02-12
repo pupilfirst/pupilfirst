@@ -114,7 +114,7 @@ class StartupsController < ApplicationController
   def remove_founder
     founder_to_remove = current_user.startup.founders.find_by id: params[:founder_id]
     if founder_to_remove.present?
-      founder_to_remove.update(is_founder: false, startup_id: nil)
+      founder_to_remove.update(startup_id: nil)
       flash.now[:success] = "The founder was successfully removed from your startup!"
     else
       flash.now[:error] = "There was an error in removing the founder!"
@@ -163,7 +163,7 @@ class StartupsController < ApplicationController
   end
 
   def restrict_to_startup_founders
-    return if current_user.is_founder?
+    return if current_user
     raise_not_found
   end
 

@@ -65,7 +65,7 @@ class TeamMembersController < ApplicationController
   end
 
   def restrict_to_startup_founders
-    return if current_user.is_founder?
+    return if current_user
     raise_not_found
   end
 end

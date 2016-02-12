@@ -87,7 +87,6 @@ ActiveAdmin.register Founder do
       end
 
       row :startup_admin
-      row :is_founder
       row :about
       row :born_on
       row :slack_username
@@ -187,7 +186,6 @@ ActiveAdmin.register Founder do
   filter :first_name
   filter :last_name
   filter :roles_cont, as: :select, collection: Founder.valid_roles, label: 'Role'
-  filter :is_founder
   filter :university
   filter :roll_number
 

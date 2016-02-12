@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160212105206) do
+ActiveRecord::Schema.define(version: 20160212115824) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -163,7 +163,6 @@ ActiveRecord::Schema.define(version: 20160212105206) do
     t.string   "twitter_url"
     t.date     "born_on"
     t.string   "auth_token"
-    t.boolean  "is_founder"
     t.string   "course"
     t.string   "semester"
     t.string   "gender"

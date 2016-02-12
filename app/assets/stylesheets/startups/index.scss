@@ -31,216 +31,222 @@
     letter-spacing: 0.04em;
   }
 }
+.startup-event-bg {
+  background-color: #f7f8fa;
 
-#startups-index-nav {
-  margin: 20px 0 0;
+  #startups-index-nav {
+    margin: 20px 0 0;
 
-  .tab-title {
-    font-weight: 600;
-  }
-
-  li.active {
     .tab-title {
-      // border: 1px solid white;
-      border-top: 3px solid $active-tab-highlight;
-      background-color: white;
-    }
-  }
-
-  .inactive-spacer {
-    height: 100%;
-    user-select: none;
-    color: white;
-
-    @media screen and (max-width: 767px) { display: none; }
-
-    &:hover {
-      cursor: default;
-      background-color: initial;
-      border: 1px solid white;
-      border-bottom: 1px solid $bootstrap-tab-underline;
-    }
-  }
-}
-.tab-events-data {
-  border: 1px solid #ddd;
-  border-top: 0;
-  margin-bottom: 30px;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
-.startups-batch-intro {
-  padding: 15px 15px 10px;
-  margin: 0;
-  color: #222222;
-}
-.startups-index-cards-container {
-  display: block;
-  margin-bottom: 40px;
-
-  .startup-card {
-    position: relative;
-    box-shadow: 0 0 5px 0 rgba(0,0,0,0.2);
-    margin: 10px 0;
-    border-radius: 5px;
-    background-color: #fff;
-    overflow: hidden;
-    border-bottom: 2px solid #207ec2;
-
-
-    // Fit three cards per row on md.
-    @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
-     margin-right: 9px;
+      font-weight: 600;
+      outline: 0;
     }
 
-    // Uniform horizontal margin on xs to ensure centralization.
-    @media (max-width: $screen-xs-max) {
-      margin-left: 5px; margin-right: 5px;
+    li {
+      &:hover, &.active {
+        .tab-title {
+          box-shadow: 0 -2px 0 0 $active-tab-highlight;
+          background-color: #f7f8fa;
+        }
+      }
     }
-  }
 
-  .startup-card-image {
-    width: 100%;
-    height: 200px;
-    display: block;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-  }
 
-  .startup-card-body {
-    padding: 0 15px 60px;
+    .inactive-spacer {
+      height: 100%;
+      user-select: none;
+      color: white;
 
-    .startup-card-title {
-      color: #207ec2;
-      font-size: 18px;
-      font-weight: 500;
-      line-height: 24px;
-      margin-top: 10px;
-      letter-spacing: 0.04em;
-      display: block;
-      font-weight: 400;
-      text-decoration: none;
+      @media screen and (max-width: 767px) { display: none; }
 
       &:hover {
-        color: #1265a2;
+        cursor: default;
+        background-color: initial;
+        border: 1px solid white;
+        border-bottom: 1px solid $bootstrap-tab-underline;
       }
     }
-
-    p {
-      color: #565656;
-      font-size: 14px;
-      line-height: 24px;
-      margin-top: 5px;
-    }
-    .time-ago {
-      display: block;
-      color: #939393;
-      font-size: 12px;
-      line-height: 21px;
-    }
   }
-
-  a.timeline-link {
-    clear: both;
-    display: inline-block;
-    width: 100%;
-    text-align: center;
-    text-transform: uppercase;
-    font-weight: bold;
+  .tab-events-data {
+    border: 0;
+    margin-bottom: 30px;
+  }
+  .startups-batch-intro {
+    padding: 15px 15px 10px;
+    margin: 0 15px;
+    color: #9f9f9f;
     font-size: 12px;
-    background-color: #E7E7E7;
-    padding: 5px 0 5px 0;
-    color: black;
-
-    &:hover {
-      text-decoration: none;
-      color: $theme-dark-green;
-    }
+    border: 1px solid #ddd;
+    border-width: 0 1px;
   }
+  .startups-index-cards-container {
+    display: block;
+    margin-bottom: 0;
 
-  .startup-footer {
-    position: relative;
-    border-top: 1px solid #d6d6d6;
-    background-color: #f9f9f9;
-    position: relative;
-    padding: 60px 15px 15px;
+    .startup-card {
+      position: relative;
+      box-shadow: 0 0 5px 0 rgba(0,0,0,0.2);
+      margin: 10px 0;
+      border-radius: 5px;
+      background-color: #fff;
+      overflow: hidden;
+      border-bottom: 2px solid #207ec2;
 
-    .startup-basebox {
-      position: absolute;
-      top: -45px;
-      left: 15px;
-      right: 15px;
 
-      .startup-event-logo {
-        overflow: hidden;
-        background-color: #fff;
+      // Fit three cards per row on md.
+      @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+       margin-right: 9px;
+      }
 
-        .startup-block-logo-container {
-          width: 100%;
-          height: 90px;
-          width: 90px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border: none;
-          color: initial;
-          margin: 0;
-          padding: 0;
-          border: 1px solid #d6d6d6;
+      // Uniform horizontal margin on xs to ensure centralization.
+      @media (max-width: $screen-xs-max) {
+        margin-left: 5px; margin-right: 5px;
+      }
+    }
 
-          &:hover {
-            background-color: initial;
-          }
-        }
+    .startup-card-image {
+      width: 100%;
+      height: 200px;
+      display: block;
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: cover;
+    }
 
-        .startup-block-logo-container.with-name {
-          text-align: center;
-          font-weight: bold;
-          text-transform: uppercase;
-          background-color: #EFEFEF;
-          font-size: 12px;
-          padding: 5px;
-        }
+    .startup-card-body {
+      padding: 0 15px 60px;
 
-        img {
-          width: 100%;
+      .startup-card-title {
+        color: #207ec2;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 24px;
+        margin-top: 10px;
+        letter-spacing: 0.04em;
+        display: block;
+        font-weight: 400;
+        text-decoration: none;
+
+        &:hover {
+          color: #1265a2;
         }
       }
-      .view-timeline-button {
 
-        a {
-          margin: 24px 0;
-          text-align: center;
-          display: inline-block;
-          width: 100%;
-          border: 1px solid #207ec2;
-          border-radius: 5px;
+      p {
+        color: #565656;
+        font-size: 14px;
+        line-height: 24px;
+        margin-top: 5px;
+      }
+      .time-ago {
+        display: block;
+        color: #939393;
+        font-size: 12px;
+        line-height: 21px;
+      }
+    }
+
+    a.timeline-link {
+      clear: both;
+      display: inline-block;
+      width: 100%;
+      text-align: center;
+      text-transform: uppercase;
+      font-weight: bold;
+      font-size: 12px;
+      background-color: #E7E7E7;
+      padding: 5px 0 5px 0;
+      color: black;
+
+      &:hover {
+        text-decoration: none;
+        color: $theme-dark-green;
+      }
+    }
+
+    .startup-footer {
+      position: relative;
+      border-top: 1px solid #d6d6d6;
+      background-color: #f9f9f9;
+      position: relative;
+      padding: 60px 15px 15px;
+
+      .startup-basebox {
+        position: absolute;
+        top: -45px;
+        left: 15px;
+        right: 15px;
+
+        .startup-event-logo {
+          overflow: hidden;
           background-color: #fff;
-          color: #207ec2;
-          padding: 10px 30px;
-          transition: all .5s;
 
-          &:hover {
-            text-decoration: none;
-            background-color: #207ec2;
-            border-color: #207ec2;
-            color: #fff;
+          .startup-block-logo-container {
+            width: 100%;
+            height: 90px;
+            width: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            color: initial;
+            margin: 0;
+            padding: 0;
+            border: 1px solid #d6d6d6;
+
+            &:hover {
+              background-color: initial;
+            }
           }
 
-          @media (max-width: $screen-md-max) {
-            padding: 10px 15px;
+          .startup-block-logo-container.with-name {
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            background-color: #EFEFEF;
+            font-size: 12px;
+            padding: 5px;
+          }
+
+          img {
+            width: 100%;
+          }
+        }
+        .view-timeline-button {
+
+          a {
+            margin: 24px 0;
+            text-align: center;
+            display: inline-block;
+            width: 100%;
+            border: 1px solid #207ec2;
+            border-radius: 5px;
+            background-color: #fff;
+            color: #207ec2;
+            padding: 10px 30px;
+            transition: all .5s;
+
+            &:hover {
+              text-decoration: none;
+              background-color: #207ec2;
+              border-color: #207ec2;
+              color: #fff;
+            }
+
+            @media (max-width: $screen-md-max) {
+              padding: 10px 15px;
+            }
           }
         }
       }
+
+      .right {
+        padding-left: 15px;
+        float: left;
+        width: 185px;
+      }
     }
 
-    .right {
-      padding-left: 15px;
-      float: left;
-      width: 185px;
-    }
+    small.break-together { display: inline-block; }
   }
-
-  small.break-together { display: inline-block; }
 }

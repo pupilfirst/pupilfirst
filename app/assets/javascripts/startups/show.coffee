@@ -1,4 +1,4 @@
-//= require masonry/dist/masonry.pkgd.js
+#= require masonry/dist/masonry.pkgd.js
 
 $(document).on 'page:change', ->
   $('#verified-icon').tooltip()

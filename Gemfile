@@ -84,6 +84,8 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-trix' # rich text editor from basecamp ( used for eg in the description for targets)
   gem 'rails-assets-bootstrap-tabcollapse' # Bootstrap plugin that switches bootstrap tabs component to collapse component for small screens.
   gem 'rails-assets-masonry' # Masonry works by placing elements in optimal position based on available vertical space.
+  gem 'rails-assets-jquery-stickit' # A jQuery plugin provides a sticky header, sidebar or else when scrolling.
+  gem 'rails-assets-jquery.scrollTo' # Lightweight, cross-browser and highly customizable animated scrolling with jQuery
 end
 
 group :development do

@@ -12,4 +12,8 @@ class HomeController < ApplicationController
 
     render "home/apply/batch-#{batch}"
   end
+
+  def transparency
+    @skip_container = true
+  end
 end

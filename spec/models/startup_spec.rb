@@ -7,7 +7,7 @@ describe Startup, broken: true do
     let(:startup) { create :startup }
 
     it 'clears association from users' do
-      user = create :user_with_out_password, startup: startup
+      user = create :founder_with_out_password, startup: startup
       startup.destroy!
       user.reload
       expect(user.startup_id).to eq nil
@@ -38,7 +38,7 @@ describe Startup, broken: true do
       startup_2 = create :startup
       university = create :university
 
-      student_founder = create :user_with_out_password, university: university, roll_number: rand(10_000).to_s
+      student_founder = create :founder_with_out_password, university: university, roll_number: rand(10_000).to_s
       startup_2.founders << student_founder
 
       expect(Startup.student_startups).to eq([startup_2])

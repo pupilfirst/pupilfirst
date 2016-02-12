@@ -24,7 +24,7 @@ feature 'Faculty Connect' do
   end
 
   context 'User is founder of batched-approved startup' do
-    let(:user) { create :user_with_password, confirmed_at: Time.now }
+    let(:user) { create :founder_with_password, confirmed_at: Time.now }
     let(:batch) { create :batch }
     let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED, batch: batch }
 

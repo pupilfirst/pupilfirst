@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 feature 'About / Contact Spec' do
-  let(:user) { create :user_with_password, confirmed_at: Time.now, phone: '9876543210' }
+  let(:user) { create :founder_with_password, confirmed_at: Time.now, phone: '9876543210' }
   let(:startup) { create :startup }
 
   before :all do

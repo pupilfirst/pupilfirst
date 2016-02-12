@@ -3,9 +3,9 @@ require 'rails_helper'
 # WARNING: The following tests run with Webmock disabled - i.e., URL calls are let through. Make sure you mock possible
 # requests unless you want to let them through. This is required for JS tests to work.
 feature 'Incubation' do
-  let(:user) { create :user_with_out_password }
-  let(:co_founder1) { create :user_with_out_password }
-  let(:co_founder2) { create :user_with_out_password }
+  let(:user) { create :founder_with_out_password }
+  let(:co_founder1) { create :founder_with_out_password }
+  let(:co_founder2) { create :founder_with_out_password }
   let!(:university) { create :university }
   let(:startup) { create :startup }
   let!(:tet_joined) { create :tet_joined }

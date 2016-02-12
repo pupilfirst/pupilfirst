@@ -3,7 +3,7 @@ require 'rails_helper'
 # WARNING: The following tests run with Webmock disabled - i.e., URL calls are let through. Make sure you mock possible
 # requests unless you want to let them through. This is required for JS tests to work.
 feature 'Timeline Builder' do
-  let(:user) { create :user_with_password, confirmed_at: Time.now }
+  let(:user) { create :founder_with_password, confirmed_at: Time.now }
   let!(:tet_team_formed) { create :tet_team_formed }
   let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
 

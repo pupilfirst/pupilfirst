@@ -5,7 +5,7 @@ Warden.test_mode!
 
 module DeviseHelpers
   def login(user = nil)
-    user ||= FactoryGirl.create(:user_with_out_password)
+    user ||= FactoryGirl.create(:founder_with_out_password)
     login_as user, scope: :user
     user
   end

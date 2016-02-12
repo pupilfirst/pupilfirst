@@ -1,16 +1,16 @@
 require 'rails_helper'
 require 'webmock/rspec'
 
-describe User do
+describe Founder do
   context 'non_founders scopes' do
-    it 'returns users who are not related to any startup' do
-      user = create(:user_with_out_password, startup: nil)
-      expect(User.non_founders.map(&:id)).to include(user.id)
+    it 'returns founders who are not related to any startup' do
+      founder = create(:founder_with_out_password, startup: nil)
+      expect(Founder.non_founders.map(&:id)).to include(founder.id)
     end
   end
 
   describe '#remove_from_startup!' do
-    it 'disassociates a user from startup completely' do
+    it 'disassociates a founder from startup completely' do
       startup = create :startup
       founder = startup.founders.first
       founder.remove_from_startup!
@@ -34,32 +34,32 @@ describe User do
         .to_return(body: '{"ok":true,"members":[{"id":"UABCDEFGH","name":"slackuser"}]}')
     end
 
-    context 'user updates slack_username to a random name not on public slack' do
+    context 'founder updates slack_username to a random name not on public slack' do
       it 'validates absence of username in SV.CO public slack and raises error' do
-        user = create :user_with_password
-        user.update(slack_username: 'abc')
+        founder = create :founder_with_password
+        founder.update(slack_username: 'abc')
         expect(a_request(:get, "https://slack.com/api/users.list?token=xxxxxx")).to have_been_made.once
-        expect(user.errors[:slack_username]).to include('a user with this mention name does not exist on SV.CO Public Slack')
+        expect(founder.errors[:slack_username]).to include('a user with this mention name does not exist on SV.CO Public Slack')
       end
     end
 
-    context 'user updates slack_username to a valid name on public slack' do
+    context 'founder updates slack_username to a valid name on public slack' do
       it 'validates presence of username in SV.CO public slack and updates succesfully' do
-        user = create :user_with_password
-        user.update(slack_username: 'slackuser')
+        founder = create :founder_with_password
+        founder.update(slack_username: 'slackuser')
         expect(a_request(:get, "https://slack.com/api/users.list?token=xxxxxx")).to have_been_made.once
-        expect(user.errors[:slack_username]).to be_empty
-        expect(user.slack_user_id).to_not be_nil
+        expect(founder.errors[:slack_username]).to be_empty
+        expect(founder.slack_user_id).to_not be_nil
       end
     end
 
-    context 'user empties slack_username' do
+    context 'founder empties slack_username' do
       it 'clears slack_user_id and sends no query to slack' do
-        user = create :user_with_password
-        user.update(slack_username: '')
+        founder = create :founder_with_password
+        founder.update(slack_username: '')
         expect(a_request(:get, "https://slack.com/api/users.list?token=xxxxxx")).not_to have_been_made
-        expect(user.slack_username).to be_nil
-        expect(user.slack_user_id).to be_nil
+        expect(founder.slack_username).to be_nil
+        expect(founder.slack_user_id).to be_nil
       end
     end
   end
@@ -72,19 +72,19 @@ describe User do
       # Set up the environment.
       batch = create :batch, start_date: (reference_time - 3.months), end_date: (reference_time + 1.month)
       startup = create :startup, batch: batch
-      user = startup.founders.first
+      founder = startup.founders.first
 
       # Events we expect should be counted in the timeline.
-      5.times { create :public_slack_message, user: user, created_at: (reference_time - 1.month) }
-      kp_3_weeks_ago = create :karma_point, user: user, created_at: (reference_time - 3.weeks)
+      5.times { create :public_slack_message, founder: founder, created_at: (reference_time - 1.month) }
+      kp_3_weeks_ago = create :karma_point, founder: founder, created_at: (reference_time - 3.weeks)
       te_2_weeks_ago = create :timeline_event, startup: startup, created_at: (reference_time - 2.weeks)
       te_1_week_ago = create :timeline_event, startup: startup, created_at: (reference_time - 1.week)
-      10.times { create :public_slack_message, user: user, created_at: (reference_time - 30.minutes) }
-      kp_now = create :karma_point, user: user, created_at: reference_time
+      10.times { create :public_slack_message, founder: founder, created_at: (reference_time - 30.minutes) }
+      kp_now = create :karma_point, founder: founder, created_at: reference_time
 
       # We won't expect the following events to be counted, since it's outside batch timing.
       create :timeline_event, startup: startup, created_at: (reference_time - 6.months)
-      create :public_slack_message, user: user, created_at: (reference_time + 2.months)
+      create :public_slack_message, founder: founder, created_at: (reference_time + 2.months)
 
       # The expected response.
       expected_activity_timeline = {
@@ -113,7 +113,7 @@ describe User do
         'February' => { counts: { 1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0 } }
       }
 
-      expect(user.activity_timeline).to eq(expected_activity_timeline)
+      expect(founder.activity_timeline).to eq(expected_activity_timeline)
     end
   end
 end

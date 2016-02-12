@@ -4,8 +4,8 @@ describe 'Public Slack Talk' do
   subject { PublicSlackTalk }
 
   describe '.post_message' do
-    let(:user_1) { create :user_with_out_password }
-    let(:user_2) { create :user_with_out_password }
+    let(:user_1) { create :founder_with_out_password }
+    let(:user_2) { create :founder_with_out_password }
 
     it 'raises ArgumentError if no target specified' do
       expect { subject.post_message message: 'Hello' }.to raise_error(ArgumentError, 'specify one of channel, user or users')
@@ -68,7 +68,7 @@ describe 'Public Slack Talk' do
   end
 
   context '.post_message' do
-    let(:user) { create :user_with_out_password }
+    let(:user) { create :founder_with_out_password }
 
     it 'raises ArgumentError if no target specified' do
       expect { PublicSlackTalk.post_message message: 'Hello' }.to raise_error(
@@ -87,8 +87,8 @@ describe 'Public Slack Talk' do
   end
 
   context '#process' do
-    let(:user1) { create :user_with_out_password }
-    let(:user2) { create :user_with_out_password }
+    let(:user1) { create :founder_with_out_password }
+    let(:user2) { create :founder_with_out_password }
     it 'raises exception if target is an invalid channel' do
       instance = PublicSlackTalk.new channel: '#abcd', message: 'hello'
       expect(instance).to receive(:channel_valid?).and_return(false)
@@ -116,7 +116,7 @@ describe 'Public Slack Talk' do
   end
 
   context '#post_to_user' do
-    let(:user) { create :user_with_out_password }
+    let(:user) { create :founder_with_out_password }
     it 'invokes post_to_channel if im_id fetched' do
       instance = PublicSlackTalk.new user: user, message: 'hello'
       expect(instance).to receive(:fetch_im_id).and_return(true)
@@ -133,8 +133,8 @@ describe 'Public Slack Talk' do
   end
 
   context '#post_to_users' do
-    let(:user1) { create :user_with_out_password }
-    let(:user2) { create :user_with_out_password }
+    let(:user1) { create :founder_with_out_password }
+    let(:user2) { create :founder_with_out_password }
     it 'calls #post_to_user n times if target is array of n users' do
       instance = PublicSlackTalk.new users: [user1, user2], message: 'hello'
       expect(instance).to receive(:post_to_user).twice

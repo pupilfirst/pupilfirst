@@ -9,11 +9,11 @@ FactoryGirl.define do
 
     email { Faker::Internet.email }
 
-    factory :user_with_out_password do
+    factory :founder_with_out_password do
       skip_password true
     end
 
-    factory :user_with_password do
+    factory :founder_with_password do
       password 'password'
       password_confirmation 'password'
     end

@@ -19,7 +19,7 @@ describe StartupsController do
 
   describe 'GET show' do
     it 'assigns the requested startup as @startup' do
-      @current_user.update_attributes(startup: startup)
+      @current_founder.update_attributes(startup: startup)
       get :show, { id: startup.to_param }, valid_session
       expect(assigns(:startup)).to eq(startup)
     end

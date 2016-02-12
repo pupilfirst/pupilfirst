@@ -1,12 +1,12 @@
 class UserMailer < ApplicationMailer
-  def cofounder_addition(cofounder_mail, current_user)
-    @current_user = current_user
+  def cofounder_addition(cofounder_mail, current_founder)
+    @current_founder = current_founder
     mail(to: cofounder_mail, subject: 'SVApp: You have been added as startup cofounder!')
   end
 
-  def incubation_request_submitted(current_user)
-    @current_user = current_user
-    mail(to: current_user.email, subject: 'You have successfully submitted your request for incubation at Startup Village.')
+  def incubation_request_submitted(current_founder)
+    @current_founder = current_founder
+    mail(to: current_founder.email, subject: 'You have successfully submitted your request for incubation at Startup Village.')
   end
 
   def password_changed(user)

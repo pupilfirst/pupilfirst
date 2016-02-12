@@ -17,8 +17,8 @@ class ApplicationController < ActionController::Base
 
       if referer
         referer
-      elsif current_user.startup.present? && !current_user.startup.unready?
-        startup_url(current_user.startup)
+      elsif current_founder.startup.present? && !current_founder.startup.unready?
+        startup_url(current_founder.startup)
       else
         super
       end
@@ -30,7 +30,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def feature_active?(feature)
-    Rails.env.development? || Rails.env.test? || Feature.active?(feature, current_user)
+    Rails.env.development? || Rails.env.test? || Feature.active?(feature, current_founder)
   end
 
   helper_method :feature_active?

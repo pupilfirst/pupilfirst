@@ -4,7 +4,7 @@ class StartupsController < ApplicationController
   before_filter :restrict_to_startup_admin, only: [:remove_founder]
 
   after_filter only: [:create] do
-    @startup.founders << current_user
+    @startup.founders << current_founder
     @startup.save
   end
 
@@ -16,15 +16,15 @@ class StartupsController < ApplicationController
 
   def new
     @skip_container = true
-    if current_user.phone.blank?
+    if current_founder.phone.blank?
       session[:referer] = new_user_startup_url
       redirect_to phone_user_path
       return
     end
 
-    if current_user.startup&.approved?
+    if current_founder.startup&.approved?
       flash[:alert] = "You already have an approved startup on SV.CO!"
-      redirect_to startup_url(current_user.startup)
+      redirect_to startup_url(current_founder.startup)
     end
 
     @startup = Startup.new
@@ -35,14 +35,14 @@ class StartupsController < ApplicationController
 
     # setting attributes required for registration-specific validations
     @startup.being_registered = true
-    @startup.team_lead_email = current_user.email
+    @startup.team_lead_email = current_founder.email
 
     if @startup.save
       # reset being_registered flag to prevent repeating cofounder validations
       @startup.being_registered = false
 
       # add the team lead
-      @startup.add_team_lead! current_user
+      @startup.add_team_lead! current_founder
 
       # add cofounders
       @startup.add_cofounders!
@@ -76,12 +76,12 @@ class StartupsController < ApplicationController
   end
 
   def edit
-    @startup = current_user.startup
+    @startup = current_founder.startup
   end
 
   def update
-    @current_user = current_user
-    @startup = @current_user.startup
+    @current_founder = current_founder
+    @startup = @current_founder.startup
     @startup.founders.each { |f| f.full_validation = true }
     @startup.validate_web_mandatory_fields = true
 
@@ -96,7 +96,7 @@ class StartupsController < ApplicationController
   # POST /add_founder
   def add_founder
     begin
-      current_user.add_as_founder_to_startup!(params[:cofounder][:email])
+      current_founder.add_as_founder_to_startup!(params[:cofounder][:email])
     rescue Exceptions::FounderNotFound
       flash[:error] = "Couldn't find a user with the SV.CO ID you supplied. Please verify founder's registered email address."
     rescue Exceptions::FounderAlreadyMemberOfStartup
@@ -112,7 +112,7 @@ class StartupsController < ApplicationController
 
   # PATCH /remove_founder
   def remove_founder
-    founder_to_remove = current_user.startup.founders.find_by id: params[:founder_id]
+    founder_to_remove = current_founder.startup.founders.find_by id: params[:founder_id]
     if founder_to_remove.present?
       founder_to_remove.update(startup_id: nil)
       flash.now[:success] = "The founder was successfully removed from your startup!"
@@ -124,10 +124,10 @@ class StartupsController < ApplicationController
 
   # DELETE /users/:id/startup/destroy
   def destroy
-    @startup = current_user.startup
+    @startup = current_founder.startup
 
-    if current_user.startup_admin
-      if current_user.startup_admin && current_user.valid_password?(startup_destroy_params[:password])
+    if current_founder.startup_admin
+      if current_founder.startup_admin && current_founder.valid_password?(startup_destroy_params[:password])
         @startup.destroy!
         flash[:success] = 'Your startup profile and all associated data has been deleted.'
         redirect_to root_url
@@ -163,12 +163,12 @@ class StartupsController < ApplicationController
   end
 
   def restrict_to_startup_founders
-    return if current_user
+    return if current_founder
     raise_not_found
   end
 
   def restrict_to_startup_admin
-    return if current_user.startup_admin?
+    return if current_founder.startup_admin?
     raise_not_found
   end
 end

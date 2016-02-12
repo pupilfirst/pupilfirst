@@ -37,7 +37,7 @@ module StartupsHelper
 
     # If any of the pending targets are completed for a viewer, show that separately.
     split_pending_targets = split_pending_targets.select do |target|
-      if target.done_for_viewer?(current_user)
+      if target.done_for_viewer?(current_founder)
         completed_by_viewer << target
         false
       else
@@ -57,7 +57,7 @@ module StartupsHelper
     expired_targets = @startup.targets.expired
 
     expired_targets.select do |target|
-      !target.done_for_viewer?(current_user)
+      !target.done_for_viewer?(current_founder)
     end
   end
 

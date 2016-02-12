@@ -1,4 +1,4 @@
-# Feature flags! Set any key and check for it with Feature.active?(key, [current_user])
+# Feature flags! Set any key and check for it with Feature.active?(key, [current_founder])
 # See documentation of method to see how to store the JSON value.
 class Feature < ActiveRecord::Base
   # {"email_regexes": ["\S*(@mobme.in|sv.co)$"], "emails": ["someone@sv.co"]}

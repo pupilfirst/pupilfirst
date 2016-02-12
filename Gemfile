@@ -116,6 +116,4 @@ group :production do
   gem 'rails_12factor' # Makes running your Rails app easier. Based on the ideas behind 12factor.net.
 end
 
-gem 'sdoc', '~> 0.4.0', group: :doc
-
 ruby '2.3.0'

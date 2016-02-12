@@ -138,11 +138,7 @@ class Startup < ActiveRecord::Base
     joins(:startup_categories).where(startup_categories: { id: category.id })
   end
 
-  has_many :founders do
-    def <<(founder)
-      super founder
-    end
-  end
+  has_many :founders
 
   # define founder emails as attributes for easier onboarding implementation
   attr_accessor :cofounder_1_email, :cofounder_2_email, :cofounder_3_email, :cofounder_4_email

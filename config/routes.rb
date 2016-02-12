@@ -12,7 +12,7 @@ Svapp::Application.routes.draw do
 
   match '/delayed_job' => DelayedJobWeb, anchor: false, via: [:get, :post]
 
-  resource :user, only: [:edit, :update] do
+  resource :founder, only: [:edit, :update] do
     member do
       get 'phone'
       patch 'set_unconfirmed_phone'
@@ -93,7 +93,7 @@ Svapp::Application.routes.draw do
 
   get 'apply(/:batch)', as: 'apply', to: 'home#apply'
 
-  get 'founders/:slug', to: 'users#founder_profile', as: 'founder_profile'
+  get 'founders/:slug', to: 'founders#founder_profile', as: 'founder_profile'
 
   get 'transparency', as: 'transparency', to: 'home#transparency'
 

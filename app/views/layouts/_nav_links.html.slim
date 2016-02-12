@@ -25,9 +25,9 @@
               i.fa.fa-list-ul
               | &nbsp;Profile
           li role="presentation"
-            = link_to destroy_user_session_path, method: :delete do
+            = link_to destroy_founder_session_path, method: :delete do
               i.fa.fa-sign-out
               | &nbsp;Logout
 
     - else
-      li role="presentation" = link_to 'Login', new_user_session_path, class: 'top-nav-link'
+      li role="presentation" = link_to 'Login', new_founder_session_path, class: 'top-nav-link'

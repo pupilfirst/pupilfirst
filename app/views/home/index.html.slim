@@ -23,9 +23,9 @@
               - if current_founder.startup.present?
                 a.btn.btn-flat.btn-join href=startup_path(current_founder.startup) View Startup Timeline
               - else
-                a.btn.btn-flat.btn-join href=new_user_startup_path Apply for Incubation!
+                a.btn.btn-flat.btn-join href=new_founder_startup_path Apply for Incubation!
             - else
-              a.btn.btn-flat.btn-join href=new_user_session_path Login for more!
+              a.btn.btn-flat.btn-join href=new_founder_session_path Login for more!
 
             a.watch-video-button.hidden-md.hidden-lg href="https://www.youtube.com/watch?v=EdToj9nviYA" target="_blank"
               i.fa.fa-youtube-play

@@ -70,7 +70,7 @@ feature 'Resources' do
       startup.founders << user
 
       # Login the user.
-      visit new_user_session_path
+      visit new_founder_session_path
       fill_in 'user_email', with: user.email
       fill_in 'user_password', with: 'password'
       click_on 'Sign in'

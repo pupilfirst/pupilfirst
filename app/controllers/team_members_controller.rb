@@ -1,5 +1,5 @@
 class TeamMembersController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_founder!
   before_filter :restrict_to_startup_founders
 
   # GET /user/startup/team_members/new
@@ -16,7 +16,7 @@ class TeamMembersController < ApplicationController
 
     if @team_member.save
       flash[:success] = 'Added new team member!'
-      redirect_to edit_user_startup_url
+      redirect_to edit_founder_startup_url
     else
       flash.now[:error] = 'Could not create new team member.'
       render 'create_or_edit'
@@ -37,7 +37,7 @@ class TeamMembersController < ApplicationController
 
     if @team_member.update(team_member_params)
       flash[:success] = 'Updated team member!'
-      redirect_to edit_user_startup_url
+      redirect_to edit_founder_startup_url
     else
       flash.now[:error] = 'Could not update team member.'
       render 'create_or_edit'
@@ -51,7 +51,7 @@ class TeamMembersController < ApplicationController
 
     if @team_member.destroy
       flash[:success] = 'Deleted team member!'
-      redirect_to edit_user_startup_url
+      redirect_to edit_founder_startup_url
     else
       flash[:error] = 'Could not delete team member.'
       render 'create_or_edit'

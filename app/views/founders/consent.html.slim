@@ -20,10 +20,10 @@
           label.font-weight-600 for='team-leader-consent'
             ' &nbsp; Yes, I&#39;m the Team Leader.
         .col-sm-6.startup-consent-btn
-          = link_to 'Create Startup!', new_user_startup_path, class: 'btn btn-success btn-lg btn-flat disabled', id: 'team-leader-consent-button'
+          = link_to 'Create Startup!', new_founder_startup_path, class: 'btn btn-success btn-lg btn-flat disabled', id: 'team-leader-consent-button'
       .row
           .edit-profile-info.text-center
-            p.font-weight-300 If you are not Team Leader - #{link_to 'Complete your Founder Profile', edit_user_path, class: 'font-weight-400'}
+            p.font-weight-300 If you are not Team Leader - #{link_to 'Complete your Founder Profile', edit_founder_path, class: 'font-weight-400'}
     .add-cofounder-info.text-center.font-weight-300
       p You can add co-founders while you submit your incubation request.
       p

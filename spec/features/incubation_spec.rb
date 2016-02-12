@@ -29,7 +29,7 @@ feature 'Incubation' do
   context 'when user arrives at accept invitation path' do
     before do
       # Visit the accept invitation page.
-      visit accept_user_invitation_path(invitation_token: user.raw_invitation_token)
+      visit accept_founder_invitation_path(invitation_token: user.raw_invitation_token)
     end
 
     scenario 'User submits empty registration form' do

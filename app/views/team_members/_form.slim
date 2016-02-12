@@ -14,4 +14,4 @@
     .col-sm-9.col-sm-offset-3
       ' #{f.submit team_member.persisted? ? 'Update team member entry' : 'List new team member', class: 'btn btn-success'}
       - if team_member.persisted?
-        = link_to 'Cancel', new_user_startup_team_member_url, class: 'btn btn-default'
+        = link_to 'Cancel', new_founder_startup_team_member_url, class: 'btn btn-default'

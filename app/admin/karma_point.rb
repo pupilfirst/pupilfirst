@@ -4,7 +4,7 @@ ActiveAdmin.register KarmaPoint do
   permit_params :startup_id, :founder_id, :points, :activity_type, :created_at
 
   preserve_default_filters!
-  filter :user_startup_id_eq, label: 'Batched Startup', as: :select, collection: proc { Startup.batched }
+  filter :founder_startup_id_eq, label: 'Batched Startup', as: :select, collection: proc { Startup.batched }
 
   controller do
     def scoped_collection

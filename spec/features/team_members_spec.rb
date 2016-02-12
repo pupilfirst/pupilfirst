@@ -9,7 +9,7 @@ feature 'Team members spec' do
     startup.founders << user
 
     # Login with user.
-    visit new_user_session_path
+    visit new_founder_session_path
     fill_in 'user_email', with: user.email
     fill_in 'user_password', with: 'password'
     click_on 'Sign in'
@@ -17,13 +17,13 @@ feature 'Team members spec' do
 
   context 'User has verified timeline event for founder target' do
     scenario 'User edits Startup profile' do
-      visit edit_user_startup_url
+      visit edit_founder_startup_url
 
       expect(page).to have_text('There aren\'t any (non-founder) team members associated with your startup.')
     end
 
     scenario 'User adds a team member' do
-      visit edit_user_startup_url
+      visit edit_founder_startup_url
       click_on 'Add new team member'
 
       # On the 'new' page.
@@ -41,7 +41,7 @@ feature 'Team members spec' do
     end
 
     scenario 'User attempts to add team member without necessary fields' do
-      visit edit_user_startup_url
+      visit edit_founder_startup_url
       click_on 'Add new team member'
       click_on 'List new team member'
 
@@ -52,7 +52,7 @@ feature 'Team members spec' do
     end
 
     scenario 'User attempts to choose more than two roles' do
-      visit edit_user_startup_url
+      visit edit_founder_startup_url
       click_on 'Add new team member'
 
       check 'Product'
@@ -68,7 +68,7 @@ feature 'Team members spec' do
       let!(:team_member) { create :team_member, startup: startup }
 
       scenario 'User deletes existing team member' do
-        visit edit_user_startup_url
+        visit edit_founder_startup_url
 
         within '.team-member-table' do
           click_on 'Remove'

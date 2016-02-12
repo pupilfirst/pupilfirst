@@ -54,7 +54,7 @@
         code #{current_founder.phone_verification_code}
 
     .user-registration-box
-      = form_tag verify_user_url, class: 'form-horizontal', role: 'form' do
+      = form_tag verify_founder_url, class: 'form-horizontal', role: 'form' do
 
         legend.margin-top-20.form-section-head.font-weight-400 
           ' Phone number verification
@@ -67,9 +67,9 @@
             = submit_tag 'Verify', class: 'btn btn-success btn-flat verify-btn'
       .form-group.row
         .col-sm-9.col-sm-offset-3
-          = button_to 'Resend verification code', resend_user_url, method: :patch, class: 'btn btn-info btn-flat resend-code-btn'
+          = button_to 'Resend verification code', resend_founder_url, method: :patch, class: 'btn btn-info btn-flat resend-code-btn'
 
-/= form_tag resend_user_url, style: 'margin-top: 10px;', method: :patch
+/= form_tag resend_founder_url, style: 'margin-top: 10px;', method: :patch
   .form-group
     .col-sm-offset-2.col-sm-10
       = button_tag 'Resend verification code', class: 'btn btn-success btn-flat', style: 'margin-top: 10px;'

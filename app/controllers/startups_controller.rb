@@ -1,5 +1,5 @@
 class StartupsController < ApplicationController
-  before_filter :authenticate_user!, except: [:show, :index]
+  before_filter :authenticate_founder!, except: [:show, :index]
   before_filter :restrict_to_startup_founders, only: [:edit, :update, :add_founder]
   before_filter :restrict_to_startup_admin, only: [:remove_founder]
 
@@ -17,8 +17,8 @@ class StartupsController < ApplicationController
   def new
     @skip_container = true
     if current_founder.phone.blank?
-      session[:referer] = new_user_startup_url
-      redirect_to phone_user_path
+      session[:referer] = new_founder_startup_url
+      redirect_to phone_founder_path
       return
     end
 
@@ -107,7 +107,7 @@ class StartupsController < ApplicationController
       flash[:success] = "SV.CO ID #{params[:email]} has been linked to your startup as founder"
     end
 
-    redirect_to edit_user_startup_path
+    redirect_to edit_founder_startup_path
   end
 
   # PATCH /remove_founder

@@ -3,7 +3,7 @@
 p
   em Please note that you can come back and change these details anytime.
 
-= simple_form_for @startup, url: user_startup_path, :html => { :class => 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean, file: :horizontal_file_input } do |f|
+= simple_form_for @startup, url: founder_startup_path, :html => { :class => 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean, file: :horizontal_file_input } do |f|
   = f.error_notification
   .panel-group#startup-form role="tablist"
     .panel.panel-default

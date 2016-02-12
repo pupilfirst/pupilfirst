@@ -88,7 +88,7 @@ ActiveAdmin.setup do |config|
   #
   # This setting changes the method which Active Admin calls
   # (within the application controller) to return the currently logged in user.
-  config.current_founder_method = :current_admin_user
+  config.current_user_method = :current_admin_user
 
   # == Logging Out
   #

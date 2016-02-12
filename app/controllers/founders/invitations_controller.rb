@@ -5,7 +5,7 @@ module Founders
       if resource.already_registered?
         sign_in resource
         session[:registration_ongoing] = true
-        redirect_to phone_verification_user_path, alert: 'You have already completed your user registration!'
+        redirect_to phone_verification_founder_path, alert: 'You have already completed your user registration!'
       else
         @skip_container = true
         super
@@ -14,7 +14,7 @@ module Founders
 
     def after_accept_path_for(_resource)
       session[:registration_ongoing] = true
-      phone_verification_user_path
+      phone_verification_founder_path
     end
 
     private

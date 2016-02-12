@@ -1,5 +1,5 @@
 class TimelineEventsController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_founder!
   before_filter :restrict_to_startup_founders
 
   # POST /user/startup/timeline_events

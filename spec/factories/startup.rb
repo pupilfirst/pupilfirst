@@ -10,8 +10,8 @@ FactoryGirl.define do
     f.team_size 3
 
     after(:build) do |startup|
-      startup.founders << create(:founder, startup: startup, startup_admin: true)
-      startup.founders << create(:founder, startup: startup)
+      startup.founders << create(:founder_with_password, startup: startup, startup_admin: true)
+      startup.founders << create(:founder_with_password, startup: startup)
       startup.startup_categories = [create(:startup_category)]
     end
 

@@ -24,7 +24,7 @@
                   = @user.profile_completion_percentage
                   | % complete
               - if @user.profile_completion_percentage < 100
-                a.profile-complete-button href=edit_user_url
+                a.profile-complete-button href=edit_founder_url
                   ' Complete Your Profile
         div class="col-md-#{@user.startup&.logo.present? ? 7 : 10}"
           .row.profile-data
@@ -40,7 +40,7 @@
                         ' &nbsp;at
                       = @user.startup.product_name
                   - if current_founder == @user
-                    a.profile-edit-button href=edit_user_url
+                    a.profile-edit-button href=edit_founder_url
                       i.fa.fa-pencil
                       ' Edit
               - if @user.social_url_present?

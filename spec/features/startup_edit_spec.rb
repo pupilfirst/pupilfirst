@@ -14,11 +14,11 @@ feature 'Startup Edit' do
     startup.founders << user
 
     # Log in the user.
-    visit new_user_session_path
+    visit new_founder_session_path
     fill_in 'user_email', with: user.email
     fill_in 'user_password', with: 'password'
     click_on 'Sign in'
-    visit edit_user_startup_path
+    visit edit_founder_startup_path
 
     # User should now be on his startup edit page.
   end
@@ -71,7 +71,7 @@ feature 'Startup Edit' do
       startup.reload
       user.reload
 
-      visit edit_user_startup_path
+      visit edit_founder_startup_path
       expect(page).to have_text('To delete your startup timeline, contact your SV.CO representative.')
     end
   end

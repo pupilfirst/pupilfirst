@@ -12,18 +12,18 @@ gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check 
 gem 'carrierwave' # One uploader to rule them all.
 gem 'carrierwave_backgrounder' # Backgrounder for carrierwave.
 gem 'fog-aws' # required by carrierwave to upload to S3.
-gem 'coffee-rails', '~> 4.1.0'
-gem 'devise', '>= 3.5.4'
-gem 'devise_invitable'
-gem 'jbuilder', '~> 2.0'
+gem 'coffee-rails', '~> 4.1.0' # Coffeescript on Rails.
+gem 'devise', '>= 3.5.4' # User auth library.
+gem 'devise_invitable' # Allow invites to be sent out.
+gem 'jbuilder', '~> 2.0' # Standard part of Rails, but unused, since we don't have an API.
 gem 'jquery-rails' # JQuery on Rails.
 gem 'mini_magick' # Image processing.
 gem 'pg' # PostgreSQL support.
 gem 'sass-rails', '~> 5.0'
 gem 'sentry-raven' # Reporter for Sentry Heroku add-on.
-gem 'slim'
-gem 'turbolinks'
-gem 'uglifier', '>= 2.7.2'
+gem 'slim' # Slim templating.
+gem 'turbolinks' # Quicker page navigation. https://github.com/turbolinks/turbolinks
+gem 'uglifier', '>= 2.7.2' # JavaScript compressor.
 gem 'rest-client' # Used to contact Fast Alerts' API.
 gem 'cancancan', '~> 1.8' # Used to manage administrator types and roles in the ActiveAdmin interface.
 gem 'phony_rails' # Phone number validation and normalization.
@@ -36,7 +36,6 @@ gem 'bootstrap-sass', '~> 3.3.3' # Official Sass port of Bootstrap.
 gem 'autoprefixer-rails' # Autoprefixer for Ruby and Ruby on Rails.
 gem 'simple_form', '~> 3.1.1' # Simple-form with support for Bootstrap 3.
 gem 'simple_form_fancy_uploads' # simple_form custom inputs to get image/link previews with file uploads. https://github.com/apeacox/simple_form_fancy_uploads
-# gem 'validate_url' # URL validation. - appears to be only supported on Rails 3
 gem 'valid_url' # New url validataion gem
 gem 'logstash-logger' # A better logger.
 
@@ -69,10 +68,8 @@ gem 'recaptcha', require: 'recaptcha/rails' # ReCaptcha helpers for ruby apps ht
 gem 'groupdate' # The simplest way to group temporal data. https://github.com/ankane/groupdate
 gem 'sparkr' # Sparklines with Ruby. https://github.com/rrrene/sparkr
 gem 'videojs_rails' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com/seanbehan/videojs_rails
-
-gem 'react-rails' # react for creating link editor in timeline builder
-
-gem 'has_secure_token' # used to create tokens for models (eg: for Faculty). Will be included with ActiveRecord in Rails 5
+gem 'react-rails' # For automatically transforming JSX and using React in Rails.
+gem 'has_secure_token' # Used to create tokens for models (eg: for Faculty). TODO: Will be included with ActiveRecord in Rails 5.
 
 # Rails assets!
 source 'https://rails-assets.org' do
@@ -96,9 +93,8 @@ group :development do
 end
 
 group :test do
-  gem 'factory_girl', require: false
-  gem 'factory_girl_rails', '~> 4.0'
-  gem 'faker'
+  gem 'factory_girl_rails', '~> 4.0' # A library for setting up Ruby objects as test data.
+  gem 'faker' # A library for generating fake data such as names, addresses, and phone numbers.
   gem 'capybara' # For RSpec feature tests.
   gem 'capybara-email' # Test ActionMailer and Mailer messages with Capybara
   gem 'capybara-webkit' # Headless WebKit browser, provided by Webkit (QT).
@@ -117,7 +113,7 @@ group :development, :test do
 end
 
 group :production do
-  gem 'rails_12factor'
+  gem 'rails_12factor' # Makes running your Rails app easier. Based on the ideas behind 12factor.net.
 end
 
 gem 'sdoc', '~> 0.4.0', group: :doc

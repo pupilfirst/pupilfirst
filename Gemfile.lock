@@ -556,7 +556,6 @@ DEPENDENCIES
   devise (>= 3.5.4)
   devise_invitable
   dotenv-rails
-  factory_girl
   factory_girl_rails (~> 4.0)
   faker
   fog-aws

@@ -250,4 +250,21 @@ class TimelineEvent < ActiveRecord::Base
     return if links[0].try(:[], :private)
     startup.update!(product_video: links[0][:url])
   end
+
+  def first_public_attachment_url
+    first_public_file_url || first_public_link_url
+  end
+
+  def first_public_file_url
+    file = timeline_event_files.detect { |file| !file.private? }
+
+    Rails.application.routes.url_helpers.download_startup_timeline_event_timeline_event_file_url(
+      startup, self, file
+    ) if file.present?
+  end
+
+  def first_public_link_url
+    link = links.detect { |link| !link[:private] }
+    link.try(:[], :url).present? ? links[0][:url] : nil
+  end
 end

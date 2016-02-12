@@ -1,4 +1,4 @@
-module Users
+module Founders
   class SessionsController < Devise::SessionsController
     # GET /resource/sign_in
     def new

@@ -1,9 +1,9 @@
 Svapp::Application.routes.draw do
   devise_for(
-    :users,
+    :founders,
     controllers: {
-      invitations: 'users/invitations',
-      sessions: 'users/sessions'
+      invitations: 'founders/invitations',
+      sessions: 'founders/sessions'
     }
   )
 

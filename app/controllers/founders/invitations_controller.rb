@@ -1,4 +1,4 @@
-module Users
+module Founders
   class InvitationsController < Devise::InvitationsController
     def edit
       # don't repeat registration if already completed

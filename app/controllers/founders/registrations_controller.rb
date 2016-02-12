@@ -1,4 +1,4 @@
-module Users
+module Founders
   class RegistrationsController < Devise::RegistrationsController
     protected
 

@@ -6,7 +6,7 @@
       ' List new team member
 
   = f.input :name
-  = f.input :roles, as: :check_boxes, collection: User.valid_roles, label_method: proc { |role| t("role.#{role}") }, required: true
+  = f.input :roles, as: :check_boxes, collection: Founder.valid_roles, label_method: proc { |role| t("role.#{role}") }, required: true
   = f.input :email, label: 'Email address'
   = f.input :avatar, as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }
 

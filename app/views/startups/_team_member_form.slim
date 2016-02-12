@@ -7,7 +7,7 @@
 
   = f.input :name
   = f.input :email
-  = f.input :roles, as: :check_boxes, collection: User.valid_roles, label_method: proc { |role| t("role.#{role}") }
+  = f.input :roles, as: :check_boxes, collection: Founder.valid_roles, label_method: proc { |role| t("role.#{role}") }
   = f.input :avatar, as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }
 
   .form-group

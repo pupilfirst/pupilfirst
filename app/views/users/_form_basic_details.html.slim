@@ -17,7 +17,7 @@
   = f.input :about, label: 'One-Liner', placeholder: 'One-liner about yourself', input_html: { maxlength: 255 }
 
   - if user.startup.present?
-    = f.input :roles, label: 'Role at Startup', as: :select, collection: User.valid_roles, label_method: ->(role) { t "user.#{role}" }, include_hidden: false, input_html: { multiple: true }
+    = f.input :roles, label: 'Role at Startup', as: :select, collection: Founder.valid_roles, label_method: ->(role) { t "user.#{role}" }, include_hidden: false, input_html: { multiple: true }
 
   = f.input :slack_username, label: (link_to 'Public Slack Username<sup>?</sup></a>'.html_safe, about_slack_url, target: '_blank'), placeholder: 'mention_name (excluding @)'
   = f.input :communication_address

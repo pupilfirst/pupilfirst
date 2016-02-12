@@ -35,7 +35,7 @@
                 ' #{public_slack_message.karma_point.points} points &mdash;
                 ' #{public_slack_message.karma_point.activity_type}.
             - elsif public_slack_message.user.blank?
-              em User not linked.
+              em Founder not linked.
             - else
               = form_tag create_karma_points_admin_public_slack_message_path(public_slack_message), method: :post, remote: true, class: 'add_karma_points_for_message' do
                 input id="activity_type_participation_#{public_slack_message.id}" name='activity_type' type='radio' value='Active participation' checked=true

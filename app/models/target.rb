@@ -27,7 +27,7 @@ class Target < ActiveRecord::Base
 
   # See en.yml's target.role
   def self.valid_roles
-    target_roles + User.valid_roles
+    target_roles + Founder.valid_roles
   end
 
   # See en.yml's target.status

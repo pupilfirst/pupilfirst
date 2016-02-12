@@ -74,7 +74,7 @@ class Startup < ActiveRecord::Base
   scope :agreement_live, -> { where('agreement_ends_at > ?', Time.now) }
   scope :agreement_expired, -> { where('agreement_ends_at < ?', Time.now) }
   scope :physically_incubated, -> { agreement_live.where(physical_incubatee: true) }
-  scope :without_founders, -> { where.not(id: (User.pluck(:startup_id).uniq - [nil])) }
+  scope :without_founders, -> { where.not(id: (Founder.pluck(:startup_id).uniq - [nil])) }
   scope :student_startups, -> { joins(:founders).where.not(users: { university_id: nil }).uniq }
   scope :kochi, -> { where incubation_location: INCUBATION_LOCATION_KOCHI }
   scope :visakhapatnam, -> { where incubation_location: INCUBATION_LOCATION_VISAKHAPATNAM }
@@ -138,7 +138,7 @@ class Startup < ActiveRecord::Base
     joins(:startup_categories).where(startup_categories: { id: category.id })
   end
 
-  has_many :founders, -> { where('is_founder = ?', true) }, class_name: 'User', foreign_key: 'startup_id' do
+  has_many :founders, -> { where('is_founder = ?', true) }, class_name: 'Founder', foreign_key: 'startup_id' do
     def <<(founder)
       founder.update_attributes!(is_founder: true)
       super founder
@@ -176,7 +176,7 @@ class Startup < ActiveRecord::Base
 
   # validates email provided is 1)unique 2)not of the team lead, 3) is a valid sv.co user and 4) does not already have a startup
   def invalid_cofounder(email)
-    user = User.find_by(email: email)
+    user = Founder.find_by(email: email)
 
     return 'must be unique' if cofounder_emails.count(email) > 1
 
@@ -213,7 +213,7 @@ class Startup < ActiveRecord::Base
   # has_many :users
   # accepts_nested_attributes_for :users
 
-  has_one :admin, -> { where(startup_admin: true) }, class_name: 'User', foreign_key: 'startup_id'
+  has_one :admin, -> { where(startup_admin: true) }, class_name: 'Founder', foreign_key: 'startup_id'
   accepts_nested_attributes_for :admin
 
   belongs_to :batch
@@ -291,8 +291,8 @@ class Startup < ActiveRecord::Base
   end
 
   before_destroy do
-    # Clear out associations from associated Users (and pending ones).
-    User.where(startup_id: id).update_all(startup_id: nil, startup_admin: nil, is_founder: nil)
+    # Clear out associations from associated Founders (and pending ones).
+    Founder.where(startup_id: id).update_all(startup_id: nil, startup_admin: nil, is_founder: nil)
   end
 
   # Friendly ID!
@@ -403,7 +403,7 @@ class Startup < ActiveRecord::Base
   end
 
   def founder_ids=(list_of_ids)
-    users_list = User.find list_of_ids.map(&:to_i).select { |e| e.is_a?(Integer) && e > 0 }
+    users_list = Founder.find list_of_ids.map(&:to_i).select { |e| e.is_a?(Integer) && e > 0 }
     users_list.each { |u| founders << u }
   end
 
@@ -468,7 +468,7 @@ class Startup < ActiveRecord::Base
   end
 
   def possible_founders
-    founders + User.non_founders
+    founders + Founder.non_founders
   end
 
   def phone
@@ -683,7 +683,7 @@ class Startup < ActiveRecord::Base
   def add_cofounders!
     cofounder_emails.each do |email|
       next if email.blank?
-      founders << User.find_by(email: email)
+      founders << Founder.find_by(email: email)
     end
   end
 

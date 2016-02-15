@@ -278,6 +278,6 @@ class TimelineEvent < ActiveRecord::Base
 
   def first_public_link_url
     first_public_link = links.detect { |link| !link[:private] }
-    first_public_link.try(:[], :url).present? ? links[0][:url] : nil
+    first_public_link.try(:[], :url)
   end
 end

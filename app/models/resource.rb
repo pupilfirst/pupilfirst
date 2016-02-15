@@ -32,15 +32,15 @@ class Resource < ActiveRecord::Base
 
   delegate :content_type, to: :file
 
-  def self.for(user)
-    if user.present? && user.founder?
+  def self.for(founder)
+    if founder.present?
       where(
         'share_status = ? OR (share_status = ? AND batch_id IS ?) OR (share_status = ? AND batch_id = ?)',
         SHARE_STATUS_PUBLIC,
         SHARE_STATUS_APPROVED,
         nil,
         SHARE_STATUS_APPROVED,
-        user.startup&.batch&.id
+        founder.startup&.batch&.id
       ).order('title')
     else
       public_resources

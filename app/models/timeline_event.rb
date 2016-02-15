@@ -192,15 +192,15 @@ class TimelineEvent < ActiveRecord::Base
     }.with_indifferent_access[grade]
   end
 
-  # A hidden timeline event is not displayed to user if user isn't logged in, or isn't the user linked to event.
+  # A hidden timeline event is not displayed to user if user isn't logged in, or isn't the founder linked to event.
   def hidden_from?(viewer)
     return false unless timeline_event_type.private?
     return true unless viewer.present?
-    user != viewer
+    founder != viewer
   end
 
-  def attachments_for_user(user)
-    privileged = privileged_user?(user)
+  def attachments_for_founder(founder)
+    privileged = privileged_founder?(founder)
     attachments = []
 
     timeline_event_files.each do |file|
@@ -218,13 +218,13 @@ class TimelineEvent < ActiveRecord::Base
 
   private
 
-  def privileged_user?(user)
-    user.present? && startup.founders.include?(user)
+  def privileged_founder?(founder)
+    founder.present? && startup.founders.include?(founder)
   end
 
   def add_link_for_new_resume!
     return unless timeline_event_type.resume_submission? && links[0].try(:[], :url).present?
-    user.update!(resume_url: links[0][:url])
+    founder.update!(resume_url: links[0][:url])
   end
 
   def add_link_for_new_deck!

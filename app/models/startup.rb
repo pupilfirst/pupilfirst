@@ -75,7 +75,7 @@ class Startup < ActiveRecord::Base
   scope :agreement_expired, -> { where('agreement_ends_at < ?', Time.now) }
   scope :physically_incubated, -> { agreement_live.where(physical_incubatee: true) }
   scope :without_founders, -> { where.not(id: (Founder.pluck(:startup_id).uniq - [nil])) }
-  scope :student_startups, -> { joins(:founders).where.not(users: { university_id: nil }).uniq }
+  scope :student_startups, -> { joins(:founders).where.not(founders: { university_id: nil }).uniq }
   scope :kochi, -> { where incubation_location: INCUBATION_LOCATION_KOCHI }
   scope :visakhapatnam, -> { where incubation_location: INCUBATION_LOCATION_VISAKHAPATNAM }
   scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED }).distinct }
@@ -169,18 +169,18 @@ class Startup < ActiveRecord::Base
     end
   end
 
-  # validates email provided is 1)unique 2)not of the team lead, 3) is a valid sv.co user and 4) does not already have a startup
+  # validates email provided is 1)unique 2)not of the team lead, 3) is a valid sv.co founder and 4) does not already have a startup
   def invalid_cofounder(email)
-    user = Founder.find_by(email: email)
+    founder = Founder.find_by(email: email)
 
     return 'must be unique' if cofounder_emails.count(email) > 1
 
     return 'already the team lead' if email == team_lead_email
 
-    return 'not a registered user. Please ensure that the co-founder has already accepted '\
-    'his/her invitation to SV.CO and completed his/her registration.' unless user
+    return 'not a registered founder. Please ensure that the co-founder has already accepted '\
+    'his/her invitation to SV.CO and completed his/her registration.' unless founder
 
-    return 'already has a startup. Please ensure that your co-founder has not registered your startup already.' unless user.startup.blank?
+    return 'already has a startup. Please ensure that your co-founder has not registered your startup already.' unless founder.startup.blank?
 
     # return false if the email is 'not invalid'
     false
@@ -394,8 +394,8 @@ class Startup < ActiveRecord::Base
   end
 
   def founder_ids=(list_of_ids)
-    users_list = Founder.find list_of_ids.map(&:to_i).select { |e| e.is_a?(Integer) && e > 0 }
-    users_list.each { |u| founders << u }
+    founders_list = Founder.find list_of_ids.map(&:to_i).select { |e| e.is_a?(Integer) && e > 0 }
+    founders_list.each { |u| founders << u }
   end
 
   validate :category_count
@@ -453,9 +453,9 @@ class Startup < ActiveRecord::Base
     try(:agreement_ends_at).to_i > Time.now.to_i
   end
 
-  def founder?(user)
-    return false unless user
-    user.startup_id == id
+  def founder?(founder)
+    return false unless founder
+    founder.startup_id == id
   end
 
   def possible_founders
@@ -466,8 +466,8 @@ class Startup < ActiveRecord::Base
     admin.try(:phone)
   end
 
-  def cofounders(user)
-    founders - [user]
+  def cofounders(founder)
+    founders - [founder]
   end
 
   def generate_randomized_slug
@@ -552,8 +552,8 @@ class Startup < ActiveRecord::Base
     approved? && timeline_events.verified.present?
   end
 
-  def admin?(user)
-    admin == user
+  def admin?(founder)
+    admin == founder
   end
 
   def timeline_events_for_display(viewer)
@@ -571,7 +571,7 @@ class Startup < ActiveRecord::Base
   def create_default_event(types)
     types.each do |type|
       timeline_events.create(
-        user: admin, timeline_event_type: TimelineEventType.find_by(key: type), auto_populated: true,
+        founder: admin, timeline_event_type: TimelineEventType.find_by(key: type), auto_populated: true,
         image: File.open("#{Rails.root}/app/assets/images/timeline/joined_svco_cover.png"),
         verified_at: Time.now, event_on: Time.now
       )
@@ -664,10 +664,10 @@ class Startup < ActiveRecord::Base
     end.in_time_zone('Asia/Calcutta') + 18.hours
   end
 
-  # Add a user as team lead
-  def add_team_lead!(user)
-    founders << user
-    user.update!(startup_admin: true)
+  # Add a founder as team lead
+  def add_team_lead!(founder)
+    founders << founder
+    founder.update!(startup_admin: true)
   end
 
   # Add cofounders from given emails

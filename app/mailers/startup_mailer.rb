@@ -26,11 +26,11 @@ class StartupMailer < ApplicationMailer
     mail(to: send_to, subject: 'Incubation Request update.')
   end
 
-  def feedback_as_email(startup_feedback, user: nil)
+  def feedback_as_email(startup_feedback, founder: nil)
     @startup_feedback = startup_feedback
 
-    send_to = if user
-      user.email
+    send_to = if founder
+      founder.email
     else
       startup_feedback.startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
     end

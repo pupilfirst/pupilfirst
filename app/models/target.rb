@@ -56,7 +56,7 @@ class Target < ActiveRecord::Base
   def done_for_viewer?(viewer)
     return true if done?
     return done? unless role == ROLE_FOUNDER
-    timeline_events.where(user: viewer).merge(TimelineEvent.verified).present?
+    timeline_events.where(founder: viewer).merge(TimelineEvent.verified).present?
   end
 
   # Stored status must be pending, and due date must be present and in the past.

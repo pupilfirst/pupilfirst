@@ -4,9 +4,9 @@ class TimelineEventFile < ActiveRecord::Base
   mount_uploader :file, TimelineEventFileUploader
 
   # Used to determine whether file can be downloaded by visitor.
-  def visible_to?(user)
+  def visible_to?(founder)
     # Owner of event will always have visibility.
-    return true if user == timeline_event.user
+    return true if founder == timeline_event.founder
 
     # Only owner has visibility to private event (and attachments).
     return false if timeline_event.private?
@@ -15,6 +15,6 @@ class TimelineEventFile < ActiveRecord::Base
     return true unless private?
 
     # If private, check if visitor is a founder in linked startup.
-    user.present? && timeline_event.startup.founders.include?(user)
+    founder.present? && timeline_event.startup.founders.include?(founder)
   end
 end

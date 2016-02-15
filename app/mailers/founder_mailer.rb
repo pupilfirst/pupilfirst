@@ -1,4 +1,4 @@
-class UserMailer < ApplicationMailer
+class FounderMailer < ApplicationMailer
   def cofounder_addition(cofounder_mail, current_founder)
     @current_founder = current_founder
     mail(to: cofounder_mail, subject: 'SVApp: You have been added as startup cofounder!')

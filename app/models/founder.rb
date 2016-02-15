@@ -257,7 +257,7 @@ class Founder < ActiveRecord::Base
     else
       startup.founders << founder
 
-      UserMailer.cofounder_addition(email, self).deliver_later
+      FounderMailer.cofounder_addition(email, self).deliver_later
     end
   end
 
@@ -419,6 +419,6 @@ class Founder < ActiveRecord::Base
   end
 
   def send_password_change_email
-    UserMailer.password_changed(self).deliver_later
+    FounderMailer.password_changed(self).deliver_later
   end
 end

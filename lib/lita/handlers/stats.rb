@@ -16,7 +16,7 @@ module Lita
             # respond directly to the user if private message
             if response.message.source.private_message
               slack_username = response.message.source.user.metadata['mention_name']
-              user = ::User.find_by(slack_username: slack_username)
+              user = ::Founder.find_by(slack_username: slack_username)
 
               # Fallback to using the SLACK postMessage API method for users who are not registered on SV.CO
               if user

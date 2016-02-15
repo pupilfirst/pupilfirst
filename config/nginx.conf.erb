@@ -30,7 +30,7 @@ pid '<%= @options[:pid_file] %>';
         user <%= @options[:user] %> <%= default_group_for(@options[:user]) %>;
     <% else %>
         <%# Prevent running Nginx workers as nobody. %>
-        user <%= current_founder %> <%= default_group_for(current_founder) %>;
+        user <%= current_user %> <%= default_group_for(current_user) %>;
     <% end %>
 <% end %>
 

@@ -67,7 +67,7 @@ en:
   activerecord:
     errors:
       models:
-        user:
+        founder:
           attributes:
             email:
               blank: "Please supply your registered email address."

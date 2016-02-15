@@ -480,10 +480,10 @@ class Startup < ActiveRecord::Base
   end
 
   def generate_randomized_slug
-    if name.present?
-      "#{name.parameterize}-#{rand 1000}"
-    elsif product_name.present?
+    if product_name.present?
       "#{product_name.parameterize}-#{rand 1000}"
+    elsif name.present?
+      "#{name.parameterize}-#{rand 1000}"
     else
       "nameless-#{SecureRandom.hex(2)}"
     end

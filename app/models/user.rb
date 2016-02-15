@@ -38,6 +38,12 @@ class User < ActiveRecord::Base
 
   validates_presence_of :born_on
 
+  validate :age_more_than_18
+
+  def age_more_than_18
+    errors.add(:born_on, 'must be at least 18 years old') if born_on && born_on > 18.years.ago.end_of_year
+  end
+
   validates :first_name,
     presence: true,
     format: { with: /\A[a-z]+\z/i, message: "should be a single name with no special characters or numbers" },

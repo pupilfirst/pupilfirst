@@ -1,4 +1,4 @@
-= simple_form_for user, :html => { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean, file: :horizontal_file_input } do |f|
+= simple_form_for founder, :html => { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean, file: :horizontal_file_input } do |f|
   legend Basic details
 
   = f.error_notification
@@ -11,13 +11,13 @@
     .control-label.col-sm-3
       strong Phone number
     .col-sm-9
-      .phone-number-controls #{user.phone} (#{link_to 'Change?', phone_founder_path(referer: edit_founder_url)})
+      .phone-number-controls #{founder.phone} (#{link_to 'Change?', phone_founder_path(referer: edit_founder_url)})
 
   = f.input :avatar, as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }
   = f.input :about, label: 'One-Liner', placeholder: 'One-liner about yourself', input_html: { maxlength: 255 }
 
-  - if user.startup.present?
-    = f.input :roles, label: 'Role at Startup', as: :select, collection: Founder.valid_roles, label_method: ->(role) { t "user.#{role}" }, include_hidden: false, input_html: { multiple: true }
+  - if founder.startup.present?
+    = f.input :roles, label: 'Role at Startup', as: :select, collection: Founder.valid_roles, label_method: ->(role) { t "founder.#{role}" }, include_hidden: false, input_html: { multiple: true }
 
   = f.input :slack_username, label: (link_to 'Public Slack Username<sup>?</sup></a>'.html_safe, about_slack_url, target: '_blank'), placeholder: 'mention_name (excluding @)'
   = f.input :communication_address
@@ -32,7 +32,7 @@
     .col-sm-offset-3.col-sm-9
       = f.button :submit, 'Update basic details', class: 'btn btn-primary btn-flat'
 
-= simple_form_for user, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean, file: :horizontal_file_input } do |f|
+= simple_form_for founder, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean, file: :horizontal_file_input } do |f|
   legend Social Links
 
   = f.error_notification

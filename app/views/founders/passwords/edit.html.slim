@@ -13,7 +13,7 @@
         | &nbsp; Reset password token: #{resource.errors[:reset_password_token].first}.
 
     .wrapped-input
-      = image_tag 'users/sessions/password.png'
+      = image_tag 'founders/sessions/password.png'
       = f.password_field :password, required: true, placeholder: 'New password'
 
       - if resource.errors[:password].any?
@@ -22,7 +22,7 @@
           | &nbsp; Password: #{resource.errors[:password].first}.
 
     .wrapped-input
-      = image_tag 'users/sessions/password.png'
+      = image_tag 'founders/sessions/password.png'
       = f.password_field :password_confirmation, required: true, placeholder: 'Type new password again'
 
       - if resource.errors[:password_confirmation].any?

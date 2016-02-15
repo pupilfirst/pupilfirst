@@ -1,6 +1,6 @@
 - content_for :head
-  title SV.CO Founder Profile for #{@user.fullname}
-  meta name="description" content="This is a detailed founder profile for #{@user.fullname}, includes bio, resume, activity on Public Slack and Karma Points earned."
+  title SV.CO Founder Profile for #{@founder.fullname}
+  meta name="description" content="This is a detailed founder profile for #{@founder.fullname}, includes bio, resume, activity on Public Slack and Karma Points earned."
 
 .user-data-container
   .container
@@ -8,81 +8,81 @@
       .row.row-eq-height
         .col-md-2
           .profile
-            = image_tag profile_image_url(@user, gravatar_size: 140, avatar_version: :mid), class: 'img-responsive'
-            - if current_founder == @user
+            = image_tag profile_image_url(@founder, gravatar_size: 140, avatar_version: :mid), class: 'img-responsive'
+            - if current_founder == @founder
               .progress-container
                 .progress.profile-progress
-                  - if @user.profile_completion_percentage >= 80
-                    .progress-bar.profile-progress-bar.progress-bar-success aria-valuemax="100" aria-valuemin="0" aria-valuenow="#{@user.profile_completion_percentage}" role="progressbar" style="width:#{@user.profile_completion_percentage}%;"
-                  - elsif @user.profile_completion_percentage >= 50
-                    .progress-bar.profile-progress-bar.progress-bar-info aria-valuemax="100" aria-valuemin="0" aria-valuenow="#{@user.profile_completion_percentage}" role="progressbar" style="width:#{@user.profile_completion_percentage}%;"
-                  - elsif @user.profile_completion_percentage >= 30
-                    .progress-bar.profile-progress-bar.progress-bar-warning aria-valuemax="100" aria-valuemin="0" aria-valuenow="#{@user.profile_completion_percentage}" role="progressbar" style="width:#{@user.profile_completion_percentage}%;"
+                  - if @founder.profile_completion_percentage >= 80
+                    .progress-bar.profile-progress-bar.progress-bar-success aria-valuemax="100" aria-valuemin="0" aria-valuenow="#{@founder.profile_completion_percentage}" role="progressbar" style="width:#{@founder.profile_completion_percentage}%;"
+                  - elsif @founder.profile_completion_percentage >= 50
+                    .progress-bar.profile-progress-bar.progress-bar-info aria-valuemax="100" aria-valuemin="0" aria-valuenow="#{@founder.profile_completion_percentage}" role="progressbar" style="width:#{@founder.profile_completion_percentage}%;"
+                  - elsif @founder.profile_completion_percentage >= 30
+                    .progress-bar.profile-progress-bar.progress-bar-warning aria-valuemax="100" aria-valuemin="0" aria-valuenow="#{@founder.profile_completion_percentage}" role="progressbar" style="width:#{@founder.profile_completion_percentage}%;"
                   - else
-                    .progress-bar.profile-progress-bar.progress-bar-danger aria-valuemax="100" aria-valuemin="0" aria-valuenow="#{@user.profile_completion_percentage}" role="progressbar" style="width:#{@user.profile_completion_percentage}%;"
+                    .progress-bar.profile-progress-bar.progress-bar-danger aria-valuemax="100" aria-valuemin="0" aria-valuenow="#{@founder.profile_completion_percentage}" role="progressbar" style="width:#{@founder.profile_completion_percentage}%;"
                 span.progress-value
-                  = @user.profile_completion_percentage
+                  = @founder.profile_completion_percentage
                   | % complete
-              - if @user.profile_completion_percentage < 100
+              - if @founder.profile_completion_percentage < 100
                 a.profile-complete-button href=edit_founder_url
                   ' Complete Your Profile
-        div class="col-md-#{@user.startup&.logo.present? ? 7 : 10}"
+        div class="col-md-#{@founder.startup&.logo.present? ? 7 : 10}"
           .row.profile-data
             .profile-head.clearfix
               .col-lg-7.col-md-12.profile-name
                 h2
-                  = @user.fullname
+                  = @founder.fullname
                   ' &nbsp;
-                  - if @user.startup.present?
+                  - if @founder.startup.present?
                     span
-                      - if @user.roles.present?
-                        = @user.roles.map { |role| t("role.#{role}") }.join ', '
+                      - if @founder.roles.present?
+                        = @founder.roles.map { |role| t("role.#{role}") }.join ', '
                         ' &nbsp;at
-                      = @user.startup.product_name
-                  - if current_founder == @user
+                      = @founder.startup.product_name
+                  - if current_founder == @founder
                     a.profile-edit-button href=edit_founder_url
                       i.fa.fa-pencil
                       ' Edit
-              - if @user.social_url_present?
+              - if @founder.social_url_present?
                 .col-lg-5.col-md-12.social-connect
-                  - if @user.personal_website_url.present?
-                    a href=@user.personal_website_url target='_blank'
+                  - if @founder.personal_website_url.present?
+                    a href=@founder.personal_website_url target='_blank'
                       i.fa.fa-globe
-                  - if @user.linkedin_url.present?
-                    a href=@user.linkedin_url target='_blank'
+                  - if @founder.linkedin_url.present?
+                    a href=@founder.linkedin_url target='_blank'
                       i.fa.fa-linkedin
-                  - if @user.facebook_url.present?
-                    a href=@user.facebook_url target='_blank'
+                  - if @founder.facebook_url.present?
+                    a href=@founder.facebook_url target='_blank'
                       i.fa.fa-facebook
-                  - if @user.twitter_url.present?
-                    a href=@user.twitter_url target='_blank'
+                  - if @founder.twitter_url.present?
+                    a href=@founder.twitter_url target='_blank'
                       i.fa.fa-twitter
-                  - if @user.behance_url.present?
-                    a href=@user.behance_url target='_blank'
+                  - if @founder.behance_url.present?
+                    a href=@founder.behance_url target='_blank'
                       i.fa.fa-behance
-                  - if @user.github_url.present?
-                    a href=@user.github_url target='_blank'
+                  - if @founder.github_url.present?
+                    a href=@founder.github_url target='_blank'
                       i.fa.fa-github
-                  - if @user.angel_co_url.present?
-                    a href=@user.angel_co_url target='_blank'
+                  - if @founder.angel_co_url.present?
+                    a href=@founder.angel_co_url target='_blank'
                       i.fa.fa-angellist
-                  - if @user.blog_url.present?
-                    a href=@user.blog_url target='_blank'
+                  - if @founder.blog_url.present?
+                    a href=@founder.blog_url target='_blank'
                       i.fa.fa-rss
 
             .profile-detail.clearfix
               .col-lg-8.col-md-7.profile-description
                 p
-                  = @user.about
+                  = @founder.about
               .col-lg-4.col-md-5.resume-link-section
-                - if @user.resume_url.present?
-                  a.btn.btn-flat.btn-resume-link href=@user.resume_url type="button"
-                    = image_tag 'users/profile/resume-icon.png'
+                - if @founder.resume_url.present?
+                  a.btn.btn-flat.btn-resume-link href=@founder.resume_url type="button"
+                    = image_tag 'founders/profile/resume-icon.png'
                     span.resume-title View Resume
-        - if @user.startup&.logo.present?
+        - if @founder.startup&.logo.present?
           .col-md-3.startup-logo-profile
-            a.startup-logo-box href=startup_url(@user.startup)
-              = image_tag @user.startup.logo.url, alt: 'Startup logo', class: 'img-responsive'
+            a.startup-logo-box href=startup_url(@founder.startup)
+              = image_tag @founder.startup.logo.url, alt: 'Startup logo', class: 'img-responsive'
 .profile-bg
   .container
     .activity-section
@@ -143,7 +143,7 @@
                                   ' Updated timeline: #{data_entry[:timeline_event].timeline_event_type.title}.
                 - else
                   .inactive-month
-                    p User was inactive during this month.
+                    p Founder was inactive during this month.
 
           .col-md-4.all-activity-counts.clearfix
             .col-md-12.col-sm-6.col-xs-12.slack-messages
@@ -151,26 +151,26 @@
                 h3.font-weight-400 Slack Messages
               .all-activity-body.clearfix
                 .logo-block.pull-left
-                  = image_tag 'users/profile/slack-logo.png', class: 'img-responsive'
+                  = image_tag 'founders/profile/slack-logo.png', class: 'img-responsive'
                 .activity-count-block.pull-left
                   h2.font-weight-300
-                    = @user.public_slack_messages.where(created_at: @user.activity_date_range).count
+                    = @founder.public_slack_messages.where(created_at: @founder.activity_date_range).count
                     span messages
                   p
-                    = @user.activity_timeline_start_date.strftime '%b %d, %Y'
+                    = @founder.activity_timeline_start_date.strftime '%b %d, %Y'
                     ' &nbsp;&mdash;
-                    = @user.activity_timeline_end_date.strftime '%b %d, %Y'
+                    = @founder.activity_timeline_end_date.strftime '%b %d, %Y'
             .col-md-12.col-sm-6.col-xs-12.karma-points
               .all-activity-head.green-head
                 h3.font-weight-400 Karma Points
               .all-activity-body.clearfix
                 .logo-block.pull-left
-                  = image_tag 'users/profile/karma-logo.png', class: 'img-responsive'
+                  = image_tag 'founders/profile/karma-logo.png', class: 'img-responsive'
                 .activity-count-block.pull-left
                   h2.font-weight-300
-                    = @user.karma_points.where(created_at: @user.activity_date_range).sum(:points)
+                    = @founder.karma_points.where(created_at: @founder.activity_date_range).sum(:points)
                     span points
                   p
-                    = @user.activity_timeline_start_date.strftime '%b %d, %Y'
+                    = @founder.activity_timeline_start_date.strftime '%b %d, %Y'
                     ' &nbsp;&mdash;
-                    = @user.activity_timeline_end_date.strftime '%b %d, %Y'
+                    = @founder.activity_timeline_end_date.strftime '%b %d, %Y'

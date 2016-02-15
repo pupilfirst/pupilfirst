@@ -21,8 +21,8 @@
       - @public_slack_messages.zip(%w(odd even).cycle).each do |public_slack_message, row_color|
         tr class=row_color
           td
-            - if public_slack_message.user.present?
-              = link_to public_slack_message.user.fullname, admin_user_path(public_slack_message.user)
+            - if public_slack_message.founder.present?
+              = link_to public_slack_message.founder.fullname, admin_user_path(public_slack_message.founder)
             - else
               | @#{public_slack_message.slack_username}
           td ##{public_slack_message.channel}
@@ -34,7 +34,7 @@
                 ' ##{public_slack_message.karma_point.id} &mdash;
                 ' #{public_slack_message.karma_point.points} points &mdash;
                 ' #{public_slack_message.karma_point.activity_type}.
-            - elsif public_slack_message.user.blank?
+            - elsif public_slack_message.founder.blank?
               em Founder not linked.
             - else
               = form_tag create_karma_points_admin_public_slack_message_path(public_slack_message), method: :post, remote: true, class: 'add_karma_points_for_message' do

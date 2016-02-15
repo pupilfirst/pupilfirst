@@ -359,7 +359,7 @@
                         .tl-body
                           p #{event.description}
 
-                        - attachments = event.attachments_for_user(current_founder)
+                        - attachments = event.attachments_for_founder(current_founder)
 
                         - if attachments.present?
                           .timeline-footer.tl-footer

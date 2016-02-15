@@ -34,15 +34,15 @@ table.index_table
       th.sorted-desc.sortable
         a.not-a-link href='#' Karma Points
   tbody
-    - users_by_karma(batch: @batch, after: @after, before: @before).each_with_index do |points_array, idx|
+    - founders_by_karma(batch: @batch, after: @after, before: @before).each_with_index do |points_array, idx|
       - founder_id, points = points_array
-      - user = Founder.includes(:startup).find(founder_id)
+      - founder = Founder.includes(:startup).find(founder_id)
       tr class="#{(idx + 1).even? ? 'even' : 'odd'}"
-        td = link_to user.fullname, admin_user_path(user)
-        td = founder_roles user.roles
+        td = link_to founder.fullname, admin_user_path(founder)
+        td = founder_roles founder.roles
         td
-          - if user.startup.present?
-            = link_to user.startup.name, admin_startup_path(user.startup)
+          - if founder.startup.present?
+            = link_to founder.startup.name, admin_startup_path(founder.startup)
           - else
             em Not a founder (anymore?)
         td = points

@@ -1,4 +1,4 @@
-= semantic_form_for [:admin, @user] do |f|
+= semantic_form_for [:admin, @founder] do |f|
   = f.inputs 'Basic Details'
     = f.input :slug
     = f.input :email
@@ -21,10 +21,10 @@
     = f.input :semester
     = f.input :year_of_graduation, as: :select, collection: 2014..2020
 
-    / When creating a user manually, let's not ask for a password.
+    / When creating a founder manually, let's not ask for a password.
     = f.input :skip_password, as: :hidden, input_html: { value: true }
 
-    / When creating a user manually, let's skip the e-mail confirmation step.
+    / When creating a founder manually, let's skip the e-mail confirmation step.
     /= f.input :confirmed_at, as: :hidden, input_html: { value: Time.now.utc.to_s }
 
   = f.inputs 'Social links'

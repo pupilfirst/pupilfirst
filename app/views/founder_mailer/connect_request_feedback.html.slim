@@ -1,0 +1,23 @@
+= content_for :heading
+  | Please supply feedback for your recent faculty connect session with faculty member #{@faculty.name}
+
+= content_for :salutation
+  | Hello #{@founder.first_name},
+
+= content_for :body
+  p
+    ' Our records indicate that a faculty connect session that was scheduled between you and our faculty member
+    ' #{@faculty.name}, should have ended recently. It would be a great help if you could supply some simple feedback
+    | on your experience.
+
+  p How would you rate your interaction with the founder? Click on the rating / phrase that applies the best.
+
+  p #{link_to '1 - Bad', connect_request_feedback_from_team_url(id: @connect_request.id, token: @founder.auth_token, rating: 1)}
+  p #{link_to '2 - OK', connect_request_feedback_from_team_url(id: @connect_request.id, token: @founder.auth_token, rating: 2)}
+  p #{link_to '3 - Good', connect_request_feedback_from_team_url(id: @connect_request.id, token: @founder.auth_token, rating: 3)}
+  p #{link_to '4 - Great', connect_request_feedback_from_team_url(id: @connect_request.id, token: @founder.auth_token, rating: 4)}
+  p #{link_to '5 - Wow!', connect_request_feedback_from_team_url(id: @connect_request.id, token: @founder.auth_token, rating: 5)}
+
+  p On the other hand, if the faculty connect session did not occur, please ignore this e-mail.
+
+  p Thank you for your time!

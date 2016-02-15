@@ -10,11 +10,11 @@
 
   = form_for resource, url: session_path(resource_name) do |f|
     .wrapped-input
-      = image_tag 'users/sessions/email.png'
+      = image_tag 'founders/sessions/email.png'
       = f.text_field :email, required: true, placeholder: 'SV.CO ID (email)'
 
     .wrapped-input
-      = image_tag 'users/sessions/password.png'
+      = image_tag 'founders/sessions/password.png'
       = f.password_field :password, required: true, placeholder: 'Password'
 
     = f.submit 'Sign in', class: 'btn btn-lg btn-primary btn-flat margin-bottom-20'
@@ -29,4 +29,4 @@
           = link_to 'Forgot your password?', new_password_path(resource_name), class: 'forgot-password'
 
   .footer
-    = render 'users/shared/links'
+    = render 'founders/shared/links'

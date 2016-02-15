@@ -105,7 +105,7 @@ class TimelineEvent < ActiveRecord::Base
     timeline_event_files.map do |file|
       {
         identifier: file.id,
-        name: file.file.file.filename, # For real. [table_entry].[column_name].file.filename.
+        name: file.filename,
         private: file.private?,
         persisted: true
       }
@@ -205,7 +205,7 @@ class TimelineEvent < ActiveRecord::Base
 
     timeline_event_files.each do |file|
       next if file.private? && !privileged
-      attachments << { file: file, title: file.file.file.filename, private: file.private? }
+      attachments << { file: file, title: file.filename, private: file.private? }
     end
 
     links.each do |link|

@@ -7,7 +7,7 @@
     .user-data-card
       .row.row-eq-height
         .col-md-2
-          #complete-profile-tooltip.profile data-toggle='tooltip' data-placement='bottom' title="#{@user.profile_completion_instruction}"
+          #complete-profile-left.profile data-toggle='tooltip' data-placement='bottom' title="#{@user == current_user ? @user.profile_completion_instruction : ''}"
             = image_tag profile_image_url(@user, gravatar_size: 140, avatar_version: :mid), class: 'img-responsive'
             - if current_user == @user
               .progress-container

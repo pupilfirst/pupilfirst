@@ -1,8 +1,8 @@
 module ActiveAdmin
   module ActiveAdminHelper
-    def sv_id_link(user)
-      if user.present?
-        link_to "#{user.email} - #{user.fullname} #{user.phone.present? ? "(#{user.phone}" : ''})", admin_user_path(user)
+    def sv_id_link(founder)
+      if founder.present?
+        link_to "#{founder.email} - #{founder.fullname} #{founder.phone.present? ? "(#{founder.phone}" : ''})", admin_user_path(founder)
       else
         '<em>Missing, probably deleted.</em>'.html_safe
       end
@@ -23,7 +23,7 @@ module ActiveAdmin
         .sort_by { |_startup_id, points| points }.reverse
     end
 
-    def users_by_karma(batch:, after:, before:)
+    def founders_by_karma(batch:, after:, before:)
       Founder.joins(:startup, :karma_points)
         .where(startups: { batch_id: batch.id })
         .where(karma_points: { created_at: (after.beginning_of_day..before.end_of_day) })

@@ -2,14 +2,14 @@ class TeamMembersController < ApplicationController
   before_filter :authenticate_founder!
   before_filter :restrict_to_startup_founders
 
-  # GET /user/startup/team_members/new
+  # GET /founder/startup/team_members/new
   def new
     @team_members = current_founder.startup.team_members
     @team_member =  TeamMember.new(startup: current_founder.startup)
     render 'create_or_edit'
   end
 
-  # POST /user/startup/team_members
+  # POST /founder/startup/team_members
   def create
     @team_members = current_founder.startup.team_members
     @team_member = TeamMember.new team_member_params.merge(startup: current_founder.startup)
@@ -23,14 +23,14 @@ class TeamMembersController < ApplicationController
     end
   end
 
-  # GET /user/startup/team_members/:id
+  # GET /founder/startup/team_members/:id
   def edit
     @team_members = current_founder.startup.team_members
     @team_member = @team_members.find(params[:id])
     render 'create_or_edit'
   end
 
-  # PATCH /user/startup/team_members/:id
+  # PATCH /founder/startup/team_members/:id
   def update
     @team_members = current_founder.startup.team_members
     @team_member = @team_members.find(params[:id])
@@ -44,7 +44,7 @@ class TeamMembersController < ApplicationController
     end
   end
 
-  # DELETE /user/startup/team_members/:id
+  # DELETE /founder/startup/team_members/:id
   def destroy
     @team_members = current_founder.startup.team_members
     @team_member = @team_members.find(params[:id])

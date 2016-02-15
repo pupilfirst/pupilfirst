@@ -1,5 +1,5 @@
 ActiveAdmin.register KarmaPoint do
-  menu parent: 'Users'
+  menu parent: 'Founders'
 
   permit_params :startup_id, :founder_id, :points, :activity_type, :created_at
 
@@ -8,7 +8,7 @@ ActiveAdmin.register KarmaPoint do
 
   controller do
     def scoped_collection
-      super.includes :user
+      super.includes :founder
     end
   end
 
@@ -30,9 +30,9 @@ ActiveAdmin.register KarmaPoint do
     selectable_column
 
     column 'Founder' do |karma_point|
-      if karma_point.user.present?
+      if karma_point.founder.present?
         span do
-          link_to karma_point.user.fullname, karma_point.user
+          link_to karma_point.founder.fullname, karma_point.founder
         end
       end
     end
@@ -62,7 +62,7 @@ ActiveAdmin.register KarmaPoint do
         label: 'Product',
         member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }
 
-      f.input :user,
+      f.input :founder,
         label: 'Founder',
         as: :select,
         collection: f.object.persisted? ? f.object.startup.founders : [],

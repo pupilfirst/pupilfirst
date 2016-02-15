@@ -38,7 +38,7 @@ ActiveAdmin.register TimelineEvent do
       end
     end
 
-    column 'Founder', :user
+    column 'Founder', :founder
     column :event_on
 
     column :verified_status do |timeline_event|
@@ -138,12 +138,12 @@ ActiveAdmin.register TimelineEvent do
       timeline_event.update!(grade: params[:grade])
 
       # if private event, assign karma points to the founder too
-      user = timeline_event.private? ? timeline_event.user : nil
+      founder = timeline_event.private? ? timeline_event.founder : nil
       assigned_to = timeline_event.private? ? 'the founder and startup' : 'the startup' # used in flash message
 
       karma_point = KarmaPoint.create!(
         source: timeline_event,
-        user: user,
+        founder: founder,
         startup: timeline_event.startup,
         activity_type: "Added a new Timeline event - #{timeline_event.timeline_event_type.title}",
         points: timeline_event.points_for_grade
@@ -190,8 +190,8 @@ ActiveAdmin.register TimelineEvent do
 
   member_action :save_resume_url, method: :post do
     timeline_event = TimelineEvent.find(params[:id])
-    timeline_event.user.update!(resume_url: timeline_event.links[params[:index].to_i][:url])
-    flash[:success] = "Successfully updated user's resume URL."
+    timeline_event.founder.update!(resume_url: timeline_event.links[params[:index].to_i][:url])
+    flash[:success] = "Successfully updated founder's resume URL."
     redirect_to action: :show
   end
 
@@ -208,7 +208,7 @@ ActiveAdmin.register TimelineEvent do
         include_blank: true,
         label: 'Product',
         member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }
-      f.input :user, label: 'Founder', as: :select, collection: f.object.persisted? ? f.object.startup.founders : [], include_blank: false
+      f.input :founder, label: 'Founder', as: :select, collection: f.object.persisted? ? f.object.startup.founders : [], include_blank: false
       f.input :timeline_event_type, include_blank: false
       f.input :description
       f.input :image
@@ -236,7 +236,7 @@ ActiveAdmin.register TimelineEvent do
         end
       end
 
-      row('Founder') { timeline_event.user }
+      row('Founder') { timeline_event.founder }
       row :iteration
       row :timeline_event_type
       row :description

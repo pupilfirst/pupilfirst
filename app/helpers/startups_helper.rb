@@ -52,7 +52,7 @@ module StartupsHelper
     ]
   end
 
-  # Only show expired targets that haven't been completed by user already.
+  # Only show expired targets that haven't been completed by founder already.
   def expired_targets
     expired_targets = @startup.targets.expired
 

@@ -21,7 +21,7 @@
 //= require google_analytics.js.erb
 //= require navbar
 //= require shift_for_hash
-//= require users
+//= require founders
 //= require limit_max_int
 //= require inspectlet
 //= require video
@@ -33,7 +33,6 @@
 //= require home
 //= require faculty
 //= require startups
-//= require users
 //= require about
 //= require transparency
 //= require jquery-stickit

@@ -2,66 +2,66 @@ class FoundersController < ApplicationController
   before_filter :authenticate_founder!, except: :founder_profile
 
   def founder_profile
-    @user = Founder.friendly.find(params[:slug])
-    @timeline = @user.activity_timeline
+    @founder = Founder.friendly.find(params[:slug])
+    @timeline = @founder.activity_timeline
     @skip_container = true
   end
 
-  # GET /users/:id/edit
+  # GET /founders/:id/edit
   def edit
-    @user = current_founder
+    @founder = current_founder
   end
 
-  # PATCH /users/:id
+  # PATCH /founders/:id
   def update
-    @user = Founder.find current_founder.id
+    @founder = Founder.find current_founder.id
 
-    if @user.update_attributes(user_params)
+    if @founder.update_attributes(founder_params)
       flash[:notice] = 'Profile updated'
-      redirect_to founder_profile_path(slug: @user.slug)
+      redirect_to founder_profile_path(slug: @founder.slug)
     else
       render 'edit'
     end
   end
 
-  # PATCH /user/update_password
+  # PATCH /founder/update_password
   def update_password
-    @user = current_founder
+    @founder = current_founder
 
-    if @user.update_with_password(user_password_change_params)
-      # Sign in the user by passing validation in case his password changed
-      sign_in @user, bypass: true
+    if @founder.update_with_password(founder_password_change_params)
+      # Sign in the founder by passing validation in case his password changed
+      sign_in @founder, bypass: true
 
       flash[:success] = 'Password updated'
 
-      redirect_to founder_profile_path(slug: @user.slug)
+      redirect_to founder_profile_path(slug: @founder.slug)
     else
       render 'edit'
     end
   end
 
-  # GET /user/phone
+  # GET /founder/phone
   def phone
     @skip_container = true
     session[:referer] = params[:referer] if params[:referer]
   end
 
-  # PATCH /user/set_unconfirmed_phone
+  # PATCH /founder/set_unconfirmed_phone
   def set_unconfirmed_phone
-    if current_founder.update(unconfirmed_phone: params[:user][:unconfirmed_phone], verification_code_sent_at: nil)
+    if current_founder.update(unconfirmed_phone: params[:founder][:unconfirmed_phone], verification_code_sent_at: nil)
       redirect_to phone_verification_founder_path
     else
       render 'phone'
     end
   end
 
-  # GET /user/phone_verification
+  # GET /founder/phone_verification
   # rubocop:disable Metrics/CyclomaticComplexity
   def phone_verification
     @registration_ongoing = true if session[:registration_ongoing]
     @skip_container = true
 
-    # skip to consent page if registration ongoing and user already has a verified phone
+    # skip to consent page if registration ongoing and founder already has a verified phone
     if @registration_ongoing && current_founder.phone.present?
       redirect_to consent_founder_path, alert: 'You already have a verified phone number'
       return
@@ -87,7 +87,7 @@ class FoundersController < ApplicationController
   end
   # rubocop:enable Metrics/CyclomaticComplexity
 
-  # PATCH /user/resend
+  # PATCH /founder/resend
   def resend
     @registration_ongoing = true if session[:registration_ongoing]
     @skip_container = true
@@ -109,7 +109,7 @@ class FoundersController < ApplicationController
     render 'phone_verification'
   end
 
-  # POST /user/verify
+  # POST /founder/verify
   def verify
     @skip_container = true
 
@@ -139,12 +139,12 @@ class FoundersController < ApplicationController
 
   private
 
-  def user_password_change_params
-    params.required(:user).permit(:current_password, :password, :password_confirmation)
+  def founder_password_change_params
+    params.required(:founder).permit(:current_password, :password, :password_confirmation)
   end
 
-  def user_params
-    params.require(:user).permit(
+  def founder_params
+    params.require(:founder).permit(
       :first_name, :last_name, :avatar, :slack_username, :college_identification, :course, :semester, :year_of_graduation, :about,
       :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :facebook_url, :angel_co_url, :github_url, :behance_url,
       :university_id, :roll_number, :born_on, :communication_address, roles: []

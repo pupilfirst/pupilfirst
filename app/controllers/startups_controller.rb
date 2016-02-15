@@ -98,7 +98,7 @@ class StartupsController < ApplicationController
     begin
       current_founder.add_as_founder_to_startup!(params[:cofounder][:email])
     rescue Exceptions::FounderNotFound
-      flash[:error] = "Couldn't find a user with the SV.CO ID you supplied. Please verify founder's registered email address."
+      flash[:error] = "Couldn't find a founder with the SV.CO ID you supplied. Please verify founder's registered email address."
     rescue Exceptions::FounderAlreadyMemberOfStartup
       flash[:info] = 'The SV.CO ID you supplied is already linked to your startup!'
     rescue Exceptions::FounderAlreadyHasStartup
@@ -122,7 +122,7 @@ class StartupsController < ApplicationController
     redirect_to :back
   end
 
-  # DELETE /users/:id/startup/destroy
+  # DELETE /founders/:id/startup/destroy
   def destroy
     @startup = current_founder.startup
 

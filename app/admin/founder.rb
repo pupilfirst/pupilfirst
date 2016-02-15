@@ -22,16 +22,16 @@ ActiveAdmin.register Founder do
     column :email
     column :fullname
 
-    column :product_name do |user|
-      if user.startup.present?
-        a href: admin_startup_path(user.startup) do
+    column :product_name do |founder|
+      if founder.startup.present?
+        a href: admin_startup_path(founder.startup) do
           span do
-            user.startup.try(:product_name)
+            founder.startup.try(:product_name)
           end
 
-          if user.startup.name.present?
+          if founder.startup.name.present?
             span do
-              " (#{user.startup.name})"
+              " (#{founder.startup.name})"
             end
           end
         end
@@ -40,15 +40,15 @@ ActiveAdmin.register Founder do
 
     column :university
 
-    column :karma_points do |user|
-      points = user.karma_points.where('created_at > ?', Date.today.beginning_of_week).sum(:points)
-      link_to points, admin_karma_points_path(q: { founder_id_eq: user.id })
+    column :karma_points do |founder|
+      points = founder.karma_points.where('created_at > ?', Date.today.beginning_of_week).sum(:points)
+      link_to points, admin_karma_points_path(q: { founder_id_eq: founder.id })
     end
   end
 
   member_action :remove_from_startup, method: :post do
-    user = Founder.friendly.find params[:id]
-    user.remove_from_startup!
+    founder = Founder.friendly.find params[:id]
+    founder.remove_from_startup!
     redirect_to action: :show
   end
 
@@ -58,23 +58,23 @@ ActiveAdmin.register Founder do
       row :email
       row :fullname
 
-      row :roles do |user|
-        user.roles.map do |role|
+      row :roles do |founder|
+        founder.roles.map do |role|
           t("role.#{role}")
         end.join ', '
       end
 
-      row :product_name do |user|
-        if user.startup.present?
-          if user.startup.present?
-            a href: admin_startup_path(user.startup) do
+      row :product_name do |founder|
+        if founder.startup.present?
+          if founder.startup.present?
+            a href: admin_startup_path(founder.startup) do
               span do
-                user.startup.try(:product_name)
+                founder.startup.try(:product_name)
               end
 
-              if user.startup.name.present?
+              if founder.startup.name.present?
                 span do
-                  " (#{user.startup.name})"
+                  " (#{founder.startup.name})"
                 end
               end
             end
@@ -93,7 +93,7 @@ ActiveAdmin.register Founder do
       row :slack_user_id
 
       row :resume_url do
-        link_to user.resume_url if user.resume_url.present?
+        link_to founder.resume_url if founder.resume_url.present?
       end
 
       row :phone
@@ -106,9 +106,9 @@ ActiveAdmin.register Founder do
       row :roll_number
 
       row :college_identification do
-        if user.college_identification.present?
-          link_to user.college_identification.url do
-            image_tag user.college_identification.thumb.url
+        if founder.college_identification.present?
+          link_to founder.college_identification.url do
+            image_tag founder.college_identification.thumb.url
           end
         end
       end
@@ -119,7 +119,7 @@ ActiveAdmin.register Founder do
     end
 
     panel 'Social links' do
-      attributes_table_for user do
+      attributes_table_for founder do
         row :twitter_url
         row :facebook_url
         row :linkedin_url
@@ -132,7 +132,7 @@ ActiveAdmin.register Founder do
     end
 
     panel 'Devise details' do
-      attributes_table_for user do
+      attributes_table_for founder do
         row :confirmed_at
         row :reset_password_sent_at
         row :sign_in_count
@@ -163,11 +163,11 @@ ActiveAdmin.register Founder do
   end
 
   collection_action :send_invite, method: :post do
-    email = params[:user][:email]
+    email = params[:founder][:email]
 
-    # do not send invites to already registered users
+    # do not send invites to already registered founders
     if Founder.find_by(email: email).present?
-      flash.now[:error] = 'A user with this email id already exists!'
+      flash.now[:error] = 'A founder with this email id already exists!'
       redirect_to :back
       return
     end
@@ -189,7 +189,7 @@ ActiveAdmin.register Founder do
   filter :university
   filter :roll_number
 
-  form partial: 'admin/users/form'
+  form partial: 'admin/founders/form'
 
   permit_params :first_name, :last_name, :email, :remote_avatar_url, :avatar, :startup_id, :slug, :about,
     :slack_username, :skip_password, :born_on, :startup_admin, :communication_address,

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 feature 'Startup Edit' do
-  let(:user) { create :founder_with_password, confirmed_at: Time.now }
+  let(:founder) { create :founder_with_password, confirmed_at: Time.now }
   let(:co_founder) { create :founder_with_password, confirmed_at: Time.now }
   let!(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
 
@@ -10,17 +10,17 @@ feature 'Startup Edit' do
   let(:new_deck) { Faker::Internet.domain_name }
 
   before :each do
-    # Add user as founder of startup.
-    startup.founders << user
+    # Add founder as founder of startup.
+    startup.founders << founder
 
-    # Log in the user.
+    # Log in the founder.
     visit new_founder_session_path
-    fill_in 'user_email', with: user.email
-    fill_in 'user_password', with: 'password'
+    fill_in 'founder_email', with: founder.email
+    fill_in 'founder_password', with: 'password'
     click_on 'Sign in'
     visit edit_founder_startup_path
 
-    # User should now be on his startup edit page.
+    # founder should now be on his startup edit page.
   end
 
   context 'Founder visits edit page of his startup' do
@@ -65,11 +65,11 @@ feature 'Startup Edit' do
     end
 
     scenario 'Founder looks to delete his approved startup as startup_admin' do
-      # change startup admin to this user
+      # change startup admin to this founder
       startup.admin.update(startup_admin: false)
-      user.update(startup_admin: true)
+      founder.update(startup_admin: true)
       startup.reload
-      user.reload
+      founder.reload
 
       visit edit_founder_startup_path
       expect(page).to have_text('To delete your startup timeline, contact your SV.CO representative.')

@@ -3,7 +3,7 @@ require 'rails_helper'
 describe StartupsController do
   include ControllerMacros
 
-  before(:each) { login_user }
+  before(:each) { login_founder }
 
   # This should return the minimal set of attributes required to create a valid
   # Startup. As you add validations to Startup, be sure to

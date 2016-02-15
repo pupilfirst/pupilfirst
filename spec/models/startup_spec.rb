@@ -6,11 +6,11 @@ describe Startup, broken: true do
   context 'when startup is destroyed' do
     let(:startup) { create :startup }
 
-    it 'clears association from users' do
-      user = create :founder_with_out_password, startup: startup
+    it 'clears association from founders' do
+      founder = create :founder_with_out_password, startup: startup
       startup.destroy!
-      user.reload
-      expect(user.startup_id).to eq nil
+      founder.reload
+      expect(founder.startup_id).to eq nil
     end
   end
 

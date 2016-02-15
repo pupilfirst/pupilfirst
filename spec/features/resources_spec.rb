@@ -5,7 +5,7 @@ require 'rails_helper'
 feature 'Resources' do
   include AjaxHelpers
 
-  let(:user) { create :founder_with_password, confirmed_at: Time.now }
+  let(:founder) { create :founder_with_password, confirmed_at: Time.now }
   let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
 
   let!(:public_resource_1) { create :resource }
@@ -28,7 +28,7 @@ feature 'Resources' do
     PublicSlackTalk.mock = false
   end
 
-  scenario 'User visits resources page' do
+  scenario 'founder visits resources page' do
     visit resources_path
 
     expect(page).to have_selector('.resource', count: 2)
@@ -36,12 +36,12 @@ feature 'Resources' do
     expect(page).to have_text(public_resource_2.title)
   end
 
-  scenario 'User visits resource page' do
+  scenario 'founder visits resource page' do
     visit resources_path
     expect(page).to have_text('Approved Startups get access to exclusive content produced by Faculty')
   end
 
-  scenario 'User downloads resource', js: true do
+  scenario 'founder downloads resource', js: true do
     visit resources_path
 
     new_window = window_opened_by { click_on 'Download', match: :first }
@@ -55,7 +55,7 @@ feature 'Resources' do
   context 'With a video resource' do
     let!(:public_resource_2) { create :video_resource }
 
-    scenario 'User can stream resource' do
+    scenario 'founder can stream resource' do
       visit resources_path
 
       page.find('.stream-resource').click
@@ -64,15 +64,15 @@ feature 'Resources' do
     end
   end
 
-  context 'User is a logged in founder' do
+  context 'founder is a logged in founder' do
     before :each do
-      # Make the user a founder of approved startup.
-      startup.founders << user
+      # Make the founder a founder of approved startup.
+      startup.founders << founder
 
-      # Login the user.
+      # Login the founder.
       visit new_founder_session_path
-      fill_in 'user_email', with: user.email
-      fill_in 'user_password', with: 'password'
+      fill_in 'founder_email', with: founder.email
+      fill_in 'founder_password', with: 'password'
       click_on 'Sign in'
     end
 

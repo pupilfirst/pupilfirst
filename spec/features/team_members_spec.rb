@@ -1,28 +1,28 @@
 require 'rails_helper'
 
 feature 'Team members spec' do
-  let(:user) { create :founder_with_password, confirmed_at: Time.now }
+  let(:founder) { create :founder_with_password, confirmed_at: Time.now }
   let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
 
   before do
-    # Add user as founder of startup.
-    startup.founders << user
+    # Add founder as founder of startup.
+    startup.founders << founder
 
-    # Login with user.
+    # Login with founder.
     visit new_founder_session_path
-    fill_in 'user_email', with: user.email
-    fill_in 'user_password', with: 'password'
+    fill_in 'founder_email', with: founder.email
+    fill_in 'founder_password', with: 'password'
     click_on 'Sign in'
   end
 
-  context 'User has verified timeline event for founder target' do
-    scenario 'User edits Startup profile' do
+  context 'founder has verified timeline event for founder target' do
+    scenario 'founder edits Startup profile' do
       visit edit_founder_startup_url
 
       expect(page).to have_text('There aren\'t any (non-founder) team members associated with your startup.')
     end
 
-    scenario 'User adds a team member' do
+    scenario 'founder adds a team member' do
       visit edit_founder_startup_url
       click_on 'Add new team member'
 
@@ -40,7 +40,7 @@ feature 'Team members spec' do
       expect(page).to have_text 'Product, Engineering'
     end
 
-    scenario 'User attempts to add team member without necessary fields' do
+    scenario 'founder attempts to add team member without necessary fields' do
       visit edit_founder_startup_url
       click_on 'Add new team member'
       click_on 'List new team member'
@@ -51,7 +51,7 @@ feature 'Team members spec' do
       expect(page).to have_text 'pick at least one'
     end
 
-    scenario 'User attempts to choose more than two roles' do
+    scenario 'founder attempts to choose more than two roles' do
       visit edit_founder_startup_url
       click_on 'Add new team member'
 
@@ -67,7 +67,7 @@ feature 'Team members spec' do
     context 'There is an existing team member' do
       let!(:team_member) { create :team_member, startup: startup }
 
-      scenario 'User deletes existing team member' do
+      scenario 'founder deletes existing team member' do
         visit edit_founder_startup_url
 
         within '.team-member-table' do

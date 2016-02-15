@@ -24,18 +24,18 @@ feature 'Faculty Connect' do
   end
 
   context 'User is founder of batched-approved startup' do
-    let(:user) { create :founder_with_password, confirmed_at: Time.now }
+    let(:founder) { create :founder_with_password, confirmed_at: Time.now }
     let(:batch) { create :batch }
     let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED, batch: batch }
 
     before :each do
-      # Add user as founder of startup.
-      startup.founders << user
+      # Add founder as founder of startup.
+      startup.founders << founder
 
-      # Log in the user.
+      # Log in the founder.
       visit new_founder_session_path
-      fill_in 'user_email', with: user.email
-      fill_in 'user_password', with: 'password'
+      fill_in 'founder_email', with: founder.email
+      fill_in 'founder_password', with: 'password'
       click_on 'Sign in'
     end
 
@@ -59,9 +59,9 @@ feature 'Faculty Connect' do
       end
 
       before :each do
-        # Make our 'user' the admin.
+        # Make our 'founder' the admin.
         startup.admin.update(startup_admin: false)
-        user.update(startup_admin: true)
+        founder.update(startup_admin: true)
       end
 
       context 'Admin has a pending request with faculty' do

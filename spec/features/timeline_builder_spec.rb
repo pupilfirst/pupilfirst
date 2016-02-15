@@ -3,7 +3,7 @@ require 'rails_helper'
 # WARNING: The following tests run with Webmock disabled - i.e., URL calls are let through. Make sure you mock possible
 # requests unless you want to let them through. This is required for JS tests to work.
 feature 'Timeline Builder' do
-  let(:user) { create :founder_with_password, confirmed_at: Time.now }
+  let(:founder) { create :founder_with_password, confirmed_at: Time.now }
   let!(:tet_team_formed) { create :tet_team_formed }
   let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
 
@@ -18,16 +18,16 @@ feature 'Timeline Builder' do
   end
 
   before :each do
-    # Add user as founder of startup.
-    startup.founders << user
+    # Add founder as founder of startup.
+    startup.founders << founder
 
-    # Log in the user.
+    # Log in the founder.
     visit new_founder_session_path
-    fill_in 'user_email', with: user.email
-    fill_in 'user_password', with: 'password'
+    fill_in 'founder_email', with: founder.email
+    fill_in 'founder_password', with: 'password'
     click_on 'Sign in'
 
-    # User should now be on the startup timeline page.
+    # founder should now be on the startup timeline page.
   end
 
   context 'Founder visits Timeline page of verified startup' do

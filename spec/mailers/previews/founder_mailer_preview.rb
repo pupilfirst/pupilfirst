@@ -2,15 +2,15 @@
 
 class FounderMailerPreview < ActionMailer::Preview
   def cofounder_request
-    FounderMailer.cofounder_request(User.first.email, User.second)
+    FounderMailer.cofounder_request(Founder.first.email, Founder.second)
   end
 
   def incubation_request_submitted
-    FounderMailer.incubation_request_submitted(User.first)
+    FounderMailer.incubation_request_submitted(Founder.first)
   end
 
   def password_changed
-    FounderMailer.password_changed(User.first)
+    FounderMailer.password_changed(Founder.first)
   end
 
   def connect_request_feedback

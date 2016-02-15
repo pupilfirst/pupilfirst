@@ -8,11 +8,11 @@ module ControllerMacros
     end
   end
 
-  def login_user
+  def login_founder
     @request.env["devise.mapping"] = Devise.mappings[:user]
-    user = FactoryGirl.create(:founder_with_out_password)
+    founder = FactoryGirl.create(:founder_with_out_password)
     # user.confirm! # or set a confirmed_at inside the factory. Only necessary if you are using the confirmable module
-    @current_founder = user
+    @current_founder = founder
     sign_in @current_founder
   end
 end

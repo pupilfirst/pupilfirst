@@ -4,9 +4,9 @@ include Warden::Test::Helpers
 Warden.test_mode!
 
 module DeviseHelpers
-  def login(user = nil)
-    user ||= FactoryGirl.create(:founder_with_out_password)
-    login_as user, scope: :user
-    user
+  def login(founder = nil)
+    founder ||= FactoryGirl.create(:founder_with_out_password)
+    login_as founder, scope: :founder
+    founder
   end
 end

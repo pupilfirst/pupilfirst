@@ -192,7 +192,7 @@ class Startup < ActiveRecord::Base
   end
 
   # validate presence of all fields during registration
-  validates_presence_of :name, :team_size, :cofounder_1_email, :cofounder_2_email, if: :being_registered
+  validates_presence_of :product_name, :team_size, :cofounder_1_email, :cofounder_2_email, if: :being_registered
   validates_presence_of :cofounder_3_email, if: proc { |startup| startup.being_registered && startup.team_size > 3 }
   validates_presence_of :cofounder_4_email, if: proc { |startup| startup.being_registered && startup.team_size > 4 }
 

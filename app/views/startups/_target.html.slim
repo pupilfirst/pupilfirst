@@ -19,10 +19,11 @@
   .learn-more
     - if target.slideshow_embed.present?
       .modal.fade tabindex="-1" role="dialog" id="target-#{target.id}-slideshow"
-        .modal-dialog
+        .modal-dialog.modal-lg
           .modal-content
             .modal-body
-              = target.slideshow_embed.html_safe
+              .embed-responsive.embed-responsive-4by3
+                = target.slideshow_embed.html_safe
             .modal-footer
               button.btn.btn-default data-dismiss="modal" type="button" Close
 

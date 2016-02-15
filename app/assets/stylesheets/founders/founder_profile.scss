@@ -2,6 +2,7 @@
   background-image: asset-url("founders/profile/profile-bg.png");
   background-repeat: repeat-x;
   background-position: center bottom;
+  border-bottom: 1px solid #e5e5e5;
 
   .user-data-card {
     padding: 45px 0;
@@ -10,11 +11,45 @@
       text-align: center;
       margin: auto;
       max-width: 150px;
+      cursor: context-menu;
 
       img {
         border: 1px solid #aaaaaa;
         border-radius: 5px;
         margin: auto;
+      }
+
+      &#complete-profile-left + .tooltip > {
+        .tooltip-inner {
+          background-color: #faebcc;
+          border-radius: 5px;
+          color: #8a6d3b;
+          border: 1px solid #bc995b;
+          position: relative;
+
+          &:after, &:before {
+            bottom: 100%;
+            left: 50%;
+            border: solid transparent;
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+          }
+          &:after {
+            border-color: rgba(250, 235, 204, 0);
+            border-bottom-color: #faebcc;
+            border-width: 5px;
+            margin-left: -5px;
+          }
+          &:before {
+            border-color: rgba(212, 176, 115, 0);
+            border-bottom-color: #d4b073;
+            border-width: 6px;
+            margin-left: -6px;
+          }
+        }
       }
     }
 
@@ -236,6 +271,31 @@
         @media (max-width: $screen-md-min) {
           padding: 15px 0;
           border-width: 0 0 1px 0;
+        }
+      }
+      .education-details {
+        font-size: 12px;
+        color: #6b6b6b;
+
+        span {
+          padding-right: 15px;
+          height: 20px;
+          border-right: 1px solid #dcdcdc;
+
+          i {
+            margin-right: 5px;
+          }
+          &.course-name {
+            display: block;
+            border: 0;
+          }
+          &.graduation-year {
+            padding-left: 15px;
+            border: 0;
+          }
+          strong {
+            padding-left: 5px;
+          }
         }
       }
     }

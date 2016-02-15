@@ -7,7 +7,7 @@
     .user-data-card
       .row.row-eq-height
         .col-md-2
-          .profile
+          #complete-profile-left.profile data-toggle='tooltip' data-placement='bottom' title="#{@founder == current_founder ? @founder.profile_completion_instruction : ''}"
             = image_tag profile_image_url(@founder, gravatar_size: 140, avatar_version: :mid), class: 'img-responsive'
             - if current_founder == @founder
               .progress-container
@@ -74,6 +74,25 @@
               .col-lg-8.col-md-7.profile-description
                 p
                   = @founder.about
+                .education-details
+                  - if @founder.course.present?
+                    span.course-name
+                      i.fa.fa-futbol-o
+                      | Course:
+                      strong
+                        = @founder.course
+                  - if @founder.semester.present?
+                    span.semester-name
+                      i.fa.fa-tachometer
+                      | Semester:
+                      strong
+                        = @founder.semester
+                  - if @founder.year_of_graduation.present?
+                    span.graduation-year
+                      i.fa.fa-graduation-cap
+                      | Year of Graduation:
+                      strong
+                        = @founder.year_of_graduation
               .col-lg-4.col-md-5.resume-link-section
                 - if @founder.resume_url.present?
                   a.btn.btn-flat.btn-resume-link href=@founder.resume_url type="button"

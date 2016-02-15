@@ -215,13 +215,13 @@ feature 'Incubation' do
             click_on 'Submit Application'
 
             # should have reached the newly created startup's page
-            expect(page).to have_text('by Team Alpha')
+            expect(page).to have_text('Team Alpha')
             user.reload
             co_founder1.reload
             co_founder2.reload
 
             # all founders should be part of the new startup
-            expect(user.startup.name).to eq('Team Alpha')
+            expect(user.startup.product_name).to eq('Team Alpha')
             expect(co_founder1.startup).to eq(user.startup)
             expect(co_founder2.startup).to eq(user.startup)
 

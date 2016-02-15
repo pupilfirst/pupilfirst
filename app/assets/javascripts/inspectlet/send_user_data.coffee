@@ -1,6 +1,6 @@
-sendUserDataToInspectlet = ->
+sendFounderDataToInspectlet = ->
   inspectletData = $('#inspectlet-data')
-  emailAddress = inspectletData.data 'userEmail'
+  emailAddress = inspectletData.data 'FounderEmail'
 
   if __insp? and emailAddress
     productName = inspectletData.data 'productName'
@@ -12,4 +12,4 @@ sendUserDataToInspectlet = ->
     if productName || startupBatch
       __insp.push ['tagSession', {email: emailAddress, productName: productName, startupBatch: startupBatch}]
 
-$(document).on 'page:change', sendUserDataToInspectlet
+$(document).on 'page:change', sendFounderDataToInspectlet

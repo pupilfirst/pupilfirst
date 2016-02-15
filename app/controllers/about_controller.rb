@@ -21,7 +21,7 @@ class AboutController < ApplicationController
 
   # GET /about/contact
   def contact
-    @contact_form = ContactForm.new(user: current_founder)
+    @contact_form = ContactForm.new(founder: current_founder)
     @sitewide_notice = params[:redirect_from] == 'startupvillage.in'
   end
 

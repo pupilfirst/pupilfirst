@@ -33,7 +33,7 @@ class Resource < ActiveRecord::Base
   delegate :content_type, to: :file
 
   def self.for(founder)
-    if founder.present?
+    if founder.present? && founder.startup.approved?
       where(
         'share_status = ? OR (share_status = ? AND batch_id IS ?) OR (share_status = ? AND batch_id = ?)',
         SHARE_STATUS_PUBLIC,

@@ -2,13 +2,6 @@ require 'rails_helper'
 require 'webmock/rspec'
 
 describe Founder do
-  context 'non_founders scopes' do
-    it 'returns founders who are not related to any startup' do
-      founder = create(:founder_with_out_password, startup: nil)
-      expect(Founder.non_founders.map(&:id)).to include(founder.id)
-    end
-  end
-
   describe '#remove_from_startup!' do
     it 'disassociates a founder from startup completely' do
       startup = create :startup

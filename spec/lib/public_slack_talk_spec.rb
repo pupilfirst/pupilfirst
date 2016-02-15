@@ -40,7 +40,7 @@ describe 'Public Slack Talk' do
       context 'when single user is supplied' do
         it 'send message to user' do
           expect_any_instance_of(PublicSlackTalk).to receive(:post_to_user).once
-          PublicSlackTalk.post_message message: 'Hello', founder: user_1
+          PublicSlackTalk.post_message message: 'Hello', user: founder_1
         end
       end
 

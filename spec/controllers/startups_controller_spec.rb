@@ -9,7 +9,7 @@ describe StartupsController do
   # Startup. As you add validations to Startup, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) do
-    attributes_for(:startup).merge(startup_categories: [build(:startup_category)], founders: [build(:founder)])
+    attributes_for(:startup).merge(startup_categories: [build(:startup_category)], founders: [build(:founder_with_password)])
   end
 
   let(:valid_params) { attributes_for(:startup).merge(startup_category_ids: [create(:startup_category).id]) }

@@ -32,7 +32,8 @@ ActiveAdmin.register PublicSlackMessage do
       Date.today
     end
 
-    @public_slack_messages = PublicSlackMessage.where(channel: @channel, created_at: (@date.beginning_of_day..@date.end_of_day)).includes(:founder, :karma_point)
+    @public_slack_messages = PublicSlackMessage.where(channel: @channel, created_at: (@date.beginning_of_day..@date.end_of_day))
+      .includes(:founder, :karma_point)
 
     render 'assign_karma_points'
   end

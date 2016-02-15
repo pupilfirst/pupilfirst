@@ -223,48 +223,61 @@ class TimelineEvent < ActiveRecord::Base
   end
 
   def add_link_for_new_resume!
-    return unless timeline_event_type.resume_submission? && links[0].try(:[], :url).present?
-    user.update!(resume_url: links[0][:url])
+    return unless timeline_event_type.resume_submission?
+
+    first_public_attachment_url do |attachment_url|
+      user.update!(resume_url: attachment_url)
+    end
   end
 
   def add_link_for_new_deck!
-    return unless timeline_event_type.new_deck? && links[0].try(:[], :url).present?
-    return if links[0].try(:[], :private)
-    startup.update!(presentation_link: links[0][:url])
+    return unless timeline_event_type.new_deck?
+
+    first_public_attachment_url do |attachment_url|
+      startup.update!(presentation_link: attachment_url)
+    end
   end
 
   def add_link_for_new_wireframe!
-    return unless timeline_event_type.new_wireframe? && links[0].try(:[], :url).present?
-    return if links[0].try(:[], :private)
-    startup.update!(wireframe_link: links[0][:url])
+    return unless timeline_event_type.new_wireframe?
+
+    first_public_attachment_url do |attachment_url|
+      startup.update!(wireframe_link: attachment_url)
+    end
   end
 
   def add_link_for_new_prototype!
-    return unless timeline_event_type.new_prototype? && links[0].try(:[], :url).present?
-    return if links[0].try(:[], :private)
-    startup.update!(prototype_link: links[0][:url])
+    return unless timeline_event_type.new_prototype?
+
+    first_public_attachment_url do |attachment_url|
+      startup.update!(prototype_link: attachment_url)
+    end
   end
 
   def add_link_for_new_video!
-    return unless timeline_event_type.new_video? && links[0].try(:[], :url).present?
-    return if links[0].try(:[], :private)
-    startup.update!(product_video: links[0][:url])
+    return unless timeline_event_type.new_video?
+
+    first_public_attachment_url do |attachment_url|
+      startup.update!(product_video: attachment_url)
+    end
   end
 
   def first_public_attachment_url
-    first_public_file_url || first_public_link_url
+    attachment_url = first_public_file_url || first_public_link_url
+    return if attachment_url.blank?
+    yield attachment_url
   end
 
   def first_public_file_url
-    file = timeline_event_files.detect { |file| !file.private? }
+    first_public_file = timeline_event_files.detect { |file| !file.private? }
 
     Rails.application.routes.url_helpers.download_startup_timeline_event_timeline_event_file_url(
-      startup, self, file
-    ) if file.present?
+      startup, self, first_public_file
+    ) if first_public_file.present?
   end
 
   def first_public_link_url
-    link = links.detect { |link| !link[:private] }
-    link.try(:[], :url).present? ? links[0][:url] : nil
+    first_public_link = links.detect { |link| !link[:private] }
+    first_public_link.try(:[], :url).present? ? links[0][:url] : nil
   end
 end

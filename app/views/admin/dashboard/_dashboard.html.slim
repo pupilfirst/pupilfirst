@@ -1,5 +1,6 @@
 /= javascript_include_tag '//www.google.com/jsapi', 'chartkick'
-- batch_selected = params[:batch].present? ? params[:batch] : Batch.current.id
+- batch_selected = params[:batch].present? ? params[:batch] : Batch.current_or_last.id
+
 .table_tools
   ul.scopes.table_tools_segmented_control style="width: calc((100% - 10px)); float: right;"
     - Startup.available_batches.each do |batch|

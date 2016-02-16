@@ -15,4 +15,9 @@ class Batch < ActiveRecord::Base
   def self.current
     where('start_date <= ? and end_date >= ?', Time.now, Time.now).first
   end
+
+  # If the current batch isn't present, supply last.
+  def self.current_or_last
+    current.present? ? current : last
+  end
 end

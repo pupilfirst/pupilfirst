@@ -154,7 +154,7 @@ class StartupsController < ApplicationController
   end
 
   def startup_registration_params
-    params.require(:startup).permit(:name, :team_size, :cofounder_1_email, :cofounder_2_email, :cofounder_3_email,
+    params.require(:startup).permit(:product_name, :team_size, :cofounder_1_email, :cofounder_2_email, :cofounder_3_email,
       :cofounder_4_email)
   end
 

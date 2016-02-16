@@ -29,7 +29,7 @@
         legend.margin-top-20.form-section-head.font-weight-400 Founder Details
 
         = f.input :gender, collection: valid_gender_values, label_method: :first, value_method: :last, as: :radio_buttons, required: true
-        = f.input :born_on, as: :date_picker, required: true, label: 'Date of birth', placeholder: 'DD/MM/YYYY'
+        = f.input :born_on, as: :date_picker, required: true, label: 'Date of birth', placeholder: 'DD/MM/YYYY', input_html: {data: {date_options: {maxDate: '1998/12/31'}}}
         = f.association :university, include_blank: 'Not a student', collection: University.all.group_by(&:location), as: :grouped_select, group_method: :last
         = f.input :roll_number, label: 'University Roll Number',required: true
         = f.input :unconfirmed_phone, label: 'Mobile Number', :required => true, placeholder: '10-digit mobile phone number'

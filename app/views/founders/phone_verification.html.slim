@@ -22,7 +22,9 @@
         .verification-message
           h3.red-text Verification Code Doesn’t Match!
           p
-            ' The verification code you supplied does not match the code sent to your mobile number.
+            = "The verification code you supplied does not match the code sent to your mobile number - (+#{current_founder.unconfirmed_phone} "
+            = link_to " Change? ", phone_founder_path(current_founder)
+            ' ).
             span.font-weight-600 Please check and re-enter the code.
     - elsif @retry_after_some_time
       .mobile-verification-alert.text-center role='alert'
@@ -30,7 +32,9 @@
         .verification-message
           h3.red-text Please Wait!
           p
-            ' A verification code was sent to your mobile number less than 5 minutes ago.
+            = "A verification code was sent to your mobile number (+#{current_founder.unconfirmed_phone}"
+            = link_to " Change? ", phone_founder_path(current_founder)
+            ' ) less than 5 minutes ago.
             span.font-weight-600 Please wait a while before trying to re-send.
     - elsif @resent_verification_code
       .mobile-verification-alert.text-center role='alert'
@@ -38,7 +42,9 @@
         .verification-message
           h3.green-text New Verification Code Sent!
           p
-            ' A new SMS verification code has been sent to your mobile number.
+            = "A new SMS verification code has been sent to your mobile number - (+#{current_founder.unconfirmed_phone}"
+            = link_to " Change? ", phone_founder_path(current_founder)
+            ' ).
             - if @registration_ongoing
               span.font-weight-600 Please supply this code to complete the registration process.
             - else
@@ -49,7 +55,9 @@
         .verification-message
           h3.green-text Verification Code Sent!
           p
-            ' An SMS containing a verification code has been sent to your mobile number.
+            = "An SMS containing a verification code has been sent to your mobile number - (+#{current_founder.unconfirmed_phone}"
+            = link_to " Change? ", phone_founder_path(current_founder)
+            ' ).
             - if @registration_ongoing
               span.font-weight-600 Please supply this code to complete the registration process.
             - else

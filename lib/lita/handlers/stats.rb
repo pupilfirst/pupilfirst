@@ -16,11 +16,11 @@ module Lita
             # respond directly to the user if private message
             if response.message.source.private_message
               slack_username = response.message.source.user.metadata['mention_name']
-              user = ::Founder.find_by(slack_username: slack_username)
+              founder = ::Founder.find_by(slack_username: slack_username)
 
               # Fallback to using the SLACK postMessage API method for users who are not registered on SV.CO
-              if user
-                PublicSlackTalk.post_message message: leaderboard_response_message, user: user
+              if founder
+                PublicSlackTalk.post_message message: leaderboard_response_message, user: founder
               else
                 reply_using_api_post_message channel: response.message.source.room, message: leaderboard_response_message
               end

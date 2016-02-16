@@ -320,7 +320,7 @@
               - else
                 .timeline id="event-#{event.id}"
                   li style="padding:0" class="timeline#{cycle '', '-inverted', name: 'card_position'}"
-                    .timeline-badge class="color#{cycle *((1..14).to_a + [{name: 'badge-color'}])}"
+                    .timeline-badge class="color#{cycle *((1..14).to_a)}"
                       = image_tag "#{event.timeline_event_type.badge_url}", width: '70'
                     .timeline-panel
                       - if event.private?

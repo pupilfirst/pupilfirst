@@ -5,7 +5,7 @@
   .onboarding-head-container.clearfix
     .col-sm-4.text-center.onboarding-tab
       .fa.fa-circle-o
-      | &nbsp; User Profile
+      | &nbsp; Founder Profile
     .col-sm-4.text-center.onboarding-tab.current-tab
       .fa.fa-circle-o-notch.fa-spin
       | &nbsp; Phone number verification
@@ -53,10 +53,10 @@
         ' Development mode! Verification code is
         code #{current_founder.phone_verification_code}
 
-    .user-registration-box
+    .founder-registration-box
       = form_tag verify_founder_url, class: 'form-horizontal', role: 'form' do
 
-        legend.margin-top-20.form-section-head.font-weight-400 
+        legend.margin-top-20.form-section-head.font-weight-400
           ' Phone number verification
         .form-group
           label.col-sm-3.control-label for='phone_verification_code' Verification code

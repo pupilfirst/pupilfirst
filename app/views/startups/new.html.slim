@@ -5,7 +5,7 @@
   .onboarding-head-container.clearfix
     .col-sm-4.text-center.onboarding-tab
       .fa.fa-circle-o
-      | &nbsp; User Profile
+      | &nbsp; Founder Profile
     .col-sm-4.text-center.onboarding-tab
       .fa.fa-circle-o
       | &nbsp; Phone number verification
@@ -15,7 +15,7 @@
 
 .onboarding-body
   .onboarding-container.clearfix
-    .user-registration-box
+    .founder-registration-box
       .row.margin-top-20
         #progressbar.col-md-12
           = simple_form_for @startup, url: founder_startup_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|

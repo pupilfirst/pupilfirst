@@ -82,11 +82,11 @@ class Target < ActiveRecord::Base
   after_update :notify_revision, if: :crucial_revision?
 
   def notify_new_target
-    PublicSlackTalk.post_message message: details_as_slack_message, users: startup.founders
+    PublicSlackTalk.post_message message: details_as_slack_message, founders: startup.founders
   end
 
   def notify_revision
-    PublicSlackTalk.post_message message: revision_as_slack_message, users: startup.founders
+    PublicSlackTalk.post_message message: revision_as_slack_message, founders: startup.founders
   end
 
   def crucial_revision?
@@ -117,7 +117,7 @@ class Target < ActiveRecord::Base
     # notify each founder
     startup.founders.each do |founder|
       next unless founder.slack_user_id.present?
-      PublicSlackTalk.post_message message: mild_slack_reminder, user: founder
+      PublicSlackTalk.post_message message: mild_slack_reminder, founder: founder
     end
   end
 
@@ -133,7 +133,7 @@ class Target < ActiveRecord::Base
     # notify each founder
     startup.founders.each do |founder|
       next unless founder.slack_user_id.present?
-      PublicSlackTalk.post_message message: strong_slack_reminder, user: founder
+      PublicSlackTalk.post_message message: strong_slack_reminder, founder: founder
     end
   end
 

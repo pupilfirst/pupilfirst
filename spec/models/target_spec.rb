@@ -26,7 +26,7 @@ describe Target do
   describe '#notify_new_target' do
     context 'when a new target is created' do
       it 'pings all founders the target details' do
-        expect(PublicSlackTalk).to receive(:post_message).with(message: subject.details_as_slack_message, users: subject.startup.founders)
+        expect(PublicSlackTalk).to receive(:post_message).with(message: subject.details_as_slack_message, founders: subject.startup.founders)
         subject.notify_new_target
       end
     end
@@ -35,7 +35,7 @@ describe Target do
   describe '#notify_revision' do
     context 'when a crucial target field is updated' do
       it 'pings all founders the update details' do
-        expect(PublicSlackTalk).to receive(:post_message).with(message: subject.revision_as_slack_message, users: subject.startup.founders)
+        expect(PublicSlackTalk).to receive(:post_message).with(message: subject.revision_as_slack_message, founders: subject.startup.founders)
         subject.notify_revision
       end
     end

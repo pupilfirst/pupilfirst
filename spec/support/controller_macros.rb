@@ -9,7 +9,7 @@ module ControllerMacros
   end
 
   def login_founder
-    @request.env["devise.mapping"] = Devise.mappings[:user]
+    @request.env["devise.mapping"] = Devise.mappings[:founder]
     founder = FactoryGirl.create(:founder_with_out_password)
     # user.confirm! # or set a confirmed_at inside the factory. Only necessary if you are using the confirmable module
     @current_founder = founder

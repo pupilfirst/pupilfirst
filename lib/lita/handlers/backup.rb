@@ -14,7 +14,7 @@ module Lita
           # See: https://github.com/kenjij/lita-slack/issues/44
           channel = Lita::Room.find_by_id(message.room_object.id).name
 
-          PublicSlackMessage.create! body: message.body, slack_username: message.founder.mention_name, user: message_author, channel: channel
+          PublicSlackMessage.create! body: message.body, slack_username: message.founder.mention_name, founder: message_author, channel: channel
         end
       end
 

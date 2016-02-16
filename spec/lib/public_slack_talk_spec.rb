@@ -8,16 +8,16 @@ describe 'Public Slack Talk' do
     let(:founder_2) { create :founder_with_out_password }
 
     it 'raises ArgumentError if no target specified' do
-      expect { subject.post_message message: 'Hello' }.to raise_error(ArgumentError, 'specify one of channel, user or users')
+      expect { subject.post_message message: 'Hello' }.to raise_error(ArgumentError, 'specify one of channel, founder or founders')
     end
 
     it 'raises ArgumentError if multiple targets specified' do
-      expect { PublicSlackTalk.post_message message: 'Hello', channel: '#general', user: founder_1 }.to raise_error(
-        ArgumentError, 'specify one of channel, user or users')
-      expect { PublicSlackTalk.post_message message: 'Hello', user: founder_1, users: [founder_1, founder_2] }.to raise_error(
-        ArgumentError, 'specify one of channel, user or users')
-      expect { PublicSlackTalk.post_message message: 'Hello', channel: '#general', users: [founder_1, founder_2] }.to raise_error(
-        ArgumentError, 'specify one of channel, user or users')
+      expect { PublicSlackTalk.post_message message: 'Hello', channel: '#general', founder: founder_1 }.to raise_error(
+        ArgumentError, 'specify one of channel, founder or founders')
+      expect { PublicSlackTalk.post_message message: 'Hello', founder: founder_1, founders: [founder_1, founder_2] }.to raise_error(
+        ArgumentError, 'specify one of channel, founder or founders')
+      expect { PublicSlackTalk.post_message message: 'Hello', channel: '#general', founders: [founder_1, founder_2] }.to raise_error(
+        ArgumentError, 'specify one of channel, founder or founders')
     end
 
     context 'when targets are correctly specified' do
@@ -37,17 +37,17 @@ describe 'Public Slack Talk' do
         end
       end
 
-      context 'when single user is supplied' do
-        it 'send message to user' do
-          expect_any_instance_of(PublicSlackTalk).to receive(:post_to_user).once
-          PublicSlackTalk.post_message message: 'Hello', user: founder_1
+      context 'when single founder is supplied' do
+        it 'send message to founder' do
+          expect_any_instance_of(PublicSlackTalk).to receive(:post_to_founder).once
+          PublicSlackTalk.post_message message: 'Hello', founder: founder_1
         end
       end
 
-      context 'when multiple users are supplied' do
-        it 'send messages to all users' do
-          expect_any_instance_of(PublicSlackTalk).to receive(:post_to_users).once
-          PublicSlackTalk.post_message message: 'Hello', users: [founder_1, founder_2]
+      context 'when multiple founders are supplied' do
+        it 'send messages to all founders' do
+          expect_any_instance_of(PublicSlackTalk).to receive(:post_to_founders).once
+          PublicSlackTalk.post_message message: 'Hello', founders: [founder_1, founder_2]
         end
       end
 
@@ -72,12 +72,12 @@ describe 'Public Slack Talk' do
 
     it 'raises ArgumentError if no target specified' do
       expect { PublicSlackTalk.post_message message: 'Hello' }.to raise_error(
-        ArgumentError, 'specify one of channel, user or users')
+        ArgumentError, 'specify one of channel, founder or founders')
     end
 
     it 'raises ArgumentError if multiple targets specified' do
-      expect { PublicSlackTalk.post_message message: 'Hello', channel: '#general', user: founder }.to raise_error(
-        ArgumentError, 'specify one of channel, user or users')
+      expect { PublicSlackTalk.post_message message: 'Hello', channel: '#general', founder: founder }.to raise_error(
+        ArgumentError, 'specify one of channel, founder or founders')
     end
 
     it 'calls process on a new PublicSlackTalk instance if exactly one target specified' do
@@ -102,43 +102,43 @@ describe 'Public Slack Talk' do
       instance.process
     end
 
-    it 'calls #post_to_user exactly once if target is a user' do
-      instance = PublicSlackTalk.new user: founder1, message: 'hello'
-      expect(instance).to receive(:post_to_user).once
+    it 'calls #post_to_founder exactly once if target is a founder' do
+      instance = PublicSlackTalk.new founder: founder1, message: 'hello'
+      expect(instance).to receive(:post_to_founder).once
       instance.process
     end
 
-    it 'calls #post_to_users exactly once if target is array of users' do
-      instance = PublicSlackTalk.new users: [founder1, founder2], message: 'hello'
-      expect(instance).to receive(:post_to_users).once
+    it 'calls #post_to_founders exactly once if target is array of founders' do
+      instance = PublicSlackTalk.new founders: [founder1, founder2], message: 'hello'
+      expect(instance).to receive(:post_to_founders).once
       instance.process
     end
   end
 
-  context '#post_to_user' do
+  context '#post_to_founder' do
     let(:founder) { create :founder_with_out_password }
     it 'invokes post_to_channel if im_id fetched' do
-      instance = PublicSlackTalk.new user: founder, message: 'hello'
+      instance = PublicSlackTalk.new founder: founder, message: 'hello'
       expect(instance).to receive(:fetch_im_id).and_return(true)
       expect(instance).to receive(:post_to_channel)
-      instance.post_to_user
+      instance.post_to_founder
     end
 
     it 'does not invoke post_to_channel if im_id not fetched' do
-      instance = PublicSlackTalk.new user: founder, message: 'hello'
+      instance = PublicSlackTalk.new founder: founder, message: 'hello'
       expect(instance).to receive(:fetch_im_id).and_return(false)
       expect(instance).to_not receive(:post_to_channel)
-      instance.post_to_user
+      instance.post_to_founder
     end
   end
 
-  context '#post_to_users' do
+  context '#post_to_founders' do
     let(:founder1) { create :founder_with_out_password }
     let(:founder2) { create :founder_with_out_password }
-    it 'calls #post_to_user n times if target is array of n users' do
-      instance = PublicSlackTalk.new users: [founder1, founder2], message: 'hello'
-      expect(instance).to receive(:post_to_user).twice
-      instance.post_to_users
+    it 'calls #post_to_founder n times if target is array of n founders' do
+      instance = PublicSlackTalk.new founders: [founder1, founder2], message: 'hello'
+      expect(instance).to receive(:post_to_founder).twice
+      instance.post_to_founders
     end
   end
 

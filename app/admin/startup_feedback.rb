@@ -152,7 +152,7 @@ ActiveAdmin.register StartupFeedback do
     founders = startup_feedback.startup.founders
 
     # post to slack
-    response = PublicSlackTalk.post_message message: startup_feedback.as_slack_message, users: founders
+    response = PublicSlackTalk.post_message message: startup_feedback.as_slack_message, founders: founders
 
     # form appropriate flash message with details from response
     success_names = Founder.find(founders.ids - response.errors.keys).map(&:slack_username).join(', ')
@@ -179,7 +179,7 @@ ActiveAdmin.register StartupFeedback do
     founder = Founder.find(params[:founder_id])
 
     # post to slack
-    response = PublicSlackTalk.post_message message: startup_feedback.as_slack_message, user: founder
+    response = PublicSlackTalk.post_message message: startup_feedback.as_slack_message, founder: founder
 
     flash[:alert] = if response.errors.any?
       "Could not ping #{founder.slack_username} on slack. Please try again"

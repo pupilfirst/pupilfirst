@@ -20,7 +20,7 @@ module Lita
 
               # Fallback to using the SLACK postMessage API method for users who are not registered on SV.CO
               if founder
-                PublicSlackTalk.post_message message: leaderboard_response_message, user: founder
+                PublicSlackTalk.post_message message: leaderboard_response_message, founder: founder
               else
                 reply_using_api_post_message channel: response.message.source.room, message: leaderboard_response_message
               end

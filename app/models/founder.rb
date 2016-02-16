@@ -189,23 +189,6 @@ class Founder < ActiveRecord::Base
     display_name
   end
 
-  # TODO: is this used anywhere ?
-  # Skips setting password and sets invitation_token to allow later registration.
-  def save_unregistered_user!
-    unless persisted?
-      # Devise wants a random password, so let's set one for a new user.
-      self.skip_password = true
-
-      # Let's store an invitation token which indicates that the user has been invited.
-      self.invitation_token = SecureRandom.hex
-    end
-
-    # When saving unregistered users, let's not send out a confirmation e-mail.
-    # skip_confirmation!
-
-    save!
-  end
-
   def remove_from_startup!
     self.startup_id = nil
     self.startup_admin = nil

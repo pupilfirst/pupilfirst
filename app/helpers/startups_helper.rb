@@ -66,7 +66,7 @@ module StartupsHelper
     showcase_events_startups = []
 
     batch.startups.approved
-      .joins(:timeline_events).merge(TimelineEvent.verified.has_image)
+      .joins(:timeline_events).merge(TimelineEvent.verified)
       .order('timeline_events.event_on ASC').each do |startup|
       next if processed_startups.include? startup.id
       showcase_events_startups << [startup.showcase_timeline_event, startup]

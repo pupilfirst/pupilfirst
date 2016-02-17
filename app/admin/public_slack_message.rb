@@ -72,7 +72,7 @@ ActiveAdmin.register PublicSlackMessage do
 
     column :author do |message|
       if message.founder.present?
-        link_to message.founder.fullname, admin_user_path(message.founder)
+        link_to message.founder.fullname, admin_founder_path(message.founder)
       else
         "@#{message.slack_username}"
       end

@@ -38,7 +38,7 @@ table.index_table
       - founder_id, points = points_array
       - founder = Founder.includes(:startup).find(founder_id)
       tr class="#{(idx + 1).even? ? 'even' : 'odd'}"
-        td = link_to founder.fullname, admin_user_path(founder)
+        td = link_to founder.fullname, admin_founder_path(founder)
         td = founder_roles founder.roles
         td
           - if founder.startup.present?

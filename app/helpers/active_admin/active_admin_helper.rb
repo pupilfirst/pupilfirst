@@ -2,7 +2,7 @@ module ActiveAdmin
   module ActiveAdminHelper
     def sv_id_link(founder)
       if founder.present?
-        link_to "#{founder.email} - #{founder.fullname} #{founder.phone.present? ? "(#{founder.phone}" : ''})", admin_user_path(founder)
+        link_to "#{founder.email} - #{founder.fullname} #{founder.phone.present? ? "(#{founder.phone}" : ''})", admin_founder_path(founder)
       else
         '<em>Missing, probably deleted.</em>'.html_safe
       end

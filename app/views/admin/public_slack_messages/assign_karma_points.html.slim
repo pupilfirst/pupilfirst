@@ -22,7 +22,7 @@
         tr class=row_color
           td
             - if public_slack_message.founder.present?
-              = link_to public_slack_message.founder.fullname, admin_user_path(public_slack_message.founder)
+              = link_to public_slack_message.founder.fullname, admin_founder_path(public_slack_message.founder)
             - else
               | @#{public_slack_message.slack_username}
           td ##{public_slack_message.channel}

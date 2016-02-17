@@ -9,7 +9,7 @@ ActiveAdmin.register Founder do
     end
   end
 
-  menu label: 'SV Founders'
+  menu label: 'Founders'
 
   scope :all
   scope :batched
@@ -80,7 +80,7 @@ ActiveAdmin.register Founder do
             end
 
             span class: 'wrap-with-paranthesis' do
-              link_to 'Remove from Startup', remove_from_startup_admin_user_path, method: :post, data: { confirm: 'Are you sure?' }
+              link_to 'Remove from Startup', remove_from_startup_admin_founder_path, method: :post, data: { confirm: 'Are you sure?' }
             end
           end
         end
@@ -156,7 +156,7 @@ ActiveAdmin.register Founder do
   end
 
   action_item :new_invite, only: :index do
-    link_to 'Send New Invite', invite_form_admin_users_path
+    link_to 'Send New Invite', invite_form_admin_founders_path
   end
 
   collection_action :invite_form do

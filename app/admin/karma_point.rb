@@ -32,7 +32,7 @@ ActiveAdmin.register KarmaPoint do
     column 'Founder' do |karma_point|
       if karma_point.founder.present?
         span do
-          link_to karma_point.founder.fullname, karma_point.founder
+          link_to karma_point.founder.fullname, admin_founder_path(karma_point.founder)
         end
       end
     end

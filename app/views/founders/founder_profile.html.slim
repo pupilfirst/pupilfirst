@@ -32,17 +32,16 @@
               .col-lg-7.col-md-12.profile-name
                 h2
                   = @founder.fullname
-                  ' &nbsp;
-                  - if @founder.startup.present?
-                    span
-                      - if @founder.roles.present?
-                        = @founder.roles.map { |role| t("role.#{role}") }.join ', '
-                        ' &nbsp;at
-                      = @founder.startup.product_name
                   - if current_founder == @founder
-                    a.profile-edit-button href=edit_founder_url
+                    a.profile-edit-button href=edit_founder_url title="Edit Your Profile"
                       i.fa.fa-pencil
-                      ' Edit
+                      | Edit
+                - if @founder.startup.present?
+                  span.founder-roll
+                    - if @founder.roles.present?
+                      = @founder.roles.map { |role| t("role.#{role}") }.join ', '
+                      ' &nbsp;at
+                    = @founder.startup.product_name
               - if @founder.social_url_present?
                 .col-lg-5.col-md-12.social-connect
                   - if @founder.personal_website_url.present?
@@ -77,13 +76,13 @@
                 .education-details
                   - if @founder.course.present?
                     span.course-name
-                      i.fa.fa-futbol-o
+                      i.fa.fa-book
                       | Course:
                       strong
                         = @founder.course
                   - if @founder.semester.present?
                     span.semester-name
-                      i.fa.fa-tachometer
+                      i.fa.fa-flag
                       | Semester:
                       strong
                         = @founder.semester

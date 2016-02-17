@@ -56,27 +56,17 @@
     .profile-head {
       border-bottom: 1px solid #d2d2d2;
       padding: 5px 0 15px;
+      display: flex;
 
       .profile-name {
         h2 {
           color: #2a6db6;
           font-size: 23px;
           margin: 0;
+          position: relative;
 
           @media (max-width: $screen-sm-max) {
             padding: 5px 0;
-          }
-
-          span {
-            color: #333333;
-            font-size: 13px;
-            font-weight: 300;
-            display: inline-block;
-
-            @media (max-width: $screen-sm-max) {
-              display: block;
-              line-height: 20px;
-            }
           }
         }
         @media (min-width: $screen-sm-max) {
@@ -86,6 +76,7 @@
       .social-connect {
         padding: 3px 0 0;
         text-align: right;
+        align-self: center;
 
         a {
           color: #fff;
@@ -95,8 +86,9 @@
           width: 25px;
           height: 25px;
           margin: 0 5px;
-          line-height: 24px;
+          line-height: 26px;
           text-align: center;
+          outline: 0;
           background-color: #bbbbbb;
           transition: all .2s;
 
@@ -124,6 +116,17 @@
           text-align: center;
         }
       }
+      .founder-roll {
+        color: #333333;
+        font-size: 13px;
+        font-weight: 300;
+        display: inline-block;
+
+        @media (max-width: $screen-sm-max) {
+          display: block;
+          line-height: 20px;
+        }
+      }
       .profile-edit-button {
         font-size: 13px;
         border: 1px solid #0091c9;
@@ -133,6 +136,9 @@
         margin-left: 10px;
         background-color: #fff;
         text-decoration: none;
+        display: inline-block;
+        position: relative;
+        top: -2px;
 
         i {
           padding-right: 3px;
@@ -145,6 +151,9 @@
           position: inherit;
           margin-top: 10px;
         }
+      }
+      @media (max-width: $screen-sm-max) {
+        display: block;
       }
     }
     .progress-container {
@@ -192,30 +201,8 @@
         max-width: 145px;
       }
     }
-    .profile-edit-button {
-      font-size: 13px;
-      border: 1px solid #0091c9;
-      color: #0091c9;
-      padding: 3px 5px;
-      border-radius: 5px;
-      margin-left: 10px;
-      background-color: #fff;
-      text-decoration: none;
-
-      i {
-        padding-right: 3px;
-      }
-      &:hover {
-        color: #0384b6;
-        border-color: #0187ba;
-      }
-      @media (max-width: $screen-sm-max) {
-        position: inherit;
-        margin-top: 10px;
-      }
-    }
     .profile-detail {
-      padding-top: 20px;
+      padding-top: 15px;
       padding-bottom: 0;
 
       .profile-description {
@@ -324,6 +311,7 @@
       @media (max-width: $screen-md-min) {
         border-left: 0;
         padding: 15px 0 0;
+        margin-left: 0;
       }
     }
 

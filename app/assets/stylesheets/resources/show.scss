@@ -16,7 +16,7 @@
   .content {
     float: left;
     margin-left: 20px;
-    height: 200px;
+    height: auto;
     width: 500px;
     position: relative;
 
@@ -25,16 +25,6 @@
       height: auto;
       width: auto;
       margin: 10px 0 0 0;
-    }
-  }
-
-  .content-inner {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-
-    @media (max-width: $screen-xs-max) {
-      position: static;
     }
   }
 }

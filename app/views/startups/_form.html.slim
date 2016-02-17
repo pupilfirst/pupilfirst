@@ -80,10 +80,8 @@ p
           = f.input :women_employees, label: 'Number of Women Employees', input_html: { min: 0, max: 9999, 'data-max-int-length' => 4 }
           = f.input :registration_type, collection: Startup.valid_registration_types, label_method: ->(obj) { registration_type_html(obj) }, include_blank: 'Not Registered'
 
-  .form-group
+  .form-group.margin-top-20
     .col-sm-offset-3.col-sm-9
       = f.submit class: 'btn btn-success btn-flat', value: 'Update startup profile'
       | &nbsp;
       = link_to 'Cancel', startup_path(@startup), class: 'btn btn-default btn-flat'
-
-

@@ -1,19 +1,5 @@
 # Mails sent out to startups, as a whole.
 class StartupMailer < ApplicationMailer
-  # Mail sent to startup whose agreement with SV.CO is expiring soon.
-  #
-  # @param startup [Startup] Startup whose agreement is expiring
-  # @param expires_in [Fixnum] Days till expiry
-  # @param renew_within [Fixnum] Days to renew
-  def agreement_expiring_soon(startup, expires_in, renew_within)
-    @startup = startup
-    @expires_in = expires_in
-    @renew_within = renew_within
-
-    send_to = @startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
-    mail(to: send_to, subject: 'Reminder to renew your incubation agreement with Startup Village')
-  end
-
   def startup_approved(startup)
     @startup = startup
     send_to = @startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }

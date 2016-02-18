@@ -300,7 +300,9 @@ ActiveAdmin.register TimelineEvent do
         column :private
 
         column :actions do |file|
-          link_to 'Save as Resume', save_file_as_resume_url_admin_timeline_event_path(file_id: file.id), method: :post, data: { confirm: 'Are you sure?' }
+          if timeline_event.timeline_event_type.resume_submission?
+            link_to 'Save as Resume', save_file_as_resume_url_admin_timeline_event_path(file_id: file.id), method: :post, data: { confirm: 'Are you sure?' }
+          end
         end
       end
 
@@ -318,8 +320,10 @@ ActiveAdmin.register TimelineEvent do
         end
 
         column :actions do |link|
-          index = timeline_event.links.find_index(link)
-          link_to 'Save as Resume', save_link_as_resume_url_admin_timeline_event_path(index: index), method: :post, data: { confirm: 'Are you sure?' }
+          if timeline_event.timeline_event_type.resume_submission?
+            index = timeline_event.links.find_index(link)
+            link_to 'Save as Resume', save_link_as_resume_url_admin_timeline_event_path(index: index), method: :post, data: { confirm: 'Are you sure?' }
+          end
         end
       end
     end

@@ -154,6 +154,12 @@ ActiveAdmin.register StartupFeedback do
     # post to slack
     response = PublicSlackTalk.post_message message: startup_feedback.as_slack_message, founders: founders
 
+    # show failure error if no response was received from PublicSlackTalk
+    unless response.present?
+      redirect_to :back, alert: 'Could not communicate with Slack. Try again'
+      return
+    end
+
     # form appropriate flash message with details from response
     success_names = Founder.find(founders.ids - response.errors.keys).map(&:slack_username).join(', ')
     failure_names = Founder.find(founders.ids & response.errors.keys).map(&:fullname).join(', ')
@@ -180,6 +186,12 @@ ActiveAdmin.register StartupFeedback do
 
     # post to slack
     response = PublicSlackTalk.post_message message: startup_feedback.as_slack_message, founder: founder
+
+    # show failure error if no response was received from PublicSlackTalk
+    unless response.present?
+      redirect_to :back, alert: 'Could not communicate with Slack. Try again'
+      return
+    end
 
     flash[:alert] = if response.errors.any?
       "Could not ping #{founder.slack_username} on slack. Please try again"

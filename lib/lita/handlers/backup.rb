@@ -23,8 +23,10 @@ module Lita
           # do not create entries for reactions removed
           next if parent_message.present? && message.event == "removed"
 
-          PublicSlackMessage.create! body: message.body, slack_username: message.user.mention_name,
-            user: message_author, channel: channel, parent_message: parent_message, timestamp: message.extensions[:slack][:timestamp]
+          PublicSlackMessage.create!(
+            body: message.body, slack_username: message.user.mention_name, user: message_author, channel: channel,
+            parent_message: parent_message, timestamp: message.extensions[:slack][:timestamp]
+          )
         end
       end
 

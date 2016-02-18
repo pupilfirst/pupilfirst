@@ -211,6 +211,9 @@ class Startup < ActiveRecord::Base
 
   attr_accessor :validate_web_mandatory_fields
 
+  # use the old name attribute as an alias for legal_registered_name
+  alias_attribute :name, :legal_registered_name
+
   # TODO: probable stale attribute
   attr_reader :validate_registration_type
 
@@ -344,7 +347,7 @@ class Startup < ActiveRecord::Base
   mount_uploader :logo, LogoUploader
   process_in_background :logo
 
-  normalize_attribute :name, :pitch, :product_description, :email, :phone, :revenue_generated, :team_size, :women_employees, :approval_status
+  normalize_attribute :pitch, :product_description, :email, :phone, :revenue_generated, :team_size, :women_employees, :approval_status
 
   attr_accessor :full_validation
 

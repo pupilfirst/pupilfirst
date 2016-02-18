@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160212115824) do
+ActiveRecord::Schema.define(version: 20160218055239) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -221,6 +221,8 @@ ActiveRecord::Schema.define(version: 20160212115824) do
     t.string   "channel"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.string   "timestamp"
+    t.integer  "reaction_to_id"
   end
 
   add_index "public_slack_messages", ["founder_id"], name: "index_public_slack_messages_on_founder_id", using: :btree
@@ -267,7 +269,6 @@ ActiveRecord::Schema.define(version: 20160212115824) do
   add_index "startup_feedback", ["faculty_id"], name: "index_startup_feedback_on_faculty_id", using: :btree
 
   create_table "startups", force: :cascade do |t|
-    t.string   "name"
     t.string   "logo"
     t.string   "pitch"
     t.string   "website"

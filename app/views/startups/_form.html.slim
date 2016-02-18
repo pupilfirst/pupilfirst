@@ -20,7 +20,6 @@ p
             hint: 'Share the link to a presentation that showcases your product, in fair detail.',
             input_html: { placeholder: 'https://slideshare.net/YourUsername/your-product-deck', maxlength: 255 },
             label: 'Product Deck'
-          = f.input :name, label: "Startup's Name", input_html: { placeholder: 'Name of your startup', maxlength: 255 }
           = f.input :legal_registered_name, label: 'Legal Registered Name', hint: 'The name of your registered legal entity. Partnership/Pvt. Ltd./LLP etc.'
           = f.input :logo, as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }, required: false
           = f.association :startup_categories,

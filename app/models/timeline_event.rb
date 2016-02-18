@@ -51,6 +51,8 @@ class TimelineEvent < ActiveRecord::Base
     maximum: MAX_DESCRIPTION_CHARACTERS,
     message: "must be within #{MAX_DESCRIPTION_CHARACTERS} characters"
 
+  accepts_nested_attributes_for :timeline_event_files, allow_destroy: true
+
   scope :end_of_iteration_events, -> { where(timeline_event_type: TimelineEventType.end_iteration) }
   scope :batched, -> { joins(:startup).merge(Startup.batched) }
   scope :verified, -> { where(verified_status: VERIFIED_STATUS_VERIFIED) }
@@ -110,6 +112,16 @@ class TimelineEvent < ActiveRecord::Base
         persisted: true
       }
     end.to_json
+  end
+
+  # Return serialized links so that AA TimelineEvent#new/edit can use it.
+  def serialized_links
+    links.to_json
+  end
+
+  # Accept links in serialized form.
+  def serialized_links=(links_string)
+    self.links = JSON.parse(links_string)
   end
 
   after_save :update_timeline_event_files

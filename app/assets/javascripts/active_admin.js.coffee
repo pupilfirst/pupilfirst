@@ -3,6 +3,8 @@
 #= require turbolinks
 
 # External libraries
+#= require react
+#= require react_ujs
 #= require select2
 #= require pnotify
 #= require trix

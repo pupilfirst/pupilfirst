@@ -1,7 +1,8 @@
 ActiveAdmin.register TimelineEvent do
   menu parent: 'Startups'
-  permit_params :description, :timeline_event_type_id, :image, :links, :event_on, :startup_id, :verified_at, :grade,
-    :founder_id
+
+  permit_params :description, :timeline_event_type_id, :image, :event_on, :startup_id, :verified_at, :grade,
+    :founder_id, :serialized_links, timeline_event_files_attributes: [:id, :file, :private, :_destroy]
 
   preserve_default_filters!
   filter :startup_batch
@@ -64,36 +65,6 @@ ActiveAdmin.register TimelineEvent do
         }
       )
     )
-  end
-
-  member_action :delete_link, method: :delete do
-    timeline_event = TimelineEvent.find params[:id]
-    timeline_event.links.delete_at(params[:link_index].to_i)
-    timeline_event.save!
-
-    flash[:notice] = 'Link Deleted!'
-
-    redirect_to action: :show
-  end
-
-  member_action :add_link, method: :post do
-    timeline_event = TimelineEvent.find params[:id]
-    timeline_event.links << { title: params[:link_title], url: params[:link_url], private: params[:link_private] }
-    timeline_event.save!
-
-    flash[:success] = 'Link Added!'
-
-    redirect_to action: :show
-  end
-
-  member_action :edit_link, method: :put do
-    timeline_event = TimelineEvent.find params[:id]
-    timeline_event.links[params[:link_index].to_i] = { title: params[:link_title], url: params[:link_url], private: params[:link_private] }
-    timeline_event.save!
-
-    flash[:success] = 'Link Updated!'
-
-    redirect_to action: :show
   end
 
   member_action :unlink_target, method: :post do
@@ -188,10 +159,18 @@ ActiveAdmin.register TimelineEvent do
     redirect_to action: :show
   end
 
-  member_action :save_resume_url, method: :post do
+  member_action :save_link_as_resume_url, method: :post do
     timeline_event = TimelineEvent.find(params[:id])
-    timeline_event.founder.update!(resume_url: timeline_event.links[params[:index].to_i][:url])
-    flash[:success] = "Successfully updated founder's resume URL."
+    timeline_event.founder.update!(resume_url: timeline_event.links[params[:index].to_i]['url'])
+    flash[:success] = "Successfully updated founder's Resume URL."
+    redirect_to action: :show
+  end
+
+  member_action :save_file_as_resume_url, method: :post do
+    timeline_event = TimelineEvent.find(params[:id])
+    file = timeline_event.timeline_event_files.find(params[:file_id])
+    timeline_event.founder.update!(resume_url: download_startup_timeline_event_timeline_event_file_url(timeline_event.startup, timeline_event, file))
+    flash[:success] = "Successfully updated founder's Resume URL."
     redirect_to action: :show
   end
 
@@ -215,6 +194,18 @@ ActiveAdmin.register TimelineEvent do
       f.input :event_on, as: :datepicker
       f.input :verified_at, as: :datepicker
       f.input :grade, as: :select, collection: TimelineEvent.valid_grades, required: false
+      f.input :serialized_links, as: :hidden
+    end
+
+    f.inputs 'Attached Files' do
+      f.has_many :timeline_event_files, new_record: 'Add file', allow_destroy: true, heading: false do |t|
+        t.input :file, hint: "#{t.object.persisted? ? t.object.filename : 'Select new file for upload'}"
+        t.input :private
+      end
+    end
+
+    panel 'Attached Links', id: 'react-edit-attached-links' do
+      react_component 'AATimelineEventLinksEditor', { linksJSON: f.object.serialized_links }
     end
 
     f.actions
@@ -303,13 +294,41 @@ ActiveAdmin.register TimelineEvent do
       row :updated_at
     end
 
+    panel 'Attachments' do
+      table_for timeline_event.timeline_event_files do
+        column :filename
+        column :private
+
+        column :actions do |file|
+          link_to 'Save as Resume', save_file_as_resume_url_admin_timeline_event_path(file_id: file.id), method: :post, data: { confirm: 'Are you sure?' }
+        end
+      end
+
+      table_for timeline_event.links do
+        column :title do |link|
+          link['title']
+        end
+
+        column :url do |link|
+          link['url']
+        end
+
+        column :private do |link|
+          link['private'] ? status_tag('yes', :ok) : status_tag('no')
+        end
+
+        column :actions do |link|
+          index = timeline_event.links.find_index(link)
+          link_to 'Save as Resume', save_link_as_resume_url_admin_timeline_event_path(index: index), method: :post, data: { confirm: 'Are you sure?' }
+        end
+      end
+    end
+
     if timeline_event.verified? && timeline_event.karma_point.blank?
       render partial: 'grade_form', locals: { timeline_event: timeline_event }
     end
 
     render partial: 'target_form', locals: { timeline_event: timeline_event }
-
-    render partial: 'links', locals: { timeline_event: timeline_event }
 
     feedback = StartupFeedback.for_timeline_event(timeline_event)
 

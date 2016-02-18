@@ -37,6 +37,9 @@ class StartupsController < ApplicationController
     @startup.being_registered = true
     @startup.team_lead_email = current_founder.email
 
+    # copy over the batch from current_founders invited_batch
+    @startup.batch = current_founder.invited_batch
+
     if @startup.save
       # reset being_registered flag to prevent repeating cofounder validations
       @startup.being_registered = false

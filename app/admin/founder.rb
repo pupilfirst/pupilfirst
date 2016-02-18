@@ -172,7 +172,7 @@ ActiveAdmin.register Founder do
       return
     end
 
-    if email =~ /@/ && Founder.invite!(email: email)
+    if email =~ /@/ && Founder.invite!(email: email, invited_batch: Batch.find(params[:founder][:invited_batch]))
       flash.now[:success] = 'Invitation successfully sent!'
       redirect_to action: :index
     else

@@ -28,6 +28,7 @@ class Founder < ActiveRecord::Base
   belongs_to :university
   has_many :karma_points, dependent: :destroy
   has_many :timeline_events
+  belongs_to :invited_batch, class_name: 'Batch'
 
   scope :batched, -> { joins(:startup).merge(Startup.batched) }
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }

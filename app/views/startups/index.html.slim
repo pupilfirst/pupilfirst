@@ -43,6 +43,6 @@
                           - if startup.logo.present?
                             = image_tag startup.logo.url
                           - else
-                            = startup.name || startup.product_name
+                            = startup.product_name || startup.name
                       .view-timeline-button.pull-right = link_to 'See full timeline', startup, class: 'timeline-link'
                     p = startup.product_description

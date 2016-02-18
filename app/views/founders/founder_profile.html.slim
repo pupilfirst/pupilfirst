@@ -70,7 +70,7 @@
                       i.fa.fa-rss
 
             .profile-detail.clearfix
-              .col-lg-8.col-md-7.profile-description
+              .col-lg-9.col-md-8.profile-description
                 p
                   = @founder.about
                 .education-details
@@ -78,7 +78,7 @@
                     span.course-name
                       i.fa.fa-book
                       | Course:
-                      strong
+                      strong.course-tooltip
                         = @founder.course
                   - if @founder.semester.present?
                     span.semester-name
@@ -92,7 +92,7 @@
                       | Year of Graduation:
                       strong
                         = @founder.year_of_graduation
-              .col-lg-4.col-md-5.resume-link-section
+              .col-lg-3.col-md-4.resume-link-section
                 - if @founder.resume_url.present?
                   a.btn.btn-flat.btn-resume-link href=@founder.resume_url type="button"
                     = image_tag 'founders/profile/resume-icon.png'

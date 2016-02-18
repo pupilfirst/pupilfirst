@@ -11,7 +11,6 @@
       text-align: center;
       margin: auto;
       max-width: 150px;
-      cursor: context-menu;
 
       img {
         border: 1px solid #aaaaaa;
@@ -265,23 +264,77 @@
         color: #6b6b6b;
 
         span {
-          padding-right: 15px;
+          padding: 0 10px;
           height: 20px;
+          display: inline-block;
           border-right: 1px solid #dcdcdc;
 
           i {
             margin-right: 5px;
           }
           &.course-name {
-            display: block;
-            border: 0;
+            padding-left: 0;
+
+            @media (max-width: $screen-md-max) {
+              display: block;
+              border: 0;
+            }
+          }
+          &.semester-name {
+            @media (max-width: $screen-md-max) and (min-width: $screen-md-min) {
+              padding-left: 0;
+            }
           }
           &.graduation-year {
-            padding-left: 15px;
             border: 0;
           }
           strong {
             padding-left: 5px;
+
+            &.course-tooltip {
+              display: inline-block;
+              max-width: 100px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              vertical-align: top;
+              white-space: nowrap;
+
+              @media (max-width: $screen-md-max) {
+                max-width: inherit;
+              }
+              + .tooltip > {
+                .tooltip-inner {
+                  background-color: #faebcc;
+                  border-radius: 5px;
+                  color: #8a6d3b;
+                  border: 1px solid #bc995b;
+                  position: relative;
+
+                  &:after, &:before {
+                    bottom: 100%;
+                    left: 50%;
+                    border: solid transparent;
+                    content: " ";
+                    height: 0;
+                    width: 0;
+                    position: absolute;
+                    pointer-events: none;
+                  }
+                  &:after {
+                    border-color: rgba(250, 235, 204, 0);
+                    border-bottom-color: #faebcc;
+                    border-width: 5px;
+                    margin-left: -5px;
+                  }
+                  &:before {
+                    border-color: rgba(212, 176, 115, 0);
+                    border-bottom-color: #d4b073;
+                    border-width: 6px;
+                    margin-left: -6px;
+                  }
+                }
+              }
+            }
           }
         }
       }

@@ -35,5 +35,5 @@ ActiveAdmin.register TargetTemplate do
 
   form partial: 'admin/target_templates/form'
 
-  permit_params :days_from_start, :title, :role, :description, :completion_instructions, :resource_url, :slideshow_embed
+  permit_params :days_from_start, :title, :role, :description, :completion_instructions, :resource_url, :slideshow_embed, :assigner_id
 end

@@ -92,8 +92,8 @@ ActiveAdmin.register Founder do
       row :slack_username
       row :slack_user_id
 
-      row :resume_url do
-        link_to founder.resume_url if founder.resume_url.present?
+      row :resume_url do |founder|
+        link_to(founder.resume_url, founder.resume_url) if founder.resume_url.present?
       end
 
       row :phone

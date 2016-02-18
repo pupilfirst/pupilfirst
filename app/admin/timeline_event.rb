@@ -199,13 +199,13 @@ ActiveAdmin.register TimelineEvent do
 
     f.inputs 'Attached Files' do
       f.has_many :timeline_event_files, new_record: 'Add file', allow_destroy: true, heading: false do |t|
-        t.input :file, hint: "#{t.object.persisted? ? t.object.filename : 'Select new file for upload'}"
+        t.input :file, hint: (t.object.persisted? ? t.object.filename : 'Select new file for upload')
         t.input :private
       end
     end
 
     panel 'Attached Links', id: 'react-edit-attached-links' do
-      react_component 'AATimelineEventLinksEditor', { linksJSON: f.object.serialized_links }
+      react_component 'AATimelineEventLinksEditor', linksJSON: f.object.serialized_links
     end
 
     f.actions

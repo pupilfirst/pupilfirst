@@ -22,8 +22,8 @@
         i.fa.fa-check-circle
         | &nbsp;Available for Connect
 
-      - if current_user.try(:can_connect?)
-        - if current_user.pending_connect_request_for?(member)
+      - if current_founder.try(:can_connect?)
+        - if current_founder.pending_connect_request_for?(member)
           .disabled.btn.btn-primary.btn-sm.connect-link data-toggle='tooltip' data-placement='top' title="You already have a pending connect request with this faculty member. Please write to help@sv.co if you would like to reschedule."
             | Connect
         - else
@@ -34,15 +34,15 @@
                   button.close data-dismiss="modal" type="button"  &times;
                   h4.modal-title Connect with #{member.name}
                 .modal-body
-                  = simple_form_for current_user.startup.connect_requests.new, url: connect_faculty_url(member) do |f|
+                  = simple_form_for current_founder.startup.connect_requests.new, url: connect_faculty_url(member) do |f|
                     = f.input :connect_slot, as: :select, collection: connect_slots, include_blank: false, label: 'Pick a slot.'
                     = f.input :questions, label: 'What questions would you like to ask the faculty member?', input_html: { maxlength: ConnectRequest::MAX_QUESTIONS_LENGTH, rows: 6 }
                     = f.submit 'Submit Request', class: 'btn btn-primary'
 
           a.btn.btn-primary.btn-sm.connect-link data-toggle="modal" data-target="#faculty-connect-modal-#{member.id}"
             | Connect
-      - elsif current_user.try(:can_view_connect?)
-        .disabled.btn.btn-primary.btn-sm.connect-link data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available to #{current_user.startup.admin.fullname} (your team lead)"
+      - elsif current_founder.try(:can_view_connect?)
+        .disabled.btn.btn-primary.btn-sm.connect-link data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available to #{current_founder.startup.admin.fullname} (your team lead)"
           | Connect
       - else
         .disabled.btn.btn-primary.btn-sm.connect-link data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available once you are a selected founder"

@@ -1,0 +1,75 @@
+- content_for :head
+  title SV.CO Verify Mobile Number
+
+.panel.onboarding-head-panel
+  .onboarding-head-container.clearfix
+    .col-sm-4.text-center.onboarding-tab
+      .fa.fa-circle-o
+      | &nbsp; Founder Profile
+    .col-sm-4.text-center.onboarding-tab.current-tab
+      .fa.fa-circle-o-notch.fa-spin
+      | &nbsp; Phone number verification
+    .col-sm-4.text-center.onboarding-tab
+      .fa.fa-circle-o
+      | &nbsp; Startup Creation
+
+.onboarding-body
+  .onboarding-container.clearfix
+    - if @failed_to_verify_phone_number
+      .mobile-verification-alert.text-center role='alert'
+        .verification-icon.send-error
+        .verification-message
+          h3.red-text Verification Code Doesn’t Match!
+          p
+            ' The verification code you supplied does not match the code sent to your mobile number.
+            span.font-weight-600 Please check and re-enter the code.
+    - elsif @retry_after_some_time
+      .mobile-verification-alert.text-center role='alert'
+        .verification-icon.send-wait
+        .verification-message
+          h3.red-text Please Wait!
+          p
+            ' A verification code was sent to your mobile number less than 5 minutes ago.
+            span.font-weight-600 Please wait a while before trying to re-send.
+    - elsif @resent_verification_code
+      .mobile-verification-alert.text-center role='alert'
+        .verification-icon.resend-success
+        .verification-message
+          h3.green-text New Verification Code Sent!
+          p
+            ' A new SMS verification code has been sent to your mobile number.
+            span.font-weight-600 Please supply this code to complete the registration process.
+    - else
+      .mobile-verification-alert.text-center role='alert'
+        .verification-icon.send-success
+        .verification-message
+          h3.green-text Verification Code Sent!
+          p
+            ' An SMS containing a verification code has been sent to your mobile number.
+            span.font-weight-600 Please supply this code to complete the registration process.
+
+    - if Rails.env.development?
+      .alert.alert-info role='alert'
+        ' Development mode! Verification code is
+        code #{current_founder.phone_verification_code}
+
+    .founder-registration-box
+      = form_tag verify_founder_url, class: 'form-horizontal', role: 'form' do
+
+        legend.margin-top-20.form-section-head.font-weight-400
+          ' Phone number verification
+        .form-group
+          label.col-sm-3.control-label for='phone_verification_code' Verification code
+          .col-sm-9
+            = text_field_tag 'phone_verification_code', '', class: 'form-control', required: true, placeholder: ''
+        .form-group
+          .col-sm-offset-3.col-sm-9
+            = submit_tag 'Verify', class: 'btn btn-success btn-flat verify-btn'
+      .form-group.row
+        .col-sm-9.col-sm-offset-3
+          = button_to 'Resend verification code', resend_founder_url, method: :patch, class: 'btn btn-info btn-flat resend-code-btn'
+
+/= form_tag resend_founder_url, style: 'margin-top: 10px;', method: :patch
+  .form-group
+    .col-sm-offset-2.col-sm-10
+      = button_tag 'Resend verification code', class: 'btn btn-success btn-flat', style: 'margin-top: 10px;'

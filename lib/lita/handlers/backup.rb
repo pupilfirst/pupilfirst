@@ -8,8 +8,8 @@ module Lita
           # do not backup private messages
           next if message.private_message?
 
-          message_author_slack_username = message.user.mention_name
-          message_author = ::User.find_by slack_username: message_author_slack_username
+          message_author_slack_username = message.founder.mention_name
+          message_author = ::Founder.find_by slack_username: message_author_slack_username
 
           # TODO: Channel name should be accessible directly from message.room_object.name, but it isn't. Fix when possible.
           # See: https://github.com/kenjij/lita-slack/issues/44
@@ -24,7 +24,7 @@ module Lita
           next if parent_message.present? && message.event == "removed"
 
           PublicSlackMessage.create!(
-            body: message.body, slack_username: message.user.mention_name, user: message_author, channel: channel,
+            body: message.body, slack_username: message.founder.mention_name, founder: message_author, channel: channel,
             parent_message: parent_message, timestamp: message.extensions[:slack][:timestamp]
           )
         end

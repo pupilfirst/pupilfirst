@@ -4,10 +4,6 @@ feature 'Faculty Connect' do
   let!(:faculty_1) { create :faculty }
   let!(:faculty_2) { create :faculty }
 
-  let!(:tet_one_liner) { create :tet_one_liner }
-  let!(:tet_new_product_deck) { create :tet_new_product_deck }
-  let!(:tet_team_formed) { create :tet_team_formed }
-
   # Three valid connect slots
   let!(:connect_slot_1) { create :connect_slot, faculty: faculty_1, slot_at: 4.days.from_now }
   let!(:connect_slot_2) { create :connect_slot, faculty: faculty_1, slot_at: 4.5.days.from_now }
@@ -28,17 +24,18 @@ feature 'Faculty Connect' do
   end
 
   context 'User is founder of batched-approved startup' do
-    let(:user) { create :user_with_password, confirmed_at: Time.now }
-    let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED, batch_number: 1 }
+    let(:founder) { create :founder_with_password, confirmed_at: Time.now }
+    let(:batch) { create :batch }
+    let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED, batch: batch }
 
     before :each do
-      # Add user as founder of startup.
-      startup.founders << user
+      # Add founder as founder of startup.
+      startup.founders << founder
 
-      # Log in the user.
-      visit new_user_session_path
-      fill_in 'user_email', with: user.email
-      fill_in 'user_password', with: 'password'
+      # Log in the founder.
+      visit new_founder_session_path
+      fill_in 'founder_email', with: founder.email
+      fill_in 'founder_password', with: 'password'
       click_on 'Sign in'
     end
 
@@ -62,9 +59,9 @@ feature 'Faculty Connect' do
       end
 
       before :each do
-        # Make our 'user' the admin.
+        # Make our 'founder' the admin.
         startup.admin.update(startup_admin: false)
-        user.update(startup_admin: true)
+        founder.update(startup_admin: true)
       end
 
       context 'Admin has a pending request with faculty' do

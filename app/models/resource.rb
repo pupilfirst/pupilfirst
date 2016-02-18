@@ -1,6 +1,11 @@
+# encoding: utf-8
+# frozen_string_literal: true
+
 class Resource < ActiveRecord::Base
   include FriendlyId
   friendly_id :slug_candidates, use: [:slugged, :finders]
+
+  belongs_to :batch
 
   def slug_candidates
     [:title, [:title, :updated_at]]
@@ -10,8 +15,8 @@ class Resource < ActiveRecord::Base
     title_changed? || super
   end
 
-  SHARE_STATUS_PUBLIC = 'public'
-  SHARE_STATUS_APPROVED = 'approved'
+  SHARE_STATUS_PUBLIC = -'public'
+  SHARE_STATUS_APPROVED = -'approved'
 
   def self.valid_share_statuses
     [SHARE_STATUS_PUBLIC, SHARE_STATUS_APPROVED]
@@ -19,9 +24,6 @@ class Resource < ActiveRecord::Base
 
   validates_presence_of :file, :title, :description, :share_status
   validates_inclusion_of :share_status, in: valid_share_statuses
-  validates_numericality_of :shared_with_batch, allow_blank: true
-
-  normalize_attributes :shared_with_batch
 
   mount_uploader :file, ResourceFileUploader
   mount_uploader :thumbnail, ResourceThumbnailUploader
@@ -30,15 +32,15 @@ class Resource < ActiveRecord::Base
 
   delegate :content_type, to: :file
 
-  def self.for(user)
-    if user.present? && user.founder?
+  def self.for(founder)
+    if founder.present? && founder.startup.approved?
       where(
-        'share_status = ? OR (share_status = ? AND shared_with_batch IS ?) OR (share_status = ? AND shared_with_batch = ?)',
+        'share_status = ? OR (share_status = ? AND batch_id IS ?) OR (share_status = ? AND batch_id = ?)',
         SHARE_STATUS_PUBLIC,
         SHARE_STATUS_APPROVED,
         nil,
         SHARE_STATUS_APPROVED,
-        user.startup.try(:batch_number)
+        founder.startup&.batch&.id
       ).order('title')
     else
       public_resources
@@ -56,5 +58,21 @@ class Resource < ActiveRecord::Base
   def increment_downloads!
     self.downloads += 1
     save!
+  end
+
+  after_create :notify_on_slack
+
+  # Notify on slack when a new resource is uploaded
+  def notify_on_slack
+    PublicSlackTalk.post_message message: new_resource_message, channel: '#resources'
+  end
+
+  # message to be send to slack for new resources
+  def new_resource_message
+    message = "*A new #{for_approved? ? 'private resource (for approved startups)' : 'public resource'}"\
+    " has been uploaded to SV.CO*: \n"
+    message += "*Title:* #{title}\n"
+    message += "*Description:* #{description}\n"
+    message + "*URL:* #{Rails.application.routes.url_helpers.resource_url(self, host: 'https://sv.co')}"
   end
 end

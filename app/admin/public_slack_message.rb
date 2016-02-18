@@ -1,5 +1,5 @@
 ActiveAdmin.register PublicSlackMessage do
-  menu parent: 'Users'
+  menu parent: 'Founders'
   actions :all, except: [:show, :new, :create, :edit, :update, :destroy]
 
   controller do
@@ -15,7 +15,7 @@ ActiveAdmin.register PublicSlackMessage do
     end
 
     def scoped_collection
-      super.includes :user
+      super.includes :founder
     end
   end
 
@@ -32,7 +32,8 @@ ActiveAdmin.register PublicSlackMessage do
       Date.today
     end
 
-    @public_slack_messages = PublicSlackMessage.where(channel: @channel, created_at: (@date.beginning_of_day..@date.end_of_day)).includes(:user, :karma_point)
+    @public_slack_messages = PublicSlackMessage.where(channel: @channel, created_at: (@date.beginning_of_day..@date.end_of_day))
+      .includes(:founder, :karma_point)
 
     render 'assign_karma_points'
   end
@@ -45,7 +46,7 @@ ActiveAdmin.register PublicSlackMessage do
       return
     end
 
-    if public_slack_message.user.blank?
+    if public_slack_message.founder.blank?
       render json: { error: :user_not_linked }
       return
     end
@@ -54,7 +55,7 @@ ActiveAdmin.register PublicSlackMessage do
       source: public_slack_message,
       points: params[:commit].delete('+').to_i,
       activity_type: params[:activity_type],
-      user: public_slack_message.user
+      founder: public_slack_message.founder
     )
 
     render json: {
@@ -70,8 +71,8 @@ ActiveAdmin.register PublicSlackMessage do
     # selectable_column
 
     column :author do |message|
-      if message.user.present?
-        link_to message.user.fullname, admin_user_path(message.user)
+      if message.founder.present?
+        link_to message.founder.fullname, admin_founder_path(message.founder)
       else
         "@#{message.slack_username}"
       end

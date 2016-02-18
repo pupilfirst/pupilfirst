@@ -1,13 +1,15 @@
 class TimelineEventsController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_founder!
   before_filter :restrict_to_startup_founders
 
-  # POST /user/startup/timeline_events
+  # POST /founder/startup/timeline_events
   def create
-    @startup = current_user.startup
+    @startup = current_founder.startup
     @timeline_event = @startup.timeline_events.new timeline_event_params.merge(
       links: JSON.parse(timeline_event_params[:links]),
-      user: current_user
+      founder: current_founder,
+      files: params.dig(:timeline_event, :files),
+      files_metadata: JSON.parse(timeline_event_params[:files_metadata])
     )
 
     if @timeline_event.save
@@ -19,9 +21,9 @@ class TimelineEventsController < ApplicationController
     end
   end
 
-  # DELETE /user/startup/timeline_events/:id
+  # DELETE /founder/startup/timeline_events/:id
   def destroy
-    @startup = current_user.startup
+    @startup = current_founder.startup
     @timeline_event = @startup.timeline_events.find(params[:id])
 
     if @timeline_event.destroy
@@ -33,12 +35,18 @@ class TimelineEventsController < ApplicationController
     end
   end
 
-  # POST /user/startup/timeline_events/:id
+  # POST /founder/startup/timeline_events/:id
   def update
-    @startup = current_user.startup
+    @startup = current_founder.startup
     @timeline_event = @startup.timeline_events.find(params[:id])
 
-    if @timeline_event.update_and_require_reverification(timeline_event_params.merge(links: JSON.parse(timeline_event_params[:links])))
+    merged_params = timeline_event_params.merge(
+      links: JSON.parse(timeline_event_params[:links]),
+      files: params.dig(:timeline_event, :files),
+      files_metadata: JSON.parse(timeline_event_params[:files_metadata])
+    )
+
+    if @timeline_event.update_and_require_reverification(merged_params)
       flash[:success] = 'Timeline event updated!'
       redirect_to @startup
     else
@@ -50,11 +58,13 @@ class TimelineEventsController < ApplicationController
   private
 
   def timeline_event_params
-    params.require(:timeline_event).permit(:timeline_event_type_id, :event_on, :description, :image, :links)
+    params.require(:timeline_event).permit(
+      :timeline_event_type_id, :event_on, :description, :image, :links, :files_metadata
+    )
   end
 
   def restrict_to_startup_founders
-    return if current_user.is_founder?
+    return if current_founder
     raise_not_found
   end
 end

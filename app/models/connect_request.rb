@@ -1,3 +1,6 @@
+# encoding: utf-8
+# frozen_string_literal: true
+
 class ConnectRequest < ActiveRecord::Base
   MEETING_DURATION = 20.minutes
   MAX_QUESTIONS_LENGTH = 600
@@ -8,14 +11,15 @@ class ConnectRequest < ActiveRecord::Base
   has_one :karma_point, as: :source
 
   scope :for_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch }) }
+  scope :upcoming, -> { joins(:connect_slot).where('connect_slots.slot_at > ?', Time.now) }
 
   delegate :faculty, :slot_at, to: :connect_slot
 
   validates_presence_of :connect_slot_id, :startup_id, :questions, :status
   validates_uniqueness_of :connect_slot_id
 
-  STATUS_REQUESTED = 'requested'
-  STATUS_CONFIRMED = 'confirmed'
+  STATUS_REQUESTED = -'requested'
+  STATUS_CONFIRMED = -'confirmed'
 
   def self.valid_statuses
     [STATUS_REQUESTED, STATUS_CONFIRMED]
@@ -95,6 +99,9 @@ class ConnectRequest < ActiveRecord::Base
 
       # Default visibility should be sufficient since it equals calendar's setting.
       # e.visibility = 'public'
+
+      # Send an sms 1 day before the office hour and a pop-up message 1 hour before
+      e.reminders = { 'useDefault' => false, 'overrides' => [{ method: 'popup', minutes: 60 }, { method: 'sms', hours: 24 }] }
     end
   end
 
@@ -116,7 +123,7 @@ class ConnectRequest < ActiveRecord::Base
     return false if rating < 3
 
     karma_point = KarmaPoint.find_or_initialize_by(source: self)
-    karma_point.user = startup.admin
+    karma_point.founder = startup.admin
     karma_point.points = points_for_rating(rating)
     karma_point.activity_type = "Connect session with faculty member #{faculty.name}"
     karma_point.save!

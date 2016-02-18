@@ -1,21 +1,25 @@
+# encoding: utf-8
+# frozen_string_literal: true
+
 class Target < ActiveRecord::Base
   belongs_to :startup
   belongs_to :assigner, class_name: 'Faculty'
   has_many :timeline_events
 
-  STATUS_PENDING = 'pending'
-  STATUS_DONE = 'done'
+  STATUS_PENDING = -'pending'
+  STATUS_DONE = -'done'
 
   # The following definitions of pending and expired is naive. A correct check requires the use of the done_for_viewer?
   # method on individual targets by supplying the viewer.
   scope :pending, -> { where(status: STATUS_PENDING).where('due_date >= ? OR due_date IS NULL', Time.now).order(due_date: 'desc') }
   scope :expired, -> { where(status: STATUS_PENDING).where('due_date < ?', Time.now).order(due_date: 'desc') }
 
-  scope :recently_completed, -> { where(status: STATUS_DONE).order(completed_at: 'desc').limit(3) }
+  scope :completed, -> { where(status: STATUS_DONE).order(completed_at: 'desc') }
   scope :founder, -> { where(role: ROLE_FOUNDER) }
   scope :not_target_roles, -> { where.not(role: target_roles) }
+  scope :due_on, -> (date) { where(due_date: date.beginning_of_day..date.end_of_day) }
 
-  ROLE_FOUNDER = 'founder'
+  ROLE_FOUNDER = -'founder'
 
   def self.target_roles
     [ROLE_FOUNDER]
@@ -23,7 +27,7 @@ class Target < ActiveRecord::Base
 
   # See en.yml's target.role
   def self.valid_roles
-    target_roles + User.valid_roles
+    target_roles + Founder.valid_roles
   end
 
   # See en.yml's target.status
@@ -52,7 +56,7 @@ class Target < ActiveRecord::Base
   def done_for_viewer?(viewer)
     return true if done?
     return done? unless role == ROLE_FOUNDER
-    timeline_events.where(user: viewer).merge(TimelineEvent.verified).present?
+    timeline_events.where(founder: viewer).merge(TimelineEvent.verified).present?
   end
 
   # Stored status must be pending, and due date must be present and in the past.
@@ -78,11 +82,11 @@ class Target < ActiveRecord::Base
   after_update :notify_revision, if: :crucial_revision?
 
   def notify_new_target
-    PublicSlackTalk.post_message message: details_as_slack_message, users: startup.founders
+    PublicSlackTalk.post_message message: details_as_slack_message, founders: startup.founders
   end
 
   def notify_revision
-    PublicSlackTalk.post_message message: revision_as_slack_message, users: startup.founders
+    PublicSlackTalk.post_message message: revision_as_slack_message, founders: startup.founders
   end
 
   def crucial_revision?
@@ -104,5 +108,39 @@ class Target < ActiveRecord::Base
     message += "Completion Instructions were modified to: \"#{completion_instructions}\"\n" if completion_instructions_changed?
     message += ":exclamation: The due date has been modified to *#{due_date.strftime('%A, %d %b %Y %l:%M %p')}* :exclamation:" if due_date_changed?
     message
+  end
+
+  # Notify all founders of the startup about expiry in 5 days
+  def send_mild_reminder_on_slack
+    return unless startup.present?
+
+    # notify each founder
+    startup.founders.each do |founder|
+      next unless founder.slack_user_id.present?
+      PublicSlackTalk.post_message message: mild_slack_reminder, founder: founder
+    end
+  end
+
+  # Slack message to remind founder of expiry in 5 days
+  def mild_slack_reminder
+    ":timer_clock: *Reminder:* Your startup has a target - _#{title}_ - assigned by #{assigner.name} due in 5 days!"
+  end
+
+  # Notify all founders of the startup about expiry in 2 days
+  def send_strong_reminder_on_slack
+    return unless startup.present?
+
+    # notify each founder
+    startup.founders.each do |founder|
+      next unless founder.slack_user_id.present?
+      PublicSlackTalk.post_message message: strong_slack_reminder, founder: founder
+    end
+  end
+
+  # Slack message to remind founder of expiry in 2 days
+  def strong_slack_reminder
+    ":exclamation: *Urgent:* It seems that the target - _#{title}_ - assigned to your startup "\
+    "by #{assigner.name} due in 2 days is not yet complete! Please complete the same at the "\
+    "earliest and submit the corresponding timeline entry for verification!"
   end
 end

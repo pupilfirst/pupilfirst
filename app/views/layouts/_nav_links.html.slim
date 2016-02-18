@@ -1,8 +1,8 @@
 #sv-navbar.collapse.navbar-collapse
   ul.nav.navbar-nav.navbar-right
-    - if current_user && current_user.startup.present? && !current_user.startup.unready?
+    - if current_founder && current_founder.startup.present? && !current_founder.startup.unready?
       li role="presentation"
-        a.top-nav-link href="#{startup_url(current_user.startup)}" Timeline
+        a.top-nav-link href="#{startup_url(current_founder.startup)}" Timeline
     li role="presentation"
       a.top-nav-link href="http://blog.sv.co" Blog
     li role="presentation"
@@ -15,19 +15,19 @@
       = link_to 'Resources', resources_path, class: 'top-nav-link'
     li role="presentation"
       = link_to 'About', about_path, class: 'top-nav-link'
-    - if current_user
+    - if current_founder
       li role="presentation" class="dropdown"
         a.dropdown-toggle.logged-in-avatar-link data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
-          = image_tag profile_image_url(current_user, gravatar_size: 40, avatar_version: :thumb), class: 'logged-in-user-link'
+          = image_tag profile_image_url(current_founder, gravatar_size: 40, avatar_version: :thumb), class: 'logged-in-user-link'
         ul.dropdown-menu
           li role="presentation"
-            = link_to founder_profile_path(slug: current_user.slug) do
+            = link_to founder_profile_path(slug: current_founder.slug) do
               i.fa.fa-list-ul
               | &nbsp;Profile
           li role="presentation"
-            = link_to destroy_user_session_path, method: :delete do
+            = link_to destroy_founder_session_path, method: :delete do
               i.fa.fa-sign-out
               | &nbsp;Logout
 
     - else
-      li role="presentation" = link_to 'Login', new_user_session_path, class: 'top-nav-link'
+      li role="presentation" = link_to 'Login', new_founder_session_path, class: 'top-nav-link'

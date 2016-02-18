@@ -1,44 +1,67 @@
 class StartupsController < ApplicationController
-  before_filter :authenticate_user!, except: [:show, :index]
+  before_filter :authenticate_founder!, except: [:show, :index]
   before_filter :restrict_to_startup_founders, only: [:edit, :update, :add_founder]
   before_filter :restrict_to_startup_admin, only: [:remove_founder]
-  before_filter :disallow_unready_startup, only: [:edit, :update]
 
   after_filter only: [:create] do
-    @startup.founders << current_user
+    @startup.founders << current_founder
     @startup.save
   end
 
   # GET /startups
   def index
-    @batches = Startup.available_batches
+    @batches = Startup.available_batches.order('batch_number DESC')
     @skip_container = true
   end
 
   def new
-    if current_user.phone.blank?
-      session[:referer] = new_user_startup_url
-      redirect_to phone_user_path
+    @skip_container = true
+    if current_founder.phone.blank?
+      session[:referer] = new_founder_startup_url
+      redirect_to phone_founder_path
       return
     end
 
-    return unless current_user.startup.present?
-
-    if current_user.startup.unready?
-      redirect_to incubation_path(id: :user_profile)
-    else
-      flash[:alert] = "You've already submitted an application for incubation."
-      redirect_to root_url
+    if current_founder.startup&.approved?
+      flash[:alert] = "You already have an approved startup on SV.CO!"
+      redirect_to startup_url(current_founder.startup)
     end
+
+    @startup = Startup.new
   end
 
-  # POST /startups/team_leader_consent
-  def team_leader_consent
-    if current_user.startup.present? || !current_user.phone?
-      redirect_to new_user_startup_path
+  def create
+    @startup = Startup.new startup_registration_params
+
+    # setting attributes required for registration-specific validations
+    @startup.being_registered = true
+    @startup.team_lead_email = current_founder.email
+
+    if @startup.save
+      # reset being_registered flag to prevent repeating cofounder validations
+      @startup.being_registered = false
+
+      # add the team lead
+      @startup.add_team_lead! current_founder
+
+      # add cofounders
+      @startup.add_cofounders!
+
+      # mark as approved
+      @startup.approve!
+
+      # generate a more meaningful slug
+      @startup.regenerate_slug!
+
+      # prepopulate the timeline with a 'Joined SV.CO' entry
+      @startup.prepopulate_timeline!
+
+      flash[:success] = "Your startup has been registered successfully!"
+      redirect_to @startup
     else
-      Startup.new_incubation!(current_user)
-      redirect_to incubation_path(id: :user_profile)
+      # redirect back to startup new form to show errors
+      @skip_container = true
+      render 'startups/new'
     end
   end
 
@@ -53,12 +76,12 @@ class StartupsController < ApplicationController
   end
 
   def edit
-    @startup = current_user.startup
+    @startup = current_founder.startup
   end
 
   def update
-    @current_user = current_user
-    @startup = @current_user.startup
+    @current_founder = current_founder
+    @startup = @current_founder.startup
     @startup.founders.each { |f| f.full_validation = true }
     @startup.validate_web_mandatory_fields = true
 
@@ -73,25 +96,25 @@ class StartupsController < ApplicationController
   # POST /add_founder
   def add_founder
     begin
-      current_user.add_as_founder_to_startup!(params[:cofounder][:email])
-    rescue Exceptions::UserNotFound
-      flash[:error] = "Couldn't find a user with the SV.CO ID you supplied. Please verify founder's registered email address."
-    rescue Exceptions::UserAlreadyMemberOfStartup
+      current_founder.add_as_founder_to_startup!(params[:cofounder][:email])
+    rescue Exceptions::FounderNotFound
+      flash[:error] = "Couldn't find a founder with the SV.CO ID you supplied. Please verify founder's registered email address."
+    rescue Exceptions::FounderAlreadyMemberOfStartup
       flash[:info] = 'The SV.CO ID you supplied is already linked to your startup!'
-    rescue Exceptions::UserAlreadyHasStartup
+    rescue Exceptions::FounderAlreadyHasStartup
       flash[:notice] = 'The SV.CO ID you supplied is already linked to another startup. Are you sure you have the right e-mail address?'
     else
       flash[:success] = "SV.CO ID #{params[:email]} has been linked to your startup as founder"
     end
 
-    redirect_to edit_user_startup_path
+    redirect_to edit_founder_startup_path
   end
 
   # PATCH /remove_founder
   def remove_founder
-    founder_to_remove = current_user.startup.founders.find_by id: params[:founder_id]
+    founder_to_remove = current_founder.startup.founders.find_by id: params[:founder_id]
     if founder_to_remove.present?
-      founder_to_remove.update(is_founder: false, startup_id: nil)
+      founder_to_remove.update(startup_id: nil)
       flash.now[:success] = "The founder was successfully removed from your startup!"
     else
       flash.now[:error] = "There was an error in removing the founder!"
@@ -99,12 +122,12 @@ class StartupsController < ApplicationController
     redirect_to :back
   end
 
-  # DELETE /users/:id/startup/destroy
+  # DELETE /founders/:id/startup/destroy
   def destroy
-    @startup = current_user.startup
+    @startup = current_founder.startup
 
-    if current_user.startup_admin
-      if current_user.startup_admin && current_user.valid_password?(startup_destroy_params[:password])
+    if current_founder.startup_admin
+      if current_founder.startup_admin && current_founder.valid_password?(startup_destroy_params[:password])
         @startup.destroy!
         flash[:success] = 'Your startup profile and all associated data has been deleted.'
         redirect_to root_url
@@ -123,11 +146,16 @@ class StartupsController < ApplicationController
 
   def startup_params
     params.require(:startup).permit(
-      :name, :legal_registered_name, :address, :pitch, :website, :email, :logo, :remote_logo_url, :facebook_link,
+      :legal_registered_name, :address, :pitch, :website, :email, :logo, :remote_logo_url, :facebook_link,
       :twitter_link, :product_name, :product_description,
       { startup_category_ids: [] }, { founders_attributes: [:id] },
       :registration_type, :revenue_generated, :presentation_link, :product_video, :wireframe_link, :prototype_link, :team_size, :women_employees, :slug
     )
+  end
+
+  def startup_registration_params
+    params.require(:startup).permit(:product_name, :team_size, :cofounder_1_email, :cofounder_2_email, :cofounder_3_email,
+      :cofounder_4_email)
   end
 
   def startup_destroy_params
@@ -135,21 +163,12 @@ class StartupsController < ApplicationController
   end
 
   def restrict_to_startup_founders
-    return if current_user.is_founder?
+    return if current_founder
     raise_not_found
   end
 
   def restrict_to_startup_admin
-    return if current_user.startup_admin?
+    return if current_founder.startup_admin?
     raise_not_found
-  end
-
-  # A startup that is in unready state shouldn't be allowed to edit its details.
-  #
-  # @see https://trello.com/c/y4ReClzt
-  def disallow_unready_startup
-    return unless current_user.startup.unready?
-    flash[:error] = "You haven't completed the incubation process yet. Please complete it before attempting to edit your startup's profile."
-    redirect_to current_user
   end
 end

@@ -15,7 +15,7 @@ class FacultyConnectSessionRatingJob < ActiveJob::Base
 
   def send_mails(connect_request)
     FacultyMailer.connect_request_feedback(connect_request).deliver_later
-    UserMailer.connect_request_feedback(connect_request).deliver_later
+    FounderMailer.connect_request_feedback(connect_request).deliver_later
 
     # Set feedback mails to sent.
     connect_request.feedback_mails_sent!

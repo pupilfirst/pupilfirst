@@ -1,24 +1,27 @@
+# encoding: utf-8
+# frozen_string_literal: true
+
 class TimelineEventType < ActiveRecord::Base
   has_many :timeline_events, dependent: :restrict_with_error
 
   validates_presence_of :key, :title, :badge
   validates_uniqueness_of :key
 
-  TYPE_END_ITERATION = 'end_iteration'
-  TYPE_NEW_DECK = 'new_product_deck'
-  TYPE_NEW_WIREFRAME = 'new_wireframe'
-  TYPE_NEW_PROTOTYPE = 'new_prototype'
-  TYPE_NEW_VIDEO = 'new_video'
-  TYPE_HELP_WANTED = 'help_wanted'
-  TYPE_RESUME_SUBMISSION = 'resume_submission'
+  TYPE_END_ITERATION = -'end_iteration'
+  TYPE_NEW_DECK = -'new_product_deck'
+  TYPE_NEW_WIREFRAME = -'new_wireframe'
+  TYPE_NEW_PROTOTYPE = -'new_prototype'
+  TYPE_NEW_VIDEO = -'new_video'
+  TYPE_HELP_WANTED = -'help_wanted'
+  TYPE_RESUME_SUBMISSION = -'resume_submission'
 
-  TYPE_STAGE_IDEA = 'moved_to_idea_discovery'
-  TYPE_STAGE_PROTOTYPE = 'moved_to_prototyping'
-  TYPE_STAGE_CUSTOMER = 'moved_to_customer_validation'
-  TYPE_STAGE_EFFICIENCY = 'moved_to_efficiency'
-  TYPE_STAGE_SCALE = 'moved_to_scale'
+  TYPE_STAGE_IDEA = -'moved_to_idea_discovery'
+  TYPE_STAGE_PROTOTYPE = -'moved_to_prototyping'
+  TYPE_STAGE_CUSTOMER = -'moved_to_customer_validation'
+  TYPE_STAGE_EFFICIENCY = -'moved_to_efficiency'
+  TYPE_STAGE_SCALE = -'moved_to_scale'
 
-  STAGES = [TYPE_STAGE_IDEA, TYPE_STAGE_PROTOTYPE, TYPE_STAGE_CUSTOMER, TYPE_STAGE_EFFICIENCY, TYPE_STAGE_SCALE]
+  STAGES = [TYPE_STAGE_IDEA, TYPE_STAGE_PROTOTYPE, TYPE_STAGE_CUSTOMER, TYPE_STAGE_EFFICIENCY, TYPE_STAGE_SCALE].freeze
 
   STAGE_NAMES = {
     TYPE_STAGE_IDEA => 'Idea Discovery',
@@ -26,7 +29,7 @@ class TimelineEventType < ActiveRecord::Base
     TYPE_STAGE_CUSTOMER => 'Customer Validation',
     TYPE_STAGE_EFFICIENCY => 'Efficiency',
     TYPE_STAGE_SCALE => 'Scale'
-  }
+  }.freeze
 
   STAGE_LINKS = {
     TYPE_STAGE_IDEA => 'http://playbook.sv.co/stages/5.1-idea-discovery.html',
@@ -34,7 +37,7 @@ class TimelineEventType < ActiveRecord::Base
     TYPE_STAGE_CUSTOMER => 'http://playbook.sv.co/stages/5.3-customer-validation.html',
     TYPE_STAGE_EFFICIENCY => 'http://playbook.sv.co/stages/5.4-efficiency.html',
     TYPE_STAGE_SCALE => 'http://playbook.sv.co/stages/5.5-scale.html'
-  }
+  }.freeze
 
   mount_uploader :badge, BadgeUploader
 

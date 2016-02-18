@@ -86,6 +86,7 @@ trix-toolbar .button_group {
     }
   }
 }
+
 trix-toolbar .link_url_fields {
 
   .button_group {
@@ -102,4 +103,11 @@ trix-toolbar .link_url_fields {
       }
     }
   }
+}
+
+.aa-error-hint {
+  margin-left: 20%;
+  display: inline-block;
+  margin-top: 5px;
+  color: crimson;
 }

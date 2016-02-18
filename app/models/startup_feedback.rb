@@ -28,7 +28,8 @@ class StartupFeedback < ActiveRecord::Base
   end
 
   def as_slack_message
-    salutation = "Hey! You have some feedback from #{faculty.name} on your <#{reference_url}|recent update.>\n"\
+    formatted_reference_url = reference_url.present? ? "<#{reference_url}|recent update>" : "recent update"
+    salutation = "Hey! You have some feedback from #{faculty.name} on your #{formatted_reference_url}.\n"\
     "Here is what he had to say:\n"
     # make transforms required by slack
     feedback_text = "\"" + feedback + "\"\n"

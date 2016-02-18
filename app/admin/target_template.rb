@@ -11,8 +11,8 @@ ActiveAdmin.register TargetTemplate do
         target: {
           role: target_template.role, title: target_template.title, description: target_template.description,
           resource_url: target_template.resource_url, completion_instructions: target_template.completion_instructions,
-          due_date_date: target_template.due_date, due_date_time_hour: 23,
-          due_date_time_minute: 59
+          due_date_date: target_template.due_date, due_date_time_hour: 23, due_date_time_minute: 59,
+          slideshow_embed: target_template.slideshow_embed
         }
       )
     )
@@ -35,5 +35,5 @@ ActiveAdmin.register TargetTemplate do
 
   form partial: 'admin/target_templates/form'
 
-  permit_params :days_from_start, :title, :role, :description, :completion_instructions, :resource_url
+  permit_params :days_from_start, :title, :role, :description, :completion_instructions, :resource_url, :slideshow_embed, :assigner_id
 end

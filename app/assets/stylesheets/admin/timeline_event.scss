@@ -1,3 +1,11 @@
 th.link-title {
   text-transform: none !important;
 }
+
+form fieldset ol > li.has_many_container .has_many_fields {
+  padding-top: 10px;
+}
+
+li.has_many_container.timeline_event_files { padding-top: 0; }
+
+#react-edit-attached-links a { cursor: pointer; }

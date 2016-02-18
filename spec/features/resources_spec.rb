@@ -5,28 +5,30 @@ require 'rails_helper'
 feature 'Resources' do
   include AjaxHelpers
 
-  let(:user) { create :user_with_password, confirmed_at: Time.now }
+  let(:founder) { create :founder_with_password, confirmed_at: Time.now }
   let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
-
-  let!(:tet_one_liner) { create :tet_one_liner }
-  let!(:tet_new_product_deck) { create :tet_new_product_deck }
-  let!(:tet_team_formed) { create :tet_team_formed }
 
   let!(:public_resource_1) { create :resource }
   let!(:public_resource_2) { create :resource }
+
+  let(:batch_1) { create :batch }
+  let(:batch_2) { create :batch }
+
   let!(:approved_resource_for_all) { create :resource, share_status: Resource::SHARE_STATUS_APPROVED }
-  let!(:approved_resource_for_batch_1) { create :resource, share_status: Resource::SHARE_STATUS_APPROVED, shared_with_batch: 1 }
-  let!(:approved_resource_for_batch_2) { create :resource, share_status: Resource::SHARE_STATUS_APPROVED, shared_with_batch: 2 }
+  let!(:approved_resource_for_batch_1) { create :resource, share_status: Resource::SHARE_STATUS_APPROVED, batch: batch_1 }
+  let!(:approved_resource_for_batch_2) { create :resource, share_status: Resource::SHARE_STATUS_APPROVED, batch: batch_2 }
 
   before :all do
     WebMock.allow_net_connect!
+    PublicSlackTalk.mock = true
   end
 
   after :all do
     WebMock.disable_net_connect!
+    PublicSlackTalk.mock = false
   end
 
-  scenario 'User visits resources page' do
+  scenario 'founder visits resources page' do
     visit resources_path
 
     expect(page).to have_selector('.resource', count: 2)
@@ -34,12 +36,12 @@ feature 'Resources' do
     expect(page).to have_text(public_resource_2.title)
   end
 
-  scenario 'User visits resource page' do
+  scenario 'founder visits resource page' do
     visit resources_path
     expect(page).to have_text('Approved Startups get access to exclusive content produced by Faculty')
   end
 
-  scenario 'User downloads resource', js: true do
+  scenario 'founder downloads resource', js: true do
     visit resources_path
 
     new_window = window_opened_by { click_on 'Download', match: :first }
@@ -53,7 +55,7 @@ feature 'Resources' do
   context 'With a video resource' do
     let!(:public_resource_2) { create :video_resource }
 
-    scenario 'User can stream resource' do
+    scenario 'founder can stream resource' do
       visit resources_path
 
       page.find('.stream-resource').click
@@ -62,15 +64,15 @@ feature 'Resources' do
     end
   end
 
-  context 'User is a logged in founder' do
+  context 'founder is a logged in founder' do
     before :each do
-      # Make the user a founder of approved startup.
-      startup.founders << user
+      # Make the founder a founder of approved startup.
+      startup.founders << founder
 
-      # Login the user.
-      visit new_user_session_path
-      fill_in 'user_email', with: user.email
-      fill_in 'user_password', with: 'password'
+      # Login the founder.
+      visit new_founder_session_path
+      fill_in 'founder_email', with: founder.email
+      fill_in 'founder_password', with: 'password'
       click_on 'Sign in'
     end
 
@@ -103,7 +105,7 @@ feature 'Resources' do
       end
 
       context "Founder's startup is from batch 1" do
-        let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED, batch_number: 1 }
+        let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED, batch: batch_1 }
 
         scenario 'Founder visits resources page' do
           visit resources_path

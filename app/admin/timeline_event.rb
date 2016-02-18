@@ -1,22 +1,20 @@
 ActiveAdmin.register TimelineEvent do
   menu parent: 'Startups'
-  permit_params :description, :timeline_event_type_id, :image, :links, :event_on, :startup_id, :verified_at, :grade,
-    :user_id
+
+  permit_params :description, :timeline_event_type_id, :image, :event_on, :startup_id, :verified_at, :grade,
+    :founder_id, :serialized_links, timeline_event_files_attributes: [:id, :file, :private, :_destroy]
 
   preserve_default_filters!
-  filter :startup_batch_number, as: :select, collection: (1..10)
+  filter :startup_batch
   filter :startup_product_name, as: :select, collection: proc { Startup.all.pluck(:product_name).uniq }
   filter :timeline_event_type, collection: proc { TimelineEventType.all.order(:title) }
 
   scope :all
   scope :batched
 
-  controller do
-    def index
-      params[:order] = 'updated_at_desc'
-      super
-    end
+  config.sort_order = 'updated_at_desc'
 
+  controller do
     def scoped_collection
       super.includes :startup, :timeline_event_type
     end
@@ -41,7 +39,7 @@ ActiveAdmin.register TimelineEvent do
       end
     end
 
-    column 'Founder', :user
+    column 'Founder', :founder
     column :event_on
 
     column :verified_status do |timeline_event|
@@ -67,36 +65,6 @@ ActiveAdmin.register TimelineEvent do
         }
       )
     )
-  end
-
-  member_action :delete_link, method: :delete do
-    timeline_event = TimelineEvent.find params[:id]
-    timeline_event.links.delete_at(params[:link_index].to_i)
-    timeline_event.save!
-
-    flash[:notice] = 'Link Deleted!'
-
-    redirect_to action: :show
-  end
-
-  member_action :add_link, method: :post do
-    timeline_event = TimelineEvent.find params[:id]
-    timeline_event.links << { title: params[:link_title], url: params[:link_url], private: params[:link_private] }
-    timeline_event.save!
-
-    flash[:success] = 'Link Added!'
-
-    redirect_to action: :show
-  end
-
-  member_action :edit_link, method: :put do
-    timeline_event = TimelineEvent.find params[:id]
-    timeline_event.links[params[:link_index].to_i] = { title: params[:link_title], url: params[:link_url], private: params[:link_private] }
-    timeline_event.save!
-
-    flash[:success] = 'Link Updated!'
-
-    redirect_to action: :show
   end
 
   member_action :unlink_target, method: :post do
@@ -140,14 +108,19 @@ ActiveAdmin.register TimelineEvent do
     if params[:grade].present?
       timeline_event.update!(grade: params[:grade])
 
+      # if private event, assign karma points to the founder too
+      founder = timeline_event.private? ? timeline_event.founder : nil
+      assigned_to = timeline_event.private? ? 'the founder and startup' : 'the startup' # used in flash message
+
       karma_point = KarmaPoint.create!(
         source: timeline_event,
-        user: timeline_event.startup.admin,
+        founder: founder,
+        startup: timeline_event.startup,
         activity_type: "Added a new Timeline event - #{timeline_event.timeline_event_type.title}",
         points: timeline_event.points_for_grade
       )
 
-      flash[:success] = "Karma points (#{timeline_event.points_for_grade}) have been assigned to startup admin."
+      flash[:success] = "Karma points (#{timeline_event.points_for_grade}) have been assigned to #{assigned_to}."
 
       Rails.logger.info event: :timeline_event_karma_point_created, karma_point_id: karma_point.id
     else
@@ -165,11 +138,12 @@ ActiveAdmin.register TimelineEvent do
     unless timeline_event.timeline_event_type.private
       startup_url = Rails.application.routes.url_helpers.startup_url(startup)
       timeline_event_url = startup_url + "#event-#{timeline_event.id}"
-      slack_message = "Hurray! <#{startup_url}|#{startup.product_name}> has a new verified timeline entry:"\
-      " <#{timeline_event_url}|#{timeline_event.timeline_event_type.title}> :clap:"
+      slack_message = "<#{startup_url}|#{startup.product_name}> has a new verified timeline entry:"\
+      " <#{timeline_event_url}|#{timeline_event.timeline_event_type.title}>\n"
+      slack_message += "*Description:* #{timeline_event.description}"
 
       # post to slack
-      PublicSlackTalk.post_message message: slack_message, channel: 'general'
+      PublicSlackTalk.post_message message: slack_message, channel: '#general'
     end
 
     redirect_to action: :show
@@ -185,10 +159,18 @@ ActiveAdmin.register TimelineEvent do
     redirect_to action: :show
   end
 
-  member_action :save_resume_url, method: :post do
+  member_action :save_link_as_resume_url, method: :post do
     timeline_event = TimelineEvent.find(params[:id])
-    timeline_event.user.update!(resume_url: timeline_event.links[params[:index].to_i][:url])
-    flash[:success] = "Successfully updated user's resume URL."
+    timeline_event.founder.update!(resume_url: timeline_event.links[params[:index].to_i][:url])
+    flash[:success] = "Successfully updated founder's Resume URL."
+    redirect_to action: :show
+  end
+
+  member_action :save_file_as_resume_url, method: :post do
+    timeline_event = TimelineEvent.find(params[:id])
+    file = timeline_event.timeline_event_files.find(params[:file_id])
+    timeline_event.founder.update!(resume_url: download_startup_timeline_event_timeline_event_file_url(timeline_event.startup, timeline_event, file))
+    flash[:success] = "Successfully updated founder's Resume URL."
     redirect_to action: :show
   end
 
@@ -205,13 +187,25 @@ ActiveAdmin.register TimelineEvent do
         include_blank: true,
         label: 'Product',
         member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }
-      f.input :user, label: 'Founder', as: :select, collection: f.object.persisted? ? f.object.startup.founders : [], include_blank: false
+      f.input :founder, label: 'Founder', as: :select, collection: f.object.persisted? ? f.object.startup.founders : [], include_blank: false
       f.input :timeline_event_type, include_blank: false
       f.input :description
       f.input :image
       f.input :event_on, as: :datepicker
       f.input :verified_at, as: :datepicker
       f.input :grade, as: :select, collection: TimelineEvent.valid_grades, required: false
+      f.input :serialized_links, as: :hidden
+    end
+
+    f.inputs 'Attached Files' do
+      f.has_many :timeline_event_files, new_record: 'Add file', allow_destroy: true, heading: false do |t|
+        t.input :file, hint: (t.object.persisted? ? t.object.filename : 'Select new file for upload')
+        t.input :private
+      end
+    end
+
+    panel 'Attached Links', id: 'react-edit-attached-links' do
+      react_component 'AATimelineEventLinksEditor', linksJSON: f.object.serialized_links
     end
 
     f.actions
@@ -233,7 +227,7 @@ ActiveAdmin.register TimelineEvent do
         end
       end
 
-      row('Founder') { timeline_event.user }
+      row('Founder') { timeline_event.founder }
       row :iteration
       row :timeline_event_type
       row :description
@@ -250,19 +244,21 @@ ActiveAdmin.register TimelineEvent do
       row :verified_status
 
       row :verified_at do
+        verification_confirm = 'Are you sure you want to verify this event?'
+        verification_confirm += ' The Verification will be announced on Public Slack' unless timeline_event.timeline_event_type.private?
         if timeline_event.verified?
           span do
             "#{timeline_event.verified_at} "
           end
 
           span class: 'wrap-with-paranthesis' do
-            link_to 'Unverify', unverify_admin_timeline_event_path, method: :post, data: { confirm: 'Are you sure?' }
+            link_to 'Unverify', unverify_admin_timeline_event_path, method: :post, data: { confirm: 'Are you sure you want to unverify this event?' }
           end
         elsif timeline_event.pending?
           span do
             button_to 'Unverified. Click to verify this event.', verify_admin_timeline_event_path,
               form_class: 'inline-button',
-              data: { confirm: 'Are you sure you want to verify this event? Verification of public events will be announced on Public Slack' }
+              data: { confirm:  verification_confirm }
           end
 
           span do
@@ -270,7 +266,7 @@ ActiveAdmin.register TimelineEvent do
           end
         elsif timeline_event.needs_improvement?
           button_to 'Unverified. Click to verify this event.', verify_admin_timeline_event_path,
-            data: { confirm: 'Are you sure you want to verify this event? Verification of public events will be announced on Public Slack' }
+            data: { confirm:  verification_confirm }
         end
       end
 
@@ -298,13 +294,45 @@ ActiveAdmin.register TimelineEvent do
       row :updated_at
     end
 
+    panel 'Attachments' do
+      table_for timeline_event.timeline_event_files do
+        column :filename
+        column :private
+
+        column :actions do |file|
+          if timeline_event.timeline_event_type.resume_submission?
+            link_to 'Save as Resume', save_file_as_resume_url_admin_timeline_event_path(file_id: file.id), method: :post, data: { confirm: 'Are you sure?' }
+          end
+        end
+      end
+
+      table_for timeline_event.links do
+        column :title do |link|
+          link[:title]
+        end
+
+        column :url do |link|
+          link[:url]
+        end
+
+        column :private do |link|
+          link[:private] ? status_tag('yes', :ok) : status_tag('no')
+        end
+
+        column :actions do |link|
+          if timeline_event.timeline_event_type.resume_submission?
+            index = timeline_event.links.find_index(link)
+            link_to 'Save as Resume', save_link_as_resume_url_admin_timeline_event_path(index: index), method: :post, data: { confirm: 'Are you sure?' }
+          end
+        end
+      end
+    end
+
     if timeline_event.verified? && timeline_event.karma_point.blank?
       render partial: 'grade_form', locals: { timeline_event: timeline_event }
     end
 
     render partial: 'target_form', locals: { timeline_event: timeline_event }
-
-    render partial: 'links', locals: { timeline_event: timeline_event }
 
     feedback = StartupFeedback.for_timeline_event(timeline_event)
 

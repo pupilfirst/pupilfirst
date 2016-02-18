@@ -5,7 +5,7 @@
 .container
   /TO DO: probably rewrite this in a cleaner way
   - if @startup.pending? || @startup.unready?
-    - if current_user && @startup.founder?(current_user)
+    - if current_founder && @startup.founder?(current_founder)
       .alert.alert-warning.margin-top-20
         p Please note that SV.CO is currently under beta! Your submissions might not be processed immediately.
       - if @startup.pending?
@@ -15,16 +15,13 @@
           p Your startup has not been approved yet. Please write to #{mail_to 'help@sv.co'} if you'd like help!
       - elsif @startup.unready?
         .alert.alert-info.margin-top-20 role='alert'
-          p It appears that your startup application is not yet complete! Please head #{link_to('here', new_user_startup_path)} and complete your application at the earliest for SV.CO approval.
+          p It appears that your startup application is not yet complete! Please head #{link_to('here', new_founder_startup_path)} and complete your application at the earliest for SV.CO approval.
     - else
       .alert.alert-info.margin-top-20
         p This startup has submitted an application to SV.CO. They have not been approved yet.
   - elsif @startup.dropped_out?
     .alert.alert-danger.margin-top-20
       p Please note that this startup has dropped out and is no longer a part of SV.CO!
-  - elsif @startup.rejected?
-    .alert.alert-info.margin-top-20
-      p This startup has submitted an application to SV.CO. They have not been approved yet.
 
   / Company Name Header
   .row
@@ -34,9 +31,9 @@
         - if @startup.timeline_verified?
           a#verified-icon data-toggle="tooltip" data-placement="top" title="Timeline verified by SV.CO" href="#"
             img.timeline-verified.margin-left-10 src='#{image_url 'timeline/verified.gif'}'
-        - if current_user && @startup.founder?(current_user)
+        - if current_founder && @startup.founder?(current_founder)
           small.edit-startup-link
-            a href=edit_user_startup_path
+            a href=edit_founder_startup_path
               i.fa.fa-pencil
       .startup-name
         - if @startup.name.present?
@@ -59,12 +56,12 @@
             ' &nbsp;#{@startup.latest_help_wanted.description}
             - if @startup.email?
               | Please reach out to us at #{mail_to @startup.email}
-        - if current_user && @startup.founder?(current_user) && @startup.targets.present?
+        - if current_founder && @startup.founder?(current_founder) && @startup.targets.present?
           #targets.margin-bottom-20
             h3.margin-top-0 Targets
             hr
             .row
-              - targets_for_display.each do |targets, target_locals|
+              - pending_targets.each do |targets, target_locals|
                 - if targets.present?
                   .col-sm-6.col-md-12
                     - targets.each do |target|
@@ -175,7 +172,7 @@
                 .media-body
                   h4.media-heading Stage Startup is In
                   p.data-content #{stage_link @startup.stage}
-            - if @startup.timeline_events_for_display(current_user).present?
+            - if @startup.timeline_events_for_display(current_founder).present?
               .col-sm-6.col-md-12
                 .media
                   .media-left
@@ -261,10 +258,10 @@
 
     /Form to post new timeline event
     .col-md-8.col-md-pull-4
-      - if current_user && @startup.founder?(current_user)
+      - if current_founder && @startup.founder?(current_founder)
         == render 'startups/timeline_builder', event: @timeline_event
 
-      - if @startup.timeline_events_for_display(current_user).present?
+      - if @startup.timeline_events_for_display(current_founder).present?
         .main-timeline
           .tl-iteration
             p
@@ -273,9 +270,9 @@
             br
             a#read-from-beginning href="#begin"  Read from the beginning.
           ul#timeline-list
-            - @startup.timeline_events_for_display(current_user).each do |event|
+            - @startup.timeline_events_for_display(current_founder).each do |event|
               / Do not display hidden events to public.
-              - next if event.hidden_from?(current_user)
+              - next if event.hidden_from?(current_founder)
 
               - if event.end_iteration?
                 .tl-iteration id="event-#{event.id}"
@@ -284,7 +281,7 @@
                   p style="margin-top: 10px"
                     ' #{event.timeline_event_type.title}
                     / display info icon if founder
-                    - if current_user && @startup.founder?(current_user)
+                    - if current_founder && @startup.founder?(current_founder)
                       - latest_feedback = StartupFeedback.for_timeline_event(event).first
                       - if latest_feedback.present?
                         - feedback = latest_feedback.feedback
@@ -301,7 +298,7 @@
                   = image_tag 'timeline/dash.png'
                   p #{event.description}
 
-                  - if current_user && @startup.founder?(current_user)
+                  - if current_founder && @startup.founder?(current_founder)
                     - if event.month_old?
                       .old-to-edit href="#" data-toggle="tooltip" title="To edit/delete this event, please write to help@sv.co."
                         button.btn.btn-danger.btn-sm.btn-flat.btn-with-default-padding.disabled.margin-right-5
@@ -311,7 +308,7 @@
                           i.fa.fa-pencil
                           | &nbsp;Edit
                     - else
-                      = button_to user_startup_timeline_event_url(event),
+                      = button_to founder_startup_timeline_event_url(event),
                         method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',
                         data: { confirm: 'This action cannot be reversed. Are you sure?' } do
                         i.fa.fa-times
@@ -323,7 +320,7 @@
               - else
                 .timeline id="event-#{event.id}"
                   li style="padding:0" class="timeline#{cycle '', '-inverted', name: 'card_position'}"
-                    .timeline-badge class="color#{cycle *((1..14).to_a + [{name: 'badge-color'}])}"
+                    .timeline-badge class="color#{cycle *((1..14).to_a)}"
                       = image_tag "#{event.timeline_event_type.badge_url}", width: '70'
                     .timeline-panel
                       - if event.private?
@@ -346,7 +343,7 @@
                             ' #{event.timeline_event_type.title}
                             i.fa.fa-link
                           / display info icon if founder
-                          - if current_user && @startup.founder?(current_user)
+                          - if current_founder && @startup.founder?(current_founder)
                             - latest_feedback = StartupFeedback.for_timeline_event(event).first
                             - if latest_feedback.present?
                               - feedback = latest_feedback.feedback
@@ -361,16 +358,26 @@
                       .timeline-body
                         .tl-body
                           p #{event.description}
-                        - if event.links? && ( event.public_link? || @startup.founder?(current_user) )
+
+                        - attachments = event.attachments_for_founder(current_founder)
+
+                        - if attachments.present?
                           .timeline-footer.tl-footer
-                            - event.links.each do |link|
-                              - if !link[:private] || @startup.founder?(current_user)
-                                a.tl-link-button href="#{link[:url]}" target="_blank"
-                                  - if link[:private]
+                            - attachments.each do |attachment|
+                              - if attachment[:url]
+                                a.tl-link-button href="#{attachment[:url]}" target="_blank"
+                                  - if attachment[:private]
                                     i.fa.fa-user-secret
                                     | &nbsp;
-                                  | #{link[:title]}
-                        - if current_user && @startup.founder?(current_user)
+                                  | #{attachment[:title]}
+                              - else # it is a file
+                                a.tl-link-button href="#{download_startup_timeline_event_timeline_event_file_url(@startup, event, attachment[:file])}" target="_blank"
+                                  - if attachment[:private]
+                                    i.fa.fa-user-secret
+                                    | &nbsp;
+                                  | #{attachment[:title]}
+
+                        - if current_founder && @startup.founder?(current_founder)
                           - if event.month_old?
                             .old-to-edit href="#" data-toggle="tooltip" title="To edit/delete this event, please write to help@sv.co."
                               button.btn.btn-danger.btn-sm.btn-flat.btn-with-default-padding.disabled.margin-right-5
@@ -380,7 +387,7 @@
                                 i.fa.fa-pencil
                                 | &nbsp;Edit
                           - else
-                            = button_to user_startup_timeline_event_url(event),
+                            = button_to founder_startup_timeline_event_url(event),
                               method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',
                               data: { confirm: 'This action cannot be reversed. Are you sure?' } do
                               i.fa.fa-times

@@ -1,9 +1,9 @@
 Svapp::Application.routes.draw do
   devise_for(
-    :users,
+    :founders,
     controllers: {
-      invitations: 'users/invitations',
-      sessions: 'users/sessions'
+      invitations: 'founders/invitations',
+      sessions: 'founders/sessions'
     }
   )
 
@@ -12,9 +12,12 @@ Svapp::Application.routes.draw do
 
   match '/delayed_job' => DelayedJobWeb, anchor: false, via: [:get, :post]
 
-  resource :user, only: [:edit, :update] do
+  resource :founder, only: [:edit, :update] do
     member do
       get 'phone'
+      patch 'set_unconfirmed_phone'
+      get 'phone_verification'
+      get 'consent'
       post 'code'
       patch 'resend'
       post 'verify'
@@ -24,7 +27,7 @@ Svapp::Application.routes.draw do
       patch 'update_password'
     end
 
-    resource :startup, only: [:new, :edit, :update, :destroy] do
+    resource :startup, only: [:new, :create, :edit, :update, :destroy] do
       post :add_founder
       patch :remove_founder
       patch :change_admin
@@ -37,6 +40,14 @@ Svapp::Application.routes.draw do
   resources :startups, only: [:index, :show] do
     collection do
       post 'team_leader_consent'
+    end
+
+    resources :timeline_events, only: [] do
+      resources :timeline_event_files, only: [] do
+        member do
+          get 'download'
+        end
+      end
     end
   end
 
@@ -52,7 +63,6 @@ Svapp::Application.routes.draw do
 
   scope 'about', as: 'about', controller: 'about' do
     get '/', action: 'index'
-    get 'transparency'
     get 'slack'
     get 'media-kit'
     get 'leaderboard'
@@ -83,7 +93,9 @@ Svapp::Application.routes.draw do
 
   get 'apply(/:batch)', as: 'apply', to: 'home#apply'
 
-  get 'founders/:slug', to: 'users#founder_profile', as: 'founder_profile'
+  get 'founders/:slug', to: 'founders#founder_profile', as: 'founder_profile'
+
+  get 'transparency', as: 'transparency', to: 'home#transparency'
 
   root 'home#index'
 end

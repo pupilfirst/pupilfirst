@@ -8,10 +8,10 @@
 .homepage-header {
   color: white;
   padding-bottom: 45px;
-  padding-top: 80px;
+  padding-top: 70px;
 
   @media (max-width: $screen-xs-max) {
-    padding-top: 40px;
+    padding-top: 80px;
   }
 
   iframe {
@@ -80,5 +80,3 @@
     text-decoration: none;
   }
 }
-
-

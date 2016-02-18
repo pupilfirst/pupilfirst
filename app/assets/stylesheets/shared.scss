@@ -12,6 +12,9 @@
   margin-top: 20px;
 }
 
+.margin-top-40 { margin-top: 40px; }
+.margin-top-60 { margin-top: 60px; }
+
 .margin-bottom-20 {
   margin-bottom: 20px;
 }
@@ -99,3 +102,5 @@ body {
 h1.page-header, h2.page-header {
   @media (max-width: $screen-xs-max) { margin-top: 20px; }
 }
+
+span.strike { text-decoration: line-through; }

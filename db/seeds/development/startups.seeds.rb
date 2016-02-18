@@ -1,6 +1,6 @@
 require_relative 'helper'
 
-after 'development:users', 'development:timeline_event_types', 'development:batches' do
+after 'development:founders', 'development:timeline_event_types', 'development:batches' do
   # Startup with live agreement.
   super_startup = Startup.new(
     name: 'Super Startup',
@@ -15,7 +15,7 @@ after 'development:users', 'development:timeline_event_types', 'development:batc
   )
 
   # ...whose founder is Some One.
-  founder = User.find_by(email: 'someone@mobme.in')
+  founder = Founder.find_by(email: 'someone@mobme.in')
   super_startup.founders << founder
   super_startup.save!
 

@@ -10,22 +10,22 @@ h2.page-header Modify founders
       tbody
         tr
           td colspan="2"
-            ' #{current_user.email}
+            ' #{current_founder.email}
             strong
               | (you)
-        - @startup.cofounders(current_user).each do |cofounder|
+        - @startup.cofounders(current_founder).each do |cofounder|
           tr
             td #{cofounder.email}
             td
-              - if @startup.admin?(current_user)
-                = button_to 'Remove', remove_founder_user_startup_path(founder_id: cofounder.id), method: :patch, class: 'btn btn-danger btn-xs', data: { confirm: 'Are you sure you want to remove this founder from your startup?' }
+              - if @startup.admin?(current_founder)
+                = button_to 'Remove', remove_founder_founder_startup_path(founder_id: cofounder.id), method: :patch, class: 'btn btn-danger btn-xs', data: { confirm: 'Are you sure you want to remove this founder from your startup?' }
 
 - if @startup.founders.size < 5
-  = simple_form_for :cofounder, url: add_founder_user_startup_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
+  = simple_form_for :cofounder, url: add_founder_founder_startup_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
     = f.input :email, placeholder: 'founder@yourstartup.com', label: "Founder's SV.CO ID"
 
     .form-group
-      .col-sm-offset-3.col-sm-10
+      .col-sm-offset-3.col-sm-9
         = f.button :submit, 'Add as co-founder', class: 'btn btn-primary btn-flat'
 - else
   .alert.alert-danger.col-sm-offset-3.col-sm-9
@@ -36,7 +36,7 @@ h2.page-header Modify founders
 
   = render 'team_members/table', team_members: @startup.team_members, team_member_being_edited: nil
 
-  = link_to new_user_startup_team_member_url, class: 'btn btn-primary' do
+  = link_to new_founder_startup_team_member_url, class: 'btn btn-primary' do
     i.fa.fa-plus
     | &nbsp; Add new team member
 
@@ -46,7 +46,7 @@ h2.page-header Edit your startup profile
 
 h2.page-header Delete my Startup
 
-- if @startup.admin?(current_user)
+- if @startup.admin?(current_founder)
   - if @startup.approved? || @startup.dropped_out?
     .alert.alert-danger
       ' You are currently #{@startup.approved? ? 'enrolled in' : 'a dropout of'} an SV.CO Batch! To delete your startup timeline, contact your SV.CO representative.
@@ -65,7 +65,7 @@ h2.page-header Delete my Startup
     p
       ' If you're absolutely sure you want to continue, please supply your login password to authorize this action:
 
-    = simple_form_for @startup, url: user_startup_url, method: :delete, html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
+    = simple_form_for @startup, url: founder_startup_url, method: :delete, html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
       = f.input :password, label: 'Your Password'
 
       .form-group

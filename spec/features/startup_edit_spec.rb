@@ -1,11 +1,8 @@
 require 'rails_helper'
 
 feature 'Startup Edit' do
-  let(:user) { create :user_with_password, confirmed_at: Time.now }
-  let(:co_founder) { create :user_with_password, confirmed_at: Time.now }
-  let!(:tet_one_liner) { create :tet_one_liner }
-  let!(:tet_new_product_deck) { create :tet_new_product_deck }
-  let!(:tet_team_formed) { create :tet_team_formed }
+  let(:founder) { create :founder_with_password, confirmed_at: Time.now }
+  let(:co_founder) { create :founder_with_password, confirmed_at: Time.now }
   let!(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
 
   let(:new_product_name) { Faker::Lorem.words(rand(3) + 1).join ' ' }
@@ -13,17 +10,17 @@ feature 'Startup Edit' do
   let(:new_deck) { Faker::Internet.domain_name }
 
   before :each do
-    # Add user as founder of startup.
-    startup.founders << user
+    # Add founder as founder of startup.
+    startup.founders << founder
 
-    # Log in the user.
-    visit new_user_session_path
-    fill_in 'user_email', with: user.email
-    fill_in 'user_password', with: 'password'
+    # Log in the founder.
+    visit new_founder_session_path
+    fill_in 'founder_email', with: founder.email
+    fill_in 'founder_password', with: 'password'
     click_on 'Sign in'
-    visit edit_user_startup_path
+    visit edit_founder_startup_path
 
-    # User should now be on his startup edit page.
+    # founder should now be on his startup edit page.
   end
 
   context 'Founder visits edit page of his startup' do
@@ -46,14 +43,10 @@ feature 'Startup Edit' do
 
     scenario 'Founder clears all required fields' do
       fill_in 'startup_product_name', with: ''
-      fill_in 'startup_product_description', with: ''
-      fill_in 'startup_presentation_link', with: ""
       click_on 'Update startup profile'
 
       expect(page).to have_text('Please review the problems below')
       expect(page.find('div.form-group.startup_product_name')[:class]).to include('has-error')
-      expect(page.find('div.form-group.startup_product_description')[:class]).to include('has-error')
-      expect(page.find('div.form-group.startup_presentation_link')[:class]).to include('has-error')
     end
 
     scenario 'Founder adds a valid co-founder to the startup' do
@@ -72,32 +65,14 @@ feature 'Startup Edit' do
     end
 
     scenario 'Founder looks to delete his approved startup as startup_admin' do
-      # change startup admin to this user
+      # change startup admin to this founder
       startup.admin.update(startup_admin: false)
-      user.update(startup_admin: true)
+      founder.update(startup_admin: true)
       startup.reload
-      user.reload
+      founder.reload
 
-      visit edit_user_startup_path
+      visit edit_founder_startup_path
       expect(page).to have_text('To delete your startup timeline, contact your SV.CO representative.')
-    end
-
-    scenario 'Founder deletes his rejected startup as startup_admin' do
-      # change startup admin to this user
-      startup.update(approval_status: Startup::APPROVAL_STATUS_REJECTED)
-      startup.admin.update(startup_admin: false)
-      user.update(startup_admin: true)
-      startup.reload
-      user.reload
-
-      visit edit_user_startup_path
-      expect(page).to have_text('Deleting this startup is an irreversible action.')
-
-      startup_id = startup.id
-      fill_in 'startup_password', with: user.password
-      click_on 'Confirm Startup Deletion'
-      expect { Startup.find(startup_id) }.to raise_error ActiveRecord::RecordNotFound
-      expect(user.startup).to be_nil
     end
   end
 end

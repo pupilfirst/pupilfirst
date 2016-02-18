@@ -4,22 +4,22 @@ module ApplicationHelper
     t.strftime('%F %R%z')
   end
 
-  def profile_image_url(user, gravatar_size: 100, avatar_version: :full)
-    if user.avatar?
-      if user.avatar_processing?
-        user.avatar_url
+  def profile_image_url(founder, gravatar_size: 100, avatar_version: :full)
+    if founder.avatar?
+      if founder.avatar_processing?
+        founder.avatar_url
       else
         case avatar_version
           when :thumb
-            user.avatar.thumb.url
+            founder.avatar.thumb.url
           when :mid
-            user.avatar.mid.url
+            founder.avatar.mid.url
           else
-            user.avatar_url
+            founder.avatar_url
         end
       end
     else
-      user.gravatar_url(size: gravatar_size, default: 'identicon')
+      founder.gravatar_url(size: gravatar_size, default: 'identicon')
     end
   end
 

@@ -3,11 +3,9 @@ require 'rails_helper'
 # WARNING: The following tests run with Webmock disabled - i.e., URL calls are let through. Make sure you mock possible
 # requests unless you want to let them through. This is required for JS tests to work.
 feature 'Timeline Builder' do
-  let(:user) { create :user_with_password, confirmed_at: Time.now }
-  let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
-  let!(:tet_one_liner) { create :tet_one_liner }
-  let!(:tet_new_product_deck) { create :tet_new_product_deck }
+  let(:founder) { create :founder_with_password, confirmed_at: Time.now }
   let!(:tet_team_formed) { create :tet_team_formed }
+  let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
 
   let(:event_description) { Faker::Lorem.words(10).join ' ' }
 
@@ -20,16 +18,16 @@ feature 'Timeline Builder' do
   end
 
   before :each do
-    # Add user as founder of startup.
-    startup.founders << user
+    # Add founder as founder of startup.
+    startup.founders << founder
 
-    # Log in the user.
-    visit new_user_session_path
-    fill_in 'user_email', with: user.email
-    fill_in 'user_password', with: 'password'
+    # Log in the founder.
+    visit new_founder_session_path
+    fill_in 'founder_email', with: founder.email
+    fill_in 'founder_password', with: 'password'
     click_on 'Sign in'
 
-    # User should now be on the startup timeline page.
+    # founder should now be on the startup timeline page.
   end
 
   context 'Founder visits Timeline page of verified startup' do
@@ -48,13 +46,19 @@ feature 'Timeline Builder' do
       # Can't figure out how to attach files to hidden file fields.
       # page.attach_file('timeline_event_image', File.join(Rails.root, '/app/assets/images/favicon.png'), visible: false)
 
-      # Add a single Link.
-      page.find('a', text: 'Add Links').click
-      click_on 'Add Links'
+      # Add one Link.
+      page.find('a', text: 'Add Links and Files').click
+      click_on 'Add a link'
       fill_in 'Title', with: 'SV.CO'
       fill_in 'URL', with: 'https://sv.co'
       page.find('#link_private').click
       click_on 'Save Link'
+
+      # And a file.
+      click_on 'Attach a file'
+      attach_file 'timeline-event-file-input', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf'))
+      click_on 'Save File'
+
       click_on 'Close'
 
       # HACK: Our slow CI servers often fail to click submit since the modal is still disappearing.
@@ -73,12 +77,13 @@ feature 'Timeline Builder' do
       expect(latest_timeline_event_entry).to have_text('Team Formed')
       expect(latest_timeline_event_entry).to have_text(event_description)
       expect(latest_timeline_event_entry).to have_link('SV.CO', href: 'https://sv.co')
+      expect(latest_timeline_event_entry).to have_link('pdf-sample.pdf')
       expect(latest_timeline_event_entry).to have_selector('i.fa.fa-user-secret')
     end
 
     scenario 'Founder attempts to add link without supplying title or URL', js: true do
-      page.find('a', text: 'Add Links').click
-      click_on 'Add Links'
+      page.find('a', text: 'Add Links and Files').click
+      click_on 'Add a link'
       click_on 'Save Link'
 
       expect(page.find('#link-title-group')[:class]).to include('has-error')
@@ -153,20 +158,20 @@ feature 'Timeline Builder' do
         # Wait for page to load.
         expect(page).to have_selector('textarea', text: verified_timeline_event.description)
         # Add two links, one private and one public.
-        page.find("#add-link").click
-        click_on 'Add Links'
+        page.find('a', text: 'Add Links and Files').click
+        click_on 'Add a link'
         fill_in 'Title', with: 'SV.CO'
         fill_in 'URL', with: 'https://sv.co'
         page.find('#link_private').click
         click_on 'Save Link'
-        click_on 'Add Links'
+        click_on 'Add a link'
         fill_in 'Title', with: 'Google'
         fill_in 'URL', with: 'https://www.google.com'
         click_on 'Save Link'
         click_on 'Close'
 
         # Test if link tab's title reflects links added
-        expect(page.find("#add-link")).to have_text('SV.CO (+1)')
+        expect(page.find('#add-link')).to have_text('SV.CO (+1)')
 
         # HACK: Our slow CI servers often fail to click submit since the modal is still disappearing.
         sleep(0.5)
@@ -186,29 +191,31 @@ feature 'Timeline Builder' do
         expect(latest_timeline_event_entry.find('.tl-link-button', text: 'Google')).to_not have_selector('i.fa.fa-user-secret')
       end
 
-      context 'Founder has a existing timeline event with multiple links' do
+      context 'Founder has a existing timeline event with one link and one file' do
         let!(:timeline_event) do
-          create :timeline_event, startup: startup, links: [{ title: 'Google', url: 'https://google.com', private: true },
-                                                            { title: 'Yahoo', url: 'https://yahoo.com', private: false }]
+          file = create :timeline_event_file
+          timeline_event = create :timeline_event, startup: startup, links: [{ title: 'Google', url: 'https://google.com', private: true }]
+          timeline_event.timeline_event_files << file
+          timeline_event
         end
 
-        scenario 'Founder deletes first link', js: true do
+        scenario 'Founder deletes link', js: true do
           visit startup_path(startup)
           page.find("#event-#{timeline_event.id} .edit-link").click
-          expect(page.find("#add-link")).to have_text('Google (+1)')
-          page.find("#add-link").click
-          expect(page).to have_text('Current Links')
-          first_link = page.find('.list-group-item', match: :first)
-          expect(first_link).to have_text('Google')
-          first_link.find('a', text: 'Delete').click
+          expect(page.find('#add-link')).to have_text('pdf-sample.pdf (+1)')
+          page.find('#add-link').click
+          expect(page).to have_text('Links and Files')
+          attachment = page.find('.list-group-item', match: :first)
+          expect(attachment).to have_text('Google')
+          attachment.find('a', text: 'Delete').click
 
-          # Test if link list was updated
+          # Test if attachments list was updated
           expect(page).to have_selector('.list-group-item', count: 1)
-          new_first_link = page.find('.list-group-item', match: :first)
-          expect(new_first_link).to have_text('Yahoo')
+          remaining_attachment = page.find('.list-group-item', match: :first)
+          expect(remaining_attachment).to have_text('pdf-sample.pdf')
 
           click_on 'Close'
-          expect(page.find("#add-link")).to have_text('Yahoo')
+          expect(page.find('#add-link')).to have_text('pdf-sample.pdf')
 
           # HACK: Our slow CI servers often fail to click submit since the modal is still disappearing.
           sleep(0.5)
@@ -216,14 +223,42 @@ feature 'Timeline Builder' do
           click_on 'Submit for Review'
           expect(page.find("#event-#{timeline_event.id} .tl-footer")).to_not have_text('Google')
           timeline_event.reload
-          expect(timeline_event.links.length).to eq(1)
+          expect(timeline_event.links.length).to eq(0)
+        end
+
+        scenario 'Founder deletes file', js: true do
+          visit startup_path(startup)
+          page.find("#event-#{timeline_event.id} .edit-link").click
+          expect(page.find('#add-link')).to have_text('pdf-sample.pdf (+1)')
+          page.find('#add-link').click
+
+          expect(page).to have_text('Links and Files')
+
+          file = page.all('.list-group-item').last
+
+          page.accept_confirm do
+            file.find('a', text: 'Delete').click
+          end
+
+          expect(file).to have_text 'Marked for Deletion'
+
+          click_on 'Close'
+          expect(page.find('#add-link')).to have_text('Google')
+
+          # HACK: Our slow CI servers often fail to click submit since the modal is still disappearing.
+          sleep(0.5)
+
+          click_on 'Submit for Review'
+          expect(page.find("#event-#{timeline_event.id} .tl-footer")).to_not have_text('pdf-sample.pdf')
+          timeline_event.reload
+          expect(timeline_event.timeline_event_files.count).to eq(0)
         end
 
         scenario 'Founder edits one of the links', js: true do
           visit startup_path(startup)
           page.find("#event-#{timeline_event.id} .edit-link").click
-          expect(page.find("#add-link")).to have_text('Google (+1)')
-          page.find("#add-link").click
+          expect(page.find('#add-link')).to have_text('pdf-sample.pdf (+1)')
+          page.find('#add-link').click
           first_link = page.find('.list-group-item', match: :first)
           expect(first_link).to have_text('Google')
           first_link.find('a', text: 'Edit').click
@@ -248,7 +283,6 @@ feature 'Timeline Builder' do
           expect(page).to have_selector('.list-group-item', count: 2)
           expect(page.find('.list-group-item', match: :first)).to have_text('Facebook')
           click_on 'Close'
-          expect(page.find("#add-link")).to have_text('Facebook')
 
           # HACK: Our slow CI servers often fail to click submit since the modal is still disappearing.
           sleep(0.5)
@@ -257,16 +291,16 @@ feature 'Timeline Builder' do
           expect(page.find("#event-#{timeline_event.id} .tl-footer")).to_not have_text('Google')
           expect(page.find("#event-#{timeline_event.id} .tl-footer")).to have_text('Facebook')
           timeline_event.reload
-          expect(timeline_event.links.length).to eq(2)
+          expect(timeline_event.links.length).to eq(1)
           expect(timeline_event.links.first[:title]).to eq('Facebook')
         end
 
         scenario 'Founder adds a third and final link', js: true do
           visit startup_path(startup)
           page.find("#event-#{timeline_event.id} .edit-link").click
-          expect(page.find("#add-link")).to have_text('Google (+1)')
-          page.find("#add-link").click
-          click_on 'Add Links'
+          expect(page.find('#add-link')).to have_text('pdf-sample.pdf (+1)')
+          page.find('#add-link').click
+          click_on 'Add a link'
           fill_in 'Title', with: 'SV.CO'
           fill_in 'URL', with: 'https://sv.co'
           page.find('#link_private').click
@@ -274,10 +308,10 @@ feature 'Timeline Builder' do
 
           # Test if link list was updated
           expect(page).to have_selector('.list-group-item', count: 3)
-          # Ensure 'Add Links' button is not shown
-          expect(page).to_not have_selector('button', text: 'Add Links')
+          # Ensure 'Add a link' button is not shown
+          expect(page).to_not have_selector('button', text: 'Add a link')
           click_on 'Close'
-          expect(page.find("#add-link")).to have_text('Google (+2)')
+          expect(page.find('#add-link')).to have_text('pdf-sample.pdf (+2)')
 
           # HACK: Our slow CI servers often fail to click submit since the modal is still disappearing.
           sleep(0.5)
@@ -285,7 +319,7 @@ feature 'Timeline Builder' do
           click_on 'Submit for Review'
           expect(page.find("#event-#{timeline_event.id} .tl-footer")).to have_text('SV.CO')
           timeline_event.reload
-          expect(timeline_event.links.length).to eq(3)
+          expect(timeline_event.links.length).to eq(2)
           expect(timeline_event.links.last[:title]).to eq('SV.CO')
         end
       end

@@ -1,0 +1,19 @@
+- content_for :head
+  title SV.CO Confirmation
+
+.text-center.devise-user-form
+  h1.title Resend confirmation instructions
+
+  = form_for resource, url: confirmation_path(resource_name) do |f|
+    - if resource.errors[:email].any?
+      p.general-error
+        i.fa.fa-exclamation-circle
+        | &nbsp; Email: #{resource.errors[:email].first}.
+
+    .wrapped-input
+      = image_tag 'founders/sessions/email.png'
+      = f.text_field :email, required: true, placeholder: 'SV.CO ID (your registered email address)'
+
+    .confirmation-links
+      = f.submit 'Resend confirmation instructions', class: 'btn btn-primary btn-flat'
+      = link_to 'Login', new_founder_session_path, class: 'btn btn-default btn-flat'

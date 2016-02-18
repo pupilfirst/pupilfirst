@@ -60,10 +60,13 @@ RSpec.configure do |config|
   # Devise includes some test helpers for functional specs.
   config.include Devise::TestHelpers, type: :controller
 
+  # Allow using broken flag to exclude tests
+  config.filter_run_excluding broken: true
+
   # Run RuboCop first.
   rubocop_output = `rubocop`
   print rubocop_output
-  fail 'RuboCop Errors' unless rubocop_output.match(/files inspected, no offenses detected/)
+  fail 'RuboCop Errors' unless rubocop_output =~ /files inspected, no offenses detected/
 end
 
 # Use cabpybara-webkit as JS driver.

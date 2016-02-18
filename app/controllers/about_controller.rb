@@ -3,10 +3,7 @@ class AboutController < ApplicationController
 
   # GET /about
   def index
-  end
-
-  # GET /about/transparency
-  def transparency
+    @sitewide_notice = params[:redirect_from] == 'startupvillage.in'
   end
 
   # GET /about/slack
@@ -24,7 +21,8 @@ class AboutController < ApplicationController
 
   # GET /about/contact
   def contact
-    @contact_form = ContactForm.new(user: current_user)
+    @contact_form = ContactForm.new(founder: current_founder)
+    @sitewide_notice = params[:redirect_from] == 'startupvillage.in'
   end
 
   # POST /about/contact

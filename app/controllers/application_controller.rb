@@ -12,13 +12,13 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    if resource.is_a?(User)
+    if resource.is_a?(Founder)
       referer = session.delete :referer
 
       if referer
         referer
-      elsif current_user.startup.present? && !current_user.startup.unready?
-        startup_url(current_user.startup)
+      elsif current_founder.startup.present? && !current_founder.startup.unready?
+        startup_url(current_founder.startup)
       else
         super
       end
@@ -30,19 +30,16 @@ class ApplicationController < ActionController::Base
   protected
 
   def feature_active?(feature)
-    Rails.env.development? || Rails.env.test? || Feature.active?(feature, current_user)
+    Rails.env.development? || Rails.env.test? || Feature.active?(feature, current_founder)
   end
 
   helper_method :feature_active?
 
   def configure_permitted_parameters
-    # TODO: Clean this method up. What is this about, anyway?!
-    devise_parameter_sanitizer.for(:accept_invitation).concat [:avatar, :twitter_url, :linkedin_url]
-    # Unpermitted parameters: salutation, fullname, born_on(1i), born_on(2i), born_on(3i), is_student, college, course, semester
-    devise_parameter_sanitizer.for(:sign_up).concat [:first_name, :last_name]
+    # allow collecting additional attributes while accepting invitation: https://github.com/scambra/devise_invitable
     devise_parameter_sanitizer.for(:accept_invitation).concat(
       [
-        :salutation, :first_name, :last_name, :email, :born_on, :is_student, :college_id, :course, :semester, :startup, :accept_startup
+        :first_name, :last_name, :gender, :born_on, :university_id, :roll_number, :unconfirmed_phone
       ]
     )
   end
@@ -54,8 +51,10 @@ class ApplicationController < ActionController::Base
       'https://sv-assets.sv.co https://secure.gravatar.com https://uploaded-assets.sv.co hn.inspectlet.com'
     ].join(' ') + ';'
 
-    resource = { media: 'https://s3.amazonaws.com/upload.assets.sv.co/' }
+    resource = { media: 'https://s3.amazonaws.com/uploaded-assets-sv-co/' }
     typeform = { frame: 'https://svlabs.typeform.com' }
+    slideshare = { frame: 'slideshare.net *.slideshare.net' }
+    speakerdeck = { frame: 'speakerdeck.com *.speakerdeck.com' }
 
     csp_directives = [
       image_sources,
@@ -65,7 +64,7 @@ class ApplicationController < ActionController::Base
       "font-src 'self' fonts.gstatic.com https://sv-assets.sv.co;",
       'child-src https://www.youtube.com;',
       'frame-src https://www.youtube.com https://svlabs-public.herokuapp.com https://www.google.com ' \
-        "#{typeform[:frame]};",
+        "#{typeform[:frame]} #{slideshare[:frame]} #{speakerdeck[:frame]};",
       "media-src 'self' #{resource[:media]};"
     ]
 

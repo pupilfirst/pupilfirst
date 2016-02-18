@@ -1,42 +1,40 @@
 - content_for :head
   title SV.CO Startups
-  
+
 .startup-index-banner
   .container
     .banner-text
       h1.page-header.header-light Startups
       - @batches.each do |batch|
         p.startups-introduction
-          ' These are latest verified events from our amazing startups in #{batch.name} batch, enrolled from
-          | #{batch.start_date.strftime('%B %-d, %Y')} &mdash; #{batch.end_date.strftime('%B %-d, %Y')}.  
+          ' These are latest verified events from our amazing startups.
 
-.container
-  .row
+.startup-event-bg
+  .container
     ul#startups-index-nav.nav.nav-tabs
       - @batches.each do |batch|
         li role="presentation" class="#{batch == @batches.first ? 'active' : ''}"
           a.tab-title href="#batch-#{batch.id}" aria-controls="batch-#{batch.id}" role="tab" data-toggle="tab"
-            ' #{batch.name}
+            ' Batch #{batch.batch_number} &mdash; #{batch.name}
             small
               | (#{batch.end_date.strftime('%b %Y')})
 
-  .tab-content.tab-events-data.row
-    - @batches.each do |batch|
-      .tab-pane role="tabpanel" id="batch-#{batch.id}" class="#{batch == @batches.first ? 'active' : ''}"
-        p.startups-batch-intro
-          ' These are latest verified events from our amazing startups in #{batch.name} batch, enrolled from
-          | #{batch.start_date.strftime('%B %-d, %Y')} &mdash; #{batch.end_date.strftime('%B %-d, %Y')}.
+    .tab-content.tab-events-data.row
+      - @batches.each do |batch|
+        .tab-pane role="tabpanel" id="batch-#{batch.id}" class="#{batch == @batches.first ? 'active' : ''}"
+          p.startups-batch-intro
+            ' #{batch.name} batch: enrolled from #{batch.start_date.strftime('%B %-d, %Y')} &mdash; #{batch.end_date.strftime('%B %-d, %Y')}.
 
           #startup-grid.startups-index-cards-container.clearfix
             - showcase_events_for_batch(batch).each do |event, startup|
               .col-md-4.col-sm-6.col-xs-12.startup-event-entry
                 .startup-card
-                  .startup-card-image style="background-image: url(#{event.image_url});"
+                  a.startup-card-image class="#{event.image_url.present? ? '' : 'event-bg-size'} event-bgcolor-#{cycle *((1..14).to_a)}" style="background-image: url(#{event.image_url.present? ? event.image_url : event.timeline_event_type.badge});" href="#{startup_url(event.startup, anchor: "event-#{event.id}")}"
                   .startup-card-body
-                    h5
+                    a.startup-card-title href="#{startup_url(event.startup, anchor: "event-#{event.id}")}"
                       ' #{startup.product_name}: #{event.timeline_event_type.title}
-                      span.time-ago
-                        | (#{time_ago_in_words(event.event_on)} ago)
+                    span.time-ago
+                      | (#{time_ago_in_words(event.event_on)} ago)
                     p = event.description
                   .startup-footer
                     .startup-basebox.clearfix
@@ -45,6 +43,6 @@
                           - if startup.logo.present?
                             = image_tag startup.logo.url
                           - else
-                            = startup.name || startup.product_name
+                            = startup.product_name || startup.name
                       .view-timeline-button.pull-right = link_to 'See full timeline', startup, class: 'timeline-link'
                     p = startup.product_description

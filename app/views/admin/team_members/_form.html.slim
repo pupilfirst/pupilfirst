@@ -3,7 +3,7 @@
     = f.input :startup, label: 'Product', member_label: proc { |startup| startup.display_name }, required: true
     = f.input :name
     = f.input :email
-    = f.input :roles, as: :check_boxes, collection: User.valid_roles
+    = f.input :roles, as: :check_boxes, collection: Founder.valid_roles
     = f.input :avatar
 
   = f.submit

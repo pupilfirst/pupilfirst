@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.5'
+gem 'rails', '4.2.5.1'
 
 gem 'dotenv-rails', :groups => [:development, :test]
 
@@ -11,21 +11,24 @@ gem 'active_skin' # Better lookin' active admin!
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
 gem 'carrierwave' # One uploader to rule them all.
 gem 'carrierwave_backgrounder' # Backgrounder for carrierwave.
-gem 'fog' # required by carrierwave to upload to S3.
-gem 'coffee-rails', '~> 4.1.0'
-gem 'devise_invitable'
-gem 'jbuilder', '~> 2.0'
-gem 'jquery-rails'
+
+# Required by Carrierwave to upload to S3.
+# TODO: Replace this with fog-aws when possible. Fog is a super-fat gem.
+# Make sure app will boot up in production mode afterwards. Carrierwave has trouble working with fog-aws.
+gem 'fog'
+
+gem 'coffee-rails', '~> 4.1.0' # Coffeescript on Rails.
+gem 'devise', '>= 3.5.4' # User auth library.
+gem 'devise_invitable' # Allow invites to be sent out.
+gem 'jbuilder', '~> 2.0' # Standard part of Rails, but unused, since we don't have an API.
+gem 'jquery-rails' # JQuery on Rails.
 gem 'mini_magick' # Image processing.
-gem 'nokogiri'
-gem 'pg'
+gem 'pg' # PostgreSQL support.
 gem 'sass-rails', '~> 5.0'
 gem 'sentry-raven' # Reporter for Sentry Heroku add-on.
-gem 'slim'
-
-gem 'turbolinks' # Disabled, because it is a pain in the ass.
-
-gem 'uglifier'
+gem 'slim' # Slim templating.
+gem 'turbolinks' # Quicker page navigation. https://github.com/turbolinks/turbolinks
+gem 'uglifier', '>= 2.7.2' # JavaScript compressor.
 gem 'rest-client' # Used to contact Fast Alerts' API.
 gem 'cancancan', '~> 1.8' # Used to manage administrator types and roles in the ActiveAdmin interface.
 gem 'phony_rails' # Phone number validation and normalization.
@@ -38,7 +41,6 @@ gem 'bootstrap-sass', '~> 3.3.3' # Official Sass port of Bootstrap.
 gem 'autoprefixer-rails' # Autoprefixer for Ruby and Ruby on Rails.
 gem 'simple_form', '~> 3.1.1' # Simple-form with support for Bootstrap 3.
 gem 'simple_form_fancy_uploads' # simple_form custom inputs to get image/link previews with file uploads. https://github.com/apeacox/simple_form_fancy_uploads
-# gem 'validate_url' # URL validation. - appears to be only supported on Rails 3
 gem 'valid_url' # New url validataion gem
 gem 'logstash-logger' # A better logger.
 
@@ -47,11 +49,10 @@ gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: '
 gem 'momentjs-rails', '>= 2.8.1', github: 'derekprior/momentjs-rails' # Required by datetimepicker-rails.
 
 gem 'roadie-rails' # CSS management for e-mails.
-gem 'passenger', '~> 5.0.14' # Passenger web-server.
+gem 'passenger', '>= 5.0.22' # Passenger web-server.
 gem 'delayed_job_active_record' # Delayed Job for deferring tasks.
 gem 'delayed_job_web' # Web interface for delayed_job
 gem 'seedbank' # Better organized seed data.
-gem 'wicked' # Multistep form wizard for incubation
 gem 'font-awesome-rails' # Icons from font-awesome!
 
 # Let's not deal with flash messages, yeah? Tracking modified github master with early rendering fix. See link below.
@@ -72,10 +73,8 @@ gem 'recaptcha', require: 'recaptcha/rails' # ReCaptcha helpers for ruby apps ht
 gem 'groupdate' # The simplest way to group temporal data. https://github.com/ankane/groupdate
 gem 'sparkr' # Sparklines with Ruby. https://github.com/rrrene/sparkr
 gem 'videojs_rails' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com/seanbehan/videojs_rails
-
-gem 'react-rails' # react for creating link editor in timeline builder
-
-gem 'has_secure_token' # used to create tokens for models (eg: for Faculty). Will be included with ActiveRecord in Rails 5
+gem 'react-rails' # For automatically transforming JSX and using React in Rails.
+gem 'has_secure_token' # Used to create tokens for models (eg: for Faculty). TODO: Will be included with ActiveRecord in Rails 5.
 
 # Rails assets!
 source 'https://rails-assets.org' do
@@ -84,6 +83,8 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-trix' # rich text editor from basecamp ( used for eg in the description for targets)
   gem 'rails-assets-bootstrap-tabcollapse' # Bootstrap plugin that switches bootstrap tabs component to collapse component for small screens.
   gem 'rails-assets-masonry' # Masonry works by placing elements in optimal position based on available vertical space.
+  gem 'rails-assets-jquery-stickit' # A jQuery plugin provides a sticky header, sidebar or else when scrolling.
+  gem 'rails-assets-jquery.scrollTo' # Lightweight, cross-browser and highly customizable animated scrolling with jQuery
 end
 
 group :development do
@@ -97,9 +98,8 @@ group :development do
 end
 
 group :test do
-  gem 'factory_girl', require: false
-  gem 'factory_girl_rails', '~> 4.0'
-  gem 'faker'
+  gem 'factory_girl_rails', '~> 4.0' # A library for setting up Ruby objects as test data.
+  gem 'faker' # A library for generating fake data such as names, addresses, and phone numbers.
   gem 'capybara' # For RSpec feature tests.
   gem 'capybara-email' # Test ActionMailer and Mailer messages with Capybara
   gem 'capybara-webkit' # Headless WebKit browser, provided by Webkit (QT).
@@ -114,12 +114,11 @@ group :development, :test do
   gem 'webmock', require: false # Mocking web requests.
   gem 'quiet_assets' # Let's not see asset serving messages in the development log!
   gem 'rubocop', require: false # Ruby Style Guide.
+  gem 'bundler-audit', require: false # Audit gems in gemfile.lock for reported vulnerabilities
 end
 
 group :production do
-  gem 'rails_12factor'
+  gem 'rails_12factor' # Makes running your Rails app easier. Based on the ideas behind 12factor.net.
 end
-
-gem 'sdoc', '~> 0.4.0', group: :doc
 
 ruby '2.3.0'

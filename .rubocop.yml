@@ -1,4 +1,5 @@
 AllCops:
+  TargetRubyVersion: 2.3
   Include:
     - '**/Rakefile'
     - '**/config.ru'
@@ -16,6 +17,8 @@ AllCops:
 Style/AlignParameters:
   EnforcedStyle: with_fixed_indentation
 Style/MultilineOperationIndentation:
+  EnforcedStyle: indented
+Style/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 Style/CaseIndentation:
   IndentWhenRelativeTo: end

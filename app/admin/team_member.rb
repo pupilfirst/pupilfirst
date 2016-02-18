@@ -9,8 +9,8 @@ ActiveAdmin.register TeamMember do
     column :name
     column :email
 
-    column :roles do |user|
-      user.roles.map do |role|
+    column :roles do |team_member|
+      team_member.roles.map do |role|
         t("role.#{role}")
       end.join ', '
     end

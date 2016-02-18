@@ -26,5 +26,12 @@ FactoryGirl.define do
       title 'Set New One-Liner'
       suggested_stage 'moved_to_idea_discovery,moved_to_customer_validation'
     end
+
+    factory :tet_joined do
+      key 'joined_svco'
+      role 'Governance'
+      title 'Joined SV.CO'
+      suggested_stage 'moved_to_idea_discovery'
+    end
   end
 end

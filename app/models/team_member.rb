@@ -26,7 +26,7 @@ class TeamMember < ActiveRecord::Base
     end
 
     roles.each do |role|
-      unless User.valid_roles.include? role
+      unless Founder.valid_roles.include? role
         errors.add(:roles, 'contained unrecognized value')
       end
     end

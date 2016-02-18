@@ -4,7 +4,8 @@
       span Select founder and date, and then slots for that one day.
     ol
       = f.input :faculty, collection: @faculty, include_blank: false
-      = f.input :date, as: :string, input_html: { class: 'datepicker', value: Date.today }
+      = f.input :date_start, as: :string, input_html: { class: 'datepicker', value: Date.today }
+      = f.input :date_end, as: :string, input_html: { class: 'datepicker', value: Date.today }
       = f.input :slots, as: :hidden
       li
         label Slots

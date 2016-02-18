@@ -1,3 +1,8 @@
+- if @sitewide_notice
+  - content_for :sitewide_notice
+    ' <strong>SV.CO</strong> is the next phase of the Startup Village story.
+    ' #{link_to 'Read more here', 'https://blog.sv.co/startup-village-to-scale-up-countrywide-after-successful-first-phase', target: '_blank'}
+
 - content_for :head
   title SV.CO: A learning platform for first-time founders
   meta name="description" content="SV.CO, or Startup Village is a learning platform for entrepreneurs that verifies results, and rewards founders with a real degree from partner Universities."
@@ -14,16 +19,13 @@
           span.font-weight-600 real Universities.
         div
           .header-buttons
-            - if current_user
-              - if current_user.startup.present?
-                - if current_user.startup.unready?
-                  a.btn.btn-flat.btn-join href=new_user_startup_path Continue Application
-                - else
-                  a.btn.btn-flat.btn-join href=startup_path(current_user.startup) View Startup Timeline
+            - if current_founder
+              - if current_founder.startup.present?
+                a.btn.btn-flat.btn-join href=startup_path(current_founder.startup) View Startup Timeline
               - else
-                a.btn.btn-flat.btn-join href=new_user_startup_path Apply for Incubation!
+                a.btn.btn-flat.btn-join href=new_founder_startup_path Apply for Incubation!
             - else
-              a.btn.btn-flat.btn-join href=new_user_session_path Login for more!
+              a.btn.btn-flat.btn-join href=new_founder_session_path Login for more!
 
             a.watch-video-button.hidden-md.hidden-lg href="https://www.youtube.com/watch?v=EdToj9nviYA" target="_blank"
               i.fa.fa-youtube-play

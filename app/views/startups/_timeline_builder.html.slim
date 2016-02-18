@@ -1,6 +1,14 @@
 .timeline-builder
-  = form_for [:user, :startup, event], html: event.verified? ? { 'data-verified' => 'true' } : {} do |f|
+
+  / pass some data attributes to the form for js modifications
+  - html_options = {}
+  - if event.persisted?
+    - html_options['data-verified'] = event.verified? ? 'true' : 'false'
+    - html_options['data-private'] = event.private? ? 'true' : 'false'
+
+  = form_for [:founder, :startup, event], html: html_options do |f|
     = f.hidden_field :links, :value => event.links.to_json
+    = f.hidden_field :files_metadata
     .container-fluid
       .row.top-row.text-center
         .col-sm-4.col-xs-8.border-right
@@ -17,7 +25,7 @@
             - if event.persisted? && event.image.present?
               span.hidden-xs href='#' Change Image
             - else
-              span.hidden-xs href='#' Add an Image
+              span.hidden-xs href='#' Add Cover Image
           a#remove-selected-image.hidden
             | &nbsp;
             i.fa.fa-times-circle
@@ -26,7 +34,7 @@
           a#add-link data-toggle="modal" data-target="#add-link-modal"
             i.fa.fa-link
             | &nbsp;
-            span.hidden-xs href='#' Add Links
+            span.hidden-xs href='#' Add Links and Files
 
       .row
         .text-area-container
@@ -59,7 +67,7 @@
     .modal-dialog
       .modal-content
         .modal-body
-          = react_component 'LinkEditor', {linksJSON: event.links.to_json }
+          = react_component 'TimelineEventAttachmentsEditor', { linksJSON: event.links.to_json, filesJSON: event.files_metadata_json }
         .modal-footer
           button#close-link-modal-button.btn.btn-default data-dismiss="modal" type="button"  Close
 

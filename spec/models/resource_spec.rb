@@ -3,18 +3,26 @@ require 'rails_helper'
 RSpec.describe Resource, type: :model do
   subject { create :resource }
 
-  let!(:tet_one_liner) { create :tet_one_liner }
-  let!(:tet_new_product_deck) { create :tet_new_product_deck }
-  let!(:tet_team_formed) { create :tet_team_formed }
+  before :all do
+    PublicSlackTalk.mock = true
+  end
+
+  after :all do
+    PublicSlackTalk.mock = false
+  end
 
   let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
   let!(:public_resource) { create :resource }
+
+  let(:batch_1) { create :batch }
+  let(:batch_2) { create :batch }
+
   let!(:approved_resource_for_all) { create :resource, share_status: Resource::SHARE_STATUS_APPROVED }
-  let!(:approved_resource_for_batch_1) { create :resource, share_status: Resource::SHARE_STATUS_APPROVED, shared_with_batch: 1 }
-  let!(:approved_resource_for_batch_2) { create :resource, share_status: Resource::SHARE_STATUS_APPROVED, shared_with_batch: 2 }
+  let!(:approved_resource_for_batch_1) { create :resource, share_status: Resource::SHARE_STATUS_APPROVED, batch: batch_1 }
+  let!(:approved_resource_for_batch_2) { create :resource, share_status: Resource::SHARE_STATUS_APPROVED, batch: batch_2 }
 
   describe '.for' do
-    context 'when user is not present' do
+    context 'when founder is not present' do
       it 'returns public resources' do
         resources = Resource.for(nil)
 
@@ -23,7 +31,7 @@ RSpec.describe Resource, type: :model do
       end
     end
 
-    context 'when user is founder of approved startup' do
+    context 'when founder is founder of approved startup' do
       it 'returns public resources and shared resources for approved startups' do
         resources = Resource.for(startup.founders.first)
 
@@ -33,8 +41,8 @@ RSpec.describe Resource, type: :model do
       end
     end
 
-    context 'when user is founder of batched startup' do
-      let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED, batch_number: 1 }
+    context 'when founder is founder of batched startup' do
+      let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED, batch: batch_1 }
 
       it 'returns public resources, shared resources and batch-specific resources for approved startups' do
         resources = Resource.for(startup.founders.first)

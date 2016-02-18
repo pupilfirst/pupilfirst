@@ -12,7 +12,7 @@ class FacultyController < ApplicationController
     questions = params[:connect_request][:questions]
     faculty = Faculty.find(params[:id])
     connect_slot = faculty.connect_slots.find(params[:connect_request][:connect_slot])
-    connect_request = connect_slot.build_connect_request(startup: current_user.startup, questions: questions)
+    connect_request = connect_slot.build_connect_request(startup: current_founder.startup, questions: questions)
 
     if connect_request.save
       flash[:success] = 'Connect Request has been submitted. You will receive an email once its confirmed.'
@@ -63,7 +63,7 @@ class FacultyController < ApplicationController
     list.each do |slot|
       date = start_date + slot[0] - 1 # index of dates start at 1
       hour = slot[1].to_i
-      minute = (((slot[1].to_f) - hour) * 60).to_s.delete('.')[0..1]
+      minute = ((slot[1].to_f - hour) * 60).to_s.delete('.')[0..1]
       # save submitted week slots
       ConnectSlot.create(
         faculty: faculty, slot_at: Time.parse("#{date} #{hour.to_s.rjust(2, '0')}:#{minute}:00 +0530"))

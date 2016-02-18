@@ -3,7 +3,7 @@
 p
   em Please note that you can come back and change these details anytime.
 
-= simple_form_for @startup, url: user_startup_path, :html => { :class => 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean, file: :horizontal_file_input } do |f|
+= simple_form_for @startup, url: founder_startup_path, :html => { :class => 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean, file: :horizontal_file_input } do |f|
   = f.error_notification
   .panel-group#startup-form role="tablist"
     .panel.panel-default
@@ -13,18 +13,15 @@ p
       #basic-details.panel-collapse.collapse.in role="tabpanel"
         .panel-body
           = f.input :product_name, label: 'Product Name', required: true, input_html: { placeholder: 'Name of your Product', maxlength: 255 }
-          = f.input :product_description, label: 'About your Product', as: :text,
+          = f.input :product_description, label: 'Product One-liner', as: :text,
             hint: "Describe your product in less than #{Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS} characters.",
-            input_html: { rows: 3, placeholder: "Description in less than #{Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS} characters", maxlength: Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS },
-            required: true
+            input_html: { rows: 3, placeholder: "Description in less than #{Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS} characters", maxlength: Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS }
           = f.input :presentation_link,
             hint: 'Share the link to a presentation that showcases your product, in fair detail.',
             input_html: { placeholder: 'https://slideshare.net/YourUsername/your-product-deck', maxlength: 255 },
-            required: true,
             label: 'Product Deck'
-          = f.input :name, label: "Startup's Name", input_html: { placeholder: 'Name of your startup', maxlength: 255 }
           = f.input :legal_registered_name, label: 'Legal Registered Name', hint: 'The name of your registered legal entity. Partnership/Pvt. Ltd./LLP etc.'
-          = f.input :logo, as: :file, required: false, input_html: { accept: 'image/*' }
+          = f.input :logo, as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }, required: false
           = f.association :startup_categories,
             hint: 'Industries that your startup is involved in. Max 3.',
             as: :select,
@@ -82,10 +79,8 @@ p
           = f.input :women_employees, label: 'Number of Women Employees', input_html: { min: 0, max: 9999, 'data-max-int-length' => 4 }
           = f.input :registration_type, collection: Startup.valid_registration_types, label_method: ->(obj) { registration_type_html(obj) }, include_blank: 'Not Registered'
 
-  .form-group
+  .form-group.margin-top-20
     .col-sm-offset-3.col-sm-9
       = f.submit class: 'btn btn-success btn-flat', value: 'Update startup profile'
       | &nbsp;
       = link_to 'Cancel', startup_path(@startup), class: 'btn btn-default btn-flat'
-
-

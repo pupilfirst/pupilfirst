@@ -1,0 +1,21 @@
+= content_for :heading
+  | You have successfully created a timeline at SV.CO!
+
+= content_for :salutation
+  | Hi,
+
+= content_for :body
+  p
+  ' Your SV.CO ID is #{@current_founder.email}.
+
+  p
+    ' We have opened up a timeline
+    ' (#{link_to @current_founder.startup.name, startup_url(@current_founder.startup)}), where you can fill in additional
+    ' details concerning your startup.
+
+  p If you're unable to click on the link to your startup profile (above), then please copy and paste the following link
+    into your browser's address bar:
+
+  p.monospace = startup_url(@current_founder.startup)
+
+  p Reach out to us at #{mail_to 'help@sv.co'} in case of any queries.

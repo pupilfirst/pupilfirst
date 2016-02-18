@@ -27,17 +27,19 @@ ActiveAdmin.register ConnectSlot do
     new_slots = []
 
     begin
-      params[:connect_slots][:slots].split(',').each do |slot|
-        hour = slot.to_i
-        minute = (((slot.to_f) - hour) * 60).to_s.delete('.')[0..1]
+      (Date.parse(params[:connect_slots][:date_start])..Date.parse(params[:connect_slots][:date_end])).each do |day|
+        params[:connect_slots][:slots].split(',').each do |slot|
+          hour = slot.to_i
+          minute = ((slot.to_f - hour) * 60).to_s.delete('.')[0..1]
 
-        connect_slot = faculty.connect_slots.find_or_initialize_by(
-          slot_at: Time.parse("#{params[:connect_slots][:date]} #{hour.to_s.rjust(2, '0')}:#{minute}:00 +0530")
-        )
+          connect_slot = faculty.connect_slots.find_or_initialize_by(
+            slot_at: Time.parse("#{day.strftime('%Y-%m-%d')} #{hour.to_s.rjust(2, '0')}:#{minute}:00 +0530")
+          )
 
-        unless connect_slot.persisted?
-          connect_slot.save!
-          new_slots << connect_slot
+          unless connect_slot.persisted?
+            connect_slot.save!
+            new_slots << connect_slot
+          end
         end
       end
     rescue ActiveRecord::RecordInvalid => e

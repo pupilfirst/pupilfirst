@@ -1,4 +1,4 @@
-//= require masonry/dist/masonry.pkgd.js
+#= require masonry/dist/masonry.pkgd.js
 
 $(document).on 'page:change', ->
   $('#verified-icon').tooltip()
@@ -85,7 +85,7 @@ timelineBuilderSubmitChecks = ->
 
       select2Container.tooltip('show')
 
-    if form.data('verified')
+    if form.data('verified') && !form.data('private')
       confirmedByUser = confirm('This will hide event from public until change is verified by SV.CO team. Continue?')
     else
       confirmedByUser = true
@@ -149,24 +149,43 @@ handleImageUpload = ->
 
   $('#remove-selected-image').click(removeSelectedImage)
 
-markSelectedLinks = ->
-  $('#timeline_event_links').change(->
-    getLinksTabTitle()
-  )
+markSelectedAttachments = ->
+  $('#timeline_event_links').change ->
+    updateAttachmentsTabTitle()
 
-getLinksTabTitle = ->
+  $('#timeline_event_files_metadata').change ->
+    updateAttachmentsTabTitle()
+
+updateAttachmentsTabTitle = ->
   links = if !$('#timeline_event_links').val() then [] else JSON.parse $('#timeline_event_links').val()
-  if links.length > 0
+  files = if !$('#timeline_event_files_metadata').val() then [] else JSON.parse $('#timeline_event_files_metadata').val()
+
+  # Remove files marked for deletion.
+  files = $.map files, (file) ->
+    if file['delete']
+      null
+    else
+      file
+
+  title = ''
+  extraAttachments = 0
+
+  if files.length > 0
+    title = files[0].name
+
+    extraAttachments = files.length - 1
+    extraAttachments += links.length
+  else if links.length > 0
     title = links[0].title
-    unless links.length == 1
-      title += ' (+' + (links.length-1) + ')'
-    $('#add-link').addClass('green-text')
+
+    extraAttachments = links.length - 1
   else
-    title = 'Add Links'
-    $('#add-link').removeClass('green-text')
+    title = 'Add Links and Files'
+
+  if extraAttachments > 0
+    title += " (+#{extraAttachments})"
+
   $('#add-link').find('span').html(title)
-
-
 
 matchDescriptionScroll = (target) ->
   $('span.text-area-overlay').scrollTop(target.scrollTop())
@@ -245,5 +264,5 @@ $(document).on 'page:change', matchSampleTextToEventType
 $(document).on 'page:change', setupTimelineBuilderDatepicker
 $(document).on 'page:change', setImprovementModalContent
 $(document).on 'page:change', addTooltipToHideCheckbox
-$(document).on 'page:change', markSelectedLinks
-$(document).on 'page:change', getLinksTabTitle
+$(document).on 'page:change', markSelectedAttachments
+$(document).on 'page:change', updateAttachmentsTabTitle

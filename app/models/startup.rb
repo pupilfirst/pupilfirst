@@ -1,3 +1,6 @@
+# encoding: utf-8
+# frozen_string_literal: true
+
 class Startup < ActiveRecord::Base
   include FriendlyId
 
@@ -7,32 +10,31 @@ class Startup < ActiveRecord::Base
   LEGACY_STARTUPS_COUNT = 849
   LEGACY_INCUBATION_REQUESTS = 5281
 
-  REGISTRATION_TYPE_PRIVATE_LIMITED = 'private_limited'
-  REGISTRATION_TYPE_PARTNERSHIP = 'partnership'
-  REGISTRATION_TYPE_LLP = 'llp' # Limited Liability Partnership
+  REGISTRATION_TYPE_PRIVATE_LIMITED = -'private_limited'
+  REGISTRATION_TYPE_PARTNERSHIP = -'partnership'
+  REGISTRATION_TYPE_LLP = -'llp' # Limited Liability Partnership
 
   MAX_PITCH_CHARACTERS = 140 unless defined?(MAX_PITCH_CHARACTERS)
   MAX_PRODUCT_DESCRIPTION_CHARACTERS = 150
   MAX_CATEGORY_COUNT = 3
 
-  APPROVAL_STATUS_UNREADY = 'unready'
-  APPROVAL_STATUS_PENDING = 'pending'
-  APPROVAL_STATUS_APPROVED = 'approved'
-  APPROVAL_STATUS_REJECTED = 'rejected'
-  APPROVAL_STATUS_DROPPED_OUT = 'dropped-out'
+  APPROVAL_STATUS_UNREADY = -'unready'
+  APPROVAL_STATUS_PENDING = -'pending'
+  APPROVAL_STATUS_APPROVED = -'approved'
+  APPROVAL_STATUS_DROPPED_OUT = -'dropped-out'
 
-  PRODUCT_PROGRESS_IDEA = 'idea'
-  PRODUCT_PROGRESS_MOCKUP = 'mockup'
-  PRODUCT_PROGRESS_PROTOTYPE = 'prototype'
-  PRODUCT_PROGRESS_PRIVATE_BETA = 'private_beta'
-  PRODUCT_PROGRESS_PUBLIC_BETA = 'public_beta'
-  PRODUCT_PROGRESS_LAUNCHED = 'launched'
+  PRODUCT_PROGRESS_IDEA = -'idea'
+  PRODUCT_PROGRESS_MOCKUP = -'mockup'
+  PRODUCT_PROGRESS_PROTOTYPE = -'prototype'
+  PRODUCT_PROGRESS_PRIVATE_BETA = -'private_beta'
+  PRODUCT_PROGRESS_PUBLIC_BETA = -'public_beta'
+  PRODUCT_PROGRESS_LAUNCHED = -'launched'
 
-  INCUBATION_LOCATION_KOCHI = 'kochi'
-  INCUBATION_LOCATION_VISAKHAPATNAM = 'visakhapatnam'
-  INCUBATION_LOCATION_KOZHIKODE = 'kozhikode'
+  INCUBATION_LOCATION_KOCHI = -'kochi'
+  INCUBATION_LOCATION_VISAKHAPATNAM = -'visakhapatnam'
+  INCUBATION_LOCATION_KOZHIKODE = -'kozhikode'
 
-  SV_STATS_LINK = 'bit.ly/svstats2'
+  SV_STATS_LINK = -'bit.ly/svstats2'
 
   def self.valid_agreement_durations
     { '1 year' => 1.year, '2 years' => 2.years, '5 years' => 5.years }
@@ -55,7 +57,7 @@ class Startup < ActiveRecord::Base
 
   def self.valid_approval_status_values
     [
-      APPROVAL_STATUS_UNREADY, APPROVAL_STATUS_PENDING, APPROVAL_STATUS_APPROVED, APPROVAL_STATUS_REJECTED,
+      APPROVAL_STATUS_UNREADY, APPROVAL_STATUS_PENDING, APPROVAL_STATUS_APPROVED,
       APPROVAL_STATUS_DROPPED_OUT
     ]
   end
@@ -65,16 +67,15 @@ class Startup < ActiveRecord::Base
   scope :not_unready, -> { where.not(approval_status: [APPROVAL_STATUS_UNREADY, nil]) }
   scope :pending, -> { where(approval_status: APPROVAL_STATUS_PENDING) }
   scope :approved, -> { where(approval_status: APPROVAL_STATUS_APPROVED) }
-  scope :rejected, -> { where(approval_status: APPROVAL_STATUS_REJECTED) }
   scope :dropped_out, -> { where(approval_status: APPROVAL_STATUS_DROPPED_OUT) }
   scope :not_dropped_out, -> { where.not(approval_status: APPROVAL_STATUS_DROPPED_OUT) }
-  scope :incubation_requested, -> { where(approval_status: [APPROVAL_STATUS_PENDING, APPROVAL_STATUS_REJECTED, APPROVAL_STATUS_APPROVED]) }
+  scope :incubation_requested, -> { where(approval_status: [APPROVAL_STATUS_PENDING, APPROVAL_STATUS_APPROVED]) }
   scope :agreement_signed, -> { where 'agreement_first_signed_at IS NOT NULL' }
   scope :agreement_live, -> { where('agreement_ends_at > ?', Time.now) }
   scope :agreement_expired, -> { where('agreement_ends_at < ?', Time.now) }
   scope :physically_incubated, -> { agreement_live.where(physical_incubatee: true) }
-  scope :without_founders, -> { where.not(id: (User.pluck(:startup_id).uniq - [nil])) }
-  scope :student_startups, -> { joins(:founders).where.not(users: { university_id: nil }).uniq }
+  scope :without_founders, -> { where.not(id: (Founder.pluck(:startup_id).uniq - [nil])) }
+  scope :student_startups, -> { joins(:founders).where.not(founders: { university_id: nil }).uniq }
   scope :kochi, -> { where incubation_location: INCUBATION_LOCATION_KOCHI }
   scope :visakhapatnam, -> { where incubation_location: INCUBATION_LOCATION_VISAKHAPATNAM }
   scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED }).distinct }
@@ -82,9 +83,13 @@ class Startup < ActiveRecord::Base
 
   # Returns the latest verified timeline event that has an image attached to it.
   #
+  # Do not return private events!
+  #
   # @return TimelineEvent
   def showcase_timeline_event
-    timeline_events.verified.has_image.order('verified_at DESC').first
+    timeline_events.verified.order('event_on DESC').detect do |timeline_event|
+      !timeline_event.private?
+    end
   end
 
   # Returns startups that have accrued no karma points for last week (starting monday). If supplied a date, it
@@ -133,12 +138,58 @@ class Startup < ActiveRecord::Base
     joins(:startup_categories).where(startup_categories: { id: category.id })
   end
 
-  has_many :founders, -> { where('is_founder = ?', true) }, class_name: 'User', foreign_key: 'startup_id' do
-    def <<(founder)
-      founder.update_attributes!(is_founder: true)
-      super founder
+  has_many :founders
+
+  # define founder emails as attributes for easier onboarding implementation
+  attr_accessor :cofounder_1_email, :cofounder_2_email, :cofounder_3_email, :cofounder_4_email
+
+  # returns an array of cofounder emails
+  def cofounder_emails
+    [cofounder_1_email, cofounder_2_email, cofounder_3_email, cofounder_4_email]
+  end
+
+  # flag to identify if the startup is being registered
+  attr_accessor :being_registered
+
+  # email of current user - to validate cofounder emails
+  attr_accessor :team_lead_email
+
+  # validate each cofounder email if startup is being registered
+  validate :validate_cofounder_emails, if: :being_registered
+
+  def validate_cofounder_emails
+    (1..4).each do |n|
+      email = "cofounder_#{n}_email"
+
+      # if email is nil
+      next unless send(email).present?
+
+      # assign appropriate error message if validation fails
+      errors.add(email.to_sym, invalid_cofounder(send(email))) if invalid_cofounder(send(email))
     end
   end
+
+  # validates email provided is 1)unique 2)not of the team lead, 3) is a valid sv.co founder and 4) does not already have a startup
+  def invalid_cofounder(email)
+    founder = Founder.find_by(email: email)
+
+    return 'must be unique' if cofounder_emails.count(email) > 1
+
+    return 'already the team lead' if email == team_lead_email
+
+    return 'not a registered founder. Please ensure that the co-founder has already accepted '\
+    'his/her invitation to SV.CO and completed his/her registration.' unless founder
+
+    return 'already has a startup. Please ensure that your co-founder has not registered your startup already.' unless founder.startup.blank?
+
+    # return false if the email is 'not invalid'
+    false
+  end
+
+  # validate presence of all fields during registration
+  validates_presence_of :product_name, :team_size, :cofounder_1_email, :cofounder_2_email, if: :being_registered
+  validates_presence_of :cofounder_3_email, if: proc { |startup| startup.being_registered && startup.team_size > 3 }
+  validates_presence_of :cofounder_4_email, if: proc { |startup| startup.being_registered && startup.team_size > 4 }
 
   has_and_belongs_to_many :startup_categories do
     def <<(_category)
@@ -148,34 +199,33 @@ class Startup < ActiveRecord::Base
 
   has_many :timeline_events, dependent: :destroy
   has_many :startup_feedback, dependent: :destroy
-  has_many :karma_points, through: :founders
+  has_many :karma_points, dependent: :restrict_with_exception
   has_many :targets, dependent: :destroy
   has_many :connect_requests, dependent: :destroy
   has_many :team_members, dependent: :destroy
 
-  # Allow statup to accept nested attributes for users
-  # has_many :users
-  # accepts_nested_attributes_for :users
-
-  has_one :admin, -> { where(startup_admin: true) }, class_name: 'User', foreign_key: 'startup_id'
+  has_one :admin, -> { where(startup_admin: true) }, class_name: 'Founder', foreign_key: 'startup_id'
   accepts_nested_attributes_for :admin
 
   belongs_to :batch
 
   attr_accessor :validate_web_mandatory_fields
+
+  # use the old name attribute as an alias for legal_registered_name
+  alias_attribute :name, :legal_registered_name
+
+  # TODO: probable stale attribute
   attr_reader :validate_registration_type
 
+  # TODO: is the validate_web_mandatory_fields flag still required?
   # Some fields are mandatory when editing from web.
-  validates_presence_of :product_name, :presentation_link, :product_description, :incubation_location, if: :validate_web_mandatory_fields
+  validates_presence_of :product_name, if: :validate_web_mandatory_fields
 
+  # TODO: probably stale
   # Registration type is required when registering.
   validates_presence_of :registration_type, if: ->(startup) { startup.validate_registration_type }
 
-  validate :valid_founders?
-
-  # TODO: Ensure this is take care of when rewriting incubation without wizard
-  # validates_associated :founders, unless: ->(startup) { startup.incubation_step_1? }
-
+  # TODO: probably stale
   # Registration type should be one of Pvt. Ltd., Partnership, or LLC.
   validates :registration_type,
     inclusion: { in: valid_registration_types },
@@ -213,21 +263,12 @@ class Startup < ActiveRecord::Base
 
   # New set of validations for incubation wizard
   store :metadata, accessors: [:updated_from]
-  validates_presence_of :product_name, :presentation_link, :product_description, :incubation_location, if: :incubation_step_2?
 
-  validates_numericality_of :team_size, greater_than: 0, allow_blank: true
+  validates_numericality_of :team_size, greater_than_or_equal_to: 3, less_than_or_equal_to: 5, only_integer: true, allow_blank: true
   validates_numericality_of :women_employees, greater_than_or_equal_to: 0, allow_blank: true
   validates_numericality_of :revenue_generated, greater_than_or_equal_to: 0, allow_blank: true
 
   validates_presence_of :product_name
-
-  def incubation_step_1?
-    updated_from == 'user_profile'
-  end
-
-  def incubation_step_2?
-    updated_from == 'startup_profile'
-  end
 
   before_validation do
     # Set registration_type to nil if its set as blank from backend.
@@ -244,8 +285,8 @@ class Startup < ActiveRecord::Base
   end
 
   before_destroy do
-    # Clear out associations from associated Users (and pending ones).
-    User.where(startup_id: id).update_all(startup_id: nil, startup_admin: nil, is_founder: nil)
+    # Clear out associations from associated Founders (and pending ones).
+    Founder.where(startup_id: id).update_all(startup_id: nil, startup_admin: nil)
   end
 
   # Friendly ID!
@@ -291,26 +332,22 @@ class Startup < ActiveRecord::Base
     approval_status == APPROVAL_STATUS_UNREADY
   end
 
-  def rejected?
-    approval_status == APPROVAL_STATUS_REJECTED
-  end
-
   def dropped_out?
     approval_status == APPROVAL_STATUS_DROPPED_OUT
   end
 
-  def valid_founders?
-    errors.add(:founders, 'should have at least one founder') if founders.nil? || founders.size < 1
+  def batched?
+    batch.present?
   end
 
-  def batched?
-    batch_number.present?
+  def approve!
+    update!(approval_status: Startup::APPROVAL_STATUS_APPROVED)
   end
 
   mount_uploader :logo, LogoUploader
   process_in_background :logo
 
-  normalize_attribute :name, :pitch, :product_description, :email, :phone, :revenue_generated, :team_size, :women_employees, :approval_status
+  normalize_attribute :pitch, :product_description, :email, :phone, :revenue_generated, :team_size, :women_employees, :approval_status
 
   attr_accessor :full_validation
 
@@ -360,8 +397,8 @@ class Startup < ActiveRecord::Base
   end
 
   def founder_ids=(list_of_ids)
-    users_list = User.find list_of_ids.map(&:to_i).select { |e| e.is_a?(Integer) && e > 0 }
-    users_list.each { |u| founders << u }
+    founders_list = Founder.find list_of_ids.map(&:to_i).select { |e| e.is_a?(Integer) && e > 0 }
+    founders_list.each { |u| founders << u }
   end
 
   validate :category_count
@@ -396,7 +433,6 @@ class Startup < ActiveRecord::Base
       'Unready' => unready.count,
       'Pending' => pending.count,
       'Approved' => approved.count,
-      'Rejected' => rejected.count,
       'Dropped-out' => dropped_out.count
     }
   end
@@ -405,7 +441,6 @@ class Startup < ActiveRecord::Base
     {
       'Pending' => pending.where(incubation_location: incubation_location).count,
       'Approved' => approved.where(incubation_location: incubation_location).count,
-      'Rejected' => rejected.where(incubation_location: incubation_location).count,
       'Dropped-out' => dropped_out.where(incubation_location: incubation_location).count
     }
   end
@@ -421,61 +456,28 @@ class Startup < ActiveRecord::Base
     try(:agreement_ends_at).to_i > Time.now.to_i
   end
 
-  def founder?(user)
-    return false unless user
-    user.is_founder? && user.startup_id == id
+  def founder?(founder)
+    return false unless founder
+    founder.startup_id == id
   end
 
   def possible_founders
-    founders + User.non_founders
+    founders + Founder.non_founders
   end
 
   def phone
     admin.try(:phone)
   end
 
-  # E-mail address of person to contact in case startup is rejected.
-  def rejection_contact
-    case incubation_location
-      when INCUBATION_LOCATION_VISAKHAPATNAM
-        'vasu@startupvillage.in'
-      when INCUBATION_LOCATION_KOCHI
-        'kiran@startupvillage.in'
-      when INCUBATION_LOCATION_KOZHIKODE
-        'kiran@startupvillage.in'
-      else
-        'kiran@startupvillage.in'
-    end
-  end
-
-  def self.new_incubation!(user)
-    startup = Startup.new
-    startup.founders << user
-    startup.save!
-
-    user.update!(startup_admin: true)
-    startup
-  end
-
-  def cofounders(user)
-    founders - [user]
-  end
-
-  def finish_incubation_flow!
-    # Set approval status to pending to end incubation flow.
-    self.approval_status = Startup::APPROVAL_STATUS_PENDING
-
-    regenerate_slug!
-
-    # Send e-mail to founder notifying him / her of pending status.
-    UserMailer.incubation_request_submitted(admin).deliver_later
+  def cofounders(founder)
+    founders - [founder]
   end
 
   def generate_randomized_slug
-    if name.present?
-      "#{name.parameterize}-#{rand 1000}"
-    elsif product_name.present?
+    if product_name.present?
       "#{product_name.parameterize}-#{rand 1000}"
+    elsif name.present?
+      "#{name.parameterize}-#{rand 1000}"
     else
       "nameless-#{SecureRandom.hex(2)}"
     end
@@ -492,13 +494,6 @@ class Startup < ActiveRecord::Base
       self.slug = "#{product_name.parameterize}-#{rand 1000}"
       retry
     end
-  end
-
-  def incubation_parameters_available?
-    product_name.present? &&
-      product_description.present? &&
-      presentation_link.present? &&
-      incubation_location.present?
   end
 
   ####
@@ -560,8 +555,8 @@ class Startup < ActiveRecord::Base
     approved? && timeline_events.verified.present?
   end
 
-  def admin?(user)
-    admin == user
+  def admin?(founder)
+    admin == founder
   end
 
   def timeline_events_for_display(viewer)
@@ -572,24 +567,16 @@ class Startup < ActiveRecord::Base
     end
   end
 
-  after_save do
-    if approval_status_changed? && approved? && timeline_events.blank?
-      self.prepopulate_timeline!
-    end
-  end
-
   def prepopulate_timeline!
-    create_default_event %w(team_formed new_product_deck one_liner)
+    create_default_event %w(joined_svco)
   end
 
   def create_default_event(types)
     types.each do |type|
       timeline_events.create(
-        user: admin,
-        timeline_event_type: TimelineEventType.find_by(key: type),
-        auto_populated: true,
-        verified_at: Time.now,
-        event_on: Time.now
+        founder: admin, timeline_event_type: TimelineEventType.find_by(key: type), auto_populated: true,
+        image: File.open("#{Rails.root}/app/assets/images/timeline/joined_svco_cover.png"),
+        verified_at: Time.now, event_on: Time.now
       )
     end
   end
@@ -613,7 +600,7 @@ class Startup < ActiveRecord::Base
   end
 
   def self.available_batches
-    Batch.find Startup.batched.pluck(:batch_id).uniq
+    Batch.where(id: Startup.batched.pluck(:batch_id).uniq)
   end
 
   def self.leaderboard_of_batch(batch)
@@ -678,6 +665,20 @@ class Startup < ActiveRecord::Base
     else
       7.days.ago.end_of_week
     end.in_time_zone('Asia/Calcutta') + 18.hours
+  end
+
+  # Add a founder as team lead
+  def add_team_lead!(founder)
+    founders << founder
+    founder.update!(startup_admin: true)
+  end
+
+  # Add cofounders from given emails
+  def add_cofounders!
+    cofounder_emails.each do |email|
+      next if email.blank?
+      founders << Founder.find_by(email: email)
+    end
   end
 
   class << self

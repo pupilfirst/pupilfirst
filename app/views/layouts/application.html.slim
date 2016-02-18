@@ -24,6 +24,11 @@ html
   body
     section#header class="#{@large_header_class ? "large-header #{@large_header_class} navbar-start-transparent" : ''}"
       nav.navbar.navbar-default.navbar-fixed-top role="navigation" class="#{@large_header_class ? '' : 'shrink'}"
+        - if @sitewide_notice
+          .sitewide-notice
+            .container
+              p == yield :sitewide_notice
+
         .container
           .navbar-header
             button.navbar-toggle.collapsed type="button" data-toggle="collapse" data-target="#sv-navbar"
@@ -48,5 +53,5 @@ html
 
     == render 'layouts/footer'
 
-    - if current_user.try(:just_signed_in)
+    - if current_founder.try(:just_signed_in)
       == render 'layouts/inspectlet'

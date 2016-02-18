@@ -2,7 +2,7 @@ class ContactForm
   include ActiveModel::Model
 
   attr_writer :name, :email, :mobile, :company
-  attr_accessor :user, :query_type, :query
+  attr_accessor :founder, :query_type, :query
 
   validates_presence_of :name, :email, :query_type, :query
   validates_format_of :email, with: /@/
@@ -14,19 +14,19 @@ class ContactForm
   validates_inclusion_of :query_type, in: valid_query_types
 
   def name
-    @name || user.try(:fullname)
+    @name || founder.try(:fullname)
   end
 
   def email
-    @email || user.try(:email)
+    @email || founder.try(:email)
   end
 
   def mobile
-    @mobile || user.try(:mobile)
+    @mobile || founder.try(:mobile)
   end
 
   def company
-    @company || user.try(:startup).try(:display_name)
+    @company || founder.try(:startup).try(:display_name)
   end
 
   def save

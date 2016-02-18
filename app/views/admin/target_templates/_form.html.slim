@@ -5,8 +5,12 @@
     = f.input :role, as: :select, collection: Target.valid_roles, include_blank: false
     = f.hidden_field :description
     .label-replica description
-    trix-editor.input-replica input="target_template_description"
+    trix-editor.input-replica input="target_template_description" class="#{'error-replica' if @target_template.errors[:description].present?}"
+    - if @target_template.errors[:description].present?
+      p.inline-errors-replica #{@target_template.errors[:description][0]}
+    = f.input :slideshow_embed
     = f.input :resource_url
+    = f.input :assigner, as: :select, collection: Faculty.all
     = f.input :completion_instructions
 
   = f.submit

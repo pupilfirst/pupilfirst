@@ -1,11 +1,11 @@
 class ResourcesController < ApplicationController
   def index
-    @resources = Resource.for(current_user)
+    @resources = Resource.for(current_founder)
     raise_not_found if @resources.blank?
   end
 
   def show
-    @resource = Resource.for(current_user).find(params[:id])
+    @resource = Resource.for(current_founder).find(params[:id])
 
     return unless params[:watch].present? && @resource.stream?
 
@@ -14,7 +14,7 @@ class ResourcesController < ApplicationController
   end
 
   def download
-    resource = Resource.for(current_user).find(params[:id])
+    resource = Resource.for(current_founder).find(params[:id])
     resource.increment_downloads!
     redirect_to resource.file.url
   end

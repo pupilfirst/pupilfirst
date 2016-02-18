@@ -13,7 +13,14 @@
 .apply-container
   .container
     .row
-      .col-md-7
+      .col-md-5.col-md-push-7
+        .alert.alert-warning
+          p
+            ' We've now closed task submissions for Batch 3. Selected applicants will be informed of the interview date soon via their registered email address.
+          p
+            ' For any help, write to #{mail_to 'help@sv.co'}.
+           
+      .col-md-7.col-md-pull-5
         .alert.alert-info
           h4 
             ' This is the Application page for Batch 3, exclusively for Gujarat Students.
@@ -64,7 +71,7 @@
             span.font-weight-400>  even while you are still in college.
 
           .second-batch
-            h3 This is the 2nd batch intake for the SV.CO program.
+            h3 This is the 3rd batch intake for the SV.CO program.
             p We had some amazing Startups in our #{link_to 'first batch', startups_path}. Videos of previous graduates and a program overview is available #{link_to 'on our home page', root_path}.
 
           .important-dates
@@ -82,14 +89,14 @@
               li
                 span.date-colum
                   span.important-month February
-                  span.important-date 5
+                  span.important-date 15
                   span.important-year 2016
                 .date-event
                   | Deadline for Video and Code Submission 
               li
                 span.date-colum
                   spanspan.important-month February
-                  span.important-date 15
+                  span.important-date 27
                   span.important-year 2016
                 .date-event
                   | Team Interview 
@@ -144,6 +151,3 @@
             p
               ' To learn more about the program, visit our #{link_to 'Website', root_url}
               ' and our #{link_to 'Startup Playbook', 'https://playbook.sv.co/'}.
-      .col-md-5
-        .apply-form
-          <iframe id="typeform-full" width="100%" height="100%" frameborder="0" src="https://svlabs.typeform.com/to/pdtIY4"></iframe>

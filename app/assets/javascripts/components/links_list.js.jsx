@@ -23,9 +23,7 @@ var LinkList = React.createClass({
         </ul>
       )
     } else {
-      return (
-        <p>No links added!</p>
-      )
+      return <div></div>
     }
   }
 });

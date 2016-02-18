@@ -464,7 +464,7 @@ h1.product-name {
   &.color10 { background-color: #8BBF53 !important; }
   &.color11 { background-color: #8BBF53 !important; }
   &.color12 { background-color: #424953 !important; }
-  &.color12 { background-color: #FA6D52 !important; }
+  &.color13 { background-color: #FA6D52 !important; }
   &.color14 { background-color: #8BBF53 !important; }
 }
 
@@ -616,7 +616,7 @@ h1.product-name {
       .expired-target-title {
         display: block;
         white-space: nowrap;
-        overflow: hidden;;
+        overflow: hidden;
         text-overflow: ellipsis;
         max-width: 140px;
       }

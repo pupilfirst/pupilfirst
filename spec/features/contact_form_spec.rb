@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 feature 'About / Contact Spec' do
-  let(:user) { create :user_with_password, confirmed_at: Time.now, phone: '9876543210' }
+  let(:founder) { create :founder_with_password, confirmed_at: Time.now, phone: '9876543210' }
   let(:startup) { create :startup }
 
   before :all do
@@ -13,22 +13,22 @@ feature 'About / Contact Spec' do
 
   context 'Founder is logged in' do
     before :each do
-      # Add user as founder of startup.
-      startup.founders << user
+      # Add founder as founder of startup.
+      startup.founders << founder
 
-      # Log in the user.
-      visit new_user_session_path
-      fill_in 'user_email', with: user.email
-      fill_in 'user_password', with: 'password'
+      # Log in the founder.
+      visit new_founder_session_path
+      fill_in 'founder_email', with: founder.email
+      fill_in 'founder_password', with: 'password'
       click_on 'Sign in'
     end
 
     scenario 'Founder of startup visits contact page' do
       visit about_contact_path
 
-      expect(page).to have_selector("input[value='#{user.fullname}']")
-      expect(page).to have_selector("input[value='#{user.email}']")
-      expect(page).to have_selector("input[value='#{user.startup.display_name}']")
+      expect(page).to have_selector("input[value='#{founder.fullname}']")
+      expect(page).to have_selector("input[value='#{founder.email}']")
+      expect(page).to have_selector("input[value='#{founder.startup.display_name}']")
     end
   end
 

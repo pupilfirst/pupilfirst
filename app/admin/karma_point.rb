@@ -1,14 +1,14 @@
 ActiveAdmin.register KarmaPoint do
-  menu parent: 'Users'
+  menu parent: 'Founders'
 
-  permit_params :user_id, :points, :activity_type, :created_at
+  permit_params :startup_id, :founder_id, :points, :activity_type, :created_at
 
   preserve_default_filters!
-  filter :user_startup_id_eq, label: 'Startup from Batch 1', as: :select, collection: proc { Startup.where(batch_number: 1) }
+  filter :founder_startup_id_eq, label: 'Batched Startup', as: :select, collection: proc { Startup.batched }
 
   controller do
     def scoped_collection
-      super.includes :user
+      super.includes :founder
     end
   end
 
@@ -29,18 +29,15 @@ ActiveAdmin.register KarmaPoint do
   index do
     selectable_column
 
-    column :user do |karma_point|
-      span do
-        link_to karma_point.user.fullname, karma_point.user
-      end
-
-      if karma_point.startup
-        span class: 'wrap-with-paranthesis' do
-          link_to karma_point.startup.product_name, karma_point.startup
+    column 'Founder' do |karma_point|
+      if karma_point.founder.present?
+        span do
+          link_to karma_point.founder.fullname, admin_founder_path(karma_point.founder)
         end
       end
     end
 
+    column :startup
     column :points
     column :activity_type
     column :source
@@ -51,14 +48,25 @@ ActiveAdmin.register KarmaPoint do
     end
   end
 
+  collection_action :founders_for_startup do
+    @startup = Startup.find params[:startup_id]
+    render 'founders_for_startup.json.erb'
+  end
+
   form do |f|
+    div id: 'karma-point-founders-for-startup-url', 'data-url' => founders_for_startup_admin_karma_points_url
+
     f.inputs 'Extra' do
-      f.input(
-        :user,
-        collection: User.founders,
-        member_label: proc { |u| "#{u.fullname}#{u.roles.present? ? " (#{founder_roles(u.roles)})" : ''} - #{u.startup.product_name}" },
-        input_html: { style: 'width: calc(80% - 22px);' }
-      )
+      f.input :startup,
+        include_blank: true,
+        label: 'Product',
+        member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }
+
+      f.input :founder,
+        label: 'Founder',
+        as: :select,
+        collection: f.object.persisted? ? f.object.startup.founders : [],
+        include_blank: 'Not linked to founder'
 
       f.input :points
       f.input :activity_type

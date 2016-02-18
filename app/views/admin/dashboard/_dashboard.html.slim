@@ -1,5 +1,6 @@
 /= javascript_include_tag '//www.google.com/jsapi', 'chartkick'
-- batch_selected = params[:batch].present? ? params[:batch] : Batch.current.id
+- batch_selected = params[:batch].present? ? params[:batch] : Batch.current_or_last.id
+
 .table_tools
   ul.scopes.table_tools_segmented_control style="width: calc((100% - 10px)); float: right;"
     - Startup.available_batches.each do |batch|
@@ -82,14 +83,17 @@
       | View All (#{startup_feedback_from_last_week.count})
 
   .dashboard-item
-    - connect_requests_confirmed = ConnectRequest.for_batch(batch_selected).confirmed.order('connect_requests.confirmed_at DESC')
+    - connect_requests_confirmed = ConnectRequest.for_batch(batch_selected).confirmed.upcoming
 
-    .heading Connect Requests - Confirmed
+    .heading Upcoming Connect Requests
 
     .content
       ol
-        - connect_requests_confirmed.limit(10).each do |connect_request|
-          li = link_to "#{connect_request.startup.product_name} - #{connect_request.faculty.name}", admin_connect_request_path(connect_request)
+        - connect_requests_confirmed.joins(:connect_slot).order('connect_slots.slot_at').limit(10).each do |connect_request|
+          - startup_name = connect_request.startup.product_name
+          - faculty_name = connect_request.faculty.name
+          - slot_time = connect_request.connect_slot.slot_at.strftime('%b %e, %l:%M %p')
+          li = link_to "#{startup_name} - #{faculty_name} (#{slot_time})", admin_connect_request_path(connect_request)
 
     .footer-spacer
 
@@ -108,8 +112,11 @@
 
     .content
       ol
-        - connect_requests_requested.limit(10).each do |connect_request|
-          li = link_to "#{connect_request.startup.product_name} - #{connect_request.faculty.name}", admin_connect_request_path(connect_request)
+        - connect_requests_requested.joins(:connect_slot).order('connect_slots.slot_at').limit(10).each do |connect_request|
+          - startup_name = connect_request.startup.product_name
+          - faculty_name = connect_request.faculty.name
+          - slot_time = connect_request.connect_slot.slot_at.strftime('%b %e, %l:%M %p')
+          li = link_to "#{startup_name} - #{faculty_name} (#{slot_time})", admin_connect_request_path(connect_request)
 
     .footer-spacer
 

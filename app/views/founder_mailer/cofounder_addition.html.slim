@@ -1,0 +1,10 @@
+= content_for :heading
+  | Congratulations! You have been added to #{@current_founder.fullname}'s startup as a co-founder.
+
+= content_for :salutation
+  | Hi,
+
+= content_for :body
+  p #{@current_founder.fullname} has added you as a co-founder for his startup (#{@current_founder.startup.display_name})! You may have a look at your startup details at SV.CO #{link_to 'here', startup_url(@current_founder.startup)}.
+
+  p Good luck, and have fun!

@@ -1,0 +1,51 @@
+= simple_form_for founder, :html => { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean, file: :horizontal_file_input } do |f|
+  legend Basic details
+
+  = f.error_notification
+
+  = f.input :first_name, input_html: { maxlength: 255 }, required: true
+  = f.input :last_name, input_html: { maxlength: 255 }, required: true
+  = f.input :born_on, as: :date_picker, required: true, label: 'Date of birth', placeholder: 'DD/MM/YYYY'
+
+  .form-group
+    .control-label.col-sm-3
+      strong Phone number
+    .col-sm-9
+      .phone-number-controls #{founder.phone} (#{link_to 'Change?', phone_founder_path(referer: edit_founder_url)})
+
+  = f.input :avatar, as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }
+  = f.input :about, label: 'One-Liner', placeholder: 'One-liner about yourself', input_html: { maxlength: 255 }
+
+  - if founder.startup.present?
+    = f.input :roles, label: 'Role at Startup', as: :select, collection: Founder.valid_roles, label_method: ->(role) { t "founder.#{role}" }, include_hidden: false, input_html: { multiple: true }
+
+  = f.input :slack_username, label: (link_to 'Public Slack Username<sup>?</sup></a>'.html_safe, about_slack_url, target: '_blank'), placeholder: 'mention_name (excluding @)'
+  = f.input :communication_address
+  = f.association :university, include_blank: 'Not a student', collection: University.all.group_by(&:location), as: :grouped_select, group_method: :last
+  = f.input :roll_number, label: 'University Roll Number', required: true
+  = f.input :college_identification, label: 'College ID', as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }
+  = f.input :course, placeholder: 'B-tech in Computer Science'
+  = f.input :semester, placeholder: 'IV'
+  = f.input :year_of_graduation, as: :select, collection: 2014..2020
+
+  .form-group
+    .col-sm-offset-3.col-sm-9
+      = f.button :submit, 'Update basic details', class: 'btn btn-primary btn-flat'
+
+= simple_form_for founder, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean, file: :horizontal_file_input } do |f|
+  legend Social Links
+
+  = f.error_notification
+
+  = f.input :twitter_url, label: 'Twitter Profile URL', input_html: { maxlength: 255 }
+  = f.input :facebook_url, label: 'Facebook Profile URL', input_html: { maxlength: 255 }
+  = f.input :linkedin_url, label: 'LinkedIn Profile URL', input_html: { maxlength: 255 }
+  = f.input :personal_website_url, label: 'Personal Website URL', input_html: { maxlength: 255 }
+  = f.input :blog_url, label: 'Blog URL', input_html: { maxlength: 255 }
+  = f.input :angel_co_url, label: 'AngelList Profile URL', input_html: { maxlength: 255 }
+  = f.input :github_url, label: 'Github Profile URL', input_html: { maxlength: 255 }
+  = f.input :behance_url, label: 'Behance Portfolio URL', input_html: { maxlength: 255 }
+
+  .form-group
+    .col-sm-offset-3.col-sm-9
+      = f.button :submit, 'Update social links', class: 'btn btn-primary btn-flat'

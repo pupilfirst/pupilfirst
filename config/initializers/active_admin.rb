@@ -197,7 +197,7 @@ ActiveAdmin.setup do |config|
   #
   config.namespace :admin do |admin|
     admin.build_menu :utility_navigation do |menu|
-      menu.add id: 'current_user', label: proc { current_admin_user.fullname }, url: proc { admin_admin_user_path current_admin_user }
+      menu.add id: 'current_founder', label: proc { current_admin_user.fullname }, url: proc { admin_admin_user_path current_admin_user }
       admin.add_logout_button_to_menu menu
     end
   end

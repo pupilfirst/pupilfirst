@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160205100017) do
+ActiveRecord::Schema.define(version: 20160218090021) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,15 +62,6 @@ ActiveRecord::Schema.define(version: 20160205100017) do
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.integer  "batch_number"
-  end
-
-  create_table "colleges", force: :cascade do |t|
-    t.string   "name"
-    t.string   "university"
-    t.string   "city"
-    t.string   "state"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "connect_requests", force: :cascade do |t|
@@ -140,8 +131,76 @@ ActiveRecord::Schema.define(version: 20160205100017) do
     t.datetime "updated_at"
   end
 
+  create_table "founders", force: :cascade do |t|
+    t.string   "email"
+    t.string   "first_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "avatar"
+    t.string   "encrypted_password",        default: ""
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",             default: 0,     null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string   "unconfirmed_email"
+    t.string   "invitation_token"
+    t.datetime "invitation_created_at"
+    t.datetime "invitation_sent_at"
+    t.datetime "invitation_accepted_at"
+    t.integer  "invitation_limit"
+    t.integer  "invited_by_id"
+    t.string   "invited_by_type"
+    t.integer  "startup_id"
+    t.string   "title"
+    t.string   "linkedin_url"
+    t.string   "twitter_url"
+    t.date     "born_on"
+    t.string   "auth_token"
+    t.string   "course"
+    t.string   "semester"
+    t.string   "gender"
+    t.string   "phone"
+    t.text     "communication_address"
+    t.string   "phone_verification_code"
+    t.boolean  "startup_admin"
+    t.integer  "year_of_graduation"
+    t.string   "roll_number"
+    t.string   "slack_username"
+    t.integer  "university_id"
+    t.string   "unconfirmed_phone"
+    t.string   "roles"
+    t.string   "last_name",                 default: ""
+    t.string   "college_identification"
+    t.boolean  "avatar_processing",         default: false
+    t.string   "slack_user_id"
+    t.string   "personal_website_url"
+    t.string   "blog_url"
+    t.string   "facebook_url"
+    t.string   "angel_co_url"
+    t.string   "github_url"
+    t.string   "behance_url"
+    t.string   "resume_url"
+    t.string   "slug"
+    t.string   "about"
+    t.datetime "verification_code_sent_at"
+  end
+
+  add_index "founders", ["confirmation_token"], name: "index_founders_on_confirmation_token", unique: true, using: :btree
+  add_index "founders", ["invitation_token"], name: "index_founders_on_invitation_token", unique: true, using: :btree
+  add_index "founders", ["invited_by_id"], name: "index_founders_on_invited_by_id", using: :btree
+  add_index "founders", ["reset_password_token"], name: "index_founders_on_reset_password_token", unique: true, using: :btree
+  add_index "founders", ["slug"], name: "index_founders_on_slug", unique: true, using: :btree
+  add_index "founders", ["university_id"], name: "index_founders_on_university_id", using: :btree
+
   create_table "karma_points", force: :cascade do |t|
-    t.integer  "user_id"
+    t.integer  "founder_id"
     t.integer  "points"
     t.string   "activity_type"
     t.datetime "created_at",    null: false
@@ -151,54 +210,14 @@ ActiveRecord::Schema.define(version: 20160205100017) do
     t.integer  "startup_id"
   end
 
+  add_index "karma_points", ["founder_id"], name: "index_karma_points_on_founder_id", using: :btree
   add_index "karma_points", ["source_id"], name: "index_karma_points_on_source_id", using: :btree
   add_index "karma_points", ["startup_id"], name: "index_karma_points_on_startup_id", using: :btree
-  add_index "karma_points", ["user_id"], name: "index_karma_points_on_user_id", using: :btree
-
-  create_table "mentor_meetings", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "mentor_id"
-    t.string   "purpose"
-    t.datetime "meeting_at"
-    t.integer  "duration"
-    t.string   "status",               default: "requested"
-    t.integer  "mentor_rating"
-    t.integer  "user_rating"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.datetime "suggested_meeting_at"
-    t.text     "user_comments"
-    t.text     "mentor_comments"
-    t.datetime "user_sms_sent_at"
-    t.datetime "mentor_sms_sent_at"
-  end
-
-  add_index "mentor_meetings", ["mentor_id"], name: "index_mentor_meetings_on_mentor_id", using: :btree
-  add_index "mentor_meetings", ["user_id"], name: "index_mentor_meetings_on_user_id", using: :btree
-
-  create_table "mentor_skills", force: :cascade do |t|
-    t.integer  "mentor_id"
-    t.integer  "skill_id"
-    t.string   "expertise"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "mentor_skills", ["mentor_id"], name: "index_mentor_skills_on_mentor_id", using: :btree
-  add_index "mentor_skills", ["skill_id"], name: "index_mentor_skills_on_skill_id", using: :btree
-
-  create_table "mentors", force: :cascade do |t|
-    t.integer  "user_id"
-    t.string   "availability"
-    t.string   "company_level"
-    t.datetime "verified_at"
-    t.string   "company"
-  end
 
   create_table "public_slack_messages", force: :cascade do |t|
     t.text     "body"
     t.string   "slack_username"
-    t.integer  "user_id"
+    t.integer  "founder_id"
     t.string   "channel"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
@@ -206,7 +225,7 @@ ActiveRecord::Schema.define(version: 20160205100017) do
     t.integer  "parent_message_id"
   end
 
-  add_index "public_slack_messages", ["user_id"], name: "index_public_slack_messages_on_user_id", using: :btree
+  add_index "public_slack_messages", ["founder_id"], name: "index_public_slack_messages_on_founder_id", using: :btree
 
   create_table "resources", force: :cascade do |t|
     t.string   "file"
@@ -224,16 +243,6 @@ ActiveRecord::Schema.define(version: 20160205100017) do
   add_index "resources", ["batch_id"], name: "index_resources_on_batch_id", using: :btree
   add_index "resources", ["share_status", "batch_id"], name: "index_resources_on_share_status_and_batch_id", using: :btree
   add_index "resources", ["slug"], name: "index_resources_on_slug", using: :btree
-
-  create_table "startup_applications", force: :cascade do |t|
-    t.string   "name"
-    t.string   "email"
-    t.string   "phone"
-    t.text     "idea"
-    t.string   "website"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "startup_categories", force: :cascade do |t|
     t.string   "name"
@@ -260,7 +269,6 @@ ActiveRecord::Schema.define(version: 20160205100017) do
   add_index "startup_feedback", ["faculty_id"], name: "index_startup_feedback_on_faculty_id", using: :btree
 
   create_table "startups", force: :cascade do |t|
-    t.string   "name"
     t.string   "logo"
     t.string   "pitch"
     t.string   "website"
@@ -314,6 +322,7 @@ ActiveRecord::Schema.define(version: 20160205100017) do
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
     t.text     "slideshow_embed"
+    t.integer  "assigner_id"
   end
 
   create_table "targets", force: :cascade do |t|
@@ -349,6 +358,16 @@ ActiveRecord::Schema.define(version: 20160205100017) do
 
   add_index "team_members", ["startup_id"], name: "index_team_members_on_startup_id", using: :btree
 
+  create_table "timeline_event_files", force: :cascade do |t|
+    t.integer  "timeline_event_id"
+    t.string   "file"
+    t.boolean  "private"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "timeline_event_files", ["timeline_event_id"], name: "index_timeline_event_files_on_timeline_event_id", using: :btree
+
   create_table "timeline_event_types", force: :cascade do |t|
     t.string   "key"
     t.string   "title"
@@ -378,13 +397,13 @@ ActiveRecord::Schema.define(version: 20160205100017) do
     t.string   "verified_status"
     t.string   "grade"
     t.integer  "target_id"
-    t.integer  "user_id"
+    t.integer  "founder_id"
   end
 
+  add_index "timeline_events", ["founder_id"], name: "index_timeline_events_on_founder_id", using: :btree
   add_index "timeline_events", ["startup_id"], name: "index_timeline_events_on_startup_id", using: :btree
   add_index "timeline_events", ["target_id"], name: "index_timeline_events_on_target_id", using: :btree
   add_index "timeline_events", ["timeline_event_type_id"], name: "index_timeline_events_on_timeline_event_type_id", using: :btree
-  add_index "timeline_events", ["user_id"], name: "index_timeline_events_on_user_id", using: :btree
 
   create_table "universities", force: :cascade do |t|
     t.string   "name"
@@ -393,91 +412,12 @@ ActiveRecord::Schema.define(version: 20160205100017) do
     t.string   "location"
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string   "email"
-    t.string   "first_name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "avatar"
-    t.string   "encrypted_password",        default: ""
-    t.string   "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer  "sign_in_count",             default: 0,     null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
-    t.string   "confirmation_token"
-    t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
-    t.string   "unconfirmed_email"
-    t.string   "invitation_token"
-    t.datetime "invitation_created_at"
-    t.datetime "invitation_sent_at"
-    t.datetime "invitation_accepted_at"
-    t.integer  "invitation_limit"
-    t.integer  "invited_by_id"
-    t.string   "invited_by_type"
-    t.integer  "startup_id"
-    t.string   "title"
-    t.string   "linkedin_url"
-    t.string   "twitter_url"
-    t.date     "born_on"
-    t.string   "auth_token"
-    t.boolean  "is_founder"
-    t.string   "din"
-    t.string   "aadhaar"
-    t.string   "place_of_birth"
-    t.string   "salutation"
-    t.string   "course"
-    t.string   "semester"
-    t.string   "gender"
-    t.string   "phone"
-    t.text     "communication_address"
-    t.string   "phone_verification_code"
-    t.string   "company"
-    t.boolean  "startup_admin"
-    t.string   "father_or_husband_name"
-    t.string   "pin"
-    t.string   "district"
-    t.string   "state"
-    t.integer  "years_of_work_experience"
-    t.integer  "year_of_graduation"
-    t.integer  "college_id"
-    t.string   "roll_number"
-    t.string   "slack_username"
-    t.integer  "university_id"
-    t.string   "unconfirmed_phone"
-    t.string   "roles"
-    t.string   "last_name",                 default: ""
-    t.string   "college_identification"
-    t.boolean  "avatar_processing",         default: false
-    t.string   "slack_user_id"
-    t.string   "personal_website_url"
-    t.string   "blog_url"
-    t.string   "facebook_url"
-    t.string   "angel_co_url"
-    t.string   "github_url"
-    t.string   "behance_url"
-    t.string   "resume_url"
-    t.string   "slug"
-    t.string   "about"
-    t.datetime "verification_code_sent_at"
-  end
-
-  add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
-  add_index "users", ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
-  add_index "users", ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-  add_index "users", ["slug"], name: "index_users_on_slug", unique: true, using: :btree
-  add_index "users", ["university_id"], name: "index_users_on_university_id", using: :btree
-
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
   add_foreign_key "resources", "batches"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "team_members", "startups"
+  add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "startups"
 end

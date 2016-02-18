@@ -34,6 +34,7 @@ class Founder < ActiveRecord::Base
   # TODO: Do we need this anymore ?
   scope :student_entrepreneurs, -> { where.not(university_id: nil) }
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
+  scope :non_founders, -> { where(startup_id: nil) }
 
   validates_presence_of :born_on
 

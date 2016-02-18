@@ -61,7 +61,7 @@
             h3.margin-top-0 Targets
             hr
             .row
-              - targets_for_display.each do |targets, target_locals|
+              - pending_targets.each do |targets, target_locals|
                 - if targets.present?
                   .col-sm-6.col-md-12
                     - targets.each do |target|

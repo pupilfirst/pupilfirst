@@ -14,7 +14,7 @@ class Target < ActiveRecord::Base
   scope :pending, -> { where(status: STATUS_PENDING).where('due_date >= ? OR due_date IS NULL', Time.now).order(due_date: 'desc') }
   scope :expired, -> { where(status: STATUS_PENDING).where('due_date < ?', Time.now).order(due_date: 'desc') }
 
-  scope :recently_completed, -> (number) { where(status: STATUS_DONE).order(completed_at: 'desc').limit(number) }
+  scope :completed, -> { where(status: STATUS_DONE).order(completed_at: 'desc') }
   scope :founder, -> { where(role: ROLE_FOUNDER) }
   scope :not_target_roles, -> { where.not(role: target_roles) }
   scope :due_on, -> (date) { where(due_date: date.beginning_of_day..date.end_of_day) }

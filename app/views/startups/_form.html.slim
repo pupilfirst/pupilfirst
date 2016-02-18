@@ -22,7 +22,7 @@ p
             label: 'Product Deck'
           = f.input :name, label: "Startup's Name", input_html: { placeholder: 'Name of your startup', maxlength: 255 }
           = f.input :legal_registered_name, label: 'Legal Registered Name', hint: 'The name of your registered legal entity. Partnership/Pvt. Ltd./LLP etc.'
-          = f.input :logo, as: :file, required: false, input_html: { accept: 'image/*' }
+          = f.input :logo, as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }, required: false
           = f.association :startup_categories,
             hint: 'Industries that your startup is involved in. Max 3.',
             as: :select,

@@ -121,7 +121,7 @@ class TimelineEvent < ActiveRecord::Base
 
   # Accept links in serialized form.
   def serialized_links=(links_string)
-    self.links = JSON.parse(links_string)
+    self.links = JSON.parse(links_string).map(&:symbolize_keys)
   end
 
   after_save :update_timeline_event_files

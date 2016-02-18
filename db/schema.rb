@@ -221,8 +221,6 @@ ActiveRecord::Schema.define(version: 20160218055239) do
     t.string   "channel"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
-    t.string   "timestamp"
-    t.integer  "reaction_to_id"
   end
 
   add_index "public_slack_messages", ["founder_id"], name: "index_public_slack_messages_on_founder_id", using: :btree

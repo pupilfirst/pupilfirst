@@ -161,7 +161,7 @@ ActiveAdmin.register TimelineEvent do
 
   member_action :save_link_as_resume_url, method: :post do
     timeline_event = TimelineEvent.find(params[:id])
-    timeline_event.founder.update!(resume_url: timeline_event.links[params[:index].to_i]['url'])
+    timeline_event.founder.update!(resume_url: timeline_event.links[params[:index].to_i][:url])
     flash[:success] = "Successfully updated founder's Resume URL."
     redirect_to action: :show
   end
@@ -306,15 +306,15 @@ ActiveAdmin.register TimelineEvent do
 
       table_for timeline_event.links do
         column :title do |link|
-          link['title']
+          link[:title]
         end
 
         column :url do |link|
-          link['url']
+          link[:url]
         end
 
         column :private do |link|
-          link['private'] ? status_tag('yes', :ok) : status_tag('no')
+          link[:private] ? status_tag('yes', :ok) : status_tag('no')
         end
 
         column :actions do |link|

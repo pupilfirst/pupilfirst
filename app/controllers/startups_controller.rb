@@ -71,6 +71,11 @@ class StartupsController < ApplicationController
   def show
     @startup = Startup.friendly.find(params[:id])
 
+    # if non-founders try to visit feedback, show an alert
+    if params[:showFeedbackFor].present?
+      flash[:alert] = "Only logged-in founders of the startup can view feedback" unless current_founder && @startup.founder?(current_founder)
+    end
+
     @timeline_event = if params[:event_id]
       @startup.timeline_events.find(params[:event_id])
     else

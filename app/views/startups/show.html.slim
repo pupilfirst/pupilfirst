@@ -402,12 +402,13 @@
               | No timeline events to show!
             = image_tag 'timeline/dash.png'
 
-#improvement-modal.modal.fade role="dialog"
-  .modal-dialog
-    .modal-content
-      .modal-header
-        button.close data-dismiss="modal" type="button"  &times;
-        h4.modal-title
-      .modal-body style="overflow:auto;"
-      .modal-footer
-        button.btn.btn-default data-dismiss="modal" type="button"  Close
+- if current_founder && @startup.founder?(current_founder)
+  #improvement-modal.modal.fade role="dialog"
+    .modal-dialog
+      .modal-content
+        .modal-header
+          button.close data-dismiss="modal" type="button"  &times;
+          h4.modal-title
+        .modal-body style="overflow:auto;"
+        .modal-footer
+          button.btn.btn-default data-dismiss="modal" type="button"  Close

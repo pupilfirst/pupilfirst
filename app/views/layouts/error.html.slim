@@ -11,10 +11,10 @@ html
     title SV.CO
 
     // Local Styles
-    = stylesheet_link_tag 'application'
+    = stylesheet_link_tag 'application', crossorigin: 'anonymous'
 
     // Scripts
-    = javascript_include_tag 'application'
+    = javascript_include_tag 'application', crossorigin: 'anonymous'
 
     = csrf_meta_tags
     = yield :head

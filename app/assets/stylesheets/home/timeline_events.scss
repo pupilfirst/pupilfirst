@@ -42,6 +42,22 @@
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
+
+  &.timeline-event-bg-size { background-size: auto !important; }
+  &.event-bgcolor-1 { background-color: #6A71E6; }
+  &.event-bgcolor-2 { background-color: #3498db; }
+  &.event-bgcolor-3 { background-color: #FF5534; }
+  &.event-bgcolor-4 { background-color: #FE4A65; }
+  &.event-bgcolor-5 { background-color: #f5ab35; }
+  &.event-bgcolor-6 { background-color: #2DBAE7; }
+  &.event-bgcolor-7 { background-color: #9babd4; }
+  &.event-bgcolor-8 { background-color: #61D2FE; }
+  &.event-bgcolor-9 { background-color: #48DC6C; }
+  &.event-bgcolor-10 { background-color: #8BBF53; }
+  &.event-bgcolor-11 { background-color: #8BBF53; }
+  &.event-bgcolor-12 { background-color: #424953; }
+  &.event-bgcolor-13 { background-color: #FA6D52; }
+  &.event-bgcolor-14 { background-color: #8BBF53; }
 }
 
 .timeline-event-body {
@@ -96,6 +112,3 @@ a.timeline-event-link {
     border: solid 1px black;
     color: black; }
 }
-
-
-

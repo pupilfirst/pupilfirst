@@ -7,7 +7,7 @@ section.timeline-events
     - timeline_events_to_showcase(3).each do |event|
       .timeline-event
         .timeline-event-top
-          .timeline-event-image class="#{event.image_url.present? ? '' : 'event-bg-size'} event-bgcolor-#{cycle *((1..14).to_a)}" style="background-image: url(#{event.image_url.present? ? event.image_url : event.timeline_event_type.badge});"
+          .timeline-event-image class="#{event.image_url.present? ? '' : 'timeline-event-bg-size'} event-bgcolor-#{cycle *((1..14).to_a)}" style="background-image: url(#{event.image_url.present? ? event.image_url : event.timeline_event_type.badge});"
           .timeline-event-body
             h5.timeline-event-title #{event.startup.product_name}: #{event.timeline_event_type.title}
             img.line src="#{image_url 'home/line2.png'}" width="100%"

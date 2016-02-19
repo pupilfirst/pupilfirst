@@ -251,6 +251,12 @@ setImprovementModalContent = ->
     $('#improvement-modal').find('.modal-body').html("<pre>#{feedback}</pre>")
     $('#improvement-modal').find('.modal-title').html("Feedback from #{faculty}")
 
+checkForShowFeedbackParam = ->
+  if $('#improvement-modal')
+    eventId = $('#improvement-modal').data('showfeedbackfor')
+    if eventId
+      $("#feedback-button-for-event-#{eventId}").click()
+
 addTooltipToHideCheckbox = ->
   $("#hide-from-public").tooltip()
 
@@ -263,6 +269,7 @@ $(document).on 'page:change', setPendingTooltips
 $(document).on 'page:change', matchSampleTextToEventType
 $(document).on 'page:change', setupTimelineBuilderDatepicker
 $(document).on 'page:change', setImprovementModalContent
+$(document).on 'page:change', checkForShowFeedbackParam
 $(document).on 'page:change', addTooltipToHideCheckbox
 $(document).on 'page:change', markSelectedAttachments
 $(document).on 'page:change', updateAttachmentsTabTitle

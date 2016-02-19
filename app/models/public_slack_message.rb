@@ -5,7 +5,7 @@ class PublicSlackMessage < ActiveRecord::Base
   has_many :reactions, class_name: PublicSlackMessage, foreign_key: 'reaction_to_id'
   belongs_to :reaction_to, class_name: PublicSlackMessage
 
-  def is_reaction?
+  def reaction?
     reaction_to.present?
   end
 

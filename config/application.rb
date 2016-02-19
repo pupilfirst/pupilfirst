@@ -34,5 +34,12 @@ module Svapp
     end
 
     config.cache_store = :memory_store, { size: 64.megabytes }
+
+    config.middleware.insert_before 0, 'Rack::Cors' do
+      allow do
+        origins /(https:\/\/(www\.)?sv\.co$)|(^http:\/\/localhost:[0-9]{4,5})/
+        resource '*', :headers => :any, :methods => [:get]
+      end
+    end
   end
 end

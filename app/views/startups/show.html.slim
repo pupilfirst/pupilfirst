@@ -402,8 +402,8 @@
               | No timeline events to show!
             = image_tag 'timeline/dash.png'
 
-- if current_founder && @startup.founder?(current_founder)
-  #improvement-modal.modal.fade role="dialog" data-showFeedbackFor="#{params[:showFeedbackFor]}"
+- if @startup.founder?(current_founder)
+  #improvement-modal.modal.fade role="dialog" data-feedback="#{@feedback_to_show&.feedback}" data-faculty="#{@feedback_to_show&.faculty&.name}"
     .modal-dialog
       .modal-content
         .modal-header

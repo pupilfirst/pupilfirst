@@ -286,7 +286,7 @@
                       - if latest_feedback.present?
                         - feedback = latest_feedback.feedback
                         - faculty = "#{latest_feedback.faculty.name} of Team SV"
-                        a.fa.fa-comment.pull-right.pointer-cursor id="feedback-button-for-event-#{event.id}" data-toggle="modal" data-target="#improvement-modal" data-feedback="#{latest_feedback.feedback}" data-faculty="#{faculty}"
+                        a.fa.fa-comment.pull-right.pointer-cursor.show-feedback-button data-feedback="#{latest_feedback.feedback}" data-faculty="#{faculty}"
                   - if event.pending?
                     .pending-verification href="#" data-toggle="tooltip" title="This event has not yet been verified by SV.CO, and is hidden from the public."
                       i.fa.fa-exclamation-circle
@@ -348,7 +348,7 @@
                             - if latest_feedback.present?
                               - feedback = latest_feedback.feedback
                               - faculty = "#{latest_feedback.faculty.name} of Team SV"
-                              a.fa.fa-comment.pull-right.pointer-cursor id="feedback-button-for-event-#{event.id}" data-toggle="modal" data-target="#improvement-modal" data-feedback="#{latest_feedback.feedback}" data-faculty="#{faculty}"
+                              a.fa.fa-comment.pull-right.pointer-cursor.show-feedback-button data-feedback="#{latest_feedback.feedback}" data-faculty="#{faculty}"
                         p.tl-date
                           small
                             i.fa.fa-calendar

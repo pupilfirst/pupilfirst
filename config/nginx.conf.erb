@@ -198,7 +198,7 @@ http {
               set $filename $1;
             }
 
-            if ($filename ~* ^.*?\.(eot)|(ttf)|(woff)|(woff2)|(svg)|(otf)$) {
+            if ($filename ~* ^.*?\.(eot)|(ttf)|(woff)|(woff2)|(svg)|(otf)|(js)|(css)$) {
               add_header Access-Control-Allow-Origin *;
             }
         }

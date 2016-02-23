@@ -1,6 +1,6 @@
 ActiveAdmin.register StartupFeedback do
   menu parent: 'Startups', label: 'Feedback'
-  permit_params :feedback, :reference_url, :startup_id, :send_email, :faculty_id, :activity_type
+  permit_params :feedback, :reference_url, :startup_id, :send_email, :faculty_id, :activity_type, :attachment
 
   preserve_default_filters!
   filter :startup_product_name, as: :select, collection: proc { Startup.all.pluck(:product_name).uniq }
@@ -94,6 +94,7 @@ ActiveAdmin.register StartupFeedback do
 
       row :reference_url
       row :faculty
+      row :attachment
 
       row :sent_at do |startup_feedback|
         if startup_feedback.sent_at.present?

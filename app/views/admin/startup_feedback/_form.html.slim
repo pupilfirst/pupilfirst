@@ -12,6 +12,7 @@
       p.inline-errors-replica #{@startup_feedback.errors[:feedback][0]}
     = f.input :activity_type
     = f.input :reference_url
+    = f.input :attachment, as: :file
     = f.input :faculty, placeholder: 'Select faculty member'
 
   = f.submit

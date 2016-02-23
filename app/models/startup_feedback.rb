@@ -5,6 +5,9 @@ class StartupFeedback < ActiveRecord::Base
 
   scope :for_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch }) }
 
+  # mount uploader for attachment
+  mount_uploader :attachment, StartupFeedbackAttachmentUploader
+
   validates_presence_of :faculty, :feedback, :startup
 
   REGEX_TIMELINE_EVENT_URL = %r{startups/.*event-(?<event_id>[\d]+)}

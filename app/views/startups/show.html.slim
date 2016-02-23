@@ -286,7 +286,9 @@
                       - if latest_feedback.present?
                         - feedback = latest_feedback.feedback
                         - faculty = "#{latest_feedback.faculty.name} of Team SV"
-                        a.fa.fa-comment.pull-right.pointer-cursor.show-feedback-button data-feedback="#{latest_feedback.feedback}" data-faculty="#{faculty}"
+                        a.fa.fa-comment.pull-right.pointer-cursor.show-feedback-button [data-feedback="#{latest_feedback.feedback}"
+                          data-faculty="#{faculty}" data-attachment-url="#{latest_feedback&.attachment&.url}"
+                          data-attachment-name="#{latest_feedback&.attachment_file_name}"]
                   - if event.pending?
                     .pending-verification href="#" data-toggle="tooltip" title="This event has not yet been verified by SV.CO, and is hidden from the public."
                       i.fa.fa-exclamation-circle
@@ -348,7 +350,10 @@
                             - if latest_feedback.present?
                               - feedback = latest_feedback.feedback
                               - faculty = "#{latest_feedback.faculty.name} of Team SV"
-                              a.fa.fa-comment.pull-right.pointer-cursor.show-feedback-button data-feedback="#{latest_feedback.feedback}" data-faculty="#{faculty}"
+                              a.fa.fa-comment.pull-right.pointer-cursor.show-feedback-button [data-feedback="#{latest_feedback.feedback}"
+                                data-faculty="#{faculty}" data-attachment-url="#{latest_feedback&.attachment&.url}"
+                                data-attachment-name="#{latest_feedback&.attachment_file_name}"]
+
                         p.tl-date
                           small
                             i.fa.fa-calendar
@@ -403,12 +408,23 @@
             = image_tag 'timeline/dash.png'
 
 - if @startup.founder?(current_founder)
-  #improvement-modal.modal.fade role="dialog" data-feedback="#{@feedback_to_show&.feedback}" data-faculty="#{@feedback_to_show&.faculty&.name}"
+  #improvement-modal.modal.fade [role="dialog"
+    data-feedback="#{@feedback_to_show&.feedback}"
+    data-faculty="#{@feedback_to_show&.faculty&.name}"
+    data-attachment-url="#{@feedback_to_show&.attachment&.url}"
+    data-attachment-name="#{@feedback_to_show&.attachment_file_name}"]
     .modal-dialog
       .modal-content
         .modal-header
           button.close data-dismiss="modal" type="button"  &times;
           h4.modal-title
         .modal-body style="overflow:auto;"
+          .feedback-text
+          .attachment.hidden
+            .attachment-name.grey-text.fa.fa-paperclip
+            a.attachment-download-btn.grey-text.margin-left-10.btn.btn-default.btn-xs target="_blank"
+              i.fa.fa-download
+              | &nbsp;
+              | Download
         .modal-footer
           button.btn.btn-default data-dismiss="modal" type="button"  Close

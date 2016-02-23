@@ -5,6 +5,9 @@ class StartupFeedback < ActiveRecord::Base
 
   scope :for_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch }) }
 
+  # mount uploader for attachment
+  mount_uploader :attachment, StartupFeedbackAttachmentUploader
+
   validates_presence_of :faculty, :feedback, :startup
 
   REGEX_TIMELINE_EVENT_URL = %r{startups/.*event-(?<event_id>[\d]+)}
@@ -34,5 +37,9 @@ class StartupFeedback < ActiveRecord::Base
     feedback_text = "<#{feedback_url}|Click here> to view the feedback.\n"
     footer = "A copy of this feedback has also been emailed to you."
     salutation + feedback_text + footer
+  end
+
+  def attachment_file_name
+    attachment? ? attachment.sanitized_file.original_filename : nil
   end
 end

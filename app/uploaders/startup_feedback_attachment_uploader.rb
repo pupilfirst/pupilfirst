@@ -14,8 +14,4 @@ class StartupFeedbackAttachmentUploader < CarrierWave::Uploader::Base
   def fog_directory
     ENV['PRIVATE_S3_BUCKET_NAME']
   end
-
-  def asset_host
-    ENV['PRIVATE_S3_ASSET_HOST']
-  end
 end

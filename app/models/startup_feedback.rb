@@ -38,4 +38,8 @@ class StartupFeedback < ActiveRecord::Base
     footer = "A copy of this feedback has also been emailed to you."
     salutation + feedback_text + footer
   end
+
+  def attachment_file_name
+    attachment? ? attachment.sanitized_file.original_filename : nil
+  end
 end

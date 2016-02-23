@@ -244,12 +244,22 @@ setupTimelineBuilderDatepicker = ->
       timelineEventDateField.tooltip('destroy')
   )
 
-setImprovementModalContent = ->
-  $('#improvement-modal').on 'show.bs.modal', (event) ->
-    feedback = $(event.relatedTarget).data('feedback')
-    faculty = $(event.relatedTarget).data('faculty')
-    $('#improvement-modal').find('.modal-body').html("<pre>#{feedback}</pre>")
-    $('#improvement-modal').find('.modal-title').html("Feedback from #{faculty}")
+handleShowFeedbackClick = ->
+  $('.show-feedback-button').click (event) ->
+    feedback = $(event.target).data('feedback')
+    faculty = $(event.target).data('faculty')
+    openFeedbackModel(feedback, faculty)
+
+openFeedbackModel = (feedback, faculty) ->
+  $('#improvement-modal').find('.modal-body').html("<pre>#{feedback}</pre>")
+  $('#improvement-modal').find('.modal-title').html("Feedback from #{faculty}")
+  $('#improvement-modal').modal('show')
+
+showDefaultFeedback = ->
+  if $('#improvement-modal') and $('#improvement-modal').data('feedback') and $('#improvement-modal').data('faculty')
+    feedback = $('#improvement-modal').data('feedback')
+    faculty = $('#improvement-modal').data('faculty')
+    openFeedbackModel(feedback, faculty)
 
 addTooltipToHideCheckbox = ->
   $("#hide-from-public").tooltip()
@@ -262,7 +272,8 @@ $(document).on 'page:change', measureDescriptionLength
 $(document).on 'page:change', setPendingTooltips
 $(document).on 'page:change', matchSampleTextToEventType
 $(document).on 'page:change', setupTimelineBuilderDatepicker
-$(document).on 'page:change', setImprovementModalContent
+$(document).on 'page:change', handleShowFeedbackClick
+$(document).on 'page:change', showDefaultFeedback
 $(document).on 'page:change', addTooltipToHideCheckbox
 $(document).on 'page:change', markSelectedAttachments
 $(document).on 'page:change', updateAttachmentsTabTitle

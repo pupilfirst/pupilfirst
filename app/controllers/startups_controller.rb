@@ -70,6 +70,14 @@ class StartupsController < ApplicationController
 
   def show
     @startup = Startup.friendly.find(params[:id])
+    if params[:show_feedback].present?
+      if current_founder.present?
+        @feedback_to_show = @startup.startup_feedback.where(id: params[:show_feedback]).first if @startup.founder?(current_founder)
+      else
+        session[:referer] = request.original_url
+        redirect_to new_founder_session_path, alert: "Please login to continue!"
+      end
+    end
 
     @timeline_event = if params[:event_id]
       @startup.timeline_events.find(params[:event_id])

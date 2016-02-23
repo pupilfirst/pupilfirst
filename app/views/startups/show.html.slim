@@ -286,7 +286,7 @@
                       - if latest_feedback.present?
                         - feedback = latest_feedback.feedback
                         - faculty = "#{latest_feedback.faculty.name} of Team SV"
-                        a.fa.fa-comment.pull-right.pointer-cursor data-toggle="modal" data-target="#improvement-modal" data-feedback="#{latest_feedback.feedback}" data-faculty="#{faculty}"
+                        a.fa.fa-comment.pull-right.pointer-cursor.show-feedback-button data-feedback="#{latest_feedback.feedback}" data-faculty="#{faculty}"
                   - if event.pending?
                     .pending-verification href="#" data-toggle="tooltip" title="This event has not yet been verified by SV.CO, and is hidden from the public."
                       i.fa.fa-exclamation-circle
@@ -348,7 +348,7 @@
                             - if latest_feedback.present?
                               - feedback = latest_feedback.feedback
                               - faculty = "#{latest_feedback.faculty.name} of Team SV"
-                              a.fa.fa-comment.pull-right.pointer-cursor data-toggle="modal" data-target="#improvement-modal" data-feedback="#{latest_feedback.feedback}" data-faculty="#{faculty}"
+                              a.fa.fa-comment.pull-right.pointer-cursor.show-feedback-button data-feedback="#{latest_feedback.feedback}" data-faculty="#{faculty}"
                         p.tl-date
                           small
                             i.fa.fa-calendar
@@ -402,12 +402,13 @@
               | No timeline events to show!
             = image_tag 'timeline/dash.png'
 
-#improvement-modal.modal.fade role="dialog"
-  .modal-dialog
-    .modal-content
-      .modal-header
-        button.close data-dismiss="modal" type="button"  &times;
-        h4.modal-title
-      .modal-body style="overflow:auto;"
-      .modal-footer
-        button.btn.btn-default data-dismiss="modal" type="button"  Close
+- if @startup.founder?(current_founder)
+  #improvement-modal.modal.fade role="dialog" data-feedback="#{@feedback_to_show&.feedback}" data-faculty="#{@feedback_to_show&.faculty&.name}"
+    .modal-dialog
+      .modal-content
+        .modal-header
+          button.close data-dismiss="modal" type="button"  &times;
+          h4.modal-title
+        .modal-body style="overflow:auto;"
+        .modal-footer
+          button.btn.btn-default data-dismiss="modal" type="button"  Close

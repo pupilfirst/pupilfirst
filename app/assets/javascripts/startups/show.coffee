@@ -1,11 +1,19 @@
 #= require masonry/dist/masonry.pkgd.js
-
+# //= require bootstrap-tabcollapse
 $(document).on 'page:change', ->
   $('#verified-icon').tooltip()
   $('.truncated-founder-name').tooltip()
   $('#startup-grid').masonry
     itemSelector: '.startup-event-entry'
     columnWidth: '.startup-event-entry'
+
+$(document).on 'page:change', ->
+  $('#targets-tab').tabCollapse
+    tabsClass: 'hidden-md hidden-sm hidden-xs',
+    accordionClass: 'visible-md visible-sm visible-xs'
+  $('#pending-targets-list .panel-collapse:first').addClass('in');
+  $('#expired-targets-list .panel-collapse:first').addClass('in');
+  $('#completed-targets-list .panel-collapse:first').addClass('in');
 
 $(document).on 'page:change', ->
   $(".tl_link_button").click((e) ->

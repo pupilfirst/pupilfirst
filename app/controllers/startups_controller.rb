@@ -69,6 +69,7 @@ class StartupsController < ApplicationController
   end
 
   def show
+    @skip_container = true
     @startup = Startup.friendly.find(params[:id])
     if params[:show_feedback].present?
       if current_founder.present?

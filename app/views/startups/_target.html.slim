@@ -1,5 +1,7 @@
 .target-container
   .target-title
+    h2
+      | #{target.title}
     .labels.text-uppercase
       span.label.label-primary #{t("role.#{target.role}")}
       | &nbsp;
@@ -9,11 +11,8 @@
           - if target.completion_comment?
             a.fa.fa-check-square-o.white-text href='#' data-toggle="tooltip" title="#{target.completion_comment}"
       - else
-        span.label.label-default #{t('target.status.pending')}
-    h4
-      | #{target.title}
-  .target-description
-    p = target.description.html_safe
+        span.label.label-warning #{t('target.status.pending')}
+  .target-description = target.description.html_safe
     - if pending && target.completion_instructions.present?
       = target.completion_instructions
   .learn-more
@@ -41,5 +40,3 @@
           br
           | Due date: <strong>#{target.due_date.in_time_zone('Asia/Calcutta').strftime('%b %-d at %I:%M %p')}</strong>.
     .clearfix
-
--

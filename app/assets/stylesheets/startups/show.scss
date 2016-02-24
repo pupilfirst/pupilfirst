@@ -274,36 +274,47 @@ h1.product-name {
 }
 
 .target-container {
-  background-color: #f7f7f7;
-  box-shadow: 2px 2px 2px #d2d2d2;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 
-  h4 {
-    margin: 0;
-    font-size: 110%;
+  .target-title {
+    h2 {
+      margin: 0;
+      border-bottom: 0;
+      font-size: 18px;
+      font-weight: 400;
+
+      &:before {
+        border-left: 3px solid #0091c9;
+        position: absolute;
+        content: ' ';
+        left: 0;
+        height: 20px;
+      }
+    }
+    .labels {
+      display: block;
+    }
+  }
+
+  .target-description {
+    margin-top: 10px;
+    border-top: 1px solid #cdcdcd;
+    padding: 8px 0px; }
+
+  .learn-more {
+    padding: 0;
+    color: $dark-grey-text;
+
+    .assigner {
+      font-size: 80%;
+      display: inline-block;
+      border-top: 1px solid #cdcdcd;
+    }
+    .assigner-center {
+      padding-top: 4px;
+    }
   }
 }
-
-.target-title {
-  background-color: #EFEFEF;
-  padding: 8px 10px;
-
-  .labels {
-    float: right;
-    margin: -4px -5px 10px 10px;
-  }
-}
-
-.target-description { padding: 8px 10px; }
-
-.learn-more {
-  background-color: #EFEFEF;
-  padding: 8px 10px;
-
-  .assigner { font-size: 80%; }
-  .assigner-center { padding-top: 7px; }
-}
-
 .timeline-panel .hidden-marker {
   position: absolute;
   top: 0;
@@ -586,14 +597,93 @@ h1.product-name {
 .founder, .founder-avatar > img {
   height: 130px;
 }
-#target-collapse {
+.target-top-head {
+  font-size: 18px;
+  line-height: 20px;
+  color: $theme-dark-green;
+  font-weight: 400;
 
-  .expired-target-head {
-    background-color: #e16c6c;
-    color: white;
+  i {
+    font-size: 19px;
+    padding-right: 8px;
+    vertical-align: bottom;
+  }
+}
+.targets-all {
+  margin-top: 10px;
 
-    h5 {
-      font-size: 16px;
+  ul#targets-tab {
+    li {
+      a {
+        outline: 0;
+        font-size: 14px;
+        margin: 0;
+        border-radius: 0;
+        border-top: 0;
+        padding: 10px;
+
+        i {
+          font-size: 14px;
+          padding-right: 5px;
+        }
+        &:hover, &:focus {
+          color: #0587bc;
+          box-shadow: 0 -2px 0 0 #ddd;
+          background-color: #f6f6f6;
+        }
+        .badge {
+          margin-left: 5px;
+          font-size: 11px;
+          padding: 2px 5px;
+          border-radius: 7px;
+          vertical-align: inherit;
+          background-color: #0587bc;
+          line-height: 12px;
+          top: -1px;
+          position: relative;
+
+        }
+      }
+      &.active {
+        a {
+          &.pending-tab {
+            color: #fc9322;
+            box-shadow: 0 -2px 0 0 #fc9322;
+          }
+          &.expired-tab {
+            color: #d24334;
+            box-shadow: 0 -2px 0 0 #d24334;
+          }
+          &.completed-tab {
+            color: #4ea243;
+            box-shadow: 0 -2px 0 0 #4ea243;
+          }
+          .badge {
+            &.pending-count {
+              background-color: #fc9322;
+            }
+            &.expired-count {
+              background-color: #d24334;
+            }
+            &.completed-count {
+              background-color: #4ea243;
+            }
+          }
+          &:hover, &:focus {
+            background-color: white;
+          }
+        }
+      }
+    }
+  }
+  .target-content {
+    padding: 20px 15px 10px;
+    color: #333333;
+    border: 1px solid #ddd;
+    border-top: 0;
+
+    .panel {
+      margin-bottom: 10px;
     }
   }
   .target-list {
@@ -605,55 +695,70 @@ h1.product-name {
       display: block;
       position: relative;
       outline: 0;
-      padding: 10px 15px;
+      padding: 10px 15px 8px;
       font-size: 16px;
       font-weight: 300;
       margin-bottom: -1px;
+      line-height: 20px;
       text-decoration: none;
       color: #333333;
       border-bottom: 1px solid $grey-border;
 
-      .expired-target-title {
-        display: block;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 140px;
+      .target-head {
+          display: inline-block;
+          width: 125px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          @media screen and (max-width: $screen-xs-max) {
+            width: 90px;
+          }
+
       }
       .target-due {
         display: inline-block;
         position: absolute;
         right: 45px;
-        font-size: 14px;
+        font-size: 13px;
+        text-align: right;
+
+        @media screen and (max-width: $screen-xs-max) {
+          width: 80px;
+          right: 30px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
       }
       .arrow-target {
         position: relative;
         width: 20px;
         height: 20px;
-        border: 1px solid #d2d2d2;
+        border: 1px solid #bbbbbb;
+        border-radius: 5px;
         text-align: center;
         border-radius: 6px;
         color: #bbbbbb;
-        line-height: 20px;
-        border-color: #bbbbbb;
-        box-shadow: 0px 0px 5px #d2d2d2;
+        line-height: 18px;
 
         &:before {
           content: '\f106';
           font-family: FontAwesome;
-          color: #bbbbbb;
+          color: #ccc;
+        }
+        @media screen and (max-width: $screen-xs-max) {
+          border: 0;
         }
       }
       &.collapsed {
 
         .arrow-target {
-          border-color: #e16c6c;
-          box-shadow: none;
+          line-height: 20px;
 
           &:before {
             content: '\f107';
             font-family: FontAwesome;
-            color: #e16c6c;
+            color: #ccc;
           }
         }
       }
@@ -662,10 +767,11 @@ h1.product-name {
       }
     }
   }
-
-  .target-content {
-    padding: 0 15px;
-    color: #333333;
+  .target-data {
+    display: block;
+    position: relative;
+    margin: 0;
+    background-color: transparent;
 
     h2 {
       margin: 0;
@@ -682,22 +788,107 @@ h1.product-name {
         height: 20px;
       }
     }
-    h3 {
+    h4 {
+      font-size: 13px;
+      display: inline-block;
+      padding-bottom: 5px;
+      padding-right: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+  }
+  #targets-tab-accordion {
+    .panel {
+      border-radius: 0;
+      margin-top: 10px;
+
+      &:first-child {
         margin: 0;
-        padding-top: 10px;
-        padding-bottom: 6px;
-        padding-right: 10px;
-        font-size: 13px;
-        display: inline-block;
-        border-bottom: 1px solid $grey-border;
+      }
     }
-    p {
-      margin: 10px 0;
-      font-weight: 300;
-    }
-    .expired-targets-description {
-      padding: 10px 0;
-      font-weight: 300;
+    .panel-heading {
+      padding: 0;
+
+      a {
+        outline: 0;
+        font-size: 16px;
+        margin: 0;
+        display: block;
+        border-radius: 0;
+        border-top: 0;
+        padding: 10px;
+        text-decoration: none;
+
+        i {
+          font-size: 16px;
+          padding-right: 5px;
+        }
+        &:hover, &:focus {
+          color: #0587bc;
+          background-color: #f6f6f6;
+        }
+        .badge {
+          margin-left: 5px;
+          font-size: 12px;
+          padding: 3px 8px;
+          border-radius: 8px;
+          vertical-align: inherit;
+          background-color: #0587bc;
+          line-height: 12px;
+        }
+        .accordian-arrow-target {
+          position: relative;
+          width: 20px;
+          height: 20px;
+          border: 1px solid #bbbbbb;
+          border-radius: 5px;
+          text-align: center;
+          border-radius: 6px;
+          color: #bbbbbb;
+          line-height: 18px;
+
+          &:before {
+            content: '\f106';
+            font-family: FontAwesome;
+            color: #ccc;
+          }
+        }
+        &.pending-tab {
+          color: #fc9322;
+          box-shadow: -2px 0 0 0 #fc9322;
+        }
+        &.expired-tab {
+          color: #d24334;
+          box-shadow: -2px 0 0 0 #d24334;
+        }
+        &.completed-tab {
+          color: #4ea243;
+          box-shadow: -2px 0 0 0 #4ea243;
+        }
+        .badge {
+          &.pending-count {
+            background-color: #fc9322;
+          }
+          &.expired-count {
+            background-color: #d24334;
+          }
+          &.completed-count {
+            background-color: #4ea243;
+          }
+        }
+
+        &.collapsed {
+
+          .accordian-arrow-target {
+            line-height: 20px;
+
+            &:before {
+              content: '\f107';
+              font-family: FontAwesome;
+              color: #ccc;
+            }
+          }
+        }
+      }
     }
   }
 }

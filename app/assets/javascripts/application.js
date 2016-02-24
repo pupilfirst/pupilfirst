@@ -28,6 +28,9 @@
 //= require jquery-stickit
 //= require jquery.scrollTo
 
+// Rails assets
+//= require intro.js/intro.js
+
 // Shared
 //= require _shared
 

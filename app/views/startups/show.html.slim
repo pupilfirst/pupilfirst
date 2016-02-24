@@ -2,6 +2,13 @@
   title SV.CO Verified Timeline for #{@startup.product_name}
   meta name="description" content="#{@startup.display_name}: #{@startup.product_description}"
 
+- if @tour.present?
+  #startup-show-tour.hide [data-intro=t('startup.show.tour.intro')
+    data-data-points=t('startup.show.tour.data_points')
+    data-founders=t('startup.show.tour.founders')
+    data-timeline-builder=t('startup.show.tour.timeline_builder')
+    data-timeline-event=t('startup.show.tour.timeline_event')]
+
 .container
   /TO DO: probably rewrite this in a cleaner way
   - if @startup.pending? || @startup.unready?

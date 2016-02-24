@@ -456,6 +456,7 @@ GEM
     rails-assets-fizzy-ui-utils (2.0.0)
       rails-assets-matches-selector (~> 2.0.0)
     rails-assets-get-size (2.0.2)
+    rails-assets-intro.js (2.0.0)
     rails-assets-jquery (2.2.0)
     rails-assets-jquery-stickit (0.2.0)
       rails-assets-jquery (>= 1.6)
@@ -683,6 +684,7 @@ DEPENDENCIES
   rails (= 4.2.5.1)
   rails-assets-bootstrap-tabcollapse!
   rails-assets-curioussolutions-datetimepicker!
+  rails-assets-intro.js!
   rails-assets-jquery-stickit!
   rails-assets-jquery.scrollTo!
   rails-assets-masonry!

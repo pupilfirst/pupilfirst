@@ -80,11 +80,10 @@ class StartupsController < ApplicationController
       end
     end
 
-    @timeline_event = if params[:event_id]
-      @startup.timeline_events.find(params[:event_id])
-    else
-      @startup.timeline_events.new
-    end
+    @timeline_event = timeline_event_for_builder
+
+    # Should we take the user on a tour?
+    @tour = take_on_tour?
   end
 
   def edit
@@ -182,5 +181,19 @@ class StartupsController < ApplicationController
   def restrict_to_startup_admin
     return if current_founder.startup_admin?
     raise_not_found
+  end
+
+  # A tour of timeline page may be given if user is founder of viewed startup, and the tour param is present.
+  def take_on_tour?
+    current_founder.present? && current_founder.startup == @startup && params[:tour].present?
+  end
+
+  # If an event_id is available, use that, otherwise supply a new timeline event.
+  def timeline_event_for_builder
+    if params[:event_id]
+      @startup.timeline_events.find(params[:event_id])
+    else
+      @startup.timeline_events.new
+    end
   end
 end

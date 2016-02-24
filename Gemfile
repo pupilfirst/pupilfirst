@@ -85,6 +85,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-masonry' # Masonry works by placing elements in optimal position based on available vertical space.
   gem 'rails-assets-jquery-stickit' # A jQuery plugin provides a sticky header, sidebar or else when scrolling.
   gem 'rails-assets-jquery.scrollTo' # Lightweight, cross-browser and highly customizable animated scrolling with jQuery
+  gem 'rails-assets-intro.js' # A better way for new feature introduction and step-by-step users guide for your website and project.
 end
 
 group :development do

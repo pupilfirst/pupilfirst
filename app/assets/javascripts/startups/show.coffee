@@ -290,6 +290,36 @@ resetOnHideFeedbackModal = ->
 addTooltipToHideCheckbox = ->
   $("#hide-from-public").tooltip()
 
+giveATour = ->
+  startupShowTour = $('#startup-show-tour')
+
+  if startupShowTour.length > 0
+    tour = introJs()
+    tour.setOptions(
+      steps: [
+        {
+          intro: startupShowTour.data('intro')
+        },
+        {
+          element: $('.timeline-builder')[0],
+          intro: startupShowTour.data('timelineBuilder')
+        },
+        {
+          element: $('.timeline-panel')[0],
+          intro: startupShowTour.data('timelineEvent')
+        },
+        {
+          element: $('.data-icons')[0],
+          intro: startupShowTour.data('dataPoints')
+        },
+        {
+          element: $('.data-founder')[0],
+          intro: startupShowTour.data('founders')
+        }
+      ]
+    )
+    tour.start()
+
 $(document).on 'page:change', timelineBuilderSubmitChecks
 $(document).on 'page:change', setupSelect2ForEventType
 $(document).on 'page:change', clearErrorsOnOpeningSelect2
@@ -304,3 +334,4 @@ $(document).on 'page:change', resetOnHideFeedbackModal
 $(document).on 'page:change', addTooltipToHideCheckbox
 $(document).on 'page:change', markSelectedAttachments
 $(document).on 'page:change', updateAttachmentsTabTitle
+$(document).on 'page:change', giveATour

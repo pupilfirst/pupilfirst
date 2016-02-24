@@ -326,7 +326,9 @@
       - if current_founder && @startup.founder?(current_founder)
         == render 'startups/timeline_builder', event: @timeline_event
 
-      - if @startup.timeline_events_for_display(current_founder).present?
+      - events_for_display = @startup.timeline_events_for_display(current_founder)
+
+      - if events_for_display.present?
         .main-timeline
           .tl-iteration
             p
@@ -335,7 +337,7 @@
             br
             a#read-from-beginning href="#begin"  Read from the beginning.
           ul#timeline-list
-            - @startup.timeline_events_for_display(current_founder).each do |event|
+            - events_for_display.each do |event|
               / Do not display hidden events to public.
               - next if event.hidden_from?(current_founder)
 

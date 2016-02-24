@@ -685,7 +685,13 @@ class Startup < ActiveRecord::Base
   def add_cofounders!
     cofounder_emails.each do |email|
       next if email.blank?
-      founders << Founder.find_by(email: email)
+
+      founder = Founder.find_by(email: email)
+      next unless founder
+
+      # skip validation as founder might not have yet completed his registration
+      founder.startup = self
+      founder.save validate: false
     end
   end
 

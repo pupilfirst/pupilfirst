@@ -37,6 +37,10 @@ class Founder < ActiveRecord::Base
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
   scope :non_founders, -> { where(startup_id: nil) }
 
+  # a verified 'phone' implies registration was completed
+  scope :registered, -> { where.not(phone: nil) }
+  scope :not_registered, -> { where(phone: nil) }
+
   validates_presence_of :born_on
 
   validate :age_more_than_18

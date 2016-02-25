@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160223071901) do
+ActiveRecord::Schema.define(version: 20160225093600) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -238,11 +238,13 @@ ActiveRecord::Schema.define(version: 20160223071901) do
     t.integer  "downloads",    default: 0
     t.string   "slug"
     t.integer  "batch_id"
+    t.integer  "startup_id"
   end
 
   add_index "resources", ["batch_id"], name: "index_resources_on_batch_id", using: :btree
   add_index "resources", ["share_status", "batch_id"], name: "index_resources_on_share_status_and_batch_id", using: :btree
   add_index "resources", ["slug"], name: "index_resources_on_slug", using: :btree
+  add_index "resources", ["startup_id"], name: "index_resources_on_startup_id", using: :btree
 
   create_table "startup_categories", force: :cascade do |t|
     t.string   "name"

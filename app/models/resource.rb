@@ -6,6 +6,7 @@ class Resource < ActiveRecord::Base
   friendly_id :slug_candidates, use: [:slugged, :finders]
 
   belongs_to :batch
+  belongs_to :startup
 
   def slug_candidates
     [:title, [:title, :updated_at]]

@@ -27,6 +27,7 @@
 //= require video
 //= require jquery-stickit
 //= require jquery.scrollTo
+//= require ahoy
 
 // Rails assets
 //= require intro.js/intro.js

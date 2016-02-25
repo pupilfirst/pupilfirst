@@ -54,6 +54,19 @@ ActiveRecord::Schema.define(version: 20160225093600) do
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
 
+  create_table "ahoy_events", id: :uuid, default: nil, force: :cascade do |t|
+    t.uuid     "visit_id"
+    t.integer  "user_id"
+    t.string   "user_type"
+    t.string   "name"
+    t.jsonb    "properties"
+    t.datetime "time"
+  end
+
+  add_index "ahoy_events", ["time"], name: "index_ahoy_events_on_time", using: :btree
+  add_index "ahoy_events", ["user_id", "user_type"], name: "index_ahoy_events_on_user_id_and_user_type", using: :btree
+  add_index "ahoy_events", ["visit_id"], name: "index_ahoy_events_on_visit_id", using: :btree
+
   create_table "batches", force: :cascade do |t|
     t.string   "name"
     t.text     "description"
@@ -414,6 +427,37 @@ ActiveRecord::Schema.define(version: 20160225093600) do
     t.datetime "updated_at", null: false
     t.string   "location"
   end
+
+  create_table "visits", id: :uuid, default: nil, force: :cascade do |t|
+    t.uuid     "visitor_id"
+    t.string   "ip"
+    t.text     "user_agent"
+    t.text     "referrer"
+    t.text     "landing_page"
+    t.integer  "user_id"
+    t.string   "user_type"
+    t.string   "referring_domain"
+    t.string   "search_keyword"
+    t.string   "browser"
+    t.string   "os"
+    t.string   "device_type"
+    t.integer  "screen_height"
+    t.integer  "screen_width"
+    t.string   "country"
+    t.string   "region"
+    t.string   "city"
+    t.string   "postal_code"
+    t.decimal  "latitude"
+    t.decimal  "longitude"
+    t.string   "utm_source"
+    t.string   "utm_medium"
+    t.string   "utm_term"
+    t.string   "utm_content"
+    t.string   "utm_campaign"
+    t.datetime "started_at"
+  end
+
+  add_index "visits", ["user_id", "user_type"], name: "index_visits_on_user_id_and_user_type", using: :btree
 
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"

@@ -160,7 +160,7 @@ feature 'Incubation' do
             fill_in 'Co-founder 1', with: 'random@email.com'
             click_on 'Submit Application'
 
-            expect(page).to have_text('not a registered founder') # as email 1 is random
+            expect(page).to have_text('could not find founder with this email') # as email 1 is random
             expect(page).to have_text('can\'t be blank') # as email 2 is blank
           end
 

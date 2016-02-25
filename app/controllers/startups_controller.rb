@@ -59,8 +59,7 @@ class StartupsController < ApplicationController
       # prepopulate the timeline with a 'Joined SV.CO' entry
       @startup.prepopulate_timeline!
 
-      flash[:success] = "Your startup has been registered successfully!"
-      redirect_to @startup
+      redirect_to startup_url(@startup, tour: 'yes')
     else
       # redirect back to startup new form to show errors
       @skip_container = true

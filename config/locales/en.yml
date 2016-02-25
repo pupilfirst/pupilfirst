@@ -23,7 +23,7 @@ en:
   startup:
     show:
       tour:
-        intro: Welcome to your team's timeline! We'll give you a quick tour of this page, which is where you'll post updates, view targets assigned to you, get feedback from faculty, and much more.
+        intro: Welcome to your team's timeline! All updates you post are verified by the SV.CO team, as indicated by the verified icon. If you'd like to add general information about your startup, click the little pencil to edit your startup profile.
         data_points: Basic information about your team and product are displayed here. You can add more information by updating your startup's profile.
         founders: Your startup's founders are listed here. You can also add team members (who do not need to register with SV.CO), by updating your startup's profile.
         timeline_builder: You can submit entries to your timeline by writing a description, picking a type of event and its date. You can also add a cover image, and attach links and files. All submissions will be reviewed by the SV.CO team before they are accepted.

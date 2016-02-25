@@ -299,6 +299,7 @@ giveATour = ->
       skipLabel: 'Close',
       steps: [
         {
+          element: $('h1.product-name')[0],
           intro: startupShowTour.data('intro')
         },
         {

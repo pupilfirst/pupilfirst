@@ -11,7 +11,7 @@ $(document).on 'page:change', ->
   $('#targets-tab').tabCollapse
     tabsClass: 'hidden-md hidden-sm hidden-xs',
     accordionClass: 'visible-md visible-sm visible-xs'
-    
+
   $('#pending-targets-list .panel-collapse:first').addClass('in');
   $('#expired-targets-list .panel-collapse:first').addClass('in');
   $('#completed-targets-list .panel-collapse:first').addClass('in');
@@ -296,6 +296,7 @@ giveATour = ->
   if startupShowTour.length > 0
     tour = introJs()
     tour.setOptions(
+      skipLabel: 'Close',
       steps: [
         {
           intro: startupShowTour.data('intro')

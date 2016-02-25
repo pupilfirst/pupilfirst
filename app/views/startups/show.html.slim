@@ -105,7 +105,7 @@
                         - targets.each do |target|
                           .panel.panel-default
                             .target-list.panel-heading
-                              a.collapsed data-parent="#pending-targets-list" data-toggle="collapse" href="#pending-target-#{target.id}" 
+                              a.collapsed data-parent="#pending-targets-list" data-toggle="collapse" href="#pending-target-#{target.id}"
                                 .target-head
                                   ' #{target.title}
                                 .arrow-target.pull-right
@@ -116,7 +116,7 @@
                     - expired_targets.each do |target|
                       .panel.panel-default
                         .target-list.panel-heading
-                          a.collapsed data-parent="#expired-targets-list" data-toggle="collapse" href="#expired-target-#{target.id}" 
+                          a.collapsed data-parent="#expired-targets-list" data-toggle="collapse" href="#expired-target-#{target.id}"
                             .target-head
                               ' #{target.title}
                             .target-due.grey-text.pull-left
@@ -284,11 +284,11 @@
                     .media
                       .media-left
                         a.media-object
-                          .founder-image style="background-image: url('#{image_url 'timeline/not-registered-avatar.png'}');"
+                          .founder-image style="background-image: url('#{profile_image_url founder, gravatar_size: 128, avatar_version: :mid}');"
                       .media-body
                         .media-heading
                           .text-lowercase #{founder.email}
-                        p This founder is yet to register on SV.CO!
+                        p This founder is yet to complete his registration on SV.CO!
         .row
           - if @startup.team_members.present?
             .col-sm-6.col-md-12

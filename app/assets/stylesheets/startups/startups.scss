@@ -1,0 +1,109 @@
+.startups-banner {
+  height: 180px;
+  background-image: asset-url("startup-index-banner.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom center;
+  position: relative;
+
+  .page-header {
+    color: white;
+    display: inline-block;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 42px;
+    letter-spacing: 0.04em;
+  }
+  .banner-text {
+    padding: 45px 0 0;
+  }
+  p.startups-introduction {
+    margin: 0;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 25px;
+    color: white;
+    letter-spacing: 0.04em;
+  }
+}
+
+.startups-bg {
+  background-color: #f7f8fa;
+
+  .startup-list-box {
+    margin-top: 15px;
+    margin-bottom: 15px;
+
+    .startup-card {
+      padding: 20px;
+      border: 1px solid #d7d7d7;
+      background-color: white;
+      border-radius: 5px;
+      height: 210px;
+      margin: 15px 0;
+      box-shadow: 0 0 5px 0 rgba(0,0,0,0.1);
+
+      .startup-logo-block {
+        border-right: 1px dashed #d7d7d7;
+        overflow: hidden;
+
+        .startup-logo-image {
+          padding-right: 15px;
+          align-items: center;
+          display: flex;
+          width: 140px;
+          height: 170px;
+          justify-content: center;
+
+          img {
+            width: 100%;
+          }
+        }
+      }
+      .startup-details {
+        padding-left: 15px;
+
+        h2 {
+          font-size: 18px;
+          color: #0587bc;
+          margin: 0 10px 0 0;
+          display: inline-block;
+        }
+        .industry {
+          font-size: 11px;
+          color: #7a7a7a;
+
+          img {
+            width: 20px;
+            vertical-align: sub;
+            padding-right: 5px;
+          }
+        }
+
+        .fade-text {
+          width: 350px;
+          overflow: hidden;
+          position: relative;
+          height: 40px;
+          margin-top: 10px;
+
+          &:after {
+            content: "";
+            text-align: right;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 30%;
+            height: 20px;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%);
+          }
+          p {
+            margin: 0;
+            color: #929292;
+            font-size: 13px;
+          }
+        }
+      }
+    }
+  }
+}

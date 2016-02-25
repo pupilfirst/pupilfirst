@@ -16,4 +16,9 @@ class HomeController < ApplicationController
   def transparency
     @skip_container = true
   end
+
+  def timeline
+    @batches = Startup.available_batches.order('batch_number DESC')
+    @skip_container = true
+  end
 end

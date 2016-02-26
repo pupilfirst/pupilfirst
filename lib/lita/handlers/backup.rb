@@ -46,7 +46,8 @@ module Lita
       end
 
       def build_body_for(reaction, reaction_to)
-        "reacted with :#{reaction}: to \'#{reaction_to.body}\' from #{reaction_to.founder.fullname}"
+        reaction_to_author = reaction_to.founder.present? ? reaction_to.founder.fullname : reaction_to.slack_username
+        "reacted with :#{reaction}: to \'#{reaction_to.body}\' from #{reaction_to_author}"
       end
 
       on :slack_reaction_removed do |payload|

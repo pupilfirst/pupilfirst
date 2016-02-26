@@ -37,6 +37,9 @@ class StartupsController < ApplicationController
     @startup.being_registered = true
     @startup.team_lead_email = current_founder.email
 
+    # copy over the batch from current_founders invited_batch
+    @startup.batch = current_founder.invited_batch
+
     if @startup.save
       # reset being_registered flag to prevent repeating cofounder validations
       @startup.being_registered = false
@@ -56,8 +59,7 @@ class StartupsController < ApplicationController
       # prepopulate the timeline with a 'Joined SV.CO' entry
       @startup.prepopulate_timeline!
 
-      flash[:success] = "Your startup has been registered successfully!"
-      redirect_to @startup
+      redirect_to startup_url(@startup, tour: 'yes')
     else
       # redirect back to startup new form to show errors
       @skip_container = true
@@ -66,13 +68,21 @@ class StartupsController < ApplicationController
   end
 
   def show
+    @skip_container = true
     @startup = Startup.friendly.find(params[:id])
-
-    @timeline_event = if params[:event_id]
-      @startup.timeline_events.find(params[:event_id])
-    else
-      @startup.timeline_events.new
+    if params[:show_feedback].present?
+      if current_founder.present?
+        @feedback_to_show = @startup.startup_feedback.where(id: params[:show_feedback]).first if @startup.founder?(current_founder)
+      else
+        session[:referer] = request.original_url
+        redirect_to new_founder_session_path, alert: "Please login to continue!"
+      end
     end
+
+    @timeline_event = timeline_event_for_builder
+
+    # Should we take the user on a tour?
+    @tour = take_on_tour?
   end
 
   def edit
@@ -170,5 +180,19 @@ class StartupsController < ApplicationController
   def restrict_to_startup_admin
     return if current_founder.startup_admin?
     raise_not_found
+  end
+
+  # A tour of timeline page may be given if user is founder of viewed startup, and the tour param is present.
+  def take_on_tour?
+    current_founder.present? && current_founder.startup == @startup && params[:tour].present?
+  end
+
+  # If an event_id is available, use that, otherwise supply a new timeline event.
+  def timeline_event_for_builder
+    if params[:event_id]
+      @startup.timeline_events.find(params[:event_id])
+    else
+      @startup.timeline_events.new
+    end
   end
 end

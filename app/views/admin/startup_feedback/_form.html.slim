@@ -3,9 +3,16 @@
     legend
       span Feedback details
     = f.input :startup, collection: Startup.where.not(product_name: nil), member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }, label: 'Product'
-    = f.input :feedback
+    = f.hidden_field :feedback
+    .label-replica
+      ' feedback
+      abbr title="required" *
+    trix-editor.input-replica input="startup_feedback_feedback" class="#{'error-replica' if @startup_feedback.errors[:feedback].present?}"
+    - if @startup_feedback.errors[:feedback].present?
+      p.inline-errors-replica #{@startup_feedback.errors[:feedback][0]}
     = f.input :activity_type
     = f.input :reference_url
+    = f.input :attachment, as: :file
     = f.input :faculty, placeholder: 'Select faculty member'
 
   = f.submit

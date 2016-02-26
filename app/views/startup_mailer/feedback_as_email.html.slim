@@ -12,7 +12,10 @@
     ' #{@startup_feedback.faculty.name} on your #{link_to update_for, @startup_feedback.reference_url} that
     | might help you:
 
-  p 
+  p
     | #{simple_format(@startup_feedback.feedback)}
+
+  p
+    | You can view #{link_to 'the full feedback at SV.CO', startup_path(@startup_feedback.startup, show_feedback: @startup_feedback.id)}, including any file uploads attached to the feedback.
 
   p Feel free to reach out to us at #{mail_to 'help@sv.co'} in case of any queries.

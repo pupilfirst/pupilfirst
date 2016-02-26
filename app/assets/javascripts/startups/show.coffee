@@ -8,6 +8,15 @@ $(document).on 'page:change', ->
     columnWidth: '.startup-event-entry'
 
 $(document).on 'page:change', ->
+  $('#targets-tab').tabCollapse
+    tabsClass: 'hidden-md hidden-sm hidden-xs',
+    accordionClass: 'visible-md visible-sm visible-xs'
+
+  $('#pending-targets-list .panel-collapse:first').addClass('in');
+  $('#expired-targets-list .panel-collapse:first').addClass('in');
+  $('#completed-targets-list .panel-collapse:first').addClass('in');
+
+$(document).on 'page:change', ->
   $(".tl_link_button").click((e) ->
     if ($(this).find(".ink").length == 0)
       $(this).prepend("<span class='ink'></span>")
@@ -244,15 +253,74 @@ setupTimelineBuilderDatepicker = ->
       timelineEventDateField.tooltip('destroy')
   )
 
-setImprovementModalContent = ->
-  $('#improvement-modal').on 'show.bs.modal', (event) ->
-    feedback = $(event.relatedTarget).data('feedback')
-    faculty = $(event.relatedTarget).data('faculty')
-    $('#improvement-modal').find('.modal-body').html("<pre>#{feedback}</pre>")
-    $('#improvement-modal').find('.modal-title').html("Feedback from #{faculty}")
+handleShowFeedbackClick = ->
+  $('.show-feedback-button').click (event) ->
+    feedback = $(event.target).data('feedback')
+    faculty = $(event.target).data('faculty')
+    attachmentName = $(event.target).data('attachment-name')
+    attachmentUrl = $(event.target).data('attachment-url')
+    openFeedbackModel(feedback, faculty, attachmentName, attachmentUrl)
+
+openFeedbackModel = (feedback, faculty, attachmentName, attachmentUrl) ->
+  $('#improvement-modal').find('.feedback-text').html("<pre>#{feedback}</pre>")
+  $('#improvement-modal').find('.modal-title').html("Feedback from #{faculty}")
+  if attachmentUrl
+    $('#improvement-modal').find('.attachment').removeClass('hidden')
+    $('#improvement-modal').find('.attachment-name').html(" #{attachmentName}")
+    $('#improvement-modal').find('.attachment-download-btn').attr('href', "#{attachmentUrl}")
+  $('#improvement-modal').modal('show')
+
+showDefaultFeedback = ->
+  if $('#improvement-modal') and $('#improvement-modal').data('feedback') and $('#improvement-modal').data('faculty')
+    feedback = $('#improvement-modal').data('feedback')
+    faculty = $('#improvement-modal').data('faculty')
+    attachmentName = $('#improvement-modal').data('attachment-name')
+    attachmentUrl = $('#improvement-modal').data('attachment-url')
+    openFeedbackModel(feedback, faculty, attachmentName, attachmentUrl)
+
+resetOnHideFeedbackModal = ->
+  $('#improvement-modal').on 'hidden.bs.modal', (event) ->
+    $('#improvement-modal').find('.feedback-text').html("")
+    $('#improvement-modal').find('.modal-title').html("")
+    $('#improvement-modal').find('.attachment').addClass("hidden")
+    $('#improvement-modal').find('.attachment-name').html("")
+    $('#improvement-modal').find('.attachment-download-btn').attr('href', "")
+
 
 addTooltipToHideCheckbox = ->
   $("#hide-from-public").tooltip()
+
+giveATour = ->
+  startupShowTour = $('#startup-show-tour')
+
+  if startupShowTour.length > 0
+    tour = introJs()
+    tour.setOptions(
+      skipLabel: 'Close',
+      steps: [
+        {
+          element: $('h1.product-name')[0],
+          intro: startupShowTour.data('intro')
+        },
+        {
+          element: $('.timeline-builder')[0],
+          intro: startupShowTour.data('timelineBuilder')
+        },
+        {
+          element: $('.timeline-panel')[0],
+          intro: startupShowTour.data('timelineEvent')
+        },
+        {
+          element: $('.data-icons')[0],
+          intro: startupShowTour.data('dataPoints')
+        },
+        {
+          element: $('.data-founder')[0],
+          intro: startupShowTour.data('founders')
+        }
+      ]
+    )
+    tour.start()
 
 $(document).on 'page:change', timelineBuilderSubmitChecks
 $(document).on 'page:change', setupSelect2ForEventType
@@ -262,7 +330,10 @@ $(document).on 'page:change', measureDescriptionLength
 $(document).on 'page:change', setPendingTooltips
 $(document).on 'page:change', matchSampleTextToEventType
 $(document).on 'page:change', setupTimelineBuilderDatepicker
-$(document).on 'page:change', setImprovementModalContent
+$(document).on 'page:change', handleShowFeedbackClick
+$(document).on 'page:change', showDefaultFeedback
+$(document).on 'page:change', resetOnHideFeedbackModal
 $(document).on 'page:change', addTooltipToHideCheckbox
 $(document).on 'page:change', markSelectedAttachments
 $(document).on 'page:change', updateAttachmentsTabTitle
+$(document).on 'page:change', giveATour

@@ -13,14 +13,35 @@
 .apply-container
   .container
     .row
-      .col-md-5.col-md-push-7
-        .alert.alert-warning
-          p
-            ' We've now closed task submissions for Batch 3. Selected applicants will be informed of the interview date soon via their registered email address.
-          p
-            ' For any help, write to #{mail_to 'help@sv.co'}.
-           
-      .col-md-7.col-md-pull-5
+      .col-md-7.col-md-push-5
+        .batch-results
+          .result-head.text-center
+            = image_tag 'home/apply/batch-result-icon.png', class: 'img-responsive'
+            h3
+              ' Batch 3 Round 2 Results are Out!
+            p
+              | We'll be announcing interview dates shortly.
+            p.interview-text
+              | We plan on starting Batch 2 and Batch 3 simultaneously, so batch start might be a bit delayed.
+          .result-table
+            .row
+              .col-md-6
+                .panel.panel-success
+                  .panel-heading Gujarat
+                  ul.list-group
+                    li.list-group-item
+                      h3 Gujarat Technical University
+                      ol
+                        li Viraj Rajendra Agarwal
+                        li Rohit Prasad
+                        li Harshil Jayeshbhai Shah
+                        li Paras Gajipara
+                    li.list-group-item
+                      h3 Gujarat Law Society
+                      ol
+                        li Jinesh Patel
+              
+      .col-md-5.col-md-pull-7
         .alert.alert-info
           h4 
             ' This is the Application page for Batch 3, exclusively for Gujarat Students.

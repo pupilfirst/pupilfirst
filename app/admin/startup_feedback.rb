@@ -1,6 +1,6 @@
 ActiveAdmin.register StartupFeedback do
   menu parent: 'Startups', label: 'Feedback'
-  permit_params :feedback, :reference_url, :startup_id, :send_email, :faculty_id, :activity_type
+  permit_params :feedback, :reference_url, :startup_id, :send_email, :faculty_id, :activity_type, :attachment
 
   preserve_default_filters!
   filter :startup_product_name, as: :select, collection: proc { Startup.all.pluck(:product_name).uniq }
@@ -94,6 +94,15 @@ ActiveAdmin.register StartupFeedback do
 
       row :reference_url
       row :faculty
+      row :attachment_file_name do |startup_feedback|
+        if startup_feedback.attachment?
+          span startup_feedback.attachment_file_name
+          span class: 'wrap-with-paranthesis' do
+            link_to 'Remove', remove_feedback_attachment_admin_startup_feedback_path(startup_feedback), method: :put, data: { confirm: 'Are you sure?' }
+          end
+          # a(href: remove_feedback_attachment_admin_startup_feedback_path(startup_feedback)) { 'Remove' }
+        end
+      end
 
       row :sent_at do |startup_feedback|
         if startup_feedback.sent_at.present?
@@ -145,6 +154,13 @@ ActiveAdmin.register StartupFeedback do
     StartupMailer.feedback_as_email(startup_feedback).deliver_later
     startup_feedback.update(sent_at: Time.now)
     redirect_to :back
+  end
+
+  member_action :remove_feedback_attachment, method: :put do
+    startup_feedback = StartupFeedback.find params[:id]
+    startup_feedback.attachment.remove!
+    startup_feedback.save!
+    redirect_to :back, alert: 'Attachment removed!'
   end
 
   member_action :slack_feedback, method: :put do

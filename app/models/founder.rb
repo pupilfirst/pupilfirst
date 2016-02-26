@@ -28,6 +28,7 @@ class Founder < ActiveRecord::Base
   belongs_to :university
   has_many :karma_points, dependent: :destroy
   has_many :timeline_events
+  belongs_to :invited_batch, class_name: 'Batch'
 
   scope :batched, -> { joins(:startup).merge(Startup.batched) }
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }
@@ -35,6 +36,10 @@ class Founder < ActiveRecord::Base
   scope :student_entrepreneurs, -> { where.not(university_id: nil) }
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
   scope :non_founders, -> { where(startup_id: nil) }
+
+  # a verified 'phone' implies registration was completed
+  scope :registered, -> { where.not(phone: nil) }
+  scope :not_registered, -> { where(phone: nil) }
 
   validates_presence_of :born_on
 

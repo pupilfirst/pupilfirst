@@ -1,7 +1,7 @@
 ActiveAdmin.register Resource do
   menu parent: 'Startups'
 
-  permit_params :title, :description, :file, :thumbnail, :share_status, :batch_id
+  permit_params :title, :description, :file, :thumbnail, :share_status, :batch_id, :startup_id
 
   preserve_default_filters!
 
@@ -22,11 +22,17 @@ ActiveAdmin.register Resource do
       end
     end
 
-    column 'Shared with Batch' do |resource|
-      if resource.batch.present?
-        link_to resource.batch.to_label, admin_batch_path(resource.batch)
+    column 'Shared with' do |resource|
+      if resource.for_approved?
+        if resource.startup.present?
+          link_to resource.startup.product_name, admin_startup_path(resource.startup)
+        elsif resource.batch.present?
+          link_to resource.batch.to_label, admin_batch_path(resource.batch)
+        else
+          'All batches'
+        end
       else
-        'All batches'
+        'Public'
       end
     end
 
@@ -43,11 +49,17 @@ ActiveAdmin.register Resource do
         end
       end
 
-      row 'Shared with Batch' do |resource|
-        if resource.batch.present?
-          link_to resource.batch.to_label, admin_batch_path(resource.batch)
+      row 'Shared with' do |resource|
+        if resource.for_approved?
+          if resource.startup.present?
+            link_to resource.startup.product_name, admin_startup_path(resource.startup)
+          elsif resource.batch.present?
+            link_to resource.batch.to_label, admin_batch_path(resource.batch)
+          else
+            'All batches'
+          end
         else
-          'All batches'
+          'Public'
         end
       end
 
@@ -77,6 +89,7 @@ ActiveAdmin.register Resource do
         member_label: proc { |share_status| t("resource.share_status.#{share_status}") }
 
       f.input :batch, label: 'Shared with Batch', placeholder: 'Leave this unselected to share with all batches.'
+      f.input :startup, label: 'Shared with Startup'
       f.input :file, as: :file
       f.input :thumbnail, as: :file
       f.input :title

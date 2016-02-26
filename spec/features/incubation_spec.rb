@@ -3,7 +3,8 @@ require 'rails_helper'
 # WARNING: The following tests run with Webmock disabled - i.e., URL calls are let through. Make sure you mock possible
 # requests unless you want to let them through. This is required for JS tests to work.
 feature 'Incubation' do
-  let(:founder) { create :founder_with_out_password }
+  let(:batch) { create :batch }
+  let(:founder) { Founder.invite!(email: "newfounder@example.com", invited_batch: batch) }
   let(:co_founder1) { create :founder_with_out_password }
   let(:co_founder2) { create :founder_with_out_password }
   let!(:university) { create :university }
@@ -15,9 +16,6 @@ feature 'Incubation' do
   end
 
   before :each do
-    # invite the founder
-    founder.invite!
-
     # Block all RestClient POST-s.
     allow(RestClient).to receive(:post)
   end
@@ -42,7 +40,7 @@ feature 'Incubation' do
 
     scenario 'founder submits a valid and complete registration form', js: true do
       fill_in 'First name', with: 'Nemo'
-      fill_in 'Last name', with: founder.last_name
+      fill_in 'Last name', with: 'Nobody'
       fill_in 'New password', with: 'password'
       fill_in 'Confirm new password', with: 'password'
       choose 'Male'
@@ -72,7 +70,7 @@ feature 'Incubation' do
     context 'when founder has registered successfully' do
       before do
         fill_in 'First name', with: 'Nemo'
-        fill_in 'Last name', with: founder.last_name
+        fill_in 'Last name', with: 'Nobody'
         fill_in 'New password', with: 'password'
         fill_in 'Confirm new password', with: 'password'
         choose 'Male'
@@ -95,9 +93,12 @@ feature 'Incubation' do
       end
 
       scenario 'founder requests resend after more than 5 mins' do
+        expect(page).to have_text('Verification code')
+
         # Tweak timing a bit to allow resending of code.
+        founder.reload
         old_code = founder.phone_verification_code
-        founder.update(verification_code_sent_at: 10.minute.ago)
+        founder.update!(verification_code_sent_at: 10.minute.ago)
 
         click_on 'Resend verification code'
         expect(page).to have_text('New Verification Code Sent!')
@@ -159,7 +160,7 @@ feature 'Incubation' do
             fill_in 'Co-founder 1', with: 'random@email.com'
             click_on 'Submit Application'
 
-            expect(page).to have_text('not a registered founder') # as email 1 is random
+            expect(page).to have_text('could not find founder with this email') # as email 1 is random
             expect(page).to have_text('can\'t be blank') # as email 2 is blank
           end
 
@@ -232,6 +233,9 @@ feature 'Incubation' do
             expect(founder.startup.timeline_events.count).to eq(1)
             expect(founder.startup.timeline_events.first.timeline_event_type.key).to eq('joined_svco')
             expect(page).to have_text('Joined SV.CO')
+
+            # the new startup must be assigned to the invited_batch of founder
+            expect(founder.startup.batch).to eq(founder.invited_batch)
           end
         end
       end

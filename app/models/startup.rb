@@ -177,8 +177,8 @@ class Startup < ActiveRecord::Base
 
     return 'already the team lead' if email == team_lead_email
 
-    return 'not a registered founder. Please ensure that the co-founder has already accepted '\
-    'his/her invitation to SV.CO and completed his/her registration.' unless founder
+    return 'could not find founder with this email. Are you sure this was the email provided to us? '\
+    'Please contact help@sv.co for any assitance' unless founder
 
     return 'already has a startup. Please ensure that your co-founder has not registered your startup already.' unless founder.startup.blank?
 
@@ -651,19 +651,27 @@ class Startup < ActiveRecord::Base
 
   # Starts on the week before last's Monday 6 PM IST.
   def self.leaderboard_start_date
-    if monday? && before_evening?
-      8.days.ago.beginning_of_week
+    if Batch.current.present?
+      if monday? && before_evening?
+        8.days.ago.beginning_of_week
+      else
+        7.days.ago.beginning_of_week
+      end
     else
-      7.days.ago.beginning_of_week
+      (Batch.last.end_date - 7.days).beginning_of_week
     end.in_time_zone('Asia/Calcutta') + 18.hours
   end
 
   # Ends on last week's Monday 6 PM IST.
   def self.leaderboard_end_date
-    if monday? && before_evening?
-      8.days.ago.end_of_week
+    if Batch.current.present?
+      if monday? && before_evening?
+        8.days.ago.end_of_week
+      else
+        7.days.ago.end_of_week
+      end
     else
-      7.days.ago.end_of_week
+      (Batch.last.end_date - 7.days).end_of_week
     end.in_time_zone('Asia/Calcutta') + 18.hours
   end
 
@@ -677,7 +685,13 @@ class Startup < ActiveRecord::Base
   def add_cofounders!
     cofounder_emails.each do |email|
       next if email.blank?
-      founders << Founder.find_by(email: email)
+
+      founder = Founder.find_by(email: email)
+      next unless founder
+
+      # skip validation as founder might not have yet completed his registration
+      founder.startup = self
+      founder.save validate: false
     end
   end
 

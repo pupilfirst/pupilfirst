@@ -204,7 +204,7 @@ class Founder < ActiveRecord::Base
   def remove_from_startup!
     self.startup_id = nil
     self.startup_admin = nil
-    save!
+    save! validate: false
   end
 
   # Store unconfirmed phone number in a standardized form. Confirmed phone number will be copied from this field.

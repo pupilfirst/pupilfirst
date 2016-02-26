@@ -36,18 +36,13 @@ module Lita
         reaction_author = ::Founder.find_by slack_username: reaction_author_slack_username
         timestamp = payload[:event_ts]
         channel = reaction_to.channel
-        body = build_body_for(payload[:name], reaction_to)
+        body = ":#{payload[:name]}:"
 
         # save the reaction as a PublicSlackMessage with appropriate details
         PublicSlackMessage.create!(
           body: body, slack_username: reaction_author_slack_username, founder: reaction_author, channel: channel,
           reaction_to: reaction_to, timestamp: timestamp
         )
-      end
-
-      def build_body_for(reaction, reaction_to)
-        reaction_to_author = reaction_to.founder.present? ? reaction_to.founder.fullname : reaction_to.slack_username
-        "reacted with :#{reaction}: to \'#{reaction_to.body}\' from #{reaction_to_author}"
       end
 
       on :slack_reaction_removed do |payload|

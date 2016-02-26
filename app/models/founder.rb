@@ -352,6 +352,15 @@ class Founder < ActiveRecord::Base
     first_name? && last_name? && encrypted_password? && gender? && born_on?
   end
 
+  # Make sure a new team lead is assigned before destroying the present one
+  before_destroy :assign_new_team_lead
+  def assign_new_team_lead
+    return unless startup_admin
+
+    team_lead_candidate = startup.founders.where.not(id: id).first
+    team_lead_candidate.update!(startup_admin: true) if team_lead_candidate
+  end
+
   private
 
   def batch_start_date

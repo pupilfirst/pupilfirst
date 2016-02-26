@@ -36,12 +36,15 @@ class Resource < ActiveRecord::Base
   def self.for(founder)
     if founder&.startup&.approved?
       where(
-        'share_status = ? OR (share_status = ? AND batch_id IS ?) OR (share_status = ? AND batch_id = ?) OR (share_status = ? AND startup_id = ?)',
+        'share_status = ? OR (share_status = ? AND batch_id IS ? AND startup_id IS ?) OR '\
+        '(share_status = ? AND batch_id = ? AND startup_id IS ?) OR (share_status = ? AND startup_id = ?)',
         SHARE_STATUS_PUBLIC,
         SHARE_STATUS_APPROVED,
         nil,
+        nil,
         SHARE_STATUS_APPROVED,
         founder.startup&.batch&.id,
+        nil,
         SHARE_STATUS_APPROVED,
         founder.startup&.id
       ).order('title')

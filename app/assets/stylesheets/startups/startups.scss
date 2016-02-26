@@ -35,41 +35,61 @@
     margin-bottom: 15px;
 
     .startup-card {
-      padding: 20px;
+      padding: 15px;
       border: 1px solid #d7d7d7;
       background-color: white;
       border-radius: 5px;
-      height: 210px;
+      min-height: 210px;
       margin: 15px 0;
       box-shadow: 0 0 5px 0 rgba(0,0,0,0.1);
 
       .startup-logo-block {
-        border-right: 1px dashed #d7d7d7;
+        border: 1px dashed #d7d7d7;
+        border-width: 0 1px 0 0;
+        float: left;
         overflow: hidden;
 
         .startup-logo-image {
           padding-right: 15px;
           align-items: center;
           display: flex;
-          width: 140px;
+          width: 120px;
           height: 170px;
           justify-content: center;
 
           img {
             width: 100%;
           }
+          @media (max-width: $screen-xs-max) {
+            width: 180px;
+            margin: auto;
+            padding: 0;
+          }
+        }
+        @media (max-width: $screen-xs-max) {
+          float: none;
+          border: 1px dashed #d7d7d7;
+          border-width: 0 0 1px 0;
         }
       }
       .startup-details {
         padding-left: 15px;
+        width: 400px;
+        float: left;
 
-        h2 {
+        .product-name {
           font-size: 18px;
           color: #0587bc;
+          text-decoration: none;
           margin: 0 10px 0 0;
           display: inline-block;
+
+          &:hover {
+            color: #0c739d;
+          }
         }
         .industry {
+          display: inline-block;
           font-size: 11px;
           color: #7a7a7a;
 
@@ -81,11 +101,11 @@
         }
 
         .fade-text {
-          width: 350px;
+          width: 385px;
           overflow: hidden;
           position: relative;
-          height: 40px;
-          margin-top: 10px;
+          height: 37px;
+          margin-top: 8px;
 
           &:after {
             content: "";
@@ -94,14 +114,160 @@
             bottom: 0;
             right: 0;
             width: 30%;
-            height: 20px;
+            height: 21px;
             background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%);
+
+            @media (max-width: $screen-xs-max) {
+              width: 0;
+            }
           }
           p {
             margin: 0;
             color: #929292;
             font-size: 13px;
+
+            @media (max-width: $screen-xs-max) {
+              font-size: 14px;
+            }
           }
+          @media (max-width: $screen-xs-max) {
+            height: auto;
+            width: 100%;
+          }
+          @media (min-width: $screen-xs-max) and (max-width: $screen-sm-max) {
+            width: 100%;
+          }
+        }
+        .startups-links {
+          padding: 0 0 2px;
+
+          a {
+            padding: 10px 7px;
+            vertical-align: -1px;
+            display: inline-block;
+            line-height: 20px;
+            position: relative;
+            outline: 0;
+
+            &:first-child {
+              padding-left: 0;
+
+              @media (max-width: $screen-xs-max) {
+                padding: 10px 10px 5px;
+              }
+            }
+            &:last-child {
+              padding-right: 0;
+
+              @media (max-width: $screen-xs-max) {
+                padding: 5px 10px 10px;
+              }
+
+              &:after {
+                width: 0;
+              }
+            }
+            img {
+              vertical-align: inherit;
+              padding-right: 5px;
+            }
+            &:after {
+              content: "";
+              width: 1px;
+              height: 20px;
+              background-color: #d7d7d7;
+              position: absolute;
+              right: 0;
+            }
+
+            @media (max-width: $screen-xs-max) {
+              &:nth-child(2){
+                padding: 10px 10px 5px;
+
+                &:after {
+                  width: 0;
+                }
+              }
+            }
+          }
+        }
+        .startupcard-footer {
+          border-top: 1px dashed #d7d7d7;
+          padding: 15px 0 0;
+
+          .founder-avatar-list {
+            margin-right: 15px;
+            max-height: 42px;
+            float: left;
+
+            .startup-founder-avatar {
+              width: 42px;
+              height: 42px;
+              overflow: hidden;
+              outline: 0;
+              display: inline-block;
+              border-radius: 50%;
+              border: 2px solid #ebeaea;
+              margin: 0 6px;
+
+              img {
+                width: 100%;
+              }
+              &:first-child {
+                margin-left: 0;
+              }
+              &:last-child {
+                margin-right: 0;
+              }
+              @media (max-width: $screen-xs-max) {
+                width: 50px;
+                height: 50px;
+              }
+            }
+            @media (max-width: $screen-xs-max) {
+              float: none;
+              max-height: 100%;
+              margin: 0 0 10px;
+            }
+          }
+          .view-timeline-btn {
+            border-left: 1px dashed #d7d7d7;
+            padding-left: 15px;
+            float: right;
+
+            .timeline-btn {
+              display: block;
+              outline: 0;
+              text-decoration: none;
+              padding: 10px;
+              border: 1px dotted #48b3de;
+              border-radius: 5px;
+              transition: all .2s;
+
+              i {
+                padding-right: 5px;
+              }
+              &:hover, &:focus {
+                background-color: #0587bc;
+                color: white;
+              }
+            }
+            @media (max-width: $screen-xs-max) {
+              float: none;
+              margin-left: 0;
+              border: 0;
+            }
+          }
+        }
+        @media (max-width: $screen-xs-max) {
+          float: none;
+          padding: 0;
+          margin: 10px auto;
+          text-align: center;
+          width: 100%;
+        }
+        @media (min-width: $screen-xs-max) and (max-width: $screen-sm-max) {
+          width: 80%;
         }
       }
     }

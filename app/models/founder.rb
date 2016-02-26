@@ -250,7 +250,8 @@ class Founder < ActiveRecord::Base
 
       fail exception_class
     else
-      startup.founders << founder
+      founder.startup = startup
+      founder.save! validate: false
 
       FounderMailer.cofounder_addition(email, self).deliver_later
     end

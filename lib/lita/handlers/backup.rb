@@ -24,29 +24,48 @@ module Lita
       end
 
       on :slack_reaction_added do |payload|
-        # dont bother if reaction is not towards a message
-        return unless payload[:item]['type'] == 'message'
+        ActiveRecord::Base.connection_pool.with_connection do
+          # dont bother if reaction is not towards a message
+          return unless payload[:item]['type'] == 'message'
 
-        # dont bother if the message reacted to cant be found in our db
-        reaction_to = ::PublicSlackMessage.find_by(timestamp: payload[:item]['ts'])
-        return unless reaction_to.present?
+          # dont bother if the message reacted to cant be found in our db
+          reaction_to = ::PublicSlackMessage.find_by(timestamp: payload[:item]['ts'])
+          return unless reaction_to.present?
 
-        # extract details from payload
-        reaction_author_slack_username = payload[:user].metadata['mention_name']
-        reaction_author = ::Founder.find_by slack_username: reaction_author_slack_username
-        timestamp = payload[:event_ts]
-        channel = reaction_to.channel
-        body = ":#{payload[:name]}:"
+          # extract details from payload
+          reaction_author_slack_username = payload[:user].metadata['mention_name']
+          reaction_author = ::Founder.find_by slack_username: reaction_author_slack_username
+          timestamp = payload[:event_ts]
+          channel = reaction_to.channel
+          body = ":#{payload[:name]}:"
 
-        # save the reaction as a PublicSlackMessage with appropriate details
-        PublicSlackMessage.create!(
-          body: body, slack_username: reaction_author_slack_username, founder: reaction_author, channel: channel,
-          reaction_to: reaction_to, timestamp: timestamp
-        )
+          # save the reaction as a PublicSlackMessage with appropriate details
+          PublicSlackMessage.create!(
+            body: body, slack_username: reaction_author_slack_username, founder: reaction_author, channel: channel,
+            reaction_to: reaction_to, timestamp: timestamp
+          )
+        end
       end
 
       on :slack_reaction_removed do |payload|
-        # TODO: probably delete the stored reaction and karma point added for it, if any
+        ActiveRecord::Base.connection_pool.with_connection do
+          # dont bother if reaction is not towards a message
+          return unless payload[:item]['type'] == 'message'
+
+          # dont bother if the message reacted to cant be found in our db
+          reaction_to = ::PublicSlackMessage.find_by(timestamp: payload[:item]['ts'])
+          return unless reaction_to.present?
+
+          # dont bother if the removed reaction could not be found
+          removed_reaction = reaction_to.reactions.where(slack_username: payload[:user].metadata['mention_name'], body: ":#{payload[:name]}:").first
+          return unless removed_reaction.present?
+
+          # Delete karma points assigned to removed reaction, if any
+          KarmaPoint.where(source: removed_reaction).destroy_all
+
+          # Delete the reaction to be removed
+          removed_reaction.destroy
+        end
       end
 
       Lita.register_handler(self)

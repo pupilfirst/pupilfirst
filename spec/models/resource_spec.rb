@@ -11,7 +11,8 @@ RSpec.describe Resource, type: :model do
     PublicSlackTalk.mock = false
   end
 
-  let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
+  let(:startup_1) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
+  let(:startup_2) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
   let!(:public_resource) { create :resource }
 
   let(:batch_1) { create :batch }
@@ -20,6 +21,8 @@ RSpec.describe Resource, type: :model do
   let!(:approved_resource_for_all) { create :resource, share_status: Resource::SHARE_STATUS_APPROVED }
   let!(:approved_resource_for_batch_1) { create :resource, share_status: Resource::SHARE_STATUS_APPROVED, batch: batch_1 }
   let!(:approved_resource_for_batch_2) { create :resource, share_status: Resource::SHARE_STATUS_APPROVED, batch: batch_2 }
+  let!(:approved_resource_for_startup_1) { create :resource, share_status: Resource::SHARE_STATUS_APPROVED, startup: startup_1 }
+  let!(:approved_resource_for_startup_2) { create :resource, share_status: Resource::SHARE_STATUS_APPROVED, startup: startup_2 }
 
   describe '.for' do
     context 'when founder is not present' do
@@ -31,13 +34,15 @@ RSpec.describe Resource, type: :model do
       end
     end
 
-    context 'when founder is founder of approved startup' do
-      it 'returns public resources and shared resources for approved startups' do
-        resources = Resource.for(startup.founders.first)
+    context 'when founder is founder of a approved startup' do
+      it 'returns public resources and shared resources for the approved startup' do
+        resources = Resource.for(startup_1.founders.first)
 
-        expect(resources.count).to eq(2)
+        expect(resources.count).to eq(3)
         expect(resources).to include(public_resource)
         expect(resources).to include(approved_resource_for_all)
+        expect(resources).to include(approved_resource_for_startup_1)
+        expect(resources).not_to include(approved_resource_for_startup_2)
       end
     end
 
@@ -51,6 +56,7 @@ RSpec.describe Resource, type: :model do
         expect(resources).to include(public_resource)
         expect(resources).to include(approved_resource_for_all)
         expect(resources).to include(approved_resource_for_batch_1)
+        expect(resources).not_to include(approved_resource_for_batch_2)
       end
     end
   end

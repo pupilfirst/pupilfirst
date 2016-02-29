@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160225093600) do
+ActiveRecord::Schema.define(version: 20160229063954) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -133,9 +133,11 @@ ActiveRecord::Schema.define(version: 20160225093600) do
     t.string   "token"
     t.boolean  "self_service"
     t.string   "current_commitment"
+    t.string   "slug"
   end
 
   add_index "faculty", ["category"], name: "index_faculty_on_category", using: :btree
+  add_index "faculty", ["slug"], name: "index_faculty_on_slug", unique: true, using: :btree
 
   create_table "features", force: :cascade do |t|
     t.string   "key"

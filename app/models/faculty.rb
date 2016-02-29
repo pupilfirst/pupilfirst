@@ -2,6 +2,11 @@
 # frozen_string_literal: true
 
 class Faculty < ActiveRecord::Base
+  # use name as slug
+  include FriendlyId
+  friendly_id :name, use: [:slugged, :finders]
+  validates_format_of :slug, with: /\A[a-z0-9\-_]+\z/i, allow_nil: true
+
   mount_uploader :image, FacultyImageUploader
   process_in_background :image
 

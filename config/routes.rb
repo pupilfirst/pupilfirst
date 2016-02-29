@@ -70,7 +70,7 @@ Svapp::Application.routes.draw do
     post 'contact', action: 'send_contact_email'
   end
 
-  resources :faculty, only: %w(index) do
+  resources :faculty, only: %w(index show) do
     post 'connect', on: :member
     collection do
       get 'weekly_slots/:token', to: 'faculty#weekly_slots', as: 'weekly_slots'

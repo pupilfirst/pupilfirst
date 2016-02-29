@@ -11,38 +11,7 @@
 .startups-bg
   .container
     .row.startup-list-box
-      .filter-box.clearfix
-        .filter-dropdown.batch-filter
-          label Batch
-          .dropdown
-            button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button" 
-              | All
-              i.fa.fa-angle-down
-            ul.dropdown-menu
-              li
-                a href="#"  Current Batch
-              li
-                a href="#"  Fintech
-        .filter-dropdown.industry-filter
-          label Industry
-          .dropdown
-            button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button" 
-              | Industry
-              i.fa.fa-angle-down
-            ul.dropdown-menu
-              li
-                a href="#"  Finance & Money
-        .filter-dropdown.stage-filter
-          label Stage
-          .dropdown
-            button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button" 
-              | Stage
-              i.fa.fa-angle-down
-            ul.dropdown-menu
-              li
-                a href="#"  Prototyping
-        button.btn.btn-primary.pull-left.filter-go-btn.pull-left
-          | Go !
+      = render 'filter_form'
 
       - @startups.each do |startup|
         .col-md-6

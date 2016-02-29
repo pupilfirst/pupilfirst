@@ -65,4 +65,14 @@ class Faculty < ActiveRecord::Base
   def days_since_last_available_week
     (7.days.from_now.beginning_of_week.to_date - last_available_connect_date.beginning_of_week.to_date).to_i.days
   end
+
+  def past_connect_sessions(limit = nil)
+    ConnectRequest.for_faculty(self).completed.limit(limit).order('connect_slots.slot_at DESC')
+  end
+
+  def average_rating
+    ratings_received = past_connect_sessions.pluck(:rating_of_faculty).compact
+    return nil unless ratings_received
+    ratings_received.inject { |a, e| a + e }.to_f / ratings_received.size
+  end
 end

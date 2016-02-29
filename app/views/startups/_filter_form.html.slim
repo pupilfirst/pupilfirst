@@ -1,32 +1,39 @@
 .filter-box.clearfix
-  .filter-dropdown.batch-filter
-    label Batch
-    .dropdown
-      button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button"
-        | All
-        i.fa.fa-angle-down
-      ul.dropdown-menu
-        li
-          a href="#"  Current Batch
-        li
-          a href="#"  Fintech
-  .filter-dropdown.industry-filter
-    label Industry
-    .dropdown
-      button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button"
-        | Industry
-        i.fa.fa-angle-down
-      ul.dropdown-menu
-        li
-          a href="#"  Finance & Money
-  .filter-dropdown.stage-filter
-    label Stage
-    .dropdown
-      button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button"
-        | Stage
-        i.fa.fa-angle-down
-      ul.dropdown-menu
-        li
-          a href="#"  Prototyping
-  button.btn.btn-primary.pull-left.filter-go-btn.pull-left
-    | Go !
+  = simple_form_for :startups_filter, url: startups_path, method: :get, html: { class: 'form-horizontal' },
+    wrapper: :horizontal_form do |f|
+    .filter-dropdown
+      = f.input :batches, collection: @batches, include_blank: 'Any', label: 'Batches', required: false, selected: params[:startups_filter][:batch], input_html: { multiple: true }
+    .filter-dropdown
+      = f.input :industries, collection: @batches, include_blank: 'Any', label: 'Industries', required: false, selected: params[:startups_filter][:industry], input_html: { multiple: true }
+    .filter-dropdown
+      = f.input :stages, collection: @batches, include_blank: 'Any', label: 'Stages', required: false, selected: params[:startups_filter][:stage], input_html: { multiple: true }
+    .filter-dropdown.batch-filter
+      label Batch
+      .dropdown
+        button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button"
+          | All
+          i.fa.fa-angle-down
+        ul.dropdown-menu
+          li
+            a href="#"  Current Batch
+          li
+            a href="#"  Fintech
+    /.filter-dropdown.industry-filter
+    /  label Industry
+    /  .dropdown
+    /    button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button"
+    /      | Industry
+    /      i.fa.fa-angle-down
+    /    ul.dropdown-menu
+    /      li
+    /        a href="#"  Finance & Money
+    /.filter-dropdown.stage-filter
+    /  label Stage
+    /  .dropdown
+    /    button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button"
+    /      | Stage
+    /      i.fa.fa-angle-down
+    /    ul.dropdown-menu
+    /      li
+    /        a href="#"  Prototyping
+    = submit_tag 'Go!', class: 'btn btn-primary pull-left filter-go-btn pull-left'

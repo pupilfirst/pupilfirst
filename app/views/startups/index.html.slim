@@ -11,15 +11,84 @@
 .startups-bg
   .container
     .row.startup-list-box
+      .filter-box.clearfix
+        .filter-dropdown.batch-filter
+          label Batch
+          .dropdown
+            button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button" 
+              | All
+              i.fa.fa-angle-down
+            ul.dropdown-menu
+              li
+                a href="#"  Current Batch
+              li
+                a href="#"  Fintech
+        .filter-dropdown.industry-filter
+          label Industry
+          .dropdown
+            button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button" 
+              | Industry
+              i.fa.fa-angle-down
+            ul.dropdown-menu
+              li
+                a href="#"  Finance & Money
+        .filter-dropdown.stage-filter
+          label Stage
+          .dropdown
+            button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button" 
+              | Stage
+              i.fa.fa-angle-down
+            ul.dropdown-menu
+              li
+                a href="#"  Prototyping
+        button.btn.btn-primary.pull-left.filter-go-btn.pull-left
+          | Go !
+
       - @startups.each do |startup|
         .col-md-6
           .startup-card.clearfix
+            - if extra_links_present? startup
+              .dropdown.links-menu
+                button.btn.btn-link.more-menu-dots.dropdown-toggle data-toggle="dropdown" type="button" 
+                  span.dots-menu
+                ul.dropdown-menu.pull-right
+                  - if startup.wireframe_link?
+                    li
+                      a href="#{startup.wireframe_link}" target="_blank"
+                        i.fa.fa-object-group
+                        ' #{startup.product_name} design
+                    li.divider
+                  - if startup.website?
+                    li
+                      a href="#{startup.website}" target="_blank"
+                        i.fa.fa-globe
+                        ' #{startup.website}
+                    li.divider
+                  - if startup.prototype_link?
+                    li
+                      a href="#{startup.prototype_link}" target="_blank"
+                        i.fa.fa-th-large
+                        ' #{startup.prototype_link}
+                    li.divider
+                  - if startup.facebook_link?
+                    li
+                      a href="#{startup.facebook_link}" target="_blank"
+                        i.fa.fa-facebook-square
+                        ' #{startup.facebook_link}
+                    li.divider
+                  - if startup.twitter_link?
+                    li
+                      a href="#{startup.twitter_link}" target="_blank"
+                        i.fa.fa-twitter-square
+                        ' #{startup.twitter_link}
+
             .startup-logo-block
               a.startup-logo-image href=startup_url(startup) class="#{startup.logo.present? ? '' : 'with-name'}"
                 - if startup.logo.present?
                  = image_tag startup.logo.url
                 - else
                  = startup.product_name || startup.name
+
             .startup-details
               a.product-name.font-weight-400 href=startup_url(startup)
                 ' #{startup.product_name}
@@ -31,26 +100,37 @@
                 p
                   = startup.product_description
               .startups-links
-                / - if startup.presentation_link?
-                a.product-deck href="#{startup.presentation_link}" target="_blank" title="Product Deck"
-                  img alt="Product Deck" src="#{image_url 'startups/icons/product-deck-icon.png'}"
-                  ' Product Deck
-
-                a.product-video href="#{startup.product_video}" target="_blank" title="Product Video"
-                  img alt="Product Video" src="#{image_url 'startups/icons/product-video-icon.png'}"
-                  ' Product Video
+                - if startup.presentation_link?
+                  a.product-deck href="#{startup.presentation_link}" target="_blank" title="Product Deck"
+                    img alt="Product Deck" src="#{image_url 'startups/icons/product-deck-icon.png'}"
+                    ' Product Deck
+                - if startup.product_video?
+                  a.product-video href="#{startup.product_video}" target="_blank" title="Product Video"
+                    img alt="Product Video" src="#{image_url 'startups/icons/product-video-icon.png'}"
+                    ' Product Video
 
                 a.startup-stage href="#{TimelineEventType::STAGE_LINKS[startup.stage]}" target="_blank" title="#{TimelineEventType::STAGE_NAMES[startup.stage]} Stage"
                   img alt="Product Stage" src="#{image_url 'startups/icons/product-stage-icon.png'}"
-                  ' #{TimelineEventType::STAGE_NAMES[startup.stage]}
+                  ' #{TimelineEventType::STAGE_NAMES[startup.stage]} Stage
 
               .startupcard-footer.clearfix
                 - if startup.founders.present?
                   .founder-avatar-list
                     - startup.founders.registered.order(:first_name).each do |founder|
-                      a.startup-founder-avatar href=founder_profile_url(slug: founder.slug)
-                        img alt="Founder profile image" src="#{profile_image_url founder, gravatar_size: 128, avatar_version: :mid}"
-
+                      .founder-tooltip.tooltip-popup
+                        a.tooltip-item.startup-founder-avatar href=founder_profile_url(slug: founder.slug)
+                          img alt="Founder profile image" src="#{profile_image_url founder, gravatar_size: 128, avatar_version: :mid}"
+                        span.tooltip-content.clearfix
+                          img alt="Founder profile image" src="#{profile_image_url founder, gravatar_size: 128, avatar_version: :mid}"
+                          span.tooltip-text
+                            h2
+                              = founder.fullname
+                            - if founder.roles.present?
+                              span.founder-role
+                                = founder.roles.map { |role| t("role.#{role}") }.join ', '
+                            a.profile-view href=founder_profile_url(slug: founder.slug)
+                              i.fa.fa-user
+                              | View Profile
                   .view-timeline-btn
                     a.timeline-btn href="#{startup}" target="_blank"
                       i.fa.fa-eye

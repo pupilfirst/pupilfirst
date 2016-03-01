@@ -4,6 +4,7 @@
 class Resource < ActiveRecord::Base
   include FriendlyId
   friendly_id :slug_candidates, use: [:slugged, :finders]
+  acts_as_taggable
 
   belongs_to :batch
   belongs_to :startup

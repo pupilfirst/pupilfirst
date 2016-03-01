@@ -22,6 +22,8 @@
         li role="presentation"
           a.tab-title href="#advisory-board" aria-controls="advisory-board" role="tab" data-toggle="tab" Advisory board
         li role="presentation"
+          a.tab-title href="#alumni" aria-controls="alumni" role="tab" data-toggle="tab" Alumni
+        li role="presentation"
           a.inactive-spacer #{('. ' * 10).html_safe}
 
       .tab-content
@@ -36,4 +38,8 @@
         .tab-pane#advisory-board role="tabpanel"
           .faculty-cards-container
             - Faculty.advisory_board.each do |member|
+              = render 'faculty_card', member: member
+        .tab-pane#alumni role="tabpanel"
+          .faculty-cards-container
+            - Faculty.alumni.each do |member|
               = render 'faculty_card', member: member

@@ -10,8 +10,8 @@ class StartupsController < ApplicationController
 
   # GET /startups
   def index
-    @batches = Startup.available_batches.order('batch_number DESC')
-    @startups = Batch.current.startups
+    load_startups
+    load_filter_options
     @skip_container = true
   end
 
@@ -156,6 +156,25 @@ class StartupsController < ApplicationController
   end
 
   private
+
+  def load_startups
+    batch_id = params.dig(:startups_filter,:batch)
+    batch_scope = batch_id.present? ? Startup.where(batch_id: batch_id) : Startup.batched
+
+    category_id = params.dig(:startups_filter,:category)
+    category_scope = category_id.present? ? Startup.joins(:startup_categories).where(startup_categories: { id: category_id }) : Startup.unscoped
+
+    stage = params.dig(:startups_filter,:stage)
+    stage_scope = stage.present? ? Startup.where(stage: stage) : Startup.unscoped
+
+    @startups = Startup.all.merge(batch_scope).merge(category_scope).merge(stage_scope)
+  end
+
+  def load_filter_options
+    @batches = Startup.available_batches.order('batch_number DESC')
+    @categories = StartupCategory.joins(:startups).where.not(startups: {batch_id: nil}).uniq
+    @stages = Startup.batched.pluck(:stage).uniq
+  end
 
   def startup_params
     params.require(:startup).permit(

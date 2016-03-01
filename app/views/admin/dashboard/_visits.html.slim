@@ -1,0 +1,21 @@
+.dashboard-item
+  - founder_visits = Visit.includes(founder: :startup).where(startups: { batch_id: batch_selected })
+  .heading Recent visits (Only logged-in founders)
+
+  .content
+    - founder_visits.order('visits.started_at DESC').limit(10).each do |visit|
+      div
+        ' &nbsp;#{visit.started_at.strftime('%b %e, %l:%M %p')}:
+        = link_to visit.user.display_name, admin_founder_path(visit.user)
+        ' &nbsp;&mdash;
+        = link_to visit.user.startup.product_name, admin_startup_path(visit.user.startup)
+
+  .footer-spacer
+
+  - trend = founder_visits.group_by_week('visits.started_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
+
+  .left-of-button title="Trend: #{trend.join(', ')}"
+    = Sparkr.sparkline trend
+
+  a.button.view-all href=admin_visits_path(scope: 'founder_visits', q: { started_at_gteq: 3.weeks.ago.strftime('%Y-%m-%d')})
+    | View All (#{Visit.founder_visits.where(started_at: (3.weeks.ago..Time.now)).count})

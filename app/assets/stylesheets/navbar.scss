@@ -120,7 +120,10 @@
     }
 
     // Push down the logo a 10px since default padding plus height of image is 10px short of header height (centers it).
-    @media (min-width: $screen-sm-min) { margin-top: 10px; }
+    @media (min-width: $screen-sm-min) {
+      margin-top: 10px;
+      padding-bottom: 5px;
+    }
   }
 
   ul.dropdown-menu {

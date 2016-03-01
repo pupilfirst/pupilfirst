@@ -75,6 +75,7 @@ gem 'sparkr' # Sparklines with Ruby. https://github.com/rrrene/sparkr
 gem 'videojs_rails' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com/seanbehan/videojs_rails
 gem 'react-rails' # For automatically transforming JSX and using React in Rails.
 gem 'has_secure_token' # Used to create tokens for models (eg: for Faculty). TODO: Will be included with ActiveRecord in Rails 5.
+gem 'ahoy_matey' # Analytics for Rails
 
 # Rails assets!
 source 'https://rails-assets.org' do
@@ -85,6 +86,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-masonry' # Masonry works by placing elements in optimal position based on available vertical space.
   gem 'rails-assets-jquery-stickit' # A jQuery plugin provides a sticky header, sidebar or else when scrolling.
   gem 'rails-assets-jquery.scrollTo' # Lightweight, cross-browser and highly customizable animated scrolling with jQuery
+  gem 'rails-assets-intro.js' # A better way for new feature introduction and step-by-step users guide for your website and project.
 end
 
 group :development do

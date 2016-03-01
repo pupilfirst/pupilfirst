@@ -2,6 +2,13 @@
   title SV.CO Verified Timeline for #{@startup.product_name}
   meta name="description" content="#{@startup.display_name}: #{@startup.product_description}"
 
+- if @tour.present?
+  #startup-show-tour.hide [data-intro=t('startup.show.tour.intro')
+    data-data-points=t('startup.show.tour.data_points')
+    data-founders=t('startup.show.tour.founders')
+    data-timeline-builder=t('startup.show.tour.timeline_builder')
+    data-timeline-event=t('startup.show.tour.timeline_event')]
+
 .container
   /TO DO: probably rewrite this in a cleaner way
   - if @startup.pending? || @startup.unready?
@@ -98,7 +105,7 @@
                         - targets.each do |target|
                           .panel.panel-default
                             .target-list.panel-heading
-                              a.collapsed data-parent="#pending-targets-list" data-toggle="collapse" href="#pending-target-#{target.id}" 
+                              a.collapsed data-parent="#pending-targets-list" data-toggle="collapse" href="#pending-target-#{target.id}"
                                 .target-head
                                   ' #{target.title}
                                 .arrow-target.pull-right
@@ -109,7 +116,7 @@
                     - expired_targets.each do |target|
                       .panel.panel-default
                         .target-list.panel-heading
-                          a.collapsed data-parent="#expired-targets-list" data-toggle="collapse" href="#expired-target-#{target.id}" 
+                          a.collapsed data-parent="#expired-targets-list" data-toggle="collapse" href="#expired-target-#{target.id}"
                             .target-head
                               ' #{target.title}
                             .target-due.grey-text.pull-left
@@ -277,11 +284,11 @@
                     .media
                       .media-left
                         a.media-object
-                          .founder-image style="background-image: url('#');"
+                          .founder-image style="background-image: url('#{profile_image_url founder, gravatar_size: 128, avatar_version: :mid}');"
                       .media-body
                         .media-heading
                           .text-lowercase #{founder.email}
-                        p This founder is yet to register on SV.CO!
+                        p This founder is yet to complete his registration on SV.CO!
         .row
           - if @startup.team_members.present?
             .col-sm-6.col-md-12
@@ -326,7 +333,9 @@
       - if current_founder && @startup.founder?(current_founder)
         == render 'startups/timeline_builder', event: @timeline_event
 
-      - if @startup.timeline_events_for_display(current_founder).present?
+      - events_for_display = @startup.timeline_events_for_display(current_founder)
+
+      - if events_for_display.present?
         .main-timeline
           .tl-iteration
             p
@@ -335,7 +344,7 @@
             br
             a#read-from-beginning href="#begin"  Read from the beginning.
           ul#timeline-list
-            - @startup.timeline_events_for_display(current_founder).each do |event|
+            - events_for_display.each do |event|
               / Do not display hidden events to public.
               - next if event.hidden_from?(current_founder)
 

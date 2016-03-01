@@ -12,6 +12,8 @@ class ConnectRequest < ActiveRecord::Base
 
   scope :for_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch }) }
   scope :upcoming, -> { joins(:connect_slot).where('connect_slots.slot_at > ?', Time.now) }
+  scope :completed, -> { joins(:connect_slot).where(status: STATUS_CONFIRMED).where('connect_slots.slot_at < ?', (Time.now - 20.minutes)) }
+  scope :for_faculty, -> (faculty) { joins(:connect_slot).where(connect_slots: { faculty_id: faculty }) }
 
   delegate :faculty, :slot_at, to: :connect_slot
 
@@ -99,9 +101,6 @@ class ConnectRequest < ActiveRecord::Base
 
       # Default visibility should be sufficient since it equals calendar's setting.
       # e.visibility = 'public'
-
-      # Send an sms 1 day before the office hour and a pop-up message 1 hour before
-      e.reminders = { 'useDefault' => false, 'overrides' => [{ method: 'popup', minutes: 60 }, { method: 'sms', hours: 24 }] }
     end
   end
 

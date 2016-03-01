@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160223071901) do
+ActiveRecord::Schema.define(version: 20160229063954) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,19 @@ ActiveRecord::Schema.define(version: 20160223071901) do
 
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "ahoy_events", id: :uuid, default: nil, force: :cascade do |t|
+    t.uuid     "visit_id"
+    t.integer  "user_id"
+    t.string   "user_type"
+    t.string   "name"
+    t.jsonb    "properties"
+    t.datetime "time"
+  end
+
+  add_index "ahoy_events", ["time"], name: "index_ahoy_events_on_time", using: :btree
+  add_index "ahoy_events", ["user_id", "user_type"], name: "index_ahoy_events_on_user_id_and_user_type", using: :btree
+  add_index "ahoy_events", ["visit_id"], name: "index_ahoy_events_on_visit_id", using: :btree
 
   create_table "batches", force: :cascade do |t|
     t.string   "name"
@@ -120,9 +133,11 @@ ActiveRecord::Schema.define(version: 20160223071901) do
     t.string   "token"
     t.boolean  "self_service"
     t.string   "current_commitment"
+    t.string   "slug"
   end
 
   add_index "faculty", ["category"], name: "index_faculty_on_category", using: :btree
+  add_index "faculty", ["slug"], name: "index_faculty_on_slug", unique: true, using: :btree
 
   create_table "features", force: :cascade do |t|
     t.string   "key"
@@ -238,11 +253,13 @@ ActiveRecord::Schema.define(version: 20160223071901) do
     t.integer  "downloads",    default: 0
     t.string   "slug"
     t.integer  "batch_id"
+    t.integer  "startup_id"
   end
 
   add_index "resources", ["batch_id"], name: "index_resources_on_batch_id", using: :btree
   add_index "resources", ["share_status", "batch_id"], name: "index_resources_on_share_status_and_batch_id", using: :btree
   add_index "resources", ["slug"], name: "index_resources_on_slug", using: :btree
+  add_index "resources", ["startup_id"], name: "index_resources_on_startup_id", using: :btree
 
   create_table "startup_categories", force: :cascade do |t|
     t.string   "name"
@@ -412,6 +429,37 @@ ActiveRecord::Schema.define(version: 20160223071901) do
     t.datetime "updated_at", null: false
     t.string   "location"
   end
+
+  create_table "visits", id: :uuid, default: nil, force: :cascade do |t|
+    t.uuid     "visitor_id"
+    t.string   "ip"
+    t.text     "user_agent"
+    t.text     "referrer"
+    t.text     "landing_page"
+    t.integer  "user_id"
+    t.string   "user_type"
+    t.string   "referring_domain"
+    t.string   "search_keyword"
+    t.string   "browser"
+    t.string   "os"
+    t.string   "device_type"
+    t.integer  "screen_height"
+    t.integer  "screen_width"
+    t.string   "country"
+    t.string   "region"
+    t.string   "city"
+    t.string   "postal_code"
+    t.decimal  "latitude"
+    t.decimal  "longitude"
+    t.string   "utm_source"
+    t.string   "utm_medium"
+    t.string   "utm_term"
+    t.string   "utm_content"
+    t.string   "utm_campaign"
+    t.datetime "started_at"
+  end
+
+  add_index "visits", ["user_id", "user_type"], name: "index_visits_on_user_id_and_user_type", using: :btree
 
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"

@@ -29,6 +29,8 @@ class Founder < ActiveRecord::Base
   has_many :karma_points, dependent: :destroy
   has_many :timeline_events
   belongs_to :invited_batch, class_name: 'Batch'
+  has_many :visits, as: :user
+  has_many :ahoy_events, class_name: 'Ahoy::Event', as: :user
 
   scope :batched, -> { joins(:startup).merge(Startup.batched) }
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }
@@ -204,7 +206,7 @@ class Founder < ActiveRecord::Base
   def remove_from_startup!
     self.startup_id = nil
     self.startup_admin = nil
-    save!
+    save! validate: false
   end
 
   # Store unconfirmed phone number in a standardized form. Confirmed phone number will be copied from this field.
@@ -250,7 +252,8 @@ class Founder < ActiveRecord::Base
 
       fail exception_class
     else
-      startup.founders << founder
+      founder.startup = startup
+      founder.save! validate: false
 
       FounderMailer.cofounder_addition(email, self).deliver_later
     end
@@ -350,6 +353,15 @@ class Founder < ActiveRecord::Base
   # Return true if the founder already has all required fields for registration
   def already_registered?
     first_name? && last_name? && encrypted_password? && gender? && born_on?
+  end
+
+  # Make sure a new team lead is assigned before destroying the present one
+  before_destroy :assign_new_team_lead
+  def assign_new_team_lead
+    return unless startup_admin
+
+    team_lead_candidate = startup.founders.where.not(id: id).first
+    team_lead_candidate.update!(startup_admin: true) if team_lead_candidate
   end
 
   private

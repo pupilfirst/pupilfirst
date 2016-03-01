@@ -177,8 +177,8 @@ class Startup < ActiveRecord::Base
 
     return 'already the team lead' if email == team_lead_email
 
-    return 'not a registered founder. Please ensure that the co-founder has already accepted '\
-    'his/her invitation to SV.CO and completed his/her registration.' unless founder
+    return 'could not find founder with this email. Are you sure this was the email provided to us? '\
+    'Please contact help@sv.co for any assitance' unless founder
 
     return 'already has a startup. Please ensure that your co-founder has not registered your startup already.' unless founder.startup.blank?
 

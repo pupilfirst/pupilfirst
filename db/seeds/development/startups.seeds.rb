@@ -15,7 +15,7 @@ after 'development:founders', 'development:timeline_event_types', 'development:b
   )
 
   # ...whose founder is Some One.
-  founder = Founder.find_by(email: 'someone@mobme.in')
+  founder = Founder.find_by(email: 'someone@sv.co')
   super_startup.founders << founder
   super_startup.save!
 

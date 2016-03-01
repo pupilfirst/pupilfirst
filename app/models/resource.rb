@@ -6,6 +6,7 @@ class Resource < ActiveRecord::Base
   friendly_id :slug_candidates, use: [:slugged, :finders]
 
   belongs_to :batch
+  belongs_to :startup
 
   def slug_candidates
     [:title, [:title, :updated_at]]
@@ -22,7 +23,7 @@ class Resource < ActiveRecord::Base
     [SHARE_STATUS_PUBLIC, SHARE_STATUS_APPROVED]
   end
 
-  validates_presence_of :file, :title, :description, :share_status
+  validates_presence_of :file, :title, :description
   validates_inclusion_of :share_status, in: valid_share_statuses
 
   mount_uploader :file, ResourceFileUploader
@@ -35,12 +36,17 @@ class Resource < ActiveRecord::Base
   def self.for(founder)
     if founder&.startup&.approved?
       where(
-        'share_status = ? OR (share_status = ? AND batch_id IS ?) OR (share_status = ? AND batch_id = ?)',
+        'share_status = ? OR (share_status = ? AND batch_id IS ? AND startup_id IS ?) OR '\
+        '(share_status = ? AND batch_id = ? AND startup_id IS ?) OR (share_status = ? AND startup_id = ?)',
         SHARE_STATUS_PUBLIC,
         SHARE_STATUS_APPROVED,
         nil,
+        nil,
         SHARE_STATUS_APPROVED,
-        founder.startup&.batch&.id
+        founder.startup&.batch&.id,
+        nil,
+        SHARE_STATUS_APPROVED,
+        founder.startup&.id
       ).order('title')
     else
       public_resources

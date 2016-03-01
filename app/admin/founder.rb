@@ -66,22 +66,20 @@ ActiveAdmin.register Founder do
 
       row :product_name do |founder|
         if founder.startup.present?
-          if founder.startup.present?
-            a href: admin_startup_path(founder.startup) do
+          a href: admin_startup_path(founder.startup) do
+            span do
+              founder.startup.try(:product_name)
+            end
+
+            if founder.startup.name.present?
               span do
-                founder.startup.try(:product_name)
-              end
-
-              if founder.startup.name.present?
-                span do
-                  " (#{founder.startup.name})"
-                end
+                " (#{founder.startup.name})"
               end
             end
+          end
 
-            span class: 'wrap-with-paranthesis' do
-              link_to 'Remove from Startup', remove_from_startup_admin_founder_path, method: :post, data: { confirm: 'Are you sure?' }
-            end
+          span class: 'wrap-with-paranthesis' do
+            link_to 'Remove from Startup', remove_from_startup_admin_founder_path, method: :post, data: { confirm: 'Are you sure?' }
           end
         end
       end

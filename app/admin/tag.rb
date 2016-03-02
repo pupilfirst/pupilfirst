@@ -1,4 +1,4 @@
-ActiveAdmin.register ActsAsTaggableOn::Tag, as: 'Tags' do
+ActiveAdmin.register ActsAsTaggableOn::Tag, as: 'Tag' do
   actions :all, except: [:new, :create]
 
   menu parent: 'Taggings'

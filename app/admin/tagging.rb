@@ -1,4 +1,4 @@
-ActiveAdmin.register ActsAsTaggableOn::Tagging, as: 'Taggings' do
+ActiveAdmin.register ActsAsTaggableOn::Tagging, as: 'Tagging' do
   actions :index
 
   index do

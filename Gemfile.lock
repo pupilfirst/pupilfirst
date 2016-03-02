@@ -542,6 +542,10 @@ GEM
     roadie-rails (1.1.0)
       railties (>= 3.0, < 4.3)
       roadie (~> 3.1)
+    rspec (3.4.0)
+      rspec-core (~> 3.4.0)
+      rspec-expectations (~> 3.4.0)
+      rspec-mocks (~> 3.4.0)
     rspec-core (3.4.1)
       rspec-support (~> 3.4.0)
     rspec-expectations (3.4.0)
@@ -713,6 +717,7 @@ DEPENDENCIES
   require_all
   rest-client
   roadie-rails
+  rspec
   rspec-rails (~> 3.4.0)
   rubocop
   sass-rails (~> 5.0)

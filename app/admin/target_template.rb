@@ -1,5 +1,5 @@
 ActiveAdmin.register TargetTemplate do
-  menu parent: 'Startups'
+  menu parent: 'Targets'
 
   config.sort_order = 'days_from_start_asc'
 

@@ -1,6 +1,4 @@
 ActiveAdmin.register Target do
-  menu parent: 'Startups'
-
   permit_params :startup_id, :assigner_id, :role, :status, :title, :description, :status, :resource_url,
     :completion_instructions, :due_date_date, :due_date_time_hour, :due_date_time_minute, :slideshow_embed,
     :completed_at_date, :completed_at_time_hour, :completed_at_time_minute, :completion_comment

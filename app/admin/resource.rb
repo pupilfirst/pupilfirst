@@ -38,7 +38,11 @@ ActiveAdmin.register Resource do
 
     column :title
     column :downloads
-    column :tag_list
+
+    column :tags do |resource|
+      linked_tags(resource.tags, separator: '|')
+    end
+
     actions
   end
 
@@ -68,7 +72,7 @@ ActiveAdmin.register Resource do
       row :downloads
 
       row :tags do |resource|
-        resource.tags.map(&:name).join ', '
+        linked_tags(resource.tags)
       end
 
       row :description

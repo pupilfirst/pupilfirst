@@ -1,6 +1,4 @@
 ActiveAdmin.register Resource do
-  menu parent: 'Startups'
-
   permit_params :title, :description, :file, :thumbnail, :share_status, :batch_id, :startup_id, :tag_list
 
   preserve_default_filters!

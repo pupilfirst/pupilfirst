@@ -10,7 +10,6 @@ $(document).on 'page:change', ->
   resourceTagList.select2(
     placeholder: 'Select some tags',
     tags: true,
-    tokenSeparators: [',', ' '],
     data: select2Data,
     createSearchChoice: (term, data) ->
       filteredData = $(data).filter ->

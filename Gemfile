@@ -64,7 +64,8 @@ gem 'friendly_id' # Slugs for links. http://norman.github.io/friendly_id
 gem 'gravtastic' # Use gravatars as fallback avatars
 gem 'require_all' # Easier folder require-s.
 
-gem 'lita-slack', require: false # Lita adapter for Slack.
+# TODO: removing github repo tracking when gem is updated
+gem 'lita-slack', github: 'litaio/lita-slack', require: false # Lita adapter for Slack.
 
 gem 'gaffe' # Custom error pages. https://github.com/mirego/gaffe
 gem 'google_calendar', github: 'northworld/google_calendar' # Thin wrapper over Google Calendar API.

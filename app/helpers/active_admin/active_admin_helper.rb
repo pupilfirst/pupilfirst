@@ -31,5 +31,14 @@ module ActiveAdmin
         .sum(:points)
         .sort_by { |_founder_id, points| points }.reverse
     end
+
+    # Returns links to tags separated by a separator string.
+    def linked_tags(tags, separator: ', ')
+      return unless tags.present?
+
+      tags.map do |tag|
+        link_to tag.name, admin_tag_path(tag)
+      end.join(separator).html_safe
+    end
   end
 end

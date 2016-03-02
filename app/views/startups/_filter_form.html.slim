@@ -2,9 +2,9 @@
   = simple_form_for :startups_filter, url: startups_path, method: :get, html: { class: 'form-horizontal' },
     wrapper: :horizontal_form do |f|
     .filter-dropdown
-      = f.input :batch, collection: @batches, include_blank: 'Any', label: 'Batch', required: false, selected: params[:startups_filter][:batch]
+      = f.input :batch, collection: @batches, include_blank: 'Any', label: 'Batch', required: false, selected: params.dig(:startups_filter, :batch)
     .filter-dropdown
-      = f.input :category, collection: @categories, include_blank: 'Any', label: 'Category', required: false, selected: params[:startups_filter][:category]
+      = f.input :category, collection: @categories, include_blank: 'Any', label: 'Category', required: false, selected: params.dig(:startups_filter, :category)
     .filter-dropdown
-      = f.input :stage, collection: @stages, label_method: ->(stage) { TimelineEventType::STAGE_NAMES[stage] }, include_blank: 'Any', label: 'Stage', required: false, selected: params[:startups_filter][:stage]
+      = f.input :stage, collection: @stages, label_method: ->(stage) { TimelineEventType::STAGE_NAMES[stage] }, include_blank: 'Any', label: 'Stage', required: false, selected: params.dig(:startups_filter, :stage)
     = submit_tag 'Go!', class: 'btn btn-primary pull-left filter-go-btn pull-left'

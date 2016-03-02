@@ -40,36 +40,47 @@
       font-size: 12px;
       padding-right: 10px;
       font-weight: 400;
+
+      &:before {
+        content: '' !important;
+      }
     }
+    select {
+      border-radius: 5px;
+      font-size: 12px;
+      line-height: 13px;
+      padding: 2px 10px;
+      border-color: #d7d7d7;
+      outline: none;
+      box-shadow: none;
+      appearance: none;
+      color: transparent;
+      text-shadow: 0 0 0 $dark-grey-text;
 
-    .dropdown {
-      display: inline-block;
-
-      button {
-        border-radius: 5px;
-        font-size: 12px;
-        line-height: 13px;
-        padding: 5px 12px 5px 15px;
-        color: $dark-grey-text;
-        border-color: #d7d7d7;
+      option {
+        padding: 5px 10px;
+      }
+      &:focus {
         outline: 0;
+        border-color: #2697c5;
+      }
+    }
+    .select {
+      position: relative;
 
-        i {
-          padding-left: 5px;
-          font-size: 16px;
-          line-height: 10px;
-          vertical-align: -2px;
-          color: #acabab;
-        }
+      &:before {
+        content: '\f107';
+        font-family: FontAwesome;
+        color: #2a6db6;
+        right: 25px;
+        position: absolute;
+        top: 7px;
+        z-index: 1;
+        color: #333;
+        pointer-events: none;
+
         @media (max-width: $screen-xs-max) {
-          width: 100%;
-          text-align: left;
-          padding: 10px 25px 10px 15px;
-
-          i {
-            position: absolute;
-            right: 15px;;
-          }
+          top: 33px;
         }
       }
     }
@@ -79,17 +90,13 @@
       margin-right: 0;
       float: none;
       display: block;
-
-      .dropdown {
-        display: block;
-      }
     }
   }
   .filter-go-btn {
     border-radius: 5px;
     font-size: 14px;
     line-height: 13px;
-    padding: 5px 20px;
+    padding: 9px 20px;
     font-weight: 500;
 
     @media (max-width: $screen-xs-max) {
@@ -100,6 +107,7 @@
 }
 .startups-bg {
   background-color: #f7f8fa;
+  overflow: hidden;
 
   .startup-list-box {
     margin-top: 15px;
@@ -201,23 +209,13 @@
           img {
             width: 100%;
           }
-          @media (max-width: $screen-xs-max) {
-            width: 180px;
-            margin: auto;
-            padding: 0;
-          }
-          @media (max-width: $screen-md-max) and (min-width: $screen-md-min) {
+          @media (max-width: $screen-md-max) and (min-width: $screen-md-min), (max-width: $screen-xs-max) {
             width: 180px;
             margin: auto;
             padding: 0;
           }
         }
-        @media (max-width: $screen-xs-max) {
-          float: none;
-          border: 1px dashed #d7d7d7;
-          border-width: 0 0 1px 0;
-        }
-        @media (max-width: $screen-md-max) and (min-width: $screen-md-min) {
+        @media (max-width: $screen-md-max) and (min-width: $screen-md-min), (max-width: $screen-xs-max) {
           float: none;
           border: 1px dashed #d7d7d7;
           border-width: 0 0 1px 0;
@@ -246,7 +244,7 @@
 
           img {
             width: 20px;
-            vertical-align: sub;
+            vertical-align: -1px;
             padding-right: 5px;
           }
         }
@@ -324,7 +322,7 @@
               }
             }
             img {
-              vertical-align: inherit;
+              vertical-align: -1px;
               padding-right: 5px;
             }
             &:before {
@@ -364,16 +362,9 @@
               display: inline-block;
               border-radius: 50%;
               border: 2px solid #ebeaea;
-              margin: 0 6px;
 
               img {
                 width: 100%;
-              }
-              &:first-child {
-                margin-left: 0;
-              }
-              &:last-child {
-                margin-right: 0;
               }
               @media (max-width: $screen-xs-max) {
                 width: 50px;
@@ -396,7 +387,7 @@
               outline: 0;
               text-decoration: none;
               padding: 10px;
-              border: 1px dotted #48b3de;
+              border: 1px solid #48b3de;
               border-radius: 5px;
               transition: all .2s;
 
@@ -421,18 +412,27 @@
             position: relative;
             height: 42px;
             z-index: 999;
+            margin: 0 6px;
 
-            &:hover {
-              pointer-events: auto;
-
-              .tooltip-content {
+            &:first-child {
+              margin-left: 0;
+            }
+            &:last-child {
+              margin-right: 0;
+            }
+            @media (min-width: $screen-xs-max) {
+              &:hover {
                 pointer-events: auto;
-                opacity: 1;
-                transform: translate3d(0,0,0) rotate3d(0,0,0,0);
-              }
-              .tooltip-item {
-                &:after {
+
+                .tooltip-content {
                   pointer-events: auto;
+                  opacity: 1;
+                  transform: translate3d(0,0,0) rotate3d(0,0,0,0);
+                }
+                .tooltip-item {
+                  &:after {
+                    pointer-events: auto;
+                  }
                 }
               }
             }
@@ -443,7 +443,7 @@
             &:after {
               content: '';
               position: absolute;
-              width: 360px;
+              width: 300px;
               height: 20px;
               bottom: 100%;
               left: 50%;
@@ -456,7 +456,7 @@
             z-index: 9999;
             width: 300px;
             left: 50%;
-            margin: 0 0 10px -155px;
+            margin: 0 0 10px -150px;
             bottom: 100%;
             text-align: left;
             box-shadow: -3px -2px 10px rgba(0,0,0,0.1);

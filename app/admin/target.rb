@@ -124,7 +124,11 @@ ActiveAdmin.register Target do
       row :title
       row :assigner
       row :timeline_event_type
-      row :description
+
+      row :description do
+        target.description.html_safe
+      end
+
       row :slideshow_embed
       row :resource_url
       row :completion_instructions

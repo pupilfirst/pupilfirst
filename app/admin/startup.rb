@@ -3,7 +3,7 @@ ActiveAdmin.register Startup do
   filter :product_name
   filter :batch
   filter :stage, as: :select, collection: proc { stages_collection }
-  filter :tags, collection: Startup.tag_counts_on(:tags), multiple: true
+  filter :tags, collection: proc { Startup.tag_counts_on(:tags) }, multiple: true
   filter :legal_registered_name
   filter :website
   filter :registration_type, as: :select, collection: proc { Startup.valid_registration_types }

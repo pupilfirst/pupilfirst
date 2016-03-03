@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160301100155) do
+ActiveRecord::Schema.define(version: 20160303054557) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -206,6 +206,7 @@ ActiveRecord::Schema.define(version: 20160301100155) do
     t.string   "about"
     t.datetime "verification_code_sent_at"
     t.integer  "invited_batch_id"
+    t.boolean  "timeline_toured"
   end
 
   add_index "founders", ["confirmation_token"], name: "index_founders_on_confirmation_token", unique: true, using: :btree

@@ -27,18 +27,25 @@
   }
 }
 .filter-box {
-  padding: 15px 0;
+  padding: 15px 0 20px;
   margin: 0 15px 15px;
   border-bottom: 1px solid #d7d7d7;
 
   .filter-dropdown {
     float: left;
     margin-right: 30px;
+    min-width: 200px;
+
+    .form-group {
+      margin-bottom: 0;
+    }
 
     label {
       color: #797979;
       font-size: 12px;
-      padding-right: 10px;
+      padding-right: 0;
+      padding-left: 0;
+      padding-top: 5px;
       font-weight: 400;
 
       &:before {
@@ -49,16 +56,17 @@
       border-radius: 5px;
       font-size: 12px;
       line-height: 13px;
-      padding: 2px 10px;
+      padding: 1px 20px 1px 10px;
       border-color: #d7d7d7;
       outline: none;
+      height: 30px;
       box-shadow: none;
       appearance: none;
       color: transparent;
       text-shadow: 0 0 0 $dark-grey-text;
 
       option {
-        padding: 5px 10px;
+        padding: 8px 10px;
       }
       &:focus {
         outline: 0;
@@ -74,7 +82,7 @@
         color: #2a6db6;
         right: 25px;
         position: absolute;
-        top: 7px;
+        top: 5px;
         z-index: 1;
         color: #333;
         pointer-events: none;
@@ -96,7 +104,7 @@
     border-radius: 5px;
     font-size: 14px;
     line-height: 13px;
-    padding: 9px 20px;
+    padding: 7px 20px;
     font-weight: 500;
 
     @media (max-width: $screen-xs-max) {

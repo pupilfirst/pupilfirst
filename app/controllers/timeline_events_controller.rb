@@ -55,6 +55,11 @@ class TimelineEventsController < ApplicationController
     end
   end
 
+  def timeline
+    @batches = Startup.available_batches.order('batch_number DESC')
+    @skip_container = true
+  end
+
   private
 
   def timeline_event_params

@@ -76,9 +76,9 @@ module StartupsHelper
 
   def extra_links_present?(startup)
     startup.website.present? ||
-    startup.wireframe_link.present? ||
-    startup.prototype_link.present? ||
-    startup.facebook_link.present? ||
-    startup.twitter_link.present?
+      startup.wireframe_link.present? ||
+      startup.prototype_link.present? ||
+      startup.facebook_link.present? ||
+      startup.twitter_link.present?
   end
 end

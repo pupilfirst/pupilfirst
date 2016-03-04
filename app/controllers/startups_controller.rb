@@ -165,7 +165,7 @@ class StartupsController < ApplicationController
     stage = params.dig(:startups_filter, :stage)
     stage_scope = stage.present? ? Startup.where(stage: stage) : Startup.unscoped
 
-    @startups = Startup.all.merge(batch_scope).merge(category_scope).merge(stage_scope)
+    @startups = Startup.approved.merge(batch_scope).merge(category_scope).merge(stage_scope)
   end
 
   def load_filter_options

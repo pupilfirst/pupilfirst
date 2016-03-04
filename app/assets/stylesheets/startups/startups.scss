@@ -51,6 +51,9 @@
       &:before {
         content: '' !important;
       }
+      @media (max-width: $screen-xs-max) {
+        padding-left: 15px;
+      }
     }
     select {
       border-radius: 5px;
@@ -98,6 +101,9 @@
       margin-right: 0;
       float: none;
       display: block;
+    }
+    @media (min-width: $screen-xs-max) and (max-width: $screen-md-min) {
+      min-width: 180px;
     }
   }
   .filter-go-btn {

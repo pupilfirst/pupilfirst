@@ -60,7 +60,7 @@ class StartupsController < ApplicationController
       # prepopulate the timeline with a 'Joined SV.CO' entry
       @startup.prepopulate_timeline!
 
-      redirect_to startup_url(@startup, tour: 'yes')
+      redirect_to startup_url(@startup)
     else
       # redirect back to startup new form to show errors
       @skip_container = true
@@ -204,7 +204,7 @@ class StartupsController < ApplicationController
 
   # A tour of timeline page may be given if user is founder of viewed startup, and the tour param is present.
   def take_on_tour?
-    current_founder.present? && current_founder.startup == @startup && params[:tour].present?
+    current_founder.present? && current_founder.startup == @startup && current_founder.tour_timeline?
   end
 
   # If an event_id is available, use that, otherwise supply a new timeline event.

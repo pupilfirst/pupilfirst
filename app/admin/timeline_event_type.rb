@@ -1,5 +1,5 @@
 ActiveAdmin.register TimelineEventType do
-  menu parent: 'Startups'
+  menu parent: 'Timeline Events'
 
   index do
     selectable_column

@@ -357,11 +357,22 @@ class Founder < ActiveRecord::Base
 
   # Make sure a new team lead is assigned before destroying the present one
   before_destroy :assign_new_team_lead
+
   def assign_new_team_lead
     return unless startup_admin
 
     team_lead_candidate = startup.founders.where.not(id: id).first
     team_lead_candidate.update!(startup_admin: true) if team_lead_candidate
+  end
+
+  # Should we give the founder a tour of the timeline? If so, we shouldn't give it again.
+  def tour_timeline?
+    if timeline_toured?
+      false
+    else
+      update!(timeline_toured: true)
+      true
+    end
   end
 
   private

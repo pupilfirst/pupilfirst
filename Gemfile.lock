@@ -93,6 +93,8 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    acts-as-taggable-on (3.5.0)
+      activerecord (>= 3.2, < 5)
     addressable (2.4.0)
     ahoy_matey (1.2.1)
       addressable
@@ -651,6 +653,7 @@ PLATFORMS
 DEPENDENCIES
   active_skin
   activeadmin!
+  acts-as-taggable-on (~> 3.5)
   ahoy_matey
   attribute_normalizer (~> 1.2.0.b)
   autoprefixer-rails

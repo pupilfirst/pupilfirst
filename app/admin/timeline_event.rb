@@ -1,6 +1,4 @@
 ActiveAdmin.register TimelineEvent do
-  menu parent: 'Startups'
-
   permit_params :description, :timeline_event_type_id, :image, :event_on, :startup_id, :verified_at, :grade,
     :founder_id, :serialized_links, timeline_event_files_attributes: [:id, :file, :private, :_destroy]
 

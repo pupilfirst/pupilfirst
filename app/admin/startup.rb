@@ -1,9 +1,10 @@
 ActiveAdmin.register Startup do
   filter :approval_status, as: :select, collection: proc { Startup.valid_approval_status_values }
   filter :product_name
-  filter :legal_registered_name
   filter :batch
   filter :stage, as: :select, collection: proc { stages_collection }
+  filter :tags, collection: proc { Startup.tag_counts_on(:tags) }, multiple: true
+  filter :legal_registered_name
   filter :website
   filter :registration_type, as: :select, collection: proc { Startup.valid_registration_types }
   filter :incubation_location, as: :select, collection: proc { Startup.valid_incubation_location_values }
@@ -225,6 +226,11 @@ ActiveAdmin.register Startup do
 
       row :batch
       row :iteration
+
+      row :tags do
+        linked_tags(startup.tags)
+      end
+
       row :featured
       row :physical_incubatee
       row :agreement_sent
@@ -357,5 +363,6 @@ ActiveAdmin.register Startup do
     { founders_attributes: [:id, :first_name, :last_name, :email, :avatar, :remote_avatar_url, :linkedin_url, :twitter_url, :skip_password] },
     :created_at, :updated_at, :approval_status, :approval_status, :registration_type,
     :incubation_location, :agreement_sent, :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration,
-    :physical_incubatee, :presentation_link, :product_video, :wireframe_link, :prototype_link, :slug, :featured, :batch_id
+    :physical_incubatee, :presentation_link, :product_video, :wireframe_link, :prototype_link, :slug, :featured, :batch_id,
+    :tag_list
 end

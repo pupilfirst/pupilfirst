@@ -30,9 +30,7 @@ ActiveAdmin.register StartupFeedback do
     end
 
     column :feedback do |startup_feedback|
-      pre class: 'max-width-pre' do
-        startup_feedback.feedback
-      end
+      startup_feedback.feedback.html_safe
     end
 
     column :reference_url do |startup_feedback|
@@ -86,10 +84,9 @@ ActiveAdmin.register StartupFeedback do
       end
 
       row :feedback do |startup_feedback|
-        pre class: 'max-width-pre' do
-          startup_feedback.feedback
-        end
+        startup_feedback.feedback.html_safe
       end
+
       row :activity_type
 
       row :reference_url

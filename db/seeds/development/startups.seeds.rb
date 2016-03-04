@@ -1,6 +1,6 @@
 require_relative 'helper'
 
-after 'development:founders', 'development:timeline_event_types', 'development:batches' do
+after 'development:founders', 'development:timeline_event_types', 'development:batches', 'development:categories' do
   # Startup with live agreement.
   super_startup = Startup.new(
     name: 'Super Startup',
@@ -11,7 +11,19 @@ after 'development:founders', 'development:timeline_event_types', 'development:b
     agreement_last_signed_at: 6.months.ago,
     agreement_ends_at: 6.months.since,
     incubation_location: Startup::INCUBATION_LOCATION_KOCHI,
-    batch: Batch.first
+    batch: Batch.first,
+    website: 'https://www.superstartup.in',
+    logo: File.open(File.join(Rails.root, "app/assets/images/logo.png")),
+    presentation_link: 'https://slideshare.net/superstartupdeck',
+    legal_registered_name: 'SuperTech Ltd',
+    startup_categories: [StartupCategory.first, StartupCategory.second],
+    email: 'help@superstartup.in',
+    twitter_link: 'https://twitter.com/superstartup',
+    facebook_link: 'https://facebook.com/superstartup',
+    product_video: 'https://www.youtube.com/ourvideo',
+    prototype_link: 'https://www.github.com/superstartup',
+    wireframe_link: 'https://drive.google.com/superstartup/wireframe',
+    team_size: 3
   )
 
   # ...whose founder is Some One.
@@ -22,4 +34,8 @@ after 'development:founders', 'development:timeline_event_types', 'development:b
   # Make founder the startup admin.
   founder.startup_admin = true
   founder.save!
+
+  # Add two more co-founders
+  super_startup.founders << Founder.find_by(email: 'thedude@sv.co')
+  super_startup.founders << Founder.find_by(email: 'thirdguy@sv.co')
 end

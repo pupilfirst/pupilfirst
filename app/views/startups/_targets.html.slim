@@ -1,0 +1,21 @@
+- if targets.present?
+  - targets.each do |target|
+    .panel.panel-default
+      .target-list.panel-heading
+        a.collapsed data-parent="#completed-targets-list" data-toggle="collapse" href="#completed-target-#{target.id}"
+          .target-head
+            ' #{target.title}
+          .arrow-target.pull-right
+      .panel-collapse.collapse id="completed-target-#{target.id}"
+        .target-data.panel-body
+          h2
+            ' #{target.title}
+          h4.font-weight-400
+            ' Description
+          .expired-targets-description = target.description.html_safe
+          - if target.completion_instructions.present?
+            h2.font-weight-400
+              ' Completion Instructions
+            p = target.completion_instructions
+- else
+  p.alert.alert-warning No targets here yet !

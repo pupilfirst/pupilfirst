@@ -15,8 +15,4 @@ class ResourceThumbnailUploader < CarrierWave::Uploader::Base
   def extension_white_list
     %w(jpg jpeg gif png)
   end
-
-  def fog_directory
-    ENV['PRIVATE_S3_BUCKET_NAME']
-  end
 end

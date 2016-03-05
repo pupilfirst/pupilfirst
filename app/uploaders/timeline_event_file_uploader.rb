@@ -10,4 +10,8 @@ class TimelineEventFileUploader < CarrierWave::Uploader::Base
   def fog_public
     false
   end
+
+  def fog_directory
+    ENV['PRIVATE_S3_BUCKET_NAME']
+  end
 end

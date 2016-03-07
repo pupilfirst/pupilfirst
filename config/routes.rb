@@ -70,7 +70,7 @@ Svapp::Application.routes.draw do
     post 'contact', action: 'send_contact_email'
   end
 
-  resources :faculty, only: %w(index) do
+  resources :faculty, only: %w(index show) do
     post 'connect', on: :member
     collection do
       get 'weekly_slots/:token', to: 'faculty#weekly_slots', as: 'weekly_slots'
@@ -96,6 +96,8 @@ Svapp::Application.routes.draw do
   get 'founders/:slug', to: 'founders#founder_profile', as: 'founder_profile'
 
   get 'transparency', as: 'transparency', to: 'home#transparency'
+
+  get 'timeline', as: 'timeline', to: 'timeline_events#timeline'
 
   root 'home#index'
 end

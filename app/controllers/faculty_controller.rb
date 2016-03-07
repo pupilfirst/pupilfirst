@@ -1,10 +1,18 @@
 class FacultyController < ApplicationController
-  layout 'error', except: [:index, :connect]
-  before_filter :validate_faculty, except: [:index, :connect]
+  layout 'error', except: [:index, :connect, :show]
+  before_filter :validate_faculty, except: [:index, :connect, :show]
 
   # GET /faculty
   def index
     @skip_container = true
+  end
+
+  # GET /faculty/:slug
+  def show
+    # temporarily stubbing the page until its ready
+    raise_not_found
+
+    @faculty = Faculty.find(params[:id])
   end
 
   # POST /faculty/:id/connect

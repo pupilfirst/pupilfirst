@@ -39,7 +39,7 @@ feature 'Targets spec' do
       fill_in 'founder_password', with: 'password'
       click_on 'Sign in'
 
-      expect(page).to have_selector('.target-title', text: 'Pending')
+      expect(page).to have_selector('.pending-count', text: '1')
     end
   end
 end

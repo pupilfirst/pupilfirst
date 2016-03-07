@@ -30,15 +30,10 @@ module StartupsHelper
     pending_targets = @startup.targets.pending
     split_pending_targets = pending_targets.founder + pending_targets.not_target_roles
 
-    # If any of the pending targets are completed for a viewer, show that separately.
-    split_pending_targets = split_pending_targets.select do |target|
+    # Show only if not done for the current viewer
+    split_pending_targets.select do |target|
       !target.done_for_viewer?(current_founder)
     end
-
-    # TODO: Probably rewrite the target partial as 'pending' and 'done' flags are no longer required
-    [
-      [split_pending_targets, { pending: true, done: false }]
-    ]
   end
 
   # Only show expired targets that haven't been completed by founder already.
@@ -72,5 +67,13 @@ module StartupsHelper
     end
 
     showcase_events_startups
+  end
+
+  def extra_links_present?(startup)
+    startup.website.present? ||
+      startup.wireframe_link.present? ||
+      startup.prototype_link.present? ||
+      startup.facebook_link.present? ||
+      startup.twitter_link.present?
   end
 end

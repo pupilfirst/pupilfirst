@@ -18,18 +18,56 @@
           .result-head.text-center
             = image_tag 'home/apply/batch-result-icon.png', class: 'img-responsive'
             h3
-              ' Interviews have been completed.
+              ' Final Results are out!
             p
-              | We'll be announcing final results by end of month.
+              | Congratulations to all those selected!
             p.interview-text
-              | We plan on starting Batch 2 and Batch 3 simultaneously, so batch start might be a bit delayed.
-            hr
+              | Note: this is the combined result for both Batch 2 and Batch 3.
+          .result-table
+            .row
+              .col-md-6
+                .panel.panel-success
+                  .panel-heading Andhra Pradesh
+                  ul.list-group
+                    li.list-group-item
+                      h3 JNTU Anantpur
+                      ol
+                        li Mohammad Shameer Khan
+                    li.list-group-item
+                      h3 JNTU Kakinada
+                      ol
+                        li Shubham Anand Gorthi
+                        li Varun Satyam
+                        li Kesanupalli Srivatsava
+                    li.list-group-item
+                      h3 GITAM University
+                      ol
+                        li Jagadeesh Vattikonda
+                        li Kaduru Vimal Raj
+                        li Akhil Pandey
+                        
+              .col-md-6
+                .panel.panel-success
+                  .panel-heading Kerala
+                  ul.list-group
+                    li.list-group-item
+                      h3 Mahatma Gandhi University
+                      ol
+                        li Adam Shamsudeen
+                        
+                .panel.panel-success
+                  .panel-heading Gujarat
+                  ul.list-group
+                    li.list-group-item
+                      h3 Gujarat Technological University
+                      ol
+                        li Viraj Rajendra Agarwal
+                        li Harshil Jayeshbhai Shah
+
+            p 
+              ' We plan on starting the batch <strong>as soon as we process signed agreements from the teams</strong>. Information on how to sign and send agreements to SV.CO will be sent to the teams&#8217; registered email address. For any help, write to help@sv.co.
+
       .col-md-5.col-md-pull-7
-        .alert.alert-info
-          h4
-            ' This is the Application page for Batch 2.
-          a.btn.btn-primary href="#{apply_path(3)}"
-            ' Visit Batch 3 Application Page (Closed)
         .graduate-details
           h2.header-light
             ' SV.CO is a six month &#8220;Build a Startup&#8221; program for college students.

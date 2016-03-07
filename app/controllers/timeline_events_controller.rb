@@ -1,6 +1,6 @@
 class TimelineEventsController < ApplicationController
-  before_filter :authenticate_founder!
-  before_filter :restrict_to_startup_founders
+  before_filter :authenticate_founder!, except: [:timeline]
+  before_filter :restrict_to_startup_founders, except: [:timeline]
 
   # POST /founder/startup/timeline_events
   def create
@@ -53,6 +53,11 @@ class TimelineEventsController < ApplicationController
       flash[:error] = "Something went wrong, and we couldn't update the timeline event! :("
       render 'startups/show'
     end
+  end
+
+  def timeline
+    @batches = Startup.available_batches.order('batch_number DESC')
+    @skip_container = true
   end
 
   private

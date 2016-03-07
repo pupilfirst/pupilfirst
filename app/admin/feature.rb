@@ -1,4 +1,6 @@
 ActiveAdmin.register Feature do
+  menu parent: 'Dashboard'
+
   form do |f|
     f.inputs "Details" do
       f.input :key

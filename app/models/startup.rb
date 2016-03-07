@@ -3,6 +3,7 @@
 
 class Startup < ActiveRecord::Base
   include FriendlyId
+  acts_as_taggable
 
   # For an explanation of these legacy values, see linked trello card.
   #

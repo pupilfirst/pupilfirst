@@ -7,6 +7,8 @@
       li class="#{ (batch.id == batch_selected.to_i ? 'selected':'') + ' scope' }"
         a.table_tools_button href=admin_dashboard_path(batch: batch) #{batch.name} Batch
 .dashboard-container
+  == render 'visits', batch_selected: batch_selected
+
   - TimelineEvent.valid_verified_status.each do |verified_status|
     .dashboard-item
       - timeline_events = TimelineEvent.for_batch(batch_selected).where(verified_status: verified_status).order('verified_at DESC').includes(:timeline_event_type, :startup)

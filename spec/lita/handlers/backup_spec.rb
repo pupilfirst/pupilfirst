@@ -12,7 +12,7 @@ require 'lita-slack'
 # end
 require_relative '../../../lib/lita/handlers/backup.rb'
 
-describe Lita::Handlers::Backup do
+describe Lita::Handlers::Backup, disabled: true do
   let(:robot) { instance_double(Lita::Robot) }
   # let(:room) { Lita::Room.create_or_update('#general') }
   let(:source) { instance_double(Lita::Source) }

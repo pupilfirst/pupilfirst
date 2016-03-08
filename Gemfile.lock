@@ -25,7 +25,7 @@ GIT
 
 GIT
   remote: git://github.com/litaio/lita-slack.git
-  revision: 4902ef00fec9f6c2fcbff55181861f000602e238
+  revision: 38a968fd88e46fb5448420296b6415ecfe946a46
   specs:
     lita-slack (1.7.2)
       eventmachine
@@ -451,7 +451,7 @@ GEM
       slop (~> 3.4)
     pry-rails (0.3.4)
       pry (>= 0.9.10)
-    puma (3.0.2)
+    puma (3.1.0)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.6.4)

@@ -1,9 +1,7 @@
 .startups-banner {
   height: 180px;
-  background-image: asset-url("startup-index-banner.png");
-  background-repeat: no-repeat;
+  background: $theme-dark-green asset-url("startup-index-banner.png") no-repeat bottom center;
   background-size: cover;
-  background-position: bottom center;
   position: relative;
 
   .page-header {

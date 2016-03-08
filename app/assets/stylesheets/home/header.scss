@@ -2,7 +2,7 @@
 @import 'variables';
 
 .large-header.home-index {
-  background-image: asset-url('home/header_background.jpg');
+  background: $theme-dark-green asset-url('home/header_background.jpg');
 }
 
 .homepage-header {

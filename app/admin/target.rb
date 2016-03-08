@@ -11,7 +11,7 @@ ActiveAdmin.register Target do
   filter :startup,
     collection: Startup.batched,
     label: 'Product',
-    member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : 's'}" }
+    member_label: proc { |startup| startup.display_name }
 
   filter :role, as: :select, collection: Target.valid_roles
   filter :status, as: :select, collection: Target.valid_statuses

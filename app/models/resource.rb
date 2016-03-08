@@ -71,7 +71,22 @@ class Resource < ActiveRecord::Base
 
   # Notify on slack when a new resource is uploaded
   def notify_on_slack
-    PublicSlackTalk.post_message message: new_resource_message, channel: '#resources'
+    if for_approved?
+      PublicSlackTalk.post_message message: new_resource_message, founders: founders_to_notify
+    else
+      PublicSlackTalk.post_message message: new_resource_message, channel: '#resources'
+    end
+  end
+
+  # returns an array of founders who needs to be notified of the new resource
+  def founders_to_notify
+    if startup_id.present?
+      startup.founders
+    elsif batch_id.present?
+      Founder.where(startup: batch.startups)
+    else
+      Founder.where(startup: Startup.batched_and_approved)
+    end
   end
 
   # message to be send to slack for new resources

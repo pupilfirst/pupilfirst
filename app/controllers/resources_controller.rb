@@ -2,6 +2,7 @@ class ResourcesController < ApplicationController
   def index
     @resources = Resource.for(current_founder)
     raise_not_found if @resources.blank?
+    @skip_container = true
   end
 
   def show

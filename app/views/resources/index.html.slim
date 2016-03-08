@@ -2,22 +2,26 @@
   title SV.CO Resources for First-time Founders
   meta name="description" content="Get access to content produced by Startup Village faculty, including presentations, video and audio clips."
 
-ol.breadcrumb.margin-top-20
-  li = link_to 'Home', root_path
-  li.active Resources
+.resources-banner
+  .container
+    .banner-text.text-center
+      h1.page-header.header-light Resources
+      p.startups-introduction
+        ' This is just a small sample of Resources available at SV.CO. Approved Startups
+        | get access to exclusive content produced by Faculty, including presentations, video and audio clips.
 
-h1.page-header.header-light Resources
+.resources-bg
+  .container
+    - if current_founder.present? && (@resources.count > Resource.public_resources.count)
+      .alert.alert-warning
+        ' You currently have access to exclusive resources that are marked clearly by a <strong>Batch Exclusive</strong>
+        | badge. Please do not share these resources outside your founding team. Thank you!
 
-- if current_founder.present? && (@resources.count > Resource.public_resources.count)
-  .alert.alert-warning
-    ' You currently have access to exclusive resources that are marked clearly by a <strong>Batch Exclusive</strong>
-    | badge. Please do not share these resources outside your founding team. Thank you!
+    - if current_founder.blank?
+      p.resources-intro
+        ' This is just a small sample of Resources available at SV.CO. Approved Startups get access to exclusive content
+        | produced by Faculty, including presentations, video and audio clips.
 
-- if current_founder.blank?
-  p.resources-intro
-    ' This is just a small sample of Resources available at SV.CO. Approved Startups get access to exclusive content
-    | produced by Faculty, including presentations, video and audio clips.
-
-.resources
-  - @resources.each do |resource|
-    = render 'resource', resource: resource
+    .resources
+      - @resources.each do |resource|
+        = render 'resource', resource: resource

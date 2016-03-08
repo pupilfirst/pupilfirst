@@ -1,13 +1,40 @@
 @import 'bootstrap/variables';
 @import 'variables';
 
-.resources {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: stretch;
-  margin-bottom: 20px;
+.resources-banner {
+  height: 180px;
+  background: asset-url("resources/resources-bg.png") no-repeat right center, linear-gradient(to bottom, rgba(255,251,246,1) 0%, rgba(255,253,250,1) 100%);
+  position: relative;
+  border-bottom: 1px solid #ececec;
 
+  .page-header {
+    color: #333333;
+    display: inline-block;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 42px;
+    letter-spacing: 0.04em;
+    border-color: #333333;
+  }
+  .banner-text {
+    max-width: 600px;
+    padding: 30px 0 0;
+    text-align: left;
+  }
+  p.startups-introduction {
+    margin: 0;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 25px;
+    color: #333333;
+    letter-spacing: 0.04em;
+  }
+}
+.resources-bg {
+  background-color: #f5f5f5;
+  padding: 40px 0;
+}
+.resources {
   @media (max-width: $screen-xs-max) { justify-content: center; }
 }
 
@@ -19,15 +46,15 @@ p.resources-intro {
 }
 
 .resource {
+  height: 540px;
+  border-radius: 5px;
+  overflow: hidden;
   position: relative;
-  flex: none;
-  width: 200px;
-  margin: 0 20px 20px 0;
-  background-color: #f7f7f7;
-  box-shadow: 1px 1px 1px #d2d2d2;
+  background-color: white;
+  box-shadow: 0 0 5px 0 rgba(0,0,0,0.1);
 
   .resource-content {
-    padding: 10px;
+    padding: 20px;
   }
 
   .download-button-spacer {
@@ -38,6 +65,13 @@ p.resources-intro {
     position: absolute;
     bottom: 10px;
     left: 10px;
+
+    a {
+      width: 40px;
+      height: 40px;
+      line-height: 27px;
+      border-radius: 50%;
+    }
   }
 
   .stream-resource {
@@ -52,13 +86,18 @@ p.resources-intro {
       text-decoration: none;
     }
   }
+  img {
+    width: 100%;
+  }
 }
 
 .batch-exclusive {
-  width: 200px;
+  width: auto;
   text-align: center;
-  position: absolute;
-  top: 165px;
+  position: absolute;;
+  top: 215px;
+  left: 50%;
+  transform: translateX(-50%);
 
   .badge {
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);

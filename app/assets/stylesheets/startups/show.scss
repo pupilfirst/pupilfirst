@@ -272,48 +272,30 @@ h1.product-name {
     }
   }
 }
+.learn-more {
+  padding: 0;
+  margin-top: 10px;
 
-.target-container {
-  margin-bottom: 5px;
+  .learn-more-btn {
+    border-radius: 5px;
+    color: #337ab7;
+    background-color: white;
+    border-color: #408bcc;
+    transition: all 300ms ease-out;
 
-  .target-title {
-    h2 {
-      margin: 0;
-      border-bottom: 0;
-      font-size: 18px;
-      font-weight: 400;
-
-      &:before {
-        border-left: 3px solid #0091c9;
-        position: absolute;
-        content: ' ';
-        left: 0;
-        height: 20px;
-      }
-    }
-    .labels {
-      display: block;
+    &:hover {
+      color: #18558a;
+      border-color: #18558a;
     }
   }
-
-  .target-description {
-    margin-top: 10px;
-    border-top: 1px solid #cdcdcd;
-    padding: 8px 0px; }
-
-  .learn-more {
-    padding: 0;
-    color: $dark-grey-text;
-
-    .assigner {
-      font-size: 80%;
-      display: inline-block;
-      border-top: 1px solid #cdcdcd;
-    }
-    .assigner-center {
-      padding-top: 4px;
-    }
-  }
+}
+.assigner {
+  font-size: 80%;
+  display: block;
+  margin-top: 10px;
+  color: #666;
+  border-top: 1px solid #eee;
+  padding: 5px 0;
 }
 .timeline-panel .hidden-marker {
   position: absolute;
@@ -786,6 +768,13 @@ h1.product-name {
         content: ' ';
         left: 0;
         height: 20px;
+      }
+      .labels {
+        display: inline-block;
+        font-size: 14px;
+        margin-left: 5px;
+        vertical-align: 1px;
+        padding-bottom: 2px;
       }
     }
     h4 {

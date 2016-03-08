@@ -2,20 +2,49 @@
   - targets.each do |target|
     .panel.panel-default
       .target-list.panel-heading
-        a.collapsed data-parent="#completed-targets-list" data-toggle="collapse" href="#completed-target-#{target.id}"
+        a.collapsed data-parent="#targets-list" data-toggle="collapse" href="#target-#{target.id}"
           .target-head
             ' #{target.title}
           .arrow-target.pull-right
-      .panel-collapse.collapse id="completed-target-#{target.id}"
+      .panel-collapse.collapse id="target-#{target.id}"
         .target-data.panel-body
           h2
             ' #{target.title}
+            .labels.text-uppercase
+              span.label.label-primary #{t("role.#{target.role}")}
+              | &nbsp;
           h4.font-weight-400
             ' Description
-          .expired-targets-description = target.description.html_safe
+          .targets-description = target.description.html_safe
           - if target.completion_instructions.present?
             h2.font-weight-400
               ' Completion Instructions
             p = target.completion_instructions
+
+          .assigner
+            em
+              ' Assigned by <strong>#{target.assigner.name}</strong>.
+              - if target.due_date.present?
+                br
+                | Due date: <strong>#{target.due_date.in_time_zone('Asia/Calcutta').strftime('%b %-d at %I:%M %p')}</strong>.
+
+          .learn-more
+            - if target.slideshow_embed.present?
+              .modal.fade tabindex="-1" role="dialog" id="target-#{target.id}-slideshow"
+                .modal-dialog.modal-lg
+                  .modal-content
+                    .modal-body
+                      .embed-responsive.embed-responsive-4by3
+                        = target.slideshow_embed.html_safe
+                    .modal-footer
+                      button.btn.btn-default data-dismiss="modal" type="button" Close
+
+              button.btn.btn-primary.btn-sm.learn-more-btn type="button" data-toggle="modal" data-target="#target-#{target.id}-slideshow"
+                i.fa.fa-external-link-square
+                | &nbsp; Learn More
+            - elsif target.resource_url.present?
+              = link_to target.resource_url, class: 'btn btn-primary btn-sm learn-more-btn', target: '_blank' do
+                i.fa.fa-external-link-square
+                | &nbsp; Learn More
 - else
   p.alert.alert-warning No targets here yet !

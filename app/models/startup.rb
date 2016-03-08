@@ -74,7 +74,6 @@ class Startup < ActiveRecord::Base
   scope :agreement_signed, -> { where 'agreement_first_signed_at IS NOT NULL' }
   scope :agreement_live, -> { where('agreement_ends_at > ?', Time.now) }
   scope :agreement_expired, -> { where('agreement_ends_at < ?', Time.now) }
-  scope :physically_incubated, -> { agreement_live.where(physical_incubatee: true) }
   scope :without_founders, -> { where.not(id: (Founder.pluck(:startup_id).uniq - [nil])) }
   scope :student_startups, -> { joins(:founders).where.not(founders: { university_id: nil }).uniq }
   scope :kochi, -> { where incubation_location: INCUBATION_LOCATION_KOCHI }

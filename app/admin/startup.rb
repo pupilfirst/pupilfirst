@@ -110,7 +110,6 @@ ActiveAdmin.register Startup do
     column :prototype_link
     column :batch
     column :incubation_location
-    column :physical_incubatee
     column(:founders) { |startup| startup.founders.pluck(:first_name).join ', ' }
     column(:team_members) { |startup| startup.team_members.pluck(:name).join ', ' }
     column(:women_cofounders) { |startup| startup.founders.where(gender: Founder::GENDER_FEMALE).count }
@@ -126,7 +125,6 @@ ActiveAdmin.register Startup do
     column :revenue_generated
     column :team_size
     column :women_employees
-    column :agreement_sent
     column :agreement_first_signed_at
     column :agreement_last_signed_at
     column :agreement_ends_at
@@ -232,8 +230,6 @@ ActiveAdmin.register Startup do
       end
 
       row :featured
-      row :physical_incubatee
-      row :agreement_sent
       row :agreement_first_signed_at
       row :agreement_last_signed_at
       row :agreement_ends_at
@@ -362,7 +358,7 @@ ActiveAdmin.register Startup do
     { startup_category_ids: [] }, { founder_ids: [] },
     { founders_attributes: [:id, :first_name, :last_name, :email, :avatar, :remote_avatar_url, :linkedin_url, :twitter_url, :skip_password] },
     :created_at, :updated_at, :approval_status, :approval_status, :registration_type,
-    :incubation_location, :agreement_sent, :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration,
-    :physical_incubatee, :presentation_link, :product_video, :wireframe_link, :prototype_link, :slug, :featured, :batch_id,
+    :incubation_location, :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration,
+    :presentation_link, :product_video, :wireframe_link, :prototype_link, :slug, :featured, :batch_id,
     :tag_list
 end

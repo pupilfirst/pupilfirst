@@ -8,8 +8,6 @@
     = f.input :prototype_link
     = f.input :legal_registered_name
     = f.input :batch
-    = f.input :physical_incubatee
-    = f.input :agreement_sent
     = f.input :agreement_first_signed_at, as: :date_select
     = f.input :agreement_last_signed_at, as: :date_select
     = f.input :agreement_duration, collection: Startup.valid_agreement_durations

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160303054557) do
+ActiveRecord::Schema.define(version: 20160308120700) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -312,12 +312,10 @@ ActiveRecord::Schema.define(version: 20160303054557) do
     t.integer  "team_size"
     t.integer  "women_employees"
     t.string   "incubation_location"
-    t.boolean  "agreement_sent",            default: false
     t.string   "pin"
     t.datetime "agreement_first_signed_at"
     t.datetime "agreement_last_signed_at"
     t.datetime "agreement_ends_at"
-    t.boolean  "physical_incubatee"
     t.text     "metadata"
     t.string   "slug"
     t.boolean  "featured"

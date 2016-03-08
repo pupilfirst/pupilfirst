@@ -172,6 +172,14 @@ class Founder < ActiveRecord::Base
     self.slack_user_id = slack_username.present? ? @new_slack_user_id : nil
   end
 
+  before_save :capitalize_name_fragments
+
+  def capitalize_name_fragments
+    return unless first_name_changed? || last_name_changed?
+    self.first_name = first_name.capitalize
+    self.last_name = last_name.capitalize
+  end
+
   has_secure_token :auth_token
 
   before_validation :remove_at_symbol_from_slack_username

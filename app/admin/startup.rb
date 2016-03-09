@@ -117,11 +117,9 @@ ActiveAdmin.register Startup do
     column :registration_type
     column :district
     column :pin
-    column :cool_fact
     column :product_progress
     column :revenue_generated
     column :team_size
-    column :women_employees
     column :agreement_signed_at
   end
 
@@ -251,7 +249,6 @@ ActiveAdmin.register Startup do
 
       row :revenue_generated
       row :team_size
-      row :women_employees
 
       row :startup_categories do
         startup.startup_categories.map(&:name).join(', ')

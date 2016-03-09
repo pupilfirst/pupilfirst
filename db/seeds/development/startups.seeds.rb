@@ -20,7 +20,7 @@ after 'development:founders', 'development:timeline_event_types', 'development:b
     email: 'help@superstartup.in',
     twitter_link: 'https://twitter.com/superstartup',
     facebook_link: 'https://facebook.com/superstartup',
-    product_video: 'https://www.youtube.com/ourvideo',
+    product_video_link: 'https://www.youtube.com/ourvideo',
     prototype_link: 'https://www.github.com/superstartup',
     wireframe_link: 'https://drive.google.com/superstartup/wireframe',
     team_size: 3

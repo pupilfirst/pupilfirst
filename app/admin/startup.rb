@@ -104,7 +104,7 @@ ActiveAdmin.register Startup do
     column :product_name
     column :product_description
     column :presentation_link
-    column :product_video
+    column :product_video_link
     column :wireframe_link
     column :prototype_link
     column :batch
@@ -243,8 +243,8 @@ ActiveAdmin.register Startup do
         link_to startup.presentation_link, startup.presentation_link if startup.presentation_link.present?
       end
 
-      row :product_video do
-        link_to startup.product_video, startup.product_video if startup.product_video.present?
+      row :product_video_link do
+        link_to startup.product_video_link, startup.product_video_link if startup.product_video_link.present?
       end
 
       row :wireframe_link do
@@ -357,6 +357,6 @@ ActiveAdmin.register Startup do
     { founders_attributes: [:id, :first_name, :last_name, :email, :avatar, :remote_avatar_url, :linkedin_url, :twitter_url, :skip_password] },
     :created_at, :updated_at, :approval_status, :approval_status, :registration_type,
     :incubation_location, :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration,
-    :presentation_link, :product_video, :wireframe_link, :prototype_link, :slug, :batch_id,
+    :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug, :batch_id,
     :tag_list
 end

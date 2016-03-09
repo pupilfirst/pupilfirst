@@ -31,18 +31,10 @@ class Startup < ActiveRecord::Base
   PRODUCT_PROGRESS_PUBLIC_BETA = -'public_beta'
   PRODUCT_PROGRESS_LAUNCHED = -'launched'
 
-  INCUBATION_LOCATION_KOCHI = -'kochi'
-  INCUBATION_LOCATION_VISAKHAPATNAM = -'visakhapatnam'
-  INCUBATION_LOCATION_KOZHIKODE = -'kozhikode'
-
   SV_STATS_LINK = -'bit.ly/svstats2'
 
   def self.valid_agreement_durations
     { '1 year' => 1.year, '2 years' => 2.years, '5 years' => 5.years }
-  end
-
-  def self.valid_incubation_location_values
-    [INCUBATION_LOCATION_KOCHI, INCUBATION_LOCATION_VISAKHAPATNAM, INCUBATION_LOCATION_KOZHIKODE]
   end
 
   def self.valid_product_progress_values
@@ -76,8 +68,6 @@ class Startup < ActiveRecord::Base
   scope :agreement_expired, -> { where('agreement_ends_at < ?', Time.now) }
   scope :without_founders, -> { where.not(id: (Founder.pluck(:startup_id).uniq - [nil])) }
   scope :student_startups, -> { joins(:founders).where.not(founders: { university_id: nil }).uniq }
-  scope :kochi, -> { where incubation_location: INCUBATION_LOCATION_KOCHI }
-  scope :visakhapatnam, -> { where incubation_location: INCUBATION_LOCATION_VISAKHAPATNAM }
   scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED }).distinct }
   scope :batched_and_approved, -> { batched.approved }
 
@@ -236,16 +226,6 @@ class Startup < ActiveRecord::Base
     inclusion: { in: valid_product_progress_values },
     allow_nil: true,
     allow_blank: true
-
-  # Product Progress should be one of acceptable list.
-  validates :incubation_location,
-    inclusion: { in: valid_incubation_location_values },
-    allow_nil: true
-
-  # validates_presence_of :name, if: ->(startup){@full_validation }
-  # validates_presence_of :address, if: ->(startup){@full_validation }
-  # validates_presence_of :email
-  # validates_presence_of :phone
 
   # Only accept both agreement dates together.
   validates_presence_of :agreement_first_signed_at, if: ->(startup) { startup.agreement_last_signed_at.present? || startup.agreement_duration.present? }
@@ -434,14 +414,6 @@ class Startup < ActiveRecord::Base
       'Pending' => pending.count,
       'Approved' => approved.count,
       'Dropped-out' => dropped_out.count
-    }
-  end
-
-  def self.current_startups_split_by_incubation_location(incubation_location)
-    {
-      'Pending' => pending.where(incubation_location: incubation_location).count,
-      'Approved' => approved.where(incubation_location: incubation_location).count,
-      'Dropped-out' => dropped_out.where(incubation_location: incubation_location).count
     }
   end
 

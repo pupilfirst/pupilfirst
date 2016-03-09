@@ -10,7 +10,6 @@ after 'development:founders', 'development:timeline_event_types', 'development:b
     agreement_first_signed_at: 18.months.ago,
     agreement_last_signed_at: 6.months.ago,
     agreement_ends_at: 6.months.since,
-    incubation_location: Startup::INCUBATION_LOCATION_KOCHI,
     batch: Batch.first,
     website: 'https://www.superstartup.in',
     logo: File.open(File.join(Rails.root, "app/assets/images/logo.png")),

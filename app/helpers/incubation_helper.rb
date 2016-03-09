@@ -25,12 +25,4 @@ module IncubationHelper
       'Launched' => Startup::PRODUCT_PROGRESS_LAUNCHED
     }
   end
-
-  def incubation_locations
-    {
-      'Kochi' => Startup::INCUBATION_LOCATION_KOCHI,
-      'Kozhikode' => Startup::INCUBATION_LOCATION_KOZHIKODE,
-      'Visakhapatnam' => Startup::INCUBATION_LOCATION_VISAKHAPATNAM
-    }
-  end
 end

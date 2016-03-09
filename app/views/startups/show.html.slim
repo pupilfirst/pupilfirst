@@ -134,7 +134,7 @@
                       a href="#{@startup.presentation_link}" target="_blank"
                         ' #{@startup.product_name} deck
                         i.fa.fa-external-link
-            - if @startup.product_video?
+            - if @startup.product_video_link?
               .col-sm-6.col-md-12
                 .media
                   .media-left
@@ -142,7 +142,7 @@
                   .media-body
                     h4.media-heading Product Video
                     p.data-content
-                      a href="#{@startup.product_video}" target="_blank"
+                      a href="#{@startup.product_video_link}" target="_blank"
                         ' #{@startup.product_name} video
                         i.fa.fa-external-link
             - if @startup.wireframe_link?

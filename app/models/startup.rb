@@ -31,19 +31,7 @@ class Startup < ActiveRecord::Base
   PRODUCT_PROGRESS_PUBLIC_BETA = -'public_beta'
   PRODUCT_PROGRESS_LAUNCHED = -'launched'
 
-  INCUBATION_LOCATION_KOCHI = -'kochi'
-  INCUBATION_LOCATION_VISAKHAPATNAM = -'visakhapatnam'
-  INCUBATION_LOCATION_KOZHIKODE = -'kozhikode'
-
   SV_STATS_LINK = -'bit.ly/svstats2'
-
-  def self.valid_agreement_durations
-    { '1 year' => 1.year, '2 years' => 2.years, '5 years' => 5.years }
-  end
-
-  def self.valid_incubation_location_values
-    [INCUBATION_LOCATION_KOCHI, INCUBATION_LOCATION_VISAKHAPATNAM, INCUBATION_LOCATION_KOZHIKODE]
-  end
 
   def self.valid_product_progress_values
     [
@@ -71,14 +59,11 @@ class Startup < ActiveRecord::Base
   scope :dropped_out, -> { where(approval_status: APPROVAL_STATUS_DROPPED_OUT) }
   scope :not_dropped_out, -> { where.not(approval_status: APPROVAL_STATUS_DROPPED_OUT) }
   scope :incubation_requested, -> { where(approval_status: [APPROVAL_STATUS_PENDING, APPROVAL_STATUS_APPROVED]) }
-  scope :agreement_signed, -> { where 'agreement_first_signed_at IS NOT NULL' }
-  scope :agreement_live, -> { where('agreement_ends_at > ?', Time.now) }
-  scope :agreement_expired, -> { where('agreement_ends_at < ?', Time.now) }
-  scope :physically_incubated, -> { agreement_live.where(physical_incubatee: true) }
+  scope :agreement_signed, -> { where 'agreement_signed_at IS NOT NULL' }
+  scope :agreement_live, -> { where('agreement_signed_at > ?', 5.years.ago) }
+  scope :agreement_expired, -> { where('agreement_signed_at < ?', 5.years.ago) }
   scope :without_founders, -> { where.not(id: (Founder.pluck(:startup_id).uniq - [nil])) }
   scope :student_startups, -> { joins(:founders).where.not(founders: { university_id: nil }).uniq }
-  scope :kochi, -> { where incubation_location: INCUBATION_LOCATION_KOCHI }
-  scope :visakhapatnam, -> { where incubation_location: INCUBATION_LOCATION_VISAKHAPATNAM }
   scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED }).distinct }
   scope :batched_and_approved, -> { batched.approved }
 
@@ -238,20 +223,6 @@ class Startup < ActiveRecord::Base
     allow_nil: true,
     allow_blank: true
 
-  # Product Progress should be one of acceptable list.
-  validates :incubation_location,
-    inclusion: { in: valid_incubation_location_values },
-    allow_nil: true
-
-  # validates_presence_of :name, if: ->(startup){@full_validation }
-  # validates_presence_of :address, if: ->(startup){@full_validation }
-  # validates_presence_of :email
-  # validates_presence_of :phone
-
-  # Only accept both agreement dates together.
-  validates_presence_of :agreement_first_signed_at, if: ->(startup) { startup.agreement_last_signed_at.present? || startup.agreement_duration.present? }
-  validates_presence_of :agreement_last_signed_at, if: ->(startup) { startup.agreement_first_signed_at.present? || startup.agreement_duration.present? }
-
   validates_numericality_of :pin, allow_nil: true, greater_than_or_equal_to: 100_000, less_than_or_equal_to: 999_999 # PIN Code is always 6 digits
 
   validates_length_of :product_description,
@@ -266,7 +237,6 @@ class Startup < ActiveRecord::Base
   store :metadata, accessors: [:updated_from]
 
   validates_numericality_of :team_size, greater_than_or_equal_to: 3, less_than_or_equal_to: 5, only_integer: true, allow_blank: true
-  validates_numericality_of :women_employees, greater_than_or_equal_to: 0, allow_blank: true
   validates_numericality_of :revenue_generated, greater_than_or_equal_to: 0, allow_blank: true
 
   validates_presence_of :product_name
@@ -293,29 +263,6 @@ class Startup < ActiveRecord::Base
   # Friendly ID!
   friendly_id :slug
   validates_format_of :slug, with: /\A[a-z0-9\-_]+\z/i, allow_nil: true
-
-  # Backend users will see agreement duration as being nil when attempting to edit. This allows them to save edits
-  # without picking a value.
-  def agreement_duration
-    nil
-  end
-
-  # Let's allow backend users to edit agreement_ends at as a duration instead of setting absolute date.
-  def agreement_duration=(duration)
-    @agreement_duration = duration unless duration.blank?
-  end
-
-  # Reader for the validator.
-  attr_reader :agreement_duration
-
-  before_save do
-    # If agreement duration is available, store that as agreement_ends_at.
-    if agreement_duration
-      self.agreement_ends_at = (agreement_last_signed_at + agreement_duration.to_i).to_date
-    end
-
-    self.agreement_ends_at = nil if agreement_first_signed_at.nil? && agreement_last_signed_at.nil?
-  end
 
   def approval_status
     super || APPROVAL_STATUS_UNREADY
@@ -348,7 +295,7 @@ class Startup < ActiveRecord::Base
   mount_uploader :logo, LogoUploader
   process_in_background :logo
 
-  normalize_attribute :pitch, :product_description, :email, :phone, :revenue_generated, :team_size, :women_employees, :approval_status
+  normalize_attribute :pitch, :product_description, :email, :phone, :revenue_generated, :team_size, :approval_status
 
   attr_accessor :full_validation
 
@@ -438,23 +385,8 @@ class Startup < ActiveRecord::Base
     }
   end
 
-  def self.current_startups_split_by_incubation_location(incubation_location)
-    {
-      'Pending' => pending.where(incubation_location: incubation_location).count,
-      'Approved' => approved.where(incubation_location: incubation_location).count,
-      'Dropped-out' => dropped_out.where(incubation_location: incubation_location).count
-    }
-  end
-
-  # Return startups with agreement signed on or after Nov 5, 2014.
-  #
-  # @see https://trello.com/c/SzqE6l8U
-  def self.agreement_signed_filtered
-    where('agreement_first_signed_at > ?', Time.parse('2014-11-05 00:00:00 +0530'))
-  end
-
   def agreement_live?
-    try(:agreement_ends_at).to_i > Time.now.to_i
+    try(:agreement_signed_at).to_i > 5.years.ago
   end
 
   def founder?(founder)
@@ -570,6 +502,22 @@ class Startup < ActiveRecord::Base
 
   def prepopulate_timeline!
     create_default_event %w(joined_svco)
+  end
+
+  def prepopulate_targets
+    TargetTemplate.where(populate_on_start: true).each do |target_template|
+      targets.create!(
+        status: Target::STATUS_PENDING,
+        role: target_template.role,
+        title: target_template.title,
+        description: target_template.description,
+        assigner: target_template.assigner,
+        resource_url: target_template.resource_url,
+        completion_instructions: target_template.completion_instructions,
+        due_date: target_template.due_date.end_of_day,
+        slideshow_embed: target_template.slideshow_embed
+      )
+    end
   end
 
   def create_default_event(types)

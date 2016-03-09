@@ -63,7 +63,7 @@ RSpec.describe TimelineEvent, type: :modelr do
         let(:timeline_event_type) { create :timeline_event_type, key: TimelineEventType::TYPE_NEW_VIDEO }
 
         it 'saves link to product video' do
-          expect(subject.startup.product_video).to eq('https://sv.co/private')
+          expect(subject.startup.product_video_link).to eq('https://sv.co/private')
         end
       end
 

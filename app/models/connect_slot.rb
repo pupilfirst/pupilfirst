@@ -3,6 +3,7 @@ class ConnectSlot < ActiveRecord::Base
   has_one :connect_request
 
   scope :next_week, -> { where('slot_at > ? AND slot_at < ?', next_week_start, next_week_end) }
+  scope :upcoming, -> { where('slot_at > ?', Time.now) }
 
   before_destroy :check_for_connect_request
 
@@ -33,9 +34,9 @@ class ConnectSlot < ActiveRecord::Base
   # Use optional_id to add one to the list regardless of its status.
   def self.available(optional_id: nil)
     if optional_id
-      where("id NOT in (SELECT DISTINCT(connect_slot_id) FROM connect_requests) OR id = #{optional_id}")
+      where("id NOT in (SELECT DISTINCT(connect_slot_id) FROM connect_requests) OR id = #{optional_id}").upcoming
     else
-      where('id NOT in (SELECT DISTINCT(connect_slot_id) FROM connect_requests)')
+      where('id NOT in (SELECT DISTINCT(connect_slot_id) FROM connect_requests)').upcoming
     end.order('slot_at ASC')
   end
 

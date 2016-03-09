@@ -8,8 +8,8 @@ class ResourceThumbnailUploader < CarrierWave::Uploader::Base
     "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}/thumbnails"
   end
 
-  # Uploaded file should be of aspect ratio 0.833. Display size is 200x240.
-  process resize_to_fill: [200, 200]
+  # Uploaded file should (ideally) be square.
+  process resize_to_fill: [300, 300]
 
   # Add a white list of extensions which are allowed to be uploaded.
   def extension_white_list

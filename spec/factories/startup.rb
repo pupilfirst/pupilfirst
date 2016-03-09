@@ -6,7 +6,6 @@ FactoryGirl.define do
     f.address { Faker::Lorem.words(6).join(' ') }
     f.website { Faker::Internet.domain_name }
     f.email { Faker::Internet.email }
-    f.incubation_location Startup::INCUBATION_LOCATION_KOCHI
     f.team_size 3
 
     after(:build) do |startup|
@@ -17,9 +16,7 @@ FactoryGirl.define do
 
     factory :incubated_startup do
       approval_status Startup::APPROVAL_STATUS_APPROVED
-      agreement_first_signed_at { 18.months.ago }
-      agreement_last_signed_at { 6.months.ago }
-      agreement_ends_at { 6.months.from_now }
+      agreement_signed_at { 18.months.ago }
     end
   end
 

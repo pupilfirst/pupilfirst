@@ -1,4 +1,4 @@
-.col-md-3
+.col-md-3.col-sm-4
   .resource
     - if resource.thumbnail.present?
       = image_tag resource.thumbnail.url
@@ -11,13 +11,13 @@
     .resource-content
       .title
         = link_to resource.title, resource
-      .description = simple_format resource.description
-      .download-button-spacer
+      .description
+        = simple_format resource.description
 
-      .links
-        - if resource.stream?
-          = link_to resource_url(resource, watch: true), class: 'btn btn-success stream-resource', title: "Play" do
-            i.fa.fa-play
+    .links
+      - if resource.stream?
+        = link_to resource_url(resource, watch: true), class: 'btn stream-resource material-btn green', title: "Play" do
+          i.fa.fa-play
 
-        a.btn.btn-primary href=download_resource_url(resource) target='_blank' title="Download"
-          i.fa.fa-download
+      a.btn.material-btn.blue href=download_resource_url(resource) target='_blank' title="Download"
+        i.fa.fa-download

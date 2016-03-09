@@ -9,8 +9,17 @@
 
   img {
     float: left;
+    position: relative;
 
     @media (max-width: $screen-xs-max) { float: none; }
+  }
+  .batch-exclusive {
+    top: 160px;
+    left: 50px;
+
+    .badge {
+      border-radius: 20px;
+    }
   }
 
   .content {

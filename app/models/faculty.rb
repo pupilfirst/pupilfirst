@@ -17,6 +17,14 @@ class Faculty < ActiveRecord::Base
   has_many :connect_slots, dependent: :destroy
   has_many :connect_requests, through: :connect_slots
 
+  # link alumni faculty to their founder profile
+  belongs_to :founder
+  validates_presence_of :founder, message: 'Must link alumni to their faculty profile', if: :alumni?
+
+  def alumni?
+    category == CATEGORY_ALUMNI
+  end
+
   CATEGORY_TEAM = -'team'
   CATEGORY_VISITING_FACULTY = -'visiting_faculty'
   CATEGORY_ADVISORY_BOARD = -'advisory_board'

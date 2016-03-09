@@ -60,6 +60,9 @@ class StartupsController < ApplicationController
       # prepopulate the timeline with a 'Joined SV.CO' entry
       @startup.prepopulate_timeline!
 
+      # Add day-zero targets.
+      @startup.prepopulate_targets
+
       redirect_to startup_url(@startup)
     else
       # redirect back to startup new form to show errors
@@ -179,7 +182,7 @@ class StartupsController < ApplicationController
       :legal_registered_name, :address, :pitch, :website, :email, :logo, :remote_logo_url, :facebook_link,
       :twitter_link, :product_name, :product_description,
       { startup_category_ids: [] }, { founders_attributes: [:id] },
-      :registration_type, :revenue_generated, :presentation_link, :product_video, :wireframe_link, :prototype_link, :team_size, :women_employees, :slug
+      :registration_type, :revenue_generated, :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :team_size, :slug
     )
   end
 

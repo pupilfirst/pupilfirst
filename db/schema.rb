@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160303054557) do
+ActiveRecord::Schema.define(version: 20160309093751) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -134,6 +134,7 @@ ActiveRecord::Schema.define(version: 20160303054557) do
     t.boolean  "self_service"
     t.string   "current_commitment"
     t.string   "slug"
+    t.integer  "founder_id"
   end
 
   add_index "faculty", ["category"], name: "index_faculty_on_category", using: :btree
@@ -300,32 +301,24 @@ ActiveRecord::Schema.define(version: 20160303054557) do
     t.string   "twitter_link"
     t.text     "address"
     t.string   "registration_type"
-    t.string   "approval_status",           default: "unready"
+    t.string   "approval_status",       default: "unready"
     t.string   "product_name"
     t.text     "product_description"
-    t.string   "cool_fact"
     t.string   "state"
     t.string   "district"
     t.string   "product_progress"
     t.string   "presentation_link"
     t.integer  "revenue_generated"
     t.integer  "team_size"
-    t.integer  "women_employees"
-    t.string   "incubation_location"
-    t.boolean  "agreement_sent",            default: false
     t.string   "pin"
-    t.datetime "agreement_first_signed_at"
-    t.datetime "agreement_last_signed_at"
-    t.datetime "agreement_ends_at"
-    t.boolean  "physical_incubatee"
+    t.datetime "agreement_signed_at"
     t.text     "metadata"
     t.string   "slug"
-    t.boolean  "featured"
     t.string   "stage"
     t.string   "legal_registered_name"
     t.string   "wireframe_link"
     t.string   "prototype_link"
-    t.string   "product_video"
+    t.string   "product_video_link"
     t.integer  "batch_id"
   end
 
@@ -364,7 +357,10 @@ ActiveRecord::Schema.define(version: 20160303054557) do
     t.datetime "updated_at",              null: false
     t.text     "slideshow_embed"
     t.integer  "assigner_id"
+    t.boolean  "populate_on_start"
   end
+
+  add_index "target_templates", ["populate_on_start"], name: "index_target_templates_on_populate_on_start", using: :btree
 
   create_table "targets", force: :cascade do |t|
     t.string   "role"

@@ -3,16 +3,12 @@
     = f.input :product_name, required: true
     = f.input :product_description, required: true
     = f.input :presentation_link
-    = f.input :product_video
+    = f.input :product_video_link
     = f.input :wireframe_link
     = f.input :prototype_link
     = f.input :legal_registered_name
     = f.input :batch
-    = f.input :physical_incubatee
-    = f.input :agreement_sent
-    = f.input :agreement_first_signed_at, as: :date_select
-    = f.input :agreement_last_signed_at, as: :date_select
-    = f.input :agreement_duration, collection: Startup.valid_agreement_durations
+    = f.input :agreement_signed_at, as: :date_select
     = f.input :logo
     = f.input :website, input_html: {maxlength: nil}
     = f.input :twitter_link
@@ -22,9 +18,7 @@
     = f.input :founders, collection: Hash[@startup.possible_founders.map{|b| [b.to_s,b.id]}], input_html: {style: "width: 400px;"}
     = f.input :registration_type, collection: Startup.valid_registration_types
     = f.input :address
-    = f.input :incubation_location, collection: Startup.valid_incubation_location_values
     = f.input :slug
-    = f.input :featured
     = f.input :tag_list, input_html: { value: f.object.tag_list.join(','), 'data-tags' => Startup.tag_counts_on(:tags).pluck(:name).to_json }
 
   = f.submit

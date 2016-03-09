@@ -271,7 +271,7 @@ class TimelineEvent < ActiveRecord::Base
     return unless timeline_event_type.new_video?
 
     first_attachment_url do |attachment_url|
-      startup.update!(product_video: attachment_url)
+      startup.update!(product_video_link: attachment_url)
     end
   end
 

@@ -22,6 +22,6 @@
         ' This is just a small sample of Resources available at SV.CO. Approved Startups get access to exclusive content
         | produced by Faculty, including presentations, video and audio clips.
 
-    .resources
+    .resources.row
       - @resources.each do |resource|
         = render 'resource', resource: resource

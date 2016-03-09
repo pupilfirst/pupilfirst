@@ -94,7 +94,8 @@ class Target < ActiveRecord::Base
   end
 
   def details_as_slack_message
-    message = "Hey! #{assigner.name} has assigned your startup, #{startup.product_name} a new target: *#{title}*\n"
+    message = "Hey! #{assigner.name} has assigned your startup, #{startup.product_name} a new target:"\
+    " *<#{Rails.application.routes.url_helpers.startup_url(startup)}|#{title}>*\n"
     message += "Description: \"#{ApplicationController.helpers.strip_tags description}\"\n"
     message += "He has also provided <#{resource_url}|a useful link> to assist you.\n" if resource_url.present?
     message += "The due date to complete this target is :exclamation: *#{due_date.strftime('%A, %d %b %Y %l:%M %p')}*" if due_date.present?
@@ -102,7 +103,8 @@ class Target < ActiveRecord::Base
   end
 
   def revision_as_slack_message
-    message = "Hey! #{assigner.name} has revised the target (#{title}) he recently assigned to your startup, #{startup.product_name}\n"
+    message = "Hey! #{assigner.name} has revised the target (<#{Rails.application.routes.url_helpers.startup_url(startup)}|#{title}>) "\
+    "he recently assigned to your startup, #{startup.product_name}\n"
     message += "The revised title is: #{title}" if title_changed?
     message += "The description now reads: \"#{ApplicationController.helpers.strip_tags description}\"\n" if description_changed?
     message += "Completion Instructions were modified to: \"#{completion_instructions}\"\n" if completion_instructions_changed?
@@ -123,7 +125,8 @@ class Target < ActiveRecord::Base
 
   # Slack message to remind founder of expiry in 5 days
   def mild_slack_reminder
-    ":timer_clock: *Reminder:* Your startup has a target - _#{title}_ - assigned by #{assigner.name} due in 5 days!"
+    ":timer_clock: *Reminder:* Your startup has a target - _<#{Rails.application.routes.url_helpers.startup_url(startup)}|#{title}>_ "\
+    "- assigned by #{assigner.name} due in 5 days!"
   end
 
   # Notify all founders of the startup about expiry in 2 days
@@ -139,7 +142,7 @@ class Target < ActiveRecord::Base
 
   # Slack message to remind founder of expiry in 2 days
   def strong_slack_reminder
-    ":exclamation: *Urgent:* It seems that the target - _#{title}_ - assigned to your startup "\
+    ":exclamation: *Urgent:* It seems that the target - _<#{Rails.application.routes.url_helpers.startup_url(startup)}|#{title}>_ - assigned to your startup "\
     "by #{assigner.name} due in 2 days is not yet complete! Please complete the same at the "\
     "earliest and submit the corresponding timeline entry for verification!"
   end

@@ -179,6 +179,7 @@ ActiveAdmin.register TimelineEvent do
 
   form do |f|
     div id: 'timeline-event-founders-for-startup-url', 'data-url' => founders_for_startup_admin_timeline_events_url
+    f.semantic_errors *f.object.errors.keys
 
     f.inputs 'Event Details' do
       f.input :startup,

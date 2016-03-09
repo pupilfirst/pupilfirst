@@ -1,5 +1,5 @@
 ActiveAdmin.register ActsAsTaggableOn::Tagging, as: 'Tagging' do
-  actions :index
+  actions :index, :destroy
 
   index do
     selectable_column

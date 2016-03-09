@@ -201,7 +201,7 @@ class Founder < ActiveRecord::Base
   end
 
   def display_name
-    email || fullname
+    fullname || email
   end
 
   def fullname_and_email

@@ -1,4 +1,5 @@
 = semantic_form_for [:admin, @target] do |f|
+  = f.semantic_errors *f.object.errors.keys
   = f.inputs 'Target details' do
     = f.input :startup,
       label: 'Product',

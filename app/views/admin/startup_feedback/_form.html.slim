@@ -1,7 +1,6 @@
 = semantic_form_for [:admin, @startup_feedback] do |f|
-  = f.inputs
-    legend
-      span Feedback details
+  = f.semantic_errors *f.object.errors.keys
+  = f.inputs 'Feedback details' do
     = f.input :startup, collection: Startup.where.not(product_name: nil), member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }, label: 'Product'
     = f.hidden_field :feedback
     .label-replica

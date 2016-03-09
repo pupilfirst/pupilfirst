@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160308120700) do
+ActiveRecord::Schema.define(version: 20160309061405) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -318,7 +318,6 @@ ActiveRecord::Schema.define(version: 20160308120700) do
     t.datetime "agreement_ends_at"
     t.text     "metadata"
     t.string   "slug"
-    t.boolean  "featured"
     t.string   "stage"
     t.string   "legal_registered_name"
     t.string   "wireframe_link"

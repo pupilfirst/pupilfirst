@@ -33,10 +33,6 @@ class Startup < ActiveRecord::Base
 
   SV_STATS_LINK = -'bit.ly/svstats2'
 
-  def self.valid_agreement_durations
-    { '1 year' => 1.year, '2 years' => 2.years, '5 years' => 5.years }
-  end
-
   def self.valid_product_progress_values
     [
       PRODUCT_PROGRESS_IDEA, PRODUCT_PROGRESS_MOCKUP, PRODUCT_PROGRESS_PROTOTYPE, PRODUCT_PROGRESS_PRIVATE_BETA,
@@ -63,9 +59,9 @@ class Startup < ActiveRecord::Base
   scope :dropped_out, -> { where(approval_status: APPROVAL_STATUS_DROPPED_OUT) }
   scope :not_dropped_out, -> { where.not(approval_status: APPROVAL_STATUS_DROPPED_OUT) }
   scope :incubation_requested, -> { where(approval_status: [APPROVAL_STATUS_PENDING, APPROVAL_STATUS_APPROVED]) }
-  scope :agreement_signed, -> { where 'agreement_first_signed_at IS NOT NULL' }
-  scope :agreement_live, -> { where('agreement_ends_at > ?', Time.now) }
-  scope :agreement_expired, -> { where('agreement_ends_at < ?', Time.now) }
+  scope :agreement_signed, -> { where 'agreement_signed_at IS NOT NULL' }
+  scope :agreement_live, -> { where('agreement_signed_at > ?', 5.years.ago) }
+  scope :agreement_expired, -> { where('agreement_signed_at < ?', 5.years.ago) }
   scope :without_founders, -> { where.not(id: (Founder.pluck(:startup_id).uniq - [nil])) }
   scope :student_startups, -> { joins(:founders).where.not(founders: { university_id: nil }).uniq }
   scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED }).distinct }
@@ -227,10 +223,6 @@ class Startup < ActiveRecord::Base
     allow_nil: true,
     allow_blank: true
 
-  # Only accept both agreement dates together.
-  validates_presence_of :agreement_first_signed_at, if: ->(startup) { startup.agreement_last_signed_at.present? || startup.agreement_duration.present? }
-  validates_presence_of :agreement_last_signed_at, if: ->(startup) { startup.agreement_first_signed_at.present? || startup.agreement_duration.present? }
-
   validates_numericality_of :pin, allow_nil: true, greater_than_or_equal_to: 100_000, less_than_or_equal_to: 999_999 # PIN Code is always 6 digits
 
   validates_length_of :product_description,
@@ -272,29 +264,6 @@ class Startup < ActiveRecord::Base
   # Friendly ID!
   friendly_id :slug
   validates_format_of :slug, with: /\A[a-z0-9\-_]+\z/i, allow_nil: true
-
-  # Backend users will see agreement duration as being nil when attempting to edit. This allows them to save edits
-  # without picking a value.
-  def agreement_duration
-    nil
-  end
-
-  # Let's allow backend users to edit agreement_ends at as a duration instead of setting absolute date.
-  def agreement_duration=(duration)
-    @agreement_duration = duration unless duration.blank?
-  end
-
-  # Reader for the validator.
-  attr_reader :agreement_duration
-
-  before_save do
-    # If agreement duration is available, store that as agreement_ends_at.
-    if agreement_duration
-      self.agreement_ends_at = (agreement_last_signed_at + agreement_duration.to_i).to_date
-    end
-
-    self.agreement_ends_at = nil if agreement_first_signed_at.nil? && agreement_last_signed_at.nil?
-  end
 
   def approval_status
     super || APPROVAL_STATUS_UNREADY
@@ -417,15 +386,8 @@ class Startup < ActiveRecord::Base
     }
   end
 
-  # Return startups with agreement signed on or after Nov 5, 2014.
-  #
-  # @see https://trello.com/c/SzqE6l8U
-  def self.agreement_signed_filtered
-    where('agreement_first_signed_at > ?', Time.parse('2014-11-05 00:00:00 +0530'))
-  end
-
   def agreement_live?
-    try(:agreement_ends_at).to_i > Time.now.to_i
+    try(:agreement_signed_at).to_i > 5.years.ago
   end
 
   def founder?(founder)

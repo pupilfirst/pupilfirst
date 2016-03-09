@@ -8,9 +8,7 @@
     = f.input :prototype_link
     = f.input :legal_registered_name
     = f.input :batch
-    = f.input :agreement_first_signed_at, as: :date_select
-    = f.input :agreement_last_signed_at, as: :date_select
-    = f.input :agreement_duration, collection: Startup.valid_agreement_durations
+    = f.input :agreement_signed_at, as: :date_select
     = f.input :logo
     = f.input :website, input_html: {maxlength: nil}
     = f.input :twitter_link

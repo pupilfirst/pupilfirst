@@ -122,9 +122,7 @@ ActiveAdmin.register Startup do
     column :revenue_generated
     column :team_size
     column :women_employees
-    column :agreement_first_signed_at
-    column :agreement_last_signed_at
-    column :agreement_ends_at
+    column :agreement_signed_at
   end
 
   action_item :view_feedback, only: :show do
@@ -226,9 +224,7 @@ ActiveAdmin.register Startup do
         linked_tags(startup.tags)
       end
 
-      row :agreement_first_signed_at
-      row :agreement_last_signed_at
-      row :agreement_ends_at
+      row :agreement_signed_at
       row :email
 
       row :logo do
@@ -353,7 +349,6 @@ ActiveAdmin.register Startup do
     { startup_category_ids: [] }, { founder_ids: [] },
     { founders_attributes: [:id, :first_name, :last_name, :email, :avatar, :remote_avatar_url, :linkedin_url, :twitter_url, :skip_password] },
     :created_at, :updated_at, :approval_status, :approval_status, :registration_type,
-    :agreement_first_signed_at, :agreement_last_signed_at, :agreement_duration,
-    :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug, :batch_id,
+    :agreement_signed_at, :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug, :batch_id,
     :tag_list
 end

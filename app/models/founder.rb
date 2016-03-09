@@ -6,6 +6,7 @@ class Founder < ActiveRecord::Base
   extend Forwardable
   include Gravtastic
   gravtastic
+  acts_as_taggable
 
   GENDER_MALE = -'male'
   GENDER_FEMALE = -'female'

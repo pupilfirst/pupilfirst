@@ -5,6 +5,7 @@
     = f.input :first_name
     = f.input :last_name
     = f.input :phone
+    = f.input :tag_list, input_html: { value: f.object.tag_list.join(','), 'data-tags' => Founder.tag_counts_on(:tags).pluck(:name).to_json }
     = f.input :roles, as: :check_boxes, collection: Founder.valid_roles
     = f.input :about
     = f.input :born_on, as: :date_select, :start_year => 1920, :end_year => Date.today.year - 10

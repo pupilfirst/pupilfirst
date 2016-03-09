@@ -15,6 +15,20 @@ ActiveAdmin.register Founder do
   scope :batched
   scope :missing_startups
 
+  filter :email
+  filter :first_name
+  filter :last_name
+  filter :tags, collection: Founder.tag_counts_on(:tags), multiple: true
+  filter :roles_cont, as: :select, collection: Founder.valid_roles, label: 'Role'
+  filter :university
+  filter :roll_number
+
+  permit_params :first_name, :last_name, :email, :remote_avatar_url, :avatar, :startup_id, :slug, :about,
+    :slack_username, :skip_password, :born_on, :startup_admin, :communication_address,
+    :phone, :invitation_token, :university_id, :roll_number, :course, :semester, :year_of_graduation,
+    :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :facebook_url, :angel_co_url, :github_url, :behance_url,
+    { roles: [] }, :tag_list
+
   # Customize the index. Let's show only a small subset of the tons of fields.
   index do
     selectable_column
@@ -57,6 +71,10 @@ ActiveAdmin.register Founder do
       row :slug
       row :email
       row :fullname
+
+      row :tags do |founder|
+        linked_tags(founder.tags)
+      end
 
       row :roles do |founder|
         founder.roles.map do |role|
@@ -179,19 +197,5 @@ ActiveAdmin.register Founder do
     end
   end
 
-  # Customize the filter options to reduce the size.
-  filter :email
-  filter :first_name
-  filter :last_name
-  filter :roles_cont, as: :select, collection: Founder.valid_roles, label: 'Role'
-  filter :university
-  filter :roll_number
-
   form partial: 'admin/founders/form'
-
-  permit_params :first_name, :last_name, :email, :remote_avatar_url, :avatar, :startup_id, :slug, :about,
-    :slack_username, :skip_password, :born_on, :startup_admin, :communication_address,
-    :phone, :invitation_token, :university_id, :roll_number, :course, :semester, :year_of_graduation,
-    :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :facebook_url, :angel_co_url, :github_url, :behance_url,
-    roles: []
 end

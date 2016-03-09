@@ -60,6 +60,9 @@ class StartupsController < ApplicationController
       # prepopulate the timeline with a 'Joined SV.CO' entry
       @startup.prepopulate_timeline!
 
+      # Add day-zero targets.
+      @startup.prepopulate_targets
+
       redirect_to startup_url(@startup)
     else
       # redirect back to startup new form to show errors

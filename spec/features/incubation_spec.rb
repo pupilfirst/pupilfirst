@@ -10,6 +10,8 @@ feature 'Incubation' do
   let!(:university) { create :university }
   let(:startup) { create :startup }
   let!(:tet_joined) { create :tet_joined }
+  let(:faculty) { create :faculty }
+  let!(:read_playbook) { create :target_template, populate_on_start: true, assigner: faculty, title: 'Read Playbook' }
 
   before :all do
     WebMock.allow_net_connect!
@@ -236,6 +238,14 @@ feature 'Incubation' do
 
             # the new startup must be assigned to the invited_batch of founder
             expect(founder.startup.batch).to eq(founder.invited_batch)
+
+            # Check for presence of prepopulated timeline events.
+            expect(founder.startup.timeline_events.count).to eq(1)
+            expect(founder.startup.timeline_events.first.timeline_event_type).to eq(tet_joined)
+
+            # Check for presence of prepopulated targets.
+            expect(founder.startup.targets.count).to eq(1)
+            expect(founder.startup.targets.first.title).to eq('Read Playbook')
           end
         end
       end

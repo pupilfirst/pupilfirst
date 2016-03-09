@@ -505,6 +505,22 @@ class Startup < ActiveRecord::Base
     create_default_event %w(joined_svco)
   end
 
+  def prepopulate_targets
+    TargetTemplate.where(populate_on_start: true).each do |target_template|
+      targets.create!(
+        status: Target::STATUS_PENDING,
+        role: target_template.role,
+        title: target_template.title,
+        description: target_template.description,
+        assigner: target_template.assigner,
+        resource_url: target_template.resource_url,
+        completion_instructions: target_template.completion_instructions,
+        due_date: target_template.due_date.end_of_day,
+        slideshow_embed: target_template.slideshow_embed
+      )
+    end
+  end
+
   def create_default_event(types)
     types.each do |type|
       timeline_events.create(

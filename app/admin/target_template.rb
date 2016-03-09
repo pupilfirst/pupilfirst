@@ -3,7 +3,8 @@ ActiveAdmin.register TargetTemplate do
 
   config.sort_order = 'days_from_start_asc'
 
-  permit_params :days_from_start, :title, :role, :description, :completion_instructions, :resource_url, :slideshow_embed, :assigner_id
+  permit_params :days_from_start, :title, :role, :description, :completion_instructions, :resource_url, :slideshow_embed,
+    :assigner_id, :populate_on_start
 
   member_action :create_target, method: :get do
     target_template = TargetTemplate.find(params[:id])
@@ -39,6 +40,7 @@ ActiveAdmin.register TargetTemplate do
     attributes_table do
       row :id
       row :days_from_start
+      row :populate_on_start
       row :role
       row :title
 

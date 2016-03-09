@@ -358,7 +358,10 @@ ActiveRecord::Schema.define(version: 20160309083100) do
     t.datetime "updated_at",              null: false
     t.text     "slideshow_embed"
     t.integer  "assigner_id"
+    t.boolean  "populate_on_start"
   end
+
+  add_index "target_templates", ["populate_on_start"], name: "index_target_templates_on_populate_on_start", using: :btree
 
   create_table "targets", force: :cascade do |t|
     t.string   "role"

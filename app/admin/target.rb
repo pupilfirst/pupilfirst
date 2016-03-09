@@ -121,7 +121,6 @@ ActiveAdmin.register Target do
 
       row :title
       row :assigner
-      row :timeline_event_type
 
       row :description do
         target.description.html_safe

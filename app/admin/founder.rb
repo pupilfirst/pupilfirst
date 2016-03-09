@@ -27,7 +27,7 @@ ActiveAdmin.register Founder do
     :slack_username, :skip_password, :born_on, :startup_admin, :communication_address,
     :phone, :invitation_token, :university_id, :roll_number, :course, :semester, :year_of_graduation,
     :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :facebook_url, :angel_co_url, :github_url, :behance_url,
-    { roles: [] }, :tag_list
+    { roles: [] }, :tag_list, :gender
 
   # Customize the index. Let's show only a small subset of the tons of fields.
   index do

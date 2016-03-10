@@ -12,7 +12,7 @@
     = f.input :activity_type
     = f.input :reference_url
     = f.input :attachment, as: :file
-    = f.input :faculty, placeholder: 'Select faculty member'
+    = f.input :faculty, collection: Faculty.active, placeholder: 'Select faculty member'
 
   = f.submit
 br

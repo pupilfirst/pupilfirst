@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160310092639) do
+ActiveRecord::Schema.define(version: 20160310103854) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -127,14 +127,15 @@ ActiveRecord::Schema.define(version: 20160310092639) do
     t.string   "category"
     t.string   "image"
     t.integer  "sort_index"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.string   "email"
     t.string   "token"
     t.boolean  "self_service"
     t.string   "current_commitment"
     t.string   "slug"
     t.integer  "founder_id"
+    t.boolean  "inactive",           default: false
   end
 
   add_index "faculty", ["category"], name: "index_faculty_on_category", using: :btree

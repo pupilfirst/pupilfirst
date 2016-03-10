@@ -1,6 +1,6 @@
 ActiveAdmin.register PublicSlackMessage do
   menu parent: 'Founders'
-  actions :all, except: [:show, :new, :create, :edit, :update, :destroy]
+  actions :index
 
   controller do
     def index

@@ -167,14 +167,13 @@
                       a href="#{@startup.prototype_link}" target="_blank"
                         ' #{@startup.product_name} prototype
                         i.fa.fa-external-link
-            - if @startup.team_size?
-              .col-sm-6.col-md-12
-                .media
-                  .media-left
-                    img.media-object alt="Team Size icon" src="#{image_url 'timeline/icons/team_size.png'}"
-                  .media-body
-                    h4.media-heading Team Size
-                    p.data-content #{@startup.team_size}
+            .col-sm-6.col-md-12
+              .media
+                .media-left
+                  img.media-object alt="Team Size icon" src="#{image_url 'timeline/icons/team_size.png'}"
+                .media-body
+                  h4.media-heading Team Size
+                  p.data-content #{@startup.founders.count}
             .col-sm-6.col-md-12
               .media
                 .media-left

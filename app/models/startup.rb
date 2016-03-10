@@ -172,10 +172,13 @@ class Startup < ActiveRecord::Base
     false
   end
 
+  # team_size is used during registration process.
+  attr_accessor :team_size
+
   # validate presence of all fields during registration
-  validates_presence_of :product_name, :team_size, :cofounder_1_email, :cofounder_2_email, if: :being_registered
-  validates_presence_of :cofounder_3_email, if: proc { |startup| startup.being_registered && startup.team_size > 3 }
-  validates_presence_of :cofounder_4_email, if: proc { |startup| startup.being_registered && startup.team_size > 4 }
+  validates_presence_of :product_name, :cofounder_1_email, :cofounder_2_email, if: :being_registered
+  validates_presence_of :cofounder_3_email, if: proc { |startup| startup.being_registered && startup.team_size.to_i > 3 }
+  validates_presence_of :cofounder_4_email, if: proc { |startup| startup.being_registered && startup.team_size.to_i > 4 }
 
   has_and_belongs_to_many :startup_categories do
     def <<(_category)
@@ -236,7 +239,6 @@ class Startup < ActiveRecord::Base
   # New set of validations for incubation wizard
   store :metadata, accessors: [:updated_from]
 
-  validates_numericality_of :team_size, greater_than_or_equal_to: 3, less_than_or_equal_to: 5, only_integer: true, allow_blank: true
   validates_numericality_of :revenue_generated, greater_than_or_equal_to: 0, allow_blank: true
 
   validates_presence_of :product_name
@@ -295,7 +297,7 @@ class Startup < ActiveRecord::Base
   mount_uploader :logo, LogoUploader
   process_in_background :logo
 
-  normalize_attribute :pitch, :product_description, :email, :phone, :revenue_generated, :team_size, :approval_status
+  normalize_attribute :pitch, :product_description, :email, :phone, :revenue_generated, :approval_status
 
   attr_accessor :full_validation
 

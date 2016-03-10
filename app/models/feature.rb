@@ -6,11 +6,9 @@ class Feature < ActiveRecord::Base
   validate :value_must_be_json
 
   def value_must_be_json
-    begin
-      JSON.parse value
-    rescue JSON::ParserError
-      errors[:value] << 'must be valid JSON'
-    end
+    JSON.parse value
+  rescue JSON::ParserError
+    errors[:value] << 'must be valid JSON'
   end
 
   # {"email_regexes": ["\S*(@mobme.in|sv.co)$"], "emails": ["someone@sv.co"]}

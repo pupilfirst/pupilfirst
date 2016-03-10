@@ -82,7 +82,7 @@ ActiveAdmin.register PublicSlackMessage do
 
     column(:body) do |message|
       pre class: 'max-width-pre' do
-        message.reaction? ? message.reaction_details : message.body
+        message.reaction? ? reaction_details(message) : message.body
       end
     end
 

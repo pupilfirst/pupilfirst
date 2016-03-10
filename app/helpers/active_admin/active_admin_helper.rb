@@ -40,5 +40,11 @@ module ActiveAdmin
         link_to tag.name, admin_tag_path(tag)
       end.join(separator).html_safe
     end
+
+    # Return a string explaining details of reaction received on public slack
+    def reaction_details(message)
+      reaction_to_author = message.reaction_to.founder.present? ? message.reaction_to.founder.fullname : message.reaction_to.slack_username
+      "reacted with #{message.body} to \'#{truncate(message.reaction_to.body, length: 250)}\' from #{reaction_to_author}"
+    end
   end
 end

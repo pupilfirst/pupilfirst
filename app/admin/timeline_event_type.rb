@@ -16,7 +16,7 @@ ActiveAdmin.register TimelineEventType do
       f.input :major
       f.input :suggested_stages, as: :check_boxes, collection: stages_collection, label: 'Suggested on stages'
       f.input :suggested_stage, as: :hidden
-      f.input :role
+      f.input :role, as: :select, collection: TimelineEventType.valid_roles, include_blank: false
       f.input :private, label: 'Private founder event?'
       f.input :title
       f.input :sample_text

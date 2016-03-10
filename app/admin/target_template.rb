@@ -4,7 +4,7 @@ ActiveAdmin.register TargetTemplate do
   config.sort_order = 'days_from_start_asc'
 
   permit_params :days_from_start, :title, :role, :description, :completion_instructions, :resource_url, :slideshow_embed,
-    :assigner_id, :populate_on_start
+    :assigner_id, :populate_on_start, :rubric
 
   member_action :create_target, method: :get do
     target_template = TargetTemplate.find(params[:id])
@@ -58,6 +58,11 @@ ActiveAdmin.register TargetTemplate do
 
       row :slideshow_embed
       row :assigner
+      row :rubric do |target_template|
+        if target_template.rubric.present?
+          link_to target_template.rubric_identifier, target_template.rubric.url
+        end
+      end
     end
   end
 

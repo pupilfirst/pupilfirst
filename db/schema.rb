@@ -310,7 +310,6 @@ ActiveRecord::Schema.define(version: 20160310103854) do
     t.string   "product_progress"
     t.string   "presentation_link"
     t.integer  "revenue_generated"
-    t.integer  "team_size"
     t.string   "pin"
     t.datetime "agreement_signed_at"
     t.text     "metadata"

@@ -6,7 +6,6 @@ FactoryGirl.define do
     f.address { Faker::Lorem.words(6).join(' ') }
     f.website { Faker::Internet.domain_name }
     f.email { Faker::Internet.email }
-    f.team_size 3
 
     after(:build) do |startup|
       startup.founders << create(:founder_with_password, startup: startup, startup_admin: true)

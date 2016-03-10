@@ -133,7 +133,7 @@ ActiveAdmin.register TimelineEvent do
     startup = timeline_event.startup
     timeline_event.verify!
 
-    unless timeline_event.timeline_event_type.private
+    unless timeline_event.private?
       startup_url = Rails.application.routes.url_helpers.startup_url(startup)
       timeline_event_url = startup_url + "#event-#{timeline_event.id}"
       slack_message = "<#{startup_url}|#{startup.product_name}> has a new verified timeline entry:"\
@@ -244,7 +244,7 @@ ActiveAdmin.register TimelineEvent do
 
       row :verified_at do
         verification_confirm = 'Are you sure you want to verify this event?'
-        verification_confirm += ' The Verification will be announced on Public Slack' unless timeline_event.timeline_event_type.private?
+        verification_confirm += ' The Verification will be announced on Public Slack' unless timeline_event.private?
         if timeline_event.verified?
           span do
             "#{timeline_event.verified_at} "

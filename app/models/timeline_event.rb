@@ -63,7 +63,7 @@ class TimelineEvent < ActiveRecord::Base
   scope :showcase, -> { includes(:timeline_event_type, :startup).verified.from_approved_startups.batched.not_private.order('timeline_events.event_on DESC') }
   scope :help_wanted, -> { where(timeline_event_type: TimelineEventType.help_wanted) }
   scope :for_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch }) }
-  scope :not_private, -> { where(timeline_event_type: TimelineEventType.where.not(private: true)) }
+  scope :not_private, -> { where(timeline_event_type: TimelineEventType.where.not(role: TimelineEventType::ROLE_FOUNDER)) }
 
   after_initialize :make_links_an_array
 

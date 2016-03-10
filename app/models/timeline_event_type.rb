@@ -54,6 +54,10 @@ class TimelineEventType < ActiveRecord::Base
 
   validates_inclusion_of :role, in: valid_roles
 
+  def private?
+    role == ROLE_FOUNDER
+  end
+
   mount_uploader :badge, BadgeUploader
 
   attr_accessor :copy_badge_from

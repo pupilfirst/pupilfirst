@@ -55,6 +55,7 @@ ActiveAdmin.register KarmaPoint do
 
   form do |f|
     div id: 'karma-point-founders-for-startup-url', 'data-url' => founders_for_startup_admin_karma_points_url
+    f.semantic_errors(*f.object.errors.keys)
 
     f.inputs 'Extra' do
       f.input :startup,

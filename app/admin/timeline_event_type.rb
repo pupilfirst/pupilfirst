@@ -11,6 +11,8 @@ ActiveAdmin.register TimelineEventType do
   end
 
   form do |f|
+    f.semantic_errors *f.object.errors.keys
+
     f.inputs 'Event Details' do
       f.input :key
       f.input :major

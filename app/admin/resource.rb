@@ -90,6 +90,8 @@ ActiveAdmin.register Resource do
   end
 
   form do |f|
+    f.semantic_errors(*f.object.errors.keys)
+
     f.inputs 'Resource details' do
       f.input :share_status,
         as: :select,

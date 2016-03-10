@@ -21,6 +21,8 @@ ActiveAdmin.register Faculty do
   end
 
   form do |f|
+    f.semantic_errors(*f.object.errors.keys)
+
     f.inputs 'Faculty Details' do
       f.input :category, as: :select, collection: Faculty.valid_categories
       f.input :name

@@ -391,7 +391,7 @@ class Startup < ActiveRecord::Base
   end
 
   def agreement_live?
-    try(:agreement_signed_at) > AGREEMENT_DURATION.years.ago
+    agreement_signed_at.present? ? agreement_signed_at > AGREEMENT_DURATION.years.ago : false
   end
 
   def founder?(founder)

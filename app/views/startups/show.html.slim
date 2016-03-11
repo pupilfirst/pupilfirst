@@ -347,7 +347,7 @@
                     .timeline-badge class="color#{cycle *((1..14).to_a)}"
                       = image_tag "#{event.timeline_event_type.badge_url}", width: '70'
                     .timeline-panel
-                      - if event.private?
+                      - if event.founder_event?
                         .hidden-marker href="#" data-toggle="tooltip" title="This event is visible only to you, and the SV.CO team."
                           i.fa.fa-user-secret
                       - if event.image?

@@ -4,7 +4,7 @@
   - html_options = {}
   - if event.persisted?
     - html_options['data-verified'] = event.verified? ? 'true' : 'false'
-    - html_options['data-private'] = event.private? ? 'true' : 'false'
+    - html_options['data-private'] = event.founder_event? ? 'true' : 'false'
 
   = form_for [:founder, :startup, event], html: html_options do |f|
     = f.hidden_field :links, :value => event.links.to_json

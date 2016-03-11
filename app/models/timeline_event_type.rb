@@ -54,7 +54,7 @@ class TimelineEventType < ActiveRecord::Base
 
   validates_inclusion_of :role, in: valid_roles
 
-  def private?
+  def founder_event?
     role == ROLE_FOUNDER
   end
 

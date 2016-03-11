@@ -13,7 +13,7 @@ class TimelineEvent < ActiveRecord::Base
   mount_uploader :image, TimelineImageUploader
   serialize :links
   validates_presence_of :event_on, :startup_id, :founder_id, :timeline_event_type, :description
-  delegate :private?, to: :timeline_event_type
+  delegate :founder_event?, to: :timeline_event_type
 
   MAX_DESCRIPTION_CHARACTERS = 300
 
@@ -207,7 +207,7 @@ class TimelineEvent < ActiveRecord::Base
 
   # A hidden timeline event is not displayed to user if user isn't logged in, or isn't the founder linked to event.
   def hidden_from?(viewer)
-    return false unless timeline_event_type.private?
+    return false unless timeline_event_type.founder_event?
     return true unless viewer.present?
     founder != viewer
   end

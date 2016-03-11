@@ -29,6 +29,6 @@ class KarmaPoint < ActiveRecord::Base
   #
   # def founder_present_if_private_event
   #   return unless source.is_a? TimelineEvent
-  #   errors.add :founder_id, 'a founder must be specified when the source is a private event' if source.private? && !founder.present?
+  #   errors.add :founder_id, 'a founder must be specified when the source is a private event' if source.founder_event? && !founder.present?
   # end
 end

@@ -1,6 +1,6 @@
 ActiveAdmin.register TimelineEvent do
   permit_params :description, :timeline_event_type_id, :image, :event_on, :startup_id, :verified_at, :grade,
-    :founder_id, :serialized_links, timeline_event_files_attributes: [:id, :file, :private, :_destroy]
+    :founder_id, :serialized_links, timeline_event_files_attributes: [:id, :title, :file, :private, :_destroy]
 
   preserve_default_filters!
   filter :startup_batch
@@ -198,7 +198,8 @@ ActiveAdmin.register TimelineEvent do
 
     f.inputs 'Attached Files' do
       f.has_many :timeline_event_files, new_record: 'Add file', allow_destroy: true, heading: false do |t|
-        t.input :file, hint: (t.object.persisted? ? t.object.filename : 'Select new file for upload')
+        t.input :title
+        t.input :file, hint: 'Select new file for upload'
         t.input :private
       end
     end
@@ -295,6 +296,7 @@ ActiveAdmin.register TimelineEvent do
 
     panel 'Attachments' do
       table_for timeline_event.timeline_event_files do
+        column :title
         column :filename
         column :private
 

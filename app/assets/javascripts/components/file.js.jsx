@@ -1,6 +1,6 @@
 var File = React.createClass({
   propTypes: {
-    name: React.PropTypes.string.isRequired,
+    title: React.PropTypes.string.isRequired,
     identifier: React.PropTypes.string.isRequired,
     private: React.PropTypes.bool.isRequired,
     persisted: React.PropTypes.bool,
@@ -44,7 +44,7 @@ var File = React.createClass({
       <li className="list-group-item">
         <i className={ this.fileIconClasses() }/>
         &nbsp;
-        <span className={this.props.markedForDeletion ? 'strike' : ''}>{ this.props.name }</span>
+        <span className={this.props.markedForDeletion ? 'strike' : ''}>{ this.props.title }</span>
         <div className="pull-right">
           { this.showDeleteButton() &&
           <a className="margin-right-10" onClick={this.props.persisted ? this.markFileForDeletion : this.deleteFile}>Delete</a>

@@ -108,7 +108,7 @@ class TimelineEvent < ActiveRecord::Base
     timeline_event_files.map do |file|
       {
         identifier: file.id,
-        name: file.filename,
+        title: file.title,
         private: file.private?,
         persisted: true
       }
@@ -138,6 +138,7 @@ class TimelineEvent < ActiveRecord::Base
       else
         # Create non-persisted files.
         timeline_event_files.create!(
+          title: file_metadata['title'],
           file: files[file_metadata['identifier']],
           private: file_metadata['private']
         )
@@ -218,7 +219,7 @@ class TimelineEvent < ActiveRecord::Base
 
     timeline_event_files.each do |file|
       next if file.private? && !privileged
-      attachments << { file: file, title: file.filename, private: file.private? }
+      attachments << { file: file, title: file.title, private: file.private? }
     end
 
     links.each do |link|

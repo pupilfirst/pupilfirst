@@ -17,11 +17,13 @@
         ' You currently have access to exclusive resources that are marked clearly by a <strong>Batch Exclusive</strong>
         | badge. Please do not share these resources outside your founding team. Thank you!
 
-    - if current_founder.blank?
-      p.resources-intro
-        ' This is just a small sample of Resources available at SV.CO. Approved Startups get access to exclusive content
-        | produced by Faculty, including presentations, video and audio clips.
-
     .resources.row
+      .col-md-12.tag-filter
+        = form_tag method: "get" do
+          = select_tag "tags", options_for_select(@resouce_tags), multiple: true, include_blank: true, id: "resources-index-tags", class: "tag-select"
+          = button_tag name: "Filter", type: "submit", class: 'btn btn-primary tag-filter-btn text-uppercase' do
+            i.fa.fa-filter
+            | Filter
+
       - @resources.each do |resource|
         = render 'resource', resource: resource

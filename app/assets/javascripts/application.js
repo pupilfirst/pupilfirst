@@ -39,5 +39,6 @@
 //= require home
 //= require faculty
 //= require startups
+//= require resources
 //= require about
 //= require transparency

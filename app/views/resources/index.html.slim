@@ -19,11 +19,15 @@
 
     .resources.row
       .col-md-12.tag-filter
-        = form_tag method: "get" do
-          = select_tag "tags", options_for_select(@resouce_tags), multiple: true, include_blank: true, id: "resources-index-tags", class: "tag-select"
+        = form_tag nil, method: "get" do
+          = select_tag "tags", options_for_select(@resouce_tags, params[:tags]), multiple: true, include_blank: true, id: "resources-index-tags", class: "tag-select"
           = button_tag name: "Filter", type: "submit", class: 'btn btn-primary tag-filter-btn text-uppercase' do
             i.fa.fa-filter
             | Filter
+          - if params[:tags].present?
+            = link_to resources_path, class: 'btn btn-primary tag-filter-clear text-uppercase' do
+              i.fa.fa-refresh
+              | Clear Filter
 
       - @resources.each do |resource|
         = render 'resource', resource: resource

@@ -67,12 +67,13 @@
       top: 11px;
     }
   }
-  .tag-filter-btn {
+  .tag-filter-btn, .tag-filter-clear  {
     margin-left: 15px;
-    padding: 6px 15px;
+    padding: 7px 15px;
     border-radius: 5px;
     font-weight: 400;
-    display: inline-block;
+    font-size: 12px;
+    letter-spacing: 0.03em;
     background-color: #117eb2;
     border: 0;
     transition: all .2s;
@@ -88,6 +89,15 @@
       margin: 10px 0 0;
       width: 100%;
       padding: 8px 15px;
+    }
+  }
+  .tag-filter-clear {
+    border: 1px solid #117eb2;
+    background-color: transparent;
+    color: #117eb2;
+
+    &:hover {
+      background-color: white;
     }
   }
 }

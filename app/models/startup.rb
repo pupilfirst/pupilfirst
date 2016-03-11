@@ -33,6 +33,9 @@ class Startup < ActiveRecord::Base
 
   SV_STATS_LINK = -'bit.ly/svstats2'
 
+  # agreement duration in years
+  AGREEMENT_DURATION = 5
+
   def self.valid_product_progress_values
     [
       PRODUCT_PROGRESS_IDEA, PRODUCT_PROGRESS_MOCKUP, PRODUCT_PROGRESS_PROTOTYPE, PRODUCT_PROGRESS_PRIVATE_BETA,
@@ -60,8 +63,8 @@ class Startup < ActiveRecord::Base
   scope :not_dropped_out, -> { where.not(approval_status: APPROVAL_STATUS_DROPPED_OUT) }
   scope :incubation_requested, -> { where(approval_status: [APPROVAL_STATUS_PENDING, APPROVAL_STATUS_APPROVED]) }
   scope :agreement_signed, -> { where 'agreement_signed_at IS NOT NULL' }
-  scope :agreement_live, -> { where('agreement_signed_at > ?', 5.years.ago) }
-  scope :agreement_expired, -> { where('agreement_signed_at < ?', 5.years.ago) }
+  scope :agreement_live, -> { where('agreement_signed_at > ?', AGREEMENT_DURATION.years.ago) }
+  scope :agreement_expired, -> { where('agreement_signed_at < ?', AGREEMENT_DURATION.years.ago) }
   scope :without_founders, -> { where.not(id: (Founder.pluck(:startup_id).uniq - [nil])) }
   scope :student_startups, -> { joins(:founders).where.not(founders: { university_id: nil }).uniq }
   scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED }).distinct }
@@ -388,7 +391,7 @@ class Startup < ActiveRecord::Base
   end
 
   def agreement_live?
-    try(:agreement_signed_at).to_i > 5.years.ago
+    try(:agreement_signed_at) > AGREEMENT_DURATION.years.ago
   end
 
   def founder?(founder)

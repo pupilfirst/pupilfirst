@@ -3,6 +3,7 @@
   .faculty-info
     .faculty-name
       = member.name
+
     .faculty-title
       = member.title
 
@@ -14,6 +15,10 @@
       .faculty-links
         = link_to member.linkedin_url, target: '_blank' do
           i.fa.fa-linkedin
+
+    - if member.alumni?
+      .founder-profile-btn
+        = link_to 'Founder Profile', founder_profile_path(member.founder.slug)
 
     - connect_slots = member.connect_slots.available_for_founder
 

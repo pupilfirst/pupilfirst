@@ -97,6 +97,26 @@
             a { margin-right: 10px; }
             :last-child { margin-right: 0; }
           }
+          .founder-profile-btn {
+            margin-top: 10px;
+
+            a {
+              display: inline-block;
+              padding: 5px 10px;
+              font-size: 11px;
+              color: $theme-dark-green;
+              border: 1px solid $theme-dark-green;
+              border-radius: 20px;
+              text-decoration: none;
+              transition: all .2s;
+
+              &:hover, &:focus {
+                outline: 0;
+                background-color: $theme-dark-green;
+                color: white;
+              }
+            }
+          }
         }
       }
     }

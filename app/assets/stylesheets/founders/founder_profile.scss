@@ -231,10 +231,12 @@
       .resume-link-section {
         border: 1px solid #d2d2d2;
         border-width: 0 0 0 1px;
+        padding-right: 0;
 
         .btn-resume-link {
           border-color: #2a6db6;
           color: #2a6db6;
+          outline: 0;
           border-radius: 5px;
           transition: all .2s;
           width: 100%;

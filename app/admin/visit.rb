@@ -3,7 +3,7 @@ ActiveAdmin.register Visit do
   scope :all
 
   menu parent: 'Founders'
-
+  actions :index, :show
   config.sort_order = 'started_at_desc'
 
   index do

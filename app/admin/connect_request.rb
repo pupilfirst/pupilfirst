@@ -84,6 +84,8 @@ ActiveAdmin.register ConnectRequest do
   end
 
   form do |f|
+    f.semantic_errors(*f.object.errors.keys)
+
     f.inputs 'Connect Request Details' do
       f.input :connect_slot,
         collection: (resource.persisted? ? ConnectSlot.available(optional_id: resource.connect_slot.id) : ConnectSlot.available).includes(:faculty),

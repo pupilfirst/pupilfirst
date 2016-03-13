@@ -1,4 +1,5 @@
 = semantic_form_for [:admin, @founder] do |f|
+  = f.semantic_errors *f.object.errors.keys
   = f.inputs 'Basic Details'
     = f.input :slug
     = f.input :email

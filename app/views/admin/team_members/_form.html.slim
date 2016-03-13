@@ -1,4 +1,5 @@
 = semantic_form_for [:admin, @team_member] do |f|
+  = f.semantic_errors *f.object.errors.keys
   = f.inputs 'Team Member Details'
     = f.input :startup, label: 'Product', member_label: proc { |startup| startup.display_name }, required: true
     = f.input :name

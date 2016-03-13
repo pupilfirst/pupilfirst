@@ -1,6 +1,16 @@
 # Feature flags! Set any key and check for it with Feature.active?(key, [current_founder])
 # See documentation of method to see how to store the JSON value.
 class Feature < ActiveRecord::Base
+  validates_presence_of :key, :value
+
+  validate :value_must_be_json
+
+  def value_must_be_json
+    JSON.parse value
+  rescue JSON::ParserError
+    errors[:value] << 'must be valid JSON'
+  end
+
   # {"email_regexes": ["\S*(@mobme.in|sv.co)$"], "emails": ["someone@sv.co"]}
   #     OR
   # {"active": true}

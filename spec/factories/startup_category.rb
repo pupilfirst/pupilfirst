@@ -1,5 +1,5 @@
 FactoryGirl.define do
   factory :startup_category do
-    name { Faker::Lorem.words(2).join(' ') }
+    sequence(:name) { |i| Faker::Lorem.words(2).push(i).join(' ') }
   end
 end

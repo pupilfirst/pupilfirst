@@ -29,17 +29,17 @@
       .tab-content
         .tab-pane.active#team role="tabpanel"
           .faculty-cards-container
-            - Faculty.team.each do |member|
+            - Faculty.active.team.each do |member|
               = render 'faculty_card', member: member
         .tab-pane#visiting-faculty role="tabpanel"
           .faculty-cards-container
-            - Faculty.visiting_faculty.each do |member|
+            - Faculty.active.visiting_faculty.each do |member|
               = render 'faculty_card', member: member
         .tab-pane#advisory-board role="tabpanel"
           .faculty-cards-container
-            - Faculty.advisory_board.each do |member|
+            - Faculty.active.advisory_board.each do |member|
               = render 'faculty_card', member: member
         .tab-pane#alumni role="tabpanel"
           .faculty-cards-container
-            - Faculty.alumni.each do |member|
+            - Faculty.active.alumni.each do |member|
               = render 'faculty_card', member: member

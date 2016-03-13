@@ -56,8 +56,10 @@ ActiveAdmin.register ConnectSlot do
   end
 
   form do |f|
+    f.semantic_errors(*f.object.errors.keys)
+
     f.inputs 'Connect Slot Details' do
-      f.input :faculty, collection: Faculty.available_for_connect
+      f.input :faculty, collection: Faculty.active.available_for_connect
       f.input :slot_at, as: :just_datetime_picker
     end
 

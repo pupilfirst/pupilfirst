@@ -106,7 +106,7 @@ describe Startup, broken: true do
 
   describe '#showcase_timeline_event' do
     it 'returns last non-private verified timeline event with image' do
-      private_timeline_event_type = create :timeline_event_type, private: true
+      private_timeline_event_type = create :timeline_event_type, role: TimelineEventType::ROLE_FOUNDER
 
       # Verified event with image.
       expected_showcase_event = create :timeline_event_with_image, startup: subject, verified_at: 20.minutes.ago

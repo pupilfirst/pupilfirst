@@ -39,6 +39,25 @@ class TimelineEventType < ActiveRecord::Base
     TYPE_STAGE_SCALE => 'http://playbook.sv.co/stages/5.5-scale.html'
   }.freeze
 
+  ROLE_GOVERNANCE = -'Governance'
+  ROLE_MARKETING = -'Marketing & Sales'
+  ROLE_ENGINEERING = -'Engineering'
+  ROLE_PRODUCT = -'Product'
+  ROLE_TEAM = -'Team'
+  ROLE_DESIGN = -'Design'
+  ROLE_FOUNDER = -'Founder'
+  ROLE_OTHER = -'Other'
+
+  def self.valid_roles
+    [ROLE_GOVERNANCE, ROLE_MARKETING, ROLE_ENGINEERING, ROLE_PRODUCT, ROLE_TEAM, ROLE_DESIGN, ROLE_FOUNDER, ROLE_OTHER]
+  end
+
+  validates_inclusion_of :role, in: valid_roles
+
+  def founder_event?
+    role == ROLE_FOUNDER
+  end
+
   mount_uploader :badge, BadgeUploader
 
   attr_accessor :copy_badge_from

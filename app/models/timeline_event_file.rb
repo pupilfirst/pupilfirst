@@ -3,6 +3,8 @@ class TimelineEventFile < ActiveRecord::Base
 
   mount_uploader :file, TimelineEventFileUploader
 
+  validates_presence_of :file, :title
+
   # File is stored as private on S3. So we need to retrieve the name another way; not the usual column.file.filename.
   def filename
     file.sanitized_file.original_filename

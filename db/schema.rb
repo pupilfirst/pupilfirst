@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160309093751) do
+ActiveRecord::Schema.define(version: 20160310114505) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -127,14 +127,15 @@ ActiveRecord::Schema.define(version: 20160309093751) do
     t.string   "category"
     t.string   "image"
     t.integer  "sort_index"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.string   "email"
     t.string   "token"
     t.boolean  "self_service"
     t.string   "current_commitment"
     t.string   "slug"
     t.integer  "founder_id"
+    t.boolean  "inactive",           default: false
   end
 
   add_index "faculty", ["category"], name: "index_faculty_on_category", using: :btree
@@ -309,7 +310,6 @@ ActiveRecord::Schema.define(version: 20160309093751) do
     t.string   "product_progress"
     t.string   "presentation_link"
     t.integer  "revenue_generated"
-    t.integer  "team_size"
     t.string   "pin"
     t.datetime "agreement_signed_at"
     t.text     "metadata"
@@ -358,6 +358,7 @@ ActiveRecord::Schema.define(version: 20160309093751) do
     t.text     "slideshow_embed"
     t.integer  "assigner_id"
     t.boolean  "populate_on_start"
+    t.string   "rubric"
   end
 
   add_index "target_templates", ["populate_on_start"], name: "index_target_templates_on_populate_on_start", using: :btree
@@ -377,6 +378,7 @@ ActiveRecord::Schema.define(version: 20160309093751) do
     t.datetime "completed_at"
     t.text     "completion_comment"
     t.text     "slideshow_embed"
+    t.string   "rubric"
   end
 
   add_index "targets", ["assigner_id"], name: "index_targets_on_assigner_id", using: :btree
@@ -401,6 +403,7 @@ ActiveRecord::Schema.define(version: 20160309093751) do
     t.boolean  "private"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
+    t.string   "title"
   end
 
   add_index "timeline_event_files", ["timeline_event_id"], name: "index_timeline_event_files_on_timeline_event_id", using: :btree
@@ -415,7 +418,6 @@ ActiveRecord::Schema.define(version: 20160309093751) do
     t.string   "role"
     t.string   "proof_required"
     t.string   "suggested_stage"
-    t.boolean  "private"
     t.boolean  "major"
   end
 

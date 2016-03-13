@@ -1,7 +1,8 @@
 ActiveAdmin.register Target do
   permit_params :startup_id, :assigner_id, :role, :status, :title, :description, :status, :resource_url,
     :completion_instructions, :due_date_date, :due_date_time_hour, :due_date_time_minute, :slideshow_embed,
-    :completed_at_date, :completed_at_time_hour, :completed_at_time_minute, :completion_comment
+    :completed_at_date, :completed_at_time_hour, :completed_at_time_minute, :completion_comment, :rubric,
+    :remote_rubric_url
 
   scope :all
   scope :pending
@@ -121,6 +122,11 @@ ActiveAdmin.register Target do
 
       row :title
       row :assigner
+      row :rubric do
+        if target.rubric.present?
+          link_to target.rubric_identifier, target.rubric.url
+        end
+      end
 
       row :description do
         target.description.html_safe

@@ -26,7 +26,7 @@
             - else
               | @#{public_slack_message.slack_username}
           td ##{public_slack_message.channel}
-          td = public_slack_message.reaction? ? public_slack_message.reaction_details : public_slack_message.body
+          td = public_slack_message.reaction? ? reaction_details(public_slack_message) : public_slack_message.body
           td = public_slack_message.created_at
           td id="message-actions-#{public_slack_message.id}"
             - if public_slack_message.karma_point.present?

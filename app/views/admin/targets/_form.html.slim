@@ -1,4 +1,5 @@
 = semantic_form_for [:admin, @target] do |f|
+  = f.semantic_errors *f.object.errors.keys
   = f.inputs 'Target details' do
     = f.input :startup,
       label: 'Product',
@@ -30,6 +31,8 @@
     = f.input :resource_url
     = f.input :completion_instructions
     = f.input :due_date, as: :just_datetime_picker
-    = f.input :assigner, include_blank: false
+    = f.input :assigner, collection: Faculty.active, include_blank: false
+    = f.input :rubric, as: :file
+    = f.input :remote_rubric_url
 
   = f.submit

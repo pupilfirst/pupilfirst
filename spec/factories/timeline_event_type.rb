@@ -4,7 +4,7 @@ FactoryGirl.define do
     proof_required { Faker::Lorem.words(10).join ' ' }
     badge File.open(File.join(Rails.root, '/spec/support/uploads/timeline_event_types/default.png'))
     key { |n| "#{Faker::Lorem.word}-#{n}" }
-    role { Faker::Lorem.word }
+    role { TimelineEventType::ROLE_OTHER }
     title { Faker::Lorem.words(2).join ' ' }
 
     factory :tet_team_formed do

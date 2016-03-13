@@ -210,6 +210,14 @@ ActiveAdmin.setup do |config|
   #     end
   #   end
 
+  # Adding menu item called 'Tagging' to the 'Resource' and 'Startup' menu to show taggings applicable to them resp.
+  config.namespace :admin do |admin|
+    admin.build_menu :default do |menu|
+      menu.add label: "Tagging", url: proc { admin_taggings_path('q[taggable_type_eq]' => 'Resource', commit: 'Filter') }, parent: 'Resources'
+      menu.add label: "Tagging", url: proc { admin_taggings_path('q[taggable_type_eq]' => 'Startup', commit: 'Filter') }, parent: 'Startups'
+    end
+  end
+
   # == Download Links
   #
   # You can disable download links on resource listing pages,

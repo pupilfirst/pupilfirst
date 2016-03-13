@@ -6,6 +6,8 @@ class Target < ActiveRecord::Base
   belongs_to :assigner, class_name: 'Faculty'
   has_many :timeline_events
 
+  mount_uploader :rubric, RubricUploader
+
   STATUS_PENDING = -'pending'
   STATUS_DONE = -'done'
 

@@ -187,7 +187,7 @@ updateAttachmentsTabTitle = ->
   extraAttachments = 0
 
   if files.length > 0
-    title = files[0].name
+    title = files[0].title
 
     extraAttachments = files.length - 1
     extraAttachments += links.length

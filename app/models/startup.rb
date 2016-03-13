@@ -33,6 +33,9 @@ class Startup < ActiveRecord::Base
 
   SV_STATS_LINK = -'bit.ly/svstats2'
 
+  # agreement duration in years
+  AGREEMENT_DURATION = 5
+
   def self.valid_product_progress_values
     [
       PRODUCT_PROGRESS_IDEA, PRODUCT_PROGRESS_MOCKUP, PRODUCT_PROGRESS_PROTOTYPE, PRODUCT_PROGRESS_PRIVATE_BETA,
@@ -60,8 +63,8 @@ class Startup < ActiveRecord::Base
   scope :not_dropped_out, -> { where.not(approval_status: APPROVAL_STATUS_DROPPED_OUT) }
   scope :incubation_requested, -> { where(approval_status: [APPROVAL_STATUS_PENDING, APPROVAL_STATUS_APPROVED]) }
   scope :agreement_signed, -> { where 'agreement_signed_at IS NOT NULL' }
-  scope :agreement_live, -> { where('agreement_signed_at > ?', 5.years.ago) }
-  scope :agreement_expired, -> { where('agreement_signed_at < ?', 5.years.ago) }
+  scope :agreement_live, -> { where('agreement_signed_at > ?', AGREEMENT_DURATION.years.ago) }
+  scope :agreement_expired, -> { where('agreement_signed_at < ?', AGREEMENT_DURATION.years.ago) }
   scope :without_founders, -> { where.not(id: (Founder.pluck(:startup_id).uniq - [nil])) }
   scope :student_startups, -> { joins(:founders).where.not(founders: { university_id: nil }).uniq }
   scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED }).distinct }
@@ -74,7 +77,7 @@ class Startup < ActiveRecord::Base
   # @return TimelineEvent
   def showcase_timeline_event
     timeline_events.verified.order('event_on DESC').detect do |timeline_event|
-      !timeline_event.private?
+      !timeline_event.founder_event?
     end
   end
 
@@ -172,10 +175,13 @@ class Startup < ActiveRecord::Base
     false
   end
 
+  # team_size is used during registration process.
+  attr_accessor :team_size
+
   # validate presence of all fields during registration
-  validates_presence_of :product_name, :team_size, :cofounder_1_email, :cofounder_2_email, if: :being_registered
-  validates_presence_of :cofounder_3_email, if: proc { |startup| startup.being_registered && startup.team_size > 3 }
-  validates_presence_of :cofounder_4_email, if: proc { |startup| startup.being_registered && startup.team_size > 4 }
+  validates_presence_of :product_name, :cofounder_1_email, :cofounder_2_email, if: :being_registered
+  validates_presence_of :cofounder_3_email, if: proc { |startup| startup.being_registered && startup.team_size.to_i > 3 }
+  validates_presence_of :cofounder_4_email, if: proc { |startup| startup.being_registered && startup.team_size.to_i > 4 }
 
   has_and_belongs_to_many :startup_categories do
     def <<(_category)
@@ -236,7 +242,6 @@ class Startup < ActiveRecord::Base
   # New set of validations for incubation wizard
   store :metadata, accessors: [:updated_from]
 
-  validates_numericality_of :team_size, greater_than_or_equal_to: 3, less_than_or_equal_to: 5, only_integer: true, allow_blank: true
   validates_numericality_of :revenue_generated, greater_than_or_equal_to: 0, allow_blank: true
 
   validates_presence_of :product_name
@@ -295,7 +300,7 @@ class Startup < ActiveRecord::Base
   mount_uploader :logo, LogoUploader
   process_in_background :logo
 
-  normalize_attribute :pitch, :product_description, :email, :phone, :revenue_generated, :team_size, :approval_status
+  normalize_attribute :pitch, :product_description, :email, :phone, :revenue_generated, :approval_status
 
   attr_accessor :full_validation
 
@@ -386,7 +391,7 @@ class Startup < ActiveRecord::Base
   end
 
   def agreement_live?
-    try(:agreement_signed_at).to_i > 5.years.ago
+    agreement_signed_at.present? ? agreement_signed_at > AGREEMENT_DURATION.years.ago : false
   end
 
   def founder?(founder)

@@ -13,8 +13,8 @@ class ConnectSlot < ActiveRecord::Base
   validate :faculty_must_have_email
 
   def faculty_must_have_email
-    return if faculty.email.present?
-    errors[:faculty] << 'must have email address to create connect slot.'
+    return if faculty&.email.present?
+    errors[:faculty] << 'must have stored email address'
   end
 
   just_define_datetime_picker :slot_at

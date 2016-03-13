@@ -1,6 +1,6 @@
 ActiveAdmin.register TimelineEvent do
   permit_params :description, :timeline_event_type_id, :image, :event_on, :startup_id, :verified_at, :grade,
-    :founder_id, :serialized_links, timeline_event_files_attributes: [:id, :file, :private, :_destroy]
+    :founder_id, :serialized_links, timeline_event_files_attributes: [:id, :title, :file, :private, :_destroy]
 
   preserve_default_filters!
   filter :startup_batch
@@ -107,8 +107,8 @@ ActiveAdmin.register TimelineEvent do
       timeline_event.update!(grade: params[:grade])
 
       # if private event, assign karma points to the founder too
-      founder = timeline_event.private? ? timeline_event.founder : nil
-      assigned_to = timeline_event.private? ? 'the founder and startup' : 'the startup' # used in flash message
+      founder = timeline_event.founder_event? ? timeline_event.founder : nil
+      assigned_to = timeline_event.founder_event? ? 'the founder and startup' : 'the startup' # used in flash message
 
       karma_point = KarmaPoint.create!(
         source: timeline_event,
@@ -133,7 +133,7 @@ ActiveAdmin.register TimelineEvent do
     startup = timeline_event.startup
     timeline_event.verify!
 
-    unless timeline_event.timeline_event_type.private
+    unless timeline_event.founder_event?
       startup_url = Rails.application.routes.url_helpers.startup_url(startup)
       timeline_event_url = startup_url + "#event-#{timeline_event.id}"
       slack_message = "<#{startup_url}|#{startup.product_name}> has a new verified timeline entry:"\
@@ -179,6 +179,7 @@ ActiveAdmin.register TimelineEvent do
 
   form do |f|
     div id: 'timeline-event-founders-for-startup-url', 'data-url' => founders_for_startup_admin_timeline_events_url
+    f.semantic_errors(*f.object.errors.keys)
 
     f.inputs 'Event Details' do
       f.input :startup,
@@ -197,7 +198,8 @@ ActiveAdmin.register TimelineEvent do
 
     f.inputs 'Attached Files' do
       f.has_many :timeline_event_files, new_record: 'Add file', allow_destroy: true, heading: false do |t|
-        t.input :file, hint: (t.object.persisted? ? t.object.filename : 'Select new file for upload')
+        t.input :title
+        t.input :file, hint: 'Select new file for upload'
         t.input :private
       end
     end
@@ -243,7 +245,7 @@ ActiveAdmin.register TimelineEvent do
 
       row :verified_at do
         verification_confirm = 'Are you sure you want to verify this event?'
-        verification_confirm += ' The Verification will be announced on Public Slack' unless timeline_event.timeline_event_type.private?
+        verification_confirm += ' The Verification will be announced on Public Slack' unless timeline_event.founder_event?
         if timeline_event.verified?
           span do
             "#{timeline_event.verified_at} "
@@ -294,6 +296,7 @@ ActiveAdmin.register TimelineEvent do
 
     panel 'Attachments' do
       table_for timeline_event.timeline_event_files do
+        column :title
         column :filename
         column :private
 

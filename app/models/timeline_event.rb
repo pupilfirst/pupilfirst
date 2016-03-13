@@ -8,12 +8,12 @@ class TimelineEvent < ActiveRecord::Base
   belongs_to :target
 
   has_one :karma_point, as: :source
-  has_many :timeline_event_files
+  has_many :timeline_event_files, dependent: :destroy
 
   mount_uploader :image, TimelineImageUploader
   serialize :links
   validates_presence_of :event_on, :startup_id, :founder_id, :timeline_event_type, :description
-  delegate :private?, to: :timeline_event_type
+  delegate :founder_event?, to: :timeline_event_type
 
   MAX_DESCRIPTION_CHARACTERS = 300
 
@@ -63,7 +63,7 @@ class TimelineEvent < ActiveRecord::Base
   scope :showcase, -> { includes(:timeline_event_type, :startup).verified.from_approved_startups.batched.not_private.order('timeline_events.event_on DESC') }
   scope :help_wanted, -> { where(timeline_event_type: TimelineEventType.help_wanted) }
   scope :for_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch }) }
-  scope :not_private, -> { where(timeline_event_type: TimelineEventType.where.not(private: true)) }
+  scope :not_private, -> { where(timeline_event_type: TimelineEventType.where.not(role: TimelineEventType::ROLE_FOUNDER)) }
 
   after_initialize :make_links_an_array
 
@@ -108,7 +108,7 @@ class TimelineEvent < ActiveRecord::Base
     timeline_event_files.map do |file|
       {
         identifier: file.id,
-        name: file.filename,
+        title: file.title,
         private: file.private?,
         persisted: true
       }
@@ -138,6 +138,7 @@ class TimelineEvent < ActiveRecord::Base
       else
         # Create non-persisted files.
         timeline_event_files.create!(
+          title: file_metadata['title'],
           file: files[file_metadata['identifier']],
           private: file_metadata['private']
         )
@@ -207,7 +208,7 @@ class TimelineEvent < ActiveRecord::Base
 
   # A hidden timeline event is not displayed to user if user isn't logged in, or isn't the founder linked to event.
   def hidden_from?(viewer)
-    return false unless timeline_event_type.private?
+    return false unless timeline_event_type.founder_event?
     return true unless viewer.present?
     founder != viewer
   end
@@ -218,7 +219,7 @@ class TimelineEvent < ActiveRecord::Base
 
     timeline_event_files.each do |file|
       next if file.private? && !privileged
-      attachments << { file: file, title: file.filename, private: file.private? }
+      attachments << { file: file, title: file.title, private: file.private? }
     end
 
     links.each do |link|

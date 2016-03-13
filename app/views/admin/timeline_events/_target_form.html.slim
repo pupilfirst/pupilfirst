@@ -1,7 +1,7 @@
 = form_tag(link_target_admin_timeline_event_path, method: :post) do
   fieldset.inputs
     legend
-      span Link target #{timeline_event.timeline_event_type.private? ? '' : '(and optionally complete it).'}
+      span Link target #{timeline_event.timeline_event_type.founder_event? ? '' : '(and optionally complete it).'}
     ol
       li.input.select.required
         = label_tag :target_id, 'Link Target', class: 'label'
@@ -11,7 +11,7 @@
         - completed_targets = startup_targets.where(status: Target::STATUS_DONE).order('created_at DESC').pluck(:title,:id)
         - grouped_options = {'Live': pending_targets, 'Expired': expired_targets, 'Completed': completed_targets}
         = select_tag :target_id, grouped_options_for_select(grouped_options), include_blank: true
-      - unless timeline_event.timeline_event_type.private?
+      - unless timeline_event.timeline_event_type.founder_event?
         li.boolean.input.optional
           label for=:target_completed
             = check_box_tag :target_completed

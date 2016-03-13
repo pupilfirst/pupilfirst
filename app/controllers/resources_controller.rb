@@ -1,8 +1,8 @@
 class ResourcesController < ApplicationController
   def index
-    @resources = Resource.for(current_founder)
-    raise_not_found if @resources.blank?
-    @resouce_tags = %w(foo bar baz)
+    load_resources
+    filter_resources
+    load_resource_tags
     @skip_container = true
   end
 
@@ -19,5 +19,20 @@ class ResourcesController < ApplicationController
     resource = Resource.for(current_founder).find(params[:id])
     resource.increment_downloads!
     redirect_to resource.file.url
+  end
+
+  private
+
+  def load_resources
+    @resources = Resource.for(current_founder)
+  end
+
+  def filter_resources
+    return if params[:tags].blank?
+    @resources = @resources.tagged_with params[:tags]
+  end
+
+  def load_resource_tags
+    @resource_tags = Resource.tag_counts_on(:tags).pluck(:name)
   end
 end

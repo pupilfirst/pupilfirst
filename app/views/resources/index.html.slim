@@ -20,7 +20,7 @@
     .resources.row
       .col-md-12.tag-filter
         = form_tag nil, method: "get" do
-          = select_tag "tags", options_for_select(@resouce_tags, params[:tags]), multiple: true, include_blank: true, id: "resources-index-tags", class: "tag-select"
+          = select_tag "tags", options_for_select(@resource_tags, params[:tags]), multiple: true, include_blank: true, id: "resources-index-tags", class: "tag-select"
           = button_tag name: "Filter", type: "submit", class: 'btn btn-primary tag-filter-btn text-uppercase' do
             i.fa.fa-filter
             | Filter

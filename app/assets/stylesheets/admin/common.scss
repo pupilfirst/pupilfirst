@@ -115,3 +115,10 @@ trix-toolbar .link_url_fields {
 #site_title {
   cursor: pointer;
 }
+
+// Overwrite some crappy styling from select2-bootstrap which is runing the look of select2 in AA.
+.select2-chosen,
+.select2-choice > span:first-child,
+.select2-container .select2-choices .select2-search-field input {
+  padding: 0 12px;
+}

@@ -13,7 +13,7 @@
     background-position: bottom center;
     background-size: 320px;
   }
-  @media (min-width: $screen-sm-min) and (max-width: $screen-md-min) {
+  @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
     background: linear-gradient(to bottom, rgba(255,251,246,1) 0%, rgba(255,253,250,1) 100%);
   }
 
@@ -113,7 +113,7 @@ p.resources-intro {
   border-radius: 5px;
   overflow: hidden;
   position: relative;
-  margin-bottom: 15px;
+  margin-bottom: 30px;
   background-color: white;
   box-shadow: 0 0 5px 0 rgba(0,0,0,0.1);
 

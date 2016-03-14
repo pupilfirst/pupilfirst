@@ -2,7 +2,9 @@ class ResourcesController < ApplicationController
   def index
     load_resources
     filter_resources
+    paginate_resources
     load_resource_tags
+
     @skip_container = true
   end
 
@@ -30,6 +32,10 @@ class ResourcesController < ApplicationController
   def filter_resources
     return if params[:tags].blank?
     @resources = @resources.tagged_with params[:tags]
+  end
+
+  def paginate_resources
+    @resources = @resources.paginate(page: params[:page], per_page: 8)
   end
 
   def load_resource_tags

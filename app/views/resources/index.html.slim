@@ -31,3 +31,5 @@
 
       - @resources.each do |resource|
         = render 'resource', resource: resource
+    .text-center
+      = will_paginate @resources, renderer: BootstrapPagination::Rails

@@ -77,6 +77,7 @@ gem 'react-rails' # For automatically transforming JSX and using React in Rails.
 gem 'has_secure_token' # Used to create tokens for models (eg: for Faculty). TODO: Will be included with ActiveRecord in Rails 5.
 gem 'ahoy_matey' # Analytics for Rails
 gem 'acts-as-taggable-on', '~> 3.5' # Tag a single model on several contexts.
+gem 'will_paginate-bootstrap' #This gem integrates the Twitter Bootstrap pagination component with the will_paginate pagination gem.
 
 # Rails assets!
 source 'https://rails-assets.org' do

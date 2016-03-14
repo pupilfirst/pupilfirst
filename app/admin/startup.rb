@@ -23,6 +23,17 @@ ActiveAdmin.register Startup do
     end
   end
 
+  batch_action :tag, form: {
+    tag: Startup.tag_counts_on(:tags).pluck(:name)
+  } do |ids, inputs|
+    Startup.where(id: ids).each do |startup|
+      startup.tag_list.add inputs[:tag]
+      startup.save!
+    end
+
+    redirect_to collection_path, alert: 'Tag added!'
+  end
+
   index do
     selectable_column
     column(:product, &:display_name)

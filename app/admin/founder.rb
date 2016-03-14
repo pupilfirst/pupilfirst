@@ -29,6 +29,17 @@ ActiveAdmin.register Founder do
     :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :facebook_url, :angel_co_url, :github_url, :behance_url,
     { roles: [] }, :tag_list, :gender
 
+  batch_action :tag, form: {
+    tag: Founder.tag_counts_on(:tags).pluck(:name)
+  } do |ids, inputs|
+    Founder.where(id: ids).each do |founder|
+      founder.tag_list.add inputs[:tag]
+      founder.save!
+    end
+
+    redirect_to collection_path, alert: 'Tag added!'
+  end
+
   # Customize the index. Let's show only a small subset of the tons of fields.
   index do
     selectable_column

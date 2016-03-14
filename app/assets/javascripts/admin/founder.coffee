@@ -11,6 +11,7 @@ setupSelect2ForFounderTagList = ->
     }
 
   founderTagList.select2(
+    width: '80%',
     placeholder: 'Select some tags',
     tags: true,
     data: select2Data,

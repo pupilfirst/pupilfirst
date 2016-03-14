@@ -1,8 +1,6 @@
 ActiveAdmin.register Resource do
   permit_params :title, :description, :file, :thumbnail, :share_status, :batch_id, :startup_id, :tag_list
 
-  preserve_default_filters!
-
   filter :startup,
     collection: Startup.batched,
     label: 'Product',
@@ -10,6 +8,11 @@ ActiveAdmin.register Resource do
 
   filter :share_status,
     collection: Resource.valid_share_statuses
+
+  filter :tags, collection: proc { Resource.tag_counts_on(:tags) }, multiple: true
+  filter :batch
+  filter :title
+  filter :description
 
   index do
     selectable_column

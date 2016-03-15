@@ -17,4 +17,9 @@ class HomeController < ApplicationController
   def transparency
     @skip_container = true
   end
+
+  # used by the 'shortener' gem's config
+  def not_found
+    raise_not_found
+  end
 end

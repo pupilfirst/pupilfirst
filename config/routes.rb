@@ -101,6 +101,9 @@ Svapp::Application.routes.draw do
 
   root 'home#index'
 
+  # custom defined 404 route to use with shortener gem's config
+  get '/404', to: 'home#not_found'
+
   # used for shortened urls from the shortener gem
   get '/:id', to: 'shortener/shortened_urls#show'
 end

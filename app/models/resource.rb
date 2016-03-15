@@ -97,4 +97,9 @@ class Resource < ActiveRecord::Base
     message += "*Description:* #{description}\n"
     message + "*URL:* #{Rails.application.routes.url_helpers.resource_url(self, host: 'https://sv.co')}"
   end
+
+  # ensure titles are titlecased
+  before_save do
+    self.title = title.titlecase
+  end
 end

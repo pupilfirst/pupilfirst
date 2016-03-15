@@ -10,9 +10,10 @@ class FacultyController < ApplicationController
   # GET /faculty/:slug
   def show
     # temporarily stubbing the page until its ready
-    raise_not_found
+    # raise_not_found
 
     @faculty = Faculty.find(params[:id])
+    @skip_container = true
   end
 
   # POST /faculty/:id/connect

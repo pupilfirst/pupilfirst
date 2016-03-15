@@ -1,4 +1,38 @@
-h1
-  ' Profile page for #{@faculty.name} (
-  i.fa.fa-wrench
-    |  Under Construction )
+.faculty-profile-bg
+  .container
+    .col-md-3.col-sm-3.faculty-profile-card
+      = image_tag @faculty.image_url, class: 'img-responsive faculty-profile-image'
+      .faculty-profile-title
+        h3.text-center.text-uppercase
+          = @faculty.name
+        h5.faculty-designation.text-center.font-weight-400
+          = @faculty.title
+          | &nbsp;at
+          span.font-weight-600
+            | &nbsp;Disney
+      .faculty-since.text-center.font-weight-300
+        | Faculty at SV.CO since October 2015
+      .faculty-profile-card-footer.clearfix
+        - if @faculty.linkedin_url.present?
+          .faculty-card-links.pull-left
+            = link_to @faculty.linkedin_url, target: '_blank' do
+              i.fa.fa-linkedin
+        .faculty-rating.pull-left
+          em.font-weight-300 Faculty Rating:
+    .col-md-9.col-sm-9.faculty-profile-right
+      .faculty-profile-details
+        .col-md-8.faculty-summary
+          h3.text-uppercase
+            | Summary
+          .faculty-about
+            p
+              ' Mr Senapathy “Kris” Gopalakrishnan served as the vice chairman of
+              | Infosys from 2011 to 2014 and the chief executive officer and managing
+              | director of Infosys from 2007 to 2011. Kris is one of the co-founders of Infosys.
+            p
+              | In January 2011, the Government of India awarded Mr. Gopalakrishnan the
+              | Padma Bhushan, the country’s third-highest civilian honor. 
+
+        .col-md-4.faculty-connect
+          h3.text-uppercase
+            | Connect

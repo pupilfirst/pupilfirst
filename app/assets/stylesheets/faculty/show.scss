@@ -1,0 +1,113 @@
+.faculty-profile-bg {
+  background-color: #f7f8fa;
+  padding: 30px 0;
+}
+.faculty-profile-card {
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 0 5px 0 rgba(0,0,0,0.1);
+  padding: 0;
+  overflow: hidden;
+
+  .faculty-profile-image {
+    border-bottom: 2px solid #7f975c;
+    width: 100%;
+  }
+  .faculty-profile-title {
+    margin: 15px 0;
+    h3 {
+      font-size: 20px;
+      color: $theme-dark-green;
+      margin: 0;
+      padding-bottom: 4px;
+    }
+    .faculty-designation {
+      color: $theme-dark-green;
+      font-size: 13px;
+      margin: 0;
+    }
+  }
+  .faculty-since {
+    background-color: #fafafa;
+    border: 1px dashed #dcdcdc;
+    border-width: 1px 0;
+    padding: 10px;
+    font-size: 14px;
+    color: #878787;
+  }
+  .faculty-profile-card-footer {
+    .faculty-card-links {
+      a {
+        display: inline-block;
+        padding: 15px 25px;
+        font-size: 16px;
+        vertical-align: middle;
+        text-align: center;
+        border-right: 1px dashed #dcdcdc;
+        outline: 0;
+        transition: all .2s;
+
+        &:hover, &:focus {
+          background-color: #0077b5;
+          color: white;
+        }
+      }
+    }
+    .faculty-rating {
+      padding: 17px 10px 16px;
+
+      em {
+        font-size: 12px;
+        color: #818181;
+      }
+    }
+  }
+}
+.faculty-profile-right {
+  height: 500px;
+  padding: 0;
+
+  @media (min-width: $screen-sm-min) {
+    padding: 0 0 0 25px;
+  }
+
+  .faculty-profile-details {
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    box-shadow: 0 0 5px 0 rgba(0,0,0,0.1);
+
+    h3 {
+      font-size: 14px;
+      color: #0077b5;
+      letter-spacing: 0.02em;
+      margin: 0;
+      padding: 20px;
+      border-bottom: 1px solid #e6e6e6;
+    }
+
+    .faculty-summary {
+      background-color: white;
+      padding: 0;
+      border-right: 1px solid #e5e5e5;
+
+      .faculty-about {
+        font-size: 14px;
+        color: #333;
+        padding: 20px;
+        font-weight: 300;
+        letter-spacing: 0.01em;
+      }
+    }
+    .faculty-connect {
+      padding: 0;
+      background-color: #fbfbfb;
+    }
+    @media (max-width: $screen-sm-max) {
+      display: block;
+    }
+  }
+  @media (max-width: $screen-xs-max) {
+    margin-top: 30px;
+  }
+}

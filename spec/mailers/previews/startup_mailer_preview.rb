@@ -1,8 +1,4 @@
 class StartupMailerPreview < ActionMailer::Preview
-  def startup_approved
-    StartupMailer.startup_approved(Startup.first)
-  end
-
   def feedback_as_email
     startup_feedback = StartupFeedback.first
     StartupMailer.feedback_as_email(startup_feedback)

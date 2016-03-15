@@ -1,6 +1,6 @@
 #sv-navbar.collapse.navbar-collapse
   ul.nav.navbar-nav.navbar-right
-    - if current_founder && current_founder.startup.present? && !current_founder.startup.unready?
+    - if current_founder && current_founder.startup.present?
       li role="presentation"
         a.top-nav-link href="#{startup_url(current_founder.startup)}" Timeline
     li role="presentation"

@@ -10,23 +10,7 @@
     data-timeline-event=t('startup.show.tour.timeline_event')]
 
 .container
-  /TO DO: probably rewrite this in a cleaner way
-  - if @startup.pending? || @startup.unready?
-    - if current_founder && @startup.founder?(current_founder)
-      .alert.alert-warning.margin-top-20
-        p Please note that SV.CO is currently under beta! Your submissions might not be processed immediately.
-      - if @startup.pending?
-        .alert.alert-info.margin-top-20 role='alert'
-          button.close type="button" data-dismiss="alert" aria-label="Close"
-            span aria-hidden="true" &times;
-          p Your startup has not been approved yet. Please write to #{mail_to 'help@sv.co'} if you'd like help!
-      - elsif @startup.unready?
-        .alert.alert-info.margin-top-20 role='alert'
-          p It appears that your startup application is not yet complete! Please head #{link_to('here', new_founder_startup_path)} and complete your application at the earliest for SV.CO approval.
-    - else
-      .alert.alert-info.margin-top-20
-        p This startup has submitted an application to SV.CO. They have not been approved yet.
-  - elsif @startup.dropped_out?
+  - if @startup.dropped_out?
     .alert.alert-danger.margin-top-20
       p Please note that this startup has dropped out and is no longer a part of SV.CO!
 

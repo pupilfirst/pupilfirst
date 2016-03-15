@@ -6,7 +6,6 @@ after 'development:founders', 'development:timeline_event_types', 'development:b
     name: 'Super Startup',
     product_name: 'Super Product',
     product_description: 'This really is a superb product! ;)',
-    approval_status: Startup::APPROVAL_STATUS_APPROVED,
     agreement_signed_at: 18.months.ago,
     batch: Batch.first,
     website: 'https://www.superstartup.in',

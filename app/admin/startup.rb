@@ -1,5 +1,4 @@
 ActiveAdmin.register Startup do
-  filter :approval_status, as: :select, collection: proc { Startup.valid_approval_status_values }
   filter :product_name
   filter :batch
   filter :stage, as: :select, collection: proc { stages_collection }
@@ -8,6 +7,7 @@ ActiveAdmin.register Startup do
   filter :website
   filter :registration_type, as: :select, collection: proc { Startup.valid_registration_types }
   filter :startup_categories
+  filter :dropped_out
 
   scope :batched_and_approved, default: true
   scope :batched
@@ -37,10 +37,6 @@ ActiveAdmin.register Startup do
   index do
     selectable_column
     column(:product, &:display_name)
-
-    column :status do |startup|
-      startup.approval_status.capitalize
-    end
 
     column :targets do |startup|
       if startup.targets.present?
@@ -123,7 +119,6 @@ ActiveAdmin.register Startup do
     column(:women_cofounders) { |startup| startup.founders.where(gender: Founder::GENDER_FEMALE).count }
     column :pitch
     column :website
-    column :approval_status
     column :email
     column :registration_type
     column :district
@@ -156,15 +151,15 @@ ActiveAdmin.register Startup do
     link_to('View Timeline', startup_url(startup), target: '_blank')
   end
 
+  # TODO: rewrite as its only used for dropping out startups now
   member_action :custom_update, method: :put do
     startup = Startup.friendly.find params[:id]
     startup.update_attributes!(permitted_params[:startup])
 
     case params[:email_to_send].to_sym
-      when :approval
-        StartupMailer.startup_approved(startup).deliver_later
       when :dropped_out
         StartupMailer.startup_dropped_out(startup).deliver_later
+      # TODO: Re-write a mail welcoming the startup back after a drop-out ?
     end
 
     redirect_to action: :show
@@ -194,21 +189,17 @@ ActiveAdmin.register Startup do
       end
 
       row :legal_registered_name
-      row :approval_status do
+      row :dropped_out do
         div class: 'startup-status' do
-          if startup.unready?
-            'Waiting for completion'
-          else
-            startup.approval_status
-          end
+          startup.dropped_out
         end
 
         div class: 'startup-status-buttons' do
-          unless startup.approved? || startup.unready?
+          unless startup.approved?
             span do
               button_to(
                 'Approve Startup',
-                custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_APPROVED }, email_to_send: :approval),
+                custom_update_admin_startup_path(startup: { dropped_out: false }, email_to_send: :approval),
                 method: :put, data: { confirm: 'Are you sure you want to approve this startup?' }
               )
             end
@@ -217,7 +208,7 @@ ActiveAdmin.register Startup do
             span do
               button_to(
                 'Drop-out Startup',
-                custom_update_admin_startup_path(startup: { approval_status: Startup::APPROVAL_STATUS_DROPPED_OUT }, email_to_send: :dropped_out),
+                custom_update_admin_startup_path(startup: { dropped_out: true }, email_to_send: :dropped_out),
                 method: :put, data: { confirm: 'Are you sure you want to drop out this startup?' }
               )
             end
@@ -354,7 +345,7 @@ ActiveAdmin.register Startup do
   permit_params :product_name, :product_description, :legal_registered_name, :website, :email, :logo, :facebook_link, :twitter_link,
     { startup_category_ids: [] }, { founder_ids: [] },
     { founders_attributes: [:id, :first_name, :last_name, :email, :avatar, :remote_avatar_url, :linkedin_url, :twitter_url, :skip_password] },
-    :created_at, :updated_at, :approval_status, :approval_status, :registration_type,
+    :created_at, :updated_at, :dropped_out, :registration_type,
     :agreement_signed_at, :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug, :batch_id,
     :tag_list
 end

@@ -5,7 +5,7 @@ require 'rails_helper'
 feature 'Timeline Builder' do
   let(:founder) { create :founder_with_password, confirmed_at: Time.now, timeline_toured: true }
   let!(:tet_team_formed) { create :tet_team_formed }
-  let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
+  let(:startup) { create :startup }
 
   let(:event_description) { Faker::Lorem.words(10).join ' ' }
 

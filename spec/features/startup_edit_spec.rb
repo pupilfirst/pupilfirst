@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'Startup Edit' do
   let(:founder) { create :founder_with_password, confirmed_at: Time.now }
   let(:co_founder) { create :founder_with_password, confirmed_at: Time.now }
-  let!(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
+  let!(:startup) { create :startup }
 
   let(:new_product_name) { Faker::Lorem.words(rand(3) + 1).join ' ' }
   let(:new_product_description) { Faker::Lorem.words(12).join(' ').truncate(Startup::MAX_PRODUCT_DESCRIPTION_CHARACTERS) }

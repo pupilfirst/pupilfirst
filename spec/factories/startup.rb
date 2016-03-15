@@ -14,7 +14,6 @@ FactoryGirl.define do
     end
 
     factory :incubated_startup do
-      approval_status Startup::APPROVAL_STATUS_APPROVED
       agreement_signed_at { 18.months.ago }
     end
   end

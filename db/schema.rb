@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160315111641) do
+ActiveRecord::Schema.define(version: 20160315145233) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -317,7 +317,6 @@ ActiveRecord::Schema.define(version: 20160315111641) do
     t.string   "twitter_link"
     t.text     "address"
     t.string   "registration_type"
-    t.string   "approval_status",       default: "unready"
     t.string   "product_name"
     t.text     "product_description"
     t.string   "state"

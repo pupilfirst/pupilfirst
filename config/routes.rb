@@ -100,4 +100,7 @@ Svapp::Application.routes.draw do
   get 'timeline', as: 'timeline', to: 'timeline_events#timeline'
 
   root 'home#index'
+
+  # used for shortened urls from the shortener gem
+  get '/:id', to: 'shortener/shortened_urls#show'
 end

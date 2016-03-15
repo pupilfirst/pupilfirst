@@ -585,6 +585,8 @@ GEM
       thor (~> 0.14)
     sentry-raven (0.13.3)
       faraday (>= 0.7.6)
+    shortener (0.5.5)
+      rails (>= 3.0.7)
     signet (0.6.1)
       addressable (~> 2.3)
       extlib (~> 0.9)
@@ -730,6 +732,7 @@ DEPENDENCIES
   seedbank
   select2-rails
   sentry-raven
+  shortener
   simple_form (~> 3.1.1)
   simple_form_fancy_uploads
   slim

@@ -78,6 +78,7 @@ gem 'has_secure_token' # Used to create tokens for models (eg: for Faculty). TOD
 gem 'ahoy_matey' # Analytics for Rails
 gem 'acts-as-taggable-on', '~> 3.5' # Tag a single model on several contexts.
 gem 'will_paginate-bootstrap' #This gem integrates the Twitter Bootstrap pagination component with the will_paginate pagination gem.
+gem 'shortener' # generate short SV.CO urls for files, links etc
 
 # Rails assets!
 source 'https://rails-assets.org' do

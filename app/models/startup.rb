@@ -639,6 +639,24 @@ class Startup < ActiveRecord::Base
     end
   end
 
+  # UPDATE: commenting out below code as it appears a simple call to short_url from view in fact creates short urls on the go if they are absent
+  # # generate/clean up shortened urls for external links
+  # after_save :update_shortened_urls
+  #
+  # def update_shortened_urls
+  #   # all the attributes that need a shortened url
+  #   external_links = ["presentation_link", "wireframe_link", "prototype_link", "product_video_link"]
+  #
+  #   # create new shortened url for any new attribute in the external_links list
+  #   # TODO: Probably rewrite without the use of eval ?
+  #   external_links.each do |link|
+  #     eval "next unless #{link}_changed?"
+  #     eval "Shortener::ShortenedUrl.generate(#{link})"
+  #
+  #     # TODO: delete stale shortened url entry for old value
+  #   end
+  # end
+
   class << self
     private
 

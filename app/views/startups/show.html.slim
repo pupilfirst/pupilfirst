@@ -131,7 +131,7 @@
                   .media-body
                     h4.media-heading Product Deck
                     p.data-content
-                      a href="#{@startup.presentation_link}" target="_blank"
+                      a href="#{short_url(@startup.presentation_link)}" target="_blank"
                         ' #{@startup.product_name} deck
                         i.fa.fa-external-link
             - if @startup.product_video_link?
@@ -142,7 +142,7 @@
                   .media-body
                     h4.media-heading Product Video
                     p.data-content
-                      a href="#{@startup.product_video_link}" target="_blank"
+                      a href="#{short_url(@startup.product_video_link)}" target="_blank"
                         ' #{@startup.product_name} video
                         i.fa.fa-external-link
             - if @startup.wireframe_link?
@@ -153,7 +153,7 @@
                   .media-body
                     h4.media-heading Design Wireframe
                     p.data-content
-                      a href="#{@startup.wireframe_link}" target="_blank"
+                      a href="#{short_url(@startup.wireframe_link)}" target="_blank"
                         ' #{@startup.product_name} design
                         i.fa.fa-external-link
             - if @startup.prototype_link?
@@ -164,7 +164,7 @@
                   .media-body
                     h4.media-heading Product Prototype
                     p.data-content
-                      a href="#{@startup.prototype_link}" target="_blank"
+                      a href="#{short_url(@startup.prototype_link)}" target="_blank"
                         ' #{@startup.product_name} prototype
                         i.fa.fa-external-link
             .col-sm-6.col-md-12

@@ -94,7 +94,7 @@
                         = @founder.year_of_graduation
               .col-lg-3.col-md-4.resume-link-section
                 - if @founder.resume_url.present?
-                  a.btn.btn-flat.btn-resume-link href=@founder.resume_url type="button"
+                  a.btn.btn-flat.btn-resume-link href=short_url(@founder.resume_url) type="button"
                     = image_tag 'founders/profile/resume-icon.png'
                     span.resume-title View Resume
         - if @founder.startup&.logo.present?

@@ -384,6 +384,20 @@ class Founder < ActiveRecord::Base
     end
   end
 
+  # UPDATE: commenting out below code as it appears a simple call to short_url from view in fact creates short urls on the go if they are absent
+  # # generate/clean up shortened urls for external links
+  # after_save :update_shortened_urls
+  #
+  # def update_shortened_urls
+  #   # only the resume_url of a founder needs a shortened link as of now
+  #   return unless resume_url_changed?
+  #
+  #   # generate a new shortened url
+  #   Shortener::ShortenedUrl.generate(resume_url)
+  #
+  #   # TODO: remove stale shortened urls, if any (Since the ShortenedUrl doesn't have a corresponding model, probably need to write direct sql queries)
+  # end
+
   private
 
   def batch_start_date

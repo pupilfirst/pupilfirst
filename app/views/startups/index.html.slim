@@ -24,7 +24,7 @@
                   ul.dropdown-menu.pull-right
                     - if startup.wireframe_link?
                       li
-                        a href="#{startup.wireframe_link}" target="_blank"
+                        a href="#{short_url(startup.wireframe_link)}" target="_blank"
                           i.fa.fa-object-group
                           ' #{startup.product_name} design
                       li.divider
@@ -36,7 +36,7 @@
                       li.divider
                     - if startup.prototype_link?
                       li
-                        a href="#{startup.prototype_link}" target="_blank"
+                        a href="#{short_url(startup.prototype_link)}" target="_blank"
                           i.fa.fa-cube
                           ' Prototype Link
                       li.divider
@@ -71,11 +71,11 @@
                     = startup.product_description
                 .startups-links
                   - if startup.presentation_link?
-                    a.product-deck href="#{startup.presentation_link}" target="_blank" title="Product Deck"
+                    a.product-deck href="#{short_url(startup.presentation_link)}" target="_blank" title="Product Deck"
                       img alt="Product Deck" src="#{image_url 'startups/icons/product-deck-icon.png'}"
                       ' Product Deck
                   - if startup.product_video_link?
-                    a.product-video href="#{startup.product_video_link}" target="_blank" title="Product Video"
+                    a.product-video href="#{short_url(startup.product_video_link)}" target="_blank" title="Product Video"
                       img alt="Product Video" src="#{image_url 'startups/icons/product-video-icon.png'}"
                       ' Product Video
 

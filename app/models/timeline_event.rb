@@ -59,7 +59,7 @@ class TimelineEvent < ActiveRecord::Base
   scope :pending, -> { where(verified_status: VERIFIED_STATUS_PENDING) }
   scope :needs_improvement, -> { where(verified_status: VERIFIED_STATUS_NEEDS_IMPROVEMENT) }
   scope :has_image, -> { where.not(image: nil) }
-  scope :from_approved_startups, -> { joins(:startup).where(startups: { approval_status: Startup::APPROVAL_STATUS_APPROVED }) }
+  scope :from_approved_startups, -> { joins(:startup).merge(Startup.approved) }
   scope :showcase, -> { includes(:timeline_event_type, :startup).verified.from_approved_startups.batched.not_private.order('timeline_events.event_on DESC') }
   scope :help_wanted, -> { where(timeline_event_type: TimelineEventType.help_wanted) }
   scope :for_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch }) }

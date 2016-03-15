@@ -50,28 +50,6 @@ h2.page-header Delete my Startup
   - if @startup.approved? || @startup.dropped_out?
     .alert.alert-danger
       ' You are currently #{@startup.approved? ? 'enrolled in' : 'a dropout of'} an SV.CO Batch! To delete your startup timeline, contact your SV.CO representative.
-  - else
-    .alert.alert-danger
-      strong Warning!
-      ' &nbsp;Deleting this startup is an irreversible action.
-
-    p
-      ' Deleting your startup's will:
-      ul
-        li Disassociate all other founders (including yourself) from this startup.
-        li Delete all associated timeline events.
-        li Delete all information related to this startup.
-
-    p
-      ' If you're absolutely sure you want to continue, please supply your login password to authorize this action:
-
-    = simple_form_for @startup, url: founder_startup_url, method: :delete, html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
-      = f.input :password, label: 'Your Password'
-
-      .form-group
-        .col-sm-9.col-sm-offset-3
-          = f.submit 'Confirm Startup Deletion', class: 'btn btn-danger btn-flat btn-with-default-padding'
-
 - else
   p Only the team leader can delete a startup's profile.
 

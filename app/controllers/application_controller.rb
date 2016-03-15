@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
 
       if referer
         referer
-      elsif current_founder.startup.present? && !current_founder.startup.unready?
+      elsif current_founder.startup.present?
         startup_url(current_founder.startup)
       else
         super

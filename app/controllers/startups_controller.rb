@@ -51,9 +51,6 @@ class StartupsController < ApplicationController
       # add cofounders
       @startup.add_cofounders!
 
-      # mark as approved
-      @startup.approve!
-
       # generate a more meaningful slug
       @startup.regenerate_slug!
 

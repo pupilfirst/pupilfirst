@@ -1,11 +1,5 @@
 # Mails sent out to startups, as a whole.
 class StartupMailer < ApplicationMailer
-  def startup_approved(startup)
-    @startup = startup
-    send_to = @startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
-    mail(to: send_to, subject: 'You are now part of Startup Village!')
-  end
-
   def startup_dropped_out(startup)
     @startup = startup
     send_to = @startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }

@@ -11,8 +11,8 @@ RSpec.describe Resource, type: :model do
     PublicSlackTalk.mock = false
   end
 
-  let(:startup_1) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
-  let(:startup_2) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
+  let(:startup_1) { create :startup }
+  let(:startup_2) { create :startup }
   let!(:public_resource) { create :resource }
 
   let(:batch_1) { create :batch }
@@ -47,7 +47,7 @@ RSpec.describe Resource, type: :model do
     end
 
     context 'when founder is founder of batched startup' do
-      let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED, batch: batch_1 }
+      let(:startup) { create :startup, batch: batch_1 }
 
       it 'returns public resources, shared resources and batch-specific resources for approved startups' do
         resources = Resource.for(startup.founders.first)

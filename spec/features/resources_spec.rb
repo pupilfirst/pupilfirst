@@ -6,7 +6,7 @@ feature 'Resources' do
   include AjaxHelpers
 
   let(:founder) { create :founder_with_password, confirmed_at: Time.now }
-  let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED }
+  let(:startup) { create :startup }
 
   let!(:public_resource_1) { create :resource }
   let!(:public_resource_2) { create :resource }
@@ -77,7 +77,7 @@ feature 'Resources' do
     end
 
     context "Founder's startup is not approved" do
-      let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_PENDING }
+      let(:startup) { create :startup, dropped_out: true }
 
       scenario 'Founder visits resources page' do
         visit resources_path
@@ -105,7 +105,7 @@ feature 'Resources' do
       end
 
       context "Founder's startup is from batch 1" do
-        let(:startup) { create :startup, approval_status: Startup::APPROVAL_STATUS_APPROVED, batch: batch_1 }
+        let(:startup) { create :startup, batch: batch_1 }
 
         scenario 'Founder visits resources page' do
           visit resources_path

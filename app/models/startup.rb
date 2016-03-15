@@ -19,11 +19,6 @@ class Startup < ActiveRecord::Base
   MAX_PRODUCT_DESCRIPTION_CHARACTERS = 150
   MAX_CATEGORY_COUNT = 3
 
-  APPROVAL_STATUS_UNREADY = -'unready'
-  APPROVAL_STATUS_PENDING = -'pending'
-  APPROVAL_STATUS_APPROVED = -'approved'
-  APPROVAL_STATUS_DROPPED_OUT = -'dropped-out'
-
   PRODUCT_PROGRESS_IDEA = -'idea'
   PRODUCT_PROGRESS_MOCKUP = -'mockup'
   PRODUCT_PROGRESS_PROTOTYPE = -'prototype'
@@ -47,21 +42,10 @@ class Startup < ActiveRecord::Base
     [REGISTRATION_TYPE_PRIVATE_LIMITED, REGISTRATION_TYPE_PARTNERSHIP, REGISTRATION_TYPE_LLP]
   end
 
-  def self.valid_approval_status_values
-    [
-      APPROVAL_STATUS_UNREADY, APPROVAL_STATUS_PENDING, APPROVAL_STATUS_APPROVED,
-      APPROVAL_STATUS_DROPPED_OUT
-    ]
-  end
-
   scope :batched, -> { where.not(batch_id: nil) }
-  scope :unready, -> { where(approval_status: [APPROVAL_STATUS_UNREADY, nil]) }
-  scope :not_unready, -> { where.not(approval_status: [APPROVAL_STATUS_UNREADY, nil]) }
-  scope :pending, -> { where(approval_status: APPROVAL_STATUS_PENDING) }
-  scope :approved, -> { where(approval_status: APPROVAL_STATUS_APPROVED) }
-  scope :dropped_out, -> { where(approval_status: APPROVAL_STATUS_DROPPED_OUT) }
-  scope :not_dropped_out, -> { where.not(approval_status: APPROVAL_STATUS_DROPPED_OUT) }
-  scope :incubation_requested, -> { where(approval_status: [APPROVAL_STATUS_PENDING, APPROVAL_STATUS_APPROVED]) }
+  scope :approved, -> { where.not(dropped_out: true) }
+  scope :dropped_out, -> { where(dropped_out: true) }
+  scope :not_dropped_out, -> { where.not(dropped_out: true) }
   scope :agreement_signed, -> { where 'agreement_signed_at IS NOT NULL' }
   scope :agreement_live, -> { where('agreement_signed_at > ?', AGREEMENT_DURATION.years.ago) }
   scope :agreement_expired, -> { where('agreement_signed_at < ?', AGREEMENT_DURATION.years.ago) }
@@ -269,38 +253,22 @@ class Startup < ActiveRecord::Base
   friendly_id :slug
   validates_format_of :slug, with: /\A[a-z0-9\-_]+\z/i, allow_nil: true
 
-  def approval_status
-    super || APPROVAL_STATUS_UNREADY
-  end
-
   def approved?
-    approval_status == APPROVAL_STATUS_APPROVED
-  end
-
-  def pending?
-    approval_status == APPROVAL_STATUS_PENDING
-  end
-
-  def unready?
-    approval_status == APPROVAL_STATUS_UNREADY
+    dropped_out != true
   end
 
   def dropped_out?
-    approval_status == APPROVAL_STATUS_DROPPED_OUT
+    dropped_out == true
   end
 
   def batched?
     batch.present?
   end
 
-  def approve!
-    update!(approval_status: Startup::APPROVAL_STATUS_APPROVED)
-  end
-
   mount_uploader :logo, LogoUploader
   process_in_background :logo
 
-  normalize_attribute :pitch, :product_description, :email, :phone, :revenue_generated, :approval_status
+  normalize_attribute :pitch, :product_description, :email, :phone, :revenue_generated
 
   attr_accessor :full_validation
 
@@ -383,8 +351,6 @@ class Startup < ActiveRecord::Base
 
   def self.current_startups_split
     {
-      'Unready' => unready.count,
-      'Pending' => pending.count,
       'Approved' => approved.count,
       'Dropped-out' => dropped_out.count
     }

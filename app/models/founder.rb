@@ -243,7 +243,7 @@ class Founder < ActiveRecord::Base
       self.phone_verification_code = nil
       save!
     else
-      fail Exceptions::PhoneNumberVerificationFailed, 'Supplied verification code does not match stored values.'
+      raise Exceptions::PhoneNumberVerificationFailed, 'Supplied verification code does not match stored values.'
     end
   end
 
@@ -253,7 +253,7 @@ class Founder < ActiveRecord::Base
   def add_as_founder_to_startup!(email)
     founder = Founder.find_by email: email
 
-    fail Exceptions::FounderNotFound unless founder
+    raise Exceptions::FounderNotFound unless founder
 
     if founder.startup.present?
       exception_class = if founder.startup == startup
@@ -262,7 +262,7 @@ class Founder < ActiveRecord::Base
         Exceptions::FounderAlreadyHasStartup
       end
 
-      fail exception_class
+      raise exception_class
     else
       founder.startup = startup
       founder.save! validate: false

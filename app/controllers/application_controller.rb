@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   before_filter :set_content_security_policy
 
   def raise_not_found
-    fail ActionController::RoutingError, 'Not Found'
+    raise ActionController::RoutingError, 'Not Found'
   end
 
   def after_sign_in_path_for(resource)

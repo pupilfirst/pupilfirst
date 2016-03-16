@@ -169,7 +169,7 @@ class Startup < ActiveRecord::Base
 
   has_and_belongs_to_many :startup_categories do
     def <<(_category)
-      fail 'Use startup_categories= to enforce startup category limit'
+      raise 'Use startup_categories= to enforce startup category limit'
     end
   end
 

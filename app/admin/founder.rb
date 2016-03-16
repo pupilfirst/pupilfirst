@@ -24,7 +24,7 @@ ActiveAdmin.register Founder do
   filter :roll_number
 
   permit_params :first_name, :last_name, :email, :remote_avatar_url, :avatar, :startup_id, :slug, :about,
-    :slack_username, :skip_password, :born_on, :startup_admin, :communication_address,
+    :slack_username, :skip_password, :born_on, :startup_admin, :communication_address, :identification_proof,
     :phone, :invitation_token, :university_id, :roll_number, :course, :semester, :year_of_graduation,
     :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :facebook_url, :angel_co_url, :github_url, :behance_url,
     { roles: [] }, :tag_list, :gender

@@ -14,9 +14,7 @@ ActiveAdmin.register Resource do
   filter :title
   filter :description
 
-  batch_action :tag, form: {
-    tag: Resource.tag_counts_on(:tags).pluck(:name)
-  } do |ids, inputs|
+  batch_action :tag, form: proc { { tag: Resource.tag_counts_on(:tags).pluck(:name) } } do |ids, inputs|
     Resource.where(id: ids).each do |resource|
       resource.tag_list.add inputs[:tag]
       resource.save!

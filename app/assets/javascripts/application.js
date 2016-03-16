@@ -31,6 +31,7 @@
 
 // Rails assets
 //= require intro.js/intro.js
+//= require perfect-scrollbar
 
 // Shared
 //= require _shared

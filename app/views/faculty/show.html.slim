@@ -1,15 +1,12 @@
 .faculty-profile-bg
   .container
-    .col-md-3.col-sm-3.faculty-profile-card
+    .col-md-3.col-sm-4.faculty-profile-card
       = image_tag @faculty.image_url, class: 'img-responsive faculty-profile-image'
       .faculty-profile-title
         h3.text-center.text-uppercase
           = @faculty.name
         h5.faculty-designation.text-center.font-weight-400
           = @faculty.title
-          | &nbsp;at
-          span.font-weight-600
-            | &nbsp;Disney
       .faculty-since.text-center.font-weight-300
         | Faculty at SV.CO since October 2015
       .faculty-profile-card-footer.clearfix
@@ -18,13 +15,17 @@
             = link_to @faculty.linkedin_url, target: '_blank' do
               i.fa.fa-linkedin
         .faculty-rating.pull-left
-          em.font-weight-300 Faculty Rating:
-    .col-md-9.col-sm-9.faculty-profile-right
+          em.font-weight-300
+            | Faculty Rating:
+            = @faculty.average_rating
+    .col-md-9.col-sm-8.faculty-profile-right
       .faculty-profile-details
         .col-md-8.faculty-summary
           h3.text-uppercase
             | Summary
-          .faculty-about
+          .faculty-summary-section
+            h4.text-uppercase.font-weight-300
+              | About
             p
               ' Mr Senapathy “Kris” Gopalakrishnan served as the vice chairman of
               | Infosys from 2011 to 2014 and the chief executive officer and managing
@@ -33,6 +34,111 @@
               | In January 2011, the Government of India awarded Mr. Gopalakrishnan the
               | Padma Bhushan, the country’s third-highest civilian honor. 
 
+          .faculty-summary-section
+            h4.text-uppercase.font-weight-300
+              | Skills
+            p.skill-box
+              span Corporate Development
+              span Product Marketing
+              span Business Strategy
+              span Nonprofits
+              span Product Marketing
+
+          .faculty-summary-section
+            h4.text-uppercase.font-weight-300
+              | Experience
+            .experience-timeline
+              .timeline-box
+                .timeline-badge-custom
+                .timeline-panel
+                  span.time-period.text-uppercase
+                    | October 2014 – Present
+                  p
+                    ' Co Founder,
+                    span.company
+                      | Infosys
+              .timeline-box
+                .timeline-badge-custom
+                .timeline-panel
+                  span.time-period.text-uppercase
+                    | October 2014 – Present
+                  p
+                    ' Executive Vice Chairman,
+                    span.company
+                      | Infosys
+
         .col-md-4.faculty-connect
           h3.text-uppercase
             | Connect
+            - if current_founder.try(:can_connect?)
+              span.online-signal.online.pull-right
+            - else
+              span.online-signal.offline.pull-right
+
+          .faculty-connect-availability.clearfix
+            .time-commitment.pull-left.font-weight-300
+              | Availability:
+              span
+                | 2 Hours per week
+            .faculty-connect-link.pull-right
+              - if current_founder.try(:can_connect?)
+                - if current_founder.pending_connect_request_for?(@faculty)
+                  .disabled.btn.btn-primary.btn-sm.connect-link.faculty-connect-btn.text-uppercase data-toggle='tooltip' data-placement='top' title="You already have a pending connect request with this faculty member. Please write to help@sv.co if you would like to reschedule."
+                    | Connect
+                - else
+                  .modal.fade.faculty-connect-modal role="dialog" id="faculty-connect-modal-#{@faculty.id}"
+                    .modal-dialog
+                      .modal-content
+                        .modal-header
+                          button.close data-dismiss="modal" type="button"  &times;
+                          h4.modal-title Connect with #{@faculty.name}
+                        .modal-body
+                          = simple_form_for current_founder.startup.connect_requests.new, url: connect_faculty_url(@faculty) do |f|
+                            = f.input :connect_slot, as: :select, collection: connect_slots, include_blank: false, label: 'Pick a slot.'
+                            = f.input :questions, label: 'What questions would you like to ask the faculty member?', input_html: { maxlength: ConnectRequest::MAX_QUESTIONS_LENGTH, rows: 6 }
+                            = f.submit 'Submit Request', class: 'btn btn-primary'
+
+                  a.btn.btn-primary.btn-sm.connect-link data-toggle="modal" data-target="#faculty-connect-modal-#{@faculty.id}"
+                    | Connect
+              - elsif current_founder.try(:can_view_connect?)
+                .disabled.btn.btn-primary.btn-sm.connect-link.faculty-connect-btn.text-uppercase data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available to #{current_founder.startup.admin.fullname} (your team lead)"
+                  | Connect
+              - else
+                .disabled.btn.btn-primary.btn-sm.connect-link.faculty-connect-btn.text-uppercase data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available once you are a selected founder"
+                  | Connect
+            - if current_founder.try(:can_connect?)
+              .faculty-flags
+                span.time-commitment-flag
+                  | Part-Time Faculty
+                span.compensation-flag
+                  | Volunteer
+
+          / - if @faculty.past_connect_sessions.present?
+          .past-connect-sessions
+            h3.text-uppercase
+              | Past connect sessions
+            .connect-session-box
+              .connect-session data-toggle="modal" data-target="#faculty-pastconnect-modal-#{@faculty.id}"
+                .media
+                  .media-left
+                    .date-box.text-center
+                      span.date
+                        | 13
+                      span.month
+                        | March
+                      span.year
+                        | 2016
+                  .media-body
+                    h4.media-heading.company-name
+                      | Spenwise
+                    p
+                      = @faculty.past_connect_sessions
+
+              .modal.fade.faculty-pastconnect-modal role="dialog" id="faculty-pastconnect-modal-#{@faculty.id}"
+                .modal-dialog
+                  .modal-content
+                    .modal-header
+                      button.close data-dismiss="modal" type="button"  &times;
+                      h4.modal-title Past Connect Session with #{@faculty.name}
+                    .modal-body
+                      p = @faculty.past_connect_sessions

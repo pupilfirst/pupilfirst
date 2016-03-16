@@ -490,6 +490,7 @@ GEM
       rails-assets-ev-emitter (~> 1.0.0)
       rails-assets-fizzy-ui-utils (~> 2.0.0)
       rails-assets-get-size (~> 2.0.2)
+    rails-assets-perfect-scrollbar (0.6.10)
     rails-assets-pnotify (2.0.1)
     rails-assets-trix (0.9.5)
     rails-deprecated_sanitizer (1.0.3)
@@ -718,6 +719,7 @@ DEPENDENCIES
   rails-assets-jquery-stickit!
   rails-assets-jquery.scrollTo!
   rails-assets-masonry!
+  rails-assets-perfect-scrollbar!
   rails-assets-pnotify!
   rails-assets-trix!
   rails_12factor

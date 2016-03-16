@@ -28,6 +28,8 @@ Lint/EndAlignment:
 
 # Concessions (remove these if possible / appropriate).
 
+Style/FrozenStringLiteralComment:
+  Enabled: false # forces addition of frozen string literal directive to all files. WTF.
 Metrics/LineLength:
   Max: 160 # default was 80.
 StringLiterals:

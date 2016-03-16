@@ -8,13 +8,13 @@ class Founder < ActiveRecord::Base
   gravtastic
   acts_as_taggable
 
-  GENDER_MALE = -'male'
-  GENDER_FEMALE = -'female'
-  GENDER_OTHER = -'other'
+  GENDER_MALE = 'male'
+  GENDER_FEMALE = 'female'
+  GENDER_OTHER = 'other'
 
-  COFOUNDER_PENDING = -'pending'
-  COFOUNDER_ACCEPTED = -'accepted'
-  COFOUNDER_REJECTED = -'rejected'
+  COFOUNDER_PENDING = 'pending'
+  COFOUNDER_ACCEPTED = 'accepted'
+  COFOUNDER_REJECTED = 'rejected'
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

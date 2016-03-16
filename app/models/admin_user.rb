@@ -6,8 +6,8 @@ class AdminUser < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
-  TYPE_SUPERADMIN = -'superadmin'
-  TYPE_FACULTY = -'faculty'
+  TYPE_SUPERADMIN = 'superadmin'
+  TYPE_FACULTY = 'faculty'
 
   mount_uploader :avatar, AvatarUploader
   process_in_background :avatar

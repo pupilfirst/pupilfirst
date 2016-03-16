@@ -8,8 +8,8 @@ class Target < ActiveRecord::Base
 
   mount_uploader :rubric, RubricUploader
 
-  STATUS_PENDING = -'pending'
-  STATUS_DONE = -'done'
+  STATUS_PENDING = 'pending'
+  STATUS_DONE = 'done'
 
   # The following definitions of pending and expired is naive. A correct check requires the use of the done_for_viewer?
   # method on individual targets by supplying the viewer.
@@ -21,7 +21,7 @@ class Target < ActiveRecord::Base
   scope :not_target_roles, -> { where.not(role: target_roles) }
   scope :due_on, -> (date) { where(due_date: date.beginning_of_day..date.end_of_day) }
 
-  ROLE_FOUNDER = -'founder'
+  ROLE_FOUNDER = 'founder'
 
   def self.target_roles
     [ROLE_FOUNDER]

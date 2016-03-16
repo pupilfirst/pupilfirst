@@ -25,10 +25,10 @@ class Faculty < ActiveRecord::Base
     category == CATEGORY_ALUMNI
   end
 
-  CATEGORY_TEAM = -'team'
-  CATEGORY_VISITING_FACULTY = -'visiting_faculty'
-  CATEGORY_ADVISORY_BOARD = -'advisory_board'
-  CATEGORY_ALUMNI = -'alumni'
+  CATEGORY_TEAM = 'team'
+  CATEGORY_VISITING_FACULTY = 'visiting_faculty'
+  CATEGORY_ADVISORY_BOARD = 'advisory_board'
+  CATEGORY_ALUMNI = 'alumni'
 
   validates_presence_of :name, :title, :category, :image
 

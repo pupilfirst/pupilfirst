@@ -7,19 +7,19 @@ class TimelineEventType < ActiveRecord::Base
   validates_presence_of :key, :title, :badge
   validates_uniqueness_of :key
 
-  TYPE_END_ITERATION = -'end_iteration'
-  TYPE_NEW_DECK = -'new_product_deck'
-  TYPE_NEW_WIREFRAME = -'new_wireframe'
-  TYPE_NEW_PROTOTYPE = -'new_prototype'
-  TYPE_NEW_VIDEO = -'new_video'
-  TYPE_HELP_WANTED = -'help_wanted'
-  TYPE_RESUME_SUBMISSION = -'resume_submission'
+  TYPE_END_ITERATION = 'end_iteration'
+  TYPE_NEW_DECK = 'new_product_deck'
+  TYPE_NEW_WIREFRAME = 'new_wireframe'
+  TYPE_NEW_PROTOTYPE = 'new_prototype'
+  TYPE_NEW_VIDEO = 'new_video'
+  TYPE_HELP_WANTED = 'help_wanted'
+  TYPE_RESUME_SUBMISSION = 'resume_submission'
 
-  TYPE_STAGE_IDEA = -'moved_to_idea_discovery'
-  TYPE_STAGE_PROTOTYPE = -'moved_to_prototyping'
-  TYPE_STAGE_CUSTOMER = -'moved_to_customer_validation'
-  TYPE_STAGE_EFFICIENCY = -'moved_to_efficiency'
-  TYPE_STAGE_SCALE = -'moved_to_scale'
+  TYPE_STAGE_IDEA = 'moved_to_idea_discovery'
+  TYPE_STAGE_PROTOTYPE = 'moved_to_prototyping'
+  TYPE_STAGE_CUSTOMER = 'moved_to_customer_validation'
+  TYPE_STAGE_EFFICIENCY = 'moved_to_efficiency'
+  TYPE_STAGE_SCALE = 'moved_to_scale'
 
   STAGES = [TYPE_STAGE_IDEA, TYPE_STAGE_PROTOTYPE, TYPE_STAGE_CUSTOMER, TYPE_STAGE_EFFICIENCY, TYPE_STAGE_SCALE].freeze
 
@@ -39,14 +39,14 @@ class TimelineEventType < ActiveRecord::Base
     TYPE_STAGE_SCALE => 'http://playbook.sv.co/stages/5.5-scale.html'
   }.freeze
 
-  ROLE_GOVERNANCE = -'Governance'
-  ROLE_MARKETING = -'Marketing & Sales'
-  ROLE_ENGINEERING = -'Engineering'
-  ROLE_PRODUCT = -'Product'
-  ROLE_TEAM = -'Team'
-  ROLE_DESIGN = -'Design'
-  ROLE_FOUNDER = -'Founder'
-  ROLE_OTHER = -'Other'
+  ROLE_GOVERNANCE = 'Governance'
+  ROLE_MARKETING = 'Marketing & Sales'
+  ROLE_ENGINEERING = 'Engineering'
+  ROLE_PRODUCT = 'Product'
+  ROLE_TEAM = 'Team'
+  ROLE_DESIGN = 'Design'
+  ROLE_FOUNDER = 'Founder'
+  ROLE_OTHER = 'Other'
 
   def self.valid_roles
     [ROLE_GOVERNANCE, ROLE_MARKETING, ROLE_ENGINEERING, ROLE_PRODUCT, ROLE_TEAM, ROLE_DESIGN, ROLE_FOUNDER, ROLE_OTHER]

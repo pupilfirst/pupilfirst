@@ -98,8 +98,8 @@ class Resource < ActiveRecord::Base
     message + "*URL:* #{Rails.application.routes.url_helpers.resource_url(self, host: 'https://sv.co')}"
   end
 
-  # ensure titles are titlecased
+  # ensure titles are capitalized
   before_save do
-    self.title = title.titlecase
+    self.title = title.capitalize
   end
 end

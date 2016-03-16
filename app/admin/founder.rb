@@ -127,6 +127,15 @@ ActiveAdmin.register Founder do
       row :communication_address
 
       row :designation
+
+      row :identification_proof do
+        if founder.identification_proof.present?
+          link_to founder.identification_proof.url do
+            image_tag founder.identification_proof.thumb.url
+          end
+        end
+      end
+
       row :university
       row :roll_number
 

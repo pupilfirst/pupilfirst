@@ -124,6 +124,9 @@ class Founder < ActiveRecord::Base
   mount_uploader :college_identification, CollegeIdentificationUploader
   process_in_background :college_identification
 
+  mount_uploader :identification_proof, IdentificationProofUploader
+  process_in_background :identification_proof
+
   normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :first_name, :last_name,
     :slack_username, :resume_url
 

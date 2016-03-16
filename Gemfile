@@ -75,7 +75,7 @@ gem 'sparkr' # Sparklines with Ruby. https://github.com/rrrene/sparkr
 gem 'videojs_rails' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com/seanbehan/videojs_rails
 gem 'react-rails' # For automatically transforming JSX and using React in Rails.
 gem 'has_secure_token' # Used to create tokens for models (eg: for Faculty). TODO: Will be included with ActiveRecord in Rails 5.
-gem 'ahoy_matey' # Analytics for Rails
+gem 'ahoy_matey', '~> 1.3' # Analytics for Rails
 gem 'acts-as-taggable-on', '~> 3.5' # Tag a single model on several contexts.
 gem 'will_paginate-bootstrap' #This gem integrates the Twitter Bootstrap pagination component with the will_paginate pagination gem.
 gem 'shortener' # generate short SV.CO urls for files, links etc
@@ -117,7 +117,6 @@ group :development, :test do
   gem 'coderay' # Pretty syntax highlighting on rspec failure snippets.
   gem 'pry-rails' # Pry debugger.
   gem 'webmock', require: false # Mocking web requests.
-  gem 'quiet_assets' # Let's not see asset serving messages in the development log!
   gem 'rubocop', require: false # Ruby Style Guide.
   gem 'bundler-audit', require: false # Audit gems in gemfile.lock for reported vulnerabilities
 end

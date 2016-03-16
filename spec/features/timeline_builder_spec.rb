@@ -77,7 +77,7 @@ feature 'Timeline Builder' do
       expect(latest_timeline_event_entry).to have_text('Pending verification')
       expect(latest_timeline_event_entry).to have_text('Team Formed')
       expect(latest_timeline_event_entry).to have_text(event_description)
-      expect(latest_timeline_event_entry).to have_link('SV.CO', href: 'https://sv.co')
+      expect(latest_timeline_event_entry).to have_link('SV.CO')
       expect(latest_timeline_event_entry).to have_link('Sample PDF')
       expect(latest_timeline_event_entry).to have_selector('i.fa.fa-user-secret')
     end
@@ -186,8 +186,8 @@ feature 'Timeline Builder' do
         last_timeline_event = TimelineEvent.order('id DESC').first
         latest_timeline_event_entry = page.find("#event-#{last_timeline_event.id}", match: :first)
 
-        expect(latest_timeline_event_entry).to have_link('SV.CO', href: 'https://sv.co')
-        expect(latest_timeline_event_entry).to have_link('Google', href: 'https://www.google.com')
+        expect(latest_timeline_event_entry).to have_link('SV.CO')
+        expect(latest_timeline_event_entry).to have_link('Google')
         expect(latest_timeline_event_entry.find('.tl-link-button', match: :first)).to have_selector('i.fa.fa-user-secret')
         expect(latest_timeline_event_entry.find('.tl-link-button', text: 'Google')).to_not have_selector('i.fa.fa-user-secret')
       end

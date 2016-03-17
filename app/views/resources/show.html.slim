@@ -15,7 +15,7 @@ h1.page-header.header-light #{@resource.title}
 
   == render 'tags', resource: @resource
 
-  a.btn.btn-primary href=download_resource_url(@resource) target='_blank'
+  a.btn.btn-primary.btn-download href=download_resource_url(@resource) target='_blank'
     i.fa.fa-download
     | &nbsp; Download
 - else
@@ -32,14 +32,14 @@ h1.page-header.header-light #{@resource.title}
       .content-inner
         .resource-show-description = simple_format @resource.description
 
+        == render 'tags', resource: @resource
+
         - if @resource.stream?
-          = link_to resource_url(@resource, watch: true), class: 'btn btn-success stream-resource' do
+          = link_to resource_url(@resource, watch: true), class: 'btn btn-success btn-play stream-resource' do
             i.fa.fa-play
             | &nbsp; Play
 
-        == render 'tags', resource: @resource
-
-        a.btn.btn-primary href=download_resource_url(@resource) target='_blank'
+        a.btn.btn-primary.btn-download href=download_resource_url(@resource) target='_blank'
           i.fa.fa-download
           | &nbsp; Download
 

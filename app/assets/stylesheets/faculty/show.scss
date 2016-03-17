@@ -103,6 +103,20 @@
           color: #333;
           padding-left: 20px;
           margin: 0 0 15px;
+          background-position: left center;
+          background-repeat: no-repeat;
+          background-size: 13px 14px;
+
+          &.about-icon {
+            background-image: asset-url("faculty/about-icon.svg");
+          }
+          &.skills-icon {
+            background-image: asset-url("faculty/skills-icon.svg");
+          }
+          &.experience-icon {
+            background-image: asset-url("faculty/experience-icon.svg");
+            background-position: 0px -1px;
+          }
         }
         p {
           padding-left: 20px;

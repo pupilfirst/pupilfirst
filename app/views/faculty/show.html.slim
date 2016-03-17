@@ -24,7 +24,7 @@
           h3.text-uppercase
             | Summary
           .faculty-summary-section
-            h4.text-uppercase.font-weight-300
+            h4.about-icon.text-uppercase.font-weight-300
               | About
             p
               ' Mr Senapathy “Kris” Gopalakrishnan served as the vice chairman of
@@ -35,7 +35,7 @@
               | Padma Bhushan, the country’s third-highest civilian honor. 
 
           .faculty-summary-section
-            h4.text-uppercase.font-weight-300
+            h4.skills-icon.text-uppercase.font-weight-300
               | Skills
             p.skill-box
               span Corporate Development
@@ -43,9 +43,10 @@
               span Business Strategy
               span Nonprofits
               span Product Marketing
+              = @faculty.key_skills
 
           .faculty-summary-section
-            h4.text-uppercase.font-weight-300
+            h4.experience-icon.text-uppercase.font-weight-300
               | Experience
             .experience-timeline
               .timeline-box

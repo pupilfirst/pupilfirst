@@ -13,9 +13,8 @@ footer
               a href="http://playbook.sv.co" Playbook
             div
               a href="http://blog.sv.co" Blog
-            - if feature_active?(:startups)
-              div
-                a href="https://www.sv.co/startups" Startups
+            div
+              = link_to 'Startups', startups_url
           .img-opacity
             span.social-link
               a href='https://www.facebook.com/startupvillage' target='_blank'

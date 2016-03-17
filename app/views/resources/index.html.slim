@@ -32,12 +32,13 @@
 
       .row
         - if @resources.blank?
-          .alert.alert-warning
-            ' We're sorry, but it looks like you're not allowed to view resources with the tags you've picked.
-            | Try #{link_to 'clearing the filter', resources_path}
-            - if current_founder.blank?
-              |, or #{link_to 'logging in', new_founder_session_path}
-            |.
+          .col-md-12
+            .alert.alert-warning
+              ' We're sorry, but it looks like you're not allowed to view resources with the tags you've picked.
+              | Try #{link_to 'clearing the filter', resources_path}
+              - if current_founder.blank?
+                |, or #{link_to 'logging in', new_founder_session_path}
+              |.
         - else
           - @resources.each do |resource|
             = render 'resource', resource: resource

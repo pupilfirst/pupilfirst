@@ -13,6 +13,8 @@ h1.page-header.header-light #{@resource.title}
   = videojs_rails sources: { mp4: @stream_video}, class: 'img-responsive resource-show-video'
   .resource-show-description = simple_format @resource.description
 
+  == render 'tags', resource: @resource
+
   a.btn.btn-primary href=download_resource_url(@resource) target='_blank'
     i.fa.fa-download
     | &nbsp; Download
@@ -34,6 +36,8 @@ h1.page-header.header-light #{@resource.title}
           = link_to resource_url(@resource, watch: true), class: 'btn btn-success stream-resource' do
             i.fa.fa-play
             | &nbsp; Play
+
+        == render 'tags', resource: @resource
 
         a.btn.btn-primary href=download_resource_url(@resource) target='_blank'
           i.fa.fa-download

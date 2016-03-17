@@ -1,0 +1,5 @@
+.resources-show-tags
+  - resource.tags.each do |tag|
+    = link_to resources_path('tags[]' => tag.name) do
+      span.label.label-info = tag.name
+    | &nbsp;

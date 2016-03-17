@@ -7,6 +7,12 @@ class ApplicationController < ActionController::Base
   after_filter :prepare_unobtrusive_flash
   before_filter :set_content_security_policy
 
+  # When in production, respond to requests that ask for unhandled formats with 404.
+  rescue_from ActionView::MissingTemplate do |exception|
+    raise exception unless Rails.env.production?
+    raise_not_found
+  end
+
   def raise_not_found
     raise ActionController::RoutingError, 'Not Found'
   end

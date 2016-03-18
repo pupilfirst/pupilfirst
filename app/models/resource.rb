@@ -17,8 +17,8 @@ class Resource < ActiveRecord::Base
     title_changed? || super
   end
 
-  SHARE_STATUS_PUBLIC = -'public'
-  SHARE_STATUS_APPROVED = -'approved'
+  SHARE_STATUS_PUBLIC = 'public'
+  SHARE_STATUS_APPROVED = 'approved'
 
   def self.valid_share_statuses
     [SHARE_STATUS_PUBLIC, SHARE_STATUS_APPROVED]
@@ -98,8 +98,8 @@ class Resource < ActiveRecord::Base
     message + "*URL:* #{Rails.application.routes.url_helpers.resource_url(self, host: 'https://sv.co')}"
   end
 
-  # ensure titles are titlecased
+  # ensure titles are capitalized
   before_save do
-    self.title = title.titlecase
+    self.title = title.capitalize
   end
 end

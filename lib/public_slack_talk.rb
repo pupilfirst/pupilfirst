@@ -27,7 +27,7 @@ class PublicSlackTalk
     return if mock
 
     # ensure one and only one target is specified
-    fail ArgumentError, 'specify one of channel, founder or founders' unless [target[:channel], target[:founder], target[:founders]].compact.length == 1
+    raise ArgumentError, 'specify one of channel, founder or founders' unless [target[:channel], target[:founder], target[:founders]].compact.length == 1
 
     # create a new PublicSlackTalk instance and process it
     new(channel: target[:channel], founder: target[:founder], founders: target[:founders], message: message).tap(&:process)
@@ -36,7 +36,7 @@ class PublicSlackTalk
   def process
     # post message to appropriate channel
     if @channel.present?
-      fail 'could not validate channel specified' unless channel_valid?
+      raise'could not validate channel specified' unless channel_valid?
       post_to_channel
     end
     post_to_founder if @founder.present?

@@ -8,13 +8,13 @@ class Founder < ActiveRecord::Base
   gravtastic
   acts_as_taggable
 
-  GENDER_MALE = -'male'
-  GENDER_FEMALE = -'female'
-  GENDER_OTHER = -'other'
+  GENDER_MALE = 'male'
+  GENDER_FEMALE = 'female'
+  GENDER_OTHER = 'other'
 
-  COFOUNDER_PENDING = -'pending'
-  COFOUNDER_ACCEPTED = -'accepted'
-  COFOUNDER_REJECTED = -'rejected'
+  COFOUNDER_PENDING = 'pending'
+  COFOUNDER_ACCEPTED = 'accepted'
+  COFOUNDER_REJECTED = 'rejected'
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -123,6 +123,9 @@ class Founder < ActiveRecord::Base
 
   mount_uploader :college_identification, CollegeIdentificationUploader
   process_in_background :college_identification
+
+  mount_uploader :identification_proof, IdentificationProofUploader
+  process_in_background :identification_proof
 
   normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :first_name, :last_name,
     :slack_username, :resume_url
@@ -240,7 +243,7 @@ class Founder < ActiveRecord::Base
       self.phone_verification_code = nil
       save!
     else
-      fail Exceptions::PhoneNumberVerificationFailed, 'Supplied verification code does not match stored values.'
+      raise Exceptions::PhoneNumberVerificationFailed, 'Supplied verification code does not match stored values.'
     end
   end
 
@@ -250,7 +253,7 @@ class Founder < ActiveRecord::Base
   def add_as_founder_to_startup!(email)
     founder = Founder.find_by email: email
 
-    fail Exceptions::FounderNotFound unless founder
+    raise Exceptions::FounderNotFound unless founder
 
     if founder.startup.present?
       exception_class = if founder.startup == startup
@@ -259,7 +262,7 @@ class Founder < ActiveRecord::Base
         Exceptions::FounderAlreadyHasStartup
       end
 
-      fail exception_class
+      raise exception_class
     else
       founder.startup = startup
       founder.save! validate: false
@@ -397,6 +400,16 @@ class Founder < ActiveRecord::Base
   #
   #   # TODO: remove stale shortened urls, if any (Since the ShortenedUrl doesn't have a corresponding model, probably need to write direct sql queries)
   # end
+
+  # method to return the list of active founders on slack for a given duration
+  def self.active_founders_on_slack(since:, upto: Time.now)
+    Founder.joins(:public_slack_messages).where(public_slack_messages: { created_at: since..upto }).distinct
+  end
+
+  # method to return the list of active founders on web for a given duration
+  def self.active_founders_on_web(since:, upto: Time.now)
+    Founder.joins(:visits).where(visits: { started_at: since..upto }).distinct
+  end
 
   private
 

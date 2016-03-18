@@ -376,13 +376,13 @@
                           .timeline-footer.tl-footer
                             - attachments.each do |attachment|
                               - if attachment[:url]
-                                a.tl-link-button href="#{attachment[:url]}" target="_blank"
+                                a.tl-link-button href="#{short_url(attachment[:url])}" target="_blank"
                                   - if attachment[:private]
                                     i.fa.fa-user-secret
                                     | &nbsp;
                                   | #{attachment[:title]}
                               - else # it is a file
-                                a.tl-link-button href="#{download_startup_timeline_event_timeline_event_file_url(@startup, event, attachment[:file])}" target="_blank"
+                                a.tl-link-button href="#{short_url(download_startup_timeline_event_timeline_event_file_url(@startup, event, attachment[:file]))}" target="_blank"
                                   - if attachment[:private]
                                     i.fa.fa-user-secret
                                     | &nbsp;

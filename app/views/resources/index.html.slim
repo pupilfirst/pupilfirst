@@ -17,19 +17,30 @@
         ' You currently have access to exclusive resources that are marked clearly by a <strong>Batch Exclusive</strong>
         | badge. Please do not share these resources outside your founding team. Thank you!
 
-    .resources.row
-      .col-md-12.tag-filter
-        = form_tag nil, method: "get" do
-          = select_tag "tags", options_for_select(@resource_tags, params[:tags]), multiple: true, include_blank: true, id: "resources-index-tags", class: "tag-select"
-          = button_tag name: "Filter", type: "submit", class: 'btn btn-primary tag-filter-btn text-uppercase' do
-            i.fa.fa-filter
-            | Filter
-          - if params[:tags].present?
-            = link_to resources_path, class: 'btn btn-primary tag-filter-clear text-uppercase' do
-              i.fa.fa-refresh
-              | Clear Filter
+    .resources
+      .row
+        .col-md-12.tag-filter
+          = form_tag nil, method: "get" do
+            = select_tag "tags", options_for_select(@resource_tags, params[:tags]), multiple: true, include_blank: true, id: "resources-index-tags", class: "tag-select"
+            = button_tag name: "Filter", type: "submit", class: 'btn btn-primary tag-filter-btn text-uppercase' do
+              i.fa.fa-filter
+              | Filter
+            - if params[:tags].present?
+              = link_to resources_path, class: 'btn btn-primary tag-filter-clear text-uppercase' do
+                i.fa.fa-refresh
+                | Clear Filter
 
-      - @resources.each do |resource|
-        = render 'resource', resource: resource
+      .row
+        - if @resources.blank?
+          .col-md-12
+            .alert.alert-warning
+              ' We're sorry, but it looks like you're not allowed to view resources with the tags you've picked.
+              | Try #{link_to 'clearing the filter', resources_path}
+              - if current_founder.blank?
+                |, or #{link_to 'logging in', new_founder_session_path}
+              |.
+        - else
+          - @resources.each do |resource|
+            = render 'resource', resource: resource
     .text-center
       = will_paginate @resources, renderer: BootstrapPagination::Rails

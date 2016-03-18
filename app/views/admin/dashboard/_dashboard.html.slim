@@ -8,6 +8,7 @@
         a.table_tools_button href=admin_dashboard_path(batch: batch) #{batch.name} Batch
 .dashboard-container
   == render 'visits', batch_selected: batch_selected
+  == render 'active_users', batch_selected: batch_selected
 
   - TimelineEvent.valid_verified_status.each do |verified_status|
     .dashboard-item

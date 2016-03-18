@@ -25,6 +25,16 @@
   .content {
     padding: 10px 10px 0 10px;
 
+    .left-half {
+      width: 150px;
+      float: left;
+    }
+
+    .right-half {
+      width: 150px;
+      float: right;
+    }
+
     a {
       text-decoration: none;
       font-size: 110%;

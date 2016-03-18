@@ -21,6 +21,7 @@
 
   = f.input :slack_username, label: (link_to 'Public Slack Username<sup>?</sup></a>'.html_safe, about_slack_url, target: '_blank'), placeholder: 'mention_name (excluding @)'
   = f.input :communication_address
+  = f.input :identification_proof, label: 'ID Proof', as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }, hint: 'Must be one of PAN/Passport/Aadhar/Driving License'
   = f.association :university, include_blank: 'Not a student', collection: University.all.group_by(&:location), as: :grouped_select, group_method: :last
   = f.input :roll_number, label: 'University Roll Number', required: true
   = f.input :college_identification, label: 'College ID', as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }

@@ -1,0 +1,24 @@
+.dashboard-item
+  - founder_visits = Visit.includes(founder: :startup).where(startups: { batch_id: batch_selected })
+  .heading Active Users (On Slack and Web)
+
+  .content
+    h6 Daily
+    .left-half
+      ' Slack: #{dau_on_slack}
+    .right-half
+      ' Web: #{dau_on_web}
+    .clearfix
+    h6 Weekly
+    .left-half
+      ' Slack: #{wau_on_slack}
+    .right-half
+      ' Web: #{wau_on_web}
+    h6 Monthly
+    .left-half
+      ' Slack: #{mau_on_slack}
+    .right-half
+      ' Web: #{mau_on_web}
+
+  .footer-spacer
+

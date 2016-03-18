@@ -11,22 +11,22 @@ class Startup < ActiveRecord::Base
   LEGACY_STARTUPS_COUNT = 849
   LEGACY_INCUBATION_REQUESTS = 5281
 
-  REGISTRATION_TYPE_PRIVATE_LIMITED = -'private_limited'
-  REGISTRATION_TYPE_PARTNERSHIP = -'partnership'
-  REGISTRATION_TYPE_LLP = -'llp' # Limited Liability Partnership
+  REGISTRATION_TYPE_PRIVATE_LIMITED = 'private_limited'
+  REGISTRATION_TYPE_PARTNERSHIP = 'partnership'
+  REGISTRATION_TYPE_LLP = 'llp' # Limited Liability Partnership
 
   MAX_PITCH_CHARACTERS = 140 unless defined?(MAX_PITCH_CHARACTERS)
   MAX_PRODUCT_DESCRIPTION_CHARACTERS = 150
   MAX_CATEGORY_COUNT = 3
 
-  PRODUCT_PROGRESS_IDEA = -'idea'
-  PRODUCT_PROGRESS_MOCKUP = -'mockup'
-  PRODUCT_PROGRESS_PROTOTYPE = -'prototype'
-  PRODUCT_PROGRESS_PRIVATE_BETA = -'private_beta'
-  PRODUCT_PROGRESS_PUBLIC_BETA = -'public_beta'
-  PRODUCT_PROGRESS_LAUNCHED = -'launched'
+  PRODUCT_PROGRESS_IDEA = 'idea'
+  PRODUCT_PROGRESS_MOCKUP = 'mockup'
+  PRODUCT_PROGRESS_PROTOTYPE = 'prototype'
+  PRODUCT_PROGRESS_PRIVATE_BETA = 'private_beta'
+  PRODUCT_PROGRESS_PUBLIC_BETA = 'public_beta'
+  PRODUCT_PROGRESS_LAUNCHED = 'launched'
 
-  SV_STATS_LINK = -'bit.ly/svstats2'
+  SV_STATS_LINK = 'bit.ly/svstats2'
 
   # agreement duration in years
   AGREEMENT_DURATION = 5
@@ -169,7 +169,7 @@ class Startup < ActiveRecord::Base
 
   has_and_belongs_to_many :startup_categories do
     def <<(_category)
-      fail 'Use startup_categories= to enforce startup category limit'
+      raise 'Use startup_categories= to enforce startup category limit'
     end
   end
 

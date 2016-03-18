@@ -77,13 +77,19 @@ class Faculty < ActiveRecord::Base
     (7.days.from_now.beginning_of_week.to_date - last_available_connect_date.beginning_of_week.to_date).to_i.days
   end
 
-  def past_connect_sessions(limit = nil)
-    ConnectRequest.for_faculty(self).completed.limit(limit).order('connect_slots.slot_at DESC')
+  # Returns completed connect requests.
+  def past_connect_requests
+    connect_requests.completed
   end
 
+  # Returns average rating of faculty if there are at least 5 ratings.
+  #
+  # @return [NilClass, Float] nil if we can't compute average rating - float value if we can.
   def average_rating
-    ratings_received = past_connect_sessions.pluck(:rating_of_faculty).compact
-    return nil unless ratings_received
-    ratings_received.inject { |a, e| a + e }.to_f / ratings_received.size
+    rated_sessions = connect_requests.where.not(rating_of_faculty: nil)
+    return nil if rated_sessions.count < 5
+
+    ratings = rated_sessions.pluck(:rating_of_faculty)
+    ratings.inject(:+).to_f / ratings.size
   end
 end

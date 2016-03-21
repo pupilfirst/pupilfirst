@@ -624,6 +624,7 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (2.0.1)
+    titleize (1.4.0)
     trollop (2.1.2)
     turbolinks (2.5.3)
       coffee-rails
@@ -740,6 +741,7 @@ DEPENDENCIES
   slim
   sparkr
   spring
+  titleize
   turbolinks
   uglifier (>= 2.7.2)
   unobtrusive_flash!

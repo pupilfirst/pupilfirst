@@ -100,6 +100,6 @@ class Resource < ActiveRecord::Base
 
   # ensure titles are capitalized
   before_save do
-    self.title = title.capitalize
+    self.title = title.titlecase(humanize: false, underscore: false)
   end
 end

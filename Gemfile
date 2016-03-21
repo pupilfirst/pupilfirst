@@ -79,6 +79,7 @@ gem 'ahoy_matey', '~> 1.3' # Analytics for Rails
 gem 'acts-as-taggable-on', '~> 3.5' # Tag a single model on several contexts.
 gem 'will_paginate-bootstrap' #This gem integrates the Twitter Bootstrap pagination component with the will_paginate pagination gem.
 gem 'shortener' # generate short SV.CO urls for files, links etc
+gem 'titleize' # better titleizing, modifies Inflector.titleize from default rails
 
 # Rails assets!
 source 'https://rails-assets.org' do

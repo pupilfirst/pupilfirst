@@ -49,7 +49,7 @@
               span Business Strategy
               span Nonprofits
               span Product Marketing
-              = @faculty.key_skills
+              span = @faculty.key_skills
 
           .faculty-summary-section
             h4.experience-icon.text-uppercase.font-weight-300
@@ -88,6 +88,7 @@
               span
                 | 2 Hours per week
             .faculty-connect-link.pull-right
+              - connect_slots = @faculty.connect_slots.available_for_founder
               - if current_founder.try(:can_connect?)
                 - if current_founder.pending_connect_request_for?(@faculty)
                   .disabled.btn.btn-primary.btn-sm.connect-link.faculty-connect-btn.text-uppercase data-toggle='tooltip' data-placement='top' title="You already have a pending connect request with this faculty member. Please write to help@sv.co if you would like to reschedule."
@@ -120,32 +121,36 @@
                 span.compensation-flag
                   | Volunteer
 
-          / - if @faculty.past_connect_requests.present?
-          .past-connect-sessions
-            h3.text-uppercase
-              | Past connect sessions
-            .connect-session-box
-              .connect-session data-toggle="modal" data-target="#faculty-pastconnect-modal-#{@faculty.id}"
-                .media
-                  .media-left
-                    .date-box.text-center
-                      span.date
-                        | 13
-                      span.month
-                        | March
-                      span.year
-                        | 2016
-                  .media-body
-                    h4.media-heading.company-name
-                      | Spenwise
-                    p
-                      = @faculty.past_connect_requests
+          - if @faculty.past_connect_requests.present?
+            .past-connect-sessions
+              h3.text-uppercase
+                | Past connect sessions
+              .connect-session-box
+                .connect-session data-toggle="modal" data-target="#faculty-pastconnect-modal-#{@faculty.id}"
+                  .media
+                    .media-left
+                      .date-box.text-center
+                        - @faculty.past_connect_requests.each do |request|
+                          span.date
+                            = request.connect_slot.slot_at.strftime('%d')
+                          span.month
+                            = request.connect_slot.slot_at.strftime('%b')
+                          span.year
+                            = request.connect_slot.slot_at.strftime('%Y')
+                    .media-body
+                      - @faculty.past_connect_requests.each do |request|
+                        h4.media-heading.company-name
+                          = request.startup.product_name
+                      p
+                        - @faculty.past_connect_requests.each do |request|
+                          = request.questions
 
-              .modal.fade.faculty-pastconnect-modal role="dialog" id="faculty-pastconnect-modal-#{@faculty.id}"
-                .modal-dialog
-                  .modal-content
-                    .modal-header
-                      button.close data-dismiss="modal" type="button"  &times;
-                      h4.modal-title Past Connect Session with #{@faculty.name}
-                    .modal-body
-                      p = @faculty.past_connect_requests
+                .modal.fade.faculty-pastconnect-modal role="dialog" id="faculty-pastconnect-modal-#{@faculty.id}"
+                  .modal-dialog
+                    .modal-content
+                      .modal-header
+                        button.close data-dismiss="modal" type="button"  &times;
+                        h4.modal-title Past Connect Session with #{@faculty.name}
+                      .modal-body
+                        - @faculty.past_connect_requests.each do |request|
+                          = request.questions

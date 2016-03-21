@@ -335,6 +335,12 @@
             }
             p {
               font-size: 12px;
+              height: 35px;
+              width: 160px;
+              margin: 0;
+              overflow: hidden;
+              text-overflow: ellipsis;
+
             }
             &:hover, &:focus {
               background-color: #f5f3f3;

@@ -1,6 +1,8 @@
 ActiveAdmin.register ActsAsTaggableOn::Tagging, as: 'Tagging' do
   actions :index, :destroy
 
+  menu false
+
   filter :taggable_type
   filter :taggable,
     if: proc { params.dig(:q, :taggable_type_eq).present? },

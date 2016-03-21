@@ -79,5 +79,20 @@ module ActiveAdmin
     def total_mau_percentage
       (total_mau_count.to_f / total_founder_count) * 100
     end
+
+    def wau_trend_on_slack
+      8.downto(1).to_a.map { |x| Founder.active_founders_on_slack(since: x.week.ago, upto: (x - 1).week.ago, batch: batch_selected).count }
+    end
+
+    def wau_trend_on_web
+      8.downto(1).to_a.map { |x| Founder.active_founders_on_web(since: x.week.ago, upto: (x - 1).week.ago, batch: batch_selected).count }
+    end
+
+    def wau_trend_in_total
+      8.downto(1).to_a.map do |x|
+        (Founder.active_founders_on_slack(since: x.week.ago, upto: (x - 1).week.ago, batch: batch_selected) +
+          Founder.active_founders_on_web(since: x.week.ago, upto: (x - 1).week.ago, batch: batch_selected)).compact.uniq.count
+      end
+    end
   end
 end

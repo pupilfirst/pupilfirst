@@ -688,12 +688,12 @@ h1.product-name {
 
       .target-head {
           display: inline-block;
-          width: 125px;
+          width: 260px;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
           @media screen and (max-width: $screen-xs-max) {
-            width: 90px;
+            width: 200px;
           }
 
       }
@@ -775,14 +775,32 @@ h1.product-name {
         margin-left: 5px;
         vertical-align: 1px;
         padding-bottom: 2px;
+
+        @media screen and (max-width: $screen-xs-max) {
+          margin-left: 0;
+          margin-top: 5px;
+        }
       }
     }
     h4 {
       font-size: 13px;
+      color: #007cb1;
       display: inline-block;
       padding-bottom: 5px;
       padding-right: 10px;
+      margin-bottom: 7px;
       border-bottom: 1px solid #ddd;
+
+      i {
+        padding-right: 6px;
+        font-size: 12px;
+      }
+    }
+    .targets-description, .complete-instruction {
+      color: #666666;
+      margin-bottom: 10px;
+      padding-left: 20px;
+      line-height: 22px;
     }
   }
   #targets-tab-accordion {

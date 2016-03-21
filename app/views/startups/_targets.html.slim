@@ -14,12 +14,15 @@
               span.label.label-primary #{t("role.#{target.role}")}
               | &nbsp;
           h4.font-weight-400
+            i.fa.fa-list-alt
             ' Description
           .targets-description = target.description.html_safe
           - if target.completion_instructions.present?
-            h2.font-weight-400
+            h4.font-weight-400
+              i.fa.fa-map-signs
               ' Completion Instructions
-            p = target.completion_instructions
+            .complete-instruction
+              p = target.completion_instructions
 
           .assigner
             em

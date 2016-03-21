@@ -341,7 +341,7 @@ class Founder < ActiveRecord::Base
   end
 
   # Returns the percentage of profile completion as an integer
-  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def profile_completion_percentage
     score = 20 # a default score given for required fields during registration
     score += 20 if startup&.approved? # has an approved startup
@@ -349,7 +349,8 @@ class Founder < ActiveRecord::Base
     score += 10 if social_url_present? # has atleast 1 social media links
     score += 5 if communication_address.present?
     score += 5 if about.present?
-    score += 20 if resume_url.present? # has uploaded resume
+    score += 10 if identification_proof.present?
+    score += 10 if resume_url.present? # has uploaded resume
     score
   end
 
@@ -360,6 +361,7 @@ class Founder < ActiveRecord::Base
     return 'Provide at-least one of your social profiles!' unless social_url_present?
     return 'Update your communication address!' unless communication_address.present?
     return 'Write a one-liner about yourself!' unless about.present?
+    return 'Upload your legal ID proof!' unless identification_proof.present?
     return 'Submit a resume to your timeline to complete your profile!' unless resume_url.present?
   end
 

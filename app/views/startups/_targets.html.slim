@@ -49,5 +49,10 @@
               = link_to target.resource_url, class: 'btn btn-primary btn-sm learn-more-btn', target: '_blank' do
                 i.fa.fa-external-link-square
                 | &nbsp; Learn More
+
+            - if target.rubric.present?
+              = link_to target.rubric_url, class: 'btn btn-primary btn-sm download-rubric-btn', target: '_blank' do
+                i.fa.fa-download
+                | &nbsp; Download Rubric
 - else
   p.alert.alert-warning No targets here yet !

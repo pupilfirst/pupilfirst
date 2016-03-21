@@ -60,6 +60,15 @@
         font-size: 12px;
         color: #818181;
       }
+      .rating-starts {
+        padding-left: 10px;
+        vertical-align: middle;
+
+        i {
+          padding-left: 5px;
+          color: #8a92db;
+        }
+      }
     }
   }
 }

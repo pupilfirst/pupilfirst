@@ -17,7 +17,13 @@
         .faculty-rating.pull-left
           em.font-weight-300
             | Faculty Rating:
-            = @faculty.average_rating
+            span.rating-starts
+              = @faculty.average_rating
+              i.fa.fa-star
+              i.fa.fa-star
+              i.fa.fa-star
+              i.fa.fa-star
+              i.fa.fa-star-half-o
     .col-md-9.col-sm-8.faculty-profile-right
       .faculty-profile-details
         .col-md-8.faculty-summary
@@ -114,7 +120,7 @@
                 span.compensation-flag
                   | Volunteer
 
-          / - if @faculty.past_connect_sessions.present?
+          / - if @faculty.past_connect_requests.present?
           .past-connect-sessions
             h3.text-uppercase
               | Past connect sessions
@@ -133,7 +139,7 @@
                     h4.media-heading.company-name
                       | Spenwise
                     p
-                      = @faculty.past_connect_sessions
+                      = @faculty.past_connect_requests
 
               .modal.fade.faculty-pastconnect-modal role="dialog" id="faculty-pastconnect-modal-#{@faculty.id}"
                 .modal-dialog
@@ -142,4 +148,4 @@
                       button.close data-dismiss="modal" type="button"  &times;
                       h4.modal-title Past Connect Session with #{@faculty.name}
                     .modal-body
-                      p = @faculty.past_connect_sessions
+                      p = @faculty.past_connect_requests

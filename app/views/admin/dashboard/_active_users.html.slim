@@ -13,13 +13,10 @@
     h6 Weekly
     .user-count
       ' Slack: #{wau_on_slack.count} (#{"%g" % ("%0.1f" % percentage_wau_on_slack)}%)
-      = Sparkr.sparkline wau_trend_on_slack
     .user-count
       ' Web: #{wau_on_web.count} (#{"%g" % ("%0.1f" % percentage_wau_on_web)}%)
-      = Sparkr.sparkline wau_trend_on_web
     .user-count
       ' Total: #{total_wau_count} (#{"%g" % ("%0.1f" % total_wau_percentage)}%)
-      = Sparkr.sparkline wau_trend_in_total
     h6 Monthly
     .user-count
       ' Slack: #{mau_on_slack.count} (#{"%g" % ("%0.1f" % percentage_mau_on_slack)}%)
@@ -27,6 +24,12 @@
       ' Web: #{mau_on_web.count} (#{"%g" % ("%0.1f" % percentage_mau_on_web)}%)
     .user-count
       ' Total: #{total_mau_count} (#{"%g" % ("%0.1f" % total_mau_percentage)}%)
-
+    h6 Trend in WAU
+    .user-count
+      = Sparkr.sparkline wau_trend_on_slack
+    .user-count
+      = Sparkr.sparkline wau_trend_on_web
+    .user-count
+      = Sparkr.sparkline wau_trend_in_total
   .footer-spacer
 

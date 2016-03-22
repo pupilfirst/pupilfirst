@@ -1,12 +1,12 @@
 - content_for :head
-  title SV.CO Login
+  title SV.CO Sign In
 
 .alert.alert-warning.margin-top-20 role="alert"
   ' Looking to sign up? We're sorry! SV.CO is currently invite-only & in closed beta.
   ' Admissions to the next batch will start in September.
 
 .text-center.devise-user-form
-  h1.title Login with your SV.CO ID!
+  h1.title Sign in with your SV.CO ID!
 
   = form_for resource, url: session_path(resource_name) do |f|
     .wrapped-input

@@ -8,7 +8,7 @@ feature 'Team members spec' do
     # Add founder as founder of startup.
     startup.founders << founder
 
-    # Login with founder.
+    # Sign in with founder.
     visit new_founder_session_path
     fill_in 'founder_email', with: founder.email
     fill_in 'founder_password', with: 'password'

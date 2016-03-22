@@ -69,7 +69,7 @@ feature 'Resources' do
       # Make the founder a founder of approved startup.
       startup.founders << founder
 
-      # Login the founder.
+      # Sign in the founder.
       visit new_founder_session_path
       fill_in 'founder_email', with: founder.email
       fill_in 'founder_password', with: 'password'

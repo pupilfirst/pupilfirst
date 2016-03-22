@@ -611,7 +611,6 @@ GEM
       temple (~> 0.7.3)
       tilt (>= 1.3.3, < 2.1)
     slop (3.6.0)
-    sparkr (0.4.1)
     spring (1.3.6)
     sprockets (3.5.2)
       concurrent-ruby (~> 1.0)
@@ -740,7 +739,6 @@ DEPENDENCIES
   simple_form (~> 3.1.1)
   simple_form_fancy_uploads
   slim
-  sparkr
   spring
   titleize
   turbolinks

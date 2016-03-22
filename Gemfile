@@ -72,7 +72,6 @@ gem 'gaffe' # Custom error pages. https://github.com/mirego/gaffe
 gem 'google_calendar', github: 'northworld/google_calendar' # Thin wrapper over Google Calendar API.
 gem 'recaptcha', require: 'recaptcha/rails' # ReCaptcha helpers for ruby apps http://github.com/ambethia/recaptcha
 gem 'groupdate' # The simplest way to group temporal data. https://github.com/ankane/groupdate
-gem 'sparkr' # Sparklines with Ruby. https://github.com/rrrene/sparkr
 gem 'videojs_rails' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com/seanbehan/videojs_rails
 gem 'react-rails' # For automatically transforming JSX and using React in Rails.
 gem 'has_secure_token' # Used to create tokens for models (eg: for Faculty). TODO: Will be included with ActiveRecord in Rails 5.

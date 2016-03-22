@@ -15,7 +15,7 @@
   - trend = founder_visits.group_by_week('visits.started_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
 
   .left-of-button title="Trend: #{trend.join(', ')}"
-    = Sparkr.sparkline trend
+    span.sparkline-tag #{trend.join(', ')}
 
   a.button.view-all href=admin_visits_path(scope: 'founder_visits', q: { started_at_gteq: 3.weeks.ago.strftime('%Y-%m-%d')})
     | View All (#{Visit.founder_visits.where(started_at: (3.weeks.ago..Time.now)).count})

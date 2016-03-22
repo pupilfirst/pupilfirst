@@ -24,12 +24,12 @@
       ' Web: #{mau_on_web.count} (#{"%g" % ("%0.1f" % percentage_mau_on_web)}%)
     .user-count
       ' Total: #{total_mau_count} (#{"%g" % ("%0.1f" % total_mau_percentage)}%)
-    h6 Trend in WAU
+    h6 style="margin-bottom: 10px" Trend in WAU
     .user-count
-      = Sparkr.sparkline wau_trend_on_slack
+      span.sparkline-tag #{wau_trend_on_slack.join(', ')}
     .user-count
-      = Sparkr.sparkline wau_trend_on_web
+      span.sparkline-tag #{wau_trend_on_web.join(', ')}
     .user-count
-      = Sparkr.sparkline wau_trend_in_total
+      span.sparkline-tag #{wau_trend_in_total.join(', ')}
   .footer-spacer
 

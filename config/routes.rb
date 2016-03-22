@@ -73,6 +73,7 @@ Svapp::Application.routes.draw do
   resources :faculty, only: %w(index show) do
     post 'connect', on: :member
     collection do
+      get 'filter/:active_tab', to: 'faculty#index'
       get 'weekly_slots/:token', to: 'faculty#weekly_slots', as: 'weekly_slots'
       post 'save_weekly_slots/:token', to: 'faculty#save_weekly_slots', as: 'save_weekly_slots'
       get 'mark_unavailable/:token', to: 'faculty#mark_unavailable', as: 'mark_unavailable'

@@ -26,4 +26,8 @@ module FacultyHelper
   def next_week_end
     7.days.from_now.end_of_week.in_time_zone('Asia/Calcutta').strftime('%b %d')
   end
+
+  def active_tab?(name)
+    @active_tab == name ? 'active' : nil
+  end
 end

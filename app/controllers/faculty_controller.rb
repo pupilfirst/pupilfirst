@@ -4,6 +4,7 @@ class FacultyController < ApplicationController
 
   # GET /faculty
   def index
+    @active_tab = params[:active_tab].present? ? params[:active_tab] : 'team'
     @skip_container = true
   end
 

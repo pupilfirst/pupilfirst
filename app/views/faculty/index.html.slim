@@ -15,31 +15,31 @@
       ul#faculty-nav.nav.nav-tabs.nav-justified
         li role="presentation"
           a.inactive-spacer #{('. ' * 10).html_safe}
-        li.active role="presentation"
-          a.tab-title href="#team" aria-controls="team" role="tab" data-toggle="tab" Team
-        li role="presentation"
-          a.tab-title href="#visiting-faculty" aria-controls="visiting-faculty" role="tab" data-toggle="tab" Visiting faculty
-        li role="presentation"
-          a.tab-title href="#advisory-board" aria-controls="advisory-board" role="tab" data-toggle="tab" Advisory board
-        li role="presentation"
-          a.tab-title href="#alumni" aria-controls="alumni" role="tab" data-toggle="tab" Alumni
+        li role="presentation" class=active_tab?('team')
+          a.cursor-pointer.tab-title data-target="#team" aria-controls="team" role="tab" Team
+        li role="presentation" class=active_tab?('visiting-faculty')
+          a.cursor-pointer.tab-title data-target="#visiting-faculty" aria-controls="visiting-faculty" role="tab" Visiting faculty
+        li role="presentation" class=active_tab?('advisory-board')
+          a.cursor-pointer.tab-title data-target="#advisory-board" aria-controls="advisory-board" role="tab" Advisory board
+        li role="presentation" class=active_tab?('alumni')
+          a.cursor-pointer.tab-title data-target="#alumni" aria-controls="alumni" role="tab" Alumni
         li role="presentation"
           a.inactive-spacer #{('. ' * 10).html_safe}
 
       .tab-content
-        .tab-pane.active#team role="tabpanel"
+        .tab-pane#team role="tabpanel" class=active_tab?('team')
           .faculty-cards-container
             - Faculty.active.team.each do |member|
               = render 'faculty_card', member: member
-        .tab-pane#visiting-faculty role="tabpanel"
+        .tab-pane#visiting-faculty role="tabpanel" class=active_tab?('visiting-faculty')
           .faculty-cards-container
             - Faculty.active.visiting_faculty.each do |member|
               = render 'faculty_card', member: member
-        .tab-pane#advisory-board role="tabpanel"
+        .tab-pane#advisory-board role="tabpanel" class=active_tab?('advisory-board')
           .faculty-cards-container
             - Faculty.active.advisory_board.each do |member|
               = render 'faculty_card', member: member
-        .tab-pane#alumni role="tabpanel"
+        .tab-pane#alumni role="tabpanel" class=active_tab?('alumni')
           .faculty-cards-container
             - Faculty.active.alumni.each do |member|
               = render 'faculty_card', member: member

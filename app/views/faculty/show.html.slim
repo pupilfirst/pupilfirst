@@ -14,17 +14,16 @@
           .faculty-card-links.pull-left
             = link_to @faculty.linkedin_url, target: '_blank' do
               i.fa.fa-linkedin
-        .faculty-rating.pull-left
-          em.font-weight-300
-            | Faculty Rating:
-            span.rating-starts
-              = @faculty.average_rating
-              i.fa.fa-star
-              i.fa.fa-star
-              i.fa.fa-star
-              i.fa.fa-star
-              i.fa.fa-star-half-o
-    .col-md-9.col-sm-8.faculty-profile-right
+        - if @faculty.average_rating.present?
+          .faculty-rating.pull-left
+            em.font-weight-300
+              | Faculty Rating:
+              span.rating-starts
+                  = @faculty.average_rating
+                  i.fa.fa-star
+                  i.fa.fa-star
+                  i.fa.fa-star-half-o
+    div class="col-md-#{@faculty.past_connect_requests.present? ? 9 : 12} col-sm-#{@faculty.past_connect_requests.present? ? 8 : 12} faculty-profile-right"
       .faculty-profile-details
         .col-md-8.faculty-summary
           h3.text-uppercase
@@ -44,82 +43,56 @@
             h4.skills-icon.text-uppercase.font-weight-300
               | Skills
             p.skill-box
-              span Corporate Development
-              span Product Marketing
-              span Business Strategy
-              span Nonprofits
-              span Product Marketing
-              span = @faculty.key_skills
-
-          .faculty-summary-section
-            h4.experience-icon.text-uppercase.font-weight-300
-              | Experience
-            .experience-timeline
-              .timeline-box
-                .timeline-badge-custom
-                .timeline-panel
-                  span.time-period.text-uppercase
-                    | October 2014 – Present
-                  p
-                    ' Co Founder,
-                    span.company
-                      | Infosys
-              .timeline-box
-                .timeline-badge-custom
-                .timeline-panel
-                  span.time-period.text-uppercase
-                    | October 2014 – Present
-                  p
-                    ' Executive Vice Chairman,
-                    span.company
-                      | Infosys
+              - @faculty.key_skills.split(',').each do |skill|
+                span = skill
 
         .col-md-4.faculty-connect
-          h3.text-uppercase
-            | Connect
-            - if current_founder.try(:can_connect?)
-              span.online-signal.online.pull-right
-            - else
-              span.online-signal.offline.pull-right
-
-          .faculty-connect-availability.clearfix
-            .time-commitment.pull-left.font-weight-300
-              | Availability:
-              span
-                | 2 Hours per week
-            .faculty-connect-link.pull-right
-              - connect_slots = @faculty.connect_slots.available_for_founder
+          - if current_founder.try(:can_connect?)
+            h3.text-uppercase
+              | Connect
               - if current_founder.try(:can_connect?)
-                - if current_founder.pending_connect_request_for?(@faculty)
-                  .disabled.btn.btn-primary.btn-sm.connect-link.faculty-connect-btn.text-uppercase data-toggle='tooltip' data-placement='top' title="You already have a pending connect request with this faculty member. Please write to help@sv.co if you would like to reschedule."
+                span.online-signal.online.pull-right
+              - else
+                span.online-signal.offline.pull-right
+
+            .faculty-connect-availability.clearfix
+              .time-commitment.pull-left.font-weight-300
+                | Availability:
+                span
+                  | 2 Hours per week
+              .faculty-connect-link.pull-right
+                - connect_slots = @faculty.connect_slots.available_for_founder
+                - if current_founder.try(:can_connect?)
+                  - if current_founder.pending_connect_request_for?(@faculty)
+                    .disabled.btn.btn-primary.btn-sm.connect-link.faculty-connect-btn.text-uppercase data-toggle='tooltip' data-placement='top' title="You already have a pending connect request with this faculty member. Please write to help@sv.co if you would like to reschedule."
+                      | Connect
+                  - else
+                    .modal.fade.faculty-connect-modal role="dialog" id="faculty-connect-modal-#{@faculty.id}"
+                      .modal-dialog
+                        .modal-content
+                          .modal-header
+                            button.close data-dismiss="modal" type="button"  &times;
+                            h4.modal-title Connect with #{@faculty.name}
+                          .modal-body
+                            = simple_form_for current_founder.startup.connect_requests.new, url: connect_faculty_url(@faculty) do |f|
+                              = f.input :connect_slot, as: :select, collection: connect_slots, include_blank: false, label: 'Pick a slot.'
+                              = f.input :questions, label: 'What questions would you like to ask the faculty member?', input_html: { maxlength: ConnectRequest::MAX_QUESTIONS_LENGTH, rows: 6 }
+                              = f.submit 'Submit Request', class: 'btn btn-primary'
+
+                    a.btn.btn-primary.btn-sm.connect-link data-toggle="modal" data-target="#faculty-connect-modal-#{@faculty.id}"
+                      | Connect
+                - elsif current_founder.try(:can_view_connect?)
+                  .disabled.btn.btn-primary.btn-sm.connect-link.faculty-connect-btn.text-uppercase data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available to #{current_founder.startup.admin.fullname} (your team lead)"
                     | Connect
                 - else
-                  .modal.fade.faculty-connect-modal role="dialog" id="faculty-connect-modal-#{@faculty.id}"
-                    .modal-dialog
-                      .modal-content
-                        .modal-header
-                          button.close data-dismiss="modal" type="button"  &times;
-                          h4.modal-title Connect with #{@faculty.name}
-                        .modal-body
-                          = simple_form_for current_founder.startup.connect_requests.new, url: connect_faculty_url(@faculty) do |f|
-                            = f.input :connect_slot, as: :select, collection: connect_slots, include_blank: false, label: 'Pick a slot.'
-                            = f.input :questions, label: 'What questions would you like to ask the faculty member?', input_html: { maxlength: ConnectRequest::MAX_QUESTIONS_LENGTH, rows: 6 }
-                            = f.submit 'Submit Request', class: 'btn btn-primary'
-
-                  a.btn.btn-primary.btn-sm.connect-link data-toggle="modal" data-target="#faculty-connect-modal-#{@faculty.id}"
+                  .disabled.btn.btn-primary.btn-sm.connect-link.faculty-connect-btn.text-uppercase data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available once you are a selected founder"
                     | Connect
-              - elsif current_founder.try(:can_view_connect?)
-                .disabled.btn.btn-primary.btn-sm.connect-link.faculty-connect-btn.text-uppercase data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available to #{current_founder.startup.admin.fullname} (your team lead)"
-                  | Connect
-              - else
-                .disabled.btn.btn-primary.btn-sm.connect-link.faculty-connect-btn.text-uppercase data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available once you are a selected founder"
-                  | Connect
-            - if current_founder.try(:can_connect?)
-              .faculty-flags
-                span.time-commitment-flag
-                  | Part-Time Faculty
-                span.compensation-flag
-                  | Volunteer
+              - if current_founder.try(:can_connect?)
+                .faculty-flags
+                  span.time-commitment-flag
+                    | Part-Time Faculty
+                  span.compensation-flag
+                    | Volunteer
 
           - if @faculty.past_connect_requests.present?
             .past-connect-sessions

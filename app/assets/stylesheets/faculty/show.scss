@@ -122,10 +122,6 @@
           &.skills-icon {
             background-image: asset-url("faculty/skills-icon.svg");
           }
-          &.experience-icon {
-            background-image: asset-url("faculty/experience-icon.svg");
-            background-position: 0px -1px;
-          }
         }
         p {
           padding-left: 20px;
@@ -142,70 +138,8 @@
             border-radius: 5px;
           }
         }
-        .experience-timeline {
-          list-style: none;
-          padding: 0;
-          margin-left: 20px;
-          position: relative;
-          border-bottom: 1px solid #d2d2d2;
-
-          &:before {
-            top: 10px;
-            bottom: 0;
-            position: absolute;
-            content: " ";
-            width: 1px;
-            background-color: #d2d2d2;
-            left: 14px;
-          }
-        }
-        .timeline-box {
-          margin-bottom: 15px;
-          position: relative;
-
-          &:before, &:after {
-            content: " ";
-            display: table;
-            clear: both;
-          }
-
-          .timeline-panel {
-            border: 0;
-            padding: 0;
-            position: relative;
-            box-shadow: 0;
-            margin-left: 30px;
-
-            .time-period {
-              font-size: 10px;
-            }
-            p {
-              margin: 0;
-              padding: 0;
-              font-size: 14px;
-
-              .company {
-                color: #0077b5;
-              }
-            }
-            @media (max-width: $screen-xs-max) {
-              left: 0;
-              margin-top: 0;
-            }
-          }
-          .timeline-badge-custom {
-            color: #fff;
-            left: 10px;
-            margin-left: 0;
-            top: 6px;
-            width: 9px;
-            height: 9px;
-            position: absolute;
-            background-color: #fff;
-            z-index: 100;
-            border: 1px solid #ccc;
-            border-radius: 50%;
-          }
+        &:last-child {
+          border-bottom: 0;
         }
       }
     }

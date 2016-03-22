@@ -43,8 +43,8 @@
                       button.btn.btn-default data-dismiss="modal" type="button" Close
 
               button.btn.btn-primary.btn-sm.learn-more-btn type="button" data-toggle="modal" data-target="#target-#{target.id}-slideshow"
-                i.fa.fa-external-link-square
-                | &nbsp; Learn More
+                i.fa.fa-film
+                | &nbsp; View Slides
             - elsif target.resource_url.present?
               = link_to target.resource_url, class: 'btn btn-primary btn-sm learn-more-btn', target: '_blank' do
                 i.fa.fa-external-link-square

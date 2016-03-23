@@ -1,5 +1,6 @@
 FactoryGirl.define do
   factory :target_template do
+    assigner { create(:faculty) }
     days_from_start { [30, 60, 90, 180].sample }
     role { Target.valid_roles.sample }
     title { Faker::Lorem.words(4).join(' ') }

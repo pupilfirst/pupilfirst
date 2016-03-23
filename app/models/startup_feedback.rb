@@ -42,4 +42,12 @@ class StartupFeedback < ActiveRecord::Base
   def attachment_file_name
     attachment? ? attachment.sanitized_file.original_filename : nil
   end
+
+  def for_founder?
+    for_timeline_event? && timeline_event&.founder_event?
+  end
+
+  def pending_email_to_founder?
+    for_founder? && sent_at.blank?
+  end
 end

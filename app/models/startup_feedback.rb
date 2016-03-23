@@ -27,7 +27,7 @@ class StartupFeedback < ActiveRecord::Base
 
   def timeline_event
     return unless reference_url.present? && reference_url.match(REGEX_TIMELINE_EVENT_URL).present?
-    TimelineEvent.find(reference_url.match(REGEX_TIMELINE_EVENT_URL)[:event_id])
+    TimelineEvent.find_by(id: reference_url.match(REGEX_TIMELINE_EVENT_URL)[:event_id])
   end
 
   def as_slack_message

@@ -87,7 +87,6 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
-    active_skin (0.0.12)
     activejob (4.2.6)
       activesupport (= 4.2.6)
       globalid (>= 0.3.0)
@@ -236,6 +235,8 @@ GEM
       websocket-driver (>= 0.5.1)
     fission (0.5.0)
       CFPropertyList (~> 2.2)
+    flattened_active_admin (0.0.7)
+      rails (>= 3.2.0)
     fog (1.37.0)
       fog-aliyun (>= 0.1.0)
       fog-atmos
@@ -611,7 +612,6 @@ GEM
       temple (~> 0.7.3)
       tilt (>= 1.3.3, < 2.1)
     slop (3.6.0)
-    sparkr (0.4.1)
     spring (1.3.6)
     sprockets (3.5.2)
       concurrent-ruby (~> 1.0)
@@ -625,6 +625,7 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (2.0.1)
+    titleize (1.4.0)
     trollop (2.1.2)
     turbolinks (2.5.3)
       coffee-rails
@@ -665,7 +666,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_skin
   activeadmin!
   acts-as-taggable-on (~> 3.5)
   ahoy_matey (~> 1.3)
@@ -694,6 +694,7 @@ DEPENDENCIES
   dotenv-rails
   factory_girl_rails (~> 4.0)
   faker
+  flattened_active_admin
   fog
   font-awesome-rails
   friendly_id
@@ -740,8 +741,8 @@ DEPENDENCIES
   simple_form (~> 3.1.1)
   simple_form_fancy_uploads
   slim
-  sparkr
   spring
+  titleize
   turbolinks
   uglifier (>= 2.7.2)
   unobtrusive_flash!

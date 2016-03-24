@@ -215,6 +215,7 @@ ActiveAdmin.setup do |config|
     admin.build_menu :default do |menu|
       menu.add label: "Tagging", url: proc { admin_taggings_path('q[taggable_type_eq]' => 'Resource', commit: 'Filter') }, parent: 'Resources'
       menu.add label: "Tagging", url: proc { admin_taggings_path('q[taggable_type_eq]' => 'Startup', commit: 'Filter') }, parent: 'Startups'
+      menu.add label: "Tagging", url: proc { admin_taggings_path('q[taggable_type_eq]' => 'Founder', commit: 'Filter') }, parent: 'Founders'
     end
   end
 

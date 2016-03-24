@@ -76,7 +76,7 @@ class StartupsController < ApplicationController
         @feedback_to_show = @startup.startup_feedback.where(id: params[:show_feedback]).first if @startup.founder?(current_founder)
       else
         session[:referer] = request.original_url
-        redirect_to new_founder_session_path, alert: "Please login to continue!"
+        redirect_to new_founder_session_path, alert: "Please sign in to continue!"
       end
     end
 

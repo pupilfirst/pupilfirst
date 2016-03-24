@@ -1,7 +1,7 @@
 ActiveAdmin.register ActsAsTaggableOn::Tag, as: 'Tag' do
   actions :all, except: [:new, :create]
 
-  menu parent: 'Taggings'
+  menu parent: 'Dashboard', label: 'Tags'
 
   config.sort_order = 'taggings_count_desc'
 

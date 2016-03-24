@@ -14,12 +14,15 @@
               span.label.label-primary #{t("role.#{target.role}")}
               | &nbsp;
           h4.font-weight-400
+            i.fa.fa-list-alt
             ' Description
           .targets-description = target.description.html_safe
           - if target.completion_instructions.present?
-            h2.font-weight-400
+            h4.font-weight-400
+              i.fa.fa-map-signs
               ' Completion Instructions
-            p = target.completion_instructions
+            .complete-instruction
+              p = target.completion_instructions
 
           .assigner
             em
@@ -40,11 +43,16 @@
                       button.btn.btn-default data-dismiss="modal" type="button" Close
 
               button.btn.btn-primary.btn-sm.learn-more-btn type="button" data-toggle="modal" data-target="#target-#{target.id}-slideshow"
-                i.fa.fa-external-link-square
-                | &nbsp; Learn More
+                i.fa.fa-film
+                | &nbsp; View Slides
             - elsif target.resource_url.present?
               = link_to target.resource_url, class: 'btn btn-primary btn-sm learn-more-btn', target: '_blank' do
                 i.fa.fa-external-link-square
                 | &nbsp; Learn More
+
+            - if target.rubric.present?
+              = link_to target.rubric_url, class: 'btn btn-primary btn-sm download-rubric-btn', target: '_blank' do
+                i.fa.fa-download
+                | &nbsp; Download Rubric
 - else
   p.alert.alert-warning No targets here yet !

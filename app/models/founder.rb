@@ -39,6 +39,7 @@ class Founder < ActiveRecord::Base
   scope :student_entrepreneurs, -> { where.not(university_id: nil) }
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
   scope :non_founders, -> { where(startup_id: nil) }
+  scope :find_by_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch.id }) }
 
   # a verified 'phone' implies registration was completed
   scope :registered, -> { where.not(phone: nil) }
@@ -340,7 +341,7 @@ class Founder < ActiveRecord::Base
   end
 
   # Returns the percentage of profile completion as an integer
-  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def profile_completion_percentage
     score = 20 # a default score given for required fields during registration
     score += 20 if startup&.approved? # has an approved startup
@@ -348,7 +349,8 @@ class Founder < ActiveRecord::Base
     score += 10 if social_url_present? # has atleast 1 social media links
     score += 5 if communication_address.present?
     score += 5 if about.present?
-    score += 20 if resume_url.present? # has uploaded resume
+    score += 10 if identification_proof.present?
+    score += 10 if resume_url.present? # has uploaded resume
     score
   end
 
@@ -359,6 +361,7 @@ class Founder < ActiveRecord::Base
     return 'Provide at-least one of your social profiles!' unless social_url_present?
     return 'Update your communication address!' unless communication_address.present?
     return 'Write a one-liner about yourself!' unless about.present?
+    return 'Upload your legal ID proof!' unless identification_proof.present?
     return 'Submit a resume to your timeline to complete your profile!' unless resume_url.present?
   end
 
@@ -402,13 +405,13 @@ class Founder < ActiveRecord::Base
   # end
 
   # method to return the list of active founders on slack for a given duration
-  def self.active_founders_on_slack(since:, upto: Time.now)
-    Founder.joins(:public_slack_messages).where(public_slack_messages: { created_at: since..upto }).distinct
+  def self.active_founders_on_slack(since:, upto: Time.now, batch: Batch.current_or_last)
+    Founder.find_by_batch(batch).joins(:public_slack_messages).where(public_slack_messages: { created_at: since..upto }).distinct
   end
 
   # method to return the list of active founders on web for a given duration
-  def self.active_founders_on_web(since:, upto: Time.now)
-    Founder.joins(:visits).where(visits: { started_at: since..upto }).distinct
+  def self.active_founders_on_web(since:, upto: Time.now, batch: Batch.current_or_last)
+    Founder.find_by_batch(batch).joins(:visits).where(visits: { started_at: since..upto }).distinct
   end
 
   private

@@ -6,8 +6,9 @@ gem 'rails', '4.2.6'
 gem 'dotenv-rails', :groups => [:development, :test]
 
 gem 'activeadmin', github: 'activeadmin' # ActiveAdmin doesn't like 4.2 at all (for the moment). Switch this to stable when available.
+gem 'flattened_active_admin' # better looking and customizable activeadmin
 gem 'just-datetime-picker' # Date/Time picker support for active admin.
-gem 'active_skin' # Better lookin' active admin!
+# gem 'active_skin' # Better lookin' active admin! Temporarily removed in favour of flattened_acitve_admin
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
 gem 'carrierwave' # One uploader to rule them all.
 gem 'carrierwave_backgrounder' # Backgrounder for carrierwave.
@@ -71,7 +72,6 @@ gem 'gaffe' # Custom error pages. https://github.com/mirego/gaffe
 gem 'google_calendar', github: 'northworld/google_calendar' # Thin wrapper over Google Calendar API.
 gem 'recaptcha', require: 'recaptcha/rails' # ReCaptcha helpers for ruby apps http://github.com/ambethia/recaptcha
 gem 'groupdate' # The simplest way to group temporal data. https://github.com/ankane/groupdate
-gem 'sparkr' # Sparklines with Ruby. https://github.com/rrrene/sparkr
 gem 'videojs_rails' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com/seanbehan/videojs_rails
 gem 'react-rails' # For automatically transforming JSX and using React in Rails.
 gem 'has_secure_token' # Used to create tokens for models (eg: for Faculty). TODO: Will be included with ActiveRecord in Rails 5.
@@ -79,6 +79,7 @@ gem 'ahoy_matey', '~> 1.3' # Analytics for Rails
 gem 'acts-as-taggable-on', '~> 3.5' # Tag a single model on several contexts.
 gem 'will_paginate-bootstrap' #This gem integrates the Twitter Bootstrap pagination component with the will_paginate pagination gem.
 gem 'shortener' # generate short SV.CO urls for files, links etc
+gem 'titleize' # better titleizing, modifies Inflector.titleize from default rails
 
 # Rails assets!
 source 'https://rails-assets.org' do

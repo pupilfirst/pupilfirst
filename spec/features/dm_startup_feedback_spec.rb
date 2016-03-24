@@ -27,7 +27,7 @@ feature 'DM Startup Feedback' do
   end
 
   before :each do
-    # Login as admin
+    # Sign in as admin
     visit admin_root_path
     fill_in 'admin_user_email', with: admin.email
     fill_in 'admin_user_password', with: admin.password

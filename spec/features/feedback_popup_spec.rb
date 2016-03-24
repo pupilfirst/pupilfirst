@@ -18,8 +18,8 @@ feature 'Feedback Popup' do
     scenario 'User is not logged in' do
       visit startup_path(startup, show_feedback: feedback.id)
 
-      # user must be redirected to login page
-      expect(page).to have_text('Login with your SV.CO ID')
+      # user must be redirected to sign in page
+      expect(page).to have_text('Sign in with your SV.CO ID')
 
       fill_in 'founder_email', with: founder.email
       fill_in 'founder_password', with: 'password'

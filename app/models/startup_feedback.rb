@@ -27,7 +27,7 @@ class StartupFeedback < ActiveRecord::Base
 
   def timeline_event
     return unless reference_url.present? && reference_url.match(REGEX_TIMELINE_EVENT_URL).present?
-    TimelineEvent.find(reference_url.match(REGEX_TIMELINE_EVENT_URL)[:event_id])
+    TimelineEvent.find_by(id: reference_url.match(REGEX_TIMELINE_EVENT_URL)[:event_id])
   end
 
   def as_slack_message
@@ -41,5 +41,13 @@ class StartupFeedback < ActiveRecord::Base
 
   def attachment_file_name
     attachment? ? attachment.sanitized_file.original_filename : nil
+  end
+
+  def for_founder?
+    for_timeline_event? && timeline_event&.founder_event?
+  end
+
+  def pending_email_to_founder?
+    for_founder? && sent_at.blank?
   end
 end

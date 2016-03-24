@@ -276,16 +276,39 @@ h1.product-name {
   padding: 0;
   margin-top: 10px;
 
-  .learn-more-btn {
+  .learn-more-btn, .download-rubric-btn {
     border-radius: 5px;
-    color: #337ab7;
     background-color: white;
-    border-color: #408bcc;
+    font-weight: 400;
     transition: all 300ms ease-out;
 
+    @media screen and (max-width: $screen-xs-max) {
+      display: block;
+    }
+  }
+  .learn-more-btn {
+    color: #337ab7;
+    border-color: #408bcc;
+
     &:hover {
-      color: #18558a;
+      background-color: #18558a;
+      color: white;
       border-color: #18558a;
+    }
+  }
+  .download-rubric-btn {
+    margin-left: 10px;
+    color: #7f975c;
+    border-color: #7f975c;
+
+    &:hover {
+      background-color: #617d38;
+      color: white;
+      border-color: #617d38;
+    }
+    @media screen and (max-width: $screen-xs-max) {
+      margin-left: 0;
+      margin-top: 10px;
     }
   }
 }
@@ -688,12 +711,13 @@ h1.product-name {
 
       .target-head {
           display: inline-block;
-          width: 125px;
+          width: 260px;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-          @media screen and (max-width: $screen-xs-max) {
-            width: 90px;
+
+          @media screen and (max-width: $screen-md-max) {
+            width: 200px;
           }
 
       }
@@ -775,14 +799,32 @@ h1.product-name {
         margin-left: 5px;
         vertical-align: 1px;
         padding-bottom: 2px;
+
+        @media screen and (max-width: $screen-xs-max) {
+          margin-left: 0;
+          margin-top: 5px;
+        }
       }
     }
     h4 {
       font-size: 13px;
+      color: #007cb1;
       display: inline-block;
       padding-bottom: 5px;
       padding-right: 10px;
+      margin-bottom: 7px;
       border-bottom: 1px solid #ddd;
+
+      i {
+        padding-right: 6px;
+        font-size: 12px;
+      }
+    }
+    .targets-description, .complete-instruction {
+      color: #666666;
+      margin-bottom: 10px;
+      padding-left: 20px;
+      line-height: 22px;
     }
   }
   #targets-tab-accordion {

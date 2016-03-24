@@ -46,30 +46,5 @@ module ActiveAdmin
       reaction_to_author = message.reaction_to.founder.present? ? message.reaction_to.founder.fullname : message.reaction_to.slack_username
       "reacted with #{message.body} to \'#{truncate(message.reaction_to.body, length: 250)}\' from #{reaction_to_author}"
     end
-
-    # Daily Active Users on Slack
-    def dau_on_slack
-      Founder.active_founders_on_slack(since: 1.day.ago).count
-    end
-
-    def dau_on_web
-      Founder.active_founders_on_web(since: 1.day.ago).count
-    end
-
-    def wau_on_slack
-      Founder.active_founders_on_slack(since: 1.week.ago).count
-    end
-
-    def wau_on_web
-      Founder.active_founders_on_web(since: 1.week.ago).count
-    end
-
-    def mau_on_slack
-      Founder.active_founders_on_slack(since: 1.month.ago).count
-    end
-
-    def mau_on_web
-      Founder.active_founders_on_web(since: 1.month.ago).count
-    end
   end
 end

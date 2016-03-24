@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160316083700) do
+ActiveRecord::Schema.define(version: 20160324070135) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -136,6 +136,7 @@ ActiveRecord::Schema.define(version: 20160316083700) do
     t.string   "slug"
     t.integer  "founder_id"
     t.boolean  "inactive",           default: false
+    t.text     "about"
   end
 
   add_index "faculty", ["category"], name: "index_faculty_on_category", using: :btree

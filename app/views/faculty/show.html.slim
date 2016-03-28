@@ -75,12 +75,14 @@
                     .disabled.btn.btn-default.btn-sm.connect-link.faculty-connect-btn.text-uppercase data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available once you are a selected founder"
                       | Connect
 
-                / TODO: This needs an if condition.
-                .faculty-flags
-                  span.time-commitment-flag
-                    | Part-Time Faculty
-                  span.compensation-flag
-                    | Volunteer
+                - if @faculty.commitment.present? || @faculty.compensation.present?
+                  .faculty-flags
+                    - if @faculty.commitment.present?
+                      span.time-commitment-flag
+                        | #{t "faculty.commitment.#{@faculty.commitment}"} Faculty
+                    - if @faculty.compensation.present?
+                      span.compensation-flag
+                        = @faculty.compensation.capitalize
 
             - if past_connect_requests.present?
               .past-connect-sessions

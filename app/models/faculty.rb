@@ -38,6 +38,24 @@ class Faculty < ActiveRecord::Base
 
   validates_inclusion_of :category, in: valid_categories
 
+  COMPENSATION_VOLUNTEER = 'volunteer'
+  COMPENSATION_PAID = 'paid'
+
+  def self.valid_compensation_values
+    [COMPENSATION_VOLUNTEER, COMPENSATION_PAID]
+  end
+
+  validates_inclusion_of :compensation, in: valid_compensation_values, allow_blank: true
+
+  COMMITMENT_PART_TIME = 'part_time'
+  COMMITMENT_FULL_TIME = 'full_time'
+
+  def self.valid_commitment_values
+    [COMMITMENT_PART_TIME, COMMITMENT_FULL_TIME]
+  end
+
+  validates_inclusion_of :commitment, in: valid_commitment_values, allow_blank: true
+
   scope :active, -> { where.not(inactive: true) }
   scope :team, -> { where(category: CATEGORY_TEAM).order('sort_index ASC') }
   scope :visiting_faculty, -> { where(category: CATEGORY_VISITING_FACULTY).order('sort_index ASC') }

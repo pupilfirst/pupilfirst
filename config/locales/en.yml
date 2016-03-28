@@ -20,6 +20,10 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  faculty:
+    commitment:
+      part_time: Part-Time
+      full_time: Full-Time
   startup:
     show:
       tour:

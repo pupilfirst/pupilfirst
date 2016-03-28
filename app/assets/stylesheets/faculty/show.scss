@@ -285,6 +285,9 @@
             max-height: none;
           }
         }
+        .past-connect-questions {
+          white-space: pre-wrap;
+        }
       }
     }
     @media (max-width: $screen-sm-max) {

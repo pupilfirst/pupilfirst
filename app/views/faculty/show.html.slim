@@ -90,30 +90,28 @@
                   | Past connect sessions
                 .connect-session-box
                   .connect-session data-toggle="modal" data-target="#faculty-pastconnect-modal-#{@faculty.id}"
-                    .media
-                      .media-left
-                        .date-box.text-center
-                          - @faculty.past_connect_requests.each do |request|
+                    - @faculty.past_connect_requests.each do |request|
+                      .media
+                        .media-left
+                          .date-box.text-center
                             span.date
                               = request.connect_slot.slot_at.strftime('%d')
                             span.month
                               = request.connect_slot.slot_at.strftime('%b')
                             span.year
                               = request.connect_slot.slot_at.strftime('%Y')
-                      .media-body
-                        - @faculty.past_connect_requests.each do |request|
+                        .media-body
                           h4.media-heading.company-name
                             = request.startup.product_name
-                        p
-                          - @faculty.past_connect_requests.each do |request|
+                          p
                             = request.questions
-
-                  .modal.fade.faculty-pastconnect-modal role="dialog" id="faculty-pastconnect-modal-#{@faculty.id}"
-                    .modal-dialog
-                      .modal-content
-                        .modal-header
-                          button.close data-dismiss="modal" type="button"  &times;
-                          h4.modal-title Past Connect Session with #{@faculty.name}
-                        .modal-body
-                          - @faculty.past_connect_requests.each do |request|
-                            = request.questions
+                  - @faculty.past_connect_requests.each do |request|
+                    .modal.fade.faculty-pastconnect-modal role="dialog" id="faculty-pastconnect-modal-#{@faculty.id}"
+                      .modal-dialog
+                        .modal-content
+                          .modal-header
+                            button.close data-dismiss="modal" type="button"  &times;
+                            h4.modal-title Past Connect Session with #{@faculty.name}
+                          .modal-body
+                            .past-connect-questions
+                              = request.questions

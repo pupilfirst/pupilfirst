@@ -8,7 +8,8 @@
         h5.faculty-designation.text-center.font-weight-400
           = @faculty.title
       .faculty-since.text-center.font-weight-300
-        | Faculty at SV.CO since October 2015
+        | Faculty at SV.CO since&nbsp;
+        = @faculty.created_at.strftime('%B %Y')
       .faculty-profile-card-footer.clearfix
         - if @faculty.linkedin_url.present?
           .faculty-card-links.pull-left

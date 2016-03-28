@@ -89,8 +89,8 @@
                 h3.text-uppercase
                   | Past connect sessions
                 .connect-session-box
-                  .connect-session data-toggle="modal" data-target="#faculty-pastconnect-modal-#{@faculty.id}"
-                    - @faculty.past_connect_requests.each do |request|
+                  - @faculty.past_connect_requests.each do |request|
+                    .connect-session data-toggle="modal" data-target="#faculty-pastconnect-modal-#{@faculty.id}"
                       .media
                         .media-left
                           .date-box.text-center
@@ -105,7 +105,6 @@
                             = request.startup.product_name
                           p
                             = request.questions
-                  - @faculty.past_connect_requests.each do |request|
                     .modal.fade.faculty-pastconnect-modal role="dialog" id="faculty-pastconnect-modal-#{@faculty.id}"
                       .modal-dialog
                         .modal-content

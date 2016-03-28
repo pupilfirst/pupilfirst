@@ -221,8 +221,7 @@
       }
       .past-connect-sessions {
         .connect-session-box {
-          max-height: 400px;
-          height: 400px;
+          height: 318px;
           position: relative;
           overflow: auto;
 
@@ -282,7 +281,6 @@
           }
           @media (max-width: $screen-sm-max) {
             height: auto;
-            max-height: none;
           }
         }
         .past-connect-questions {

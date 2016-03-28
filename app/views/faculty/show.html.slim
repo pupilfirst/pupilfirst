@@ -19,10 +19,7 @@
             em.font-weight-300
               | Faculty Rating:
               span.rating-starts
-                  = @faculty.average_rating
-                  i.fa.fa-star
-                  i.fa.fa-star
-                  i.fa.fa-star-half-o
+                = faculty_rating_stars(@faculty.average_rating)
     div class="col-md-#{@faculty.past_connect_requests.present? ? 9 : 12} col-sm-#{@faculty.past_connect_requests.present? ? 8 : 12} faculty-profile-right"
       .faculty-profile-details
         .col-md-8.faculty-summary

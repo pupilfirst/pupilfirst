@@ -61,7 +61,7 @@ module FacultyHelper
 
   def commitment_this_week
     commitment = @faculty.connect_slots.where(slot_at: Time.now.beginning_of_week..Time.now.end_of_week).count * 0.5
-    return 'Not available' if commitment == 0
+    return 'Unavailable' if commitment == 0
     commitment_string = commitment >= 1 ? commitment.to_i.to_s : ''
     commitment_string += '½' if commitment.to_i != commitment
     commitment_string + (commitment > 1 ? ' hours' : ' hour')

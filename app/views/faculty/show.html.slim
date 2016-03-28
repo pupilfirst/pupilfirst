@@ -22,7 +22,7 @@
                 = faculty_rating_stars(@faculty.average_rating)
     div class="col-md-#{@faculty.past_connect_requests.present? ? 9 : 12} col-sm-#{@faculty.past_connect_requests.present? ? 8 : 12} faculty-profile-right"
       .faculty-profile-details
-        .col-md-8.faculty-summary
+        .faculty-summary class="#{sidebar_present? ? 'col-md-8' : 'col-md-12'}"
           h3.text-uppercase
             | Summary
           .faculty-summary-section
@@ -37,84 +37,81 @@
               - @faculty.key_skills.split(',').each do |skill|
                 span = skill
 
-        .col-md-4.faculty-connect
-          - if current_founder.try(:can_connect?)
-            h3.text-uppercase
-              | Connect
-              - if current_founder.try(:can_connect?)
-                span.online-signal.online.pull-right
-              - else
-                span.online-signal.offline.pull-right
+        - if sidebar_present?
+          .col-md-4.faculty-connect
+            - if connect_slots.present?
+              h3.text-uppercase
+                | Connect
 
-            .faculty-connect-availability.clearfix
-              .time-commitment.pull-left.font-weight-300
-                | Availability:
-                span
-                  | 2 Hours per week
-              .faculty-connect-link.pull-right
-                - connect_slots = @faculty.connect_slots.available_for_founder
-                - if current_founder.try(:can_connect?)
-                  - if current_founder.pending_connect_request_for?(@faculty)
-                    .disabled.btn.btn-primary.btn-sm.connect-link.faculty-connect-btn.text-uppercase data-toggle='tooltip' data-placement='top' title="You already have a pending connect request with this faculty member. Please write to help@sv.co if you would like to reschedule."
+              .faculty-connect-availability.clearfix
+                .time-commitment.pull-left.font-weight-300
+                  | Availability:
+                  span
+                    | #{commitment_this_week} this week
+                .faculty-connect-link.pull-right
+                  - if current_founder&.can_connect?
+                    - if current_founder.pending_connect_request_for?(@faculty)
+                      .disabled.btn.btn-default.btn-sm.connect-link.faculty-connect-btn.text-uppercase data-toggle='tooltip' data-placement='top' title="You already have a pending connect request with this faculty member. Please write to help@sv.co if you would like to reschedule."
+                        | Connect
+                    - else
+                      .modal.fade.faculty-connect-modal role="dialog" id="faculty-connect-modal-#{@faculty.id}"
+                        .modal-dialog
+                          .modal-content
+                            .modal-header
+                              button.close data-dismiss="modal" type="button"  &times;
+                              h4.modal-title Connect with #{@faculty.name}
+                            .modal-body
+                              = simple_form_for current_founder.startup.connect_requests.new, url: connect_faculty_url(@faculty) do |f|
+                                = f.input :connect_slot, as: :select, collection: connect_slots, include_blank: false, label: 'Pick a slot.'
+                                = f.input :questions, label: 'What questions would you like to ask the faculty member?', input_html: { maxlength: ConnectRequest::MAX_QUESTIONS_LENGTH, rows: 6 }
+                                = f.submit 'Submit Request', class: 'btn btn-primary'
+
+                      a.btn.btn-default.btn-sm.connect-link.faculty-connect-btn.text-uppercase data-toggle="modal" data-target="#faculty-connect-modal-#{@faculty.id}"
+                        | Connect
+                  - elsif current_founder&.can_view_connect?
+                    .disabled.btn.btn-default.btn-sm.connect-link.faculty-connect-btn.text-uppercase data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available to #{current_founder.startup.admin.fullname} (your team lead)"
                       | Connect
                   - else
-                    .modal.fade.faculty-connect-modal role="dialog" id="faculty-connect-modal-#{@faculty.id}"
-                      .modal-dialog
-                        .modal-content
-                          .modal-header
-                            button.close data-dismiss="modal" type="button"  &times;
-                            h4.modal-title Connect with #{@faculty.name}
-                          .modal-body
-                            = simple_form_for current_founder.startup.connect_requests.new, url: connect_faculty_url(@faculty) do |f|
-                              = f.input :connect_slot, as: :select, collection: connect_slots, include_blank: false, label: 'Pick a slot.'
-                              = f.input :questions, label: 'What questions would you like to ask the faculty member?', input_html: { maxlength: ConnectRequest::MAX_QUESTIONS_LENGTH, rows: 6 }
-                              = f.submit 'Submit Request', class: 'btn btn-primary'
-
-                    a.btn.btn-primary.btn-sm.connect-link data-toggle="modal" data-target="#faculty-connect-modal-#{@faculty.id}"
+                    .disabled.btn.btn-default.btn-sm.connect-link.faculty-connect-btn.text-uppercase data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available once you are a selected founder"
                       | Connect
-                - elsif current_founder.try(:can_view_connect?)
-                  .disabled.btn.btn-primary.btn-sm.connect-link.faculty-connect-btn.text-uppercase data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available to #{current_founder.startup.admin.fullname} (your team lead)"
-                    | Connect
-                - else
-                  .disabled.btn.btn-primary.btn-sm.connect-link.faculty-connect-btn.text-uppercase data-toggle='tooltip' data-placement='top' title="Faculty Connect is only available once you are a selected founder"
-                    | Connect
-              - if current_founder.try(:can_connect?)
+
+                / TODO: This needs an if condition.
                 .faculty-flags
                   span.time-commitment-flag
                     | Part-Time Faculty
                   span.compensation-flag
                     | Volunteer
 
-          - if @faculty.past_connect_requests.present?
-            .past-connect-sessions
-              h3.text-uppercase
-                | Past connect sessions
-              .connect-session-box
-                .connect-session data-toggle="modal" data-target="#faculty-pastconnect-modal-#{@faculty.id}"
-                  .media
-                    .media-left
-                      .date-box.text-center
+            - if past_connect_requests.present?
+              .past-connect-sessions
+                h3.text-uppercase
+                  | Past connect sessions
+                .connect-session-box
+                  .connect-session data-toggle="modal" data-target="#faculty-pastconnect-modal-#{@faculty.id}"
+                    .media
+                      .media-left
+                        .date-box.text-center
+                          - @faculty.past_connect_requests.each do |request|
+                            span.date
+                              = request.connect_slot.slot_at.strftime('%d')
+                            span.month
+                              = request.connect_slot.slot_at.strftime('%b')
+                            span.year
+                              = request.connect_slot.slot_at.strftime('%Y')
+                      .media-body
                         - @faculty.past_connect_requests.each do |request|
-                          span.date
-                            = request.connect_slot.slot_at.strftime('%d')
-                          span.month
-                            = request.connect_slot.slot_at.strftime('%b')
-                          span.year
-                            = request.connect_slot.slot_at.strftime('%Y')
-                    .media-body
-                      - @faculty.past_connect_requests.each do |request|
-                        h4.media-heading.company-name
-                          = request.startup.product_name
-                      p
-                        - @faculty.past_connect_requests.each do |request|
-                          = request.questions
+                          h4.media-heading.company-name
+                            = request.startup.product_name
+                        p
+                          - @faculty.past_connect_requests.each do |request|
+                            = request.questions
 
-                .modal.fade.faculty-pastconnect-modal role="dialog" id="faculty-pastconnect-modal-#{@faculty.id}"
-                  .modal-dialog
-                    .modal-content
-                      .modal-header
-                        button.close data-dismiss="modal" type="button"  &times;
-                        h4.modal-title Past Connect Session with #{@faculty.name}
-                      .modal-body
-                        - @faculty.past_connect_requests.each do |request|
-                          = request.questions
+                  .modal.fade.faculty-pastconnect-modal role="dialog" id="faculty-pastconnect-modal-#{@faculty.id}"
+                    .modal-dialog
+                      .modal-content
+                        .modal-header
+                          button.close data-dismiss="modal" type="button"  &times;
+                          h4.modal-title Past Connect Session with #{@faculty.name}
+                        .modal-body
+                          - @faculty.past_connect_requests.each do |request|
+                            = request.questions

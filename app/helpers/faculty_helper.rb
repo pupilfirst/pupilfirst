@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module FacultyHelper
   def faculty_image_path(type, image)
     # Images are stored in a subfolder in faculty/
@@ -43,5 +45,25 @@ module FacultyHelper
 
     # Return as HTML.
     stars_html.join("\n").html_safe
+  end
+
+  def connect_slots
+    @faculty.connect_slots.available_for_founder
+  end
+
+  def past_connect_requests
+    @faculty.past_connect_requests
+  end
+
+  def sidebar_present?
+    @sidebar_present ||= connect_slots.present? || past_connect_requests.present?
+  end
+
+  def commitment_this_week
+    commitment = @faculty.connect_slots.where(slot_at: Time.now.beginning_of_week..Time.now.end_of_week).count * 0.5
+    return 'Not available' if commitment == 0
+    commitment_string = commitment >= 1 ? commitment.to_i.to_s : ''
+    commitment_string += '½' if commitment.to_i != commitment
+    commitment_string + (commitment > 1 ? ' hours' : ' hour')
   end
 end

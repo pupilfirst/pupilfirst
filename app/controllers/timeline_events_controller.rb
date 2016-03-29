@@ -13,11 +13,11 @@ class TimelineEventsController < ApplicationController
     )
 
     if @timeline_event.save
-      flash[:success] = 'Your new timeline event has been submitted to the SV.CO team for approval!'
-      redirect_to @startup
+      flash.now[:success] = 'Your new timeline event has been submitted to the SV.CO team for approval!'
+      head :ok
     else
-      flash[:error] = 'There seems to be an error in your submission. Please try again!'
-      render 'startups/show'
+      flash.now[:error] = 'There seems to be an error in your submission. Please try again!'
+      head :unprocessable_entity
     end
   end
 

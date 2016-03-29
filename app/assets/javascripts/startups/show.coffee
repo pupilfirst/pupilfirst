@@ -66,6 +66,9 @@ $(document).on 'page:change', ->
 
 timelineBuilderSubmitChecks = ->
   $('form.new_timeline_event, form.edit_timeline_event').submit((event) ->
+    # Don't allow form submit to proceed. We're going to do it with AJAX instead.
+    event.preventDefault()
+
     form = $(event.target)
 
     typeOfEventPresent = !!form.find('select#timeline_event_timeline_event_type_id').val()
@@ -106,9 +109,85 @@ timelineBuilderSubmitChecks = ->
     else
       confirmedByUser = true
 
-    unless typeOfEventPresent && dateOfEventPresent && descriptionPresent && confirmedByUser
-      event.preventDefault()
+    if typeOfEventPresent && dateOfEventPresent && descriptionPresent && confirmedByUser
+      submitWithProgressReport(event)
   )
+
+submitWithProgressReport = (event) ->
+  form = $(event.target)
+  formData = new FormData(form[0])
+
+  # Disable the submit button.
+  submitButtonInProgress()
+
+  # Submit form data using AJAX and set a progress handler function.
+  $.ajax(
+    url: form.attr('action'),
+    type: form.attr('method'),
+    xhr: ->
+      myXhr = $.ajaxSettings.xhr()
+
+      if myXhr.upload # Check if upload property exists
+        myXhr.upload.addEventListener 'progress', progressHandlingFunction, false # For handling the progress of the upload
+
+      myXhr
+    ,
+
+    # Ajax events.
+    beforeSend: beforeSendHandler,
+    success: completeHandler,
+    error: errorHandler,
+
+    # Form data
+    data: formData,
+
+    # Options to tell jQuery not to process data or worry about content-type.
+    cache: false,
+    contentType: false,
+    processData: false
+  )
+
+submitButtonInProgress = ->
+  submitButton = $('#timeline-builder-submit-button')
+  submitButton.prop('disabled', true).addClass('disabled')
+  submitButton.find('.submit-timeline-builder-icon > i').prop('class', 'fa fa-spinner fa-pulse')
+
+progressHandlingFunction = (event) ->
+  if event.lengthComputable
+    $('progress.timeline-event-upload-progress').attr(value: event.loaded, max: event.total)
+
+    if event.loaded != event.total
+      percentDone = Math.round((event.loaded / event.total) * 100)
+
+      if event.total >= 1024
+        loadedKB = Math.round(event.loaded / 1024)
+        totalKB = Math.round(event.total / 1024)
+      else
+        totalKB = false
+
+      progressText = $('.timeline-event-upload-progress-text')
+      updatedProgressText = "Uploading data... #{percentDone}%"
+
+      if totalKB
+        updatedProgressText += " (#{loadedKB} KB of #{totalKB} KB)"
+
+      progressText.html updatedProgressText
+
+beforeSendHandler = ->
+  progressSection = $('section.timeline-event-upload-progress-section')
+  progressSection.show()
+
+completeHandler = ->
+  progressText = $('.timeline-event-upload-progress-text')
+  progressText.html 'All done! Refreshing timeline&hellip;'
+
+  setTimeout ->
+    location.reload()
+  , 2000
+
+errorHandler = ->
+  progressText = $('.timeline-event-upload-progress-text')
+  progressText.html 'Something went wrong. Please try again after a little while, or contact us at help@sv.co.'
 
 clearErrorsOnOpeningSelect2 = ->
   $('#timeline_event_timeline_event_type_id').on('select2-opening', ->

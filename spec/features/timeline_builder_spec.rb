@@ -67,12 +67,18 @@ feature 'Timeline Builder' do
 
       click_on 'Submit for Review'
 
-      # Wait for page to load.
-      expect(page).to have_text(startup.name)
+      # Wait for AJAX request to finish.
+      expect(page).to have_text('All done!')
 
       # Get the timeline entry for last created event.
       last_timeline_event = TimelineEvent.order('id DESC').first
-      latest_timeline_event_entry = page.find("#event-#{last_timeline_event.id}", match: :first)
+
+      # Sleep for 2s, since that's the delay to page refresh.
+      sleep 2
+
+      # Then wait for page to load.
+      new_event_selector = "#event-#{last_timeline_event.id}"
+      latest_timeline_event_entry = page.find(new_event_selector, match: :first)
 
       expect(latest_timeline_event_entry).to have_text('Pending verification')
       expect(latest_timeline_event_entry).to have_text('Team Formed')
@@ -120,6 +126,13 @@ feature 'Timeline Builder' do
         fill_in 'timeline_event_description', with: new_description
         click_on 'Submit for Review'
 
+        # Wait for AJAX request to finish.
+        expect(page).to have_text('All done!')
+
+        # Sleep for 2s, since that's the delay to page refresh.
+        sleep 2
+
+        # Then wait for page to load.
         new_timeline_event_panel = page.find("#event-#{unverified_timeline_event.id}")
         expect(new_timeline_event_panel).to have_text(new_description)
       end
@@ -143,6 +156,13 @@ feature 'Timeline Builder' do
           click_on 'Submit for Review'
         end
 
+        # Wait for AJAX request to finish.
+        expect(page).to have_text('All done!')
+
+        # Sleep for 2s, since that's the delay to page refresh.
+        sleep 2
+
+        # Then wait for page to load.
         new_timeline_event_panel = page.find("#event-#{verified_timeline_event.id}")
         expect(new_timeline_event_panel).to have_text(new_description)
         expect(new_timeline_event_panel).to have_text('Pending verification')
@@ -179,9 +199,13 @@ feature 'Timeline Builder' do
 
         click_on 'Submit for Review'
 
-        # Wait for page to load.
-        expect(page).to have_text(startup.name)
+        # Wait for AJAX request to finish.
+        expect(page).to have_text('All done!')
 
+        # Sleep for 2s, since that's the delay to page refresh.
+        sleep 2
+
+        # Then wait for page to load.
         # Get the timeline entry for last created event.
         last_timeline_event = TimelineEvent.order('id DESC').first
         latest_timeline_event_entry = page.find("#event-#{last_timeline_event.id}", match: :first)
@@ -223,6 +247,14 @@ feature 'Timeline Builder' do
           sleep(0.5)
 
           click_on 'Submit for Review'
+
+          # Wait for AJAX request to finish.
+          expect(page).to have_text('All done!')
+
+          # Sleep for 2s, since that's the delay to page refresh.
+          sleep 2
+
+          # Then wait for page to load.
           expect(page.find("#event-#{timeline_event.id} .tl-footer")).to_not have_text('Google')
           timeline_event.reload
           expect(timeline_event.links.length).to eq(0)
@@ -251,6 +283,14 @@ feature 'Timeline Builder' do
           sleep(0.5)
 
           click_on 'Submit for Review'
+
+          # Wait for AJAX request to finish.
+          expect(page).to have_text('All done!')
+
+          # Sleep for 2s, since that's the delay to page refresh.
+          sleep 2
+
+          # Then wait for page to load.
           expect(page.find("#event-#{timeline_event.id} .tl-footer")).to_not have_text(timeline_event_file.title)
           timeline_event.reload
           expect(timeline_event.timeline_event_files.count).to eq(0)
@@ -290,6 +330,14 @@ feature 'Timeline Builder' do
           sleep(0.5)
 
           click_on 'Submit for Review'
+
+          # Wait for AJAX request to finish.
+          expect(page).to have_text('All done!')
+
+          # Sleep for 2s, since that's the delay to page refresh.
+          sleep 2
+
+          # Then wait for page to load.
           expect(page.find("#event-#{timeline_event.id} .tl-footer")).to_not have_text('Google')
           expect(page.find("#event-#{timeline_event.id} .tl-footer")).to have_text('Facebook')
           timeline_event.reload
@@ -319,6 +367,14 @@ feature 'Timeline Builder' do
           sleep(0.5)
 
           click_on 'Submit for Review'
+
+          # Wait for AJAX request to finish.
+          expect(page).to have_text('All done!')
+
+          # Sleep for 2s, since that's the delay to page refresh.
+          sleep 2
+
+          # Then wait for page to load.
           expect(page.find("#event-#{timeline_event.id} .tl-footer")).to have_text('SV.CO')
           timeline_event.reload
           expect(timeline_event.links.length).to eq(2)

@@ -120,6 +120,7 @@ h1.product-name {
 .timeline-builder {
   border: 1px solid lightgrey;
   margin: 5px 0 20px;
+  border-radius: 0 0 5px 5px;
 
   .top-row {
     background-color: whitesmoke;
@@ -921,5 +922,36 @@ h1.product-name {
         }
       }
     }
+  }
+}
+
+.timeline-event-upload-progress-section {
+  display: none;
+  background-color: #f9f9f9;
+  border-radius: 0 0 5px 5px;
+  height: auto;
+
+  .timeline-event-upload-progress {
+    position: relative;
+    display: block;
+    border: 0;
+    height: 6px;
+    background-color: #e4e6ea;
+    width: 100%;
+  }
+  progress::-webkit-progress-bar {
+    background: #e4e6ea;
+  }
+  progress::-webkit-progress-value {
+    background: #0f9d58;
+  }
+  progress::-moz-progress-bar {
+    background: #0f9d58;
+  }
+  .timeline-event-upload-progress-text {
+    line-height: 14px;
+    padding: 5px 10px;
+    font-style: italic;
+    font-size: 12px;
   }
 }

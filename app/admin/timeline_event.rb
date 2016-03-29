@@ -297,7 +297,13 @@ ActiveAdmin.register TimelineEvent do
     panel 'Attachments' do
       table_for timeline_event.timeline_event_files do
         column :title
-        column :filename
+
+        column :file do |timeline_event_file|
+          link_to timeline_event_file.filename,
+            download_startup_timeline_event_timeline_event_file_url(timeline_event.startup, timeline_event, timeline_event_file),
+            target: '_blank'
+        end
+
         column :private
 
         column :actions do |file|

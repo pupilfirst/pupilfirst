@@ -57,10 +57,11 @@
           = f.text_field :event_on, 'data-field' => 'date', readonly: true, placeholder: '  Date'
 
           button#timeline-builder-submit-button.btn.btn-primary.btn-flat.btn-with-default-padding type='submit'
-            - if event.persisted?
-              i.fa.fa-pencil
-            - else
-              i.fa.fa-plus
+            span.submit-timeline-builder-icon
+              - if event.persisted?
+                i.fa.fa-pencil
+              - else
+                i.fa.fa-plus
             span &nbsp;Submit for Review
 
   #add-link-modal.modal.fade role="dialog"
@@ -72,8 +73,8 @@
           button#close-link-modal-button.btn.btn-default data-dismiss="modal" type="button"  Close
 
   section.timeline-event-upload-progress-section
-    progress.timeline-event-upload-progress value="0" max="100"
-    .timeline-event-upload-progress-text Uploading data&hellip;
+    progress.timeline-event-upload-progress
+    .timeline-event-upload-progress-text Saving timeline event&hellip;
 
 / Populated by JS from CuriousSolution's DatePicker.
 #timeline-builder-datepicker-box

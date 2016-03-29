@@ -118,7 +118,7 @@ submitWithProgressReport = (event) ->
   formData = new FormData(form[0])
 
   # Disable the submit button.
-  $('#timeline-builder-submit-button').prop('disabled', true).addClass('disabled')
+  submitButtonInProgress()
 
   # Submit form data using AJAX and set a progress handler function.
   $.ajax(
@@ -147,16 +147,38 @@ submitWithProgressReport = (event) ->
     processData: false
   )
 
+submitButtonInProgress = ->
+  submitButton = $('#timeline-builder-submit-button')
+  submitButton.prop('disabled', true).addClass('disabled')
+  submitButton.find('.submit-timeline-builder-icon > i').prop('class', 'fa fa-spinner fa-pulse')
+
 progressHandlingFunction = (event) ->
   if event.lengthComputable
     $('progress.timeline-event-upload-progress').attr(value: event.loaded, max: event.total)
+
+    if event.loaded != event.total
+      percentDone = Math.round((event.loaded / event.total) * 100)
+
+      if event.total >= 1024
+        loadedKB = Math.round(event.loaded / 1024)
+        totalKB = Math.round(event.total / 1024)
+      else
+        totalKB = false
+
+      progressText = $('.timeline-event-upload-progress-text')
+      updatedProgressText = "Uploading data... #{percentDone}%"
+
+      if totalKB
+        updatedProgressText += " (#{loadedKB} KB of #{totalKB} KB)"
+
+      progressText.html updatedProgressText
 
 beforeSendHandler = ->
   progressSection = $('section.timeline-event-upload-progress-section')
   progressSection.show()
 
 completeHandler = ->
-  progressText = $('span.timeline-event-upload-progress-text')
+  progressText = $('.timeline-event-upload-progress-text')
   progressText.html 'All done! Refreshing timeline&hellip;'
 
   setTimeout ->
@@ -164,7 +186,7 @@ completeHandler = ->
   , 2000
 
 errorHandler = ->
-  progressText = $('span.timeline-event-upload-progress-text')
+  progressText = $('.timeline-event-upload-progress-text')
   progressText.html 'Something went wrong. Please try again after a little while, or contact us at help@sv.co.'
 
 clearErrorsOnOpeningSelect2 = ->

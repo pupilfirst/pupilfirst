@@ -33,4 +33,26 @@ after 'development:founders', 'development:timeline_event_types', 'development:b
   # Add two more co-founders
   super_startup.founders << Founder.find_by(email: 'thedude@sv.co')
   super_startup.founders << Founder.find_by(email: 'thirdguy@sv.co')
+
+  # a second avengers startup
+  avengers_startup = Startup.new(
+    name: 'The Avengers',
+    product_name: 'SuperHeroes',
+    product_description: 'Earths Mightiest Heroes joined forces to take on threats that were too big for any one hero to tackle.',
+    agreement_signed_at: 2.years.ago,
+    batch: Batch.second,
+    website: 'https://www.avengers.co',
+    startup_categories: [StartupCategory.second, StartupCategory.last]
+  )
+
+  # make ironman the team lead
+  founder = Founder.find_by(email: 'ironman@avengers.co')
+  avengers_startup.founders << founder
+  avengers_startup.save!
+
+  # Add all the other avengers as founders
+  avengers_startup.founders << Founder.find_by(email: 'ultron@avengers.co')
+  avengers_startup.founders << Founder.find_by(email: 'wasp@avengers.co')
+  avengers_startup.founders << Founder.find_by(email: 'hulk@avengers.co')
+  avengers_startup.founders << Founder.find_by(email: 'thor@avengers.co')
 end

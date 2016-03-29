@@ -69,9 +69,12 @@
           padding-left: 5px;
           color: #8a92db;
 
-          @media (max-width: $screen-sm-max) {
+          @media (min-width: $screen-sm-min) and (max-width: $screen-md-max) {
             padding-left: 2px;
           }
+        }
+        @media (min-width: $screen-sm-min) and (max-width: $screen-md-max) {
+          padding-left: 5px;
         }
       }
     }
@@ -136,6 +139,7 @@
         p {
           padding-left: 20px;
           line-height: 22px;
+          white-space: pre-wrap;
         }
         .skill-box {
           span {

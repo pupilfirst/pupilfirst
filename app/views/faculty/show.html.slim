@@ -43,7 +43,7 @@
             - if connect_slots.present?
               h3.text-uppercase
                 | Connect
-                - if connect_slots.present?
+                - if current_founder&.can_connect?
                   span.online-signal.online.pull-right
                 - else
                   span.online-signal.offline.pull-right

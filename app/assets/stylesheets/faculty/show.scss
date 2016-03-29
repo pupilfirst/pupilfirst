@@ -38,8 +38,9 @@
   .faculty-profile-card-footer {
     .faculty-card-links {
       a {
-        display: inline-block;
+        display: block;
         padding: 15px 25px;
+        height: 53px;
         font-size: 16px;
         vertical-align: middle;
         text-align: center;
@@ -60,16 +61,24 @@
         font-size: 12px;
         color: #818181;
       }
-      .rating-starts {
+      .rating-stars {
         padding-left: 10px;
         vertical-align: middle;
 
         i {
           padding-left: 5px;
           color: #8a92db;
+
+          @media (max-width: $screen-sm-max) {
+            padding-left: 2px;
+          }
         }
       }
     }
+  }
+  @media (max-width: $screen-xs-max) and (orientation: landscape) {
+    width: 300px;
+    margin: auto;
   }
 }
 .faculty-profile-right {
@@ -97,7 +106,8 @@
     .faculty-summary {
       background-color: white;
       padding: 0;
-      border-right: 1px solid #e5e5e5;
+      border: 1px solid #e5e5e5;
+      border-width: 0 1px 0 0;
 
       .faculty-summary-section {
         font-size: 14px;
@@ -141,6 +151,9 @@
         &:last-child {
           border-bottom: 0;
         }
+      }
+      @media (max-width: $screen-sm-max) {
+        border-width: 0 0 1px 0;
       }
     }
     .faculty-connect {
@@ -269,11 +282,8 @@
             p {
               font-size: 12px;
               height: 35px;
-              width: 160px;
               margin: 0;
               overflow: hidden;
-              text-overflow: ellipsis;
-
             }
             &:hover, &:focus {
               background-color: #f5f3f3;

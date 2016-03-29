@@ -19,7 +19,7 @@
           .faculty-rating.pull-left
             em.font-weight-300
               | Faculty Rating:
-              span.rating-starts
+              span.rating-stars
                 = faculty_rating_stars(@faculty.average_rating)
     .col-md-9.col-sm-8.faculty-profile-right
       .faculty-profile-details
@@ -43,6 +43,10 @@
             - if connect_slots.present?
               h3.text-uppercase
                 | Connect
+                - if connect_slots.present?
+                  span.online-signal.online.pull-right
+                - else
+                  span.online-signal.offline.pull-right
 
               .faculty-connect-availability.clearfix
                 .time-commitment.pull-left.font-weight-300
@@ -91,7 +95,7 @@
                   | Past connect sessions
                 .connect-session-box
                   - @faculty.past_connect_requests.each do |request|
-                    .connect-session data-toggle="modal" data-target="#faculty-pastconnect-modal-#{@faculty.id}"
+                    .connect-session data-toggle="modal" data-target="#faculty-pastconnect-modal-#{request.id}"
                       .media
                         .media-left
                           .date-box.text-center
@@ -106,7 +110,7 @@
                             = request.startup.product_name
                           p
                             = request.questions
-                    .modal.fade.faculty-pastconnect-modal role="dialog" id="faculty-pastconnect-modal-#{@faculty.id}"
+                    .modal.fade.faculty-pastconnect-modal role="dialog" id="faculty-pastconnect-modal-#{request.id}"
                       .modal-dialog
                         .modal-content
                           .modal-header

@@ -49,8 +49,8 @@ module ActiveAdmin
 
     def commitment_options
       {
-        Faculty::COMMITMENT_PART_TIME => 'Part Time',
-        Faculty::COMMITMENT_FULL_TIME => 'Full Time'
+        'Part Time' => Faculty::COMMITMENT_PART_TIME,
+        'Full Time' => Faculty::COMMITMENT_FULL_TIME
       }
     end
   end

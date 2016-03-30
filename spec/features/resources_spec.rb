@@ -89,7 +89,8 @@ feature 'Resources' do
 
       scenario 'Founder visits approved resource page' do
         visit resource_path(approved_resource_for_all)
-        expect(page.status_code).to eq(404)
+        # should be redirected to the index page
+        expect(page).to have_text('This is just a small sample of Resources available at SV.CO')
       end
     end
 
@@ -124,7 +125,8 @@ feature 'Resources' do
 
         scenario 'Founder visits approved resource for batch 2 page' do
           visit resource_path(approved_resource_for_batch_2)
-          expect(page.status_code).to eq(404)
+          # should be redirected to the index page
+          expect(page).to have_text('This is just a small sample of Resources available at SV.CO')
         end
       end
 

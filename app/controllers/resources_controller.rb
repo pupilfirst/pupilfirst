@@ -15,6 +15,15 @@ class ResourcesController < ApplicationController
 
     @resource.increment_downloads!
     @stream_video = @resource.file.url
+
+  rescue ActiveRecord::RecordNotFound
+    alert_message = 'Could not find the requested resource! '
+    alert_message += if current_founder.present?
+      'You might not be authorized to view this resource.'
+    else
+      'Please try again after signing in as this could be a private resource.'
+    end
+    redirect_to resources_path, alert: alert_message
   end
 
   def download

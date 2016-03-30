@@ -83,10 +83,10 @@
                 - if @faculty.commitment.present? || @faculty.compensation.present?
                   .faculty-flags
                     - if @faculty.commitment.present?
-                      span.time-commitment-flag
+                      span.time-commitment-flag data-toggle='tooltip' data-placement='top' title="This Faculty #{tooltip_for_commitment == 'part_time' ? "contributes to SV.CO #{t "faculty.commitment.#{tooltip_for_commitment}"}" : "works at SV.CO #{t "faculty.commitment.#{tooltip_for_commitment}"}"}."
                         | #{t "faculty.commitment.#{@faculty.commitment}"} Faculty
                     - if @faculty.compensation.present?
-                      span.compensation-flag
+                      span.compensation-flag data-toggle='tooltip' data-placement='top' title="This Faculty #{tooltip_for_compensation == 'volunteer' ? "#{tooltip_for_compensation}s pro-bono" : "is #{tooltip_for_compensation} for his work"} at SV.CO"
                         = @faculty.compensation.capitalize
 
             - if past_connect_requests.present?

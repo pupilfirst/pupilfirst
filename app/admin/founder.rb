@@ -27,7 +27,7 @@ ActiveAdmin.register Founder do
     :slack_username, :skip_password, :born_on, :startup_admin, :communication_address, :identification_proof,
     :phone, :invitation_token, :university_id, :roll_number, :course, :semester, :year_of_graduation,
     :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :facebook_url, :angel_co_url, :github_url, :behance_url,
-    { roles: [] }, :tag_list, :gender
+    { roles: [] }, :tag_list, :gender, :skype_id
 
   batch_action :tag, form: proc { { tag: Founder.tag_counts_on(:tags).pluck(:name) } } do |ids, inputs|
     Founder.where(id: ids).each do |founder|
@@ -116,6 +116,9 @@ ActiveAdmin.register Founder do
       row :born_on
       row :slack_username
       row :slack_user_id
+      row 'Skype Id' do
+        founder.skype_id
+      end
 
       row :resume_url do |founder|
         link_to(founder.resume_url, founder.resume_url) if founder.resume_url.present?

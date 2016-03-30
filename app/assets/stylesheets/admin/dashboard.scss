@@ -58,12 +58,12 @@
     right: 10px;
     float: right;
     background-color: #fff;
-    border: 1px solid #30b987;
-    color: #30b987;
+    border: 1px solid #83aa77;
+    color: #83aa77;
     transition: all .2s;
 
     &:hover, &:focus {
-      background-color: #30b987;
+      background-color: #83aa77 !important;
       color: #fff;
     }
   }

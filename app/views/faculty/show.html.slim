@@ -12,15 +12,27 @@
         = @faculty.created_at.strftime('%B %Y')
       .faculty-profile-card-footer.clearfix
         - if @faculty.linkedin_url.present?
-          .faculty-card-links.pull-left
-            = link_to @faculty.linkedin_url, target: '_blank' do
-              i.fa.fa-linkedin
+          - if @faculty.average_rating.present?
+            .faculty-card-links.pull-left
+              = link_to @faculty.linkedin_url, target: '_blank' do
+                i.fa.fa-linkedin
+          - else
+            .faculty-card-links
+              = link_to @faculty.linkedin_url, target: '_blank' do
+                i.fa.fa-linkedin
         - if @faculty.average_rating.present?
-          .faculty-rating.pull-left
-            em.font-weight-300
-              | Faculty Rating:
-              span.rating-stars
-                = faculty_rating_stars(@faculty.average_rating)
+          - if @faculty.linkedin_url.present?
+            .faculty-rating.pull-left
+              em.font-weight-300
+                | Faculty Rating:
+                span.rating-stars
+                  = faculty_rating_stars(@faculty.average_rating)
+          - else
+            .faculty-rating.text-center
+              em.font-weight-300
+                | Faculty Rating:
+                span.rating-stars
+                  = faculty_rating_stars(@faculty.average_rating)
     .col-md-9.col-sm-8.faculty-profile-right
       .faculty-profile-details
         .faculty-summary class="#{sidebar_present? ? 'col-md-8' : 'col-md-12'}"

@@ -1,8 +1,11 @@
 .faculty-card
-  = image_tag member.image_url
+  a.faculty-image href=faculty_url(member)
+    .btn.btn-default.btn-view-profile
+      | View profile
+    = image_tag member.image_url
   .faculty-info
     .faculty-name
-      = member.name
+      = link_to member.name, faculty_url(member)
 
     .faculty-title
       = member.title

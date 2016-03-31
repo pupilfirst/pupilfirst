@@ -23,14 +23,9 @@
         multiple: true,
         input_html: { style: 'height: 100%' }
     - else
-      = f.input :assignee_type,
-        as: :select,
-        collection: %w(Startup Founder),
-        include_blank: false,
-        input_html: { disabled: true }
-
       = f.input :assignee_id,
-        collection: proc { Object.const_get(f.object.assignee_type).all },
+        as: :select,
+        collection: [f.object.assignee],
         input_html: { disabled: true }
 
     = f.input :status,

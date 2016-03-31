@@ -80,7 +80,10 @@
                             .modal-body
                               = simple_form_for current_founder.startup.connect_requests.new, url: connect_faculty_url(@faculty) do |f|
                                 = f.input :connect_slot, as: :select, collection: connect_slots, include_blank: false, label: 'Pick a slot.'
-                                = f.input :questions, label: 'What questions would you like to ask the faculty member?', input_html: { maxlength: ConnectRequest::MAX_QUESTIONS_LENGTH, rows: 6 }
+                                = f.input :questions, label: 'What questions would you like to ask the faculty member?', input_html: { maxlength: ConnectRequest::MAX_QUESTIONS_LENGTH, rows: 6 },
+                                  hint: "We've noticed that the first 10 minutes of the Office Hour session are most productive. So it's a good idea to spend that time on questions you'd like to get answered."\
+                                  "Type in relevant questions above. As an example, if you are talking to a Marketing & Sales faculty, ask questions about making a sales plan or completing a customer acquisition target."\
+                                  "To know more about office hours refer #{link_to 'section 3.2 of the SV.CO playbook', 'http://playbook.sv.co/3.2-office-hours.html', target: '_blank'}.".html_safe
                                 = f.submit 'Submit Request', class: 'btn btn-primary'
 
                       a.btn.btn-default.btn-sm.connect-link.faculty-connect-btn.text-uppercase data-toggle="modal" data-target="#faculty-connect-modal-#{@faculty.id}"

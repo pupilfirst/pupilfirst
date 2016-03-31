@@ -1,5 +1,5 @@
 ActiveAdmin.register Startup do
-  filter :product_name
+  filter :product_name, as: :select
   filter :batch
   filter :stage, as: :select, collection: proc { stages_collection }
   filter :tags, collection: proc { Startup.tag_counts_on(:tags) }, multiple: true

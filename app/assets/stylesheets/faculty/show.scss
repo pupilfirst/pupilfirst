@@ -267,6 +267,9 @@
               }
             }
           }
+          @media (max-width: $screen-md-max) {
+            font-size: 11px;
+          }
         }
       }
       .past-connect-sessions {

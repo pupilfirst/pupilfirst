@@ -4,7 +4,7 @@
     .panel-contents
       = form_tag assign_karma_points_admin_public_slack_messages_path, method: :get do
         = label_tag :batch, 'Batch:'
-        = select_tag :batch, options_for_select(Batch.all.map { |batch| [batch.name, batch.id] }, @batch.id)
+        = select_tag :batch, options_for_select(Batch.all.map { |batch| [batch.name, batch.id] }, @batch&.id)
         = label_tag :channel, 'Channel:'
         = select_tag :channel, options_for_select(PublicSlackMessage.available_channels.map { |c| ["##{c}", c] }, @channel)
         = label_tag :date, 'Date:'

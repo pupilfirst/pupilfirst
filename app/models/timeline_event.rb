@@ -20,9 +20,10 @@ class TimelineEvent < ActiveRecord::Base
   VERIFIED_STATUS_PENDING = 'Pending'
   VERIFIED_STATUS_NEEDS_IMPROVEMENT = 'Needs Improvement'
   VERIFIED_STATUS_VERIFIED = 'Verified'
+  VERIFIED_STATUS_NOT_ACCEPTED = 'Not Accepted'
 
   def self.valid_verified_status
-    [VERIFIED_STATUS_VERIFIED, VERIFIED_STATUS_PENDING, VERIFIED_STATUS_NEEDS_IMPROVEMENT]
+    [VERIFIED_STATUS_VERIFIED, VERIFIED_STATUS_PENDING, VERIFIED_STATUS_NEEDS_IMPROVEMENT, VERIFIED_STATUS_NOT_ACCEPTED]
   end
 
   validates_inclusion_of :verified_status, in: valid_verified_status

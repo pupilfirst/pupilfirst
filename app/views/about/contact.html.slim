@@ -66,6 +66,7 @@ h1.page-header.header-light Contact
         = f.input :mobile, label: 'Mobile phone number', input_html: { maxlength: 20 }
         = f.input :company, label: 'Company you represent', input_html: { maxlength: 50 }
         = f.input :query_type, label: 'Type of query', as: :select, include_blank: false, collection: ContactForm.valid_query_types
+        #contact-alerts.col-sm-9.col-sm-offset-3.alert.alert-warning
         = f.input :query, as: :text, input_html: { rows: 5, maxlength: 600 }
 
         .form-group

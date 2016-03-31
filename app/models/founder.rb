@@ -55,12 +55,12 @@ class Founder < ActiveRecord::Base
 
   validates :first_name,
     presence: true,
-    format: { with: /\A[a-z]+\z/i, message: "should be a single name with no special characters or numbers" },
+    format: { with: /\A[a-z]+\z/i, message: "Business Name format. Should be a single name with no special characters or numbers" },
     length: { minimum: 2 }
 
   validates :last_name,
     presence: true,
-    format: { with: /\A[a-z]+\z/i, message: "should be a single name with no special characters or numbers" },
+    format: { with: /\A[a-z]+\z/i, message: "Business Name format. Should be a single name with no special characters or numbers" },
     length: { minimum: 2 }
 
   def self.valid_gender_values

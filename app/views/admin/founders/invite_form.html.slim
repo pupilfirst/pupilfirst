@@ -1,5 +1,5 @@
 = semantic_form_for :founder, url: { action: :send_invite } do |f|
   = f.inputs 'Provide email and batch to invite to'
     = f.input :email
-    = f.input :invited_batch, as: :select, collection: Batch.all, include_blank: false
+    = f.input :invited_batch, as: :select, collection: Batch.not_completed, include_blank: false
   = f.submit 'Send Invite'

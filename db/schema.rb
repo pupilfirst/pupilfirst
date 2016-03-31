@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160328105702) do
+ActiveRecord::Schema.define(version: 20160329093200) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -398,8 +398,11 @@ ActiveRecord::Schema.define(version: 20160328105702) do
     t.text     "completion_comment"
     t.text     "slideshow_embed"
     t.string   "rubric"
+    t.integer  "assignee_id"
+    t.string   "assignee_type"
   end
 
+  add_index "targets", ["assignee_id", "assignee_type"], name: "index_targets_on_assignee_id_and_assignee_type", using: :btree
   add_index "targets", ["assigner_id"], name: "index_targets_on_assigner_id", using: :btree
   add_index "targets", ["startup_id"], name: "index_targets_on_startup_id", using: :btree
 

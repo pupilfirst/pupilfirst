@@ -176,7 +176,7 @@ class Startup < ActiveRecord::Base
   has_many :timeline_events, dependent: :destroy
   has_many :startup_feedback, dependent: :destroy
   has_many :karma_points, dependent: :restrict_with_exception
-  has_many :targets, dependent: :destroy
+  has_many :targets, dependent: :destroy, as: :assignee
   has_many :connect_requests, dependent: :destroy
   has_many :team_members, dependent: :destroy
 
@@ -477,7 +477,13 @@ class Startup < ActiveRecord::Base
 
   def prepopulate_targets
     TargetTemplate.where(populate_on_start: true).each do |target_template|
-      target_template.create_target!(self)
+      if target_template.founder_role?
+        founders.each do |founder|
+          target_template.create_target!(founder)
+        end
+      else
+        target_template.create_target!(self)
+      end
     end
   end
 

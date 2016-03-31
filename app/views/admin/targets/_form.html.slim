@@ -1,9 +1,37 @@
 = semantic_form_for [:admin, @target] do |f|
   = f.semantic_errors *f.object.errors.keys
   = f.inputs 'Target details' do
-    = f.input :startup,
-      label: 'Product',
-      member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }
+    #target-founders-for-startup-url data-url=founders_for_target_admin_targets_url
+
+    = f.input :role,
+      as: :select,
+      collection: Target.valid_roles,
+      include_blank: false,
+      member_label: proc { |role| t("role.#{role}") }
+
+    - if f.object.new_record?
+      = f.input :startup_id,
+        required: true,
+        collection: Startup.all,
+        as: :select,
+        label: 'Product',
+        member_label: proc { |startup| startup.display_name }
+
+      = f.input :founder_id,
+        as: :select,
+        label: 'Founder',
+        multiple: true,
+        input_html: { style: 'height: 100%' }
+    - else
+      = f.input :assignee_type,
+        as: :select,
+        collection: %w(Startup Founder),
+        include_blank: false,
+        input_html: { disabled: true }
+
+      = f.input :assignee_id,
+        collection: proc { Object.const_get(f.object.assignee_type).all },
+        input_html: { disabled: true }
 
     = f.input :status,
       as: :select,
@@ -13,20 +41,18 @@
 
     = f.input :completed_at, as: :just_datetime_picker
     = f.input :completion_comment
-    = f.input :role,
-      as: :select,
-      collection: Target.valid_roles,
-      include_blank: false,
-      member_label: proc { |role| t("role.#{role}") }
-
     = f.input :title
     = f.hidden_field :description
+
     .label-replica
-      ' description
+      ' Description
       abbr title="required" *
+
     trix-editor.input-replica input="target_description" class="#{'error-replica' if @target.errors[:description].present?}"
+
     - if @target.errors[:description].present?
       p.inline-errors-replica #{@target.errors[:description][0]}
+
     = f.input :slideshow_embed
     = f.input :resource_url
     = f.input :completion_instructions

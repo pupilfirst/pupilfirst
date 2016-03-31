@@ -15,7 +15,7 @@ describe Target do
     end
 
     context 'when target is not in pending status' do
-      let(:subject) { create :target, status: 'done' }
+      let(:subject) { create :target, status: Target::STATUS_DONE }
 
       it 'returns false' do
         expect(subject.pending?).to eq(false)

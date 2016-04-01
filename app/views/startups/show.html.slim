@@ -313,7 +313,7 @@
                       i.fa.fa-exclamation-circle
                       | &nbsp;#{status_text}
                   - elsif event.not_accepted?
-                    .verified-status-notice href="#" data-toggle="tooltip" title="This event has not been accepted and will not be displayed to public."
+                    .verified-status-notice href="#" data-toggle="tooltip" title="This event has not been accepted. Please edit based on feedback and resubmit for approval."
                       i.fa.fa-exclamation-circle
                       | &nbsp;Not Accepted
                   = image_tag 'timeline/dash.png'
@@ -366,7 +366,7 @@
                             i.fa.fa-exclamation-circle
                             | &nbsp;#{status_text}
                         - elsif event.not_accepted?
-                          .verified-status-notice href="#" data-toggle="tooltip" title="This event has not been accepted and will not be displayed to public."
+                          .verified-status-notice href="#" data-toggle="tooltip" title="This event has not been accepted. Please edit based on feedback and resubmit for approval."
                             i.fa.fa-exclamation-circle
                             | &nbsp;Not Accepted
                         h4.timeline-title-panel

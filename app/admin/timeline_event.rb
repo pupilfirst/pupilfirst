@@ -43,6 +43,8 @@ ActiveAdmin.register TimelineEvent do
     column :verified_status do |timeline_event|
       if timeline_event.verified?
         "Verified on #{timeline_event.verified_at.strftime('%d/%m/%y')}"
+      elsif timeline_event.needs_improvement?
+        "Marked needs improvement on #{timeline_event.verified_at.strftime('%d/%m/%y')}"
       else
         timeline_event.verified_status
       end
@@ -147,13 +149,18 @@ ActiveAdmin.register TimelineEvent do
     redirect_to action: :show
   end
 
-  member_action :unverify, method: :post do
-    TimelineEvent.find(params[:id]).unverify!
+  member_action :revert_to_pending, method: :post do
+    TimelineEvent.find(params[:id]).revert_to_pending!
     redirect_to action: :show
   end
 
   member_action :mark_needs_improvement, method: :post do
     TimelineEvent.find(params[:id]).mark_needs_improvement!
+    redirect_to action: :show
+  end
+
+  member_action :mark_not_accepted, method: :post do
+    TimelineEvent.find(params[:id]).mark_not_accepted!
     redirect_to action: :show
   end
 
@@ -241,34 +248,49 @@ ActiveAdmin.register TimelineEvent do
       end
 
       row :event_on
-      row :verified_status
 
-      row :verified_at do
+      row :verified_status do
+        span do
+          "#{timeline_event.verified_status} "
+        end
+
+        # an event in any state (other than already verified) can be verified
         verification_confirm = 'Are you sure you want to verify this event?'
         verification_confirm += ' The Verification will be announced on Public Slack' unless timeline_event.founder_event?
-        if timeline_event.verified?
+        unless timeline_event.verified?
           span do
-            "#{timeline_event.verified_at} "
-          end
-
-          span class: 'wrap-with-paranthesis' do
-            link_to 'Unverify', unverify_admin_timeline_event_path, method: :post, data: { confirm: 'Are you sure you want to unverify this event?' }
-          end
-        elsif timeline_event.pending?
-          span do
-            button_to 'Unverified. Click to verify this event.', verify_admin_timeline_event_path,
+            button_to 'Verify and Accept', verify_admin_timeline_event_path,
               form_class: 'inline-button',
               data: { confirm:  verification_confirm }
           end
+        end
 
+        # an event in any state (other than already marked for improvement) can be marked for improvement
+        unless timeline_event.needs_improvement?
           span do
-            button_to('Mark As Needs Improvement', mark_needs_improvement_admin_timeline_event_path, form_class: 'inline-button')
+            button_to 'Verify and Mark Needs Improvement', mark_needs_improvement_admin_timeline_event_path,
+              form_class: 'inline-button'
           end
-        elsif timeline_event.needs_improvement?
-          button_to 'Unverified. Click to verify this event.', verify_admin_timeline_event_path,
-            data: { confirm:  verification_confirm }
+        end
+
+        # an event in any state (other than already rejected) can be marked not accepted
+        unless timeline_event.not_accepted?
+          span do
+            button_to 'Mark Not Accepted', mark_not_accepted_admin_timeline_event_path,
+              form_class: 'inline-button'
+          end
+        end
+
+        # any non pending event can be retracted back to pending
+        unless timeline_event.pending?
+          span do
+            button_to 'Revert to Pending', revert_to_pending_admin_timeline_event_path,
+              form_class: 'inline-button'
+          end
         end
       end
+
+      row :verified_at
 
       row('Linked Target') do
         if timeline_event.target.present?

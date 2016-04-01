@@ -39,15 +39,6 @@ class TimelineEvent < ActiveRecord::Base
   normalize_attribute :grade
   validates_inclusion_of :grade, in: valid_grades, allow_nil: true
 
-  before_validation do
-    # default verified_status to pending unless verified_at is present
-    if verified_at.present?
-      self.verified_status = VERIFIED_STATUS_VERIFIED
-    else
-      self.verified_status ||= VERIFIED_STATUS_PENDING
-    end
-  end
-
   validates_length_of :description,
     maximum: MAX_DESCRIPTION_CHARACTERS,
     message: "must be within #{MAX_DESCRIPTION_CHARACTERS} characters"
@@ -171,12 +162,16 @@ class TimelineEvent < ActiveRecord::Base
     add_link_for_new_resume!
   end
 
-  def unverify!
+  def revert_to_pending!
     update!(verified_status: VERIFIED_STATUS_PENDING, verified_at: nil)
   end
 
   def mark_needs_improvement!
-    update!(verified_status: VERIFIED_STATUS_NEEDS_IMPROVEMENT, verified_at: nil)
+    update!(verified_status: VERIFIED_STATUS_NEEDS_IMPROVEMENT, verified_at: Time.now)
+  end
+
+  def mark_not_accepted!
+    update!(verified_status: VERIFIED_STATUS_NOT_ACCEPTED, verified_at: nil)
   end
 
   def verified?
@@ -189,6 +184,10 @@ class TimelineEvent < ActiveRecord::Base
 
   def needs_improvement?
     self.verified_status == VERIFIED_STATUS_NEEDS_IMPROVEMENT
+  end
+
+  def not_accepted?
+    self.verified_status == VERIFIED_STATUS_NOT_ACCEPTED
   end
 
   def month_old?

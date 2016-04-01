@@ -299,13 +299,17 @@
                           data-faculty="#{faculty}" data-attachment-url="#{latest_feedback&.attachment&.url}"
                           data-attachment-name="#{latest_feedback&.attachment_file_name}"]
                   - if event.pending?
-                    .pending-verification href="#" data-toggle="tooltip" title="This event has not yet been verified by SV.CO, and is hidden from the public."
+                    .verified-status-notice href="#" data-toggle="tooltip" title="This event has not yet been verified by SV.CO, and is hidden from the public."
                       i.fa.fa-exclamation-circle
                       | &nbsp;Pending verification
-                  - if event.needs_improvement?
-                    .pending-verification href="#" data-toggle="tooltip" title="This event needs to be improved and resubmitted for approval."
+                  - elsif event.needs_improvement?
+                    .verified-status-notice href="#" data-toggle="tooltip" title="This event has been verified but needs improvement. Please submit a new revised event based on feedback."
                       i.fa.fa-exclamation-circle
                       | &nbsp;Needs Improvement
+                  - elsif event.not_accepted?
+                    .verified-status-notice href="#" data-toggle="tooltip" title="This event has not been accepted and will not be displayed to public."
+                      i.fa.fa-exclamation-circle
+                      | &nbsp;Not Accepted
                   = image_tag 'timeline/dash.png'
                   p #{event.description}
 
@@ -342,13 +346,17 @@
                           = image_tag event.image
                       .timeline-heading
                         - if event.pending?
-                          .pending-verification href="#" data-toggle="tooltip" title="This event has not yet been verified by SV.CO, and is hidden from the public."
+                          .verified-status-notice href="#" data-toggle="tooltip" title="This event has not yet been verified by SV.CO, and is hidden from the public."
                             i.fa.fa-exclamation-circle
                             | &nbsp;Pending verification
                         - elsif event.needs_improvement?
-                          .pending-verification href="#" data-toggle="tooltip" title="This event needs to be improved and resubmitted for approval."
+                          .verified-status-notice href="#" data-toggle="tooltip" title="This event has been verified but needs improvement. Please submit a new revised event based on the feedback."
                             i.fa.fa-exclamation-circle
                             | &nbsp;Needs Improvement
+                        - elsif event.not_accepted?
+                          .verified-status-notice href="#" data-toggle="tooltip" title="This event has not been accepted and will not be displayed to public."
+                            i.fa.fa-exclamation-circle
+                            | &nbsp;Not Accepted
                         h4.timeline-title-panel
                           a.timeline-title href="#{startup_url(event.startup, anchor: "event-#{event.id}")}"
                             ' #{event.timeline_event_type.title}

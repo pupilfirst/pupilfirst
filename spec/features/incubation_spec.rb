@@ -11,7 +11,8 @@ feature 'Incubation' do
   let(:startup) { create :startup }
   let!(:tet_joined) { create :tet_joined }
   let(:faculty) { create :faculty }
-  let!(:read_playbook) { create :target_template, populate_on_start: true, assigner: faculty, title: 'Read Playbook' }
+  let!(:read_playbook) { create :target_template, populate_on_start: true, assigner: faculty, title: 'Read Playbook', role: Target::ROLE_FOUNDER }
+  let!(:pick_product_idea) { create :target_template, populate_on_start: true, assigner: faculty, title: 'Pick Product Idea', role: 'product' }
 
   before :all do
     WebMock.allow_net_connect!
@@ -244,8 +245,10 @@ feature 'Incubation' do
             expect(founder.startup.timeline_events.first.timeline_event_type).to eq(tet_joined)
 
             # Check for presence of prepopulated targets.
+            expect(founder.targets.count).to eq(1)
             expect(founder.startup.targets.count).to eq(1)
-            expect(founder.startup.targets.first.title).to eq('Read Playbook')
+            expect(founder.targets.first.title).to eq('Read Playbook')
+            expect(founder.startup.targets.first.title).to eq('Pick Product Idea')
           end
         end
       end

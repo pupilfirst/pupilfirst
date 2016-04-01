@@ -320,7 +320,7 @@
                   p #{event.description}
 
                   - if current_founder && @startup.founder?(current_founder)
-                    - if event.month_old?
+                    - if event.not_editable?
                       .old-to-edit href="#" data-toggle="tooltip" title="To edit/delete this event, please write to help@sv.co."
                         button.btn.btn-danger.btn-sm.btn-flat.btn-with-default-padding.disabled.margin-right-5
                           i.fa.fa-times
@@ -412,7 +412,7 @@
                                   | #{attachment[:title]}
 
                         - if current_founder && @startup.founder?(current_founder)
-                          - if event.month_old?
+                          - if event.not_editable?
                             .old-to-edit href="#" data-toggle="tooltip" title="To edit/delete this event, please write to help@sv.co."
                               button.btn.btn-danger.btn-sm.btn-flat.btn-with-default-padding.disabled.margin-right-5
                                 i.fa.fa-times

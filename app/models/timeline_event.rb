@@ -196,8 +196,8 @@ class TimelineEvent < ActiveRecord::Base
     verified_status == VERIFIED_STATUS_NOT_ACCEPTED
   end
 
-  def month_old?
-    created_at < 1.month.ago
+  def not_editable?
+    verified? || needs_improvement?
   end
 
   def public_link?

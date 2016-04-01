@@ -135,49 +135,15 @@ feature 'Timeline Builder' do
         # Then wait for page to load.
         new_timeline_event_panel = page.find("#event-#{unverified_timeline_event.id}")
         expect(new_timeline_event_panel).to have_text(new_description)
-      end
-    end
-
-    context 'Founder has a existing verified timeline event' do
-      let!(:verified_timeline_event) { create :timeline_event, startup: startup, verified_at: Time.now }
-      let(:new_description) { Faker::Lorem.words(10).join ' ' }
-
-      scenario 'Founder edits existing event', js: true do
-        visit startup_path(startup)
-
-        page.find("#event-#{verified_timeline_event.id} .edit-link").click
-
-        # Turbolinks is in effect, so wait for event to load.
-        expect(page).to have_selector('textarea', text: verified_timeline_event.description)
-
-        fill_in 'timeline_event_description', with: new_description
-
-        page.accept_confirm do
-          click_on 'Submit for Review'
-        end
-
-        # Wait for AJAX request to finish.
-        expect(page).to have_text('All done!')
-
-        # Sleep for 2s, since that's the delay to page refresh.
-        sleep 2
-
-        # Then wait for page to load.
-        new_timeline_event_panel = page.find("#event-#{verified_timeline_event.id}")
-        expect(new_timeline_event_panel).to have_text(new_description)
         expect(new_timeline_event_panel).to have_text('Pending verification')
-
-        verified_timeline_event.reload
-
-        expect(verified_timeline_event.verified_at).to be_nil
       end
 
       scenario 'Founder adds multiple links', js: true do
         visit startup_path(startup)
-        page.find("#event-#{verified_timeline_event.id} .edit-link").click
+        page.find("#event-#{unverified_timeline_event.id} .edit-link").click
 
         # Wait for page to load.
-        expect(page).to have_selector('textarea', text: verified_timeline_event.description)
+        expect(page).to have_selector('textarea', text: unverified_timeline_event.description)
         # Add two links, one private and one public.
         page.find('a', text: 'Add Links and Files').click
         click_on 'Add a link'
@@ -380,6 +346,62 @@ feature 'Timeline Builder' do
           expect(timeline_event.links.length).to eq(2)
           expect(timeline_event.links.last[:title]).to eq('SV.CO')
         end
+      end
+    end
+
+    context 'Founder has a existing rejected timeline event' do
+      let!(:rejected_timeline_event) { create :timeline_event, startup: startup, verified_status: TimelineEvent::VERIFIED_STATUS_NOT_ACCEPTED }
+      let(:new_description) { Faker::Lorem.words(10).join ' ' }
+
+      scenario 'Founder edits rejected event', js: true do
+        visit startup_path(startup)
+
+        rejected_event_card = page.find("#event-#{rejected_timeline_event.id}")
+        expect(rejected_event_card).to have_text('Not Accepted')
+
+        page.find("#event-#{rejected_timeline_event.id} .edit-link").click
+
+        expect(page).to have_selector('textarea', text: rejected_timeline_event.description)
+
+        fill_in 'timeline_event_description', with: new_description
+        click_on 'Submit for Review'
+
+        expect(page).to have_text('All done!')
+        # Sleep for 2s, since that's the delay to page refresh.
+        sleep 2
+
+        # Then wait for page to load.
+        new_timeline_event_panel = page.find("#event-#{rejected_timeline_event.id}")
+        expect(new_timeline_event_panel).to have_text(new_description)
+        expect(new_timeline_event_panel).to have_text('Pending verification')
+      end
+    end
+
+    context 'Founder has a existing verified timeline event' do
+      let!(:verified_timeline_event) do
+        create :timeline_event, startup: startup, verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED, verified_at: Time.now
+      end
+
+      scenario 'Founder attempts to edit verified event' do
+        visit startup_path(startup)
+
+        # edit and delete buttons should be disabled
+        expect(page.find("#event-#{verified_timeline_event.id} .edit-link")[:class]).to include('disabled')
+        expect(page.find("#event-#{verified_timeline_event.id} .delete-link")[:class]).to include('disabled')
+      end
+    end
+
+    context 'Founder has a existing needs_improvement timeline event' do
+      let!(:needs_improvement_timeline_event) do
+        create :timeline_event, startup: startup, verified_status: TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT, verified_at: Time.now
+      end
+
+      scenario 'Founder attempts to edit needs_improvement event' do
+        visit startup_path(startup)
+
+        # edit and delete buttons should be disabled
+        expect(page.find("#event-#{needs_improvement_timeline_event.id} .edit-link")[:class]).to include('disabled')
+        expect(page.find("#event-#{needs_improvement_timeline_event.id} .delete-link")[:class]).to include('disabled')
       end
     end
   end

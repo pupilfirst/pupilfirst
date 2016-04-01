@@ -322,7 +322,7 @@
                   - if current_founder && @startup.founder?(current_founder)
                     - if event.not_editable?
                       .old-to-edit href="#" data-toggle="tooltip" title="To edit/delete this event, please write to help@sv.co."
-                        button.btn.btn-danger.btn-sm.btn-flat.btn-with-default-padding.disabled.margin-right-5
+                        button.btn.btn-danger.btn-sm.btn-flat.btn-with-default-padding.disabled.margin-right-5.delete-link
                           i.fa.fa-times
                           | &nbsp;Delete
                         button.btn.btn-info.btn-sm.btn-flat.btn-with-default-padding.edit-link.disabled
@@ -414,7 +414,7 @@
                         - if current_founder && @startup.founder?(current_founder)
                           - if event.not_editable?
                             .old-to-edit href="#" data-toggle="tooltip" title="To edit/delete this event, please write to help@sv.co."
-                              button.btn.btn-danger.btn-sm.btn-flat.btn-with-default-padding.disabled.margin-right-5
+                              button.btn.btn-danger.btn-sm.btn-flat.btn-with-default-padding.disabled.margin-right-5.delete-link
                                 i.fa.fa-times
                                 | &nbsp;Delete
                               button.btn.btn-info.btn-sm.btn-flat.btn-with-default-padding.edit-link.disabled

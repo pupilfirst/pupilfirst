@@ -417,7 +417,7 @@ class Founder < ActiveRecord::Base
     Founder.find_by_batch(batch).joins(:visits).where(visits: { started_at: since..upto }).distinct
   end
 
-  def has_targets?
+  def any_targets?
     targets.present? || startup&.targets.present?
   end
 

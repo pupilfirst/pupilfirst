@@ -46,5 +46,12 @@ module ActiveAdmin
       reaction_to_author = message.reaction_to.founder.present? ? message.reaction_to.founder.fullname : message.reaction_to.slack_username
       "reacted with #{message.body} to \'#{truncate(message.reaction_to.body, length: 250)}\' from #{reaction_to_author}"
     end
+
+    def commitment_options
+      {
+        'Part Time' => Faculty::COMMITMENT_PART_TIME,
+        'Full Time' => Faculty::COMMITMENT_FULL_TIME
+      }
+    end
   end
 end

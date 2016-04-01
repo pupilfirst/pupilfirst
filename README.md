@@ -20,6 +20,7 @@
 ### Configure
   *  Setup `database.yml` for postgresql.
   *  copy `example.env` to `.env` and set the variables as required.
+  *  Remove `SENTRY_DSN` key from `.env`. This disables the sentry-raven gem (useful only in production).
 
 ### Bundle
     $ bundle install

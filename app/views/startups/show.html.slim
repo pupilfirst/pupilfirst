@@ -157,7 +157,7 @@
                   img.media-object alt="Team Size icon" src="#{image_url 'timeline/icons/team_size.png'}"
                 .media-body
                   h4.media-heading Team Size
-                  p.data-content #{@startup.founders.count}
+                  p.data-content #{@startup.founders.count + @startup.team_members.count}
             .col-sm-6.col-md-12
               .media
                 .media-left
@@ -221,6 +221,9 @@
                         .media-heading
                           .text-lowercase #{founder.email}
                         p This founder is yet to complete his registration on SV.CO!
+              - else
+                .alert.alert-info
+                  ' + #{pluralize(@startup.founders.not_registered.count, 'founder')} yet to register!
         .row
           - if @startup.team_members.present?
             .col-sm-6.col-md-12

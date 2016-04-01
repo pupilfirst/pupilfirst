@@ -226,8 +226,6 @@ class Startup < ActiveRecord::Base
   # New set of validations for incubation wizard
   store :metadata, accessors: [:updated_from]
 
-  validates_numericality_of :revenue_generated, greater_than_or_equal_to: 0, allow_blank: true
-
   validates_presence_of :product_name
 
   before_validation do
@@ -268,7 +266,7 @@ class Startup < ActiveRecord::Base
   mount_uploader :logo, LogoUploader
   process_in_background :logo
 
-  normalize_attribute :pitch, :product_description, :email, :phone, :revenue_generated
+  normalize_attribute :pitch, :product_description, :email, :phone
 
   attr_accessor :full_validation
 

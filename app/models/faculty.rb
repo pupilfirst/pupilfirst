@@ -97,7 +97,7 @@ class Faculty < ActiveRecord::Base
 
   # Returns completed connect requests.
   def past_connect_requests
-    connect_requests.completed
+    connect_requests.completed.order('connect_slots.slot_at DESC')
   end
 
   # Returns average rating of faculty if there are at least 5 ratings.

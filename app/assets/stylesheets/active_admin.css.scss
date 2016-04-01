@@ -7,22 +7,11 @@
 // For example, to change the sidebar width:
 // $sidebar-width: 242px;
 
+@import "admin/flattened_active_admin_variables";
 // Active Admin's got SASS!
 // Modified to use flattened active_admin
 @import "flattened_active_admin/mixins";
 @import "flattened_active_admin/base";
-
-// Overriding any non-variable SASS must be done after the fact.
-// For example, to change the default status-tag color:
-//
-//   .status_tag { background: #6090DB; }
-
-// Customize ActiveSkin before importing it.
-//$skinLogo: image-url('admin/logo_40.png') no-repeat 0 0;
-//$skinActiveColor: #27ba9c;
-
-// ActiveSkin
-//@import "active_skin";
 
 // Rails Assets.
 @import "pnotify";

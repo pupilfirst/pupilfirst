@@ -66,4 +66,12 @@ module FacultyHelper
     commitment_string += '½' if commitment.to_i != commitment
     commitment_string + (commitment > 1 ? ' hours' : ' hour')
   end
+
+  def tooltip_for_commitment
+    @faculty.commitment
+  end
+
+  def tooltip_for_compensation
+    @faculty.compensation
+  end
 end

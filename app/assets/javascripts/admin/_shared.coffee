@@ -16,12 +16,13 @@ $(window).bind 'rails:flash', (e, params) ->
 $ ->
   Turbolinks.enableProgressBar();
 
-select2ForTagsFilter = ->
+select2Initializations = ->
   $('#q_tag_ids').select2(width: '100%');
+  $('#q_product_name').select2(width: '100%');
 
 # Manually link site_title logo to /admin as activeskin messes up setting config.site_title_link
 $(document).on 'page:change', ->
   $('#site_title').click (event) ->
     location.href = 'https://www.sv.co/admin'
 
-$(document).on 'page:change', select2ForTagsFilter
+$(document).on 'page:change', select2Initializations

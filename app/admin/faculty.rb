@@ -1,6 +1,6 @@
 ActiveAdmin.register Faculty do
   permit_params :name, :email, :title, :key_skills, :linkedin_url, :category, :image, :sort_index, :self_service,
-    :current_commitment, :founder_id, :inactive, :about
+    :current_commitment, :founder_id, :inactive, :about, :commitment, :compensation
 
   config.sort_order = 'sort_index_asc'
 
@@ -36,7 +36,9 @@ ActiveAdmin.register Faculty do
       f.input :sort_index
       f.input :inactive
       f.input :self_service
+      f.input :commitment, as: :select, collection: commitment_options, label_method: :first, value_method: :last
       f.input :current_commitment
+      f.input :compensation, as: :select, collection: Faculty.valid_compensation_values
       f.input :founder
     end
 

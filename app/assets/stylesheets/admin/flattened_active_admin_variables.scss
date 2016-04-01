@@ -1,12 +1,11 @@
 // Variables used throughout Active Admin.
 // They can be overridden by your own
-
 // Colors
-$body-background-color: #FFF !default;
+$body-background-color: #f9f9f9 !default;
 $title-bar-background: #efefef !default;
 $primary-color: #5E6469 !default;
 $secondary-color: #f0f0f0 !default;
-$current-menu-item-background: lighten($primary-color, 12%) !default;
+$current-menu-item-background: #0074a8 !default;
 $hover-menu-item-background: lighten($primary-color, 12%) !default;
 $table-stripe-color: lighten($primary-color, 57%) !default;
 $table-selected-color: #d9e4ec !default;
@@ -15,14 +14,14 @@ $blank-slate-primary-color: #AAA !default;
 $breadcrumbs-color: #8a949e !default;
 $breadcrumbs-separator-color: #aab2ba !default;
 $required-field-marker-color: #aaa !default;
-$page-header-background-color: #5E6469 !default;
+$page-header-background-color: #FFF !default;
 
 // Text
 $text-color: #323537 !default;
 $link-color: #38678b !default;
-$header-dropdown-menu-text-color: #cdcdcd !default;
+$header-dropdown-menu-text-color: #fff !default;
 $section-header-text-color: $primary-color !default;
-$page-header-text-color: #cdcdcd !default;
+$page-header-text-color: #000 !default;
 $form-label-color: $section-header-text-color !default;
 
 

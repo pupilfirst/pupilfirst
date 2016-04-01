@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160329093200) do
+ActiveRecord::Schema.define(version: 20160331122312) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,9 +72,10 @@ ActiveRecord::Schema.define(version: 20160329093200) do
     t.text     "description"
     t.date     "start_date"
     t.date     "end_date"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.integer  "batch_number"
+    t.string   "slack_channel"
   end
 
   create_table "connect_requests", force: :cascade do |t|
@@ -213,6 +214,7 @@ ActiveRecord::Schema.define(version: 20160329093200) do
     t.integer  "invited_batch_id"
     t.boolean  "timeline_toured"
     t.string   "identification_proof"
+    t.string   "skype_id"
   end
 
   add_index "founders", ["confirmation_token"], name: "index_founders_on_confirmation_token", unique: true, using: :btree
@@ -327,7 +329,6 @@ ActiveRecord::Schema.define(version: 20160329093200) do
     t.string   "district"
     t.string   "product_progress"
     t.string   "presentation_link"
-    t.integer  "revenue_generated"
     t.string   "pin"
     t.datetime "agreement_signed_at"
     t.text     "metadata"

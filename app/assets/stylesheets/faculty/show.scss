@@ -227,12 +227,48 @@
           display: inline-block;
           font-size: 12px;
           padding: 3px 8px;
+          cursor: default;
 
           &.time-commitment-flag {
             background-color: #a0c0da;
           }
           &.compensation-flag {
             background-color: #a0d190;
+          }
+          + .tooltip > {
+            .tooltip-inner {
+              background-color: #faebcc;
+              border-radius: 5px;
+              color: #8a6d3b;
+              border: 1px solid #bc995b;
+              position: relative;
+
+              &:after, &:before {
+                top: 100%;
+                left: 50%;
+                border: solid transparent;
+                content: " ";
+                height: 0;
+                width: 0;
+                position: absolute;
+                pointer-events: none;
+              }
+              &:after {
+                border-color: rgba(250, 235, 204, 0);
+                border-top-color: #faebcc;
+                border-width: 5px;
+                margin-left: -5px;
+              }
+              &:before {
+                border-color: rgba(212, 176, 115, 0);
+                border-top-color: #d4b073;
+                border-width: 6px;
+                margin-left: -6px;
+              }
+            }
+          }
+          @media (max-width: $screen-md-max) {
+            font-size: 11px;
           }
         }
       }

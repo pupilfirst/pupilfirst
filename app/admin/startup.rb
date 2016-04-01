@@ -1,5 +1,5 @@
 ActiveAdmin.register Startup do
-  filter :product_name
+  filter :product_name, as: :select
   filter :batch
   filter :stage, as: :select, collection: proc { stages_collection }
   filter :tags, collection: proc { Startup.tag_counts_on(:tags) }, multiple: true
@@ -122,7 +122,6 @@ ActiveAdmin.register Startup do
     column :district
     column :pin
     column :product_progress
-    column :revenue_generated
     column :agreement_signed_at
   end
 
@@ -245,8 +244,6 @@ ActiveAdmin.register Startup do
       row :prototype_link do
         link_to startup.prototype_link, startup.prototype_link if startup.prototype_link.present?
       end
-
-      row :revenue_generated
 
       row :startup_categories do
         startup.startup_categories.map(&:name).join(', ')

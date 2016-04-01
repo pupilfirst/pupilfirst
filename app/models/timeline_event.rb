@@ -175,19 +175,19 @@ class TimelineEvent < ActiveRecord::Base
   end
 
   def verified?
-    self.verified_status == VERIFIED_STATUS_VERIFIED
+    verified_status == VERIFIED_STATUS_VERIFIED
   end
 
   def pending?
-    self.verified_status == VERIFIED_STATUS_PENDING
+    verified_status == VERIFIED_STATUS_PENDING
   end
 
   def needs_improvement?
-    self.verified_status == VERIFIED_STATUS_NEEDS_IMPROVEMENT
+    verified_status == VERIFIED_STATUS_NEEDS_IMPROVEMENT
   end
 
   def not_accepted?
-    self.verified_status == VERIFIED_STATUS_NOT_ACCEPTED
+    verified_status == VERIFIED_STATUS_NOT_ACCEPTED
   end
 
   def month_old?

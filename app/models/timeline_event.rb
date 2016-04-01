@@ -43,6 +43,11 @@ class TimelineEvent < ActiveRecord::Base
     maximum: MAX_DESCRIPTION_CHARACTERS,
     message: "must be within #{MAX_DESCRIPTION_CHARACTERS} characters"
 
+  before_validation do
+    self.verified_status ||= VERIFIED_STATUS_PENDING
+    self.verified_at = nil unless needs_improvement? || verified?
+  end
+
   accepts_nested_attributes_for :timeline_event_files, allow_destroy: true
 
   scope :end_of_iteration_events, -> { where(timeline_event_type: TimelineEventType.end_iteration) }

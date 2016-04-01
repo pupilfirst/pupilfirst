@@ -465,7 +465,7 @@ class Startup < ActiveRecord::Base
     if viewer && self == viewer.startup
       timeline_events.order(:event_on, :updated_at).reverse_order
     else
-      timeline_events.verified.order(:event_on, :updated_at).reverse_order
+      timeline_events.visible_to_public.order(:event_on, :updated_at).reverse_order
     end
   end
 

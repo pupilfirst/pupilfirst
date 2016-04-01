@@ -23,4 +23,12 @@ setupSelect2ForFounderTagList = ->
         return {id: term, text: term}
 )
 
+showTargetsOptionally = ->
+  $('.admin-founder-targets-show-link').click (event) ->
+    showLink = $(event.target)
+    founderId = showLink.data('founderId')
+    $(".admin-founder-#{founderId}-hidden-target").removeClass('hide')
+    showLink.hide()
+
+$(document).on 'page:change', showTargetsOptionally
 $(document).on 'page:change', setupSelect2ForFounderTagList

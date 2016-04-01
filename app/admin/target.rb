@@ -1,5 +1,5 @@
 ActiveAdmin.register Target do
-  permit_params :startup_id, :assigner_id, :role, :status, :title, :description, :status, :resource_url,
+  permit_params :assignee_id, :assignee_type, :assigner_id, :role, :status, :title, :description, :status, :resource_url,
     :completion_instructions, :due_date_date, :due_date_time_hour, :due_date_time_minute, :slideshow_embed,
     :completed_at_date, :completed_at_time_hour, :completed_at_time_minute, :completion_comment, :rubric,
     :remote_rubric_url
@@ -9,13 +9,52 @@ ActiveAdmin.register Target do
   scope :expired
 
   preserve_default_filters!
-  filter :startup,
-    collection: Startup.batched,
-    label: 'Product',
-    member_label: proc { |startup| startup.display_name }
+
+  filter :assignee_type
+
+  filter :assignee,
+    if: proc { params.dig(:q, :assignee_type_eq).present? },
+    collection: proc { Object.const_get(params.dig(:q, :assignee_type_eq)).joins(:targets).distinct }
 
   filter :role, as: :select, collection: Target.valid_roles
   filter :status, as: :select, collection: Target.valid_statuses
+
+  controller do
+    def create
+      startup = Startup.find_by id: params[:target][:startup_id]
+
+      @target = Target.new permitted_params[:target]
+      @target.assignee = startup if startup.present?
+
+      unless @target.valid?
+        render :new
+        return
+      end
+
+      if params.dig(:target, :role) == 'founder'
+        # Then we're creating one of more founder targets.
+        targets = create_multiple_founder_targets!
+        flash[:success] = "Created #{targets.count} targets"
+        redirect_to admin_targets_url
+      else
+        # Then we're just creating a single startup target.
+        @target.save!
+        flash[:success] = 'New target has been created.'
+        redirect_to admin_target_url(@target)
+      end
+    end
+
+    def create_multiple_founder_targets!
+      founder_ids = params[:target][:founder_id].reject(&:blank?)
+
+      # Founders can either be all (of a startup), or selected list.
+      founders = founder_ids.include?('all') ? startup.founders : Founder.where(id: founder_ids)
+
+      founders.map do |founder|
+        Target.create!(@target.attributes.merge(assignee: founder))
+      end
+    end
+  end
 
   member_action :duplicate, method: :get do
     target = Target.find(params[:id])
@@ -38,28 +77,15 @@ ActiveAdmin.register Target do
   index do
     selectable_column
 
-    column :product do |target|
-      startup = target.startup
-
-      a href: admin_startup_path(startup) do
-        span startup.product_name
-
-        if startup.name.present?
-          span class: 'wrap-with-paranthesis' do
-            startup.name
-          end
-        end
-      end
-    end
+    column :assignee_type
+    column :assignee
 
     column :role do |target|
       t("role.#{target.role}")
     end
 
     column :status do |target|
-      if target.founder?
-        'N/A'
-      elsif target.expired?
+      if target.expired?
         'Expired'
       else
         t("target.status.#{target.status}")
@@ -92,28 +118,15 @@ ActiveAdmin.register Target do
     end
 
     attributes_table do
-      row :product do
-        startup = target.startup
-
-        a href: admin_startup_path(startup) do
-          span startup.product_name
-
-          if startup.name.present?
-            span class: 'wrap-with-paranthesis' do
-              startup.name
-            end
-          end
-        end
-      end
+      row :assignee_type
+      row :assignee
 
       row :role do
         t("role.#{target.role}")
       end
 
       row :status do
-        if target.founder?
-          'N/A'
-        elsif target.expired?
+        if target.expired?
           'Expired'
         else
           t("target.status.#{target.status}")
@@ -122,6 +135,7 @@ ActiveAdmin.register Target do
 
       row :title
       row :assigner
+
       row :rubric do
         if target.rubric.present?
           link_to target.rubric_identifier, target.rubric.url
@@ -141,6 +155,11 @@ ActiveAdmin.register Target do
       row :created_at
       row :updated_at
     end
+  end
+
+  collection_action :founders_for_target do
+    @founders = Startup.find(params[:startup_id]).founders
+    render 'founders_for_target.json.erb'
   end
 
   form partial: 'admin/targets/form'

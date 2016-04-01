@@ -5,18 +5,11 @@
     ol
       li.input.select.required
         = label_tag :target_id, 'Link Target', class: 'label'
-        - startup_targets = timeline_event.startup.targets
-        - pending_targets = startup_targets.pending.order('created_at DESC').pluck(:title,:id)
-        - expired_targets = startup_targets.expired.order('created_at DESC').pluck(:title,:id)
-        - completed_targets = startup_targets.where(status: Target::STATUS_DONE).order('created_at DESC').pluck(:title,:id)
-        - grouped_options = {'Live': pending_targets, 'Expired': expired_targets, 'Completed': completed_targets}
-        = select_tag :target_id, grouped_options_for_select(grouped_options), include_blank: true
-      - unless timeline_event.timeline_event_type.founder_event?
-        li.boolean.input.optional
-          label for=:target_completed
-            = check_box_tag :target_completed
-            ' Mark Target as completed?
-            /' Mark Target as completed? Once marked, it will be unavailable for creating more links.
+        = select_tag :target_id, grouped_options_for_select(grouped_targets_for_linking(timeline_event)), include_blank: true
+      li.boolean.input.optional
+        label for=:target_completed
+          = check_box_tag :target_completed
+          ' Mark Target as completed? Once marked, it will be unavailable for creating more links.
     ol
       li.action.input_action
         = submit_tag 'Link Target'

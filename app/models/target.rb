@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 class Target < ActiveRecord::Base
+  belongs_to :assignee, polymorphic: true
   belongs_to :startup
   belongs_to :assigner, class_name: 'Faculty'
   has_many :timeline_events
@@ -37,7 +38,10 @@ class Target < ActiveRecord::Base
     %w(pending done)
   end
 
-  validates_presence_of :startup_id, :assigner_id, :role, :title, :description, :status
+  # Need to allow these two to be read for AA form.
+  attr_reader :startup_id, :founder_id
+
+  validates_presence_of :assignee_id, :assignee_type, :assigner_id, :role, :title, :description, :status
   validates_inclusion_of :role, in: valid_roles
   validates_inclusion_of :status, in: valid_statuses
 
@@ -52,13 +56,6 @@ class Target < ActiveRecord::Base
   # This is a naive check. See done_for_viewer?
   def done?
     status == STATUS_DONE
-  end
-
-  # This checks for presence of a linked verified timeline event if role of target is founder.
-  def done_for_viewer?(viewer)
-    return true if done?
-    return done? unless role == ROLE_FOUNDER
-    timeline_events.where(founder: viewer).merge(TimelineEvent.verified).present?
   end
 
   # Stored status must be pending, and due date must be present and in the past.
@@ -84,11 +81,19 @@ class Target < ActiveRecord::Base
   after_update :notify_revision, if: :crucial_revision?
 
   def notify_new_target
-    PublicSlackTalk.post_message message: details_as_slack_message, founders: startup.founders
+    PublicSlackTalk.post_message message: details_as_slack_message, founders: slack_targets
   end
 
   def notify_revision
-    PublicSlackTalk.post_message message: revision_as_slack_message, founders: startup.founders
+    PublicSlackTalk.post_message message: revision_as_slack_message, founders: slack_targets
+  end
+
+  def slack_targets
+    @slack_targets ||= assignee.is_a?(Startup) ? assignee.founders : [assignee]
+  end
+
+  def startup
+    @startup ||= assignee.is_a?(Startup) ? assignee : assignee.startup
   end
 
   def crucial_revision?
@@ -119,7 +124,7 @@ class Target < ActiveRecord::Base
     return unless startup.present?
 
     # notify each founder
-    startup.founders.each do |founder|
+    slack_targets.each do |founder|
       next unless founder.slack_user_id.present?
       PublicSlackTalk.post_message message: mild_slack_reminder, founder: founder
     end
@@ -136,7 +141,7 @@ class Target < ActiveRecord::Base
     return unless startup.present?
 
     # notify each founder
-    startup.founders.each do |founder|
+    slack_targets.each do |founder|
       next unless founder.slack_user_id.present?
       PublicSlackTalk.post_message message: strong_slack_reminder, founder: founder
     end

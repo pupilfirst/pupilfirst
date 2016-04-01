@@ -47,7 +47,7 @@
             ' &nbsp;#{@startup.latest_help_wanted.description}
             - if @startup.email?
               | Please reach out to us at #{mail_to @startup.email}
-        - if current_founder && @startup.founder?(current_founder) && @startup.targets.present?
+        - if current_founder && @startup.founder?(current_founder) && current_founder.any_targets?
           #targets.margin-bottom-20
             h4.target-top-head.margin-top-0
               i.fa.fa-bullseye

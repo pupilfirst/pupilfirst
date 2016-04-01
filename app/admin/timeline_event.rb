@@ -20,7 +20,6 @@ ActiveAdmin.register TimelineEvent do
 
   index do
     selectable_column
-    actions
     column :timeline_event_type
 
     column :product do |timeline_event|
@@ -49,6 +48,8 @@ ActiveAdmin.register TimelineEvent do
         timeline_event.verified_status
       end
     end
+
+    actions
   end
 
   action_item :view, only: :show do
@@ -79,18 +80,14 @@ ActiveAdmin.register TimelineEvent do
 
     # If a target has been picked, complete it.
     if params[:target_id].present?
-      target = timeline_event.startup.targets.find(params[:target_id])
+      target = Target.find(params[:target_id])
 
       # Link the target to event.
       timeline_event.update(target: target)
 
-      Rails.logger.info event: :timeline_event_target_linked, target_id: target.id
-
       if params[:target_completed]
         target.complete!
         flash[:success] = 'Target has been linked and marked completed.'
-
-        Rails.logger.info event: :timeline_event_target_completed, target_id: target.id
       else
         flash[:success] = 'Target has been linked.'
       end

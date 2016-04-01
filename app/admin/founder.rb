@@ -41,9 +41,39 @@ ActiveAdmin.register Founder do
   # Customize the index. Let's show only a small subset of the tons of fields.
   index do
     selectable_column
-    actions
-    column :email
     column :fullname
+
+    column :targets do |founder|
+      if founder.targets.present?
+        ol do
+          hide_some_targets = founder.targets.count >= 5
+
+          founder.targets.order('updated_at DESC').each_with_index do |target, index|
+            fa_icon = if target.done?
+              'fa-check'
+            elsif target.expired?
+              'fa-times'
+            else
+              'fa-circle-o'
+            end
+
+            li class: (index >= 3 && hide_some_targets ? "hide admin-founder-#{founder.id}-hidden-target" : '') do
+              link_to " #{target.title}", [:admin, target], class: "fa #{fa_icon} no-text-decoration"
+            end
+          end
+
+          if hide_some_targets
+            li do
+              a class: 'admin-founder-targets-show-link fa fa-chevron-circle-down', 'data-founder-id' => founder.id do
+                ' Show all targets'
+              end
+            end
+          end
+        end
+      end
+    end
+
+    column :email
 
     column :product_name do |founder|
       if founder.startup.present?
@@ -61,12 +91,12 @@ ActiveAdmin.register Founder do
       end
     end
 
-    column :university
-
     column :karma_points do |founder|
       points = founder.karma_points.where('created_at > ?', Date.today.beginning_of_week).sum(:points)
       link_to points, admin_karma_points_path(q: { founder_id_eq: founder.id })
     end
+
+    actions
   end
 
   member_action :remove_from_startup, method: :post do

@@ -11,9 +11,9 @@ class TargetTemplate < ActiveRecord::Base
   end
 
   # Create a target using this template.
-  def create_target!(startup)
+  def create_target!(assignee)
     Target.create!(
-      startup: startup,
+      assignee: assignee,
       status: Target::STATUS_PENDING,
       role: role,
       title: title,
@@ -24,5 +24,9 @@ class TargetTemplate < ActiveRecord::Base
       due_date: due_date.end_of_day,
       slideshow_embed: slideshow_embed
     )
+  end
+
+  def founder_role?
+    role == Target::ROLE_FOUNDER
   end
 end

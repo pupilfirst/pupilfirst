@@ -26,32 +26,17 @@ module StartupsHelper
   end
 
   def pending_targets
-    # The split retrieval of targets is so that founder targets appear above team targets.
-    pending_targets = @startup.targets.pending
-    split_pending_targets = pending_targets.founder + pending_targets.not_target_roles
-
-    # Show only if not done for the current viewer
-    split_pending_targets.select do |target|
-      !target.done_for_viewer?(current_founder)
-    end
+    current_founder.targets.pending + @startup.targets.pending
   end
 
   # Only show expired targets that haven't been completed by founder already.
   def expired_targets
-    expired_targets = @startup.targets.expired
-
-    expired_targets.select do |target|
-      !target.done_for_viewer?(current_founder)
-    end
+    current_founder.targets.expired + @startup.targets.expired
   end
 
   # Only show completed targets which were completed by the founder
   def completed_targets
-    completed_targets = @startup.targets.completed
-
-    completed_targets.select do |target|
-      target.done_for_viewer?(current_founder)
-    end
+    current_founder.targets.completed + @startup.targets.completed
   end
 
   def showcase_events_for_batch(batch)

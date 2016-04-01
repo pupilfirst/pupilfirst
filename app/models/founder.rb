@@ -32,6 +32,7 @@ class Founder < ActiveRecord::Base
   belongs_to :invited_batch, class_name: 'Batch'
   has_many :visits, as: :user
   has_many :ahoy_events, class_name: 'Ahoy::Event', as: :user
+  has_many :targets, dependent: :destroy, as: :assignee
 
   scope :batched, -> { joins(:startup).merge(Startup.batched) }
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }
@@ -205,7 +206,7 @@ class Founder < ActiveRecord::Base
   end
 
   def display_name
-    fullname || email
+    fullname.blank? ? email : fullname
   end
 
   def fullname_and_email
@@ -414,6 +415,10 @@ class Founder < ActiveRecord::Base
   # method to return the list of active founders on web for a given duration
   def self.active_founders_on_web(since:, upto: Time.now, batch: Batch.current_or_last)
     Founder.find_by_batch(batch).joins(:visits).where(visits: { started_at: since..upto }).distinct
+  end
+
+  def any_targets?
+    targets.present? || startup&.targets.present?
   end
 
   private

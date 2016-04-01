@@ -97,8 +97,9 @@ end
 group :development do
   gem 'letter_opener' # In development, open mails sent in browser.
   gem 'bullet' # Detect N+1 queries.
-  gem 'better_errors' # Better error info on the front-end.
-  gem 'binding_of_caller' # For advanced better_errors features - REPL, local/instance variable inspection etc.
+  # gem 'better_errors' # Better error info on the front-end.
+  # gem 'binding_of_caller' # For advanced better_errors features - REPL, local/instance variable inspection etc.
+  gem 'web-console' # TODO: Restored until better_errors speeds up again.
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'

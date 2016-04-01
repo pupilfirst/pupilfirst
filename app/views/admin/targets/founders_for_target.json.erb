@@ -1,0 +1,3 @@
+{
+  "founder_options": "<%= j(options_for_select(@founders.map { |founder| [founder.display_name, founder.id] }.prepend(['All founders', 'all']), 'all')) %>"
+}

@@ -221,7 +221,7 @@
                         .media-heading
                           .text-lowercase #{founder.email}
                         p This founder is yet to complete his registration on SV.CO!
-              - else
+              - elsif @startup.founders.not_registered.present?
                 .alert.alert-info
                   ' + #{pluralize(@startup.founders.not_registered.count, 'founder')} yet to register!
         .row

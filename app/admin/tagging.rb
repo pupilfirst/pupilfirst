@@ -9,7 +9,7 @@ ActiveAdmin.register ActsAsTaggableOn::Tagging, as: 'Tagging' do
     if: proc { params.dig(:q, :taggable_type_eq).present? },
     collection: proc { Object.const_get(params.dig(:q, :taggable_type_eq)).joins(:taggings).distinct }
 
-  filter :tag, collection: proc {
+  filter :tag, multiple: true, collection: proc {
     taggable_type = params.dig(:q, :taggable_type_eq)
 
     if taggable_type.present?

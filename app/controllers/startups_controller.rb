@@ -202,9 +202,9 @@ class StartupsController < ApplicationController
     raise_not_found
   end
 
-  # A tour of timeline page may be given if user is founder of viewed startup, and the tour param is present.
+  # A tour of timeline page may be given if user is founder of viewed startup, or the tour param is present.
   def take_on_tour?
-    current_founder.present? && current_founder.startup == @startup && current_founder.tour_timeline?
+    current_founder.present? && current_founder.startup == @startup && (current_founder.tour_timeline? || params[:tour])
   end
 
   # If an event_id is available, use that, otherwise supply a new timeline event.

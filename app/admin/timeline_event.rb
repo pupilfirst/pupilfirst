@@ -354,7 +354,7 @@ ActiveAdmin.register TimelineEvent do
       end
     end
 
-    if timeline_event.verified? && timeline_event.karma_point.blank?
+    if timeline_event.to_be_graded?
       render partial: 'grade_form', locals: { timeline_event: timeline_event }
     end
 

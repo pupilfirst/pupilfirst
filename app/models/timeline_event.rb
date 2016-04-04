@@ -196,6 +196,10 @@ class TimelineEvent < ActiveRecord::Base
     verified_status == VERIFIED_STATUS_NOT_ACCEPTED
   end
 
+  def to_be_graded?
+    ([VERIFIED_STATUS_VERIFIED, VERIFIED_STATUS_NEEDS_IMPROVEMENT].include? verified_status) && karma_point.blank?
+  end
+
   def not_editable?
     verified? || needs_improvement?
   end

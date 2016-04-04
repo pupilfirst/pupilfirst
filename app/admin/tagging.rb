@@ -4,10 +4,20 @@ ActiveAdmin.register ActsAsTaggableOn::Tagging, as: 'Tagging' do
   menu false
 
   filter :taggable_type
+
   filter :taggable,
     if: proc { params.dig(:q, :taggable_type_eq).present? },
     collection: proc { Object.const_get(params.dig(:q, :taggable_type_eq)).joins(:taggings).distinct }
-  filter :tag
+
+  filter :tag, collection: proc {
+    taggable_type = params.dig(:q, :taggable_type_eq)
+
+    if taggable_type.present?
+      ActsAsTaggableOn::Tag.joins(:taggings).where(taggings: { taggable_type: taggable_type }).distinct
+    else
+      ActsAsTaggableOn::Tag.all
+    end
+  }
 
   index do
     selectable_column

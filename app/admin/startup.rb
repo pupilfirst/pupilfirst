@@ -268,7 +268,7 @@ ActiveAdmin.register Startup do
         startup.founders.each do |founder|
           div do
             span do
-              link_to founder.fullname, [:admin, founder]
+              link_to founder.display_name, [:admin, founder]
             end
 
             span do

@@ -319,9 +319,7 @@ ActiveAdmin.register Startup do
           end
 
           column :status do |target|
-            if target.founder?
-              'N/A'
-            elsif target.expired?
+            if target.expired?
               'Expired'
             else
               t("target.status.#{target.status}")

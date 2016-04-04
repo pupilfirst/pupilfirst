@@ -207,6 +207,33 @@ ActiveAdmin.register Founder do
         row :last_sign_in_at
       end
     end
+
+    if founder.targets.present?
+      panel 'Targets' do
+        table_for founder.targets.order('created_at DESC') do
+          column 'Target' do |target|
+            a href: admin_target_path(target) do
+              target.title
+            end
+          end
+
+          column :role do |target|
+            t("role.#{target.role}")
+          end
+
+          column :status do |target|
+            if target.expired?
+              'Expired'
+            else
+              t("target.status.#{target.status}")
+            end
+          end
+
+          column :assigner
+          column :created_at
+        end
+      end
+    end
   end
 
   action_item :feedback, only: :show, if: proc { Founder.friendly.find(params[:id]).startup.present? } do

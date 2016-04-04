@@ -2,10 +2,24 @@ ActiveAdmin.register TimelineEvent do
   permit_params :description, :timeline_event_type_id, :image, :event_on, :startup_id, :verified_at, :grade,
     :founder_id, :serialized_links, timeline_event_files_attributes: [:id, :title, :file, :private, :_destroy]
 
-  preserve_default_filters!
-  filter :startup_batch
-  filter :startup_product_name, as: :select, collection: proc { Startup.all.pluck(:product_name).uniq }
+  filter :startup_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'Batch'
+
+  filter :startup, label: 'Product', collection: proc {
+    batch_id = params.dig(:q, :startup_batch_id_eq)
+    batch_id.present? ? Startup.where(batch_id: batch_id) : Startup.all
+  }
+
   filter :timeline_event_type, collection: proc { TimelineEventType.all.order(:title) }
+  filter :timeline_event_type_role_eq, as: :select, collection: TimelineEventType.valid_roles, label: 'Role'
+  filter :founder, collection: proc {
+    batch_id = params.dig(:q, :startup_batch_id_eq)
+    batch_id.present? ? Founder.joins(:startup).where(startups: { batch_id: batch_id }).distinct : Founder.all
+  }
+
+  filter :created_at
+  filter :verified_at
+  filter :verified_status, as: :select, collection: TimelineEvent.valid_verified_status
+  filter :grade, as: :select, collection: TimelineEvent.valid_grades
 
   scope :all
   scope :batched

@@ -300,21 +300,21 @@
                           data-faculty="#{faculty}" data-attachment-url="#{latest_feedback&.attachment&.url}"
                           data-attachment-name="#{latest_feedback&.attachment_file_name}"]
                   - if event.pending?
-                    .verified-status-notice href="#" data-toggle="tooltip" title="This event has not yet been verified by SV.CO, and is hidden from the public."
+                    .verified-status-notice href="#" data-toggle="tooltip" title="We will verify this event very soon! If you haven't heard from us in 24 hours, do ping us on Slack!"
                       i.fa.fa-exclamation-circle
                       | &nbsp;Pending verification
                   - elsif event.needs_improvement?
                     - if current_founder && @startup.founder?(current_founder)
-                      - tooltip_text = 'This event has been verified but needs improvement. Please submit a new revised event based on feedback.'
+                      - tooltip_text = 'We have verified this event, but you can do better! If you have time, submit a new revised event based on our feedback.'
                       - status_text = 'Needs Improvement'
                     - else
-                      - tooltip_text = 'This event was verified by SV.CO but improvements asked for'
+                      - tooltip_text = 'This event is verified by SV.CO but our Faculty submitted feedback asking for further improvements.'
                       - status_text = 'Marked for Improvement'
                     .verified-status-notice href="#" data-toggle="tooltip" title="#{tooltip_text}"
                       i.fa.fa-exclamation-circle
                       | &nbsp;#{status_text}
                   - elsif event.not_accepted?
-                    .verified-status-notice href="#" data-toggle="tooltip" title="This event has not been accepted. Please edit based on feedback and resubmit for approval."
+                    .verified-status-notice href="#" data-toggle="tooltip" title="We are sorry, but this event is not acceptable. Please edit the event based on feedback and resubmit for approval."
                       i.fa.fa-exclamation-circle
                       | &nbsp;Not Accepted
                   = image_tag 'timeline/dash.png'
@@ -353,21 +353,21 @@
                           = image_tag event.image
                       .timeline-heading
                         - if event.pending?
-                          .verified-status-notice href="#" data-toggle="tooltip" title="This event has not yet been verified by SV.CO, and is hidden from the public."
+                          .verified-status-notice href="#" data-toggle="tooltip" title="We will verify this event very soon! If you haven't heard from us in 24 hours, do ping us on Slack!"
                             i.fa.fa-exclamation-circle
                             | &nbsp;Pending verification
                         - elsif event.needs_improvement?
                           - if current_founder && @startup.founder?(current_founder)
-                            - tooltip_text = 'This event has been verified but needs improvement. Please submit a new revised event based on feedback.'
+                            - tooltip_text = 'We have verified this event, but you can do better! If you have time, submit a new revised event based on our feedback.'
                             - status_text = 'Needs Improvement'
                           - else
-                            - tooltip_text = 'This event was verified by SV.CO but improvements asked for'
+                            - tooltip_text = 'This event is verified by SV.CO but our Faculty submitted feedback asking for further improvements.'
                             - status_text = 'Marked for Improvement'
                           .verified-status-notice href="#" data-toggle="tooltip" title="#{tooltip_text}"
                             i.fa.fa-exclamation-circle
                             | &nbsp;#{status_text}
                         - elsif event.not_accepted?
-                          .verified-status-notice href="#" data-toggle="tooltip" title="This event has not been accepted. Please edit based on feedback and resubmit for approval."
+                          .verified-status-notice href="#" data-toggle="tooltip" title="We are sorry, but this event is not acceptable. Please edit the event based on feedback and resubmit for approval."
                             i.fa.fa-exclamation-circle
                             | &nbsp;Not Accepted
                         h4.timeline-title-panel

@@ -397,6 +397,10 @@ giveATour = ->
           intro: startupShowTour.data('timelineEvent')
         },
         {
+          element: $('#targets')[0],
+          intro: startupShowTour.data('targets')
+        },
+        {
           element: $('.data-icons')[0],
           intro: startupShowTour.data('dataPoints')
         },

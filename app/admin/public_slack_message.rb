@@ -36,7 +36,7 @@ ActiveAdmin.register PublicSlackMessage do
       .includes(:founder, :karma_point)
 
     @batch = params[:batch].present? ? Batch.find(params[:batch]) : nil
-    @public_slack_messages = @public_slack_messages.from_batch(@batch) if @batch.present?
+    @public_slack_messages = @public_slack_messages.from_batch(@batch).order('created_at ASC') if @batch.present?
 
     render 'assign_karma_points'
   end

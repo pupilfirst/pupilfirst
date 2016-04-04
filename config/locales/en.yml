@@ -30,7 +30,10 @@ en:
         intro: Welcome to your team's timeline! All updates you post are verified by the SV.CO team, as indicated by the verified icon. If you'd like to invite new co-founders, list team members, or add general information about your startup, click the little pencil to edit your startup profile.
         timeline_builder: You can submit entries to your timeline by writing a description, picking a type of event and its date. You can also add a cover image, and attach links and files. All submissions will be reviewed by the SV.CO team before they are accepted.
         timeline_event: Once approved by the SV.CO team, (most) timeline events are displayed to the public. You can edit, or delete a timeline event up to a month past its date of creation, after which you'll have to contact us for any changes.
-        targets: Faculty from SV.CO will assign targets that you'll need to complete within the specified due date. A target's role indicates whether it has been assigned directly to you, or to your team as a whole. You'll receive notifications on Slack when you or your team are assigned new targets, or when existing targets are revised.
+        targets: |
+          <p>Faculty from SV.CO will assign targets that you'll need to complete within the specified due date.</p>
+          <p>A target might be marked either one of: <strong>All Founders</strong> which indicates that <em>every founder</em> has to submit that task, or any of the other founder roles like <strong>Product</strong> or <strong>Engineering</strong>, which means that it's a <em>team</em> task, meant to be submitted by the team as a whole.</p>
+          <p>You'll receive notifications on Slack when you or your team are assigned new targets, or when existing targets are revised.</p>
         data_points: Basic information about your team and product are displayed here. You can add more information by updating your startup's profile.
         founders: Your startup's founders are listed here. You can also add team members (who do not need to register with SV.CO), by updating your startup's profile.
   resource:

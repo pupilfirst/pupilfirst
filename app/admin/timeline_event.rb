@@ -16,10 +16,10 @@ ActiveAdmin.register TimelineEvent do
     batch_id.present? ? Founder.joins(:startup).where(startups: { batch_id: batch_id }).distinct : Founder.all
   }
 
-  filter :created_at
-  filter :verified_at
   filter :verified_status, as: :select, collection: TimelineEvent.valid_verified_status
   filter :grade, as: :select, collection: TimelineEvent.valid_grades
+  filter :created_at
+  filter :verified_at
 
   scope :all
   scope :batched

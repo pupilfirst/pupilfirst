@@ -77,7 +77,7 @@ ActiveAdmin.register Startup do
             'fa-circle-o'
           end
           li do
-            link_to " #{event.timeline_event_type.title}", [:admin, event], class: "fa #{fa_icon} no-text-decoration"
+            link_to " #{event.title}", [:admin, event], class: "fa #{fa_icon} no-text-decoration"
           end
         end
       end

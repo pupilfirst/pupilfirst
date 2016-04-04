@@ -106,7 +106,7 @@ ActiveAdmin.register Target do
         table_for target.timeline_events.includes(:timeline_event_type) do
           column 'Timeline Event' do |timeline_event|
             a href: admin_timeline_event_path(timeline_event) do
-              "##{timeline_event.id} #{timeline_event.timeline_event_type.title}"
+              "##{timeline_event.id} #{timeline_event.title}"
             end
           end
 

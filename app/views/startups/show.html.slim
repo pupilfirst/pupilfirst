@@ -289,7 +289,7 @@
                   .buttons style="display:inline" End of Iteration #{event.iteration}
                   br
                   p style="margin-top: 10px"
-                    ' #{event.timeline_event_type.title}
+                    ' #{event.title}
                     / display info icon if founder
                     - if current_founder && @startup.founder?(current_founder)
                       - latest_feedback = StartupFeedback.for_timeline_event(event).first
@@ -372,7 +372,7 @@
                             | &nbsp;Not Accepted
                         h4.timeline-title-panel
                           a.timeline-title href="#{startup_url(event.startup, anchor: "event-#{event.id}")}"
-                            ' #{event.timeline_event_type.title}
+                            ' #{event.title}
                             i.fa.fa-link
                           / display info icon if founder
                           - if current_founder && @startup.founder?(current_founder)

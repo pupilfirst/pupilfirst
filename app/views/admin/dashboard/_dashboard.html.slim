@@ -18,7 +18,7 @@
       .content
         ol
           - timeline_events.limit(10).each do |timeline_event|
-            li = link_to "#{timeline_event.startup.product_name} - #{timeline_event.timeline_event_type.title}", admin_timeline_event_path(timeline_event)
+            li = link_to "#{timeline_event.startup.product_name} - #{timeline_event.title}", admin_timeline_event_path(timeline_event)
 
       .footer-spacer
 

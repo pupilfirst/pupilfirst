@@ -85,3 +85,12 @@ en:
           attributes:
             email:
               blank: "Please supply your registered email address."
+
+  slack_notifications:
+    timeline_events:
+      verification:
+        private: "Your new timeline entry (<%{event_url}|%{event_title}>) has been verified by SV.CO"
+        public: "<%{startup_url}|%{startup_product_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>\n*Description:* %{event_description}"
+      needs_improvement:
+        private: "Your new timeline entry (<%{event_url}|%{event_title}>) has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
+        public: "<%{startup_url}|%{startup_product_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>\n*Description:* %{event_description}"

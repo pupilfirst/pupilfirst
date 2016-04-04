@@ -127,7 +127,7 @@ ActiveAdmin.register TimelineEvent do
         source: timeline_event,
         founder: founder,
         startup: timeline_event.startup,
-        activity_type: "Added a new Timeline event - #{timeline_event.timeline_event_type.title}",
+        activity_type: "Added a new Timeline event - #{timeline_event.title}",
         points: timeline_event.points_for_grade
       )
 
@@ -143,20 +143,8 @@ ActiveAdmin.register TimelineEvent do
 
   member_action :verify, method: :post do
     timeline_event = TimelineEvent.find(params[:id])
-    startup = timeline_event.startup
     timeline_event.verify!
-
-    unless timeline_event.founder_event?
-      startup_url = Rails.application.routes.url_helpers.startup_url(startup)
-      timeline_event_url = startup_url + "#event-#{timeline_event.id}"
-      slack_message = "<#{startup_url}|#{startup.product_name}> has a new verified timeline entry:"\
-      " <#{timeline_event_url}|#{timeline_event.timeline_event_type.title}>\n"
-      slack_message += "*Description:* #{timeline_event.description}"
-
-      # post to slack
-      PublicSlackTalk.post_message message: slack_message, channel: '#general'
-    end
-
+    TimelineEventVerificationNotificationJob.perform_later timeline_event
     redirect_to action: :show
   end
 
@@ -166,7 +154,9 @@ ActiveAdmin.register TimelineEvent do
   end
 
   member_action :mark_needs_improvement, method: :post do
-    TimelineEvent.find(params[:id]).mark_needs_improvement!
+    timeline_event = TimelineEvent.find(params[:id])
+    timeline_event.mark_needs_improvement!
+    TimelineEventVerificationNotificationJob.perform_later timeline_event
     redirect_to action: :show
   end
 

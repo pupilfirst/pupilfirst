@@ -3,7 +3,6 @@
 
 class Target < ActiveRecord::Base
   belongs_to :assignee, polymorphic: true
-  belongs_to :startup
   belongs_to :assigner, class_name: 'Faculty'
   has_many :timeline_events
 

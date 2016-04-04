@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160331122312) do
+ActiveRecord::Schema.define(version: 20160404074014) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -385,7 +385,6 @@ ActiveRecord::Schema.define(version: 20160331122312) do
 
   create_table "targets", force: :cascade do |t|
     t.string   "role"
-    t.integer  "startup_id"
     t.integer  "assigner_id"
     t.string   "title"
     t.text     "description"
@@ -405,7 +404,6 @@ ActiveRecord::Schema.define(version: 20160331122312) do
 
   add_index "targets", ["assignee_id", "assignee_type"], name: "index_targets_on_assignee_id_and_assignee_type", using: :btree
   add_index "targets", ["assigner_id"], name: "index_targets_on_assigner_id", using: :btree
-  add_index "targets", ["startup_id"], name: "index_targets_on_startup_id", using: :btree
 
   create_table "team_members", force: :cascade do |t|
     t.string   "name"

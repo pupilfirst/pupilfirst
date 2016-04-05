@@ -1,14 +1,13 @@
 /= javascript_include_tag '//www.google.com/jsapi', 'chartkick'
-- batch_selected = params[:batch].present? ? params[:batch] : Batch.current_or_last.id
 
 .table_tools
   ul.scopes.table_tools_segmented_control style="width: calc((100% - 10px)); float: right;"
     - Startup.available_batches.each do |batch|
-      li class="#{ (batch.id == batch_selected.to_i ? 'selected':'') + ' scope' }"
+      li class="#{ (batch == batch_selected ? 'selected':'') + ' scope' }"
         a.table_tools_button href=admin_dashboard_path(batch: batch) #{batch.name} Batch
 .dashboard-container
-  == render 'visits', batch_selected: batch_selected
-  == render 'active_users', batch_selected: batch_selected
+  == render 'visits'
+  == render 'active_users'
 
   - TimelineEvent.valid_verified_status.each do |verified_status|
     .dashboard-item
@@ -27,7 +26,7 @@
       .left-of-button
         span.sparkline-tag #{trend.join(', ')}
 
-      a.button.view-all href=admin_timeline_events_path(q: { verified_status_equals: verified_status, startup_batch_id_equals: batch_selected })
+      a.button.view-all href=admin_timeline_events_path(q: { verified_status_equals: verified_status, startup_batch_id_equals: batch_selected.id })
         | View All (#{timeline_events.count})
 
   .dashboard-item
@@ -42,7 +41,7 @@
 
     .footer-spacer
 
-    a.button.view-all href=admin_startups_path(scope: 'without_live_targets', q: {batch_id_equals: batch_selected})
+    a.button.view-all href=admin_startups_path(scope: 'without_live_targets', q: {batch_id_equals: batch_selected.id})
       | View All (#{startups_without_live_targets.count})
 
   .dashboard-item
@@ -62,7 +61,7 @@
     .left-of-button
       span.sparkline-tag #{trend.join(', ')}
 
-    a.button.view-all href=admin_startups_path(scope: 'with_targets_completed_last_week', q: {batch_id_equals: batch_selected})
+    a.button.view-all href=admin_startups_path(scope: 'with_targets_completed_last_week', q: {batch_id_equals: batch_selected.id})
       | View All (#{startups_with_targets_completed_last_week.count})
 
   .dashboard-item
@@ -82,7 +81,7 @@
     .left-of-button
       span.sparkline-tag #{trend.join(', ')}
 
-    a.button.view-all href=admin_startup_feedback_index_path(q: { created_at_gteq: 1.week.ago.strftime('%Y-%m-%d'), startup_batch_id_equals: batch_selected })
+    a.button.view-all href=admin_startup_feedback_index_path(q: { created_at_gteq: 1.week.ago.strftime('%Y-%m-%d'), startup_batch_id_equals: batch_selected.id })
       | View All (#{startup_feedback_from_last_week.count})
 
   .dashboard-item
@@ -105,7 +104,7 @@
     .left-of-button
       span.sparkline-tag #{trend.join(', ')}
 
-    a.button.view-all href=admin_connect_requests_path(scope: 'confirmed', q: {startup_batch_id_equals: batch_selected})
+    a.button.view-all href=admin_connect_requests_path(scope: 'confirmed', q: {startup_batch_id_equals: batch_selected.id})
       | View All (#{connect_requests_confirmed.count})
 
   .dashboard-item
@@ -128,7 +127,7 @@
     .left-of-button
       span.sparkline-tag #{trend.join(', ')}
 
-    a.button.view-all href=admin_connect_requests_path(scope: 'requested', q: {batch_id_equals: batch_selected})
+    a.button.view-all href=admin_connect_requests_path(scope: 'requested', q: {batch_id_equals: batch_selected.id})
       | View All (#{connect_requests_requested.count})
 
   .dashboard-item
@@ -170,7 +169,7 @@
     .left-of-button
       span.sparkline-tag #{trend.join(', ')}
 
-    a.button.view-all href=admin_startups_path(scope: 'inactive', q: {batch_id_equals: batch_selected})
+    a.button.view-all href=admin_startups_path(scope: 'inactive', q: {batch_id_equals: batch_selected.id})
       | View All (#{inactive_startups.count})
 
   .dashboard-item
@@ -190,7 +189,7 @@
     .left-of-button
       span.sparkline-tag #{trend.join(', ')}
 
-    a.button.view-all href=admin_startups_path(scope: 'endangered', q: {batch_id_equals: batch_selected})
+    a.button.view-all href=admin_startups_path(scope: 'endangered', q: {batch_id_equals: batch_selected.id})
       | View All (#{inactive_startups.count})
 
 

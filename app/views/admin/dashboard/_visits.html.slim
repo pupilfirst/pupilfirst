@@ -1,5 +1,5 @@
 .dashboard-item
-  - founder_visits = Visit.includes(founder: :startup).where(startups: { batch_id: batch_selected })
+  - founder_visits = Visit.includes(founder: :startup).where(startups: { batch_id: batch_selected.id })
   .heading Recent visits (Only logged-in founders)
 
   .content

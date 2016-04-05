@@ -10,7 +10,7 @@ class ConnectRequest < ActiveRecord::Base
 
   has_one :karma_point, as: :source
 
-  scope :for_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch }) }
+  scope :for_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch.id }) }
   scope :upcoming, -> { joins(:connect_slot).where('connect_slots.slot_at > ?', Time.now) }
   scope :completed, -> { joins(:connect_slot).where(status: STATUS_CONFIRMED).where('connect_slots.slot_at < ?', (Time.now - 20.minutes)) }
   scope :for_faculty, -> (faculty) { joins(:connect_slot).where(connect_slots: { faculty_id: faculty }) }

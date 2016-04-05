@@ -1,7 +1,7 @@
 module ActiveAdmin
   module DashboardHelper
     def batch_selected
-      params[:batch].present? ? Batch.find(params[:batch]) : Batch.current_or_last
+      @batch_selected ||= params[:batch].present? ? Batch.find(params[:batch]) : Batch.current_or_last
     end
 
     def total_founder_count

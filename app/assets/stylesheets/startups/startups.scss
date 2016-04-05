@@ -68,6 +68,7 @@
 
       option {
         padding: 8px 10px;
+        color: $dark-grey-text;
       }
       &:focus {
         outline: 0;
@@ -495,6 +496,7 @@
             }
             img {
               position: relative;
+              z-index: 1;
               height: 100px;
               display: block;
               float: left;

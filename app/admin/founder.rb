@@ -253,6 +253,10 @@ ActiveAdmin.register Founder do
     link_to 'Send New Invite', invite_form_admin_founders_path
   end
 
+  action_item :view_targets, only: :show do
+    link_to 'View Targets', admin_targets_path(q: { assignee_type_eq: 'Founder', assignee_id_eq: founder.id })
+  end
+
   collection_action :invite_form do
   end
 

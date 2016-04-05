@@ -7,11 +7,11 @@ class TargetTemplate < ActiveRecord::Base
   validates_presence_of :role, :title, :description, :assigner_id
 
   def due_date(batch: Batch.current_or_last)
-    (batch.start_date + days_from_start).to_date
+    days_from_start.present? ? (batch.start_date + days_from_start).to_date.end_of_day : nil
   end
 
   # Create a target using this template.
-  def create_target!(assignee)
+  def create_target!(assignee, batch: Batch.current_or_last)
     Target.create!(
       assignee: assignee,
       status: Target::STATUS_PENDING,
@@ -21,7 +21,7 @@ class TargetTemplate < ActiveRecord::Base
       assigner: assigner,
       resource_url: resource_url,
       completion_instructions: completion_instructions,
-      due_date: due_date.end_of_day,
+      due_date: due_date(batch: batch),
       slideshow_embed: slideshow_embed
     )
   end

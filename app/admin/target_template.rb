@@ -26,6 +26,25 @@ ActiveAdmin.register TargetTemplate do
     link_to 'Create Target', create_target_admin_target_template_path(id: params[:id])
   end
 
+  action_item :deploy_to_batch, only: :show do
+    link_to 'Deploy to Batch', batch_select_form_admin_target_template_path(id: params[:id])
+  end
+
+  member_action :batch_select_form do
+  end
+
+  member_action :deploy_to_batch, method: :post do
+    target_template = TargetTemplate.find(params[:id])
+    batch = Batch.find(params[:batch][:id])
+
+    batch.startups.each do |startup|
+      target_template.create_target!(startup, batch: batch)
+    end
+
+    flash[:success] = "Deployed as target to all startups in #{batch.name} batch!"
+    redirect_to action: :show
+  end
+
   index do
     selectable_column
     column :days_from_start
@@ -34,6 +53,7 @@ ActiveAdmin.register TargetTemplate do
 
     actions defaults: true do |target_template|
       link_to 'Create Target', create_target_admin_target_template_path(target_template)
+      link_to 'Deploy to Batch', batch_select_form_admin_target_template_path(id: target_template.id)
     end
   end
 

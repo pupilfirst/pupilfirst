@@ -1,0 +1,4 @@
+= semantic_form_for :batch, url: { action: :deploy_to_batch } do |f|
+  = f.inputs 'Select batch to deploy to'
+    = f.input :id, label: 'Batch', as: :select, collection: Batch.not_completed, include_blank: false
+  = f.submit 'Deploy!'

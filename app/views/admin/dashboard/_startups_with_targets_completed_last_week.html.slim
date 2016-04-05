@@ -1,0 +1,19 @@
+.dashboard-item
+  - startups_with_targets_completed_last_week = Startup.where(batch: batch_selected).with_targets_completed_last_week.order('targets.completed_at DESC')
+
+  .heading Startups with Targets Completed Last Week
+
+  .content
+    ol
+      - startups_with_targets_completed_last_week.limit(10).each do |startup|
+        li = link_to startup.display_name, admin_startup_path(startup)
+
+  .footer-spacer
+
+  - trend = Startup.where(batch: batch_selected).with_completed_targets.group_by_week('targets.completed_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
+
+  .left-of-button
+    span.sparkline-tag #{trend.join(', ')}
+
+  a.button.view-all href=admin_startups_path(scope: 'with_targets_completed_last_week', q: {batch_id_equals: batch_selected.id})
+    | View All (#{startups_with_targets_completed_last_week.count})

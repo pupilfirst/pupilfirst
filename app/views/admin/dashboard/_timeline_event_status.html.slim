@@ -1,0 +1,19 @@
+- TimelineEvent.valid_verified_status.each do |verified_status|
+  .dashboard-item
+    - timeline_events = TimelineEvent.for_batch(batch_selected).where(verified_status: verified_status).order('verified_at DESC').includes(:timeline_event_type, :startup)
+    .heading Timeline Events - #{verified_status}
+
+    .content
+      ol
+        - timeline_events.limit(10).each do |timeline_event|
+          li = link_to "#{timeline_event.startup.product_name} - #{timeline_event.title}", admin_timeline_event_path(timeline_event)
+
+    .footer-spacer
+
+    - trend = TimelineEvent.for_batch(batch_selected).where(verified_status: verified_status).group_by_week('timeline_events.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
+
+    .left-of-button
+      span.sparkline-tag #{trend.join(', ')}
+
+    a.button.view-all href=admin_timeline_events_path(q: { verified_status_equals: verified_status, startup_batch_id_equals: batch_selected.id })
+      | View All (#{timeline_events.count})

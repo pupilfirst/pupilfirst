@@ -1,0 +1,19 @@
+.dashboard-item
+  - startup_feedback_from_last_week = StartupFeedback.for_batch(batch_selected).where('startup_feedback.created_at > ?', 1.week.ago).order('startup_feedback.created_at DESC')
+
+  .heading Feedback Submitted Last Week
+
+  .content
+    ol
+      - startup_feedback_from_last_week.limit(10).each do |startup_feedback|
+        li = link_to "#{startup_feedback.faculty.name} - #{startup_feedback.startup.product_name}", admin_startup_feedback_path(startup_feedback)
+
+  .footer-spacer
+
+  - trend = StartupFeedback.for_batch(batch_selected).group_by_week('startup_feedback.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
+
+  .left-of-button
+    span.sparkline-tag #{trend.join(', ')}
+
+  a.button.view-all href=admin_startup_feedback_index_path(q: { created_at_gteq: 1.week.ago.strftime('%Y-%m-%d'), startup_batch_id_equals: batch_selected.id })
+    | View All (#{startup_feedback_from_last_week.count})

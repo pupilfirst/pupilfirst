@@ -1,0 +1,22 @@
+.dashboard-item
+  - connect_requests_confirmed = ConnectRequest.for_batch(batch_selected).confirmed.upcoming
+
+  .heading Upcoming Connect Requests
+
+  .content
+    ol
+      - connect_requests_confirmed.joins(:connect_slot).order('connect_slots.slot_at').limit(10).each do |connect_request|
+        - startup_name = connect_request.startup.product_name
+        - faculty_name = connect_request.faculty.name
+        - slot_time = connect_request.connect_slot.slot_at.strftime('%b %e, %l:%M %p')
+        li = link_to "#{startup_name} - #{faculty_name} (#{slot_time})", admin_connect_request_path(connect_request)
+
+  .footer-spacer
+
+  - trend = ConnectRequest.for_batch(batch_selected).confirmed.group_by_week('connect_requests.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
+
+  .left-of-button
+    span.sparkline-tag #{trend.join(', ')}
+
+  a.button.view-all href=admin_connect_requests_path(scope: 'confirmed', q: {startup_batch_id_equals: batch_selected.id})
+    | View All (#{connect_requests_confirmed.count})

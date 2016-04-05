@@ -200,7 +200,7 @@ class TimelineEvent < ActiveRecord::Base
     ([VERIFIED_STATUS_VERIFIED, VERIFIED_STATUS_NEEDS_IMPROVEMENT].include? verified_status) && karma_point.blank?
   end
 
-  def not_editable?
+  def verified_or_needs_improvement?
     verified? || needs_improvement?
   end
 

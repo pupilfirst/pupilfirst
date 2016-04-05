@@ -1,0 +1,12 @@
+.dashboard-item
+  .heading Faculty - Inactive
+
+  .content
+    ol
+      - Faculty.recently_inactive.limit(10).each do |faculty|
+        li = link_to faculty.name, admin_faculty_path(faculty)
+
+  .footer-space
+
+  a.button.view-all href=admin_faculty_index_path(scope: 'recently_inactive')
+    | View All (#{Faculty.recently_inactive.count})

@@ -63,6 +63,12 @@ class Faculty < ActiveRecord::Base
   scope :alumni, -> { where(category: CATEGORY_ALUMNI).order('sort_index ASC') }
   scope :available_for_connect, -> { where(category: [CATEGORY_TEAM, CATEGORY_VISITING_FACULTY, CATEGORY_ALUMNI]) }
 
+  # Returns faculty members who have had connect slots in the past, but not 'after' a date.
+  scope :recently_inactive, lambda { |after = Date.today.beginning_of_week|
+    slotted_after_date = Faculty.joins(:connect_slots).where('connect_slots.slot_at > ?', after)
+    joins(:connect_slots).where.not(id: slotted_after_date).distinct
+  }
+
   # This method sets the label used for object by Active Admin.
   def display_name
     name

@@ -45,6 +45,19 @@ ActiveAdmin.register TargetTemplate do
     redirect_to action: :show
   end
 
+  batch_action :batch_deploy,
+    confirm: "Select batch to deploy selected templates as targets", form: proc { { batch: Batch.not_completed.pluck(:name, :id) } } do |ids, inputs|
+    batch = Batch.find(inputs[:batch])
+    TargetTemplate.where(id: ids).each do |target_template|
+      batch.startups.each do |startup|
+        target_template.create_target!(startup, batch: batch)
+      end
+    end
+
+    flash[:success] = "Deployed as target to all startups in #{batch.name} batch!"
+    redirect_to action: :index
+  end
+
   index do
     selectable_column
     column :days_from_start

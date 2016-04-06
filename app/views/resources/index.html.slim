@@ -25,13 +25,15 @@
             = button_tag name: "Filter", type: "submit", class: 'btn btn-primary tag-filter-btn text-uppercase' do
               i.fa.fa-filter
               | Filter
+            = hidden_field_tag 'search', params[:search]
             - if params[:tags].present?
-              = link_to resources_path, class: 'btn btn-primary tag-filter-clear text-uppercase' do
+              = link_to resources_path(search: params[:search]), class: 'btn btn-primary tag-filter-clear text-uppercase' do
                 i.fa.fa-refresh
                 | Clear Filter
         .col-md-6.pull-right.search-bar
           = form_tag nil, method: "get", class: 'pull-right' do
-            = text_field_tag "search", nil, placeholder: 'Search Title for', class: 'search-field'
+            = text_field_tag "search", params[:search], placeholder: 'Search Title for', class: 'search-field'
+            = hidden_field_tag 'tags', params[:tags]
             = button_tag name: "Search", type: "submit", class: 'btn btn-primary search-bar-btn text-uppercase' do
               i.fa.fa-search
               | Search

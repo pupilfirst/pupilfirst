@@ -3,9 +3,13 @@ class TargetExpiryNotificationJob < ActiveJob::Base
 
   def perform
     # send mild reminder 5 days before expiry
-    Target.pending.due_on(5.days.from_now).each(&:send_mild_reminder_on_slack)
+    Target.pending.due_on(5.days.from_now).each do |target|
+      AllTargetNotificationsJob.perform_later target, 'mild_reminder'
+    end
 
     # send strong reminder 2 days before expiry
-    Target.pending.due_on(2.days.from_now).each(&:send_strong_reminder_on_slack)
+    Target.pending.due_on(2.days.from_now).each do |target|
+      AllTargetNotificationsJob.perform_later target, 'strong_reminder'
+    end
   end
 end

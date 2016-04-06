@@ -23,46 +23,6 @@ describe Target do
     end
   end
 
-  describe '#notify_new_target' do
-    context 'when target has non-founder role' do
-      subject { create :target, role: 'product' }
-
-      it 'pings all founders the target details' do
-        expect(PublicSlackTalk).to receive(:post_message).with(message: subject.details_as_slack_message, founders: subject.startup.founders)
-        subject.notify_new_target
-      end
-    end
-
-    context 'when target has founder role' do
-      subject { create :target, role: 'founder' }
-
-      it 'pings assignee the target details' do
-        expect(PublicSlackTalk).to receive(:post_message).with(message: subject.details_as_slack_message, founders: [subject.assignee])
-        subject.notify_new_target
-      end
-    end
-  end
-
-  describe '#notify_revision' do
-    context 'when target has non-founder role' do
-      subject { create :target, role: 'product' }
-
-      it 'pings all founders the update details' do
-        expect(PublicSlackTalk).to receive(:post_message).with(message: subject.revision_as_slack_message, founders: subject.startup.founders)
-        subject.notify_revision
-      end
-    end
-
-    context 'when target has founder role' do
-      subject { create :target, role: 'founder' }
-
-      it 'pings assignee the update details' do
-        expect(PublicSlackTalk).to receive(:post_message).with(message: subject.revision_as_slack_message, founders: [subject.assignee])
-        subject.notify_revision
-      end
-    end
-  end
-
   describe '#crucial_revision?' do
     context 'when a crucial target field is updated' do
       it 'returns true' do

@@ -39,6 +39,7 @@ ActiveAdmin.register Target do
       else
         # Then we're just creating a single startup target.
         @target.save!
+        AllTargetNotificationsJob.perform_later @target, 'new_target'
         flash[:success] = 'New target has been created.'
         redirect_to admin_target_url(@target)
       end
@@ -51,7 +52,8 @@ ActiveAdmin.register Target do
       founders = founder_ids.include?('all') ? startup.founders : Founder.where(id: founder_ids)
 
       founders.map do |founder|
-        Target.create!(@target.attributes.merge(assignee: founder))
+        target = Target.create!(@target.attributes.merge(assignee: founder))
+        AllTargetNotificationsJob.perform_later target, 'new_target'
       end
     end
   end

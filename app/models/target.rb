@@ -75,18 +75,6 @@ class Target < ActiveRecord::Base
     role == Target::ROLE_FOUNDER
   end
 
-  # Notify founders about a new or revised target on public slack
-  after_create :notify_new_target
-  after_update :notify_revision, if: :crucial_revision?
-
-  def notify_new_target
-    PublicSlackTalk.post_message message: details_as_slack_message, founders: slack_targets
-  end
-
-  def notify_revision
-    PublicSlackTalk.post_message message: revision_as_slack_message, founders: slack_targets
-  end
-
   def slack_targets
     @slack_targets ||= assignee.is_a?(Startup) ? assignee.founders : [assignee]
   end
@@ -95,12 +83,20 @@ class Target < ActiveRecord::Base
     @startup ||= assignee.is_a?(Startup) ? assignee : assignee.startup
   end
 
+  # TODO: Probably find a way to move this to the corresponding admin controller update action
+  # attempts to use after_update hook of activeadmin, overriding its update action or writing a after_filter for update didnt work
+  after_update :notify_revision, if: :crucial_revision?
+
+  def notify_revision
+    PublicSlackTalk.post_message message: revision_as_slack_message, founders: slack_targets
+  end
+
   def crucial_revision?
     title_changed? || description_changed? || completion_instructions_changed? || due_date_changed?
   end
 
   def details_as_slack_message
-    message = "Hey! #{assigner.name} has assigned your startup, #{startup.product_name} a new target:"\
+    message = "Hey! #{assigner.name} has assigned #{assignee.is_a?(Startup) ? 'your startup ' + startup.product_name : 'you'} a new target:"\
     " *<#{Rails.application.routes.url_helpers.startup_url(startup)}|#{title}>*\n"
     message += "Description: \"#{ApplicationController.helpers.strip_tags description}\"\n"
     message += "He has also provided <#{resource_url}|a useful link> to assist you.\n" if resource_url.present?
@@ -110,45 +106,25 @@ class Target < ActiveRecord::Base
 
   def revision_as_slack_message
     message = "Hey! #{assigner.name} has revised the target (<#{Rails.application.routes.url_helpers.startup_url(startup)}|#{title}>) "\
-    "he recently assigned to your startup, #{startup.product_name}\n"
-    message += "The revised title is: #{title}" if title_changed?
+    "he recently assigned to #{assignee.is_a?(Startup) ? 'your startup ' + startup.product_name : 'you'}\n"
+    message += "The revised title is: #{title}\n" if title_changed?
     message += "The description now reads: \"#{ApplicationController.helpers.strip_tags description}\"\n" if description_changed?
     message += "Completion Instructions were modified to: \"#{completion_instructions}\"\n" if completion_instructions_changed?
     message += ":exclamation: The due date has been modified to *#{due_date.strftime('%A, %d %b %Y %l:%M %p')}* :exclamation:" if due_date_changed?
     message
   end
 
-  # Notify all founders of the startup about expiry in 5 days
-  def send_mild_reminder_on_slack
-    return unless startup.present?
-
-    # notify each founder
-    slack_targets.each do |founder|
-      next unless founder.slack_user_id.present?
-      PublicSlackTalk.post_message message: mild_slack_reminder, founder: founder
-    end
-  end
-
   # Slack message to remind founder of expiry in 5 days
   def mild_slack_reminder
-    ":timer_clock: *Reminder:* Your startup has a target - _<#{Rails.application.routes.url_helpers.startup_url(startup)}|#{title}>_ "\
+    ":timer_clock: *Reminder:* #{assignee.is_a?(Startup) ? 'Your startup ' + startup.product_name + 'has' : 'You have'} a target"\
+    " - _<#{Rails.application.routes.url_helpers.startup_url(startup)}|#{title}>_ "\
     "- assigned by #{assigner.name} due in 5 days!"
-  end
-
-  # Notify all founders of the startup about expiry in 2 days
-  def send_strong_reminder_on_slack
-    return unless startup.present?
-
-    # notify each founder
-    slack_targets.each do |founder|
-      next unless founder.slack_user_id.present?
-      PublicSlackTalk.post_message message: strong_slack_reminder, founder: founder
-    end
   end
 
   # Slack message to remind founder of expiry in 2 days
   def strong_slack_reminder
-    ":exclamation: *Urgent:* It seems that the target - _<#{Rails.application.routes.url_helpers.startup_url(startup)}|#{title}>_ - assigned to your startup "\
+    ":exclamation: *Urgent:* It seems that the target - _<#{Rails.application.routes.url_helpers.startup_url(startup)}|#{title}>_ "\
+    "- assigned to #{assignee.is_a?(Startup) ? 'your startup ' + startup.product_name : 'you'} "\
     "by #{assigner.name} due in 2 days is not yet complete! Please complete the same at the "\
     "earliest and submit the corresponding timeline entry for verification!"
   end

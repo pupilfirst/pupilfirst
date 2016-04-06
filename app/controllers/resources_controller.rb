@@ -1,7 +1,8 @@
 class ResourcesController < ApplicationController
   def index
     load_resources
-    filter_resources
+    filter_resources_by_tags
+    filter_resources_by_search
     paginate_resources
     load_resource_tags
 
@@ -38,9 +39,14 @@ class ResourcesController < ApplicationController
     @resources = Resource.for(current_founder)
   end
 
-  def filter_resources
+  def filter_resources_by_tags
     return if params[:tags].blank?
     @resources = @resources.tagged_with params[:tags]
+  end
+
+  def filter_resources_by_search
+    return if params[:search].blank?
+    @resources = @resources.title_matches(params[:search])
   end
 
   def paginate_resources

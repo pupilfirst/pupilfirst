@@ -19,7 +19,7 @@
 
     .resources
       .row
-        .col-md-12.tag-filter
+        .col-md-6.tag-filter
           = form_tag nil, method: "get" do
             = select_tag "tags", options_for_select(@resource_tags, params[:tags]), multiple: true, include_blank: true, id: "resources-index-tags", class: "tag-select"
             = button_tag name: "Filter", type: "submit", class: 'btn btn-primary tag-filter-btn text-uppercase' do
@@ -29,17 +29,25 @@
               = link_to resources_path, class: 'btn btn-primary tag-filter-clear text-uppercase' do
                 i.fa.fa-refresh
                 | Clear Filter
+        .col-md-6.pull-right.search-bar
+          = form_tag nil, method: "get", class: 'pull-right' do
+            = text_field_tag "search", nil, placeholder: 'Search Title for', class: 'search-field'
+            = button_tag name: "Search", type: "submit", class: 'btn btn-primary search-bar-btn text-uppercase' do
+              i.fa.fa-search
+              | Search
 
       .row
         - if @resources.blank?
           .col-md-12
             .alert.alert-warning
-              ' We're sorry, but it looks like you're not allowed to view resources with the tags you've picked.
-              | Try #{link_to 'clearing the filter', resources_path}
+              ' We're sorry, but it looks like you're not allowed to view resources with the tags and search criteria you've picked.
+              | Try #{link_to 'clearing the filter and search', resources_path}
               - if current_founder.blank?
                 |, or #{link_to 'logging in', new_founder_session_path}
               |.
         - else
+          - if params[:search].present?
+            p.grey-text Showing results for '#{params[:search].titlecase}':
           - @resources.each do |resource|
             = render 'resource', resource: resource
     .text-center

@@ -31,6 +31,8 @@ class Resource < ActiveRecord::Base
   mount_uploader :thumbnail, ResourceThumbnailUploader
 
   scope :public_resources, -> { where(share_status: SHARE_STATUS_PUBLIC).order('title') }
+  # scope to search title, titlecase enforced as our resources are titlecased
+  scope :title_matches, -> (search_key) { where("title LIKE ?", "%#{search_key.titlecase}%") }
 
   delegate :content_type, to: :file
 

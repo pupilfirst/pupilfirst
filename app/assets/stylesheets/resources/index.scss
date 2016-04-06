@@ -56,7 +56,7 @@
   margin-bottom: 30px;
 
   .tag-select {
-    width: 400px;
+    width: 300px;
     box-shadow: 0;
 
     @media (max-width: $screen-xs-max) {
@@ -98,6 +98,49 @@
 
     &:hover {
       background-color: white;
+    }
+  }
+}
+
+.search-bar {
+  margin-bottom: 30px;
+
+  .search-field {
+    width: 250px;
+    padding: 6px 12px;
+    margin: 0;
+    height: 32px;
+    border-radius: 4px;
+    box-shadow: none;
+    outline: 0;
+    border: 0;
+    border-color: #cccccc;
+  }
+
+  @media (max-width: $screen-xs-max) {
+    width: 100%;
+    float: none;
+  }
+
+  .search-bar-btn {
+    margin-left: 15px;
+    padding: 7px 15px;
+    border-radius: 5px;
+    font-weight: 400;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    background-color: #117eb2;
+    border: 0;
+    transition: all .2s;
+
+    &:hover {
+      background-color: #3096c7;
+    }
+
+    @media (max-width: $screen-xs-max) {
+      margin: 10px 0 0;
+      width: 100%;
+      padding: 8px 15px;
     }
   }
 }

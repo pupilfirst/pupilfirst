@@ -2,13 +2,14 @@
   title SV.CO Resources for First-time Founders
   meta name="description" content="Get access to content produced by Startup Village faculty, including presentations, video and audio clips."
 
-.resources-banner
+.resources-banner-bg
   .container
-    .banner-text.text-center
-      h1.page-header.header-light Resources
-      p.startups-introduction
-        ' This is just a small sample of Resources available at SV.CO. Approved Startups
-        | get access to exclusive content produced by Faculty, including presentations, video and audio clips.
+    .resources-banner
+      .banner-text.text-center
+        h1.page-header.header-light Resources
+        p.startups-introduction
+          ' This is just a small sample of Resources available at SV.CO. Approved Startups
+          | get access to exclusive content produced by Faculty, including presentations, video and audio clips.
 
 .resources-bg
   .container
@@ -19,7 +20,7 @@
 
     .resources
       .row
-        .col-md-6.tag-filter
+        .col-md-6.col-sm-7.tag-filter
           = form_tag nil, method: "get" do
             = select_tag "tags", options_for_select(@resource_tags, params[:tags]), multiple: true, include_blank: true, id: "resources-index-tags", class: "tag-select"
             = button_tag name: "Filter", type: "submit", class: 'btn btn-primary tag-filter-btn text-uppercase' do
@@ -30,8 +31,8 @@
               = link_to resources_path(search: params[:search]), class: 'btn btn-primary tag-filter-clear text-uppercase' do
                 i.fa.fa-refresh
                 | Clear Filter
-        .col-md-6.pull-right.search-bar
-          = form_tag nil, method: "get", class: 'pull-right' do
+        .col-md-6.col-sm-5.search-bar.text-right
+          = form_tag nil, method: "get" do
             = text_field_tag "search", params[:search], placeholder: 'Search Title for', class: 'search-field'
             = hidden_field_tag 'tags', params[:tags]
             = button_tag name: "Search", type: "submit", class: 'btn btn-primary search-bar-btn text-uppercase' do

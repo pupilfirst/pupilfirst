@@ -1,12 +1,15 @@
 @import 'bootstrap/variables';
 @import 'variables';
 
+.resources-banner-bg {
+  background: linear-gradient(to bottom, rgba(255,251,246,1) 0%, rgba(255,253,250,1) 100%);
+  border-bottom: 1px solid #ececec;
+}
 .resources-banner {
   height: 180px;
-  background: asset-url("resources/resources-bg.png") no-repeat right center, linear-gradient(to bottom, rgba(255,251,246,1) 0%, rgba(255,253,250,1) 100%);
+  background: asset-url("resources/resources-bg.png") no-repeat right center;
   position: relative;
   background-size: 500px;
-  border-bottom: 1px solid #ececec;
 
   @media (max-width: $screen-xs-max) {
     height: 320px;
@@ -66,6 +69,9 @@
     .select2-search-choice-close {
       top: 11px;
     }
+    ul {
+      border-color: #dddddd;
+    }
   }
   .tag-filter-btn, .tag-filter-clear  {
     margin-left: 15px;
@@ -114,12 +120,14 @@
     box-shadow: none;
     outline: 0;
     border: 0;
-    border-color: #cccccc;
-  }
+    border: 1px solid #dddddd;
 
-  @media (max-width: $screen-xs-max) {
-    width: 100%;
-    float: none;
+    @media (max-width: $screen-sm-max) {
+      width: auto;
+    }
+    @media (max-width: $screen-xs-max) {
+      width: 100%;
+    }
   }
 
   .search-bar-btn {
@@ -132,6 +140,11 @@
     background-color: #117eb2;
     border: 0;
     transition: all .2s;
+
+
+    i {
+      padding-right: 5px;
+    }
 
     &:hover {
       background-color: #3096c7;

@@ -47,9 +47,9 @@ class Founder < ActiveRecord::Base
   scope :not_registered, -> { where(phone: nil) }
 
   # Custom scope to allow AA to filter by intersection of tags.
-  scope :ransack_tagged_with, ->(*tags){ tagged_with(tags) }
+  scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
 
-  def self.ransackable_scopes(auth=nil)
+  def self.ransackable_scopes(_auth)
     %i(ransack_tagged_with)
   end
 

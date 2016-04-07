@@ -54,6 +54,13 @@ class Startup < ActiveRecord::Base
   scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED }).distinct }
   scope :batched_and_approved, -> { batched.approved }
 
+  # Custom scope to allow AA to filter by intersection of tags.
+  scope :ransack_tagged_with, ->(*tags){ tagged_with(tags) }
+
+  def self.ransackable_scopes(auth=nil)
+    %i(ransack_tagged_with)
+  end
+
   # Returns the latest verified timeline event that has an image attached to it.
   #
   # Do not return private events!

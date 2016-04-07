@@ -17,7 +17,7 @@ $ ->
   Turbolinks.enableProgressBar();
 
 select2Initializations = ->
-  $('#q_tag_ids').select2(width: '100%');
+  $('#q_ransack_tagged_with').select2(width: '100%');
   $('#q_product_name').select2(width: '100%');
 
 # Manually link site_title logo to /admin as activeskin messes up setting config.site_title_link

@@ -34,6 +34,13 @@ class Resource < ActiveRecord::Base
   # scope to search title, titlecase enforced as our resources are titlecased
   scope :title_matches, -> (search_key) { where("title LIKE ?", "%#{search_key.titlecase}%") }
 
+  # Custom scope to allow AA to filter by intersection of tags.
+  scope :ransack_tagged_with, ->(*tags){ tagged_with(tags) }
+
+  def self.ransackable_scopes(auth=nil)
+    %i(ransack_tagged_with)
+  end
+
   delegate :content_type, to: :file
 
   def self.for(founder)

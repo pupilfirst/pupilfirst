@@ -18,7 +18,13 @@ ActiveAdmin.register Founder do
   filter :email
   filter :first_name
   filter :last_name
-  filter :tags, collection: proc { Founder.tag_counts_on(:tags) }, multiple: true
+
+  filter :ransack_tagged_with,
+    as: :select,
+    multiple: true,
+    label: 'Tags',
+    collection: -> { Founder.tag_counts_on(:tags).pluck(:name).sort }
+
   filter :roles_cont, as: :select, collection: Founder.valid_roles, label: 'Role'
   filter :university
   filter :roll_number

@@ -9,7 +9,12 @@ ActiveAdmin.register Resource do
   filter :share_status,
     collection: Resource.valid_share_statuses
 
-  filter :tags, collection: proc { Resource.tag_counts_on(:tags) }, multiple: true
+  filter :ransack_tagged_with,
+    as: :select,
+    multiple: true,
+    label: 'Tags',
+    collection: -> { Resource.tag_counts_on(:tags).pluck(:name).sort }
+
   filter :batch
   filter :title
   filter :description

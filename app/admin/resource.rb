@@ -55,7 +55,7 @@ ActiveAdmin.register Resource do
     column :downloads
 
     column :tags do |resource|
-      linked_tags(resource.tags, separator: '|')
+      linked_tags(resource.tags, separator: ' | ')
     end
 
     actions

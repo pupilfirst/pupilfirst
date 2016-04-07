@@ -15,7 +15,7 @@
     = f.input :completion_instructions
     = f.input :slideshow_embed
     = f.input :resource_url
-    = f.input :assigner, as: :select, collection: Faculty.active, include_blank: false, required: true
+    = f.input :assigner, as: :select, collection: Faculty.active.order(:name), include_blank: false, required: true
     = f.input :rubric, as: :file
 
   = f.submit

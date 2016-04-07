@@ -3,7 +3,7 @@ ActiveAdmin.register StartupFeedback do
   permit_params :feedback, :reference_url, :startup_id, :send_email, :faculty_id, :activity_type, :attachment, :event_id, :event_status
 
   preserve_default_filters!
-  filter :startup_product_name, as: :select, collection: proc { Startup.all.pluck(:product_name).uniq }
+  filter :startup_product_name, as: :select, collection: proc { Startup.all.order(:product_name).pluck(:product_name).uniq }
 
   controller do
     def scoped_collection

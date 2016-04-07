@@ -12,7 +12,7 @@
     - if f.object.new_record?
       = f.input :startup_id,
         required: true,
-        collection: Startup.all,
+        collection: Startup.all.order(:product_name),
         as: :select,
         label: 'Product',
         member_label: proc { |startup| startup.display_name }
@@ -52,7 +52,7 @@
     = f.input :resource_url
     = f.input :completion_instructions
     = f.input :due_date, as: :just_datetime_picker
-    = f.input :assigner, collection: Faculty.active, include_blank: false
+    = f.input :assigner, collection: Faculty.active.order(:name), include_blank: false
     = f.input :rubric, as: :file
     = f.input :remote_rubric_url
 

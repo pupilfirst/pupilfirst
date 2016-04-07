@@ -1,7 +1,7 @@
 = semantic_form_for [:admin, @startup_feedback] do |f|
   = f.semantic_errors *f.object.errors.keys
   = f.inputs 'Feedback details' do
-    = f.input :startup, collection: Startup.where.not(product_name: nil), member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }, label: 'Product'
+    = f.input :startup, collection: Startup.where.not(product_name: nil).order(:product_name), member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }, label: 'Product'
     = f.hidden_field :feedback
     .label-replica
       ' feedback
@@ -12,7 +12,7 @@
     = f.input :activity_type
     = f.input :reference_url
     = f.input :attachment, as: :file
-    = f.input :faculty, collection: Faculty.active, placeholder: 'Select faculty member'
+    = f.input :faculty, collection: Faculty.active.order(:name), placeholder: 'Select faculty member'
     = f.input :event_status, label: 'Mark Event as:', as: :select, collection: TimelineEvent.valid_verified_status, selected: TimelineEvent.find(@startup_feedback.event_id).verified_status, include_blank: false if @startup_feedback.event_id.present?
     = f.input :event_id, as: :hidden
 

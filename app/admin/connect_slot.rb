@@ -18,7 +18,7 @@ ActiveAdmin.register ConnectSlot do
 
   collection_action :add_multiple, method: :get do
     @connect_slot = ConnectSlot.new
-    @faculty = Faculty.available_for_connect
+    @faculty = Faculty.available_for_connect.order(:name)
   end
 
   collection_action :create_multiple, method: :post do
@@ -59,7 +59,7 @@ ActiveAdmin.register ConnectSlot do
     f.semantic_errors(*f.object.errors.keys)
 
     f.inputs 'Connect Slot Details' do
-      f.input :faculty, collection: Faculty.active.available_for_connect
+      f.input :faculty, collection: Faculty.active.available_for_connect.order(:name)
       f.input :slot_at, as: :just_datetime_picker
     end
 

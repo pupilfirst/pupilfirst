@@ -90,7 +90,7 @@ ActiveAdmin.register ConnectRequest do
       f.input :connect_slot,
         collection: (resource.persisted? ? ConnectSlot.available(optional_id: resource.connect_slot.id) : ConnectSlot.available).includes(:faculty),
         required: true
-      f.input :startup, label: 'Product', collection: Startup.batched.approved, required: true
+      f.input :startup, label: 'Product', collection: Startup.batched.approved.order(:product_name), required: true
       f.input :questions
       f.input :meeting_link
       f.input :status, as: :select, collection: ConnectRequest.valid_statuses, include_blank: false

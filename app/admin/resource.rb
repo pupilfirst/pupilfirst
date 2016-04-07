@@ -2,7 +2,7 @@ ActiveAdmin.register Resource do
   permit_params :title, :description, :file, :thumbnail, :share_status, :batch_id, :startup_id, :tag_list
 
   filter :startup,
-    collection: Startup.batched,
+    collection: Startup.batched.order(:product_name),
     label: 'Product',
     member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : 's'}" }
 

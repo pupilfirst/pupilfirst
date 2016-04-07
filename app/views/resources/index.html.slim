@@ -50,7 +50,9 @@
               |.
         - else
           - if params[:search].present?
-            p.grey-text Showing results for '#{params[:search].titlecase}':
+            p.grey-text.show-result-text
+              | Showing results for&nbsp;
+              strong '#{params[:search].titlecase}':
           - @resources.each do |resource|
             = render 'resource', resource: resource
     .text-center

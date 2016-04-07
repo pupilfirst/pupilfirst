@@ -128,4 +128,13 @@ class Target < ActiveRecord::Base
     "by #{assigner.name} due in 2 days is not yet complete! Please complete the same at the "\
     "earliest and submit the corresponding timeline entry for verification!"
   end
+
+  # Slack message to announce on batch slack channel when deployed to entire batch
+  def batch_deploy_message
+    message = "Attention Founders! #{assigner.name} has assigned all startups in the #{startup.batch.name} batch a new target: #{title}\n"
+    message += "Description: \"#{ApplicationController.helpers.strip_tags description}\"\n"
+    message += "He has also provided <#{resource_url}|a useful link> to assist you.\n" if resource_url.present?
+    message += "The due date to complete this target is :exclamation: *#{due_date.strftime('%A, %d %b %Y %l:%M %p')}*" if due_date.present?
+    message
+  end
 end

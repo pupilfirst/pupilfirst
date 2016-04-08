@@ -160,6 +160,7 @@ class Founder < ActiveRecord::Base
   def slack_username_must_exist
     return if slack_username.blank?
     return unless slack_username_changed?
+    return if Rails.env.development?
 
     response_json = JSON.parse(RestClient.get("https://slack.com/api/users.list?token=#{APP_CONFIG[:slack_token]}"))
 

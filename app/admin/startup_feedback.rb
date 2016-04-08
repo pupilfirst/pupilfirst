@@ -118,9 +118,13 @@ ActiveAdmin.register StartupFeedback do
 
       row :reference_url
       row :faculty
-      row :attachment_file_name do |startup_feedback|
+
+      row :attachment do |startup_feedback|
         if startup_feedback.attachment?
-          span startup_feedback.attachment_file_name
+          span do
+            link_to startup_feedback.attachment_file_name, startup_feedback.attachment_url
+          end
+
           span class: 'wrap-with-paranthesis' do
             link_to 'Remove', remove_feedback_attachment_admin_startup_feedback_path(startup_feedback), method: :put, data: { confirm: 'Are you sure?' }
           end

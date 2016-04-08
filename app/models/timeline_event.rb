@@ -48,6 +48,8 @@ class TimelineEvent < ActiveRecord::Base
     self.verified_at = nil unless needs_improvement? || verified?
   end
 
+  validates_presence_of :verified_at, if: proc { verified? || needs_improvement? }
+
   accepts_nested_attributes_for :timeline_event_files, allow_destroy: true
 
   scope :end_of_iteration_events, -> { where(timeline_event_type: TimelineEventType.end_iteration) }

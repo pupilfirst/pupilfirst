@@ -2,13 +2,13 @@
   title SV.CO Verified Timeline for #{@startup.product_name}
   meta name="description" content="#{@startup.display_name}: #{@startup.product_description}"
 
-- if @tour.present?
-  #startup-show-tour.hide [data-intro=t('startup.show.tour.intro')
-    data-data-points=t('startup.show.tour.data_points')
-    data-founders=t('startup.show.tour.founders')
-    data-timeline-builder=t('startup.show.tour.timeline_builder')
-    data-timeline-event=t('startup.show.tour.timeline_event')
-    data-targets=t('startup.show.tour.targets')]
+#startup-show-tour.hide [data-intro=t('startup.show.tour.intro')
+  data-data-points=t('startup.show.tour.data_points')
+  data-founders=t('startup.show.tour.founders')
+  data-timeline-builder=t('startup.show.tour.timeline_builder')
+  data-timeline-event=t('startup.show.tour.timeline_event')
+  data-targets=t('startup.show.tour.targets')
+  data-tour-flag=@tour]
 
 .container
   - if @startup.dropped_out?
@@ -42,18 +42,17 @@
   .row
     #data-points
       .col-md-4.col-md-push-8
+        - if @startup.founder?(current_founder)
+          button#tour-button.btn.btn-info.btn-flat.btn-with-default-padding.margin-bottom-20.pull-right
+            i.fa.fa-eye
+            | &nbsp;Take a tour of this page!
+        .clearfix
         - if @startup.latest_help_wanted.present?
           .alert.alert-info
             strong Help Wanted:
             ' &nbsp;#{@startup.latest_help_wanted.description}
             - if @startup.email?
               | Please reach out to us at #{mail_to @startup.email}
-        - if @startup.founder?(current_founder)
-          = link_to startup_path(@startup, tour: true),
-            class: 'btn btn-info btn-flat btn-with-default-padding margin-bottom-20 pull-right' do
-              i.fa.fa-eye
-              | &nbsp;Take a tour of this page!
-        .clearfix
         - if current_founder && @startup.founder?(current_founder) && current_founder.any_targets?
           #targets.margin-bottom-20
             h4.target-top-head.margin-top-0

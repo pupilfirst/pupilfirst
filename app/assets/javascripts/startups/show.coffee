@@ -377,40 +377,47 @@ addTooltipToHideCheckbox = ->
   $("#hide-from-public").tooltip()
 
 giveATour = ->
+  startTour() if $('#startup-show-tour').data('tour-flag')
+
+
+startTour = ->
   startupShowTour = $('#startup-show-tour')
 
-  if startupShowTour.length > 0
-    tour = introJs()
-    tour.setOptions(
-      skipLabel: 'Close',
-      steps: [
-        {
-          element: $('h1.product-name')[0],
-          intro: startupShowTour.data('intro')
-        },
-        {
-          element: $('.timeline-builder')[0],
-          intro: startupShowTour.data('timelineBuilder')
-        },
-        {
-          element: $('.timeline-panel')[0],
-          intro: startupShowTour.data('timelineEvent')
-        },
-        {
-          element: $('#targets')[0],
-          intro: startupShowTour.data('targets')
-        },
-        {
-          element: $('.data-icons')[0],
-          intro: startupShowTour.data('dataPoints')
-        },
-        {
-          element: $('.data-founder')[0],
-          intro: startupShowTour.data('founders')
-        }
-      ]
-    )
-    tour.start()
+  tour = introJs()
+  tour.setOptions(
+    skipLabel: 'Close',
+    steps: [
+      {
+        element: $('h1.product-name')[0],
+        intro: startupShowTour.data('intro')
+      },
+      {
+        element: $('.timeline-builder')[0],
+        intro: startupShowTour.data('timelineBuilder')
+      },
+      {
+        element: $('.timeline-panel')[0],
+        intro: startupShowTour.data('timelineEvent')
+      },
+      {
+        element: $('#targets')[0],
+        intro: startupShowTour.data('targets')
+      },
+      {
+        element: $('.data-icons')[0],
+        intro: startupShowTour.data('dataPoints')
+      },
+      {
+        element: $('.data-founder')[0],
+        intro: startupShowTour.data('founders')
+      }
+    ]
+  )
+  tour.start()
+  
+handleTourButtonClick = ->
+  $('#tour-button').on 'click', ->
+    startTour()
 
 $(document).on 'page:change', timelineBuilderSubmitChecks
 $(document).on 'page:change', setupSelect2ForEventType
@@ -427,3 +434,4 @@ $(document).on 'page:change', addTooltipToHideCheckbox
 $(document).on 'page:change', markSelectedAttachments
 $(document).on 'page:change', updateAttachmentsTabTitle
 $(document).on 'page:change', giveATour
+$(document).on 'page:change', handleTourButtonClick

@@ -1,5 +1,5 @@
 ActiveAdmin.register TimelineEvent do
-  permit_params :description, :timeline_event_type_id, :image, :event_on, :startup_id, :verified_at, :grade,
+  permit_params :description, :timeline_event_type_id, :image, :event_on, :startup_id, :grade,
     :founder_id, :serialized_links, timeline_event_files_attributes: [:id, :title, :file, :private, :_destroy]
 
   filter :startup_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'Batch'
@@ -200,7 +200,6 @@ ActiveAdmin.register TimelineEvent do
       f.input :description
       f.input :image
       f.input :event_on, as: :datepicker
-      f.input :verified_at, as: :datepicker
       f.input :grade, as: :select, collection: TimelineEvent.valid_grades, required: false
       f.input :serialized_links, as: :hidden
     end

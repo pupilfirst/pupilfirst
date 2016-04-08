@@ -414,7 +414,7 @@ startTour = ->
     ]
   )
   tour.start()
-  
+
 handleTourButtonClick = ->
   $('#tour-button').on 'click', ->
     startTour()

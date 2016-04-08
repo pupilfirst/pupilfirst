@@ -16,7 +16,7 @@
     = f.input :facebook_link
     = f.input :email
     = f.input :startup_categories, hint: "Max: 3, Min: 1", input_html: {style: "width: 400px;"}
-    = f.input :founders, collection: Hash[@startup.possible_founders.order(:first_name).map{|b| [b.to_s,b.id]}], input_html: {style: "width: 400px;"}
+    = f.input :founders, collection: Hash[@startup.possible_founders.map{|b| [b.to_s,b.id]}], input_html: {style: "width: 400px;"}
     = f.input :registration_type, collection: Startup.valid_registration_types
     = f.input :address
     = f.input :slug

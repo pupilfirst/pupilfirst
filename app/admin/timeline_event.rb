@@ -375,9 +375,7 @@ ActiveAdmin.register TimelineEvent do
           column(:faculty) { |feedback_entry| feedback_entry.faculty.name }
 
           column(:feedback) do |feedback_entry|
-            pre class: 'max-width-pre' do
-              feedback_entry.feedback
-            end
+            feedback_entry.feedback.html_safe
           end
 
           column(:created_at)

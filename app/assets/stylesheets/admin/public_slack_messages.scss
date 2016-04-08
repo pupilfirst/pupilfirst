@@ -5,14 +5,53 @@
   }
 
   label {
-    margin-right: 10px;
-    padding-left: 15px;
+    padding-left: 3px;
   }
-  select {appearance: none;}
-  select#channel { margin-right: 20px;}
-  th.actions-width { min-width: 690px; }
+
+  select {
+    appearance: none;
+  }
+
+  select#channel {
+    margin-right: 20px;
+  }
+
+  th.actions-width {
+    min-width: 690px;
+  }
 
   .panel-contents {
     padding: 10px 15px 15px 0;
+  }
+
+  .karma-point-buttons {
+    input[type=submit] {
+      padding: 7px;
+      color: white;
+      border: 0;
+    }
+
+    .plus-10 {
+      background-color: #063300;
+    }
+
+    .plus-20 {
+      background-color: #0c6600;
+    }
+
+    .plus-30 {
+      background-color: #129900;
+    }
+
+    .plus-40 {
+      background-color: #18cc00;
+    }
+  }
+
+  .activity-type-option {
+    background-color: #e6e6e6;
+    border-radius: 15px;
+    padding: 7px;
+    margin-right: 5px;
   }
 }

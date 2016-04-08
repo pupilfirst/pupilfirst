@@ -29,7 +29,7 @@
               | @#{public_slack_message.slack_username}
           td ##{public_slack_message.channel}
           td = public_slack_message.reaction? ? reaction_details(public_slack_message) : public_slack_message.body
-          td = public_slack_message.created_at
+          td = public_slack_message.created_at.strftime('%b %e, %l:%M %p')
           td id="message-actions-#{public_slack_message.id}"
             - if public_slack_message.karma_point.present?
               a href=admin_karma_point_path(public_slack_message.karma_point)
@@ -40,15 +40,24 @@
               em Founder not linked.
             - else
               = form_tag create_karma_points_admin_public_slack_message_path(public_slack_message), method: :post, remote: true, class: 'add_karma_points_for_message' do
-                input id="activity_type_participation_#{public_slack_message.id}" name='activity_type' type='radio' value='Active participation' checked=true
-                label for="activity_type_participation_#{public_slack_message.id}" &nbsp;Participation
-                input id="activity_type_asked_feedback_#{public_slack_message.id}" name='activity_type' type='radio' value='Asked for feedback'
-                label for="activity_type_asked_feedback_#{public_slack_message.id}" &nbsp;Asked for feedback
-                input id="activity_type_provided_feedback_#{public_slack_message.id}" name='activity_type' type='radio' value='Provided feedback'
-                label for="activity_type_provided_feedback_#{public_slack_message.id}" &nbsp;Provided feedback
-                input id="activity_type_shared_resource_#{public_slack_message.id}" name='activity_type' type='radio' value='Shared resource'
-                label for="activity_type_shared_resource_#{public_slack_message.id}" &nbsp;Shared resource
-                = submit_tag '+10'
-                = submit_tag '+20'
-                = submit_tag '+30'
-                = submit_tag '+40'
+                span.activity-type-option
+                  input id="activity_type_participation_#{public_slack_message.id}" name='activity_type' type='radio' value='Active participation' checked=true
+                  label for="activity_type_participation_#{public_slack_message.id}" &nbsp;Participation
+
+                span.activity-type-option
+                  input id="activity_type_asked_feedback_#{public_slack_message.id}" name='activity_type' type='radio' value='Asked for feedback'
+                  label for="activity_type_asked_feedback_#{public_slack_message.id}" &nbsp;Asked for feedback
+
+                span.activity-type-option
+                  input id="activity_type_provided_feedback_#{public_slack_message.id}" name='activity_type' type='radio' value='Provided feedback'
+                  label for="activity_type_provided_feedback_#{public_slack_message.id}" &nbsp;Provided feedback
+
+                span.activity-type-option
+                  input id="activity_type_shared_resource_#{public_slack_message.id}" name='activity_type' type='radio' value='Shared resource'
+                  label for="activity_type_shared_resource_#{public_slack_message.id}" &nbsp;Shared resource
+
+                span.karma-point-buttons
+                  = submit_tag '+10', class: 'plus-10'
+                  = submit_tag '+20', class: 'plus-20'
+                  = submit_tag '+30', class: 'plus-30'
+                  = submit_tag '+40', class: 'plus-40'

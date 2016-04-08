@@ -97,3 +97,10 @@ en:
       needs_improvement:
         private: "Your new timeline entry (<%{event_url}|%{event_title}>) has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
         public: "<%{startup_url}|%{startup_product_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>\n*Description:* %{event_description}"
+    targets:
+      new_target:
+        salutation: "Hey! %{assigner} has assigned %{assignee} a new target: *<%{startup_url}|%{title}>*\n"
+        description: "Description: \"%{description}\"\n"
+        resouce_url: "The faculty has also provided <%{resource_url}|a useful link> to assist you.\n"
+        due_date: "The due date to complete this target is :exclamation: *%{due_date}*"
+

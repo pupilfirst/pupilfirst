@@ -12,7 +12,7 @@ class AllTargetNotificationsJob < ActiveJob::Base
 
     case notification_type
       when 'new_target'
-        notify_founders_on_slack message: @target.details_as_slack_message
+        notify_founders_on_slack message: details_as_slack_message
       when 'revise_target'
         notify_founders_on_slack message: @target.revision_as_slack_message
       when 'mild_reminder'
@@ -38,5 +38,22 @@ class AllTargetNotificationsJob < ActiveJob::Base
     return unless channel.present?
 
     PublicSlackTalk.post_message message: @target.batch_deploy_message, channel: channel
+  end
+
+  def details_as_slack_message
+    assigner = @target.assigner.name
+    assignee = @target.assignee.is_a?(Startup) ? 'your startup ' + startup.product_name : 'you'
+    startup_url = Rails.application.routes.url_helpers.startup_url(@target.startup)
+    title = @target.title
+    message = I18n.t('slack_notifications.targets.new_target.salutation', assigner: assigner, assignee: assignee, startup_url: startup_url, title: title)
+
+    description = ApplicationController.helpers.strip_tags @target.description
+    message += I18n.t('slack_notifications.targets.new_target.description', description: description)
+
+    message += I18n.t('slack_notifications.targets.new_target.resouce_url', resource_url: @target.resource_url) if @target.resource_url.present?
+    message += I18n.t('slack_notifications.targets.new_target.due_date',
+      due_date: @target.due_date.strftime('%A, %d %b %Y %l:%M %p')) if @target.due_date.present?
+
+    message
   end
 end

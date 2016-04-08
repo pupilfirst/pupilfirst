@@ -39,27 +39,27 @@ describe Target do
     end
   end
 
-  describe '#details_as_slack_message' do
-    it 'contains target details' do
-      slack_message = subject.details_as_slack_message
-
-      # default details
-      expect(slack_message).to include("#{subject.assigner.name} has assigned ")
-      expect(slack_message).to include(ApplicationController.helpers.strip_tags(subject.description))
-
-      # conditional details
-      expect(slack_message).to include("<#{subject.resource_url}|a useful link>") # already set from factory
-      expect(slack_message).to_not include("due date to complete this target is") # no due date yet
-    end
-
-    context 'when due date is available' do
-      subject { create :target, due_date: 1.week.from_now }
-
-      it 'contains due date' do
-        expect(subject.details_as_slack_message).to include(subject.due_date.strftime('%A, %d %b %Y %l:%M %p'))
-      end
-    end
-  end
+  # describe '#details_as_slack_message' do
+  #   it 'contains target details' do
+  #     slack_message = subject.details_as_slack_message
+  #
+  #     # default details
+  #     expect(slack_message).to include("#{subject.assigner.name} has assigned ")
+  #     expect(slack_message).to include(ApplicationController.helpers.strip_tags(subject.description))
+  #
+  #     # conditional details
+  #     expect(slack_message).to include("<#{subject.resource_url}|a useful link>") # already set from factory
+  #     expect(slack_message).to_not include("due date to complete this target is") # no due date yet
+  #   end
+  #
+  #   context 'when due date is available' do
+  #     subject { create :target, due_date: 1.week.from_now }
+  #
+  #     it 'contains due date' do
+  #       expect(subject.details_as_slack_message).to include(subject.due_date.strftime('%A, %d %b %Y %l:%M %p'))
+  #     end
+  #   end
+  # end
 
   describe '#revision_as_slack_message' do
     context 'when title is changed' do

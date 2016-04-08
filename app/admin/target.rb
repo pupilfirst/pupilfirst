@@ -47,6 +47,7 @@ ActiveAdmin.register Target do
 
     def create_multiple_founder_targets!
       founder_ids = params[:target][:founder_id].reject(&:blank?)
+      startup = Startup.find_by_id params[:target][:startup_id]
 
       # Founders can either be all (of a startup), or selected list.
       founders = founder_ids.include?('all') ? startup.founders : Founder.where(id: founder_ids)

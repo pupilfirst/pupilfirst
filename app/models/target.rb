@@ -95,15 +95,6 @@ class Target < ActiveRecord::Base
     title_changed? || description_changed? || completion_instructions_changed? || due_date_changed?
   end
 
-  def details_as_slack_message
-    message = "Hey! #{assigner.name} has assigned #{assignee.is_a?(Startup) ? 'your startup ' + startup.product_name : 'you'} a new target:"\
-    " *<#{Rails.application.routes.url_helpers.startup_url(startup)}|#{title}>*\n"
-    message += "Description: \"#{ApplicationController.helpers.strip_tags description}\"\n"
-    message += "He has also provided <#{resource_url}|a useful link> to assist you.\n" if resource_url.present?
-    message += "The due date to complete this target is :exclamation: *#{due_date.strftime('%A, %d %b %Y %l:%M %p')}*" if due_date.present?
-    message
-  end
-
   def revision_as_slack_message
     message = "Hey! #{assigner.name} has revised the target (<#{Rails.application.routes.url_helpers.startup_url(startup)}|#{title}>) "\
     "he recently assigned to #{assignee.is_a?(Startup) ? 'your startup ' + startup.product_name : 'you'}\n"

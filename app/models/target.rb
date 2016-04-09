@@ -104,28 +104,4 @@ class Target < ActiveRecord::Base
     message += ":exclamation: The due date has been modified to *#{due_date.strftime('%A, %d %b %Y %l:%M %p')}* :exclamation:" if due_date_changed?
     message
   end
-
-  # Slack message to remind founder of expiry in 5 days
-  def mild_slack_reminder
-    ":timer_clock: *Reminder:* #{assignee.is_a?(Startup) ? 'Your startup ' + startup.product_name + 'has' : 'You have'} a target"\
-    " - _<#{Rails.application.routes.url_helpers.startup_url(startup)}|#{title}>_ "\
-    "- assigned by #{assigner.name} due in 5 days!"
-  end
-
-  # Slack message to remind founder of expiry in 2 days
-  def strong_slack_reminder
-    ":exclamation: *Urgent:* It seems that the target - _<#{Rails.application.routes.url_helpers.startup_url(startup)}|#{title}>_ "\
-    "- assigned to #{assignee.is_a?(Startup) ? 'your startup ' + startup.product_name : 'you'} "\
-    "by #{assigner.name} due in 2 days is not yet complete! Please complete the same at the "\
-    "earliest and submit the corresponding timeline entry for verification!"
-  end
-
-  # Slack message to announce on batch slack channel when deployed to entire batch
-  def batch_deploy_message
-    message = "Attention Founders! #{assigner.name} has assigned all startups in the #{startup.batch.name} batch a new target: #{title}\n"
-    message += "Description: \"#{ApplicationController.helpers.strip_tags description}\"\n"
-    message += "He has also provided <#{resource_url}|a useful link> to assist you.\n" if resource_url.present?
-    message += "The due date to complete this target is :exclamation: *#{due_date.strftime('%A, %d %b %Y %l:%M %p')}*" if due_date.present?
-    message
-  end
 end

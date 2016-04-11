@@ -1,5 +1,6 @@
 class TargetTemplate < ActiveRecord::Base
   belongs_to :assigner, class_name: 'Faculty'
+  has_many :targets
 
   mount_uploader :rubric, RubricUploader
 

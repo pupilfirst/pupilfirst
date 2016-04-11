@@ -215,8 +215,9 @@ ActiveAdmin.register Founder do
     end
 
     if founder.targets.present?
-      panel 'Targets' do
+      div do
         table_for founder.targets.order('created_at DESC') do
+          caption 'Linked Targets'
           column 'Target' do |target|
             a href: admin_target_path(target) do
               target.title

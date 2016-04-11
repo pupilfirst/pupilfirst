@@ -105,8 +105,10 @@ ActiveAdmin.register Target do
 
   show do |target|
     if target.timeline_events.present?
-      panel 'Linked Timeline Events' do
+      div do
         table_for target.timeline_events.includes(:timeline_event_type) do
+          caption 'Linked Timeline Events'
+
           column 'Timeline Event' do |timeline_event|
             a href: admin_timeline_event_path(timeline_event) do
               "##{timeline_event.id} #{timeline_event.title}"

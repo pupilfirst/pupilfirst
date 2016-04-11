@@ -58,6 +58,7 @@ describe Lita::Handlers::Backup do
 
   describe '#record_reaction' do
     let(:user) { double 'Lita User', metadata: { 'mention_name' => 'mention_name' } }
+
     let(:payload) do
       {
         item: { 'type' => 'message', 'ts' => 'timestamp' },
@@ -66,16 +67,16 @@ describe Lita::Handlers::Backup do
         name: 'reaction_type'
       }
     end
-    let(:parent_message) { create :public_slack_message, timestamp: 'timestamp', channel: 'channel_name' }
+
+    let!(:parent_message) { create :public_slack_message, timestamp: 'timestamp', channel: 'channel_name' }
     let(:founder) { create :founder_with_out_password, slack_username: 'mention_name' }
     let(:slack_username_check_response) { { ok: true, members: [{ name: 'mention_name', id: 'ABCD1234' }] }.to_json }
 
     before do
       allow(RestClient).to receive(:get).and_return(slack_username_check_response)
 
-      # Memoize founder and parent_message
+      # Memoize founder after stubbing RestClient's get (above).
       founder
-      parent_message
     end
 
     it 'records reaction' do
@@ -87,6 +88,7 @@ describe Lita::Handlers::Backup do
       expect(last_public_slack_message.founder).to eq(founder)
       expect(last_public_slack_message.channel).to eq('channel_name')
       expect(last_public_slack_message.timestamp).to eq('event_ts')
+      expect(last_public_slack_message.reaction_to).to eq(parent_message)
     end
 
     context 'reaction was not to a message' do
@@ -119,6 +121,7 @@ describe Lita::Handlers::Backup do
 
   describe '#remove_reaction' do
     let(:user) { double 'Lita User', metadata: { 'mention_name' => 'mention_name' } }
+
     let(:payload) do
       {
         item: { 'type' => 'message', 'ts' => 'timestamp' },
@@ -127,24 +130,12 @@ describe Lita::Handlers::Backup do
         name: 'reaction_type'
       }
     end
-    let(:parent_message) { create :public_slack_message, timestamp: 'timestamp', channel: 'channel_name' }
-    let(:existing_reaction) { create :public_slack_message, slack_username: 'mention_name', body: ':reaction_type:' }
-    let(:karma_point) { create :karma_point }
 
-    before do
-      # memoize everything so that .count works fine
-      parent_message
-      existing_reaction
-      karma_point
-    end
+    let(:parent_message) { create :public_slack_message, timestamp: 'timestamp', channel: 'channel_name' }
+    let(:existing_reaction) { create :public_slack_message, slack_username: 'mention_name', body: ':reaction_type:', reaction_to: parent_message }
+    let!(:karma_point) { create :karma_point, source: existing_reaction }
 
     it 'removes reaction and associated karma point' do
-      # assign existing reaction to the parent message
-      existing_reaction.update!(reaction_to: parent_message)
-
-      # assign the karma point to existing_reaction
-      karma_point.update!(source: existing_reaction)
-
       subject.remove_reaction(payload)
       expect(PublicSlackMessage.count).to eq(1)
       expect(KarmaPoint.count).to eq(0)
@@ -177,7 +168,7 @@ describe Lita::Handlers::Backup do
     end
 
     context 'reaction to be removed could not be found' do
-      let(:existing_reaction) { create :public_slack_message, slack_username: 'mention_name', body: ':some_other_reaction_type:' }
+      let(:existing_reaction) { create :public_slack_message, slack_username: 'mention_name', body: ':some_other_reaction_type:', reaction_to: parent_message }
 
       it 'does not modify anything' do
         subject.remove_reaction(payload)

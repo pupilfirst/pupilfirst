@@ -16,7 +16,7 @@ ActiveAdmin.register TargetTemplate do
           resource_url: target_template.resource_url, completion_instructions: target_template.completion_instructions,
           due_date_date: target_template.due_date, due_date_time_hour: 23, due_date_time_minute: 59,
           slideshow_embed: target_template.slideshow_embed, assigner_id: target_template.assigner_id,
-          remote_rubric_url: target_template.rubric_url
+          remote_rubric_url: target_template.rubric_url, target_template_id: params[:id]
         }
       )
     )
@@ -44,12 +44,13 @@ ActiveAdmin.register TargetTemplate do
     AllTargetNotificationsJob.perform_later Target.last, 'batch_deploy'
 
     flash[:success] = "Deployed as target to all startups in #{batch.name} batch!"
-    redirect_to action: :show
+    redirect_to admin_targets_url
   end
 
   batch_action :batch_deploy,
-    confirm: "Select batch to deploy selected templates as targets", form: proc { { batch: Batch.not_completed.pluck(:name, :id) } } do |ids, inputs|
+    confirm: 'Select batch to deploy selected templates as targets', form: proc { { batch: Batch.not_completed.pluck(:name, :id) } } do |ids, inputs|
     batch = Batch.find(inputs[:batch])
+
     TargetTemplate.where(id: ids).each do |target_template|
       batch.startups.each do |startup|
         target_template.create_target!(startup, batch: batch)
@@ -59,7 +60,8 @@ ActiveAdmin.register TargetTemplate do
     AllTargetNotificationsJob.perform_later Target.last, 'batch_deploy'
 
     flash[:success] = "Deployed as target to all startups in #{batch.name} batch!"
-    redirect_to action: :index
+
+    redirect_to admin_targets_url
   end
 
   index do

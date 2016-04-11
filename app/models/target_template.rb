@@ -23,7 +23,8 @@ class TargetTemplate < ActiveRecord::Base
       resource_url: resource_url,
       completion_instructions: completion_instructions,
       due_date: due_date(batch: batch),
-      slideshow_embed: slideshow_embed
+      slideshow_embed: slideshow_embed,
+      target_template: self
     )
   end
 

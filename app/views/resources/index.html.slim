@@ -20,39 +20,27 @@
 
     .resources
       .row
-        .col-md-6.col-sm-7.tag-filter
+        .tag-filter
           = form_tag nil, method: "get" do
             = select_tag "tags", options_for_select(@resource_tags, params[:tags]), multiple: true, include_blank: true, id: "resources-index-tags", class: "tag-select"
+            = text_field_tag "search", params[:search], placeholder: 'Title contains', class: 'search-field'
             = button_tag name: "Filter", type: "submit", class: 'btn btn-primary tag-filter-btn text-uppercase' do
               i.fa.fa-filter
               | Filter
-            = hidden_field_tag 'search', params[:search]
-            - if params[:tags].present?
-              = link_to resources_path(search: params[:search]), class: 'btn btn-primary tag-filter-clear text-uppercase' do
+            - if params[:tags].present? || params[:search].present?
+              = link_to resources_path, class: 'btn btn-primary tag-filter-clear text-uppercase' do
                 i.fa.fa-refresh
                 | Clear Filter
-        .col-md-6.col-sm-5.search-bar.text-right
-          = form_tag nil, method: "get" do
-            = text_field_tag "search", params[:search], placeholder: 'Search Title for', class: 'search-field'
-            = hidden_field_tag 'tags', params[:tags]
-            = button_tag name: "Search", type: "submit", class: 'btn btn-primary search-bar-btn text-uppercase' do
-              i.fa.fa-search
-              | Search
 
       .row
         - if @resources.blank?
           .col-md-12
             .alert.alert-warning
-              ' We're sorry, but it looks like you're not allowed to view resources with the tags and search criteria you've picked.
-              | Try #{link_to 'clearing the filter and search', resources_path}
-              - if current_founder.blank?
-                |, or #{link_to 'logging in', new_founder_session_path}
-              |.
+              = zero_results_text.html_safe
         - else
-          - if params[:search].present?
+          - if params[:tags].present? || params[:search].present?
             p.grey-text.show-result-text
-              | Showing results for&nbsp;
-              strong '#{params[:search].titlecase}':
+              = results_caption
           - @resources.each do |resource|
             = render 'resource', resource: resource
     .text-center

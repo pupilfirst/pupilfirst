@@ -40,6 +40,9 @@ en:
     share_status:
       approved: 'Only with approved startups'
       public: Public
+    search_results:
+      zero_results: "We\'re sorry, but it looks like there are no resources %{tag_text} %{search_text}.  Try changing your filter conditions %{login_text}."
+      results_caption: "Showing resources %{tag_text} %{search_text}:"
   recaptcha:
     errors:
       verification_failed: Verification of Recaptcha failed. Please try again.

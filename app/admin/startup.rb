@@ -40,7 +40,10 @@ ActiveAdmin.register Startup do
 
   index do
     selectable_column
-    column(:product, &:display_name)
+
+    column :product do |startup|
+      link_to startup.display_name, admin_startup_path(startup)
+    end
 
     column :targets do |startup|
       if startup.targets.present?

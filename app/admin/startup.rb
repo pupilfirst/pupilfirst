@@ -90,23 +90,25 @@ ActiveAdmin.register Startup do
     end
 
     actions do |startup|
-      link_to('View Timeline', startup, target: '_blank') +
-        link_to(
-          'View All Feedback',
-          admin_startup_feedback_index_url(
-            'q[startup_id_eq]' => startup.id,
-            commit: 'Filter'
-          )
-        ) +
-        link_to(
-          'Record New Feedback',
-          new_admin_startup_feedback_path(
-            startup_feedback: {
-              startup_id: startup.id,
-              reference_url: startup_url(startup)
-            }
-          )
+      span do
+        link_to 'View Timeline', startup, target: '_blank', class: 'member_link'
+      end
+
+      span do
+        link_to 'View All Feedback',
+          admin_startup_feedback_index_url('q[startup_id_eq]' => startup.id, commit: 'Filter'),
+          class: 'member_link'
+      end
+
+      span do
+        link_to('Record New Feedback', new_admin_startup_feedback_path(
+          startup_feedback: {
+            startup_id: startup.id,
+            reference_url: startup_url(startup)
+          }),
+          class: 'member_link'
         )
+      end
     end
   end
 

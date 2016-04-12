@@ -55,9 +55,8 @@ ActiveAdmin.register TargetTemplate do
       batch.startups.each do |startup|
         target_template.create_target!(startup, batch: batch)
       end
+      AllTargetNotificationsJob.perform_later Target.last, 'batch_deploy'
     end
-
-    AllTargetNotificationsJob.perform_later Target.last, 'batch_deploy'
 
     flash[:success] = "Deployed as target to all startups in #{batch.name} batch!"
 

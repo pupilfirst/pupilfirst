@@ -71,8 +71,13 @@ ActiveAdmin.register TargetTemplate do
     column :role
 
     actions defaults: true do |target_template|
-      link_to 'Create Target', create_target_admin_target_template_path(target_template)
-      link_to 'Deploy to Batch', batch_select_form_admin_target_template_path(id: target_template.id)
+      span do
+        link_to 'Create Target', create_target_admin_target_template_path(target_template), class: 'member_link'
+      end
+
+      span do
+        link_to 'Deploy to Batch', batch_select_form_admin_target_template_path(id: target_template.id), class: 'member_link'
+      end
     end
   end
 

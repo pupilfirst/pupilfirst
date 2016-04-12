@@ -92,6 +92,8 @@ Svapp::Application.routes.draw do
     get ':id/feedback/from_faculty/:token', action: 'feedback_from_faculty', as: 'feedback_from_faculty'
   end
 
+  get 'graduation', as: 'graduation', to: 'home#graduation'
+
   get 'apply(/:batch)', as: 'apply', to: 'home#apply'
 
   get 'founders/:slug', to: 'founders#founder_profile', as: 'founder_profile'

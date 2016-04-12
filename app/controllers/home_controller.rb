@@ -18,6 +18,10 @@ class HomeController < ApplicationController
     @skip_container = true
   end
 
+  def graduation
+    @skip_container = true
+  end
+
   # used by the 'shortener' gem's config
   def not_found
     raise_not_found

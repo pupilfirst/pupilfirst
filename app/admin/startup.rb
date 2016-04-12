@@ -104,13 +104,14 @@ ActiveAdmin.register Startup do
       end
 
       span do
-        link_to('Record New Feedback', new_admin_startup_feedback_path(
-          startup_feedback: {
-            startup_id: startup.id,
-            reference_url: startup_url(startup)
-          }),
+        link_to 'Record New Feedback',
+          new_admin_startup_feedback_path(
+            startup_feedback: {
+              startup_id: startup.id,
+              reference_url: startup_url(startup)
+            }
+          ),
           class: 'member_link'
-        )
       end
     end
   end

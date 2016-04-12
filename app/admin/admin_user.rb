@@ -4,6 +4,7 @@ ActiveAdmin.register AdminUser do
   permit_params :email, :password, :password_confirmation, :fullname, :avatar, :admin_type
 
   index do
+    id_column
     column :email
     column :fullname
     column :current_sign_in_at

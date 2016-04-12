@@ -11,14 +11,14 @@ ActiveAdmin.setup do |config|
   # Set the link url for the title. For example, to take
   # users to your main site. Defaults to no link.
   #
-  config.site_title_link = "https://www.sv.co/admin"
+  config.site_title_link = '/'
 
   # Set an optional image to be displayed for the header
   # instead of a string (overrides :site_title)
   #
   # Note: Aim for an image that's 21px high so it fits in the header.
   #
-  config.site_title_image = "admin/logo_40.png"
+  config.site_title_image = 'admin/logo_40.png'
 
   # == Default Namespace
   #
@@ -123,11 +123,18 @@ ActiveAdmin.setup do |config|
   # You can completely disable comments:
   config.comments = false
   #
-  # You can disable the menu item for the comments index page:
-  config.show_comments_in_menu = false
-  #
   # You can change the name under which comments are registered:
   # config.comments_registration_name = 'AdminComment'
+  #
+  # You can change the order for the comments and you can change the column
+  # to be used for ordering:
+  # config.comments_order = 'created_at ASC'
+  #
+  # You can disable the menu item for the comments index page:
+  config.comments_menu = false
+  #
+  # You can customize the comment menu:
+  # config.comments_menu = { parent: 'Admin', priority: 1 }
 
   # == Batch Actions
   #
@@ -141,6 +148,14 @@ ActiveAdmin.setup do |config|
   # Active Admin resources and pages from here.
   #
   # config.before_filter :do_something_awesome
+
+  # == Localize Date/Time Format
+  #
+  # Set the localize format to display dates and times.
+  # To understand how to localize your app with I18n, read more at
+  # https://github.com/svenfuchs/i18n/blob/master/lib%2Fi18n%2Fbackend%2Fbase.rb#L52
+  #
+  config.localize_format = :long
 
   # == Setting a Favicon
   #
@@ -213,9 +228,9 @@ ActiveAdmin.setup do |config|
   # Adding menu item called 'Tagging' to the 'Resource' and 'Startup' menu to show taggings applicable to them resp.
   config.namespace :admin do |admin|
     admin.build_menu :default do |menu|
-      menu.add label: "Tagging", url: proc { admin_taggings_path('q[taggable_type_eq]' => 'Resource', commit: 'Filter') }, parent: 'Resources'
-      menu.add label: "Tagging", url: proc { admin_taggings_path('q[taggable_type_eq]' => 'Startup', commit: 'Filter') }, parent: 'Startups'
-      menu.add label: "Tagging", url: proc { admin_taggings_path('q[taggable_type_eq]' => 'Founder', commit: 'Filter') }, parent: 'Founders'
+      menu.add label: 'Tagging', url: proc { admin_taggings_path('q[taggable_type_eq]' => 'Resource', commit: 'Filter') }, parent: 'Resources'
+      menu.add label: 'Tagging', url: proc { admin_taggings_path('q[taggable_type_eq]' => 'Startup', commit: 'Filter') }, parent: 'Startups'
+      menu.add label: 'Tagging', url: proc { admin_taggings_path('q[taggable_type_eq]' => 'Founder', commit: 'Filter') }, parent: 'Founders'
     end
   end
 
@@ -246,6 +261,10 @@ ActiveAdmin.setup do |config|
   # You can control the default per page count for all resources here.
   #
   # config.default_per_page = 30
+  #
+  # You can control the max per page count too.
+  #
+  # config.max_per_page = 10_000
 
   # == Filters
   #
@@ -254,4 +273,14 @@ ActiveAdmin.setup do |config|
   # You can enable or disable them for all resources here.
   #
   # config.filters = true
+  #
+  # By default the filters include associations in a select, which means
+  # that every record will be loaded for each association.
+  # You can enabled or disable the inclusion
+  # of those filters by default here.
+  #
+  # config.include_default_association_filters = true
+
+  # Disable streaming of CSV export in development.
+  config.disable_streaming_in = %w(development staging)
 end

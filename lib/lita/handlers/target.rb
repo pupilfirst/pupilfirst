@@ -2,12 +2,12 @@ module Lita
   module Handlers
     class Target < Handler
       route(
-        /^targets\??\sinfo\s(\d)|targets\??$/,
+        /^targets\??\sinfo\s(\d)$|^targets\??$/,
         :targets_handler,
         command: true,
         help: {
-          'targets' => 'Get a list of targets assigned to you and your team.',
-          'targets info [NUMBER]' => 'Get detailed information about a target from list.'
+          'targets' => I18n.t('slack.help.targets'),
+          'targets info [NUMBER]' => I18n.t('slack.help.targets_info')
         }
       )
 
@@ -24,10 +24,7 @@ module Lita
               reply_with_targets_info
             end
           else
-            response.reply <<~REPLY
-              I'm sorry, but your slack mention name `@#{slack_username}` isn't known to me.
-              Please update your slack mention name on your SV.CO profile, and try asking me again.
-            REPLY
+            response.reply I18n.t('slack.handlers.targets.unknown_username', slack_username: slack_username)
           end
         end
       end
@@ -41,10 +38,28 @@ module Lita
       end
 
       def reply_with_target_info
-        response.reply <<~REPLY
-          I'm supposed to send you all info I have about target no. #{target_number},
-          but I don't know how to yet. Sorry. :cry:
-        REPLY
+        if chosen_target.present?
+          response.reply <<~REPLY
+            *#{chosen_target.title}*
+            *Status:* #{target_status_message(chosen_target)}
+            *Role:* #{I18n.t("role.#{chosen_target.role}")}
+            *Assigner:* #{chosen_target.assigner.name}
+            *Description:* #{ActionView::Base.full_sanitizer.sanitize chosen_target.description}
+            #{optional_target_data}
+          REPLY
+        else
+          reply_with_choice_error
+        end
+      end
+
+      def reply_with_choice_error
+        response.reply I18n.t('slack.handlers.targets.choice_error', choices: (1..targets.count).to_a.join(', '))
+      end
+
+      def optional_target_data
+        if chosen_target.completion_instructions.present?
+
+        end
       end
 
       def reply_with_targets_info
@@ -54,7 +69,7 @@ module Lita
 
         response.reply <<~REPLY
           #{targets_info}
-          Reply with `targets info [NUMBER]` for more information about a target.
+          #{I18n.t('slack.handlers.targets.more_info')}
         REPLY
       end
 
@@ -73,7 +88,7 @@ module Lita
       end
 
       def chosen_target
-        targets[target_number - 1]
+        target_number > 0 ? targets[target_number - 1] : nil
       end
 
       def targets

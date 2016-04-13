@@ -955,3 +955,53 @@ h1.product-name {
     font-size: 12px;
   }
 }
+
+.tour-button {
+	font-size: 14px;
+	color: #3a9343;
+	background: white;
+  border: 1px solid #3a9343;
+  padding: 10px 15px 10px 78px;
+  border-radius: 10px;
+	display: block;
+	letter-spacing: 0.05em;
+	outline: none;
+  overflow: hidden;
+	position: relative;
+	transition: all 0.2s;
+
+  &:after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    width: 20px;
+    height: 20px;
+    background: #3a9343;
+    z-index: 1;
+    left: 55px;
+    top: 50%;
+    margin: -10px 0 0 -10px;
+    transition: all 0.2s;
+    transform: rotate(45deg);
+  }
+  &:active:after {
+    left: 60px;
+  }
+  &:hover {
+    background-color: #d5e6d7;
+  }
+}
+.tour-icon {
+  background-image: asset-url("timeline/tour-icon.svg");
+  background-repeat: no-repeat;
+  width: 60px;
+  height: 100%;
+  position: absolute;
+  z-index: 2;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-size: 30px;
+  background-position: center;
+  background-color: #3a9343;
+}

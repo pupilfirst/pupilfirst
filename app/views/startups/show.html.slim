@@ -43,9 +43,9 @@
     #data-points
       .col-md-4.col-md-push-8
         - if @startup.founder?(current_founder)
-          button#tour-button.btn.btn-info.btn-flat.btn-with-default-padding.margin-bottom-20.pull-right
-            i.fa.fa-eye
-            | &nbsp;Take a tour of this page!
+          button#tour-button.tour-button.btn-3d.text-uppercase.margin-bottom-20.font-weight-600
+            span.tour-icon
+            | Take a tour!
         .clearfix
         - if @startup.latest_help_wanted.present?
           .alert.alert-info

@@ -54,18 +54,6 @@
       font-size: 16px;
       line-height: 28px;
     }
-    .graduation-action-btn {
-      border: 1px solid #0089D0;
-      border-radius: 30px;
-      background-color: white;
-      font-size: 15px;
-      letter-spacing: 0.05em;
-      font-weight: normal;
-      margin-top: 20px;
-      outline: 0;
-      padding: 15px 30px;
-      box-shadow: 0 0 10px 0 rgba(0,0,0,0.15);
-    }
   }
 }
 .graduation-video-playlist {
@@ -107,11 +95,13 @@
 .talkto-founders {
   background-color: rgba(246,246,246,0.75);
   border-top: 1px solid #E4E4E4;
+  padding: 20px 0;
 
   h3 {
     font-size: 18px;
     line-height: 24px;
     font-weight: 300;
+    margin-top: 40px;
 
     span {
       display: block;
@@ -123,8 +113,40 @@
     border-radius: 10px;
     max-width: 960px;
     padding: 50px;
-    margin: 25px auto;
+    margin: 25px auto 10px;
 
+    .ways-icon {
+      background-position: center center;
+      background-repeat: no-repeat;
+      border: 1px solid rgba(0,137,208,0.4);
+      box-shadow: 0 0 9px 0 rgba(0,0,0,0.08);
+      width: 100px;
+      height: 100px;
+      padding: 0;
+      border-radius: 50%;
+      margin: 0 auto;
+      display: block;
+
+      &.faculty-join-icon {
+        background-image: asset-url("graduation/join-faculty-icon.svg");
+      }
+      &.broadcast-icon {
+        background-image: asset-url("graduation/broadcast-icon.svg");
+      }
+    }
+    .talks-ways-content {
+      h4 {
+        color: #0089D0;
+        font-size: 18px;
+        margin-top: 0;
+      }
+      p {
+        color: #666666;
+        font-weight: 300;
+        font-size: 14px;
+        line-height: 23px;
+      }
+    }
   }
 }
 .testimonial-container {
@@ -136,6 +158,7 @@
 .graduate-subhead {
   font-size: 26px;
   color: #7F7F7F;
+  position: relative;
 
   .graduate-subhead-icon {
     background-position: center top;
@@ -153,5 +176,46 @@
       width: 70px;
       height: 72px;
     }
+    &.testimonial-icon {
+      background-image: asset-url("graduation/testimonial-icon.svg");
+      width: 74px;
+      height: 66px;
+    }
+  }
+  &:before {
+    content: '';
+    background-color: #0089D0;
+    height: 1px;
+    width: 140px;
+    display: inline-block;
+    border-bottom: 1px solid #0089D0;
+    position: absolute;
+    top: 135px;
+    transform: translateX(-50%);
+  }
+}
+.graduation-action-btn {
+  border-radius: 30px;
+  font-size: 15px;
+  letter-spacing: 0.05em;
+  font-weight: normal;
+  margin: 20px 0;
+  padding: 15px 30px;
+  outline: 0;
+  display: inline-block;
+  box-shadow: 0 0 10px 0 rgba(0,0,0,0.15);
+
+  &:active, &:focus {
+    outline: 0 !important;
+  }
+
+  &.white-action {
+    background-color: white;
+    border: 1px solid #0089D0;
+  }
+  &.green-action {
+    background-color: #499E43;
+    border: 1px solid #2F8829;
+    color: white;
   }
 }

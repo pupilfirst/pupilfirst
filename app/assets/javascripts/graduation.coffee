@@ -6,6 +6,5 @@ $(document).on 'page:change', ->
     autoplay:true
 
   $(".testimonial-carousel").owlCarousel
-    autoplay:true
     items:1
     loop:true

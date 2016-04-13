@@ -14,6 +14,6 @@ module ResourcesHelper
   end
 
   def search_text
-    params[:search].present? ? "whose title contains \'#{params[:search].titlecase}\'" : ''
+    params[:search].present? ? "whose title contains \'#{params[:search].downcase}\'" : ''
   end
 end

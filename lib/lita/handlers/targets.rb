@@ -1,6 +1,6 @@
 module Lita
   module Handlers
-    class Target < Handler
+    class Targets < Handler
       route(
         /^targets\??\sinfo\s(\d)$|^targets\??$/,
         :targets_handler,
@@ -39,14 +39,17 @@ module Lita
 
       def reply_with_target_info
         if chosen_target.present?
-          response.reply_privately <<~REPLY
+          response_message = <<~REPLY
             *#{chosen_target.title}*
             *Status:* #{target_status_message(chosen_target)}
             *Role:* #{I18n.t("role.#{chosen_target.role}")}
             *Assigner:* #{chosen_target.assigner.name}
             *Description:* #{ActionView::Base.full_sanitizer.sanitize chosen_target.description}
-            #{optional_target_data}
           REPLY
+
+          response_message += optional_target_data if optional_target_data.present?
+
+          response.reply_privately response_message
         else
           reply_with_choice_error
         end
@@ -57,13 +60,15 @@ module Lita
       end
 
       def optional_target_data
+        return @optional_target_data if @optional_target_data.present?
+
         optional = []
 
         optional << "*Completion Instructions:* #{chosen_target.completion_instructions}" if chosen_target.completion_instructions.present?
         optional << "*Linked Resource:* <#{chosen_target.resource_url}|#{chosen_target.resource_url}>" if chosen_target.resource_url.present?
         optional << "*Rubric:* <#{chosen_target.rubric_url}|#{chosen_target.rubric_filename}>" if chosen_target.rubric.present?
 
-        optional.join("\n") if optional.present?
+        @optional_target_data = (optional.join("\n") + "\n") if optional.present?
       end
 
       def reply_with_targets_info
@@ -97,7 +102,7 @@ module Lita
 
       def targets
         @targets ||= begin
-          (founder.targets + startup.targets).sort_by { |target| target.created_at }.reverse
+          (founder.targets + startup.targets).sort_by(&:created_at).reverse
         end[0..4]
       end
 
@@ -114,6 +119,6 @@ module Lita
       end
     end
 
-    Lita.register_handler(Target)
+    Lita.register_handler(Targets)
   end
 end

@@ -105,4 +105,8 @@ class Target < ActiveRecord::Base
     message += ":exclamation: The due date has been modified to *#{due_date.strftime('%A, %d %b %Y %l:%M %p')}* :exclamation:" if due_date_changed?
     message
   end
+
+  def rubric_filename
+    rubric.sanitized_file.original_filename
+  end
 end

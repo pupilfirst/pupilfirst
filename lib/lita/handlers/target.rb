@@ -24,7 +24,7 @@ module Lita
               reply_with_targets_info
             end
           else
-            response.reply I18n.t('slack.handlers.targets.unknown_username', slack_username: slack_username)
+            response.reply_privately I18n.t('slack.handlers.targets.unknown_username', slack_username: slack_username)
           end
         end
       end
@@ -39,7 +39,7 @@ module Lita
 
       def reply_with_target_info
         if chosen_target.present?
-          response.reply <<~REPLY
+          response.reply_privately <<~REPLY
             *#{chosen_target.title}*
             *Status:* #{target_status_message(chosen_target)}
             *Role:* #{I18n.t("role.#{chosen_target.role}")}
@@ -53,13 +53,17 @@ module Lita
       end
 
       def reply_with_choice_error
-        response.reply I18n.t('slack.handlers.targets.choice_error', choices: (1..targets.count).to_a.join(', '))
+        response.reply_privately I18n.t('slack.handlers.targets.choice_error', choices: (1..targets.count).to_a.join(', '))
       end
 
       def optional_target_data
-        if chosen_target.completion_instructions.present?
+        optional = []
 
-        end
+        optional << "*Completion Instructions:* #{chosen_target.completion_instructions}" if chosen_target.completion_instructions.present?
+        optional << "*Linked Resource:* <#{chosen_target.resource_url}|#{chosen_target.resource_url}>" if chosen_target.resource_url.present?
+        optional << "*Rubric:* <#{chosen_target.rubric_url}|#{chosen_target.rubric_filename}>" if chosen_target.rubric.present?
+
+        optional.join("\n") if optional.present?
       end
 
       def reply_with_targets_info
@@ -67,7 +71,7 @@ module Lita
           short_target_message(target, index)
         end.join "\n"
 
-        response.reply <<~REPLY
+        response.reply_privately <<~REPLY
           #{targets_info}
           #{I18n.t('slack.handlers.targets.more_info')}
         REPLY
@@ -83,7 +87,7 @@ module Lita
         elsif target.done?
           'Done'
         else
-          "Pending. Due on #{target.due_date.strftime '%A, %b %d'}"
+          "Pending - Due on #{target.due_date.strftime '%A, %b %d'}"
         end
       end
 

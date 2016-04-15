@@ -100,6 +100,9 @@ describe Lita::Handlers::Targets do
             end
 
             it 'replies with all available info' do
+              shortened_url = Shortener::ShortenedUrl.generate pending_founder_target.resource_url
+              url_with_host = "https://sv.co/#{shortened_url.unique_key}"
+
               expect(response).to receive(:reply_privately).with <<~EXPECTED_REPLY
                 *#{pending_founder_target.title}*
                 *Status:* Pending - Due on #{pending_founder_target.due_date.strftime '%A, %b %d'}
@@ -107,7 +110,7 @@ describe Lita::Handlers::Targets do
                 *Assigner:* #{pending_founder_target.assigner.name}
                 *Description:* #{pending_founder_target.description}
                 *Completion Instructions:* #{pending_founder_target.completion_instructions}
-                *Linked Resource:* <#{pending_founder_target.resource_url}|#{pending_founder_target.resource_url}>
+                *Linked Resource:* <#{url_with_host}|#{url_with_host}>
               EXPECTED_REPLY
 
               subject.targets_handler(response)

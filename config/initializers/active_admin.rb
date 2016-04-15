@@ -234,6 +234,14 @@ ActiveAdmin.setup do |config|
     end
   end
 
+  # Add 'Targets' under 'Founder' and 'Startup' menus
+  config.namespace :admin do |admin|
+    admin.build_menu :default do |menu|
+      menu.add label: 'Targets', url: proc { admin_targets_path('q[assignee_type_eq]' => 'Founder', commit: 'Filter') }, parent: 'Founders'
+      menu.add label: 'Targets', url: proc { admin_targets_path('q[assignee_type_eq]' => 'Startup', commit: 'Filter') }, parent: 'Startups'
+    end
+  end
+
   # == Download Links
   #
   # You can disable download links on resource listing pages,

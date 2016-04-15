@@ -80,7 +80,6 @@ ActiveAdmin.register Target do
   index do
     selectable_column
 
-    column :assignee_type
     column :assignee
 
     column :role do |target|

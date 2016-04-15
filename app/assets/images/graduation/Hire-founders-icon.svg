@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.7 (28169) - http://www.bohemiancoding.com/sketch -->
+    <title>Page 1</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M0,19 C0,29.494 8.507,38 19,38 C29.493,38 38,29.494 38,19 C38,8.507 29.493,0 19,0 C8.507,0 0,8.507 0,19 L0,19 Z" id="path-1"></path>
+        <path d="M0,6.5 C0,10.09 3.606,13 5,13 C6.394,13 10,10.09 10,6.5 C10,2.91 9.068,0 5,0 C1.279,0 0,2.91 0,6.5 L0,6.5 Z" id="path-3"></path>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g transform="translate(1.000000, 1.000000)">
+            <g id="Group-3">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="Clip-2"></g>
+                <polygon id="Fill-1" fill="#FFFFFF" mask="url(#mask-2)" points="-5 43 43 43 43 -5 -5 -5"></polygon>
+            </g>
+            <g id="Group-8">
+                <path d="M6.125,32.717 L6.125,28.16 C6.125,28.16 7.616,23.688 14.799,23.281 L19,27.483 L23.201,23.281 C30.384,23.688 31.875,28.16 31.875,28.16 L31.875,32.717 C31.875,32.717 24.417,38 19,38 C11.25,38 6.125,32.717 6.125,32.717" id="Fill-4" fill="#B0D8F1"></path>
+                <path d="M19,38 C29.493,38 38,29.493 38,19 C38,8.507 29.493,0 19,0 C8.507,0 0,8.507 0,19 C0,29.493 8.507,38 19,38 L19,38 Z" id="Stroke-6" stroke="#497EA8" stroke-width="2"></path>
+            </g>
+            <g id="Group-11" transform="translate(14.000000, 8.000000)">
+                <mask id="mask-4" fill="white">
+                    <use xlink:href="#path-3"></use>
+                </mask>
+                <g id="Clip-10"></g>
+                <polygon id="Fill-9" fill="#AFD8EE" mask="url(#mask-4)" points="-5 18 15 18 15 -5 -5 -5"></polygon>
+            </g>
+            <g id="Group-18" transform="translate(3.000000, 3.000000)">
+                <path d="M16,18 C17.394,18 21,15.09 21,11.5 C21,7.91 20.068,5 16,5 C12.279,5 11,7.91 11,11.5 C11,15.09 14.606,18 16,18 L16,18 Z" id="Stroke-12" stroke="#497FAB" stroke-width="1.5"></path>
+                <path d="M28.875,29.717 L28.875,25.16 C28.875,25.16 27.384,20.688 20.201,20.281 L16,24.483 L11.799,20.281 C4.616,20.688 3.125,25.16 3.125,25.16 L3.125,29.717" id="Stroke-14" stroke="#487EAA" stroke-width="1.5"></path>
+                <path d="M15.2605,0.7075 C6.7055,1.3515 0.3035,8.7945 0.9475,17.3505" id="Stroke-16" stroke="#497EA8"></path>
+            </g>
+        </g>
+    </g>
+</svg>

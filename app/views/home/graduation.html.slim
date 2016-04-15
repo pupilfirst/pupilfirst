@@ -6,42 +6,79 @@
     .tab-container
       ul.nav.nav-tabs.nav-justified role="tablist" 
         li.active role="presentation" 
-          a aria-controls="acquihire-teams" data-toggle="tab" href="#acquihire-teams" role="tab" Acquihire Teams
+          a aria-controls="acquihire-teams" data-toggle="tab" href="#acquihire-teams" role="tab"
+            .tab-icon.acquihire-team-icon
+            span.hidden-xs
+              | Acquihire Teams
         li role="presentation" 
-          a aria-controls="hire-founders" data-toggle="tab" href="#hire-founders" role="tab" Hire Founders
+          a aria-controls="hire-founders" data-toggle="tab" href="#hire-founders" role="tab"
+            .tab-icon.hire-founders-icon
+            span.hidden-xs
+              | Hire Founders
         li role="presentation" 
-          a aria-controls="invest-in-startups" data-toggle="tab" href="#invest-in-startups" role="tab" Invest in startups
+          a aria-controls="invest-in-startups" data-toggle="tab" href="#invest-in-startups" role="tab"
+            .tab-icon.invest-in-startups-icon
+            span.hidden-xs
+              | Invest in startups
         li role="presentation" 
-          a aria-controls="build-startup-pipeline" data-toggle="tab" href="#build-startup-pipeline" role="tab" Build a startup pipeline
+          a aria-controls="build-startup-pipeline" data-toggle="tab" href="#build-startup-pipeline" role="tab"
+            .tab-icon.accelerate-icon
+            span.hidden-xs
+              | Build a startup pipeline
 
       .tab-content.graduation-tab-content
-        #acquihire-teams.tab-pane.active role="tabpanel"
+        #acquihire-teams.tab-pane.fade.in.active role="tabpanel"
           .row
             .col-md-7
-              iframe.graduation-video-playlist src="https://www.youtube.com/embed/videoseries?list=PLrvZyo34miDKhO2JCA9sAzZ6kwjGzwBYv" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+              iframe.graduation-video-playlist src="https://www.youtube.com/embed/SWR95X-lmz4?list=PLrvZyo34miDJt-m4a0WKUPqMvnmJ-9hVO" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
             .col-md-5
               h2 Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse neca.
               p.font-weight-300
                 | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor.
                 ' Ut eget imperdiet neque. In volutpat ante semper diam molestie, et aliquam erat laoreet.
                 ' Sed sit amet arcu aliquet, molestie justo at, auctor nunc.
-                ' Phasellus ligula ipsum, volutpat eget semper id, viverra eget nibh. Suspendisse luctus mattis cursus. 
+                ' Phasellus ligula ipsum, volutpat eget semper id, viverra eget nibh. Suspendisse luctus mattis cursus.
               a.btn.graduation-action-btn.white-action.text-uppercase href="#"
                 | Acquihire Teams
-        #hire-founders.tab-pane role="tabpanel"
-          p
-            ' Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            | Ut pretium pretium tempor. Ut eget imperdiet neque. In volutpat ante semper.
-        #invest-in-startups.tab-pane role="tabpanel"
-          p 
-            ' Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            ' Ut pretium pretium tempor. Ut eget imperdiet neque. In volutpat ante semper
-            ' diam molestie, et aliquam erat laoreet. Sed sit amet arcu aliquet, molestie justo at,
-            ' auctor nunc. Phasellus ligula ipsum, volutpat eget semper id, viverra eget nibh.
-        #build-startup-pipeline.tab-pane role="tabpanel"
-          p
-            ' Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            | Ut pretium pretium tempor. Ut eget imperdiet neque. In volutpat ante semper.
+        #hire-founders.tab-pane.fade.in role="tabpanel"
+          .row
+            .col-md-7
+              iframe.graduation-video-playlist src="https://www.youtube.com/embed/cqyOZI4AopI?list=PLrvZyo34miDL8J63zyVLNonPjUK8Q-m6U" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+            .col-md-5
+              h2 Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse neca.
+              p.font-weight-300
+                | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor.
+                ' Ut eget imperdiet neque. In volutpat ante semper diam molestie, et aliquam erat laoreet.
+                ' Sed sit amet arcu aliquet, molestie justo at, auctor nunc.
+                ' Phasellus ligula ipsum, volutpat eget semper id, viverra eget nibh. Suspendisse luctus mattis cursus.
+              a.btn.graduation-action-btn.white-action.text-uppercase href="#"
+                | Hire Founders
+        #invest-in-startups.tab-pane.fade.in role="tabpanel"
+          .row
+            .col-md-7
+              iframe.graduation-video-playlist src="https://www.youtube.com/embed/QmavQDI3SV4?list=PLrvZyo34miDIszuU6tptnX5coYUkWVcQi" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+            .col-md-5
+              h2 Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse neca.
+              p.font-weight-300
+                | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor.
+                ' Ut eget imperdiet neque. In volutpat ante semper diam molestie, et aliquam erat laoreet.
+                ' Sed sit amet arcu aliquet, molestie justo at, auctor nunc.
+                ' Phasellus ligula ipsum, volutpat eget semper id, viverra eget nibh. Suspendisse luctus mattis cursus.
+              a.btn.graduation-action-btn.white-action.text-uppercase href="#"
+                | Invest in Startups
+        #build-startup-pipeline.tab-pane.fade.in role="tabpanel"
+          .row
+            .col-md-7
+              iframe.graduation-video-playlist src="https://www.youtube.com/embed/vjDdSdfitKY" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+            .col-md-5
+              h2 Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse neca.
+              p.font-weight-300
+                | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor.
+                ' Ut eget imperdiet neque. In volutpat ante semper diam molestie, et aliquam erat laoreet.
+                ' Sed sit amet arcu aliquet, molestie justo at, auctor nunc.
+                ' Phasellus ligula ipsum, volutpat eget semper id, viverra eget nibh. Suspendisse luctus mattis cursus.
+              a.btn.graduation-action-btn.white-action.text-uppercase href="#"
+                | Build Startup Pipeline
 
 .graduates-join.text-center.clearfix
   .container
@@ -119,55 +156,66 @@
       | Lorem ipsum dolor sit am
     .testimonial-carousel.owl-theme
       .testimonial-slide-item
-        .row
-          .col-md-6
-            | asd
-            h4
-              | Join as SV.CO Faculty
-            p
-              ' A half-hour per week commitment to our batch.
-              | Founders send you office hour requests with topics they'd like to discuss about.
+        div
+          .col-md-5
+            .testimonial-head
+              h2.font-weight-300
+                | Amit Saini
+              span.role.font-weight-300
+                | Director of Engineering, Ola
+            p.testimonial-quote.font-weight-300
+              ' “ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor.
+              | Ut eget imperdiet neque. In volutpat ante semper diam molestie, et aliquam erat laoreet.”
 
-          .col-md-6
-            | asd
-            h4
-              | Join as SV.CO Faculty
-            p
-              ' A half-hour per week commitment to our batch.
-              | Founders send you office hour requests with topics they'd like to discuss about.
-
+          .col-md-7
+            iframe.testimonial-video src="https://www.youtube.com/embed/z2e5o5ftgRc" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
       .testimonial-slide-item
-        .row
-          .col-md-6
-            | asd
-            h4
-              | Join as SV.CO Faculty
-            p
-              ' A half-hour per week commitment to our batch.
-              | Founders send you office hour requests with topics they'd like to discuss about.
-          
-          .col-md-6
-            | asd
-            h4
-              | Join as SV.CO Faculty
-            p
-              ' A half-hour per week commitment to our batch.
-              | Founders send you office hour requests with topics they'd like to discuss about.
+        div
+          .col-md-5
+            .testimonial-head
+              h2.font-weight-300
+                | Sachin Janghel
+              span.role.font-weight-300
+                | CTO, GOQII
+            p.testimonial-quote.font-weight-300
+              ' “ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor.
+              | Ut eget imperdiet neque. In volutpat ante semper diam molestie, et aliquam erat laoreet.”
 
+          .col-md-7
+            iframe.testimonial-video src="https://www.youtube.com/embed/jiZs9BqC8vw" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
       .testimonial-slide-item
-        .row
-          .col-md-6
-            | asd
-            h4
-              | Join as SV.CO Faculty
-            p
-              ' A half-hour per week commitment to our batch.
-              | Founders send you office hour requests with topics they'd like to discuss about.
+        div
+          .col-md-5
+            .testimonial-head
+              h2.font-weight-300
+                | Harish Sivaramakrishnan
+              span.role.font-weight-300
+                | VP of Design, Snapdeal
+            p.testimonial-quote.font-weight-300
+              ' “ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor.
+              | Ut eget imperdiet neque. In volutpat ante semper diam molestie, et aliquam erat laoreet.”
 
-          .col-md-6
-            | asd
-            h4
-              | Join as SV.CO Faculty
-            p
-              ' A half-hour per week commitment to our batch.
-              | Founders send you office hour requests with topics they'd like to discuss about.
+          .col-md-7
+            iframe.testimonial-video src="https://www.youtube.com/embed/ut-J7cuQpzI" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+      .testimonial-slide-item
+        div
+          .col-md-5
+            .testimonial-head
+              h2.font-weight-300
+                | Vinod Malhotra
+              span.role.font-weight-300
+                | Chief of R&amp;D, Tally Solutions
+            p.testimonial-quote.font-weight-300
+              ' “ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor.
+              | Ut eget imperdiet neque. In volutpat ante semper diam molestie, et aliquam erat laoreet.”
+
+          .col-md-7
+            iframe.testimonial-video src="https://www.youtube.com/embed/qEZ1RamKt6k" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+.footer-action
+  .container
+    .footer-action-box.text-center
+      h2.font-weight-300
+        ' Mauris non tempor quam, et lacinia sapien.
+        | Mauris accumsan eros eget libero posuere vulputate. Etiam elit elit, elementum sed varius at, 
+      a.btn.graduation-action-btn.green-action.text-uppercase href="#"
+        | Call to Action Link

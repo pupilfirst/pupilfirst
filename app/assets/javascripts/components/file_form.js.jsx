@@ -1,22 +1,29 @@
 var FileForm = React.createClass({
   getInitialState: function () {
-    return {fileError: false};
+    return {fileMissingError: false, fileSizeError: false};
   },
 
   saveFile: function () {
     var fileInput = $('#timeline-event-file-input');
     var filePrivate = $('#timeline-event-file-private').prop('checked');
     var fileTitle = $('#timeline-event-file-title').val();
+    var fileSize = (!!fileInput[0].files[0] ? fileInput[0].files[0].size : 0);
     var hasError = false;
+
 
     if (fileInput.val().length == 0) {
       hasError = true;
-      this.setState({fileError: true});
+      this.setState({fileMissingError: true});
     }
 
     if (fileTitle.length == 0) {
       hasError = true;
       this.setState({titleError: true});
+    }
+
+    if (fileSize > 5000000) {
+      hasError = true;
+      this.setState({fileSizeError: true});
     }
 
     if (hasError) {
@@ -46,7 +53,7 @@ var FileForm = React.createClass({
   },
 
   formClasses: function () {
-    if (this.state.fileError) {
+    if (this.state.fileMissingError || this.state.fileSizeError) {
       return 'form-group has-error';
     } else {
       return 'form-group';
@@ -58,7 +65,7 @@ var FileForm = React.createClass({
     if (event.target.id == "timeline-event-file-title") {
       this.setState({titleError: false});
     } else if (event.target.id == "timeline-event-file-input") {
-      this.setState({fileError: false});
+      this.setState({fileMissingError: false, fileSizeError: false});
     } else {
       console.log('clearErrorMarkers called on unknown element with ID "' + event.target.id + '"');
     }
@@ -85,7 +92,11 @@ var FileForm = React.createClass({
             <div className="col-sm-offset-2 col-sm-10">
               <input type="file" id="timeline-event-file-input" onFocus={this.clearErrorMarkers}/>
               {
-                this.state.fileError &&
+                this.state.fileSizeError &&
+                <p className="help-block">Please pick a file less than 5MB in size!</p>
+              }
+              {
+                this.state.fileMissingError &&
                 <p className="help-block">Please pick a file!</p>
               }
             </div>

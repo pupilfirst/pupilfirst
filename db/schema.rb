@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160404074014) do
+ActiveRecord::Schema.define(version: 20160414094700) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -140,6 +140,8 @@ ActiveRecord::Schema.define(version: 20160404074014) do
     t.text     "about"
     t.string   "commitment"
     t.string   "compensation"
+    t.string   "slack_username"
+    t.string   "slack_user_id"
   end
 
   add_index "faculty", ["category"], name: "index_faculty_on_category", using: :btree
@@ -400,10 +402,12 @@ ActiveRecord::Schema.define(version: 20160404074014) do
     t.string   "rubric"
     t.integer  "assignee_id"
     t.string   "assignee_type"
+    t.integer  "target_template_id"
   end
 
   add_index "targets", ["assignee_id", "assignee_type"], name: "index_targets_on_assignee_id_and_assignee_type", using: :btree
   add_index "targets", ["assigner_id"], name: "index_targets_on_assigner_id", using: :btree
+  add_index "targets", ["target_template_id"], name: "index_targets_on_target_template_id", using: :btree
 
   create_table "team_members", force: :cascade do |t|
     t.string   "name"

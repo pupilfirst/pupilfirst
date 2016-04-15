@@ -204,6 +204,18 @@ class Founder < ActiveRecord::Base
   end
 
   validates_uniqueness_of :slack_username, allow_blank: true
+  validates_uniqueness_of :phone, allow_blank: true
+
+  validate :unconfirmed_phone_must_be_unique
+
+  def unconfirmed_phone_must_be_unique
+    return if unconfirmed_phone.nil?
+    return unless unconfirmed_phone_changed?
+    return if Founder.find_by(phone: unconfirmed_phone).blank?
+
+    errors[:unconfirmed_phone] << 'is taken. Please enter your personal mobile phone number.'
+  end
+
   validate :slack_username_format
 
   def slack_username_format

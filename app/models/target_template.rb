@@ -1,5 +1,6 @@
 class TargetTemplate < ActiveRecord::Base
   belongs_to :assigner, class_name: 'Faculty'
+  has_many :targets
 
   mount_uploader :rubric, RubricUploader
 
@@ -22,7 +23,8 @@ class TargetTemplate < ActiveRecord::Base
       resource_url: resource_url,
       completion_instructions: completion_instructions,
       due_date: due_date(batch: batch),
-      slideshow_embed: slideshow_embed
+      slideshow_embed: slideshow_embed,
+      target_template: self
     )
   end
 

@@ -10,9 +10,12 @@ module Lita
   end
 
   module Handlers
+    # Empty handlers. Call payload handler methods in the spec.
     class Handler
+      def self.route(_matcher, _method, _options)
+      end
+
       def self.on(_event)
-        # Do nothing. Call payload handler methods in the spec.
       end
     end
   end

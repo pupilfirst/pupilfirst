@@ -417,13 +417,13 @@ class Startup < ActiveRecord::Base
   end
 
   # returns the date of the earliest verified timeline entry
-  def earliest_event_date
-    timeline_events.verified.order(:event_on).first.try(:event_on)
+  def earliest_team_event_date
+    timeline_events.verified_or_needs_improvement.not_private.order(:event_on).first.try(:event_on)
   end
 
   # returns the date of the latest verified timeline entry
-  def latest_event_date
-    timeline_events.verified.order(:event_on).last.try(:event_on)
+  def latest_team_event_date
+    timeline_events.verified_or_needs_improvement.not_private.order(:event_on).last.try(:event_on)
   end
 
   # returns the latest 'moved_to_x_stage' timeline entry
@@ -472,7 +472,7 @@ class Startup < ActiveRecord::Base
     if viewer && self == viewer.startup
       timeline_events.order(:event_on, :updated_at).reverse_order
     else
-      timeline_events.visible_to_public.order(:event_on, :updated_at).reverse_order
+      timeline_events.verified_or_needs_improvement.order(:event_on, :updated_at).reverse_order
     end
   end
 

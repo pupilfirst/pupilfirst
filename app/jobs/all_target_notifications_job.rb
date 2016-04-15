@@ -11,7 +11,7 @@ class AllTargetNotificationsJob < ActiveJob::Base
     @title = @target.title
     @assigner = @target.assigner.name
     @description = ApplicationController.helpers.strip_tags @target.description
-    @due_date = @target.due_date.strftime('%A, %d %b %Y %l:%M %p')
+    @due_date = @target.due_date&.strftime('%A, %d %b %Y %l:%M %p')
     @resource_url = @target.resource_url
 
     ping_on_slack(notification_type)

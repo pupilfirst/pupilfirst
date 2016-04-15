@@ -4,6 +4,7 @@
 class Target < ActiveRecord::Base
   belongs_to :assignee, polymorphic: true
   belongs_to :assigner, class_name: 'Faculty'
+  belongs_to :target_template
   has_many :timeline_events
 
   mount_uploader :rubric, RubricUploader
@@ -103,5 +104,9 @@ class Target < ActiveRecord::Base
     message += "Completion Instructions were modified to: \"#{completion_instructions}\"\n" if completion_instructions_changed?
     message += ":exclamation: The due date has been modified to *#{due_date.strftime('%A, %d %b %Y %l:%M %p')}* :exclamation:" if due_date_changed?
     message
+  end
+
+  def rubric_filename
+    rubric.sanitized_file.original_filename
   end
 end

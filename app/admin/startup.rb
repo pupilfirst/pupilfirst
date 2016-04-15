@@ -40,7 +40,10 @@ ActiveAdmin.register Startup do
 
   index do
     selectable_column
-    column(:product, &:display_name)
+
+    column :product do |startup|
+      link_to startup.display_name, admin_startup_path(startup)
+    end
 
     column :targets do |startup|
       if startup.targets.present?
@@ -90,23 +93,26 @@ ActiveAdmin.register Startup do
     end
 
     actions do |startup|
-      link_to('View Timeline', startup, target: '_blank') +
-        link_to(
-          'View All Feedback',
-          admin_startup_feedback_index_url(
-            'q[startup_id_eq]' => startup.id,
-            commit: 'Filter'
-          )
-        ) +
-        link_to(
-          'Record New Feedback',
+      span do
+        link_to 'View Timeline', startup, target: '_blank', class: 'member_link'
+      end
+
+      span do
+        link_to 'View All Feedback',
+          admin_startup_feedback_index_url('q[startup_id_eq]' => startup.id, commit: 'Filter'),
+          class: 'member_link'
+      end
+
+      span do
+        link_to 'Record New Feedback',
           new_admin_startup_feedback_path(
             startup_feedback: {
               startup_id: startup.id,
               reference_url: startup_url(startup)
             }
-          )
-        )
+          ),
+          class: 'member_link'
+      end
     end
   end
 
@@ -312,8 +318,10 @@ ActiveAdmin.register Startup do
     end
 
     if startup.targets.present?
-      panel 'Targets' do
+      div do
         table_for startup.targets.order('created_at DESC') do
+          caption 'Linked Targets'
+
           column 'Target' do |target|
             a href: admin_target_path(target) do
               target.title

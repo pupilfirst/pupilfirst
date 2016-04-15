@@ -105,6 +105,55 @@ ActiveAdmin.register Founder do
     actions
   end
 
+  csv do
+    column :email
+    column :first_name
+    column :last_name
+
+    column :product do |founder|
+      founder.startup&.product_name
+    end
+
+    column :batch do |founder|
+      founder.startup&.batch&.to_label
+    end
+
+    column :roles do |founder|
+      founder.roles.join ', '
+    end
+
+    column :phone
+    column :gender
+    column :born_on
+    column :communication_address
+    column :about
+
+    column :university do |founder|
+      founder.university&.name
+    end
+
+    column :roll_number
+    column :course
+    column :semester
+    column :year_of_graduation
+
+    column :slack_username
+    column(:skype_username, &:skype_id)
+
+    column :startup_admin?
+    column :slug
+
+    column :resume_url
+    column :linkedin_url
+    column :twitter_url
+    column :personal_website_url
+    column :blog_url
+    column :facebook_url
+    column :angel_co_url
+    column :github_url
+    column :behance_url
+  end
+
   member_action :remove_from_startup, method: :post do
     founder = Founder.friendly.find params[:id]
     founder.remove_from_startup!
@@ -215,8 +264,9 @@ ActiveAdmin.register Founder do
     end
 
     if founder.targets.present?
-      panel 'Targets' do
+      div do
         table_for founder.targets.order('created_at DESC') do
+          caption 'Linked Targets'
           column 'Target' do |target|
             a href: admin_target_path(target) do
               target.title

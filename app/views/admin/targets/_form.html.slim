@@ -55,5 +55,6 @@
     = f.input :assigner, collection: Faculty.active.order(:name), include_blank: false
     = f.input :rubric, as: :file
     = f.input :remote_rubric_url
+    = f.input :target_template
 
   = f.submit

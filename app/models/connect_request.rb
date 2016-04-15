@@ -125,7 +125,7 @@ class ConnectRequest < ActiveRecord::Base
     return false if rating < 3
 
     karma_point = KarmaPoint.find_or_initialize_by(source: self)
-    karma_point.founder = startup.admin
+    karma_point.startup = startup
     karma_point.points = points_for_rating(rating)
     karma_point.activity_type = "Connect session with faculty member #{faculty.name}"
     karma_point.save!

@@ -40,6 +40,9 @@ en:
     share_status:
       approved: 'Only with approved startups'
       public: Public
+    search_results:
+      zero_results: "We\'re sorry, but it looks like there are no resources %{tag_text} %{search_text}.  Try changing your filter conditions %{login_text}."
+      results_caption: "Showing resources %{tag_text} %{search_text}:"
   recaptcha:
     errors:
       verification_failed: Verification of Recaptcha failed. Please try again.
@@ -88,6 +91,17 @@ en:
           attributes:
             email:
               blank: "Please supply your registered email address."
+  slack:
+    help:
+      targets: Get a list of targets recently assigned to you and your team.
+      targets_info: Get detailed information about a target from list.
+    handlers:
+      targets:
+        choice_error: "I couldn't find your choice in my list of targets. It should be one of: `%{choices}`."
+        more_info: "Reply with `targets info [NUMBER]` for more information about a target."
+        unknown_username: |
+          I'm sorry, but your slack mention name `@%{slack_username}` isn't known to me.
+          Please update your slack mention name on your SV.CO profile, and try asking me again.
 
   slack_notifications:
     timeline_events:

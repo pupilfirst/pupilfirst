@@ -5,7 +5,7 @@ gem 'rails', '4.2.6'
 
 gem 'dotenv-rails', :groups => [:development, :test]
 
-gem 'activeadmin', github: 'activeadmin' # ActiveAdmin doesn't like 4.2 at all (for the moment). Switch this to stable when available.
+gem 'activeadmin', github: 'activeadmin' # TODO: ActiveAdmin doesn't like 4.2 at all (for the moment). Switch this to stable when available.
 gem 'flattened_active_admin' # better looking and customizable activeadmin
 gem 'just-datetime-picker' # Date/Time picker support for active admin.
 # gem 'active_skin' # Better lookin' active admin! Temporarily removed in favour of flattened_acitve_admin

@@ -43,9 +43,9 @@
     #data-points
       .col-md-4.col-md-push-8
         - if @startup.founder?(current_founder)
-          button#tour-button.btn.btn-info.btn-flat.btn-with-default-padding.margin-bottom-20.pull-right
-            i.fa.fa-eye
-            | &nbsp;Take a tour of this page!
+          button#tour-button.tour-button.btn-3d.text-uppercase.margin-bottom-20.font-weight-600
+            span.tour-icon
+            | Take a tour!
         .clearfix
         - if @startup.latest_help_wanted.present?
           .alert.alert-info
@@ -179,7 +179,7 @@
                   .media-body
                     h4.media-heading Product Iteration
                     p.data-content #{@startup.iteration.ordinalize}
-            - if @startup.earliest_event_date.present?
+            - if @startup.earliest_team_event_date.present?
               .col-sm-6.col-md-12
                 .media
                   .media-left
@@ -187,10 +187,10 @@
                   .media-body
                     h4.media-heading Days Elapsed
                     p.data-content
-                      ' #{(Date.today - @startup.earliest_event_date).to_i}
+                      ' #{(Date.today - @startup.earliest_team_event_date).to_i}
                       span.data-subcontent
                         ' (last update:
-                        - @no_of_days = (Date.today - @startup.latest_event_date).to_i
+                        - @no_of_days = (Date.today - @startup.latest_team_event_date).to_i
                         ' #{@no_of_days} #{'day'.pluralize(@no_of_days)} ago)
         .row
           - if @startup.founders.present?
@@ -393,8 +393,8 @@
                           small
                             i.fa.fa-calendar
                             ' &nbsp;#{event.event_on.strftime("%B %e, %Y")}
-                            - if @startup.earliest_event_date.present? && event.verified?
-                              ' (#{((event.event_on- @startup.earliest_event_date).to_i + 1).ordinalize} day)
+                            - if @startup.earliest_team_event_date.present? && !event.founder_event? && event.verified_or_needs_improvement?
+                              ' (#{((event.event_on- @startup.earliest_team_event_date).to_i + 1).ordinalize} day)
                       .timeline-body
                         .tl-body
                           p #{event.description}

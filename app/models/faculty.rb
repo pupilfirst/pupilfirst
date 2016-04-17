@@ -62,6 +62,8 @@ class Faculty < ActiveRecord::Base
   scope :advisory_board, -> { where(category: CATEGORY_ADVISORY_BOARD).order('sort_index ASC') }
   scope :alumni, -> { where(category: CATEGORY_ALUMNI).order('sort_index ASC') }
   scope :available_for_connect, -> { where(category: [CATEGORY_TEAM, CATEGORY_VISITING_FACULTY, CATEGORY_ALUMNI]) }
+  # hard-wired ids of our ops_team, kireeti: 19. A flag for this might be an overkill?
+  scope :ops_team, -> { where(id: [19]) }
 
   # Returns faculty members who have had connect slots in the past, but not 'after' a date.
   scope :recently_inactive, lambda { |after = Date.today.beginning_of_week|

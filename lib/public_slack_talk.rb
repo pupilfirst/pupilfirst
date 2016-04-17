@@ -6,6 +6,8 @@ class PublicSlackTalk
     attr_accessor :mock
   end
 
+  # TODO: A faculty can double as a founder argument. Either rename the argument to accomodate or modify to accept a
+  # faculty argument which works exactly like a founder argument.
   def initialize(message:, channel: nil, founder: nil, founders: nil)
     @channel = channel
     @founder = founder

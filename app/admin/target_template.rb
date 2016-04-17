@@ -37,13 +37,16 @@ ActiveAdmin.register TargetTemplate do
     target_template = TargetTemplate.find(params[:id])
     batch = Batch.find(params[:batch][:id])
 
-    batch.startups.each do |startup|
-      target_template.create_target!(startup, batch: batch)
+    assignees = target_template.founder_role? ? batch.founders : batch.startups
+    targets_as_string = target_template.founder_role? ? 'founders' : 'startups'
+
+    assignees.each do |assignee|
+      target_template.create_target!(assignee, batch: batch)
     end
 
     AllTargetNotificationsJob.perform_later Target.last, 'batch_deploy'
 
-    flash[:success] = "Deployed as target to all startups in #{batch.name} batch!"
+    flash[:success] = "Deployed as target to all #{targets_as_string} in #{batch.name} batch!"
     redirect_to admin_targets_url
   end
 
@@ -52,13 +55,16 @@ ActiveAdmin.register TargetTemplate do
     batch = Batch.find(inputs[:batch])
 
     TargetTemplate.where(id: ids).each do |target_template|
-      batch.startups.each do |startup|
-        target_template.create_target!(startup, batch: batch)
+      assignees = target_template.founder_role? ? batch.founders : batch.startups
+
+      assignees.each do |assignee|
+        target_template.create_target!(assignee, batch: batch)
       end
+
       AllTargetNotificationsJob.perform_later Target.last, 'batch_deploy'
     end
 
-    flash[:success] = "Deployed as target to all startups in #{batch.name} batch!"
+    flash[:success] = "Deployed as targets to everyone in #{batch.name} batch!"
 
     redirect_to admin_targets_url
   end

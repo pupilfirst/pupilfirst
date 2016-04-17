@@ -1,0 +1,31 @@
+.aa-short-urls-table {
+  margin-top: 20px;
+}
+
+.aa-short-urls-shortened {
+  padding: 10px;
+  font-size: 150%;
+  border: 1px solid darkgreen;
+  background-color: #83aa77;
+  margin-bottom: 20px;
+
+  a {
+    color: white;
+
+    &:visited {
+      color: white;
+    }
+  }
+
+  .short-url {
+    float: left;
+  }
+
+  .full-url {
+    float: right;
+    width: 900px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

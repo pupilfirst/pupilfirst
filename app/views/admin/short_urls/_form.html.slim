@@ -1,0 +1,4 @@
+= semantic_form_for :short_urls, url: admin_short_urls_shorten_path, method: :post do |f|
+  = f.inputs 'Supply a URL to shorten'
+    = f.input :url, label: 'URL', placeholder: 'http[s]://alonghostname.com/some/long/url'
+  = f.submit 'Shorten'

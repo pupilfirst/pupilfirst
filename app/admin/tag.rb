@@ -17,7 +17,7 @@ ActiveAdmin.register ActsAsTaggableOn::Tag, as: 'Tag' do
   # of a tag in its results.
   controller do
     def apply_filtering(chain)
-      @search = chain.ransack clean_search_params params[:q]
+      @search = chain.ransack clean_search_params
       @search.result(distinct: true)
     end
   end

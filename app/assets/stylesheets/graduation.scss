@@ -4,13 +4,81 @@
   background-repeat: repeat-x;
   background-position: center top;
 
-  h1 {
-    font-size: 32px;
+  .hero-headline {
+    font-size: 36px;
     font-weight: 300;
     margin: 85px 0 40px;
 
-    span {
-      font-weight: 500;
+    &.type {
+
+      .hero-words-wrapper {
+        vertical-align: top;
+        overflow: hidden;
+        position: relative;
+        font-weight: 400;
+        margin-left: 8px;
+
+        &:after {
+          /* vertical bar */
+          content: '';
+          position: absolute;
+          right: 0;
+          top: 50%;
+          bottom: auto;
+          transform: translateY(-50%);
+          height: 90%;
+          width: 1px;
+          background-color: #000;
+        }
+        &.waiting::after {
+          animation: type-pulse 1s infinite;
+        }
+        &.selected {
+          background-color: #0089d0;
+          &:after {
+            visibility: hidden;
+          }
+          b {
+            color: #fff;
+          }
+        }
+      }
+      b {
+        font-weight: 400;
+        visibility: hidden;
+        display: inline;
+
+        &.is-visible {
+          visibility: visible;
+        }
+      }
+      i {
+        position: absolute;
+        visibility: hidden;
+        font-style: normal;
+
+        &.in {
+          position: relative;
+          visibility: visible;
+        }
+      }
+    }
+    @media (max-width: $screen-sm-max) {
+      font-size: 26px;
+    }
+  }
+  @keyframes type-pulse {
+    0% {
+      transform: translateY(-50%) scale(1);
+      opacity: 1;
+    }
+    40% {
+      transform: translateY(-50%) scale(0.9);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(-50%) scale(0);
+      opacity: 0;
     }
   }
 }
@@ -22,18 +90,21 @@
   .nav
   {
     li {
+      margin: 0;
       a {
         outline: 0;
         text-transform: uppercase;
         border-radius: 0;
         border-right: 1px solid #dddddd;
         padding: 15px 15px;
+        margin: 0;
         background-color: #F9F9F9;
 
         .tab-icon {
           opacity: 0.5;
           height: 40px;
           width: 40px;
+          background-size: contain;
           display: inline-block;
           vertical-align: middle;
           margin-right: 10px;
@@ -51,13 +122,20 @@
           &.accelerate-icon {
             background-image: asset-url("graduation/Accelerate-icon.svg");
           }
+          @media (max-width: $screen-xs-max) {
+            margin: 0;
+          }
+          @media (min-width: $screen-sm-min) and (max-width: $screen-md-max) {
+            width: 30px;
+            height: 30px;
+            display: block;
+            margin: 0 auto 10px;
+          }
         }
-        @media (max-width: $screen-xs-max) {
-          display: inline-block;
+        @media (max-width: $screen-sm-max) {
+          border-bottom: 1px solid #ddd;
+          font-size: 12px;
         }
-      }
-      @media (max-width: $screen-xs-max) {
-        display: inline-block;
       }
       &:last-child a {
         border-right-color: white;
@@ -71,7 +149,14 @@
           .tab-icon {
             opacity: 1;
           }
+          @media (max-width: $screen-xs-max) {
+            border-bottom-color: white;
+          }
         }
+      }
+      @media (max-width: $screen-xs-max) {
+        width: 25%;
+        float: left;
       }
     }
   }
@@ -88,6 +173,9 @@
       font-size: 16px;
       line-height: 28px;
     }
+    @media (max-width: $screen-xs-max) {
+      text-align: center;
+    }
   }
 }
 .graduation-video-playlist, .testimonial-video {
@@ -95,6 +183,10 @@
   height: 330px;
   box-shadow: 0 0 15px 0 rgba(0,0,0,0.15);
   border: 5px solid #ffffff;
+
+  @media (max-width: $screen-xs-max) {
+    height: auto;
+  }
 }
 .graduates-join {
   margin-top: 20px;
@@ -146,7 +238,7 @@
     border: 1px solid #EAEAEA;
     border-radius: 10px;
     max-width: 960px;
-    padding: 50px;
+    padding: 25px 50px;
     margin: 25px auto 10px;
 
     .ways-icon {
@@ -167,6 +259,19 @@
       &.broadcast-icon {
         background-image: asset-url("graduation/broadcast-icon.svg");
       }
+      @media (max-width: $screen-xs-max) {
+        margin-bottom: 15px;
+      }
+    }
+    .talks-ways-section {
+        padding-bottom: 15px;
+        padding-top: 25px;
+
+        @media (max-width: $screen-xs-max) {
+          &:first-child {
+            border-bottom: 1px solid #ddd;
+          }
+        }
     }
     .talks-ways-content {
       h4 {
@@ -179,6 +284,9 @@
         font-weight: 300;
         font-size: 14px;
         line-height: 23px;
+      }
+      @media (max-width: $screen-xs-max) {
+        text-align: center;
       }
     }
   }
@@ -201,6 +309,12 @@
       font-size: 30px;
       line-height: 21px;
       margin: 0 0 15px;
+
+      @media (max-width: $screen-xs-max) {
+        font-size: 24px;
+        line-height: 18px;
+        margin: 0 0 10px;
+      }
     }
     .role {
       display: block;

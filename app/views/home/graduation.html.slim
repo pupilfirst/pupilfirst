@@ -1,8 +1,13 @@
 .graduation-hero
   .container
-    h1.text-center
-      | Discover Great Startups for your 
-      span Company
+    .hero-intro.text-center
+      h1.hero-headline.letters.type
+        span Discover Great Startups for your
+        span.hero-words-wrapper
+          b.is-visible Investment Fund
+          b Company
+          b Accelerator
+          b Company
     .tab-container
       ul.nav.nav-tabs.nav-justified role="tablist" 
         li.active role="presentation" 
@@ -109,12 +114,32 @@
             | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor. Ut eget imperdiet neque.
         .slide-item
           .company-logo
-            = image_tag 'graduation/askme-logo.png', class: 'img-responsive'
+            = image_tag 'graduation/Freshdesk-logo.png', class: 'img-responsive'
           p
             | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor. Ut eget imperdiet neque.
         .slide-item
           .company-logo
-            = image_tag 'graduation/askme-logo.png', class: 'img-responsive'
+            = image_tag 'graduation/Citrus-logo.png', class: 'img-responsive'
+          p
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor. Ut eget imperdiet neque.
+        .slide-item
+          .company-logo
+            = image_tag 'graduation/AHventures-logo.png', class: 'img-responsive'
+          p
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor. Ut eget imperdiet neque.
+        .slide-item
+          .company-logo
+            = image_tag 'graduation/Flat6labs-logo.png', class: 'img-responsive'
+          p
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor. Ut eget imperdiet neque.
+        .slide-item
+          .company-logo
+            = image_tag 'graduation/Goodmethods-logo.png', class: 'img-responsive'
+          p
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor. Ut eget imperdiet neque.
+        .slide-item
+          .company-logo
+            = image_tag 'graduation/Kalaaricapital-logo.png', class: 'img-responsive'
           p
             | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor. Ut eget imperdiet neque.
   
@@ -128,20 +153,20 @@
       span.font-weight-400 even while our program is ongoing.
     .talks-ways-container
       .row
-        .col-md-6
+        .col-md-6.talks-ways-section
           .row
-            .col-md-3.ways-icon.faculty-join-icon
-            .col-md-9.text-left.talks-ways-content
+            .col-md-3.col-sm-3.ways-icon.faculty-join-icon
+            .col-md-9.col-sm-9.text-left.talks-ways-content
               h4
                 | Join as SV.CO Faculty
               p
                 ' A half-hour per week commitment to our batch.
                 | Founders send you office hour requests with topics they'd like to discuss about.
         
-        .col-md-6
+        .col-md-6.talks-ways-section
           .row
-            .col-md-3.ways-icon.broadcast-icon
-            .col-md-9.text-left.talks-ways-content
+            .col-md-3.col-sm-3.ways-icon.broadcast-icon
+            .col-md-9.col-sm-9.text-left.talks-ways-content
               h4
                 | Broadcast to our Batch Live
               p

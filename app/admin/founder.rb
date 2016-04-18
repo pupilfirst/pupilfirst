@@ -305,21 +305,28 @@ ActiveAdmin.register Founder do
     link_to 'Public Slack Messages', admin_public_slack_messages_path(q: { founder_id_eq: params[:id] })
   end
 
-  action_item :new_invites, only: :index do
-    link_to 'Send New Invites', invite_form_admin_founders_path
+  action_item :invite_team, only: :index do
+    link_to 'Invite team', invite_team_form_admin_founders_path
+  end
+
+  action_item :invite_founder, only: :index do
+    link_to 'Invite founder', invite_founder_form_admin_founders_path
   end
 
   action_item :view_targets, only: :show do
     link_to 'View Targets', admin_targets_path(q: { assignee_type_eq: 'Founder', assignee_id_eq: founder.id })
   end
 
-  collection_action :invite_form do
+  collection_action :invite_team_form do
   end
 
-  collection_action :send_invites, method: :post do
+  collection_action :invite_founder_form do
+  end
+
+  collection_action :send_team_invites, method: :post do
     invited_to_batch = Batch.find params[:invited_to_batch]
     team_lead = params[:team_lead_email]
-    founders = params[:founder_emails].reject { |founder_email| founder_email.blank? }
+    founders = params[:founder_emails].reject(&:blank?)
 
     # Team lead is mandatory.
     if team_lead.blank?
@@ -350,7 +357,7 @@ ActiveAdmin.register Founder do
     end
 
     # Set the same startup token for all invites. This'll let us associate them when team lead creates startup.
-    startup_token = Time.now.in_time_zone('Asia/Calcutta').strftime('%a, %e %b %Y %H:%M:%S %z')
+    startup_token = Time.now.in_time_zone('Asia/Calcutta').strftime('%a, %e %b %Y, %I:%M:%S %p IST')
 
     # Invite team lead.
     Founder.invite! email: team_lead, invited_batch: invited_to_batch, startup_token: startup_token, startup_admin: true
@@ -360,8 +367,47 @@ ActiveAdmin.register Founder do
       Founder.invite! email: founder_email, invited_batch: invited_to_batch, startup_token: startup_token
     end
 
-    flash.now[:success] = 'Invitations successfully sent!'
+    flash[:success] = 'Invitations successfully sent!'
+    redirect_to action: :index
+  end
 
+  collection_action :send_founder_invite, method: :post do
+    startup = Startup.find_by id: params.dig(:invite, :startup_id)
+    token = params.dig(:invite, :startup_token)
+    email = params.dig(:invite, :email)
+
+    # Either startup or token should be picked.
+    if (startup.blank? && token.blank?) || (startup.present? && token.present?)
+      flash[:error] = 'Only one of startup or token should be picked.'
+      redirect_to :back
+      return
+    end
+
+    # Check whether the emails look OK.
+    unless email =~ /@/
+      flash[:error] = "That email address doesn't look right. Please enter it again."
+      redirect_to :back
+      return
+    end
+
+    # The email address shouldn't already be in use.
+    if Founder.find_by(email: email).present?
+      flash[:error] = 'That email address is already registered with us.'
+      redirect_to :back
+      return
+    end
+
+    founder_params = if startup.present?
+      { startup: startup, invited_batch: startup.batch }
+    else
+      team_lead = Founder.find_by startup_admin: true, startup_token: token
+      { startup_token: token, invited_batch: team_lead.invited_batch }
+    end.merge(email: email)
+
+    # Invite the founder
+    Founder.invite! founder_params
+
+    flash[:success] = 'Invitation successfully sent!'
     redirect_to action: :index
   end
 

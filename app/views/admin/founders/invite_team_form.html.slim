@@ -1,4 +1,4 @@
-= semantic_form_for :invite, url: { action: :send_invites }, method: :post do |f|
+= semantic_form_for :invite, url: { action: :send_team_invites }, method: :post do |f|
   = f.inputs 'Provide email addresses of founders (min. 3) and batch to invite them to.'
     = f.input :invited_batch, as: :select, collection: Batch.not_completed, include_blank: false,
       label: 'Invited to Batch', input_html: { name: 'invited_to_batch' }

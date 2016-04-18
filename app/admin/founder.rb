@@ -197,6 +197,24 @@ ActiveAdmin.register Founder do
       end
 
       row :startup_admin
+
+      row :registration_status do |founder|
+        if founder.startup_token.present?
+          if founder.startup_admin?
+            "This founder is team lead of a startup that hasn't completed registration."
+          else
+            team_lead = Founder.find_by(startup_admin: true, startup_token: founder.startup_token)
+
+            "This founder is part of a team led by #{link_to team_lead.display_name, admin_founder_path(team_lead)}, "\
+            "who hasn't completed startup registration.".html_safe
+          end
+        elsif founder.phone.blank?
+          "This founder's startup has registered, but his/ her registration is incomplete."
+        else
+          'Registration is complete.'
+        end
+      end
+
       row :about
       row :born_on
       row :slack_username

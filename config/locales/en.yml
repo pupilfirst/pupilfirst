@@ -111,6 +111,9 @@ en:
       needs_improvement:
         private: "Your new timeline entry (<%{event_url}|%{event_title}>) has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
         public: "<%{startup_url}|%{startup_product_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>\n*Description:* %{event_description}"
+      not_accepted:
+        private: "Your new timeline entry (<%{event_url}|%{event_title}>) has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
+        public: "The new timeline entry (<%{event_url}|%{event_title}>) submitted by  your startup %{startup_product_name} has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
     targets:
       new_target:
         salutation: "Hey! %{assigner} has assigned %{assignee} a new target: *<%{startup_url}|%{title}>*\n"

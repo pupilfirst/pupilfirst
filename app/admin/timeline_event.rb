@@ -162,7 +162,9 @@ ActiveAdmin.register TimelineEvent do
   end
 
   member_action :mark_not_accepted, method: :post do
-    TimelineEvent.find(params[:id]).mark_not_accepted!
+    timeline_event = TimelineEvent.find(params[:id])
+    timeline_event.mark_not_accepted!
+    TimelineEventVerificationNotificationJob.perform_later timeline_event
     redirect_to action: :show
   end
 

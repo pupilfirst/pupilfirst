@@ -63,6 +63,7 @@ class TimelineEventVerificationNotificationJob < ActiveJob::Base
       event_title: @timeline_event.title, event_description: @timeline_event.description
   end
 
+  # this is not exactly 'public' but to 'all founders'. Using public for consistency in naming
   def public_not_accepted_notice
     I18n.t "slack_notifications.timeline_events.not_accepted.public",
       event_title: @timeline_event.title, event_url: @timeline_event_url, startup_product_name: @startup.product_name

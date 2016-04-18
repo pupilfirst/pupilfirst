@@ -305,8 +305,8 @@ ActiveAdmin.register Founder do
     link_to 'Public Slack Messages', admin_public_slack_messages_path(q: { founder_id_eq: params[:id] })
   end
 
-  action_item :new_invite, only: :index do
-    link_to 'Send New Invite', invite_form_admin_founders_path
+  action_item :new_invites, only: :index do
+    link_to 'Send New Invites', invite_form_admin_founders_path
   end
 
   action_item :view_targets, only: :show do
@@ -316,23 +316,53 @@ ActiveAdmin.register Founder do
   collection_action :invite_form do
   end
 
-  collection_action :send_invite, method: :post do
-    email = params[:founder][:email]
+  collection_action :send_invites, method: :post do
+    invited_to_batch = Batch.find params[:invited_to_batch]
+    team_lead = params[:team_lead_email]
+    founders = params[:founder_emails].reject { |founder_email| founder_email.blank? }
 
-    # do not send invites to already registered founders
-    if Founder.find_by(email: email).present?
-      flash.now[:error] = 'A founder with this email id already exists!'
+    # Team lead is mandatory.
+    if team_lead.blank?
+      flash[:error] = 'Team lead is mandatory.'
       redirect_to :back
       return
     end
 
-    if email =~ /@/ && Founder.invite!(email: email, invited_batch: Batch.find(params[:founder][:invited_batch]))
-      flash.now[:success] = 'Invitation successfully sent!'
-      redirect_to action: :index
-    else
-      flash.now[:error] = 'Error in sending invitation! Please ensure the Email address is valid and try again.'
+    # There should be at least two other founders.
+    if founders.count < 2
+      flash[:error] = 'Two other founders, besides the team lead are required.'
       redirect_to :back
+      return
     end
+
+    # Check whether all the emails look OK.
+    if ([team_lead] + founders).select { |founder_email| !(founder_email =~ /@/) }.present?
+      flash[:error] = 'Not all email addresses look right. Please enter emails again.'
+      redirect_to :back
+      return
+    end
+
+    # None of the founders should already exist.
+    if ([team_lead] + founders).select { |founder_email| Founder.find_by email: founder_email }.present?
+      flash[:error] = 'None of the supplied email addresses should be of existing founders.'
+      redirect_to :back
+      return
+    end
+
+    # Set the same startup token for all invites. This'll let us associate them when team lead creates startup.
+    startup_token = Time.now.in_time_zone('Asia/Calcutta').strftime('%a, %e %b %Y %H:%M:%S %z')
+
+    # Invite team lead.
+    Founder.invite! email: team_lead, invited_batch: invited_to_batch, startup_token: startup_token, startup_admin: true
+
+    # Invite founders one by one.
+    founders.each do |founder_email|
+      Founder.invite! email: founder_email, invited_batch: invited_to_batch, startup_token: startup_token
+    end
+
+    flash.now[:success] = 'Invitations successfully sent!'
+
+    redirect_to action: :index
   end
 
   form partial: 'admin/founders/form'

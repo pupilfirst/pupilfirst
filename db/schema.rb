@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160414094700) do
+ActiveRecord::Schema.define(version: 20160418103345) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -217,6 +217,7 @@ ActiveRecord::Schema.define(version: 20160414094700) do
     t.boolean  "timeline_toured"
     t.string   "identification_proof"
     t.string   "skype_id"
+    t.string   "startup_token"
   end
 
   add_index "founders", ["confirmation_token"], name: "index_founders_on_confirmation_token", unique: true, using: :btree
@@ -225,6 +226,7 @@ ActiveRecord::Schema.define(version: 20160414094700) do
   add_index "founders", ["invited_by_id"], name: "index_founders_on_invited_by_id", using: :btree
   add_index "founders", ["reset_password_token"], name: "index_founders_on_reset_password_token", unique: true, using: :btree
   add_index "founders", ["slug"], name: "index_founders_on_slug", unique: true, using: :btree
+  add_index "founders", ["startup_token"], name: "index_founders_on_startup_token", using: :btree
   add_index "founders", ["university_id"], name: "index_founders_on_university_id", using: :btree
 
   create_table "karma_points", force: :cascade do |t|

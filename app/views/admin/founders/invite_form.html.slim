@@ -1,5 +1,16 @@
-= semantic_form_for :founder, url: { action: :send_invite } do |f|
-  = f.inputs 'Provide email and batch to invite to'
-    = f.input :email
-    = f.input :invited_batch, as: :select, collection: Batch.not_completed, include_blank: false
-  = f.submit 'Send Invite'
+= semantic_form_for :invite, url: { action: :send_invites }, method: :post do |f|
+  = f.inputs 'Provide email addresses of founders (min. 3) and batch to invite them to.'
+    = f.input :invited_batch, as: :select, collection: Batch.not_completed, include_blank: false,
+      label: 'Invited to Batch', input_html: { name: 'invited_to_batch' }
+    = f.input 'team_lead', placeholder: "Team lead's email address".html_safe, required: true, label: 'Team lead',
+      input_html: { name: 'team_lead_email' }
+    = f.input 'founders[]', placeholder: "Second founder's email address".html_safe, required: true,
+      label: '2nd Founder', input_html: { name: 'founder_emails[]' }
+    = f.input 'founders[]', placeholder: "Third founder's email address".html_safe, required: true,
+      label: '3rd Founder', input_html: { name: 'founder_emails[]' }
+    = f.input 'founders[]', placeholder: "Fourth founder's email address".html_safe, required: false,
+      label: '4th Founder', input_html: { name: 'founder_emails[]' }
+    = f.input 'founders[]', placeholder: "Fifth founder's email address".html_safe, required: false,
+      label: '5th Founder', input_html: { name: 'founder_emails[]' }
+
+  = f.submit 'Send Invites'

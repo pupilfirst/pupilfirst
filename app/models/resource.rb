@@ -31,7 +31,7 @@ class Resource < ActiveRecord::Base
   mount_uploader :thumbnail, ResourceThumbnailUploader
 
   scope :public_resources, -> { where(share_status: SHARE_STATUS_PUBLIC).order('title') }
-  # scope to search title, titlecase enforced as our resources are titlecased
+  # scope to search title
   scope :title_matches, -> (search_key) { where("lower(title) LIKE ?", "%#{search_key.downcase}%") }
 
   # Custom scope to allow AA to filter by intersection of tags.

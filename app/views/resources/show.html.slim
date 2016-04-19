@@ -3,7 +3,7 @@
 
 ol.breadcrumb.margin-top-20
   li = link_to 'Home', root_path
-  li = link_to 'Resources', resources_path
+  li = link_to 'Library', resources_path
   li.active = @resource.title
 
 h1.page-header.header-light #{@resource.title}

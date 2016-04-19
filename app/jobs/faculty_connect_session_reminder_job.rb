@@ -2,8 +2,6 @@ class FacultyConnectSessionReminderJob < ActiveJob::Base
   queue_as :default
 
   def perform(connect_request)
-    return unless job_is_relevant?
-
     # some helpful instance variables
     @connect_request = connect_request
     @startup_name = @connect_request.startup.product_name
@@ -11,6 +9,8 @@ class FacultyConnectSessionReminderJob < ActiveJob::Base
     @faculty_name = @connect_request.faculty.name
     @faculty_url = Rails.application.routes.url_helpers.faculty_url(@connect_request.faculty)
     @meeting_link = @connect_request.meeting_link
+
+    return unless job_is_relevant?
 
     remind_founders_on_slack
     remind_faculty_on_slack

@@ -81,10 +81,10 @@ Svapp::Application.routes.draw do
     end
   end
 
-  resources :resources, only: %w(index show) do
-    member do
-      get 'download'
-    end
+  scope 'library', controller: 'resources' do
+    get '/', action: 'index', as: 'resources'
+    get '/:id', action: 'show', as: 'resource'
+    get '/:id/download', action: 'download', as: 'download_resource'
   end
 
   scope 'connect_request', controller: 'connect_request', as: 'connect_request' do

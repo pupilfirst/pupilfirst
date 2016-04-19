@@ -27,6 +27,8 @@
           small.edit-startup-link
             a href=edit_founder_startup_path
               i.fa.fa-pencil
+        - if @startup.founder?(current_founder)
+          button#tour-button.tour-button.btn-3d.text-uppercase.margin-bottom-20.font-weight-600 data-toggle="tooltip" data-placement="top" title="Take a tour of this page"
       .startup-name
         - if @startup.name.present?
           ' (by #{@startup.name})
@@ -42,11 +44,6 @@
   .row
     #data-points
       .col-md-4.col-md-push-8
-        - if @startup.founder?(current_founder)
-          button#tour-button.tour-button.btn-3d.text-uppercase.margin-bottom-20.font-weight-600
-            span.tour-icon
-            | Take a tour!
-        .clearfix
         - if @startup.latest_help_wanted.present?
           .alert.alert-info
             strong Help Wanted:

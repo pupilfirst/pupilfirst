@@ -20,10 +20,18 @@ class HomeController < ApplicationController
 
   def graduation
     @skip_container = true
+
+    @contact_form = ContactForm.new
   end
 
   # used by the 'shortener' gem's config
   def not_found
     raise_not_found
   end
+
+  private
+
+  # def contact_form_params
+  #   params.require(:contact_form).permit(:name, :email, :mobile)
+  # end
 end

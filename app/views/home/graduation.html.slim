@@ -43,8 +43,33 @@
                 ' Ut eget imperdiet neque. In volutpat ante semper diam molestie, et aliquam erat laoreet.
                 ' Sed sit amet arcu aliquet, molestie justo at, auctor nunc.
                 ' Phasellus ligula ipsum, volutpat eget semper id, viverra eget nibh. Suspendisse luctus mattis cursus.
-              a.btn.graduation-action-btn.white-action.text-uppercase href="#"
+              button.btn.graduation-action-btn.white-action.text-uppercase data-target=".bd-example-modal-lg" data-toggle="modal"
                 | Acquihire Teams
+              .modal.fade.bd-example-modal-lg aria-hidden="true" aria-labelledby="myLargeModalLabel" role="dialog" tabindex="-1" 
+                .modal-dialog
+                  .modal-content
+                    .modal-header
+                      button.close type="button" data-dismiss="modal" aria-label="Close"
+                        span aria-hidden="true"
+                          | &times;
+                    .graduation-form-popup
+                      = simple_form_for @contact_form, url: '#',
+                        method: :post,
+                        html: { class: 'form-horizontal' },
+                        wrapper: :horizontal_form,
+                        wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_file_input, boolean: :horizontal_boolean } do |f|
+
+                        legend Contact Form
+
+                        = f.input :name, label: 'Your name', input_html: { maxlength: 50 }
+                        = f.input :email, type: 'email', label: 'Email address', input_html: { maxlength: 50 }
+                        = f.input :mobile, label: 'Mobile phone number', input_html: { maxlength: 20 }
+                        = f.input :company, label: 'Company you represent', input_html: { maxlength: 50 }
+                        .form-group
+                          .col-sm-9.col-sm-offset-3
+                            = button_tag type: :submit, class: 'btn btn-primary' do
+                              i.fa.fa-send
+                              | &nbsp;Submit
         #hire-founders.tab-pane.fade.in role="tabpanel"
           .row
             .col-md-7

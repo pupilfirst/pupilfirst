@@ -1,0 +1,271 @@
+.graduation-hero
+  .container
+    .hero-intro.text-center
+      h1.hero-headline.letters.type
+        span Discover Great Startups for your
+        span.hero-words-wrapper
+          b.is-visible Investment Fund
+          b Company
+          b Accelerator
+          b Company
+    .tab-container
+      ul.nav.nav-tabs.nav-justified role="tablist" 
+        li.active role="presentation" 
+          a aria-controls="acquihire-teams" data-toggle="tab" href="#acquihire-teams" role="tab"
+            .tab-icon.acquihire-team-icon
+            span.hidden-xs
+              | Acquihire Teams
+        li role="presentation" 
+          a aria-controls="hire-founders" data-toggle="tab" href="#hire-founders" role="tab"
+            .tab-icon.hire-founders-icon
+            span.hidden-xs
+              | Hire Founders
+        li role="presentation" 
+          a aria-controls="invest-in-startups" data-toggle="tab" href="#invest-in-startups" role="tab"
+            .tab-icon.invest-in-startups-icon
+            span.hidden-xs
+              | Invest in startups
+        li role="presentation" 
+          a aria-controls="build-startup-pipeline" data-toggle="tab" href="#build-startup-pipeline" role="tab"
+            .tab-icon.accelerate-icon
+            span.hidden-xs
+              | Build a startup pipeline
+
+      .tab-content.graduation-tab-content
+        #acquihire-teams.tab-pane.fade.in.active role="tabpanel"
+          .row
+            .col-md-7
+              iframe.graduation-video-playlist src="https://www.youtube.com/embed/SWR95X-lmz4?list=PLrvZyo34miDJt-m4a0WKUPqMvnmJ-9hVO" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+            .col-md-5
+              h2 Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse neca.
+              p.font-weight-300
+                | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor.
+                ' Ut eget imperdiet neque. In volutpat ante semper diam molestie, et aliquam erat laoreet.
+                ' Sed sit amet arcu aliquet, molestie justo at, auctor nunc.
+                ' Phasellus ligula ipsum, volutpat eget semper id, viverra eget nibh. Suspendisse luctus mattis cursus.
+              button.btn.graduation-action-btn.white-action.text-uppercase data-target=".bd-example-modal-lg" data-toggle="modal"
+                | Acquihire Teams
+              .modal.fade.bd-example-modal-lg aria-hidden="true" aria-labelledby="myLargeModalLabel" role="dialog" tabindex="-1" 
+                .modal-dialog
+                  .modal-content
+                    .modal-header
+                      button.close type="button" data-dismiss="modal" aria-label="Close"
+                        span aria-hidden="true"
+                          | &times;
+                    .graduation-form-popup
+                      = simple_form_for @contact_form, url: '#',
+                        method: :post,
+                        html: { class: 'form-horizontal' },
+                        wrapper: :horizontal_form,
+                        wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_file_input, boolean: :horizontal_boolean } do |f|
+
+                        legend Contact Form
+
+                        = f.input :name, label: 'Your name', input_html: { maxlength: 50 }
+                        = f.input :email, type: 'email', label: 'Email address', input_html: { maxlength: 50 }
+                        = f.input :mobile, label: 'Mobile phone number', input_html: { maxlength: 20 }
+                        = f.input :company, label: 'Company you represent', input_html: { maxlength: 50 }
+                        .form-group
+                          .col-sm-9.col-sm-offset-3
+                            = button_tag type: :submit, class: 'btn btn-primary' do
+                              i.fa.fa-send
+                              | &nbsp;Submit
+        #hire-founders.tab-pane.fade.in role="tabpanel"
+          .row
+            .col-md-7
+              iframe.graduation-video-playlist src="https://www.youtube.com/embed/cqyOZI4AopI?list=PLrvZyo34miDL8J63zyVLNonPjUK8Q-m6U" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+            .col-md-5
+              h2 Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse neca.
+              p.font-weight-300
+                | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor.
+                ' Ut eget imperdiet neque. In volutpat ante semper diam molestie, et aliquam erat laoreet.
+                ' Sed sit amet arcu aliquet, molestie justo at, auctor nunc.
+                ' Phasellus ligula ipsum, volutpat eget semper id, viverra eget nibh. Suspendisse luctus mattis cursus.
+              a.btn.graduation-action-btn.white-action.text-uppercase href="#"
+                | Hire Founders
+        #invest-in-startups.tab-pane.fade.in role="tabpanel"
+          .row
+            .col-md-7
+              iframe.graduation-video-playlist src="https://www.youtube.com/embed/QmavQDI3SV4?list=PLrvZyo34miDIszuU6tptnX5coYUkWVcQi" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+            .col-md-5
+              h2 Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse neca.
+              p.font-weight-300
+                | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor.
+                ' Ut eget imperdiet neque. In volutpat ante semper diam molestie, et aliquam erat laoreet.
+                ' Sed sit amet arcu aliquet, molestie justo at, auctor nunc.
+                ' Phasellus ligula ipsum, volutpat eget semper id, viverra eget nibh. Suspendisse luctus mattis cursus.
+              a.btn.graduation-action-btn.white-action.text-uppercase href="#"
+                | Invest in Startups
+        #build-startup-pipeline.tab-pane.fade.in role="tabpanel"
+          .row
+            .col-md-7
+              iframe.graduation-video-playlist src="https://www.youtube.com/embed/vjDdSdfitKY" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+            .col-md-5
+              h2 Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse neca.
+              p.font-weight-300
+                | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor.
+                ' Ut eget imperdiet neque. In volutpat ante semper diam molestie, et aliquam erat laoreet.
+                ' Sed sit amet arcu aliquet, molestie justo at, auctor nunc.
+                ' Phasellus ligula ipsum, volutpat eget semper id, viverra eget nibh. Suspendisse luctus mattis cursus.
+              a.btn.graduation-action-btn.white-action.text-uppercase href="#"
+                | Build Startup Pipeline
+
+.graduates-join.text-center.clearfix
+  .container
+    h2.text-center.font-weight-300.graduate-subhead
+      span.graduate-subhead-icon.graduates-join-icon
+      | Our graduates go onto join
+    .company-slide
+      .company-carousel.owl-theme
+        .slide-item
+          .company-logo
+            = image_tag 'graduation/askme-logo.png'
+          p
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor. Ut eget imperdiet neque.
+        .slide-item
+          .company-logo
+            = image_tag 'graduation/tally-logo.png'
+          p
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor. Ut eget imperdiet neque.
+        .slide-item
+          .company-logo
+            = image_tag 'graduation/microsoft-ventures-logo.png'
+          p
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor. Ut eget imperdiet neque.
+        .slide-item
+          .company-logo
+            = image_tag 'graduation/freecharge-logo.png'
+          p
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor. Ut eget imperdiet neque.
+        .slide-item
+          .company-logo
+            = image_tag 'graduation/Freshdesk-logo.png', class: 'img-responsive'
+          p
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor. Ut eget imperdiet neque.
+        .slide-item
+          .company-logo
+            = image_tag 'graduation/Citrus-logo.png', class: 'img-responsive'
+          p
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor. Ut eget imperdiet neque.
+        .slide-item
+          .company-logo
+            = image_tag 'graduation/AHventures-logo.png', class: 'img-responsive'
+          p
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor. Ut eget imperdiet neque.
+        .slide-item
+          .company-logo
+            = image_tag 'graduation/Flat6labs-logo.png', class: 'img-responsive'
+          p
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor. Ut eget imperdiet neque.
+        .slide-item
+          .company-logo
+            = image_tag 'graduation/Goodmethods-logo.png', class: 'img-responsive'
+          p
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor. Ut eget imperdiet neque.
+        .slide-item
+          .company-logo
+            = image_tag 'graduation/Kalaaricapital-logo.png', class: 'img-responsive'
+          p
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor. Ut eget imperdiet neque.
+  
+.talkto-founders.text-center
+  .container
+    h2.text-center.font-weight-300.graduate-subhead
+      span.graduate-subhead-icon.talkto-graduates-icon
+      | Talk to our Founders Early
+    h3
+      ' Interact with our batch founders &amp; identify great talent
+      span.font-weight-400 even while our program is ongoing.
+    .talks-ways-container
+      .row
+        .col-md-6.talks-ways-section
+          .row
+            .col-md-3.col-sm-3.ways-icon.faculty-join-icon
+            .col-md-9.col-sm-9.text-left.talks-ways-content
+              h4
+                | Join as SV.CO Faculty
+              p
+                ' A half-hour per week commitment to our batch.
+                | Founders send you office hour requests with topics they'd like to discuss about.
+        
+        .col-md-6.talks-ways-section
+          .row
+            .col-md-3.col-sm-3.ways-icon.broadcast-icon
+            .col-md-9.col-sm-9.text-left.talks-ways-content
+              h4
+                | Broadcast to our Batch Live
+              p
+                ' Present a topic to our Batch or be part of
+                | an AMA session with interesting questions from our young founders
+    a.btn.graduation-action-btn.green-action.text-uppercase href="#"
+      | Acquihire Teams
+.testimonial-container
+  .container
+    h2.text-center.font-weight-300.graduate-subhead
+      span.graduate-subhead-icon.testimonial-icon
+      | Lorem ipsum dolor sit am
+    .testimonial-carousel.owl-theme
+      .testimonial-slide-item
+        div
+          .col-md-5
+            .testimonial-head
+              h2.font-weight-300
+                | Amit Saini
+              span.role.font-weight-300
+                | Director of Engineering, Ola
+            p.testimonial-quote.font-weight-300
+              ' “ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor.
+              | Ut eget imperdiet neque. In volutpat ante semper diam molestie, et aliquam erat laoreet.”
+
+          .col-md-7
+            iframe.testimonial-video src="https://www.youtube.com/embed/z2e5o5ftgRc" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+      .testimonial-slide-item
+        div
+          .col-md-5
+            .testimonial-head
+              h2.font-weight-300
+                | Sachin Janghel
+              span.role.font-weight-300
+                | CTO, GOQII
+            p.testimonial-quote.font-weight-300
+              ' “ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor.
+              | Ut eget imperdiet neque. In volutpat ante semper diam molestie, et aliquam erat laoreet.”
+
+          .col-md-7
+            iframe.testimonial-video src="https://www.youtube.com/embed/jiZs9BqC8vw" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+      .testimonial-slide-item
+        div
+          .col-md-5
+            .testimonial-head
+              h2.font-weight-300
+                | Harish Sivaramakrishnan
+              span.role.font-weight-300
+                | VP of Design, Snapdeal
+            p.testimonial-quote.font-weight-300
+              ' “ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor.
+              | Ut eget imperdiet neque. In volutpat ante semper diam molestie, et aliquam erat laoreet.”
+
+          .col-md-7
+            iframe.testimonial-video src="https://www.youtube.com/embed/ut-J7cuQpzI" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+      .testimonial-slide-item
+        div
+          .col-md-5
+            .testimonial-head
+              h2.font-weight-300
+                | Vinod Malhotra
+              span.role.font-weight-300
+                | Chief of R&amp;D, Tally Solutions
+            p.testimonial-quote.font-weight-300
+              ' “ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor.
+              | Ut eget imperdiet neque. In volutpat ante semper diam molestie, et aliquam erat laoreet.”
+
+          .col-md-7
+            iframe.testimonial-video src="https://www.youtube.com/embed/qEZ1RamKt6k" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+.footer-action
+  .container
+    .footer-action-box.text-center
+      h2.font-weight-300
+        ' Mauris non tempor quam, et lacinia sapien.
+        | Mauris accumsan eros eget libero posuere vulputate. Etiam elit elit, elementum sed varius at, 
+      a.btn.graduation-action-btn.green-action.text-uppercase href="#"
+        | Call to Action Link

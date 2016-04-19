@@ -80,6 +80,7 @@ gem 'acts-as-taggable-on', '~> 3.5' # Tag a single model on several contexts.
 gem 'will_paginate-bootstrap' #This gem integrates the Twitter Bootstrap pagination component with the will_paginate pagination gem.
 gem 'shortener' # generate short SV.CO urls for files, links etc
 gem 'titleize' # better titleizing, modifies Inflector.titleize from default rails
+gem 'owlcarousel-rails' # Touch enabled responsive carousel slider.
 
 # Rails assets!
 source 'https://rails-assets.org' do

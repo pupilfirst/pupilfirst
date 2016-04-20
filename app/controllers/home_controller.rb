@@ -28,10 +28,4 @@ class HomeController < ApplicationController
   def not_found
     raise_not_found
   end
-
-  private
-
-  # def contact_form_params
-  #   params.require(:contact_form).permit(:name, :email, :mobile)
-  # end
 end

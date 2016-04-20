@@ -277,22 +277,24 @@ ActiveAdmin.register Startup do
       row :twitter_link
 
       row :founders do
-        startup.founders.each do |founder|
-          div do
-            span do
-              link_to founder.display_name, [:admin, founder]
-            end
+        div do
+          startup.founders.each do |founder|
+            div do
+              span do
+                link_to founder.display_name, [:admin, founder]
+              end
 
-            span do
-              " &mdash; #{link_to 'Karma++'.html_safe, new_admin_karma_point_path(karma_point: { founder_id: founder.id })}".html_safe
-            end
+              span do
+                " &mdash; #{link_to 'Karma++'.html_safe, new_admin_karma_point_path(karma_point: { founder_id: founder.id })}".html_safe
+              end
 
-            span do
-              if founder.startup_admin?
-                " &mdash; (Current Team Lead)".html_safe
-              else
-                " &mdash; #{link_to('Make Team Lead', change_admin_admin_startup_path(founder_id: founder),
-                  method: :patch, data: { confirm: 'Are you sure you want to change the team lead for this startup?' })}".html_safe
+              span do
+                if founder.startup_admin?
+                  " &mdash; (Current Team Lead)".html_safe
+                else
+                  " &mdash; #{link_to('Make Team Lead', change_admin_admin_startup_path(founder_id: founder),
+                    method: :patch, data: { confirm: 'Are you sure you want to change the team lead for this startup?' })}".html_safe
+                end
               end
             end
           end

@@ -50,16 +50,6 @@ Svapp::Application.routes.draw do
     end
   end
 
-  resources :incubation, only: %w(show update) do
-    collection do
-      post 'cancel'
-    end
-
-    member do
-      post 'add_cofounder'
-    end
-  end
-
   scope 'about', as: 'about', controller: 'about' do
     get '/', action: 'index'
     get 'slack'

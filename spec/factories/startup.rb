@@ -7,6 +7,9 @@ FactoryGirl.define do
     f.website { Faker::Internet.domain_name }
     f.email { Faker::Internet.email }
 
+    # registration_token isn't stored, but it's mandatory for, and used during creation.
+    f.registration_token { Time.now.to_s }
+
     after(:build) do |startup|
       startup.founders << create(:founder_with_password, startup: startup, startup_admin: true)
       startup.founders << create(:founder_with_password, startup: startup)

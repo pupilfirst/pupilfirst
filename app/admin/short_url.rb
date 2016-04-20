@@ -23,12 +23,13 @@ ActiveAdmin.register_page 'Short URLs' do
 
   page_action :shorten, method: :post do
     url_to_shorten = params.dig(:short_urls, :url)
-    shortened_url = Shortener::ShortenedUrl.new url: url_to_shorten
 
-    shortened_url = if shortened_url.valid?
-      Shortener::ShortenedUrl.generate url_to_shorten
+    if url_to_shorten.present?
+      shortened_url = Shortener::ShortenedUrl.generate url_to_shorten
+      redirect_to admin_short_urls_url(shortened: shortened_url&.url)
+    else
+      flash[:error] = 'Need a URL to shorten!'
+      redirect_to admin_short_urls_url
     end
-
-    redirect_to admin_short_urls_url(shortened: shortened_url&.url)
   end
 end

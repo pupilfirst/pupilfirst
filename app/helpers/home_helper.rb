@@ -19,4 +19,12 @@ module HomeHelper
       'activity-high'
     end
   end
+
+  def startup_village_redirect?
+    params[:redirect_from] == 'startupvillage.in'
+  end
+
+  def registration_redirect?
+    params[:redirect_from] == 'registration'
+  end
 end

@@ -2,7 +2,7 @@ class HomeController < ApplicationController
   def index
     @large_header_class = 'home-index'
     @skip_container = true
-    @sitewide_notice = params[:redirect_from] == 'startupvillage.in'
+    @sitewide_notice = true if %w(startupvillage.in registration).include?(params[:redirect_from])
   end
 
   def apply

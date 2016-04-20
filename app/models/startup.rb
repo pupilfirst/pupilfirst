@@ -120,59 +120,7 @@ class Startup < ActiveRecord::Base
 
   has_many :founders
 
-  # define founder emails as attributes for easier onboarding implementation
-  attr_accessor :cofounder_1_email, :cofounder_2_email, :cofounder_3_email, :cofounder_4_email
-
-  # returns an array of cofounder emails
-  def cofounder_emails
-    [cofounder_1_email, cofounder_2_email, cofounder_3_email, cofounder_4_email]
-  end
-
-  # flag to identify if the startup is being registered
-  attr_accessor :being_registered
-
-  # email of current user - to validate cofounder emails
-  attr_accessor :team_lead_email
-
-  # validate each cofounder email if startup is being registered
-  validate :validate_cofounder_emails, if: :being_registered
-
-  def validate_cofounder_emails
-    (1..4).each do |n|
-      email = "cofounder_#{n}_email"
-
-      # if email is nil
-      next unless send(email).present?
-
-      # assign appropriate error message if validation fails
-      errors.add(email.to_sym, invalid_cofounder(send(email))) if invalid_cofounder(send(email))
-    end
-  end
-
-  # validates email provided is 1)unique 2)not of the team lead, 3) is a valid sv.co founder and 4) does not already have a startup
-  def invalid_cofounder(email)
-    founder = Founder.find_by(email: email)
-
-    return 'must be unique' if cofounder_emails.count(email) > 1
-
-    return 'already the team lead' if email == team_lead_email
-
-    return 'could not find founder with this email. Are you sure this was the email provided to us? '\
-    'Please contact help@sv.co for any assitance' unless founder
-
-    return 'already has a startup. Please ensure that your co-founder has not registered your startup already.' unless founder.startup.blank?
-
-    # return false if the email is 'not invalid'
-    false
-  end
-
-  # team_size is used during registration process.
-  attr_accessor :team_size
-
-  # validate presence of all fields during registration
-  validates_presence_of :product_name, :cofounder_1_email, :cofounder_2_email, if: :being_registered
-  validates_presence_of :cofounder_3_email, if: proc { |startup| startup.being_registered && startup.team_size.to_i > 3 }
-  validates_presence_of :cofounder_4_email, if: proc { |startup| startup.being_registered && startup.team_size.to_i > 4 }
+  validates_presence_of :product_name
 
   has_and_belongs_to_many :startup_categories do
     def <<(_category)
@@ -596,26 +544,6 @@ class Startup < ActiveRecord::Base
     end.in_time_zone('Asia/Calcutta') + 18.hours
   end
 
-  # Add a founder as team lead
-  def add_team_lead!(founder)
-    founders << founder
-    founder.update!(startup_admin: true)
-  end
-
-  # Add cofounders from given emails
-  def add_cofounders!
-    cofounder_emails.each do |email|
-      next if email.blank?
-
-      founder = Founder.find_by(email: email)
-      next unless founder
-
-      # skip validation as founder might not have yet completed his registration
-      founder.startup = self
-      founder.save validate: false
-    end
-  end
-
   # UPDATE: commenting out below code as it appears a simple call to short_url from view in fact creates short urls on the go if they are absent
   # # generate/clean up shortened urls for external links
   # after_save :update_shortened_urls
@@ -633,6 +561,19 @@ class Startup < ActiveRecord::Base
   #     # TODO: delete stale shortened url entry for old value
   #   end
   # end
+
+  # Registration token must be set before startup can be created - equal to startup_token of team lead.
+  attr_accessor :registration_token
+
+  after_create :assign_founders
+
+  # Use registration_token to link founders.
+  def assign_founders
+    raise 'registration_token missing!' if registration_token.blank?
+
+    # Assign founders to startup, and wipe the startup token to indicate completion of this event.
+    Founder.where(startup_token: registration_token).update_all(startup_id: id, startup_token: nil)
+  end
 
   class << self
     private

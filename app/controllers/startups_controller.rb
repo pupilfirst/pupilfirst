@@ -1,7 +1,7 @@
 class StartupsController < ApplicationController
   before_filter :authenticate_founder!, except: [:show, :index]
   before_filter :restrict_to_startup_founders, only: [:edit, :update, :add_founder]
-  before_filter :restrict_to_startup_admin, only: [:remove_founder]
+  before_filter :restrict_to_startup_admin, only: [:remove_founder, :create]
 
   after_filter only: [:create] do
     @startup.founders << current_founder
@@ -17,6 +17,9 @@ class StartupsController < ApplicationController
 
   def new
     @skip_container = true
+
+    return if redirect_non_admin
+
     if current_founder.phone.blank?
       session[:referer] = new_founder_startup_url
       redirect_to phone_founder_path
@@ -24,7 +27,7 @@ class StartupsController < ApplicationController
     end
 
     if current_founder.startup&.approved?
-      flash[:alert] = "You already have an approved startup on SV.CO!"
+      flash[:alert] = 'You already have an approved startup on SV.CO!'
       redirect_to startup_url(current_founder.startup)
     end
 
@@ -35,22 +38,12 @@ class StartupsController < ApplicationController
     @startup = Startup.new startup_registration_params
 
     # setting attributes required for registration-specific validations
-    @startup.being_registered = true
-    @startup.team_lead_email = current_founder.email
+    @startup.registration_token = current_founder.startup_token
 
     # copy over the batch from current_founders invited_batch
     @startup.batch = current_founder.invited_batch
 
     if @startup.save
-      # reset being_registered flag to prevent repeating cofounder validations
-      @startup.being_registered = false
-
-      # add the team lead
-      @startup.add_team_lead! current_founder
-
-      # add cofounders
-      @startup.add_cofounders!
-
       # generate a more meaningful slug
       @startup.regenerate_slug!
 
@@ -155,6 +148,15 @@ class StartupsController < ApplicationController
 
   private
 
+  def redirect_non_admin
+    if current_founder.startup_admin?
+      false
+    else
+      redirect_to(root_path, redirect_from: 'registration')
+      true
+    end
+  end
+
   def load_startups
     batch_id = params.dig(:startups_filter, :batch)
     batch_scope = batch_id.present? ? Startup.where(batch_id: batch_id) : Startup.batched
@@ -184,8 +186,7 @@ class StartupsController < ApplicationController
   end
 
   def startup_registration_params
-    params.require(:startup).permit(:product_name, :team_size, :cofounder_1_email, :cofounder_2_email, :cofounder_3_email,
-      :cofounder_4_email)
+    params.require(:startup).permit(:product_name)
   end
 
   def startup_destroy_params

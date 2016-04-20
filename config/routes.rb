@@ -17,7 +17,6 @@ Svapp::Application.routes.draw do
       get 'phone'
       patch 'set_unconfirmed_phone'
       get 'phone_verification'
-      get 'consent'
       post 'code'
       patch 'resend'
       post 'verify'

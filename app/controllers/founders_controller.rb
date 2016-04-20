@@ -63,7 +63,7 @@ class FoundersController < ApplicationController
 
     # skip to consent page if registration ongoing and founder already has a verified phone
     if @registration_ongoing && current_founder.phone.present?
-      redirect_to consent_or_timeline_path, alert: 'You already have a verified phone number'
+      redirect_to create_startup_or_timeline_path, alert: 'You already have a verified phone number'
       return
     end
 
@@ -126,25 +126,23 @@ class FoundersController < ApplicationController
 
     if session[:registration_ongoing]
       session[:registration_ongoing] = nil
-      redirect_to consent_or_timeline_path
+      redirect_to create_startup_or_timeline_path
     else
       referer = session.delete :referer
       redirect_to referer || root_url
     end
   end
 
-  def consent
-    @skip_container = true
-  end
-
   private
 
   # If founder's startup has already been created (by team lead), take him there. Otherwise, take him to consent screen.
-  def consent_or_timeline_path
+  def create_startup_or_timeline_path
     if current_founder.startup.present?
       startup_path(current_founder.startup)
+    elsif current_founder.startup_admin?
+      new_founder_startup_path
     else
-      consent_founder_path
+      root_path(redirect_from: 'registration')
     end
   end
 

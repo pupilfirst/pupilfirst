@@ -1,7 +1,11 @@
-- if @sitewide_notice
+- if startup_village_redirect?
   - content_for :sitewide_notice
     ' <strong>SV.CO</strong> is the next phase of the Startup Village story.
     ' #{link_to 'Read more here', 'https://blog.sv.co/startup-village-to-scale-up-countrywide-after-successful-first-phase', target: '_blank'}
+
+- if registration_redirect?
+  - content_for :sitewide_notice
+    ' You have successfully registered on SV.CO. Please wait for your team lead to complete registration.
 
 - content_for :head
   title SV.CO: A learning platform for first-time founders
@@ -22,7 +26,7 @@
             - if current_founder
               - if current_founder.startup.present?
                 a.btn.btn-flat.btn-join href=startup_path(current_founder.startup) View Startup Timeline
-              - else
+              - elsif current_founder.startup_admin?
                 a.btn.btn-flat.btn-join href=new_founder_startup_path Apply for Incubation!
             - else
               a.btn.btn-flat.btn-join href=new_founder_session_path Sign in for more!

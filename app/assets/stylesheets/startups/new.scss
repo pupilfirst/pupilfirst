@@ -116,6 +116,20 @@
       padding-bottom: 5px;
     }
   }
+
+  .cofounders-label {
+    padding-top: 8px;
+    font-weight: 300;
+    color: #565656;
+
+    @media (min-width: $screen-sm-min) {
+      text-align: right;
+    }
+  }
+
+  .cofounders-table {
+    color: #565656;
+  }
 }
 .mobile-verification-alert {
   margin: 35px 0 0;

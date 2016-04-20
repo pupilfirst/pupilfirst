@@ -397,10 +397,17 @@ class Founder < ActiveRecord::Base
   before_destroy :assign_new_team_lead
 
   def assign_new_team_lead
-    return unless startup_admin
+    return unless startup_admin && startup.present?
 
     team_lead_candidate = startup.founders.where.not(id: id).first
     team_lead_candidate.update!(startup_admin: true) if team_lead_candidate
+  end
+
+  # Only applicable to startup admins, during startup creation.
+  def pending_cofounders
+    raise StandardError unless startup_admin? && startup.blank?
+
+    Founder.where.not(id: id).where(startup_token: startup_token).order('id ASC')
   end
 
   # Should we give the founder a tour of the timeline? If so, we shouldn't give it again.
@@ -439,6 +446,10 @@ class Founder < ActiveRecord::Base
 
   def any_targets?
     targets.present? || startup&.targets.present?
+  end
+
+  def self.lead_of(startup_token)
+    find_by(startup_token: startup_token, startup_admin: true)
   end
 
   private

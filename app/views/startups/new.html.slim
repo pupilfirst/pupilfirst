@@ -21,20 +21,28 @@
           = simple_form_for @startup, url: founder_startup_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
             = f.error_notification
 
-            = f.input :product_name, placeholder: 'Team Name.', required: true, label: 'Team Name'
-            = f.input :team_size, required: true, collection: 3..5, include_blank: false
+            = f.input :product_name, placeholder: 'Team Name', required: true, label: 'Team Name'
 
-            #cofounder-textbox
-              = f.input :cofounder_1_email, placeholder: 'Co-founder email', required: true, label: 'Co-founder 1'
-              = f.input :cofounder_2_email, placeholder: 'Co-founder email', required: true, label: 'Co-founder 2'
-              = f.input :cofounder_3_email, placeholder: 'Co-founder email', required: true, label: 'Co-founder 3'
-              = f.input :cofounder_4_email, placeholder: 'Co-founder email', required: true, label: 'Co-founder 4'
+            .row
+              .col-sm-3
+                .cofounders-label Co-founders
+              .col-sm-9
+                table.table.cofounders-table
+                  thead
+                    tr
+                      th Name / Email address
+                      th Registered?
+                  tbody
+                    - current_founder.pending_cofounders.each do |cofounder|
+                      tr
+                        td #{cofounder.display_name}
+                        th #{cofounder.phone.present? ? 'Yes' : 'Not yet'}
 
             .form-group
               .col-sm-offset-3.col-sm-9
-                /= f.button :submit, 'Request incubation', class: 'btn btn-primary btn-flat'
                 = f.button :submit, 'Submit Application', class: 'btn btn-primary btn-flat submit-btn'
 
+          / TODO: Does it make sense to have a cancel button here?
           .row
             .col-sm-9.col-sm-offset-3
               = button_to 'Cancel Application', cancel_incubation_index_url, class: 'btn btn-danger btn-flat cancel-application-btn',

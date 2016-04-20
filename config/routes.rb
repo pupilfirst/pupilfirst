@@ -70,16 +70,18 @@ Svapp::Application.routes.draw do
     end
   end
 
-  resources :resources, only: %w(index show) do
-    member do
-      get 'download'
-    end
+  scope 'library', controller: 'resources' do
+    get '/', action: 'index', as: 'resources'
+    get '/:id', action: 'show', as: 'resource'
+    get '/:id/download', action: 'download', as: 'download_resource'
   end
 
   scope 'connect_request', controller: 'connect_request', as: 'connect_request' do
     get ':id/feedback/from_team/:token', action: 'feedback_from_team', as: 'feedback_from_team'
     get ':id/feedback/from_faculty/:token', action: 'feedback_from_faculty', as: 'feedback_from_faculty'
   end
+
+  get 'graduation', as: 'graduation', to: 'home#graduation'
 
   get 'apply(/:batch)', as: 'apply', to: 'home#apply'
 

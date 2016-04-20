@@ -54,17 +54,31 @@ class TimelineEventVerificationNotificationJob < ActiveJob::Base
   def public_verification_notice
     I18n.t "slack_notifications.timeline_events.verification.public",
       startup_url: @startup_url, startup_product_name: @startup.product_name, event_url: @timeline_event_url,
-      event_title: @timeline_event.title, event_description: @timeline_event.description
+      event_title: @timeline_event.title, event_description: @timeline_event.description, links_attached_notice: links_attached_notice
   end
 
   def public_needs_improvement_notice
     I18n.t "slack_notifications.timeline_events.needs_improvement.public",
       startup_url: @startup_url, startup_product_name: @startup.product_name, event_url: @timeline_event_url,
-      event_title: @timeline_event.title, event_description: @timeline_event.description
+      event_title: @timeline_event.title, event_description: @timeline_event.description, links_attached_notice: links_attached_notice
   end
 
+  # this is not exactly 'public' but to 'all founders'. Using public for consistency in naming
   def public_not_accepted_notice
     I18n.t "slack_notifications.timeline_events.not_accepted.public",
       event_title: @timeline_event.title, event_url: @timeline_event_url, startup_product_name: @startup.product_name
+  end
+
+  def links_attached_notice
+    return '' unless @timeline_event.links.present?
+
+    notice = "*Public Links attached:*\n"
+    @timeline_event.links.each.with_index(1) do |link, index|
+      next if link[:private]
+      short_url = Shortener::ShortenedUrl.generate(link[:url])
+      notice += "#{index}. <https://sv.co/#{short_url.unique_key}|#{link[:title]}>\n"
+    end
+
+    notice
   end
 end

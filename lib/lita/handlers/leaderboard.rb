@@ -1,6 +1,6 @@
 module Lita
   module Handlers
-    class Stats < Handler
+    class Leaderboard < Handler
       route(/\Aleaderboard\? *(\d*)\z/, :leaderboard, command: true)
 
       # rubocop:disable Metrics/AbcSize
@@ -85,6 +85,6 @@ module Lita
       end
     end
 
-    Lita.register_handler(Stats)
+    Lita.register_handler(Leaderboard)
   end
 end

@@ -28,6 +28,7 @@
 //= require jquery-stickit
 //= require jquery.scrollTo
 //= require ahoy
+//= require owl.carousel
 
 // Rails assets
 //= require intro.js/intro.js
@@ -43,3 +44,4 @@
 //= require resources
 //= require about
 //= require transparency
+//= require graduation

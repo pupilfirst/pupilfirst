@@ -9,7 +9,7 @@ module ActiveAdmin
     end
 
     def dau_on_slack
-      Founder.active_founders_on_slack(since: 1.day.ago, batch: batch_selected)
+      Founder.active_founders_on_slack(since: 1.day.ago.beginning_of_day, upto: 1.day.ago.end_of_day, batch: batch_selected)
     end
 
     def percentage_dau_on_slack
@@ -17,7 +17,7 @@ module ActiveAdmin
     end
 
     def dau_on_web
-      Founder.active_founders_on_web(since: 1.day.ago, batch: batch_selected)
+      Founder.active_founders_on_web(since: 1.day.ago.beginning_of_day, upto: 1.day.ago.end_of_day, batch: batch_selected)
     end
 
     def percentage_dau_on_web
@@ -33,7 +33,7 @@ module ActiveAdmin
     end
 
     def wau_on_slack
-      Founder.active_founders_on_slack(since: 1.week.ago, batch: batch_selected)
+      Founder.active_founders_on_slack(since: 1.week.ago.beginning_of_week, upto: 1.week.ago.end_of_week, batch: batch_selected)
     end
 
     def percentage_wau_on_slack
@@ -41,7 +41,7 @@ module ActiveAdmin
     end
 
     def wau_on_web
-      Founder.active_founders_on_web(since: 1.week.ago, batch: batch_selected)
+      Founder.active_founders_on_web(since: 1.week.ago.beginning_of_week, upto: 1.week.ago.end_of_week, batch: batch_selected)
     end
 
     def percentage_wau_on_web
@@ -57,7 +57,7 @@ module ActiveAdmin
     end
 
     def mau_on_slack
-      Founder.active_founders_on_slack(since: 1.month.ago, batch: batch_selected)
+      Founder.active_founders_on_slack(since: 1.month.ago.beginning_of_month, upto: 1.month.ago.end_of_month, batch: batch_selected)
     end
 
     def percentage_mau_on_slack
@@ -65,7 +65,7 @@ module ActiveAdmin
     end
 
     def mau_on_web
-      Founder.active_founders_on_web(since: 1.month.ago, batch: batch_selected)
+      Founder.active_founders_on_web(since: 1.month.ago.beginning_of_month, upto: 1.month.ago.end_of_month, batch: batch_selected)
     end
 
     def percentage_mau_on_web
@@ -81,17 +81,21 @@ module ActiveAdmin
     end
 
     def wau_trend_on_slack
-      8.downto(1).to_a.map { |x| Founder.active_founders_on_slack(since: x.week.ago, upto: (x - 1).week.ago, batch: batch_selected).count }
+      8.downto(1).to_a.map do |x|
+        Founder.active_founders_on_slack(since: x.week.ago.beginning_of_week, upto: x.week.ago.end_of_week, batch: batch_selected).count
+      end
     end
 
     def wau_trend_on_web
-      8.downto(1).to_a.map { |x| Founder.active_founders_on_web(since: x.week.ago, upto: (x - 1).week.ago, batch: batch_selected).count }
+      8.downto(1).to_a.map do |x|
+        Founder.active_founders_on_web(since: x.week.ago.beginning_of_week, upto: x.week.ago.end_of_week, batch: batch_selected).count
+      end
     end
 
     def wau_trend_in_total
       8.downto(1).to_a.map do |x|
-        (Founder.active_founders_on_slack(since: x.week.ago, upto: (x - 1).week.ago, batch: batch_selected) +
-          Founder.active_founders_on_web(since: x.week.ago, upto: (x - 1).week.ago, batch: batch_selected)).compact.uniq.count
+        (Founder.active_founders_on_slack(since: x.week.ago.beginning_of_week, upto: x.week.ago.end_of_week, batch: batch_selected) +
+          Founder.active_founders_on_web(since: x.week.ago.beginning_of_week, upto: x.week.ago.end_of_week, batch: batch_selected)).compact.uniq.count
       end
     end
   end

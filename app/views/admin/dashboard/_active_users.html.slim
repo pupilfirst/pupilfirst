@@ -2,7 +2,7 @@
   .heading Active Users (On Slack and Web)
 
   .content
-    h6 Daily
+    h6 Daily (#{1.day.ago.strftime('%b %e')})
     .user-count
       ' Slack: #{dau_on_slack.count} (#{"%g" % ("%0.1f" % percentage_dau_on_slack)}%)
     .user-count
@@ -10,14 +10,14 @@
     .user-count
       ' Total: #{total_dau_count} (#{"%g" % ("%0.1f" % total_dau_percentage)}%)
     .clearfix
-    h6 Weekly
+    h6 Weekly (#{1.week.ago.beginning_of_week.strftime('%b %e')} - #{1.week.ago.end_of_week.strftime('%b %e')})
     .user-count
       ' Slack: #{wau_on_slack.count} (#{"%g" % ("%0.1f" % percentage_wau_on_slack)}%)
     .user-count
       ' Web: #{wau_on_web.count} (#{"%g" % ("%0.1f" % percentage_wau_on_web)}%)
     .user-count
       ' Total: #{total_wau_count} (#{"%g" % ("%0.1f" % total_wau_percentage)}%)
-    h6 Monthly
+    h6 Monthly (#{1.month.ago.strftime('%B')})
     .user-count
       ' Slack: #{mau_on_slack.count} (#{"%g" % ("%0.1f" % percentage_mau_on_slack)}%)
     .user-count

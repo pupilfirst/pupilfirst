@@ -1,11 +1,7 @@
 = semantic_form_for :invite, url: { action: :send_founder_invite }, method: :post do |f|
   = f.inputs 'Select a startup or a pending invite, and supply email address.'
     = f.input :startup_id, as: :select, collection: Startup.all
-
-    = f.input :startup_token, as: :select, collection: (Founder.distinct.pluck(:startup_token) - [nil]),
-      member_label: proc { |startup_token| "Team invited on #{startup_token}" },
-      label: 'Pending invite'
-
+    = f.input :startup_token, as: :select, collection: startup_token_collection, label: 'Pending invite'
     = f.input :email, placeholder: "Founder's email address".html_safe
 
   = f.submit 'Send Invite'

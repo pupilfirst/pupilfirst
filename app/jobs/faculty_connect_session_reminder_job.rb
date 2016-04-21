@@ -34,7 +34,7 @@ class FacultyConnectSessionReminderJob < ActiveJob::Base
   # Ensure the job is still relevant and not rescheduled
   def job_is_relevant?
     @connect_request.startup.present? && @connect_request.faculty.present? &&
-      @connect_request.confirmed? && @connect_request.connect_slot.slot_at <= 30.minutes.from_now
+      @connect_request.confirmed? && @connect_request.slot_at.future? && @connect_request.slot_at <= 30.minutes.from_now
   end
 
   def reminder_for_founder

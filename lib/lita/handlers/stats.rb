@@ -21,7 +21,7 @@ module Lita
       end
 
       def send_batch_missing_message
-        @response.reply('Please specify a batch number! eg: `stats for batch 1`')
+        @response.reply('Please specify a batch number! eg: `state of SV.CO for batch 1?`')
       end
 
       def send_stats_privately
@@ -52,7 +52,7 @@ module Lita
 
       def total_startups_count_and_names
         names_list = list_of_names(@batch_requested.startups)
-        "#{@batch_requested.startups.count} (#{names_list})\n"
+        "#{@batch_requested.startups.count} #{names_list}\n"
       end
 
       def stage_wise_startup_counts_and_names
@@ -62,7 +62,7 @@ module Lita
         stages.each do |stage|
           response += 'Number of startups in _\'' + I18n.t("timeline_event.stage.#{stage}") + '\'_ stage: '
           startups = Startup.where(stage: stage, batch: @batch_requested)
-          response += startups.count.to_s + " (#{list_of_names(startups)})\n"
+          response += startups.count.to_s + " #{list_of_names(startups)}\n"
         end
 
         response
@@ -71,17 +71,18 @@ module Lita
       def inactive_startups_count_and_names
         startups = @batch_requested.startups.inactive_for_week
         names_list = list_of_names(startups)
-        "#{startups.count} (#{names_list})\n"
+        "#{startups.count} #{names_list}\n"
       end
 
       def endangered_startups_count_and_names
         startups = @batch_requested.startups.endangered
         names_list = list_of_names(startups)
-        "#{startups.count} (#{names_list})\n"
+        "#{startups.count} #{names_list}\n"
       end
 
       def list_of_names(startups)
-        startups.map { |startup| "<#{Rails.application.routes.url_helpers.startup_url(startup)}|#{startup.product_name}>" }.join(', ')
+        return '' unless startups.present?
+        '(' + startups.map { |startup| "<#{Rails.application.routes.url_helpers.startup_url(startup)}|#{startup.product_name}>" }.join(', ') + ')'
       end
 
       def reply_using_api_post_message(channel:, message:)

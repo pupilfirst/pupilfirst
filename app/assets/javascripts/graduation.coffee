@@ -2,7 +2,7 @@ $(document).on 'page:change', ->
   $(".company-carousel").owlCarousel
     items:4
     margin:10
-    autoPlay:30000
+    autoPlay:45000
     stopOnHover:true
 
   $(".testimonial-carousel").owlCarousel

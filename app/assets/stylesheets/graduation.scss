@@ -195,7 +195,7 @@
   margin: 45px 0;
 
   .slide-item {
-    padding: 0 44px;
+    padding: 0 40px 10px;
     border-right: 1px solid #DEDEDE;
 
     .company-logo {
@@ -215,6 +215,9 @@
       font-size: 16px;
       font-weight: 300;
       line-height: 28px;
+    }
+    @media (max-width: $screen-xs-max) {
+      border-right-width: 0px;
     }
   }
 }
@@ -312,7 +315,7 @@
 
       @media (max-width: $screen-xs-max) {
         font-size: 24px;
-        line-height: 18px;
+        line-height: 25px;
         margin: 0 0 10px;
       }
     }
@@ -324,8 +327,8 @@
     }
   }
   .testimonial-quote {
-    font-size: 22px;
-    line-height: 40px;
+    font-size: 21px;
+    line-height: 37px;
     font-style: italic;
     padding: 50px 25px 0 15px;
   }
@@ -367,6 +370,9 @@
     position: absolute;
     top: 135px;
     transform: translateX(-50%);
+  }
+  @media (max-width: $screen-xs-max) {
+    font-size: 25px;
   }
 }
 .graduation-action-btn {

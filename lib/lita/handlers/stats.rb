@@ -1,7 +1,13 @@
 module Lita
   module Handlers
     class Stats < Handler
-      route(/\Astate of SV.CO for batch *(\d*) *\?\z/, :state_of_batch, command: true, restrict_to: :sv_co_team)
+      route(
+        /\Astate of SV.CO for batch *(\d*) *\?\z/,
+        :state_of_batch,
+        command: true,
+        restrict_to: :sv_co_team,
+        help: { 'state of SV.CO for batch N' => I18n.t('slack.help.state_of_svco') }
+      )
 
       def state_of_batch(response)
         # lets avoid the need to pass response around

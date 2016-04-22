@@ -1,7 +1,7 @@
 module Lita
   module Handlers
     class Leaderboard < Handler
-      route(/\Aleaderboard\? *(\d*)\z/, :leaderboard, command: true)
+      route(/\Aleaderboard\? *(\d*)\z/, :leaderboard, command: true, help: { 'leaderboard N' => I18n.t('slack.help.leaderboard') })
 
       # rubocop:disable Metrics/AbcSize
       def leaderboard(response)

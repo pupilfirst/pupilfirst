@@ -95,6 +95,8 @@ en:
     help:
       targets: Get a list of targets recently assigned to you and your team.
       targets_info: Get detailed information about a target from list.
+      leaderboard: Get the last published leaderboard for Batch N
+      state_of_svco: Get the present state of startups in Batch N, including inactive and endangered startups. Access restricted to SV.CO admins.
     handlers:
       targets:
         choice_error: "I couldn't find your choice in my list of targets. It should be one of: `%{choices}`."

@@ -37,7 +37,7 @@ module Lita
         if founder
           PublicSlackTalk.post_message message: batch_state_message, founder: founder
         else
-          reply_using_api_post_message channel: response.message.source.room, message: batch_state_message
+          reply_using_api_post_message channel: @response.message.source.room, message: batch_state_message
         end
       end
 

@@ -10,6 +10,16 @@
   h2 {
     font-size: 48px;
     font-weight: 200;
+
+    &:after {
+      background-color: $theme-light-green;
+      content: ' ';
+      display: block;
+      height: 2px;
+      margin: auto;
+      margin-top: 20px;
+      width: 100px;
+    }
   }
 
   p {
@@ -49,6 +59,15 @@
     font-weight: 300;
     line-height: 26px;
     margin-bottom: 0;
+
+    &:after {
+      background-color: $timeline-blue-text;
+      content: ' ';
+      display: block;
+      height: 2px;
+      margin: 10px auto;
+      width: 100%;
+    }
   }
 
   p {

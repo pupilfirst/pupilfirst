@@ -1,7 +1,6 @@
 section.timeline-events
   .timeline-event-heading
     h2 Latest Verified Events
-    = image_tag 'home/line.jpg'
 
   #timeline-events-container
     - timeline_events_to_showcase(3).each do |event|
@@ -10,7 +9,6 @@ section.timeline-events
           .timeline-event-image class="#{event.image_url.present? ? '' : 'timeline-event-bg-size'} event-bgcolor-#{cycle *((1..14).to_a)}" style="background-image: url(#{event.image_url.present? ? event.image_url : event.timeline_event_type.badge});"
           .timeline-event-body
             h5.timeline-event-title #{event.startup.product_name}: #{event.title}
-            img.line src="#{image_url 'home/line2.png'}" width="100%"
             p.timeline-event-content #{event.description.truncate(140, separator: ' ')}
         a.timeline-event-link.btn.btn-default href="#{startup_url(event.startup, anchor:"event-#{event.id}")}"  target="_blank"
           | View on Timeline

@@ -47,4 +47,4 @@ loadBlogPosts = ->
     $("#blog-posts-loading").addClass('hidden')
   ) unless $('.blog-post:not(.hidden)').length > 0
 
-$(document).on 'page:change', loadBlogPosts
+#$(document).on 'page:change', loadBlogPosts

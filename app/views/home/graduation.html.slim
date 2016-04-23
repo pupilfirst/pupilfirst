@@ -40,12 +40,12 @@
               h2
                 ' Companies like
                 b Tally
-                | &nbsp;have acquired founding teams from SV.CO
+                | &nbsp;have acquired founding teams from SV.CO.
               p.font-weight-300
                 | Hiring a team brings you their combined strengths into your company.
                 ' Our teams usually have full-stack developers, mobile-focused engineers and data analysts.
                 ' The best part? All of their work is public
-                = link_to 'through our timelines', startups_path
+                = link_to 'through our timelines.', startups_path
               button.btn.graduation-action-btn.white-action.text-uppercase data-target=".bd-example-modal-lg" data-toggle="modal"
                 | Acquihire Teams
               .modal.fade.bd-example-modal-lg aria-hidden="true" aria-labelledby="myLargeModalLabel" role="dialog" tabindex="-1" 
@@ -84,10 +84,14 @@
                 b &nbsp;Ola
                 ' &nbsp;&amp;
                 b Freecharge
-                | &nbsp;have hired great founders from SV.CO
+                | &nbsp;have hired great founders from SV.CO.
               p.font-weight-300
-                ' We have some of the best founders in India on our platform.
-                | Work with us to hire the best young startup talent in India.
+                ' We work with some of the best young founders in India.
+                | Hire Android, iOS &amp; Backend engineers who have built 
+                | <em>real products</em> and have industry knowhow. We also 
+                ' try to match founders&#8217; deep interests with an industy sector
+                ' so you get people who are deeply passionate about the work
+                ' you do.
               a.btn.graduation-action-btn.white-action.text-uppercase href="#"
                 | Hire Founders
         #invest-in-startups.tab-pane.fade.in role="tabpanel"
@@ -100,7 +104,7 @@
                 b &nbsp;Reckone
                 ' &nbsp;and
                 b iTraveller
-                | &nbsp;have been Funded by amazing investors who are SV.CO partners
+                | &nbsp;have been funded by amazing investors who are SV.CO partners.
               p.font-weight-300
                 ' If you're an angel or seed investor, sign up with us to get access to budding startups.
                 | We'll put you in touch early and you can interact with them even as they build their products.
@@ -113,12 +117,13 @@
             .col-md-5
               h2
                 ' Startups like
-                b &nbsp;Profoundis
-                | &nbsp;go on to join our Partner Accelerators
+                ' <strong>Profoundis</strong>
+                ' go on to join SV.CO&#8217;s Partner Accelerators.
               p.font-weight-300
                 ' If you're an accelerator based in India, get access to our startups to build a
-                ' strong pipeline of great companies. You can subscribe to our batch themes like
-                | SaaS or FinTech and get early updates on products our founders are building.
+                ' strong pipeline of great companies. You can subscribe to our themed batches like
+                | <em>SaaS</em> or <em>FinTech</em> and get early updates on products our 
+                | founders are building.
               a.btn.graduation-action-btn.white-action.text-uppercase href="#"
                 | Build Startup Pipeline
 
@@ -134,49 +139,51 @@
             = image_tag 'graduation/tally-logo.png'
           p
             ' India's leading business management software product company has acquihired
-            | team Z-Pay and extended hiring offers to 2 founders.
+            | the founding team of 
+            = link_to 'Z-Pay', startup_path('z-pay')
+            ' .
         .slide-item
           .company-logo
             = image_tag 'graduation/Freshdesk-logo.png', class: 'img-responsive'
           p
-            ' A leading provider of cloud-based customer support software,
-            | helping over 50,000 businesses has extended hiring offer to one SV.CO founder.
+            ' India's best known SaaS company,
+            ' has extended hiring offers to SV.CO founders.
         .slide-item
           .company-logo
             = image_tag 'graduation/freecharge-logo.png'
           p
-            ' India’s largest m-commerce platform focusing on bringing simplicity
-            | to everyday payments has extended hiring offers to two SV.CO founders.
+            ' India’s largest m-commerce platform
+            ' has extended hiring offers to SV.CO founders.
         .slide-item
           .company-logo
             = image_tag 'graduation/askme-logo.png'
           p
-            ' India’s No.1 Local Search Engine has acquihired team Mindhelix, hired Francis Alexander at 15 Lac CTC
-            | and gave funding offers to 2 teams.
+            ' India’s No.1 Local Search Engine has hired SV.CO founders
+            ' and given funding offers to teams.
         .slide-item
           .company-logo
             = image_tag 'graduation/microsoft-ventures-logo.png'
           p
-            ' SV incubate, Profoundis was the part of Microsoft Ventures, Bangalore, a global
+            ' Startup Village incubatee Profoundis was part of Microsoft Ventures, Bangalore, a global
             | initiative empowering entrepreneurs around the world.
         .slide-item
           .company-logo
             = image_tag 'graduation/Citrus-logo.png', class: 'img-responsive'
           p
             ' India's best payment stack for developers and instant payments for businesses
-            | has extended hiring offer to one SV.CO founder.
+            | has extended hiring offers to SV.CO founders.
         .slide-item
           .company-logo
             = image_tag 'graduation/AHventures-logo.png', class: 'img-responsive'
           p
             ' A growth catalyst that brings together promising businesses and investors has
-            | invested 1M USD in SV incubatee, iTraveller along with other investors.
+            | invested 1M USD in Startup Village incubatee, iTraveller.
         .slide-item
           .company-logo
             = image_tag 'graduation/Flat6labs-logo.png', class: 'img-responsive'
           p
-            ' SV incubate, Flip Technologies was the part of Flat6Labs, Abudhabi, an accelerator program
-            | that fosters and invests in bright entrepreneurs.
+            ' Startup Village incubatee Flip Technologies was part of Flat6Labs, Abudhabi, an accelerator 
+            | program that fosters bright entrepreneurs.
         .slide-item
           .company-logo
             = image_tag 'graduation/Goodmethods-logo.png', class: 'img-responsive'
@@ -194,7 +201,7 @@
   .container
     h2.text-center.font-weight-300.graduate-subhead
       span.graduate-subhead-icon.talkto-graduates-icon
-      | Talk to Our Founders early
+      | Talk to Our Founders Early
     h3
       ' Interact with our batch founders &amp; identify great talent
       span.font-weight-400 even while our program is ongoing.
@@ -218,7 +225,7 @@
                 | Broadcast to our Batch Live
               p
                 ' Present a topic to our Batch or be part of
-                | an AMA session with interesting questions from our young founders
+                | an AMA session with interesting questions from our young founders.
     a.btn.graduation-action-btn.green-action.text-uppercase href="#"
       | Join as SV.CO Faculty
 .testimonial-container
@@ -236,10 +243,10 @@
               span.role.font-weight-300
                 | VP of Design, Snapdeal
             p.testimonial-quote.font-weight-300
-              ' " Budding the idea of entrepreneurship right when they are in college,
+              ' &#8220;Budding the idea of entrepreneurship right when they are in college,
               ' working with real products that touch customers is super valuable,
               ' it's the need of the hour and I'm personally very excited to see what's going to
-              | come out of all these young people. 
+              | come out of all these young people.&#8221;
           .col-md-7
             iframe.testimonial-video src="https://www.youtube.com/embed/ut-J7cuQpzI" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
       .testimonial-slide-item
@@ -251,8 +258,8 @@
               span.role.font-weight-300
                 | Chief of R&amp;D, Tally Solutions
             p.testimonial-quote.font-weight-300
-              ' " Really impressed with the program that Startup Village is running, I would say
-              | it's very admirable, because if you look ahead what is going to drive this country forward is innovation. "
+              ' &#8220;Really impressed with the program that Startup Village is running, I would say
+              | it's very admirable, because if you look ahead what is going to drive this country forward is innovation.&#8221;
           .col-md-7
             iframe.testimonial-video src="https://www.youtube.com/embed/qEZ1RamKt6k" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
       .testimonial-slide-item
@@ -264,8 +271,8 @@
               span.role.font-weight-300
                 | Director of Engineering, Ola
             p.testimonial-quote.font-weight-300
-              ' " When we got hold of Startup Village, we were very much excited and we found
-              | a great talent pool. A very exciting day for us! "
+              ' &#8220;When we got hold of Startup Village, we were very much excited and we found
+              | a great talent pool. A very exciting day for us!&#8221;
 
           .col-md-7
             iframe.testimonial-video src="https://www.youtube.com/embed/z2e5o5ftgRc" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
@@ -278,8 +285,8 @@
               span.role.font-weight-300
                 | CTO, GOQII
             p.testimonial-quote.font-weight-300
-              ' "I'm really excited to be here and what I found here was really fascinating people with lots
-              | of talent who are trying to solve real problems. I think what Startup Village is doing is really great."
+              ' &#8220;I'm really excited to be here and what I found here was really fascinating people with lots
+              | of talent who are trying to solve real problems. I think what Startup Village is doing is really great.&#8221;
 
           .col-md-7
             iframe.testimonial-video src="https://www.youtube.com/embed/jiZs9BqC8vw" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"

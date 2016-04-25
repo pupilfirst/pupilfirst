@@ -5,6 +5,7 @@ module Lita
         /\Astate of SV.CO for batch *(\d*) *\?\z/,
         :state_of_batch,
         command: true,
+        restrict_to: :sv_co_team,
         help: { 'state of SV.CO for batch N?' => I18n.t('slack.help.state_of_svco') }
       )
 

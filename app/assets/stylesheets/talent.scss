@@ -417,8 +417,123 @@
     }
   }
 }
-.talent-form-popup {
-  padding: 50px;
+.action-form {
+  .modal-content {
+    background-image: asset-url("talent/Banner-bg.png");
+    background-repeat: repeat-x;
+    background-position: 140px -120px;
+    padding: 40px;
+
+    .modal-header {
+      border: 0;
+      .close {
+        font-size: 22px;
+        margin-right: -30px;
+        margin-top: -32px;
+      }
+    }
+  }
+
+  .action-form-icon {
+    background-image: asset-url("talent/Invest-hire-board.svg");
+    background-repeat: no-repeat;
+    height: 80px;
+    width: 125px;
+    margin: 0 auto 25px;
+  }
+  .talent-form-popup {
+    form {
+      margin: auto;
+      max-width: 460px;
+    }
+    label {
+      font-weight: 400;
+      color: #646464;
+      padding-left: 0;
+    }
+    input {
+      border-radius: 5px;
+      box-shadow: none;
+      border-color: #E0E0E0;
+      max-width: 265px;
+    }
+    .action-submit {
+      background-color: #3AA828;
+      border: 0;
+      border-radius: 20px;
+      padding: 10px 30px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .talent-action-checklist {
+      border: 1px solid #ECECEC;
+      border-radius: 5px;
+      padding: 20px;
+      margin: auto;
+      position: relative;
+      max-width: 650px;
+      margin-bottom: 25px;
+
+      h4 {
+        position: absolute;
+        background-color: white;
+        margin: 0;
+        width: 280px;
+        line-height: 35px;
+        letter-spacing: 0.02em;
+        font-size: 18px;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .check-box-group {
+        display: inline-block;
+        margin: 10px 10px 10px;
+        color: #646464;
+      }
+      .talent-action-checkbox {
+        opacity: 0;
+        position: absolute;
+      }
+
+      .talent-action-checkbox, .talent-action-checkbox-label {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0;
+        cursor: pointer;
+        font-weight: 400;
+      }
+
+      .talent-action-checkbox-label {
+        position: relative;
+      }
+
+      .talent-action-checkbox + .talent-action-checkbox-label:before {
+        content: '';
+        background: #fff;
+        border: 1px solid #CFD5D8;
+        background: #f8f8f8;
+        border-radius: 3px;
+        box-shadow: inset 0 0 1px rgba(0,0,0,.1);
+        display: inline-block;
+        vertical-align: middle;
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        margin-right: 10px;
+        text-align: center;
+      }
+
+      .talent-action-checkbox:checked + .talent-action-checkbox-label:before {
+        content: '✔';
+        background: #3AA828;
+        color: white;
+        font-size: 16px;
+        line-height: 16px;
+        transition: all .2s;
+      }
+    }
+  }
 }
 .footer-action {
   background-image: asset-url("talent/Banner-bg.png");

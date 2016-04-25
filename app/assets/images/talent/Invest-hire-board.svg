@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="122px" height="78px" viewBox="0 0 122 78" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.7 (28169) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 2</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="2.38461538" y="25.2" width="119.230769" height="48" rx="5"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="119.230769" height="48" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-2" transform="translate(-1.000000, 1.000000)">
+            <use id="Rectangle-121" stroke="#2BA216" mask="url(#mask-2)" stroke-width="2" fill="#FFFFFF" transform="translate(62.000000, 49.200000) rotate(-4.000000) translate(-62.000000, -49.200000) " xlink:href="#path-1"></use>
+            <text id="Invest-&amp;-Hire" transform="translate(59.496154, 49.940000) rotate(-4.000000) translate(-59.496154, -49.940000) " font-family="SourceSansPro-Bold, Source Sans Pro" font-size="15.6923077" font-weight="bold" letter-spacing="0.400000006" fill="#2BA217">
+                <tspan x="15.9781538" y="55.44">Invest &amp; Hire</tspan>
+            </text>
+            <path d="M35.6376578,28.5738281 L54.8529232,6.89663785 C54.8529232,6.89663785 62.3262688,-0.520797312 69.455132,6.89663785 C76.5839951,14.314073 86.5395409,25.1054941 86.5395409,25.1054941" id="Path-258" stroke="#2BA217"></path>
+            <ellipse id="Oval-21" stroke="#2BA217" stroke-width="2" fill="#FFFFFF" cx="62" cy="3.6" rx="3.57692308" ry="3.6"></ellipse>
+        </g>
+    </g>
+</svg>

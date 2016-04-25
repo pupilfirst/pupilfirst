@@ -17,6 +17,14 @@ module Lita
         help: { 'expired team targets for batch N?' => I18n.t('slack.help.expired_team_targets') }
       )
 
+      route(
+        /\Aexpired founder targets for batch *(\d*) *\?\z/,
+        :expired_founder_targets,
+        command: true,
+        restrict_to: :sv_co_team,
+        help: { 'expired founder targets for batch N?' => I18n.t('slack.help') }
+      )
+
       def state_of_batch(response)
         # lets avoid the need to pass response around
         @response = response
@@ -36,6 +44,15 @@ module Lita
         end
       end
 
+      def expired_founder_targets(response)
+        @response = response
+
+        ActiveRecord::Base.connection_pool.with_connection do
+          @batch_requested = parse_batch_from_command
+          @batch_requested.present? ? reply_with_expired_founder_targets : send_batch_missing_message
+        end
+      end
+
       def parse_batch_from_command
         @response.match_data[1].present? ? ::Batch.find_by_batch_number(@response.match_data[1].to_i) : nil
       end
@@ -50,6 +67,10 @@ module Lita
 
       def reply_with_expired_team_targets
         @response.reply expired_team_targets_details
+      end
+
+      def reply_with_expired_founder_targets
+        @response.reply expired_founder_targets_details
       end
 
       def batch_state_message
@@ -99,7 +120,7 @@ module Lita
 
       def expired_team_targets_details
         <<~MESSAGE
-          > *Targets expired last week for SV.CO Batch #{@batch_requested.batch_number} (#{@batch_requested.name}):*
+          > *Team targets expired last week for SV.CO Batch #{@batch_requested.batch_number} (#{@batch_requested.name}):*
           #{expired_team_targets_list}
         MESSAGE
       end
@@ -107,11 +128,31 @@ module Lita
       def expired_team_targets_list
         targets = Target.for_startups_in_batch(@batch_requested).expired_last_week
 
-        return I18n.t('slack.handlers.stats.no_expired_targets') unless targets.present?
+        return I18n.t('slack.handlers.stats.no_expired_team_targets') unless targets.present?
 
         targets_list = ''
         targets.each_with_index do |target, index|
           targets_list += "#{index + 1}. #{target.startup.product_name}: _'#{target.title}'_\n"
+        end
+
+        targets_list
+      end
+
+      def expired_founder_targets_details
+        <<~MESSAGE
+        > *Founder targets expired last week for SV.CO Batch #{@batch_requested.batch_number} (#{@batch_requested.name}):*
+        #{expired_founder_targets_list}
+        MESSAGE
+      end
+
+      def expired_founder_targets_list
+        targets = Target.for_founders_in_batch(@batch_requested).expired_last_week
+
+        return I18n.t('slack.handlers.stats.no_expired_founder_targets') unless targets.present?
+
+        targets_list = ''
+        targets.each_with_index do |target, index|
+          targets_list += "#{index + 1}. #{target.assignee.fullname}: _'#{target.title}'_\n"
         end
 
         targets_list

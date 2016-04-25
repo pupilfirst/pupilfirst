@@ -98,6 +98,7 @@ en:
       leaderboard: Get the last published leaderboard for Batch N.
       state_of_svco: Get the present state of startups in Batch N, including inactive and endangered startups. Access restricted to SV.CO admins.
       expired_team_targets: Get a list of all team targets which expired last week - for every startup in the batch.
+      expired_founder_targets: Get a list of all individual targets which expired last week - for every founder in the batch.
     handlers:
       targets:
         choice_error: "I couldn't find your choice in my list of targets. It should be one of: `%{choices}`."
@@ -107,7 +108,8 @@ en:
           Please update your slack mention name on your SV.CO profile, and try asking me again.
       stats:
         batch_missing_error: Could not identify batch specified. Ensure you have entered a valid batch number!
-        no_expired_targets: "No one in the batch had an expired target last week! :simple_smile:"
+        no_expired_team_targets: "No team in the batch had an expired target last week! :simple_smile:"
+        no_expired_founder_targets: "No founder in the batch had an expired target last week! :simple_smile:"
 
   slack_notifications:
     timeline_events:

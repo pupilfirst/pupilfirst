@@ -384,6 +384,7 @@ startTour = ->
   startupShowTour = $('#startup-show-tour')
 
   tour = introJs()
+
   tour.setOptions(
     skipLabel: 'Close',
     steps: [
@@ -413,7 +414,21 @@ startTour = ->
       }
     ]
   )
+
+  tour.onexit enableTourButton
+  tour.oncomplete enableTourButton
+  disableTourButton()
   tour.start()
+
+disableTourButton = ->
+  tourButton = $('button.tour-button')
+  tourButton.tooltip('destroy')
+  tourButton.attr('disabled', true)
+
+enableTourButton = ->
+  tourButton = $('button.tour-button')
+  tourButton.removeAttr('disabled')
+  tourButton.tooltip()
 
 handleTourButtonClick = ->
   $('#tour-button').on 'click', ->

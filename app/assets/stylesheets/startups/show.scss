@@ -976,4 +976,9 @@ h1.product-name {
   position: relative;
   transition: all 0.2s;
 
+  &[disabled] {
+    cursor: default;
+    background-color: grey;
+    border-color: grey;
+  }
 }

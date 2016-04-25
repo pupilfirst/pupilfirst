@@ -12,4 +12,4 @@ sendFounderDataToInspectlet = ->
     if productName || startupBatch
       __insp.push ['tagSession', {email: emailAddress, productName: productName, startupBatch: startupBatch}]
 
-$(document).on 'page:change', sendFounderDataToInspectlet
+#$(document).on 'page:change', sendFounderDataToInspectlet

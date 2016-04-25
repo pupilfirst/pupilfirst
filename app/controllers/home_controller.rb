@@ -18,7 +18,7 @@ class HomeController < ApplicationController
     @skip_container = true
   end
 
-  def graduation
+  def talent
     @skip_container = true
 
     @contact_form = ContactForm.new

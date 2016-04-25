@@ -44,4 +44,4 @@
 //= require resources
 //= require about
 //= require transparency
-//= require graduation
+//= require talent

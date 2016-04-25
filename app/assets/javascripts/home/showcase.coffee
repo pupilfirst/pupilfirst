@@ -12,7 +12,7 @@ showcaseEmbeds = ->
   # Removes iframe src when the video modal is hidden.
   $('#showcase-video').on('hidden.bs.modal', (event) ->
     modal = $(this)
-    modal.find('.modal-body iframe').attr('src', '')
+    modal.find('.modal-body iframe').removeAttr('src')
   )
 
   # Sets title and populates timeline modal.

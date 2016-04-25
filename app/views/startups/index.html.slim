@@ -53,7 +53,7 @@
                           ' #{startup.twitter_link}
 
               .startup-logo-block
-                a.startup-logo-image href=startup_url(startup) class="#{startup.logo.present? ? '' : 'with-name'}"
+                a.startup-logo-image href=startup_url(startup)
                   - if startup.logo.present?
                    = image_tag startup.logo.url
                   - else

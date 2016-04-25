@@ -22,6 +22,10 @@ class Target < ActiveRecord::Base
   scope :not_target_roles, -> { where.not(role: target_roles) }
   scope :due_on, -> (date) { where(due_date: date.beginning_of_day..date.end_of_day) }
 
+  scope :for_founders_in_batch, -> (batch) { where(assignee: batch.founders) }
+  scope :for_startups_in_batch, -> (batch) { where(assignee: batch.startups) }
+  scope :expired_last_week, -> { where('due_date < ? AND due_date > ?', Time.now, 1.week.ago.beginning_of_day) }
+
   ROLE_FOUNDER = 'founder'
 
   def self.target_roles

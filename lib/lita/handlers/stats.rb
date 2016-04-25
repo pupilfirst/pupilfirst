@@ -126,7 +126,7 @@ module Lita
       end
 
       def expired_team_targets_list
-        targets = Target.for_startups_in_batch(@batch_requested).expired_last_week
+        targets = Target.for_startups_in_batch(@batch_requested).expired
 
         return I18n.t('slack.handlers.stats.no_expired_team_targets') unless targets.present?
 
@@ -146,7 +146,7 @@ module Lita
       end
 
       def expired_founder_targets_list
-        targets = Target.for_founders_in_batch(@batch_requested).expired_last_week
+        targets = Target.for_founders_in_batch(@batch_requested).expired
 
         return I18n.t('slack.handlers.stats.no_expired_founder_targets') unless targets.present?
 

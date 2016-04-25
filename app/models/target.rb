@@ -24,7 +24,7 @@ class Target < ActiveRecord::Base
 
   scope :for_founders_in_batch, -> (batch) { where(assignee: batch.founders) }
   scope :for_startups_in_batch, -> (batch) { where(assignee: batch.startups) }
-  scope :expired_last_week, -> { where('due_date < ? AND due_date > ?', Time.now, 1.week.ago.beginning_of_day) }
+  scope :expired_last_week, -> { where(status: STATUS_PENDING).where('due_date < ? AND due_date > ?', Time.now, 1.week.ago.beginning_of_day) }
 
   ROLE_FOUNDER = 'founder'
 

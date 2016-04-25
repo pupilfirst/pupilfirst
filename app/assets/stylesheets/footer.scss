@@ -1,7 +1,11 @@
 @import 'variables';
 
 footer {
-  //font-family: 'Roboto', sans-serif;
+  .footer-logo {
+    opacity: 0.7;
+    margin-bottom: 15px;
+    width: 150px;
+  }
 
   #footer-top {
     background-color: $footer-bg;

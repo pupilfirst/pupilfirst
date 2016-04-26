@@ -20,13 +20,12 @@ class TalentForm
       return
     end
 
-    valid_query_types_count = query_type.select do |type|
+    valid_query_types_count = query_type.count do |type|
       TalentForm.valid_query_types.include? type
-    end.count
-
-    unless valid_query_types_count == query_type.count
-      errors[:query_type] << 'invalid types selected'
     end
+
+    return if valid_query_types_count == query_type.count
+    errors[:query_type] << 'invalid types selected'
   end
 
   def save

@@ -148,13 +148,13 @@ feature 'Incubation' do
     end
 
     scenario 'team-lead submits an empty startup registration form' do
-      click_on 'Submit Application'
+      click_on 'Create Startup'
       expect(page).to have_text('Please review the problems below')
     end
 
     scenario 'team-lead submits a valid startup form with 2 co-founders' do
       fill_in 'Team Name', with: 'Team Alpha'
-      click_on 'Submit Application'
+      click_on 'Create Startup'
 
       # should have reached the newly created startup's page
       expect(page).to have_text('Team Alpha')

@@ -57,7 +57,7 @@ module ActiveAdmin
     end
 
     def mau_on_slack
-      Founder.active_founders_on_slack(since: 1.month.ago.beginning_of_month, upto: 1.month.ago.end_of_month, batch: batch_selected)
+      Founder.active_founders_on_slack(since: Time.now.beginning_of_month, upto: Time.now, batch: batch_selected)
     end
 
     def percentage_mau_on_slack
@@ -65,7 +65,7 @@ module ActiveAdmin
     end
 
     def mau_on_web
-      Founder.active_founders_on_web(since: 1.month.ago.beginning_of_month, upto: 1.month.ago.end_of_month, batch: batch_selected)
+      Founder.active_founders_on_web(since: Time.now.beginning_of_month, upto: Time.now, batch: batch_selected)
     end
 
     def percentage_mau_on_web

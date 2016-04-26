@@ -17,7 +17,7 @@
       ' Web: #{wau_on_web.count} (#{"%g" % ("%0.1f" % percentage_wau_on_web)}%)
     .user-count
       ' Total: #{total_wau_count} (#{"%g" % ("%0.1f" % total_wau_percentage)}%)
-    h6 Monthly (#{1.month.ago.strftime('%B')})
+    h6 Current Month (#{Time.now.beginning_of_month.strftime('%B %d')} - Today)
     .user-count
       ' Slack: #{mau_on_slack.count} (#{"%g" % ("%0.1f" % percentage_mau_on_slack)}%)
     .user-count

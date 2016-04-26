@@ -197,6 +197,7 @@
 
   .slide-item {
     padding: 0 40px 10px;
+    min-height: 275px;
     border-right: 1px solid #DEDEDE;
 
     .company-logo {
@@ -394,6 +395,7 @@
   &.white-action {
     background-color: white;
     border: 1px solid #0089D0;
+    color: #0089D0;
   }
   &.green-action {
     background-color: #499E43;
@@ -435,21 +437,24 @@
   }
 
   .action-form-icon {
-    background-image: asset-url("talent/Invest-hire-board.svg");
+    background-image: asset-url("talent/Invest-hire-board.png");
     background-repeat: no-repeat;
-    height: 80px;
-    width: 125px;
+    height: 82px;
+    width: 126px;
     margin: 0 auto 25px;
   }
   .talent-form-popup {
     form {
       margin: auto;
       max-width: 460px;
+
+      @media (max-width: $screen-xs-max) {
+        text-align: left;
+      }
     }
     label {
       font-weight: 400;
       color: #646464;
-      padding-left: 0;
     }
     input {
       border-radius: 5px;
@@ -473,6 +478,7 @@
       position: relative;
       max-width: 650px;
       margin-bottom: 25px;
+      text-align: center;
 
       h4 {
         position: absolute;
@@ -485,6 +491,12 @@
         top: -20px;
         left: 50%;
         transform: translateX(-50%);
+
+        @media (max-width: $screen-xs-max) {
+          text-align: center;
+          font-size: 15px;
+          width: 230px;
+        }
       }
       .check-box-group {
         display: inline-block;
@@ -531,6 +543,10 @@
         font-size: 16px;
         line-height: 16px;
         transition: all .2s;
+      }
+
+      @media (max-width: $screen-xs-max) {
+        text-align: left;
       }
     }
   }

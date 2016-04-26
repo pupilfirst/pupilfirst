@@ -1,0 +1,47 @@
+.modal.action-form.fade.invest-hire-modal aria-hidden="true" aria-labelledby="Invest_Hire_Talents" role="dialog" tabindex="-1" 
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header.text-center
+        button.close type="button" data-dismiss="modal" aria-label="Close"
+          span aria-hidden="true"
+            | &times;
+        .action-form-icon.modal-title
+      .talent-form-popup
+        .talent-action-checklist
+          h4.font-weight-300
+            | Tick all that you are interested in:
+          .check-box-group.hiring-founders-check
+            input#hiring-founders.talent-action-checkbox type="checkbox" value=""
+            label.talent-action-checkbox-label for="hiring-founders"
+              | Hiring Founders
+          .check-box-group.invest-startups-check
+            input#invest-startups.talent-action-checkbox type="checkbox" value=""
+            label.talent-action-checkbox-label for="invest-startups"
+              | Investing in Startups
+          .check-box-group.acquihiring-teams-check
+            input#acquihiring-teams.talent-action-checkbox type="checkbox" value=""
+            label.talent-action-checkbox-label for="acquihiring-teams"
+              | Acquihiring Teams
+          .check-box-group.accelerating-startups-check
+            input#accelerating-startups.talent-action-checkbox type="checkbox" value=""
+            label.talent-action-checkbox-label for="accelerating-startups"
+              | Accelerating Startups
+          .check-box-group.join-as-faculty-check
+            input#join-as-faculty.talent-action-checkbox type="checkbox" value=""
+            label.talent-action-checkbox-label for="join-as-faculty"
+              | Joining SV.CO as Faculty
+
+        = simple_form_for @contact_form, url: '#',
+          method: :post,
+          html: { class: 'form-horizontal' },
+          wrapper: :horizontal_form,
+          wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_file_input, boolean: :horizontal_boolean } do |f|
+
+          = f.input :name, label: 'Name', input_html: { maxlength: 50 }
+          = f.input :email, type: 'email', label: 'Email address', input_html: { maxlength: 50 }
+          = f.input :mobile, label: 'Mobile number', input_html: { maxlength: 20 }
+          = f.input :company, label: 'Organization', input_html: { maxlength: 50 }
+          .form-group
+            .col-sm-9.col-sm-offset-3
+              = button_tag type: :submit, class: 'btn btn-primary action-submit' do
+                | &nbsp;Submit

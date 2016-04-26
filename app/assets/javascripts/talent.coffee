@@ -10,8 +10,11 @@ $(document).on 'page:change', ->
     itemsDesktop:[1920,1]
     itemsTablet:[768,1]
 
-
 $(document).ready ->
+  $('#acquihire-teams-btn').click ->
+    acquihire_check = $('input#acquihiring-teams')
+    acquihire_check.prop("checked", true)
+
   #set animation timing
   animationDelay = 2500
   barAnimationDelay = 3800

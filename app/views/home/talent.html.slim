@@ -1,3 +1,7 @@
+- content_for :head
+  title SV.CO Talent: Invest &amp Hire
+  meta name="description" content="Hire, Acqui-hire, invest and build a pipeline from India's best startup talent."
+
 .talent-hero
   .container
     .hero-intro.text-center
@@ -45,55 +49,11 @@
                 ' Our teams usually have full-stack developers, mobile-focused engineers and data analysts.
                 ' The best part? All of their work is public
                 = link_to 'through our timelines.', startups_path
-              button.btn.talent-action-btn.white-action.text-uppercase data-target=".bd-example-modal-lg" data-toggle="modal"
+              button#acquihire-teams-btn.btn.talent-action-btn.white-action.text-uppercase data-target=".invest-hire-modal" data-toggle="modal"
                 | Acquihire Teams
-              .modal.action-form.fade.bd-example-modal-lg aria-hidden="true" aria-labelledby="myLargeModalLabel" role="dialog" tabindex="-1" 
-                .modal-dialog.modal-lg
-                  .modal-content
-                    .modal-header.text-center
-                      button.close type="button" data-dismiss="modal" aria-label="Close"
-                        span aria-hidden="true"
-                          | &times;
-                      .action-form-icon.modal-title
-                    .talent-form-popup
-                      .talent-action-checklist.text-center
-                        h4.font-weight-300
-                          | Tick all that you are interested in:
-                        .check-box-group.hiring-founders-check
-                          input#hiring-founders.talent-action-checkbox type="checkbox" value=""
-                          label.talent-action-checkbox-label for="hiring-founders"
-                            | Hiring Founders
-                        .check-box-group.invest-startups-check
-                          input#invest-startups.talent-action-checkbox type="checkbox" value=""
-                          label.talent-action-checkbox-label for="invest-startups"
-                            | Investing in Startups
-                        .check-box-group.acquihiring-teams-check
-                          input#acquihiring-teams.talent-action-checkbox type="checkbox" value=""
-                          label.talent-action-checkbox-label for="acquihiring-teams"
-                            | Acquihiring Teams
-                        .check-box-group.accelerating-startups-check
-                          input#accelerating-startups.talent-action-checkbox type="checkbox" value=""
-                          label.talent-action-checkbox-label for="accelerating-startups"
-                            | Accelerating Startups
-                        .check-box-group.join-as-faculty-check
-                          input#join-as-faculty.talent-action-checkbox type="checkbox" value=""
-                          label.talent-action-checkbox-label for="join-as-faculty"
-                            | Joining SV.CO as Faculty
 
-                      = simple_form_for @contact_form, url: '#',
-                        method: :post,
-                        html: { class: 'form-horizontal' },
-                        wrapper: :horizontal_form,
-                        wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_file_input, boolean: :horizontal_boolean } do |f|
+              = render 'invest_hire_form'
 
-                        = f.input :name, label: 'Name', input_html: { maxlength: 50 }
-                        = f.input :email, type: 'email', label: 'Email address', input_html: { maxlength: 50 }
-                        = f.input :mobile, label: 'Mobile number', input_html: { maxlength: 20 }
-                        = f.input :company, label: 'Organization', input_html: { maxlength: 50 }
-                        .form-group
-                          .col-sm-9.col-sm-offset-3
-                            = button_tag type: :submit, class: 'btn btn-primary action-submit' do
-                              | &nbsp;Submit
         #hire-founders.tab-pane.fade.in role="tabpanel"
           .row
             .col-md-7
@@ -109,7 +69,7 @@
                 ' try to match founders&#8217; deep interests with an industy sector
                 ' so you get people who are deeply passionate about the work
                 ' you do.
-              a.btn.talent-action-btn.white-action.text-uppercase href="#"
+              button.btn.talent-action-btn.white-action.text-uppercase
                 | Hire Founders
         #invest-in-startups.tab-pane.fade.in role="tabpanel"
           .row
@@ -122,7 +82,7 @@
               p.font-weight-300
                 ' If you're an angel or seed investor, sign up with us to get access to budding startups.
                 | We'll put you in touch early and you can interact with them even as they build their products.
-              a.btn.talent-action-btn.white-action.text-uppercase href="#"
+              button.btn.talent-action-btn.white-action.text-uppercase
                 | Invest in Startups
         #build-startup-pipeline.tab-pane.fade.in role="tabpanel"
           .row
@@ -138,7 +98,7 @@
                 ' strong pipeline of great companies. You can subscribe to our themed batches like
                 | <em>SaaS</em> or <em>FinTech</em> and get early updates on products our 
                 | founders are building.
-              a.btn.talent-action-btn.white-action.text-uppercase href="#"
+              button.btn.talent-action-btn.white-action.text-uppercase
                 | Build Startup Pipeline
 
 .graduates-join.text-center.clearfix
@@ -240,7 +200,7 @@
               p
                 ' Present a topic to our Batch or be part of
                 | an AMA session with interesting questions from our young founders.
-    a.btn.talent-action-btn.green-action.text-uppercase href="#"
+    button.btn.talent-action-btn.green-action.text-uppercase
       | Join as SV.CO Faculty
 .testimonial-container
   .container
@@ -311,5 +271,5 @@
         ' We're trying to build a new generation of product founders right in college.
         | It's the first of its kind in India. Partner with us early!
 
-      a.btn.talent-action-btn.green-action.text-uppercase href="#"
+      button.btn.talent-action-btn.green-action.text-uppercase
         | Partner with SV.CO

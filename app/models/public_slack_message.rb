@@ -11,10 +11,6 @@ class PublicSlackMessage < ActiveRecord::Base
     reaction_to.present?
   end
 
-  def self.founders_active_last_hour
-    Founder.where(id: PublicSlackMessage.where('created_at > ?', 1.hour.ago).select(:founder).distinct.pluck(:founder_id))
-  end
-
   def self.available_channels
     all.pluck(:channel).uniq
   end

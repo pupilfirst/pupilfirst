@@ -67,7 +67,8 @@ ActiveAdmin.register Target do
           role: target.role, title: target.title, description: target.description,
           resource_url: target.resource_url, completion_instructions: target.completion_instructions,
           due_date_date: target.due_date_date, due_date_time_hour: target.due_date.hour,
-          due_date_time_minute: target.due_date.min
+          due_date_time_minute: target.due_date.min, slideshow_embed: target.slideshow_embed,
+          assigner_id: target.assigner.id
         }
       )
     )

@@ -182,7 +182,7 @@ completeHandler = ->
   progressText.html 'All done! Refreshing timeline&hellip;'
 
   setTimeout ->
-    location.reload()
+    window.location = window.location.pathname
   , 2000
 
 errorHandler = ->

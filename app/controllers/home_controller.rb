@@ -18,12 +18,6 @@ class HomeController < ApplicationController
     @skip_container = true
   end
 
-  def talent
-    @skip_container = true
-
-    @contact_form = ContactForm.new
-  end
-
   # used by the 'shortener' gem's config
   def not_found
     raise_not_found

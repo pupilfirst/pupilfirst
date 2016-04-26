@@ -1,0 +1,14 @@
+= content_for :heading
+  | Talent Form: Interest shown by #{@name}
+
+= content_for :salutation
+  | Hello,
+
+= content_for :body
+  p
+    | <strong>Name:</strong> #{@name}<br/>
+    | <strong>Email:</strong> #{@email}<br/>
+    | <strong>Mobile Phone Number:</strong> #{@mobile}<br/>
+    | <strong>Organization:</strong> #{@organization}<br/>
+    | <strong>Interested in:</strong> #{@query_type.join ', '}<br/>
+

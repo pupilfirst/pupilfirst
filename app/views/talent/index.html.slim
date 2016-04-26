@@ -2,6 +2,8 @@
   title SV.CO Talent: Invest &amp Hire
   meta name="description" content="Hire, Acqui-hire, invest and build a pipeline from India's best startup talent."
 
+= render 'invest_hire_form'
+
 .talent-hero
   .container
     .hero-intro.text-center
@@ -13,23 +15,23 @@
           b Accelerator
           b Company
     .tab-container
-      ul.nav.nav-tabs.nav-justified role="tablist" 
-        li.active role="presentation" 
+      ul.nav.nav-tabs.nav-justified role="tablist"
+        li.active role="presentation"
           a aria-controls="acquihire-teams" data-toggle="tab" href="#acquihire-teams" role="tab"
             .tab-icon.acquihire-team-icon
             span.hidden-xs
               | Acquihire Teams
-        li role="presentation" 
+        li role="presentation"
           a aria-controls="hire-founders" data-toggle="tab" href="#hire-founders" role="tab"
             .tab-icon.hire-founders-icon
             span.hidden-xs
               | Hire Founders
-        li role="presentation" 
+        li role="presentation"
           a aria-controls="invest-in-startups" data-toggle="tab" href="#invest-in-startups" role="tab"
             .tab-icon.invest-in-startups-icon
             span.hidden-xs
               | Invest in startups
-        li role="presentation" 
+        li role="presentation"
           a aria-controls="build-startup-pipeline" data-toggle="tab" href="#build-startup-pipeline" role="tab"
             .tab-icon.accelerate-icon
             span.hidden-xs
@@ -49,10 +51,8 @@
                 ' Our teams usually have full-stack developers, mobile-focused engineers and data analysts.
                 ' The best part? All of their work is public
                 = link_to 'through our timelines.', startups_path
-              button#acquihire-teams-btn.btn.talent-action-btn.white-action.text-uppercase data-target=".invest-hire-modal" data-toggle="modal"
+              button.btn.talent-action-btn.white-action.text-uppercase data-selection='acquihiring_teams'
                 | Acquihire Teams
-
-              = render 'invest_hire_form'
 
         #hire-founders.tab-pane.fade.in role="tabpanel"
           .row
@@ -64,12 +64,12 @@
                 | have hired great founders from SV.CO.
               p.font-weight-300
                 ' We work with some of the best young founders in India.
-                | Hire Android, iOS &amp; Backend engineers who have built 
-                | <em>real products</em> and have industry knowhow. We also 
+                | Hire Android, iOS &amp; Backend engineers who have built
+                | <em>real products</em> and have industry knowhow. We also
                 ' try to match founders&#8217; deep interests with an industy sector
                 ' so you get people who are deeply passionate about the work
                 ' you do.
-              button.btn.talent-action-btn.white-action.text-uppercase
+              button.btn.talent-action-btn.white-action.text-uppercase data-selection='hiring_founders'
                 | Hire Founders
         #invest-in-startups.tab-pane.fade.in role="tabpanel"
           .row
@@ -82,7 +82,7 @@
               p.font-weight-300
                 ' If you're an angel or seed investor, sign up with us to get access to budding startups.
                 | We'll put you in touch early and you can interact with them even as they build their products.
-              button.btn.talent-action-btn.white-action.text-uppercase
+              button.btn.talent-action-btn.white-action.text-uppercase data-selection='investing_in_startups'
                 | Invest in Startups
         #build-startup-pipeline.tab-pane.fade.in role="tabpanel"
           .row
@@ -96,9 +96,9 @@
               p.font-weight-300
                 ' If you're an accelerator based in India, get access to our startups to build a
                 ' strong pipeline of great companies. You can subscribe to our themed batches like
-                | <em>SaaS</em> or <em>FinTech</em> and get early updates on products our 
+                | <em>SaaS</em> or <em>FinTech</em> and get early updates on products our
                 | founders are building.
-              button.btn.talent-action-btn.white-action.text-uppercase
+              button.btn.talent-action-btn.white-action.text-uppercase data-selection='accelerating_startups'
                 | Build Startup Pipeline
 
 .graduates-join.text-center.clearfix
@@ -112,27 +112,27 @@
           .company-logo
             = image_tag 'talent/tally-logo.png'
           p
-            ' India's leading business management software product company has acquihired
-            | the founding team of 
+            ' India&rsquo;s leading business management software product company has acquihired
+            | the founding team of
             = link_to 'Z-Pay', startup_path('z-pay')
             ' .
         .slide-item
           .company-logo
             = image_tag 'talent/Freshdesk-logo.png', class: 'img-responsive'
           p
-            ' India's best known SaaS company,
+            ' India&rsquo;s best known SaaS company,
             ' has extended hiring offers to SV.CO founders.
         .slide-item
           .company-logo
             = image_tag 'talent/freecharge-logo.png'
           p
-            ' India’s largest m-commerce platform
+            ' India&rsquo;s largest m-commerce platform
             ' has extended hiring offers to SV.CO founders.
         .slide-item
           .company-logo
             = image_tag 'talent/askme-logo.png'
           p
-            ' India’s No.1 Local Search Engine has hired SV.CO founders
+            ' India&rsquo;s No.1 Local Search Engine has hired SV.CO founders
             ' and given funding offers to teams.
         .slide-item
           .company-logo
@@ -144,7 +144,7 @@
           .company-logo
             = image_tag 'talent/Citrus-logo.png', class: 'img-responsive'
           p
-            ' India's best payment stack for developers and instant payments for businesses
+            ' India&rsquo;s best payment stack for developers and instant payments for businesses
             | has extended hiring offers to SV.CO founders.
         .slide-item
           .company-logo
@@ -156,7 +156,7 @@
           .company-logo
             = image_tag 'talent/Flat6labs-logo.png', class: 'img-responsive'
           p
-            ' Startup Village incubatee Flip Technologies was part of Flat6Labs, Abudhabi, an accelerator 
+            ' Startup Village incubatee Flip Technologies was part of Flat6Labs, Abudhabi, an accelerator
             | program that fosters bright entrepreneurs.
         .slide-item
           .company-logo
@@ -170,7 +170,7 @@
           p
             ' SV incubate, Fin Robotics has raised Series A funding from
             | Kalaari Capital, an early-stage, technology-focused venture capital firm.
-  
+
 .talkto-founders.text-center
   .container
     h2.text-center.font-weight-300.graduate-subhead
@@ -190,7 +190,7 @@
               p
                 ' A half-hour per week commitment to our batch.
                 | Founders send you office hour requests with topics they'd like to discuss about.
-        
+
         .col-md-6.talks-ways-section
           .row
             .col-md-3.col-sm-3.ways-icon.broadcast-icon
@@ -200,7 +200,7 @@
               p
                 ' Present a topic to our Batch or be part of
                 | an AMA session with interesting questions from our young founders.
-    button.btn.talent-action-btn.green-action.text-uppercase
+    button.btn.talent-action-btn.green-action.text-uppercase data-selection='joining_svco_as_faculty'
       | Join as SV.CO Faculty
 .testimonial-container
   .container

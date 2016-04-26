@@ -81,7 +81,10 @@ Svapp::Application.routes.draw do
     get ':id/feedback/from_faculty/:token', action: 'feedback_from_faculty', as: 'feedback_from_faculty'
   end
 
-  get 'talent', as: 'talent', to: 'home#talent'
+  scope 'talent', as: 'talent', controller: 'talent' do
+    get '/', action: 'index'
+    post 'contact'
+  end
 
   get 'apply(/:batch)', as: 'apply', to: 'home#apply'
 

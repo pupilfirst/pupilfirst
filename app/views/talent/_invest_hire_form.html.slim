@@ -1,0 +1,49 @@
+.modal.action-form.fade.invest-hire-modal aria-hidden="true" aria-labelledby="Invest_Hire_Talents" role="dialog" tabindex="-1" data-show-on-load=(@show_form ? 'true' : nil)
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header.text-center
+        button.close type="button" data-dismiss="modal" aria-label="Close"
+          span aria-hidden="true"
+            | &times;
+        .action-form-icon.modal-title
+      .talent-form-popup
+        = simple_form_for @talent_form, url: talent_contact_url,
+          method: :post,
+          html: { class: 'form-horizontal' },
+          wrapper: :horizontal_form,
+          wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_file_input, boolean: :horizontal_boolean } do |f|
+
+          /.talent-action-checklist
+          /  h4.font-weight-300
+          /    | Tick all that you are interested in:
+          /  .check-box-group.hiring-founders-check
+          /    input#hiring-founders.talent-action-checkbox type="checkbox" name="talent_form[query_type][]" value="Hiring Founders"
+          /    label.talent-action-checkbox-label for="hiring-founders"
+          /      | Hiring Founders
+          /  .check-box-group.invest-startups-check
+          /    input#invest-startups.talent-action-checkbox type="checkbox" name="talent_form[query_type][]" value="Investing in Startups"
+          /    label.talent-action-checkbox-label for="invest-startups"
+          /      | Investing in Startups
+          /  .check-box-group.acquihiring-teams-check
+          /    input#acquihiring-teams.talent-action-checkbox type="checkbox" name="talent_form[query_type][]" value="Acquihiring Teams"
+          /    label.talent-action-checkbox-label for="acquihiring-teams"
+          /      | Acquihiring Teams
+          /  .check-box-group.accelerating-startups-check
+          /    input#accelerating-startups.talent-action-checkbox type="checkbox" name="talent_form[query_type][]" value="Accelerating Startups"
+          /    label.talent-action-checkbox-label for="accelerating-startups"
+          /      | Accelerating Startups
+          /  .check-box-group.join-as-faculty-check
+          /    input#join-as-faculty.talent-action-checkbox type="checkbox" name="talent_form[query_type][]" value="Joining SV.CO as Faculty"
+          /    label.talent-action-checkbox-label for="join-as-faculty"
+          /      | Joining SV.CO as Faculty
+
+          = f.input :query_type, label: 'Interested in', collection: TalentForm.valid_query_types, as: :check_boxes
+          = f.input :name, label: 'Name', input_html: { maxlength: 50 }
+          = f.input :email, type: 'email', label: 'Email address', input_html: { maxlength: 50 }
+          = f.input :mobile, label: 'Mobile number', input_html: { maxlength: 20 }
+          = f.input :organization, label: 'Organization', input_html: { maxlength: 50 }
+
+          .form-group
+            .col-sm-9.col-sm-offset-3
+              = button_tag type: :submit, class: 'btn btn-primary action-submit' do
+                | &nbsp;Submit

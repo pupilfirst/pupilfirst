@@ -9,6 +9,7 @@ class FacultyConnectSessionReminderJob < ActiveJob::Base
     @faculty_name = @connect_request.faculty.name
     @faculty_url = Rails.application.routes.url_helpers.faculty_url(@connect_request.faculty)
     @meeting_link = @connect_request.meeting_link
+    @questions = @connect_request.questions
 
     return unless job_is_relevant?
 
@@ -44,7 +45,7 @@ class FacultyConnectSessionReminderJob < ActiveJob::Base
 
   def reminder_for_faculty
     I18n.t('slack_notifications.connect_sessions.faculty_reminder',
-      startup_url: @startup_url, startup_name: @startup_name, meeting_link: @meeting_link)
+      startup_url: @startup_url, startup_name: @startup_name, meeting_link: @meeting_link, questions: @questions)
   end
 
   def reminder_for_ops_team

@@ -74,5 +74,15 @@
     font-family: serif;
     left: 10px;
     bottom: 17px;
+
+    &.full-width {
+      width: 93%;
+    }
+
+    .label {
+      font-family: "Source Sans Pro", sans-serif;
+      font-size: 70%;
+      margin-bottom: 5px;
+    }
   }
 }

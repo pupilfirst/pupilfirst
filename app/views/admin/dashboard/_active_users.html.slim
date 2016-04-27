@@ -25,6 +25,13 @@
     .user-count
       ' Total: #{total_mau_count} (#{"%g" % ("%0.1f" % total_mau_percentage)}%)
   .footer-spacer
-    .left-of-button
-      span.sparkline-tag #{wau_trend_in_total.join(', ')}
+    .left-of-button.full-width
+      div style="display: flex; justify-content: space-between;"
+        .label Slack (WAU)
+        .label Web (WAU)
+        .label Total (WAU)
+      div style="display: flex; justify-content: space-between;"
+        .sparkline-tag #{wau_trend_on_slack.join(', ')}
+        .sparkline-tag #{wau_trend_on_web.join(', ')}
+        .sparkline-tag #{wau_trend_in_total.join(', ')}
 

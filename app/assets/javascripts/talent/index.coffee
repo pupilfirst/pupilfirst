@@ -1,7 +1,7 @@
 setupCompanyCarousel = ->
   $(".company-carousel").slick
     slidesToShow: 4
-    slidesToScroll: 1
+    slidesToScroll: 2
     dots: true
     arrows: true
     responsive: [

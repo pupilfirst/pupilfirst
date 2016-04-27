@@ -80,7 +80,6 @@ gem 'acts-as-taggable-on', '~> 3.5' # Tag a single model on several contexts.
 gem 'will_paginate-bootstrap' #This gem integrates the Twitter Bootstrap pagination component with the will_paginate pagination gem.
 gem 'shortener' # generate short SV.CO urls for files, links etc
 gem 'titleize' # better titleizing, modifies Inflector.titleize from default rails
-gem 'owlcarousel-rails' # Touch enabled responsive carousel slider.
 
 # Rails assets!
 source 'https://rails-assets.org' do
@@ -93,6 +92,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-jquery.scrollTo' # Lightweight, cross-browser and highly customizable animated scrolling with jQuery
   gem 'rails-assets-intro.js' # A better way for new feature introduction and step-by-step users guide for your website and project.
   gem 'rails-assets-perfect-scrollbar' # Minimalistic but perfect custom scrollbar plugin
+  gem 'rails-assets-slick.js' # the last carousel you'll ever need http://kenwheeler.github.io/slick
 end
 
 group :development do

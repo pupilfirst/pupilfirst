@@ -28,11 +28,11 @@
 //= require jquery-stickit
 //= require jquery.scrollTo
 //= require ahoy
-//= require owl.carousel
 
 // Rails assets
 //= require intro.js/intro.js
 //= require perfect-scrollbar
+//= require slick-carousel/slick.js
 
 // Shared
 //= require _shared

@@ -4,10 +4,10 @@
 
   .content
     - founder_visits.order('visits.started_at DESC').limit(10).each do |visit|
-      div
-        ' &nbsp;#{visit.started_at.strftime('%b %e, %l:%M %p')}:
+      .recent-visit
+        ' &nbsp;#{visit.started_at.strftime('%b %e, %H:%M')}:
         = link_to visit.user.fullname, admin_founder_path(visit.user)
-        ' &nbsp;&mdash;
+        ' &nbsp;&dash;
         = link_to visit.user.startup.product_name, admin_startup_path(visit.user.startup)
 
   .footer-spacer

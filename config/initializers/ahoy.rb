@@ -11,5 +11,5 @@ module Ahoy
   end
 end
 
-# Do geocoding offline. https://github.com/ankane/ahoy#geocoding
-Ahoy.geocode = :async
+# Disable geocoding. It isn't working. Plus, we don't really need it at the moment.
+Ahoy.geocode = false

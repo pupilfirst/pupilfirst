@@ -10,14 +10,10 @@ footer
         .col-md-3.col-sm-6.footer-column
           .footer-links.clearfix
             .sitemap.pull-left
-              - if current_founder && current_founder.startup.present?
-                div
-                  a.top-nav-link href="#{startup_url(current_founder.startup)}" Timeline
               div
                 = link_to 'Startups', startups_url
-              - unless current_founder
-                div
-                  = link_to 'Invest & Hire', talent_path
+              div
+                = link_to 'Invest & Hire', talent_path
               div
                 = link_to 'Faculty', faculty_index_path
               div

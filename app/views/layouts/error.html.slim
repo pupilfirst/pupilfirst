@@ -41,6 +41,8 @@ html lang='en'
               li role="presentation"
                 a.top-nav-link href="http://playbook.sv.co" Playbook
               li role="presentation"
+                = link_to 'Invest & Hire', talent_path, class: 'top-nav-link'
+              li role="presentation"
                 = link_to 'About', about_path, class: 'top-nav-link'
               /li role="presentation"
               /  = link_to 'Startups', startups_path, class: 'top-nav-link'
@@ -65,13 +67,23 @@ html lang='en'
               ' Reach us at <strong>#{link_to 'help@sv.co', 'mailto:help@sv.co'}</strong>.
 
             .col-md-3.col-sm-6.footer-column
-              .sitemap
-                div
-                  a href="http://playbook.sv.co" Playbook
-                div
-                  a href="http://blog.sv.co" Blog
-                div
-                  a href="https://www.sv.co/startups" Startups
+              .footer-links.clearfix
+                .sitemap
+                  div
+                    a href="https://www.sv.co/startups" Startups
+                  div
+                    = link_to 'Invest & Hire', talent_path
+                  div
+                    = link_to 'Faculty', faculty_index_path
+                  div
+                    = link_to 'Library', resources_path
+                .sitemap.pull-left
+                  div
+                    = link_to 'About', about_path
+                  div
+                    a href="http://playbook.sv.co" Playbook
+                  div
+                    a href="http://blog.sv.co" Blog
               .img-opacity
                 span.social-link
                   a href='https://www.facebook.com/svdotco' target='_blank'

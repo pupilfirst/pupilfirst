@@ -29,6 +29,15 @@ setupTestimonialCarousel = ->
     dots: true
     arrows: true
     infinite: true
+    responsive: [
+      {
+        breakpoint: 992,
+        settings: {
+          arrows: false
+        }
+      }
+    ]
+
 
   testimonialCarousel.on 'beforeChange', (event, slick, currentSlide, nextSlide) ->
     previousSlide = $(".testimonial-slide-item[data-slick-index='#{currentSlide}']")

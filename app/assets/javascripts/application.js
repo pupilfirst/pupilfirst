@@ -41,6 +41,7 @@
 //= require home
 //= require faculty
 //= require startups
+//= require timeline_events
 //= require resources
 //= require about
 //= require transparency

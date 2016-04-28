@@ -1,18 +1,6 @@
-#= require masonry/dist/masonry.pkgd.js
-
 $(document).on 'page:change', ->
   $('#verified-icon').tooltip()
   $('.truncated-founder-name').tooltip()
-
-  $('.startup-grid').masonry
-    itemSelector: '.startup-event-entry'
-    columnWidth: '.startup-event-entry'
-
-  $('.tab-title').on 'click', ->
-    setTimeout ->
-      $('.startup-grid').masonry
-        itemSelector: '.startup-event-entry'
-        columnWidth: '.startup-event-entry'
 
 $(document).on 'page:change', ->
   $('#targets-tab').tabCollapse

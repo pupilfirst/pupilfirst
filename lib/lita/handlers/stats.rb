@@ -22,7 +22,7 @@ module Lita
         :expired_founder_targets,
         command: true,
         restrict_to: :sv_co_team,
-        help: { 'expired founder targets for batch N?' => I18n.t('slack.help') }
+        help: { 'expired founder targets for batch N?' => I18n.t('slack.help.expired_founder_targets') }
       )
 
       def state_of_batch(response)

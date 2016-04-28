@@ -489,7 +489,7 @@ GEM
       rails-assets-get-size (~> 2.0.2)
     rails-assets-perfect-scrollbar (0.6.10)
     rails-assets-pnotify (2.0.1)
-    rails-assets-slick.js (1.5.9)
+    rails-assets-slick-carousel (1.5.9)
       rails-assets-jquery (>= 1.7)
     rails-assets-trix (0.9.5)
     rails-deprecated_sanitizer (1.0.3)
@@ -723,7 +723,7 @@ DEPENDENCIES
   rails-assets-masonry!
   rails-assets-perfect-scrollbar!
   rails-assets-pnotify!
-  rails-assets-slick.js!
+  rails-assets-slick-carousel!
   rails-assets-trix!
   rails_12factor
   react-rails

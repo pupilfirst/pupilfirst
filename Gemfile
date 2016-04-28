@@ -92,7 +92,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-jquery.scrollTo' # Lightweight, cross-browser and highly customizable animated scrolling with jQuery
   gem 'rails-assets-intro.js' # A better way for new feature introduction and step-by-step users guide for your website and project.
   gem 'rails-assets-perfect-scrollbar' # Minimalistic but perfect custom scrollbar plugin
-  gem 'rails-assets-slick.js' # the last carousel you'll ever need http://kenwheeler.github.io/slick
+  gem 'rails-assets-slick-carousel' # the last carousel you'll ever need http://kenwheeler.github.io/slick
 end
 
 group :development do

@@ -49,7 +49,7 @@ class AllTargetNotificationsJob < ActiveJob::Base
   end
 
   def details_as_slack_message
-    assignee = @target.assignee.is_a?(Startup) ? 'your startup ' + startup.product_name : 'you'
+    assignee = @target.assignee.is_a?(Startup) ? "your startup #{@target.assignee.product_name}" : 'you'
     message = I18n.t('slack_notifications.targets.new_target.salutation', assigner: @assigner, assignee: assignee, startup_url: @startup_url, title: @title)
     message += I18n.t('slack_notifications.targets.new_target.description', description: @description)
 

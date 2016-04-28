@@ -4,6 +4,28 @@ module ActiveAdmin
       @batch_selected ||= params[:batch].present? ? Batch.find(params[:batch]) : Batch.current_or_last
     end
 
+    def days_elapsed
+      (Time.now.to_date - batch_selected.start_date.to_date).to_i
+    end
+
+    def batch_duration
+      (batch_selected.end_date.to_date - batch_selected.start_date.to_date).to_i
+    end
+
+    def percentage_completed_days
+      ((days_elapsed.to_f / batch_duration) * 100).to_i
+    end
+
+    def batch_progress_text
+      if batch_selected.start_date > Time.now
+        "Batch starting on #{batch_selected.start_date.strftime('%B %e')}"
+      elsif batch_selected.end_date < Time.now
+        "Batch ended on #{batch_selected.end_date.strftime('%B %e')}"
+      else
+        "Day #{days_elapsed} of #{batch_duration} — #{percentage_completed_days}% of Program Complete"
+      end
+    end
+
     def total_founder_count
       Founder.find_by_batch(batch_selected).count
     end

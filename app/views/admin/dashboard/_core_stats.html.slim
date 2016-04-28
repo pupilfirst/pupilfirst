@@ -1,7 +1,9 @@
 .dashboard-item
-  .heading Active Users (On Slack and Web)
+  .heading Core Stats
 
   .content
+    h6 #{batch_progress_text}
+    hr
     h6 Today
     .user-count
       ' Slack: #{dau_on_slack.count} (#{"%g" % ("%0.1f" % percentage_dau_on_slack)}%)
@@ -10,7 +12,7 @@
     .user-count
       ' Total: #{total_dau_count} (#{"%g" % ("%0.1f" % total_dau_percentage)}%)
     .clearfix
-    h6 Weekly (#{Time.now.beginning_of_week.strftime('%b %e')} - Today)
+    h6 Weekly (#{Time.now.beginning_of_week.strftime('%B %e')} - Today)
     .user-count
       ' Slack: #{wau_on_slack.count} (#{"%g" % ("%0.1f" % percentage_wau_on_slack)}%)
     .user-count

@@ -1,5 +1,5 @@
 $(document).on 'page:change', ->
-  $('#sidebar').stickit
+  $('#transparency-sidebar').stickit
     top: 100
     extraHeight: -30
 
@@ -20,7 +20,7 @@ $(document).on 'page:change', ->
         $(this).addClass 'active'
         navElement.find('a[href="#' + $(this).attr('id') + '"]').addClass 'active'
 
-  $('#sidebar a').click (event) ->
+  $('#transparency-sidebar a').click (event) ->
     event.preventDefault()
     $.scrollTo $(this).attr('href'), 500, offset: -95
     $('.active').removeClass 'active'

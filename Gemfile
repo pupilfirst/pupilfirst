@@ -129,4 +129,4 @@ group :production do
   gem 'rails_12factor' # Makes running your Rails app easier. Based on the ideas behind 12factor.net.
 end
 
-ruby '2.3.0'
+ruby '2.3.1'

@@ -70,7 +70,7 @@ class TimelineEventVerificationNotificationJob < ActiveJob::Base
   end
 
   def links_attached_notice
-    return '' unless @timeline_event.links.present?
+    return '' unless @timeline_event.public_link?
 
     notice = "*Public Links attached:*\n"
     @timeline_event.links.each.with_index(1) do |link, index|

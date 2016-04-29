@@ -277,7 +277,9 @@ h1.product-name {
   padding: 0;
   margin-top: 10px;
 
-  .learn-more-btn, .download-rubric-btn {
+  .learn-more-btn, .download-rubric-btn, .review-test-btn {
+    margin-right: 10px;
+    margin-top: 10px;
     border-radius: 5px;
     background-color: white;
     font-weight: 400;
@@ -297,8 +299,17 @@ h1.product-name {
       border-color: #18558a;
     }
   }
+  .review-test-btn {
+    color: #337ab7;
+    border-color: #408bcc;
+
+    &:hover {
+      background-color: #18558a;
+      color: white;
+      border-color: #18558a;
+    }
+  }
   .download-rubric-btn {
-    margin-left: 10px;
     color: #7f975c;
     border-color: #7f975c;
 
@@ -306,10 +317,6 @@ h1.product-name {
       background-color: #617d38;
       color: white;
       border-color: #617d38;
-    }
-    @media screen and (max-width: $screen-xs-max) {
-      margin-left: 0;
-      margin-top: 10px;
     }
   }
 }

@@ -44,8 +44,11 @@ class TimelineEvent < ActiveRecord::Base
     message: "must be within #{MAX_DESCRIPTION_CHARACTERS} characters"
 
   before_validation do
+    if verified_status_changed?
+      self.verified_at = Time.now if verified? || needs_improvement?
+      self.verified_at = nil if pending? || not_accepted?
+    end
     self.verified_status ||= VERIFIED_STATUS_PENDING
-    self.verified_at = nil unless needs_improvement? || verified?
   end
 
   validates_presence_of :verified_at, if: proc { verified? || needs_improvement? }

@@ -206,6 +206,7 @@ http {
             passenger_enabled on;
         }
         server_tokens off;
+        add_header X-Content-Type-Options nosniff;
     }
     passenger_show_version_in_header off;
     passenger_pre_start http://<%= nginx_listen_address(app) %>;

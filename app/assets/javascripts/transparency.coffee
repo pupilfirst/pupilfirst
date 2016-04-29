@@ -20,7 +20,7 @@ $(document).on 'page:change', ->
         $(this).addClass 'active'
         navElement.find('a[href="#' + $(this).attr('id') + '"]').addClass 'active'
 
-  $('#transparency-sidebar a').click (event) ->
+  $('#transparency-sidebar').find('a').click (event) ->
     event.preventDefault()
     $.scrollTo $(this).attr('href'), 500, offset: -95
     $('.active').removeClass 'active'

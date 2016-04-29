@@ -15,21 +15,9 @@ footer {
     font-weight: 300;
     line-height: 25px;
 
-    .social-link {
-      padding-right: 10px;
-      transition: all 300ms cubic-bezier(.25, .25, .75, .75);
-
-      &:hover {
-        opacity: .6;
-      }
-    }
-
     .sitemap {
       margin-bottom: 10px;
       width: 50%;
-    }
-    .img-opacity {
-      margin-bottom: 10px;
     }
 
     .footer-column {
@@ -60,6 +48,26 @@ footer {
     padding: 15px 0 10px;
     font-size: 12px;
 
+    .img-opacity {
+      text-align: center;
+
+      .social-link {
+        a {
+          display: inline-block;
+          padding: 0 8px;
+          transition: all 300ms cubic-bezier(.25, .25, .75, .75);
+          color: $light-grey-text;
+
+          &:hover {
+            opacity: .6;
+          }
+        }
+      }
+      @media (max-width: $screen-xs-max) {
+        text-align: left;
+        margin: 0 0 10px;
+      }
+    }
     .footer-right {
       text-align: right;
 

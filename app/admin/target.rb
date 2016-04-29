@@ -2,7 +2,7 @@ ActiveAdmin.register Target do
   permit_params :assignee_id, :assignee_type, :assigner_id, :role, :status, :title, :description, :status, :resource_url,
     :completion_instructions, :due_date_date, :due_date_time_hour, :due_date_time_minute, :slideshow_embed,
     :completed_at_date, :completed_at_time_hour, :completed_at_time_minute, :completion_comment, :rubric,
-    :remote_rubric_url, :target_template_id
+    :remote_rubric_url, :target_template_id, :review_test_embed
 
   scope :all
   scope :pending
@@ -68,7 +68,7 @@ ActiveAdmin.register Target do
           resource_url: target.resource_url, completion_instructions: target.completion_instructions,
           due_date_date: target.due_date_date, due_date_time_hour: target.due_date.hour,
           due_date_time_minute: target.due_date.min, slideshow_embed: target.slideshow_embed,
-          assigner_id: target.assigner.id
+          assigner_id: target.assigner.id, review_test_embed: target.review_test_embed
         }
       )
     )
@@ -153,6 +153,7 @@ ActiveAdmin.register Target do
       end
 
       row :slideshow_embed
+      row :review_test_embed
       row :resource_url
       row :completion_instructions
       row :due_date

@@ -24,6 +24,7 @@ class TargetTemplate < ActiveRecord::Base
       completion_instructions: completion_instructions,
       due_date: due_date(batch: batch),
       slideshow_embed: slideshow_embed,
+      review_test_embed: review_test_embed,
       target_template: self
     )
   end

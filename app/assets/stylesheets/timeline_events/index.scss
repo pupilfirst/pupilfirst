@@ -41,6 +41,11 @@
     .tab-title {
       font-weight: 600;
       outline: 0;
+
+      @media (max-width: $screen-xs-max) {
+        font-size: 11px;
+        padding: 10px 8px;
+      }
     }
 
     li.active {

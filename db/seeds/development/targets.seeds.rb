@@ -11,7 +11,7 @@ after 'development:startups' do
 
   targets_list.each do |startup, assigner, role, title, description, status|
     Target.create!(
-      startup: avengers_startup,
+      assignee: startup,
       assigner: assigner,
       role: role,
       title: title,

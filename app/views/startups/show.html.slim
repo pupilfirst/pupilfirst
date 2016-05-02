@@ -283,7 +283,7 @@
             = image_tag 'timeline/dash.png'
             br
             a#read-from-beginning href="#begin"  Read from the beginning.
-          ul#timeline-list
+          #timeline-list.timeline-container
             - events_for_display.each do |event|
               / Do not display hidden events to public.
               - next if event.hidden_from?(current_founder)
@@ -344,10 +344,10 @@
                         i.fa.fa-pencil
                         | &nbsp;Edit
               - else
-                .timeline id="event-#{event.id}"
-                  li style="padding:0" class="timeline#{cycle '', '-inverted', name: 'card_position'}"
+                .timeline.timeline-item.col-md-6.col-sm-6.col-xs-12 id="event-#{event.id}"
+                  div style="padding:0" class="timeline#{cycle '', '-inverted', name: 'card_position'}"
                     .timeline-badge class="color#{cycle *((1..14).to_a)}"
-                      = image_tag "#{event.timeline_event_type.badge_url}", width: '70'
+                      = image_tag "#{event.timeline_event_type.badge_url}", class: 'img-responsive'
                     .timeline-panel
                       - if event.founder_event?
                         .hidden-marker href="#" data-toggle="tooltip" title="This event is not visible on the public startup timeline."

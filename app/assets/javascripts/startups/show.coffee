@@ -2,6 +2,23 @@ $(document).on 'page:change', ->
   $('#verified-icon').tooltip()
   $('.truncated-founder-name').tooltip()
 
+  $('.timeline-container').masonry
+    itemSelector: '.timeline-item'
+
+Align_Badge = ->
+  timelineItems = $('.timeline-container').find('.timeline-item')
+  $.each timelineItems, (index, item) ->
+    timelineItem = $(item)
+    timelineBadge = timelineItem.find('.timeline-badge')
+    posLeft = timelineItem.css('left')
+
+    if posLeft == '0px'
+      timelineBadge.addClass('right-aligned')
+      timelineItem.addClass('left-item')
+    else
+      timelineBadge.addClass('left-aligned')
+      timelineItem.addClass('right-item')
+
 $(document).on 'page:change', ->
   $('#targets-tab').tabCollapse
     tabsClass: 'hidden-md hidden-sm hidden-xs',
@@ -438,3 +455,4 @@ $(document).on 'page:change', markSelectedAttachments
 $(document).on 'page:change', updateAttachmentsTabTitle
 $(document).on 'page:change', giveATour
 $(document).on 'page:change', handleTourButtonClick
+$(document).on 'page:change', Align_Badge

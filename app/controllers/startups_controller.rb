@@ -3,11 +3,6 @@ class StartupsController < ApplicationController
   before_filter :restrict_to_startup_founders, only: [:edit, :update, :add_founder]
   before_filter :restrict_to_startup_admin, only: [:remove_founder, :create]
 
-  after_filter only: [:create] do
-    @startup.founders << current_founder
-    @startup.save
-  end
-
   # GET /startups
   def index
     load_startups

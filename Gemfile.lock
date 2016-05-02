@@ -394,6 +394,7 @@ GEM
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
+    kramdown (1.11.1)
     launchy (2.4.3)
       addressable (~> 2.3)
     letter_opener (1.4.1)
@@ -705,6 +706,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   just-datetime-picker
+  kramdown
   letter_opener
   lita-slack!
   logstash-logger
@@ -752,5 +754,8 @@ DEPENDENCIES
   webmock
   will_paginate-bootstrap
 
+RUBY VERSION
+   ruby 2.3.1p112
+
 BUNDLED WITH
-   1.11.2
+   1.12.0

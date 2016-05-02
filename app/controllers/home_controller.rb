@@ -22,4 +22,9 @@ class HomeController < ApplicationController
   def not_found
     raise_not_found
   end
+
+  # GET /changelog
+  def changelog
+    @changelog = File.read(File.absolute_path(Rails.root.join('CHANGELOG.md')))
+  end
 end

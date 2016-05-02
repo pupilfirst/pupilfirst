@@ -56,39 +56,73 @@ class ApplicationController < ActionController::Base
 
   # Set headers for CSP. Be careful when changing this.
   def set_content_security_policy
-    image_sources = "img-src 'self' data: " + [
-      'https://www.google-analytics.com https://blog.sv.co https://www.startatsv.com http://www.startatsv.com',
-      'https://sv-assets.sv.co https://secure.gravatar.com https://uploaded-assets.sv.co hn.inspectlet.com'
-    ].join(' ') + ';'
+    response.headers['Content-Security-Policy'] = ("default-src 'none'; " + csp_directives.join(' '))
+  end
 
-    resource = { media: 'https://s3.amazonaws.com/private-assets-sv-co/' }
-    typeform = { frame: 'https://svlabs.typeform.com' }
-    slideshare = { frame: 'slideshare.net *.slideshare.net' }
-    speakerdeck = { frame: 'speakerdeck.com *.speakerdeck.com' }
-    google_form = { frame: 'google.com *.google.com' }
+  private
 
-    csp_directives = [
+  def csp_directives
+    [
       image_sources,
       script_sources,
       "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://sv-assets.sv.co;",
       "connect-src 'self' hn.inspectlet.com wss://inspectletws.herokuapp.com;",
       "font-src 'self' fonts.gstatic.com https://sv-assets.sv.co;",
       'child-src https://www.youtube.com;',
-      'frame-src https://www.youtube.com https://svlabs-public.herokuapp.com https://www.google.com ' \
-        "#{typeform[:frame]} #{slideshare[:frame]} #{speakerdeck[:frame]} #{google_form[:frame]};",
-      "media-src 'self' #{resource[:media]};"
+      frame_sources,
+      "media-src 'self' #{resource_csp[:media]};"
     ]
-
-    response.headers['Content-Security-Policy'] = "default-src 'none'; " + csp_directives.join(' ')
   end
 
-  private
+  def resource_csp
+    { media: 'https://s3.amazonaws.com/private-assets-sv-co/' }
+  end
+
+  def typeform_csp
+    { frame: 'https://svlabs.typeform.com' }
+  end
+
+  def slideshare_csp
+    { frame: 'slideshare.net *.slideshare.net' }
+  end
+
+  def speakerdeck_csp
+    { frame: 'speakerdeck.com *.speakerdeck.com' }
+  end
+
+  def google_form_csp
+    { frame: 'google.com *.google.com' }
+  end
+
+  def recaptcha_csp
+    { script: 'www.google.com www.gstatic.com apis.google.com' }
+  end
+
+  def youtube_csp
+    { frame: 'https://www.youtube.com' }
+  end
+
+  def frame_sources
+    <<~FRAME_SOURCES.squish
+      frame-src
+      #{youtube_csp[:frame]} https://svlabs-public.herokuapp.com https://www.google.com #{typeform_csp[:frame]}
+      #{slideshare_csp[:frame]} #{speakerdeck_csp[:frame]} #{google_form_csp[:frame]};
+    FRAME_SOURCES
+  end
+
+  def image_sources
+    <<~IMAGE_SOURCES.squish
+      img-src
+      'self' data: https://www.google-analytics.com https://blog.sv.co http://www.startatsv.com https://sv-assets.sv.co
+      https://secure.gravatar.com https://uploaded-assets.sv.co hn.inspectlet.com;
+    IMAGE_SOURCES
+  end
 
   def script_sources
-    recaptcha = 'www.google.com www.gstatic.com apis.google.com'
-
-    "script-src 'self' https://ajax.googleapis.com https://www.google-analytics.com " \
-      'https://blog.sv.co https://www.youtube.com http://www.startatsv.com https://sv-assets.sv.co ' \
-      "cdn.inspectlet.com #{recaptcha};"
+    <<~SCRIPT_SOURCES.squish
+      script-src
+      'self' https://ajax.googleapis.com https://www.google-analytics.com https://blog.sv.co https://www.youtube.com
+      http://www.startatsv.com https://sv-assets.sv.co cdn.inspectlet.com #{recaptcha_csp[:script]};
+    SCRIPT_SOURCES
   end
 end

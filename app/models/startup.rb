@@ -569,7 +569,7 @@ class Startup < ActiveRecord::Base
 
   # Use registration_token to link founders.
   def assign_founders
-    raise 'registration_token missing!' if registration_token.blank?
+    return if registration_token.blank?
 
     # Assign founders to startup, and wipe the startup token to indicate completion of this event.
     Founder.where(startup_token: registration_token).update_all(startup_id: id, startup_token: nil)

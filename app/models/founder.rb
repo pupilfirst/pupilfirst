@@ -49,6 +49,11 @@ class Founder < ActiveRecord::Base
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
 
+  # Founders active last week
+  scope :active_on_slack, -> { where(id: PublicSlackMessage.last_week.pluck(:founder_id).uniq) }
+  scope :active_on_web, -> { where(id: Visit.last_week.pluck(:user_id).uniq) }
+  scope :recently_inactive, -> { where.not(id: active_on_slack).where.not(id: active_on_web) }
+
   def self.ransackable_scopes(_auth)
     %i(ransack_tagged_with)
   end

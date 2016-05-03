@@ -1,0 +1,12 @@
+.dashboard-item
+  .heading Founders - Inactive
+
+  .content
+    ol
+      - batch_selected.founders.recently_inactive.limit(10).each do |founder|
+        li = link_to founder.fullname, admin_founder_path(founder)
+
+  .footer-space
+
+  a.button.view-all href=admin_founders_path(scope: 'recently_inactive', q: {startup_batch_id_eq: batch_selected.id })
+    | View All (#{batch_selected.founders.recently_inactive.count})

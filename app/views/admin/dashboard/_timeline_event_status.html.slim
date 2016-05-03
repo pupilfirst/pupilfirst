@@ -1,6 +1,6 @@
 - TimelineEvent.valid_verified_status.each do |verified_status|
   .dashboard-item
-    - timeline_events = TimelineEvent.for_batch(batch_selected).where(verified_status: verified_status).order('verified_at DESC').includes(:timeline_event_type, :startup)
+    - timeline_events = TimelineEvent.not_dropped_out.for_batch(batch_selected).where(verified_status: verified_status).order('verified_at DESC').includes(:timeline_event_type, :startup)
     .heading Timeline Events - #{verified_status}
 
     .content

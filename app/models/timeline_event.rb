@@ -57,6 +57,7 @@ class TimelineEvent < ActiveRecord::Base
 
   scope :end_of_iteration_events, -> { where(timeline_event_type: TimelineEventType.end_iteration) }
   scope :batched, -> { joins(:startup).merge(Startup.batched) }
+  scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }
   scope :verified, -> { where(verified_status: VERIFIED_STATUS_VERIFIED) }
   scope :pending, -> { where(verified_status: VERIFIED_STATUS_PENDING) }
   scope :needs_improvement, -> { where(verified_status: VERIFIED_STATUS_NEEDS_IMPROVEMENT) }

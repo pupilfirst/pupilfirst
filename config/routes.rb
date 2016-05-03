@@ -96,6 +96,8 @@ Svapp::Application.routes.draw do
 
   root 'home#index'
 
+  get 'changelog', to: 'home#changelog'
+
   # custom defined 404 route to use with shortener gem's config
   get '/404', to: 'home#not_found'
 

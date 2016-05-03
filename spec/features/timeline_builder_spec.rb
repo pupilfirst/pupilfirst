@@ -121,6 +121,8 @@ feature 'Timeline Builder' do
         page.find("#event-#{unverified_timeline_event.id} .edit-link").click
 
         # Turbolinks is in effect, so wait for event to load.
+        expect(page).to have_selector('form.edit_timeline_event')
+
         expect(page).to have_selector('textarea', text: unverified_timeline_event.description)
 
         fill_in 'timeline_event_description', with: new_description
@@ -143,6 +145,8 @@ feature 'Timeline Builder' do
         page.find("#event-#{unverified_timeline_event.id} .edit-link").click
 
         # Wait for page to load.
+        expect(page).to have_selector('form.edit_timeline_event')
+
         expect(page).to have_selector('textarea', text: unverified_timeline_event.description)
         # Add two links, one private and one public.
         page.find('a', text: 'Add Links and Files').click
@@ -194,6 +198,9 @@ feature 'Timeline Builder' do
         scenario 'Founder deletes link', js: true do
           visit startup_path(startup)
           page.find("#event-#{timeline_event.id} .edit-link").click
+
+          # Wait for Tubrolinks load.
+          expect(page).to have_selector('form.edit_timeline_event')
           expect(page.find('#add-link')).to have_text("#{timeline_event_file.title} (+1)")
           page.find('#add-link').click
           expect(page).to have_text('Links and Files')
@@ -229,6 +236,10 @@ feature 'Timeline Builder' do
         scenario 'Founder deletes file', js: true do
           visit startup_path(startup)
           page.find("#event-#{timeline_event.id} .edit-link").click
+
+          # Wait for page to load.
+          expect(page).to have_selector('form.edit_timeline_event')
+
           expect(page.find('#add-link')).to have_text("#{timeline_event_file.title} (+1)")
           page.find('#add-link').click
 
@@ -265,6 +276,10 @@ feature 'Timeline Builder' do
         scenario 'Founder edits one of the links', js: true do
           visit startup_path(startup)
           page.find("#event-#{timeline_event.id} .edit-link").click
+
+          # Wait for page to load.
+          expect(page).to have_selector('form.edit_timeline_event')
+
           expect(page.find('#add-link')).to have_text("#{timeline_event_file.title} (+1)")
           page.find('#add-link').click
           first_link = page.find('.list-group-item', match: :first)
@@ -314,6 +329,10 @@ feature 'Timeline Builder' do
         scenario 'Founder adds a third and final link', js: true do
           visit startup_path(startup)
           page.find("#event-#{timeline_event.id} .edit-link").click
+
+          # Wait for page to load.
+          expect(page).to have_selector('form.edit_timeline_event')
+
           expect(page.find('#add-link')).to have_text("#{timeline_event_file.title} (+1)")
           page.find('#add-link').click
           click_on 'Add a link'

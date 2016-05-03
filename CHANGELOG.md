@@ -1,9 +1,49 @@
+## 2 May, 2016
+
+### Features
+
+  - A _Graduation_ page has been created to showcase our
+    graduation efforts & results.
+  - Vocalist includes questions asked by founders in the
+    reminder for faculty members about imminent connect session.
+
+### Performance
+
+  - We've switched our CDN from Cloudfront to Cloudflare to
+    take advantage of [CNAME flattening](https://sv.co/tvyfw).
+    This lets us bypass the CDN on dynamic page requests for
+    considerable speed-up. Also, Cloudflare is way cooler. B-)
+
+### Visual
+
+  - Minor changes to site's header and footer, re-organizing
+    links, and such.
+
+### Bugfixes
+
+  - Vocalist no longer includes an empty _Links attached_
+    postfix when links aren't available on a timeline event
+    notification.
+  - After editing a timeline event and submitting changes,
+    the form now clears instead of remaining in _edit mode_.
+
+## 25 April, 2016
+
+### Features
+
+  - Vocalist now responds to a bunch of commands that makes her
+    fetch basic information about a batch, for use as intro
+    during weekly _town hall_ meetings.
+  - Founder registration flow has been reworked. On-boarding a
+    team of founders is much more straight-forward; the team
+    lead is asked to enter startup information right after user
+    registration, and co-founders being automatically linked
+    once that's done.
+
 ## 18 April, 2016
 
 ### Features
 
-  - A _Graduation_ page has been created to showcase our graduation
-    efforts & results.
   - Vocalist now responds to `targets?` command, responding with
     list of targets. She can also supply more information with
     `targets info [NUMBER]`

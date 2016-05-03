@@ -68,10 +68,11 @@ footer {
         margin: 0 0 10px;
       }
     }
+
     .footer-right {
       text-align: right;
 
-      @media screen and (max-width: 767px) {
+      @media screen and (max-width: $screen-xs-max) {
         text-align: left;
       }
 
@@ -84,6 +85,13 @@ footer {
           opacity: .8;
           cursor: pointer;
         }
+      }
+    }
+
+    p, .footer-right {
+      @media screen and (min-width: $screen-sm-min) {
+        margin-bottom: 0;
+        line-height: 25px;
       }
     }
   }

@@ -38,7 +38,7 @@ ActiveAdmin.register TargetTemplate do
     target_template = TargetTemplate.find(params[:id])
     batch = Batch.find(params[:batch][:id])
 
-    assignees = target_template.founder_role? ? batch.founders : batch.startups
+    assignees = target_template.founder_role? ? batch.founders.not_dropped_out : batch.startups.not_dropped_out
     targets_as_string = target_template.founder_role? ? 'founders' : 'startups'
 
     assignees.each do |assignee|
@@ -56,7 +56,7 @@ ActiveAdmin.register TargetTemplate do
     batch = Batch.find(inputs[:batch])
 
     TargetTemplate.where(id: ids).each do |target_template|
-      assignees = target_template.founder_role? ? batch.founders : batch.startups
+      assignees = target_template.founder_role? ? batch.founders.not_dropped_out : batch.startups.not_dropped_out
 
       assignees.each do |assignee|
         target_template.create_target!(assignee, batch: batch)

@@ -5,15 +5,15 @@ module ActiveAdmin
     end
 
     def days_elapsed
-      (Time.now.to_date - batch_selected.start_date.to_date).to_i
+      (Date.today - batch_selected.start_date).to_i
     end
 
     def batch_duration
-      (batch_selected.end_date.to_date - batch_selected.start_date.to_date).to_i
+      (batch_selected.end_date - batch_selected.start_date).to_i
     end
 
     def percentage_completed_days
-      ((days_elapsed.to_f / batch_duration) * 100).to_i
+      ((days_elapsed.to_f / batch_duration) * 100).round
     end
 
     def batch_progress_text

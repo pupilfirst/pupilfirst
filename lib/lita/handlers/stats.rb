@@ -6,7 +6,7 @@ module Lita
         :state_of_batch,
         command: true,
         restrict_to: :sv_co_team,
-        help: { 'state of SV.CO for batch N?' => I18n.t('slack.help.state_of_svco') }
+        help: { 'state of SV.CO for batch NUMBER?' => I18n.t('slack.help.state_of_svco') }
       )
 
       route(
@@ -14,7 +14,7 @@ module Lita
         :expired_team_targets,
         command: true,
         restrict_to: :sv_co_team,
-        help: { 'expired team targets for batch N?' => I18n.t('slack.help.expired_team_targets') }
+        help: { 'expired team targets for batch NUMBER?' => I18n.t('slack.help.expired_team_targets') }
       )
 
       route(
@@ -22,7 +22,7 @@ module Lita
         :expired_founder_targets,
         command: true,
         restrict_to: :sv_co_team,
-        help: { 'expired founder targets for batch N?' => I18n.t('slack.help.expired_founder_targets') }
+        help: { 'expired founder targets for batch NUMBER?' => I18n.t('slack.help.expired_founder_targets') }
       )
 
       def state_of_batch(response)

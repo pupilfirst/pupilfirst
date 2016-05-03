@@ -83,14 +83,14 @@ class Startup < ActiveRecord::Base
       .pluck(:id)
 
     # Filter them out.
-    batched.approved.where.not(id: startups_with_karma_ids)
+    batched.approved.not_dropped_out.where.not(id: startups_with_karma_ids)
   end
 
   def self.endangered
     startups_with_karma_ids = joins(:karma_points)
       .where(karma_points: { created_at: 3.weeks.ago..Time.now })
       .pluck(:id)
-    batched.approved.where.not(id: startups_with_karma_ids)
+    batched.approved.not_dropped_out.where.not(id: startups_with_karma_ids)
   end
 
   # Batched & approved startups that don't have un-expired targets.
@@ -102,7 +102,7 @@ class Startup < ActiveRecord::Base
     without_live_targets_ids = without_live_targets_ids.where('targets.due_date IS NULL OR targets.due_date > ?', Time.now)
 
     # All except the above.
-    batched.approved.where.not(id: without_live_targets_ids)
+    batched.approved.not_dropped_out.where.not(id: without_live_targets_ids)
   end
 
   def self.with_targets_completed_last_week

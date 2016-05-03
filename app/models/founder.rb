@@ -35,6 +35,7 @@ class Founder < ActiveRecord::Base
   has_many :targets, dependent: :destroy, as: :assignee
 
   scope :batched, -> { joins(:startup).merge(Startup.batched) }
+  scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }
   # TODO: Do we need this anymore ?
   scope :student_entrepreneurs, -> { where.not(university_id: nil) }

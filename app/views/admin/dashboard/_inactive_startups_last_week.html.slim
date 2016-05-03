@@ -15,5 +15,5 @@
   .left-of-button
     span.sparkline-tag #{trend.join(', ')}
 
-  a.button.view-all href=admin_startups_path(scope: 'inactive', q: {batch_id_equals: batch_selected.id})
+  a.button.view-all href=admin_startups_path(scope: 'inactive_for_week', q: {batch_id_equals: batch_selected.id })
     | View All (#{inactive_startups.count})

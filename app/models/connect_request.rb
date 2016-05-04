@@ -63,17 +63,17 @@ class ConnectRequest < ActiveRecord::Base
 
   def create_faculty_connect_session_rating_job
     if Rails.env.production?
-      FacultyConnectSessionRatingJob.set(wait_until: connect_slot.slot_at + 45.minutes).perform_later(self)
+      FacultyConnectSessionRatingJob.set(wait_until: connect_slot.slot_at + 45.minutes).perform_later(id)
     else
-      FacultyConnectSessionRatingJob.perform_later(self)
+      FacultyConnectSessionRatingJob.perform_later(id)
     end
   end
 
   def create_faculty_connect_session_reminder_job
     if Rails.env.production?
-      FacultyConnectSessionReminderJob.set(wait_until: connect_slot.slot_at - 30.minutes).perform_later(self)
+      FacultyConnectSessionReminderJob.set(wait_until: connect_slot.slot_at - 30.minutes).perform_later(id)
     else
-      FacultyConnectSessionReminderJob.perform_later(self)
+      FacultyConnectSessionReminderJob.perform_later(id)
     end
   end
 

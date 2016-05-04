@@ -15,22 +15,23 @@
             tbody
               tr.row
                 th Title
-                td #{template.title}
+                td
+                  = link_to template.title, admin_target_template_path(template)
               tr.row
                 th Days from Start
                 td #{template.days_from_start}
               tr.row
-                th Completed By
-                td #{assignees(template, :completed)}
+                th Completed
+                td #{assignees_list(template, status: :completed)}
               tr.row
-                th Pending For
-                td #{assignees(template, :pending)}
+                th Pending
+                td #{assignees_list(template, status: :pending)}
               tr.row
-                th Expired For
-                td #{assignees(template, :expired)}
+                th Expired
+                td #{assignees_list(template, status: :expired)}
               tr.row
-                th Extended For
-                td #{assignees_with_extension(template)}
+                th Extended
+                td #{assignees_list(template, status: :extended)}
 
 
 table.index_table.index

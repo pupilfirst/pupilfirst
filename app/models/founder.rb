@@ -425,12 +425,12 @@ class Founder < ActiveRecord::Base
 
   # method to return the list of active founders on slack for a given duration
   def self.active_founders_on_slack(since:, upto: Time.now, batch: Batch.current_or_last)
-    Founder.find_by_batch(batch).active_on_slack(since, upto).distinct
+    Founder.not_dropped_out.find_by_batch(batch).active_on_slack(since, upto).distinct
   end
 
   # method to return the list of active founders on web for a given duration
   def self.active_founders_on_web(since:, upto: Time.now, batch: Batch.current_or_last)
-    Founder.find_by_batch(batch).active_on_web(since, upto).distinct
+    Founder.not_dropped_out.find_by_batch(batch).active_on_web(since, upto).distinct
   end
 
   def any_targets?

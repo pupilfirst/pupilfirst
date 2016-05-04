@@ -26,17 +26,17 @@ module StartupsHelper
   end
 
   def pending_targets
-    current_founder.targets.pending + @startup.targets.pending
+    current_founder.targets.pending.order(due_date: 'desc') + @startup.targets.pending.order(due_date: 'desc')
   end
 
   # Only show expired targets that haven't been completed by founder already.
   def expired_targets
-    current_founder.targets.expired + @startup.targets.expired
+    current_founder.targets.expired.order(due_date: 'desc') + @startup.targets.expired.order(due_date: 'desc')
   end
 
   # Only show completed targets which were completed by the founder
   def completed_targets
-    current_founder.targets.completed + @startup.targets.completed
+    current_founder.targets.completed.order(completed_at: 'desc') + @startup.targets.completed.order(completed_at: 'desc')
   end
 
   def showcase_events_for_batch(batch)

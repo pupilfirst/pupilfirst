@@ -14,10 +14,10 @@ class Target < ActiveRecord::Base
 
   # The following definitions of pending and expired is naive. A correct check requires the use of the done_for_viewer?
   # method on individual targets by supplying the viewer.
-  scope :pending, -> { where(status: STATUS_PENDING).where('due_date >= ? OR due_date IS NULL', Time.now).order(due_date: 'desc') }
-  scope :expired, -> { where(status: STATUS_PENDING).where('due_date < ?', Time.now).order(due_date: 'desc') }
+  scope :pending, -> { where(status: STATUS_PENDING).where('due_date >= ? OR due_date IS NULL', Time.now) }
+  scope :expired, -> { where(status: STATUS_PENDING).where('due_date < ?', Time.now) }
 
-  scope :completed, -> { where(status: STATUS_DONE).order(completed_at: 'desc') }
+  scope :completed, -> { where(status: STATUS_DONE) }
   scope :founder, -> { where(role: ROLE_FOUNDER) }
   scope :not_target_roles, -> { where.not(role: target_roles) }
   scope :due_on, -> (date) { where(due_date: date.beginning_of_day..date.end_of_day) }

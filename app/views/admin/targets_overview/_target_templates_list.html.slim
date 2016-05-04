@@ -4,6 +4,35 @@
       li class="#{ (batch == batch_selected ? 'selected':'') + ' scope' }"
         a.table_tools_button href=admin_targets_overview_path(batch: batch) #{batch.name} Batch
 
+- if params[:template_id].present?
+  - template = TargetTemplate.find_by(id: params[:template_id])
+  - if template.present?
+    .panel
+      h3 Template Details
+      .panel_contents
+        .attributes_table
+          table
+            tbody
+              tr.row
+                th Title
+                td #{template.title}
+              tr.row
+                th Days from Start
+                td #{template.days_from_start}
+              tr.row
+                th Completed By
+                td #{assignees(template, :completed)}
+              tr.row
+                th Pending For
+                td #{assignees(template, :pending)}
+              tr.row
+                th Expired For
+                td #{assignees(template, :expired)}
+              tr.row
+                th Extended For
+                td #{assignees_with_extension(template)}
+
+
 table.index_table.index
   thead
     tr

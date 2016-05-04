@@ -1,8 +1,10 @@
 class FacultyConnectSessionRatingJob < ActiveJob::Base
   queue_as :default
 
-  def perform(connect_request)
-    return unless job_is_relevant?(connect_request)
+  def perform(connect_request_id)
+    @connect_request_id = connect_request_id
+
+    return unless job_is_relevant?
 
     # Check if the timing is still correct. If meeting had been rescheduled to the future, create a new job, otherwise
     # run immediately.
@@ -23,10 +25,14 @@ class FacultyConnectSessionRatingJob < ActiveJob::Base
 
   private
 
+  def connect_request
+    @connect_request ||= ConnectRequest.find_by id: @connect_request_id
+  end
+
   # Run the job only if associated startup and faculty are still present. Also, don't run the job if feedback mails
   # have already been sent, or if the connect request isn't in confirmed state.
-  def job_is_relevant?(connect_request)
-    (connect_request.startup.present? && connect_request.faculty.present?) &&
+  def job_is_relevant?
+    (connect_request.present? && connect_request.startup.present? && connect_request.faculty.present?) &&
       !(connect_request.feedback_mails_sent? || connect_request.unconfirmed?)
   end
 end

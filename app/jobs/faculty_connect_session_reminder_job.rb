@@ -1,17 +1,17 @@
 class FacultyConnectSessionReminderJob < ActiveJob::Base
   queue_as :default
 
-  def perform(connect_request)
-    # some helpful instance variables
-    @connect_request = connect_request
-    @startup_name = @connect_request.startup.product_name
-    @startup_url = Rails.application.routes.url_helpers.startup_url(@connect_request.startup)
-    @faculty_name = @connect_request.faculty.name
-    @faculty_url = Rails.application.routes.url_helpers.faculty_url(@connect_request.faculty)
-    @meeting_link = @connect_request.meeting_link
-    @questions = @connect_request.questions
+  def perform(connect_request_id)
+    @connect_request_id = connect_request_id
 
     return unless job_is_relevant?
+
+    @startup_name = connect_request.startup.product_name
+    @startup_url = Rails.application.routes.url_helpers.startup_url(connect_request.startup)
+    @faculty_name = connect_request.faculty.name
+    @faculty_url = Rails.application.routes.url_helpers.faculty_url(connect_request.faculty)
+    @meeting_link = connect_request.meeting_link
+    @questions = connect_request.questions
 
     remind_founders_on_slack
     remind_faculty_on_slack
@@ -19,11 +19,11 @@ class FacultyConnectSessionReminderJob < ActiveJob::Base
   end
 
   def remind_founders_on_slack
-    PublicSlackTalk.post_message message: reminder_for_founder, founders: @connect_request.startup.founders
+    PublicSlackTalk.post_message message: reminder_for_founder, founders: connect_request.startup.founders
   end
 
   def remind_faculty_on_slack
-    PublicSlackTalk.post_message message: reminder_for_faculty, founder: @connect_request.faculty
+    PublicSlackTalk.post_message message: reminder_for_faculty, founder: connect_request.faculty
   end
 
   def remind_ops_team_on_slack
@@ -32,10 +32,14 @@ class FacultyConnectSessionReminderJob < ActiveJob::Base
 
   private
 
+  def connect_request
+    @connect_request ||= ConnectRequest.find_by id: @connect_request_id
+  end
+
   # Ensure the job is still relevant and not rescheduled
   def job_is_relevant?
-    @connect_request.startup.present? && @connect_request.faculty.present? &&
-      @connect_request.confirmed? && @connect_request.slot_at.future? && @connect_request.slot_at <= 30.minutes.from_now
+    connect_request.present? && connect_request.startup.present? && connect_request.faculty.present? &&
+      connect_request.confirmed? && connect_request.slot_at.future? && connect_request.slot_at <= 30.minutes.from_now
   end
 
   def reminder_for_founder

@@ -50,10 +50,9 @@ class Founder < ActiveRecord::Base
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
 
-  # Founders active last week
-  scope :active_on_slack, -> { where(id: PublicSlackMessage.last_week.pluck(:founder_id).uniq) }
-  scope :active_on_web, -> { where(id: Visit.last_week.pluck(:user_id).uniq) }
-  scope :recently_inactive, -> { where.not(id: active_on_slack).where.not(id: active_on_web) }
+  scope :active_on_slack, -> (since, upto) { joins(:public_slack_messages).where(public_slack_messages: { created_at: since..upto }) }
+  scope :active_on_web, -> (since, upto) { joins(:visits).where(visits: { started_at: since..upto }) }
+  scope :inactive, -> { where.not(id: active_on_slack(1.week.ago, Time.now)).where.not(id: active_on_web(1.week.ago, Time.now)) }
 
   def self.ransackable_scopes(_auth)
     %i(ransack_tagged_with)
@@ -426,12 +425,12 @@ class Founder < ActiveRecord::Base
 
   # method to return the list of active founders on slack for a given duration
   def self.active_founders_on_slack(since:, upto: Time.now, batch: Batch.current_or_last)
-    Founder.find_by_batch(batch).joins(:public_slack_messages).where(public_slack_messages: { created_at: since..upto }).distinct
+    Founder.not_dropped_out.find_by_batch(batch).active_on_slack(since, upto).distinct
   end
 
   # method to return the list of active founders on web for a given duration
   def self.active_founders_on_web(since:, upto: Time.now, batch: Batch.current_or_last)
-    Founder.find_by_batch(batch).joins(:visits).where(visits: { started_at: since..upto }).distinct
+    Founder.not_dropped_out.find_by_batch(batch).active_on_web(since, upto).distinct
   end
 
   def any_targets?

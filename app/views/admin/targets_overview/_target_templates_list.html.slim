@@ -3,22 +3,20 @@ table.index_table.index
     tr
       th.col Template Title
       th.col Due Date
-      th.col Complete
+      th.col Completed
       th.col Pending
       th.col Expired
       th.col Extensions
+      th.col Details
   tbody
-    tr.odd
-      td.col #{TargetTemplate.first.title}
-      td.col #{TargetTemplate.first.due_date&.strftime('%b %e, %l:%M %p')}
-      td.col 10
-      td.col 2
-      td.col 3
-      td.col 3
-    tr.even
-      td.col #{TargetTemplate.second.title}
-      td.col #{TargetTemplate.second.due_date&.strftime('%b %e, %l:%M %p')}
-      td.col 9
-      td.col 3
-      td.col 5
-      td.col 7
+    - templates_to_show.each do |template|
+      tr class="#{cycle %w(odd even)}"
+        td.col
+          = link_to template.title, admin_target_template_path(template)
+        td.col #{template.due_date&.strftime('%b %e, %l:%M %p')}
+        td.col #{Target.completed.where(target_template: template).count}
+        td.col #{Target.pending.where(target_template: template).count}
+        td.col #{Target.expired.where(target_template: template).count}
+        td.col #{Target.pending.where(target_template: template).where('due_date > ?', template.due_date).count}
+        td.col
+          = link_to 'View Details', admin_targets_overview_path(template_id: template.id)

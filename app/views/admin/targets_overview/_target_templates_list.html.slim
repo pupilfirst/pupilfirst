@@ -1,0 +1,24 @@
+table.index_table.index
+  thead
+    tr
+      th.col Template Title
+      th.col Due Date
+      th.col Complete
+      th.col Pending
+      th.col Expired
+      th.col Extensions
+  tbody
+    tr.odd
+      td.col #{TargetTemplate.first.title}
+      td.col #{TargetTemplate.first.due_date&.strftime('%b %e, %l:%M %p')}
+      td.col 10
+      td.col 2
+      td.col 3
+      td.col 3
+    tr.even
+      td.col #{TargetTemplate.second.title}
+      td.col #{TargetTemplate.second.due_date&.strftime('%b %e, %l:%M %p')}
+      td.col 9
+      td.col 3
+      td.col 5
+      td.col 7

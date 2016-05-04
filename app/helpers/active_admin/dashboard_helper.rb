@@ -1,9 +1,5 @@
 module ActiveAdmin
   module DashboardHelper
-    def batch_selected
-      @batch_selected ||= params[:batch].present? ? Batch.find(params[:batch]) : Batch.current_or_last
-    end
-
     def days_elapsed
       (Date.today - batch_selected.start_date).to_i
     end

@@ -3,10 +3,10 @@
 
   .content
     ol
-      - batch_selected.founders.not_dropped_out.recently_inactive.limit(10).each do |founder|
+      - batch_selected.founders.not_dropped_out.inactive.limit(10).each do |founder|
         li = link_to founder.fullname, admin_founder_path(founder)
 
   .footer-space
 
-  a.button.view-all href=admin_founders_path(scope: 'recently_inactive', q: {startup_batch_id_eq: batch_selected.id, startup_dropped_out_eq: false })
-    | View All (#{batch_selected.founders.not_dropped_out.recently_inactive.count})
+  a.button.view-all href=admin_founders_path(scope: 'inactive', q: {startup_batch_id_eq: batch_selected.id, startup_dropped_out_eq: false })
+    | View All (#{batch_selected.founders.not_dropped_out.inactive.count})

@@ -14,7 +14,7 @@ ActiveAdmin.register Founder do
   scope :all
   scope :batched
   scope :missing_startups
-  scope :recently_inactive
+  scope :inactive
 
   filter :startup_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'Batch'
   filter :email

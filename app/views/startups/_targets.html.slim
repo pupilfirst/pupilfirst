@@ -60,7 +60,7 @@
                       button.btn.btn-default data-dismiss="modal" type="button" Close
 
               button.btn.btn-primary.btn-sm.review-test-btn type="button" data-toggle="modal" data-target="#target-#{target.id}-review-test"
-                i.fa.fa-question
+                i.fa.fa-pencil-square-o
                 | &nbsp; Review Test
             - if target.rubric.present?
               = button_to target.rubric_url, class: 'btn btn-primary btn-sm download-rubric-btn', target: '_blank' do

@@ -1,7 +1,14 @@
+.table_tools
+  ul.scopes.table_tools_segmented_control style="width: calc((100% - 10px)); float: right;"
+    - Startup.available_batches.each do |batch|
+      li class="#{ (batch == batch_selected ? 'selected':'') + ' scope' }"
+        a.table_tools_button href=admin_targets_overview_path(batch: batch) #{batch.name} Batch
+
 table.index_table.index
   thead
     tr
       th.col Template Title
+      th.col Days from Start
       th.col Due Date
       th.col Completed
       th.col Pending
@@ -9,14 +16,15 @@ table.index_table.index
       th.col Extensions
       th.col Details
   tbody
-    - templates_to_show.each do |template|
+    - TargetTemplate.all.order(:days_from_start).each do |template|
       tr class="#{cycle %w(odd even)}"
         td.col
           = link_to template.title, admin_target_template_path(template)
+        td.col #{template.days_from_start}
         td.col #{template.due_date&.strftime('%b %e, %l:%M %p')}
-        td.col #{Target.completed.where(target_template: template).count}
-        td.col #{Target.pending.where(target_template: template).count}
-        td.col #{Target.expired.where(target_template: template).count}
-        td.col #{Target.pending.where(target_template: template).where('due_date > ?', template.due_date).count}
+        td.col #{Target.shortlist(batch_selected, :completed, template).count}
+        td.col #{Target.shortlist(batch_selected, :pending, template).count}
+        td.col #{Target.shortlist(batch_selected, :expired, template).count}
+        td.col #{Target.shortlist(batch_selected, :pending, template).where('due_date > ?', template.due_date).count}
         td.col
           = link_to 'View Details', admin_targets_overview_path(template_id: template.id)

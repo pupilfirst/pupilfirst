@@ -33,28 +33,29 @@
                 th Extended
                 td #{assignees_list(template, status: :extended)}
 
-
-table.index_table.index
-  thead
-    tr
-      th.col Template Title
-      th.col Days from Start
-      th.col Due Date
-      th.col Completed
-      th.col Pending
-      th.col Expired
-      th.col Extensions
-      th.col Details
-  tbody
-    - TargetTemplate.all.order(:days_from_start).each do |template|
-      tr class="#{cycle %w(odd even)}"
-        td.col
-          = link_to template.title, admin_target_template_path(template)
-        td.col #{template.days_from_start}
-        td.col #{template.due_date&.strftime('%b %e, %l:%M %p')}
-        td.col #{Target.shortlist(batch_selected, :completed, template).count}
-        td.col #{Target.shortlist(batch_selected, :pending, template).count}
-        td.col #{Target.shortlist(batch_selected, :expired, template).count}
-        td.col #{Target.shortlist(batch_selected, :pending, template).where('due_date > ?', template.due_date).count}
-        td.col
-          = link_to 'View Details', admin_targets_overview_path(template_id: template.id)
+- %w(team founder).each do |role|
+  h3 #{role.capitalize} Targets
+  table.index_table.index
+    thead
+      tr
+        th.col Template Title
+        th.col Days from Start
+        th.col Due Date
+        th.col Completed
+        th.col Pending
+        th.col Expired
+        th.col Extensions
+        th.col Details
+    tbody
+      - TargetTemplate.send("#{role}_role").order(:days_from_start).each do |template|
+        tr class="#{cycle %w(odd even)}"
+          td.col
+            = link_to template.title, admin_target_template_path(template)
+          td.col #{template.days_from_start}
+          td.col #{template.due_date&.strftime('%b %e, %l:%M %p')}
+          td.col #{Target.shortlist(batch_selected, :completed, template).count}
+          td.col #{Target.shortlist(batch_selected, :pending, template).count}
+          td.col #{Target.shortlist(batch_selected, :expired, template).count}
+          td.col #{Target.shortlist(batch_selected, :pending, template).where('due_date > ?', template.due_date).count}
+          td.col
+            = link_to 'View Details', admin_targets_overview_path(template_id: template.id)

@@ -4,6 +4,9 @@ class TargetTemplate < ActiveRecord::Base
 
   mount_uploader :rubric, RubricUploader
 
+  scope :founder_role, -> { where(role: Target::ROLE_FOUNDER) }
+  scope :team_role, -> { where.not(id: founder_role) }
+
   # ensure required fields for a target (which cannot be auto-alloted) are specified
   validates_presence_of :role, :title, :description, :assigner_id
 

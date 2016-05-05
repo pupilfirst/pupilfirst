@@ -19,12 +19,12 @@ module ActiveAdmin
     # returns founders or startups (as applicable) which have targets built from the specified template
     def assignees(target_template, status)
       assignees = if target_template.founder_role?
-        Founder.find_by_batch(batch_selected)
+        Founder.find_by_batch(batch_selected).not_dropped_out
           .joins(:targets)
           .where(targets: { target_template_id: target_template.id })
           .merge(Target.send(effective_scope(status)))
       else
-        Startup
+        Startup.not_dropped_out
           .joins(:targets)
           .where(batch: batch_selected, targets: { target_template_id: target_template.id })
           .merge(Target.send(effective_scope(status)))

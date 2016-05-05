@@ -13,7 +13,7 @@ module ActiveAdmin
     end
 
     def effective_scope(status)
-      extended_scope?(status) ? 'pending' : status
+      extended_scope?(status) ? 'all' : status
     end
 
     # returns founders or startups (as applicable) which have targets built from the specified template

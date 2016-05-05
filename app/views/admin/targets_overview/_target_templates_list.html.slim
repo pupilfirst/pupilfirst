@@ -56,6 +56,6 @@
           td.col #{Target.shortlist(batch_selected, :completed, template).count}
           td.col #{Target.shortlist(batch_selected, :pending, template).count}
           td.col #{Target.shortlist(batch_selected, :expired, template).count}
-          td.col #{Target.shortlist(batch_selected, :pending, template).where('due_date > ?', template.due_date).count}
+          td.col #{Target.shortlist(batch_selected, :all, template).where('due_date > ?', template.due_date).count}
           td.col
             = link_to 'View Details', admin_targets_overview_path(template_id: template.id)

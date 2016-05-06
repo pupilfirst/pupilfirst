@@ -166,6 +166,10 @@ GEM
       activesupport (>= 3.2.0)
       json (>= 1.7)
       mime-types (>= 1.16)
+    carrierwave-bombshelter (0.2.0.1)
+      activesupport (>= 3.2.0)
+      carrierwave
+      fastimage
     carrierwave_backgrounder (0.4.1)
       carrierwave (~> 0.5)
     coderay (1.1.0)
@@ -225,6 +229,8 @@ GEM
       i18n (~> 0.5)
     faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
+    fastimage (2.0.0)
+      addressable (~> 2)
     faye-websocket (0.10.3)
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.5.1)
@@ -682,6 +688,7 @@ DEPENDENCIES
   capybara-screenshot
   capybara-webkit
   carrierwave
+  carrierwave-bombshelter
   carrierwave_backgrounder
   coderay
   coffee-rails (~> 4.1.0)

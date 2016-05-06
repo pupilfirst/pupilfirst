@@ -1,8 +1,9 @@
 # encoding: utf-8
 
 class CollegeIdentificationUploader < CarrierWave::Uploader::Base
-  include ::CarrierWave::Backgrounder::Delay
+  include CarrierWave::Backgrounder::Delay
   include CarrierWave::MiniMagick
+  include CarrierWave::BombShelter
 
   # Override the directory where uploaded files will be stored.
   def store_dir

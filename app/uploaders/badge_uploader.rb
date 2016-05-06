@@ -1,10 +1,9 @@
 # encoding: utf-8
 
 class BadgeUploader < CarrierWave::Uploader::Base
-  # Include RMagick or MiniMagick support:
-  # include CarrierWave::RMagick
-  include ::CarrierWave::Backgrounder::Delay
+  include CarrierWave::Backgrounder::Delay
   include CarrierWave::MiniMagick
+  include CarrierWave::BombShelter
 
   # Choose what kind of storage to use for this uploader:
   # storage Rails.application.config.carrier_wave_storage

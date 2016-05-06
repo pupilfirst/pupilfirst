@@ -2,6 +2,7 @@
 
 class ResourceThumbnailUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
+  include CarrierWave::BombShelter
 
   # Override the directory where uploaded files will be stored.
   def store_dir

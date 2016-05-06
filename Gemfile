@@ -12,6 +12,7 @@ gem 'just-datetime-picker' # Date/Time picker support for active admin.
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
 gem 'carrierwave' # One uploader to rule them all.
 gem 'carrierwave_backgrounder' # Backgrounder for carrierwave.
+gem 'carrierwave-bombshelter' # Protects your carrierwave from image bombs (and such).
 
 # Required by Carrierwave to upload to S3.
 # TODO: Replace this with fog-aws when possible. Fog is a super-fat gem.

@@ -28,7 +28,8 @@ class TargetTemplate < ActiveRecord::Base
       due_date: due_date(batch: batch),
       slideshow_embed: slideshow_embed,
       review_test_embed: review_test_embed,
-      target_template: self
+      target_template: self,
+      rubric: rubric
     )
   end
 

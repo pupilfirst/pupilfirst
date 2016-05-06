@@ -3,13 +3,13 @@
   = f.inputs 'Target details' do
     #target-founders-for-startup-url data-url=founders_for_target_admin_targets_url
 
-    = f.input :role,
-      as: :select,
-      collection: Target.valid_roles,
-      include_blank: false,
-      member_label: proc { |role| t("role.#{role}") }
-
     - if f.object.new_record?
+      = f.input :role,
+        as: :select,
+        collection: Target.valid_roles,
+        include_blank: false,
+        member_label: proc { |role| t("role.#{role}") }
+
       = f.input :startup_id,
         required: true,
         collection: Startup.all.order(:product_name),
@@ -23,6 +23,12 @@
         multiple: true,
         input_html: { style: 'height: 100%' }
     - else
+      = f.input :role,
+        as: :select,
+        collection: Target.valid_roles,
+        member_label: proc { |role| t("role.#{role}") },
+        input_html: { disabled: true }
+
       = f.input :assignee_id,
         as: :select,
         collection: [f.object.assignee],

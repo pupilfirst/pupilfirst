@@ -53,7 +53,10 @@ ActiveAdmin.register Target do
       founders = founder_ids.include?('all') ? startup.founders : Founder.where(id: founder_ids)
 
       founders.map do |founder|
-        target = Target.create!(@target.attributes.merge(assignee: founder))
+        target = Target.new permitted_params[:target]
+        target.assignee = founder
+        target.save!
+
         AllTargetNotificationsJob.perform_later target, 'new_target'
       end
     end

@@ -25,7 +25,8 @@ ActiveAdmin.register_page 'Short URLs' do
     url_to_shorten = params.dig(:short_urls, :url)
 
     if url_to_shorten.present?
-      shortened_url = Shortener::ShortenedUrl.generate url_to_shorten
+      addressable_url = Addressable::URI.parse(url_to_shorten).normalize.to_s
+      shortened_url = Shortener::ShortenedUrl.generate addressable_url
       redirect_to admin_short_urls_url(shortened: shortened_url&.url)
     else
       flash[:error] = 'Need a URL to shorten!'

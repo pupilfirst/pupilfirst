@@ -69,8 +69,7 @@ gem 'require_all' # Easier folder require-s.
 # TODO: removing github repo tracking when gem is updated
 gem 'lita-slack', github: 'litaio/lita-slack', require: false # Lita adapter for Slack.
 
-gem 'kramdown'
-
+gem 'kramdown' # kramdown is a fast, pure Ruby Markdown superset converter, using a strict syntax definition and supporting several common extensions. http://kramdown.gettalong.org
 gem 'gaffe' # Custom error pages. https://github.com/mirego/gaffe
 gem 'google_calendar', github: 'northworld/google_calendar' # Thin wrapper over Google Calendar API.
 gem 'recaptcha', require: 'recaptcha/rails' # ReCaptcha helpers for ruby apps http://github.com/ambethia/recaptcha
@@ -83,6 +82,7 @@ gem 'acts-as-taggable-on', '~> 3.5' # Tag a single model on several contexts.
 gem 'will_paginate-bootstrap' #This gem integrates the Twitter Bootstrap pagination component with the will_paginate pagination gem.
 gem 'shortener' # generate short SV.CO urls for files, links etc
 gem 'titleize' # better titleizing, modifies Inflector.titleize from default rails
+gem 'addressable' # Addressable is a replacement for the URI implementation that is part of Ruby's standard library. https://github.com/sporkmonger/addressable
 
 # Rails assets!
 source 'https://rails-assets.org' do

@@ -676,6 +676,7 @@ PLATFORMS
 DEPENDENCIES
   activeadmin!
   acts-as-taggable-on (~> 3.5)
+  addressable
   ahoy_matey (~> 1.3)
   attribute_normalizer (~> 1.2.0.b)
   autoprefixer-rails

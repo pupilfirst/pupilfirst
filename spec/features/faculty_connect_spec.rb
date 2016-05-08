@@ -94,7 +94,7 @@ feature 'Faculty Connect' do
         click_on 'Submit Request'
 
         # The connect button should now be disabled.
-        expect(page.find('.connect-link')[:class]).to include('disabled')
+        expect(page).to have_selector('.connect-link.disabled')
 
         # Verify data.
         connect_request = startup.connect_requests.last

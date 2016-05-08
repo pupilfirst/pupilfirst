@@ -72,6 +72,9 @@ end
 # Use cabpybara-webkit as JS driver.
 Capybara.javascript_driver = :webkit
 
+# Increase Capybara's default maximum wait time to 5 seconds to account for our slow Strider server.
+Capybara.default_max_wait_time = 5
+
 # rubocop:disable Style/SymbolProc
 Capybara::Webkit.configure do |config|
   config.block_unknown_urls

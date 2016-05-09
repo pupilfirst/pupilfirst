@@ -1,3 +1,26 @@
+## 9 May, 2016
+
+### Features
+
+  - _Review tests_ have been added to targets. This allows
+    founders to take part in small survey-type questionnaires
+    after going through slides and / or completing targets.
+
+### Content
+
+  - Added more information related to SV.CO's mission in the
+    _About_ section.
+  - _Ola_ and _GOQii_ have been listed as partners in the
+    _Talent_ section.
+
+### Bugfixes
+
+  - URLs that point to `/resources/...` now redirect to the
+    new `/library/...` path. This preserves old links.
+  - Improved reliability of reminder notifications sent via
+    vocalist to faculty and founders about imminent connect
+    sessions. They had a tendency to get lost in transit.
+
 ## 2 May, 2016
 
 ### Features

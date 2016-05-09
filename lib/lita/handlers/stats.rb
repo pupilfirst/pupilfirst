@@ -84,17 +84,21 @@ module Lita
       end
 
       def total_startups_count_and_names
-        names_list = list_of_names(@batch_requested.startups)
-        "#{@batch_requested.startups.count} #{names_list}\n"
+        names_list = list_of_names(requested_batch_startups)
+        "#{requested_batch_startups.count} #{names_list}\n"
+      end
+
+      def requested_batch_startups
+        @batch_requested.startups.not_dropped_out
       end
 
       def stage_wise_startup_counts_and_names
         response = ''
-        stages = @batch_requested.startups.pluck(:stage).uniq
+        stages = requested_batch_startups.pluck('DISTINCT stage')
 
         stages.each do |stage|
           response += 'Number of startups in _\'' + I18n.t("timeline_event.stage.#{stage}") + '\'_ stage: '
-          startups = Startup.where(stage: stage, batch: @batch_requested)
+          startups = Startup.not_dropped_out.where(stage: stage, batch: @batch_requested)
           response += startups.count.to_s + " #{list_of_names(startups)}\n"
         end
 

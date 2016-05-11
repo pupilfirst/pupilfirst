@@ -52,11 +52,11 @@ ActiveAdmin.register Startup do
 
           startup.targets.order('updated_at DESC').each_with_index do |target, index|
             fa_icon = if target.done?
-              'fa-check'
+              'fa-calendar-check-o'
             elsif target.expired?
-              'fa-times'
+              'fa-hourglass-end'
             else
-              'fa-circle-o'
+              'fa-clock-o'
             end
 
             li class: (index >= 3 && hide_some_targets ? "hide admin-startup-#{startup.id}-hidden-target" : '') do
@@ -79,11 +79,13 @@ ActiveAdmin.register Startup do
       ol do
         startup.timeline_events.order('updated_at DESC').limit(5).each do |event|
           fa_icon = if event.verified?
-            'fa-check'
+            'fa-thumbs-o-up'
           elsif event.needs_improvement?
-            'fa-times'
+            'fa-star-half-empty'
+          elsif event.not_accepted?
+            'fa-ban'
           else
-            'fa-circle-o'
+            'fa-clock-o'
           end
           li do
             link_to " #{event.title}", [:admin, event], class: "fa #{fa_icon} no-text-decoration"

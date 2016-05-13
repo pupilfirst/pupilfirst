@@ -1,5 +1,14 @@
 ActiveAdmin.register Glossary do
   menu parent: 'Dashboard', label: 'Glossary'
-  index title: 'Glossary'
+
   permit_params :term, :definition, :links
+
+  index title: 'Glossary' do
+    selectable_column
+
+    column :term
+    column :definition
+    column :links
+    actions
+  end
 end

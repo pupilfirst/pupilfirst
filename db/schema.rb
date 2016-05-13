@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160511082135) do
+ActiveRecord::Schema.define(version: 20160513064505) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -228,7 +228,7 @@ ActiveRecord::Schema.define(version: 20160511082135) do
   add_index "founders", ["startup_token"], name: "index_founders_on_startup_token", using: :btree
   add_index "founders", ["university_id"], name: "index_founders_on_university_id", using: :btree
 
-  create_table "glossaries", force: :cascade do |t|
+  create_table "glossary_terms", force: :cascade do |t|
     t.string   "term"
     t.text     "definition"
     t.text     "links"

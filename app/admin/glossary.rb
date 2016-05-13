@@ -1,4 +1,4 @@
-ActiveAdmin.register Glossary do
+ActiveAdmin.register GlossaryTerm do
   menu parent: 'Dashboard', label: 'Glossary'
 
   permit_params :term, :definition, :links

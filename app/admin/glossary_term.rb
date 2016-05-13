@@ -8,7 +8,6 @@ ActiveAdmin.register GlossaryTerm do
 
     column :term
     column :definition
-    column :links
     actions
   end
 end

@@ -5,8 +5,10 @@
 
     .content
       ol
-        - timeline_events.limit(10).each do |timeline_event|
-          li = link_to "#{timeline_event.startup.product_name} - #{timeline_event.title}", admin_timeline_event_path(timeline_event)
+        - events_to_list = verified_status == TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT ? timeline_events.not_improved : timeline_events
+        - if events_to_list.present?
+          - events_to_list.limit(10).each do |timeline_event|
+            li = link_to "#{timeline_event.startup.product_name} - #{timeline_event.title}", admin_timeline_event_path(timeline_event)
 
     .footer-spacer
 
@@ -15,5 +17,7 @@
     .left-of-button
       span.sparkline-tag #{trend.join(', ')}
 
-    a.button.view-all href=admin_timeline_events_path(q: { verified_status_equals: verified_status, startup_batch_id_equals: batch_selected.id })
-      | View All (#{timeline_events.count})
+    - params = { q: { verified_status_equals: verified_status, startup_batch_id_equals: batch_selected.id } }
+    - params = params.merge(scope: 'not_improved') if verified_status == TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT
+    a.button.view-all href=admin_timeline_events_path(params)
+      | View All (#{events_to_list.count})

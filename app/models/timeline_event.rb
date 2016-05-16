@@ -70,6 +70,7 @@ class TimelineEvent < ActiveRecord::Base
   scope :help_wanted, -> { where(timeline_event_type: TimelineEventType.help_wanted) }
   scope :for_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch.id }) }
   scope :not_private, -> { where(timeline_event_type: TimelineEventType.where.not(role: TimelineEventType::ROLE_FOUNDER)) }
+  scope :not_improved, -> { where(improved_timeline_event_id: nil) }
 
   after_initialize :make_links_an_array
 

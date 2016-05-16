@@ -23,6 +23,7 @@ ActiveAdmin.register TimelineEvent do
 
   scope :all
   scope :batched
+  scope :not_improved
 
   config.sort_order = 'updated_at_desc'
 

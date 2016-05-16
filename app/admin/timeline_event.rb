@@ -100,6 +100,9 @@ ActiveAdmin.register TimelineEvent do
       # Link the target to event.
       timeline_event.update(target: target)
 
+      # Assign as improved_timeline_event, if applicable
+      timeline_event.set_as_improved_timeline_event
+
       if params[:target_completed]
         target.complete!
         flash[:success] = 'Target has been linked and marked completed.'

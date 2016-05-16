@@ -256,7 +256,6 @@ ActiveRecord::Schema.define(version: 20160516103220) do
   create_table "glossary_terms", force: :cascade do |t|
     t.string   "term"
     t.text     "definition"
-    t.text     "links"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -1,7 +1,7 @@
 module Lita
   module Handlers
     class Glossary < Handler
-      route(/\Adefine *(\w*) *\?\z/, :definition, command: true, help: { 'define [TERM]?' => I18n.t('slack.help.glossary') })
+      route(/\Adefine ([a-zA-z\s]*)\z/, :definition, command: true, help: { 'define [TERM]' => I18n.t('slack.help.glossary') })
 
       def definition(response)
         @response = response

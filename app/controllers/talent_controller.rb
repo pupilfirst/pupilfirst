@@ -31,6 +31,6 @@ class TalentController < ApplicationController
   private
 
   def talent_form_params
-    params.require(:talent_form).permit(:name, :email, :mobile, :organization, query_type: [])
+    params.require(:talent_form).permit(:name, :email, :mobile, :organization, :website, query_type: [])
   end
 end

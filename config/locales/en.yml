@@ -99,6 +99,7 @@ en:
       state_of_svco: Get the present state of startups in Batch N, including inactive and endangered startups. Access restricted to SV.CO admins.
       expired_team_targets: Get a list of all team targets which expired last week - for every startup in the batch.
       expired_founder_targets: Get a list of all individual targets which expired last week - for every founder in the batch.
+      glossary: Get definitions and references of a commanly used TERM in the startup ecosystem.
     handlers:
       targets:
         choice_error: "I couldn't find your choice in my list of targets. It should be one of: `%{choices}`."
@@ -110,6 +111,8 @@ en:
         batch_missing_error: Could not identify batch specified. Ensure you have entered a valid batch number!
         no_expired_team_targets: "No team in the batch had an expired target last week! :simple_smile:"
         no_expired_founder_targets: "No founder in the batch had an expired target last week! :simple_smile:"
+      glossary:
+        term_not_found: "The term `%{term}` could not be found in our records."
 
   slack_notifications:
     timeline_events:
@@ -136,8 +139,8 @@ en:
         resouce_url: "The faculty has also provided <%{resource_url}|a useful link> to assist you.\n"
         due_date: "The due date to complete this target is :exclamation: *%{due_date}*"
     connect_sessions:
-      founder_reminder: ":exclamation: *Reminder:* Your startup (%{startup_name}) has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes! You may <%{meeting_link}|click here> to join the meeting when time."
-      faculty_reminder: ":exclamation: *Reminder:* You have an office hour with the founders of <%{startup_url}|%{startup_name}> starting in 30 minutes!\nThe founders plan to discuss the following questions:\n %{questions}\nYou may <%{meeting_link}|click here> to join the meeting when time."
+      founder_reminder: ":exclamation: *Reminder:* Your startup (%{startup_name}) has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes! You can <%{meeting_link}|click here> to join the meeting when it's time."
+      faculty_reminder: ":exclamation: *Reminder:* You have an office hour with the founders of <%{startup_url}|%{startup_name}> starting in 30 minutes!\nThe founders plan to discuss the following questions:\n %{questions}\nYou can <%{meeting_link}|click here> to join the meeting when it's time."
       ops_team_reminder: ":exclamation: *Reminder:* <%{startup_url}|%{startup_name}> has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes. Follow up!"
 
 

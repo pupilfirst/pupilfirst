@@ -1,7 +1,7 @@
 class TalentForm
   include ActiveModel::Model
 
-  attr_accessor :name, :email, :mobile, :organization, :query_type
+  attr_accessor :name, :email, :mobile, :organization, :query_type, :website
 
   validates_presence_of :name, :email, :mobile, :query_type, :organization
   validates_format_of :email, with: /@/
@@ -31,6 +31,6 @@ class TalentForm
   def save
     return unless valid?
 
-    TalentFormMailer.contact(name: name, email: email, mobile: mobile, organization: organization, query_type: query_type).deliver_later
+    TalentFormMailer.contact(name: name, email: email, mobile: mobile, organization: organization, website: website, query_type: query_type).deliver_later
   end
 end

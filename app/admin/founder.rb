@@ -58,11 +58,11 @@ ActiveAdmin.register Founder do
 
           founder.targets.order('updated_at DESC').each_with_index do |target, index|
             fa_icon = if target.done?
-              'fa-check'
+              'fa-calendar-check-o'
             elsif target.expired?
-              'fa-times'
+              'fa-hourglass-end'
             else
-              'fa-circle-o'
+              'fa-clock-o'
             end
 
             li class: (index >= 3 && hide_some_targets ? "hide admin-founder-#{founder.id}-hidden-target" : '') do

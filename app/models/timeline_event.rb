@@ -249,7 +249,8 @@ class TimelineEvent < ActiveRecord::Base
   end
 
   def improved_event_candidates
-    startup&.timeline_events.where(timeline_event_type: timeline_event_type).where.not(id: id).order('event_on DESC')
+    owner = founder_event? ? founder : startup
+    owner.timeline_events.where(timeline_event_type: timeline_event_type).where.not(id: id).order('event_on DESC')
   end
 
   private

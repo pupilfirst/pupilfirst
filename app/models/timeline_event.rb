@@ -10,7 +10,7 @@ class TimelineEvent < ActiveRecord::Base
   has_one :karma_point, as: :source
   has_many :timeline_event_files, dependent: :destroy
 
-  belongs_to :next_event, class_name: 'TimelineEvent'
+  belongs_to :improved_timeline_event, class_name: 'TimelineEvent'
 
   mount_uploader :image, TimelineImageUploader
   serialize :links
@@ -246,6 +246,10 @@ class TimelineEvent < ActiveRecord::Base
     end
 
     attachments
+  end
+
+  def improved_event_candidates
+    startup&.timeline_events.where(timeline_event_type: timeline_event_type).where.not(id: id).order('event_on DESC')
   end
 
   private

@@ -1,6 +1,6 @@
 ActiveAdmin.register TimelineEvent do
   permit_params :description, :timeline_event_type_id, :image, :event_on, :startup_id, :grade,
-    :founder_id, :serialized_links, timeline_event_files_attributes: [:id, :title, :file, :private, :_destroy]
+    :founder_id, :serialized_links, :improved_timeline_event_id, timeline_event_files_attributes: [:id, :title, :file, :private, :_destroy]
 
   filter :startup_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'Batch'
 
@@ -203,6 +203,10 @@ ActiveAdmin.register TimelineEvent do
       f.input :image
       f.input :event_on, as: :datepicker
       f.input :grade, as: :select, collection: TimelineEvent.valid_grades, required: false
+      f.input :improved_timeline_event,
+        as: :select,
+        collection: f.object.improved_event_candidates,
+        member_label: proc { |event| "#{event.title} (#{event.event_on.strftime('%b %d')})" } if f.object.persisted?
       f.input :serialized_links, as: :hidden
     end
 
@@ -314,6 +318,8 @@ ActiveAdmin.register TimelineEvent do
           t("timeline_event.grade.#{timeline_event.grade}")
         end
       end
+
+      row :improved_timeline_event
 
       row :created_at
       row :updated_at

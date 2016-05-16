@@ -10,6 +10,8 @@ class TimelineEvent < ActiveRecord::Base
   has_one :karma_point, as: :source
   has_many :timeline_event_files, dependent: :destroy
 
+  belongs_to :next_event, class_name: 'TimelineEvent'
+
   mount_uploader :image, TimelineImageUploader
   serialize :links
   validates_presence_of :event_on, :startup_id, :founder_id, :timeline_event_type, :description

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160513064505) do
+ActiveRecord::Schema.define(version: 20160516081610) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,6 +78,12 @@ ActiveRecord::Schema.define(version: 20160513064505) do
     t.string   "slack_channel"
   end
 
+  create_table "categories", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "connect_requests", force: :cascade do |t|
     t.integer  "connect_slot_id"
     t.integer  "startup_id"
@@ -119,6 +125,25 @@ ActiveRecord::Schema.define(version: 20160513064505) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+
+  create_table "events", force: :cascade do |t|
+    t.string   "title"
+    t.text     "description"
+    t.datetime "start_at"
+    t.datetime "end_at"
+    t.integer  "location_id"
+    t.boolean  "featured"
+    t.integer  "category_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "picture"
+    t.integer  "user_id"
+    t.boolean  "notification_sent"
+  end
+
+  add_index "events", ["category_id"], name: "index_events_on_category_id", using: :btree
+  add_index "events", ["location_id"], name: "index_events_on_location_id", using: :btree
+  add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
 
   create_table "faculty", force: :cascade do |t|
     t.string   "name"
@@ -250,6 +275,30 @@ ActiveRecord::Schema.define(version: 20160513064505) do
   add_index "karma_points", ["founder_id"], name: "index_karma_points_on_founder_id", using: :btree
   add_index "karma_points", ["source_id"], name: "index_karma_points_on_source_id", using: :btree
   add_index "karma_points", ["startup_id"], name: "index_karma_points_on_startup_id", using: :btree
+
+  create_table "locations", force: :cascade do |t|
+    t.decimal  "latitude"
+    t.decimal  "longitude"
+    t.string   "title"
+    t.text     "address"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "news", force: :cascade do |t|
+    t.string   "title"
+    t.text     "body"
+    t.integer  "user_id"
+    t.boolean  "featured"
+    t.string   "youtube_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "picture"
+    t.boolean  "notification_sent"
+    t.datetime "published_at"
+  end
+
+  add_index "news", ["user_id"], name: "index_news_on_user_id", using: :btree
 
   create_table "public_slack_messages", force: :cascade do |t|
     t.text     "body"
@@ -473,6 +522,7 @@ ActiveRecord::Schema.define(version: 20160513064505) do
     t.string   "grade"
     t.integer  "target_id"
     t.integer  "founder_id"
+    t.integer  "next_event_id"
   end
 
   add_index "timeline_events", ["founder_id"], name: "index_timeline_events_on_founder_id", using: :btree
@@ -485,6 +535,15 @@ ActiveRecord::Schema.define(version: 20160513064505) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string   "location"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string   "username"
+    t.string   "email"
+    t.string   "fullname"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "avatar"
   end
 
   create_table "visits", id: :uuid, default: nil, force: :cascade do |t|

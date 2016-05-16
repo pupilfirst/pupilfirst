@@ -112,9 +112,7 @@ en:
         no_expired_team_targets: "No team in the batch had an expired target last week! :simple_smile:"
         no_expired_founder_targets: "No founder in the batch had an expired target last week! :simple_smile:"
       glossary:
-        no_term_error: 'Please specify a term to fetch its definition. Eg: define TERM'
-        term_not_found: "The term '%{term}' could not be found in our records."
-
+        term_not_found: "The term `%{term}` could not be found in our records."
 
   slack_notifications:
     timeline_events:

@@ -4,15 +4,6 @@ require_relative '../../../lib/lita/handlers/glossary'
 
 describe Lita::Handlers::Glossary do
   describe '#definition' do
-    context "when term isn't specified" do
-      let(:response) { double 'Lita Response Object', match_data: %w(define) }
-
-      it 'replies that term is required' do
-        expect(response).to receive(:reply).with I18n.t('slack.handlers.glossary.no_term_error')
-        subject.definition(response)
-      end
-    end
-
     context 'when term is unknown' do
       let(:response) { double 'Lita Response Object', match_data: ['define', 'unknown term'] }
 

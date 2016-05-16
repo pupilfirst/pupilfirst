@@ -42,7 +42,7 @@
                     .modal-footer
                       button.btn.btn-default data-dismiss="modal" type="button" Close
 
-              button.btn.btn-primary.btn-sm.learn-more-btn type="button" data-toggle="modal" data-target="#target-#{target.id}-slideshow"
+              a.btn.btn-primary.btn-sm.learn-more-btn type="button" data-toggle="modal" data-target="#target-#{target.id}-slideshow"
                 i.fa.fa-film
                 | &nbsp; View Slides
             - elsif target.resource_url.present?
@@ -59,11 +59,11 @@
                     .modal-footer
                       button.btn.btn-default data-dismiss="modal" type="button" Close
 
-              button.btn.btn-primary.btn-sm.review-test-btn type="button" data-toggle="modal" data-target="#target-#{target.id}-review-test"
+              a.btn.btn-primary.btn-sm.review-test-btn type="button" data-toggle="modal" data-target="#target-#{target.id}-review-test"
                 i.fa.fa-pencil-square-o
                 | &nbsp; Review Test
             - if target.rubric.present?
-              = button_to target.rubric_url, class: 'btn btn-primary btn-sm download-rubric-btn', target: '_blank' do
+              = link_to target.rubric_url, class: 'btn btn-primary btn-sm download-rubric-btn', target: '_blank' do
                 i.fa.fa-download
                 | &nbsp; Download Rubric
 - else

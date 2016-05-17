@@ -254,7 +254,10 @@ class TimelineEvent < ActiveRecord::Base
   end
 
   def improved_event_candidates
-    founder_or_startup.timeline_events.where(timeline_event_type: timeline_event_type).where.not(id: id).order('event_on DESC')
+    founder_or_startup.timeline_events
+      .where(timeline_event_type: timeline_event_type)
+      .where('created_at > ?', created_at)
+      .where.not(id: id).order('event_on DESC')
   end
 
   def set_as_improved_timeline_event

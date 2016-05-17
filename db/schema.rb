@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160516081338) do
+ActiveRecord::Schema.define(version: 20160516103220) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -514,8 +514,8 @@ ActiveRecord::Schema.define(version: 20160516081338) do
     t.string   "image"
     t.integer  "startup_id"
     t.text     "links"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.date     "event_on"
     t.datetime "verified_at"
     t.integer  "timeline_event_type_id"
@@ -523,6 +523,7 @@ ActiveRecord::Schema.define(version: 20160516081338) do
     t.string   "grade"
     t.integer  "target_id"
     t.integer  "founder_id"
+    t.integer  "improved_timeline_event_id"
   end
 
   add_index "timeline_events", ["founder_id"], name: "index_timeline_events_on_founder_id", using: :btree

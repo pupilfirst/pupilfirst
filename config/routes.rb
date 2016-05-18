@@ -1,4 +1,8 @@
 Svapp::Application.routes.draw do
+  get 'batch_application/index'
+
+  get 'batch_application/apply'
+
   devise_for(
     :founders,
     controllers: {
@@ -88,7 +92,10 @@ Svapp::Application.routes.draw do
     post 'contact'
   end
 
-  get 'apply(/:batch)', as: 'apply', to: 'home#apply'
+  scope 'apply', as: 'apply', controller: 'batch_application' do
+    get '/', action: 'index'
+    get '/:batch', action: 'apply'
+  end
 
   get 'founders/:slug', to: 'founders#founder_profile', as: 'founder_profile'
 

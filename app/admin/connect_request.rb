@@ -13,6 +13,10 @@ ActiveAdmin.register ConnectRequest do
     end
   end
 
+  action_item :record_feedback, only: :show do
+    link_to 'Record Feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: connect_request.startup.id })
+  end
+
   index do
     selectable_column
 
@@ -39,7 +43,11 @@ ActiveAdmin.register ConnectRequest do
       end
     end
 
-    actions
+    actions do |connect_request|
+      span do
+        link_to 'Record Feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: connect_request.startup.id }), class: 'member_link'
+      end
+    end
   end
 
   show do

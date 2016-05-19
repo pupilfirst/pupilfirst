@@ -30,27 +30,16 @@ h1.page-header.header-light Contact
         .col-md-6
           .contact-location
             .google-maps-iframe-container
-              iframe.contact-google-map frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/view?zoom=16&center=10.0552%2C76.3520&key=#{ENV['GOOGLE_BROWSER_KEY']}" allowfullscreen=true sandbox="allow-same-origin allow-scripts"
+              iframe.contact-google-map frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/view?zoom=16&center=9.9876%2C76.2846&key=#{ENV['GOOGLE_BROWSER_KEY']}" allowfullscreen=true sandbox="allow-same-origin allow-scripts"
             address
-              strong Startup Village, Kochi
+              strong SV.CO
               br
-              | Kinfra Hi-Tech Park,
-              br
-              | Kalamassery,
-              br
-              | Kochi &mdash; 683503.
-        .col-md-6
-          .contact-location
-            .google-maps-iframe-container
-              iframe.contact-google-map frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/view?zoom=17&center=17.8095%2C83.3876&key=#{ENV['GOOGLE_BROWSER_KEY']}" allowfullscreen=true sandbox="allow-same-origin allow-scripts"
-            address
-              strong Startup Village, Visakhapatnam
-              br
-              | Sunrise Startups, Hill No. 3,
-              br
-              | Cyber Hills, IT SEZ, Madhuruwada,
-              br
-              | Visakhapatnam &mdash; 530048.
+              p
+                | 4th Floor, Bhageeratha Square,
+                br
+                | Kacherippady, Kochi,
+                br
+                | India &mdash; 682018.
 
       = simple_form_for @contact_form,
         url: about_contact_url,

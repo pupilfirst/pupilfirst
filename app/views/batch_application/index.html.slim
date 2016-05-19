@@ -18,6 +18,26 @@
   .container
     .row
       .col-md-7.col-md-push-5
+        - if @batches_open.present?
+          .batch-results.margin-bottom-20
+            .result-head
+              h3 We are accepting applications!
+
+              .margin-top-20
+              p
+                ' The following batches are currently accepting applications. Choose one of the options below to begin
+                ' the application process.
+
+              .margin-top-20
+              p
+                ' You will need to identify yourself using a one-time login link that will be sent to your e-mail
+                | address.
+
+              .margin-top-20
+              ul
+                - @batches_open.each do |batch|
+                  li = link_to batch.name, apply_batch_path(batch: batch.name)
+
         .batch-results
           .result-head.text-center
             = image_tag 'home/apply/batch-result-icon.png', class: 'img-responsive'

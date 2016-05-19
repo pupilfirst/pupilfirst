@@ -1,0 +1,23 @@
+= content_for :heading
+  | Sign in to SV.CO and continue the application process!
+
+= content_for :salutation
+  | Hello,
+
+= content_for :body
+  p
+    ' Click and confirm that you want to sign in to SV.CO. Once signed in, you will be redirected to the page where you
+    | can continue the application process.
+
+  p
+    ' #{link_to 'Click here', apply_identify_url(batch: @batch, token: @token)} to sign in.
+
+  p
+    ' If you're unable to click on the link above, then please copy and paste the following link
+    ' into your browser's address bar:
+
+  p.monospace = apply_identify_url(batch: @batch, token: @token)
+
+  p
+    ' Please note that the above url is a private link and should not be shared with others.
+    ' Reach out to us at #{mail_to 'help@sv.co'} in case of any queries.

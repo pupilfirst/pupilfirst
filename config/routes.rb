@@ -93,8 +93,10 @@ Svapp::Application.routes.draw do
   end
 
   scope 'apply', as: 'apply', controller: 'batch_application' do
-    get '/', action: 'index'
-    get '/:batch', action: 'apply'
+    get '/', action: 'index', as: 'index'
+    get '/to/:batch', action: 'apply', as: 'batch'
+    get '/identify/:batch', action: 'identify', as: 'identify'
+    post '/identify', action: 'send_sign_in_email', as: 'send_sign_in_email'
   end
 
   get 'founders/:slug', to: 'founders#founder_profile', as: 'founder_profile'

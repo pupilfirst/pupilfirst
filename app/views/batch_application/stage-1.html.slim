@@ -1,2 +1,23 @@
 / Stage one of the application process opens the batch up to applications from the public. It should supply some
   information about the batch,
+
+
+- content_for :head
+  title SV.CO Apply Now
+  meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
+
+.container
+  .apply-banner
+    .row
+      .col-md-4
+        h1 Applications open for #{@batch.name} batch!
+        p.header-light
+          ' The application process for this batch has started. Apply now!
+.apply-container
+  .container
+    .row
+      .col-md-7.col-md-push-5
+        p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin id efficitur tellus. Fusce eleifend leo eu lectus consequat rutrum. Nullam eu congue lacus. Suspendisse potenti. Donec a nisl iaculis purus blandit tempus. Nullam ac faucibus odio. Maecenas mollis luctus blandit. Maecenas in dolor orci. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nullam fringilla enim ut orci aliquet, at sollicitudin purus placerat.
+        p Fusce sollicitudin ut purus pharetra congue. Donec eu pretium tellus, ut mattis nisl. Nulla facilisi. Suspendisse dictum diam non libero lacinia, sed dignissim lorem lobortis. Sed facilisis sollicitudin dui, ac aliquet ipsum iaculis eget. Suspendisse finibus ante ut ullamcorper interdum.
+
+      == render 'left_bar'

@@ -308,15 +308,9 @@
                       i.fa.fa-exclamation-circle
                       | &nbsp;Pending verification
                   - elsif event.needs_improvement?
-                    - if current_founder && @startup.founder?(current_founder)
-                      - tooltip_text = 'We have verified this event, but you can do better! If you have time, submit a new revised event based on our feedback.'
-                      - status_text = 'Needs Improvement'
-                    - else
-                      - tooltip_text = 'This event is verified by SV.CO but our Faculty submitted feedback asking for further improvements.'
-                      - status_text = 'Marked for Improvement'
-                    .verified-status-notice href="#" data-toggle="tooltip" title="#{tooltip_text}"
+                    .verified-status-notice href="#" data-toggle="tooltip" title="#{needs_improvement_tooltip_text(event)}"
                       i.fa.fa-exclamation-circle
-                      | &nbsp;#{status_text}
+                      | &nbsp;#{needs_improvement_status_text(event)}
                   - elsif event.not_accepted?
                     .verified-status-notice href="#" data-toggle="tooltip" title="We are sorry, but this event is not acceptable. Please edit the event based on feedback and resubmit for approval."
                       i.fa.fa-exclamation-circle
@@ -361,15 +355,9 @@
                             i.fa.fa-exclamation-circle
                             | &nbsp;Pending verification
                         - elsif event.needs_improvement?
-                          - if current_founder && @startup.founder?(current_founder)
-                            - tooltip_text = 'We have verified this event, but you can do better! If you have time, submit a new revised event based on our feedback.'
-                            - status_text = 'Needs Improvement'
-                          - else
-                            - tooltip_text = 'This event is verified by SV.CO but our Faculty submitted feedback asking for further improvements.'
-                            - status_text = 'Marked for Improvement'
-                          .verified-status-notice href="#" data-toggle="tooltip" title="#{tooltip_text}"
+                          .verified-status-notice href="#" data-toggle="tooltip" title="#{needs_improvement_tooltip_text(event)}"
                             i.fa.fa-exclamation-circle
-                            | &nbsp;#{status_text}
+                            | &nbsp;#{needs_improvement_status_text(event)}
                         - elsif event.not_accepted?
                           .verified-status-notice href="#" data-toggle="tooltip" title="We are sorry, but this event is not acceptable. Please edit the event based on feedback and resubmit for approval."
                             i.fa.fa-exclamation-circle

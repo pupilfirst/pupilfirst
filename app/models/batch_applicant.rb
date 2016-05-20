@@ -1,7 +1,10 @@
 class BatchApplicant < ActiveRecord::Base
   belongs_to :batch_application
 
+  # Basic validations.
   validates :email, presence: true, uniqueness: true
+
+  # Custom validations.
   validate :email_must_look_right
 
   def email_must_look_right

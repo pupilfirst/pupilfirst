@@ -8,18 +8,40 @@ class BatchApplicationController < ApplicationController
   # GET /apply/:batch
   def apply
     @skip_container = true
-    @batch = Batch.find_by(name: params[:batch]) || Batch.find_by(batch_number: params[:batch])
-    stage_number = @batch&.application_stage&.number
-    raise_not_found if stage_number.blank?
-
+    raise_not_found if current_stage_number.blank?
     return unless applicant_signed_in?
 
-    render "batch_application/stage-#{stage_number}"
+    if submitted_for_stage?
+      render "batch_application/stage_#{current_stage_number}_submitted"
+    else
+      render "batch_application/stage_#{current_stage_number}"
+    end
   end
 
-  # POST /apply/application
-  def application
+  # POST /apply/:batch
+  def submit
+    send "submit_handler_for_stage_#{current_stage_number}"
+  end
 
+  def submit_handler_for_stage_1
+    application = BatchApplication.new(
+      batch: current_batch,
+      application_stage: current_stage,
+    )
+
+    if application.save
+      application.batch_applicants << current_batch_applicant
+
+      application.application_stage_scores.create(
+        application_stage: current_stage,
+        submission_urls: { 'Application' => admin_batch_application_url(application) }
+      )
+
+      redirect_to apply_batch_path(batch: params[:batch])
+    else
+      # Something about the application isn't okay.
+      raise NotImplementedError
+    end
   end
 
   # GET /apply/identify/:batch
@@ -58,6 +80,25 @@ class BatchApplicationController < ApplicationController
 
   protected
 
+  def current_stage
+    @current_stage ||= begin
+      current_batch&.application_stage
+    end
+  end
+
+  def current_stage_number
+    @current_stage_number ||= begin
+      current_stage&.number
+    end
+  end
+
+  # Returns currently picked batch.
+  def current_batch
+    @current_batch ||= begin
+      Batch.find_by(name: params[:batch]) || Batch.find_by(batch_number: params[:batch])
+    end
+  end
+
   # Returns currently 'signed in' application founder.
   def current_batch_applicant
     @current_batch_applicant ||= begin
@@ -66,9 +107,29 @@ class BatchApplicationController < ApplicationController
     end
   end
 
+  helper_method :current_batch
   helper_method :current_batch_applicant
 
   private
+
+  def submitted_for_stage?
+    application = current_batch_applicant.batch_application
+
+    # Applicant hasn't submitted if there is no application at all.
+    return false if application.blank?
+
+    # Applicant hasn't submitted if there is no score entry for the current stage.
+    return false if ApplicationStageScore.where(
+      batch_application_id: application.id,
+      application_stage_id: current_stage.id
+    ).blank?
+
+    true
+  end
+
+  # def prep_for_stage_1
+  #   @batch_application = BatchApplication.new
+  # end
 
   # Check whether a token parameter has been supplied. Sign in application founder if there's a corresponding entry.
   def check_token

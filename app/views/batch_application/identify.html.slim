@@ -15,7 +15,7 @@
       .col-md-7.col-md-push-5
         .batch-results.margin-bottom-20
           .result-head
-            = simple_form_for @application_founder, url: apply_send_sign_in_email_path do |f|
+            = simple_form_for @batch_applicant, url: apply_send_sign_in_email_path do |f|
               = f.input :email
               = f.submit 'Send one-time sign in link'
 

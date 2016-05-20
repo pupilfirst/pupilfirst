@@ -1,5 +1,5 @@
 # Mails sent out from the contact form.
-class ApplicationFounderMailer < ApplicationMailer
+class BatchApplicantMailer < ApplicationMailer
   # Since there's no DB table supporting ContactForm, this method accepts all data (to allow serialization).
   def sign_in(email, token, batch)
     @token = token

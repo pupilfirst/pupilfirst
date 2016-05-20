@@ -26,7 +26,7 @@ class BatchApplicationController < ApplicationController
   def identify
     check_token
 
-    if current_application_founder.present?
+    if current_batch_applicant.present?
       redirect_to apply_batch_path(batch: params[:batch])
       return
     end
@@ -34,20 +34,20 @@ class BatchApplicationController < ApplicationController
     save_batch(params[:batch])
 
     @skip_container = true
-    @application_founder = ApplicationFounder.new
+    @batch_applicant = BatchApplicant.new
   end
 
   # POST /apply/identify
   def send_sign_in_email
     @skip_container = true
-    @application_founder = ApplicationFounder.find_or_initialize_by email: params[:application_founder][:email]
+    @batch_applicant = BatchApplicant.find_or_initialize_by email: params[:batch_applicant][:email]
 
-    if @application_founder.save
+    if @batch_applicant.save
       # Regenerate token.
-      @application_founder.regenerate_token
+      @batch_applicant.regenerate_token
 
       # Send email.
-      ApplicationFounderMailer.sign_in(@application_founder.email, @application_founder.token, session[:application_batch]).deliver_later
+      BatchApplicantMailer.sign_in(@batch_applicant.email, @batch_applicant.token, session[:application_batch]).deliver_later
 
       render 'batch_application/sign_in_email_sent'
     else
@@ -59,25 +59,25 @@ class BatchApplicationController < ApplicationController
   protected
 
   # Returns currently 'signed in' application founder.
-  def current_application_founder
-    @current_application_founder ||= begin
+  def current_batch_applicant
+    @current_batch_applicant ||= begin
       return if cookies[:applicant_token].blank?
-      ApplicationFounder.find_by token: cookies[:applicant_token]
+      BatchApplicant.find_by token: cookies[:applicant_token]
     end
   end
 
-  helper_method :current_application_founder
+  helper_method :current_batch_applicant
 
   private
 
   # Check whether a token parameter has been supplied. Sign in application founder if there's a corresponding entry.
   def check_token
     return if params[:token].blank?
-    applicant = ApplicationFounder.find_by token: params[:token]
+    applicant = BatchApplicant.find_by token: params[:token]
     return if applicant.blank?
 
     # Sign in the current application founder.
-    @current_application_founder = applicant
+    @current_batch_applicant = applicant
 
     # Store a cookie that'll keep him / her signed in for 2 months.
     cookies[:applicant_token] = { value: applicant.token, expires: 2.months.from_now }
@@ -85,7 +85,7 @@ class BatchApplicationController < ApplicationController
 
   # Redirect to applicant sign in page is one isn't signed in.
   def applicant_signed_in?
-    return true if current_application_founder.present?
+    return true if current_batch_applicant.present?
     redirect_to apply_identify_url(batch: params[:batch])
     false
   end

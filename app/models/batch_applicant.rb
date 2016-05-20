@@ -1,4 +1,4 @@
-class ApplicationFounder < ActiveRecord::Base
+class BatchApplicant < ActiveRecord::Base
   belongs_to :batch_application
 
   validates :email, presence: true, uniqueness: true

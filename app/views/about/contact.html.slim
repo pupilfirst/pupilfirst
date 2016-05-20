@@ -30,16 +30,22 @@ h1.page-header.header-light Contact
         .col-md-6
           .contact-location
             .google-maps-iframe-container
-              iframe.contact-google-map frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/view?zoom=16&center=9.9876%2C76.2846&key=#{ENV['GOOGLE_BROWSER_KEY']}" allowfullscreen=true sandbox="allow-same-origin allow-scripts"
+              iframe.contact-google-map frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/view?zoom=16&center=12.9310%2C77.6314&key=#{ENV['GOOGLE_BROWSER_KEY']}" allowfullscreen=true sandbox="allow-same-origin allow-scripts"
             address
               strong SV.CO
               br
               p
-                | 4th Floor, Bhageeratha Square,
+                | 1st floor, atop Cafe Coffee Day,
                 br
-                | Kacherippady, Kochi,
+                | Opp. The Beer Cafe,
                 br
-                | India &mdash; 682018.
+                | 4th Block Main Road,
+                br
+                | 80 Feet Main Rd,
+                br
+                | Koramangala 4th Block,
+                br
+                | Bengaluru &mdash; 560095
 
       = simple_form_for @contact_form,
         url: about_contact_url,

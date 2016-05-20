@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160520061803) do
+ActiveRecord::Schema.define(version: 20160520180356) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,7 +67,14 @@ ActiveRecord::Schema.define(version: 20160520061803) do
   add_index "ahoy_events", ["user_id", "user_type"], name: "index_ahoy_events_on_user_id_and_user_type", using: :btree
   add_index "ahoy_events", ["visit_id"], name: "index_ahoy_events_on_visit_id", using: :btree
 
-  create_table "application_stage_scores", force: :cascade do |t|
+  create_table "application_stages", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "number"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "application_submissions", force: :cascade do |t|
     t.integer  "application_stage_id"
     t.integer  "batch_application_id"
     t.integer  "score"
@@ -76,15 +83,8 @@ ActiveRecord::Schema.define(version: 20160520061803) do
     t.datetime "updated_at",           null: false
   end
 
-  add_index "application_stage_scores", ["application_stage_id"], name: "index_application_stage_scores_on_application_stage_id", using: :btree
-  add_index "application_stage_scores", ["batch_application_id"], name: "index_application_stage_scores_on_batch_application_id", using: :btree
-
-  create_table "application_stages", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "number"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
+  add_index "application_submissions", ["application_stage_id"], name: "index_application_submissions_on_application_stage_id", using: :btree
+  add_index "application_submissions", ["batch_application_id"], name: "index_application_submissions_on_batch_application_id", using: :btree
 
   create_table "batch_applicants", force: :cascade do |t|
     t.integer  "batch_application_id"

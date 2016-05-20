@@ -33,7 +33,7 @@ class BatchApplicationController < ApplicationController
       current_batch_applicant.update!(name: params[:batch_application][:team_lead_name], team_lead: true)
       application.batch_applicants << current_batch_applicant
 
-      application.application_stage_scores.create(
+      application.application_submissions.create(
         application_stage: current_stage,
         submission_urls: { 'Application' => admin_batch_application_url(application) }
       )
@@ -120,7 +120,7 @@ class BatchApplicationController < ApplicationController
     return false if application.blank?
 
     # Applicant hasn't submitted if there is no score entry for the current stage.
-    return false if ApplicationStageScore.where(
+    return false if ApplicationSubmission.where(
       batch_application_id: application.id,
       application_stage_id: current_stage.id
     ).blank?

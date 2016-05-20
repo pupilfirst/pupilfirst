@@ -1,4 +1,4 @@
-class ApplicationStageScore < ActiveRecord::Base
+class ApplicationSubmission < ActiveRecord::Base
   belongs_to :application_stage
   belongs_to :batch_application
 

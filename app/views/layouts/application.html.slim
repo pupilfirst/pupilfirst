@@ -48,6 +48,10 @@ html lang='en'
       .nav-spacer
       == yield :header
 
+    - if current_founder
+      button.btn.btn-lg.btn-primary#floating-feedback-button title="Submit Feedback!"
+        i.fa.fa-comment-o
+
     - if @skip_container
       == yield
     - else

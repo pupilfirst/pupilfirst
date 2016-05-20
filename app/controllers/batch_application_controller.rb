@@ -30,6 +30,7 @@ class BatchApplicationController < ApplicationController
     )
 
     if application.save
+      current_batch_applicant.update!(name: params[:batch_application][:team_lead_name], team_lead: true)
       application.batch_applicants << current_batch_applicant
 
       application.application_stage_scores.create(

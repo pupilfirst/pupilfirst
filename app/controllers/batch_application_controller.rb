@@ -13,6 +13,8 @@ class BatchApplicationController < ApplicationController
 
     if submitted_for_stage?
       render "batch_application/stage_#{current_stage_number}_submitted"
+    elsif application_rejected?
+      render "batch_application/rejected_at_stage_#{current_stage_number}"
     else
       render "batch_application/stage_#{current_stage_number}"
     end
@@ -81,22 +83,24 @@ class BatchApplicationController < ApplicationController
 
   protected
 
+  # Returns currently picked batch.
+  def current_batch
+    @current_batch ||= begin
+      Batch.find_by(name: params[:batch]) || Batch.find_by(batch_number: params[:batch])
+    end
+  end
+
+  # Returns the application_stage that current batch is at.
   def current_stage
     @current_stage ||= begin
       current_batch&.application_stage
     end
   end
 
+  # Returns the stage number of current batch.
   def current_stage_number
     @current_stage_number ||= begin
       current_stage&.number
-    end
-  end
-
-  # Returns currently picked batch.
-  def current_batch
-    @current_batch ||= begin
-      Batch.find_by(name: params[:batch]) || Batch.find_by(batch_number: params[:batch])
     end
   end
 
@@ -113,6 +117,7 @@ class BatchApplicationController < ApplicationController
 
   private
 
+  # Returns false if no submission has been supplied for current stage. true otherwise.
   def submitted_for_stage?
     application = current_batch_applicant.batch_application
 
@@ -126,6 +131,12 @@ class BatchApplicationController < ApplicationController
     ).blank?
 
     true
+  end
+
+  # Returns true if batch's stage is ahead of application's stage.
+  def application_rejected?
+    applicant_stage_number = current_batch_applicant&.batch_application&.application_stage&.number.to_i
+    current_stage_number > applicant_stage_number
   end
 
   # def prep_for_stage_1

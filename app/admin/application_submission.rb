@@ -1,7 +1,7 @@
 ActiveAdmin.register ApplicationSubmission do
   menu parent: 'Batches'
 
-  permit_params :application_stage_id, :batch_application_id, :score, :submission_urls
+  permit_params :application_stage_id, :batch_application_id, :score
 
   index do
     selectable_column
@@ -28,5 +28,45 @@ ActiveAdmin.register ApplicationSubmission do
     column :score
 
     actions
+  end
+
+  show do
+    attributes_table do
+      row :application_stage
+
+      row :batch_application do |application_submission|
+        application = application_submission.batch_application
+        link_to application.display_name, admin_batch_application_path(application)
+      end
+
+      row :submissions do |application_submission|
+        if application_submission.submission_urls.present?
+          ul do
+            application_submission.submission_urls.each do |key, value|
+              li do
+                strong key + ': '
+                span { link_to value, value }
+              end
+            end
+          end
+        end
+      end
+
+      row :score
+      row :created_at
+      row :updated_at
+    end
+  end
+
+  form do |f|
+    f.semantic_errors(*f.object.errors.keys)
+
+    f.inputs do
+      f.input :application_stage
+      f.input :batch_application
+      f.input :score
+    end
+
+    f.actions
   end
 end

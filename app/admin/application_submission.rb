@@ -1,7 +1,7 @@
 ActiveAdmin.register ApplicationSubmission do
   menu parent: 'Batches'
 
-  permit_params :application_stage_id, :batch_application_id, :score
+  permit_params :application_stage_id, :batch_application_id, :score, :notes
 
   index do
     selectable_column
@@ -53,6 +53,15 @@ ActiveAdmin.register ApplicationSubmission do
       end
 
       row :score
+
+      row :notes do |application_submission|
+        notes = application_submission.notes
+
+        if notes.present?
+          Kramdown::Document.new(notes).to_html.html_safe
+        end
+      end
+
       row :created_at
       row :updated_at
     end
@@ -65,6 +74,7 @@ ActiveAdmin.register ApplicationSubmission do
       f.input :application_stage
       f.input :batch_application
       f.input :score
+      f.input :notes, placeholder: 'Use markdown to format.'
     end
 
     f.actions

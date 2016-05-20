@@ -2,7 +2,7 @@ module Lita
   module Handlers
     class Targets < Handler
       route(
-        /^targets\??\sinfo\s(\d)$|^targets\??$/,
+        /^targets\s*\?*\s*info\s*(\d)\s*$|^targets\s*\?*\s*$/i,
         :targets_handler,
         command: true,
         help: {

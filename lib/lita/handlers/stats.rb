@@ -2,7 +2,7 @@ module Lita
   module Handlers
     class Stats < Handler
       route(
-        /\Astate of SV.CO for batch *(\d*) *\?\z/,
+        /\Astate of SV.CO for batch\s*(\d*)\s*\?*\z/i,
         :state_of_batch,
         command: true,
         restrict_to: :sv_co_team,
@@ -10,7 +10,7 @@ module Lita
       )
 
       route(
-        /\Aexpired team targets for batch *(\d*) *\?\z/,
+        /\Aexpired team targets for batch\s*(\d*)\s*\?*\z/i,
         :expired_team_targets,
         command: true,
         restrict_to: :sv_co_team,
@@ -18,7 +18,7 @@ module Lita
       )
 
       route(
-        /\Aexpired founder targets for batch *(\d*) *\?\z/,
+        /\Aexpired founder targets for batch\s*(\d*)\s*\?*\z/i,
         :expired_founder_targets,
         command: true,
         restrict_to: :sv_co_team,

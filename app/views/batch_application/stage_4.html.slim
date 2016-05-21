@@ -1,2 +1,26 @@
 / Stage four is pre-selection. We have shortlisted teams for the batch, and need to ask them to do a few things. Not
   entirely sure what we need them to do at this point.
+
+
+- content_for :head do
+  title SV.CO Apply Now
+  meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
+
+.container
+  .apply-banner
+    .row
+      .col-md-4
+        h1 Pre-selection!
+        p.header-light
+          ' Congratulations. Your team has got what it needs to build the next great startup!
+.apply-container
+  .container
+    .row
+      .col-md-7.col-md-push-5
+        .batch-results
+          .result-head
+            h3 Congratulations on passing our interview process!
+            p You've got to complete a few formalities before we can get this next batch rolling.
+            code What exactly needs to be accepted at this point?
+
+      == render 'left_bar'

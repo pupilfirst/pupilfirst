@@ -23,4 +23,20 @@ ActiveAdmin.register BatchApplicant do
 
     actions
   end
+
+  form do |f|
+    f.semantic_errors(*f.object.errors.keys)
+
+    f.inputs do
+      f.input :batch_application
+      f.input :name
+      f.input :team_lead
+      f.input :gender, as: :select, collection: Founder.valid_gender_values
+      f.input :email
+      f.input :phone
+      f.input :role, as: :select, collection: Founder.valid_roles
+    end
+
+    f.actions
+  end
 end

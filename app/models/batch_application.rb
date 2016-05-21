@@ -10,6 +10,14 @@ class BatchApplication < ActiveRecord::Base
   validates :application_stage_id, presence: true
 
   def display_name
-    batch_applicants.find_by(team_lead: true).name
+    team_lead.name
+  end
+
+  def team_lead
+    batch_applicants.find_by(team_lead: true)
+  end
+
+  def score
+    application_submissions.find_by(application_stage_id: application_stage.id)&.score
   end
 end

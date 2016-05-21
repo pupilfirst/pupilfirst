@@ -23,4 +23,8 @@
             p You've got to complete a few formalities before we can get this next batch rolling.
             code What exactly needs to be accepted at this point?
 
+            = simple_form_for :pre_selection do |f|
+              = f.input :some_file, as: :file
+              = f.submit 'Submit documents'
+
       == render 'left_bar'

@@ -61,6 +61,17 @@ class BatchApplicationController < ApplicationController
     redirect_to apply_batch_path(batch: params[:batch])
   end
 
+  def submission_for_stage_4
+    # TODO: Server-side error handling for stage 4 inputs.
+
+    # TODO: How to handle file uploads (if any for pre-selection)?
+    current_application.application_submissions.create!(
+      application_stage: current_stage
+    )
+
+    redirect_to apply_batch_path(batch: params[:batch])
+  end
+
   # GET /apply/identify/:batch
   def identify
     check_token

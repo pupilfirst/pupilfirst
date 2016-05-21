@@ -3,6 +3,12 @@ ActiveAdmin.register ApplicationSubmission do
 
   permit_params :application_stage_id, :batch_application_id, :score, :notes
 
+  filter :batch_application_batch_id_eq, as: :select, collection: Batch.all, label: 'Batch'
+  filter :batch_application
+  filter :application_stage
+  filter :score
+  filter :notes
+
   index do
     selectable_column
 

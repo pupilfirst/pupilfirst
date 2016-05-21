@@ -12,7 +12,17 @@ ActiveAdmin.register BatchApplication do
     end
 
     column :product_name
-    column :application_stage
+    column 'Stage', :application_stage
+
+    column 'Submission' do |batch_application|
+      current_stage = batch_application.application_stage
+      submission = batch_application.application_submissions.find_by(application_stage_id: current_stage.id)
+
+      if submission.present?
+        link_to "#{current_stage.name} submission", admin_application_submission_path(submission)
+      end
+    end
+
     column :score
 
     actions do |batch_application|

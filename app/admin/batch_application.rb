@@ -16,8 +16,10 @@ ActiveAdmin.register BatchApplication do
     column :score
 
     actions do |batch_application|
-      span do
-        link_to 'Promote', promote_admin_batch_application_path(batch_application), method: :post, class: 'member_link'
+      if batch_application.promotable?
+        span do
+          link_to 'Promote', promote_admin_batch_application_path(batch_application), method: :post, class: 'member_link'
+        end
       end
     end
   end
@@ -30,6 +32,8 @@ ActiveAdmin.register BatchApplication do
   end
 
   action_item :promote, only: :show do
-    link_to 'Promote to next stage', promote_admin_batch_application_path(batch_application), method: :post
+    if batch_application.promotable?
+      link_to('Promote to next stage', promote_admin_batch_application_path(batch_application), method: :post)
+    end
   end
 end

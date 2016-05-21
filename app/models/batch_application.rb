@@ -23,8 +23,14 @@ class BatchApplication < ActiveRecord::Base
 
   # Promotes this application to the next stage, and returns the latest stage.
   def promote!
+    return application_stage unless promotable?
     self.application_stage = application_stage.next
     save!
     application_stage
+  end
+
+  # Application is promotable is it's on the same stage as its batch, and has a score.
+  def promotable?
+    application_stage == batch.application_stage && score.present?
   end
 end

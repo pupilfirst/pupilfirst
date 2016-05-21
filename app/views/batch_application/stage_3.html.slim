@@ -1,2 +1,25 @@
 / Stage three is the interview stage. There's no input at this stage. Just need to inform the candidates of timing of
   interview.
+
+- content_for :head do
+  title SV.CO Apply Now
+  meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
+
+.container
+  .apply-banner
+    .row
+      .col-md-4
+        h1 Coding and Hustling tests are live!
+        p.header-light
+          ' You've made it in! Now prove that you've got what it takes.
+.apply-container
+  .container
+    .row
+      .col-md-7.col-md-push-5
+        .batch-results
+          .result-head
+            h3 Congratulations on passing our coding and hustling tests!
+            p You've got interviews next.
+            code Fill in information on when the interviews will occur, and what not.
+
+      == render 'left_bar'

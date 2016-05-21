@@ -6,7 +6,7 @@
   .apply-banner
     .row
       .col-md-4
-        h1 Application submitted.
+        h1 Your coding and hustling submissions were rejected.
 .apply-container
   .container
     .row
@@ -14,7 +14,8 @@
         .batch-results.margin-bottom-20
           .result-head
             p
-              ' Your application has been received. The SV.CO team will take a look at it soon as possible, and results
-              | will be published by <code>FIGURE_THIS_OUT</code> date.
+              ' We're sorry, but your coding and hustling submissions didn't make the cut. Possible reasons for this
+              ' include YYYY, ZZZZ, or ABCD. If you think there's we've made a mistake in our evaluation, feel free to
+              | contact us at #{mail_to 'help@sv.co'}, and we'll get back to you as soon as we can.
 
       == render 'left_bar'

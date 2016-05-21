@@ -22,10 +22,10 @@ class BatchApplicationController < ApplicationController
 
   # POST /apply/:batch
   def submit
-    send "submit_handler_for_stage_#{current_stage_number}"
+    send "submission_for_stage_#{current_stage_number}"
   end
 
-  def submit_handler_for_stage_1
+  def submission_for_stage_1
     application = BatchApplication.new(
       batch: current_batch,
       application_stage: current_stage,
@@ -35,16 +35,30 @@ class BatchApplicationController < ApplicationController
       current_batch_applicant.update!(name: params[:batch_application][:team_lead_name], team_lead: true)
       application.batch_applicants << current_batch_applicant
 
-      application.application_submissions.create(
+      application.application_submissions.create!(
         application_stage: current_stage,
         submission_urls: { 'Application' => admin_batch_application_url(application) }
       )
 
       redirect_to apply_batch_path(batch: params[:batch])
     else
-      # Something about the application isn't okay.
+      # TODO: Something about the application isn't okay.
       raise NotImplementedError
     end
+  end
+
+  def submission_for_stage_2
+    # TODO: Server-side error handling for stage 2 inputs.
+
+    current_application.application_submissions.create!(
+      application_stage: current_stage,
+      submission_urls: {
+        'Code Submission' => params[:tests][:github_url],
+        'Video Submission' => params[:tests][:video_url]
+      }
+    )
+
+    redirect_to apply_batch_path(batch: params[:batch])
   end
 
   # GET /apply/identify/:batch
@@ -109,6 +123,13 @@ class BatchApplicationController < ApplicationController
     @current_batch_applicant ||= begin
       return if cookies[:applicant_token].blank?
       BatchApplicant.find_by token: cookies[:applicant_token]
+    end
+  end
+
+  # Returns batch application of current applicant.
+  def current_application
+    @current_application ||= begin
+      current_batch_applicant&.batch_application
     end
   end
 

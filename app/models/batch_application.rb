@@ -20,4 +20,11 @@ class BatchApplication < ActiveRecord::Base
   def score
     application_submissions.find_by(application_stage_id: application_stage.id)&.score
   end
+
+  # Promotes this application to the next stage, and returns the latest stage.
+  def promote!
+    self.application_stage = application_stage.next
+    save!
+    application_stage
+  end
 end

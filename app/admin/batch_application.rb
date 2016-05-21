@@ -28,4 +28,8 @@ ActiveAdmin.register BatchApplication do
     flash[:success] = "Application has been promoted to #{promoted_stage.name}"
     redirect_to admin_batch_applications_path
   end
+
+  action_item :promote, only: :show do
+    link_to 'Promote to next stage', promote_admin_batch_application_path(batch_application), method: :post
+  end
 end

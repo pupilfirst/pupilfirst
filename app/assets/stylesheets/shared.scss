@@ -82,17 +82,6 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 
 body {
   font-family: 'Source Sans Pro', sans-serif;
-  #floating-feedback-button {
-    position: fixed;
-    right: 0;
-    bottom: 50%;
-    z-index: 100;
-    border-radius: 30px;
-    border: white;
-    border-style: solid;
-    border-width: thin;
-    box-shadow: 3px 3px 5px grey;
-  }
 }
 
 .green-text {

@@ -48,10 +48,17 @@ html lang='en'
       .nav-spacer
       == yield :header
 
-    - if current_founder
-      button.btn.btn-lg.btn-primary#floating-feedback-button title="Submit Feedback!"
-        i.fa.fa-comment-o
-
+      - if current_founder
+        #platform-feedback-modal.modal.fade role="dialog"
+          .modal-dialog
+            .modal-content
+              .modal-header
+                button.close data-dismiss="modal" type="button"  &times;
+                h4.modal-title We Love Feedback!
+              .modal-body
+                ' If your feedback is useful, it shows you can think well of product ideas and improvement, and we'll reward you with Karma Points & a special timeline event :)
+              .modal-footer
+                button.btn.btn-default data-dismiss="modal" type="button"  Close
     - if @skip_container
       == yield
     - else

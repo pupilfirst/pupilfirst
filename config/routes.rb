@@ -106,5 +106,5 @@ Svapp::Application.routes.draw do
   # used for shortened urls from the shortener gem
   get '/:id', to: 'shortener/shortened_urls#show'
 
-  resource :platform_feedback, only: [:create]
+  resource :platform_feedback
 end

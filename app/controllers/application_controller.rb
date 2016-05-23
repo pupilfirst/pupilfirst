@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   before_filter :configure_permitted_parameters, if: :devise_controller?
   after_filter :prepare_unobtrusive_flash
   before_filter :set_content_security_policy
+  before_action :prepare_platform_feedback
 
   # When in production, respond to requests that ask for unhandled formats with 406.
   rescue_from ActionView::MissingTemplate do |exception|
@@ -35,6 +36,13 @@ class ApplicationController < ActionController::Base
     else
       super
     end
+  end
+
+  # If a user is signed in, prepare a platform_feedback object to be used with its form
+  def prepare_platform_feedback
+    return unless current_founder
+
+    @platform_feedback = PlatformFeedback.new(founder_id: current_founder.id)
   end
 
   protected

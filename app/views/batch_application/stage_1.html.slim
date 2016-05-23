@@ -34,7 +34,7 @@
 
               = f.input :team_lead_email,
                 label: 'Team lead email ID',
-                input_html: { value: current_batch_applicant.email }
+                input_html: { value: current_batch_applicant.email, disabled: true }
 
               = f.input :team_lead_gender,
                 label: "Team lead's gender",

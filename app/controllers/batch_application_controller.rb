@@ -167,7 +167,8 @@ class BatchApplicationController < ApplicationController
 
   # Returns true if batch's stage is ahead of application's stage.
   def application_rejected?
-    applicant_stage_number = current_batch_applicant&.batch_application&.application_stage&.number.to_i
+    return false if current_application.nil?
+    applicant_stage_number = current_application.application_stage&.number.to_i
     current_stage_number > applicant_stage_number
   end
 

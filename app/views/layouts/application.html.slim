@@ -52,25 +52,28 @@ html lang='en'
         #platform-feedback-modal.modal.fade role="dialog"
           .modal-dialog
             .modal-content
-              .modal-header
-                button.close data-dismiss="modal" type="button"  &times;
-                h4.modal-title We Love Feedback!
-              .modal-body
-                ' If your feedback is useful, it shows you can think well of product ideas and improvement, and we'll reward you with Karma Points & a special timeline event :)
-                = simple_form_for @platform_feedback,
-                  html: { class: 'form-horizontal' },
-                  wrapper: :horizontal_form,
-                  wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_file_input, boolean: :horizontal_boolean } do |f|
+              = simple_form_for @platform_feedback,
+                url: platform_feedback_path,
+                html: { class: 'form-horizontal' },
+                wrapper: :horizontal_form,
+                wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_file_input, boolean: :horizontal_boolean } do |f|
+                .modal-header
+                  button.close data-dismiss="modal" type="button"  &times;
+                  h4.modal-title We Love Feedback!
+                .modal-body
+                  ' If your feedback is useful, it shows you can think well of product ideas and improvement, and we'll reward you with Karma Points & a special timeline event :)
+                  hr
+                    = f.input :founder_id, as: :hidden
+                    = f.input :feedback_type, as: :select, collection: PlatformFeedback.types_of_feedback, include_blank: false
+                    = f.input :description, input_html: { rows: 5 }
+                    = f.input :attachment, as: :file
+                    hr
+                    p How likely is it that you would recommend SV.CO to a friend?
+                    = f.input :promoter_score, as: :radio_buttons, collection: 1..9, label: false
+                .modal-footer
+                  button.btn.btn-primary type="submit" Submit Feedback
+                  button.btn.btn-default data-dismiss="modal" type="button"  Close
 
-                  legend Contact Form
-
-                  = f.input :founder, label: 'Your name'
-                  = f.input :type, label: 'Type'
-                  = f.input :description, label: 'Description'
-                  = f.input :attachment
-                  = f.input :promoter_score
-              .modal-footer
-                button.btn.btn-default data-dismiss="modal" type="button"  Close
     - if @skip_container
       == yield
     - else

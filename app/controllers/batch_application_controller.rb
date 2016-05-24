@@ -34,12 +34,6 @@ class BatchApplicationController < ApplicationController
     if application.save
       current_batch_applicant.update!(name: params[:batch_application][:team_lead_name], team_lead: true)
       application.batch_applicants << current_batch_applicant
-
-      application.application_submissions.create!(
-        application_stage: current_stage,
-        submission_urls: { 'Application' => admin_batch_application_url(application) }
-      )
-
       redirect_to apply_batch_path(batch: params[:batch])
     else
       # TODO: Something about the application isn't okay.
@@ -50,12 +44,16 @@ class BatchApplicationController < ApplicationController
   def submission_for_stage_2
     # TODO: Server-side error handling for stage 2 inputs.
 
-    current_application.application_submissions.create!(
-      application_stage: current_stage,
-      submission_urls: {
-        'Code Submission' => params[:tests][:github_url],
-        'Video Submission' => params[:tests][:video_url]
-      }
+    submission = current_application.application_submissions.create!(application_stage: current_stage)
+
+    submission.application_submission_urls.create!(
+      name: 'Code Submission',
+      url: params[:tests][:github_url]
+    )
+
+    submission.application_submission_urls.create!(
+      name: 'Video Submission',
+      url: params[:tests][:video_url]
     )
 
     redirect_to apply_batch_path(batch: params[:batch])
@@ -151,14 +149,15 @@ class BatchApplicationController < ApplicationController
 
   # Returns false if no submission has been supplied for current stage. true otherwise.
   def submitted_for_stage?
-    application = current_batch_applicant.batch_application
-
     # Applicant hasn't submitted if there is no application at all.
-    return false if application.blank?
+    return false if current_application.blank?
 
-    # Applicant hasn't submitted if there is no score entry for the current stage.
+    # On stage 1, all we need is the submitted application.
+    return true if current_stage_number == 1
+
+    # Applicant hasn't submitted if there is no submission entry for the current stage.
     return false if ApplicationSubmission.where(
-      batch_application_id: application.id,
+      batch_application_id: current_application.id,
       application_stage_id: current_stage.id
     ).blank?
 

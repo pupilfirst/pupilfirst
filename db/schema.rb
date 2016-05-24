@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160520183355) do
+ActiveRecord::Schema.define(version: 20160524071806) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,11 +74,21 @@ ActiveRecord::Schema.define(version: 20160520183355) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "application_submission_urls", force: :cascade do |t|
+    t.string   "name"
+    t.string   "url"
+    t.integer  "score"
+    t.integer  "application_submission_id"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "application_submission_urls", ["application_submission_id"], name: "index_application_submission_urls_on_application_submission_id", using: :btree
+
   create_table "application_submissions", force: :cascade do |t|
     t.integer  "application_stage_id"
     t.integer  "batch_application_id"
     t.integer  "score"
-    t.text     "submission_urls"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
     t.text     "notes"

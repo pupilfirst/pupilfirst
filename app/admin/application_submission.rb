@@ -1,7 +1,8 @@
 ActiveAdmin.register ApplicationSubmission do
   menu parent: 'Batches'
 
-  permit_params :application_stage_id, :batch_application_id, :score, :notes
+  permit_params :application_stage_id, :batch_application_id, :score, :notes,
+    application_submission_urls_attributes: [:id, :name, :url, :score, :_destroy]
 
   filter :batch_application_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'Batch'
   filter :batch_application
@@ -19,12 +20,18 @@ ActiveAdmin.register ApplicationSubmission do
 
     column :application_stage
 
-    column :submissions do |application_submission|
-      if application_submission.submission_urls.present?
+    column 'Submitted Links' do |application_submission|
+      if application_submission.application_submission_urls.present?
         ul do
-          application_submission.submission_urls.each do |key, value|
+          application_submission.application_submission_urls.each do |entry|
             li do
-              link_to key, value
+              span do
+                link_to "#{entry.name}", entry.url
+              end
+
+              if entry.score.present?
+                span " (#{entry.score})"
+              end
             end
           end
         end
@@ -45,13 +52,19 @@ ActiveAdmin.register ApplicationSubmission do
         link_to application.display_name, admin_batch_application_path(application)
       end
 
-      row :submissions do |application_submission|
-        if application_submission.submission_urls.present?
+      row 'Submitted Links' do |application_submission|
+        if application_submission.application_submission_urls.present?
           ul do
-            application_submission.submission_urls.each do |key, value|
+            application_submission.application_submission_urls.each do |entry|
               li do
-                strong key + ': '
-                span { link_to value, value }
+                span do
+                  strong entry.name + ': '
+                  span { link_to entry.url, entry.url }
+                end
+
+                if entry.score.present?
+                  span " (#{entry.score})"
+                end
               end
             end
           end
@@ -81,6 +94,14 @@ ActiveAdmin.register ApplicationSubmission do
       f.input :batch_application
       f.input :score
       f.input :notes, placeholder: 'Use markdown to format.'
+    end
+
+    f.inputs 'Submitted URLs' do
+      f.has_many :application_submission_urls, new_record: 'Add URL', allow_destroy: true, heading: false do |t|
+        t.input :name
+        t.input :url
+        t.input :score
+      end
     end
 
     f.actions

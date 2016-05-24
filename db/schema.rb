@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160524085035) do
+ActiveRecord::Schema.define(version: 20160524135113) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(version: 20160524085035) do
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
     t.text     "notes"
+    t.string   "file"
   end
 
   add_index "application_submissions", ["application_stage_id"], name: "index_application_submissions_on_application_stage_id", using: :btree

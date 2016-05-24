@@ -5,6 +5,12 @@ class ApplicationSubmission < ActiveRecord::Base
 
   accepts_nested_attributes_for :application_submission_urls, allow_destroy: true
 
+  mount_uploader :file, ApplicationSubmissionFileUploader
+
+  def file_name
+    file.sanitized_file.original_filename
+  end
+
   def display_name
     "#{batch_application.display_name} - #{application_stage.name}"
   end

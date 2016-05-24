@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160524072042) do
+ActiveRecord::Schema.define(version: 20160524085035) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -307,6 +307,7 @@ ActiveRecord::Schema.define(version: 20160524072042) do
     t.integer  "founder_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "notes"
   end
 
   add_index "platform_feedback", ["founder_id"], name: "index_platform_feedback_on_founder_id", using: :btree

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160524063900) do
+ActiveRecord::Schema.define(version: 20160524072042) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -300,11 +300,13 @@ ActiveRecord::Schema.define(version: 20160524063900) do
   add_index "news", ["user_id"], name: "index_news_on_user_id", using: :btree
 
   create_table "platform_feedback", force: :cascade do |t|
-    t.string  "feedback_type"
-    t.string  "attachment"
-    t.text    "description"
-    t.integer "promoter_score"
-    t.integer "founder_id"
+    t.string   "feedback_type"
+    t.string   "attachment"
+    t.text     "description"
+    t.integer  "promoter_score"
+    t.integer  "founder_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "platform_feedback", ["founder_id"], name: "index_platform_feedback_on_founder_id", using: :btree

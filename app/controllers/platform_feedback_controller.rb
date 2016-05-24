@@ -4,11 +4,11 @@ class PlatformFeedbackController < ApplicationController
 
     if @platform_feedback.save!
       flash[:success] = 'Thank You! Your feedback has been sent to the SV.CO team!'
-      redirect_to :back
     else
       flash[:error] = 'Something went wrong while saving your feedback! Please try again.'
-      redirect_to :back
     end
+
+    redirect_to :back
   end
 
   private

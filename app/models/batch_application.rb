@@ -29,8 +29,8 @@ class BatchApplication < ActiveRecord::Base
     application_stage
   end
 
-  # Application is promotable is it's on the same stage as its batch, and has a score.
+  # Application is promotable is it's on the same stage as its batch.
   def promotable?
-    application_stage == batch.application_stage && score.present?
+    application_stage == batch.application_stage
   end
 end

@@ -40,7 +40,23 @@ ActiveAdmin.register ApplicationSubmission do
 
     column :score
 
-    actions
+    actions do |application_submission|
+      application = application_submission.batch_application
+
+      if application.promotable? && application_submission.application_stage == application.application_stage
+        span do
+          link_to 'Promote', promote_admin_batch_application_path(application), method: :post, class: 'member_link'
+        end
+      end
+    end
+  end
+
+  action_item :promote, only: :show do
+    application = application_submission.batch_application
+
+    if application.promotable? && application_submission.application_stage == application.application_stage
+      link_to('Promote application to next stage', promote_admin_batch_application_path(application), method: :post)
+    end
   end
 
   show do

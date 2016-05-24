@@ -1,3 +1,16 @@
+## 24 May, 2016
+
+### Features
+
+  - Tracking improved timeline events for those that were
+    marked as needing improvement.
+
+### UX and UI
+
+  - Vocalist now ignores case when responding to commands.
+  - Removed play and pause buttons on notifications.
+  - Updated SV.CO's address; we've got new digs in Bengaluru!
+
 ## 17 May, 2016
 
 ### Features

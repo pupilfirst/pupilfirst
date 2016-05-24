@@ -1,0 +1,17 @@
+= content_for :heading
+| Platform Feedback (#{@platform_feedback.feedback_type}) by #{@platform_feedback.founder.fullname}
+
+= content_for :salutation
+| Hello,
+
+= content_for :body
+  ' A new Platform Feedback with the following details was submitted by #{@platform_feedback.founder.fullname}:
+  p
+    | <strong>Type:</strong> #{@platform_feedback.feedback_type}<br/>
+    | <strong>Description:</strong> #{@platform_feedback.description}<br/>
+    - if @platform_feedback.attachment.present?
+      | <strong>Attachment:</strong> <a href="#{@platform_feedback.attachment.url}">#{@platform_feedback.attachment.file.filename}</a><br/>
+    - if @platform_feedback.promoter_score.present?
+      | <strong>Promoter Score:</strong> #{@platform_feedback.promoter_score}<br/>
+  p
+    ' Please login at SV.CO as admin to follow up and assign karma points, if applicable.

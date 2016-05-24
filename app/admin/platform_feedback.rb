@@ -21,4 +21,21 @@ ActiveAdmin.register PlatformFeedback do
 
     actions
   end
+
+  show do |feedback|
+    attributes_table do
+      row :feedback_type
+      row :founder
+      row :description
+      row :attachment do
+        if feedback.attachment.present?
+          link_to feedback.attachment.url, target: '_blank' do
+            image_tag feedback.attachment.url, width: '200px'
+          end
+        end
+      end
+      row :promoter_score
+      row :created_at
+    end
+  end
 end

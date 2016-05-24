@@ -24,8 +24,8 @@ ActiveAdmin.register Batch do
       f.input :batch_number
       f.input :name
       f.input :description
-      f.input :start_date
-      f.input :end_date
+      f.input :start_date, as: :datepicker
+      f.input :end_date, as: :datepicker
       f.input :slack_channel
     end
 

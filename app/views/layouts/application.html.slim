@@ -52,7 +52,7 @@ html lang='en'
         #platform-feedback-modal.modal.fade role="dialog"
           .modal-dialog
             .modal-content
-              = simple_form_for @platform_feedback,
+              = simple_form_for @platform_feedback_for_form,
                 url: platform_feedback_path,
                 html: { class: 'form-horizontal' },
                 wrapper: :horizontal_form,

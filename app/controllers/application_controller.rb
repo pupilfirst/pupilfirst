@@ -42,7 +42,7 @@ class ApplicationController < ActionController::Base
   def prepare_platform_feedback
     return unless current_founder
 
-    @platform_feedback = PlatformFeedback.new(founder_id: current_founder.id)
+    @platform_feedback_for_form = PlatformFeedback.new(founder_id: current_founder.id)
   end
 
   protected

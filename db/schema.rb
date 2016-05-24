@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160523111551) do
+ActiveRecord::Schema.define(version: 20160524063900) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -306,6 +306,8 @@ ActiveRecord::Schema.define(version: 20160523111551) do
     t.integer "promoter_score"
     t.integer "founder_id"
   end
+
+  add_index "platform_feedback", ["founder_id"], name: "index_platform_feedback_on_founder_id", using: :btree
 
   create_table "public_slack_messages", force: :cascade do |t|
     t.text     "body"

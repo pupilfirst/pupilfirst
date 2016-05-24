@@ -10,7 +10,7 @@ class BatchApplication < ActiveRecord::Base
   validates :application_stage_id, presence: true
 
   def display_name
-    team_lead.name
+    team_lead&.name || "Batch Application ##{id}"
   end
 
   def team_lead

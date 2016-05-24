@@ -8,7 +8,12 @@ ActiveAdmin.register BatchApplication do
 
     column :team_lead do |batch_application|
       team_lead = batch_application.team_lead
-      link_to team_lead.name, admin_batch_applicant_path(team_lead)
+
+      if team_lead.present?
+        link_to team_lead.name, admin_batch_applicant_path(team_lead)
+      else
+        em 'Deleted'
+      end
     end
 
     column :product_name

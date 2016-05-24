@@ -1,0 +1,14 @@
+= form_tag(assign_karma_point_admin_platform_feedback_path, method: :post) do
+  fieldset.inputs
+    legend
+      span Assign Karma Points and Add Notes
+    ol
+      li.input.select
+        = label_tag :karma_point, 'Assign Karma Point', class: 'label'
+        = select_tag :karma_point, options_for_select([10, 20, 30, 40]), include_blank: true
+      li.input.select
+        = label_tag :notes, 'Notes', class: 'label'
+        = text_area_tag :notes
+    ol
+      li.action.input_action
+        = submit_tag 'Add'

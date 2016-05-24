@@ -69,7 +69,7 @@ html lang='en'
                     = f.input :attachment, as: :file
                     hr
                     p How likely is it that you would recommend SV.CO to a friend?
-                    = f.input :promoter_score, as: :radio_buttons, collection: 1..9, label: false
+                    = f.input :promoter_score, as: :radio_buttons, collection: 0..10, label: false
                 .modal-footer
                   button.btn.btn-primary type="submit" Submit Feedback
                   button.btn.btn-default data-dismiss="modal" type="button"  Close

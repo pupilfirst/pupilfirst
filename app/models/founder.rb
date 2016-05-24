@@ -33,6 +33,7 @@ class Founder < ActiveRecord::Base
   has_many :visits, as: :user
   has_many :ahoy_events, class_name: 'Ahoy::Event', as: :user
   has_many :targets, dependent: :destroy, as: :assignee
+  has_many :platform_feedback
 
   scope :batched, -> { joins(:startup).merge(Startup.batched) }
   scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }

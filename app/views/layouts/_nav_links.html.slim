@@ -28,6 +28,10 @@
             = link_to destroy_founder_session_path, method: :delete do
               i.fa.fa-sign-out
               | &nbsp;Logout
+          li role="presentation"
+            a href="#" data-toggle="modal" data-target="#platform-feedback-modal"
+              i.fa.fa-comment-o
+                | &nbsp;Submit Feedback
 
     - else
       li role="presentation" = link_to 'Sign In', new_founder_session_path, class: 'top-nav-link'

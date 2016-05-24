@@ -1,4 +1,5 @@
 module ActiveAdmin
+  # rubocop:disable Metrics/ModuleLength
   module DashboardHelper
     def days_elapsed
       (Date.today - batch_selected.start_date).to_i
@@ -116,5 +117,22 @@ module ActiveAdmin
           Founder.active_founders_on_web(since: x.week.ago.beginning_of_week, upto: x.week.ago.end_of_week, batch: batch_selected)).compact.uniq.count
       end
     end
+
+    def promoter_score_text
+      "Net Promoter Score: #{present_nps} (from #{source_of_nps})"
+    end
+
+    def present_nps
+      PlatformFeedback.average(:promoter_score).round(1).to_s('+F')
+    end
+
+    def source_of_nps
+      "#{count_of_PS} Platform Feedback"
+    end
+
+    def count_of_ps
+      PlatformFeedback.where.not(promoter_score: nil).count
+    end
   end
+  # rubocop:enable Metrics/ModuleLength
 end

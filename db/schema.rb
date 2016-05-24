@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160524071806) do
+ActiveRecord::Schema.define(version: 20160524085035) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -313,6 +313,19 @@ ActiveRecord::Schema.define(version: 20160524071806) do
   add_index "karma_points", ["founder_id"], name: "index_karma_points_on_founder_id", using: :btree
   add_index "karma_points", ["source_id"], name: "index_karma_points_on_source_id", using: :btree
   add_index "karma_points", ["startup_id"], name: "index_karma_points_on_startup_id", using: :btree
+
+  create_table "platform_feedback", force: :cascade do |t|
+    t.string   "feedback_type"
+    t.string   "attachment"
+    t.text     "description"
+    t.integer  "promoter_score"
+    t.integer  "founder_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "notes"
+  end
+
+  add_index "platform_feedback", ["founder_id"], name: "index_platform_feedback_on_founder_id", using: :btree
 
   create_table "public_slack_messages", force: :cascade do |t|
     t.text     "body"

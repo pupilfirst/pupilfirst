@@ -48,6 +48,32 @@ html lang='en'
       .nav-spacer
       == yield :header
 
+      - if current_founder
+        #platform-feedback-modal.modal.fade role="dialog"
+          .modal-dialog
+            .modal-content
+              = simple_form_for @platform_feedback_for_form,
+                url: platform_feedback_path,
+                html: { class: 'form-horizontal' },
+                wrapper: :horizontal_form,
+                wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_file_input, boolean: :horizontal_boolean } do |f|
+                .modal-header
+                  button.close data-dismiss="modal" type="button"  &times;
+                  h4.modal-title We Love Feedback!
+                .modal-body
+                  ' If your feedback is useful, it shows you can think well of product ideas and improvement, and we'll reward you with Karma Points & a special timeline event :)
+                  hr
+                    = f.input :founder_id, as: :hidden
+                    = f.input :feedback_type, as: :select, collection: PlatformFeedback.types_of_feedback, include_blank: false
+                    = f.input :description, input_html: { rows: 5 }
+                    = f.input :attachment, as: :file
+                    hr
+                    p How likely is it that you would recommend SV.CO to a friend?
+                    = f.input :promoter_score, as: :radio_buttons, collection: 0..10, label: false
+                .modal-footer
+                  button.btn.btn-primary type="submit" Submit Feedback
+                  button.btn.btn-default data-dismiss="modal" type="button"  Close
+
     - if @skip_container
       == yield
     - else

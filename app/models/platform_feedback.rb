@@ -4,6 +4,8 @@ class PlatformFeedback < ActiveRecord::Base
 
   validates_presence_of :founder
 
+  mount_uploader :attachment, PlatformFeedbackAttachmentUploader
+
   def self.types_of_feedback
     %w(Feature Suggestion Bug Other)
   end

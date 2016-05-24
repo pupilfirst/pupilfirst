@@ -36,6 +36,18 @@ en:
           <p>You'll receive notifications on Slack when you or your team are assigned new targets, or when existing targets are revised.</p>
         data_points: Basic information about your team and product are displayed here. You can add more information by updating your startup's profile.
         founders: Your startup's founders are listed here. You can also add team members (who do not need to register with SV.CO), by updating your startup's profile.
+      timeline_cards:
+        needs_imprvement:
+          tooltip_text:
+            founder: We have verified this event, but you can do better! If you have time, submit a new revised event based on our feedback.
+            public: This event is verified by SV.CO but our Faculty submitted feedback asking for further improvements.
+          status_text: Needs Improvement
+        improved_later:
+          tooltip_text:
+            founder: Thank you for improving this event with a later event!
+            public: This event was improved upon with a later submission!
+          status_text: Improved Later
+
   resource:
     share_status:
       approved: 'Only with approved startups'

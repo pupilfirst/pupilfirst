@@ -1,7 +1,7 @@
 module Lita
   module Handlers
     class Glossary < Handler
-      route(/\Adefine ([a-zA-z\s]*)\z/, :definition, command: true, help: { 'define TERM' => I18n.t('slack.help.glossary') })
+      route(/\Adefine\s*\?*\s*([a-z\s]*)\?*\z/i, :definition, command: true, help: { 'define TERM' => I18n.t('slack.help.glossary') })
 
       def definition(response)
         @response = response
@@ -11,14 +11,14 @@ module Lita
 
       def fetch_definition
         ActiveRecord::Base.connection_pool.with_connection do
-          @result = ::GlossaryTerm.find_by(term: @term.downcase)
+          @result = ::GlossaryTerm.find_by(term: @term.downcase.strip)
         end
 
         @result.present? ? send_definition : send_not_found
       end
 
       def send_not_found
-        @response.reply I18n.t('slack.handlers.glossary.term_not_found', term: @term)
+        @response.reply I18n.t('slack.handlers.glossary.term_not_found', term: @term.strip)
       end
 
       def send_definition

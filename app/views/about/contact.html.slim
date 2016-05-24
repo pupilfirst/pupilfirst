@@ -1,7 +1,7 @@
 - if @sitewide_notice
   - content_for :sitewide_notice
     ' <strong>SV.CO</strong> is the next phase of the Startup Village story.
-    ' #{link_to 'Read more here', 'https://blog.sv.co/startup-village-to-scale-up-countrywide-after-successful-first-phase', target: '_blank'}
+    ' #{link_to 'Read more here', 'https://sv.co/cwlg8', target: '_blank'}
 
 - content_for :head
   title SV.CO Contact Details
@@ -30,27 +30,22 @@ h1.page-header.header-light Contact
         .col-md-6
           .contact-location
             .google-maps-iframe-container
-              iframe.contact-google-map frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/view?zoom=16&center=10.0552%2C76.3520&key=#{ENV['GOOGLE_BROWSER_KEY']}" allowfullscreen=true sandbox="allow-same-origin allow-scripts"
+              iframe.contact-google-map frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/view?zoom=16&center=12.93116%2C77.63232&key=#{ENV['GOOGLE_BROWSER_KEY']}" allowfullscreen=true sandbox="allow-same-origin allow-scripts"
             address
-              strong Startup Village, Kochi
+              strong SV.CO
               br
-              | Kinfra Hi-Tech Park,
-              br
-              | Kalamassery,
-              br
-              | Kochi &mdash; 683503.
-        .col-md-6
-          .contact-location
-            .google-maps-iframe-container
-              iframe.contact-google-map frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/view?zoom=17&center=17.8095%2C83.3876&key=#{ENV['GOOGLE_BROWSER_KEY']}" allowfullscreen=true sandbox="allow-same-origin allow-scripts"
-            address
-              strong Startup Village, Visakhapatnam
-              br
-              | Sunrise Startups, Hill No. 3,
-              br
-              | Cyber Hills, IT SEZ, Madhuruwada,
-              br
-              | Visakhapatnam &mdash; 530048.
+              p
+                | 1st floor, atop Cafe Coffee Day,
+                br
+                | Opp. The Beer Cafe,
+                br
+                | 4th Block Main Road,
+                br
+                | 80 Feet Main Rd,
+                br
+                | Koramangala 4th Block,
+                br
+                | Bengaluru &mdash; 560095
 
       = simple_form_for @contact_form,
         url: about_contact_url,

@@ -4,4 +4,5 @@ $(window).bind 'rails:flash', (e, params) ->
     text: params.message,
     type: params.type,
     mouse_reset: false,
-    styling: 'fontawesome'
+    styling: 'fontawesome',
+    buttons: { sticker: false }

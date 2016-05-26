@@ -11,12 +11,15 @@ class BatchApplicationController < ApplicationController
     raise_not_found if current_stage_number.blank?
     return unless applicant_signed_in?
 
-    if submitted_for_stage?
-      render "batch_application/stage_#{current_stage_number}_submitted"
-    elsif application_rejected?
-      render "batch_application/rejected_at_stage_#{current_stage_number}"
-    else
-      render "batch_application/stage_#{current_stage_number}"
+    case applicant_status
+      when :expired
+        render "batch_application/stage_#{applicant_stage_number}_expired"
+      when :rejected
+        render "batch_application/stage_#{applicant_stage_number}_rejection"
+      when :submitted
+        render "batch_application/stage_#{current_stage_number}_submitted"
+      else
+        render "batch_application/stage_#{current_stage_number}"
     end
   end
 
@@ -135,6 +138,21 @@ class BatchApplicationController < ApplicationController
     end
   end
 
+  def applicant_stage
+    @applicant_stage ||= begin
+      if current_application.blank?
+        ApplicationStage.find_by number: 1
+      else
+        current_application.application_stage
+      end
+    end
+  end
+
+  # Returns stage number of current applicant.
+  def applicant_stage_number
+    @applicant_stage_number ||= applicant_stage.number
+  end
+
   # Returns batch application of current applicant.
   def current_application
     @current_application ||= begin
@@ -147,33 +165,42 @@ class BatchApplicationController < ApplicationController
 
   private
 
-  # Returns false if no submission has been supplied for current stage. true otherwise.
-  def submitted_for_stage?
-    # Applicant hasn't submitted if there is no application at all.
-    return false if current_application.blank?
+  # Returns one of :expired, :rejected, :submitted, or :ongoing, to indicate which view should be rendered.
+  def applicant_status
+    if current_application.blank?
+      if current_stage_number != 1 || stage_expired?
+        :expired
+      else
+        :ongoing
+      end
+    else
+      if applicant_stage_number == current_stage_number
+        if applicant_has_submitted?
+          :submitted
+        else
+          stage_expired? ? :expired : :ongoing
+        end
+      elsif applicant_stage_number > current_stage_number
+        :submitted
+      else
+        applicant_has_submitted? ? :rejected : :expired
+      end
+    end
+  end
 
-    # On stage 1, all we need is the submitted application.
-    return true if current_stage_number == 1
+  def applicant_has_submitted?
+    return true if applicant_stage_number == 1
 
-    # Applicant hasn't submitted if there is no submission entry for the current stage.
-    return false if ApplicationSubmission.where(
+    ApplicationSubmission.where(
       batch_application_id: current_application.id,
-      application_stage_id: current_stage.id
-    ).blank?
-
-    true
+      application_stage_id: applicant_stage.id
+    ).present?
   end
 
-  # Returns true if batch's stage is ahead of application's stage.
-  def application_rejected?
-    return false if current_application.nil?
-    applicant_stage_number = current_application.application_stage&.number.to_i
-    current_stage_number > applicant_stage_number
+  # Batch's stage should have expired, and current stage should be same as application stage.
+  def stage_expired?
+    current_batch.stage_expired?
   end
-
-  # def prep_for_stage_1
-  #   @batch_application = BatchApplication.new
-  # end
 
   # Check whether a token parameter has been supplied. Sign in application founder if there's a corresponding entry.
   def check_token

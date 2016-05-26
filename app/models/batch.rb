@@ -12,8 +12,16 @@ class Batch < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
   validates :batch_number, presence: true, numericality: true, uniqueness: true
   validates_presence_of :start_date, :end_date
-  validates :slack_channel, format: { with: /#[^A-Z\s.;!?]+/, message: "must start with a # and not contain uppercase, spaces or periods" },
-                            length: { in: 2..22, message: "channel name should be 1-21 characters" }, allow_nil: true
+  validates :slack_channel, format: { with: /#[^A-Z\s.;!?]+/, message: 'must start with a # and not contain uppercase, spaces or periods' },
+                            length: { in: 2..22, message: 'channel name should be 1-21 characters' }, allow_nil: true
+
+  validate :deadline_changes_with_stage
+
+  def deadline_changes_with_stage
+    return unless application_stage_id_changed?
+    return if application_stage_deadline_changed?
+    errors[:application_stage_deadline] << 'must change with application stage'
+  end
 
   def to_label
     "##{batch_number} #{name}"
@@ -29,11 +37,8 @@ class Batch < ActiveRecord::Base
     current.present? ? current : last
   end
 
-  validate :deadline_changes_with_stage
-
-  def deadline_changes_with_stage
-    return unless application_stage_id_changed?
-    return if application_stage_deadline_changed?
-    errors[:application_stage_deadline] << 'must change with application stage'
+  # Stage has expired when deadline has been crossed.
+  def stage_expired?
+    application_stage_deadline.past?
   end
 end

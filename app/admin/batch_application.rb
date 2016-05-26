@@ -51,4 +51,17 @@ ActiveAdmin.register BatchApplication do
       link_to('Promote to next stage', promote_admin_batch_application_path(batch_application), method: :post)
     end
   end
+
+  form do |f|
+    f.semantic_errors(*f.object.errors.keys)
+
+    f.inputs do
+      f.input :batch
+      f.input :application_stage, collection: ApplicationStage.all.order(number: 'ASC')
+      f.input :product_name
+      f.input :team_achievement
+    end
+
+    f.actions
+  end
 end

@@ -11,7 +11,7 @@ ActiveAdmin.register Batch do
     column :name
     column :start_date
     column :end_date
-    column :slack_channel
+    column :application_stage
     actions
   end
 
@@ -19,7 +19,7 @@ ActiveAdmin.register Batch do
     f.semantic_errors(*f.object.errors.keys)
 
     f.inputs 'Batch Details' do
-      f.input :application_stage
+      f.input :application_stage, collection: ApplicationStage.all.order(number: 'ASC')
       f.input :application_stage_deadline, as: :just_datetime_picker
       f.input :batch_number
       f.input :name

@@ -25,7 +25,13 @@ class BatchApplicationController < ApplicationController
 
   # POST /apply/:batch
   def submit
-    send "submission_for_stage_#{current_stage_number}"
+    # Only allow applicants who have an ongoing application to submit.
+    if applicant_status == :ongoing
+      send "submission_for_stage_#{current_stage_number}"
+    else
+      flash[:error] = 'Something went wrong when attempting to process your submission. Please contact us at help@sv.co.'
+      redirect_to apply_batch_path(batch: params[:batch])
+    end
   end
 
   def submission_for_stage_1

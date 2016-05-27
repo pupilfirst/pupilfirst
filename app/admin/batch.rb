@@ -12,7 +12,14 @@ ActiveAdmin.register Batch do
     column :start_date
     column :end_date
     column :application_stage
-    actions
+
+    actions do |batch|
+      if batch.application_stage&.final_stage?
+        span do
+          link_to 'Invite all founders', '#'
+        end
+      end
+    end
   end
 
   form do |f|

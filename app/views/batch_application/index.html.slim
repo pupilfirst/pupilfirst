@@ -28,16 +28,38 @@
                 ' The following batches are currently accepting applications. Choose one of the options below to begin
                 ' the application process.
 
-              .margin-top-20
-              p
-                ' You will need to identify yourself using a one-time login link that will be sent to your e-mail
-                | address.
+              - if current_batch_applicant.blank?
+                .margin-top-20
+                p
+                  ' You will need to identify yourself using a one-time login link that will be sent to your e-mail
+                  | address.
 
               .margin-top-20
               ul
                 - @batches_open.each do |batch|
                   li = link_to batch.name, apply_batch_path(batch: batch.batch_number)
 
+        - if @batches_ongoing.present?
+          .batch-results.margin-bottom-20
+            .result-head
+              h3 There are ongoing applications!
+
+              .margin-top-20
+              p
+                ' The application process for the following batches are still in progress. <strong>They are not open for
+                ' new applications</strong>, but if you'd submitted an application, then you can check your status, or
+                | proceed with the application, by clicking the links below:
+
+              - if current_batch_applicant.blank?
+                .margin-top-20
+                p
+                  ' You will need to identify yourself using a one-time login link that will be sent to your e-mail
+                  | address.
+
+              .margin-top-20
+              ul
+                - @batches_ongoing.each do |batch|
+                  li = link_to batch.name, apply_batch_path(batch: batch.batch_number)
         .batch-results
           .result-head.text-center
             = image_tag 'home/apply/batch-result-icon.png', class: 'img-responsive'

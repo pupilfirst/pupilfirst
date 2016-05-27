@@ -3,6 +3,7 @@ class BatchApplicationController < ApplicationController
   def index
     set_instance_variables
     @batches_open = Batch.joins(:application_stage).where(application_stages: { number: 1 })
+    @batches_ongoing = Batch.joins(:application_stage).where('application_stages.number > 1').where('application_stages.final_stage IS NOT TRUE')
   end
 
   # GET /apply/:batch

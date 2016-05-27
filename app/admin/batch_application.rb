@@ -6,6 +6,8 @@ ActiveAdmin.register BatchApplication do
   index do
     selectable_column
 
+    column :batch
+
     column :team_lead do |batch_application|
       team_lead = batch_application.team_lead
 

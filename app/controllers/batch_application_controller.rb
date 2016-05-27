@@ -38,10 +38,11 @@ class BatchApplicationController < ApplicationController
     application = BatchApplication.new(
       batch: current_batch,
       application_stage: current_stage,
+      team_lead: current_batch_applicant
     )
 
     if application.save
-      current_batch_applicant.update!(name: params[:batch_application][:team_lead_name], team_lead: true)
+      current_batch_applicant.update!(name: params[:batch_application][:team_lead_name])
       application.batch_applicants << current_batch_applicant
       redirect_to apply_batch_path(batch: params[:batch])
     else
@@ -162,7 +163,7 @@ class BatchApplicationController < ApplicationController
   # Returns batch application of current applicant.
   def current_application
     @current_application ||= begin
-      current_batch_applicant&.batch_application
+      current_batch_applicant&.batch_applications.find_by(batch: current_batch)
     end
   end
 

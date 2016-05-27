@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160524141756) do
+ActiveRecord::Schema.define(version: 20160527060111) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -100,20 +100,25 @@ ActiveRecord::Schema.define(version: 20160524141756) do
   add_index "application_submissions", ["batch_application_id"], name: "index_application_submissions_on_batch_application_id", using: :btree
 
   create_table "batch_applicants", force: :cascade do |t|
-    t.integer  "batch_application_id"
     t.string   "name"
     t.string   "gender"
     t.string   "email"
     t.string   "phone"
     t.string   "role"
-    t.boolean  "team_lead"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string   "token"
   end
 
-  add_index "batch_applicants", ["batch_application_id"], name: "index_batch_applicants_on_batch_application_id", using: :btree
   add_index "batch_applicants", ["token"], name: "index_batch_applicants_on_token", using: :btree
+
+  create_table "batch_applicants_applications", id: false, force: :cascade do |t|
+    t.integer "batch_applicant_id",   null: false
+    t.integer "batch_application_id", null: false
+  end
+
+  add_index "batch_applicants_applications", ["batch_applicant_id", "batch_application_id"], name: "idx_applicants_applications_on_applicant_id_and_application_id", using: :btree
+  add_index "batch_applicants_applications", ["batch_application_id", "batch_applicant_id"], name: "idx_applications_applicants_on_application_id_and_applicant_id", using: :btree
 
   create_table "batch_applications", force: :cascade do |t|
     t.integer  "batch_id"
@@ -123,10 +128,12 @@ ActiveRecord::Schema.define(version: 20160524141756) do
     t.text     "team_achievement"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
+    t.integer  "team_lead_id"
   end
 
   add_index "batch_applications", ["application_stage_id"], name: "index_batch_applications_on_application_stage_id", using: :btree
   add_index "batch_applications", ["batch_id"], name: "index_batch_applications_on_batch_id", using: :btree
+  add_index "batch_applications", ["team_lead_id"], name: "index_batch_applications_on_team_lead_id", using: :btree
   add_index "batch_applications", ["university_id"], name: "index_batch_applications_on_university_id", using: :btree
 
   create_table "batches", force: :cascade do |t|

@@ -3,7 +3,7 @@ ActiveAdmin.register BatchApplicant do
 
   permit_params :batch_application_id, :name, :gender, :email, :phone, :role, :team_lead
 
-  filter :batch_application_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'Batch'
+  filter :batch_applications_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'Batch'
   filter :batch_application
   filter :name
   filter :email

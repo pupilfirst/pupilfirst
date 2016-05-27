@@ -1,5 +1,6 @@
 class BatchApplicant < ActiveRecord::Base
-  belongs_to :batch_application
+  has_and_belongs_to_many :batch_applications
+  has_many :applications_as_lead, class_name: 'BatchApplication', foreign_key: 'team_lead_id'
 
   # Basic validations.
   validates :email, presence: true, uniqueness: true

@@ -2,19 +2,14 @@ class BatchApplication < ActiveRecord::Base
   belongs_to :batch
   belongs_to :application_stage
   has_many :application_submissions, dependent: :destroy
-  has_many :batch_applicants, dependent: :destroy
-
-  accepts_nested_attributes_for :batch_applicants
+  has_and_belongs_to_many :batch_applicants
+  belongs_to :team_lead, class_name: 'BatchApplicant'
 
   validates :batch_id, presence: true
   validates :application_stage_id, presence: true
 
   def display_name
     team_lead&.name || "Batch Application ##{id}"
-  end
-
-  def team_lead
-    batch_applicants.find_by(team_lead: true)
   end
 
   def score

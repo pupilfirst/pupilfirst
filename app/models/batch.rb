@@ -20,6 +20,7 @@ class Batch < ActiveRecord::Base
   def deadline_changes_with_stage
     return unless application_stage_id_changed?
     return if application_stage_deadline_changed?
+    return if application_stage.final_stage?
     errors[:application_stage_deadline] << 'must change with application stage'
   end
 

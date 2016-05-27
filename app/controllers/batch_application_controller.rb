@@ -1,13 +1,13 @@
 class BatchApplicationController < ApplicationController
   # GET /apply
   def index
-    @skip_container = true
+    set_instance_variables
     @batches_open = Batch.joins(:application_stage).where(application_stages: { number: 1 })
   end
 
   # GET /apply/:batch
   def apply
-    @skip_container = true
+    set_instance_variables
     raise_not_found if current_stage_number.blank?
     return unless applicant_signed_in?
 
@@ -170,6 +170,11 @@ class BatchApplicationController < ApplicationController
   helper_method :current_stage
 
   private
+
+  def set_instance_variables
+    @skip_container = true
+    @hide_sign_in = true
+  end
 
   # Returns one of :expired, :rejected, :submitted, or :ongoing, to indicate which view should be rendered.
   #

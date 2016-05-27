@@ -33,5 +33,5 @@
               i.fa.fa-comment-o
                 | &nbsp;Submit Feedback
 
-    - else
+    - elsif @hide_sign_in.blank?
       li role="presentation" = link_to 'Sign In', new_founder_session_path, class: 'top-nav-link'

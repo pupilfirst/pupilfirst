@@ -8,9 +8,13 @@ ActiveAdmin.register ApplicationStage do
     selectable_column
 
     column :number
-    column :name
+
+    column :name do |application_stage|
+      span application_stage.name
+      em ' (Final Stage)' if application_stage.final_stage?
+    end
+
     column 'Starts X days before batch', :days_before_batch
-    column :final_stage
 
     actions
   end

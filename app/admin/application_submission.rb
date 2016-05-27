@@ -32,12 +32,10 @@ ActiveAdmin.register ApplicationSubmission do
           application_submission.application_submission_urls.each do |entry|
             li do
               span do
-                link_to "#{entry.name}", entry.url
+                link_to entry.name, entry.url
               end
 
-              if entry.score.present?
-                span " (#{entry.score})"
-              end
+              span(" (#{entry.score})") if entry.score.present?
             end
           end
         end
@@ -84,9 +82,7 @@ ActiveAdmin.register ApplicationSubmission do
                   span { link_to entry.url, entry.url }
                 end
 
-                if entry.score.present?
-                  span " (#{entry.score})"
-                end
+                span " (#{entry.score})" if entry.score.present?
               end
             end
           end
@@ -103,10 +99,7 @@ ActiveAdmin.register ApplicationSubmission do
 
       row :notes do |application_submission|
         notes = application_submission.notes
-
-        if notes.present?
-          Kramdown::Document.new(notes).to_html.html_safe
-        end
+        Kramdown::Document.new(notes).to_html.html_safe if notes.present?
       end
 
       row :created_at

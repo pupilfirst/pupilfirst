@@ -41,14 +41,12 @@ class BatchApplicationController < ApplicationController
       team_lead: current_batch_applicant
     )
 
-    if application.save
-      current_batch_applicant.update!(name: params[:batch_application][:team_lead_name])
-      application.batch_applicants << current_batch_applicant
-      redirect_to apply_batch_path(batch: params[:batch])
-    else
-      # TODO: Something about the application isn't okay.
-      raise NotImplementedError
-    end
+    # TODO: Something about the application isn't okay.
+    raise NotImplementedError unless application.save
+
+    current_batch_applicant.update!(name: params[:batch_application][:team_lead_name])
+    application.batch_applicants << current_batch_applicant
+    redirect_to apply_batch_path(batch: params[:batch])
   end
 
   def submission_for_stage_2
@@ -173,25 +171,38 @@ class BatchApplicationController < ApplicationController
   private
 
   # Returns one of :expired, :rejected, :submitted, or :ongoing, to indicate which view should be rendered.
+  #
+  # Hari: I'm disabling complexity cops here, because the point of this method is to put the complex state logic in
+  # one place. It used to be scattered across many methods, but that became unmanageable, and I had to bring it
+  # together to make sense of it all.
+  #
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def applicant_status
     if current_application.blank?
+      # There's no application...
       if current_stage_number != 1 || stage_expired?
+        # ...and the either the batch's stage has moved on, or its deadline has passed.
         :expired
       else
+        # ...and it's still stage 1, and stage's deadline hasn't passed.
         :ongoing
       end
-    else
-      if applicant_stage_number == current_stage_number
-        if applicant_has_submitted?
-          :submitted
-        else
-          stage_expired? ? :expired : :ongoing
-        end
-      elsif applicant_stage_number > current_stage_number
+    elsif applicant_stage_number == current_stage_number
+      # There is an application which is on batch's stage...
+      if applicant_has_submitted?
+        # ...and it has been submitted.
         :submitted
       else
-        applicant_has_submitted? ? :rejected : :expired
+        # ... and if stage's deadline has passed, then it's expired, otherwise ongoing.
+        stage_expired? ? :expired : :ongoing
       end
+    elsif applicant_stage_number > current_stage_number
+      # The application has been selected for the next stage.
+      :submitted
+    else
+      # Application has been left behind. If a submission exists for application's stage, then it was rejected,
+      # otherwise it expired when the stage's deadline passed.
+      applicant_has_submitted? ? :rejected : :expired
     end
   end
 

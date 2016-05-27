@@ -167,6 +167,7 @@ class BatchApplicationController < ApplicationController
 
   helper_method :current_batch
   helper_method :current_batch_applicant
+  helper_method :current_stage
 
   private
 

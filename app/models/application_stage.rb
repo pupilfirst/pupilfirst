@@ -10,4 +10,8 @@ class ApplicationStage < ActiveRecord::Base
   def next
     ApplicationStage.find_by number: (number + 1)
   end
+
+  def tentative_start_date(batch)
+    batch.start_date - days_before_batch.days
+  end
 end

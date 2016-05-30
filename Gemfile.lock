@@ -209,6 +209,7 @@ GEM
       actionmailer (>= 3.2.6, < 5)
       devise (>= 3.2.0)
     diff-lcs (1.2.5)
+    docile (1.1.5)
     domain_name (0.5.24)
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.0.2)
@@ -609,6 +610,11 @@ GEM
       carrierwave
       rails (>= 4.0.0)
       simple_form (~> 3.1)
+    simplecov (0.11.2)
+      docile (~> 1.1.0)
+      json (~> 1.8)
+      simplecov-html (~> 0.10.0)
+    simplecov-html (0.10.0)
     sinatra (1.4.6)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -751,6 +757,7 @@ DEPENDENCIES
   shortener
   simple_form (~> 3.1.1)
   simple_form_fancy_uploads
+  simplecov
   slim
   spring
   titleize

@@ -13,7 +13,7 @@
       strong Attachment:&nbsp;
 
       a href=redirect_to_attachment_admin_platform_feedback_url(@platform_feedback)
-        | #{@platform_feedback.attachment.file.filename}
+        | #{@platform_feedback.attachment_filename}
 
       br
     - if @platform_feedback.promoter_score.present?

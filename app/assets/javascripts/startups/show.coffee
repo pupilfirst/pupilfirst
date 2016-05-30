@@ -7,10 +7,6 @@ $(document).on 'page:change', ->
     tabsClass: 'hidden-md hidden-sm hidden-xs',
     accordionClass: 'visible-md visible-sm visible-xs'
 
-  $('#pending-targets-list .panel-collapse:first').addClass('in');
-  $('#expired-targets-list .panel-collapse:first').addClass('in');
-  $('#completed-targets-list .panel-collapse:first').addClass('in');
-
 $(document).on 'page:change', ->
   $(".tl_link_button").click((e) ->
     if ($(this).find(".ink").length == 0)

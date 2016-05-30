@@ -31,19 +31,21 @@ ActiveAdmin.register PlatformFeedback do
       row :feedback_type
       row :founder
       row :description
+
       row :attachment do
         if feedback.attachment.present?
-          link_to feedback.attachment.url, target: '_blank' do
-            image_tag feedback.attachment.url, width: '200px'
-          end
+          link_to feedback.attachment_filename, feedback.attachment.url, target: '_blank'
         end
       end
+
       row :promoter_score
+
       row :karma_point do
         if feedback.karma_point.present?
           link_to feedback.karma_point.points, admin_karma_point_path(feedback.karma_point)
         end
       end
+
       row :notes
       row :created_at
     end
@@ -64,5 +66,16 @@ ActiveAdmin.register PlatformFeedback do
     platform_feedback.update(notes: params[:notes]) if params[:notes].present?
 
     redirect_to action: :show
+  end
+
+  member_action :redirect_to_attachment, method: :get do
+    platform_feedback = PlatformFeedback.find params[:id]
+
+    if platform_feedback.attachment.present?
+      redirect_to platform_feedback.attachment.url
+    else
+      flash[:error] = 'This entry has no attachment.'
+      redirect_to admin_platform_feedback_path(platform_feedback)
+    end
   end
 end

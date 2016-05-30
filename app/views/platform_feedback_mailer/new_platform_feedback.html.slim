@@ -10,7 +10,12 @@
     | <strong>Type:</strong> #{@platform_feedback.feedback_type}<br/>
     | <strong>Description:</strong> #{@platform_feedback.description}<br/>
     - if @platform_feedback.attachment.present?
-      | <strong>Attachment:</strong> <a href="#{@platform_feedback.attachment.url}">#{@platform_feedback.attachment.file.filename}</a><br/>
+      strong Attachment:&nbsp;
+
+      a href=redirect_to_attachment_admin_platform_feedback_url(@platform_feedback)
+        | #{@platform_feedback.attachment.file.filename}
+
+      br
     - if @platform_feedback.promoter_score.present?
       | <strong>Promoter Score:</strong> #{@platform_feedback.promoter_score}<br/>
   p

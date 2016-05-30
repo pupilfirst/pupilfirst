@@ -1,0 +1,36 @@
+@import "bootstrap4_alpha2/bootstrap/variables";
+@import "variables";
+
+.error {
+  margin: 65px 0 75px 0;
+  font-weight: 300;
+  // @media (max-width: $screen-xs-max) { margin: 40px 0 50px; }
+
+  img {
+    width: 500px;
+  }
+
+  .img-responsive {
+    margin: 0 auto;
+  }
+
+  .title {
+    font-size: 200%;
+    color: $timeline-blue-text;
+    margin-top: 20px;
+    // @media (max-width: $screen-xs-max) { font-size: 160%; }
+  }
+
+  .description {
+    margin-top: 10px;
+    font-size: 110%;
+    // @media (max-width: $screen-xs-max) { font-size: 100%; }
+
+    p { margin-bottom: 5px; }
+
+    a {
+      color: $theme-light-green;
+      &:visited { color: $theme-dark-green; }
+    }
+  }
+}

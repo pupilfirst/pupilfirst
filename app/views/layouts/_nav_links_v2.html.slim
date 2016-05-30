@@ -1,0 +1,37 @@
+#sv-navbar.collapse.navbar-toggleable-xs.navbar-right
+  ul.nav.navbar-nav.clearfix
+    - if current_founder && current_founder.startup.present?
+      li.nav-item role="presentation"
+        a.nav-link href="#{startup_url(current_founder.startup)}" Timeline
+    li.nav-item role="presentation"
+      = link_to 'Startups', startups_path, class: 'nav-link'
+    - unless current_founder
+      li.nav-item role="presentation"
+        = link_to 'Invest & Hire', talent_path, class: 'nav-link'
+    li.nav-item role="presentation"
+      = link_to 'Faculty', faculty_index_path, class: 'nav-link'
+    li.nav-item role="presentation"
+      = link_to 'Library', resources_path, class: 'nav-link'
+    - unless current_founder
+      li.nav-item role="presentation"
+        = link_to 'About', about_path, class: 'nav-link'
+    - if current_founder
+      li.nav-item role="presentation" class="dropdown"
+        a.dropdown-toggle.logged-in-avatar-link.img-circle data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
+          = image_tag profile_image_url(current_founder, gravatar_size: 40, avatar_version: :thumb), class: 'logged-in-user-link'
+        ul.dropdown-menu
+          li role="presentation"
+            = link_to founder_profile_path(slug: current_founder.slug) do
+              i.fa.fa-list-ul
+              | Profile
+          li role="presentation"
+            = link_to destroy_founder_session_path, method: :delete do
+              i.fa.fa-sign-out
+              | Logout
+          li role="presentation"
+            a href="#" data-toggle="modal" data-target="#platform-feedback-modal"
+              i.fa.fa-comment-o
+              | Submit Feedback
+
+    - else
+      li.nav-item role="presentation" = link_to 'Sign In', new_founder_session_path, class: 'nav-link'

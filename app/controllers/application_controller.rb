@@ -129,7 +129,7 @@ class ApplicationController < ActionController::Base
   def script_sources
     <<~SCRIPT_SOURCES.squish
       script-src
-      'self' https://ajax.googleapis.com https://www.google-analytics.com https://blog.sv.co https://www.youtube.com
+      'self' 'unsafe-eval' https://ajax.googleapis.com https://www.google-analytics.com https://blog.sv.co https://www.youtube.com
       http://www.startatsv.com https://sv-assets.sv.co cdn.inspectlet.com #{recaptcha_csp[:script]};
     SCRIPT_SOURCES
   end

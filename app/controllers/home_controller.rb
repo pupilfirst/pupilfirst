@@ -26,5 +26,10 @@ class HomeController < ApplicationController
   # GET /changelog
   def changelog
     @changelog = File.read(File.absolute_path(Rails.root.join('CHANGELOG.md')))
+    render layout: 'application_v2'
+  end
+
+  def styleguide
+    render layout: 'application_v2'
   end
 end

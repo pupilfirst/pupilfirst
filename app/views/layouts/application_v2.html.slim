@@ -1,0 +1,80 @@
+doctype html
+html lang='en'
+  head
+    // Begin critial tags.
+    meta charset="utf-8"
+    meta http-equiv="X-UA-Compatible" content="IE=edge"
+    meta name="viewport" content="width=device-width, initial-scale=1"
+    // The above 3 meta tags *must* come first in the head; any other head
+    // content must come *after* these tags.
+
+    / title SV.CO
+
+    // Local Styles
+    = stylesheet_link_tag 'application_v2', media: 'all', 'data-turbolinks-track' => true
+
+    // Fonts
+    link type='text/css' rel='stylesheet' href='//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,400italic,300italic' media='all' data-turbolinks-track='true'
+
+    // Scripts
+    = javascript_include_tag 'application_v2', 'data-turbolinks-track' => true
+
+    = csrf_meta_tags
+    = yield :head
+
+    link rel="icon" href="#{image_url 'favicon.png'}"
+
+  body
+    section#header
+      nav.navbar.navbar-fixed-top role="navigation"
+        - if @sitewide_notice
+          .sitewide-notice
+            .container
+              p == yield :sitewide_notice
+
+        .container
+          .navbar-header
+            button.navbar-toggler.hidden-sm-up type="button" data-toggle="collapse" data-target="#sv-navbar"
+                | ☰
+            a.navbar-brand href="#{root_url}"
+              img.site-logo#site-logo src="#{image_url 'SV.CO-Logo.svg'}" alt='Logo of SV.CO'
+          = render 'layouts/nav_links_v2'
+      .nav-spacer
+      == yield :header
+
+      - if current_founder
+        #platform-feedback-modal.modal.fade role="dialog"
+          .modal-dialog
+            .modal-content
+              = simple_form_for @platform_feedback_for_form,
+                url: platform_feedback_path,
+                html: { class: 'form-horizontal' },
+                wrapper: :horizontal_form,
+                wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_file_input, boolean: :horizontal_boolean } do |f|
+                .modal-header
+                  button.close data-dismiss="modal" type="button"  &times;
+                  h4.modal-title We Love Feedback!
+                .modal-body
+                  ' If your feedback is useful, it shows you can think well of product ideas and improvement, and we'll reward you with Karma Points & a special timeline event :)
+                  hr
+                    = f.input :founder_id, as: :hidden
+                    = f.input :feedback_type, as: :select, collection: PlatformFeedback.types_of_feedback, include_blank: false
+                    = f.input :description, input_html: { rows: 5 }
+                    = f.input :attachment, as: :file
+                    hr
+                    p How likely is it that you would recommend SV.CO to a friend?
+                    = f.input :promoter_score, as: :radio_buttons, collection: 0..10, label: false
+                .modal-footer
+                  button.btn.btn-primary type="submit" Submit Feedback
+                  button.btn.btn-default data-dismiss="modal" type="button"  Close
+
+    - if @skip_container
+      == yield
+    - else
+      .container
+        == yield
+
+    == render 'layouts/footer'
+
+    /- if current_founder.try(:just_signed_in)
+    /  == render 'layouts/inspectlet'

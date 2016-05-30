@@ -1,0 +1,22 @@
+// Bootstrap customization variables
+@import "bootstrap_btn_customization";
+
+@import "bootstrap4_alpha2/bootstrap";
+
+@import "font-awesome";
+@import "bootstrap-datetimepicker";
+@import "video-js";
+
+// Rails Assets.
+
+// Local.
+@import "v2/shared";
+@import "v2/navbar";
+@import "v2/header";
+@import "v2/footer";
+@import "v2/errors";
+
+// Controller-specific
+@import 'v2/changelog';
+
+// Select2

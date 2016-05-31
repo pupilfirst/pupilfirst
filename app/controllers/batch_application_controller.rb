@@ -1,4 +1,6 @@
 class BatchApplicationController < ApplicationController
+  before_action :ensure_applicant_is_signed_in, only: :apply
+
   # GET /apply
   def index
     set_instance_variables
@@ -10,7 +12,6 @@ class BatchApplicationController < ApplicationController
   def apply
     set_instance_variables
     raise_not_found if current_stage_number.blank?
-    return unless applicant_signed_in?
 
     case applicant_status
       when :expired
@@ -240,11 +241,10 @@ class BatchApplicationController < ApplicationController
     cookies[:applicant_token] = { value: applicant.token, expires: 2.months.from_now }
   end
 
-  # Redirect to applicant sign in page is one isn't signed in.
-  def applicant_signed_in?
-    return true if current_batch_applicant.present?
+  # Redirect applicant to sign in page is zhe isn't signed in.
+  def ensure_applicant_is_signed_in
+    return if current_batch_applicant.present?
     redirect_to apply_identify_url(batch: params[:batch])
-    false
   end
 
   # Save the batch being requested in session. We'll add this info to the sign in link.

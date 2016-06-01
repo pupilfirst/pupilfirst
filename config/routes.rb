@@ -1,8 +1,4 @@
 Svapp::Application.routes.draw do
-  get 'batch_application/index'
-
-  get 'batch_application/apply'
-
   devise_for(
     :founders,
     controllers: {

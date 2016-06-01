@@ -22,7 +22,7 @@ module Lita
       end
 
       def format_for_slack
-        salutation = "*Here is a snippet of the latest changes on the SV.CO Platform:*\n"
+        salutation = "*Here are the latest changes on the SV.CO platform. Visit sv.co/changelog for more.*\n\n"
 
         # replace '###' with slack-friendly '>'
         @latest_log.gsub!(/###/, '> ')

@@ -1,9 +1,22 @@
+## 1 June, 2016
+
+### Features
+
+  - A form has been added to gather feedback from signed-in founders, on all aspects of the program. It's accessible from the profile dropdown menu (top-right).
+
+### UX and UI
+
+  - The first version of our unified design guideline is ready. We've been working on it for the last few weeks, and we'll slowly roll out updated design elements over the next couple of weeks - starting with the changelog!
+
+### Bugfixes
+
+  - There was a report of a rendering error (via the new platform feedback feature!) related to the display of founder targets. That's been taken care of.
+
 ## 24 May, 2016
 
 ### Features
 
-  - Tracking improved timeline events for those that were
-    marked as needing improvement.
+  - Tracking improved timeline events for those that were marked as needing improvement.
 
 ### UX and UI
 
@@ -15,99 +28,68 @@
 
 ### Features
 
-  - Vocalist now supplies definitions to common industry terms
-    using the `define TERM` command.
+  - Vocalist now supplies definitions to common industry terms using the `define TERM` command.
 
 ### Bugfixes
 
-  - The button to download _Rubric_ for targets was broken
-    during an unrelated change. This has been fixed, and tests
-    have been added.
+  - The button to download _Rubric_ for targets was broken during an unrelated change. This has been fixed, and tests have been added.
 
 ## 9 May, 2016
 
 ### Features
 
-  - _Review tests_ have been added to targets. This allows
-    founders to take part in small survey-type questionnaires
-    after going through slides and / or completing targets.
+  - _Review tests_ have been added to targets. This allows founders to take part in small survey-type questionnaires after going through slides and / or completing targets.
 
 ### Content
 
-  - Added more information related to SV.CO's mission in the
-    _About_ section.
-  - _Ola_ and _GOQii_ have been listed as partners in the
-    _Talent_ section.
+  - Added more information related to SV.CO's mission in the _About_ section.
+  - _Ola_ and _GOQii_ have been listed as partners in the _Talent_ section.
 
 ### Bugfixes
 
-  - URLs that point to `/resources/...` now redirect to the
-    new `/library/...` path. This preserves old links.
-  - Improved reliability of reminder notifications sent via
-    vocalist to faculty and founders about imminent connect
-    sessions. They had a tendency to get lost in transit.
+  - URLs that point to `/resources/...` now redirect to the new `/library/...` path. This preserves old links.
+  - Improved reliability of reminder notifications sent via vocalist to faculty and founders about imminent connect sessions. They had a tendency to get lost in transit.
 
 ## 2 May, 2016
 
 ### Features
 
-  - A _Graduation_ page has been created to showcase our
-    graduation efforts & results.
-  - Vocalist includes questions asked by founders in the
-    reminder for faculty members about imminent connect session.
+  - A _Graduation_ page has been created to showcase our graduation efforts & results.
+  - Vocalist includes questions asked by founders in the reminder for faculty members about imminent connect session.
 
 ### Performance
 
-  - We've switched our CDN from Cloudfront to Cloudflare to
-    take advantage of [CNAME flattening](https://sv.co/tvyfw).
-    This lets us bypass the CDN on dynamic page requests for
-    considerable speed-up. Also, Cloudflare is way cooler. B-)
+  - We've switched our CDN from Cloudfront to Cloudflare to take advantage of [CNAME flattening](https://sv.co/tvyfw). This lets us bypass the CDN on dynamic page requests for considerable speed-up. Also, Cloudflare is way cooler. B-)
 
 ### Visual
 
-  - Minor changes to site's header and footer, re-organizing
-    links, and such.
+  - Minor changes to site's header and footer, re-organizing links, and such.
 
 ### Bugfixes
 
-  - Vocalist no longer includes an empty _Links attached_
-    postfix when links aren't available on a timeline event
-    notification.
-  - After editing a timeline event and submitting changes,
-    the form now clears instead of remaining in _edit mode_.
+  - Vocalist no longer includes an empty _Links attached_ postfix when links aren't available on a timeline event notification.
+  - After editing a timeline event and submitting changes, the form now clears instead of remaining in _edit mode_.
 
 ## 25 April, 2016
 
 ### Features
 
-  - Vocalist now responds to a bunch of commands that makes her
-    fetch basic information about a batch, for use as intro
-    during weekly _town hall_ meetings.
-  - Founder registration flow has been reworked. On-boarding a
-    team of founders is much more straight-forward; the team
-    lead is asked to enter startup information right after user
-    registration, and co-founders being automatically linked
-    once that's done.
+  - Vocalist now responds to a bunch of commands that makes her fetch basic information about a batch, for use as intro during weekly _town hall_ meetings.
+  - Founder registration flow has been reworked. On-boarding a team of founders is much more straight-forward; the team lead is asked to enter startup information right after user registration, and co-founders being automatically linked once that's done.
 
 ## 18 April, 2016
 
 ### Features
 
-  - Vocalist now responds to `targets?` command, responding with
-    list of targets. She can also supply more information with
-    `targets info [NUMBER]`
+  - Vocalist now responds to `targets?` command, responding with list of targets. She can also supply more information with `targets info [NUMBER]`
 
 ### Performance
 
-  - Sped up first load of the website by tweaking a setting on
-    the visit logging library.
+  - Sped up first load of the website by tweaking a setting on the visit logging library.
 
 ### Bugfixes
 
-  - Blank entries were being shown on Startups page's filter
-    (Google Chrome, on Windows).
-  - Vocalist will correctly notify everyone of multiple targets
-    being deployed together to a batch.
-  - Founders can no longer register with phone numbers already
-    linked to others.
+  - Blank entries were being shown on Startups page's filter (Google Chrome, on Windows).
+  - Vocalist will correctly notify everyone of multiple targets being deployed together to a batch.
+  - Founders can no longer register with phone numbers already linked to others.
 

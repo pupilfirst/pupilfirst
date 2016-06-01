@@ -1,4 +1,5 @@
 class BatchApplicationController < ApplicationController
+  before_action :lock_under_feature_flag
   before_action :ensure_applicant_is_signed_in, only: :apply
 
   # GET /apply
@@ -172,6 +173,10 @@ class BatchApplicationController < ApplicationController
   helper_method :current_stage
 
   private
+
+  def lock_under_feature_flag
+    raise_not_found unless Feature.active?(:application_v2, current_founder)
+  end
 
   def set_instance_variables
     @skip_container = true

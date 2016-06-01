@@ -26,6 +26,15 @@ class Batch < ActiveRecord::Base
     errors[:application_stage_deadline] << 'must change with application stage'
   end
 
+  after_save :send_emails_to_applicants
+
+  def send_emails_to_applicants
+    return unless application_stage_id_changed?
+    return if application_stage.initial_stage? || application_stage.final_stage?
+
+    EmailApplicantsJob.perform_later(self)
+  end
+
   def to_label
     "##{batch_number} #{name}"
   end

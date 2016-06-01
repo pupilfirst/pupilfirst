@@ -14,4 +14,8 @@ class ApplicationStage < ActiveRecord::Base
   def tentative_start_date(batch)
     batch.start_date - days_before_batch.days
   end
+
+  def initial_stage?
+    number == 1
+  end
 end

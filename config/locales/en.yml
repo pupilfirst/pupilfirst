@@ -112,6 +112,7 @@ en:
       expired_team_targets: Get a list of all team targets which expired last week - for every startup in the batch.
       expired_founder_targets: Get a list of all individual targets which expired last week - for every founder in the batch.
       glossary: Get definitions and references of a commanly used TERM in the startup ecosystem.
+      changelog: Get a snippet of the latest changes on the SV.CO Platform
     handlers:
       targets:
         choice_error: "I couldn't find your choice in my list of targets. It should be one of: `%{choices}`."

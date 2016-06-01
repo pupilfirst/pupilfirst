@@ -1,12 +1,12 @@
 - if targets.present?
-  - targets.each do |target|
+  - targets.each_with_index do |target, index|
     .panel.panel-default
       .target-list.panel-heading
-        a.collapsed data-parent="#targets-list" data-toggle="collapse" href="#target-#{target.id}"
+        a data-parent="#targets-list" data-toggle="collapse" href="#target-#{target.id}" class=(index > 0 ? 'collapsed' : '')
           .target-head
             ' #{target.title}
           .arrow-target.pull-right
-      .panel-collapse.collapse id="target-#{target.id}"
+      .panel-collapse.collapse id="target-#{target.id}" class=(index == 0 ? 'in' : '')
         .target-data.panel-body
           h2
             ' #{target.title}

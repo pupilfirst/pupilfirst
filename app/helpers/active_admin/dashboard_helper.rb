@@ -1,5 +1,5 @@
+# rubocop:disable Metrics/ModuleLength
 module ActiveAdmin
-  # rubocop:disable Metrics/ModuleLength
   module DashboardHelper
     def days_elapsed
       (Date.today - batch_selected.start_date).to_i
@@ -123,16 +123,15 @@ module ActiveAdmin
     end
 
     def present_nps
-      PlatformFeedback.average(:promoter_score).round(1).to_s('+F')
+      PlatformFeedback.average(:promoter_score).round(1)
     end
 
     def source_of_nps
-      "#{count_of_PS} Platform Feedback"
+      "#{count_of_ps} entries"
     end
 
     def count_of_ps
       PlatformFeedback.where.not(promoter_score: nil).count
     end
   end
-  # rubocop:enable Metrics/ModuleLength
 end

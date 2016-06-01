@@ -17,11 +17,27 @@ $timeline-blue-text: #2458a1;
 $theme-light-gray: #f7f7f7;
 $theme-dark-gray: #d2d2d2;
 
-
-$green-dark: #057F44;
-$green-light: #32B475;
-$blue-dark: #087CAA;
-$blue-light: #0AA5E3;
+// ********** Colors **********
+$brand-primary: #0F9D58;
+$brand-secondary: #008AC1;
+$dark-primary: #057F44;
+$light-primary: #32B475;
+$dark-secondary: #087CAA;
+$light-secondary: #0AA5E3;
+$primary-background: #F9F9F9;
 $primary-gray-text: #333333;
 $gray-light-text: #999999;
 $gray-border: #e5e5e5;
+
+$font-size-h1: 2.625rem !default;
+$font-size-h2: 2.25rem !default;
+$font-size-h3: 1.5rem !default;
+$font-size-h4: 1.125rem !default;
+$font-size-h5: 1rem !default;
+$font-size-h6: 0.875rem !default;
+
+$headings-font-weight: 300;
+
+$border-radius-btn: 2em;
+$box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.04);
+$box-shadow-btn: inset 0 3px 3px 0 rgba(0, 0, 0, 0.5);

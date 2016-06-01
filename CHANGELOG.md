@@ -110,4 +110,3 @@
     being deployed together to a batch.
   - Founders can no longer register with phone numbers already
     linked to others.
-

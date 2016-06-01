@@ -14,7 +14,7 @@ html lang='en'
     = stylesheet_link_tag 'application_v2', media: 'all', 'data-turbolinks-track' => true
 
     // Fonts
-    link type='text/css' rel='stylesheet' href='//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,400italic,300italic' media='all' data-turbolinks-track='true'
+    link type='text/css' rel='stylesheet' href='//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,400italic,300italic' media='all' data-turbolinks-track='true'
 
     // Scripts
     = javascript_include_tag 'application_v2', 'data-turbolinks-track' => true
@@ -34,7 +34,7 @@ html lang='en'
 
         .container
           .navbar-header
-            button.navbar-toggler.hidden-sm-up type="button" data-toggle="collapse" data-target="#sv-navbar"
+            button.navbar-toggler.hidden-md-up type="button" data-toggle="collapse" data-target="#sv-navbar"
                 | ☰
             a.navbar-brand href="#{root_url}"
               img.site-logo#site-logo src="#{image_url 'SV.CO-Logo.svg'}" alt='Logo of SV.CO'

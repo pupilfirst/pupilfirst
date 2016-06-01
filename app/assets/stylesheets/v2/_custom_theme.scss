@@ -1,0 +1,74 @@
+body {
+  font-family: 'Source Sans Pro', sans-serif;
+  background-color: $primary-background;
+  font-size: $font-size-sm;
+}
+
+a {
+  transition: all .2s;
+
+  &:hover, &:focus {
+    outline: none;
+    text-decoration: $link-decoration;
+  }
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-weight: $headings-font-weight;
+}
+// ******** BUTTON Style ********
+.btn {
+  border-radius: $border-radius-btn;
+  background-color: $light-primary;
+  outline: none;
+  border: 0;
+  color: white;
+
+  &,
+  &:active,
+  &.active {
+    &:focus,
+    &.focus {
+      outline: none;
+      color: white;
+    }
+  }
+}
+.btn-sm {
+  padding: 4px 18px;
+}
+
+.btn-primary {
+  @include button-variant($btn-primary-color, $light-primary, $btn-primary-border);
+
+  &:hover {
+    background-color: $brand-primary;
+    color: white;
+  }
+  &,
+  &:active,
+  &.active {
+    &:focus,
+    &.focus {
+      background-color: $dark-primary;
+      box-shadow: $box-shadow-btn;
+    }
+  }
+}
+.btn-secondary {
+  @include button-variant($btn-secondary-color, $light-secondary, $btn-secondary-border);
+}
+
+// Default container style with border
+.container-md {
+  max-width: 45rem;
+  margin: 20px auto;
+  background-color: white;
+  padding: 30px;
+}
+.content-box {
+  box-shadow: $box-shadow;
+  border-radius: 5px;
+  border: 1px solid $gray-border;
+}

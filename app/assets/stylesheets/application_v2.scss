@@ -1,7 +1,9 @@
 // Bootstrap customization variables
-@import "bootstrap_btn_customization";
 
 @import "bootstrap4_alpha2/bootstrap";
+@import "v2/variables";
+@import "v2/custom_theme";
+@import "bootstrap_btn_customization";
 
 @import "font-awesome";
 @import "bootstrap-datetimepicker";
@@ -18,5 +20,6 @@
 
 // Controller-specific
 @import 'v2/changelog';
+@import 'v2/styleguide';
 
 // Select2

@@ -6,6 +6,8 @@ class Batch < ActiveRecord::Base
 
   scope :live, -> { where('start_date <= ? and end_date >= ?', Time.now, Time.now) }
   scope :not_completed, -> { where('end_date >= ?', Time.now) }
+  scope :open_for_applications, -> { joins(:application_stage).where(application_stages: { number: 1 }) }
+  scope :applications_ongoing, -> { joins(:application_stage).where('application_stages.number > 1').where('application_stages.final_stage IS NOT TRUE') }
 
   just_define_datetime_picker :application_stage_deadline
 

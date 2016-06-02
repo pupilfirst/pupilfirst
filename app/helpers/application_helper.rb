@@ -32,4 +32,8 @@ module ApplicationHelper
       end.join ', '
     end
   end
+
+  def startup_or_root_url
+    current_founder&.startup.present? ? startup_url(current_founder.startup) : root_url
+  end
 end

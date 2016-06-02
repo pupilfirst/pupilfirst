@@ -1,0 +1,22 @@
+- content_for :head do
+  title SV.CO Apply Now
+  meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
+
+.container
+  .apply-banner
+    .row
+      .col-md-4
+        h1 Please supply your email address.
+        p.header-light
+          ' We'll email you a one-time link to sign in.
+.apply-container
+  .container
+    .row
+      .col-md-7.col-md-push-5
+        .batch-results.margin-bottom-20
+          .result-head
+            = simple_form_for @batch_applicant, url: apply_send_sign_in_email_path do |f|
+              = f.input :email
+              = f.submit 'Send one-time sign in link'
+
+      == render 'left_bar'

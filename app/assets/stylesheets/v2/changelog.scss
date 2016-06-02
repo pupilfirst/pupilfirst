@@ -1,3 +1,47 @@
-h2 {
-  color: $brand-primary;
+.changelog-section {
+  h2 {
+    color: $brand-primary;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    font-weight: $font-semibold;
+    padding: 10px 0;
+    margin: 30px 0 20px;
+    border: 1px solid $gray-border;
+    border-width: 1px 0;
+
+    &:before {
+      @include fa-icon(calendar);
+      padding-right: 10px;
+    }
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  h3 {
+    font-size: $font-size-h6;
+    font-weight: $font-regular;
+    padding: 0 10px 5px 0;
+    border-bottom: 1px solid $gray-border;
+    display: inline-block;
+
+    &:before {
+      @include fa-icon(caret-right);
+      padding-right: 10px;
+      color: $brand-secondary;
+    }
+  }
+
+  ul {
+    li {
+      font-size: $paragraph-text;
+      list-style-type: circle;
+      font-size: 1rem;
+      line-height: 1.65rem;
+      padding-bottom: 10px;
+      font-weight: $font-light;
+      widows: 3;
+    }
+  }
 }

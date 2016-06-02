@@ -1,0 +1,21 @@
+= content_for :heading
+  | Your application to SV.CO has moved to the next stage!
+
+= content_for :salutation
+  | Hello,
+
+= content_for :body
+  p
+    ' Your application has progressed to the next stage: <strong>#{@stage.name}</strong>. Please visit
+    ' #{link_to "the batch's application page", apply_batch_url(batch: @batch.batch_number)} for information on how to
+    ' proceed. You may be required to sign in if you're returning to application process from a new device.
+
+  p
+    ' If you're unable to click on the link above, then please copy and paste the following link
+    ' into your browser's address bar:
+
+  p.monospace = apply_batch_url(batch: @batch.batch_number)
+
+  p
+    ' Please note that the deadline for this new stage is
+    strong #{@batch.application_stage_deadline}.

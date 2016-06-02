@@ -46,3 +46,4 @@
 //= require about
 //= require transparency
 //= require talent
+//= require batch_applications

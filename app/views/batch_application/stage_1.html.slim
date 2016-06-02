@@ -1,0 +1,56 @@
+/ Stage one of the application process opens the batch up to applications from the public. It should supply some
+  information about the batch,
+
+- content_for :head do
+  title SV.CO Apply Now
+  meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
+
+.container
+  .apply-banner
+    .row
+      .col-md-4
+        h1 Applications open for #{current_batch.name} batch!
+        p.header-light
+          ' The application process for this batch has started. Apply now!
+.apply-container
+  .container
+    .row
+      .col-md-7.col-md-push-5
+        .batch-results
+          .result-head
+            = simple_form_for :batch_application do |f|
+              = f.input :application_page_read,
+                as: :boolean,
+                inline_label: 'Did you read the application page before starting this form?'
+
+              = f.input :university,
+                collection: University.all,
+                as: :select,
+                label: 'Which university does your institute belong to?'
+
+              = f.input :college, label: "Name of team lead's college"
+              = f.input :state
+              = f.input :team_lead_name, label: 'Full name of team lead'
+
+              = f.input :team_lead_email,
+                label: 'Team lead email ID',
+                input_html: { value: current_batch_applicant.email, disabled: true }
+
+              = f.input :team_lead_gender,
+                label: "Team lead's gender",
+                collection: Founder.valid_gender_values,
+                as: :radio_buttons
+
+              = f.input :cofounders_count,
+                as: :select,
+                collection: [2,3,4],
+                label: 'Number of co-founders',
+                include_blank: false
+
+              = f.input :achievement,
+                as: :text,
+                label: 'Mention an achievement you are most proud of as a team'
+
+              = f.submit 'Submit Application', class: 'btn btn-primary'
+
+      == render 'left_bar'

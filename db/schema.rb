@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160524085035) do
+ActiveRecord::Schema.define(version: 20160527080626) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,22 +67,90 @@ ActiveRecord::Schema.define(version: 20160524085035) do
   add_index "ahoy_events", ["user_id", "user_type"], name: "index_ahoy_events_on_user_id_and_user_type", using: :btree
   add_index "ahoy_events", ["visit_id"], name: "index_ahoy_events_on_visit_id", using: :btree
 
+  create_table "application_stages", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "number"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.integer  "days_before_batch"
+    t.boolean  "final_stage"
+  end
+
+  create_table "application_submission_urls", force: :cascade do |t|
+    t.string   "name"
+    t.string   "url"
+    t.integer  "score"
+    t.integer  "application_submission_id"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "application_submission_urls", ["application_submission_id"], name: "index_application_submission_urls_on_application_submission_id", using: :btree
+
+  create_table "application_submissions", force: :cascade do |t|
+    t.integer  "application_stage_id"
+    t.integer  "batch_application_id"
+    t.integer  "score"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.text     "notes"
+    t.string   "file"
+  end
+
+  add_index "application_submissions", ["application_stage_id"], name: "index_application_submissions_on_application_stage_id", using: :btree
+  add_index "application_submissions", ["batch_application_id"], name: "index_application_submissions_on_batch_application_id", using: :btree
+
+  create_table "batch_applicants", force: :cascade do |t|
+    t.string   "name"
+    t.string   "gender"
+    t.string   "email"
+    t.string   "phone"
+    t.string   "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "token"
+  end
+
+  add_index "batch_applicants", ["token"], name: "index_batch_applicants_on_token", using: :btree
+
+  create_table "batch_applicants_applications", id: false, force: :cascade do |t|
+    t.integer "batch_applicant_id",   null: false
+    t.integer "batch_application_id", null: false
+  end
+
+  add_index "batch_applicants_applications", ["batch_applicant_id", "batch_application_id"], name: "idx_applicants_applications_on_applicant_id_and_application_id", using: :btree
+  add_index "batch_applicants_applications", ["batch_application_id", "batch_applicant_id"], name: "idx_applications_applicants_on_application_id_and_applicant_id", using: :btree
+
+  create_table "batch_applications", force: :cascade do |t|
+    t.integer  "batch_id"
+    t.integer  "application_stage_id"
+    t.integer  "university_id"
+    t.string   "product_name"
+    t.text     "team_achievement"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.integer  "team_lead_id"
+  end
+
+  add_index "batch_applications", ["application_stage_id"], name: "index_batch_applications_on_application_stage_id", using: :btree
+  add_index "batch_applications", ["batch_id"], name: "index_batch_applications_on_batch_id", using: :btree
+  add_index "batch_applications", ["team_lead_id"], name: "index_batch_applications_on_team_lead_id", using: :btree
+  add_index "batch_applications", ["university_id"], name: "index_batch_applications_on_university_id", using: :btree
+
   create_table "batches", force: :cascade do |t|
     t.string   "name"
     t.text     "description"
     t.date     "start_date"
     t.date     "end_date"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.integer  "batch_number"
     t.string   "slack_channel"
+    t.integer  "application_stage_id"
+    t.datetime "application_stage_deadline"
   end
 
-  create_table "categories", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
+  add_index "batches", ["application_stage_id"], name: "index_batches_on_application_stage_id", using: :btree
 
   create_table "connect_requests", force: :cascade do |t|
     t.integer  "connect_slot_id"
@@ -125,25 +193,6 @@ ActiveRecord::Schema.define(version: 20160524085035) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
-
-  create_table "events", force: :cascade do |t|
-    t.string   "title"
-    t.text     "description"
-    t.datetime "start_at"
-    t.datetime "end_at"
-    t.integer  "location_id"
-    t.boolean  "featured"
-    t.integer  "category_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "picture"
-    t.integer  "user_id"
-    t.boolean  "notification_sent"
-  end
-
-  add_index "events", ["category_id"], name: "index_events_on_category_id", using: :btree
-  add_index "events", ["location_id"], name: "index_events_on_location_id", using: :btree
-  add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
 
   create_table "faculty", force: :cascade do |t|
     t.string   "name"
@@ -274,30 +323,6 @@ ActiveRecord::Schema.define(version: 20160524085035) do
   add_index "karma_points", ["founder_id"], name: "index_karma_points_on_founder_id", using: :btree
   add_index "karma_points", ["source_id"], name: "index_karma_points_on_source_id", using: :btree
   add_index "karma_points", ["startup_id"], name: "index_karma_points_on_startup_id", using: :btree
-
-  create_table "locations", force: :cascade do |t|
-    t.decimal  "latitude"
-    t.decimal  "longitude"
-    t.string   "title"
-    t.text     "address"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "news", force: :cascade do |t|
-    t.string   "title"
-    t.text     "body"
-    t.integer  "user_id"
-    t.boolean  "featured"
-    t.string   "youtube_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "picture"
-    t.boolean  "notification_sent"
-    t.datetime "published_at"
-  end
-
-  add_index "news", ["user_id"], name: "index_news_on_user_id", using: :btree
 
   create_table "platform_feedback", force: :cascade do |t|
     t.string   "feedback_type"
@@ -547,15 +572,6 @@ ActiveRecord::Schema.define(version: 20160524085035) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string   "location"
-  end
-
-  create_table "users", force: :cascade do |t|
-    t.string   "username"
-    t.string   "email"
-    t.string   "fullname"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "avatar"
   end
 
   create_table "visits", id: :uuid, default: nil, force: :cascade do |t|

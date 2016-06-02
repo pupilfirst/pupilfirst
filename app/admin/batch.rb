@@ -1,7 +1,6 @@
 ActiveAdmin.register Batch do
-  menu parent: 'Startups'
-
-  permit_params :name, :description, :start_date, :end_date, :batch_number, :slack_channel
+  permit_params :name, :description, :start_date, :end_date, :batch_number, :slack_channel, :application_stage_id,
+    :application_stage_deadline_date, :application_stage_deadline_time_hour, :application_stage_deadline_time_minute
 
   config.sort_order = 'batch_number_asc'
 
@@ -12,7 +11,31 @@ ActiveAdmin.register Batch do
     column :name
     column :start_date
     column :end_date
-    column :slack_channel
-    actions
+    column :application_stage
+
+    actions do |batch|
+      if batch.application_stage&.final_stage?
+        span do
+          link_to 'Invite all founders', '#'
+        end
+      end
+    end
+  end
+
+  form do |f|
+    f.semantic_errors(*f.object.errors.keys)
+
+    f.inputs 'Batch Details' do
+      f.input :application_stage, collection: ApplicationStage.all.order(number: 'ASC')
+      f.input :application_stage_deadline, as: :just_datetime_picker
+      f.input :batch_number
+      f.input :name
+      f.input :description
+      f.input :start_date, as: :datepicker
+      f.input :end_date, as: :datepicker
+      f.input :slack_channel
+    end
+
+    f.actions
   end
 end

@@ -24,7 +24,7 @@
     margin-left: 30px;
 
     @media (max-width: $screen-xs-max) {
-        margin-left: 15px;
+      margin-left: 15px;
     }
   }
 
@@ -32,7 +32,7 @@
     font-size: 18px;
     padding-left: 30px;
     @media (max-width: $screen-xs-max) {
-        padding-left: 15px;
+      padding-left: 15px;
     }
   }
 }
@@ -45,10 +45,10 @@
 .apply-form {
   background-color: #fff;
   padding: 15px;
-  height:550px;
+  height: 550px;
 
   @media (max-width: $screen-xs-max) {
-    padding:0;
+    padding: 0;
   }
 }
 
@@ -168,48 +168,6 @@
     }
   }
 
-  .second-batch {
-    padding: 30px;
-    border-bottom: 1px solid #e6e6e6;
-
-    @media (max-width: $screen-xs-max) {
-      padding: 15px;
-    }
-
-    h3 {
-      font-size: 23px;
-
-      @media (max-width: $screen-xs-max) {
-        font-size: 20px;
-      }
-    }
-
-    p {
-      font-size: 20px;
-      display: inline-block;
-      font-weight: 200;
-
-      @media (max-width: $screen-xs-max) {
-        font-size: 16px;
-      }
-    }
-
-    a {
-      color: #0c86be;
-      font-size: 20px;
-      font-weight: 400;
-      transition: all 200ms cubic-bezier(.25, .25, .75, .75);
-
-      &:hover {
-        color: $theme-light-green;
-      }
-
-      @media (max-width: $screen-xs-max) {
-        font-size: 16px;
-      }
-    }
-  }
-
   .important-dates {
     padding: 30px;
     border-bottom: 1px solid #e6e6e6;
@@ -234,7 +192,7 @@
         .date-colum {
           width: 90px;
           height: 90px;
-          display:table-cell;
+          display: table-cell;
           vertical-align: middle;
           text-align: center;
           color: white;
@@ -254,7 +212,7 @@
             display: block;
           }
 
-          .important-year{
+          .important-year {
             font-size: 15px;
             display: block;
             font-weight: 400;
@@ -330,6 +288,7 @@
     }
   }
 }
+
 .task-details {
 
   .engineering-task {
@@ -337,7 +296,7 @@
     padding: 25px;
     margin-bottom: 15px;
 
-    h4,h5 {
+    h4, h5 {
       color: #449a43;
     }
   }
@@ -347,7 +306,7 @@
     padding: 25px;
     margin-bottom: 15px;
 
-    h4,h5 {
+    h4, h5 {
       color: #0c86be;
     }
   }
@@ -370,7 +329,7 @@
     }
   }
 
-  .requirements-section, .judgement-section  {
+  .requirements-section, .judgement-section {
     border-bottom: 1px solid $grey-border;
     margin-top: 15px;
 
@@ -384,7 +343,7 @@
 
       li {
         padding-bottom: 10px;
-        font-weight:300;
+        font-weight: 300;
       }
     }
   }
@@ -393,6 +352,7 @@
     font-size: 16px;
   }
 }
+
 .batch-results {
 
   .result-head {
@@ -433,7 +393,7 @@
     padding: 15px 25px 25px;
     margin-bottom: 25px;
 
-    .panel{
+    .panel {
       border: 1px solid #ddd;
 
       .panel-heading {

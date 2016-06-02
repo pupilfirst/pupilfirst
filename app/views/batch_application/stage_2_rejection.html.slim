@@ -1,0 +1,21 @@
+- content_for :head do
+  title SV.CO Apply Now
+  meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
+
+.container
+  .apply-banner
+    .row
+      .col-md-4
+        h1 Your coding and hustling submissions were rejected.
+.apply-container
+  .container
+    .row
+      .col-md-7.col-md-push-5
+        .batch-results.margin-bottom-20
+          .result-head
+            p
+              ' We're sorry, but your coding and hustling submissions didn't make the cut. Possible reasons for this
+              ' include YYYY, ZZZZ, or ABCD. If you think there's we've made a mistake in our evaluation, feel free to
+              | contact us at #{mail_to 'help@sv.co'}, and we'll get back to you as soon as we can.
+
+      == render 'left_bar'

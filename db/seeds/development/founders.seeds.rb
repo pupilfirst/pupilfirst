@@ -21,6 +21,9 @@ founders_list += [
 ]
 
 founders_list.each do |email, first_name, last_name, born_on, gender|
+  # Don't recreate entries.
+  next if Founder.find_by(email: email).present?
+
   Founder.create!(email: email, first_name: first_name, last_name: last_name, password: 'password',
     password_confirmation: 'password', confirmed_at: Time.now, born_on: born_on, gender: gender
   )

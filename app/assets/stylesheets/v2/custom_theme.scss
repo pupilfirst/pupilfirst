@@ -16,7 +16,11 @@ a {
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
   font-weight: $headings-font-weight;
+  color: $dark-grey-text;
 }
+
+// **********  Overriding Bootstrap classes **********
+
 // ******** BUTTON Style ********
 .btn {
   border-radius: $border-radius-btn;
@@ -37,6 +41,10 @@ h1, h2, h3, h4, h5, h6,
 }
 .btn-sm {
   padding: 4px 18px;
+}
+
+.navbar-brand {
+  padding: 0.1rem 0 0 0;
 }
 
 .btn-primary {
@@ -60,12 +68,17 @@ h1, h2, h3, h4, h5, h6,
   @include button-variant($btn-secondary-color, $light-secondary, $btn-secondary-border);
 }
 
+
+// **********  Custom style **********
+
 // Default container style with border
-.container-md {
+.container-md-center {
+  @include center-block;
   max-width: 45rem;
-  margin: 20px auto;
   background-color: white;
   padding: 30px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 .content-box {
   box-shadow: $box-shadow;

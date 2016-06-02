@@ -1,0 +1,33 @@
+/ Stage two of application process is the testing of tech and marketing / sales pitch abilities. Communication on this
+  page should include details about the tests themselves, and a form accepting founder's submissions on behalf of his or
+  her team.
+
+- content_for :head do
+  title SV.CO Apply Now
+  meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
+
+.container
+  .apply-banner
+    .row
+      .col-md-4
+        h1 Coding and Hustling tests are live!
+        p.header-light
+          ' You've made it in! Now prove that you've got what it takes.
+.apply-container
+  .container
+    .row
+      .col-md-7.col-md-push-5
+        .batch-results
+          .result-head
+            = simple_form_for :tests do |f|
+              = f.input :github_url,
+                label: 'Full URL to public Git repository',
+                placeholder: 'https://github.com/username/repository'
+
+              = f.input :video_url,
+                label: 'Full URL to public hustling video',
+                placeholder: 'https://www.youtube.com/watch?v=abcd1234'
+
+              = f.submit 'Submit your entries', class: 'btn btn-primary'
+
+      == render 'left_bar'

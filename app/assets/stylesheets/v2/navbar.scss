@@ -24,7 +24,7 @@
   .navbar,
   .navbar-default {
     background-color: white;
-    border-bottom: 1px solid $gray-border;
+    box-shadow: 0 1px 0 0 $gray-border;
     height: auto;
     padding: 10px;
     transition: all .5s;
@@ -37,7 +37,23 @@
       float: none;
 
       .navbar-toggler {
+        vertical-align:middle;
+        padding: .7rem .7rem;
+        margin: .5rem .25rem;
+        border-radius: 4px;
         float: right;
+
+        .icon-bar {
+          display: block;
+          width: 22px;
+          height: 3px;
+          border-radius: 1px;
+          background-color: #888888;
+          transition: all 0.2s;
+        }
+        .icon-bar + .icon-bar {
+          margin-top: 4px;
+        }
       }
     }
   }
@@ -65,7 +81,7 @@
           letter-spacing: 0.02rem;
 
           &.nav-link {
-            color: $primary-gray-text;
+            color: $dark-grey-text;
             line-height: 26px;
 
             &:hover, &:focus {
@@ -153,7 +169,7 @@
         display: block;
         padding: 10px 15px;
         font-size: 13px;
-        color: $gray-light-text;
+        color: $light-grey-text;
 
         i {
           color: $light-secondary;

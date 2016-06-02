@@ -6,6 +6,11 @@ ActiveAdmin.register Visit do
   actions :index, :show
   config.sort_order = 'started_at_desc'
 
+  filter :founder_startup_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'Batch'
+  filter :user_type
+  filter :founder
+  filter :started_at
+
   index do
     selectable_column
 

@@ -2,6 +2,9 @@ ActiveAdmin.register PublicSlackMessage do
   menu parent: 'Founders'
   actions :index
 
+  filter :founder_startup_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'Batch'
+  preserve_default_filters!
+
   controller do
     def index
       index! do |format|

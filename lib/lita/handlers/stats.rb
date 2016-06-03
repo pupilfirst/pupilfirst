@@ -84,8 +84,8 @@ module Lita
       end
 
       def total_startups_count_and_names
-        names_list = list_of_names(requested_batch_startups)
-        "#{requested_batch_startups.count} #{names_list}\n"
+        names_list = list_of_startups(requested_batch_startups)
+        "#{requested_batch_startups.count} (#{names_list})\n"
       end
 
       def requested_batch_startups
@@ -99,7 +99,7 @@ module Lita
         stages.each do |stage|
           response += 'Number of startups in _\'' + I18n.t("timeline_event.stage.#{stage}") + '\'_ stage: '
           startups = Startup.not_dropped_out.where(stage: stage, batch: @batch_requested)
-          response += startups.count.to_s + " #{list_of_names(startups)}\n"
+          response += startups.count.to_s + " (#{list_of_startups(startups)})\n"
         end
 
         response
@@ -107,19 +107,19 @@ module Lita
 
       def inactive_startups_count_and_names
         startups = @batch_requested.startups.inactive_for_week
-        names_list = list_of_names(startups)
-        "#{startups.count} #{names_list}\n"
+        names_list = list_of_startups(startups)
+        "#{startups.count} (#{names_list})\n"
       end
 
       def endangered_startups_count_and_names
         startups = @batch_requested.startups.endangered
-        names_list = list_of_names(startups)
-        "#{startups.count} #{names_list}\n"
+        names_list = list_of_startups(startups)
+        "#{startups.count} (#{names_list})\n"
       end
 
-      def list_of_names(startups)
+      def list_of_startups(startups)
         return '' unless startups.present?
-        '(' + startups.map { |startup| "<#{Rails.application.routes.url_helpers.startup_url(startup)}|#{startup.product_name}>" }.join(', ') + ')'
+        startups.map { |startup| "<#{Rails.application.routes.url_helpers.startup_url(startup)}|#{startup.product_name}>" }.join(', ')
       end
 
       def expired_team_targets_details
@@ -135,8 +135,11 @@ module Lita
         return I18n.t('slack.handlers.stats.no_expired_team_targets') unless targets.present?
 
         targets_list = ''
-        targets.each_with_index do |target, index|
-          targets_list += "#{index + 1}. #{target.startup.product_name}: _'#{target.title}'_\n"
+        target_titles = targets.pluck(:title).uniq
+
+        target_titles.each_with_index do |title, index|
+          startup_ids = targets.where(title: title).pluck(:assignee_id)
+          targets_list += "#{index + 1}. _#{title}_: #{list_of_startups(Startup.find(startup_ids))}\n"
         end
 
         targets_list

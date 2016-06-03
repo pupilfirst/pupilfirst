@@ -155,11 +155,23 @@ module Lita
         return I18n.t('slack.handlers.stats.no_expired_founder_targets') unless targets.present?
 
         targets_list = ''
-        targets.each_with_index do |target, index|
-          targets_list += "#{index + 1}. #{target.assignee.fullname}: _'#{target.title}'_\n"
+        target_titles = targets.pluck(:title).uniq
+
+        target_titles.each_with_index do |title, index|
+          founder_ids = targets.where(title: title).pluck(:assignee_id)
+          targets_list += "#{index + 1}. _#{title}_: #{list_of_founders(founder_ids)}\n"
         end
 
         targets_list
+      end
+
+      def list_of_founders(founder_ids)
+        founder_ids.map do |founder_id|
+          founder = Founder.find(founder_id)
+          name = founder.fullname
+          name += " (@#{founder.slack_username})" if founder.slack_username.present?
+          name
+        end.join(', ')
       end
     end
 

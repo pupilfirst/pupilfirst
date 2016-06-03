@@ -26,7 +26,7 @@ html lang='en'
 
   body
     section#header
-      nav.navbar.navbar-fixed-top role="navigation"
+      nav.navbar.navbar-fixed-top.nav-down role="navigation"
         - if @sitewide_notice
           .sitewide-notice
             .container
@@ -34,7 +34,7 @@ html lang='en'
 
         .container
           .navbar-header
-            button.navbar-toggler.hidden-md-up type="button" data-toggle="collapse" data-target="#sv-navbar"
+            button.navbar-toggler.collapsed.hidden-md-up type="button" data-toggle="collapse" data-target="#sv-navbar"
               span.sr-only Toggle navigation
               span.icon-bar.top-bar
               span.icon-bar.middle-bar
@@ -43,7 +43,6 @@ html lang='en'
             a.navbar-brand href="#{root_url}"
               img.site-logo#site-logo src="#{image_url 'SV.CO-Logo.svg'}" alt='Logo of SV.CO'
           = render 'layouts/nav_links_v2'
-      .nav-spacer
       == yield :header
 
       - if current_founder

@@ -17,5 +17,5 @@
   .left-of-button title="Trend: #{trend.join(', ')}"
     span.sparkline-tag #{trend.join(', ')}
 
-  a.button.view-all href=admin_visits_path(scope: 'founder_visits', q: { started_at_gteq: 3.weeks.ago.strftime('%Y-%m-%d')})
-    | View All (#{Visit.founder_visits.where(started_at: (3.weeks.ago..Time.now)).count})
+  a.button.view-all href=admin_visits_path(scope: 'founder_visits', q: { started_at_gteq: 3.weeks.ago.strftime('%Y-%m-%d'), founder_startup_batch_id_eq: batch_selected.id })
+    | View All (#{founder_visits.where(started_at: (3.weeks.ago..Time.now)).count})

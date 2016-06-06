@@ -989,3 +989,12 @@ h1.product-name {
     border-color: grey;
   }
 }
+
+#improvement-modal {
+  .feedback-text > pre > div {
+    white-space: pre-wrap;
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}

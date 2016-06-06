@@ -1,7 +1,7 @@
 ActiveAdmin.register BatchApplication do
   menu parent: 'Batches', label: 'Applications', priority: 0
 
-  permit_params :batch_id, :application_stage_id, :university_id, :product_name, :team_achievement
+  permit_params :batch_id, :application_stage_id, :university_id, :product_name, :team_achievement, :team_lead_id
 
   index do
     selectable_column
@@ -59,6 +59,7 @@ ActiveAdmin.register BatchApplication do
 
     f.inputs do
       f.input :batch
+      f.input :team_lead
       f.input :application_stage, collection: ApplicationStage.all.order(number: 'ASC')
       f.input :product_name
       f.input :team_achievement

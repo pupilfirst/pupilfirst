@@ -9,7 +9,11 @@ class BatchApplication < ActiveRecord::Base
   validates :application_stage_id, presence: true
 
   def display_name
-    team_lead&.name || "Batch Application ##{id}"
+    if team_lead.present?
+      "#{team_lead&.name} (#{batch.name})"
+    else
+      "Batch Application ##{id}"
+    end
   end
 
   def score

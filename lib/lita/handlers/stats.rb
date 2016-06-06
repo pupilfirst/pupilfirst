@@ -130,13 +130,16 @@ module Lita
       end
 
       def expired_team_targets_list
+        # get all expired team targets for the batch
         targets = Target.for_startups_in_batch(@batch_requested).expired
 
         return I18n.t('slack.handlers.stats.no_expired_team_targets') unless targets.present?
 
         targets_list = ''
+        # get all unique titles from the fetched targets - to group startups by them
         target_titles = targets.pluck(:title).uniq
 
+        # fetch startup names for each group and append them to the response
         target_titles.each_with_index do |title, index|
           startup_ids = targets.where(title: title).pluck(:assignee_id)
           targets_list += "#{index + 1}. _#{title}_: #{list_of_startups(Startup.find(startup_ids))}\n"
@@ -153,13 +156,16 @@ module Lita
       end
 
       def expired_founder_targets_list
+        # get all expired founder targets for the batch
         targets = Target.for_founders_in_batch(@batch_requested).expired
 
         return I18n.t('slack.handlers.stats.no_expired_founder_targets') unless targets.present?
 
         targets_list = ''
+        # get all unique titles from the fetched targets - to group founders by them
         target_titles = targets.pluck(:title).uniq
 
+        # fetch founder names for each group and append them to the response
         target_titles.each_with_index do |title, index|
           founder_ids = targets.where(title: title).pluck(:assignee_id)
           targets_list += "#{index + 1}. _#{title}_: #{list_of_founders(founder_ids)}\n"

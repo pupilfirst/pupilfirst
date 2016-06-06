@@ -80,8 +80,10 @@ module Lita
           #{stage_wise_startup_counts_and_names}
           Number of inactive startups last week: #{inactive_startups_count_and_names}
           Number of startups in danger zone: #{endangered_startups_count_and_names}
-          Latest deployed team targets: #{latest_deployed_targets_for(:startups)}
-          Latest deployed founder targets: #{latest_deployed_targets_for(:founders)}
+          Latest deployed team targets ( *C* = Completed, *P* = Pending, *E* = Expired ):
+          #{latest_deployed_targets_for(:startups)}
+          Latest deployed founder targets ( *C* = Completed, *P* = Pending, *E* = Expired ):
+          #{latest_deployed_targets_for(:founders)}
         MESSAGE
       end
 
@@ -195,8 +197,8 @@ module Lita
           pending_count = Target.send("for_#{scope}_in_batch", @batch_requested).where(title: title).pending.count
           expired_count = Target.send("for_#{scope}_in_batch", @batch_requested).where(title: title).expired.count
 
-          "_#{title}_ (Completed: #{completed_count}, Pending: #{pending_count}, Expired: #{expired_count})"
-        end.join(', ') + "\n"
+          "_#{title}_ ( *C*: #{completed_count}, *P*: #{pending_count}, *E*: #{expired_count} )"
+        end.join(",\n") + "\n"
       end
 
       def fetch_latest_target_titles(scope)

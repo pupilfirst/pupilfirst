@@ -3,6 +3,21 @@ ActiveAdmin.register BatchApplication do
 
   permit_params :batch_id, :application_stage_id, :university_id, :product_name, :team_achievement, :team_lead_id
 
+  batch_action :promote, confirm: 'Are you sure?' do |ids|
+    promoted = 0
+
+    BatchApplication.where(id: ids).each do |batch_application|
+      if batch_application.promotable?
+        batch_application.promote!
+        promoted += 1
+      end
+    end
+
+    flash[:success] = "#{promoted} #{'application'.pluralize(promoted)} successfully promoted!"
+
+    redirect_to collection_path
+  end
+
   index do
     selectable_column
 

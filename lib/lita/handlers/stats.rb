@@ -80,6 +80,8 @@ module Lita
           #{stage_wise_startup_counts_and_names}
           Number of inactive startups last week: #{inactive_startups_count_and_names}
           Number of startups in danger zone: #{endangered_startups_count_and_names}
+          Latest deployed team targets: #{latest_deployed_targets_for(:startups)}
+          Latest deployed founder targets: #{latest_deployed_targets_for(:founders)}
         MESSAGE
       end
 
@@ -181,6 +183,27 @@ module Lita
           name += " (@#{founder.slack_username})" if founder.slack_username.present?
           name
         end.join(', ')
+      end
+
+      def latest_deployed_targets_for(scope)
+        latest_unique_titles = fetch_latest_target_titles(scope)
+
+        return "None\n" unless latest_unique_titles.present?
+
+        latest_unique_titles.map do |title|
+          completed_count = Target.send("for_#{scope}_in_batch", @batch_requested).where(title: title).completed.count
+          pending_count = Target.send("for_#{scope}_in_batch", @batch_requested).where(title: title).pending.count
+          expired_count = Target.send("for_#{scope}_in_batch", @batch_requested).where(title: title).expired.count
+
+          "_#{title}_ (Completed: #{completed_count}, Pending: #{pending_count}, Expired: #{expired_count})"
+        end.join(', ') + "\n"
+      end
+
+      def fetch_latest_target_titles(scope)
+        target_titles = Target.send("for_#{scope}_in_batch", @batch_requested).order('created_at DESC').pluck(:title)
+
+        # return the latest 5 unique titles
+        target_titles.uniq[0..4]
       end
     end
 

@@ -236,8 +236,12 @@ class BatchApplicationController < ApplicationController
   # Check whether a token parameter has been supplied. Sign in application founder if there's a corresponding entry.
   def check_token
     return if params[:token].blank?
-    applicant = BatchApplicant.find_by token: params[:token]
-    return if applicant.blank?
+    applicant = BatchApplicant.find_using_token params[:token]
+
+    if applicant.blank?
+      flash[:error] = "That token is invalid. It's likely that it has been used already. Please generate a new one-time link using the form on this page."
+      return
+    end
 
     # Sign in the current application founder.
     @current_batch_applicant = applicant

@@ -18,14 +18,14 @@ module Lita
       end
 
       def extract_latest_log
-        @latest_log = @changelog_file.strip.split(/^##\s/)[1]
+        @latest_log = @changelog_file.strip.split(/^###\s/)[1]
       end
 
       def format_for_slack
         salutation = "*Here are the latest changes on the SV.CO platform. Visit sv.co/changelog for more.*\n\n"
 
-        # replace '###' with slack-friendly '>'
-        @latest_log.gsub!(/###/, '> ')
+        # replace '####' with slack-friendly '>'
+        @latest_log.gsub!(/####/, '> ')
 
         salutation + @latest_log
       end

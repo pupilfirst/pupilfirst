@@ -1,5 +1,4 @@
 # TODO: This handler should probably be renamed to 'miscellaneous.rb' or so and re-used for similar random cases
-
 module Lita
   module Handlers
     class Thanks < Handler
@@ -10,7 +9,7 @@ module Lita
       end
 
       def random_response_to_thanks
-        ["You are welcome :simple_smile:", "It was my pleasure ! :blush:", "Anytime :thumbsup:"].sample
+        ['You are welcome :simple_smile:', 'It was my pleasure! :blush:', 'Anytime :thumbsup:'].sample
       end
     end
 

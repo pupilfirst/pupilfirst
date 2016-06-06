@@ -10,6 +10,23 @@ ActiveAdmin.register ApplicationSubmission do
   filter :score
   filter :notes
 
+  batch_action :promote, confirm: 'Are you sure?' do |ids|
+    promoted = 0
+
+    ApplicationSubmission.where(id: ids).each do |application_submission|
+      batch_application = application_submission.batch_application
+
+      if batch_application.promotable? && application_submission.application_stage == batch_application.application_stage
+        batch_application.promote!
+        promoted += 1
+      end
+    end
+
+    flash[:success] = "#{promoted} #{'application'.pluralize(promoted)} successfully promoted!"
+
+    redirect_to collection_path
+  end
+
   index do
     selectable_column
 

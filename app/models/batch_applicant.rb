@@ -13,4 +13,13 @@ class BatchApplicant < ActiveRecord::Base
   end
 
   has_secure_token
+
+  # Attempts to find an applicant with the supplied token. If found, the token is regenerated to invalidate previous
+  # value, thus preventing reuse of login link.
+  def self.find_using_token(incoming_token)
+    applicant = find_by token: incoming_token
+    return if applicant.blank?
+    applicant.regenerate_token
+    applicant
+  end
 end

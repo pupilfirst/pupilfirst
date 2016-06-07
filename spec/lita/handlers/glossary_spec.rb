@@ -14,7 +14,7 @@ describe Lita::Handlers::Glossary do
     end
 
     context 'when term is known' do
-      let(:glossary_term) { create :glossary_term, term: 'known term', definition: Faker::Lorem.sentence }
+      let(:glossary_term) { create :glossary_term, term: 'known term' }
       let(:response) { double 'Lita Response Object', match_data: ['define', 'known term'] }
 
       it 'replies with definition to term' do

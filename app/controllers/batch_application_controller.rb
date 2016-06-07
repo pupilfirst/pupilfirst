@@ -120,7 +120,7 @@ class BatchApplicationController < ApplicationController
   # Returns currently picked batch.
   def current_batch
     @current_batch ||= begin
-      Batch.find_by(name: params[:batch]) || Batch.find_by(batch_number: params[:batch])
+      Batch.find_by(batch_number: params[:batch]
     end
   end
 

@@ -20,6 +20,10 @@ h1, h2, h3, h4, h5, h6,
   color: $dark-grey-text;
 }
 
+p {
+  margin-bottom: 0;
+}
+
 // **********  Overriding Bootstrap classes **********
 
 // ******** BUTTON Style ********

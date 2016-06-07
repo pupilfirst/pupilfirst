@@ -1,4 +1,10 @@
 #header {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 1;
+
   .sitewide-notice {
     background-color: $theme-light-green;
     text-align: center;
@@ -27,7 +33,6 @@
     box-shadow: 0 1px 0 0 $gray-border;
     height: auto;
     padding: 10px;
-    transition: all .5s;
 
   }
   .navbar-header {
@@ -223,8 +228,4 @@
       }
     }
   }
-}
-// we'll add this class using javascript
-.nav-up {
-  top: -75px; // same as header height. use variables in LESS/SASS
 }

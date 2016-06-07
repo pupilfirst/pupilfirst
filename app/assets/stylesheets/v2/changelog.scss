@@ -1,5 +1,5 @@
 .changelog-section {
-  h2 {
+  h3 {
     color: $brand-primary;
     font-size: 0.875rem;
     text-transform: uppercase;
@@ -19,15 +19,12 @@
     }
   }
 
-  h3 {
-    font-size: $font-size-h6;
-    font-weight: $font-regular;
+  h4 {
     padding: 0 10px 5px 0;
     border-bottom: 1px solid $gray-border;
     display: inline-block;
 
     &:before {
-      @include fa-icon(caret-right);
       padding-right: 10px;
       color: $brand-secondary;
     }

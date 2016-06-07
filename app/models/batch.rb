@@ -11,7 +11,7 @@ class Batch < ActiveRecord::Base
 
   just_define_datetime_picker :application_stage_deadline
 
-  validates :name, presence: true, uniqueness: true
+  validates :theme, presence: true
   validates :batch_number, presence: true, numericality: true, uniqueness: true
   validates_presence_of :start_date, :end_date
   validates :slack_channel, format: { with: /#[^A-Z\s.;!?]+/, message: 'must start with a # and not contain uppercase, spaces or periods' },
@@ -35,9 +35,11 @@ class Batch < ActiveRecord::Base
     EmailApplicantsJob.perform_later(self)
   end
 
-  def to_label
-    "##{batch_number} #{name}"
+  def display_name
+    "##{batch_number} #{theme}"
   end
+
+  alias name display_name
 
   # TODO: Batch.current should probably be re-written to account for overlapping batches.
   def self.current

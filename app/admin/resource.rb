@@ -42,7 +42,7 @@ ActiveAdmin.register Resource do
         if resource.startup.present?
           link_to resource.startup.product_name, admin_startup_path(resource.startup)
         elsif resource.batch.present?
-          link_to resource.batch.to_label, admin_batch_path(resource.batch)
+          link_to resource.batch.display_name, admin_batch_path(resource.batch)
         else
           'All batches'
         end
@@ -74,7 +74,7 @@ ActiveAdmin.register Resource do
           if resource.startup.present?
             link_to resource.startup.product_name, admin_startup_path(resource.startup)
           elsif resource.batch.present?
-            link_to resource.batch.to_label, admin_batch_path(resource.batch)
+            link_to resource.batch.display_name, admin_batch_path(resource.batch)
           else
             'All batches'
           end

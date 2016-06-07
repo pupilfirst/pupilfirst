@@ -34,7 +34,7 @@ class ConnectSlot < ActiveRecord::Base
   # Use optional_id to add one to the list regardless of its status.
   def self.available(optional_id: nil)
     if optional_id
-      where("id NOT in (SELECT DISTINCT(connect_slot_id) FROM connect_requests) OR id = #{optional_id}").upcoming
+      where("(id NOT in (SELECT DISTINCT(connect_slot_id) FROM connect_requests) AND slot_at > ?) OR id = #{optional_id}", Time.now)
     else
       where('id NOT in (SELECT DISTINCT(connect_slot_id) FROM connect_requests)').upcoming
     end.order('slot_at ASC')

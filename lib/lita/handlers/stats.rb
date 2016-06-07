@@ -80,10 +80,11 @@ module Lita
           #{stage_wise_startup_counts_and_names}
           Number of inactive startups last week: #{inactive_startups_count_and_names}
           Number of startups in danger zone: #{endangered_startups_count_and_names}
-          Latest deployed team targets ( *C* = Completed, *P* = Pending, *E* = Expired ):
+          Latest deployed team targets:
           #{latest_deployed_targets_for(:startups)}
-          Latest deployed founder targets ( *C* = Completed, *P* = Pending, *E* = Expired ):
+          Latest deployed founder targets:
           #{latest_deployed_targets_for(:founders)}
+          (*C* = Completed, *P* = Pending, *E* = Expired)
         MESSAGE
       end
 

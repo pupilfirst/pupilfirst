@@ -117,7 +117,7 @@ ActiveAdmin.register Founder do
     end
 
     column :batch do |founder|
-      founder.startup&.batch&.to_label
+      founder.startup&.batch&.display_name
     end
 
     column :roles do |founder|

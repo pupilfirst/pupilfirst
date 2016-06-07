@@ -119,23 +119,17 @@ class BatchApplicationController < ApplicationController
 
   # Returns currently picked batch.
   def current_batch
-    @current_batch ||= begin
-      Batch.find_by(name: params[:batch]) || Batch.find_by(batch_number: params[:batch])
-    end
+    @current_batch ||= Batch.find_by(batch_number: params[:batch])
   end
 
   # Returns the application_stage that current batch is at.
   def current_stage
-    @current_stage ||= begin
-      current_batch&.application_stage
-    end
+    @current_stage ||= current_batch&.application_stage
   end
 
   # Returns the stage number of current batch.
   def current_stage_number
-    @current_stage_number ||= begin
-      current_stage&.number
-    end
+    @current_stage_number ||= current_stage&.number
   end
 
   # Returns currently 'signed in' application founder.
@@ -163,9 +157,7 @@ class BatchApplicationController < ApplicationController
 
   # Returns batch application of current applicant.
   def current_application
-    @current_application ||= begin
-      current_batch_applicant&.batch_applications.find_by(batch: current_batch)
-    end
+    @current_application ||= current_batch_applicant&.batch_applications.find_by(batch: current_batch)
   end
 
   helper_method :current_batch

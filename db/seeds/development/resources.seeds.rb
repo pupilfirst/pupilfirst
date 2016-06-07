@@ -28,7 +28,7 @@ Resource.create!(
 )
 
 after 'development:batches' do
-  fintech_batch = Batch.find_by(name: 'FinTech')
+  fintech_batch = Batch.find_by(batch_number: 1)
 
   Resource.create!(
     file: Rails.root.join(pdf_path).open,

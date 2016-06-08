@@ -22,4 +22,10 @@ class BatchApplicant < ActiveRecord::Base
     applicant.regenerate_token
     applicant
   end
+
+  def applied_to?(batch)
+    return false unless batch_applications.present?
+
+    batch_applications.find_by(batch_id: batch.id).present?
+  end
 end

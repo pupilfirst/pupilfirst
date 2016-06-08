@@ -5,6 +5,8 @@ class BatchApplication < ActiveRecord::Base
   has_and_belongs_to_many :batch_applicants
   belongs_to :team_lead, class_name: 'BatchApplicant'
 
+  scope :selected, -> { joins(:application_stage).where(application_stages: { final_stage: true }) }
+
   validates :batch_id, presence: true
   validates :application_stage_id, presence: true
 

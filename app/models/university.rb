@@ -4,7 +4,10 @@ class University < ActiveRecord::Base
   validates_uniqueness_of :name, presence: true
   validates_presence_of :location
 
-  def to_label
-    name + (location.present? ? " [#{location}]" : '')
+  def self.grouped_by_location
+    all.each_with_object({}) do |university, grouped|
+      grouped[university.location] ||= []
+      grouped[university.location] << [university.id, university.name]
+    end
   end
 end

@@ -52,7 +52,7 @@ ActiveAdmin.register TargetTemplate do
   end
 
   batch_action :batch_deploy,
-    confirm: 'Select batch to deploy selected templates as targets', form: proc { { batch: Batch.not_completed.pluck(:name, :id) } } do |ids, inputs|
+    confirm: 'Select batch to deploy selected templates as targets', form: proc { { batch: Batch.not_completed.pluck(:batch_number, :id) } } do |ids, inputs|
     batch = Batch.find(inputs[:batch])
 
     TargetTemplate.where(id: ids).each do |target_template|

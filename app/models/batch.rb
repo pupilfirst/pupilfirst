@@ -8,6 +8,7 @@ class Batch < ActiveRecord::Base
   scope :not_completed, -> { where('end_date >= ?', Time.now) }
   scope :open_for_applications, -> { joins(:application_stage).where(application_stages: { number: 1 }) }
   scope :applications_ongoing, -> { joins(:application_stage).where('application_stages.number > 1').where('application_stages.final_stage IS NOT TRUE') }
+  scope :with_recent_results, -> { joins(:application_stage).where(application_stages: { final_stage: true }).where('start_date > ?', 3.months.ago) }
 
   just_define_datetime_picker :application_stage_deadline
 
@@ -54,5 +55,13 @@ class Batch < ActiveRecord::Base
   # Stage has expired when deadline has been crossed.
   def stage_expired?
     application_stage_deadline.past?
+  end
+
+  def selected_candidates
+    BatchApplicant.find selected_applications.pluck(:team_lead_id)
+  end
+
+  def selected_applications
+    batch_applications.selected
   end
 end

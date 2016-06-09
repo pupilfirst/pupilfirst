@@ -24,8 +24,11 @@
                 inline_label: 'Did you read the application page before starting this form?'
 
               = f.input :university,
-                collection: University.all,
-                as: :select,
+                collection: University.grouped_by_location,
+                as: :grouped_select,
+                group_method: :last,
+                value_method: :first,
+                label_method: :last,
                 label: 'Which university does your institute belong to?'
 
               = f.input :college, label: "Name of team lead's college"

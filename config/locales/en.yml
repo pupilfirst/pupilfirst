@@ -20,6 +20,9 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  batch_application:
+    stage_2:
+      submission_failure: Something seems wrong. Please ensure your urls are valid and re-submit
   faculty:
     commitment:
       part_time: Part-Time

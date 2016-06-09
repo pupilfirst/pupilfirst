@@ -59,7 +59,10 @@
               .margin-top-20
               ul
                 - @batches_ongoing.each do |batch|
-                  li = link_to batch.name, apply_batch_path(batch: batch.batch_number)
+                  - if current_batch_applicant.blank? || current_batch_applicant.applied_to?(batch)
+                    li = link_to batch.name, apply_batch_path(batch: batch.batch_number)
+                  - else
+                    li.grey-text #{batch.name} (not accepting new applications)
         .batch-results
           .result-head.text-center
             = image_tag 'home/apply/batch-result-icon.png', class: 'img-responsive'

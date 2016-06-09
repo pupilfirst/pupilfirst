@@ -1,6 +1,8 @@
 universities = [
   ['Gujarat Technical University', 'Gujarat'],
-  ['Kerala University', 'Kerala']
+  ['Kerala University', 'Kerala'],
+  ['Cochin University of Science and Technology', 'Kerala'],
+  ['-- Other University not in this List --', 'Other']
 ]
 
 universities.each do |university|

@@ -23,8 +23,8 @@
                 as: :boolean,
                 inline_label: 'Did you read the application page before starting this form?'
 
-              = f.input :university,
-                collection: University.grouped_by_location,
+              = f.input :university_id,
+                collection: proc { University.grouped_by_location },
                 as: :grouped_select,
                 group_method: :last,
                 value_method: :first,
@@ -50,7 +50,10 @@
                 label: 'Number of co-founders',
                 include_blank: false
 
-              = f.input :achievement,
+              - (1..4).each do |cofounder_index|
+                = render 'cofounder_fields', index: cofounder_index, f: f
+
+              = f.input :team_achievement,
                 as: :text,
                 label: 'Mention an achievement you are most proud of as a team'
 

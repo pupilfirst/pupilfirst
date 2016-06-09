@@ -4,11 +4,16 @@ class BatchApplication < ActiveRecord::Base
   has_many :application_submissions, dependent: :destroy
   has_and_belongs_to_many :batch_applicants
   belongs_to :team_lead, class_name: 'BatchApplicant'
+  belongs_to :university
 
   scope :selected, -> { joins(:application_stage).where(application_stages: { final_stage: true }) }
 
   validates :batch_id, presence: true
   validates :application_stage_id, presence: true
+  validates :university_id, presence: true
+  validates :college, presence: true
+  validates :state, presence: true
+  validates :team_achievement, presence: true
 
   def display_name
     if team_lead.present?

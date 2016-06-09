@@ -1,0 +1,9 @@
+= f.input :cofounder_email, input_html: { name: "cofounder_#{index}[email]" }
+= f.input :cofounder_name, input_html: { name: "cofounder_#{index}[name]" }
+
+= f.input :cofounder_role,
+  input_html: { name: "cofounder_#{index}[role]" },
+  as: :select,
+  collection: proc { Founder.valid_roles },
+  include_blank: false,
+  label_method: proc { |role| t("role.#{role}") }

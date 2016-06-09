@@ -21,6 +21,10 @@
 
 en:
   batch_application:
+    general:
+      submission_failure: Something went wrong when attempting to process your submission. Please contact us at help@sv.co.
+    stage_1:
+      submission_failure: Something went wrong when we tried to save your application data. Please contact help@sv.co if this error persists.
     stage_2:
       submission_failure: Something seems wrong. Please ensure your urls are valid and re-submit
   faculty:

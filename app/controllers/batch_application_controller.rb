@@ -32,23 +32,14 @@ class BatchApplicationController < ApplicationController
     if applicant_status == :ongoing
       send "submission_for_stage_#{current_stage_number}"
     else
-      flash[:error] = 'Something went wrong when attempting to process your submission. Please contact us at help@sv.co.'
+      flash[:error] = t('batch_application.general.submission_failure')
       redirect_to apply_batch_path(batch: params[:batch])
     end
   end
 
   def submission_for_stage_1
-    application = BatchApplication.new(
-      batch: current_batch,
-      application_stage: current_stage,
-      team_lead: current_batch_applicant
-    )
-
-    # TODO: Something about the application isn't okay.
-    raise NotImplementedError unless application.save
-
-    current_batch_applicant.update!(name: params[:batch_application][:team_lead_name])
-    application.batch_applicants << current_batch_applicant
+    applied = current_batch_applicant.create_application(current_batch, params)
+    flash[:error] = t('batch_application.stage_1.submission_failure') unless applied
     redirect_to apply_batch_path(batch: params[:batch])
   end
 

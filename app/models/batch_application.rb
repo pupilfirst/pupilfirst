@@ -34,4 +34,24 @@ class BatchApplication < ActiveRecord::Base
   def promotable?
     application_stage == batch.application_stage
   end
+
+  def save_code_and_video_submissions!(code_url:, video_url:)
+    ApplicationSubmission.transaction do
+      submission = application_submissions.create!(application_stage: application_stage)
+
+      submission.application_submission_urls.create!(
+        name: 'Code Submission',
+        url: code_url
+      )
+
+      submission.application_submission_urls.create!(
+        name: 'Video Submission',
+        url: video_url
+      )
+    end
+
+    true
+  rescue ActiveRecord::RecordInvalid
+    false
+  end
 end

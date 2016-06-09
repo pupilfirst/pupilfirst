@@ -53,19 +53,12 @@ class BatchApplicationController < ApplicationController
   end
 
   def submission_for_stage_2
-    # TODO: Server-side error handling for stage 2 inputs.
+    code_url = params[:stage_2_submission][:git_repo_url]
+    video_url = params[:stage_2_submission][:video_url]
 
-    submission = current_application.application_submissions.create!(application_stage: current_stage)
-
-    submission.application_submission_urls.create!(
-      name: 'Code Submission',
-      url: params[:tests][:github_url]
-    )
-
-    submission.application_submission_urls.create!(
-      name: 'Video Submission',
-      url: params[:tests][:video_url]
-    )
+    unless current_application.save_code_and_video_submissions!(code_url: code_url, video_url: video_url)
+      flash[:error] = t('batch_application.stage_2.submission_failure')
+    end
 
     redirect_to apply_batch_path(batch: params[:batch])
   end

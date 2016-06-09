@@ -2,7 +2,7 @@ class ApplicationSubmissionUrl < ActiveRecord::Base
   belongs_to :application_submission
 
   validates :name, presence: true
-  validates :url, presence: true
+  validates :url, presence: true, url: true
   validates :application_submission_id, presence: true
   validates :score, numericality: true, allow_nil: true
 

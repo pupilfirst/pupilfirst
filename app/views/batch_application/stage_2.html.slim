@@ -19,8 +19,8 @@
       .col-md-7.col-md-push-5
         .batch-results
           .result-head
-            = simple_form_for :tests do |f|
-              = f.input :github_url,
+            = simple_form_for :stage_2_submission do |f|
+              = f.input :git_repo_url,
                 label: 'Full URL to public Git repository',
                 placeholder: 'https://github.com/username/repository'
 

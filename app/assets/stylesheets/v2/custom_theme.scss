@@ -2,7 +2,7 @@ body {
   font-family: 'Source Sans Pro', sans-serif;
   background-color: $primary-background;
   font-size: $font-size-sm;
-  padding-top: 75px;
+  padding-top: 85px;
 }
 
 a {
@@ -89,4 +89,26 @@ p {
   box-shadow: $box-shadow;
   border-radius: 5px;
   border: 1px solid $gray-border;
+}
+.secondary-banner {
+  padding: 35px 0;
+  background-color: white;
+  position: relative;
+  border-bottom: 1px solid $gray-border;
+}
+.banner-head {
+  padding: 25px 0 0;
+
+  h1 {
+    display: inline-block;
+    padding-bottom: 15px;
+    border-bottom: 1px solid $light-primary;
+  }
+  p {
+    font-size: 1rem;
+    font-weight: $font-light;
+  }
+  @include media-breakpoint-down(sm) {
+    padding: 0;
+  }
 }

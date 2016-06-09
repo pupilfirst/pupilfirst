@@ -16,6 +16,7 @@ class HomeController < ApplicationController
 
   # GET /changelog
   def changelog
+    @skip_container = true
     @changelog = File.read(File.absolute_path(Rails.root.join('CHANGELOG.md')))
     render layout: 'application_v2'
   end

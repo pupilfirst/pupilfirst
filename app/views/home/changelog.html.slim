@@ -1,2 +1,13 @@
-.container-md-center.content-box.changelog-section
-  == Kramdown::Document.new(@changelog).to_html.html_safe
+.secondary-banner
+  .container
+    .col-md-5.col-sm-5
+      .banner-head
+        h1 Changelog
+        p
+          ' Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec
+          | tortor urna. Ut laoreet sodales nisi quis. Rutrum quam.
+    .col-md-7.changelog-bg
+
+.container
+  .container-md-center.content-box.changelog-section
+    == Kramdown::Document.new(@changelog).to_html.html_safe

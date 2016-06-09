@@ -1,3 +1,7 @@
+.changelog-bg {
+  background: asset-url("Changelog-banner-bg.svg") no-repeat right center;
+  height: 160px;
+}
 .changelog-section {
   h3 {
     color: $brand-primary;

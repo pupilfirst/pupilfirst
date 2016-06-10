@@ -22,6 +22,7 @@ class BatchApplicationController < ApplicationController
       when :submitted
         render "batch_application/stage_#{current_stage_number}_submitted"
       else
+        send "prep_for_stage_#{current_stage_number}"
         render "batch_application/stage_#{current_stage_number}"
     end
   end
@@ -37,10 +38,30 @@ class BatchApplicationController < ApplicationController
     end
   end
 
+  def prep_for_stage_1
+    batch_application = BatchApplication.new
+    @form = ApplicationStageOneForm.new(batch_application)
+    @form.prepopulate! team_lead: current_batch_applicant
+  end
+
   def submission_for_stage_1
-    applied = current_batch_applicant.create_application(current_batch, params)
-    flash[:error] = t('batch_application.stage_1.submission_failure') unless applied
-    redirect_to apply_batch_path(batch: params[:batch])
+    batch_application = BatchApplication.new(
+      team_lead: current_batch_applicant,
+      batch: current_batch,
+      application_stage: current_stage
+    )
+
+    @form = ApplicationStageOneForm.new(batch_application)
+
+    if @form.validate(params[:application_stage_one])
+      @form.save
+      redirect_to apply_batch_path(batch: params[:batch])
+    else
+      render 'batch_application/stage_1'
+    end
+  end
+
+  def prep_for_stage_2
   end
 
   def submission_for_stage_2
@@ -54,6 +75,9 @@ class BatchApplicationController < ApplicationController
     redirect_to apply_batch_path(batch: params[:batch])
   end
 
+  def prep_for_stage_4
+  end
+
   def submission_for_stage_4
     # TODO: Server-side error handling for stage 4 inputs.
 
@@ -63,6 +87,9 @@ class BatchApplicationController < ApplicationController
     )
 
     redirect_to apply_batch_path(batch: params[:batch])
+  end
+
+  def prep_for_stage_5
   end
 
   # GET /apply/identify/:batch

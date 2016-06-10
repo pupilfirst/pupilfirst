@@ -84,6 +84,10 @@ gem 'shortener' # generate short SV.CO urls for files, links etc
 gem 'titleize' # better titleizing, modifies Inflector.titleize from default rails
 gem 'addressable' # Addressable is a replacement for the URI implementation that is part of Ruby's standard library. https://github.com/sporkmonger/addressable
 
+gem 'reform' # Form objects decoupled from models. http://www.trailblazer.to/gems/reform
+gem 'reform-rails'
+gem 'virtus' # Required for reform coercion. Attributes on Steroids for Plain Old Ruby Objects
+
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify' # Superb notifications library. http://sciactive.github.io/pnotify/

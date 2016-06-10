@@ -40,6 +40,7 @@ class BatchApplication < ActiveRecord::Base
     application_stage == batch.application_stage
   end
 
+  # TODO: Rewrite with Reform.
   def save_code_and_video_submissions!(code_url:, video_url:)
     ApplicationSubmission.transaction do
       submission = application_submissions.create!(application_stage: application_stage)
@@ -58,5 +59,9 @@ class BatchApplication < ActiveRecord::Base
     true
   rescue ActiveRecord::RecordInvalid
     false
+  end
+
+  def cofounders
+    batch_applicants.where.not(id: team_lead_id)
   end
 end

@@ -1,9 +1,12 @@
 #header {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  z-index: 1;
+  &.header {
+    height: 85px;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+  }
 
   .sitewide-notice {
     background-color: $theme-light-green;
@@ -33,7 +36,6 @@
     box-shadow: 0 1px 0 0 $gray-border;
     height: auto;
     padding: 15px;
-
   }
   .navbar-header {
     float: left;

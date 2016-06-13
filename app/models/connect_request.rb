@@ -31,15 +31,6 @@ class ConnectRequest < ActiveRecord::Base
 
   validates_length_of :questions, maximum: MAX_QUESTIONS_LENGTH
 
-  def require_meeting_link_for_confirmed
-    return unless confirmed?
-    return if confirmed? && meeting_link.present?
-    errors[:status] << 'can be confirmed only with meeting link'
-    errors[:meeting_link] << 'must be present for confirmed state'
-  end
-
-  validate :require_meeting_link_for_confirmed
-
   before_validation :set_status_for_nil
 
   def set_status_for_nil

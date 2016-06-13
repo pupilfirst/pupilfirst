@@ -36,4 +36,12 @@ class ConnectRequestController < ApplicationController
 
     redirect_to root_url
   end
+
+  # GET /connect_request/:id/join_session
+  def join_session
+    @connect_request = current_founder&.startup&.connect_requests&.confirmed&.find(params[:id])
+
+    # Raise Not Found if current_founder does not have a confirmed connect request with given id
+    raise_not_found unless @connect_request.present?
+  end
 end

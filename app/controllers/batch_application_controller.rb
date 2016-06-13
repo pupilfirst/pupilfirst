@@ -62,17 +62,24 @@ class BatchApplicationController < ApplicationController
   end
 
   def prep_for_stage_2
+    application_submission = ApplicationSubmission.new
+    @form = ApplicationStageTwoForm.new(application_submission)
   end
 
   def submission_for_stage_2
-    code_url = params[:stage_2_submission][:git_repo_url]
-    video_url = params[:stage_2_submission][:video_url]
+    application_submission = ApplicationSubmission.new(
+      application_stage: current_stage,
+      batch_application: current_application
+    )
 
-    unless current_application.save_code_and_video_submissions!(code_url: code_url, video_url: video_url)
-      flash[:error] = t('batch_application.stage_2.submission_failure')
+    @form = ApplicationStageTwoForm.new(application_submission)
+
+    if @form.validate(params[:application_stage_two])
+      @form.save
+      redirect_to apply_batch_path(batch: params[:batch])
+    else
+      render 'batch_application/stage_2'
     end
-
-    redirect_to apply_batch_path(batch: params[:batch])
   end
 
   def prep_for_stage_4

@@ -19,13 +19,13 @@
       .col-md-7.col-md-push-5
         .batch-results
           .result-head
-            = simple_form_for :stage_2_submission do |f|
+            = simple_form_for @form, url: apply_submit_path(batch: params[:batch]) do |f|
               = f.input :git_repo_url,
-                label: 'Full URL to public Git repository',
+                label: 'Full URL to public Git repository (on Github or BitBucket)',
                 placeholder: 'https://github.com/username/repository'
 
               = f.input :video_url,
-                label: 'Full URL to public hustling video',
+                label: 'Full URL to public hustling video (on Youtube or Vimeo)',
                 placeholder: 'https://www.youtube.com/watch?v=abcd1234'
 
               = f.submit 'Submit your entries', class: 'btn btn-primary'

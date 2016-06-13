@@ -1,3 +1,14 @@
+### 13 June, 2016
+
+#### UX and UI
+
+  - Check out our new changelog page! B-) We've applied our styleguide here, and we'll slowly roll out this design language across the entire website.
+
+#### Bugfixes
+
+  - Signed-in sessions were not being shared between _[sv.co](https://sv.co)_ and _[www.sv.co](https://www.sv.co)_. We were serving bad cookies, so we've baked a new batch. Everyone has been signed out as a result; sorry about that.
+  - Vocalist is now able to define terms that have a _hyphen_ in them.
+
 ### 6 June, 2016
 
 #### Features

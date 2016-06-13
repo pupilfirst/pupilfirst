@@ -1,4 +1,5 @@
 //= require jquery
+//= require tether
 //= require bootstrap4_alpha2/bootstrap-sprockets
 //= require jquery_ujs
 

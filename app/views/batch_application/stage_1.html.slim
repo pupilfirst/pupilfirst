@@ -22,8 +22,12 @@
               = f.error :base
 
               = f.input :application_page_read,
-              as: :boolean,
-              inline_label: 'Did you read the application page before starting this form?'
+                as: :boolean,
+                inline_label: t('batch_application.stage_1.application_page_read')
+
+              = f.input :team_lead_consent,
+                as: :boolean,
+                inline_label: t('batch_application.stage_1.team_lead_consent')
 
               = f.input :university_id,
                 collection: proc { University.grouped_by_location },

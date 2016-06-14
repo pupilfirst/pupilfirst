@@ -3,9 +3,9 @@
   .panel.panel-success
     .panel-heading Your hangout is ready!
     .panel-body
-      ' #{link_to 'Click here', @connect_request.meeting_link} to join the Google hangout for your connect session with #{@connect_request.faculty.name}
+      ' #{link_to 'Click here', @connect_request.meeting_link} to join the Google hangout for your connect session with #{params[:token].present? ? @connect_request.startup.product_name : @connect_request.faculty.name}
 - else
   .panel.panel-warning
     .panel-heading Your hangout is not yet ready!
     .panel-body
-      ' The Google hangout for your connect session with #{@connect_request.faculty.name} is not yet live. Please re-vist this page 15 minutes before scheduled time to join the session hangout.
+      ' The Google hangout for your connect session with #{params[:token].present? ? @connect_request.startup.product_name : @connect_request.faculty.name} is not yet live. Please re-vist this page 15 minutes before scheduled time to join the session hangout.

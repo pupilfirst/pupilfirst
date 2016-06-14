@@ -81,7 +81,7 @@ Svapp::Application.routes.draw do
   scope 'connect_request', controller: 'connect_request', as: 'connect_request' do
     get ':id/feedback/from_team/:token', action: 'feedback_from_team', as: 'feedback_from_team'
     get ':id/feedback/from_faculty/:token', action: 'feedback_from_faculty', as: 'feedback_from_faculty'
-    get ':id/join_session', action: 'join_session', as: 'join_session'
+    get ':id/join_session(/:token)', action: 'join_session', as: 'join_session'
   end
 
   scope 'talent', as: 'talent', controller: 'talent' do

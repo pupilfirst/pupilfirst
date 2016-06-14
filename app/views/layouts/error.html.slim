@@ -64,16 +64,16 @@ html lang='en'
       section#footer-top
         .container
           .row
-            .col-md-3.col-sm-6.footer-column
+            .col-md-3.footer-column
               img.footer-logo src="#{image_url 'logo_white.png'}" alt="Logo of SV.CO"
               br
               ' Reach us at <strong>#{link_to 'help@sv.co', 'mailto:help@sv.co'}</strong>.
 
-            .col-md-3.col-sm-6.footer-column
+            .col-md-3.footer-column
               .footer-links.clearfix
                 .sitemap.pull-left
                   div
-                    a href="https://www.sv.co/startups" Startups
+                    = link_to 'Startups', startups_url
                   div
                     = link_to 'Invest & Hire', talent_path
                   div
@@ -87,23 +87,18 @@ html lang='en'
                     a href="http://playbook.sv.co" Playbook
                   div
                     a href="http://blog.sv.co" Blog
-            .col-md-3.col-sm-6.footer-column
+                  div
+                    = link_to 'Tour', root_path
+
+            .col-md-3.footer-column
               address
-                strong Startup Village, Kochi
-                br
+                strong SV.CO
                 p
-                  | Kinfra Hi-Tech Park, Kalamassery,
+                  | 1st Floor, atop Cafe Coffee Day,
                   br
-                  | Kochi &mdash; 683503.
-            .col-md-3.col-sm-6.footer-column
-              address
-                strong Startup Village, Visakhapatnam
-                br
-                | Sunrise Startups, Hill No. 3,
-                br
-                | Cyber Hills, IT SEZ, Madhuruwada,
-                br
-                | Visakhapatnam &mdash; 530048.
+                  | 4th Block, 80 Feet Main Road,
+                  br
+                  | Koramangala, Bangalore &mdash; 560095
 
       #footer-bottom
         .container

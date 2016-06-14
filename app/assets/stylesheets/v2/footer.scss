@@ -22,7 +22,7 @@ footer {
     }
 
     @include media-breakpoint-down(sm) {
-      padding-left: 15px;
+      text-align: center;
     }
 
     address {
@@ -49,9 +49,10 @@ footer {
       text-align: center;
 
       .social-link {
+        display: inline-block;
         a {
           display: inline-block;
-          padding: 0 8px;
+          padding: 10px 15px;
           transition: all 300ms cubic-bezier(.25, .25, .75, .75);
           color: $light-grey-text;
 
@@ -61,8 +62,7 @@ footer {
         }
       }
       @include media-breakpoint-down(xs) {
-        text-align: left;
-        margin: 0 0 10px;
+        text-align: center;
       }
     }
 
@@ -70,7 +70,7 @@ footer {
       text-align: right;
 
       @include media-breakpoint-down(xs) {
-        text-align: left;
+        text-align: center;
       }
 
       a {
@@ -86,10 +86,15 @@ footer {
     }
 
     p, .footer-right {
+      margin: 5px 0;
+
       @include media-breakpoint-up(sm) {
         margin-bottom: 0;
         line-height: 25px;
       }
+    }
+    @include media-breakpoint-down(xs) {
+      text-align: center;
     }
   }
 }

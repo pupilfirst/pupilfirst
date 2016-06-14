@@ -1,6 +1,6 @@
 class TimelineEventsController < ApplicationController
-  before_filter :authenticate_founder!, except: [:timeline]
-  before_filter :restrict_to_startup_founders, except: [:timeline]
+  before_filter :authenticate_founder!, except: [:activity]
+  before_filter :restrict_to_startup_founders, except: [:activity]
 
   # POST /founder/startup/timeline_events
   def create
@@ -55,7 +55,7 @@ class TimelineEventsController < ApplicationController
     end
   end
 
-  def timeline
+  def activity
     @batches = Startup.available_batches.order('batch_number DESC')
     @skip_container = true
   end

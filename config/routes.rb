@@ -101,7 +101,7 @@ Svapp::Application.routes.draw do
 
   get 'transparency', as: 'transparency', to: 'home#transparency'
 
-  get 'timeline', as: 'timeline', to: 'timeline_events#timeline'
+  get 'activity', as: 'activity', to: 'timeline_events#activity'
 
   root 'home#index'
 

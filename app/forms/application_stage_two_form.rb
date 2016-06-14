@@ -6,14 +6,14 @@ class ApplicationStageTwoForm < Reform::Form
   validate :git_repo_url_must_be_acceptable
 
   def git_repo_url_must_be_acceptable
-    errors[:git_repo_url] = 'is not a valid Github or Bitbucket url' unless git_repo_url =~ /github|bitbucket/
+    errors[:git_repo_url] = 'is not a valid Github or Bitbucket url' unless git_repo_url =~ %r{https?\://.*(github|bitbucket)}
   end
 
   # Ensure video_url is from youtube or vimeo
   validate :video_url_must_be_acceptable
 
   def video_url_must_be_acceptable
-    errors[:video_url] = 'is not a valid Youtube or Vimeo url' unless video_url =~ /youtube|vimeo/
+    errors[:video_url] = 'is not a valid Youtube or Vimeo url' unless video_url =~ %r{https?\://.*(youtube|vimeo)}
   end
 
   def save

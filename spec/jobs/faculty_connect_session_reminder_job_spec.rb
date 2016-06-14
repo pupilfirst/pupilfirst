@@ -15,7 +15,7 @@ describe FacultyConnectSessionReminderJob do
 
   context 'when the job is still relevant' do
     let(:connect_slot) { create :connect_slot, slot_at: 20.minutes.from_now }
-    let(:connect_request) { create :connect_request, status: ConnectRequest::STATUS_CONFIRMED, connect_slot: connect_slot, meeting_link: 'some-link' }
+    let(:connect_request) { create :connect_request, status: ConnectRequest::STATUS_CONFIRMED, connect_slot: connect_slot }
 
     it 'notifies the faculty, founders and ops team on slack' do
       expect(PublicSlackTalk).to receive(:post_message).with(message: instance_of(String), founders: connect_request.startup.founders)

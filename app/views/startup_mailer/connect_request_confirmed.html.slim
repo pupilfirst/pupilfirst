@@ -11,7 +11,4 @@
     strong #{@connect_request.connect_slot} IST.
 
   p
-    - if @connect_request.meeting_link
-      ' Please visit the following link at the alloted time:
-      = link_to @connect_request.meeting_link do
-        span.monospace #{@connect_request.meeting_link}
+    ' You can #{link_to 'click here', connect_request_join_session_url(@connect_request)} to join the meeting when it's time!

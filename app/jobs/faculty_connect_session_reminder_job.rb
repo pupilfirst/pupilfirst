@@ -6,13 +6,6 @@ class FacultyConnectSessionReminderJob < ActiveJob::Base
 
     return unless job_is_relevant?
 
-    @startup_name = connect_request.startup.product_name
-    @startup_url = Rails.application.routes.url_helpers.startup_url(connect_request.startup)
-    @faculty_name = connect_request.faculty.name
-    @faculty_url = Rails.application.routes.url_helpers.faculty_url(connect_request.faculty)
-    @meeting_link = connect_request.meeting_link
-    @questions = connect_request.questions
-
     remind_founders_on_slack
     remind_faculty_on_slack
     remind_ops_team_on_slack
@@ -36,6 +29,34 @@ class FacultyConnectSessionReminderJob < ActiveJob::Base
     @connect_request ||= ConnectRequest.find_by id: @connect_request_id
   end
 
+  def startup_name
+    @startup_name ||= connect_request.startup.product_name
+  end
+
+  def startup_url
+    @startup_url ||= Rails.application.routes.url_helpers.startup_url(connect_request.startup)
+  end
+
+  def faculty_name
+    @faculty_name ||= connect_request.faculty.name
+  end
+
+  def faculty_url
+    @faculty_url ||= Rails.application.routes.url_helpers.faculty_url(connect_request.faculty)
+  end
+
+  def founder_join_session_link
+    @founder_join_session_link ||= Rails.application.routes.url_helpers.connect_request_join_session_url(connect_request)
+  end
+
+  def faculty_join_session_link
+    @faculty_join_session_link ||= Rails.application.routes.url_helpers.connect_request_join_session_url(connect_request, token: connect_request.faculty.token)
+  end
+
+  def questions
+    @questions ||= connect_request.questions
+  end
+
   # Ensure the job is still relevant and not rescheduled
   def job_is_relevant?
     connect_request.present? && connect_request.startup.present? && connect_request.faculty.present? &&
@@ -44,16 +65,16 @@ class FacultyConnectSessionReminderJob < ActiveJob::Base
 
   def reminder_for_founder
     I18n.t('slack_notifications.connect_sessions.founder_reminder',
-      startup_name: @startup_name, faculty_url: @faculty_url, faculty_name: @faculty_name, meeting_link: @meeting_link)
+      startup_name: startup_name, faculty_url: faculty_url, faculty_name: faculty_name, meeting_link: founder_join_session_link)
   end
 
   def reminder_for_faculty
     I18n.t('slack_notifications.connect_sessions.faculty_reminder',
-      startup_url: @startup_url, startup_name: @startup_name, meeting_link: @meeting_link, questions: @questions)
+      startup_url: startup_url, startup_name: startup_name, meeting_link: faculty_join_session_link, questions: questions)
   end
 
   def reminder_for_ops_team
     I18n.t('slack_notifications.connect_sessions.ops_team_reminder',
-      startup_url: @startup_url, startup_name: @startup_name, faculty_url: @faculty_url, faculty_name: @faculty_name)
+      startup_url: startup_url, startup_name: startup_name, faculty_url: faculty_url, faculty_name: faculty_name)
   end
 end

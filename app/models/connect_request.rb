@@ -152,7 +152,6 @@ class ConnectRequest < ActiveRecord::Base
   end
 
   def calendar_event_description
-    "Meeting Link: #{meeting_link}\\n" \
     "Product: #{startup.display_name}\\n" \
     "Timeline: #{Rails.application.routes.url_helpers.startup_url(startup, host: 'https://sv.co')}\\n" \
     "Team lead: #{startup.admin.fullname}\\n\\n" \

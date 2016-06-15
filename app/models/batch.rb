@@ -57,7 +57,8 @@ class Batch < ActiveRecord::Base
     application_stage_deadline.past?
   end
 
-  def selected_candidates
+  # Probably use this to auto-announce results
+  def selected_team_leads
     BatchApplicant.find selected_applications.pluck(:team_lead_id)
   end
 

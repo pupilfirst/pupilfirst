@@ -16,7 +16,7 @@ ActiveAdmin.register Batch do
     actions do |batch|
       if batch.application_stage&.final_stage?
         span do
-          link_to 'Invite all founders', '#'
+          link_to 'Invite all founders', invite_all_founders_admin_batch_path(batch)
         end
       end
     end
@@ -37,5 +37,10 @@ ActiveAdmin.register Batch do
     end
 
     f.actions
+  end
+
+  member_action :invite_all_founders do
+    @batch = Batch.find params[:id]
+    render 'batch_invite_page'
   end
 end

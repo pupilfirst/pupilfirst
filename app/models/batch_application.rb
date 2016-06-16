@@ -53,4 +53,19 @@ class BatchApplication < ActiveRecord::Base
   def fee
     batch_applicants.count(&:fee_required?) * BatchApplicant::APPLICATION_FEE
   end
+
+  def invite_applicants!
+    # create unique tokens using time and id
+    startup_token = Time.now.in_time_zone('Asia/Calcutta').strftime('%a, %e %b %Y, %I:%M:%S %p IST') + " ID#{id}"
+
+    Founder.transaction do
+      # Invite team lead.
+      Founder.invite! email: team_lead.email, invited_batch: batch, startup_token: startup_token, startup_admin: true
+
+      # Invite cofounders one by one.
+      cofounders.each do |cofounder|
+        Founder.invite! email: cofounder.email, invited_batch: batch, startup_token: startup_token
+      end
+    end
+  end
 end

@@ -56,6 +56,7 @@ class Founder < ActiveRecord::Base
   scope :inactive, lambda {
     where(exited: false).where.not(id: active_on_slack(Time.now.beginning_of_week, Time.now)).where.not(id: active_on_web(Time.now.beginning_of_week, Time.now))
   }
+  scope :not_exited, -> { where.not(exited: true) }
 
   def self.ransackable_scopes(_auth)
     %i(ransack_tagged_with)
@@ -428,12 +429,12 @@ class Founder < ActiveRecord::Base
 
   # method to return the list of active founders on slack for a given duration
   def self.active_founders_on_slack(since:, upto: Time.now, batch: Batch.current_or_last)
-    Founder.not_dropped_out.find_by_batch(batch).active_on_slack(since, upto).distinct
+    Founder.not_dropped_out.not_exited.find_by_batch(batch).active_on_slack(since, upto).distinct
   end
 
   # method to return the list of active founders on web for a given duration
   def self.active_founders_on_web(since:, upto: Time.now, batch: Batch.current_or_last)
-    Founder.not_dropped_out.find_by_batch(batch).active_on_web(since, upto).distinct
+    Founder.not_dropped_out.not_exited.find_by_batch(batch).active_on_web(since, upto).distinct
   end
 
   def any_targets?

@@ -1,0 +1,23 @@
+- if @batch.selected_applications.present?
+  h3.pull-left Selected candidates for batch #{@batch.batch_number} - #{@batch.theme}
+  a.button.pull-right href="#{invite_all_selected_admin_batch_path(@batch)}" Invite all
+  table.index_table.index
+    thead
+      tr
+        th.col Team Lead
+        th.col University
+        th.col College
+        th.col State
+        th.col Score
+    tbody
+      - @batch.selected_applications.each do |application|
+        tr class="#{cycle %w(odd even)}"
+          td.col #{application.team_lead.name}
+          td.col #{application.university.name}
+          td.col #{application.college}
+          td.col #{application.state}
+          td.col #{application.score}
+  a.button href="#{invite_all_selected_admin_batch_path(@batch)}" Invite All
+
+- else
+  p It seems this batch does not have any selected applications yet! Please ensure you have modified the stage of the selected applications to 'Closed'.

@@ -22,7 +22,7 @@ class Target < ActiveRecord::Base
   scope :not_target_roles, -> { where.not(role: target_roles) }
   scope :due_on, -> (date) { where(due_date: date.beginning_of_day..date.end_of_day) }
 
-  scope :for_founders_in_batch, -> (batch) { where(assignee: batch.founders.not_dropped_out) }
+  scope :for_founders_in_batch, -> (batch) { where(assignee: batch.founders.not_dropped_out.not_exited) }
   scope :for_startups_in_batch, -> (batch) { where(assignee: batch.startups.not_dropped_out) }
 
   ROLE_FOUNDER = 'founder'

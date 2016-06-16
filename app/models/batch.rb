@@ -65,4 +65,15 @@ class Batch < ActiveRecord::Base
   def selected_applications
     batch_applications.selected
   end
+
+  def invite_selected_candidates!
+    Batch.transaction do
+      selected_applications.each(&:invite_applicants!)
+    end
+  end
+
+  # TODO: Probably use a flag to avoid sending multiple invites
+  def invites_sent?
+    true
+  end
 end

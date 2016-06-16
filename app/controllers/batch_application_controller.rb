@@ -20,6 +20,9 @@ class BatchApplicationController < ApplicationController
       when :rejected
         render "batch_application/stage_#{applicant_stage_number}_rejection"
       when :submitted
+        # Payment information needs to be loaded after application is submitted.
+        prep_for_payment if current_stage_number == 1
+
         render "batch_application/stage_#{current_stage_number}_submitted"
       else
         send "prep_for_stage_#{current_stage_number}"
@@ -59,6 +62,10 @@ class BatchApplicationController < ApplicationController
     else
       render 'batch_application/stage_1'
     end
+  end
+
+  def prep_for_payment
+    @payment = Payment.find_or_create_by!(batch_application: current_application)
   end
 
   def prep_for_stage_2

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160613184644) do
+ActiveRecord::Schema.define(version: 20160615102031) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,6 +120,14 @@ ActiveRecord::Schema.define(version: 20160613184644) do
 
   add_index "batch_applicants_applications", ["batch_applicant_id", "batch_application_id"], name: "idx_applicants_applications_on_applicant_id_and_application_id", using: :btree
   add_index "batch_applicants_applications", ["batch_application_id", "batch_applicant_id"], name: "idx_applications_applicants_on_application_id_and_applicant_id", using: :btree
+
+  create_table "batch_applicants_payments", id: false, force: :cascade do |t|
+    t.integer "batch_applicant_id", null: false
+    t.integer "payment_id",         null: false
+  end
+
+  add_index "batch_applicants_payments", ["batch_applicant_id", "payment_id"], name: "idx_applicants_payments_on_applicant_id_and_payment_id", using: :btree
+  add_index "batch_applicants_payments", ["payment_id", "batch_applicant_id"], name: "idx_applicants_payments_on_payment_id_and_applicant_id", using: :btree
 
   create_table "batch_applications", force: :cascade do |t|
     t.integer  "batch_id"
@@ -325,6 +333,22 @@ ActiveRecord::Schema.define(version: 20160613184644) do
   add_index "karma_points", ["founder_id"], name: "index_karma_points_on_founder_id", using: :btree
   add_index "karma_points", ["source_id"], name: "index_karma_points_on_source_id", using: :btree
   add_index "karma_points", ["startup_id"], name: "index_karma_points_on_startup_id", using: :btree
+
+  create_table "payments", force: :cascade do |t|
+    t.integer  "batch_application_id"
+    t.string   "instamojo_payment_request_id"
+    t.string   "instamojo_payment_request_status"
+    t.string   "instamojo_payment_id"
+    t.string   "instamojo_payment_status"
+    t.decimal  "amount",                           precision: 9, scale: 2
+    t.decimal  "fees",                             precision: 9, scale: 2
+    t.string   "short_url"
+    t.string   "long_url"
+    t.datetime "created_at",                                               null: false
+    t.datetime "updated_at",                                               null: false
+  end
+
+  add_index "payments", ["batch_application_id"], name: "index_payments_on_batch_application_id", using: :btree
 
   create_table "platform_feedback", force: :cascade do |t|
     t.string   "feedback_type"
@@ -610,6 +634,7 @@ ActiveRecord::Schema.define(version: 20160613184644) do
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
+  add_foreign_key "payments", "batch_applications"
   add_foreign_key "resources", "batches"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "team_members", "startups"

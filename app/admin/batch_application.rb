@@ -1,7 +1,7 @@
 ActiveAdmin.register BatchApplication do
   menu parent: 'Batches', label: 'Applications', priority: 0
 
-  permit_params :batch_id, :application_stage_id, :university_id, :team_achievement, :team_lead_id
+  permit_params :batch_id, :application_stage_id, :university_id, :team_achievement, :team_lead_id, :college, :state
 
   batch_action :promote, confirm: 'Are you sure?' do |ids|
     promoted = 0
@@ -75,6 +75,9 @@ ActiveAdmin.register BatchApplication do
       f.input :batch
       f.input :team_lead
       f.input :application_stage, collection: ApplicationStage.all.order(number: 'ASC')
+      f.input :university
+      f.input :college
+      f.input :state
       f.input :team_achievement
     end
 

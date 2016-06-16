@@ -6,7 +6,7 @@
   .apply-banner
     .row
       .col-md-4
-        h1 Application submitted.
+        h1 Application submitted. Payment pending (???).
 .apply-container
   .container
     .row
@@ -14,7 +14,8 @@
         .batch-results.margin-bottom-20
           .result-head
             p
-              ' Your application has been received. The SV.CO team will take a look at it soon as possible. Please note
-              | that the next stage should begin by <strong>#{next_stage_date}</strong>.
+              ' Your application has been received. A payment request has been created.
+
+            pre = @payment.inspect
 
       == render 'left_bar'

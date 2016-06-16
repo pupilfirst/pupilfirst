@@ -97,23 +97,32 @@ Svapp::Application.routes.draw do
     post '/identify', action: 'send_sign_in_email', as: 'send_sign_in_email'
   end
 
+  resource :platform_feedback, only: [:create]
+
+  # Redirect + webhook from Instamojo
+  get 'webhook_from/:source', to: 'batch_applications#webhook', as: 'batch_applications_webhook'
+  get 'redirect_from/:source', to: 'batch_applications#redirect', as: 'batch_applications_redirect'
+
+  # Custom founder profile page.
   get 'founders/:slug', to: 'founders#founder_profile', as: 'founder_profile'
 
+  # Custom transparency page, accessed via about pages.
   get 'transparency', as: 'transparency', to: 'home#transparency'
 
+  # Activity from startups.
   get 'activity', as: 'activity', to: 'timeline_events#activity'
 
-  root 'home#index'
-
+  # Public Changelog.
   get 'changelog', to: 'home#changelog'
 
+  # Published styleguide of SV.CO
   get 'styleguide', to: 'home#styleguide'
+
+  root 'home#index'
 
   # custom defined 404 route to use with shortener gem's config
   get '/404', to: 'home#not_found'
 
   # used for shortened urls from the shortener gem
   get '/:id', to: 'shortener/shortened_urls#show'
-
-  resource :platform_feedback
 end

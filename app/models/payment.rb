@@ -39,4 +39,8 @@ class Payment < ActiveRecord::Base
       raise "Unexpected state of payment. Please inspect Payment ##{id}."
     end
   end
+
+  def paid?
+    status == STATUS_PAID
+  end
 end

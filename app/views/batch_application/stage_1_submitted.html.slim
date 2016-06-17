@@ -6,16 +6,33 @@
   .apply-banner
     .row
       .col-md-4
-        h1 Application submitted. Payment pending (???).
+        h1 Application submitted. #{current_application.paid? ? 'Payment accepted' : 'Payment pending'}
 .apply-container
   .container
     .row
       .col-md-7.col-md-push-5
         .batch-results.margin-bottom-20
           .result-head
-            p
-              ' Your application has been received. A payment request has been created.
+            - if current_application.paid?
+              p
+                ' Your application has been received, and your payment has been accepted. The next stage of the
+                ' application process should begin on <strong>#{next_stage_date}</strong>. We will send an email to your
+                | registered email address when this occurs.
+            - else
+              p
+                ' Your application has been received. Your payment is pending.
 
-            pre = @payment.inspect
+              h3 Applicants
+
+              ol
+                li #{current_batch_applicant.name} (#{current_batch_applicant.fee_required? ? 'Unpaid' : 'Already paid'})
+
+                - current_application.cofounders.each do |cofounder|
+                  li #{cofounder.name} (#{cofounder.fee_required? ? 'Unpaid' : 'Already paid'})
+
+              p
+                ' You need to pay Rs. #{current_application.fee}, for your application to be processed.
+
+              = button_to 'Pay with Instamojo', instamojo_initiate_payment_path(current_application)
 
       == render 'left_bar'

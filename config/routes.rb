@@ -100,6 +100,12 @@ Svapp::Application.routes.draw do
   resource :platform_feedback, only: [:create]
 
   # Redirect + webhook from Instamojo
+  scope 'instamojo', as: 'instamojo', controller: 'instamojo' do
+    post 'initiate_payment/:id', action: 'initiate_payment', as: 'initiate_payment'
+    get 'redirect'
+    post 'webhook'
+  end
+
   get 'webhook_from/:source', to: 'batch_applications#webhook', as: 'batch_applications_webhook'
   get 'redirect_from/:source', to: 'batch_applications#redirect', as: 'batch_applications_redirect'
 

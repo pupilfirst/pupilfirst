@@ -54,6 +54,12 @@ class BatchApplication < ActiveRecord::Base
     batch_applicants.count(&:fee_required?) * BatchApplicant::APPLICATION_FEE
   end
 
+  # Batch application is paid depending on its payment request status.
+  def paid?
+    return false if payment.blank?
+    payment.paid?
+  end
+
   def invite_applicants!
     # create unique tokens using time and id
     startup_token = Time.now.in_time_zone('Asia/Calcutta').strftime('%a, %e %b %Y, %I:%M:%S %p IST') + " ID#{id}"

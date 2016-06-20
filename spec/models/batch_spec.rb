@@ -46,7 +46,7 @@ RSpec.describe Batch, type: :model do
             application_stage: third_stage,
             application_stage_deadline: Time.now
           )
-        end.to change { ActionMailer::Base.deliveries.count }.by(1)
+        end.to change { ActionMailer::Base.deliveries.count }.by(2)
       end
     end
   end

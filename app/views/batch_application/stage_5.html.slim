@@ -1,1 +1,25 @@
-/ Stage five is application closed. Teams for the batch have been picked, and those can be displayed. (maybe?)
+.margin-top-20
+- if current_batch.selected_applications.present?
+  .panel.panel-success
+    .panel-heading Results are out!
+    .panel-body
+      ' The following candidates were selected for SV.CO batch #{current_batch.batch_number} (#{current_batch.theme}):
+      table.table.table-striped
+        thead
+          tr
+            td Team Lead
+            td College
+            td University
+            td State
+        tbody
+          - current_batch.selected_applications.each do |application|
+            tr
+              td #{application.team_lead.name}
+              td #{application.college}
+              td #{application.university.name}
+              td #{application.state}
+- else
+  .panel.panel-warning
+    .panel-heading Wait for the results!
+    .panel-body
+      ' The results for this batch are not yet announced! Please check back later.

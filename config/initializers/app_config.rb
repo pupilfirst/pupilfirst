@@ -6,6 +6,7 @@ APP_CONFIG = {
   instamojo: {
     url: ENV['INSTAMOJO_API_URL'],
     api_key: ENV['INSTAMOJO_API_KEY'],
-    auth_token: ENV['INSTAMOJO_AUTH_TOKEN']
+    auth_token: ENV['INSTAMOJO_AUTH_TOKEN'],
+    salt: ENV['INSTAMOJO_SALT']
   }
 }.with_indifferent_access

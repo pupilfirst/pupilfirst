@@ -106,9 +106,6 @@ Svapp::Application.routes.draw do
     post 'webhook'
   end
 
-  get 'webhook_from/:source', to: 'batch_applications#webhook', as: 'batch_applications_webhook'
-  get 'redirect_from/:source', to: 'batch_applications#redirect', as: 'batch_applications_redirect'
-
   # Custom founder profile page.
   get 'founders/:slug', to: 'founders#founder_profile', as: 'founder_profile'
 

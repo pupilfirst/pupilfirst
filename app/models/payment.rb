@@ -20,6 +20,7 @@ class Payment < ActiveRecord::Base
       email: batch_application.team_lead.email
     )
 
+    self.amount = batch_application.fee
     self.instamojo_payment_request_id = response[:id]
     self.instamojo_payment_request_status = response[:status]
     self.short_url = response[:short_url]
@@ -53,5 +54,20 @@ class Payment < ActiveRecord::Base
   # A payment has failed when instamojo payment status is failed.
   def failed?
     instamojo_payment_status == Instamojo::PAYMENT_STATUS_FAILED
+  end
+
+  def refresh_payment!(payment_id)
+    # Store the payment ID.
+    update!(instamojo_payment_id: payment_id)
+
+    # Fetch latest payment status from Instamojo.
+    instamojo = Instamojo.new
+    response = instamojo.get_payment_status(payment_request_id: instamojo_payment_request_id, payment_id: payment_id)
+
+    update!(
+      instamojo_payment_request_status: response[:payment_request_status],
+      instamojo_payment_status: response[:payment_status],
+      fees: response[:fees]
+    )
   end
 end

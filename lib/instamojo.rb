@@ -38,6 +38,60 @@ class Instamojo
     }
   end
 
+  def get_payment_status(payment_request_id:, payment_id:)
+    uri = URI(payment_status_endpoint(payment_request_id, payment_id))
+    request = Net::HTTP::Get.new(uri)
+
+    request['X-Api-Key'] = api_key
+    request['X-Auth-Token'] = auth_token
+
+    http = Net::HTTP.new(uri.hostname, uri.port)
+    http.use_ssl = true
+
+    raw_response = http.request(request)
+
+    # Parse the response
+    response = JSON.parse(raw_response.body).with_indifferent_access
+
+    raise 'Failed to fetch payment details. Please check.' unless response.key?(:success)
+
+    payment_request = response[:payment_request]
+    payment = payment_request[:payment]
+
+    {
+      payment_request_status: payment_request[:status],
+      payment_status: payment[:status],
+      fees: payment[:fees]
+    }
+  end
+
+  def get_payment_request_status(payment_request_id:)
+    uri = URI(payment_request_status_endpoint(payment_request_id))
+    request = Net::HTTP::Get.new(uri)
+
+    request['X-Api-Key'] = api_key
+    request['X-Auth-Token'] = auth_token
+
+    http = Net::HTTP.new(uri.hostname, uri.port)
+    http.use_ssl = true
+
+    raw_response = http.request(request)
+
+    # Parse the response
+    response = JSON.parse(raw_response.body).with_indifferent_access
+
+    raise 'Failed to fetch payment details. Please check.' unless response.key?(:success)
+
+    payment_request = response[:payment_request]
+
+    {
+      payment_request_status: payment_request[:status],
+      short_url: payment_request[:shorturl],
+      redirect_url: payment_request[:redirect_url],
+      webhook_url: payment_request[:webhook]
+    }
+  end
+
   private
 
   def payment_request_params(amount, buyer_name, email)
@@ -49,15 +103,16 @@ class Instamojo
       redirect_url: redirect_url,
       send_email: Rails.env.production?,
       send_sms: false,
-      # webhook: webhook_url
+      webhook: webhook_url
     }
   end
 
   def redirect_url
-    Rails.application.routes.url_helpers.batch_applications_redirect_url(source: 'instamojo')
+    Rails.application.routes.url_helpers.instamojo_redirect_url(source: 'instamojo')
   end
 
   def webhook_url
+    # 'http://requestb.in/1anzd8v1'
     Rails.application.routes.url_helpers.batch_applications_webhook_url(source: 'instamojo')
   end
 
@@ -66,7 +121,15 @@ class Instamojo
   end
 
   def payment_request_endpoint
-    [base_url, 'payment-requests/'].join('/')
+    [base_url, 'payment-requests'].join('/') + '/'
+  end
+
+  def payment_request_status_endpoint(payment_request_id)
+    [base_url, 'payment-requests', payment_request_id].join('/') + '/'
+  end
+
+  def payment_status_endpoint(payment_request_id, payment_id)
+    [base_url, 'payment-requests', payment_request_id, payment_id].join('/') + '/'
   end
 
   def api_key

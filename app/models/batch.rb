@@ -69,11 +69,11 @@ class Batch < ActiveRecord::Base
   def invite_selected_candidates!
     Batch.transaction do
       selected_applications.each(&:invite_applicants!)
+      update!(invites_sent_at: Time.now)
     end
   end
 
-  # TODO: Probably use a flag to avoid sending multiple invites
   def invites_sent?
-    true
+    invites_sent_at.present?
   end
 end

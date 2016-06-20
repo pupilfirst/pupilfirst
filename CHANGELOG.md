@@ -1,3 +1,14 @@
+### 20 June, 2016
+
+#### UX and UI
+
+  - There's been a slight modification in the faculty connect request process. Due to a recent change in Google Hangouts, the Hangouts URL can only be generated a little while before the meeting takes place. Emails sent to founders and faculty will now have a link to a new page, which will reveal the Hangouts URL when it is available.
+  - When founder is logged in, an _Activity_ link is added to the navbar, pointing to the page listing latest activity from startups.
+
+#### Content
+
+  - Added information about host institute change to the transparency page.
+
 ### 13 June, 2016
 
 #### UX and UI

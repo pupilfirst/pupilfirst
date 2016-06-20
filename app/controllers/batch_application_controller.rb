@@ -82,6 +82,10 @@ class BatchApplicationController < ApplicationController
     end
   end
 
+  def prep_for_stage_3
+    # nothing to prepare here!
+  end
+
   def prep_for_stage_4
   end
 

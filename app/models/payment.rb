@@ -29,18 +29,29 @@ class Payment < ActiveRecord::Base
   end
 
   def status
-    if instamojo_payment_status == Instamojo::PAYMENT_STATUS_CREDITED
+    if paid?
       STATUS_PAID
-    elsif instamojo_payment_status == Instamojo::PAYMENT_STATUS_FAILED
+    elsif failed?
       STATUS_FAILED
-    elsif instamojo_payment_request_status == Instamojo::PAYMENT_REQUEST_STATUS_PENDING
+    elsif requested?
       STATUS_REQUESTED
     else
       raise "Unexpected state of payment. Please inspect Payment ##{id}."
     end
   end
 
+  # A payment is considered requested when instamojo payment status is requested.
+  def requested?
+    instamojo_payment_request_status == Instamojo::PAYMENT_REQUEST_STATUS_PENDING
+  end
+
+  # An payment is considered processed when instamojo payment status is credited.
   def paid?
-    status == STATUS_PAID
+    instamojo_payment_status == Instamojo::PAYMENT_STATUS_CREDITED
+  end
+
+  # A payment has failed when instamojo payment status is failed.
+  def failed?
+    instamojo_payment_status == Instamojo::PAYMENT_STATUS_FAILED
   end
 end

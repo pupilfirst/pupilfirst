@@ -125,3 +125,8 @@ trix-toolbar .link_url_fields {
 .select2-container-multi .select2-search-field input.select2-input {
   border: 0 !important;
 }
+
+a.disabled_action_link {
+  text-decoration: none;
+  cursor: help;
+}

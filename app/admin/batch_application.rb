@@ -46,7 +46,25 @@ ActiveAdmin.register BatchApplication do
 
     column :score
 
-    actions do |batch_application|
+    actions defaults: false do |batch_application|
+      span do
+        link_to 'View', admin_batch_application_path(batch_application), class: 'view_link member_link'
+      end
+
+      span do
+        link_to 'Edit', edit_admin_batch_application_path(batch_application), class: 'edit_link member_link'
+      end
+
+      span do
+        if batch_application.payment.present?
+          a class: 'disabled_action_link member_link', title: 'Disabled. Payment entry is present.' do
+            s 'Delete'
+          end
+        else
+          link_to 'Delete', destroy_admin_batch_application_path(batch_application), method: :delete, class: 'delete_link member_link'
+        end
+      end
+
       if batch_application.promotable?
         span do
           link_to 'Promote', promote_admin_batch_application_path(batch_application), method: :post, class: 'member_link'

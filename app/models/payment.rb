@@ -62,7 +62,7 @@ class Payment < ActiveRecord::Base
 
     # Fetch latest payment status from Instamojo.
     instamojo = Instamojo.new
-    response = instamojo.get_payment_status(payment_request_id: instamojo_payment_request_id, payment_id: payment_id)
+    response = instamojo.payment_details(payment_request_id: instamojo_payment_request_id, payment_id: payment_id)
 
     update!(
       instamojo_payment_request_status: response[:payment_request_status],

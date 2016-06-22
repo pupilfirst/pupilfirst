@@ -1,6 +1,6 @@
 ActiveAdmin.register Payment do
   menu parent: 'Batches'
-  actions :index, :show
+  actions :index, :show, :destroy
 
   filter :batch_application
   filter :amount

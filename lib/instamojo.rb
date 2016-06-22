@@ -116,11 +116,11 @@ class Instamojo
   end
 
   def redirect_url
-    Rails.application.routes.url_helpers.instamojo_redirect_url(source: 'instamojo')
+    Rails.application.routes.url_helpers.instamojo_redirect_url
   end
 
   def webhook_url
-    Rails.application.routes.url_helpers.instamojo_webhook_url(source: 'instamojo')
+    Rails.application.routes.url_helpers.instamojo_webhook_url
   end
 
   def base_url

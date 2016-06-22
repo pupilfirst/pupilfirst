@@ -120,7 +120,7 @@ class Instamojo
   end
 
   def webhook_url
-    Rails.application.routes.url_helpers.batch_applications_webhook_url(source: 'instamojo')
+    Rails.application.routes.url_helpers.instamojo_webhook_url(source: 'instamojo')
   end
 
   def base_url

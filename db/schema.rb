@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160622095201) do
+ActiveRecord::Schema.define(version: 20160622112011) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,14 +120,6 @@ ActiveRecord::Schema.define(version: 20160622095201) do
 
   add_index "batch_applicants_applications", ["batch_applicant_id", "batch_application_id"], name: "idx_applicants_applications_on_applicant_id_and_application_id", using: :btree
   add_index "batch_applicants_applications", ["batch_application_id", "batch_applicant_id"], name: "idx_applications_applicants_on_application_id_and_applicant_id", using: :btree
-
-  create_table "batch_applicants_payments", id: false, force: :cascade do |t|
-    t.integer "batch_applicant_id", null: false
-    t.integer "payment_id",         null: false
-  end
-
-  add_index "batch_applicants_payments", ["batch_applicant_id", "payment_id"], name: "idx_applicants_payments_on_applicant_id_and_payment_id", using: :btree
-  add_index "batch_applicants_payments", ["payment_id", "batch_applicant_id"], name: "idx_applicants_payments_on_payment_id_and_applicant_id", using: :btree
 
   create_table "batch_applications", force: :cascade do |t|
     t.integer  "batch_id"

@@ -1,6 +1,5 @@
 class Payment < ActiveRecord::Base
   belongs_to :batch_application
-  has_and_belongs_to_many :batch_applicants
 
   validates :batch_application_id, presence: true
 

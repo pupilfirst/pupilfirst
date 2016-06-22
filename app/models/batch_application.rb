@@ -51,7 +51,7 @@ class BatchApplication < ActiveRecord::Base
 
   # Fee amount, calculated from unpaid founders
   def fee
-    batch_applicants.count(&:fee_required?) * BatchApplicant::APPLICATION_FEE
+    batch_applicants.count * BatchApplicant::APPLICATION_FEE
   end
 
   # Batch application is paid depending on its payment request status.

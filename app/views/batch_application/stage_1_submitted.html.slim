@@ -25,10 +25,10 @@
               h3 Applicants
 
               ol
-                li #{current_batch_applicant.name} (#{current_batch_applicant.fee_required? ? 'Unpaid' : 'Already paid'})
+                li #{current_batch_applicant.name} &mdash; Rs. #{BatchApplicant::APPLICATION_FEE}
 
                 - current_application.cofounders.each do |cofounder|
-                  li #{cofounder.name} (#{cofounder.fee_required? ? 'Unpaid' : 'Already paid'})
+                  li #{cofounder.name} &mdash; Rs. #{BatchApplicant::APPLICATION_FEE}
 
               p
                 ' You need to pay Rs. #{current_application.fee}, for your application to be processed.

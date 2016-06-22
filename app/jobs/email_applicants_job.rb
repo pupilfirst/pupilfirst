@@ -10,7 +10,11 @@ class EmailApplicantsJob < ActiveJob::Base
     send_application_progress_mails(selected_applications)
 
     # Send rejection emails to team leads who didn't get through
-    rejected_applications = applications_for_batch.joins(:application_stage).where('application_stages.number < ?', batch.application_stage.number)
+    rejected_applications = applications_for_batch
+      .joins(:application_stage)
+      .where('application_stages.number < ?', batch.application_stage.number)
+      .where.not(application_stages: { number: 1 })
+
     send_application_rejection_mails(rejected_applications)
   end
 

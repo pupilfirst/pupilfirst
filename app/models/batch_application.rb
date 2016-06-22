@@ -40,9 +40,9 @@ class BatchApplication < ActiveRecord::Base
     application_stage
   end
 
-  # Application is promotable is it's on the same stage as its batch.
+  # Application is promotable is it's on the same stage as its batch, or if application stage is 1, and batch is in stage 2.
   def promotable?
-    application_stage == batch.application_stage
+    application_stage == batch.application_stage || (application_stage.initial_stage? && batch.application_stage.number == 2)
   end
 
   def cofounders
@@ -73,5 +73,10 @@ class BatchApplication < ActiveRecord::Base
         Founder.invite! email: cofounder.email, invited_batch: batch, startup_token: startup_token
       end
     end
+  end
+
+  # Called after payment is known to have succeeded. This automatically promotes stage 1 applications to stage 2.
+  def peform_post_payment_tasks!
+    promote! if application_stage.initial_stage?
   end
 end

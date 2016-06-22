@@ -10,11 +10,20 @@ class BatchApplicationController < ApplicationController
   end
 
   # GET /apply/:batch
+  #
+  # rubocop:disable Metrics/CyclomaticComplexity
   def apply
     set_instance_variables
-    raise_not_found if current_stage_number.blank?
+    raise_not_found if current_stage_number == 0
 
     case applicant_status
+      when :application_pending
+        prep_for_stage_1
+        render 'batch_application/stage_1'
+      when :application_expired
+        render 'batch_application/stage_1_expired'
+      when :payment_pending
+        render 'batch_application/stage_1_submitted'
       when :expired
         render "batch_application/stage_#{applicant_stage_number}_expired"
       when :rejected
@@ -29,12 +38,15 @@ class BatchApplicationController < ApplicationController
 
   # POST /apply/:batch
   def submit
-    # Only allow applicants who have an ongoing application to submit.
-    if applicant_status == :ongoing
-      send "submission_for_stage_#{current_stage_number}"
-    else
-      flash[:error] = t('batch_application.general.submission_failure')
-      redirect_to apply_batch_path(batch: params[:batch])
+    # Only allow applicants who have an ongoing application, or have pending application to submit.
+    case applicant_status
+      when :application_pending
+        submission_for_stage_1
+      when :ongoing
+        send "submission_for_stage_#{current_stage_number}"
+      else
+        flash[:error] = t('batch_application.general.submission_failure')
+        redirect_to apply_batch_path(batch: params[:batch])
     end
   end
 
@@ -151,7 +163,7 @@ class BatchApplicationController < ApplicationController
 
   # Returns the stage number of current batch.
   def current_stage_number
-    @current_stage_number ||= current_stage&.number
+    @current_stage_number ||= current_stage&.number.to_i
   end
 
   # Returns currently 'signed in' application founder.
@@ -198,22 +210,32 @@ class BatchApplicationController < ApplicationController
     @hide_sign_in = true
   end
 
-  # Returns one of :expired, :rejected, :submitted, or :ongoing, to indicate which view should be rendered.
+  # Returns one of :application_pending, :application_expired, :expired, :rejected, :submitted, or :ongoing, to indicate
+  # which view should be rendered.
   #
   # Hari: I'm disabling complexity cops here, because the point of this method is to put the complex state logic in
   # one place. It used to be scattered across many methods, but that became unmanageable, and I had to bring it
   # together to make sense of it all.
   #
-  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/PerceivedComplexity, Metrics/MethodLength
   def applicant_status
     if current_application.blank?
       # There's no application...
-      if current_stage_number != 1 || stage_expired?
-        # ...and the either the batch's stage has moved on, or its deadline has passed.
-        :expired
+      if current_stage_number == 1 || (current_stage_number == 2 && !stage_expired?)
+        # ... and current stage is 1, or un-expired 2, then applications are still accepted.
+        :application_pending
       else
-        # ...and it's still stage 1, and stage's deadline hasn't passed.
-        :ongoing
+        # ... but batch has moved to a stage where application is not possible.
+        :application_expired
+      end
+    elsif applicant_stage_number == 1
+      # There is an application, and applicant is still in stage 1...
+      if current_stage_number == 1 || (current_stage_number == 2 && !stage_expired?)
+        # ... and current stage is 1, or un-expired 2, then applications are still accepted.
+        :payment_pending
+      else
+        # ... but batch has moved to a stage where application is not possible.
+        :application_expired
       end
     elsif applicant_stage_number == current_stage_number
       # There is an application which is on batch's stage...

@@ -61,7 +61,13 @@ ActiveAdmin.register BatchApplication do
             s 'Delete'
           end
         else
-          link_to 'Delete', destroy_admin_batch_application_path(batch_application), method: :delete, class: 'delete_link member_link'
+          link_to(
+            'Delete',
+            admin_batch_application_path(batch_application),
+            method: :delete,
+            class: 'delete_link member_link',
+            data: { confirm: 'Are you sure?' }
+          )
         end
       end
 

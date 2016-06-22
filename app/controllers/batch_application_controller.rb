@@ -60,7 +60,7 @@ class BatchApplicationController < ApplicationController
     batch_application = BatchApplication.new(
       team_lead: current_batch_applicant,
       batch: current_batch,
-      application_stage: current_stage
+      application_stage: ApplicationStage.initial_stage
     )
 
     @form = ApplicationStageOneForm.new(batch_application)

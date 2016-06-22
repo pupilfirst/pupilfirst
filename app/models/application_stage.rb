@@ -6,6 +6,11 @@ class ApplicationStage < ActiveRecord::Base
   validates :number, presence: true
   validates :days_before_batch, presence: true
 
+  # Returns stage 1 (application process).
+  def self.initial_stage
+    find_by(number: 1)
+  end
+
   # Returns next stage using number.
   def next
     ApplicationStage.find_by number: (number + 1)

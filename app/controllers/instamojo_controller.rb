@@ -31,7 +31,8 @@ class InstamojoController < ApplicationController
     payment.update(
       instamojo_payment_id: params[:payment_id],
       instamojo_payment_status: params[:status],
-      fees: params[:fees]
+      fees: params[:fees],
+      webhook_received_at: Time.now
     )
 
     payment.batch_application.peform_post_payment_tasks!

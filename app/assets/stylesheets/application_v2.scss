@@ -1,7 +1,7 @@
 // Bootstrap customization variables
 
-@import "bootstrap4_alpha2/bootstrap";
 @import "v2/variables";
+@import "bootstrap4_alpha2/bootstrap";
 @import "v2/custom_mixins";
 @import "v2/custom_theme";
 @import "bootstrap_btn_customization";
@@ -11,6 +11,8 @@
 @import "video-js";
 
 // Rails Assets.
+@import "slick-carousel/slick.scss";
+@import "slick-carousel/slick-theme.scss";
 
 // Local.
 @import "v2/shared";
@@ -22,5 +24,6 @@
 // Controller-specific
 @import 'v2/changelog';
 @import 'v2/styleguide';
+@import 'v2/apply';
 
 // Select2

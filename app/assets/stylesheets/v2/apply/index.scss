@@ -1,0 +1,145 @@
+.apply-illustration {
+  background: asset-url("apply/Apply-banner-illustration.svg") no-repeat right center;
+  height: 315px;
+  background-size: contain;
+}
+.primary-banner-head {
+  h1 {
+    line-height: 1.4;
+    margin-bottom: 25px;
+
+    @include media-breakpoint-down(xs) {
+      font-size: 1.5rem;
+    }
+  }
+  .btn-secondary {
+    margin-left: 30px;
+    @include media-breakpoint-down(xs) {
+      margin: 10px 0 0 0;
+    }
+  }
+}
+
+.graduated-slide {
+  overflow: hidden;
+
+  .slick-prev, .slick-next {
+    border: 1px solid $gray-border;
+    @include border-radius(50%);
+    background-color: white;
+    box-shadow: $box-shadow;
+    height: 40px;
+    width: 40px;
+    top: auto;
+    bottom: 0px;
+    margin: 0 20px;
+    z-index: 1;
+
+
+    &:before {
+      font-size: 18px;
+      vertical-align: middle;
+      opacity: 1;
+    }
+  }
+  .slick-prev {
+    left: 44%;
+
+    &:before {
+      @include fa-icon(angle-left);
+      color: $light-grey-text;
+    }
+  }
+  .slick-next {
+    right: 44%;
+
+    &:before {
+      @include fa-icon(angle-right);
+      color: $light-grey-text;
+    }
+  }
+}
+.slick-slider {
+  margin-bottom: 20px;
+  padding-bottom: 80px;
+}
+.slide-item {
+  margin: 20px;
+  width: 400px;
+  background-color: transparent;
+  outline: none;
+  transition: all 300ms ease 0s;
+
+  img {
+    box-shadow: $box-shadow;
+    width: 100%;
+  }
+}
+.slick-center {
+  transform: scale(1.08);
+}
+.graduate-data {
+  background-color: white;
+  margin: 0 5px;
+  border: 1px solid $gray-border;
+  border-width: 0 1px 1px 1px;
+  box-shadow: $box-shadow;
+  @include border-bottom-radius(5px);
+
+  h4 {
+    padding: 15px 0 0;
+    margin: 0;
+  }
+  p {
+    color: $brand-secondary;
+    padding: 5px  0 15px;
+  }
+}
+
+.program-benefits {
+  background-color: white;
+  border: 1px solid $gray-border;
+  border-width: 1px 0;
+  padding-bottom: 50px;
+
+  .benefits-section {
+    max-width: 55rem;
+    padding: 0 15px;
+
+    .media {
+      max-width: 400px;
+      text-align: left;
+    }
+
+    .media-object {
+      border: 1px solid $gray-border;
+      @include border-radius(5px);
+      padding: 15px;
+
+      i {
+        font-size: 20px;
+      }
+    }
+    .media-heading {
+      font-weight: $font-regular;
+    }
+    .tour-link {
+      margin-top: 40px;
+    }
+  }
+}
+.program-partners {
+  .card {
+    text-align: center;
+    max-height: 200px;
+
+    img {
+      max-height: 50px;
+      padding: 10px;
+      margin: auto;
+    }
+    .card-block {
+      border-top: 1px solid $gray-border;
+    }
+  }
+}

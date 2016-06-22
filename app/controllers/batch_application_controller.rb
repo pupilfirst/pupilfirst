@@ -7,6 +7,7 @@ class BatchApplicationController < ApplicationController
     set_instance_variables
     @batches_open = Batch.open_for_applications
     @batches_ongoing = Batch.applications_ongoing
+    render layout: 'application_v2'
   end
 
   # GET /apply/:batch

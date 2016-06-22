@@ -70,4 +70,10 @@ class Payment < ActiveRecord::Base
       fees: response[:fees]
     )
   end
+
+  # Debug method. Use to pull latest payment details from Instamojo.
+  def raw_details
+    instamojo = Instamojo.new
+    instamojo.raw_payment_request_details(instamojo_payment_request_id)
+  end
 end

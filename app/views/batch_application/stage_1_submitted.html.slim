@@ -33,6 +33,6 @@
               p
                 ' You need to pay Rs. #{current_application.fee}, for your application to be processed.
 
-              = button_to 'Pay with Instamojo', instamojo_initiate_payment_path(current_application)
+              = button_to payment_button_message(current_application), instamojo_initiate_payment_path(current_application)
 
       == render 'left_bar'

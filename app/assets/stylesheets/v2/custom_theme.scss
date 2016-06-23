@@ -23,7 +23,18 @@ h1, h2, h3, h4, h5, h6,
 p {
   margin-bottom: 0;
 }
-
+.font-light {
+  font-weight: $font-light;
+}
+.font-regular {
+  font-weight: $font-regular;
+}
+.font-semibold {
+  font-weight: $font-semibold;
+}
+.font-bold {
+  font-weight: $font-bold;
+}
 // **********  Overriding Bootstrap classes **********
 
 // ******** BUTTON Style ********
@@ -34,6 +45,7 @@ p {
   border: 0;
   color: white;
   font-size: $btn-text-size;
+  letter-spacing: 0.03rem;
 
   &,
   &:active,
@@ -55,110 +67,6 @@ p {
 .btn-md {
   padding: 12px 24px;
 }
-
-// ******** Uniform Spacing ********
-.padding-xxs {
-  padding: 5px;
-}
-.padding-xs {
-  padding: 10px;
-}
-.padding-s {
-  padding: 15px;
-}
-.padding-m {
-  padding: 20px;
-}
-.padding-l {
-  padding: 25px;
-}
-.padding-xl {
-  padding: 30px;
-}
-
-// ******** Individual Spacing ********
-//--- Margin Classes ---
-.marginTop-s {
-  margin-top: 10px;
-}
-.marginRight-s {
-  margin-right: 10px;
-}
-.marginBottom-s {
-  margin-bottom: 10px;
-}
-.marginLeft-s {
-  margin-left: 10px;
-}
-
-.marginTop-m {
-  margin-top: 20px;
-}
-.marginRight-m {
-  margin-right: 20px;
-}
-.marginBottom-m {
-  margin-bottom: 20px;
-}
-.marginLeft-m {
-  margin-left: 20px;
-}
-
-.marginTop-l {
-  margin-top: 30px;
-}
-.marginRight-l {
-  margin-right: 30px;
-}
-.marginBottom-l {
-  margin-bottom: 30px;
-}
-.marginLeft-l {
-  margin-left: 30px;
-}
-
-
-
-//--- Padding Classes ---
-.paddingTop-s {
-  padding-top: 10px;
-}
-.paddingRight-s {
-  padding-right: 10px;
-}
-.paddingBottom-s {
-  padding-bottom: 10px;
-}
-.paddingLeft-s {
-  padding-left: 10px;
-}
-
-.paddingTop-m {
-  padding-top: 20px;
-}
-.paddingRight-m {
-  padding-right: 20px;
-}
-.paddingBottom-m {
-  padding-bottom: 20px;
-}
-.paddingLeft-m {
-  padding-left: 20px;
-}
-
-.paddingTop-l {
-  padding-top: 30px;
-}
-.paddingRight-l {
-  padding-right: 30px;
-}
-.paddingBottom-l {
-  padding-bottom: 30px;
-}
-.paddingLeft-l {
-  padding-left: 30px;
-}
-
 
 .navbar-brand {
   padding: 0.1rem 0 0 0;

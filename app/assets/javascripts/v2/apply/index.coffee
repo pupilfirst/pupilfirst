@@ -22,4 +22,13 @@ setupGraduationCarousel = ->
     ]
     infinite: true
 
+avoidwidowsTypography = ->
+  $('h5').each ->
+    wordArray = $(this).text().split(' ')
+    if wordArray.length > 1
+      wordArray[wordArray.length - 2] += '&nbsp;' + wordArray[wordArray.length - 1]
+      wordArray.pop()
+      $(this).html wordArray.join(' ')
+
 $(document).on 'page:change', setupGraduationCarousel
+$(document).on 'page:change', avoidwidowsTypography

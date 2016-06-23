@@ -6,32 +6,29 @@
   title SV.CO Apply Now
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
 
-.secondary-banner
+.apply-illustration
   .container
-    .primary-banner
-      .col-md-6
-        .primary-banner-head
-          h1
-            ' Build your startup
-            br
-            ' while in college &amp; get a chance
-            br
-            ' to visit Silicon Valley
-              
-          - if @batches_open.present?
-            - @batches_open.each do |batch|
-              = link_to 'Start Application', apply_batch_path(batch: batch.batch_number), class: 'btn btn-primary btn-md text-uppercase'
-          - if @batches_ongoing.present?
-            - @batches_ongoing.each do |batch|
-              - if current_batch_applicant.blank? || current_batch_applicant.applied_to?(batch)
-                = link_to 'Continue Application', apply_batch_path(batch: batch.batch_number), class: 'btn btn-primary btn-md text-uppercase'
-              - else
-                / .grey-text #{batch.name} (not accepting new applications)
-                button.btn.btn-primary.btn-md.text-uppercase disabled="true"
-                  | Not accepting new applications
-          a href="#" class= 'btn btn-secondary btn-md text-uppercase'
-            | Watch Video
-      .col-md-6.hidden-xs-down.apply-illustration
+    .primary-banner-head.center-block.text-xs-center
+      h1
+        ' Build your startup
+        br
+        ' while in college &amp; get a chance
+        br
+        ' to visit Silicon Valley
+          
+      - if @batches_open.present?
+        - @batches_open.each do |batch|
+          = link_to 'Start Application', apply_batch_path(batch: batch.batch_number), class: 'btn btn-primary btn-md text-uppercase'
+      - if @batches_ongoing.present?
+        - @batches_ongoing.each do |batch|
+          - if current_batch_applicant.blank? || current_batch_applicant.applied_to?(batch)
+            = link_to 'Continue Application', apply_batch_path(batch: batch.batch_number), class: 'btn btn-primary btn-md text-uppercase'
+          - else
+            / .grey-text #{batch.name} (not accepting new applications)
+            button.btn.btn-primary.btn-md.text-uppercase disabled="true"
+              | Not accepting new applications
+      a href="#" class= 'btn btn-secondary btn-md text-uppercase'
+        | Watch Video
 
 .graduated-slide
   .container-fluid
@@ -149,74 +146,185 @@
     h3.text-xs-center.content-head
       span.content-title-icon.graduated-icon
       | Program Partners
-    .col-md-2
+    .col-lg-2.col-md-3.col-sm-4
       .card
         = image_tag 'talent/tally-logo.png', class: "img-fluid"
         .card-block
           p Cras justo odio
 
-    .col-md-2
+    .col-lg-2.col-md-3.col-sm-4
       .card
         = image_tag 'talent/Freshdesk-logo.png', class: "img-fluid"
         .card-block
           p.card-text Graduation Partner
 
-    .col-md-2
+    .col-lg-2.col-md-3.col-sm-4
       .card
         = image_tag 'talent/freecharge-logo.png', class: "img-fluid"
         .card-block
           p.card-text Graduation Partner
           
-    .col-md-2
+    .col-lg-2.col-md-3.col-sm-4
       .card
         = image_tag 'talent/askme-logo.png', class: "img-fluid"
         .card-block
           p.card-text Graduation Partner
           
-    .col-md-2
+    .col-lg-2.col-md-3.col-sm-4
       .card
         = image_tag 'talent/ola-logo.png', class: "img-fluid"
         .card-block
           p.card-text Graduation Partner
           
-    .col-md-2
+    .col-lg-2.col-md-3.col-sm-4
       .card
-        = image_tag 'talent/tally-logo.png', class: "img-fluid"
+        = image_tag 'talent/goqii-logo.png', class: "img-fluid"
         .card-block
           p.card-text Graduation Partner
 
-    .col-md-2
+    .col-lg-2.col-md-3.col-sm-4
       .card
-        = image_tag 'talent/tally-logo.png', class: "img-fluid"
+        = image_tag 'talent/microsoft-ventures-logo.png'
         .card-block
           p.card-text Graduation Partner
           
-    .col-md-2
+    .col-lg-2.col-md-3.col-sm-4
       .card
-        = image_tag 'talent/tally-logo.png', class: "img-fluid"
+        = image_tag 'talent/Citrus-logo.png', class: "img-fluid"
         .card-block
           p Cras justo odio
 
-    .col-md-2
+    .col-lg-2.col-md-3.col-sm-4
       .card
-        = image_tag 'talent/Freshdesk-logo.png', class: "img-fluid"
+        = image_tag 'talent/AHventures-logo.png', class: "img-fluid"
         .card-block
           p.card-text Graduation Partner
 
-    .col-md-2
+    .col-lg-2.col-md-3.col-sm-4
       .card
-        = image_tag 'talent/freecharge-logo.png', class: "img-fluid"
+        = image_tag 'talent/Flat6labs-logo.png', class: "img-fluid"
         .card-block
           p.card-text Graduation Partner
           
-    .col-md-2
+    .col-lg-2.col-md-3.col-sm-4
       .card
-        = image_tag 'talent/askme-logo.png', class: "img-fluid"
+        = image_tag 'talent/Goodmethods-logo.png', class: "img-fluid"
         .card-block
           p.card-text Graduation Partner
           
-    .col-md-2
+    .col-lg-2.col-md-3.col-sm-4
       .card
-        = image_tag 'talent/ola-logo.png', class: "img-fluid"
+        = image_tag 'talent/Kalaaricapital-logo.png', class: "img-fluid"
         .card-block
           p.card-text Graduation Partner
+
+.application-faq
+  .container
+    h3.text-xs-center.content-head
+      span.content-title-icon.graduated-icon
+      | FAQ
+    .col-md-6
+      ul
+        li
+          h5
+            | Completely impact multifunctional processes and wireless supply chains?
+          p
+            ' Dynamically engage business meta-services for market-driven data.
+            | Collaboratively restore cross-platform users before client-centered manufactured products. 
+        li
+          h5
+            | Assertively evolve long-term high-impact vortals through visionary solutions?
+          p
+            ' Professionally harness standardized portals vis-a-vis resource maximizing deliverables.
+            | Continually coordinate stand-alone applications rather than virtual communities.
+        li
+          h5
+            | Dynamically optimize fully researched results before stand-alone human capital?
+          p
+            ' Dynamically engage business meta-services for market-driven data.
+            | Collaboratively restore cross-platform users before client-centered manufactured products. 
+    .col-md-6
+      ul
+        li
+          h5
+            | Completely impact multifunctional processes and wireless supply chains?
+          p
+            ' Dynamically engage business meta-services for market-driven data.
+            | Collaboratively restore cross-platform users before client-centered manufactured products. 
+        li
+          h5
+            | Assertively evolve long-term high-impact vortals through visionary solutions?
+          p
+            ' Professionally harness standardized portals vis-a-vis resource maximizing deliverables.
+            | Continually coordinate stand-alone applications rather than virtual communities.
+        li
+          h5
+            | Dynamically optimize fully researched results before stand-alone human capital?
+          p
+            ' Dynamically engage business meta-services for market-driven data.
+            | Collaboratively restore cross-platform users before client-centered manufactured products.
+            
+.application-fee  
+  .container
+    h3.text-xs-center.content-head
+      span.content-title-icon.graduated-icon
+      | Fees
+    .fees-section.center-block.text-xs-center
+      .col-md-6
+        .fee-box
+          h4.primary-head
+            | Application Fee
+          h3.center-block
+            i.fa.fa-inr
+            span.font-regular 1,000
+            ' &nbsp;per founder. For
+            span.font-regular 4
+            | &nbsp;tries.
+          a href="#" class= 'btn-link'
+            | View More
+      .col-md-6
+        .fee-box
+          h4.primary-head
+            | Program Fee
+          h3.center-block
+            i.fa.fa-inr
+            span.font-regular 37,500
+            ' &nbsp;per founder. For a
+            span.font-regular 1L
+            ' &nbsp;worth course.
+          a href="#" class= 'btn-link'
+            | View More
+      .col-md-12
+        .fee-box.m-t-2
+          h4.secondary-head
+            | Success Fee
+        
+          ul.list-unstyled.m-b-0
+            li.success-fee-box
+              h3
+                ' 2.5%
+              p
+                | of funding round on successful funding.
+          
+            li.success-fee-box
+              h3 5%
+              p
+                | of funding round on successful funding.
+          
+            li.success-fee-box
+              h3 10%
+              p
+                | of funding round on successful funding.
+          
+            li.success-fee-box
+              h3 20%
+              p
+                | of funding round on successful funding.
+          
+            li.success-fee-box
+              h3 30%
+              p
+                | of funding round on successful funding.
+
+          a href="#" class= 'btn-link'
+            | View More

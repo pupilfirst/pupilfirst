@@ -20,13 +20,21 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  payment:
+    status:
+      requested: Requested
+      paid: Paid
+      failed: Failed
   batch_application:
     general:
       submission_failure: Something went wrong when attempting to process your submission. Please contact us at help@sv.co.
+      applications_close_soon_html: Applications for batch %{batch_number} will close on <strong>%{deadline}</strong>. You have <strong>%{delta}</strong> to complete your application, and finish the tasks required in the second stage of the application process.
     stage_1:
-      application_page_read: Did you read the application page before starting this form?
+      application_page_read: I have gone through application page and I understand the conditions of the agreement that I will be required to sign, if my team is short-listed for the program.
       team_lead_consent: I understand that I'm the designated Team Lead and I will accept all communication on behalf of the team during this application process.
       submission_failure: Something went wrong when we tried to save your application data. Please contact help@sv.co if this error persists.
+      payment_start: Pay with Instamojo
+      payment_retry: Retry payment with Instamojo
     stage_2:
       submission_failure: Something seems wrong. Please ensure your urls are valid and re-submit
   faculty:

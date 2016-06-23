@@ -75,4 +75,12 @@ class Payment < ActiveRecord::Base
     instamojo = Instamojo.new
     instamojo.raw_payment_request_details(instamojo_payment_request_id)
   end
+
+  def peform_post_payment_tasks!
+    # Log payment time, if unrecorded.
+    update!(paid_at: Time.now) if paid_at.blank?
+
+    # Let the batch application take care of its stuff.
+    batch_application.peform_post_payment_tasks!
+  end
 end

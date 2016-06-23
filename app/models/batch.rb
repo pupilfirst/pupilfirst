@@ -87,4 +87,11 @@ class Batch < ActiveRecord::Base
   def invites_sent?
     invites_sent_at.present?
   end
+
+  # Returns true if applications for this batch closes within 7 days.
+  def applications_close_soon?
+    return false if application_stage&.number != 2
+    return false if application_stage_deadline > 7.days.from_now
+    true
+  end
 end

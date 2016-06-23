@@ -11,6 +11,8 @@
   .container
     .row
       .col-md-7.col-md-push-5
+        == render('applications_close_soon', batch: current_batch) if current_batch.applications_close_soon?
+
         .batch-results.margin-bottom-20
           .result-head
             - if current_application.paid?
@@ -33,6 +35,6 @@
               p
                 ' You need to pay Rs. #{current_application.fee}, for your application to be processed.
 
-              = button_to 'Pay with Instamojo', instamojo_initiate_payment_path(current_application)
+              = button_to payment_button_message(current_application), instamojo_initiate_payment_path(current_application)
 
       == render 'left_bar'

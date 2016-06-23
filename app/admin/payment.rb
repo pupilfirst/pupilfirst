@@ -10,7 +10,7 @@ ActiveAdmin.register Payment do
     column :batch_application
     column :amount
     column :fees
-    column :status
+    column(:status) { |payment| t("en.payment.status.#{payment.status}") }
     actions
   end
 end

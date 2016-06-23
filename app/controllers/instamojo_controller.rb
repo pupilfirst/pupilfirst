@@ -18,7 +18,7 @@ class InstamojoController < ApplicationController
   def redirect
     payment = Payment.find_by instamojo_payment_request_id: params[:payment_request_id]
     payment.refresh_payment!(params[:payment_id])
-    payment.batch_application.peform_post_payment_tasks!
+    payment.peform_post_payment_tasks!
 
     redirect_to apply_batch_path(batch: payment.batch_application.batch.batch_number)
   end
@@ -35,7 +35,7 @@ class InstamojoController < ApplicationController
       webhook_received_at: Time.now
     )
 
-    payment.batch_application.peform_post_payment_tasks!
+    payment.peform_post_payment_tasks!
 
     render nothing: true
   end

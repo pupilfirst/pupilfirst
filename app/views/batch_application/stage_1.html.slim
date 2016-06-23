@@ -16,6 +16,8 @@
   .container
     .row
       .col-md-7.col-md-push-5
+        == render('applications_close_soon', batch: current_batch) if current_batch.applications_close_soon?
+
         .batch-results
           .result-head
             = simple_form_for @form, url: apply_submit_path(batch: params[:batch]) do |f|

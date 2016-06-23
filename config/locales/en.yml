@@ -28,6 +28,7 @@ en:
   batch_application:
     general:
       submission_failure: Something went wrong when attempting to process your submission. Please contact us at help@sv.co.
+      applications_close_soon_html: Applications for batch %{batch_number} will close on <strong>%{deadline}</strong>. You have <strong>%{delta}</strong> to complete your application, and finish the tasks required in the second stage of the application process.
     stage_1:
       application_page_read: I have gone through application page and I understand the conditions of the agreement that I will be required to sign, if my team is short-listed for the program.
       team_lead_consent: I understand that I'm the designated Team Lead and I will accept all communication on behalf of the team during this application process.

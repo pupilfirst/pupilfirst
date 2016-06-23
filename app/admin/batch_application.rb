@@ -46,6 +46,14 @@ ActiveAdmin.register BatchApplication do
 
     column :score
 
+    column :payment_status do |batch_application|
+      if batch_application.payment.present?
+        link_to t("payment.status.#{batch_application.payment.status}"), admin_payment_path(batch_application.payment)
+      else
+        em 'No payment'
+      end
+    end
+
     actions defaults: false do |batch_application|
       span do
         link_to 'View', admin_batch_application_path(batch_application), class: 'view_link member_link'

@@ -108,7 +108,8 @@ class Instamojo
       email: email,
       redirect_url: redirect_url,
       send_email: Rails.env.production?,
-      send_sms: false
+      send_sms: false,
+      allow_repeated_payments: false
     }
 
     params[:webhook] = webhook_url if Rails.env.production?

@@ -42,7 +42,7 @@ class Payment < ActiveRecord::Base
 
   # A payment is considered requested when instamojo payment status is requested.
   def requested?
-    instamojo_payment_request_status == Instamojo::PAYMENT_REQUEST_STATUS_PENDING
+    instamojo_payment_request_status.in? [Instamojo::PAYMENT_REQUEST_STATUS_PENDING, Instamojo::PAYMENT_REQUEST_STATUS_SENT]
   end
 
   # An payment is considered processed when instamojo payment status is credited.

@@ -24,7 +24,6 @@
           - if current_batch_applicant.blank? || current_batch_applicant.applied_to?(batch)
             = link_to 'Continue Application', apply_batch_path(batch: batch.batch_number), class: 'btn btn-primary btn-md text-uppercase'
           - else
-            / .grey-text #{batch.name} (not accepting new applications)
             button.btn.btn-primary.btn-md.text-uppercase disabled="true"
               | Not accepting new applications
       a href="#" class= 'btn btn-secondary btn-md text-uppercase'
@@ -36,16 +35,16 @@
       h3.text-xs-center.content-head
         span.content-title-icon.graduated-icon
         | Graduated Startups and Founders 
-      .graduation-carousel.owl-theme
+      .graduation-carousel
         .slide-item
-          .graduate-thumbnail
+          a.graduate-thumbnail data-toggle="modal" href="#myModal"
             = image_tag 'apply/graduation-thumbnail-1.png'
           .graduate-data.text-xs-center
             h4
               | Kallidil Kalidasan
             p
               | Placed at Freecharge
-            
+              
         .slide-item
           .graduate-thumbnail
             = image_tag 'apply/graduation-thumbnail-1.png'
@@ -77,8 +76,11 @@
   .container-fluid
     .row
       h3.text-xs-center.content-head
-        span.content-title-icon.graduated-icon
+        span.content-title-icon.program-icon
         | The Program
+      .program-video.center-block.text-xs-center
+        iframe.program-video-frame src="" frameborder="0" allowfullscreen="allowfullscreen"
+        
       .benefits-section.center-block.text-xs-center
         .col-md-6  
           .media
@@ -99,7 +101,24 @@
                 | Engineering &amp; Product Perks
               p
                 | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.
-          
+          .media
+            .media-left
+              .media-object
+                i.fa.fa-user
+            .media-body
+              h5.media-heading
+                | Access to Great Faculty
+              p
+                | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.
+          .media
+            .media-left
+              .media-object
+                i.fa.fa-user
+            .media-body
+              h5.media-heading
+                | Engineering &amp; Product Perks
+              p
+                | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.
           .media
             .media-left
               .media-object
@@ -109,7 +128,6 @@
                 | Access to Great Faculty
               p
                 | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.
-
         .col-md-6  
           .media
             .media-left
@@ -119,6 +137,15 @@
               h5.media-heading
                 | Access to Great Faculty
               p
+                | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.      
+          .media
+            .media-left
+              .media-object
+                | H1
+            .media-body
+              h5.media-heading
+                | Access to Great Faculty
+              p
                 | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.
           .media
             .media-left
@@ -129,22 +156,31 @@
                 | Access to Great Faculty
               p
                 | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.
-          
           .media
             .media-left
               .media-object
-                | H1
+                i.fa.fa-user
             .media-body
               h5.media-heading
                 | Access to Great Faculty
               p
+                | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.  
+          .media
+            .media-left
+              .media-object
+                i.fa.fa-user
+            .media-body
+              h5.media-heading
+                | Engineering &amp; Product Perks
+              p
                 | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.
+                
         a href="#" class= 'btn btn-primary btn-md text-uppercase tour-link'
           | TAKE A TOUR
 .program-partners
   .container
     h3.text-xs-center.content-head
-      span.content-title-icon.graduated-icon
+      span.content-title-icon.program-partners-icon
       | Program Partners
     .col-lg-2.col-md-3.col-sm-4
       .card
@@ -221,7 +257,7 @@
 .application-faq
   .container
     h3.text-xs-center.content-head
-      span.content-title-icon.graduated-icon
+      span.content-title-icon.faq-icon
       | FAQ
     .col-md-6
       ul
@@ -267,7 +303,7 @@
 .application-fee  
   .container
     h3.text-xs-center.content-head
-      span.content-title-icon.graduated-icon
+      span.content-title-icon.fees-icon
       | Fees
     .fees-section.center-block.text-xs-center
       .col-md-6
@@ -328,3 +364,13 @@
 
           a href="#" class= 'btn-link'
             | View More
+            
+
+#myModal.modal.fade.graduates-video aria-hidden="true" aria-labelledby="" role="dialog" tabindex="-1" 
+  .modal-dialog.modal-lg role="document" 
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button" 
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/vjDdSdfitKY?enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"

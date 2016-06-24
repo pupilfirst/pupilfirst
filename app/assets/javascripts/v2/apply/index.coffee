@@ -30,5 +30,10 @@ avoidwidowsTypography = ->
       wordArray.pop()
       $(this).html wordArray.join(' ')
 
+stopVideosOnModalClose = ->
+  $('.graduates-video').on 'hidden.bs.modal', (event) ->
+    $('.graduates-video iframe').attr 'src', $('.graduates-video iframe').attr('src')
+
 $(document).on 'page:change', setupGraduationCarousel
 $(document).on 'page:change', avoidwidowsTypography
+$(document).on 'page:change', stopVideosOnModalClose

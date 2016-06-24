@@ -1,5 +1,5 @@
 .apply-illustration {
-  background: rgba(255, 255, 255, 1) asset-url("apply/Apply-banner-illustration.svg") no-repeat center center;
+  background: rgba(255, 255, 255, 1) asset-url("apply/apply-banner-illustration.svg") no-repeat center center;
   background-size: cover;
   height: 380px;
   border-bottom: 1px solid $gray-border;
@@ -99,6 +99,20 @@
     padding: 5px  0 15px;
   }
 }
+.program-video {
+  max-width: 500px;
+  margin-bottom: 30px;
+
+  .program-video-frame {
+    margin: auto;
+    border: 5px solid #ffffff;
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);
+    height: 275px;
+    width: 100%;
+    text-align: center;
+  }
+}
+
 
 .program-benefits {
   background-color: white;
@@ -113,6 +127,11 @@
     .media {
       max-width: 400px;
       text-align: left;
+      margin-top: 30px;
+
+      .media-left {
+        padding-right: 15px;
+      }
     }
 
     .media-object {
@@ -130,9 +149,13 @@
     .tour-link {
       margin-top: 40px;
     }
+    p {
+      font-weight: $font-light;
+    }
   }
 }
 .program-partners {
+  padding-bottom: 35px;
   .card {
     text-align: center;
     max-height: 200px;
@@ -155,13 +178,23 @@
   padding-bottom: 50px;
 
   ul {
-    > li {
-      list-style-type: circle;
+    li {
+      list-style: none;
       line-height: 1.65rem;
       padding-bottom: 10px;
+      position: relative;
+
+      &:before {
+        @include fa-icon(circle-o);
+        color: $brand-secondary;
+        position: absolute;
+        left: -25px;
+        top: 6px;
+      }
     }
   }
   h5 {
+    display: inline-block;
     font-weight: $font-semibold;
     line-height: 1.65rem;
   }
@@ -169,99 +202,130 @@
     letter-spacing: 0.01rem;
   }
 }
+.application-fee {
+  padding-bottom: 50px;
 
-.fees-section {
-  max-width: 55rem;
+  .fees-section {
+    max-width: 55rem;
 
-  .fee-box {
-    background-color: white;
-    box-shadow: $box-shadow;
-    border: 1px solid $gray-border;
-    @include border-radius(5px);
-    overflow: hidden;
-    min-height: 200px;
+    .fee-box {
+      background-color: white;
+      box-shadow: $box-shadow;
+      border: 1px solid $gray-border;
+      @include border-radius(5px);
+      overflow: hidden;
+      min-height: 200px;
 
-    h4 {
-      color: white;
-      padding: 15px;
-      margin-bottom: 30px;
+      h4 {
+        color: white;
+        padding: 15px;
+        margin-bottom: 30px;
 
-      &.primary-head {
-        background-color: $light-primary;
+        &.primary-head {
+          background-color: $light-primary;
+        }
+        &.secondary-head {
+          background-color: $light-secondary;
+        }
       }
-      &.secondary-head {
-        background-color: $light-secondary;
-      }
-    }
-    h3 {
-      max-width: 220px;
-      margin-bottom: 0;
-      line-height: 1.3;
+      h3 {
+        max-width: 220px;
+        margin-bottom: 0;
+        line-height: 1.3;
 
-      @include media-breakpoint-down(xs) {
-        max-width: inherit;
-        padding: 0 30px;
-      }
+        @include media-breakpoint-down(xs) {
+          max-width: inherit;
+          padding: 0 30px;
+        }
 
-      i {
-        font-size: 20px;
-        padding-right: 5px;
+        i {
+          font-size: 20px;
+          padding-right: 5px;
+        }
       }
-    }
-    a {
-      display: inline-block;
-      border-top: 1px solid $gray-border;
-      padding: 15px 100px 25px;
-      margin-top: 20px;
+      a {
+        display: inline-block;
+        border-top: 1px solid $gray-border;
+        padding: 15px 100px 25px;
+        margin-top: 20px;
 
-      @include media-breakpoint-down(xs) {
-        padding: 15px 50px 25px;
+        @include media-breakpoint-down(xs) {
+          padding: 15px 50px 25px;
+        }
       }
-    }
-    .success-fee-box {
-      display: inline-table;
-      border-left: 1px solid $gray-border;
-      width: 20%;
-      padding: 30px 15px;
+      .success-fee-box {
+        display: inline-table;
+        border-left: 1px solid $gray-border;
+        width: 20%;
+        padding: 30px 15px;
 
-      p {
-        font-weight: $font-light;
-        font-size: 1rem;
-        line-height: 1.4;
-      }
+        p {
+          font-weight: $font-light;
+          font-size: 1rem;
+          line-height: 1.4;
+        }
 
-      &:first-child {
-        border-left: 0;
-      }
-      @include media-breakpoint-down(md) {
-        width: 33.33%;
-        border: 1px solid $gray-border;
-        border-width: 0 1px 1px 0;
+        &:first-child {
+          border-left: 0;
+        }
+        @include media-breakpoint-down(md) {
+          width: 33.33%;
+          border: 1px solid $gray-border;
+          border-width: 0 1px 1px 0;
 
-        &:last-child {
-          border-right: 0;
+          &:last-child {
+            border-right: 0;
+          }
+        }
+        @include media-breakpoint-down(sm) {
+          width: 50%;
+          border-width: 1px 1px 0 0;
+
+          &:nth-child(2n) {
+            border-right: 0;
+          }
+        }
+        @include media-breakpoint-down(xs) {
+          width: 100%;
+          border-width: 0 0 1px 0;
+          padding: 30px 50px;
+
+          &:last-child {
+            border-bottom: 0;
+          }
         }
       }
       @include media-breakpoint-down(sm) {
-        width: 50%;
-        border-width: 1px 1px 0 0;
-
-        &:nth-child(2n) {
-          border-right: 0;
-        }
-      }
-      @include media-breakpoint-down(xs) {
-        width: 100%;
-        border-width: 0 0 1px 0;
-        padding: 30px 50px;
-
-        &:last-child {
-          border-bottom: 0;
-        }
+        margin-bottom: 20px;
       }
     }
-    @include media-breakpoint-down(sm) {
-      margin-bottom: 20px;
+  }
+}
+
+.graduates-video {
+  .modal-dialog {
+    .modal-content {
+      background-color: #000;
+
+      .modal-header {
+        border: 0;
+        padding: 10px 10px 0;
+
+        .close {
+          color: #fff;
+          opacity: 0.5;
+          text-shadow: 0;
+        }
+      }
+      .modal-body {
+        padding: 10px 10px 0;
+      }
+    }
+  }
+  @include media-breakpoint-up(sm) {
+    .video-frame {
+      width: 100%;
+      height: 500px;
     }
   }
 }

@@ -160,24 +160,24 @@ p {
     display: block;
 
     &.graduated-icon {
-      background-image: asset-url("talent/talent-icon.svg");
-      width: 60px;
-      height: 72px;
+      background-image: asset-url("apply/graduated-icon.svg");
+      height: 75px;
     }
     &.program-icon {
-      background-image: asset-url("talent/talk-to-founders-icon.svg");
-      width: 70px;
-      height: 72px;
+      background-image: asset-url("apply/program-icon.svg");
+      height: 50px;
+    }
+    &.program-partners-icon {
+      background-image: asset-url("apply/program-partners-icon.svg");
+      height: 43px;
     }
     &.faq-icon {
-      background-image: asset-url("talent/testimonial-icon.svg");
-      width: 74px;
-      height: 66px;
+      background-image: asset-url("apply/faq-icon.svg");
+      height: 60px;
     }
-    &.fee-icon {
-      background-image: asset-url("talent/testimonial-icon.svg");
-      width: 74px;
-      height: 66px;
+    &.fees-icon {
+      background-image: asset-url("apply/fees-icon.svg");
+      height: 62px;
     }
   }
   &:before {
@@ -186,7 +186,7 @@ p {
     display: inline-block;
     border-bottom: 3px solid $gray-border;
     position: absolute;
-    top: 135px;
+    bottom: -20px;
     transform: translateX(-50%);
   }
 }

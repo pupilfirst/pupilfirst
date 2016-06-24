@@ -22,7 +22,7 @@
                 | registered email address when this occurs.
             - else
               p
-                ' Your application has been received. Your payment is pending.
+                ' Your application data has been stored. You now need to pay the applcation fee.
 
               h3 Applicants
 
@@ -33,7 +33,7 @@
                   li #{cofounder.name} &mdash; Rs. #{BatchApplicant::APPLICATION_FEE}
 
               p
-                ' You need to pay Rs. #{current_application.fee}, for your application to be processed.
+                ' You need to pay Rs. #{current_application.fee}, to proceed to the next stage.
 
               = button_to payment_button_message(current_application), instamojo_initiate_payment_path(current_application)
 

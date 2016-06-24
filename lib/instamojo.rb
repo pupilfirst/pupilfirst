@@ -1,6 +1,7 @@
 class Instamojo
   # Status values that we are concerned with:
   PAYMENT_REQUEST_STATUS_PENDING = -'Pending'
+  PAYMENT_REQUEST_STATUS_SENT = -'Sent'
   PAYMENT_STATUS_CREDITED = -'Credit'
   PAYMENT_STATUS_FAILED = -'Failed'
 

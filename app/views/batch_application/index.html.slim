@@ -37,7 +37,7 @@
         | Graduated Startups and Founders 
       .graduation-carousel
         .slide-item
-          a.graduate-thumbnail data-toggle="modal" href="#myModal"
+          a.graduate-thumbnail data-toggle="modal" href="#graduatesVideo"
             = image_tag 'apply/graduation-thumbnail-1.png'
           .graduate-data.text-xs-center
             h4
@@ -46,7 +46,7 @@
               | Placed at Freecharge
               
         .slide-item
-          .graduate-thumbnail
+          a.graduate-thumbnail data-toggle="modal" href="#graduatesVideo"
             = image_tag 'apply/graduation-thumbnail-1.png'
           .graduate-data.text-xs-center
             h4
@@ -55,7 +55,7 @@
               | Placed at Freecharge
             
         .slide-item
-          .graduate-thumbnail
+          a.graduate-thumbnail data-toggle="modal" href="#graduatesVideo"
             = image_tag 'apply/graduation-thumbnail-1.png'
           .graduate-data.text-xs-center
             h4
@@ -64,7 +64,7 @@
               | Placed at Freecharge
 
         .slide-item
-          .graduate-thumbnail
+          a.graduate-thumbnail data-toggle="modal" href="#graduatesVideo"
             = image_tag 'apply/graduation-thumbnail-1.png'
           .graduate-data.text-xs-center
             h4
@@ -83,95 +83,95 @@
         
       .benefits-section.center-block.text-xs-center
         .col-md-6  
-          .media
+          .media.center-block
             .media-left
               .media-object
-                i.fa.fa-user
+                = image_tag 'apply/program-icons/great-faculty-icon.svg'
             .media-body
               h5.media-heading
                 | Access to Great Faculty
               p
                 | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.
-          .media
+          .media.center-block
             .media-left
               .media-object
-                i.fa.fa-user
+                = image_tag 'apply/program-icons/engineering-icon.svg'
             .media-body
               h5.media-heading
                 | Engineering &amp; Product Perks
               p
                 | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.
-          .media
+          .media.center-block
             .media-left
               .media-object
-                i.fa.fa-user
+                = image_tag 'apply/program-icons/slack-icon.svg'
             .media-body
               h5.media-heading
-                | Access to Great Faculty
+                | Peer Support on Public Slack
               p
                 | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.
-          .media
+          .media.center-block
             .media-left
               .media-object
-                i.fa.fa-user
+                = image_tag 'apply/program-icons/timeline-icon.svg'
             .media-body
               h5.media-heading
-                | Engineering &amp; Product Perks
+                | Verified Public Timeline 
               p
                 | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.
-          .media
+          .media.center-block
             .media-left
               .media-object
-                | H1
+                = image_tag 'apply/program-icons/target-icon.svg'
             .media-body
               h5.media-heading
-                | Access to Great Faculty
+                | Target-based Guided Learning
               p
                 | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.
         .col-md-6  
-          .media
+          .media.center-block
             .media-left
               .media-object
-                | H1
+                = image_tag 'apply/program-icons/founder-icon.svg'
             .media-body
               h5.media-heading
-                | Access to Great Faculty
+                | Dynamic Founder Profiles
               p
                 | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.      
-          .media
+          .media.center-block
             .media-left
               .media-object
-                | H1
+                = image_tag 'apply/program-icons/university-icon.svg'
             .media-body
               h5.media-heading
-                | Access to Great Faculty
+                | Partner University Certifications
               p
                 | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.
-          .media
+          .media.center-block
             .media-left
               .media-object
-                | H1
+                = image_tag 'apply/program-icons/library-icon.svg'
             .media-body
               h5.media-heading
-                | Access to Great Faculty
+                | Startup Library with Exclusive Resources
               p
                 | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.
-          .media
+          .media.center-block
             .media-left
               .media-object
-                i.fa.fa-user
+                = image_tag 'apply/program-icons/leaderboard-icon.svg'
             .media-body
               h5.media-heading
-                | Access to Great Faculty
+                | Karma Points-based Leaderboard System
               p
                 | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.  
-          .media
+          .media.center-block
             .media-left
               .media-object
-                i.fa.fa-user
+                = image_tag 'apply/program-icons/help-icon.svg'
             .media-body
               h5.media-heading
-                | Engineering &amp; Product Perks
+                | Ad&ndash;hoc Help Wanted Requests
               p
                 | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.
                 
@@ -182,77 +182,90 @@
     h3.text-xs-center.content-head
       span.content-title-icon.program-partners-icon
       | Program Partners
-    .col-lg-2.col-md-3.col-sm-4
-      .card
-        = image_tag 'talent/tally-logo.png', class: "img-fluid"
-        .card-block
-          p Cras justo odio
+    .partner-container
+      .col-lg-2.col-md-3.col-sm-4
+        .card.center-block
+          .image-block
+            = image_tag 'talent/tally-logo.png', class: "img-fluid"
+          .card-block
+            p.card-text Graduation Partner
 
-    .col-lg-2.col-md-3.col-sm-4
-      .card
-        = image_tag 'talent/Freshdesk-logo.png', class: "img-fluid"
-        .card-block
-          p.card-text Graduation Partner
+      .col-lg-2.col-md-3.col-sm-4
+        .card.center-block
+          .image-block
+            = image_tag 'talent/Freshdesk-logo.png', class: "img-fluid"
+          .card-block
+            p.card-text Graduation Partner
 
-    .col-lg-2.col-md-3.col-sm-4
-      .card
-        = image_tag 'talent/freecharge-logo.png', class: "img-fluid"
-        .card-block
-          p.card-text Graduation Partner
-          
-    .col-lg-2.col-md-3.col-sm-4
-      .card
-        = image_tag 'talent/askme-logo.png', class: "img-fluid"
-        .card-block
-          p.card-text Graduation Partner
-          
-    .col-lg-2.col-md-3.col-sm-4
-      .card
-        = image_tag 'talent/ola-logo.png', class: "img-fluid"
-        .card-block
-          p.card-text Graduation Partner
-          
-    .col-lg-2.col-md-3.col-sm-4
-      .card
-        = image_tag 'talent/goqii-logo.png', class: "img-fluid"
-        .card-block
-          p.card-text Graduation Partner
+      .col-lg-2.col-md-3.col-sm-4
+        .card.center-block
+          .image-block
+            = image_tag 'talent/freecharge-logo.png', class: "img-fluid"
+          .card-block
+            p.card-text Graduation Partner
+            
+      .col-lg-2.col-md-3.col-sm-4
+        .card.center-block
+          .image-block
+            = image_tag 'talent/askme-logo.png', class: "img-fluid"
+          .card-block
+            p.card-text Graduation Partner
+            
+      .col-lg-2.col-md-3.col-sm-4
+        .card.center-block
+          .image-block
+            = image_tag 'talent/ola-logo.png', class: "img-fluid"
+          .card-block
+            p.card-text Graduation Partner
+            
+      .col-lg-2.col-md-3.col-sm-4
+        .card.center-block
+          .image-block
+            = image_tag 'talent/goqii-logo.png', class: "img-fluid"
+          .card-block
+            p.card-text Graduation Partner
 
-    .col-lg-2.col-md-3.col-sm-4
-      .card
-        = image_tag 'talent/microsoft-ventures-logo.png'
-        .card-block
-          p.card-text Graduation Partner
-          
-    .col-lg-2.col-md-3.col-sm-4
-      .card
-        = image_tag 'talent/Citrus-logo.png', class: "img-fluid"
-        .card-block
-          p Cras justo odio
+      .col-lg-2.col-md-3.col-sm-4
+        .card.center-block
+          .image-block
+            = image_tag 'talent/microsoft-ventures-logo.png'
+          .card-block
+            p.card-text Graduation Partner
+            
+      .col-lg-2.col-md-3.col-sm-4
+        .card.center-block
+          .image-block
+            = image_tag 'talent/Citrus-logo.png', class: "img-fluid"
+          .card-block
+            p.card-text Graduation Partner
 
-    .col-lg-2.col-md-3.col-sm-4
-      .card
-        = image_tag 'talent/AHventures-logo.png', class: "img-fluid"
-        .card-block
-          p.card-text Graduation Partner
+      .col-lg-2.col-md-3.col-sm-4
+        .card.center-block
+          .image-block
+            = image_tag 'talent/AHventures-logo.png', class: "img-fluid"
+          .card-block
+            p.card-text Graduation Partner
 
-    .col-lg-2.col-md-3.col-sm-4
-      .card
-        = image_tag 'talent/Flat6labs-logo.png', class: "img-fluid"
-        .card-block
-          p.card-text Graduation Partner
-          
-    .col-lg-2.col-md-3.col-sm-4
-      .card
-        = image_tag 'talent/Goodmethods-logo.png', class: "img-fluid"
-        .card-block
-          p.card-text Graduation Partner
-          
-    .col-lg-2.col-md-3.col-sm-4
-      .card
-        = image_tag 'talent/Kalaaricapital-logo.png', class: "img-fluid"
-        .card-block
-          p.card-text Graduation Partner
+      .col-lg-2.col-md-3.col-sm-4
+        .card.center-block
+          .image-block
+            = image_tag 'talent/Flat6labs-logo.png', class: "img-fluid"
+          .card-block
+            p.card-text Graduation Partner
+            
+      .col-lg-2.col-md-3.col-sm-4
+        .card.center-block
+          .image-block
+            = image_tag 'talent/Goodmethods-logo.png', class: "img-fluid"
+          .card-block
+            p.card-text Graduation Partner
+            
+      .col-lg-2.col-md-3.col-sm-4
+        .card.center-block
+          .image-block
+            = image_tag 'talent/Kalaaricapital-logo.png', class: "img-fluid"
+          .card-block
+            p.card-text Graduation Partner
 
 .application-faq
   .container
@@ -366,11 +379,11 @@
             | View More
             
 
-#myModal.modal.fade.graduates-video aria-hidden="true" aria-labelledby="" role="dialog" tabindex="-1" 
+#graduatesVideo.modal.fade.graduates-video aria-hidden="true" aria-labelledby="" role="dialog" tabindex="-1" 
   .modal-dialog.modal-lg role="document" 
     .modal-content
       .modal-header
         button.close aria-label="Close" data-dismiss="modal" type="button" 
           span aria-hidden="true" &times;
       .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/vjDdSdfitKY?enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
+        iframe.video-frame src="https://www.youtube.com/embed/KufIL6ZS1lk?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"

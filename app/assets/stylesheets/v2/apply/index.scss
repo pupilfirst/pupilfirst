@@ -36,18 +36,26 @@
     width: 40px;
     top: auto;
     bottom: 0px;
-    margin: 0 20px;
+    margin: 0 15px;
     z-index: 1;
-
+    transition: all .2s;
 
     &:before {
       font-size: 18px;
       vertical-align: middle;
       opacity: 1;
     }
+    &:hover, &:focus, &:active {
+      box-shadow: $box-shadow-hover;
+
+      &:before {
+        color: $light-secondary;
+      }
+    }
   }
   .slick-prev {
-    left: 44%;
+    right: 50%;
+    left: auto;
 
     &:before {
       @include fa-icon(angle-left);
@@ -55,7 +63,8 @@
     }
   }
   .slick-next {
-    right: 44%;
+    left: 50%;
+    right: auto;
 
     &:before {
       @include fa-icon(angle-right);
@@ -74,13 +83,57 @@
   outline: none;
   transition: all 300ms ease 0s;
 
-  img {
-    box-shadow: $box-shadow;
-    width: 100%;
+  .graduate-thumbnail {
+    display: block;
+    position:relative;
+
+    &:before, &:after {
+      position: absolute;
+      opacity: 0;
+      transition: all .2s;
+    }
+    &:before {
+      content:'';
+      width:100%;
+      height:100%;
+      top:0;
+      left:0;
+      background:rgba(0,0,0,0.5);
+      background: radial-gradient(ellipse at center, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.5) 100%);
+    }
+    &:after {
+      content:url('apply/play-button.svg');
+      width: 50px;
+      height: 50px;
+      top: 40%;
+      left: 50%;
+      transform: translateX(-50%);
+
+      @include media-breakpoint-down(md) {
+        width: 30px;
+        height: 30px;
+      }
+    }
+    img {
+      box-shadow: $box-shadow;
+      width: 100%;
+
+    }
+    &:hover {
+      &:before, &:after {
+        opacity: 1.0;
+      }
+    }
   }
 }
 .slick-center {
   transform: scale(1.08);
+
+  .graduate-thumbnail {
+    &:after {
+      opacity: 1.0;
+    }
+  }
 }
 .graduate-data {
   background-color: white;
@@ -102,6 +155,7 @@
 .program-video {
   max-width: 500px;
   margin-bottom: 30px;
+  padding: 0 15px;
 
   .program-video-frame {
     margin: auto;
@@ -109,7 +163,12 @@
     box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);
     height: 275px;
     width: 100%;
+    @include border-radius(5px);
     text-align: center;
+
+    @include media-breakpoint-down(sm) {
+      height: auto;
+    }
   }
 }
 
@@ -139,8 +198,9 @@
       @include border-radius(5px);
       padding: 15px;
 
-      i {
-        font-size: 20px;
+      img {
+        width: 30px;
+        height: 30px;
       }
     }
     .media-heading {
@@ -154,19 +214,47 @@
     }
   }
 }
+@include media-breakpoint-up(sm) {
+  .partner-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
 .program-partners {
   padding-bottom: 35px;
+
   .card {
     text-align: center;
-    max-height: 200px;
+    overflow: hidden;
+    margin-bottom: 1.75rem;
 
-    img {
-      max-height: 50px;
-      padding: 10px;
+    .image-block {
+      height: 75px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      width: 120px;
       margin: auto;
+
+      img {
+        padding: 10px;
+        margin: auto;
+        width: 100%;
+      }
     }
     .card-block {
+      padding: 10px 20px;
       border-top: 1px solid $gray-border;
+
+      @include media-breakpoint-down(lg) {
+        padding: 10px;
+      }
+    }
+    @include media-breakpoint-down(sm) {
+      max-width: 160px;
     }
   }
 }
@@ -175,13 +263,13 @@
   background-color: white;
   border: 1px solid $gray-border;
   border-width: 1px 0;
-  padding-bottom: 50px;
+  padding-bottom: 20px;
 
   ul {
     li {
       list-style: none;
       line-height: 1.65rem;
-      padding-bottom: 10px;
+      padding-bottom: 30px;
       position: relative;
 
       &:before {
@@ -305,11 +393,12 @@
 .graduates-video {
   .modal-dialog {
     .modal-content {
-      background-color: #000;
+      background-color: transparent;
+      border: 0;
 
       .modal-header {
         border: 0;
-        padding: 10px 10px 0;
+        padding: 0;
 
         .close {
           color: #fff;
@@ -318,6 +407,7 @@
         }
       }
       .modal-body {
+        background-color: rgba(0, 0, 0, 1.0);
         padding: 10px 10px 0;
       }
     }

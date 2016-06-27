@@ -335,7 +335,7 @@
             span.font-regular 1,000
             br
             | per founder.
-          a.btn-link href='#' data-toggle="modal" data-target="#basic-fee"
+          a.btn-link href='#' data-toggle="modal" data-target="#basic-fees"
             | View More
       .col-md-6
         .fee-box
@@ -347,7 +347,7 @@
             ' &nbsp;per founder. For a
             span.font-regular 2,00,000
             ' &nbsp;worth course.
-          a.btn-link href='#' data-toggle="modal" data-target="#basic-fee"
+          a.btn-link href='#' data-toggle="modal" data-target="#basic-fees"
             | View More
       .col-md-12
         .fee-box.m-t-2
@@ -381,7 +381,7 @@
               p
                 | investment discount on up to 30% of any funding round.
 
-          a href="#" class= 'btn-link'
+          a.btn-link href='#' data-toggle="modal" data-target="#success-fees"
             | View More
 
 
@@ -394,13 +394,13 @@
       .modal-body
         iframe.video-frame src="https://www.youtube.com/embed/KufIL6ZS1lk?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
 
-#basic-fee.modal.fade aria-hidden="true" role="dialog" tabindex="-1"
+#basic-fees.modal.fade aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content
       .modal-header
         button.close aria-label="Close" data-dismiss="modal" type="button"
           span aria-hidden="true" &times;
-        h4.modal-title Fees
+        h4.modal-title Fixed Fees
       .modal-body
         h4 Application Fee
 
@@ -436,3 +436,25 @@
           li
             ' We offer financial support for this fee for founders from financially weak backgrounds. To know more,
             | write to #{mail_to 'help@sv.co'}.
+
+#success-fees.modal.fade aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+        h4.modal-title Success Fees
+      .modal-body
+        ul
+          li The success fee is enforced through a legal agreement that you sign when you are selected to the program.
+          li
+            ' To download the complete legal agreement,
+            ' #{link_to 'visit this link', 'https://sv.co/library/agreement-for -educational-services-to-startups'}.
+            ' The agreement is #{link_to 'explained in detail here', 'http://playbook.sv.co/2-legal-agreement.html'}.
+          li
+            ' You are also required to form a legal partnership between the founders when you start the program. The
+            ' costs (if any) to start this partnership must be borne by the founders. A
+            ' #{link_to 'sample partnership deed is available here', 'https://sv.co/library/startup-partnership-deed'}.
+          li
+            ' The 30% discount &amp; investment rights scenario is explained in detail in the
+            ' #{link_to 'Raising Investment', 'http://playbook.sv.co/6-raising-investment.html'} section.

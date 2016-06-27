@@ -119,8 +119,8 @@ Svapp::Application.routes.draw do
   # Public Changelog.
   get 'changelog', to: 'home#changelog'
 
-  # Published styleguide of SV.CO
-  get 'styleguide', to: 'home#styleguide'
+  # Application process tour of SV.CO
+  get 'tour', to: 'home#tour'
 
   root 'home#index'
 

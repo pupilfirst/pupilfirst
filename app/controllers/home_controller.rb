@@ -21,7 +21,9 @@ class HomeController < ApplicationController
     render layout: 'application_v2'
   end
 
-  def styleguide
+  # GET /tour
+  def tour
+    @skip_container = true
     render layout: 'application_v2'
   end
 end

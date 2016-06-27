@@ -5,75 +5,75 @@
   title SV.CO Apply Now
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
 
-.container
-  .apply-banner
-    .row
-      .col-md-4
-        h1 Applications open for #{current_batch.name} batch!
-        p.header-light
-          ' The application process for this batch has started. Apply now!
-.apply-container
+.secondary-banner.application-stages-banner
   .container
-    .row
-      .col-md-7.col-md-push-5
-        == render('applications_close_soon', batch: current_batch) if current_batch.applications_close_soon?
+    .application-stages-head.text-xs-center
+      h1
+        | Applications open for
+        span
+          | &nbsp;#{current_batch.name} batch!
+      h4.center-block
+        ' The application process for this batch has started. Apply now!
+        
+.container        
+  .container-md-center.content-box.m-t-3.m-b-3
+    == render('applications_close_soon', batch: current_batch) if current_batch.applications_close_soon?
 
-        .batch-results
-          .result-head
-            = simple_form_for @form, url: apply_submit_path(batch: params[:batch]) do |f|
-              = f.error :base
+    .batch-results
+      .result-head
+        = simple_form_for @form, url: apply_submit_path(batch: params[:batch]) do |f|
+          = f.error :base
 
-              = f.input :application_page_read,
-                as: :boolean,
-                inline_label: t('batch_application.stage_1.application_page_read')
+          = f.input :application_page_read,
+            as: :boolean,
+            inline_label: t('batch_application.stage_1.application_page_read')
 
-              = f.input :team_lead_consent,
-                as: :boolean,
-                inline_label: t('batch_application.stage_1.team_lead_consent')
+          = f.input :team_lead_consent,
+            as: :boolean,
+            inline_label: t('batch_application.stage_1.team_lead_consent')
 
-              = f.input :university_id,
-                collection: proc { University.grouped_by_location },
-                as: :grouped_select,
-                group_method: :last,
-                value_method: :first,
-                label_method: :last,
-                label: 'Which university does your institute belong to?'
+          = f.input :university_id,
+            collection: proc { University.grouped_by_location },
+            as: :grouped_select,
+            group_method: :last,
+            value_method: :first,
+            label_method: :last,
+            label: 'Which university does your institute belong to?'
 
-              = f.input :college, label: "Name of team lead's college"
-              = f.input :state
+          = f.input :college, label: "Name of team lead's college"
+          = f.input :state
 
-              = f.simple_fields_for :team_lead do |t|
-                = t.input :name, label: 'Full name of team lead'
+          = f.simple_fields_for :team_lead do |t|
+            = t.input :name, label: 'Full name of team lead'
 
-                = t.input :email,
-                  label: 'Team lead email ID',
-                  input_html: { disabled: true }
+            = t.input :email,
+              label: 'Team lead email ID',
+              input_html: { disabled: true }
 
-                = t.input :role,
-                  label: "Team lead's role",
-                  as: :select,
-                  collection: proc { Founder.valid_roles },
-                  include_blank: false,
-                  label_method: proc { |role| t("role.#{role}") }
+            = t.input :role,
+              label: "Team lead's role",
+              as: :select,
+              collection: proc { Founder.valid_roles },
+              include_blank: false,
+              label_method: proc { |role| t("role.#{role}") }
 
-                = t.input :gender,
-                  label: "Team lead's gender",
-                  collection: Founder.valid_gender_values,
-                  as: :radio_buttons
+            = t.input :gender,
+              label: "Team lead's gender",
+              collection: Founder.valid_gender_values,
+              as: :radio_buttons
 
-              = f.simple_fields_for :cofounders do |c|
-                = c.input :email
-                = c.input :name
+          = f.simple_fields_for :cofounders do |c|
+            = c.input :email
+            = c.input :name
 
-                = c.input :role,
-                  as: :select,
-                  collection: proc { Founder.valid_roles },
-                  include_blank: false,
-                  label_method: proc { |role| t("role.#{role}") }
+            = c.input :role,
+              as: :select,
+              collection: proc { Founder.valid_roles },
+              include_blank: false,
+              label_method: proc { |role| t("role.#{role}") }
 
-              = f.input :team_achievement,
-                as: :text,
-                label: 'Mention an achievement you are most proud of as a team'
+          = f.input :team_achievement,
+            as: :text,
+            label: 'Mention an achievement you are most proud of as a team'
 
-              = f.submit 'Submit Application', class: 'btn btn-primary'
-      == render 'left_bar'
+          = f.submit 'Submit Application', class: 'btn btn-primary'

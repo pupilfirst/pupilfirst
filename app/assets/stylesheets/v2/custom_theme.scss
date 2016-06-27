@@ -147,7 +147,49 @@ p {
   }
 }
 
+.form-section-title {
+  border-bottom: 1px solid $gray-border;
+  padding-bottom: 10px;
+}
+.simple-form-container {
+  .form-horizontal {
+    .form-group {
+      margin-left: -15px;
+      margin-right: -15px;
 
+      .control-label {
+        margin-bottom: 0;
+        padding-top: 7px;
+
+        @include media-breakpoint-down(xs) {
+          margin-bottom: 10px;
+        }
+      }
+      .form-control {
+        font-size: 0.875rem;
+        padding: 0.5rem 0.75rem;
+        border-color: $gray-border;
+
+        &:focus {
+          border-color: lighten($light-secondary, 20%);
+        }
+      }
+      &:before, &:after {
+        content: " ";
+        display: table;
+      }
+      &:after {
+        clear: both;
+      }
+    }
+  }
+  .simple-form-submit {
+    margin-left: 8px;
+    @include media-breakpoint-down(sm) {
+      margin-left: 0;
+    }
+  }
+}
 .content-head {
   position: relative;
   margin-top: 40px;

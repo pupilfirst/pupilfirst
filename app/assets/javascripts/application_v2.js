@@ -46,4 +46,4 @@
 // require about
 // require transparency
 // require talent
-//= require v2/apply
+//= require v2/batch_application

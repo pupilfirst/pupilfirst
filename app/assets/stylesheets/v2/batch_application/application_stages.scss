@@ -1,0 +1,20 @@
+.application-stages-banner {
+  background: rgba(255, 255, 255, 1) asset-url("apply/application-process-stages-bg.svg") no-repeat center center;
+  background-size: cover;
+  border-bottom: 1px solid $gray-border;
+}
+.application-stages-head {
+  margin: auto;
+  
+  h1 {
+    margin-bottom: 15px;
+
+    span {
+      color: $brand-secondary;
+    }
+  }
+  h4 {
+    max-width: 380px;
+    line-height: 1.4;
+  }
+}

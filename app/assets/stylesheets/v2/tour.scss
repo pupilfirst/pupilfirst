@@ -1,0 +1,22 @@
+.tour-banner {
+  background: rgba(255, 255, 255, 1) asset-url("tour/tour-illustration.svg") no-repeat center center;
+  background-size: cover;
+  height: 380px;
+  border-bottom: 1px solid $gray-border;
+}
+.tour-banner-head {
+  padding: 190px 0 0;
+  max-width: 430px;
+
+  h1 {
+    line-height: 1.4;
+    margin-bottom: 10px;
+
+    @include media-breakpoint-down(xs) {
+      font-size: 1.5rem;
+    }
+  }
+  h4 {
+    line-height: 1.4;
+  }
+}

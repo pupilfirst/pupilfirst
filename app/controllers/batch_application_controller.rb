@@ -20,7 +20,7 @@ class BatchApplicationController < ApplicationController
     case applicant_status
       when :application_pending
         prep_for_stage_1
-        render 'batch_application/stage_1'
+        render 'batch_application/stage_1', layout: 'application_v2'
       when :application_expired
         render 'batch_application/stage_1_expired'
       when :payment_pending
@@ -129,6 +129,7 @@ class BatchApplicationController < ApplicationController
 
     @skip_container = true
     @batch_applicant = BatchApplicant.new
+    render layout: 'application_v2'
   end
 
   # POST /apply/identify
@@ -143,10 +144,10 @@ class BatchApplicationController < ApplicationController
       # Send email.
       BatchApplicantMailer.sign_in(@batch_applicant.email, @batch_applicant.token, session[:application_batch]).deliver_later
 
-      render 'batch_application/sign_in_email_sent'
+      render 'batch_application/sign_in_email_sent', layout: 'application_v2'
     else
       # There's probably something wrong with the entered email address. Render the form again.
-      render 'batch_application/identify'
+      render 'batch_application/identify', layout: 'application_v2'
     end
   end
 

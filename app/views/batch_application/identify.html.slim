@@ -2,21 +2,24 @@
   title SV.CO Apply Now
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
 
-.container
-  .apply-banner
-    .row
-      .col-md-4
-        h1 Please supply your email address.
-        p.header-light
-          ' We'll email you a one-time application link to establish your identity.
-.apply-container
-  .container
-    .row
-      .col-md-7.col-md-push-5
-        .batch-results.margin-bottom-20
-          .result-head
-            = simple_form_for @batch_applicant, url: apply_send_sign_in_email_path do |f|
-              = f.input :email
-              = f.submit 'Send one-time application link'
 
-      == render 'left_bar'
+.secondary-banner.application-stages-banner
+  .container
+    .application-stages-head.text-xs-center
+      h1
+        | Please supply your
+        span
+          | &nbsp;email address.
+      h4.center-block
+        ' We'll email you a one-time application link to establish your identity.
+
+.container        
+  .container-md-center.content-box.m-t-3.m-b-3
+    h5.form-section-title.text-uppercase.font-semibold.m-b-2
+      | email id
+    .simple-form-container
+      = simple_form_for @batch_applicant, url: apply_send_sign_in_email_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
+        = f.input :email, placeholder: 'Enter Your email id'
+        .col-sm-offset-3
+          .simple-form-submit
+            = f.submit 'Send one-time application link', class: 'btn btn-primary btn-md text-uppercase'

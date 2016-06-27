@@ -335,7 +335,7 @@
             span.font-regular 1,000
             br
             | per founder.
-          a href="#" class= 'btn-link'
+          a.btn-link href='#' data-toggle="modal" data-target="#basic-fee"
             | View More
       .col-md-6
         .fee-box
@@ -345,9 +345,9 @@
             i.fa.fa-inr
             span.font-regular 37,500
             ' &nbsp;per founder. For a
-            span.font-regular 1L
+            span.font-regular 2,00,000
             ' &nbsp;worth course.
-          a href="#" class= 'btn-link'
+          a.btn-link href='#' data-toggle="modal" data-target="#basic-fee"
             | View More
       .col-md-12
         .fee-box.m-t-2
@@ -359,33 +359,33 @@
               h3
                 ' 2.5%
               p
-                | of funding round on successful funding.
+                | arranger's fee on a funding introduction.
 
             li.success-fee-box
               h3 5%
               p
-                | of funding round on successful funding.
+                | lead fee (for 3 years) on a businesss lead.
 
             li.success-fee-box
               h3 10%
               p
-                | of funding round on successful funding.
+                | of salary received (for the 1<sup>st</sup> year) on hire.
 
             li.success-fee-box
               h3 20%
               p
-                | of funding round on successful funding.
+                | of combined compensation on an acqui-hire.
 
             li.success-fee-box
               h3 30%
               p
-                | of funding round on successful funding.
+                | investment discount on up to 30% of any funding round.
 
           a href="#" class= 'btn-link'
             | View More
 
 
-#graduatesVideo.modal.fade.graduates-video aria-hidden="true" aria-labelledby="" role="dialog" tabindex="-1"
+#graduatesVideo.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content
       .modal-header
@@ -393,3 +393,46 @@
           span aria-hidden="true" &times;
       .modal-body
         iframe.video-frame src="https://www.youtube.com/embed/KufIL6ZS1lk?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
+
+#basic-fee.modal.fade aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+        h4.modal-title Fees
+      .modal-body
+        h4 Application Fee
+
+        ul
+          li
+            ' The Application Fee is a non-refundable ₹1000 per founder. Since SV.CO accepts between 3 and 5 founders
+            | in a team, you pay between ₹3000 and ₹5000.
+          li
+            ' The fee is just for one application. You can apply to SV.CO any number of times, and pay the application
+            | fee due at that time.
+          li There is no financial support for this fee.
+
+        h4 Program Fee
+
+        ul
+          li
+            ' The Program Fee is ₹37,500 per founder. Since SV.CO accepts between three and five founders in a team,
+            | you pay between ₹1,12,500 and ₹1,87,500 if you are accepted.
+          li
+            ' For the benefits you get from the program, visit the #{link_to 'main apply page', apply_index_path} and
+            | the #{link_to 'tour page', apply_tour_path}.
+          li
+            ' All costs of the Silicon Valley visit for one founder, including travel, tickets and accomodation (but not
+            | food) is included in the Program Fee.
+          li
+            ' Refund: If you drop out of the program within 2 months of program start (because of any
+            ' reason), you&apos;ll receive 100% of the application fee as a refund. After 2 months, you will not receive
+            | any refund.
+          li
+            ' The cost to run this program and take founders to Silicon Valley is at least ₹2,00,000 per founder.
+            ' Because this is one of the initial batches at SV.CO, for a team of average 4 members, we are offering at
+            | least a 75% discount.
+          li
+            ' We offer financial support for this fee for founders from financially weak backgrounds. To know more,
+            | write to #{mail_to 'help@sv.co'}.

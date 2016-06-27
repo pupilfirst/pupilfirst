@@ -1,7 +1,7 @@
 .error.text-center
   = image_tag 'errors/400.png', class: 'img-responsive'
   .title
-    | HTTP 406 - You requested an invalid format.
+    | HTTP 422 - Unprocessable Entity
   .description
-    ' If you reached this page by clicking on one of our links, please contact us on our
+    ' If you reached this page by submitting one of our forms, please contact us on our
     | #{link_to 'Public Slack Channel', about_slack_url}.

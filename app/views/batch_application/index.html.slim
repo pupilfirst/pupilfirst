@@ -15,7 +15,7 @@
         ' while in college &amp; get a chance
         br
         ' to visit Silicon Valley
-          
+
       - if @batches_open.present?
         - @batches_open.each do |batch|
           = link_to 'Start Application', apply_batch_path(batch: batch.batch_number), class: 'btn btn-primary btn-md text-uppercase'
@@ -34,7 +34,7 @@
     .row
       h3.text-xs-center.content-head
         span.content-title-icon.graduated-icon
-        | Graduated Startups and Founders 
+        | Graduated Startups and Founders
       .graduation-carousel
         .slide-item
           a.graduate-thumbnail data-toggle="modal" href="#graduatesVideo"
@@ -44,7 +44,7 @@
               | Kallidil Kalidasan
             p
               | Placed at Freecharge
-              
+
         .slide-item
           a.graduate-thumbnail data-toggle="modal" href="#graduatesVideo"
             = image_tag 'apply/graduation-thumbnail-1.png'
@@ -53,7 +53,7 @@
               | Kallidil Kalidasan
             p
               | Placed at Freecharge
-            
+
         .slide-item
           a.graduate-thumbnail data-toggle="modal" href="#graduatesVideo"
             = image_tag 'apply/graduation-thumbnail-1.png'
@@ -80,9 +80,9 @@
         | The Program
       .program-video.center-block.text-xs-center
         iframe.program-video-frame src="" frameborder="0" allowfullscreen="allowfullscreen"
-        
+
       .benefits-section.center-block.text-xs-center
-        .col-md-6  
+        .col-md-6
           .media.center-block
             .media-left
               .media-object
@@ -116,7 +116,7 @@
                 = image_tag 'apply/program-icons/timeline-icon.svg'
             .media-body
               h5.media-heading
-                | Verified Public Timeline 
+                | Verified Public Timeline
               p
                 | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.
           .media.center-block
@@ -128,7 +128,7 @@
                 | Target-based Guided Learning
               p
                 | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.
-        .col-md-6  
+        .col-md-6
           .media.center-block
             .media-left
               .media-object
@@ -137,7 +137,7 @@
               h5.media-heading
                 | Dynamic Founder Profiles
               p
-                | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.      
+                | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.
           .media.center-block
             .media-left
               .media-object
@@ -164,7 +164,7 @@
               h5.media-heading
                 | Karma Points-based Leaderboard System
               p
-                | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.  
+                | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.
           .media.center-block
             .media-left
               .media-object
@@ -174,7 +174,7 @@
                 | Ad&ndash;hoc Help Wanted Requests
               p
                 | Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna.
-                
+
         a href="#" class= 'btn btn-primary btn-md text-uppercase tour-link'
           | TAKE A TOUR
 .program-partners
@@ -203,21 +203,21 @@
             = image_tag 'talent/freecharge-logo.png', class: "img-fluid"
           .card-block
             p.card-text Graduation Partner
-            
+
       .col-lg-2.col-md-3.col-sm-4
         .card.center-block
           .image-block
             = image_tag 'talent/askme-logo.png', class: "img-fluid"
           .card-block
             p.card-text Graduation Partner
-            
+
       .col-lg-2.col-md-3.col-sm-4
         .card.center-block
           .image-block
             = image_tag 'talent/ola-logo.png', class: "img-fluid"
           .card-block
             p.card-text Graduation Partner
-            
+
       .col-lg-2.col-md-3.col-sm-4
         .card.center-block
           .image-block
@@ -231,7 +231,7 @@
             = image_tag 'talent/microsoft-ventures-logo.png'
           .card-block
             p.card-text Graduation Partner
-            
+
       .col-lg-2.col-md-3.col-sm-4
         .card.center-block
           .image-block
@@ -252,14 +252,14 @@
             = image_tag 'talent/Flat6labs-logo.png', class: "img-fluid"
           .card-block
             p.card-text Graduation Partner
-            
+
       .col-lg-2.col-md-3.col-sm-4
         .card.center-block
           .image-block
             = image_tag 'talent/Goodmethods-logo.png', class: "img-fluid"
           .card-block
             p.card-text Graduation Partner
-            
+
       .col-lg-2.col-md-3.col-sm-4
         .card.center-block
           .image-block
@@ -279,27 +279,7 @@
             | Completely impact multifunctional processes and wireless supply chains?
           p
             ' Dynamically engage business meta-services for market-driven data.
-            | Collaboratively restore cross-platform users before client-centered manufactured products. 
-        li
-          h5
-            | Assertively evolve long-term high-impact vortals through visionary solutions?
-          p
-            ' Professionally harness standardized portals vis-a-vis resource maximizing deliverables.
-            | Continually coordinate stand-alone applications rather than virtual communities.
-        li
-          h5
-            | Dynamically optimize fully researched results before stand-alone human capital?
-          p
-            ' Dynamically engage business meta-services for market-driven data.
-            | Collaboratively restore cross-platform users before client-centered manufactured products. 
-    .col-md-6
-      ul
-        li
-          h5
-            | Completely impact multifunctional processes and wireless supply chains?
-          p
-            ' Dynamically engage business meta-services for market-driven data.
-            | Collaboratively restore cross-platform users before client-centered manufactured products. 
+            | Collaboratively restore cross-platform users before client-centered manufactured products.
         li
           h5
             | Assertively evolve long-term high-impact vortals through visionary solutions?
@@ -312,8 +292,28 @@
           p
             ' Dynamically engage business meta-services for market-driven data.
             | Collaboratively restore cross-platform users before client-centered manufactured products.
-            
-.application-fee  
+    .col-md-6
+      ul
+        li
+          h5
+            | Completely impact multifunctional processes and wireless supply chains?
+          p
+            ' Dynamically engage business meta-services for market-driven data.
+            | Collaboratively restore cross-platform users before client-centered manufactured products.
+        li
+          h5
+            | Assertively evolve long-term high-impact vortals through visionary solutions?
+          p
+            ' Professionally harness standardized portals vis-a-vis resource maximizing deliverables.
+            | Continually coordinate stand-alone applications rather than virtual communities.
+        li
+          h5
+            | Dynamically optimize fully researched results before stand-alone human capital?
+          p
+            ' Dynamically engage business meta-services for market-driven data.
+            | Collaboratively restore cross-platform users before client-centered manufactured products.
+
+.application-fee
   .container
     h3.text-xs-center.content-head
       span.content-title-icon.fees-icon
@@ -326,9 +326,8 @@
           h3.center-block
             i.fa.fa-inr
             span.font-regular 1,000
-            ' &nbsp;per founder. For
-            span.font-regular 4
-            | &nbsp;tries.
+            br
+            | per founder.
           a href="#" class= 'btn-link'
             | View More
       .col-md-6
@@ -347,29 +346,29 @@
         .fee-box.m-t-2
           h4.secondary-head
             | Success Fee
-        
+
           ul.list-unstyled.m-b-0
             li.success-fee-box
               h3
                 ' 2.5%
               p
                 | of funding round on successful funding.
-          
+
             li.success-fee-box
               h3 5%
               p
                 | of funding round on successful funding.
-          
+
             li.success-fee-box
               h3 10%
               p
                 | of funding round on successful funding.
-          
+
             li.success-fee-box
               h3 20%
               p
                 | of funding round on successful funding.
-          
+
             li.success-fee-box
               h3 30%
               p
@@ -377,13 +376,13 @@
 
           a href="#" class= 'btn-link'
             | View More
-            
 
-#graduatesVideo.modal.fade.graduates-video aria-hidden="true" aria-labelledby="" role="dialog" tabindex="-1" 
-  .modal-dialog.modal-lg role="document" 
+
+#graduatesVideo.modal.fade.graduates-video aria-hidden="true" aria-labelledby="" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
     .modal-content
       .modal-header
-        button.close aria-label="Close" data-dismiss="modal" type="button" 
+        button.close aria-label="Close" data-dismiss="modal" type="button"
           span aria-hidden="true" &times;
       .modal-body
         iframe.video-frame src="https://www.youtube.com/embed/KufIL6ZS1lk?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"

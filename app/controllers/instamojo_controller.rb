@@ -7,10 +7,10 @@ class InstamojoController < ApplicationController
     raise_not_found if batch_application.blank? || batch_application.paid?
     @payment = Payment.find_or_create_by!(batch_application: batch_application)
 
-    if Rails.env.production?
-      redirect_to @payment.long_url
-    else
+    if Rails.env.development?
       render text: "Redirect to #{@payment.long_url}"
+    else
+      redirect_to @payment.long_url
     end
   end
 

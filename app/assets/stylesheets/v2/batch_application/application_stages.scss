@@ -5,7 +5,7 @@
 }
 .application-stages-head {
   margin: auto;
-  
+
   h1 {
     margin-bottom: 15px;
 
@@ -16,5 +16,24 @@
   h4 {
     max-width: 380px;
     line-height: 1.4;
+  }
+}
+
+.cofounder-section-form {
+  border: 1px solid $gray-border;
+  @include border-radius(5px);
+  background-color: white;
+  padding: 30px 15px;
+  margin-left: 15px;
+  max-width: 500px;
+  position: relative;
+
+  .cofounder-title {
+    position: absolute;
+    border: 1px solid $gray-border;
+    @include border-radius(5px);
+    background-color: white;
+    padding: 5px 10px;
+    top: -17px;
   }
 }

@@ -18,8 +18,9 @@
     h5.form-section-title.text-uppercase.font-semibold.m-b-2
       | email id
     .simple-form-container
-      = simple_form_for @batch_applicant, url: apply_send_sign_in_email_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
-        = f.input :email, placeholder: 'Enter Your email id'
-        .col-sm-offset-3
-          .simple-form-submit
-            = f.submit 'Send one-time application link', class: 'btn btn-primary btn-md text-uppercase'
+      .row
+        = simple_form_for @batch_applicant, url: apply_send_sign_in_email_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
+          = f.input :email, placeholder: 'Enter Your email id'
+          .col-sm-offset-3
+            .simple-form-submit
+              = f.submit 'Send one-time application link', class: 'btn btn-primary btn-md text-uppercase'

@@ -15,13 +15,19 @@
       h4.center-block
         ' The application process for this batch has started. Apply now!
         
-.container        
-  .container-md-center.content-box.m-t-3.m-b-3
-    == render('applications_close_soon', batch: current_batch) if current_batch.applications_close_soon?
+.container
+  == render('applications_close_soon', batch: current_batch) if current_batch.applications_close_soon?
+  div.m-t-3.m-b-3
+    = simple_form_for @form,
+      url: apply_submit_path(batch: params[:batch]),
+      html: { class: 'form-horizontal' },
+      wrapper: :horizontal_form,
+      wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes} do |f|
 
-    .batch-results
-      .result-head
-        = simple_form_for @form, url: apply_submit_path(batch: params[:batch]) do |f|
+      .container-md-center.content-box.m-b-2
+        h5.form-section-title.text-uppercase.font-semibold.m-b-2
+          | Cheklist
+        .simple-form-container
           = f.error :base
 
           = f.input :application_page_read,
@@ -31,49 +37,71 @@
           = f.input :team_lead_consent,
             as: :boolean,
             inline_label: t('batch_application.stage_1.team_lead_consent')
+      .container-md-center.content-box.m-b-2
+        h5.form-section-title.text-uppercase.font-semibold.m-b-2
+          | Team Lead's Details
+        .simple-form-container
+          .row
+            = f.input :university_id,
+              collection: proc { University.grouped_by_location },
+              as: :grouped_select,
+              group_method: :last,
+              value_method: :first,
+              label_method: :last,
+              label: 'University'
 
-          = f.input :university_id,
-            collection: proc { University.grouped_by_location },
-            as: :grouped_select,
-            group_method: :last,
-            value_method: :first,
-            label_method: :last,
-            label: 'Which university does your institute belong to?'
+            = f.input :college, label: "Team Lead’s College"
+            = f.input :state
 
-          = f.input :college, label: "Name of team lead's college"
-          = f.input :state
+            = f.simple_fields_for :team_lead do |t|
+              = t.input :name, label: 'Full name of team lead'
 
-          = f.simple_fields_for :team_lead do |t|
-            = t.input :name, label: 'Full name of team lead'
+              = t.input :email,
+                label: 'Team lead email ID',
+                input_html: { disabled: true }
 
-            = t.input :email,
-              label: 'Team lead email ID',
-              input_html: { disabled: true }
+              = t.input :role,
+                label: "Team lead's role",
+                as: :select,
+                collection: proc { Founder.valid_roles },
+                include_blank: false,
+                label_method: proc { |role| t("role.#{role}") }
 
-            = t.input :role,
-              label: "Team lead's role",
-              as: :select,
-              collection: proc { Founder.valid_roles },
-              include_blank: false,
-              label_method: proc { |role| t("role.#{role}") }
+              = t.input :gender,
+                label: "Team lead's gender",
+                collection: Founder.valid_gender_values,
+                as: :radio_buttons
+      .container-md-center.content-box.m-b-2
+        h5.form-section-title.text-uppercase.font-semibold.m-b-2
+          | Co-founders
+        .simple-form-container
+          .row
+            .cofounder-section-form.m-t-3
+              = f.input :university_id,
+                label: "Number of Co-Founders",
+                collection: proc { University.grouped_by_location },
+                as: :radio_buttons
 
-            = t.input :gender,
-              label: "Team lead's gender",
-              collection: Founder.valid_gender_values,
-              as: :radio_buttons
+              span.cofounder-title.font-semibold Co-founder 1
+              = f.simple_fields_for :cofounders do |c|
+                = c.input :email
+                = c.input :name
 
-          = f.simple_fields_for :cofounders do |c|
-            = c.input :email
-            = c.input :name
+                = c.input :role,
+                  as: :select,
+                  collection: proc { Founder.valid_roles },
+                  include_blank: false,
+                  label_method: proc { |role| t("role.#{role}") }
 
-            = c.input :role,
-              as: :select,
-              collection: proc { Founder.valid_roles },
-              include_blank: false,
-              label_method: proc { |role| t("role.#{role}") }
-
-          = f.input :team_achievement,
-            as: :text,
-            label: 'Mention an achievement you are most proud of as a team'
-
-          = f.submit 'Submit Application', class: 'btn btn-primary'
+      .container-md-center.content-box
+        h5.form-section-title.text-uppercase.font-semibold.m-b-2
+          | Achievement
+        .simple-form-container
+          .row
+            = f.input :team_achievement,
+              as: :text,
+              placeholder: 'Mention an achievement you are most proud of as a team',
+              label: 'Achievement'
+            .col-sm-offset-3
+              .simple-form-submit
+                = f.submit 'Submit Application', class: 'btn btn-primary btn-md text-uppercase'

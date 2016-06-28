@@ -22,18 +22,18 @@ class BatchApplicationController < ApplicationController
         prep_for_stage_1
         render 'batch_application/stage_1', layout: 'application_v2'
       when :application_expired
-        render 'batch_application/stage_1_expired'
+        render 'batch_application/stage_1_expired', layout: 'application_v2'
       when :payment_pending
-        render 'batch_application/stage_1_submitted'
+        render 'batch_application/stage_1_submitted', layout: 'application_v2'
       when :expired
-        render "batch_application/stage_#{applicant_stage_number}_expired"
+        render "batch_application/stage_#{applicant_stage_number}_expired", layout: 'application_v2'
       when :rejected
-        render "batch_application/stage_#{applicant_stage_number}_rejection"
+        render "batch_application/stage_#{applicant_stage_number}_rejection", layout: 'application_v2'
       when :submitted
-        render "batch_application/stage_#{current_stage_number}_submitted"
+        render "batch_application/stage_#{current_stage_number}_submitted", layout: 'application_v2'
       else
         send "prep_for_stage_#{current_stage_number}"
-        render "batch_application/stage_#{current_stage_number}"
+        render "batch_application/stage_#{current_stage_number}", layout: 'application_v2'
     end
   end
 
@@ -58,6 +58,7 @@ class BatchApplicationController < ApplicationController
   end
 
   def submission_for_stage_1
+    @skip_container = true
     batch_application = BatchApplication.new(
       team_lead: current_batch_applicant,
       batch: current_batch,
@@ -70,7 +71,7 @@ class BatchApplicationController < ApplicationController
       @form.save
       redirect_to apply_batch_path(batch: params[:batch])
     else
-      render 'batch_application/stage_1'
+      render 'batch_application/stage_1', layout: 'application_v2'
     end
   end
 
@@ -91,7 +92,7 @@ class BatchApplicationController < ApplicationController
       @form.save
       redirect_to apply_batch_path(batch: params[:batch])
     else
-      render 'batch_application/stage_2'
+      render 'batch_application/stage_2', layout: 'application_v2'
     end
   end
 

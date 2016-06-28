@@ -2,39 +2,45 @@
   title SV.CO Apply Now
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
 
-.container
-  .apply-banner
-    .row
-      .col-md-4
-        h1 Application submitted. #{current_application.paid? ? 'Payment accepted' : 'Payment pending'}
-.apply-container
+.secondary-banner.application-stages-banner
   .container
-    .row
-      .col-md-7.col-md-push-5
-        == render('applications_close_soon', batch: current_batch) if current_batch.applications_close_soon?
+    .application-stages-head.text-xs-center
+      h1 Application submitted.
+      h4.center-block #{current_application.paid? ? 'Payment accepted' : 'Payment pending'}
+.container        
+  == render('applications_close_soon', batch: current_batch) if current_batch.applications_close_soon?
+  .container-md-center.content-box.m-t-3.m-b-3.apply-submitted
+    - if current_application.paid?
+      h3.text-xs-center
+        ' Your application has been received, and
+        span.brand-primary.font-semibold your payment has been accepted.
+        ' &nbsp;The next stage of the application process should begin on
+        span.brand-secondary.font-semibold #{next_stage_date}.
+        ' &nbsp;We will send an email to your
+        | registered email address when this occurs.
+    - else
+      h3.text-xs-center
+        ' Your application data has been stored.
+        br
+        ' You now need to
+        span.brand-secondary.font-semibold pay the applcation fee.
+      
+      .submit-fee-section.clearfix.m-t-2
+        .col-md-5.applicants-list
+          h5.text-uppercase.font-semibold Applicants
 
-        .batch-results.margin-bottom-20
-          .result-head
-            - if current_application.paid?
-              p
-                ' Your application has been received, and your payment has been accepted. The next stage of the
-                ' application process should begin on <strong>#{next_stage_date}</strong>. We will send an email to your
-                | registered email address when this occurs.
-            - else
-              p
-                ' Your application data has been stored. You now need to pay the applcation fee.
+          ol.font-semibold
+            li #{current_batch_applicant.name} &mdash; Rs. #{BatchApplicant::APPLICATION_FEE}
 
-              h3 Applicants
+            - current_application.cofounders.each do |cofounder|
+              li #{cofounder.name} &mdash; Rs. #{BatchApplicant::APPLICATION_FEE}
+        .col-md-7.paywith-instamojo
+          div
+            h3.m-b-2
+              ' You need to pay
+              span.brand-secondary.font-semibold
+                ' Rs. #{current_application.fee},
+                br
+              | to proceed to the next stage.
 
-              ol
-                li #{current_batch_applicant.name} &mdash; Rs. #{BatchApplicant::APPLICATION_FEE}
-
-                - current_application.cofounders.each do |cofounder|
-                  li #{cofounder.name} &mdash; Rs. #{BatchApplicant::APPLICATION_FEE}
-
-              p
-                ' You need to pay Rs. #{current_application.fee}, to proceed to the next stage.
-
-              = button_to payment_button_message(current_application), instamojo_initiate_payment_path(current_application)
-
-      == render 'left_bar'
+            = button_to payment_button_message(current_application), instamojo_initiate_payment_path(current_application), class: 'btn btn-primary btn-md text-uppercase'

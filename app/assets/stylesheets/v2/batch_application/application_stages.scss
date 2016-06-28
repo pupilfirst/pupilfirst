@@ -37,3 +37,48 @@
     top: -17px;
   }
 }
+.apply-submitted {
+  h3 {
+    line-height: 1.3;
+  }
+}
+.submit-fee-section {
+  border: 1px solid $gray-border;
+  @include border-radius(5px);
+  box-shadow: $box-shadow;
+  overflow: hidden;
+
+
+  .applicants-list {
+    background-color: $light-secondary;
+    color: white;
+    padding: 30px;
+
+    h5 {
+      color: white;
+      border-bottom: 1px solid #ffffff;
+      padding-bottom: 10px;
+    }
+    ol {
+      margin: 0;
+      padding-left: 15px;
+      line-height: 2.5;
+      letter-spacing: 0.03rem;
+    }
+  }
+  .paywith-instamojo {
+    padding: 30px;
+    position: relative;
+
+    @include media-breakpoint-up(md) {
+      div {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+  @include media-breakpoint-up(md) {
+    display: flex;
+  }
+}

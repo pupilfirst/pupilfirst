@@ -44,8 +44,9 @@ p {
   outline: none;
   border: 0;
   color: white;
+  font-weight: $font-semibold;
   font-size: $btn-text-size;
-  letter-spacing: 0.03rem;
+  letter-spacing: 0.04rem;
 
   &,
   &:active,
@@ -109,7 +110,19 @@ p {
 
 
 // **********  Custom style **********
-
+// Brand Color classes
+.brand-primary {
+  color: $brand-primary;
+}
+.brand-secondary {
+  color: $brand-secondary;
+}
+.light-primary {
+  color: $light-primary;
+}
+.light-secondary {
+  color: $light-secondary;
+}
 // Default container style with border
 .container-md-center {
   @include center-block;
@@ -163,6 +176,7 @@ p {
     }
     .radio-inline {
       padding-top: 7px;
+      margin-right: 20px;
     }
     .form-control {
       font-size: 0.875rem;

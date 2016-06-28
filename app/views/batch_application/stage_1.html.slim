@@ -76,14 +76,15 @@
           | Co-founders
         .simple-form-container
           .row
-            .cofounder-section-form.m-t-3
-              = f.input :university_id,
-                label: "Number of Co-Founders",
-                collection: proc { University.grouped_by_location },
-                as: :radio_buttons
-
-              span.cofounder-title.font-semibold Co-founder 1
-              = f.simple_fields_for :cofounders do |c|
+            = f.input :cofounder_count,
+              as: :radio_buttons,
+              collection: [2, 3, 4],
+              label: 'Count of co-founders'
+            
+            = f.simple_fields_for :cofounders do |c|
+              .cofounder-section-form.m-t-3
+                span.cofounder-title.font-semibold
+                  | Co-founder #{c.index + 1}
                 = c.input :email
                 = c.input :name
 

@@ -6,6 +6,7 @@ class ApplicationStageOneForm < Reform::Form
   property :application_page_read, virtual: true, validates: { acceptance: true }
   property :team_lead_consent, virtual: true, validates: { acceptance: true }
   properties :university_id, :college, :state, :team_achievement, validates: { presence: true }
+  property :cofounder_count, virtual: true, type: Integer, validates: { inclusion: [2, 3, 4] }
 
   property :team_lead do
     property :name, validates: { presence: true }

@@ -28,13 +28,16 @@ class InstamojoController < ApplicationController
     return unless authentic_request?
     payment = Payment.find_by instamojo_payment_request_id: params[:payment_request_id]
 
-    payment.update(
+    update_params = {
       instamojo_payment_id: params[:payment_id],
       instamojo_payment_status: params[:status],
       fees: params[:fees],
       webhook_received_at: Time.now
-    )
+    }
 
+    update_params[:instamojo_payment_request_status] = 'Completed' if params[:status] == 'Credit'
+
+    payment.update update_params
     payment.peform_post_payment_tasks!
 
     render nothing: true

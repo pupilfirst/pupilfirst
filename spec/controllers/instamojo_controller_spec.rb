@@ -23,6 +23,11 @@ describe InstamojoController do
   end
 
   describe 'POST initiate_payment' do
+    before :each do
+      # Log in the batch applicant.
+      request.cookies['applicant_token'] = batch_application.team_lead.token
+    end
+
     it 'creates a payment entry' do
       post :initiate_payment, id: batch_application.id
       last_payment = Payment.last

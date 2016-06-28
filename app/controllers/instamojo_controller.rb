@@ -3,8 +3,10 @@ class InstamojoController < ApplicationController
 
   # POST /instamojo/initiate_payment/:id
   def initiate_payment
-    batch_application = BatchApplication.find_by id: params[:id]
+    raise_not_found if current_batch_applicant.blank?
+    batch_application = current_batch_applicant.batch_applications.last
     raise_not_found if batch_application.blank? || batch_application.paid?
+
     @payment = Payment.find_or_create_by!(batch_application: batch_application)
 
     if Rails.env.development?

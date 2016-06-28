@@ -102,7 +102,7 @@ Svapp::Application.routes.draw do
 
   # Redirect + webhook from Instamojo
   scope 'instamojo', as: 'instamojo', controller: 'instamojo' do
-    post 'initiate_payment/:id', action: 'initiate_payment', as: 'initiate_payment'
+    post 'initiate_payment'
     get 'redirect'
     post 'webhook'
   end

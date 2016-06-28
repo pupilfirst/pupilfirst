@@ -1,21 +1,23 @@
 - content_for :head
-  title SV.CO Transparency Initiative
+  title SV.CO - The Story
   meta name="description" content="This is SV.CO's Transparency initiative, a mechanism to be open and public about our finances, selection processes and utilization of government grants."
 
 .transparency-banner
   .container
     .banner-text
-      h1.page-header.header-light Transparency
+      h1.page-header.header-light The Story of Startup Village
       p.transparency-introduction
-        ' This is SV.CO's Transparency initiative, a mechanism to be open and public about our finances, selection processes and utilization of government grants.
+        ' We have written a small book to talk about the story of Startup Village from its origins as a small incubator based in Kochi to the world’s first digital student startup platform.
 
 .transparency-content
   .container
     .transparency-intro.clearfix
       .col-sm-8
         #transparency-intiative.document-section
-          p Through our not-for-profit entity, we receive access to Government and Private funds as grants. As part of a public-private partnership with state and national governments, we also steward entrepreneurship-development and founder-training programs across India. This receives understandable scrutiny from the media and general public, and through our transparency initiative, we want to proactively share  information about Startup Village.
-          p This is still a work-in-progress. If you'd like to see more information here, please write to <a href="mailto:help@sv.co">help@sv.co</a>.
+          p The Story of Startup Village is  a small book written by Founder & Chairman Sanjay Vijayakumar. It talks about his entrepreneurship journey, starting from his days as the founder of a small company in Thiruvananthapuram to founding Startup Village.
+          / TODO: remove temporary 'download-btn' class below when page is upgraded to new custom theme
+          = link_to 'Download the Book', 'https://sv.co/x3s9f', class: 'btn btn-primary btn-md text-uppercase download-book-btn', target: '_blank'
+          p The resources below supplement the book with additional detail. If you’d like to see more content added here, please write to <a href="mailto:help@sv.co">help@sv.co</a>.
       .col-sm-4
         .transparency-initiative-image
           = image_tag 'transparency/transparency-intro-image.png'

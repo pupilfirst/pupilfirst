@@ -5,7 +5,7 @@ class HomeController < ApplicationController
     @sitewide_notice = true if %w(startupvillage.in registration).include?(params[:redirect_from])
   end
 
-  def transparency
+  def story
     @skip_container = true
   end
 

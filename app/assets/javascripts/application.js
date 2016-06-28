@@ -43,6 +43,6 @@
 //= require timeline_events
 //= require resources
 //= require about
-//= require transparency
+//= require story
 //= require talent
 //= require batch_applications

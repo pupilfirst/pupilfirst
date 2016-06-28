@@ -98,7 +98,6 @@ describe InstamojoController do
         fees: '43.21',
         mac: computed_mac
 
-      puts "#{response.status} @!#!@#!@#!@ #!@#"
       payment.reload
 
       expect(payment.instamojo_payment_id).to eq(payment_id)

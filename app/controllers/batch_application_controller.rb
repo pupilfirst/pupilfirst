@@ -168,14 +168,6 @@ class BatchApplicationController < ApplicationController
     @current_stage_number ||= current_stage&.number.to_i
   end
 
-  # Returns currently 'signed in' application founder.
-  def current_batch_applicant
-    @current_batch_applicant ||= begin
-      return if cookies[:applicant_token].blank?
-      BatchApplicant.find_by token: cookies[:applicant_token]
-    end
-  end
-
   def applicant_stage
     @applicant_stage ||= begin
       if current_application.blank?
@@ -197,7 +189,6 @@ class BatchApplicationController < ApplicationController
   end
 
   helper_method :current_batch
-  helper_method :current_batch_applicant
   helper_method :current_stage
   helper_method :current_application
 

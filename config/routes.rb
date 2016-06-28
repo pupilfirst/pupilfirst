@@ -102,7 +102,7 @@ Svapp::Application.routes.draw do
 
   # Redirect + webhook from Instamojo
   scope 'instamojo', as: 'instamojo', controller: 'instamojo' do
-    post 'initiate_payment/:id', action: 'initiate_payment', as: 'initiate_payment'
+    post 'initiate_payment'
     get 'redirect'
     post 'webhook'
   end
@@ -110,8 +110,11 @@ Svapp::Application.routes.draw do
   # Custom founder profile page.
   get 'founders/:slug', to: 'founders#founder_profile', as: 'founder_profile'
 
-  # Custom transparency page, accessed via about pages.
-  get 'transparency', as: 'transparency', to: 'home#transparency'
+  # Story of startup village, accessed via about pages.
+  get 'story', as: 'story', to: 'home#story'
+
+  # Previous transparency page re-directed to story
+  get 'transparency', to: redirect('/story')
 
   # Activity from startups.
   get 'activity', as: 'activity', to: 'timeline_events#activity'

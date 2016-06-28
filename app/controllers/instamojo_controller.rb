@@ -3,14 +3,16 @@ class InstamojoController < ApplicationController
 
   # POST /instamojo/initiate_payment/:id
   def initiate_payment
-    batch_application = BatchApplication.find_by id: params[:id]
+    raise_not_found if current_batch_applicant.blank?
+    batch_application = current_batch_applicant.batch_applications.last
     raise_not_found if batch_application.blank? || batch_application.paid?
+
     @payment = Payment.find_or_create_by!(batch_application: batch_application)
 
-    if Rails.env.production?
-      redirect_to @payment.long_url
-    else
+    if Rails.env.development?
       render text: "Redirect to #{@payment.long_url}"
+    else
+      redirect_to @payment.long_url
     end
   end
 
@@ -28,13 +30,16 @@ class InstamojoController < ApplicationController
     return unless authentic_request?
     payment = Payment.find_by instamojo_payment_request_id: params[:payment_request_id]
 
-    payment.update(
+    update_params = {
       instamojo_payment_id: params[:payment_id],
       instamojo_payment_status: params[:status],
       fees: params[:fees],
       webhook_received_at: Time.now
-    )
+    }
 
+    update_params[:instamojo_payment_request_status] = 'Completed' if params[:status] == 'Credit'
+
+    payment.update update_params
     payment.peform_post_payment_tasks!
 
     render nothing: true

@@ -333,3 +333,29 @@
   background-image: asset-url("transparency/circle-arrow.png");
   background-repeat: no-repeat;
 }
+
+// temporary class, to be removed when page is updated to use custom theme
+.download-book-btn {
+  border-radius: 2em;
+  background-color: #32B475;
+  border: 0;
+  padding: 12px 24px;
+  margin-bottom: 10px;
+
+  &:hover {
+    background-color: #0F9D58;
+    color: white;
+  }
+
+  &,
+  &:active,
+  &.active {
+    &:focus,
+    &.focus {
+      outline: none;
+      color: white;
+      background-color: #057F44;
+      box-shadow: inset 0 3px 3px 0 rgba(0, 0, 0, 0.5);
+    }
+  }
+}

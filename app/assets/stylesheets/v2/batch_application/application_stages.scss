@@ -77,8 +77,39 @@
         transform: translateY(-50%);
       }
     }
+    @include media-breakpoint-down(sm) {
+      text-align: center;
+    }
   }
   @include media-breakpoint-up(md) {
     display: flex;
+  }
+}
+.application-close-alert {
+  h4 {
+    line-height: 1.5;
+
+    strong {
+      font-weight: $font-semibold;
+      color: $brand-secondary;
+    }
+  }
+  .close-alert-icon {
+    border: 1px solid $gray-border;
+    border-width: 0 1px 0 0;
+
+    @include media-breakpoint-down(sm) {
+      border-width: 0;
+      padding-bottom: 15px;
+      margin-bottom: 10px;
+    }
+
+    i {
+      font-size: 5rem;
+      color: $light-secondary;
+    }
+  }
+  @include media-breakpoint-down(sm) {
+    text-align: center;
   }
 }

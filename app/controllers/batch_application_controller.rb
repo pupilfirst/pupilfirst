@@ -1,13 +1,13 @@
 class BatchApplicationController < ApplicationController
   before_action :lock_under_feature_flag
   before_action :ensure_applicant_is_signed_in, only: :apply
+  layout 'application_v2'
 
   # GET /apply
   def index
     set_instance_variables
     @batches_open = Batch.open_for_applications
     @batches_ongoing = Batch.applications_ongoing
-    render layout: 'application_v2'
   end
 
   # GET /apply/:batch
@@ -20,20 +20,20 @@ class BatchApplicationController < ApplicationController
     case applicant_status
       when :application_pending
         prep_for_stage_1
-        render 'batch_application/stage_1', layout: 'application_v2'
+        render 'batch_application/stage_1'
       when :application_expired
-        render 'batch_application/stage_1_expired', layout: 'application_v2'
+        render 'batch_application/stage_1_expired'
       when :payment_pending
-        render 'batch_application/stage_1_submitted', layout: 'application_v2'
+        render 'batch_application/stage_1_submitted'
       when :expired
-        render "batch_application/stage_#{applicant_stage_number}_expired", layout: 'application_v2'
+        render "batch_application/stage_#{applicant_stage_number}_expired"
       when :rejected
-        render "batch_application/stage_#{applicant_stage_number}_rejection", layout: 'application_v2'
+        render "batch_application/stage_#{applicant_stage_number}_rejection"
       when :submitted
-        render "batch_application/stage_#{current_stage_number}_submitted", layout: 'application_v2'
+        render "batch_application/stage_#{current_stage_number}_submitted"
       else
         send "prep_for_stage_#{current_stage_number}"
-        render "batch_application/stage_#{current_stage_number}", layout: 'application_v2'
+        render "batch_application/stage_#{current_stage_number}"
     end
   end
 
@@ -71,7 +71,7 @@ class BatchApplicationController < ApplicationController
       @form.save
       redirect_to apply_batch_path(batch: params[:batch])
     else
-      render 'batch_application/stage_1', layout: 'application_v2'
+      render 'batch_application/stage_1'
     end
   end
 
@@ -92,7 +92,7 @@ class BatchApplicationController < ApplicationController
       @form.save
       redirect_to apply_batch_path(batch: params[:batch])
     else
-      render 'batch_application/stage_2', layout: 'application_v2'
+      render 'batch_application/stage_2'
     end
   end
 

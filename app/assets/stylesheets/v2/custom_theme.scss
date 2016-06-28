@@ -47,6 +47,7 @@ p {
   font-weight: $font-semibold;
   font-size: $btn-text-size;
   letter-spacing: 0.04rem;
+  white-space: normal;
 
   &,
   &:active,
@@ -173,6 +174,12 @@ p {
       @include media-breakpoint-down(xs) {
         margin-bottom: 10px;
       }
+    }
+    select {
+      appearance: none;
+      position: relative;
+      background: asset-url('down-arrow.svg') no-repeat 97% 50%;
+      background-size: 15px 15px;
     }
     .radio-inline {
       padding-top: 7px;

@@ -2,19 +2,14 @@
   title SV.CO Apply Now
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
 
-.container
-  .apply-banner
-    .row
-      .col-md-4
-        h1 Coding and hustling submissions accepted!
-.apply-container
+.secondary-banner.application-stages-banner
   .container
-    .row
-      .col-md-7.col-md-push-5
-        .batch-results.margin-bottom-20
-          .result-head
-            p
-              ' Your coding and hustling submissions has been received. The SV.CO team will take a look at it soon as
-              | possible, and results for all entries will be published by <strong>#{next_stage_date}</strong>.
-
-      == render 'left_bar'
+    .application-stages-head.text-xs-center
+      h1 Coding and hustling submissions accepted!
+.container
+  .container-md-center.content-box.m-t-3.m-b-3
+    h4
+      ' Your coding and hustling submissions has been received. The SV.CO team will take a look at it soon as
+      ' possible, and results for all entries will be published by
+      span.brand-primary.font-semibold 
+        | &nbsp;#{next_stage_date}.

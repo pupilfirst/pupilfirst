@@ -6,28 +6,26 @@
   title SV.CO Apply Now
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
 
-.container
-  .apply-banner
-    .row
-      .col-md-4
-        h1 Coding and Hustling tests are live!
-        p.header-light
-          ' You've made it in! Now prove that you've got what it takes.
-.apply-container
+.secondary-banner.application-stages-banner
   .container
-    .row
-      .col-md-7.col-md-push-5
-        .batch-results
-          .result-head
-            = simple_form_for @form, url: apply_submit_path(batch: params[:batch]) do |f|
-              = f.input :git_repo_url,
-                label: 'Full URL to public Git repository (on Github or BitBucket)',
-                placeholder: 'https://github.com/username/repository'
+    .application-stages-head.text-xs-center
+      h1 Coding and Hustling tests are live!
+      h4.center-block
+        ' You've made it in! Now prove that you've got what it takes.
+.container
+  .container-md-center.content-box.m-t-3.m-b-3
+    h5.form-section-title.text-uppercase.font-semibold.m-b-2
+      | Coding and Hustling tests
+    .simple-form-container
+      .row
+        = simple_form_for @form, url: apply_submit_path(batch: params[:batch]), html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
+          = f.input :git_repo_url,
+            label: 'Full URL to public Git repository (on Github or BitBucket)',
+            placeholder: 'https://github.com/username/repository'
 
-              = f.input :video_url,
-                label: 'Full URL to public hustling video (on Youtube or Vimeo)',
-                placeholder: 'https://www.youtube.com/watch?v=abcd1234'
-
-              = f.submit 'Submit your entries', class: 'btn btn-primary'
-
-      == render 'left_bar'
+          = f.input :video_url,
+            label: 'Full URL to public hustling video (on Youtube or Vimeo)',
+            placeholder: 'https://www.youtube.com/watch?v=abcd1234'
+          .col-sm-offset-3
+            .simple-form-submit
+              = f.submit 'Submit your entries', class: 'btn btn-primary btn-md text-uppercase'

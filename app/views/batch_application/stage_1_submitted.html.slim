@@ -7,7 +7,7 @@
     .application-stages-head.text-xs-center
       h1 Application submitted.
       h4.center-block #{current_application.paid? ? 'Payment accepted' : 'Payment pending'}
-.container        
+.container
   == render('applications_close_soon', batch: current_batch) if current_batch.applications_close_soon?
   .container-md-center.content-box.m-t-3.m-b-3.apply-submitted
     - if current_application.paid?

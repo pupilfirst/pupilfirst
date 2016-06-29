@@ -101,6 +101,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-perfect-scrollbar' # Minimalistic but perfect custom scrollbar plugin
   gem 'rails-assets-slick-carousel' # the last carousel you'll ever need http://kenwheeler.github.io/slick
   gem 'rails-assets-tether' # A positioning engine to make overlays, tooltips and dropdowns better
+  gem 'rails-assets-readmore' # A lightweight jQuery plugin for collapsing and expanding long blocks of text with "Read more" and "Close" links.
 end
 
 group :development do

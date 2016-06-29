@@ -33,6 +33,7 @@
 //= require intro.js/intro.js
 //= require perfect-scrollbar
 //= require slick-carousel/slick.js
+//= require readmore
 
 // Shared
 // require _shared

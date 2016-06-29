@@ -34,6 +34,14 @@ stopVideosOnModalClose = ->
   $('.graduates-video').on 'hidden.bs.modal', (event) ->
     $('.graduates-video iframe').attr 'src', $('.graduates-video iframe').attr('src')
 
+readmoreFAQ = ->
+  $('.read-more').readmore
+    speed: 200
+    collapsedHeight: 700
+    lessLink: '<a class="read-less-link" href="#">Read Less</a>'
+    moreLink: '<a class="read-more-link" href="#">Read More</a>'
+
 $(document).on 'page:change', setupGraduationCarousel
 $(document).on 'page:change', avoidwidowsTypography
 $(document).on 'page:change', stopVideosOnModalClose
+$(document).on 'page:change', readmoreFAQ

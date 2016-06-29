@@ -263,7 +263,6 @@
   background-color: white;
   border: 1px solid $gray-border;
   border-width: 1px 0;
-  padding-bottom: 20px;
 
   ul {
     li {
@@ -280,6 +279,12 @@
         top: 6px;
       }
     }
+  }
+  h4 {
+    margin-left: 15px;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid $gray-border;
   }
   h5 {
     display: inline-block;
@@ -426,4 +431,7 @@
       height: 500px;
     }
   }
+}
+.eq-height {
+  display: flex;
 }

@@ -188,7 +188,6 @@ p {
     .form-control {
       font-size: 0.875rem;
       padding: 0.5rem 0.75rem;
-      border-color: $gray-border;
 
       &:focus {
         border-color: lighten($light-secondary, 20%);
@@ -207,6 +206,7 @@ p {
   }
   .simple-form-submit {
     margin-left: 15px;
+
     @include media-breakpoint-down(sm) {
       margin-left: 0;
     }
@@ -253,4 +253,17 @@ p {
     bottom: -20px;
     transform: translateX(-50%);
   }
+}
+.read-less-link, .read-more-link {
+  text-transform: uppercase;
+  font-weight: $font-semibold;
+  text-align: center;
+  padding: 10px;
+  display: inline-block;
+}
+.has-error {
+  @extend .has-danger;
+}
+.help-block {
+  color: red;
 }

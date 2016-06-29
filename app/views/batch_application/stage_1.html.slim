@@ -24,6 +24,14 @@
       wrapper: :horizontal_form,
       wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes} do |f|
 
+      - if f.object.errors.present?
+        .alert.alert-warning.alert-dismissable.fade.in role='alert'
+          button.close type="button" data-dismiss="alert" aria-label="Close"
+            span aria-hidden="true" &times;
+
+          strong There were problems with your submission.
+          | &nbsp;Please check all fields and try again.
+
       .container-md-center.content-box.m-b-2
         h5.form-section-title.text-uppercase.font-semibold.m-b-2
           | Cheklist

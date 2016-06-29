@@ -13,8 +13,8 @@
         span
           | &nbsp;#{current_batch.name} batch!
       h4.center-block
-        ' The application process for this batch has started. Apply now!
-        
+        ' The application process for this batch has started.
+
 .container
   == render('applications_close_soon', batch: current_batch) if current_batch.applications_close_soon?
   div.m-t-3.m-b-3
@@ -80,7 +80,7 @@
               as: :radio_buttons,
               collection: [2, 3, 4],
               label: 'Count of co-founders'
-            
+
             = f.simple_fields_for :cofounders do |c|
               .cofounder-section-form.m-t-3
                 span.cofounder-title.font-semibold

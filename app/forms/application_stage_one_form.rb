@@ -43,6 +43,7 @@ class ApplicationStageOneForm < Reform::Form
   def prepopulate!(options)
     self.team_lead = options[:team_lead]
     self.cofounders = [BatchApplicant.new] * 2
+    self.cofounder_count = 2
   end
 
   def save

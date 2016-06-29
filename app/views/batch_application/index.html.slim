@@ -181,9 +181,7 @@
                 | Ad&ndash;hoc Help Wanted Requests
               p
                 | Every startup is different, so we help founders out with ad&ndash;hoc requests. This could be things like getting in touch with a great investor or help with vetting a client agreement.
-
-        a href="#" class= 'btn btn-primary btn-md text-uppercase tour-link'
-          | TAKE A TOUR
+        = link_to 'take a Tour', tour_path, class: 'btn btn-primary btn-md text-uppercase tour-link'
 .program-partners
   .container
     h3.text-xs-center.content-head
@@ -277,23 +275,23 @@
       .col-lg-2.col-md-3.col-sm-4
         .card.center-block
           .image-block
-            = image_tag 'talent/Flat6labs-logo.png', class: "img-fluid"
+            = image_tag 'apply/aws-logo.png', class: "img-fluid"
           .card-block
-            p.card-text Graduation Partner
+            p.card-text Program Partner
 
       .col-lg-2.col-md-3.col-sm-4
         .card.center-block
           .image-block
-            = image_tag 'talent/Goodmethods-logo.png', class: "img-fluid"
+            = image_tag 'apply/dotco-logo.png'
           .card-block
-            p.card-text Graduation Partner
+            p.card-text Program Partner
 
       .col-lg-2.col-md-3.col-sm-4
         .card.center-block
           .image-block
-            = image_tag 'talent/Kalaaricapital-logo.png', class: "img-fluid"
+            = image_tag 'apply/GTU-logo.png'
           .card-block
-            p.card-text Graduation Partner
+            p.card-text Program Partner
 
 .application-faq.p-b-3
   .container
@@ -397,7 +395,7 @@
                 ' For this batch, we’ve calibrated the fee so that it’s similar
                 ' to a one-semester fee that a lot of private engineering colleges
                 ' ask for. For the same fee, you get a once-in-a-lifetime opportunity.
-                | You can #{link_to 'take the tour', 'https://sv.co/tour'} or listen to our previous founders if you are still not convinced.
+                | You can #{link_to 'take the tour', tour_path} or listen to our previous founders if you are still not convinced.
             li
               h5
                 | If I do not find the program satisfactory, can I get a refund?
@@ -439,7 +437,7 @@
                 ' through three stages of creating a great product: from picking
                 ' an idea, to building a great prototype, and finally showing
                 ' it to real customers for feedback. To get an idea of the program
-                | from application to graduation, #{link_to 'take the tour', 'https://sv.co/tour'}.
+                | from application to graduation, #{link_to 'take the tour', tour_path}.
             li
               h5
                 | What do you mean by 5 years of graduation support?
@@ -455,7 +453,7 @@
               h5
                 | Can you tell me about the faculty I will interact with?
               p
-                ' Sure, #{link_to 'visit our faculty', 'https://sv.co/faculty'} page. You interact with the faculty
+                ' Sure, #{link_to 'visit our faculty', faculty_index_path} page. You interact with the faculty
                 ' through a one-on-one connect request, and you can even
                 | #{link_to 'rate your interaction', 'https://sv.co/faculty/gautham'} through SV.CO.
 
@@ -464,7 +462,7 @@
                 | What exclusive resources will I receive?
               p
                 ' You will receive access to a set of Batch Exclusive material
-                ' through our #{link_to 'Startup Library', 'https://sv.co/library'}. These include Market Analyst
+                ' through our #{link_to 'Startup Library', resources_path}. These include Market Analyst
                 ' reports, pitch sessions &amp; interview recordings of previous
                 ' founders, exclusive material from our partner network, and great
                 ' video content. In addition, we also have Engineering &amp; Product
@@ -549,11 +547,9 @@
   .modal-dialog.modal-lg role="document"
     .modal-content
       .modal-header
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-        h4.modal-title Fixed Fees
+        h5.font-regular.modal-title Fixed Fees
       .modal-body
-        h4 Application Fee
+        h5.font-regular Application Fee
 
         ul
           li
@@ -564,7 +560,7 @@
             | fee due at that time.
           li There is no financial support for this fee.
 
-        h4 Program Fee
+        h5.font-regular Program Fee
 
         ul
           li
@@ -572,7 +568,7 @@
             | you pay between ₹1,12,500 and ₹1,87,500 if you are accepted.
           li
             ' For the benefits you get from the program, visit the #{link_to 'main apply page', apply_index_path} and
-            | the #{link_to 'tour page', apply_tour_path}.
+            | the #{link_to 'tour page', tour_path}.
           li
             ' All costs of the Silicon Valley visit for one founder, including travel, tickets and accomodation (but not
             | food) is included in the Program Fee.
@@ -587,14 +583,15 @@
           li
             ' We offer financial support for this fee for founders from financially weak backgrounds. To know more,
             | write to #{mail_to 'help@sv.co'}.
+      .modal-footer
+        button.btn.btn-sm.btn-secondary.text-uppercase aria-label="Close" data-dismiss="modal" type="button"
+          | Close
 
 #success-fees.modal.fade aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content
       .modal-header
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-        h4.modal-title Success Fees
+        h5.font-regular.modal-title Success Fees
       .modal-body
         ul
           li The success fee is enforced through a legal agreement that you sign when you are selected to the program.
@@ -609,3 +606,6 @@
           li
             ' The 30% discount &amp; investment rights scenario is explained in detail in the
             ' #{link_to 'Raising Investment', 'http://playbook.sv.co/6-raising-investment.html'} section.
+      .modal-footer
+        button.btn.btn-sm.btn-secondary.text-uppercase aria-label="Close" data-dismiss="modal" type="button"
+          | Close

@@ -24,7 +24,7 @@
         br
         ' You now need to
         span.brand-secondary.font-semibold pay the applcation fee.
-      
+
       .submit-fee-section.clearfix.m-t-2
         .col-md-5.applicants-list
           h5.text-uppercase.font-semibold Applicants
@@ -43,4 +43,4 @@
                 br
               | to proceed to the next stage.
 
-            = button_to payment_button_message(current_application), instamojo_initiate_payment_path(current_application), class: 'btn btn-primary btn-md text-uppercase'
+            = button_to payment_button_message(current_application), instamojo_initiate_payment_path, class: 'btn btn-primary btn-md text-uppercase'

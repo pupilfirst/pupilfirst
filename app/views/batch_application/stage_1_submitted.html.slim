@@ -23,7 +23,14 @@
         ' Your application data has been stored.
         br
         ' You now need to
-        span.brand-secondary.font-semibold pay the applcation fee.
+        span.brand-secondary.font-semibold pay the application fee.
+
+      - if current_application.payment.present?
+        .alert.alert-warning.m-t-1
+          i.fa.fa-warning
+          ' &nbsp;It looks like you've attempted to pay at least once before, but didn't complete the process. Note that it
+          ' might take a few minutes for the payment status to update, if you experienced network issues after completing
+          ' the payment. Please contact us at #{mail_to 'help@sv.co'} if you're experiencing any issue.
 
       .submit-fee-section.clearfix.m-t-2
         .col-md-5.applicants-list

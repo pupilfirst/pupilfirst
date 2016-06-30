@@ -196,7 +196,7 @@ class BatchApplicationController < ApplicationController
   private
 
   def lock_under_feature_flag
-    return if Rails.env.test?
+    return if Rails.env.test? || Rails.env.development?
     raise_not_found unless Feature.active?(:application_v2, current_founder)
   end
 

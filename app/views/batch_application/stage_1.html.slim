@@ -47,7 +47,7 @@
             inline_label: t('batch_application.stage_1.team_lead_consent')
       .container-md-center.content-box.m-b-2
         h5.form-section-title.text-uppercase.font-semibold.m-b-2
-          | Team Lead's Details
+          | Team Lead's Details (You are the team lead)
         .simple-form-container
           .row
             = f.input :university_id,
@@ -87,7 +87,7 @@
             = f.input :cofounder_count,
               as: :radio_buttons,
               collection: [2, 3, 4],
-              label: 'Count of co-founders'
+              label: 'Number of cofounders (founders other than yourself)'
 
             = f.simple_fields_for :cofounders do |c|
               .cofounder-section-form.m-t-3

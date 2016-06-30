@@ -17,10 +17,9 @@ feature 'Applying to SV.CO' do
   end
 
   context 'when a batch is open for applications' do
-    let!(:batch) { create :batch, application_stage: application_stage_1, application_stage_deadline: 15.days.from_now }
+    let!(:batch) { create :batch, application_stage: application_stage_1, application_stage_deadline: 15.days.from_now, next_stage_starts_on: 1.month.from_now }
 
     scenario 'user visits apply page' do
-      batch.update application_stage: application_stage_1, application_stage_deadline: 15.days.from_now
       visit apply_index_path
       expect(page).to have_link('Start Application', href: apply_batch_path(batch: batch.batch_number))
     end

@@ -29,13 +29,13 @@ class Batch < ActiveRecord::Base
   validates :slack_channel, format: { with: /#[^A-Z\s.;!?]+/, message: 'must start with a # and not contain uppercase, spaces or periods' },
                             length: { in: 2..22, message: 'channel name should be 1-21 characters' }, allow_nil: true
 
-  validate :deadline_changes_with_stage
+  validate :application_dates_changes_with_stage
 
-  def deadline_changes_with_stage
+  def application_dates_changes_with_stage
     return unless application_stage_id_changed?
-    return if application_stage_deadline_changed?
     return if application_stage.final_stage?
-    errors[:application_stage_deadline] << 'must change with application stage'
+    errors[:application_stage_deadline] << 'must change with application stage' unless application_stage_deadline_changed?
+    errors[:next_stage_starts_on] << 'must change with application stage' unless next_stage_starts_on_changed?
   end
 
   after_save :send_emails_to_applicants

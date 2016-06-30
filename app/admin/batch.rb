@@ -1,6 +1,7 @@
 ActiveAdmin.register Batch do
   permit_params :theme, :description, :start_date, :end_date, :batch_number, :slack_channel, :application_stage_id,
-    :application_stage_deadline_date, :application_stage_deadline_time_hour, :application_stage_deadline_time_minute
+    :application_stage_deadline_date, :application_stage_deadline_time_hour, :application_stage_deadline_time_minute,
+    :next_stage_starts_on
 
   config.sort_order = 'batch_number_asc'
 
@@ -28,6 +29,7 @@ ActiveAdmin.register Batch do
     f.inputs 'Batch Details' do
       f.input :application_stage, collection: ApplicationStage.all.order(number: 'ASC')
       f.input :application_stage_deadline, as: :just_datetime_picker
+      f.input :next_stage_starts_on, as: :datepicker, label: 'Tentative start date for next stage'
       f.input :batch_number
       f.input :theme
       f.input :description

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160623093350) do
+ActiveRecord::Schema.define(version: 20160630073257) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -150,6 +150,7 @@ ActiveRecord::Schema.define(version: 20160623093350) do
     t.integer  "application_stage_id"
     t.datetime "application_stage_deadline"
     t.datetime "invites_sent_at"
+    t.date     "next_stage_starts_on"
   end
 
   add_index "batches", ["application_stage_id"], name: "index_batches_on_application_stage_id", using: :btree

@@ -15,7 +15,8 @@ RSpec.describe Batch, type: :model do
 
         subject.update!(
           application_stage: first_stage,
-          application_stage_deadline: Time.now
+          application_stage_deadline: Time.now,
+          next_stage_starts_on: 7.days.from_now
         )
       end
     end
@@ -44,7 +45,8 @@ RSpec.describe Batch, type: :model do
         expect do
           subject.update!(
             application_stage: third_stage,
-            application_stage_deadline: Time.now
+            application_stage_deadline: Time.now,
+            next_stage_starts_on: 7.days.from_now
           )
         end.to change { ActionMailer::Base.deliveries.count }.by(2)
       end

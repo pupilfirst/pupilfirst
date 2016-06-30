@@ -21,7 +21,7 @@ alterCofounderFields = (count) ->
     newSection = $(cofounderSections.selector).first().clone().appendTo(cofounderSections.parent())
 
     # Blank copied text, if any.
-    newSection.find("input[type=text], input[type=email]").val('')
+    newSection.find("input[type=text], input[type=email]").removeAttr('value')
 
     # Set correct title.
     newSection.find('.cofounder-title').text ->

@@ -2,7 +2,7 @@
 
 module BatchApplicationsHelper
   def next_stage_date
-    current_stage.next.tentative_start_date(current_batch).strftime('%A, %b %e')
+    current_batch.next_stage_starts_on.strftime('%A, %b %e')
   end
 
   def payment_button_message(batch_application)

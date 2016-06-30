@@ -1,7 +1,7 @@
 ActiveAdmin.register ApplicationStage do
   menu parent: 'Batches'
 
-  permit_params :name, :number, :days_before_batch, :final_stage
+  permit_params :name, :number, :final_stage
   config.sort_order = 'number_asc'
 
   index do
@@ -13,8 +13,6 @@ ActiveAdmin.register ApplicationStage do
       span application_stage.name
       em ' (Final Stage)' if application_stage.final_stage?
     end
-
-    column 'Starts X days before batch', :days_before_batch
 
     actions
   end

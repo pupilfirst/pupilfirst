@@ -22,8 +22,22 @@ class ApplicationStageOneForm < Reform::Form
   end
 
   # Custom validations.
+  validate :prevent_cofounder_duplicates
   validate :cofounder_count_must_be_valid
   validate :emails_must_look_right
+
+  def prevent_cofounder_duplicates
+    cofounders.each_with_index do |cofounder, index|
+      cofounders[index].errors[:email] << 'is a duplicate of team lead' if cofounder.email == team_lead.email
+    end
+
+    previous_cofounder_emails = []
+
+    cofounders.each_with_index do |cofounder, index|
+      cofounders[index].errors[:email] << 'has been mentioned previously' if cofounder.email.in?(previous_cofounder_emails)
+      previous_cofounder_emails << cofounder.email
+    end
+  end
 
   def cofounder_count_must_be_valid
     return if cofounders.count.in? [2, 3, 4]

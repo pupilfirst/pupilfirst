@@ -1,0 +1,33 @@
+.full-screen-background {
+  background-position: center;
+  background-size: cover;
+}
+
+.background-image-1 {
+  //background-image: asset_url('home/background_images/1.jpg');
+  background-color: lightcoral;
+}
+
+.background-image-2 {
+  //background-image: asset_url('home/background_images/2.jpg');
+  background-color: lightgreen;
+}
+
+.background-image-3 {
+  //background-image: asset_url('home/background_images/3.jpg');
+  background-color: lightblue;
+}
+
+.background-image-4 {
+  //background-image: asset_url('home/background_images/4.jpg');
+  background-color: lightgoldenrodyellow;
+}
+
+.hero-text-right {
+  text-align: right;
+  margin-right: 3em;
+}
+
+.hero-text-center {
+  text-align: center;
+}

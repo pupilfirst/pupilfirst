@@ -26,4 +26,33 @@ class HomeController < ApplicationController
     @skip_container = true
     render layout: 'application_v2'
   end
+
+  def test_background
+    # Background image cycling test.
+  end
+
+  protected
+
+  def background_image_number
+    @background_image_number ||= begin
+      session[:background_image_number] ||= rand(5) + 1
+      session[:background_image_number] += 1
+      session[:background_image_number] = 1 if session[:background_image_number] > 4
+      session[:background_image_number]
+    end
+  end
+
+  def hero_text_alignment
+    @hero_text_alignment ||= begin
+      {
+        1 => 'center',
+        2 => 'right',
+        3 => 'center',
+        4 => 'right'
+      }[background_image_number]
+    end
+  end
+
+  helper_method :background_image_number
+  helper_method :hero_text_alignment
 end

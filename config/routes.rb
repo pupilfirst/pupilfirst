@@ -130,6 +130,9 @@ Svapp::Application.routes.draw do
   # custom defined 404 route to use with shortener gem's config
   get '/404', to: 'home#not_found'
 
+  # to test rotating background images.
+  get '/test_background', to: 'home#test_background'
+
   # used for shortened urls from the shortener gem
   get '/:id', to: 'shortener/shortened_urls#show'
 end

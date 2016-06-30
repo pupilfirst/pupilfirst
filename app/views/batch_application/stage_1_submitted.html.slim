@@ -5,7 +5,7 @@
 .secondary-banner.application-stages-banner
   .container
     .application-stages-head.text-xs-center
-      h1 Application submitted.
+      h1 Application Fee
       h4.center-block #{current_application.paid? ? 'Payment accepted' : 'Payment pending'}
 .container
   == render('applications_close_soon', batch: current_batch) if current_batch.applications_close_soon?

@@ -137,4 +137,14 @@ Svapp::Application.routes.draw do
 
   # used for shortened urls from the shortener gem
   get '/:id', to: 'shortener/shortened_urls#show'
+
+  scope 'sixways', as: 'sixways', controller: 'six_ways_mooc' do
+    # TODO: change '/start' to point to '/'
+    get 'start(/:token)', action: 'index'
+  end
+
+  scope 'user', as: 'user', controller: 'user' do
+    get 'identify'
+    post 'login'
+  end
 end

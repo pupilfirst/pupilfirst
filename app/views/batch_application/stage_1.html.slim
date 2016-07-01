@@ -88,11 +88,11 @@
               = t.input :name, label: 'Full name of Team Lead', input_html: { maxlength: 250 }
 
               = t.input :email,
-                label: "Team Lead's email ID",
+                label: "Team Lead's Email ID",
                 input_html: { disabled: true }
 
               = t.input :role,
-                label: "Team Lead's role",
+                label: "Team Lead's <a href='http://playbook.sv.co/4-startup-roles.html' target='_blank'>Role</a>".html_safe,
                 as: :select,
                 collection: proc { Founder.valid_roles },
                 include_blank: false,
@@ -116,8 +116,8 @@
               .cofounder-section-form.m-t-3
                 span.cofounder-title.font-semibold
                   | Co-founder #{c.index + 1}
-                = c.input :email, input_html: { maxlength: 250 }
                 = c.input :name, input_html: { maxlength: 250 }
+                = c.input :email, input_html: { maxlength: 250 }
 
                 = c.input :role,
                   as: :select,

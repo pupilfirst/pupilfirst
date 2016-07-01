@@ -41,7 +41,19 @@ readmoreFAQ = ->
     lessLink: '<a class="read-less-link" href="#">Read Less</a>'
     moreLink: '<a class="read-more-link" href="#">Read More</a>'
 
+stickyApplyButton = ->
+  startApplication = $('#start-application')
+
+  if startApplication.length
+    waypoint = new Waypoint(
+      element: $('.graduated-slide')[0],
+      handler: (direction) ->
+        startApplicationButton = $('#start-application')
+        startApplicationButton.toggleClass('start-application-hover btn-md btn-xs')
+    )
+
 $(document).on 'page:change', setupGraduationCarousel
 $(document).on 'page:change', avoidwidowsTypography
 $(document).on 'page:change', stopVideosOnModalClose
 $(document).on 'page:change', readmoreFAQ
+$(document).on 'page:change', stickyApplyButton

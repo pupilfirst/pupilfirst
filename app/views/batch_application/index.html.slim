@@ -17,8 +17,8 @@
         ' to visit Silicon Valley
 
       - if @batches_open.present?
-        - @batches_open.each do |batch|
-          = link_to 'Start Application', apply_batch_path(batch: batch.batch_number), class: 'btn btn-primary btn-md text-uppercase'
+        - batch = @batches_open.first
+        = link_to 'Start Application', apply_batch_path(batch: batch.batch_number), class: 'btn btn-primary btn-md text-uppercase', id: 'start-application'
       - if @batches_ongoing.present?
         - @batches_ongoing.each do |batch|
           - if current_batch_applicant.blank? || current_batch_applicant.applied_to?(batch)
@@ -365,12 +365,12 @@
               h5
                 | What will be covered under my Program Fee?
               p
-                ' All costs of the Silicon Valley visit for one founder, including 
-                | travel (economy flight tickets) and accomodation (shared) 
+                ' All costs of the Silicon Valley visit for one founder, including
+                | travel (economy flight tickets) and accomodation (shared)
                 | is included in the Program Fee.
               p
                 ' Food expenses for the visit will not be covered. Neither will any
-                | costs associated with procuring the required U.S. Visa and other 
+                | costs associated with procuring the required U.S. Visa and other
                 | related travel documents.
             li
               h5
@@ -581,7 +581,7 @@
             ' For the benefits you get from the program, visit the #{link_to 'main apply page', apply_index_path} and
             | the #{link_to 'tour page', tour_path}.
           li
-            ' All costs of the Silicon Valley visit for one founder, including travel (economy flight tickets tickets) and accomodation (shared) is included in the Program Fee. 
+            ' All costs of the Silicon Valley visit for one founder, including travel (economy flight tickets tickets) and accomodation (shared) is included in the Program Fee.
           li
             ' Food expenses for the Silicon Valley visit will not be covered under the Program Fee. Neither will any costs associated with procuring the required U.S. Visa and other related travel documents.
           li

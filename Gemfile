@@ -102,6 +102,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-slick-carousel' # the last carousel you'll ever need http://kenwheeler.github.io/slick
   gem 'rails-assets-tether' # A positioning engine to make overlays, tooltips and dropdowns better
   gem 'rails-assets-readmore' # A lightweight jQuery plugin for collapsing and expanding long blocks of text with "Read more" and "Close" links.
+  gem 'rails-assets-waypoints' # Waypoints is a library that makes it easy to execute a function whenever you scroll to an element.
 end
 
 group :development do

@@ -91,6 +91,11 @@
                 label: "Team Lead's Email ID",
                 input_html: { disabled: true }
 
+              = t.input :phone,
+                label: 'Mobile number',
+                input_html: { maxlength: 10 },
+                placeholder: '10-digit mobile phone number'
+
               = t.input :role,
                 label: "Team Lead's <a href='http://playbook.sv.co/4-startup-roles.html' target='_blank'>Role</a>".html_safe,
                 as: :select,

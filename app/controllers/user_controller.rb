@@ -6,6 +6,9 @@ class UserController < ApplicationController
 
   # create session for email received
   def login
+    # validate email
+    render 'identify' and return unless email_valid?
+
     find_or_create_user
 
     # email referer url with token attached
@@ -21,5 +24,15 @@ class UserController < ApplicationController
 
   def send_email_with_token
     UserMailer.send_login_token(@user, @referer).deliver_later
+  end
+
+  def email_valid?
+    @user = User.new(params[:user].permit(:email))
+    if params[:user][:email] =~ /@/
+      true
+    else
+      @user.errors[:email] << 'does not look like a valid email'
+      false
+    end
   end
 end

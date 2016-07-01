@@ -1,5 +1,4 @@
 class BatchApplicationController < ApplicationController
-  before_action :lock_under_feature_flag
   before_action :ensure_applicant_is_signed_in, only: :apply
   layout 'application_v2'
 
@@ -194,11 +193,6 @@ class BatchApplicationController < ApplicationController
   helper_method :current_application
 
   private
-
-  def lock_under_feature_flag
-    return if Rails.env.test? || Rails.env.development?
-    raise_not_found unless Feature.active?(:application_v2, current_founder)
-  end
 
   def set_instance_variables
     @skip_container = true

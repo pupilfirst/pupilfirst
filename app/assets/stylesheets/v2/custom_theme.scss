@@ -2,7 +2,6 @@ body {
   font-family: 'Source Sans Pro', sans-serif;
   background-color: $primary-background;
   font-size: $font-size-sm;
-  padding-top: 85px;
 }
 
 a {
@@ -266,4 +265,7 @@ p {
 }
 .help-block {
   color: red;
+}
+.header-spacer {
+  padding-top: 85px;
 }

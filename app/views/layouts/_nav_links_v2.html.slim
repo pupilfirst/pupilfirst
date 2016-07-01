@@ -1,5 +1,8 @@
 #sv-navbar.collapse.navbar-toggleable-sm.navbar-right
   ul.nav.navbar-nav.clearfix
+    - unless current_founder
+      li.nav-item role="presentation"
+        = link_to 'Apply', apply_index_path, class: 'nav-link'
     - if current_founder && current_founder.startup.present?
       li.nav-item role="presentation"
         a.nav-link href="#{startup_url(current_founder.startup)}" Timeline

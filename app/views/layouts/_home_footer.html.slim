@@ -1,13 +1,9 @@
 footer
-  section#footer-top
+  section.home-footer
     .container
       .row
         .col-md-3.footer-column
-          img.footer-logo src="#{image_url 'logo_white.png'}" alt="Logo of SV.CO"
-          br
-          ' Reach us at <strong>#{link_to 'help@sv.co', 'mailto:help@sv.co'}</strong>.
-
-        .col-md-3.footer-column
+          strong.text-uppercase Quick Links
           .footer-links.clearfix
             .sitemap.pull-left
               div
@@ -29,21 +25,26 @@ footer
               /   = link_to 'Tour', root_path
 
         .col-md-3.footer-column
+          strong.text-uppercase Legal
+          div
+            a data-toggle="modal" data-target="#privacy" Privacy Policy
+          div
+            a data-toggle="modal" data-target="#terms" Terms of Use
+
+        .col-md-3.footer-column
           address
-            strong SV.CO
+            strong.text-uppercase SV.CO
             p
               | 1st Floor, atop Cafe Coffee Day,
               br
               | 4th Block, 80 Feet Main Road,
               br
               | Koramangala, Bangalore &mdash; 560095
-
-  #footer-bottom
-    .container
-      .row
-        .col-sm-4
-          p &copy; 2015 SV.CO. All rights reserved.
-        .col-sm-4
+              
+        .col-md-3.footer-column
+          strong.text-uppercase Connect
+          div
+            ' Reach us at <strong>#{link_to 'help@sv.co', 'mailto:help@sv.co'}</strong>.
           .img-opacity
             span.social-link
               a href='https://www.facebook.com/svdotco' target='_blank'
@@ -54,11 +55,29 @@ footer
             span.social-link
               a href='https://www.youtube.com/c/svdotco' target='_blank'
                 i.fa.fa-youtube.fa-2x
-        .col-sm-4
-          .footer-right
-            a data-toggle="modal" data-target="#privacy" Privacy Policy
-            | &nbsp;|&nbsp;
-            a data-toggle="modal" data-target="#terms" Terms of Use
+          p &copy; 2015 SV.CO. All rights reserved.
+
+  / #footer-bottom
+  /   .container
+  /     .row
+  /       .col-sm-4
+  /         p &copy; 2015 SV.CO. All rights reserved.
+  /       .col-sm-4
+  /         .img-opacity
+  /           span.social-link
+  /             a href='https://www.facebook.com/svdotco' target='_blank'
+  /               i.fa.fa-facebook.fa-2x
+  /           span.social-link
+  /             a href='https://twitter.com/svdotco' target='_blank'
+  /               i.fa.fa-twitter.fa-2x
+  /           span.social-link
+  /             a href='https://www.youtube.com/c/svdotco' target='_blank'
+  /               i.fa.fa-youtube.fa-2x
+  /       .col-sm-4
+  /         .footer-right
+  /           a data-toggle="modal" data-target="#privacy" Privacy Policy
+  /           | &nbsp;|&nbsp;
+  /           a data-toggle="modal" data-target="#terms" Terms of Use
 
 #privacy.modal.fade role="dialog"
   .modal-dialog

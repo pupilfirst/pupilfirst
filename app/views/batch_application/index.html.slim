@@ -26,7 +26,7 @@
           - else
             button.btn.btn-primary.btn-md.text-uppercase disabled="true"
               | Not accepting new applications
-      a.btn.btn-md.text-uppercase href="#" class=(@batches_open.present? ? 'btn-secondary' : '')
+      a.btn.btn-md.text-uppercase href="#" data-toggle="modal" data-target="#watchIntroVideo" class=(@batches_open.present? ? 'btn-secondary' : '')
         | Watch Video
 
 .graduated-slide
@@ -37,40 +37,76 @@
         | Graduated Startups and Founders
       .graduation-carousel
         .slide-item
-          a.graduate-thumbnail data-toggle="modal" href="#graduatesVideo"
-            = image_tag 'apply/graduation-thumbnail-1.png'
+          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-1"
+            = image_tag 'apply/graduation-video-thumbnail-1.png'
           .graduate-data.text-xs-center
             h4
-              | Kallidil Kalidasan
+              | The Journey from a college hostel to a million dollar startup
             p
-              | Placed at Freecharge
 
         .slide-item
-          a.graduate-thumbnail data-toggle="modal" href="#graduatesVideo"
-            = image_tag 'apply/graduation-thumbnail-1.png'
+          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-2"
+            = image_tag 'apply/graduation-video-thumbnail-2.png'
           .graduate-data.text-xs-center
             h4
-              | Kallidil Kalidasan
+              | SYM Funding Story
             p
-              | Placed at Freecharge
 
         .slide-item
-          a.graduate-thumbnail data-toggle="modal" href="#graduatesVideo"
-            = image_tag 'apply/graduation-thumbnail-1.png'
+          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-3"
+            = image_tag 'apply/graduation-video-thumbnail-3.png'
           .graduate-data.text-xs-center
             h4
-              | Kallidil Kalidasan
+              | Spenwise Funding &amp; Accelerator story
             p
-              | Placed at Freecharge
 
         .slide-item
-          a.graduate-thumbnail data-toggle="modal" href="#graduatesVideo"
-            = image_tag 'apply/graduation-thumbnail-1.png'
+          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-4"
+            = image_tag 'apply/graduation-video-thumbnail-4.png'
           .graduate-data.text-xs-center
             h4
-              | Kallidil Kalidasan
+              | Z Pay Acqui hired by Tally
             p
-              | Placed at Freecharge
+
+        .slide-item
+          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
+            = image_tag 'apply/graduation-video-thumbnail-5.png'
+          .graduate-data.text-xs-center
+            h4
+              | Getting Hired
+            p
+              
+        .slide-item
+          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-6"
+            = image_tag 'apply/graduation-video-thumbnail-6.png'
+          .graduate-data.text-xs-center
+            h4
+              | Graduation Rockstar
+            p
+
+        .slide-item
+          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-7"
+            = image_tag 'apply/graduation-video-thumbnail-7.png'
+          .graduate-data.text-xs-center
+            h4
+              | Harish Sivaramakrishnan (VP of Design, Snapdeal)
+            p
+  
+        .slide-item
+          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-8"
+            = image_tag 'apply/graduation-video-thumbnail-8.png'
+          .graduate-data.text-xs-center
+            h4
+              | Amit Saini (Director of Engineering, Ola Money)
+            p
+
+        .slide-item
+          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-9"
+            = image_tag 'apply/graduation-video-thumbnail-9.png'
+          .graduate-data.text-xs-center
+            h4
+              | Vinod Malhotra (Chief of R&amp;D, Tally Solutions)
+            p
 
 .program-benefits
   .container-fluid
@@ -79,7 +115,7 @@
         span.content-title-icon.program-icon
         | The Program
       .program-video.center-block.text-xs-center
-        iframe.program-video-frame src="" frameborder="0" allowfullscreen="allowfullscreen"
+        iframe.program-video-frame src="https://www.youtube.com/embed/7fDmQOFNmLQ" frameborder="0" allowfullscreen="allowfullscreen"
 
       .benefits-section.center-block.text-xs-center
         .col-md-6
@@ -181,7 +217,7 @@
                 | Ad&ndash;hoc Help Wanted Requests
               p
                 | Every startup is different, so we help founders out with ad&ndash;hoc requests. This could be things like getting in touch with a great investor or help with vetting a client agreement.
-        = link_to 'take a Tour', tour_path, class: 'btn btn-primary btn-md text-uppercase tour-link'
+        / = link_to 'take a Tour', tour_path, class: 'btn btn-primary btn-md text-uppercase tour-link'
 .program-partners
   .container
     h3.text-xs-center.content-head
@@ -564,15 +600,96 @@
           a.btn-link href='#' data-toggle="modal" data-target="#success-fees"
             | View More
 
-
-#graduatesVideo.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+#watchIntroVideo.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content
       .modal-header
         button.close aria-label="Close" data-dismiss="modal" type="button"
           span aria-hidden="true" &times;
       .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/KufIL6ZS1lk?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
+        iframe.video-frame src="https://www.youtube.com/embed/RUP3fk7lf5o" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-1.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/AzABLPISPQU" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-2.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/k13C6C_MzCE" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-3.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/xBaaBVlK5Ws" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-4.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/pwmVitwaeL0" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-5.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/XBjkCUW1lFQ" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-6.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/AaoW1W7wZLk" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-7.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/ut-J7cuQpzI" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-8.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/z2e5o5ftgRc" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-9.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/qEZ1RamKt6k" frameborder="0" allowfullscreen="allowfullscreen"
+
 
 #basic-fees.modal.fade aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"

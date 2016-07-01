@@ -1,4 +1,6 @@
 Svapp::Application.routes.draw do
+  get 'user/identify'
+
   devise_for(
     :founders,
     controllers: {

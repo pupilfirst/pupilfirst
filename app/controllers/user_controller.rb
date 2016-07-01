@@ -7,7 +7,10 @@ class UserController < ApplicationController
   # create session for email received
   def login
     # validate email
-    render 'identify' and return unless email_valid?
+    unless email_valid?
+      render 'identify'
+      return
+    end
 
     find_or_create_user
 

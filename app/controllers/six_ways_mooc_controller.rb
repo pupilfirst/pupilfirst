@@ -1,8 +1,8 @@
 class SixWaysMoocController < ApplicationController
   before_action :authorize_user
 
+  # the landing page for sixways
   def index
-    binding.pry
     # something
   end
 
@@ -18,7 +18,6 @@ class SixWaysMoocController < ApplicationController
   private
 
   def authorize_user
-    binding.pry
     current_mooc_student.present? ? return : check_for_token
   end
 

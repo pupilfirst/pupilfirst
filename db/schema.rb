@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160701071910) do
+ActiveRecord::Schema.define(version: 20160701072249) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -326,6 +326,18 @@ ActiveRecord::Schema.define(version: 20160701071910) do
   add_index "karma_points", ["founder_id"], name: "index_karma_points_on_founder_id", using: :btree
   add_index "karma_points", ["source_id"], name: "index_karma_points_on_source_id", using: :btree
   add_index "karma_points", ["startup_id"], name: "index_karma_points_on_startup_id", using: :btree
+
+  create_table "mooc_students", force: :cascade do |t|
+    t.string   "email"
+    t.string   "name"
+    t.integer  "university_id"
+    t.string   "college"
+    t.string   "semester"
+    t.string   "state"
+    t.string   "gender"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
 
   create_table "payments", force: :cascade do |t|
     t.integer  "batch_application_id"

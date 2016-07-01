@@ -23,20 +23,30 @@ en:
   home:
     index:
       background_1_messages:
-        main_html: Tally Solutions <br><strong>acquihires</strong> Z-pay
-        secondary_html: Tally Solutions acqui hired Z-pay during their 8th semester of college. The team of four 22 years old  will now be working for India’s one of the best Product companies.
+        main:
+          message_1_html: "The world&apos;s best proving ground for <strong>student founders</strong> who want to <strong>join India&apos;s best startups</strong>."
+          message_2_html: "&ldquo;Through SV.CO, we built a great product and showed it to real customers. We&apos;re very happy to bring our skills to a larger company.&rdquo;"
+        secondary_html: "Varghese, Sidharth, Rakhul and Renjith of <a href='https://sv.co/startups/z-pay'>Z-Pay</a> built a prototype during SV.CO&apos;s six month startup course and got acqui-hired by <a href='http://www.tallysolutions.com/index.php' target='_blank'>Tally Solutions</a>, Bangalore."
       background_2_messages:
-        main_html: SV.CO presented me an opportunity to <strong>learn through experiences</strong>, the routine college education doesn’t provide me with such opportunities.
-        secondary_html: Arun. P, Job offer at Goquii & selected to join Draper university
+        main:
+          message_1_html: "The world&apos;s best proving ground for <strong>student founders</strong> who want to <strong>join the best Universities</strong>."
+          message_2_html: "&ldquo;Even in this day and age, my college education prioritised mugging up and writing exams. SV.CO gave me an opportunity to learn from my experiences.&rdquo;"
+        secondary_html: "Arun of <a href='https://sv.co/startups/handme'>handME</a> built a prototype during SV.CO&apos;s six month startup course and got both a job offer from <a href='http://goqii.com' target='_blank'>Goqii</a> and selection to the prestigious <a href='http://www.draperuniversity.com' target='_blank'>Draper University</a> in the US."
       background_3_messages:
-        main_html: SV.CO Startup SYM raises <strong>funding</strong> from ASKME
-        secondary_html: SYM
+        main:
+          message_1_html: "The world&apos;s best proving ground for <strong>student startups</strong> who want to <strong>get early funding</strong>."
+          message_2_html: "&ldquo;We built a great product and saw early traction at SV.CO. Now that we&apos;ve raised seed funding, we want a great launch for our product.&rdquo;"
+        secondary_html: "Aravind, Sarah and Vivek of <a href='https://sv.co/startups/sym'>SYM</a> built a prototype during SV.CO&apos;s six month startup course and raised seed funding from <a href='https://www.askme.com' target='_blank'>AskME.com</a> to scale up their product."
       background_4_messages:
-        main_html: We joined engineering in search for a job or go for higher studies, but we challenged the status quo and <strong>got funded</strong> and selected to zone accelerator.
-        secondary_html: Spenwise, selected to zone startups, Mumbai
+        main:
+          message_1_html: "The world's best proving ground for <strong>student startups</strong> who want to <strong>jumpstart their products</strong>."
+          message_2_html: "&ldquo;We joined engineering college in search of a job, but through SV.CO we learnt how to challenge the status quo &amp; become job creators instead.&rdquo;"
+        secondary_html: "Ajmal, Aswin, Balram and Kishan of <a href='https://sv.co/startups/spenwise'>Spenwise</a> built a prototype during SV.CO&apos;s six month startup course and got selected at <a href='http://india.zonestartups.com/about/' target='_blank'>Zone Startups</a>, Mumbai to continue their startup journey."
       background_5_messages:
-        main_html: We experienced the real startup experience during college and the <strong>6 ways to graduate</strong> opened up many more opportunities for us.
-        secondary_html: Sarah &amp; Arya Murali, women entrepreneurs from our First Batch
+        main:
+          message_1_html: "The world&apos;s best proving ground for <strong>student founders</strong> who want to <strong>decimate all expectations</strong>."
+          message_2_html: "&ldquo;We built a startup product right in college &amp; showed it to real customers. Even when some things didn&apos;t work, SV.CO&apos;s six ways to graduate opened up many more opportunities for us.&rdquo;"
+        secondary_html: "Two amazing woman founders: Sarah of <a href='https://sv.co/startups/sym'>SYM</a> and Arya of <a href='https://sv.co/startups/walat'>Walat</a>. Both teams built complete prototypes during SV.CO&apos;s six month startup course."
   payment:
     status:
       requested: Requested

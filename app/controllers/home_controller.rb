@@ -33,6 +33,19 @@ class HomeController < ApplicationController
 
   protected
 
+  def hero_text_number
+    @hero_text_number ||= begin
+      session[:hero_text_numbers] ||= {}.to_json
+      hero_text_numbers = JSON.parse(session[:hero_text_numbers])
+      key = background_image_number.to_s
+      hero_text_numbers[key] ||= rand(2) + 1
+      hero_text_numbers[key] += 1
+      hero_text_numbers[key] = 1 if hero_text_numbers[key] > 2
+      session[:hero_text_numbers] = hero_text_numbers.to_json
+      hero_text_numbers[key]
+    end
+  end
+
   def background_image_number
     @background_image_number ||= begin
       session[:background_image_number] ||= rand(5) + 1
@@ -56,4 +69,5 @@ class HomeController < ApplicationController
 
   helper_method :background_image_number
   helper_method :hero_text_alignment
+  helper_method :hero_text_number
 end

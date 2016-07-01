@@ -24,7 +24,7 @@
     .container
       .header-container class="header-#{hero_text_alignment}"
         .hero-text class="hero-text-#{hero_text_alignment}"
-          h1 = t("home.index.background_#{background_image_number}_messages.main_html")
+          h1 = t("home.index.background_#{background_image_number}_messages.main.message_#{hero_text_number}_html")
           h4 = t("home.index.background_#{background_image_number}_messages.secondary_html")
           = link_to 'Learn More', root_url, class: 'btn btn-primary btn-md text-uppercase'
     == render 'layouts/home_footer'

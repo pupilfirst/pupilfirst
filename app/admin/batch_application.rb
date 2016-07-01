@@ -33,7 +33,10 @@ ActiveAdmin.register BatchApplication do
       end
     end
 
-    column 'Stage', :application_stage
+    column 'Stage' do |batch_application|
+      stage = batch_application.application_stage
+      link_to "##{stage.number} #{stage.name}", admin_application_stage_path(stage)
+    end
 
     column 'Submission' do |batch_application|
       current_stage = batch_application.application_stage

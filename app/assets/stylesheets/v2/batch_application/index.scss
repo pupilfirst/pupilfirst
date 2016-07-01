@@ -4,6 +4,7 @@
   height: 380px;
   border-bottom: 1px solid $gray-border;
 }
+
 .primary-banner-head {
   padding: 80px 0;
 
@@ -20,6 +21,19 @@
 
     @include media-breakpoint-down(xs) {
       margin: 10px 0 0 0;
+    }
+  }
+
+  a.start-application-hover {
+    position: fixed;
+    right: 2em;
+    bottom: 2em;
+    z-index: 100;
+
+    @include media-breakpoint-down(xs) {
+      width: auto;
+      right: 1em;
+      bottom: 1em;
     }
   }
 }

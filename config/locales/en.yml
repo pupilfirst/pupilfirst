@@ -47,11 +47,12 @@ en:
       submission_failure: Something went wrong when attempting to process your submission. Please contact us at help@sv.co.
       applications_close_soon_html: Applications for batch %{batch_number} will close on <strong>%{deadline}</strong>. You have <strong>%{delta}</strong> to complete your application, and finish the tasks required in the second stage of the application process.
     stage_1:
-      application_page_read: I have gone through application page and I understand the conditions of the agreement that I will be required to sign, if my team is short-listed for the program.
+      application_page_read_html: I have gone through application page and I understand the conditions of the <a href='http://playbook.sv.co/2-legal-agreement.html' target='_blank'>legal agreement that I will be required to sign</a>, if my team is short-listed for the program.
       team_lead_consent: I understand that I'm the designated Team Lead and I will accept all communication on behalf of the team during this application process.
+      fees_consent: I agree that I have read the application page and understood all fees related to the program.
       submission_failure: Something went wrong when we tried to save your application data. Please contact help@sv.co if this error persists.
-      payment_start: Pay with Instamojo
-      payment_retry: Retry payment with Instamojo
+      payment_start: Pay Fees Online
+      payment_retry: Retry Payment
     stage_2:
       submission_failure: Something seems wrong. Please ensure your urls are valid and re-submit
   faculty:

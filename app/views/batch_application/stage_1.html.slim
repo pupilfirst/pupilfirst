@@ -34,6 +34,25 @@
 
       .container-md-center.content-box.m-b-2
         h5.form-section-title.text-uppercase.font-semibold.m-b-2
+          | Hello there!
+        .simple-form-container
+          | Thanks for applying. These are a few things to keep in mind:
+
+          ul.m-t-1
+            li
+              ' SV.CO accepts applications from a team of 3&ndash;5 founders, so if you do not have co-founders, you are
+              | not eligible to apply.
+            li
+              ' The application process will be in three stages: first, you apply and pay the fees. Second, you complete
+              ' a <em>Coding and Video Task</em>, and third, selected teams will move on to a final <em>Personal
+              | Interview</em> stage.
+            li
+              ' If at any stage of the process, you have any doubts or you need help, please write to
+              | #{mail_to 'help@sv.co'}.
+
+
+      .container-md-center.content-box.m-b-2
+        h5.form-section-title.text-uppercase.font-semibold.m-b-2
           | Checklist
         .simple-form-container
           = f.error :base

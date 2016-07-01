@@ -100,6 +100,8 @@
   .graduate-thumbnail {
     display: block;
     position:relative;
+    border-radius: 5px;
+    overflow: hidden;
 
     &:before, &:after {
       position: absolute;
@@ -155,11 +157,13 @@
   border: 1px solid $gray-border;
   border-width: 0 1px 1px 1px;
   box-shadow: $box-shadow;
+  min-height: 65px;
   @include border-bottom-radius(5px);
 
   h4 {
-    padding: 15px 0 0;
+    padding: 15px 15px 0;
     margin: 0;
+    line-height: 1.3;
   }
   p {
     color: $brand-secondary;

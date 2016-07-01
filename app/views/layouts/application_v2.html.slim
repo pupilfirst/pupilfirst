@@ -43,7 +43,7 @@ html lang='en'
             a.navbar-brand href="#{root_url}"
               img.site-logo#site-logo src="#{image_url 'SV.CO-Logo.svg'}" alt='Logo of SV.CO'
           = render 'layouts/nav_links_v2'
-      .header-spacer
+    .header-spacer
       == yield :header
 
       - if current_founder

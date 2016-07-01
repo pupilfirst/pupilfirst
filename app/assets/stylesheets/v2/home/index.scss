@@ -199,8 +199,8 @@
 .hero-text {
   &.hero-text-center {
     text-align: center;
-    margin: 50px auto 0;
-    max-width: 480px;
+    margin: 100px auto 0;
+    max-width: 510px;
   }
   &.hero-text-right {
     text-align: left;
@@ -230,6 +230,10 @@
 
     @include media-breakpoint-down(xs) {
       font-size: 1rem;
+    }
+    a {
+      font-weight: $font-semibold;
+      color: $light-secondary;
     }
   }
 }

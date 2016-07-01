@@ -18,42 +18,13 @@
   meta name="description" content="SV.CO, or Startup Village is a learning platform for entrepreneurs that verifies results, and rewards founders with a real degree from partner Universities."
 
 - content_for :header
-  .container.homepage-header
-    .row
-      .col-md-6
-        .alert.alert-warning role="alert" SV.CO is currently invite only & in private beta!
-        h1
-          ' We&#8217;re building a
-          span.font-weight-600> learning platform
-          ' for first-time founders backed by
-          span.font-weight-600 real Universities.
-        div
-          .header-buttons
-            - if current_founder
-              - if current_founder.startup.present?
-                a.btn.btn-flat.btn-join href=startup_path(current_founder.startup) View Startup Timeline
-              - elsif current_founder.startup_admin?
-                a.btn.btn-flat.btn-join href=new_founder_startup_path Create your Startup!
-            - else
-              a.btn.btn-flat.btn-join href=new_founder_session_path Sign in for more!
 
-            a.watch-video-button.hidden-md.hidden-lg href="https://www.youtube.com/watch?v=EdToj9nviYA" target="_blank"
-              i.fa.fa-youtube-play
-              | &nbsp;Watch video
-      .col-md-6.hidden-sm.hidden-xs
-        iframe.homepage-header-video src="https://www.youtube.com/embed/EdToj9nviYA?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
-
-/ Latest Timeline Events
-== render 'timeline_events'
-
-/ Stages and learning.
-== render 'stages'
-
-/ Six Ways to Graduate!
-== render 'showcase'
-
-/ Testimonials
-== render 'testimonials'
-
-/ Blog Posts
-/== render 'blog_posts'
+.big-container
+  .full-screen-background class="background-image-#{background_image_number}"
+    .container
+      .header-container class="header-#{hero_text_alignment}"
+        .hero-text class="hero-text-#{hero_text_alignment}"
+          h1 = t("home.index.background_#{background_image_number}_messages.main_html")
+          h4 = t("home.index.background_#{background_image_number}_messages.secondary_html")
+          = link_to 'Learn More', root_url, class: 'btn btn-primary btn-md text-uppercase'
+    == render 'layouts/home_footer'

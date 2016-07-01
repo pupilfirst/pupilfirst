@@ -1,8 +1,8 @@
 class HomeController < ApplicationController
   def index
-    @large_header_class = 'home-index'
     @skip_container = true
     @sitewide_notice = true if %w(startupvillage.in registration).include?(params[:redirect_from])
+    render layout: 'home'
   end
 
   def story
@@ -37,7 +37,7 @@ class HomeController < ApplicationController
     @background_image_number ||= begin
       session[:background_image_number] ||= rand(5) + 1
       session[:background_image_number] += 1
-      session[:background_image_number] = 1 if session[:background_image_number] > 4
+      session[:background_image_number] = 1 if session[:background_image_number] > 5
       session[:background_image_number]
     end
   end
@@ -48,7 +48,8 @@ class HomeController < ApplicationController
         1 => 'center',
         2 => 'right',
         3 => 'center',
-        4 => 'right'
+        4 => 'right',
+        5 => 'right'
       }[background_image_number]
     end
   end

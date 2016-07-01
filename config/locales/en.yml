@@ -20,6 +20,23 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  home:
+    index:
+      background_1_messages:
+        main_html: Tally Solutions <br><strong>acquihires</strong> Z-pay
+        secondary_html: Tally Solutions acqui hired Z-pay during their 8th semester of college. The team of four 22 years old  will now be working for India’s one of the best Product companies.
+      background_2_messages:
+        main_html: SV.CO presented me an opportunity to <strong>learn through experiences</strong>, the routine college education doesn’t provide me with such opportunities.
+        secondary_html: Arun. P, Job offer at Goquii & selected to join Draper university
+      background_3_messages:
+        main_html: SV.CO Startup SYM raises <strong>funding</strong> from ASKME
+        secondary_html: SYM
+      background_4_messages:
+        main_html: We joined engineering in search for a job or go for higher studies, but we challenged the status quo and <strong>got funded</strong> and selected to zone accelerator.
+        secondary_html: Spenwise, selected to zone startups, Mumbai
+      background_5_messages:
+        main_html: We experienced the real startup experience during college and the <strong>6 ways to graduate</strong> opened up many more opportunities for us.
+        secondary_html: Sarah &amp; Arya Murali, women entrepreneurs from our First Batch
   payment:
     status:
       requested: Requested
@@ -172,5 +189,3 @@ en:
       founder_reminder: ":exclamation: *Reminder:* Your startup (%{startup_name}) has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes! You can <%{meeting_link}|click here> to join the meeting when it's time."
       faculty_reminder: ":exclamation: *Reminder:* You have an office hour with the founders of <%{startup_url}|%{startup_name}> starting in 30 minutes!\nThe founders plan to discuss the following questions:\n %{questions}\nYou can <%{meeting_link}|click here> to join the meeting when it's time."
       ops_team_reminder: ":exclamation: *Reminder:* <%{startup_url}|%{startup_name}> has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes. Follow up!"
-
-

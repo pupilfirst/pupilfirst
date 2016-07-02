@@ -1,7 +1,8 @@
 ActiveAdmin.register BatchApplication do
   menu parent: 'Batches', label: 'Applications', priority: 0
 
-  permit_params :batch_id, :application_stage_id, :university_id, :team_achievement, :team_lead_id, :college, :state
+  permit_params :batch_id, :application_stage_id, :university_id, :team_achievement, :team_lead_id, :college, :state,
+    :phone
 
   batch_action :promote, confirm: 'Are you sure?' do |ids|
     promoted = 0
@@ -95,7 +96,7 @@ ActiveAdmin.register BatchApplication do
       row :batch
       row :team_lead
 
-      row :cofounders do |batch_application|
+      row :cofounders do
         ul do
           batch_application.cofounders.each do |applicant|
             li do
@@ -106,7 +107,11 @@ ActiveAdmin.register BatchApplication do
       end
 
       row :application_stage
-      row "Team Lead's Mobile Phone Number", :phone
+
+      row "Team Lead's Mobile Phone Number" do
+        batch_application.phone
+      end
+
       row :university
       row :college
       row :state
@@ -141,6 +146,7 @@ ActiveAdmin.register BatchApplication do
     f.inputs do
       f.input :batch
       f.input :team_lead
+      f.input :phone, label: "Team lead's mobile number", placeholder: '10-digit number'
       f.input :application_stage, collection: ApplicationStage.all.order(number: 'ASC')
       f.input :university
       f.input :college

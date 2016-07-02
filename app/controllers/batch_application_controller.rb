@@ -268,8 +268,8 @@ class BatchApplicationController < ApplicationController
     # Sign in the current application founder.
     @current_batch_applicant = applicant
 
-    # Store a cookie that'll keep him / her signed in for 2 months.
-    cookies[:applicant_token] = { value: applicant.token, expires: 2.months.from_now }
+    # Store a cookie that'll keep him / her signed in for 3 months.
+    cookies[:applicant_token] = { value: applicant.token, expires: 3.months.from_now }
   end
 
   # Redirect applicant to sign in page is zhe isn't signed in.

@@ -138,11 +138,7 @@ class BatchApplicationController < ApplicationController
     @batch_applicant = BatchApplicant.find_or_initialize_by email: params[:batch_applicant][:email]
 
     if @batch_applicant.save
-      # Regenerate token.
-      @batch_applicant.regenerate_token
-
-      # Send email.
-      BatchApplicantMailer.sign_in(@batch_applicant.email, @batch_applicant.token, session[:application_batch]).deliver_later
+      @batch_applicant.send_sign_in_email(session[:application_batch])
 
       render 'batch_application/sign_in_email_sent', layout: 'application_v2'
     else
@@ -265,7 +261,7 @@ class BatchApplicationController < ApplicationController
     applicant = BatchApplicant.find_using_token params[:token]
 
     if applicant.blank?
-      flash.now[:error] = "That token is invalid. It's likely that it has been used already. Please generate a new one-time link using the form on this page."
+      flash.now[:error] = "That token is invalid. It's likely that an hour has passed since it was generated."
       return
     end
 

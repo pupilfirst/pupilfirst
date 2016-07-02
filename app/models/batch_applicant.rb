@@ -18,12 +18,18 @@ class BatchApplicant < ActiveRecord::Base
 
   has_secure_token
 
-  # Attempts to find an applicant with the supplied token. If found, the token is regenerated to invalidate previous
-  # value, thus preventing reuse of login link.
+  # Attempts to find an applicant with the supplied token.
   def self.find_using_token(incoming_token)
     applicant = find_by token: incoming_token
+
     return if applicant.blank?
-    applicant.regenerate_token
+
+    # Hack to continue logins that were created before time-bound check was introduced.
+    applicant.update!(sign_in_email_sent_at: Time.now) if applicant.sign_in_email_sent_at.blank?
+
+    # Don't sign in applicant if the email was sent over an hour ago.
+    return if applicant.sign_in_email_sent_at < 1.hour.ago
+
     applicant
   end
 
@@ -31,5 +37,16 @@ class BatchApplicant < ActiveRecord::Base
     return false unless batch_applications.present?
 
     batch_applications.find_by(batch_id: batch.id).present?
+  end
+
+  def send_sign_in_email(application_batch)
+    # Create a new token.
+    regenerate_token
+
+    # Send email.
+    BatchApplicantMailer.sign_in(email, token, application_batch).deliver_later
+
+    # Mark when email was sent.
+    update!(sign_in_email_sent_at: Time.now)
   end
 end

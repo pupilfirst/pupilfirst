@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160701130747) do
+ActiveRecord::Schema.define(version: 20160702130647) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,9 +105,10 @@ ActiveRecord::Schema.define(version: 20160701130747) do
     t.string   "email"
     t.string   "phone"
     t.string   "role"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
     t.string   "token"
+    t.datetime "sign_in_email_sent_at"
   end
 
   add_index "batch_applicants", ["token"], name: "index_batch_applicants_on_token", using: :btree

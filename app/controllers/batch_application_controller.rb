@@ -265,7 +265,7 @@ class BatchApplicationController < ApplicationController
     applicant = BatchApplicant.find_using_token params[:token]
 
     if applicant.blank?
-      flash[:error] = "That token is invalid. It's likely that it has been used already. Please generate a new one-time link using the form on this page."
+      flash.now[:error] = "That token is invalid. It's likely that it has been used already. Please generate a new one-time link using the form on this page."
       return
     end
 

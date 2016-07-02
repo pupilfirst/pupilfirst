@@ -90,6 +90,38 @@ ActiveAdmin.register BatchApplication do
     end
   end
 
+  show do
+    attributes_table do
+      row :batch
+      row :team_lead
+
+      row :cofounders do |batch_application|
+        ul do
+          batch_application.cofounders.each do |applicant|
+            li do
+              link_to applicant.name, admin_batch_applicant_path(applicant)
+            end
+          end
+        end
+      end
+
+      row :application_stage
+      row "Team Lead's Mobile Phone Number", :phone
+      row :university
+      row :college
+      row :state
+      row :team_achievement
+    end
+
+    panel 'Technical details' do
+      attributes_table_for batch_application do
+        row :id
+        row :created_at
+        row :updated_at
+      end
+    end
+  end
+
   member_action :promote, method: :post do
     batch_application = BatchApplication.find(params[:id])
     promoted_stage = batch_application.promote!

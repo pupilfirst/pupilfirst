@@ -46,21 +46,23 @@ stickyApplyButton = ->
   startApplication = $('#start-application')
 
   if startApplication.length
-    stickyToggle = new Waypoint(
+    stickyToggle = new Waypoint
       element: $('.graduated-slide')[0],
       handler: (direction) ->
-        $('.sticky-application-button').toggleClass('hidden-xs-up')
-    )
+        applicationButton = $('.sticky-application-button')
+        if direction == 'down'
+          applicationButton.removeClass('hidden-xs-up')
+        else
+          applicationButton.addClass('hidden-xs-up')
 
-    bottomStickyToggle = new Waypoint.Inview(
+    bottomStickyToggle = new Waypoint.Inview
       element: $('footer')[0]
       enter: (direction) ->
         if direction == 'down'
-          $('.sticky-application-button').toggleClass('stick-above-footer')
+          $('.sticky-application-button').addClass('stick-above-footer')
       exited: (direction) ->
         if direction == 'up'
-          $('.sticky-application-button').toggleClass('stick-above-footer')
-    )
+          $('.sticky-application-button').removeClass('stick-above-footer')
 
 $(document).on 'page:change', setupGraduationCarousel
 $(document).on 'page:change', avoidwidowsTypography

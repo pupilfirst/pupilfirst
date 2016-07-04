@@ -585,6 +585,9 @@ GEM
     roadie-rails (1.1.0)
       railties (>= 3.0, < 4.3)
       roadie (~> 3.1)
+    roo (2.4.0)
+      nokogiri (~> 1)
+      rubyzip (~> 1.1, < 2.0.0)
     rspec-core (3.4.4)
       rspec-support (~> 3.4.0)
     rspec-expectations (3.4.0)
@@ -609,6 +612,7 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.7.5)
+    rubyzip (1.2.0)
     safe_yaml (1.0.4)
     sass (3.4.22)
     sass-rails (5.0.4)
@@ -786,6 +790,7 @@ DEPENDENCIES
   require_all
   rest-client
   roadie-rails
+  roo (~> 2.4.0)
   rspec-rails (~> 3.4.0)
   rubocop
   sass-rails (~> 5.0)

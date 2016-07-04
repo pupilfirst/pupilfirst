@@ -88,6 +88,8 @@ gem 'reform' # Form objects decoupled from models. http://www.trailblazer.to/gem
 gem 'reform-rails'
 gem 'virtus' # Required for reform coercion. Attributes on Steroids for Plain Old Ruby Objects
 
+gem 'roo', '~> 2.4.0' # Temporarily used to parse spreadsheet list of universities
+
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify' # Superb notifications library. http://sciactive.github.io/pnotify/

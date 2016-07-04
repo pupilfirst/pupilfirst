@@ -7,6 +7,7 @@ class HomeController < ApplicationController
 
   def story
     @skip_container = true
+    render layout: 'application'
   end
 
   # used by the 'shortener' gem's config

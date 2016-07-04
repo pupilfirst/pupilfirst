@@ -1,0 +1,48 @@
+.select2-container.grouped_select.form-control {
+  // Give bounding box correct size.
+  padding: 0;
+
+  a {
+    // Give border correct size.
+    border-color: $gray-border;
+    box-shadow: none;
+
+    // Let element expand to size of contents.
+    height: 100%;
+
+    .select2-chosen {
+      // Reset overridden font (WTF!).
+      font-family: 'Source Sans Pro', sans-serif;
+
+      // Set a minimum height to prop it up without content.
+      min-height: 37px;
+
+      // Set correct line height and padding.
+      line-height: 1.5;
+      padding: 0.5rem 0.75rem;
+    }
+
+    .select2-arrow {
+      // Inherit border color from parent.
+      border-color: inherit;
+
+      b {
+        // Lower the arrow.
+        background-position: 0 7px;
+      }
+    }
+  }
+
+  &.select2-dropdown-open {
+    .select2-arrow {
+      // No border when dropdown is open.
+      border-color: transparent;
+    }
+  }
+}
+
+.select2-drop.select2-drop-active {
+  // Correct border color on dropdown component.
+  border-color: $gray-border;
+  box-shadow: none;
+}

@@ -11,6 +11,7 @@
 @import "video-js";
 
 // Rails Assets.
+@import "pnotify";
 @import "slick-carousel/slick.scss";
 @import "slick-carousel/slick-theme.scss";
 
@@ -22,6 +23,7 @@
 @import "v2/errors";
 
 // Controller-specific
+@import 'v2/home';
 @import 'v2/changelog';
 @import 'v2/batch_application';
 @import 'v2/tour';

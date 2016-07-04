@@ -25,8 +25,8 @@ html lang='en'
     link rel="icon" href="#{image_url 'favicon.png'}"
 
   body
-    section#header.header
-      nav.navbar role="navigation"
+    section#header.home-header
+      nav.navbar.home-navbar role="navigation"
         - if @sitewide_notice
           .sitewide-notice
             .container
@@ -41,9 +41,8 @@ html lang='en'
               span.icon-bar.bottom-bar
 
             a.navbar-brand href="#{root_url}"
-              img.site-logo#site-logo src="#{image_url 'SV.CO-Logo.svg'}" alt='Logo of SV.CO'
+              img.site-logo#site-logo src="#{image_url 'SV.CO-Logo-home.svg'}" alt='Logo of SV.CO'
           = render 'layouts/nav_links_v2'
-    .header-spacer
       == yield :header
 
       - if current_founder
@@ -77,8 +76,6 @@ html lang='en'
     - else
       .container
         == yield
-
-    == render 'layouts/footer'
 
     /- if current_founder.try(:just_signed_in)
     /  == render 'layouts/inspectlet'

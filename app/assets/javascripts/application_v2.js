@@ -34,6 +34,7 @@
 //= require perfect-scrollbar
 //= require slick-carousel/slick.js
 //= require readmore
+//= require waypoints
 
 // Shared
 // require _shared

@@ -17,8 +17,8 @@
         ' to visit Silicon Valley
 
       - if @batches_open.present?
-        - @batches_open.each do |batch|
-          = link_to 'Start Application', apply_batch_path(batch: batch.batch_number), class: 'btn btn-primary btn-md text-uppercase'
+        - batch = @batches_open.first
+        = link_to 'Start Application', apply_batch_path(batch: batch.batch_number), class: 'btn btn-primary btn-md text-uppercase', id: 'start-application'
       - if @batches_ongoing.present?
         - @batches_ongoing.each do |batch|
           - if current_batch_applicant.blank? || current_batch_applicant.applied_to?(batch)
@@ -26,7 +26,7 @@
           - else
             button.btn.btn-primary.btn-md.text-uppercase disabled="true"
               | Not accepting new applications
-      a.btn.btn-md.text-uppercase href="#" class=(@batches_open.present? ? 'btn-secondary' : '')
+      a.btn.btn-md.text-uppercase href="#" data-toggle="modal" data-target="#watchIntroVideo" class=(@batches_open.present? ? 'btn-secondary' : '')
         | Watch Video
 
 .graduated-slide
@@ -37,40 +37,76 @@
         | Graduated Startups and Founders
       .graduation-carousel
         .slide-item
-          a.graduate-thumbnail data-toggle="modal" href="#graduatesVideo"
-            = image_tag 'apply/graduation-thumbnail-1.png'
+          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-1"
+            = image_tag 'apply/graduation-video-thumbnail-1.png'
           .graduate-data.text-xs-center
             h4
-              | Kallidil Kalidasan
+              | The Journey from a college hostel to a million dollar startup
             p
-              | Placed at Freecharge
 
         .slide-item
-          a.graduate-thumbnail data-toggle="modal" href="#graduatesVideo"
-            = image_tag 'apply/graduation-thumbnail-1.png'
+          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-2"
+            = image_tag 'apply/graduation-video-thumbnail-2.png'
           .graduate-data.text-xs-center
             h4
-              | Kallidil Kalidasan
+              | SYM Funding Story
             p
-              | Placed at Freecharge
 
         .slide-item
-          a.graduate-thumbnail data-toggle="modal" href="#graduatesVideo"
-            = image_tag 'apply/graduation-thumbnail-1.png'
+          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-3"
+            = image_tag 'apply/graduation-video-thumbnail-3.png'
           .graduate-data.text-xs-center
             h4
-              | Kallidil Kalidasan
+              | Spenwise Funding &amp; Accelerator story
             p
-              | Placed at Freecharge
 
         .slide-item
-          a.graduate-thumbnail data-toggle="modal" href="#graduatesVideo"
-            = image_tag 'apply/graduation-thumbnail-1.png'
+          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-4"
+            = image_tag 'apply/graduation-video-thumbnail-4.png'
           .graduate-data.text-xs-center
             h4
-              | Kallidil Kalidasan
+              | Z Pay Acqui hired by Tally
             p
-              | Placed at Freecharge
+
+        .slide-item
+          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
+            = image_tag 'apply/graduation-video-thumbnail-5.png'
+          .graduate-data.text-xs-center
+            h4
+              | Getting Hired
+            p
+              
+        .slide-item
+          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-6"
+            = image_tag 'apply/graduation-video-thumbnail-6.png'
+          .graduate-data.text-xs-center
+            h4
+              | Graduation Rockstar
+            p
+
+        .slide-item
+          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-7"
+            = image_tag 'apply/graduation-video-thumbnail-7.png'
+          .graduate-data.text-xs-center
+            h4
+              | Harish Sivaramakrishnan (VP of Design, Snapdeal)
+            p
+  
+        .slide-item
+          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-8"
+            = image_tag 'apply/graduation-video-thumbnail-8.png'
+          .graduate-data.text-xs-center
+            h4
+              | Amit Saini (Director of Engineering, Ola Money)
+            p
+
+        .slide-item
+          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-9"
+            = image_tag 'apply/graduation-video-thumbnail-9.png'
+          .graduate-data.text-xs-center
+            h4
+              | Vinod Malhotra (Chief of R&amp;D, Tally Solutions)
+            p
 
 .program-benefits
   .container-fluid
@@ -79,7 +115,7 @@
         span.content-title-icon.program-icon
         | The Program
       .program-video.center-block.text-xs-center
-        iframe.program-video-frame src="" frameborder="0" allowfullscreen="allowfullscreen"
+        iframe.program-video-frame src="https://www.youtube.com/embed/7fDmQOFNmLQ" frameborder="0" allowfullscreen="allowfullscreen"
 
       .benefits-section.center-block.text-xs-center
         .col-md-6
@@ -181,7 +217,7 @@
                 | Ad&ndash;hoc Help Wanted Requests
               p
                 | Every startup is different, so we help founders out with ad&ndash;hoc requests. This could be things like getting in touch with a great investor or help with vetting a client agreement.
-        = link_to 'take a Tour', tour_path, class: 'btn btn-primary btn-md text-uppercase tour-link'
+        / = link_to 'take a Tour', tour_path, class: 'btn btn-primary btn-md text-uppercase tour-link'
 .program-partners
   .container
     h3.text-xs-center.content-head
@@ -305,6 +341,16 @@
           ul
             li
               h5
+                | Does this batch have a theme?
+              p
+                ' Yes, all SV.CO batches have a <em>theme</em>, a particular domain
+                ' that all startups in the batch focus on. The theme of this batch
+                ' is Software-as-a-Service (SaaS), an industry domain where quick
+                ' and nimble startups can create a great product without a lot of
+                ' resources. We think that this domain is particularly apt for 
+                ' student startups.
+            li
+              h5
                 | How many teams will be selected?
               p
                 ' Our plan is to select 100 teams for Batch 3. However, this number
@@ -327,13 +373,16 @@
               h5
                 | Do I need a product idea to get selected in this program?
               p
-                | No. We’ll provide you a curated list of startup ideas for you to work on.
+                | Not necessary. We will provide you a curated list of startup ideas in the SaaS space for you to work on if you don't have one.
             li
               h5
-                | Can I work on my own  idea?
+                | Can I work on my own idea?
               p
                 ' Yes, but be prepared to receive additional scrutiny during the Idea Discovery
-                ' phase of the program. If you apply to this program with a prototype
+                ' phase of the program. Because the theme of this batch is SaaS, 
+                ' if you have an idea that is not in the SaaS space,  you might miss out on some
+                ' SaaS-specific resources and content we provide.
+                ' Be aware though that if you apply to this program with a prototype
                 ' already built or if you already have customers, we’ll strongly advise
                 ' you that this program might not be the right fit for you. We’re tailoring
                 | this program towards first-time founders.
@@ -365,12 +414,12 @@
               h5
                 | What will be covered under my Program Fee?
               p
-                ' All costs of the Silicon Valley visit for one founder, including 
-                | travel (economy flight tickets) and accomodation (shared) 
+                ' All costs of the Silicon Valley visit for one founder, including
+                | travel (economy flight tickets) and accomodation (shared)
                 | is included in the Program Fee.
               p
                 ' Food expenses for the visit will not be covered. Neither will any
-                | costs associated with procuring the required U.S. Visa and other 
+                | costs associated with procuring the required U.S. Visa and other
                 | related travel documents.
             li
               h5
@@ -401,19 +450,22 @@
               p
                 ' The program is the first of its kind student entrepreneurship
                 ' program in the world. Not only do you get a guided startup
-                ' experience even while you are still in college, your team
+                ' experience even while you are still in college, you
                 ' also gets to visit the mecca of startups: Silicon Valley.
                 ' For this batch, we’ve calibrated the fee so that it’s similar
                 ' to a one-semester fee that a lot of private engineering colleges
                 ' ask for. For the same fee, you get a once-in-a-lifetime opportunity.
-                | You can #{link_to 'take the tour', tour_path} or listen to our previous founders if you are still not convinced.
+                ' You can #{link_to 'take the tour', tour_path} or listen to 
+                ' our previous founders if you are still not convinced.
             li
               h5
                 | If I do not find the program satisfactory, can I get a refund?
               p
                 ' There is no refund for the Application Fee. If you drop out of
                 ' the program within 2 months of batch start, you will receive
-                | a no-questions-asked 100% refund of your Program Fee.
+                ' a no-questions-asked 100% refund of your Program Fee. 
+                ' Dropped-out teams will not be eligible for the Silicon Valley
+                ' visit.
             li
               h5
                 | Can you explain the legal agreement further?
@@ -464,9 +516,13 @@
               h5
                 | Can you tell me about the faculty I will interact with?
               p
-                ' Sure, #{link_to 'visit our faculty', faculty_index_path} page. You interact with the faculty
-                ' through a one-on-one connect request, and you can even
-                | #{link_to 'rate your interaction', 'https://sv.co/faculty/gautham'} through SV.CO.
+                ' Sure, #{link_to 'visit our faculty', faculty_index_path} page. You 
+                ' interact with the faculty through a one-on-one connect request, 
+                ' and you can even
+                ' #{link_to 'rate your interaction', 'https://sv.co/faculty/gautham'} 
+                ' through SV.CO. Because most faculty volunteer their valuable time 
+                ' to the SV.CO program, your access to them will be gated by your
+                ' progress in the program. 
 
             li
               h5
@@ -544,15 +600,96 @@
           a.btn-link href='#' data-toggle="modal" data-target="#success-fees"
             | View More
 
-
-#graduatesVideo.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+#watchIntroVideo.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content
       .modal-header
         button.close aria-label="Close" data-dismiss="modal" type="button"
           span aria-hidden="true" &times;
       .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/KufIL6ZS1lk?rel=0&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen"
+        iframe.video-frame src="https://www.youtube.com/embed/RUP3fk7lf5o" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-1.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/AzABLPISPQU" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-2.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/k13C6C_MzCE" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-3.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/xBaaBVlK5Ws" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-4.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/pwmVitwaeL0" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-5.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/XBjkCUW1lFQ" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-6.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/AaoW1W7wZLk" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-7.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/ut-J7cuQpzI" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-8.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/z2e5o5ftgRc" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-9.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/qEZ1RamKt6k" frameborder="0" allowfullscreen="allowfullscreen"
+
 
 #basic-fees.modal.fade aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
@@ -581,7 +718,7 @@
             ' For the benefits you get from the program, visit the #{link_to 'main apply page', apply_index_path} and
             | the #{link_to 'tour page', tour_path}.
           li
-            ' All costs of the Silicon Valley visit for one founder, including travel (economy flight tickets tickets) and accomodation (shared) is included in the Program Fee. 
+            ' All costs of the Silicon Valley visit for one founder, including travel (economy flight tickets tickets) and accomodation (shared) is included in the Program Fee.
           li
             ' Food expenses for the Silicon Valley visit will not be covered under the Program Fee. Neither will any costs associated with procuring the required U.S. Visa and other related travel documents.
           li

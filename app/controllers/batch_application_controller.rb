@@ -1,5 +1,4 @@
 class BatchApplicationController < ApplicationController
-  before_action :lock_under_feature_flag
   before_action :ensure_applicant_is_signed_in, only: :apply
   layout 'application_v2'
 
@@ -139,11 +138,7 @@ class BatchApplicationController < ApplicationController
     @batch_applicant = BatchApplicant.find_or_initialize_by email: params[:batch_applicant][:email]
 
     if @batch_applicant.save
-      # Regenerate token.
-      @batch_applicant.regenerate_token
-
-      # Send email.
-      BatchApplicantMailer.sign_in(@batch_applicant.email, @batch_applicant.token, session[:application_batch]).deliver_later
+      @batch_applicant.send_sign_in_email(session[:application_batch])
 
       render 'batch_application/sign_in_email_sent', layout: 'application_v2'
     else
@@ -194,11 +189,6 @@ class BatchApplicationController < ApplicationController
   helper_method :current_application
 
   private
-
-  def lock_under_feature_flag
-    return if Rails.env.test? || Rails.env.development?
-    raise_not_found unless Feature.active?(:application_v2, current_founder)
-  end
 
   def set_instance_variables
     @skip_container = true
@@ -271,15 +261,15 @@ class BatchApplicationController < ApplicationController
     applicant = BatchApplicant.find_using_token params[:token]
 
     if applicant.blank?
-      flash[:error] = "That token is invalid. It's likely that it has been used already. Please generate a new one-time link using the form on this page."
+      flash.now[:error] = "That token is invalid. It's likely that an hour has passed since it was generated."
       return
     end
 
     # Sign in the current application founder.
     @current_batch_applicant = applicant
 
-    # Store a cookie that'll keep him / her signed in for 2 months.
-    cookies[:applicant_token] = { value: applicant.token, expires: 2.months.from_now }
+    # Store a cookie that'll keep him / her signed in for 3 months.
+    cookies[:applicant_token] = { value: applicant.token, expires: 3.months.from_now }
   end
 
   # Redirect applicant to sign in page is zhe isn't signed in.

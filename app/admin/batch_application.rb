@@ -1,7 +1,8 @@
 ActiveAdmin.register BatchApplication do
   menu parent: 'Batches', label: 'Applications', priority: 0
 
-  permit_params :batch_id, :application_stage_id, :university_id, :team_achievement, :team_lead_id, :college, :state
+  permit_params :batch_id, :application_stage_id, :university_id, :team_achievement, :team_lead_id, :college, :state,
+    :phone
 
   batch_action :promote, confirm: 'Are you sure?' do |ids|
     promoted = 0
@@ -33,7 +34,10 @@ ActiveAdmin.register BatchApplication do
       end
     end
 
-    column 'Stage', :application_stage
+    column 'Stage' do |batch_application|
+      stage = batch_application.application_stage
+      link_to "##{stage.number} #{stage.name}", admin_application_stage_path(stage)
+    end
 
     column 'Submission' do |batch_application|
       current_stage = batch_application.application_stage
@@ -87,6 +91,42 @@ ActiveAdmin.register BatchApplication do
     end
   end
 
+  show do
+    attributes_table do
+      row :batch
+      row :team_lead
+
+      row :cofounders do
+        ul do
+          batch_application.cofounders.each do |applicant|
+            li do
+              link_to applicant.name, admin_batch_applicant_path(applicant)
+            end
+          end
+        end
+      end
+
+      row :application_stage
+
+      row "Team Lead's Mobile Phone Number" do
+        batch_application.phone
+      end
+
+      row :university
+      row :college
+      row :state
+      row :team_achievement
+    end
+
+    panel 'Technical details' do
+      attributes_table_for batch_application do
+        row :id
+        row :created_at
+        row :updated_at
+      end
+    end
+  end
+
   member_action :promote, method: :post do
     batch_application = BatchApplication.find(params[:id])
     promoted_stage = batch_application.promote!
@@ -106,6 +146,7 @@ ActiveAdmin.register BatchApplication do
     f.inputs do
       f.input :batch
       f.input :team_lead
+      f.input :phone, label: "Team lead's mobile number", placeholder: '10-digit number'
       f.input :application_stage, collection: ApplicationStage.all.order(number: 'ASC')
       f.input :university
       f.input :college

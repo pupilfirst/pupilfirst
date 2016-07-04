@@ -1,4 +1,18 @@
 class UserController < ApplicationController
+  # try to authenticate user from cookie or given token
+  def authentication
+    if cookie[:login_token].present?
+      set_current_user
+      redirect_to params[:referrer]
+    elsif params[:token].present?
+      if token_valid?
+        login_user
+      else
+        request_identification
+      end
+    end
+  end
+
   # collect email for user identification
   def identify
     @user = User.new

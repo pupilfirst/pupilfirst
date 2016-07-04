@@ -144,6 +144,7 @@ Svapp::Application.routes.draw do
   end
 
   scope 'user', as: 'user', controller: 'user' do
+    get 'authentication'
     get 'identify'
     post 'login'
   end

@@ -1,5 +1,5 @@
 class SixWaysMoocController < ApplicationController
-  before_action :authorize_user
+  before_action :authorize_student
 
   # the landing page for sixways
   def index
@@ -10,15 +10,20 @@ class SixWaysMoocController < ApplicationController
 
   def current_mooc_student
     @current_mooc_student ||= begin
-      return if cookies[:login_token].blank?
-      MoocStudent.joins(:user).find_by('users.login_token': cookies[:login_token])
+      return false unless current_user.present?
+      MoocStudent.where(user: current_user).first
     end
   end
 
   private
 
-  def authorize_user
-    current_mooc_student.present? ? return : check_for_token
+  def authorize_student
+    binding.pry
+    current_mooc_student.present? ? return : request_authentication
+  end
+
+  def request_authentication
+    redirect_to user_authentication_path(referrer: request.url, token: params[:token])
   end
 
   def check_for_token

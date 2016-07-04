@@ -23,17 +23,28 @@
       margin: 10px 0 0 0;
     }
   }
+}
 
-  a.start-application-hover {
-    position: fixed;
-    right: 2em;
-    bottom: 2em;
-    z-index: 100;
+.sticky-application-button {
+  position: fixed;
+  right: 2em;
+  bottom: 2em;
+  z-index: 100;
+  transition: none;
+
+  @include media-breakpoint-down(xs) {
+    width: auto;
+    right: 1em;
+    bottom: 1em;
+  }
+
+  &.stick-above-footer {
+    position: absolute;
+    bottom: initial;
+    margin-top: -4.4em;
 
     @include media-breakpoint-down(xs) {
-      width: auto;
-      right: 1em;
-      bottom: 1em;
+      margin-top: -3.4em
     }
   }
 }

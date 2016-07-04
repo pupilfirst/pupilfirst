@@ -75,7 +75,7 @@
             h4
               | Getting Hired
             p
-              
+
         .slide-item
           a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-6"
             = image_tag 'apply/graduation-video-thumbnail-6.png'
@@ -91,7 +91,7 @@
             h4
               | Harish Sivaramakrishnan (VP of Design, Snapdeal)
             p
-  
+
         .slide-item
           a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-8"
             = image_tag 'apply/graduation-video-thumbnail-8.png'
@@ -347,7 +347,7 @@
                 ' that all startups in the batch focus on. The theme of this batch
                 ' is Software-as-a-Service (SaaS), an industry domain where quick
                 ' and nimble startups can create a great product without a lot of
-                ' resources. We think that this domain is particularly apt for 
+                ' resources. We think that this domain is particularly apt for
                 ' student startups.
             li
               h5
@@ -379,7 +379,7 @@
                 | Can I work on my own idea?
               p
                 ' Yes, but be prepared to receive additional scrutiny during the Idea Discovery
-                ' phase of the program. Because the theme of this batch is SaaS, 
+                ' phase of the program. Because the theme of this batch is SaaS,
                 ' if you have an idea that is not in the SaaS space,  you might miss out on some
                 ' SaaS-specific resources and content we provide.
                 ' Be aware though that if you apply to this program with a prototype
@@ -455,7 +455,7 @@
                 ' For this batch, we’ve calibrated the fee so that it’s similar
                 ' to a one-semester fee that a lot of private engineering colleges
                 ' ask for. For the same fee, you get a once-in-a-lifetime opportunity.
-                ' You can #{link_to 'take the tour', tour_path} or listen to 
+                ' You can #{link_to 'take the tour', tour_path} or listen to
                 ' our previous founders if you are still not convinced.
             li
               h5
@@ -463,7 +463,7 @@
               p
                 ' There is no refund for the Application Fee. If you drop out of
                 ' the program within 2 months of batch start, you will receive
-                ' a no-questions-asked 100% refund of your Program Fee. 
+                ' a no-questions-asked 100% refund of your Program Fee.
                 ' Dropped-out teams will not be eligible for the Silicon Valley
                 ' visit.
             li
@@ -516,13 +516,13 @@
               h5
                 | Can you tell me about the faculty I will interact with?
               p
-                ' Sure, #{link_to 'visit our faculty', faculty_index_path} page. You 
-                ' interact with the faculty through a one-on-one connect request, 
+                ' Sure, #{link_to 'visit our faculty', faculty_index_path} page. You
+                ' interact with the faculty through a one-on-one connect request,
                 ' and you can even
-                ' #{link_to 'rate your interaction', 'https://sv.co/faculty/gautham'} 
-                ' through SV.CO. Because most faculty volunteer their valuable time 
+                ' #{link_to 'rate your interaction', 'https://sv.co/faculty/gautham'}
+                ' through SV.CO. Because most faculty volunteer their valuable time
                 ' to the SV.CO program, your access to them will be gated by your
-                ' progress in the program. 
+                ' progress in the program.
 
             li
               h5
@@ -760,3 +760,5 @@
       .modal-footer
         button.btn.btn-sm.btn-secondary.text-uppercase aria-label="Close" data-dismiss="modal" type="button"
           | Close
+
+= link_to 'Start Application', apply_batch_path(batch: batch.batch_number), class: 'btn btn-primary btn-xs text-uppercase hidden-xs-up sticky-application-button'

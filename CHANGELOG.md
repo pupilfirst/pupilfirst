@@ -1,3 +1,9 @@
+### 4 July, 2016
+
+### Features, UI, Content
+
+  - Applications for batch 3 are open! We've been working towards this for the last four weeks. We've released a brand new home page featuring graduates from our first batch, new videos and content on the apply page, and a four-stage application process.
+
 ### 20 June, 2016
 
 #### UX and UI

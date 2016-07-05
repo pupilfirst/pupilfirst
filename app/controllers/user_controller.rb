@@ -1,12 +1,7 @@
 class UserController < ApplicationController
   # try to authenticate user from cookie or given token
   def authentication
-    if cookies[:login_token].present?
-      # something was wrong with the present cookie, clear it and authenticate again
-      clear_cookie_and_authenticate
-    else
-      check_for_token_param
-    end
+    params[:token].present? ? validate_token : request_email_for_authentication
   end
 
   # collect email for user identification
@@ -30,16 +25,6 @@ class UserController < ApplicationController
   end
 
   private
-
-  def clear_cookie_and_authenticate
-    cookies[:login_token] = nil
-    flash[:error] = 'Something seems wrong! Please sign in again'
-    request_email_for_authentication
-  end
-
-  def check_for_token_param
-    params[:token].present? ? validate_token : request_email_for_authentication
-  end
 
   def validate_token
     token_valid? ? save_token_and_redirect_back : request_email_for_authentication

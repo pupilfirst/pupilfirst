@@ -1,16 +1,16 @@
-class UserController < ApplicationController
-  # try to authenticate user from cookie or given token
+class UserSessionsController < ApplicationController
+  # GET user/authenticate - try to authenticate user from given token
   def authentication
     params[:token].present? ? validate_token : request_email_for_authentication
   end
 
-  # collect email for user identification
-  def identify
+  # GET user_sessions/new - collect email for user identification
+  def new
     @user = User.new
   end
 
-  # find or create user from email received
-  def login
+  # POST user_sessions/send_email - find or create user from email received
+  def send_email
     # validate email
     unless email_valid?
       render 'identify'
@@ -48,16 +48,16 @@ class UserController < ApplicationController
   end
 
   def find_or_create_user
-    @user = User.where(email: params[:user][:email]).first_or_create
+    @user = User.where(email: params[:user_sessions][:email]).first_or_create
   end
 
   def send_email_with_token
-    UserMailer.send_login_token(@user, @referer).deliver_later
+    UserSessionMailer.send_login_token(@user, @referer).deliver_later
   end
 
   def email_valid?
-    @user = User.new(params[:user].permit(:email))
-    if params[:user][:email] =~ /@/
+    @user = User.new(params[:user_sessions].permit(:email))
+    if params[:user_sessions][:email] =~ /@/
       true
     else
       @user.errors[:email] << 'does not look like a valid address'

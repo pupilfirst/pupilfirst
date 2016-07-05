@@ -143,9 +143,9 @@ Svapp::Application.routes.draw do
     get 'start(/:token)', action: 'index'
   end
 
-  scope 'user', as: 'user', controller: 'user' do
+  scope 'user_sessions', as: 'user_sessions', controller: 'user_sessions' do
     get 'authentication'
-    get 'identify'
-    post 'login'
+    get 'new'
+    post 'send_email'
   end
 end

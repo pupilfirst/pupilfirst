@@ -22,7 +22,6 @@ class SixWaysMoocController < ApplicationController
   end
 
   def request_authentication
-    session[:referer] = request.url
-    redirect_to user_authentication_path(token: params[:token])
+    redirect_to user_sessions_new_path(token: params[:token], referer: request.url)
   end
 end

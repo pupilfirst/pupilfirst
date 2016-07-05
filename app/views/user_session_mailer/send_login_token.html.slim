@@ -5,13 +5,13 @@
   | Hi,
 
 = content_for :body
-  P Please #{link_to 'click here', @referer + '/' + @user.login_token} to login to your SV.CO account!
+  P Please #{link_to 'click here', user_sessions_new_path(token: @user.login_token, referer: @referer)} to login to your SV.CO account!
 
   p
     ' If you're unable to click on the link above, then please copy and paste the following
     | link into your browser's address bar:
 
-    p.monospace = @referer + '/' + @user.login_token
+    p.monospace = user_sessions_new_path(token: @user.login_token, referer: @referer)
 
   p Please not that this is a private url and should not be shared.
 

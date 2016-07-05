@@ -4,7 +4,7 @@ title SV.CO Identification
 .text-center.devise-user-form
   h1.title Please identify yourself!
 
-  = form_for @user, url: user_login_path do |f|
+  = form_for @user, url: user_sessions_send_email_path do |f|
     - if @user.errors[:email].any?
       p.general-error
         i.fa.fa-exclamation-circle

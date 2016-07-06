@@ -1,4 +1,5 @@
 class SixWaysMoocController < ApplicationController
+  before_action :lock_under_feature_flag
   before_action :authorize_student, except: :index
 
   # GET /sixways - the landing page for sixways
@@ -19,6 +20,10 @@ class SixWaysMoocController < ApplicationController
   end
 
   private
+
+  def lock_under_feature_flag
+    raise_not_found unless feature_active? :six_ways_mooc
+  end
 
   def authorize_student
     request_authentication if current_mooc_student.blank?

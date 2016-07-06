@@ -139,6 +139,8 @@ Svapp::Application.routes.draw do
   scope 'sixways', as: 'sixways', controller: 'six_ways_mooc' do
     get '/', action: 'index'
     get 'start'
+    get 'student_details'
+    post 'save_student_details'
   end
 
   # used for shortened urls from the shortener gem

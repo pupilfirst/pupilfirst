@@ -25,6 +25,6 @@ class MoocStudent < ActiveRecord::Base
   end
 
   def details_complete?
-    [name, gender, university_id, college, semester, state].reject { |c| c.blank? }.length == 6
+    [name, gender, university_id, college, semester, state].count(&:present?) == 6
   end
 end

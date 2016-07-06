@@ -135,16 +135,15 @@ Svapp::Application.routes.draw do
   # to test rotating background images.
   get '/test_background', to: 'home#test_background'
 
+  scope 'sixways', as: 'sixways', controller: 'six_ways_mooc' do
+    get '/', action: 'index'
+    get 'start'
+  end
+
   # used for shortened urls from the shortener gem
   get '/:id', to: 'shortener/shortened_urls#show'
 
-  scope 'sixways', as: 'sixways', controller: 'six_ways_mooc' do
-    # TODO: change '/start' to point to '/'
-    get 'start(/:token)', action: 'index'
-  end
-
   scope 'user_sessions', as: 'user_sessions', controller: 'user_sessions' do
-    get 'authentication'
     get 'new'
     post 'send_email'
   end

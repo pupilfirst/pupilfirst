@@ -1,9 +1,12 @@
 class SixWaysMoocController < ApplicationController
-  before_action :authorize_student
+  before_action :authorize_student, except: :index
 
-  # the landing page for sixways
+  # GET /sixways - the landing page for sixways
   def index
-    # something
+  end
+
+  # GET /sixways/start - the start page for the course
+  def start
   end
 
   protected

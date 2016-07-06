@@ -137,6 +137,9 @@ class BatchApplicationController < ApplicationController
     @skip_container = true
     @batch_applicant = BatchApplicant.find_or_initialize_by email: params[:batch_applicant][:email]
 
+    @batch_applicant.name = params[:batch_applicant][:name]
+    @batch_applicant.phone = params[:batch_applicant][:phone]
+
     if @batch_applicant.save
       @batch_applicant.send_sign_in_email(session[:application_batch])
 
@@ -145,6 +148,17 @@ class BatchApplicationController < ApplicationController
       # There's probably something wrong with the entered email address. Render the form again.
       render 'batch_application/identify', layout: 'application_v2'
     end
+  end
+
+  # POST /apply/restart/:batch
+  def restart
+    # Only applications in stage 1 can restart.
+    raise_not_found if applicant_stage_number != 1
+    current_application&.restart!
+
+    flash[:success] = 'Your previous application has been discarded.'
+
+    redirect_to apply_batch_path(batch: params[:batch])
   end
 
   protected
@@ -187,6 +201,7 @@ class BatchApplicationController < ApplicationController
   helper_method :current_batch
   helper_method :current_stage
   helper_method :current_application
+  helper_method :applicant_stage
 
   private
 

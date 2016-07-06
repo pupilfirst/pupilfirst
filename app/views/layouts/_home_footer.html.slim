@@ -30,6 +30,9 @@ footer
             a data-toggle="modal" data-target="#privacy" Privacy Policy
           div
             a data-toggle="modal" data-target="#terms" Terms of Use
+          .hidden-sm-down
+            a href='http://www.go.co/' target='_blank'
+              = image_tag 'home/dot_co_banner.png', class: 'dot-co-banner'
 
         .col-md-3.footer-column
           address
@@ -40,7 +43,7 @@ footer
               | 4th Block, 80 Feet Main Road,
               br
               | Koramangala, Bangalore &mdash; 560095
-              
+
         .col-md-3.footer-column
           strong.text-uppercase Connect
           div
@@ -57,6 +60,9 @@ footer
                 i.fa.fa-youtube.fa-2x
           p &copy; 2015 SV.CO. All rights reserved.
 
+        .hidden-md-up.banner-row
+          a href='http://www.go.co/' target='_blank'
+            = image_tag 'home/dot_co_banner.png', class: 'dot-co-banner'
   / #footer-bottom
   /   .container
   /     .row

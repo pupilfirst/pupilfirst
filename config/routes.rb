@@ -1,4 +1,6 @@
 Svapp::Application.routes.draw do
+  get 'user/identify'
+
   devise_for(
     :founders,
     controllers: {
@@ -94,6 +96,7 @@ Svapp::Application.routes.draw do
     get '/tour', action: 'tour', as: 'tour'
     get '/to/:batch', action: 'apply', as: 'batch'
     post '/to/:batch', action: 'submit', as: 'submit'
+    post '/restart/:batch', action: 'restart', as: 'restart'
     get '/identify/:batch', action: 'identify', as: 'identify'
     post '/identify', action: 'send_sign_in_email', as: 'send_sign_in_email'
   end
@@ -133,6 +136,18 @@ Svapp::Application.routes.draw do
   # to test rotating background images.
   get '/test_background', to: 'home#test_background'
 
+  scope 'sixways', as: 'sixways', controller: 'six_ways_mooc' do
+    get '/', action: 'index'
+    get 'start'
+    get 'student_details'
+    post 'save_student_details'
+  end
+
   # used for shortened urls from the shortener gem
   get '/:id', to: 'shortener/shortened_urls#show'
+
+  scope 'user_sessions', as: 'user_sessions', controller: 'user_sessions' do
+    get 'new'
+    post 'send_email'
+  end
 end

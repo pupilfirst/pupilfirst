@@ -11,8 +11,6 @@ loadFoundersForStartup = ->
       $.get(foundersForStartupUrl, { startup_id: selectedStartupId }).success (data) ->
         $('#target_founder_id').html(data.founder_options)
 
-        console.log data
-
         # Now show the input
         $('#target_founder_id_input').show()
 

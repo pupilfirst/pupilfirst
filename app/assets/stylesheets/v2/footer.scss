@@ -98,3 +98,19 @@ footer {
     }
   }
 }
+
+.banner-row {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1.5rem 0 0.5rem 0;
+  text-align: center;
+}
+
+img.dot-co-banner {
+  margin-top: 0.6rem;
+  height: 2rem;
+  background-color: black;
+
+  @include media-breakpoint-down(sm) {
+    margin-top: 0;
+  }
+}

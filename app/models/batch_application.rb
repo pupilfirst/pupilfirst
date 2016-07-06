@@ -79,4 +79,19 @@ class BatchApplication < ActiveRecord::Base
   def peform_post_payment_tasks!
     promote! if application_stage.initial_stage?
   end
+
+  # Destroys all trace of an application so that applicant can start again.
+  def restart!
+    raise 'Paid payment is present!' if paid?
+    raise "Restart blocked because application is in stage #{application_stage.number}" unless application_stage.initial_stage?
+
+    # Destroy payment if it exists.
+    if payment.present?
+      payment.destroy!
+      reload
+    end
+
+    # Destory self.
+    destroy!
+  end
 end

@@ -80,8 +80,7 @@ class ApplicationStageOneForm < Reform::Form
       team_achievement: team_achievement,
       college: college,
       state: state,
-      team_lead_id: team_lead.id,
-      phone: team_lead.phone
+      team_lead_id: team_lead.id
     )
   end
 
@@ -89,7 +88,8 @@ class ApplicationStageOneForm < Reform::Form
     team_lead.model.update!(
       name: team_lead.name,
       gender: team_lead.gender,
-      role: team_lead.role
+      role: team_lead.role,
+      phone: team_lead.phone
     )
 
     model.batch_applicants << team_lead.model

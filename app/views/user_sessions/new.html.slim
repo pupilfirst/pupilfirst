@@ -1,0 +1,18 @@
+- content_for :head
+title SV.CO Identification
+
+.text-center.devise-user-form
+  h1.title Please identify yourself!
+
+  = form_for @user, url: user_sessions_send_email_path do |f|
+    - if @user.errors[:email].any?
+      p.general-error
+        i.fa.fa-exclamation-circle
+        | &nbsp; Email: #{@user.errors[:email].first}.
+
+    .wrapped-input
+      = image_tag 'founders/sessions/email.png'
+      = f.text_field :email, required: true, placeholder: 'enter your email'
+
+    .confirmation-links
+      = f.submit 'Register / Login', class: 'btn btn-primary btn-flat'

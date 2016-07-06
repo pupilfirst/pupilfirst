@@ -8,12 +8,20 @@ class BatchApplicant < ActiveRecord::Base
 
   # Basic validations.
   validates :email, presence: true, uniqueness: true
+  validates :name, presence: true
 
   # Custom validations.
   validate :email_must_look_right
 
   def email_must_look_right
     errors[:email] << "doesn't look like an email" unless email =~ /\S+@\S+/
+  end
+
+  validate :phone_must_look_right
+
+  def phone_must_look_right
+    return if phone.blank?
+    errors[:phone] << 'must be a 10-digit mobile phone number' unless phone =~ /^[0-9]{10}$/
   end
 
   has_secure_token

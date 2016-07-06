@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160702130647) do
+ActiveRecord::Schema.define(version: 20160705104506) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -131,7 +131,6 @@ ActiveRecord::Schema.define(version: 20160702130647) do
     t.integer  "team_lead_id"
     t.string   "college"
     t.string   "state"
-    t.string   "phone"
   end
 
   add_index "batch_applications", ["application_stage_id"], name: "index_batch_applications_on_application_stage_id", using: :btree
@@ -328,6 +327,19 @@ ActiveRecord::Schema.define(version: 20160702130647) do
   add_index "karma_points", ["founder_id"], name: "index_karma_points_on_founder_id", using: :btree
   add_index "karma_points", ["source_id"], name: "index_karma_points_on_source_id", using: :btree
   add_index "karma_points", ["startup_id"], name: "index_karma_points_on_startup_id", using: :btree
+
+  create_table "mooc_students", force: :cascade do |t|
+    t.string   "email"
+    t.string   "name"
+    t.integer  "university_id"
+    t.string   "college"
+    t.string   "semester"
+    t.string   "state"
+    t.string   "gender"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.integer  "user_id"
+  end
 
   create_table "payments", force: :cascade do |t|
     t.integer  "batch_application_id"
@@ -595,6 +607,11 @@ ActiveRecord::Schema.define(version: 20160702130647) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string   "location"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email"
+    t.string "login_token"
   end
 
   create_table "visits", id: :uuid, default: nil, force: :cascade do |t|

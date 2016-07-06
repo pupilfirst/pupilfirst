@@ -73,13 +73,16 @@
           | Team Lead's Details (You are the team lead)
         .simple-form-container
           .row
+            // TODO: University is actually a required field, but select2 v3 does not play nice with HTML5 validations. Try enabling this when upgrading to select2 v4.
             = f.input :university_id,
               collection: proc { University.grouped_by_location },
               as: :grouped_select,
               group_method: :last,
               value_method: :first,
               label_method: :last,
-              label: 'University'
+              label: 'University',
+              include_blank: 'Please pick your university',
+              required: false
 
             = f.input :college, label: "Team Lead's College", input_html: { maxlength: 250 }
             = f.input :state, input_html: { maxlength: 250 }
@@ -93,7 +96,7 @@
 
               = t.input :phone,
                 label: 'Mobile number',
-                input_html: { maxlength: 10 },
+                input_html: { maxlength: 10, type: 'tel', pattern: '[0-9]{10}' },
                 placeholder: '10-digit mobile phone number'
 
               = t.input :role,

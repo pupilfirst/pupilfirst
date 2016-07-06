@@ -45,6 +45,10 @@ class ApplicationController < ActionController::Base
     @platform_feedback_for_form = PlatformFeedback.new(founder_id: current_founder.id)
   end
 
+  def current_user
+    @current_user ||= User.find_by(login_token: cookies[:login_token])
+  end
+
   protected
 
   # Returns currently 'signed in' application founder.

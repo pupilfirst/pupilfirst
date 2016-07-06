@@ -37,4 +37,8 @@ alterCofounderFields = (count) ->
 
     sectionsLength = $(cofounderSections.selector).length
 
+setupUniversitySelect2 = ->
+  $('#application_stage_one_university_id').select2()
+
 $(document).on 'page:change', prepareCofounderFields
+$(document).on 'page:change', setupUniversitySelect2

@@ -20,7 +20,6 @@ slotsClickHandler = ->
         current_slots.splice(index, 1);
 
     $('#list_of_slots').val(JSON.stringify(current_slots))
-    console.log $('#list_of_slots').val()
 
 findSlot = (list, slotValue) ->
   i = 0

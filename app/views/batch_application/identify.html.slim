@@ -16,11 +16,19 @@
 .container
   .container-md-center.content-box.m-t-3.m-b-3
     h5.form-section-title.text-uppercase.font-semibold.m-b-2
-      | email id
+      | Hello there!
     .simple-form-container
       .row
         = simple_form_for @batch_applicant, url: apply_send_sign_in_email_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
-          = f.input :email, placeholder: 'Enter your email address.'
+          = f.input :name, required: true
+          = f.input :email
+
+          = f.input :phone,
+            placeholder: '10-digit mobile phone number.',
+            required: true,
+            label: 'Mobile number',
+            input_html: { maxlength: 10, type: 'tel', pattern: '[0-9]{10}' }
+
           .col-sm-offset-3
             .simple-form-submit
               = f.submit 'Send one-time application link', class: 'btn btn-primary btn-md text-uppercase'

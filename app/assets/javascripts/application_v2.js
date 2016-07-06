@@ -35,6 +35,7 @@
 //= require slick-carousel/slick.js
 //= require readmore
 //= require waypoints
+//= require waypoints/shortcuts/inview
 
 // Shared
 // require _shared

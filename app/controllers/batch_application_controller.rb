@@ -137,6 +137,9 @@ class BatchApplicationController < ApplicationController
     @skip_container = true
     @batch_applicant = BatchApplicant.find_or_initialize_by email: params[:batch_applicant][:email]
 
+    @batch_applicant.name = params[:batch_applicant][:name]
+    @batch_applicant.phone = params[:batch_applicant][:phone]
+
     if @batch_applicant.save
       @batch_applicant.send_sign_in_email(session[:application_batch])
 

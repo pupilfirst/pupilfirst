@@ -10,6 +10,7 @@ class SixWaysMoocController < ApplicationController
 
   # GET /sixways/start - the start page for the course
   def start
+    redirect_to sixways_student_details_path unless current_mooc_student.details_complete?
   end
 
   # GET /sixways/student_details - page to collect basic info of the student

@@ -1,5 +1,6 @@
 class MoocStudent < ActiveRecord::Base
   belongs_to :user
+  belongs_to :university
 
   GENDER_MALE = -'male'
   GENDER_FEMALE = -'female'

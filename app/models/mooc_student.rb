@@ -12,4 +12,12 @@ class MoocStudent < ActiveRecord::Base
   validates :gender, inclusion: { in: valid_gender_values }
 
   validates_uniqueness_of :user_id
+
+  before_save :copy_email_from_user
+
+  def copy_email_from_user
+    return unless user.present? && user_id_changed?
+
+    self.email = user.email
+  end
 end

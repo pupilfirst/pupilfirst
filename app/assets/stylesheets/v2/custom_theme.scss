@@ -47,6 +47,7 @@ p {
   font-size: $btn-text-size;
   letter-spacing: 0.04rem;
   white-space: normal;
+  transition: all .2s;
 
   &,
   &:active,
@@ -80,14 +81,14 @@ p {
     background-color: $brand-primary;
     color: white;
   }
-  &,
+  &:focus,
+  &.focus {
+    background-color: $light-primary;
+  }
   &:active,
   &.active {
-    &:focus,
-    &.focus {
-      background-color: $dark-primary;
-      box-shadow: $box-shadow-btn;
-    }
+    background-color: $dark-primary;
+    box-shadow: $box-shadow-btn;
   }
 }
 .btn-secondary {
@@ -97,14 +98,14 @@ p {
     background-color: $brand-secondary;
     color: white;
   }
-  &,
+  &:focus,
+  &.focus {
+    background-color: $light-secondary;
+  }
   &:active,
   &.active {
-    &:focus,
-    &.focus {
-      background-color: $dark-secondary;
-      box-shadow: $box-shadow-btn;
-    }
+    background-color: $dark-secondary;
+    box-shadow: $box-shadow-btn;
   }
 }
 

@@ -6,11 +6,12 @@
 }
 .tour-banner-head {
   padding: 190px 0 0;
-  max-width: 430px;
+  max-width: 600px;
 
   h1 {
     line-height: 1.4;
     margin-bottom: 10px;
+    font-size: $font-size-h2;
 
     @include media-breakpoint-down(xs) {
       font-size: 1.5rem;
@@ -18,5 +19,26 @@
   }
   h4 {
     line-height: 1.4;
+  }
+  strong {
+    font-weight: $font-semibold;
+  }
+  .dropdown {
+    display: inline-block;
+  }
+}
+.tour-block {
+  padding: 40px 0;
+  border-bottom: 1px solid $gray-border;
+
+  &:nth-child(odd) {
+    background-color: #fff;
+  }
+  h2 {
+    margin-bottom: 15px;
+  }
+  p {
+    line-height: 1.8;
+    max-width: 400px;
   }
 }

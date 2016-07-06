@@ -187,16 +187,49 @@
   padding: 0 15px;
 
   .program-video-frame {
+    display: block;
     margin: auto;
     border: 5px solid #ffffff;
     box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);
-    height: 275px;
     width: 100%;
     @include border-radius(5px);
     text-align: center;
+    position: relative;
 
     @include media-breakpoint-down(sm) {
       height: auto;
+    }
+    &:before, &:after {
+      position: absolute;
+      opacity: 0;
+      transition: all .2s;
+    }
+    &:before {
+      content:'';
+      width:100%;
+      height:100%;
+      top:0;
+      left:0;
+      background:rgba(0,0,0,0.5);
+      background: radial-gradient(ellipse at center, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.5) 100%);
+    }
+    &:after {
+      content: asset-url('apply/play-button.svg');
+      width: 50px;
+      height: 50px;
+      top: 40%;
+      left: 50%;
+      transform: translateX(-50%);
+
+      @include media-breakpoint-down(md) {
+        width: 30px;
+        height: 30px;
+      }
+    }
+    &:hover {
+      &:before, &:after {
+        opacity: 1.0;
+      }
     }
   }
 }

@@ -41,15 +41,7 @@
             = image_tag 'apply/graduation-video-thumbnail-1.png'
           .graduate-data.text-xs-center
             h4
-              | The Journey from a college hostel to a million dollar startup
-            p
-
-        .slide-item
-          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-2"
-            = image_tag 'apply/graduation-video-thumbnail-2.png'
-          .graduate-data.text-xs-center
-            h4
-              | SYM Funding Story
+              | The Journey from a College Hostel to a Million Dollar Startup
             p
 
         .slide-item
@@ -65,7 +57,7 @@
             = image_tag 'apply/graduation-video-thumbnail-4.png'
           .graduate-data.text-xs-center
             h4
-              | Z Pay Acqui hired by Tally
+              | Z-Pay Acquihired by Tally
             p
 
         .slide-item
@@ -73,7 +65,7 @@
             = image_tag 'apply/graduation-video-thumbnail-5.png'
           .graduate-data.text-xs-center
             h4
-              | Getting Hired
+              | Six Ways to Success: Getting Hired
             p
 
         .slide-item
@@ -81,7 +73,7 @@
             = image_tag 'apply/graduation-video-thumbnail-6.png'
           .graduate-data.text-xs-center
             h4
-              | Graduation Rockstar
+              | Six ways to Success: Graduation Options
             p
 
         .slide-item
@@ -115,7 +107,8 @@
         span.content-title-icon.program-icon
         | The Program
       .program-video.center-block.text-xs-center
-        iframe.program-video-frame src="https://www.youtube.com/embed/7fDmQOFNmLQ" frameborder="0" allowfullscreen="allowfullscreen"
+        a.program-video-frame href="#" data-toggle="modal" data-target="#programVideo"
+          = image_tag 'apply/program-video-thumbnail.png', class: 'img-fluid'
 
       .benefits-section.center-block.text-xs-center
         .col-md-6
@@ -619,15 +612,6 @@
       .modal-body
         iframe.video-frame src="https://www.youtube.com/embed/AzABLPISPQU" frameborder="0" allowfullscreen="allowfullscreen"
 
-#graduatesVideo-2.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/k13C6C_MzCE" frameborder="0" allowfullscreen="allowfullscreen"
-
 #graduatesVideo-3.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content
@@ -691,6 +675,14 @@
       .modal-body
         iframe.video-frame src="https://www.youtube.com/embed/qEZ1RamKt6k" frameborder="0" allowfullscreen="allowfullscreen"
 
+#programVideo.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/7fDmQOFNmLQ" frameborder="0" allowfullscreen="allowfullscreen"
 
 #basic-fees.modal.fade aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"

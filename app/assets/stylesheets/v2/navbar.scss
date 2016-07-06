@@ -97,6 +97,9 @@
     .nav-item + .nav-item {
       margin-left: 2rem;
 
+      @include media-breakpoint-down(md) {
+        margin-left: 1.2rem;
+      }
       @include media-breakpoint-down(sm) {
         margin-left: 0;
       }

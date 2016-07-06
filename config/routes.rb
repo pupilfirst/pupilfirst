@@ -96,6 +96,7 @@ Svapp::Application.routes.draw do
     get '/tour', action: 'tour', as: 'tour'
     get '/to/:batch', action: 'apply', as: 'batch'
     post '/to/:batch', action: 'submit', as: 'submit'
+    post '/restart/:batch', action: 'restart', as: 'restart'
     get '/identify/:batch', action: 'identify', as: 'identify'
     post '/identify', action: 'send_sign_in_email', as: 'send_sign_in_email'
   end

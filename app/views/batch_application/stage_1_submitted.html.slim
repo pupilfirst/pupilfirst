@@ -51,3 +51,13 @@
               | to proceed to the next stage.
 
             = button_to payment_button_message(current_application), instamojo_initiate_payment_path, class: 'btn btn-primary btn-md text-uppercase'
+
+      - if applicant_stage.initial_stage?
+        h3.text-xs-center.m-t-2
+          ' Change of plans? That's okay!
+          br
+          ' You can
+          span.brand-secondary.font-semibold restart the application process.
+
+        .text-xs-center.m-t-2
+          = button_to 'Revoke and Rewrite Application', apply_restart_path(batch: params[:batch]), class: 'btn btn-primary btn-md text-uppercase', data: { confirm: 'This will delete the saved application. Continue?' }

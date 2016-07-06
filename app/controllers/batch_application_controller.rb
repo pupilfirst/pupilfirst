@@ -150,6 +150,17 @@ class BatchApplicationController < ApplicationController
     end
   end
 
+  # POST /apply/restart/:batch
+  def restart
+    # Only applications in stage 1 can restart.
+    raise_not_found if applicant_stage_number != 1
+    current_application&.restart!
+
+    flash[:success] = 'Your previous application has been discarded.'
+
+    redirect_to apply_batch_path(batch: params[:batch])
+  end
+
   protected
 
   # Returns currently picked batch.
@@ -190,6 +201,7 @@ class BatchApplicationController < ApplicationController
   helper_method :current_batch
   helper_method :current_stage
   helper_method :current_application
+  helper_method :applicant_stage
 
   private
 

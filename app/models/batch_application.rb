@@ -85,7 +85,13 @@ class BatchApplication < ActiveRecord::Base
     raise 'Paid payment is present!' if paid?
     raise "Restart blocked because application is in stage #{application_stage.number}" unless application_stage.initial_stage?
 
-    payment&.destroy!
+    # Destroy payment if it exists.
+    if payment.present?
+      payment.destroy!
+      reload
+    end
+
+    # Destory self.
     destroy!
   end
 end

@@ -13,6 +13,8 @@ class MoocStudent < ActiveRecord::Base
 
   validates_uniqueness_of :user_id
 
+  validates_presence_of :name, :university_id, :college, :semester, :state
+
   before_save :copy_email_from_user
 
   def copy_email_from_user

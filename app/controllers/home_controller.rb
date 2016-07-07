@@ -49,9 +49,9 @@ class HomeController < ApplicationController
 
   def background_image_number
     @background_image_number ||= begin
-      session[:background_image_number] ||= rand(5) + 1
+      session[:background_image_number] ||= rand(4) + 1
       session[:background_image_number] += 1
-      session[:background_image_number] = 1 if session[:background_image_number] > 5
+      session[:background_image_number] = 1 if session[:background_image_number] > 4
       session[:background_image_number]
     end
   end
@@ -61,9 +61,9 @@ class HomeController < ApplicationController
       {
         1 => 'center',
         2 => 'right',
-        3 => 'center',
+        3 => 'right',
         4 => 'right',
-        5 => 'right'
+        5 => 'center' # TODO: Note that this fifth image (SYM's) is disabled.
       }[background_image_number]
     end
   end

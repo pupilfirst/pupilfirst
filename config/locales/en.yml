@@ -34,9 +34,9 @@ en:
         secondary_html: "Arun of <a href='https://sv.co/startups/handme'>handME</a> built a prototype during SV.CO&apos;s six month startup course and got both a job offer from <a href='http://goqii.com' target='_blank'>Goqii</a> and selection to the prestigious <a href='http://www.draperuniversity.com' target='_blank'>Draper University</a> in the US."
       background_3_messages:
         main:
-          message_1_html: "The world&apos;s best proving ground for <strong>student startups</strong> who want to <strong>get early funding</strong>."
-          message_2_html: "&ldquo;We built a great product and saw early traction at SV.CO. Now that we&apos;ve raised seed funding, we want a great launch for our product.&rdquo;"
-        secondary_html: "Aravind, Sarah and Vivek of <a href='https://sv.co/startups/sym'>SYM</a> built a prototype during SV.CO&apos;s six month startup course and raised seed funding from <a href='https://www.askme.com' target='_blank'>AskME.com</a> to scale up their product."
+          message_1_html: "The world&apos;s best proving ground for <strong>student founders</strong> who want to <strong>decimate all expectations</strong>."
+          message_2_html: "&ldquo;We built a startup product right in college &amp; showed it to real customers. Even when some things didn&apos;t work, SV.CO&apos;s six ways to graduate opened up many more opportunities for us.&rdquo;"
+        secondary_html: "Two amazing woman founders: Sarah of <a href='https://sv.co/startups/sym'>SYM</a> and Arya of <a href='https://sv.co/startups/walat'>Walat</a>. Both teams built complete prototypes during SV.CO&apos;s six month startup course."
       background_4_messages:
         main:
           message_1_html: "The world's best proving ground for <strong>student startups</strong> who want to <strong>jumpstart their products</strong>."
@@ -44,9 +44,9 @@ en:
         secondary_html: "Ajmal, Aswin, Balram and Kishan of <a href='https://sv.co/startups/spenwise'>Spenwise</a> built a prototype during SV.CO&apos;s six month startup course and got selected at <a href='http://india.zonestartups.com/about/' target='_blank'>Zone Startups</a>, Mumbai to continue their startup journey."
       background_5_messages:
         main:
-          message_1_html: "The world&apos;s best proving ground for <strong>student founders</strong> who want to <strong>decimate all expectations</strong>."
-          message_2_html: "&ldquo;We built a startup product right in college &amp; showed it to real customers. Even when some things didn&apos;t work, SV.CO&apos;s six ways to graduate opened up many more opportunities for us.&rdquo;"
-        secondary_html: "Two amazing woman founders: Sarah of <a href='https://sv.co/startups/sym'>SYM</a> and Arya of <a href='https://sv.co/startups/walat'>Walat</a>. Both teams built complete prototypes during SV.CO&apos;s six month startup course."
+          message_1_html: "The world&apos;s best proving ground for <strong>student startups</strong> who want to <strong>get early funding</strong>."
+          message_2_html: "&ldquo;We built a great product and saw early traction at SV.CO. Now that we&apos;ve raised seed funding, we want a great launch for our product.&rdquo;"
+        secondary_html: "Aravind, Sarah and Vivek of <a href='https://sv.co/startups/sym'>SYM</a> built a prototype during SV.CO&apos;s six month startup course and raised seed funding from <a href='https://www.askme.com' target='_blank'>AskME.com</a> to scale up their product."
   payment:
     status:
       requested: Requested

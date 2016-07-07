@@ -93,6 +93,10 @@ feature 'Faculty Connect' do
 
         click_on 'Submit Request'
 
+        # Desperate move. The next check fails now and then on CI, with Capybara failing to wait even though the request
+        # was a POST to the server.
+        sleep 1
+
         # The connect button should now be disabled.
         expect(page).to have_selector('.connect-link.disabled')
 

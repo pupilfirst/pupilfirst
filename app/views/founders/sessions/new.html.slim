@@ -1,9 +1,13 @@
 - content_for :head
   title SV.CO Sign In
 
-.alert.alert-warning.margin-top-20 role="alert"
-  ' Looking to sign up? We're sorry! SV.CO is currently invite-only & in closed beta.
-  ' Admissions to the next batch will start in September.
+.row
+  .col-md-6.col-md-offset-3.col-sm-8.col-sm-offset-2
+    .alert.alert-success.margin-top-40 role="alert"
+      h3.margin-top-0.margin-bottom-0.text-center.margin-top-10
+        ' Applications for Batch #3 are open!
+        br
+        ' #{link_to 'Click here', apply_index_path} to get started.
 
 .text-center.devise-user-form
   h1.title Sign in with your SV.CO ID!

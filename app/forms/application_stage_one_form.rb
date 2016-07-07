@@ -6,19 +6,22 @@ class ApplicationStageOneForm < Reform::Form
   property :application_page_read, virtual: true, validates: { acceptance: true }
   property :team_lead_consent, virtual: true, validates: { acceptance: true }
   property :fees_consent, virtual: true, validates: { acceptance: true }
-  properties :university_id, :college, :state, :team_achievement, validates: { presence: true }
+  property :university_id, validates: { presence: true }
+  properties :college, :state, validates: { presence: true, length: { maximum: 250 } }
+  property :team_achievement, validates: { presence: true, length: { maximum: 1000 } }
   property :cofounder_count, virtual: true, type: Integer, validates: { inclusion: [2, 3, 4] }
 
   property :team_lead do
-    properties :name, :phone, validates: { presence: true }
+    property :name, validates: { presence: true, length: { maximum: 250 } }
+    property :phone, validates: { presence: true, length: { is: 10 } }
     property :email, writeable: false
     property :gender, validates: { presence: true, inclusion: Founder.valid_gender_values }
     property :role, validates: { inclusion: Founder.valid_roles }
   end
 
   collection :cofounders, populate_if_empty: BatchApplicant do
-    property :email, validates: { presence: true }
-    property :name, validates: { presence: true }
+    property :email, validates: { presence: true, length: { maximum: 250 } }
+    property :name, validates: { presence: true, length: { maximum: 250 } }
     property :role, validates: { inclusion: Founder.valid_roles }
   end
 

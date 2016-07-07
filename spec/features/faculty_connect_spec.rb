@@ -93,6 +93,9 @@ feature 'Faculty Connect' do
 
         click_on 'Submit Request'
 
+        # Desperate move. This test fails now any then.
+        sleep 1
+
         # The connect button should now be disabled.
         expect(page).to have_selector('.connect-link.disabled')
 

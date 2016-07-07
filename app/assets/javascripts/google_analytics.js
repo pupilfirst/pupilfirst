@@ -13,8 +13,6 @@ if(/sv\.co/.test(window.location.hostname)) {
 }
 
 $(document).on('page:change', function() {
-  console.log('Google Analytics Debug: Create');
   ga('create', 'UA-65573888-1', 'auto');
-  console.log('Google Analytics Debug: Page view');
   ga('send', 'pageview', window.location.pathname);
 });

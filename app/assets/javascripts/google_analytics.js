@@ -1,16 +1,16 @@
-<% if Rails.env.production? %>
+if(/sv\.co/.test(window.location.hostname)) {
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', '<%= APP_CONFIG[:google_analytics_tracking_id] %>', 'auto');
-<% else %>
+  ga('create', 'UA-65573888-1', 'auto');
+} else {
   function ga() {
     var params = Array.prototype.slice.call(arguments, ga.length);
-    console.log("GoogleAnalytics: " + params);
+    console.log('Google Analytics: ' + params);
   }
-<% end %>
+}
 
 $(document).on('page:change', function() {
   ga('send', 'pageview', window.location.pathname);

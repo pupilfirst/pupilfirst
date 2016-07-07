@@ -18,7 +18,7 @@
 //= require pickers
 //= require select2
 
-//= require google_analytics.js.erb
+//= require google_analytics
 //= require navbar
 //= require shift_for_hash
 //= require founders

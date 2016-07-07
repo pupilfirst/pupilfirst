@@ -5,13 +5,13 @@
   border-bottom: 1px solid $gray-border;
 }
 .tour-banner-head {
-  padding: 190px 0 0;
+  padding: 160px 0 0;
   max-width: 600px;
 
   h1 {
-    line-height: 1.4;
-    margin-bottom: 10px;
     font-size: $font-size-h2;
+    line-height: 1.3;
+    margin-bottom: 10px;
 
     @include media-breakpoint-down(xs) {
       font-size: 1.5rem;
@@ -30,15 +30,47 @@
 .tour-block {
   padding: 40px 0;
   border-bottom: 1px solid $gray-border;
+  min-height: 300px;
 
   &:nth-child(odd) {
     background-color: #fff;
+
+    .tour-image {
+      float: none;
+    }
+  }
+  .tour-image {
+    width: 360px;
+    float: right;
+    min-height: 200px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+
+    @include media-breakpoint-down(sm) {
+      float: none;
+      width: 100%;
+      max-width: 360px;
+      margin: auto;
+    }
   }
   h2 {
     margin-bottom: 15px;
   }
   p {
-    line-height: 1.8;
-    max-width: 400px;
+    line-height: 2;
+    max-width: 460px;
+    @include media-breakpoint-down(sm) {
+      max-width: inherit;
+    }
   }
+  @include media-breakpoint-down(sm) {
+    text-align: center;
+  }
+}
+.back-to-top {
+  display: inline-block;
+  padding-top: 15px;
+  font-weight: $font-semibold;
 }

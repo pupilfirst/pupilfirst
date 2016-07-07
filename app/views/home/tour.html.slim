@@ -13,105 +13,368 @@
         br
         | great <strong>Faculty</strong> and a world-class <strong>Startup Library</strong>.
       .dropdown
-        button#dropdownMenu1.btn.btn-default.btn-md.text-uppercase.dropdown-toggle aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" type="drop" 
+        button#dropdownMenu1.btn.btn-default.text-uppercase.dropdown-toggle aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" type="drop" 
           | Take a Tour
         .dropdown-menu aria-labelledby="dropdownMenu1" 
-          a.dropdown-item href="#"  Action
-          a.dropdown-item href="#"  Another action
-          a.dropdown-item href="#"  Something else here
-#Form-a-team.tour-block
+          a.dropdown-item href="#form-a-team"
+            | Form a Team
+          a.dropdown-item href="#pay-fee-apply"
+            | Pay Fee &amp; Apply
+          a.dropdown-item href="#coding-video-task"
+            | Coding &amp; Video Task
+          a.dropdown-item href="#personal-interview"
+            | Personal Interview
+          a.dropdown-item href="#sign-partnership"
+            | Sign Partnership Deed
+          a.dropdown-item href="#legal-agreements"
+            | Sign Legal Agreements
+          a.dropdown-item href="#sign-up"
+            | Sign up at SV.CO
+          a.dropdown-item href="#public-slack"
+            | Join Public Slack
+          a.dropdown-item href="#startup-profile"
+            | Fill up Startup Profile
+          a.dropdown-item href="#receive-first-target"
+            | Receive your First Target
+
+#form-a-team.tour-block
   section.container
-    .col-md-5
+    .col-md-6.col-md-push-6
+      .tour-image
+        = image_tag 'tour/team.svg', class: 'img-fluid'
+    .col-md-6.col-md-pull-6
       h2
         | Form a Team
       p
-        ' Founders begin by forming a well-rounded team. It's important that a
-        | great startup team has engineering, product, marketing &amp; sales and design skills.
-    .col-md-7
+        ' Founders begin by forming a well-rounded team. It's important that
+        | #{link_to 'a great startup team', 'http://playbook.sv.co/4-startup-roles.html'} has engineering, product, marketing &amp; sales and design skills.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
 
-#Pay-fee-apply.tour-block
+#pay-fee-apply.tour-block
   section.container
-    .col-md-7
-
-    .col-md-5
+    .col-md-6
+      .tour-image 
+        = image_tag 'tour/pay-apply.svg', class: 'img-fluid'
+    .col-md-6
       h2
         | Pay Fee &amp; Apply
       p
         ' Founders then pay a nominal Application Fee (₹1000 per founder) to apply.
         ' It's important at this stage to correctly fill in all co-founder details
         | and differentiate your team by writing about a great team achievement.
-
-#Coding-video-task.tour-block
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+#coding-video-task.tour-block
   section.container
-    .col-md-5
+    .col-md-6.col-md-push-6
+      .tour-image
+        = image_tag 'tour/code-video.svg', class: 'img-fluid'
+    .col-md-6.col-md-pull-6
       h2
         | Coding &amp; Video Task
       p
-        ' SV.CO has historically accepted about 1% of applicants, so the program is _very competitive_.
+        ' SV.CO has historically accepted about 1% of applicants, so the program is <strong>very competitive</strong>.
         ' The first leg of the selection process is to complete a coding and video task.
         | The coding task validates engineering ability and the video task ensures that founders can speak and pitch well.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
 
-    .col-md-7
-
-#Personal-interview.tour-block
+#personal-interview.tour-block
   section.container
-    .col-md-7
-
-    .col-md-5
+    .col-md-6
+      .tour-image
+        = image_tag 'tour/interview.svg', class: 'img-fluid'
+    .col-md-6
       h2
         | Personal Interview
       p
         ' As a final filter, founders attend an in-person interview with the SV.CO team.
         ' The interview is an informal half-hour session where we have a great lot of fun!
-        ' You can [view a previous interview](https://sv.co/library/sv-co-round-3-interview-experience-part-1-selected)
+        ' You can #{link_to 'view a previous interview', 'https://sv.co/library/sv-co-round-3-interview-experience-part-1-selected'}
         | in our Startup Library.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
 
-#Sign-partnership.tour-block
+#sign-partnership.tour-block
   section.container
-    .col-md-5
+    .col-md-6.col-md-push-6
+      .tour-image
+        = image_tag 'tour/partnership.svg', class: 'img-fluid'
+    .col-md-6.col-md-pull-6
       h2
         | Sign Partnership Deed
       p
         ' Founders form a real legal entity when they join our program. The Partnership
         ' that they form helps them get a jumpstart on interacting with other companies
-        ' and learning the basics of good governance. We have a [sample Partnership
-        | Deed available](https://sv.co/library/startup-partnership-deed) for founders to sign.
+        ' and learning the basics of good governance. We have a
+        | #{link_to 'sample Partnership Deed available', 'https://sv.co/library/startup-partnership-deed'} for founders to sign.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
 
-    .col-md-7
-
-#Legal-agreements.tour-block
+#legal-agreements.tour-block
   section.container
-    .col-md-7
-
-    .col-md-5
+    .col-md-6
+      .tour-image
+        = image_tag 'tour/legal-agreement.svg', class: 'img-fluid'
+    .col-md-6
       h2
         | Sign Legal Agreements
       p
-        ' All founders have to sign [legal agreements with SV.CO](http://playbook.sv.co/2-legal-agreement.html)
+        ' All founders have to sign #{link_to 'legal agreements with SV.CO', 'http://playbook.sv.co/2-legal-agreement.html'}
         ' to be a part of the program. The agreements clarify our program details and enforce the Success Fee
         | that founders have to commit to.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
 
-#Sign-partnership.tour-block
+#sign-up.tour-block
   section.container
-    .col-md-5
+    .col-md-6.col-md-push-6
+      .tour-image
+        = image_tag 'tour/signup.svg', class: 'img-fluid'
+
+    .col-md-6.col-md-pull-6
       h2
-        | Sign Partnership Deed
+        | Sign up at SV.CO
       p
-        ' Founders form a real legal entity when they join our program. The Partnership
-        ' that they form helps them get a jumpstart on interacting with other companies
-        ' and learning the basics of good governance. We have a [sample Partnership
-        | Deed available](https://sv.co/library/startup-partnership-deed) for founders to sign.
+        ' Once accepted, founders can sign up at SV.CO! All founders receive access
+        ' to our online <strong>Verified Timeline</strong>, <strong>Startup Library</strong>,
+        | and a host of other perks and benefits.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
 
-    .col-md-7
-
-#Legal-agreements.tour-block
+#public-slack.tour-block
   section.container
-    .col-md-7
+    .col-md-6
+      .tour-image
+        = image_tag 'tour/public-slack.svg', class: 'img-fluid'
 
-    .col-md-5
+    .col-md-6
       h2
-        | Sign Legal Agreements
+        | Join Public Slack
       p
-        ' All founders have to sign [legal agreements with SV.CO](http://playbook.sv.co/2-legal-agreement.html)
-        ' to be a part of the program. The agreements clarify our program details and enforce the Success Fee
-        | that founders have to commit to.
+        ' Founders can also join Public Slack, the primary medium that SV.CO uses to
+        ' communicate with batch founders. Founders can received direct support from
+        | batch coordinators, but they can also receive peer support and learn from previous batches.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+
+#startup-profile.tour-block
+  section.container
+    .col-md-6.col-md-push-6
+      .tour-image
+        = image_tag 'tour/startup-profile.svg', class: 'img-fluid'
+    .col-md-6.col-md-pull-6
+      h2
+        | Fill up Startup Profile
+      p
+        ' Teams begin by filling up the Startup Profile. A complete Startup Profile
+        | leads to more graduation options and better visibility to industry mentors and other companies.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+
+#receive-first-target.tour-block
+  section.container
+    .col-md-6
+      .tour-image
+        = image_tag 'tour/first-target.svg', class: 'img-fluid'
+    .col-md-6
+      h2
+        | Receive your First Target
+      p
+        ' At SV.CO, we follow a guided target-based system for learning how to
+        ' create great startups. Founders receive targets that they either complete
+        ' individually or as a team. Each target is well-defined, constrained and
+        | has a viable deadline. Founders own up to completing targets and get graded on Target submissions.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+
+#startup-library.tour-block
+  section.container
+    .col-md-6.col-md-push-6
+      .tour-image
+        = image_tag 'tour/startup-library.svg', class: 'img-fluid'
+    .col-md-6.col-md-pull-6
+      h2
+        | Look at the Startup Library
+      p
+        ' The Startup Library is a one-stop-shop for all resources that SV.CO provides.
+        ' It includes industry-leading market-reports, theme-specific analysis, workshops
+        | and great live video &amp; presentation content.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+
+#target-slides.tour-block
+  section.container
+    .col-md-6
+      .tour-image
+        = image_tag 'tour/target-slides.svg', class: 'img-fluid'
+    .col-md-6
+      h2
+        | View Target Slides
+      p
+        ' Most targets have focused content that describes how to complete them.
+        ' They also contain links to further reading and even audio and video content.
+        | Target Slides provide a great resource for founders to look back on as reference.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+
+#complete-target.tour-block
+  section.container
+    .col-md-6.col-md-push-6
+      .tour-image
+        = image_tag 'tour/complete-target.svg', class: 'img-fluid'
+    .col-md-6.col-md-pull-6
+      h2
+        | Complete Targets &amp; Earn Karma Points
+      p
+        ' Founders tell us that completing their first target is a great milestone.
+        ' We grade target submissions and award founders karma points for their work.
+        ' Building a great startup is never about competing with your batch founders,
+        | so the karma points system rewards collaboration and helping each other out.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+
+#connect-faculty.tour-block
+  section.container
+    .col-md-6
+      .tour-image
+        = image_tag 'tour/connect-faculty.svg', class: 'img-fluid'
+    .col-md-6
+      h2
+        | Connect to Faculty
+      p
+        ' A great team of full-time and volunteer faculty is available to answer
+        ' any questions that you might have as part of the program. These faculty
+        ' are available to answer target-specific questions, reduce startup angst
+        ' and in general be a helping hand. We've worked with student startups for
+        ' over 5 years and we understand all sorts of pain points: from convincing
+        | your parents that your crazy idea is viable to managing college work-load and your startup.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+
+#target-submissions.tour-block
+  section.container
+    .col-md-6.col-md-push-6
+      .tour-image
+        = image_tag 'tour/improve-submission.svg', class: 'img-fluid'
+
+    .col-md-6.col-md-pull-6
+      h2
+        | Improve Target Submissions
+      p
+        ' Great founders learn to constantly iterate. And for great teams at SV.CO,
+        ' target submissions are never really <strong>done</strong>. For example,
+        ' founders choose to revise their prototypes a truckload of times before
+        | ending up at something they—and their customers—are happy with.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+
+#first-deck.tour-block
+  section.container
+    .col-md-6
+      .tour-image
+        = image_tag 'tour/first-deck.svg', class: 'img-fluid'
+    .col-md-6
+      h2
+        | Build your First Deck
+      p
+        ' Building a great first deck that accurately and concisely describes a product
+        ' idea is the first major target that founders receive. Browse through
+        ' #{link_to 'our previous batches&rsquo; content'.html_safe, 'https://sv.co/startups'} to see the
+        | great decks and other content they have made.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+
+#talk-to-customers.tour-block
+  section.container
+    .col-md-6.col-md-push-6
+      .tour-image
+        = image_tag 'tour/talk-to-customers.svg', class: 'img-fluid'
+
+    .col-md-6.col-md-pull-6
+      h2
+        | Talk to Customers Early
+      p
+        ' "Get out of the building!" is a constant refrain throughout the program.
+        ' Great founders go out and talk to customers early—and often—and use these
+        ' insights to build great products. Pair this with constant iteration and great
+        | teams can build useful products that customers love and will pay for.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+
+#code-practice.tour-block
+  section.container
+    .col-md-6
+      .tour-image
+        = image_tag 'tour/code.svg', class: 'img-fluid'
+    .col-md-6
+      h2
+        | Code, Code, Code!
+      p
+        ' Two whole months of the program are dedicated to teams doubling down and
+        ' building a great prototype. Engineering focused sessions dominate this
+        ' period and founders are taught everything from coding best practices to
+        | the best way to translate constantly changing business requirements to a great prototype.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+
+#launch-product.tour-block
+  section.container
+    .col-md-6.col-md-push-6
+      .tour-image
+        = image_tag 'tour/product-launch.svg', class: 'img-fluid'
+    .col-md-6.col-md-pull-6
+      h2
+        | Launch your Product
+      p
+        ' We provide you on the best ways to launch your product: a global audience
+        ' through our Silicon Valley visit. Our batch focuses on a SaaS theme,
+        | and we believe that agile Indian startups can build some of the best SaaS products out there.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+
+#pivot-persevere.tour-block
+  section.container
+    .col-md-6
+      .tour-image
+        = image_tag 'tour/pivot-persevere.svg', class: 'img-fluid'
+
+    .col-md-6
+      h2
+        | Pivot or Persevere
+      p
+        ' Some ideas work, some do not. Great founders learn when to keep trying
+        ' and when to give up and try something else. Our program is designed to
+        ' make founders metrics-driven and help them make a right choice. At a
+        ' deeper level, founders will learn how to get over their fear of failure
+        | and build great products that customers will want and love.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+
+#university-certification.tour-block
+  section.container
+    .col-md-6.col-md-push-6
+      .tour-image
+        = image_tag 'tour/university-certificate.svg', class: 'img-fluid'
+    .col-md-6.col-md-pull-6
+      h2
+        | Get University Certification
+      p
+        ' We have #{link_to 'partner Universities on board', 'http://playbook.sv.co/1-partnership.html'}
+        ' that can offer a degree on completion of the six month SV.CO program. Separate guidelines
+        ' and application fees might apply, but these programs offer you an ability to combine
+        | your startup education with a degree from a recognised University.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+
+#graduate-from-sv.tour-block
+  section.container
+    .col-md-6
+      .tour-image
+        = image_tag 'tour/graduate.svg', class: 'img-fluid'
+    .col-md-6
+      h2
+        | Graduate from SV.CO
+      p
+        ' You graduate from SV.CO in #{link_to 'one of six ways', talent_path}.
+        ' Great founders and teams can get hired at other companies. And teams
+        ' that build great products can get funded or go on to other incubators
+        ' and accelerators to continue building their product. For Batch 3, we're also
+        | introducing our Silicon Valley visit that provides unparalleled opportunities for capable founders.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+
+#become-alumni.tour-block
+  section.container
+    .col-md-6.col-md-push-6
+      .tour-image
+        = image_tag 'tour/alumni.svg', class: 'img-fluid'
+    .col-md-6.col-md-pull-6
+      h2
+        | Become an Alumni
+      p
+        ' SV.CO is about life-long learning: we believe that great founders keep learning
+        ' skills throughout their life. And one of the best ways to learn is to teach:
+        ' when you pass on your skills to juniors, you'll notice significant improvements
+        ' in your own work. This is why the SV.CO Alumni hang out in our Slack channel,
+        | become faculty themselves and mentor their juniors.
+      ' #{link_to 'Back to top', '#', class: 'back-to-top'}

@@ -14,5 +14,6 @@ if(/sv\.co/.test(window.location.hostname)) {
 
 $(document).on('page:change', function() {
   ga('create', 'UA-65573888-1', 'auto');
+  ga('require', 'linkid');
   ga('send', 'pageview', window.location.pathname);
 });

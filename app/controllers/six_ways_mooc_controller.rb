@@ -19,7 +19,7 @@ class SixWaysMoocController < ApplicationController
 
   # POST /sixways/save_student_details - save the details received and redirect to start of course
   def save_student_details
-    if current_mooc_student.update(update_params)
+    if @current_mooc_student.update(update_params)
       flash[:success] = 'Your details have been saved!'
       redirect_to sixways_start_path
     else

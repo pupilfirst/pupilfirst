@@ -32,7 +32,7 @@ class SixWaysMoocController < ApplicationController
   def current_mooc_student
     @current_mooc_student ||= begin
       return nil unless current_user.present?
-      MoocStudent.where(user: current_user).first_or_create
+      MoocStudent.where(user: current_user).first_or_create! skip_validation: true
     end
   end
 

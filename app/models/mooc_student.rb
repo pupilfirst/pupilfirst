@@ -9,11 +9,13 @@ class MoocStudent < ActiveRecord::Base
     [GENDER_FEMALE, GENDER_MALE, GENDER_OTHER]
   end
 
-  validates :gender, inclusion: { in: valid_gender_values }
+  attr_accessor :skip_validation
 
-  validates_uniqueness_of :user_id
+  validates :gender, inclusion: { in: valid_gender_values }, unless: :skip_validation
 
-  validates_presence_of :name, :university_id, :college, :semester, :state
+  validates_uniqueness_of :user_id, unless: :skip_validation
+
+  validates_presence_of :name, :university_id, :college, :semester, :state, unless: :skip_validation
 
   before_save :copy_email_from_user
 

@@ -123,27 +123,37 @@ class ApplicationController < ActionController::Base
     { frame: 'https://www.youtube.com' }
   end
 
+  def google_analytics_csp
+    {
+      image: 'https://www.google-analytics.com https://stats.g.doubleclick.net',
+      script: 'https://www.google-analytics.com'
+    }
+  end
+
   def frame_sources
     <<~FRAME_SOURCES.squish
       frame-src
-      #{youtube_csp[:frame]} https://svlabs-public.herokuapp.com https://www.google.com #{typeform_csp[:frame]}
-      #{slideshare_csp[:frame]} #{speakerdeck_csp[:frame]} #{google_form_csp[:frame]};
+      https://svlabs-public.herokuapp.com https://www.google.com
+      #{typeform_csp[:frame]} #{youtube_csp[:frame]} #{slideshare_csp[:frame]} #{speakerdeck_csp[:frame]}
+      #{google_form_csp[:frame]};
     FRAME_SOURCES
   end
 
   def image_sources
     <<~IMAGE_SOURCES.squish
       img-src
-      'self' data: https://www.google-analytics.com https://blog.sv.co http://www.startatsv.com https://sv-assets.sv.co
-      https://secure.gravatar.com https://uploaded-assets.sv.co hn.inspectlet.com;
+      'self' data: https://blog.sv.co http://www.startatsv.com https://sv-assets.sv.co https://secure.gravatar.com
+      https://uploaded-assets.sv.co hn.inspectlet.com
+      #{google_analytics_csp[:image]};
     IMAGE_SOURCES
   end
 
   def script_sources
     <<~SCRIPT_SOURCES.squish
       script-src
-      'self' 'unsafe-eval' https://ajax.googleapis.com https://www.google-analytics.com https://blog.sv.co https://www.youtube.com
-      http://www.startatsv.com https://sv-assets.sv.co cdn.inspectlet.com #{recaptcha_csp[:script]};
+      'self' 'unsafe-eval' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
+      http://www.startatsv.com https://sv-assets.sv.co cdn.inspectlet.com
+      #{recaptcha_csp[:script]} #{google_analytics_csp[:script]};
     SCRIPT_SOURCES
   end
 end

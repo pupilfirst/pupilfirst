@@ -51,6 +51,17 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  # sets a permanent signed cookie. Additional options such as :tld_length can be passed via the options_hash
+  # eg: set_cookie(:token, 'abcd', { 'tld_length' => 1 })
+  def set_cookie(key, value, options_hash = { } )
+    cookies.permanent.signed[key] = { value: value, domain: :all }.merge(options_hash)
+  end
+
+  # read a signed cookie
+  def read_cookie(key)
+    cookies.signed[key]
+  end
+
   # Returns currently 'signed in' application founder.
   def current_batch_applicant
     @current_batch_applicant ||= begin

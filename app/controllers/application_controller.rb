@@ -46,7 +46,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    @current_user ||= User.find_by(login_token: cookies[:login_token])
+    @current_user ||= User.find_by(login_token: read_cookie(:login_token))
   end
 
   protected

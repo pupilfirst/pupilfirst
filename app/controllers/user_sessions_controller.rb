@@ -36,7 +36,7 @@ class UserSessionsController < ApplicationController
   end
 
   def save_token
-    cookies[:login_token] = { value: @user.login_token, expires: 2.months.from_now }
+    set_cookie(:login_token, @user.login_token)
   end
 
   def send_email_with_token

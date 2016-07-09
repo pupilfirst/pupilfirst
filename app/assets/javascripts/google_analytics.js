@@ -10,7 +10,7 @@ if(/sv\.co/.test(window.location.hostname)) {
 } else {
   console.log('Detected development environment. Mocking function ga()...');
 
-  function ga() {
+  var ga = function() {
     var params = Array.prototype.slice.call(arguments, ga.length);
     console.log('Google Analytics Capture: ' + params);
   }

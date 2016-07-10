@@ -3,17 +3,21 @@ if(/sv\.co/.test(window.location.hostname)) {
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  // Create the tracker.
+  ga('create', 'UA-65573888-1', 'auto');
+  ga('require', 'linkid');
 } else {
   console.log('Detected development environment. Mocking function ga()...');
 
-  function ga() {
+  var ga = function() {
     var params = Array.prototype.slice.call(arguments, ga.length);
     console.log('Google Analytics Capture: ' + params);
   }
 }
 
 $(document).on('page:change', function() {
-  ga('create', 'UA-65573888-1', 'auto');
-  ga('require', 'linkid');
-  ga('send', 'pageview', window.location.pathname);
+  // Optimized for SPA. https://developers.google.com/analytics/devguides/collection/analyticsjs/single-page-applications
+  ga('set', 'page', window.location.pathname);
+  ga('send', 'pageview');
 });

@@ -90,6 +90,51 @@ ActiveAdmin.register BatchApplication do
     end
   end
 
+  csv do
+    column :id
+
+    column "Team Lead's Name" do |batch_application|
+      batch_application.team_lead.name
+    end
+
+    column "Team Lead's Email" do |batch_application|
+      batch_application.team_lead.email
+    end
+
+    column 'Contact number' do |batch_application|
+      batch_application.team_lead.phone
+    end
+
+    column :payment_status do |batch_application|
+      if batch_application.payment.present?
+        t("payment.status.#{batch_application.payment.status}")
+      else
+        'No payment'
+      end
+    end
+
+    column :stage do |batch_application|
+      stage = batch_application.application_stage
+      "##{stage.number} #{stage.name}"
+    end
+
+    column "Team Lead's Role" do |batch_application|
+      batch_application.team_lead.role
+    end
+
+    column :college
+    column :state
+
+    column :cofounders do |batch_application|
+      batch_application.cofounders.map do |cofounder|
+        "#{cofounder.name} (#{cofounder.role})"
+      end.join(', ')
+    end
+
+    column :team_achievement
+    column :created_at
+  end
+
   show do
     attributes_table do
       row :batch

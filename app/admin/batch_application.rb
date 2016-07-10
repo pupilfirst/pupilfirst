@@ -91,6 +91,8 @@ ActiveAdmin.register BatchApplication do
   end
 
   csv do
+    column :id
+
     column "Team Lead's Name" do |batch_application|
       batch_application.team_lead.name
     end

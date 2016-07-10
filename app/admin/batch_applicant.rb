@@ -41,6 +41,8 @@ ActiveAdmin.register BatchApplicant do
         end.join(', ')
       end
     end
+
+    column :created_at
   end
 
   form do |f|

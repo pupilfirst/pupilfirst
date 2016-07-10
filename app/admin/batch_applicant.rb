@@ -24,6 +24,25 @@ ActiveAdmin.register BatchApplicant do
     actions
   end
 
+  csv do
+    column :name
+    column :email
+    column :phone
+    column :gender
+
+    column :applications do |batch_applicant|
+      if batch_applicant.batch_applications.present?
+        batch_applicant.batch_applications.map do |application|
+          if application.team_lead == batch_applicant
+            "Team lead on batch #{application.batch.batch_number}"
+          else
+            "Cofounder on batch #{application.batch.batch_number}"
+          end
+        end.join(', ')
+      end
+    end
+  end
+
   form do |f|
     f.semantic_errors(*f.object.errors.keys)
 

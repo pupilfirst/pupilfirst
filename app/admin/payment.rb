@@ -23,6 +23,11 @@ ActiveAdmin.register Payment do
       t("payment.status.#{payment.status}")
     end
 
+    column :team_lead do |payment|
+      team_lead = payment.batch_application.team_lead
+      "#{team_lead.name} (#{team_lead.phone})"
+    end
+
     column :amount
 
     column('Instamojo Fees', &:fees)

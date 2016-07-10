@@ -109,7 +109,7 @@ ActiveAdmin.register BatchApplication do
       if batch_application.payment.present?
         t("payment.status.#{batch_application.payment.status}")
       else
-        em 'No payment'
+        'No payment'
       end
     end
 

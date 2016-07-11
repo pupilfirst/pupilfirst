@@ -61,8 +61,16 @@ class SixWaysMoocController < ApplicationController
     params.require(:mooc_student).permit(:name, :gender, :university_id, :college, :semester, :state)
   end
 
-  # TODO: is there a way to avoid updating this array manually ?
+  # TODO: is there a way to avoid updating these arrays manually ?
+  # check if given section exists for the given chapter
   def section_exists?
-    [params[:id].to_i, params[:section_id].to_i].in? [[1, 1], [1, 2]]
+    case params[:id].to_i
+      when 1
+        params[:section_id].to_i.in? [1, 2]
+      when 2
+        params[:section_id].to_i.in? [1]
+      else
+        false
+    end
   end
 end

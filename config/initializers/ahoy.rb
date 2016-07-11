@@ -15,4 +15,4 @@ end
 Ahoy.geocode = false
 
 # Track visits across multiple subdomains.
-Ahoy.cookie_domain = :all
+Ahoy.cookie_domain = Rails.env.production? ? '.sv.co' : :all

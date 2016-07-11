@@ -13,6 +13,8 @@ ActiveAdmin.register QuizQuestion do
   end
 
   form do |f|
+    f.semantic_errors
+
     # TODO: Reduce height of the text field below. 'input_html' seems to be malfunctioning
     f.inputs :question
     f.inputs :course_chapter

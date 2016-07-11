@@ -1,5 +1,12 @@
+- content_for :head
+title SV.CO Start at College
+
 .margin-top-20
 .panel.panel-success
   .panel-heading Course content here!
   .panel-body
-    ' This is the start page of the course. Users reach here after signing in and entering their details.
+    p This is the start page of the course. Users reach here after signing in and entering their details.
+
+    p It should probably have a course overview and table of chapters.
+
+    = link_to 'Start the course', sixways_chapter_path(1, 1), class: 'btn btn-primary btn-md text-uppercase'

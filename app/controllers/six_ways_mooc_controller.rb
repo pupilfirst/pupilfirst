@@ -27,6 +27,13 @@ class SixWaysMoocController < ApplicationController
     end
   end
 
+  # GET /sixways/chapter/:id/:section_id - displays the content of a chapter's section
+  def chapter
+    raise_not_found unless section_exists?
+
+    render "six_ways_mooc/chapters/chapter_#{params[:id]}_#{params[:section_id]}"
+  end
+
   protected
 
   def current_mooc_student
@@ -52,5 +59,10 @@ class SixWaysMoocController < ApplicationController
 
   def update_params
     params.require(:mooc_student).permit(:name, :gender, :university_id, :college, :semester, :state)
+  end
+
+  # TODO: is there a way to avoid updating this array manually ?
+  def section_exists?
+    [params[:id].to_i, params[:section_id].to_i].in? [[1, 1], [1, 2]]
   end
 end

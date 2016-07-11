@@ -1,5 +1,5 @@
 ActiveAdmin.register ApplicationSubmission do
-  menu parent: 'Batches'
+  menu parent: 'Admissions'
 
   permit_params :application_stage_id, :batch_application_id, :score, :notes, :file,
     application_submission_urls_attributes: [:id, :name, :url, :score, :_destroy]

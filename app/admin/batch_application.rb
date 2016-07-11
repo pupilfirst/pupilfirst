@@ -1,5 +1,5 @@
 ActiveAdmin.register BatchApplication do
-  menu parent: 'Batches', label: 'Applications', priority: 0
+  menu parent: 'Admissions', label: 'Applications', priority: 0
 
   permit_params :batch_id, :application_stage_id, :university_id, :team_achievement, :team_lead_id, :college, :state
 

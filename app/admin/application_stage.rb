@@ -1,5 +1,5 @@
 ActiveAdmin.register ApplicationStage do
-  menu parent: 'Batches'
+  menu parent: 'Admissions'
 
   permit_params :name, :number, :final_stage
   config.sort_order = 'number_asc'

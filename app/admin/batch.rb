@@ -1,4 +1,6 @@
 ActiveAdmin.register Batch do
+  menu parent: 'Admissions'
+
   permit_params :theme, :description, :start_date, :end_date, :batch_number, :slack_channel, :application_stage_id,
     :application_stage_deadline_date, :application_stage_deadline_time_hour, :application_stage_deadline_time_minute,
     :next_stage_starts_on

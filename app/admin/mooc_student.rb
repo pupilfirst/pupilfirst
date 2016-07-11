@@ -1,5 +1,5 @@
 ActiveAdmin.register MoocStudent do
-  menu parent: 'Users'
+  menu parent: 'Start@College'
 
   permit_params :name, :university_id, :college, :semester, :state, :gender, :user_id
 

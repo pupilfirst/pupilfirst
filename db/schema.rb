@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160711090139) do
+ActiveRecord::Schema.define(version: 20160711091757) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,9 +68,13 @@ ActiveRecord::Schema.define(version: 20160711090139) do
   add_index "ahoy_events", ["visit_id"], name: "index_ahoy_events_on_visit_id", using: :btree
 
   create_table "answer_options", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.integer  "quiz_question_id"
+    t.boolean  "correct_answer",   default: false
   end
+
+  add_index "answer_options", ["quiz_question_id"], name: "index_answer_options_on_quiz_question_id", using: :btree
 
   create_table "application_stages", force: :cascade do |t|
     t.string   "name"
@@ -396,9 +400,12 @@ ActiveRecord::Schema.define(version: 20160711090139) do
   add_index "public_slack_messages", ["founder_id"], name: "index_public_slack_messages_on_founder_id", using: :btree
 
   create_table "quiz_questions", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.integer  "course_chapter_id"
   end
+
+  add_index "quiz_questions", ["course_chapter_id"], name: "index_quiz_questions_on_course_chapter_id", using: :btree
 
   create_table "resources", force: :cascade do |t|
     t.string   "file"

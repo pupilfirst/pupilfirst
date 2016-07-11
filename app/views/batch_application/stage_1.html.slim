@@ -32,6 +32,11 @@
           strong There were problems with your submission.
           | &nbsp;Please check all fields and try again.
 
+          - if f.object.errors[:base].present?
+            ul.m-t-1
+              - f.object.errors[:base].each do |error_message|
+                li #{error_message}
+
       .container-md-center.content-box.m-b-2
         h5.form-section-title.text-uppercase.font-semibold.m-b-2
           | Hello there!
@@ -55,8 +60,6 @@
         h5.form-section-title.text-uppercase.font-semibold.m-b-2
           | Checklist
         .simple-form-container
-          = f.error :base
-
           = f.input :application_page_read,
             as: :boolean,
             inline_label: t('batch_application.stage_1.application_page_read_html')

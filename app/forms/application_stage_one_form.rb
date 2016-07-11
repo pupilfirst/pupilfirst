@@ -1,15 +1,11 @@
-require 'reform/form/coercion'
-
 class ApplicationStageOneForm < Reform::Form
-  include Coercion
-
   property :application_page_read, virtual: true, validates: { acceptance: true }
   property :team_lead_consent, virtual: true, validates: { acceptance: true }
   property :fees_consent, virtual: true, validates: { acceptance: true }
   property :university_id, validates: { presence: true }
   properties :college, :state, validates: { presence: true, length: { maximum: 250 } }
   property :team_achievement, validates: { presence: true, length: { maximum: 1000 } }
-  property :cofounder_count, virtual: true, type: Integer, validates: { inclusion: [2, 3, 4] }
+  property :cofounder_count, virtual: true
 
   property :team_lead do
     property :name, validates: { presence: true, length: { maximum: 250 } }
@@ -26,20 +22,31 @@ class ApplicationStageOneForm < Reform::Form
   end
 
   # Custom validations.
-  validate :prevent_cofounder_duplicates
+  validate :prevent_team_lead_duplicate
+  validate :prevent_cofounder_duplicate
   validate :cofounder_count_must_be_valid
   validate :emails_must_look_right
   validate :phone_number_must_look_right
 
-  def prevent_cofounder_duplicates
+  def prevent_team_lead_duplicate
     cofounders.each_with_index do |cofounder, index|
-      cofounders[index].errors[:email] << 'is a duplicate of team lead' if cofounder.email == team_lead.email
+      next if cofounder.email != team_lead.email
+      cofounders[index].errors[:email] << 'is a duplicate of team lead'
+      errors[:base] << 'One or more cofounders are invalid.'
+      errors[:base].uniq!
     end
+  end
 
+  def prevent_cofounder_duplicate
     previous_cofounder_emails = []
 
     cofounders.each_with_index do |cofounder, index|
-      cofounders[index].errors[:email] << 'has been mentioned previously' if cofounder.email.in?(previous_cofounder_emails)
+      if cofounder.email.in?(previous_cofounder_emails)
+        cofounders[index].errors[:email] << 'has been mentioned previously'
+        errors[:base] << 'One or more cofounders are invalid.'
+        errors[:base].uniq!
+      end
+
       previous_cofounder_emails << cofounder.email
     end
   end
@@ -47,16 +54,23 @@ class ApplicationStageOneForm < Reform::Form
   def cofounder_count_must_be_valid
     return if cofounders.count.in? [2, 3, 4]
     errors[:base] << 'Must have at least two, and at most four co-founders.'
+    errors[:base].uniq!
   end
 
   def emails_must_look_right
     cofounders.each_with_index do |cofounder, index|
-      cofounders[index].errors[:email] << "doesn't look like an email" unless valid_email?(cofounder.email)
+      next if valid_email?(cofounder.email)
+      cofounders[index].errors[:email] << "doesn't look like an email"
+      errors[:base] << 'One or more cofounders are invalid.'
+      errors[:base].uniq!
     end
   end
 
   def phone_number_must_look_right
-    team_lead.errors[:phone] << 'must be a 10-digit phone number' unless team_lead.phone =~ /\A[0-9]{10}\z/
+    return if team_lead.phone =~ /\A[0-9]{10}\z/
+    team_lead.errors[:phone] << 'must be a 10-digit phone number'
+    errors[:base] << 'Supplied contact number does not look correct.'
+    errors[:base].uniq!
   end
 
   def valid_email?(email)

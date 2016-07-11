@@ -87,6 +87,7 @@ gem 'addressable' # Addressable is a replacement for the URI implementation that
 gem 'reform' # Form objects decoupled from models. http://www.trailblazer.to/gems/reform
 gem 'reform-rails'
 gem 'virtus' # Required for reform coercion. Attributes on Steroids for Plain Old Ruby Objects
+gem 'dry-validation' # There seems to be a dependency bug in reform's coercion code - it required dry-types.
 
 # Rails assets!
 source 'https://rails-assets.org' do

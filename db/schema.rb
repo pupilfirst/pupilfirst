@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160711105249) do
+ActiveRecord::Schema.define(version: 20160711150553) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -192,9 +192,11 @@ ActiveRecord::Schema.define(version: 20160711105249) do
   add_index "connect_slots", ["faculty_id"], name: "index_connect_slots_on_faculty_id", using: :btree
 
   create_table "course_chapters", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.string   "name"
+    t.integer  "chapter_number"
+    t.integer  "sections_count"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|

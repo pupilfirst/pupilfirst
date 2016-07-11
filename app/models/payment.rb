@@ -7,6 +7,13 @@ class Payment < ActiveRecord::Base
   STATUS_PAID = -'paid'
   STATUS_FAILED = -'failed'
 
+  scope :requested, -> { where(instamojo_payment_request_status: payment_requested_statuses) }
+  scope :paid, -> { where(instamojo_payment_status: Instamojo::PAYMENT_STATUS_CREDITED) }
+
+  def self.payment_requested_statuses
+    [Instamojo::PAYMENT_REQUEST_STATUS_PENDING, Instamojo::PAYMENT_REQUEST_STATUS_SENT]
+  end
+
   # Before an payment entry can be created, a request must be placed with Instamojo.
   after_create do
     raise 'Payment cannot be initialized without supplying a batch application.' if batch_application.blank?
@@ -42,7 +49,7 @@ class Payment < ActiveRecord::Base
 
   # A payment is considered requested when instamojo payment status is requested.
   def requested?
-    instamojo_payment_request_status.in? [Instamojo::PAYMENT_REQUEST_STATUS_PENDING, Instamojo::PAYMENT_REQUEST_STATUS_SENT]
+    instamojo_payment_request_status.in? Payment.payment_requested_statuses
   end
 
   # An payment is considered processed when instamojo payment status is credited.

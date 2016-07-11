@@ -1,7 +1,8 @@
 ActiveAdmin.register BatchApplication do
   menu parent: 'Admissions', label: 'Applications', priority: 0
 
-  permit_params :batch_id, :application_stage_id, :university_id, :team_achievement, :team_lead_id, :college, :state
+  permit_params :batch_id, :application_stage_id, :university_id, :team_achievement, :team_lead_id, :college, :state,
+    :tag_list
 
   batch_action :promote, confirm: 'Are you sure?' do |ids|
     promoted = 0
@@ -17,6 +18,25 @@ ActiveAdmin.register BatchApplication do
 
     redirect_to collection_path
   end
+
+  filter :batch
+  filter :application_stage
+
+  filter :ransack_tagged_with,
+    as: :select,
+    multiple: true,
+    label: 'Tags',
+    collection: -> { BatchApplication.tag_counts_on(:tags).pluck(:name).sort }
+
+  filter :team_lead
+  filter :university
+  filter :college
+  filter :state
+
+  scope :all, default: true
+  scope :payment_missing
+  scope :payment_requested
+  scope :payment_complete
 
   index do
     selectable_column
@@ -154,6 +174,10 @@ ActiveAdmin.register BatchApplication do
         end
       end
 
+      row :tags do |batch_application|
+        linked_tags(batch_application.tags)
+      end
+
       row :application_stage
       row :university
       row :college
@@ -190,6 +214,7 @@ ActiveAdmin.register BatchApplication do
       f.input :batch
       f.input :team_lead
       f.input :application_stage, collection: ApplicationStage.all.order(number: 'ASC')
+      f.input :tag_list, input_html: { value: f.object.tag_list.join(','), 'data-tags' => BatchApplication.tag_counts_on(:tags).pluck(:name).to_json }
       f.input :university
       f.input :college
       f.input :state

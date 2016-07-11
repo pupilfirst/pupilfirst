@@ -1,4 +1,6 @@
 class BatchApplication < ActiveRecord::Base
+  include Taggable
+
   belongs_to :batch
   belongs_to :application_stage
   has_many :application_submissions, dependent: :destroy
@@ -8,6 +10,9 @@ class BatchApplication < ActiveRecord::Base
   has_one :payment, dependent: :restrict_with_error
 
   scope :selected, -> { joins(:application_stage).where(application_stages: { final_stage: true }) }
+  scope :payment_missing, -> { where.not(id: Payment.select(:batch_application_id).distinct) }
+  scope :payment_requested, -> { joins(:payment).merge(Payment.requested) }
+  scope :payment_complete, -> { joins(:payment).merge(Payment.paid) }
 
   validates :batch_id, presence: true
   validates :application_stage_id, presence: true

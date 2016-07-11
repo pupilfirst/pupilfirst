@@ -1,10 +1,12 @@
 class BatchApplicant < ActiveRecord::Base
+  include Taggable
+
   has_and_belongs_to_many :batch_applications
-  has_many :applications_as_lead, class_name: 'BatchApplication', foreign_key: 'team_lead_id'
+
+  scope :team_leads, -> { joins(:batch_applications).where('batch_applications.team_lead_id = batch_applicants.id') }
 
   # Per-founder application fee.
   APPLICATION_FEE = 1000
-  NUMBER_OF_APPLICATIONS_PER_FEE = 4
 
   # Basic validations.
   validates :email, presence: true, uniqueness: true

@@ -1,28 +1,31 @@
-- content_for :head
-title SV.CO Student Details
+- content_for :head do
+  title SV.CO Student Details
+  meta name="description" content="online course on the various stages of a startup journey: from deciding to start up, to forming a team,validating a good idea, building a prototype and finding passionate customers."
 
-.text-center.devise-user-form
-  h1.title Please tell us more about yourself!
 
-  = simple_form_for current_mooc_student,
-    url: start_in_college_save_student_details_path,
-    method: :post,
-    html: { class: 'form-horizontal' },
-    wrapper: :horizontal_form,
-    wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_file_input, boolean: :horizontal_boolean } do |f|
+.secondary-banner.application-stages-banner
+  .container
+    .application-stages-head.text-xs-center
+      h1
+        | Please tell us more
+        span
+          | &nbsp;about yourself!
 
-    .form-group
-      .col-sm-6.col-sm-offset-3
-        = f.input :email, disabled: true
-        = f.input :name, label: 'Your name', input_html: { maxlength: 50 }, required: true, disabled: true
-        = f.input :gender, label: 'Gender', as: :radio_buttons, include_blank: false, collection: MoocStudent.valid_gender_values
-        = f.input :university_id, label: 'University', collection: University.all, required: true, include_blank: 'Select your University', disabled: true
-        = f.input :college, required: true
-        = f.input :semester, as: :select, collection: MoocStudent.semester_values, include_blank: 'Select your semester'
-        = f.input :state, required: true
+.container
+  .container-md-center.content-box.m-t-3.m-b-3
+    h5.form-section-title.text-uppercase.font-semibold.m-b-2
+      | Hello there!
+    .simple-form-container
+      .row
+        = simple_form_for current_mooc_student, url: start_in_college_save_student_details_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
 
-    .form-group
-      .col-sm-6.col-sm-offset-3
-        = button_tag type: :submit, class: 'btn btn-primary contact-submit-button' do
-          i.fa.fa-send
-          | &nbsp;Submit
+          = f.input :name, required: true, disabled: true
+          = f.input :email, required: true, disabled: true
+          = f.input :university_id, label: 'University', collection: University.all, required: true, include_blank: 'Select your University', disabled: true
+          = f.input :college, required: true
+          = f.input :semester, as: :select, collection: MoocStudent.semester_values, include_blank: 'Select your semester'
+          = f.input :state, required: true
+
+          .col-sm-offset-3
+            .simple-form-submit
+              = f.submit 'Submit', class: 'btn btn-primary btn-md text-uppercase'

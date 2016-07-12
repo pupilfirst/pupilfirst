@@ -17,7 +17,7 @@ title SV.CO Student Details
         = f.input :gender, label: 'Gender', as: :radio_buttons, include_blank: false, collection: MoocStudent.valid_gender_values
         = f.input :university_id, label: 'University', collection: University.all
         = f.input :college
-        = f.input :semester
+        = f.input :semester, as: :select, collection: MoocStudent.semester_values, include_blank: false
         = f.input :state
 
     .form-group

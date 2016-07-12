@@ -29,4 +29,8 @@ class MoocStudent < ActiveRecord::Base
   def details_complete?
     [name, gender, university_id, college, semester, state].count(&:present?) == 6
   end
+
+  def self.semester_values
+    %w(I II III IV V VI VII VIII Graduated Other)
+  end
 end

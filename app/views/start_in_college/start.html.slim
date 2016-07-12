@@ -1,12 +1,13 @@
-- content_for :head
-title SV.CO Start in College
+- content_for :head do
+  title SV.CO | Start In College
+  meta name="description" content="online course on the various stages of a startup journey: from deciding to start up, to forming a team,validating a good idea, building a prototype and finding passionate customers."
 
-.margin-top-20
-.panel.panel-success
-  .panel-heading Course content here!
-  .panel-body
-    p This is the start page of the course. Users reach here after signing in and entering their details.
-
-    p It should probably have a course overview and table of chapters.
-
-    = link_to 'Start the course', start_in_college_chapter_path(1, 1), class: 'btn btn-primary btn-md text-uppercase'
+.secondary-banner.application-stages-banner
+  .container
+    .application-stages-head.text-xs-center
+      h1
+        | You are early!
+.container
+  .container-md-center.content-box.m-t-3.m-b-3
+    h4
+      ' You have been registered for the upcoming 'Start In College' course successfully. The course is expected to commence on August 1. Please visit back later to start learning!

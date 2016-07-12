@@ -11,6 +11,8 @@ class StartInCollegeController < ApplicationController
   # GET /start_in_college/start - the start page for the course
   def start
     redirect_to start_in_college_student_details_path unless current_mooc_student.details_complete?
+    @skip_container = true
+    render layout: 'application_v2'
   end
 
   # GET /start_in_college/student_details - page to collect basic info of the student

@@ -5,7 +5,10 @@ class UserSessionsController < ApplicationController
     session[:referer] = params[:referer]
 
     # validate token in params, if present
-    save_token_and_redirect if params[:token].present? && token_valid?
+    if params[:token].present? && token_valid?
+      save_token_and_redirect
+      return
+    end
 
     @user = User.new
 

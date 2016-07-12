@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Signing up for the StartinCollege course' do
+feature 'Signing up for the StartinCollege course', disabled: true do
   context 'when no login_token is present in the cookies' do
     scenario 'user visits the course start page' do
       visit start_in_college_start_path

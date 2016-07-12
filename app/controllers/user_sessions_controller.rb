@@ -8,22 +8,27 @@ class UserSessionsController < ApplicationController
     save_token_and_redirect if params[:token].present? && token_valid?
 
     @user = User.new
+
+    @skip_container = true
+    render layout: 'application_v2'
   end
 
   # POST user_sessions/send_email - find or create user from email received
   def send_email
+    @skip_container = true
+
     @user = User.where(email: params[:user][:email]).first_or_initialize
     @user.assign_attributes(name: params[:user][:name], phone: params[:user][:phone], university_id: params[:user][:university_id])
+
     if @user.save
       # email referer url with token attached
       @referer = session.delete :referer
       send_email_with_token
 
-      @skip_container = true
       render layout: 'application_v2'
     else
       # show errors
-      render 'new'
+      render 'new', layout: 'application_v2'
     end
   end
 

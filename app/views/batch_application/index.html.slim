@@ -441,6 +441,14 @@
                 | Fee for a selected team. To know more details, write to help@sv.co.
             li
               h5
+                | Will SV.CO own 30% equity in my startup?
+              p
+                ' Emphatic no. You don't have to commit any upfront equity. What we have is a <strong>right to invest additional money</strong>
+                ' when you raise a funding round. Our investment is capped at 30% of the money you 
+                ' raise. This means that we'll <strong>never become a majority stakeholder</strong>. The only perk we ask for is a 30% discount on your valuation. This is 
+                ' explained in detail in #{link_to 'Raising Investment', 'http://playbook.sv.co/6-raising-investment.html'}.
+            li
+              h5
                 | Is the course worth the program fee?
               p
                 ' The program is the first of its kind student entrepreneurship
@@ -575,22 +583,22 @@
             li.success-fee-box
               h3 5%
               p
-                | lead fee (for 3 years) on a businesss lead.
+                | lead fee (for 3 years) on a businesss lead introduction.
 
             li.success-fee-box
               h3 10%
               p
-                | of salary received (for the 1<sup>st</sup> year) on hire.
+                | of salary received (for the 1<sup>st</sup> year) on a hiring introduction.
 
             li.success-fee-box
               h3 20%
               p
-                | of combined compensation on an acqui-hire.
+                | of combined compensation on an acqui-hire introduction.
 
             li.success-fee-box
-              h3 30%
+              h3 30% Discount
               p
-                | investment discount on up to 30% of any funding round.
+                | for a right to invest in any funding round. <strong>No upfront equity</strong>.
 
           a.btn-link href='#' data-toggle="modal" data-target="#success-fees"
             | View More
@@ -739,7 +747,7 @@
   .modal-dialog.modal-lg role="document"
     .modal-content
       .modal-header
-        h5.font-regular.modal-title Success Fees
+        h5.font-regular.modal-title Success Fee
       .modal-body
         ul
           li The success fee is enforced through a legal agreement that you sign when you are selected to the program.
@@ -752,10 +760,14 @@
             ' costs (if any) to start this partnership must be borne by the founders. A
             ' #{link_to 'sample partnership deed is available here', 'https://sv.co/library/startup-partnership-deed'}.
           li
-            ' The 30% discount &amp; investment rights scenario is explained in detail in the
-            ' #{link_to 'Raising Investment', 'http://playbook.sv.co/6-raising-investment.html'} section.
+            ' The Right to Invest only applies when you raise funding. SV.CO has the 
+            ' right to <strong>invest additional money</strong>, capped at 30% of your funding round. This means that SV.CO will never become a majority stakeholder.
+            ' There is no upfront equity committed by the founders.
+          li
+            ' The 30% discount &amp; investment rights scenario is explained in detail in
+            ' #{link_to 'Raising Investment', 'http://playbook.sv.co/6-raising-investment.html'}.
       .modal-footer
         button.btn.btn-sm.btn-secondary.text-uppercase aria-label="Close" data-dismiss="modal" type="button"
           | Close
 
-= link_to 'Start Application', apply_batch_path(batch: batch.batch_number, state: 'start_from_floating'), class: 'btn btn-primary btn-xs text-uppercase hidden-xs-up sticky-application-button'
+= link_to 'Start Application', apply_batch_path(batch: batch.batch_number, state: 'start_from_floating'), class: 'btn btn-primary btn-xs text-uppercase hidden-xs-up sticky-application-button' if batch

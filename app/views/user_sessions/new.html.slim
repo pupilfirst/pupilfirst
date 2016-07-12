@@ -4,15 +4,32 @@ title SV.CO Identification
 .text-center.devise-user-form
   h1.title Please identify yourself!
 
-  = form_for @user, url: user_sessions_send_email_path do |f|
+  = simple_form_for @user, url: user_sessions_send_email_path do |f|
     - if @user.errors[:email].any?
       p.general-error
         i.fa.fa-exclamation-circle
         | &nbsp; Email: #{@user.errors[:email].first}.
+    - if @user.errors[:phone].any?
+      p.general-error
+        i.fa.fa-exclamation-circle
+        | &nbsp; Phone: #{@user.errors[:phone].first}.
+
 
     .wrapped-input
       = image_tag 'founders/sessions/email.png'
       = f.text_field :email, required: true, placeholder: 'enter your email'
+
+    .wrapped-input
+      = image_tag 'founders/sessions/email.png'
+      = f.text_field :name, required: true, placeholder: 'enter your full name'
+
+    .wrapped-input
+      = image_tag 'founders/sessions/email.png'
+      = f.text_field :phone, required: true, placeholder: 'enter your phone number'
+
+    .wrapped-input
+      = image_tag 'founders/sessions/email.png'
+      = f.input :university_id, label: 'University', collection: University.all, required: true, include_blank: 'Select your University'
 
     .confirmation-links
       = f.submit 'Register / Login', class: 'btn btn-primary btn-flat'

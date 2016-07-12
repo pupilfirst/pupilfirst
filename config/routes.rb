@@ -150,5 +150,6 @@ Svapp::Application.routes.draw do
   scope 'user_sessions', as: 'user_sessions', controller: 'user_sessions' do
     get 'new'
     post 'send_email'
+    patch 'send_email'
   end
 end

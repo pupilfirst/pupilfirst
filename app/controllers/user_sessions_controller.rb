@@ -13,7 +13,7 @@ class UserSessionsController < ApplicationController
   # POST user_sessions/send_email - find or create user from email received
   def send_email
     @user = User.where(email: params[:user][:email]).first_or_initialize
-
+    @user.assign_attributes(name: params[:user][:name], phone: params[:user][:phone], university_id: params[:user][:university_id])
     if @user.save
       # email referer url with token attached
       @referer = session.delete :referer

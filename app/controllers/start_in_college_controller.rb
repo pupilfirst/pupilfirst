@@ -15,6 +15,10 @@ class StartInCollegeController < ApplicationController
 
   # GET /start_in_college/student_details - page to collect basic info of the student
   def student_details
+    if current_mooc_student.details_complete?
+      flash[:alert] = 'You have already filled in your details!'
+      redirect_to start_in_college_start_path
+    end
   end
 
   # POST /start_in_college/save_student_details - save the details received and redirect to start of course

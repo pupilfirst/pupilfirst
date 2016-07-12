@@ -1,3 +1,13 @@
+### 12 July, 2016
+
+#### Features
+
+  - New applicants can now redo their application form as long as they haven't completed the payment step.
+
+#### Content
+
+  - Added a [tour](/tour) of SV.CO's programme.
+
 ### 4 July, 2016
 
 #### Features, UI, Content

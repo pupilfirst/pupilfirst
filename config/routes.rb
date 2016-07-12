@@ -136,7 +136,7 @@ Svapp::Application.routes.draw do
   # to test rotating background images.
   get '/test_background', to: 'home#test_background'
 
-  scope 'start_in_college', as: 'start_in_college', controller: 'start_in_college' do
+  scope 'startincollege', as: 'start_in_college', controller: 'start_in_college' do
     get '/', action: 'index'
     get 'start'
     get 'student_details'

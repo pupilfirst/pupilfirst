@@ -13,9 +13,10 @@ title SV.CO Student Details
 
     .form-group
       .col-sm-6.col-sm-offset-3
-        = f.input :name, label: 'Your name', input_html: { maxlength: 50 }, required: true
+        = f.input :email, disabled: true
+        = f.input :name, label: 'Your name', input_html: { maxlength: 50 }, required: true, disabled: true
         = f.input :gender, label: 'Gender', as: :radio_buttons, include_blank: false, collection: MoocStudent.valid_gender_values
-        = f.input :university_id, label: 'University', collection: University.all, required: true, include_blank: 'Select your University'
+        = f.input :university_id, label: 'University', collection: University.all, required: true, include_blank: 'Select your University', disabled: true
         = f.input :college, required: true
         = f.input :semester, as: :select, collection: MoocStudent.semester_values, include_blank: 'Select your semester'
         = f.input :state, required: true

@@ -1,5 +1,5 @@
 ActiveAdmin.register QuizQuestion do
-  menu parent: 'Start@College'
+  menu parent: 'StartInCollege'
   permit_params :course_chapter_id, :question, answer_options_attributes: [:id, :value, :correct_answer, :_destroy]
 
   index do

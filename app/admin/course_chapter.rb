@@ -1,5 +1,5 @@
 ActiveAdmin.register CourseChapter do
-  menu parent: 'Start@College'
+  menu parent: 'StartInCollege'
 
   permit_params :name
 end

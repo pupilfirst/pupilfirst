@@ -18,12 +18,12 @@ class MoocStudent < ActiveRecord::Base
 
   validates_presence_of :name, :university_id, :college, :semester, :state, unless: :skip_validation
 
-  before_save :copy_email_from_user
+  before_save :copy_details_from_user
 
-  def copy_email_from_user
+  def copy_details_from_user
     return unless user.present? && user_id_changed?
 
-    self.email = user.email
+    assign_attributes(email: user.email, name: user.name, university_id: user.university_id)
   end
 
   def details_complete?

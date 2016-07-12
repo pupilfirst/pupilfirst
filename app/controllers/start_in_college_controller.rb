@@ -37,7 +37,7 @@ class StartInCollegeController < ApplicationController
       flash[:success] = 'Your details have been saved!'
       redirect_to start_in_college_start_path
     else
-      render 'student_details'
+      render 'student_details', layout: 'application_v2'
     end
   end
 

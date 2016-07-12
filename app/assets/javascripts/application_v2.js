@@ -49,6 +49,7 @@
 // require about
 // require transparency
 // require talent
+//= require v2/user_sessions
 //= require v2/batch_application
 //= require v2/tour
 //= require v2/start_in_college

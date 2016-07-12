@@ -1,35 +1,45 @@
-- content_for :head
-title SV.CO Identification
-
-.text-center.devise-user-form
-  h1.title Please identify yourself!
-
-  = simple_form_for @user, url: user_sessions_send_email_path do |f|
-    - if @user.errors[:email].any?
-      p.general-error
-        i.fa.fa-exclamation-circle
-        | &nbsp; Email: #{@user.errors[:email].first}.
-    - if @user.errors[:phone].any?
-      p.general-error
-        i.fa.fa-exclamation-circle
-        | &nbsp; Phone: #{@user.errors[:phone].first}.
+- content_for :head do
+  title SV.CO Login
+  meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
 
 
-    .wrapped-input
-      = image_tag 'founders/sessions/email.png'
-      = f.text_field :email, required: true, placeholder: 'enter your email'
+.secondary-banner.application-stages-banner
+  .container
+    .application-stages-head.text-xs-center
+      h1
+        | Please supply your
+        span
+          | &nbsp;basic details.
+      h4.center-block
+        ' We'll email you a log-in link to establish your identity.
 
-    .wrapped-input
-      = image_tag 'founders/sessions/email.png'
-      = f.text_field :name, required: true, placeholder: 'enter your full name'
+.container
+  .container-md-center.content-box.m-t-3.m-b-3
+    h5.form-section-title.text-uppercase.font-semibold.m-b-2
+      | Hello there!
+    .simple-form-container
+      .row
+        = simple_form_for @user, url: user_sessions_send_email_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
 
-    .wrapped-input
-      = image_tag 'founders/sessions/email.png'
-      = f.text_field :phone, required: true, placeholder: 'enter your phone number'
+          = f.input :name, required: true
+          = f.input :email
 
-    .wrapped-input
-      = image_tag 'founders/sessions/email.png'
-      = f.input :university_id, label: 'University', collection: University.all, required: true, include_blank: 'Select your University'
+          = f.input :phone,
+            placeholder: '10-digit mobile phone number.',
+            required: true,
+            label: 'Mobile number',
+            input_html: { maxlength: 10, type: 'tel', pattern: '[0-9]{10}' }
 
-    .confirmation-links
-      = f.submit 'Register / Login', class: 'btn btn-primary btn-flat'
+          = f.input :university_id,
+            collection: proc { University.grouped_by_location },
+            as: :grouped_select,
+            group_method: :last,
+            value_method: :first,
+            label_method: :last,
+            label: 'University',
+            include_blank: 'Please pick your university',
+            required: false
+
+          .col-sm-offset-3
+            .simple-form-submit
+              = f.submit 'Register / Login', class: 'btn btn-primary btn-md text-uppercase'

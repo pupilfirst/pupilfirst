@@ -18,11 +18,11 @@
 
       - if @batches_open.present?
         - batch = @batches_open.first
-        = link_to 'Start Application', apply_batch_path(batch: batch.batch_number), class: 'btn btn-primary btn-md text-uppercase', id: 'start-application'
+        = link_to 'Start Application', apply_batch_path(batch: batch.batch_number, state: 'start'), class: 'btn btn-primary btn-md text-uppercase', id: 'start-application'
       - if @batches_ongoing.present?
         - @batches_ongoing.each do |batch|
           - if current_batch_applicant.blank? || current_batch_applicant.applied_to?(batch)
-            = link_to 'Continue Application', apply_batch_path(batch: batch.batch_number), class: 'btn btn-primary btn-md text-uppercase'
+            = link_to 'Continue Application', apply_batch_path(batch: batch.batch_number, state: 'continue'), class: 'btn btn-primary btn-md text-uppercase'
           - else
             button.btn.btn-primary.btn-md.text-uppercase disabled="true"
               | Not accepting new applications
@@ -450,7 +450,7 @@
                 ' For this batch, we’ve calibrated the fee so that it’s similar
                 ' to a one-semester fee that a lot of private engineering colleges
                 ' ask for. For the same fee, you get a once-in-a-lifetime opportunity.
-                ' You can #{link_to 'take the tour', tour_path} or listen to 
+                ' You can #{link_to 'take the tour', tour_path} or listen to
                 ' our previous founders if you are still not convinced.
             li
               h5
@@ -720,9 +720,9 @@
           li
             ' Refund: If your team drops out of the program within 2 months of program start (because of any
             ' reason), you&apos;ll receive 100% of the Program Fee as a refund. After 2 months, you will not receive
-            | any refund. Note: <em>this only applies to the entire team dropping out</em>. Because SV.CO accepts teams and not individual founders, 
-            | Program Fee will not be refunded for individual founder dropouts. 
-            | Founders may drop out from the team individually at any time, 
+            | any refund. Note: <em>this only applies to the entire team dropping out</em>. Because SV.CO accepts teams and not individual founders,
+            | Program Fee will not be refunded for individual founder dropouts.
+            | Founders may drop out from the team individually at any time,
             | and a the Team Lead may appoint a replacement co-founder.
           li
             ' The cost to run this program and take founders to Silicon Valley is at least ₹2,00,000 per founder.
@@ -758,4 +758,4 @@
         button.btn.btn-sm.btn-secondary.text-uppercase aria-label="Close" data-dismiss="modal" type="button"
           | Close
 
-= link_to 'Start Application', apply_batch_path(batch: batch.batch_number), class: 'btn btn-primary btn-xs text-uppercase hidden-xs-up sticky-application-button'
+= link_to 'Start Application', apply_batch_path(batch: batch.batch_number, state: 'start_from_floating'), class: 'btn btn-primary btn-xs text-uppercase hidden-xs-up sticky-application-button'

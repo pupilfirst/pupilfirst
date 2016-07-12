@@ -22,7 +22,7 @@ class InstamojoController < ApplicationController
     payment.refresh_payment!(params[:payment_id])
     payment.peform_post_payment_tasks!
 
-    redirect_to apply_batch_path(batch: payment.batch_application.batch.batch_number)
+    redirect_to apply_batch_path(batch: payment.batch_application.batch.batch_number, state: 'payment_complete')
   end
 
   # POST /instamojo/webhook

@@ -46,7 +46,7 @@ class BatchApplicationController < ApplicationController
         send "submission_for_stage_#{current_stage_number}"
       else
         flash[:error] = t('batch_application.general.submission_failure')
-        redirect_to apply_batch_path(batch: params[:batch])
+        redirect_to apply_batch_path(batch: params[:batch], state: 'submission_blocked')
     end
   end
 
@@ -68,7 +68,7 @@ class BatchApplicationController < ApplicationController
 
     if @form.validate(params[:application_stage_one])
       @form.save
-      redirect_to apply_batch_path(batch: params[:batch])
+      redirect_to apply_batch_path(batch: params[:batch], state: 'payment_pending')
     else
       render 'batch_application/stage_1'
     end
@@ -89,7 +89,7 @@ class BatchApplicationController < ApplicationController
 
     if @form.validate(params[:application_stage_two])
       @form.save
-      redirect_to apply_batch_path(batch: params[:batch])
+      redirect_to apply_batch_path(batch: params[:batch], state: 'stage_2_submitted')
     else
       render 'batch_application/stage_2'
     end
@@ -110,7 +110,7 @@ class BatchApplicationController < ApplicationController
       application_stage: current_stage
     )
 
-    redirect_to apply_batch_path(batch: params[:batch])
+    redirect_to apply_batch_path(batch: params[:batch], state: 'stage_4_submitted')
   end
 
   def prep_for_stage_5
@@ -121,7 +121,7 @@ class BatchApplicationController < ApplicationController
     check_token
 
     if current_batch_applicant.present?
-      redirect_to apply_batch_path(batch: params[:batch])
+      redirect_to apply_batch_path(batch: params[:batch], state: login_state)
       return
     end
 
@@ -158,7 +158,7 @@ class BatchApplicationController < ApplicationController
 
     flash[:success] = 'Your previous application has been discarded.'
 
-    redirect_to apply_batch_path(batch: params[:batch])
+    redirect_to apply_batch_path(batch: params[:batch], state: 'restart')
   end
 
   protected
@@ -208,6 +208,17 @@ class BatchApplicationController < ApplicationController
   def set_instance_variables
     @skip_container = true
     @hide_sign_in = true
+  end
+
+  def login_state
+    cached_status = applicant_status
+
+    case cached_status
+      when :application_pending, :application_expired, :payment_pending
+        cached_status.to_s
+      else
+        "stage_#{applicant_stage_number}_#{cached_status}"
+    end
   end
 
   # Returns one of :application_pending, :application_expired, :expired, :rejected, :submitted, or :ongoing, to indicate

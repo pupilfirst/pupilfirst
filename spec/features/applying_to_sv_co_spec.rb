@@ -21,7 +21,7 @@ feature 'Applying to SV.CO' do
 
     scenario 'user visits apply page' do
       visit apply_index_path
-      expect(page).to have_link('Start Application', href: apply_batch_path(batch: batch.batch_number))
+      expect(page).to have_link('Start Application', href: apply_batch_path(batch: batch.batch_number, state: 'start'))
     end
   end
 end

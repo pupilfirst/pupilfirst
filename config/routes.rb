@@ -94,8 +94,8 @@ Svapp::Application.routes.draw do
   scope 'apply', as: 'apply', controller: 'batch_application' do
     get '/', action: 'index', as: 'index'
     get '/tour', action: 'tour', as: 'tour'
-    get '/to/:batch', action: 'apply', as: 'batch'
-    post '/to/:batch', action: 'submit', as: 'submit'
+    get '/to/:batch/(:state)', action: 'apply', as: 'batch'
+    post '/to/:batch/(:state)', action: 'submit', as: 'submit'
     post '/restart/:batch', action: 'restart', as: 'restart'
     get '/identify/:batch', action: 'identify', as: 'identify'
     post '/identify', action: 'send_sign_in_email', as: 'send_sign_in_email'

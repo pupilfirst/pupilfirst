@@ -7,14 +7,14 @@
 = content_for :body
   p
     ' Your application has progressed to the next stage: <strong>#{@stage.name}</strong>. Please visit
-    ' #{link_to "the batch's application page", apply_batch_url(batch: @batch.batch_number)} for information on how to
+    ' #{link_to "the batch's application page", apply_batch_url(batch: @batch.batch_number, state: 'continue_from_mail')} for information on how to
     ' proceed. You may be required to identify yourself if you're returning to application process from a new device.
 
   p
     ' If you're unable to click on the link above, then please copy and paste the following link
     ' into your browser's address bar:
 
-  p.monospace = apply_batch_url(batch: @batch.batch_number)
+  p.monospace = apply_batch_url(batch: @batch.batch_number, state: 'continue_from_mail')
 
   p
     ' Please note that the deadline for this new stage is

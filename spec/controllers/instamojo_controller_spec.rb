@@ -75,7 +75,7 @@ describe InstamojoController do
 
     it 'redirects to apply page for batch' do
       get :redirect, payment_request_id: payment.instamojo_payment_request_id, payment_id: payment_id
-      expect(response).to redirect_to(apply_batch_path(batch: batch_application.batch.batch_number))
+      expect(response).to redirect_to(apply_batch_path(batch: batch_application.batch.batch_number, state: 'payment_complete'))
     end
   end
 

@@ -1,0 +1,12 @@
+- content_for :head
+title Chapter 1.2 | Start in College
+
+.margin-top-20
+.panel.panel-success
+  .panel-heading Chapter 1.2
+  .panel-body
+    p The second section of the first chapter of the course! Page will contain buttons at the end to navigate forward or back.
+
+    = link_to '<< Previous', start_in_college_chapter_path(1, 1), class: 'btn btn-primary btn-md text-uppercase'
+
+    = link_to 'Next >>', start_in_college_chapter_path(1, 3), class: 'btn btn-primary btn-md text-uppercase pull-right'

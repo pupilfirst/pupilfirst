@@ -1,37 +1,37 @@
-class SixWaysMoocController < ApplicationController
+class StartInCollegeController < ApplicationController
   before_action :lock_under_feature_flag
   before_action :authorize_student, except: :index
 
   helper_method :current_mooc_student
 
-  # GET /sixways - the landing page for sixways
+  # GET /start_in_college - the landing page for start_in_college
   def index
   end
 
-  # GET /sixways/start - the start page for the course
+  # GET /start_in_college/start - the start page for the course
   def start
-    redirect_to sixways_student_details_path unless current_mooc_student.details_complete?
+    redirect_to start_in_college_student_details_path unless current_mooc_student.details_complete?
   end
 
-  # GET /sixways/student_details - page to collect basic info of the student
+  # GET /start_in_college/student_details - page to collect basic info of the student
   def student_details
   end
 
-  # POST /sixways/save_student_details - save the details received and redirect to start of course
+  # POST /start_in_college/save_student_details - save the details received and redirect to start of course
   def save_student_details
     if @current_mooc_student.update(update_params)
       flash[:success] = 'Your details have been saved!'
-      redirect_to sixways_start_path
+      redirect_to start_in_college_start_path
     else
       render 'student_details'
     end
   end
 
-  # GET /sixways/chapter/:id/:section_id - displays the content of a chapter's section
+  # GET /start_in_college/chapter/:id/:section_id - displays the content of a chapter's section
   def chapter
     raise_not_found unless section_exists?
 
-    render "six_ways_mooc/chapters/chapter_#{params[:id]}_#{params[:section_id]}"
+    render "start_in_college/chapters/chapter_#{params[:id]}_#{params[:section_id]}"
   end
 
   protected
@@ -46,7 +46,7 @@ class SixWaysMoocController < ApplicationController
   private
 
   def lock_under_feature_flag
-    raise_not_found unless feature_active? :six_ways_mooc
+    raise_not_found unless feature_active? :start_in_college
   end
 
   def authorize_student

@@ -23,7 +23,7 @@ class StartInCollegeController < ApplicationController
 
   # POST /start_in_college/save_student_details - save the details received and redirect to start of course
   def save_student_details
-    if @current_mooc_student.update(update_params)
+    if current_mooc_student.update(update_params)
       flash[:success] = 'Your details have been saved!'
       redirect_to start_in_college_start_path
     else

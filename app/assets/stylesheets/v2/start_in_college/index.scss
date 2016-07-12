@@ -1,0 +1,108 @@
+.video-container, .mooc-left, .mooc-sidebar {
+  padding: 30px;
+  background-color: white;
+}
+.mooc-left {
+  margin-bottom: 30px;
+  h3 {
+    line-height: 1.5;
+  }
+  p {
+    line-height: 2;
+  }
+}
+.mooc-sidebar {
+  ul {
+    list-style: none;
+    padding-left: 30px;
+    margin-bottom: 30px;
+
+    li {
+      line-height: 2;
+      position: relative;
+
+      &:before {
+        content: '';
+        width: 12px;
+        height: 12px;
+        position: absolute;
+        display: inline-block;
+        left: -30px;
+        top: 8px;
+        @include border-radius(50%);
+        border: 1px solid $light-primary;
+        margin-right: 10px;
+      }
+    }
+  }
+}
+.course-authors {
+  .media {
+    margin: 0 0 30px;
+  }
+  .media-left {
+    padding-right: 20px;
+
+    @include media-breakpoint-down(xs) {
+      display: block;
+      margin: auto;
+    }
+  }
+  .media-object {
+    border: 4px solid $gray-border;
+    @include border-radius(50%);
+    width: 130px;
+    height: 130px;
+    overflow: hidden;
+
+    @include media-breakpoint-down(xs) {
+      margin: auto;
+    }
+  }
+  .media-body {
+    max-width: 400px;
+    padding-top: 5px;
+
+    .media-heading {
+      margin-bottom: 10px;
+    }
+    @include media-breakpoint-down(xs) {
+      padding-top: 20px;
+      text-align: center;
+    }
+  }
+}
+.course-outline {
+  h4 {
+    margin-bottom: 15px;
+  }
+  ul {
+    list-style: circle;
+
+    @include media-breakpoint-down(xs) {
+      padding-left: 30px;
+    }
+
+    li {
+      font-size: 15px;
+      padding-bottom: 10px;
+    }
+  }
+}
+.join-course-box {
+  padding: 30px 15px;
+  border: 1px solid $gray-border;
+  @include border-radius(5px);
+
+  h3 {
+    margin-bottom: 15px;
+  }
+}
+.paid-program-box {
+  padding: 30px 0 0;
+
+  p {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+}

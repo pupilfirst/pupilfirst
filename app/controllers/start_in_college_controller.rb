@@ -6,6 +6,7 @@ class StartInCollegeController < ApplicationController
 
   # GET /start_in_college - the landing page for start_in_college
   def index
+    render layout: 'application_v2'
   end
 
   # GET /start_in_college/start - the start page for the course

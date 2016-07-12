@@ -18,6 +18,9 @@ class UserSessionsController < ApplicationController
       # email referer url with token attached
       @referer = session.delete :referer
       send_email_with_token
+
+      @skip_container = true
+      render layout: 'application_v2'
     else
       # show errors
       render 'new'

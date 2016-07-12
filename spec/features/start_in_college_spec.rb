@@ -6,7 +6,7 @@ feature 'Signing up for the StartinCollege course' do
       visit start_in_college_start_path
 
       # must have redirected to the login page
-      expect(page).to have_text('Please identify yourself')
+      expect(page).to have_text('Please supply your basic details')
 
       fill_in 'user_email', with: 'someone@example.com'
       click_on 'Register / Login'

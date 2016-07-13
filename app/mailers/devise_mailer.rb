@@ -5,5 +5,5 @@ class DeviseMailer < Devise::Mailer
   include Roadie::Rails::Automatic
   include Devise::Controllers::UrlHelpers
 
-  default from: 'Startup Village <no-reply@sv.co>'
+  default from: 'SV.CO <help@sv.co>'
 end

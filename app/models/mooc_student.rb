@@ -2,35 +2,7 @@ class MoocStudent < ActiveRecord::Base
   belongs_to :university
   belongs_to :user
 
-  GENDER_MALE = -'male'
-  GENDER_FEMALE = -'female'
-  GENDER_OTHER = -'other'
-
-  def self.valid_gender_values
-    [GENDER_FEMALE, GENDER_MALE, GENDER_OTHER]
-  end
-
-  attr_accessor :skip_validation
-
-  validates :gender, inclusion: { in: valid_gender_values }, unless: :skip_validation
-
-  validates_uniqueness_of :user_id, unless: :skip_validation
-
-  validates_presence_of :name, :university_id, :college, :semester, :state, unless: :skip_validation
-
-  before_save :copy_details_from_user
-
-  def copy_details_from_user
-    return unless user.present? && user_id_changed?
-
-    assign_attributes(email: user.email, name: user.name, university_id: user.university_id)
-  end
-
-  def details_complete?
-    [name, gender, university_id, college, semester, state].count(&:present?) == 6
-  end
-
-  def self.semester_values
+  def self.valid_semester_values
     %w(I II III IV V VI VII VIII Graduated Other)
   end
 end

@@ -13,19 +13,22 @@
 
 .container
   .container-md-center.content-box.m-t-3.m-b-3
-    h5.form-section-title.text-uppercase.font-semibold.m-b-2
-      | Hello there!
+    .alert.alert-success
+      p Did this once before? #{link_to 'Log in', user_sessions_new_path(referer: start_in_college_start_url)} instead.
+
+    h5.form-section-title.font-semibold.m-b-2
+      | Sign up for StartInCollege!
     .simple-form-container
       .row
-        = simple_form_for current_mooc_student, url: start_in_college_save_student_details_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
-
-          = f.input :name, required: true, disabled: true
-          = f.input :email, required: true, disabled: true
-          = f.input :university_id, label: 'University', collection: University.all, required: true, include_blank: 'Select your University', disabled: true
+        = simple_form_for @form, url: start_in_college_create_student_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { radio_buttons: :horizontal_radio_and_checkboxes } do |f|
+          = f.input :name, required: true
+          = f.input :email, required: true, disabled: @disable_email
+          = f.input :gender, required: true, collection: Founder.valid_gender_values, as: :radio_buttons, label_method: proc { |gender| gender.capitalize }
+          = f.input :university_id, label: 'University', collection: University.all, required: true, include_blank: 'Select your University'
           = f.input :college, required: true
-          = f.input :semester, as: :select, collection: MoocStudent.semester_values, include_blank: 'Select your semester'
+          = f.input :semester, as: :select, collection: MoocStudent.valid_semester_values, include_blank: 'Select your semester'
           = f.input :state, required: true
 
           .col-sm-offset-3
             .simple-form-submit
-              = f.submit 'Submit', class: 'btn btn-primary btn-md text-uppercase'
+              = f.submit 'Sign up', class: 'btn btn-primary btn-md text-uppercase'

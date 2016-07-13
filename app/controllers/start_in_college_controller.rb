@@ -1,37 +1,55 @@
 class StartInCollegeController < ApplicationController
-  before_action :lock_under_feature_flag
-  before_action :authorize_student, except: :index
+  before_action :authorize_student, except: %w(index student_details create_student)
+  before_action :block_student, only: %w(student_details create_student)
 
   helper_method :current_mooc_student
 
-  # GET /start_in_college - the landing page for start_in_college
+  # GET /start_in_college
+  #
+  # Landing page for StartInCollege
   def index
     render layout: 'application_v2'
   end
 
-  # GET /start_in_college/start - the start page for the course
+  # GET /start_in_college/start
+  #
+  # Start page for the course.
   def start
-    unless current_mooc_student.details_complete?
+    if current_mooc_student.present?
+      @skip_container = true
+      render layout: 'application_v2'
+    else
       redirect_to start_in_college_student_details_path
-      return
     end
+  end
+
+  # GET /start_in_college/student_details
+  #
+  # Signup page for MOOC course.
+  def student_details
     @skip_container = true
+    @form = MoocStudentSignupForm.new(MoocStudent.new)
+    @form.prepopulate! email: current_user&.email
+    @disable_email = true if current_user.present?
     render layout: 'application_v2'
   end
 
-  # GET /start_in_college/student_details - page to collect basic info of the student
-  def student_details
-    unless current_mooc_student.details_complete?
-      @skip_container = true
-      render layout: 'application_v2'
-      return
-    end
+  # POST /start_in_college/create_student
+  def create_student
+    @form = MoocStudentSignupForm.new(MoocStudent.new)
 
-    flash[:alert] = 'You have already filled in your details!'
-    redirect_to start_in_college_start_path
+    if @form.validate(params[:mooc_student_signup])
+      @user = @form.save(referer: start_in_college_start_url)
+      @skip_container = true
+      render 'user_sessions/send_email', layout: 'application_v2'
+    else
+      render 'student_details', layout: 'application_v2'
+    end
   end
 
-  # POST /start_in_college/save_student_details - save the details received and redirect to start of course
+  # POST /start_in_college/save_student_details
+  #
+  # Create MoocStudent and send user login email, or start course if already logged in.
   def save_student_details
     if current_mooc_student.update(update_params)
       flash[:success] = 'Your details have been saved!'
@@ -41,7 +59,9 @@ class StartInCollegeController < ApplicationController
     end
   end
 
-  # GET /start_in_college/chapter/:id/:section_id - displays the content of a chapter's section
+  # GET /start_in_college/chapter/:id/:section_id
+  #
+  # Displays the content of a chapter's section.
   def chapter
     raise_not_found unless section_exists?
 
@@ -51,16 +71,15 @@ class StartInCollegeController < ApplicationController
   protected
 
   def current_mooc_student
-    @current_mooc_student ||= begin
-      return nil unless current_user.present?
-      MoocStudent.where(user: current_user).first_or_create! skip_validation: true
-    end
+    @current_mooc_student ||= MoocStudent.find_by(user: current_user) if current_user.present?
   end
 
   private
 
-  def lock_under_feature_flag
-    raise_not_found unless feature_active? :start_in_college
+  def block_student
+    return if current_mooc_student.blank?
+    flash[:alert] = 'You have already registered for the course!'
+    redirect_to start_in_college_start_path
   end
 
   def authorize_student
@@ -68,7 +87,7 @@ class StartInCollegeController < ApplicationController
   end
 
   def request_authentication
-    redirect_to user_sessions_new_path(token: params[:token], referer: request.url)
+    redirect_to start_in_college_student_details_path
   end
 
   def update_params

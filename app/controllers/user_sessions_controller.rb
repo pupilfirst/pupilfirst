@@ -21,12 +21,10 @@ class UserSessionsController < ApplicationController
     @skip_container = true
 
     @user = User.where(email: params[:user][:email]).first_or_initialize
-    @user.assign_attributes(name: params[:user][:name], phone: params[:user][:phone], university_id: params[:user][:university_id])
+    @user.referer = session.delete :referer
 
     if @user.save
-      # email referer url with token attached
-      @referer = session.delete :referer
-      send_email_with_token
+      @user.send_login_email
 
       render layout: 'application_v2'
     else
@@ -48,10 +46,6 @@ class UserSessionsController < ApplicationController
 
   def save_token
     set_cookie(:login_token, @user.login_token)
-  end
-
-  def send_email_with_token
-    UserSessionMailer.send_login_token(@user, @referer).deliver_later
   end
 
   def redirect_to_referer

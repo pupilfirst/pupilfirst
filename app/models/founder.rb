@@ -81,7 +81,7 @@ class Founder < ActiveRecord::Base
     length: { minimum: 2 }
 
   def self.valid_gender_values
-    [GENDER_FEMALE, GENDER_MALE, GENDER_OTHER]
+    [GENDER_MALE, GENDER_FEMALE, GENDER_OTHER]
   end
 
   validates :gender, inclusion: { in: valid_gender_values }

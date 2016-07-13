@@ -140,6 +140,7 @@ Svapp::Application.routes.draw do
     get '/', action: 'index'
     get 'start'
     get 'student_details'
+    post 'create_student'
     # TODO: why is a patch request send after a few rounds of errors ?
     post 'save_student_details'
     patch 'save_student_details'

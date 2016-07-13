@@ -13,11 +13,11 @@
         = link_to 'Invest & Hire', talent_path, class: 'nav-link'
     li.nav-item role="presentation"
       = link_to 'Faculty', faculty_index_path, class: 'nav-link'
-    li.nav-item role="presentation"
-      = link_to 'Library', resources_path, class: 'nav-link'
     - unless current_founder
       li.nav-item role="presentation"
         = link_to 'About', about_path, class: 'nav-link'
+    li.nav-item role="presentation"
+      = link_to '#StartInCollege', start_in_college_path, class: 'nav-link'
     - if current_founder
       li.nav-item role="presentation" class="dropdown"
         a.dropdown-toggle.logged-in-avatar-link data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"

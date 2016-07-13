@@ -89,6 +89,8 @@ gem 'reform-rails'
 gem 'virtus' # Required for reform coercion. Attributes on Steroids for Plain Old Ruby Objects
 gem 'dry-validation' # There seems to be a dependency bug in reform's coercion code - it required dry-types.
 
+gem 'postmark-rails' #
+
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify' # Superb notifications library. http://sciactive.github.io/pnotify/

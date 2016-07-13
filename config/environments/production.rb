@@ -96,15 +96,7 @@ Rails.application.configure do
   config.middleware.delete(Rack::Runtime)
 end
 
-ActionMailer::Base.smtp_settings = {
-  port: ENV['SPARKPOST_SMTP_PORT'],
-  address: ENV['SPARKPOST_SMTP_HOST'],
-  user_name: ENV['SPARKPOST_SMTP_USERNAME'],
-  password: ENV['SPARKPOST_SMTP_PASSWORD'],
-  authentication: :login,
-  enable_starttls_auto: true
-}
-
-ActionMailer::Base.delivery_method = :smtp
+config.action_mailer.delivery_method   = :postmark
+config.action_mailer.postmark_settings = { :api_token => ENV['POSTMARK_API_TOKEN'] }
 
 Rails.application.default_url_options = Svapp::Application.config.action_mailer.default_url_options

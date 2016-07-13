@@ -1,8 +1,25 @@
 - content_for :head
 title SV.CO Start in College
 
+.col-md-4.col-md-push-8#mooc-sidebar.m-b-2
+  .mooc-sidebar.content-box.m-t-2
+    h4.font-regular
+      ' #StartInCollege: An Introduction to
+      br
+      | Student Startups
+    h5.font-regular.m-t-1.m-b-1
+      | FREE &amp; self-paced online course
+    ul
 
-.col-md-8
+      li Build a Startup while in College
+      li No prior skills needed
+      li Learn real-world Engineering, Product and Design Skills
+      li Get support from the student startup community
+    h4.font-semibold.m-b-2
+      | <mark>Launching August 15</mark>, register today!
+    = link_to 'Join the course', start_in_college_start_path, class: 'btn btn-primary btn-md text-uppercase'
+
+.col-md-8.col-md-pull-4
   / .video-container.content-box.m-t-2
 
   .mooc-left.content-box.m-t-2.m-b-2
@@ -67,7 +84,7 @@ title SV.CO Start in College
         li
           | Industrial-era education versus Internet-era education
         li
-          | Learning versus Earnings.
+          | Learning versus Earnings
         li
           | Growth versus Fixed Mindset
         li
@@ -135,21 +152,3 @@ title SV.CO Start in College
         ' for capable student founders. Applications for the next batch are
         br
           = link_to 'currently open.', apply_index_path, class: 'font-semibold'
-
-.col-md-4#mooc-sidebar.m-b-2
-  .mooc-sidebar.content-box.m-t-2
-    h4.font-regular
-      ' #StartInCollege: An Introduction to
-      br
-      | Student Startups
-    h5.font-regular.m-t-1.m-b-1
-      | FREE &amp; self-paced online course
-    ul
-
-      li Build a Startup while in College
-      li No prior skills needed
-      li Learn real-world Engineering, Product and Design Skills
-      li Get support from the student startup community
-    h4.font-semibold.m-b-2
-     | <mark>Launching August 15</mark>, register today!
-    = link_to 'Join the course', start_in_college_start_path, class: 'btn btn-primary btn-md text-uppercase'

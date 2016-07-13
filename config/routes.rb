@@ -138,7 +138,7 @@ Svapp::Application.routes.draw do
 
   # Previous sixways page re-directed to startincollege
   get 'sixways', to: redirect('/startincollege')
-  
+
   scope 'startincollege', as: 'start_in_college', controller: 'start_in_college' do
     get '/', action: 'index'
     get 'start'

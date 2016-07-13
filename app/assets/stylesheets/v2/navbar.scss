@@ -98,7 +98,7 @@
       margin-left: 2rem;
 
       @include media-breakpoint-down(md) {
-        margin-left: 1.2rem;
+        margin-left: 1rem;
       }
       @include media-breakpoint-down(sm) {
         margin-left: 0;
@@ -122,6 +122,9 @@
 
             &:hover, &:focus {
               color: $brand-primary;
+            }
+            @include media-breakpoint-down(md) {
+              font-size: 13px;
             }
           }
           &.btn-signin {

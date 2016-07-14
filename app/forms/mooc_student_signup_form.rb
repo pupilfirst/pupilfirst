@@ -18,6 +18,7 @@ class MoocStudentSignupForm < Reform::Form
   end
 
   def university_id_must_be_valid
+    return if university_id.blank? # Presence validator will show correct message.
     return if University.find_by(id: university_id).present?
     errors[:university_id] << 'is invalid'
   end

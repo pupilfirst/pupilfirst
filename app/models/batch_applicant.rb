@@ -54,7 +54,7 @@ class BatchApplicant < ActiveRecord::Base
     regenerate_token
 
     # Send email.
-    BatchApplicantMailer.sign_in(email, token, application_batch).deliver_later
+    BatchApplicantMailer.sign_in(email, token, application_batch).deliver_now
 
     # Mark when email was sent.
     update!(sign_in_email_sent_at: Time.now)

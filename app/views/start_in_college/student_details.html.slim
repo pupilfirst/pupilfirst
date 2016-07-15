@@ -23,6 +23,10 @@
         = simple_form_for @form, url: start_in_college_create_student_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { radio_buttons: :horizontal_radio_and_checkboxes } do |f|
           = f.input :name, required: true
           = f.input :email, required: true, disabled: @disable_email
+          = f.input :phone,
+            label: 'Mobile number',
+            input_html: { maxlength: 10, type: 'tel', pattern: '[0-9]{10}' },
+            placeholder: '10-digit mobile phone number'
           = f.input :gender, required: true, collection: Founder.valid_gender_values, as: :radio_buttons, label_method: proc { |gender| gender.capitalize }
 
           // University is actually a required field, but select2 v3 does not play nice with HTML5 validations.

@@ -217,7 +217,7 @@ feature 'Timeline Builder' do
           expect(page.find('#add-link')).to have_text(timeline_event_file.title)
 
           # HACK: Our slow CI servers often fail to click submit since the modal is still disappearing.
-          sleep(0.5)
+          sleep(1)
 
           click_on 'Submit for Review'
 
@@ -336,6 +336,10 @@ feature 'Timeline Builder' do
           expect(page.find('#add-link')).to have_text("#{timeline_event_file.title} (+1)")
           page.find('#add-link').click
           click_on 'Add a link'
+
+          # HACK: Our slow CI servers often fail to click the link since the modal needs to appear.
+          sleep(1)
+
           fill_in 'Title', with: 'SV.CO'
           fill_in 'URL', with: 'https://sv.co'
           page.find('#link_private').click
@@ -349,7 +353,7 @@ feature 'Timeline Builder' do
           expect(page.find('#add-link')).to have_text("#{timeline_event_file.title} (+2)")
 
           # HACK: Our slow CI servers often fail to click submit since the modal is still disappearing.
-          sleep(0.5)
+          sleep(1)
 
           click_on 'Submit for Review'
 

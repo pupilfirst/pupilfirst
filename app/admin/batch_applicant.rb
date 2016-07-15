@@ -37,8 +37,9 @@ ActiveAdmin.register BatchApplicant do
       end
     end
 
-    column :role
-    column :gender
+    column :tags do |batch_applicant|
+      linked_tags(batch_applicant.tags, separator: ' | ')
+    end
 
     actions
   end

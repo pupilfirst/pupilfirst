@@ -28,6 +28,9 @@ class BatchApplicant < ActiveRecord::Base
 
   has_secure_token
 
+  normalize_attribute :phone, with: :phone
+  normalize_attribute :gender, with: :blank
+
   # Attempts to find an applicant with the supplied token.
   def self.find_using_token(incoming_token)
     applicant = find_by token: incoming_token

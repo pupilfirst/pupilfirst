@@ -88,7 +88,10 @@
               required: false
 
             = f.input :college, label: "Team Lead's College", input_html: { maxlength: 250 }
-            = f.input :state, input_html: { maxlength: 250 }
+            = f.input :state,
+              collection: proc { University.valid_state_names },
+              include_blank: 'Please pick your state',
+              required: true
 
             = f.simple_fields_for :team_lead do |t|
               = t.input :name, label: 'Full name of Team Lead', input_html: { maxlength: 250 }

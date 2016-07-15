@@ -2,8 +2,19 @@ class BatchApplicant < ActiveRecord::Base
   include Taggable
 
   has_and_belongs_to_many :batch_applications
+  has_many :payments, through: :batch_applications
 
-  scope :team_leads, -> { joins(:batch_applications).where('batch_applications.team_lead_id = batch_applicants.id') }
+  # Applicants who have signed up but haven't applied.
+  scope :lead_signup, -> { where.not(id: joins(:batch_applications).where.not(batch_applications: { id: nil }).select(:id), phone: nil) }
+
+  # Applicants who have submitted application, but haven't clicked pay.
+  scope :team_signup, -> { joins(:batch_applications).where.not(batch_applications: { id: nil }, phone: nil).where.not(id: joins(:payments).select(:id)).distinct }
+
+  # Applicants who have applications who clicked the pay button but didn't pay.
+  scope :payment_requested, -> { joins(:payments).where.not(phone: nil).merge(Payment.requested).distinct }
+
+  # Applicants who have completed payments.
+  scope :conversion, -> { joins(:payments).where.not(phone: nil).merge(Payment.paid).distinct }
 
   # Per-founder application fee.
   APPLICATION_FEE = 1000

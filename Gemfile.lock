@@ -163,6 +163,9 @@ GEM
     capybara-screenshot (1.0.12)
       capybara (>= 1.0, < 3)
       launchy
+    capybara-webkit (1.11.1)
+      capybara (>= 2.3.0, < 2.8.0)
+      json
     carrierwave (0.10.0)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
@@ -174,7 +177,6 @@ GEM
       fastimage
     carrierwave_backgrounder (0.4.1)
       carrierwave (~> 0.5)
-    cliver (0.3.2)
     coderay (1.1.0)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
@@ -487,10 +489,6 @@ GEM
     phony_rails (0.12.11)
       activesupport (>= 3.0)
       phony (~> 2.12)
-    poltergeist (1.10.0)
-      capybara (~> 2.1)
-      cliver (~> 0.3.1)
-      websocket-driver (>= 0.2.0)
     polyamorous (1.3.0)
       activerecord (>= 3.0)
     postmark (1.8.1)
@@ -763,6 +761,7 @@ DEPENDENCIES
   capybara
   capybara-email
   capybara-screenshot
+  capybara-webkit
   carrierwave
   carrierwave-bombshelter
   carrierwave_backgrounder
@@ -799,7 +798,6 @@ DEPENDENCIES
   passenger (>= 5.0.22)
   pg
   phony_rails
-  poltergeist
   postmark-rails
   pry-rails
   rails (= 4.2.6)

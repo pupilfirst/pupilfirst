@@ -6,7 +6,7 @@ ActiveAdmin.register User do
     selectable_column
 
     column :email
-    column :login_token
+    column :mooc_student
 
     actions
   end

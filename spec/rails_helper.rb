@@ -69,16 +69,18 @@ RSpec.configure do |config|
   raise 'RuboCop Errors' unless rubocop_output =~ /files inspected, no offenses detected/
 end
 
-# Use cabpybara-webkit as JS driver.
-Capybara.javascript_driver = :webkit
+# Use poltergeist as JS driver.
+require 'capybara/poltergeist'
+
+Capybara.register_driver :poltergeist do |app|
+  Capybara::Poltergeist::Driver.new app,
+    phantomjs_logger: Logger.new('/dev/null')
+end
+
+Capybara.javascript_driver = :poltergeist
 
 # Increase Capybara's default maximum wait time to 5 seconds to account for our slow Strider server.
 Capybara.default_max_wait_time = 5
-
-# rubocop:disable Style/SymbolProc
-Capybara::Webkit.configure do |config|
-  config.block_unknown_urls
-end
 
 # Save screenshots on failure (and more).
 require 'capybara-screenshot/rspec'

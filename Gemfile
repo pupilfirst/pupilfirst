@@ -124,7 +124,7 @@ group :test do
   gem 'faker' # A library for generating fake data such as names, addresses, and phone numbers.
   gem 'capybara' # For RSpec feature tests.
   gem 'capybara-email' # Test ActionMailer and Mailer messages with Capybara
-  gem 'capybara-webkit' # Headless WebKit browser, provided by Webkit (QT).
+  gem 'poltergeist' # A PhantomJS driver for Capybara
   gem 'capybara-screenshot' # Save screenshots on failure!
   gem 'database_cleaner' # Database cleaner can handle complex DB cleanup strategies for test (feature vs regular tests).
 end

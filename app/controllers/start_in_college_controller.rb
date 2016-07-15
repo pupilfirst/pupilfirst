@@ -6,13 +6,13 @@ class StartInCollegeController < ApplicationController
 
   layout 'application_v2'
 
-  # GET /start_in_college
+  # GET /startincollege
   #
   # Landing page for StartInCollege
   def index
   end
 
-  # GET /start_in_college/start
+  # GET /startincollege/start
   #
   # Start page for the course.
   def start
@@ -23,7 +23,7 @@ class StartInCollegeController < ApplicationController
     end
   end
 
-  # GET /start_in_college/student_details
+  # GET /startincollege/student_details
   #
   # Signup page for MOOC course.
   def student_details
@@ -33,7 +33,7 @@ class StartInCollegeController < ApplicationController
     @disable_email = true if current_user.present?
   end
 
-  # POST /start_in_college/create_student
+  # POST /startincollege/create_student
   def create_student
     @form = MoocStudentSignupForm.new(MoocStudent.new)
 
@@ -46,7 +46,7 @@ class StartInCollegeController < ApplicationController
     end
   end
 
-  # POST /start_in_college/save_student_details
+  # POST /startincollege/save_student_details
   #
   # Create MoocStudent and send user login email, or start course if already logged in.
   def save_student_details
@@ -58,7 +58,7 @@ class StartInCollegeController < ApplicationController
     end
   end
 
-  # GET /start_in_college/chapter/:id/:section_id
+  # GET /startincollege/chapter/:id/:section_id
   #
   # Displays the content of a chapter's section.
   def chapter
@@ -93,16 +93,15 @@ class StartInCollegeController < ApplicationController
     params.require(:mooc_student).permit(:name, :gender, :university_id, :college, :semester, :state)
   end
 
-  # TODO: is there a way to avoid updating these arrays manually ?
-  # check if given section exists for the given chapter
+  def chapter_exists?
+    params[:id].to_i.in? CourseChapter.valid_chapter_numbers
+  end
+
+  def chapter_has_section?
+    params[:section_id].to_i <= CourseChapter.find(params[:id]).sections_count
+  end
+
   def section_exists?
-    case params[:id].to_i
-      when 1
-        params[:section_id].to_i.in? [1, 2]
-      when 2
-        params[:section_id].to_i.in? [1]
-      else
-        false
-    end
+    chapter_exists? && chapter_has_section?
   end
 end

@@ -5,9 +5,8 @@ ActiveAdmin.register User do
   index do
     selectable_column
 
-    column :name
-    column :phone
-    column :university
+    column :email
+    column :login_token
 
     actions
   end
@@ -15,9 +14,7 @@ ActiveAdmin.register User do
   show do
     attributes_table do
       row :email
-      row :name
-      row :phone
-      row :university
+      row :login_token
     end
   end
 end

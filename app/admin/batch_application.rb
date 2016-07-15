@@ -34,8 +34,8 @@ ActiveAdmin.register BatchApplication do
   filter :state
 
   scope :all, default: true
-  scope :payment_missing
-  scope :payment_requested
+  scope :started_application
+  scope :payment_initiated
   scope :payment_complete
 
   index do

@@ -5,8 +5,8 @@ ActiveAdmin.register BatchApplicant do
 
   scope :all, default: true
   scope :lead_signup
-  scope :team_signup
-  scope :payment_requested
+  scope :started_application
+  scope :payment_initiated
   scope :conversion
 
   filter :name

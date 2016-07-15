@@ -4,11 +4,12 @@ class StartInCollegeController < ApplicationController
 
   helper_method :current_mooc_student
 
+  layout 'application_v2'
+
   # GET /start_in_college
   #
   # Landing page for StartInCollege
   def index
-    render layout: 'application_v2'
   end
 
   # GET /start_in_college/start
@@ -17,7 +18,6 @@ class StartInCollegeController < ApplicationController
   def start
     if current_mooc_student.present?
       @skip_container = true
-      render layout: 'application_v2'
     else
       redirect_to start_in_college_student_details_path
     end
@@ -31,7 +31,6 @@ class StartInCollegeController < ApplicationController
     @form = MoocStudentSignupForm.new(MoocStudent.new)
     @form.prepopulate! email: current_user&.email
     @disable_email = true if current_user.present?
-    render layout: 'application_v2'
   end
 
   # POST /start_in_college/create_student
@@ -41,9 +40,9 @@ class StartInCollegeController < ApplicationController
     if @form.validate(params[:mooc_student_signup])
       @user = @form.save(referer: start_in_college_start_url)
       @skip_container = true
-      render 'user_sessions/send_email', layout: 'application_v2'
+      render 'user_sessions/send_email'
     else
-      render 'student_details', layout: 'application_v2'
+      render 'student_details'
     end
   end
 
@@ -55,7 +54,7 @@ class StartInCollegeController < ApplicationController
       flash[:success] = 'Your details have been saved!'
       redirect_to start_in_college_start_path
     else
-      render 'student_details', layout: 'application_v2'
+      render 'student_details'
     end
   end
 

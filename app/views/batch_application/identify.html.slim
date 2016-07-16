@@ -29,6 +29,17 @@
             label: 'Mobile number',
             input_html: { maxlength: 10, type: 'tel', pattern: '[0-9]{10}' }
 
+          hr
+          h4 How did you hear about us ?
+          = f.input :reference,
+            label: false,
+            collection: BatchApplicant.reference_sources,
+            as: :radio_buttons,
+            class: 'margin-bottom-10'
+          = f.input :reference_text,
+            label: 'Other? Please specify'
+
+
           .col-sm-offset-3
             .simple-form-submit
               = f.submit 'Send Link to Apply', class: 'btn btn-primary btn-md text-uppercase'

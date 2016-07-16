@@ -28,6 +28,7 @@ ActiveAdmin.register BatchApplicant do
     column :name
     column :email
     column :phone
+    column :reference
 
     column :last_created_application do |batch_applicant|
       application = batch_applicant.batch_applications.where(team_lead_id: batch_applicant.id).last

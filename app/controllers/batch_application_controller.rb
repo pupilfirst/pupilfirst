@@ -140,6 +140,10 @@ class BatchApplicationController < ApplicationController
     @batch_applicant.name = params[:batch_applicant][:name]
     @batch_applicant.phone = params[:batch_applicant][:phone]
 
+    # save reference_text if provided. Else save reference
+    @batch_applicant.reference =
+      params[:batch_applicant][:reference_text].blank? ? params[:batch_applicant][:reference] : params[:batch_applicant][:reference_text]
+
     if @batch_applicant.save
       @batch_applicant.send_sign_in_email(session[:application_batch])
 

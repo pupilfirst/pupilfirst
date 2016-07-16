@@ -4,6 +4,8 @@ class BatchApplicant < ActiveRecord::Base
   has_and_belongs_to_many :batch_applications
   has_many :payments, through: :batch_applications
 
+  attr_accessor :reference_text
+
   # Applicants who have signed up but haven't applied.
   scope :lead_signup, -> { where.not(id: joins(:batch_applications).where('batch_applications.team_lead_id = batch_applicants.id').select(:id), phone: nil) }
 
@@ -72,5 +74,9 @@ class BatchApplicant < ActiveRecord::Base
 
     # Mark when email was sent.
     update!(sign_in_email_sent_at: Time.now)
+  end
+
+  def self.reference_sources
+    ['Friend', 'SV.CO Blog', 'Facebook/Twitter', 'TV, newspaper etc.']
   end
 end

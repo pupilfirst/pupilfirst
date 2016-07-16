@@ -1,6 +1,7 @@
 class StartInCollegeController < ApplicationController
   before_action :authorize_student, except: %w(index student_details create_student)
   before_action :block_student, only: %w(student_details create_student)
+  before_action :lock_under_feature_flag, only: %w(chapter quiz)
 
   helper_method :current_mooc_student
 
@@ -111,5 +112,9 @@ class StartInCollegeController < ApplicationController
 
   def section_exists?
     chapter_exists? && chapter_has_section?
+  end
+
+  def lock_under_feature_flag
+    raise_not_found unless feature_active? :start_in_college
   end
 end

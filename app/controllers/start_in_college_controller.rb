@@ -67,6 +67,14 @@ class StartInCollegeController < ApplicationController
     render "start_in_college/chapters/chapter_#{params[:id]}_#{params[:section_id]}"
   end
 
+  # GET /quiz/:id
+  #
+  # Displays the quiz questions
+  def quiz
+    # TODO: load the quiz questions in some random order here
+    render "start_in_college/quizzes/quiz_#{params[:id]}"
+  end
+
   protected
 
   def current_mooc_student

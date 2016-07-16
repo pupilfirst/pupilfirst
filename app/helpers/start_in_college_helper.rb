@@ -19,7 +19,7 @@ module StartInCollegeHelper
   end
 
   def quiz_of_previous_chapter
-    # temporary till we have path to quizes
+    # temporary till we have path to quizzes
     start_in_college_chapter_path(1, 1)
   end
 
@@ -36,7 +36,7 @@ module StartInCollegeHelper
   end
 
   def quiz_of_this_chapter
-    # temporary till we have path to quizes
+    # temporary till we have path to quizzes
     start_in_college_chapter_path(1, 1)
   end
 end

@@ -151,6 +151,7 @@ Svapp::Application.routes.draw do
     post 'save_student_details'
     patch 'save_student_details'
     get 'chapter/:id/:section_id', action: 'chapter', as: 'chapter'
+    get 'quiz/:id', action: 'quiz', as: 'quiz'
   end
 
   # used for shortened urls from the shortener gem

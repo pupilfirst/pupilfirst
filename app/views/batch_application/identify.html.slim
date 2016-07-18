@@ -19,7 +19,7 @@
       | Hello there!
     .simple-form-container
       .row
-        = simple_form_for @form, url: apply_send_sign_in_email_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
+        = simple_form_for @form, url: apply_send_sign_in_email_path(batch: params[:batch]), html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
           = f.input :name, required: true
           = f.input :email, required: true
 

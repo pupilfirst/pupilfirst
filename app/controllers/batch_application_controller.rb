@@ -125,8 +125,6 @@ class BatchApplicationController < ApplicationController
       return
     end
 
-    save_batch(params[:batch])
-
     @skip_container = true
     @form = BatchApplicantSignupForm.new(BatchApplicant.new)
     render layout: 'application_v2'
@@ -138,8 +136,8 @@ class BatchApplicationController < ApplicationController
 
     @form = BatchApplicantSignupForm.new(BatchApplicant.new)
 
-    if @form.validate(params[:batch_applicant_signup]) && session.key?(:application_batch)
-      @form.save(session[:application_batch])
+    if @form.validate(params[:batch_applicant_signup])
+      @form.save(params[:batch])
       render 'batch_application/sign_in_email_sent', layout: 'application_v2'
     else
       flash.now[:error] = 'Something went wrong. Please try again.'
@@ -299,11 +297,5 @@ class BatchApplicationController < ApplicationController
   def ensure_applicant_is_signed_in
     return if current_batch_applicant.present?
     redirect_to apply_identify_url(batch: params[:batch])
-  end
-
-  # Save the batch being requested in session. We'll add this info to the sign in link.
-  def save_batch(batch)
-    return if batch.blank?
-    session[:application_batch] = batch
   end
 end

@@ -98,7 +98,7 @@ Svapp::Application.routes.draw do
     post '/to/:batch/(:state)', action: 'submit', as: 'submit'
     post '/restart/:batch', action: 'restart', as: 'restart'
     get '/identify/:batch', action: 'identify', as: 'identify'
-    post '/identify', action: 'send_sign_in_email', as: 'send_sign_in_email'
+    post '/identify/:batch', action: 'send_sign_in_email', as: 'send_sign_in_email'
   end
 
   resource :platform_feedback, only: [:create]

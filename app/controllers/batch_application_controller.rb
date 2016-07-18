@@ -144,12 +144,13 @@ class BatchApplicationController < ApplicationController
     @batch_applicant.reference =
       params[:batch_applicant][:reference_text].blank? ? params[:batch_applicant][:reference] : params[:batch_applicant][:reference_text]
 
-    if @batch_applicant.save
+    if @batch_applicant.save && session.key?(:application_batch)
       @batch_applicant.send_sign_in_email(session[:application_batch])
 
       render 'batch_application/sign_in_email_sent', layout: 'application_v2'
     else
       # There's probably something wrong with the entered email address. Render the form again.
+      flash.now[:error] = 'Something went wrong. Please try again.'
       render 'batch_application/identify', layout: 'application_v2'
     end
   end

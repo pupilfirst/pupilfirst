@@ -1,3 +1,14 @@
+### 18 July, 2016
+
+#### Features
+
+  - Login e-mails are now sent immediately instead of being deferred, resulting in improved delivery times.
+
+#### Bugfixes
+
+  - Fixed some bugs related to addition of co-founders on batch 3's application form.
+  - Apply page videos were being hidden by the floating header element on mobile view. They're now on top!
+
 ### 12 July, 2016
 
 #### Features

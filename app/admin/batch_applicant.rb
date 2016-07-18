@@ -1,7 +1,7 @@
 ActiveAdmin.register BatchApplicant do
   menu parent: 'Admissions', label: 'Applicants'
 
-  permit_params :batch_application_id, :name, :gender, :email, :phone, :role, :team_lead, :tag_list
+  permit_params :batch_application_id, :name, :gender, :email, :phone, :role, :team_lead, :tag_list, :reference
 
   scope :all, default: true
   scope :lead_signup
@@ -81,6 +81,8 @@ ActiveAdmin.register BatchApplicant do
           end
         end
       end
+
+      row :reference
     end
 
     panel 'Technical details' do
@@ -124,6 +126,7 @@ ActiveAdmin.register BatchApplicant do
       f.input :gender, as: :select, collection: Founder.valid_gender_values
       f.input :phone
       f.input :role, as: :select, collection: Founder.valid_roles
+      f.input :reference
     end
 
     f.actions

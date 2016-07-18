@@ -98,7 +98,7 @@ class ApplicationController < ActionController::Base
     [
       image_sources,
       script_sources,
-      "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://sv-assets.sv.co;",
+      "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://sv-assets.sv.co http://keyreply.com;",
       "connect-src 'self' hn.inspectlet.com wss://inspectletws.herokuapp.com;",
       "font-src 'self' fonts.gstatic.com https://sv-assets.sv.co;",
       'child-src https://www.youtube.com;',
@@ -155,7 +155,7 @@ class ApplicationController < ActionController::Base
     <<~IMAGE_SOURCES.squish
       img-src
       'self' data: https://blog.sv.co http://www.startatsv.com https://sv-assets.sv.co https://secure.gravatar.com
-      https://uploaded-assets.sv.co hn.inspectlet.com
+      https://uploaded-assets.sv.co hn.inspectlet.com http://keyreply.com
       #{google_analytics_csp[:image]};
     IMAGE_SOURCES
   end
@@ -164,7 +164,7 @@ class ApplicationController < ActionController::Base
     <<~SCRIPT_SOURCES.squish
       script-src
       'self' 'unsafe-eval' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
-      http://www.startatsv.com https://sv-assets.sv.co cdn.inspectlet.com
+      http://www.startatsv.com https://sv-assets.sv.co cdn.inspectlet.com http://keyreply.com
       #{recaptcha_csp[:script]} #{google_analytics_csp[:script]};
     SCRIPT_SOURCES
   end

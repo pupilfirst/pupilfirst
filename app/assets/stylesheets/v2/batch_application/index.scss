@@ -27,15 +27,15 @@
 
 .sticky-application-button {
   position: fixed;
-  right: 2em;
+  right: 5em;
   bottom: 2em;
   z-index: 100;
   transition: none;
 
   @include media-breakpoint-down(xs) {
     width: auto;
-    right: 1em;
-    bottom: 1em;
+    right: 5em;
+    bottom: 2em;
   }
 
   &.stick-above-footer {

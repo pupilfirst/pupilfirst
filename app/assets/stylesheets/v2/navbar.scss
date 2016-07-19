@@ -9,21 +9,21 @@
   }
 
   .sitewide-notice {
-    background-color: $theme-light-green;
+    background-color: $light-primary;
     text-align: center;
-    line-height: 25px;
+    line-height: 2;
+    margin: -20px -20px 10px;
+    padding: 10px;
     color: white;
 
-    p { margin-top: 10px; }
     a {
-      padding: 2px 5px;
       color: white;
       border: 1px solid #fff;
-      border-radius: 5px;
+      border-radius: 20px;
 
       &:hover, &:focus {
         background-color: white;
-        color: $theme-light-green;
+        color: $light-primary;
         text-decoration: none;
       }
       @include media-breakpoint-down(sm) { display: inline-block; }

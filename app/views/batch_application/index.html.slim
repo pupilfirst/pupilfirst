@@ -10,11 +10,11 @@
   .container
     .primary-banner-head.center-block.text-xs-center
       h1
-        ' Build your startup
+        ' Startup = <strong>Learn</strong> “In Demand” Industry Skills
         br
-        ' while in college &amp; get a chance
+        ' Silicon Valley = Life Changing <strong>Experience</strong>
         br
-        ' to visit Silicon Valley
+        ' Startup + Silicon Valley = Early <strong>Success</strong> in Life
 
       - if @batches_open.present?
         - batch = @batches_open.first
@@ -26,81 +26,149 @@
           - else
             button.btn.btn-primary.btn-md.text-uppercase disabled="true"
               | Not accepting new applications
-      a.btn.btn-md.text-uppercase href="#" data-toggle="modal" data-target="#watchIntroVideo" class=(@batches_open.present? ? 'btn-secondary' : '')
-        | Watch Video
+      = link_to 'take a Tour', tour_path, class:(@batches_open.present? ? 'btn-secondary btn btn-md text-uppercase' : 'btn-primary btn btn-md text-uppercase')
 
 .graduated-slide
   .container-fluid
     .row
       h3.text-xs-center.content-head
         span.content-title-icon.graduated-icon
-        | Graduated Startups and Founders
+        | Few Successful Students after their first startup with SV.CO
       .graduation-carousel
         .slide-item
           a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-1"
             = image_tag 'apply/graduation-video-thumbnail-1.png'
           .graduate-data.text-xs-center
             h4
-              | The Journey from a College Hostel to a Million Dollar Startup
+              | <strong>Jibin Jose</strong>
+              br
+              | 0 to Million-Dollar Campus Startup
+            p
+              | “After” Silicon Valley exposure
 
         .slide-item
           a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-3"
             = image_tag 'apply/graduation-video-thumbnail-3.png'
           .graduate-data.text-xs-center
             h4
-              | Spenwise
+              | <strong>Spenwise</strong>
+              br
+              | 0 to 1 Crore Value in Six Months
             p
-              | Funding &amp; Accelerator story
+              | Admission to Accelerator
 
         .slide-item
           a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-4"
             = image_tag 'apply/graduation-video-thumbnail-4.png'
           .graduate-data.text-xs-center
             h4
-              | Z-Pay
+              | <strong>Z-Pay</strong>
+              br
+              | 0 to 7 Lacs CTC in six months
             p
-              | Acquihired by Tally
+              | Team Acquihired by Tally
 
         .slide-item
           a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
             = image_tag 'apply/graduation-video-thumbnail-5.png'
           .graduate-data.text-xs-center
             h4
-              | Six Ways to Success: Getting Hired
+              | <strong>Varghese George</strong>
+              br
+              | CTC 7 Lacs
+            p
+              | Team Acquihired by Tally
+
+        .slide-item
+          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
+            = image_tag 'apply/sriram.png'
+          .graduate-data.text-xs-center
+            h4
+              | <strong>Sreeram Narayanan</strong>
+              br
+              | CTC 7 Lacs
+            p
+              | Hired by Tally Solutions
+
+        .slide-item
+          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
+            = image_tag 'apply/arun-p.png'
+          .graduate-data.text-xs-center
+            h4
+              | <strong>Arun P</strong>
+              br
+              | CTC 6 Lacs
+            p
+              | Hired by Goqii
+
+        .slide-item
+          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
+            = image_tag 'apply/aravind-sai.png'
+          .graduate-data.text-xs-center
+            h4
+              | <strong>Aravind Sai</strong>
+              br
+              | CTC 12.6 Lacs
+            p
+              | Hired by Goqii
+
+        .slide-item
+          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
+            = image_tag 'apply/sachu.png'
+          .graduate-data.text-xs-center
+            h4
+              | <strong>Sachu Shylan</strong>
+              br
+              | CTC 6 Lacs
+            p
+              | Hired by Good Methods Global
+
+        .slide-item
+          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
+            = image_tag 'apply/ajayson.png'
+          .graduate-data.text-xs-center
+            h4
+              | <strong>Ajayson</strong>
+              br
+              | CTC 7 Lacs
+            p
+              | Hired by Tally Solutions
 
         .slide-item
           a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-6"
             = image_tag 'apply/graduation-video-thumbnail-6.png'
           .graduate-data.text-xs-center
             h4
-              | Six ways to Success: Graduation Options
+              | <strong>Six ways to Success</strong>
+              br
+              |	Graduation Options
 
-        .slide-item
-          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-7"
-            = image_tag 'apply/graduation-video-thumbnail-7.png'
-          .graduate-data.text-xs-center
-            h4
-              | Harish Sivaramakrishnan
-            p
-              | VP of Design, Snapdeal
-
-        .slide-item
-          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-8"
-            = image_tag 'apply/graduation-video-thumbnail-8.png'
-          .graduate-data.text-xs-center
-            h4
-              | Amit Saini
-            p
-              | Director of Engineering, Ola Money
-
-        .slide-item
-          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-9"
-            = image_tag 'apply/graduation-video-thumbnail-9.png'
-          .graduate-data.text-xs-center
-            h4
-              | Vinod Malhotra
-            p
-              | Chief of R&amp;D, Tally Solutions
+        / .slide-item
+        /   a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-7"
+        /     = image_tag 'apply/graduation-video-thumbnail-7.png'
+        /   .graduate-data.text-xs-center
+        /     h4
+        /       | Harish Sivaramakrishnan
+        /     p
+        /       | VP of Design, Snapdeal
+        /
+        / .slide-item
+        /   a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-8"
+        /     = image_tag 'apply/graduation-video-thumbnail-8.png'
+        /   .graduate-data.text-xs-center
+        /     h4
+        /       | Amit Saini
+        /     p
+        /       | Director of Engineering, Ola Money
+        /
+        / .slide-item
+        /   a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-9"
+        /     = image_tag 'apply/graduation-video-thumbnail-9.png'
+        /   .graduate-data.text-xs-center
+        /     h4
+        /       | Vinod Malhotra
+        /     p
+        /       | Chief of R&amp;D, Tally Solutions
 
 .program-benefits
   .container-fluid
@@ -657,32 +725,32 @@
       .modal-body
         iframe.video-frame src="https://www.youtube.com/embed/AaoW1W7wZLk" frameborder="0" allowfullscreen="allowfullscreen"
 
-#graduatesVideo-7.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/ut-J7cuQpzI" frameborder="0" allowfullscreen="allowfullscreen"
-
-#graduatesVideo-8.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/z2e5o5ftgRc" frameborder="0" allowfullscreen="allowfullscreen"
-
-#graduatesVideo-9.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/qEZ1RamKt6k" frameborder="0" allowfullscreen="allowfullscreen"
+/ #graduatesVideo-7.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+/   .modal-dialog.modal-lg role="document"
+/     .modal-content
+/       .modal-header
+/         button.close aria-label="Close" data-dismiss="modal" type="button"
+/           span aria-hidden="true" &times;
+/       .modal-body
+/         iframe.video-frame src="https://www.youtube.com/embed/ut-J7cuQpzI" frameborder="0" allowfullscreen="allowfullscreen"
+/
+/ #graduatesVideo-8.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+/   .modal-dialog.modal-lg role="document"
+/     .modal-content
+/       .modal-header
+/         button.close aria-label="Close" data-dismiss="modal" type="button"
+/           span aria-hidden="true" &times;
+/       .modal-body
+/         iframe.video-frame src="https://www.youtube.com/embed/z2e5o5ftgRc" frameborder="0" allowfullscreen="allowfullscreen"
+/
+/ #graduatesVideo-9.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+/   .modal-dialog.modal-lg role="document"
+/     .modal-content
+/       .modal-header
+/         button.close aria-label="Close" data-dismiss="modal" type="button"
+/           span aria-hidden="true" &times;
+/       .modal-body
+/         iframe.video-frame src="https://www.youtube.com/embed/qEZ1RamKt6k" frameborder="0" allowfullscreen="allowfullscreen"
 
 #programVideo.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"

@@ -25,6 +25,7 @@ class HomeController < ApplicationController
   # GET /tour
   def tour
     @skip_container = true
+    @batches_open = Batch.open_for_applications
     render layout: 'application_v2'
   end
 

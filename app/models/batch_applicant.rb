@@ -2,8 +2,21 @@ class BatchApplicant < ActiveRecord::Base
   include Taggable
 
   has_and_belongs_to_many :batch_applications
+  has_many :payments, through: :batch_applications
 
-  scope :team_leads, -> { joins(:batch_applications).where('batch_applications.team_lead_id = batch_applicants.id') }
+  attr_accessor :reference_text
+
+  # Applicants who have signed up but haven't applied.
+  scope :lead_signup, -> { where.not(id: joins(:batch_applications).where('batch_applications.team_lead_id = batch_applicants.id').select(:id), phone: nil) }
+
+  # Applicants who have submitted application, but haven't clicked pay.
+  scope :started_application, -> { joins(:batch_applications).where('batch_applications.team_lead_id = batch_applicants.id').where.not(id: joins(:payments).select(:id)).distinct }
+
+  # Applicants who have applications who clicked the pay button but didn't pay.
+  scope :payment_initiated, -> { joins(:batch_applications).where('batch_applications.team_lead_id = batch_applicants.id').joins(:payments).where.not(phone: nil).merge(Payment.requested).distinct }
+
+  # Applicants who have completed payments.
+  scope :conversion, -> { joins(:batch_applications).where('batch_applications.team_lead_id = batch_applicants.id').joins(:payments).where.not(phone: nil).merge(Payment.paid).distinct }
 
   # Per-founder application fee.
   APPLICATION_FEE = 1000
@@ -27,6 +40,9 @@ class BatchApplicant < ActiveRecord::Base
   end
 
   has_secure_token
+
+  normalize_attribute :phone, with: [:strip, :phone]
+  normalize_attribute :gender, :reference
 
   # Attempts to find an applicant with the supplied token.
   def self.find_using_token(incoming_token)
@@ -54,9 +70,13 @@ class BatchApplicant < ActiveRecord::Base
     regenerate_token
 
     # Send email.
-    BatchApplicantMailer.sign_in(email, token, application_batch).deliver_later
+    BatchApplicantMailer.sign_in(email, token, application_batch).deliver_now
 
     # Mark when email was sent.
     update!(sign_in_email_sent_at: Time.now)
+  end
+
+  def self.reference_sources
+    ['Friend', 'SV.CO Blog', 'Facebook/Twitter', 'TV, newspaper etc.', 'Other (Please Specify)']
   end
 end

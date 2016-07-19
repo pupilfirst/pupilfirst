@@ -25,7 +25,7 @@ var FileList = React.createClass({
       return (
         <ul className="list-group">
           { this.state.files.map(function (file, i) {
-            return (<File title={file.title} key={file.identifier} identifier={file.identifier} private={file.private}
+            return (<File title={file.title} key={file.identifier} identifier={file.identifier.toString()} private={file.private}
                           markedForDeletion={!!file['delete']} persisted={file.persisted} index={i}
                           markFileForDeletionCB={this.props.markFileForDeletionCB}
                           deleteFileCB={this.props.deleteFileCB}/>);

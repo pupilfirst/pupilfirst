@@ -11,7 +11,7 @@
         span
           | &nbsp;email address.
       h4.center-block
-        ' We'll email you a one-time application link to establish your identity.
+        ' We'll email you a link to establish your identity.
 
 .container
   .container-md-center.content-box.m-t-3.m-b-3
@@ -19,16 +19,25 @@
       | Hello there!
     .simple-form-container
       .row
-        = simple_form_for @batch_applicant, url: apply_send_sign_in_email_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
+        = simple_form_for @form, url: apply_send_sign_in_email_path(batch: params[:batch]), html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
           = f.input :name, required: true
-          = f.input :email
+          = f.input :email, required: true
 
           = f.input :phone,
-            placeholder: '10-digit mobile phone number.',
-            required: true,
             label: 'Mobile number',
-            input_html: { maxlength: 10, type: 'tel', pattern: '[0-9]{10}' }
+            input_html: { maxlength: 10, type: 'tel', pattern: '[0-9]{10}' },
+            placeholder: '10-digit mobile phone number',
+            required: true
+
+          hr
+
+          = f.input :reference,
+            collection: BatchApplicant.reference_sources,
+            label: 'How did you hear about us?',
+            required: false
 
           .col-sm-offset-3
+            = f.input :reference_text, label: false, placeholder: 'Please Specify', required: false
+
             .simple-form-submit
-              = f.submit 'Send one-time application link', class: 'btn btn-primary btn-md text-uppercase'
+              = f.submit 'Send Link to Apply', class: 'btn btn-primary btn-md text-uppercase'

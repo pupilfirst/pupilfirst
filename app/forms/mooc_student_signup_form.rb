@@ -1,6 +1,7 @@
 class MoocStudentSignupForm < Reform::Form
   property :name, validates: { presence: true, length: { maximum: 250 } }
   property :email, virtual: true, validates: { presence: true, length: { maximum: 250 }, format: { with: /\S+@\S+/, message: "doesn't look like an email" } }
+  property :phone, validates: { presence: true, format: { with: /\A[987][0-9]{9}\z/, message: "doesn't look like a mobile phone number" } }
   property :gender, validates: { presence: true, inclusion: Founder.valid_gender_values }
   property :university_id, validates: { presence: true }
   property :college, validates: { presence: true, length: { maximum: 250 } }
@@ -18,6 +19,7 @@ class MoocStudentSignupForm < Reform::Form
   end
 
   def university_id_must_be_valid
+    return if university_id.blank? # Presence validator will show correct message.
     return if University.find_by(id: university_id).present?
     errors[:university_id] << 'is invalid'
   end
@@ -40,6 +42,7 @@ class MoocStudentSignupForm < Reform::Form
       mooc_student.college = college
       mooc_student.semester = semester
       mooc_student.state = state
+      mooc_student.phone = phone
 
       mooc_student.save!
 

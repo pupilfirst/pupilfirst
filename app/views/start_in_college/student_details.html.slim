@@ -23,11 +23,30 @@
         = simple_form_for @form, url: start_in_college_create_student_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { radio_buttons: :horizontal_radio_and_checkboxes } do |f|
           = f.input :name, required: true
           = f.input :email, required: true, disabled: @disable_email
+          = f.input :phone,
+            label: 'Mobile number',
+            input_html: { maxlength: 10, type: 'tel', pattern: '[0-9]{10}' },
+            placeholder: '10-digit mobile phone number'
           = f.input :gender, required: true, collection: Founder.valid_gender_values, as: :radio_buttons, label_method: proc { |gender| gender.capitalize }
-          = f.input :university_id, label: 'University', collection: University.all, required: true, include_blank: 'Select your University'
+
+          // University is actually a required field, but select2 v3 does not play nice with HTML5 validations.
+          // TODO: Try enabling this when upgrading to select2 v4.
+          = f.input :university_id,
+            collection: proc { University.grouped_by_location },
+            as: :grouped_select,
+            group_method: :last,
+            value_method: :first,
+            label_method: :last,
+            label: 'University',
+            include_blank: 'Please pick your university',
+            required: false
+
           = f.input :college, required: true
           = f.input :semester, as: :select, collection: MoocStudent.valid_semester_values, include_blank: 'Select your semester'
-          = f.input :state, required: true
+          = f.input :state,
+            collection: proc { University.valid_state_names },
+            include_blank: 'Please pick your state',
+            required: true
 
           .col-sm-offset-3
             .simple-form-submit

@@ -1,10 +1,13 @@
 ActiveAdmin.register BatchApplicant do
   menu parent: 'Admissions', label: 'Applicants'
 
-  permit_params :batch_application_id, :name, :gender, :email, :phone, :role, :team_lead, :tag_list
+  permit_params :batch_application_id, :name, :gender, :email, :phone, :role, :team_lead, :tag_list, :reference
 
   scope :all, default: true
-  scope :team_leads
+  scope :lead_signup
+  scope :started_application
+  scope :payment_initiated
+  scope :conversion
 
   filter :name
   filter :email
@@ -25,6 +28,7 @@ ActiveAdmin.register BatchApplicant do
     column :name
     column :email
     column :phone
+    column :reference
 
     column :last_created_application do |batch_applicant|
       application = batch_applicant.batch_applications.where(team_lead_id: batch_applicant.id).last
@@ -34,8 +38,9 @@ ActiveAdmin.register BatchApplicant do
       end
     end
 
-    column :role
-    column :gender
+    column :tags do |batch_applicant|
+      linked_tags(batch_applicant.tags, separator: ' | ')
+    end
 
     actions
   end
@@ -76,6 +81,8 @@ ActiveAdmin.register BatchApplicant do
           end
         end
       end
+
+      row :reference
     end
 
     panel 'Technical details' do
@@ -119,6 +126,7 @@ ActiveAdmin.register BatchApplicant do
       f.input :gender, as: :select, collection: Founder.valid_gender_values
       f.input :phone
       f.input :role, as: :select, collection: Founder.valid_roles
+      f.input :reference
     end
 
     f.actions

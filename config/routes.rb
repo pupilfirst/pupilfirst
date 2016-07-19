@@ -98,7 +98,7 @@ Svapp::Application.routes.draw do
     post '/to/:batch/(:state)', action: 'submit', as: 'submit'
     post '/restart/:batch', action: 'restart', as: 'restart'
     get '/identify/:batch', action: 'identify', as: 'identify'
-    post '/identify', action: 'send_sign_in_email', as: 'send_sign_in_email'
+    post '/identify/:batch', action: 'send_sign_in_email', as: 'send_sign_in_email'
   end
 
   resource :platform_feedback, only: [:create]
@@ -136,6 +136,12 @@ Svapp::Application.routes.draw do
   # to test rotating background images.
   get '/test_background', to: 'home#test_background'
 
+  # Previous sixways page re-directed to startincollege
+  # get 'sixways', to: redirect('/startincollege')
+
+  # Also have /StartInCollege
+  get 'StartInCollege', to: redirect('/startincollege')
+
   scope 'startincollege', as: 'start_in_college', controller: 'start_in_college' do
     get '/', action: 'index'
     get 'start'
@@ -145,6 +151,7 @@ Svapp::Application.routes.draw do
     post 'save_student_details'
     patch 'save_student_details'
     get 'chapter/:id/:section_id', action: 'chapter', as: 'chapter'
+    get 'quiz/:id', action: 'quiz', as: 'quiz'
   end
 
   # used for shortened urls from the shortener gem

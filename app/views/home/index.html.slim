@@ -14,7 +14,7 @@
     ' You have successfully registered on SV.CO. Please wait for your team lead to complete registration.
 
 - content_for :head
-  title SV.CO: A learning platform for first-time founders
+  title SV.CO: India’s No 1 Digital Incubator For Students
   meta name="description" content="SV.CO, or Startup Village is a learning platform for entrepreneurs that verifies results, and rewards founders with a real degree from partner Universities."
 
 - content_for :header
@@ -24,7 +24,7 @@
     .container
       .header-container class="header-#{hero_text_alignment}"
         .hero-text class="hero-text-#{hero_text_alignment}"
-          h1 = t("home.index.background_#{background_image_number}_messages.main.message_#{hero_text_number}_html")
+          h1 = t("home.index.main_bleed_message_html")
           h4 = t("home.index.background_#{background_image_number}_messages.secondary_html")
           = link_to 'Apply Now', apply_index_path, class: 'btn btn-primary btn-md text-uppercase'
     == render 'layouts/home_footer'

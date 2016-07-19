@@ -22,6 +22,7 @@
 en:
   home:
     index:
+      main_bleed_message_html: "SV.CO is for ambitious students to learn how to build a <strong>real</strong> startup and experience <strong>Silicon Valley</strong> while still in college."
       background_1_messages:
         main:
           message_1_html: "The world&apos;s best proving ground for <strong>student founders</strong> who want to <strong>join India&apos;s best startups</strong>."

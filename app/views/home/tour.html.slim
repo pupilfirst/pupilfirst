@@ -5,15 +5,25 @@
 .tour-banner
   .container
     .tour-banner-head.center-block.text-xs-center
-      h1
-        ' We have the <strong>best program in the world</strong>
-        | for student startups.
-      h4
-        ' Get access to <strong>Target-based Learning</strong>,
-        br
-        | great <strong>Faculty</strong> and a world-class <strong>Startup Library</strong>.
+      - if feature_active? :start_in_college
+        h1
+          ' Gain World Class Industry Experience as College Students
+        h4
+          a href="#" data-toggle="modal" data-target="#watchIntroVideo"
+            | Why SV.CO is Different from College
+          br
+          a href="#" data-toggle="modal" data-target="#graduatesVideo-1"
+            | Why Silicon Valley is Life Changing
+      - else
+        h1
+          ' We have the <strong>best program in the world</strong>
+          | for student startups.
+        h4
+          ' Get access to <strong>Target-based Learning</strong>,
+          br
+          | great <strong>Faculty</strong> and a world-class <strong>Startup Library</strong>.
       / .dropdown
-      /   button.btn.btn-default.text-uppercase.dropdown-toggle aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" type="drop" 
+      /   button.btn.btn-default.text-uppercase.dropdown-toggle aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" type="drop"
       /     | Jump to a section
       /   ul.dropdown-menu
       /     li role="presentation"
@@ -92,7 +102,7 @@
       .tour-image
         = image_tag 'tour/team.svg', class: 'img-fluid'
     .col-md-6.col-md-pull-6
-      h2
+      h2#first-title
         | Form a Team
       p
         ' Founders begin by forming a well-rounded team. It's important that
@@ -102,7 +112,7 @@
 #pay-fee-apply.tour-block
   section.container
     .col-md-6
-      .tour-image 
+      .tour-image
         = image_tag 'tour/pay-apply.svg', class: 'img-fluid'
     .col-md-6
       h2
@@ -427,3 +437,27 @@
         ' in your own work. This is why the SV.CO Alumni hang out in our Slack channel,
         | become faculty themselves and mentor their juniors.
       ' #{link_to 'Back to top', '#', class: 'back-to-top'}
+
+#watchIntroVideo.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/RUP3fk7lf5o" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-1.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/AzABLPISPQU" frameborder="0" allowfullscreen="allowfullscreen"
+
+- batch = @batches_open.first if @batches_open.present?
+= link_to 'Start Application', apply_batch_path(batch: batch.batch_number, state: 'start_from_floating'), class: 'btn btn-primary btn-xs text-uppercase hidden-xs-up sticky-application-button' if batch
+
+script data-align="right"  data-overlay="false" id="keyreply-script" src="//keyreply.com/chat/widget.js" data-color="#32B475" data-apps="JTdCJTIydHdpdHRlciUyMjolMjJAU1Zkb3RDTyUyMiwlMjJmYWNlYm9vayUyMjolMjIxMDg2NDYxNzkyNTkzNzMlMjIsJTIyZW1haWwlMjI6JTIyaGVscEBzdi5jbyUyMiU3RA=="
+

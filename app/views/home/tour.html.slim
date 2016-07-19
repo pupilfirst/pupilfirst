@@ -5,23 +5,14 @@
 .tour-banner
   .container
     .tour-banner-head.center-block.text-xs-center
-      - if feature_active? :start_in_college
-        h1
-          ' Gain World Class Industry Experience as College Students
-        h4
-          a href="#" data-toggle="modal" data-target="#watchIntroVideo"
-            | Why SV.CO is Different from College
-          br
-          a href="#" data-toggle="modal" data-target="#graduatesVideo-1"
-            | Why Silicon Valley is Life Changing
-      - else
-        h1
-          ' We have the <strong>best program in the world</strong>
-          | for student startups.
-        h4
-          ' Get access to <strong>Target-based Learning</strong>,
-          br
-          | great <strong>Faculty</strong> and a world-class <strong>Startup Library</strong>.
+      h1
+        ' Gain <strong>World Class Industry Experience</strong> as College Students
+      / h4
+      /   a href="#" data-toggle="modal" data-target="#watchIntroVideo"
+      /     | Why SV.CO is Different from College
+      /   br
+      /   a href="#" data-toggle="modal" data-target="#graduatesVideo-1"
+      /     | Why Silicon Valley is Life Changing
       / .dropdown
       /   button.btn.btn-default.text-uppercase.dropdown-toggle aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" type="drop"
       /     | Jump to a section
@@ -95,6 +86,27 @@
       /     li role="presentation"
       /       a.dropdown-item href="#become-alumni"
       /         | Become an Alumni
+.tour-videos
+  .container
+    .col-md-6
+      .why-sv-video.text-xs-center.with-border
+        a.tour-video-frame href="#" data-toggle="modal" data-target="#watchIntroVideo"
+          = image_tag 'tour/sv.co.svg', class: 'img-fluid'
+        h3.m-t-1
+          a href="#" data-toggle="modal" data-target="#watchIntroVideo"
+            | Why SV.CO is Different
+            br
+            | from College
+
+    .col-md-6
+      .why-sv-video.text-xs-center
+        a.tour-video-frame href="#" data-toggle="modal" data-target="#graduatesVideo-1"
+          = image_tag 'tour/silicon-valley.svg', class: 'img-fluid'        
+        h3.m-t-1
+          a href="#" data-toggle="modal" data-target="#graduatesVideo-1"
+            | Why Silicon Valley is
+            br
+            |	Life Changing
 
 #form-a-team.tour-block
   section.container
@@ -460,4 +472,3 @@
 = link_to 'Start Application', apply_batch_path(batch: batch.batch_number, state: 'start_from_floating'), class: 'btn btn-primary btn-xs text-uppercase hidden-xs-up sticky-application-button' if batch
 
 script data-align="right"  data-overlay="false" id="keyreply-script" src="//keyreply.com/chat/widget.js" data-color="#32B475" data-apps="JTdCJTIydHdpdHRlciUyMjolMjJAU1Zkb3RDTyUyMiwlMjJmYWNlYm9vayUyMjolMjIxMDg2NDYxNzkyNTkzNzMlMjIsJTIyZW1haWwlMjI6JTIyaGVscEBzdi5jbyUyMiU3RA=="
-

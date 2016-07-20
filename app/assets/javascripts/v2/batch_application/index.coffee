@@ -43,29 +43,32 @@ readmoreFAQ = ->
     moreLink: '<a class="read-more-link" href="#">Read More</a>'
 
 stickyApplyButton = ->
-  startApplication = $('#start-application')
-
-  if startApplication.length
+  if $('.apply-illustration').length
     stickyToggle = new Waypoint
       element: $('.graduated-slide')[0],
       handler: (direction) ->
-        applicationButton = $('.sticky-application-button')
+        applicationButton = $('#apply-sticky-application-button')
         if direction == 'down'
           applicationButton.removeClass('hidden-xs-up')
         else
           applicationButton.addClass('hidden-xs-up')
 
     bottomStickyToggle = new Waypoint.Inview
-      element: $('footer')[0]
+      element: $('.ready-to-apply')[0]
       enter: (direction) ->
         if direction == 'down'
-          $('.sticky-application-button').addClass('stick-above-footer')
+          $('#apply-sticky-application-button').addClass('hidden-xs-up')
       exited: (direction) ->
         if direction == 'up'
-          $('.sticky-application-button').removeClass('stick-above-footer')
+          $('#apply-sticky-application-button').removeClass('hidden-xs-up')
+
+removeWaypoints = ->
+  if $('.tour-banner').length
+    Waypoint.destroyAll()
 
 $(document).on 'page:change', setupGraduationCarousel
 $(document).on 'page:change', avoidwidowsTypography
 $(document).on 'page:change', stopVideosOnModalClose
 $(document).on 'page:change', readmoreFAQ
 $(document).on 'page:change', stickyApplyButton
+$(document).on 'page:before-change', removeWaypoints

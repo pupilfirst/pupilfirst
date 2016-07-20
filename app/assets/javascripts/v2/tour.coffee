@@ -1,22 +1,16 @@
-$(document).on 'page:change', ->
-  $(".dropdown-menu").find("a").click (e) ->
-    e.preventDefault()
-    section = $(this).attr "href"
-    $("html, body").animate
-      scrollTop: $(section).offset().top
-
-  $('.back-to-top').click (e) ->
-    e.preventDefault()
-    $('html, body').animate
-      scrollTop: 0, 500
+activateBackToTopLinks = ->
+  if $('.tour-banner').length
+    $('.back-to-top').click (e) ->
+      e.preventDefault()
+      $('html, body').animate
+        scrollTop: 0, 500
 
 stickyApplyButtonOnTourPage = ->
-
-  if $('.sticky-application-button')
+  if $('.tour-banner').length
     stickyToggle = new Waypoint
       element: $('.tour-banner')[0],
       handler: (direction) ->
-        applicationButton = $('.sticky-application-button')
+        applicationButton = $('#tour-sticky-application-button')
         if direction == 'down'
           applicationButton.removeClass('hidden-xs-up')
         else
@@ -26,9 +20,15 @@ stickyApplyButtonOnTourPage = ->
       element: $('footer')[0]
       enter: (direction) ->
         if direction == 'down'
-          $('.sticky-application-button').addClass('stick-above-footer')
+          $('#tour-sticky-application-button').addClass('stick-above-footer')
       exited: (direction) ->
         if direction == 'up'
-          $('.sticky-application-button').removeClass('stick-above-footer')
+          $('#tour-sticky-application-button').removeClass('stick-above-footer')
+
+removeWaypoints = ->
+  if $('.tour-banner').length
+    Waypoint.destroyAll()
 
 $(document).on 'page:change', stickyApplyButtonOnTourPage
+$(document).on 'page:change', activateBackToTopLinks
+$(document).on 'page:before-change', removeWaypoints

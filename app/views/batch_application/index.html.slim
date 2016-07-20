@@ -851,6 +851,6 @@
         button.btn.btn-sm.btn-secondary.text-uppercase aria-label="Close" data-dismiss="modal" type="button"
           | Close
 
-= link_to 'Start Application', apply_batch_path(batch: batch.batch_number, state: 'start_from_floating'), class: 'btn btn-primary btn-xs text-uppercase hidden-xs-up sticky-application-button' if batch
+= link_to 'Start Application', apply_batch_path(batch: batch.batch_number, state: 'start_from_floating'), class: 'btn btn-primary btn-xs text-uppercase hidden-xs-up sticky-application-button', id: 'apply-sticky-application-button' if batch
 
 script data-align="right"  data-overlay="false" id="keyreply-script" src="//keyreply.com/chat/widget.js" data-color="#32B475" data-apps="JTdCJTIydHdpdHRlciUyMjolMjJAU1Zkb3RDTyUyMiwlMjJmYWNlYm9vayUyMjolMjIxMDg2NDYxNzkyNTkzNzMlMjIsJTIyZW1haWwlMjI6JTIyaGVscEBzdi5jbyUyMiU3RA=="

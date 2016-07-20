@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160716090934) do
+ActiveRecord::Schema.define(version: 20160720141755) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -404,6 +404,20 @@ ActiveRecord::Schema.define(version: 20160716090934) do
   end
 
   add_index "public_slack_messages", ["founder_id"], name: "index_public_slack_messages_on_founder_id", using: :btree
+
+  create_table "quiz_attempts", force: :cascade do |t|
+    t.integer  "course_chapter_id"
+    t.string   "mooc_student_id"
+    t.datetime "taken_at"
+    t.float    "score"
+    t.integer  "total_questions"
+    t.integer  "attempted_questions"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
+  add_index "quiz_attempts", ["course_chapter_id"], name: "index_quiz_attempts_on_course_chapter_id", using: :btree
+  add_index "quiz_attempts", ["mooc_student_id"], name: "index_quiz_attempts_on_mooc_student_id", using: :btree
 
   create_table "quiz_questions", force: :cascade do |t|
     t.datetime "created_at",        null: false

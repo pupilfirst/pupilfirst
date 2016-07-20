@@ -671,6 +671,19 @@
           a.btn-link href='#' data-toggle="modal" data-target="#success-fees"
             | View More
 
+- if @batches_open.present?
+  - batch = @batches_open.first
+  .ready-to-apply
+    .container
+      h3.text-xs-center.content-head
+        span.content-title-icon.graduated-icon
+        | Ready to Apply?
+
+      .text-xs-center
+        = link_to 'Start Application', apply_batch_path(batch: batch.batch_number, state: 'start'), class: 'btn btn-primary btn-md text-uppercase', id: 'start-application'
+        a.btn.btn-md.text-uppercase.btn-secondary href=tour_path
+          | or Take a Tour
+
 #watchIntroVideo.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content

@@ -510,3 +510,18 @@
     display: block;
   }
 }
+
+.ready-to-apply {
+  background-color: white;
+  border: 0 solid $gray-border;
+  border-top-width: 1px;
+  padding-bottom: 50px;
+
+  .btn-secondary {
+    margin-left: 30px;
+
+    @include media-breakpoint-down(xs) {
+      margin: 10px 0 0 0;
+    }
+  }
+}

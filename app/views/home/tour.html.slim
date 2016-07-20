@@ -89,24 +89,22 @@
 .tour-videos
   .container
     .col-md-6
-      .why-sv-video.text-xs-center.with-border
-        a.tour-video-frame href="#" data-toggle="modal" data-target="#watchIntroVideo"
+      .why-sv-video.text-xs-center data-toggle="modal" data-target="#watchIntroVideo"
+        .tour-video-frame
           = image_tag 'tour/sv.co.svg', class: 'img-fluid'
         h3.m-t-1
-          a href="#" data-toggle="modal" data-target="#watchIntroVideo"
-            | Why SV.CO is Different
-            br
-            | from College
+          | Why SV.CO is Different
+          br
+          | from College?
 
     .col-md-6
-      .why-sv-video.text-xs-center
-        a.tour-video-frame href="#" data-toggle="modal" data-target="#graduatesVideo-1"
+      .why-sv-video.text-xs-center data-toggle="modal" data-target="#graduatesVideo-1"
+        .tour-video-frame
           = image_tag 'tour/silicon-valley.svg', class: 'img-fluid'
         h3.m-t-1
-          a href="#" data-toggle="modal" data-target="#graduatesVideo-1"
-            | Why Silicon Valley is
-            br
-            |	Life Changing
+          | Why Silicon Valley is
+          br
+          |	Life Changing?
 
 #form-a-team.tour-block
   section.container
@@ -450,6 +448,17 @@
         | become faculty themselves and mentor their juniors.
       ' #{link_to 'Back to top', '#', class: 'back-to-top'}
 
+- if @batches_open.present?
+  - batch = @batches_open.first
+  .ready-to-apply
+    .container
+      h3.text-xs-center.content-head
+        span.content-title-icon.graduated-icon
+        | Ready to Apply?
+
+      .text-xs-center
+        = link_to 'Start Application', apply_batch_path(batch: batch.batch_number, state: 'start'), class: 'btn btn-primary btn-md text-uppercase', id: 'start-application'
+    
 #watchIntroVideo.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content

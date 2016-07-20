@@ -17,13 +17,13 @@ stickyApplyButtonOnTourPage = ->
           applicationButton.addClass('hidden-xs-up')
 
     bottomStickyToggle = new Waypoint.Inview
-      element: $('footer')[0]
+      element: $('.ready-to-apply')[0]
       enter: (direction) ->
         if direction == 'down'
-          $('#tour-sticky-application-button').addClass('stick-above-footer')
+          $('#tour-sticky-application-button').addClass('hidden-xs-up')
       exited: (direction) ->
         if direction == 'up'
-          $('#tour-sticky-application-button').removeClass('stick-above-footer')
+          $('#tour-sticky-application-button').removeClass('hidden-xs-up')
 
 removeWaypoints = ->
   if $('.tour-banner').length

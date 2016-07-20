@@ -5,7 +5,7 @@
 
     .simple-form-container
       .row
-        = simple_form_for @form, url: start_in_college_quiz_submission_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { radio_buttons: :horizontal_radio_and_checkboxes } do |f|
+        = simple_form_for @form, url: start_in_college_quiz_submission_path(chapter: @chapter.id), html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { radio_buttons: :horizontal_radio_and_checkboxes } do |f|
           = f.simple_fields_for :questions do |s|
             - quiz_question = s.object.model
             = s.input :answer_id,

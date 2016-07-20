@@ -87,8 +87,8 @@ class StartInCollegeController < ApplicationController
   #
   # Evaluates a quiz submission
   def quiz_submission
-    # TODO: Do grading and relevant re-direction here. Temporarily re-directing back.
-    redirect_to :back
+    @chapter = CourseChapter.find params[:chapter]
+    grade_submission
   end
 
   protected
@@ -131,5 +131,13 @@ class StartInCollegeController < ApplicationController
 
   def lock_under_feature_flag
     raise_not_found unless feature_active? :start_in_college
+  end
+
+  def grade_submission
+    answers = params[:quiz_submission][:questions_attributes].values
+
+    @total = answers.count
+    @attempted = answers.count{ |a| a[:answer_id].present? }
+    @correct = answers.count{ |a| a[:answer_id].to_i == QuizQuestion.find(a[:id]).correct_answer.id }
   end
 end

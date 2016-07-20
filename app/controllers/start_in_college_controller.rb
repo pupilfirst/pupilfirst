@@ -1,7 +1,7 @@
 class StartInCollegeController < ApplicationController
   before_action :authorize_student, except: %w(index student_details create_student)
   before_action :block_student, only: %w(student_details create_student)
-  before_action :lock_under_feature_flag, only: %w(chapter quiz)
+  before_action :lock_under_feature_flag, only: %w(chapter quiz quiz_submission)
 
   helper_method :current_mooc_student
 
@@ -68,12 +68,27 @@ class StartInCollegeController < ApplicationController
     render "start_in_college/chapters/chapter_#{params[:id]}_#{params[:section_id]}"
   end
 
-  # GET /quiz/:id
+  # GET /startincollege/quiz/:id
   #
   # Displays the quiz questions
   def quiz
-    # TODO: load the quiz questions in some random order here
+    raise_not_found unless chapter_exists?
+
+    @chapter = CourseChapter.find(params[:id])
+    @questions = @chapter.quiz_questions.shuffle
+
+    @form = QuizSubmissionForm.new(OpenStruct.new)
+    @form.prepopulate! questions: @questions
+
     render "start_in_college/quizzes/quiz_#{params[:id]}"
+  end
+
+  # POST /startincollege/quiz_submission
+  #
+  # Evaluates a quiz submission
+  def quiz_submission
+    # TODO: Do grading and relevant re-direction here. Temporarily re-directing back.
+    redirect_to :back
   end
 
   protected

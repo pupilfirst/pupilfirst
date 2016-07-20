@@ -1,1 +1,22 @@
-p the first quiz
+.container
+  .container-md-center.content-box.m-t-3.m-b-3
+    h5.form-section-title.font-semibold.m-b-2
+      | Quiz For Chapter #{@chapter.chapter_number}: #{@chapter.name}
+
+    .simple-form-container
+      .row
+        = simple_form_for @form, url: start_in_college_quiz_submission_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { radio_buttons: :horizontal_radio_and_checkboxes } do |f|
+          = f.simple_fields_for :questions do |s|
+            - quiz_question = s.object.model
+            = s.input :answer_id,
+            label: quiz_question.question,
+            collection: quiz_question.answer_options.pluck(:id,:value),
+            value_method: :first,
+            label_method: :last,
+            as: :radio_buttons,
+            required: false
+
+          .col-sm-offset-3
+            .simple-form-submit
+              = f.submit 'Submit', class: 'btn btn-primary btn-md text-uppercase'
+

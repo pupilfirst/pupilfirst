@@ -19,8 +19,7 @@ module StartInCollegeHelper
   end
 
   def quiz_of_previous_chapter
-    # temporary till we have path to quizzes
-    start_in_college_chapter_path(1, 1)
+    start_in_college_quiz_path(chapter_number - 1)
   end
 
   def previous_section
@@ -36,8 +35,7 @@ module StartInCollegeHelper
   end
 
   def quiz_of_this_chapter
-    # temporary till we have path to quizzes
-    start_in_college_chapter_path(1, 1)
+    start_in_college_quiz_path(chapter_number)
   end
 
   def quiz_result_title

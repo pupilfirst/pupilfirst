@@ -134,14 +134,14 @@
 
   &:before {
     background-color: $gray-border;
-  	content: "";
-  	display: block;
-  	width: 1px;
-  	height: 80%;
+    content: "";
+    display: block;
+    width: 1px;
+    height: 80%;
     background-position: center center;
-  	position: absolute;
-  	top: 10%;
-  	left: calc(50% - 1px);
+    position: absolute;
+    top: 10%;
+    left: calc(50% - 1px);
 
     @include media-breakpoint-down(sm) {
       background-color: transparent;

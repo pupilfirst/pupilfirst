@@ -137,7 +137,7 @@ class StartInCollegeController < ApplicationController
     answers = params[:quiz_submission][:questions_attributes].values
 
     @total = answers.count
-    @attempted = answers.count{ |a| a[:answer_id].present? }
-    @correct = answers.count{ |a| a[:answer_id].to_i == QuizQuestion.find(a[:id]).correct_answer.id }
+    @attempted = answers.count { |a| a[:answer_id].present? }
+    @correct = answers.count { |a| a[:answer_id].to_i == QuizQuestion.find(a[:id]).correct_answer.id }
   end
 end

@@ -1,7 +1,7 @@
 ActiveAdmin.register BatchApplicant do
   menu parent: 'Admissions', label: 'Applicants'
 
-  permit_params :batch_application_id, :name, :gender, :email, :phone, :role, :team_lead, :tag_list, :reference
+  permit_params :batch_application_id, :name, :gender, :email, :phone, :role, :team_lead, :tag_list, :reference, :college
 
   scope :all, default: true
   scope :lead_signup
@@ -21,6 +21,7 @@ ActiveAdmin.register BatchApplicant do
   filter :batch_applications_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'With applications in batch'
   filter :phone
   filter :gender, as: :select, collection: Founder.valid_gender_values
+  filter :college
 
   index do
     selectable_column
@@ -29,6 +30,7 @@ ActiveAdmin.register BatchApplicant do
     column :email
     column :phone
     column :reference
+    column :college
 
     column :last_created_application do |batch_applicant|
       application = batch_applicant.batch_applications.where(team_lead_id: batch_applicant.id).last
@@ -50,6 +52,7 @@ ActiveAdmin.register BatchApplicant do
       row :email
       row :name
       row :phone
+      row :college
 
       row :tags do |batch_applicant|
         linked_tags(batch_applicant.tags)
@@ -125,6 +128,7 @@ ActiveAdmin.register BatchApplicant do
       f.input :tag_list, input_html: { value: f.object.tag_list.join(','), 'data-tags' => BatchApplicant.tag_counts_on(:tags).pluck(:name).to_json }
       f.input :gender, as: :select, collection: Founder.valid_gender_values
       f.input :phone
+      f.input :college
       f.input :role, as: :select, collection: Founder.valid_roles
       f.input :reference
     end

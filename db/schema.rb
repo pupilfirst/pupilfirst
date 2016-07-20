@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160720145224) do
+ActiveRecord::Schema.define(version: 20160720184547) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,6 +120,7 @@ ActiveRecord::Schema.define(version: 20160720145224) do
     t.string   "token"
     t.datetime "sign_in_email_sent_at"
     t.string   "reference"
+    t.string   "college"
   end
 
   add_index "batch_applicants", ["token"], name: "index_batch_applicants_on_token", using: :btree

@@ -3,6 +3,10 @@
   background-size: cover;
   height: 380px;
   border-bottom: 1px solid $gray-border;
+
+  @include media-breakpoint-down(xs) {
+    height: auto;
+  }
 }
 
 .primary-banner-head {
@@ -18,7 +22,7 @@
     }
 
     @include media-breakpoint-down(xs) {
-      font-size: 1.5rem;
+      font-size: 1.125rem;
     }
   }
   .btn-secondary {
@@ -27,6 +31,9 @@
     @include media-breakpoint-down(xs) {
       margin: 10px 0 0 0;
     }
+  }
+  @include media-breakpoint-down(xs) {
+    padding: 90px 0 50px;
   }
 }
 

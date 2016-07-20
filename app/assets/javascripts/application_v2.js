@@ -20,7 +20,6 @@
 //= require select2
 
 //= require google_analytics
-//= require v2/navbar
 //= require shift_for_hash
 //= require founders
 //= require limit_max_int
@@ -40,6 +39,8 @@
 
 // Shared
 // require _shared
+//= require v2/navbar
+//= require v2/footer
 
 // Controller-specific
 // require home

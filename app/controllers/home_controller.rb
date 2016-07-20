@@ -33,6 +33,18 @@ class HomeController < ApplicationController
     # Background image cycling test.
   end
 
+  # GET /policies/privacy
+  def privacy
+    privacy_policy = File.read(File.absolute_path(Rails.root.join('privacy_policy.md')))
+    render text: Kramdown::Document.new(privacy_policy).to_html.html_safe
+  end
+
+  # GET /policies/terms
+  def terms
+    terms_of_use = File.read(File.absolute_path(Rails.root.join('terms_of_use.md')))
+    render text: Kramdown::Document.new(terms_of_use).to_html.html_safe
+  end
+
   protected
 
   def hero_text_number

@@ -142,6 +142,11 @@ Svapp::Application.routes.draw do
   # Also have /StartInCollege
   get 'StartInCollege', to: redirect('/startincollege')
 
+  scope 'policies', as: 'policies', controller: 'home' do
+    get 'privacy'
+    get 'terms'
+  end
+
   scope 'startincollege', as: 'start_in_college', controller: 'start_in_college' do
     get '/', action: 'index'
     get 'start'

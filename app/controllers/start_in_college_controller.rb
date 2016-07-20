@@ -4,6 +4,7 @@ class StartInCollegeController < ApplicationController
   before_action :lock_under_feature_flag, only: %w(chapter quiz quiz_submission)
 
   helper_method :current_mooc_student
+  helper_method :quiz_score
 
   layout 'application_v2'
 
@@ -88,7 +89,9 @@ class StartInCollegeController < ApplicationController
   # Evaluates a quiz submission
   def quiz_submission
     @chapter = CourseChapter.find params[:chapter]
+
     grade_submission
+    save_grade
   end
 
   protected
@@ -139,5 +142,13 @@ class StartInCollegeController < ApplicationController
     @total = answers.count
     @attempted = answers.count { |a| a[:answer_id].present? }
     @correct = answers.count { |a| a[:answer_id].to_i == QuizQuestion.find(a[:id]).correct_answer.id }
+  end
+
+  def quiz_score
+    ((@correct.to_f / @total) * 100).round
+  end
+
+  def save_grade
+    QuizAttempt.create!(course_chapter: @chapter, mooc_student: current_mooc_student, score: quiz_score, attempted_questions: @attempted, total_questions: @total)
   end
 end

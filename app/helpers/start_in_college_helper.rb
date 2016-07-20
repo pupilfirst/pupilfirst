@@ -40,10 +40,6 @@ module StartInCollegeHelper
     start_in_college_chapter_path(1, 1)
   end
 
-  def quiz_score
-    ((@attempted.to_f / @total) * 100).round
-  end
-
   def quiz_result_title
     return "Great! You scored #{quiz_score}%!" if quiz_score > 80
     return "Not Bad! You scored #{quiz_score}%!" if quiz_score > 50

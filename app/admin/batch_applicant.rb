@@ -87,6 +87,7 @@ ActiveAdmin.register BatchApplicant do
 
       row :reference
       row :notes
+      row :last_sign_in_at
     end
 
     panel 'Technical details' do

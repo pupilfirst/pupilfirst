@@ -130,7 +130,7 @@ class BatchApplicationController < ApplicationController
     render layout: 'application_v2'
   end
 
-  # POST /apply/identify
+  # POST /apply/identify/:batch
   def send_sign_in_email
     @skip_container = true
 
@@ -138,11 +138,17 @@ class BatchApplicationController < ApplicationController
 
     if @form.validate(params[:batch_applicant_signup])
       @form.save(params[:batch])
-      render 'batch_application/sign_in_email_sent', layout: 'application_v2'
+      redirect_to apply_sign_in_email_sent_path(batch: params[:batch])
     else
       flash.now[:error] = 'Something went wrong. Please try again.'
       render 'batch_application/identify', layout: 'application_v2'
     end
+  end
+
+  # GET /apply/sign_in_email_sent/:batch
+  def sign_in_email_sent
+    @skip_container = true
+    render layout: 'application_v2'
   end
 
   # POST /apply/restart/:batch

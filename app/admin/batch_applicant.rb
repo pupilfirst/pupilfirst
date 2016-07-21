@@ -22,6 +22,7 @@ ActiveAdmin.register BatchApplicant do
   filter :phone
   filter :gender, as: :select, collection: Founder.valid_gender_values
   filter :college
+  filter :created_at
 
   index do
     selectable_column

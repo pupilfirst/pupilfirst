@@ -478,6 +478,6 @@
         iframe.video-frame src="https://www.youtube.com/embed/AzABLPISPQU" frameborder="0" allowfullscreen="allowfullscreen"
 
 - batch = @batches_open.first if @batches_open.present?
-= link_to 'Start Application', apply_batch_path(batch: batch.batch_number, state: 'start_from_floating'), class: 'btn btn-primary btn-xs text-uppercase hidden-xs-up sticky-application-button', id: 'tour-sticky-application-button' if batch
+= link_to 'Start Application', apply_batch_path(batch: batch.batch_number, state: 'start_from_floating'), class: 'btn btn-primary btn-xs text-uppercase sticky-application-button', id: 'tour-sticky-application-button' if batch
 
 script data-align="right"  data-overlay="false" id="keyreply-script" src="//keyreply.com/chat/widget.js" data-color="#32B475" data-apps="JTdCJTIydHdpdHRlciUyMjolMjJAU1Zkb3RDTyUyMiwlMjJmYWNlYm9vayUyMjolMjIxMDg2NDYxNzkyNTkzNzMlMjIsJTIyZW1haWwlMjI6JTIyaGVscEBzdi5jbyUyMiU3RA=="

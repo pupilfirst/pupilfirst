@@ -99,7 +99,7 @@ class ApplicationController < ActionController::Base
       image_sources,
       script_sources,
       "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://sv-assets.sv.co http://keyreply.com;",
-      "connect-src 'self' hn.inspectlet.com wss://inspectletws.herokuapp.com;",
+      "connect-src 'self' #{inspectlet_csp[:connect]};",
       "font-src 'self' fonts.gstatic.com https://sv-assets.sv.co;",
       'child-src https://www.youtube.com;',
       frame_sources,
@@ -142,6 +142,21 @@ class ApplicationController < ActionController::Base
     }
   end
 
+  def inspectlet_csp
+    {
+      connect: 'https://hn.inspectlet.com wss://ws.inspectlet.com',
+      script: 'https://cdn.inspectlet.com',
+      image: 'https://hn.inspectlet.com'
+    }
+  end
+
+  def facebook_csp
+    {
+      image: 'https://www.facebook.com/tr/',
+      script: 'https://connect.facebook.net'
+    }
+  end
+
   def frame_sources
     <<~FRAME_SOURCES.squish
       frame-src
@@ -155,8 +170,8 @@ class ApplicationController < ActionController::Base
     <<~IMAGE_SOURCES.squish
       img-src
       'self' data: https://blog.sv.co http://www.startatsv.com https://sv-assets.sv.co https://secure.gravatar.com
-      https://uploaded-assets.sv.co hn.inspectlet.com http://keyreply.com
-      #{google_analytics_csp[:image]};
+      https://uploaded-assets.sv.co http://keyreply.com
+      #{google_analytics_csp[:image]} #{inspectlet_csp[:image]} #{facebook_csp[:image]};
     IMAGE_SOURCES
   end
 
@@ -164,8 +179,8 @@ class ApplicationController < ActionController::Base
     <<~SCRIPT_SOURCES.squish
       script-src
       'self' 'unsafe-eval' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
-      http://www.startatsv.com https://sv-assets.sv.co cdn.inspectlet.com http://keyreply.com
-      #{recaptcha_csp[:script]} #{google_analytics_csp[:script]};
+      http://www.startatsv.com https://sv-assets.sv.co http://keyreply.com
+      #{recaptcha_csp[:script]} #{google_analytics_csp[:script]} #{inspectlet_csp[:script]} #{facebook_csp[:script]};
     SCRIPT_SOURCES
   end
 end

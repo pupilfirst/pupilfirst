@@ -1,0 +1,35 @@
+- content_for :head do
+  title SV.CO | Start In College
+  meta name="description" content="online course on the various stages of a startup journey: from deciding to start up, to forming a team,validating a good idea, building a prototype and finding passionate customers."
+
+.secondary-banner.application-stages-banner
+  .container
+    .application-stages-head.text-xs-center
+      h1 Hurray! You have completed the #StartInCollege course!
+.container
+  .container-md-center.content-box.m-t-3.m-b-3
+    h3.text-xs-center
+      | You have reached the end of this course.
+      br
+      | Your total score is <strong>#{@final_score} %</strong>.
+    h4
+      | You may now print your 'Course Completion Certificate' with the present grade or try improving your score by retaking the quizzes.
+
+    table.table
+      thead
+        tr
+          th #
+          th Chapter
+          th Score
+          th
+      tbody
+        - CourseChapter.all.each do |chapter|
+          tr
+            th scope="row"
+              ' #{chapter.chapter_number}
+            td #{chapter.name}
+            td #{current_mooc_student.score_for_chapter(chapter)} %
+            td #{link_to 'Retry', start_in_college_quiz_path(chapter.id)}
+
+    = link_to 'Previous', '#', class: 'btn btn-secondary btn-md text-uppercase'
+    = link_to 'Print Certificate', '#', class: 'btn btn-primary btn-md text-uppercase pull-right'

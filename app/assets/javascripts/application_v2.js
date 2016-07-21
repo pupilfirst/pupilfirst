@@ -20,6 +20,7 @@
 //= require select2
 
 //= require google_analytics
+//= require facebook_pixel
 //= require shift_for_hash
 //= require founders
 //= require limit_max_int

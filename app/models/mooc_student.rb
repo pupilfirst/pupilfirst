@@ -8,4 +8,14 @@ class MoocStudent < ActiveRecord::Base
   def self.valid_semester_values
     %w(I II III IV V VI VII VIII Graduated Other)
   end
+
+  def score
+    # rubocop: disable SingleLineBlockParams
+    CourseChapter.all.inject(0.0) { |sum, chapter| sum + score_for_chapter(chapter) } / CourseChapter.all.count
+    # rubocop: enable SingleLineBlockParams
+  end
+
+  def score_for_chapter(chapter)
+    quiz_attempts.where(course_chapter: chapter).order('created_at DESC').first&.score.to_i
+  end
 end

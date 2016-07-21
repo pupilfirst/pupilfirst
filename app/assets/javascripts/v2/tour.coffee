@@ -7,16 +7,8 @@ activateBackToTopLinks = ->
 
 stickyApplyButtonOnTourPage = ->
   if $('.tour-banner').length
-    stickyToggle = new Waypoint
-      element: $('.tour-banner')[0],
-      handler: (direction) ->
-        applicationButton = $('#tour-sticky-application-button')
-        if direction == 'down'
-          applicationButton.removeClass('hidden-xs-up')
-        else
-          applicationButton.addClass('hidden-xs-up')
 
-    bottomStickyToggle = new Waypoint.Inview
+    visibilityToggle = new Waypoint.Inview
       element: $('.ready-to-apply')[0]
       enter: (direction) ->
         if direction == 'down'

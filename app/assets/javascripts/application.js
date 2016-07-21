@@ -19,6 +19,7 @@
 //= require select2
 
 //= require google_analytics
+//= require facebook_pixel
 //= require navbar
 //= require shift_for_hash
 //= require founders

@@ -21,6 +21,7 @@ class BatchApplicantSignupForm < Reform::Form
       applicant.reference = reference_text.present? ? reference_text : reference
     end
 
+    applicant.last_sign_in_at = Time.now
     applicant.save!
 
     applicant

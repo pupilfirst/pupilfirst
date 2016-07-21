@@ -80,8 +80,6 @@ class StartInCollegeController < ApplicationController
 
     @form = QuizSubmissionForm.new(OpenStruct.new)
     @form.prepopulate! questions: @questions
-
-    render "start_in_college/quizzes/quiz_#{params[:id]}"
   end
 
   # POST /startincollege/quiz_submission
@@ -92,6 +90,13 @@ class StartInCollegeController < ApplicationController
 
     grade_submission
     save_grade
+  end
+
+  # GET /startincollege/course_end
+  #
+  # End of course page. Probably show grade and option to print certificate
+  def course_end
+    @final_score = current_mooc_student.score.round(1)
   end
 
   protected

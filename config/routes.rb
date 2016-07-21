@@ -99,6 +99,7 @@ Svapp::Application.routes.draw do
     post '/restart/:batch', action: 'restart', as: 'restart'
     get '/identify/:batch', action: 'identify', as: 'identify'
     post '/identify/:batch', action: 'send_sign_in_email', as: 'send_sign_in_email'
+    get '/sign_in_email_sent/:batch', action: 'sign_in_email_sent', as: 'sign_in_email_sent'
   end
 
   resource :platform_feedback, only: [:create]
@@ -158,6 +159,7 @@ Svapp::Application.routes.draw do
     get 'chapter/:id/:section_id', action: 'chapter', as: 'chapter'
     get 'quiz/:id', action: 'quiz', as: 'quiz'
     post 'quiz_submission'
+    get 'course_end'
   end
 
   # used for shortened urls from the shortener gem

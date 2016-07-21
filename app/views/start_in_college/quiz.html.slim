@@ -9,12 +9,12 @@
           = f.simple_fields_for :questions do |s|
             - quiz_question = s.object.model
             = s.input :answer_id,
-            label: quiz_question.question,
-            collection: quiz_question.answer_options.pluck(:id,:value),
-            value_method: :first,
-            label_method: :last,
-            as: :radio_buttons,
-            required: false
+              label: quiz_question.question,
+              collection: quiz_question.answer_options.pluck(:id,:value),
+              value_method: :first,
+              label_method: :last,
+              as: :radio_buttons,
+              required: false
 
           .col-sm-offset-3
             .simple-form-submit

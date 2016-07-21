@@ -80,8 +80,6 @@ class StartInCollegeController < ApplicationController
 
     @form = QuizSubmissionForm.new(OpenStruct.new)
     @form.prepopulate! questions: @questions
-
-    render "start_in_college/quizzes/quiz_#{params[:id]}"
   end
 
   # POST /startincollege/quiz_submission

@@ -152,6 +152,7 @@ class ApplicationController < ActionController::Base
 
   def facebook_csp
     {
+      image: 'https://www.facebook.com/tr',
       script: 'https://connect.facebook.net'
     }
   end
@@ -170,7 +171,7 @@ class ApplicationController < ActionController::Base
       img-src
       'self' data: https://blog.sv.co http://www.startatsv.com https://sv-assets.sv.co https://secure.gravatar.com
       https://uploaded-assets.sv.co http://keyreply.com
-      #{google_analytics_csp[:image]} #{inspectlet_csp[:image]};
+      #{google_analytics_csp[:image]} #{inspectlet_csp[:image]} #{facebook_csp[:image]};
     IMAGE_SOURCES
   end
 

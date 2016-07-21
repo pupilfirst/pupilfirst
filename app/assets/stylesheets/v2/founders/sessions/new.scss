@@ -1,0 +1,162 @@
+.login-container {
+  max-width: 55rem;
+  display: flex;
+
+  @include media-breakpoint-down(sm) {
+    display: block;
+  }
+}
+.login-notice {
+  background-color: white;
+  padding: 30px;
+  margin: 0 15px;
+  position: relative;
+
+  img {
+    width: 200px;
+  }
+  .notice-section {
+    h4 {
+      line-height: 1.3;
+
+      .batch-link-head {
+        color: $brand-primary;
+
+        &:hover {
+          color: $light-primary;
+        }
+      }
+      .startincollege-link-head {
+        color: $brand-secondary;
+
+        &:hover {
+          color: $light-secondary;
+        }
+      }
+    }
+    &.with-border-btm {
+      border-bottom: 1px solid $gray-border;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+    }
+  }
+}
+.devise-user-login {
+  background-color: white;
+  padding: 60px 30px;
+  margin: 0 15px;
+
+  @include media-breakpoint-down(sm) {
+    margin-top: 30px;
+    padding: 30px 15px;
+  }
+  .sign-in-kid {
+    img {
+      width: 80px;
+    }
+  }
+
+  .wrapped-input {
+    position: relative;
+    margin: 0 auto 20px;
+
+    @include media-breakpoint-down(xs) {
+      width: 100%;
+    }
+
+    img {
+      position: absolute;
+      left: 10px;
+      top: 8px;
+      padding-right: 10px;
+      width: 30px;
+      height: 30px;
+      border-right: 1px solid $gray-border;
+    }
+
+    input {
+      height: 45px;
+      padding: 5px 5px 5px 55px;
+      border: 1px solid $gray-border;
+      @include border-radius(5px);
+      width: 100%;
+    }
+  }
+  .remember-forgot {
+    @include media-breakpoint-down(sm) {
+      text-align: center;
+    }
+  }
+  .forgot-label {
+    @include media-breakpoint-up(sm) {
+      text-align: right;
+    }
+  }
+  .login-option {
+    padding: 0;
+
+    @include media-breakpoint-down(xs) {
+      width: auto;
+      display: block;
+      height: 30px;
+    }
+  }
+  .forgot-password {
+    vertical-align: middle;
+  }
+
+  input[type="checkbox"]:not(:checked),
+  input[type="checkbox"]:checked {
+    position: absolute;
+    left: -9999px;
+  }
+  input[type="checkbox"]:not(:checked) + label,
+  input[type="checkbox"]:checked + label {
+    position: relative;
+    padding-left: 25px;
+    cursor: pointer;
+    color: $light-grey-text;
+  }
+
+  input[type="checkbox"]:not(:checked) + label:before,
+  input[type="checkbox"]:checked + label:before {
+    content: '';
+    position: absolute;
+    left:0;
+    top: 2px;
+    width: 17px;
+    height: 17px;
+    border: 1px solid $gray-border;
+    background: white;
+    border-radius: 2px;
+  }
+  /* checked mark */
+  input[type="checkbox"]:not(:checked) + label:after,
+  input[type="checkbox"]:checked + label:after {
+    content: '✔';
+    position: absolute;
+    top: 3px;
+    left: 4px;
+    font-size: 1.125rem;
+    line-height: 0.8;
+    color: $brand-primary;
+    transition: all .2s;
+  }
+  /* checked mark changes */
+  input[type="checkbox"]:not(:checked) + label:after {
+    opacity: 0;
+    transform: scale(0);
+  }
+  input[type="checkbox"]:checked + label:after {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .sign-in-btn {
+    padding: 12px 100px;
+    font-size: 1rem;
+
+    @include media-breakpoint-down(sm) {
+      padding: 12px 40px;
+    }
+  }
+}

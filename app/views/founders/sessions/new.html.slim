@@ -1,40 +1,51 @@
 - content_for :head
   title SV.CO Sign In
 
-.row
-  .col-md-6.col-md-offset-3.col-sm-8.col-sm-offset-2
-    .alert.alert-success.margin-top-40 role="alert"
-      h3.margin-top-0.margin-bottom-0.text-center.margin-top-10
-        ' Applications for Batch #3 are open!
-        br
-        ' #{link_to 'Click here', apply_index_path} to get started.
-      h3.margin-top-10.margin-bottom-0.text-center.margin-top-10
-        ' Looking for the #StartInCollege course?
-        br
-        ' #{link_to 'Click here', start_in_college_path} to get started.
+.login-container.center-block.m-t-3.m-b-3.clearfix
+  .col-md-6.login-notice.content-box.text-xs-center
+    .notice-section.with-border-btm
+      = image_tag 'founders/sessions/sv-spaceship.svg', class: 'img-fluid center-block'
+      h4
+        = link_to apply_index_path, class: "batch-link-head" do
+          ' Applications for
+          br
+          | <strong>Batch #3</strong> are open!
+          br
+          ' <strong>Click here</strong> to get started.
+    .notice-section
+      = image_tag 'founders/sessions/fly-a-kite.svg', class: 'img-fluid center-block'
+      h4
+        =link_to start_in_college_path, class: "startincollege-link-head" do
+          ' Looking for the
+          br
+          |	<strong>#StartInCollege</strong> course?
+          br
+          ' <strong>Click here</strong> to get started.
 
-.text-center.devise-user-form
-  h1.title Sign in with your SV.CO ID!
+  .col-md-6.devise-user-form.content-box.devise-user-login
+    .sign-in-kid.center-block.m-b-1
+      = image_tag 'founders/sessions/sign-in-kid.svg', class: 'img-fluid center-block'
+    h3.text-xs-center.m-b-2 Sign in with your SV.CO ID!
 
-  = form_for resource, url: session_path(resource_name) do |f|
-    .wrapped-input
-      = image_tag 'founders/sessions/email.png'
-      = f.text_field :email, required: true, placeholder: 'SV.CO ID (email)'
+    = form_for resource, url: session_path(resource_name) do |f|
+      .wrapped-input
+        = image_tag 'founders/sessions/email.svg'
+        = f.text_field :email, required: true, placeholder: 'SV.CO ID (email)'
 
-    .wrapped-input
-      = image_tag 'founders/sessions/password.png'
-      = f.password_field :password, required: true, placeholder: 'Password'
+      .wrapped-input
+        = image_tag 'founders/sessions/password.svg'
+        = f.password_field :password, required: true, placeholder: 'Password'
 
-    = f.submit 'Sign in', class: 'btn btn-lg btn-primary btn-flat margin-bottom-20'
+      .remember-forgot.clearfix.m-t-1.m-b-2
+        .login-option.col-md-6
+          = f.check_box :remember_me, class: 'css-checkbox' if devise_mapping.rememberable?
+          = f.label :remember_me, 'Remember Me', class: 'css-label'
 
-    div
-      .login-option.border-right
-        = f.check_box :remember_me, class: 'css-checkbox' if devise_mapping.rememberable?
-        = f.label :remember_me, 'Remember Me', class: 'css-label'
+        - if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations'
+          .login-option.forgot-label.col-md-6
+            = link_to 'Forgot your password?', new_password_path(resource_name), class: 'forgot-password'
 
-      - if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations'
-        .login-option
-          = link_to 'Forgot your password?', new_password_path(resource_name), class: 'forgot-password'
+      = f.submit 'Sign in', class: 'btn btn-primary btn-md text-uppercase center-block sign-in-btn'
 
-  .footer
-    = render 'founders/shared/links'
+    .footer.text-xs-center.m-t-2
+      = render 'founders/shared/links'

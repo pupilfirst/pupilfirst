@@ -144,9 +144,9 @@ class ApplicationController < ActionController::Base
 
   def inspectlet_csp
     {
-      connect: 'hn.inspectlet.com wss://ws.inspectlet.com',
-      script: 'cdn.inspectlet.com',
-      image: 'hn.inspectlet.com'
+      connect: 'wss://ws.inspectlet.com',
+      script: 'https://cdn.inspectlet.com',
+      image: 'https://hn.inspectlet.com'
     }
   end
 

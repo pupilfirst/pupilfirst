@@ -43,4 +43,17 @@ module StartInCollegeHelper
     return "Not Bad! You scored #{quiz_score}%!" if quiz_score > 50
     "You scored #{quiz_score}%. You can do better!"
   end
+
+  def after_quiz_path
+    return start_in_college_course_end_path if last_quiz?
+    start_of_next_chapter
+  end
+
+  def last_quiz?
+    @chapter.chapter_number == CourseChapter.maximum(:chapter_number)
+  end
+
+  def start_of_next_chapter
+    start_in_college_chapter_path(@chapter.chapter_number + 1, 1)
+  end
 end

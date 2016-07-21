@@ -8,11 +8,28 @@
       h1 Hurray! You have completed the #StartInCollege course!
 .container
   .container-md-center.content-box.m-t-3.m-b-3
+    h3.text-xs-center
+      | You have reached the end of this course.
+      br
+      | Your total score is <strong>#{@final_score} %</strong>.
     h4
-      ' You have reached the end of this course. Your total score for this course is 56 %. You can improve your grade by retrying the quizes. You can also choose to print your Course Completion Certificate with the present grade.
+      | You may now print your 'Course Completion Certificate' with the present grade or try improving your score by retaking the quizzes.
 
-    p Probably show a table of all quizes taken and marks scored here, with options to retry each.
-    br
+    table.table
+      thead
+        tr
+          th #
+          th Chapter
+          th Score
+          th
+      tbody
+        - CourseChapter.all.each do |chapter|
+          tr
+            th scope="row"
+              ' #{chapter.chapter_number}
+            td #{chapter.name}
+            td #{current_mooc_student.score_for_chapter(chapter)} %
+            td #{link_to 'Retry', start_in_college_quiz_path(chapter.id)}
 
     = link_to 'Previous', '#', class: 'btn btn-secondary btn-md text-uppercase'
     = link_to 'Print Certificate', '#', class: 'btn btn-primary btn-md text-uppercase pull-right'

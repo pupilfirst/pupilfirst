@@ -1,0 +1,18 @@
+- content_for :head do
+  title SV.CO | Start In College
+  meta name="description" content="online course on the various stages of a startup journey: from deciding to start up, to forming a team,validating a good idea, building a prototype and finding passionate customers."
+
+.secondary-banner.application-stages-banner
+  .container
+    .application-stages-head.text-xs-center
+      h1 Hurray! You have completed the #StartInCollege course!
+.container
+  .container-md-center.content-box.m-t-3.m-b-3
+    h4
+      ' You have reached the end of this course. Your total score for this course is 56 %. You can improve your grade by retrying the quizes. You can also choose to print your Course Completion Certificate with the present grade.
+
+    p Probably show a table of all quizes taken and marks scored here, with options to retry each.
+    br
+
+    = link_to 'Previous', '#', class: 'btn btn-secondary btn-md text-uppercase'
+    = link_to 'Print Certificate', '#', class: 'btn btn-primary btn-md text-uppercase pull-right'

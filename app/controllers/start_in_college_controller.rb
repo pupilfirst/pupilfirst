@@ -94,6 +94,12 @@ class StartInCollegeController < ApplicationController
     save_grade
   end
 
+  # GET /startincollege/course_end
+  #
+  # End of course page. Probably show grade and option to print certificate
+  def course_end
+  end
+
   protected
 
   def current_mooc_student

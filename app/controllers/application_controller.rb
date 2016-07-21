@@ -150,6 +150,12 @@ class ApplicationController < ActionController::Base
     }
   end
 
+  def facebook_csp
+    {
+      script: 'https://connect.facebook.net'
+    }
+  end
+
   def frame_sources
     <<~FRAME_SOURCES.squish
       frame-src
@@ -173,7 +179,7 @@ class ApplicationController < ActionController::Base
       script-src
       'self' 'unsafe-eval' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
       http://www.startatsv.com https://sv-assets.sv.co http://keyreply.com
-      #{recaptcha_csp[:script]} #{google_analytics_csp[:script]} #{inspectlet_csp[:script]};
+      #{recaptcha_csp[:script]} #{google_analytics_csp[:script]} #{inspectlet_csp[:script]} #{facebook_csp[:script]};
     SCRIPT_SOURCES
   end
 end

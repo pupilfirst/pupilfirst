@@ -144,7 +144,7 @@ class ApplicationController < ActionController::Base
 
   def inspectlet_csp
     {
-      connect: 'wss://ws.inspectlet.com',
+      connect: 'https://hn.inspectlet.com wss://ws.inspectlet.com',
       script: 'https://cdn.inspectlet.com',
       image: 'https://hn.inspectlet.com'
     }
@@ -152,7 +152,7 @@ class ApplicationController < ActionController::Base
 
   def facebook_csp
     {
-      image: 'https://www.facebook.com/tr',
+      image: 'https://www.facebook.com/tr/',
       script: 'https://connect.facebook.net'
     }
   end

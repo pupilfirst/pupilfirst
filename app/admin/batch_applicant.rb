@@ -28,10 +28,10 @@ ActiveAdmin.register BatchApplicant do
     selectable_column
 
     column :name
-    column :email
     column :phone
     column :reference
     column :college
+    column :notes
 
     column :last_created_application do |batch_applicant|
       application = batch_applicant.batch_applications.where(team_lead_id: batch_applicant.id).last

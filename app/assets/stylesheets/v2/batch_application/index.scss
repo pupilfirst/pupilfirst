@@ -10,24 +10,23 @@
 }
 
 .primary-banner-head {
-  padding: 120px 0 80px;
+  padding: 110px 0 80px;
 
   h1 {
-    line-height: 1.5;
+    line-height: 1.4;
     margin-bottom: 10px;
-    font-size: 1.875rem;
 
     strong {
       font-weight: $font-semibold;
     }
 
     @include media-breakpoint-down(xs) {
-      font-size: 1.125rem;
+      font-size: 2rem;
     }
   }
 
   h4 {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     color: $brand-secondary;
   }
 
@@ -490,6 +489,9 @@
 
 .graduates-video {
   .modal-dialog {
+    @include media-breakpoint-down(md) {
+      max-width: 720px;
+    }
     .modal-content {
       background-color: transparent;
       border: 0;
@@ -507,13 +509,20 @@
       .modal-body {
         background-color: rgba(0, 0, 0, 1.0);
         padding: 10px 10px 0;
+        @include border-radius(5px);
       }
     }
   }
-  @include media-breakpoint-up(sm) {
-    .video-frame {
+  .video-frame {
+    width: 100%;
+    height: 500px;
+
+    @include media-breakpoint-down(md) {
       width: 100%;
-      height: 500px;
+      max-height: 100%;
+    }
+    @include media-breakpoint-down(sm) {
+      height: 300px;
     }
   }
 }

@@ -15,7 +15,7 @@ ActiveAdmin.register_page 'Short URLs' do
       column :url
 
       column :short_url do |short_url|
-        url = "https://sv.co/#{short_url.unique_key}"
+        url = "https://www.sv.co/#{short_url.unique_key}"
         link_to url, url
       end
     end

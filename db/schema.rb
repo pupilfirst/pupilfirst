@@ -120,9 +120,9 @@ ActiveRecord::Schema.define(version: 20160721091513) do
     t.string   "token"
     t.datetime "sign_in_email_sent_at"
     t.string   "reference"
-    t.datetime "last_sign_in_at"
     t.string   "college"
     t.text     "notes"
+    t.datetime "last_sign_in_at"
   end
 
   add_index "batch_applicants", ["token"], name: "index_batch_applicants_on_token", using: :btree

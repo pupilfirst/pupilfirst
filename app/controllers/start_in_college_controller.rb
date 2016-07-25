@@ -130,7 +130,7 @@ class StartInCollegeController < ApplicationController
   end
 
   def chapter_has_section?
-    params[:section_id].to_i <= CourseChapter.find(params[:id]).sections_count
+    params[:section_id].to_i <= CourseChapter.find_by(chapter_number: params[:id].to_i).sections_count
   end
 
   def section_exists?

@@ -2,29 +2,31 @@
   title SV.CO - The Story
   meta name="description" content="This is the story of SV.CO's journey from being India's first PPP Incubator to the first digital student startup platform."
 
-.transparency-banner
+.secondary-banner.application-stages-banner
   .container
-    .banner-text
-      h1.page-header.header-light The Story of Startup Village
-      p.transparency-introduction
-        ' We have written a small book to talk about the story of Startup Village from its origins as a small incubator based in Kochi to the world’s first digital student startup platform.
+    .col-md-7
+      .banner-head
+        h1 The Story of Startup Village
+        p
+          ' We have written a small book to talk about the story of Startup Village from its origins as a small incubator based in Kochi to the world’s first digital student startup platform.
+    .col-md-5.story-bg
 
-.transparency-content
+.transparency-content.m-t-2
   .container
-    .transparency-intro.clearfix
-      .col-sm-8
+    .transparency-intro.clearfix.m-b-2
+      .col-md-4.col-md-push-8
+        .transparency-initiative-image
+          = image_tag 'story/SV-storybook-mockup.png', class: "img-fluid"
+
+      .col-md-8.col-md-pull-4
         #transparency-intiative.document-section
           p The Story of Startup Village is  a small book written by Founder & Chairman Sanjay Vijayakumar. It talks about his entrepreneurship journey, starting from his days as the founder of a small company in Thiruvananthapuram to founding Startup Village.
-          / TODO: remove temporary 'download-btn' class below when page is upgraded to new custom theme
-          = link_to 'Download the Book', 'https://sv.co/yysk4', class: 'btn btn-primary btn-md text-uppercase download-book-btn', target: '_blank'
+          = link_to 'Download the Book', 'https://sv.co/yysk4', class: 'btn btn-primary btn-md text-uppercase m-t-1 m-b-1', target: '_blank'
           p The resources below supplement the book with additional detail. If you’d like to see more content added here, please write to <a href="mailto:help@sv.co">help@sv.co</a>.
-      .col-sm-4
-        .transparency-initiative-image
-          = image_tag 'transparency/transparency-intro-image.png'
 
     .row.transparency-block
       .col-md-8
-        .transparency-document
+        .transparency-document.m-b-2
           section#founding-agreements.document-section
             h3.header-light.blue-shadow-left Founding Agreements
             span.last-updated Last Updated February 16, 2016
@@ -66,14 +68,14 @@
             section#impact-report.col-sm-6
               a.highlight-link.impact-report-link.btn-anim href="https://goo.gl/d3fAO4" target='_blank'
                 p Last Updated February 15, 2016
-                h4.font-weight-300 1000 Days Report
+                h4 1000 Days Report
                 .document-link-text
                   i.fa.fa-file-text-o
                   ' SV 1000 Days Impact Report
             section#sv-handbook.col-sm-6
               a.highlight-link.sv-handbook-link.btn-anim href="https://goo.gl/euOpqv" target='_blank'
                 p Last Updated February 15, 2016
-                h4.font-weight-300 Handbook
+                h4 Handbook
                 .document-link-text
                   i.fa.fa-file-text-o
                   ' SV Handbook
@@ -239,8 +241,8 @@
                   ' #{link_to 'Requesting information about the SV Square program', 'https://goo.gl/AaWlRL', target: '_blank'}
                   | was filed at Technopark, Trivandrum and forwarded to Startup Village. A response was sent back on December 11, 2013.
 
-      #transparency-sidebar.col-md-4
-        .hidden-xs.clearfix
+      #transparency-sidebar.col-md-4.m-b-2
+        .hidden-xs-down.clearfix
           nav
             ul.list-unstyled
               li

@@ -1,3 +1,19 @@
+### 25 July, 2016
+
+#### Features
+
+  - Added a hovering contact option on a few important pages.
+
+#### Bugfixes
+
+  - We'd messed up when we redirected sv.co to www.sv.co (new canonical URL), which was failing on Apple's Safari browser. This has been fixed.
+
+#### UI and UX
+
+  - Sign in page for existing founders has been updated to new design language.
+  - Fixed broken styling of announcement headers when using new design.
+  - Popup videos on apply page were not being centered correctly, and were overflowing on low-res mobiles. They now fit correctly within the viewport.
+
 ### 18 July, 2016
 
 #### Features

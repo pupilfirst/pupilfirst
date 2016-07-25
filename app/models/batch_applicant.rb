@@ -65,12 +65,12 @@ class BatchApplicant < ActiveRecord::Base
     batch_applications.find_by(batch_id: batch.id).present?
   end
 
-  def send_sign_in_email(application_batch)
+  def send_sign_in_email(batch_number)
     # Create a new token.
     regenerate_token
 
     # Send email.
-    BatchApplicantMailer.sign_in(email, token, application_batch).deliver_now
+    BatchApplicantMailer.sign_in(email, token, batch_number).deliver_now
 
     # Mark when email was sent.
     update!(sign_in_email_sent_at: Time.now)

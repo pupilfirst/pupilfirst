@@ -1,4 +1,4 @@
-class ApplicationStageOneForm < Reform::Form
+class BatchApplicationForm < Reform::Form
   property :application_page_read, virtual: true, validates: { acceptance: true }
   property :team_lead_consent, virtual: true, validates: { acceptance: true }
   property :fees_consent, virtual: true, validates: { acceptance: true }
@@ -7,7 +7,6 @@ class ApplicationStageOneForm < Reform::Form
     property :name, validates: { presence: true, length: { maximum: 250 } }
     property :email, validates: { presence: true, length: { maximum: 250 }, format: { with: /\S+@\S+/, message: "doesn't look like an email" } }
     property :phone, validates: { presence: true, format: { with: /\A[987][0-9]{9}\z/, message: "doesn't look like a mobile phone number" } }
-    property :gender, validates: { presence: true, inclusion: Founder.valid_gender_values }
   end
 
   property :university_id, validates: { presence: true }

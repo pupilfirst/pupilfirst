@@ -92,14 +92,20 @@ Svapp::Application.routes.draw do
   end
 
   scope 'apply', as: 'apply', controller: 'batch_application' do
-    get '/', action: 'index', as: 'index'
-    get '/tour', action: 'tour', as: 'tour'
-    get '/to/:batch/(:state)', action: 'apply', as: 'batch'
-    post '/to/:batch/(:state)', action: 'submit', as: 'submit'
-    post '/restart/:batch', action: 'restart', as: 'restart'
-    get '/identify/:batch', action: 'identify', as: 'identify'
-    post '/identify/:batch', action: 'send_sign_in_email', as: 'send_sign_in_email'
-    get '/sign_in_email_sent/:batch', action: 'sign_in_email_sent', as: 'sign_in_email_sent'
+    get '', action: 'index'
+    post 'register'
+    get 'identify'
+    post 'send_sign_in_email'
+    get 'sign_in_email_sent'
+    get 'continue'
+
+    scope 'stage/:stage_number', as: 'stage' do
+      get '', action: 'form'
+      post 'submit'
+      get 'complete'
+      get 'expired'
+      get 'rejected'
+    end
   end
 
   resource :platform_feedback, only: [:create]

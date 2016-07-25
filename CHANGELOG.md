@@ -2,7 +2,7 @@
 
 #### Features
 
-  - Added a hovering contact option on a few important pages.
+  - We introduced a widget for traffic landing on the website to contact us easily. Folks can now reach us directly through Facebook's Messenger, tweet to us, or mail us for a quick response.
 
 #### Bugfixes
 

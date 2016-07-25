@@ -27,7 +27,7 @@ module StartInCollegeHelper
   end
 
   def last_section?
-    section_number == CourseChapter.find(chapter_number).sections_count
+    section_number == CourseChapter.find_by(chapter_number: chapter_number).sections_count
   end
 
   def next_section

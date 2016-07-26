@@ -84,6 +84,6 @@ class BatchApplicationForm < Reform::Form
   end
 
   def supplied_reference
-    team_lead.reference == 'Other (Please Specify)' ? team_lead.reference_text : team_lead.reference
+    team_lead.reference_text.present? ? team_lead.reference_text : team_lead.reference
   end
 end

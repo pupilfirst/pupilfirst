@@ -1,6 +1,6 @@
 ActiveAdmin.register QuizQuestion do
   menu parent: 'StartInCollege'
-  permit_params :course_chapter_id, :question, answer_options_attributes: [:id, :value, :correct_answer, :_destroy]
+  permit_params :course_chapter_id, :question, :question_number, answer_options_attributes: [:id, :value, :correct_answer, :_destroy]
 
   index do
     selectable_column
@@ -9,6 +9,7 @@ ActiveAdmin.register QuizQuestion do
       question.correct_answer.value if question.correct_answer.present?
     end
     column :course_chapter_id
+    column :question_number
     actions
   end
 
@@ -17,7 +18,11 @@ ActiveAdmin.register QuizQuestion do
 
     # TODO: Reduce height of the text field below. 'input_html' seems to be malfunctioning
     f.inputs :question
-    f.inputs :course_chapter
+    f.inputs 'Chapter Details' do
+      f.input :course_chapter
+      f.input :question_number
+    end
+
     f.inputs 'Answer Options' do
       f.has_many :answer_options, heading: false, allow_destroy: true, new_record: 'Add Option' do |o|
         o.input :value
@@ -31,6 +36,7 @@ ActiveAdmin.register QuizQuestion do
     attributes_table do
       row :question
       row :course_chapter_id
+      row :question_number
       row :correct_answer do |question|
         question.correct_answer.value if question.correct_answer.present?
       end

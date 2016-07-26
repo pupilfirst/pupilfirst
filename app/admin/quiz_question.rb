@@ -1,6 +1,6 @@
 ActiveAdmin.register QuizQuestion do
   menu parent: 'StartInCollege'
-  permit_params :course_chapter_id, :question, :question_number, answer_options_attributes: [:id, :value, :correct_answer, :_destroy]
+  permit_params :course_chapter_id, :question, :question_number, answer_options_attributes: [:id, :value, :correct_answer, :hint_text, :_destroy]
 
   index do
     selectable_column
@@ -27,6 +27,7 @@ ActiveAdmin.register QuizQuestion do
       f.has_many :answer_options, heading: false, allow_destroy: true, new_record: 'Add Option' do |o|
         o.input :value
         o.input :correct_answer
+        o.input :hint_text
       end
     end
     f.actions

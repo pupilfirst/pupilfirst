@@ -98,7 +98,7 @@ class ApplicationController < ActionController::Base
     [
       image_sources,
       script_sources,
-      "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://sv-assets.sv.co http://keyreply.com;",
+      "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://sv-assets.sv.co http://keyreply.com https://heapanalytics.com;",
       "connect-src 'self' #{inspectlet_csp[:connect]};",
       "font-src 'self' fonts.gstatic.com https://sv-assets.sv.co;",
       'child-src https://www.youtube.com;',
@@ -157,6 +157,13 @@ class ApplicationController < ActionController::Base
     }
   end
 
+  def heapanalytics_csp
+    {
+      script: 'https://cdn.heapanalytics.com https://heapanalytics.com',
+      image: 'http://heapanalytics.com'
+    }
+  end
+
   def frame_sources
     <<~FRAME_SOURCES.squish
       frame-src
@@ -170,8 +177,8 @@ class ApplicationController < ActionController::Base
     <<~IMAGE_SOURCES.squish
       img-src
       'self' data: https://blog.sv.co http://www.startatsv.com https://sv-assets.sv.co https://secure.gravatar.com
-      https://uploaded-assets.sv.co http://keyreply.com http://heapanalytics.com
-      #{google_analytics_csp[:image]} #{inspectlet_csp[:image]} #{facebook_csp[:image]};
+      https://uploaded-assets.sv.co http://keyreply.com
+      #{google_analytics_csp[:image]} #{inspectlet_csp[:image]} #{facebook_csp[:image]} #{heapanalytics_csp[:image]};
     IMAGE_SOURCES
   end
 
@@ -179,8 +186,9 @@ class ApplicationController < ActionController::Base
     <<~SCRIPT_SOURCES.squish
       script-src
       'self' 'unsafe-eval' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
-      http://www.startatsv.com https://sv-assets.sv.co http://keyreply.com https://cdn.heapanalytics.com
-      #{recaptcha_csp[:script]} #{google_analytics_csp[:script]} #{inspectlet_csp[:script]} #{facebook_csp[:script]};
+      http://www.startatsv.com https://sv-assets.sv.co http://keyreply.com
+      #{recaptcha_csp[:script]} #{google_analytics_csp[:script]} #{inspectlet_csp[:script]} #{facebook_csp[:script]}
+      #{heapanalytics_csp[:script]};
     SCRIPT_SOURCES
   end
 end

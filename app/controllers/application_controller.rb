@@ -98,7 +98,7 @@ class ApplicationController < ActionController::Base
     [
       image_sources,
       script_sources,
-      "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://sv-assets.sv.co http://keyreply.com https://heapanalytics.com;",
+      "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://sv-assets.sv.co http://keyreply.com #{heapanalytics_csp[:style]};",
       "connect-src 'self' #{inspectlet_csp[:connect]} #{heapanalytics_csp[:connect]};",
       "font-src 'self' fonts.gstatic.com https://sv-assets.sv.co #{heapanalytics_csp[:font]};",
       'child-src https://www.youtube.com;',
@@ -158,12 +158,23 @@ class ApplicationController < ActionController::Base
   end
 
   def heapanalytics_csp
-    {
-      script: 'https://cdn.heapanalytics.com https://heapanalytics.com',
-      image: 'http://heapanalytics.com',
-      connect: 'https://heapanalytics.com',
-      font: 'https://heapanalytics.com'
-    }
+    if Rails.env.development?
+      {
+        script: 'http://cdn.heapanalytics.com http://heapanalytics.com',
+        image: 'http://heapanalytics.com',
+        connect: 'http://heapanalytics.com',
+        font: 'http://heapanalytics.com',
+        style: 'http://heapanalytics.com'
+      }
+    else
+      {
+        script: 'https://cdn.heapanalytics.com https://heapanalytics.com',
+        image: 'http://heapanalytics.com',
+        connect: 'https://heapanalytics.com',
+        font: 'https://heapanalytics.com',
+        style: 'https://heapanalytics.com'
+      }
+    end
   end
 
   def frame_sources

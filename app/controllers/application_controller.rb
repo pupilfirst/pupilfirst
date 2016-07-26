@@ -98,7 +98,7 @@ class ApplicationController < ActionController::Base
     [
       image_sources,
       script_sources,
-      "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://sv-assets.sv.co http://keyreply.com #{heapanalytics_csp[:style]};",
+      "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://sv-assets.sv.co #{keyreply_csp[:style]} #{heapanalytics_csp[:style]};",
       "connect-src 'self' #{inspectlet_csp[:connect]} #{heapanalytics_csp[:connect]};",
       "font-src 'self' fonts.gstatic.com https://sv-assets.sv.co #{heapanalytics_csp[:font]};",
       'child-src https://www.youtube.com;',
@@ -169,12 +169,20 @@ class ApplicationController < ActionController::Base
     else
       {
         script: 'https://cdn.heapanalytics.com https://heapanalytics.com',
-        image: 'http://heapanalytics.com',
+        image: 'https://heapanalytics.com',
         connect: 'https://heapanalytics.com',
         font: 'https://heapanalytics.com',
         style: 'https://heapanalytics.com'
       }
     end
+  end
+
+  def keyreply_csp
+    {
+      image: 'https://keyreply.com',
+      script: 'https://keyreply.com',
+      style: 'https://keyreply.com'
+    }
   end
 
   def frame_sources
@@ -190,7 +198,7 @@ class ApplicationController < ActionController::Base
     <<~IMAGE_SOURCES.squish
       img-src
       'self' data: https://blog.sv.co http://www.startatsv.com https://sv-assets.sv.co https://secure.gravatar.com
-      https://uploaded-assets.sv.co http://keyreply.com
+      https://uploaded-assets.sv.co #{keyreply_csp[:image]}
       #{google_analytics_csp[:image]} #{inspectlet_csp[:image]} #{facebook_csp[:image]} #{heapanalytics_csp[:image]};
     IMAGE_SOURCES
   end
@@ -199,7 +207,7 @@ class ApplicationController < ActionController::Base
     <<~SCRIPT_SOURCES.squish
       script-src
       'self' 'unsafe-eval' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
-      http://www.startatsv.com https://sv-assets.sv.co http://keyreply.com
+      http://www.startatsv.com https://sv-assets.sv.co #{keyreply_csp[:script]}
       #{recaptcha_csp[:script]} #{google_analytics_csp[:script]} #{inspectlet_csp[:script]} #{facebook_csp[:script]}
       #{heapanalytics_csp[:script]};
     SCRIPT_SOURCES

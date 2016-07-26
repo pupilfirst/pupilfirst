@@ -160,7 +160,7 @@ class BatchApplicationController < ApplicationController
 
   # Returns batch application of current applicant.
   def current_application
-    @current_application ||= current_batch_applicant&.batch_applications.find_by(batch: current_batch)
+    @current_application ||= current_batch_applicant&.batch_applications&.find_by(batch: current_batch)
   end
 
   # Returns currently 'signed in' application founder.

@@ -1,7 +1,5 @@
 class BatchApplicationForm < Reform::Form
-  property :application_page_read, virtual: true, validates: { acceptance: true }
-  property :team_lead_consent, virtual: true, validates: { acceptance: true }
-  property :fees_consent, virtual: true, validates: { acceptance: true }
+  property :consent, virtual: true, validates: { acceptance: true }
 
   property :team_lead do
     property :name, validates: { presence: true, length: { maximum: 250 } }

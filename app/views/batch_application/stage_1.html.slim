@@ -38,9 +38,9 @@
             label: 'Number of cofounders (founders other than yourself)',
             collection: %w(2 3 4),
             as: :select,
-            include_blank: false
+            include_blank: 'Please select number of cofounders'
 
-          .text-xs-center.m-t-2
+          .text-xs-center.m-t-2 class="#{f.object.cofounder_count.blank? ? 'hidden-xs-up' : ''}"
             .paywith-instamojo
               div
                 h3.m-b-2

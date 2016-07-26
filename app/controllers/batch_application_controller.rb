@@ -33,11 +33,6 @@ class BatchApplicationController < ApplicationController
 
   # GET /apply/identify
   def identify
-    if current_batch_applicant(require_cookie: true).present?
-      redirect_to apply_continue_path
-      return
-    end
-
     @form = BatchApplicantSignInForm.new(BatchApplicant.new)
   end
 
@@ -49,6 +44,10 @@ class BatchApplicationController < ApplicationController
 
     if @form.validate(params[:batch_applicant_sign_in])
       @form.save
+
+      # Kick out session based login if a manual login is requested. This allows applicant to change signed-in ID.
+      session.delete :applicant_token
+
       redirect_to apply_sign_in_email_sent_path(batch_number: params[:batch_number])
     else
       render 'batch_application/identify'
@@ -164,16 +163,9 @@ class BatchApplicationController < ApplicationController
   end
 
   # Returns currently 'signed in' application founder.
-  def current_batch_applicant(require_cookie: false)
-    @current_batch_applicant = nil if require_cookie
-
+  def current_batch_applicant
     @current_batch_applicant ||= begin
-      token = if require_cookie
-        cookies[:applicant_token]
-      else
-        session[:applicant_token] || cookies[:applicant_token]
-      end
-
+      token = session[:applicant_token] || cookies[:applicant_token]
       BatchApplicant.find_by token: token
     end
   end

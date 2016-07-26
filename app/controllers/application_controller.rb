@@ -170,7 +170,7 @@ class ApplicationController < ActionController::Base
     <<~IMAGE_SOURCES.squish
       img-src
       'self' data: https://blog.sv.co http://www.startatsv.com https://sv-assets.sv.co https://secure.gravatar.com
-      https://uploaded-assets.sv.co http://keyreply.com
+      https://uploaded-assets.sv.co http://keyreply.com http://heapanalytics.com
       #{google_analytics_csp[:image]} #{inspectlet_csp[:image]} #{facebook_csp[:image]};
     IMAGE_SOURCES
   end
@@ -179,7 +179,7 @@ class ApplicationController < ActionController::Base
     <<~SCRIPT_SOURCES.squish
       script-src
       'self' 'unsafe-eval' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
-      http://www.startatsv.com https://sv-assets.sv.co http://keyreply.com
+      http://www.startatsv.com https://sv-assets.sv.co http://keyreply.com https://cdn.heapanalytics.com
       #{recaptcha_csp[:script]} #{google_analytics_csp[:script]} #{inspectlet_csp[:script]} #{facebook_csp[:script]};
     SCRIPT_SOURCES
   end

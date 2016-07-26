@@ -51,34 +51,37 @@ class BatchApplicationForm < Reform::Form
 
   def save
     BatchApplication.transaction do
-      team_lead = create_team_lead
-      application = create_application(team_lead)
-      application.batch_applicants << team_lead
+      applicant = update_or_create_team_lead
+      application = create_application(applicant)
+      application.batch_applicants << applicant
 
       # Send login email when all's done.
-      team_lead.send_sign_in_email
+      applicant.send_sign_in_email
 
       # Return the applicant
-      team_lead
+      applicant
     end
   end
 
-  def create_team_lead
-    BatchApplicant.create!(
-      email: team_lead.email,
+  def update_or_create_team_lead
+    applicant = BatchApplicant.where(email: team_lead.email).first_or_create!
+
+    applicant.update(
       name: team_lead.name,
       phone: team_lead.phone,
       reference: supplied_reference
     )
+
+    applicant
   end
 
-  def create_application(team_lead)
+  def create_application(applicant)
     BatchApplication.create!(
       batch: Batch.open_batch,
       application_stage: ApplicationStage.initial_stage,
       university_id: university_id,
       college: college,
-      team_lead_id: team_lead.id,
+      team_lead_id: applicant.id,
       cofounder_count: cofounder_count
     )
   end

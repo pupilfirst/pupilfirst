@@ -92,7 +92,7 @@ class BatchApplication < ActiveRecord::Base
 
     # Destroy payment if it exists.
     if payment.present?
-      payment.destroy!
+      payment.archive!
       reload
     end
 

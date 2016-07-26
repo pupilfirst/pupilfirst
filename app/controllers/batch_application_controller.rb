@@ -121,7 +121,7 @@ class BatchApplicationController < ApplicationController
 
     flash[:success] = 'Your previous application has been discarded.'
 
-    redirect_to apply_batch_path(batch_number: params[:batch_number], state: 'restart')
+    redirect_to apply_path
   end
 
   protected

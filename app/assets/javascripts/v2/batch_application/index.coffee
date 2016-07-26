@@ -78,4 +78,16 @@ $(document).on 'page:before-change', removeWaypoints
 setupSelect2Inputs = ->
   $('#batch_application_university_id').select2()
 
+toggleReferenceTextField = ->
+  if $('#batch_application_team_lead_attributes_reference').val() == 'Other (Please Specify)'
+    $('#batch_application_team_lead_attributes_reference_text').parent().parent().parent().removeClass('hidden-xs-up')
+  else
+    $('#batch_application_team_lead_attributes_reference_text').val('')
+    $('#batch_application_team_lead_attributes_reference_text').parent().parent().parent().addClass('hidden-xs-up')
+
+$(document).on 'page:change', ->
+  if $('#batch_application_team_lead_attributes_reference').length
+    toggleReferenceTextField()
+    $('#batch_application_team_lead_attributes_reference').change toggleReferenceTextField
+
 $(document).on 'page:change', setupSelect2Inputs

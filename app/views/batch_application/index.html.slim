@@ -70,7 +70,7 @@
                 label: 'How did you hear about us?',
                 required: false
 
-              .col-sm-offset-3
+              .col-sm-offset-3.hidden-xs-up
                 = t.input :reference_text, label: false, placeholder: 'Please Specify', required: false
 
             // TODO: University is actually a required field, but select2 v3 does not play nice with HTML5 validations. Try enabling this when upgrading to select2 v4.

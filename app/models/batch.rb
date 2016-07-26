@@ -26,7 +26,8 @@ class Batch < ActiveRecord::Base
   validates :theme, presence: true
   validates :batch_number, presence: true, numericality: true, uniqueness: true
   validates_presence_of :start_date, :end_date
-  validates :slack_channel, format: { with: /#[^A-Z\s.;!?]+/, message: 'must start with a # and not contain uppercase, spaces or periods' },
+  validates :slack_channel,
+    format: { with: /#[^A-Z\s.;!?]+/, message: 'must start with a # and not contain uppercase, spaces or periods' },
     length: { in: 2..22, message: 'channel name should be 1-21 characters' }, allow_nil: true
 
   validate :application_dates_changes_with_stage
@@ -99,8 +100,8 @@ class Batch < ActiveRecord::Base
   def self.open_batch
     if open_for_applications.any?
       open_for_applications.first
-    else
-      applications_ongoing.first if applications_ongoing.any?
+    elsif applications_ongoing.any?
+      applications_ongoing.first
     end
   end
 end

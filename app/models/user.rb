@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
 
   attr_accessor :referer
 
-  def send_login_email(template = :default)
+  def send_login_email
     regenerate_login_token
 
     # TODO: Send email with template.

@@ -85,30 +85,30 @@ class BatchApplicationController < ApplicationController
 
   # GET /apply/stage/:stage_number
   def ongoing
-    send "stage_#{applicant_stage_number}" rescue NoMethodError
+    try "stage_#{applicant_stage_number}"
     render "stage_#{applicant_stage_number}"
   end
 
   # POST /apply/stage/:stage_number/submit
   def submit
-    send "stage_#{applicant_stage_number}_submit" rescue NoMethodError
+    try "stage_#{applicant_stage_number}_submit"
   end
 
   # GET /apply/stage/:stage_number/complete
   def complete
-    send "stage_#{current_stage_number}_complete" rescue NoMethodError
+    try "stage_#{applicant_stage_number}_complete"
     render "stage_#{current_stage_number}_complete"
   end
 
   # GET /apply/stage/:stage_number/expired
   def expired
-    send "stage_#{applicant_stage_number}_expired" rescue NoMethodError
+    try "stage_#{applicant_stage_number}_expired"
     render "stage_#{applicant_stage_number}_expired"
   end
 
   # GET /apply/stage/:stage_number/rejected
   def rejected
-    send "stage_#{applicant_stage_number}_rejected" rescue NoMethodError
+    try "stage_#{applicant_stage_number}_rejected"
     render "stage_#{applicant_stage_number}_rejected"
   end
 
@@ -196,7 +196,7 @@ class BatchApplicationController < ApplicationController
 
   # Returns one of :application_pending, :ongoing, :expired, :rejected, :submitted to indicate which view should be rendered.
   #
-  # rubocop:disable Metrics/PerceivedComplexity, Metrics/MethodLength
+  # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
   def applicant_status
     if current_application.blank?
       :application_pending

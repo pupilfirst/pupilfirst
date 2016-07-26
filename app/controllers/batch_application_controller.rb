@@ -123,6 +123,64 @@ class BatchApplicationController < ApplicationController
     redirect_to apply_path
   end
 
+  ####
+  ## Public methods after this after called with 'try'.
+  ####
+
+  def stage_1
+    # A form which takes number of cofounders.
+    @form = ApplicationStageOneForm.new(current_application)
+  end
+
+  def stage_1_submit
+    # Save number of cofounders, and redirect to Instamojo.
+    @form = ApplicationStageOneForm.new(current_application)
+
+    if @form.validate(params[:application_stage_one])
+      payment = @form.save
+
+      if Rails.env.development?
+        render text: "Redirect to #{payment.long_url}"
+      else
+        redirect_to payment.long_url
+      end
+    else
+      render 'stage_1'
+    end
+  end
+
+  def stage_2
+    application_submission = ApplicationSubmission.new
+    @form = ApplicationStageTwoForm.new(application_submission)
+  end
+
+  def stage_2_submit
+    application_submission = ApplicationSubmission.new(
+      application_stage: current_stage,
+      batch_application: current_application
+    )
+
+    @form = ApplicationStageTwoForm.new(application_submission)
+
+    if @form.validate(params[:application_stage_two])
+      @form.save
+      redirect_to apply_batch_path(batch_number: params[:batch_number], state: 'stage_2_submitted')
+    else
+      render 'batch_application/stage_2'
+    end
+  end
+
+  def stage_4_submit
+    # TODO: Server-side error handling for stage 4 inputs.
+
+    # TODO: How to handle file uploads (if any for pre-selection)?
+    current_application.application_submissions.create!(
+      application_stage: current_stage
+    )
+
+    redirect_to apply_batch_path(batch_number: params[:batch_number], state: 'stage_4_submitted')
+  end
+
   protected
 
   # Returns currently active batch.
@@ -267,59 +325,5 @@ class BatchApplicationController < ApplicationController
 
   def sign_in_applicant_temporarily(applicant)
     session[:applicant_token] = applicant.token
-  end
-
-  def stage_1
-    # A form which takes number of cofounders.
-    @form = ApplicationStageOneForm.new(current_application)
-  end
-
-  def stage_1_submit
-    # Save number of cofounders, and redirect to Instamojo.
-    @form = ApplicationStageOneForm.new(current_application)
-
-    if @form.validate(params[:application_stage_one])
-      payment = @form.save
-
-      if Rails.env.development?
-        render text: "Redirect to #{payment.long_url}"
-      else
-        redirect_to payment.long_url
-      end
-    else
-      render 'stage_1'
-    end
-  end
-
-  def stage_2
-    application_submission = ApplicationSubmission.new
-    @form = ApplicationStageTwoForm.new(application_submission)
-  end
-
-  def stage_2_submit
-    application_submission = ApplicationSubmission.new(
-      application_stage: current_stage,
-      batch_application: current_application
-    )
-
-    @form = ApplicationStageTwoForm.new(application_submission)
-
-    if @form.validate(params[:application_stage_two])
-      @form.save
-      redirect_to apply_batch_path(batch_number: params[:batch_number], state: 'stage_2_submitted')
-    else
-      render 'batch_application/stage_2'
-    end
-  end
-
-  def stage_4_submit
-    # TODO: Server-side error handling for stage 4 inputs.
-
-    # TODO: How to handle file uploads (if any for pre-selection)?
-    current_application.application_submissions.create!(
-      application_stage: current_stage
-    )
-
-    redirect_to apply_batch_path(batch_number: params[:batch_number], state: 'stage_4_submitted')
   end
 end

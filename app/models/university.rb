@@ -20,4 +20,13 @@ class University < ActiveRecord::Base
       'Dadra and Nagar Haveli', 'Daman and Diu', 'Lakshadweep', 'Delhi', 'Puducherry'
     ]
   end
+
+  # Returns the university designated as 'Other not in the list'.
+  def self.other
+    if Rails.env.production?
+      find(8)
+    else
+      where("name LIKE '%Other%'").first
+    end
+  end
 end

@@ -1,43 +1,54 @@
 class BatchApplicationController < ApplicationController
-  before_action :ensure_applicant_is_signed_in, except: :index
+  before_action :ensure_applicant_is_signed_in, except: %w(index register)
   before_action :ensure_batch_active, except: :index
   before_action :ensure_accurate_stage_number, only: %w(form submit complete expired rejected)
+  before_action :set_instance_variables, only: %w(index register identify)
 
   layout 'application_v2'
 
   # GET /apply
   def index
     # TODO: Redirect to stage routes if applicant + application exists.
-    set_instance_variables
+
     @form = BatchApplicationForm.new(BatchApplication.new)
+    @form.prepopulate!(team_lead: BatchApplicant.new)
   end
 
   # POST /apply/register
   def register
+    batch_application = BatchApplication.new
+    batch_application.team_lead = BatchApplicant.new
+    @form = BatchApplicationForm.new(batch_application)
 
+    if @form.validate(params[:batch_application])
+      applicant = @form.save
+
+      sign_in_applicant_temporarily(applicant)
+
+      redirect_to apply_stage_path(stage_number: applicant_stage_number)
+    else
+      render 'index'
+    end
   end
 
   # GET /apply/identify
   def identify
-    check_token
-
-    if current_batch_applicant.present?
-      redirect_to apply_batch_path(batch_number: params[:batch_number], state: login_state)
+    if current_batch_applicant(require_cookie: true).present?
+      redirect_to apply_continue_path
       return
     end
 
-    @skip_container = true
-    @form = BatchApplicantSignupForm.new(BatchApplicant.new)
+    @form = BatchApplicantSignInForm.new(BatchApplicant.new)
   end
 
   # POST /apply/send_sign_in_email
   def send_sign_in_email
     @skip_container = true
 
-    @form = BatchApplicantSignupForm.new(BatchApplicant.new)
+    @form = BatchApplicantSignInForm.new(BatchApplicant.new)
 
-    if @form.validate(params[:batch_applicant_signup])
-      @form.save(params[:batch_number])
+    if @form.validate(params[:batch_applicant_sign_in])
+      @form.save
       redirect_to apply_sign_in_email_sent_path(batch_number: params[:batch_number])
     else
       flash.now[:error] = 'Something went wrong. Please try again.'
@@ -54,27 +65,30 @@ class BatchApplicationController < ApplicationController
   #
   # This is the link supplied in emails. Routes applicant to correct location.
   def continue
-    # TODO: Check token.
+    check_token
+
+    # TODO: Consider case where there is no ongoing batch.
 
     case applicant_status
       when :application_pending
         redirect_to apply_path
-      when :form
+      when :ongoing
         redirect_to apply_stage_path(stage_number: applicant_stage_number)
       when :expired
-        redirect_to apply_stage_expired(stage_number: applicant_stage_number)
+        redirect_to apply_stage_expired_path(stage_number: applicant_stage_number)
       when :rejected
-        redirect_to apply_stage_rejected(stage_number: applicant_stage_number)
+        redirect_to apply_stage_rejected_path(stage_number: applicant_stage_number)
       when :complete
-        redirect_to apply_stage_complete(stage_number: applicant_stage_number)
+        redirect_to apply_stage_complete_path(stage_number: current_stage_number)
       else
         raise "Unexpected applicant_status: #{applicant_status}"
     end
   end
 
   # GET /apply/stage/:stage_number
-  def form
-    send "stage_#{applicant_stage_number}_form" rescue NoMethodError
+  def ongoing
+    send "stage_#{applicant_stage_number}" rescue NoMethodError
+    render "stage_#{applicant_stage_number}"
   end
 
   # POST /apply/stage/:stage_number/submit
@@ -84,105 +98,23 @@ class BatchApplicationController < ApplicationController
 
   # GET /apply/stage/:stage_number/complete
   def complete
-    send "stage_#{applicant_stage_number}_complete" rescue NoMethodError
+    send "stage_#{current_stage_number}_complete" rescue NoMethodError
+    render "stage_#{current_stage_number}_complete"
   end
 
   # GET /apply/stage/:stage_number/expired
   def expired
     send "stage_#{applicant_stage_number}_expired" rescue NoMethodError
+    render "stage_#{applicant_stage_number}_expired"
   end
 
   # GET /apply/stage/:stage_number/rejected
   def rejected
     send "stage_#{applicant_stage_number}_rejected" rescue NoMethodError
+    render "stage_#{applicant_stage_number}_rejected"
   end
 
-  # GET /apply/:batch
-  #
-  # rubocop:disable Metrics/CyclomaticComplexity
-  def apply
-    set_instance_variables
-
-    case applicant_status
-      when :application_pending
-        prep_for_stage_1
-        render 'batch_application/stage_1'
-      when :application_expired
-        render 'batch_application/stage_1_expired'
-      when :payment_pending
-        render 'batch_application/stage_1_submitted'
-      when :expired
-        render "batch_application/stage_#{applicant_stage_number}_expired"
-      when :rejected
-        render "batch_application/stage_#{applicant_stage_number}_rejection"
-      when :submitted
-        render "batch_application/stage_#{current_stage_number}_submitted"
-      else
-        send "prep_for_stage_#{current_stage_number}"
-        render "batch_application/stage_#{current_stage_number}"
-    end
-  end
-
-  def prep_for_stage_1
-    batch_application = BatchApplication.new
-    @form = ApplicationStageOneForm.new(batch_application)
-    @form.prepopulate! team_lead: current_batch_applicant
-  end
-
-  def stage_1_submit
-    @skip_container = true
-    batch_application = BatchApplication.new(
-      team_lead: current_batch_applicant,
-      batch: current_batch,
-      application_stage: ApplicationStage.initial_stage
-    )
-
-    @form = ApplicationStageOneForm.new(batch_application)
-
-    if @form.validate(params[:application_stage_one])
-      @form.save
-      redirect_to apply_batch_path(batch_number: params[:batch_number], state: 'payment_pending')
-    else
-      render 'batch_application/stage_1'
-    end
-  end
-
-  def stage_2_form
-    application_submission = ApplicationSubmission.new
-    @form = ApplicationStageTwoForm.new(application_submission)
-  end
-
-  def stage_2_submit
-    application_submission = ApplicationSubmission.new(
-      application_stage: current_stage,
-      batch_application: current_application
-    )
-
-    @form = ApplicationStageTwoForm.new(application_submission)
-
-    if @form.validate(params[:application_stage_two])
-      @form.save
-      redirect_to apply_batch_path(batch_number: params[:batch_number], state: 'stage_2_submitted')
-    else
-      render 'batch_application/stage_2'
-    end
-  end
-
-  def submission_for_stage_4
-    # TODO: Server-side error handling for stage 4 inputs.
-
-    # TODO: How to handle file uploads (if any for pre-selection)?
-    current_application.application_submissions.create!(
-      application_stage: current_stage
-    )
-
-    redirect_to apply_batch_path(batch_number: params[:batch_number], state: 'stage_4_submitted')
-  end
-
-  def prep_for_stage_5
-  end
-
-  # POST /apply/restart/:batch
+  # POST /apply/restart
   def restart
     # Only applications in stage 1 can restart.
     raise_not_found if applicant_stage_number != 1
@@ -198,14 +130,7 @@ class BatchApplicationController < ApplicationController
   # Returns currently active batch.
   def current_batch
     @current_batch ||= begin
-      open = Batch.open_for_applications
-
-      if open.any?
-        open.first
-      else
-        ongoing = Batch.applications_ongoing
-        ongoing.first if ongoing.any?
-      end
+      Batch.open_batch
     end
   end
 
@@ -239,6 +164,22 @@ class BatchApplicationController < ApplicationController
     @current_application ||= current_batch_applicant&.batch_applications.find_by(batch: current_batch)
   end
 
+  # Returns currently 'signed in' application founder.
+  def current_batch_applicant(require_cookie: false)
+    @current_batch_applicant = nil if require_cookie
+
+    @current_batch_applicant ||= begin
+      token = if require_cookie
+        cookies[:applicant_token]
+      else
+        cookies[:applicant_token] || session[:applicant_token]
+      end
+
+      BatchApplicant.find_by token: token
+    end
+  end
+
+  helper_method :current_batch_applicant
   helper_method :current_batch
   helper_method :current_stage
   helper_method :current_application
@@ -262,48 +203,27 @@ class BatchApplicationController < ApplicationController
     end
   end
 
-  # Returns one of :application_pending, :application_expired, :expired, :rejected, :submitted, or :ongoing, to indicate
-  # which view should be rendered.
-  #
-  # Hari: I'm disabling complexity cops here, because the point of this method is to put the complex state logic in
-  # one place. It used to be scattered across many methods, but that became unmanageable, and I had to bring it
-  # together to make sense of it all.
+  # Returns one of :application_pending, :ongoing, :expired, :rejected, :submitted to indicate which view should be rendered.
   #
   # rubocop:disable Metrics/PerceivedComplexity, Metrics/MethodLength
   def applicant_status
     if current_application.blank?
-      # There's no application...
-      if current_stage_number == 1 || (current_stage_number == 2 && !stage_expired?)
-        # ... and current stage is 1, or un-expired 2, then applications are still accepted.
-        :application_pending
-      else
-        # ... but batch has moved to a stage where application is not possible.
-        :application_expired
-      end
+      :application_pending
     elsif applicant_stage_number == 1
-      # There is an application, and applicant is still in stage 1...
       if current_stage_number == 1 || (current_stage_number == 2 && !stage_expired?)
-        # ... and current stage is 1, or un-expired 2, then applications are still accepted.
-        :payment_pending
+        :ongoing
       else
-        # ... but batch has moved to a stage where application is not possible.
-        :application_expired
+        :expired
       end
     elsif applicant_stage_number == current_stage_number
-      # There is an application which is on batch's stage...
       if applicant_has_submitted?
-        # ...and it has been submitted.
-        :submitted
+        :complete
       else
-        # ... and if stage's deadline has passed, then it's expired, otherwise ongoing.
         stage_expired? ? :expired : :ongoing
       end
     elsif applicant_stage_number > current_stage_number
-      # The application has been selected for the next stage.
-      :submitted
+      :complete
     else
-      # Application has been left behind. If a submission exists for application's stage, then it was rejected,
-      # otherwise it expired when the stage's deadline passed.
       applicant_has_submitted? ? :rejected : :expired
     end
   end
@@ -328,7 +248,7 @@ class BatchApplicationController < ApplicationController
     applicant = BatchApplicant.find_using_token params[:token]
 
     if applicant.blank?
-      flash.now[:error] = "That token is invalid. It's likely that an hour has passed since it was generated."
+      flash[:error] = 'That token is invalid.'
       return
     end
 
@@ -350,6 +270,65 @@ class BatchApplicationController < ApplicationController
   end
 
   def ensure_accurate_stage_number
-    raise_not_found if applicant_stage_number != params[:stage_number]
+    expected_stage_number = applicant_status == :complete ? applicant_stage_number - 1 : applicant_stage_number
+    raise_not_found if params[:stage_number].to_i != expected_stage_number
+  end
+
+  def sign_in_applicant_temporarily(applicant)
+    session[:applicant_token] = applicant.token
+  end
+
+  def stage_1
+    # A form which takes number of cofounders.
+    @form = ApplicationStageOneForm.new(current_application)
+  end
+
+  def stage_1_submit
+    # Save number of cofounders, and redirect to Instamojo.
+    @form = ApplicationStageOneForm.new(current_application)
+
+    if @form.validate(params[:application_stage_one])
+      payment = @form.save
+
+      if Rails.env.development?
+        render text: "Redirect to #{payment.long_url}"
+      else
+        redirect_to payment.long_url
+      end
+    else
+      render 'stage_1'
+    end
+  end
+
+  def stage_2
+    application_submission = ApplicationSubmission.new
+    @form = ApplicationStageTwoForm.new(application_submission)
+  end
+
+  def stage_2_submit
+    application_submission = ApplicationSubmission.new(
+      application_stage: current_stage,
+      batch_application: current_application
+    )
+
+    @form = ApplicationStageTwoForm.new(application_submission)
+
+    if @form.validate(params[:application_stage_two])
+      @form.save
+      redirect_to apply_batch_path(batch_number: params[:batch_number], state: 'stage_2_submitted')
+    else
+      render 'batch_application/stage_2'
+    end
+  end
+
+  def stage_4_submit
+    # TODO: Server-side error handling for stage 4 inputs.
+
+    # TODO: How to handle file uploads (if any for pre-selection)?
+    current_application.application_submissions.create!(
+      application_stage: current_stage
+    )
+
+    redirect_to apply_batch_path(batch_number: params[:batch_number], state: 'stage_4_submitted')
   end
 end

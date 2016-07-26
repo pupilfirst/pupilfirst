@@ -1,10 +1,107 @@
-/ The is the /apply index page. This is the general content page asking for founders to apply for admission to SV.CO.
-  It should list open batches, if any. If not, it should list the date on which the next batch is expected to begin its
-  admission process.
-
 - content_for :head do
   title SV.CO Apply Now
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
+
+.container
+  == render('applications_close_soon', batch: current_batch) if current_batch.applications_close_soon?
+
+  div.m-t-3.m-b-3
+    = simple_form_for @form,
+      url: apply_register_path,
+      html: { class: 'form-horizontal' },
+      wrapper: :horizontal_form,
+      wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes } do |f|
+
+      - if f.object.errors.present?
+        .alert.alert-warning.alert-dismissable.fade.in role='alert'
+          button.close type="button" data-dismiss="alert" aria-label="Close"
+            span aria-hidden="true" &times;
+
+          strong There were problems with your submission.
+          | &nbsp;Please check all fields and try again.
+
+          - if f.object.errors[:base].present?
+            ul.m-t-1
+              - f.object.errors[:base].each do |error_message|
+                li #{error_message}
+
+
+      .container-md-center.content-box.m-b-2
+        h5.form-section-title.text-uppercase.font-semibold.m-b-2
+          | Checklist
+        .simple-form-container
+          = f.input :application_page_read,
+            as: :boolean,
+            inline_label: t('batch_application.stage_1.application_page_read_html'),
+            required: true
+
+          = f.input :team_lead_consent,
+            as: :boolean,
+            inline_label: t('batch_application.stage_1.team_lead_consent'),
+            required: true
+
+          = f.input :fees_consent,
+            as: :boolean,
+            inline_label: t('batch_application.stage_1.fees_consent'),
+            required: true
+
+      .container-md-center.content-box.m-b-2
+        h5.form-section-title.text-uppercase.font-semibold.m-b-2
+          | Team Lead's Details (You are the team lead)
+        .simple-form-container
+          .row
+            = f.simple_fields_for :team_lead do |t|
+              = t.input :name, label: 'Full name of Team Lead', input_html: { maxlength: 250 }
+
+              = t.input :email,
+                label: "Team Lead's Email Address",
+                input_html: { maxlength: 250, type: 'email' }
+
+              = t.input :email_confirmation,
+                label: 'Please repeat your Email Address',
+                input_html: { maxlength: 250, type: 'email' }
+
+              = t.input :phone,
+                label: 'Mobile number',
+                input_html: { maxlength: 10, type: 'tel', pattern: '[0-9]{10}' },
+                placeholder: '10-digit mobile phone number'
+
+              = t.input :reference,
+                collection: proc { BatchApplicant.reference_sources },
+                label: 'How did you hear about us?',
+                required: false
+
+              .col-sm-offset-3
+                = t.input :reference_text, label: false, placeholder: 'Please Specify', required: false
+
+            // TODO: University is actually a required field, but select2 v3 does not play nice with HTML5 validations. Try enabling this when upgrading to select2 v4.
+            = f.input :university_id,
+              collection: proc { University.grouped_by_location },
+              as: :grouped_select,
+              group_method: :last,
+              value_method: :first,
+              label_method: :last,
+              label: 'University',
+              include_blank: false,
+              required: false
+
+            = f.input :college, input_html: { maxlength: 250 }
+
+      .container-md-center.content-box.m-b-2
+        h5.form-section-title.text-uppercase.font-semibold.m-b-2
+          | Co-founders (founders other than yourself)
+        .simple-form-container
+          .row
+            = f.input :cofounder_count,
+              as: :select,
+              collection: [2, 3, 4],
+              include_blank: "I'm not sure",
+              label: 'Number of co-founders',
+              required: false
+
+            .col-sm-offset-3
+              .simple-form-submit
+                = f.submit 'Submit Application', class: 'btn btn-primary btn-md text-uppercase'
 
 .apply-illustration
   .container
@@ -26,7 +123,6 @@
           - else
             button.btn.btn-primary.btn-md.text-uppercase disabled="true"
               | Not accepting new applications
-      = link_to 'take a Tour', tour_path, class:(@batches_open.present? ? 'btn-secondary btn btn-md text-uppercase' : 'btn-primary btn btn-md text-uppercase')
 
 .graduated-slide
   .container-fluid
@@ -280,7 +376,6 @@
                 | Ad&ndash;hoc Help Wanted Requests
               p
                 | Every startup is different, so we help founders out with ad&ndash;hoc requests. This could be things like getting in touch with a great investor or help with vetting a client agreement.
-        = link_to 'take a Tour', tour_path, class: 'btn btn-primary btn-md text-uppercase tour-link'
 .program-partners
   .container
     h3.text-xs-center.content-head
@@ -533,8 +628,6 @@
                 ' For this batch, we’ve calibrated the fee so that it’s similar
                 ' to a one-semester fee that a lot of private engineering colleges
                 ' ask for. For the same fee, you get a once-in-a-lifetime opportunity.
-                ' You can #{link_to 'take the tour', tour_path} or listen to
-                ' our previous founders if you are still not convinced.
             li
               h5
                 | If I do not find the program satisfactory, can I get a refund?
@@ -577,8 +670,7 @@
                 ' batch coordinator and a team of faculty. Teams will be guided
                 ' through three stages of creating a great product: from picking
                 ' an idea, to building a great prototype, and finally showing
-                ' it to real customers for feedback. To get an idea of the program
-                | from application to graduation, #{link_to 'take the tour', tour_path}.
+                ' it to real customers for feedback.
             li
               h5
                 | What do you mean by 5 years of graduation support?
@@ -688,8 +780,6 @@
 
       .text-xs-center
         = link_to 'Start Application', apply_batch_path(batch: batch.batch_number, state: 'start'), class: 'btn btn-primary btn-md text-uppercase', id: 'start-application'
-        a.btn.btn-md.text-uppercase.btn-secondary href=tour_path
-          | or Take a Tour
 
 #watchIntroVideo.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
@@ -804,9 +894,6 @@
           li
             ' The Program Fee is ₹37,500 per founder. Since SV.CO accepts between three and five founders in a team,
             | you pay between ₹1,12,500 and ₹1,87,500 if you are accepted.
-          li
-            ' For the benefits you get from the program, visit the #{link_to 'main apply page', apply_index_path} and
-            | the #{link_to 'tour page', tour_path}.
           li
             ' All costs of the Silicon Valley visit for one founder, including travel (economy flight tickets tickets) and accomodation (shared) is included in the Program Fee.
           li

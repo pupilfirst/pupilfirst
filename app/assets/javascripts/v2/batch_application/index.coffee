@@ -70,5 +70,12 @@ $(document).on 'page:change', setupGraduationCarousel
 $(document).on 'page:change', avoidwidowsTypography
 $(document).on 'page:change', stopVideosOnModalClose
 $(document).on 'page:change', readmoreFAQ
-$(document).on 'page:change', stickyApplyButton
+#$(document).on 'page:change', stickyApplyButton
 $(document).on 'page:before-change', removeWaypoints
+
+# !!! NEW STUFF !!!
+
+setupSelect2Inputs = ->
+  $('#batch_application_university_id').select2()
+
+$(document).on 'page:change', setupSelect2Inputs

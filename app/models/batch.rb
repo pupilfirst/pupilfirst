@@ -27,7 +27,7 @@ class Batch < ActiveRecord::Base
   validates :batch_number, presence: true, numericality: true, uniqueness: true
   validates_presence_of :start_date, :end_date
   validates :slack_channel, format: { with: /#[^A-Z\s.;!?]+/, message: 'must start with a # and not contain uppercase, spaces or periods' },
-                            length: { in: 2..22, message: 'channel name should be 1-21 characters' }, allow_nil: true
+    length: { in: 2..22, message: 'channel name should be 1-21 characters' }, allow_nil: true
 
   validate :application_dates_changes_with_stage
 
@@ -93,5 +93,14 @@ class Batch < ActiveRecord::Base
     return false if application_stage&.number != 2
     return false if application_stage_deadline > 7.days.from_now
     true
+  end
+
+  # Currently 'open' batch - the one which has an application process ongoing.
+  def self.open_batch
+    if open_for_applications.any?
+      open_for_applications.first
+    else
+      applications_ongoing.first if applications_ongoing.any?
+    end
   end
 end

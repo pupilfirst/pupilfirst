@@ -1,8 +1,7 @@
 class BatchApplicantMailer < ApplicationMailer
-  def sign_in(email, token, batch_number)
-    @token = token
-    @batch_number = batch_number
-    mail(to: email, subject: 'Apply to SV.CO')
+  def sign_in(team_lead)
+    @team_lead = team_lead
+    mail(to: team_lead.email, subject: 'Continue application at SV.CO')
   end
 
   def application_progress(batch, team_lead)

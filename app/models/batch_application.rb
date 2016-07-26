@@ -8,6 +8,7 @@ class BatchApplication < ActiveRecord::Base
   belongs_to :team_lead, class_name: 'BatchApplicant'
   belongs_to :university
   has_one :payment, dependent: :restrict_with_error
+  has_many :archived_payments, class_name: 'Payment', foreign_key: 'original_batch_application_id'
 
   scope :selected, -> { joins(:application_stage).where(application_stages: { final_stage: true }) }
   scope :started_application, -> { where.not(id: Payment.select(:batch_application_id).distinct) }
@@ -18,8 +19,6 @@ class BatchApplication < ActiveRecord::Base
   validates :application_stage_id, presence: true
   validates :university_id, presence: true
   validates :college, presence: true
-  validates :state, presence: true
-  validates :team_achievement, presence: true
 
   # If a team lead is present (should be), display his name and batch number as title, otherwise use this entry's ID.
   def display_name
@@ -56,7 +55,8 @@ class BatchApplication < ActiveRecord::Base
 
   # Fee amount, calculated from unpaid founders
   def fee
-    batch_applicants.count * BatchApplicant::APPLICATION_FEE
+    return if cofounder_count.blank?
+    (cofounder_count + 1) * BatchApplicant::APPLICATION_FEE
   end
 
   # Batch application is paid depending on its payment request status.

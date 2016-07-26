@@ -1,7 +1,6 @@
 class Payment < ActiveRecord::Base
   belongs_to :batch_application
-
-  validates :batch_application_id, presence: true
+  belongs_to :original_batch_application, class_name: 'BatchApplication'
 
   STATUS_REQUESTED = -'requested'
   STATUS_PAID = -'paid'
@@ -12,6 +11,13 @@ class Payment < ActiveRecord::Base
 
   def self.payment_requested_statuses
     [Instamojo::PAYMENT_REQUEST_STATUS_PENDING, Instamojo::PAYMENT_REQUEST_STATUS_SENT]
+  end
+
+  validate :must_have_batch_application
+
+  def must_have_batch_application
+    return if batch_application_id.present? || original_batch_application_id.present?
+    errors[:base] << 'one of batch_application_id or original_batch_application_id must be present'
   end
 
   # Before an payment entry can be created, a request must be placed with Instamojo.
@@ -87,7 +93,14 @@ class Payment < ActiveRecord::Base
     # Log payment time, if unrecorded.
     update!(paid_at: Time.now) if paid_at.blank?
 
-    # Let the batch application take care of its stuff.
-    batch_application.peform_post_payment_tasks!
+    # Let the batch application (if still linked) take care of its stuff.
+    batch_application&.peform_post_payment_tasks!
+  end
+
+  # Remove direct relation from application to payment and store the relationship as 'original batch application'
+  def archive!
+    self.original_batch_application_id = batch_application_id
+    self.batch_application_id = nil
+    save!
   end
 end

@@ -164,6 +164,7 @@ ActiveAdmin.register BatchApplication do
         batch_application.team_lead.phone
       end
 
+      row :cofounder_count
       row :cofounders do
         ul do
           batch_application.cofounders.each do |applicant|
@@ -181,8 +182,6 @@ ActiveAdmin.register BatchApplication do
       row :application_stage
       row :university
       row :college
-      row :state
-      row :team_achievement
     end
 
     panel 'Technical details' do

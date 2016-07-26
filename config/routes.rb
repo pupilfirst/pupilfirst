@@ -98,9 +98,10 @@ Svapp::Application.routes.draw do
     post 'send_sign_in_email'
     get 'sign_in_email_sent'
     get 'continue'
+    post 'restart'
 
     scope 'stage/:stage_number', as: 'stage' do
-      get '', action: 'form'
+      get '', action: 'ongoing'
       post 'submit'
       get 'complete'
       get 'expired'
@@ -112,7 +113,6 @@ Svapp::Application.routes.draw do
 
   # Redirect + webhook from Instamojo
   scope 'instamojo', as: 'instamojo', controller: 'instamojo' do
-    post 'initiate_payment'
     get 'redirect'
     post 'webhook'
   end

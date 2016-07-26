@@ -1,22 +1,22 @@
 = content_for :heading
-  | Apply to SV.CO
+  | Continue application at SV.CO
 
 = content_for :salutation
-  | Hello,
+  | Hello #{@team_lead.name},
 
 = content_for :body
   p
-    ' Please use the following link to identify yourself for the application process on SV.CO. You will be redirected to
-    | the page where you can continue the application process.
+    ' Please use the following link to continue the application process at SV.CO. This link will not expire, so please
+    ' keep it private.
 
   p
-    ' #{link_to 'Click here', apply_identify_url(batch: @batch_number, token: @token)} to confirm your identity.
+    ' #{link_to 'Click here', apply_continue_url(token: @team_lead.token)} to continue application.
 
   p
     ' If you're unable to click on the link above, then please copy and paste the following link into your browser's
     | address bar:
 
-  p.monospace = apply_identify_url(batch: @batch_number, token: @token)
+  p.monospace = apply_continue_url(token: @team_lead.token)
 
   p
     ' Please note that the above URL is private and should not be shared with others. Reach out to us at

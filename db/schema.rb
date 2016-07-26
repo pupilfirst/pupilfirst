@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160721091513) do
+ActiveRecord::Schema.define(version: 20160726113629) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,9 +120,9 @@ ActiveRecord::Schema.define(version: 20160721091513) do
     t.string   "token"
     t.datetime "sign_in_email_sent_at"
     t.string   "reference"
+    t.datetime "last_sign_in_at"
     t.string   "college"
     t.text     "notes"
-    t.datetime "last_sign_in_at"
   end
 
   add_index "batch_applicants", ["token"], name: "index_batch_applicants_on_token", using: :btree
@@ -145,6 +145,7 @@ ActiveRecord::Schema.define(version: 20160721091513) do
     t.integer  "team_lead_id"
     t.string   "college"
     t.string   "state"
+    t.integer  "cofounder_count"
   end
 
   add_index "batch_applications", ["application_stage_id"], name: "index_batch_applications_on_application_stage_id", using: :btree
@@ -378,9 +379,11 @@ ActiveRecord::Schema.define(version: 20160721091513) do
     t.datetime "updated_at",                                               null: false
     t.datetime "webhook_received_at"
     t.datetime "paid_at"
+    t.integer  "original_batch_application_id"
   end
 
   add_index "payments", ["batch_application_id"], name: "index_payments_on_batch_application_id", using: :btree
+  add_index "payments", ["original_batch_application_id"], name: "index_payments_on_original_batch_application_id", using: :btree
 
   create_table "platform_feedback", force: :cascade do |t|
     t.string   "feedback_type"

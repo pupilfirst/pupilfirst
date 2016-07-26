@@ -1,6 +1,3 @@
-/ Stage one of the application process opens the batch up to applications from the public. It should supply some
-  information about the batch,
-
 - content_for :head do
   title SV.CO Apply Now
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
@@ -8,148 +5,61 @@
 .secondary-banner.application-stages-banner
   .container
     .application-stages-head.text-xs-center
-      h1
-        | Applications open for
-        span
-          | &nbsp;#{current_batch.name} batch!
-      h4.center-block
-        ' The application process for this batch has started.
-
+      h1 Application Fee
+      h4.center-block Payment pending
 .container
   == render('applications_close_soon', batch: current_batch) if current_batch.applications_close_soon?
-  div.m-t-3.m-b-3
-    = simple_form_for @form,
-      url: apply_submit_path(batch: params[:batch], state: 'application_submit'),
-      html: { class: 'form-horizontal' },
-      wrapper: :horizontal_form,
-      wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes} do |f|
 
-      - if f.object.errors.present?
-        .alert.alert-warning.alert-dismissable.fade.in role='alert'
-          button.close type="button" data-dismiss="alert" aria-label="Close"
-            span aria-hidden="true" &times;
+  .container-md-center.content-box.m-t-3.m-b-3.apply-submitted
+    h3.text-xs-center
+      ' Your application data has been stored.
+      br
+      ' You now need to
+      span.brand-secondary.font-semibold pay the application fee.
 
-          strong There were problems with your submission.
-          | &nbsp;Please check all fields and try again.
+    - if current_application.payment.present?
+      .alert.alert-warning.m-t-1
+        i.fa.fa-warning
+        ' &nbsp;It looks like you've attempted to pay at least once before, but didn't complete the process. Note that it
+        ' might take a few minutes for the payment status to update, if you experienced network issues after completing
+        ' the payment. Please contact us at #{mail_to 'help@sv.co'} if you're experiencing any issue.
 
-          - if f.object.errors[:base].present?
-            ul.m-t-1
-              - f.object.errors[:base].each do |error_message|
-                li #{error_message}
+    .row
+      .col-md-12
+        #applicant-fee-data.hidden-xs-up data-applicant-fee=BatchApplicant::APPLICATION_FEE
 
-      .container-md-center.content-box.m-b-2
-        h5.form-section-title.text-uppercase.font-semibold.m-b-2
-          | Hello there!
-        .simple-form-container
-          | Thanks for applying. These are a few things to keep in mind:
+        = simple_form_for @form,
+          url: apply_stage_submit_path(stage_number: 1),
+          method: :post,
+          html: { class: 'form-horizontal' },
+          wrapper: :horizontal_form do |f|
 
-          ul.m-t-1
-            li
-              ' SV.CO accepts applications from a team of 3&ndash;5 founders, so if you do not have co-founders, you are
-              | not eligible to apply.
-            li
-              ' The application process will be in three stages: first, you apply and pay the fees. Second, you complete
-              ' a <em>Coding and Video Task</em>, and third, selected teams will move on to a final <em>Personal
-              | Interview</em> stage.
-            li
-              ' If at any stage of the process, you have any doubts or you need help, please write to
-              | #{mail_to 'help@sv.co'}.
+          = f.input :cofounder_count,
+            label: 'Number of cofounders (founders other than yourself)',
+            collection: %w(2 3 4),
+            as: :select,
+            include_blank: false
 
+          .text-xs-center.m-t-2
+            .paywith-instamojo
+              div
+                h3.m-b-2
+                  ' You need to pay
+                  span.brand-secondary.font-semibold
+                    ' Rs. #{current_application.fee},
+                  br
+                  | to proceed to the next stage.
 
-      .container-md-center.content-box.m-b-2
-        h5.form-section-title.text-uppercase.font-semibold.m-b-2
-          | Checklist
-        .simple-form-container
-          = f.input :application_page_read,
-            as: :boolean,
-            inline_label: t('batch_application.stage_1.application_page_read_html')
+                = f.submit payment_button_message(current_application), class: 'btn btn-primary btn-md text-uppercase'
+    hr.m-t-2
 
-          = f.input :team_lead_consent,
-            as: :boolean,
-            inline_label: t('batch_application.stage_1.team_lead_consent')
+    h3.text-xs-center.m-t-2
+    ' Made mistakes in your application? That's okay!
+    br
+    ' You can
+    span.brand-secondary.font-semibold restart the application process.
 
-          = f.input :fees_consent,
-            as: :boolean,
-            inline_label: t('batch_application.stage_1.fees_consent')
-      .container-md-center.content-box.m-b-2
-        h5.form-section-title.text-uppercase.font-semibold.m-b-2
-          | Team Lead's Details (You are the team lead)
-        .simple-form-container
-          .row
-            // TODO: University is actually a required field, but select2 v3 does not play nice with HTML5 validations. Try enabling this when upgrading to select2 v4.
-            = f.input :university_id,
-              collection: proc { University.grouped_by_location },
-              as: :grouped_select,
-              group_method: :last,
-              value_method: :first,
-              label_method: :last,
-              label: 'University',
-              include_blank: 'Please pick your university',
-              required: false
+    .text-xs-center.m-t-2
+    = button_to 'Revoke and Rewrite Application', apply_restart_path, class: 'btn btn-secondary btn-md text-uppercase', data: { confirm: 'This will delete the saved application. Continue?' }
 
-            = f.input :college, label: "Team Lead's College", input_html: { maxlength: 250 }
-            = f.input :state,
-              collection: proc { University.valid_state_names },
-              include_blank: 'Please pick your state',
-              required: true
-
-            = f.simple_fields_for :team_lead do |t|
-              = t.input :name, label: 'Full name of Team Lead', input_html: { maxlength: 250 }
-
-              = t.input :email,
-                label: "Team Lead's Email ID",
-                input_html: { disabled: true }
-
-              = t.input :phone,
-                label: 'Mobile number',
-                input_html: { maxlength: 10, type: 'tel', pattern: '[0-9]{10}' },
-                placeholder: '10-digit mobile phone number'
-
-              = t.input :role,
-                label: "Team Lead's <a href='http://playbook.sv.co/4-startup-roles.html' target='_blank'>Role</a>".html_safe,
-                as: :select,
-                collection: proc { Founder.valid_roles },
-                include_blank: false,
-                label_method: proc { |role| t("role.#{role}") }
-
-              = t.input :gender,
-                label: "Team Lead's gender",
-                collection: Founder.valid_gender_values,
-                as: :radio_buttons
-      .container-md-center.content-box.m-b-2
-        h5.form-section-title.text-uppercase.font-semibold.m-b-2
-          | Co-founders (founders other than yourself)
-        .simple-form-container
-          .row
-            = f.input :cofounder_count,
-              as: :radio_buttons,
-              collection: [2, 3, 4],
-              label: 'Number of co-founders'
-
-            = f.simple_fields_for :cofounders do |c|
-              .cofounder-section-form.m-t-3
-                span.cofounder-title.font-semibold
-                  | Co-founder #{c.index + 1}
-                = c.input :name, input_html: { maxlength: 250 }
-                = c.input :email, input_html: { maxlength: 250 }
-
-                = c.input :role,
-                  as: :select,
-                  collection: proc { Founder.valid_roles },
-                  include_blank: false,
-                  label_method: proc { |role| t("role.#{role}") },
-                  input_html: { maxlength: 250 }
-
-      .container-md-center.content-box
-        h5.form-section-title.text-uppercase.font-semibold.m-b-2
-          | Achievement
-        .simple-form-container
-          .row
-            = f.input :team_achievement,
-              as: :text,
-              placeholder: 'Mention an achievement you are most proud of as a team',
-              label: 'Achievement',
-              input_html: { maxlength: 1000 }
-            .col-sm-offset-3
-              .simple-form-submit
-                = f.submit 'Submit Application', class: 'btn btn-primary btn-md text-uppercase'
+script data-align="right" data-overlay="false" id="keyreply-script" src="//keyreply.com/chat/widget.js" data-color="#32B475" data-apps="JTdCJTIydHdpdHRlciUyMjolMjJAU1Zkb3RDTyUyMiwlMjJmYWNlYm9vayUyMjolMjIxMDg2NDYxNzkyNTkzNzMlMjIsJTIyZW1haWwlMjI6JTIyaGVscEBzdi5jbyUyMiU3RA=="

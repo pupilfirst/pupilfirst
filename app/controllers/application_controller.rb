@@ -63,19 +63,10 @@ class ApplicationController < ActionController::Base
     cookies.signed[key]
   end
 
-  # Returns currently 'signed in' application founder.
-  def current_batch_applicant
-    @current_batch_applicant ||= begin
-      return if cookies[:applicant_token].blank?
-      BatchApplicant.find_by token: cookies[:applicant_token]
-    end
-  end
-
   def feature_active?(feature)
     Rails.env.development? || Rails.env.test? || Feature.active?(feature, current_founder)
   end
 
-  helper_method :current_batch_applicant
   helper_method :feature_active?
 
   def configure_permitted_parameters

@@ -99,8 +99,8 @@ class ApplicationController < ActionController::Base
       image_sources,
       script_sources,
       "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://sv-assets.sv.co http://keyreply.com https://heapanalytics.com;",
-      "connect-src 'self' #{inspectlet_csp[:connect]};",
-      "font-src 'self' fonts.gstatic.com https://sv-assets.sv.co;",
+      "connect-src 'self' #{inspectlet_csp[:connect]} #{heapanalytics_csp[:connect]};",
+      "font-src 'self' fonts.gstatic.com https://sv-assets.sv.co #{heapanalytics_csp[:font]};",
       'child-src https://www.youtube.com;',
       frame_sources,
       "media-src 'self' #{resource_csp[:media]};"
@@ -160,7 +160,9 @@ class ApplicationController < ActionController::Base
   def heapanalytics_csp
     {
       script: 'https://cdn.heapanalytics.com https://heapanalytics.com',
-      image: 'http://heapanalytics.com'
+      image: 'http://heapanalytics.com',
+      connect: 'https://heapanalytics.com',
+      font: 'https://heapanalytics.com'
     }
   end
 

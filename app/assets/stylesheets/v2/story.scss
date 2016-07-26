@@ -1,31 +1,6 @@
-.transparency-banner {
-  height: 260px;
-  background: $theme-dark-green asset-url("transparency/transparency-banner.png") no-repeat bottom center;
-  background-size: cover;
-  position: relative;
-
-  .page-header {
-    color: white;
-    display: inline-block;
-    margin-top: 0;
-    font-size: 42px;
-    letter-spacing: 0.04em;
-  }
-  .banner-text {
-    max-width: 600px;
-    position: absolute;
-    text-align: left;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-  p.transparency-introduction {
-    margin: 0;
-    font-weight: 300;
-    font-size: 15px;
-    line-height: 25px;
-    color: white;
-    letter-spacing: 0.04em;
-  }
+.story-bg {
+  background: asset-url("story/story-illustration.svg") no-repeat center center;
+  height: 160px;
 }
 .document-section {
   padding-bottom: 30px;
@@ -55,10 +30,14 @@
     background-color: white;
     border: 1px solid #ededed;
     border-radius: 5px;
-    margin: 30px 0;
     padding: 0 15px;
-    background-image: asset-url("transparency/transparency-bg.png");
-    background-repeat: repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include media-breakpoint-down(sm) {
+      display: block;
+    }
   }
   #transparency-intiative {
     padding-top: 30px;
@@ -75,7 +54,6 @@
       border: 1px solid #ededed;
       border-radius: 5px;
       padding: 20px 0;
-      margin-bottom: 30px;
       position: relative;
 
       h3 {
@@ -114,7 +92,7 @@
             margin-top: 2px;
             color: #389ccc;
           }
-          @media (max-width: $screen-xs-max) {
+          @include media-breakpoint-down(xs) {
             margin-left: 30px;
           }
         }
@@ -135,18 +113,18 @@
 
           &.impact-report-link {
             background-color: #936a79;
-            background-image: asset-url("transparency/imapct-report-bg.png");
+            background-image: asset-url("story/imapct-report-bg.png");
             background-size: cover;
             box-shadow: inset -1px 0 0 0 white;
 
-            @media (max-width: $screen-xs-max) {
+            @include media-breakpoint-down(xs) {
               box-shadow: none;
               border-bottom: 1px solid white;
             }
           }
           &.sv-handbook-link {
             background-color: #254582;
-            background-image: asset-url("transparency/sv-handbook-bg.png");
+            background-image: asset-url("story/sv-handbook-bg.png");
             background-size: cover;
           }
           &:hover, &:focus {
@@ -171,16 +149,17 @@
         }
         h4 {
           margin: 0;
+          color: white;
           font-size: 40px;
           line-height: 40px;
 
-          @media (max-width: $screen-md-max) {
+          @include media-breakpoint-down(md) {
             font-size: 32px;
           }
         }
       }
       .section-bg {
-        background-image: asset-url("transparency/transparency-sprite-bg.png");
+        background-image: asset-url("story/transparency-sprite-bg.png");
         background-repeat: no-repeat;
         background-position: right top;
 
@@ -208,7 +187,7 @@
         &#recognition-certificate {
           background-position: right -1540px;
         }
-        @media (max-width: $screen-xs-max) {
+        @include media-breakpoint-down(xs) {
           background-image: none;
         }
       }
@@ -330,32 +309,6 @@
   width: 20px;
   height: 20px;
   display: inline-block;
-  background-image: asset-url("transparency/circle-arrow.png");
+  background-image: asset-url("story/circle-arrow.png");
   background-repeat: no-repeat;
-}
-
-// temporary class, to be removed when page is updated to use custom theme
-.download-book-btn {
-  border-radius: 2em;
-  background-color: #32B475;
-  border: 0;
-  padding: 12px 24px;
-  margin-bottom: 10px;
-
-  &:hover {
-    background-color: #0F9D58;
-    color: white;
-  }
-
-  &,
-  &:active,
-  &.active {
-    &:focus,
-    &.focus {
-      outline: none;
-      color: white;
-      background-color: #057F44;
-      box-shadow: inset 0 3px 3px 0 rgba(0, 0, 0, 0.5);
-    }
-  }
 }

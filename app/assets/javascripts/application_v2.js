@@ -29,6 +29,7 @@
 //= require jquery-stickit
 //= require jquery.scrollTo
 //= require ahoy
+//= require heap_analytics
 
 // Rails assets
 //= require intro.js/intro.js
@@ -54,4 +55,5 @@
 // require talent
 //= require v2/batch_application
 //= require v2/tour
+//= require v2/story
 //= require v2/start_in_college

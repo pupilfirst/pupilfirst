@@ -1,7 +1,6 @@
 $(document).on 'page:change', ->
   $('#transparency-sidebar').stickit
     top: 100
-    extraHeight: -30
 
   sections = $('section')
   navElement = $('nav')

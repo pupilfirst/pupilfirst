@@ -118,6 +118,7 @@ ActiveAdmin.register BatchApplicant do
       end
     end
 
+    column :college
     column :created_at
   end
 

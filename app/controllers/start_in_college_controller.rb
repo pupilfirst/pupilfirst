@@ -75,7 +75,7 @@ class StartInCollegeController < ApplicationController
   def quiz
     raise_not_found unless chapter_exists?
 
-    @chapter = CourseChapter.find(params[:id])
+    @chapter = CourseChapter.find_by(chapter_number: params[:id].to_i)
     @questions = @chapter.quiz_questions.shuffle
 
     @form = QuizSubmissionForm.new(OpenStruct.new)
@@ -130,7 +130,7 @@ class StartInCollegeController < ApplicationController
   end
 
   def chapter_has_section?
-    params[:section_id].to_i <= CourseChapter.find(params[:id]).sections_count
+    params[:section_id].to_i <= CourseChapter.find_by(chapter_number: params[:id].to_i).sections_count
   end
 
   def section_exists?

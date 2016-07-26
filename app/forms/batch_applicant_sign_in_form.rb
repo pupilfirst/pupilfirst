@@ -5,7 +5,7 @@ class BatchApplicantSignInForm < Reform::Form
 
   def applicant_should_have_application
     if applicant.blank? || applicant.batch_applications.where(batch: Batch.open_batch).blank?
-      errors[:base] << "It looks like you haven't applied yet. Start at our #{link_to 'application page', apply_path}."
+      errors[:base] << "It looks like you haven't applied yet. Start at our application page."
       errors[:email] << 'has not submitted an application'
     end
   end

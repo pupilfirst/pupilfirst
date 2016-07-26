@@ -20,6 +20,18 @@
     .simple-form-container
       .row
         = simple_form_for @form, url: apply_send_sign_in_email_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
+          - if f.object.errors.present?
+            .alert.alert-warning.alert-dismissable.fade.in role='alert'
+              button.close type="button" data-dismiss="alert" aria-label="Close"
+                span aria-hidden="true" &times;
+
+              strong There were some problems:
+
+              - if f.object.errors[:base].present?
+                ul.m-t-1
+                  - f.object.errors[:base].each do |error_message|
+                    li #{error_message}
+
           = f.input :email, required: true
 
           .col-sm-offset-3

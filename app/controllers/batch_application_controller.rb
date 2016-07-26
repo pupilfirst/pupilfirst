@@ -171,7 +171,7 @@ class BatchApplicationController < ApplicationController
       token = if require_cookie
         cookies[:applicant_token]
       else
-        cookies[:applicant_token] || session[:applicant_token]
+        session[:applicant_token] || cookies[:applicant_token]
       end
 
       BatchApplicant.find_by token: token

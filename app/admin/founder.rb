@@ -110,8 +110,7 @@ ActiveAdmin.register Founder do
   csv do
     column :id
     column :email
-    column :first_name
-    column :last_name
+    column :fullname
 
     column :product do |founder|
       founder.startup&.product_name

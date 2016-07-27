@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160726113629) do
+ActiveRecord::Schema.define(version: 20160726185851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(version: 20160726113629) do
     t.integer  "quiz_question_id"
     t.boolean  "correct_answer",   default: false
     t.string   "value"
+    t.text     "hint_text"
   end
 
   add_index "answer_options", ["quiz_question_id"], name: "index_answer_options_on_quiz_question_id", using: :btree
@@ -430,9 +431,11 @@ ActiveRecord::Schema.define(version: 20160726113629) do
     t.datetime "updated_at",        null: false
     t.integer  "course_chapter_id"
     t.text     "question"
+    t.integer  "question_number"
   end
 
   add_index "quiz_questions", ["course_chapter_id"], name: "index_quiz_questions_on_course_chapter_id", using: :btree
+  add_index "quiz_questions", ["question_number"], name: "index_quiz_questions_on_question_number", using: :btree
 
   create_table "resources", force: :cascade do |t|
     t.string   "file"

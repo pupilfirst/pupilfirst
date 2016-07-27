@@ -8,11 +8,12 @@ feature 'Applying to SV.CO' do
   let!(:application_stage_3) { create :application_stage, number: 3 }
   let!(:application_stage_4) { create :application_stage, number: 4 }
   let!(:application_stage_5) { create :application_stage, number: 5 }
+  let!(:other_university) { create :university, name: 'Other' }
 
   context 'when no batches are open' do
     scenario 'user visits apply page' do
-      visit apply_index_path
-      expect(page).to_not have_link('Start Application')
+      visit apply_path
+      expect(page).to_not have_text("Team Lead's Details")
     end
   end
 
@@ -20,8 +21,8 @@ feature 'Applying to SV.CO' do
     let!(:batch) { create :batch, application_stage: application_stage_1, application_stage_deadline: 15.days.from_now, next_stage_starts_on: 1.month.from_now }
 
     scenario 'user visits apply page' do
-      visit apply_index_path
-      expect(page).to have_link('Start Application', href: apply_batch_path(batch: batch.batch_number, state: 'start'))
+      visit apply_path
+      expect(page).to have_text("Team Lead's Details")
     end
   end
 end

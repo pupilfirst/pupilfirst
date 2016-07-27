@@ -2,14 +2,13 @@ class BatchApplicationController < ApplicationController
   before_action :ensure_applicant_is_signed_in, except: %w(index register identify send_sign_in_email)
   before_action :ensure_batch_active, except: :index
   before_action :ensure_accurate_stage_number, only: %w(form submit complete expired rejected)
+  before_action :ensure_application_absent, only: :index
   before_action :set_instance_variables, only: %w(index register identify)
 
   layout 'application_v2'
 
   # GET /apply
   def index
-    # TODO: Redirect to stage routes if applicant + application exists.
-
     @form = BatchApplicationForm.new(BatchApplication.new)
     @form.prepopulate!(team_lead: BatchApplicant.new)
   end
@@ -325,5 +324,10 @@ class BatchApplicationController < ApplicationController
 
   def sign_in_applicant_temporarily(applicant)
     session[:applicant_token] = applicant.token
+  end
+
+  def ensure_application_absent
+    return unless current_batch.applied?(current_batch_applicant)
+    redirect_to apply_continue_path
   end
 end

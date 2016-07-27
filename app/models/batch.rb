@@ -104,4 +104,10 @@ class Batch < ActiveRecord::Base
       applications_ongoing.first
     end
   end
+
+  # Checks whether an applicant has an application for this batch.
+  def applied?(applicant)
+    return false if applicant.blank?
+    applicant.batch_applications.where(batch: self).present?
+  end
 end

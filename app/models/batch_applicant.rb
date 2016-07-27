@@ -23,7 +23,6 @@ class BatchApplicant < ActiveRecord::Base
 
   # Basic validations.
   validates :email, presence: true, uniqueness: true
-  validates :name, presence: true
 
   # Custom validations.
   validate :email_must_look_right

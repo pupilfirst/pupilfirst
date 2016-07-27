@@ -108,6 +108,7 @@ ActiveAdmin.register Founder do
   end
 
   csv do
+    column :id
     column :email
     column :first_name
     column :last_name

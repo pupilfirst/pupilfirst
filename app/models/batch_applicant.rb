@@ -44,21 +44,6 @@ class BatchApplicant < ActiveRecord::Base
   normalize_attribute :phone, with: [:strip, :phone]
   normalize_attribute :gender, :reference
 
-  # Attempts to find an applicant with the supplied token.
-  def self.find_using_token(incoming_token)
-    applicant = find_by token: incoming_token
-
-    return if applicant.blank?
-
-    # Hack to continue logins that were created before time-bound check was introduced.
-    applicant.update!(sign_in_email_sent_at: Time.now) if applicant.sign_in_email_sent_at.blank?
-
-    # Don't sign in applicant if the email was sent over an hour ago.
-    return if applicant.sign_in_email_sent_at < 1.hour.ago
-
-    applicant
-  end
-
   def applied_to?(batch)
     return false unless batch_applications.present?
 

@@ -1,4 +1,6 @@
 ActiveAdmin.register Founder do
+  include DisableIntercom
+
   controller do
     def scoped_collection
       super.includes :university, :startup

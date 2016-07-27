@@ -1,4 +1,6 @@
 ActiveAdmin.register TargetTemplate do
+  include DisableIntercom
+
   menu parent: 'Targets'
 
   config.sort_order = 'days_from_start_asc'

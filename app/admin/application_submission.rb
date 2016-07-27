@@ -1,4 +1,6 @@
 ActiveAdmin.register ApplicationSubmission do
+  include DisableIntercom
+
   menu parent: 'Admissions'
 
   permit_params :application_stage_id, :batch_application_id, :score, :notes, :file,

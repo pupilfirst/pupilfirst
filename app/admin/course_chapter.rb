@@ -1,4 +1,6 @@
 ActiveAdmin.register CourseChapter do
+  include DisableIntercom
+
   menu parent: 'StartInCollege'
   filter :name
   filter :chapter_number

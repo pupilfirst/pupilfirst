@@ -1,4 +1,6 @@
 ActiveAdmin.register User do
+  include DisableIntercom
+
   menu parent: 'Dashboard'
   filter :email
 

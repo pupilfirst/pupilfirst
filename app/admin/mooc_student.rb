@@ -1,4 +1,6 @@
 ActiveAdmin.register MoocStudent do
+  include DisableIntercom
+
   menu parent: 'StartInCollege'
 
   permit_params :name, :university_id, :college, :semester, :state, :gender, :user_id, :phone

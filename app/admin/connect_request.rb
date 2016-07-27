@@ -1,4 +1,6 @@
 ActiveAdmin.register ConnectRequest do
+  include DisableIntercom
+
   permit_params :connect_slot_id, :startup_id, :questions, :meeting_link, :status
 
   menu parent: 'Faculty'

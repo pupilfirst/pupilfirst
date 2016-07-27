@@ -1,4 +1,6 @@
 ActiveAdmin.register GlossaryTerm do
+  include DisableIntercom
+
   menu parent: 'Dashboard', label: 'Glossary'
 
   permit_params :term, :definition, :links

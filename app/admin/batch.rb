@@ -1,4 +1,6 @@
 ActiveAdmin.register Batch do
+  include DisableIntercom
+
   menu parent: 'Admissions'
 
   permit_params :theme, :description, :start_date, :end_date, :batch_number, :slack_channel, :application_stage_id,

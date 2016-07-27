@@ -1,4 +1,6 @@
 ActiveAdmin.register TeamMember do
+  include DisableIntercom
+
   menu parent: 'Startups'
 
   permit_params :startup_id, :name, :email, :avatar, roles: []

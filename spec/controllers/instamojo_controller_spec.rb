@@ -22,28 +22,6 @@ describe InstamojoController do
     )
   end
 
-  describe 'POST initiate_payment' do
-    before :each do
-      # Log in the batch applicant.
-      request.cookies['applicant_token'] = batch_application.team_lead.token
-    end
-
-    it 'creates a payment entry' do
-      post :initiate_payment, id: batch_application.id
-      last_payment = Payment.last
-
-      expect(last_payment.instamojo_payment_request_id).to eq(instamojo_payment_request_id)
-      expect(last_payment.instamojo_payment_request_status).to eq('Pending')
-      expect(last_payment.long_url).to eq(long_url)
-      expect(last_payment.short_url).to eq(short_url)
-    end
-
-    it 'redirects to instamojo payment URL' do
-      post :initiate_payment, id: batch_application.id
-      expect(response).to redirect_to(long_url)
-    end
-  end
-
   describe 'GET redirect' do
     let(:payment) { create :payment, batch_application: batch_application }
     let(:payment_id) { SecureRandom.hex }
@@ -75,7 +53,7 @@ describe InstamojoController do
 
     it 'redirects to apply page for batch' do
       get :redirect, payment_request_id: payment.instamojo_payment_request_id, payment_id: payment_id
-      expect(response).to redirect_to(apply_batch_path(batch: batch_application.batch.batch_number, state: 'payment_complete'))
+      expect(response).to redirect_to(apply_stage_complete_path(stage_number: '1'))
     end
   end
 

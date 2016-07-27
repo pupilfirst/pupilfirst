@@ -7,7 +7,7 @@ class InstamojoController < ApplicationController
     payment.refresh_payment!(params[:payment_id])
     payment.peform_post_payment_tasks!
 
-    redirect_to apply_stage_complete(stage_number: '1')
+    redirect_to apply_stage_complete_path(stage_number: '1')
   end
 
   # POST /instamojo/webhook

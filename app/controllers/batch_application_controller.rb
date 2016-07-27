@@ -170,7 +170,7 @@ class BatchApplicationController < ApplicationController
 
     if @form.validate(params[:application_stage_two])
       @form.save
-      redirect_to apply_batch_path(batch_number: params[:batch_number], state: 'stage_2_submitted')
+      redirect_to apply_stage_complete_path(stage_number: '2')
     else
       render 'batch_application/stage_2'
     end
@@ -184,7 +184,7 @@ class BatchApplicationController < ApplicationController
       application_stage: current_stage
     )
 
-    redirect_to apply_batch_path(batch_number: params[:batch_number], state: 'stage_4_submitted')
+    redirect_to apply_stage_complete_path(stage_number: '4')
   end
 
   protected

@@ -14,8 +14,13 @@
         = link_to 'Next', next_page, class: 'card-link pull-right'
 
   .col-md-3
-    #chapter-links.card
-      .list-group.list-group-flush
-        - CourseChapter.all.order(:chapter_number).each do |chapter|
-          a.list-group-item href="#{start_in_college_chapter_path(chapter.chapter_number, 1)}" #{chapter.chapter_number}. #{chapter.name}
-          a.list-group-item href="#{start_in_college_quiz_path(chapter.chapter_number)}" Quiz #{chapter.chapter_number}
+    #chapter-links
+      - CourseChapter.all.order(:chapter_number).each do |chapter|
+        .card
+          .card-header
+            a data-toggle="collapse" data-parent="#chapter-links" href="#chapter#{chapter.chapter_number}"  #{chapter.chapter_number}. #{chapter.name}
+          .card-block.collapse id="chapter#{chapter.chapter_number}" class="#{chapter.chapter_number == chapter_number ? 'in' : ''}"
+            .list-group.list-group-flush
+              - chapter.chapter_sections.order(:section_number).each do |section|
+                a.list-group-item href="#{start_in_college_chapter_path(chapter.chapter_number, section.section_number)}" #{section.name}
+              a.list-group-item href="#{start_in_college_quiz_path(chapter.chapter_number)}" Quiz #{chapter.chapter_number}

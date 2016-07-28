@@ -42,33 +42,7 @@ readmoreFAQ = ->
     lessLink: '<a class="read-less-link" href="#">Read Less</a>'
     moreLink: '<a class="read-more-link" href="#">Read More</a>'
 
-stickyApplyButton = ->
-  if $('.apply-illustration').length
-    stickyToggle = new Waypoint
-      element: $('.graduated-slide')[0],
-      handler: (direction) ->
-        applicationButton = $('#apply-sticky-application-button')
-        if direction == 'down'
-          applicationButton.removeClass('hidden-xs-up')
-        else
-          applicationButton.addClass('hidden-xs-up')
-
-    bottomStickyToggle = new Waypoint.Inview
-      element: $('.ready-to-apply')[0]
-      enter: (direction) ->
-        if direction == 'down'
-          $('#apply-sticky-application-button').addClass('hidden-xs-up')
-      exited: (direction) ->
-        if direction == 'up'
-          $('#apply-sticky-application-button').removeClass('hidden-xs-up')
-
-removeWaypoints = ->
-  if $('.tour-banner').length
-    Waypoint.destroyAll()
-
 $(document).on 'page:change', setupGraduationCarousel
 $(document).on 'page:change', avoidwidowsTypography
 $(document).on 'page:change', stopVideosOnModalClose
 $(document).on 'page:change', readmoreFAQ
-$(document).on 'page:change', stickyApplyButton
-$(document).on 'page:before-change', removeWaypoints

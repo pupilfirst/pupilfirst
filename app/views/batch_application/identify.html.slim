@@ -14,12 +14,16 @@
         ' We'll email you a link using which you can continue the application process.
 
 .container
+  .alert.alert-info.m-t-1
+    ' Haven't submitted an application yet? Do so,
+    | #{link_to 'at our apply page', apply_path}.
+
   .container-md-center.content-box.m-t-3.m-b-3
     h5.form-section-title.text-uppercase.font-semibold.m-b-2
       | Hello there!
     .simple-form-container
       .row
-        = simple_form_for @form, url: apply_send_sign_in_email_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
+        = simple_form_for @form, url: apply_send_sign_in_email_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { boolean: :horizontal_boolean } do |f|
           - if f.object.errors.present?
             .alert.alert-warning.alert-dismissable.fade.in role='alert'
               button.close type="button" data-dismiss="alert" aria-label="Close"
@@ -33,6 +37,10 @@
                     li #{error_message}
 
           = f.input :email, required: true
+
+          = f.input :shared_device,
+            as: :boolean,
+            label: '&nbsp;Are you using a shared device?'.html_safe
 
           .col-sm-offset-3
             .simple-form-submit

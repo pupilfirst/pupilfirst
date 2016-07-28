@@ -5,18 +5,23 @@
   | Hello #{@team_lead.name},
 
 = content_for :body
-  p
-    ' Please use the following link to continue the application process at SV.CO. This link will not expire, so please
-    ' keep it private.
+  p Please use the following link to continue the application process at SV.CO.
+
+  - if @shared_device
+    | This link will not expire, so please keep it private.
+  - else
+    ' This link will <strong>will sign you in permanently</strong>, so please do not use it on a shared device. It will
+    | also never expire, so please keep it private.
 
   p
-    ' #{link_to 'Click here', apply_continue_url(token: @team_lead.token)} to continue application.
+    ' #{link_to 'Click here', apply_continue_url(token: @team_lead.token, shared_device: @shared_device)} to continue
+    | application.
 
   p
     ' If you're unable to click on the link above, then please copy and paste the following link into your browser's
     | address bar:
 
-  p.monospace = apply_continue_url(token: @team_lead.token)
+  p.monospace = apply_continue_url(token: @team_lead.token, shared_device: @shared_device)
 
   p
     ' Please note that the above URL is private and should not be shared with others. Reach out to us at

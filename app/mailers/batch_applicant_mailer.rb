@@ -1,6 +1,7 @@
 class BatchApplicantMailer < ApplicationMailer
-  def sign_in(team_lead)
+  def sign_in(team_lead, shared_device)
     @team_lead = team_lead
+    @shared_device = shared_device
     mail(to: team_lead.email, subject: 'Continue application at SV.CO')
   end
 

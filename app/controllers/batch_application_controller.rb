@@ -312,8 +312,13 @@ class BatchApplicationController < ApplicationController
     # Sign in the current application founder.
     @current_batch_applicant = applicant
 
-    # Store a cookie that'll keep him / her signed in for 3 months.
-    cookies[:applicant_token] = { value: applicant.token, expires: 3.months.from_now }
+    if params[:shared_device] == 'true'
+      # If applicant has indicated that zhe is on a shared device, create session variable instead of cookie.
+      session[:applicant_token] = applicant.token
+    else
+      # Store a cookie that'll keep applicant signed in for 3 months.
+      cookies[:applicant_token] = { value: applicant.token, expires: 3.months.from_now }
+    end
   end
 
   # Redirect applicant to sign in page is zhe isn't signed in.

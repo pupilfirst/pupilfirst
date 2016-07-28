@@ -5,10 +5,9 @@
 .container
   == render('applications_close_soon', batch: current_batch) if current_batch.applications_close_soon?
 
-  .m-t-3.m-b-3
-    .alert.alert-info
-      ' Did you complete registration once before? If so,
-      | #{link_to 'sign in and continue the application process', apply_identify_path}.
+  .alert.alert-info.m-t-1
+    ' Did you complete registration once before? If so,
+    | #{link_to 'sign in and continue the application process', apply_identify_path}.
 
   div.m-t-3.m-b-3
     = simple_form_for @form,

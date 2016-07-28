@@ -1,5 +1,6 @@
 class BatchApplicantSignInForm < Reform::Form
   property :email, validates: { presence: true, length: { maximum: 250 }, format: { with: /\S+@\S+/, message: "doesn't look like an email" } }
+  property :shared_device, virtual: true
 
   validate :applicant_should_have_application
 
@@ -11,10 +12,14 @@ class BatchApplicantSignInForm < Reform::Form
   end
 
   def save
-    applicant.send_sign_in_email
+    applicant.send_sign_in_email(shared_device: shared_device?)
   end
 
   def applicant
     @applicant ||= BatchApplicant.find_by email: email
+  end
+
+  def shared_device?
+    shared_device == '1'
   end
 end

@@ -5,7 +5,7 @@ ActiveAdmin.register CourseChapter do
   filter :name
   filter :chapter_number
 
-  permit_params :name, :chapter_number, :sections_count, chapter_sections_attributes: [:id, :section_number, :name, :_destroy]
+  permit_params :name, :chapter_number, chapter_sections_attributes: [:id, :section_number, :name, :_destroy]
 
   form do |f|
     f.semantic_errors(*f.object.errors.keys)
@@ -13,7 +13,6 @@ ActiveAdmin.register CourseChapter do
     f.inputs do
       f.input :name
       f.input :chapter_number
-      f.input :sections_count
 
       f.inputs 'Sections' do
         f.has_many :chapter_sections, heading: false, allow_destroy: true, new_record: 'Add Section' do |o|

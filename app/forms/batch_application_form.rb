@@ -12,7 +12,6 @@ class BatchApplicationForm < Reform::Form
 
   property :university_id, validates: { presence: true }
   properties :college, validates: { presence: true, length: { maximum: 250 } }
-  property :cofounder_count, validates: { inclusion: ['', '2', '3', '4'] }
 
   # Custom validations.
   validate :do_not_reapply
@@ -43,7 +42,6 @@ class BatchApplicationForm < Reform::Form
 
   def prepopulate!(options)
     self.team_lead = options[:team_lead]
-    self.cofounder_count = 2
     self.university_id = University.other.id
   end
 
@@ -79,8 +77,7 @@ class BatchApplicationForm < Reform::Form
       application_stage: ApplicationStage.initial_stage,
       university_id: university_id,
       college: college,
-      team_lead_id: applicant.id,
-      cofounder_count: cofounder_count
+      team_lead_id: applicant.id
     )
   end
 

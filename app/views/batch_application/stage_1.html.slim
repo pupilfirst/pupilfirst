@@ -10,6 +10,14 @@
 .container
   == render('applications_close_soon', batch: current_batch) if current_batch.applications_close_soon?
 
+  - if @continue_mail_sent
+      .alert.alert-success.m-t-1
+        button type="button" class="close" data-dismiss="alert" aria-label="Close"
+          span aria-hidden="true" &times;
+        .text-xs-center
+          ' &nbsp;We have sent you an email that will allow you to continue the application process, should you close this
+          | window.
+
   .container-md-center.content-box.m-t-3.m-b-3.apply-submitted
     h3.text-xs-center
       ' Your application data has been stored.

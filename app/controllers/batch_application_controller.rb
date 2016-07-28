@@ -26,7 +26,7 @@ class BatchApplicationController < ApplicationController
 
       sign_in_applicant_temporarily(applicant)
 
-      redirect_to apply_stage_path(stage_number: applicant_stage_number)
+      redirect_to apply_stage_path(stage_number: applicant_stage_number, continue_mail_sent: 'yes')
     else
       render 'index'
     end
@@ -134,7 +134,7 @@ class BatchApplicationController < ApplicationController
   ####
 
   def stage_1
-    # A form which takes number of cofounders.
+    @continue_mail_sent = params[:continue_mail_sent]
     @form = ApplicationStageOneForm.new(current_application)
   end
 

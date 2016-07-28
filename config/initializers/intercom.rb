@@ -32,7 +32,7 @@ IntercomRails.config do |config|
   # The method/variable that contains the logged in user in your controllers.
   # If it is `current_user` or `@user`, then you can ignore this
   #
-  # config.user.current = Proc.new { current_user }
+  config.user.current = proc { current_batch_applicant }
   # config.user.current = [Proc.new { current_user }]
 
   # == Include for logged out Users
@@ -43,7 +43,7 @@ IntercomRails.config do |config|
   # == User model class
   # The class which defines your user model
   #
-  # config.user.model = Proc.new { User }
+  config.user.model = proc { BatchApplicant }
 
   # == Lead/custom attributes for non-signed up users
   # Pass additional attributes to for potential leads or

@@ -1,9 +1,7 @@
 class BatchApplicantMailerPreview < ActionMailer::Preview
   def sign_in
-    email = 'test@sv.co'
-    token = 'TOKEN1234'
-    batch = Batch.first
-    BatchApplicantMailer.sign_in(email, token, batch)
+    team_lead = BatchApplicant.first
+    BatchApplicantMailer.sign_in(team_lead, false)
   end
 
   def application_progress

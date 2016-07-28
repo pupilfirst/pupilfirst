@@ -1,4 +1,6 @@
 ActiveAdmin.register ApplicationStage do
+  include DisableIntercom
+
   menu parent: 'Admissions'
 
   permit_params :name, :number, :final_stage

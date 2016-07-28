@@ -1,4 +1,6 @@
 ActiveAdmin.register TimelineEvent do
+  include DisableIntercom
+
   permit_params :description, :timeline_event_type_id, :image, :event_on, :startup_id, :grade,
     :founder_id, :serialized_links, :improved_timeline_event_id, timeline_event_files_attributes: [:id, :title, :file, :private, :_destroy]
 

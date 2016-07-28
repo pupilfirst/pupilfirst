@@ -1,4 +1,6 @@
 ActiveAdmin.register PublicSlackMessage do
+  include DisableIntercom
+
   menu parent: 'Founders'
   actions :index
 

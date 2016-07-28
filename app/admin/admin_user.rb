@@ -1,4 +1,6 @@
 ActiveAdmin.register AdminUser do
+  include DisableIntercom
+
   menu parent: 'Dashboard'
 
   permit_params :email, :password, :password_confirmation, :fullname, :avatar, :admin_type

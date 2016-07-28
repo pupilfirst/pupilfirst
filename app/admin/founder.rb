@@ -1,4 +1,6 @@
 ActiveAdmin.register Founder do
+  include DisableIntercom
+
   controller do
     def scoped_collection
       super.includes :university, :startup
@@ -108,9 +110,9 @@ ActiveAdmin.register Founder do
   end
 
   csv do
+    column :id
     column :email
-    column :first_name
-    column :last_name
+    column :fullname
 
     column :product do |founder|
       founder.startup&.product_name

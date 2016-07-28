@@ -1,4 +1,8 @@
 ActiveAdmin.register_page 'Short URLs' do
+  controller do
+    skip_after_action :intercom_rails_auto_include
+  end
+
   menu parent: 'Dashboard'
 
   content do

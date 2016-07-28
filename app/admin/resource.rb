@@ -1,4 +1,6 @@
 ActiveAdmin.register Resource do
+  include DisableIntercom
+
   permit_params :title, :description, :file, :thumbnail, :share_status, :batch_id, :startup_id, :tag_list
 
   filter :startup,

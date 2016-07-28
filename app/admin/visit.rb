@@ -1,4 +1,6 @@
 ActiveAdmin.register Visit do
+  include DisableIntercom
+
   scope :founder_visits, default: true
   scope :all
 

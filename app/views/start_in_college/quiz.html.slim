@@ -6,17 +6,42 @@
     .simple-form-container
       .row
         = simple_form_for @form, url: start_in_college_quiz_submission_path(chapter: @chapter.id), html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { radio_buttons: :horizontal_radio_and_checkboxes } do |f|
+          #quiz-form-data.hidden-xs-up data-question-count="#{f.object.questions.count}"
           = f.simple_fields_for :questions do |s|
             - quiz_question = s.object.model
-            = s.input :answer_id,
-              label: quiz_question.question,
-              collection: quiz_question.answer_options.pluck(:id,:value),
-              value_method: :first,
-              label_method: :last,
-              as: :radio_buttons,
-              required: false
+            .question-container.hidden-xs-up id="question-container-#{s.index}" data-correct-answer-id="#{quiz_question.correct_answer.id}"
+              .question-heading Question # #{s.index + 1}
+              hr
+              .question-body
+                .question-text
+                  p #{quiz_question.question}
+                .answer-form
+                  = s.input :answer_id,
+                    label: false,
+                    collection: quiz_question.answer_options.pluck(:id,:value),
+                    value_method: :first,
+                    label_method: :last,
+                    as: :radio_buttons,
+                    required: false
+                .submission-result
+                  .no-selection-error.hidden-xs-up id="no-selection-error-#{s.index}"
+                    | Please select an option before submitting or skip the question
+                  .answer-hints
+                    - quiz_question.answer_options.each do |answer|
+                      .answer-result.hidden-xs-up id="answer-#{answer.id}-result"
+                        ' #{answer.correct_answer ? 'You are right!' : 'That seems wrong!'}
+                      .answer-hint.hidden-xs-up id="answer-#{answer.id}-hint"
+                        ' #{answer.hint_text}
+                .answer-submit-button.pull-left data-question-index="#{s.index}"
+                  a.btn.btn-primary.btn-md.text-uppercase
+                    | Submit
+                .question-skip-button.pull-right data-question-index="#{s.index}"
+                  a.btn.btn-primary.btn-md.text-uppercase
+                    | Skip
+          #quiz-submit-button.hidden-xs-up.pull-right
+            = f.submit 'Finish', class: 'btn btn-primary btn-md text-uppercase'
 
-          .col-sm-offset-3
-            .simple-form-submit
-              = f.submit 'Submit', class: 'btn btn-primary btn-md text-uppercase'
+          /.col-sm-offset-3
+          /  .simple-form-submit
+          /    = f.submit 'Finish', class: 'btn btn-primary btn-md text-uppercase'
 

@@ -89,7 +89,8 @@ gem 'reform-rails'
 gem 'virtus' # Required for reform coercion. Attributes on Steroids for Plain Old Ruby Objects
 gem 'dry-validation' # There seems to be a dependency bug in reform's coercion code - it required dry-types.
 
-gem 'postmark-rails' #
+gem 'postmark-rails' # Official integration library for using Rails and ActionMailer with the Postmark HTTP API.
+gem 'intercom-rails' # The easiest way to install Intercom in a Rails app.
 
 # Rails assets!
 source 'https://rails-assets.org' do

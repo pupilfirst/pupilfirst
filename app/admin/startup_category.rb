@@ -1,4 +1,6 @@
 ActiveAdmin.register StartupCategory do
+  include DisableIntercom
+
   menu parent: 'Startups', label: 'Categories'
   filter :name
 

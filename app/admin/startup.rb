@@ -1,4 +1,6 @@
 ActiveAdmin.register Startup do
+  include DisableIntercom
+
   filter :product_name, as: :select
   filter :batch
   filter :stage, as: :select, collection: proc { stages_collection }

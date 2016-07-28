@@ -49,6 +49,14 @@ class ApplicationController < ActionController::Base
     @current_user ||= User.find_by(login_token: read_cookie(:login_token))
   end
 
+  # Hack to allow Intercom to insert its script's hash into our CSP.
+  def add_csp_hash(hash)
+    current_csp = response.headers['Content-Security-Policy']
+    csp_components = current_csp.split ' '
+    csp_components.insert(csp_components.index('script-src') + 3, "'unsafe-inline' #{hash}")
+    response.headers['Content-Security-Policy'] = csp_components.join ' '
+  end
+
   protected
 
   # sets a permanent signed cookie. Additional options such as :tld_length can be passed via the options_hash
@@ -89,12 +97,12 @@ class ApplicationController < ActionController::Base
     [
       image_sources,
       script_sources,
-      "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://sv-assets.sv.co #{keyreply_csp[:style]} #{heapanalytics_csp[:style]};",
-      "connect-src 'self' #{inspectlet_csp[:connect]} #{heapanalytics_csp[:connect]};",
-      "font-src 'self' fonts.gstatic.com https://sv-assets.sv.co #{heapanalytics_csp[:font]};",
+      "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://sv-assets.sv.co #{heapanalytics_csp[:style]};",
+      connect_sources,
+      font_sources,
       'child-src https://www.youtube.com;',
       frame_sources,
-      "media-src 'self' #{resource_csp[:media]};"
+      media_sources
     ]
   end
 
@@ -168,11 +176,13 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def keyreply_csp
+  def intercom_csp
     {
-      image: 'https://keyreply.com',
-      script: 'https://keyreply.com',
-      style: 'https://keyreply.com'
+      script: 'https://widget.intercom.io https://js.intercomcdn.com',
+      connect: 'https://api-ping.intercom.io https://nexus-websocket-a.intercom.io https://nexus-websocket-b.intercom.io wss://nexus-websocket-a.intercom.io wss://nexus-websocket-b.intercom.io https://api-iam.intercom.io',
+      font: 'https://js.intercomcdn.com',
+      image: 'https://js.intercomcdn.com https://static.intercomassets.com',
+      media: 'https://js.intercomcdn.com'
     }
   end
 
@@ -189,8 +199,8 @@ class ApplicationController < ActionController::Base
     <<~IMAGE_SOURCES.squish
       img-src
       'self' data: https://blog.sv.co http://www.startatsv.com https://sv-assets.sv.co https://secure.gravatar.com
-      https://uploaded-assets.sv.co #{keyreply_csp[:image]}
-      #{google_analytics_csp[:image]} #{inspectlet_csp[:image]} #{facebook_csp[:image]} #{heapanalytics_csp[:image]};
+      https://uploaded-assets.sv.co #{google_analytics_csp[:image]} #{inspectlet_csp[:image]} #{facebook_csp[:image]}
+      #{heapanalytics_csp[:image]} #{intercom_csp[:image]};
     IMAGE_SOURCES
   end
 
@@ -198,9 +208,26 @@ class ApplicationController < ActionController::Base
     <<~SCRIPT_SOURCES.squish
       script-src
       'self' 'unsafe-eval' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
-      http://www.startatsv.com https://sv-assets.sv.co #{keyreply_csp[:script]}
-      #{recaptcha_csp[:script]} #{google_analytics_csp[:script]} #{inspectlet_csp[:script]} #{facebook_csp[:script]}
-      #{heapanalytics_csp[:script]};
+      http://www.startatsv.com https://sv-assets.sv.co #{recaptcha_csp[:script]} #{google_analytics_csp[:script]}
+      #{inspectlet_csp[:script]} #{facebook_csp[:script]} #{heapanalytics_csp[:script]} #{intercom_csp[:script]};
     SCRIPT_SOURCES
+  end
+
+  def connect_sources
+    <<~CONNECT_SOURCES.squish
+      connect-src 'self' #{inspectlet_csp[:connect]} #{heapanalytics_csp[:connect]} #{intercom_csp[:connect]};
+    CONNECT_SOURCES
+  end
+
+  def font_sources
+    <<~FONT_SOURCES.squish
+      font-src 'self' fonts.gstatic.com https://sv-assets.sv.co #{heapanalytics_csp[:font]} #{intercom_csp[:font]};
+    FONT_SOURCES
+  end
+
+  def media_sources
+    <<~MEDIA_SOURCES
+      media-src 'self' #{resource_csp[:media]} #{intercom_csp[:media]};
+    MEDIA_SOURCES
   end
 end

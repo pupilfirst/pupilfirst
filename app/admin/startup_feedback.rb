@@ -1,4 +1,6 @@
 ActiveAdmin.register StartupFeedback do
+  include DisableIntercom
+
   menu parent: 'Startups', label: 'Feedback'
   permit_params :feedback, :reference_url, :startup_id, :send_email, :faculty_id, :activity_type, :attachment, :event_id, :event_status
 

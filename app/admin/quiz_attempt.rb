@@ -1,4 +1,6 @@
 ActiveAdmin.register QuizAttempt do
+  include DisableIntercom
+
   menu parent: 'StartInCollege'
 
   index do

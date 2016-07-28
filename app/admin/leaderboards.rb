@@ -1,4 +1,8 @@
 ActiveAdmin.register_page 'Leaderboards' do
+  controller do
+    skip_after_action :intercom_rails_auto_include
+  end
+
   menu parent: 'Startups'
 
   controller do

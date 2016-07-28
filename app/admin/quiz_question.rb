@@ -1,4 +1,6 @@
 ActiveAdmin.register QuizQuestion do
+  include DisableIntercom
+
   menu parent: 'StartInCollege'
   permit_params :course_chapter_id, :question, :question_number, answer_options_attributes: [:id, :value, :correct_answer, :hint_text, :_destroy]
 

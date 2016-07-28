@@ -1,4 +1,6 @@
 ActiveAdmin.register KarmaPoint do
+  include DisableIntercom
+
   menu parent: 'Founders'
 
   permit_params :startup_id, :founder_id, :points, :activity_type, :created_at

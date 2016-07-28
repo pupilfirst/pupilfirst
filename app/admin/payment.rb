@@ -1,4 +1,6 @@
 ActiveAdmin.register Payment do
+  include DisableIntercom
+
   menu parent: 'Admissions'
   actions :index, :show
 

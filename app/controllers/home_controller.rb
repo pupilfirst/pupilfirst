@@ -2,6 +2,7 @@ class HomeController < ApplicationController
   def index
     @skip_container = true
     @sitewide_notice = true if %w(startupvillage.in registration).include?(params[:redirect_from])
+    @hide_nav_links = true
     render layout: 'home'
   end
 

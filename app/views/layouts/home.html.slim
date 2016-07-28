@@ -34,15 +34,18 @@ html lang='en'
 
         .container
           .navbar-header
-            button.navbar-toggler.collapsed.hidden-md-up type="button" data-toggle="collapse" data-target="#sv-navbar"
-              span.sr-only Toggle navigation
-              span.icon-bar.top-bar
-              span.icon-bar.middle-bar
-              span.icon-bar.bottom-bar
+            - unless @hide_nav_links
+              button.navbar-toggler.collapsed.hidden-md-up type="button" data-toggle="collapse" data-target="#sv-navbar"
+                span.sr-only Toggle navigation
+                span.icon-bar.top-bar
+                span.icon-bar.middle-bar
+                span.icon-bar.bottom-bar
 
             a.navbar-brand href="#{root_url}"
               img.site-logo#site-logo src="#{image_url 'SV.CO-Logo-home.svg'}" alt='Logo of SV.CO'
-          = render 'layouts/nav_links_v2'
+
+          - unless @hide_nav_links
+            = render 'layouts/nav_links_v2'
       == yield :header
 
       - if current_founder

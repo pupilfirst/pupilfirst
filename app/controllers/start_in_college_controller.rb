@@ -66,6 +66,7 @@ class StartInCollegeController < ApplicationController
   def chapter
     raise_not_found unless section_exists?
     @chapter = CourseChapter.find_by_chapter_number params[:id].to_i
+    @section = @chapter.chapter_sections.find_by_section_number params[:section_id].to_i
   end
 
   # GET /startincollege/quiz/:id

@@ -6,7 +6,9 @@
     .card
       .card-header.text-xs-center Chapter #{chapter_number} - #{@chapter.name}
       .card-block
-        = render "start_in_college/chapters/chapter_#{chapter_number}_#{section_number}"
+        h4.card-title #{chapter_number}.#{section_number} #{@section.name}
+        .card-text
+          = render "start_in_college/chapter_#{chapter_number}/section_#{section_number}"
       .card-footer
         = link_to 'Previous', previous_page, class: 'card-link'
         = link_to 'Next', next_page, class: 'card-link pull-right'
@@ -14,6 +16,6 @@
   .col-md-3
     #chapter-links.card
       .list-group.list-group-flush
-        - CourseChapter.all.each do |chapter|
+        - CourseChapter.all.order(:chapter_number).each do |chapter|
           a.list-group-item href="#{start_in_college_chapter_path(chapter.chapter_number, 1)}" #{chapter.chapter_number}. #{chapter.name}
           a.list-group-item href="#{start_in_college_quiz_path(chapter.chapter_number)}" Quiz #{chapter.chapter_number}

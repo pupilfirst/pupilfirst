@@ -49,6 +49,30 @@ $(document).on 'page:change', readmoreFAQ
 
 # !!! NEW STUFF !!!
 
+emailsShouldMatch = ->
+  batchApplicationForm = $('#new_batch_application')
+  if batchApplicationForm.length
+    emailInput = $('#batch_application_team_lead_attributes_email')
+    emailConfirmationInput = $('#batch_application_team_lead_attributes_email_confirmation')
+
+    validateEmailMatch = ->
+      email = emailInput.val()
+
+      if email != emailConfirmationInput.val()
+        unless emailConfirmationInput.parent().find('span').length
+          emailConfirmationInput.after('<span class="help-block">does not match</span>')
+
+        emailConfirmationInput.parent().parent().addClass('has-error')
+      else
+        emailConfirmationInput.parent().find('span').remove()
+        emailConfirmationInput.parent().parent().removeClass('has-error')
+
+    emailConfirmationInput.blur ->
+      validateEmailMatch()
+
+    emailInput.blur ->
+      validateEmailMatch() if emailConfirmationInput.val().length
+
 setupSelect2Inputs = ->
   $('#batch_application_university_id').select2()
 
@@ -65,3 +89,4 @@ $(document).on 'page:change', ->
     $('#batch_application_team_lead_attributes_reference').change toggleReferenceTextField
 
 $(document).on 'page:change', setupSelect2Inputs
+$(document).on 'page:change', emailsShouldMatch

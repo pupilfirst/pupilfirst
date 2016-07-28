@@ -1,11 +1,5 @@
 require 'active_admin/cancan_adapter'
 
-module ActiveAdmin
-  class ResourceController
-    skip_after_action :intercom_rails_auto_include
-  end
-end
-
 ActiveAdmin.setup do |config|
   # == Site Title
   #

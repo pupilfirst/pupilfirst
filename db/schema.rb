@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160726185851) do
+ActiveRecord::Schema.define(version: 20160728130803) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -169,6 +169,16 @@ ActiveRecord::Schema.define(version: 20160726185851) do
   end
 
   add_index "batches", ["application_stage_id"], name: "index_batches_on_application_stage_id", using: :btree
+
+  create_table "chapter_sections", force: :cascade do |t|
+    t.integer  "course_chapter_id"
+    t.string   "name"
+    t.integer  "section_number"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "chapter_sections", ["course_chapter_id"], name: "index_chapter_sections_on_course_chapter_id", using: :btree
 
   create_table "connect_requests", force: :cascade do |t|
     t.integer  "connect_slot_id"

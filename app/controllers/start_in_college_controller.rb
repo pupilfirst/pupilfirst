@@ -65,8 +65,7 @@ class StartInCollegeController < ApplicationController
   # Displays the content of a chapter's section.
   def chapter
     raise_not_found unless section_exists?
-
-    render "start_in_college/chapters/chapter_#{params[:id]}_#{params[:section_id]}"
+    @chapter = CourseChapter.find_by_chapter_number params[:id].to_i
   end
 
   # GET /startincollege/quiz/:id

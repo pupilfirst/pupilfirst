@@ -1,0 +1,19 @@
+- content_for :head
+  title Chapter #{chapter_number}.#{section_number} | Start in College
+
+.margin-top-20
+  .col-md-9
+    .card
+      .card-header.text-xs-center Chapter #{chapter_number} - #{@chapter.name}
+      .card-block
+        = render "start_in_college/chapters/chapter_#{chapter_number}_#{section_number}"
+      .card-footer
+        = link_to 'Previous', previous_page, class: 'card-link'
+        = link_to 'Next', next_page, class: 'card-link pull-right'
+
+  .col-md-3
+    #chapter-links.card
+      .list-group.list-group-flush
+        - CourseChapter.all.each do |chapter|
+          a.list-group-item href="#{start_in_college_chapter_path(chapter.chapter_number, 1)}" #{chapter.chapter_number}. #{chapter.name}
+          a.list-group-item href="#{start_in_college_quiz_path(chapter.chapter_number)}" Quiz #{chapter.chapter_number}

@@ -20,7 +20,10 @@ footer
                 = link_to 'Faculty', faculty_index_path
             .sitemap.pull-left
               div
-                = link_to 'Library', resources_path
+                - if current_founder
+                  = link_to 'Profile', founder_profile_path(slug: current_founder.slug)
+                - else
+                  = link_to 'Sign In', new_founder_session_path
               div
                 = link_to 'About', about_path
               div

@@ -1,5 +1,8 @@
 $(document).on 'page:change', ->
   elSelector = '.header'
+
+  return if $.inArray('header-non-floating', $(elSelector).attr("class").split(' ')) > -1
+
   element = document.querySelector(elSelector)
   elHeight = 0
   elTop = 0

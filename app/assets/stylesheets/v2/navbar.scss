@@ -6,6 +6,10 @@
     top: 0;
     width: 100%;
     z-index: 1000;
+
+    &.header-non-floating {
+      position: initial;
+    }
   }
 
   .sitewide-notice {

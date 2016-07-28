@@ -3,6 +3,7 @@ class BatchApplicationController < ApplicationController
   before_action :ensure_batch_active, except: :index
   before_action :ensure_accurate_stage_number, only: %w(form submit complete expired rejected)
   before_action :set_instance_variables, only: %w(index register identify)
+  before_action :hide_nav_links
 
   layout 'application_v2'
 
@@ -338,5 +339,9 @@ class BatchApplicationController < ApplicationController
 
   def sign_in_applicant_temporarily(applicant)
     session[:applicant_token] = applicant.token
+  end
+
+  def hide_nav_links
+    @hide_nav_links = true
   end
 end

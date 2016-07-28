@@ -25,7 +25,7 @@ html lang='en'
     link rel="icon" href="#{image_url 'favicon.png'}"
 
   body
-    section#header.header
+    section#header.header class=(@hide_nav_links ? 'header-non-floating' : '')
       nav.navbar role="navigation"
         - if @sitewide_notice
           .sitewide-notice
@@ -34,43 +34,47 @@ html lang='en'
 
         .container
           .navbar-header
-            button.navbar-toggler.collapsed.hidden-md-up type="button" data-toggle="collapse" data-target="#sv-navbar"
-              span.sr-only Toggle navigation
-              span.icon-bar.top-bar
-              span.icon-bar.middle-bar
-              span.icon-bar.bottom-bar
+            - unless @hide_nav_links
+              button.navbar-toggler.collapsed.hidden-md-up type="button" data-toggle="collapse" data-target="#sv-navbar"
+                span.sr-only Toggle navigation
+                span.icon-bar.top-bar
+                span.icon-bar.middle-bar
+                span.icon-bar.bottom-bar
 
             a.navbar-brand href="#{root_url}"
               img.site-logo#site-logo src="#{image_url 'SV.CO-Logo.svg'}" alt='Logo of SV.CO'
-          = render 'layouts/nav_links_v2'
-    .header-spacer
-      == yield :header
 
-      - if current_founder
-        #platform-feedback-modal.modal.fade role="dialog"
-          .modal-dialog
-            .modal-content
-              = simple_form_for @platform_feedback_for_form,
-                url: platform_feedback_path,
-                html: { class: 'form-horizontal' },
-                wrapper: :horizontal_form,
-                wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_file_input, boolean: :horizontal_boolean } do |f|
-                .modal-header
-                  button.close data-dismiss="modal" type="button"  &times;
-                  h4.modal-title We Love Feedback!
-                .modal-body
-                  ' If your feedback is useful, it shows you can think well of product ideas and improvement, and we'll reward you with Karma Points & a special timeline event :)
+          - unless @hide_nav_links
+            = render 'layouts/nav_links_v2'
+    .header-spacer class=(@hide_nav_links ? 'hidden-xs-up' : '')
+
+    == yield :header
+
+    - if current_founder
+      #platform-feedback-modal.modal.fade role="dialog"
+        .modal-dialog
+          .modal-content
+            = simple_form_for @platform_feedback_for_form,
+              url: platform_feedback_path,
+              html: { class: 'form-horizontal' },
+              wrapper: :horizontal_form,
+              wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_file_input, boolean: :horizontal_boolean } do |f|
+              .modal-header
+                button.close data-dismiss="modal" type="button"  &times;
+                h4.modal-title We Love Feedback!
+              .modal-body
+                ' If your feedback is useful, it shows you can think well of product ideas and improvement, and we'll reward you with Karma Points & a special timeline event :)
+                hr
+                  = f.input :founder_id, as: :hidden
+                  = f.input :feedback_type, as: :select, collection: PlatformFeedback.types_of_feedback, include_blank: false
+                  = f.input :description, input_html: { rows: 5 }
+                  = f.input :attachment, as: :file
                   hr
-                    = f.input :founder_id, as: :hidden
-                    = f.input :feedback_type, as: :select, collection: PlatformFeedback.types_of_feedback, include_blank: false
-                    = f.input :description, input_html: { rows: 5 }
-                    = f.input :attachment, as: :file
-                    hr
-                    p How likely is it that you would recommend SV.CO to a friend?
-                    = f.input :promoter_score, as: :radio_buttons, collection: 0..10, label: false
-                .modal-footer
-                  button.btn.btn-primary type="submit" Submit Feedback
-                  button.btn.btn-default data-dismiss="modal" type="button"  Close
+                  p How likely is it that you would recommend SV.CO to a friend?
+                  = f.input :promoter_score, as: :radio_buttons, collection: 0..10, label: false
+              .modal-footer
+                button.btn.btn-primary type="submit" Submit Feedback
+                button.btn.btn-default data-dismiss="modal" type="button"  Close
 
     - if @skip_container
       == yield

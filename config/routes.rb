@@ -160,6 +160,7 @@ Svapp::Application.routes.draw do
     get 'quiz/:id', action: 'quiz', as: 'quiz'
     post 'quiz_submission'
     get 'course_end'
+    get 'completion_certificate'
   end
 
   # used for shortened urls from the shortener gem

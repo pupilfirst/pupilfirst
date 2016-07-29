@@ -99,6 +99,18 @@ class StartInCollegeController < ApplicationController
     @final_score = current_mooc_student.score.round(1)
   end
 
+  # GET /startincollege/completion_certificate
+  #
+  # Display the completion certificate with provision to download as pdf
+  def completion_certificate
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: 'certificate', disposition: 'attachment', show_as_html: params.key?('debug')
+      end
+    end
+  end
+
   protected
 
   def current_mooc_student

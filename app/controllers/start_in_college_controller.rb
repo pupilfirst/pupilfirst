@@ -96,7 +96,7 @@ class StartInCollegeController < ApplicationController
   #
   # End of course page. Probably show grade and option to print certificate
   def course_end
-    @final_score = current_mooc_student.score.round(1)
+    @final_score = current_mooc_student.score.round
   end
 
   # GET /startincollege/completion_certificate

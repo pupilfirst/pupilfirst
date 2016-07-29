@@ -4,8 +4,8 @@ class CourseModule < ActiveRecord::Base
   has_many :quiz_attempts
   has_many :mooc_students, through: :quiz_attempts
 
-  has_many :chapter_sections
-  accepts_nested_attributes_for :chapter_sections, allow_destroy: true
+  has_many :module_chapters
+  accepts_nested_attributes_for :module_chapters, allow_destroy: true
 
   validates_presence_of :name, :module_number
   validates_uniqueness_of :module_number
@@ -14,7 +14,7 @@ class CourseModule < ActiveRecord::Base
     CourseModule.all.pluck(:module_number)
   end
 
-  def sections_count
-    chapter_sections.maximum(:section_number)
+  def chapters_count
+    module_chapters.maximum(:chapter_number)
   end
 end

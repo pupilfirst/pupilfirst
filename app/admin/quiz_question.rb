@@ -20,7 +20,7 @@ ActiveAdmin.register QuizQuestion do
 
     # TODO: Reduce height of the text field below. 'input_html' seems to be malfunctioning
     f.inputs :question
-    f.inputs 'Chapter Details' do
+    f.inputs 'Module Details' do
       f.input :course_module
       f.input :question_number
     end

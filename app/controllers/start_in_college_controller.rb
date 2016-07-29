@@ -60,13 +60,13 @@ class StartInCollegeController < ApplicationController
     end
   end
 
-  # GET /startincollege/module/:id/:section_id
+  # GET /startincollege/module/:id/:chapter_id
   #
-  # Displays the content of a module's section.
+  # Displays the content of a module's chapter.
   def module
-    raise_not_found unless section_exists?
+    raise_not_found unless chapter_exists?
     @module = CourseModule.find_by_module_number params[:id].to_i
-    @section = @module.chapter_sections.find_by_section_number params[:section_id].to_i
+    @chapter = @module.module_chapters.find_by_chapter_number params[:chapter_id].to_i
   end
 
   # GET /startincollege/quiz/:id
@@ -141,12 +141,12 @@ class StartInCollegeController < ApplicationController
     params[:id].to_i.in? CourseModule.valid_module_numbers
   end
 
-  def module_has_section?
-    params[:section_id].to_i.in? CourseModule.find_by(module_number: params[:id].to_i).chapter_sections.pluck(:section_number)
+  def module_has_chapter?
+    params[:chapter_id].to_i.in? CourseModule.find_by(module_number: params[:id].to_i).module_chapters.pluck(:chapter_number)
   end
 
-  def section_exists?
-    module_exists? && module_has_section?
+  def chapter_exists?
+    module_exists? && module_has_chapter?
   end
 
   def lock_under_feature_flag

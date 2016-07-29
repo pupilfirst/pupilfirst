@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160729104025) do
+ActiveRecord::Schema.define(version: 20160729110328) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -169,16 +169,6 @@ ActiveRecord::Schema.define(version: 20160729104025) do
   end
 
   add_index "batches", ["application_stage_id"], name: "index_batches_on_application_stage_id", using: :btree
-
-  create_table "chapter_sections", force: :cascade do |t|
-    t.integer  "course_module_id"
-    t.string   "name"
-    t.integer  "section_number"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
-  end
-
-  add_index "chapter_sections", ["course_module_id"], name: "index_chapter_sections_on_course_module_id", using: :btree
 
   create_table "connect_requests", force: :cascade do |t|
     t.integer  "connect_slot_id"
@@ -359,6 +349,16 @@ ActiveRecord::Schema.define(version: 20160729104025) do
   add_index "karma_points", ["founder_id"], name: "index_karma_points_on_founder_id", using: :btree
   add_index "karma_points", ["source_id"], name: "index_karma_points_on_source_id", using: :btree
   add_index "karma_points", ["startup_id"], name: "index_karma_points_on_startup_id", using: :btree
+
+  create_table "module_chapters", force: :cascade do |t|
+    t.integer  "course_module_id"
+    t.string   "name"
+    t.integer  "chapter_number"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "module_chapters", ["course_module_id"], name: "index_module_chapters_on_course_module_id", using: :btree
 
   create_table "mooc_students", force: :cascade do |t|
     t.string   "email"

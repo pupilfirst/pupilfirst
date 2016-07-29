@@ -31,7 +31,7 @@
     .container-fluid.hidden-sm-down
       .row.instagram-header-footer
         .text-xs-center
-          h3 Checkout the latest images from our #StartInCollege campaign!
+          h3 Checkout the latest images from our <strong>#StartInCollege</strong> campaign!
       .row
         - @instagram_images.each_with_index do |image, index|
           .col-sm-4.col-md-3.col-lg-2.instagram-images-wrapper style="background-image: url('#{image[:image_url]}');" class="#{index > 3 ? 'hidden-md-down' : ''}"

@@ -266,7 +266,7 @@
     padding: 0.5em;
     background-color: black;
     opacity: 0;
-    color: $light-grey-text;
+    color: white;
 
     &.overlay-enabled {
       opacity: .85;
@@ -302,6 +302,7 @@
   padding: 2rem 0;
 
   h3 {
-    color: $light-grey-text;
+    color: white;
+    margin-bottom: 0;
   }
 }

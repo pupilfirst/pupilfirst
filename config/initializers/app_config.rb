@@ -8,5 +8,6 @@ APP_CONFIG = {
     api_key: ENV['INSTAMOJO_API_KEY'],
     auth_token: ENV['INSTAMOJO_AUTH_TOKEN'],
     salt: ENV['INSTAMOJO_SALT']
-  }
+  },
+  instagram_access_token: ENV['INSTAGRAM_ACCESS_TOKEN']
 }.with_indifferent_access

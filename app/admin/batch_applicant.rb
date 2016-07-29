@@ -33,6 +33,12 @@ ActiveAdmin.register BatchApplicant do
     column :phone
     column :reference
     column :college
+
+    column :location do |batch_applicant|
+      application = batch_applicant.batch_applications.last
+      application.state || application.university.location if application.present?
+    end
+
     column :notes
 
     column :last_created_application do |batch_applicant|

@@ -1,10 +1,10 @@
 class QuizQuestion < ActiveRecord::Base
-  belongs_to :course_chapter
+  belongs_to :course_module
   has_many :answer_options
   accepts_nested_attributes_for :answer_options, allow_destroy: true
 
-  validates_presence_of :question, :course_chapter_id, :question_number
-  validates_uniqueness_of :question_number, scope: :course_chapter_id
+  validates_presence_of :question, :course_module_id, :question_number
+  validates_uniqueness_of :question_number, scope: :course_module_id
 
   validate :must_have_exactly_one_correct_answer
 

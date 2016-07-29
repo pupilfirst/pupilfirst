@@ -49,10 +49,11 @@
     }
   }
 }
+
 .big-container {
   background-color: #000;
 
-  .home-footer{
+  .home-footer {
     position: relative;
     background-color: #000;
     color: $light-grey-text;
@@ -73,7 +74,7 @@
       width: 50%;
 
       @include media-breakpoint-down(sm) {
-      margin-bottom: 0;
+        margin-bottom: 0;
       }
     }
 
@@ -121,6 +122,7 @@
     }
   }
 }
+
 .full-screen-background {
   position: relative;
   height: calc(100vh + 85px);
@@ -167,18 +169,18 @@
   }
   &:before {
     content: '';
-		position: absolute;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;
-    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.5) inset;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
   }
   @include media-breakpoint-down(sm) {
     background-size: cover;
     height: 600px;
   }
 }
+
 .header-container {
   position: relative;
   width: 100%;
@@ -196,6 +198,7 @@
     align-items: flex-end;
   }
 }
+
 .hero-text {
   &.hero-text-center {
     text-align: center;
@@ -237,7 +240,69 @@
     }
   }
 }
+
 .home-apply-btn {
   padding: 15px 45px;
   font-size: 1rem;
+}
+
+.instagram-images-wrapper {
+  background-size: cover;
+  background-position: center;
+  padding: 0;
+  position: relative;
+
+  .instagram-spacer {
+    visibility: hidden;
+    max-width: 100%;
+  }
+
+  .instagram-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    padding: 0.5em;
+    background-color: black;
+    opacity: 0;
+    color: white;
+
+    &.overlay-enabled {
+      opacity: .85;
+    }
+
+    .caption {
+      padding: 1em 1em 0 1em;
+      height: 80%;
+      overflow: hidden;
+    }
+
+    .caption:before {
+      content: '';
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      background: linear-gradient(transparent 60%, black 80%);
+    }
+
+    .metrics {
+      position: absolute;
+      bottom: 1rem;
+      right: 2rem;
+      color: white;
+    }
+  }
+}
+
+.instagram-header-footer {
+  background-color: black;
+  padding: 2rem 0;
+
+  h3 {
+    color: white;
+    margin-bottom: 0;
+  }
 }

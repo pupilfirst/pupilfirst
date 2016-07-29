@@ -2,7 +2,7 @@ ActiveAdmin.register QuizQuestion do
   include DisableIntercom
 
   menu parent: 'StartInCollege'
-  permit_params :course_chapter_id, :question, :question_number, answer_options_attributes: [:id, :value, :correct_answer, :hint_text, :_destroy]
+  permit_params :course_module_id, :question, :question_number, answer_options_attributes: [:id, :value, :correct_answer, :hint_text, :_destroy]
 
   index do
     selectable_column
@@ -10,7 +10,7 @@ ActiveAdmin.register QuizQuestion do
     column :correct_answer do |question|
       question.correct_answer.value if question.correct_answer.present?
     end
-    column :course_chapter_id
+    column :course_module_id
     column :question_number
     actions
   end
@@ -20,8 +20,8 @@ ActiveAdmin.register QuizQuestion do
 
     # TODO: Reduce height of the text field below. 'input_html' seems to be malfunctioning
     f.inputs :question
-    f.inputs 'Chapter Details' do
-      f.input :course_chapter
+    f.inputs 'Module Details' do
+      f.input :course_module
       f.input :question_number
     end
 
@@ -38,7 +38,7 @@ ActiveAdmin.register QuizQuestion do
   show do
     attributes_table do
       row :question
-      row :course_chapter_id
+      row :course_module_id
       row :question_number
       row :correct_answer do |question|
         question.correct_answer.value if question.correct_answer.present?

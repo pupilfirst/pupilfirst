@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160726185851) do
+ActiveRecord::Schema.define(version: 20160729110328) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -197,12 +197,11 @@ ActiveRecord::Schema.define(version: 20160726185851) do
 
   add_index "connect_slots", ["faculty_id"], name: "index_connect_slots_on_faculty_id", using: :btree
 
-  create_table "course_chapters", force: :cascade do |t|
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+  create_table "course_modules", force: :cascade do |t|
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.string   "name"
-    t.integer  "chapter_number"
-    t.integer  "sections_count"
+    t.integer  "module_number"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -352,6 +351,16 @@ ActiveRecord::Schema.define(version: 20160726185851) do
   add_index "karma_points", ["source_id"], name: "index_karma_points_on_source_id", using: :btree
   add_index "karma_points", ["startup_id"], name: "index_karma_points_on_startup_id", using: :btree
 
+  create_table "module_chapters", force: :cascade do |t|
+    t.integer  "course_module_id"
+    t.string   "name"
+    t.integer  "chapter_number"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "module_chapters", ["course_module_id"], name: "index_module_chapters_on_course_module_id", using: :btree
+
   create_table "mooc_students", force: :cascade do |t|
     t.string   "email"
     t.string   "name"
@@ -413,7 +422,7 @@ ActiveRecord::Schema.define(version: 20160726185851) do
   add_index "public_slack_messages", ["founder_id"], name: "index_public_slack_messages_on_founder_id", using: :btree
 
   create_table "quiz_attempts", force: :cascade do |t|
-    t.integer  "course_chapter_id"
+    t.integer  "course_module_id"
     t.integer  "mooc_student_id"
     t.datetime "taken_at"
     t.float    "score"
@@ -423,18 +432,18 @@ ActiveRecord::Schema.define(version: 20160726185851) do
     t.datetime "updated_at",          null: false
   end
 
-  add_index "quiz_attempts", ["course_chapter_id"], name: "index_quiz_attempts_on_course_chapter_id", using: :btree
+  add_index "quiz_attempts", ["course_module_id"], name: "index_quiz_attempts_on_course_module_id", using: :btree
   add_index "quiz_attempts", ["mooc_student_id"], name: "index_quiz_attempts_on_mooc_student_id", using: :btree
 
   create_table "quiz_questions", force: :cascade do |t|
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-    t.integer  "course_chapter_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.integer  "course_module_id"
     t.text     "question"
     t.integer  "question_number"
   end
 
-  add_index "quiz_questions", ["course_chapter_id"], name: "index_quiz_questions_on_course_chapter_id", using: :btree
+  add_index "quiz_questions", ["course_module_id"], name: "index_quiz_questions_on_course_module_id", using: :btree
   add_index "quiz_questions", ["question_number"], name: "index_quiz_questions_on_question_number", using: :btree
 
   create_table "resources", force: :cascade do |t|

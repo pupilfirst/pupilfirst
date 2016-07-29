@@ -181,8 +181,15 @@ class ApplicationController < ActionController::Base
       script: 'https://widget.intercom.io https://js.intercomcdn.com',
       connect: 'https://api-ping.intercom.io https://nexus-websocket-a.intercom.io https://nexus-websocket-b.intercom.io wss://nexus-websocket-a.intercom.io wss://nexus-websocket-b.intercom.io https://api-iam.intercom.io',
       font: 'https://js.intercomcdn.com',
-      image: 'https://js.intercomcdn.com https://static.intercomassets.com',
+      image: 'https://js.intercomcdn.com https://static.intercomassets.com https://uploads.intercomcdn.com',
       media: 'https://js.intercomcdn.com'
+    }
+  end
+
+  def instagram_csp
+    {
+      script: 'https://api.instagram.com',
+      image: 'scontent.cdninstagram.com'
     }
   end
 
@@ -200,7 +207,7 @@ class ApplicationController < ActionController::Base
       img-src
       'self' data: https://blog.sv.co http://www.startatsv.com https://sv-assets.sv.co https://secure.gravatar.com
       https://uploaded-assets.sv.co #{google_analytics_csp[:image]} #{inspectlet_csp[:image]} #{facebook_csp[:image]}
-      #{heapanalytics_csp[:image]} #{intercom_csp[:image]};
+      #{heapanalytics_csp[:image]} #{intercom_csp[:image]} #{instagram_csp[:image]};
     IMAGE_SOURCES
   end
 
@@ -209,7 +216,8 @@ class ApplicationController < ActionController::Base
       script-src
       'self' 'unsafe-eval' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
       http://www.startatsv.com https://sv-assets.sv.co #{recaptcha_csp[:script]} #{google_analytics_csp[:script]}
-      #{inspectlet_csp[:script]} #{facebook_csp[:script]} #{heapanalytics_csp[:script]} #{intercom_csp[:script]};
+      #{inspectlet_csp[:script]} #{facebook_csp[:script]} #{heapanalytics_csp[:script]} #{intercom_csp[:script]}
+      #{instagram_csp[:script]};
     SCRIPT_SOURCES
   end
 

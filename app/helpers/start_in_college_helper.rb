@@ -27,7 +27,7 @@ module StartInCollegeHelper
   end
 
   def last_section?
-    section_number == CourseChapter.find_by(chapter_number: chapter_number).sections_count
+    section_number == CourseModule.find_by(chapter_number: chapter_number).sections_count
   end
 
   def next_section
@@ -50,7 +50,7 @@ module StartInCollegeHelper
   end
 
   def last_quiz?
-    @chapter.chapter_number == CourseChapter.maximum(:chapter_number)
+    @chapter.chapter_number == CourseModule.maximum(:chapter_number)
   end
 
   def start_of_next_chapter

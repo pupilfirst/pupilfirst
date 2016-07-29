@@ -1,4 +1,4 @@
-class CourseChapter < ActiveRecord::Base
+class CourseModule < ActiveRecord::Base
   has_many :quiz_questions
 
   has_many :quiz_attempts
@@ -7,11 +7,11 @@ class CourseChapter < ActiveRecord::Base
   has_many :chapter_sections
   accepts_nested_attributes_for :chapter_sections, allow_destroy: true
 
-  validates_presence_of :name, :chapter_number
-  validates_uniqueness_of :chapter_number
+  validates_presence_of :name, :module_number
+  validates_uniqueness_of :module_number
 
-  def self.valid_chapter_numbers
-    CourseChapter.all.pluck(:chapter_number)
+  def self.valid_module_numbers
+    CourseModule.all.pluck(:module_number)
   end
 
   def sections_count

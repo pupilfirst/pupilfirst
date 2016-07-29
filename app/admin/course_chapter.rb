@@ -1,4 +1,4 @@
-ActiveAdmin.register CourseChapter do
+ActiveAdmin.register CourseModule do
   include DisableIntercom
 
   menu parent: 'StartInCollege'

@@ -15,7 +15,7 @@
 
   .col-md-3
     #chapter-links
-      - CourseChapter.all.order(:chapter_number).each do |chapter|
+      - CourseModule.all.order(:chapter_number).each do |chapter|
         .card
           .card-header
             a data-toggle="collapse" data-parent="#chapter-links" href="#chapter#{chapter.chapter_number}"  #{chapter.chapter_number}. #{chapter.name}

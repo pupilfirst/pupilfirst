@@ -9,6 +9,7 @@
       h4.center-block Payment pending
 .container
   == render('applications_close_soon', batch: current_batch) if current_batch.applications_close_soon?
+  == render 'application_progress'
 
   - if @continue_mail_sent
       .alert.alert-success.m-t-1

@@ -7,6 +7,14 @@ class BatchApplicationController < ApplicationController
 
   layout 'application_v2'
 
+  helper_method :current_batch_applicant
+  helper_method :current_batch
+  helper_method :current_stage
+  helper_method :current_application
+  helper_method :applicant_stage
+  helper_method :applicant_stage_number
+  helper_method :applicant_status
+
   # GET /apply
   def index
     # Redirect current batch's applicants to continue route.
@@ -235,30 +243,6 @@ class BatchApplicationController < ApplicationController
     end
   end
 
-  helper_method :current_batch_applicant
-  helper_method :current_batch
-  helper_method :current_stage
-  helper_method :current_application
-  helper_method :applicant_stage
-
-  private
-
-  def set_instance_variables
-    @skip_container = true
-    @hide_sign_in = true
-  end
-
-  def login_state
-    cached_status = applicant_status
-
-    case cached_status
-      when :application_pending, :application_expired, :payment_pending
-        cached_status.to_s
-      else
-        "stage_#{applicant_stage_number}_#{cached_status}"
-    end
-  end
-
   # Returns one of :application_pending, :ongoing, :expired, :rejected, :complete to indicate which view should be rendered.
   #
   # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength
@@ -283,6 +267,24 @@ class BatchApplicationController < ApplicationController
       else
         applicant_has_submitted? ? :rejected : :expired
       end
+    end
+  end
+
+  private
+
+  def set_instance_variables
+    @skip_container = true
+    @hide_sign_in = true
+  end
+
+  def login_state
+    cached_status = applicant_status
+
+    case cached_status
+      when :application_pending, :application_expired, :payment_pending
+        cached_status.to_s
+      else
+        "stage_#{applicant_stage_number}_#{cached_status}"
     end
   end
 

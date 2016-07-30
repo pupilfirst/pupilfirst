@@ -14,4 +14,25 @@ module BatchApplicationsHelper
     delta = time_ago_in_words(batch.application_stage_deadline)
     t('batch_application.general.applications_close_soon_html', batch_number: batch.batch_number, deadline: deadline, delta: delta)
   end
+
+  # Used to determine which stage applicant is in for the progress bar.
+  def stage_active_class(stage_number)
+    applicant_stage_number == stage_number ? 'applicant-stage' : ''
+  end
+
+  # Used to determine the status of a stage in the progress bar. Returns one of :pending, :ongoing, :complete,
+  # :expired, :rejected, or :not_applicable
+  def stage_status(stage_number)
+    if applicant_stage_number == stage_number
+      applicant_status
+    elsif stage_number < applicant_stage_number
+      :complete
+    elsif stage_number > applicant_stage_number
+      if applicant_status.in? [:ongoing, :complete]
+        :pending
+      else
+        :not_applicable
+      end
+    end
+  end
 end

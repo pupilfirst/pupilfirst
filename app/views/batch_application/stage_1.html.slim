@@ -9,7 +9,7 @@
       h4.center-block Payment pending
 .container
   == render('applications_close_soon', batch: current_batch) if current_batch.applications_close_soon?
-  == render 'application_progress'
+  / == render 'application_progress'
 
   - if @continue_mail_sent
       .alert.alert-success.m-t-1
@@ -20,7 +20,7 @@
           | window.
 
   .container-md-center.content-box.m-t-3.m-b-3.apply-submitted
-    h3.text-xs-center
+    h3.text-xs-center.m-b-2
       ' Your application data has been stored.
       br
       ' You now need to
@@ -36,37 +36,38 @@
     .row
       .col-md-12
         #applicant-fee-data.hidden-xs-up data-applicant-fee=BatchApplicant::APPLICATION_FEE
+        .simple-form-container
+          = simple_form_for @form,
+            url: apply_stage_submit_path(stage_number: 1),
+            method: :post,
+            html: { class: 'form-horizontal' },
+            wrapper: :horizontal_form do |f|
 
-        = simple_form_for @form,
-          url: apply_stage_submit_path(stage_number: 1),
-          method: :post,
-          html: { class: 'form-horizontal' },
-          wrapper: :horizontal_form do |f|
+            = f.input :cofounder_count,
+              label: 'Number of cofounders (founders other than yourself)',
+              collection: %w(2 3 4),
+              as: :select,
+              include_blank: 'Please select number of cofounders'
 
-          = f.input :cofounder_count,
-            label: 'Number of cofounders (founders other than yourself)',
-            collection: %w(2 3 4),
-            as: :select,
-            include_blank: 'Please select number of cofounders'
+            .text-xs-center.m-t-2 class="#{f.object.cofounder_count.blank? ? 'hidden-xs-up' : ''}"
+              .paywith-instamojo
+                div
+                  h3.m-b-1
+                    ' You need to pay
+                    span.brand-secondary.font-semibold
+                      ' Rs. #{current_application.fee},
+                    br
+                    | to proceed to the next stage.
 
-          .text-xs-center.m-t-2 class="#{f.object.cofounder_count.blank? ? 'hidden-xs-up' : ''}"
-            .paywith-instamojo
-              div
-                h3.m-b-2
-                  ' You need to pay
-                  span.brand-secondary.font-semibold
-                    ' Rs. #{current_application.fee},
-                  br
-                  | to proceed to the next stage.
+                  = f.submit payment_button_message(current_application), class: 'btn btn-primary btn-md text-uppercase'
+    .restart-application.m-t-2
+      h6.text-xs-center
+        ' Made mistakes in your application? That's okay!
+        br
+        ' You can
 
-                = f.submit payment_button_message(current_application), class: 'btn btn-primary btn-md text-uppercase'
-    hr.m-t-2
+        span.brand-secondary.font-semibold
+          | restart the application process.
 
-    h3.text-xs-center.m-t-2
-    ' Made mistakes in your application? That's okay!
-    br
-    ' You can
-    span.brand-secondary.font-semibold restart the application process.
-
-    .text-xs-center.m-t-2
-    = button_to 'Revoke and Rewrite Application', apply_restart_path, class: 'btn btn-secondary btn-md text-uppercase', data: { confirm: 'This will delete the saved application. Continue?' }
+    .text-xs-center.m-t-1
+      = button_to 'Revoke and Rewrite Application', apply_restart_path, class: 'btn btn-secondary btn-md text-uppercase', data: { confirm: 'This will delete the saved application. Continue?' }

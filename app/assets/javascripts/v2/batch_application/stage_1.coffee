@@ -2,6 +2,8 @@ prepareCofounderFields = ->
   cofounderCountSelect = $('[name="application_stage_one[cofounder_count]"]')
 
   if cofounderCountSelect.length
+    updateFee(parseInt(cofounderCountSelect.val()))
+
     cofounderCountSelect.change (e) ->
       updateFee(parseInt(e.target.value))
 

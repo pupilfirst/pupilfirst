@@ -183,6 +183,8 @@ p {
       position: relative;
       background: asset-url('down-arrow.svg') no-repeat 97% 50%;
       background-size: 15px 15px;
+      color: transparent;
+      text-shadow: 0 0 0 #000;
     }
     .radio-inline {
       padding-top: 7px;

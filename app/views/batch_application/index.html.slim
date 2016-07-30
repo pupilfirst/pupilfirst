@@ -8,9 +8,10 @@
   .row.application-process
     .col-lg-8.col-md-12
       .registration-complete-notice.card.content-box.m-t-2.m-b-0
-        h4
-          ' <strong>Did you complete registration once before?</strong> If so,
-        = link_to 'Sign In to Continue', apply_identify_path, class: 'btn btn-primary btn-md text-uppercase m-t-1'
+        h4.m-a-0
+          span
+            ' <strong>Did you complete registration once before?</strong>
+          = link_to 'Sign In to Continue', apply_identify_path, class: 'btn btn-primary btn-md text-uppercase'
       .application-process-left.content-box.m-t-2.m-b-2
         .admission-process.clearfix
           h2
@@ -21,7 +22,7 @@
             ' We don’t have Exams at Admission or at Graduation. Instead, at both
             ' stages we look at the real product that you have build to measure your
             | knowledge. We encourage you to use the internet for your help to solve problems.
-          .row
+          .row.m-t-1
             .col-md-4
               .process-box.arrow-right
                 .stage-number
@@ -326,8 +327,6 @@
           
           - if f.object.errors.present?
             .alert.alert-warning.alert-dismissable.fade.in role='alert'
-              button.close type="button" data-dismiss="alert" aria-label="Close"
-                span aria-hidden="true" &times;
 
               strong There were problems with your submission.
               | &nbsp;Please check all fields and try again.

@@ -1,6 +1,8 @@
 class BatchApplication < ActiveRecord::Base
   include Taggable
 
+  FEE = 3000
+
   belongs_to :batch
   belongs_to :application_stage
   has_many :application_submissions, dependent: :destroy
@@ -55,8 +57,7 @@ class BatchApplication < ActiveRecord::Base
 
   # Fee amount, calculated from unpaid founders
   def fee
-    return if cofounder_count.blank?
-    (cofounder_count + 1) * BatchApplicant::APPLICATION_FEE
+    FEE
   end
 
   # Batch application is paid depending on its payment request status.

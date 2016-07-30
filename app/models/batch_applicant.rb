@@ -18,9 +18,6 @@ class BatchApplicant < ActiveRecord::Base
   # Applicants who have completed payments.
   scope :conversion, -> { joins(:batch_applications).where('batch_applications.team_lead_id = batch_applicants.id').joins(:payments).where.not(phone: nil).merge(Payment.paid).distinct }
 
-  # Per-founder application fee.
-  APPLICATION_FEE = 1000
-
   # Basic validations.
   validates :email, presence: true, uniqueness: true
 

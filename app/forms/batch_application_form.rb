@@ -25,7 +25,7 @@ class BatchApplicationForm < Reform::Form
     return if applicant.blank?
     return if applicant.batch_applications.where(batch: Batch.open_batch).blank?
 
-    errors[:base] << 'You have already completed this step. Please login instead.'
+    errors[:base] << 'You have already completed this step. Please sign in instead.'
     team_lead.errors[:email] << 'is already an applicant'
   end
 

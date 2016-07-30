@@ -13,7 +13,7 @@ feature 'Applying to SV.CO' do
   context 'when no batches are open' do
     scenario 'user visits apply page' do
       visit apply_path
-      expect(page).to_not have_text("Team Lead's Details")
+      expect(page).to_not have_text('Did you complete registration once before?')
     end
   end
 
@@ -22,7 +22,7 @@ feature 'Applying to SV.CO' do
 
     scenario 'user visits apply page' do
       visit apply_path
-      expect(page).to have_text("Team Lead's Details")
+      expect(page).to have_text('Did you complete registration once before?')
     end
   end
 end

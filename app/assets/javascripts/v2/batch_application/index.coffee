@@ -45,10 +45,10 @@ emailsShouldMatch = ->
         unless emailConfirmationInput.parent().find('span').length
           emailConfirmationInput.after('<span class="help-block">does not match</span>')
 
-        emailConfirmationInput.parent().parent().addClass('has-error')
+        emailConfirmationInput.parent().addClass('has-error')
       else
         emailConfirmationInput.parent().find('span').remove()
-        emailConfirmationInput.parent().parent().removeClass('has-error')
+        emailConfirmationInput.parent().removeClass('has-error')
 
     emailConfirmationInput.blur ->
       validateEmailMatch()

@@ -97,9 +97,13 @@ stickyApplyButtonOnApplyPage = ->
         if direction == 'up'
           $('#sticky-start-application').removeClass('hidden-xs-up')
 
+destroyWaypoints = ->
+  if $('.application-process').length
+    Waypoint.destroyAll()
 
 $(document).on 'page:change', setupSelect2Inputs
 $(document).on 'page:change', emailsShouldMatch
 $(document).on 'page:change', stickStartapplicationForm
 $(document).on 'page:change', scrolltoStartapplicationForm
 $(document).on 'page:change', stickyApplyButtonOnApplyPage
+$(document).on 'page:before-change', destroyWaypoints

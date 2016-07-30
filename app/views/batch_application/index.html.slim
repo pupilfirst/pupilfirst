@@ -124,7 +124,7 @@
               .row
                 .col-md-8.col-sm-8
                   h3
-                    | Select a Business Idea 
+                    | Select a Business Idea
                   ul
                     li All Ideas are industry grade
                     li Can be done by student startups
@@ -240,7 +240,7 @@
                       p
                         ' Yes. Founding Teams of Apple, Microsoft, Google and
                         ' Facebook had at least one programmer. You need at least
-                        | one co-founders how is a programmer in your team to apply.
+                        | one co-founders who is a programmer in your team to apply.
         .help-section.clearfix
           .col-md-3
             .help-icon
@@ -256,16 +256,16 @@
           #fee-accordion.panel-group
             .card.content-box
               h4
-                a.card-block.accordion-toggle.collapsed data-parent="#fee-accordion" data-toggle="collapse" href="#application-fee" 
+                a.card-block.accordion-toggle.collapsed data-parent="#fee-accordion" data-toggle="collapse" href="#application-fee"
                   | Application Fee
               #application-fee.card-text.collapse.in
                 h3
                  span
-                   ' &#8377; 1,000 per founder.
+                   ' &#8377; 3,000 per team, non-refundable.
 
             .card.content-box
               h4
-                a.card-block.accordion-toggle data-parent="#fee-accordion" data-toggle="collapse" href="#program-fee" 
+                a.card-block.accordion-toggle data-parent="#fee-accordion" data-toggle="collapse" href="#program-fee"
                   | Program Fee
               #program-fee.collapse
                 .card-text
@@ -275,16 +275,16 @@
 
             .card.content-box
               h4
-                a.card-block.accordion-toggle data-parent="#fee-accordion" data-toggle="collapse" href="#scholorship" 
+                a.card-block.accordion-toggle data-parent="#fee-accordion" data-toggle="collapse" href="#scholorship"
                   | Scholarship
               #scholorship.collapse
                 .card-text
                   h3
-                    | Anim probably haven't heard of them accusamus labore sustainable VHS.
+                    | For those students whose annual family income does not exceed &#8377; 5 lakhs, we provide scholarship in the form of financial aid.
 
             .card.content-box
               h4
-                a.card-block.accordion-toggle data-parent="#fee-accordion" data-toggle="collapse" href="#success-fee" 
+                a.card-block.accordion-toggle data-parent="#fee-accordion" data-toggle="collapse" href="#success-fee"
                   | Success Fee
               #success-fee.collapse
                 .card-text.text-xs-center
@@ -314,7 +314,7 @@
                       h3 30% Discount
                       p
                         | for a right to invest in any funding round. <strong>No upfront equity</strong>.
-            
+
     .col-lg-4.col-md-12#start-application-process
       .m-t-2.m-b-3
         / .alert.alert-info.m-t-2.m-b-0
@@ -324,7 +324,7 @@
         = simple_form_for @form,
           url: apply_register_path,
           wrapper: :vertical_form do |f|
-          
+
           - if f.object.errors.present?
             .alert.alert-warning.alert-dismissable.fade.in role='alert'
 

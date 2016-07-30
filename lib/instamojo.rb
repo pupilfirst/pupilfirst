@@ -5,6 +5,10 @@ class Instamojo
   PAYMENT_STATUS_CREDITED = -'Credit'
   PAYMENT_STATUS_FAILED = -'Failed'
 
+  # Raised when Instamojo API fails to create a payment request. This is handled in
+  # BatchApplicationController#stage_1_submit.
+  class PaymentRequestCreationFailed < StandardError; end
+
   def create_payment_request(amount:, buyer_name:, email:)
     payment_request = raw_create_payment_request(amount, buyer_name, email)[:payment_request]
 
@@ -52,9 +56,15 @@ class Instamojo
     raw_response = http.request(request)
 
     # Parse the response
-    response = JSON.parse(raw_response.body).with_indifferent_access
+    begin
+      response = JSON.parse(raw_response.body).with_indifferent_access
+    rescue JSON::ParserError
+      raise PaymentRequestCreationFailed, "Failed to parse the response from Instamojo API as JSON: #{raw_response.body}"
+    end
 
-    raise 'Failed to create payment request. Please check.' unless response.key?(:success)
+    unless response.key?(:success)
+      raise PaymentRequestCreationFailed, "Response from Instamojo API was valid JSON, but did not contain the success key: #{raw_response.body}"
+    end
 
     response
   end

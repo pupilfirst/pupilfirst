@@ -22,6 +22,32 @@ describe Instamojo do
     let(:buyer_name) { Faker::Name.name }
     let(:email) { Faker::Internet.email(buyer_name) }
 
+    let(:api_response) do
+      {
+        body: {
+          payment_request: {
+            id: 'd66cb29dd059482e8072999f995c4eef',
+            phone: '+919999999999',
+            email: 'foo@example.com',
+            buyer_name: 'John Doe',
+            amount: amount.to_s,
+            purpose: 'Application to SV.CO',
+            status: 'Pending',
+            send_sms: true,
+            send_email: true,
+            sms_status: 'Pending',
+            email_status: 'Pending',
+            longurl: 'https://www.instamojo.com/@ashwch/d66cb29dd059482e8072999f995c4eef/',
+            redirect_url: 'http://localhost:3000/instamojo/redirect',
+            created_at: '2015-10-07T21:36:34.665Z',
+            modified_at: '2015-10-07T21:36:34.665Z',
+            allow_repeated_payments: false
+          },
+          success: true
+        }.to_json
+      }
+    end
+
     before :each do
       stub_request(:post, 'https://www.example.com/payment-requests/')
         .with(
@@ -45,29 +71,7 @@ describe Instamojo do
             'X-Auth-Token' => 'AUTH_TOKEN'
           }
         )
-        .to_return(
-          body: {
-            payment_request: {
-              id: 'd66cb29dd059482e8072999f995c4eef',
-              phone: '+919999999999',
-              email: 'foo@example.com',
-              buyer_name: 'John Doe',
-              amount: amount.to_s,
-              purpose: 'Application to SV.CO',
-              status: 'Pending',
-              send_sms: true,
-              send_email: true,
-              sms_status: 'Pending',
-              email_status: 'Pending',
-              longurl: 'https://www.instamojo.com/@ashwch/d66cb29dd059482e8072999f995c4eef/',
-              redirect_url: 'http://localhost:3000/instamojo/redirect',
-              created_at: '2015-10-07T21:36:34.665Z',
-              modified_at: '2015-10-07T21:36:34.665Z',
-              allow_repeated_payments: false
-            },
-            success: true
-          }.to_json
-        )
+        .to_return(api_response)
     end
 
     it 'creates a payment request and returns basic details' do
@@ -79,6 +83,28 @@ describe Instamojo do
         short_url: nil,
         long_url: 'https://www.instamojo.com/@ashwch/d66cb29dd059482e8072999f995c4eef/'
       )
+    end
+
+    context 'when Instamojo API returns non-JSON response' do
+      let(:api_response) { { body: '<html></html>' } }
+
+      it 'raises PaymentRequestCreationFailed' do
+        expect do
+          subject.create_payment_request(amount: amount, buyer_name: buyer_name, email: email)
+        end.to raise_error(Instamojo::PaymentRequestCreationFailed)
+      end
+    end
+
+    context "when Instamojo's JSON response does not indicate success" do
+      context 'when Instamojo API returns non-JSON response' do
+        let(:api_response) { { body: '{}' } }
+
+        it 'raises PaymentRequestCreationFailed' do
+          expect do
+            subject.create_payment_request(amount: amount, buyer_name: buyer_name, email: email)
+          end.to raise_error(Instamojo::PaymentRequestCreationFailed)
+        end
+      end
     end
   end
 

@@ -21,7 +21,7 @@ class Payment < ActiveRecord::Base
   end
 
   # Before an payment entry can be created, a request must be placed with Instamojo.
-  after_create do
+  before_create do
     raise 'Payment cannot be initialized without supplying a batch application.' if batch_application.blank?
 
     instamojo = Instamojo.new
@@ -37,8 +37,6 @@ class Payment < ActiveRecord::Base
     self.instamojo_payment_request_status = response[:status]
     self.short_url = response[:short_url]
     self.long_url = response[:long_url]
-
-    save!
   end
 
   def status

@@ -2,7 +2,7 @@ class BatchApplicationController < ApplicationController
   before_action :ensure_applicant_is_signed_in, except: %w(index register identify send_sign_in_email continue sign_in_email_sent)
   before_action :ensure_batch_active, except: :index
   before_action :ensure_accurate_stage_number, only: %w(form submit complete expired rejected)
-  before_action :set_instance_variables, only: %w(index register identify)
+  before_action :set_instance_variables
   before_action :hide_nav_links
 
   layout 'application_v2'
@@ -152,7 +152,13 @@ class BatchApplicationController < ApplicationController
     @form = ApplicationStageOneForm.new(current_application)
 
     if @form.validate(params[:application_stage_one])
-      payment = @form.save
+      begin
+        payment = @form.save
+      rescue Instamojo::PaymentRequestCreationFailed
+        flash[:error] = 'We were unable to contact our payment partner. Please try again in a few minutes.'
+        redirect_to apply_stage_path(stage_number: 1, error: 'payment_request_failed')
+        return
+      end
 
       if Rails.env.development?
         render text: "Redirect to #{payment.long_url}"

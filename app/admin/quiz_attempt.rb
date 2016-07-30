@@ -6,7 +6,7 @@ ActiveAdmin.register QuizAttempt do
   index do
     selectable_column
 
-    column :course_chapter
+    column :course_module
     column :mooc_student
     column :score
     column :created_at

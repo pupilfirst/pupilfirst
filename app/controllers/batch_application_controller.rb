@@ -2,10 +2,18 @@ class BatchApplicationController < ApplicationController
   before_action :ensure_applicant_is_signed_in, except: %w(index register identify send_sign_in_email continue sign_in_email_sent)
   before_action :ensure_batch_active, except: :index
   before_action :ensure_accurate_stage_number, only: %w(form submit complete expired rejected)
-  before_action :set_instance_variables, only: %w(index register identify)
+  before_action :set_instance_variables
   before_action :hide_nav_links
 
   layout 'application_v2'
+
+  helper_method :current_batch_applicant
+  helper_method :current_batch
+  helper_method :current_stage
+  helper_method :current_application
+  helper_method :applicant_stage
+  helper_method :applicant_stage_number
+  helper_method :applicant_status
 
   # GET /apply
   def index
@@ -144,7 +152,13 @@ class BatchApplicationController < ApplicationController
     @form = ApplicationStageOneForm.new(current_application)
 
     if @form.validate(params[:application_stage_one])
-      payment = @form.save
+      begin
+        payment = @form.save
+      rescue Instamojo::PaymentRequestCreationFailed
+        flash[:error] = 'We were unable to contact our payment partner. Please try again in a few minutes.'
+        redirect_to apply_stage_path(stage_number: 1, error: 'payment_request_failed')
+        return
+      end
 
       if Rails.env.development?
         render text: "Redirect to #{payment.long_url}"
@@ -235,30 +249,6 @@ class BatchApplicationController < ApplicationController
     end
   end
 
-  helper_method :current_batch_applicant
-  helper_method :current_batch
-  helper_method :current_stage
-  helper_method :current_application
-  helper_method :applicant_stage
-
-  private
-
-  def set_instance_variables
-    @skip_container = true
-    @hide_sign_in = true
-  end
-
-  def login_state
-    cached_status = applicant_status
-
-    case cached_status
-      when :application_pending, :application_expired, :payment_pending
-        cached_status.to_s
-      else
-        "stage_#{applicant_stage_number}_#{cached_status}"
-    end
-  end
-
   # Returns one of :application_pending, :ongoing, :expired, :rejected, :complete to indicate which view should be rendered.
   #
   # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength
@@ -283,6 +273,24 @@ class BatchApplicationController < ApplicationController
       else
         applicant_has_submitted? ? :rejected : :expired
       end
+    end
+  end
+
+  private
+
+  def set_instance_variables
+    @skip_container = true
+    @hide_sign_in = true
+  end
+
+  def login_state
+    cached_status = applicant_status
+
+    case cached_status
+      when :application_pending, :application_expired, :payment_pending
+        cached_status.to_s
+      else
+        "stage_#{applicant_stage_number}_#{cached_status}"
     end
   end
 

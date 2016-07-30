@@ -45,7 +45,6 @@
 //= require v2/footer
 
 // Controller-specific
-// require home
 // require faculty
 // require startups
 // require timeline_events
@@ -53,6 +52,7 @@
 // require about
 // require transparency
 // require talent
+//= require v2/home
 //= require v2/batch_application
 //= require v2/tour
 //= require v2/story

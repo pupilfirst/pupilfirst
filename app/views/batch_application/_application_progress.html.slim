@@ -1,0 +1,24 @@
+// CSS in batch_application/shared.scss
+.application-progress
+  .row
+    .col-md-1
+    .col-md-2
+      .application-stage.stage-1 class=stage_active_class(1)
+        h4 Pay Application Fee
+        .stage-status = stage_status(1)
+    .col-md-2
+      .application-stage.stage-2 class=stage_active_class(2)
+        h4 Perform Coding & Video Task
+        .stage-status = stage_status(2)
+    .col-md-2
+      .application-stage.stage-3 class=stage_active_class(3)
+        h4 Interview
+        .stage-status = stage_status(3)
+    .col-md-2
+      .application-stage.stage-4 class=stage_active_class(4)
+        h4 Pre-selection
+        .stage-status = stage_status(4)
+    .col-md-2
+      .application-stage.stage-5 class=stage_active_class(5)
+        h4 Complete!
+        .stage-status = stage_status(5)

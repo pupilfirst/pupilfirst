@@ -1,0 +1,10 @@
+/ To view this page as html set a debug param. For eg: http://localhost:3000/startincollege/completion_certificate.pdf?debug
+
+head
+  / Note: @vinu: This page cannot access assets including stylesheets the usual way. Bootstrap etc are thus unavailable. I have added a sample sytlesheet below which you can expand on.
+  = stylesheet_link_tag wicked_pdf_asset_base64('v2/start_in_college/completion_certificate')
+body
+  p.certificate-text This is to certify that #{current_mooc_student.name} of #{current_mooc_student.university.name} has successfully completed the 'Sixways: Introduction' course with a score of #{current_mooc_student.score} %.
+
+  / Note: @vinu: to include images use the following syntax:
+  /  = wicked_pdf_image_tag 'image.jpg'

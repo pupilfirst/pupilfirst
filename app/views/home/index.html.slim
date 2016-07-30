@@ -24,7 +24,36 @@
     .container
       .header-container class="header-#{hero_text_alignment}"
         .hero-text class="hero-text-#{hero_text_alignment}"
-          h1 = t("home.index.main_bleed_message_html")
+          h1 = t('home.index.main_bleed_message_html')
           h4 = t("home.index.background_#{background_image_number}_messages.secondary_html")
           = link_to 'Apply Now', apply_path, class: 'btn btn-primary btn-lg text-uppercase home-apply-btn'
+
+    .container-fluid.hidden-sm-down
+      .row.instagram-header-footer
+        .text-xs-center
+          h3 Checkout the latest images from our <strong>#StartInCollege</strong> campaign!
+      .row
+        - @instagram_images.each_with_index do |image, index|
+          .col-sm-4.col-md-3.col-lg-2.instagram-images-wrapper style="background-image: url('#{image[:image_url]}');" class="#{index > 3 ? 'hidden-md-down' : ''}"
+            img.instagram-spacer src=image_path('home/instagram_square_spacer.png')
+            a.instagram-overlay href=image[:instagram_link] target='_blank'
+              - if image.key?(:caption)
+                .caption = image[:caption][:text]
+              .metrics
+                i.fa.fa-heart
+                ' &nbsp;#{image[:likes_count]}&nbsp;&nbsp;
+                i.fa.fa-comment
+                ' &nbsp;#{image[:comments_count]}
+      .row.instagram-header-footer
+        .text-xs-center
+          a.btn.btn-md.btn-secondary href='https://www.instagram.com/svdotco' target='_blank'
+            i.fa.fa-instagram
+            ' &nbsp;&nbsp;Instagram
+          a.btn.btn-md.btn-secondary.m-l-1.m-r-1 href='https://twitter.com/svdotco' target='_blank'
+            i.fa.fa-twitter
+            ' &nbsp;&nbsp;Twitter
+          a.btn.btn-md.btn-secondary href='https://www.facebook.com/svdotco' target='_blank'
+            i.fa.fa-facebook
+            ' &nbsp;&nbsp;Facebook
+
     == render 'layouts/home_footer'

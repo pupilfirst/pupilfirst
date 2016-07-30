@@ -1,7 +1,7 @@
 class StartInCollegeController < ApplicationController
   before_action :authorize_student, except: %w(index student_details create_student)
   before_action :block_student, only: %w(student_details create_student)
-  before_action :lock_under_feature_flag, only: %w(chapter quiz quiz_submission)
+  before_action :lock_under_feature_flag, only: %w(module quiz quiz_submission)
 
   helper_method :current_mooc_student
   helper_method :quiz_score
@@ -60,23 +60,23 @@ class StartInCollegeController < ApplicationController
     end
   end
 
-  # GET /startincollege/chapter/:id/:section_id
+  # GET /startincollege/module/:id/:chapter_id
   #
-  # Displays the content of a chapter's section.
-  def chapter
-    raise_not_found unless section_exists?
-
-    render "start_in_college/chapters/chapter_#{params[:id]}_#{params[:section_id]}"
+  # Displays the content of a module's chapter.
+  def module
+    raise_not_found unless chapter_exists?
+    @module = CourseModule.find_by_module_number params[:id].to_i
+    @chapter = @module.module_chapters.find_by_chapter_number params[:chapter_id].to_i
   end
 
   # GET /startincollege/quiz/:id
   #
   # Displays the quiz questions
   def quiz
-    raise_not_found unless chapter_exists?
+    raise_not_found unless module_exists?
 
-    @chapter = CourseChapter.find_by(chapter_number: params[:id].to_i)
-    @questions = @chapter.quiz_questions.shuffle
+    @module = CourseModule.find_by(module_number: params[:id].to_i)
+    @questions = @module.quiz_questions.shuffle
 
     @form = QuizSubmissionForm.new(OpenStruct.new)
     @form.prepopulate! questions: @questions
@@ -86,7 +86,7 @@ class StartInCollegeController < ApplicationController
   #
   # Evaluates a quiz submission
   def quiz_submission
-    @chapter = CourseChapter.find params[:chapter]
+    @module = CourseModule.find params[:module]
 
     grade_submission
     save_grade
@@ -96,7 +96,19 @@ class StartInCollegeController < ApplicationController
   #
   # End of course page. Probably show grade and option to print certificate
   def course_end
-    @final_score = current_mooc_student.score.round(1)
+    @final_score = current_mooc_student.score.round
+  end
+
+  # GET /startincollege/completion_certificate
+  #
+  # Display the completion certificate with provision to download as pdf
+  def completion_certificate
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: 'certificate', disposition: 'attachment', show_as_html: params.key?('debug')
+      end
+    end
   end
 
   protected
@@ -125,16 +137,16 @@ class StartInCollegeController < ApplicationController
     params.require(:mooc_student).permit(:name, :gender, :university_id, :college, :semester, :state)
   end
 
+  def module_exists?
+    params[:id].to_i.in? CourseModule.valid_module_numbers
+  end
+
+  def module_has_chapter?
+    params[:chapter_id].to_i.in? CourseModule.find_by(module_number: params[:id].to_i).module_chapters.pluck(:chapter_number)
+  end
+
   def chapter_exists?
-    params[:id].to_i.in? CourseChapter.valid_chapter_numbers
-  end
-
-  def chapter_has_section?
-    params[:section_id].to_i <= CourseChapter.find_by(chapter_number: params[:id].to_i).sections_count
-  end
-
-  def section_exists?
-    chapter_exists? && chapter_has_section?
+    module_exists? && module_has_chapter?
   end
 
   def lock_under_feature_flag
@@ -154,6 +166,6 @@ class StartInCollegeController < ApplicationController
   end
 
   def save_grade
-    QuizAttempt.create!(course_chapter: @chapter, mooc_student: current_mooc_student, score: quiz_score, attempted_questions: @attempted, total_questions: @total)
+    QuizAttempt.create!(course_module: @module, mooc_student: current_mooc_student, score: quiz_score, attempted_questions: @attempted, total_questions: @total)
   end
 end

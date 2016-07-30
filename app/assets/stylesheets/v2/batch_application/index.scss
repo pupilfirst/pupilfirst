@@ -312,7 +312,7 @@
     @include media-breakpoint-down(xs) {
       width: 100%;
       border-width: 0 0 1px 0;
-      padding: 30px 50px;
+      padding: 30px 15px;
 
       &:last-child {
         border-bottom: 0;
@@ -362,19 +362,23 @@
     }
     .program-slide-icon {
       @include media-breakpoint-down(sm) {
-        width: 100px;
-        margin: auto;
+        display: none;
       }
     }
-
+    h3 {
+      @include media-breakpoint-down(xs) {
+        font-size: 1.25rem;
+      }
+    }
     ul {
       list-style: none;
       padding-left: 30px;
       margin-bottom: 15px;
 
       li {
-        line-height: 2;
         position: relative;
+        margin-top: 5px;
+        padding-top: 4px;
 
         &:before {
           content: '';
@@ -407,7 +411,7 @@
       }
     }
     @include media-breakpoint-down(sm) {
-      height: auto;
+      height: 300px;
       margin: 0;
     }
   }

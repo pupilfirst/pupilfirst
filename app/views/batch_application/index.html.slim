@@ -5,898 +5,384 @@
 .container
   == render('applications_close_soon', batch: current_batch) if current_batch.applications_close_soon?
 
-  .alert.alert-info.m-t-1
-    ' Did you complete registration once before? If so,
-    | #{link_to 'sign in and continue the application process', apply_identify_path}.
-
-  div.m-t-3.m-b-3
-    = simple_form_for @form,
-      url: apply_register_path,
-      html: { class: 'form-horizontal' },
-      wrapper: :horizontal_form,
-      wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes } do |f|
-
-      - if f.object.errors.present?
-        .alert.alert-warning.alert-dismissable.fade.in role='alert'
-          button.close type="button" data-dismiss="alert" aria-label="Close"
-            span aria-hidden="true" &times;
-
-          strong There were problems with your submission.
-          | &nbsp;Please check all fields and try again.
-
-          - if f.object.errors[:base].present?
-            ul.m-t-1
-              - f.object.errors[:base].each do |error_message|
-                li #{error_message}
-
-      .container-md-center.content-box.m-b-2
-        .simple-form-container
-          = f.input :consent,
-            as: :boolean,
-            inline_label: t('batch_application.stage_1.application_page_read_html') + t('batch_application.stage_1.team_lead_consent') + t('batch_application.stage_1.fees_consent'),
-            required: true
-
-        h5.form-section-title.text-uppercase.font-semibold.m-b-2
-          | Team Lead's Details (You are the team lead)
-        .simple-form-container
+  .row.application-process
+    .col-lg-8.col-md-12
+      .registration-complete-notice.card.content-box.m-t-2.m-b-0
+        h4
+          ' <strong>Did you complete registration once before?</strong> If so,
+        = link_to 'Sign In to Continue', apply_identify_path, class: 'btn btn-primary btn-md text-uppercase m-t-1'
+      .application-process-left.content-box.m-t-2.m-b-2
+        .admission-process.clearfix
+          h2
+            ' Unique <strong>Admission Process</strong>
+            br
+            | to show team skills
+          p
+            ' We don’t have Exams at Admission or at Graduation. Instead, at both
+            ' stages we look at the real product that you have build to measure your
+            | knowledge. We encourage you to use the internet for your help to solve problems.
           .row
-            = f.simple_fields_for :team_lead do |t|
-              = t.input :name, label: 'Your name', input_html: { maxlength: 250 }
+            .col-md-4
+              .process-box.arrow-right
+                .stage-number
+                  | 1
+                .process-icon.center-block
+                  = image_tag 'apply/admission-process/team_lead.svg'
+                h5
+                  ' Apply
+                  br
+                  | as a Team Lead
+            .col-md-4
+              .process-box.arrow-right.process-box-green
+                .stage-number
+                  | 2
+                .process-icon.center-block
+                  = image_tag 'apply/admission-process/co_founders.svg'
+                h5
+                  ' Add
+                  br
+                  | Co-Founders
+            .col-md-4
+              .process-box.arrow-down
+                .stage-number
+                  | 3
+                .process-icon.center-block
+                  = image_tag 'apply/admission-process/task.svg'
+                h5
+                  ' Perform Coding
+                  br
+                  | &amp; Video Task
+          .row
+            .col-md-4.col-md-push-8
+              .process-box.arrow-left.process-box-green
+                .stage-number
+                  | 4
+                .process-icon.center-block
+                  = image_tag 'apply/admission-process/interview.svg'
+                h5
+                  | Interview
+            .col-md-4
+              .process-box.arrow-left
+                .stage-number
+                  | 5
+                .process-icon.center-block
+                  = image_tag 'apply/admission-process/selection_notification.svg'
+                h5
+                  | Selection Notification
+            .col-md-4.col-md-pull-8
+              .process-box.arrow-down.process-box-green
+                .stage-number
+                  | 6
+                .process-icon.center-block
+                  = image_tag 'apply/admission-process/batch_start.svg'
+                h5
+                | Batch Start
 
-              = t.input :email,
-                label: "Email Address",
-                input_html: { maxlength: 250, type: 'email' }
+        .important-dates
+          h2
+            ' Important <strong>Dates</strong>
+          .date-table.content-box.clearfix
+            .col-md-3
+              .start-date
+                | 30<sup>th</sup> Aug 2016
+              .process-head
+                | Apply as a Team Lead
+            .col-md-3
+              .start-date
+                | 15<sup>th</sup> Aug 2016
+              .process-head
+                | Perform Coding &amp; Video Task
+            .col-md-3
+              .start-date
+                | 1<sup>st</sup> Oct 2016
+              .process-head
+                | Interviews Begin
+            .col-md-3
+              .start-date
+                | 1<sup>st</sup> Nov 2016
+              .process-head
+                | Batch Start
 
-              = t.input :email_confirmation,
-                label: 'Please repeat your Email Address',
-                input_html: { maxlength: 250, type: 'email' }
+          .program-slides.m-t-3
+            .slide-item.content-box
+              .program-day.blue-day
+                | Day 1/180
+              .row
+                .col-md-8.col-sm-8
+                  h3
+                    | Form A Real Company
+                  ul
+                    li Build a Startup while in College
+                    li No prior skills needed
+                .col-md-4.col-sm-4
+                  .program-slide-icon
+                    = image_tag 'apply/admission-process/real_company.svg'
+            .slide-item.content-box
+              .program-day.green-day
+                | Day 30/180
+              .row
+                .col-md-8.col-sm-8
+                  h3
+                    | Select a Business Idea 
+                  ul
+                    li All Ideas are industry grade
+                    li Can be done by student startups
+                  .partner-section
+                    .partner-logo
+                      = image_tag 'apply/admission-process/tracxn-logo.png', class: 'img-fluid'
+                    p
+                      | Ratan Tata is an investor in Tracxn Labs, our Research Partner
+                .col-md-4.col-sm-4
+                  .program-slide-icon
+                    = image_tag 'apply/admission-process/business_idea.svg'
+            .slide-item.content-box
+              .program-day.blue-day
+                | Day 90/180
+              .row
+                .col-md-8.col-sm-8
+                  h3
+                    | Build a Real Prototype
+                  ul
+                    li Create working prototypes
+                    li  Entire team works together
+                .col-md-4.col-sm-4
+                  .program-slide-icon
+                    = image_tag 'apply/admission-process/prototyping.svg'
+            .slide-item.content-box
+              .program-day.green-day
+                | Day 120/180
+              .row
+                .col-md-8.col-sm-8
+                  h3
+                    | Learn from the Experts
+                  ul
+                    li Our Faculty have build world class products
+                    li Our Visiting Faculty are startup leaders
+                .col-md-4.col-sm-4
+                  .program-slide-icon
+                    = image_tag 'apply/admission-process/experts.svg'
+            .slide-item.content-box
+              .program-day.blue-day
+                | Day 150/180
+              .row
+                .col-md-8.col-sm-8
+                  h3
+                    | Launch to Real Customers
+                  ul
+                    li Learn to launch a real product in market
+                    li Learn from real customer feedback
+                  .partner-section
+                    .partner-logo
+                      = image_tag 'apply/admission-process/fb_start-logo.png', class: 'img-fluid'
+                    p
+                      | All teams Receive support from facebook FB Start team
+                .col-md-4.col-sm-4
+                  .program-slide-icon
+                    = image_tag 'apply/admission-process/launch.svg'
+            .slide-item.content-box
+              .program-day.green-day
+                | Day 180/180
+              .row
+                .col-md-8.col-sm-8
+                  h3
+                    | Graduate with Global Exposure
+                  ul
+                    li Win 1 week Silicon Valley Scholarship
+                    li Create your startup or get great startup jobs.
+                .col-md-4.col-sm-4
+                  .program-slide-icon
+                    = image_tag 'apply/admission-process/graduate.svg'
 
-              = t.input :phone,
-                label: 'Mobile number',
-                input_html: { maxlength: 10, type: 'tel', pattern: '[0-9]{10}' },
-                placeholder: '10-digit mobile phone number'
+        .application-faq.m-b-2
+          h2
+            | Top <strong>Frequently asked Questions</strong>
+          .row
+            .read-more
+              .eq-height
+                .col-md-6
+                  ul
+                    li
+                      h5
+                        | Do I need a team to apply?
+                      p
+                        ' Like you need a team to play football, you need a team
+                        ' to build a startup. In the real companies, individuals
+                        ' come together to work as a team. SV.CO brings the real
+                        ' world experience to students. You need to bring a team
+                        | and we can teach you how to build a startup.
+                    li
+                      h5
+                        | Can I apply even if I don’t have an idea?
+                      p
+                        ' Yes. Students in college don’t get industry experience
+                        ' to come up with good ideas. We have carefully created a list of industry ideas which students in college can build. You can thus apply, even if you don’t have an idea.
+                    li
+                      h5
+                        | Is SV.CO only for college students?
+                      p
+                        ' Yes. However, if you are within 3 years of graduating
+                        | from a college, we will accept your application.
 
-              = t.input :reference,
-                collection: proc { BatchApplicant.reference_sources },
-                label: 'How did you hear about us?',
+                .col-md-6
+                  ul
+                    li
+                      h5
+                        | I don’t have co-founders. Can I apply alone?
+                      p
+                        ' Like a football team has a goalkeeper, defender, mid-fielder
+                        ' and forward, a good startup has a programmer/coder, a sales person,
+                        ' a design person and one person for operations. You need all four
+                        | people to work together on an idea. Thus, you cannot apply alone.
+                    li
+                      h5
+                        | Do I need programmers in my team?
+                      p
+                        ' Yes. Founding Teams of Apple, Microsoft, Google and
+                        ' Facebook had at least one programmer. You need at least
+                        | one co-founders how is a programmer in your team to apply.
+        .help-section.clearfix
+          .col-md-3
+            .help-icon
+              = image_tag 'apply/admission-process/help_icon.svg'
+          .col-md-9
+            h2
+              ' We are here to <strong>help you</strong>
+            p
+              ' Please email your doubts or questions to <strong>help@sv.co</strong> or <strong>talk to using the friendly chat window.</strong>
+        .fees-section
+          h2
+            ' <strong>Fees</strong>
+          #fee-accordion.panel-group
+            .card.content-box
+              h4
+                a.card-block.accordion-toggle.collapsed data-parent="#fee-accordion" data-toggle="collapse" href="#application-fee" 
+                  | Application Fee
+              #application-fee.card-text.collapse.in
+                h3
+                 span
+                   ' &#8377; 1,000 per founder.
+
+            .card.content-box
+              h4
+                a.card-block.accordion-toggle data-parent="#fee-accordion" data-toggle="collapse" href="#program-fee" 
+                  | Program Fee
+              #program-fee.collapse
+                .card-text
+                  h3
+                    span
+                      ' &#8377; 37,500 per founder. For a 1,00,000 worth course.
+
+            .card.content-box
+              h4
+                a.card-block.accordion-toggle data-parent="#fee-accordion" data-toggle="collapse" href="#scholorship" 
+                  | Scholarship
+              #scholorship.collapse
+                .card-text
+                  h3
+                    | Anim probably haven't heard of them accusamus labore sustainable VHS.
+
+            .card.content-box
+              h4
+                a.card-block.accordion-toggle data-parent="#fee-accordion" data-toggle="collapse" href="#success-fee" 
+                  | Success Fee
+              #success-fee.collapse
+                .card-text.text-xs-center
+                  ul.list-unstyled.m-b-0
+                    li.success-fee-box
+                      h3
+                        ' 2.5%
+                      p
+                        | arranger's fee on a funding introduction.
+
+                    li.success-fee-box
+                      h3 5%
+                      p
+                        | lead fee (for 3 years) on a businesss lead introduction.
+
+                    li.success-fee-box
+                      h3 10%
+                      p
+                        | of salary received (for the 1<sup>st</sup> year) on a hiring introduction.
+
+                    li.success-fee-box
+                      h3 20%
+                      p
+                        | of combined compensation on an acqui-hire introduction.
+
+                    li.success-fee-box
+                      h3 30% Discount
+                      p
+                        | for a right to invest in any funding round. <strong>No upfront equity</strong>.
+            
+    .col-lg-4.col-md-12#start-application-process
+      .m-t-2.m-b-3
+        / .alert.alert-info.m-t-2.m-b-0
+        /   ' Did you complete registration once before? If so,
+        /   | #{link_to 'sign in and continue the application process', apply_identify_path}.
+
+        = simple_form_for @form,
+          url: apply_register_path,
+          wrapper: :vertical_form do |f|
+          
+          - if f.object.errors.present?
+            .alert.alert-warning.alert-dismissable.fade.in role='alert'
+              button.close type="button" data-dismiss="alert" aria-label="Close"
+                span aria-hidden="true" &times;
+
+              strong There were problems with your submission.
+              | &nbsp;Please check all fields and try again.
+
+              - if f.object.errors[:base].present?
+                ul.m-t-1
+                  - f.object.errors[:base].each do |error_message|
+                    li #{error_message}
+
+          .application-start-form.content-box.m-b-2
+            / .simple-form-container
+            /   = f.input :consent,
+            /     as: :boolean,
+            /     inline_label: t('batch_application.stage_1.application_page_read_html') + t('batch_application.stage_1.team_lead_consent') + t('batch_application.stage_1.fees_consent'),
+            /     required: true
+
+            h4.form-section-title.m-b-2
+              | Apply Now
+            .simple-form-container
+              = f.simple_fields_for :team_lead do |t|
+                = t.input :name, label: false, placeholder: 'Full Name of Team Lead', input_html: { maxlength: 250 }
+
+                = t.input :email, label: false, placeholder: 'Team Leads Email Address',
+                  input_html: { maxlength: 250, type: 'email' }
+
+                = t.input :email_confirmation, label: false, placeholder: 'Please repeat your Email Address',
+                  input_html: { maxlength: 250, type: 'email' }
+
+                = t.input :phone, label: false, placeholder: '10-digit mobile phone number',
+                  input_html: { maxlength: 10, type: 'tel', pattern: '[0-9]{10}' }
+
+                = t.input :reference, label: false,
+                  collection: proc { BatchApplicant.reference_sources },
+                  required: false,
+                  include_blank: 'How did you hear about us?'
+
+                .hidden-xs-up
+                  = t.input :reference_text, label: false, placeholder: 'How did you hear about us?', required: false
+
+              // TODO: University is actually a required field, but select2 v3 does not play nice with HTML5 validations. Try enabling this when upgrading to select2 v4.
+              = f.input :university_id,
+                collection: proc { University.grouped_by_location },
+                as: :grouped_select,
+                group_method: :last,
+                value_method: :first,
+                label_method: :last,
+                label: University,
+                input_html: {class: 'university_select'},
+                include_blank: false,
                 required: false
 
-              .col-sm-offset-3.hidden-xs-up
-                = t.input :reference_text, label: false, placeholder: 'Please Specify', required: false
+              = f.input :college, label: false, placeholder: 'Name of your College', input_html: { maxlength: 250 }
 
-            // TODO: University is actually a required field, but select2 v3 does not play nice with HTML5 validations. Try enabling this when upgrading to select2 v4.
-            = f.input :university_id,
-              collection: proc { University.grouped_by_location },
-              as: :grouped_select,
-              group_method: :last,
-              value_method: :first,
-              label_method: :last,
-              label: 'University',
-              include_blank: false,
-              required: false
+              div
+                = f.submit 'Start Application', class: 'btn btn-primary btn-md text-uppercase'
 
-            = f.input :college, input_html: { maxlength: 250 }
-
-            .col-sm-offset-3
-              .simple-form-submit
-                = f.submit 'Submit Application', class: 'btn btn-primary btn-md text-uppercase'
-
-.apply-illustration
-  .container
-    .primary-banner-head.center-block.text-xs-center
-      h1
-        ' Build a startup as a team
-        br
-        ' Experience <strong>Silicon Valley</strong>
-      h4
-        ' Don't have an idea? We will provide a #SaaS idea.
-
-.graduated-slide
-  .container-fluid
-    .row
-      h3.text-xs-center.content-head
-        span.content-title-icon.graduated-icon
-        | Few Successful Students after their first startup with SV.CO
-      .graduation-carousel
-        .slide-item
-          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-1"
-            = image_tag 'apply/graduation-video-thumbnail-1.png'
-          .graduate-data.text-xs-center
-            h4
-              | <strong>Jibin Jose</strong>
-              br
-              | 0 to Million-Dollar Campus Startup
-            p
-              | “After” Silicon Valley exposure
-
-        .slide-item
-          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-3"
-            = image_tag 'apply/graduation-video-thumbnail-3.png'
-          .graduate-data.text-xs-center
-            h4
-              | <strong>Spenwise</strong>
-              br
-              | 0 to 1 Crore Value in Six Months
-            p
-              | Admission to Accelerator
-
-        .slide-item
-          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-4"
-            = image_tag 'apply/graduation-video-thumbnail-4.png'
-          .graduate-data.text-xs-center
-            h4
-              | <strong>Z-Pay</strong>
-              br
-              | 0 to 7 Lacs CTC in six months
-            p
-              | Team Acquihired by Tally
-
-        .slide-item
-          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
-            = image_tag 'apply/graduation-video-thumbnail-5.png'
-          .graduate-data.text-xs-center
-            h4
-              | <strong>Varghese George</strong>
-              br
-              | CTC 7 Lacs
-            p
-              | Team Acquihired by Tally
-
-        .slide-item
-          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
-            = image_tag 'apply/sriram.png'
-          .graduate-data.text-xs-center
-            h4
-              | <strong>Sreeram Narayanan</strong>
-              br
-              | CTC 7 Lacs
-            p
-              | Hired by Tally Solutions
-
-        .slide-item
-          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
-            = image_tag 'apply/arun-p.png'
-          .graduate-data.text-xs-center
-            h4
-              | <strong>Arun P</strong>
-              br
-              | CTC 6 Lacs
-            p
-              | Hired by Goqii
-
-        .slide-item
-          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
-            = image_tag 'apply/aravind-sai.png'
-          .graduate-data.text-xs-center
-            h4
-              | <strong>Aravind Sai</strong>
-              br
-              | CTC 12.6 Lacs
-            p
-              | Hired by Goqii
-
-        .slide-item
-          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
-            = image_tag 'apply/sachu.png'
-          .graduate-data.text-xs-center
-            h4
-              | <strong>Sachu Shylan</strong>
-              br
-              | CTC 6 Lacs
-            p
-              | Hired by Good Methods Global
-
-        .slide-item
-          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
-            = image_tag 'apply/ajayson.png'
-          .graduate-data.text-xs-center
-            h4
-              | <strong>Ajayson</strong>
-              br
-              | CTC 7 Lacs
-            p
-              | Hired by Tally Solutions
-
-        .slide-item
-          a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-6"
-            = image_tag 'apply/graduation-video-thumbnail-6.png'
-          .graduate-data.text-xs-center
-            h4
-              | <strong>Six ways to Success</strong>
-              br
-              |	Graduation Options
-
-        / .slide-item
-        /   a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-7"
-        /     = image_tag 'apply/graduation-video-thumbnail-7.png'
-        /   .graduate-data.text-xs-center
-        /     h4
-        /       | Harish Sivaramakrishnan
-        /     p
-        /       | VP of Design, Snapdeal
-        /
-        / .slide-item
-        /   a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-8"
-        /     = image_tag 'apply/graduation-video-thumbnail-8.png'
-        /   .graduate-data.text-xs-center
-        /     h4
-        /       | Amit Saini
-        /     p
-        /       | Director of Engineering, Ola Money
-        /
-        / .slide-item
-        /   a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-9"
-        /     = image_tag 'apply/graduation-video-thumbnail-9.png'
-        /   .graduate-data.text-xs-center
-        /     h4
-        /       | Vinod Malhotra
-        /     p
-        /       | Chief of R&amp;D, Tally Solutions
-
-.program-benefits
-  .container-fluid
-    .row
-      h3.text-xs-center.content-head
-        span.content-title-icon.program-icon
-        | The Program
-      .program-video.center-block.text-xs-center
-        a.program-video-frame href="#" data-toggle="modal" data-target="#programVideo"
-          = image_tag 'apply/program-video-thumbnail.png', class: 'img-fluid'
-
-      .benefits-section.center-block.text-xs-center
-        .col-md-6
-          .media.center-block
-            .media-left
-              .media-object
-                = image_tag 'apply/program-icons/great-faculty-icon.svg'
-            .media-body
-              h5.media-heading
-                | Access to Great Faculty
-              p
-                ' Access to a full-time professinal batch coordinator + a
-                ' #{link_to 'team of well-rounded startup experts', faculty_index_path} who will answer your every
-                | question.
-          .media.center-block
-            .media-left
-              .media-object
-                = image_tag 'apply/program-icons/engineering-icon.svg'
-            .media-body
-              h5.media-heading
-                | Engineering &amp; Product Perks
-              p
-                | Free hosting credits from AWS &amp; a free domain from dotCO domains to get you started with your prototype.
-          .media.center-block
-            .media-left
-              .media-object
-                = image_tag 'apply/program-icons/slack-icon.svg'
-            .media-body
-              h5.media-heading
-                | Peer Support on Public Slack
-              p
-                ' A great community of startup founders &amp; batch seniors who are responsive and active on our
-                | #{link_to 'Public Slack', about_slack_path}
-          .media.center-block
-            .media-left
-              .media-object
-                = image_tag 'apply/program-icons/timeline-icon.svg'
-            .media-body
-              h5.media-heading
-                | Verified Public Timeline
-              p
-                ' An industry-first SV.CO #{link_to 'verified timeline', activity_path} of events on your startup. So
-                | prospective mentors &amp; investors can be updated on exactly what&apos;s happening.
-          .media.center-block
-            .media-left
-              .media-object
-                = image_tag 'apply/program-icons/target-icon.svg'
-            .media-body
-              h5.media-heading
-                | Target-based Guided Learning
-              p
-                | Building great products is hard. We have a guided system where you&apos;ll learn using specific targets.
-        .col-md-6
-          .media.center-block
-            .media-left
-              .media-object
-                = image_tag 'apply/program-icons/founder-icon.svg'
-            .media-body
-              h5.media-heading
-                | Dynamic Founder Profiles
-              p
-                ' Founders get their own dedicated founder profile where they can showcase their activity at SV.CO.
-                | Great when you want to #{link_to 'get hired at an amazing startup', talent_path}!
-          .media.center-block
-            .media-left
-              .media-object
-                = image_tag 'apply/program-icons/university-icon.svg'
-            .media-body
-              h5.media-heading
-                | Partner University Certifications
-              p
-                | Universities such as Gujarat Technological University provide certificates that validate your work at SV.CO.
-          .media.center-block
-            .media-left
-              .media-object
-                = image_tag 'apply/program-icons/library-icon.svg'
-            .media-body
-              h5.media-heading
-                | Startup Library with Exclusive Resources
-              p
-                ' We have a constantly updated #{link_to 'startup library', resources_path} that has exclusive resources
-                | for batch founders.
-          .media.center-block
-            .media-left
-              .media-object
-                = image_tag 'apply/program-icons/leaderboard-icon.svg'
-            .media-body
-              h5.media-heading
-                | Karma Points-based Leaderboard System
-              p
-                ' We rank startups &amp; founders based on their karma. Teams at SV.CO value collaboration over
-                | competition and earn points based on the great work that they do.
-          .media.center-block
-            .media-left
-              .media-object
-                = image_tag 'apply/program-icons/help-icon.svg'
-            .media-body
-              h5.media-heading
-                | Ad&ndash;hoc Help Wanted Requests
-              p
-                | Every startup is different, so we help founders out with ad&ndash;hoc requests. This could be things like getting in touch with a great investor or help with vetting a client agreement.
-.program-partners
-  .container
-    h3.text-xs-center.content-head
-      span.content-title-icon.program-partners-icon
-      | Program Partners
-    .partner-container
-      .col-lg-2.col-md-3.col-sm-4
-        .card.center-block
-          .image-block
-            = image_tag 'talent/tally-logo.png', class: "img-fluid"
-          .card-block
-            p.card-text Graduation Partner
-
-      .col-lg-2.col-md-3.col-sm-4
-        .card.center-block
-          .image-block
-            = image_tag 'talent/Freshdesk-logo.png', class: "img-fluid"
-          .card-block
-            p.card-text Graduation Partner
-
-      .col-lg-2.col-md-3.col-sm-4
-        .card.center-block
-          .image-block
-            = image_tag 'talent/freecharge-logo.png', class: "img-fluid"
-          .card-block
-            p.card-text Graduation Partner
-
-      .col-lg-2.col-md-3.col-sm-4
-        .card.center-block
-          .image-block
-            = image_tag 'talent/askme-logo.png', class: "img-fluid"
-          .card-block
-            p.card-text Graduation Partner
-
-      .col-lg-2.col-md-3.col-sm-4
-        .card.center-block
-          .image-block
-            = image_tag 'talent/ola-logo.png', class: "img-fluid"
-          .card-block
-            p.card-text Graduation Partner
-
-      .col-lg-2.col-md-3.col-sm-4
-        .card.center-block
-          .image-block
-            = image_tag 'talent/goqii-logo.png', class: "img-fluid"
-          .card-block
-            p.card-text Graduation Partner
-
-      .col-lg-2.col-md-3.col-sm-4
-        .card.center-block
-          .image-block
-            = image_tag 'talent/microsoft-ventures-logo.png'
-          .card-block
-            p.card-text Graduation Partner
-
-      .col-lg-2.col-md-3.col-sm-4
-        .card.center-block
-          .image-block
-            = image_tag 'talent/Citrus-logo.png', class: "img-fluid"
-          .card-block
-            p.card-text Graduation Partner
-
-      .col-lg-2.col-md-3.col-sm-4
-        .card.center-block
-          .image-block
-            = image_tag 'talent/AHventures-logo.png', class: "img-fluid"
-          .card-block
-            p.card-text Graduation Partner
-
-      .col-lg-2.col-md-3.col-sm-4
-        .card.center-block
-          .image-block
-            = image_tag 'talent/Flat6labs-logo.png', class: "img-fluid"
-          .card-block
-            p.card-text Graduation Partner
-
-      .col-lg-2.col-md-3.col-sm-4
-        .card.center-block
-          .image-block
-            = image_tag 'talent/Goodmethods-logo.png', class: "img-fluid"
-          .card-block
-            p.card-text Graduation Partner
-
-      .col-lg-2.col-md-3.col-sm-4
-        .card.center-block
-          .image-block
-            = image_tag 'talent/Kalaaricapital-logo.png', class: "img-fluid"
-          .card-block
-            p.card-text Graduation Partner
-
-      .col-lg-2.col-md-3.col-sm-4
-        .card.center-block
-          .image-block
-            = image_tag 'apply/indian-angel-network-logo.png', class: "img-fluid"
-          .card-block
-            p.card-text Graduation Partner
-
-      .col-lg-2.col-md-3.col-sm-4
-        .card.center-block
-          .image-block
-            = image_tag 'apply/aws-logo.png', class: "img-fluid"
-          .card-block
-            p.card-text Resource Partner
-
-      .col-lg-2.col-md-3.col-sm-4
-        .card.center-block
-          .image-block
-            = image_tag 'apply/dotco-logo.png'
-          .card-block
-            p.card-text Resource Partner
-
-      .col-lg-2.col-md-3.col-sm-4
-        .card.center-block
-          .image-block
-            = image_tag 'apply/GTU-logo.png'
-          .card-block
-            p.card-text University Partner
-
-.application-faq.p-b-3
-  .container
-    h3.text-xs-center.content-head
-      span.content-title-icon.faq-icon
-      | FAQ
-    .read-more.m-b-1
-      .eq-height
-        .col-md-6
-          h4 Admission
-          ul
-            li
-              h5
-                | Does this batch have a theme?
-              p
-                ' Yes, all SV.CO batches have a <em>theme</em>, a particular domain
-                ' that all startups in the batch focus on. The theme of this batch
-                ' is Software-as-a-Service (SaaS), an industry domain where quick
-                ' and nimble startups can create a great product without a lot of
-                ' resources. We think that this domain is particularly apt for
-                ' student startups.
-            li
-              h5
-                | How many teams will be selected?
-              p
-                ' Our plan is to select 100 teams for Batch 3. However, this number
-                ' might vary as we’ll not budge on our selection criteria. If teams
-                ' cannot complete the Coding &amp; Video task and cannot perform well
-                | at the Personal Interview round, we will not select them.
-            li
-              h5
-                | What should I write in the field Team Achievement?
-              p
-                ' Whatever you are proud of as a team. You can also write in individual
-                | achievements, but we’ll prioritize work you’ve done as a team.
-            li
-              h5
-                | Can non-engineers apply?
-              p
-                ' Yes, any student founder can apply. You still need to complete
-                | the Coding &amp; Video task however.
-            li
-              h5
-                | Do I need a product idea to get selected in this program?
-              p
-                | Not necessary. We will provide you a curated list of startup ideas in the SaaS space for you to work on if you don't have one.
-            li
-              h5
-                | Can I work on my own idea?
-              p
-                ' Yes, but be prepared to receive additional scrutiny during the Idea Discovery
-                ' phase of the program. Because the theme of this batch is SaaS,
-                ' if you have an idea that is not in the SaaS space,  you might miss out on some
-                ' SaaS-specific resources and content we provide.
-                ' Be aware though that if you apply to this program with a prototype
-                ' already built or if you already have customers, we’ll strongly advise
-                ' you that this program might not be the right fit for you. We’re tailoring
-                | this program towards first-time founders.
-
-        .col-md-6
-          h4 Silicon Valley Visit
-          ul
-            li
-              h5
-                | How long will the visit be?
-              p
-                ' The visit will be at least 1 week long.
-            li
-              h5
-                | What is the agenda of the visit?
-              p
-                ' We are planning to make founders pitch to investors, take them
-                ' around great Silicon Valley companies, and arrange for a visit
-                ' to great academic institutions. We’ll release more details of
-                ' the visit as we finalise the plan.
-                | #{link_to 'You can watch a video of a previous visit we arranged here.', 'https://www.youtube.com/watch?v=7D3Yf8fjcAU', target: '_blank'}
-            li
-              h5
-                | How many founders will go to Silicon Valley?
-              p
-                ' We’ll take 1 founder (usually the team lead) from each selected team.
-                | You are free to nominate a different member.
-            li
-              h5
-                | What will be covered under my Program Fee?
-              p
-                ' All costs of the Silicon Valley visit for one founder, including
-                | travel (economy flight tickets) and accomodation (shared)
-                | is included in the Program Fee.
-              p
-                ' Food expenses for the visit will not be covered. Neither will any
-                | costs associated with procuring the required U.S. Visa and other
-                | related travel documents.
-            li
-              h5
-                | Can I take additional founders from my team?
-              p
-                ' Yes, but these founders will have to pay the full cost of the visit.
-                ' We’ll announce details when we finalize the program, but we expect
-                | the fee to be at least ₹1,00,000 per founder.
-            li
-              h5
-                | How much should I budget for food &amp; other costs?
-              p
-                ' You should budget at least $50 (&#8377;3,500) per day.
-      .eq-height
-        .col-md-6
-          h4 Fee & Agreement
-          ul
-            li
-              h5
-                | Can I avail of a scholarship?
-              p
-                ' There is no financial support for the the Application Fee of
-                ' ₹1,000 per founder. We provide financial support for the Program
-                | Fee for a selected team. To know more details, write to help@sv.co.
-            li
-              h5
-                | Will SV.CO own 30% equity in my startup?
-              p
-                ' Emphatic no. You don't have to commit any upfront equity. What we have is a <strong>right to invest additional money</strong>
-                ' when you raise a funding round. Our investment is capped at 30% of the money you
-                ' raise. This means that we'll <strong>never become a majority stakeholder</strong>. The only perk we ask for is a 30% discount on your valuation. This is
-                ' explained in detail in #{link_to 'Raising Investment', 'http://playbook.sv.co/6-raising-investment.html'}.
-            li
-              h5
-                | Is the course worth the program fee?
-              p
-                ' The program is the first of its kind student entrepreneurship
-                ' program in the world. Not only do you get a guided startup
-                ' experience even while you are still in college, you
-                ' also gets to visit the mecca of startups: Silicon Valley.
-                ' For this batch, we’ve calibrated the fee so that it’s similar
-                ' to a one-semester fee that a lot of private engineering colleges
-                ' ask for. For the same fee, you get a once-in-a-lifetime opportunity.
-            li
-              h5
-                | If I do not find the program satisfactory, can I get a refund?
-              p
-                ' There is no refund for the Application Fee. If you drop out of
-                ' the program within 2 months of batch start, you will receive
-                ' a no-questions-asked 100% refund of your Program Fee.
-                ' Dropped-out teams will not be eligible for the Silicon Valley
-                ' visit.
-            li
-              h5
-                | Can you explain the legal agreement further?
-              p
-                ' Please read the Playbook chapter on #{link_to 'Legal Agreements', 'http://playbook.sv.co/2-legal-agreement.html'}. It explains
-                ' the agreement in detail. There is also a related #{link_to 'Raising Investment', 'http://playbook.sv.co/6-raising-investment.html'}
-                ' chapter that explains our discounted right to invest. To check
-                ' if this program is right for you, we also have a #{link_to 'Decision Tree', 'http://playbook.sv.co/agreement/2.1-decision_tree.html'}.
-                ' If you still have doubts, write to #{mail_to 'help@sv.co'}. You can also talk
-                ' to previous founders who have signed the same agreement &amp; had
-                | a lot of success #{link_to 'if you join our Public Slack', 'https://sv.co/about/slack'}.
-            li
-              h5
-                | How do I form a partnership?
-              p
-                ' You just have to sign a Partnership Deed on the correct stamp paper
-                ' for your jurisdiction. We provide a sample Partnership Deed in
-                ' our Startup Library. Note: for the purposes of this program, you
-                ' do not need to register your partnership. If you have more doubts,
-                | write to #{mail_to 'help@sv.co'}.
-
-        .col-md-6
-          h4 Program
-          ul
-            li
-              h5
-                | What will the 6 month program consist of?
-              p
-                ' The six month program will be an entirely online program where
-                ' teams of founders receive one-on-one support from a dedicated
-                ' batch coordinator and a team of faculty. Teams will be guided
-                ' through three stages of creating a great product: from picking
-                ' an idea, to building a great prototype, and finally showing
-                ' it to real customers for feedback.
-            li
-              h5
-                | What do you mean by 5 years of graduation support?
-              p
-                ' Great teams take at least 5 years to learn how to form a viable
-                ' idea, build a great prototype and get to scalable revenue.
-                ' This is the reason why we support teams of founders for up to
-                ' 5 years. You’ll receive all kinds of support, including introductions
-                ' to other companies, potential investors and mentors, and business
-                ' introductions. Because SV.CO’s program also offers ad-hoc Help
-                | Wanted requests, founders are free to request for any kind of support.
-            li
-              h5
-                | Can you tell me about the faculty I will interact with?
-              p
-                ' Sure, #{link_to 'visit our faculty', faculty_index_path} page. You
-                ' interact with the faculty through a one-on-one connect request,
-                ' and you can even
-                ' #{link_to 'rate your interaction', 'https://sv.co/faculty/gautham'}
-                ' through SV.CO. Because most faculty volunteer their valuable time
-                ' to the SV.CO program, your access to them will be gated by your
-                ' progress in the program.
-
-            li
-              h5
-                | What exclusive resources will I receive?
-              p
-                ' You will receive access to a set of Batch Exclusive material
-                ' through our #{link_to 'Startup Library', resources_path}. These include Market Analyst
-                ' reports, pitch sessions &amp; interview recordings of previous
-                ' founders, exclusive material from our partner network, and great
-                ' video content. In addition, we also have Engineering &amp; Product
-                ' resources like AWS credits for hosting and a dotCO domain
-                | to get you started building a prototype.
-
-.application-fee
-  .container
-    h3.text-xs-center.content-head
-      span.content-title-icon.fees-icon
-      | Fees
-    .fees-section.center-block.text-xs-center
-      .col-md-6
-        .fee-box
-          h4.primary-head
-            | Application Fee
-          h3.center-block
-            span.font-regular
-              ' &#8377; 1,000
-            br
-            | per founder.
-          a.btn-link href='#' data-toggle="modal" data-target="#basic-fees"
-            | View More
-      .col-md-6
-        .fee-box
-          h4.primary-head
-            | Program Fee
-          h3.center-block
-            span.font-regular
-              ' &#8377; 37,500
-            ' &nbsp;per founder. For a
-            span.font-regular 2,00,000
-            ' &nbsp;worth course.
-          a.btn-link href='#' data-toggle="modal" data-target="#basic-fees"
-            | View More
-      .col-md-12
-        .fee-box.m-t-2
-          h4.secondary-head
-            | Success Fee
-
-          ul.list-unstyled.m-b-0
-            li.success-fee-box
-              h3
-                ' 2.5%
-              p
-                | arranger's fee on a funding introduction.
-
-            li.success-fee-box
-              h3 5%
-              p
-                | lead fee (for 3 years) on a businesss lead introduction.
-
-            li.success-fee-box
-              h3 10%
-              p
-                | of salary received (for the 1<sup>st</sup> year) on a hiring introduction.
-
-            li.success-fee-box
-              h3 20%
-              p
-                | of combined compensation on an acqui-hire introduction.
-
-            li.success-fee-box
-              h3 30% Discount
-              p
-                | for a right to invest in any funding round. <strong>No upfront equity</strong>.
-
-          a.btn-link href='#' data-toggle="modal" data-target="#success-fees"
-            | View More
-
-#watchIntroVideo.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/RUP3fk7lf5o" frameborder="0" allowfullscreen="allowfullscreen"
-
-#graduatesVideo-1.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/AzABLPISPQU" frameborder="0" allowfullscreen="allowfullscreen"
-
-#graduatesVideo-3.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/xBaaBVlK5Ws" frameborder="0" allowfullscreen="allowfullscreen"
-
-#graduatesVideo-4.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/pwmVitwaeL0" frameborder="0" allowfullscreen="allowfullscreen"
-
-#graduatesVideo-5.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/XBjkCUW1lFQ" frameborder="0" allowfullscreen="allowfullscreen"
-
-#graduatesVideo-6.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/AaoW1W7wZLk" frameborder="0" allowfullscreen="allowfullscreen"
-
-/ #graduatesVideo-7.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
-/   .modal-dialog.modal-lg role="document"
-/     .modal-content
-/       .modal-header
-/         button.close aria-label="Close" data-dismiss="modal" type="button"
-/           span aria-hidden="true" &times;
-/       .modal-body
-/         iframe.video-frame src="https://www.youtube.com/embed/ut-J7cuQpzI" frameborder="0" allowfullscreen="allowfullscreen"
-/
-/ #graduatesVideo-8.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
-/   .modal-dialog.modal-lg role="document"
-/     .modal-content
-/       .modal-header
-/         button.close aria-label="Close" data-dismiss="modal" type="button"
-/           span aria-hidden="true" &times;
-/       .modal-body
-/         iframe.video-frame src="https://www.youtube.com/embed/z2e5o5ftgRc" frameborder="0" allowfullscreen="allowfullscreen"
-/
-/ #graduatesVideo-9.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
-/   .modal-dialog.modal-lg role="document"
-/     .modal-content
-/       .modal-header
-/         button.close aria-label="Close" data-dismiss="modal" type="button"
-/           span aria-hidden="true" &times;
-/       .modal-body
-/         iframe.video-frame src="https://www.youtube.com/embed/qEZ1RamKt6k" frameborder="0" allowfullscreen="allowfullscreen"
-
-#programVideo.modal.fade.graduates-video aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/7fDmQOFNmLQ" frameborder="0" allowfullscreen="allowfullscreen"
-
-#basic-fees.modal.fade aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header
-        h5.font-regular.modal-title Fixed Fees
-      .modal-body
-        h5.font-regular Application Fee
-
-        ul
-          li
-            ' The Application Fee is a non-refundable ₹1000 per founder. Since SV.CO accepts between 3 and 5 founders
-            | in a team, you pay between ₹3000 and ₹5000.
-          li
-            ' The fee is just for one application. You can apply to SV.CO any number of times, and pay the application
-            | fee due at that time.
-          li There is no financial support for this fee.
-
-        h5.font-regular Program Fee
-
-        ul
-          li
-            ' The Program Fee is ₹37,500 per founder. Since SV.CO accepts between three and five founders in a team,
-            | you pay between ₹1,12,500 and ₹1,87,500 if you are accepted.
-          li
-            ' All costs of the Silicon Valley visit for one founder, including travel (economy flight tickets tickets) and accomodation (shared) is included in the Program Fee.
-          li
-            ' Food expenses for the Silicon Valley visit will not be covered under the Program Fee. Neither will any costs associated with procuring the required U.S. Visa and other related travel documents.
-          li
-           ' It is the founders' responsibility to ensure that all related documents are submitted for procuring the required travel U.S. Visa. SV.CO will guide the founder on submitting the required documents, but will not be responsible for any rejection at the U.S. consulate.
-          li
-            ' Refund: If your team drops out of the program within 2 months of program start (because of any
-            ' reason), you&apos;ll receive 100% of the Program Fee as a refund. After 2 months, you will not receive
-            | any refund. Note: <em>this only applies to the entire team dropping out</em>. Because SV.CO accepts teams and not individual founders,
-            | Program Fee will not be refunded for individual founder dropouts.
-            | Founders may drop out from the team individually at any time,
-            | and a the Team Lead may appoint a replacement co-founder.
-          li
-            ' The cost to run this program and take founders to Silicon Valley is at least ₹2,00,000 per founder.
-            ' Because this is one of the initial batches at SV.CO, for a team of average 4 members, we are offering at
-            | least a 75% discount.
-          li
-            ' We offer financial support for this fee for founders from financially weak backgrounds. To know more,
-            | write to #{mail_to 'help@sv.co'}.
-      .modal-footer
-        button.btn.btn-sm.btn-secondary.text-uppercase aria-label="Close" data-dismiss="modal" type="button"
-          | Close
-
-#success-fees.modal.fade aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header
-        h5.font-regular.modal-title Success Fee
-      .modal-body
-        ul
-          li The success fee is enforced through a legal agreement that you sign when you are selected to the program.
-          li
-            ' To download the complete legal agreement,
-            ' #{link_to 'visit this link', 'https://sv.co/library/agreement-for -educational-services-to-startups'}.
-            ' The agreement is #{link_to 'explained in detail here', 'http://playbook.sv.co/2-legal-agreement.html'}.
-          li
-            ' You are also required to form a legal partnership between the founders when you start the program. The
-            ' costs (if any) to start this partnership must be borne by the founders. A
-            ' #{link_to 'sample partnership deed is available here', 'https://sv.co/library/startup-partnership-deed'}.
-          li
-            ' The Right to Invest only applies when you raise funding. SV.CO has the
-            ' right to <strong>invest additional money</strong>, capped at 30% of your funding round. This means that SV.CO will never become a majority stakeholder.
-            ' There is no upfront equity committed by the founders.
-          li
-            ' The 30% discount &amp; investment rights scenario is explained in detail in
-            ' #{link_to 'Raising Investment', 'http://playbook.sv.co/6-raising-investment.html'}.
-      .modal-footer
-        button.btn.btn-sm.btn-secondary.text-uppercase aria-label="Close" data-dismiss="modal" type="button"
-          | Close
+a#sticky-start-application.btn.btn-primary.btn-md.text-uppercase.sticky-application-button.visible-md-down href="#start-application-process"
+  | Start Application

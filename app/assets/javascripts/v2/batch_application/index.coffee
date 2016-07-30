@@ -1,26 +1,9 @@
-setupGraduationCarousel = ->
-  $(".graduation-carousel").slick
-    slidesToShow: 3
-    arrows: true
-    centerMode: true
-    adaptiveHeight: true
-    responsive: [
-      {
-        breakpoint: 992,
-        settings: {
-          centerMode: true
-          slidesToShow: 3
-        }
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          centerMode: true
-          slidesToShow: 1
-        }
-      }
-    ]
+setupProgramCarousel = ->
+  $('.program-slides').slick
     infinite: true
+    adaptiveHeight: true
+    autoplay: true
+    autoplaySpeed: 10000
 
 avoidwidowsTypography = ->
   $('h5').each ->
@@ -38,14 +21,14 @@ stopVideosOnModalClose = ->
 readmoreFAQ = ->
   $('.read-more').readmore
     speed: 200
-    collapsedHeight: 700
+    collapsedHeight: 200
     lessLink: '<a class="read-less-link" href="#">Read Less</a>'
     moreLink: '<a class="read-more-link" href="#">Read More</a>'
 
-$(document).on 'page:change', setupGraduationCarousel
 $(document).on 'page:change', avoidwidowsTypography
 $(document).on 'page:change', stopVideosOnModalClose
 $(document).on 'page:change', readmoreFAQ
+$(document).on 'page:change', setupProgramCarousel
 
 # !!! NEW STUFF !!!
 
@@ -78,15 +61,43 @@ setupSelect2Inputs = ->
 
 toggleReferenceTextField = ->
   if $('#batch_application_team_lead_attributes_reference').val() == 'Other (Please Specify)'
-    $('#batch_application_team_lead_attributes_reference_text').parent().parent().parent().removeClass('hidden-xs-up')
-  else
-    $('#batch_application_team_lead_attributes_reference_text').val('')
-    $('#batch_application_team_lead_attributes_reference_text').parent().parent().parent().addClass('hidden-xs-up')
+    referenceTextInput = $('#batch_application_team_lead_attributes_reference_text')
+    # debugger
+    referenceTextInput.parent().parent().removeClass('hidden-xs-up')
+    $('#batch_application_team_lead_attributes_reference').parent().addClass('hidden-xs-up')
+    referenceTextInput.focus()
 
 $(document).on 'page:change', ->
   if $('#batch_application_team_lead_attributes_reference').length
     toggleReferenceTextField()
     $('#batch_application_team_lead_attributes_reference').change toggleReferenceTextField
 
+stickStartapplicationForm = ->
+  $('#start-application-process').stickit
+    top: 0,
+    screenMinWidth: 1024
+
+scrolltoStartapplicationForm = ->
+  $('#sticky-start-application').click (e) ->
+    e.preventDefault()
+    $('html, body').animate
+      scrollTop: $($.attr(this, 'href')).offset().top, 500
+
+stickyApplyButtonOnApplyPage = ->
+  if $('.application-process').length
+
+    visibilityToggle = new Waypoint.Inview
+      element: $('#start-application-process')[0]
+      enter: (direction) ->
+        if direction == 'down'
+          $('#sticky-start-application').addClass('hidden-xs-up')
+      exited: (direction) ->
+        if direction == 'up'
+          $('#sticky-start-application').removeClass('hidden-xs-up')
+
+
 $(document).on 'page:change', setupSelect2Inputs
 $(document).on 'page:change', emailsShouldMatch
+$(document).on 'page:change', stickStartapplicationForm
+$(document).on 'page:change', scrolltoStartapplicationForm
+$(document).on 'page:change', stickyApplyButtonOnApplyPage

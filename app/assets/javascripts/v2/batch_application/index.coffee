@@ -74,7 +74,9 @@ emailsShouldMatch = ->
       validateEmailMatch() if emailConfirmationInput.val().length
 
 setupSelect2Inputs = ->
-  $('#batch_application_university_id').select2()
+  $('#batch_application_university_id').select2
+    matcher: (term, text, opt) ->
+      text.toUpperCase().indexOf(term.toUpperCase()) >= 0 || opt.html().toUpperCase().indexOf('OTHER') >= 0
 
 toggleReferenceTextField = ->
   if $('#batch_application_team_lead_attributes_reference').val() == 'Other (Please Specify)'

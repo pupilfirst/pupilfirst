@@ -43,7 +43,7 @@ emailsShouldMatch = ->
 
       if email != emailConfirmationInput.val()
         unless emailConfirmationInput.parent().find('span').length
-          emailConfirmationInput.after('<span class="help-block">does not match</span>')
+          emailConfirmationInput.after('<span class="help-block">email addresses do not match</span>')
 
         emailConfirmationInput.parent().addClass('has-error')
       else

@@ -36,8 +36,8 @@ class BatchApplicationForm < Reform::Form
 
   def emails_should_match
     return if team_lead.email == team_lead.email_confirmation
-    errors[:base] << 'Supplied email address does not match confirmation.'
-    team_lead.errors[:email_confirmation] << 'does not match'
+    errors[:base] << 'Supplied email address and its confirmation do not match.'
+    team_lead.errors[:email_confirmation] << 'email addresses do not match'
   end
 
   def prepopulate!(options)

@@ -1,6 +1,15 @@
 ActiveAdmin.register CourseModule do
   include DisableIntercom
 
+  # accounting for use of friendly_id without finders
+  controller do
+    def find_resource
+      scoped_collection.friendly.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      scoped_collection.find(params[:id])
+    end
+  end
+
   menu parent: 'StartInCollege'
   filter :name
   filter :module_number

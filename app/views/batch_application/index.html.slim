@@ -3,7 +3,7 @@
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
 
 .container
-  == render('applications_close_soon', batch: current_batch) if current_batch.applications_close_soon?
+  == render('applications_close_soon', batch: current_batch) if current_batch && current_batch.applications_close_soon?
 
   .row.application-process
     .col-lg-8.col-md-12
@@ -19,9 +19,9 @@
             br
             | to show team skills
           p
-            ' We don’t have Exams at Admission or at Graduation. Instead, at both
-            ' stages we look at the real product that you have build to measure your
-            | knowledge. We encourage you to use the internet for your help to solve problems.
+            ' We don’t have exams at Admission or Graduation. Instead, at both
+            ' stages we look at the real product that you have built to measure your
+            | knowledge. We encourage you to use the Internet to help solve problems.
           .row.m-t-1
             .col-md-4
               .process-box.arrow-right
@@ -176,7 +176,7 @@
                     .partner-logo
                       = image_tag 'apply/admission-process/fb_start-logo.png', class: 'img-fluid'
                     p
-                      | All teams Receive support from facebook FB Start team
+                      | All teams Receive support from Facebook FB Start team
                 .col-md-4.col-sm-4
                   .program-slide-icon
                     = image_tag 'apply/admission-process/launch.svg'
@@ -207,8 +207,8 @@
                         | Do I need a team to apply?
                       p
                         ' Like you need a team to play football, you need a team
-                        ' to build a startup. In the real companies, individuals
-                        ' come together to work as a team. SV.CO brings the real
+                        ' to build a startup. In real companies, individuals
+                        ' come together to work as a team. SV.CO brings real
                         ' world experience to students. You need to bring a team
                         | and we can teach you how to build a startup.
                     li
@@ -217,7 +217,7 @@
                       p
                         ' Students in college don&rsquo;t have industry experience. To overcome this, we have a
                         ' carefully researched list of good industry ideas which students in colleges can build. Each
-                        ' idea costs &#8377; 10,000 of research by business analysts. You can thus apply, even if you
+                        ' idea costs &#8377;10,000 of research by business analysts. You can thus apply, even if you
                         | don&rsquo;t have an idea.
                     li
                       h5
@@ -235,7 +235,7 @@
                         ' Like a football team has a goalkeeper, defender, mid-fielder
                         ' and forward, a good startup has a programmer/coder, a sales person,
                         ' a design person and one person for operations. You need all four
-                        | people to work together on an idea. Thus, you cannot apply alone.
+                        | roles filled to work together on an idea. Thus, you cannot apply alone.
                     li
                       h5
                         | Do I need programmers in my team?
@@ -251,7 +251,7 @@
             h2
               ' We are here to <strong>help you</strong>
             p
-              ' Please email your doubts or questions to <strong>help@sv.co</strong> or <strong>talk to using the friendly chat window.</strong>
+              ' Please email your doubts or questions to <strong>help@sv.co</strong> or <strong>talk to us using the friendly chat window in the bottom right corner.</strong>
         .fees-section
           h2
             ' <strong>Fees</strong>
@@ -263,7 +263,10 @@
               #application-fee.card-text.collapse.in
                 h3
                  span
-                   ' &#8377; 3,000 per team, non-refundable.
+                   ' &#8377;3,000 per team.
+                p
+                  span
+                    ' Teams who apply and complete the Coding &amp; Video round gets a certificate with scores received from SV.CO. If selected, we will deduct the Application Fee from the Program Fee.
 
             .card.content-box
               h4
@@ -273,7 +276,11 @@
                 .card-text
                   h3
                     span
-                      ' &#8377; 37,500 per founder. For a 1,00,000 worth course.
+                      ' &#8377;37,500 per founder. For a &#8377;1,00,000 worth course.
+                  p
+                    span
+                      ' If you <em>refer a friend</em>, both of you get 10% off the Program Fee if selected. If you are unhappy with the SV.CO program, this fee is fully refundable within 60 days of program start.
+                      
 
             .card.content-box
               h4
@@ -282,7 +289,11 @@
               #scholorship.collapse
                 .card-text
                   h3
-                    | For those students whose annual family income does not exceed &#8377; 5 lakhs, we provide scholarship in the form of financial aid.
+                    span
+                    ' Limited scholarships for students whose annual family income is less than &#8377;5,00,000.
+                  p
+                    span
+                      ' Please write to us at help@sv.co or use the chat window below to understand more.
 
             .card.content-box
               h4

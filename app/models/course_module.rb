@@ -14,7 +14,7 @@ class CourseModule < ActiveRecord::Base
   has_many :module_chapters
   accepts_nested_attributes_for :module_chapters, allow_destroy: true
 
-  validates_presence_of :name, :module_number
+  validates_presence_of :name, :module_number, :publish_at
   validates_uniqueness_of :module_number, :name
 
   def self.valid_module_numbers
@@ -24,4 +24,10 @@ class CourseModule < ActiveRecord::Base
   def chapters_count
     module_chapters.maximum(:chapter_number)
   end
+
+  def published?
+    publish_at && publish_at < Time.now
+  end
+
+  scope :published, -> { where('publish_at < ?', Time.now) }
 end

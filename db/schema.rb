@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160801065455) do
+ActiveRecord::Schema.define(version: 20160801113713) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -203,6 +203,7 @@ ActiveRecord::Schema.define(version: 20160801065455) do
     t.string   "name"
     t.integer  "module_number"
     t.string   "slug"
+    t.datetime "publish_at"
   end
 
   add_index "course_modules", ["slug"], name: "index_course_modules_on_slug", using: :btree

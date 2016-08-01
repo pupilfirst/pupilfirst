@@ -24,3 +24,16 @@
               - course_module.module_chapters.order(:chapter_number).each do |chapter|
                 a.list-group-item href="#{start_in_college_module_path(course_module.module_number, chapter.chapter_number)}" #{chapter.name}
               a.list-group-item href="#{start_in_college_quiz_path(course_module.module_number)}" Quiz #{course_module.module_number}
+                a.list-group-item href="#{start_in_college_module_path(course_module.slug, chapter.chapter_number)}" #{chapter.name}
+              a.list-group-item href="#{start_in_college_quiz_path(course_module.slug)}" Quiz #{course_module.module_number}
+
+  - if @chapter.links.present?
+    .col-md-3
+      .card.card-primary-outline#extra-reading
+        .card-header Extra Reading
+        .card-block
+          .list-group.list-group-flush
+            - @chapter.links.each do |link|
+              a.list-group-item href="#{link[:url]}" target="_blank" #{link[:title]}
+
+

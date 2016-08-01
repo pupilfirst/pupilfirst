@@ -1,5 +1,5 @@
 class BatchApplicationController < ApplicationController
-  before_action :ensure_applicant_is_signed_in, except: %w(index register identify send_sign_in_email continue sign_in_email_sent universities)
+  before_action :ensure_applicant_is_signed_in, except: %w(index register identify send_sign_in_email continue sign_in_email_sent)
   before_action :ensure_batch_active, except: :index
   before_action :ensure_accurate_stage_number, only: %w(form submit complete expired rejected)
   before_action :set_instance_variables
@@ -102,16 +102,6 @@ class BatchApplicationController < ApplicationController
     flash[:success] = 'Your previous application has been discarded.'
 
     redirect_to apply_path
-  end
-
-  # GET /apply/universities
-  def universities
-    if params[:q].blank?
-      render json: []
-      return
-    end
-
-    render json: University.select2_search(params[:q])
   end
 
   # GET /apply/stage/:stage_number

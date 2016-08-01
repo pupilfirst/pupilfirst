@@ -113,6 +113,8 @@ Svapp::Application.routes.draw do
     end
   end
 
+  resources :universities, only: :index
+
   resource :platform_feedback, only: [:create]
 
   # Redirect + webhook from Instamojo

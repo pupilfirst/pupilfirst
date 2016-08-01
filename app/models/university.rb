@@ -4,13 +4,6 @@ class University < ActiveRecord::Base
   validates_uniqueness_of :name, presence: true
   validates_presence_of :location
 
-  def self.grouped_by_location
-    all.each_with_object({}) do |university, grouped|
-      grouped[university.location] ||= []
-      grouped[university.location] << [university.id, university.name]
-    end
-  end
-
   def self.valid_state_names
     [
       'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana',

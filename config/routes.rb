@@ -100,6 +100,9 @@ Svapp::Application.routes.draw do
     get 'continue'
     post 'restart'
 
+    # TODO: Remove this after batch 3 intake is complete. Added to account for emails sent out before application process was overhauled.
+    get 'identify/3', to: redirect('/apply')
+
     scope 'stage/:stage_number', as: 'stage' do
       get '', action: 'ongoing'
       post 'submit'

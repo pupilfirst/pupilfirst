@@ -1,7 +1,7 @@
 - content_for :head
   title Module #{module_number}.#{chapter_number} | Start in College
 
-.margin-top-20
+.m-t-1
   .col-md-9
     .card
       .card-header.text-xs-center Module #{module_number} - #{@module.name}
@@ -22,8 +22,6 @@
           .card-block.collapse id="module#{course_module.module_number}" class="#{course_module.module_number == module_number ? 'in' : ''}"
             .list-group.list-group-flush
               - course_module.module_chapters.order(:chapter_number).each do |chapter|
-                a.list-group-item href="#{start_in_college_module_path(course_module.module_number, chapter.chapter_number)}" #{chapter.name}
-              a.list-group-item href="#{start_in_college_quiz_path(course_module.module_number)}" Quiz #{course_module.module_number}
                 a.list-group-item href="#{start_in_college_module_path(course_module.slug, chapter.chapter_number)}" #{chapter.name}
               a.list-group-item href="#{start_in_college_quiz_path(course_module.slug)}" Quiz #{course_module.module_number}
 

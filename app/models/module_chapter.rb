@@ -26,7 +26,7 @@ class ModuleChapter < ActiveRecord::Base
       return false
     end
 
-    return true
+    true
   end
 
   after_initialize :make_links_an_array

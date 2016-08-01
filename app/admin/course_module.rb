@@ -27,7 +27,7 @@ ActiveAdmin.register CourseModule do
         f.has_many :module_chapters, heading: false, allow_destroy: true, new_record: 'Add Chapter' do |o|
           o.input :name
           o.input :chapter_number
-          o.input :serialized_links, as: :text, hint: 'Add as JSON array. Eg: [{"title": "Title", "url" : "sv.co"}, {"title": "Title", "url" : "sv.co"}]', input_html: {rows: 10}
+          o.input :serialized_links, as: :text, hint: 'Add as JSON array. Eg: [{"title": "Title", "url" : "sv.co"}, {"title": "Title", "url" : "sv.co"}]', input_html: { rows: 10 }
         end
       end
     end

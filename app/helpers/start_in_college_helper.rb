@@ -64,4 +64,8 @@ module StartInCollegeHelper
   def start_of_next_module
     start_in_college_module_path(next_module.slug, 1)
   end
+
+  def first_chapter_path
+    start_in_college_module_path(CourseModule.find_by_module_number(1).slug, 1)
+  end
 end

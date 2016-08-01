@@ -57,9 +57,25 @@ emailsShouldMatch = ->
       validateEmailMatch() if emailConfirmationInput.val().length
 
 setupSelect2Inputs = ->
-  $('#batch_application_university_id').select2
-    matcher: (term, text, opt) ->
-      text.toUpperCase().indexOf(term.toUpperCase()) >= 0 || opt.html().toUpperCase().indexOf('OTHER') >= 0
+  universityInput = $('#batch_application_university_id')
+
+  if universityInput.length
+    universitySearchUrl = universityInput.data('searchUrl')
+
+    universityInput.select2
+      minimumInputLength: 3,
+      ajax:
+        url: universitySearchUrl,
+        dataType: 'json',
+        quietMillis: 500,
+        data: (term, page) ->
+          return {
+            q: term
+          }
+        ,
+        results: (data, page) ->
+          return { results: data }
+        cache: true
 
 toggleReferenceTextField = ->
   if $('#batch_application_team_lead_attributes_reference').val() == 'Other (Please Specify)'

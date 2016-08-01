@@ -99,6 +99,7 @@ Svapp::Application.routes.draw do
     get 'sign_in_email_sent'
     get 'continue'
     post 'restart'
+    get 'universities'
 
     # TODO: Remove this after batch 3 intake is complete. Added to account for emails sent out before application process was overhauled.
     get 'identify/3', to: redirect('/apply')

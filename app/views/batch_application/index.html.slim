@@ -280,7 +280,7 @@
                   p
                     span
                       ' If you <em>refer a friend</em>, both of you get 10% off the Program Fee if selected. If you are unhappy with the SV.CO program, this fee is fully refundable within 60 days of program start.
-                      
+
 
             .card.content-box
               h4
@@ -381,14 +381,10 @@
 
               // TODO: University is actually a required field, but select2 v3 does not play nice with HTML5 validations. Try enabling this when upgrading to select2 v4.
               = f.input :university_id,
-                collection: proc { University.grouped_by_location },
-                as: :grouped_select,
-                group_method: :last,
-                value_method: :first,
-                label_method: :last,
-                label: University,
-                input_html: {class: 'university_select'},
-                include_blank: false,
+                type: :hidden,
+                label: false,
+                placeholder: 'Please pick your university',
+                input_html: { value: nil, 'data-search-url' => apply_universities_url },
                 required: false
 
               = f.input :college, label: false, placeholder: 'Name of your College', input_html: { maxlength: 250 }

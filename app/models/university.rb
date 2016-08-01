@@ -29,4 +29,22 @@ class University < ActiveRecord::Base
       where("name LIKE '%Other%'").first
     end
   end
+
+  # Searches for a university with a term. Always returns 'other' university in search results.
+  def self.select2_search(term)
+    query = "%#{term}%"
+    universities = where('name ILIKE ? OR location ILIKE ? OR id = ?', query, query, other.id)
+
+    universities.select(:id, :location, :name).group_by(&:location).each_with_object([]) do |search_result, results|
+      results << {
+        text: search_result[0],
+        children: search_result[1].map do |university|
+          {
+            id: university.id,
+            text: university.name
+          }
+        end
+      }
+    end
+  end
 end

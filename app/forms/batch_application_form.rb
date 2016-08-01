@@ -30,6 +30,7 @@ class BatchApplicationForm < Reform::Form
   end
 
   def university_should_exist
+    return if university_id.blank?
     return if University.find(university_id).present?
     errors[:university_id] << 'is invalid'
   end

@@ -12,6 +12,7 @@ feature 'Applying to SV.CO' do
 
   context 'when no batches are open' do
     scenario 'user visits apply page' do
+      pending
       visit apply_path
       expect(page).to_not have_text('Did you complete registration once before?')
     end

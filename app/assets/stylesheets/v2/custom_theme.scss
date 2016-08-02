@@ -131,10 +131,10 @@ p {
 .container-md-center {
   @include center-block;
   max-width: 45rem;
-  background-color: white;
-  padding: 30px;
 }
 .content-box {
+  padding: 30px;
+  background-color: white;
   box-shadow: $box-shadow;
   border-radius: 5px;
   border: 1px solid $gray-border;

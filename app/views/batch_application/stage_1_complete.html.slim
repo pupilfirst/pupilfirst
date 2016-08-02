@@ -8,8 +8,9 @@
       h1 Application Fee
       h4.center-block Payment accepted
 .container
+  .m-t-3
+    == render 'application_progress'
   .container-md-center.content-box.m-t-3.m-b-3.apply-submitted
-
     .text-xs-center
       h3
         ' Your application has been received, and
@@ -22,7 +23,7 @@
       h4
         ' While you wait, let your friends know you are onboard!
       a href="https://www.facebook.com/sharer/sharer.php?u=sv.co/apply" target="_blank"
-        i.fa.fa-facebook-square.fa-3x
+        i.fa.fa-facebook-square.fa-2x
       - default_tweet = URI.escape 'Just applied to the @SVdotCO program for student entrepreneurs. I think you should too! sv.co/apply #StartInCollege'
       a.margin-left-10 href="https://twitter.com/intent/tweet?text=#{default_tweet}&url=sv.co/startincollege" target="_blank"
-        i.fa.fa-twitter-square.fa-3x
+        i.fa.fa-twitter-square.fa-2x

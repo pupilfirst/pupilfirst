@@ -22,6 +22,8 @@ module BatchApplicationsHelper
 
   # Used to determine the status of a stage in the progress bar. Returns one of :pending, :ongoing, :complete,
   # :expired, :rejected, or :not_applicable
+  #
+  # rubocop:disable Metrics/PerceivedComplexity
   def stage_status(stage_number)
     if stage_number == applicant_stage_number
       if applicant_stage_number == current_stage.number
@@ -33,16 +35,14 @@ module BatchApplicationsHelper
       end
     elsif stage_number < applicant_stage_number
       :complete
+    elsif applicant_status.in? [:ongoing, :complete]
+      :pending
     else
-      if applicant_status.in? [:ongoing, :complete]
-        :pending
-      else
-        :not_applicable
-      end
+      :not_applicable
     end
   end
 
   def pretty_stage_status(stage_number)
-    stage_status(stage_number).to_s.gsub('_', ' ').capitalize
+    stage_status(stage_number).to_s.tr('_', ' ').capitalize
   end
 end

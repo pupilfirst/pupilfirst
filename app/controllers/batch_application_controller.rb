@@ -342,7 +342,7 @@ class BatchApplicationController < ApplicationController
 
   def ensure_accurate_stage_number
     expected_stage_number = applicant_status == :complete ? applicant_stage_number - 1 : applicant_stage_number
-    raise_not_found if params[:stage_number].to_i != expected_stage_number
+    redirect_to apply_continue_path if params[:stage_number].to_i != expected_stage_number
   end
 
   def sign_in_applicant_temporarily(applicant)

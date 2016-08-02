@@ -5,7 +5,7 @@ class InstamojoController < ApplicationController
   def redirect
     payment = Payment.find_by instamojo_payment_request_id: params[:payment_request_id]
     payment.refresh_payment!(params[:payment_id])
-    payment.peform_post_payment_tasks!
+    payment.perform_post_payment_tasks!
 
     redirect_to apply_stage_complete_path(stage_number: '1')
   end
@@ -25,7 +25,7 @@ class InstamojoController < ApplicationController
     update_params[:instamojo_payment_request_status] = 'Completed' if params[:status] == 'Credit'
 
     payment.update update_params
-    payment.peform_post_payment_tasks!
+    payment.perform_post_payment_tasks!
 
     render nothing: true
   end

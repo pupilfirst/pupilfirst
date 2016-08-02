@@ -82,7 +82,7 @@ class BatchApplication < ActiveRecord::Base
   end
 
   # Called after payment is known to have succeeded. This automatically promotes stage 1 applications to stage 2.
-  def peform_post_payment_tasks!
+  def perform_post_payment_tasks!
     promote! if application_stage.initial_stage?
   end
 

@@ -87,12 +87,12 @@ class Payment < ActiveRecord::Base
     instamojo.raw_payment_request_details(instamojo_payment_request_id)
   end
 
-  def peform_post_payment_tasks!
+  def perform_post_payment_tasks!
     # Log payment time, if unrecorded.
     update!(paid_at: Time.now) if paid_at.blank?
 
     # Let the batch application (if still linked) take care of its stuff.
-    batch_application&.peform_post_payment_tasks!
+    batch_application&.perform_post_payment_tasks!
   end
 
   # Remove direct relation from application to payment and store the relationship as 'original batch application'

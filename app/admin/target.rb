@@ -121,9 +121,7 @@ ActiveAdmin.register Target do
           end
 
           column :description
-          column 'Status' do |timeline_event|
-            timeline_event.verified_status
-          end
+          column 'Status', &:verified_status
           column :created_at
         end
       end

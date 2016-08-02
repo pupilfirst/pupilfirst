@@ -1,7 +1,11 @@
 module ActiveAdmin
   module ActiveAdminHelper
+    def selected_batch_ids
+      @selected_batch_ids ||= params[:batch].present? ? [Batch.find(params[:batch]).id] : Batch.all.pluck(:id)
+    end
+
     def batch_selected
-      @batch_selected ||= params[:batch].present? ? Batch.find(params[:batch]) : Batch.current_or_last
+      @batch_selected ||= Batch.find selected_batch_ids.first
     end
 
     def sv_id_link(founder)

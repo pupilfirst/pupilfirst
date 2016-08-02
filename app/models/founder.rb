@@ -36,6 +36,7 @@ class Founder < ActiveRecord::Base
   has_many :platform_feedback
 
   scope :batched, -> { joins(:startup).merge(Startup.batched) }
+  scope :for_batch_id_in, -> (ids) { joins(:startup).where(startups: { batch_id: ids }) }
   scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }
   # TODO: Do we need this anymore ?

@@ -1,5 +1,5 @@
 .dashboard-item
-  - startups_without_live_targets = Startup.where(batch: batch_selected).without_live_targets
+  - startups_without_live_targets = Startup.where(batch: selected_batch_ids).without_live_targets
 
   .heading Startups without Live Team Targets
 
@@ -10,5 +10,5 @@
 
   .footer-spacer
 
-  a.button.view-all href=admin_startups_path(scope: 'without_live_targets', q: {batch_id_equals: batch_selected.id})
+  a.button.view-all href=admin_startups_path(scope: 'without_live_targets', q: {batch_id_in: selected_batch_ids})
     | View All (#{startups_without_live_targets.count})

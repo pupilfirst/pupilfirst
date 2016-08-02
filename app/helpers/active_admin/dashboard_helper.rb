@@ -133,5 +133,9 @@ module ActiveAdmin
     def count_of_ps
       PlatformFeedback.where.not(promoter_score: nil).count
     end
+
+    def multiple_batches_selected?
+      selected_batch_ids.count > 1
+    end
   end
 end

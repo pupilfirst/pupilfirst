@@ -1,6 +1,6 @@
 - TimelineEvent.valid_verified_status.each do |verified_status|
   .dashboard-item
-    - timeline_events = TimelineEvent.not_dropped_out.for_batch(batch_selected).where(verified_status: verified_status).order('verified_at DESC').includes(:timeline_event_type, :startup)
+    - timeline_events = TimelineEvent.not_dropped_out.for_batch_id_in(selected_batch_ids).where(verified_status: verified_status).order('verified_at DESC').includes(:timeline_event_type, :startup)
     .heading Timeline Events - #{verified_status}
 
     .content
@@ -12,12 +12,12 @@
 
     .footer-spacer
 
-    - trend = TimelineEvent.for_batch(batch_selected).where(verified_status: verified_status).group_by_week('timeline_events.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
+    - trend = TimelineEvent.for_batch_id_in(selected_batch_ids).where(verified_status: verified_status).group_by_week('timeline_events.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
 
     .left-of-button
       span.sparkline-tag #{trend.join(', ')}
 
-    - params = { q: { verified_status_equals: verified_status, startup_batch_id_equals: batch_selected.id } }
+    - params = { q: { verified_status_equals: verified_status, startup_batch_id_in: selected_batch_ids } }
     - params = params.merge(scope: 'not_improved') if verified_status == TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT
     a.button.view-all href=admin_timeline_events_path(params)
       | View All (#{events_to_list.count})

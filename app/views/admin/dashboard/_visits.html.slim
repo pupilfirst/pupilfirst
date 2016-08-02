@@ -1,5 +1,5 @@
 .dashboard-item
-  - founder_visits = Visit.includes(founder: :startup).where(startups: { batch_id: batch_selected.id })
+  - founder_visits = Visit.includes(founder: :startup).where(started_at: (3.weeks.ago..Time.now)).where(startups: { batch_id: selected_batch_ids })
   .heading Recent visits (Only logged-in founders)
 
   .content
@@ -17,5 +17,5 @@
   .left-of-button title="Trend: #{trend.join(', ')}"
     span.sparkline-tag #{trend.join(', ')}
 
-  a.button.view-all href=admin_visits_path(scope: 'founder_visits', q: { started_at_gteq: 3.weeks.ago.strftime('%Y-%m-%d'), founder_startup_batch_id_eq: batch_selected.id })
+  a.button.view-all href=admin_visits_path(scope: 'founder_visits', q: { started_at_gteq: 3.weeks.ago.strftime('%Y-%m-%d'), founder_startup_batch_id_in: selected_batch_ids })
     | View All (#{founder_visits.where(started_at: (3.weeks.ago..Time.now)).count})

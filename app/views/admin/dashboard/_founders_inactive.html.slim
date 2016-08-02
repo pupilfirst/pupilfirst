@@ -1,12 +1,12 @@
 .dashboard-item
   .heading Founders - Inactive (#{Time.now.beginning_of_week.strftime('%B %e')} - Today)
-
+  - founders = Founder.for_batch_id_in(selected_batch_ids).not_dropped_out.inactive
   .content
     ol
-      - batch_selected.founders.not_dropped_out.inactive.limit(10).each do |founder|
+      - founders.limit(10).each do |founder|
         li = link_to founder.fullname, admin_founder_path(founder)
 
   .footer-space
 
-  a.button.view-all href=admin_founders_path(scope: 'inactive', q: {startup_batch_id_eq: batch_selected.id, startup_dropped_out_eq: false })
-    | View All (#{batch_selected.founders.not_dropped_out.inactive.count})
+  a.button.view-all href=admin_founders_path(scope: 'inactive', q: {startup_batch_id_in: selected_batch_ids, startup_dropped_out_eq: false })
+    | View All (#{founders.count})

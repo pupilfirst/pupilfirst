@@ -121,7 +121,7 @@ ActiveAdmin.register Target do
           end
 
           column :description
-          column :verified?
+          column 'Status', &:verified_status
           column :created_at
         end
       end

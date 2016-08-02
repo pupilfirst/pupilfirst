@@ -1,26 +1,43 @@
 - content_for :head
   title Module #{module_number}.#{chapter_number} | Start in College
 
-.margin-top-20
+.m-t-1
   .col-md-9
     .card
       .card-header.text-xs-center Module #{module_number} - #{@module.name}
       .card-block
-        h4.card-title #{module_number}.#{chapter_number} #{@chapter.name}
+        - if @module.published?
+          h4.card-title #{module_number}.#{chapter_number} #{@chapter.name}
         .card-text
-          = render "start_in_college/module_#{module_number}/chapter_#{chapter_number}"
+          - if @module.published?
+            = render "start_in_college/module_#{module_number}/chapter_#{chapter_number}"
+            - if @chapter.links.present?
+              hr
+              h5 Extra Reading
+              - @chapter.links.each do |link|
+                a href="#{link[:url]}" target="_blank" #{link[:title]}
+                br
+          - else
+            .text-xs-center
+              i.fa.fa-exclamation-triangle
+              ' &nbsp;<strong>You have reached the end of our published content!</strong>
+              br
+              '  The next module ( #{@module.name} ) will be published on #{@module.publish_at.strftime('%A, %b %d')}. Please come back later to continue learning.
+
       .card-footer
         = link_to 'Previous', previous_page, class: 'card-link'
-        = link_to 'Next', next_page, class: 'card-link pull-right'
+        = link_to 'Next', next_page, class: 'card-link pull-right' if @module.published?
 
   .col-md-3
     #module-links
-      - CourseModule.all.order(:module_number).each do |course_module|
+      - CourseModule.published.order(:module_number).each do |course_module|
         .card
           .card-header
             a data-toggle="collapse" data-parent="#module-links" href="#module#{course_module.module_number}"  #{course_module.module_number}. #{course_module.name}
           .card-block.collapse id="module#{course_module.module_number}" class="#{course_module.module_number == module_number ? 'in' : ''}"
             .list-group.list-group-flush
               - course_module.module_chapters.order(:chapter_number).each do |chapter|
-                a.list-group-item href="#{start_in_college_module_path(course_module.module_number, chapter.chapter_number)}" #{chapter.name}
-              a.list-group-item href="#{start_in_college_quiz_path(course_module.module_number)}" Quiz #{course_module.module_number}
+                a.list-group-item href="#{start_in_college_module_path(course_module.slug, chapter.chapter_number)}" #{chapter.name}
+              a.list-group-item href="#{start_in_college_quiz_path(course_module.slug)}" Quiz #{course_module.module_number}
+
+

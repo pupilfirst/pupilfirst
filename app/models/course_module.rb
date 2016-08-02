@@ -1,4 +1,11 @@
 class CourseModule < ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :name, use: :slugged
+
+  def should_generate_new_friendly_id?
+    name_changed? || super
+  end
+
   has_many :quiz_questions
 
   has_many :quiz_attempts
@@ -7,8 +14,8 @@ class CourseModule < ActiveRecord::Base
   has_many :module_chapters
   accepts_nested_attributes_for :module_chapters, allow_destroy: true
 
-  validates_presence_of :name, :module_number
-  validates_uniqueness_of :module_number
+  validates_presence_of :name, :module_number, :publish_at
+  validates_uniqueness_of :module_number, :name
 
   def self.valid_module_numbers
     CourseModule.all.pluck(:module_number)
@@ -17,4 +24,10 @@ class CourseModule < ActiveRecord::Base
   def chapters_count
     module_chapters.maximum(:chapter_number)
   end
+
+  def published?
+    publish_at && publish_at < Time.now
+  end
+
+  scope :published, -> { where('publish_at < ?', Time.now) }
 end

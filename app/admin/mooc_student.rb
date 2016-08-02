@@ -33,4 +33,15 @@ ActiveAdmin.register MoocStudent do
 
     f.actions
   end
+
+  csv do
+    column :name
+    column(:email) { |student| student.user.email }
+    column :phone
+    column :gender
+    column :college
+    column :semester
+    column(:university) { |student| student.university.name }
+    column :state
+  end
 end

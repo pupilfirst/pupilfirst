@@ -60,22 +60,22 @@ class StartInCollegeController < ApplicationController
     end
   end
 
-  # GET /startincollege/module/:id/:chapter_id
+  # GET /startincollege/module/:name/:chapter_number
   #
   # Displays the content of a module's chapter.
   def module
     raise_not_found unless chapter_exists?
-    @module = CourseModule.find_by_module_number params[:id].to_i
-    @chapter = @module.module_chapters.find_by_chapter_number params[:chapter_id].to_i
+    @module = CourseModule.friendly.find(params[:name])
+    @chapter = @module.module_chapters.find_by_chapter_number params[:chapter_number].to_i
   end
 
-  # GET /startincollege/quiz/:id
+  # GET /startincollege/quiz/:name
   #
   # Displays the quiz questions
   def quiz
     raise_not_found unless module_exists?
 
-    @module = CourseModule.find_by(module_number: params[:id].to_i)
+    @module = CourseModule.friendly.find(params[:name])
     @questions = @module.quiz_questions.shuffle
 
     @form = QuizSubmissionForm.new(OpenStruct.new)
@@ -86,7 +86,7 @@ class StartInCollegeController < ApplicationController
   #
   # Evaluates a quiz submission
   def quiz_submission
-    @module = CourseModule.find params[:module]
+    @module = CourseModule.friendly.find params[:module]
 
     grade_submission
     save_grade
@@ -138,11 +138,11 @@ class StartInCollegeController < ApplicationController
   end
 
   def module_exists?
-    params[:id].to_i.in? CourseModule.valid_module_numbers
+    CourseModule.friendly.find(params[:name]).present?
   end
 
   def module_has_chapter?
-    params[:chapter_id].to_i.in? CourseModule.find_by(module_number: params[:id].to_i).module_chapters.pluck(:chapter_number)
+    params[:chapter_number].to_i.in? CourseModule.friendly.find(params[:name]).module_chapters.pluck(:chapter_number)
   end
 
   def chapter_exists?

@@ -1,3 +1,14 @@
+### 1 August, 2016
+
+#### Features
+
+  - The widget to contact us via Facebook, Twitter or Email has been replaced! We now have a live chat function instead, active all over the site (including this page), where you can have a chat with us without any interruption. It's pretty slick, check it out!
+
+#### UI and UX
+
+  - Application process to batch 3 has been given a bit of an overhaul. We've altered and improved the way information is delivered to applicants, and reduced the amount of data we require for them to get started. Brand new apply page design included!
+  - The latest posts from our Instagram account are now featured on the homepage!
+
 ### 25 July, 2016
 
 #### Features

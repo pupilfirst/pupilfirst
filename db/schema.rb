@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160729110328) do
+ActiveRecord::Schema.define(version: 20160801113713) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -202,7 +202,11 @@ ActiveRecord::Schema.define(version: 20160729110328) do
     t.datetime "updated_at",    null: false
     t.string   "name"
     t.integer  "module_number"
+    t.string   "slug"
+    t.datetime "publish_at"
   end
+
+  add_index "course_modules", ["slug"], name: "index_course_modules_on_slug", using: :btree
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -357,6 +361,7 @@ ActiveRecord::Schema.define(version: 20160729110328) do
     t.integer  "chapter_number"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+    t.text     "links"
   end
 
   add_index "module_chapters", ["course_module_id"], name: "index_module_chapters_on_course_module_id", using: :btree

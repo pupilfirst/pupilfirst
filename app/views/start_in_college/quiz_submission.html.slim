@@ -11,5 +11,5 @@
     h4
       ' You have just completed the quiz for Module #{@module.module_number}: '#{@module.name}'. You attempted #{@attempted} questions of the total #{@total} and got #{@correct} correct.
 
-    = link_to 'Retry Quiz', start_in_college_quiz_path(@module.module_number), class: 'btn btn-secondary btn-md text-uppercase'
+    = link_to 'Retry Quiz', start_in_college_quiz_path(@module.slug), class: 'btn btn-secondary btn-md text-uppercase'
     = link_to 'Continue Course', after_quiz_path, class: 'btn btn-primary btn-md text-uppercase pull-right'

@@ -11,31 +11,39 @@ module StartInCollegeHelper
   end
 
   def module_number
-    params[:id].to_i
+    @module.module_number
+  end
+
+  def previous_module
+    CourseModule.find_by_module_number module_number - 1
+  end
+
+  def next_module
+    CourseModule.find_by_module_number module_number + 1
   end
 
   def chapter_number
-    params[:chapter_id].to_i
+    @chapter.chapter_number
   end
 
   def quiz_of_previous_module
-    start_in_college_quiz_path(module_number - 1)
+    start_in_college_quiz_path(previous_module.slug)
   end
 
   def previous_chapter
-    start_in_college_module_path(module_number, chapter_number - 1)
+    start_in_college_module_path(@module.slug, chapter_number - 1)
   end
 
   def last_chapter?
-    chapter_number == CourseModule.find_by(module_number: module_number).chapters_count
+    chapter_number == @module.chapters_count
   end
 
   def next_chapter
-    start_in_college_module_path(module_number, chapter_number + 1)
+    start_in_college_module_path(@module.slug, chapter_number + 1)
   end
 
   def quiz_of_this_module
-    start_in_college_quiz_path(module_number)
+    start_in_college_quiz_path(@module.slug)
   end
 
   def quiz_result_title
@@ -54,6 +62,10 @@ module StartInCollegeHelper
   end
 
   def start_of_next_module
-    start_in_college_module_path(@module.module_number + 1, 1)
+    start_in_college_module_path(next_module.slug, 1)
+  end
+
+  def first_chapter_path
+    start_in_college_module_path(CourseModule.find_by_module_number(1).slug, 1)
   end
 end

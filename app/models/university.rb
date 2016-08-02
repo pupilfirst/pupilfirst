@@ -4,13 +4,6 @@ class University < ActiveRecord::Base
   validates_uniqueness_of :name, presence: true
   validates_presence_of :location
 
-  def self.grouped_by_location
-    all.each_with_object({}) do |university, grouped|
-      grouped[university.location] ||= []
-      grouped[university.location] << [university.id, university.name]
-    end
-  end
-
   def self.valid_state_names
     [
       'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana',
@@ -27,6 +20,24 @@ class University < ActiveRecord::Base
       find(8)
     else
       where("name LIKE '%Other%'").first
+    end
+  end
+
+  # Searches for a university with a term. Always returns 'other' university in search results.
+  def self.select2_search(term)
+    query = "%#{term}%"
+    universities = where('name ILIKE ? OR location ILIKE ? OR id = ?', query, query, other.id)
+
+    universities.select(:id, :location, :name).group_by(&:location).each_with_object([]) do |search_result, results|
+      results << {
+        text: search_result[0],
+        children: search_result[1].map do |university|
+          {
+            id: university.id,
+            text: university.name
+          }
+        end
+      }
     end
   end
 end

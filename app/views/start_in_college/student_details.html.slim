@@ -32,13 +32,9 @@
           // University is actually a required field, but select2 v3 does not play nice with HTML5 validations.
           // TODO: Try enabling this when upgrading to select2 v4.
           = f.input :university_id,
-            collection: proc { University.grouped_by_location },
-            as: :grouped_select,
-            group_method: :last,
-            value_method: :first,
-            label_method: :last,
-            label: 'University',
-            include_blank: 'Please pick your university',
+            type: :hidden,
+            placeholder: 'Please pick your university',
+            input_html: { value: nil, 'data-search-url' => universities_url },
             required: false
 
           = f.input :college, required: true

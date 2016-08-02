@@ -34,5 +34,8 @@ module Svapp
     end
 
     config.cache_store = :memory_store, { size: 64.megabytes }
+
+    # Precompile fonts.
+    config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
   end
 end

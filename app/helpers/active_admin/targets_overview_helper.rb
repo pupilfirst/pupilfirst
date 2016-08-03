@@ -9,11 +9,7 @@ module ActiveAdmin
     end
 
     def name_link(assignee, template, status)
-      status == :completed ? completion_event_path(assignee, template) : show_path(assignee)
-    end
-
-    def completion_event_path(assignee, template)
-      admin_target_path assignee.targets.completed.where(target_template: template).last
+      admin_target_path assignee.targets.where(target_template: template).merge(Target.send(effective_scope(status))).last
     end
 
     def show_path(assignee)

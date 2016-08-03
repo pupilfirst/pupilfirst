@@ -60,16 +60,21 @@ ActiveAdmin.register BatchApplication do
       link_to "##{stage.number} #{stage.name}", admin_application_stage_path(stage)
     end
 
-    column 'Submission' do |batch_application|
-      current_stage = batch_application.application_stage
-      submission = batch_application.application_submissions.find_by(application_stage_id: current_stage.id)
+    # column 'Submission' do |batch_application|
+    #   current_stage = batch_application.application_stage
+    #   submission = batch_application.application_submissions.find_by(application_stage_id: current_stage.id)
+    #
+    #   if submission.present?
+    #     link_to "#{current_stage.name} submission", admin_application_submission_path(submission)
+    #   end
+    # end
 
-      if submission.present?
-        link_to "#{current_stage.name} submission", admin_application_submission_path(submission)
-      end
+    column :college
+    column :state do |application|
+      application.state || application.university.location
     end
 
-    column :score
+    # column :score
 
     column :payment_status do |batch_application|
       if batch_application.payment.present?

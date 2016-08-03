@@ -352,11 +352,11 @@ ActiveAdmin.register TimelineEvent do
 
       table_for timeline_event.links do
         column :title do |link|
-          link[:title]
+          link_to link[:title], link[:url], target: '_blank'
         end
 
         column :url do |link|
-          link[:url]
+          link_to link[:url], link[:url], target: '_blank'
         end
 
         column :private do |link|

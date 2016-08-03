@@ -11,7 +11,7 @@ class BatchApplicationForm < Reform::Form
   end
 
   property :university_id, validates: { presence: true }
-  properties :college, validates: { presence: true, length: { maximum: 250 } }
+  property :college, validates: { presence: true, length: { maximum: 250 } }
 
   # Custom validations.
   validate :do_not_reapply
@@ -47,6 +47,7 @@ class BatchApplicationForm < Reform::Form
   end
 
   def save
+    # TODO: It seems this transaction is not working fine. We are getting applicants without correspoinding applications
     BatchApplication.transaction do
       applicant = update_or_create_team_lead
       application = create_application(applicant)
@@ -66,7 +67,8 @@ class BatchApplicationForm < Reform::Form
     applicant.update(
       name: team_lead.name,
       phone: team_lead.phone,
-      reference: supplied_reference
+      reference: supplied_reference,
+      college: college
     )
 
     applicant

@@ -68,7 +68,7 @@ class Faculty < ActiveRecord::Base
   # Returns faculty members who have had connect slots in the past, but not 'after' a date.
   scope :recently_inactive, lambda { |after = Date.today.beginning_of_week|
     slotted_after_date = Faculty.joins(:connect_slots).where('connect_slots.slot_at > ?', after)
-    joins(:connect_slots).where.not(id: slotted_after_date).distinct
+    active.joins(:connect_slots).where.not(id: slotted_after_date).distinct
   }
 
   # This method sets the label used for object by Active Admin.

@@ -446,6 +446,18 @@ class Founder < ActiveRecord::Base
     find_by(startup_token: startup_token, startup_admin: true)
   end
 
+  def latest_nps
+    platform_feedback.scored.order('created_at').last&.promoter_score
+  end
+
+  def promoter?
+    latest_nps.present? && latest_nps > 8
+  end
+
+  def detractor?
+    latest_nps.present? && latest_nps < 7
+  end
+
   private
 
   def batch_start_date

@@ -123,15 +123,17 @@ module ActiveAdmin
     end
 
     def present_nps
-      PlatformFeedback.average(:promoter_score).round(1)
+      promoters = PlatformFeedback.promoters.count
+      detractors = PlatformFeedback.detractors.count
+      format("%+d", ((promoters - detractors).to_f / count_of_ps) * 100)
     end
 
     def source_of_nps
-      "#{count_of_ps} entries"
+      pluralize count_of_ps, 'entry'
     end
 
     def count_of_ps
-      PlatformFeedback.where.not(promoter_score: nil).count
+      PlatformFeedback.founders_with_scores.count
     end
 
     def multiple_batches_selected?

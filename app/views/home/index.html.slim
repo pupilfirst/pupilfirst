@@ -28,32 +28,338 @@
           h4 = t("home.index.background_#{background_image_number}_messages.secondary_html")
           = link_to 'Apply Now', apply_path, class: 'btn btn-primary btn-lg text-uppercase home-apply-btn'
 
-    .container-fluid.hidden-sm-down
-      .row.instagram-header-footer
-        .text-xs-center
-          h3 Checkout the latest images from our <strong>#StartInCollege</strong> campaign!
+  .graduated-slide
+    .container-fluid
       .row
-        - @instagram_images.each_with_index do |image, index|
-          .col-sm-4.col-md-3.col-lg-2.instagram-images-wrapper style="background-image: url('#{image[:image_url]}');" class="#{index > 3 ? 'hidden-md-down' : ''}"
-            img.instagram-spacer src=image_path('home/instagram_square_spacer.png')
-            a.instagram-overlay href=image[:instagram_link] target='_blank'
-              - if image.key?(:caption)
-                .caption = image[:caption][:text]
-              .metrics
-                i.fa.fa-heart
-                ' &nbsp;#{image[:likes_count]}&nbsp;&nbsp;
-                i.fa.fa-comment
-                ' &nbsp;#{image[:comments_count]}
-      .row.instagram-header-footer
-        .text-xs-center
-          a.btn.btn-md.btn-secondary href='https://www.instagram.com/svdotco' target='_blank'
-            i.fa.fa-instagram
-            ' &nbsp;&nbsp;Instagram
-          a.btn.btn-md.btn-secondary.m-l-1.m-r-1 href='https://twitter.com/svdotco' target='_blank'
-            i.fa.fa-twitter
-            ' &nbsp;&nbsp;Twitter
-          a.btn.btn-md.btn-secondary href='https://www.facebook.com/svdotco' target='_blank'
-            i.fa.fa-facebook
-            ' &nbsp;&nbsp;Facebook
+        h3.text-xs-center.content-head
+          span.content-title-icon.graduated-icon
+          | Few Successful Students after their first startup with SV.CO
+        .graduation-carousel
+          .slide-item
+            a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-1"
+              = image_tag 'apply/graduation-video-thumbnail-1.png'
+            .graduate-data.text-xs-center
+              h4
+                | <strong>Jibin Jose</strong>
+                br
+                | 0 to Million-Dollar Campus Startup
+              p
+                | “After” Silicon Valley exposure
 
-    == render 'layouts/home_footer'
+          .slide-item
+            a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-3"
+              = image_tag 'apply/graduation-video-thumbnail-3.png'
+            .graduate-data.text-xs-center
+              h4
+                | <strong>Spenwise</strong>
+                br
+                | 0 to 1 Crore Value in Six Months
+              p
+                | Admission to Accelerator
+
+          .slide-item
+            a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-4"
+              = image_tag 'apply/graduation-video-thumbnail-4.png'
+            .graduate-data.text-xs-center
+              h4
+                | <strong>Z-Pay</strong>
+                br
+                | 0 to 7 Lacs CTC in six months
+              p
+                | Team Acquihired by Tally
+
+          .slide-item
+            a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
+              = image_tag 'apply/graduation-video-thumbnail-5.png'
+            .graduate-data.text-xs-center
+              h4
+                | <strong>Varghese George</strong>
+                br
+                | CTC 7 Lacs
+              p
+                | Team Acquihired by Tally
+
+          .slide-item
+            a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
+              = image_tag 'apply/sriram.png'
+            .graduate-data.text-xs-center
+              h4
+                | <strong>Sreeram Narayanan</strong>
+                br
+                | CTC 7 Lacs
+              p
+                | Hired by Tally Solutions
+
+          .slide-item
+            a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
+              = image_tag 'apply/arun-p.png'
+            .graduate-data.text-xs-center
+              h4
+                | <strong>Arun P</strong>
+                br
+                | CTC 6 Lacs
+              p
+                | Hired by Goqii
+
+          .slide-item
+            a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
+              = image_tag 'apply/aravind-sai.png'
+            .graduate-data.text-xs-center
+              h4
+                | <strong>Aravind Sai</strong>
+                br
+                | CTC 12.6 Lacs
+              p
+                | Hired by Goqii
+
+          .slide-item
+            a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
+              = image_tag 'apply/sachu.png'
+            .graduate-data.text-xs-center
+              h4
+                | <strong>Sachu Shylan</strong>
+                br
+                | CTC 6 Lacs
+              p
+                | Hired by Good Methods Global
+
+          .slide-item
+            a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-5"
+              = image_tag 'apply/ajayson.png'
+            .graduate-data.text-xs-center
+              h4
+                | <strong>Ajayson</strong>
+                br
+                | CTC 7 Lacs
+              p
+                | Hired by Tally Solutions
+
+          .slide-item
+            a.graduate-thumbnail href="#" data-toggle="modal" data-target="#graduatesVideo-6"
+              = image_tag 'apply/graduation-video-thumbnail-6.png'
+            .graduate-data.text-xs-center
+              h4
+                | <strong>Six ways to Success</strong>
+                br
+                | Graduation Options
+  .program-partners
+    .container
+      h3.text-xs-center.content-head
+        span.content-title-icon.program-partners-icon
+        | Program Partners
+      .partner-container
+        .col-lg-2.col-md-3.col-sm-4
+          .card.center-block
+            .image-block
+              = image_tag 'talent/tally-logo.png', class: "img-fluid"
+            .card-block
+              p.card-text Graduation Partner
+
+        .col-lg-2.col-md-3.col-sm-4
+          .card.center-block
+            .image-block
+              = image_tag 'talent/Freshdesk-logo.png', class: "img-fluid"
+            .card-block
+              p.card-text Graduation Partner
+
+        .col-lg-2.col-md-3.col-sm-4
+          .card.center-block
+            .image-block
+              = image_tag 'talent/freecharge-logo.png', class: "img-fluid"
+            .card-block
+              p.card-text Graduation Partner
+
+        .col-lg-2.col-md-3.col-sm-4
+          .card.center-block
+            .image-block
+              = image_tag 'talent/askme-logo.png', class: "img-fluid"
+            .card-block
+              p.card-text Graduation Partner
+
+        .col-lg-2.col-md-3.col-sm-4
+          .card.center-block
+            .image-block
+              = image_tag 'talent/ola-logo.png', class: "img-fluid"
+            .card-block
+              p.card-text Graduation Partner
+
+        .col-lg-2.col-md-3.col-sm-4
+          .card.center-block
+            .image-block
+              = image_tag 'talent/goqii-logo.png', class: "img-fluid"
+            .card-block
+              p.card-text Graduation Partner
+
+        .col-lg-2.col-md-3.col-sm-4
+          .card.center-block
+            .image-block
+              = image_tag 'talent/microsoft-ventures-logo.png'
+            .card-block
+              p.card-text Graduation Partner
+
+        .col-lg-2.col-md-3.col-sm-4
+          .card.center-block
+            .image-block
+              = image_tag 'talent/Citrus-logo.png', class: "img-fluid"
+            .card-block
+              p.card-text Graduation Partner
+
+        .col-lg-2.col-md-3.col-sm-4
+          .card.center-block
+            .image-block
+              = image_tag 'talent/AHventures-logo.png', class: "img-fluid"
+            .card-block
+              p.card-text Graduation Partner
+
+        .col-lg-2.col-md-3.col-sm-4
+          .card.center-block
+            .image-block
+              = image_tag 'talent/Flat6labs-logo.png', class: "img-fluid"
+            .card-block
+              p.card-text Graduation Partner
+
+        .col-lg-2.col-md-3.col-sm-4
+          .card.center-block
+            .image-block
+              = image_tag 'talent/Goodmethods-logo.png', class: "img-fluid"
+            .card-block
+              p.card-text Graduation Partner
+
+        .col-lg-2.col-md-3.col-sm-4
+          .card.center-block
+            .image-block
+              = image_tag 'talent/Kalaaricapital-logo.png', class: "img-fluid"
+            .card-block
+              p.card-text Graduation Partner
+
+        .col-lg-2.col-md-3.col-sm-4
+          .card.center-block
+            .image-block
+              = image_tag 'apply/aws-logo.png', class: "img-fluid"
+            .card-block
+              p.card-text Resource Partner
+
+        .col-lg-2.col-md-3.col-sm-4
+          .card.center-block
+            .image-block
+              = image_tag 'apply/dotco-logo.png'
+            .card-block
+              p.card-text Resource Partner
+
+        .col-lg-2.col-md-3.col-sm-4
+          .card.center-block
+            .image-block
+              = image_tag 'apply/GTU-logo.png'
+            .card-block
+              p.card-text University Partner
+
+  .container-fluid.hidden-sm-down
+    .row.instagram-header-footer
+      .text-xs-center
+        h3 Checkout the latest images from our <strong>#StartInCollege</strong> campaign!
+    .row
+      - @instagram_images.each_with_index do |image, index|
+        .col-sm-4.col-md-3.col-lg-2.instagram-images-wrapper style="background-image: url('#{image[:image_url]}');" class="#{index > 3 ? 'hidden-md-down' : ''}"
+          img.instagram-spacer src=image_path('home/instagram_square_spacer.png')
+          a.instagram-overlay href=image[:instagram_link] target='_blank'
+            - if image.key?(:caption)
+              .caption = image[:caption][:text]
+            .metrics
+              i.fa.fa-heart
+              ' &nbsp;#{image[:likes_count]}&nbsp;&nbsp;
+              i.fa.fa-comment
+              ' &nbsp;#{image[:comments_count]}
+    .row.instagram-header-footer
+      .text-xs-center
+        a.btn.btn-md.btn-secondary href='https://www.instagram.com/svdotco' target='_blank'
+          i.fa.fa-instagram
+          ' &nbsp;&nbsp;Instagram
+        a.btn.btn-md.btn-secondary.m-l-1.m-r-1 href='https://twitter.com/svdotco' target='_blank'
+          i.fa.fa-twitter
+          ' &nbsp;&nbsp;Twitter
+        a.btn.btn-md.btn-secondary href='https://www.facebook.com/svdotco' target='_blank'
+          i.fa.fa-facebook
+          ' &nbsp;&nbsp;Facebook
+
+  == render 'layouts/home_footer'
+
+#graduatesVideo-1.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/AzABLPISPQU" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-2.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/k13C6C_MzCE" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-3.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/xBaaBVlK5Ws" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-4.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/pwmVitwaeL0" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-5.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/XBjkCUW1lFQ" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-6.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/AaoW1W7wZLk" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-7.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/ut-J7cuQpzI" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-8.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/z2e5o5ftgRc" frameborder="0" allowfullscreen="allowfullscreen"
+
+#graduatesVideo-9.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        iframe.video-frame src="https://www.youtube.com/embed/qEZ1RamKt6k" frameborder="0" allowfullscreen="allowfullscreen"

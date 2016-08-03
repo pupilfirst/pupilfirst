@@ -14,7 +14,7 @@ avoidwidowsTypography = ->
       $(this).html wordArray.join(' ')
 
 stopVideosOnModalClose = ->
-  $('.graduates-video').on 'hide.bs.modal', (event) ->
+  $('.video-modal').on 'hide.bs.modal', (event) ->
     modalIframe = $(event.target).find('iframe')
     modalIframe.attr 'src', modalIframe.attr('src')
 

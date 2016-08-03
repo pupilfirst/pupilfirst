@@ -514,55 +514,6 @@
     }
   }
 }
-
-.graduated-slide {
-  overflow: hidden;
-
-  .slick-prev, .slick-next {
-    border: 1px solid $gray-border;
-    @include border-radius(50%);
-    background-color: white;
-    box-shadow: $box-shadow;
-    height: 40px;
-    width: 40px;
-    top: auto;
-    bottom: 0px;
-    margin: 0 15px;
-    z-index: 1;
-    transition: all .2s;
-
-    &:before {
-      font-size: 18px;
-      vertical-align: middle;
-      opacity: 1;
-    }
-    &:hover, &:focus, &:active {
-      box-shadow: $box-shadow-hover;
-
-      &:before {
-        color: $light-secondary;
-      }
-    }
-  }
-  .slick-prev {
-    right: 50%;
-    left: auto;
-
-    &:before {
-      @include fa-icon(angle-left);
-      color: $light-grey-text;
-    }
-  }
-  .slick-next {
-    left: 50%;
-    right: auto;
-
-    &:before {
-      @include fa-icon(angle-right);
-      color: $light-grey-text;
-    }
-  }
-}
 .application-faq {
   background-color: white;
   position: relative;

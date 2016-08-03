@@ -101,7 +101,7 @@ class Resource < ActiveRecord::Base
   # message to be send to slack for new resources
   def new_resource_message
     message = "*A new #{for_approved? ? 'private resource (for approved startups)' : 'public resource'}"\
-    " has been uploaded to SV.CO*: \n"
+    " has been uploaded to the SV.CO Startup Library*: \n"
     message += "*Title:* #{title}\n"
     message += "*Description:* #{description}\n"
     message + "*URL:* #{Rails.application.routes.url_helpers.resource_url(self, host: 'https://sv.co')}"

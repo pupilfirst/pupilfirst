@@ -169,6 +169,7 @@
   }
   @include media-breakpoint-down(sm) {
     background-size: cover;
+    height: auto;
   }
 }
 

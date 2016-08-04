@@ -248,6 +248,10 @@ p {
       background-image: asset-url("apply/fees-icon.svg");
       height: 62px;
     }
+    &.winner-icon {
+      background-image: asset-url("apply/first-batch-graduation.svg");
+      height: 75px;
+    }
   }
   &:before {
     content: '';
@@ -256,6 +260,7 @@ p {
     border-bottom: 3px solid $gray-border;
     position: absolute;
     bottom: -20px;
+    left: 50%;
     transform: translateX(-50%);
   }
 }

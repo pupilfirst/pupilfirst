@@ -33,5 +33,12 @@ showInstagramImageOverlays = ->
   , ->
     $(this).removeClass('overlay-enabled')
 
+scrollmeDownIcon = ->
+  $('.icon-scroll').click (e) ->
+    e.preventDefault()
+    $('html, body').animate
+      scrollTop: $($.attr(this, 'href')).offset().top, 500
+
 $(document).on 'page:change', showInstagramImageOverlays
 $(document).on 'page:change', setupGraduationCarousel
+$(document).on 'page:change', scrollmeDownIcon

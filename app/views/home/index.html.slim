@@ -27,8 +27,9 @@
           h1 = t('home.index.main_bleed_message_html')
           h4 = t("home.index.background_#{background_image_number}_messages.secondary_html")
           = link_to 'Apply Now', apply_path, class: 'btn btn-primary btn-lg text-uppercase home-apply-btn'
+    a.icon-scroll href="#graduation-slide-section"
 
-  .graduated-slide
+  #graduation-slide-section.graduated-slide
     .container-fluid
       .row
         h3.text-xs-center.content-head
@@ -142,6 +143,45 @@
                 | <strong>Six ways to Success</strong>
                 br
                 | Graduation Options
+
+  .graduation-summary
+    .container
+      h3.text-xs-center.content-head
+        span.content-title-icon.winner-icon
+        | Our First Batch Graduation Summary
+      .graduation-options.text-xs-center.row
+        .col-md-4
+          h4.text-xs-center.font-semibold
+            | GET FUNDED
+          p.option-desc.font-light
+            ' Startup gets funded through a venture capital firm or an angel investor
+          p.option-detail
+            ' <strong>SYM and Walat</strong> raised Seed funding of <strong>$7500</strong> from <strong>askme.com</strong>
+          .logo-block.m-t-1
+            = image_tag 'talent/askme-logo.png', class: "img-fluid"
+
+        .col-md-4
+          h4.text-xs-center.font-semibold
+            | GET ACQUI-HIRED
+          p.option-desc.font-light
+            ' Founding team is hired on by another company that values the skillset 
+          p.option-detail
+            ' <strong>Tally Acqui-hired Z-pay</strong> with an offer of <strong>
+            | 7 Lakh CTC</strong> to all four members of team
+          .logo-block.m-t-1
+            = image_tag 'talent/tally-logo.png', class: "img-fluid"
+
+        .col-md-4
+          h4.text-xs-center.font-semibold
+            | GET JOB
+          p.option-desc.font-light
+            ' Get hired at a great company because of the skills acquired while building a Startup
+          p.option-detail
+            ' Ola, Freecharge, Goqii, Citruspay, Tally etc.
+            | have made <strong>14 offers</strong>. Highest offer made is <strong>12.6 Lpa</strong>
+          .logo-block.m-t-1
+            = image_tag 'talent/first_batch_graduation_companies.png', class: "img-fluid"
+
   .program-partners
     .container
       h3.text-xs-center.content-head
@@ -235,6 +275,13 @@
         .col-lg-2.col-md-3.col-sm-4
           .card.center-block
             .image-block
+              = image_tag 'apply/indian-angel-network-logo.png', class: "img-fluid"
+            .card-block
+              p.card-text Graduation Partner
+
+        .col-lg-2.col-md-3.col-sm-4
+          .card.center-block
+            .image-block
               = image_tag 'apply/aws-logo.png', class: "img-fluid"
             .card-block
               p.card-text Resource Partner
@@ -252,6 +299,8 @@
               = image_tag 'apply/GTU-logo.png'
             .card-block
               p.card-text University Partner
+      .center-block.text-xs-center
+        = link_to 'Visit our Talent page', talent_path, class: 'btn btn-primary btn-lg text-uppercase'
 
   .container-fluid.hidden-sm-down
     .row.instagram-header-footer

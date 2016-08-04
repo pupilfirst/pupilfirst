@@ -127,6 +127,7 @@
   position: relative;
   padding: 4rem 0 2rem;
   width: 100%;
+  height: 100vh;
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
@@ -166,14 +167,6 @@
       background-image: asset-url("home/mobile/background-image-5.jpg");
     }
   }
-  &:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-  }
   @include media-breakpoint-down(sm) {
     background-size: cover;
   }
@@ -182,7 +175,7 @@
 .header-container {
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - 4em);
   align-items: center;
   display: flex;
   justify-content: center;
@@ -201,7 +194,7 @@
   &.hero-text-center {
     text-align: center;
     margin: 100px auto 0;
-    max-width: 510px;
+    max-width: 620px;
   }
   &.hero-text-right {
     text-align: left;
@@ -242,6 +235,45 @@
 .home-apply-btn {
   padding: 15px 45px;
   font-size: 1rem;
+}
+.icon-scroll,
+.icon-scroll:before {
+  position: absolute;
+  left: 50%;
+}
+
+.icon-scroll {
+  width: 25px;
+  height: 40px;
+  bottom: 20px;
+  transform: translateX(-50%);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.8);
+  @include border-radius(50px);
+
+  &:before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: rgba(255,255,255,0.8);
+    margin-left: -3px;
+    top: 6px;
+    @include border-radius(50%);
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+    animation-name: scroll;
+  }
+  @include media-breakpoint-down (sm) {
+    display: none;
+  }
+}
+@keyframes scroll {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
 }
 
 .instagram-images-wrapper {
@@ -297,7 +329,7 @@
 
 .graduated-slide {
   overflow: hidden;
-  background-color: white;
+  background-color: $primary-background;
   padding: 30px 0;
 
   .slick-prev, .slick-next {
@@ -433,10 +465,60 @@
     padding: 0;
   }
 }
+.graduation-summary {
+  border-top: 1px solid $gray-border;
+  background-color: white;
+  padding: 30px 0 70px;
+
+  h4 {
+    position: relative;
+    margin-bottom: 40px;
+
+    &:before {
+      content: '';
+      width: 60px;
+      display: inline-block;
+      border-bottom: 3px solid $gray-border;
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+  .graduation-options {
+    > div {
+      padding: 30px 35px;
+
+      &:nth-child(2) {
+        border: 1px solid $gray-border;
+        border-width: 0 1px 0 1px;
+
+        @include media-breakpoint-down(sm) {
+          border-width: 1px 0 1px 0;
+        }
+      }
+    }
+    .option-detail {
+      padding-top: 15px;
+      font-size: 1rem;
+      font-weight: $font-light;
+
+      strong {
+        font-weight: $font-semibold;
+      }
+    }
+    .logo-block {
+      img {
+        display: inline-block;
+        height: 50px;
+      }
+    }
+  }
+}
 .program-partners {
   border-top: 1px solid $gray-border;
   background-color: $primary-background;
-  padding: 30px 0;
+  padding: 30px 0 70px;
 
   .card {
     text-align: center;

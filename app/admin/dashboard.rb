@@ -4,6 +4,7 @@ ActiveAdmin.register_page 'Dashboard' do
     skip_after_action :intercom_rails_auto_include
 
     def pull_intercom_data
+      # TODO: Add error handling for all intercom API interactions.
       initialize_intercom_client
       fetch_conversation_summary
       fetch_user_summary

@@ -8,7 +8,7 @@ class ContactForm
   validates_format_of :email, with: /@/
 
   def self.valid_query_types
-    ['Media Relations Query', 'Incubation Help', 'Education Help', 'Space Availability Question', 'Other']
+    ['Media Relations Query', 'Incubation Help', 'Education Help', 'Space Availability Question', 'Startup India Recommendation Query', 'Other']
   end
 
   validates_inclusion_of :query_type, in: valid_query_types

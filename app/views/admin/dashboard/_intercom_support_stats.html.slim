@@ -1,0 +1,22 @@
+.dashboard-item
+  .heading Intercom Support
+
+  .content
+    .user-count
+      h6 Conversations
+    .user-count
+      ' Open: #{@open_conversations_count}
+    .user-count
+      ' Closed: #{@closed_conversations_count}
+    .clearfix
+    .user-count
+      h6 Users
+    .user-count
+      ' New: #{@new_user_count}
+    .user-count
+      ' Active: #{@active_user_count}
+    hr
+    h6 Latest Conversations:
+    - @conversations_to_display.each do |conversation|
+      = link_to "<strong>#{truncate(conversation[:name])}:</strong> #{truncate(conversation[:body], length: 75)}".html_safe, conversation_url(conversation[:id]), target: '_blank'
+      br

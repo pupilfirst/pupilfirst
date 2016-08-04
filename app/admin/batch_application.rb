@@ -34,6 +34,7 @@ ActiveAdmin.register BatchApplication do
   filter :university
   filter :college
   filter :state
+  filter :created_at
 
   scope :all, default: true
   scope :started_application

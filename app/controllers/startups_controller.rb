@@ -162,7 +162,10 @@ class StartupsController < ApplicationController
     stage = params.dig(:startups_filter, :stage)
     stage_scope = stage.present? ? Startup.where(stage: stage) : Startup.unscoped
 
-    @startups = Startup.approved.merge(batch_scope).merge(category_scope).merge(stage_scope)
+    unsorted_startups = Startup.approved.merge(batch_scope).merge(category_scope).merge(stage_scope)
+
+    # HACK: account for startups with latest_team_event_date = nil while sorting
+    @startups = unsorted_startups.select(&:latest_team_event_date).sort_by(&:latest_team_event_date).reverse + unsorted_startups.reject(&:latest_team_event_date)
   end
 
   def load_filter_options

@@ -91,6 +91,7 @@ gem 'dry-validation' # There seems to be a dependency bug in reform's coercion c
 
 gem 'postmark-rails' # Official integration library for using Rails and ActionMailer with the Postmark HTTP API.
 gem 'intercom-rails' # The easiest way to install Intercom in a Rails app.
+gem 'intercom', "~> 3.5.1" # Ruby bindings for the Intercom API
 
 gem 'wicked_pdf' # html to pdf converted - used to generate MOOC completion certificate
 

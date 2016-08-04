@@ -139,5 +139,9 @@ module ActiveAdmin
     def multiple_batches_selected?
       selected_batch_ids.count > 1
     end
+
+    def conversation_url(id)
+      "https://app.intercom.io/a/apps/#{ENV['INTERCOM_API_ID']}/inbox/all/conversations/#{id}"
+    end
   end
 end

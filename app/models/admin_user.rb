@@ -9,6 +9,8 @@ class AdminUser < ActiveRecord::Base
   TYPE_SUPERADMIN = 'superadmin'
   TYPE_FACULTY = 'faculty'
 
+  belongs_to :faculty
+
   mount_uploader :avatar, AvatarUploader
   process_in_background :avatar
   normalize_attribute :password, :password_confirmation, :fullname, :avatar

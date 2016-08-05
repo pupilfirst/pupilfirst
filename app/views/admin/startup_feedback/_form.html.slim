@@ -12,7 +12,7 @@
     = f.input :activity_type
     = f.input :reference_url
     = f.input :attachment, as: :file
-    = f.input :faculty, collection: Faculty.active.order(:name), placeholder: 'Select faculty member'
+    = f.input :faculty, as: :select, collection: Faculty.active.order(:name), selected: @startup_feedback&.faculty&.id || current_admin_user.faculty.id
     = f.input :event_status, label: 'Mark Event as:', as: :select, collection: TimelineEvent.valid_verified_status, selected: TimelineEvent.find(@startup_feedback.event_id).verified_status, include_blank: false if @startup_feedback.event_id.present?
     = f.input :event_id, as: :hidden
 

@@ -193,6 +193,12 @@ class ApplicationController < ActionController::Base
     }
   end
 
+  def web_console_csp
+    return {} unless Rails.env.development?
+
+    { script: "'sha256-kyVR4MSQgwMT/9qlHjJ54ne+O5IgATAix8tiQwZqKbI=' 'sha256-N8P082RH9sZuH82Ho7454s+117pCE2iWh5PWBDp/T60='" }
+  end
+
   def frame_sources
     <<~FRAME_SOURCES.squish
       frame-src
@@ -217,7 +223,7 @@ class ApplicationController < ActionController::Base
       'self' 'unsafe-eval' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
       http://www.startatsv.com https://sv-assets.sv.co #{recaptcha_csp[:script]} #{google_analytics_csp[:script]}
       #{inspectlet_csp[:script]} #{facebook_csp[:script]} #{heapanalytics_csp[:script]} #{intercom_csp[:script]}
-      #{instagram_csp[:script]};
+      #{instagram_csp[:script]} #{web_console_csp[:script]};
     SCRIPT_SOURCES
   end
 

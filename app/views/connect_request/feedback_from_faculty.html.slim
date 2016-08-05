@@ -1,0 +1,13 @@
+.margin-top-20
+- if @rating_recorded
+  .panel.panel-success
+    .panel-heading Rating recorded!
+    .panel-body
+      ' Thank you! Your valuable feedback will help us better mentor the young startups.
+      - if @karma_points_added
+        ' We have also assigned them karma points based on your rating.
+- else
+  .panel.panel-warning
+    .panel-heading Rating not recorded!
+    .panel-body
+      ' Something went wrong while trying to record your rating for the startup. We will be grateful if you can go back to your inbox and try again! Your valuable feedback will help us better mentor the young startups.

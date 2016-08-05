@@ -6,28 +6,106 @@
   title SV.CO Apply Now
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
 
-.secondary-banner.application-stages-banner
-  .container
-    .application-stages-head.text-xs-center
-      h1 Coding and Hustling tests are live!
-      h4.center-block
-        ' You've made it in! Now prove that you've got what it takes.
 .container
   .m-t-3
     == render 'application_progress'
-  .container-md-center.content-box.m-t-3.m-b-3
-    h5.form-section-title.text-uppercase.font-semibold.m-b-2
-      | Coding and Hustling tests
-    .simple-form-container
-      .row
-        = simple_form_for @form, url: apply_submit_path(batch: params[:batch]), html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
+
+  .row.m-t-3
+    .col-lg-8.col-md-12
+      .content-box
+        h2 Coding Task
+
+        p
+          | Build a casual game that people would love to play.
+          br
+          strong OR
+          br
+          | Develop a product that lets people find a car they will love.
+
+        h3 Instructions:
+
+        ul
+          li You should aim to spend around 1-2 weeks on this task.
+          li You should work on this task as a team.
+          li You can develop this in any language.
+          li You can build an app or a website.
+          li <strong>IMPORTANT:</strong> Your submission should include a link to a working app install bundle (.APK/.IPA) or a link to a fully working website.
+          li You should also submit the full source code repository for the app or the website. This should include code commit history.
+          li The source code need not include necessary libraries and utilities, but should have an easy way to install all such dependencies.
+
+        h3 Scoring Criteria:
+
+        ul
+          li <strong>Purpose.</strong> How well does the product developed solve the problem statement.
+          li <strong>Design.</strong> How well does the product communicate its intent to the user. Includes visual design, usability and user experience.
+          li <strong>Code Quality.</strong> The quality of the codebase submitted. Includes tests developed, abstractions and data structures used, programming languages, libraries and tools selected, and technical debt analysis.
+
+        h2 Video Task
+
+        p Introduce your team to SV.CO in a video, and let us know why your team will do well in the program.
+
+        h3 Instructions:
+
+        ul
+          li You should record a video of your team members speaking.
+          li The video should be maximum 3 minutes long.
+          li Your video submission should be uploaded publicly on Facebook.
+          li Do make sure that the video and audio track is clear.
+
+        h3 Scoring Criteria:
+
+        ul
+          li <strong>Clarity.</strong> How confidently the founders communicate on screen.
+          li <strong>Participation.</strong> The number of co-founders who speak, and how frequently they speak.
+          li <strong>Creativity.</strong> We&rsquo;re looking for original ways that founders impress us here :)
+          li <strong>Likes & Shares.</strong> The number of likes and shares your video receives on Facebook.
+
+    .col-lg-4.col-md-12
+      = simple_form_for @form, url: apply_stage_submit_path(batch: params[:batch]) do |f|
+        - if f.object.errors.present?
+          .alert.alert-warning.alert-dismissable.fade.in role='alert'
+
+            strong There were problems with your submission.
+            | &nbsp;Please check all fields and try again.
+
+            - if f.object.errors[:base].present?
+              ul.m-t-1
+                - f.object.errors[:base].each do |error_message|
+                  li #{error_message}
+
+        .content-box
+          h5.form-section-title.text-uppercase.font-semibold.m-b-2
+            | Coding Submission
+
           = f.input :git_repo_url,
             label: 'Full URL to public Git repository (on Github or BitBucket)',
             placeholder: 'https://github.com/username/repository'
 
+          .clearfix
+            .pull-left I've built a
+
+            .btn-group.pull-left data-toggle='buttons'
+              label.btn.btn-secondary.active
+                input type="radio" name="options" id="option1" autocomplete="off" checked='checked'
+                  ' Website
+              label.btn.btn-secondary
+                input type="radio" name="options" id="option2" autocomplete="off"
+                  ' Mobile App
+
+          = f.input :website,
+            label: 'URL to Website',
+            placeholder: 'https://yourwebsite.com'
+
+          label.custom-file
+            input class="custom-file-input" required="required" aria-required="true" type="file" name="application_stage_two[executable]" id="application_stage_two_executable"
+            span.custom-file-control
+
+          h5.form-section-title.text-uppercase.font-semibold.m-b-2
+            | Video Submission
+
           = f.input :video_url,
             label: 'Full URL to public hustling video (on Youtube or Vimeo)',
             placeholder: 'https://www.youtube.com/watch?v=abcd1234'
-          .col-sm-offset-3
-            .simple-form-submit
-              = f.submit 'Submit your entries', class: 'btn btn-primary btn-md text-uppercase'
+
+          .simple-form-submit
+            = f.submit 'Submit your entries', class: 'btn btn-primary btn-md text-uppercase'

@@ -4,6 +4,7 @@
   border-top: 1px solid $gray-border;
   border-bottom: 1px solid $gray-border;
 }
+
 .application-stages-head {
   margin: auto;
 
@@ -14,8 +15,8 @@
       color: $brand-secondary;
     }
   }
+
   h4 {
-    max-width: 380px;
     line-height: 1.4;
   }
 }
@@ -38,17 +39,18 @@
     top: -17px;
   }
 }
+
 .apply-submitted {
   h3 {
     line-height: 1.3;
   }
 }
+
 .submit-fee-section {
   border: 1px solid $gray-border;
   @include border-radius(5px);
   box-shadow: $box-shadow;
   overflow: hidden;
-
 
   .applicants-list {
     background-color: $light-secondary;
@@ -86,6 +88,7 @@
     display: flex;
   }
 }
+
 .application-close-alert {
   h4 {
     line-height: 1.5;

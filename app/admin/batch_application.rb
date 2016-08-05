@@ -122,15 +122,18 @@ ActiveAdmin.register BatchApplication do
     column :id
 
     column "Team Lead's Name" do |batch_application|
-      batch_application.team_lead.name
+      team_lead = batch_application.team_lead
+      team_lead.present? ? team_lead.name : 'Deleted'
     end
 
     column "Team Lead's Email" do |batch_application|
-      batch_application.team_lead.email
+      team_lead = batch_application.team_lead
+      team_lead.email if team_lead.present?
     end
 
     column 'Contact number' do |batch_application|
-      batch_application.team_lead.phone
+      team_lead = batch_application.team_lead
+      team_lead.phone if team_lead.present?
     end
 
     column :payment_status do |batch_application|
@@ -147,7 +150,8 @@ ActiveAdmin.register BatchApplication do
     end
 
     column "Team Lead's Role" do |batch_application|
-      batch_application.team_lead.role
+      team_lead = batch_application.team_lead
+      team_lead.role if team_lead.present?
     end
 
     column :college

@@ -6,7 +6,7 @@ ActiveAdmin.register TargetTemplate do
   config.sort_order = 'days_from_start_asc'
 
   permit_params :days_from_start, :title, :role, :description, :completion_instructions, :resource_url, :slideshow_embed,
-    :assigner_id, :populate_on_start, :rubric, :review_test_embed
+    :assigner_id, :populate_on_start, :rubric, :review_test_embed, :timeline_event_type_id
 
   member_action :create_target, method: :get do
     target_template = TargetTemplate.find(params[:id])
@@ -102,6 +102,7 @@ ActiveAdmin.register TargetTemplate do
       end
 
       row :completion_instructions
+      row :timeline_event_type
 
       row :resource_url do |target_template|
         if target_template.resource_url.present?

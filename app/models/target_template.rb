@@ -1,6 +1,7 @@
 class TargetTemplate < ActiveRecord::Base
   belongs_to :assigner, class_name: 'Faculty'
   has_many :targets
+  belongs_to :timeline_event_type
 
   mount_uploader :rubric, RubricUploader
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160805064539) do
+ActiveRecord::Schema.define(version: 20160805080457) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -580,9 +580,11 @@ ActiveRecord::Schema.define(version: 20160805064539) do
     t.boolean  "populate_on_start"
     t.string   "rubric"
     t.text     "review_test_embed"
+    t.integer  "timeline_event_type_id"
   end
 
   add_index "target_templates", ["populate_on_start"], name: "index_target_templates_on_populate_on_start", using: :btree
+  add_index "target_templates", ["timeline_event_type_id"], name: "index_target_templates_on_timeline_event_type_id", using: :btree
 
   create_table "targets", force: :cascade do |t|
     t.string   "role"

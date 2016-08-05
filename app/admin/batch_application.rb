@@ -37,7 +37,7 @@ ActiveAdmin.register BatchApplication do
   filter :created_at
 
   scope :all, default: true
-  scope :started_application
+  scope :submitted_application
   scope :payment_initiated
   scope :payment_complete
 

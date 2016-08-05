@@ -13,8 +13,14 @@ class BatchApplication < ActiveRecord::Base
   has_many :archived_payments, class_name: 'Payment', foreign_key: 'original_batch_application_id'
 
   scope :selected, -> { joins(:application_stage).where(application_stages: { final_stage: true }) }
-  scope :started_application, -> { where.not(id: Payment.select(:batch_application_id).distinct) }
+
+  # Batch applicants who haven't initiated payment yet.
+  scope :submitted_application, -> { joins('LEFT OUTER JOIN payments on batch_applications.id = payments.batch_application_id').where(payments: { id: nil }) }
+
+  # Batch applicants who have initiated payment, but haven't completed it.
   scope :payment_initiated, -> { joins(:payment).merge(Payment.requested) }
+
+  # Batch applicants who have completed payment.
   scope :payment_complete, -> { joins(:payment).merge(Payment.paid) }
 
   validates :batch_id, presence: true

@@ -10,7 +10,7 @@
         | Please supply your
         span
           | &nbsp;email address.
-      h4.center-block
+      h4
         ' We'll email you a log-in link to establish your identity.
 
 .container
@@ -23,6 +23,6 @@
 
           = f.input :email
 
-          .col-sm-offset-3
+          .offset-sm-3
             .simple-form-submit
               = f.submit 'Send Login Email', class: 'btn btn-primary btn-md text-uppercase'

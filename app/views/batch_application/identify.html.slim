@@ -10,7 +10,7 @@
         | Please supply your
         span
           | &nbsp;email address.
-      h4.center-block
+      h4
         ' We'll email you a link using which you can continue the application process.
 
 .container
@@ -42,6 +42,6 @@
             as: :boolean,
             label: '&nbsp;I am on a shared device. Log me out when i leave.'.html_safe
 
-          .col-sm-offset-3
+          .offset-sm-3
             .simple-form-submit
               = f.submit 'Resend link to resume application', class: 'btn btn-primary btn-md text-uppercase'

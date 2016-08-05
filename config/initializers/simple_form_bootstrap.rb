@@ -85,7 +85,7 @@ SimpleForm.setup do |config|
     b.use :html5
     b.optional :readonly
 
-    b.wrapper tag: 'div', class: 'col-sm-offset-3 col-sm-9' do |wr|
+    b.wrapper tag: 'div', class: 'offset-sm-3 col-sm-9' do |wr|
       wr.wrapper tag: 'div', class: 'checkbox' do |ba|
         ba.use :label_input
       end

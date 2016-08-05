@@ -129,7 +129,7 @@ p {
 }
 // Default container style with border
 .container-md-center {
-  @include center-block;
+  @extend .m-x-auto;
   max-width: 45rem;
 }
 .content-box {

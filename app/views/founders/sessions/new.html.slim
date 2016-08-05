@@ -1,10 +1,10 @@
 - content_for :head
   title SV.CO Sign In
 
-.login-container.center-block.m-t-3.m-b-3.clearfix
+.login-container.m-x-auto.m-t-3.m-b-3.clearfix
   .col-md-6.login-notice.content-box.text-xs-center
     .notice-section.with-border-btm
-      = image_tag 'founders/sessions/sv-spaceship.svg', class: 'img-fluid center-block'
+      = image_tag 'founders/sessions/sv-spaceship.svg', class: 'img-fluid m-x-auto'
       h4
         = link_to apply_path, class: "batch-link-head" do
           ' Applications for
@@ -13,7 +13,7 @@
           br
           ' <strong>Click here</strong> to get started.
     .notice-section
-      = image_tag 'founders/sessions/fly-a-kite.svg', class: 'img-fluid center-block'
+      = image_tag 'founders/sessions/fly-a-kite.svg', class: 'img-fluid m-x-auto'
       h4
         =link_to start_in_college_path, class: "startincollege-link-head" do
           ' Looking for the
@@ -23,8 +23,8 @@
           ' <strong>Click here</strong> to get started.
 
   .col-md-6.devise-user-form.content-box.devise-user-login
-    .sign-in-kid.center-block.m-b-1
-      = image_tag 'founders/sessions/sign-in-kid.svg', class: 'img-fluid center-block'
+    .sign-in-kid.m-x-auto.m-b-1
+      = image_tag 'founders/sessions/sign-in-kid.svg', class: 'img-fluid m-x-auto'
     h3.text-xs-center.m-b-2 Sign in with your SV.CO ID!
 
     = form_for resource, url: session_path(resource_name) do |f|
@@ -45,7 +45,8 @@
           .login-option.forgot-label.col-md-6
             = link_to 'Forgot your password?', new_password_path(resource_name), class: 'forgot-password'
 
-      = f.submit 'Sign in', class: 'btn btn-primary btn-md text-uppercase center-block sign-in-btn'
+      .text-xs-center
+        = f.submit 'Sign in', class: 'btn btn-primary btn-md text-uppercase sign-in-btn'
 
     .footer.text-xs-center.m-t-2
       = render 'founders/shared/links'

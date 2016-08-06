@@ -91,10 +91,9 @@
             label: false,
             placeholder: 'http://yourwebsite.com'
 
-          / TODO: This input is written with custom markup because existing simple_form is unaware of Bootstrap4.
-          label.custom-file.hidden-xs-up
-            input class="custom-file-input" required="required" aria-required="true" type="file" name="application_stage_two[executable]" id="application_stage_two_executable" disabled='disabled'
-            span.custom-file-control
+          = f.input :executable,
+            label: false,
+            placeholder: 'https://www.dropbox.com/s/...'
 
           h5.form-section-title.text-uppercase.font-semibold.m-b-2
             | Video Submission

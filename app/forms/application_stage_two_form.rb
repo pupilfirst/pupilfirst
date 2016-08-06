@@ -1,8 +1,8 @@
 class ApplicationStageTwoForm < Reform::Form
   property :git_repo_url, virtual: true, validates: { presence: true, url: true }
   property :app_type, virtual: true
-  property :executable, virtual: true
-  property :website, virtual: true, validates: { url: true }
+  property :executable, virtual: true, validates: { url: true, allow_blank: true }
+  property :website, virtual: true, validates: { url: true, allow_blank: true }
   property :video_url, virtual: true, validates: { presence: true, url: true }
 
   # Ensure git_repo_url is from github or bitbucket
@@ -29,12 +29,11 @@ class ApplicationStageTwoForm < Reform::Form
 
   def save
     ApplicationSubmission.transaction do
-      model.file = executable if executable.present?
       model.save!
-
       model.application_submission_urls.create!(name: 'Code Submission', url: git_repo_url)
       model.application_submission_urls.create!(name: 'Video Submission', url: video_url)
       model.application_submission_urls.create!(name: 'Live Website', url: website) if website.present?
+      model.application_submission_urls.create!(name: 'Application Binary', url: executable) if executable.present?
     end
   end
 end

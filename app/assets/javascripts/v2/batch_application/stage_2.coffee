@@ -17,11 +17,11 @@ switchAppType = ->
   inputValue = $('#application_stage_two_app_type').val()
 
   if inputValue == 'Website'
-    hideSection('label.custom-file')
+    hideSection('.application_stage_two_executable')
     showSection('.application_stage_two_website')
   else
     hideSection('.application_stage_two_website')
-    showSection('label.custom-file')
+    showSection('.application_stage_two_executable')
 
 hideSection = (finder) ->
   websiteSection = $(finder)

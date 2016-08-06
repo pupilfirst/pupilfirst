@@ -1,0 +1,14 @@
+#new_application_stage_two {
+  // TODO: Custom styling written for custom-file-input on Bootstrap 4 Alpha 3, which doesn't have a fully featured file input.
+  // This styling, coupled with JS code, allows the name of the selected file to be displayed in the file input box.
+  .custom-file-control.custom-after-content {
+    &:after {
+      content: attr(data-content);
+      overflow: hidden;
+      max-width: 63%;
+      text-overflow: ellipsis;
+      display: inline-block;
+      white-space: nowrap;
+    }
+  }
+}

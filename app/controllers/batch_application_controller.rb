@@ -1,7 +1,7 @@
 class BatchApplicationController < ApplicationController
   before_action :ensure_applicant_is_signed_in, except: %w(index register identify send_sign_in_email continue sign_in_email_sent)
   before_action :ensure_batch_active, except: :index
-  before_action :ensure_accurate_stage_number, only: %w(ongoing submit complete expired rejected)
+  before_action :ensure_accurate_stage_number, only: %w(ongoing submit complete restart expired rejected)
   before_action :set_instance_variables
   before_action :hide_nav_links
 
@@ -94,7 +94,7 @@ class BatchApplicationController < ApplicationController
   end
 
   # POST /apply/restart
-  def restart
+  def restart_application
     # Only applications in stage 1 can restart.
     raise_not_found if applicant_stage_number != 1
     current_application&.restart!
@@ -114,7 +114,12 @@ class BatchApplicationController < ApplicationController
   # POST /apply/stage/:stage_number/submit
   def submit
     raise_not_found if applicant_status != :ongoing
-    try "stage_#{applicant_stage_number}_submit"
+
+    begin
+      send "stage_#{applicant_stage_number}_submit"
+    rescue NoMethodError
+      raise_not_found
+    end
   end
 
   # GET /apply/stage/:stage_number/complete
@@ -122,6 +127,18 @@ class BatchApplicationController < ApplicationController
     return redirect_to(apply_continue_path) if applicant_status != :complete
     try "stage_#{applicant_stage_number}_complete"
     render "stage_#{current_stage_number}_complete"
+  end
+
+  # POST /apply/stage/:stage_number/restart
+  def restart
+    return redirect_to(apply_continue_path) if applicant_status != :complete
+    raise_not_found if current_batch.stage_expired?
+
+    begin
+      send "stage_#{applicant_stage_number}_restart"
+    rescue NoMethodError
+      raise_not_found
+    end
   end
 
   # GET /apply/stage/:stage_number/expired
@@ -189,6 +206,12 @@ class BatchApplicationController < ApplicationController
     else
       render 'batch_application/stage_2'
     end
+  end
+
+  def stage_2_restart
+    stage_2_submission = current_application.application_submissions.where(application_stage_id: applicant_stage.id).first
+    stage_2_submission.destroy!
+    redirect_to apply_stage_path(stage_number: 2)
   end
 
   def stage_4_submit

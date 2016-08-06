@@ -98,7 +98,7 @@ Svapp::Application.routes.draw do
     post 'send_sign_in_email'
     get 'sign_in_email_sent'
     get 'continue'
-    post 'restart'
+    post 'restart', action: 'restart_application'
     get 'universities'
 
     # TODO: Remove this after batch 3 intake is complete. Added to account for emails sent out before application process was overhauled.
@@ -108,6 +108,7 @@ Svapp::Application.routes.draw do
       get '', action: 'ongoing'
       post 'submit'
       get 'complete'
+      post 'restart'
       get 'expired'
       get 'rejected'
     end

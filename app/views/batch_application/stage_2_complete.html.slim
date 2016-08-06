@@ -6,7 +6,7 @@
   .container
     .application-stages-head.text-xs-center
       h1 Coding and hustling submissions accepted!
-.container
+.container.stage-2-complete-container
   .m-t-3
     == render 'application_progress'
   .container-md-center.content-box.m-t-3.m-b-3
@@ -15,3 +15,21 @@
       ' possible, and results for all entries will be published by
       span.brand-primary.font-semibold
         | &nbsp;#{next_stage_date}.
+
+    .text-xs-center
+      h3 Your submission:
+      - stage_2_submission.application_submission_urls.each do |entry|
+        p = link_to entry.name, entry.url, target: '_blank'
+
+    - unless current_batch.stage_expired?
+      hr.m-y-2
+        h3.text-xs-center
+          ' Made mistakes in your submission? That's okay!
+          br
+          ' You can
+
+          span.brand-secondary.font-semibold
+            | re-submit anytime before the deadline.
+
+      .text-xs-center.m-t-1
+        = button_to 'Redo your submission', apply_stage_restart_path(stage_number: 2), class: 'btn btn-secondary btn-md text-uppercase', data: { confirm: 'This will delete your current submission. Continue?' }

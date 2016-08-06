@@ -47,4 +47,13 @@ module BatchApplicationsHelper
   def pretty_stage_status(stage_number)
     stage_status(stage_number).to_s.tr('_', ' ').capitalize
   end
+
+  def stage_2_submission
+    @stage_2_submission ||= begin
+      ApplicationSubmission.where(
+        batch_application_id: current_application.id,
+        application_stage_id: applicant_stage.id
+      ).first
+    end
+  end
 end

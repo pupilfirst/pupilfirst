@@ -78,26 +78,22 @@
             | Coding Submission
 
           = f.input :git_repo_url,
-            label: 'Full URL to public Git repository (on Github or BitBucket)',
-            placeholder: 'https://github.com/username/repository'
+            label: 'Github or BitBucket repository:',
+            placeholder: 'https://github.com/user/repo'
 
-          .clearfix
-            .pull-left I've built a
-
-            .btn-group.pull-left data-toggle='buttons'
-              label.btn.btn-secondary.active
-                input type="radio" name="options" id="option1" autocomplete="off" checked='checked'
-                  ' Website
-              label.btn.btn-secondary
-                input type="radio" name="options" id="option2" autocomplete="off"
-                  ' Mobile App
+          = f.input :app_type,
+            label: "We've built a:",
+            as: :select,
+            collection: ['Website', 'Mobile Application'],
+            include_blank: false
 
           = f.input :website,
-            label: 'URL to Website',
-            placeholder: 'https://yourwebsite.com'
+            label: false,
+            placeholder: 'http://yourwebsite.com'
 
-          label.custom-file
-            input class="custom-file-input" required="required" aria-required="true" type="file" name="application_stage_two[executable]" id="application_stage_two_executable"
+          / TODO: This input is written with custom markup because existing simple_form is unaware of Bootstrap4.
+          label.custom-file.hidden-xs-up
+            input class="custom-file-input" required="required" aria-required="true" type="file" name="application_stage_two[executable]" id="application_stage_two_executable" disabled='disabled'
             span.custom-file-control
 
           h5.form-section-title.text-uppercase.font-semibold.m-b-2

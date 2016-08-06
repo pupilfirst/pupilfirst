@@ -1,5 +1,6 @@
 class ApplicationStageTwoForm < Reform::Form
   property :git_repo_url, virtual: true, validates: { presence: true, url: true }
+  property :app_type, virtual: true
   property :executable, virtual: true
   property :website, virtual: true, validates: { url: true }
   property :video_url, virtual: true, validates: { presence: true, url: true }

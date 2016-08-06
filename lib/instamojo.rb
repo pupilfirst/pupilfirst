@@ -84,7 +84,7 @@ class Instamojo
     # Parse the response
     response = JSON.parse(raw_response.body).with_indifferent_access
 
-    raise 'Failed to fetch payment details. Please check.' unless response.key?(:success)
+    raise "Failed to fetch payment details. Please check: #{raw_response.body}" unless response[:success]
 
     response
   end
@@ -104,7 +104,7 @@ class Instamojo
     # Parse the response
     response = JSON.parse(raw_response.body).with_indifferent_access
 
-    raise 'Failed to fetch payment request details. Please check.' unless response.key?(:success)
+    raise "Failed to fetch payment request details. Please check: #{raw_response.body}" unless response[:success]
 
     response
   end

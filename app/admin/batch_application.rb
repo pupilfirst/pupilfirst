@@ -33,7 +33,8 @@ ActiveAdmin.register BatchApplication do
   filter :team_lead
   filter :university
   filter :college
-  filter :state
+  filter :university_location, as: :select, collection: proc { University.valid_state_names }
+  filter :state, label: 'State (Deprecated)'
   filter :created_at
 
   scope :all, default: true
@@ -71,8 +72,9 @@ ActiveAdmin.register BatchApplication do
     # end
 
     column :college
+
     column :state do |application|
-      application.state || application.university.location
+      application.university&.location || application.state
     end
 
     # column :score
@@ -155,7 +157,10 @@ ActiveAdmin.register BatchApplication do
     end
 
     column :college
-    column :state
+
+    column :state do |batch_application|
+      batch_application.university&.location || application.state
+    end
 
     column :cofounders do |batch_application|
       batch_application.cofounders.map do |cofounder|
@@ -193,6 +198,11 @@ ActiveAdmin.register BatchApplication do
 
       row :application_stage
       row :university
+
+      row :state do |batch_application|
+        batch_application.university&.location || application.state
+      end
+
       row :college
     end
 

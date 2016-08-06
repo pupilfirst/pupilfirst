@@ -30,6 +30,8 @@ module BatchApplicationsHelper
         applicant_status
       elsif applicant_stage_number > current_stage.number
         :pending
+      elsif current_stage.number == 2
+        applicant_status
       else
         :expired
       end

@@ -24,7 +24,7 @@ class ApplicationStageTwoForm < Reform::Form
   validate :video_url_must_be_acceptable
 
   def video_url_must_be_acceptable
-    errors[:video_url] << 'is not a valid Youtube or Vimeo URL' unless video_url =~ %r{https?\://.*(youtube|vimeo)}
+    errors[:video_url] << 'is not a valid Facebook URL' unless video_url =~ %r{https?\://.*(facebook)}
   end
 
   def save

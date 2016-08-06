@@ -341,7 +341,12 @@ class BatchApplicationController < ApplicationController
   end
 
   def ensure_accurate_stage_number
-    expected_stage_number = applicant_status == :complete ? applicant_stage_number - 1 : applicant_stage_number
+    expected_stage_number = if current_stage_number == 1 && applicant_stage_number == 2
+      1
+    else
+      applicant_stage_number
+    end
+
     redirect_to apply_continue_path if params[:stage_number].to_i != expected_stage_number
   end
 

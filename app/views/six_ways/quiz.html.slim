@@ -8,7 +8,7 @@ title Quiz # #{module_number} | Start in College
 
     .simple-form-container
       .row
-        = simple_form_for @form, url: start_in_college_quiz_submission_path(module: @module.slug), html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { radio_buttons: :horizontal_radio_and_checkboxes } do |f|
+        = simple_form_for @form, url: six_ways_quiz_submission_path(module: @module.slug), html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { radio_buttons: :horizontal_radio_and_checkboxes } do |f|
           #quiz-form-data.hidden-xs-up data-question-count="#{f.object.questions.count}"
           = f.simple_fields_for :questions do |s|
             - quiz_question = s.object.model

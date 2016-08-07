@@ -1,7 +1,7 @@
-module StartInCollegeHelper
+module SixWaysHelper
   def previous_page
     return previous_chapter unless chapter_number == 1
-    return start_in_college_start_path if module_number == 1
+    return six_ways_start_path if module_number == 1
     quiz_of_previous_module
   end
 
@@ -27,11 +27,11 @@ module StartInCollegeHelper
   end
 
   def quiz_of_previous_module
-    start_in_college_quiz_path(previous_module.slug)
+    six_ways_quiz_path(previous_module.slug)
   end
 
   def previous_chapter
-    start_in_college_module_path(@module.slug, chapter_number - 1)
+    six_ways_module_path(@module.slug, chapter_number - 1)
   end
 
   def last_chapter?
@@ -39,11 +39,11 @@ module StartInCollegeHelper
   end
 
   def next_chapter
-    start_in_college_module_path(@module.slug, chapter_number + 1)
+    six_ways_module_path(@module.slug, chapter_number + 1)
   end
 
   def quiz_of_this_module
-    start_in_college_quiz_path(@module.slug)
+    six_ways_quiz_path(@module.slug)
   end
 
   def quiz_result_title
@@ -53,7 +53,7 @@ module StartInCollegeHelper
   end
 
   def after_quiz_path
-    return start_in_college_course_end_path if last_quiz?
+    return six_ways_course_end_path if last_quiz?
     start_of_next_module
   end
 
@@ -62,10 +62,10 @@ module StartInCollegeHelper
   end
 
   def start_of_next_module
-    start_in_college_module_path(next_module.slug, 1)
+    six_ways_module_path(next_module.slug, 1)
   end
 
   def first_chapter_path
-    start_in_college_module_path(CourseModule.find_by_module_number(1).slug, 1)
+    six_ways_module_path(CourseModule.find_by_module_number(1).slug, 1)
   end
 end

@@ -1,7 +1,7 @@
 ActiveAdmin.register QuizAttempt do
   include DisableIntercom
 
-  menu parent: 'StartInCollege'
+  menu parent: 'SixWays'
 
   index do
     selectable_column

@@ -161,7 +161,7 @@ Svapp::Application.routes.draw do
     get 'terms'
   end
 
-  scope 'startincollege', as: 'start_in_college', controller: 'start_in_college' do
+  scope 'sixways', as: 'six_ways', controller: 'six_ways' do
     get '/', action: 'index'
     get 'start'
     get 'student_details'

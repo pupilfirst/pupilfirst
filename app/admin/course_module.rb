@@ -10,7 +10,7 @@ ActiveAdmin.register CourseModule do
     end
   end
 
-  menu parent: 'StartInCollege'
+  menu parent: 'SixWays'
   filter :name
   filter :module_number
 

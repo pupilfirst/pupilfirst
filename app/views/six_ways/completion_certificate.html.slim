@@ -5,5 +5,5 @@
     blockquote.card-blockquote
       ' This is to certify that <em>#{current_mooc_student.name}</em> of <em>#{current_mooc_student.university.name}</em> has successfully completed the 'Six Ways To Graduate: An Introduction To Student Startups' course with a score of #{current_mooc_student.score} %.
   .card-footer.text-xs-left
-    = link_to 'Back', start_in_college_course_end_path
-    = link_to 'Download Certificate', start_in_college_completion_certificate_path(format: 'pdf'), class: 'pull-right'
+    = link_to 'Back', six_ways_course_end_path
+    = link_to 'Download Certificate', six_ways_completion_certificate_path(format: 'pdf'), class: 'pull-right'

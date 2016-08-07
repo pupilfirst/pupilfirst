@@ -56,4 +56,4 @@
 //= require v2/batch_application
 //= require v2/tour
 //= require v2/story
-//= require v2/start_in_college
+//= require v2/six_ways

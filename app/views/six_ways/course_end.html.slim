@@ -29,10 +29,10 @@
               ' #{course_module.module_number}
             td #{course_module.name}
             td #{current_mooc_student.score_for_module(course_module)} %
-            td #{link_to 'Retry', start_in_college_quiz_path(course_module.id)}
+            td #{link_to 'Retry', six_ways_quiz_path(course_module.id)}
 
-    = link_to 'Previous', '#', class: 'btn btn-secondary btn-md text-uppercase'
-    = link_to 'Print Certificate', start_in_college_completion_certificate_path, class: 'btn btn-primary btn-md text-uppercase pull-right'
+    /= link_to 'Previous', '#', class: 'btn btn-secondary btn-md text-uppercase'
+    = link_to 'Print Certificate', six_ways_completion_certificate_path, class: 'btn btn-primary btn-md text-uppercase pull-right'
 
     .text-xs-center
       h5 Let your friends know!

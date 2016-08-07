@@ -1,4 +1,4 @@
-class StartInCollegeController < ApplicationController
+class SixWaysController < ApplicationController
   before_action :authorize_student, except: %w(index student_details create_student)
   before_action :block_student, only: %w(student_details create_student)
   before_action :lock_under_feature_flag, only: %w(module quiz quiz_submission)
@@ -8,24 +8,24 @@ class StartInCollegeController < ApplicationController
 
   layout 'application_v2'
 
-  # GET /startincollege
+  # GET /sixways
   #
-  # Landing page for StartInCollege
+  # Landing page for sixways
   def index
   end
 
-  # GET /startincollege/start
+  # GET /sixways/start
   #
   # Start page for the course.
   def start
     if current_mooc_student.present?
       @skip_container = true
     else
-      redirect_to start_in_college_student_details_path
+      redirect_to six_ways_student_details_path
     end
   end
 
-  # GET /startincollege/student_details
+  # GET /sixways/student_details
   #
   # Signup page for MOOC course.
   def student_details
@@ -35,12 +35,12 @@ class StartInCollegeController < ApplicationController
     @disable_email = true if current_user.present?
   end
 
-  # POST /startincollege/create_student
+  # POST /sixways/create_student
   def create_student
     @form = MoocStudentSignupForm.new(MoocStudent.new)
 
     if @form.validate(params[:mooc_student_signup])
-      @user = @form.save(referer: start_in_college_start_url)
+      @user = @form.save(referer: six_ways_start_url)
       @skip_container = true
       render 'user_sessions/send_email'
     else
@@ -48,19 +48,19 @@ class StartInCollegeController < ApplicationController
     end
   end
 
-  # POST /startincollege/save_student_details
+  # POST /sixways/save_student_details
   #
   # Create MoocStudent and send user login email, or start course if already logged in.
   def save_student_details
     if current_mooc_student.update(update_params)
       flash[:success] = 'Your details have been saved!'
-      redirect_to start_in_college_start_path
+      redirect_to six_ways_start_path
     else
       render 'student_details'
     end
   end
 
-  # GET /startincollege/module/:name/:chapter_number
+  # GET /sixways/module/:name/:chapter_number
   #
   # Displays the content of a module's chapter.
   def module
@@ -69,7 +69,7 @@ class StartInCollegeController < ApplicationController
     @chapter = @module.module_chapters.find_by_chapter_number params[:chapter_number].to_i
   end
 
-  # GET /startincollege/quiz/:name
+  # GET /sixways/quiz/:name
   #
   # Displays the quiz questions
   def quiz
@@ -82,7 +82,7 @@ class StartInCollegeController < ApplicationController
     @form.prepopulate! questions: @questions
   end
 
-  # POST /startincollege/quiz_submission
+  # POST /sixways/quiz_submission
   #
   # Evaluates a quiz submission
   def quiz_submission
@@ -92,14 +92,14 @@ class StartInCollegeController < ApplicationController
     save_grade
   end
 
-  # GET /startincollege/course_end
+  # GET /sixways/course_end
   #
   # End of course page. Probably show grade and option to print certificate
   def course_end
     @final_score = current_mooc_student.score.round
   end
 
-  # GET /startincollege/completion_certificate
+  # GET /sixways/completion_certificate
   #
   # Display the completion certificate with provision to download as pdf
   def completion_certificate
@@ -122,7 +122,7 @@ class StartInCollegeController < ApplicationController
   def block_student
     return if current_mooc_student.blank?
     flash[:alert] = 'You have already registered for the course!'
-    redirect_to start_in_college_start_path
+    redirect_to six_ways_start_path
   end
 
   def authorize_student
@@ -130,7 +130,7 @@ class StartInCollegeController < ApplicationController
   end
 
   def request_authentication
-    redirect_to start_in_college_student_details_path
+    redirect_to six_ways_student_details_path
   end
 
   def update_params

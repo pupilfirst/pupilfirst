@@ -10,7 +10,7 @@
           h4.card-title #{module_number}.#{chapter_number} #{@chapter.name}
         .card-text
           - if @module.published?
-            = render "start_in_college/module_#{module_number}/chapter_#{chapter_number}"
+            = render "six_ways/module_#{module_number}/chapter_#{chapter_number}"
             - if @chapter.links.present?
               hr
               h5 Extra Reading
@@ -37,7 +37,7 @@
           .card-block.collapse id="module#{course_module.module_number}" class="#{course_module.module_number == module_number ? 'in' : ''}"
             .list-group.list-group-flush
               - course_module.module_chapters.order(:chapter_number).each do |chapter|
-                a.list-group-item href="#{start_in_college_module_path(course_module.slug, chapter.chapter_number)}" #{chapter.name}
-              a.list-group-item href="#{start_in_college_quiz_path(course_module.slug)}" Quiz #{course_module.module_number}
+                a.list-group-item href="#{six_ways_module_path(course_module.slug, chapter.chapter_number)}" #{chapter.name}
+              a.list-group-item href="#{six_ways_quiz_path(course_module.slug)}" Quiz #{course_module.module_number}
 
 

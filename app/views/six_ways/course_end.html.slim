@@ -31,14 +31,12 @@
             td #{current_mooc_student.score_for_module(course_module)} %
             td #{link_to 'Retry', six_ways_quiz_path(course_module.id)}
 
-    /= link_to 'Previous', '#', class: 'btn btn-secondary btn-md text-uppercase'
     = link_to 'Print Certificate', six_ways_completion_certificate_path, class: 'btn btn-primary btn-md text-uppercase pull-right'
 
     .text-xs-center
       h5 Let your friends know!
-      /= social_share_button_tag('Title')
-      a href="https://www.facebook.com/sharer/sharer.php?u=sv.co/startincollege" target="_blank"
+      a href="https://www.facebook.com/sharer/sharer.php?u=sv.co/sixways" target="_blank"
         i.fa.fa-facebook-square.fa-2x
-      - default_tweet = URI.escape "I just completed the Sixwayx MOOC course by @SVdotCO and scored #{@final_score} %. Great experience! sv.co/startincollege #StartInCollege"
+      - default_tweet = URI.escape "I just completed the Sixwayx MOOC course by @SVdotCO and scored #{@final_score} %. Great experience! sv.co/sixways #StartInCollege"
       a.margin-left-10 href="https://twitter.com/intent/tweet?text=#{default_tweet}&url=sv.co/startincollege" target="_blank"
         i.fa.fa-twitter-square.fa-2x

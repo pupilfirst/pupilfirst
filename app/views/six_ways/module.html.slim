@@ -23,6 +23,13 @@
               ' &nbsp;<strong>You have reached the end of our published content!</strong>
               br
               '  The next module ( #{@module.name} ) will be published on #{@module.publish_at.strftime('%A, %b %d')}. Please come back later to continue learning.
+              hr
+              h5 While you wait, let your friends know about the course!
+              a href="https://www.facebook.com/sharer/sharer.php?u=www.sv.co/sixways" target="_blank"
+                i.fa.fa-facebook-square.fa-2x
+              - default_tweet = URI.escape "I just completed a new module from the Sixways MOOC course by @SVdotCO. Great learning experience! sv.co/sixways #StartInCollege"
+              a.margin-left-10 href="https://twitter.com/intent/tweet?text=#{default_tweet}&url=sv.co/startincollege" target="_blank"
+                i.fa.fa-twitter-square.fa-2x
 
       .card-footer
         = link_to 'Previous', previous_page, class: 'card-link'

@@ -17,7 +17,7 @@
       p Did this once before? #{link_to 'Log in', user_sessions_new_path(referer: six_ways_start_url)} instead.
 
     h5.form-section-title.font-semibold.m-b-2
-      | Sign up for StartInCollege!
+      | Sign up for '#StartInCollege Six Ways'!
     .simple-form-container
       .row
         = simple_form_for @form, url: six_ways_create_student_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { radio_buttons: :horizontal_radio_and_checkboxes } do |f|

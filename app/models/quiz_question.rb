@@ -3,8 +3,7 @@ class QuizQuestion < ActiveRecord::Base
   has_many :answer_options
   accepts_nested_attributes_for :answer_options, allow_destroy: true
 
-  validates_presence_of :question, :course_module_id, :question_number
-  validates_uniqueness_of :question_number, scope: :course_module_id
+  validates_presence_of :question, :course_module_id
 
   validate :must_have_exactly_one_correct_answer
 

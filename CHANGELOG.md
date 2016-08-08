@@ -1,3 +1,20 @@
+### 8 August, 2016
+
+#### UI and UX
+
+  - Our homepage is undergoing updates - new content has been added, and more is coming this week.
+  - The _Startups_ page is now ordered by most recent activity.
+
+#### Performance
+
+  - When picking university when signing up for our MOOC, or for the latest batch, we used to preload all of the universities. Now the select box searches for, and returns only a subset of matching universities. This speeds up operation on mobiles significantly.
+
+#### Bugfixes
+
+  - The _Record Feedback_ option for signed-in founders went kaput. It's up and running again.
+  - Founders are now asked to sign-in if they try to join a connect request. Earlier, they were met with a 404 if they weren't signed-in already.
+  - Changes to the application process meant that all of the earlier sign-in mails sent to applicants contained links which 404-ed. All of those have been redirected to the new apply page.
+
 ### 1 August, 2016
 
 #### Features

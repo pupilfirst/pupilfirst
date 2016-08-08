@@ -30,7 +30,7 @@ ActiveAdmin.register BatchApplication do
     label: 'Tags',
     collection: -> { BatchApplication.tag_counts_on(:tags).pluck(:name).sort }
 
-  filter :team_lead
+  filter :team_lead_name_eq, label: "Team Lead Name"
   filter :university
   filter :college
   filter :university_location, as: :select, collection: proc { University.valid_state_names }

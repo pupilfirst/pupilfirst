@@ -53,12 +53,12 @@ module SixWaysHelper
   end
 
   def after_quiz_path
-    return six_ways_course_end_path if last_quiz?
+    return six_ways_course_end_path if last_quiz_attempted?
     start_of_next_module
   end
 
-  def last_quiz?
-    @module.module_number == CourseModule.maximum(:module_number)
+  def last_quiz_attempted?
+    current_mooc_student.quiz_attempts.maximum(:course_module_id) == CourseModule.last_module.id
   end
 
   def start_of_next_module

@@ -19,6 +19,8 @@ setupSelect2Inputs = ->
           return { results: data }
         cache: true
 
-    $('#mooc_student_signup_state').select2()
+    $('#mooc_student_signup_state').select2
+      matcher: (term, text, opt) ->
+        text.toUpperCase().indexOf(term.toUpperCase()) >= 0 || opt.html().toUpperCase().indexOf('INDIA') >= 0
 
 $(document).on 'page:change', setupSelect2Inputs

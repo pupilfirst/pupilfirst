@@ -8,6 +8,11 @@ ActiveAdmin.register Payment do
   filter :batch_applicant
   filter :amount
   filter :fees
+  filter :created_at
+
+  scope :all, default: true
+  scope :requested
+  scope :paid
 
   index do
     column :batch_application do |payment|

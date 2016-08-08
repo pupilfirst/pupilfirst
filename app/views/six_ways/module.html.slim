@@ -15,8 +15,8 @@
               hr
               h5 Extra Reading
               - @chapter.links.each do |link|
-                a href="#{link[:url]}" target="_blank" #{link[:title]}
-                br
+                li
+                  a href="#{link[:url]}" target="_blank" #{link[:title]}
           - else
             .text-xs-center
               i.fa.fa-exclamation-triangle

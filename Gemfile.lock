@@ -36,6 +36,12 @@ GIT
       multi_json
 
 GIT
+  remote: git://github.com/mileszs/wicked_pdf.git
+  revision: aee77867a7356d2a5f5340d22d30cb5a8b6afc86
+  specs:
+    wicked_pdf (1.0.6)
+
+GIT
   remote: git://github.com/mobmewireless/unobtrusive_flash.git
   revision: 24e7787d16db66f7956747444433a4e47278193a
   branch: master
@@ -743,7 +749,6 @@ GEM
     websocket-driver (0.6.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
-    wicked_pdf (1.0.6)
     will_paginate (3.1.0)
     will_paginate-bootstrap (1.0.1)
       will_paginate (>= 3.0.3)
@@ -853,7 +858,7 @@ DEPENDENCIES
   virtus
   web-console
   webmock
-  wicked_pdf
+  wicked_pdf!
   will_paginate-bootstrap
   wkhtmltopdf-heroku
 

@@ -168,7 +168,6 @@ ActiveAdmin.register BatchApplication do
       end.join(', ')
     end
 
-    column :team_achievement
     column :created_at
   end
 

@@ -5,5 +5,5 @@ Rails.application.config.assets.precompile += %w(
   active_admin.js
   mails.css
   video-js.swf vjs.eot vjs.svg vjs.ttf vjs.woff
-  completion_certificate.css
+  v2/completion_certificate.css
 )

@@ -2,7 +2,7 @@
 
 head
   / Note: @vinu: This page cannot access assets including stylesheets the usual way. Bootstrap etc are thus unavailable. I have added a sample sytlesheet below which you can expand on.
-  = stylesheet_link_tag wicked_pdf_asset_base64('v2/six_ways/completion_certificate')
+  = stylesheet_link_tag wicked_pdf_asset_base64('v2/completion_certificate')
 body
   p.certificate-text This is to certify that #{current_mooc_student.name} of #{current_mooc_student.university.name} has successfully completed the 'Sixways: Introduction' course with a score of #{current_mooc_student.score} %.
 

@@ -1,6 +1,6 @@
 ### 8 August, 2016
 
-#### UI and UX
+#### Content, UI
 
   - Our homepage is undergoing updates - new content has been added, and more is coming this week.
   - The _Startups_ page is now ordered by most recent activity.

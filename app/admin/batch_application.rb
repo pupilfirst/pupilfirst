@@ -181,6 +181,15 @@ ActiveAdmin.register BatchApplication do
       end
 
       row :cofounder_count
+
+      row :payment_status do |batch_application|
+        if batch_application.payment.present?
+          link_to t("payment.status.#{batch_application.payment.status}"), admin_payment_path(batch_application.payment)
+        else
+          em 'No payment'
+        end
+      end
+
       row :cofounders do
         ul do
           batch_application.cofounders.each do |applicant|

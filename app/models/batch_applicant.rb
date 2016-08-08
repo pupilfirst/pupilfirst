@@ -2,7 +2,7 @@ class BatchApplicant < ActiveRecord::Base
   include Taggable
 
   has_and_belongs_to_many :batch_applications
-  has_many :payments, through: :batch_applications
+  has_many :payments
 
   attr_accessor :reference_text
 

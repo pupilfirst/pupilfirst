@@ -5,6 +5,7 @@ ActiveAdmin.register Payment do
   actions :index, :show
 
   filter :batch_application
+  filter :batch_applicant
   filter :amount
   filter :fees
 
@@ -21,6 +22,7 @@ ActiveAdmin.register Payment do
       end
     end
 
+    column :batch_applicant
     column :amount
     column :fees
     column(:status) { |payment| t("payment.status.#{payment.status}") }
@@ -55,7 +57,13 @@ ActiveAdmin.register Payment do
 
   csv do
     column :application do |payment|
-      "Application ##{payment.batch_application.id} to batch #{payment.batch_application.batch.batch_number}"
+      batch_application = payment.batch_application
+
+      if batch_application.present?
+        "Application ##{payment.batch_application.id} to batch #{payment.batch_application.batch.batch_number}"
+      else
+        'Missing'
+      end
     end
 
     column :status do |payment|
@@ -63,12 +71,11 @@ ActiveAdmin.register Payment do
     end
 
     column :team_lead do |payment|
-      team_lead = payment.batch_application.team_lead
-      "#{team_lead.name} (#{team_lead.phone})"
+      team_lead = payment&.batch_application&.team_lead || payment.batch_applicant
+      "#{team_lead.name} (#{team_lead.phone})" if team_lead.present?
     end
 
     column :amount
-
     column('Instamojo Fees', &:fees)
     column :paid_at
     column :created_at

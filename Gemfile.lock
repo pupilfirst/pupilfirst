@@ -747,6 +747,7 @@ GEM
     will_paginate (3.1.0)
     will_paginate-bootstrap (1.0.1)
       will_paginate (>= 3.0.3)
+    wkhtmltopdf-heroku (2.12.3.0)
     xml-simple (1.1.5)
     xpath (2.0.0)
       nokogiri (~> 1.3)
@@ -854,6 +855,7 @@ DEPENDENCIES
   webmock
   wicked_pdf
   will_paginate-bootstrap
+  wkhtmltopdf-heroku
 
 RUBY VERSION
    ruby 2.3.1p112

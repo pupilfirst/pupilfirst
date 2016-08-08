@@ -145,6 +145,7 @@ end
 
 group :production do
   gem 'rails_12factor' # Makes running your Rails app easier. Based on the ideas behind 12factor.net.
+  gem 'wkhtmltopdf-heroku', require: false # wkhtmltopdf binary for heroku / amd64
 end
 
 ruby '2.3.1'

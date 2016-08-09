@@ -9,7 +9,7 @@
     .col-lg-8.col-md-12
       .registration-complete-notice.card.content-box.m-t-2.m-b-0
         h4.m-a-0
-          - if current_batch_applicant.present?
+          - if current_application.present?
             span <strong>You have already completed registration.</strong>
             = link_to 'Continue application', apply_continue_path, class: 'btn btn-primary btn-md text-uppercase'
           - else

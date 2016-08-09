@@ -3,7 +3,7 @@
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
 
 .container
-  == render('applications_close_soon', batch: current_batch) if current_batch && current_batch.applications_close_soon?
+  == render('applications_close_soon', batch: @open_batch) if @open_batch.present? && @open_batch.applications_close_soon?
 
   .row.application-process
     .col-lg-8.col-md-12

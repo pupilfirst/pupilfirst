@@ -177,7 +177,7 @@ ActiveAdmin.register BatchApplication do
       row :team_lead
 
       row :contact_number do
-        batch_application.team_lead.phone
+        batch_application&.team_lead&.phone
       end
 
       row :cofounder_count

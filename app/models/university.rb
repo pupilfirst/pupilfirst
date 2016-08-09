@@ -1,5 +1,6 @@
 class University < ActiveRecord::Base
   has_many :founders, dependent: :restrict_with_error
+  has_many :batch_applications
 
   validates_uniqueness_of :name, presence: true
   validates_presence_of :location

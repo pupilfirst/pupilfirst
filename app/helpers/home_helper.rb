@@ -27,4 +27,16 @@ module HomeHelper
   def registration_redirect?
     params[:redirect_from] == 'registration'
   end
+
+  def university_count_from_applications
+    Rails.cache.fetch('home/university_count', expires_in: 1.hour) do
+      University.joins(:batch_applications).distinct.count
+    end
+  end
+
+  def state_count_from_applications
+    Rails.cache.fetch('home/state_count', expires_in: 1.hour) do
+      University.joins(:batch_applications).select(:location).distinct.count
+    end
+  end
 end

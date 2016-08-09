@@ -1,6 +1,6 @@
 class BatchApplicationController < ApplicationController
   before_action :ensure_applicant_is_signed_in, except: %w(index register identify send_sign_in_email continue sign_in_email_sent)
-  before_action :ensure_batch_active, except: %w(index register identify send_sign_in_email continue sign_in_email_sent)
+  before_action :ensure_batch_active, except: %w(index register identify send_sign_in_email continue sign_in_email_sent batch_pending)
   before_action :ensure_accurate_stage_number, only: %w(ongoing submit complete restart expired rejected)
   before_action :set_instance_variables
   before_action :hide_nav_links
@@ -70,6 +70,7 @@ class BatchApplicationController < ApplicationController
   # GET /apply/continue
   #
   # This is the link supplied in emails. Routes applicant to correct location.
+  # rubocop:disable Metrics/CyclomaticComplexity
   def continue
     check_token
 
@@ -78,6 +79,8 @@ class BatchApplicationController < ApplicationController
     case applicant_status
       when :application_pending
         redirect_to apply_path
+      when :batch_pending
+        redirect_to apply_batch_pending_path
       when :ongoing
         redirect_to apply_stage_path(stage_number: applicant_stage_number)
       when :expired
@@ -89,6 +92,10 @@ class BatchApplicationController < ApplicationController
       else
         raise "Unexpected applicant_status: #{applicant_status}"
     end
+  end
+
+  # GET /apply/batch_pending
+  def batch_pending
   end
 
   # POST /apply/restart
@@ -267,8 +274,6 @@ class BatchApplicationController < ApplicationController
         else
           current_batch_applicant.batch_applications.order('created_at DESC').first
         end
-      else
-        nil
       end
     end
   end
@@ -281,15 +286,18 @@ class BatchApplicationController < ApplicationController
     end
   end
 
-  # Returns one of :application_pending, :ongoing, :expired, :rejected, :complete to indicate which view should be rendered.
+  # Returns one of :application_pending, :batch_pending, :ongoing, :expired, :rejected, :complete to indicate which
+  # view should be rendered.
   #
-  # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength
+  # rubocop:disable Metrics/PerceivedComplexity, Metrics/MethodLength
   def applicant_status
     @applicant_status ||= begin
       if current_application.blank?
         :application_pending
       elsif applicant_stage_number == 1
-        if current_stage_number == 1 || (current_stage_number == 2 && !stage_expired?)
+        if current_application.batch.blank?
+          :batch_pending
+        elsif current_stage_number == 1 || (current_stage_number == 2 && !stage_expired?)
           :ongoing
         else
           :expired

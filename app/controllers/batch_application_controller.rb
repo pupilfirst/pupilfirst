@@ -96,6 +96,7 @@ class BatchApplicationController < ApplicationController
 
   # GET /apply/batch_pending
   def batch_pending
+    return redirect_to(apply_continue_path) if applicant_status != :batch_pending
   end
 
   # POST /apply/restart

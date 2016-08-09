@@ -27,6 +27,29 @@ ActiveAdmin.register Batch do
     end
   end
 
+  show do
+    attributes_table do
+      row :batch_number
+      row :theme
+      row :description
+      row :start_date
+      row :end_date
+      row :application_stage
+      row :application_stage_deadline
+      row :next_stage_starts_on
+      row :invites_sent_at
+      row :slack_channel
+    end
+
+    panel 'Technical details' do
+      attributes_table_for batch do
+        row :id
+        row :created_at
+        row :updated_at
+      end
+    end
+  end
+
   form do |f|
     f.semantic_errors(*f.object.errors.keys)
 
@@ -43,6 +66,16 @@ ActiveAdmin.register Batch do
     end
 
     f.actions
+  end
+
+  member_action :sweep_in_applications do
+    @batch = Batch.find params[:id]
+    @unbatched = BatchApplication.where(batch: nil)
+    render 'sweep_in_applications'
+  end
+
+  action_item :sweep_in_applications, only: :show, if: proc { resource&.application_stage&.initial_stage? } do
+    link_to('Sweep in Applications', sweep_in_applications_admin_batch_path(Batch.find(params[:id])))
   end
 
   member_action :selected_applications do
@@ -66,5 +99,18 @@ ActiveAdmin.register Batch do
     end
 
     redirect_to selected_applications_admin_batch_path(batch)
+  end
+
+  member_action :sweep_in_unbatched, method: :post do
+    batch = Batch.find params[:id]
+
+    if batch.application_stage.initial_stage?
+      BatchApplication.where(batch: nil).update_all(batch_id: batch.id)
+      flash[:success] = "All unbatched applications have been assigned to batch ##{batch.batch_number}"
+      redirect_to admin_batch_path(batch)
+    else
+      flash[:error] = "Did not initiate sweep. Batch ##{batch.batch_number} is not in initial stage."
+      redirect_to admin_batch_path(batch)
+    end
   end
 end

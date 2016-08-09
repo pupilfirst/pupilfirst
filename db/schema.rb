@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160808065852) do
+ActiveRecord::Schema.define(version: 20160808154153) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -123,9 +123,9 @@ ActiveRecord::Schema.define(version: 20160808065852) do
     t.string   "token"
     t.datetime "sign_in_email_sent_at"
     t.string   "reference"
+    t.datetime "last_sign_in_at"
     t.string   "college"
     t.text     "notes"
-    t.datetime "last_sign_in_at"
   end
 
   add_index "batch_applicants", ["token"], name: "index_batch_applicants_on_token", using: :btree
@@ -397,8 +397,10 @@ ActiveRecord::Schema.define(version: 20160808065852) do
     t.datetime "webhook_received_at"
     t.datetime "paid_at"
     t.integer  "original_batch_application_id"
+    t.integer  "batch_applicant_id"
   end
 
+  add_index "payments", ["batch_applicant_id"], name: "index_payments_on_batch_applicant_id", using: :btree
   add_index "payments", ["batch_application_id"], name: "index_payments_on_batch_application_id", using: :btree
   add_index "payments", ["original_batch_application_id"], name: "index_payments_on_original_batch_application_id", using: :btree
 

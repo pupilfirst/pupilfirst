@@ -30,7 +30,7 @@ ActiveAdmin.register BatchApplication do
     label: 'Tags',
     collection: -> { BatchApplication.tag_counts_on(:tags).pluck(:name).sort }
 
-  filter :team_lead
+  filter :team_lead_name_eq, label: "Team Lead Name"
   filter :university
   filter :college
   filter :university_location, as: :select, collection: proc { University.valid_state_names }
@@ -168,7 +168,6 @@ ActiveAdmin.register BatchApplication do
       end.join(', ')
     end
 
-    column :team_achievement
     column :created_at
   end
 
@@ -182,6 +181,15 @@ ActiveAdmin.register BatchApplication do
       end
 
       row :cofounder_count
+
+      row :payment_status do |batch_application|
+        if batch_application.payment.present?
+          link_to t("payment.status.#{batch_application.payment.status}"), admin_payment_path(batch_application.payment)
+        else
+          em 'No payment'
+        end
+      end
+
       row :cofounders do
         ul do
           batch_application.cofounders.each do |applicant|

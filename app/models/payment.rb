@@ -1,6 +1,7 @@
 class Payment < ActiveRecord::Base
   belongs_to :batch_application
   belongs_to :original_batch_application, class_name: 'BatchApplication'
+  belongs_to :batch_applicant
 
   STATUS_REQUESTED = -'requested'
   STATUS_PAID = -'paid'

@@ -28,23 +28,28 @@ title Quiz # #{module_number} | Start in College
                     required: false
                 .submission-result
                   .no-selection-error.hidden-xs-up id="no-selection-error-#{s.index}"
-                    | Please select an option before submitting or skip the question
+                    | Please select an option before checking or skip the question
                   .answer-hints
                     - quiz_question.answer_options.each do |answer|
-                      .answer-result.hidden-xs-up id="answer-#{answer.id}-result"
-                        ' #{answer.correct_answer ? 'You are right!' : 'That seems wrong!'}
-                      .answer-hint.hidden-xs-up id="answer-#{answer.id}-hint"
-                        ' #{answer.hint_text}
-                .answer-submit-button.pull-left data-question-index="#{s.index}"
+                      .answer-result.hidden-xs-up.m-b-2 id="answer-#{answer.id}-result"
+                        - if answer.correct_answer
+                          i.fa.fa-thumbs-o-up
+                            ' &nbsp;Correct answer
+                        - else
+                          i.fa.fa-thumbs-o-down
+                            ' &nbsp;Wrong! Try again!
+                      .answer-hint.hidden-xs-up.m-b-2 id="answer-#{answer.id}-hint"
+                        - if answer.hint_text.present?
+                          ' #{answer.hint_text}
+                .answer-check-button.pull-left data-question-index="#{s.index}"
                   a.btn.btn-primary.btn-md.text-uppercase
-                    | Submit
+                    | Check
+                .question-next-button.pull-right.hidden-xs-up data-question-index="#{s.index}"
+                  a.btn.btn-primary.btn-md.text-uppercase
+                    | Next
                 .question-skip-button.pull-right data-question-index="#{s.index}"
                   a.btn.btn-primary.btn-md.text-uppercase
                     | Skip
           #quiz-submit-button.hidden-xs-up.pull-right
             = f.submit 'Finish', class: 'btn btn-primary btn-md text-uppercase'
-
-          /.offset-sm-3
-          /  .simple-form-submit
-          /    = f.submit 'Finish', class: 'btn btn-primary btn-md text-uppercase'
 

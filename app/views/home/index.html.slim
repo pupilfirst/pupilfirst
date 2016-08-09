@@ -27,7 +27,105 @@
           h1 = t('home.index.main_bleed_message_html')
           h4 = t("home.index.background_#{background_image_number}_messages.secondary_html")
           = link_to 'Apply Now', apply_path, class: 'btn btn-primary btn-lg text-uppercase home-apply-btn'
-    a.icon-scroll href="#graduation-slide-section"
+    a.icon-scroll href="#startincollege-initiative"
+
+  #startincollege-initiative.startincollege-section
+    .container
+      h3.text-xs-center.content-head
+        span.content-title-icon.graduated-icon
+        | #StartInCollege Initiative
+      .startincollege-intro.m-x-auto.text-xs-center
+        p.font-light
+          ' <strong>#StartInCollege</strong> is <strong>India's largest student entrepreneurship campaign</strong>
+          ' that aims to reach all engineering colleges in the country. We believe
+          | that students in college can create the next generation of India's great startups.
+      .campaign-analysis.m-t-3.m-b-3.clearfix
+        .col-md-2.offset-md-1.col-xs-6
+          .analysis-icon.m-x-auto
+            = image_tag 'home/college-icon.svg'
+          p
+            = university_count_from_applications
+            span
+              | Universities
+        .col-md-2.col-xs-6
+          .analysis-icon.m-x-auto
+            = image_tag 'home/startup-partner-icon.svg'
+
+          p
+            ' 20
+            span
+              |	Graduation Partners
+        .col-md-2.col-xs-6
+          .analysis-icon.m-x-auto
+            = image_tag 'home/graduation-icon.svg'
+          p
+            ' 6
+            span
+              | Ways to Graduate
+        .col-md-2.col-xs-6
+          .analysis-icon.m-x-auto
+            = image_tag 'home/scholarship-icon.svg'
+  
+          p
+            ' 30
+            span
+              | Scholoship by Paytm
+        .col-md-2.col-xs-12
+          .analysis-icon.m-x-auto
+            = image_tag 'home/states-icon.svg'
+  
+          p
+            = state_count_from_applications
+            span
+              |	States
+      .official-partners.m-b-3
+        .highlight-partners.clearfix
+          .col-md-4.m-x-auto
+            h4
+              | Official Silicon Valley Host Partner
+            .official-partner-logo
+              = image_tag 'home/official-partners/facebook-logo.svg', class: "img-fluid facebook-logo"
+          .col-md-4.m-x-auto
+            h4
+              | Official Scholarship Partner
+            .official-partner-logo
+              = image_tag 'home/official-partners/paytm-logo.svg', class: "img-fluid paytm-logo"
+          .col-md-4.m-x-auto
+            h4
+              | Official Outreach Partner
+            .official-partner-logo
+              = image_tag 'home/official-partners/FICCI-logo.svg', class: "img-fluid ficci-logo"
+        .support-partners.clearfix
+          .col-md-6
+            h4
+              | Supported By
+
+            .official-partner-logo.support-partner-logo
+              = image_tag 'home/official-partners/NSTEDB-Govt-of-India.png', class: "img-fluid"
+              p
+                | NSTEDB Govt. of India
+            .official-partner-logo.support-partner-logo
+              = image_tag 'home/official-partners/US-embassy.png', class: "img-fluid"
+              p
+                | Embassy of the United States
+          .col-md-6
+            h4
+              | Official State Partners
+
+            .official-partner-logo
+              = image_tag 'home/official-partners/KSUM.png', class: "img-fluid"
+              p
+                | Kerala Startup Mission
+
+            .official-partner-logo
+              = image_tag 'home/official-partners/GTU.png', class: "img-fluid"
+              p
+                | Gujarat Technological University
+
+            .official-partner-logo
+              = image_tag 'home/official-partners/t-hub.png', class: "img-fluid"
+              p
+                | T-HUB
 
   #graduation-slide-section.graduated-slide
     .container-fluid

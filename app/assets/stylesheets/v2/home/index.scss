@@ -252,11 +252,9 @@
   @include border-radius(50px);
 
   &:before {
-    content: '';
-    width: 6px;
-    height: 6px;
-    background: rgba(255,255,255,0.8);
-    margin-left: -3px;
+    @include fa-icon(angle-down);
+    color: white;
+    left: 8px;
     top: 6px;
     @include border-radius(50%);
     animation-duration: 1.5s;
@@ -324,6 +322,160 @@
       bottom: 1rem;
       right: 2rem;
       color: white;
+    }
+  }
+}
+
+.startincollege-section {
+  background-color: white;
+  border-bottom: 1px solid $gray-border;
+  padding: 30px 0;
+
+  .startincollege-intro {
+    max-width: 37rem;
+    p {
+      font-size: 1.125rem;
+
+      strong {
+        font-weight: $font-semibold;
+      }
+    }
+  }
+  .campaign-analysis {
+
+    @include media-breakpoint-down(sm) {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    p {
+      text-align: center;
+      font-size: 1.875rem;
+      font-weight: $font-semibold;
+
+      span {
+        display: block;
+        font-weight: $font-light;
+        font-size: 1rem;
+      }
+    }
+    .analysis-icon {
+      width: 55px;
+    }
+    > div {
+      @include media-breakpoint-down(sm) {
+        padding-top: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid $gray-border;
+
+        &:nth-child(even) {
+          border-left: 1px solid $gray-border;
+        }
+      }
+    }
+  }
+  .highlight-partners, .support-partners {
+    border: 1px solid $gray-border;
+    display: flex;
+    flex-wrap: wrap;
+
+    > div {
+      text-align: center;
+      padding: 30px 20px;
+
+      h4 {
+        font-size: 1rem;
+        margin: 0;
+        padding-bottom: 15px;
+        border-bottom: 1px dashed $gray-border;
+      }
+      @include media-breakpoint-down(md) {
+        padding: 30px;
+      }
+      @include media-breakpoint-down(sm) {
+        padding: 30px;
+        border-bottom: 1px solid $gray-border;
+        width: 100%;
+      }
+    }
+    .official-partner-logo {
+      display: inline-block;
+      padding: 20px 30px 0;
+
+      img {
+        height: 45px;
+        margin: auto;
+      }
+      .facebook-logo {
+        height: 40px;
+      }
+      .paytm-logo {
+        height: 25px;
+      }
+      .ficci-logo {
+        height: 50px;
+      }
+      @include media-breakpoint-down(sm) {
+        padding: 20px 10px 0;
+      }
+      p {
+        font-size: .75rem;
+        margin-top: 10px;
+      }
+    }
+  }
+  .highlight-partners {
+    border-width: 1px 0 1px 0;
+
+    > div {
+      &:first-child {
+        @include media-breakpoint-down(sm) {
+          padding-top: 0;
+        }
+      }
+      &:nth-child(even) {
+        border: 1px solid $gray-border;
+        border-width: 0 1px 0 1px;
+
+        @include media-breakpoint-down(sm) {
+          border-width: 0 0 1px 0;
+        }
+      }
+    }
+    @include media-breakpoint-down(sm) {
+      border: 0;
+    }
+  }
+  .support-partners {
+    border-width: 0 0 1px 0;
+
+    > div {
+      &:first-child {
+        border: 1px solid $gray-border;
+        border-width: 0 1px 0 0;
+
+        @include media-breakpoint-down(sm) {
+          border: 0;
+        }
+      }
+      @include media-breakpoint-down(sm) {
+        padding: 30px 15px;
+      }
+    }
+    .support-partner-logo {
+      padding: 20px 30px 0;
+      display: inline-block;
+
+      img {
+        height: 45px;
+        margin: auto;
+      }
+
+      @include media-breakpoint-down(sm) {
+        padding: 20px 10px 0;
+      }
+    }
+    @include media-breakpoint-down(sm) {
+      border: 0;
     }
   }
 }

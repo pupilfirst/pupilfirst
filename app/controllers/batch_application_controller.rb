@@ -1,6 +1,6 @@
 class BatchApplicationController < ApplicationController
   before_action :ensure_applicant_is_signed_in, except: %w(index register identify send_sign_in_email continue sign_in_email_sent)
-  before_action :ensure_batch_active, except: :index
+  before_action :ensure_batch_active, except: %w(index register identify send_sign_in_email continue sign_in_email_sent)
   before_action :ensure_accurate_stage_number, only: %w(ongoing submit complete restart expired rejected)
   before_action :set_instance_variables
   before_action :hide_nav_links

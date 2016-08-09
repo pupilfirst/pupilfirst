@@ -17,9 +17,6 @@ class BatchApplicationController < ApplicationController
 
   # GET /apply
   def index
-    # Redirect current batch's applicants to continue route.
-    return redirect_to(apply_continue_path) if current_batch&.applied?(current_batch_applicant)
-
     @form = BatchApplicationForm.new(BatchApplication.new)
     @form.prepopulate!(team_lead: BatchApplicant.new)
   end
@@ -132,7 +129,7 @@ class BatchApplicationController < ApplicationController
   # POST /apply/stage/:stage_number/restart
   def restart
     return redirect_to(apply_continue_path) if applicant_status != :complete
-    raise_not_found if current_batch.stage_expired?
+    raise_not_found if current_batch&.stage_expired?
 
     begin
       send "stage_#{applicant_stage_number}_restart"
@@ -230,7 +227,7 @@ class BatchApplicationController < ApplicationController
   # Returns currently active batch.
   def current_batch
     @current_batch ||= begin
-      Batch.open_batch
+      current_application.batch
     end
   end
 
@@ -261,7 +258,18 @@ class BatchApplicationController < ApplicationController
 
   # Returns batch application of current applicant.
   def current_application
-    @current_application ||= current_batch_applicant&.batch_applications&.find_by(batch: current_batch)
+    @current_application ||= begin
+      if current_batch_applicant.present?
+        if session[:application_selected_batch_id].present?
+          selected_batch = Batch.find session[:application_selected_batch_id]
+          current_batch_applicant.batch_applications.find_by(batch: selected_batch)
+        else
+          current_batch_applicant.batch_applications.order('created_at DESC').first
+        end
+      else
+        nil
+      end
+    end
   end
 
   # Returns currently 'signed in' application founder.
@@ -328,6 +336,7 @@ class BatchApplicationController < ApplicationController
 
   # Batch's stage should have expired, and current stage should be same as application stage.
   def stage_expired?
+    return false if current_batch.blank?
     current_batch.stage_expired?
   end
 

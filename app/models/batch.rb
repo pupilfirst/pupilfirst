@@ -96,18 +96,8 @@ class Batch < ActiveRecord::Base
     true
   end
 
-  # Currently 'open' batch - the one which has an application process ongoing.
+  # Currently 'open' batch - the one which is accepting new applications.
   def self.open_batch
-    if open_for_applications.any?
-      open_for_applications.first
-    elsif applications_ongoing.any?
-      applications_ongoing.first
-    end
-  end
-
-  # Checks whether an applicant has an application for this batch.
-  def applied?(applicant)
-    return false if applicant.blank?
-    applicant.batch_applications.where(batch: self).present?
+    open_for_applications.first if open_for_applications.any?
   end
 end

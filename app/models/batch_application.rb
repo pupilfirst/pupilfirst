@@ -23,7 +23,6 @@ class BatchApplication < ActiveRecord::Base
   # Batch applicants who have completed payment.
   scope :payment_complete, -> { joins(:payment).merge(Payment.paid) }
 
-  validates :batch_id, presence: true
   validates :application_stage_id, presence: true
   validates :university_id, presence: true
   validates :college, presence: true

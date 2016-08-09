@@ -26,7 +26,7 @@ setupStoryCarousel = ->
   $(".story-container").slick
     slidesToShow: 3
     slidesToScroll: 1
-    dots: true
+    dots: false
     arrows: true
     responsive: [
       {

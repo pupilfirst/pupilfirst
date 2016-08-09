@@ -103,15 +103,16 @@ scrolltoStartapplicationForm = ->
 
 stickyApplyButtonOnApplyPage = ->
   if $('.application-process').length
-
     visibilityToggle = new Waypoint.Inview
       element: $('#start-application-process')[0]
       enter: (direction) ->
         if direction == 'down'
           $('#sticky-start-application').addClass('hidden-xs-up')
+          $('#intercom-container').addClass('hidden-xs-down')
       exited: (direction) ->
         if direction == 'up'
           $('#sticky-start-application').removeClass('hidden-xs-up')
+          $('#intercom-container').removeClass('hidden-xs-down')
 
 destroyWaypoints = ->
   if $('.application-process').length

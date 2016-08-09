@@ -6,8 +6,7 @@ ActiveAdmin.register BatchApplicant do
   permit_params :batch_application_id, :name, :gender, :email, :phone, :role, :team_lead, :tag_list, :reference, :college, :notes
 
   scope :all, default: true
-  scope :lead_signup
-  scope :started_application
+  scope :submitted_application
   scope :payment_initiated
   scope :conversion
 

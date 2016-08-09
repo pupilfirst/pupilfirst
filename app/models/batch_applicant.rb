@@ -6,17 +6,23 @@ class BatchApplicant < ActiveRecord::Base
 
   attr_accessor :reference_text
 
-  # Applicants who have signed up but haven't applied.
-  scope :lead_signup, -> { where.not(id: joins(:batch_applications).where('batch_applications.team_lead_id = batch_applicants.id').select(:id), phone: nil) }
-
   # Applicants who have submitted application, but haven't clicked pay.
-  scope :started_application, -> { joins(:batch_applications).where('batch_applications.team_lead_id = batch_applicants.id').where.not(id: joins(:payments).select(:id)).distinct }
+  scope :submitted_application, lambda {
+    joins(:batch_applications).where('batch_applications.team_lead_id = batch_applicants.id')
+      .where.not(id: joins(:payments).select(:id)).distinct
+  }
 
   # Applicants who have applications who clicked the pay button but didn't pay.
-  scope :payment_initiated, -> { joins(:batch_applications).where('batch_applications.team_lead_id = batch_applicants.id').joins(:payments).where.not(phone: nil).merge(Payment.requested).distinct }
+  scope :payment_initiated, lambda {
+    joins(:batch_applications).where('batch_applications.team_lead_id = batch_applicants.id').joins(batch_applications: :payment)
+      .merge(Payment.requested).distinct
+  }
 
   # Applicants who have completed payments.
-  scope :conversion, -> { joins(:batch_applications).where('batch_applications.team_lead_id = batch_applicants.id').joins(:payments).where.not(phone: nil).merge(Payment.paid).distinct }
+  scope :conversion, lambda {
+    joins(:batch_applications).where('batch_applications.team_lead_id = batch_applicants.id').joins(batch_applications: :payment)
+      .merge(Payment.paid).distinct
+  }
 
   # Basic validations.
   validates :email, presence: true, uniqueness: true

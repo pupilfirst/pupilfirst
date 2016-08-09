@@ -30,7 +30,11 @@ class BatchApplication < ActiveRecord::Base
   # If a team lead is present (should be), display his name and batch number as title, otherwise use this entry's ID.
   def display_name
     if team_lead.present?
-      "#{team_lead&.name} (#{batch.name})"
+      if batch.present?
+        "#{team_lead&.name} (#{batch.name})"
+      else
+        "#{team_lead&.name} (Batch Pending)"
+      end
     else
       "Batch Application ##{id}"
     end

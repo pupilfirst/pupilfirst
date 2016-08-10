@@ -14,6 +14,10 @@ module SixWaysHelper
     @module.module_number
   end
 
+  def module_name
+    @module.name
+  end
+
   def previous_module
     CourseModule.find_by_module_number module_number - 1
   end
@@ -67,5 +71,9 @@ module SixWaysHelper
 
   def first_chapter_path
     six_ways_module_path(CourseModule.find_by_module_number(1).slug, 1)
+  end
+
+  def module_has_quiz_header?
+    lookup_context.exists?('quiz_header', ["six_ways/module_#{module_number}"], true)
   end
 end

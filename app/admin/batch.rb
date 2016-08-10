@@ -107,10 +107,53 @@ ActiveAdmin.register Batch do
     if batch.application_stage.initial_stage?
       BatchApplication.where(batch: nil).update_all(batch_id: batch.id)
       flash[:success] = "All unbatched applications have been assigned to batch ##{batch.batch_number}"
-      redirect_to admin_batch_path(batch)
     else
       flash[:error] = "Did not initiate sweep. Batch ##{batch.batch_number} is not in initial stage."
-      redirect_to admin_batch_path(batch)
     end
+
+    redirect_to admin_batch_path(batch)
+  end
+
+  member_action :sweep_in_unpaid, method: :post do
+    batch = Batch.find params[:id]
+    source_batch = Batch.find params[:sweep_in_unpaid_applications][:source_batch_id]
+
+    if batch.application_stage.initial_stage?
+      uninitiated_applications = source_batch.batch_applications.includes(:payment).where(payments: { id: nil })
+      unpaid_applications = source_batch.batch_applications.joins(:payment).merge(Payment.requested)
+      applications_count = uninitiated_applications.count + unpaid_applications.count
+      (uninitiated_applications + unpaid_applications).each { |application| application.update!(batch_id: batch.id) }
+
+      flash[:success] = "#{applications_count} unpaid applications from Batch ##{source_batch.batch_number} have been assigned to batch ##{batch.batch_number}"
+    else
+      flash[:error] = "Did not initiate sweep. Batch ##{batch.batch_number} is not in initial stage."
+    end
+
+    redirect_to admin_batch_path(batch)
+  end
+
+  member_action :sweep_in_rejects, method: :post do
+    batch = Batch.find params[:id]
+    source_batch = Batch.find params[:sweep_in_rejects][:source_batch_id]
+
+    if batch.application_stage.initial_stage?
+      current_stage_number = source_batch.application_stage.number
+
+      rejected_and_left_behind_applications = source_batch.batch_applications.joins(:application_stage).
+        where('application_stages.number < ?', current_stage_number).
+        where('application_stages.number != 1')
+
+      expired_applications = source_batch.batch_applications.joins(:application_stage).
+        where(application_stages: { number: current_stage_number } ).
+        where('application_stages.number != 1').where()
+
+      raise NotImplementedError
+
+      flash[:success] = "#{applications_count} rejected or expired applications from Batch ##{source_batch.batch_number} have been copied to batch ##{batch.batch_number}"
+    else
+      flash[:error] = "Did not initiate sweep. Batch ##{batch.batch_number} is not in initial stage."
+    end
+
+    redirect_to admin_batch_path(batch)
   end
 end

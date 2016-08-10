@@ -33,7 +33,7 @@ ActiveAdmin.register BatchApplication do
   filter :team_lead_name_eq, label: "Team Lead Name"
   filter :university
   filter :college
-  filter :university_location, as: :select, collection: proc { University.valid_state_names }
+  filter :university_location, as: :select, collection: proc { University.all.pluck(:location).uniq }
   filter :state, label: 'State (Deprecated)'
   filter :created_at
 

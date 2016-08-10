@@ -22,6 +22,30 @@ setupGraduationCarousel = ->
      ]
 infinite: true
 
+setupStoryCarousel = ->
+  $(".story-container").slick
+    slidesToShow: 3
+    slidesToScroll: 1
+    dots: false
+    arrows: true
+    responsive: [
+      {
+        breakpoint: 992,
+        settings: {
+          slidesToShow: 2
+        }
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1
+          slidesToScroll: 1
+          arrows: false
+        }
+      }
+    ]
+    infinite: true
+
 stopVideosOnModalClose = ->
   $('.video-modal').on 'hide.bs.modal', (event) ->
     modalIframe = $(event.target).find('iframe')
@@ -42,3 +66,4 @@ scrollmeDownIcon = ->
 $(document).on 'page:change', showInstagramImageOverlays
 $(document).on 'page:change', setupGraduationCarousel
 $(document).on 'page:change', scrollmeDownIcon
+$(document).on 'page:change', setupStoryCarousel

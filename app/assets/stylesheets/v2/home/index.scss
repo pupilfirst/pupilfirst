@@ -329,7 +329,7 @@
 .startincollege-section {
   background-color: white;
   border-bottom: 1px solid $gray-border;
-  padding: 30px 0;
+  padding: 30px 0 70px;
 
   .startincollege-intro {
     max-width: 37rem;
@@ -349,7 +349,8 @@
     }
     p {
       text-align: center;
-      font-size: 1.875rem;
+      font-size: 2.5rem;
+      line-height: 1.2;
       font-weight: $font-semibold;
 
       span {
@@ -360,6 +361,7 @@
     }
     .analysis-icon {
       width: 55px;
+      margin-bottom: 5px;
     }
     > div {
       @include media-breakpoint-down(sm) {
@@ -529,68 +531,68 @@
       color: $light-grey-text;
     }
   }
-}
-.slick-slider {
-  margin-bottom: 20px;
-  padding-bottom: 80px;
-}
-.slide-item {
-  margin: 20px;
-  width: 400px;
-  background-color: transparent;
-  outline: none;
-  transition: all 300ms ease 0s;
+  .slick-slider {
+    margin-bottom: 20px;
+    padding-bottom: 80px;
+  }
+  .slide-item {
+    margin: 20px;
+    width: 400px;
+    background-color: transparent;
+    outline: none;
+    transition: all 300ms ease 0s;
 
-  .graduate-thumbnail {
-    display: block;
-    position:relative;
-    border-radius: 5px;
-    overflow: hidden;
+    .graduate-thumbnail {
+      display: block;
+      position:relative;
+      border-radius: 5px;
+      overflow: hidden;
 
-    &:before, &:after {
-      position: absolute;
-      opacity: 0;
-      transition: all .2s;
-    }
-    &:before {
-      content:'';
-      width:100%;
-      height:100%;
-      top:0;
-      left:0;
-      background:rgba(0,0,0,0.5);
-      background: radial-gradient(ellipse at center, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.5) 100%);
-    }
-   &:after {
-    content: asset-url('apply/play-button.svg');
-    width: 50px;
-    height: 50px;
-    top: 40%;
-    left: 50%;
-    transform: translateX(-50%);
-
-      @include media-breakpoint-down(md) {
-        width: 30px;
-        height: 30px;
-      }
-    }
-    img {
-      box-shadow: $box-shadow;
-      width: 100%;
-    }
-    &:hover {
       &:before, &:after {
-        opacity: 1.0;
+        position: absolute;
+        opacity: 0;
+        transition: all .2s;
+      }
+      &:before {
+        content:'';
+        width:100%;
+        height:100%;
+        top:0;
+        left:0;
+        background:rgba(0,0,0,0.5);
+        background: radial-gradient(ellipse at center, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.5) 100%);
+      }
+      &:after {
+        content: asset-url('apply/play-button.svg');
+        width: 50px;
+        height: 50px;
+        top: 40%;
+        left: 50%;
+        transform: translateX(-50%);
+
+        @include media-breakpoint-down(md) {
+          width: 30px;
+          height: 30px;
+        }
+      }
+      img {
+        box-shadow: $box-shadow;
+        width: 100%;
+      }
+      &:hover {
+        &:before, &:after {
+          opacity: 1.0;
+        }
       }
     }
   }
-}
-.slick-center {
-  transform: scale(1.08);
+  .slick-center {
+    transform: scale(1.08);
 
-  .graduate-thumbnail {
-    &:after {
-      opacity: 1.0;
+    .graduate-thumbnail {
+      &:after {
+        opacity: 1.0;
+      }
     }
   }
 }
@@ -618,7 +620,7 @@
     padding: 0;
   }
 }
-.graduation-summary {
+.success-story {
   border-top: 1px solid $gray-border;
   background-color: white;
   padding: 30px 0 70px;
@@ -638,32 +640,78 @@
       transform: translateX(-50%);
     }
   }
-  .graduation-options {
-    > div {
-      padding: 30px 35px;
+  .story-container {
+    display: block;
 
-      &:nth-child(2) {
-        border: 1px solid $gray-border;
-        border-width: 0 1px 0 1px;
+    .story-box {
+      margin: 0 15px;
+      height: 430px;
+      position: relative;
+      border-top: 4px solid $light-primary;
 
-        @include media-breakpoint-down(sm) {
-          border-width: 1px 0 1px 0;
+      ul {
+        padding-left: 25px;
+        li {
+          // font-size: 1rem;
+          line-height: 1.4rem;
+          font-weight: $font-light;
+          list-style-type: circle;
+          padding-bottom: 15px;
         }
       }
     }
-    .option-detail {
-      padding-top: 15px;
-      font-size: 1rem;
-      font-weight: $font-light;
-
-      strong {
-        font-weight: $font-semibold;
-      }
-    }
     .logo-block {
+      position: absolute;
+      border-top: 1px solid $gray-border;
+      bottom: 0;
+      left: 30px;
+      right: 30px;
+
       img {
         display: inline-block;
         height: 50px;
+      }
+    }
+    .slick-prev, .slick-next {
+      border: 1px solid $gray-border;
+      @include border-radius(50%);
+      background-color: white;
+      box-shadow: $box-shadow;
+      height: 40px;
+      width: 40px;
+      top: 50%;
+      bottom: 0px;
+      margin: 0 15px;
+      z-index: 1;
+      transition: all .2s;
+
+      &:before {
+       font-size: 18px;
+       vertical-align: middle;
+       opacity: 1;
+      }
+      &:hover, &:focus, &:active {
+        box-shadow: $box-shadow-hover;
+
+        &:before {
+         color: $light-secondary;
+        }
+      }
+    }
+    .slick-prev {
+      left: -20px;
+
+      &:before {
+        @include fa-icon(angle-left);
+        color: $light-grey-text;
+      }
+    }
+    .slick-next {
+      right: -20px;
+
+      &:before {
+        @include fa-icon(angle-right);
+        color: $light-grey-text;
       }
     }
   }

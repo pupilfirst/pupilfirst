@@ -58,6 +58,7 @@
         .col-md-2.col-xs-6
           .analysis-icon.m-x-auto
             = image_tag 'home/graduation-icon.svg'
+
           p
             ' 6
             span
@@ -65,15 +66,15 @@
         .col-md-2.col-xs-6
           .analysis-icon.m-x-auto
             = image_tag 'home/scholarship-icon.svg'
-  
+
           p
             ' 30
             span
-              | Scholoship by Paytm
+              | Scholaships by Paytm
         .col-md-2.col-xs-12
           .analysis-icon.m-x-auto
             = image_tag 'home/states-icon.svg'
-  
+
           p
             = state_count_from_applications
             span
@@ -126,6 +127,8 @@
               = image_tag 'home/official-partners/t-hub.png', class: "img-fluid"
               p
                 | T-HUB
+      .text-xs-center
+        = link_to 'Read More', apply_path, class: 'btn btn-primary btn-lg text-uppercase'
 
   #graduation-slide-section.graduated-slide
     .container-fluid
@@ -242,43 +245,165 @@
                 br
                 | Graduation Options
 
-  .graduation-summary
+  .success-story
     .container
       h3.text-xs-center.content-head
         span.content-title-icon.winner-icon
-        | Our First Batch Graduation Summary
-      .graduation-options.text-xs-center.row
-        .col-md-4
+        | Success Stories
+      .story-container.row
+        .story-box.content-box
           h4.text-xs-center.font-semibold
-            | GET FUNDED
-          p.option-desc.font-light
-            ' Startup gets funded through a venture capital firm or an angel investor
-          p.option-detail
-            ' <strong>SYM and Walat</strong> raised Seed funding of <strong>$7500</strong> from <strong>askme.com</strong>
-          .logo-block.m-t-1
-            = image_tag 'talent/askme-logo.png', class: "img-fluid"
+            | Spenwise
+          ul
+            li Part of Batch 1 of SV.CO's Digital Incubation Program
+            li Developed a great prototype in six months.
+            li Selection to Zone Startups, Mumbai
 
-        .col-md-4
-          h4.text-xs-center.font-semibold
-            | GET ACQUI-HIRED
-          p.option-desc.font-light
-            ' Founding team is hired on by another company that values the skillset
-          p.option-detail
-            ' <strong>Tally Acqui-hired Z-pay</strong> with an offer of <strong>
-            | 7 Lakh CTC</strong> to all four members of team
-          .logo-block.m-t-1
-            = image_tag 'talent/tally-logo.png', class: "img-fluid"
+          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
+            = image_tag 'home/success-stories/spenwise-logo.png', class: "img-fluid"
 
-        .col-md-4
+        .story-box.content-box
           h4.text-xs-center.font-semibold
-            | GET JOB
-          p.option-desc.font-light
-            ' Get hired at a great company because of the skills acquired while building a Startup
-          p.option-detail
-            ' Ola, Freecharge, Goqii, Citruspay, Tally etc.
-            | have made <strong>14 offers</strong>. Highest offer made is <strong>12.6 Lpa</strong>
-          .logo-block.m-t-1
-            = image_tag 'talent/first_batch_graduation_companies.png', class: "img-fluid"
+            | SYM
+          ul
+            li Part of Batch 1 of SV.CO's Digital Incubation Program
+            li Developed a great prototype in six months.
+            li In talks with banks for deploying prototype
+
+          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
+            = image_tag 'home/success-stories/SYM-logo.png', class: "img-fluid"
+
+        .story-box.content-box
+          h4.text-xs-center.font-semibold
+            | Fin Robotics
+          ul
+            li Youngest Speaker at the Mobile World Congress 2013, Barcelona
+            li  One of the TOP 50 startups in Vienna for Pioneers Festival 2013 
+            li One of the TOP 15 Startups from the world during CES'14 TechCrunch Hardware Battlefield
+
+          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
+            = image_tag 'home/success-stories/finrobotics-logo.png', class: "img-fluid"
+
+        .story-box.content-box
+          h4.text-xs-center.font-semibold
+            | MindHelix Technosol
+          ul
+            li NASSCOM Emerge Award
+            li NASSCOM mBillionth Award
+            li Runner up for World Youth Summit Awards, United Nations
+            li Winners, Intel App4India Contest
+
+          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
+            = image_tag 'home/success-stories/mindhelix-logo.png', class: "img-fluid"
+
+        .story-box.content-box
+          h4.text-xs-center.font-semibold
+            | Jiffstore
+          ul
+            li Top 100 innovative Product Companies - NASSCOM Product Conclave 2014
+            li Top 5 in Start-up Competition, 2015 - Wharton India Economic Forum
+
+          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
+            = image_tag 'home/success-stories/jiffstore-logo.png', class: "img-fluid"
+
+        .story-box.content-box
+          h4.text-xs-center.font-semibold
+            | iTraveller
+          ul
+            li Awarded as one among the top 30 global innovators in Travel Innovation Summit, Los Angeles
+
+
+          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
+            = image_tag 'home/success-stories/itraveller-logo.png', class: "img-fluid"
+
+        .story-box.content-box
+          h4.text-xs-center.font-semibold
+            | Asimov Robotics
+          ul
+            li Rated the Top 5 Innovators of 2012 by Deccan Chronicle
+            li The British High Commission rated them one of the Top 5 Innovators of 2013
+            li Shortlisted as One Of The 20 Great IDEAS of 2013 by Spiegel, Germany
+            li Won the Red Herring Asia Award consecutively in 2013 and 2014
+
+          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
+            = image_tag 'home/success-stories/asimov-logo.png', class: "img-fluid"
+
+        .story-box.content-box
+          h4.text-xs-center.font-semibold
+            | Profoundis Labs
+          ul
+            li First company from India to be selected to Startup Chile 2013
+            li Selected for the Microsoft Accelerator Program
+            li Top 20 Startups, Startup Bootcamp Lisbon
+            li Selected to the Silicon Valley Immersion Programme, Blackbox Connect 2013
+            li Top 10 startups in the IBM Smart Camp Startup Challenge 2012
+
+          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
+            = image_tag 'home/success-stories/profoundis-logo.png', class: "img-fluid"
+
+        .story-box.content-box
+          h4.text-xs-center.font-semibold
+            | Reckone Technologies
+          ul
+            li Awarded Rajeev Circle Fellowship, 2014
+            li Represented India for NASA Space Apps Challenge
+            li Represented India for University Rover Challenge USA, Mars Society Utah
+
+          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
+            = image_tag 'home/success-stories/reckone-logo.png', class: "img-fluid"
+
+        .story-box.content-box
+          h4.text-xs-center.font-semibold
+            | Flip Technologies
+          ul
+            li Won Next Big Idea Contest 2014 & chosen to be incubated at the Digital Media Zone (DMZ) at Ryerson University, Toronto
+            li Runner up of IIT Bombay Firehack 2014
+            li Selected to participate in the Flat6Labs accelerator program, Abu Dhabi
+
+          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
+            = image_tag 'home/success-stories/flip-logo.png', class: "img-fluid"
+
+        .story-box.content-box
+          h4.text-xs-center.font-semibold
+            | Livares Technologies
+          ul
+            li Won the Vodafone AppStar contest in “Best app for good – India” category
+
+          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
+            = image_tag 'home/success-stories/livares-logo.png', class: "img-fluid"
+
+        .story-box.content-box
+          h4.text-xs-center.font-semibold
+            | Agrima Infotech
+          ul
+            li Won the GREAT Tech Rocketships Initiative 2015 & invited to visit UK as part of UK Trade & Investment (UKTI) delegation
+
+          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
+            = image_tag 'home/success-stories/agrima-logo.png', class: "img-fluid"
+
+        .story-box.content-box
+          h4.text-xs-center.font-semibold
+            | Cognicor Technologies
+          ul
+            li Best Tech Startup Award from European Union in 2012
+            li Best emerging IT start-up award from NASSCOM, 2013
+
+          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
+            = image_tag 'home/success-stories/cognicor-logo.png', class: "img-fluid"
+
+        .story-box.content-box
+          h4.text-xs-center.font-semibold
+            | Mocioun TechLabs
+          ul
+            li India Leadership Award Nominee
+            li Winner Open Data Apps Challenge, Government of India & NASSCOM
+            li Panel Participant for 36th International Conference on Software Engineering
+            li Got selected for the United Nations Millennial Development Programme UNCTAD EMPRETEC
+
+          .logo-block.p-t-1.p-b-1.m-t-1.text-xs-center
+            = image_tag 'home/success-stories/mocioun-logo.png', class: "img-fluid"
+
+
 
   .program-partners
     .container

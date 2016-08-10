@@ -3,6 +3,7 @@
   = button_to 'Sweep in all unbatched applications', sweep_in_unbatched_admin_batch_path(@batch), data: { confirm: 'Are you sure?' }
 
   h3 Unpaid applications
+
   = semantic_form_for :sweep_in_unpaid_applications, url: sweep_in_unpaid_admin_batch_path(@batch) do |f|
     = f.inputs do
       = f.input :source_batch_id,
@@ -13,3 +14,16 @@
 
     = f.actions do
       = f.action :submit, label: 'Sweep in all unbatched applications', button_html: { :'data-confirm' => 'Are you sure?' }
+
+  h3 Rejected &amp; Expired applications
+
+  = semantic_form_for :sweep_in_rejected_applications, url: sweep_in_rejects_admin_batch_path(@batch) do |f|
+    = f.inputs do
+      = f.input :source_batch_id,
+        as: :select,
+        collection: Batch.where.not(id: @batch.id).order('batch_number DESC'),
+        include_blank: false,
+        label_method: proc { |item| 'foo' }
+
+    = f.actions do
+      = f.action :submit, label: 'Create fresh applications for rejected and expired applications', button_html: { :'data-confirm' => 'Are you sure?' }

@@ -118,9 +118,15 @@ destroyWaypoints = ->
   if $('.application-process').length
     Waypoint.destroyAll()
 
+helpIntercomPopup = ->
+  $(".help-intercom-link").click (e) ->
+    e.preventDefault()
+    Intercom('show')
+
 $(document).on 'page:change', setupSelect2Inputs
 $(document).on 'page:change', emailsShouldMatch
 $(document).on 'page:change', stickStartapplicationForm
 $(document).on 'page:change', scrolltoStartapplicationForm
 $(document).on 'page:change', stickyApplyButtonOnApplyPage
+$(document).on 'page:change', helpIntercomPopup
 $(document).on 'page:before-change', destroyWaypoints

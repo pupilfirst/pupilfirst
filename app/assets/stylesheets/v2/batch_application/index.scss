@@ -34,7 +34,7 @@
   a {
     margin-left: 15px;
 
-    @include media-breakpoint-down(xs) {
+    @include media-breakpoint-down(sm) {
       margin-top: 10px;
       margin-left: 0;
     }
@@ -216,8 +216,21 @@
   margin: 0 -30px;
 
   .help-icon {
+    display: block;
+    @include border-radius(50%);
+
     @include media-breakpoint-down(sm) {
       max-width: 100px;
+    }
+    &:hover, &:focus {
+      box-shadow: 0 0 2px $dark-secondary;
+    }
+  }
+  .help-intercom-link {
+    color: #FFF794;
+
+    &:hover {
+      color: #F3EA76;
     }
   }
   h2 {

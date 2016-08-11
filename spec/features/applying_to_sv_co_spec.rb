@@ -9,6 +9,17 @@ feature 'Applying to SV.CO' do
   let(:long_url) { 'http://example.com/a/b' }
   let(:short_url) { 'http://example.com/a/b' }
 
+  before do
+    # stub any requests to instamojo
+    allow_any_instance_of(Instamojo).to receive(:create_payment_request).and_return(
+      id: instamojo_payment_request_id,
+      status: 'Pending',
+      long_url: long_url,
+      short_url: short_url
+    )
+  end
+
+
   context 'when a batch is open for applications' do
     let!(:batch) { create :batch, application_stage: application_stage_1, application_stage_deadline: 15.days.from_now, next_stage_starts_on: 1.month.from_now }
 
@@ -35,18 +46,6 @@ feature 'Applying to SV.CO' do
       # prepare for invoking payment
       batch_applicant = BatchApplicant.find_by(email: 'elcapitan@thesea.com')
       batch_application = batch_applicant.batch_applications.last
-
-      # stubbing instamojo requests
-      allow_any_instance_of(Instamojo).to receive(:create_payment_request).with(
-        amount: batch_application.fee,
-        buyer_name: batch_application.team_lead.name,
-        email: batch_application.team_lead.email
-      ).and_return(
-        id: instamojo_payment_request_id,
-        status: 'Pending',
-        long_url: long_url,
-        short_url: short_url
-      )
 
       # user selects co-founder count and clicks pay
       select '2', from: 'application_stage_one_cofounder_count'
@@ -90,7 +89,7 @@ feature 'Applying to SV.CO' do
         batch_application.batch_applicants << batch_applicant
       end
 
-      scenario 'Returning applicant logs in' do
+      scenario 'returning applicant logs in' do
         # user signs in
         visit apply_path
         expect(page).to have_text('Did you complete registration once before?')
@@ -115,6 +114,48 @@ feature 'Applying to SV.CO' do
         # user must be at the payment page
         expect(page).to have_text('You now need to pay the application fee')
       end
+    end
+  end
+
+  context 'when a batch has moved to stage 2 - coding and video' do
+    # ready-to-use batch, batch_applicant and batch_application
+    let!(:batch) { create :batch, application_stage: application_stage_2, application_stage_deadline: 15.days.from_now, next_stage_starts_on: 1.month.from_now }
+    let(:batch_applicant) { create :batch_applicant }
+    let!(:batch_application) do
+      create :batch_application,
+        batch: batch,
+        application_stage: ApplicationStage.initial_stage,
+        university_id: University.last.id,
+        college: 'Random College',
+        team_lead_id: batch_applicant.id
+    end
+
+    before do
+      # add the applicant to the application
+      batch_application.batch_applicants << batch_applicant
+
+      # create a completed payment
+      payment =  create :payment, batch_application: batch_application, instamojo_payment_request_status: 'Completed',
+        instamojo_payment_status: 'Credit', paid_at: Time.now
+      payment.batch_application.perform_post_payment_tasks!
+    end
+
+    scenario 'paid applicant returns to submit his code and video links' do
+      visit apply_continue_path(token: batch_applicant.token, shared_device: false)
+
+      # user must see the coding and video tasks
+      expect(page).to have_text('Coding Task')
+      expect(page).to have_text('Video Task')
+
+      # user fills the stage 2 form and submits
+      fill_in 'application_stage_two_git_repo_url', with: 'https://github.com/user/repo'
+      select 'Website', from: 'application_stage_two_app_type'
+      fill_in 'application_stage_two_website', with: 'http://example.com'
+      fill_in 'application_stage_two_video_url', with: 'https://facebook.com/user/videos/random'
+      click_on 'Submit your entries'
+
+      # user submission must be acknowledged
+      expect(page).to have_text('Your coding and hustling submissions has been received')
     end
   end
 end

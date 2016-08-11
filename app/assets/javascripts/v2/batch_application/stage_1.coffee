@@ -13,4 +13,10 @@ showOrHidePaymentButton = (cofounderCount) ->
   else
     $('.paywith-instamojo').parent().removeClass('hidden-xs-up')
 
+stickCodeVideoSubmitForm = ->
+  $('#code-video-submit').stickit
+    top: 0,
+    screenMinWidth: 1024
+
 $(document).on 'page:change', prepareCofounderFields
+$(document).on 'page:change', stickCodeVideoSubmitForm

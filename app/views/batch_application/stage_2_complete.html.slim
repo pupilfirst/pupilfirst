@@ -10,16 +10,20 @@
   .m-t-3
     == render 'application_progress'
   .container-md-center.content-box.m-t-3.m-b-3
-    h4
-      ' Your coding and hustling submissions has been received. The SV.CO team will take a look at it soon as
-      ' possible, and results for all entries will be published by
+    h4.m-b-1
+      span.brand-secondary.font-regular
+        | Your coding and hustling submissions has been received.
+      ' The SV.CO team will take a look at it soon as possible, and results for all entries will be published by
       span.brand-primary.font-semibold
         | &nbsp;#{next_stage_date}.
 
-    .text-xs-center
-      h3 Your submission:
+    .row.code-video-links.text-xs-center
+      h3.m-b-1
+        | Your submission:
       - stage_2_submission.application_submission_urls.each do |entry|
-        p = link_to entry.name, entry.url, target: '_blank'
+        .col-md-4
+          .submission-links class= url_entry_class(entry.name)
+            = link_to entry.name, entry.url, target: '_blank'
 
     - unless current_batch.stage_expired?
       hr.m-y-2

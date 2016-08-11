@@ -45,13 +45,20 @@
             html: { class: 'form-horizontal' },
             wrapper: :horizontal_form do |f|
 
-            = f.input :cofounder_count,
+            = f.input :cofounder_count_select,
               label: 'Number of cofounders (founders other than yourself)',
-              collection: %w(2 3 4),
+              collection: ['1', '2', '3', '4', 'More than 4 (Enter number)'],
               as: :select,
               include_blank: 'Please select number of cofounders'
 
-            .text-xs-center.m-t-2 class="#{f.object.cofounder_count.blank? ? 'hidden-xs-up' : ''}"
+            .hidden-xs-up
+              = f.input :cofounder_count_number,
+                label: 'Number of cofounders (founders other than yourself)',
+                placeholder: 'Enter number',
+                input_html: { type: :number, min: '1', max: '9' },
+                disabled: true
+
+            .text-xs-center.m-t-2 class="#{f.object.cofounder_count_select.blank? ? 'hidden-xs-up' : ''}"
               .paywith-instamojo
                 div
                   h3.m-b-1

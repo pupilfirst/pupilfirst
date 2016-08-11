@@ -80,7 +80,6 @@ setupSelect2Inputs = ->
 toggleReferenceTextField = ->
   if $('#batch_application_team_lead_attributes_reference').val() == 'Other (Please Specify)'
     referenceTextInput = $('#batch_application_team_lead_attributes_reference_text')
-    # debugger
     referenceTextInput.parent().parent().removeClass('hidden-xs-up')
     $('#batch_application_team_lead_attributes_reference').parent().addClass('hidden-xs-up')
     referenceTextInput.focus()

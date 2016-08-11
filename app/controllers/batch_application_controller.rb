@@ -168,6 +168,7 @@ class BatchApplicationController < ApplicationController
   def stage_1
     @continue_mail_sent = params[:continue_mail_sent]
     @form = ApplicationStageOneForm.new(current_application)
+    @form.prepopulate!
   end
 
   def stage_1_submit
@@ -370,6 +371,8 @@ class BatchApplicationController < ApplicationController
       # Store a cookie that'll keep applicant signed in for 3 months.
       cookies[:applicant_token] = { value: applicant.token, expires: 3.months.from_now }
     end
+
+    raise StandardError
   end
 
   # Redirect applicant to sign in page is zhe isn't signed in.

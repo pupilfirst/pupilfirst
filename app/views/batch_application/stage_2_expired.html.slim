@@ -4,6 +4,8 @@
 
 .secondary-banner.application-stages-banner
   .container
+    .stages-alert-icon.m-x-auto
+      = image_tag 'apply/admission-process/expired-icon.svg'
     .application-stages-head.text-xs-center
       h1
         ' Deadline for tests are over.
@@ -11,6 +13,8 @@
 .container
   .m-t-3
     == render 'application_progress'
-  .container-md-center.content-box.m-t-3.m-b-3
+  .container-md-center.content-box.m-t-3.m-b-3.text-xs-center
     h4
-      ' We've sorry, but you missed the deadline for submitting your code and video.
+      ' We've sorry, but
+      span.brand-secondary.font-semibold
+        | you missed the deadline for submitting your code and video.

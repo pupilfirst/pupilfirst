@@ -28,5 +28,11 @@ toggleCofounderCountFieldOnLoad = ->
     toggleCofounderCountFieldOnChange()
     $('#application_stage_one_cofounder_count_select').change toggleCofounderCountFieldOnChange
 
+stickCodeVideoSubmitForm = ->
+  $('#code-video-submit').stickit
+    top: 0,
+    screenMinWidth: 1024
+
 $(document).on 'page:change', prepareCofounderFields
 $(document).on 'page:change', toggleCofounderCountFieldOnLoad
+$(document).on 'page:change', stickCodeVideoSubmitForm

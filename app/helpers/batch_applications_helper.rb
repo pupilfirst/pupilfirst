@@ -45,7 +45,15 @@ module BatchApplicationsHelper
   end
 
   def pretty_stage_status(stage_number)
-    stage_status(stage_number).to_s.tr('_', ' ').capitalize
+    if stage_status(stage_number) == :ongoing
+      "Ends on #{stage_deadline}"
+    else
+      stage_status(stage_number).to_s.tr('_', ' ').capitalize
+    end
+  end
+
+  def stage_deadline
+    current_batch.application_stage_deadline.strftime('%b %d')
   end
 
   def stage_2_submission
@@ -54,6 +62,21 @@ module BatchApplicationsHelper
         batch_application_id: current_application.id,
         application_stage_id: applicant_stage.id
       ).first
+    end
+  end
+
+  def url_entry_class(name)
+    name = name.downcase
+    if 'code'.in? name
+      'icon-code'
+    elsif 'video'.in? name
+      'icon-video'
+    elsif 'web'.in? name
+      'icon-website'
+    elsif 'app'.in? name
+      'icon-application'
+    else
+      'icon-default'
     end
   end
 end

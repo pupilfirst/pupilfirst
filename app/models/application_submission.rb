@@ -1,7 +1,7 @@
 class ApplicationSubmission < ActiveRecord::Base
   belongs_to :application_stage
   belongs_to :batch_application
-  has_many :application_submission_urls
+  has_many :application_submission_urls, dependent: :destroy
 
   accepts_nested_attributes_for :application_submission_urls, allow_destroy: true
 

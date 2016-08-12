@@ -158,7 +158,7 @@ class BatchApplicationController < ApplicationController
   def rejected
     return redirect_to(apply_continue_path) if applicant_status != :rejected
     try "stage_#{applicant_stage_number}_rejected"
-    render "stage_#{applicant_stage_number}_rejected"
+    render "stage_#{applicant_stage_number}_rejection"
   end
 
   ####

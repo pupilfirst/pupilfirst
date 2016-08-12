@@ -81,7 +81,11 @@
                   = image_tag 'apply/admission-process/batch_start.svg'
                 h5
                   | Batch Start
-
+        .our-program
+          h2
+            ' Our <strong>Program</strong>
+          .slideshare-embed
+            iframe.slideshare-frame src="//www.slideshare.net/slideshow/embed_code/key/2w0Ffb4moASiss" width="100%" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" allowfullscreen="allowfullscreen"
         .important-dates
           h2
             ' Important <strong>Dates</strong>
@@ -252,13 +256,17 @@
                         | one co-founders who is a programmer in your team to apply.
         .help-section.clearfix
           .col-md-3
-            .help-icon
-              = image_tag 'apply/admission-process/help_icon.svg'
+            a.help-intercom-link.help-icon href= "#"
+              = image_tag 'apply/admission-process/intercom-chat-icon.svg'
           .col-md-9
             h2
               ' We are here to <strong>help you</strong>
             p
-              ' Please email your doubts or questions to <strong>help@sv.co</strong> or <strong>talk to us using the friendly chat window in the bottom right corner.</strong>
+              ' Please email your doubts or questions to <strong>help@sv.co</strong>
+              br
+              | or
+              a.help-intercom-link href= "#"
+                | <strong> Talk to us using the friendly chat window</strong>
         .fees-section
           h2
             ' <strong>Fees</strong>
@@ -394,5 +402,5 @@
               div
                 = f.submit 'Submit my application', class: 'btn btn-primary btn-md text-uppercase'
 
-a#sticky-start-application.btn.btn-primary.btn-md.text-uppercase.sticky-application-button.visible-md-down href="#start-application-process"
+a#sticky-start-application.btn.btn-primary.btn-md.text-uppercase.sticky-application-button.hidden-md-up href="#start-application-process"
   | Start Application

@@ -2,7 +2,7 @@ require_relative 'helper'
 
 after 'development:module_chapters' do
   question = QuizQuestion.new(
-    course_module: CourseModule.find_by_module_number(1),
+    course_module: CourseModule.find_by_module_number(2),
     question: 'Is Fin Robotics a successful business?'
   )
 
@@ -33,7 +33,7 @@ after 'development:module_chapters' do
   )
 
   question = QuizQuestion.new(
-    course_module: CourseModule.find_by_module_number(1),
+    course_module: CourseModule.find_by_module_number(2),
     question: 'Fin Robotics went through four failed products before building Fin. Was that a good thing?'
   )
 

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 20.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 64 64" style="enable-background:new 0 0 64 64;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#0AA5E3;}
+</style>
+<g id="Browser-window-squares">
+	<path class="st0" d="M18,42h2v-2v-8v-2h-2h-8H8v2v8v2h2H18z M10,32h8v8h-8V32z"/>
+	<path class="st0" d="M36,42h2v-2v-8v-2h-2h-8h-2v2v8v2h2H36z M28,32h8v8h-8V32z"/>
+	<path class="st0" d="M54,42h2v-2v-8v-2h-2h-8h-2v2v8v2h2H54z M46,32h8v8h-8V32z"/>
+	<path class="st0" d="M60,5H4C1.8,5,0,6.8,0,9v5v2v39c0,2.2,1.8,4,4,4h56c2.2,0,4-1.8,4-4V16v-2V9C64,6.8,62.2,5,60,5z M62,55
+		c0,1.1-0.9,2-2,2H4c-1.1,0-2-0.9-2-2V16h60V55z M62,14H2V9c0-1.1,0.9-2,2-2h56c1.1,0,2,0.9,2,2V14z"/>
+	<path class="st0" d="M6,9c-1,0-1.8,0.8-1.8,1.8c0,1,0.8,1.8,1.8,1.8c1,0,1.8-0.8,1.8-1.8C7.8,9.8,7,9,6,9z M6,11.5
+		c-0.4,0-0.8-0.3-0.8-0.8S5.6,10,6,10c0.4,0,0.8,0.3,0.8,0.8S6.4,11.5,6,11.5z"/>
+	<path class="st0" d="M16,9c-1,0-1.8,0.8-1.8,1.8c0,1,0.8,1.8,1.8,1.8c1,0,1.8-0.8,1.8-1.8C17.8,9.8,17,9,16,9z M16,11.5
+		c-0.4,0-0.8-0.3-0.8-0.8S15.6,10,16,10s0.8,0.3,0.8,0.8S16.4,11.5,16,11.5z"/>
+	<path class="st0" d="M11,9c-1,0-1.8,0.8-1.8,1.8c0,1,0.8,1.8,1.8,1.8c1,0,1.8-0.8,1.8-1.8C12.8,9.8,12,9,11,9z M11,11.5
+		c-0.4,0-0.8-0.3-0.8-0.8S10.6,10,11,10c0.4,0,0.8,0.3,0.8,0.8S11.4,11.5,11,11.5z"/>
+</g>
+</svg>

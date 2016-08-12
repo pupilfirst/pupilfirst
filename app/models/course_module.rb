@@ -34,4 +34,12 @@ class CourseModule < ActiveRecord::Base
   end
 
   scope :published, -> { where('publish_at < ?', Time.now) }
+
+  def quiz?
+    quiz_questions.any?
+  end
+
+  def self.with_quiz
+    CourseModule.select(&:quiz?)
+  end
 end

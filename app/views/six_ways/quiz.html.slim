@@ -4,7 +4,10 @@ title Quiz # #{module_number} | Start in College
 .container
   .container-md-center.content-box.m-t-3.m-b-3
     h5.form-section-title.font-semibold.m-b-2
-      | Quiz For Module #{@module.module_number}: #{@module.name}
+      | Quiz For Module #{module_number}: #{module_name}
+
+    .row
+      = render "six_ways/module_#{module_number}/quiz_header" if module_has_quiz_header?
 
     .simple-form-container
       .row

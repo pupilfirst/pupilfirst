@@ -16,4 +16,8 @@ module ResourcesHelper
   def search_text
     params[:search].present? ? "whose title contains \'#{params[:search].downcase}\'" : ''
   end
+
+  def date_filter_options
+    ['Since Yesterday', 'Past Week', 'Past Month', 'Past Year']
+  end
 end

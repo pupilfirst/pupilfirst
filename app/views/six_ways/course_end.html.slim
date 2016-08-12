@@ -24,6 +24,7 @@
           th
       tbody
         - CourseModule.all.each do |course_module|
+          - next unless course_module.quiz?
           tr
             th scope="row"
               ' #{course_module.module_number}

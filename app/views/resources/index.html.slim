@@ -23,6 +23,7 @@
         = form_tag nil, method: "get" do
           = select_tag "tags", options_for_select(@resource_tags, params[:tags]), multiple: true, include_blank: true, id: "resources-index-tags", class: "tag-select"
           = text_field_tag "search", params[:search], placeholder: 'Title contains', class: 'search-field'
+          = select_tag 'created_after', options_for_select(date_filter_options, params[:created_after]), include_blank: 'Added Anytime', class: 'search-field'
           = button_tag name: "Filter", type: "submit", class: 'btn btn-primary tag-filter-btn text-uppercase' do
             i.fa.fa-filter
             | Filter

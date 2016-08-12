@@ -3,6 +3,9 @@ class Batch < ActiveRecord::Base
   has_many :founders, through: :startups
   has_many :batch_applications
   belongs_to :application_stage
+  has_many :batch_stages, dependent: :destroy
+
+  accepts_nested_attributes_for :batch_stages, allow_destroy: true
 
   scope :live, -> { where('start_date <= ? and end_date >= ?', Time.now, Time.now) }
   scope :not_completed, -> { where('end_date >= ?', Time.now) }
@@ -30,13 +33,13 @@ class Batch < ActiveRecord::Base
     format: { with: /#[^A-Z\s.;!?]+/, message: 'must start with a # and not contain uppercase, spaces or periods' },
     length: { in: 2..22, message: 'channel name should be 1-21 characters' }, allow_nil: true
 
-  validate :application_dates_changes_with_stage
+  validate :must_have_dates_for_stage
 
-  def application_dates_changes_with_stage
-    return unless application_stage_id_changed?
-    return if application_stage.final_stage?
-    errors[:application_stage_deadline] << 'must change with application stage' unless application_stage_deadline_changed?
-    errors[:next_stage_starts_on] << 'must change with application stage' unless next_stage_starts_on_changed?
+  def must_have_dates_for_stage
+    return if application_stage_id.blank?
+    return if batch_stages.select { |sd| sd.application_stage_id == application_stage_id }.present?
+    errors[:base] << 'Please make sure that stage dates are also available'
+    errors[:application_stage] << 'does not have its dates set'
   end
 
   after_save :send_emails_to_applicants

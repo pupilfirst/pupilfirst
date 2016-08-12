@@ -3,7 +3,21 @@ require 'rails_helper'
 describe InstamojoController do
   let(:application_stage) { create :application_stage, number: 1 }
   let!(:application_stage_2) { create :application_stage, number: 2 }
-  let(:batch) { create :batch, application_stage: application_stage, application_stage_deadline: 1.week.from_now, next_stage_starts_on: 3.weeks.from_now }
+
+  let(:batch) do
+    create :batch,
+      application_stage: application_stage,
+      application_stage_deadline: 15.days.from_now,
+      next_stage_starts_on: 1.month.from_now,
+      batch_stages_attributes: [
+        {
+          application_stage_id: application_stage.id,
+          starts_at: 15.days.ago,
+          ends_at: 15.days.from_now
+        }
+      ]
+  end
+
   let(:batch_application) { create :batch_application, application_stage: application_stage, batch: batch }
   let(:instamojo_payment_request_id) { SecureRandom.hex }
   let(:long_url) { Faker::Internet.url }

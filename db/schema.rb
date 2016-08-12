@@ -156,6 +156,18 @@ ActiveRecord::Schema.define(version: 20160812102719) do
   add_index "batch_applications", ["team_lead_id"], name: "index_batch_applications_on_team_lead_id", using: :btree
   add_index "batch_applications", ["university_id"], name: "index_batch_applications_on_university_id", using: :btree
 
+  create_table "batch_stages", force: :cascade do |t|
+    t.integer  "batch_id"
+    t.integer  "application_stage_id"
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "batch_stages", ["application_stage_id"], name: "index_batch_stages_on_application_stage_id", using: :btree
+  add_index "batch_stages", ["batch_id"], name: "index_batch_stages_on_batch_id", using: :btree
+
   create_table "batches", force: :cascade do |t|
     t.string   "theme"
     t.text     "description"

@@ -45,6 +45,7 @@
             .list-group.list-group-flush
               - course_module.module_chapters.order(:chapter_number).each do |chapter|
                 a.list-group-item href="#{six_ways_module_path(course_module.slug, chapter.chapter_number)}" #{chapter.name}
-              a.list-group-item href="#{six_ways_quiz_path(course_module.slug)}" Quiz #{course_module.module_number}
+              - if course_module.quiz?
+                a.list-group-item href="#{six_ways_quiz_path(course_module.slug)}" Quiz
 
 

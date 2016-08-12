@@ -11,7 +11,7 @@ class MoocStudent < ActiveRecord::Base
 
   def score
     # rubocop: disable SingleLineBlockParams
-    CourseModule.all.inject(0.0) { |sum, course_module| sum + score_for_module(course_module) } / CourseModule.all.count
+    CourseModule.with_quiz.inject(0.0) { |sum, course_module| sum + score_for_module(course_module) } / CourseModule.with_quiz.count
     # rubocop: enable SingleLineBlockParams
   end
 

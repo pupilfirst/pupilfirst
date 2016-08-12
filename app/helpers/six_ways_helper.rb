@@ -6,8 +6,9 @@ module SixWaysHelper
   end
 
   def next_page
-    return quiz_of_this_module if last_chapter?
-    next_chapter
+    return next_chapter unless last_chapter?
+    return quiz_of_this_module if @module.quiz?
+    start_of_next_module
   end
 
   def module_number

@@ -18,8 +18,10 @@ ActiveAdmin.register QuizQuestion do
     f.semantic_errors
 
     # TODO: Reduce height of the text field below. 'input_html' seems to be malfunctioning
-    f.inputs :question
-    f.inputs :course_module
+    f.inputs 'Question Details' do
+      f.input :question
+      f.input :course_module
+    end
 
     f.inputs 'Answer Options' do
       f.has_many :answer_options, heading: false, allow_destroy: true, new_record: 'Add Option' do |o|

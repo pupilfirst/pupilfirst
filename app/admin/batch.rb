@@ -5,7 +5,10 @@ ActiveAdmin.register Batch do
 
   permit_params :theme, :description, :start_date, :end_date, :batch_number, :slack_channel, :application_stage_id,
     :application_stage_deadline_date, :application_stage_deadline_time_hour, :application_stage_deadline_time_minute,
-    :next_stage_starts_on
+    :next_stage_starts_on, batch_stages_attributes: [
+      :id, :application_stage_id, :starts_at_date, :starts_at_time_hour, :starts_at_time_minute, :ends_at_date,
+      :ends_at_time_hour, :ends_at_time_minute, :_destroy
+    ]
 
   config.sort_order = 'batch_number_asc'
 
@@ -40,6 +43,14 @@ ActiveAdmin.register Batch do
       f.input :start_date, as: :datepicker
       f.input :end_date, as: :datepicker
       f.input :slack_channel
+    end
+
+    f.inputs 'Stage Dates' do
+      f.has_many :batch_stages, heading: false, allow_destroy: true, new_record: 'Add Stage' do |s|
+        s.input :application_stage, collection: ApplicationStage.order('number ASC')
+        s.input :starts_at, as: :just_datetime_picker
+        s.input :ends_at, as: :just_datetime_picker
+      end
     end
 
     f.actions

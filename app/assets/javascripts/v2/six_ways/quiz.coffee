@@ -59,6 +59,7 @@ showQuestion = (questionIndex) ->
   $("#question-container-#{questionIndex}").removeClass('hidden-xs-up')
   resetButtons()
   showFinishButton() if lastQuestion(questionIndex)
+  handleAnswerSelect()
 
 showFinishButton = ->
   $('.question-next-button').addClass('hidden-xs-up')

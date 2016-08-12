@@ -19,7 +19,19 @@ feature 'Applying to SV.CO' do
   end
 
   context 'when a batch is open for applications' do
-    let!(:batch) { create :batch, application_stage: application_stage_1, application_stage_deadline: 15.days.from_now, next_stage_starts_on: 1.month.from_now }
+    let!(:batch) do
+      create :batch,
+        application_stage: application_stage_1,
+        application_stage_deadline: 15.days.from_now,
+        next_stage_starts_on: 1.month.from_now,
+        batch_stages_attributes: [
+          {
+            application_stage_id: application_stage_1.id,
+            starts_at: 15.days.ago,
+            ends_at: 15.days.from_now
+          }
+        ]
+    end
 
     scenario 'user visits apply page' do
       visit apply_path

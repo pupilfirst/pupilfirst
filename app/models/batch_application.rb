@@ -113,7 +113,7 @@ class BatchApplication < ActiveRecord::Base
   # Returns either a completed Payment (Stage 1), or ApplicationSubmission (any other stage), or nil
   def submission
     if application_stage.initial_stage?
-      payment.paid? ? payment : nil
+      payment.present? && payment.paid? ? payment : nil
     else
       application_submissions.find_by(application_stage: application_stage)
     end

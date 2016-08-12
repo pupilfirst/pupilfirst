@@ -21,18 +21,10 @@ feature 'Applying to SV.CO' do
 
 
   context 'when a batch is open for applications' do
-    let!(:batch) do
-      create :batch,
-        application_stage: application_stage_1,
-        application_stage_deadline: 15.days.from_now,
-        next_stage_starts_on: 1.month.from_now,
-        batch_stages_attributes: [
-          {
-            application_stage_id: application_stage_1.id,
-            starts_at: 15.days.ago,
-            ends_at: 15.days.from_now
-          }
-        ]
+    let(:batch) { create :batch }
+
+    before do
+      create :batch_stage, batch: batch, application_stage: application_stage_1
     end
 
     scenario 'user submits application and pays' do
@@ -130,9 +122,9 @@ feature 'Applying to SV.CO' do
   end
 
   context 'when a batch has moved to stage 2 - coding and video' do
-    # ready-to-use batch, batch_applicant and batch_application
-    let!(:batch) { create :batch, application_stage: application_stage_2, application_stage_deadline: 15.days.from_now, next_stage_starts_on: 1.month.from_now }
+    let(:batch) { create :batch }
     let(:batch_applicant) { create :batch_applicant }
+
     let!(:batch_application) do
       create :batch_application,
         batch: batch,
@@ -143,11 +135,14 @@ feature 'Applying to SV.CO' do
     end
 
     before do
+      # Batch is in stage 2
+      create :batch_stage, batch: batch, application_stage: application_stage_2
+
       # add the applicant to the application
       batch_application.batch_applicants << batch_applicant
 
       # create a completed payment
-      payment =  create :payment, batch_application: batch_application, instamojo_payment_request_status: 'Completed',
+      payment = create :payment, batch_application: batch_application, instamojo_payment_request_status: 'Completed',
         instamojo_payment_status: 'Credit', paid_at: Time.now
       payment.batch_application.perform_post_payment_tasks!
     end

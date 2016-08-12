@@ -48,7 +48,7 @@ feature 'Applying to SV.CO' do
       batch_application = batch_applicant.batch_applications.last
 
       # user selects co-founder count and clicks pay
-      select '2', from: 'application_stage_one_cofounder_count'
+      select '2', from: 'application_stage_one_cofounder_count_select'
       expect(page).to have_text('You need to pay Rs. 3000')
       click_on 'Pay Fees Online'
 

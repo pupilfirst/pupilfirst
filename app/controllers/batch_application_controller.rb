@@ -371,8 +371,6 @@ class BatchApplicationController < ApplicationController
       # Store a cookie that'll keep applicant signed in for 3 months.
       cookies[:applicant_token] = { value: applicant.token, expires: 3.months.from_now }
     end
-
-    raise StandardError
   end
 
   # Redirect applicant to sign in page is zhe isn't signed in.

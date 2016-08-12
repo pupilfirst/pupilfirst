@@ -67,6 +67,7 @@ class SixWaysController < ApplicationController
     raise_not_found unless chapter_exists?
     @module = CourseModule.friendly.find(params[:name])
     @chapter = @module.module_chapters.find_by_chapter_number params[:chapter_number].to_i
+    @skip_container = true
   end
 
   # GET /sixways/quiz/:name

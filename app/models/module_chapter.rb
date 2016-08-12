@@ -1,6 +1,13 @@
 class ModuleChapter < ActiveRecord::Base
   belongs_to :course_module
 
+  extend FriendlyId
+  friendly_id :name, use: :slugged
+
+  def should_generate_new_friendly_id?
+    name_changed? || super
+  end
+
   validates_presence_of :chapter_number, :name, :course_module_id
   validates_uniqueness_of :chapter_number, scope: :course_module_id
 

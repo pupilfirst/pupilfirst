@@ -60,22 +60,22 @@ class SixWaysController < ApplicationController
     end
   end
 
-  # GET /sixways/:name/:chapter_number
+  # GET /sixways/:module_name/:chapter_name
   #
   # Displays the content of a module's chapter.
   def module
     raise_not_found unless chapter_exists?
-    @module = CourseModule.friendly.find(params[:name])
-    @chapter = @module.module_chapters.find_by_chapter_number params[:chapter_number].to_i
+    @module = CourseModule.friendly.find(params[:module_name])
+    @chapter = @module.module_chapters.find_by(slug: params[:chapter_name])
   end
 
-  # GET /sixways/quiz/:name
+  # GET /sixways/quiz/:module_name
   #
   # Displays the quiz questions
   def quiz
     raise_not_found unless module_exists?
 
-    @module = CourseModule.friendly.find(params[:name])
+    @module = CourseModule.friendly.find(params[:module_name])
     @questions = @module.quiz_questions.shuffle
 
     @form = QuizSubmissionForm.new(OpenStruct.new)
@@ -138,11 +138,11 @@ class SixWaysController < ApplicationController
   end
 
   def module_exists?
-    CourseModule.friendly.find(params[:name]).present?
+    CourseModule.friendly.find(params[:module_name]).present?
   end
 
   def module_has_chapter?
-    params[:chapter_number].to_i.in? CourseModule.friendly.find(params[:name]).module_chapters.pluck(:chapter_number)
+    params[:chapter_name].in? CourseModule.friendly.find(params[:module_name]).module_chapters.pluck(:slug)
   end
 
   def chapter_exists?

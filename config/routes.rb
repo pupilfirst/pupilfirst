@@ -172,8 +172,8 @@ Svapp::Application.routes.draw do
     # TODO: why is a patch request send after a few rounds of errors ?
     post 'save_student_details'
     patch 'save_student_details'
-    get ':name/:chapter_number', action: 'module', as: 'module'
-    get 'quiz/:name', action: 'quiz', as: 'quiz'
+    get 'quiz/:module_name', action: 'quiz', as: 'quiz'
+    get ':module_name/:chapter_name', action: 'module', as: 'module'
     post 'quiz_submission'
     get 'course_end'
     get 'completion_certificate'

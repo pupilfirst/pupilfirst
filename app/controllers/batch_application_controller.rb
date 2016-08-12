@@ -1,19 +1,18 @@
 class BatchApplicationController < ApplicationController
   before_action :ensure_applicant_is_signed_in, except: %w(index register identify send_sign_in_email continue sign_in_email_sent)
-  before_action :ensure_batch_active, except: %w(index register identify send_sign_in_email continue sign_in_email_sent batch_pending)
   before_action :ensure_accurate_stage_number, only: %w(ongoing submit complete restart expired rejected)
-  before_action :set_instance_variables
-  before_action :hide_nav_links
+  before_action :load_common_instance_variables
 
   layout 'application_v2'
 
   helper_method :current_batch_applicant
   helper_method :current_batch
-  helper_method :current_stage
   helper_method :current_application
-  helper_method :applicant_stage
-  helper_method :applicant_stage_number
-  helper_method :applicant_status
+  helper_method :application_stage
+  helper_method :application_stage_number
+  helper_method :application_status
+  helper_method :stage_expired?
+  helper_method :stage_active?
 
   # GET /apply
   def index
@@ -33,7 +32,7 @@ class BatchApplicationController < ApplicationController
 
       sign_in_applicant_temporarily(applicant)
 
-      redirect_to apply_stage_path(stage_number: applicant_stage_number, continue_mail_sent: 'yes')
+      redirect_to apply_stage_path(stage_number: application_stage_number, continue_mail_sent: 'yes')
     else
       render 'index'
     end
@@ -74,23 +73,23 @@ class BatchApplicationController < ApplicationController
   def continue
     check_token
 
-    # TODO: Consider case where there is no ongoing batch.
-
-    case applicant_status
-      when :application_pending
+    case application_status
+      when :pending
         redirect_to apply_path
       when :batch_pending
         redirect_to apply_batch_pending_path
       when :ongoing
-        redirect_to apply_stage_path(stage_number: applicant_stage_number)
+        redirect_to apply_stage_path(stage_number: application_stage_number)
       when :expired
-        redirect_to apply_stage_expired_path(stage_number: applicant_stage_number)
+        redirect_to apply_stage_expired_path(stage_number: application_stage_number)
       when :rejected
-        redirect_to apply_stage_rejected_path(stage_number: applicant_stage_number)
-      when :complete
-        redirect_to apply_stage_complete_path(stage_number: current_stage_number)
+        redirect_to apply_stage_rejected_path(stage_number: application_stage_number)
+      when :submitted
+        redirect_to apply_stage_complete_path(stage_number: application_stage_number)
+      when :promoted
+        redirect_to apply_stage_complete_path(stage_number: (application_stage_number - 1))
       else
-        raise "Unexpected applicant_status: #{applicant_status}"
+        raise "Unexpected application_status: #{application_status}"
     end
   end
 
@@ -102,7 +101,7 @@ class BatchApplicationController < ApplicationController
   # POST /apply/restart
   def restart_application
     # Only applications in stage 1 can restart.
-    raise_not_found if applicant_stage_number != 1
+    raise_not_found if application_stage_number != 1
     current_application&.restart!
 
     flash[:success] = 'Your previous application has been discarded.'
@@ -112,17 +111,17 @@ class BatchApplicationController < ApplicationController
 
   # GET /apply/stage/:stage_number
   def ongoing
-    return redirect_to(apply_continue_path) if applicant_status != :ongoing
-    try "stage_#{applicant_stage_number}"
-    render "stage_#{applicant_stage_number}"
+    return redirect_to(apply_continue_path) if application_status != :ongoing
+    try "stage_#{application_stage_number}"
+    render "stage_#{application_stage_number}"
   end
 
   # POST /apply/stage/:stage_number/submit
   def submit
-    raise_not_found if applicant_status != :ongoing
+    raise_not_found if application_status != :ongoing
 
     begin
-      send "stage_#{applicant_stage_number}_submit"
+      send "stage_#{application_stage_number}_submit"
     rescue NoMethodError
       raise_not_found
     end
@@ -130,18 +129,18 @@ class BatchApplicationController < ApplicationController
 
   # GET /apply/stage/:stage_number/complete
   def complete
-    return redirect_to(apply_continue_path) if applicant_status != :complete
-    try "stage_#{applicant_stage_number}_complete"
-    render "stage_#{current_stage_number}_complete"
+    return redirect_to(apply_continue_path) if application_status != :complete
+    try "stage_#{application_stage_number}_complete"
+    render "stage_#{application_stage_number}_complete"
   end
 
   # POST /apply/stage/:stage_number/restart
   def restart
-    return redirect_to(apply_continue_path) if applicant_status != :complete
-    raise_not_found if current_batch&.stage_expired?
+    return redirect_to(apply_continue_path) if application_status != :complete
+    raise_not_found if stage_expired?
 
     begin
-      send "stage_#{applicant_stage_number}_restart"
+      send "stage_#{application_stage_number}_restart"
     rescue NoMethodError
       raise_not_found
     end
@@ -149,16 +148,16 @@ class BatchApplicationController < ApplicationController
 
   # GET /apply/stage/:stage_number/expired
   def expired
-    return redirect_to(apply_continue_path) if applicant_status != :expired
-    try "stage_#{applicant_stage_number}_expired"
-    render "stage_#{applicant_stage_number}_expired"
+    return redirect_to(apply_continue_path) if application_status != :expired
+    try "stage_#{application_stage_number}_expired"
+    render "stage_#{application_stage_number}_expired"
   end
 
   # GET /apply/stage/:stage_number/rejected
   def rejected
-    return redirect_to(apply_continue_path) if applicant_status != :rejected
-    try "stage_#{applicant_stage_number}_rejected"
-    render "stage_#{applicant_stage_number}_rejection"
+    return redirect_to(apply_continue_path) if application_status != :rejected
+    try "stage_#{application_stage_number}_rejected"
+    render "stage_#{application_stage_number}_rejected"
   end
 
   ####
@@ -201,7 +200,7 @@ class BatchApplicationController < ApplicationController
 
   def stage_2_submit
     application_submission = ApplicationSubmission.new(
-      application_stage: current_stage,
+      application_stage: ApplicationStage.find_by(number: 2),
       batch_application: current_application
     )
 
@@ -216,7 +215,7 @@ class BatchApplicationController < ApplicationController
   end
 
   def stage_2_restart
-    stage_2_submission = current_application.application_submissions.where(application_stage_id: applicant_stage.id).first
+    stage_2_submission = current_application.application_submissions.where(application_stage_id: application_stage.id).first
     stage_2_submission.destroy!
     redirect_to apply_stage_path(stage_number: 2)
   end
@@ -226,7 +225,7 @@ class BatchApplicationController < ApplicationController
 
     # TODO: How to handle file uploads (if any for pre-selection)?
     current_application.application_submissions.create!(
-      application_stage: current_stage
+      application_stage: ApplicationStage.find_by(number: 4)
     )
 
     redirect_to apply_stage_complete_path(stage_number: '4')
@@ -241,18 +240,8 @@ class BatchApplicationController < ApplicationController
     end
   end
 
-  # Returns the application_stage that current batch is at.
-  def current_stage
-    @current_stage ||= current_batch&.application_stage
-  end
-
-  # Returns the stage number of current batch.
-  def current_stage_number
-    @current_stage_number ||= current_stage&.number.to_i
-  end
-
-  def applicant_stage
-    @applicant_stage ||= begin
+  def application_stage
+    @application_stage ||= begin
       if current_application.blank?
         ApplicationStage.find_by number: 1
       else
@@ -262,8 +251,8 @@ class BatchApplicationController < ApplicationController
   end
 
   # Returns stage number of current applicant.
-  def applicant_stage_number
-    @applicant_stage_number ||= applicant_stage.number
+  def application_stage_number
+    @application_stage_number ||= application_stage.number
   end
 
   # Returns batch application of current applicant.
@@ -288,67 +277,27 @@ class BatchApplicationController < ApplicationController
     end
   end
 
-  # Returns one of :application_pending, :batch_pending, :ongoing, :expired, :rejected, :complete to indicate which
-  # view should be rendered.
-  #
-  # rubocop:disable Metrics/PerceivedComplexity, Metrics/MethodLength
-  def applicant_status
-    @applicant_status ||= begin
-      if current_application.blank?
-        :application_pending
-      elsif applicant_stage_number == 1
-        if current_application.batch.blank?
-          :batch_pending
-        elsif current_stage_number == 1 || (current_stage_number == 2 && !stage_expired?)
-          :ongoing
-        else
-          :expired
-        end
-      elsif applicant_stage_number == current_stage_number
-        if applicant_has_submitted?
-          :complete
-        else
-          stage_expired? ? :expired : :ongoing
-        end
-      elsif applicant_stage_number > current_stage_number
-        :complete
-      else
-        applicant_has_submitted? ? :rejected : :expired
-      end
-    end
-  end
-
-  private
-
-  def set_instance_variables
-    @skip_container = true
-    @hide_sign_in = true
-  end
-
-  def login_state
-    cached_status = applicant_status
-
-    case cached_status
-      when :application_pending, :application_expired, :payment_pending
-        cached_status.to_s
-      else
-        "stage_#{applicant_stage_number}_#{cached_status}"
-    end
-  end
-
-  def applicant_has_submitted?
-    return true if applicant_stage_number == 1
-
-    ApplicationSubmission.where(
-      batch_application_id: current_application.id,
-      application_stage_id: applicant_stage.id
-    ).present?
+  # Returns one of :pending, :ongoing, :expired, :rejected, :complete, or :promoted to indicate which view should be
+  # rendered.
+  def application_status
+    @application_status ||= (current_application&.status || :pending)
   end
 
   # Batch's stage should have expired, and current stage should be same as application stage.
   def stage_expired?
-    return false if current_batch.blank?
-    current_batch.stage_expired?
+    @stage_expired ||= current_batch.stage_expired?(application_stage)
+  end
+
+  def stage_active?
+    @stage_active ||= current_batch.stage_active?(application_stage)
+  end
+
+  private
+
+  def load_common_instance_variables
+    @skip_container = true
+    @hide_sign_in = true
+    @hide_nav_links = true
   end
 
   # Check whether a token parameter has been supplied. Sign in application founder if there's a corresponding entry.
@@ -379,25 +328,16 @@ class BatchApplicationController < ApplicationController
     redirect_to apply_identify_url(batch: params[:batch_number])
   end
 
-  def ensure_batch_active
-    raise_not_found if current_stage_number == 0
-  end
-
+  # Make sure that the stage number supplied in the URL matches application's state.
   def ensure_accurate_stage_number
-    expected_stage_number = if current_stage_number == 1 && applicant_stage_number == 2
-      1
-    else
-      applicant_stage_number
-    end
+    # If the application has been promoted, but batch is still at the earlier stage, the displayed stage number will be
+    # one less than the application's stage.
+    expected_stage_number = (application_status == :promoted ? application_stage_number - 1 : application_stage_number)
 
     redirect_to apply_continue_path if params[:stage_number].to_i != expected_stage_number
   end
 
   def sign_in_applicant_temporarily(applicant)
     session[:applicant_token] = applicant.token
-  end
-
-  def hide_nav_links
-    @hide_nav_links = true
   end
 end

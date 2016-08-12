@@ -3,12 +3,10 @@ ActiveAdmin.register Batch do
 
   menu parent: 'Admissions'
 
-  permit_params :theme, :description, :start_date, :end_date, :batch_number, :slack_channel, :application_stage_id,
-    :application_stage_deadline_date, :application_stage_deadline_time_hour, :application_stage_deadline_time_minute,
-    :next_stage_starts_on, batch_stages_attributes: [
-      :id, :application_stage_id, :starts_at_date, :starts_at_time_hour, :starts_at_time_minute, :ends_at_date,
-      :ends_at_time_hour, :ends_at_time_minute, :_destroy
-    ]
+  permit_params :theme, :description, :start_date, :end_date, :batch_number, :slack_channel, batch_stages_attributes: [
+    :id, :application_stage_id, :starts_at_date, :starts_at_time_hour, :starts_at_time_minute, :ends_at_date,
+    :ends_at_time_hour, :ends_at_time_minute, :_destroy
+  ]
 
   config.sort_order = 'batch_number_asc'
 
@@ -19,10 +17,15 @@ ActiveAdmin.register Batch do
     column :theme
     column :start_date
     column :end_date
-    column :application_stage
+
+    column :active_stages do |batch|
+      batch.batch_stages.select do |batch_stage|
+        batch_stage.active?
+      end.map { |active_batch_stage| active_batch_stage.application_stage.name }.join ', '
+    end
 
     actions do |batch|
-      if batch.application_stage&.final_stage?
+      if batch.applications_complete?
         span do
           link_to 'Invite all founders', selected_applications_admin_batch_path(batch)
         end
@@ -30,18 +33,25 @@ ActiveAdmin.register Batch do
     end
   end
 
-  show do
+  show do |batch|
     attributes_table do
       row :batch_number
       row :theme
       row :description
       row :start_date
       row :end_date
-      row :application_stage
-      row :application_stage_deadline
-      row :next_stage_starts_on
       row :invites_sent_at
       row :slack_channel
+    end
+
+    panel 'Application Stages' do
+      batch.batch_stages.each do |batch_stage|
+        attributes_table_for batch_stage do
+          row :application_stage
+          row :starts_at
+          row :ends_at
+        end
+      end
     end
 
     panel 'Technical details' do
@@ -57,9 +67,6 @@ ActiveAdmin.register Batch do
     f.semantic_errors(*f.object.errors.keys)
 
     f.inputs 'Batch Details' do
-      f.input :application_stage, collection: ApplicationStage.all.order(number: 'ASC')
-      f.input :application_stage_deadline, as: :just_datetime_picker
-      f.input :next_stage_starts_on, as: :datepicker, label: 'Tentative start date for next stage'
       f.input :batch_number
       f.input :theme
       f.input :description

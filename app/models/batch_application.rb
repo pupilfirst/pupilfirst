@@ -55,9 +55,9 @@ class BatchApplication < ActiveRecord::Base
     application_stage
   end
 
-  # Application is promotable is it's on the same stage as its batch, or if application stage is 1, and batch is in stage 2.
+  # Application is promotable if its stage has started.
   def promotable?
-    application_stage == batch.application_stage || (application_stage.initial_stage? && batch.application_stage.number == 2)
+    application_stage == batch.stage_started?(application_stage)
   end
 
   def cofounders
@@ -108,5 +108,63 @@ class BatchApplication < ActiveRecord::Base
 
     # Destory self.
     destroy!
+  end
+
+  # Returns either a completed Payment (Stage 1), or ApplicationSubmission (any other stage), or nil
+  def submission
+    if application_stage.initial_stage?
+      payment.paid? ? payment : nil
+    else
+      application_submissions.find_by(application_stage: application_stage)
+    end
+  end
+
+  # Returns true if application has been upgraded to a stage that is currently not active.
+  def promoted?
+    !batch.stage_active?(application_stage) && !batch.stage_expired?(application_stage)
+  end
+
+  # Returns true if the application is in the final stage.
+  def complete?
+    application_stage == ApplicationStage.final_stage
+  end
+
+  # Returns true if the application is in an active stage and hasn't submitted.
+  def ongoing?
+    batch.stage_active?(application_stage) && submission.blank?
+  end
+
+  # Returns true application has a submission for current stage.
+  def submitted?
+    submission.present?
+  end
+
+  # Returns true if stage has expired and there's no submssion.
+  def expired?
+    batch.stage_expired?(application_stage) && submission.blank?
+  end
+
+  # Returns true if application's stage has expired, there's a submission, and the next stage has started.
+  def rejected?
+    batch.stage_expired?(application_stage) && batch.stage_started?(application_stage.next) && submission.present?
+  end
+
+  # Returns one of :ongoing, :expired, :complete, :promoted, :rejected or :complete
+  def status
+    if ongoing?
+      :ongoing
+    elsif submitted?
+      :submitted
+    elsif expired?
+      :expired
+    elsif promoted?
+      :promoted
+    elsif rejected?
+      :rejected
+    elsif complete?
+      :complete
+    else
+      raise "BatchApplication ##{id} is in an unexpected state. Please investigate."
+    end
   end
 end

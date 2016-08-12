@@ -10,14 +10,14 @@ module BatchApplicationsHelper
   end
 
   def applications_close_soon_message(batch)
-    deadline = batch.application_stage_deadline.strftime('%d %b, %l:%M %p (%z)')
-    delta = time_ago_in_words(batch.application_stage_deadline)
+    deadline = deadline_time.strftime('%d %b, %l:%M %p (%z)')
+    delta = time_ago_in_words(deadline_time)
     t('batch_application.general.applications_close_soon_html', batch_number: batch.batch_number, deadline: deadline, delta: delta)
   end
 
   # Used to determine which stage applicant is in for the progress bar.
   def stage_active_class(stage_number)
-    applicant_stage_number == stage_number ? 'applicant-stage' : ''
+    application_stage_number == stage_number ? 'applicant-stage' : ''
   end
 
   # Used to determine the status of a stage in the progress bar. Returns one of :pending, :ongoing, :complete,
@@ -25,22 +25,12 @@ module BatchApplicationsHelper
   #
   # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
   def stage_status(stage_number)
-    if stage_number == applicant_stage_number
-      if applicant_stage_number == current_stage.number
-        applicant_status
-      elsif applicant_stage_number > current_stage.number
-        :pending
-      elsif current_stage.number == 2
-        applicant_status
-      else
-        :expired
-      end
-    elsif stage_number < applicant_stage_number
+    if stage_number == application_stage_number
+      application_status
+    elsif stage_number < application_stage_number
       :complete
-    elsif applicant_status.in? [:ongoing, :complete]
-      :pending
     else
-      :not_applicable
+      (application_status.in? [:ongoing, :complete]) ? :pending : :not_applicable
     end
   end
 
@@ -53,14 +43,18 @@ module BatchApplicationsHelper
   end
 
   def stage_deadline
-    current_batch.application_stage_deadline.strftime('%b %d')
+    deadline_time.strftime('%b %d')
+  end
+
+  def deadline_time
+    current_batch.batch_stages.find_by(application_stage: application_stage).ends_at
   end
 
   def stage_2_submission
     @stage_2_submission ||= begin
       ApplicationSubmission.where(
         batch_application_id: current_application.id,
-        application_stage_id: applicant_stage.id
+        application_stage: ApplicationStage.find_by(number: 2)
       ).first
     end
   end

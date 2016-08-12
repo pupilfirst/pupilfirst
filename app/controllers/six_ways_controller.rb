@@ -60,7 +60,7 @@ class SixWaysController < ApplicationController
     end
   end
 
-  # GET /sixways/module/:name/:chapter_number
+  # GET /sixways/:name/:chapter_number
   #
   # Displays the content of a module's chapter.
   def module

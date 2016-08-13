@@ -136,7 +136,7 @@ class BatchApplication < ActiveRecord::Base
 
   # Returns true application has a submission for current stage.
   def submitted?
-    submission.present?
+    submission.present? && !batch.stage_started?(application_stage.next)
   end
 
   # Returns true if stage has expired and there's no submssion.

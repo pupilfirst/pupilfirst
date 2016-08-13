@@ -103,7 +103,7 @@ class BatchApplicationForm < Reform::Form
     end
 
     intercom.tags.tag(name: 'Applicant', users: [{ email: user.email }])
-  
+
   rescue
     # simply skip for now if anything goes wrong here
     return

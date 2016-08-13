@@ -94,6 +94,8 @@ class Payment < ActiveRecord::Base
 
     # Let the batch application (if still linked) take care of its stuff.
     batch_application&.perform_post_payment_tasks!
+
+    add_intercom_paid_applicant_tag
   end
 
   # Remove direct relation from application to payment and store the relationship as 'original batch application'
@@ -101,5 +103,24 @@ class Payment < ActiveRecord::Base
     self.original_batch_application_id = batch_application_id
     self.batch_application_id = nil
     save!
+  end
+
+  def add_intercom_paid_applicant_tag
+    # initialize a client
+    intercom = Intercom::Client.new(app_id: ENV['INTERCOM_API_ID'], api_key: ENV['INTERCOM_API_KEY'])
+
+    # TODO: Create an intercom user for applicant if he doesn't have one
+    # try to find corresponding intercom user
+    begin
+      user = intercom.users.find(email: batch_applicant.email)
+    rescue Intercom::ResourceNotFound
+      return
+    end
+
+    intercom.tags.tag(name: 'Paid Applicant', users: [{ email: user.email }])
+
+  rescue
+    # simply skip for now if anything goes wrong here
+    return
   end
 end

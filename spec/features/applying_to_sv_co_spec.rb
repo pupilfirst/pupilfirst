@@ -4,6 +4,7 @@ feature 'Applying to SV.CO' do
   # Things that are assumed to exist.
   let!(:application_stage_1) { create :application_stage, number: 1 }
   let!(:application_stage_2) { create :application_stage, number: 2 }
+  let!(:application_stage_3) { create :application_stage, number: 3 }
   let!(:other_university) { create :university, name: 'Other' }
   let(:instamojo_payment_request_id) { SecureRandom.hex }
   let(:long_url) { 'http://example.com/a/b' }
@@ -23,7 +24,9 @@ feature 'Applying to SV.CO' do
     let(:batch) { create :batch }
 
     before do
+      # Set up the dates for the batch.
       create :batch_stage, batch: batch, application_stage: application_stage_1
+      create :batch_stage, batch: batch, application_stage: application_stage_2, starts_at: 16.days.from_now, ends_at: 46.days.from_now
     end
 
     scenario 'user submits application and pays' do
@@ -134,8 +137,10 @@ feature 'Applying to SV.CO' do
     end
 
     before do
-      # Batch is in stage 2
+      # Set up dates for batch stages.
+      create :batch_stage, batch: batch, application_stage: application_stage_1
       create :batch_stage, batch: batch, application_stage: application_stage_2
+      create :batch_stage, batch: batch, application_stage: application_stage_3, starts_at: 16.days.from_now, ends_at: 46.days.from_now
 
       # add the applicant to the application
       batch_application.batch_applicants << batch_applicant

@@ -130,9 +130,10 @@ class BatchApplicationController < ApplicationController
 
   # GET /apply/stage/:stage_number/complete
   def complete
-    return redirect_to(apply_continue_path) if application_status != :complete
-    try "stage_#{application_stage_number}_complete"
-    render "stage_#{application_stage_number}_complete"
+    return redirect_to(apply_continue_path) unless application_status.in? [:complete, :promoted]
+    stage_number = (application_status == :promoted ? application_stage_number - 1 : application_stage_number)
+    try "stage_#{stage_number}_complete"
+    render "stage_#{stage_number}_complete"
   end
 
   # POST /apply/stage/:stage_number/restart
@@ -334,7 +335,6 @@ class BatchApplicationController < ApplicationController
     # If the application has been promoted, but batch is still at the earlier stage, the displayed stage number will be
     # one less than the application's stage.
     expected_stage_number = (application_status == :promoted ? application_stage_number - 1 : application_stage_number)
-
     redirect_to apply_continue_path if params[:stage_number].to_i != expected_stage_number
   end
 

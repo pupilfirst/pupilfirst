@@ -100,7 +100,7 @@ class ApplicationController < ActionController::Base
     [
       image_sources,
       script_sources,
-      "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://sv-assets.sv.co #{heapanalytics_csp[:style]};",
+      style_sources,
       connect_sources,
       font_sources,
       'child-src https://www.youtube.com;',
@@ -202,12 +202,21 @@ class ApplicationController < ActionController::Base
     { script: "'sha256-kyVR4MSQgwMT/9qlHjJ54ne+O5IgATAix8tiQwZqKbI=' 'sha256-N8P082RH9sZuH82Ho7454s+117pCE2iWh5PWBDp/T60='" }
   end
 
+  def drift_csp
+    {
+      connect: 'https://*.drift.com',
+      frame: 'https://js.driftt.com',
+      style: 'https://js.driftt.com',
+      script: 'https://js.driftt.com'
+    }
+  end
+
   def frame_sources
     <<~FRAME_SOURCES.squish
       frame-src
       https://svlabs-public.herokuapp.com https://www.google.com
       #{typeform_csp[:frame]} #{youtube_csp[:frame]} #{slideshare_csp[:frame]} #{speakerdeck_csp[:frame]}
-      #{google_form_csp[:frame]};
+      #{google_form_csp[:frame]} #{drift_csp[:frame]};
     FRAME_SOURCES
   end
 
@@ -226,13 +235,14 @@ class ApplicationController < ActionController::Base
       'self' 'unsafe-eval' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
       http://www.startatsv.com https://sv-assets.sv.co #{recaptcha_csp[:script]} #{google_analytics_csp[:script]}
       #{inspectlet_csp[:script]} #{facebook_csp[:script]} #{heapanalytics_csp[:script]} #{intercom_csp[:script]}
-      #{instagram_csp[:script]} #{web_console_csp[:script]};
+      #{instagram_csp[:script]} #{web_console_csp[:script]} #{drift_csp[:frame]};
     SCRIPT_SOURCES
   end
 
   def connect_sources
     <<~CONNECT_SOURCES.squish
-      connect-src 'self' #{inspectlet_csp[:connect]} #{heapanalytics_csp[:connect]} #{intercom_csp[:connect]};
+      connect-src 'self' #{inspectlet_csp[:connect]} #{heapanalytics_csp[:connect]} #{intercom_csp[:connect]}
+      #{drift_csp[:connect]};
     CONNECT_SOURCES
   end
 
@@ -243,8 +253,15 @@ class ApplicationController < ActionController::Base
   end
 
   def media_sources
-    <<~MEDIA_SOURCES
+    <<~MEDIA_SOURCES.squish
       media-src 'self' #{resource_csp[:media]} #{intercom_csp[:media]};
     MEDIA_SOURCES
+  end
+
+  def style_sources
+    <<~STYLE_SOURCES.squish
+      style-src 'self' 'unsafe-inline' fonts.googleapis.com https://sv-assets.sv.co #{heapanalytics_csp[:style]}
+      #{drift_csp[:style]};
+    STYLE_SOURCES
   end
 end

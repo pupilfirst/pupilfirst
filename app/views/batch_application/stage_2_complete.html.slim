@@ -25,7 +25,7 @@
           .submission-links class= url_entry_class(entry.name)
             = link_to entry.name, entry.url, target: '_blank'
 
-    - unless stage_expired?
+    - if restartable?
       hr.m-y-2
         h3.text-xs-center
           ' Made mistakes in your submission? That's okay!

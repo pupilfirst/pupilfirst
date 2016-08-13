@@ -78,4 +78,8 @@ module BatchApplicationsHelper
       'icon-default'
     end
   end
+
+  def restartable?
+    application_status == :submitted && !stage_expired?
+  end
 end

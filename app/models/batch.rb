@@ -10,10 +10,10 @@ class Batch < ActiveRecord::Base
   scope :not_completed, -> { where('end_date >= ?', Time.now) }
 
   scope :open_for_applications, lambda {
-    joins(:batch_stages).
-      where(batch_stages: { application_stage_id: ApplicationStage.initial_stage }).
-      where('batch_stages.starts_at < ?', Time.now).
-      where('batch_stages.ends_at > ?', Time.now)
+    joins(:batch_stages)
+      .where(batch_stages: { application_stage_id: ApplicationStage.initial_stage })
+      .where('batch_stages.starts_at < ?', Time.now)
+      .where('batch_stages.ends_at > ?', Time.now)
   }
 
   validates :theme, presence: true
@@ -83,9 +83,9 @@ class Batch < ActiveRecord::Base
 
   # Stage is active when current time is between its bounds.
   def stage_active?(stage)
-    batch_stages.where(application_stage: stage).
-      where('starts_at < ?', Time.now).
-      where('ends_at > ?', Time.now).present?
+    batch_stages.where(application_stage: stage)
+      .where('starts_at < ?', Time.now)
+      .where('ends_at > ?', Time.now).present?
   end
 
   # Stage has expired when deadline has been crossed.

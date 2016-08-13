@@ -92,6 +92,7 @@ class BatchApplicationController < ApplicationController
         raise "Unexpected application_status: #{application_status}"
     end
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   # GET /apply/batch_pending
   def batch_pending

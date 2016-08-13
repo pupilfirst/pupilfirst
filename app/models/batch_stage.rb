@@ -5,7 +5,10 @@ class BatchStage < ActiveRecord::Base
   validates_uniqueness_of :application_stage_id, scope: [:batch_id]
 
   validates :starts_at, presence: true
+
+  # rubocop:disable Style/DoubleNegation
   validates :ends_at, presence: true, unless: proc { |batch_stage| !!batch_stage.application_stage&.final_stage? }
+  # rubocop:enable Style/DoubleNegation
 
   validate :should_start_before_end
 

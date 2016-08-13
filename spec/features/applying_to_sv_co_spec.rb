@@ -19,7 +19,6 @@ feature 'Applying to SV.CO' do
     )
   end
 
-
   context 'when a batch is open for applications' do
     let(:batch) { create :batch }
 
@@ -142,8 +141,12 @@ feature 'Applying to SV.CO' do
       batch_application.batch_applicants << batch_applicant
 
       # create a completed payment
-      payment = create :payment, batch_application: batch_application, instamojo_payment_request_status: 'Completed',
-        instamojo_payment_status: 'Credit', paid_at: Time.now
+      payment = create :payment,
+        batch_application: batch_application,
+        instamojo_payment_request_status: 'Completed',
+        instamojo_payment_status: 'Credit',
+        paid_at: Time.now
+
       payment.batch_application.perform_post_payment_tasks!
     end
 

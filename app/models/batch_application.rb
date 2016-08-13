@@ -150,6 +150,8 @@ class BatchApplication < ActiveRecord::Base
   end
 
   # Returns one of :ongoing, :expired, :complete, :promoted, :rejected or :complete
+  #
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def status
     if ongoing?
       :ongoing
@@ -167,4 +169,5 @@ class BatchApplication < ActiveRecord::Base
       raise "BatchApplication ##{id} is in an unexpected state. Please investigate."
     end
   end
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 end

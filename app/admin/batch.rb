@@ -19,9 +19,7 @@ ActiveAdmin.register Batch do
     column :end_date
 
     column :active_stages do |batch|
-      batch.batch_stages.select do |batch_stage|
-        batch_stage.active?
-      end.map { |active_batch_stage| active_batch_stage.application_stage.name }.join ', '
+      batch.batch_stages.select(&:active?).map { |active_batch_stage| active_batch_stage.application_stage.name }.join ', '
     end
 
     actions do |batch|
@@ -157,15 +155,13 @@ ActiveAdmin.register Batch do
     if batch.application_stage.initial_stage?
       current_stage_number = source_batch.application_stage.number
 
-      rejected_and_left_behind_applications = source_batch.batch_applications.joins(:application_stage).
-        where('application_stages.number < ?', current_stage_number).
-        where('application_stages.number != 1')
+      _rejected_and_left_behind_applications = source_batch.batch_applications.joins(:application_stage)
+        .where('application_stages.number < ?', current_stage_number)
+        .where('application_stages.number != 1')
 
-      expired_applications = source_batch.batch_applications.joins(:application_stage).
-        where(application_stages: { number: current_stage_number } ).
-        where('application_stages.number != 1').where()
-
-      raise NotImplementedError
+      # _expired_applications = source_batch.batch_applications.joins(:application_stage)
+      #   .where(application_stages: { number: current_stage_number })
+      #   .where('application_stages.number != 1').where()
 
       flash[:success] = "#{applications_count} rejected or expired applications from Batch ##{source_batch.batch_number} have been copied to batch ##{batch.batch_number}"
     else

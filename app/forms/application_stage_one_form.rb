@@ -6,7 +6,7 @@ class ApplicationStageOneForm < Reform::Form
 
   def cofounder_count_must_be_valid
     count = cofounder_count_number.present? ? cofounder_count_number : cofounder_count_select
-    return if count.to_i.in? (1..9)
+    return if count.to_i.in?(1..9)
     errors[:base] << 'Cofounder count is invalid'
     errors[:cofounder_count] << 'Cofounder count is invalid'
     errors[:cofounder_count_number] << 'Cofounder count is invalid'

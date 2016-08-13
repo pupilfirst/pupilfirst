@@ -90,7 +90,7 @@ ActiveAdmin.register Batch do
     render 'sweep_in_applications'
   end
 
-  action_item :sweep_in_applications, only: :show, if: proc { resource&.application_stage&.initial_stage? } do
+  action_item :sweep_in_applications, only: :show, if: proc { resource&.initial_stage? } do
     link_to('Sweep in Applications', sweep_in_applications_admin_batch_path(Batch.find(params[:id])))
   end
 
@@ -120,7 +120,7 @@ ActiveAdmin.register Batch do
   member_action :sweep_in_unbatched, method: :post do
     batch = Batch.find params[:id]
 
-    if batch.application_stage.initial_stage?
+    if batch.initial_stage?
       BatchApplication.where(batch: nil).update_all(batch_id: batch.id)
       flash[:success] = "All unbatched applications have been assigned to batch ##{batch.batch_number}"
     else
@@ -134,7 +134,7 @@ ActiveAdmin.register Batch do
     batch = Batch.find params[:id]
     source_batch = Batch.find params[:sweep_in_unpaid_applications][:source_batch_id]
 
-    if batch.application_stage.initial_stage?
+    if batch.initial_stage?
       uninitiated_applications = source_batch.batch_applications.includes(:payment).where(payments: { id: nil })
       unpaid_applications = source_batch.batch_applications.joins(:payment).merge(Payment.requested)
       applications_count = uninitiated_applications.count + unpaid_applications.count
@@ -152,18 +152,17 @@ ActiveAdmin.register Batch do
     batch = Batch.find params[:id]
     source_batch = Batch.find params[:sweep_in_rejects][:source_batch_id]
 
-    if batch.application_stage.initial_stage?
-      current_stage_number = source_batch.application_stage.number
-
-      _rejected_and_left_behind_applications = source_batch.batch_applications.joins(:application_stage)
-        .where('application_stages.number < ?', current_stage_number)
-        .where('application_stages.number != 1')
+    if batch.initial_stage?
+      # _rejected_and_left_behind_applications = source_batch.batch_applications.joins(:application_stage)
+      #   .where('application_stages.number < ?', current_stage_number)
+      #   .where('application_stages.number != 1')
 
       # _expired_applications = source_batch.batch_applications.joins(:application_stage)
       #   .where(application_stages: { number: current_stage_number })
       #   .where('application_stages.number != 1').where()
 
-      flash[:success] = "#{applications_count} rejected or expired applications from Batch ##{source_batch.batch_number} have been copied to batch ##{batch.batch_number}"
+      # flash[:success] = "#{applications_count} rejected or expired applications from Batch ##{source_batch.batch_number} have been copied to batch ##{batch.batch_number}"
+      flash[:error] = 'This feature has not been implemented yet!'
     else
       flash[:error] = "Did not initiate sweep. Batch ##{batch.batch_number} is not in initial stage."
     end

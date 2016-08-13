@@ -100,4 +100,8 @@ class Batch < ActiveRecord::Base
   def applications_complete?
     stage_started?(ApplicationStage.final_stage)
   end
+
+  def initial_stage?
+    stage_active?(ApplicationStage.initial_stage)
+  end
 end

@@ -22,12 +22,8 @@ feature 'Applying to SV.CO' do
 
   context 'when a batch is open for applications' do
     let(:batch) { create :batch }
-
-    before do
-      # Set up the dates for the batch.
-      create :batch_stage, batch: batch, application_stage: application_stage_1
-      create :batch_stage, batch: batch, application_stage: application_stage_2, starts_at: 16.days.from_now, ends_at: 46.days.from_now
-    end
+    let!(:batch_stage_1) { create :batch_stage, batch: batch, application_stage: application_stage_1 }
+    let!(:batch_stage_2) { create :batch_stage, batch: batch, application_stage: application_stage_2, starts_at: 16.days.from_now, ends_at: 46.days.from_now }
 
     scenario 'user submits application and pays' do
       visit apply_path
@@ -124,6 +120,18 @@ feature 'Applying to SV.CO' do
 
         expect(page).to have_text('Did you complete registration once before?')
       end
+
+      context 'when applicant stage has expired' do
+        let!(:batch_stage_1) { create :batch_stage, batch: batch, application_stage: application_stage_1, starts_at: 45.days.ago, ends_at: 15.days.ago }
+        let!(:batch_stage_2) { create :batch_stage, batch: batch, application_stage: application_stage_2 }
+
+        scenario 'applicant did not complete payment in time' do
+          continue_path = apply_continue_path(token: batch_applicant.token, shared_device: false)
+          visit continue_path
+
+          expect(page).to have_content 'Application process has closed'
+        end
+      end
     end
   end
 
@@ -140,12 +148,11 @@ feature 'Applying to SV.CO' do
         team_lead_id: batch_applicant.id
     end
 
-    before do
-      # Set up dates for batch stages.
-      create :batch_stage, batch: batch, application_stage: application_stage_1
-      create :batch_stage, batch: batch, application_stage: application_stage_2
-      create :batch_stage, batch: batch, application_stage: application_stage_3, starts_at: 16.days.from_now, ends_at: 46.days.from_now
+    let!(:batch_stage_1) { create :batch_stage, batch: batch, application_stage: application_stage_1 }
+    let!(:batch_stage_2) { create :batch_stage, batch: batch, application_stage: application_stage_2 }
+    let!(:batch_stage_3) { create :batch_stage, batch: batch, application_stage: application_stage_3, starts_at: 16.days.from_now, ends_at: 46.days.from_now }
 
+    before do
       # add the applicant to the application
       batch_application.batch_applicants << batch_applicant
 

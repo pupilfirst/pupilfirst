@@ -130,7 +130,7 @@ class BatchApplicationController < ApplicationController
 
   # GET /apply/stage/:stage_number/complete
   def complete
-    return redirect_to(apply_continue_path) unless application_status.in? [:complete, :promoted]
+    return redirect_to(apply_continue_path) unless application_status.in? [:submitted, :promoted]
     stage_number = (application_status == :promoted ? application_stage_number - 1 : application_stage_number)
     try "stage_#{stage_number}_complete"
     render "stage_#{stage_number}_complete"
@@ -279,8 +279,8 @@ class BatchApplicationController < ApplicationController
     end
   end
 
-  # Returns one of :pending, :ongoing, :expired, :rejected, :complete, or :promoted to indicate which view should be
-  # rendered.
+  # Returns one of :pending, :ongoing, :expired, :rejected, :submitted, :complete, or :promoted to indicate which view
+  # should be rendered.
   def application_status
     @application_status ||= (current_application&.status || :pending)
   end

@@ -14,6 +14,10 @@ class ApplicationStage < ActiveRecord::Base
     ApplicationStage.find_by number: (number + 1)
   end
 
+  def previous
+    ApplicationStage.find_by number: (number - 1)
+  end
+
   def initial_stage?
     number == 1
   end

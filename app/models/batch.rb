@@ -23,15 +23,6 @@ class Batch < ActiveRecord::Base
     format: { with: /#[^A-Z\s.;!?]+/, message: 'must start with a # and not contain uppercase, spaces or periods' },
     length: { in: 2..22, message: 'channel name should be 1-21 characters' }, allow_nil: true
 
-  # after_save :send_emails_to_applicants
-  #
-  # def send_emails_to_applicants
-  #   return unless application_stage_id_changed?
-  #   return if application_stage.initial_stage? || application_stage.final_stage?
-  #
-  #   EmailApplicantsJob.perform_later(self)
-  # end
-
   def display_name
     "##{batch_number} #{theme}"
   end
@@ -103,5 +94,9 @@ class Batch < ActiveRecord::Base
 
   def initial_stage?
     stage_active?(ApplicationStage.initial_stage)
+  end
+
+  def final_stage?
+    stage_started?(ApplicationStage.final_stage)
   end
 end

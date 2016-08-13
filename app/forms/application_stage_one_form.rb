@@ -1,8 +1,31 @@
 class ApplicationStageOneForm < Reform::Form
-  property :cofounder_count, validates: { presence: true, inclusion: %w(2 3 4) }
+  property :cofounder_count_select, virtual: true
+  property :cofounder_count_number, virtual: true
+
+  validate :cofounder_count_must_be_valid
+
+  def cofounder_count_must_be_valid
+    count = cofounder_count_number.present? ? cofounder_count_number : cofounder_count_select
+    return if count.to_i.in?(1..9)
+    errors[:base] << 'Cofounder count is invalid'
+    errors[:cofounder_count] << 'Cofounder count is invalid'
+    errors[:cofounder_count_number] << 'Cofounder count is invalid'
+  end
+
+  def prepopulate!
+    if model.cofounder_count.present?
+      if model.cofounder_count.in? [1, 2, 3, 4]
+        self.cofounder_count_select = model.cofounder_count.to_s
+      else
+        self.cofounder_count_select = 'More than 4 (Enter number)'
+        self.cofounder_count_number = model.cofounder_count
+      end
+    end
+  end
 
   def save
-    model.update!(cofounder_count: cofounder_count)
+    count = cofounder_count_number.present? ? cofounder_count_number : cofounder_count_select
+    model.update! cofounder_count: count
 
     # If payment is present
     if model.payment.present?

@@ -3,15 +3,16 @@
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
 
 .container
-  == render('applications_close_soon', batch: current_batch) if current_batch && current_batch.applications_close_soon?
-
   .row.application-process
     .col-lg-8.col-md-12
       .registration-complete-notice.card.content-box.m-t-2.m-b-0
         h4.m-a-0
-          span
-            ' <strong>Did you complete registration once before?</strong>
-          = link_to 'Sign In to Continue', apply_identify_path, class: 'btn btn-primary btn-md text-uppercase'
+          - if current_application.present?
+            span <strong>You have already completed registration.</strong>
+            = link_to 'Continue application', apply_continue_path, class: 'btn btn-primary btn-md text-uppercase'
+          - else
+            span <strong>Did you complete registration once before?</strong>
+            = link_to 'Sign In to Continue', apply_identify_path, class: 'btn btn-primary btn-md text-uppercase'
       .application-process-left.content-box.m-t-2.m-b-2
         .admission-process.clearfix
           h2
@@ -310,7 +311,7 @@
                     li
                       p The remaining scholarships will be automatically awarded based on your ranking in the selection rounds.
                   p If you have any doubts about scholarships, write to us at help@sv.co
-                        
+
 
             .card
               h4
@@ -347,10 +348,6 @@
 
     .col-lg-4.col-md-12#start-application-process
       .m-t-2.m-b-3
-        / .alert.alert-info.m-t-2.m-b-0
-        /   ' Did you complete registration once before? If so,
-        /   | #{link_to 'sign in and continue the application process', apply_identify_path}.
-
         = simple_form_for @form,
           url: apply_register_path,
           wrapper: :vertical_form do |f|
@@ -367,13 +364,7 @@
                     li #{error_message}
 
           .application-start-form.content-box.m-b-2
-            / .simple-form-container
-            /   = f.input :consent,
-            /     as: :boolean,
-            /     inline_label: t('batch_application.stage_1.application_page_read_html') + t('batch_application.stage_1.team_lead_consent') + t('batch_application.stage_1.fees_consent'),
-            /     required: true
-
-            h4.form-section-title.m-b-2
+            h4.form-section-title.m-b-1
               | Apply Now
             .simple-form-container
               = f.simple_fields_for :team_lead do |t|

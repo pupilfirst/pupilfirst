@@ -3,12 +3,10 @@ ActiveAdmin.register Batch do
 
   menu parent: 'Admissions'
 
-  permit_params :theme, :description, :start_date, :end_date, :batch_number, :slack_channel, :application_stage_id,
-    :application_stage_deadline_date, :application_stage_deadline_time_hour, :application_stage_deadline_time_minute,
-    :next_stage_starts_on, batch_stages_attributes: [
-      :id, :application_stage_id, :starts_at_date, :starts_at_time_hour, :starts_at_time_minute, :ends_at_date,
-      :ends_at_time_hour, :ends_at_time_minute, :_destroy
-    ]
+  permit_params :theme, :description, :start_date, :end_date, :batch_number, :slack_channel, batch_stages_attributes: [
+    :id, :application_stage_id, :starts_at_date, :starts_at_time_hour, :starts_at_time_minute, :ends_at_date,
+    :ends_at_time_hour, :ends_at_time_minute, :_destroy
+  ]
 
   config.sort_order = 'batch_number_asc'
 
@@ -19,13 +17,46 @@ ActiveAdmin.register Batch do
     column :theme
     column :start_date
     column :end_date
-    column :application_stage
+
+    column :active_stages do |batch|
+      batch.batch_stages.select(&:active?).map { |active_batch_stage| active_batch_stage.application_stage.name }.join ', '
+    end
 
     actions do |batch|
-      if batch.application_stage&.final_stage?
+      if batch.applications_complete?
         span do
           link_to 'Invite all founders', selected_applications_admin_batch_path(batch)
         end
+      end
+    end
+  end
+
+  show do |batch|
+    attributes_table do
+      row :batch_number
+      row :theme
+      row :description
+      row :start_date
+      row :end_date
+      row :invites_sent_at
+      row :slack_channel
+    end
+
+    panel 'Application Stages' do
+      batch.batch_stages.each do |batch_stage|
+        attributes_table_for batch_stage do
+          row :application_stage
+          row :starts_at
+          row :ends_at
+        end
+      end
+    end
+
+    panel 'Technical details' do
+      attributes_table_for batch do
+        row :id
+        row :created_at
+        row :updated_at
       end
     end
   end
@@ -34,9 +65,6 @@ ActiveAdmin.register Batch do
     f.semantic_errors(*f.object.errors.keys)
 
     f.inputs 'Batch Details' do
-      f.input :application_stage, collection: ApplicationStage.all.order(number: 'ASC')
-      f.input :application_stage_deadline, as: :just_datetime_picker
-      f.input :next_stage_starts_on, as: :datepicker, label: 'Tentative start date for next stage'
       f.input :batch_number
       f.input :theme
       f.input :description
@@ -54,6 +82,16 @@ ActiveAdmin.register Batch do
     end
 
     f.actions
+  end
+
+  member_action :sweep_in_applications do
+    @batch = Batch.find params[:id]
+    @unbatched = BatchApplication.where(batch: nil)
+    render 'sweep_in_applications'
+  end
+
+  action_item :sweep_in_applications, only: :show, if: proc { resource&.initial_stage? } do
+    link_to('Sweep in Applications', sweep_in_applications_admin_batch_path(Batch.find(params[:id])))
   end
 
   member_action :selected_applications do
@@ -77,5 +115,58 @@ ActiveAdmin.register Batch do
     end
 
     redirect_to selected_applications_admin_batch_path(batch)
+  end
+
+  member_action :sweep_in_unbatched, method: :post do
+    batch = Batch.find params[:id]
+
+    if batch.initial_stage?
+      BatchApplication.where(batch: nil).update_all(batch_id: batch.id)
+      flash[:success] = "All unbatched applications have been assigned to batch ##{batch.batch_number}"
+    else
+      flash[:error] = "Did not initiate sweep. Batch ##{batch.batch_number} is not in initial stage."
+    end
+
+    redirect_to admin_batch_path(batch)
+  end
+
+  member_action :sweep_in_unpaid, method: :post do
+    batch = Batch.find params[:id]
+    source_batch = Batch.find params[:sweep_in_unpaid_applications][:source_batch_id]
+
+    if batch.initial_stage?
+      uninitiated_applications = source_batch.batch_applications.includes(:payment).where(payments: { id: nil })
+      unpaid_applications = source_batch.batch_applications.joins(:payment).merge(Payment.requested)
+      applications_count = uninitiated_applications.count + unpaid_applications.count
+      (uninitiated_applications + unpaid_applications).each { |application| application.update!(batch_id: batch.id) }
+
+      flash[:success] = "#{applications_count} unpaid applications from Batch ##{source_batch.batch_number} have been assigned to batch ##{batch.batch_number}"
+    else
+      flash[:error] = "Did not initiate sweep. Batch ##{batch.batch_number} is not in initial stage."
+    end
+
+    redirect_to admin_batch_path(batch)
+  end
+
+  member_action :sweep_in_rejects, method: :post do
+    batch = Batch.find params[:id]
+    _source_batch = Batch.find params[:sweep_in_rejects][:source_batch_id]
+
+    flash[:message] = if batch.initial_stage?
+      # _rejected_and_left_behind_applications = source_batch.batch_applications.joins(:application_stage)
+      #   .where('application_stages.number < ?', current_stage_number)
+      #   .where('application_stages.number != 1')
+      #
+      # _expired_applications = source_batch.batch_applications.joins(:application_stage)
+      #   .where(application_stages: { number: current_stage_number })
+      #   .where('application_stages.number != 1').where()
+      #
+      # flash[:success] = "#{applications_count} rejected or expired applications from Batch ##{source_batch.batch_number} have been copied to batch ##{batch.batch_number}"
+      'This feature has not been implemented yet!'
+    else
+      "Did not initiate sweep. Batch ##{batch.batch_number} is not in initial stage."
+    end
+
+    redirect_to admin_batch_path(batch)
   end
 end

@@ -57,7 +57,7 @@ class BatchApplication < ActiveRecord::Base
 
   # Application is promotable if its stage has started.
   def promotable?
-    application_stage == batch.stage_started?(application_stage)
+    batch.stage_started?(application_stage)
   end
 
   def cofounders

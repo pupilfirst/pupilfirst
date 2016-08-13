@@ -95,7 +95,7 @@ feature 'Applying to SV.CO' do
         batch_application.batch_applicants << batch_applicant
       end
 
-      scenario 'returning applicant logs in' do
+      scenario 'returning applicant restarts application' do
         # user signs in
         visit apply_path
         expect(page).to have_text('Did you complete registration once before?')
@@ -119,6 +119,10 @@ feature 'Applying to SV.CO' do
 
         # user must be at the payment page
         expect(page).to have_text('You now need to pay the application fee')
+
+        click_on 'Revoke and Rewrite Application'
+
+        expect(page).to have_text('Did you complete registration once before?')
       end
     end
   end

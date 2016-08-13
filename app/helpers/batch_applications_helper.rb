@@ -2,7 +2,13 @@
 
 module BatchApplicationsHelper
   def next_stage_date
-    current_batch.next_stage_starts_on.strftime('%A, %b %e')
+    target_stage = if application_status == :promoted
+      current_application.application_stage
+    else
+      current_application.application_stage.next
+    end
+
+    current_batch.batch_stages.find_by(application_stage: target_stage).starts_at.strftime('%A, %b %e')
   end
 
   def payment_button_message(batch_application)
@@ -17,18 +23,19 @@ module BatchApplicationsHelper
 
   # Used to determine which stage applicant is in for the progress bar.
   def stage_active_class(stage_number)
-    application_stage_number == stage_number ? 'applicant-stage' : ''
+    expected_stage_number = (application_status == :promoted ? application_stage_number - 1 : application_stage_number)
+    expected_stage_number == stage_number ? 'applicant-stage' : ''
   end
 
   # Used to determine the status of a stage in the progress bar. Returns one of :pending, :ongoing, :complete,
   # :expired, :rejected, or :not_applicable
   def stage_status(stage_number)
     if stage_number == application_stage_number
-      application_status
+      application_status == :promoted ? :pending : application_status
     elsif stage_number < application_stage_number
       :complete
     else
-      (application_status.in? [:ongoing, :complete]) ? :pending : :not_applicable
+      (application_status.in? [:ongoing, :complete, :promoted]) ? :pending : :not_applicable
     end
   end
 

@@ -150,21 +150,21 @@ ActiveAdmin.register Batch do
 
   member_action :sweep_in_rejects, method: :post do
     batch = Batch.find params[:id]
-    source_batch = Batch.find params[:sweep_in_rejects][:source_batch_id]
+    _source_batch = Batch.find params[:sweep_in_rejects][:source_batch_id]
 
-    if batch.initial_stage?
+    flash[:message] = if batch.initial_stage?
       # _rejected_and_left_behind_applications = source_batch.batch_applications.joins(:application_stage)
       #   .where('application_stages.number < ?', current_stage_number)
       #   .where('application_stages.number != 1')
-
+      #
       # _expired_applications = source_batch.batch_applications.joins(:application_stage)
       #   .where(application_stages: { number: current_stage_number })
       #   .where('application_stages.number != 1').where()
-
+      #
       # flash[:success] = "#{applications_count} rejected or expired applications from Batch ##{source_batch.batch_number} have been copied to batch ##{batch.batch_number}"
-      flash[:error] = 'This feature has not been implemented yet!'
+      'This feature has not been implemented yet!'
     else
-      flash[:error] = "Did not initiate sweep. Batch ##{batch.batch_number} is not in initial stage."
+      "Did not initiate sweep. Batch ##{batch.batch_number} is not in initial stage."
     end
 
     redirect_to admin_batch_path(batch)

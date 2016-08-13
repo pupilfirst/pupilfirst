@@ -172,5 +172,40 @@ feature 'Applying to SV.CO' do
       # user submission must be acknowledged
       expect(page).to have_text('Your coding and hustling submissions has been received')
     end
+
+    context 'when applicant has submitted for stage 2' do
+      let(:application_submission) do
+        create :application_submission,
+          application_stage: application_stage_2,
+          batch_application: batch_application
+      end
+
+      before do
+        create :application_submission_url, application_submission: application_submission
+
+        create :application_submission_url,
+          application_submission: application_submission,
+          name: 'Facebook Video',
+          url: 'https://facebook.com/video'
+
+        create :application_submission_url,
+          application_submission: application_submission,
+          name: 'Code Repository',
+          url: 'https://github.com/user/repo'
+      end
+
+      scenario 'applicant removes existing submission' do
+        visit apply_continue_path(token: batch_applicant.token, shared_device: false)
+
+        # user submission must be acknowledged
+        expect(page).to have_text('Your coding and hustling submissions has been received')
+
+        click_on 'Redo your submission'
+
+        # user must see the coding and video tasks
+        expect(page).to have_text('Coding Task')
+        expect(page).to have_text('Video Task')
+      end
+    end
   end
 end

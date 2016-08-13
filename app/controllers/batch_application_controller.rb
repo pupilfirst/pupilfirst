@@ -138,7 +138,7 @@ class BatchApplicationController < ApplicationController
 
   # POST /apply/stage/:stage_number/restart
   def restart
-    return redirect_to(apply_continue_path) if application_status != :complete
+    return redirect_to(apply_continue_path) if application_status != :submitted || stage_expired?
     raise_not_found if stage_expired?
 
     begin

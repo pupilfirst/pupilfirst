@@ -35,7 +35,7 @@ module BatchApplicationsHelper
     elsif stage_number < application_stage_number
       :complete
     else
-      (application_status.in? [:ongoing, :complete, :promoted]) ? :pending : :not_applicable
+      (application_status.in? [:ongoing, :submitted, :promoted]) ? :pending : :not_applicable
     end
   end
 

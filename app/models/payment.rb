@@ -114,7 +114,7 @@ class Payment < ActiveRecord::Base
     begin
       user = intercom.users.find(email: batch_applicant.email)
     rescue Intercom::ResourceNotFound
-      return
+      user = intercom.users.create(email: batch_applicant.email, name: batch_applicant.name)
     end
 
     intercom.tags.tag(name: 'Paid Applicant', users: [{ email: user.email }])

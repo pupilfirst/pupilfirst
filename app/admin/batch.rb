@@ -43,7 +43,7 @@ ActiveAdmin.register Batch do
     end
 
     panel 'Application Stages' do
-      batch.batch_stages.each do |batch_stage|
+      batch.batch_stages.sort_by { |batch_stage| batch_stage.application_stage.number }.each do |batch_stage|
         attributes_table_for batch_stage do
           row :application_stage
           row :starts_at

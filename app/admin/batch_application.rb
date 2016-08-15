@@ -42,6 +42,12 @@ ActiveAdmin.register BatchApplication do
   scope :payment_initiated
   scope :payment_complete
 
+  controller do
+    def scoped_collection
+      super.includes :payment # prevent N+1 queries
+    end
+  end
+
   index do
     selectable_column
 
@@ -62,7 +68,9 @@ ActiveAdmin.register BatchApplication do
       link_to "##{stage.number} #{stage.name}", admin_application_stage_path(stage)
     end
 
-    column :college
+    column 'College, University' do |batch_application|
+      "#{batch_application&.college}, #{batch_application&.university&.name}"
+    end
 
     column :state do |application|
       application.university&.location || application.state
@@ -70,8 +78,15 @@ ActiveAdmin.register BatchApplication do
 
     # column :score
 
-    column :university do |batch_application|
-      batch_application&.university&.name
+    column 'Payment Date', sortable: 'payments.paid_at' do |application|
+      payment = application.payment
+      if payment.blank?
+        'No Payment'
+      elsif payment.paid?
+        payment.paid_at.strftime('%b %d, %Y')
+      else
+        "#{payment.status.capitalize} on #{payment.created_at.strftime('%b %d, %Y')}"
+      end
     end
 
     actions defaults: false do |batch_application|

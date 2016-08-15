@@ -4,7 +4,7 @@ ActiveAdmin.register BatchApplication do
   menu parent: 'Admissions', label: 'Applications', priority: 0
 
   permit_params :batch_id, :application_stage_id, :university_id, :team_achievement, :team_lead_id, :college, :state,
-    :tag_list, :cofounder_count
+    :tag_list, :team_size
 
   batch_action :promote, confirm: 'Are you sure?' do |ids|
     promoted = 0
@@ -182,7 +182,7 @@ ActiveAdmin.register BatchApplication do
         batch_application&.team_lead&.phone
       end
 
-      row :cofounder_count
+      row :team_size
 
       row :payment_status do |batch_application|
         if batch_application.payment.present?
@@ -244,7 +244,7 @@ ActiveAdmin.register BatchApplication do
     f.inputs do
       f.input :batch
       f.input :team_lead
-      f.input :cofounder_count, as: :select, collection: 1..9, include_blank: false
+      f.input :team_size, as: :select, collection: 2..10, include_blank: false
       f.input :application_stage, collection: ApplicationStage.all.order(number: 'ASC')
       f.input :tag_list, input_html: { value: f.object.tag_list.join(','), 'data-tags' => BatchApplication.tag_counts_on(:tags).pluck(:name).to_json }
       f.input :university

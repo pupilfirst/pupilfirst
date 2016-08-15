@@ -1,5 +1,5 @@
 prepareCofounderFields = ->
-  cofounderCountSelect = $('[name="application_stage_one[cofounder_count_select]"]')
+  cofounderCountSelect = $('[name="application_stage_one[team_size_select]"]')
 
   if cofounderCountSelect.length
     showOrHidePaymentButton(cofounderCountSelect.val())
@@ -14,19 +14,19 @@ showOrHidePaymentButton = (cofounderCountSelectValue) ->
     $('.paywith-instamojo').parent().addClass('hidden-xs-up')
 
 toggleCofounderCountFieldOnChange = ->
-  cofounderCountSelectInput = $('#application_stage_one_cofounder_count_select')
+  cofounderCountSelectInput = $('#application_stage_one_team_size_select')
 
-  if cofounderCountSelectInput.val() == 'More than 4 (Enter number)'
-    cofounderCountNumberInput = $('#application_stage_one_cofounder_count_number')
+  if cofounderCountSelectInput.val() == 'More than 5 (Enter number)'
+    cofounderCountNumberInput = $('#application_stage_one_team_size_number')
     cofounderCountNumberInput.prop('disabled', false)
     cofounderCountNumberInput.parent().parent().parent().removeClass('hidden-xs-up')
     cofounderCountSelectInput.parent().parent().addClass('hidden-xs-up')
     cofounderCountNumberInput.focus()
 
 toggleCofounderCountFieldOnLoad = ->
-  if $('#application_stage_one_cofounder_count_select').length
+  if $('#application_stage_one_team_size_select').length
     toggleCofounderCountFieldOnChange()
-    $('#application_stage_one_cofounder_count_select').change toggleCofounderCountFieldOnChange
+    $('#application_stage_one_team_size_select').change toggleCofounderCountFieldOnChange
 
 stickCodeVideoSubmitForm = ->
   $('#code-video-submit').stickit

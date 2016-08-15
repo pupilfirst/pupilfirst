@@ -45,20 +45,20 @@
             html: { class: 'form-horizontal' },
             wrapper: :horizontal_form do |f|
 
-            = f.input :cofounder_count_select,
-              label: 'Number of cofounders (founders other than yourself)',
-              collection: ['1', '2', '3', '4', 'More than 4 (Enter number)'],
+            = f.input :team_size_select,
+              label: 'Team Size',
+              collection: ['2', '3', '4', '5', 'More than 5 (Enter number)'],
               as: :select,
-              include_blank: 'Please select number of cofounders'
+              include_blank: 'Please select your total team size'
 
             .hidden-xs-up
-              = f.input :cofounder_count_number,
-                label: 'Number of cofounders (founders other than yourself)',
-                placeholder: 'Enter number',
-                input_html: { type: :number, min: '1', max: '9' },
+              = f.input :team_size_number,
+                label: 'Team Size',
+                placeholder: 'Enter team size',
+                input_html: { type: :number, min: '2', max: '10' },
                 disabled: true
 
-            .text-xs-center.m-t-2 class="#{f.object.cofounder_count_select.blank? ? 'hidden-xs-up' : ''}"
+            .text-xs-center.m-t-2 class="#{f.object.team_size_select.blank? ? 'hidden-xs-up' : ''}"
               .paywith-instamojo
                 div
                   h3.m-b-1

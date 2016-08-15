@@ -1,31 +1,31 @@
 class ApplicationStageOneForm < Reform::Form
-  property :cofounder_count_select, virtual: true
-  property :cofounder_count_number, virtual: true
+  property :team_size_select, virtual: true
+  property :team_size_number, virtual: true
 
-  validate :cofounder_count_must_be_valid
+  validate :team_size_must_be_valid
 
-  def cofounder_count_must_be_valid
-    count = cofounder_count_number.present? ? cofounder_count_number : cofounder_count_select
-    return if count.to_i.in?(1..9)
-    errors[:base] << 'Cofounder count is invalid'
-    errors[:cofounder_count] << 'Cofounder count is invalid'
-    errors[:cofounder_count_number] << 'Cofounder count is invalid'
+  def team_size_must_be_valid
+    count = team_size_number.present? ? team_size_number : team_size_select
+    return if count.to_i.in?(2..10)
+    errors[:base] << 'Team size is invalid'
+    errors[:team_size] << 'Team size is invalid'
+    errors[:team_size_number] << 'Team size is invalid'
   end
 
   def prepopulate!
-    if model.cofounder_count.present?
-      if model.cofounder_count.in? [1, 2, 3, 4]
-        self.cofounder_count_select = model.cofounder_count.to_s
+    if model.team_size.present?
+      if model.team_size.in? [2, 3, 4, 5]
+        self.team_size_select = model.team_size.to_s
       else
-        self.cofounder_count_select = 'More than 4 (Enter number)'
-        self.cofounder_count_number = model.cofounder_count
+        self.team_size_select = 'More than 5 (Enter number)'
+        self.team_size_number = model.team_size
       end
     end
   end
 
   def save
-    count = cofounder_count_number.present? ? cofounder_count_number : cofounder_count_select
-    model.update! cofounder_count: count
+    count = team_size_number.present? ? team_size_number : team_size_select
+    model.update! team_size: count
 
     # If payment is present
     if model.payment.present?

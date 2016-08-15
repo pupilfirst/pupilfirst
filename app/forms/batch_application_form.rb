@@ -71,7 +71,7 @@ class BatchApplicationForm < Reform::Form
       college: college
     )
 
-    add_intercom_applicant_tag
+    add_intercom_applicant_tag if Rails.env.production?
 
     applicant
   end

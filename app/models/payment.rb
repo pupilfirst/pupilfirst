@@ -95,7 +95,7 @@ class Payment < ActiveRecord::Base
     # Let the batch application (if still linked) take care of its stuff.
     batch_application&.perform_post_payment_tasks!
 
-    add_intercom_paid_applicant_tag
+    add_intercom_paid_applicant_tag if Rails.env.production?
   end
 
   # Remove direct relation from application to payment and store the relationship as 'original batch application'

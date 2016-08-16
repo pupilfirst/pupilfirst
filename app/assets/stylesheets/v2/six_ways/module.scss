@@ -1,0 +1,387 @@
+.sixways-container {
+  background-color: white;
+  position: relative;
+  overflow: hidden;
+
+  @include media-breakpoint-down(sm) {
+    overflow-y: auto;
+    display: block;
+  }
+}
+.sixways-header {
+  display: flex;
+  height: 120px;
+  position: fixed;
+  width: 100%;
+  z-index: 1;
+
+  .sixways-logo-container {
+    background: $light-secondary;
+    height: 120px;
+    left: 0;
+    position: fixed;
+    top: 0;
+    padding: 2rem;
+    width: 320px;
+    border-bottom: 1px solid $brand-secondary;
+
+    .sixways-logo {
+      display: inline-block;
+      width: 140px;
+
+      @include media-breakpoint-down(sm) {
+        width: 100px;
+      }
+    }
+    @include media-breakpoint-down(sm) {
+      width: 100%;
+      height: 60px;
+      padding: 12px 30px;
+    }
+  }
+  .module-fixed-head {
+    height: 120px;
+    position: fixed;
+    right: 0;
+    left: 320px;
+    background-color: white;
+
+    @include media-breakpoint-down(sm) {
+      top: 60px;
+      height: 60px;
+      left: 0;
+    }
+    .chapter-nav {
+      position: relative;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid $gray-border;
+
+      > a {
+        display: block;
+        padding: 20px 50px;
+
+        @include media-breakpoint-down(sm) {
+          display: inline-block;
+          width: 50%;
+        }
+      }
+      &:before {
+        content: '';
+        height: 50px;
+        display: inline-block;
+        border-right: 1px solid $gray-border;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+
+        @include media-breakpoint-down(sm) {
+          height: 60px;
+        }
+      }
+      @include media-breakpoint-down(sm) {
+        height: 60px;
+      }
+    }
+    .module-details {
+      height: 70px;
+      margin: 0 3rem;
+      background-color: white;
+      border-bottom: 1px solid $gray-border;
+
+      .module-detail-icon {
+        width: 30px;
+        padding-right: 8px;
+      }
+      h4 {
+        padding: 15px 0px;
+        margin: 0;
+        font-size: 0.875rem;
+        font-weight: $font-regular;
+        color: $light-grey-text;
+      }
+      .module-name, .read-time {
+        display: flex;
+        align-items: center;
+        height: 70px;
+        padding: 10px 0;
+      }
+      .module-name {
+
+      }
+      .read-time {
+        justify-content: flex-end;
+      }
+      @include media-breakpoint-down(sm) {
+        display: none;
+      }
+    }
+  }
+}
+.sixways-menu-wrap {
+  margin-top: 120px;
+  background-color: $light-secondary;
+  position: fixed;
+  margin-top: 120px;
+  left: 0;
+  width: 20rem;
+  height: 100%;
+  overflow-y: auto;
+  z-index: 100;
+
+  @include media-breakpoint-down(sm) {
+    margin-top: 0;
+    bottom: 0;
+    transform: translate3d(-320px,0,0);
+    transition: transform 0.3s;
+    transition-timing-function: cubic-bezier(0.7,0,0.3,1);
+  }
+}
+#sidebar-menu-container {
+  position: relative;
+}
+.sidebar-fixed-head {
+  padding: 0 30px;
+  background-color: $light-secondary;
+
+  h4, a {
+    display: inline-block;
+    padding: 25px 0;
+    margin: 0;
+    width: 50%;
+    font-weight: $font-bold;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+  }
+  h4 {
+    color: white;
+
+    @include media-breakpoint-down(sm) {
+      display: none;
+    }
+  }
+  a {
+    text-align: right;
+    color: $brand-secondary;
+    width: 50%;
+
+    @include media-breakpoint-down(sm) {
+      text-align: left;
+    }
+
+    &:hover {
+      color: $dark-secondary;
+    }
+  }
+}
+.sidebar-menu {
+  margin: 0;
+  padding: 0;
+  position: relative;
+
+  .treeview {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    background: $brand-secondary;
+    transition: all .2s;
+
+    > a {
+      padding: 12px 5px 12px 15px;
+      display: block;
+      color: white;
+    }
+    &:hover, &:focus, &:active, &.active {
+      color: white;
+      background: $dark-secondary;
+    }
+    &.active {
+      > .treeview-menu {
+        display: block;
+      }
+    }
+  }
+  .treeview-menu {
+    display: none;
+    list-style: none;
+    margin: 0;
+    background: $light-secondary;
+
+    > li {
+      margin: 0;
+
+      > a {
+        padding: 5px 5px 5px 15px;
+        display: block;
+        font-size: 14px;
+        color: white;
+      }
+      &.active {
+        > a {
+          color: #fff;
+        }
+      }
+    }
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  .content-wrap {
+  	position: relative;
+
+    &:before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 10;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.3);
+      content: '';
+      opacity: 0;
+      transform: translate3d(100%,0,0);
+      transition: opacity 0.3s, transform 0s 0.3s;
+      transition-timing-function: cubic-bezier(0.7,0,0.3,1);
+    }
+  }
+  .show-menu {
+    .sixways-menu-wrap {
+    	transform: translate3d(0,0,0);
+    	transition: transform 0.3s;
+    	transition-timing-function: cubic-bezier(0.7,0,0.3,1);
+    }
+    .content-wrap{
+      &:before {
+      	opacity: 1;
+      	transition: opacity 0.3s;
+      	transition-timing-function: cubic-bezier(0.7,0,0.3,1);
+      	transform: translate3d(0,0,0);
+      }
+    }
+  }
+}
+.sixways-right {
+  padding: 3rem;
+  overflow-y: auto;
+  position: relative;
+  margin-top: 120px;
+  margin-left: 20rem;
+  background-color: white;
+  z-index: 0;
+
+  @include media-breakpoint-down(sm) {
+    margin-left: 0;
+    margin-top: 120px;
+    overflow-y: visible;
+    padding: 2rem;
+  }
+}
+.show-menu-trigger, .close-menu-trigger {
+  position: fixed;
+  z-index: 100;
+  right: 0;
+
+  @include media-breakpoint-up(md) {
+    display: none;
+  }
+}
+.show-menu-trigger {
+  right: 30px;
+  top: 20px;
+}
+.close-menu-trigger {
+  right: 30px;
+  top: 25px;
+}
+.chapter-block {
+  h1 {
+    position: relative;
+    margin-bottom: 40px;
+
+    &:before {
+      content: '';
+      width: 120px;
+      display: inline-block;
+      border-bottom: 4px solid $light-primary;
+      position: absolute;
+      bottom: -20px;
+      left: 0;
+    }
+  }
+  .list-title {
+    font-size: 1.25rem;
+    font-weight: $font-semibold;
+    margin-bottom: 15px;
+    max-width: 40rem;
+  }
+  p {
+    font-size: 1.25rem;
+    font-weight: $font-light;
+    line-height: 1.58;
+
+    &.with-dropcap {
+      &:first-letter {
+        float: left;
+        font-size: 5rem;
+        font-weight: $font-semibold;
+        color: $light-grey-text;
+        line-height: 60px;
+        padding-top: 4px;
+        padding-right: 8px;
+      }
+    }
+  }
+  ul {
+    padding-left: 30px;
+    max-width: 45rem;
+
+    li {
+      position: relative;
+      padding-bottom: 25px;
+      p {
+        font-size: 1.25rem;
+        font-weight: $font-light;
+        letter-spacing: 0.01rem;
+        line-height: 1.58;
+      }
+      strong, em {
+        font-weight: $font-regular;
+      }
+      &:before {
+        content: asset-url('six_ways/tick-inside-circle.svg');
+        width: 16px;
+        height: 16px;
+        position: absolute;
+        left: -30px;
+        top: 8px;
+      }
+    }
+  }
+}
+.sixways-illustration {
+  width: 100%;
+}
+//
+// .sidebar-menu > li > a > .fa {
+//   width: 20px; }
+//
+// .sidebar-menu li > a > .fa-angle-left {
+//   width: auto;
+//   height: auto;
+//   padding: 0;
+//   margin-right: 10px;
+//   margin-top: 3px; }
+//
+// .sidebar-menu li.active > a > .fa-angle-left {
+//   transform: rotate(-90deg); }
+//
+//
+// .sidebar-menu .treeview-menu > li > a > .fa {
+//   width: 20px; }
+// .sidebar-menu .treeview-menu > li > a > .fa-angle-left,
+// .sidebar-menu .treeview-menu > li > a > .fa-angle-down {
+//   width: auto; }
+// .sidebar-menu .treeview-menu > li.active > a, .sidebar-menu .treeview-menu > li > a:hover {
+//   color: #fff; }

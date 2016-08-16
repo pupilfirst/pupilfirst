@@ -1,3 +1,4 @@
+
 //= require jquery
 //= require tether
 //= require bootstrap4_alpha3/bootstrap
@@ -18,6 +19,7 @@
 //= require bootstrap-datetimepicker
 //= require pickers
 //= require select2
+//= require sidebar-menu
 
 //= require google_analytics
 //= require facebook_pixel

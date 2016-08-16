@@ -1,0 +1,32 @@
+doctype html
+html lang='en'
+  head
+    // Begin critial tags.
+    meta charset="utf-8"
+    meta http-equiv="X-UA-Compatible" content="IE=edge"
+    meta name="viewport" content="width=device-width, initial-scale=1"
+    // The above 3 meta tags *must* come first in the head; any other head
+    // content must come *after* these tags.
+
+    / title SV.CO
+
+    // Local Styles
+    = stylesheet_link_tag 'application_v2', media: 'all', 'data-turbolinks-track' => true
+
+    // Scripts
+    = javascript_include_tag 'application_v2', 'data-turbolinks-track' => true
+
+    = csrf_meta_tags
+    = yield :head
+
+    link rel="icon" href="#{image_url 'favicon.png'}"
+
+  body
+    - if @skip_container
+      == yield
+    - else
+      .container
+        == yield
+
+    /- if current_founder.try(:just_signed_in)
+    /  == render 'layouts/inspectlet'

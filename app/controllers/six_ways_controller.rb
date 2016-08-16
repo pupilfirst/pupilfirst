@@ -68,6 +68,7 @@ class SixWaysController < ApplicationController
     @skip_container = true
     @module = CourseModule.friendly.find(params[:module_name])
     @chapter = @module.module_chapters.find_by(slug: params[:chapter_name])
+    render layout: 'sixways'
   end
 
   # GET /sixways/quiz/:module_name

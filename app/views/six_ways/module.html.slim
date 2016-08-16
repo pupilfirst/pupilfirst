@@ -2,51 +2,78 @@
   title Module #{module_number}.#{chapter_number} | Start in College
 
 .container-fluid
-  .m-t-1
-    .col-md-3
-      #module-links
-        - CourseModule.published.order(:module_number).each do |course_module|
-          .card
-            .card-header
-              a data-toggle="collapse" data-parent="#module-links" href="#module#{course_module.module_number}"  #{course_module.module_number}. #{course_module.name}
-            .card-block.collapse id="module#{course_module.module_number}" class="#{course_module.module_number == module_number ? 'in' : ''}"
-              .list-group.list-group-flush
-                - course_module.module_chapters.order(:chapter_number).each do |chapter|
-                  a.list-group-item href="#{six_ways_module_path(course_module.slug, chapter.slug)}" #{chapter.name}
-                - if course_module.quiz?
-                  a.list-group-item href="#{six_ways_quiz_path(course_module.slug)}" Quiz
-    
-    .col-md-9
-      .card
-        .card-header.text-xs-center Module #{module_number} - #{@module.name}
-        .card-block
+  .row
+    #sixways-container.sixways-container
+      header.sixways-header
+        .sixways-logo-container
+          a.sixways-logo href="#{root_url}"
+            img src="#{image_url 'SV.CO-Logo-home.svg'}" alt='Logo of SV.CO'
+        .module-fixed-head
+          .chapter-nav.clearfix
+            = link_to 'Previous', previous_page, class: 'col-md-6 prev-chapter'
+            = link_to 'Next', next_page, class: 'col-md-6 next-chapter text-xs-right' if @module.published?
+          .module-details
+            .col-md-6.module-name
+              .module-detail-icon
+                = image_tag 'six_ways/padnote.svg'
+              h4 Module #{module_number} - #{@module.name}
+            .col-md-6.read-time
+              .module-detail-icon
+                = image_tag 'six_ways/timer.svg'
+              h4 1 Minute Read
+
+        #open-button.show-menu-trigger
+          button
+            | Menu
+      aside#module-links.sixways-menu-wrap
+
+        #sidebar-menu-container
+          .sidebar-fixed-head
+            h4
+              | Modules
+            = link_to 'Back To SV.CO', root_url
+            #close-button.close-menu-trigger
+              button
+                | Close
+          ul.sidebar-menu.list-unstyled
+            - CourseModule.published.order(:module_number).each do |course_module|
+              li.treeview class="#{course_module.module_number == module_number ? 'active' : ''}"
+                a href="module#{course_module.module_number}"  #{course_module.module_number}. #{course_module.name}
+                ul.treeview-menu class="#{course_module.module_number == module_number ? 'menu-open' : ''}"
+                  li id="module#{course_module.module_number}"
+                    - course_module.module_chapters.order(:chapter_number).each do |chapter|
+                      a class="#{chapter.chapter_number == chapter_number ? 'active_chapter' : ''}" href="#{six_ways_module_path(course_module.slug, chapter.slug)}" #{chapter.name}
+                    - if course_module.quiz?
+                      a href="#{six_ways_quiz_path(course_module.slug)}" Quiz
+      
+
+      .sixways-right.content-wrap
+        .chapter-block
           - if @module.published?
-            h4.card-title #{module_number}.#{chapter_number} #{@chapter.name}
-          .card-text
-            - if @module.published?
-              = render "six_ways/module_#{module_number}/chapter_#{chapter_number}"
-              - if @chapter.links.present?
-                hr
-                h5 Extra Reading
-                - @chapter.links.each do |link|
-                  li
-                    a href="#{link[:url]}" target="_blank" #{link[:title]}
-            - else
-              .text-xs-center
-                i.fa.fa-exclamation-triangle
-                ' &nbsp;<strong>You have reached the end of our published content!</strong>
-                br
-                '  The next module ( #{@module.name} ) will be published on #{@module.publish_at.strftime('%A, %b %d')}. Please come back later to continue learning.
-                hr
-                h5 While you wait, let your friends know about the course!
-                a href="https://www.facebook.com/sharer/sharer.php?u=www.sv.co/sixways" target="_blank"
-                  i.fa.fa-facebook-square.fa-2x
-                - default_tweet = URI.escape "I just completed a new module from the Sixways MOOC course by @SVdotCO. Great learning experience! sv.co/sixways #StartInCollege"
-                a.margin-left-10 href="https://twitter.com/intent/tweet?text=#{default_tweet}&url=sv.co/sixways" target="_blank"
-                  i.fa.fa-twitter-square.fa-2x
+            h1 #{@chapter.name}
+          - if @module.published?
+            = render "six_ways/module_#{module_number}/chapter_#{chapter_number}"
+            - if @chapter.links.present?
+              hr
+              h5 Extra Reading
+              - @chapter.links.each do |link|
+                li
+                  a href="#{link[:url]}" target="_blank" #{link[:title]}
+          - else
+            .text-xs-center
+              i.fa.fa-exclamation-triangle
+              ' &nbsp;<strong>You have reached the end of our published content!</strong>
+              br
+              '  The next module ( #{@module.name} ) will be published on #{@module.publish_at.strftime('%A, %b %d')}. Please come back later to continue learning.
+              hr
+              h5 While you wait, let your friends know about the course!
+              a href="https://www.facebook.com/sharer/sharer.php?u=www.sv.co/sixways" target="_blank"
+                i.fa.fa-facebook-square.fa-2x
+              - default_tweet = URI.escape "I just completed a new module from the Sixways MOOC course by @SVdotCO. Great learning experience! sv.co/sixways #StartInCollege"
+              a.margin-left-10 href="https://twitter.com/intent/tweet?text=#{default_tweet}&url=sv.co/sixways" target="_blank"
+                i.fa.fa-twitter-square.fa-2x
 
-        .card-footer
-          = link_to 'Previous', previous_page, class: 'card-link'
-          = link_to 'Next', next_page, class: 'card-link pull-right' if @module.published?
-
-  
+          .footer-chapter-nav
+            = link_to 'Previous', previous_page, class: 'card-link'
+            = link_to 'Next', next_page, class: 'card-link pull-right' if @module.published?
+        / == render 'layouts/footer'

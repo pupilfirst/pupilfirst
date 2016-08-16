@@ -1,18 +1,18 @@
 class IntercomClient
   def initialize(app_id = ENV['INTERCOM_API_ID'], api_key = ENV['INTERCOM_API_KEY'])
-    @intercom = Intercom::Client.new(app_id: app_id, api_key: api_key)
+    @intercom_client = Intercom::Client.new(app_id: app_id, api_key: api_key)
   end
 
   # find a user given his email
   def find_user(email)
-    @intercom.users.find(email: email)
+    @intercom_client.users.find(email: email)
   rescue Intercom::ResourceNotFound
     return nil
   end
 
   # create user with given arguments
   def create_user(args)
-    @intercom.users.create(args)
+    @intercom_client.users.create(args)
   end
 
   # find user by email in args or create one with the given args
@@ -23,12 +23,12 @@ class IntercomClient
 
   # add a tag to a user
   def add_tag_to_user(user, tag)
-    @intercom.tags.tag(name: tag, users: [{ email: user.email }])
+    @intercom_client.tags.tag(name: tag, users: [{ email: user.email }])
   end
 
   # count of open and closed conversations grouped by admin
   def conversation_count_by_admin
-    @conversation_count ||= @intercom.counts.for_type(type: 'conversation', count: 'admin').conversation['admin']
+    @conversation_count ||= @intercom_client.counts.for_type(type: 'conversation', count: 'admin').conversation['admin']
   end
 
   # total count of open conversations
@@ -43,7 +43,7 @@ class IntercomClient
 
   # user counts grouped by segments
   def user_count_by_segment
-    @user_count ||= @intercom.counts.for_type(type: 'user', count: 'segment').user['segment']
+    @user_count ||= @intercom_client.counts.for_type(type: 'user', count: 'segment').user['segment']
   end
 
   # total number of new users
@@ -58,17 +58,17 @@ class IntercomClient
 
   # fetch the latest n open conversations
   def fetch_open_conversations(n)
-    @open_conversations ||= @intercom.conversations.find(open: true, display_as: 'plaintext').conversations[0..n]
+    @open_conversations ||= @intercom_client.conversations.find(open: true, display_as: 'plaintext').conversations[0..n]
   end
 
   # array of n latest conversations including their id, user's name and body
   def latest_conversation_array(n)
     @conversations_to_display = []
-    conversations = @intercom.fetch_open_conversations(n)
+    conversations = fetch_open_conversations(n)
 
     conversations.each do |conversation|
       id = conversation['id']
-      user = @intercom.users.find(id: conversation['user']['id'])
+      user = @intercom_client.users.find(id: conversation['user']['id'])
       user_name = user.name || (user.email.present? ? user.email : user.pseudonym)
       body = conversation['conversation_message']['body']
       @conversations_to_display << { id: id, name: user_name, body: body }

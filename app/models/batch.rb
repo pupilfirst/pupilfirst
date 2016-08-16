@@ -2,7 +2,6 @@ class Batch < ActiveRecord::Base
   has_many :startups
   has_many :founders, through: :startups
   has_many :batch_applications
-  belongs_to :application_stage
   has_many :batch_stages, dependent: :destroy
 
   accepts_nested_attributes_for :batch_stages, allow_destroy: true
@@ -11,20 +10,11 @@ class Batch < ActiveRecord::Base
   scope :not_completed, -> { where('end_date >= ?', Time.now) }
 
   scope :open_for_applications, lambda {
-    joins(:application_stage)
-      .where('application_stages.number = 1 OR (application_stages.number = 2 AND application_stage_deadline > ?)', Time.now)
+    joins(:batch_stages)
+      .where(batch_stages: { application_stage_id: ApplicationStage.initial_stage })
+      .where('batch_stages.starts_at < ?', Time.now)
+      .where('batch_stages.ends_at > ?', Time.now)
   }
-
-  scope :applications_ongoing, lambda {
-    joins(:application_stage)
-      .where('application_stages.number > 1')
-      .where('application_stages.final_stage IS NOT TRUE')
-      .where('(NOT (application_stages.number = 2 AND application_stage_deadline > ?))', Time.now)
-  }
-
-  scope :with_recent_results, -> { joins(:application_stage).where(application_stages: { final_stage: true }).where('start_date > ?', 3.months.ago) }
-
-  just_define_datetime_picker :application_stage_deadline
 
   validates :theme, presence: true
   validates :batch_number, presence: true, numericality: true, uniqueness: true
@@ -32,24 +22,6 @@ class Batch < ActiveRecord::Base
   validates :slack_channel,
     format: { with: /#[^A-Z\s.;!?]+/, message: 'must start with a # and not contain uppercase, spaces or periods' },
     length: { in: 2..22, message: 'channel name should be 1-21 characters' }, allow_nil: true
-
-  validate :must_have_dates_for_stage
-
-  def must_have_dates_for_stage
-    return if application_stage_id.blank?
-    return if batch_stages.select { |sd| sd.application_stage_id == application_stage_id }.present?
-    errors[:base] << 'Please make sure that stage dates are also available'
-    errors[:application_stage] << 'does not have its dates set'
-  end
-
-  after_save :send_emails_to_applicants
-
-  def send_emails_to_applicants
-    return unless application_stage_id_changed?
-    return if application_stage.initial_stage? || application_stage.final_stage?
-
-    EmailApplicantsJob.perform_later(self)
-  end
 
   def display_name
     "##{batch_number} #{theme}"
@@ -65,11 +37,6 @@ class Batch < ActiveRecord::Base
   # If the current batch isn't present, supply last.
   def self.current_or_last
     current.present? ? current : last
-  end
-
-  # Stage has expired when deadline has been crossed.
-  def stage_expired?
-    application_stage_deadline.past?
   end
 
   # Probably use this to auto-announce results
@@ -94,23 +61,42 @@ class Batch < ActiveRecord::Base
 
   # Returns true if applications for this batch closes within 7 days.
   def applications_close_soon?
-    return false if application_stage&.number != 2
-    return false if application_stage_deadline > 7.days.from_now
+    initial_stage = ApplicationStage.initial_stage
+    return false unless stage_active?(initial_stage)
+    return false if batch_stages.find_by(application_stage: initial_stage).ends_at > 7.days.from_now
     true
   end
 
-  # Currently 'open' batch - the one which has an application process ongoing.
+  # Currently 'open' batch - the one which is accepting new applications.
   def self.open_batch
-    if open_for_applications.any?
-      open_for_applications.first
-    elsif applications_ongoing.any?
-      applications_ongoing.first
-    end
+    open_for_applications.first if open_for_applications.any?
   end
 
-  # Checks whether an applicant has an application for this batch.
-  def applied?(applicant)
-    return false if applicant.blank?
-    applicant.batch_applications.where(batch: self).present?
+  # Stage is active when current time is between its bounds.
+  def stage_active?(stage)
+    batch_stages.where(application_stage: stage)
+      .where('starts_at < ?', Time.now)
+      .where('ends_at > ?', Time.now).present?
+  end
+
+  # Stage has expired when deadline has been crossed.
+  def stage_expired?(stage)
+    batch_stages.where(application_stage: stage).where('ends_at < ?', Time.now).present?
+  end
+
+  def stage_started?(stage)
+    batch_stages.where(application_stage: stage).where('starts_at < ?', Time.now).present?
+  end
+
+  def applications_complete?
+    stage_started?(ApplicationStage.final_stage)
+  end
+
+  def initial_stage?
+    stage_active?(ApplicationStage.initial_stage)
+  end
+
+  def final_stage?
+    stage_started?(ApplicationStage.final_stage)
   end
 end

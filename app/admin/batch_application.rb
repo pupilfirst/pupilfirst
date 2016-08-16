@@ -4,7 +4,7 @@ ActiveAdmin.register BatchApplication do
   menu parent: 'Admissions', label: 'Applications', priority: 0
 
   permit_params :batch_id, :application_stage_id, :university_id, :team_achievement, :team_lead_id, :college, :state,
-    :tag_list
+    :tag_list, :team_size
 
   batch_action :promote, confirm: 'Are you sure?' do |ids|
     promoted = 0
@@ -42,6 +42,12 @@ ActiveAdmin.register BatchApplication do
   scope :payment_initiated
   scope :payment_complete
 
+  controller do
+    def scoped_collection
+      super.includes :payment # prevent N+1 queries
+    end
+  end
+
   index do
     selectable_column
 
@@ -62,16 +68,9 @@ ActiveAdmin.register BatchApplication do
       link_to "##{stage.number} #{stage.name}", admin_application_stage_path(stage)
     end
 
-    # column 'Submission' do |batch_application|
-    #   current_stage = batch_application.application_stage
-    #   submission = batch_application.application_submissions.find_by(application_stage_id: current_stage.id)
-    #
-    #   if submission.present?
-    #     link_to "#{current_stage.name} submission", admin_application_submission_path(submission)
-    #   end
-    # end
-
-    column :college
+    column 'College, University' do |batch_application|
+      "#{batch_application&.college}, #{batch_application&.university&.name}"
+    end
 
     column :state do |application|
       application.university&.location || application.state
@@ -79,11 +78,14 @@ ActiveAdmin.register BatchApplication do
 
     # column :score
 
-    column :payment_status do |batch_application|
-      if batch_application.payment.present?
-        link_to t("payment.status.#{batch_application.payment.status}"), admin_payment_path(batch_application.payment)
+    column 'Payment Date', sortable: 'payments.paid_at' do |application|
+      payment = application.payment
+      if payment.blank?
+        'No Payment'
+      elsif payment.paid?
+        payment.paid_at.strftime('%b %d, %Y')
       else
-        em 'No payment'
+        "#{payment.status.capitalize} on #{payment.created_at.strftime('%b %d, %Y')}"
       end
     end
 
@@ -180,7 +182,7 @@ ActiveAdmin.register BatchApplication do
         batch_application&.team_lead&.phone
       end
 
-      row :cofounder_count
+      row :team_size
 
       row :payment_status do |batch_application|
         if batch_application.payment.present?
@@ -242,6 +244,7 @@ ActiveAdmin.register BatchApplication do
     f.inputs do
       f.input :batch
       f.input :team_lead
+      f.input :team_size, as: :select, collection: 2..10, include_blank: false
       f.input :application_stage, collection: ApplicationStage.all.order(number: 'ASC')
       f.input :tag_list, input_html: { value: f.object.tag_list.join(','), 'data-tags' => BatchApplication.tag_counts_on(:tags).pluck(:name).to_json }
       f.input :university

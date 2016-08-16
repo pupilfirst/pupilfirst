@@ -7,7 +7,7 @@ class Payment < ActiveRecord::Base
   STATUS_PAID = -'paid'
   STATUS_FAILED = -'failed'
 
-  scope :requested, -> { where(instamojo_payment_request_status: payment_requested_statuses) }
+  scope :requested, -> { where(instamojo_payment_request_status: payment_requested_statuses, instamojo_payment_status: nil) }
   scope :paid, -> { where(instamojo_payment_status: Instamojo::PAYMENT_STATUS_CREDITED) }
 
   def self.payment_requested_statuses
@@ -94,6 +94,8 @@ class Payment < ActiveRecord::Base
 
     # Let the batch application (if still linked) take care of its stuff.
     batch_application&.perform_post_payment_tasks!
+
+    add_intercom_paid_applicant_tag if Rails.env.production?
   end
 
   # Remove direct relation from application to payment and store the relationship as 'original batch application'
@@ -101,5 +103,15 @@ class Payment < ActiveRecord::Base
     self.original_batch_application_id = batch_application_id
     self.batch_application_id = nil
     save!
+  end
+
+  def add_intercom_paid_applicant_tag
+    intercom = IntercomClient.new
+    user = intercom.find_or_create_user(email: batch_applicant.email, name: batch_applicant.name)
+    intercom.add_tag_to_user(user, 'Paid Applicant')
+
+  rescue
+    # simply skip for now if anything goes wrong here
+    return
   end
 end

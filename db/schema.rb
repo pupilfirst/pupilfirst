@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160812102719) do
+ActiveRecord::Schema.define(version: 20160815093507) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -148,7 +148,7 @@ ActiveRecord::Schema.define(version: 20160812102719) do
     t.integer  "team_lead_id"
     t.string   "college"
     t.string   "state"
-    t.integer  "cofounder_count"
+    t.integer  "team_size"
   end
 
   add_index "batch_applications", ["application_stage_id"], name: "index_batch_applications_on_application_stage_id", using: :btree
@@ -173,17 +173,12 @@ ActiveRecord::Schema.define(version: 20160812102719) do
     t.text     "description"
     t.date     "start_date"
     t.date     "end_date"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.integer  "batch_number"
     t.string   "slack_channel"
-    t.integer  "application_stage_id"
-    t.datetime "application_stage_deadline"
     t.datetime "invites_sent_at"
-    t.date     "next_stage_starts_on"
   end
-
-  add_index "batches", ["application_stage_id"], name: "index_batches_on_application_stage_id", using: :btree
 
   create_table "connect_requests", force: :cascade do |t|
     t.integer  "connect_slot_id"

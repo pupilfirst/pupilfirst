@@ -18,4 +18,4 @@
 
   p
     ' Please note that the deadline for this new stage is
-    strong #{@batch.application_stage_deadline}.
+    strong #{@batch.batch_stages.find_by(application_stage: @stage).ends_at}.

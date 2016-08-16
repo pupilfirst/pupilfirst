@@ -71,6 +71,8 @@ class BatchApplicationForm < Reform::Form
       college: college
     )
 
+    add_intercom_applicant_tag if Rails.env.production?
+
     applicant
   end
 
@@ -86,5 +88,15 @@ class BatchApplicationForm < Reform::Form
 
   def supplied_reference
     team_lead.reference_text.present? ? team_lead.reference_text : team_lead.reference
+  end
+
+  def add_intercom_applicant_tag
+    intercom = IntercomClient.new
+    user = intercom.find_or_create_user(email: team_lead.email, name: team_lead.name)
+    intercom.add_tag_to_user(user, 'Applicant')
+
+  rescue
+    # simply skip for now if anything goes wrong here
+    return
   end
 end

@@ -5,18 +5,18 @@
     .user-count
       h6 Conversations
     .user-count
-      ' Open: #{@open_conversations_count}
+      ' Open: #{@intercom.open_conversations_count}
     .user-count
-      ' Closed: #{@closed_conversations_count}
+      ' Closed: #{@intercom.closed_conversations_count}
     .clearfix
     .user-count
       h6 Users
     .user-count
-      ' New: #{@new_user_count}
+      ' New: #{@intercom.new_users_count}
     .user-count
-      ' Active: #{@active_user_count}
+      ' Active: #{@intercom.active_users_count}
     hr
     h6 Latest Conversations:
-    - @conversations_to_display.each do |conversation|
+    - @intercom.latest_conversation_array(5).each do |conversation|
       = link_to "<strong>#{truncate(conversation[:name])}:</strong> #{truncate(conversation[:body], length: 75)}".html_safe, conversation_url(conversation[:id]), target: '_blank'
       br

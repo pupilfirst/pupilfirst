@@ -1,3 +1,18 @@
+### 15 August, 2016
+
+#### Content, UI
+
+  - Stage 2 (coding and video challenge) of the application process for batch #3 is now live!
+  - Added lots of new content to the home page.
+
+#### Features
+
+  - On demand, we've modified the registration process for our SixWays MOOC to allow students from outside India to participate.
+
+#### Bugfixes
+
+  - Reference dropdown options on the application form weren't visible on Chrome (Windows). This has been fixed.
+
 ### 8 August, 2016
 
 #### Content, UI

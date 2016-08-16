@@ -4,26 +4,16 @@ describe InstamojoController do
   let(:application_stage) { create :application_stage, number: 1 }
   let!(:application_stage_2) { create :application_stage, number: 2 }
 
-  let(:batch) do
-    create :batch,
-      application_stage: application_stage,
-      application_stage_deadline: 15.days.from_now,
-      next_stage_starts_on: 1.month.from_now,
-      batch_stages_attributes: [
-        {
-          application_stage_id: application_stage.id,
-          starts_at: 15.days.ago,
-          ends_at: 15.days.from_now
-        }
-      ]
-  end
-
+  let(:batch) { create :batch }
   let(:batch_application) { create :batch_application, application_stage: application_stage, batch: batch }
   let(:instamojo_payment_request_id) { SecureRandom.hex }
   let(:long_url) { Faker::Internet.url }
   let(:short_url) { Faker::Internet.url }
 
   before do
+    # Open up the batch.
+    create :batch_stage, batch: batch, application_stage: application_stage
+
     allow_any_instance_of(Instamojo).to receive(:create_payment_request).with(
       amount: batch_application.fee,
       buyer_name: batch_application.team_lead.name,

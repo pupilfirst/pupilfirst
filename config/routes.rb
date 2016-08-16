@@ -98,6 +98,7 @@ Svapp::Application.routes.draw do
     post 'send_sign_in_email'
     get 'sign_in_email_sent'
     get 'continue'
+    get 'batch_pending'
     post 'restart', action: 'restart_application'
     get 'universities'
 

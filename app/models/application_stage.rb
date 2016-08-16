@@ -1,6 +1,5 @@
 class ApplicationStage < ActiveRecord::Base
   has_many :batch_applications
-  has_many :batches
 
   validates :name, presence: true
   validates :number, presence: true
@@ -15,7 +14,15 @@ class ApplicationStage < ActiveRecord::Base
     ApplicationStage.find_by number: (number + 1)
   end
 
+  def previous
+    ApplicationStage.find_by number: (number - 1)
+  end
+
   def initial_stage?
     number == 1
+  end
+
+  def self.final_stage
+    find_by(final_stage: true)
   end
 end

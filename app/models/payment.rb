@@ -106,18 +106,9 @@ class Payment < ActiveRecord::Base
   end
 
   def add_intercom_paid_applicant_tag
-    # initialize a client
-    intercom = Intercom::Client.new(app_id: ENV['INTERCOM_API_ID'], api_key: ENV['INTERCOM_API_KEY'])
-
-    # TODO: Create an intercom user for applicant if he doesn't have one
-    # try to find corresponding intercom user
-    begin
-      user = intercom.users.find(email: batch_applicant.email)
-    rescue Intercom::ResourceNotFound
-      user = intercom.users.create(email: batch_applicant.email, name: batch_applicant.name)
-    end
-
-    intercom.tags.tag(name: 'Paid Applicant', users: [{ email: user.email }])
+    intercom = IntercomClient.new
+    user = intercom.find_or_create_user(email: batch_applicant.email, name: batch_applicant.name)
+    intercom.add_tag_to_user(user, 'Paid Applicant')
 
   rescue
     # simply skip for now if anything goes wrong here

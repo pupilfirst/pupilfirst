@@ -91,17 +91,9 @@ class BatchApplicationForm < Reform::Form
   end
 
   def add_intercom_applicant_tag
-    # initialize a client
-    intercom = Intercom::Client.new(app_id: ENV['INTERCOM_API_ID'], api_key: ENV['INTERCOM_API_KEY'])
-
-    # try to find corresponding intercom user
-    begin
-      user = intercom.users.find(email: team_lead.email)
-    rescue Intercom::ResourceNotFound
-      user = intercom.users.create(email: team_lead.email, name: team_lead.name)
-    end
-
-    intercom.tags.tag(name: 'Applicant', users: [{ email: user.email }])
+    intercom = IntercomClient.new
+    user = intercom.find_or_create_user(email: team_lead.email, name: team_lead.name)
+    intercom.add_tag_to_user(user, 'Applicant')
 
   rescue
     # simply skip for now if anything goes wrong here

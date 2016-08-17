@@ -10,8 +10,9 @@ class IntercomClient
     return nil
   end
 
-  # create user with given arguments
+  # create user with given arguments and user_id as nil
   def create_user(args)
+    args[:user_id] = nil
     @intercom_client.users.create(args)
   end
 

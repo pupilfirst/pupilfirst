@@ -1,15 +1,31 @@
+# rubocop:disable Metrics/ModuleLength
 module SixWaysHelper
-  def previous_page
+  def previous_page_path
     return previous_chapter_path unless chapter_number == 1
-    return six_ways_start_path if module_number == 1
-    quiz_of_previous_module if previous_module.quiz?
+    return '#' if module_number == 1
+    return quiz_of_previous_module if previous_module.quiz?
     last_chapter_of_previous_module
   end
 
-  def next_page
+  def next_page_path
     return next_chapter_path unless last_chapter?
     return quiz_of_this_module if @module.quiz?
-    start_of_next_module
+    return start_of_next_module unless last_module?
+    '#'
+  end
+
+  def previous_button_title
+    return previous_chapter.name unless chapter_number == 1
+    return 'Previous Chapter' if module_number == 1
+    return 'Retake Previous Quiz' if previous_module.quiz?
+    previous_module.module_chapters.find_by(chapter_number: previous_module.chapters_count).name
+  end
+
+  def next_button_title
+    return next_chapter.name unless last_chapter?
+    return 'Take Quiz' if @module.quiz?
+    next_module.module_chapters.find_by(chapter_number: 1).name unless last_module?
+    'Next'
   end
 
   def module_number
@@ -58,6 +74,10 @@ module SixWaysHelper
 
   def last_chapter?
     chapter_number == @module.chapters_count
+  end
+
+  def last_module?
+    @module.module_number == CourseModule.maximum(:module_number)
   end
 
   def next_chapter_path
@@ -125,4 +145,13 @@ module SixWaysHelper
     # TODO: Add active condition here if the quiz is being rendered in the same layout
     current_mooc_student.completed_quiz?(course_module) ? 'fa-check-circle' : 'fa-circle'
   end
+
+  def disabled_previous?(chapter)
+    chapter == first_chapter ? 'disabled' : ''
+  end
+
+  def disabled_next?(_chapter)
+    !@module.published?
+  end
 end
+# rubocop:enable Metrics/ModuleLength

@@ -3,6 +3,8 @@ class SixWaysController < ApplicationController
   before_action :block_student, only: %w(student_details create_student)
   before_action :lock_under_feature_flag, only: %w(module quiz quiz_submission)
 
+  skip_after_action :intercom_rails_auto_include
+
   helper_method :current_mooc_student
   helper_method :quiz_score
 

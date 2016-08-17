@@ -37,15 +37,15 @@
                 | Close
           ul.sidebar-menu.list-unstyled
             - CourseModule.published.order(:module_number).each do |course_module|
-              li.treeview class="#{course_module.module_number == module_number ? 'active' : ''}"
+              li.treeview class="#{active_module_class?(course_module)} #{complete_module_class?(course_module)}"
                 a href="module#{course_module.module_number}"  #{course_module.module_number}. #{course_module.name}
                 ul.treeview-menu class="#{course_module.module_number == module_number ? 'menu-open' : ''}"
                   li id="module#{course_module.module_number}"
                     - course_module.module_chapters.order(:chapter_number).each do |chapter|
-                      a class="#{chapter.chapter_number == chapter_number ? 'active_chapter' : ''}" href="#{six_ways_module_path(course_module.slug, chapter.slug)}" #{chapter.name}
+                      a class="#{active_chapter_class?(chapter)} #{complete_chapter_class?(chapter)}" href="#{six_ways_module_path(course_module.slug, chapter.slug)}" #{chapter.name}
                     - if course_module.quiz?
                       a href="#{six_ways_quiz_path(course_module.slug)}" Quiz
-      
+
 
       .sixways-right.content-wrap
         .chapter-block

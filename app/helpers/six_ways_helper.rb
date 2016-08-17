@@ -98,4 +98,20 @@ module SixWaysHelper
   def last_chapter_of_previous_module
     six_ways_module_path(previous_module.slug, previous_module.module_chapters.find_by(chapter_number: previous_module.chapters_count).slug)
   end
+
+  def active_module_class?(course_module)
+    course_module.module_number == module_number ? 'active' : ''
+  end
+
+  def complete_module_class?(course_module)
+    current_mooc_student.completed_module?(course_module) ? 'complete' : ''
+  end
+
+  def active_chapter_class?(chapter)
+    chapter.chapter_number == chapter_number ? 'active_chapter' : ''
+  end
+
+  def complete_chapter_class?(chapter)
+    current_mooc_student.completed_chapter?(chapter) ? 'complete_chapter' : ''
+  end
 end

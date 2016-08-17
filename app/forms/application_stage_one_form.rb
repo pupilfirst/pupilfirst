@@ -59,6 +59,7 @@ class ApplicationStageOneForm < Reform::Form
     intercom = IntercomClient.new
     user = intercom.find_or_create_user(email: model.team_lead.email, name: model.team_lead.name)
     intercom.add_tag_to_user(user, 'Payment Initiated')
+    intercom.add_note_to_user(user, 'Auto-tagged as <em>Payment Initiated</em>')
 
   rescue
     # simply skip for now if anything goes wrong here

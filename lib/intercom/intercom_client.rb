@@ -32,6 +32,11 @@ class IntercomClient
     @intercom_client.tags.tag(name: tag, users: [{ email: user.email }])
   end
 
+  # add internal note to a user
+  def add_note_to_user(user, note)
+    @intercom_client.notes.create(body: note, email: user.email)
+  end
+
   # count of open and closed conversations grouped by admin
   def conversation_count_by_admin
     @conversation_count ||= @intercom_client.counts.for_type(type: 'conversation', count: 'admin').conversation['admin']

@@ -109,6 +109,7 @@ class Payment < ActiveRecord::Base
     intercom = IntercomClient.new
     user = intercom.find_or_create_user(email: batch_applicant.email, name: batch_applicant.name)
     intercom.add_tag_to_user(user, 'Paid Applicant')
+    intercom.add_note_to_user(user, 'Auto-tagged as <em>Paid Applicant</em>')
 
   rescue
     # simply skip for now if anything goes wrong here

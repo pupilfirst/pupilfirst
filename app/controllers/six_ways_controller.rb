@@ -68,6 +68,10 @@ class SixWaysController < ApplicationController
     @skip_container = true
     @module = CourseModule.friendly.find(params[:module_name])
     @chapter = @module.module_chapters.find_by(slug: params[:chapter_name])
+
+    # mark this chapter as complete for the current student
+    current_mooc_student.add_completed_chapter(@chapter)
+
     render layout: 'sixways'
   end
 

@@ -36,17 +36,25 @@
             = link_to 'Back To SV.CO', root_url
           ul.sidebar-menu.list-unstyled
             - CourseModule.published.order(:module_number).each do |course_module|
-              li.treeview class="#{course_module.module_number == module_number ? 'active' : ''}"
-                a href="module#{course_module.module_number}"
-                  | #{course_module.module_number}. #{course_module.name}
+
+              li.treeview class="#{active_module_class?(course_module)}"
+                a.clearfix href="module#{course_module.module_number}"
+                  span #{course_module.module_number}. #{course_module.name}&nbsp;
+                 - if current_mooc_student.completed_module?(course_module)
+                  i.fa.fa-check
                   i.fa.fa-angle-down.pull-xs-right
+
                 ul.treeview-menu class="#{course_module.module_number == module_number ? 'menu-open' : ''}"
                   li id="module#{course_module.module_number}"
                     - course_module.module_chapters.order(:chapter_number).each do |chapter|
-                      a class="#{chapter.chapter_number == chapter_number ? 'active_chapter' : ''}" href="#{six_ways_module_path(course_module.slug, chapter.slug)}" #{chapter.name}
+                      a class="#{active_chapter_class?(chapter)} #{complete_chapter_class?(chapter)}" href="#{six_ways_module_path(course_module.slug, chapter.slug)}"
+                        i.fa class="#{fa_icon_of_chapter(chapter)}"
+                        ' &nbsp;#{chapter.name}
                     - if course_module.quiz?
-                      a href="#{six_ways_quiz_path(course_module.slug)}" Quiz
-      
+                      a href="#{six_ways_quiz_path(course_module.slug)}"
+                        i.fa class="#{fa_icon_of_quiz(course_module)}"
+                        ' &nbsp;Quiz
+
 
       .sixways-right.content-wrap
         .chapter-block
@@ -76,5 +84,5 @@
 
           .footer-chapter-nav
             = link_to 'Previous', previous_page, class: 'card-link'
-            = link_to 'Next', next_page, class: 'card-link pull--xs-right' if @module.published?
+            = link_to 'Next', next_page, class: 'card-link pull-right' if @module.published?
         / == render 'layouts/footer'

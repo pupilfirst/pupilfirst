@@ -10,9 +10,15 @@ class IntercomClient
     return nil
   end
 
-  # create user with given arguments
+  # create user with given arguments and user_id as nil
   def create_user(args)
+    args[:user_id] = nil
     @intercom_client.users.create(args)
+  end
+
+  def delete_user(email)
+    user = find_user(email)
+    @intercom_client.users.delete(user)
   end
 
   # find user by email in args or create one with the given args
@@ -24,6 +30,11 @@ class IntercomClient
   # add a tag to a user
   def add_tag_to_user(user, tag)
     @intercom_client.tags.tag(name: tag, users: [{ email: user.email }])
+  end
+
+  # add internal note to a user
+  def add_note_to_user(user, note)
+    @intercom_client.notes.create(body: note, email: user.email)
   end
 
   # count of open and closed conversations grouped by admin
@@ -79,28 +90,25 @@ class IntercomClient
 
   ## Methods below were created for cleaning up user_id from existing intercom users - a one-time correction measure.
 
-  def alter_and_delete(intercom_client, user)
+  def alter_and_delete(user)
     puts "Altering user #{user.email} who is a dupe of an essential user..."
     components = user.email.split('@')
     new_email = "#{components.first}+#{rand(10_000)}@#{components.last}"
     user.email = new_email
     user.user_id = nil
-    intercom_client.users.save(user)
+    @intercom_client.users.save(user)
 
     puts 'Now deleting the same user...'
-    intercom_client.users.delete(user)
+    @intercom_client.users.delete(user)
   end
 
-  # rubocop:disable MethodLength
-  def strip_user_ids(intercom_client)
-    users = File.read('/Users/hari/code/api-backend/conversing_users.txt').split.each_with_object({}) do |user_line, users_collected|
-      components = user_line.split ','
-      users_collected[components.first] = components.last
-    end
-
+  # rubocop:disable MethodLength, Metrics/PerceivedComplexity
+  def strip_user_ids_from_segment(segment_name)
+    users = get_users_by_segment(segment_name)
+    raise 'No Users found in the Segment' unless users.present?
     user_emails = users.values
 
-    intercom_client.users.all.each_with_index do |user, index|
+    @intercom_client.users.all.each_with_index do |user, index|
       if user.user_id.nil?
         puts "User ##{index} already has nil user_id. Skipping."
         next
@@ -112,26 +120,39 @@ class IntercomClient
         if users[user.id].present?
           puts "Essential user #{user.email} with ID #{user.id} encountered. Only wiping."
           user.user_id = nil
-          intercom_client.users.save(user)
+          @intercom_client.users.save(user)
         else
-          alter_and_delete(intercom_client, user)
+          alter_and_delete(user)
         end
       else
         user.user_id = nil
 
         begin
-          intercom_client.users.save(user)
+          @intercom_client.users.save(user)
         rescue Intercom::MultipleMatchingUsersError
-          alter_and_delete(intercom_client, user)
+          alter_and_delete(user)
         end
       end
     end
   end
-  # rubocop:enable MethodLength
+  # rubocop:enable MethodLength, Metrics/PerceivedComplexity
 
-  def get_user_data_by_segement(intercom_client, segment_id)
-    intercom_client.users.find_all(segment_id: segment_id).each do |user|
-      puts "#{user.id},#{user.email}"
+  def get_segment_id(segment_name)
+    segment_id = nil
+    @intercom_client.segments.all.each do |segment|
+      next unless segment.name == segment_name
+      segment_id = segment.id
     end
+    segment_id
+  end
+
+  def get_users_by_segment(segment_name)
+    segment_id = get_segment_id(segment_name)
+    raise 'Could not Fetch Segment Id' unless segment_id.present?
+    users_by_segment = {}
+    @intercom_client.users.find_all(segment_id: segment_id).each do |user|
+      users_by_segment[user.id] = user.email
+    end
+    users_by_segment
   end
 end

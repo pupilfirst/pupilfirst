@@ -98,4 +98,31 @@ module SixWaysHelper
   def last_chapter_of_previous_module
     six_ways_module_path(previous_module.slug, previous_module.module_chapters.find_by(chapter_number: previous_module.chapters_count).slug)
   end
+
+  def active_module_class?(course_module)
+    course_module == @module ? 'active' : ''
+  end
+
+  def active_chapter_class?(chapter)
+    chapter == @chapter ? 'active_chapter' : ''
+  end
+
+  def complete_chapter_class?(chapter)
+    current_mooc_student.completed_chapter?(chapter) ? 'complete_chapter' : ''
+  end
+
+  def fa_icon_of_chapter(chapter)
+    if chapter == @chapter
+      'fa-circle-o'
+    elsif current_mooc_student.completed_chapter?(chapter)
+      'fa-check-circle'
+    else
+      'fa-circle'
+    end
+  end
+
+  def fa_icon_of_quiz(course_module)
+    # TODO: Add active condition here if the quiz is being rendered in the same layout
+    current_mooc_student.completed_quiz?(course_module) ? 'fa-check-circle' : 'fa-circle'
+  end
 end

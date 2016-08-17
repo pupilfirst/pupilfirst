@@ -5,6 +5,8 @@ class MoocStudent < ActiveRecord::Base
   has_many :quiz_attempts
   has_many :course_modules, through: :quiz_attempts
 
+  serialize :completed_chapters, Array
+
   def self.valid_semester_values
     %w(I II III IV V VI VII VIII Graduated Other)
   end
@@ -17,5 +19,18 @@ class MoocStudent < ActiveRecord::Base
 
   def score_for_module(course_module)
     quiz_attempts.where(course_module: course_module).order('created_at DESC').first&.score.to_i
+  end
+
+  def add_completed_chapter(chapter)
+    self.completed_chapters |= [[chapter.course_module.module_number, chapter.chapter_number]]
+    save!
+  end
+
+  def completed_chapter?(chapter)
+    [chapter.course_module.module_number, chapter.chapter_number].in? self.completed_chapters
+  end
+
+  def completed_module?(course_module)
+    completed_chapters.count { |c| c[0] == course_module.module_number } == course_module.chapters_count
   end
 end

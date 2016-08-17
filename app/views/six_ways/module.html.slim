@@ -11,7 +11,7 @@
         .module-fixed-head
           .chapter-nav.clearfix
             = link_to 'Previous', previous_page, class: 'col-md-6 prev-chapter'
-            = link_to 'Next', next_page, class: 'col-md-6 next-chapter text-xs-right' if @module.published?
+            = link_to 'Next', next_page, class: 'col-md-6 next-chapter' if @module.published?
           .module-details
             .col-md-6.module-name
               .module-detail-icon
@@ -23,8 +23,10 @@
               h4 1 Minute Read
 
         #open-button.show-menu-trigger
-          button
-            | Menu
+          #hambuger-icon
+            span
+            span
+            span
       aside#module-links.sixways-menu-wrap
 
         #sidebar-menu-container
@@ -32,13 +34,12 @@
             h4
               | Modules
             = link_to 'Back To SV.CO', root_url
-            #close-button.close-menu-trigger
-              button
-                | Close
           ul.sidebar-menu.list-unstyled
             - CourseModule.published.order(:module_number).each do |course_module|
               li.treeview class="#{course_module.module_number == module_number ? 'active' : ''}"
-                a href="module#{course_module.module_number}"  #{course_module.module_number}. #{course_module.name}
+                a href="module#{course_module.module_number}"
+                  | #{course_module.module_number}. #{course_module.name}
+                  i.fa.fa-angle-down.pull-xs-right
                 ul.treeview-menu class="#{course_module.module_number == module_number ? 'menu-open' : ''}"
                   li id="module#{course_module.module_number}"
                     - course_module.module_chapters.order(:chapter_number).each do |chapter|
@@ -75,5 +76,5 @@
 
           .footer-chapter-nav
             = link_to 'Previous', previous_page, class: 'card-link'
-            = link_to 'Next', next_page, class: 'card-link pull-right' if @module.published?
+            = link_to 'Next', next_page, class: 'card-link pull--xs-right' if @module.published?
         / == render 'layouts/footer'

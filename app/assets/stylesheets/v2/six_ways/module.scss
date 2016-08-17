@@ -59,12 +59,29 @@
       border-bottom: 1px solid $gray-border;
 
       > a {
-        display: block;
-        padding: 20px 50px;
+        display: flex;
+        align-items: center;
+        padding: 0 50px;
+        height: 100%;
+        font-size: 0.875rem;
+        font-weight: $font-semibold;
+        color: $light-primary;
 
         @include media-breakpoint-down(sm) {
-          display: inline-block;
           width: 50%;
+        }
+        &.next-chapter {
+          justify-content: flex-end;
+        }
+        &.disabled {
+          color: $light-grey-text;
+          pointer-events: none;
+          cursor: not-allowed;
+          opacity: 0.65;
+        }
+        &:hover, &:focus {
+          background-color: $light-primary;
+          color: white;
         }
       }
       &:before {
@@ -124,16 +141,16 @@
   margin-top: 120px;
   background-color: $light-secondary;
   position: fixed;
-  margin-top: 120px;
   left: 0;
   width: 20rem;
-  height: 100%;
+  height: calc(100% - 120px);
   overflow-y: auto;
   z-index: 100;
 
   @include media-breakpoint-down(sm) {
     margin-top: 0;
     bottom: 0;
+    height: calc(100% - 60px);
     transform: translate3d(-320px,0,0);
     transition: transform 0.3s;
     transition-timing-function: cubic-bezier(0.7,0,0.3,1);
@@ -157,10 +174,6 @@
   }
   h4 {
     color: white;
-
-    @include media-breakpoint-down(sm) {
-      display: none;
-    }
   }
   a {
     text-align: right;
@@ -189,9 +202,18 @@
     transition: all .2s;
 
     > a {
-      padding: 12px 5px 12px 15px;
+      padding: 20px 20px 20px 30px;
+      border: 1px solid $dark-secondary;
+      border-width: 1px 0 0 0;
       display: block;
+      font-size: 1rem;
+      letter-spacing: 0.03rem;
       color: white;
+
+      i {
+        margin: 2px 0 0;
+        transition: all 0.2s ease-in-out 0s;
+      }
     }
     &:hover, &:focus, &:active, &.active {
       color: white;
@@ -201,6 +223,17 @@
       > .treeview-menu {
         display: block;
       }
+
+      > a {
+        i {
+          transform: rotate(-180deg);
+        }
+      }
+    }
+    &:last-child {
+      > a {
+        border-bottom: 1px solid $dark-secondary;
+      }
     }
   }
   .treeview-menu {
@@ -208,19 +241,38 @@
     list-style: none;
     margin: 0;
     background: $light-secondary;
+    overflow: hidden;
 
     > li {
       margin: 0;
+      position: relative;
+
+      &:before {
+        border-left: 1px solid $brand-secondary;
+        content: "";
+        height: 100%;
+        left: 0px;
+        bottom: 20px;
+        position: absolute;
+        width: 1px;
+      }
 
       > a {
-        padding: 5px 5px 5px 15px;
+        padding: 15px 5px 15px 15px;
+        margin-right: 20px;
+        margin-left: 15px;
+        border: 1px dashed $brand-secondary;
+        border-width: 0 0 1px 0;
         display: block;
-        font-size: 14px;
+        font-size: 1rem;
         color: white;
-      }
-      &.active {
-        > a {
-          color: #fff;
+
+        &:last-child {
+          border-width: 0px;
+        }
+        &.active_chapter {
+          color: $dark-secondary;
+          font-weight: $font-semibold;
         }
       }
     }
@@ -325,11 +377,11 @@
       &:first-letter {
         float: left;
         font-size: 5rem;
-        font-weight: $font-semibold;
+        font-weight: $font-regular;
         color: $light-grey-text;
         line-height: 60px;
         padding-top: 4px;
-        padding-right: 8px;
+        padding-right: 4px;
       }
     }
   }
@@ -363,25 +415,57 @@
 .sixways-illustration {
   width: 100%;
 }
-//
-// .sidebar-menu > li > a > .fa {
-//   width: 20px; }
-//
-// .sidebar-menu li > a > .fa-angle-left {
-//   width: auto;
-//   height: auto;
-//   padding: 0;
-//   margin-right: 10px;
-//   margin-top: 3px; }
-//
-// .sidebar-menu li.active > a > .fa-angle-left {
-//   transform: rotate(-90deg); }
-//
-//
-// .sidebar-menu .treeview-menu > li > a > .fa {
-//   width: 20px; }
-// .sidebar-menu .treeview-menu > li > a > .fa-angle-left,
-// .sidebar-menu .treeview-menu > li > a > .fa-angle-down {
-//   width: auto; }
-// .sidebar-menu .treeview-menu > li.active > a, .sidebar-menu .treeview-menu > li > a:hover {
-//   color: #fff; }
+
+#hambuger-icon{
+  width: 30px;
+  height: 30px;
+  position: relative;
+  margin: 0;
+  transform: rotate(0deg);
+  transition: .5s ease-in-out;
+  cursor: pointer;
+
+  span {
+    display: block;
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    background: white;
+    border-radius: 20px;
+    opacity: 1;
+    left: 0;
+    transform: rotate(0deg);
+    transition: .2s ease-in-out;
+
+    &:nth-child(1) {
+      top: 0px;
+      transform-origin: left center;
+    }
+    &:nth-child(2) {
+      top: 9px;
+      transform-origin: left center;
+    }
+    &:nth-child(3) {
+      top: 18px;
+      transform-origin: left center;
+    }
+  }
+  &.open {
+    span {
+      &:nth-child(1) {
+        transform: rotate(45deg);
+        top: 0px;
+        left: 5px;
+      }
+      &:nth-child(2) {
+        width: 0%;
+        opacity: 0;
+      }
+      &:nth-child(3) {
+        transform: rotate(-45deg);
+        top: 21px;
+        left: 5px;
+      }
+    }
+  }
+}

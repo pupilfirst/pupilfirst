@@ -1,6 +1,6 @@
 $.sidebarMenu = function(menu) {
   var animationSpeed = 300;
-  
+
   $(menu).on('click', 'li a', function(e) {
     var $this = $(this);
     var checkElement = $this.next();

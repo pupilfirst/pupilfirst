@@ -10,8 +10,8 @@
             img src="#{image_url 'SV.CO-Logo-home.svg'}" alt='Logo of SV.CO'
         .module-fixed-head
           .chapter-nav.clearfix
-            = link_to 'Previous', previous_page, class: 'col-md-6 prev-chapter'
-            = link_to 'Next', next_page, class: 'col-md-6 next-chapter' if @module.published?
+            = link_to previous_button_title, previous_page_path, class: "col-md-6 prev-chapter #{disabled_previous?(@chapter)}"
+            = link_to next_button_title, next_page_path, class: "col-md-6 next-chapter text-xs-right #{disabled_next?(@chapter)}"
           .module-details
             .col-md-6.module-name
               .module-detail-icon
@@ -83,6 +83,6 @@
                 i.fa.fa-twitter-square.fa-2x
 
           .footer-chapter-nav
-            = link_to 'Previous', previous_page, class: 'card-link'
-            = link_to 'Next', next_page, class: 'card-link pull-right' if @module.published?
+            = link_to previous_button_title, previous_page_path, class: "card-link #{disabled_previous?(@chapter)}"
+            = link_to next_button_title, next_page_path, class: "card-link pull-right #{disabled_next?(@chapter)}"
         / == render 'layouts/footer'

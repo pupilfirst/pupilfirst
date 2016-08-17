@@ -30,7 +30,15 @@ class MoocStudent < ActiveRecord::Base
     [chapter.course_module.module_number, chapter.chapter_number].in? self.completed_chapters
   end
 
-  def completed_module?(course_module)
+  def completed_all_chapters?(course_module)
     completed_chapters.count { |c| c[0] == course_module.module_number } == course_module.chapters_count
+  end
+
+  def completed_quiz?(course_module)
+    !course_module.quiz? || quiz_attempts.where(course_module: course_module).present?
+  end
+
+  def completed_module?(course_module)
+    completed_all_chapters?(course_module) && completed_quiz?(course_module)
   end
 end

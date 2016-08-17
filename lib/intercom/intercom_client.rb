@@ -16,6 +16,11 @@ class IntercomClient
     @intercom_client.users.create(args)
   end
 
+  def delete_user(email)
+    user = find_user(email)
+    @intercom_client.users.delete(user)
+  end
+
   # find user by email in args or create one with the given args
   def find_or_create_user(args)
     user = args[:email].present? ? find_user(args[:email]) : nil

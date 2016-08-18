@@ -55,9 +55,9 @@ describe InstamojoController do
       expect(payment.batch_application.application_stage.number).to eq(2)
     end
 
-    it 'redirects to apply page for batch' do
+    it 'redirects to continue page with a from parameter' do
       get :redirect, payment_request_id: payment.instamojo_payment_request_id, payment_id: payment_id
-      expect(response).to redirect_to(apply_stage_complete_path(stage_number: '1'))
+      expect(response).to redirect_to(apply_continue_path(from: 'instamojo'))
     end
   end
 

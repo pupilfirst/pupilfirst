@@ -8,7 +8,7 @@ class Payment < ActiveRecord::Base
   STATUS_FAILED = -'failed'
 
   scope :requested, -> { where(instamojo_payment_request_status: payment_requested_statuses, instamojo_payment_status: nil) }
-  scope :paid, -> { where(instamojo_payment_status: Instamojo::PAYMENT_STATUS_CREDITED) }
+  scope :paid, -> { where.not(paid_at: nil) }
 
   def self.payment_requested_statuses
     [Instamojo::PAYMENT_REQUEST_STATUS_PENDING, Instamojo::PAYMENT_REQUEST_STATUS_SENT]
@@ -54,12 +54,13 @@ class Payment < ActiveRecord::Base
 
   # A payment is considered requested when instamojo payment status is requested.
   def requested?
+    return false if paid?
     instamojo_payment_request_status.in? Payment.payment_requested_statuses
   end
 
   # An payment is considered processed when instamojo payment status is credited.
   def paid?
-    instamojo_payment_status == Instamojo::PAYMENT_STATUS_CREDITED
+    paid_at.present?
   end
 
   # A payment has failed when instamojo payment status is failed.

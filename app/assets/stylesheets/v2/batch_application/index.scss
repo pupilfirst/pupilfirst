@@ -301,16 +301,47 @@
     display: block;
   }
   .card-text {
-    padding: 20px;
+    padding: 20px 35px;
   }
+
   .success-fee-box {
-    border: 1px solid $gray-border;
-    width: 50%;
+    border-style: solid;
+    border-color: $gray-border;
     border-width: 1px 1px 0 0;
-    display: inline-flex;
     text-align: left;
     align-items: center;
     padding: 20px;
+
+    .centered-fee-box {
+      width: 70%;
+      margin: 0 auto;
+      border-right: 0;
+
+      .detail {
+        width: 58%;
+      }
+    }
+
+    .percent {
+      font-weight: 600;
+      font-size: 1.25rem;
+      float: left;
+      width: fit-content;
+      padding-top: 0.4rem;
+    }
+
+    .detail {
+      font-weight: 300;
+      font-size: 1rem;
+      padding-left: 15px;
+      line-height: 1.4;
+      float: left;
+      width: 78%;
+
+      strong {
+        font-weight: $font-semibold;
+      }
+    }
 
     &:nth-child(2n) {
       border-right: 0;
@@ -319,36 +350,32 @@
     &:last-child {
       border-right: 0;
     }
-    h3 {
-      font-size: 1.25rem;
-      font-weight: $font-semibold;
-    }
-    p {
-      font-weight: $font-light;
-      font-size: 1rem;
-      line-height: 1.4;
-      margin-left: 15px;
 
-      strong {
-        font-weight: $font-semibold;
-      }
-    }
-
-    &:first-child {
-      border-left: 0;
-    }
-
-    @include media-breakpoint-down(xs) {
+    @include media-breakpoint-down(sm) {
       width: 100%;
       border-width: 0 0 1px 0;
       padding: 30px 15px;
 
-      &:last-child {
+      &.last-fee-box {
         border-bottom: 0;
+      }
+
+      .centered-fee-box {
+
+        width: 100%;
+
+        .percent {
+          width: 30%;
+        }
+
+        .detail {
+          width: 68%;
+        }
       }
     }
   }
 }
+
 .program-slides {
   position: relative;
   max-width: 560px;

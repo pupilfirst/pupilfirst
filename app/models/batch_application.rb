@@ -23,6 +23,7 @@ class BatchApplication < ActiveRecord::Base
   # Batch applicants who have completed payment.
   scope :payment_complete, -> { joins(:payment).merge(Payment.paid) }
 
+  validates :batch_id, presence: true
   validates :application_stage_id, presence: true
   validates :university_id, presence: true
   validates :college, presence: true
@@ -170,4 +171,18 @@ class BatchApplication < ActiveRecord::Base
     end
   end
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+
+  # Creates a duplicate (pristine, unpaid) of this application into given batch.
+  def duplicate!(batch)
+    BatchApplication.create!(
+      batch: batch,
+      team_lead: team_lead,
+      application_stage: ApplicationStage.initial_stage,
+      university: university,
+      college: college,
+      team_size: team_size
+    )
+
+    update!(swept_at: Time.now)
+  end
 end

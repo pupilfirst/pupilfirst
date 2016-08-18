@@ -282,10 +282,7 @@
               #program-fee.collapse
                 .card-text
                   h3
-                    ' &#8377;37,500 per founder. For a &#8377;1,00,000 worth course.
-                  p
-                    ' If you <em>refer a friend</em>, both of you get 10% off the Program Fee if selected. If you are unhappy with the SV.CO program, this fee is fully refundable within 60 days of program start.
-
+                    ' &#8377;37,500 per founder.
 
             .card
               h4
@@ -315,32 +312,59 @@
                   | Success Fee
               #success-fee.collapse
                 .card-text.text-xs-center
-                  ul.list-unstyled.m-b-0
-                    li.success-fee-box
-                      h3
-                        ' 2.5%
-                      p
-                        | arranger's fee on a funding introduction.
-
-                    li.success-fee-box
-                      h3 5%
-                      p
-                        | lead fee (for 3 years) on a businesss lead introduction.
-
-                    li.success-fee-box
-                      h3 10%
-                      p
-                        | of salary received (for the 1<sup>st</sup> year) on a hiring introduction.
-
-                    li.success-fee-box
-                      h3 20%
-                      p
-                        | of combined compensation on an acqui-hire introduction.
-
-                    li.success-fee-box
-                      h3 30% Discount
-                      p
-                        | for a right to invest in any funding round. <strong>No upfront equity</strong>.
+                  .row
+                    .col-md-6.success-fee-box.clearfix
+                      .percent 2.5%
+                      .detail arranger's fee on a funding introduction.
+                    .col-md-6.success-fee-box.clearfix
+                      .percent 5%
+                      .detail lead fee (for 3 years) on a businesss lead introduction.
+                  .row
+                    .col-md-6.success-fee-box.clearfix
+                      .percent 10%
+                      .detail of salary received (for the 1<sup>st</sup> year) on a hiring introduction.
+                    .col-md-6.success-fee-box.clearfix
+                      .percent 20%
+                      .detail of combined compensation on an acqui-hire introduction.
+                  .row
+                    .col-md-12.success-fee-box.last-fee-box.clearfix
+                      .centered-fee-box
+                        .percent 30% Discount
+                        .detail for a right to invest in any funding round. <strong>No upfront equity</strong>.
+                        
+            .card
+              h4
+                a.card-block.accordion-toggle data-parent="#fee-accordion" data-toggle="collapse" href="#referal-program-applicants"
+                  | Referral Program for Paid Applicants
+              #referal-program-applicants.collapse
+                .card-text
+                  p We're introducing a great way to reduce your Program Fee. For Applicants who have paid, refer teams and for each team you refer that gets selected, get 5% off your Program Fee. If you refer 20 teams that go on to be selected, you can attend this course for free!
+                  p Terms:
+                  ul.m-t-1
+                    li 5% discount on Program Fee for each Selected Team referred. To both the Referred & Referring Teams.
+                    li To qualify, Referred Team must clear the selection rounds (Coding & Video test and Personal Interview) and pay the Program Fee, sign Agreements and be part of the next Batch for the discount to apply.
+                    li Proof to be Submitted: Teams must forward the Application Fee payment receipt of the referred teams to help@sv.co within 15 days of Application Submission. Both Teams can claim the fee deduction immediately when selected.
+                    
+                    
+            .card
+              h4
+                a.card-block.accordion-toggle data-parent="#fee-accordion" data-toggle="collapse" href="#referal-program-students"
+                  | For Microsoft Student Partners &amp; IEDC Volunteers
+              #referal-program-students.collapse
+                .card-text
+                  p We're offering special perks for Microsoft Student Partners &amp; IEDC Volunteers.
+                  p Perks:
+                  ul.m-t-1
+                     li 
+                       | Teams who have at least one Microsoft Student Partner or an IEDC Volunetter have their Application Fee of ₹3000 per team refunded.
+                       ul
+                         li To qualify, teams must ensure to apply via the MSP/IEDC registered email IDs. 
+                     li 
+                       | When a Microsoft Student Partner/IEDC Volunteer refers other teams to apply, they get ₹1000 from their Application Fee refunded.
+                       ul
+                         li To qualify, Referred Teams must pay the Application Fee.
+                         li Proof to be Submitted: MSPs/IEDC Volunteers must forward the Application Fee payment receipt of their Referred Teams to help@sv.co within 15 days of Application Submission. We will credit the refund money to the Teams within 3 working days.
+              
 
     .col-lg-4.col-md-12#start-application-process
       .m-t-2.m-b-3

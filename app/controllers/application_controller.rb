@@ -8,6 +8,8 @@ class ApplicationController < ActionController::Base
   before_filter :set_content_security_policy
   before_action :prepare_platform_feedback
 
+  skip_after_action :intercom_rails_auto_include, unless: proc { Rails.env.production? }
+
   # When in production, respond to requests that ask for unhandled formats with 406.
   rescue_from ActionView::MissingTemplate do |exception|
     raise exception unless Rails.env.production?

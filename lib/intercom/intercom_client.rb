@@ -27,6 +27,10 @@ class IntercomClient
     user.present? ? user : create_user(args)
   end
 
+  def save_user(user)
+    @intercom_client.users.save(user)
+  end
+
   # add a tag to a user
   def add_tag_to_user(user, tag)
     @intercom_client.tags.tag(name: tag, users: [{ email: user.email }])
@@ -35,6 +39,17 @@ class IntercomClient
   # add internal note to a user
   def add_note_to_user(user, note)
     @intercom_client.notes.create(body: note, email: user.email)
+  end
+
+  # add phone as custom attribute to a user
+  def add_phone_to_user(user, phone)
+    user.custom_attributes[:phone] = phone
+    save_user(user)
+  end
+
+  def add_college_to_user(user, college)
+    user.custom_attributes[:college] = college
+    save_user(user)
   end
 
   # count of open and closed conversations grouped by admin
@@ -86,6 +101,16 @@ class IntercomClient
     end
 
     @conversations_to_display
+  end
+
+  # sets the user_id as nil for a user with the given email
+  def strip_user_id(email)
+    user = find_user(email)
+
+    return unless user.present? && user.user_id.present?
+
+    user.user_id = nil
+    save_user(user)
   end
 
   ## Methods below were created for cleaning up user_id from existing intercom users - a one-time correction measure.

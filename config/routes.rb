@@ -115,6 +115,9 @@ Svapp::Application.routes.draw do
     end
   end
 
+  # webhook url for intercom user create - used to strip them off user_id
+  post 'intercom_user_create', as: 'intercom_user_create', controller: 'batch_application'
+
   resources :universities, only: :index
 
   resource :platform_feedback, only: [:create]

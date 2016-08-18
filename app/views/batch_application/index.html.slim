@@ -315,32 +315,25 @@
                   | Success Fee
               #success-fee.collapse
                 .card-text.text-xs-center
-                  ul.list-unstyled.m-b-0
-                    li.success-fee-box
-                      h3
-                        ' 2.5%
-                      p
-                        | arranger's fee on a funding introduction.
-
-                    li.success-fee-box
-                      h3 5%
-                      p
-                        | lead fee (for 3 years) on a businesss lead introduction.
-
-                    li.success-fee-box
-                      h3 10%
-                      p
-                        | of salary received (for the 1<sup>st</sup> year) on a hiring introduction.
-
-                    li.success-fee-box
-                      h3 20%
-                      p
-                        | of combined compensation on an acqui-hire introduction.
-
-                    li.success-fee-box
-                      h3 30% Discount
-                      p
-                        | for a right to invest in any funding round. <strong>No upfront equity</strong>.
+                  .row
+                    .col-md-6.success-fee-box.clearfix
+                      .percent 2.5%
+                      .detail arranger's fee on a funding introduction.
+                    .col-md-6.success-fee-box.clearfix
+                      .percent 5%
+                      .detail lead fee (for 3 years) on a businesss lead introduction.
+                  .row
+                    .col-md-6.success-fee-box.clearfix
+                      .percent 10%
+                      .detail of salary received (for the 1<sup>st</sup> year) on a hiring introduction.
+                    .col-md-6.success-fee-box.clearfix
+                      .percent 20%
+                      .detail of combined compensation on an acqui-hire introduction.
+                  .row
+                    .col-md-12.success-fee-box.last-fee-box.clearfix
+                      .centered-fee-box
+                        .percent 30% Discount
+                        .detail for a right to invest in any funding round. <strong>No upfront equity</strong>.
 
     .col-lg-4.col-md-12#start-application-process
       .m-t-2.m-b-3

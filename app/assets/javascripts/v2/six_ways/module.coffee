@@ -1,4 +1,4 @@
-SidebarMenuEffects = ->
+SidebarMenuToggle = ->
   bodyEl = document.body
   content = document.querySelector('.content-wrap')
   openbtn = document.getElementById('open-button')
@@ -9,15 +9,16 @@ SidebarMenuEffects = ->
     initEvents()
 
   initEvents = ->
-    openbtn.addEventListener 'click', toggleMenu
+    if $('#sixways-container').length
+      openbtn.addEventListener 'click', toggleMenu
 
-    if closebtn
-      closebtn.addEventListener 'click', toggleMenu
-    # close the menu element if the target it´s not the menu element or one of its descendants..
-    content.addEventListener 'click', (ev) ->
-      target = ev.target
-      if isOpen and target != openbtn
-        toggleMenu()
+      if closebtn
+        closebtn.addEventListener 'click', toggleMenu
+      # close the menu element if the target it´s not the menu element or one of its descendants..
+      content.addEventListener 'click', (ev) ->
+        target = ev.target
+        if isOpen and target != openbtn
+          toggleMenu()
 
   toggleMenu = ->
     if isOpen
@@ -33,6 +34,5 @@ SidebarMenuEffects = ->
 JqueryAccordion = ->
   $.sidebarMenu $('.sidebar-menu')
 
-
-$(document).on 'page:change', SidebarMenuEffects
-$(document).on 'page:change', JqueryAccordion
+$(document).on 'page:change', SidebarMenuToggle
+$(document).on 'ready page:load',  JqueryAccordion

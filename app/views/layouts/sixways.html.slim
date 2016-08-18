@@ -22,11 +22,70 @@ html lang='en'
     link rel="icon" href="#{image_url 'favicon.png'}"
 
   body
-    - if @skip_container
-      == yield
-    - else
-      .container
-        == yield
+    .container-fluid
+      .row
+        #sixways-container.sixways-container
+          header.sixways-header
+            .sixways-logo-container
+              a.sixways-logo href="#{root_url}"
+                img src="#{image_url 'SV.CO-Logo-home.svg'}" alt='Logo of SV.CO'
+            .module-fixed-head
+              .chapter-nav.clearfix
+                = link_to previous_button_title, previous_page_path, class: "col-md-6 prev-chapter #{disabled_previous?(@chapter)}"
+                = link_to next_button_title, next_page_path, class: "col-md-6 next-chapter #{disabled_next?(@chapter)}"
+
+              .module-details
+                .col-md-6.module-name
+                  .module-detail-icon
+                    = image_tag 'six_ways/padnote.svg'
+                  h4 Module #{module_number} - #{@module.name}
+                .col-md-6.read-time
+                  .module-detail-icon
+                    = image_tag 'six_ways/timer.svg'
+                  h4 1 Minute Read
+
+            #open-button.show-menu-trigger
+              #hambuger-icon
+                span
+                span
+                span
+          aside#module-links.sixways-menu-wrap
+            #sidebar-menu-container
+              .sidebar-fixed-head
+                h4
+                  span.modules-icon
+                    = image_tag 'six_ways/notes-stack.svg', class: "img-fluid"
+                  | Modules
+                = link_to 'Back To SV.CO', root_url
+              ul.sidebar-menu.list-unstyled
+                - CourseModule.published.order(:module_number).each do |course_module|
+
+                  li.treeview class="#{active_module_class?(course_module)}"
+                    a.clearfix href="module#{course_module.module_number}"
+                      .module-title 
+                        h3 #{course_module.module_number}. #{course_module.name}
+                        - if current_mooc_student.completed_module?(course_module)
+                          span.complete-module.tag.tag-pill
+                            i.fa.fa-check
+                        span.menu-collapse-icon
+                          i.fa.fa-angle-down.pull-xs-right
+
+                    ul.treeview-menu class="#{course_module.module_number == module_number ? 'menu-open' : ''}"
+                      li id="module#{course_module.module_number}"
+                        - course_module.module_chapters.order(:chapter_number).each do |chapter|
+                          a class="#{active_chapter_class?(chapter)} #{complete_chapter_class?(chapter)}" href="#{six_ways_module_path(course_module.slug, chapter.slug)}"
+                            i.fa class="#{fa_icon_of_chapter(chapter)}"
+                            ' &nbsp;#{chapter.name}
+                        - if course_module.quiz?
+                          a href="#{six_ways_quiz_path(course_module.slug)}"
+                            i.fa class="#{fa_icon_of_quiz(course_module)}"
+                            ' &nbsp;Quiz
+
+          - if @skip_container
+            == yield
+          - else
+            .container
+              == yield
 
     /- if current_founder.try(:just_signed_in)
     /  == render 'layouts/inspectlet'

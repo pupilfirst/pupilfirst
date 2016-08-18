@@ -1,7 +1,80 @@
-.quiz-header-image{
+.quiz-header-image {
+  height: 340px;
+  overflow-y: auto;
+  border: 1px solid $gray-border;
+  border-width: 1px 0 1px 0;
+
   img {
     width: 100%;
   }
-  height: 600px;
-  overflow-y: scroll;
+}
+
+.question-heading {
+  color: $light-grey-text;
+}
+
+.question-body {
+  .question-text {
+    margin-top: 5px;
+
+    h3 {
+      max-width: 40rem;
+      line-height: 1.5;
+    }
+  }
+  .answer-form {
+    .form-group {
+      .radio-inline {
+        padding-top: 0;
+        margin-right: 0;
+        font-size: 1.125rem;
+
+        label {
+          display: flex;
+          align-items: center;
+          padding: 15px 20px;
+          border: 1px solid $gray-border;
+          border-width: 1px;
+          margin-bottom: -1px;
+          cursor: pointer;
+          transition: all .2s;
+
+          &:hover {
+            color: $light-primary;
+          }
+        }
+        input {
+          margin-right: 25px;
+          width: 20px;
+          height: 20px;
+          background-color: $light-secondary;
+        }
+      }
+    }
+  }
+  .submission-result {
+    .answer-hints {
+      max-width: 40rem;
+
+      .answer-hint {
+        font-size: 1.125rem;
+        font-weight: $font-light;
+        line-height: 1.5;
+      }
+      .answer-result {
+        font-size: 2rem;
+        display: inline-block;
+
+        .correct-answer {
+          color: $light-primary;
+        }
+        .wrong-answer {
+          color: red;
+        }
+      }
+    }
+  }
+  .answer-check-button-container {
+    max-width: 40rem;
+  }
 }

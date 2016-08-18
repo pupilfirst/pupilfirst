@@ -82,12 +82,13 @@ class SixWaysController < ApplicationController
   # Displays the quiz questions
   def quiz
     raise_not_found unless module_exists?
-
+    @skip_container = true
     @module = CourseModule.friendly.find(params[:module_name])
     @questions = @module.quiz_questions.shuffle
 
     @form = QuizSubmissionForm.new(OpenStruct.new)
     @form.prepopulate! questions: @questions
+    render layout: 'sixways'
   end
 
   # POST /sixways/quiz_submission

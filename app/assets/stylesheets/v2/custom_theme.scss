@@ -190,6 +190,10 @@ p {
     .radio-inline {
       padding-top: 7px;
       margin-right: 20px;
+
+      input {
+        margin-right: 10px;
+      }
     }
     .form-control {
       font-size: 0.875rem;

@@ -47,6 +47,11 @@ class IntercomClient
     save_user(user)
   end
 
+  def add_college_to_user(user, college)
+    user.custom_attributes[:college] = college
+    save_user(user)
+  end
+
   # count of open and closed conversations grouped by admin
   def conversation_count_by_admin
     @conversation_count ||= @intercom_client.counts.for_type(type: 'conversation', count: 'admin').conversation['admin']

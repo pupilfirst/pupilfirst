@@ -71,25 +71,27 @@ class BatchApplicationController < ApplicationController
   # GET /apply/continue
   #
   # This is the link supplied in emails. Routes applicant to correct location.
-  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize
   def continue
     check_token
 
+    from = params[:from].present? ? { from: params[:from] } : {}
+
     case application_status
       when :pending
-        redirect_to apply_path
+        redirect_to apply_path(from)
       when :batch_pending
-        redirect_to apply_batch_pending_path
+        redirect_to apply_batch_pending_path(from)
       when :ongoing
-        redirect_to apply_stage_path(stage_number: application_stage_number)
+        redirect_to apply_stage_path(from.merge(stage_number: application_stage_number))
       when :expired
-        redirect_to apply_stage_expired_path(stage_number: application_stage_number)
+        redirect_to apply_stage_expired_path(from.merge(stage_number: application_stage_number))
       when :rejected
-        redirect_to apply_stage_rejected_path(stage_number: application_stage_number)
+        redirect_to apply_stage_rejected_path(from.merge(stage_number: application_stage_number))
       when :submitted
-        redirect_to apply_stage_complete_path(stage_number: application_stage_number)
+        redirect_to apply_stage_complete_path(from.merge(stage_number: application_stage_number))
       when :promoted
-        redirect_to apply_stage_complete_path(stage_number: (application_stage_number - 1))
+        redirect_to apply_stage_complete_path(from.merge(stage_number: (application_stage_number - 1)))
       else
         raise "Unexpected application_status: #{application_status}"
     end

@@ -41,6 +41,12 @@ class IntercomClient
     @intercom_client.notes.create(body: note, email: user.email)
   end
 
+  # add phone as custom attribute to a user
+  def add_phone_to_user(user, phone)
+    user.custom_attributes[:phone] = phone
+    save_user(user)
+  end
+
   # count of open and closed conversations grouped by admin
   def conversation_count_by_admin
     @conversation_count ||= @intercom_client.counts.for_type(type: 'conversation', count: 'admin').conversation['admin']

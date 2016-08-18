@@ -89,6 +89,8 @@ ActiveAdmin.register BatchApplication do
       end
     end
 
+    column :status
+
     actions defaults: false do |batch_application|
       span do
         link_to 'View', admin_batch_application_path(batch_application), class: 'view_link member_link'
@@ -221,6 +223,7 @@ ActiveAdmin.register BatchApplication do
         row :id
         row :created_at
         row :updated_at
+        row :swept_at
       end
     end
   end

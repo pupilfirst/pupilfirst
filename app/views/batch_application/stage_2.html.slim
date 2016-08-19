@@ -7,7 +7,20 @@
     == render 'application_progress'
 
   .row
-    .col-lg-8.col-md-12
+    .col-lg-8.col-md-12.m-t-2
+      - if current_application.cofounders.blank?
+        .card.content-box.notice-with-link.m-b-1
+          .notice
+            ' Before getting started with these tasks, please consider adding some details about your cofounders.
+          .link
+            = link_to 'Add cofounder details', apply_cofounders_path, class: 'btn btn-primary btn-md text-uppercase'
+      - else
+        .card.content-box.notice-with-link.m-b-1
+          .notice
+            ' Thanks for submitting details about your cofounders. You can edit these details at any time.
+          .link
+            = link_to 'Edit cofounder details', apply_cofounders_path, class: 'btn btn-secondary btn-md text-uppercase'
+
       .code-video-task.content-box.m-t-2.m-b-1
         h6.font-semibold.text-uppercase.m-b-1
           | Coding &amp; Video task

@@ -1,0 +1,71 @@
+- content_for :head do
+  title SV.CO Apply Now
+  meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
+
+.secondary-banner.application-stages-banner
+  .container
+    .application-stages-head.text-xs-center
+      h1 Update Cofounder Details
+
+.container
+  .m-t-2.m-b-2
+    .row
+      .col-lg-6.offset-lg-3.col-md-8.offset-md-2
+        .content-box
+          p.m-b-1 You are the <strong>Team Lead</strong>. We have the following information about you on record:
+
+          .m-l-1.m-b-1.m-r-1
+            table.table
+              tr
+                td <strong>Name</strong>
+                td = current_batch_applicant.name
+              tr
+                td <strong>Email Address</strong>
+                td = current_batch_applicant.email
+
+          p Use the form below to modify the list of cofounders associated with this application.
+
+        .text-xs-center.m-b-1.m-t-2
+          h3 Your Cofounders
+
+        .apply-cofounders-form
+          = simple_form_for(@form, url: apply_cofounders_path, method: :post, html: { class: 'form-horizontal' }, wrapper: :horizontal_form) do |f|
+            - if f.object.errors.present?
+              .alert.alert-warning.alert-dismissable.fade.in role='alert'
+
+                strong There were problems with your submission.
+                | &nbsp;Please check all fields and try again.
+
+                - if f.object.errors[:base].present?
+                  ul.m-t-1
+                    - f.object.errors[:base].each do |error_message|
+                      li #{error_message}
+
+            .cofounders-list
+              = f.fields_for :cofounders do |c|
+                .cofounder.content-box
+                  - unless c.object.persisted?
+                    .cofounder-delete-button
+                      i.fa.fa-times-circle
+
+                  - if c.object.persisted?
+                    .hidden-xs-up
+                      = c.input :id, as: :hidden
+
+                  = c.input :name, input_html: { maxlength: 250 }
+
+                  = c.input :email,
+                    input_html: { maxlength: 250, type: :email, disabled: c.object.persisted? },
+                    label: 'Email address'
+
+                  - if c.object.persisted?
+                    = c.input :delete, as: :boolean, label: '&nbsp;Delete this cofounder'.html_safe
+
+            .clearfix
+              .pull-sm-left.m-b-1
+                .add-another-cofounder.btn.btn-secondary.text-uppercase
+                  i.fa.fa-plus
+                  ' &nbsp; Add cofounder
+
+              .pull-sm-right.m-b-1
+                = f.submit 'Save cofounders', class: 'btn btn-success text-uppercase' do

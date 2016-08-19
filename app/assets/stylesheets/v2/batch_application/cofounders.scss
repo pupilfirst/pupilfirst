@@ -1,0 +1,21 @@
+.apply-cofounders-form {
+  .cofounder {
+    //padding: 1rem;
+    margin-bottom: 1rem;
+    //background-color: white;
+    //box-shadow: 2px 2px 10px $dark-grey-bg;
+    position: relative;
+  }
+
+  .cofounder-delete-button {
+    position: absolute;
+    top: 0.2rem;
+    right: 0.4rem;
+    padding: 0.5rem;
+    cursor: pointer;
+  }
+
+  .form-group.cofounders_cofounders_delete {
+    margin-bottom: 0;
+  }
+}

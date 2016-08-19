@@ -7,7 +7,7 @@ class Payment < ActiveRecord::Base
   STATUS_PAID = -'paid'
   STATUS_FAILED = -'failed'
 
-  scope :requested, -> { where(instamojo_payment_request_status: payment_requested_statuses, instamojo_payment_status: nil) }
+  scope :requested, -> { where(instamojo_payment_request_status: payment_requested_statuses, instamojo_payment_status: nil, paid_at: nil) }
   scope :paid, -> { where.not(paid_at: nil) }
 
   def self.payment_requested_statuses

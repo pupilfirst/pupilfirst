@@ -114,6 +114,28 @@ class BatchApplicationController < ApplicationController
     redirect_to apply_path
   end
 
+  # GET /apply/cofounders
+  def cofounders_form
+    return redirect_to(apply_continue_path) if current_batch.final_stage?
+    @form = CofoundersForm.new(current_application)
+    @form.prepopulate!
+  end
+
+  # POST /apply/cofounders
+  def cofounders_save
+    raise_not_found if current_batch.final_stage?
+    @form = CofoundersForm.new(current_application)
+
+    if @form.validate(params[:cofounders])
+      @form.save
+
+      flash[:success] = 'Thank you for updating cofounder details.'
+      redirect_to apply_continue_path
+    else
+      render 'cofounders_form'
+    end
+  end
+
   # GET /apply/stage/:stage_number
   def ongoing
     return redirect_to(apply_continue_path) if application_status != :ongoing

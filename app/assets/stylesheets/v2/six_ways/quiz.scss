@@ -17,7 +17,6 @@
   width: 50%;
 }
 
-
 .question-body {
   .question-text {
     margin-top: 5px;
@@ -102,6 +101,28 @@
     max-width: 40rem;
     border-top: 1px solid $gray-border;
     padding-top: 15px;
+
+    .answer-check-button, .question-skip-button {
+      .btn {
+        margin: 0 30px 20px 0;
+      }
+    }
+    .question-next-button {
+      .btn {
+        margin: 0;
+      }
+    }
+    .btn {
+      min-width: 120px;
+
+      @include media-breakpoint-down(md) {
+        min-width: 100px;
+        margin: 0 20px 20px 0;
+      }
+      @include media-breakpoint-down(sm) {
+        margin: 0 0 20px 0;
+      }
+    }
   }
 }
 .quiz-reference {
@@ -115,4 +136,16 @@
   width: 50%;
   display: flex;
   justify-content: flex-end;
+}
+.quiz-result {
+  max-width: 40rem;
+
+  .btn {
+    min-width: 160px;
+    margin: 0 30px 20px 0;
+
+    @include media-breakpoint-down(sm) {
+      margin: 0 0 20px 0;
+    }
+  }
 }

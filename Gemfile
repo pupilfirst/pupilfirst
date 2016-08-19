@@ -110,6 +110,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-tether' # A positioning engine to make overlays, tooltips and dropdowns better
   gem 'rails-assets-readmore' # A lightweight jQuery plugin for collapsing and expanding long blocks of text with "Read more" and "Close" links.
   gem 'rails-assets-waypoints' # Waypoints is a library that makes it easy to execute a function whenever you scroll to an element.
+  gem 'rails-assets-gemini-scrollbar' # Custom overlay-scrollbars with native scrolling mechanism for web applications
 end
 
 group :development do

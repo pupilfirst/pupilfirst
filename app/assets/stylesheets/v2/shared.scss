@@ -1,7 +1,10 @@
 @import 'select2';
 
 .turbolinks-progress-bar {
-  background-color: $brand-primary;
+
+  &:before {
+    background-color: $brand-primary !important;
+  }
 }
 
 .cursor-pointer {

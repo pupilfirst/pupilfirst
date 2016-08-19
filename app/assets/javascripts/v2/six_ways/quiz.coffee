@@ -65,7 +65,7 @@ showQuestion = (questionIndex) ->
 
 showFinishButton = ->
   $('.question-next-button').addClass('hidden-xs-up')
-  $('#quiz-submit-button').removeClass('hidden-xs-up')
+  $('.quiz-submit-button').removeClass('hidden-xs-up')
 
 lastQuestion = (questionIndex) ->
   return questionIndex is $('#quiz-form-data').data().questionCount - 1

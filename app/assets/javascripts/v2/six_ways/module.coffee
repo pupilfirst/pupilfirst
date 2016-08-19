@@ -34,5 +34,9 @@ SidebarMenuToggle = ->
 JqueryAccordion = ->
   $.sidebarMenu $('.sidebar-menu')
 
+SimpleScrollBar = ->
+  myScrollbar = new GeminiScrollbar(element: document.querySelector('#module-links')).create()
+
 $(document).on 'page:change', SidebarMenuToggle
-$(document).on 'ready page:load',  JqueryAccordion
+$(document).on 'ready page:load', JqueryAccordion
+$(document).on 'ready page:load', SimpleScrollBar

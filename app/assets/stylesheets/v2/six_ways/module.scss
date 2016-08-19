@@ -244,7 +244,7 @@
   position: relative;
 }
 .sidebar-fixed-head {
-  padding: 0 30px;
+  padding: 0 20px 0 30px;
   background-color: $light-secondary;
   display: flex;
   align-items: center;
@@ -511,6 +511,35 @@
   top: 25px;
 }
 .chapter-block {
+  position: relative;
+
+  .content-wrapper {
+    max-width: 48rem;
+
+    .list-title {
+      font-size: 1.25rem;
+      font-weight: $font-semibold;
+      margin-bottom: 15px;
+      max-width: 40rem;
+    }
+    > p {
+      font-size: 1.25rem;
+      font-weight: $font-light;
+      margin-bottom: 20px;
+      line-height: 1.58;
+
+      &.with-dropcap {
+        &:first-letter {
+          float: left;
+          font-size: 5rem;
+          font-weight: $font-regular;
+          line-height: 60px;
+          padding-top: 4px;
+          padding-right: 4px;
+        }
+      }
+    }
+  }
 
   h1 {
     position: relative;
@@ -526,29 +555,7 @@
       left: 0;
     }
   }
-  .list-title {
-    font-size: 1.25rem;
-    font-weight: $font-semibold;
-    margin-bottom: 15px;
-    max-width: 40rem;
-  }
-  p {
-    font-size: 1.25rem;
-    font-weight: $font-light;
-    line-height: 1.58;
 
-    &.with-dropcap {
-      &:first-letter {
-        float: left;
-        font-size: 5rem;
-        font-weight: $font-regular;
-        color: $light-grey-text;
-        line-height: 60px;
-        padding-top: 4px;
-        padding-right: 4px;
-      }
-    }
-  }
   ul {
     padding-left: 30px;
     max-width: 45rem;
@@ -556,6 +563,7 @@
     li {
       position: relative;
       padding-bottom: 25px;
+
       p {
         font-size: 1.25rem;
         font-weight: $font-light;
@@ -578,13 +586,38 @@
   @include media-breakpoint-down(sm) {
     height: 100%;
   }
+  ol {
+    padding-left: 30px;
+    max-width: 45rem;
+    font-size: 1.24rem;
+
+    li {
+      position: relative;
+      padding-bottom: 25px;
+
+      p {
+        font-size: 1.25rem;
+        font-weight: $font-regular;
+        letter-spacing: 0.01rem;
+        line-height: 1.58;
+      }
+      strong, em {
+        font-weight: $font-regular;
+      }
+    }
+  }
 }
 .sixways-illustration {
   width: 100%;
 }
 .footer-chapter-nav {
   .btn {
+    margin: 0 30px 0 0;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
     min-width: 140px;
+
+    @include media-breakpoint-down(sm) {
+      margin: 0 0 20px 0;
+    }
   }
 }

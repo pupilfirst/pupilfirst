@@ -27,8 +27,8 @@
         a.margin-left-10 href="https://twitter.com/intent/tweet?text=#{default_tweet}&url=sv.co/sixways" target="_blank"
           i.fa.fa-twitter-square.fa-2x
 
-    .footer-chapter-nav.m-t-1.m-x-auto.text-xs-center
-      = link_to 'Previous Chapter', previous_page_path, class: "btn btn-ghost-primary btn-md m-r-2 text-uppercase #{disabled_previous?(@chapter)}"
+    .footer-chapter-nav.m-t-3.m-x-auto.text-xs-center
+      = link_to 'Previous Chapter', previous_page_path, class: "btn btn-ghost-primary btn-md text-uppercase #{disabled_previous?(@chapter)}"
       = link_to 'Complete & Continue', next_page_path, class: "btn btn-ghost-primary btn-md text-uppercase #{disabled_next?(@chapter)}"
   / == render 'layouts/footer'
 

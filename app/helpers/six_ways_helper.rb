@@ -156,8 +156,7 @@ module SixWaysHelper
   def fa_icon_of_quiz(course_module)
     if quiz_page? && course_module == @module
       'fa-circle-o'
-    elsif
-      current_mooc_student.completed_quiz?(course_module)
+    elsif current_mooc_student.completed_quiz?(course_module)
       'fa-check-circle'
     else
       'fa-circle'

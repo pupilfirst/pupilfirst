@@ -5,16 +5,18 @@ class QuizQuestion < ActiveRecord::Base
 
   validates_presence_of :question, :course_module_id
 
+  # TODO: Valdiation below is broken. Suspect implementation of nested form by activeadmin + persistence issues. Disabling it except for persisted questions.
   validate :must_have_exactly_one_correct_answer
 
   def must_have_exactly_one_correct_answer
+    return unless persisted?
     errors.add :base, 'Must have exactly one correct answer' unless exactly_one_correct_answer?
   end
 
   def exactly_one_correct_answer?
     # Answers might not be persisted yet. So we can't use the count short-hand as rubocop suggests
     # rubocop: disable Performance/Count
-    answer_options.select { |o| o.correct_answer == true }.count == 1
+    answer_options.select { |o| o.correct_answer == true }.length == 1
     # rubocop: enable Performance/Count
   end
 

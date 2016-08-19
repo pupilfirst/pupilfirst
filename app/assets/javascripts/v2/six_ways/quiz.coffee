@@ -1,12 +1,15 @@
 showFirstQuestion = ->
   $('#question-container-0').removeClass('hidden-xs-up')
 
-handleAnswerSelect = ->
+handleAnswerSelect = (questionIndex = '0') ->
   $('.question-container:not(.hidden-xs-up) input.radio_buttons').click(->
+
     $('.question-next-button').removeClass('hidden-xs-up')
+    $('.answer-check-button').removeClass('hidden-xs-up')
+    showFinishButton() if lastQuestion(questionIndex)
   )
 
-handleAnswerSubmission = ->
+handleAnswerCheck = ->
   $('.answer-check-button').click(->
     questionIndex = $(this).data().questionIndex
     clearPreviousResults()
@@ -47,7 +50,7 @@ modifyButtons = (questionIndex, submittedAnswerId) ->
 
 
 resetButtons = ->
-  $('.answer-check-button').removeClass('hidden-xs-up')
+  $('.answer-check-button').addClass('hidden-xs-up')
   $('.question-skip-button').removeClass('hidden-xs-up')
   $('.question-next-button').addClass('hidden-xs-up')
 
@@ -58,8 +61,7 @@ showQuestion = (questionIndex) ->
   $('.question-container').addClass('hidden-xs-up')
   $("#question-container-#{questionIndex}").removeClass('hidden-xs-up')
   resetButtons()
-  showFinishButton() if lastQuestion(questionIndex)
-  handleAnswerSelect()
+  handleAnswerSelect(questionIndex)
 
 showFinishButton = ->
   $('.question-next-button').addClass('hidden-xs-up')
@@ -81,6 +83,6 @@ submitForm = ->
 
 $(document).on 'page:change', showFirstQuestion
 $(document).on 'page:change', handleAnswerSelect
-$(document).on 'page:change', handleAnswerSubmission
+$(document).on 'page:change', handleAnswerCheck
 $(document).on 'page:change', handleQuestionSkip
 $(document).on 'page:change', handleQuestionNext

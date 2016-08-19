@@ -56,7 +56,7 @@ html lang='en'
                   span.modules-icon
                     = image_tag 'six_ways/notes-stack.svg', class: "img-fluid"
                   | Modules
-                = link_to 'Back To SV.CO', root_url
+                = link_to 'Back To SV.CO', root_url, class: "btn btn-sm"
               ul.sidebar-menu.list-unstyled
                 - CourseModule.published.order(:module_number).each do |course_module|
 
@@ -77,7 +77,7 @@ html lang='en'
                             i.fa class="#{fa_icon_of_chapter(chapter)}"
                             ' &nbsp;#{chapter.name}
                         - if course_module.quiz?
-                          a href="#{six_ways_quiz_path(course_module.slug)}"
+                          a class="#{active_quiz_class?(course_module)} #{complete_quiz_class?(course_module)}" href="#{six_ways_quiz_path(course_module.slug)}"
                             i.fa class="#{fa_icon_of_quiz(course_module)}"
                             ' &nbsp;Quiz
 

@@ -95,10 +95,12 @@ class SixWaysController < ApplicationController
   #
   # Evaluates a quiz submission
   def quiz_submission
+    @skip_container = true
     @module = CourseModule.friendly.find params[:module]
 
     grade_submission
     save_grade
+    render layout: 'sixways'
   end
 
   # GET /sixways/course_end

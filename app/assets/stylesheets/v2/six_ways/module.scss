@@ -273,10 +273,13 @@
   a {
     display: flex;
     color: $brand-secondary;
-    justify-content: flex-end;
+    padding: 5px;
+    background: white;
+    justify-content: center;
 
-    &:hover {
-      color: $dark-secondary;
+    &:hover, &:focus {
+      color: $light-secondary;
+      background: $dark-secondary;
     }
   }
 }
@@ -319,8 +322,9 @@
         .complete-module {
           flex: 1 1 10px;
           margin-left: 30px;
-          background-color: white;
-          color: $dark-secondary;
+          background-color: transparent;
+          border: 1px solid white;
+          color: white;
         }
       }
 
@@ -328,7 +332,8 @@
         flex: 1 1 15px;
 
         i {
-          margin: 2px 0 0;
+          font-size: 1rem;
+          margin: 0;
           transition: all 0.2s ease-in-out 0s;
         }
       }
@@ -369,7 +374,7 @@
 
       &:before {
         border-left: 2px solid $dark-secondary;
-        content: "";
+        content: '';
         height: 100%;
         left: 0px;
         bottom: 20px;
@@ -410,7 +415,7 @@
         &:last-child {
           border-width: 0px;
         }
-        &.active_chapter {
+        &.active_chapter, &.active_quiz {
           color: white;
           font-weight: $font-semibold;
 
@@ -418,11 +423,11 @@
             background-color: white;
           }
 
-          &.complete_chapter {
+          &.complete_chapter, &.complete_quiz {
             color: white;
           }
         }
-        &.complete_chapter {
+        &.complete_chapter, &.complete_quiz {
           color: darken($dark-secondary, 15%);
 
           i {
@@ -506,7 +511,6 @@
   top: 25px;
 }
 .chapter-block {
-  height: 100vh;
 
   h1 {
     position: relative;
@@ -577,4 +581,10 @@
 }
 .sixways-illustration {
   width: 100%;
+}
+.footer-chapter-nav {
+  .btn {
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    min-width: 140px;
+  }
 }

@@ -12,11 +12,15 @@ title Quiz # #{module_number} | Start in College
         = f.simple_fields_for :questions do |s|
           - quiz_question = s.object.model
           .question-container.hidden-xs-up id="question-container-#{s.index}" data-correct-answer-id="#{quiz_question.correct_answer.id}"
-            .question-heading.text-uppercase.font-semibold
-              | Question ##{s.index + 1}
+            .quiz-header
+              .question-heading.text-uppercase.font-semibold
+                | Question ##{s.index + 1}
+              .view-quiz-ref-btn
+                a.btn.btn-secondary.btn-sm.text-uppercase href="#{image_url 'home/showcase/timelines/finrobotics.jpg'}" target="_blank"
+                  | Quiz Reference
 
             .question-body
-              .question-text.m-b-2
+              .question-text.m-b-1
                 h3.font-semibold #{quiz_question.question}
               .answer-form.row
                 = s.input :answer_id,
@@ -27,7 +31,7 @@ title Quiz # #{module_number} | Start in College
                   as: :radio_buttons,
                   required: false
               .submission-result
-                .no-selection-error.hidden-xs-up.m-b-2 id="no-selection-error-#{s.index}"
+                .no-selection-error.alert-box.hidden-xs-up.m-b-2 id="no-selection-error-#{s.index}"
                   | Please select an option before checking or skip the question
                 .answer-hints
                   - quiz_question.answer_options.each do |answer|
@@ -44,15 +48,15 @@ title Quiz # #{module_number} | Start in College
                       - if answer.hint_text.present?
                         ' #{answer.hint_text}
               .answer-check-button-container
-                .answer-check-button.pull-left data-question-index="#{s.index}"
+                .answer-check-button.pull-xs-left.m-r-2 data-question-index="#{s.index}"
                   .btn.btn-primary.btn-md.text-uppercase
                     | Check
-                .question-next-button.pull-right.hidden-xs-up data-question-index="#{s.index}"
+                .question-skip-button.pull-xs-left data-question-index="#{s.index}"
+                  .btn.btn-ghost-primary.btn-md.text-uppercase
+                    | Skip
+                .question-next-button.pull-xs-right.hidden-xs-up data-question-index="#{s.index}"
                   .btn.btn-primary.btn-md.text-uppercase
                     | Next
-                .question-skip-button.pull-right.m-r-2 data-question-index="#{s.index}"
-                  .btn.btn-primary.btn-md.text-uppercase
-                    | Skip
-        #quiz-submit-button.hidden-xs-up.pull-right.m-r-2
-          = f.submit 'Finish', class: 'btn btn-primary btn-md text-uppercase'
+                #quiz-submit-button.pull-xs-right.hidden-xs-up.m-r-2
+                  = f.submit 'Finish', class: 'btn btn-primary btn-md text-uppercase'
 

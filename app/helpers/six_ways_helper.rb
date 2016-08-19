@@ -135,6 +135,14 @@ module SixWaysHelper
     current_mooc_student.completed_chapter?(chapter) ? 'complete_chapter' : ''
   end
 
+  def active_quiz_class?(course_module)
+    quiz_page? && course_module == @module ? 'active_quiz' : ''
+  end
+
+  def complete_quiz_class?(course_module)
+    current_mooc_student.completed_quiz?(course_module) ? 'complete_quiz' : ''
+  end
+
   def fa_icon_of_chapter(chapter)
     if chapter == @chapter
       'fa-circle-o'

@@ -27,7 +27,16 @@
         a.margin-left-10 href="https://twitter.com/intent/tweet?text=#{default_tweet}&url=sv.co/sixways" target="_blank"
           i.fa.fa-twitter-square.fa-2x
 
-    .footer-chapter-nav
-      = link_to previous_button_title, previous_page_path, class: "card-link #{disabled_previous?(@chapter)}"
-      = link_to next_button_title, next_page_path, class: "card-link pull-xs-right #{disabled_next?(@chapter)}"
+    .footer-chapter-nav.m-t-1.m-x-auto.text-xs-center
+      = link_to 'Previous Chapter', previous_page_path, class: "btn btn-ghost-primary btn-md m-r-2 text-uppercase #{disabled_previous?(@chapter)}"
+      = link_to 'Complete & Continue', next_page_path, class: "btn btn-ghost-primary btn-md text-uppercase #{disabled_next?(@chapter)}"
   / == render 'layouts/footer'
+
+#finrobotics-timeline.modal.fade aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+      .modal-body
+        = image_tag 'home/showcase/timelines/finrobotics.jpg', class: "img-fluid"

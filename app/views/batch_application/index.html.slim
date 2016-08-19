@@ -5,14 +5,18 @@
 .container
   .row.application-process
     .col-lg-8.col-md-12
-      .registration-complete-notice.card.content-box.m-t-2.m-b-0
-        h4.m-a-0
-          - if current_application.present?
-            span <strong>You have already completed registration.</strong>
+      .card.content-box.notice-with-link.m-t-2.m-b-0
+        - if current_application.present?
+          .notice.strong-notice
+            ' You have already completed registration.
+          .link
             = link_to 'Continue application', apply_continue_path, class: 'btn btn-primary btn-md text-uppercase'
-          - else
-            span <strong>Did you complete registration once before?</strong>
+        - else
+          .notice.strong-notice
+            ' Did you complete registration once before?
+          .link
             = link_to 'Sign In to Continue', apply_identify_path, class: 'btn btn-primary btn-md text-uppercase'
+
       .application-process-left.content-box.m-t-2.m-b-2
         .admission-process.clearfix
           h2
@@ -331,7 +335,7 @@
                       .centered-fee-box
                         .percent 30% Discount
                         .detail for a right to invest in any funding round. <strong>No upfront equity</strong>.
-                        
+
             .card
               h4
                 a.card-block.accordion-toggle data-parent="#fee-accordion" data-toggle="collapse" href="#referal-program-applicants"
@@ -344,8 +348,8 @@
                     li 5% discount on Program Fee for each Selected Team referred. To both the Referred & Referring Teams.
                     li To qualify, Referred Team must clear the selection rounds (Coding & Video test and Personal Interview) and pay the Program Fee, sign Agreements and be part of the next Batch for the discount to apply.
                     li Proof to be Submitted: Teams must forward the Application Fee payment receipt of the referred teams to help@sv.co within 15 days of Application Submission. Both Teams can claim the fee deduction immediately when selected.
-                    
-                    
+
+
             .card
               h4
                 a.card-block.accordion-toggle data-parent="#fee-accordion" data-toggle="collapse" href="#referal-program-students"
@@ -354,19 +358,19 @@
                 .card-text
                   p We're offering special perks for IEDC Volunteers:
                   ul.m-t-1
-                     li 
+                     li
                        | Teams who have at least one IEDC Volunteer have their Application Fee of ₹3000 per team refunded.
                        ul
                          li To qualify, IEDC Volunteers must attend the <a href="https://keralastartupmission.wordpress.com/2016/07/27/iedc-summit-2016-on-august-23-2016/">KSUM IEDC Student Meet</a> on August 23, 2016 & make sure to meet the SV.CO representative and register their email address.
                          li To qualify, teams must ensure to apply via the IEDC Volunteer Registered Email IDs.
                          li Proof to be Submitted: Registered IEDC Volunteers must forward their Application Fee payment receipt to help@sv.co within 15 days of Application Submission. We will credit the refund within 3 working days of receipt.
-                     li 
+                     li
                        | When a Registered IEDC Volunteer refers other teams to apply, they get ₹1000 from their Application Fee refunded.
                        ul
                          li To qualify, IEDC Volunteers must attend the <a href="https://keralastartupmission.wordpress.com/2016/07/27/iedc-summit-2016-on-august-23-2016/">KSUM IEDC Student Meet</a> on August 23, 2016 & make sure to meet the SV.CO representative and register their email address.
                          li To qualify, Referred Teams must pay the Application Fee.
                          li Proof to be Submitted: Registered IEDC Volunteers must forward the Application Fee payment receipt of their Referred Teams to help@sv.co within 15 days of Application Submission. We will credit the refund to the Teams within 3 working days of receipt.
-              
+
 
     .col-lg-4.col-md-12#start-application-process
       .m-t-2.m-b-3

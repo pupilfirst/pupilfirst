@@ -36,7 +36,7 @@ class CofoundersForm < Reform::Form
       next if cofounder.model.persisted?
 
       if BatchApplicant.find_by email: cofounder.email
-        errors[:base] << "A founder with email #{cofounder.email} already exists in our database."
+        errors[:base] << "An applicant with email #{cofounder.email} already exists in our database. If this is your friend who registered by accident, please ask them to login and revoke application. Mail help@sv.co or use the chat below for any help."
         cofounder.errors[:email] << 'is already associated with an application'
       end
     end

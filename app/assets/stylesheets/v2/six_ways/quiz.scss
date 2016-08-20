@@ -51,6 +51,7 @@
           margin-right: 25px;
           width: 20px;
           height: 20px;
+          flex-shrink: 0;
           background-color: $light-secondary;
         }
         &:last-child {
@@ -136,6 +137,10 @@ align-items: center;
   width: 50%;
   display: flex;
   justify-content: flex-end;
+
+  a {
+    font-size: 0.625rem;
+  }
 }
 .quiz-result {
   max-width: 40rem;

@@ -22,7 +22,7 @@ title Quiz # #{module_number} | Start in College
             .question-body
               .question-text.m-b-1
                 h3.font-semibold #{quiz_question.question}
-              .answer-form.row
+              .answer-form.row data-question-index=s.index
                 = s.input :answer_id,
                   label: false,
                   collection: quiz_question.answer_options.pluck(:id,:value),
@@ -47,10 +47,7 @@ title Quiz # #{module_number} | Start in College
                     .answer-hint.hidden-xs-up.m-b-2 id="answer-#{answer.id}-hint"
                       - if answer.hint_text.present?
                         ' #{answer.hint_text}
-              .answer-check-button-container.clearfix
-                .answer-check-button.pull-sm-left.hidden-xs-up data-question-index="#{s.index}"
-                  .btn.btn-primary.btn-md.text-uppercase
-                    | Check
+              .answer-buttons-container.clearfix
                 .question-skip-button.pull-sm-left data-question-index="#{s.index}"
                   .btn.btn-ghost-primary.btn-md.text-uppercase
                     | Skip

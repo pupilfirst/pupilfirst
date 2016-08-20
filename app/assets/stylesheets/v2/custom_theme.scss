@@ -389,3 +389,9 @@ p {
     content: '\f00c';
   }
 }
+
+.tooltip {
+  @include media-breakpoint-down(sm) {
+    display: none;
+  }
+}

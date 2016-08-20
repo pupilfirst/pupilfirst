@@ -139,47 +139,6 @@
       }
     }
   }
-  .date-table {
-    padding: 0;
-    display: flex;
-
-    > div {
-      padding: 15px;
-      text-align: center;
-      border: 1px solid $gray-border;
-      border-width: 0 1px 0 0;
-
-      &:last-child {
-        border: 0;
-      }
-      @include media-breakpoint-down(xs) {
-        border-width: 0 0 1px 0;
-        padding: 30px 15px;
-      }
-    }
-    @include media-breakpoint-down(xs) {
-      display: block;
-    }
-    .start-date {
-      font-size: 1.125rem;
-      font-weight: $font-semibold;
-      border-bottom: 1px solid $gray-border;
-      padding: 0 0 10px 0;
-      margin-bottom: 10px;
-
-      span {
-        display: block;
-        font-size: .75rem;
-        color: $light-grey-text;
-      }
-      @include media-breakpoint-down(xs) {
-        margin: 0 40px 10px;
-      }
-    }
-    .process-head {
-      font-size: 1rem;
-    }
-  }
 }
 .slideshare-embed {
   position: relative;

@@ -1,7 +1,6 @@
 class SixWaysController < ApplicationController
   before_action :authorize_student, except: %w(index student_details create_student)
   before_action :block_student, only: %w(student_details create_student)
-  before_action :lock_under_feature_flag, only: %w(module quiz quiz_submission)
 
   skip_after_action :intercom_rails_auto_include
 

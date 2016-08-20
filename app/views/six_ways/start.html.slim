@@ -15,7 +15,5 @@
     h4.m-t-1
       ' If you already have a great team and skills to build a startup, try
       | #{link_to 'applying to our paid six month student startup program.', apply_path}
-    - if feature_active? :start_in_college
-          .text-xs-center
-            = link_to 'Start The Course! (beta)', first_chapter_path, class: 'btn btn-primary btn-md text-uppercase'
-
+        .text-xs-center
+          = link_to 'Start The Course! (Early Access)', first_chapter_path, class: 'btn btn-primary btn-md text-uppercase'

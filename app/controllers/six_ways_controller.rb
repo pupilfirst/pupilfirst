@@ -84,7 +84,7 @@ class SixWaysController < ApplicationController
     raise_not_found unless module_exists?
     @skip_container = true
     @module = CourseModule.friendly.find(params[:module_name])
-    @questions = @module.quiz_questions.shuffle
+    @questions = @module.quiz_questions
 
     @form = QuizSubmissionForm.new(OpenStruct.new)
     @form.prepopulate! questions: @questions

@@ -62,7 +62,7 @@ html lang='en'
 
                   li.treeview class="#{active_module_class?(course_module)}"
                     a.clearfix href="module#{course_module.module_number}"
-                      .module-title 
+                      .module-title data-toggle='tooltip' data-placement='right' title="#{course_module.name}"
                         h3 #{course_module.module_number}. #{course_module.name}
                         - if current_mooc_student.completed_module?(course_module)
                           span.complete-module.tag.tag-pill

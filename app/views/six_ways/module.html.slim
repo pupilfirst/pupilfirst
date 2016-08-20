@@ -9,16 +9,23 @@
       = render "six_ways/module_#{module_number}/chapter_#{chapter_number}"
       - if @chapter.links.present?
         hr
-        h5 Extra Reading
-        - @chapter.links.each do |link|
-          li
-            a href="#{link[:url]}" target="_blank" #{link[:title]}
+        .extra-reading.m-t-2
+          h3.m-b-2
+            | Extra Reading
+          - @chapter.links.each do |link|
+            ul.list-unstyled
+              li
+                a href="#{link[:url]}" target="_blank" #{link[:title]}
     - else
-      .text-xs-center
-        i.fa.fa-exclamation-triangle
-        ' &nbsp;<strong>You have reached the end of our published content!</strong>
-        br
-        '  The next module ( #{@module.name} ) will be published on #{@module.publish_at.strftime('%A, %b %d')}. Please come back later to continue learning.
+      .end-of-content.text-xs-center
+        .lesson-end-icon.m-b-1.m-x-auto
+          = image_tag "six_ways/lesson-end", class: "img-fluid"
+        h3.m-b-1.brand-secondary
+          ' <strong>You have reached the end of our published content!</strong>
+        p
+          ' The next module ( #{@module.name} ) will be published on <strong>#{@module.publish_at.strftime('%A, %b %d')}</strong>.
+          br
+          ' Please come back later to <strong>continue learning</strong>.
         hr
         h5 While you wait, let your friends know about the course!
         a href="https://www.facebook.com/sharer/sharer.php?u=www.sv.co/sixways" target="_blank"
@@ -27,12 +34,20 @@
         a.margin-left-10 href="https://twitter.com/intent/tweet?text=#{default_tweet}&url=sv.co/sixways" target="_blank"
           i.fa.fa-twitter-square.fa-2x
 
-    .footer-chapter-nav.m-t-3.m-x-auto.text-xs-center
-      = link_to 'Previous Chapter', previous_page_path, class: "btn btn-ghost-primary btn-md text-uppercase #{disabled_previous?(@chapter)}"
-      = link_to 'Complete & Continue', next_page_path, class: "btn btn-ghost-primary btn-md text-uppercase #{disabled_next?(@chapter)}"
+    .footer-chapter-nav.p-t-2.m-t-3
+      .col-md-6.col-xs-6.p-a-0.m-r-2
+        = link_to previous_page_path, class: "btn btn-ghost-primary btn-md prev-chapter text-uppercase #{disabled_previous?(@chapter)}" do
+          i.fa.fa-angle-left
+          span.nav-title
+            | Previous Chapter
+      .col-md-6.col-xs-6.p-a-0.text-xs-right
+        = link_to next_page_path, class: "btn btn-ghost-primary btn-md next-chapter text-uppercase #{disabled_next?(@chapter)}" do
+          span.nav-title
+            | Complete &amp; Continue
+          i.fa.fa-angle-right
   / == render 'layouts/footer'
 
-#finrobotics-timeline.modal.fade aria-hidden="true" role="dialog" tabindex="-1"
+#finrobotics-timeline.modal.sixways-timeline-modal.fade aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"
     .modal-content
       .modal-header

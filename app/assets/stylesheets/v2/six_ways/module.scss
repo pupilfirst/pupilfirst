@@ -85,7 +85,6 @@
             top: 11px;
             font-size: 1.5rem;
 
-
             @include media-breakpoint-down(sm) {
               content: none;
             }
@@ -390,7 +389,7 @@
         border-width: 0 0 1px 0;
         display: block;
         font-size: 1rem;
-        color: darken($dark-secondary, 15%);
+        color: darken($dark-secondary, 8%);
         position: relative;
 
         &:hover, &:focus {
@@ -428,10 +427,10 @@
           }
         }
         &.complete_chapter, &.complete_quiz {
-          color: darken($dark-secondary, 15%);
+          color: darken($dark-secondary, 8%);
 
           i {
-            color: darken($dark-secondary, 15%);
+            color: darken($dark-secondary, 8%);
           }
           &:hover, &:focus {
             color: white;
@@ -513,8 +512,16 @@
 .chapter-block {
   position: relative;
 
+  @include media-breakpoint-down(sm) {
+    height: 100%;
+  }
+
   .content-wrapper {
     max-width: 48rem;
+
+    p {
+      font-size: 1.25rem;
+    }
 
     .list-title {
       font-size: 1.25rem;
@@ -523,7 +530,6 @@
       max-width: 40rem;
     }
     > p {
-      font-size: 1.25rem;
       font-weight: $font-light;
       margin-bottom: 20px;
       line-height: 1.58;
@@ -538,6 +544,39 @@
           padding-right: 4px;
         }
       }
+      strong {
+        font-weight: $font-semibold;
+      }
+    }
+  }
+  .extra-reading {
+    ul {
+      li {
+        position: relative;
+        padding-bottom: 10px;
+
+        a {
+          font-size: 1.125rem;
+        }
+        &:before {
+          @include fa-icon(external-link);
+          color: $brand-primary;
+        }
+      }
+    }
+  }
+  .read-now-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+
+    p {
+        font-size: 1.875rem;
+    }
+    .read-now-icon {
+      width: 100px;
+      margin-right: 25px;
     }
   }
 
@@ -560,9 +599,9 @@
     padding-left: 30px;
     max-width: 45rem;
 
-    li {
+    > li {
       position: relative;
-      padding-bottom: 25px;
+      padding-bottom: 20px;
 
       p {
         font-size: 1.25rem;
@@ -571,7 +610,7 @@
         line-height: 1.58;
       }
       strong, em {
-        font-weight: $font-regular;
+        font-weight: $font-semibold;
       }
       &:before {
         content: asset-url('six_ways/tick-inside-circle.svg');
@@ -583,26 +622,31 @@
       }
     }
   }
-  @include media-breakpoint-down(sm) {
-    height: 100%;
-  }
   ol {
-    padding-left: 30px;
     max-width: 45rem;
     font-size: 1.24rem;
 
-    li {
+    @include media-breakpoint-up(sm) {
+      margin-left: 25px;
+      border-left: 4px solid $gray-border;
+    }
+
+    > li {
       position: relative;
-      padding-bottom: 25px;
+      padding-bottom: 20px;
+      padding-left: 5px;
 
       p {
         font-size: 1.25rem;
-        font-weight: $font-regular;
         letter-spacing: 0.01rem;
+        font-weight: $font-regular;
         line-height: 1.58;
       }
       strong, em {
         font-weight: $font-regular;
+      }
+      &:last-child {
+        padding-bottom: 0;
       }
     }
   }
@@ -610,14 +654,65 @@
 .sixways-illustration {
   width: 100%;
 }
+.end-of-content {
+
+  p {
+    font-size: 1rem;
+  }
+  .lesson-end-icon {
+    width: 80px;
+  }
+}
+.sixways-timeline-modal {
+  .modal-lg {
+    max-width: 1024px;
+  }
+}
 .footer-chapter-nav {
+  display: flex;
+  border-top: 1px solid $gray-border;
+
   .btn {
-    margin: 0 30px 0 0;
+    margin: 0;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
     min-width: 140px;
+    display: inline-flex;
+    align-items: center;
+    position: relative;
 
-    @include media-breakpoint-down(sm) {
-      margin: 0 0 20px 0;
+    i {
+      font-size: 1.125rem;
+      position: relative;
+      top: -1px;
+      font-weight: $font-bold;
+    }
+    &.prev-chapter {
+      i {
+        padding-right: 10px;
+      }
+    }
+    &.next-chapter {
+      i {
+        padding-left: 10px;
+      }
+    }
+    &.disabled {
+      color: $light-grey-text;
+      border-color: $gray-border;
+      cursor: not-allowed;
+      opacity: 0.65;
+    }
+    @include media-breakpoint-down(md) {
+      .nav-title {
+        display: none;
+      }
+    }
+    @include media-breakpoint-down(md) {
+      display: inline-block;
+
+      i {
+        font-size: 1.5rem;
+      }
     }
   }
 }

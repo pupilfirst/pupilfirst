@@ -1,9 +1,10 @@
-.quiz-reference.m-b-1
-  .view-ref-text
-    h3.font-semibold.m-b-0
-      | Quiz reference material here
-  .view-quiz-ref-btn
+/ .quiz-reference.m-b-1
+/   .view-ref-text
+/     h3.font-semibold.m-t-2.m-b-0
+/       | Quiz reference material here
+
+.content-wrapper
+  = render "six_ways/module_#{module_number}/quiz_header" if module_has_quiz_header?
+  .m-t-2
     a.btn.btn-secondary.btn-md.text-uppercase href="#" data-toggle="modal" data-target="#finrobotics-timeline"
       | Open Finrobotics' Timeline
-
-= render "six_ways/module_#{module_number}/quiz_header" if module_has_quiz_header?

@@ -116,7 +116,7 @@ feature 'Applying to SV.CO' do
         # user must be at the payment page
         expect(page).to have_text('You now need to pay the application fee')
 
-        click_on 'Revoke and Rewrite Application'
+        click_on 'Cancel and Restart Application'
 
         expect(page).to have_text('Did you complete registration once before?')
       end

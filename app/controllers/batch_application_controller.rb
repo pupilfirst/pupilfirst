@@ -52,7 +52,13 @@ class BatchApplicationController < ApplicationController
     @form = BatchApplicantSignInForm.new(BatchApplicant.new)
 
     if @form.validate(params[:batch_applicant_sign_in])
-      @form.save
+      begin
+        @form.save
+      rescue Postmark::InvalidMessageError
+        flash[:error] = 'Our email delivery service refused to accept the supplied address. It is likely that a previous email hard-bounced, or was reported as spam. Please contact us at help@sv.co for more information.'
+        redirect_to apply_identify_path
+        return
+      end
 
       # Kick out session based login if a manual login is requested. This allows applicant to change signed-in ID.
       session.delete :applicant_token

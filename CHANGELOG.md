@@ -2,7 +2,7 @@
 
 #### Features
 
-  - Our free MOOC, [SixWays](www.sv.co/sixways) is live. Check it out!
+  - Our free MOOC, [SixWays](sixways) is live. Check it out!
   - Picking a university from our select boxes should now be easier since it returns out-of-order results.
 
 #### Content

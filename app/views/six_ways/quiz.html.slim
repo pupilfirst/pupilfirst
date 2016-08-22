@@ -15,10 +15,8 @@ title Quiz # #{module_number} | Start in College
             .quiz-header
               .question-heading.text-uppercase.font-semibold
                 | Question ##{s.index + 1}
-              .view-quiz-ref-btn
-                a.btn.btn-secondary.btn-sm.text-uppercase href="#{image_url 'home/showcase/timelines/finrobotics.jpg'}" target="_blank"
-                  i.fa.fa-external-link
-                  | Open Finrobotics' Timeline
+
+              == render "six_ways/module_#{module_number}/quiz_reference" if module_has_quiz_reference?
 
             .question-body
               .question-text.m-b-1
@@ -26,7 +24,7 @@ title Quiz # #{module_number} | Start in College
               .answer-form.row data-question-index=s.index
                 = s.input :answer_id,
                   label: false,
-                  collection: quiz_question.answer_options.pluck(:id,:value),
+                  collection: quiz_question.answer_options.order('value ASC').pluck(:id,:value),
                   value_method: :first,
                   label_method: :last,
                   as: :radio_buttons,
@@ -35,7 +33,7 @@ title Quiz # #{module_number} | Start in College
                 .no-selection-error.alert-box.hidden-xs-up.m-b-2 id="no-selection-error-#{s.index}"
                   | Please select an option before checking or skip the question
                 .answer-hints
-                  - quiz_question.answer_options.each do |answer|
+                  - quiz_question.answer_options.order('value ASC').each do |answer|
                     .answer-result.hidden-xs-up.m-b-1 id="answer-#{answer.id}-result"
                       - if answer.correct_answer
                         .correct-answer

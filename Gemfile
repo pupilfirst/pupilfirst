@@ -5,7 +5,7 @@ gem 'rails', '4.2.7'
 
 gem 'dotenv-rails', :groups => [:development, :test]
 
-gem 'activeadmin', github: 'activeadmin' # TODO: ActiveAdmin doesn't like 4.2 at all (for the moment). Switch this to stable when available.
+gem 'activeadmin', '>= 1.0.0.pre4'
 gem 'flattened_active_admin' # better looking and customizable activeadmin
 gem 'just-datetime-picker' # Date/Time picker support for active admin.
 # gem 'active_skin' # Better lookin' active admin! Temporarily removed in favour of flattened_acitve_admin
@@ -110,6 +110,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-tether' # A positioning engine to make overlays, tooltips and dropdowns better
   gem 'rails-assets-readmore' # A lightweight jQuery plugin for collapsing and expanding long blocks of text with "Read more" and "Close" links.
   gem 'rails-assets-waypoints' # Waypoints is a library that makes it easy to execute a function whenever you scroll to an element.
+  gem 'rails-assets-chartkick' # chartkick lib for admissions dashboard charts
   gem 'rails-assets-gemini-scrollbar' # Custom overlay-scrollbars with native scrolling mechanism for web applications
 end
 

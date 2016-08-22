@@ -1,0 +1,5 @@
+.admissions-dashboard-item
+  .heading Paid Applicants by Location
+
+  .content
+    #paid_applications_by_location data-chart-data="#{BatchApplication.payment_complete.joins(:university).group('universities.location').count.to_json}"

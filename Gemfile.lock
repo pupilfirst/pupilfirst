@@ -535,6 +535,7 @@ GEM
       railties (= 4.2.7)
       sprockets-rails
     rails-assets-bootstrap-tabcollapse (0.2.6)
+    rails-assets-chartkick (2.0.1)
     rails-assets-curioussolutions-datetimepicker (0.1.11)
     rails-assets-ev-emitter (1.0.1)
     rails-assets-fizzy-ui-utils (2.0.0)
@@ -816,6 +817,7 @@ DEPENDENCIES
   pry-rails
   rails (= 4.2.7)
   rails-assets-bootstrap-tabcollapse!
+  rails-assets-chartkick!
   rails-assets-curioussolutions-datetimepicker!
   rails-assets-intro.js!
   rails-assets-jquery-stickit!

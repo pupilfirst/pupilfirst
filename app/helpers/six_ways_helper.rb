@@ -115,8 +115,8 @@ module SixWaysHelper
     six_ways_module_path(first_module.slug, first_chapter.slug)
   end
 
-  def module_has_quiz_header?
-    lookup_context.exists?('quiz_header', ["six_ways/module_#{module_number}"], true)
+  def module_has_quiz_reference?
+    lookup_context.exists?('quiz_reference', ["six_ways/module_#{module_number}"], true)
   end
 
   def last_chapter_of_previous_module

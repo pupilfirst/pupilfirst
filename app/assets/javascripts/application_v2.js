@@ -40,6 +40,7 @@
 //= require readmore
 //= require waypoints
 //= require waypoints/shortcuts/inview
+//= require gemini-scrollbar
 
 // Shared
 // require _shared

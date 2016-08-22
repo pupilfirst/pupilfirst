@@ -100,7 +100,8 @@ Svapp::Application.routes.draw do
     get 'continue'
     get 'batch_pending'
     post 'restart', action: 'restart_application'
-    get 'universities'
+    get 'cofounders', action: 'cofounders_form'
+    post 'cofounders', action: 'cofounders_save'
 
     # TODO: Remove this after batch 3 intake is complete. Added to account for emails sent out before application process was overhauled.
     get 'identify/3', to: redirect('/apply')

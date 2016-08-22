@@ -1,9 +1,12 @@
+html, body {
+  overflow-x: hidden;
+}
 body {
   font-family: 'Source Sans Pro', sans-serif;
   background-color: $primary-background;
   font-size: $font-size-sm;
+  position: relative;
 }
-
 a {
   transition: all .2s;
 
@@ -108,6 +111,25 @@ p {
   &:active,
   &.active {
     background-color: $dark-secondary;
+    box-shadow: $box-shadow-btn;
+  }
+}
+
+.btn-ghost-primary {
+  @include button-outline-variant($btn-primary-bg);
+  border: 1px solid $brand-primary;
+
+  &:hover {
+    background-color: $brand-primary;
+    color: white;
+  }
+  &:focus,
+  &.focus {
+    background-color: $light-primary;
+  }
+  &:active,
+  &.active {
+    background-color: $dark-primary;
     box-shadow: $box-shadow-btn;
   }
 }
@@ -334,5 +356,45 @@ p {
     @include media-breakpoint-down(sm) {
       height: 300px;
     }
+  }
+}
+.success-box, .alert-box {
+  padding: 15px;
+  @include border-radius(10px);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  color: white;
+  position: relative;
+  max-width: 20rem;
+  font-size: 1rem;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+
+  &:before {
+    font-family: 'FontAwesome';
+    font-size: 2.125rem;
+    margin-right: 15px;
+  }
+}
+.alert-box {
+  background-color: $alert-background;
+  border: 1px solid darken($alert-background, 20%);
+
+  &:before {
+    content: '\f0a2';
+  }
+}
+.success-box {
+  background-color: $light-primary;
+  border: 1px solid $brand-primary;
+
+  &:before {
+    content: '\f00c';
+  }
+}
+
+.tooltip {
+  @include media-breakpoint-down(sm) {
+    display: none;
   }
 }

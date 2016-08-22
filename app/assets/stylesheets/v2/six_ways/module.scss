@@ -85,7 +85,6 @@
             top: 11px;
             font-size: 1.5rem;
 
-
             @include media-breakpoint-down(sm) {
               content: none;
             }
@@ -244,7 +243,7 @@
   position: relative;
 }
 .sidebar-fixed-head {
-  padding: 0 30px;
+  padding: 0 20px 0 30px;
   background-color: $light-secondary;
   display: flex;
   align-items: center;
@@ -273,10 +272,13 @@
   a {
     display: flex;
     color: $brand-secondary;
-    justify-content: flex-end;
+    padding: 5px;
+    background: white;
+    justify-content: center;
 
-    &:hover {
-      color: $dark-secondary;
+    &:hover, &:focus {
+      color: $light-secondary;
+      background: $dark-secondary;
     }
   }
 }
@@ -319,8 +321,9 @@
         .complete-module {
           flex: 1 1 10px;
           margin-left: 30px;
-          background-color: white;
-          color: $dark-secondary;
+          background-color: transparent;
+          border: 1px solid white;
+          color: white;
         }
       }
 
@@ -328,7 +331,8 @@
         flex: 1 1 15px;
 
         i {
-          margin: 2px 0 0;
+          font-size: 1rem;
+          margin: 0;
           transition: all 0.2s ease-in-out 0s;
         }
       }
@@ -369,7 +373,7 @@
 
       &:before {
         border-left: 2px solid $dark-secondary;
-        content: "";
+        content: '';
         height: 100%;
         left: 0px;
         bottom: 20px;
@@ -385,7 +389,7 @@
         border-width: 0 0 1px 0;
         display: block;
         font-size: 1rem;
-        color: darken($dark-secondary, 15%);
+        color: darken($dark-secondary, 8%);
         position: relative;
 
         &:hover, &:focus {
@@ -410,7 +414,7 @@
         &:last-child {
           border-width: 0px;
         }
-        &.active_chapter {
+        &.active_chapter, &.active_quiz {
           color: white;
           font-weight: $font-semibold;
 
@@ -418,15 +422,15 @@
             background-color: white;
           }
 
-          &.complete_chapter {
+          &.complete_chapter, &.complete_quiz {
             color: white;
           }
         }
-        &.complete_chapter {
-          color: darken($dark-secondary, 15%);
+        &.complete_chapter, &.complete_quiz {
+          color: darken($dark-secondary, 8%);
 
           i {
-            color: darken($dark-secondary, 15%);
+            color: darken($dark-secondary, 8%);
           }
           &:hover, &:focus {
             color: white;
@@ -506,7 +510,75 @@
   top: 25px;
 }
 .chapter-block {
-  height: 100vh;
+  position: relative;
+
+  @include media-breakpoint-down(sm) {
+    height: 100%;
+  }
+
+  .content-wrapper {
+    max-width: 48rem;
+
+    p {
+      font-size: 1.25rem;
+    }
+
+    .list-title {
+      font-size: 1.25rem;
+      font-weight: $font-semibold;
+      margin-bottom: 15px;
+      max-width: 40rem;
+    }
+    > p {
+      font-weight: $font-light;
+      margin-bottom: 20px;
+      line-height: 1.58;
+
+      &.with-dropcap {
+        &:first-letter {
+          float: left;
+          font-size: 5rem;
+          font-weight: $font-regular;
+          line-height: 60px;
+          padding-top: 4px;
+          padding-right: 4px;
+        }
+      }
+      strong {
+        font-weight: $font-semibold;
+      }
+    }
+  }
+  .extra-reading {
+    ul {
+      li {
+        position: relative;
+        padding-bottom: 10px;
+
+        a {
+          font-size: 1.125rem;
+        }
+        &:before {
+          @include fa-icon(external-link);
+          color: $brand-primary;
+        }
+      }
+    }
+  }
+  .read-now-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+
+    p {
+        font-size: 1.875rem;
+    }
+    .read-now-icon {
+      width: 100px;
+      margin-right: 25px;
+    }
+  }
 
   h1 {
     position: relative;
@@ -522,36 +594,15 @@
       left: 0;
     }
   }
-  .list-title {
-    font-size: 1.25rem;
-    font-weight: $font-semibold;
-    margin-bottom: 15px;
-    max-width: 40rem;
-  }
-  p {
-    font-size: 1.25rem;
-    font-weight: $font-light;
-    line-height: 1.58;
 
-    &.with-dropcap {
-      &:first-letter {
-        float: left;
-        font-size: 5rem;
-        font-weight: $font-regular;
-        color: $light-grey-text;
-        line-height: 60px;
-        padding-top: 4px;
-        padding-right: 4px;
-      }
-    }
-  }
   ul {
     padding-left: 30px;
     max-width: 45rem;
 
-    li {
+    > li {
       position: relative;
-      padding-bottom: 25px;
+      padding-bottom: 20px;
+
       p {
         font-size: 1.25rem;
         font-weight: $font-light;
@@ -559,7 +610,7 @@
         line-height: 1.58;
       }
       strong, em {
-        font-weight: $font-regular;
+        font-weight: $font-semibold;
       }
       &:before {
         content: asset-url('six_ways/tick-inside-circle.svg');
@@ -571,10 +622,97 @@
       }
     }
   }
-  @include media-breakpoint-down(sm) {
-    height: 100%;
+  ol {
+    max-width: 45rem;
+    font-size: 1.24rem;
+
+    @include media-breakpoint-up(sm) {
+      margin-left: 25px;
+      border-left: 4px solid $gray-border;
+    }
+
+    > li {
+      position: relative;
+      padding-bottom: 20px;
+      padding-left: 5px;
+
+      p {
+        font-size: 1.25rem;
+        letter-spacing: 0.01rem;
+        font-weight: $font-regular;
+        line-height: 1.58;
+      }
+      strong, em {
+        font-weight: $font-regular;
+      }
+      &:last-child {
+        padding-bottom: 0;
+      }
+    }
   }
 }
 .sixways-illustration {
   width: 100%;
+}
+.end-of-content {
+
+  p {
+    font-size: 1rem;
+  }
+  .lesson-end-icon {
+    width: 80px;
+  }
+}
+.sixways-timeline-modal {
+  .modal-lg {
+    max-width: 1024px;
+  }
+}
+.footer-chapter-nav {
+  display: flex;
+  border-top: 1px solid $gray-border;
+
+  .btn {
+    margin: 0;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    min-width: 140px;
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+
+    i {
+      font-size: 1.125rem;
+      position: relative;
+      top: -1px;
+      font-weight: $font-bold;
+    }
+    &.prev-chapter {
+      i {
+        padding-right: 10px;
+      }
+    }
+    &.next-chapter {
+      i {
+        padding-left: 10px;
+      }
+    }
+    &.disabled {
+      color: $light-grey-text;
+      border-color: $gray-border;
+      cursor: not-allowed;
+      opacity: 0.65;
+    }
+    @include media-breakpoint-down(md) {
+      .nav-title {
+        display: none;
+      }
+    }
+    @include media-breakpoint-down(md) {
+      display: inline-block;
+
+      i {
+        font-size: 1.5rem;
+      }
+    }
+  }
 }

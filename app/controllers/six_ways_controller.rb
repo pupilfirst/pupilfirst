@@ -1,7 +1,6 @@
 class SixWaysController < ApplicationController
   before_action :authorize_student, except: %w(index student_details create_student)
   before_action :block_student, only: %w(student_details create_student)
-  before_action :lock_under_feature_flag, only: %w(module quiz quiz_submission)
 
   skip_after_action :intercom_rails_auto_include
 
@@ -84,7 +83,7 @@ class SixWaysController < ApplicationController
     raise_not_found unless module_exists?
     @skip_container = true
     @module = CourseModule.friendly.find(params[:module_name])
-    @questions = @module.quiz_questions.shuffle
+    @questions = @module.quiz_questions
 
     @form = QuizSubmissionForm.new(OpenStruct.new)
     @form.prepopulate! questions: @questions
@@ -95,10 +94,12 @@ class SixWaysController < ApplicationController
   #
   # Evaluates a quiz submission
   def quiz_submission
+    @skip_container = true
     @module = CourseModule.friendly.find params[:module]
 
     grade_submission
     save_grade
+    render layout: 'sixways'
   end
 
   # GET /sixways/course_end

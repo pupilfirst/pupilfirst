@@ -2,14 +2,12 @@
   title SV.CO | Start In College
   meta name="description" content="online course on the various stages of a startup journey: from deciding to start up, to forming a team,validating a good idea, building a prototype and finding passionate customers."
 
-.secondary-banner.application-stages-banner
-  .container
-    .application-stages-head.text-xs-center
-      h1 #{quiz_result_title}
-.container
-  .container-md-center.content-box.m-t-3.m-b-3
-    h4
-      ' You have just completed the quiz for Module #{@module.module_number}: '#{@module.name}'. You attempted #{@attempted} questions of the total #{@total} and got #{@correct} correct.
-
-    = link_to 'Retry Quiz', six_ways_quiz_path(@module.slug), class: 'btn btn-secondary btn-md text-uppercase'
-    = link_to 'Continue Course', after_quiz_path, class: 'btn btn-primary btn-md text-uppercase pull-right'
+.sixways-right.content-wrap
+  .chapter-block
+    h2.text-xs-center.m-b-2 #{quiz_result_title}
+    .quiz-result.m-x-auto
+      p.text-xs-center
+        ' You have just completed the quiz for Module #{@module.module_number}: '#{@module.name}'. <strong>You attempted #{@attempted} questions of the total #{@total} and got #{@correct} correct.</strong>
+      .m-t-2.text-xs-center.clearfix
+        = link_to 'Retry Quiz', six_ways_quiz_path(@module.slug), class: 'btn btn-secondary btn-md text-uppercase'
+        = link_to 'Continue Course', after_quiz_path, class: 'btn btn-primary btn-md text-uppercase'

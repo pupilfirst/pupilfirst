@@ -7,30 +7,32 @@ title Quiz # #{module_number} | Start in College
     /   | Quiz For Module #{module_number}
 
     .simple-form-container.clearfix
-      = simple_form_for @form, url: six_ways_quiz_submission_path(module: @module.slug), html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { radio_buttons: :horizontal_radio_and_checkboxes } do |f|
+      = simple_form_for @form, url: six_ways_quiz_submission_path(module: @module.slug), html: { class: 'form-horizontal', autocomplete: 'off' }, wrapper: :horizontal_form, wrapper_mappings: { radio_buttons: :horizontal_radio_and_checkboxes } do |f|
         #quiz-form-data.hidden-xs-up data-question-count="#{f.object.questions.count}"
         = f.simple_fields_for :questions do |s|
           - quiz_question = s.object.model
           .question-container.hidden-xs-up id="question-container-#{s.index}" data-correct-answer-id="#{quiz_question.correct_answer.id}"
-            .question-heading.text-uppercase.font-semibold
-              | Question ##{s.index + 1}
+            .quiz-header
+              .question-heading.text-uppercase.font-semibold
+                | Question ##{s.index + 1}
+              == render "six_ways/module_#{module_number}/quiz_reference" if module_has_quiz_reference?
 
             .question-body
-              .question-text.m-b-2
+              .question-text.m-b-1
                 h3.font-semibold #{quiz_question.question}
-              .answer-form.row
+              .answer-form.row data-question-index=s.index
                 = s.input :answer_id,
                   label: false,
-                  collection: quiz_question.answer_options.pluck(:id,:value),
+                  collection: quiz_question.answer_options.order('value ASC').pluck(:id,:value),
                   value_method: :first,
                   label_method: :last,
                   as: :radio_buttons,
                   required: false
               .submission-result
-                .no-selection-error.hidden-xs-up.m-b-2 id="no-selection-error-#{s.index}"
+                .no-selection-error.alert-box.hidden-xs-up.m-b-2 id="no-selection-error-#{s.index}"
                   | Please select an option before checking or skip the question
                 .answer-hints
-                  - quiz_question.answer_options.each do |answer|
+                  - quiz_question.answer_options.order('value ASC').each do |answer|
                     .answer-result.hidden-xs-up.m-b-1 id="answer-#{answer.id}-result"
                       - if answer.correct_answer
                         .correct-answer
@@ -43,16 +45,13 @@ title Quiz # #{module_number} | Start in College
                     .answer-hint.hidden-xs-up.m-b-2 id="answer-#{answer.id}-hint"
                       - if answer.hint_text.present?
                         ' #{answer.hint_text}
-              .answer-check-button-container
-                .answer-check-button.pull-left.hidden-xs-up data-question-index="#{s.index}"
-                  .btn.btn-primary.btn-md.text-uppercase
-                    | Check
-                .question-next-button.pull-right.hidden-xs-up data-question-index="#{s.index}"
-                  .btn.btn-primary.btn-md.text-uppercase
-                    | Next
-                .question-skip-button.pull-right.m-r-2 data-question-index="#{s.index}"
-                  .btn.btn-primary.btn-md.text-uppercase
+              .answer-buttons-container.clearfix
+                .question-skip-button.pull-sm-left data-question-index="#{s.index}"
+                  .btn.btn-ghost-primary.btn-md.text-uppercase
                     | Skip
-        #quiz-submit-button.hidden-xs-up.pull-right.m-r-2
-          = f.submit 'Finish', class: 'btn btn-primary btn-md text-uppercase'
+                .question-next-button.pull-sm-right.hidden-xs-up data-question-index="#{s.index}"
+                  .btn.btn-secondary.btn-md.text-uppercase
+                    | Next
+                .quiz-submit-button.pull-sm-right.hidden-xs-up
+                  = f.submit 'Finish', class: 'btn btn-secondary btn-md text-uppercase'
 

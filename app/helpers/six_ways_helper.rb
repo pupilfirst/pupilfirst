@@ -115,8 +115,8 @@ module SixWaysHelper
     six_ways_module_path(first_module.slug, first_chapter.slug)
   end
 
-  def module_has_quiz_header?
-    lookup_context.exists?('quiz_header', ["six_ways/module_#{module_number}"], true)
+  def module_has_quiz_reference?
+    lookup_context.exists?('quiz_reference', ["six_ways/module_#{module_number}"], true)
   end
 
   def last_chapter_of_previous_module
@@ -133,6 +133,14 @@ module SixWaysHelper
 
   def complete_chapter_class?(chapter)
     current_mooc_student.completed_chapter?(chapter) ? 'complete_chapter' : ''
+  end
+
+  def active_quiz_class?(course_module)
+    quiz_page? && course_module == @module ? 'active_quiz' : ''
+  end
+
+  def complete_quiz_class?(course_module)
+    current_mooc_student.completed_quiz?(course_module) ? 'complete_quiz' : ''
   end
 
   def fa_icon_of_chapter(chapter)

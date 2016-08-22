@@ -1,7 +1,10 @@
 @import 'select2';
 
 .turbolinks-progress-bar {
-  background-color: $brand-primary;
+
+  &:before {
+    background-color: $brand-primary !important;
+  }
 }
 
 .cursor-pointer {
@@ -10,4 +13,33 @@
 
 .margin-left-10 {
   margin-left: 10px;
+}
+
+.notice-with-link {
+  display: flex;
+  align-items: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+
+  .notice {
+    font-size: 1.125rem;
+
+    &.strong-notice {
+      font-weight: 600;
+    }
+  }
+
+  .link {
+    flex-shrink: 0;
+    margin-left: 1rem;
+  }
+
+  @include media-breakpoint-down(sm) {
+    flex-wrap: wrap;
+
+    .link {
+      margin-left: 0;
+      margin-top: 1rem;
+    }
+  }
 }

@@ -128,7 +128,7 @@
 }
 .quiz-reference {
   display: flex;
-align-items: center;
+  align-items: center;
 }
 .view-ref-text {
   width: 50%;
@@ -139,7 +139,11 @@ align-items: center;
   justify-content: flex-end;
 
   a {
-    font-size: 0.625rem;
+    font-size: 0.7rem;
+
+    i {
+      padding-right: 5px;
+    }
   }
 }
 .quiz-result {

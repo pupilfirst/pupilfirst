@@ -24,9 +24,13 @@ SidebarMenuToggle = ->
     if isOpen
       bodyEl.classList.remove 'show-menu'
       $('#hambuger-icon').removeClass 'open'
+      $('.module-fixed-head').removeClass 'hide-head'
+      $('.sixways-right').removeClass 'margin-top-adjust'
     else
       bodyEl.classList.add 'show-menu'
       $('#hambuger-icon').addClass 'open'
+      $('.module-fixed-head').addClass 'hide-head'
+      $('.sixways-right').addClass 'margin-top-adjust'
     isOpen = !isOpen
 
   init()

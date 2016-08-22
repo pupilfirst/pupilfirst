@@ -39,13 +39,12 @@
         = link_to previous_page_path, class: "btn btn-ghost-primary btn-md prev-chapter text-uppercase #{disabled_previous?(@chapter)}" do
           i.fa.fa-angle-left
           span.nav-title
-            | Previous Chapter
+            | #{previous_button_title}
       .col-md-6.col-xs-6.p-a-0.text-xs-right
         = link_to next_page_path, class: "btn btn-ghost-primary btn-md next-chapter text-uppercase #{disabled_next?(@chapter)}" do
           span.nav-title
-            | Complete &amp; Continue
+            | #{next_button_title}
           i.fa.fa-angle-right
-  / == render 'layouts/footer'
 
 #finrobotics-timeline.modal.sixways-timeline-modal.fade aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg role="document"

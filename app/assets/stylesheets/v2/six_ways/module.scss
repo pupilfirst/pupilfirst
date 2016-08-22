@@ -46,6 +46,10 @@
     left: 320px;
     background-color: white;
 
+    &.hide-head {
+      display: none;
+    }
+
     @include media-breakpoint-down(sm) {
       top: 60px;
       height: 60px;
@@ -64,14 +68,10 @@
         position: relative;
         padding: 0 50px;
         height: 100%;
+        width: 100%;
         font-size: 0.875rem;
         font-weight: $font-semibold;
         color: $light-primary;
-
-        @include media-breakpoint-down(sm) {
-          width: 50%;
-          padding: 0 30px;
-        }
 
         &:before {
           position: absolute;
@@ -86,8 +86,11 @@
             font-size: 1.5rem;
 
             @include media-breakpoint-down(sm) {
-              content: none;
+              top: 17px;
             }
+          }
+          @include media-breakpoint-down(sm) {
+            padding: 0 50px 0 10px;
           }
         }
         &.prev-chapter {
@@ -98,8 +101,11 @@
             font-size: 1.5rem;
 
             @include media-breakpoint-down(sm) {
-              content: none;
+              top: 17px;
             }
+          }
+          @include media-breakpoint-down(sm) {
+            padding: 0 10px 0 50px;
           }
         }
         &.disabled {
@@ -232,7 +238,8 @@
 
   @include media-breakpoint-down(sm) {
     margin-top: 0;
-    bottom: 0;
+    top: 60px;
+    position: fixed;
     height: calc(100% - 60px);
     transform: translate3d(-320px,0,0);
     transition: transform 0.3s;
@@ -302,7 +309,7 @@
       color: white;
 
       .module-title {
-        display: flex;
+        display: inline-flex;
         width: 100%;
         align-items: center;
 
@@ -487,9 +494,12 @@
 
   @include media-breakpoint-down(sm) {
     margin-left: 0;
-    margin-top: 120px;
     overflow-y: visible;
     padding: 2rem;
+
+    &.margin-top-adjust {
+      margin-top: 60px;
+    }
   }
 }
 .show-menu-trigger, .close-menu-trigger {
@@ -692,6 +702,7 @@
       }
     }
     &.next-chapter {
+      justify-content: flex-end;
       i {
         padding-left: 10px;
       }
@@ -703,15 +714,14 @@
       opacity: 0.65;
     }
     @include media-breakpoint-down(md) {
-      .nav-title {
-        display: none;
-      }
-    }
-    @include media-breakpoint-down(md) {
       display: inline-block;
+      min-width: 100px;
 
       i {
         font-size: 1.5rem;
+      }
+      .nav-title {
+        display: none;
       }
     }
   }

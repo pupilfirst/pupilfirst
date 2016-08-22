@@ -1,3 +1,18 @@
+### 22 August, 2016
+
+#### Features
+
+  - Our free MOOC, [SixWays](www.sv.co/sixways) is live. Check it out!
+  - Picking a university from our select boxes should now be easier since it returns out-of-order results.
+
+#### Content
+
+  - Clarify dates related to the application process on the apply page.
+
+#### Bugfixes
+
+  - Applicants are now informed if their email address could not be reached, when attempting to send sign-in email (instead of crashing and showing a failure message).
+
 ### 15 August, 2016
 
 #### Content, UI

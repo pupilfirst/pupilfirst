@@ -3,7 +3,7 @@ module CoreExtensions
   module IntercomRails
     module AutoInclude
       def self.csp_sha256_hook(controller, sha256)
-        return if controller.class.in?([Rails::MailersController])
+        return if controller.class.in?([Rails::MailersController, Rails::InfoController])
         controller.add_csp_hash(sha256)
       end
     end

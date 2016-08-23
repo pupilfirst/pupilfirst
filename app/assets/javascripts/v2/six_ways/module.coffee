@@ -39,7 +39,8 @@ JqueryAccordion = ->
   $.sidebarMenu $('.sidebar-menu')
 
 SimpleScrollBar = ->
-  myScrollbar = new GeminiScrollbar(element: document.querySelector('#module-links')).create()
+  if $('#sixways-container').length
+    myScrollbar = new GeminiScrollbar(element: document.querySelector('#module-links')).create()
 
 ModuleTooltip = ->
   $('.module-title').tooltip()

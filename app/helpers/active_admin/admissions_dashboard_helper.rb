@@ -54,6 +54,14 @@ module ActiveAdmin
       BatchApplication.where(batch_id: selected_batch_ids).paid_today.from_state(state).count
     end
 
+    def payment_completed_count_for_others
+      BatchApplication.where(batch_id: selected_batch_ids).payment_complete.from_other_states.count
+    end
+
+    def payment_completed_delta_for_others
+      BatchApplication.where(batch_id: selected_batch_ids).paid_today.from_other_states.count
+    end
+
     def payment_initiated_count_for(state)
       BatchApplication.where(batch_id: selected_batch_ids).payment_initiated.from_state(state).count
     end
@@ -62,12 +70,28 @@ module ActiveAdmin
       BatchApplication.where(batch_id: selected_batch_ids).payment_initiated_today.from_state(state).count
     end
 
+    def payment_initiated_count_for_others
+      BatchApplication.where(batch_id: selected_batch_ids).payment_initiated.from_other_states.count
+    end
+
+    def payment_initiated_delta_for_others
+      BatchApplication.where(batch_id: selected_batch_ids).payment_initiated_today.from_other_states.count
+    end
+
     def submitted_application_count_for(state)
       BatchApplication.where(batch_id: selected_batch_ids).submitted_application.from_state(state).count
     end
 
     def submitted_application_delta_for(state)
       BatchApplication.where(batch_id: selected_batch_ids).submitted_application.where('batch_applications.created_at > ?', Time.now.beginning_of_day).from_state(state).count
+    end
+
+    def submitted_application_count_for_others
+      BatchApplication.where(batch_id: selected_batch_ids).submitted_application.from_other_states.count
+    end
+
+    def submitted_application_delta_for_others
+      BatchApplication.where(batch_id: selected_batch_ids).submitted_application.where('batch_applications.created_at > ?', Time.now.beginning_of_day).from_other_states.count
     end
   end
 end

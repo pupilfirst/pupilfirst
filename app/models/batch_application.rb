@@ -27,6 +27,7 @@ class BatchApplication < ActiveRecord::Base
   scope :payment_initiated_today, -> { payment_initiated.where('payments.created_at > ?', Time.now.beginning_of_day) }
 
   scope :from_state, -> (state) { joins(:university).where('universities.location': state) }
+  scope :from_other_states, -> { joins(:university).where.not('universities.location': BatchApplication.top_states(5)) }
 
   validates :batch_id, presence: true
   validates :application_stage_id, presence: true
@@ -205,7 +206,8 @@ class BatchApplication < ActiveRecord::Base
     status == :rejected
   end
 
+  # Returns name of states with most number of applications - excludes 'Other' if present
   def self.top_states(n)
-    BatchApplication.joins(:university).group(:location).count.sort_by { |_k, v| v }.reverse[0..(n - 1)].to_h.keys
+    joins(:university).group(:location).count.sort_by { |_k, v| v }.reverse[0..(n - 1)].to_h.keys - ['Other']
   end
 end

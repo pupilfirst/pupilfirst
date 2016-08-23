@@ -1,5 +1,5 @@
 ActiveAdmin.register_page 'Admissions Dashboard' do
-  menu parent: 'Dashboard'
+  menu parent: 'Admissions', label: 'Dashboard', priority: 0
 
   controller do
     before_filter :initialize_intercom_client

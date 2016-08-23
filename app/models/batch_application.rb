@@ -23,6 +23,9 @@ class BatchApplication < ActiveRecord::Base
   # Batch applicants who have completed payment.
   scope :payment_complete, -> { joins(:payment).merge(Payment.paid) }
 
+  scope :paid_today, -> { payment_complete.where('payments.paid_at > ?', Time.now.beginning_of_day) }
+  scope :payment_initiated_today, -> { payment_initiated.where('payments.created_at > ?', Time.now.beginning_of_day) }
+
   validates :batch_id, presence: true
   validates :application_stage_id, presence: true
   validates :university_id, presence: true

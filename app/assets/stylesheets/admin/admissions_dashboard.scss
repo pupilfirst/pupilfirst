@@ -25,9 +25,18 @@
   .content {
     line-height: 21px;
 
+    ul {
+      margin-left: 10px;
+    }
+
     .chart-area {
       padding: 10px;
       height: 500px;
     }
   }
+}
+
+.full-width{
+  width: 100%;
+  height: auto;
 }

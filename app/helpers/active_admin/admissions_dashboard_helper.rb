@@ -21,5 +21,29 @@ module ActiveAdmin
     def paid_applications_by_team_size
       BatchApplication.where(batch_id: selected_batch_ids).payment_complete.group(:team_size).count.sort.to_h.to_json
     end
+
+    def payment_completed_count
+      BatchApplication.where(batch_id: selected_batch_ids).payment_complete.count
+    end
+
+    def payment_completed_delta
+      BatchApplication.where(batch_id: selected_batch_ids).paid_today.count
+    end
+
+    def payment_initiated_count
+      BatchApplication.where(batch_id: selected_batch_ids).payment_initiated.count
+    end
+
+    def payment_initiated_delta
+      BatchApplication.where(batch_id: selected_batch_ids).payment_initiated_today.count
+    end
+
+    def submitted_application_count
+      BatchApplication.where(batch_id: selected_batch_ids).submitted_application.count
+    end
+
+    def submitted_application_delta
+      BatchApplication.where(batch_id: selected_batch_ids).submitted_application.where('batch_applications.created_at > ?', Time.now.beginning_of_day).count
+    end
   end
 end

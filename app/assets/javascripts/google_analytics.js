@@ -18,6 +18,6 @@ if(/sv\.co/.test(window.location.hostname)) {
 
 $(document).on('page:change', function() {
   // Optimized for SPA. https://developers.google.com/analytics/devguides/collection/analyticsjs/single-page-applications
-  ga('set', 'page', window.location.pathname);
+  ga('set', 'page', window.location.pathname + window.location.search);
   ga('send', 'pageview');
 });

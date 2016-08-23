@@ -65,4 +65,14 @@ class BatchApplicant < ActiveRecord::Base
      'TV', 'SV.CO Blog', 'Instagram', 'Facebook', 'Twitter',
      'Other (Please Specify)']
   end
+
+  def has_multiple_applications?
+    batch_applications.count > 1
+  end
+
+  def old_applications
+    batch_applications.select do |application|
+      application.status.in? [:expired, :complete, :rejected]
+    end
+  end
 end

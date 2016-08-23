@@ -17,6 +17,28 @@
           .link
             = link_to 'Sign In to Continue', apply_identify_path, class: 'btn btn-primary btn-md text-uppercase'
 
+      - if current_batch_applicant&.has_multiple_applications?
+        .card.content-box.m-t-2.m-b-0
+          h3.m-b-2 Previous Applications
+
+          .table-responsive
+            table.table
+              thead
+                tr
+                  th Batch
+                  th Status
+                  th Results
+              tbody
+                - current_batch_applicant.old_applications.each do |old_application|
+                  tr
+                    td = old_application.batch.batch_number
+                    td #{old_application.status.to_s.capitalize} at stage #{old_application.application_stage.number}
+                    td
+                      - if old_application.merits_certificate?
+                        = link_to 'Download Certificate', '#', class: 'btn btn-secondary btn-sm'
+                      - else
+                        em Did not complete coding / video task.
+
       .application-process-left.content-box.m-t-2.m-b-2
         .admission-process.clearfix
           h2

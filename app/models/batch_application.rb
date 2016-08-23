@@ -187,4 +187,13 @@ class BatchApplication < ActiveRecord::Base
 
     update!(swept_at: Time.now)
   end
+
+  # An application that has submitted for stage 2, or beyond merits a certificate from SV.CO
+  def merits_certificate?
+    return true if application_stage.number > 2
+    return false if application_stage.number == 1
+
+    # If application is at stage 2, :rejected state gets certificate, and :expired does not.
+    status == :rejected
+  end
 end

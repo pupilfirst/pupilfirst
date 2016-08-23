@@ -3,6 +3,18 @@
 
   .content
     ul
-      li Payment Completed: #{payment_completed_count} (+#{payment_completed_delta})
-      li Payment Initiated: #{payment_initiated_count} (+#{payment_initiated_delta})
-      li Submitted Application: #{submitted_application_count} (+#{submitted_application_delta})
+      li
+        ' Payment Completed: #{payment_completed_count} (+#{payment_completed_delta})
+        br
+        - BatchApplication.top_states(5).each do |state|
+          ' #{state}:#{payment_completed_count_for(state)} (+#{payment_completed_delta_for(state)})&nbsp;
+      li
+        ' Payment Initiated: #{payment_initiated_count} (+#{payment_initiated_delta})
+        br
+        - BatchApplication.top_states(5).each do |state|
+          ' #{state}:#{payment_initiated_count_for(state)} (+#{payment_initiated_delta_for(state)})&nbsp;
+      li
+        ' Submitted Application: #{submitted_application_count} (+#{submitted_application_delta})
+        br
+        - BatchApplication.top_states(5).each do |state|
+          ' #{state}:#{submitted_application_count_for(state)} (+#{submitted_application_delta_for(state)})&nbsp;

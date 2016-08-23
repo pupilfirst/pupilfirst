@@ -26,6 +26,8 @@ class BatchApplication < ActiveRecord::Base
   scope :paid_today, -> { payment_complete.where('payments.paid_at > ?', Time.now.beginning_of_day) }
   scope :payment_initiated_today, -> { payment_initiated.where('payments.created_at > ?', Time.now.beginning_of_day) }
 
+  scope :from_state, -> (state) { joins(:university).where('universities.location': state) }
+
   validates :batch_id, presence: true
   validates :application_stage_id, presence: true
   validates :university_id, presence: true
@@ -198,5 +200,9 @@ class BatchApplication < ActiveRecord::Base
 
     # If application is at stage 2, :rejected state gets certificate, and :expired does not.
     status == :rejected
+  end
+
+  def self.top_states(n)
+    BatchApplication.joins(:university).group(:location).count.sort.reverse[0..(n - 1)].to_h.keys
   end
 end

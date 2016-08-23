@@ -61,7 +61,7 @@ class BatchApplicant < ActiveRecord::Base
   end
 
   def self.reference_sources
-    ['Friend', 'Seniors', '#StartinCollge Event', 'Newspaper/Magazine',
+    ['Friend', 'Seniors', '#StartinCollege Event', 'Newspaper/Magazine',
      'TV', 'SV.CO Blog', 'Instagram', 'Facebook', 'Twitter',
      'Other (Please Specify)']
   end

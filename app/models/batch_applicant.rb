@@ -24,6 +24,8 @@ class BatchApplicant < ActiveRecord::Base
       .merge(Payment.paid).distinct
   }
 
+  scope :for_batch_id_in, -> (ids) { joins(:batch_applications).where(batch_applications: { batch_id: ids }) }
+
   # Basic validations.
   validates :email, presence: true, uniqueness: true
 
@@ -61,8 +63,18 @@ class BatchApplicant < ActiveRecord::Base
   end
 
   def self.reference_sources
-    ['Friend', 'Seniors', '#StartinCollge Event', 'Newspaper/Magazine',
+    ['Friend', 'Seniors', '#StartinCollege Event', 'Newspaper/Magazine',
      'TV', 'SV.CO Blog', 'Instagram', 'Facebook', 'Twitter',
      'Other (Please Specify)']
+  end
+
+  def multiple_applications?
+    batch_applications.count > 1
+  end
+
+  def old_applications
+    batch_applications.select do |application|
+      application.status.in? [:expired, :complete, :rejected]
+    end
   end
 end

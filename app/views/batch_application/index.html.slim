@@ -17,6 +17,28 @@
           .link
             = link_to 'Sign In to Continue', apply_identify_path, class: 'btn btn-primary btn-md text-uppercase'
 
+      - if current_batch_applicant&.multiple_applications?
+        .card.content-box.m-t-2.m-b-0
+          h3.m-b-2 Previous Applications
+
+          .table-responsive
+            table.table
+              thead
+                tr
+                  th Batch
+                  th Status
+                  th Results
+              tbody
+                - current_batch_applicant.old_applications.each do |old_application|
+                  tr
+                    td = old_application.batch.batch_number
+                    td #{old_application.status.to_s.capitalize} at stage #{old_application.application_stage.number}
+                    td
+                      - if old_application.merits_certificate?
+                        = link_to 'Download Certificate', '#', class: 'btn btn-secondary btn-sm'
+                      - else
+                        em Did not complete coding / video task.
+
       .application-process-left.content-box.m-t-2.m-b-2
         .admission-process.clearfix
           h2
@@ -286,12 +308,12 @@
             .card
               h4
                 a.card-block.accordion-toggle.collapsed data-parent="#fee-accordion" data-toggle="collapse" href="#application-fee"
-                  | Application Fee
+                  | Registration Fee
               #application-fee.card-text.collapse.in
                 h3
                   ' &#8377;3,000 per team.
                 p
-                  ' Teams who apply and complete the Coding &amp; Video round gets a certificate with scores received from SV.CO. If selected, we will deduct the Application Fee from the Program Fee.
+                  ' Teams who apply and complete the Coding &amp; Video round gets a certificate with scores received from SV.CO. If selected, we will deduct the Registration Fee from the Program Fee.
 
             .card
               h4
@@ -305,13 +327,13 @@
             .card
               h4
                 a.card-block.accordion-toggle data-parent="#fee-accordion" data-toggle="collapse" href="#scholorship"
-                  | Scholarships
+                  | Paytm Scholarships
               #scholorship.collapse
                 .card-text
                   h3
-                    ' PayTM Scholarships
+                    ' Paytm Scholarships
                   p
-                    ' We're excited to partner with PayTM to offer full merit-based scholarships to <strong>30 deserving founders</strong>. There is no separate application for scholarship, we'll award them automatically based on your team scores in the selection rounds. Scholarships are awarded to individual founders and not to the team as a whole.
+                    ' We're excited to partner with Paytm to offer full merit-based scholarships to <strong>30 deserving founders</strong>. There is no separate application for scholarship, we'll award them automatically based on your team scores in the selection rounds. Scholarships are awarded to individual founders and not to the team as a whole.
                   p
                     ' Scholarship Awards will be based on the following rules:
                   ul
@@ -361,7 +383,7 @@
                   ul.m-t-1
                     li 5% discount on Program Fee for each Selected Team referred. To both the Referred & Referring Teams.
                     li To qualify, Referred Team must clear the selection rounds (Coding & Video test and Personal Interview) and pay the Program Fee, sign Agreements and be part of the next Batch for the discount to apply.
-                    li Proof to be Submitted: Teams must forward the Application Fee payment receipt of the referred teams to help@sv.co within 15 days of Application Submission. Both Teams can claim the fee deduction immediately when selected.
+                    li Proof to be Submitted: Teams must forward the Registration Fee payment receipt of the referred teams to help@sv.co within 15 days of Application Submission. Both Teams can claim the fee deduction immediately when selected.
 
 
             .card
@@ -373,21 +395,21 @@
                   p We're offering special perks for IEDC Volunteers:
                   ul.m-t-1
                     li
-                      | Teams who have at least one IEDC Volunteer have their Application Fee of ₹3000 per team refunded.
+                      | Teams who have at least one IEDC Volunteer have their Registration Fee of ₹3000 per team refunded.
                       ul
                         li To qualify, IEDC Volunteers must attend the <a href="https://keralastartupmission.wordpress.com/2016/07/27/iedc-summit-2016-on-august-23-2016/">KSUM IEDC Student Meet</a> on August 23, 2016 & make sure to meet the SV.CO representative and register their email address.
                         li To qualify, teams must ensure to apply via the IEDC Volunteer Registered Email IDs.
-                        li Proof to be Submitted: Registered IEDC Volunteers must forward their Application Fee payment receipt to help@sv.co within 15 days of Application Submission. We will credit the refund within 3 working days of receipt.
+                        li Proof to be Submitted: Registered IEDC Volunteers must forward their Registration Fee payment receipt to help@sv.co within 15 days of Application Submission. We will credit the refund within 3 working days of receipt.
                     li
-                      | When a Registered IEDC Volunteer refers other teams to apply, they get ₹1000 from their Application Fee refunded.
+                      | When a Registered IEDC Volunteer refers other teams to apply, they get ₹1000 from their Registration Fee refunded.
                       ul
                         li To qualify, IEDC Volunteers must attend the <a href="https://keralastartupmission.wordpress.com/2016/07/27/iedc-summit-2016-on-august-23-2016/">KSUM IEDC Student Meet</a> on August 23, 2016 & make sure to meet the SV.CO representative and register their email address.
-                        li To qualify, Referred Teams must pay the Application Fee.
-                        li Proof to be Submitted: Registered IEDC Volunteers must forward the Application Fee payment receipt of their Referred Teams to help@sv.co within 15 days of Application Submission. We will credit the refund to the Teams within 3 working days of receipt.
+                        li To qualify, Referred Teams must pay the Registration Fee.
+                        li Proof to be Submitted: Registered IEDC Volunteers must forward the Registration Fee payment receipt of their Referred Teams to help@sv.co within 15 days of Application Submission. We will credit the refund to the Teams within 3 working days of receipt.
 
 
     .col-lg-4.col-md-12#start-application-process
-      .m-t-2.m-b-3
+      .m-t-2
         = simple_form_for @form,
           url: apply_register_path,
           wrapper: :vertical_form do |f|

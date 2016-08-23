@@ -23,6 +23,12 @@ class BatchApplication < ActiveRecord::Base
   # Batch applicants who have completed payment.
   scope :payment_complete, -> { joins(:payment).merge(Payment.paid) }
 
+  scope :paid_today, -> { payment_complete.where('payments.paid_at > ?', Time.now.beginning_of_day) }
+  scope :payment_initiated_today, -> { payment_initiated.where('payments.created_at > ?', Time.now.beginning_of_day) }
+
+  scope :from_state, -> (state) { joins(:university).where('universities.location': state) }
+  scope :from_other_states, -> { joins(:university).where.not('universities.location': BatchApplication.selected_states) }
+
   validates :batch_id, presence: true
   validates :application_stage_id, presence: true
   validates :university_id, presence: true
@@ -150,7 +156,7 @@ class BatchApplication < ActiveRecord::Base
     batch.stage_expired?(application_stage) && batch.stage_started?(application_stage.next) && submission.present?
   end
 
-  # Returns one of :ongoing, :expired, :complete, :promoted, :rejected or :complete
+  # Returns one of :ongoing, :submitted, :expired, :promoted, :rejected, or :complete
   #
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def status
@@ -174,7 +180,7 @@ class BatchApplication < ActiveRecord::Base
 
   # Creates a duplicate (pristine, unpaid) of this application into given batch.
   def duplicate!(batch)
-    BatchApplication.create!(
+    application = BatchApplication.create!(
       batch: batch,
       team_lead: team_lead,
       application_stage: ApplicationStage.initial_stage,
@@ -183,6 +189,30 @@ class BatchApplication < ActiveRecord::Base
       team_size: team_size
     )
 
+    application.batch_applicants << team_lead
+
     update!(swept_at: Time.now)
+
+    # Send email to the lead.
+    BatchApplicantMailer.swept(team_lead, batch).deliver_later
+  end
+
+  # An application that has submitted for stage 2, or beyond merits a certificate from SV.CO
+  def merits_certificate?
+    return true if application_stage.number > 2
+    return false if application_stage.number == 1
+
+    # If application is at stage 2, :rejected state gets certificate, and :expired does not.
+    status == :rejected
+  end
+
+  # Returns name of states with most number of applications - excludes 'Other' if present
+  # this was included to dynamically calculate the top states for Admissions Dashboard. Later replaced by the pre-selected list of states below
+  def self.top_states(n)
+    joins(:university).group(:location).count.sort_by { |_k, v| v }.reverse[0..(n - 1)].to_h.keys - ['Other']
+  end
+
+  def self.selected_states
+    ['Kerala', 'Andhra Pradesh', 'Telangana', 'Tamil Nadu', 'Gujarat']
   end
 end

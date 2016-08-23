@@ -7,8 +7,8 @@
         a.table_tools_button href=admin_admissions_dashboard_path(batch: batch) #{batch.name} Batch
 
 .admissions-dashboard-container
+  == render 'admission_stats'
   == render 'paid_applicants_by_reference'
   == render 'paid_applications_by_location'
-
-p
-  ' * This is Work In Progress
+  == render 'paid_applications_by_date'
+  == render 'paid_applications_by_team_size'

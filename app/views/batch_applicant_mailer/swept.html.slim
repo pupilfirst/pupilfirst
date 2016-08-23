@@ -1,0 +1,25 @@
+= content_for :heading
+  | Reapply to Batch ##{@batch.batch_number} at SV.CO
+
+= content_for :salutation
+  | Hello #{@team_lead.name},
+
+= content_for :body
+  p We're sending you this email because you had previously applied to SV.CO.
+
+  p
+    ' We have started accepting applications to a new batch, and would like to welcome you to participate.
+
+  p
+    ' #{link_to 'Click here', apply_continue_url(token: @team_lead.token, shared_device: true)} to continue
+    | application.
+
+  p
+    ' If you're unable to click on the link above, then please copy and paste the following link into your browser's
+    | address bar:
+
+  p.monospace = apply_continue_url(token: @team_lead.token, shared_device: true)
+
+  p
+    ' If you would like to know the status of your previous application, please visit the
+    | #{link_to 'apply page', apply_url} once you're signed in.

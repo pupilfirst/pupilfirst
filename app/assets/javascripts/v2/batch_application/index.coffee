@@ -89,10 +89,24 @@ $(document).on 'page:change', ->
     toggleReferenceTextField()
     $('#batch_application_team_lead_attributes_reference').change toggleReferenceTextField
 
-stickStartapplicationForm = ->
+setupStickyStartApplicationForm = ->
+  stickApplicationForm()
+
+  $('#fee-accordion').on 'show.bs.collapse', ->
+    stickApplicationForm(scope = StickScope.Document)
+
+  $('#fee-accordion').on 'shown.bs.collapse', ->
+    stickApplicationForm()
+
+  $('#fee-accordion').on 'hidden.bs.collapse', ->
+    stickApplicationForm()
+
+stickApplicationForm = (scope = StickScope.Parent) ->
+  $('#start-application-process').stickit('destroy')
   $('#start-application-process').stickit
     top: 0,
-    screenMinWidth: 1024
+    screenMinWidth: 992,
+    scope: scope
 
 scrolltoStartapplicationForm = ->
   $('#sticky-start-application').click (e) ->
@@ -124,7 +138,7 @@ helpIntercomPopup = ->
 
 $(document).on 'page:change', setupSelect2Inputs
 $(document).on 'page:change', emailsShouldMatch
-$(document).on 'page:change', stickStartapplicationForm
+$(document).on 'page:change', setupStickyStartApplicationForm
 $(document).on 'page:change', scrolltoStartapplicationForm
 $(document).on 'page:change', stickyApplyButtonOnApplyPage
 $(document).on 'page:change', helpIntercomPopup

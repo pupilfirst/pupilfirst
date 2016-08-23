@@ -1,7 +1,7 @@
 ActiveAdmin.register BatchApplication do
   include DisableIntercom
 
-  menu parent: 'Admissions', label: 'Applications', priority: 0
+  menu parent: 'Admissions', label: 'Applications', priority: 1
 
   permit_params :batch_id, :application_stage_id, :university_id, :team_achievement, :team_lead_id, :college, :state,
     :tag_list, :team_size

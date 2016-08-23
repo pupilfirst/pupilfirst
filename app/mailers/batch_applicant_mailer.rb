@@ -16,4 +16,10 @@ class BatchApplicantMailer < ApplicationMailer
     @stage = stage
     mail(to: team_lead.email, subject: 'Your application to SV.CO has not been selected to the next stage!')
   end
+
+  def swept(team_lead, batch)
+    @team_lead = team_lead
+    @batch = batch
+    mail(to: team_lead.email, subject: "Reapply to Batch ##{batch.batch_number} at SV.CO")
+  end
 end

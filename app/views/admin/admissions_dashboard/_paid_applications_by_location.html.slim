@@ -2,4 +2,4 @@
   .heading Paid Applicants by Location
 
   .content
-    #paid_applications_by_location data-chart-data="#{BatchApplication.payment_complete.joins(:university).group('universities.location').count.to_json}"
+    #paid_applications_by_location.chart-area data-chart-data="#{paid_applications_by_location}"

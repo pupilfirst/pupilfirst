@@ -14,6 +14,6 @@ displayPaidApplicationsByLocation = ->
 
 displayPaidApplicationsByDate = ->
   chartData = $('#paid_applications_by_date').data('chartData')
-  new (Chartkick.LineChart)('paid_applications_by_date', chartData)
+  new (Chartkick.ColumnChart)('paid_applications_by_date', chartData)
 
 $(document).on 'page:change', displayAllCharts

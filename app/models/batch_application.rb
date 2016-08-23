@@ -203,6 +203,6 @@ class BatchApplication < ActiveRecord::Base
   end
 
   def self.top_states(n)
-    BatchApplication.joins(:university).group(:location).count.sort.reverse[0..(n - 1)].to_h.keys
+    BatchApplication.joins(:university).group(:location).count.sort_by { |_k, v| v }.reverse[0..(n - 1)].to_h.keys
   end
 end

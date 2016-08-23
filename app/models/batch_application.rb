@@ -191,6 +191,9 @@ class BatchApplication < ActiveRecord::Base
     application.batch_applicants << team_lead
 
     update!(swept_at: Time.now)
+
+    # Send email to the lead.
+    BatchApplicantMailer.swept(team_lead, batch).deliver_later
   end
 
   # An application that has submitted for stage 2, or beyond merits a certificate from SV.CO

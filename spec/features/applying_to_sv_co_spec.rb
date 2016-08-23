@@ -39,7 +39,7 @@ feature 'Applying to SV.CO' do
       click_on 'Submit my application'
 
       # user must be at the payment page
-      expect(page).to have_text('You now need to pay the application fee')
+      expect(page).to have_text('You now need to pay the registration fee')
 
       # user must have recieved a 'Continue Application' email
       open_email('elcapitan@thesea.com')
@@ -114,7 +114,7 @@ feature 'Applying to SV.CO' do
         visit continue_path
 
         # user must be at the payment page
-        expect(page).to have_text('You now need to pay the application fee')
+        expect(page).to have_text('You now need to pay the registration fee')
 
         click_on 'Cancel and Restart Application'
 

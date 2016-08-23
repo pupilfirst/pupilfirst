@@ -5,7 +5,7 @@
 .secondary-banner.application-stages-banner
   .container
     .application-stages-head.text-xs-center
-      h1 Application Fee
+      h1 Registration Fee
       h4.m-x-auto Payment pending
 .container
   == render('applications_close_soon', batch: current_batch) if current_batch.applications_close_soon?
@@ -26,7 +26,7 @@
       ' Your application data has been stored.
       br
       ' You now need to
-      span.brand-secondary.font-semibold pay the application fee.
+      span.brand-secondary.font-semibold pay the registration fee.
 
     - if current_application.payment.present?
       .alert.alert-warning.m-t-1

@@ -24,6 +24,8 @@ class BatchApplicant < ActiveRecord::Base
       .merge(Payment.paid).distinct
   }
 
+  scope :for_batch_id_in, -> (ids) { joins(:batch_applications).where(batch_applications: { batch_id: ids }) }
+
   # Basic validations.
   validates :email, presence: true, uniqueness: true
 

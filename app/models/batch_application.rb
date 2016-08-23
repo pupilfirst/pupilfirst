@@ -150,7 +150,7 @@ class BatchApplication < ActiveRecord::Base
     batch.stage_expired?(application_stage) && batch.stage_started?(application_stage.next) && submission.present?
   end
 
-  # Returns one of :ongoing, :expired, :complete, :promoted, :rejected or :complete
+  # Returns one of :ongoing, :submitted, :expired, :promoted, :rejected, or :complete
   #
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def status

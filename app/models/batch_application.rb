@@ -174,7 +174,7 @@ class BatchApplication < ActiveRecord::Base
 
   # Creates a duplicate (pristine, unpaid) of this application into given batch.
   def duplicate!(batch)
-    BatchApplication.create!(
+    application = BatchApplication.create!(
       batch: batch,
       team_lead: team_lead,
       application_stage: ApplicationStage.initial_stage,
@@ -182,6 +182,8 @@ class BatchApplication < ActiveRecord::Base
       college: college,
       team_size: team_size
     )
+
+    application.batch_applicants << team_lead
 
     update!(swept_at: Time.now)
   end

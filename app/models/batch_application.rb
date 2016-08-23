@@ -27,7 +27,7 @@ class BatchApplication < ActiveRecord::Base
   scope :payment_initiated_today, -> { payment_initiated.where('payments.created_at > ?', Time.now.beginning_of_day) }
 
   scope :from_state, -> (state) { joins(:university).where('universities.location': state) }
-  scope :from_other_states, -> { joins(:university).where.not('universities.location': BatchApplication.top_states(5)) }
+  scope :from_other_states, -> { joins(:university).where.not('universities.location': BatchApplication.selected_states) }
 
   validates :batch_id, presence: true
   validates :application_stage_id, presence: true
@@ -207,7 +207,12 @@ class BatchApplication < ActiveRecord::Base
   end
 
   # Returns name of states with most number of applications - excludes 'Other' if present
+  # this was included to dynamically calculate the top states for Admissions Dashboard. Later replaced by the pre-selected list of states below
   def self.top_states(n)
     joins(:university).group(:location).count.sort_by { |_k, v| v }.reverse[0..(n - 1)].to_h.keys - ['Other']
+  end
+
+  def self.selected_states
+    ['Kerala', 'Andhra Pradesh', 'Telangana', 'Tamil Nadu', 'Gujarat']
   end
 end

@@ -66,7 +66,7 @@ class BatchApplicant < ActiveRecord::Base
      'Other (Please Specify)']
   end
 
-  def has_multiple_applications?
+  def multiple_applications?
     batch_applications.count > 1
   end
 

@@ -23,8 +23,12 @@
   }
 
   .content {
-    padding: 10px 10px 0 10px;
     line-height: 21px;
+
+    .chart-area {
+      padding: 10px;
+      height: 500px;
+    }
 
     .recent-visit {
       padding: 0;

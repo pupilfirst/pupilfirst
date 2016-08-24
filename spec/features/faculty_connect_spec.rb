@@ -88,7 +88,14 @@ feature 'Faculty Connect' do
         expect(page.find('.form-group.connect_request_questions')[:class].split).to include('has-error')
 
         # Fill something in as questions.
-        questions = Faker::Lorem.words(rand(10)).join(' ') + "\n\n" + Faker::Lorem.words(rand(10)).join(' ')
+        questions = <<~QUESTIONS
+          These are the questions I have:
+
+          1. This is question number 1.
+          2. This is question number two with a single special character: ₹
+          3. ഈ ചോദ്യം മലയാളത്തിൽ ആണ്
+        QUESTIONS
+
         fill_in 'connect_request_questions', with: questions
 
         click_on 'Submit Request'

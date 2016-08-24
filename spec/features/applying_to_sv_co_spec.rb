@@ -159,6 +159,7 @@ feature 'Applying to SV.CO' do
       # create a completed payment
       payment = create :payment,
         batch_application: batch_application,
+        batch_applicant: batch_application.team_lead,
         instamojo_payment_request_status: 'Completed',
         instamojo_payment_status: 'Credit',
         paid_at: Time.now

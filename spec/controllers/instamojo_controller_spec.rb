@@ -27,7 +27,7 @@ describe InstamojoController do
   end
 
   describe 'GET redirect' do
-    let(:payment) { create :payment, batch_application: batch_application }
+    let(:payment) { create :payment, batch_application: batch_application, batch_applicant: batch_application.team_lead }
     let(:payment_id) { SecureRandom.hex }
 
     before do
@@ -62,7 +62,7 @@ describe InstamojoController do
   end
 
   describe 'POST webhook' do
-    let(:payment) { create :payment, batch_application: batch_application }
+    let(:payment) { create :payment, batch_application: batch_application, batch_applicant: batch_application.team_lead }
     let(:payment_id) { SecureRandom.hex }
 
     before :all do

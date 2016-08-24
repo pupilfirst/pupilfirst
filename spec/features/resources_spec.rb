@@ -45,9 +45,7 @@ feature 'Resources' do
     new_window = window_opened_by { click_on 'Download', match: :first }
 
     within_window new_window do
-      using_wait_time 10 do
-        expect(page.response_headers['Content-Type']).to eq('application/pdf')
-      end
+      expect(page.response_headers['Content-Type']).to eq('application/pdf')
     end
   end
 

@@ -85,9 +85,7 @@ feature 'Faculty Connect' do
         click_on 'Submit Request'
 
         # Attempting to submit the form without writing questions should show error.
-        using_wait_time 10 do
-          expect(page.find('.form-group.connect_request_questions')[:class].split).to include('has-error')
-        end
+        expect(page).to have_selector('.form-group.connect_request_questions.has-error')
 
         # Fill something in as questions.
         questions = <<~QUESTIONS
@@ -102,9 +100,7 @@ feature 'Faculty Connect' do
         click_on 'Submit Request'
 
         # The connect button should now be disabled.
-        using_wait_time 10 do
-          expect(page).to have_selector('.connect-link.disabled')
-        end
+        expect(page).to have_selector('.connect-link.disabled')
 
         # Verify data.
         connect_request = startup.connect_requests.last

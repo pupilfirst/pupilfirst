@@ -59,12 +59,8 @@ feature 'Timeline Builder' do
       fill_in 'timeline-event-file-title', with: 'Sample PDF'
       attach_file 'timeline-event-file-input', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf'))
       click_on 'Save File'
-
       click_on 'Close'
-
-      using_wait_time 10 do
-        click_on 'Submit for Review'
-      end
+      click_on 'Submit for Review'
 
       # Wait for AJAX request to finish.
       expect(page).to have_text('All done!')
@@ -72,14 +68,11 @@ feature 'Timeline Builder' do
       # Get the timeline entry for last created event.
       last_timeline_event = TimelineEvent.order('id DESC').first
 
-      # Then wait for page to load.
+      # Then wait for page to load with a waiting selector.
       new_event_selector = "#event-#{last_timeline_event.id}"
+      expect(page).to have_selector(new_event_selector, text: /pending verification/i)
+
       latest_timeline_event_entry = page.find(new_event_selector, match: :first)
-
-      using_wait_time 10 do
-        expect(latest_timeline_event_entry).to have_text('Pending verification')
-      end
-
       expect(latest_timeline_event_entry).to have_text('Team Formed')
       expect(latest_timeline_event_entry).to have_text(event_description)
       expect(latest_timeline_event_entry).to have_link('SV.CO')
@@ -92,19 +85,16 @@ feature 'Timeline Builder' do
       click_on 'Add a link'
       click_on 'Save Link'
 
-      using_wait_time 10 do
-        expect(page.find('#link-title-group')[:class]).to include('has-error')
-      end
-
-      expect(page.find('#link-url-group')[:class]).to include('has-error')
+      expect(page).to have_selector('#link-title-group.has-error')
+      expect(page).to have_selector('#link-url-group.has-error')
     end
 
     scenario 'Founder attempts to submit builder without essential fields', js: true do
       click_on 'Submit for Review'
 
-      expect(page.find('textarea.description')[:class]).to include('has-error')
-      expect(page.find('#timeline_event_event_on')[:class]).to include('has-error')
-      expect(page.find('.select2-container')[:class]).to include('has-error')
+      expect(page).to have_selector('textarea.description.has-error')
+      expect(page).to have_selector('#timeline_event_event_on.has-error')
+      expect(page).to have_selector('.select2-container.has-error')
     end
 
     scenario "Founder attempts to enter description larger than #{TimelineEvent::MAX_DESCRIPTION_CHARACTERS} characters", js: true do
@@ -133,13 +123,10 @@ feature 'Timeline Builder' do
         # Wait for AJAX request to finish.
         expect(page).to have_text('All done!')
 
-        # Then wait for page to load.
-        new_timeline_event_panel = page.find("#event-#{unverified_timeline_event.id}")
-
-        using_wait_time 10 do
-          expect(new_timeline_event_panel).to have_text(new_description)
-          expect(new_timeline_event_panel).to have_text('Pending verification')
-        end
+        # Ensure the description updates.
+        event_selector = "#event-#{unverified_timeline_event.id}"
+        expect(page).to have_selector(event_selector, text: 'Pending verification')
+        expect(page).to have_selector(event_selector, text: new_description)
       end
 
       scenario 'Founder adds multiple links', js: true do
@@ -157,10 +144,7 @@ feature 'Timeline Builder' do
         fill_in 'URL', with: 'https://sv.co'
         page.find('#link_private').click
         click_on 'Save Link'
-
-        using_wait_time 10 do
-          click_on 'Add a link'
-        end
+        click_on 'Add a link'
 
         fill_in 'Title', with: 'Google'
         fill_in 'URL', with: 'https://www.google.com'
@@ -170,25 +154,17 @@ feature 'Timeline Builder' do
         # Test if link tab's title reflects links added
         expect(page.find('#add-link')).to have_text('SV.CO (+1)')
 
-        using_wait_time 10 do
-          click_on 'Submit for Review'
-        end
+        click_on 'Submit for Review'
 
         # Wait for AJAX request to finish.
         expect(page).to have_text('All done!')
 
-        # Then wait for page to load.
-        # Get the timeline entry for last created event.
+        # There should be a secret link on the page.
         last_timeline_event = TimelineEvent.order('id DESC').first
-        latest_timeline_event_entry = page.find("#event-#{last_timeline_event.id}", match: :first)
-
-        using_wait_time 10 do
-          expect(latest_timeline_event_entry).to have_link('SV.CO')
-        end
-
-        expect(latest_timeline_event_entry).to have_link('Google')
-        expect(latest_timeline_event_entry.find('.tl-link-button', match: :first)).to have_selector('i.fa.fa-user-secret')
-        expect(latest_timeline_event_entry.find('.tl-link-button', text: 'Google')).to_not have_selector('i.fa.fa-user-secret')
+        timeline_event_selector = "#event-#{last_timeline_event.id}"
+        expect(page).to have_selector(timeline_event_selector + ' .tl-link-button i.fa.fa-user-secret')
+        expect(page.find(timeline_event_selector + ' .tl-link-button', text: 'SV.CO')).to have_selector('i.fa.fa-user-secret')
+        expect(page.find(timeline_event_selector + ' .tl-link-button', text: 'Google')).to_not have_selector('i.fa.fa-user-secret')
       end
 
       context 'Founder has a existing timeline event with one link and one file' do
@@ -219,22 +195,19 @@ feature 'Timeline Builder' do
           expect(remaining_attachment).to have_text(timeline_event_file.title)
 
           click_on 'Close'
-          expect(page.find('#add-link')).to have_text(timeline_event_file.title)
 
-          using_wait_time 10 do
-            click_on 'Submit for Review'
-          end
+          expect(page).to have_selector('#add-link', text: timeline_event_file.title)
+
+          click_on 'Submit for Review'
 
           # Wait for AJAX request to finish.
           expect(page).to have_text('All done!')
 
-          # Then wait for page to load.
-          using_wait_time 10 do
-            expect(page.find("#event-#{timeline_event.id} .tl-footer")).to_not have_text('Google')
-          end
-
           timeline_event.reload
           expect(timeline_event.links.length).to eq(0)
+
+          # The link should then disappear on reload.
+          expect(page).to_not have_selector("#event-#{timeline_event.id} .tl-footer", text: 'Google')
         end
 
         scenario 'Founder deletes file', js: true do
@@ -258,22 +231,19 @@ feature 'Timeline Builder' do
           expect(file).to have_text 'Marked for Deletion'
 
           click_on 'Close'
-          expect(page.find('#add-link')).to have_text('Google')
 
-          using_wait_time 10 do
-            click_on 'Submit for Review'
-          end
+          expect(page).to have_selector('#add-link', text: 'Google')
+
+          click_on 'Submit for Review'
 
           # Wait for AJAX request to finish.
           expect(page).to have_text('All done!')
 
-          # Then wait for page to load.
-          using_wait_time 10 do
-            expect(page.find("#event-#{timeline_event.id} .tl-footer")).to_not have_text(timeline_event_file.title)
-          end
-
           timeline_event.reload
           expect(timeline_event.timeline_event_files.count).to eq(0)
+
+          # The file should then disappear on reload.
+          expect(page).to_not have_selector("#event-#{timeline_event.id} .tl-footer", text: timeline_event_file.title)
         end
 
         scenario 'Founder edits one of the links', js: true do
@@ -285,9 +255,9 @@ feature 'Timeline Builder' do
 
           expect(page.find('#add-link')).to have_text("#{timeline_event_file.title} (+1)")
           page.find('#add-link').click
-          first_link = page.find('.list-group-item', match: :first)
-          expect(first_link).to have_text('Google')
-          first_link.find('a', text: 'Edit').click
+
+          google_link = page.find('.list-group-item', text: 'Google')
+          google_link.find('a', text: 'Edit').click
 
           # Test if form was pre-populated with existing details
           expect(page).to have_selector('#link_title')
@@ -310,22 +280,18 @@ feature 'Timeline Builder' do
           expect(page.find('.list-group-item', match: :first)).to have_text('Facebook')
           click_on 'Close'
 
-          using_wait_time 10 do
-            click_on 'Submit for Review'
-          end
+          click_on 'Submit for Review'
 
           # Wait for AJAX request to finish.
           expect(page).to have_text('All done!')
 
-          # Then wait for page to load.
-          using_wait_time 10 do
-            expect(page.find("#event-#{timeline_event.id} .tl-footer")).to_not have_text('Google')
-            expect(page.find("#event-#{timeline_event.id} .tl-footer")).to have_text('Facebook')
-          end
-
           timeline_event.reload
           expect(timeline_event.links.length).to eq(1)
           expect(timeline_event.links.first[:title]).to eq('Facebook')
+
+          # Then ensure that the view updates.
+          expect(page).to_not have_selector("#event-#{timeline_event.id} .tl-footer", text: 'Google')
+          expect(page).to have_selector("#event-#{timeline_event.id} .tl-footer", text: 'Facebook')
         end
 
         scenario 'Founder adds a third and final link', js: true do
@@ -341,33 +307,28 @@ feature 'Timeline Builder' do
           fill_in 'Title', with: 'SV.CO'
           fill_in 'URL', with: 'https://sv.co'
           page.find('#link_private').click
-          click_on 'Save Link'
+          click_button 'Save Link'
 
           # Test if link list was updated
-          using_wait_time 10 do
-            expect(page).to have_selector('.list-group-item', count: 3)
-          end
+          expect(page).to have_selector('.list-group-item', count: 3)
 
           # Ensure 'Add a link' button is not shown
           expect(page).to_not have_selector('button', text: 'Add a link')
           click_on 'Close'
-          expect(page.find('#add-link')).to have_text("#{timeline_event_file.title} (+2)")
 
-          using_wait_time 10 do
-            click_on 'Submit for Review'
-          end
+          expect(page).to have_selector('#add-link', text: "#{timeline_event_file.title} (+2)")
+
+          click_on 'Submit for Review'
 
           # Wait for AJAX request to finish.
           expect(page).to have_text('All done!')
 
-          # Then wait for page to load.
-          using_wait_time 10 do
-            expect(page.find("#event-#{timeline_event.id} .tl-footer")).to have_text('SV.CO')
-          end
-
           timeline_event.reload
           expect(timeline_event.links.length).to eq(2)
           expect(timeline_event.links.last[:title]).to eq('SV.CO')
+
+          # Then ensure final link is visible
+          expect(page).to have_selector("#event-#{timeline_event.id} .tl-footer", text: 'SV.CO')
         end
       end
     end
@@ -379,8 +340,7 @@ feature 'Timeline Builder' do
       scenario 'Founder edits rejected event', js: true do
         visit startup_path(startup)
 
-        rejected_event_card = page.find("#event-#{rejected_timeline_event.id}")
-        expect(rejected_event_card).to have_text('Not Accepted')
+        expect(page).to have_selector("#event-#{rejected_timeline_event.id}", text: 'Not Accepted')
 
         page.find("#event-#{rejected_timeline_event.id} .edit-link").click
 
@@ -391,13 +351,10 @@ feature 'Timeline Builder' do
 
         expect(page).to have_text('All done!')
 
-        # Then wait for page to load.
-        new_timeline_event_panel = page.find("#event-#{rejected_timeline_event.id}")
-
-        using_wait_time 10 do
-          expect(new_timeline_event_panel).to have_text(new_description)
-          expect(new_timeline_event_panel).to have_text('Pending verification')
-        end
+        # Ensure view updates.
+        timeline_event_selector = "#event-#{rejected_timeline_event.id}"
+        expect(page).to have_selector(timeline_event_selector, text: 'Pending verification')
+        expect(page).to have_selector(timeline_event_selector, text: new_description)
       end
     end
 
@@ -410,8 +367,8 @@ feature 'Timeline Builder' do
         visit startup_path(startup)
 
         # edit and delete buttons should be disabled
-        expect(page.find("#event-#{verified_timeline_event.id} .edit-link")[:class]).to include('disabled')
-        expect(page.find("#event-#{verified_timeline_event.id} .delete-link")[:class]).to include('disabled')
+        expect(page).to have_selector("#event-#{verified_timeline_event.id} .edit-link.disabled")
+        expect(page).to have_selector("#event-#{verified_timeline_event.id} .delete-link.disabled")
       end
     end
 
@@ -424,8 +381,8 @@ feature 'Timeline Builder' do
         visit startup_path(startup)
 
         # edit and delete buttons should be disabled
-        expect(page.find("#event-#{needs_improvement_timeline_event.id} .edit-link")[:class]).to include('disabled')
-        expect(page.find("#event-#{needs_improvement_timeline_event.id} .delete-link")[:class]).to include('disabled')
+        expect(page).to have_selector("#event-#{needs_improvement_timeline_event.id} .edit-link.disabled")
+        expect(page).to have_selector("#event-#{needs_improvement_timeline_event.id} .delete-link.disabled")
       end
     end
   end

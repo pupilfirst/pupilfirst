@@ -3,6 +3,6 @@ window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.h
 if(/sv\.co/.test(window.location.hostname)) {
   heap.load("1992576375");
 } else {
-  console.log('Heap Analytics Load: 3962996833');
+  if (window.debug) { console.log('Heap Analytics Load: 3962996833'); }
   heap.load("3962996833");
 }

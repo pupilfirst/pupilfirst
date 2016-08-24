@@ -10,7 +10,7 @@ __insp.push(['wid', 986143149]);
 window.__insp = {
   push: function() {
     var params = Array.prototype.slice.call(arguments);
-    console.log("Inspectlet: " + params);
+    if (window.debug) { console.log("Inspectlet: " + params); }
   }
 };
 <% end %>

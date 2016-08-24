@@ -8,11 +8,11 @@ if(/sv\.co/.test(window.location.hostname)) {
   // Initialize pixel.
   fbq('init', '1743667805902382');
 } else {
-  console.log('Detected development environment. Mocking function fbq()...');
+  if (window.debug) { console.log('Detected development environment. Mocking function fbq()...'); }
 
   var fbq = function() {
     var params = Array.prototype.slice.call(arguments, fbq.length);
-    console.log('Facebook Pixel Capture: ' + params);
+    if (window.debug) { console.log('Facebook Pixel Capture: ' + params); }
   }
 }
 

@@ -9,15 +9,10 @@
 
   *  imagemagick - `brew install imagemagick`
   *  postgresql - Install postgres from http://postgresapp.com
-  *  (OSX) Xcode, and qt5 - `brew install qt5`, followed by `brew link --force qt5`
-
-#### Ubuntu (14.04 CI)
-
-  * `sudo apt-get install build-essential libgmp-dev`
-  * PostgreSQL - `sudo apt-get install postgresql postgresql-contrib libpq-dev`
-  * Capybara-webkit deps - `sudo apt-get install xvfb gstreamer1.0-plugins-base gstreamer1.0-tools gstreamer1.0-x`
+  *  PhantomJS - `brew install phantomjs`
 
 ### Configure
+
   *  Setup `database.yml` for postgresql.
   *  copy `example.env` to `.env` and set the variables as required.
   *  Remove `SENTRY_DSN` key from `.env`. This disables the sentry-raven gem (useful only in production).

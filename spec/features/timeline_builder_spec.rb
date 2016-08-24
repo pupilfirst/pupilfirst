@@ -155,7 +155,11 @@ feature 'Timeline Builder' do
         fill_in 'URL', with: 'https://sv.co'
         page.find('#link_private').click
         click_on 'Save Link'
-        click_on 'Add a link'
+
+        using_wait_time 10 do
+          click_on 'Add a link'
+        end
+
         fill_in 'Title', with: 'Google'
         fill_in 'URL', with: 'https://www.google.com'
         click_on 'Save Link'

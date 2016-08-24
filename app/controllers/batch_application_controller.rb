@@ -30,7 +30,13 @@ class BatchApplicationController < ApplicationController
     @form = BatchApplicationForm.new(batch_application)
 
     if @form.validate(params[:batch_application])
-      applicant = @form.save
+      begin
+        applicant = @form.save
+      rescue Postmark::InvalidMessageError
+        flash.now[:error] = "Our email delivery service refused to accept the supplied address. Please make that is is a valid email address. If you're still having issues, please contact us using live chat or at help@sv.co"
+        render 'index'
+        return
+      end
 
       sign_in_applicant_temporarily(applicant)
 

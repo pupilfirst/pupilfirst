@@ -97,15 +97,12 @@ feature 'Faculty Connect' do
         QUESTIONS
 
         fill_in 'connect_request_questions', with: questions
-
         click_on 'Submit Request'
 
-        # Desperate move. The next check fails now and then on CI, with Capybara failing to wait even though the request
-        # was a POST to the server.
-        sleep 1
-
         # The connect button should now be disabled.
-        expect(page).to have_selector('.connect-link.disabled')
+        using_wait_time 10 do
+          expect(page).to have_selector('.connect-link.disabled')
+        end
 
         # Verify data.
         connect_request = startup.connect_requests.last

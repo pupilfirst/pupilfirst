@@ -62,10 +62,9 @@ feature 'Timeline Builder' do
 
       click_on 'Close'
 
-      # HACK: Our slow CI servers often fail to click submit since the modal is still disappearing.
-      sleep(0.5)
-
-      click_on 'Submit for Review'
+      using_wait_time 10 do
+        click_on 'Submit for Review'
+      end
 
       # Wait for AJAX request to finish.
       expect(page).to have_text('All done!')
@@ -73,14 +72,14 @@ feature 'Timeline Builder' do
       # Get the timeline entry for last created event.
       last_timeline_event = TimelineEvent.order('id DESC').first
 
-      # Sleep for 2s, since that's the delay to page refresh.
-      sleep 2
-
       # Then wait for page to load.
       new_event_selector = "#event-#{last_timeline_event.id}"
       latest_timeline_event_entry = page.find(new_event_selector, match: :first)
 
-      expect(latest_timeline_event_entry).to have_text('Pending verification')
+      using_wait_time 10 do
+        expect(latest_timeline_event_entry).to have_text('Pending verification')
+      end
+
       expect(latest_timeline_event_entry).to have_text('Team Formed')
       expect(latest_timeline_event_entry).to have_text(event_description)
       expect(latest_timeline_event_entry).to have_link('SV.CO')
@@ -131,13 +130,13 @@ feature 'Timeline Builder' do
         # Wait for AJAX request to finish.
         expect(page).to have_text('All done!')
 
-        # Sleep for 2s, since that's the delay to page refresh.
-        sleep 2
-
         # Then wait for page to load.
         new_timeline_event_panel = page.find("#event-#{unverified_timeline_event.id}")
-        expect(new_timeline_event_panel).to have_text(new_description)
-        expect(new_timeline_event_panel).to have_text('Pending verification')
+
+        using_wait_time 10 do
+          expect(new_timeline_event_panel).to have_text(new_description)
+          expect(new_timeline_event_panel).to have_text('Pending verification')
+        end
       end
 
       scenario 'Founder adds multiple links', js: true do
@@ -168,23 +167,22 @@ feature 'Timeline Builder' do
         # Test if link tab's title reflects links added
         expect(page.find('#add-link')).to have_text('SV.CO (+1)')
 
-        # HACK: Our slow CI servers often fail to click submit since the modal is still disappearing.
-        sleep(0.5)
-
-        click_on 'Submit for Review'
+        using_wait_time 10 do
+          click_on 'Submit for Review'
+        end
 
         # Wait for AJAX request to finish.
         expect(page).to have_text('All done!')
-
-        # Sleep for 2s, since that's the delay to page refresh.
-        sleep 2
 
         # Then wait for page to load.
         # Get the timeline entry for last created event.
         last_timeline_event = TimelineEvent.order('id DESC').first
         latest_timeline_event_entry = page.find("#event-#{last_timeline_event.id}", match: :first)
 
-        expect(latest_timeline_event_entry).to have_link('SV.CO')
+        using_wait_time 10 do
+          expect(latest_timeline_event_entry).to have_link('SV.CO')
+        end
+
         expect(latest_timeline_event_entry).to have_link('Google')
         expect(latest_timeline_event_entry.find('.tl-link-button', match: :first)).to have_selector('i.fa.fa-user-secret')
         expect(latest_timeline_event_entry.find('.tl-link-button', text: 'Google')).to_not have_selector('i.fa.fa-user-secret')
@@ -220,19 +218,18 @@ feature 'Timeline Builder' do
           click_on 'Close'
           expect(page.find('#add-link')).to have_text(timeline_event_file.title)
 
-          # HACK: Our slow CI servers often fail to click submit since the modal is still disappearing.
-          sleep(0.5)
-
-          click_on 'Submit for Review'
+          using_wait_time 10 do
+            click_on 'Submit for Review'
+          end
 
           # Wait for AJAX request to finish.
           expect(page).to have_text('All done!')
 
-          # Sleep for 2s, since that's the delay to page refresh.
-          sleep 2
-
           # Then wait for page to load.
-          expect(page.find("#event-#{timeline_event.id} .tl-footer")).to_not have_text('Google')
+          using_wait_time 10 do
+            expect(page.find("#event-#{timeline_event.id} .tl-footer")).to_not have_text('Google')
+          end
+
           timeline_event.reload
           expect(timeline_event.links.length).to eq(0)
         end
@@ -260,19 +257,18 @@ feature 'Timeline Builder' do
           click_on 'Close'
           expect(page.find('#add-link')).to have_text('Google')
 
-          # HACK: Our slow CI servers often fail to click submit since the modal is still disappearing.
-          sleep(0.5)
-
-          click_on 'Submit for Review'
+          using_wait_time 10 do
+            click_on 'Submit for Review'
+          end
 
           # Wait for AJAX request to finish.
           expect(page).to have_text('All done!')
 
-          # Sleep for 2s, since that's the delay to page refresh.
-          sleep 2
-
           # Then wait for page to load.
-          expect(page.find("#event-#{timeline_event.id} .tl-footer")).to_not have_text(timeline_event_file.title)
+          using_wait_time 10 do
+            expect(page.find("#event-#{timeline_event.id} .tl-footer")).to_not have_text(timeline_event_file.title)
+          end
+
           timeline_event.reload
           expect(timeline_event.timeline_event_files.count).to eq(0)
         end
@@ -311,20 +307,19 @@ feature 'Timeline Builder' do
           expect(page.find('.list-group-item', match: :first)).to have_text('Facebook')
           click_on 'Close'
 
-          # HACK: Our slow CI servers often fail to click submit since the modal is still disappearing.
-          sleep(0.5)
-
-          click_on 'Submit for Review'
+          using_wait_time 10 do
+            click_on 'Submit for Review'
+          end
 
           # Wait for AJAX request to finish.
           expect(page).to have_text('All done!')
 
-          # Sleep for 2s, since that's the delay to page refresh.
-          sleep 2
-
           # Then wait for page to load.
-          expect(page.find("#event-#{timeline_event.id} .tl-footer")).to_not have_text('Google')
-          expect(page.find("#event-#{timeline_event.id} .tl-footer")).to have_text('Facebook')
+          using_wait_time 10 do
+            expect(page.find("#event-#{timeline_event.id} .tl-footer")).to_not have_text('Google')
+            expect(page.find("#event-#{timeline_event.id} .tl-footer")).to have_text('Facebook')
+          end
+
           timeline_event.reload
           expect(timeline_event.links.length).to eq(1)
           expect(timeline_event.links.first[:title]).to eq('Facebook')
@@ -346,25 +341,27 @@ feature 'Timeline Builder' do
           click_on 'Save Link'
 
           # Test if link list was updated
-          expect(page).to have_selector('.list-group-item', count: 3)
+          using_wait_time 10 do
+            expect(page).to have_selector('.list-group-item', count: 3)
+          end
+
           # Ensure 'Add a link' button is not shown
           expect(page).to_not have_selector('button', text: 'Add a link')
           click_on 'Close'
           expect(page.find('#add-link')).to have_text("#{timeline_event_file.title} (+2)")
 
-          # HACK: Our slow CI servers often fail to click submit since the modal is still disappearing.
-          sleep(0.5)
-
-          click_on 'Submit for Review'
+          using_wait_time 10 do
+            click_on 'Submit for Review'
+          end
 
           # Wait for AJAX request to finish.
           expect(page).to have_text('All done!')
 
-          # Sleep for 2s, since that's the delay to page refresh.
-          sleep 2
-
           # Then wait for page to load.
-          expect(page.find("#event-#{timeline_event.id} .tl-footer")).to have_text('SV.CO')
+          using_wait_time 10 do
+            expect(page.find("#event-#{timeline_event.id} .tl-footer")).to have_text('SV.CO')
+          end
+
           timeline_event.reload
           expect(timeline_event.links.length).to eq(2)
           expect(timeline_event.links.last[:title]).to eq('SV.CO')
@@ -390,13 +387,14 @@ feature 'Timeline Builder' do
         click_on 'Submit for Review'
 
         expect(page).to have_text('All done!')
-        # Sleep for 2s, since that's the delay to page refresh.
-        sleep 2
 
         # Then wait for page to load.
         new_timeline_event_panel = page.find("#event-#{rejected_timeline_event.id}")
-        expect(new_timeline_event_panel).to have_text(new_description)
-        expect(new_timeline_event_panel).to have_text('Pending verification')
+
+        using_wait_time 10 do
+          expect(new_timeline_event_panel).to have_text(new_description)
+          expect(new_timeline_event_panel).to have_text('Pending verification')
+        end
       end
     end
 

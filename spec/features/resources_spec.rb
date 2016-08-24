@@ -3,8 +3,6 @@ require 'rails_helper'
 # WARNING: The following tests run with Webmock disabled - i.e., URL calls are let through. Make sure you mock possible
 # requests unless you want to let them through. This is required for JS tests to work.
 feature 'Resources' do
-  include AjaxHelpers
-
   let(:founder) { create :founder_with_password, confirmed_at: Time.now }
   let(:startup) { create :startup }
 
@@ -45,10 +43,11 @@ feature 'Resources' do
     visit resources_path
 
     new_window = window_opened_by { click_on 'Download', match: :first }
-    wait_for_ajax
 
     within_window new_window do
-      expect(page.response_headers['Content-Type']).to eq('application/pdf')
+      using_wait_time 10 do
+        expect(page.response_headers['Content-Type']).to eq('application/pdf')
+      end
     end
   end
 

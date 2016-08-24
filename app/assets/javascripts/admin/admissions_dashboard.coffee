@@ -1,5 +1,5 @@
 displayAllCharts = ->
-  if $('.admissions-dashboard-containter')
+  if $('.admissions-dashboard-containter').length
     displayPaidApplicantsByReference()
     displayPaidApplicationsByLocation()
     displayPaidApplicationsByDate()

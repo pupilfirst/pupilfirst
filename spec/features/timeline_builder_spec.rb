@@ -48,14 +48,14 @@ feature 'Timeline Builder' do
 
       # Add one Link.
       page.find('a', text: 'Add Links and Files').click
-      click_on 'Add a link'
+      click_button 'Add a link'
       fill_in 'Title', with: 'SV.CO'
       fill_in 'URL', with: 'https://sv.co'
       page.find('#link_private').click
-      click_on 'Save Link'
+      click_button 'Save Link'
 
       # And a file.
-      click_on 'Attach a file'
+      click_button 'Attach a file'
       fill_in 'timeline-event-file-title', with: 'Sample PDF'
       attach_file 'timeline-event-file-input', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf'))
       click_on 'Save File'
@@ -82,8 +82,8 @@ feature 'Timeline Builder' do
 
     scenario 'Founder attempts to add link without supplying title or URL', js: true do
       page.find('a', text: 'Add Links and Files').click
-      click_on 'Add a link'
-      click_on 'Save Link'
+      click_button 'Add a link'
+      click_button 'Save Link'
 
       expect(page).to have_selector('#link-title-group.has-error')
       expect(page).to have_selector('#link-url-group.has-error')
@@ -139,16 +139,16 @@ feature 'Timeline Builder' do
         expect(page).to have_selector('textarea', text: unverified_timeline_event.description)
         # Add two links, one private and one public.
         page.find('a', text: 'Add Links and Files').click
-        click_on 'Add a link'
+        click_button 'Add a link'
         fill_in 'Title', with: 'SV.CO'
         fill_in 'URL', with: 'https://sv.co'
         page.find('#link_private').click
-        click_on 'Save Link'
-        click_on 'Add a link'
+        click_button 'Save Link'
+        click_button 'Add a link'
 
         fill_in 'Title', with: 'Google'
         fill_in 'URL', with: 'https://www.google.com'
-        click_on 'Save Link'
+        click_button 'Save Link'
         click_on 'Close'
 
         # Test if link tab's title reflects links added
@@ -273,7 +273,7 @@ feature 'Timeline Builder' do
           fill_in 'Title', with: new_title
           fill_in 'URL', with: new_url
           page.find('#link_private').set(false)
-          click_on 'Save Link'
+          click_button 'Save Link'
 
           # Test if link list was updated
           expect(page).to have_selector('.list-group-item', count: 2)
@@ -299,11 +299,9 @@ feature 'Timeline Builder' do
           page.find("#event-#{timeline_event.id} .edit-link").click
 
           # Wait for page to load.
-          expect(page).to have_selector('form.edit_timeline_event')
-
-          expect(page.find('#add-link')).to have_text("#{timeline_event_file.title} (+1)")
+          expect(page).to have_selector('#add-link', text: "#{timeline_event_file.title} (+1)")
           page.find('#add-link').click
-          click_on 'Add a link'
+          click_button 'Add a link'
           fill_in 'Title', with: 'SV.CO'
           fill_in 'URL', with: 'https://sv.co'
           page.find('#link_private').click

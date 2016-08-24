@@ -92,7 +92,10 @@ feature 'Timeline Builder' do
       click_on 'Add a link'
       click_on 'Save Link'
 
-      expect(page.find('#link-title-group')[:class]).to include('has-error')
+      using_wait_time 10 do
+        expect(page.find('#link-title-group')[:class]).to include('has-error')
+      end
+
       expect(page.find('#link-url-group')[:class]).to include('has-error')
     end
 

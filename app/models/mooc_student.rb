@@ -41,4 +41,8 @@ class MoocStudent < ActiveRecord::Base
   def completed_module?(course_module)
     completed_all_chapters?(course_module) && completed_quiz?(course_module)
   end
+
+  def started_course?
+    completed_chapters.present?
+  end
 end

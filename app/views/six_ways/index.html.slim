@@ -14,9 +14,10 @@ title SV.CO Start in College
       li No prior skills needed
       li Learn real-world Engineering, Product and Design Skills
       li Get support from the student startup community
-    h4.font-semibold.m-b-2
-      | <mark>Launching August 30</mark>, register today!
-    = link_to 'Join the course', six_ways_start_path, class: 'btn btn-primary btn-md text-uppercase'
+    - unless current_mooc_student.present?
+      h4.font-semibold.m-b-2
+        | <mark>Launching August 30</mark>, register today!
+    = link_to resume_course_button_text, resume_course_path, class: 'btn btn-primary btn-md text-uppercase'
 
 .col-lg-8.pull-lg-4
   .video-container.content-box.m-t-2
@@ -146,8 +147,11 @@ title SV.CO Start in College
 
     .join-course-box.text-xs-center
       h3
-        | Ready to Sign up?
-      = link_to 'Join the course', six_ways_start_path, class: 'btn btn-primary btn-md text-uppercase'
+        - if current_mooc_student.present?
+          | Welcome Back, #{current_mooc_student.name}!
+        - else
+          | Ready to Sign up?
+      = link_to resume_course_button_text, resume_course_path, class: 'btn btn-primary btn-md text-uppercase'
 
     .paid-program-box.text-xs-center
       p

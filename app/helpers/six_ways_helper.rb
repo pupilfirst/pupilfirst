@@ -176,5 +176,24 @@ module SixWaysHelper
   def quiz_page?
     @chapter.blank?
   end
+
+  def resume_course_button_text
+    return 'Join the Course' unless current_mooc_student.present?
+    return 'Start the Course' unless current_mooc_student.started_course?
+    'Continue Course'
+  end
+
+  def resume_course_path
+    return six_ways_student_details_path unless current_mooc_student.present?
+    unless current_mooc_student.started_course?
+      return first_chapter_path if current_page? six_ways_start_path
+      return six_ways_start_path
+    end
+
+    latest_module_number, latest_chapter_number = current_mooc_student.completed_chapters.last
+    latest_module = CourseModule.find_by(module_number: latest_module_number)
+    latest_chapter = latest_module.module_chapters.find_by(chapter_number: latest_chapter_number)
+    six_ways_module_path(latest_module.slug, latest_chapter.slug)
+  end
 end
 # rubocop:enable Metrics/ModuleLength

@@ -139,17 +139,20 @@ feature 'Timeline Builder' do
         expect(page).to have_selector('textarea', text: unverified_timeline_event.description)
         # Add two links, one private and one public.
         page.find('a', text: 'Add Links and Files').click
-        click_button 'Add a link'
-        fill_in 'Title', with: 'SV.CO'
-        fill_in 'URL', with: 'https://sv.co'
-        page.find('#link_private').click
-        click_button 'Save Link'
-        click_button 'Add a link'
 
-        fill_in 'Title', with: 'Google'
-        fill_in 'URL', with: 'https://www.google.com'
-        click_button 'Save Link'
-        click_on 'Close'
+        within '#add-link-modal' do
+          click_button 'Add a link'
+          fill_in 'Title', with: 'SV.CO'
+          fill_in 'URL', with: 'https://sv.co'
+          check 'link_private'
+          click_button 'Save Link'
+          click_button 'Add a link'
+
+          fill_in 'Title', with: 'Google'
+          fill_in 'URL', with: 'https://www.google.com'
+          click_button 'Save Link'
+          click_button 'Close'
+        end
 
         # Test if link tab's title reflects links added
         expect(page.find('#add-link')).to have_text('SV.CO (+1)')
@@ -176,7 +179,7 @@ feature 'Timeline Builder' do
           timeline_event
         end
 
-        scenario 'Founder deletes link', js: true do
+        scenario 'Founder deletes link', js: true, focus: true do
           visit startup_path(startup)
           page.find("#event-#{timeline_event.id} .edit-link").click
 
@@ -184,17 +187,17 @@ feature 'Timeline Builder' do
           expect(page).to have_selector('form.edit_timeline_event')
           expect(page.find('#add-link')).to have_text("#{timeline_event_file.title} (+1)")
           page.find('#add-link').click
-          expect(page).to have_text('Links and Files')
-          attachment = page.find('.list-group-item', match: :first)
-          expect(attachment).to have_text('Google')
-          attachment.find('a', text: 'Delete').click
 
-          # Test if attachments list was updated
-          expect(page).to have_selector('.list-group-item', count: 1)
-          remaining_attachment = page.find('.list-group-item', match: :first)
-          expect(remaining_attachment).to have_text(timeline_event_file.title)
+          within '#add-link-modal' do
+            expect(page).to have_selector('.list-group-item', text: 'Google')
+            page.find('.list-group-item', text: 'Google').find('a', text: 'Delete').click
 
-          click_on 'Close'
+            # Test if attachments list was updated
+            expect(page).to have_selector('.list-group-item', count: 1)
+            expect(page).to have_selector('.list-group-item', text: timeline_event_file.title)
+
+            click_on 'Close'
+          end
 
           expect(page).to have_selector('#add-link', text: timeline_event_file.title)
 
@@ -220,17 +223,17 @@ feature 'Timeline Builder' do
           expect(page.find('#add-link')).to have_text("#{timeline_event_file.title} (+1)")
           page.find('#add-link').click
 
-          expect(page).to have_text('Links and Files')
+          within '#add-link-modal' do
+            expect(page).to have_text('Links and Files')
 
-          file = page.all('.list-group-item').last
+            page.accept_confirm do
+              page.find('.list-group-item', text: timeline_event_file.title).find('a', text: 'Delete').click
+            end
 
-          page.accept_confirm do
-            file.find('a', text: 'Delete').click
+            expect(page).to have_selector('.list-group-item', text: 'Marked for Deletion')
+
+            click_button 'Close'
           end
-
-          expect(file).to have_text 'Marked for Deletion'
-
-          click_on 'Close'
 
           expect(page).to have_selector('#add-link', text: 'Google')
 

@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   attr_accessor :referer
 
   def send_login_email
-    regenerate_login_token
+    regenerate_login_token unless Rails.env.development?
 
     # TODO: Send email with template.
     UserSessionMailer.send_login_token(self, referer).deliver_now

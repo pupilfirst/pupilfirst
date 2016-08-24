@@ -18,6 +18,7 @@
 //= require pickers
 //= require select2
 
+//= require googleanalytics/autotrack
 //= require google_analytics
 //= require facebook_pixel
 //= require navbar

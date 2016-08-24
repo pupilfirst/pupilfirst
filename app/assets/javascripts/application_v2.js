@@ -21,6 +21,7 @@
 //= require select2
 //= require sidebar-menu
 
+//= require googleanalytics/autotrack
 //= require google_analytics
 //= require facebook_pixel
 //= require shift_for_hash

@@ -1,9 +1,8 @@
 displayAllCharts = ->
-  if $('.admissions-dashboard-containter').length
-    displayPaidApplicantsByReference()
-    displayPaidApplicationsByLocation()
-    displayPaidApplicationsByDate()
-    displayPaidApplicationsByTeamSize()
+  displayPaidApplicantsByReference()
+  displayPaidApplicationsByLocation()
+  displayPaidApplicationsByDate()
+  displayPaidApplicationsByTeamSize()
 
 displayPaidApplicantsByReference = ->
   chartData = $('#paid_applicants_by_reference').data('chartData')
@@ -21,4 +20,6 @@ displayPaidApplicationsByTeamSize = ->
   chartData = $('#paid_applications_by_team_size').data('chartData')
   new (Chartkick.ColumnChart)('paid_applications_by_team_size', chartData)
 
-$(document).on 'page:change', displayAllCharts
+$(document).on 'page:change', ->
+  if $('.admissions-dashboard-containter').length > 0
+    displayAllCharts()

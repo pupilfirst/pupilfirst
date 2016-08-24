@@ -139,7 +139,8 @@ class ApplicationController < ActionController::Base
   def google_analytics_csp
     {
       image: 'https://www.google-analytics.com https://stats.g.doubleclick.net',
-      script: 'https://www.google-analytics.com'
+      script: 'https://www.google-analytics.com',
+      connect: 'https://www.google-analytics.com'
     }
   end
 
@@ -231,7 +232,8 @@ class ApplicationController < ActionController::Base
 
   def connect_sources
     <<~CONNECT_SOURCES.squish
-      connect-src 'self' #{inspectlet_csp[:connect]} #{heapanalytics_csp[:connect]} #{intercom_csp[:connect]};
+      connect-src 'self' #{inspectlet_csp[:connect]} #{heapanalytics_csp[:connect]} #{intercom_csp[:connect]}
+      #{google_analytics_csp[:connect]};
     CONNECT_SOURCES
   end
 

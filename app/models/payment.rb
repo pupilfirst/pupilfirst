@@ -15,6 +15,7 @@ class Payment < ActiveRecord::Base
   end
 
   validate :must_have_batch_application
+  validates :batch_applicant_id, presence: true
 
   def must_have_batch_application
     return if batch_application_id.present? || original_batch_application_id.present?

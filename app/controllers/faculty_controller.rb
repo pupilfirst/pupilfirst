@@ -39,14 +39,14 @@ class FacultyController < ApplicationController
   def save_weekly_slots
     list_of_slots = JSON.parse(params[:list_of_slots])
     save_slots_in_list list_of_slots, @faculty
-    flash.now[:success] = "Your slots have been saved succesfully!"
+    flash.now[:success] = 'Your slots have been saved succesfully!'
     redirect_to action: 'slots_saved'
   end
 
   # GET /faculty/mark_unavailable/:token
   def mark_unavailable
     @faculty.connect_slots.next_week.destroy_all
-    flash.now[:success] = "Your have been marked unavailable for next week!"
+    flash.now[:success] = 'Your have been marked unavailable for next week!'
     redirect_to action: 'slots_saved'
   end
 

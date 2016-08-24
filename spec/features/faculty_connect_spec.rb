@@ -85,7 +85,9 @@ feature 'Faculty Connect' do
         click_on 'Submit Request'
 
         # Attempting to submit the form without writing questions should show error.
-        expect(page.find('.form-group.connect_request_questions')[:class].split).to include('has-error')
+        using_wait_time 10 do
+          expect(page.find('.form-group.connect_request_questions')[:class].split).to include('has-error')
+        end
 
         # Fill something in as questions.
         questions = <<~QUESTIONS

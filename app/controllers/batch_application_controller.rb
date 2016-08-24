@@ -55,7 +55,7 @@ class BatchApplicationController < ApplicationController
       begin
         @form.save
       rescue Postmark::InvalidMessageError
-        flash[:error] = 'Our email delivery service refused to accept the supplied address. It is likely that a previous email hard-bounced, or was reported as spam. Please contact us at help@sv.co for more information.'
+        flash[:error] = 'Our email delivery service refused to accept the supplied address. It is likely that a previous email hard-bounced, or was reported as spam. Please contact us using live chat or at help@sv.co for more information.'
         redirect_to apply_identify_path
         return
       end

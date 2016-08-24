@@ -48,6 +48,17 @@ ActiveAdmin.register BatchApplicant do
       end
     end
 
+    column :latest_payment, sortable: 'latest_payment_at' do |batch_applicant|
+      payment = batch_applicant.payments.order('created_at').last
+      if payment.blank?
+        'No Payment'
+      elsif payment.paid?
+        payment.paid_at.strftime('%b %d, %Y')
+      else
+        "#{payment.status.capitalize} on #{payment.created_at.strftime('%b %d, %Y')}"
+      end
+    end
+
     column :tags do |batch_applicant|
       linked_tags(batch_applicant.tags, separator: ' | ')
     end

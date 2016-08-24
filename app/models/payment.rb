@@ -93,6 +93,9 @@ class Payment < ActiveRecord::Base
     # Log payment time, if unrecorded.
     update!(paid_at: Time.now) if paid_at.blank?
 
+    # update the team leads latest payment date
+    batch_applicant.update!(latest_payment_at: paid_at)
+
     # Let the batch application (if still linked) take care of its stuff.
     batch_application&.perform_post_payment_tasks!
 

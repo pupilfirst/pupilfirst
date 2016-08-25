@@ -191,7 +191,6 @@ feature 'Timeline Builder' do
           within '#add-link-modal' do
             expect(page).to have_selector('.list-group-item', text: 'Google')
 
-            page.save_screenshot '/Users/Hari/Desktop/test.png'
             within('.list-group-item', text: 'Google') do
               click_button 'Delete'
             end

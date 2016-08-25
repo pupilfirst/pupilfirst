@@ -104,7 +104,7 @@ module SixWaysHelper
   end
 
   def last_quiz_attempted?
-    current_mooc_student.quiz_attempts.maximum(:course_module_id) == CourseModule.last_module.id
+    current_mooc_student&.quiz_attempts.maximum(:course_module_id) == CourseModule.last_module.id
   end
 
   def start_of_next_module
@@ -132,7 +132,7 @@ module SixWaysHelper
   end
 
   def complete_chapter_class?(chapter)
-    current_mooc_student.completed_chapter?(chapter) ? 'complete_chapter' : ''
+    current_mooc_student&.completed_chapter?(chapter) ? 'complete_chapter' : ''
   end
 
   def active_quiz_class?(course_module)
@@ -140,13 +140,13 @@ module SixWaysHelper
   end
 
   def complete_quiz_class?(course_module)
-    current_mooc_student.completed_quiz?(course_module) ? 'complete_quiz' : ''
+    current_mooc_student&.completed_quiz?(course_module) ? 'complete_quiz' : ''
   end
 
   def fa_icon_of_chapter(chapter)
     if chapter == @chapter
       'fa-circle-o'
-    elsif current_mooc_student.completed_chapter?(chapter)
+    elsif current_mooc_student&.completed_chapter?(chapter)
       'fa-check-circle'
     else
       'fa-circle'
@@ -156,7 +156,7 @@ module SixWaysHelper
   def fa_icon_of_quiz(course_module)
     if quiz_page? && course_module == @module
       'fa-circle-o'
-    elsif current_mooc_student.completed_quiz?(course_module)
+    elsif current_mooc_student&.completed_quiz?(course_module)
       'fa-check-circle'
     else
       'fa-circle'

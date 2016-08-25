@@ -177,19 +177,17 @@ module SixWaysHelper
     @chapter.blank?
   end
 
-  def resume_course_button_text
-    return 'Join the Course' unless current_mooc_student.present?
-    return 'Start the Course' unless current_mooc_student.started_course?
+  def start_or_continue_button_text
+    return 'Start the Course' unless current_mooc_student&.started_course?
     'Continue Course'
   end
 
-  def resume_course_path
-    return six_ways_student_details_path unless current_mooc_student.present?
-    unless current_mooc_student.started_course?
-      return first_chapter_path if current_page? six_ways_start_path
-      return six_ways_start_path
-    end
+  def start_or_continue_path
+    return six_ways_start_path unless current_mooc_student&.started_course?
+    last_completed_chapter_path
+  end
 
+  def last_completed_chapter_path
     latest_module_number, latest_chapter_number = current_mooc_student.completed_chapters.last
     latest_module = CourseModule.find_by(module_number: latest_module_number)
     latest_chapter = latest_module.module_chapters.find_by(chapter_number: latest_chapter_number)

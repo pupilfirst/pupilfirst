@@ -17,7 +17,7 @@ title SV.CO Start in College
     - unless current_mooc_student.present?
       h4.font-semibold.m-b-2
         | <mark>Launching August 30</mark>, register today!
-    = link_to resume_course_button_text, resume_course_path, class: 'btn btn-primary btn-md text-uppercase'
+    = link_to start_or_continue_button_text, start_or_continue_path, class: 'btn btn-primary btn-md text-uppercase'
 
 .col-lg-8.pull-lg-4
   .video-container.content-box.m-t-2
@@ -151,7 +151,7 @@ title SV.CO Start in College
           | Welcome Back, #{current_mooc_student.name}!
         - else
           | Ready to Sign up?
-      = link_to resume_course_button_text, resume_course_path, class: 'btn btn-primary btn-md text-uppercase'
+      = link_to start_or_continue_button_text, start_or_continue_path, class: 'btn btn-primary btn-md text-uppercase'
 
     .paid-program-box.text-xs-center
       p

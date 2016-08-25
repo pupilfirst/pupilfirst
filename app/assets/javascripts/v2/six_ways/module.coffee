@@ -45,7 +45,11 @@ SimpleScrollBar = ->
 ModuleTooltip = ->
   $('.module-title').tooltip()
 
+helpIconTooltip = ->
+  $('.guest-banner .help-icon').tooltip()
+
 $(document).on 'page:change', SidebarMenuToggle
 $(document).on 'ready page:load', JqueryAccordion
 $(document).on 'ready page:load', SimpleScrollBar
 $(document).on 'page:change', ModuleTooltip
+$(document).on 'page:change', helpIconTooltip

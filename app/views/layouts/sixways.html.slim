@@ -30,9 +30,18 @@ html lang='en'
               a.sixways-logo href="#{root_url}"
                 img src="#{image_url 'SV.CO-Logo-home.svg'}" alt='Logo of SV.CO'
             .module-fixed-head
-              .chapter-nav.clearfix
-                = link_to previous_button_title, previous_page_path, class: "col-md-6 prev-chapter #{disabled_previous?(@chapter)}"
-                = link_to next_button_title, next_page_path, class: "col-md-6 next-chapter #{disabled_next?(@chapter)}"
+              - if current_mooc_student.present?
+                .chapter-nav.clearfix
+                  = link_to previous_button_title, previous_page_path, class: "col-md-6 prev-chapter #{disabled_previous?(@chapter)}"
+                  = link_to next_button_title, next_page_path, class: "col-md-6 next-chapter #{disabled_next?(@chapter)}"
+              - else
+                .guest-banner
+                  h4
+                    | &nbsp;Previewing as Guest!&nbsp;
+                    | #{link_to 'Sign up', six_ways_student_details_path, class: 'btn btn-secondary text-uppercase m-l-1'}
+                  .help-icon.m-l-1 data-toggle="tooltip" data-placement="bottom" title="Your course progress is not being tracked. To save your progress and be eligible for a course completion certificate, sign up as a student!"
+                    i.fa.fa-question-circle.fa-2x
+
 
               .module-details
                 .col-md-6.module-name

@@ -137,6 +137,28 @@
         height: 60px;
       }
     }
+
+    .guest-banner {
+      position: relative;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid $gray-border;
+      justify-content: center;
+      background-color: $alert-background;
+
+      h4 {
+        margin: 0;
+        color: white;
+      }
+
+      .help-icon {
+        float: right;
+        color: white;
+        cursor: help;
+      }
+    }
+
     .module-details {
       height: 70px;
       margin: 0 3rem;

@@ -67,7 +67,7 @@ class SixWaysController < ApplicationController
     @chapter = @module.module_chapters.find_by(slug: params[:chapter_name])
 
     # mark this chapter as complete for the current student
-    current_mooc_student.add_completed_chapter(@chapter)if current_mooc_student.present?
+    current_mooc_student.add_completed_chapter(@chapter) if current_mooc_student.present?
 
     render layout: 'sixways'
   end

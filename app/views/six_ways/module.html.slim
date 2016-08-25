@@ -5,7 +5,6 @@
   .chapter-block
     - if @module.published?
       h1 #{@chapter.name}
-    - if @module.published?
       = render "six_ways/module_#{module_number}/chapter_#{chapter_number}"
       - if @chapter.links.present?
         hr

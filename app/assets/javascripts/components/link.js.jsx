@@ -23,11 +23,11 @@ var Link = React.createClass({
           &nbsp;{ this.props.title }
         </a>
         <div className="pull-right">
-          <a className="margin-right-10" onClick={this.editLinkClicked} >Edit</a>
-          <a onClick={this.deleteLink} >Delete</a>
+          <button className="btn btn-default btn-xs margin-right-10" onClick={this.editLinkClicked} >Edit</button>
+          <button className="btn btn-danger btn-xs" onClick={this.deleteLink} >Delete</button>
         </div>
         <p className="grey-text margin-bottom-0">{ this.props.url }</p>
       </li>
-          );
-        }
+    );
+  }
 });

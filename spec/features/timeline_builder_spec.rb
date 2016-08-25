@@ -179,7 +179,7 @@ feature 'Timeline Builder' do
           timeline_event
         end
 
-        scenario 'Founder deletes link', js: true, focus: true do
+        scenario 'Founder deletes link', js: true do
           visit startup_path(startup)
           page.find("#event-#{timeline_event.id} .edit-link").click
 
@@ -190,7 +190,11 @@ feature 'Timeline Builder' do
 
           within '#add-link-modal' do
             expect(page).to have_selector('.list-group-item', text: 'Google')
-            page.find('.list-group-item', text: 'Google').find('a', text: 'Delete').click
+
+            page.save_screenshot '/Users/Hari/Desktop/test.png'
+            within('.list-group-item', text: 'Google') do
+              click_button 'Delete'
+            end
 
             # Test if attachments list was updated
             expect(page).to have_selector('.list-group-item', count: 1)
@@ -226,8 +230,10 @@ feature 'Timeline Builder' do
           within '#add-link-modal' do
             expect(page).to have_text('Links and Files')
 
-            page.accept_confirm do
-              page.find('.list-group-item', text: timeline_event_file.title).find('a', text: 'Delete').click
+            within('.list-group-item', text: timeline_event_file.title) do
+              page.accept_confirm do
+                click_button 'Delete'
+              end
             end
 
             expect(page).to have_selector('.list-group-item', text: 'Marked for Deletion')
@@ -259,8 +265,9 @@ feature 'Timeline Builder' do
           expect(page.find('#add-link')).to have_text("#{timeline_event_file.title} (+1)")
           page.find('#add-link').click
 
-          google_link = page.find('.list-group-item', text: 'Google')
-          google_link.find('a', text: 'Edit').click
+          within('.list-group-item', text: 'Google') do
+            click_button 'Edit'
+          end
 
           # Test if form was pre-populated with existing details
           expect(page).to have_selector('#link_title')

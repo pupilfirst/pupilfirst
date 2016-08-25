@@ -47,7 +47,7 @@ var File = React.createClass({
         <span className={this.props.markedForDeletion ? 'strike' : ''}>{ this.props.title }</span>
         <div className="pull-right">
           { this.showDeleteButton() &&
-          <a className="margin-right-10" onClick={this.props.persisted ? this.markFileForDeletion : this.deleteFile}>Delete</a>
+          <button className="btn btn-danger btn-xs margin-right-10" onClick={this.props.persisted ? this.markFileForDeletion : this.deleteFile}>Delete</button>
           }
           { this.props.markedForDeletion &&
           <em>Marked for Deletion</em>

@@ -94,7 +94,7 @@ class SixWaysController < ApplicationController
     @module = CourseModule.friendly.find params[:module]
 
     grade_submission
-    save_grade
+    save_grade if current_mooc_student.present?
     render layout: 'sixways'
   end
 

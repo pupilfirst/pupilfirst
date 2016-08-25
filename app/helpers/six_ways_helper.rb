@@ -104,7 +104,7 @@ module SixWaysHelper
   end
 
   def last_quiz_attempted?
-    current_mooc_student&.quiz_attempts.maximum(:course_module_id) == CourseModule.last_module.id
+    current_mooc_student&.quiz_attempts&.maximum(:course_module_id) == CourseModule.last_module.id
   end
 
   def start_of_next_module

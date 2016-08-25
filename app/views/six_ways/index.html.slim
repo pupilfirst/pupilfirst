@@ -16,7 +16,7 @@ title SV.CO Start in College
       li Get support from the student startup community
     - unless current_mooc_student.present?
       h4.font-semibold.m-b-2
-        | <mark>Launching August 30</mark>, register today!
+        | Start Learning Now!
     = link_to start_or_continue_button_text, start_or_continue_path, class: 'btn btn-primary btn-md text-uppercase'
 
 .col-lg-8.pull-lg-4
@@ -150,7 +150,7 @@ title SV.CO Start in College
         - if current_mooc_student.present?
           | Welcome Back, #{current_mooc_student.name}!
         - else
-          | Ready to Sign up?
+          | Start Learning Now!
       = link_to start_or_continue_button_text, start_or_continue_path, class: 'btn btn-primary btn-md text-uppercase'
 
     .paid-program-box.text-xs-center

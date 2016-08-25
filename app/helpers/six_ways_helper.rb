@@ -183,7 +183,10 @@ module SixWaysHelper
   end
 
   def start_or_continue_path
-    return six_ways_start_path unless current_mooc_student&.started_course?
+    unless current_mooc_student&.started_course?
+      return six_ways_start_path unless current_page? six_ways_start_path
+      return first_chapter_path
+    end
     last_completed_chapter_path
   end
 
@@ -192,6 +195,14 @@ module SixWaysHelper
     latest_module = CourseModule.find_by(module_number: latest_module_number)
     latest_chapter = latest_module.module_chapters.find_by(chapter_number: latest_chapter_number)
     six_ways_module_path(latest_module.slug, latest_chapter.slug)
+  end
+
+  def completed_chapters_count
+    current_mooc_student.completed_chapters.count
+  end
+
+  def completed_quizzes_count
+    current_mooc_student.quiz_attempts.pluck(:course_module_id).uniq.count
   end
 end
 # rubocop:enable Metrics/ModuleLength

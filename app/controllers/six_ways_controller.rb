@@ -19,11 +19,7 @@ class SixWaysController < ApplicationController
   #
   # Start page for the course.
   def start
-    if current_mooc_student.present?
-      @skip_container = true
-    else
-      redirect_to six_ways_student_details_path
-    end
+    @skip_container = true
   end
 
   # GET /sixways/student_details

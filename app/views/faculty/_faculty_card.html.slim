@@ -36,7 +36,7 @@
           .disabled.btn.btn-primary.btn-sm.connect-link data-toggle='tooltip' data-placement='top' title="You already have a pending connect request with this faculty member. Please write to help@sv.co if you would like to reschedule."
             | Connect
         - else
-          .modal.fade.faculty-connect-modal role="dialog" id="faculty-connect-modal-#{member.id}"
+          .modal.faculty-connect-modal class="#{'fade' unless Rails.env.test?}" role="dialog" id="faculty-connect-modal-#{member.id}"
             .modal-dialog
               .modal-content
                 .modal-header

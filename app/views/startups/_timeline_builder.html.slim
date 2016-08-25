@@ -64,7 +64,7 @@
                 i.fa.fa-plus
             span &nbsp;Submit for Review
 
-  #add-link-modal.modal.fade role="dialog"
+  #add-link-modal.modal class="#{'fade' unless Rails.env.test?}" role="dialog"
     .modal-dialog
       .modal-content
         .modal-body

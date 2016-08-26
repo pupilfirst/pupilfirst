@@ -23,7 +23,5 @@
     .user-count
       ' Active: #{@intercom.active_users_count}
     hr
-    h6 Latest Conversations:
-    - @intercom.latest_conversation_array(5).each do |conversation|
-      = link_to "<strong>#{truncate(conversation[:name])}:</strong> #{truncate(conversation[:body], length: 75)}".html_safe, conversation_url(conversation[:id]), target: '_blank'
-      br
+    = link_to 'Fetch Latest Conversations', admin_dashboard_intercom_conversations_path, remote: true, data: { disable_with: 'Fetching... ' }, id: 'intercom-fetch-button'
+    #intercom-conversations

@@ -1,0 +1,4 @@
+h6 Latest Conversations:
+- @conversations.each do |conversation|
+  = link_to "<strong>#{truncate(conversation[:name])}:</strong> #{truncate(conversation[:body], length: 75)}".html_safe, conversation_url(conversation[:id]), target: '_blank'
+  br

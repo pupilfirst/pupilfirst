@@ -42,13 +42,10 @@ reindexCofounderInputs = ->
 
     $.each cofounderSection.find('label'), (index, label) ->
       $(label).prop('for', $(label).prop('for').replace(/attributes_\d/g, "attributes_#{cofounderIndex}"))
-      console.log "label prop: #{$(label).prop('for')}"
 
     $.each cofounderSection.find('input'), (index, input) ->
       $(input).prop('name', $(input).prop('name').replace(/attributes]\[\d/g, "attributes][#{cofounderIndex}"))
       $(input).prop('id', $(input).prop('id').replace(/attributes_\d/g, "attributes_#{cofounderIndex}"))
-      console.log "input name: #{$(input).prop('name')}"
-      console.log "input id: #{$(input).prop('id')}"
 
 setupDeleteCofounderButton = ->
   $('.cofounder-delete-button').click handleDeleteCofounderSection

@@ -73,8 +73,8 @@ end
 require 'capybara/poltergeist'
 Capybara.javascript_driver = :poltergeist
 
-# Increase Capybara's default maximum wait time to 5 seconds to account for our slow Strider server.
-Capybara.default_max_wait_time = 10
+# Increase Capybara's default maximum wait time to 5 seconds to allow for some slow responds (timeline builder).
+Capybara.default_max_wait_time = 5
 
 # Save screenshots on failure (and more).
 require 'capybara-screenshot/rspec'

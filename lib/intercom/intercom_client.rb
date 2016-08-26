@@ -52,19 +52,29 @@ class IntercomClient
     save_user(user)
   end
 
-  # count of open and closed conversations grouped by admin
-  def conversation_count_by_admin
-    @conversation_count ||= @intercom_client.counts.for_type(type: 'conversation', count: 'admin').conversation['admin']
+  # count of open, closed, assigned and unassigned conversations
+  def conversation_count
+    @conversation_count ||= @intercom_client.counts.for_type(type: 'conversation')
   end
 
   # total count of open conversations
   def open_conversations_count
-    conversation_count_by_admin.inject(0) { |a, e| a + e['open'] }
+    conversation_count.conversation['open']
   end
 
   # total count of close conversations
   def closed_conversations_count
-    conversation_count_by_admin.inject(0) { |a, e| a + e['closed'] }
+    conversation_count.conversation['closed']
+  end
+
+  # total count of assigned conversations
+  def assigned_conversations_count
+    conversation_count.conversation['assigned']
+  end
+
+  # total count of unassigned conversations
+  def unassigned_conversations_count
+    conversation_count.conversation['unassigned']
   end
 
   # user counts grouped by segments

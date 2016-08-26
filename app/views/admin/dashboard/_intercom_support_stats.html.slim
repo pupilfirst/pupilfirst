@@ -5,6 +5,13 @@
     .user-count
       h6 Conversations
     .user-count
+      ' Unassigned: #{@intercom.unassigned_conversations_count}
+    .user-count
+      ' Assigned: #{@intercom.assigned_conversations_count}
+    .clearfix
+    .user-count
+      h6
+    .user-count
       ' Open: #{@intercom.open_conversations_count}
     .user-count
       ' Closed: #{@intercom.closed_conversations_count}

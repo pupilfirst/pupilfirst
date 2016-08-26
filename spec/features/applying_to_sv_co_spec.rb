@@ -145,7 +145,8 @@ feature 'Applying to SV.CO' do
         application_stage: ApplicationStage.initial_stage,
         university_id: University.last.id,
         college: 'Random College',
-        team_lead_id: batch_applicant.id
+        team_lead_id: batch_applicant.id,
+        team_size: 2
     end
 
     let!(:batch_stage_1) { create :batch_stage, batch: batch, application_stage: application_stage_1 }
@@ -183,6 +184,43 @@ feature 'Applying to SV.CO' do
 
       # user submission must be acknowledged
       expect(page).to have_text('Your coding and hustling submissions has been received')
+    end
+
+    scenario 'applicant adds cofounder details', js: true do
+      WebMock.allow_net_connect!
+
+      visit apply_continue_path(token: batch_applicant.token, shared_device: false)
+
+      # TODO: Replace this with click_link when PhantomJS moves to next version. It currently doesn't render flexbox correctly:
+      # See: https://github.com/ariya/phantomjs/issues/14365
+      find_link('Add cofounder details').trigger('click')
+
+      # The page should ask for details of one co-founder.
+      expect(page).to have_selector('.cofounder.content-box', count: 1)
+
+      # Add another, and fill in details for two.
+      name = Faker::Name.name
+      fill_in 'Name', with: name
+      fill_in 'Email address', with: Faker::Internet.email(name)
+
+      click_button 'Add cofounder'
+
+      expect(page).to have_selector('.cofounder.content-box', count: 2)
+
+      within all('.cofounder.content-box').last do
+        name = Faker::Name.name
+        fill_in 'Name', with: name
+        fill_in 'Email address', with: Faker::Internet.email(name)
+      end
+
+      click_button 'Save cofounders'
+
+      expect(page).to have_content(/edit cofounder details/i)
+
+      # Ensure that the cofounders have been stored.
+      expect(batch_application.cofounders.count).to eq(2)
+
+      WebMock.disable_net_connect!
     end
 
     context 'when applicant has submitted for stage 2' do

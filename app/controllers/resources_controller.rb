@@ -52,7 +52,7 @@ class ResourcesController < ApplicationController
 
   def filter_resources_by_date
     return if params[:created_after].blank?
-    @resources = @resources.where('created_at > ?', date_filter_values[params[:created_after].to_sym])
+    @resources = @resources.where('resources.created_at > ?', date_filter_values[params[:created_after].to_sym])
   end
 
   def paginate_resources

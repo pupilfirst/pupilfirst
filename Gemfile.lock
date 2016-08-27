@@ -423,7 +423,7 @@ GEM
       railties (>= 3.2, < 5)
       responders
     insensitive_hash (0.3.3)
-    intercom (3.5.2)
+    intercom (3.5.3)
       json (~> 1.8)
     intercom-rails (0.3.2)
       activesupport (> 3.0)

@@ -143,25 +143,45 @@
       height: 50px;
       display: flex;
       align-items: center;
-      border-bottom: 1px solid $gray-border;
+      border-bottom: 1px solid $dark-secondary;
       justify-content: center;
-      background-color: $alert-background;
+      padding: 0 30px;
+      background-color: $dark-secondary;
 
-      h4 {
+      h5 {
         margin: 0;
+        letter-spacing: 0.04rem;
         color: white;
-      }
 
+        @include media-breakpoint-down(xs) {
+          font-size: 0.875rem;
+        }
+      }
       .help-icon {
-        float: right;
         color: white;
         cursor: help;
+        display: flex;
+
+        i {
+          font-size: 1.25rem;
+        }
+      }
+
+      @include media-breakpoint-down(sm) {
+        height: 60px;
+
+        .btn {
+          width: auto;
+        }
+        .help-icon {
+          display: none;
+        }
       }
     }
 
     .module-details {
       height: 70px;
-      margin: 0 3rem;
+      padding: 0 3rem;
       background-color: white;
       border-bottom: 1px solid $gray-border;
 

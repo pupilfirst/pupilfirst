@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'webmock/rspec'
 
 describe Founder do
   describe '#remove_from_startup!' do

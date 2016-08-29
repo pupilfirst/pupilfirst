@@ -1,3 +1,15 @@
+### 29 August, 2016
+
+#### Features
+
+  - Our SixWays MOOC can now be previewed without supplying an email address - signing up is required to be eligible for the certificate. 
+
+#### Bugfixes
+
+  - Fixed some bugs that could have popped up when updating or deleting timeline events.
+  - Fixed a bug which allowed cofounders to login and see application state as though they were the team lead.
+  - Improved handling of cases where supplied email address cannot be reached.
+
 ### 22 August, 2016
 
 #### Features

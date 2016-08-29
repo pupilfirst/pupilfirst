@@ -673,7 +673,8 @@
         font-weight: $font-semibold;
       }
       &:before {
-        content: asset-url('six_ways/tick-inside-circle.svg');
+        content: '';
+        background: asset-url('six_ways/tick-inside-circle.svg');
         width: 16px;
         height: 16px;
         position: absolute;

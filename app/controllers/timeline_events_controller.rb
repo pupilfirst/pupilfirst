@@ -26,13 +26,14 @@ class TimelineEventsController < ApplicationController
     @startup = current_founder.startup
     @timeline_event = @startup.timeline_events.find(params[:id])
 
-    if @timeline_event.destroy
+    # Do not allow destruction of verified / needs improvement timeline events.
+    if @timeline_event.founder_can_modify? && @timeline_event.destroy
       flash[:success] = 'Timeline event deleted!'
-      redirect_to @startup
     else
       flash[:error] = "Something went wrong, and we couldn't delete the timeline event! :("
-      render 'startups/show'
     end
+
+    redirect_to @startup
   end
 
   # POST /founder/startup/timeline_events/:id
@@ -46,12 +47,12 @@ class TimelineEventsController < ApplicationController
       files_metadata: JSON.parse(timeline_event_params[:files_metadata])
     )
 
-    if @timeline_event.update_and_require_reverification(merged_params)
-      flash[:success] = 'Timeline event updated!'
-      redirect_to @startup
+    if @timeline_event.founder_can_modify? && @timeline_event.update_and_require_reverification(merged_params)
+      flash.now[:success] = 'Timeline event updated!'
+      head :ok
     else
-      flash[:error] = "Something went wrong, and we couldn't update the timeline event! :("
-      render 'startups/show'
+      flash.now[:error] = 'There seems to be an error in your submission. Please try again!'
+      head :unprocessable_entity
     end
   end
 

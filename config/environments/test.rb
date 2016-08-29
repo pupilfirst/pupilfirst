@@ -45,6 +45,8 @@ Rails.application.configure do
 
   # In development and test, let's have carrierwave store everything on local disk.
   config.carrier_wave_storage = :file
+
+  config.assets.compile = false if ENV['REQUIRE_PRECOMPILED_ASSETS'] == 'true'
 end
 
 Rails.application.default_url_options = Svapp::Application.config.action_mailer.default_url_options

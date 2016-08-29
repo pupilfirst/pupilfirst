@@ -30,8 +30,8 @@
       - if current_mooc_student.present?
         | #{link_to start_or_continue_button_text, start_or_continue_path, class: 'btn btn-secondary btn-md text-uppercase m-r-2'}
       - else
-        | #{link_to 'Start as Guest', first_chapter_path, class: 'btn btn-secondary btn-md text-uppercase m-r-2'}
-        | #{link_to 'Sign-up as Student', six_ways_student_details_path, class: 'btn btn-primary btn-md text-uppercase'}
-    .m-t-1
+        | #{link_to 'Start as Guest', first_chapter_path, class: 'btn btn-secondary btn-md text-uppercase m-r-2 m-b-1'}
+        | #{link_to 'Sign-up as Student', six_ways_student_details_path, class: 'btn btn-primary btn-md m-b-1 text-uppercase'}
+    div
       ' <strong>Note:</strong> If you already have a great team and skills to build a startup, try
       | #{link_to 'applying to our paid six month student startup program.', apply_path}

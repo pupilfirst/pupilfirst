@@ -26,13 +26,14 @@ class TimelineEventsController < ApplicationController
     @startup = current_founder.startup
     @timeline_event = @startup.timeline_events.find(params[:id])
 
-    if @timeline_event.destroy
+    # Do not allow destruction of verified / needs improvement timeline events.
+    if @timeline_event.founder_can_modify? && @timeline_event.destroy
       flash[:success] = 'Timeline event deleted!'
-      redirect_to @startup
     else
       flash[:error] = "Something went wrong, and we couldn't delete the timeline event! :("
-      render 'startups/show'
     end
+
+    redirect_to @startup
   end
 
   # POST /founder/startup/timeline_events/:id

@@ -214,6 +214,10 @@ class TimelineEvent < ActiveRecord::Base
     verified? || needs_improvement?
   end
 
+  def founder_can_modify?
+    !verified_or_needs_improvement?
+  end
+
   def public_link?
     links.select { |l| !l[:private] }.present?
   end

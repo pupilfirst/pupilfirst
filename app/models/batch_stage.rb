@@ -25,6 +25,10 @@ class BatchStage < ActiveRecord::Base
   end
 
   def active?
-    starts_at < Time.now && ends_at > Time.now
+    if application_stage.final_stage?
+      starts_at < Time.now
+    else
+      starts_at < Time.now && ends_at > Time.now
+    end
   end
 end

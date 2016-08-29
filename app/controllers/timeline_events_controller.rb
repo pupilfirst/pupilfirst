@@ -47,12 +47,12 @@ class TimelineEventsController < ApplicationController
       files_metadata: JSON.parse(timeline_event_params[:files_metadata])
     )
 
-    if @timeline_event.update_and_require_reverification(merged_params)
-      flash[:success] = 'Timeline event updated!'
-      redirect_to @startup
+    if @timeline_event.founder_can_modify? && @timeline_event.update_and_require_reverification(merged_params)
+      flash.now[:success] = 'Timeline event updated!'
+      head :ok
     else
-      flash[:error] = "Something went wrong, and we couldn't update the timeline event! :("
-      render 'startups/show'
+      flash.now[:error] = 'There seems to be an error in your submission. Please try again!'
+      head :unprocessable_entity
     end
   end
 

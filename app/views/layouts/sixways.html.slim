@@ -36,6 +36,8 @@ html lang='en'
                   = link_to next_button_title, next_page_path, class: "col-md-6 next-chapter #{disabled_next?(@chapter)}"
               - else
                 .guest-banner
+                  .bell-icon
+                    i.fa.fa-bell-o.faa-tada.animated
                   h5.font-regular
                     | Previewing as a guest!
                   = link_to 'Sign up', six_ways_student_details_path, class: 'btn btn-secondary text-uppercase m-l-1'

@@ -148,6 +148,14 @@
       padding: 0 30px;
       background-color: $dark-secondary;
 
+      .bell-icon {
+        margin-right: 10px;
+        i {
+          font-size: 1.125rem;
+          color: white;
+        }
+      }
+
       h5 {
         margin: 0;
         letter-spacing: 0.04rem;

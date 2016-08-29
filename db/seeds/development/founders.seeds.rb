@@ -6,7 +6,7 @@ OTHER = Founder::GENDER_OTHER
 
 # 3 random founders for sv.co
 founders_list = [
-  ['someone@sv.co', 'Some', 'One', 20.years.ago, MALE],
+  ['someone@sv.co', 'Some', 'One', 20.years.ago, MALE, 9876543210],
   ['thedude@sv.co', 'Big', 'Lebowski', 40.years.ago, MALE],
   ['thirdguy@sv.co', 'Guy', 'Third', 30.years.ago, FEMALE]
 ]
@@ -20,11 +20,19 @@ founders_list += [
   ['thor@avengers.co', 'Thor', 'Odinson', 30.years.ago, MALE]
 ]
 
-founders_list.each do |email, first_name, last_name, born_on, gender|
+founders_list.each do |email, first_name, last_name, born_on, gender, phone|
   # Don't recreate entries.
   next if Founder.find_by(email: email).present?
 
-  Founder.create!(email: email, first_name: first_name, last_name: last_name, password: 'password',
-    password_confirmation: 'password', confirmed_at: Time.now, born_on: born_on, gender: gender
+  Founder.create!(
+    email: email,
+    first_name: first_name,
+    last_name: last_name,
+    password: 'password',
+    password_confirmation: 'password',
+    confirmed_at: Time.now,
+    born_on: born_on,
+    gender: gender,
+    phone: phone
   )
 end

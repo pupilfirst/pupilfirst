@@ -6,6 +6,8 @@ class BatchStage < ActiveRecord::Base
 
   validates :starts_at, presence: true
 
+  # It is possible for BatchStage to be instantiated without application stage (an error captured by validation above),
+  # but in order to handle that error, we should treat it as a possible case in this related validation.
   # rubocop:disable Style/DoubleNegation
   validates :ends_at, presence: true, unless: proc { |batch_stage| !!batch_stage.application_stage&.final_stage? }
   # rubocop:enable Style/DoubleNegation

@@ -139,7 +139,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.4.0' # Duh.
   gem 'coderay' # Pretty syntax highlighting on rspec failure snippets.
   gem 'pry-rails' # Pry debugger.
-  gem 'webmock', require: false # Mocking web requests.
+  gem 'webmock' # Mocking web requests.
   gem 'rubocop', require: false # Ruby Style Guide.
   gem 'bundler-audit', require: false # Audit gems in gemfile.lock for reported vulnerabilities
   gem 'simplecov', require: false # Code coverage for Ruby 1.9+

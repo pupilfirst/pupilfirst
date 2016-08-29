@@ -25,7 +25,24 @@
 ### Database setup
     $ rake db:setup
 
-Now start the server with `rails s`
+### Use [puma-dev](https://github.com/puma/puma-dev) to run the application.
+
+After installing puma-dev using its instructions:
+
+    mkdir ~/.puma-dev && cd ~/.puma-dev
+    ln -s ~/path/to/sv_repository sv
+
+It's useful to have puma-dev's log file in easy reach:
+
+    ln -s ~/Library/Logs/puma-dev.log log/
+
+To restart the server:
+
+    touch tmp/restart.txt
+
+If it crashes, gets stuck, etc., kill everything from the master process down.
+
+    ps -ef | grep puma
 
 ## Testing
 

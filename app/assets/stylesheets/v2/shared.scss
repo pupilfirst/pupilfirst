@@ -50,6 +50,7 @@
   background-color: $primary-background;
 
   .card-image {
+    flex-shrink: 0;
     margin-right: 1rem;
   }
 

@@ -1,0 +1,7 @@
+= semantic_form_for :vocalist_ping, url: admin_vocalist_ping_send_ping_path, method: :post do |f|
+  = f.inputs 'Send Ping To'
+    = f.input :channel, collection: options_for_select(@channels, @selected_channel), required: false
+    = f.input :startups, collection: options_for_select(@startups, @selected_startups), required: false, multiple: true
+    = f.input :founders, collection: options_for_select(@founders, @selected_founders), required: false, multiple: true
+    = f.input :message, as: :text, placeholder: 'Enter what you would like vocalist to say!'
+  = f.submit 'Send Ping'

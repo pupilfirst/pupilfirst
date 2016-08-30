@@ -119,4 +119,9 @@ class PublicSlackTalk
 
     'Unidentified Error'
   end
+
+  def self.valid_channel_names
+    channel_list = JSON.parse RestClient.get("https://slack.com/api/channels.list?token=#{APP_CONFIG[:slack_token]}")
+    channel_list['channels'].map { |c| '#' + c['name'] }
+  end
 end

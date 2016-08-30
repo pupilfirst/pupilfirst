@@ -11,8 +11,8 @@
         .extra-reading.m-t-2
           h3.m-b-2
             | Extra Reading
-          - @chapter.links.each do |link|
-            ul.list-unstyled
+          ul.list-unstyled
+            - @chapter.links.each do |link|
               li
                 a href="#{link[:url]}" target="_blank" #{link[:title]}
     - else

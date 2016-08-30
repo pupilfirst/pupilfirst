@@ -613,13 +613,14 @@
     ul {
       li {
         position: relative;
-        padding-bottom: 10px;
+        padding-bottom: 25px;
 
         a {
           font-size: 1.125rem;
         }
         &:before {
           @include fa-icon(external-link);
+          background: none;
           color: $brand-primary;
         }
       }

@@ -99,4 +99,24 @@ class PublicSlackTalk
 
     im_id_response['channel']['id']
   end
+
+  def had_errors?
+    @errors.any?
+  end
+
+  def error_message
+    return nil unless had_errors?
+
+    if @errors.keys.include? 'Slack'
+      return 'Something went wrong with Slack. Try again!'
+    elsif @errors.keys.include? 'RestClient'
+      return 'Something went wrong with RestClient. Try again!'
+    elsif @founders.present?
+      return "Could only ping #{@founders.count - @errors.count} out of #{@founders.count} founders. Check error hash for more details"
+    elsif @founder.present?
+      return "Could not ping founder. Error: #{@errors[@founder.id]}"
+    end
+
+    'Unidentified Error'
+  end
 end

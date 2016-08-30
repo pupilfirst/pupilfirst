@@ -43,3 +43,27 @@
     }
   }
 }
+.card-with-description {
+  display: flex;
+  align-items: center;
+  padding: 2rem;
+  background-color: $primary-background;
+
+  .card-image {
+    margin-right: 1rem;
+  }
+
+  .card-description {
+    font-size: 1rem;
+    font-weight: $font-light;
+    line-height: 1.6;
+  }
+
+  @include media-breakpoint-down(md) {
+    flex-wrap: wrap;
+
+    .card-image {
+      margin: auto;
+    }
+  }
+}

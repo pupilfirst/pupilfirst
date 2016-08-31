@@ -1,59 +1,31 @@
 ActiveAdmin.register_page 'Vocalist Ping' do
-  menu parent: 'Dashboard', label: 'Send Vocalist Ping (Beta!)'
-
   controller do
-    skip_after_action :intercom_rails_auto_include
-
-    def index
-      load_target_options
-    end
-
-    private
-
-    def load_target_options
-      @founders = Founder.all.map { |f| [f.fullname, f.id] }
-      @startups = Startup.all.pluck(:product_name, :id)
-      @channels = PublicSlackTalk.valid_channel_names
-    end
+    include DisableIntercom
   end
 
+  menu parent: 'Dashboard', label: 'Send Vocalist Ping (Beta!)'
+
   content do
-    render 'vocalist_ping'
+    form = VocalistPingForm.new OpenStruct.new
+    render 'vocalist_ping', form: form
   end
 
   page_action :send_ping, method: :post do
-    @message = params[:vocalist_ping][:message]
-    @selected_channel = params[:vocalist_ping][:channel]
-    @selected_startups = params[:vocalist_ping][:startups].reject(&:empty?)
-    @selected_founders = params[:vocalist_ping][:founders].reject(&:empty?)
+    form = VocalistPingForm.new OpenStruct.new
 
-    unless @selected_channel.present? || @selected_startups.present? || @selected_founders.present?
-      flash[:error] = 'Please select a channel OR one or more startups OR founders!'
-      load_target_options
-      render '_vocalist_ping'
+    if form.validate(params[:vocalist_ping])
+      response = form.send_pings
+
+      if response&.errors?
+        flash[:error] = response.error_message
+      else
+        flash[:success] = 'Pings send successfully!'
+      end
+
+      redirect_to admin_vocalist_ping_path
+    else
+      render '_vocalist_ping', form: form
       return
     end
-
-    unless @message.present?
-      flash[:error] = 'Please enter a message to be sent!'
-      load_target_options
-      render '_vocalist_ping'
-      return
-    end
-
-    response = if @selected_founders.present?
-      PublicSlackTalk.post_message message: @message, founders: Founder.find(@selected_founders)
-    elsif @selected_startups.present?
-      PublicSlackTalk.post_message message: @message, founders: Founder.where(startup: @selected_startups)
-    else
-      PublicSlackTalk.post_message message: @message, channel: @selected_channel
-    end
-
-    if response.had_errors?
-      flash[:error] = response.error_message
-    else
-      flash[:success] = 'Pings send successfully!'
-    end
-    redirect_to admin_vocalist_ping_path
   end
 end

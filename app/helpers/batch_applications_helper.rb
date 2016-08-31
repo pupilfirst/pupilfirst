@@ -82,4 +82,13 @@ module BatchApplicationsHelper
   def restartable?
     application_status == :submitted && !stage_expired?
   end
+
+  def calendar_visible?(batch:)
+    case batch
+      when 4
+        (Time.parse 'Wed, 31 Aug 2016 23:00:00 IST +05:30').past?
+      else
+        raise NotImplementedError
+    end
+  end
 end

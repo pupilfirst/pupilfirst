@@ -100,12 +100,12 @@ class PublicSlackTalk
     im_id_response['channel']['id']
   end
 
-  def had_errors?
+  def errors?
     @errors.any?
   end
 
   def error_message
-    return nil unless had_errors?
+    return nil unless errors?
 
     if @errors.keys.include? 'Slack'
       return 'Something went wrong with Slack. Try again!'

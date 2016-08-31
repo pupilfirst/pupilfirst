@@ -8,12 +8,12 @@ feature 'DM Startup Feedback' do
   let!(:startup_feedback) { create :startup_feedback, faculty: faculty, startup: startup }
 
   let!(:founder_1_request) do
-    stub_request(:get, 'https://slack.com/api/chat.postMessage?as_user=true&channel=DABCDEF'\
+    stub_request(:get, 'https://slack.com/api/chat.postMessage?as_user=true&channel=DABCDEF&parse=full'\
     "&text=#{startup_feedback.as_slack_message}&token=xxxxxx&unfurl_links=false")
       .to_return(body: '{"ok":true}')
   end
   let!(:founder_2_request) do
-    stub_request(:get, 'https://slack.com/api/chat.postMessage?as_user=true&channel=D123456'\
+    stub_request(:get, 'https://slack.com/api/chat.postMessage?as_user=true&channel=D123456&parse=full'\
     "&text=#{startup_feedback.as_slack_message}&token=xxxxxx&unfurl_links=false")
       .to_return(body: '{"ok":true}')
   end

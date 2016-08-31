@@ -5,7 +5,7 @@ class BatchApplicantSignInForm < Reform::Form
   validate :applicant_should_have_application
 
   def applicant_should_have_application
-    if applicant.blank?
+    if applicant.blank? || applicant.batch_applications.blank?
       errors[:base] << "It looks like you haven't applied yet. Start at our application page."
       errors[:email] << 'has not submitted an application'
     elsif applicant.applications_as_team_lead.blank?

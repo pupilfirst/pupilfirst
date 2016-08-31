@@ -128,7 +128,10 @@ class BatchApplicationController < ApplicationController
 
   # GET /apply/cofounders
   def cofounders_form
-    return redirect_to(apply_continue_path) if current_batch.final_stage?
+    if current_batch.final_stage? || application_stage_number != 2
+      return redirect_to(apply_continue_path)
+    end
+
     @form = CofoundersForm.new(current_application)
     @form.prepopulate!
   end

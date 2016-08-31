@@ -5,6 +5,12 @@ ActiveAdmin.register_page 'Vocalist Ping' do
     skip_after_action :intercom_rails_auto_include
 
     def index
+      load_target_options
+    end
+
+    private
+
+    def load_target_options
       @founders = Founder.all.map { |f| [f.fullname, f.id] }
       @startups = Startup.all.pluck(:product_name, :id)
       @channels = PublicSlackTalk.valid_channel_names
@@ -23,12 +29,14 @@ ActiveAdmin.register_page 'Vocalist Ping' do
 
     unless @selected_channel.present? || @selected_startups.present? || @selected_founders.present?
       flash[:error] = 'Please select a channel OR one or more startups OR founders!'
+      load_target_options
       render '_vocalist_ping'
       return
     end
 
     unless @message.present?
       flash[:error] = 'Please enter a message to be sent!'
+      load_target_options
       render '_vocalist_ping'
       return
     end

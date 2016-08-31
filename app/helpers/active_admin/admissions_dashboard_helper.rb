@@ -14,7 +14,7 @@ module ActiveAdmin
     end
 
     def paid_applications_by_date
-      result = BatchApplication.where(batch_id: selected_batch_ids).payment_complete.joins(:payment).group("date_trunc('day', payments.paid_at)").count.sort.to_h
+      result = BatchApplication.where(batch_id: selected_batch_ids).payment_complete.joins(:payment).group_by_day('payments.paid_at').count.sort.to_h
       result.map { |k, v| [k.strftime('%b %d'), v] }.to_h.to_json
     end
 

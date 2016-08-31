@@ -23,7 +23,7 @@ class PublicSlackTalk
   # Specify either the channel name (eg: 'general'), founder or an array of founders
   def self.post_message(message:, **target)
     # skip if in development environment
-    # return if Rails.env.development?
+    return if Rails.env.development?
 
     # Skip if in mock mode.
     return if mock

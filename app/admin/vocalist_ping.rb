@@ -1,24 +1,22 @@
 ActiveAdmin.register_page 'Vocalist Ping' do
-  menu parent: 'Dashboard', label: 'Send Vocalist Ping (Beta!)'
-
   controller do
-    skip_after_action :intercom_rails_auto_include
-
-    def index
-      @form = VocalistPingForm.new OpenStruct.new
-    end
+    include DisableIntercom
   end
 
+  menu parent: 'Dashboard', label: 'Send Vocalist Ping (Beta!)'
+
   content do
-    render 'vocalist_ping'
+    form = VocalistPingForm.new OpenStruct.new
+    render 'vocalist_ping', form: form
   end
 
   page_action :send_ping, method: :post do
-    @form = VocalistPingForm.new OpenStruct.new
-    if @form.validate(params[:vocalist_ping])
-      response = @form.send_pings
+    form = VocalistPingForm.new OpenStruct.new
 
-      if !Rails.env.development? && response.errors?
+    if form.validate(params[:vocalist_ping])
+      response = form.send_pings
+
+      if response&.errors?
         flash[:error] = response.error_message
       else
         flash[:success] = 'Pings send successfully!'
@@ -26,7 +24,7 @@ ActiveAdmin.register_page 'Vocalist Ping' do
 
       redirect_to admin_vocalist_ping_path
     else
-      render '_vocalist_ping'
+      render '_vocalist_ping', form: form
       return
     end
   end

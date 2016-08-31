@@ -66,9 +66,10 @@
         display: flex;
         align-items: center;
         position: relative;
-        padding: 0 50px;
+        padding: 0 70px;
         height: 100%;
         width: 100%;
+        overflow: hidden;
         font-size: 0.875rem;
         font-weight: $font-semibold;
         color: $light-primary;
@@ -81,12 +82,13 @@
 
           &:before {
             @include fa-icon(angle-right);
-            right: 30px;
+            right: 3rem;
             top: 11px;
             font-size: 1.5rem;
 
             @include media-breakpoint-down(sm) {
-              top: 17px;
+              top: 16px;
+              right: 2rem;
             }
           }
           @include media-breakpoint-down(sm) {
@@ -96,12 +98,13 @@
         &.prev-chapter {
           &:before {
             @include fa-icon(angle-left);
-            left: 30px;
+            left: 3rem;
             top: 11px;
             font-size: 1.5rem;
 
             @include media-breakpoint-down(sm) {
-              top: 17px;
+              top: 16px;
+              left: 2rem;
             }
           }
           @include media-breakpoint-down(sm) {
@@ -368,7 +371,6 @@
           letter-spacing: 0.03rem;
           color: white;
           margin: 0;
-          display: inline-block;
           flex: 1 1 170px;
           overflow: hidden;
           text-overflow: ellipsis;

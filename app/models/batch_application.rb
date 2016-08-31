@@ -23,8 +23,8 @@ class BatchApplication < ActiveRecord::Base
   # Batch applicants who have completed payment.
   scope :payment_complete, -> { joins(:payment).merge(Payment.paid) }
 
-  scope :paid_today, -> { payment_complete.where('payments.paid_at > ?', Time.now.beginning_of_day) }
-  scope :payment_initiated_today, -> { payment_initiated.where('payments.created_at > ?', Time.now.beginning_of_day) }
+  scope :paid_today, -> { payment_complete.where('payments.paid_at > ?', Time.now.in_time_zone('Asia/Kolkata').beginning_of_day) }
+  scope :payment_initiated_today, -> { payment_initiated.where('payments.created_at > ?', Time.now.in_time_zone('Asia/Kolkata').beginning_of_day) }
 
   scope :from_state, -> (state) { joins(:university).where('universities.location': state) }
   scope :from_other_states, -> { joins(:university).where.not('universities.location': BatchApplication.selected_states) }

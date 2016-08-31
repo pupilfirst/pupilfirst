@@ -23,7 +23,7 @@ class PublicSlackTalk
   # Specify either the channel name (eg: 'general'), founder or an array of founders
   def self.post_message(message:, **target)
     # skip if in development environment
-    return if Rails.env.development?
+    # return if Rails.env.development?
 
     # Skip if in mock mode.
     return if mock
@@ -100,12 +100,12 @@ class PublicSlackTalk
     im_id_response['channel']['id']
   end
 
-  def had_errors?
+  def errors?
     @errors.any?
   end
 
   def error_message
-    return nil unless had_errors?
+    return nil unless errors?
 
     if @errors.keys.include? 'Slack'
       return 'Something went wrong with Slack. Try again!'

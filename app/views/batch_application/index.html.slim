@@ -119,39 +119,44 @@
               tr
                 th Batch
                 td #3
-                /td #4
+                - if calendar_visible?(batch: 4)
+                  td #4
               tr
                 th Apply as a Team Lead
                 td
                   .hidden-xs-down August 1 &mdash; 31
                   .hidden-sm-up Aug 1 &ndash; 31
-                /td
-                /  .hidden-xs-down September 1 &mdash; 30
-                /  .hidden-sm-up Sep 1 &ndash; 30
+                - if calendar_visible?(batch: 4)
+                  td
+                    .hidden-xs-down September 1 &mdash; 30
+                    .hidden-sm-up Sep 1 &ndash; 30
               tr
                 th Perform Coding &amp; Video Task
                 td
                   .hidden-xs-down August 15 &mdash; September 15
                   .hidden-sm-up Aug 15 &ndash; Sep 15
-                /td
-                /  .hidden-xs-down September 1 &mdash; 30
-                /  .hidden-sm-up Sep 1 &ndash; 30
+                - if calendar_visible?(batch: 4)
+                  td
+                    .hidden-xs-down September 1 &mdash; 30
+                    .hidden-sm-up Sep 1 &ndash; 30
               tr
                 th Team Interviews
                 td
                   .hidden-xs-down October 15 &mdash; 20
                   .hidden-sm-up Oct 15 &ndash; 20
-                /td
-                /  .hidden-xs-down October 15 &mdash; 20
-                /  .hidden-sm-up Oct 15 &ndash; 20
+                - if calendar_visible?(batch: 4)
+                  td
+                    .hidden-xs-down October 15 &mdash; 20
+                    .hidden-sm-up Oct 15 &ndash; 20
               tr
                 th Batch Starts
                 td
                   .hidden-xs-down January 2
                   .hidden-sm-up Jan 2
-                /td
-                /  .hidden-xs-down January 2
-                /  .hidden-sm-up Jan 2
+                - if calendar_visible?(batch: 4)
+                  td
+                    .hidden-xs-down January 2
+                    .hidden-sm-up Jan 2
 
           .program-slides.m-t-3
             .slide-item.content-box

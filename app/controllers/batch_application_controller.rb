@@ -1,5 +1,5 @@
 class BatchApplicationController < ApplicationController
-  before_action :ensure_applicant_is_signed_in, except: %w(index register identify send_sign_in_email continue sign_in_email_sent intercom_user_create)
+  before_action :require_application, except: %w(index register identify send_sign_in_email continue sign_in_email_sent intercom_user_create)
   before_action :ensure_accurate_stage_number, only: %w(ongoing submit complete restart expired rejected)
   before_action :load_common_instance_variables
 
@@ -374,8 +374,8 @@ class BatchApplicationController < ApplicationController
   end
 
   # Redirect applicant to sign in page is zhe isn't signed in.
-  def ensure_applicant_is_signed_in
-    return if current_batch_applicant.present?
+  def require_application
+    return if current_application.present?
     redirect_to apply_identify_url(batch: params[:batch_number])
   end
 

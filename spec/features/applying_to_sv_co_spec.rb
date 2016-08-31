@@ -119,6 +119,15 @@ feature 'Applying to SV.CO' do
         click_on 'Cancel and Restart Application'
 
         expect(page).to have_text('Did you complete registration once before?')
+
+        # Applicant should be blocked from visiting inner pages, now that he doesn't have an application.
+        visit apply_cofounders_path
+
+        expect(page).to have_text("Haven't submitted an application yet?")
+
+        visit apply_stage_path(stage_number: 1)
+
+        expect(page).to have_text("Haven't submitted an application yet?")
       end
 
       context 'when applicant stage has expired' do

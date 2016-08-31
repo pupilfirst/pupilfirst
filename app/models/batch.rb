@@ -16,6 +16,9 @@ class Batch < ActiveRecord::Base
       .where('batch_stages.ends_at > ?', Time.now)
   }
 
+  # Batches that opened for applications at some point of time in the past.
+  scope :opened_for_applications, -> { joins(:batch_stages).uniq }
+
   validates :theme, presence: true
   validates :batch_number, presence: true, numericality: true, uniqueness: true
   validates_presence_of :start_date, :end_date

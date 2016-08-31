@@ -2,7 +2,7 @@
   ul.scopes.table_tools_segmented_control style="width: calc((100% - 10px)); float: right;"
     li class="#{ (multiple_batches_selected? ? 'selected':'') + ' scope' }"
       a.table_tools_button href=admin_admissions_dashboard_path All Batches
-    - Batch.open_for_applications.each do |batch|
+    - Batch.opened_for_applications.each do |batch|
       li class="#{ (([batch.id] == selected_batch_ids) ? 'selected' : '') + ' scope' }"
         a.table_tools_button href=admin_admissions_dashboard_path(batch: batch) #{batch.name} Batch
 

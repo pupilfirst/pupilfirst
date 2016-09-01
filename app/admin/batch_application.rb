@@ -162,9 +162,15 @@ ActiveAdmin.register BatchApplication do
 
     column :college
 
+    column :university do |batch_application|
+      batch_application.university.name
+    end
+
     column :state do |batch_application|
       batch_application.university&.location || application.state
     end
+
+    column :team_size
 
     column :cofounders do |batch_application|
       batch_application.cofounders.map do |cofounder|

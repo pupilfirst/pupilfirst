@@ -4,6 +4,18 @@
   .content
     ul
       li
+        ' Summary
+        br
+        ' Total Applications: #{BatchApplication.where(batch_id: selected_batch_ids).count}&nbsp;&nbsp;
+        ' Total Applicants: #{BatchApplication.where(batch_id: selected_batch_ids).sum(:team_size)}&nbsp;&nbsp;
+        ' Total Universities: #{University.joins(:batch_applications).where(batch_applications: { batch: selected_batch_ids} ).uniq.count}&nbsp;&nbsp;
+        ' Total States: #{University.joins(:batch_applications).where(batch_applications: { batch: selected_batch_ids}).group(:location).count.count}
+        br
+        - start_time = Time.parse 'August 1, 2016, 00:00:00+0530'
+        - end_time = Time.now
+        ' Unique Visits to website from August 1: #{Visit.where(started_at: start_time..end_time).count}
+
+      li
         ' Payment Completed: #{payment_completed_count} (+#{payment_completed_delta})
         br
         - BatchApplication.selected_states.each do |state|
@@ -21,3 +33,9 @@
         - BatchApplication.selected_states.each do |state|
           ' #{state}:#{submitted_application_count_for(state)} (+#{submitted_application_delta_for(state)})&nbsp;
         ' Others:#{submitted_application_count_for_others} (+#{submitted_application_delta_for_others})
+      /li
+      /  ' Conversion % (Paid/Total Submissions)
+      /  br
+      /  - BatchApplication.selected_states.each do |state|
+      /    ' #{state}:#{submitted_application_count_for(state)}
+      /  ' Others:#{submitted_application_count_for_others}

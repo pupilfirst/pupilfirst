@@ -93,5 +93,27 @@ module ActiveAdmin
     def submitted_application_delta_for_others
       BatchApplication.where(batch_id: selected_batch_ids).submitted_application.where('batch_applications.created_at > ?', Time.now.beginning_of_day).from_other_states.count
     end
+
+    def total_applications_count
+      BatchApplication.where(batch_id: selected_batch_ids).count
+    end
+
+    def total_applicants_count
+      BatchApplication.where(batch_id: selected_batch_ids).sum(:team_size) + BatchApplication.where(batch_id: selected_batch_ids, team_size: nil).count
+    end
+
+    def total_universities_count
+      University.joins(:batch_applications).where(batch_applications: { batch: selected_batch_ids }).uniq.count
+    end
+
+    def total_location_count
+      University.joins(:batch_applications).where(batch_applications: { batch: selected_batch_ids }).group(:location).count.count
+    end
+
+    def unique_visits_count
+      start_time = Time.parse 'August 1, 2016, 00:00:00+0530'
+      end_time = Time.now
+      Visit.where(started_at: start_time..end_time).count
+    end
   end
 end

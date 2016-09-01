@@ -8,6 +8,8 @@ class ApplicationController < ActionController::Base
   before_filter :set_content_security_policy
   before_action :prepare_platform_feedback
 
+  helper_method :current_mooc_student
+
   skip_after_action :intercom_rails_auto_include, unless: proc { Rails.env.production? }
 
   # When in production, respond to requests that ask for unhandled formats with 406.
@@ -49,6 +51,12 @@ class ApplicationController < ActionController::Base
 
   def current_user
     @current_user ||= User.find_by(login_token: read_cookie(:login_token))
+  end
+
+  protected
+
+  def current_mooc_student
+    @current_mooc_student ||= MoocStudent.find_by(user: current_user) if current_user.present?
   end
 
   # Hack to allow Intercom to insert its script's hash into our CSP.

@@ -4,7 +4,6 @@ class SixWaysController < ApplicationController
 
   skip_after_action :intercom_rails_auto_include
 
-  helper_method :current_mooc_student
   helper_method :quiz_score
 
   layout 'application_v2'
@@ -117,11 +116,7 @@ class SixWaysController < ApplicationController
     end
   end
 
-  protected
 
-  def current_mooc_student
-    @current_mooc_student ||= MoocStudent.find_by(user: current_user) if current_user.present?
-  end
 
   private
 

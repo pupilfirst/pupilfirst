@@ -3,7 +3,6 @@ class SixWaysController < ApplicationController
   before_action :block_student, only: %w(student_details create_student)
 
   skip_after_action :intercom_rails_auto_include
-
   helper_method :quiz_score
 
   layout 'application_v2'
@@ -115,8 +114,6 @@ class SixWaysController < ApplicationController
       end
     end
   end
-
-
 
   private
 

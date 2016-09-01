@@ -285,6 +285,19 @@ class BatchApplicationController < ApplicationController
     head :ok
   end
 
+  # GET apply/certificate/:application_id
+  def certificate
+    @batch_application = current_batch_applicant.batch_applications.find(params[:application_id])
+    raise_not_found unless @batch_application&.merits_certificate?
+
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: 'certificate', disposition: 'attachment', show_as_html: params.key?('debug')
+      end
+    end
+  end
+
   protected
 
   # Returns currently active batch.

@@ -114,6 +114,8 @@ Svapp::Application.routes.draw do
       get 'expired'
       get 'rejected'
     end
+
+    get 'certificate/:application_id', action: 'certificate', as: 'certificate'
   end
 
   # webhook url for intercom user create - used to strip them off user_id

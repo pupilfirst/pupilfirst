@@ -41,7 +41,7 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  config.action_mailer.default_url_options = { host: 'sv.dev' }
+  config.action_mailer.default_url_options = { host: 'www.sv.dev' }
 
   # In development and test, let's have carrierwave store everything on local disk.
   config.carrier_wave_storage = :file
@@ -55,7 +55,7 @@ Rails.application.configure do
   Bullet.add_footer = false
 
   # Roadie asset host.
-  config.roadie.url_options = { host: 'sv.dev', scheme: 'https' }
+  config.roadie.url_options = { host: 'www.sv.dev', scheme: 'https' }
 end
 
 Rails.application.default_url_options = Svapp::Application.config.action_mailer.default_url_options

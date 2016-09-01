@@ -8,7 +8,7 @@ feature 'DM Startup Feedback' do
   let!(:startup_feedback) { create :startup_feedback, faculty: faculty, startup: startup }
 
   let!(:founder_1_request) do
-    stub_request(:get, 'https://slack.com/api/chat.postMessage?as_user=true&channel=DABCDEF&parse=full'\
+    stub_request(:get, 'https://slack.com/api/chat.postMessage?as_user=true&channel=DABCDEF&link_names=1'\
     "&text=#{startup_feedback.as_slack_message}&token=xxxxxx&unfurl_links=false")
       .to_return(body: '{"ok":true}')
   end

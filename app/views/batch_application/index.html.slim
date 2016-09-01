@@ -17,7 +17,7 @@
           .link
             = link_to 'Sign In to Continue', apply_identify_path, class: 'btn btn-primary btn-md text-uppercase'
 
-      - if current_batch_applicant&.multiple_applications?
+      - if current_batch_applicant&.old_applications.any?
         .card.content-box.m-t-2.m-b-0
           h3.m-b-2 Previous Applications
 
@@ -35,7 +35,7 @@
                     td #{old_application.status.to_s.capitalize} at stage #{old_application.application_stage.number}
                     td
                       - if old_application.merits_certificate?
-                        = link_to 'Download Certificate', '#', class: 'btn btn-secondary btn-sm'
+                        = link_to 'Download Certificate', apply_view_certificate_path(old_application), class: 'btn btn-secondary btn-sm'
                       - else
                         em Did not complete coding / video task.
 

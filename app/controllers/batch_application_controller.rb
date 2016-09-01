@@ -285,6 +285,12 @@ class BatchApplicationController < ApplicationController
     head :ok
   end
 
+  # GET apply/:application_id/view_certificate
+  def view_certificate
+    @batch_application = BatchApplication.find_by(id: params[:application_id])
+    raise_not_found unless @batch_application&.merits_certificate?
+  end
+
   protected
 
   # Returns currently active batch.

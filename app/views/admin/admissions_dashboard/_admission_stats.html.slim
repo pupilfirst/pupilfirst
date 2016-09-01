@@ -7,7 +7,7 @@
         ' Summary
         br
         ' Total Applications: #{BatchApplication.where(batch_id: selected_batch_ids).count}&nbsp;&nbsp;
-        ' Total Applicants: #{BatchApplication.where(batch_id: selected_batch_ids).sum(:team_size)}&nbsp;&nbsp;
+        ' Total Applicants: #{BatchApplication.where(batch_id: selected_batch_ids).sum(:team_size) + BatchApplication.where(batch_id: selected_batch_ids, team_size: nil).count}&nbsp;&nbsp;
         ' Total Universities: #{University.joins(:batch_applications).where(batch_applications: { batch: selected_batch_ids} ).uniq.count}&nbsp;&nbsp;
         ' Total States: #{University.joins(:batch_applications).where(batch_applications: { batch: selected_batch_ids}).group(:location).count.count}
         br

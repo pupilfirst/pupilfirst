@@ -31,9 +31,9 @@
         - BatchApplication.selected_states.each do |state|
           ' #{state}:#{submitted_application_count_for(state)} (+#{submitted_application_delta_for(state)})&nbsp;
         ' Others:#{submitted_application_count_for_others} (+#{submitted_application_delta_for_others})
-      /li
-      /  ' Conversion % (Paid/Total Submissions)
-      /  br
-      /  - BatchApplication.selected_states.each do |state|
-      /    ' #{state}:#{submitted_application_count_for(state)}
-      /  ' Others:#{submitted_application_count_for_others}
+      li
+        ' Conversion % (Paid/Total Submissions)
+        br
+        - BatchApplication.selected_states.each do |state|
+          ' #{state}:#{"%g" % ("%0.1f" % conversion_percentage_for(state))}%&nbsp;&nbsp;
+        ' Others:#{"%g" % ("%0.1f" % conversion_percentage_for_others)}%

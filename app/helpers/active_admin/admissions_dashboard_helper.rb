@@ -115,5 +115,17 @@ module ActiveAdmin
       end_time = Time.now
       Visit.where(started_at: start_time..end_time).count
     end
+
+    def conversion_percentage_for(state)
+      total = BatchApplication.where(batch_id: selected_batch_ids).from_state(state).count
+      return 0 unless total > 0
+      (payment_completed_count_for(state).to_f / total) * 100
+    end
+
+    def conversion_percentage_for_others
+      total = BatchApplication.where(batch_id: selected_batch_ids).from_other_states.count
+      return 0 unless total > 0
+      (payment_completed_count_for_others.to_f / total) * 100
+    end
   end
 end

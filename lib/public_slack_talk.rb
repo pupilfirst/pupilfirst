@@ -63,7 +63,7 @@ class PublicSlackTalk
     # make channel name url safe by replacing '#' with '%23' if any
     @channel = '%23' + @channel[1..-1] if @channel[0] == '#'
 
-    response_json = JSON.parse RestClient.get("https://slack.com/api/chat.postMessage?token=#{@token}&channel=#{@channel}&parse=full"\
+    response_json = JSON.parse RestClient.get("https://slack.com/api/chat.postMessage?token=#{@token}&channel=#{@channel}&link_names=1"\
       "&text=#{@message}&as_user=#{@as_user}&unfurl_links=#{@unfurl}")
     error_key = @founder.present? ? @founder.id : 'Slack'
     @errors[error_key] = response_json['error'] unless response_json['ok']

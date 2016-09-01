@@ -53,8 +53,6 @@ class ApplicationController < ActionController::Base
     @current_user ||= User.find_by(login_token: read_cookie(:login_token))
   end
 
-  protected
-
   def current_mooc_student
     @current_mooc_student ||= MoocStudent.find_by(user: current_user) if current_user.present?
   end
@@ -66,6 +64,8 @@ class ApplicationController < ActionController::Base
     csp_components.insert(csp_components.index('script-src') + 3, "'unsafe-inline' #{hash}")
     response.headers['Content-Security-Policy'] = csp_components.join ' '
   end
+
+  protected
 
   # sets a permanent signed cookie. Additional options such as :tld_length can be passed via the options_hash
   # eg: set_cookie(:token, 'abcd', { 'tld_length' => 1 })

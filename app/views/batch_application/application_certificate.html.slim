@@ -1,1 +1,9 @@
-p Certificate for Batch Application #{@batch_application.id} here!
+.card.text-xs-center.m-t-2
+  .card-header Preview
+  .card-block
+    h3.card-title Application Certificate
+    blockquote.card-blockquote
+      ' This is to certify that <em>#{current_batch_applicant.name}</em> of <em>#{@batch_application.university.name}</em> had submitted an application to Batch #{@batch_application.batch.batch_number} (#{@batch_application.batch.theme}) of SV.CO. The application successfully progressed until <em>Stage #{@batch_application.application_stage.name}</em> of the admission process.
+  .card-footer.text-xs-left
+    = link_to 'Back', apply_path
+    = link_to 'Download Certificate', apply_application_certificate_path(format: 'pdf'), class: 'pull-right'

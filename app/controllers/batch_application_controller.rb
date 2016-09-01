@@ -287,7 +287,7 @@ class BatchApplicationController < ApplicationController
 
   # GET apply/application_certificate/:application_id
   def application_certificate
-    @batch_application = BatchApplication.find_by(id: params[:application_id])
+    @batch_application = current_batch_applicant.batch_applications.find(params[:application_id])
     raise_not_found unless @batch_application&.merits_certificate?
 
     respond_to do |format|

@@ -50,11 +50,8 @@
   }
 }
 .continue-sixways-btn {
-  margin-top: 10px;
+  margin: 0 0 0 2rem;
 
-  @include media-breakpoint-down(md) {
-    margin: 0 0 0 2rem;
-  }
   @include media-breakpoint-down(xs) {
     margin: 1rem 0 0 0;
   }

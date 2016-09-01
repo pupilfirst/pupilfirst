@@ -28,7 +28,7 @@
           h4 = t("home.index.background_#{background_image_number}_messages.secondary_html")
           = link_to 'Apply Now', apply_path, class: 'btn btn-primary btn-lg text-uppercase home-apply-btn'
           - if current_mooc_student.present?
-            = link_to 'Continue Sixways Course', start_or_continue_path, class: 'btn btn-secondary btn-lg continue-sixways-btn text-uppercase hidden-md-up'
+            = link_to 'Continue Sixways Course', start_or_continue_path, class: 'btn btn-secondary btn-lg continue-sixways-btn home-apply-btn text-uppercase'
     a.icon-scroll href="#startincollege-initiative"
 
   #startincollege-initiative.startincollege-section

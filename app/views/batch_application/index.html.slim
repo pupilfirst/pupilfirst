@@ -17,7 +17,7 @@
           .link
             = link_to 'Sign In to Continue', apply_identify_path, class: 'btn btn-primary btn-md text-uppercase'
 
-      - if current_batch_applicant&.old_applications.any?
+      - if current_batch_applicant&.old_applications&.any?
         .card.content-box.m-t-2.m-b-0
           h3.m-b-2 Previous Applications
 

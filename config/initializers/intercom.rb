@@ -13,7 +13,7 @@ end
 IntercomRails.config do |config|
   # == Intercom app_id
   #
-  config.app_id = ENV["INTERCOM_APP_ID"] || "fw99ny6p"
+  config.app_id = ENV["INTERCOM_APP_ID"]
 
   # == Intercom session_duration
   #

@@ -2,7 +2,6 @@ class SixWaysController < ApplicationController
   before_action :authorize_student, only: %w(completion_certificate)
   before_action :block_student, only: %w(student_details create_student)
 
-  skip_after_action :intercom_rails_auto_include
   helper_method :quiz_score
 
   layout 'application_v2'

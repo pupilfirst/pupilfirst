@@ -10,8 +10,6 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_mooc_student
 
-  skip_after_action :intercom_rails_auto_include, unless: proc { Rails.env.production? }
-
   # When in production, respond to requests that ask for unhandled formats with 406.
   rescue_from ActionView::MissingTemplate do |exception|
     raise exception unless Rails.env.production?

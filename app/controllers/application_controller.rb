@@ -63,8 +63,6 @@ class ApplicationController < ActionController::Base
     response.headers['Content-Security-Policy'] = csp_components.join ' '
   end
 
-  protected
-
   # sets a permanent signed cookie. Additional options such as :tld_length can be passed via the options_hash
   # eg: set_cookie(:token, 'abcd', { 'tld_length' => 1 })
   def set_cookie(key, value, options_hash = {})

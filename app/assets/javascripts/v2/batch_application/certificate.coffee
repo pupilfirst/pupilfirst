@@ -15,5 +15,5 @@ handleDownload = ->
   $('#download-button').click ->
     console.log 'Downloading Certificate'
 
-$(document).on 'page:change', buildCertificatePDF
-$(document).on 'page:change', handleDownload
+#$(document).on 'page:change', buildCertificatePDF
+#$(document).on 'page:change', handleDownload

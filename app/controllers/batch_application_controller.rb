@@ -397,7 +397,7 @@ class BatchApplicationController < ApplicationController
   # Only let in team leads of existing applications.
   def ensure_team_lead_signed_in
     return if current_application.present? && current_application.team_lead == current_batch_applicant
-    redirect_to apply_path(batch: params[:batch_number])
+    redirect_to apply_identify_path(batch: params[:batch_number])
   end
 
   # Make sure that the stage number supplied in the URL matches application's state.

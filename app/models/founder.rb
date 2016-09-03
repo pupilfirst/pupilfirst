@@ -150,7 +150,7 @@ class Founder < ActiveRecord::Base
     :slack_username, :resume_url
 
   normalize_attribute :skip_password do |value|
-    value.is_a?(String) ? (value.casecmp('true') == 0) : value
+    value.is_a?(String) ? value.casecmp('true').zero? : value
   end
 
   validates :twitter_url, url: true, allow_nil: true

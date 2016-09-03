@@ -5,7 +5,7 @@ module ActiveAdmin
       paid_applicants = BatchApplicant.for_batch_id_in(selected_batch_ids).conversion.where(reference: named_references).group(:reference).count
       paid_applicants_others_count = BatchApplicant.for_batch_id_in(selected_batch_ids).conversion.where.not(reference: named_references).count
 
-      paid_applicants["Other"] = paid_applicants_others_count if paid_applicants_others_count > 0
+      paid_applicants["Other"] = paid_applicants_others_count if paid_applicants_others_count.positive?
       paid_applicants.to_json
     end
 
@@ -118,13 +118,13 @@ module ActiveAdmin
 
     def conversion_percentage_for(state)
       total = BatchApplication.where(batch_id: selected_batch_ids).from_state(state).count
-      return 0 unless total > 0
+      return 0 unless total.positive?
       (payment_completed_count_for(state).to_f / total) * 100
     end
 
     def conversion_percentage_for_others
       total = BatchApplication.where(batch_id: selected_batch_ids).from_other_states.count
-      return 0 unless total > 0
+      return 0 unless total.positive?
       (payment_completed_count_for_others.to_f / total) * 100
     end
   end

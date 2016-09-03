@@ -117,7 +117,7 @@ module Lita
       end
 
       def chosen_target
-        target_number > 0 ? targets[target_number - 1] : nil
+        target_number.positive? ? targets[target_number - 1] : nil
       end
 
       def targets

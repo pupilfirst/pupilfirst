@@ -121,7 +121,8 @@ describe Instamojo do
             'Host' => 'www.example.com',
             'User-Agent' => 'Ruby',
             'X-Api-Key' => 'API_KEY',
-            'X-Auth-Token' => 'AUTH_TOKEN' }
+            'X-Auth-Token' => 'AUTH_TOKEN'
+          }
         )
         .to_return(
           body: {
@@ -199,8 +200,8 @@ describe Instamojo do
             'Host' => 'www.example.com',
             'User-Agent' => 'Ruby',
             'X-Api-Key' => 'API_KEY',
-            'X-Auth-Token' =>
-              'AUTH_TOKEN' }
+            'X-Auth-Token' => 'AUTH_TOKEN'
+          }
         )
         .to_return(
           body: {

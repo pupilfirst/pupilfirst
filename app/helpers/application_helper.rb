@@ -1,9 +1,4 @@
 module ApplicationHelper
-  def fmt_time(t)
-    raise(ArgumentError, "Should be a instance of Time/Date/DateTime. #{t.class} given.") unless t.is_a?(Time) || t.is_a?(Date) || t.is_a?(DateTime)
-    t.strftime('%F %R%z')
-  end
-
   def profile_image_url(founder, gravatar_size: 100, avatar_version: :full)
     if founder.avatar?
       if founder.avatar_processing?

@@ -9,7 +9,7 @@ module HomeHelper
   end
 
   def activity_class_for_count(count)
-    if count == 0
+    if count.zero?
       'activity-blank'
     elsif count <= 5
       'activity-low'

@@ -68,7 +68,7 @@ class Target < ActiveRecord::Base
 
   # Set and clear completed at, depending on the value of stored status.
   before_save do
-    self.completed_at = (status == STATUS_DONE) ? completed_at || Time.now : nil
+    self.completed_at = (status == STATUS_DONE ? completed_at || Time.now : nil)
   end
 
   def complete!

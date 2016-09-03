@@ -13,11 +13,16 @@ describe 'Public Slack Talk' do
 
     it 'raises ArgumentError if multiple targets specified' do
       expect { PublicSlackTalk.post_message message: 'Hello', channel: '#general', founder: founder_1 }.to raise_error(
-        ArgumentError, 'specify one of channel, founder or founders')
+        ArgumentError, 'specify one of channel, founder or founders'
+      )
+
       expect { PublicSlackTalk.post_message message: 'Hello', founder: founder_1, founders: [founder_1, founder_2] }.to raise_error(
-        ArgumentError, 'specify one of channel, founder or founders')
+        ArgumentError, 'specify one of channel, founder or founders'
+      )
+
       expect { PublicSlackTalk.post_message message: 'Hello', channel: '#general', founders: [founder_1, founder_2] }.to raise_error(
-        ArgumentError, 'specify one of channel, founder or founders')
+        ArgumentError, 'specify one of channel, founder or founders'
+      )
     end
 
     context 'when targets are correctly specified' do
@@ -31,8 +36,10 @@ describe 'Public Slack Talk' do
         context 'when supplied channel is invalid' do
           it 'fails' do
             expect_any_instance_of(PublicSlackTalk).to receive(:channel_valid?).and_return(false)
+
             expect { PublicSlackTalk.post_message message: 'Hello', channel: '#general' }.to raise_error(
-              'could not validate channel specified')
+              'could not validate channel specified'
+            )
           end
         end
       end
@@ -72,12 +79,14 @@ describe 'Public Slack Talk' do
 
     it 'raises ArgumentError if no target specified' do
       expect { PublicSlackTalk.post_message message: 'Hello' }.to raise_error(
-        ArgumentError, 'specify one of channel, founder or founders')
+        ArgumentError, 'specify one of channel, founder or founders'
+      )
     end
 
     it 'raises ArgumentError if multiple targets specified' do
       expect { PublicSlackTalk.post_message message: 'Hello', channel: '#general', founder: founder }.to raise_error(
-        ArgumentError, 'specify one of channel, founder or founders')
+        ArgumentError, 'specify one of channel, founder or founders'
+      )
     end
 
     it 'calls process on a new PublicSlackTalk instance if exactly one target specified' do

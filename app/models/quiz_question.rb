@@ -15,9 +15,7 @@ class QuizQuestion < ActiveRecord::Base
 
   def exactly_one_correct_answer?
     # Answers might not be persisted yet. So we can't use the count short-hand as rubocop suggests
-    # rubocop: disable Performance/Count
     answer_options.select { |o| o.correct_answer == true }.length == 1
-    # rubocop: enable Performance/Count
   end
 
   def correct_answer

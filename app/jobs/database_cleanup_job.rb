@@ -8,7 +8,7 @@ class DatabaseCleanupJob < ActiveJob::Base
       .where(connect_requests: { connect_slot_id: nil })
       .where('slot_at < ?', 1.week.ago)
 
-    if slots.count > 0
+    if slots.count.positive?
       logger.info "Deleting #{slots.count} stale connect slots..."
       slots.destroy_all
     else

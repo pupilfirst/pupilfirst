@@ -271,7 +271,7 @@ class Startup < ActiveRecord::Base
   end
 
   def founder_ids=(list_of_ids)
-    founders_list = Founder.find list_of_ids.map(&:to_i).select { |e| e.is_a?(Integer) && e > 0 }
+    founders_list = Founder.find list_of_ids.map(&:to_i).select { |e| e.is_a?(Integer) && e.positive? }
     founders_list.each { |u| founders << u }
   end
 

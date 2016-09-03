@@ -1,5 +1,5 @@
 class BatchApplicationController < ApplicationController
-  before_action :require_application, except: %w(index register identify send_sign_in_email continue sign_in_email_sent intercom_user_create)
+  before_action :ensure_team_lead_signed_in, except: %w(index register identify send_sign_in_email continue sign_in_email_sent intercom_user_create)
   before_action :ensure_accurate_stage_number, only: %w(ongoing submit complete restart expired rejected)
   before_action :load_common_instance_variables
 
@@ -393,10 +393,10 @@ class BatchApplicationController < ApplicationController
     end
   end
 
-  # Redirect applicant to sign in page is zhe isn't signed in.
-  def require_application
-    return if current_application.present?
-    redirect_to apply_identify_url(batch: params[:batch_number])
+  # Only let in team leads of existing applications.
+  def ensure_team_lead_signed_in
+    return if current_application.present? && current_application.team_lead == current_batch_applicant
+    redirect_to apply_path(batch: params[:batch_number])
   end
 
   # Make sure that the stage number supplied in the URL matches application's state.

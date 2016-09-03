@@ -209,6 +209,7 @@ class ApplicationController < ActionController::Base
   def frame_sources
     <<~FRAME_SOURCES.squish
       frame-src
+      data:
       https://svlabs-public.herokuapp.com https://www.google.com
       #{typeform_csp[:frame]} #{youtube_csp[:frame]} #{slideshare_csp[:frame]} #{speakerdeck_csp[:frame]}
       #{google_form_csp[:frame]};

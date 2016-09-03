@@ -33,6 +33,7 @@
 //= require jquery.scrollTo
 //= require ahoy
 //= require heap_analytics
+//= require jspdf
 
 // Rails assets
 //= require intro.js/intro.js

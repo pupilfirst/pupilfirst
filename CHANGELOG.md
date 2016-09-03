@@ -2,7 +2,7 @@
 
 #### Features
 
-  - Our SixWays MOOC can now be previewed without supplying an email address - signing up is required to be eligible for the certificate. 
+  - Our SixWays MOOC can now be previewed without supplying an email address - signing up is required to be eligible for the certificate.
 
 #### Bugfixes
 

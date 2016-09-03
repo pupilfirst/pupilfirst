@@ -66,8 +66,9 @@ class BatchApplicationController < ApplicationController
         return
       end
 
-      # Kick out session based login if a manual login is requested. This allows applicant to change signed-in ID.
+      # Delete existing session / cookie login if a manual login is requested. This allows applicant to change signed-in ID.
       session.delete :applicant_token
+      cookies.delete :applicant_token
 
       redirect_to apply_sign_in_email_sent_path(batch_number: params[:batch_number])
     else

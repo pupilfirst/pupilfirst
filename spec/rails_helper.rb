@@ -61,11 +61,6 @@ RSpec.configure do |config|
 
   # Allow using broken flag to exclude tests
   config.filter_run_excluding broken: true
-
-  # Run RuboCop first.
-  rubocop_output = `rubocop`
-  print rubocop_output
-  raise 'RuboCop Errors' unless rubocop_output =~ /files inspected, no offenses detected/
 end
 
 # Use poltergeist as JS driver.

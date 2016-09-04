@@ -84,11 +84,13 @@ class IntercomClient
 
   # total number of new users
   def new_users_count
+    return 0 unless user_count_by_segment.present?
     user_count_by_segment.find { |h| h.key? 'New' }['New']
   end
 
   # total number of active users
   def active_users_count
+    return 0 unless user_count_by_segment.present?
     user_count_by_segment.find { |h| h.key? 'Active' }['Active']
   end
 

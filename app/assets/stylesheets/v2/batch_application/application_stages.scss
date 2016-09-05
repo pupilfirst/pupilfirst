@@ -20,7 +20,11 @@
     line-height: 1.4;
   }
 }
-
+.application-stages-content {
+  h4 {
+    line-height: 1.4;
+  }
+}
 .cofounder-section-form {
   border: 1px solid $gray-border;
   @include border-radius(5px);

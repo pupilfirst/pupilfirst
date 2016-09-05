@@ -4,12 +4,14 @@
 
 .secondary-banner.application-stages-banner
   .container
+    .stages-alert-icon.m-x-auto
+      = image_tag 'apply/admission-process/just-missed-icon.svg'
     .application-stages-head.text-xs-center
-      h1 Your coding and hustling submissions were rejected.
+      h2 Your coding and hustling submissions were rejected.
 .container
   .m-t-3
     == render 'application_progress'
-  .container-md-center.content-box.m-t-3.m-b-3
+  .container-md-center.content-box.application-stages-content.m-t-3.m-b-3
     h4
       ' We're sorry, but your coding and hustling submissions didn't make the cut. Possible reasons for this
       ' include YYYY, ZZZZ, or ABCD. If you think there's we've made a mistake in our evaluation, feel free to

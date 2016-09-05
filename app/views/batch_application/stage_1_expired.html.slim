@@ -4,12 +4,14 @@
 
 .secondary-banner.application-stages-banner
   .container
+    .stages-alert-icon.m-x-auto
+      = image_tag 'apply/admission-process/you-are-late-icon.svg'
     .application-stages-head.text-xs-center
       h1
         ' Application process has closed.
 .container
   .m-t-3
     == render 'application_progress'
-  .container-md-center.content-box.m-t-3.m-b-3
+  .container-md-center.content-box.application-stages-content.m-t-3.m-b-3
     h4.text-xs-center
       ' We've sorry, but the deadline for submitting applications to this batch is over.

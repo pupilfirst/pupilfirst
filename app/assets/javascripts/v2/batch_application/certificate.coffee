@@ -20,7 +20,7 @@ showCertificate = ->
 
 handleDownload = ->
   if $('#certificate-content').length > 0
-    $('#download-button').click ->
+    $('.certificate-download-button').click ->
       console.log 'Downloading Certificate'
       doc = buildCertificatePDF()
       doc.save('Certificate.pdf')

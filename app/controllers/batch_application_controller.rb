@@ -300,13 +300,6 @@ class BatchApplicationController < ApplicationController
     @video_task_score = @batch_application.video_task_score || 'Not Available'
 
     @result = @batch_application.application_stage.number > 2 ? 'Selected' : 'Not Selected'
-
-    respond_to do |format|
-      format.html
-      format.pdf do
-        render pdf: 'certificate', disposition: 'attachment', show_as_html: params.key?('debug')
-      end
-    end
   end
 
   protected

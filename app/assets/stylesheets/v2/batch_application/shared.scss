@@ -46,6 +46,7 @@
           width: 50px;
           height: 50px;
           content: '';
+          background-repeat: no-repeat;
           position: absolute;
           top: 0;
           left: 50%;
@@ -58,30 +59,30 @@
         }
         &.stage-1 {
           &:before {
-            content: asset-url('apply/admission-process/application-progress/application-fee-blue.svg');
+            background-image: asset-url('apply/admission-process/application-progress/application-fee-blue.svg');
           }
         }
         &.stage-2 {
           &:before {
-            content: asset-url('apply/admission-process/application-progress/coding-video-blue.svg');
+            background-image: asset-url('apply/admission-process/application-progress/coding-video-blue.svg');
           }
         }
         &.stage-3 {
           &:before {
-            content: asset-url('apply/admission-process/application-progress/interview-blue.svg');
+            background-image: asset-url('apply/admission-process/application-progress/interview-blue.svg');
           }
         }
         &.stage-4 {
           &:before {
-            content: asset-url('apply/admission-process/application-progress/pre-selection-blue.svg');
+            background-image: asset-url('apply/admission-process/application-progress/pre-selection-blue.svg');
           }
         }
         &.stage-5 {
           &:before {
-            content: asset-url('apply/admission-process/application-progress/complete-blue.svg');
+            background-image: asset-url('apply/admission-process/application-progress/complete-blue.svg');
           }
         }
-        &.complete, &.expired, &.rejected, &.not_applicable {
+        &.complete, &.submitted, &.expired, &.rejected, &.not_applicable {
           &:before {
             box-shadow: $box-shadow;
             background-color: $light-primary;
@@ -99,32 +100,32 @@
           }
           &.stage-1 {
             &:before {
-              content: asset-url('apply/admission-process/application-progress/application-fee-white.svg');
+              background-image: asset-url('apply/admission-process/application-progress/application-fee-white.svg');
             }
           }
           &.stage-2 {
             &:before {
-              content: asset-url('apply/admission-process/application-progress/coding-video-white.svg');
+              background-image: asset-url('apply/admission-process/application-progress/coding-video-white.svg');
             }
           }
           &.stage-3 {
             &:before {
-              content: asset-url('apply/admission-process/application-progress/interview-white.svg');
+              background-image: asset-url('apply/admission-process/application-progress/interview-white.svg');
             }
           }
           &.stage-4 {
             &:before {
-              content: asset-url('apply/admission-process/application-progress/pre-selection-white.svg');
+              background-image: asset-url('apply/admission-process/application-progress/pre-selection-white.svg');
             }
           }
           &.stage-5 {
             &:before {
-              content: asset-url('apply/admission-process/application-progress/complete-white.svg');
+              background-image: asset-url('apply/admission-process/application-progress/complete-white.svg');
             }
           }
         }
         &.applicant-stage {
-          &.expired, &.rejected, &.not_applicable {
+          &.expired, &.submitted, &.rejected, &.not_applicable {
             &:before {
               width: 60px;
               height: 60px;
@@ -142,27 +143,27 @@
             }
             &.stage-1 {
               &:before {
-                content: asset-url('apply/admission-process/application-progress/application-fee-blue.svg');
+                background-image: asset-url('apply/admission-process/application-progress/application-fee-blue.svg');
               }
             }
             &.stage-2 {
               &:before {
-                content: asset-url('apply/admission-process/application-progress/coding-video-blue.svg');
+                background-image: asset-url('apply/admission-process/application-progress/coding-video-blue.svg');
               }
             }
             &.stage-3 {
               &:before {
-                content: asset-url('apply/admission-process/application-progress/interview-blue.svg');
+                background-image: asset-url('apply/admission-process/application-progress/interview-blue.svg');
               }
             }
             &.stage-4 {
               &:before {
-                content: asset-url('apply/admission-process/application-progress/pre-selection-blue.svg');
+                background-image: asset-url('apply/admission-process/application-progress/pre-selection-blue.svg');
               }
             }
             &.stage-5 {
               &:before {
-                content: asset-url('apply/admission-process/application-progress/complete-blue.svg');
+                background-image: asset-url('apply/admission-process/application-progress/complete-blue.svg');
               }
             }
           }

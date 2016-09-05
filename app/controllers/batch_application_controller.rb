@@ -291,9 +291,15 @@ class BatchApplicationController < ApplicationController
     @batch_application = current_batch_applicant.batch_applications.find(params[:application_id])
     raise_not_found unless @batch_application&.merits_certificate?
 
-    @certificate_background = Base64.strict_encode64(
-      open(File.expand_path(File.join(Rails.root, 'app', 'assets', 'images', 'timeline.jpg'))).read
-    )
+    @certificate_background = APP_CONSTANTS[:certificate_background_base64]
+
+    @team_members = @batch_application.batch_applicants.pluck(:name).sort
+
+    @coding_task_score = @batch_application.coding_task_score || 'Not Available'
+
+    @video_task_score = @batch_application.video_task_score || 'Not Available'
+
+    @result = @batch_application.application_stage.number > 2 ? 'Selected' : 'Not Selected'
 
     respond_to do |format|
       format.html

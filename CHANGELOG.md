@@ -1,3 +1,23 @@
+### 5 September, 2016
+
+#### Features
+
+  - Vocalist now pings the #saas Slack channel at 9 AM, every day, with a _Term of the Day_.
+
+#### UX and UI
+
+  - Improved styling of the MOOC course when accessing from a mobile device.
+  - Returning students can now access the course from the homepage with a helpful link.
+
+#### Content
+
+  - More illustrations were added to the MOOC course.
+  - Applications to Batch 4 were opened, and dates were published.
+
+#### Bugfixes
+
+  - Some icons on application pages were invisible on Mozilla Firefox. This has been fixed.
+
 ### 29 August, 2016
 
 #### Features

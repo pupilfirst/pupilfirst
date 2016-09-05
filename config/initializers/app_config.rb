@@ -11,3 +11,9 @@ APP_CONFIG = {
   },
   instagram_access_token: ENV['INSTAGRAM_ACCESS_TOKEN']
 }.with_indifferent_access
+
+APP_CONSTANTS = {
+  certificate_background_base64: Base64.strict_encode64(
+    open(File.expand_path(File.join(Rails.root, 'app', 'assets', 'images', 'apply', 'admission-process', 'coding-video-certificate.png'))).read
+  )
+}.with_indifferent_access

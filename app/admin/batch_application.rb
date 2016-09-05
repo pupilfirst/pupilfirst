@@ -252,7 +252,7 @@ ActiveAdmin.register BatchApplication do
 
     f.inputs do
       f.input :batch
-      f.input :team_lead
+      f.input :team_lead, collection: f.object.batch_applicants, include_blank: false
       f.input :team_size, as: :select, collection: 2..10, include_blank: false
       f.input :application_stage, collection: ApplicationStage.all.order(number: 'ASC')
       f.input :tag_list, input_html: { value: f.object.tag_list.join(','), 'data-tags' => BatchApplication.tag_counts_on(:tags).pluck(:name).to_json }

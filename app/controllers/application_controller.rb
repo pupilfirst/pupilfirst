@@ -101,7 +101,7 @@ class ApplicationController < ActionController::Base
     [
       image_sources,
       script_sources,
-      "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://sv-assets.sv.co #{heapanalytics_csp[:style]};",
+      "style-src 'self' 'unsafe-inline' fonts.googleapis.com https://sv-assets.sv.co;",
       connect_sources,
       font_sources,
       'child-src https://www.youtube.com;',
@@ -161,26 +161,6 @@ class ApplicationController < ActionController::Base
     }
   end
 
-  def heapanalytics_csp
-    if Rails.env.development?
-      {
-        script: 'http://cdn.heapanalytics.com http://heapanalytics.com',
-        image: 'http://heapanalytics.com',
-        connect: 'http://heapanalytics.com',
-        font: 'http://heapanalytics.com',
-        style: 'http://heapanalytics.com'
-      }
-    else
-      {
-        script: 'https://cdn.heapanalytics.com https://heapanalytics.com',
-        image: 'https://heapanalytics.com',
-        connect: 'https://heapanalytics.com',
-        font: 'https://heapanalytics.com',
-        style: 'https://heapanalytics.com'
-      }
-    end
-  end
-
   def intercom_csp
     {
       script: 'https://widget.intercom.io https://js.intercomcdn.com',
@@ -219,7 +199,7 @@ class ApplicationController < ActionController::Base
       img-src
       'self' data: https://blog.sv.co http://www.startatsv.com https://sv-assets.sv.co https://secure.gravatar.com
       https://uploaded-assets.sv.co #{google_analytics_csp[:image]} #{inspectlet_csp[:image]} #{facebook_csp[:image]}
-      #{heapanalytics_csp[:image]} #{intercom_csp[:image]} #{instagram_csp[:image]};
+      #{intercom_csp[:image]} #{instagram_csp[:image]};
     IMAGE_SOURCES
   end
 
@@ -228,21 +208,21 @@ class ApplicationController < ActionController::Base
       script-src
       'self' 'unsafe-eval' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
       http://www.startatsv.com https://sv-assets.sv.co #{recaptcha_csp[:script]} #{google_analytics_csp[:script]}
-      #{inspectlet_csp[:script]} #{facebook_csp[:script]} #{heapanalytics_csp[:script]} #{intercom_csp[:script]}
+      #{inspectlet_csp[:script]} #{facebook_csp[:script]} #{intercom_csp[:script]}
       #{instagram_csp[:script]} #{web_console_csp[:script]};
     SCRIPT_SOURCES
   end
 
   def connect_sources
     <<~CONNECT_SOURCES.squish
-      connect-src 'self' #{inspectlet_csp[:connect]} #{heapanalytics_csp[:connect]} #{intercom_csp[:connect]}
+      connect-src 'self' #{inspectlet_csp[:connect]} #{intercom_csp[:connect]}
       #{google_analytics_csp[:connect]};
     CONNECT_SOURCES
   end
 
   def font_sources
     <<~FONT_SOURCES.squish
-      font-src 'self' fonts.gstatic.com https://sv-assets.sv.co #{heapanalytics_csp[:font]} #{intercom_csp[:font]};
+      font-src 'self' fonts.gstatic.com https://sv-assets.sv.co #{intercom_csp[:font]};
     FONT_SOURCES
   end
 

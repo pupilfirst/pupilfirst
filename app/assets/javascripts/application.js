@@ -30,7 +30,6 @@
 //= require jquery-stickit
 //= require jquery.scrollTo
 //= require ahoy
-//= require heap_analytics
 //= require jspdf
 
 // Rails assets

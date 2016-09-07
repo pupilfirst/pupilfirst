@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160824121249) do
+ActiveRecord::Schema.define(version: 20160905125208) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -181,6 +181,20 @@ ActiveRecord::Schema.define(version: 20160824121249) do
     t.string   "slack_channel"
     t.datetime "invites_sent_at"
   end
+
+  create_table "colleges", force: :cascade do |t|
+    t.string  "name"
+    t.string  "also_known_as"
+    t.string  "city"
+    t.integer "state_id"
+    t.string  "established_year"
+    t.string  "website"
+    t.string  "contact_numbers"
+    t.integer "replacement_university_id"
+  end
+
+  add_index "colleges", ["replacement_university_id"], name: "index_colleges_on_replacement_university_id", using: :btree
+  add_index "colleges", ["state_id"], name: "index_colleges_on_state_id", using: :btree
 
   create_table "connect_requests", force: :cascade do |t|
     t.integer  "connect_slot_id"
@@ -465,6 +479,15 @@ ActiveRecord::Schema.define(version: 20160824121249) do
 
   add_index "quiz_questions", ["course_module_id"], name: "index_quiz_questions_on_course_module_id", using: :btree
 
+  create_table "replacement_universities", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "state_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "replacement_universities", ["state_id"], name: "index_replacement_universities_on_state_id", using: :btree
+
   create_table "resources", force: :cascade do |t|
     t.string   "file"
     t.string   "thumbnail"
@@ -557,6 +580,12 @@ ActiveRecord::Schema.define(version: 20160824121249) do
   add_index "startups", ["batch_id"], name: "index_startups_on_batch_id", using: :btree
   add_index "startups", ["slug"], name: "index_startups_on_slug", unique: true, using: :btree
   add_index "startups", ["stage"], name: "index_startups_on_stage", using: :btree
+
+  create_table "states", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "taggings", force: :cascade do |t|
     t.integer  "tag_id"

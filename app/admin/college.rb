@@ -11,6 +11,7 @@ ActiveAdmin.register College do
   filter :city
   filter :city_null, label: 'City missing?', as: :boolean
   filter :replacement_university
+  filter :replacement_university_id_null, label: 'University missing?', as: :boolean
   filter :name
 
   index do

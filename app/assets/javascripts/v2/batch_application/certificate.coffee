@@ -13,18 +13,18 @@ buildCertificatePDF = ->
   doc
 
 showCertificate = ->
-  if $('#certificate-content').length > 0
+  if $('.certificate-preview-container').is(':visible')
     doc = buildCertificatePDF()
     datauri = doc.output('datauristring')
     $('#certificate-content')[0].src = datauri
 
 handleDownload = ->
+  $('.certificate-download-button').click ->
+    console.log 'Downloading Certificate'
+    doc = buildCertificatePDF()
+    doc.save('Certificate.pdf')
+
+$(document).on 'page:change', ->
   if $('#certificate-content').length > 0
-    $('.certificate-download-button').click ->
-      console.log 'Downloading Certificate'
-      doc = buildCertificatePDF()
-      doc.save('Certificate.pdf')
-
-
-$(document).on 'page:change', showCertificate
-$(document).on 'page:change', handleDownload
+    showCertificate()
+    handleDownload()

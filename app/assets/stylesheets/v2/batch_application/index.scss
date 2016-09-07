@@ -210,6 +210,7 @@
 
   .accordion-toggle {
     position: relative;
+    box-shadow: $box-shadow-hover;
 
     &:before {
       @include fa-icon(angle-up);
@@ -221,9 +222,6 @@
       &:before {
         @include fa-icon(angle-down);
       }
-    }
-    &:hover, &:focus, &:active {
-      box-shadow: $box-shadow-hover;
     }
   }
   h4 {
@@ -238,6 +236,18 @@
   }
   .card-text {
     padding: 20px 35px;
+
+    p {
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+  }
+  ul {
+    li {
+      font-size: 1rem;
+      line-height: 1.6;
+      padding-bottom: 15px;
+    }
   }
 
   .success-fee-box {

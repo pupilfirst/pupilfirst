@@ -1,17 +1,17 @@
-.container
+.container-md-center
   .content-box.m-t-3.m-b-3
-    .cerificate-preview-header.p-y-1.m-b-2
-      h3
+    .cerificate-preview-header.p-b-1.m-b-2
+      h3.hidden-sm-down
         | Preview
       p.hidden-sm-up
         | Have any trouble with the download?
-      .certificate-download-button.btn.btn-primary.btn-md.text-uppercase.pull-xs-right
+      button.certificate-download-button.btn.btn-primary.btn-md.text-uppercase.pull-xs-right
         i.fa.fa-download
         ' &nbsp;Download Now
-    .certificate-preview-container.text-xs-center
+    .certificate-preview-container.hidden-sm-down.text-xs-center
       iframe#certificate-content src='' data-background=@certificate_background data-team-members=@team_members data-code-score=@coding_task_score data-video-score=@video_task_score data-result=@result
       div.p-t-2
-        .certificate-download-button.btn.btn-primary.btn-md.text-uppercase
+        button.certificate-download-button.btn.btn-primary.btn-md.text-uppercase
           i.fa.fa-download
           ' &nbsp;Download Now
     /  h3.card-title Application Certificate

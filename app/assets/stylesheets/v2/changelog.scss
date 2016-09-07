@@ -36,13 +36,11 @@
 
   ul {
     li {
-      font-size: $paragraph-text;
       list-style-type: circle;
       font-size: 1rem;
       line-height: 1.65rem;
       padding-bottom: 10px;
       font-weight: $font-light;
-      widows: 3;
     }
   }
 }

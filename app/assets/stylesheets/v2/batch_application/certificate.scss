@@ -11,16 +11,10 @@
 
   @include media-breakpoint-down(sm) {
     border-bottom: 0;
-    h3 {
-      display: none;
-    }
+    justify-content: center;
+
     .certificate-download-button {
       margin-top: 15px;
     }
   }
-}
-@include media-breakpoint-down(sm) {
-    .certificate-preview-container {
-      display: none;
-    }
 }

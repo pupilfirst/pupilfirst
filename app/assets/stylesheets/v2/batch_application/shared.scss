@@ -59,27 +59,27 @@
         }
         &.stage-1 {
           &:before {
-            background-image: asset-url('apply/admission-process/application-progress/application-fee-blue.svg');
+            background-image: asset-url('apply/batch_application/application-progress/application-fee-blue.svg');
           }
         }
         &.stage-2 {
           &:before {
-            background-image: asset-url('apply/admission-process/application-progress/coding-video-blue.svg');
+            background-image: asset-url('apply/batch_application/application-progress/coding-video-blue.svg');
           }
         }
         &.stage-3 {
           &:before {
-            background-image: asset-url('apply/admission-process/application-progress/interview-blue.svg');
+            background-image: asset-url('apply/batch_application/application-progress/interview-blue.svg');
           }
         }
         &.stage-4 {
           &:before {
-            background-image: asset-url('apply/admission-process/application-progress/pre-selection-blue.svg');
+            background-image: asset-url('apply/batch_application/application-progress/pre-selection-blue.svg');
           }
         }
         &.stage-5 {
           &:before {
-            background-image: asset-url('apply/admission-process/application-progress/complete-blue.svg');
+            background-image: asset-url('apply/batch_application/application-progress/complete-blue.svg');
           }
         }
         &.complete, &.submitted, &.expired, &.rejected, &.not_applicable {
@@ -100,27 +100,27 @@
           }
           &.stage-1 {
             &:before {
-              background-image: asset-url('apply/admission-process/application-progress/application-fee-white.svg');
+              background-image: asset-url('apply/batch_application/application-progress/application-fee-white.svg');
             }
           }
           &.stage-2 {
             &:before {
-              background-image: asset-url('apply/admission-process/application-progress/coding-video-white.svg');
+              background-image: asset-url('apply/batch_application/application-progress/coding-video-white.svg');
             }
           }
           &.stage-3 {
             &:before {
-              background-image: asset-url('apply/admission-process/application-progress/interview-white.svg');
+              background-image: asset-url('apply/batch_application/application-progress/interview-white.svg');
             }
           }
           &.stage-4 {
             &:before {
-              background-image: asset-url('apply/admission-process/application-progress/pre-selection-white.svg');
+              background-image: asset-url('apply/batch_application/application-progress/pre-selection-white.svg');
             }
           }
           &.stage-5 {
             &:before {
-              background-image: asset-url('apply/admission-process/application-progress/complete-white.svg');
+              background-image: asset-url('apply/batch_application/application-progress/complete-white.svg');
             }
           }
         }
@@ -143,27 +143,27 @@
             }
             &.stage-1 {
               &:before {
-                background-image: asset-url('apply/admission-process/application-progress/application-fee-blue.svg');
+                background-image: asset-url('apply/batch_application/application-progress/application-fee-blue.svg');
               }
             }
             &.stage-2 {
               &:before {
-                background-image: asset-url('apply/admission-process/application-progress/coding-video-blue.svg');
+                background-image: asset-url('apply/batch_application/application-progress/coding-video-blue.svg');
               }
             }
             &.stage-3 {
               &:before {
-                background-image: asset-url('apply/admission-process/application-progress/interview-blue.svg');
+                background-image: asset-url('apply/batch_application/application-progress/interview-blue.svg');
               }
             }
             &.stage-4 {
               &:before {
-                background-image: asset-url('apply/admission-process/application-progress/pre-selection-blue.svg');
+                background-image: asset-url('apply/batch_application/application-progress/pre-selection-blue.svg');
               }
             }
             &.stage-5 {
               &:before {
-                background-image: asset-url('apply/admission-process/application-progress/complete-blue.svg');
+                background-image: asset-url('apply/batch_application/application-progress/complete-blue.svg');
               }
             }
           }

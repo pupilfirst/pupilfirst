@@ -8,6 +8,7 @@ class ApplicationStageTwoForm < Reform::Form
   # Ensure git_repo_url is from github or bitbucket
   validate :git_repo_url_must_be_acceptable
   validate :executable_or_website_must_be_supplied
+  validate :cofounders_should_be_present
 
   def git_repo_url_must_be_acceptable
     errors[:git_repo_url] << 'is not a valid Github or Bitbucket URL' unless git_repo_url =~ %r{https?\://.*(github|bitbucket)}
@@ -18,6 +19,12 @@ class ApplicationStageTwoForm < Reform::Form
     errors[:base] << 'Either one of website or executable must be supplied.'
     errors[:executable] << 'either this or website should be supplied'
     errors[:website] << 'either this or executable should be supplied'
+  end
+
+  def cofounders_should_be_present
+    application = model.batch_application
+    return if application.cofounders.count.positive?
+    errors[:base] << 'Please add cofounders before submitting this form.'
   end
 
   # Ensure video_url is from youtube or vimeo

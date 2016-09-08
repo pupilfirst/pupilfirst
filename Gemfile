@@ -96,6 +96,8 @@ gem 'intercom', "~> 3.5.1" # Ruby bindings for the Intercom API
 gem 'wicked_pdf', github: 'mileszs/wicked_pdf' # html to pdf converted - used to generate MOOC completion certificate
 gem 'jspdf-rails' # HTML5 client-side pdf generation - for certificates
 
+gem 'draper' # Decorators/View-Models for Rails Applications
+
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify' # Superb notifications library. http://sciactive.github.io/pnotify/

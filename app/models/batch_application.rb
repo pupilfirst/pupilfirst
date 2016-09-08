@@ -215,18 +215,4 @@ class BatchApplication < ActiveRecord::Base
   def self.selected_states
     ['Kerala', 'Andhra Pradesh', 'Telangana', 'Tamil Nadu', 'Gujarat']
   end
-
-  # Returns the score given for the code submission
-  def coding_task_score
-    ApplicationSubmissionUrl.joins(:application_submission).where(
-      application_submissions: { batch_application_id: id }
-    ).find_by(name: 'Code Submission')&.score
-  end
-
-  # Returns the score given for the video submission
-  def video_task_score
-    ApplicationSubmissionUrl.joins(:application_submission).where(
-      application_submissions: { batch_application_id: id }
-    ).find_by(name: 'Video Submission')&.score
-  end
 end

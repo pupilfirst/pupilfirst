@@ -244,12 +244,7 @@ class BatchApplicationController < ApplicationController
 
   # TODO: Refactor this to use a decorator / view object.
   def stage_2_rejected
-    @batch_application = current_application
-    @certificate_background = APP_CONSTANTS[:certificate_background_base64]
-    @team_members = @batch_application.batch_applicants.pluck(:name).sort
-    @coding_task_score = @batch_application.coding_task_score || 'Not Available'
-    @video_task_score = @batch_application.video_task_score || 'Not Available'
-    @result = @batch_application.application_stage.number > 2 ? 'Selected' : 'Not Selected'
+    @batch_application = current_application.decorate
   end
 
   def stage_2_submit

@@ -58,76 +58,7 @@
 }
 
 .big-container {
-  background-color: #000;
-
-  .home-footer {
-    position: relative;
-    background-color: #000;
-    color: $light-grey-text;
-    padding-top: 30px;
-    padding-bottom: 20px;
-    font-weight: 300;
-    line-height: 25px;
-
-    strong {
-      font-weight: $font-semibold;
-      color: white;
-      font-size: 13px;
-      letter-spacing: 0.03rem;
-
-    }
-    .sitemap {
-      margin-bottom: 10px;
-      width: 50%;
-
-      @include media-breakpoint-down(sm) {
-        margin-bottom: 0;
-      }
-    }
-
-    .footer-column {
-      min-height: inherit;
-
-      @include media-breakpoint-down(sm) {
-        text-align: center;
-        border-top: 1px solid rgba(255, 255, 255, 0.2);
-        padding-bottom: 15px;
-        margin-bottom: 0;
-        padding-top: 20px;
-      }
-    }
-
-    address {
-      line-height: 25px;
-      @include media-breakpoint-down(sm) {
-        margin-bottom: 0;
-      }
-    }
-
-    a {
-      color: $light-grey-text;
-      text-decoration: none;
-
-      &:hover {
-        opacity: .8;
-      }
-    }
-    .img-opacity {
-      margin: 10px 0;
-      .social-link {
-        display: inline-block;
-        a {
-          display: inline-block;
-          padding: 0 8px;
-          color: $light-grey-text;
-
-          &:hover {
-            opacity: .6;
-          }
-        }
-      }
-    }
-  }
+  background-color: white;
 }
 
 .full-screen-background {
@@ -769,12 +700,20 @@
     justify-content: center;
   }
 }
+
+.campaign-images-container {
+  border-top: 1px solid $gray-border;
+  padding: 30px 0 70px;
+
+  .instagram-image-container {
+    border: 1px solid $gray-border;
+    box-shadow: 0 0 20px 0 #e5e5e5;
+  }
+}
 .instagram-header-footer {
-  background-color: black;
-  padding: 2rem 0;
+  padding: 2rem 0 0 0;
 
   h3 {
-    color: white;
     margin-bottom: 0;
   }
 }

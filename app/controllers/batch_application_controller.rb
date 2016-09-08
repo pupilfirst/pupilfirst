@@ -289,16 +289,6 @@ class BatchApplicationController < ApplicationController
     head :ok
   end
 
-  # GET apply/certificate/:application_id
-  def certificate
-    @batch_application = current_batch_applicant.batch_applications.find(params[:application_id])
-    @certificate_background = APP_CONSTANTS[:certificate_background_base64]
-    @team_members = @batch_application.batch_applicants.pluck(:name).sort
-    @coding_task_score = @batch_application.coding_task_score || 'Not Available'
-    @video_task_score = @batch_application.video_task_score || 'Not Available'
-    @result = @batch_application.application_stage.number > 2 ? 'Selected' : 'Not Selected'
-  end
-
   protected
 
   # Returns currently active batch.

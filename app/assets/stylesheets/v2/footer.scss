@@ -5,6 +5,83 @@ footer {
     width: 150px;
   }
 
+  .footer-block {
+    position: relative;
+    background-color: #2E2F33;
+    color: $light-grey-text;
+    padding: 3rem 0 2rem 0;
+    font-weight: 300;
+    line-height: 25px;
+
+    @include media-breakpoint-down(sm) {
+      padding: 2rem 0;
+    }
+
+    strong {
+      font-weight: $font-semibold;
+      color: white;
+      font-size: 13px;
+      letter-spacing: 0.03rem;
+
+    }
+    .sitemap {
+      margin-bottom: 10px;
+      width: 50%;
+
+      @include media-breakpoint-down(sm) {
+        margin-bottom: 0;
+      }
+    }
+
+    .footer-column {
+      min-height: inherit;
+
+      @include media-breakpoint-down(sm) {
+        text-align: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        padding-bottom: 15px;
+        margin-bottom: 0;
+        padding-top: 20px;
+
+        &:first-child {
+          border-top: 0;
+          padding-top: 0;
+        }
+      }
+    }
+
+    address {
+      line-height: 25px;
+      @include media-breakpoint-down(sm) {
+        margin-bottom: 0;
+      }
+    }
+
+    a {
+      color: $light-grey-text;
+      text-decoration: none;
+
+      &:hover {
+        opacity: .8;
+      }
+    }
+    .img-opacity {
+      margin: 10px 0;
+      .social-link {
+        display: inline-block;
+        a {
+          display: inline-block;
+          padding: 0 8px;
+          color: $light-grey-text;
+
+          &:hover {
+            opacity: .6;
+          }
+        }
+      }
+    }
+  }
+
   #footer-top {
     background-color: $footer-bg;
     color: $light-grey-text;

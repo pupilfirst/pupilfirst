@@ -18,9 +18,7 @@ class BatchApplicationController < ApplicationController
 
   # GET /apply
   def index
-    @form = BatchApplicationForm.new(BatchApplication.new)
-    @form.prepopulate!(team_lead: BatchApplicant.new)
-    @open_batch = Batch.open_batch
+    @presenter = ApplicationIndexPresenter.new(current_batch_applicant)
   end
 
   # POST /apply/register

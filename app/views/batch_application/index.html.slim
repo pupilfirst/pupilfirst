@@ -17,7 +17,8 @@
           .link
             = link_to 'Sign In to Continue', apply_identify_path, class: 'btn btn-primary btn-md text-uppercase'
 
-      - if current_batch_applicant&.old_applications&.any?
+      - if @presenter.old_applications.any?
+        #application-certificate-background data-background=@presenter.old_applications.first.certificate_background_image_base64
         .card.content-box.m-t-2.m-b-0
           h3.m-b-2 Previous Applications
 
@@ -29,13 +30,14 @@
                   th Status
                   th Results
               tbody
-                - current_batch_applicant.old_applications.each do |old_application|
-                  tr
+                - @presenter.old_applications.each do |old_application|
+                  tr.application-certificate-data data-team-members=old_application.team_member_names data-code-score=old_application.coding_task_score data-video-score=old_application.video_task_score data-result=old_application.preliminary_result
                     td = old_application.batch.batch_number
                     td #{old_application.status.to_s.capitalize} at stage #{old_application.application_stage.number}
                     td
                       - if old_application.merits_certificate?
-                        = link_to 'Download Certificate', apply_certificate_path(old_application), class: 'btn btn-secondary btn-sm'
+                        button.btn.btn-secondary.btn-sm.download-old-application-certificate
+                          | Download Certificate
                       - else
                         em Did not complete coding / video task.
 
@@ -407,7 +409,7 @@
 
     .col-lg-4.col-md-12#start-application-process
       .m-t-2
-        = simple_form_for @form,
+        = simple_form_for @presenter.batch_application_form,
           url: apply_register_path,
           wrapper: :vertical_form do |f|
 

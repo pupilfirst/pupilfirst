@@ -8,3 +8,6 @@ require_all 'lib/intercom'
 
 # Services
 require_all 'app/services'
+
+# Presenters
+require_all 'app/presenters'

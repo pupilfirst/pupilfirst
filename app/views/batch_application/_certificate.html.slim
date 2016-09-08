@@ -7,8 +7,4 @@
         i.fa.fa-download
         ' &nbsp;Download Now
     .certificate-preview-container.hidden-sm-down.text-xs-center
-      iframe#certificate-content src='' data-background=@certificate_background data-team-members=@team_members data-code-score=@coding_task_score data-video-score=@video_task_score data-result=@result
-      / div.p-t-2
-      /   button.certificate-download-button.btn.btn-primary.btn-md.text-uppercase
-      /     i.fa.fa-download
-      /     ' &nbsp;Download Now
+      iframe#certificate-content src='' data-background=@batch_application.certificate_background_image_base64 data-team-members=@batch_application.team_member_names data-code-score=@batch_application.coding_task_score data-video-score=@batch_application.video_task_score data-result=@batch_application.preliminary_result

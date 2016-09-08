@@ -177,22 +177,47 @@ feature 'Applying to SV.CO' do
       payment.batch_application.perform_post_payment_tasks!
     end
 
-    scenario 'paid applicant returns to submit his code and video links' do
-      visit apply_continue_path(token: batch_applicant.token, shared_device: false)
+    context 'when cofounders are absent' do
+      scenario 'paid applicant fails to submit his code and video links' do
+        visit apply_continue_path(token: batch_applicant.token, shared_device: false)
 
-      # user must see the coding and video tasks
-      expect(page).to have_text('Coding Task')
-      expect(page).to have_text('Video Task')
+        # user must see the coding and video tasks
+        expect(page).to have_text('Coding Task')
 
-      # user fills the stage 2 form and submits
-      fill_in 'application_stage_two_git_repo_url', with: 'https://github.com/user/repo'
-      select 'Website', from: 'application_stage_two_app_type'
-      fill_in 'application_stage_two_website', with: 'http://example.com'
-      fill_in 'application_stage_two_video_url', with: 'https://facebook.com/user/videos/random'
-      click_on 'Submit your entries'
+        # user fills the stage 2 form and submits
+        fill_in 'application_stage_two_git_repo_url', with: 'https://github.com'
+        select 'Website', from: 'application_stage_two_app_type'
+        fill_in 'application_stage_two_website', with: 'http://example.com'
+        fill_in 'application_stage_two_video_url', with: 'https://facebook.com'
+        click_on 'Submit your entries'
 
-      # user submission must be acknowledged
-      expect(page).to have_text('Your coding and hustling submissions has been received')
+        # user submission must be acknowledged
+        expect(page).to have_text('Please add cofounders before submitting this form')
+      end
+    end
+
+    context 'when cofounders are present' do
+      before do
+        batch_application.batch_applicants << create(:batch_applicant)
+      end
+
+      scenario 'paid applicant is able to submit code and video links' do
+        visit apply_continue_path(token: batch_applicant.token, shared_device: false)
+
+        # user must see the coding and video tasks
+        expect(page).to have_text('Coding Task')
+        expect(page).to have_text('Video Task')
+
+        # user fills the stage 2 form and submits
+        fill_in 'application_stage_two_git_repo_url', with: 'https://github.com/user/repo'
+        select 'Website', from: 'application_stage_two_app_type'
+        fill_in 'application_stage_two_website', with: 'http://example.com'
+        fill_in 'application_stage_two_video_url', with: 'https://facebook.com/user/videos/random'
+        click_on 'Submit your entries'
+
+        # user submission must be acknowledged
+        expect(page).to have_text('Your coding and hustling submissions has been received')
+      end
     end
 
     scenario 'applicant adds cofounder details', js: true do

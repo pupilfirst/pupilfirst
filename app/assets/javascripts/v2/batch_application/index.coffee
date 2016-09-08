@@ -136,6 +136,20 @@ helpIntercomPopup = ->
     e.preventDefault()
     Intercom('show')
 
+setupOldApplicationCertificateDownloadButtons = ->
+  $('.download-old-application-certificate').click (event) ->
+    certificateBackground = $('#application-certificate-background').data('background')
+
+    downloadCertificateButton = $(event.target)
+    teamMembers = downloadCertificateButton.closest('.application-certificate-data').data('teamMembers')
+    codeScore = downloadCertificateButton.closest('.application-certificate-data').data('codeScore')
+    videoScore = downloadCertificateButton.closest('.application-certificate-data').data('videoScore')
+    result = downloadCertificateButton.closest('.application-certificate-data').data('result')
+
+    doc = buildApplicationCertificate(certificateBackground, teamMembers, codeScore, videoScore, result)
+    doc.save('Certificate.pdf')
+
+$(document).on 'page:change', setupOldApplicationCertificateDownloadButtons
 $(document).on 'page:change', setupSelect2Inputs
 $(document).on 'page:change', emailsShouldMatch
 $(document).on 'page:change', setupStickyStartApplicationForm

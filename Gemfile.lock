@@ -228,6 +228,11 @@ GEM
     dotenv-rails (2.0.2)
       dotenv (= 2.0.2)
       railties (~> 4.0)
+    draper (2.1.0)
+      actionpack (>= 3.0)
+      activemodel (>= 3.0)
+      activesupport (>= 3.0)
+      request_store (~> 1.0)
     dry-configurable (0.1.6)
       concurrent-ruby (~> 1.0)
     dry-container (0.3.4)
@@ -789,6 +794,7 @@ DEPENDENCIES
   devise (>= 3.5.4)
   devise_invitable
   dotenv-rails
+  draper
   dry-validation
   factory_girl_rails (~> 4.0)
   faker

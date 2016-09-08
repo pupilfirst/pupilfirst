@@ -72,10 +72,4 @@ class BatchApplicant < ActiveRecord::Base
   def multiple_applications?
     batch_applications.count > 1
   end
-
-  def old_applications
-    batch_applications.select do |application|
-      application.status.in? [:expired, :complete, :rejected]
-    end
-  end
 end

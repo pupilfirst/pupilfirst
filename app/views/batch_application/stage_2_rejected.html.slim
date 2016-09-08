@@ -16,8 +16,5 @@
       ' We're sorry, but your coding and hustling submissions didn't make the cut.
       ' If you think there's we've made a mistake in our evaluation, feel free to
       | contact us at #{mail_to 'help@sv.co'}, and we'll get back to you as soon as we can.
-    / - if current_application.merits_certificate?
-    /   h4 However, you are eligible for a certificate for progressing till this stage!
-    /   .m-x-auto.text-xs-center.m-t-2
-    /     = link_to 'View Certificate', apply_certificate_path(current_application), class: 'btn btn-primary btn-md text-uppercase'
+
   == render 'certificate'

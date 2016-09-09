@@ -38,9 +38,6 @@ ActiveAdmin.register BatchApplicant do
       elsif batch_applicant.college_text.present?
         span "#{batch_applicant.college_text} "
         span admin_create_college_link(batch_applicant.college_text)
-      elsif batch_applicant.college_text_old.present?
-        span "#{batch_applicant.college_text_old} "
-        span admin_create_college_link(batch_applicant.college_text_old)
       else
         content_tag :em, 'Unknown'
       end
@@ -109,7 +106,6 @@ ActiveAdmin.register BatchApplicant do
       row :phone
       row :college
       row :college_text
-      row :college_text_old
 
       row :tags do |batch_applicant|
         linked_tags(batch_applicant.tags)

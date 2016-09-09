@@ -37,5 +37,8 @@ module Svapp
 
     # Precompile fonts.
     config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
+
+    # Add some paths to autoload
+    config.autoload_paths.push "#{Rails.root}/app/presenters", "#{Rails.root}/app/services"
   end
 end

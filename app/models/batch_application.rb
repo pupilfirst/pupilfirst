@@ -31,8 +31,6 @@ class BatchApplication < ActiveRecord::Base
 
   validates :batch_id, presence: true
   validates :application_stage_id, presence: true
-  validates :university_id, presence: true
-  validates :college, presence: true
 
   # If a team lead is present (should be), display his name and batch number as title, otherwise use this entry's ID.
   def display_name

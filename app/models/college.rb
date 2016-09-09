@@ -3,4 +3,5 @@ class College < ActiveRecord::Base
 
   belongs_to :state
   belongs_to :replacement_university
+  has_many :batch_applicants
 end

@@ -120,6 +120,7 @@ Svapp::Application.routes.draw do
   post 'intercom_user_create', as: 'intercom_user_create', controller: 'batch_application'
 
   resources :universities, only: :index
+  resources :colleges, only: :index
 
   resource :platform_feedback, only: [:create]
 

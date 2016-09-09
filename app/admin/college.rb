@@ -13,6 +13,7 @@ ActiveAdmin.register College do
   filter :replacement_university
   filter :replacement_university_id_null, label: 'University missing?', as: :boolean
   filter :name
+  filter :also_known_as
 
   index do
     selectable_column

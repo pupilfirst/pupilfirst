@@ -5,7 +5,7 @@ feature 'Applying to SV.CO' do
   let!(:application_stage_1) { create :application_stage, number: 1 }
   let!(:application_stage_2) { create :application_stage, number: 2 }
   let!(:application_stage_3) { create :application_stage, number: 3 }
-  let!(:other_university) { create :university, name: 'Other' }
+  let!(:college) { create :college }
   let(:instamojo_payment_request_id) { SecureRandom.hex }
   let(:long_url) { 'http://example.com/a/b' }
   let(:short_url) { 'http://example.com/a/b' }
@@ -30,12 +30,11 @@ feature 'Applying to SV.CO' do
       expect(page).to have_text('Did you complete registration once before?')
 
       # user fills the form and submits
-      fill_in 'batch_application_team_lead_attributes_name', with: 'Jack Sparrow'
-      fill_in 'batch_application_team_lead_attributes_email', with: 'elcapitan@thesea.com'
-      fill_in 'batch_application_team_lead_attributes_email_confirmation', with: 'elcapitan@thesea.com'
-      fill_in 'batch_application_team_lead_attributes_phone', with: '9876543210'
-      fill_in 'batch_application_university_id', with: University.last.id
-      fill_in 'batch_application_college', with: 'Random College'
+      fill_in 'batch_application_name', with: 'Jack Sparrow'
+      fill_in 'batch_application_email', with: 'elcapitan@thesea.com'
+      fill_in 'batch_application_email_confirmation', with: 'elcapitan@thesea.com'
+      fill_in 'batch_application_phone', with: '9876543210'
+      fill_in 'batch_application_college_id', with: college.id
       click_on 'Submit my application'
 
       # user must be at the payment page
@@ -82,8 +81,7 @@ feature 'Applying to SV.CO' do
         create :batch_application,
           batch: batch,
           application_stage: ApplicationStage.initial_stage,
-          university_id: University.last.id,
-          college: 'Random College',
+          college: college,
           team_lead_id: batch_applicant.id
       end
 
@@ -152,8 +150,7 @@ feature 'Applying to SV.CO' do
       create :batch_application,
         batch: batch,
         application_stage: ApplicationStage.initial_stage,
-        university_id: University.last.id,
-        college: 'Random College',
+        college: college,
         team_lead_id: batch_applicant.id,
         team_size: 2
     end

@@ -3,8 +3,7 @@ FactoryGirl.define do
     batch
     application_stage
     team_lead { create :batch_applicant }
-    university
-    college { Faker::Lorem.words(3).join(' ') }
+    college
     team_size { (2..10).to_a.sample }
 
     after(:build) do |application|

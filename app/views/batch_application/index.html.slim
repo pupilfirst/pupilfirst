@@ -428,35 +428,39 @@
             h4.form-section-title.m-b-1
               | Apply Now
             .simple-form-container
-              = f.simple_fields_for :team_lead do |t|
-                = t.input :name, label: false, placeholder: 'Full Name of Team Lead', input_html: { maxlength: 250 }
+              = f.input :name, label: false, placeholder: 'Full Name of Team Lead', input_html: { maxlength: 250 }
 
-                = t.input :email, label: false, placeholder: 'Team Leads Email Address',
-                  input_html: { maxlength: 250, type: 'email' }
+              = f.input :email, label: false, placeholder: 'Team Leads Email Address',
+                input_html: { maxlength: 250, type: 'email' }
 
-                = t.input :email_confirmation, label: false, placeholder: 'Please repeat your Email Address',
-                  input_html: { maxlength: 250, type: 'email' }
+              = f.input :email_confirmation, label: false, placeholder: 'Please repeat your Email Address',
+                input_html: { maxlength: 250, type: 'email' }
 
-                = t.input :phone, label: false, placeholder: '10-digit mobile phone number',
-                  input_html: { maxlength: 10, type: 'tel', pattern: '[0-9]{10}' }
+              = f.input :phone, label: false, placeholder: '10-digit mobile phone number',
+                input_html: { maxlength: 10, type: 'tel', pattern: '[0-9]{10}' }
 
-                = t.input :reference, label: false,
-                  collection: proc { BatchApplicant.reference_sources },
-                  required: false,
-                  include_blank: 'How did you hear about us?'
+              = f.input :reference, label: false,
+                collection: proc { BatchApplicant.reference_sources },
+                required: false,
+                include_blank: 'How did you hear about us?'
 
-                .hidden-xs-up
-                  = t.input :reference_text, label: false, placeholder: 'How did you hear about us?', required: false
+              .hidden-xs-up
+                = f.input :reference_text, label: false, placeholder: 'How did you hear about us?', required: false
 
-              // TODO: University is actually a required field, but select2 v3 does not play nice with HTML5 validations. Try enabling this when upgrading to select2 v4.
-              = f.input :university_id,
+              // TODO: College is actually a required field, but select2 v3 does not play nice with HTML5 validations. Try enabling this when upgrading to select2 v4.
+              = f.input :college_id,
                 type: :hidden,
                 label: false,
-                placeholder: 'Please pick your university',
-                input_html: { value: nil, 'data-search-url' => universities_url },
+                placeholder: 'Please pick your college',
+                input_html: { value: nil, 'data-search-url' => colleges_url },
                 required: false
 
-              = f.input :college, label: false, placeholder: 'Name of your College', input_html: { maxlength: 250 }
+              .hidden-xs-up
+                = f.input :college_text,
+                  label: false,
+                  placeholder: 'Name of your college',
+                  required: true,
+                  input_html: { maxlength: 250, disabled: true }
 
               div
                 = f.submit 'Submit my application', class: 'btn btn-primary btn-md text-uppercase'

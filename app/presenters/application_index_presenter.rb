@@ -4,9 +4,7 @@ class ApplicationIndexPresenter
   end
 
   def batch_application_form
-    form = BatchApplicationForm.new(BatchApplication.new)
-    form.prepopulate!(team_lead: BatchApplicant.new)
-    form
+    @batch_application_form ||= BatchApplicationForm.new(BatchApplicant.new)
   end
 
   def old_applications

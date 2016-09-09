@@ -35,8 +35,8 @@ $(document).on 'page:change', setupProgramCarousel
 emailsShouldMatch = ->
   batchApplicationForm = $('#new_batch_application')
   if batchApplicationForm.length
-    emailInput = $('#batch_application_team_lead_attributes_email')
-    emailConfirmationInput = $('#batch_application_team_lead_attributes_email_confirmation')
+    emailInput = $('#batch_application_email')
+    emailConfirmationInput = $('#batch_application_email_confirmation')
 
     validateEmailMatch = ->
       email = emailInput.val()
@@ -57,15 +57,15 @@ emailsShouldMatch = ->
       validateEmailMatch() if emailConfirmationInput.val().length
 
 setupSelect2Inputs = ->
-  universityInput = $('#batch_application_university_id')
+  collegeInput = $('#batch_application_college_id')
 
-  if universityInput.length
-    universitySearchUrl = universityInput.data('searchUrl')
+  if collegeInput.length
+    collegeSearchUrl = collegeInput.data('searchUrl')
 
-    universityInput.select2
+    collegeInput.select2
       minimumInputLength: 3,
       ajax:
-        url: universitySearchUrl,
+        url: collegeSearchUrl,
         dataType: 'json',
         quietMillis: 500,
         data: (term, page) ->
@@ -78,16 +78,29 @@ setupSelect2Inputs = ->
         cache: true
 
 toggleReferenceTextField = ->
-  if $('#batch_application_team_lead_attributes_reference').val() == 'Other (Please Specify)'
-    referenceTextInput = $('#batch_application_team_lead_attributes_reference_text')
+  if $('#batch_application_reference').val() == 'Other (Please Specify)'
+    referenceTextInput = $('#batch_application_reference_text')
     referenceTextInput.parent().parent().removeClass('hidden-xs-up')
-    $('#batch_application_team_lead_attributes_reference').parent().addClass('hidden-xs-up')
+    $('#batch_application_reference').parent().addClass('hidden-xs-up')
     referenceTextInput.focus()
 
-$(document).on 'page:change', ->
-  if $('#batch_application_team_lead_attributes_reference').length
+setupTogglingReferenceField = ->
+  if $('#batch_application_reference').length
     toggleReferenceTextField()
-    $('#batch_application_team_lead_attributes_reference').change toggleReferenceTextField
+    $('#batch_application_reference').change toggleReferenceTextField
+
+toggleCollegeTextField = ->
+  if $('#batch_application_college_id').val() == 'other'
+    collegeTextInput = $('#batch_application_college_text')
+    collegeTextInput.prop('disabled', false)
+    collegeTextInput.parent().parent().removeClass('hidden-xs-up')
+    $('#batch_application_college_id').parent().addClass('hidden-xs-up')
+    collegeTextInput.focus()
+
+setupTogglingCollegeField = ->
+  if $('#batch_application_college_id').length
+    toggleCollegeTextField()
+    $('#batch_application_college_id').change toggleCollegeTextField
 
 setupStickyStartApplicationForm = ->
   stickApplicationForm()
@@ -149,6 +162,8 @@ setupOldApplicationCertificateDownloadButtons = ->
     doc = buildApplicationCertificate(certificateBackground, teamMembers, codeScore, videoScore, result)
     doc.save('Certificate.pdf')
 
+$(document).on 'page:change', setupTogglingCollegeField
+$(document).on 'page:change', setupTogglingReferenceField
 $(document).on 'page:change', setupOldApplicationCertificateDownloadButtons
 $(document).on 'page:change', setupSelect2Inputs
 $(document).on 'page:change', emailsShouldMatch

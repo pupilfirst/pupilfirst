@@ -21,8 +21,8 @@ ActiveAdmin.register BatchApplicant do
 
   filter :batch_applications_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'With applications in batch'
   filter :phone
-  filter :gender, as: :select, collection: Founder.valid_gender_values
-  filter :college
+  filter :gender, as: :select, collection: proc { Founder.valid_gender_values }
+  filter :college_state_id_eq, label: 'State', as: :select, collection: proc { State.all }
   filter :created_at
 
   index do
@@ -31,11 +31,47 @@ ActiveAdmin.register BatchApplicant do
     column :name
     column :phone
     column :reference
-    column :college
 
-    column :location do |batch_applicant|
+    column :college do |batch_applicant|
+      if batch_applicant.college.present?
+        link_to batch_applicant.college.name, admin_college_path(batch_applicant.college)
+      elsif batch_applicant.college_text.present?
+        span "#{batch_applicant.college_text} "
+        span admin_create_college_link(batch_applicant.college_text)
+      elsif batch_applicant.college_text_old.present?
+        span "#{batch_applicant.college_text_old} "
+        span admin_create_college_link(batch_applicant.college_text_old)
+      else
+        content_tag :em, 'Unknown'
+      end
+    end
+
+    column :state do |batch_applicant|
       application = batch_applicant.batch_applications.last
-      application.state || application.university.location if application.present?
+
+      if batch_applicant.college.present?
+        if batch_applicant.college.state.present?
+          link_to batch_applicant.college.state.name, admin_state_path(batch_applicant.college.state)
+        else
+          content_tag :em, 'College without state'
+        end
+      elsif batch_applicant.college_text.present?
+        content_tag :em, 'No linked college'
+      elsif application&.state.present?
+        span "#{application.state} "
+
+        span do
+          content_tag :em, '(Old data)'
+        end
+      elsif application&.university.present?
+        span "#{application.university.location} "
+
+        span do
+          content_tag :em, '(Old data)'
+        end
+      else
+        content_tag :em, 'Unknown - Please fix'
+      end
     end
 
     column :notes
@@ -72,6 +108,8 @@ ActiveAdmin.register BatchApplicant do
       row :name
       row :phone
       row :college
+      row :college_text
+      row :college_text_old
 
       row :tags do |batch_applicant|
         linked_tags(batch_applicant.tags)
@@ -152,6 +190,7 @@ ActiveAdmin.register BatchApplicant do
       f.input :gender, as: :select, collection: Founder.valid_gender_values
       f.input :phone
       f.input :college
+      f.input :college_text
       f.input :role, as: :select, collection: Founder.valid_roles
       f.input :reference
       f.input :notes

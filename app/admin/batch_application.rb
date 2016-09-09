@@ -30,10 +30,11 @@ ActiveAdmin.register BatchApplication do
     label: 'Tags',
     collection: -> { BatchApplication.tag_counts_on(:tags).pluck(:name).sort }
 
-  filter :team_lead_name_eq, label: "Team Lead Name"
+  filter :team_lead_name_eq, label: 'Team Lead Name'
   filter :university
   filter :college
-  filter :university_location, as: :select, collection: proc { University.all.pluck(:location).uniq }
+  filter :team_lead_college_state_id_eq, label: 'State', as: :select, collection: proc { State.all }
+  filter :university_location, label: 'University location (Deprecated)', as: :select, collection: proc { University.all.pluck(:location).uniq }
   filter :state, label: 'State (Deprecated)'
   filter :created_at
 
@@ -68,12 +69,43 @@ ActiveAdmin.register BatchApplication do
       link_to "##{stage.number} #{stage.name}", admin_application_stage_path(stage)
     end
 
-    column 'College, University' do |batch_application|
-      "#{batch_application&.college}, #{batch_application&.university&.name}"
+    column 'College' do |batch_application|
+      team_lead = batch_application.team_lead
+
+      if team_lead&.college.present?
+        link_to team_lead.college.name, admin_college_path(team_lead.college)
+      elsif team_lead&.college_text.present?
+        span "#{team_lead.college_text} "
+        span admin_create_college_link(team_lead.college_text)
+      elsif batch_application.college.present?
+        span "#{batch_application&.college}, #{batch_application&.university&.name} "
+
+        span do
+          content_tag :em, '(Deprecated)'
+        end
+      else
+        content_tag :em, 'Missing'
+      end
     end
 
     column :state do |application|
-      application.university&.location || application.state
+      if application.team_lead&.college.present?
+        link_to application.team_lead.college.state.name, admin_state_path(application.team_lead.college.state)
+      elsif application&.state.present?
+        span "#{application.state} "
+
+        span do
+          content_tag :em, '(Old data)'
+        end
+      elsif application&.university.present?
+        span "#{application.university.location} "
+
+        span do
+          content_tag :em, '(Old data)'
+        end
+      else
+        content_tag :em, 'Unknown'
+      end
     end
 
     # column :score
@@ -256,9 +288,6 @@ ActiveAdmin.register BatchApplication do
       f.input :team_size, as: :select, collection: 2..10, include_blank: false
       f.input :application_stage, collection: ApplicationStage.all.order(number: 'ASC')
       f.input :tag_list, input_html: { value: f.object.tag_list.join(','), 'data-tags' => BatchApplication.tag_counts_on(:tags).pluck(:name).to_json }
-      f.input :university
-      f.input :college
-      f.input :state
       f.input :team_achievement
     end
 

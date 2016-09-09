@@ -18,20 +18,20 @@ class BatchApplicationController < ApplicationController
 
   # GET /apply
   def index
-    @presenter = ApplicationIndexPresenter.new(current_batch_applicant)
+    applicant = current_batch_applicant || BatchApplicant.new
+    @presenter = ApplicationIndexPresenter.new(applicant)
   end
 
   # POST /apply/register
   def register
-    batch_application = BatchApplication.new
-    batch_application.team_lead = BatchApplicant.new
-    @form = BatchApplicationForm.new(batch_application)
+    @presenter = ApplicationIndexPresenter.new(BatchApplicant.new)
+    form = @presenter.batch_application_form
 
-    if @form.validate(params[:batch_application])
+    if form.validate(params[:batch_application])
       begin
-        applicant = @form.save
+        applicant = form.save
       rescue Postmark::InvalidMessageError
-        @form.errors[:base] << "Our email delivery service refused to accept the supplied address. Please ensure that it is a valid email address. If you're still having issues, please contact us using live chat or at help@sv.co"
+        form.errors[:base] << "Our email delivery service refused to accept the supplied address. Please ensure that it is a valid email address. If you're still having issues, please contact us using live chat or at help@sv.co"
         render 'index'
         return
       end

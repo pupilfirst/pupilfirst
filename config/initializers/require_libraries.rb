@@ -5,9 +5,3 @@ require_relative '../../lib/week_of_month'
 require_relative '../../lib/instamojo'
 require_relative '../../lib/instagram'
 require_all 'lib/intercom'
-
-# Services
-require_all 'app/services'
-
-# Presenters
-require_all 'app/presenters'

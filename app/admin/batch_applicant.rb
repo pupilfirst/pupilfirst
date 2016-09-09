@@ -3,7 +3,7 @@ ActiveAdmin.register BatchApplicant do
 
   menu parent: 'Admissions', label: 'Applicants'
 
-  permit_params :batch_application_id, :name, :gender, :email, :phone, :role, :team_lead, :tag_list, :reference, :college, :notes
+  permit_params :batch_application_id, :name, :gender, :email, :phone, :role, :team_lead, :tag_list, :reference, :college_id, :notes
 
   scope :all, default: true
   scope :submitted_application
@@ -38,9 +38,6 @@ ActiveAdmin.register BatchApplicant do
       elsif batch_applicant.college_text.present?
         span "#{batch_applicant.college_text} "
         span admin_create_college_link(batch_applicant.college_text)
-      elsif batch_applicant.college_text_old.present?
-        span "#{batch_applicant.college_text_old} "
-        span admin_create_college_link(batch_applicant.college_text_old)
       else
         content_tag :em, 'Unknown'
       end
@@ -109,7 +106,6 @@ ActiveAdmin.register BatchApplicant do
       row :phone
       row :college
       row :college_text
-      row :college_text_old
 
       row :tags do |batch_applicant|
         linked_tags(batch_applicant.tags)
@@ -189,8 +185,8 @@ ActiveAdmin.register BatchApplicant do
       f.input :tag_list, input_html: { value: f.object.tag_list.join(','), 'data-tags' => BatchApplicant.tag_counts_on(:tags).pluck(:name).to_json }
       f.input :gender, as: :select, collection: Founder.valid_gender_values
       f.input :phone
-      f.input :college
-      f.input :college_text
+      f.input :college_id, input_html: { 'data-search-url' => colleges_url }
+      f.input :college_text, label: 'College as text'
       f.input :role, as: :select, collection: Founder.valid_roles
       f.input :reference
       f.input :notes

@@ -77,8 +77,8 @@ ActiveAdmin.register BatchApplication do
       elsif team_lead&.college_text.present?
         span "#{team_lead.college_text} "
         span admin_create_college_link(team_lead.college_text)
-      elsif batch_application.college.present?
-        span "#{batch_application&.college}, #{batch_application&.university&.name} "
+      elsif batch_application.college_text.present?
+        span "#{batch_application.college_text} "
 
         span do
           content_tag :em, '(Deprecated)'
@@ -247,13 +247,17 @@ ActiveAdmin.register BatchApplication do
       end
 
       row :application_stage
-      row :university
+      row :college
 
-      row :state do |batch_application|
-        batch_application.university&.location || application.state
+      row 'University (Deprecated)' do |batch_application|
+        if batch_application.university.present?
+          link_to batch_application.university.name, admin_university_path(batch_application.university)
+        end
       end
 
-      row :college
+      row 'State (Deprecated)' do |batch_application|
+        batch_application.university&.location || batch_application.state
+      end
     end
 
     panel 'Technical details' do

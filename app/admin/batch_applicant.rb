@@ -3,7 +3,7 @@ ActiveAdmin.register BatchApplicant do
 
   menu parent: 'Admissions', label: 'Applicants'
 
-  permit_params :batch_application_id, :name, :gender, :email, :phone, :role, :team_lead, :tag_list, :reference, :college, :notes
+  permit_params :batch_application_id, :name, :gender, :email, :phone, :role, :team_lead, :tag_list, :reference, :college_id, :notes
 
   scope :all, default: true
   scope :submitted_application

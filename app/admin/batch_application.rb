@@ -77,8 +77,8 @@ ActiveAdmin.register BatchApplication do
       elsif team_lead&.college_text.present?
         span "#{team_lead.college_text} "
         span admin_create_college_link(team_lead.college_text)
-      elsif batch_application.college.present?
-        span "#{batch_application&.college}, #{batch_application&.university&.name} "
+      elsif batch_application.college_text.present?
+        span "#{batch_application.college_text} "
 
         span do
           content_tag :em, '(Deprecated)'

@@ -9,7 +9,7 @@
         ' Total Applications: #{total_applications_count}&nbsp;&nbsp;
         ' Total Applicants: #{total_applicants_count}&nbsp;&nbsp;
         ' Total Universities: #{total_universities_count}&nbsp;&nbsp;
-        ' Total States: #{total_location_count - 1}(*includes territories)
+        ' Total States: #{total_location_count - 1}
         br
         ' Unique Website Visits: #{unique_visits_count} (from August 1)
 
@@ -17,23 +17,23 @@
         ' Payment Completed: #{payment_completed_count} (+#{payment_completed_delta})
         br
         - BatchApplication.selected_states.each do |state|
-          ' #{state}:#{payment_completed_count_for(state)} (+#{payment_completed_delta_for(state)})&nbsp;
-        ' Others:#{payment_completed_count_for_others} (+#{payment_completed_delta_for_others})
+          ' #{state.name}: #{payment_completed_count_for(state)} (+#{payment_completed_delta_for(state)})&nbsp;
+        ' Others: #{payment_completed_count_for_others} (+#{payment_completed_delta_for_others})
       li
         ' Payment Initiated: #{payment_initiated_count} (+#{payment_initiated_delta})
         br
         - BatchApplication.selected_states.each do |state|
-          ' #{state}:#{payment_initiated_count_for(state)} (+#{payment_initiated_delta_for(state)})&nbsp;
-        ' Others:#{payment_initiated_count_for_others} (+#{payment_initiated_delta_for_others})
+          ' #{state.name}: #{payment_initiated_count_for(state)} (+#{payment_initiated_delta_for(state)})&nbsp;
+        ' Others: #{payment_initiated_count_for_others} (+#{payment_initiated_delta_for_others})
       li
         ' Submitted Application: #{submitted_application_count} (+#{submitted_application_delta})
         br
         - BatchApplication.selected_states.each do |state|
-          ' #{state}:#{submitted_application_count_for(state)} (+#{submitted_application_delta_for(state)})&nbsp;
-        ' Others:#{submitted_application_count_for_others} (+#{submitted_application_delta_for_others})
+          ' #{state.name}: #{submitted_application_count_for(state)} (+#{submitted_application_delta_for(state)})&nbsp;
+        ' Others: #{submitted_application_count_for_others} (+#{submitted_application_delta_for_others})
       li
         ' Conversion % (Paid/Total Submissions)
         br
         - BatchApplication.selected_states.each do |state|
-          ' #{state}:#{"%g" % ("%0.1f" % conversion_percentage_for(state))}%&nbsp;&nbsp;
-        ' Others:#{"%g" % ("%0.1f" % conversion_percentage_for_others)}%
+          ' #{state.name}: #{'%g' % ('%0.1f' % conversion_percentage_for(state))}%&nbsp;&nbsp;
+        ' Others: #{'%g' % ('%0.1f' % conversion_percentage_for_others)}%

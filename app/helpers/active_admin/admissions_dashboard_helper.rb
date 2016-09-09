@@ -10,7 +10,8 @@ module ActiveAdmin
     end
 
     def paid_applications_by_location
-      BatchApplication.where(batch_id: selected_batch_ids).payment_complete.joins(:university).group('universities.location').count.to_json
+      result = BatchApplication.joins(:college).select('colleges.state_id').where(batch_id: selected_batch_ids).payment_complete.group('colleges.state_id').count
+      result.map { |state_id, count| [State.find(state_id).name, count] }.to_h.to_json
     end
 
     def paid_applications_by_date
@@ -103,11 +104,13 @@ module ActiveAdmin
     end
 
     def total_universities_count
-      University.joins(:batch_applications).where(batch_applications: { batch: selected_batch_ids }).uniq.count
+      # University.joins(:batch_applications).where(batch_applications: { batch: selected_batch_ids }).uniq.count
+      ReplacementUniversity.joins(:batch_applications).where(batch_applications: { batch: selected_batch_ids }).distinct.count
     end
 
     def total_location_count
-      University.joins(:batch_applications).where(batch_applications: { batch: selected_batch_ids }).group(:location).count.count
+      # University.joins(:batch_applications).where(batch_applications: { batch: selected_batch_ids }).group(:location).count.count
+      State.joins(:batch_applications).where(batch_applications: { batch: selected_batch_ids }).distinct.count
     end
 
     def unique_visits_count

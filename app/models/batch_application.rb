@@ -7,6 +7,7 @@ class BatchApplication < ActiveRecord::Base
   belongs_to :application_stage
   has_many :application_submissions, dependent: :destroy
   has_and_belongs_to_many :batch_applicants
+  has_one :college, through: :team_lead
   belongs_to :team_lead, class_name: 'BatchApplicant'
   belongs_to :university
   has_one :payment, dependent: :restrict_with_error
@@ -26,8 +27,10 @@ class BatchApplication < ActiveRecord::Base
   scope :paid_today, -> { payment_complete.where('payments.paid_at > ?', Time.now.in_time_zone('Asia/Kolkata').beginning_of_day) }
   scope :payment_initiated_today, -> { payment_initiated.where('payments.created_at > ?', Time.now.in_time_zone('Asia/Kolkata').beginning_of_day) }
 
-  scope :from_state, -> (state) { joins(:university).where('universities.location': state) }
-  scope :from_other_states, -> { joins(:university).where.not('universities.location': BatchApplication.selected_states) }
+  # scope :from_state, -> (state) { joins(:university).where('universities.location': state) }
+  # scope :from_other_states, -> { joins(:university).where.not('universities.location': BatchApplication.selected_states) }
+  scope :from_state, -> (state) { joins(:college).where(colleges: { state_id: state.id }) }
+  scope :from_other_states, -> { joins(:college).where.not(colleges: { state_id: BatchApplication.selected_states.pluck(:id) }) }
 
   validates :batch_id, presence: true
   validates :application_stage_id, presence: true
@@ -174,6 +177,7 @@ class BatchApplication < ActiveRecord::Base
       raise "BatchApplication ##{id} is in an unexpected state. Please investigate."
     end
   end
+
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   # Creates a duplicate (pristine, unpaid) of this application into given batch.
@@ -211,6 +215,6 @@ class BatchApplication < ActiveRecord::Base
   end
 
   def self.selected_states
-    ['Kerala', 'Andhra Pradesh', 'Telangana', 'Tamil Nadu', 'Gujarat']
+    State.where name: ['Kerala', 'Andhra Pradesh', 'Telangana', 'Tamil Nadu', 'Gujarat']
   end
 end

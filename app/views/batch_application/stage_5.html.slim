@@ -15,9 +15,9 @@
           - current_batch.selected_applications.each do |application|
             tr
               td #{application.team_lead.name}
-              td #{application.college}
-              td #{application.university.name}
-              td #{application.state}
+              td #{application.team_lead.college.name}
+              td #{application.team_lead.college.replacement_university.name}
+              td #{application.team_lead.state.name}
 - else
   .panel.panel-warning
     .panel-heading Wait for the results!

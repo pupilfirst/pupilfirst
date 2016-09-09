@@ -255,6 +255,10 @@ p {
     margin: 0 auto 15px;
     display: block;
 
+    &.startincollege-initiative-icon {
+      background-image: asset-url("apply/startincollege-initiative-icon.svg");
+      height: 75px;
+    }
     &.graduated-icon {
       background-image: asset-url("apply/graduated-icon.svg");
       height: 75px;
@@ -277,6 +281,10 @@ p {
     }
     &.winner-icon {
       background-image: asset-url("apply/first-batch-graduation.svg");
+      height: 75px;
+    }
+    &.campaign-images-icon {
+      background-image: asset-url("apply/startincollege-campaign-icon.svg");
       height: 75px;
     }
   }

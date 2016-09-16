@@ -9,25 +9,21 @@ class BatchApplicationDecorator < Draper::Decorator
     batch_applicants.pluck(:name).sort
   end
 
-  # Returns the score given for the code submission
-  def coding_task_score
-    score_from_database = ApplicationSubmissionUrl.joins(:application_submission).where(
-      application_submissions: { batch_application_id: id }
-    ).find_by(name: 'Code Submission')&.score
-
-    score_from_database || 'Not Available'
-  end
-
-  # Returns the score given for the video submission
-  def video_task_score
-    score_from_database = ApplicationSubmissionUrl.joins(:application_submission).where(
-      application_submissions: { batch_application_id: id }
-    ).find_by(name: 'Video Submission')&.score
-
-    score_from_database || 'Not Available'
-  end
-
   def preliminary_result
     application_stage.number > 2 ? 'Selected' : 'Not Selected'
+  end
+
+  def percentile_code_score
+    grade[:code] || 'Not Available'
+  end
+
+  def percentile_video_score
+    grade[:video] || 'Not Available'
+  end
+
+  private
+
+  def grade
+    @grade ||= BatchApplicationGradingService.grade(model)
   end
 end

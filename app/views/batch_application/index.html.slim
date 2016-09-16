@@ -31,7 +31,7 @@
                   th Results
               tbody
                 - @presenter.old_applications.each do |old_application|
-                  tr.application-certificate-data data-team-members=old_application.team_member_names data-code-score=old_application.coding_task_score data-video-score=old_application.video_task_score data-result=old_application.preliminary_result
+                  tr.application-certificate-data data-team-members=old_application.team_member_names data-code-score=old_application.percentile_code_score data-video-score=old_application.percentile_video_score data-result=old_application.preliminary_result
                     td = old_application.batch.batch_number
                     td #{old_application.status.to_s.capitalize} at stage #{old_application.application_stage.number}
                     td

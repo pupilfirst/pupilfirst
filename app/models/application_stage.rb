@@ -25,4 +25,8 @@ class ApplicationStage < ActiveRecord::Base
   def self.final_stage
     find_by(final_stage: true)
   end
+
+  def self.testing_stage
+    find_by number: 2
+  end
 end

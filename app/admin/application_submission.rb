@@ -54,7 +54,7 @@ ActiveAdmin.register ApplicationSubmission do
                 link_to entry.name, entry.url
               end
 
-              span(" (#{entry.score})") if entry.score.present?
+              span(" (#{entry.score} - #{entry.admin_user&.fullname})") if entry.score.present?
             end
           end
         end
@@ -101,7 +101,7 @@ ActiveAdmin.register ApplicationSubmission do
                   span { link_to entry.url, entry.url }
                 end
 
-                span " (#{entry.score})" if entry.score.present?
+                span(" (#{entry.score} - #{entry.admin_user&.fullname})") if entry.score.present?
               end
             end
           end

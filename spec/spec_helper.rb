@@ -43,12 +43,9 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
-  # These two settings work together to allow you to limit a spec run
-  # to individual examples or groups you care about by tagging them with
-  # `:focus` metadata. When nothing is tagged with `:focus`, all examples
-  # get run.
-  config.filter_run :focus
-  config.run_all_when_everything_filtered = true
+  # With this configuration, the :focus filtering will only apply if any
+  # examples or groups are tagged with :focus.
+  config.filter_run_when_matching :focus
 
   # Exclude a bunch of specs with custom tag.
   config.filter_run_excluding disabled: true

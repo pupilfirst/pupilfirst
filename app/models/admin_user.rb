@@ -11,6 +11,9 @@ class AdminUser < ActiveRecord::Base
 
   belongs_to :faculty
 
+  # Scores submissions
+  has_many :application_submission_urls
+
   mount_uploader :avatar, AvatarUploader
   process_in_background :avatar
   normalize_attribute :password, :password_confirmation, :fullname, :avatar

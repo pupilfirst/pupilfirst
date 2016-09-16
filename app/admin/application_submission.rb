@@ -4,7 +4,7 @@ ActiveAdmin.register ApplicationSubmission do
   menu parent: 'Admissions'
 
   permit_params :application_stage_id, :batch_application_id, :score, :notes, :file,
-    application_submission_urls_attributes: [:id, :name, :url, :score, :_destroy]
+    application_submission_urls_attributes: [:id, :name, :url, :score, :admin_user_id, :_destroy]
 
   filter :batch_application_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'Batch'
   filter :batch_application
@@ -142,6 +142,7 @@ ActiveAdmin.register ApplicationSubmission do
         t.input :name
         t.input :url
         t.input :score
+        t.input :admin_user, label: 'Scored by'
       end
     end
 

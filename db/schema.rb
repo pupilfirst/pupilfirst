@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160909113616) do
+ActiveRecord::Schema.define(version: 20160916081213) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,8 +95,10 @@ ActiveRecord::Schema.define(version: 20160909113616) do
     t.integer  "application_submission_id"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+    t.integer  "admin_user_id"
   end
 
+  add_index "application_submission_urls", ["admin_user_id"], name: "index_application_submission_urls_on_admin_user_id", using: :btree
   add_index "application_submission_urls", ["application_submission_id"], name: "index_application_submission_urls_on_application_submission_id", using: :btree
 
   create_table "application_submissions", force: :cascade do |t|

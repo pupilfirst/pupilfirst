@@ -65,6 +65,11 @@ end
 
 # Use poltergeist as JS driver.
 require 'capybara/poltergeist'
+
+Capybara.register_driver :poltergeist do |app|
+  Capybara::Poltergeist::Driver.new(app, timeout: 60)
+end
+
 Capybara.javascript_driver = :poltergeist
 
 # Increase Capybara's default maximum wait time to 5 seconds to allow for some slow responds (timeline builder).

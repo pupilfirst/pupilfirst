@@ -43,7 +43,8 @@ gem 'bootstrap-sass', '~> 3.3.3' # Official Sass port of Bootstrap.
 gem 'autoprefixer-rails' # Autoprefixer for Ruby and Ruby on Rails.
 gem 'simple_form', '~> 3.1.1' # Simple-form with support for Bootstrap 3.
 gem 'simple_form_fancy_uploads' # simple_form custom inputs to get image/link previews with file uploads. https://github.com/apeacox/simple_form_fancy_uploads
-gem 'valid_url' # New url validataion gem
+# TODO: The zones list in the gem was outdated. Have updated and submitted a PR (https://github.com/ralovets/valid_url/pull/10). Using a personal fork until its merged
+gem 'valid_url', github: 'ajaleelp/valid_url', branch: 'patch-1' # New url validataion gem
 gem 'logstash-logger' # A better logger.
 
 # Used for picking date and time fields in a few places.

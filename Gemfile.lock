@@ -1,4 +1,13 @@
 GIT
+  remote: git://github.com/ajaleelp/valid_url.git
+  revision: 7548e04df02e6281ef0b00f9d0db73a85a8de594
+  branch: patch-1
+  specs:
+    valid_url (0.0.4)
+      addressable
+      rails
+
+GIT
   remote: git://github.com/derekprior/momentjs-rails.git
   revision: 85334f46df85cccb4c8fbaf07f0757f57801b9a9
   specs:
@@ -735,9 +744,6 @@ GEM
       rack
     user_agent_parser (2.3.0)
     uuidtools (2.1.5)
-    valid_url (0.0.4)
-      addressable
-      rails
     videojs_rails (4.12.14)
     virtus (1.0.5)
       axiom-types (~> 0.1)
@@ -865,7 +871,7 @@ DEPENDENCIES
   turbolinks
   uglifier (>= 2.7.2)
   unobtrusive_flash!
-  valid_url
+  valid_url!
   videojs_rails
   virtus
   web-console

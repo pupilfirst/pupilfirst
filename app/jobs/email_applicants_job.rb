@@ -49,7 +49,7 @@ class EmailApplicantsJob < ActiveJob::Base
       BatchApplicantMailer.application_rejection(
         @batch,
         @latest_stage,
-        application.team_lead
+        application
       ).deliver_later
     end
   end

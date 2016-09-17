@@ -1,9 +1,21 @@
 = content_for :heading
-  | Your application to SV.CO has not been selected to the next stage!
+  | We're sorry! You didn't make it into Batch ##{@batch.batch_number}.
 
 = content_for :salutation
   | Hello,
 
 = content_for :body
   p
-    ' <Add Content for body>
+    ' After evaluation, your team's coding and video submissions for Batch #{@batch.batch_number} scored
+    ' #{@batch_application.overall_percentile} percentile. Because of great submissions by other applicants, our
+    | percentile cutoff for this batch was 80%.
+
+  p
+    ' We're sorry! You didn't make it into Batch #{@batch.batch_number}. Just a note: please don't be disappointed. A
+    | lot of folks make it into Startup Village only on their second or third try, so do apply again!
+
+  p
+    ' If you think there's we've made a mistake in our evaluation, feel free to contact us at #{mail_to 'help@sv.co'},
+    | and we'll get back to you as soon as we can.
+
+  p Login at #{link_to 'www.sv.co/apply', apply_url} to download your score certificate.

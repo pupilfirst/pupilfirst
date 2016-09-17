@@ -10,6 +10,13 @@ class BatchApplicantMailerPreview < ActionMailer::Preview
     BatchApplicantMailer.application_progress(batch, team_lead)
   end
 
+  def application_rejection
+    application = BatchApplication.first
+    batch = application.batch
+    stage = ApplicationStage.testing_stage
+    BatchApplicantMailer.application_rejection(batch, stage, application)
+  end
+
   def swept
     application = BatchApplication.first
     team_lead = application.team_lead

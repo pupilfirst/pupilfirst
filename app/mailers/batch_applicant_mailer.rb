@@ -11,10 +11,10 @@ class BatchApplicantMailer < ApplicationMailer
     mail(to: team_lead.email, subject: 'Your application to SV.CO has moved to the next stage!')
   end
 
-  def application_rejection(batch, stage, team_lead)
+  def application_rejection(batch, _stage, batch_application)
     @batch = batch
-    @stage = stage
-    mail(to: team_lead.email, subject: 'Your application to SV.CO has not been selected to the next stage!')
+    @batch_application = batch_application.decorate
+    mail(to: batch_application.team_lead.email, subject: 'Your application to SV.CO has not been selected to the next stage!')
   end
 
   def swept(team_lead, batch)

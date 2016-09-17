@@ -21,9 +21,17 @@ class BatchApplicationDecorator < Draper::Decorator
     grade[:video] || 'Not Available'
   end
 
+  def overall_percentile
+    @overall_percentile ||= grading_service.overall_percentile
+  end
+
   private
 
+  def grading_service
+    BatchApplicationGradingService.new(model)
+  end
+
   def grade
-    @grade ||= BatchApplicationGradingService.grade(model)
+    @grade ||= grading_service.grade
   end
 end

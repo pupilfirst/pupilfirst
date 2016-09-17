@@ -27,6 +27,6 @@ class ApplicationStage < ActiveRecord::Base
   end
 
   def self.testing_stage
-    find_by number: 2
+    find_by(number: 2)
   end
 end

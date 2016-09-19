@@ -50,5 +50,21 @@ $(document).on 'page:change', ->
     placeholder : 'Select applications'
   )
 
+toggleCollegeFormFieldsIfRequired = ->
+  checkbox = $('#aa_batch_applicant_enable_create_college_checkbox')
+
+  if checkbox.length
+    collegeFormInputs = $("[name*='batch_applicant[college_attributes]']")
+
+    if checkbox.prop('checked')
+      collegeFormInputs.prop('disabled', false)
+    else
+      collegeFormInputs.prop('disabled', true)
+
+enableCreateCollegeFormOnRequest = ->
+  $('#aa_batch_applicant_enable_create_college_checkbox').click toggleCollegeFormFieldsIfRequired
+
+$(document).on 'page:change', toggleCollegeFormFieldsIfRequired
+$(document).on 'page:change', enableCreateCollegeFormOnRequest
 $(document).on 'page:change', setupSelect2ForBatchApplicantColleges
 $(document).on 'page:change', setupSelect2ForBatchApplicantTagList

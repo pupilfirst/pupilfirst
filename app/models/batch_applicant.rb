@@ -8,6 +8,8 @@ class BatchApplicant < ActiveRecord::Base
 
   attr_accessor :reference_text
 
+  accepts_nested_attributes_for :college
+
   # Applicants who have submitted application, but haven't clicked pay.
   scope :submitted_application, lambda {
     joins(:batch_applications).where('batch_applications.team_lead_id = batch_applicants.id')

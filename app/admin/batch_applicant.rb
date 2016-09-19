@@ -3,7 +3,9 @@ ActiveAdmin.register BatchApplicant do
 
   menu parent: 'Admissions', label: 'Applicants'
 
-  permit_params :batch_application_id, :name, :gender, :email, :phone, :role, :team_lead, :tag_list, :reference, :college_id, :notes
+  permit_params :batch_application_id, :name, :gender, :email, :phone, :role, :team_lead, :tag_list, :reference,
+    :college_id, :notes,
+    college_attributes: [:name, :also_known_as, :city, :state_id, :established_year, :website, :contact_numbers, :replacement_university_id]
 
   scope :all, default: true
   scope :submitted_application
@@ -190,6 +192,24 @@ ActiveAdmin.register BatchApplicant do
       f.input :role, as: :select, collection: Founder.valid_roles
       f.input :reference
       f.input :notes
+    end
+
+    if f.object.college.blank? || !f.object.college&.persisted?
+      div class: 'aa_batch_applicant_enable_create_college' do
+        span { check_box_tag 'aa_batch_applicant_enable_create_college_checkbox' }
+        span { label_tag 'aa_batch_applicant_enable_create_college_checkbox', 'Enable the form to create new college?' }
+      end
+
+      f.inputs 'Create missing college', for: [:college, College.new] do |cf|
+        cf.input :name
+        cf.input :also_known_as
+        cf.input :city
+        cf.input :state_id, as: :select, collection: State.all
+        cf.input :established_year
+        cf.input :website
+        cf.input :contact_numbers
+        cf.input :replacement_university_id, label: 'University', as: :select, collection: ReplacementUniversity.all
+      end
     end
 
     f.actions

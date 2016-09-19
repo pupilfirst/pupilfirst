@@ -1,3 +1,22 @@
+### 19 September, 2016
+
+#### Features
+
+  - Instead of asking University and College information separately, the application form now asks applicant to search for, and pick just the college from a list.
+
+#### Content
+
+  - Deadlines for applications to Batch 4 were updated.
+
+#### UX and UI
+
+  - Updated footer on all pages using the latest design language.
+
+#### Bugfixes
+
+  - The form accepting submissions for coding and video task was rejecting URLs with `.online`, and other newer TLD-s. This has been fixed.
+  - Fixed a visual bug with page header on older versions of Microsoft's Edge web browser.
+
 ### 5 September, 2016
 
 #### Features

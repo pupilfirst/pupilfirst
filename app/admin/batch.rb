@@ -10,6 +10,11 @@ ActiveAdmin.register Batch do
 
   config.sort_order = 'batch_number_asc'
 
+  filter :batch_number
+  filter :theme
+  filter :start_date
+  filter :end_date
+
   index do
     selectable_column
 

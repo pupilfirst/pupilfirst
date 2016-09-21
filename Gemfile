@@ -98,6 +98,7 @@ gem 'wicked_pdf', github: 'mileszs/wicked_pdf' # html to pdf converted - used to
 gem 'jspdf-rails' # HTML5 client-side pdf generation - for certificates
 
 gem 'draper' # Decorators/View-Models for Rails Applications
+gem 'skylight' # Skylight agent for Ruby https://www.skylight.io
 
 # Rails assets!
 source 'https://rails-assets.org' do

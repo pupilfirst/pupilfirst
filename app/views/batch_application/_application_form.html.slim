@@ -1,0 +1,55 @@
+= simple_form_for @presenter.batch_application_form,
+  url: apply_register_path,
+  wrapper: :vertical_form do |f|
+
+  - if f.object.errors.present?
+    .alert.alert-warning.alert-dismissable.fade.in role='alert'
+
+      strong There were problems with your submission.
+      | &nbsp;Please check all fields and try again.
+
+      - if f.object.errors[:base].present?
+        ul.m-t-1
+          - f.object.errors[:base].each do |error_message|
+            li #{error_message}
+
+  .application-start-form.content-box.m-b-2
+    h4.form-section-title.m-b-1
+      | Apply Now
+    .simple-form-container
+      = f.input :name, label: false, placeholder: 'Full Name of Team Lead', input_html: { maxlength: 250 }
+
+      = f.input :email, label: false, placeholder: 'Team Leads Email Address',
+        input_html: { maxlength: 250, type: 'email' }
+
+      = f.input :email_confirmation, label: false, placeholder: 'Please repeat your Email Address',
+        input_html: { maxlength: 250, type: 'email' }
+
+      = f.input :phone, label: false, placeholder: '10-digit mobile phone number',
+        input_html: { maxlength: 10, type: 'tel', pattern: '[0-9]{10}' }
+
+      = f.input :reference, label: false,
+        collection: proc { BatchApplicant.reference_sources },
+        required: false,
+        include_blank: 'How did you hear about us?'
+
+      .hidden-xs-up
+        = f.input :reference_text, label: false, placeholder: 'How did you hear about us?', required: false
+
+      // TODO: College is actually a required field, but select2 v3 does not play nice with HTML5 validations. Try enabling this when upgrading to select2 v4.
+      = f.input :college_id,
+        type: :hidden,
+        label: false,
+        placeholder: 'Please pick your college',
+        input_html: { value: nil, 'data-search-url' => colleges_url },
+        required: false
+
+      .hidden-xs-up
+        = f.input :college_text,
+          label: false,
+          placeholder: 'Name of your college',
+          required: true,
+          input_html: { maxlength: 250, disabled: true }
+
+      div
+        = f.submit 'Submit my application', class: 'btn btn-primary btn-md text-uppercase'

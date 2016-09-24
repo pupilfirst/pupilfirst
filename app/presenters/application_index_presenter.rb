@@ -16,4 +16,8 @@ class ApplicationIndexPresenter
 
     applications.map { |application| BatchApplicationDecorator.decorate(application) }
   end
+
+  def applications_open?
+    Batch.open_for_applications.any?
+  end
 end

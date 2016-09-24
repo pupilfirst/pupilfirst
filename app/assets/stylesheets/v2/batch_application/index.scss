@@ -586,3 +586,17 @@
     }
   }
 }
+.application-closed-icon {
+  max-width: 225px;
+}
+.application-open-text {
+  p {
+    font-size: 1rem;
+    font-weight: $font-light;
+
+    span {
+      font-size: 1.125rem;
+      font-weight: $font-regular;
+    }
+  }
+}

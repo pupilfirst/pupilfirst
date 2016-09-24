@@ -1,0 +1,23 @@
+/ = simple_form_for @presenter.batch_application_form,
+/   url: apply_register_path,
+/   wrapper: :vertical_form do |f|
+
+.application-start-form.content-box.m-b-2
+  h4.form-section-title.m-b-1
+    | New Batch Opening Soon!
+  .application-closed-icon.m-x-auto
+    = image_tag 'apply/batch_application/batch-closed.svg'
+  .application-open-text
+    p.font-regular.m-y-1
+      span
+        ' New batch
+      ' is expected to
+      br
+      ' open on
+      span.font-semibold.brand-secondary
+        | 01 Feb 2017
+  / .simple-form-container
+  /   = f.input :email, label: false, placeholder: 'Your Email Address',
+  /     input_html: { maxlength: 250, type: 'email' }
+  /   div
+  /     = f.submit 'Notify Me', class: 'btn btn-primary btn-md text-uppercase'

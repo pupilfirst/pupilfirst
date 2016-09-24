@@ -32,13 +32,7 @@ class BatchApplicant < ActiveRecord::Base
 
   # Basic validations.
   validates :email, presence: true, uniqueness: true, email: true
-
-  validate :phone_must_look_right
-
-  def phone_must_look_right
-    return if phone.blank?
-    errors[:phone] << 'must be a 10-digit mobile phone number' unless phone =~ /^[0-9]{10}$/
-  end
+  validates :phone, indian_mobile_number: true
 
   has_secure_token
 

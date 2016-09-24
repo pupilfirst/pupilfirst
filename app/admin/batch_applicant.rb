@@ -173,7 +173,12 @@ ActiveAdmin.register BatchApplicant do
       end
     end
 
-    column :college
+    column :college do |batch_applicant|
+      college = batch_applicant.college
+      college.name if college.present?
+    end
+
+    column :college_text
     column :created_at
   end
 

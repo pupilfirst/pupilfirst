@@ -20,4 +20,8 @@ class ApplicationIndexPresenter
   def applications_open?
     Batch.open_for_applications.any?
   end
+
+  def next_batch_number
+    @next_batch_number ||= Batch.order('created_at DESC').first.batch_number + 1
+  end
 end

@@ -192,14 +192,23 @@ ActiveAdmin.register BatchApplication do
       team_lead.role if team_lead.present?
     end
 
-    column :college
+    column :college do |batch_application|
+      team_lead = batch_application.team_lead
+      team_lead.college.name if team_lead&.college.present?
+    end
 
-    column :university do |batch_application|
-      batch_application.university.name
+    column :college_text do |batch_application|
+      team_lead = batch_application.team_lead
+
+      if team_lead&.college_text.present?
+        team_lead.college_text
+      elsif batch_application.college_text.present?
+        batch_application.college_text
+      end
     end
 
     column :state do |batch_application|
-      batch_application.university&.location || application.state
+      batch_application.college&.state&.name || batch_application.state
     end
 
     column :team_size

@@ -31,21 +31,8 @@ class BatchApplicant < ActiveRecord::Base
   scope :for_batch_id_in, -> (ids) { joins(:batch_applications).where(batch_applications: { batch_id: ids }) }
 
   # Basic validations.
-  validates :email, presence: true, uniqueness: true
-
-  # Custom validations.
-  validate :email_must_look_right
-
-  def email_must_look_right
-    errors[:email] << "doesn't look like an email" unless email =~ /\S+@\S+/
-  end
-
-  validate :phone_must_look_right
-
-  def phone_must_look_right
-    return if phone.blank?
-    errors[:phone] << 'must be a 10-digit mobile phone number' unless phone =~ /^[0-9]{10}$/
-  end
+  validates :email, presence: true, uniqueness: true, email: true
+  validates :phone, indian_mobile_number: true
 
   has_secure_token
 

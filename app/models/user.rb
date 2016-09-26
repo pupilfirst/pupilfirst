@@ -13,5 +13,5 @@ class User < ActiveRecord::Base
     UserSessionMailer.send_login_token(self, referer).deliver_now
   end
 
-  validates :email, presence: true, uniqueness: true, format: { with: /@/, message: 'does not look like a valid address' }
+  validates :email, presence: true, uniqueness: true, email: true
 end

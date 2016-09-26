@@ -409,9 +409,9 @@
     .col-lg-4.col-md-12#start-application-process
       .m-t-2
         - if @presenter.applications_open?
-          == render "applications_form"
+          == render 'application_form'
         - else
-          == render "interested_applicants_form"
+          == render 'interested_applicants_form'
 
 a#sticky-start-application.btn.btn-primary.btn-md.text-uppercase.sticky-application-button.hidden-md-up href="#start-application-process"
   | Start Application

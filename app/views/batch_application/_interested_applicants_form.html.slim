@@ -1,23 +1,42 @@
 .application-start-form.content-box.m-b-2
-  h4.form-section-title.m-b-1
-    | Currently not accepting applications
   .application-closed-icon.m-x-auto
     = image_tag 'apply/batch_application/batch-closed.svg'
   .application-open-text
     p.font-regular.m-y-1
       span.bigger-text
         ' Admissions to Batch ##{@presenter.next_batch_number}
-      ' is
+      ' is expected to
       br
-      ' expected to start on
+      ' start on
       span.font-semibold.brand-secondary.bigger-text
         | Feb 1, 2017
 
-  /= simple_form_for @presenter.batch_application_form,
-  /  url: apply_register_path,
-  /  wrapper: :vertical_form do |f|
-  /  .simple-form-container
-  /    = f.input :email, label: false, placeholder: 'Your Email Address',
-  /      input_html: { maxlength: 250, type: 'email' }
-  /    div
-  /      = f.submit 'Notify Me', class: 'btn btn-primary btn-md text-uppercase'
+  = simple_form_for @presenter.batch_application_form,
+    url: apply_register_path,
+    wrapper: :vertical_form do |f|
+    .simple-form-container
+      = f.input :name, label: false, placeholder: 'Your Name', input_html: { maxlength: 250 }
+
+      = f.input :email, label: false, placeholder: 'Email Address',
+        input_html: { maxlength: 250, type: 'email' }
+
+      = f.input :phone, label: false, placeholder: '10-digit mobile phone number',
+        input_html: { maxlength: 10, type: 'tel', pattern: '[0-9]{10}' }
+
+      // TODO: College is actually a required field, but select2 v3 does not play nice with HTML5 validations. Try enabling this when upgrading to select2 v4.
+      = f.input :college_id,
+        type: :hidden,
+        label: false,
+        placeholder: 'Please pick your college',
+        input_html: { value: nil, 'data-search-url' => colleges_url },
+        required: false
+
+      .hidden-xs-up
+        = f.input :college_text,
+          label: false,
+          placeholder: 'Name of your college',
+          required: true,
+          input_html: { maxlength: 250, disabled: true }
+
+      div
+        = f.submit 'Notify Me', class: 'btn btn-primary btn-md text-uppercase'

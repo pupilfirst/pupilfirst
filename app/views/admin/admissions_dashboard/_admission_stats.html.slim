@@ -16,24 +16,24 @@
       li
         ' Payment Completed: #{payment_completed_count} (+#{payment_completed_delta})
         br
-        - BatchApplication.selected_states.each do |state|
+        - State.focused_for_admissions.each do |state|
           ' #{state.name}: #{payment_completed_count_for(state)} (+#{payment_completed_delta_for(state)})&nbsp;
         ' Others: #{payment_completed_count_for_others} (+#{payment_completed_delta_for_others})
       li
         ' Payment Initiated: #{payment_initiated_count} (+#{payment_initiated_delta})
         br
-        - BatchApplication.selected_states.each do |state|
+        - State.focused_for_admissions.each do |state|
           ' #{state.name}: #{payment_initiated_count_for(state)} (+#{payment_initiated_delta_for(state)})&nbsp;
         ' Others: #{payment_initiated_count_for_others} (+#{payment_initiated_delta_for_others})
       li
         ' Submitted Application: #{submitted_application_count} (+#{submitted_application_delta})
         br
-        - BatchApplication.selected_states.each do |state|
+        - State.focused_for_admissions.each do |state|
           ' #{state.name}: #{submitted_application_count_for(state)} (+#{submitted_application_delta_for(state)})&nbsp;
         ' Others: #{submitted_application_count_for_others} (+#{submitted_application_delta_for_others})
       li
         ' Conversion % (Paid/Total Submissions)
         br
-        - BatchApplication.selected_states.each do |state|
+        - State.focused_for_admissions.each do |state|
           ' #{state.name}: #{'%g' % ('%0.1f' % conversion_percentage_for(state))}%&nbsp;&nbsp;
         ' Others: #{'%g' % ('%0.1f' % conversion_percentage_for_others)}%

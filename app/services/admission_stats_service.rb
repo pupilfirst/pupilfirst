@@ -1,10 +1,12 @@
 class AdmissionStatsService
   attr_reader :selected_batch_ids
 
+  # returns stats for all batches which have opened for applications
   def self.load_overall_stats
     new.load_stats(Batch.opened_for_applications.pluck(:id))
   end
 
+  # return stats for the specified batch
   def self.load_stats(batch)
     new.load_stats([batch.id])
   end
@@ -23,16 +25,23 @@ class AdmissionStatsService
       payment_initiated: payment_initiated_count,
       payment_initiated_today: payment_initiated_today,
       submitted_applications: submitted_applications_count,
-      submitted_applications_today: submitted_applications_today
-    }.merge(selected_states_stats).merge(other_states_stats)
+      submitted_applications_today: submitted_applications_today,
+      state_wise_stats: focused_states_stats.merge(other_states_stats)
+    }
+  end
+
+  private
+
+  def selected_applications
+    BatchApplication.where(batch_id: selected_batch_ids)
   end
 
   def total_applications_count
-    BatchApplication.where(batch_id: selected_batch_ids).count
+    selected_applications.count
   end
 
   def total_applicants_count
-    BatchApplication.where(batch_id: selected_batch_ids).sum(:team_size) + BatchApplication.where(batch_id: selected_batch_ids, team_size: nil).count
+    selected_applications.sum(:team_size) + BatchApplication.where(batch_id: selected_batch_ids, team_size: nil).count
   end
 
   def total_universities_count
@@ -52,31 +61,31 @@ class AdmissionStatsService
   end
 
   def paid_applications_count
-    BatchApplication.where(batch_id: selected_batch_ids).payment_complete.count
+    selected_applications.payment_complete.count
   end
 
   def paid_applications_today
-    BatchApplication.where(batch_id: selected_batch_ids).paid_today.count
+    selected_applications.paid_today.count
   end
 
   def payment_initiated_count
-    BatchApplication.where(batch_id: selected_batch_ids).payment_initiated.count
+    selected_applications.payment_initiated.count
   end
 
   def payment_initiated_today
-    BatchApplication.where(batch_id: selected_batch_ids).payment_initiated_today.count
+    selected_applications.payment_initiated_today.count
   end
 
   def submitted_applications_count
-    BatchApplication.where(batch_id: selected_batch_ids).submitted_application.count
+    selected_applications.submitted_application.count
   end
 
   def submitted_applications_today
-    BatchApplication.where(batch_id: selected_batch_ids).submitted_application.where('batch_applications.created_at > ?', Time.now.beginning_of_day).count
+    selected_applications.submitted_application.where('batch_applications.created_at > ?', Time.now.beginning_of_day).count
   end
 
-  def selected_states_stats
-    BatchApplication.selected_states.each_with_object({}) do |state, states|
+  def focused_states_stats
+    State.focused_for_admissions.each_with_object({}) do |state, states|
       states[state.name.to_sym] = {
         paid_applications: paid_applications_count_for(state),
         paid_applications_today: paid_applications_today_for(state),
@@ -90,31 +99,31 @@ class AdmissionStatsService
   end
 
   def paid_applications_count_for(state)
-    BatchApplication.where(batch_id: selected_batch_ids).payment_complete.from_state(state).count
+    selected_applications.payment_complete.from_state(state).count
   end
 
   def paid_applications_today_for(state)
-    BatchApplication.where(batch_id: selected_batch_ids).paid_today.from_state(state).count
+    selected_applications.paid_today.from_state(state).count
   end
 
   def payment_initiated_count_for(state)
-    BatchApplication.where(batch_id: selected_batch_ids).payment_initiated.from_state(state).count
+    selected_applications.payment_initiated.from_state(state).count
   end
 
   def payment_initiated_today_for(state)
-    BatchApplication.where(batch_id: selected_batch_ids).payment_initiated_today.from_state(state).count
+    selected_applications.payment_initiated_today.from_state(state).count
   end
 
   def submitted_applications_count_for(state)
-    BatchApplication.where(batch_id: selected_batch_ids).submitted_application.from_state(state).count
+    selected_applications.submitted_application.from_state(state).count
   end
 
   def submitted_applications_today_for(state)
-    BatchApplication.where(batch_id: selected_batch_ids).submitted_application.where('batch_applications.created_at > ?', Time.now.beginning_of_day).from_state(state).count
+    selected_applications.submitted_application.where('batch_applications.created_at > ?', Time.now.beginning_of_day).from_state(state).count
   end
 
   def conversion_percentage_for(state)
-    total = BatchApplication.where(batch_id: selected_batch_ids).from_state(state).count
+    total = selected_applications.from_state(state).count
     return 0 unless total.positive?
     (paid_applications_count_for(state).to_f / total) * 100
   end
@@ -135,31 +144,31 @@ class AdmissionStatsService
   end
 
   def paid_applications_count_for_others
-    BatchApplication.where(batch_id: selected_batch_ids).payment_complete.from_other_states.count
+    selected_applications.payment_complete.from_other_states.count
   end
 
   def paid_applications_today_for_others
-    BatchApplication.where(batch_id: selected_batch_ids).paid_today.from_other_states.count
+    selected_applications.paid_today.from_other_states.count
   end
 
   def payment_initiated_count_for_others
-    BatchApplication.where(batch_id: selected_batch_ids).payment_initiated.from_other_states.count
+    selected_applications.payment_initiated.from_other_states.count
   end
 
   def payment_initiated_today_for_others
-    BatchApplication.where(batch_id: selected_batch_ids).payment_initiated_today.from_other_states.count
+    selected_applications.payment_initiated_today.from_other_states.count
   end
 
   def submitted_applications_count_for_others
-    BatchApplication.where(batch_id: selected_batch_ids).submitted_application.from_other_states.count
+    selected_applications.submitted_application.from_other_states.count
   end
 
   def submitted_applications_today_for_others
-    BatchApplication.where(batch_id: selected_batch_ids).submitted_application.where('batch_applications.created_at > ?', Time.now.beginning_of_day).from_other_states.count
+    selected_applications.submitted_application.where('batch_applications.created_at > ?', Time.now.beginning_of_day).from_other_states.count
   end
 
   def conversion_percentage_for_others
-    total = BatchApplication.where(batch_id: selected_batch_ids).from_other_states.count
+    total = selected_applications.from_other_states.count
     return 0 unless total.positive?
     (payment_completed_count_for_others.to_f / total) * 100
   end

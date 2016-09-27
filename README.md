@@ -10,8 +10,9 @@
 #### OSX
 
   *  imagemagick - `brew install imagemagick`
-  *  postgresql - Install postgres from http://postgresapp.com
+  *  postgresql - `brew cask install postgres`
   *  PhantomJS - `brew install phantomjs`
+  *  Puma - `brew install puma/puma/puma-dev`
 
 ### Configure
 
@@ -29,7 +30,7 @@
 
 After installing puma-dev using its instructions:
 
-    mkdir ~/.puma-dev && cd ~/.puma-dev
+    cd ~/.puma-dev
     ln -s ~/path/to/sv_repository sv
 
 It's useful to have puma-dev's log file in easy reach:

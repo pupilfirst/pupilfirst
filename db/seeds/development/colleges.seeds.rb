@@ -10,12 +10,12 @@ after 'development:replacement_universities' do
     ['Cochin University of Science and Technology, Kochi', 'Ernakulam', kerala, cusat, nil],
     ['Government Model Engineering College, Thrikkakara', 'Ernakulam', kerala, cusat, 'MEC'],
     ['College of Engineering, Trivandrum', 'Thiruvananthapuram', kerala, ukt, 'CET'],
-    ['Sree Chitra Thirunal College of Engineering, Thiruvananthapuram', kerala, ukt, 'SCT'],
+    ['Sree Chitra Thirunal College of Engineering', 'Thiruvananthapuram', kerala, ukt, 'SCT'],
     ['Birla Vishvakarma Mahavidyalaya, Anand', 'Anand', gujarat, gtu, 'BVM'],
     ['Vishwakarma Government Engineering College, Ahmedabad', 'Ahmedabad', gujarat, gtu, 'VGEC']
   ].each do |college_details|
     college = College.where(name: college_details[0]).first_or_initialize
-
+    
     college.city = college_details[1]
     college.state = college_details[2]
     college.replacement_university = college_details[3]

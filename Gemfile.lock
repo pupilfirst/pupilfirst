@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/ajaleelp/valid_url.git
+  remote: https://github.com/ajaleelp/valid_url.git
   revision: 7548e04df02e6281ef0b00f9d0db73a85a8de594
   branch: patch-1
   specs:
@@ -8,31 +8,31 @@ GIT
       rails
 
 GIT
-  remote: git://github.com/derekprior/momentjs-rails.git
-  revision: 85334f46df85cccb4c8fbaf07f0757f57801b9a9
+  remote: https://github.com/derekprior/momentjs-rails.git
+  revision: fa8ac4899554775945704fd6b7a7b3c5ce1bde17
   specs:
-    momentjs-rails (2.10.3)
+    momentjs-rails (2.15.1)
       railties (>= 3.1)
 
 GIT
-  remote: git://github.com/litaio/lita-slack.git
-  revision: 38a968fd88e46fb5448420296b6415ecfe946a46
+  remote: https://github.com/litaio/lita-slack.git
+  revision: 862ec7252c2087c1a365c01d40e7cdfd97b392eb
   specs:
-    lita-slack (1.7.2)
+    lita-slack (1.8.0)
       eventmachine
       faraday
       faye-websocket (>= 0.8.0)
-      lita (>= 4.7.0)
+      lita (>= 4.7.1)
       multi_json
 
 GIT
-  remote: git://github.com/mileszs/wicked_pdf.git
-  revision: aee77867a7356d2a5f5340d22d30cb5a8b6afc86
+  remote: https://github.com/mileszs/wicked_pdf.git
+  revision: d6c4e9fb258b26c37d08ece97b7c4a221c4b0c6f
   specs:
-    wicked_pdf (1.0.6)
+    wicked_pdf (1.1.0)
 
 GIT
-  remote: git://github.com/mobmewireless/unobtrusive_flash.git
+  remote: https://github.com/mobmewireless/unobtrusive_flash.git
   revision: 24e7787d16db66f7956747444433a4e47278193a
   branch: master
   specs:
@@ -40,16 +40,16 @@ GIT
       railties
 
 GIT
-  remote: git://github.com/northworld/google_calendar.git
-  revision: b56fb3050b926fdf945db333cdc3b14b70dbb212
+  remote: https://github.com/northworld/google_calendar.git
+  revision: 0ade6ac9ed12e6d3688981d44eb0056d8cd08296
   specs:
-    google_calendar (0.5.1)
+    google_calendar (0.6.0)
       TimezoneParser (~> 0.2.0)
-      json (~> 1.8)
-      signet (~> 0.6)
+      json (>= 1.8.3, < 2.1)
+      signet (~> 0.7)
 
 GIT
-  remote: git://github.com/zpaulovics/datetimepicker-rails.git
+  remote: https://github.com/zpaulovics/datetimepicker-rails.git
   revision: 36d21cec5da7f5b214925804f60e63c61c747023
   branch: master
   submodules: true
@@ -271,10 +271,9 @@ GEM
     equalizer (0.0.11)
     errbase (0.0.3)
     erubis (2.7.0)
-    eventmachine (1.0.9.1)
+    eventmachine (1.2.0.1)
     excon (0.45.4)
     execjs (2.7.0)
-    extlib (0.9.16)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
     factory_girl_rails (4.5.0)
@@ -286,7 +285,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     fastimage (2.0.0)
       addressable (~> 2)
-    faye-websocket (0.10.3)
+    faye-websocket (0.10.4)
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.5.1)
     fission (0.5.0)
@@ -459,7 +458,7 @@ GEM
     just-datetime-picker (0.0.6)
       activeadmin (>= 0.4.4)
       formtastic (>= 2.0.0)
-    jwt (1.5.1)
+    jwt (1.5.6)
     kaminari (0.17.0)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -468,7 +467,7 @@ GEM
       addressable (~> 2.3)
     letter_opener (1.4.1)
       launchy (~> 2.2)
-    lita (4.7.0)
+    lita (4.7.1)
       bundler (>= 1.3)
       faraday (>= 0.8.7)
       http_router (>= 0.11.2)
@@ -476,7 +475,7 @@ GEM
       ice_nine (>= 0.11.0)
       multi_json (>= 1.7.7)
       puma (>= 2.7.1)
-      rack (>= 1.5.2)
+      rack (>= 1.5.2, < 2.0.0)
       rb-readline (>= 0.5.1)
       redis-namespace (>= 1.3.0)
       thor (>= 0.18.1)
@@ -530,7 +529,7 @@ GEM
       slop (~> 3.4)
     pry-rails (0.3.4)
       pry (>= 0.9.10)
-    puma (3.1.0)
+    puma (3.6.0)
     rack (1.6.4)
     rack-attack (4.4.1)
       rack
@@ -619,7 +618,7 @@ GEM
       railties (>= 3.2)
       tilt
     recaptcha (0.4.0)
-    redis (3.2.2)
+    redis (3.3.1)
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
     referer-parser (0.3.0)
@@ -686,9 +685,8 @@ GEM
       faraday (>= 0.7.6)
     shortener (0.5.5)
       rails (>= 3.0.7)
-    signet (0.6.1)
+    signet (0.7.3)
       addressable (~> 2.3)
-      extlib (~> 0.9)
       faraday (~> 0.9)
       jwt (~> 1.5)
       multi_json (~> 1.10)
@@ -887,4 +885,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.12.5
+   1.13.1

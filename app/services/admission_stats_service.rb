@@ -115,6 +115,6 @@ class AdmissionStatsService
   def conversion_percentage(state_scope)
     total = selected_applications.for_states(state_scope).count
     return 0 unless total.positive?
-    (paid_applications.for_states(state_scope).to_f / total) * 100
+    (paid_applications(state_scope).to_f / total) * 100
   end
 end

@@ -12,7 +12,7 @@
   *  imagemagick - `brew install imagemagick`
   *  postgresql - `brew cask install postgres`
   *  PhantomJS - `brew install phantomjs`
-  *  Puma - `brew install puma/puma/puma-dev`
+  *  puma-dev - `brew install puma/puma/puma-dev`
 
 ### Configure
 

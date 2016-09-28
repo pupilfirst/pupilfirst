@@ -51,7 +51,7 @@ class MoocStudent
       {
         name: data['name'].titleize,
         email: data['email'].strip,
-        phone: data['mobile'].strip[0..9],
+        phone: data['mobile'].strip,
         gender: gender_value(data['gender']),
         university_id: university.id,
         college: data['college'].titleize,
@@ -64,7 +64,7 @@ class MoocStudent
       !(data['name'].present? &&
         data['email'] =~ EmailValidator::REGULAR_EXPRESSION &&
         data['mobile'].present? &&
-        data['mobile'].length >= 10 &&
+        data['mobile'].strip.length >= 10 &&
         data['college'].present? &&
         data['semester'].present?)
     end

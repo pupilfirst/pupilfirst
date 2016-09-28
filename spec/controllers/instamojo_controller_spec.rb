@@ -65,14 +65,6 @@ describe InstamojoController do
     let(:payment) { create :payment, batch_application: batch_application, batch_applicant: batch_application.team_lead }
     let(:payment_id) { SecureRandom.hex }
 
-    before :all do
-      APP_CONFIG[:instamojo][:salt] = 'TEST_SALT'
-    end
-
-    after :all do
-      APP_CONFIG[:instamojo][:salt] = ENV['INSTAMOJO_SALT']
-    end
-
     it 'updates payment and associated entries' do
       data = "43.21|#{payment_id}|#{payment.instamojo_payment_request_id}|Credit"
       digest = OpenSSL::Digest.new('sha1')

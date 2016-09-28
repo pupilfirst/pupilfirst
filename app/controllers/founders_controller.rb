@@ -83,7 +83,7 @@ class FoundersController < ApplicationController
     return if Rails.env.development?
 
     # SMS the code to the phone number. Currently uses FA format.
-    RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV.CO: #{code}", msisdn: phone_number)
+    RestClient.post(Rails.application.secrets.sms_provider_url, text: "Verification code for SV.CO: #{code}", msisdn: phone_number)
   end
   # rubocop:enable Metrics/CyclomaticComplexity
 
@@ -100,7 +100,7 @@ class FoundersController < ApplicationController
       code, phone_number = current_founder.generate_phone_number_verification_code!
 
       unless Rails.env.development?
-        RestClient.post(APP_CONFIG[:sms_provider_url], text: "Verification code for SV.CO: #{code}", msisdn: phone_number)
+        RestClient.post(Rails.application.secrets.sms_provider_url, text: "Verification code for SV.CO: #{code}", msisdn: phone_number)
       end
 
       @resent_verification_code = true

@@ -1,22 +1,6 @@
 require 'rails_helper'
 
 describe Instamojo do
-  before :all do
-    APP_CONFIG[:instamojo] = {
-      url: 'https://www.example.com',
-      api_key: 'API_KEY',
-      auth_token: 'AUTH_TOKEN'
-    }
-  end
-
-  after :all do
-    APP_CONFIG[:instamojo] = {
-      url: ENV['INSTAMOJO_API_URL'],
-      api_key: ENV['INSTAMOJO_API_KEY'],
-      auth_token: ENV['INSTAMOJO_AUTH_TOKEN']
-    }
-  end
-
   describe '#create_payment_request' do
     let(:amount) { rand(10_000) }
     let(:buyer_name) { Faker::Name.name }

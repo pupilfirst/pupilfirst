@@ -20,6 +20,7 @@ class AdmissionStatsService
       total_universities: total_universities,
       total_states: total_locations,
       total_visits: unique_visits,
+      total_visits_today: unique_visits_today,
       paid_applications: paid_applications(:all),
       paid_applications_today: paid_applications_today(:all),
       payment_initiated: payment_initiated(:all),
@@ -84,6 +85,12 @@ class AdmissionStatsService
 
   def unique_visits
     start_time = Time.parse 'August 1, 2016, 00:00:00+0530'
+    end_time = Time.now
+    Visit.where(started_at: start_time..end_time).count
+  end
+
+  def unique_visits_today
+    start_time = 1.hour.ago.beginning_of_day # to be safe when invoked at midnight
     end_time = Time.now
     Visit.where(started_at: start_time..end_time).count
   end

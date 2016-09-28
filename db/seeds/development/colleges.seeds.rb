@@ -15,7 +15,6 @@ after 'development:replacement_universities' do
     ['Vishwakarma Government Engineering College, Ahmedabad', 'Ahmedabad', gujarat, gtu, 'VGEC']
   ].each do |college_details|
     college = College.where(name: college_details[0]).first_or_initialize
-    
     college.city = college_details[1]
     college.state = college_details[2]
     college.replacement_university = college_details[3]

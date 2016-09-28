@@ -1,0 +1,23 @@
+= content_for :heading
+  | Get started with SixWays!
+
+= content_for :salutation
+  | Hello,
+
+= content_for :body
+  p Thank you for signing up for SV.CO's SixWays MOOC.
+
+  p
+    ' Please
+    ' #{link_to 'click here', user_sessions_new_url(token: @mooc_student.user.login_token, referer: six_ways_start_url)}
+    | to login to your SV.CO account and get started!
+
+  p
+    ' If you're unable to click on the link above, then please copy and paste the following link into your browser's
+    | address bar:
+
+  p.monospace = user_sessions_new_url(token: @mooc_student.user.login_token, referer: six_ways_start_url)
+
+  p Please note that this is a private URL and should not be shared.
+
+  p Feel free to reach out to us at #{mail_to 'help@sv.co'} in case of any queries.

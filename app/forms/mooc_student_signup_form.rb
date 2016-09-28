@@ -28,30 +28,7 @@ class MoocStudentSignupForm < Reform::Form
     self.email = options[:email]
   end
 
-  def save(referer:)
-    User.transaction do
-      # Find or create the user entry.
-      user = User.where(email: email).first_or_create!
-
-      # Find or initialize the user entry.
-      mooc_student = MoocStudent.where(user_id: user.id).first_or_initialize
-
-      mooc_student.name = name
-      mooc_student.gender = gender
-      mooc_student.university_id = university_id
-      mooc_student.college = college
-      mooc_student.semester = semester
-      mooc_student.state = state
-      mooc_student.phone = phone
-
-      mooc_student.save!
-
-      # Send the user a login email.
-      user.referer = referer
-      user.send_login_email
-
-      # Return the user
-      user
-    end
+  def save
+    MoocStudent::RegistrationService.new(to_nested_hash).register
   end
 end

@@ -4,9 +4,7 @@ class User < ActiveRecord::Base
 
   has_secure_token :login_token
 
-  attr_accessor :referer
-
-  def send_login_email
+  def send_login_email(referer)
     regenerate_login_token unless Rails.env.development?
 
     # TODO: Send email with template.

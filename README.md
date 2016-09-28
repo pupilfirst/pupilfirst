@@ -23,6 +23,11 @@
 ### Bundle
     $ bundle install
 
+### Overcommit
+
+    $ overcommit --install
+    $ overcommit --sign
+
 ### Database setup
     $ rake db:setup
 

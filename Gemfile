@@ -151,6 +151,7 @@ group :development, :test do
   gem 'rubocop', require: false # Ruby Style Guide.
   gem 'bundler-audit', require: false # Audit gems in gemfile.lock for reported vulnerabilities
   gem 'simplecov', require: false # Code coverage for Ruby 1.9+
+  gem 'overcommit', require: false # A fully configurable and extendable Git hook manager
 end
 
 group :production do

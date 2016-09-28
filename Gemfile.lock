@@ -183,6 +183,8 @@ GEM
       fastimage
     carrierwave_backgrounder (0.4.1)
       carrierwave (~> 0.5)
+    childprocess (0.5.9)
+      ffi (~> 1.0, >= 1.0.11)
     cliver (0.3.2)
     coderay (1.1.0)
     coercible (1.0.0)
@@ -288,6 +290,7 @@ GEM
     faye-websocket (0.10.4)
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.5.1)
+    ffi (1.9.14)
     fission (0.5.0)
       CFPropertyList (~> 2.2)
     flattened_active_admin (0.0.7)
@@ -436,6 +439,7 @@ GEM
       has_scope (~> 0.6.0.rc)
       railties (>= 3.2, < 5)
       responders
+    iniparse (1.4.2)
     insensitive_hash (0.3.3)
     intercom (3.5.3)
       json (~> 1.8)
@@ -499,6 +503,9 @@ GEM
       mini_portile2 (~> 2.1.0)
       pkg-config (~> 1.1.7)
     orm_adapter (0.5.0)
+    overcommit (0.36.0)
+      childprocess (~> 0.5.8)
+      iniparse (~> 1.4)
     parser (2.3.1.2)
       ast (~> 2.2)
     passenger (5.0.24)
@@ -825,6 +832,7 @@ DEPENDENCIES
   logstash-logger
   mini_magick
   momentjs-rails (>= 2.8.1)!
+  overcommit
   passenger (>= 5.0.22)
   pg
   phony_rails

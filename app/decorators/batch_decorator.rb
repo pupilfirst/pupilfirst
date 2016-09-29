@@ -16,7 +16,7 @@ class BatchDecorator < Draper::Decorator
   end
 
   def campaign_days_left
-    return 0 if Time.now > campaign_start_at
+    return 0 if Time.now > admission_close_at
 
     (admission_close_at.to_date - Date.today).to_i
   end

@@ -39,8 +39,13 @@ class ApplicationStageTwoForm < Reform::Form
       model.save!
       model.application_submission_urls.create!(name: 'Code Submission', url: git_repo_url)
       model.application_submission_urls.create!(name: 'Video Submission', url: video_url)
-      model.application_submission_urls.create!(name: 'Live Website', url: website) if website.present?
+      model.application_submission_urls.create!(name: 'Live Website', url: prepend_http_if_required(website)) if website.present?
       model.application_submission_urls.create!(name: 'Application Binary', url: executable) if executable.present?
     end
+  end
+
+  def prepend_http_if_required(url)
+    return url if url.starts_with?('http')
+    "http://#{url}"
   end
 end

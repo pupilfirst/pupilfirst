@@ -18,11 +18,12 @@ class AdmissionStatsNotificationJob < ActiveJob::Base
   def admission_stats_summary
     <<~MESSAGE
       > Here are the *Admission Stats for Batch #{batch.batch_number}* today:
-      _Payments Completed:_ #{stats[:paid_applications]} (+#{stats[:paid_applications_today]})
-      _Payments Intiated:_ #{stats[:payment_initiated]} (+#{stats[:payment_initiated_today]})
-      _Applications Started:_ #{stats[:submitted_applications]} (+#{stats[:submitted_applications_today]})
-      _Paid Applications From:_ #{state_wise_paid_count}
-      _Unique Visits Today:_ #{stats[:total_visits_today]}
+      *Payments Completed:* #{stats[:paid_applications]} (+#{stats[:paid_applications_today]})
+      :point_up_2: _Note that #{stats[:paid_from_earlier_batches]} of these were moved-in from earlier batches._
+      *Payments Intiated:* #{stats[:payment_initiated]} (+#{stats[:payment_initiated_today]})
+      *Applications Started:* #{stats[:submitted_applications]} (+#{stats[:submitted_applications_today]})
+      *Paid Applications From:* #{state_wise_paid_count}
+      *Unique Visits Today:* #{stats[:total_visits_today]}
     MESSAGE
   end
 

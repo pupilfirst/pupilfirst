@@ -3,7 +3,7 @@ ActiveAdmin.register Batch do
 
   menu parent: 'Admissions'
 
-  permit_params :theme, :description, :start_date, :end_date, :batch_number, :slack_channel, batch_stages_attributes: [
+  permit_params :theme, :description, :start_date, :end_date, :batch_number, :slack_channel, :campaign_start_at, :target_application_count, batch_stages_attributes: [
     :id, :application_stage_id, :starts_at_date, :starts_at_time_hour, :starts_at_time_minute, :ends_at_date,
     :ends_at_time_hour, :ends_at_time_minute, :_destroy
   ]
@@ -45,6 +45,8 @@ ActiveAdmin.register Batch do
       row :end_date
       row :invites_sent_at
       row :slack_channel
+      row :campaign_start_at
+      row :target_application_count
     end
 
     panel 'Application Stages' do
@@ -88,6 +90,8 @@ ActiveAdmin.register Batch do
       f.input :start_date, as: :datepicker
       f.input :end_date, as: :datepicker
       f.input :slack_channel
+      f.input :campaign_start_at, label: 'Campaign Start Date', as: :datepicker
+      f.input :target_application_count
     end
 
     f.inputs 'Stage Dates' do

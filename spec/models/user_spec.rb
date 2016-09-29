@@ -13,14 +13,6 @@ describe Founder do
   end
 
   context 'Slack integration' do
-    before :all do
-      APP_CONFIG[:slack_token] = 'xxxxxx'
-    end
-
-    after :all do
-      APP_CONFIG[:slack_token] = ENV['SLACK_TOKEN']
-    end
-
     before :each do
       stub_request(:get, "https://slack.com/api/users.list?token=xxxxxx")
         .to_return(body: '{"ok":true,"members":[{"id":"UABCDEFGH","name":"slackuser"}]}')

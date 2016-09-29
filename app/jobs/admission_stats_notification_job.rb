@@ -3,8 +3,7 @@ class AdmissionStatsNotificationJob < ActiveJob::Base
   attr_reader :batch, :stats
 
   def perform
-    # @batch = Batch.open_for_applications.order(:start_date).first
-    @batch = Batch.last
+    @batch = Batch.open_for_applications.order(:start_date).first.decorate
     return unless batch.present?
     @stats = AdmissionStatsService.load_stats(batch)
 
@@ -17,12 +16,17 @@ class AdmissionStatsNotificationJob < ActiveJob::Base
 
   def admission_stats_summary
     <<~MESSAGE
-      > Here are the *Admission Stats for Batch #{batch.batch_number}* today:
-      _Payments Completed:_ #{stats[:paid_applications]} (+#{stats[:paid_applications_today]})
-      _Payments Intiated:_ #{stats[:payment_initiated]} (+#{stats[:payment_initiated_today]})
-      _Applications Started:_ #{stats[:submitted_applications]} (+#{stats[:submitted_applications_today]})
-      _Paid Applications From:_ #{state_wise_paid_count}
-      _Unique Visits Today:_ #{stats[:total_visits_today]}
+      > Here are the *Admission Campaign Stats for Batch #{batch.batch_number}* today:
+      *Campaign Progress:* Day #{days_passed}/#{total_days} (#{days_left} days left)
+      *Target Achieved:* #{stats[:paid_applications]}/#{target_count} applications.
+      *Payments Completed:* #{stats[:paid_applications]} (+#{stats[:paid_applications_today]})
+      :point_up_2: _Note that #{stats[:paid_from_earlier_batches]} of these were moved-in from earlier batches._
+      *Payments Intiated:* #{stats[:payment_initiated]} (+#{stats[:payment_initiated_today]})
+      *Applications Started:* #{stats[:submitted_applications]} (+#{stats[:submitted_applications_today]})
+      *Paid Applications From:* #{state_wise_paid_count}
+      *Unique Visits Today:* #{stats[:total_visits_today]}
+
+      <#{dashboard_url}|:bar_chart: View Dashboard>
     MESSAGE
   end
 
@@ -36,5 +40,25 @@ class AdmissionStatsNotificationJob < ActiveJob::Base
     message << "Others(#{others_count})" if others_count.positive?
 
     message
+  end
+
+  def dashboard_url
+    Rails.application.routes.url_helpers.admin_admissions_dashboard_url(batch: batch.id)
+  end
+
+  def days_passed
+    batch.campaign_days_passed
+  end
+
+  def total_days
+    batch.total_campaign_days
+  end
+
+  def days_left
+    batch.campaign_days_left
+  end
+
+  def target_count
+    batch.target_application_count
   end
 end

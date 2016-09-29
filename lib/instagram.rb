@@ -41,7 +41,7 @@ class Instagram
     response = RestClient.get(
       'https://api.instagram.com/v1/users/self/media/recent/',
       params: {
-        access_token: APP_CONFIG[:instagram_access_token],
+        access_token: Rails.application.secrets.instagram_access_token,
         count: count
       }
     )

@@ -13,7 +13,7 @@ class PublicSlackTalk
     @founder = founder
     @message = URI.escape message
     @founders = founders
-    @token = APP_CONFIG[:slack_token]
+    @token = Rails.application.secrets.slack_token
     @as_user = true
     @unfurl = false
     @errors = {}
@@ -121,7 +121,7 @@ class PublicSlackTalk
   end
 
   def self.valid_channel_names
-    channel_list = JSON.parse RestClient.get("https://slack.com/api/channels.list?token=#{APP_CONFIG[:slack_token]}")
+    channel_list = JSON.parse RestClient.get("https://slack.com/api/channels.list?token=#{Rails.application.secrets.slack_token}")
     channel_list['channels'].map { |c| '#' + c['name'] }
   end
 end

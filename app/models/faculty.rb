@@ -128,7 +128,7 @@ class Faculty < ActiveRecord::Base
     return unless slack_username_changed?
     return if Rails.env.development?
 
-    response_json = JSON.parse(RestClient.get("https://slack.com/api/users.list?token=#{APP_CONFIG[:slack_token]}"))
+    response_json = JSON.parse(RestClient.get("https://slack.com/api/users.list?token=#{Rails.application.secrets.slack_token}"))
 
     unless response_json['ok']
       errors.add(:slack_username, 'unable to validate username from slack. Please try again')

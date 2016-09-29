@@ -49,7 +49,7 @@ module Lita
 
       # reply to non-SV.CO users using the SLACK API directly
       def reply_using_api_post_message(channel:, message:)
-        RestClient.get "https://slack.com/api/chat.postMessage?token=#{APP_CONFIG[:slack_token]}&channel=#{channel}"\
+        RestClient.get "https://slack.com/api/chat.postMessage?token=#{Rails.application.secrets.slack_token}&channel=#{channel}"\
         "&text=#{CGI.escape message}&as_user=true"
       end
 

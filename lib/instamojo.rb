@@ -136,7 +136,7 @@ class Instamojo
   end
 
   def base_url
-    APP_CONFIG[:instamojo][:url]
+    Rails.application.secrets.instamojo_url
   end
 
   def payment_request_endpoint
@@ -152,10 +152,10 @@ class Instamojo
   end
 
   def api_key
-    APP_CONFIG[:instamojo][:api_key]
+    Rails.application.secrets.instamojo_api_key
   end
 
   def auth_token
-    APP_CONFIG[:instamojo][:auth_token]
+    Rails.application.secrets.instamojo_auth_token
   end
 end

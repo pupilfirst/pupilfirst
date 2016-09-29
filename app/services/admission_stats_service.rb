@@ -104,7 +104,7 @@ class AdmissionStatsService
   def paid_from_earlier_batches
     return unless selected_batch_ids.length == 1 # can be calculated only if a single batch is specified
 
-    batch_opening_date = Batch.find(selected_batch_ids).first.opening_date
+    batch_opening_date = Batch.find(selected_batch_ids).first.decorate.admission_opening_at
     selected_applications.joins(:payment).where('paid_at < ?', batch_opening_date).count
   end
 

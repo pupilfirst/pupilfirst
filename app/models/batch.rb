@@ -100,8 +100,4 @@ class Batch < ActiveRecord::Base
   def final_stage?
     stage_started?(ApplicationStage.final_stage)
   end
-
-  def opening_date
-    batch_stages&.find_by(application_stage_id: ApplicationStage.initial_stage)&.starts_at
-  end
 end

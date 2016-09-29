@@ -22,6 +22,7 @@ class AdmissionStatsService
       total_visits: unique_visits,
       total_visits_today: unique_visits_today,
       paid_applications: paid_applications(:all),
+      paid_from_earlier_batches: paid_from_earlier_batches,
       paid_applications_today: paid_applications_today(:all),
       payment_initiated: payment_initiated(:all),
       payment_initiated_today: payment_initiated_today(:all),
@@ -97,6 +98,14 @@ class AdmissionStatsService
 
   def paid_applications(state_scope)
     selected_applications.for_states(state_scope).payment_complete.count
+  end
+
+  # applications which were paid but for earlier batches
+  def paid_from_earlier_batches
+    return unless selected_batch_ids.length == 1 # can be calculated only if a single batch is specified
+
+    batch_opening_date = Batch.find(selected_batch_ids).first.batch_stages.find_by(application_stage_id: ApplicationStage.initial_stage).starts_at
+    selected_applications.joins(:payment).where('paid_at < ?', batch_opening_date).count
   end
 
   def paid_applications_today(state_scope)

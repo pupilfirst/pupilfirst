@@ -9,7 +9,7 @@ module ActiveAdmin
 
     # overall metrics in the hash returned by the AdmissionStatsService
     OVERALL_STATS_METRICS = [
-      :total_applications, :total_applicants, :total_universities, :total_states, :total_visits
+      :total_applications, :total_applicants, :total_universities, :total_states, :total_visits, :paid_from_earlier_batches
     ].freeze
 
     # define a bunch of methods to dig the overall metrics from the stats hash

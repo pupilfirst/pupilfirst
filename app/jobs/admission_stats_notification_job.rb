@@ -3,8 +3,7 @@ class AdmissionStatsNotificationJob < ActiveJob::Base
   attr_reader :batch, :stats
 
   def perform
-    # @batch = Batch.open_for_applications.order(:start_date).first
-    @batch = Batch.last
+    @batch = Batch.open_for_applications.order(:start_date).first.decorate
     return unless batch.present?
     @stats = AdmissionStatsService.load_stats(batch)
 
@@ -17,7 +16,8 @@ class AdmissionStatsNotificationJob < ActiveJob::Base
 
   def admission_stats_summary
     <<~MESSAGE
-      > Here are the *Admission Stats for Batch #{batch.batch_number}* today:
+      > Here are the *Admission Campaign Stats for Batch #{batch.batch_number}* today:
+      *Campaign Progress:* Day #{days_passed}/#{total_days} (#{days_left} days left)
       *Payments Completed:* #{stats[:paid_applications]} (+#{stats[:paid_applications_today]})
       :point_up_2: _Note that #{stats[:paid_from_earlier_batches]} of these were moved-in from earlier batches._
       *Payments Intiated:* #{stats[:payment_initiated]} (+#{stats[:payment_initiated_today]})
@@ -39,5 +39,17 @@ class AdmissionStatsNotificationJob < ActiveJob::Base
     message << "Others(#{others_count})" if others_count.positive?
 
     message
+  end
+
+  def days_passed
+    batch.campaign_days_passed
+  end
+
+  def total_days
+    batch.total_campaign_days
+  end
+
+  def days_left
+    batch.campaign_days_left
   end
 end

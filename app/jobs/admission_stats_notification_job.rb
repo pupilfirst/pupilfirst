@@ -24,6 +24,8 @@ class AdmissionStatsNotificationJob < ActiveJob::Base
       *Applications Started:* #{stats[:submitted_applications]} (+#{stats[:submitted_applications_today]})
       *Paid Applications From:* #{state_wise_paid_count}
       *Unique Visits Today:* #{stats[:total_visits_today]}
+
+      <#{Rails.application.routes.url_helpers.admin_admissions_dashboard_url(batch: batch.id)}|:bar_chart: View Dashboard>
     MESSAGE
   end
 

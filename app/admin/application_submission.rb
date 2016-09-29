@@ -7,7 +7,7 @@ ActiveAdmin.register ApplicationSubmission do
     application_submission_urls_attributes: [:id, :name, :url, :score, :admin_user_id, :_destroy]
 
   filter :batch_application_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'Batch'
-  filter :batch_application
+  filter :batch_application_state_eq, as: :select, collection: proc { State.all }, label: 'State'
   filter :application_stage
   filter :score
   filter :notes

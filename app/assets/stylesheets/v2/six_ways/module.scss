@@ -783,3 +783,11 @@
 .mobme-logo {
   width: 130px;
 }
+.sixways-video-container {
+  width: 100%;
+  height: 400px;
+
+  @include media-breakpoint-down(xs) {
+    height: auto;
+  }
+}

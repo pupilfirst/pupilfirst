@@ -6,34 +6,34 @@
       li
         ' Summary of Submitted Applications
         br
-        ' Total Applications: #{total_applications_count}&nbsp;&nbsp;
-        ' Total Applicants: #{total_applicants_count}&nbsp;&nbsp;
-        ' Total Universities: #{total_universities_count}&nbsp;&nbsp;
-        ' Total States: #{total_location_count - 1}
+        ' Total Applications: #{@presenter.total_applications}&nbsp;&nbsp;
+        ' Total Applicants: #{@presenter.total_applicants}&nbsp;&nbsp;
+        ' Total Universities: #{@presenter.total_universities}&nbsp;&nbsp;
+        ' Total States: #{@presenter.total_states}
         br
-        ' Unique Website Visits: #{unique_visits_count} (from August 1)
+        ' Unique Website Visits: #{@presenter.total_visits} (from August 1)
 
       li
-        ' Payment Completed: #{payment_completed_count} (+#{payment_completed_delta})
+        ' Payment Completed: #{@presenter.paid_applications(:all)} (+#{@presenter.paid_applications_today(:all)})
         br
-        - BatchApplication.selected_states.each do |state|
-          ' #{state.name}: #{payment_completed_count_for(state)} (+#{payment_completed_delta_for(state)})&nbsp;
-        ' Others: #{payment_completed_count_for_others} (+#{payment_completed_delta_for_others})
+        - State.focused_for_admissions.each do |state|
+          ' #{state.name}: #{@presenter.paid_applications(state)} (+#{@presenter.paid_applications_today(state)})&nbsp;
+        ' Others: #{@presenter.paid_applications(:non_focused)} (+#{@presenter.paid_applications_today(:non_focused)})
       li
-        ' Payment Initiated: #{payment_initiated_count} (+#{payment_initiated_delta})
+        ' Payment Initiated: #{@presenter.payment_initiated(:all)} (+#{@presenter.payment_initiated_today(:all)})
         br
-        - BatchApplication.selected_states.each do |state|
-          ' #{state.name}: #{payment_initiated_count_for(state)} (+#{payment_initiated_delta_for(state)})&nbsp;
-        ' Others: #{payment_initiated_count_for_others} (+#{payment_initiated_delta_for_others})
+        - State.focused_for_admissions.each do |state|
+          ' #{state.name}: #{@presenter.payment_initiated(state)} (+#{@presenter.payment_initiated_today(state)})&nbsp;
+        ' Others: #{@presenter.payment_initiated(:non_focused)} (+#{@presenter.payment_initiated_today(:non_focused)})
       li
-        ' Submitted Application: #{submitted_application_count} (+#{submitted_application_delta})
+        ' Submitted Application: #{@presenter.submitted_applications(:all)} (+#{@presenter.submitted_applications_today(:all)})
         br
-        - BatchApplication.selected_states.each do |state|
-          ' #{state.name}: #{submitted_application_count_for(state)} (+#{submitted_application_delta_for(state)})&nbsp;
-        ' Others: #{submitted_application_count_for_others} (+#{submitted_application_delta_for_others})
+        - State.focused_for_admissions.each do |state|
+          ' #{state.name}: #{@presenter.submitted_applications(state)} (+#{@presenter.submitted_applications_today(state)})&nbsp;
+        ' Others: #{@presenter.submitted_applications(:non_focused)} (+#{@presenter.submitted_applications_today(:non_focused)})
       li
         ' Conversion % (Paid/Total Submissions)
         br
-        - BatchApplication.selected_states.each do |state|
-          ' #{state.name}: #{'%g' % ('%0.1f' % conversion_percentage_for(state))}%&nbsp;&nbsp;
-        ' Others: #{'%g' % ('%0.1f' % conversion_percentage_for_others)}%
+        - State.focused_for_admissions.each do |state|
+          ' #{state.name}: #{'%g' % ('%0.1f' % @presenter.conversion_percentage(state))}%&nbsp;&nbsp;
+        ' Others: #{'%g' % ('%0.1f' % @presenter.conversion_percentage(:non_focused))}%

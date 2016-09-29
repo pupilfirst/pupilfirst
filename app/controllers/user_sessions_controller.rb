@@ -21,10 +21,9 @@ class UserSessionsController < ApplicationController
     @skip_container = true
 
     @user = User.where(email: params[:user][:email]).first_or_initialize
-    @user.referer = session.delete :referer
 
     if @user.save
-      @user.send_login_email
+      @user.send_login_email(session.delete(:referer))
 
       render layout: 'application_v2'
     else

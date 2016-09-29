@@ -201,19 +201,22 @@ feature 'Applying to SV.CO' do
       scenario 'paid applicant is able to submit code and video links' do
         visit apply_continue_path(token: batch_applicant.token, shared_device: false)
 
-        # user must see the coding and video tasks
+        # User must see the coding and video tasks.
         expect(page).to have_text('Coding Task')
         expect(page).to have_text('Video Task')
 
-        # user fills the stage 2 form and submits
+        # User fills the stage 2 form and submits.
         fill_in 'application_stage_two_git_repo_url', with: 'https://github.com/user/repo'
         select 'Website', from: 'application_stage_two_app_type'
-        fill_in 'application_stage_two_website', with: 'http://example.com'
+        fill_in 'application_stage_two_website', with: 'example.com'
         fill_in 'application_stage_two_video_url', with: 'https://facebook.com/user/videos/random'
         click_on 'Submit your entries'
 
-        # user submission must be acknowledged
+        # User submission must be acknowledged.
         expect(page).to have_text('Your coding and hustling submissions has been received')
+
+        # Example link should have had http prepended since its missing.
+        expect(page).to have_link('Live Website', href: 'http://example.com')
       end
     end
 

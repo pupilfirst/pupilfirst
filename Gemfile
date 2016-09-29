@@ -1,7 +1,10 @@
 source 'https://rubygems.org'
 
+# Required to suppress warnings about insecure :github source.
+git_source(:github) { |repo_name| "https://github.com/#{repo_name}.git" }
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.7'
+gem 'rails', '4.2.7.1'
 
 gem 'dotenv-rails', groups: [:development, :test]
 
@@ -148,6 +151,7 @@ group :development, :test do
   gem 'rubocop', require: false # Ruby Style Guide.
   gem 'bundler-audit', require: false # Audit gems in gemfile.lock for reported vulnerabilities
   gem 'simplecov', require: false # Code coverage for Ruby 1.9+
+  gem 'overcommit', require: false # A fully configurable and extendable Git hook manager
 end
 
 group :production do

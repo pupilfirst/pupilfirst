@@ -27,10 +27,21 @@ class BatchApplication < ActiveRecord::Base
   scope :paid_today, -> { payment_complete.where('payments.paid_at > ?', Time.now.in_time_zone('Asia/Kolkata').beginning_of_day) }
   scope :payment_initiated_today, -> { payment_initiated.where('payments.created_at > ?', Time.now.in_time_zone('Asia/Kolkata').beginning_of_day) }
 
-  # scope :from_state, -> (state) { joins(:university).where('universities.location': state) }
-  # scope :from_other_states, -> { joins(:university).where.not('universities.location': BatchApplication.selected_states) }
   scope :from_state, -> (state) { joins(:college).where(colleges: { state_id: state.id }) }
-  scope :from_other_states, -> { joins(:college).where.not(colleges: { state_id: BatchApplication.selected_states.pluck(:id) }) }
+  scope :from_other_states, -> { joins(:college).where.not(colleges: { state_id: State.focused_for_admissions.pluck(:id) }) }
+
+  # a single scope for states - specify a State or :non_focused or :all.
+  def self.for_states(scope)
+    raise 'Unexpected Argument. Must be a State or :non_focused or :all' unless scope.is_a?(State) || scope.in?([:non_focused, :all])
+
+    if scope.is_a?(State)
+      joins(:college).where(colleges: { state_id: scope.id })
+    elsif scope == :non_focused
+      joins(:college).where.not(colleges: { state_id: State.focused_for_admissions.pluck(:id) })
+    elsif scope == :all
+      all
+    end
+  end
 
   validates :batch_id, presence: true
   validates :application_stage_id, presence: true
@@ -209,12 +220,8 @@ class BatchApplication < ActiveRecord::Base
   end
 
   # Returns name of states with most number of applications - excludes 'Other' if present
-  # this was included to dynamically calculate the top states for Admissions Dashboard. Later replaced by the pre-selected list of states below
+  # this was included to dynamically calculate the top states for Admissions Dashboard. Later replaced by the pre-selected list of states i.e State.focused_for_admissions
   def self.top_states(n)
     joins(:university).group(:location).count.sort_by { |_k, v| v }.reverse[0..(n - 1)].to_h.keys - ['Other']
-  end
-
-  def self.selected_states
-    State.where name: ['Kerala', 'Andhra Pradesh', 'Telangana', 'Tamil Nadu', 'Gujarat']
   end
 end

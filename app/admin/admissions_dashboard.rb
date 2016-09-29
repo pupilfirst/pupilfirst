@@ -8,6 +8,10 @@ ActiveAdmin.register_page 'Admissions Dashboard' do
     def initialize_intercom_client
       @intercom = IntercomClient.new
     end
+
+    def index
+      @presenter = ActiveAdmin::AdmissionsDashboardPresenter.new(params[:batch])
+    end
   end
 
   content do

@@ -130,3 +130,19 @@ a.disabled_action_link {
   text-decoration: none;
   cursor: help;
 }
+
+// Active Tab header bg custom style
+.table_tools_segmented_control {
+  li {
+    &.selected a {
+      background: white !important;
+      box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1) inset;
+      cursor: default;
+      color: #008AC1;
+
+      .count {
+        color: #008AC1;
+      }
+    }
+  }
+}

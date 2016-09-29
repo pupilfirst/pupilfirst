@@ -24,7 +24,7 @@ class BatchApplicationController < ApplicationController
 
   # POST /apply/register
   def register
-    @presenter = ApplicationIndexPresenter.new(BatchApplicant.new)
+    @presenter = ApplicationIndexPresenter.new
     form = @presenter.batch_application_form
 
     if form.validate(params[:batch_application])
@@ -39,6 +39,20 @@ class BatchApplicationController < ApplicationController
       sign_in_applicant_temporarily(applicant)
 
       redirect_to apply_stage_path(stage_number: application_stage_number, continue_mail_sent: 'yes')
+    else
+      render 'index'
+    end
+  end
+
+  # POST /apply/notify
+  def notify
+    @presenter = ApplicationIndexPresenter.new
+    form = @presenter.prospective_applicant_form
+
+    if form.validate(params[:prospective_applicant])
+      form.save
+      flash[:success] = "Done! We'll send you an email when our next batch is about to open."
+      redirect_to apply_path
     else
       render 'index'
     end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160916081213) do
+ActiveRecord::Schema.define(version: 20160929082712) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -446,6 +446,18 @@ ActiveRecord::Schema.define(version: 20160916081213) do
   end
 
   add_index "platform_feedback", ["founder_id"], name: "index_platform_feedback_on_founder_id", using: :btree
+
+  create_table "prospective_applicants", force: :cascade do |t|
+    t.string   "name"
+    t.string   "email"
+    t.string   "phone"
+    t.integer  "college_id"
+    t.string   "college_text"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "prospective_applicants", ["college_id"], name: "index_prospective_applicants_on_college_id", using: :btree
 
   create_table "public_slack_messages", force: :cascade do |t|
     t.text     "body"

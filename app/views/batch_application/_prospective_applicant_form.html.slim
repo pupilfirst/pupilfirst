@@ -9,10 +9,10 @@
       br
       ' start on
       span.font-semibold.brand-secondary.bigger-text
-        | Feb 1, 2017
+        | Jan 1, 2017
 
-  = simple_form_for @presenter.batch_application_form,
-    url: apply_register_path,
+  = simple_form_for @presenter.prospective_applicant_form,
+    url: apply_notify_path,
     wrapper: :vertical_form do |f|
     .simple-form-container
       = f.input :name, label: false, placeholder: 'Your Name', input_html: { maxlength: 250 }

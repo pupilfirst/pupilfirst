@@ -1,10 +1,14 @@
 class ApplicationIndexPresenter
-  def initialize(batch_applicant)
+  def initialize(batch_applicant = BatchApplicant.new)
     @batch_applicant = batch_applicant
   end
 
   def batch_application_form
     @batch_application_form ||= BatchApplicationForm.new(BatchApplicant.new)
+  end
+
+  def prospective_applicant_form
+    @prospective_applicant_form ||= ProspectiveApplicantForm.new(ProspectiveApplicant.new)
   end
 
   def old_applications

@@ -18,6 +18,7 @@ class AdmissionStatsNotificationJob < ActiveJob::Base
     <<~MESSAGE
       > Here are the *Admission Campaign Stats for Batch #{batch.batch_number}* today:
       *Campaign Progress:* Day #{days_passed}/#{total_days} (#{days_left} days left)
+      *Target Achieved:* #{stats[:paid_applications]}/#{target_count} applications.
       *Payments Completed:* #{stats[:paid_applications]} (+#{stats[:paid_applications_today]})
       :point_up_2: _Note that #{stats[:paid_from_earlier_batches]} of these were moved-in from earlier batches._
       *Payments Intiated:* #{stats[:payment_initiated]} (+#{stats[:payment_initiated_today]})
@@ -25,7 +26,7 @@ class AdmissionStatsNotificationJob < ActiveJob::Base
       *Paid Applications From:* #{state_wise_paid_count}
       *Unique Visits Today:* #{stats[:total_visits_today]}
 
-      <#{Rails.application.routes.url_helpers.admin_admissions_dashboard_url(batch: batch.id)}|:bar_chart: View Dashboard>
+      <#{dashboard_url}|:bar_chart: View Dashboard>
     MESSAGE
   end
 
@@ -41,6 +42,10 @@ class AdmissionStatsNotificationJob < ActiveJob::Base
     message
   end
 
+  def dashboard_url
+    Rails.application.routes.url_helpers.admin_admissions_dashboard_url(batch: batch.id)
+  end
+
   def days_passed
     batch.campaign_days_passed
   end
@@ -51,5 +56,9 @@ class AdmissionStatsNotificationJob < ActiveJob::Base
 
   def days_left
     batch.campaign_days_left
+  end
+
+  def target_count
+    batch.target_application_count
   end
 end

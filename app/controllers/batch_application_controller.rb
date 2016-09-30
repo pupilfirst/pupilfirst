@@ -1,5 +1,5 @@
 class BatchApplicationController < ApplicationController
-  before_action :ensure_team_lead_signed_in, except: %w(index register identify send_sign_in_email continue sign_in_email_sent)
+  before_action :ensure_team_lead_signed_in, except: %w(index register identify send_sign_in_email continue sign_in_email_sent notify)
   before_action :ensure_accurate_stage_number, only: %w(ongoing submit complete restart expired rejected)
   before_action :load_common_instance_variables
 

@@ -88,10 +88,7 @@ class BatchApplicationForm < Reform::Form
     user = intercom.find_or_create_user(email: email, name: name)
     intercom.add_tag_to_user(user, 'Applicant')
     intercom.add_note_to_user(user, 'Auto-tagged as <em>Applicant</em>')
-    intercom.add_phone_to_user(user, phone)
-    intercom.add_college_to_user(user, applicant_college_name)
-    intercom.add_batch_to_user(user, Batch.open_batch)
-    intercom.add_university_to_user(user, applicant_university) if applicant_university.present?
+    intercom.add_custom_attributes_to_user(user, phone: phone, college: applicant_college_name, batch: open_batch_name, university: applicant_university)
   rescue
     # TODO: @jaleel: Fix this. Capture all rescues are not OK!
     # simply skip for now if anything goes wrong here
@@ -102,11 +99,16 @@ class BatchApplicationForm < Reform::Form
     @applicant ||= BatchApplicant.where(email: email).first
   end
 
+  def open_batch_name
+    batch = Batch.open_batch
+    "#{batch.batch_number} #{batch.theme}"
+  end
+
   def applicant_college_name
     applicant.college_text || applicant.college.name
   end
 
   def applicant_university
-    applicant&.college&.replacement_university&.name
+    applicant&.college&.replacement_university&.name || 'Not Available'
   end
 end

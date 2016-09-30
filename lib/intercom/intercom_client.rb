@@ -63,7 +63,7 @@ class IntercomClient
     save_user(user)
   end
 
-  def add_custom_attributes_to_user(user, attributes)
+  def update_user(user, attributes)
     attributes.each do |name, value|
       user.custom_attributes[name.to_sym] = value
     end

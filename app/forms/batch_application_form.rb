@@ -88,7 +88,7 @@ class BatchApplicationForm < Reform::Form
     user = intercom.find_or_create_user(email: email, name: name)
     intercom.add_tag_to_user(user, 'Applicant')
     intercom.add_note_to_user(user, 'Auto-tagged as <em>Applicant</em>')
-    intercom.add_custom_attributes_to_user(user, phone: phone, college: applicant_college_name, batch: open_batch_name, university: applicant_university)
+    intercom.update_user(user, phone: phone, college: applicant_college_name, batch: open_batch_name, university: applicant_university)
   rescue
     # TODO: @jaleel: Fix this. Capture all rescues are not OK!
     # simply skip for now if anything goes wrong here

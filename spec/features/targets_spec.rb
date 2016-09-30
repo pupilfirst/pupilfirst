@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 feature 'Targets spec' do
-  let(:founder) { create :founder_with_password, confirmed_at: Time.now }
+  let(:founder) { create :founder, confirmed_at: Time.now }
   let(:startup) { create :startup }
   let(:target) { create :target, assignee: founder, role: Target::ROLE_FOUNDER }
 

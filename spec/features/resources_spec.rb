@@ -3,7 +3,7 @@ require 'rails_helper'
 # WARNING: The following tests run with Webmock disabled - i.e., URL calls are let through. Make sure you mock possible
 # requests unless you want to let them through. This is required for JS tests to work.
 feature 'Resources' do
-  let(:founder) { create :founder_with_password, confirmed_at: Time.now }
+  let(:founder) { create :founder, confirmed_at: Time.now }
   let(:startup) { create :startup }
 
   let!(:public_resource_1) { create :resource }

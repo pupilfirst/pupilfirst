@@ -38,5 +38,4 @@ markPresentSlots = ->
 $(document).on 'page:change', slotsClickHandler
 $(document).on 'page:change', findSlot
 $(document).on 'page:change', markPresentSlots
-$(window).load markPresentSlots
-
+$(window).on 'load', markPresentSlots

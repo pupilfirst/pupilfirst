@@ -4,8 +4,8 @@ describe 'Public Slack Talk' do
   subject { PublicSlackTalk }
 
   describe '.post_message' do
-    let(:founder_1) { create :founder_with_out_password }
-    let(:founder_2) { create :founder_with_out_password }
+    let(:founder_1) { create :founder }
+    let(:founder_2) { create :founder }
 
     it 'raises ArgumentError if no target specified' do
       expect { subject.post_message message: 'Hello' }.to raise_error(ArgumentError, 'specify one of channel, founder or founders')
@@ -75,7 +75,7 @@ describe 'Public Slack Talk' do
   end
 
   context '.post_message' do
-    let(:founder) { create :founder_with_out_password }
+    let(:founder) { create :founder }
 
     it 'raises ArgumentError if no target specified' do
       expect { PublicSlackTalk.post_message message: 'Hello' }.to raise_error(
@@ -96,8 +96,9 @@ describe 'Public Slack Talk' do
   end
 
   context '#process' do
-    let(:founder1) { create :founder_with_out_password }
-    let(:founder2) { create :founder_with_out_password }
+    let(:founder1) { create :founder }
+    let(:founder2) { create :founder }
+
     it 'raises exception if target is an invalid channel' do
       instance = PublicSlackTalk.new channel: '#abcd', message: 'hello'
       expect(instance).to receive(:channel_valid?).and_return(false)
@@ -125,7 +126,8 @@ describe 'Public Slack Talk' do
   end
 
   context '#post_to_founder' do
-    let(:founder) { create :founder_with_out_password }
+    let(:founder) { create :founder }
+
     it 'invokes post_to_channel if im_id fetched' do
       instance = PublicSlackTalk.new founder: founder, message: 'hello'
       expect(instance).to receive(:fetch_im_id).and_return(true)
@@ -142,8 +144,9 @@ describe 'Public Slack Talk' do
   end
 
   context '#post_to_founders' do
-    let(:founder1) { create :founder_with_out_password }
-    let(:founder2) { create :founder_with_out_password }
+    let(:founder1) { create :founder }
+    let(:founder2) { create :founder }
+
     it 'calls #post_to_founder n times if target is array of n founders' do
       instance = PublicSlackTalk.new founders: [founder1, founder2], message: 'hello'
       expect(instance).to receive(:post_to_founder).twice

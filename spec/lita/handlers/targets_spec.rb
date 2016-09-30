@@ -8,7 +8,7 @@ require_relative '../../../lib/lita/handlers/targets'
 describe Lita::Handlers::Targets do
   describe '#targets_handler' do
     let(:response) { double 'Lita Response Object', match_data: ['targets'] }
-    let(:founder) { create :founder_with_out_password }
+    let(:founder) { create :founder }
     let(:slack_username_check_response) { { ok: true, members: [{ name: 'slack_username', id: 'ABCD1234' }] }.to_json }
 
     before do
@@ -28,7 +28,7 @@ describe Lita::Handlers::Targets do
 
     context 'when client is a known founder' do
       let(:startup) { create :startup }
-      let(:founder) { create :founder_with_out_password, slack_username: 'slack_username' }
+      let(:founder) { create :founder, slack_username: 'slack_username' }
 
       # Create six targets to make sure only five are displayed.
       let(:expired_founder_target) { create :target, role: Target::ROLE_FOUNDER, assignee: founder, due_date: 2.days.ago }

@@ -357,7 +357,7 @@ ActiveAdmin.register Startup do
 
   permit_params :product_name, :product_description, :legal_registered_name, :website, :email, :logo, :facebook_link, :twitter_link,
     { startup_category_ids: [] }, { founder_ids: [] },
-    { founders_attributes: [:id, :first_name, :last_name, :email, :avatar, :remote_avatar_url, :linkedin_url, :twitter_url, :skip_password] },
+    { founders_attributes: [:id, :first_name, :last_name, :email, :avatar, :remote_avatar_url, :linkedin_url, :twitter_url] },
     :created_at, :updated_at, :dropped_out, :registration_type,
     :agreement_signed_at, :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug, :batch_id,
     :tag_list

@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 feature 'Startup Edit' do
-  let(:founder) { create :founder_with_password, confirmed_at: Time.now }
-  let(:co_founder) { create :founder_with_password, confirmed_at: Time.now }
+  let(:founder) { create :founder, confirmed_at: Time.now }
+  let(:co_founder) { create :founder, confirmed_at: Time.now }
   let!(:startup) { create :startup }
 
   let(:new_product_name) { Faker::Lorem.words(rand(3) + 1).join ' ' }

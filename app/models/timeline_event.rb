@@ -13,6 +13,8 @@ class TimelineEvent < ActiveRecord::Base
   belongs_to :improved_timeline_event, class_name: 'TimelineEvent'
 
   mount_uploader :image, TimelineImageUploader
+  process_in_background :image
+
   serialize :links
   validates_presence_of :event_on, :startup_id, :founder_id, :timeline_event_type, :description
   delegate :founder_event?, :title, to: :timeline_event_type

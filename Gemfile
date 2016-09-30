@@ -23,24 +23,35 @@ gem 'carrierwave-bombshelter' # Protects your carrierwave from image bombs (and 
 gem 'fog'
 
 gem 'coffee-rails', '~> 4.1.0' # Coffeescript on Rails.
-gem 'devise', '>= 3.5.4' # User auth library.
+
+# TODO: Devise is out-of-date.
+gem 'devise', '~> 3.5.6' # User auth library.
 gem 'devise_invitable' # Allow invites to be sent out.
 gem 'jbuilder', '~> 2.0' # Standard part of Rails, but unused, since we don't have an API.
 gem 'jquery-rails' # JQuery on Rails.
 gem 'mini_magick' # Image processing.
 gem 'pg' # PostgreSQL support.
 gem 'sass-rails', '~> 5.0'
-gem 'sentry-raven' # Reporter for Sentry Heroku add-on.
+
+# TODO: sentry-raven is out-of-date.
+gem 'sentry-raven', '~> 0.13.3' # Reporter for Sentry Heroku add-on.
+
 gem 'slim' # Slim templating.
-gem 'turbolinks' # Quicker page navigation. https://github.com/turbolinks/turbolinks
+
+# TODO: Turbolinks is out of date.
+gem 'turbolinks', '~> 2.5.3' # Quicker page navigation. https://github.com/turbolinks/turbolinks
+
 gem 'uglifier', '>= 2.7.2' # JavaScript compressor.
-gem 'rest-client' # Used to contact Fast Alerts' API.
+
+# TODO: rest-client is out-of-date.
+gem 'rest-client', '~> 1.8.0' # Used to contact Fast Alerts' API.
+
 gem 'cancancan', '~> 1.8' # Used to manage administrator types and roles in the ActiveAdmin interface.
 gem 'phony_rails' # Phone number validation and normalization.
 
 # Select2 javascript select box improvement library, using in ActiveAdmin interface.
 # TODO: This gem currently serves version 3.x of select2. Version 4 (released) has breaking changes. Take care when upgrading.
-gem 'select2-rails'
+gem 'select2-rails', '~> 3.5.10'
 
 gem 'bootstrap-sass', '~> 3.3.3' # Official Sass port of Bootstrap.
 gem 'autoprefixer-rails' # Autoprefixer for Ruby and Ruby on Rails.
@@ -76,7 +87,10 @@ gem 'lita-slack', github: 'litaio/lita-slack', require: false # Lita adapter for
 gem 'kramdown' # kramdown is a fast, pure Ruby Markdown superset converter, using a strict syntax definition and supporting several common extensions. http://kramdown.gettalong.org
 gem 'gaffe' # Custom error pages. https://github.com/mirego/gaffe
 gem 'google_calendar', github: 'northworld/google_calendar' # Thin wrapper over Google Calendar API.
-gem 'recaptcha', require: 'recaptcha/rails' # ReCaptcha helpers for ruby apps http://github.com/ambethia/recaptcha
+
+# TODO: Old version of recaptcha. Upgrade when possible.
+gem 'recaptcha', '~> 0.4.0', require: 'recaptcha/rails' # ReCaptcha helpers for ruby apps http://github.com/ambethia/recaptcha
+
 gem 'groupdate' # The simplest way to group temporal data. https://github.com/ankane/groupdate
 gem 'videojs_rails' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com/seanbehan/videojs_rails
 gem 'react-rails' # For automatically transforming JSX and using React in Rails.
@@ -105,7 +119,9 @@ gem 'skylight' # Skylight agent for Ruby https://www.skylight.io
 
 # Rails assets!
 source 'https://rails-assets.org' do
-  gem 'rails-assets-pnotify' # Superb notifications library. http://sciactive.github.io/pnotify/
+  # TODO: Old version of pnotify. Upgrade when possible.
+  gem 'rails-assets-pnotify', '~> 2.0.1' # Superb notifications library. http://sciactive.github.io/pnotify/
+
   gem 'rails-assets-curioussolutions-datetimepicker' # Responsive datetimepicker for timeline builder form.
   gem 'rails-assets-trix' # rich text editor from basecamp ( used for eg in the description for targets)
   gem 'rails-assets-bootstrap-tabcollapse' # Bootstrap plugin that switches bootstrap tabs component to collapse component for small screens.

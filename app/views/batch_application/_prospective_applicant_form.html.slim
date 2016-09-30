@@ -11,32 +11,39 @@
       span.font-semibold.brand-secondary.bigger-text
         | Jan 1, 2017
 
-  = simple_form_for @presenter.prospective_applicant_form,
-    url: apply_notify_path,
-    wrapper: :vertical_form do |f|
-    .simple-form-container
-      = f.input :name, label: false, placeholder: 'Your Name', input_html: { maxlength: 250 }
+  - if @presenter.prospective_applicant_submitted?(self)
+    .application-open-text
+      p.font-regular.m-t-1
+        span.bigger-text
+          ' Thank you for your interest!
+        ' We'll send you an email when admissions for the next batch is about to open.
+  - else
+    = simple_form_for @presenter.prospective_applicant_form,
+      url: apply_notify_path,
+      wrapper: :vertical_form do |f|
+      .simple-form-container
+        = f.input :name, label: false, placeholder: 'Your Name', input_html: { maxlength: 250 }
 
-      = f.input :email, label: false, placeholder: 'Email Address',
-        input_html: { maxlength: 250, type: 'email' }
+        = f.input :email, label: false, placeholder: 'Email Address',
+          input_html: { maxlength: 250, type: 'email' }
 
-      = f.input :phone, label: false, placeholder: '10-digit mobile phone number',
-        input_html: { maxlength: 10, type: 'tel', pattern: '[0-9]{10}' }
+        = f.input :phone, label: false, placeholder: '10-digit mobile phone number',
+          input_html: { maxlength: 10, type: 'tel', pattern: '[0-9]{10}' }
 
-      // TODO: College is actually a required field, but select2 v3 does not play nice with HTML5 validations. Try enabling this when upgrading to select2 v4.
-      = f.input :college_id,
-        type: :hidden,
-        label: false,
-        placeholder: 'Please pick your college',
-        input_html: { value: nil, 'data-search-url' => colleges_url },
-        required: false
-
-      .hidden-xs-up
-        = f.input :college_text,
+        // TODO: College is actually a required field, but select2 v3 does not play nice with HTML5 validations. Try enabling this when upgrading to select2 v4.
+        = f.input :college_id,
+          type: :hidden,
           label: false,
-          placeholder: 'Name of your college',
-          required: true,
-          input_html: { maxlength: 250, disabled: true }
+          placeholder: 'Please pick your college',
+          input_html: { value: nil, 'data-search-url' => colleges_url },
+          required: false
 
-      div
-        = f.submit 'Notify Me', class: 'btn btn-primary btn-md text-uppercase'
+        .hidden-xs-up
+          = f.input :college_text,
+            label: false,
+            placeholder: 'Name of your college',
+            required: true,
+            input_html: { maxlength: 250, disabled: true }
+
+        div
+          = f.submit 'Notify Me', class: 'btn btn-primary btn-md text-uppercase'

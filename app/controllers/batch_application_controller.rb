@@ -1,5 +1,5 @@
 class BatchApplicationController < ApplicationController
-  before_action :ensure_team_lead_signed_in, except: %w(index register identify send_sign_in_email continue sign_in_email_sent intercom_user_create)
+  before_action :ensure_team_lead_signed_in, except: %w(index register identify send_sign_in_email continue sign_in_email_sent intercom_user_create notify)
   before_action :ensure_accurate_stage_number, only: %w(ongoing submit complete restart expired rejected)
   before_action :load_common_instance_variables
 
@@ -50,8 +50,8 @@ class BatchApplicationController < ApplicationController
     form = @presenter.prospective_applicant_form
 
     if form.validate(params[:prospective_applicant])
-      form.save
-      flash[:success] = "Done! We'll send you an email when our next batch is about to open."
+      prospective_applicant = form.save
+      session[:prospective_applicant_email] = prospective_applicant.email
       redirect_to apply_path
     else
       render 'index'

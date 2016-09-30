@@ -11,6 +11,10 @@ class ApplicationIndexPresenter
     @prospective_applicant_form ||= ProspectiveApplicantForm.new(ProspectiveApplicant.new)
   end
 
+  def prospective_applicant_submitted?(view)
+    view.session[:prospective_applicant_email].present?
+  end
+
   def old_applications
     return [] if @batch_applicant.nil? || @batch_applicant.batch_applications.blank?
 

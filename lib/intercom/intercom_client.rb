@@ -57,6 +57,11 @@ class IntercomClient
     save_user(user)
   end
 
+  def add_university_to_user(user, university)
+    user.custom_attributes[:university] = university
+    save_user(user)
+  end
+
   # count of open, closed, assigned and unassigned conversations
   def conversation_count
     @conversation_count ||= intercom_client.counts.for_type(type: 'conversation')

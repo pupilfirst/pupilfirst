@@ -91,14 +91,22 @@ class BatchApplicationForm < Reform::Form
     intercom.add_phone_to_user(user, phone)
     intercom.add_college_to_user(user, applicant_college_name)
     intercom.add_batch_to_user(user, Batch.open_batch)
+    intercom.add_university_to_user(user, applicant_university) if applicant_university.present?
   rescue
     # TODO: @jaleel: Fix this. Capture all rescues are not OK!
     # simply skip for now if anything goes wrong here
     return
   end
 
+  def applicant
+    @applicant ||= BatchApplicant.where(email: email).first
+  end
+
   def applicant_college_name
-    applicant = BatchApplicant.where(email: email).first
     applicant.college_text || applicant.college.name
+  end
+
+  def applicant_university
+    applicant&.college&.replacement_university&.name
   end
 end

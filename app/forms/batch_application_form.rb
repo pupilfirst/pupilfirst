@@ -89,11 +89,16 @@ class BatchApplicationForm < Reform::Form
     intercom.add_tag_to_user(user, 'Applicant')
     intercom.add_note_to_user(user, 'Auto-tagged as <em>Applicant</em>')
     intercom.add_phone_to_user(user, phone)
-    # intercom.add_college_to_user(user, college)
+    intercom.add_college_to_user(user, applicant_college_name)
     intercom.add_batch_to_user(user, Batch.open_batch)
   rescue
     # TODO: @jaleel: Fix this. Capture all rescues are not OK!
     # simply skip for now if anything goes wrong here
     return
+  end
+
+  def applicant_college_name
+    applicant = BatchApplicant.where(email: email).first
+    applicant.college_text || applicant.college.name
   end
 end

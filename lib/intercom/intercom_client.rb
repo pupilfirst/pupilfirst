@@ -4,9 +4,8 @@ class IntercomClient
   end
 
   # find a user given his email
-  # TODO: this method raises an exception if there are duplicate users with the same email address. Need to modify this to probably use the latest record. No API method helps in retrieving this as of now. Have contacted intercom support.
   def find_user(email)
-    intercom_client.users.find(email: email)
+    intercom_client.users.all.select { |user| user.email == email }.first
   rescue Intercom::ResourceNotFound
     return nil
   end

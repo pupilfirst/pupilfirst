@@ -1,10 +1,18 @@
 class ApplicationIndexPresenter
-  def initialize(batch_applicant)
+  def initialize(batch_applicant = BatchApplicant.new)
     @batch_applicant = batch_applicant
   end
 
   def batch_application_form
     @batch_application_form ||= BatchApplicationForm.new(BatchApplicant.new)
+  end
+
+  def prospective_applicant_form
+    @prospective_applicant_form ||= ProspectiveApplicantForm.new(ProspectiveApplicant.new)
+  end
+
+  def prospective_applicant_submitted?(view)
+    view.session[:prospective_applicant_email].present?
   end
 
   def old_applications
@@ -15,5 +23,13 @@ class ApplicationIndexPresenter
     end
 
     applications.map { |application| BatchApplicationDecorator.decorate(application) }
+  end
+
+  def applications_open?
+    Batch.open_for_applications.any?
+  end
+
+  def next_batch_number
+    @next_batch_number ||= Batch.order('created_at DESC').first.batch_number + 1
   end
 end

@@ -1,4 +1,6 @@
 class BatchApplicationForm < Reform::Form
+  include CollegeAddable
+
   property :name, validates: { presence: true, length: { maximum: 250 } }
   property :email, validates: { presence: true, length: { maximum: 250 }, format: { with: /\S+@\S+/, message: "doesn't look like an email" } }
   property :email_confirmation, virtual: true, validates: { presence: true, length: { maximum: 250 }, format: { with: /\S+@\S+/, message: "doesn't look like an email" } }
@@ -12,7 +14,6 @@ class BatchApplicationForm < Reform::Form
   validate :do_not_reapply
   validate :college_should_exist
   validate :emails_should_match
-  validate :college_id_or_text_should_be_supplied
 
   # Applicant with application should be blocked from submitting the form. Zhe should login instead.
   def do_not_reapply
@@ -37,19 +38,6 @@ class BatchApplicationForm < Reform::Form
     return if email == email_confirmation
     errors[:base] << 'Supplied email address and its confirmation do not match.'
     errors[:email_confirmation] << 'email addresses do not match'
-  end
-
-  def college_id_or_text_should_be_supplied
-    return if college_id.present? && college_id != 'other'
-    return if college_text.present?
-
-    errors[:base] << 'College is missing.'
-
-    if college_id == 'other'
-      errors[:college_text] << "can't be blank"
-    else
-      errors[:college_id] << 'must be selected'
-    end
   end
 
   def save
@@ -89,14 +77,6 @@ class BatchApplicationForm < Reform::Form
       application_stage: ApplicationStage.initial_stage,
       team_lead_id: applicant.id
     )
-  end
-
-  def college_details
-    if college_text.present?
-      { college_text: college_text }
-    else
-      { college_id: college_id }
-    end
   end
 
   def supplied_reference

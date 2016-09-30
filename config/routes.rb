@@ -94,6 +94,7 @@ Svapp::Application.routes.draw do
   scope 'apply', as: 'apply', controller: 'batch_application' do
     get '', action: 'index'
     post 'register'
+    post 'notify'
     get 'identify'
     post 'send_sign_in_email'
     get 'sign_in_email_sent'

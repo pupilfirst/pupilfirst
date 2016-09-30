@@ -66,7 +66,7 @@ class BatchApplicationForm < Reform::Form
       }.merge(college_details)
     )
 
-    add_intercom_applicant_tag_and_details if Rails.env.production?
+    add_intercom_applicant_tag_and_details unless Rails.env.test?
 
     applicant
   end
@@ -89,7 +89,8 @@ class BatchApplicationForm < Reform::Form
     intercom.add_tag_to_user(user, 'Applicant')
     intercom.add_note_to_user(user, 'Auto-tagged as <em>Applicant</em>')
     intercom.add_phone_to_user(user, phone)
-    intercom.add_college_to_user(user, college)
+    # intercom.add_college_to_user(user, college)
+    intercom.add_batch_to_user(user, Batch.open_batch)
   rescue
     # TODO: @jaleel: Fix this. Capture all rescues are not OK!
     # simply skip for now if anything goes wrong here

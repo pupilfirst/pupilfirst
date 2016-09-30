@@ -52,6 +52,11 @@ class IntercomClient
     save_user(user)
   end
 
+  def add_batch_to_user(user, batch)
+    user.custom_attributes[:batch] = "#{batch.batch_number} #{batch.theme}"
+    save_user(user)
+  end
+
   # count of open, closed, assigned and unassigned conversations
   def conversation_count
     @conversation_count ||= intercom_client.counts.for_type(type: 'conversation')

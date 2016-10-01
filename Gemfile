@@ -23,9 +23,7 @@ gem 'carrierwave-bombshelter' # Protects your carrierwave from image bombs (and 
 gem 'fog'
 
 gem 'coffee-rails', '~> 4.1.0' # Coffeescript on Rails.
-
-# TODO: Devise is out-of-date.
-gem 'devise', '~> 3.5.6' # User auth library.
+gem 'devise' # User auth library.
 gem 'devise_invitable' # Allow invites to be sent out.
 gem 'jbuilder', '~> 2.0' # Standard part of Rails, but unused, since we don't have an API.
 gem 'jquery-rails' # JQuery on Rails.

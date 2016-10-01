@@ -30,9 +30,7 @@ gem 'jquery-rails' # JQuery on Rails.
 gem 'mini_magick' # Image processing.
 gem 'pg' # PostgreSQL support.
 gem 'sass-rails', '~> 5.0'
-
-# TODO: sentry-raven is out-of-date.
-gem 'sentry-raven', '~> 0.13.3' # Reporter for Sentry Heroku add-on.
+gem 'sentry-raven' # Reporter for Sentry Heroku add-on.
 
 gem 'slim' # Slim templating.
 

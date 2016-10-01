@@ -49,7 +49,7 @@ class BatchApplicationForm < Reform::Form
       application.batch_applicants << applicant
 
       # Send login email when all's done.
-      applicant.send_sign_in_email
+      applicant.send_sign_in_email(defer: true)
     end
 
     # Update user info on intercom

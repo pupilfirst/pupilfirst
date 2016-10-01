@@ -41,7 +41,8 @@ class BatchApplicationForm < Reform::Form
   end
 
   def save
-    # TODO: It seems this transaction is not working fine. We are getting applicants without correspoinding applications
+    applicant = nil
+
     BatchApplication.transaction do
       applicant = update_or_create_team_lead
       application = create_application(applicant)
@@ -49,10 +50,13 @@ class BatchApplicationForm < Reform::Form
 
       # Send login email when all's done.
       applicant.send_sign_in_email
-
-      # Return the applicant
-      applicant
     end
+
+    # Update user info on intercom
+    IntercomApplicantUpdateJob.perform_later applicant if applicant.present?
+
+    # Return the applicant
+    applicant
   end
 
   def update_or_create_team_lead
@@ -65,8 +69,6 @@ class BatchApplicationForm < Reform::Form
         reference: supplied_reference
       }.merge(college_details)
     )
-
-    add_intercom_applicant_tag_and_details unless Rails.env.test?
 
     applicant
   end
@@ -81,34 +83,5 @@ class BatchApplicationForm < Reform::Form
 
   def supplied_reference
     reference_text.present? ? reference_text : reference
-  end
-
-  def add_intercom_applicant_tag_and_details
-    intercom = IntercomClient.new
-    user = intercom.find_or_create_user(email: email, name: name)
-    intercom.add_tag_to_user(user, 'Applicant')
-    intercom.add_note_to_user(user, 'Auto-tagged as <em>Applicant</em>')
-    intercom.update_user(user, phone: phone, college: applicant_college_name, batch: open_batch_name, university: applicant_university)
-  rescue
-    # TODO: @jaleel: Fix this. Capture all rescues are not OK!
-    # simply skip for now if anything goes wrong here
-    return
-  end
-
-  def applicant
-    @applicant ||= BatchApplicant.where(email: email).first
-  end
-
-  def open_batch_name
-    batch = Batch.open_batch
-    "#{batch.batch_number} #{batch.theme}"
-  end
-
-  def applicant_college_name
-    applicant.college_text || applicant.college.name
-  end
-
-  def applicant_university
-    applicant&.college&.replacement_university&.name || 'Not Available'
   end
 end

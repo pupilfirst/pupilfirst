@@ -58,7 +58,7 @@ class FacultyController < ApplicationController
 
   def validate_faculty
     @faculty = Faculty.find_by token: params[:token]
-    raise_not_found unless @faculty && @faculty.email?
+    raise_not_found unless @faculty&.email?
   end
 
   def save_slots_in_list(list, faculty)

@@ -20,7 +20,7 @@ class Feature < ActiveRecord::Base
     return false unless feature
 
     parsed_value = begin
-      JSON.load(feature.value).with_indifferent_access
+      JSON.parse(feature.value).with_indifferent_access
     rescue JSON::ParserError
       return false
     end

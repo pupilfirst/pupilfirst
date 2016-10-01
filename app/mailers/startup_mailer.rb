@@ -8,14 +8,8 @@ class StartupMailer < ApplicationMailer
 
   def feedback_as_email(startup_feedback, founder: nil)
     @startup_feedback = startup_feedback
-
-    send_to = if founder
-      founder.email
-    else
-      startup_feedback.startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
-    end
-
-    mail(to: send_to, subject: 'Feedback from Team SV.')
+    send_to = founder&.email || startup_feedback.startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
+    mail(to: send_to, subject: 'Feedback from Team SV')
   end
 
   # Mail sent to startup founders once a connect request is confirmed.

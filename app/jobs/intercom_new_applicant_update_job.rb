@@ -1,4 +1,4 @@
-class IntercomApplicantUpdateJob < ActiveJob::Base
+class IntercomNewApplicantUpdateJob < ActiveJob::Base
   queue_as :default
   attr_reader :applicant
 
@@ -11,7 +11,7 @@ class IntercomApplicantUpdateJob < ActiveJob::Base
 
     intercom.add_tag_to_user(user, 'Applicant')
     intercom.add_note_to_user(user, 'Auto-tagged as <em>Applicant</em>')
-    intercom.update_user(user, phone: applicant.phone, college: applicant_college_name, batch: open_batch_name, university: applicant_university)
+    IntercomUpdateUserJob.perform_later(user.email, phone: applicant.phone, college: applicant_college_name, batch: open_batch_name, university: applicant_university, application_stage: 'Submitted Application')
   end
 
   def open_batch_name

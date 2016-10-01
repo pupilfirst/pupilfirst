@@ -53,7 +53,7 @@ class BatchApplicationForm < Reform::Form
     end
 
     # Update user info on intercom
-    IntercomApplicantUpdateJob.perform_later applicant if applicant.present?
+    IntercomNewApplicantUpdateJob.perform_later applicant if applicant.present?
 
     # Return the applicant
     applicant

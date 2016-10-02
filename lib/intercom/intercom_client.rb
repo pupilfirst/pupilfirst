@@ -33,12 +33,14 @@ class IntercomClient
 
   # add a tag to a user
   def add_tag_to_user(user, tag)
-    intercom_client.tags.tag(name: tag, users: [{ email: user.email }])
+    user_id = find_user(user.email).id
+    intercom_client.tags.tag(name: tag, users: [{ id: user_id }])
   end
 
   # add internal note to a user
   def add_note_to_user(user, note)
-    intercom_client.notes.create(body: note, email: user.email)
+    user_id = find_user(user.email).user_id
+    intercom_client.notes.create(body: note, user_id: user_id)
   end
 
   # add phone as custom attribute to a user

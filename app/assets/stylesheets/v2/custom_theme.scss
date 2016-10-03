@@ -328,7 +328,9 @@ p {
 }
 .read-more {
   position: relative;
+  overflow: hidden;
 }
+
 .read-less-link, .read-more-link {
   text-transform: uppercase;
   font-weight: $font-semibold;

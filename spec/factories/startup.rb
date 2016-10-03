@@ -11,8 +11,8 @@ FactoryGirl.define do
     f.registration_token { Time.now.to_s }
 
     after(:build) do |startup|
-      startup.founders << create(:founder_with_password, startup: startup, startup_admin: true)
-      startup.founders << create(:founder_with_password, startup: startup)
+      startup.founders << create(:founder, startup: startup, startup_admin: true)
+      startup.founders << create(:founder, startup: startup)
       startup.startup_categories = [create(:startup_category)]
     end
 

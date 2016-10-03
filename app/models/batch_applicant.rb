@@ -45,9 +45,10 @@ class BatchApplicant < ActiveRecord::Base
     batch_applications.find_by(batch_id: batch.id).present?
   end
 
-  def send_sign_in_email(shared_device: false)
+  def send_sign_in_email(shared_device: false, defer: false)
     # Send email.
-    BatchApplicantMailer.sign_in(self, shared_device).deliver_now
+    mailer = BatchApplicantMailer.sign_in(self, shared_device)
+    defer ? mailer.deliver_later : mailer.deliver_now
 
     # Mark when email was sent.
     update!(sign_in_email_sent_at: Time.now)

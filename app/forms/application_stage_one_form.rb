@@ -27,7 +27,7 @@ class ApplicationStageOneForm < Reform::Form
     count = team_size_number.present? ? team_size_number : team_size_select
     model.update! team_size: count
 
-    add_intercom_payment_initiated_tag if Rails.env.production?
+    IntercomLastApplicantEventUpdateJob.perform_later(model.team_lead, 'payment_initiated') unless Rails.env.test?
 
     # If payment is present
     if model.payment.present?
@@ -53,16 +53,5 @@ class ApplicationStageOneForm < Reform::Form
       batch_application: model,
       batch_applicant: model.team_lead
     )
-  end
-
-  def add_intercom_payment_initiated_tag
-    intercom = IntercomClient.new
-    user = intercom.find_or_create_user(email: model.team_lead.email, name: model.team_lead.name)
-    intercom.add_tag_to_user(user, 'Payment Initiated')
-    intercom.add_note_to_user(user, 'Auto-tagged as <em>Payment Initiated</em>')
-
-  rescue
-    # simply skip for now if anything goes wrong here
-    return
   end
 end

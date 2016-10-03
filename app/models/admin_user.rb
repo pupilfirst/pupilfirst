@@ -16,6 +16,7 @@ class AdminUser < ActiveRecord::Base
 
   mount_uploader :avatar, AvatarUploader
   process_in_background :avatar
+
   normalize_attribute :password, :password_confirmation, :fullname, :avatar
 
   def self.admin_user_types

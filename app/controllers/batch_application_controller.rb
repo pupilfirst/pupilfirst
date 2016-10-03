@@ -1,9 +1,7 @@
 class BatchApplicationController < ApplicationController
-  before_action :ensure_team_lead_signed_in, except: %w(index register identify send_sign_in_email continue sign_in_email_sent intercom_user_create)
+  before_action :ensure_team_lead_signed_in, except: %w(index register identify send_sign_in_email continue sign_in_email_sent notify)
   before_action :ensure_accurate_stage_number, only: %w(ongoing submit complete restart expired rejected)
   before_action :load_common_instance_variables
-
-  skip_before_action :verify_authenticity_token, only: :intercom_user_create
 
   layout 'application_v2'
 
@@ -24,7 +22,7 @@ class BatchApplicationController < ApplicationController
 
   # POST /apply/register
   def register
-    @presenter = ApplicationIndexPresenter.new(BatchApplicant.new)
+    @presenter = ApplicationIndexPresenter.new
     form = @presenter.batch_application_form
 
     if form.validate(params[:batch_application])
@@ -39,6 +37,20 @@ class BatchApplicationController < ApplicationController
       sign_in_applicant_temporarily(applicant)
 
       redirect_to apply_stage_path(stage_number: application_stage_number, continue_mail_sent: 'yes')
+    else
+      render 'index'
+    end
+  end
+
+  # POST /apply/notify
+  def notify
+    @presenter = ApplicationIndexPresenter.new
+    form = @presenter.prospective_applicant_form
+
+    if form.validate(params[:prospective_applicant])
+      prospective_applicant = form.save
+      session[:prospective_applicant_email] = prospective_applicant.email
+      redirect_to apply_path
     else
       render 'index'
     end
@@ -276,17 +288,6 @@ class BatchApplicationController < ApplicationController
     )
 
     redirect_to apply_stage_complete_path(stage_number: '4')
-  end
-
-  # webhook url for stripping off user_id from new intercom users
-  def intercom_user_create
-    raise 'Unexpected Intercom Webhook Topic' unless params[:topic] == 'user.created'
-
-    email = params.dig(:data, :item, :email)
-    raise 'Could not retreive email from Webhook POST' unless email.present?
-
-    IntercomClient.new.strip_user_id(email)
-    head :ok
   end
 
   protected

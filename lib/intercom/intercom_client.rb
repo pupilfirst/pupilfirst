@@ -5,7 +5,7 @@ class IntercomClient
 
   # find a user given his email
   def find_user(email)
-    intercom_client.users.find(email: email)
+    intercom_client.users.all.select { |user| user.email == email }.first
   rescue Intercom::ResourceNotFound
     return nil
   end
@@ -33,12 +33,14 @@ class IntercomClient
 
   # add a tag to a user
   def add_tag_to_user(user, tag)
-    intercom_client.tags.tag(name: tag, users: [{ email: user.email }])
+    user_id = find_user(user.email)&.id
+    intercom_client.tags.tag(name: tag, users: [{ id: user_id }]) if user_id.present?
   end
 
   # add internal note to a user
   def add_note_to_user(user, note)
-    intercom_client.notes.create(body: note, email: user.email)
+    user_id = find_user(user.email)&.user_id
+    intercom_client.notes.create(body: note, user_id: user_id) if user_id.present?
   end
 
   # add phone as custom attribute to a user
@@ -49,6 +51,23 @@ class IntercomClient
 
   def add_college_to_user(user, college)
     user.custom_attributes[:college] = college
+    save_user(user)
+  end
+
+  def add_batch_to_user(user, batch)
+    user.custom_attributes[:batch] = "#{batch.batch_number} #{batch.theme}"
+    save_user(user)
+  end
+
+  def add_university_to_user(user, university)
+    user.custom_attributes[:university] = university
+    save_user(user)
+  end
+
+  def update_user(user, attributes)
+    attributes.each do |name, value|
+      user.custom_attributes[name.to_sym] = value
+    end
     save_user(user)
   end
 

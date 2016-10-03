@@ -59,6 +59,7 @@ class TimelineEventType < ActiveRecord::Base
   end
 
   mount_uploader :badge, BadgeUploader
+  process_in_background :badge
 
   attr_accessor :copy_badge_from
 

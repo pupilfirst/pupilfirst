@@ -40,8 +40,3 @@ toggleNavBg = ->
     $('.home-navbar').toggleClass 'toggle-bg'
 
 $(document).on 'page:change', toggleNavBg
-
-# Enable the progressbar that shows up at top of page. This needs to be done only once per session.
-# TODO: Remove this when upgrading to Rails 5 (Turbolinks 5), where this progressbar is active by default.
-$ ->
-  Turbolinks.enableProgressBar();

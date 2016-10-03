@@ -1,5 +1,5 @@
 # Responsive datetimepicker.
-#= require curioussolutions-datetimepicker/dist/DateTimePicker.js
+#= require curioussolutions-datetimepicker
 #= require masonry/dist/masonry.pkgd.js
 
 #= require_tree ./startups

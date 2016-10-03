@@ -34,6 +34,7 @@ class ApplicationStageTwoForm < Reform::Form
     errors[:video_url] << 'is not a valid Facebook URL' unless video_url =~ %r{https?\://.*(facebook)}
   end
 
+  # rubocop:disable Metrics/AbcSize
   def save
     ApplicationSubmission.transaction do
       model.save!
@@ -42,7 +43,10 @@ class ApplicationStageTwoForm < Reform::Form
       model.application_submission_urls.create!(name: 'Live Website', url: prepend_http_if_required(website)) if website.present?
       model.application_submission_urls.create!(name: 'Application Binary', url: executable) if executable.present?
     end
+
+    IntercomLastApplicantEventUpdateJob.perform_later(model.batch_application.team_lead, 'tasks_submitted') unless Rails.env.test?
   end
+  # rubocop:enable Metrics/AbcSize
 
   def prepend_http_if_required(url)
     return url if url.starts_with?('http')

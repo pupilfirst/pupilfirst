@@ -25,7 +25,7 @@ describe Lita::Handlers::Backup do
       }
     end
 
-    let(:founder) { create :founder_with_out_password, slack_username: 'mention_name' }
+    let(:founder) { create :founder, slack_username: 'mention_name' }
 
     before do
       allow(Lita::Room).to receive(:find_by_id).with('room_object_id').and_return(room)
@@ -69,7 +69,7 @@ describe Lita::Handlers::Backup do
     end
 
     let!(:parent_message) { create :public_slack_message, timestamp: 'timestamp', channel: 'channel_name' }
-    let(:founder) { create :founder_with_out_password, slack_username: 'mention_name' }
+    let(:founder) { create :founder, slack_username: 'mention_name' }
     let(:slack_username_check_response) { { ok: true, members: [{ name: 'mention_name', id: 'ABCD1234' }] }.to_json }
 
     before do

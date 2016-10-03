@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 feature 'Feedback Popup' do
-  let(:founder) { create :founder_with_password, confirmed_at: Time.now }
+  let(:founder) { create :founder, confirmed_at: Time.now }
   let(:startup) { create :startup }
   let(:faculty) { create :faculty }
   let!(:feedback) { create :startup_feedback, faculty: faculty, startup: startup }

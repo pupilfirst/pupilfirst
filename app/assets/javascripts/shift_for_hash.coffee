@@ -4,7 +4,7 @@ shiftWindow = ->
 
 window.addEventListener("hashchange", shiftWindow)
 
-$(window).load ->
+$(window).on 'load', ->
   if location.hash
     shiftWindow()
 

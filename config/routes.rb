@@ -94,6 +94,7 @@ Svapp::Application.routes.draw do
   scope 'apply', as: 'apply', controller: 'batch_application' do
     get '', action: 'index'
     post 'register'
+    post 'notify'
     get 'identify'
     post 'send_sign_in_email'
     get 'sign_in_email_sent'
@@ -117,7 +118,7 @@ Svapp::Application.routes.draw do
   end
 
   # webhook url for intercom user create - used to strip them off user_id
-  post 'intercom_user_create', as: 'intercom_user_create', controller: 'batch_application'
+  post 'intercom_user_create', controller: 'intercom', action: 'user_create'
 
   resources :universities, only: :index
   resources :colleges, only: :index

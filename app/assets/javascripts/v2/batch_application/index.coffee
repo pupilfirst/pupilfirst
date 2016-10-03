@@ -18,19 +18,18 @@ stopVideosOnModalClose = ->
     modalIframe = $(event.target).find('iframe')
     modalIframe.attr 'src', modalIframe.attr('src')
 
+$(document).on 'page:change', avoidwidowsTypography
+$(document).on 'page:change', stopVideosOnModalClose
+$(document).on 'page:change', setupProgramCarousel
+
+# !!! NEW STUFF !!!
+
 readmoreFAQ = ->
   $('.read-more').readmore
     speed: 200
     collapsedHeight: 200
     lessLink: '<a class="read-less-link" href="#">Read Less</a>'
     moreLink: '<a class="read-more-link" href="#">Read More</a>'
-
-$(document).on 'page:change', avoidwidowsTypography
-$(document).on 'page:change', stopVideosOnModalClose
-$(document).on 'page:change', readmoreFAQ
-$(document).on 'page:change', setupProgramCarousel
-
-# !!! NEW STUFF !!!
 
 emailsShouldMatch = ->
   batchApplicationForm = $('#new_batch_application')
@@ -58,6 +57,9 @@ emailsShouldMatch = ->
 
 setupSelect2Inputs = ->
   collegeInput = $('#batch_application_college_id')
+
+  if collegeInput.length == 0
+    collegeInput = $('#prospective_applicant_college_id')
 
   if collegeInput.length
     collegeSearchUrl = collegeInput.data('searchUrl')
@@ -90,17 +92,28 @@ setupTogglingReferenceField = ->
     $('#batch_application_reference').change toggleReferenceTextField
 
 toggleCollegeTextField = ->
+  formName = null
+
   if $('#batch_application_college_id').val() == 'other'
-    collegeTextInput = $('#batch_application_college_text')
+    formName = 'batch_application'
+  else if $('#prospective_applicant_college_id').val() == 'other'
+    formName = 'prospective_applicant'
+
+  if formName != null
+    collegeTextInput = $("##{formName}_college_text")
     collegeTextInput.prop('disabled', false)
     collegeTextInput.parent().parent().removeClass('hidden-xs-up')
-    $('#batch_application_college_id').parent().addClass('hidden-xs-up')
+    $("##{formName}_college_id").parent().addClass('hidden-xs-up')
     collegeTextInput.focus()
 
 setupTogglingCollegeField = ->
   if $('#batch_application_college_id').length
     toggleCollegeTextField()
     $('#batch_application_college_id').change toggleCollegeTextField
+
+  if $('#prospective_applicant_college_id').length
+    toggleCollegeTextField()
+    $('#prospective_applicant_college_id').change toggleCollegeTextField
 
 setupStickyStartApplicationForm = ->
   stickApplicationForm()
@@ -171,4 +184,5 @@ $(document).on 'page:change', setupStickyStartApplicationForm
 $(document).on 'page:change', scrolltoStartapplicationForm
 $(document).on 'page:change', stickyApplyButtonOnApplyPage
 $(document).on 'page:change', helpIntercomPopup
+$(document).on 'page:change', readmoreFAQ
 $(document).on 'page:before-change', destroyWaypoints

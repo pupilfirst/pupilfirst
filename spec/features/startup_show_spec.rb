@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 feature 'Startup Show' do
-  let(:founder) { create :founder_with_password, confirmed_at: Time.now }
+  let(:founder) { create :founder, confirmed_at: Time.now }
   let!(:startup) { create :startup }
   let(:target) { create :target, rubric: Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')) }
 

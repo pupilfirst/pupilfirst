@@ -26,9 +26,6 @@
     = f.input :year_of_graduation, as: :select, collection: 2014..2020
     = f.input :exited
 
-    / When creating a founder manually, let's not ask for a password.
-    = f.input :skip_password, as: :hidden, input_html: { value: true }
-
     / When creating a founder manually, let's skip the e-mail confirmation step.
     /= f.input :confirmed_at, as: :hidden, input_html: { value: Time.now.utc.to_s }
 

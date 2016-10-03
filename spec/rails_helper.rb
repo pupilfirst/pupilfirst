@@ -57,7 +57,7 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
 
   # Devise includes some test helpers for functional specs.
-  config.include Devise::TestHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :controller
 
   # Allow using broken flag to exclude tests
   config.filter_run_excluding broken: true

@@ -22,7 +22,7 @@ describe Lita::Handlers::Leaderboard do
     end
 
     context 'when a SV.CO founder asks for the leaderboard privately' do
-      let(:founder) { create :founder_with_out_password, slack_username: 'slack_username' }
+      let(:founder) { create :founder, slack_username: 'slack_username' }
 
       before do
         allow(response).to receive_message_chain(:message, :source, :private_message).and_return(true)

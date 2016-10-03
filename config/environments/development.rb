@@ -52,10 +52,12 @@ Rails.application.configure do
   Bullet.enable = true
   Bullet.bullet_logger = true
   Bullet.rails_logger = true
-  Bullet.add_footer = false
 
   # Roadie asset host.
   config.roadie.url_options = { host: 'www.sv.dev', scheme: 'https' }
+
+  # Quiet asset logging.
+  config.assets.quiet = true
 end
 
 Rails.application.default_url_options = Svapp::Application.config.action_mailer.default_url_options

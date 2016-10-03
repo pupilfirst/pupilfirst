@@ -1,4 +1,6 @@
 class BatchApplicationForm < Reform::Form
+  include CollegeAddable
+
   property :name, validates: { presence: true, length: { maximum: 250 } }
   property :email, validates: { presence: true, length: { maximum: 250 }, format: { with: /\S+@\S+/, message: "doesn't look like an email" } }
   property :email_confirmation, virtual: true, validates: { presence: true, length: { maximum: 250 }, format: { with: /\S+@\S+/, message: "doesn't look like an email" } }
@@ -12,7 +14,6 @@ class BatchApplicationForm < Reform::Form
   validate :do_not_reapply
   validate :college_should_exist
   validate :emails_should_match
-  validate :college_id_or_text_should_be_supplied
 
   # Applicant with application should be blocked from submitting the form. Zhe should login instead.
   def do_not_reapply
@@ -39,32 +40,23 @@ class BatchApplicationForm < Reform::Form
     errors[:email_confirmation] << 'email addresses do not match'
   end
 
-  def college_id_or_text_should_be_supplied
-    return if college_id.present? && college_id != 'other'
-    return if college_text.present?
-
-    errors[:base] << 'College is missing.'
-
-    if college_id == 'other'
-      errors[:college_text] << "can't be blank"
-    else
-      errors[:college_id] << 'must be selected'
-    end
-  end
-
   def save
-    # TODO: It seems this transaction is not working fine. We are getting applicants without correspoinding applications
+    applicant = nil
+
     BatchApplication.transaction do
       applicant = update_or_create_team_lead
       application = create_application(applicant)
       application.batch_applicants << applicant
 
       # Send login email when all's done.
-      applicant.send_sign_in_email
-
-      # Return the applicant
-      applicant
+      applicant.send_sign_in_email(defer: true)
     end
+
+    # Update user info on intercom
+    IntercomNewApplicantCreateJob.perform_later applicant if applicant.present?
+
+    # Return the applicant
+    applicant
   end
 
   def update_or_create_team_lead
@@ -78,8 +70,6 @@ class BatchApplicationForm < Reform::Form
       }.merge(college_details)
     )
 
-    add_intercom_applicant_tag_and_details if Rails.env.production?
-
     applicant
   end
 
@@ -91,28 +81,7 @@ class BatchApplicationForm < Reform::Form
     )
   end
 
-  def college_details
-    if college_text.present?
-      { college_text: college_text }
-    else
-      { college_id: college_id }
-    end
-  end
-
   def supplied_reference
     reference_text.present? ? reference_text : reference
-  end
-
-  def add_intercom_applicant_tag_and_details
-    intercom = IntercomClient.new
-    user = intercom.find_or_create_user(email: email, name: name)
-    intercom.add_tag_to_user(user, 'Applicant')
-    intercom.add_note_to_user(user, 'Auto-tagged as <em>Applicant</em>')
-    intercom.add_phone_to_user(user, phone)
-    intercom.add_college_to_user(user, college)
-  rescue
-    # TODO: @jaleel: Fix this. Capture all rescues are not OK!
-    # simply skip for now if anything goes wrong here
-    return
   end
 end

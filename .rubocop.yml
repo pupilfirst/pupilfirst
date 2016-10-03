@@ -27,6 +27,8 @@ Style/CaseIndentation:
   IndentOneStep: true
 Lint/EndAlignment:
   AlignWith: variable
+Style/VariableNumber:
+  Enabled: false
 
 # Concessions (remove these if possible / appropriate).
 

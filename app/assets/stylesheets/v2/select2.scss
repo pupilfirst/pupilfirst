@@ -7,6 +7,9 @@
     border-color: $gray-border;
     box-shadow: none;
 
+    // Remove background color.
+    background: white none;
+
     // Let element expand to size of contents.
     height: 100%;
 
@@ -26,23 +29,41 @@
       // Inherit border color from parent.
       border-color: inherit;
 
+      // Remove border to the left.
+      border-left: 0;
+
+      // Remove background color.
+      background: white none;
+
       b {
         // Lower the arrow.
         background-position: 0 7px;
       }
     }
   }
-
-  &.select2-dropdown-open {
-    .select2-arrow {
-      // No border when dropdown is open.
-      border-color: transparent;
-    }
-  }
 }
 
-.select2-drop.select2-drop-active {
-  // Correct border color on dropdown component.
+.form-control.select2-container.select2-dropdown-open {
+  // Correct the border color when dropdown is open.
   border-color: $gray-border;
-  box-shadow: none;
+}
+
+.select2-drop {
+  &.select2-drop-active {
+    // Correct border color on dropdown component.
+    border-color: $gray-border;
+    box-shadow: none;
+
+    &.select2-drop-active {
+      // Remove blue border-top.
+      border-color: $gray-border;
+    }
+  }
+
+  .select2-results {
+    .select2-no-results {
+      // Remove background color from text indicating no results.
+      background: none;
+    }
+  }
 }

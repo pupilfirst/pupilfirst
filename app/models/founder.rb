@@ -115,8 +115,6 @@ class Founder < ActiveRecord::Base
     first_name_changed? || last_name_changed? || super
   end
 
-  attr_reader :skip_password
-
   def fullname
     [first_name, last_name].join(' ')
   end
@@ -148,10 +146,6 @@ class Founder < ActiveRecord::Base
 
   normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :first_name, :last_name,
     :slack_username, :resume_url
-
-  normalize_attribute :skip_password do |value|
-    value.is_a?(String) ? value.casecmp('true').zero? : value
-  end
 
   validates :twitter_url, url: true, allow_nil: true
   validates :linkedin_url, url: true, allow_nil: true
@@ -408,7 +402,7 @@ class Founder < ActiveRecord::Base
     return unless startup_admin && startup.present?
 
     team_lead_candidate = startup.founders.where.not(id: id).first
-    team_lead_candidate.update!(startup_admin: true) if team_lead_candidate
+    team_lead_candidate&.update!(startup_admin: true)
   end
 
   # Only applicable to startup admins, during startup creation.

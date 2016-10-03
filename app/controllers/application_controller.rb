@@ -82,12 +82,11 @@ class ApplicationController < ActionController::Base
   helper_method :feature_active?
 
   def configure_permitted_parameters
-    # allow collecting additional attributes while accepting invitation: https://github.com/scambra/devise_invitable
-    devise_parameter_sanitizer.for(:accept_invitation).concat(
+    # Allow collecting additional attributes while accepting invitation: https://github.com/scambra/devise_invitable
+    devise_parameter_sanitizer.permit(:accept_invitation, keys:
       [
         :first_name, :last_name, :gender, :born_on, :university_id, :roll_number, :unconfirmed_phone
-      ]
-    )
+      ])
   end
 
   # Set headers for CSP. Be careful when changing this.
@@ -186,28 +185,28 @@ class ApplicationController < ActionController::Base
 
   def frame_sources
     <<~FRAME_SOURCES.squish
-      frame-src
-      data:
-      https://svlabs-public.herokuapp.com https://www.google.com
-      #{typeform_csp[:frame]} #{youtube_csp[:frame]} #{slideshare_csp[:frame]} #{speakerdeck_csp[:frame]}
+            frame-src
+            data:
+            https://svlabs-public.herokuapp.com https://www.google.com
+            #{typeform_csp[:frame]} #{youtube_csp[:frame]} #{slideshare_csp[:frame]} #{speakerdeck_csp[:frame]}
       #{google_form_csp[:frame]};
     FRAME_SOURCES
   end
 
   def image_sources
     <<~IMAGE_SOURCES.squish
-      img-src
-      'self' data: https://blog.sv.co http://www.startatsv.com https://sv-assets.sv.co https://secure.gravatar.com
-      https://uploaded-assets.sv.co #{google_analytics_csp[:image]} #{inspectlet_csp[:image]} #{facebook_csp[:image]}
+            img-src
+            'self' data: https://blog.sv.co http://www.startatsv.com https://sv-assets.sv.co https://secure.gravatar.com
+            https://uploaded-assets.sv.co #{google_analytics_csp[:image]} #{inspectlet_csp[:image]} #{facebook_csp[:image]}
       #{intercom_csp[:image]} #{instagram_csp[:image]};
     IMAGE_SOURCES
   end
 
   def script_sources
     <<~SCRIPT_SOURCES.squish
-      script-src
-      'self' 'unsafe-eval' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
-      http://www.startatsv.com https://sv-assets.sv.co #{recaptcha_csp[:script]} #{google_analytics_csp[:script]}
+            script-src
+            'self' 'unsafe-eval' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
+            http://www.startatsv.com https://sv-assets.sv.co #{recaptcha_csp[:script]} #{google_analytics_csp[:script]}
       #{inspectlet_csp[:script]} #{facebook_csp[:script]} #{intercom_csp[:script]}
       #{instagram_csp[:script]} #{web_console_csp[:script]};
     SCRIPT_SOURCES
@@ -215,7 +214,7 @@ class ApplicationController < ActionController::Base
 
   def connect_sources
     <<~CONNECT_SOURCES.squish
-      connect-src 'self' #{inspectlet_csp[:connect]} #{intercom_csp[:connect]}
+            connect-src 'self' #{inspectlet_csp[:connect]} #{intercom_csp[:connect]}
       #{google_analytics_csp[:connect]};
     CONNECT_SOURCES
   end

@@ -1,3 +1,10 @@
+### 3 October, 2016
+
+#### Bugfixes
+
+  - [playbook.sv.co](https://playbook.sv.co) was serving an incorrect SSL certificate - this has been fixed. [Let’s Encrypt FTW!](https://letsencrypt.org/)
+  - Improved handling of URL-s submitted by applicants during the second stage of application process.
+
 ### 19 September, 2016
 
 #### Features

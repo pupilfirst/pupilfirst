@@ -18,19 +18,18 @@ stopVideosOnModalClose = ->
     modalIframe = $(event.target).find('iframe')
     modalIframe.attr 'src', modalIframe.attr('src')
 
+$(document).on 'page:change', avoidwidowsTypography
+$(document).on 'page:change', stopVideosOnModalClose
+$(document).on 'page:change', setupProgramCarousel
+
+# !!! NEW STUFF !!!
+
 readmoreFAQ = ->
   $('.read-more').readmore
     speed: 200
     collapsedHeight: 200
     lessLink: '<a class="read-less-link" href="#">Read Less</a>'
     moreLink: '<a class="read-more-link" href="#">Read More</a>'
-
-$(document).on 'page:change', avoidwidowsTypography
-$(document).on 'page:change', stopVideosOnModalClose
-$(document).on 'page:change', readmoreFAQ
-$(document).on 'page:change', setupProgramCarousel
-
-# !!! NEW STUFF !!!
 
 emailsShouldMatch = ->
   batchApplicationForm = $('#new_batch_application')
@@ -185,4 +184,5 @@ $(document).on 'page:change', setupStickyStartApplicationForm
 $(document).on 'page:change', scrolltoStartapplicationForm
 $(document).on 'page:change', stickyApplyButtonOnApplyPage
 $(document).on 'page:change', helpIntercomPopup
+$(document).on 'page:change', readmoreFAQ
 $(document).on 'page:before-change', destroyWaypoints

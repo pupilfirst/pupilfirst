@@ -31,12 +31,8 @@ gem 'mini_magick' # Image processing.
 gem 'pg' # PostgreSQL support.
 gem 'sass-rails', '~> 5.0'
 gem 'sentry-raven' # Reporter for Sentry Heroku add-on.
-
 gem 'slim' # Slim templating.
-
-# TODO: Turbolinks is out of date.
-gem 'turbolinks', '~> 2.5.3' # Quicker page navigation. https://github.com/turbolinks/turbolinks
-
+gem 'turbolinks' # Quicker page navigation. https://github.com/turbolinks/turbolinks
 gem 'uglifier', '>= 2.7.2' # JavaScript compressor.
 
 # TODO: rest-client is out-of-date.

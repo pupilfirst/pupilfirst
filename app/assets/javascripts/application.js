@@ -3,6 +3,7 @@
 //= require jquery_ujs
 
 //= require turbolinks
+//= require turbolinks_compatibility
 //= require react
 //= require react_ujs
 //= require components

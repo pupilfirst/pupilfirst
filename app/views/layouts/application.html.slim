@@ -11,14 +11,14 @@ html lang='en'
     / title SV.CO
 
     // Local Styles
-    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => 'reload'
 
     // Fonts
-    link type='text/css' rel='stylesheet' href='//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,400italic,300italic' media='all' data-turbolinks-track='true'
+    link type='text/css' rel='stylesheet' href='//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,400italic,300italic' media='all' data-turbolinks-track='reload'
 
     // Scripts
     = javascript_include_tag 'https://www.google-analytics.com/analytics.js', async: true
-    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => 'reload'
 
     = csrf_meta_tags
     = yield :head

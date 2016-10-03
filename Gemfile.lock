@@ -753,8 +753,9 @@ GEM
     tilt (2.0.5)
     titleize (1.4.1)
     trollop (2.1.2)
-    turbolinks (2.5.3)
-      coffee-rails
+    turbolinks (5.0.1)
+      turbolinks-source (~> 5)
+    turbolinks-source (5.0.0)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uber (0.0.15)
@@ -895,7 +896,7 @@ DEPENDENCIES
   slim
   spring
   titleize
-  turbolinks (~> 2.5.3)
+  turbolinks
   uglifier (>= 2.7.2)
   unobtrusive_flash!
   valid_url!

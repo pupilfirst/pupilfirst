@@ -27,7 +27,7 @@ class ApplicationStageOneForm < Reform::Form
     count = team_size_number.present? ? team_size_number : team_size_select
     model.update! team_size: count
 
-    IntercomPaymentInitiatedUpdateJob.perform_later(model) unless Rails.env.test?
+    IntercomLastApplicantEventUpdateJob.perform_later(model.team_lead, 'payment_initiated') unless Rails.env.test?
 
     # If payment is present
     if model.payment.present?

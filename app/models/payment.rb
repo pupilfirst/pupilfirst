@@ -100,7 +100,7 @@ class Payment < ActiveRecord::Base
     # Let the batch application (if still linked) take care of its stuff.
     batch_application&.perform_post_payment_tasks!
 
-    IntercomPaymentCompleteUpdateJob.perform_later(batch_applicant) unless Rails.env.test?
+    IntercomLastApplicantEventUpdateJob.perform_later(batch_applicant, 'payment_complete') unless Rails.env.test?
   end
 
   # Remove direct relation from application to payment and store the relationship as 'original batch application'

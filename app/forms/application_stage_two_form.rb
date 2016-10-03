@@ -44,7 +44,7 @@ class ApplicationStageTwoForm < Reform::Form
       model.application_submission_urls.create!(name: 'Application Binary', url: executable) if executable.present?
     end
 
-    IntercomTaskSubmissionUpdateJob.perform_later(model.batch_application.team_lead) unless Rails.env.test?
+    IntercomLastApplicantEventUpdateJob.perform_later(model.batch_application.team_lead, 'tasks_submitted') unless Rails.env.test?
   end
   # rubocop:enable Metrics/AbcSize
 

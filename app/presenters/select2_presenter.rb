@@ -10,9 +10,12 @@ class Select2Presenter
       )
     end
 
-    select2_results = colleges.select(:id, :state_id, :name).group_by(&:state_id).each_with_object([]) do |search_result, results|
+    # Limit the number of object allocations.
+    selected_colleges = colleges.count > 19 ? colleges.limit(19) : colleges
+
+    select2_results = selected_colleges.select(:id, :state_id, :name, 'states.name AS state_name').group_by(&:state_id).each_with_object([]) do |search_result, results|
       results << {
-        text: State.find(search_result[0]).name,
+        text: search_result[1].first.state_name,
         children: search_result[1].map do |college|
           {
             id: college.id,

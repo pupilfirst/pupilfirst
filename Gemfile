@@ -34,10 +34,7 @@ gem 'sentry-raven' # Reporter for Sentry Heroku add-on.
 gem 'slim' # Slim templating.
 gem 'turbolinks' # Quicker page navigation. https://github.com/turbolinks/turbolinks
 gem 'uglifier', '>= 2.7.2' # JavaScript compressor.
-
-# TODO: rest-client is out-of-date.
-gem 'rest-client', '~> 1.8.0' # Used to contact Fast Alerts' API.
-
+gem 'rest-client' # Used to contact Fast Alerts' API.
 gem 'cancancan', '~> 1.8' # Used to manage administrator types and roles in the ActiveAdmin interface.
 gem 'phony_rails' # Phone number validation and normalization.
 

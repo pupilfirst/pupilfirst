@@ -123,7 +123,7 @@ feature 'Resources' do
         scenario 'Founder visits approved resource for batch 2 page' do
           visit resource_path(approved_resource_for_batch_2)
           # should be redirected to the index page
-          expect(page).to have_text('This is just a small sample of resources available in the SV.CO Startup Library')
+          expect(page).to have_text('You currently have access to exclusive resources')
         end
       end
 

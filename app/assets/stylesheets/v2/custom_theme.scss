@@ -447,6 +447,8 @@ p {
 
 // Override Pagination style
 .pagination {
+  margin: 0;
+
   .page-item {
     &:first-child {
       .page-link {

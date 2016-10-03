@@ -19,7 +19,7 @@
     .col-lg-7.col-md-5.hidden-sm-down.library-banner-illustration
 
 .container
-  .resources.m-t-3.m-b-2
+  .resources.m-y-3
     .tag-filter
       = form_tag nil, method: "get" do
         = select_tag "tags", options_for_select(@resource_tags, params[:tags]), multiple: true, include_blank: true, id: "resources-index-tags", class: "tag-select"
@@ -45,5 +45,5 @@
             = results_caption
         - @resources.each do |resource|
           = render 'resource', resource: resource
-  .text-xs-center
+  .text-xs-center.m-b-2
     = will_paginate @resources, renderer: WillPaginate::ActionView::BootstrapLinkRenderer

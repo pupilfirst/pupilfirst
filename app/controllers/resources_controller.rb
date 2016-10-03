@@ -57,7 +57,7 @@ class ResourcesController < ApplicationController
   end
 
   def paginate_resources
-    @resources = @resources.paginate(page: params[:page], per_page: 8)
+    @resources = @resources.paginate(page: params[:page], per_page: 9)
   end
 
   def load_resource_tags

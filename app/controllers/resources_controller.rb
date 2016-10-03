@@ -8,6 +8,7 @@ class ResourcesController < ApplicationController
     load_resource_tags
 
     @skip_container = true
+    render layout: 'application_v2'
   end
 
   def show

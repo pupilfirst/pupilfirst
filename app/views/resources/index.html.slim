@@ -2,46 +2,48 @@
   title SV.CO Startup Library for First-time Founders
   meta name="description" content="Get access to content produced by Startup Village faculty, including presentations, video and audio clips."
 
-.resources-banner-bg
+.secondary-banner
   .container
-    .resources-banner
-      .banner-text.text-center
-        h1.page-header.header-light Startup Library
-        p.startups-introduction
+    .col-lg-5.col-md-7.library-banner-content.p-a-0
+      h1.m-b-1 Startup Library
+      - if current_founder.present? && (@resources.count > Resource.public_resources.count)
+        p.font-light
+          ' You currently have access to exclusive resources that are marked clearly by a
+          span.batch-exclusive-text.text-uppercase
+            ' Batch Exclusive
+          | badge. Please do not share these resources outside your founding team. Thank you!
+      - else
+        p.font-light
           ' This is just a small sample of resources available in the SV.CO Startup Library. Approved Startups
           | get access to exclusive content produced by Faculty, including presentations, video and audio clips.
+    .col-lg-7.col-md-5.hidden-sm-down.library-banner-illustration
 
-.resources-bg
-  .container
-    - if current_founder.present? && (@resources.count > Resource.public_resources.count)
-      .alert.alert-warning
-        ' You currently have access to exclusive resources that are marked clearly by a <strong>Batch Exclusive</strong>
-        | badge. Please do not share these resources outside your founding team. Thank you!
-
-    .resources
-      .tag-filter
-        = form_tag nil, method: "get" do
-          = select_tag "tags", options_for_select(@resource_tags, params[:tags]), multiple: true, include_blank: true, id: "resources-index-tags", class: "tag-select"
-          = text_field_tag "search", params[:search], placeholder: 'Title contains', class: 'search-field'
-          = select_tag 'created_after', options_for_select(date_filter_options, params[:created_after]), include_blank: 'Added Anytime', class: 'search-field'
-          = button_tag name: "Filter", type: "submit", class: 'btn btn-primary tag-filter-btn text-uppercase' do
+.container
+  .resources.m-t-3.m-b-2
+    .tag-filter
+      = form_tag nil, method: "get" do
+        = select_tag "tags", options_for_select(@resource_tags, params[:tags]), multiple: true, include_blank: true, id: "resources-index-tags", class: "tag-select"
+        = text_field_tag "search", params[:search], placeholder: 'Title contains', class: 'search-field'
+        = select_tag 'created_after', options_for_select(date_filter_options, params[:created_after]), include_blank: 'Added Anytime', class: 'search-field'
+        .filter-buttons
+          = button_tag name: "Filter", type: "submit", class: 'btn btn-secondary btn-with-icon text-uppercase' do
             i.fa.fa-filter
             | Filter
           - if params[:tags].present? || params[:search].present?
-            = link_to resources_path, class: 'btn btn-primary tag-filter-clear text-uppercase' do
+            = link_to resources_path, class: 'btn btn-ghost-primary btn-with-icon text-uppercase' do
               i.fa.fa-refresh
-              | Clear Filter
+              | Clear
 
-      .row
-        - if @resources.blank?
-          .col-md-12
-            .alert.alert-warning
-              = zero_results_text.html_safe
-        - else
-          - if params[:tags].present? || params[:search].present?
-            p.grey-text.show-result-text
-              = results_caption
-          - @resources.each do |resource|
-            = render 'resource', resource: resource
-    .text-center
-      = will_paginate @resources, renderer: BootstrapPagination::Rails
+    .row
+      - if @resources.blank?
+        .col-md-12
+          .alert.alert-warning
+            = zero_results_text.html_safe
+      - else
+        - if params[:tags].present? || params[:search].present?
+          p.grey-text.show-result-text
+            = results_caption
+        - @resources.each do |resource|
+          = render 'resource', resource: resource
+  .text-xs-center
+    = will_paginate @resources, renderer: WillPaginate::ActionView::BootstrapLinkRenderer

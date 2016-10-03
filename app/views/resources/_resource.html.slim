@@ -1,23 +1,30 @@
-.col-md-3.col-sm-4
-  .resource
-    - if resource.thumbnail.present?
-      = image_tag resource.thumbnail.url
-    - else
-      = image_tag 'resources/thumbnail_default.png', class: 'img-responsive'
+.col-lg-4.col-md-6
+  .resource.content-box
+    .resource-thumbnail
+      - if resource.thumbnail.present?
+        = image_tag resource.thumbnail.url
+      - else
+        = image_tag 'resources/thumbnail_default.png', class: 'img-responsive'
     - if resource.for_approved?
       .batch-exclusive
-        .badge Batch Exclusive
+        p.text-uppercase
+          | Batch Exclusive
 
     .resource-content
-      .title
+      h3.m-b-1
         = link_to resource.title, resource
       .description
         = simple_format resource.description
+      = render 'tags', resource: resource
 
     .links
-      - if resource.stream?
-        = link_to resource_url(resource, watch: true), class: 'btn stream-resource material-btn green', title: "Play" do
-          i.fa.fa-play
-
-      a.btn.material-btn.blue href=download_resource_url(resource) target='_blank' title="Download"
+      a.btn.btn-ghost-secondary.btn-sm.btn-with-icon.text-uppercase href=download_resource_url(resource) target='_blank' title="Download"
         i.fa.fa-download
+        span
+          | Download
+
+      - if resource.stream?
+        = link_to resource_url(resource, watch: true), class: 'btn btn-ghost-primary btn-sm btn-with-icon text-uppercase', title: "Play" do
+          i.fa.fa-play
+          span
+            | Play

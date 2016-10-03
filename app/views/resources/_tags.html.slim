@@ -1,4 +1,4 @@
-.resources-show-tags
+.resources-show-tags.m-y-1
   - resource.tags.each do |tag|
-    = link_to resources_path('tags[]' => tag.name) do
-      span.label.label-info = tag.name
+    = link_to resources_path('tags[]' => tag.name), class: 'tag tag-pill tag-default' do
+      = tag.name

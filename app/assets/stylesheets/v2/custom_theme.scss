@@ -39,6 +39,21 @@ p {
 }
 // **********  Overriding Bootstrap classes **********
 
+// **********  Custom style **********
+// Brand Color classes
+.brand-primary {
+  color: $brand-primary;
+}
+.brand-secondary {
+  color: $brand-secondary;
+}
+.light-primary {
+  color: $light-primary;
+}
+.light-secondary {
+  color: $light-secondary;
+}
+
 // ******** BUTTON Style ********
 .btn {
   border-radius: $border-radius-btn;
@@ -67,7 +82,7 @@ p {
   }
 }
 .btn-sm {
-  padding: 4px 18px;
+  padding: 6px 18px;
 }
 .btn-md {
   padding: 12px 24px;
@@ -116,8 +131,9 @@ p {
 }
 
 .btn-ghost-primary {
-  @include button-outline-variant($btn-primary-bg);
+  background-color: white;
   border: 1px solid $brand-primary;
+  color: $brand-primary;
 
   &:hover {
     background-color: $brand-primary;
@@ -134,21 +150,31 @@ p {
   }
 }
 
-
-// **********  Custom style **********
-// Brand Color classes
-.brand-primary {
-  color: $brand-primary;
-}
-.brand-secondary {
+.btn-ghost-secondary {
+  background-color: white;
+  border: 1px solid $brand-secondary;
   color: $brand-secondary;
+
+  &:hover {
+    background-color: $brand-secondary;
+    color: white;
+  }
+  &:focus,
+  &.focus {
+    background-color: $light-secondary;
+  }
+  &:active,
+  &.active {
+    background-color: $dark-secondary;
+    box-shadow: $box-shadow-btn;
+  }
 }
-.light-primary {
-  color: $light-primary;
+.btn-with-icon {
+  i {
+    margin-right: 10px;
+  }
 }
-.light-secondary {
-  color: $light-secondary;
-}
+
 // Default container style with border
 .container-md-center {
   @extend .m-x-auto;
@@ -163,7 +189,8 @@ p {
 }
 .secondary-banner {
   padding: 35px 0;
-  background-color: white;
+  background: rgba(255, 255, 255, 1) asset-url("apply/application-process-stages-bg.svg") no-repeat center center;
+  background-size: cover;
   position: relative;
   border-bottom: 1px solid $gray-border;
 }
@@ -406,8 +433,37 @@ p {
     display: none;
   }
 }
+// Tags
+.tag-default {
+  border: 1px solid $gray-border;
+  color: $light-grey-text;
+
+  &:hover, &:focus {
+    background-color: darken($tag-default-bg, 30%) !important;
+  }
+}
+
+// Override Pagination style
+.pagination {
+  .page-item {
+    &:first-child {
+      .page-link {
+        @include border-left-radius($border-radius-btn);
+      }
+    }
+    &:last-child {
+      .page-link {
+        @include border-right-radius($border-radius-btn);
+      }
+    }
+    .page-link {
+      border: $pagination-border-width solid $gray-border;
+    }
+  }
+}
 
 // Fontawesome icon animation
+// Used in sixways page for guest login alert icon
 @keyframes tada {
   0% {
     transform: scale(1);

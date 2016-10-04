@@ -99,7 +99,7 @@ feature 'Resources' do
         expect(page).to have_selector('.resource', count: 3)
         expect(page).to have_text(public_resource_1.title[0..10])
         expect(page).to have_text(public_resource_2.title[0..10])
-        expect(page).to have_text(approved_resource_for_all.title)
+        expect(page).to have_text(approved_resource_for_all.title[0..10])
       end
 
       context "Founder's startup is from batch 1" do
@@ -111,8 +111,8 @@ feature 'Resources' do
           expect(page).to have_selector('.resource', count: 4)
           expect(page).to have_text(public_resource_1.title[0..10])
           expect(page).to have_text(public_resource_2.title[0..10])
-          expect(page).to have_text(approved_resource_for_all.title)
-          expect(page).to have_text(approved_resource_for_batch_1.title)
+          expect(page).to have_text(approved_resource_for_all.title[0..10])
+          expect(page).to have_text(approved_resource_for_batch_1.title[0..10])
         end
 
         scenario 'Founder visits approved resource for batch 1 page' do

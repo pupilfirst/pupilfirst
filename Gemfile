@@ -46,7 +46,9 @@ gem 'bootstrap-sass', '~> 3.3.3' # Official Sass port of Bootstrap.
 gem 'autoprefixer-rails' # Autoprefixer for Ruby and Ruby on Rails.
 gem 'simple_form', '~> 3.1.1' # Simple-form with support for Bootstrap 3.
 gem 'simple_form_fancy_uploads' # simple_form custom inputs to get image/link previews with file uploads. https://github.com/apeacox/simple_form_fancy_uploads
-# TODO: The zones list in the gem was outdated. Have updated and submitted a PR (https://github.com/ralovets/valid_url/pull/10). Using a personal fork until its merged
+
+# TODO: The zones list in the gem was outdated.
+# Have updated and submitted a PR (https://github.com/ralovets/valid_url/pull/10). Using a personal fork until it's merged.
 gem 'valid_url', github: 'ajaleelp/valid_url', branch: 'patch-1' # New url validataion gem
 gem 'logstash-logger' # A better logger.
 
@@ -66,7 +68,6 @@ gem 'font-awesome-rails' # Icons from font-awesome!
 gem 'unobtrusive_flash', github: 'mobmewireless/unobtrusive_flash', branch: 'master'
 
 gem 'friendly_id' # Slugs for links. http://norman.github.io/friendly_id
-
 gem 'gravtastic' # Use gravatars as fallback avatars
 gem 'require_all' # Easier folder require-s.
 
@@ -76,10 +77,7 @@ gem 'lita-slack', github: 'litaio/lita-slack', require: false # Lita adapter for
 gem 'kramdown' # kramdown is a fast, pure Ruby Markdown superset converter, using a strict syntax definition and supporting several common extensions. http://kramdown.gettalong.org
 gem 'gaffe' # Custom error pages. https://github.com/mirego/gaffe
 gem 'google_calendar', github: 'northworld/google_calendar' # Thin wrapper over Google Calendar API.
-
-# TODO: Old version of recaptcha. Upgrade when possible.
-gem 'recaptcha', '~> 0.4.0', require: 'recaptcha/rails' # ReCaptcha helpers for ruby apps http://github.com/ambethia/recaptcha
-
+gem 'recaptcha', require: 'recaptcha/rails' # ReCaptcha helpers for ruby apps http://github.com/ambethia/recaptcha
 gem 'groupdate' # The simplest way to group temporal data. https://github.com/ankane/groupdate
 gem 'videojs_rails' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com/seanbehan/videojs_rails
 gem 'react-rails' # For automatically transforming JSX and using React in Rails.

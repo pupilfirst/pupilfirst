@@ -30,8 +30,8 @@ feature 'Resources' do
     visit resources_path
 
     expect(page).to have_selector('.resource', count: 2)
-    expect(page).to have_text(public_resource_1.title)
-    expect(page).to have_text(public_resource_2.title)
+    expect(page).to have_text(public_resource_1.title[0..10])
+    expect(page).to have_text(public_resource_2.title[0..10])
   end
 
   scenario 'founder visits resource page' do
@@ -80,8 +80,8 @@ feature 'Resources' do
         visit resources_path
 
         expect(page).to have_selector('.resource', count: 2)
-        expect(page).to have_text(public_resource_1.title)
-        expect(page).to have_text(public_resource_2.title)
+        expect(page).to have_text(public_resource_1.title[0..10])
+        expect(page).to have_text(public_resource_2.title[0..10])
       end
 
       scenario 'Founder visits approved resource page' do
@@ -97,8 +97,8 @@ feature 'Resources' do
 
         expect(page).to have_text('Please do not share these resources outside your founding team')
         expect(page).to have_selector('.resource', count: 3)
-        expect(page).to have_text(public_resource_1.title)
-        expect(page).to have_text(public_resource_2.title)
+        expect(page).to have_text(public_resource_1.title[0..10])
+        expect(page).to have_text(public_resource_2.title[0..10])
         expect(page).to have_text(approved_resource_for_all.title)
       end
 
@@ -109,8 +109,8 @@ feature 'Resources' do
           visit resources_path
 
           expect(page).to have_selector('.resource', count: 4)
-          expect(page).to have_text(public_resource_1.title)
-          expect(page).to have_text(public_resource_2.title)
+          expect(page).to have_text(public_resource_1.title[0..10])
+          expect(page).to have_text(public_resource_2.title[0..10])
           expect(page).to have_text(approved_resource_for_all.title)
           expect(page).to have_text(approved_resource_for_batch_1.title)
         end

@@ -3,9 +3,13 @@ class IntercomClient
     @intercom_client ||= Intercom::Client.new(app_id: ENV['INTERCOM_APP_ID'], api_key: ENV['INTERCOM_API_KEY'])
   end
 
+  def all_users
+    @all_users ||= intercom_client.users.all
+  end
+
   # find a user given his email
   def find_user(email)
-    intercom_client.users.all.select { |user| user.email == email }.first
+    all_users.select { |user| user.email == email }.first
   rescue Intercom::ResourceNotFound
     return nil
   end
@@ -164,7 +168,7 @@ class IntercomClient
     raise 'No Users found in the Segment' unless users.present?
     user_emails = users.values
 
-    intercom_client.users.all.each_with_index do |user, index|
+    all_users.each_with_index do |user, index|
       if user.user_id.nil?
         puts "User ##{index} already has nil user_id. Skipping."
         next

@@ -4,7 +4,7 @@ class IntercomClient
   end
 
   def all_users
-    @all_users ||= intercom_client.users.all
+    @all_users ||= intercom_client.users.all.to_a
   end
 
   # find a user given his email

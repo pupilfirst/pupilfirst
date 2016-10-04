@@ -11,8 +11,8 @@
           | Batch Exclusive
 
     .resource-content
-      h3.m-b-1
-        = link_to resource.title, resource
+      h3.m-b-2
+        = link_to truncate( resource.title, length: 50, separator: ' ' ), resource
       .description
         = simple_format resource.description
       = render 'tags', resource: resource

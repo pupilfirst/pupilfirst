@@ -50,6 +50,39 @@ class IntercomUserUpdateService < BaseService
 
   def update_last_applicant_event
     log "Updating last_applicant_event of #{batch_applicant.email}"
-    IntercomLastApplicantEventUpdateJob.perform_now(batch_applicant, batch_applicant.last_applicant_event)
+
+    intercom.add_tag_to_user(user, tags[batch_applicant.last_applicant_event.to_sym])
+    intercom.add_note_to_user(user, "Auto-tagged as <em>#{notes[batch_applicant.last_applicant_event.to_sym]}</em>")
+    intercom.update_user(user, last_applicant_event: event_description[batch_applicant.last_applicant_event.to_sym])
+  end
+
+  def tags
+    {
+      submitted_application: 'Applicant',
+      payment_initiated: 'Payment Initiated',
+      payment_complete: 'Paid Applicant',
+      tasks_submitted: 'Tasks Submitted',
+      selected_for_interview: 'Selected For Interview'
+    }
+  end
+
+  def notes
+    {
+      submitted_application: 'Applicant',
+      payment_initiated: 'Payment Initiated',
+      payment_complete: 'Paid Applicant',
+      tasks_submitted: 'Tasks Submitted',
+      selected_for_interview: 'Selected For Interview'
+    }
+  end
+
+  def event_description
+    {
+      submitted_application: 'Submitted Application',
+      payment_initiated: 'Payment Initiated',
+      payment_complete: 'Payment Completed',
+      tasks_submitted: 'Tasks Submitted',
+      selected_for_interview: 'Selected For Interview'
+    }
   end
 end

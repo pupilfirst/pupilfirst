@@ -29,10 +29,13 @@ class AboutController < ApplicationController
   def send_contact_email
     @contact_form = ContactForm.new contact_form_params
 
-    # Check recaptcha first.
-    unless verify_recaptcha(model: @contact_form)
-      render 'contact'
-      return
+    unless Rails.env.test?
+      # Check recaptcha first.
+      unless verify_recaptcha(model: @contact_form)
+        flash[:error] = 'Whoops. Verification of Recaptcha failed. Please try again.'
+        render 'contact'
+        return
+      end
     end
 
     if @contact_form.save

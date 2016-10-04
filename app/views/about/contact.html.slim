@@ -56,6 +56,16 @@ h1.page-header.header-light Contact
 
         legend Contact Form
 
+        - if f.object.errors.present?
+          .alert.alert-warning.alert-dismissable.fade.in role='alert'
+            strong There were problems with your submission.
+            | &nbsp;Please check all fields and try again.
+
+            - if f.object.errors[:base].present?
+              ul.m-t-1
+                - f.object.errors[:base].each do |error_message|
+                  li #{error_message}
+
         = f.input :name, label: 'Your name', input_html: { maxlength: 50 }
         = f.input :email, type: 'email', label: 'Email address', input_html: { maxlength: 50 }
         = f.input :mobile, label: 'Mobile phone number', input_html: { maxlength: 20 }

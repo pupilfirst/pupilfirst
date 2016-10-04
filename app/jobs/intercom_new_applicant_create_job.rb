@@ -15,7 +15,7 @@ class IntercomNewApplicantCreateJob < ActiveJob::Base
 
   def open_batch_name
     batch = Batch.open_batch
-    "#{batch.batch_number} #{batch.theme}"
+    "##{batch.batch_number} #{batch.theme}"
   end
 
   def applicant_college_name

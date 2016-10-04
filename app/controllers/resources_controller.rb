@@ -38,7 +38,7 @@ class ResourcesController < ApplicationController
   private
 
   def load_resources
-    @resources = Resource.for(current_founder)
+    @resources = Resource.for(current_founder).includes(:tags)
   end
 
   def filter_resources_by_tags

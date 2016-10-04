@@ -96,7 +96,7 @@ gem 'dry-validation' # There seems to be a dependency bug in reform's coercion c
 
 gem 'postmark-rails' # Official integration library for using Rails and ActionMailer with the Postmark HTTP API.
 gem 'intercom-rails' # The easiest way to install Intercom in a Rails app.
-gem 'intercom', "~> 3.5.1" # Ruby bindings for the Intercom API
+gem 'intercom', '~> 3.5.1' # Ruby bindings for the Intercom API
 
 gem 'wicked_pdf', github: 'mileszs/wicked_pdf' # html to pdf converted - used to generate MOOC completion certificate
 gem 'jspdf-rails' # HTML5 client-side pdf generation - for certificates
@@ -106,9 +106,7 @@ gem 'skylight' # Skylight agent for Ruby https://www.skylight.io
 
 # Rails assets!
 source 'https://rails-assets.org' do
-  # TODO: Old version of pnotify. Upgrade when possible.
-  gem 'rails-assets-pnotify', '~> 2.0.1' # Superb notifications library. http://sciactive.github.io/pnotify/
-
+  gem 'rails-assets-pnotify' # Superb notifications library. http://sciactive.github.io/pnotify/
   gem 'rails-assets-curioussolutions-datetimepicker' # Responsive datetimepicker for timeline builder form.
   gem 'rails-assets-trix' # rich text editor from basecamp ( used for eg in the description for targets)
   gem 'rails-assets-bootstrap-tabcollapse' # Bootstrap plugin that switches bootstrap tabs component to collapse component for small screens.

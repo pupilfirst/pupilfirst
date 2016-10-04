@@ -598,7 +598,8 @@ GEM
       rails-assets-fizzy-ui-utils (>= 2.0.0, < 3)
       rails-assets-get-size (>= 2.0.2, < 3)
     rails-assets-perfect-scrollbar (0.6.12)
-    rails-assets-pnotify (2.0.1)
+    rails-assets-pnotify (3.0.0)
+      rails-assets-jquery (>= 1.6)
     rails-assets-readmore (2.2.0)
       rails-assets-jquery (>= 2.1.4)
     rails-assets-slick-carousel (1.6.0)
@@ -871,7 +872,7 @@ DEPENDENCIES
   rails-assets-jquery.scrollTo!
   rails-assets-masonry!
   rails-assets-perfect-scrollbar!
-  rails-assets-pnotify (~> 2.0.1)!
+  rails-assets-pnotify!
   rails-assets-readmore!
   rails-assets-slick-carousel!
   rails-assets-tether!

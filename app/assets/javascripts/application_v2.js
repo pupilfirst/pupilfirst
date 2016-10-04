@@ -8,10 +8,12 @@
 //= require turbolinks_compatibility
 //= require react
 //= require react_ujs
-//= require components
 
 // Require PNotify (rails asset), unobtrusive flash (rubygems), and flashes (local code) early so that notifications
 // render as quickly as possible.
+// TODO: Remove require pnotify/pnotify.js when possible.
+// The extra require is needed to avoid issue with incorrect require-order in main file.
+//= require pnotify/pnotify.js
 //= require pnotify
 //= require flashes
 //= require unobtrusive_flash
@@ -48,6 +50,9 @@
 // require _shared
 //= require v2/navbar
 //= require v2/footer
+
+// Components
+//= require components
 
 // Controller-specific
 // require faculty

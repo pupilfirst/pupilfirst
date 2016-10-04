@@ -19,12 +19,6 @@
   }
 }
 
-.resources {
-  @include media-breakpoint-down(xs) {
-    justify-content: center;
-  }
-}
-
 .tag-filter {
   min-height: 60px;
 
@@ -67,7 +61,7 @@
       font-size: 0.75rem;
       color: $light-grey-text;
       margin: 6px 0 3px 5px;
-      padding: 2px 7px 4px 20px;
+      padding: 3px 7px 3px 20px;
     }
     .select2-search-choice-close {
       top: 4px;

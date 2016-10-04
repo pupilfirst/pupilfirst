@@ -1,171 +1,172 @@
 - content_for :head
-title SV.CO Start in College
+  title SV.CO Start in College
 
-.col-lg-4.push-lg-8#mooc-sidebar.m-b-2
-  .mooc-sidebar.content-box.m-t-2
-    h4.font-regular
-      ' Six Ways: An Introduction to
-      | Student Startups
-    h5.font-regular.m-t-1.m-b-1
-      | FREE &amp; self-paced online course
-    ul
-
-      li Build a Startup while in College
-      li No prior skills needed
-      li Learn real-world Engineering, Product and Design Skills
-      li Get support from the student startup community
-    - unless current_mooc_student.present?
-      h4.font-semibold.m-b-2
-        | Start Learning Now!
-    = link_to start_or_continue_button_text, start_or_continue_path, class: 'btn btn-primary btn-md text-uppercase'
-
-.col-lg-8.pull-lg-4
-  .video-container.content-box.m-t-2
-    a.startincollege-video-frame href="#" data-toggle="modal" data-target="#startincollegeVideo"
-      = image_tag 'six_ways/startincollege-video-thumbnail.png', class: 'img-fluid'
-
-
-  .mooc-left.content-box.m-t-2.m-b-2
-    h3.font-regular.m-b-1
-      ' <strong>#StartInCollege Six Ways</strong> is SV.CO&rsquo;s <strong>free online course</strong> that tells you why &amp; how to build startups even while
-      | you are in college.
-    p
-      ' From the folks who built India’s best student startup platform Startup
-      ' Village, this online course will take you through the various stages of
-      ' a startup journey: from deciding to start up, to forming a team,
-      | validating a good idea, building a prototype and finding passionate customers.
-
-    .course-authors.m-t-2
-      h3.font-regular.m-b-2
-        | Course Authors
-      .media
-        .media-left
-          .media-object
-            = image_tag 'six_ways/vishnugopal.png', class: 'img-fluid'
-
-        .media-body
-          h5.media-heading.font-semibold
-            | Vishnu Gopal
-          p
-            ' Currently CTO of SV.CO,  Vishnu Gopal has over 10 years of experience
-            ' working in the startup industry, most prominently with India’s first
-            | product startup: SlideShare.
-
-      .media
-        .media-left
-          .media-object
-            = image_tag 'six_ways/sanjay.png', class: 'img-fluid'
-
-        .media-body
-          h5.media-heading.font-semibold
-            | Sanjay Vijayakumar
-          p
-            ' Founder &amp; Chairman at Startup Village, Sanjay is a well-known
-            ' figure in India’s startup space. He’s instrumental in bringing about
-            | a student startup revolution in India.
-
-      .media
-        .media-left
-          .media-object
-            = image_tag 'six_ways/gautham.png', class: 'img-fluid'
-
-        .media-body
-          h5.media-heading.font-semibold
-            | Gautham
-          p
-            ' Gautham is part of the founding team at Startup Village and is in
-            | hard pursuit of the grand vision of changing the higher education landscape in India.
-
-    .course-outline.m-t-2
-      h3.font-regular.m-b-2
-        | Course Outline
-      h4
-        | 1. Why should you start up in college?
+.row
+  .col-lg-4.push-lg-8#mooc-sidebar.m-b-2
+    .mooc-sidebar.content-box.m-t-2
+      h4.font-regular
+        ' Six Ways: An Introduction to
+        | Student Startups
+      h5.font-regular.m-t-1.m-b-1
+        | FREE &amp; self-paced online course
       ul
-        li
-          | 21st Century Skills for students
-        li
-          | Industrial-era education versus Internet-era education
-        li
-          | Learning versus Earnings
-        li
-          | Growth versus Fixed Mindset
-        li
-          | Six ways to Graduate
-        li
-          | 8 Years to go from Idea to ROI
 
-      h4
-        | 2. What are startups?
-      ul
-        li
-          | Startups grow up to be Businesses
-        li
-          | Uncertainty &amp; Risk
-        li
-          | Basic Economic Theory
-
-      h4
-        | 3. Why are startups important?
-      ul
-        li
-          | Startups as Change Agents
-        li
-          | Jobs Situation in India
-
-      h4
-        | 4. How do you build a good startup?
-      ul
-        li
-          | From a Startup Idea to a Business ROI
-        li
-          | The Execution Premium: Vision to Execution
-        li
-          | Idea Discovery, Prototyping, and Customer Validation
-        li
-          | Efficiency and Scale
-        li
-          | Milestone &amp; Target-based Work
-
-      h4
-        | 5. Next steps: Where do you go next?
-      ul
-        li
-          | Incubators
-        li
-          | Accelerators
-        li
-          | Angel Networks
-        li
-          | Venture Capital Funds
-        li
-          | Other Startups &amp; Established Businesses
-        li
-          | Higher Studies in Universities
-        li
-          | Resources for Student Startups
-
-    .join-course-box.text-xs-center
-      h3
-        - if current_mooc_student.present?
-          | Welcome Back, #{current_mooc_student.name}!
-        - else
+        li Build a Startup while in College
+        li No prior skills needed
+        li Learn real-world Engineering, Product and Design Skills
+        li Get support from the student startup community
+      - unless current_mooc_student.present?
+        h4.font-semibold.m-b-2
           | Start Learning Now!
       = link_to start_or_continue_button_text, start_or_continue_path, class: 'btn btn-primary btn-md text-uppercase'
 
-    .paid-program-box.text-xs-center
-      p
-        ' At Startup Village, we also offer a paid intensive six-month program
-        br
-        ' for capable student founders. Applications for the next batch are
-        br
-          = link_to 'currently open.', apply_path, class: 'font-semibold'
+  .col-lg-8.pull-lg-4
+    .video-container.content-box.m-t-2
+      a.startincollege-video-frame href="#" data-toggle="modal" data-target="#startincollegeVideo"
+        = image_tag 'six_ways/startincollege-video-thumbnail.png', class: 'img-fluid'
 
-#startincollegeVideo.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header
-        button.close aria-label="Close" data-dismiss="modal" type="button"
-          span aria-hidden="true" &times;
-      .modal-body
-        iframe.video-frame src="https://www.youtube.com/embed/TGsidfBRfmQ" frameborder="0" allowfullscreen="allowfullscreen"
+
+    .mooc-left.content-box.m-t-2.m-b-2
+      h3.font-regular.m-b-1
+        ' <strong>#StartInCollege Six Ways</strong> is SV.CO&rsquo;s <strong>free online course</strong> that tells you why &amp; how to build startups even while
+        | you are in college.
+      p
+        ' From the folks who built India’s best student startup platform Startup
+        ' Village, this online course will take you through the various stages of
+        ' a startup journey: from deciding to start up, to forming a team,
+        | validating a good idea, building a prototype and finding passionate customers.
+
+      .course-authors.m-t-2
+        h3.font-regular.m-b-2
+          | Course Authors
+        .media
+          .media-left
+            .media-object
+              = image_tag 'six_ways/vishnugopal.png', class: 'img-fluid'
+
+          .media-body
+            h5.media-heading.font-semibold
+              | Vishnu Gopal
+            p
+              ' Currently CTO of SV.CO,  Vishnu Gopal has over 10 years of experience
+              ' working in the startup industry, most prominently with India’s first
+              | product startup: SlideShare.
+
+        .media
+          .media-left
+            .media-object
+              = image_tag 'six_ways/sanjay.png', class: 'img-fluid'
+
+          .media-body
+            h5.media-heading.font-semibold
+              | Sanjay Vijayakumar
+            p
+              ' Founder &amp; Chairman at Startup Village, Sanjay is a well-known
+              ' figure in India’s startup space. He’s instrumental in bringing about
+              | a student startup revolution in India.
+
+        .media
+          .media-left
+            .media-object
+              = image_tag 'six_ways/gautham.png', class: 'img-fluid'
+
+          .media-body
+            h5.media-heading.font-semibold
+              | Gautham
+            p
+              ' Gautham is part of the founding team at Startup Village and is in
+              | hard pursuit of the grand vision of changing the higher education landscape in India.
+
+      .course-outline.m-t-2
+        h3.font-regular.m-b-2
+          | Course Outline
+        h4
+          | 1. Why should you start up in college?
+        ul
+          li
+            | 21st Century Skills for students
+          li
+            | Industrial-era education versus Internet-era education
+          li
+            | Learning versus Earnings
+          li
+            | Growth versus Fixed Mindset
+          li
+            | Six ways to Graduate
+          li
+            | 8 Years to go from Idea to ROI
+
+        h4
+          | 2. What are startups?
+        ul
+          li
+            | Startups grow up to be Businesses
+          li
+            | Uncertainty &amp; Risk
+          li
+            | Basic Economic Theory
+
+        h4
+          | 3. Why are startups important?
+        ul
+          li
+            | Startups as Change Agents
+          li
+            | Jobs Situation in India
+
+        h4
+          | 4. How do you build a good startup?
+        ul
+          li
+            | From a Startup Idea to a Business ROI
+          li
+            | The Execution Premium: Vision to Execution
+          li
+            | Idea Discovery, Prototyping, and Customer Validation
+          li
+            | Efficiency and Scale
+          li
+            | Milestone &amp; Target-based Work
+
+        h4
+          | 5. Next steps: Where do you go next?
+        ul
+          li
+            | Incubators
+          li
+            | Accelerators
+          li
+            | Angel Networks
+          li
+            | Venture Capital Funds
+          li
+            | Other Startups &amp; Established Businesses
+          li
+            | Higher Studies in Universities
+          li
+            | Resources for Student Startups
+
+      .join-course-box.text-xs-center
+        h3
+          - if current_mooc_student.present?
+            | Welcome Back, #{current_mooc_student.name}!
+          - else
+            | Start Learning Now!
+        = link_to start_or_continue_button_text, start_or_continue_path, class: 'btn btn-primary btn-md text-uppercase'
+
+      .paid-program-box.text-xs-center
+        p
+          ' At Startup Village, we also offer a paid intensive six-month program
+          br
+          ' for capable student founders. Applications for the next batch are
+          br
+            = link_to 'currently open.', apply_path, class: 'font-semibold'
+
+  #startincollegeVideo.modal.fade.video-modal aria-hidden="true" role="dialog" tabindex="-1"
+    .modal-dialog.modal-lg role="document"
+      .modal-content
+        .modal-header
+          button.close aria-label="Close" data-dismiss="modal" type="button"
+            span aria-hidden="true" &times;
+        .modal-body
+          iframe.video-frame src="https://www.youtube.com/embed/TGsidfBRfmQ" frameborder="0" allowfullscreen="allowfullscreen"

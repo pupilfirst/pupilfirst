@@ -644,7 +644,8 @@ GEM
       execjs
       railties (>= 3.2)
       tilt
-    recaptcha (0.4.0)
+    recaptcha (3.3.0)
+      json
     redis (3.3.1)
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
@@ -878,7 +879,7 @@ DEPENDENCIES
   rails-assets-waypoints!
   rails_12factor
   react-rails
-  recaptcha (~> 0.4.0)
+  recaptcha
   reform
   reform-rails
   require_all

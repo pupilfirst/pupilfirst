@@ -70,10 +70,7 @@ gem 'unobtrusive_flash', github: 'mobmewireless/unobtrusive_flash', branch: 'mas
 gem 'friendly_id' # Slugs for links. http://norman.github.io/friendly_id
 gem 'gravtastic' # Use gravatars as fallback avatars
 gem 'require_all' # Easier folder require-s.
-
-# TODO: removing github repo tracking when gem is updated
-gem 'lita-slack', github: 'litaio/lita-slack', require: false # Lita adapter for Slack.
-
+gem 'lita-slack', github: 'litaio/lita-slack', require: false # Lita adapter for Slack. TODO: removing github repo tracking when gem is updated
 gem 'kramdown' # kramdown is a fast, pure Ruby Markdown superset converter, using a strict syntax definition and supporting several common extensions. http://kramdown.gettalong.org
 gem 'gaffe' # Custom error pages. https://github.com/mirego/gaffe
 gem 'google_calendar', github: 'northworld/google_calendar' # Thin wrapper over Google Calendar API.
@@ -83,24 +80,20 @@ gem 'videojs_rails' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com
 gem 'react-rails' # For automatically transforming JSX and using React in Rails.
 gem 'has_secure_token' # Used to create tokens for models (eg: for Faculty). TODO: Will be included with ActiveRecord in Rails 5.
 gem 'ahoy_matey', '~> 1.3' # Analytics for Rails
-gem 'acts-as-taggable-on', '~> 3.5' # Tag a single model on several contexts.
+gem 'acts-as-taggable-on', '~> 4.0.0' # Tag a single model on several contexts.
 gem 'will_paginate-bootstrap4' # This gem integrates the Twitter Bootstrap pagination component with the will_paginate pagination gem.
 gem 'shortener' # generate short SV.CO urls for files, links etc
 gem 'titleize' # better titleizing, modifies Inflector.titleize from default rails
 gem 'addressable' # Addressable is a replacement for the URI implementation that is part of Ruby's standard library. https://github.com/sporkmonger/addressable
-
 gem 'reform' # Form objects decoupled from models. http://www.trailblazer.to/gems/reform
 gem 'reform-rails'
 gem 'virtus' # Required for reform coercion. Attributes on Steroids for Plain Old Ruby Objects
 gem 'dry-validation' # There seems to be a dependency bug in reform's coercion code - it required dry-types.
-
 gem 'postmark-rails' # Official integration library for using Rails and ActionMailer with the Postmark HTTP API.
 gem 'intercom-rails' # The easiest way to install Intercom in a Rails app.
 gem 'intercom', '~> 3.5.1' # Ruby bindings for the Intercom API
-
 gem 'wicked_pdf', github: 'mileszs/wicked_pdf' # html to pdf converted - used to generate MOOC completion certificate
 gem 'jspdf-rails' # HTML5 client-side pdf generation - for certificates
-
 gem 'draper' # Decorators/View-Models for Rails Applications
 gem 'skylight' # Skylight agent for Ruby https://www.skylight.io
 

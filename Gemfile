@@ -117,7 +117,7 @@ source 'https://rails-assets.org' do
 end
 
 group :development do
-  gem 'letter_opener' # In development, open mails sent in browser.
+  gem 'letter_opener_web', '~> 1.3.0' # A web interface for browsing Ruby on Rails sent emails.
   gem 'bullet' # Detect N+1 queries.
   # gem 'better_errors' # Better error info on the front-end.
   # gem 'binding_of_caller' # For advanced better_errors features - REPL, local/instance variable inspection etc.

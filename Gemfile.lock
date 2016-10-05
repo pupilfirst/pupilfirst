@@ -489,6 +489,10 @@ GEM
       addressable (~> 2.3)
     letter_opener (1.4.1)
       launchy (~> 2.2)
+    letter_opener_web (1.3.0)
+      actionmailer (>= 3.2)
+      letter_opener (~> 1.0)
+      railties (>= 3.2)
     lita (4.7.1)
       bundler (>= 1.3)
       faraday (>= 0.8.7)
@@ -848,7 +852,7 @@ DEPENDENCIES
   jspdf-rails
   just-datetime-picker
   kramdown
-  letter_opener
+  letter_opener_web (~> 1.3.0)
   lita-slack!
   logstash-logger
   mini_magick

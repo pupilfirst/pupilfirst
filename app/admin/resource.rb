@@ -123,7 +123,7 @@ ActiveAdmin.register Resource do
       f.input :thumbnail, as: :file
       f.input :title
       f.input :description
-      f.input :tag_list, input_html: { value: f.object.tag_list.join(','), 'data-tags' => Resource.tag_counts_on(:tags).pluck(:name).to_json }
+      f.input :tag_list, input_html: { value: f.object.tag_list.join(','), 'data-resource-tags' => Resource.tag_counts_on(:tags).pluck(:name).to_json }
     end
 
     f.actions

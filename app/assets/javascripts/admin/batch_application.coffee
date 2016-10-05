@@ -2,7 +2,7 @@ setupSelect2ForBatchApplicationTagList = ->
   batchApplicationTagList = $('#batch_application_tag_list')
 
   if batchApplicationTagList.length
-    currentFounderTags = batchApplicationTagList.data('tags')
+    currentFounderTags = batchApplicationTagList.data('applicationTags')
     select2Data = $.map currentFounderTags, (tag) ->
       {
         id: tag,

@@ -5,7 +5,7 @@ setupSelect2ForFounderTagList = ->
   founderTagList = $('#founder_tag_list')
 
   if founderTagList.length
-    currentFounderTags = founderTagList.data('tags')
+    currentFounderTags = founderTagList.data('founderTags')
     select2Data = $.map currentFounderTags, (tag) ->
       {
         id: tag,

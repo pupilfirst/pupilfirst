@@ -190,7 +190,7 @@ ActiveAdmin.register BatchApplicant do
       f.input :batch_applications
       f.input :name
       f.input :email
-      f.input :tag_list, input_html: { value: f.object.tag_list.join(','), 'data-tags' => BatchApplicant.tag_counts_on(:tags).pluck(:name).to_json }
+      f.input :tag_list, input_html: { value: f.object.tag_list.join(','), 'data-applicant-tags' => BatchApplicant.tag_counts_on(:tags).pluck(:name).to_json }
       f.input :gender, as: :select, collection: Founder.valid_gender_values
       f.input :phone
       f.input :college_text, label: 'College as text'

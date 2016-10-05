@@ -2,7 +2,7 @@ setupSelect2ForStartupTagList = ->
   startupTagList = $('#startup_tag_list')
 
   if startupTagList.length
-    currentStartupTags = startupTagList.data('tags')
+    currentStartupTags = startupTagList.data('startupTags')
     select2Data = $.map currentStartupTags, (tag) ->
       {
         id: tag,

@@ -2,7 +2,7 @@ $(document).on 'page:change', ->
   resourceTagList = $('#resource_tag_list')
 
   if resourceTagList.length
-    currentResourceTags = resourceTagList.data('tags')
+    currentResourceTags = resourceTagList.data('resourceTags')
     select2Data = $.map currentResourceTags, (tag) ->
       {
         id: tag,

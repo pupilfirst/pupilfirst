@@ -37,13 +37,15 @@ ActiveAdmin.register ApplicationSubmission do
       link_to application.display_name, admin_batch_application_path(application)
     end
 
-    column :application_stage
-
-    column :file do |application_submission|
-      if application_submission.file.present?
-        link_to application_submission.file_name, application_submission.file.url
-      end
+    column :application_presently_in do |application_submission|
+      link_to application_submission.batch_application.application_stage.name, admin_application_stage_path(application_submission.batch_application.application_stage)
     end
+
+    # column :file do |application_submission|
+    #   if application_submission.file.present?
+    #     link_to application_submission.file_name, application_submission.file.url
+    #   end
+    # end
 
     column 'Submitted Links' do |application_submission|
       if application_submission.application_submission_urls.present?
@@ -59,6 +61,10 @@ ActiveAdmin.register ApplicationSubmission do
           end
         end
       end
+    end
+
+    column :submitted_for_stage do |application_submission|
+      link_to application_submission.application_stage.name, admin_application_stage_path(application_submission.application_stage)
     end
 
     column :score

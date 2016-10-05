@@ -1,12 +1,18 @@
 #= require active_admin/base
 
 #= require turbolinks
+#= require turbolinks_compatibility
 
 # External libraries
 #= require react
 #= require react_ujs
-#= require select2
+
+# TODO: Remove require pnotify/pnotify.js when possible.
+# The extra require is needed to avoid issue with incorrect require-order in main file.
+#= require pnotify/pnotify.js
 #= require pnotify
+
+#= require select2
 #= require trix
 
 # Local files

@@ -41,9 +41,9 @@ GIT
 
 GIT
   remote: https://github.com/northworld/google_calendar.git
-  revision: ff1aa4e18c3ad4f5f907f95b1e4ad7e437fbe17a
+  revision: 1c845134abf4b2e26aa64ac4b849961037f8eec5
   specs:
-    google_calendar (0.6.0)
+    google_calendar (0.6.1)
       TimezoneParser (~> 0.2.0)
       json (>= 1.8.3, < 2.1)
       signet (~> 0.7)
@@ -519,9 +519,8 @@ GEM
     multi_json (1.12.1)
     multipart-post (2.0.0)
     netrc (0.11.0)
-    nokogiri (1.6.8)
+    nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
-      pkg-config (~> 1.1.7)
     orm_adapter (0.5.0)
     overcommit (0.36.0)
       childprocess (~> 0.5.8)
@@ -536,7 +535,6 @@ GEM
     phony_rails (0.14.2)
       activesupport (>= 3.0)
       phony (~> 2.12)
-    pkg-config (1.1.7)
     poltergeist (1.10.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -577,7 +575,7 @@ GEM
       sprockets-rails
     rails-assets-bootstrap-tabcollapse (0.2.7)
     rails-assets-chartkick (2.1.0)
-    rails-assets-curioussolutions-datetimepicker (0.1.34)
+    rails-assets-curioussolutions-datetimepicker (0.1.35)
     rails-assets-desandro-matches-selector (2.0.1)
     rails-assets-ev-emitter (1.0.3)
     rails-assets-fizzy-ui-utils (2.0.3)
@@ -906,7 +904,7 @@ DEPENDENCIES
   valid_url!
   videojs_rails
   virtus
-  web-console
+  web-console (~> 3.3.0)
   webmock
   wicked_pdf!
   will_paginate-bootstrap4

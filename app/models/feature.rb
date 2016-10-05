@@ -1,6 +1,6 @@
 # Feature flags! Set any key and check for it with Feature.active?(key, [current_founder])
 # See documentation of method to see how to store the JSON value.
-class Feature < ActiveRecord::Base
+class Feature < ApplicationRecord
   validates_presence_of :key, :value
 
   validate :value_must_be_json

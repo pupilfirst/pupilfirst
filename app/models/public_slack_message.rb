@@ -1,4 +1,4 @@
-class PublicSlackMessage < ActiveRecord::Base
+class PublicSlackMessage < ApplicationRecord
   belongs_to :founder
   has_one :karma_point, as: :source
 

@@ -1,4 +1,4 @@
-class DatabaseCleanupJob < ActiveJob::Base
+class DatabaseCleanupJob < ApplicationJob
   queue_as :default
 
   def perform

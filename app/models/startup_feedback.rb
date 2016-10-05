@@ -1,4 +1,4 @@
-class StartupFeedback < ActiveRecord::Base
+class StartupFeedback < ApplicationRecord
   belongs_to :startup
   belongs_to :faculty
   attr_accessor :send_email, :event_id, :event_status

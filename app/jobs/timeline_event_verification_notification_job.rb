@@ -1,4 +1,4 @@
-class TimelineEventVerificationNotificationJob < ActiveJob::Base
+class TimelineEventVerificationNotificationJob < ApplicationJob
   queue_as :default
 
   def perform(timeline_event)

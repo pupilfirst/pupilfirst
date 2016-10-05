@@ -1,4 +1,4 @@
-class AdmissionStatsNotificationJob < ActiveJob::Base
+class AdmissionStatsNotificationJob < ApplicationJob
   queue_as :default
   attr_reader :batch, :stats
 

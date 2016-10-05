@@ -1,4 +1,4 @@
-class ConnectSlot < ActiveRecord::Base
+class ConnectSlot < ApplicationRecord
   belongs_to :faculty
   has_one :connect_request
 

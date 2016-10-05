@@ -1,4 +1,4 @@
-class TeamMember < ActiveRecord::Base
+class TeamMember < ApplicationRecord
   belongs_to :startup
 
   mount_uploader :avatar, AvatarUploader

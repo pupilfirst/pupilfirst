@@ -1,4 +1,5 @@
-Svapp::Application.routes.draw do
+Rails.application.routes.draw do
+  mount Delayed::Web::Engine, at: '/jobs'
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
 
   devise_for(
@@ -11,8 +12,6 @@ Svapp::Application.routes.draw do
 
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-
-  match '/delayed_job' => DelayedJobWeb, anchor: false, via: [:get, :post]
 
   resource :founder, only: [:edit, :update] do
     member do

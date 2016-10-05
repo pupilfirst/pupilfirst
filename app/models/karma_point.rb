@@ -1,4 +1,4 @@
-class KarmaPoint < ActiveRecord::Base
+class KarmaPoint < ApplicationRecord
   belongs_to :founder
   belongs_to :startup
 

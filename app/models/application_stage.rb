@@ -1,4 +1,4 @@
-class ApplicationStage < ActiveRecord::Base
+class ApplicationStage < ApplicationRecord
   has_many :batch_applications
 
   validates :name, presence: true

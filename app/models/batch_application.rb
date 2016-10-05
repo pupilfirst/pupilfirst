@@ -1,4 +1,4 @@
-class BatchApplication < ActiveRecord::Base
+class BatchApplication < ApplicationRecord
   include Taggable
 
   FEE = 3000

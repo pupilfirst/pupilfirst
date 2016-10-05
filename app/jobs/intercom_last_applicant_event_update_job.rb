@@ -1,4 +1,4 @@
-class IntercomLastApplicantEventUpdateJob < ActiveJob::Base
+class IntercomLastApplicantEventUpdateJob < ApplicationJob
   queue_as :default
 
   def perform(batch_applicant, event)

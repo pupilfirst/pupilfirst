@@ -1,7 +1,7 @@
 # encoding: utf-8
 # frozen_string_literal: true
 
-class Founder < ActiveRecord::Base
+class Founder < ApplicationRecord
   extend FriendlyId
   extend Forwardable
   include Gravtastic

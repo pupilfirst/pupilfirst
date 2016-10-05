@@ -1,7 +1,7 @@
 # encoding: utf-8
 # frozen_string_literal: true
 
-class Resource < ActiveRecord::Base
+class Resource < ApplicationRecord
   include FriendlyId
   friendly_id :slug_candidates, use: [:slugged, :finders]
   acts_as_taggable

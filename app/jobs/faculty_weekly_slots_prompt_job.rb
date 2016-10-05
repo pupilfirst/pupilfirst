@@ -1,4 +1,4 @@
-class FacultyWeeklySlotsPromptJob < ActiveJob::Base
+class FacultyWeeklySlotsPromptJob < ApplicationJob
   queue_as :default
 
   def perform

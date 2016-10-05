@@ -1,4 +1,4 @@
-class ModuleChapter < ActiveRecord::Base
+class ModuleChapter < ApplicationRecord
   belongs_to :course_module
 
   extend FriendlyId

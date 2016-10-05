@@ -1,4 +1,4 @@
-class Batch < ActiveRecord::Base
+class Batch < ApplicationRecord
   has_many :startups
   has_many :founders, through: :startups
   has_many :batch_applications

@@ -1,7 +1,7 @@
 # encoding: utf-8
 # frozen_string_literal: true
 
-class Startup < ActiveRecord::Base
+class Startup < ApplicationRecord
   include FriendlyId
   acts_as_taggable
 

@@ -1,4 +1,4 @@
-class ApplicationSubmissionUrl < ActiveRecord::Base
+class ApplicationSubmissionUrl < ApplicationRecord
   belongs_to :application_submission
 
   # Is scored by

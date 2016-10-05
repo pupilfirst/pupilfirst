@@ -1,4 +1,4 @@
-class CourseModule < ActiveRecord::Base
+class CourseModule < ApplicationRecord
   extend FriendlyId
   friendly_id :name, use: :slugged
 

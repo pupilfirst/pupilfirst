@@ -1,4 +1,4 @@
-class FacultyConnectSessionReminderJob < ActiveJob::Base
+class FacultyConnectSessionReminderJob < ApplicationJob
   queue_as :default
 
   def perform(connect_request_id)

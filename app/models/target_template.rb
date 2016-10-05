@@ -1,4 +1,4 @@
-class TargetTemplate < ActiveRecord::Base
+class TargetTemplate < ApplicationRecord
   belongs_to :assigner, class_name: 'Faculty'
   has_many :targets
   belongs_to :timeline_event_type

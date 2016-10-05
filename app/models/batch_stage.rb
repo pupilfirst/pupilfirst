@@ -1,4 +1,4 @@
-class BatchStage < ActiveRecord::Base
+class BatchStage < ApplicationRecord
   belongs_to :batch
   belongs_to :application_stage
 

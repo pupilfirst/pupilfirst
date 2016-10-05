@@ -1,4 +1,33 @@
 GIT
+  remote: https://github.com/activeadmin/activeadmin.git
+  revision: f8926831429fe635d26ac8043ea5d676fb6ee637
+  specs:
+    activeadmin (1.0.0.pre4)
+      arbre (~> 1.0, >= 1.0.2)
+      bourbon
+      coffee-rails
+      formtastic (~> 3.1)
+      formtastic_i18n
+      inherited_resources (~> 1.6)
+      jquery-rails
+      jquery-ui-rails
+      kaminari (~> 0.15)
+      railties (>= 3.2, < 5.1)
+      ransack (~> 1.3)
+      sass-rails
+      sprockets (< 4.1)
+
+GIT
+  remote: https://github.com/activeadmin/inherited_resources.git
+  revision: 4434f0ae72f790cf371728838c927c338100555d
+  specs:
+    inherited_resources (1.6.0)
+      actionpack (>= 3.2, < 5.1)
+      has_scope (~> 0.6)
+      railties (>= 3.2, < 5.1)
+      responders
+
+GIT
   remote: https://github.com/ajaleelp/valid_url.git
   revision: 7548e04df02e6281ef0b00f9d0db73a85a8de594
   branch: patch-1
@@ -49,6 +78,23 @@ GIT
       signet (~> 0.7)
 
 GIT
+  remote: https://github.com/svdotco/lita.git
+  revision: 94861d1270de373b1147c5e9162976becdfaac1c
+  specs:
+    lita (5.0.0)
+      bundler (>= 1.3)
+      faraday (>= 0.8.7)
+      http_router (>= 0.11.2)
+      i18n (>= 0.6.9)
+      ice_nine (>= 0.11.0)
+      lita-default-handlers
+      puma (>= 2.7.1)
+      rack (>= 1.5.2)
+      rb-readline (>= 0.5.1)
+      redis-namespace (>= 1.3.0)
+      thor (>= 0.18.1)
+
+GIT
   remote: https://github.com/zpaulovics/datetimepicker-rails.git
   revision: 36d21cec5da7f5b214925804f60e63c61c747023
   branch: master
@@ -65,54 +111,47 @@ GEM
     TimezoneParser (0.2.0)
       insensitive_hash
       tzinfo
-    actionmailer (4.2.7.1)
-      actionpack (= 4.2.7.1)
-      actionview (= 4.2.7.1)
-      activejob (= 4.2.7.1)
+    actioncable (5.0.0.1)
+      actionpack (= 5.0.0.1)
+      nio4r (~> 1.2)
+      websocket-driver (~> 0.6.1)
+    actionmailer (5.0.0.1)
+      actionpack (= 5.0.0.1)
+      actionview (= 5.0.0.1)
+      activejob (= 5.0.0.1)
       mail (~> 2.5, >= 2.5.4)
-      rails-dom-testing (~> 1.0, >= 1.0.5)
-    actionpack (4.2.7.1)
-      actionview (= 4.2.7.1)
-      activesupport (= 4.2.7.1)
-      rack (~> 1.6)
-      rack-test (~> 0.6.2)
-      rails-dom-testing (~> 1.0, >= 1.0.5)
+      rails-dom-testing (~> 2.0)
+    actionpack (5.0.0.1)
+      actionview (= 5.0.0.1)
+      activesupport (= 5.0.0.1)
+      rack (~> 2.0)
+      rack-test (~> 0.6.3)
+      rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
-    actionview (4.2.7.1)
-      activesupport (= 4.2.7.1)
+    actionview (5.0.0.1)
+      activesupport (= 5.0.0.1)
       builder (~> 3.1)
       erubis (~> 2.7.0)
-      rails-dom-testing (~> 1.0, >= 1.0.5)
+      rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
-    activeadmin (1.0.0.pre4)
-      arbre (~> 1.0, >= 1.0.2)
-      bourbon
-      coffee-rails
-      formtastic (~> 3.1)
-      formtastic_i18n
-      inherited_resources (~> 1.6)
-      jquery-rails
-      jquery-ui-rails
-      kaminari (~> 0.15)
-      rails (>= 3.2, < 5.1)
-      ransack (~> 1.3)
-      sass-rails
-      sprockets (< 4)
-    activejob (4.2.7.1)
-      activesupport (= 4.2.7.1)
-      globalid (>= 0.3.0)
-    activemodel (4.2.7.1)
-      activesupport (= 4.2.7.1)
+    activejob (5.0.0.1)
+      activesupport (= 5.0.0.1)
+      globalid (>= 0.3.6)
+    activemodel (5.0.0.1)
+      activesupport (= 5.0.0.1)
+    activemodel-serializers-xml (1.0.1)
+      activemodel (> 5.x)
+      activerecord (> 5.x)
+      activesupport (> 5.x)
       builder (~> 3.1)
-    activerecord (4.2.7.1)
-      activemodel (= 4.2.7.1)
-      activesupport (= 4.2.7.1)
-      arel (~> 6.0)
-    activesupport (4.2.7.1)
+    activerecord (5.0.0.1)
+      activemodel (= 5.0.0.1)
+      activesupport (= 5.0.0.1)
+      arel (~> 7.0)
+    activesupport (5.0.0.1)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (~> 0.7)
-      json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
-      thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     acts-as-taggable-on (4.0.0)
       activerecord (>= 4.0)
@@ -130,7 +169,7 @@ GEM
       uuidtools
     arbre (1.1.1)
       activesupport (>= 3.0.0)
-    arel (6.0.3)
+    arel (7.1.2)
     ast (2.3.0)
     attribute_normalizer (1.2.0)
     autoprefixer-rails (6.5.0.1)
@@ -207,15 +246,13 @@ GEM
     debug_inspector (0.0.2)
     declarative (0.0.8)
       uber (>= 0.0.15)
+    delayed-web (0.4.1)
+      rails (>= 3.2.13)
     delayed_job (4.1.2)
       activesupport (>= 3.0, < 5.1)
     delayed_job_active_record (4.1.1)
       activerecord (>= 3.0, < 5.1)
       delayed_job (>= 3.0, < 5)
-    delayed_job_web (1.2.10)
-      activerecord (> 3.0.0)
-      delayed_job (> 2.0.3)
-      sinatra (>= 1.4.4)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
     devise (4.2.0)
@@ -239,10 +276,11 @@ GEM
     dotenv-rails (2.1.1)
       dotenv (= 2.1.1)
       railties (>= 4.0, < 5.1)
-    draper (2.1.0)
-      actionpack (>= 3.0)
-      activemodel (>= 3.0)
-      activesupport (>= 3.0)
+    draper (3.0.0.pre1)
+      actionpack (~> 5.0)
+      activemodel (~> 5.0)
+      activemodel-serializers-xml (~> 1.0)
+      activesupport (~> 5.0)
       request_store (~> 1.0)
     dry-configurable (0.1.7)
       concurrent-ruby (~> 1.0)
@@ -438,9 +476,9 @@ GEM
     gravtastic (3.2.6)
     groupdate (3.0.2)
       activesupport (>= 3)
-    has_scope (0.6.0)
-      actionpack (>= 3.2, < 5)
-      activesupport (>= 3.2, < 5)
+    has_scope (0.7.0)
+      actionpack (>= 4.1, < 5.1)
+      activesupport (>= 4.1, < 5.1)
     has_secure_token (1.0.0)
       activerecord (>= 3.0)
     hashdiff (0.3.0)
@@ -452,11 +490,6 @@ GEM
     i18n (0.7.0)
     ice_nine (0.11.2)
     inflecto (0.0.2)
-    inherited_resources (1.6.0)
-      actionpack (>= 3.2, < 5)
-      has_scope (~> 0.6.0.rc)
-      railties (>= 3.2, < 5)
-      responders
     iniparse (1.4.2)
     insensitive_hash (0.3.3)
     intercom (3.5.4)
@@ -493,18 +526,10 @@ GEM
       actionmailer (>= 3.2)
       letter_opener (~> 1.0)
       railties (>= 3.2)
-    lita (4.7.1)
-      bundler (>= 1.3)
-      faraday (>= 0.8.7)
-      http_router (>= 0.11.2)
-      i18n (>= 0.6.9)
-      ice_nine (>= 0.11.0)
-      multi_json (>= 1.7.7)
-      puma (>= 2.7.1)
-      rack (>= 1.5.2, < 2.0.0)
-      rb-readline (>= 0.5.1)
-      redis-namespace (>= 1.3.0)
-      thor (>= 0.18.1)
+    listen (3.0.8)
+      rb-fsevent (~> 0.9, >= 0.9.4)
+      rb-inotify (~> 0.9, >= 0.9.7)
+    lita-default-handlers (0.1.0)
     logstash-event (1.2.02)
     logstash-logger (0.19.2)
       logstash-event (~> 1.2)
@@ -523,6 +548,7 @@ GEM
     multi_json (1.12.1)
     multipart-post (2.0.0)
     netrc (0.11.0)
+    nio4r (1.2.1)
     nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
     orm_adapter (0.5.0)
@@ -559,24 +585,23 @@ GEM
     pry-rails (0.3.4)
       pry (>= 0.9.10)
     puma (3.6.0)
-    rack (1.6.4)
+    rack (2.0.1)
     rack-attack (5.0.1)
-      rack
-    rack-protection (1.5.3)
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
-    rails (4.2.7.1)
-      actionmailer (= 4.2.7.1)
-      actionpack (= 4.2.7.1)
-      actionview (= 4.2.7.1)
-      activejob (= 4.2.7.1)
-      activemodel (= 4.2.7.1)
-      activerecord (= 4.2.7.1)
-      activesupport (= 4.2.7.1)
+    rails (5.0.0.1)
+      actioncable (= 5.0.0.1)
+      actionmailer (= 5.0.0.1)
+      actionpack (= 5.0.0.1)
+      actionview (= 5.0.0.1)
+      activejob (= 5.0.0.1)
+      activemodel (= 5.0.0.1)
+      activerecord (= 5.0.0.1)
+      activesupport (= 5.0.0.1)
       bundler (>= 1.3.0, < 2.0)
-      railties (= 4.2.7.1)
-      sprockets-rails
+      railties (= 5.0.0.1)
+      sprockets-rails (>= 2.0.0)
     rails-assets-bootstrap-tabcollapse (0.2.7)
     rails-assets-chartkick (2.1.0)
     rails-assets-curioussolutions-datetimepicker (0.1.35)
@@ -609,12 +634,9 @@ GEM
     rails-assets-tether (1.3.7)
     rails-assets-trix (0.9.9)
     rails-assets-waypoints (4.0.1)
-    rails-deprecated_sanitizer (1.0.3)
-      activesupport (>= 4.2.0.alpha)
-    rails-dom-testing (1.0.7)
-      activesupport (>= 4.2.0.beta, < 5.0)
+    rails-dom-testing (2.0.1)
+      activesupport (>= 4.2.0, < 6.0)
       nokogiri (~> 1.6.0)
-      rails-deprecated_sanitizer (>= 1.0.1)
     rails-html-sanitizer (1.0.3)
       loofah (~> 2.0)
     rails_12factor (0.0.3)
@@ -622,9 +644,10 @@ GEM
       rails_stdout_logging
     rails_serve_static_assets (0.0.5)
     rails_stdout_logging (0.0.5)
-    railties (4.2.7.1)
-      actionpack (= 4.2.7.1)
-      activesupport (= 4.2.7.1)
+    railties (5.0.0.1)
+      actionpack (= 5.0.0.1)
+      activesupport (= 5.0.0.1)
+      method_source
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rainbow (2.1.0)
@@ -635,6 +658,9 @@ GEM
       activesupport (>= 3.0)
       i18n
       polyamorous (~> 1.3)
+    rb-fsevent (0.9.7)
+    rb-inotify (0.9.7)
+      ffi (>= 0.5.0)
     rb-readline (0.5.3)
     rbvmomi (1.8.2)
       builder
@@ -723,9 +749,9 @@ GEM
       faraday (~> 0.9)
       jwt (~> 1.5)
       multi_json (~> 1.10)
-    simple_form (3.1.1)
-      actionpack (~> 4.0)
-      activemodel (~> 4.0)
+    simple_form (3.3.1)
+      actionpack (> 4, < 5.1)
+      activemodel (> 4, < 5.1)
     simple_form_fancy_uploads (0.2.0)
       carrierwave
       rails (>= 4.0.0)
@@ -735,10 +761,6 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.0)
-    sinatra (1.4.7)
-      rack (~> 1.5)
-      rack-protection (~> 1.4)
-      tilt (>= 1.3, < 3)
     skylight (0.10.6)
       activesupport (>= 3.0.0)
     slim (3.0.7)
@@ -807,7 +829,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activeadmin (>= 1.0.0.pre4)
+  activeadmin!
   acts-as-taggable-on (~> 4.0.0)
   addressable
   ahoy_matey (~> 1.3)
@@ -827,12 +849,12 @@ DEPENDENCIES
   coffee-rails (~> 4.1.0)
   database_cleaner
   datetimepicker-rails!
+  delayed-web
   delayed_job_active_record
-  delayed_job_web
   devise
   devise_invitable
   dotenv-rails
-  draper
+  draper (~> 3.0.0.pre1)
   dry-validation
   factory_girl_rails (~> 4.0)
   faker
@@ -845,6 +867,7 @@ DEPENDENCIES
   gravtastic
   groupdate
   has_secure_token
+  inherited_resources!
   intercom (~> 3.5.1)
   intercom-rails
   jbuilder (~> 2.0)
@@ -853,6 +876,8 @@ DEPENDENCIES
   just-datetime-picker
   kramdown
   letter_opener_web (~> 1.3.0)
+  listen
+  lita!
   lita-slack!
   logstash-logger
   mini_magick
@@ -864,7 +889,7 @@ DEPENDENCIES
   poltergeist
   postmark-rails
   pry-rails
-  rails (= 4.2.7.1)
+  rails (= 5.0.0.1)
   rails-assets-bootstrap-tabcollapse!
   rails-assets-chartkick!
   rails-assets-curioussolutions-datetimepicker!
@@ -895,7 +920,7 @@ DEPENDENCIES
   select2-rails (~> 3.5.10)
   sentry-raven
   shortener
-  simple_form (~> 3.1.1)
+  simple_form (~> 3.3.1)
   simple_form_fancy_uploads
   simplecov
   skylight

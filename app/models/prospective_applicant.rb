@@ -1,3 +1,3 @@
-class ProspectiveApplicant < ActiveRecord::Base
+class ProspectiveApplicant < ApplicationRecord
   belongs_to :college
 end

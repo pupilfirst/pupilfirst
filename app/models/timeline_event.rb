@@ -1,7 +1,7 @@
 # encoding: utf-8
 # frozen_string_literal: true
 
-class TimelineEvent < ActiveRecord::Base
+class TimelineEvent < ApplicationRecord
   belongs_to :startup
   belongs_to :founder
   belongs_to :timeline_event_type

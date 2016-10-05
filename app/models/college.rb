@@ -1,4 +1,4 @@
-class College < ActiveRecord::Base
+class College < ApplicationRecord
   validates :name, presence: true
 
   belongs_to :state

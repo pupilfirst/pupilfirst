@@ -1,4 +1,4 @@
-class TargetExpiryNotificationJob < ActiveJob::Base
+class TargetExpiryNotificationJob < ApplicationJob
   queue_as :default
 
   def perform

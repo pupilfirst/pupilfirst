@@ -1,4 +1,4 @@
-class State < ActiveRecord::Base
+class State < ApplicationRecord
   validates :name, presence: true
 
   has_many :colleges

@@ -1,7 +1,7 @@
 # encoding: utf-8
 # frozen_string_literal: true
 
-class TimelineEventType < ActiveRecord::Base
+class TimelineEventType < ApplicationRecord
   has_many :timeline_events, dependent: :restrict_with_error
 
   validates_presence_of :key, :title, :badge

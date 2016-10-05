@@ -1,4 +1,4 @@
-class MoocStudent < ActiveRecord::Base
+class MoocStudent < ApplicationRecord
   belongs_to :university
   belongs_to :user
 

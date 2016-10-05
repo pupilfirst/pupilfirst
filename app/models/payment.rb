@@ -1,4 +1,4 @@
-class Payment < ActiveRecord::Base
+class Payment < ApplicationRecord
   belongs_to :batch_application
   belongs_to :original_batch_application, class_name: 'BatchApplication'
   belongs_to :batch_applicant

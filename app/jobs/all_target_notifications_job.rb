@@ -1,4 +1,4 @@
-class AllTargetNotificationsJob < ActiveJob::Base
+class AllTargetNotificationsJob < ApplicationJob
   queue_as :default
 
   def perform(target, notification_type)

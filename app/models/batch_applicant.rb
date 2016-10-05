@@ -1,4 +1,4 @@
-class BatchApplicant < ActiveRecord::Base
+class BatchApplicant < ApplicationRecord
   include Taggable
 
   has_many :applications_as_team_lead, class_name: 'BatchApplication', foreign_key: 'team_lead_id'

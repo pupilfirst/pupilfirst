@@ -1,4 +1,4 @@
-class VocalistTermOfTheDayJob < ActiveJob::Base
+class VocalistTermOfTheDayJob < ApplicationJob
   queue_as :default
 
   def perform(channel)

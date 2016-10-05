@@ -1,4 +1,4 @@
-class ApplicationSubmission < ActiveRecord::Base
+class ApplicationSubmission < ApplicationRecord
   belongs_to :application_stage
   belongs_to :batch_application
   has_many :application_submission_urls, dependent: :destroy

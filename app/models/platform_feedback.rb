@@ -1,4 +1,4 @@
-class PlatformFeedback < ActiveRecord::Base
+class PlatformFeedback < ApplicationRecord
   belongs_to :founder
   has_one :karma_point, as: :source
 

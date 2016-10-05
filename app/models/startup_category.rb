@@ -1,4 +1,4 @@
-class StartupCategory < ActiveRecord::Base
+class StartupCategory < ApplicationRecord
   has_and_belongs_to_many :startups
 
   validates :name, uniqueness: true, presence: true

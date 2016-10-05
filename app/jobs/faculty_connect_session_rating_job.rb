@@ -1,4 +1,4 @@
-class FacultyConnectSessionRatingJob < ActiveJob::Base
+class FacultyConnectSessionRatingJob < ApplicationJob
   queue_as :default
 
   def perform(connect_request_id)

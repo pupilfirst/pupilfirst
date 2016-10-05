@@ -1,4 +1,4 @@
-class GlossaryTerm < ActiveRecord::Base
+class GlossaryTerm < ApplicationRecord
   validates_presence_of :term, :definition
 
   before_save do

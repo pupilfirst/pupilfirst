@@ -1,4 +1,4 @@
-class University < ActiveRecord::Base
+class University < ApplicationRecord
   has_many :founders, dependent: :restrict_with_error
   has_many :batch_applications
 

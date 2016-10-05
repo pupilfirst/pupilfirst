@@ -1,4 +1,4 @@
-class TimelineEventFile < ActiveRecord::Base
+class TimelineEventFile < ApplicationRecord
   belongs_to :timeline_event
 
   mount_uploader :file, TimelineEventFileUploader

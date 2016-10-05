@@ -1,7 +1,7 @@
 # encoding: utf-8
 # frozen_string_literal: true
 
-class Target < ActiveRecord::Base
+class Target < ApplicationRecord
   belongs_to :assignee, polymorphic: true
   belongs_to :assigner, class_name: 'Faculty'
   belongs_to :target_template

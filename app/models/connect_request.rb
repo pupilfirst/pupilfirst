@@ -1,7 +1,7 @@
 # encoding: utf-8
 # frozen_string_literal: true
 
-class ConnectRequest < ActiveRecord::Base
+class ConnectRequest < ApplicationRecord
   MEETING_DURATION = 20.minutes
   MAX_QUESTIONS_LENGTH = 600
 

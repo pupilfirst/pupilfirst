@@ -1,4 +1,4 @@
-class EmailApplicantsJob < ActiveJob::Base
+class EmailApplicantsJob < ApplicationJob
   queue_as :default
 
   def perform(batch)

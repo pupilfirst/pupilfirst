@@ -1,14 +1,15 @@
 source 'https://rubygems.org'
 
 # Required to suppress warnings about insecure :github source.
-git_source(:github) { |repo_name| "https://github.com/#{repo_name}.git" }
+git_source(:github) { |repository_path| "https://github.com/#{repository_path}.git" }
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.7.1'
+gem 'rails', '5.0.0.1'
 
 gem 'dotenv-rails', groups: [:development, :test]
 
-gem 'activeadmin', '>= 1.0.0.pre4'
+gem 'inherited_resources', github: 'activeadmin/inherited_resources' # Required for Rails 5 support for activeadmin. TODO: Remove when activeadmin 1.0.0 is released, which is when I'm guessing this gem will be removed.
+gem 'activeadmin', github: 'activeadmin/activeadmin' # Tracking master for Rails 5 support. TODO: Revert to rubygems version when 1.0.0 is released.
 gem 'flattened_active_admin' # better looking and customizable activeadmin
 gem 'just-datetime-picker' # Date/Time picker support for active admin.
 # gem 'active_skin' # Better lookin' active admin! Temporarily removed in favour of flattened_acitve_admin
@@ -44,7 +45,7 @@ gem 'select2-rails', '~> 3.5.10'
 
 gem 'bootstrap-sass', '~> 3.3.3' # Official Sass port of Bootstrap.
 gem 'autoprefixer-rails' # Autoprefixer for Ruby and Ruby on Rails.
-gem 'simple_form', '~> 3.1.1' # Simple-form with support for Bootstrap 3.
+gem 'simple_form', '~> 3.3.1' # Simple-form with support for Bootstrap 3.
 gem 'simple_form_fancy_uploads' # simple_form custom inputs to get image/link previews with file uploads. https://github.com/apeacox/simple_form_fancy_uploads
 
 # TODO: The zones list in the gem was outdated.
@@ -59,7 +60,7 @@ gem 'momentjs-rails', '>= 2.8.1', github: 'derekprior/momentjs-rails' # Required
 gem 'roadie-rails' # CSS management for e-mails.
 gem 'passenger', '>= 5.0.22' # Passenger web-server.
 gem 'delayed_job_active_record' # Delayed Job for deferring tasks.
-gem 'delayed_job_web' # Web interface for delayed_job
+gem 'delayed-web' # A rails engine that provides a simple web interface for exposing the Delayed::Job queue.
 gem 'seedbank' # Better organized seed data.
 gem 'font-awesome-rails' # Icons from font-awesome!
 
@@ -70,6 +71,7 @@ gem 'unobtrusive_flash', github: 'mobmewireless/unobtrusive_flash', branch: 'mas
 gem 'friendly_id' # Slugs for links. http://norman.github.io/friendly_id
 gem 'gravtastic' # Use gravatars as fallback avatars
 gem 'require_all' # Easier folder require-s.
+gem 'lita', github: 'svdotco/lita', require: false # Lita without rack version limitation. TODO: Replace with official version when it drops rack < v2 limitation.
 gem 'lita-slack', github: 'litaio/lita-slack', require: false # Lita adapter for Slack. TODO: removing github repo tracking when gem is updated
 gem 'kramdown' # kramdown is a fast, pure Ruby Markdown superset converter, using a strict syntax definition and supporting several common extensions. http://kramdown.gettalong.org
 gem 'gaffe' # Custom error pages. https://github.com/mirego/gaffe
@@ -94,7 +96,7 @@ gem 'intercom-rails' # The easiest way to install Intercom in a Rails app.
 gem 'intercom', '~> 3.5.1' # Ruby bindings for the Intercom API
 gem 'wicked_pdf', github: 'mileszs/wicked_pdf' # html to pdf converted - used to generate MOOC completion certificate
 gem 'jspdf-rails' # HTML5 client-side pdf generation - for certificates
-gem 'draper' # Decorators/View-Models for Rails Applications
+gem 'draper', '~> 3.0.0.pre1' # Decorators/View-Models for Rails Applications # TODO: Pre-release version for Rails 5 support. Upgrade to stable when available.
 gem 'skylight' # Skylight agent for Ruby https://www.skylight.io
 
 # Rails assets!
@@ -125,6 +127,7 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+  gem 'listen' # The Listen gem listens to file modifications and notifies you about the changes.
 end
 
 group :test do

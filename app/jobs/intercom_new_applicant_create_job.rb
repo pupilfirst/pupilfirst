@@ -1,4 +1,4 @@
-class IntercomNewApplicantCreateJob < ActiveJob::Base
+class IntercomNewApplicantCreateJob < ApplicationJob
   queue_as :default
   attr_reader :applicant
 

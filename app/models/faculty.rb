@@ -1,7 +1,7 @@
 # encoding: utf-8
 # frozen_string_literal: true
 
-class Faculty < ActiveRecord::Base
+class Faculty < ApplicationRecord
   # use name as slug
   include FriendlyId
   friendly_id :name, use: [:slugged, :finders]

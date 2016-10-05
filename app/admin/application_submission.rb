@@ -37,6 +37,27 @@ ActiveAdmin.register ApplicationSubmission do
       link_to application.display_name, admin_batch_application_path(application)
     end
 
+    column :state do |application_submission|
+      application = application_submission.batch_application
+      if application.team_lead&.college.present?
+        link_to application.team_lead.college.state.name, admin_state_path(application.team_lead.college.state)
+      elsif application&.state.present?
+        span "#{application.state} "
+
+        span do
+          content_tag :em, '(Old data)'
+        end
+      elsif application&.university.present?
+        span "#{application.university.location} "
+
+        span do
+          content_tag :em, '(Old data)'
+        end
+      else
+        content_tag :em, 'Unknown'
+      end
+    end
+
     column :application_presently_in do |application_submission|
       link_to application_submission.batch_application.application_stage.name, admin_application_stage_path(application_submission.batch_application.application_stage)
     end

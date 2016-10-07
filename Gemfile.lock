@@ -44,6 +44,14 @@ GIT
       railties (>= 3.1)
 
 GIT
+  remote: https://github.com/harigopal/shortener.git
+  revision: fa07d7225acc802483ba5cf611bb2b4fc371d06d
+  branch: 74-rails-5-support
+  specs:
+    shortener (0.5.5)
+      rails (>= 3.0.7)
+
+GIT
   remote: https://github.com/litaio/lita-slack.git
   revision: 862ec7252c2087c1a365c01d40e7cdfd97b392eb
   specs:
@@ -749,8 +757,6 @@ GEM
       thor (~> 0.14)
     sentry-raven (2.0.2)
       faraday (>= 0.7.6, < 0.10.x)
-    shortener (0.5.5)
-      rails (>= 3.0.7)
     signet (0.7.3)
       addressable (~> 2.3)
       faraday (~> 0.9)
@@ -927,7 +933,7 @@ DEPENDENCIES
   seedbank
   select2-rails (~> 3.5.10)
   sentry-raven
-  shortener
+  shortener!
   simple_form (~> 3.3.1)
   simple_form_fancy_uploads
   simplecov

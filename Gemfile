@@ -84,7 +84,10 @@ gem 'has_secure_token' # Used to create tokens for models (eg: for Faculty). TOD
 gem 'ahoy_matey', '~> 1.3' # Analytics for Rails
 gem 'acts-as-taggable-on', '~> 4.0.0' # Tag a single model on several contexts.
 gem 'will_paginate-bootstrap4' # This gem integrates the Twitter Bootstrap pagination component with the will_paginate pagination gem.
-gem 'shortener' # generate short SV.CO urls for files, links etc
+
+# TODO: Switch to vendor's version of 'shortener' gem when Rails 5 support has been added.
+gem 'shortener', github: 'harigopal/shortener', branch: '74-rails-5-support' # generate short SV.CO urls for files, links etc
+
 gem 'titleize' # better titleizing, modifies Inflector.titleize from default rails
 gem 'addressable' # Addressable is a replacement for the URI implementation that is part of Ruby's standard library. https://github.com/sporkmonger/addressable
 gem 'reform' # Form objects decoupled from models. http://www.trailblazer.to/gems/reform

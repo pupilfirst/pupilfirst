@@ -44,6 +44,9 @@ Rails.application.configure do
 
   # In development and test, let's have carrierwave store everything on local disk.
   config.carrier_wave_storage = :file
+
+  # Override Rails 5's default of :async, and force jobs to run inline.
+  config.active_job.queue_adapter = :inline
 end
 
 Rails.application.default_url_options = Rails.application.config.action_mailer.default_url_options

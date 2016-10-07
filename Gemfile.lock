@@ -468,6 +468,9 @@ GEM
     formtastic_i18n (0.6.0)
     friendly_id (5.1.0)
       activerecord (>= 4.0.0)
+    fuubar (2.0.0)
+      rspec (~> 3.0)
+      ruby-progressbar (~> 1.4)
     gaffe (1.2.0)
       rails (>= 4.0.0)
     geocoder (1.4.0)
@@ -703,6 +706,10 @@ GEM
     roadie-rails (1.1.1)
       railties (>= 3.0, < 5.1)
       roadie (~> 3.1)
+    rspec (3.5.0)
+      rspec-core (~> 3.5.0)
+      rspec-expectations (~> 3.5.0)
+      rspec-mocks (~> 3.5.0)
     rspec-core (3.5.4)
       rspec-support (~> 3.5.0)
     rspec-expectations (3.5.0)
@@ -862,6 +869,7 @@ DEPENDENCIES
   fog
   font-awesome-rails
   friendly_id
+  fuubar
   gaffe
   google_calendar!
   gravtastic
@@ -943,4 +951,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.13.1
+   1.13.2

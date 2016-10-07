@@ -21,9 +21,6 @@ module Svapp
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     config.time_zone = 'New Delhi'
 
-    # Do not swallow errors in after_commit/after_rollback callbacks.
-    config.active_record.raise_in_transactional_callbacks = true
-
     config.i18n.enforce_available_locales = true
 
     Dir.glob('config/routes/*.rb').each do |file|

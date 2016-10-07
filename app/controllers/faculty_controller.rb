@@ -10,14 +10,14 @@ class FacultyController < ApplicationController
 
   # GET /faculty/:slug
   def show
-    @faculty = Faculty.find(params[:id])
+    @faculty = Faculty.friendly.find(params[:id])
     @skip_container = true
   end
 
   # POST /faculty/:id/connect
   def connect
     questions = params[:connect_request][:questions]
-    faculty = Faculty.find(params[:id])
+    faculty = Faculty.friendly.find(params[:id])
     connect_slot = faculty.connect_slots.find(params[:connect_request][:connect_slot])
     connect_request = connect_slot.build_connect_request(startup: current_founder.startup, questions: questions)
 

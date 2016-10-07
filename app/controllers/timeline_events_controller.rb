@@ -8,7 +8,7 @@ class TimelineEventsController < ApplicationController
     @timeline_event = @startup.timeline_events.new timeline_event_params.merge(
       links: JSON.parse(timeline_event_params[:links]),
       founder: current_founder,
-      files: params.dig(:timeline_event, :files),
+      files: params.permit!.dig(:timeline_event, :files),
       files_metadata: JSON.parse(timeline_event_params[:files_metadata])
     )
 

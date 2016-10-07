@@ -46,14 +46,14 @@ feature 'Startup Edit' do
       click_on 'Update startup profile'
 
       expect(page).to have_text('Please review the problems below')
-      expect(page.find('div.form-group.startup_product_name')[:class]).to include('has-error')
+      expect(page).to have_selector('div.form-group.startup_product_name.has-error')
     end
 
     scenario 'Founder adds a valid co-founder to the startup' do
       fill_in 'cofounder_email', with: co_founder.email
       click_on 'Add as co-founder'
 
-      expect(page.find('.founders-table')).to have_text(co_founder.email)
+      expect(page).to have_selector('.founders-table', text: co_founder.email)
       co_founder.reload
       expect(co_founder.startup).to eq(startup)
       open_email(co_founder.email)

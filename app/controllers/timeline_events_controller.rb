@@ -1,6 +1,6 @@
 class TimelineEventsController < ApplicationController
-  before_filter :authenticate_founder!, except: [:activity]
-  before_filter :restrict_to_startup_founders, except: [:activity]
+  before_action :authenticate_founder!, except: [:activity]
+  before_action :restrict_to_startup_founders, except: [:activity]
 
   # POST /founder/startup/timeline_events
   def create

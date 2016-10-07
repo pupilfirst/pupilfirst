@@ -42,7 +42,7 @@ describe InstamojoController do
     end
 
     it 'updates payment and associated entries' do
-      get :redirect, payment_request_id: payment.instamojo_payment_request_id, payment_id: payment_id
+      get :redirect, params: { payment_request_id: payment.instamojo_payment_request_id, payment_id: payment_id }
 
       payment.reload
 
@@ -56,7 +56,7 @@ describe InstamojoController do
     end
 
     it 'redirects to continue page with a from parameter' do
-      get :redirect, payment_request_id: payment.instamojo_payment_request_id, payment_id: payment_id
+      get :redirect, params: { payment_request_id: payment.instamojo_payment_request_id, payment_id: payment_id }
       expect(response).to redirect_to(apply_continue_path(from: 'instamojo'))
     end
   end
@@ -70,12 +70,13 @@ describe InstamojoController do
       digest = OpenSSL::Digest.new('sha1')
       computed_mac = OpenSSL::HMAC.hexdigest(digest, 'TEST_SALT', data)
 
-      post :webhook,
+      post :webhook, params: {
         payment_request_id: payment.instamojo_payment_request_id,
         payment_id: payment_id,
         status: 'Credit',
         fees: '43.21',
         mac: computed_mac
+      }
 
       payment.reload
 
@@ -90,11 +91,12 @@ describe InstamojoController do
 
     context 'when mac is incorrect or missing' do
       it 'returns 401 Unauthorized' do
-        post :webhook,
+        post :webhook, params: {
           payment_request_id: payment.instamojo_payment_request_id,
           payment_id: payment_id,
           status: 'Credit',
           fees: '43.21'
+        }
 
         expect(response.status).to eq(401)
       end

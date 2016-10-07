@@ -1,6 +1,5 @@
 class TeamMembersController < ApplicationController
-  before_filter :authenticate_founder!
-  before_filter :restrict_to_startup_founders
+  before_action :authenticate_founder!, :restrict_to_startup_founders
 
   # GET /founder/startup/team_members/new
   def new

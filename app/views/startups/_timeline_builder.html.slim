@@ -49,7 +49,7 @@
               optgroup label="Suggested"
                 - suggested.each do |s_t|
                   option value='#{s_t.id}' data-sample-text='#{s_t.sample}' selected=(s_t == event.timeline_event_type ? true : nil) #{s_t.title}
-            - TimelineEventType.uniq(:role).pluck(:role).each do |role|
+            - TimelineEventType.distinct(:role).pluck(:role).each do |role|
               optgroup label=role
                 - TimelineEventType.where(role: role).order(:title).where.not(id: suggested.pluck(:id)).each do |t|
                   option value='#{t.id}' data-sample-text='#{t.sample}' selected=(t == event.timeline_event_type ? true : nil) #{t.title}

@@ -1,7 +1,7 @@
 class StartupsController < ApplicationController
-  before_filter :authenticate_founder!, except: [:show, :index]
-  before_filter :restrict_to_startup_founders, only: [:edit, :update, :add_founder]
-  before_filter :restrict_to_startup_admin, only: [:remove_founder, :create]
+  before_action :authenticate_founder!, except: [:show, :index]
+  before_action :restrict_to_startup_founders, only: [:edit, :update, :add_founder]
+  before_action :restrict_to_startup_admin, only: [:remove_founder, :create]
 
   # GET /startups
   def index

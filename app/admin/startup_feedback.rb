@@ -205,14 +205,15 @@ ActiveAdmin.register StartupFeedback do
     startup_feedback = StartupFeedback.find params[:id]
     StartupMailer.feedback_as_email(startup_feedback).deliver_later
     startup_feedback.update(sent_at: Time.now)
-    redirect_to :back
+    redirect_back(fallback_location: admin_startup_feedback_index_url)
   end
 
   member_action :remove_feedback_attachment, method: :put do
     startup_feedback = StartupFeedback.find params[:id]
     startup_feedback.attachment.remove!
     startup_feedback.save!
-    redirect_to :back, alert: 'Attachment removed!'
+    flash[:success] = 'Attachment removed!'
+    redirect_back(fallback_location: admin_startup_feedback_index_url)
   end
 
   member_action :slack_feedback, method: :put do
@@ -224,7 +225,8 @@ ActiveAdmin.register StartupFeedback do
 
     # show failure error if no response was received from PublicSlackTalk
     unless response.present?
-      redirect_to :back, alert: 'Could not communicate with Slack. Try again'
+      flash[:error] = 'Could not communicate with Slack. Try again.'
+      redirect_back(fallback_location: admin_startup_feedback_index_url)
       return
     end
 
@@ -235,7 +237,7 @@ ActiveAdmin.register StartupFeedback do
     failure_message = failure_names.present? ? "Failed to ping: #{failure_names}" : ''
     flash[:alert] = success_message + failure_message
 
-    redirect_to :back
+    redirect_back(fallback_location: admin_startup_feedback_index_url)
   end
 
   member_action :email_feedback_to_founder, method: :put do
@@ -245,7 +247,7 @@ ActiveAdmin.register StartupFeedback do
     # Mark feedback as sent.
     startup_feedback.update(sent_at: Time.now)
     flash[:alert] = "Your feedback has been sent to #{founder.email}"
-    redirect_to :back
+    redirect_back(fallback_location: admin_startup_feedback_index_url)
   end
 
   member_action :slack_feedback_to_founder, method: :put do
@@ -257,7 +259,8 @@ ActiveAdmin.register StartupFeedback do
 
     # show failure error if no response was received from PublicSlackTalk
     unless response.present?
-      redirect_to :back, alert: 'Could not communicate with Slack. Try again'
+      flash[:error] = 'Could not communicate with Slack. Try again.'
+      redirect_back(fallback_location: admin_startup_feedback_index_url)
       return
     end
 
@@ -266,7 +269,7 @@ ActiveAdmin.register StartupFeedback do
     else
       "Your feedback has been sent as a DM to #{founder.slack_username} on slack"
     end
-    redirect_to :back
+    redirect_back(fallback_location: admin_startup_feedback_index_url)
   end
 
   action_item :email_feedback, only: :show, if: proc { startup_feedback.sent_at.blank? && !startup_feedback.for_founder? } do

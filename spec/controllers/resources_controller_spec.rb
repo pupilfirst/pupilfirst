@@ -16,7 +16,7 @@ describe ResourcesController do
     it 'increments downloads of resource by 1' do
       downloads = binary_resource.downloads
 
-      get :download, id: binary_resource.id
+      get :download, params: { id: binary_resource.id }
       binary_resource.reload
 
       expect(binary_resource.downloads).to eq(downloads + 1)
@@ -27,7 +27,7 @@ describe ResourcesController do
     it 'increments downloads of resource by 1' do
       downloads = video_resource.downloads
 
-      get :show, id: video_resource.id, watch: true
+      get :show, params: { id: video_resource.id, watch: true }
       video_resource.reload
 
       expect(video_resource.downloads).to eq(downloads + 1)

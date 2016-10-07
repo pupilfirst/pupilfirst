@@ -1,5 +1,5 @@
 class FoundersController < ApplicationController
-  before_filter :authenticate_founder!, except: :founder_profile
+  before_action :authenticate_founder!, except: :founder_profile
 
   def founder_profile
     @founder = Founder.friendly.find(params[:slug])

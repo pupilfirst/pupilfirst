@@ -25,6 +25,7 @@ ActiveAdmin.register BatchApplicant do
   filter :phone
   filter :gender, as: :select, collection: proc { Founder.valid_gender_values }
   filter :college_state_id_eq, label: 'State', as: :select, collection: proc { State.all }
+  filter :college_id_null, label: 'College missing?', as: :boolean
   filter :created_at
 
   index do

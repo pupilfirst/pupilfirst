@@ -39,8 +39,7 @@ JqueryAccordion = ->
   $.sidebarMenu $('.sidebar-menu')
 
 SimpleScrollBar = ->
-  if $('#sixways-container').length
-    myScrollbar = new GeminiScrollbar(element: document.querySelector('#module-links')).create()
+  myScrollbar = new GeminiScrollbar(element: document.querySelector('#module-links')).create()
 
 ModuleTooltip = ->
   $('.module-title').tooltip()
@@ -48,8 +47,17 @@ ModuleTooltip = ->
 helpIconTooltip = ->
   $('.guest-banner .help-icon').tooltip()
 
-$(document).on 'page:change', SidebarMenuToggle
-$(document).on 'ready page:load', JqueryAccordion
-$(document).on 'ready page:load', SimpleScrollBar
-$(document).on 'page:change', ModuleTooltip
-$(document).on 'page:change', helpIconTooltip
+
+$(document).on 'turbolinks:load', ->
+  if $('#module-links').length
+    SidebarMenuToggle()
+
+$(document).on 'turbolinks:load', ->
+  if $('#sidebar-menu-container').length
+    JqueryAccordion()
+
+$(document).on 'turbolinks:load', ->
+  if $('#sixways-container').length
+    SimpleScrollBar()
+    ModuleTooltip()
+    helpIconTooltip()

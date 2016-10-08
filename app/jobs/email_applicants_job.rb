@@ -16,9 +16,10 @@ class EmailApplicantsJob < ActiveJob::Base
       end
     end
 
+    # TODO: Emails for selected applications were decided to be send manually for Batch 3 on Oct' 8th. Commenting this out for now. Include back if required for later admissions.
     # Send emails to team leads who got through.
-    selected_applications = applications_for_batch.where(application_stage: @latest_stage)
-    send_application_progress_mails(selected_applications)
+    # selected_applications = applications_for_batch.where(application_stage: @latest_stage)
+    # send_application_progress_mails(selected_applications)
 
     # Send rejection emails to team leads who didn't get through (except for those in stage 1).
     if @latest_stage.previous.number > 1

@@ -54,7 +54,7 @@ module Lita
       end
 
       def parse_batch_from_command
-        @response.match_data[1].present? ? ::Batch.find_by_batch_number(@response.match_data[1].to_i) : nil
+        @response.match_data[1].present? ? ::Batch.find_by(batch_number: @response.match_data[1].to_i) : nil
       end
 
       def send_batch_missing_message

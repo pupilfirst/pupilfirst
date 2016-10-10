@@ -31,8 +31,8 @@ after 'development:startups' do
   events_list.each do |startup, type_key, founder_email, description, verified_status|
     TimelineEvent.create!(
       startup: startup,
-      timeline_event_type: TimelineEventType.find_by_key(type_key),
-      founder: Founder.find_by_email(founder_email),
+      timeline_event_type: TimelineEventType.find_by(key: type_key),
+      founder: Founder.find_by(email: founder_email),
       event_on: Time.now,
       description: description,
       verified_status: verified_status,

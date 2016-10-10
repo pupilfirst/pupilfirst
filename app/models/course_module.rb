@@ -22,7 +22,7 @@ class CourseModule < ApplicationRecord
   end
 
   def self.last_module
-    CourseModule.find_by_module_number CourseModule.all.maximum(:module_number)
+    CourseModule.find_by(module_number: CourseModule.all.maximum(:module_number))
   end
 
   def chapters_count

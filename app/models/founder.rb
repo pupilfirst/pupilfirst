@@ -43,7 +43,7 @@ class Founder < ApplicationRecord
   scope :student_entrepreneurs, -> { where.not(university_id: nil) }
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
   scope :non_founders, -> { where(startup_id: nil) }
-  scope :find_by_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch.id }) }
+  scope :in_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch.id }) }
 
   # a verified 'phone' implies registration was completed
   scope :registered, -> { where.not(phone: nil) }
@@ -424,12 +424,12 @@ class Founder < ApplicationRecord
 
   # method to return the list of active founders on slack for a given duration
   def self.active_founders_on_slack(since:, upto: Time.now, batch: Batch.current_or_last)
-    Founder.not_dropped_out.not_exited.find_by_batch(batch).active_on_slack(since, upto).distinct
+    Founder.not_dropped_out.not_exited.in_batch(batch).active_on_slack(since, upto).distinct
   end
 
   # method to return the list of active founders on web for a given duration
   def self.active_founders_on_web(since:, upto: Time.now, batch: Batch.current_or_last)
-    Founder.not_dropped_out.not_exited.find_by_batch(batch).active_on_web(since, upto).distinct
+    Founder.not_dropped_out.not_exited.in_batch(batch).active_on_web(since, upto).distinct
   end
 
   def any_targets?

@@ -147,7 +147,7 @@ class FoundersController < ApplicationController
   end
 
   def founder_password_change_params
-    params.required(:founder).permit(:current_password, :password, :password_confirmation)
+    params.require(:founder).permit(:current_password, :password, :password_confirmation)
   end
 
   def founder_params

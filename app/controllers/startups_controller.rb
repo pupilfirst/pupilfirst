@@ -112,13 +112,15 @@ class StartupsController < ApplicationController
   # PATCH /remove_founder
   def remove_founder
     founder_to_remove = current_founder.startup.founders.find_by id: params[:founder_id]
+
     if founder_to_remove.present?
       founder_to_remove.update(startup_id: nil)
       flash.now[:success] = "The founder was successfully removed from your startup!"
     else
       flash.now[:error] = "There was an error in removing the founder!"
     end
-    redirect_to :back
+
+    redirect_to edit_founder_startup_path
   end
 
   # DELETE /founders/:id/startup/destroy

@@ -284,7 +284,7 @@ ActiveAdmin.register BatchApplication do
     IntercomLastApplicantEventUpdateJob.perform_later(batch_application.team_lead, 'selected_for_interview') if promoted_stage == ApplicationStage.find_by(name: 'Team Interview')
 
     flash[:success] = "Application has been promoted to #{promoted_stage.name}"
-    redirect_to :back
+    redirect_back(fallback_location: admin_batch_applications_url)
   end
 
   action_item :promote, only: :show do

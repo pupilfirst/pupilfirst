@@ -9,7 +9,7 @@ class PlatformFeedbackController < ApplicationController
       flash[:error] = 'Something went wrong while saving your feedback! Please try again.'
     end
 
-    redirect_to :back
+    redirect_back(fallback_location: root_url)
   end
 
   private

@@ -354,28 +354,28 @@ ActiveAdmin.register Founder do
     # Team lead is mandatory.
     if team_lead.blank?
       flash[:error] = 'Team lead is mandatory.'
-      redirect_to :back
+      redirect_back(fallback_location: admin_founders_url)
       return
     end
 
     # There should be at least two other founders.
     if founders.count < 2
       flash[:error] = 'Two other founders, besides the team lead are required.'
-      redirect_to :back
+      redirect_back(fallback_location: admin_founders_url)
       return
     end
 
     # Check whether all the emails look OK.
     if ([team_lead] + founders).select { |founder_email| !(founder_email =~ /@/) }.present?
       flash[:error] = 'Not all email addresses look right. Please enter emails again.'
-      redirect_to :back
+      redirect_back(fallback_location: admin_founders_url)
       return
     end
 
     # None of the founders should already exist.
     if ([team_lead] + founders).select { |founder_email| Founder.find_by email: founder_email }.present?
       flash[:error] = 'None of the supplied email addresses should be of existing founders.'
-      redirect_to :back
+      redirect_back(fallback_location: admin_founders_url)
       return
     end
 
@@ -402,21 +402,21 @@ ActiveAdmin.register Founder do
     # Either startup or token should be picked.
     if (startup.blank? && token.blank?) || (startup.present? && token.present?)
       flash[:error] = 'Only one of startup or token should be picked.'
-      redirect_to :back
+      redirect_back(fallback_location: admin_founders_url)
       return
     end
 
     # Check whether the emails look OK.
     unless email =~ /@/
       flash[:error] = "That email address doesn't look right. Please enter it again."
-      redirect_to :back
+      redirect_back(fallback_location: admin_founders_url)
       return
     end
 
     # The email address shouldn't already be in use.
     if Founder.find_by(email: email).present?
       flash[:error] = 'That email address is already registered with us.'
-      redirect_to :back
+      redirect_back(fallback_location: admin_founders_url)
       return
     end
 

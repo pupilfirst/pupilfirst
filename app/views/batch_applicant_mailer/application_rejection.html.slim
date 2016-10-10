@@ -1,21 +1,28 @@
 = content_for :heading
-  | We're sorry! You didn't make it into Batch ##{@batch.batch_number}.
+  | There's always a next time!
 
 = content_for :salutation
   | Hello,
 
 = content_for :body
   p
-    ' After evaluation, your team's coding and video submissions for Batch #{@batch.batch_number} scored
-    ' #{@batch_application.overall_percentile} percentile. Because of great submissions by other applicants, our
-    | percentile cutoff for this batch was 80%.
+    ' We're sorry to inform you that you didn't make it to the January 2017 batch of Startup Village Silicon Valley programme.
+    - if @batch_application.overall_percentile.present?
+      ' We've received some terrific video and coding submissions this time and your team has <strong>scored #{@batch_application.overall_percentile.round(1)} percentile</strong>, falling short of our cutoff of 50 percentile.
 
   p
-    ' We're sorry! You didn't make it into Batch #{@batch.batch_number}. Just a note: please don't be disappointed. A
-    | lot of folks make it into Startup Village only on their second or third try, so do apply again!
+    ' But Hey! All's not bad - a lot of the teams only make it to Startup Village only on their second or third attempts and <strong>we want to give you one more chance!</strong>
 
-  p
-    ' If you think there's we've made a mistake in our evaluation, feel free to contact us at #{mail_to 'help@sv.co'},
-    | and we'll get back to you as soon as we can.
+      We're launching a new challenge to become part of the January batch and you can attempt it free of cost, unlike new applicants.
 
-  p Login at #{link_to 'www.sv.co/apply', apply_url} to download your score certificate.
+      We're hoping that you'll give it another shot and come out victorious.
+
+    ' Come back to #{link_to 'www.sv.co/apply', apply_url} on 25th October to receive your new challenge.
+
+  - if @batch_application.overall_percentile.present?
+    p
+      ' If you think we've made a mistake in our evaluation, feel free to contact us at #{mail_to 'help@sv.co'} and we'll get back to you as soon as we can.
+
+    p Login at #{link_to 'www.sv.co/apply', apply_url} before 20th October to download your score certificate.
+
+  p <em> "Failure is simply the opportunity to begin again, this time more intelligently." – Henry Ford (Founder of Ford Motor Company)</em>

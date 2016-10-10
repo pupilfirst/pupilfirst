@@ -1,3 +1,14 @@
+### 10 October, 2016
+
+#### UX and UI
+
+  - We've released a new design for the [library](/library) index page!
+  - Notifications now have _bolder_ styling with greater visibility.
+
+#### Performance
+
+  - SV.CO now runs on Rails 5, and uses Turbolinks 5 - the latest and greatest.
+
 ### 3 October, 2016
 
 #### Bugfixes

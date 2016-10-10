@@ -17,7 +17,6 @@
 /tmp
 
 .env*
-.rspec
 tags
 coverage
 public/svapp-dev

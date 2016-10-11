@@ -1,5 +1,7 @@
 require_relative 'helper'
 
+puts 'Seeding batches'
+
 Batch.create!(
   theme: 'FinTech',
   batch_number: 1,

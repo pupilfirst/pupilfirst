@@ -1,6 +1,8 @@
 require_relative 'helper'
 
 after 'development:colleges' do
+  puts 'Seeding batch_applicants'
+
   def applicant_defaults
     {
       name: Faker::Name.name,

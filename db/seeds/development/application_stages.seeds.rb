@@ -1,5 +1,7 @@
 require_relative 'helper'
 
+puts 'Seeding application_stages'
+
 ApplicationStage.create!(number: 1, name: 'Open')
 ApplicationStage.create!(number: 2, name: 'Testing')
 ApplicationStage.create!(number: 3, name: 'Interview')

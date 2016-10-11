@@ -1,6 +1,8 @@
 require_relative 'helper'
 
 after 'development:founders', 'development:timeline_event_types', 'development:batches', 'development:categories' do
+  puts 'Seeding startups'
+
   # Startup with live agreement.
   super_startup = Startup.new(
     name: 'Super Startup',

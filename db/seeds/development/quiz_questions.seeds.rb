@@ -1,6 +1,8 @@
 require_relative 'helper'
 
 after 'development:module_chapters' do
+  puts 'Seeding quiz_questions'
+
   question = QuizQuestion.new(
     course_module: CourseModule.find_by(module_number: 2),
     question: 'Is Fin Robotics a successful business?'

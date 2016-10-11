@@ -1,5 +1,7 @@
 require_relative 'helper'
 
+puts 'Seeding categories'
+
 # Startup Categories
 StartupCategory.create! name: 'Enterprise'
 StartupCategory.create! name: 'Hardware'

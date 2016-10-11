@@ -1,3 +1,5 @@
+puts 'Seeding universities'
+
 universities = [
   ['Gujarat Technical University', 'Gujarat'],
   ['Kerala University', 'Kerala'],

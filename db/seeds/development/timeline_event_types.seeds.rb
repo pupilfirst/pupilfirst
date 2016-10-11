@@ -1,3 +1,5 @@
+puts 'Seeding timeline_event_types'
+
 def self.seed_image(image_name)
   File.open(File.join(Rails.root, "/spec/support/uploads/timeline_event_types/#{image_name}.png"))
 end

@@ -1,5 +1,7 @@
 require_relative 'helper'
 
+puts 'Seeding faculty'
+
 Faculty.create!(
   name: 'Mickey Mouse',
   title: 'CEO',

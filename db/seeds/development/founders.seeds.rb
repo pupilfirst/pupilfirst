@@ -1,5 +1,7 @@
 require_relative 'helper'
 
+puts 'Seeding founders'
+
 MALE = Founder::GENDER_MALE
 FEMALE = Founder::GENDER_FEMALE
 OTHER = Founder::GENDER_OTHER

@@ -1,3 +1,5 @@
+puts 'Seeding states'
+
 [
   'Karnataka',
   'Andhra Pradesh',

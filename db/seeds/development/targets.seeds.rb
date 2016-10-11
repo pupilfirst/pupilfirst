@@ -1,6 +1,8 @@
 require_relative 'helper'
 
 after 'development:startups' do
+  puts 'Seeding targets'
+
   avengers_startup = Startup.find_by(product_name: 'SuperHeroes')
 
   targets_list = [

@@ -1,3 +1,5 @@
+puts 'Seeding admin_users'
+
 # Create an admin user for the /admin interface. This user is a 'super-admin', who can do everything possible from the
 # ActiveAdmin interface.
 AdminUser.create!(

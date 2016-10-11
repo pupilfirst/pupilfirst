@@ -1,4 +1,6 @@
 after 'development:replacement_universities' do
+  puts 'Seeding colleges'
+
   kerala = State.find_by name: 'Kerala'
   gujarat = State.find_by name: 'Gujarat'
 

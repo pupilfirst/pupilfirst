@@ -1,6 +1,8 @@
 require_relative 'helper'
 
 after 'development:application_stages', 'development:batches', 'development:batch_applicants', 'admin_users' do
+  puts 'Seeding batch_applications'
+
   batch = Batch.find_by(batch_number: 4)
   inteview_batch = Batch.find_by(batch_number: 3)
 

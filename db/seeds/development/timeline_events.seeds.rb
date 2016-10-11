@@ -1,6 +1,8 @@
 require_relative 'helper'
 
 after 'development:startups' do
+  puts 'Seeding timeline_events'
+
   super_startup = Startup.find_by(product_name: 'Super Product')
   avengers_startup = Startup.find_by(product_name: 'SuperHeroes')
 

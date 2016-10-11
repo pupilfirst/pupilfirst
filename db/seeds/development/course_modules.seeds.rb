@@ -1,5 +1,7 @@
 require_relative 'helper'
 
+puts 'Seeding course_modules'
+
 CourseModule.create!(
   name: 'Introduction',
   module_number: 1,

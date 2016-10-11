@@ -1,6 +1,8 @@
 require_relative 'helper'
 
 after 'development:application_stages', 'development:batches' do
+  puts 'Seeding batch_stages'
+
   batch_4 = Batch.find_by batch_number: 4
 
   stage_1 = ApplicationStage.initial_stage

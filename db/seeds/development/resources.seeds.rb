@@ -4,6 +4,8 @@ pdf_thumbnail_path = 'spec/support/uploads/resources/pdf-thumbnail.png'
 video_path = 'spec/support/uploads/resources/video-sample.mp4'
 video_thumbnail_path = 'spec/support/uploads/resources/video-thumbnail.png'
 
+puts 'Seeding resources'
+
 Resource.create!(
   file: Rails.root.join(pdf_path).open,
   thumbnail: Rails.root.join(pdf_thumbnail_path).open,

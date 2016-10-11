@@ -1,6 +1,8 @@
 require_relative 'helper'
 
 after 'development:course_modules' do
+  puts 'Seeding module_chapters'
+
   ModuleChapter.create!(
     course_module: CourseModule.find_by(module_number: 1),
     name: 'Before You Begin',

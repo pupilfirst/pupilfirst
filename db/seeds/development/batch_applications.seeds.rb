@@ -1,7 +1,9 @@
 require_relative 'helper'
 
-after 'development:application_stages', 'development:batches', 'development:batch_applicants' do
-  batch = Batch.find_by(batch_number: 3)
+after 'development:application_stages', 'development:batches', 'development:batch_applicants', 'admin_users' do
+  batch = Batch.find_by(batch_number: 4)
+  inteview_batch = Batch.find_by(batch_number: 3)
+
   stage_1 = ApplicationStage.find_by number: 1
   stage_2 = ApplicationStage.find_by number: 2
   stage_3 = ApplicationStage.find_by number: 3
@@ -44,17 +46,29 @@ after 'development:application_stages', 'development:batches', 'development:batc
 
     case application_stage.number
       when 2
-        urls = [
-          { name: 'Code Submission', url: 'https://github.com/user/repository' },
-          { name: 'Live Website', url: 'http://www.example.com' },
-          { name: 'Video Submission', url: 'https://facebook.com/video' }
-        ]
-
-        urls.each do |submission_url_attributes|
-          submission.application_submission_urls.create!(submission_url_attributes)
-        end
+        create_submission_urls(submission)
       else
         raise NotImplementedError
+    end
+
+    submission
+  end
+
+  def create_submission_urls(submission)
+    urls = [
+      { name: 'Code Submission', url: 'https://github.com/user/repository' },
+      { name: 'Live Website', url: 'http://www.example.com' },
+      { name: 'Video Submission', url: 'https://facebook.com/video' }
+    ]
+
+    urls.map do |submission_url_attributes|
+      submission.application_submission_urls.create!(submission_url_attributes)
+    end
+  end
+
+  def score(submission)
+    submission.application_submission_urls.each do |url|
+      url.update!(score: 70, admin_user: AdminUser.first) if url.name =~ /Submission/
     end
   end
 
@@ -71,7 +85,8 @@ after 'development:application_stages', 'development:batches', 'development:batc
   create_submission(submitted_application, stage_2)
 
   # Applicant promoted to interview stage
-  interview_application = create_application(interview_applicant, batch: batch, application_stage: stage_3)
+  interview_application = create_application(interview_applicant, batch: inteview_batch, application_stage: stage_3)
   create_payment(interview_application)
-  create_submission(interview_application, stage_2)
+  submission = create_submission(interview_application, stage_2)
+  score(submission)
 end

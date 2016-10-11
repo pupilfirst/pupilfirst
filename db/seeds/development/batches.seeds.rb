@@ -19,7 +19,15 @@ Batch.create!(
 Batch.create!(
   theme: 'SaaS',
   batch_number: 3,
-  description: 'The third batch of SV.CO focusing on SaaS Solutions, and whose applications are ongoing',
+  description: 'The third batch of SV.CO focusing on SaaS Solutions, and whose interviews are ongoing',
   start_date: 3.months.from_now,
   end_date: 9.months.from_now
+)
+
+Batch.create!(
+  theme: 'SaaS',
+  batch_number: 4,
+  description: 'The fourth batch of SV.CO focusing on SaaS Solutions, and whose applications are ongoing',
+  start_date: 6.months.from_now,
+  end_date: 12.months.from_now
 )

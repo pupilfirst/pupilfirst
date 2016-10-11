@@ -279,6 +279,10 @@ class BatchApplicationController < ApplicationController
     redirect_to apply_stage_path(stage_number: 2)
   end
 
+  def stage_3
+    @batch_application = current_application.decorate
+  end
+
   def stage_4_submit
     # TODO: Server-side error handling for stage 4 inputs.
 

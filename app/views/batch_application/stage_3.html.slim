@@ -18,10 +18,14 @@
     == render 'application_progress'
   .container-md-center.content-box.application-stages-content.m-t-3.m-b-3.text-xs-center
     h4.m-b-1
-      ' You've made it to the interviews! Now prove that you've got what it takes.
+      ' You've made it to the interviews!
 
     p.m-b-1
-      ' Interviews will happen in Kerala (24, 25 October) and Bangalore (27th October). We’ll let you know details about the venue very soon.
+      ' After evaluation, your team&rsquo;s coding and video submissions for Batch #{current_batch.batch_number}
+      span.brand-secondary.font-semibold scored #{@batch_application.overall_percentile.round(1)} percentile.
+
+    p.m-b-1
+      ' Interviews will happen in Kerala (24, 25 October) and Bangalore (27th October). We&rsquo;ll let you know details about the venue very soon.
 
 /.container
 /  .apply-banner

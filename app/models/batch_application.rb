@@ -65,8 +65,8 @@ class BatchApplication < ApplicationRecord
   end
 
   # Promotes this application to the next stage, and returns the latest stage.
-  def promote!
-    if promotable?
+  def promote!(force: false)
+    if promotable? || force
       self.application_stage = application_stage.next
       save!
     end
@@ -111,7 +111,7 @@ class BatchApplication < ApplicationRecord
 
   # Called after payment is known to have succeeded. This automatically promotes stage 1 applications to stage 2.
   def perform_post_payment_tasks!
-    promote! if application_stage.initial_stage?
+    promote!(force: true) if application_stage.initial_stage?
   end
 
   # Destroys all trace of an application so that applicant can start again.

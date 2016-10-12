@@ -188,27 +188,7 @@ class BatchApplication < ApplicationRecord
       raise "BatchApplication ##{id} is in an unexpected state. Please investigate."
     end
   end
-
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-
-  # Creates a duplicate (pristine, unpaid) of this application into given batch.
-  def duplicate!(batch)
-    application = BatchApplication.create!(
-      batch: batch,
-      team_lead: team_lead,
-      application_stage: ApplicationStage.initial_stage,
-      university: university,
-      college: college,
-      team_size: team_size
-    )
-
-    application.batch_applicants << team_lead
-
-    update!(swept_at: Time.now)
-
-    # Send email to the lead.
-    BatchApplicantMailer.swept(team_lead, batch).deliver_later
-  end
 
   # An application that has submitted for stage 2, or beyond merits a certificate from SV.CO
   def merits_certificate?

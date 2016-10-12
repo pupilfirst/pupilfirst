@@ -6,19 +6,8 @@ feature 'Applying to SV.CO' do
   let!(:application_stage_2) { create :application_stage, number: 2 }
   let!(:application_stage_3) { create :application_stage, number: 3 }
   let!(:college) { create :college }
-  let(:instamojo_payment_request_id) { SecureRandom.hex }
-  let(:long_url) { 'http://example.com/a/b' }
-  let(:short_url) { 'http://example.com/a/b' }
 
-  before do
-    # stub any requests to instamojo
-    allow_any_instance_of(Instamojo).to receive(:create_payment_request).and_return(
-      id: instamojo_payment_request_id,
-      status: 'Pending',
-      long_url: long_url,
-      short_url: short_url
-    )
-  end
+  include_context 'mocked_instamojo'
 
   context 'when a batch is open for applications' do
     let(:batch) { create :batch }

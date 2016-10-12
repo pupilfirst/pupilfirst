@@ -13,5 +13,9 @@
         include_blank: false,
         label: 'Sweep in rejected and expired applications from these batches (multi-select):'
 
+      = f.input :skip_payment,
+        as: :boolean,
+        label: 'Skip payment stage for applications rejected and expired (paid) applications'
+
     = f.actions do
       = f.action :submit, label: 'Sweep in all applications from selected categories', button_html: { :'data-confirm' => 'Are you sure?' }

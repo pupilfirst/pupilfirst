@@ -91,12 +91,7 @@ class BatchSweepJob < ApplicationJob
 
   # Create a dummy payment entry and
   def skip_payment(batch_application)
-    Payment.create!(
-      batch_application: batch_application,
-      batch_applicant: batch_application.team_lead,
-      paid_at: Time.now,
-      notes: 'Payment has been skipped.'
-    )
+    PaymentCreateService.new(batch_application, skip_payment: true).execute
   end
 
   def new_application_stage

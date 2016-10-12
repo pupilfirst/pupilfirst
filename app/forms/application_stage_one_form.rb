@@ -49,9 +49,6 @@ class ApplicationStageOneForm < Reform::Form
   end
 
   def create_new_payment
-    Payment.create!(
-      batch_application: model,
-      batch_applicant: model.team_lead
-    )
+    PaymentCreateService.new(model).execute
   end
 end

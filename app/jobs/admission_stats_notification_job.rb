@@ -3,8 +3,9 @@ class AdmissionStatsNotificationJob < ApplicationJob
   attr_reader :batch, :stats
 
   def perform
-    @batch = Batch.open_for_applications.order(:start_date).first.decorate
+    @batch = Batch.open_for_applications.order(:start_date).first
     return unless batch.present?
+    @batch = @batch.decorate
     @stats = AdmissionStatsService.load_stats(batch)
 
     slack_webhook_url = Rails.application.secrets.slack_general_webhook_url

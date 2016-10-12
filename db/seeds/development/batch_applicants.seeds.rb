@@ -17,6 +17,7 @@ after 'development:colleges' do
     { email: 'applicant+registered@gmail.com' },
     { email: 'applicant+paid@gmail.com' },
     { email: 'applicant+submitted@gmail.com' },
+    { email: 'applicant+submitted+rejected@gmail.com' },
     { email: 'applicant+interview@gmail.com' }
   ].map { |applicant| applicant.merge(applicant_defaults) }
 

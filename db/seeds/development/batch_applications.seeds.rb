@@ -13,6 +13,7 @@ after 'development:application_stages', 'development:batches', 'development:batc
   registered_applicant = BatchApplicant.find_by(email: 'applicant+registered@gmail.com')
   paid_applicant = BatchApplicant.find_by(email: 'applicant+paid@gmail.com')
   submitted_applicant = BatchApplicant.find_by(email: 'applicant+submitted@gmail.com')
+  submitted_rejected_applicant = BatchApplicant.find_by(email: 'applicant+submitted+rejected@gmail.com')
   interview_applicant = BatchApplicant.find_by(email: 'applicant+interview@gmail.com')
 
   def sample_payment
@@ -68,9 +69,9 @@ after 'development:application_stages', 'development:batches', 'development:batc
     end
   end
 
-  def score(submission)
+  def score(submission, score: 70)
     submission.application_submission_urls.each do |url|
-      url.update!(score: 70, admin_user: AdminUser.first) if url.name =~ /Submission/
+      url.update!(score: score, admin_user: AdminUser.first) if url.name =~ /Submission/
     end
   end
 
@@ -85,6 +86,12 @@ after 'development:application_stages', 'development:batches', 'development:batc
   submitted_application = create_application(submitted_applicant, batch: batch, application_stage: stage_2)
   create_payment(submitted_application)
   create_submission(submitted_application, stage_2)
+
+  # Submitted and rejected applicant
+  submitted_rejected_application = create_application(submitted_rejected_applicant, batch: inteview_batch, application_stage: stage_2)
+  create_payment(submitted_rejected_application)
+  submission = create_submission(submitted_rejected_application, stage_2)
+  score(submission, score: 40)
 
   # Applicant promoted to interview stage
   interview_application = create_application(interview_applicant, batch: inteview_batch, application_stage: stage_3)

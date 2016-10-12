@@ -172,6 +172,7 @@ Rails.application.routes.draw do
 
   scope 'sixways', as: 'six_ways', controller: 'six_ways' do
     get '/', action: 'index'
+    get 'gtu'
     get 'start'
     get 'student_details'
     post 'create_student'

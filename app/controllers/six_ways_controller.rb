@@ -19,6 +19,13 @@ class SixWaysController < ApplicationController
     @skip_container = true
   end
 
+  # Temporary page for launch MOOC in GTU.
+  def gtu
+    @skip_container = true
+    @hide_layout_header = true
+    @hide_layout_footer = true
+  end
+
   # GET /sixways/student_details
   #
   # Signup page for MOOC course.

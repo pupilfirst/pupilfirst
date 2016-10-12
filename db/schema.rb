@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -17,7 +16,7 @@ ActiveRecord::Schema.define(version: 20161007055454) do
   enable_extension "plpgsql"
   enable_extension "pg_trgm"
 
-  create_table "active_admin_comments", force: :cascade do |t|
+  create_table "active_admin_comments", force: :cascade,  do |t|
     t.string   "namespace"
     t.text     "body"
     t.string   "resource_id",   null: false
@@ -26,13 +25,12 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.string   "author_type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
+    t.index ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
+    t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
   end
 
-  add_index "active_admin_comments", ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
-  add_index "active_admin_comments", ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
-  add_index "active_admin_comments", ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
-
-  create_table "admin_users", force: :cascade do |t|
+  create_table "admin_users", force: :cascade,  do |t|
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
@@ -50,37 +48,34 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.string   "fullname"
     t.string   "admin_type"
     t.integer  "faculty_id"
+    t.index ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
+    t.index ["faculty_id"], name: "index_admin_users_on_faculty_id", using: :btree
+    t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
   end
 
-  add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
-  add_index "admin_users", ["faculty_id"], name: "index_admin_users_on_faculty_id", using: :btree
-  add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
-
-  create_table "ahoy_events", id: :uuid, default: nil, force: :cascade do |t|
+  create_table "ahoy_events", id: :uuid, default: nil, force: :cascade,  do |t|
     t.uuid     "visit_id"
     t.integer  "user_id"
     t.string   "user_type"
     t.string   "name"
     t.jsonb    "properties"
     t.datetime "time"
+    t.index ["time"], name: "index_ahoy_events_on_time", using: :btree
+    t.index ["user_id", "user_type"], name: "index_ahoy_events_on_user_id_and_user_type", using: :btree
+    t.index ["visit_id"], name: "index_ahoy_events_on_visit_id", using: :btree
   end
 
-  add_index "ahoy_events", ["time"], name: "index_ahoy_events_on_time", using: :btree
-  add_index "ahoy_events", ["user_id", "user_type"], name: "index_ahoy_events_on_user_id_and_user_type", using: :btree
-  add_index "ahoy_events", ["visit_id"], name: "index_ahoy_events_on_visit_id", using: :btree
-
-  create_table "answer_options", force: :cascade do |t|
+  create_table "answer_options", force: :cascade,  do |t|
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
     t.integer  "quiz_question_id"
     t.boolean  "correct_answer",   default: false
     t.string   "value"
     t.text     "hint_text"
+    t.index ["quiz_question_id"], name: "index_answer_options_on_quiz_question_id", using: :btree
   end
 
-  add_index "answer_options", ["quiz_question_id"], name: "index_answer_options_on_quiz_question_id", using: :btree
-
-  create_table "application_stages", force: :cascade do |t|
+  create_table "application_stages", force: :cascade,  do |t|
     t.string   "name"
     t.integer  "number"
     t.datetime "created_at",  null: false
@@ -88,7 +83,7 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.boolean  "final_stage"
   end
 
-  create_table "application_submission_urls", force: :cascade do |t|
+  create_table "application_submission_urls", force: :cascade,  do |t|
     t.string   "name"
     t.string   "url"
     t.integer  "score"
@@ -96,12 +91,11 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
     t.integer  "admin_user_id"
+    t.index ["admin_user_id"], name: "index_application_submission_urls_on_admin_user_id", using: :btree
+    t.index ["application_submission_id"], name: "index_application_submission_urls_on_application_submission_id", using: :btree
   end
 
-  add_index "application_submission_urls", ["admin_user_id"], name: "index_application_submission_urls_on_admin_user_id", using: :btree
-  add_index "application_submission_urls", ["application_submission_id"], name: "index_application_submission_urls_on_application_submission_id", using: :btree
-
-  create_table "application_submissions", force: :cascade do |t|
+  create_table "application_submissions", force: :cascade,  do |t|
     t.integer  "application_stage_id"
     t.integer  "batch_application_id"
     t.integer  "score"
@@ -109,12 +103,11 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.datetime "updated_at",           null: false
     t.text     "notes"
     t.string   "file"
+    t.index ["application_stage_id"], name: "index_application_submissions_on_application_stage_id", using: :btree
+    t.index ["batch_application_id"], name: "index_application_submissions_on_batch_application_id", using: :btree
   end
 
-  add_index "application_submissions", ["application_stage_id"], name: "index_application_submissions_on_application_stage_id", using: :btree
-  add_index "application_submissions", ["batch_application_id"], name: "index_application_submissions_on_batch_application_id", using: :btree
-
-  create_table "batch_applicants", force: :cascade do |t|
+  create_table "batch_applicants", force: :cascade,  do |t|
     t.string   "name"
     t.string   "gender"
     t.string   "email"
@@ -130,20 +123,18 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.datetime "latest_payment_at"
     t.integer  "college_id"
     t.string   "college_text"
+    t.index ["college_id"], name: "index_batch_applicants_on_college_id", using: :btree
+    t.index ["token"], name: "index_batch_applicants_on_token", using: :btree
   end
 
-  add_index "batch_applicants", ["college_id"], name: "index_batch_applicants_on_college_id", using: :btree
-  add_index "batch_applicants", ["token"], name: "index_batch_applicants_on_token", using: :btree
-
-  create_table "batch_applicants_applications", id: false, force: :cascade do |t|
+  create_table "batch_applicants_applications", id: false, force: :cascade,  do |t|
     t.integer "batch_applicant_id",   null: false
     t.integer "batch_application_id", null: false
+    t.index ["batch_applicant_id", "batch_application_id"], name: "idx_applicants_applications_on_applicant_id_and_application_id", using: :btree
+    t.index ["batch_application_id", "batch_applicant_id"], name: "idx_applications_applicants_on_application_id_and_applicant_id", using: :btree
   end
 
-  add_index "batch_applicants_applications", ["batch_applicant_id", "batch_application_id"], name: "idx_applicants_applications_on_applicant_id_and_application_id", using: :btree
-  add_index "batch_applicants_applications", ["batch_application_id", "batch_applicant_id"], name: "idx_applications_applicants_on_application_id_and_applicant_id", using: :btree
-
-  create_table "batch_applications", force: :cascade do |t|
+  create_table "batch_applications", force: :cascade,  do |t|
     t.integer  "batch_id"
     t.integer  "application_stage_id"
     t.integer  "university_id"
@@ -155,26 +146,24 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.string   "state"
     t.integer  "team_size"
     t.datetime "swept_at"
+    t.index ["application_stage_id"], name: "index_batch_applications_on_application_stage_id", using: :btree
+    t.index ["batch_id"], name: "index_batch_applications_on_batch_id", using: :btree
+    t.index ["team_lead_id"], name: "index_batch_applications_on_team_lead_id", using: :btree
+    t.index ["university_id"], name: "index_batch_applications_on_university_id", using: :btree
   end
 
-  add_index "batch_applications", ["application_stage_id"], name: "index_batch_applications_on_application_stage_id", using: :btree
-  add_index "batch_applications", ["batch_id"], name: "index_batch_applications_on_batch_id", using: :btree
-  add_index "batch_applications", ["team_lead_id"], name: "index_batch_applications_on_team_lead_id", using: :btree
-  add_index "batch_applications", ["university_id"], name: "index_batch_applications_on_university_id", using: :btree
-
-  create_table "batch_stages", force: :cascade do |t|
+  create_table "batch_stages", force: :cascade,  do |t|
     t.integer  "batch_id"
     t.integer  "application_stage_id"
     t.datetime "starts_at"
     t.datetime "ends_at"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
+    t.index ["application_stage_id"], name: "index_batch_stages_on_application_stage_id", using: :btree
+    t.index ["batch_id"], name: "index_batch_stages_on_batch_id", using: :btree
   end
 
-  add_index "batch_stages", ["application_stage_id"], name: "index_batch_stages_on_application_stage_id", using: :btree
-  add_index "batch_stages", ["batch_id"], name: "index_batch_stages_on_batch_id", using: :btree
-
-  create_table "batches", force: :cascade do |t|
+  create_table "batches", force: :cascade,  do |t|
     t.string   "theme"
     t.text     "description"
     t.date     "start_date"
@@ -188,7 +177,7 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.integer  "target_application_count"
   end
 
-  create_table "colleges", force: :cascade do |t|
+  create_table "colleges", force: :cascade,  do |t|
     t.string  "name"
     t.string  "also_known_as"
     t.string  "city"
@@ -197,12 +186,11 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.string  "website"
     t.string  "contact_numbers"
     t.integer "replacement_university_id"
+    t.index ["replacement_university_id"], name: "index_colleges_on_replacement_university_id", using: :btree
+    t.index ["state_id"], name: "index_colleges_on_state_id", using: :btree
   end
 
-  add_index "colleges", ["replacement_university_id"], name: "index_colleges_on_replacement_university_id", using: :btree
-  add_index "colleges", ["state_id"], name: "index_colleges_on_state_id", using: :btree
-
-  create_table "connect_requests", force: :cascade do |t|
+  create_table "connect_requests", force: :cascade,  do |t|
     t.integer  "connect_slot_id"
     t.integer  "startup_id"
     t.text     "questions"
@@ -214,32 +202,29 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.datetime "feedback_mails_sent_at"
     t.integer  "rating_of_faculty"
     t.integer  "rating_of_team"
+    t.index ["connect_slot_id"], name: "index_connect_requests_on_connect_slot_id", using: :btree
+    t.index ["startup_id"], name: "index_connect_requests_on_startup_id", using: :btree
   end
 
-  add_index "connect_requests", ["connect_slot_id"], name: "index_connect_requests_on_connect_slot_id", using: :btree
-  add_index "connect_requests", ["startup_id"], name: "index_connect_requests_on_startup_id", using: :btree
-
-  create_table "connect_slots", force: :cascade do |t|
+  create_table "connect_slots", force: :cascade,  do |t|
     t.integer  "faculty_id"
     t.datetime "slot_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["faculty_id"], name: "index_connect_slots_on_faculty_id", using: :btree
   end
 
-  add_index "connect_slots", ["faculty_id"], name: "index_connect_slots_on_faculty_id", using: :btree
-
-  create_table "course_modules", force: :cascade do |t|
+  create_table "course_modules", force: :cascade,  do |t|
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.string   "name"
     t.integer  "module_number"
     t.string   "slug"
     t.datetime "publish_at"
+    t.index ["slug"], name: "index_course_modules_on_slug", using: :btree
   end
 
-  add_index "course_modules", ["slug"], name: "index_course_modules_on_slug", using: :btree
-
-  create_table "delayed_jobs", force: :cascade do |t|
+  create_table "delayed_jobs", force: :cascade,  do |t|
     t.integer  "priority",   default: 0, null: false
     t.integer  "attempts",   default: 0, null: false
     t.text     "handler",                null: false
@@ -251,11 +236,10 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.string   "queue"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
   end
 
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
-
-  create_table "faculty", force: :cascade do |t|
+  create_table "faculty", force: :cascade,  do |t|
     t.string   "name"
     t.string   "title"
     t.string   "key_skills"
@@ -277,19 +261,18 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.string   "compensation"
     t.string   "slack_username"
     t.string   "slack_user_id"
+    t.index ["category"], name: "index_faculty_on_category", using: :btree
+    t.index ["slug"], name: "index_faculty_on_slug", unique: true, using: :btree
   end
 
-  add_index "faculty", ["category"], name: "index_faculty_on_category", using: :btree
-  add_index "faculty", ["slug"], name: "index_faculty_on_slug", unique: true, using: :btree
-
-  create_table "features", force: :cascade do |t|
+  create_table "features", force: :cascade,  do |t|
     t.string   "key"
     t.string   "value"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "founders", force: :cascade do |t|
+  create_table "founders", force: :cascade,  do |t|
     t.string   "email"
     t.string   "first_name"
     t.datetime "created_at"
@@ -353,25 +336,24 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.string   "skype_id"
     t.string   "startup_token"
     t.boolean  "exited",                    default: false
+    t.index ["confirmation_token"], name: "index_founders_on_confirmation_token", unique: true, using: :btree
+    t.index ["invitation_token"], name: "index_founders_on_invitation_token", unique: true, using: :btree
+    t.index ["invited_batch_id"], name: "index_founders_on_invited_batch_id", using: :btree
+    t.index ["invited_by_id"], name: "index_founders_on_invited_by_id", using: :btree
+    t.index ["reset_password_token"], name: "index_founders_on_reset_password_token", unique: true, using: :btree
+    t.index ["slug"], name: "index_founders_on_slug", unique: true, using: :btree
+    t.index ["startup_token"], name: "index_founders_on_startup_token", using: :btree
+    t.index ["university_id"], name: "index_founders_on_university_id", using: :btree
   end
 
-  add_index "founders", ["confirmation_token"], name: "index_founders_on_confirmation_token", unique: true, using: :btree
-  add_index "founders", ["invitation_token"], name: "index_founders_on_invitation_token", unique: true, using: :btree
-  add_index "founders", ["invited_batch_id"], name: "index_founders_on_invited_batch_id", using: :btree
-  add_index "founders", ["invited_by_id"], name: "index_founders_on_invited_by_id", using: :btree
-  add_index "founders", ["reset_password_token"], name: "index_founders_on_reset_password_token", unique: true, using: :btree
-  add_index "founders", ["slug"], name: "index_founders_on_slug", unique: true, using: :btree
-  add_index "founders", ["startup_token"], name: "index_founders_on_startup_token", using: :btree
-  add_index "founders", ["university_id"], name: "index_founders_on_university_id", using: :btree
-
-  create_table "glossary_terms", force: :cascade do |t|
+  create_table "glossary_terms", force: :cascade,  do |t|
     t.string   "term"
     t.text     "definition"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "karma_points", force: :cascade do |t|
+  create_table "karma_points", force: :cascade,  do |t|
     t.integer  "founder_id"
     t.integer  "points"
     t.string   "activity_type"
@@ -380,13 +362,12 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.integer  "source_id"
     t.string   "source_type"
     t.integer  "startup_id"
+    t.index ["founder_id"], name: "index_karma_points_on_founder_id", using: :btree
+    t.index ["source_id"], name: "index_karma_points_on_source_id", using: :btree
+    t.index ["startup_id"], name: "index_karma_points_on_startup_id", using: :btree
   end
 
-  add_index "karma_points", ["founder_id"], name: "index_karma_points_on_founder_id", using: :btree
-  add_index "karma_points", ["source_id"], name: "index_karma_points_on_source_id", using: :btree
-  add_index "karma_points", ["startup_id"], name: "index_karma_points_on_startup_id", using: :btree
-
-  create_table "module_chapters", force: :cascade do |t|
+  create_table "module_chapters", force: :cascade,  do |t|
     t.integer  "course_module_id"
     t.string   "name"
     t.integer  "chapter_number"
@@ -394,12 +375,11 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.datetime "updated_at",       null: false
     t.text     "links"
     t.string   "slug"
+    t.index ["course_module_id"], name: "index_module_chapters_on_course_module_id", using: :btree
+    t.index ["slug"], name: "index_module_chapters_on_slug", using: :btree
   end
 
-  add_index "module_chapters", ["course_module_id"], name: "index_module_chapters_on_course_module_id", using: :btree
-  add_index "module_chapters", ["slug"], name: "index_module_chapters_on_slug", using: :btree
-
-  create_table "mooc_students", force: :cascade do |t|
+  create_table "mooc_students", force: :cascade,  do |t|
     t.string   "email"
     t.string   "name"
     t.integer  "university_id"
@@ -414,7 +394,7 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.text     "completed_chapters"
   end
 
-  create_table "payments", force: :cascade do |t|
+  create_table "payments", force: :cascade,  do |t|
     t.integer  "batch_application_id"
     t.string   "instamojo_payment_request_id"
     t.string   "instamojo_payment_request_status"
@@ -430,13 +410,12 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.datetime "paid_at"
     t.integer  "original_batch_application_id"
     t.integer  "batch_applicant_id"
+    t.index ["batch_applicant_id"], name: "index_payments_on_batch_applicant_id", using: :btree
+    t.index ["batch_application_id"], name: "index_payments_on_batch_application_id", using: :btree
+    t.index ["original_batch_application_id"], name: "index_payments_on_original_batch_application_id", using: :btree
   end
 
-  add_index "payments", ["batch_applicant_id"], name: "index_payments_on_batch_applicant_id", using: :btree
-  add_index "payments", ["batch_application_id"], name: "index_payments_on_batch_application_id", using: :btree
-  add_index "payments", ["original_batch_application_id"], name: "index_payments_on_original_batch_application_id", using: :btree
-
-  create_table "platform_feedback", force: :cascade do |t|
+  create_table "platform_feedback", force: :cascade,  do |t|
     t.string   "feedback_type"
     t.string   "attachment"
     t.text     "description"
@@ -445,11 +424,10 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "notes"
+    t.index ["founder_id"], name: "index_platform_feedback_on_founder_id", using: :btree
   end
 
-  add_index "platform_feedback", ["founder_id"], name: "index_platform_feedback_on_founder_id", using: :btree
-
-  create_table "prospective_applicants", force: :cascade do |t|
+  create_table "prospective_applicants", force: :cascade,  do |t|
     t.string   "name"
     t.string   "email"
     t.string   "phone"
@@ -457,11 +435,10 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.string   "college_text"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.index ["college_id"], name: "index_prospective_applicants_on_college_id", using: :btree
   end
 
-  add_index "prospective_applicants", ["college_id"], name: "index_prospective_applicants_on_college_id", using: :btree
-
-  create_table "public_slack_messages", force: :cascade do |t|
+  create_table "public_slack_messages", force: :cascade,  do |t|
     t.text     "body"
     t.string   "slack_username"
     t.integer  "founder_id"
@@ -470,11 +447,10 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.datetime "updated_at",     null: false
     t.string   "timestamp"
     t.integer  "reaction_to_id"
+    t.index ["founder_id"], name: "index_public_slack_messages_on_founder_id", using: :btree
   end
 
-  add_index "public_slack_messages", ["founder_id"], name: "index_public_slack_messages_on_founder_id", using: :btree
-
-  create_table "quiz_attempts", force: :cascade do |t|
+  create_table "quiz_attempts", force: :cascade,  do |t|
     t.integer  "course_module_id"
     t.integer  "mooc_student_id"
     t.datetime "taken_at"
@@ -483,30 +459,27 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.integer  "attempted_questions"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
+    t.index ["course_module_id"], name: "index_quiz_attempts_on_course_module_id", using: :btree
+    t.index ["mooc_student_id"], name: "index_quiz_attempts_on_mooc_student_id", using: :btree
   end
 
-  add_index "quiz_attempts", ["course_module_id"], name: "index_quiz_attempts_on_course_module_id", using: :btree
-  add_index "quiz_attempts", ["mooc_student_id"], name: "index_quiz_attempts_on_mooc_student_id", using: :btree
-
-  create_table "quiz_questions", force: :cascade do |t|
+  create_table "quiz_questions", force: :cascade,  do |t|
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.integer  "course_module_id"
     t.text     "question"
+    t.index ["course_module_id"], name: "index_quiz_questions_on_course_module_id", using: :btree
   end
 
-  add_index "quiz_questions", ["course_module_id"], name: "index_quiz_questions_on_course_module_id", using: :btree
-
-  create_table "replacement_universities", force: :cascade do |t|
+  create_table "replacement_universities", force: :cascade,  do |t|
     t.string   "name"
     t.integer  "state_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["state_id"], name: "index_replacement_universities_on_state_id", using: :btree
   end
 
-  add_index "replacement_universities", ["state_id"], name: "index_replacement_universities_on_state_id", using: :btree
-
-  create_table "resources", force: :cascade do |t|
+  create_table "resources", force: :cascade,  do |t|
     t.string   "file"
     t.string   "thumbnail"
     t.string   "title"
@@ -518,14 +491,13 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.string   "slug"
     t.integer  "batch_id"
     t.integer  "startup_id"
+    t.index ["batch_id"], name: "index_resources_on_batch_id", using: :btree
+    t.index ["share_status", "batch_id"], name: "index_resources_on_share_status_and_batch_id", using: :btree
+    t.index ["slug"], name: "index_resources_on_slug", using: :btree
+    t.index ["startup_id"], name: "index_resources_on_startup_id", using: :btree
   end
 
-  add_index "resources", ["batch_id"], name: "index_resources_on_batch_id", using: :btree
-  add_index "resources", ["share_status", "batch_id"], name: "index_resources_on_share_status_and_batch_id", using: :btree
-  add_index "resources", ["slug"], name: "index_resources_on_slug", using: :btree
-  add_index "resources", ["startup_id"], name: "index_resources_on_startup_id", using: :btree
-
-  create_table "shortened_urls", force: :cascade do |t|
+  create_table "shortened_urls", force: :cascade,  do |t|
     t.integer  "owner_id"
     t.string   "owner_type", limit: 20
     t.text     "url",                               null: false
@@ -534,24 +506,23 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.datetime "expires_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["owner_id", "owner_type"], name: "index_shortened_urls_on_owner_id_and_owner_type", using: :btree
+    t.index ["unique_key"], name: "index_shortened_urls_on_unique_key", unique: true, using: :btree
+    t.index ["url"], name: "index_shortened_urls_on_url", using: :btree
   end
 
-  add_index "shortened_urls", ["owner_id", "owner_type"], name: "index_shortened_urls_on_owner_id_and_owner_type", using: :btree
-  add_index "shortened_urls", ["unique_key"], name: "index_shortened_urls_on_unique_key", unique: true, using: :btree
-  add_index "shortened_urls", ["url"], name: "index_shortened_urls_on_url", using: :btree
-
-  create_table "startup_categories", force: :cascade do |t|
+  create_table "startup_categories", force: :cascade,  do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "startup_categories_startups", id: false, force: :cascade do |t|
+  create_table "startup_categories_startups", id: false, force: :cascade,  do |t|
     t.integer "startup_id"
     t.integer "startup_category_id"
   end
 
-  create_table "startup_feedback", force: :cascade do |t|
+  create_table "startup_feedback", force: :cascade,  do |t|
     t.text     "feedback"
     t.string   "reference_url"
     t.datetime "created_at",    null: false
@@ -561,11 +532,10 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.integer  "faculty_id"
     t.string   "activity_type"
     t.string   "attachment"
+    t.index ["faculty_id"], name: "index_startup_feedback_on_faculty_id", using: :btree
   end
 
-  add_index "startup_feedback", ["faculty_id"], name: "index_startup_feedback_on_faculty_id", using: :btree
-
-  create_table "startups", force: :cascade do |t|
+  create_table "startups", force: :cascade,  do |t|
     t.string   "logo"
     t.string   "pitch"
     t.string   "website"
@@ -593,19 +563,18 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.string   "product_video_link"
     t.integer  "batch_id"
     t.boolean  "dropped_out",           default: false
+    t.index ["batch_id"], name: "index_startups_on_batch_id", using: :btree
+    t.index ["slug"], name: "index_startups_on_slug", unique: true, using: :btree
+    t.index ["stage"], name: "index_startups_on_stage", using: :btree
   end
 
-  add_index "startups", ["batch_id"], name: "index_startups_on_batch_id", using: :btree
-  add_index "startups", ["slug"], name: "index_startups_on_slug", unique: true, using: :btree
-  add_index "startups", ["stage"], name: "index_startups_on_stage", using: :btree
-
-  create_table "states", force: :cascade do |t|
+  create_table "states", force: :cascade,  do |t|
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "taggings", force: :cascade do |t|
+  create_table "taggings", force: :cascade,  do |t|
     t.integer  "tag_id"
     t.integer  "taggable_id"
     t.string   "taggable_type"
@@ -613,26 +582,24 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.string   "tagger_type"
     t.string   "context",       limit: 128
     t.datetime "created_at"
+    t.index ["context"], name: "index_taggings_on_context", using: :btree
+    t.index ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true, using: :btree
+    t.index ["tag_id"], name: "index_taggings_on_tag_id", using: :btree
+    t.index ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context", using: :btree
+    t.index ["taggable_id", "taggable_type", "tagger_id", "context"], name: "taggings_idy", using: :btree
+    t.index ["taggable_id"], name: "index_taggings_on_taggable_id", using: :btree
+    t.index ["taggable_type"], name: "index_taggings_on_taggable_type", using: :btree
+    t.index ["tagger_id", "tagger_type"], name: "index_taggings_on_tagger_id_and_tagger_type", using: :btree
+    t.index ["tagger_id"], name: "index_taggings_on_tagger_id", using: :btree
   end
 
-  add_index "taggings", ["context"], name: "index_taggings_on_context", using: :btree
-  add_index "taggings", ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true, using: :btree
-  add_index "taggings", ["tag_id"], name: "index_taggings_on_tag_id", using: :btree
-  add_index "taggings", ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context", using: :btree
-  add_index "taggings", ["taggable_id", "taggable_type", "tagger_id", "context"], name: "taggings_idy", using: :btree
-  add_index "taggings", ["taggable_id"], name: "index_taggings_on_taggable_id", using: :btree
-  add_index "taggings", ["taggable_type"], name: "index_taggings_on_taggable_type", using: :btree
-  add_index "taggings", ["tagger_id", "tagger_type"], name: "index_taggings_on_tagger_id_and_tagger_type", using: :btree
-  add_index "taggings", ["tagger_id"], name: "index_taggings_on_tagger_id", using: :btree
-
-  create_table "tags", force: :cascade do |t|
+  create_table "tags", force: :cascade,  do |t|
     t.string  "name"
     t.integer "taggings_count", default: 0
+    t.index ["name"], name: "index_tags_on_name", unique: true, using: :btree
   end
 
-  add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
-
-  create_table "target_templates", force: :cascade do |t|
+  create_table "target_templates", force: :cascade,  do |t|
     t.integer  "days_from_start"
     t.string   "role"
     t.string   "title"
@@ -647,12 +614,11 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.string   "rubric"
     t.text     "review_test_embed"
     t.integer  "timeline_event_type_id"
+    t.index ["populate_on_start"], name: "index_target_templates_on_populate_on_start", using: :btree
+    t.index ["timeline_event_type_id"], name: "index_target_templates_on_timeline_event_type_id", using: :btree
   end
 
-  add_index "target_templates", ["populate_on_start"], name: "index_target_templates_on_populate_on_start", using: :btree
-  add_index "target_templates", ["timeline_event_type_id"], name: "index_target_templates_on_timeline_event_type_id", using: :btree
-
-  create_table "targets", force: :cascade do |t|
+  create_table "targets", force: :cascade,  do |t|
     t.string   "role"
     t.integer  "assigner_id"
     t.string   "title"
@@ -671,13 +637,12 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.string   "assignee_type"
     t.integer  "target_template_id"
     t.text     "review_test_embed"
+    t.index ["assignee_id", "assignee_type"], name: "index_targets_on_assignee_id_and_assignee_type", using: :btree
+    t.index ["assigner_id"], name: "index_targets_on_assigner_id", using: :btree
+    t.index ["target_template_id"], name: "index_targets_on_target_template_id", using: :btree
   end
 
-  add_index "targets", ["assignee_id", "assignee_type"], name: "index_targets_on_assignee_id_and_assignee_type", using: :btree
-  add_index "targets", ["assigner_id"], name: "index_targets_on_assigner_id", using: :btree
-  add_index "targets", ["target_template_id"], name: "index_targets_on_target_template_id", using: :btree
-
-  create_table "team_members", force: :cascade do |t|
+  create_table "team_members", force: :cascade,  do |t|
     t.string   "name"
     t.string   "email"
     t.string   "roles"
@@ -686,22 +651,20 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.datetime "created_at",                        null: false
     t.datetime "updated_at",                        null: false
     t.boolean  "avatar_processing", default: false
+    t.index ["startup_id"], name: "index_team_members_on_startup_id", using: :btree
   end
 
-  add_index "team_members", ["startup_id"], name: "index_team_members_on_startup_id", using: :btree
-
-  create_table "timeline_event_files", force: :cascade do |t|
+  create_table "timeline_event_files", force: :cascade,  do |t|
     t.integer  "timeline_event_id"
     t.string   "file"
     t.boolean  "private"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
     t.string   "title"
+    t.index ["timeline_event_id"], name: "index_timeline_event_files_on_timeline_event_id", using: :btree
   end
 
-  add_index "timeline_event_files", ["timeline_event_id"], name: "index_timeline_event_files_on_timeline_event_id", using: :btree
-
-  create_table "timeline_event_types", force: :cascade do |t|
+  create_table "timeline_event_types", force: :cascade,  do |t|
     t.string   "key"
     t.string   "title"
     t.text     "sample_text"
@@ -712,11 +675,10 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.string   "proof_required"
     t.string   "suggested_stage"
     t.boolean  "major"
+    t.index ["role"], name: "index_timeline_event_types_on_role", using: :btree
   end
 
-  add_index "timeline_event_types", ["role"], name: "index_timeline_event_types_on_role", using: :btree
-
-  create_table "timeline_events", force: :cascade do |t|
+  create_table "timeline_events", force: :cascade,  do |t|
     t.text     "description"
     t.string   "image"
     t.integer  "startup_id"
@@ -731,26 +693,25 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.integer  "target_id"
     t.integer  "founder_id"
     t.integer  "improved_timeline_event_id"
+    t.index ["founder_id"], name: "index_timeline_events_on_founder_id", using: :btree
+    t.index ["startup_id"], name: "index_timeline_events_on_startup_id", using: :btree
+    t.index ["target_id"], name: "index_timeline_events_on_target_id", using: :btree
+    t.index ["timeline_event_type_id"], name: "index_timeline_events_on_timeline_event_type_id", using: :btree
   end
 
-  add_index "timeline_events", ["founder_id"], name: "index_timeline_events_on_founder_id", using: :btree
-  add_index "timeline_events", ["startup_id"], name: "index_timeline_events_on_startup_id", using: :btree
-  add_index "timeline_events", ["target_id"], name: "index_timeline_events_on_target_id", using: :btree
-  add_index "timeline_events", ["timeline_event_type_id"], name: "index_timeline_events_on_timeline_event_type_id", using: :btree
-
-  create_table "universities", force: :cascade do |t|
+  create_table "universities", force: :cascade,  do |t|
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string   "location"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", force: :cascade,  do |t|
     t.string "email"
     t.string "login_token"
   end
 
-  create_table "visits", id: :uuid, default: nil, force: :cascade do |t|
+  create_table "visits", id: :uuid, default: nil, force: :cascade,  do |t|
     t.uuid     "visitor_id"
     t.string   "ip"
     t.text     "user_agent"
@@ -777,9 +738,8 @@ ActiveRecord::Schema.define(version: 20161007055454) do
     t.string   "utm_content"
     t.string   "utm_campaign"
     t.datetime "started_at"
+    t.index ["user_id", "user_type"], name: "index_visits_on_user_id_and_user_type", using: :btree
   end
-
-  add_index "visits", ["user_id", "user_type"], name: "index_visits_on_user_id_and_user_type", using: :btree
 
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"

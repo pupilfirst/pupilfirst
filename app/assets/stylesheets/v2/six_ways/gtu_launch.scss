@@ -1,0 +1,62 @@
+.mooc-launch-container {
+  background: #32b475;
+  background: linear-gradient(to bottom, #32b475 0%, #1d9c5a 100%);
+  width: 100%;
+  min-height: 100vh;
+  height: 100%;
+
+  .green-bg {
+    height: 100%;
+    min-height: 100vh;
+    background-image: asset-url('six_ways/gtu-launch/bg-texture.png');
+    background-position: center center;
+    background-repeat: repeat;
+  }
+}
+.logo-header {
+  height: 100px;
+  width: 100%;
+  display: flex;
+  border-top: 2px solid $light-secondary;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.7);
+  background-color: white;
+
+  img {
+    max-height: 75px;
+  }
+}
+.launch-box {
+  h1 {
+    color: white;
+  }
+  .launch-button {
+    background-color: white;
+    color: $brand-primary;
+    box-shadow: 0px 0px 10px 0px $dark-primary;
+
+    &:hover, &:focus {
+      box-shadow: 0px 10px 20px 0px $dark-primary;
+    }
+  }
+  .mockup-mac {
+    max-width: 470px;
+    position: relative;
+    z-index: 0;
+
+    &:before {
+      position: absolute;
+      left: 80px;
+      bottom: 20px;
+      width: 75%;
+      height: 90%;
+      border-radius: 0 10% 0 0;
+      z-index: -1;
+      content: "";
+      box-shadow: -50px 0 50px rgba(19, 126, 70, 0.7);
+      transform: skew(4deg);
+      transform-origin: 0% 100%;
+    }
+  }
+}

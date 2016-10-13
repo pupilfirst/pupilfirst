@@ -43,6 +43,7 @@ html lang='en'
                   = link_to 'Sign up', six_ways_student_details_path, class: 'btn btn-secondary text-uppercase m-l-1'
                   .help-icon.m-l-1 data-toggle="tooltip" data-placement="bottom" title="Your course progress is not being tracked. To save your progress and be eligible for a course completion certificate, sign up as a student!"
                     i.fa.fa-question-circle.fa-2x
+                  = link_to 'Log in', user_sessions_new_path(referer: six_ways_start_url), class: 'btn btn-secondary text-uppercase login-link m-l-1'
 
               .module-details
                 .col-md-6.module-name

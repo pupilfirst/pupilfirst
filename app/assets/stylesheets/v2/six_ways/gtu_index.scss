@@ -1,0 +1,57 @@
+.gtu-landing-container {
+  &.landing-bg {
+    height: 100%;
+    min-height: 100vh;
+    background: white;
+    background-image: asset-url('six_ways/gtu-start/GTU-start-bg.png');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+.gtu-sv-logos {
+  border-bottom: 1px solid $gray-border;
+
+  img {
+    max-height: 65px;
+  }
+}
+.gtu-start-box {
+  display: flex;
+  flex-wrap: wrap-reverse;
+  align-items: center;
+  justify-content: center;
+
+  .launch-rocket {
+    img {
+      width: 100%;
+      text-align: right;
+    }
+  }
+
+  h1 {
+    color: #525C6F;
+
+    .hero-text {
+      font-size: 6.4rem;
+      font-weight: $font-semibold;
+
+      @include media-breakpoint-down(sm) {
+        font-size: 4rem;
+      }
+    }
+    @include media-breakpoint-down(sm) {
+      font-size: 2rem;
+    }
+  }
+  .start-course-btn {
+    box-shadow: 0px 10px 15px 0px lighten($light-primary, 30%);
+
+    &:hover {
+      box-shadow: 0px 15px 15px 0px lighten($light-primary, 25%);
+    }
+  }
+}

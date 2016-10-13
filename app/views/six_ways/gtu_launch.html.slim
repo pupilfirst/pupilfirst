@@ -7,10 +7,11 @@
     .launch-box.text-xs-center.p-t-3
       .container
         h1.m-b-2
-          | SV.CO’s Six Ways Course is
+          | Kickstart the <strong>Student Startup</strong>
           br
-          | <strong>Now Live!</strong>
-        a.btn.btn-primary.btn-lg.text-uppercase.launch-button href="#"
-          | Launch Sixways
-        .mockup-mac.m-x-auto.m-t-3
+          span.highlight-word
+            | Revolution
+        = link_to 'Launch Course', six_ways_gtu_path, class: "btn btn-primary btn-lg text-uppercase launch-button"
+
+        .mockup-mac.m-x-auto
           = image_tag 'six_ways/gtu-launch/Mac-Mockup.png', class: 'img-fluid'

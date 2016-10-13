@@ -147,15 +147,31 @@
       display: flex;
       align-items: center;
       border-bottom: 1px solid $dark-secondary;
-      justify-content: center;
-      padding: 0 30px;
+      justify-content: left;
+      padding: 0 3rem;
       background-color: $dark-secondary;
+
+      .btn {
+        font-size: 0.675rem;
+        flex-shrink: 0;
+      }
 
       .bell-icon {
         margin-right: 10px;
         i {
           font-size: 1.125rem;
           color: white;
+        }
+      }
+
+      .login-link {
+        color: $brand-secondary;
+        background-color: white;
+
+        @include media-breakpoint-up(lg) {
+          position: absolute;
+          right: 3rem;
+          top: 10px;
         }
       }
 
@@ -180,6 +196,7 @@
 
       @include media-breakpoint-down(sm) {
         height: 60px;
+        padding: 0 2rem;
 
         .btn {
           width: auto;

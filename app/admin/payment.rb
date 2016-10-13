@@ -84,5 +84,6 @@ ActiveAdmin.register Payment do
     column('Instamojo Fees', &:fees)
     column :paid_at
     column :created_at
+    column :notes
   end
 end

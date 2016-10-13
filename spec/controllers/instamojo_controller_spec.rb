@@ -10,26 +10,20 @@ describe InstamojoController do
   let(:long_url) { Faker::Internet.url }
   let(:short_url) { Faker::Internet.url }
 
-  before do
-    # Open up the batch.
-    create :batch_stage, batch: batch, application_stage: application_stage
-
-    allow_any_instance_of(Instamojo).to receive(:create_payment_request).with(
+  let(:payment) do
+    create :payment,
+      batch_application: batch_application,
+      batch_applicant: batch_application.team_lead,
       amount: batch_application.fee,
-      buyer_name: batch_application.team_lead.name,
-      email: batch_application.team_lead.email
-    ).and_return(
-      id: instamojo_payment_request_id,
-      status: 'Pending',
-      long_url: long_url,
-      short_url: short_url
-    )
+      instamojo_payment_request_id: instamojo_payment_request_id,
+      instamojo_payment_request_status: 'Pending',
+      short_url: short_url,
+      long_url: long_url
   end
 
-  describe 'GET redirect' do
-    let(:payment) { create :payment, batch_application: batch_application, batch_applicant: batch_application.team_lead }
-    let(:payment_id) { SecureRandom.hex }
+  let(:payment_id) { SecureRandom.hex }
 
+  describe 'GET redirect' do
     before do
       allow_any_instance_of(Instamojo).to receive(:payment_details).with(
         payment_request_id: instamojo_payment_request_id,
@@ -62,9 +56,6 @@ describe InstamojoController do
   end
 
   describe 'POST webhook' do
-    let(:payment) { create :payment, batch_application: batch_application, batch_applicant: batch_application.team_lead }
-    let(:payment_id) { SecureRandom.hex }
-
     it 'updates payment and associated entries' do
       data = "43.21|#{payment_id}|#{payment.instamojo_payment_request_id}|Credit"
       digest = OpenSSL::Digest.new('sha1')

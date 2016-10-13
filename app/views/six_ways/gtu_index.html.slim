@@ -1,0 +1,17 @@
+.gtu-landing-container.landing-bg
+  .container
+    .gtu-start-box
+      .col-md-6
+        .launch-rocket.m-t-3
+          = image_tag 'six_ways/gtu-start/Launch-rocket.png'
+      .col-md-6
+        .gtu-sv-logos.m-b-2
+          = image_tag 'six_ways/gtu-launch/SV-GTU-Logo-combo.png', class: 'img-fluid'
+        h1.m-b-2
+          span.hero-text
+            | Six Ways
+          br
+          ' An Introduction to
+          br
+          | Student Startups
+        = link_to 'Start Course', first_chapter_path, class: 'btn btn-primary btn-lg text-uppercase start-course-btn'

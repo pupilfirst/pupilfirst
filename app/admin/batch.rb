@@ -159,14 +159,17 @@ ActiveAdmin.register Batch do
   member_action :create_sweep_job, method: :post do
     sweep_unpaid = params[:sweep_in_applications][:sweep_unpaid] == '1'
     sweep_batch_ids = (params[:sweep_in_applications][:source_batch_ids] - ['']).map(&:to_i)
+    skip_payment = params.dig(:sweep_in_applications, :skip_payment) == '1'
 
     batch = Batch.find params[:id]
 
     if batch.initial_stage?
+      batch_sweep_job = BatchSweepJob.new(batch.id, sweep_unpaid, sweep_batch_ids, current_admin_user.email, skip_payment: skip_payment)
+
       if Rails.env.production?
-        BatchSweepJob.perform_later(batch.id, sweep_unpaid, sweep_batch_ids, current_admin_user.email)
+        batch_sweep_job.perform_later
       else
-        BatchSweepJob.perform_now(batch.id, sweep_unpaid, sweep_batch_ids, current_admin_user.email)
+        batch_sweep_job.perform_now
       end
 
       flash[:success] = 'Sweep Job has been created. You will be sent an email with the results when it is complete.'

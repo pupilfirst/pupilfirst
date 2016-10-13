@@ -22,25 +22,6 @@ class Payment < ApplicationRecord
     errors[:base] << 'one of batch_application_id or original_batch_application_id must be present'
   end
 
-  # Before an payment entry can be created, a request must be placed with Instamojo.
-  before_create do
-    raise 'Payment cannot be initialized without supplying a batch application.' if batch_application.blank?
-
-    instamojo = Instamojo.new
-
-    response = instamojo.create_payment_request(
-      amount: batch_application.fee,
-      buyer_name: batch_application.team_lead.name,
-      email: batch_application.team_lead.email
-    )
-
-    self.amount = batch_application.fee
-    self.instamojo_payment_request_id = response[:id]
-    self.instamojo_payment_request_status = response[:status]
-    self.short_url = response[:short_url]
-    self.long_url = response[:long_url]
-  end
-
   def status
     if paid?
       STATUS_PAID

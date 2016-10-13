@@ -1,11 +1,10 @@
 class BatchSweepJob < ApplicationJob
   queue_as :default
 
-  attr_reader :batch
-
-  def perform(batch_id, sweep_unpaid, sweep_batch_ids, admin_email)
+  def perform(batch_id, sweep_unpaid, sweep_batch_ids, admin_email, skip_payment: false)
     @batch = Batch.find batch_id
-    raise 'Target batch is not in initial stage' unless batch.initial_stage?
+    @skip_payment = skip_payment
+    raise 'Target batch is not in initial stage' unless @batch.initial_stage?
 
     sweep_unpaid_applications if sweep_unpaid
     sweep_from_batches(sweep_batch_ids)
@@ -13,19 +12,18 @@ class BatchSweepJob < ApplicationJob
   end
 
   def sweep_unpaid_applications
-    other_applications = BatchApplication.where.not(batch: batch)
+    other_applications = BatchApplication.where.not(batch: @batch)
     uninitiated_applications = other_applications.includes(:payment).where(payments: { id: nil })
     unpaid_applications = other_applications.joins(:payment).merge(Payment.requested)
     count_for_email 'Payment missing applications swept' => uninitiated_applications.count
     count_for_email 'Payment initiated applications swept' => unpaid_applications.count
-    (uninitiated_applications + unpaid_applications).each { |application| application.update!(batch_id: batch.id) }
+    (uninitiated_applications + unpaid_applications).each { |application| application.update!(batch_id: @batch.id) }
   end
 
   def sweep_from_batches(batch_ids)
     sweep_results = batch_ids.each_with_object({}) do |batch_id, results|
       source_batch = Batch.find batch_id
       expired, ignored, rejected = sweep_from_batch(source_batch)
-
       results["From Batch ##{source_batch.batch_number}"] = { 'Rejected swept' => rejected, 'Expired swept' => expired, 'Ignored' => ignored }
     end
 
@@ -45,10 +43,10 @@ class BatchSweepJob < ApplicationJob
 
       case batch_application.status
         when :rejected
-          batch_application.duplicate!(batch)
+          duplicate_application(batch_application)
           rejected += 1
         when :expired
-          batch_application.duplicate!(batch)
+          duplicate_application(batch_application)
           expired += 1
         else
           ignored += 1
@@ -61,7 +59,7 @@ class BatchSweepJob < ApplicationJob
   def send_email(admin_email)
     AdminUserMailer.batch_sweep(
       admin_email,
-      batch.batch_number,
+      @batch.batch_number,
       @counts
     ).deliver_later
   end
@@ -69,5 +67,36 @@ class BatchSweepJob < ApplicationJob
   def count_for_email(hash)
     @counts ||= {}
     @counts.merge!(hash)
+  end
+
+  # Creates a (pristine) duplicate of this application into given batch.
+  def duplicate_application(batch_application)
+    new_application = BatchApplication.create!(
+      batch: @batch,
+      team_lead: batch_application.team_lead,
+      application_stage: new_application_stage,
+      college: batch_application.college,
+      team_size: batch_application.team_size
+    )
+
+    new_application.batch_applicants << batch_application.team_lead
+
+    batch_application.update!(swept_at: Time.now)
+
+    if @skip_payment
+      skip_payment(new_application)
+      BatchApplicantMailer.swept_skip_payment(batch_application.team_lead).deliver_later
+    else
+      BatchApplicantMailer.swept(batch_application.team_lead, @batch).deliver_later
+    end
+  end
+
+  # Create a dummy payment entry and
+  def skip_payment(batch_application)
+    PaymentCreateService.new(batch_application, skip_payment: true).execute
+  end
+
+  def new_application_stage
+    @skip_payment ? ApplicationStage.testing_stage : ApplicationStage.initial_stage
   end
 end

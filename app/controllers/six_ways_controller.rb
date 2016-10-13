@@ -1,6 +1,7 @@
 class SixWaysController < ApplicationController
   before_action :authorize_student, only: %w(completion_certificate)
   before_action :block_student, only: %w(student_details create_student)
+  before_action :gtu_variables, only: %w(gtu_index gtu_launch)
 
   helper_method :quiz_score
 
@@ -19,11 +20,12 @@ class SixWaysController < ApplicationController
     @skip_container = true
   end
 
+  # Landing page for GTU MOOC
+  def gtu_index
+  end
+
   # Temporary page for launch MOOC in GTU.
-  def gtu
-    @skip_container = true
-    @hide_layout_header = true
-    @hide_layout_footer = true
+  def gtu_launch
   end
 
   # GET /sixways/student_details
@@ -172,5 +174,11 @@ class SixWaysController < ApplicationController
 
   def save_grade
     QuizAttempt.create!(course_module: @module, mooc_student: current_mooc_student, score: quiz_score, attempted_questions: @attempted, total_questions: @total)
+  end
+
+  def gtu_variables
+    @skip_container = true
+    @hide_layout_header = true
+    @hide_layout_footer = true
   end
 end

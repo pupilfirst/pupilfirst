@@ -9,5 +9,19 @@ FactoryGirl.define do
     after(:build) do |application|
       application.batch_applicants << application.team_lead
     end
+
+    trait :paid do
+      after(:create) do |application|
+        create :payment, batch_application: application, batch_applicant: application.team_lead, paid_at: Time.now
+      end
+    end
+
+    trait :stage_2_submitted do
+      paid
+
+      after(:create) do |application|
+        create :application_submission, :stage_2_submission, batch_application: application
+      end
+    end
   end
 end

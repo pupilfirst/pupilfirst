@@ -23,6 +23,8 @@ ActiveAdmin.register BatchApplicant do
 
   filter :batch_applications_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'With applications in batch'
   filter :phone
+  filter :reference_eq, as: :select, collection: proc { BatchApplicant.reference_sources[0..-2] }, label: 'Reference (Selected)'
+  filter :reference, label: 'Reference (Free-form)'
   filter :gender, as: :select, collection: proc { Founder.valid_gender_values }
   filter :college_state_id_eq, label: 'State', as: :select, collection: proc { State.all }
   filter :college_id_null, label: 'College missing?', as: :boolean

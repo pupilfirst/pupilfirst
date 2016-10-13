@@ -32,12 +32,11 @@ class BatchApplicant < ApplicationRecord
 
   # Basic validations.
   validates :email, presence: true, uniqueness: true, email: true
-  validates :phone, indian_mobile_number: true
+  validates :phone, mobile_number: true
 
   has_secure_token
 
-  normalize_attribute :phone, with: [:strip, :phone]
-  normalize_attribute :gender, :reference
+  normalize_attribute :gender, :reference, :phone
 
   def applied_to?(batch)
     return false unless batch_applications.present?

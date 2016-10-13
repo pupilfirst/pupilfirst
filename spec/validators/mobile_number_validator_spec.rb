@@ -12,6 +12,11 @@ end
 describe MobileNumberValidator do
   subject { MobileNumberValidatorMock.new(phone: mobile_number) }
 
+  context 'when mobile number is +67712345' do
+    let(:mobile_number) { '+67712345' } # Solomon Islands
+    it { is_expected.to be_valid }
+  end
+
   context 'when mobile number is 9876543210' do
     let(:mobile_number) { '9876543210' }
     it { is_expected.to be_valid }
@@ -42,8 +47,8 @@ describe MobileNumberValidator do
     it { is_expected.to_not be_valid } # Too long
   end
 
-  context 'when mobile number is 123456789' do
-    let(:mobile_number) { '123456789' }
+  context 'when mobile number is 1234567' do
+    let(:mobile_number) { '1234567' }
     it { is_expected.to_not be_valid } # Too short
   end
 end

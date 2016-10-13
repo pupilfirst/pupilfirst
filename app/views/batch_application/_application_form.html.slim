@@ -25,8 +25,8 @@
       = f.input :email_confirmation, label: false, placeholder: 'Please repeat your Email Address',
         input_html: { maxlength: 250, type: 'email' }
 
-      = f.input :phone, label: false, placeholder: '10-digit mobile phone number',
-        input_html: { maxlength: 10, type: 'tel', pattern: '[0-9]{10}' }
+      = f.input :phone, label: false, placeholder: 'Mobile phone number',
+        input_html: { maxlength: 17, type: 'tel', pattern: MobileNumberValidator::FORM_EXPRESSION }
 
       = f.input :reference, label: false,
         collection: proc { BatchApplicant.reference_sources },

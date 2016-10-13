@@ -22,4 +22,9 @@ class BatchApplicantMailer < ApplicationMailer
     @batch = batch
     mail(to: team_lead.email, subject: "Reapply to Batch ##{batch.batch_number} at SV.CO")
   end
+
+  def swept_skip_payment(team_lead)
+    @team_lead = team_lead
+    mail(to: team_lead.email, subject: 'Your chance to reapply at SV.CO, for FREE!')
+  end
 end

@@ -83,10 +83,12 @@ class BatchSweepJob < ApplicationJob
 
     batch_application.update!(swept_at: Time.now)
 
-    skip_payment(new_application) if @skip_payment
-
-    # Send email to the lead.
-    BatchApplicantMailer.swept(batch_application.team_lead, @batch).deliver_later
+    if @skip_payment
+      skip_payment(new_application)
+      BatchApplicantMailer.swept_skip_payment(batch_application.team_lead).deliver_later
+    else
+      BatchApplicantMailer.swept(batch_application.team_lead, @batch).deliver_later
+    end
   end
 
   # Create a dummy payment entry and

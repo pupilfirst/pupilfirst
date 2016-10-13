@@ -23,4 +23,10 @@ class BatchApplicantMailerPreview < ActionMailer::Preview
     batch = application.batch
     BatchApplicantMailer.swept(team_lead, batch)
   end
+
+  def swept_skip_payment
+    application = BatchApplication.first
+    team_lead = application.team_lead
+    BatchApplicantMailer.swept_skip_payment(team_lead)
+  end
 end

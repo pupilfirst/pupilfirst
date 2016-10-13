@@ -1,0 +1,30 @@
+= content_for :heading
+  | Your chance to reapply at SV.CO, for FREE!
+
+= content_for :salutation
+  | Hello #{@team_lead.name},
+
+= content_for :body
+  p We want to give you another shot at being part of SV.CO.
+
+  p
+    ' We are presenting an opportunity for you to up your game with a new task and we're cool with waiving off the
+    | application fee. Yup, you get a free walk-in unlike other new applicants.
+
+  p
+    ' A lot of you communicated to us that you could have done a much better job at the coding task and video submission
+    | for reasons aplenty. We think so too!
+
+  - continue_link = apply_continue_url(token: @team_lead.token, shared_device: true)
+
+  p
+    ' #{link_to 'Click here', continue_link} to check your new task and continue application.
+  p
+    ' If you're unable to click on the link above, then please copy and paste the following link into your browser's
+    | address bar:
+
+  p.monospace = continue_link
+
+  p
+    ' If you would like to know the status of your previous application, please visit the
+    | #{link_to 'apply page', apply_url} once you're signed in.

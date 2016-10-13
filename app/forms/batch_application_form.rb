@@ -2,9 +2,9 @@ class BatchApplicationForm < Reform::Form
   include CollegeAddable
 
   property :name, validates: { presence: true, length: { maximum: 250 } }
-  property :email, validates: { presence: true, length: { maximum: 250 }, format: { with: /\S+@\S+/, message: "doesn't look like an email" } }
-  property :email_confirmation, virtual: true, validates: { presence: true, length: { maximum: 250 }, format: { with: /\S+@\S+/, message: "doesn't look like an email" } }
-  property :phone, validates: { presence: true, format: { with: /\A[987][0-9]{9}\z/, message: "doesn't look like a mobile phone number" } }
+  property :email, validates: { presence: true, length: { maximum: 250 }, email: true }
+  property :email_confirmation, virtual: true, validates: { presence: true, length: { maximum: 250 }, email: true }
+  property :phone, validates: { presence: true, mobile_number: true }
   property :reference
   property :reference_text, virtual: true
   property :college_id, validates: { presence: true }

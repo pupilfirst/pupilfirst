@@ -240,7 +240,7 @@ ActiveAdmin.register Startup do
       row :email
 
       row :logo do
-        link_to(image_tag(startup.logo_url(:thumb)), startup.logo_url)
+        link_to(image_tag(startup.logo_url(:thumb)), startup.logo_url) if startup.logo.present?
       end
 
       row :website

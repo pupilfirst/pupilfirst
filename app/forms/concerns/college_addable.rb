@@ -1,3 +1,4 @@
+# This module is included in BatchApplicationForm and ProspectiveApplicantForm
 module CollegeAddable
   extend ActiveSupport::Concern
 

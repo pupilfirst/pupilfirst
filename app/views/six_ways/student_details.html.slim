@@ -26,7 +26,7 @@
 
           = f.input :phone,
             label: 'Mobile number',
-            input_html: { maxlength: 17, type: 'tel', pattern: '\+?[0-9]{10,16}' }
+            input_html: { maxlength: 17, type: 'tel', pattern: MobileNumberValidator::FORM_EXPRESSION }
 
           = f.input :gender, required: true, collection: Founder.valid_gender_values, as: :radio_buttons, label_method: proc { |gender| gender.capitalize }
 

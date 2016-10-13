@@ -19,10 +19,10 @@ class IntercomNewApplicantCreateJob < ApplicationJob
   end
 
   def applicant_college_name
-    applicant.college_text || applicant.college.name
+    applicant.college&.name || applicant.college_text
   end
 
   def applicant_university
-    applicant&.college&.replacement_university&.name
+    applicant.college&.replacement_university&.name
   end
 end

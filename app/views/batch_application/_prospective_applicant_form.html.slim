@@ -27,8 +27,8 @@
         = f.input :email, label: false, placeholder: 'Email Address',
           input_html: { maxlength: 250, type: 'email' }
 
-        = f.input :phone, label: false, placeholder: '10-digit mobile phone number',
-          input_html: { maxlength: 10, type: 'tel', pattern: '[0-9]{10}' }
+        = f.input :phone, label: false, placeholder: 'Mobile phone number',
+          input_html: { maxlength: 17, type: 'tel', pattern: MobileNumberValidator::FORM_EXPRESSION }
 
         // TODO: College is actually a required field, but select2 v3 does not play nice with HTML5 validations. Try enabling this when upgrading to select2 v4.
         = f.input :college_id,

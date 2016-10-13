@@ -2,7 +2,7 @@ class BatchApplicantDecorator < Draper::Decorator
   delegate_all
 
   def college_name
-    college_text || college&.name
+    college&.name || college_text
   end
 
   def university_name

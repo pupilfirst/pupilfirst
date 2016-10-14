@@ -28,7 +28,7 @@
           h2 Coding Task
 
           .task-container.m-b-2.clearfix
-              - if current_application.batch == Batch.find(5)
+              - if current_application.batch == Batch.where(batch_number: 5).first
                 .col-md-5.content-box.task-box
                   .task-icon
                     = image_tag 'apply/batch_application/money-manager.svg'

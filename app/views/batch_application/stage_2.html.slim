@@ -28,19 +28,34 @@
           h2 Coding Task
 
           .task-container.m-b-2.clearfix
-            .col-md-5.content-box.task-box
-              .task-icon
-                = image_tag 'apply/batch_application/game-task.svg'
-              p
-                | Build a casual game that people would love to play.
-            .col-md-2.or-text
-              p.text-xs-center
-                | OR
-            .col-md-5.content-box.task-box
-              .task-icon
-                = image_tag 'apply/batch_application/car-love-task.svg'
-              p
-                | Develop a product that helps people purchase a car they will love.
+              - if current_application.batch == Batch.find(5)
+                .col-md-5.content-box.task-box
+                  .task-icon
+                    = image_tag 'apply/batch_application/money-manager.svg'
+                  p
+                    | Build a money manager that help people to track their expenditure.
+                .col-md-2.or-text
+                  p.text-xs-center
+                    | OR
+                .col-md-5.content-box.task-box
+                  .task-icon
+                    = image_tag 'apply/batch_application/group-study.svg'
+                  p
+                    | Develop a product that helps students in studying and preparing for exams.
+              - else
+                .col-md-5.content-box.task-box
+                  .task-icon
+                    = image_tag 'apply/batch_application/game-task.svg'
+                  p
+                    | Build a casual game that people would love to play.
+                .col-md-2.or-text
+                  p.text-xs-center
+                    | OR
+                .col-md-5.content-box.task-box
+                  .task-icon
+                    = image_tag 'apply/batch_application/car-love-task.svg'
+                  p
+                    | Develop a product that helps people purchase a car they will love.
 
           h3 Instructions:
 
@@ -57,9 +72,6 @@
             li
               p
                 | You can build an app or a website.
-            li
-              p
-                | You needn't implement paying for the car, just help them find one.
             li
               p
                 | <strong>IMPORTANT:</strong> Your submission should <strong>include a link to a working app install bundle (.APK/.IPA) or a link to a fully working website.</strong>

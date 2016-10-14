@@ -283,6 +283,10 @@ class BatchApplicationController < ApplicationController
     @batch_application = current_application.decorate
   end
 
+  def stage_3_expired
+    @batch_application = current_application.decorate
+  end
+
   def stage_4_submit
     # TODO: Server-side error handling for stage 4 inputs.
 

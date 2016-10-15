@@ -34,6 +34,8 @@ ActiveAdmin.register BatchApplication do
   filter :team_lead_college_state_id_eq, label: 'State', as: :select, collection: proc { State.all }
   filter :university_location, label: 'University location (Deprecated)', as: :select, collection: proc { University.all.pluck(:location).uniq }
   filter :state, label: 'State (Deprecated)'
+  filter :team_lead_reference_contains, label: 'Reference contains'
+
   filter :created_at
 
   scope :all, default: true
@@ -60,6 +62,10 @@ ActiveAdmin.register BatchApplication do
       else
         em 'Deleted'
       end
+    end
+
+    column 'Reference' do |batch_application|
+      batch_application.team_lead.reference
     end
 
     column 'Stage' do |batch_application|

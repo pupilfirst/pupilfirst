@@ -5,6 +5,8 @@ FactoryGirl.define do
     description { Faker::Lorem.words(10).join ' ' }
     start_date { 1.month.ago }
     end_date { 5.months.from_now }
+    campaign_start_at { 1.week.ago }
+    target_application_count 100
 
     trait :in_stage_1 do
       start_date { 3.months.from_now }

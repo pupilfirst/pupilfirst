@@ -164,14 +164,7 @@ ActiveAdmin.register Batch do
     batch = Batch.find params[:id]
 
     if batch.initial_stage?
-      batch_sweep_job = BatchSweepJob.new(batch.id, sweep_unpaid, sweep_batch_ids, current_admin_user.email, skip_payment: skip_payment)
-
-      if Rails.env.production?
-        batch_sweep_job.perform_later
-      else
-        batch_sweep_job.perform_now
-      end
-
+      BatchSweepJob.perform_later(batch.id, sweep_unpaid, sweep_batch_ids, current_admin_user.email, skip_payment: skip_payment)
       flash[:success] = 'Sweep Job has been created. You will be sent an email with the results when it is complete.'
     else
       flash[:error] = "Did not initiate sweep. Batch ##{batch.batch_number} is not in initial stage."

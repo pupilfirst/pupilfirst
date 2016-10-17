@@ -3,7 +3,7 @@ module CoreExtensions
   module IntercomRails
     module AutoInclude
       def self.csp_sha256_hook(controller, sha256)
-        return if controller.class.in?([Rails::MailersController, Rails::InfoController])
+        return if controller.class.in?([Rails::MailersController, Rails::InfoController, Delayed::Web::JobsController])
         return if defined?(LetterOpenerWeb) && controller.class == LetterOpenerWeb::LettersController
         controller.add_csp_hash(sha256)
       end

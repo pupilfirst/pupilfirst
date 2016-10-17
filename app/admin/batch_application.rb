@@ -35,6 +35,7 @@ ActiveAdmin.register BatchApplication do
   filter :university_location, label: 'University location (Deprecated)', as: :select, collection: proc { University.all.pluck(:location).uniq }
   filter :state, label: 'State (Deprecated)'
   filter :team_lead_reference_contains, label: 'Reference contains'
+  filter :swept_in_at_not_null, as: :boolean, label: 'Swept In'
 
   filter :created_at
 
@@ -279,6 +280,7 @@ ActiveAdmin.register BatchApplication do
         row :created_at
         row :updated_at
         row :swept_at
+        row :swept_in_at
       end
     end
   end

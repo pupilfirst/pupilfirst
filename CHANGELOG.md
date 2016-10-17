@@ -1,3 +1,10 @@
+### 17 October, 2016
+
+#### Features
+
+  - We've opened up the applications process to international applicants!
+  - Applicants are now shown their percentile scores after coding and video submission results are released.
+
 ### 10 October, 2016
 
 #### UX and UI

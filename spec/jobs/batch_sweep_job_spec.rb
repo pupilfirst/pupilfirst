@@ -34,34 +34,45 @@ describe BatchSweepJob do
   end
 
   context 'when tasked with sweeping unpaid applications' do
-    it 'sweeps those applications' do
+    it 'sweeps those applications and sets swept_in_at' do
       subject.perform_now(new_batch.id, true, [], 'someone@sv.co')
-      expect(BatchApplication.where(batch: new_batch).count).to eq(10)
+      applications_in_new_batch = BatchApplication.where(batch: new_batch)
+      expect(applications_in_new_batch.count).to eq(10)
+      expect(applications_in_new_batch.where.not(swept_in_at: nil).count).to eq(10)
     end
   end
 
   context 'when asked to sweep paid rejected and expired applications' do
-    it 'sweeps those applications' do
+    it 'sweeps those applications and sets swept_in_at' do
       subject.perform_now(new_batch.id, false, [old_batch.id], 'someone@sv.co')
-      expect(BatchApplication.where(batch: new_batch).count).to eq(4)
+      applications_in_new_batch = BatchApplication.where(batch: new_batch)
+
+      expect(applications_in_new_batch.count).to eq(4)
 
       # All of them will be unpaid applications
-      expect(BatchApplication.where(batch: new_batch).payment_complete.count).to eq(0)
+      expect(applications_in_new_batch.payment_complete.count).to eq(0)
 
       # All of them will be in stage 1.
-      expect(BatchApplication.where(batch: new_batch).pluck(:application_stage_id) - [ApplicationStage.initial_stage.id]).to be_empty
+      expect(applications_in_new_batch.pluck(:application_stage_id) - [ApplicationStage.initial_stage.id]).to be_empty
+
+      # All of them will have swept_in_at set
+      expect(applications_in_new_batch.where.not(swept_in_at: nil).count).to eq(4)
     end
 
     context 'when asked to skip payment' do
       it 'sweeps those payments and skips their payment stage' do
         subject.perform_now(new_batch.id, false, [old_batch.id], 'someone@sv.co', skip_payment: true)
-        expect(BatchApplication.where(batch: new_batch).payment_complete.count).to eq(4)
+        applications_in_new_batch = BatchApplication.where(batch: new_batch)
+        expect(applications_in_new_batch.payment_complete.count).to eq(4)
 
         # All of them will be in stage 2.
-        expect(BatchApplication.where(batch: new_batch).pluck(:application_stage_id) - [ApplicationStage.testing_stage.id]).to be_empty
+        expect(applications_in_new_batch.pluck(:application_stage_id) - [ApplicationStage.testing_stage.id]).to be_empty
 
         # There should be four payments noting skip action.
         expect(Payment.where(notes: 'Payment has been skipped.').count).to eq(4)
+
+        # All of them will have swept_in_at set
+        expect(applications_in_new_batch.where.not(swept_in_at: nil).count).to eq(4)
       end
     end
   end

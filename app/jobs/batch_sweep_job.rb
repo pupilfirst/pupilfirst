@@ -17,7 +17,7 @@ class BatchSweepJob < ApplicationJob
     unpaid_applications = other_applications.joins(:payment).merge(Payment.requested)
     count_for_email 'Payment missing applications swept' => uninitiated_applications.count
     count_for_email 'Payment initiated applications swept' => unpaid_applications.count
-    (uninitiated_applications + unpaid_applications).each { |application| application.update!(batch_id: @batch.id) }
+    (uninitiated_applications + unpaid_applications).each { |application| application.update!(batch_id: @batch.id, swept_in_at: Time.now) }
   end
 
   def sweep_from_batches(batch_ids)
@@ -76,7 +76,8 @@ class BatchSweepJob < ApplicationJob
       team_lead: batch_application.team_lead,
       application_stage: new_application_stage,
       college: batch_application.college,
-      team_size: batch_application.team_size
+      team_size: batch_application.team_size,
+      swept_in_at: Time.now
     )
 
     new_application.batch_applicants << batch_application.team_lead

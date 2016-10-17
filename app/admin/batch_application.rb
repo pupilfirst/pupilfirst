@@ -65,7 +65,7 @@ ActiveAdmin.register BatchApplication do
     end
 
     column 'Reference' do |batch_application|
-      batch_application.team_lead.reference
+      batch_application.team_lead&.reference
     end
 
     column 'Stage' do |batch_application|

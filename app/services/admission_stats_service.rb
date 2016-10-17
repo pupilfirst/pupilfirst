@@ -28,6 +28,7 @@ class AdmissionStatsService
       payment_initiated_today: payment_initiated_today(:all),
       submitted_applications: submitted_applications(:all),
       submitted_applications_today: submitted_applications_today(:all),
+      top_references_today: top_references_today,
       state_wise_stats: focused_states_stats.merge(other_states_stats)
     }
   end
@@ -132,5 +133,11 @@ class AdmissionStatsService
     total = selected_applications.for_states(state_scope).count
     return 0 unless total.positive?
     (paid_applications(state_scope).to_f / total) * 100
+  end
+
+  def top_references_today
+    applicants_today = BatchApplicant.where('created_at > ?', Time.now.in_time_zone('Asia/Kolkata').beginning_of_day)
+
+    applicants_today.group(:reference).count.sort_by(&:last).reverse[0..4]
   end
 end

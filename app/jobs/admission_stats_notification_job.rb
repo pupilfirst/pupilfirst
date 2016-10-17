@@ -25,6 +25,7 @@ class AdmissionStatsNotificationJob < ApplicationJob
       *Payments Intiated:* #{stats[:payment_initiated]} (+#{stats[:payment_initiated_today]})
       *Applications Started:* #{stats[:submitted_applications]} (+#{stats[:submitted_applications_today]})
       *Paid Applications From:* #{state_wise_paid_count}
+      *Top References Today:* #{top_references_today}
       *Unique Visits Today:* #{stats[:total_visits_today]}
 
       <#{dashboard_url}|:bar_chart: View Dashboard>
@@ -61,5 +62,9 @@ class AdmissionStatsNotificationJob < ApplicationJob
 
   def target_count
     batch.target_application_count
+  end
+
+  def top_references_today
+    stats[:top_references_today].map { |r| "#{r[0]}(#{r[1]})" }.join(', ')
   end
 end

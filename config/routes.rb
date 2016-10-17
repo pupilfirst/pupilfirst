@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  mount Delayed::Web::Engine, at: '/jobs'
+  authenticated :admin_user do
+    mount Delayed::Web::Engine, at: '/jobs'
+  end
+
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
 
   devise_for(

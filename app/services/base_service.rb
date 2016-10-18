@@ -1,6 +1,7 @@
 # Create new services by inherting from this class.
 class BaseService
   def log(message)
+    return if Rails.env.test?
     print "[#{current_timestamp}] #{message}\n"
   end
 

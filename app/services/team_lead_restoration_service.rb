@@ -1,6 +1,6 @@
-# This service will restore team lead entries to paid applications if they're missing. It retrieves the team lead's
-# email and name from Instamojo's API through the stored payment details, creates the applicant, and re-links it as
-# application's lead and payment's applicant.
+# This service will restore team lead entries to applications with payment entries if they're missing. It retrieves the
+# team lead's email and name from Instamojo's API through the stored payment details, creates the applicant, and
+# re-links it as application's lead and payment's applicant.
 class TeamLeadRestorationService < BaseService
   def initialize(dry_run: true)
     @dry_run = dry_run
@@ -10,9 +10,11 @@ class TeamLeadRestorationService < BaseService
     applications_without_team_lead = BatchApplication.includes(:team_lead).where(batch_applicants: { id: nil })
 
     if applications_without_team_lead.any?
-      log "There are #{applications_without_team_lead.count} applications without team lead, of which #{applications_without_team_lead.payment_complete.count} are paid."
+      headless_applications_with_payment = applications_without_team_lead.joins(:payment)
 
-      applications_without_team_lead.payment_complete.each do |headless_application|
+      log "There are #{applications_without_team_lead.count} applications without team lead, of which #{headless_applications_with_payment.count} have payment entries."
+
+      headless_applications_with_payment.each do |headless_application|
         log "Processing BatchApplication##{headless_application.id}..."
 
         response = details_from_instamojo(headless_application)

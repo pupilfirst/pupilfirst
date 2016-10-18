@@ -10,6 +10,12 @@ FactoryGirl.define do
       application.batch_applicants << application.team_lead
     end
 
+    trait :payment_requested do
+      after(:create) do |application|
+        create :payment, batch_application: application, batch_applicant: application.team_lead
+      end
+    end
+
     trait :paid do
       after(:create) do |application|
         create :payment, batch_application: application, batch_applicant: application.team_lead, paid_at: Time.now

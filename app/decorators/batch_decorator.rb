@@ -1,10 +1,6 @@
 class BatchDecorator < Draper::Decorator
   delegate_all
 
-  def admission_opening_at
-    batch_stages&.find_by(application_stage_id: ApplicationStage.initial_stage)&.starts_at
-  end
-
   def admission_close_at
     batch_stages&.find_by(application_stage_id: ApplicationStage.initial_stage)&.ends_at
   end

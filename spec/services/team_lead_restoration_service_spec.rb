@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe TeamLeadRestorationService, focus: true do
+describe TeamLeadRestorationService do
   let!(:batch_application_with_team_lead) { create :batch_application, :paid }
   let!(:batch_application_without_team_lead_1) { create :batch_application, :paid }
   let!(:batch_application_without_team_lead_2) { create :batch_application, :paid }

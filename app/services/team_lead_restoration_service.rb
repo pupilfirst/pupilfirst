@@ -55,5 +55,9 @@ class TeamLeadRestorationService < BaseService
     # Link team lead to application and payment.
     application.update!(team_lead: applicant)
     application.payment.update!(batch_applicant: applicant)
+
+    # Tag the applicant as 'restored'
+    applicant.tag_list.add('restored')
+    applicant.save!
   end
 end

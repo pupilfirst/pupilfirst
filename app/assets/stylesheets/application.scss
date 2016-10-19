@@ -4,7 +4,10 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 @import "font-awesome";
-@import "bootstrap-datetimepicker";
+
+// XDAN's datetimepicker
+@import "datetimepicker";
+
 @import "video-js";
 
 // Rails Assets.

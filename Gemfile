@@ -120,6 +120,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-waypoints' # Waypoints is a library that makes it easy to execute a function whenever you scroll to an element.
   gem 'rails-assets-chartkick' # chartkick lib for admissions dashboard charts
   gem 'rails-assets-gemini-scrollbar' # Custom overlay-scrollbars with native scrolling mechanism for web applications
+  gem 'rails-assets-datetimepicker' # jQuery Plugin Date and Time Picker
 end
 
 group :development do

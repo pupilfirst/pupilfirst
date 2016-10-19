@@ -16,9 +16,11 @@
 //= require flashes
 //= require unobtrusive_flash
 
+// XDAN's datetimepicker
+//= require datetimepicker
+//= require xdan_datetimepicker
+
 //= require moment
-//= require bootstrap-datetimepicker
-//= require pickers
 //= require select2
 
 //= require googleanalytics/autotrack

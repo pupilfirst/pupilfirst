@@ -2,22 +2,20 @@
   title SV.CO Apply Now
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
 
-.container
-  .apply-banner
-    .row
-      .col-md-4
-        h1 No Show
-.apply-container
+.secondary-banner
   .container
-    .row
-      .col-md-7.col-md-push-5
-        .batch-results.margin-bottom-20
-          .result-head
-            p
-              ' We've sorry, but it looks like your team didn't attend the interview.
-            - if current_application.merits_certificate?
-              p However, you are eligible for a certificate for progressing till this stage!
-              .m-x-auto.text-xs-center.m-t-2
-                = link_to 'Download Certificate', apply_certificate_path(current_application, format: 'pdf'), class: 'btn btn-primary btn-md text-uppercase'
+    .stages-alert-icon.m-x-auto
+      = image_tag 'apply/batch_application/expired-icon.svg'
+    .application-stages-head.text-xs-center
+      h2 We didn 't see you at the Interviews!
 
-      == render 'left_bar'
+.container
+  .m-t-3
+    == render 'application_progress'
+  .container-md-center.content-box.application-stages-content.m-t-3.m-b-2.text-xs-center
+    h4.m-b-1
+      ' It looks like your team didn't attend the interviews and hence didn't make it to the upcoming batch of SV.CO. However, you are eligible for a certificate for progressing till this stage!
+    p
+      ' If you think we&rsquo;ve made a mistake, feel free to contact us at #{mail_to 'help@sv.co'}, and we&rsquo;ll get back to you as soon as we can.
+
+  == render 'certificate'

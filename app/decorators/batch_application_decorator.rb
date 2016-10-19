@@ -10,7 +10,7 @@ class BatchApplicationDecorator < Draper::Decorator
   end
 
   def preliminary_result
-    application_stage.number > 2 ? 'Selected' : 'Not Selected'
+    application_stage.number > 2 ? 'Selected for Interview' : 'Not Selected'
   end
 
   def percentile_code_score

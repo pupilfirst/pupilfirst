@@ -14,15 +14,15 @@ class BatchApplicationDecorator < Draper::Decorator
   end
 
   def percentile_code_score
-    grade[:code] || 'Not Available'
+    grade[:code]&.round(1) || 'Not Available'
   end
 
   def percentile_video_score
-    grade[:video] || 'Not Available'
+    grade[:video]&.round(1) || 'Not Available'
   end
 
   def overall_percentile
-    @overall_percentile ||= grading_service.overall_percentile
+    @overall_percentile ||= grading_service.overall_percentile&.round(1)
   end
 
   private

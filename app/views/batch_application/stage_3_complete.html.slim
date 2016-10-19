@@ -2,19 +2,16 @@
   title SV.CO Apply Now
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
 
-.container
-  .apply-banner
-    .row
-      .col-md-4
-        h1 Interview complete!
-.apply-container
+.secondary-banner
   .container
-    .row
-      .col-md-7.col-md-push-5
-        .batch-results.margin-bottom-20
-          .result-head
-            p
-              ' You've taken part in the interview process. Results of the interview round will be published by
-              | <strong>#{next_stage_date}</strong>.
+    .stages-alert-icon.m-x-auto
+      = image_tag 'apply/batch_application/expired-icon.svg'
+    .application-stages-head.text-xs-center
+      h2 Interview complete!
 
-      == render 'left_bar'
+.container
+  .m-t-3
+    == render 'application_progress'
+  .container-md-center.content-box.application-stages-content.m-t-3.m-b-2.text-xs-center
+    h4.m-b-1
+      ' It was great meeting you at the interview. Hold on tight! Results of the interview round will be published soon.

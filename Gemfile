@@ -51,11 +51,6 @@ gem 'simple_form_fancy_uploads' # simple_form custom inputs to get image/link pr
 # Have updated and submitted a PR (https://github.com/ralovets/valid_url/pull/10). Using a personal fork until it's merged.
 gem 'valid_url', github: 'ajaleelp/valid_url', branch: 'patch-1' # New url validataion gem
 gem 'logstash-logger' # A better logger.
-
-# Used for picking date and time fields in a few places.
-gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
-gem 'momentjs-rails', '>= 2.8.1', github: 'derekprior/momentjs-rails' # Required by datetimepicker-rails.
-
 gem 'roadie-rails' # CSS management for e-mails.
 gem 'passenger', '>= 5.0.22' # Passenger web-server.
 gem 'delayed_job_active_record' # Delayed Job for deferring tasks.
@@ -119,6 +114,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-chartkick' # chartkick lib for admissions dashboard charts
   gem 'rails-assets-gemini-scrollbar' # Custom overlay-scrollbars with native scrolling mechanism for web applications
   gem 'rails-assets-datetimepicker' # jQuery Plugin Date and Time Picker
+  gem 'rails-assets-moment' # Parse, validate, manipulate, and display dates in javascript. http://momentjs.com
 end
 
 group :development do

@@ -3,10 +3,7 @@ ActiveAdmin.register Batch do
 
   menu parent: 'Admissions'
 
-  permit_params :theme, :description, :start_date, :end_date, :batch_number, :slack_channel, :campaign_start_at, :target_application_count, batch_stages_attributes: [
-    :id, :application_stage_id, :starts_at_date, :starts_at_time_hour, :starts_at_time_minute, :ends_at_date,
-    :ends_at_time_hour, :ends_at_time_minute, :_destroy
-  ]
+  permit_params :theme, :description, :start_date, :end_date, :batch_number, :slack_channel, :campaign_start_at, :target_application_count, batch_stages_attributes: [:id, :application_stage_id, :starts_at, :ends_at, :_destroy]
 
   config.sort_order = 'batch_number_asc'
 

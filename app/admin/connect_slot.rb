@@ -1,7 +1,7 @@
 ActiveAdmin.register ConnectSlot do
   include DisableIntercom
 
-  permit_params :faculty_id, :slot_at_date, :slot_at_time_hour, :slot_at_time_minute
+  permit_params :faculty_id, :slot_at
 
   menu parent: 'Faculty'
 

@@ -17,8 +17,6 @@ class ConnectSlot < ApplicationRecord
     errors[:faculty] << 'must have stored email address'
   end
 
-  just_define_datetime_picker :slot_at
-
   # Used by AA to form label.
   def display_name
     "#{faculty.name} (#{self})"

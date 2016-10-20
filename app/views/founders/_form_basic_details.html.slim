@@ -5,7 +5,7 @@
 
   = f.input :first_name, input_html: { maxlength: 255 }, required: true
   = f.input :last_name, input_html: { maxlength: 255 }, required: true
-  = f.input :born_on, as: :date_picker, required: true, label: 'Date of birth', placeholder: 'DD/MM/YYYY'
+  = f.input :born_on, as: :string, required: true, label: 'Date of birth', placeholder: 'YYYY-MM-DD', input_html: { class: 'date-picker', data: { format: 'Y-m-d' } }
 
   .form-group
     .control-label.col-sm-3
@@ -24,7 +24,7 @@
   = f.input :communication_address
   = f.input :identification_proof, label: 'ID Proof', as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }, hint: 'Must be one of PAN/Passport/Aadhar/Driving License'
   = f.association :university, include_blank: 'Not a student', collection: University.all.group_by(&:location), as: :grouped_select, group_method: :last
-  = f.input :roll_number, label: 'University Roll Number', required: true
+  = f.input :roll_number, label: 'University Roll Number'
   = f.input :college_identification, label: 'College ID', as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }
   = f.input :course, placeholder: 'B-tech in Computer Science'
   = f.input :semester, placeholder: 'IV'

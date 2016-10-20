@@ -15,6 +15,10 @@
 #= require select2
 #= require trix
 
+# XDAN's datetimepicker
+#= require datetimepicker
+#= require xdan_datetimepicker
+
 # Local files
 #= require_tree ./admin
 #= require jquery.sparkline.js

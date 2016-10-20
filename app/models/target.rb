@@ -48,9 +48,6 @@ class Target < ApplicationRecord
   validates_inclusion_of :role, in: valid_roles
   validates_inclusion_of :status, in: valid_statuses
 
-  just_define_datetime_picker :due_date
-  just_define_datetime_picker :completed_at
-
   # A target is pending if it isn't marker done, or isn't expired.
   def pending?
     !(done? || expired?)

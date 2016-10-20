@@ -62,7 +62,7 @@ ActiveAdmin.register ConnectSlot do
 
     f.inputs 'Connect Slot Details' do
       f.input :faculty, collection: Faculty.active.available_for_connect.order(:name)
-      f.input :slot_at, as: :just_datetime_picker
+      f.input :slot_at, as: :string, input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O', step: 30 } }, placeholder: 'YYYY-MM-DD HH:MM:SS'
     end
 
     f.actions

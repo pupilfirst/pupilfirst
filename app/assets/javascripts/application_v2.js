@@ -19,11 +19,8 @@
 //= require unobtrusive_flash
 
 //= require moment
-//= require bootstrap-datetimepicker
-//= require pickers
 //= require select2
 //= require sidebar-menu
-
 //= require googleanalytics/autotrack
 //= require google_analytics
 //= require facebook_pixel

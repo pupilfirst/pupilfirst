@@ -21,24 +21,17 @@ class AboutController < ApplicationController
 
   # GET /about/contact
   def contact
-    @contact_form = ContactForm.new(founder: current_founder)
+    @contact_form = ContactForm.new(OpenStruct.new)
+    @contact_form.prepopulate!(current_founder)
     @sitewide_notice = params[:redirect_from] == 'startupvillage.in'
   end
 
   # POST /about/contact
   def send_contact_email
-    @contact_form = ContactForm.new contact_form_params
+    @contact_form = ContactForm.new(OpenStruct.new)
 
-    unless Rails.env.test?
-      # Check recaptcha first.
-      unless verify_recaptcha(model: @contact_form)
-        flash[:error] = 'Whoops. Verification of Recaptcha failed. Please try again.'
-        render 'contact'
-        return
-      end
-    end
-
-    if @contact_form.save
+    if @contact_form.validate(contact_form_params) && recaptcha_valid?
+      @contact_form.send_mail
       flash[:success] = "An email with your query has been sent to help@sv.co. We'll get back to you as soon as we can."
       redirect_to about_contact_path
     else
@@ -50,6 +43,12 @@ class AboutController < ApplicationController
   private
 
   def contact_form_params
-    params.require(:contact_form).permit(:name, :email, :mobile, :company, :query_type, :query)
+    params.require(:contact).permit(:name, :email, :mobile, :company, :query_type, :query)
+  end
+
+  def recaptcha_valid?
+    return true if Rails.env.test?
+
+    verify_recaptcha(model: @contact_form, message: 'Whoops. Verification of Recaptcha failed. Please try again.')
   end
 end

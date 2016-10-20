@@ -59,13 +59,13 @@ clearAllFormInterests = ->
     'acquihiring_teams']
 
   $.each interestChoices, (index, selection) ->
-    $("#talent_form_query_type_#{selection}").prop('checked', false)
+    $("#talent_query_type_#{selection}").prop('checked', false)
 
 handleActionButtonClicks = ->
   $('.talent-action-btn').click (event) ->
     selection = $(event.target).data('selection')
     clearAllFormInterests()
-    $("#talent_form_query_type_#{selection}").prop('checked', true)
+    $("#talent_query_type_#{selection}").prop('checked', true)
     $('.invest-hire-modal').modal('show')
 
 pauseVideosOnTalentTabSwitch = ->

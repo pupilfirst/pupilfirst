@@ -16,7 +16,7 @@
           .talent-action-checklist
             h4.font-weight-300
               | Tick all that you are interested in:
-            = f.input :query_type, label: 'Interested in:', collection: TalentForm.valid_query_types, as: :check_boxes
+            = f.input :query_type, label: 'Interested in:', collection: TalentForm::VALID_QUERY_TYPES, as: :check_boxes
           .investor-details
             = f.input :name, label: 'Name', input_html: { maxlength: 50 }
             = f.input :email, type: 'email', label: 'Email address', input_html: { maxlength: 50 }

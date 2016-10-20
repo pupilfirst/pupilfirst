@@ -12,8 +12,6 @@ gem 'dotenv-rails', groups: [:development, :test]
 gem 'inherited_resources', github: 'activeadmin/inherited_resources' # Required for Rails 5 support for activeadmin. TODO: Remove when activeadmin 1.0.0 is released, which is when I'm guessing this gem will be removed.
 gem 'activeadmin', github: 'activeadmin/activeadmin' # Tracking master for Rails 5 support. TODO: Revert to rubygems version when 1.0.0 is released.
 gem 'flattened_active_admin' # better looking and customizable activeadmin
-gem 'just-datetime-picker' # Date/Time picker support for active admin.
-# gem 'active_skin' # Better lookin' active admin! Temporarily removed in favour of flattened_acitve_admin
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
 gem 'carrierwave' # One uploader to rule them all.
 gem 'carrierwave_backgrounder' # Backgrounder for carrierwave.

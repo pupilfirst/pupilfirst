@@ -14,9 +14,6 @@ class BatchStage < ApplicationRecord
 
   validate :should_start_before_end
 
-  just_define_datetime_picker :starts_at
-  just_define_datetime_picker :ends_at
-
   def should_start_before_end
     return if ends_at.blank? || starts_at.blank?
     return if ends_at > starts_at

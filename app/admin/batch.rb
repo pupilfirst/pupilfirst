@@ -97,8 +97,8 @@ ActiveAdmin.register Batch do
     f.inputs 'Stage Dates' do
       f.has_many :batch_stages, heading: false, allow_destroy: true, new_record: 'Add Stage' do |s|
         s.input :application_stage, collection: ApplicationStage.order('number ASC')
-        s.input :starts_at, as: :just_datetime_picker
-        s.input :ends_at, as: :just_datetime_picker
+        s.input :starts_at, as: :string, input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O' } }, placeholder: 'YYYY-MM-DD HH:MM:SS'
+        s.input :ends_at, as: :string, input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O' } }, placeholder: 'YYYY-MM-DD HH:MM:SS'
       end
     end
 

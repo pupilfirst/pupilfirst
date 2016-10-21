@@ -12,6 +12,12 @@ ActiveAdmin.register ApplicationSubmission do
   filter :score
   filter :notes
 
+  controller do
+    def scoped_collection
+      super.includes :application_stage, application_submission_urls: [:admin_user], batch_application: [{ team_lead: [{ college: [:state] }] }, :batch, :application_stage]
+    end
+  end
+
   batch_action :promote, confirm: 'Are you sure?' do |ids|
     promoted = 0
 
@@ -158,7 +164,6 @@ ActiveAdmin.register ApplicationSubmission do
 
     f.inputs do
       f.input :application_stage
-      f.input :batch_application
       f.input :file
       f.input :score
       f.input :notes, placeholder: 'Use markdown to format.'

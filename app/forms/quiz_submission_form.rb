@@ -1,5 +1,5 @@
 class QuizSubmissionForm < Reform::Form
-  collection :questions, virtual: true do
+  collection :questions do
     property :answer_id, virtual: true
   end
 

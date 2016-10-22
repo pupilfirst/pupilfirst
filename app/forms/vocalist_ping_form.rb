@@ -1,14 +1,14 @@
 class VocalistPingForm < Reform::Form
-  property :channel, virtual: true
-  property :startups, virtual: true
-  property :founders, virtual: true
-  property :message, virtual: true, validates: { presence: true }
+  property :channel
+  property :startups
+  property :founders
+  property :message, validates: { presence: true }
 
   property :channel_options
 
-  validate :atleast_one_target_present
+  validate :at_least_one_target_present
 
-  def atleast_one_target_present
+  def at_least_one_target_present
     clean_up_targets
     return if channel.present? || startups.present? || founders.present?
     errors[:base] << 'Please select a channel OR one or more startups OR founders!'

@@ -1,4 +1,4 @@
-# Mails sent out from the contact form.
+# Mails sent out from the talent form.
 class TalentFormMailer < ApplicationMailer
   # Since there's no DB table supporting TalentForm, this method accepts all data (to allow serialization).
   def contact(mail_params)

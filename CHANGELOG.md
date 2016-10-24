@@ -1,3 +1,9 @@
+### 24 October, 2016
+
+#### Bugfixes
+
+  - The datepicker used for certain forms on the site were non-functional. These have been replaced with an updated component.
+
 ### 17 October, 2016
 
 #### Features

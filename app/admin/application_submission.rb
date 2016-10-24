@@ -9,6 +9,8 @@ ActiveAdmin.register ApplicationSubmission do
   filter :batch_application_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'Batch'
   filter :batch_application_college_state_id_eq, as: :select, collection: proc { State.all }, label: 'State'
   filter :application_stage
+  filter :batch_application_team_lead_name, as: :string, label: 'Team Lead Name'
+  filter :batch_application_team_lead_email, as: :string, label: 'Team Lead Email'
   filter :score
   filter :notes
 

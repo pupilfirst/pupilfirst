@@ -41,7 +41,11 @@ ActiveAdmin.register QuizQuestion do
         question.correct_answer.value if question.correct_answer.present?
       end
       row :answer_options do |question|
-        question.answer_options.pluck(:value).join(', ')
+        ul do
+          question.answer_options.pluck(:value).each do |answer|
+            li answer
+          end
+        end
       end
     end
   end

@@ -7,8 +7,8 @@ class IntercomClient
     yield
   rescue Intercom::ResourceNotFound, Intercom::MultipleMatchingUsersError
     raise
-  rescue Intercom::IntercomError
-    raise Exceptions::IntercomError
+  rescue Intercom::IntercomError => e
+    raise Exceptions::IntercomError, "#{e.class}: #{e.message}}"
   end
 
   def all_users

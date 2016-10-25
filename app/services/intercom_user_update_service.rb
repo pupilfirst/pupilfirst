@@ -29,6 +29,10 @@ class IntercomUserUpdateService < BaseService
 
     log "No intercom user with email #{batch_applicant.email} found. Skipping..."
     false
+
+  rescue Intercom::IntercomError
+    log "Intercom error occured while retreiving applicant with email #{batch_applicant.email}."
+    raise Exceptions::IntercomError
   end
 
   def update_intercom_user
@@ -39,6 +43,10 @@ class IntercomUserUpdateService < BaseService
   def update_basic_info
     log "Updating basic info of #{batch_applicant.email}"
     intercom.update_user(user, phone: batch_applicant.phone, college: batch_applicant.college_name, batch: batch_applicant.batch_name, university: batch_applicant.university_name)
+
+  rescue Intercom::IntercomError
+    log "Intercom error occured while updating basic info for applicant with email #{batch_applicant.email}."
+    raise Exceptions::IntercomError
   end
 
   def last_applicant_event?
@@ -48,13 +56,19 @@ class IntercomUserUpdateService < BaseService
     false
   end
 
+  # rubocop:disable Metrics/AbcSize
   def update_last_applicant_event
     log "Updating last_applicant_event of #{batch_applicant.email}"
 
     intercom.add_tag_to_user(user, tags[batch_applicant.last_applicant_event.to_sym])
     intercom.add_note_to_user(user, "Auto-tagged as <em>#{notes[batch_applicant.last_applicant_event.to_sym]}</em>")
     intercom.update_user(user, last_applicant_event: event_description[batch_applicant.last_applicant_event.to_sym])
+
+  rescue Intercom::IntercomError
+    log "Intercom error occured while updating applicant with email #{batch_applicant.email}."
+    raise Exceptions::IntercomError
   end
+  # rubocop:enable Metrics/AbcSize
 
   def tags
     {

@@ -13,7 +13,7 @@ module ActiveAdmin
       define_method method_name do
         begin
           intercom.public_send(method_name)
-        rescue Intercom::IntercomError
+        rescue Exceptions::IntercomError
           'Error'
         end
       end

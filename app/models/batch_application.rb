@@ -79,6 +79,18 @@ class BatchApplication < ApplicationRecord
     batch.stage_started?(application_stage)
   end
 
+  # Returns true if application is in interview stage.
+  def interviewable?
+    return false if batch.blank?
+    interview_stage = ApplicationStage.interview_stage
+
+    # Not if already interviewed
+    return false if application_submissions.find_by(application_stage: interview_stage).present?
+
+    # Must be in interview stage
+    application_stage == interview_stage
+  end
+
   def cofounders
     batch_applicants.where.not(id: team_lead_id)
   end

@@ -620,7 +620,7 @@ GEM
     rails-assets-gemini-scrollbar (1.4.3)
     rails-assets-get-size (2.0.2)
     rails-assets-intro.js (2.3.0)
-    rails-assets-jquery (3.1.1)
+    rails-assets-jquery (2.2.4)
     rails-assets-jquery-mousewheel (3.1.13)
       rails-assets-jquery (>= 1.2.2)
     rails-assets-jquery-stickit (0.2.9)
@@ -902,6 +902,7 @@ DEPENDENCIES
   rails-assets-datetimepicker!
   rails-assets-gemini-scrollbar!
   rails-assets-intro.js!
+  rails-assets-jquery (~> 2.2.4)!
   rails-assets-jquery-stickit!
   rails-assets-jquery.scrollTo!
   rails-assets-masonry!

@@ -21,6 +21,21 @@ ActiveAdmin.register BatchApplication do
     redirect_to collection_path
   end
 
+  batch_action :mark_interview_attended, confirm: 'Are you sure?' do |ids|
+    marked = 0
+
+    BatchApplication.where(id: ids).each do |batch_application|
+      if batch_application.interviewable?
+        BatchApplication::MarkInterviewAttendedService.new(batch_application).execute
+        marked += 1
+      end
+    end
+
+    flash[:success] = "#{marked} applications have been marked as having attended interview."
+
+    redirect_to collection_path
+  end
+
   filter :batch
   filter :application_stage
 
@@ -155,7 +170,13 @@ ActiveAdmin.register BatchApplication do
 
       if batch_application.promotable?
         span do
-          link_to 'Promote', promote_admin_batch_application_path(batch_application), method: :post, class: 'member_link'
+          link_to 'Promote', promote_admin_batch_application_path(batch_application), method: :post, class: 'member_link', data: { confirm: 'Are you sure?' }
+        end
+      end
+
+      if batch_application.interviewable?
+        span do
+          link_to 'Mark Interview Attended', mark_interview_attended_admin_batch_application_path(batch_application), method: :post, class: 'member_link', data: { confirm: 'Are you sure?' }
         end
       end
     end
@@ -295,9 +316,25 @@ ActiveAdmin.register BatchApplication do
     redirect_back(fallback_location: admin_batch_applications_url)
   end
 
+  member_action :mark_interview_attended, method: :post do
+    batch_application = BatchApplication.find(params[:id])
+
+    if batch_application.interviewable?
+      BatchApplication::MarkInterviewAttendedService.new(batch_application).execute
+      flash[:success] = 'Application has been marked as having attended interview.'
+      redirect_back(fallback_location: admin_batch_applications_url)
+    end
+  end
+
   action_item :promote, only: :show do
     if batch_application.promotable?
-      link_to('Promote to next stage', promote_admin_batch_application_path(batch_application), method: :post)
+      link_to('Promote to next stage', promote_admin_batch_application_path(batch_application), method: :post, data: { confirm: 'Are you sure?' })
+    end
+  end
+
+  action_item :mark_interview_attended, only: :show do
+    if batch_application.interviewable?
+      link_to('Mark Interview Attended', mark_interview_attended_admin_batch_application_path(batch_application), method: :post, data: { confirm: 'Are you sure?' })
     end
   end
 

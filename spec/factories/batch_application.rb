@@ -17,6 +17,8 @@ FactoryGirl.define do
     end
 
     trait :paid do
+      application_stage { create :application_stage, number: 2 }
+
       after(:create) do |application|
         create :payment, batch_application: application, batch_applicant: application.team_lead, paid_at: Time.now
       end
@@ -28,6 +30,11 @@ FactoryGirl.define do
       after(:create) do |application|
         create :application_submission, :stage_2_submission, batch_application: application
       end
+    end
+
+    trait :stage_3 do
+      stage_2_submitted
+      application_stage { create :application_stage, number: 3 }
     end
   end
 end

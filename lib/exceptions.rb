@@ -17,4 +17,6 @@ module Exceptions
   class FounderAlreadyMemberOfStartup < ApiRequestError; end
   class PhoneNumberVerificationFailed < ApiRequestError; end
   class FounderNotFound < ApiResourceMissingError; end
+
+  class IntercomError < StandardError; end
 end

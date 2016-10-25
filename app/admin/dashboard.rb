@@ -1,10 +1,9 @@
 ActiveAdmin.register_page 'Dashboard' do
   controller do
-    before_action :initialize_intercom_client
     skip_after_action :intercom_rails_auto_include
 
-    def initialize_intercom_client
-      @intercom = IntercomClient.new
+    def index
+      @presenter = ActiveAdmin::DashboardPresenter.new
     end
   end
 

@@ -17,10 +17,6 @@ class ApplicationStage < ApplicationRecord
     number == 1
   end
 
-  def final_stage?
-    self == final_stage
-  end
-
   def self.initial_stage
     find_by(number: 1)
   end

@@ -115,6 +115,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-gemini-scrollbar' # Custom overlay-scrollbars with native scrolling mechanism for web applications
   gem 'rails-assets-datetimepicker' # jQuery Plugin Date and Time Picker
   gem 'rails-assets-moment' # Parse, validate, manipulate, and display dates in javascript. http://momentjs.com
+  gem 'rails-assets-jquery', '~> 2.2.4' # TODO: Lock down jquery to v2 because v3 doesn't work well with AA.
 end
 
 group :development do

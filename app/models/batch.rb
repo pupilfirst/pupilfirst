@@ -16,6 +16,12 @@ class Batch < ApplicationRecord
       .where('batch_stages.ends_at > ?', Time.now)
   }
 
+  scope :ongoing_applications, lambda {
+    joins(:batch_stages)
+      .where(batch_stages: { application_stage_id: ApplicationStage.final_stage })
+      .where('batch_stages.starts_at > ?', Time.now)
+  }
+
   # Batches that opened for applications at some point of time in the past.
   scope :opened_for_applications, -> { joins(:batch_stages).uniq }
 

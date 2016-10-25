@@ -1,3 +1,26 @@
+- ongoing_applications = Batch.ongoing_applications.order('batch_number DESC')
+- if ongoing_applications.any?
+  table.admissions-dashboard-progress
+    thead
+      tr
+        th Batch
+        th #1 Payment
+        th #2 Submissions
+        th #3 Interview
+        th #4 Pre-selection
+        th #5 Closed
+    tbody
+      - ongoing_applications.each do |open_batch|
+        tr
+          th = open_batch.batch_number
+          - open_batch.batch_stages.each do |stage|
+            td
+              .start-time #{stage.starts_at.strftime('%b %d %H:%M')}
+
+              - if stage.ends_at.present?
+                .end-time #{stage.ends_at.strftime('%b %d %H:%M')}
+                .clear-both
+                progress value=(Time.now - stage.starts_at) max=(stage.ends_at - stage.starts_at)
 
 
 .table_tools

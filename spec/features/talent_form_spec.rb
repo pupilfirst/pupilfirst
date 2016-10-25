@@ -21,6 +21,8 @@ feature 'Talent Form' do
       fill_in 'Website', with: 'www.example.com'
       click_on 'Submit'
 
+      expect(page).to have_content('An email with your query has been sent to help@sv.co.')
+
       open_email('help@sv.co')
 
       expect(current_email.subject).to include('Talent Form: Acquihiring Teams (by Some Name)')

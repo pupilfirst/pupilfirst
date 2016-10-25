@@ -1,5 +1,22 @@
 @import 'admin_variables';
 
+.admissions-dashboard-progress {
+  .start-time {
+    float: left;
+    border-left: 1px dotted black;
+    padding-left: 10px;
+  }
+
+  .end-time {
+    float: right;
+    padding-right: 10px;
+  }
+
+  progress {
+    width: 100%;
+  }
+}
+
 .admissions-dashboard-container {
   display: flex;
   flex-wrap: wrap;
@@ -36,7 +53,7 @@
   }
 }
 
-.full-width{
+.full-width {
   width: 100%;
   height: auto;
 }

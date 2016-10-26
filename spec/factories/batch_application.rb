@@ -28,7 +28,7 @@ FactoryGirl.define do
       paid
 
       after(:create) do |application|
-        create :application_submission, :stage_2_submission, batch_application: application
+        create :application_submission, :stage_2_submission, batch_application: application, scored: true
       end
     end
 

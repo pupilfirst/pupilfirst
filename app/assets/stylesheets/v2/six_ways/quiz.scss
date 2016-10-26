@@ -27,37 +27,35 @@
     }
   }
   .answer-form {
-    .form-group {
-      .radio {
-        padding-top: 0;
-        margin-right: 0;
-        font-size: 1.125rem;
+    .answer-option {
+      padding-top: 0;
+      margin-right: 0;
+      font-size: 1.125rem;
 
+      label {
+        display: flex;
+        align-items: center;
+        padding: 15px 20px 15px 0;
+        border: 1px dashed $gray-border;
+        border-width: 0 0 1px 0;
+        margin-bottom: -1px;
+        cursor: pointer;
+        transition: all .2s;
+
+        &:hover {
+          color: $light-secondary;
+        }
+      }
+      input {
+        margin-right: 25px;
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+        background-color: $light-secondary;
+      }
+      &:last-child {
         label {
-          display: flex;
-          align-items: center;
-          padding: 15px 20px 15px 0;
-          border: 1px dashed $gray-border;
-          border-width: 0 0 1px 0;
-          margin-bottom: -1px;
-          cursor: pointer;
-          transition: all .2s;
-
-          &:hover {
-            color: $light-secondary;
-          }
-        }
-        input {
-          margin-right: 25px;
-          width: 20px;
-          height: 20px;
-          flex-shrink: 0;
-          background-color: $light-secondary;
-        }
-        &:last-child {
-          label {
-            border-width: 0px;
-          }
+          border-width: 0px;
         }
       }
     }

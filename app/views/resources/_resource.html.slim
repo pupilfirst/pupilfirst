@@ -16,15 +16,4 @@
       .description
         = simple_format resource.description
       = render 'tags', resource: resource
-
-    .links
-      a.btn.btn-ghost-secondary.btn-sm.btn-with-icon.text-uppercase href=download_resource_url(resource) target='_blank' title="Download"
-        i.fa.fa-download
-        span
-          | Download
-
-      - if resource.stream?
-        = link_to resource_url(resource, watch: true), class: 'btn btn-ghost-primary stream-resource btn-sm btn-with-icon text-uppercase', title: "Play" do
-          i.fa.fa-play
-          span
-            | Play
+    == render 'links', resource: resource, playing: false

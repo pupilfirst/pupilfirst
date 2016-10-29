@@ -116,12 +116,6 @@ class SixWaysController < ApplicationController
   #
   # Display the completion certificate with provision to download as pdf
   def completion_certificate
-    respond_to do |format|
-      format.html
-      format.pdf do
-        render pdf: 'certificate', disposition: 'attachment', show_as_html: params.key?('debug')
-      end
-    end
   end
 
   private

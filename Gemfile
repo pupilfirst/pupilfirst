@@ -91,7 +91,6 @@ gem 'dry-validation' # There seems to be a dependency bug in reform's coercion c
 gem 'postmark-rails' # Official integration library for using Rails and ActionMailer with the Postmark HTTP API.
 gem 'intercom-rails' # The easiest way to install Intercom in a Rails app.
 gem 'intercom', '~> 3.5.1' # Ruby bindings for the Intercom API
-gem 'wicked_pdf', github: 'mileszs/wicked_pdf' # html to pdf converted - used to generate MOOC completion certificate
 gem 'jspdf-rails' # HTML5 client-side pdf generation - for certificates
 gem 'draper', '~> 3.0.0.pre1' # Decorators/View-Models for Rails Applications # TODO: Pre-release version for Rails 5 support. Upgrade to stable when available.
 gem 'skylight' # Skylight agent for Ruby https://www.skylight.io
@@ -154,7 +153,6 @@ end
 
 group :production do
   gem 'rails_12factor' # Makes running your Rails app easier. Based on the ideas behind 12factor.net.
-  gem 'wkhtmltopdf-heroku', require: false # wkhtmltopdf binary for heroku / amd64
 end
 
 ruby '2.3.1'

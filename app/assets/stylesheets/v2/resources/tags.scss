@@ -6,9 +6,11 @@
 
   .tag-pill {
     font-size: 0.75rem;
-    margin-right: 10px;
+    margin-right: 0.5rem;
   }
+}
 
+.resource-tags-fade {
   &:after {
     content: '';
     position: absolute;

@@ -15,5 +15,5 @@
         = link_to truncate( resource.title, length: 50, separator: ' ' ), resource
       .description
         = simple_format resource.description
-      = render 'tags', resource: resource
+      = render 'tags', resource: resource, fade: true
     == render 'links', resource: resource, playing: false

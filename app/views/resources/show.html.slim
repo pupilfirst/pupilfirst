@@ -27,5 +27,5 @@ h1.m-b-1 #{@resource.title}
         | Batch Exclusive
 
     p.m-t-1 = simple_format @resource.description
-    == render 'tags', resource: @resource
+    == render 'tags', resource: @resource, fade: false
     == render 'links', resource: @resource, playing: @stream_video.present?

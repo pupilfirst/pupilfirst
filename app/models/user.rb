@@ -6,12 +6,12 @@ class User < ApplicationRecord
   # database_authenticable is required by devise_for to generate the session routes
   devise :database_authenticatable
 
+  validates :email, presence: true, uniqueness: true, email: true
+
   def send_login_email(referer)
     regenerate_login_token unless Rails.env.development?
 
     # TODO: Send email with template.
     UserSessionMailer.send_login_token(self, referer).deliver_now
   end
-
-  validates :email, presence: true, uniqueness: true, email: true
 end

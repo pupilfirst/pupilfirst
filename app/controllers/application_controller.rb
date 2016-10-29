@@ -42,10 +42,6 @@ class ApplicationController < ActionController::Base
     @platform_feedback_for_form = PlatformFeedback.new(founder_id: current_founder.id)
   end
 
-  def current_user
-    @current_user ||= User.find_by(login_token: read_cookie(:login_token))
-  end
-
   def current_mooc_student
     @current_mooc_student ||= MoocStudent.find_by(user: current_user) if current_user.present?
   end

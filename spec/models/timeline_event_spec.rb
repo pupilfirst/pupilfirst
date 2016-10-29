@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe TimelineEvent, type: :modelr do
+RSpec.describe TimelineEvent, type: :model do
   subject { create :timeline_event }
 
   describe '#verify!' do

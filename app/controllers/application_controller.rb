@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    referer = params[:referer]
+    referer = params[:referer] || session[:referer]
 
     if referer
       referer

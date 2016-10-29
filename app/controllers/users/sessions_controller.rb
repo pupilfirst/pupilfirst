@@ -4,9 +4,6 @@ module Users
 
     # GET /user/sign_in
     def new
-      # Store referer in session if it's sent.
-      save_referer if params[:referer]
-
       @skip_container = true
       super
     end
@@ -18,7 +15,7 @@ module Users
       @user = User.where(email: params[:user][:email]).first_or_initialize
 
       if @user.save
-        @user.send_login_email(session.delete(:referer))
+        @user.send_login_email(params[:referer])
 
         render layout: 'application_v2'
       else
@@ -30,12 +27,6 @@ module Users
     def login_with_token
       # TODO
       redirect_to root_path
-    end
-
-    private
-
-    def save_referer
-      session[:referer] = params[:referer]
     end
   end
 end

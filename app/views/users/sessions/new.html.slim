@@ -19,7 +19,7 @@
       | Hello there!
     .simple-form-container
       .row
-        = simple_form_for @user, url: user_send_login_email_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
+        = simple_form_for @user, url: user_send_login_email_path(referer: params[:referer]), html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
 
           = f.input :email
 

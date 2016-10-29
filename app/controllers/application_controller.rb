@@ -24,16 +24,12 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    if resource.is_a?(Founder)
-      referer = session.delete :referer
+    referer = session.delete(:referer) || request.referer || params[:referer]
 
-      if referer
-        referer
-      elsif current_founder.startup.present?
-        startup_url(current_founder.startup)
-      else
-        super
-      end
+    if referer
+      referer
+    elsif resource.is_a?(Founder) && current_founder.startup.present?
+      startup_url(current_founder.startup)
     else
       super
     end

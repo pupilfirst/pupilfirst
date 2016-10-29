@@ -24,9 +24,22 @@ module Users
       end
     end
 
+    # GET user/login_with_token - link to sign_in user with token in params
     def login_with_token
-      # TODO
-      redirect_to root_path
+      if token_valid?
+        sign_in @user
+        redirect_to after_sign_in_path_for(@user)
+      else
+        # Show error and ask for re-authentication
+        flash[:error] = 'Something went wrong while signing you in! Please try again.'
+        redirect_to new_user_session_path(referer: params[:referer])
+      end
+    end
+
+    private
+
+    def token_valid?
+      @user = User.find_by(login_token: params[:token])
     end
   end
 end

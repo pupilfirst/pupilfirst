@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  devise_for :users, only: :sessions, controllers: { sessions: 'users/sessions' }
+  devise_scope :user do
+    post :user_send_login_email, controller: 'users/sessions', action: 'send_login_email'
+    get :user_login_with_token, controller: 'users/sessions', action: 'login_with_token'
+  end
+
   authenticated :admin_user do
     mount Delayed::Web::Engine, at: '/jobs'
   end
@@ -192,10 +198,4 @@ Rails.application.routes.draw do
 
   # used for shortened urls from the shortener gem
   get '/:id', to: 'shortener/shortened_urls#show'
-
-  scope 'user_sessions', as: 'user_sessions', controller: 'user_sessions' do
-    get 'new'
-    post 'send_email'
-    patch 'send_email'
-  end
 end

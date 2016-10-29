@@ -21,7 +21,7 @@ h1.m-b-1 #{@resource.title}
       - else
         = image_tag 'resources/thumbnail_default.png'
 
-  .pull-md-left
+  .pull-md-left.resource-description-and-links
     - if @resource.for_approved?
       .batch-exclusive-badge.text-uppercase.m-t-1
         | Batch Exclusive

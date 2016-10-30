@@ -48,7 +48,7 @@ feature 'Incubation' do
       fill_in 'New password', with: 'password'
       fill_in 'Confirm new password', with: 'password'
       fill_in 'Date of birth', with: '1990-01-01'
-      page.find('#founder_gender_male').click
+      choose 'Male'
 
       # Roll number field should be hidden by default
       expect(page).to_not have_text('University Roll Number')
@@ -61,7 +61,7 @@ feature 'Incubation' do
       fill_in 'University Roll Number', with: '12345'
       fill_in 'Mobile Number', with: '9876543210'
 
-      click_on 'Sign Me Up!'
+      page.find('input[type=submit]').trigger('click')
 
       # founder should be at phone number verification page.
       expect(page).to have_text('Verification Code Sent!')

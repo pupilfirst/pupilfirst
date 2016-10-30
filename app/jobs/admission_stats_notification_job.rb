@@ -33,15 +33,15 @@ class AdmissionStatsNotificationJob < ApplicationJob
   end
 
   def state_wise_paid_count
-    message = State.focused_for_admissions.each_with_object('') do |state, string|
+    states_with_count = State.focused_for_admissions.each_with_object([]) do |state, message_components|
       count = stats[:state_wise_stats][state.name.to_sym][:paid_applications]
-      string << "#{state.name}(#{count}) " if count.positive?
+      message_components << "#{state.name} (#{count})" if count.positive?
     end
 
     others_count = stats[:state_wise_stats][:Others][:paid_applications]
-    message << "Others(#{others_count})" if others_count.positive?
+    states_with_count << "Others (#{others_count})" if others_count.positive?
 
-    message
+    states_with_count.join(', ')
   end
 
   def dashboard_url

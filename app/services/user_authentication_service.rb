@@ -18,7 +18,7 @@ class UserAuthenticationService
   def mail_login_token
     return user_not_found_error unless @user.present?
 
-    @user.regenerate_login_token unless Rails.env.development?
+    @user.regenerate_login_token if Rails.env.production?
 
     send_token
     mail_success_response

@@ -17,10 +17,15 @@ describe UserAuthenticationService do
     end
 
     scenario 'user with given email exists' do
+      old_token = user.login_token
       response = subject.mail_login_token('valid_email@example.com', 'www.example.com')
 
       expect(response[:success]).to be_truthy
       expect(response[:message]).to eq('Login token successfully emailed.')
+
+      # it should have generated a new token
+      user.reload
+      expect(user.login_token).to_not eq(old_token)
 
       # it successfully emails login link with token and referer
       open_email('valid_email@example.com')
@@ -32,28 +37,24 @@ describe UserAuthenticationService do
   end
 
   context 'invoked to authenticate a token' do
-    scenario 'user with given email does not exist' do
-      response = subject.authenticate_token('random@example.com', 'some_token')
+    scenario 'token is invalid' do
+      response = subject.authenticate_token('some_token')
 
       # it returns authentication failure
       expect(response[:success]).to be_falsey
       expect(response[:message]).to eq('User authentication failed.')
     end
 
-    scenario 'user with given email exists but token is invalid' do
-      response = subject.authenticate_token(user.email, 'some_token')
-
-      # it returns authentication failure
-      expect(response[:success]).to be_falsey
-      expect(response[:message]).to eq('User authentication failed.')
-    end
-
-    scenario 'user with given email exists and token is valid' do
-      response = subject.authenticate_token(user.email, user.login_token)
+    scenario 'token is valid' do
+      response = subject.authenticate_token(user.login_token)
 
       # it returns authentication success
       expect(response[:success]).to be_truthy
       expect(response[:message]).to eq('User authenticated successfully.')
+
+      # it should have cleared the token
+      user.reload
+      expect(user.login_token).to eq(nil)
     end
   end
 end

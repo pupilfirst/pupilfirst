@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :users, only: :sessions, controllers: { sessions: 'users/sessions' }
   devise_scope :user do
     post :user_send_login_email, controller: 'users/sessions', action: 'send_login_email'
-    get :user_login_with_token, controller: 'users/sessions', action: 'login_with_token'
+    get :authenticate, controller: 'users/sessions', action: 'authenticate'
   end
 
   authenticated :admin_user do

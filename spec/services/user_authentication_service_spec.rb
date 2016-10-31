@@ -25,7 +25,7 @@ describe UserAuthenticationService do
       # it successfully emails login link with token and referer
       open_email('valid_email@example.com')
       expect(current_email.subject).to eq('Log in to SV.CO')
-      expect(current_email.body).to include('http://localhost:3000/user_login_with_token?')
+      expect(current_email.body).to include('http://localhost:3000/authenticate?')
       expect(current_email.body).to include('referer=www.example.com')
       expect(current_email.body).to include("token=#{user.login_token}")
     end

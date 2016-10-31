@@ -7,11 +7,4 @@ class User < ApplicationRecord
   devise :database_authenticatable
 
   validates :email, presence: true, uniqueness: true, email: true
-
-  def send_login_email(referer)
-    regenerate_login_token unless Rails.env.development?
-
-    # TODO: Send email with template.
-    UserSessionMailer.send_login_token(self, referer).deliver_now
-  end
 end

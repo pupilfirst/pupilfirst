@@ -1,3 +1,13 @@
+### 31 October, 2016
+
+#### Bugfixes
+
+  - The styling of radio buttons in SixWays MOOC quizzes were broken by a recent change. They have been restored to their original state.
+
+#### UX and UI
+
+  - Minor changes to styling of library inner pages.
+
 ### 24 October, 2016
 
 #### Bugfixes

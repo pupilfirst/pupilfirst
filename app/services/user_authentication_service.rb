@@ -1,7 +1,5 @@
 # Service responsible for emailing user login_tokens and authenticating them.
 class UserAuthenticationService
-  attr_reader :email, :referer, :token, :user
-
   def initialize(email:, referer: nil, token: nil)
     @email = email
     @user = User.where(email: email).first
@@ -18,9 +16,9 @@ class UserAuthenticationService
   end
 
   def mail_login_token
-    return user_not_found_error unless user.present?
+    return user_not_found_error unless @user.present?
 
-    user.regenerate_login_token unless Rails.env.development?
+    @user.regenerate_login_token unless Rails.env.development?
 
     send_token
     mail_success_response
@@ -37,7 +35,7 @@ class UserAuthenticationService
   end
 
   def send_token
-    UserSessionMailer.send_login_token(user, referer).deliver_now
+    UserSessionMailer.send_login_token(@user, @referer).deliver_now
   end
 
   def mail_success_response
@@ -45,7 +43,7 @@ class UserAuthenticationService
   end
 
   def token_valid?
-    user && token == user.login_token
+    @user && @token == @user.login_token
   end
 
   def authentication_success_response

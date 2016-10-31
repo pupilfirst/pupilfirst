@@ -19,9 +19,10 @@
       | Hello there!
     .simple-form-container
       .row
-        = simple_form_for @user, url: user_send_login_email_path(referer: params[:referer]), html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
+        = simple_form_for @form, url: user_send_login_email_path(referer: params[:referer]), html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
 
           = f.input :email
+          = f.input :referer, as: :hidden
 
           .offset-sm-3
             .simple-form-submit

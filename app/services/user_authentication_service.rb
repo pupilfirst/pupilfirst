@@ -1,6 +1,6 @@
 # Service responsible for emailing user login_tokens and authenticating them.
 class UserAuthenticationService
-  def initialize(email:, referer: nil, token: nil)
+  def initialize(email: nil, referer: nil, token: nil)
     @email = email
     @user = User.where(email: email).first
     @referer = referer
@@ -11,21 +11,26 @@ class UserAuthenticationService
     new(email: email, referer: referer).mail_login_token
   end
 
-  def self.authenticate_token(email, token)
-    new(email: email, token: token).authenticate_token
+  def self.authenticate_token(token)
+    new(token: token).authenticate_token
   end
 
   def mail_login_token
     return user_not_found_error unless @user.present?
 
-    @user.regenerate_login_token if Rails.env.production?
+    @user.regenerate_login_token
 
     send_token
     mail_success_response
   end
 
   def authenticate_token
-    token_valid? ? authentication_success_response : authentication_failure_response
+    if token_valid?
+      clear_token
+      authentication_success_response
+    else
+      authentication_failure_response
+    end
   end
 
   private
@@ -43,11 +48,16 @@ class UserAuthenticationService
   end
 
   def token_valid?
-    @user && @token == @user.login_token
+    return false if @token.blank?
+    @user = User.find_by(login_token: @token)
+  end
+
+  def clear_token
+    @user.update!(login_token: nil)
   end
 
   def authentication_success_response
-    { success: true, message: 'User authenticated successfully.' }
+    { success: true, message: 'User authenticated successfully.', user_id: @user.id }
   end
 
   def authentication_failure_response

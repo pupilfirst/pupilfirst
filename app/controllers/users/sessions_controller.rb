@@ -1,45 +1,44 @@
 module Users
-  class SessionsController < Devise::SessionsController
-    layout 'application_v2', only: [:new]
+  class SessionsController < ApplicationController
+    layout 'application_v2'
 
     # GET /user/sign_in
     def new
       @skip_container = true
-      super
+      form_data = OpenStruct.new(referer: params[:referer])
+      @form = UserSignInForm.new(form_data)
     end
 
     # POST user/send_email - find or create user from email received
     def send_login_email
       @skip_container = true
-
-      @user = User.where(email: params[:user][:email]).first_or_initialize
-
-      if @user.save
-        @user.send_login_email(params[:referer])
-
-        render layout: 'application_v2'
+      @form = UserSignInForm.new(OpenStruct.new)
+      if @form.validate(sign_in_params)
+        @form.save
       else
-        # show errors
-        render 'new', layout: 'application_v2'
+        render 'new'
       end
     end
 
     # GET /authenticate - link to sign_in user with token in params
     def authenticate
-      if token_valid?
+      response = UserAuthenticationService.authenticate_token(params[:token])
+      if response[:success]
+        @user = User.find(response[:user_id])
         sign_in @user
+        flash[:success] = response[:message]
         redirect_to after_sign_in_path_for(@user)
       else
         # Show error and ask for re-authentication
-        flash[:error] = 'Something went wrong while signing you in! Please try again.'
+        flash[:error] = response[:message]
         redirect_to new_user_session_path(referer: params[:referer])
       end
     end
 
     private
 
-    def token_valid?
-      @user = User.find_by(login_token: params[:token])
+    def sign_in_params
+      params.require(:user_sign_in).permit(:email, :referer)
     end
   end
 end

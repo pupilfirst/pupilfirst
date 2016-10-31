@@ -7,9 +7,9 @@ title Quiz # #{module_number} | Start in College
     /   | Quiz For Module #{module_number}
 
     .simple-form-container.clearfix
-      = simple_form_for @form, url: six_ways_quiz_submission_path(module: @module.slug), html: { class: 'form-horizontal', autocomplete: 'off' }, wrapper: :horizontal_form, wrapper_mappings: { radio_buttons: :horizontal_radio_and_checkboxes } do |f|
+      = form_for @form, url: six_ways_quiz_submission_path(module: @module.slug) do |f|
         #quiz-form-data.hidden-xs-up data-question-count="#{f.object.questions.count}"
-        = f.simple_fields_for :questions do |s|
+        = f.fields_for :questions do |s|
           - quiz_question = s.object.model
           .question-container.hidden-xs-up id="question-container-#{s.index}" data-correct-answer-id="#{quiz_question.correct_answer.id}"
             .quiz-header
@@ -22,13 +22,13 @@ title Quiz # #{module_number} | Start in College
               .question-text.m-b-1
                 h3.font-semibold #{quiz_question.question}
               .answer-form.row data-question-index=s.index
-                = s.input :answer_id,
-                  label: false,
-                  collection: quiz_question.answer_options.order('value ASC').pluck(:id,:value),
-                  value_method: :first,
-                  label_method: :last,
-                  as: :radio_buttons,
-                  required: false
+                .col-sm-9
+                  - quiz_question.answer_options.order('value ASC').pluck(:id, :value).each do |answer_option|
+                    span.answer-option
+                      = label_tag(:"quiz_submission_questions_attributes_#{s.index}_answer_id_#{answer_option.first}", answer_option.last)
+                        = radio_button_tag :"quiz_submission_questions_attributes_#{s.index}_answer_id", answer_option.first, false, name: "quiz_submission[questions_attributes][#{s.index}][answer_id]", class: "radio_buttons"
+                        | #{answer_option.last}
+
               .submission-result
                 .no-selection-error.alert-box.hidden-xs-up.m-b-2 id="no-selection-error-#{s.index}"
                   | Please select an option before checking or skip the question

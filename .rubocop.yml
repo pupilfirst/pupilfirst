@@ -29,6 +29,12 @@ Lint/EndAlignment:
   AlignWith: variable
 Style/VariableNumber:
   Enabled: false
+Metrics/BlockLength:
+  Exclude:
+    - 'app/admin/**/*'
+    - 'spec/**/*_spec.rb'
+    - 'config/**/*'
+    - 'spec/factories/*'
 
 # Concessions (remove these if possible / appropriate).
 

@@ -1,7 +1,7 @@
 class SixWaysController < ApplicationController
   before_action :authorize_student, only: %w(completion_certificate)
   before_action :block_student, only: %w(student_details create_student)
-  before_action :gtu_variables, only: %w(gtu_index gtu_launch)
+  before_action :gtu_variables, only: %w(gtu_index)
 
   helper_method :quiz_score
 
@@ -22,10 +22,6 @@ class SixWaysController < ApplicationController
 
   # Landing page for GTU MOOC
   def gtu_index
-  end
-
-  # Temporary page for launch MOOC in GTU.
-  def gtu_launch
   end
 
   # GET /sixways/student_details
@@ -116,12 +112,6 @@ class SixWaysController < ApplicationController
   #
   # Display the completion certificate with provision to download as pdf
   def completion_certificate
-    respond_to do |format|
-      format.html
-      format.pdf do
-        render pdf: 'certificate', disposition: 'attachment', show_as_html: params.key?('debug')
-      end
-    end
   end
 
   private

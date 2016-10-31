@@ -1,4 +1,6 @@
 class ResourcesController < ApplicationController
+  layout 'application_v2'
+
   def index
     load_resources
     filter_resources_by_tags
@@ -8,7 +10,6 @@ class ResourcesController < ApplicationController
     load_resource_tags
 
     @skip_container = true
-    render layout: 'application_v2'
   end
 
   def show
@@ -21,11 +22,13 @@ class ResourcesController < ApplicationController
 
   rescue ActiveRecord::RecordNotFound
     alert_message = 'Could not find the requested resource! '
+
     alert_message += if current_founder.present?
       'You might not be authorized to view this resource.'
     else
       'Please try again after signing in as this could be a private resource.'
     end
+
     redirect_to resources_path, alert: alert_message
   end
 

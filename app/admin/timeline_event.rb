@@ -274,7 +274,7 @@ ActiveAdmin.register TimelineEvent do
           span do
             button_to 'Verify and Accept', verify_admin_timeline_event_path,
               form_class: 'inline-button',
-              data: { confirm:  verification_confirm }
+              data: { confirm: verification_confirm }
           end
         end
 

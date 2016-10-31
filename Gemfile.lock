@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/activeadmin/activeadmin.git
-  revision: f8926831429fe635d26ac8043ea5d676fb6ee637
+  revision: 3a16a1fc45961c0dfea3111a87995eae4382a59c
   specs:
     activeadmin (1.0.0.pre4)
       arbre (~> 1.0, >= 1.0.2)
@@ -56,12 +56,6 @@ GIT
       multi_json
 
 GIT
-  remote: https://github.com/mileszs/wicked_pdf.git
-  revision: d6c4e9fb258b26c37d08ece97b7c4a221c4b0c6f
-  specs:
-    wicked_pdf (1.1.0)
-
-GIT
   remote: https://github.com/mobmewireless/unobtrusive_flash.git
   revision: 24e7787d16db66f7956747444433a4e47278193a
   branch: master
@@ -71,7 +65,7 @@ GIT
 
 GIT
   remote: https://github.com/northworld/google_calendar.git
-  revision: 1c845134abf4b2e26aa64ac4b849961037f8eec5
+  revision: 1be620f57f22fc628b8615cd5d9d500988db9b3d
   specs:
     google_calendar (0.6.1)
       TimezoneParser (~> 0.2.0)
@@ -80,7 +74,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: d621a26e062444ac97d581294e18b0fc3f2006ea
+  revision: 9c96367a7022784530f243a4c7cd9a4c06fc2287
   branch: 5-0-stable
   specs:
     actioncable (5.0.0.1)
@@ -188,7 +182,7 @@ GEM
     arel (7.1.4)
     ast (2.3.0)
     attribute_normalizer (1.2.0)
-    autoprefixer-rails (6.5.0.1)
+    autoprefixer-rails (6.5.1.1)
       execjs
     axiom-types (0.1.1)
       descendants_tracker (~> 0.0.4)
@@ -214,7 +208,7 @@ GEM
       bundler (~> 1.2)
       thor (~> 0.18)
     cancancan (1.15.0)
-    capybara (2.9.2)
+    capybara (2.10.1)
       addressable
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
@@ -256,7 +250,7 @@ GEM
     connection_pool (2.2.0)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    css_parser (1.3.7)
+    css_parser (1.4.6)
       addressable
     database_cleaner (1.5.3)
     debug_inspector (0.0.2)
@@ -286,7 +280,7 @@ GEM
       representable (>= 2.4.0, <= 3.1.0)
       uber
     docile (1.1.5)
-    domain_name (0.5.20160826)
+    domain_name (0.5.20161021)
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.1.1)
     dotenv-rails (2.1.1)
@@ -298,7 +292,7 @@ GEM
       activemodel-serializers-xml (~> 1.0)
       activesupport (~> 5.0)
       request_store (~> 1.0)
-    dry-configurable (0.1.7)
+    dry-configurable (0.3.0)
       concurrent-ruby (~> 1.0)
     dry-container (0.5.0)
       concurrent-ruby (~> 1.0)
@@ -330,7 +324,7 @@ GEM
     errbase (0.0.3)
     erubis (2.7.0)
     eventmachine (1.2.0.1)
-    excon (0.53.0)
+    excon (0.54.0)
     execjs (2.7.0)
     factory_girl (4.7.0)
       activesupport (>= 3.0.0)
@@ -420,9 +414,9 @@ GEM
     fog-json (1.0.2)
       fog-core (~> 1.0)
       multi_json (~> 1.10)
-    fog-local (0.3.0)
+    fog-local (0.3.1)
       fog-core (~> 1.27)
-    fog-openstack (0.1.12)
+    fog-openstack (0.1.15)
       fog-core (>= 1.40)
       fog-json (>= 1.0)
       ipaddress (>= 0.8)
@@ -467,16 +461,16 @@ GEM
     fog-voxel (0.1.0)
       fog-core
       fog-xml
-    fog-vsphere (1.2.0)
+    fog-vsphere (1.5.0)
       fog-core
-      rbvmomi (~> 1.8.0)
+      rbvmomi (~> 1.9)
     fog-xenserver (0.2.3)
       fog-core
       fog-xml
     fog-xml (0.1.2)
       fog-core
       nokogiri (~> 1.5, >= 1.5.11)
-    font-awesome-rails (4.6.3.1)
+    font-awesome-rails (4.7.0.0)
       railties (>= 3.2, < 5.1)
     formatador (0.2.5)
     formtastic (3.1.4)
@@ -484,8 +478,8 @@ GEM
     formtastic_i18n (0.6.0)
     friendly_id (5.1.0)
       activerecord (>= 4.0.0)
-    fuubar (2.0.0)
-      rspec (~> 3.0)
+    fuubar (2.2.0)
+      rspec-core (~> 3.0)
       ruby-progressbar (~> 1.4)
     gaffe (1.2.0)
       rails (>= 4.0.0)
@@ -493,7 +487,7 @@ GEM
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     gravtastic (3.2.6)
-    groupdate (3.0.2)
+    groupdate (3.1.1)
       activesupport (>= 3)
     has_scope (0.7.0)
       actionpack (>= 4.1, < 5.1)
@@ -511,9 +505,9 @@ GEM
     inflecto (0.0.2)
     iniparse (1.4.2)
     insensitive_hash (0.3.3)
-    intercom (3.5.4)
+    intercom (3.5.9)
       json (~> 1.8)
-    intercom-rails (0.3.2)
+    intercom-rails (0.3.4)
       activesupport (> 3.0)
     ipaddress (0.8.3)
     jbuilder (2.6.0)
@@ -542,9 +536,10 @@ GEM
       actionmailer (>= 3.2)
       letter_opener (~> 1.0)
       railties (>= 3.2)
-    listen (3.0.8)
+    listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
+      ruby_dep (~> 1.2)
     lita-default-handlers (0.1.0)
     logstash-event (1.2.02)
     logstash-logger (0.19.2)
@@ -568,7 +563,7 @@ GEM
     nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
     orm_adapter (0.5.0)
-    overcommit (0.36.0)
+    overcommit (0.37.0)
       childprocess (~> 0.5.8)
       iniparse (~> 1.4)
     parser (2.3.1.4)
@@ -577,22 +572,22 @@ GEM
       rack
       rake (>= 0.8.1)
     pg (0.19.0)
-    phony (2.15.32)
-    phony_rails (0.14.2)
+    phony (2.15.33)
+    phony_rails (0.14.4)
       activesupport (>= 3.0)
-      phony (~> 2.12)
-    poltergeist (1.10.0)
+      phony (~> 2.15)
+    poltergeist (1.11.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
       websocket-driver (>= 0.2.0)
     polyamorous (1.3.1)
       activerecord (>= 3.0)
-    postmark (1.8.1)
+    postmark (1.9.1)
       json
       rake
-    postmark-rails (0.13.0)
+    postmark-rails (0.14.0)
       actionmailer (>= 3.0.0)
-      postmark (~> 1.8.0)
+      postmark (~> 1.9.0)
     powerpack (0.1.1)
     pry (0.10.4)
       coderay (~> 1.1.0)
@@ -630,7 +625,7 @@ GEM
     rails-assets-masonry (4.1.1)
       rails-assets-get-size (>= 2.0.2, < 3)
       rails-assets-outlayer (>= 2.1.0, < 3)
-    rails-assets-moment (2.15.1)
+    rails-assets-moment (2.15.2)
     rails-assets-outlayer (2.1.0)
       rails-assets-ev-emitter (>= 1.0.0, < 2)
       rails-assets-fizzy-ui-utils (>= 2.0.0, < 3)
@@ -664,22 +659,23 @@ GEM
       activesupport (>= 3.0)
       i18n
       polyamorous (~> 1.3)
-    rb-fsevent (0.9.7)
+    rb-fsevent (0.9.8)
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
     rb-readline (0.5.3)
-    rbvmomi (1.8.2)
-      builder
-      nokogiri (>= 1.4.1)
-      trollop
-    react-rails (1.8.2)
+    rbvmomi (1.9.4)
+      builder (~> 3.2)
+      json (>= 1.8)
+      nokogiri (~> 1.5)
+      trollop (~> 2.1)
+    react-rails (1.9.0)
       babel-transpiler (>= 0.7.0)
       coffee-script-source (~> 1.8)
       connection_pool
       execjs
       railties (>= 3.2)
       tilt
-    recaptcha (3.3.0)
+    recaptcha (3.4.0)
       json
     redis (3.3.1)
     redis-namespace (1.5.2)
@@ -703,16 +699,12 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
-    roadie (3.1.1)
-      css_parser (~> 1.3.4)
+    roadie (3.2.0)
+      css_parser (~> 1.4.5)
       nokogiri (>= 1.5.0, < 1.7.0)
     roadie-rails (1.1.1)
       railties (>= 3.0, < 5.1)
       roadie (~> 3.1)
-    rspec (3.5.0)
-      rspec-core (~> 3.5.0)
-      rspec-expectations (~> 3.5.0)
-      rspec-mocks (~> 3.5.0)
     rspec-core (3.5.4)
       rspec-support (~> 3.5.0)
     rspec-expectations (3.5.0)
@@ -730,13 +722,14 @@ GEM
       rspec-mocks (~> 3.5.0)
       rspec-support (~> 3.5.0)
     rspec-support (3.5.0)
-    rubocop (0.43.0)
+    rubocop (0.44.1)
       parser (>= 2.3.1.1, < 3.0)
       powerpack (~> 0.1)
       rainbow (>= 1.99.1, < 3.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.8.1)
+    ruby_dep (1.5.0)
     safe_yaml (1.0.4)
     safely_block (0.1.1)
       errbase
@@ -750,7 +743,7 @@ GEM
     seedbank (0.4.0)
     select2-rails (3.5.10)
       thor (~> 0.14)
-    sentry-raven (2.0.2)
+    sentry-raven (2.1.2)
       faraday (>= 0.7.6, < 0.10.x)
     signet (0.7.3)
       addressable (~> 2.3)
@@ -769,13 +762,14 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.0)
-    skylight (0.10.6)
+    skylight (1.0.0)
       activesupport (>= 3.0.0)
     slim (3.0.7)
       temple (~> 0.7.6)
       tilt (>= 1.3.3, < 2.1)
     slop (3.6.0)
-    spring (1.7.2)
+    spring (2.0.0)
+      activesupport (>= 4.2)
     sprockets (3.7.0)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -795,7 +789,7 @@ GEM
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uber (0.0.15)
-    uglifier (3.0.2)
+    uglifier (3.0.3)
       execjs (>= 0.3.0, < 3)
     unf (0.1.4)
       unf_ext
@@ -814,10 +808,11 @@ GEM
       equalizer (~> 0.0, >= 0.0.9)
     warden (1.2.6)
       rack (>= 1.0)
-    web-console (3.3.0)
-      activemodel (>= 4.2)
+    web-console (3.3.1)
+      actionview (>= 5.0)
+      activemodel (>= 5.0)
       debug_inspector
-      railties (>= 4.2)
+      railties (>= 5.0)
     webmock (2.1.0)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
@@ -825,10 +820,9 @@ GEM
     websocket-driver (0.6.4)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
-    will_paginate (3.1.3)
+    will_paginate (3.1.5)
     will_paginate-bootstrap4 (0.1.2)
       will_paginate (~> 3.0, >= 3.0.9)
-    wkhtmltopdf-heroku (2.12.3.0)
     xml-simple (1.1.5)
     xpath (2.0.0)
       nokogiri (~> 1.3)
@@ -944,9 +938,7 @@ DEPENDENCIES
   virtus
   web-console (~> 3.3.0)
   webmock
-  wicked_pdf!
   will_paginate-bootstrap4
-  wkhtmltopdf-heroku
 
 RUBY VERSION
    ruby 2.3.1p112

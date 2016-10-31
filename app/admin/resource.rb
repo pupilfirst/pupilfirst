@@ -3,6 +3,12 @@ ActiveAdmin.register Resource do
 
   permit_params :title, :description, :file, :thumbnail, :share_status, :batch_id, :startup_id, :tag_list
 
+  controller do
+    def find_resource
+      scoped_collection.friendly.find(params[:id])
+    end
+  end
+
   filter :startup,
     collection: Startup.batched.order(:product_name),
     label: 'Product',

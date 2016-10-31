@@ -1,0 +1,24 @@
+.batch-exclusive-badge {
+  border: 1px solid $alert-background;
+  border-radius: 1rem;
+  width: 8rem;
+  text-align: center;
+  background-color: $alert-background;
+  line-height: 100%;
+  vertical-align: middle;
+  padding: 0.2rem;
+  color: white;
+  font-weight: bold;
+}
+
+.resource-description-and-links {
+  max-width: 870px;
+
+  @include media-breakpoint-down(lg) {
+    max-width: 670px;
+  }
+
+  @include media-breakpoint-down(md) {
+    max-width: 450px;
+  }
+}

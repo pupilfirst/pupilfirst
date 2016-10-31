@@ -7,7 +7,11 @@ class ErrorsController < ApplicationController
   # Only respond with HTML or JSON, regardless of what is asked for.
   before_action :override_format
 
+  layout 'application_v2'
+
   def show
+    @header_non_floating = true
+
     respond_to do |format|
       format.html { render "errors/#{@rescue_response}", status: @status_code }
       format.json { render json: { error: @status_code }, status: @status_code }

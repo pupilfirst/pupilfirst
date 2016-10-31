@@ -6,10 +6,12 @@
           = image_tag 'six_ways/gtu-start/Launch-rocket.png'
       .col-md-6
         .gtu-sv-logos.m-b-2
-          = image_tag 'six_ways/gtu-launch/SV-GTU-Logo-combo.png', class: 'img-fluid'
+          = image_tag 'six_ways/gtu-start/SV-GTU-Logo-combo.png', class: 'img-fluid'
 
-        h5.font-semibold
-          | Welcome to India&#39;s largest Student Startup literacy program.
+        h3.font-semibold
+          | Welcome to India&#39;s largest
+          br
+          | Student Startup literacy program
         h1.m-b-2
           span.hero-text
             | Six Ways
@@ -17,4 +19,4 @@
           ' An Introduction to
           br
           | Student Startups
-        = link_to 'Start Course', first_chapter_path, class: 'btn btn-primary btn-lg text-uppercase start-course-btn'
+        = link_to 'Start Course', six_ways_student_details_path, class: 'btn btn-primary btn-lg text-uppercase start-course-btn'

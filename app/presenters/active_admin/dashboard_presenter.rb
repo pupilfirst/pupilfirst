@@ -18,5 +18,14 @@ module ActiveAdmin
         end
       end
     end
+
+    def mooc_stats
+      @mooc_stats ||= {
+        students_total: MoocStudent.count,
+        students_started: MoocStudent.where.not(completed_chapters: nil).count,
+        quizzes_total: QuizAttempt.count,
+        quizzes_distinct: QuizAttempt.distinct.count(:mooc_student_id)
+      }
+    end
   end
 end

@@ -4,6 +4,12 @@ ActiveAdmin.register Faculty do
   permit_params :name, :email, :title, :key_skills, :linkedin_url, :category, :image, :sort_index, :self_service,
     :current_commitment, :founder_id, :inactive, :about, :commitment, :compensation, :slack_username
 
+  controller do
+    def find_resource
+      scoped_collection.friendly.find(params[:id])
+    end
+  end
+
   config.sort_order = 'sort_index_asc'
 
   filter :category, as: :select, collection: Faculty.valid_categories

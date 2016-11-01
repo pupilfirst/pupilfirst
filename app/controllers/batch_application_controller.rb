@@ -238,7 +238,7 @@ class BatchApplicationController < ApplicationController
       end
 
       if Rails.env.development?
-        render text: "Redirect to #{payment.long_url}"
+        render plain: "Redirect to #{payment.long_url}"
       else
         redirect_to payment.long_url
       end

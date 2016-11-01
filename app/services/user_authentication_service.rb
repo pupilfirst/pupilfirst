@@ -1,14 +1,15 @@
 # Service responsible for emailing user login_tokens and authenticating them.
 class UserAuthenticationService
-  def initialize(email: nil, referer: nil, token: nil)
+  def initialize(email: nil, referer: nil, token: nil, shared_device: true)
     @email = email
     @user = User.where(email: email).first
     @referer = referer
     @token = token
+    @shared_device = shared_device
   end
 
-  def self.mail_login_token(email, referer)
-    new(email: email, referer: referer).mail_login_token
+  def self.mail_login_token(email, referer, shared_device)
+    new(email: email, referer: referer, shared_device: shared_device).mail_login_token
   end
 
   def self.authenticate_token(token)
@@ -40,7 +41,7 @@ class UserAuthenticationService
   end
 
   def send_token
-    UserSessionMailer.send_login_token(@user, @referer).deliver_now
+    UserSessionMailer.send_login_token(@user, @referer, @shared_device).deliver_now
   end
 
   def mail_success_response

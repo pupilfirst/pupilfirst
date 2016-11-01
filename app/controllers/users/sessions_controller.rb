@@ -38,7 +38,7 @@ module Users
     private
 
     def sign_in_params
-      params.require(:user_sign_in).permit(:email, :referer)
+      params.require(:user_sign_in).permit(:email, :referer, :shared_device)
     end
   end
 end

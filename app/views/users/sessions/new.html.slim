@@ -22,7 +22,10 @@
         = simple_form_for @form, url: user_send_login_email_path(referer: params[:referer]), html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
 
           = f.input :email
-          = f.input :referer, as: :hidden
+          = f.input :referer, as: :hidden, wrapper_html: { class: 'm-b-0' }
+          = f.input :shared_device, as: :boolean,
+            label: '&nbsp;I am on a shared device. Log me out when I leave.'.html_safe,
+            wrapper_html: { class: 'p-l-1 m-b-1' }
 
           .offset-sm-3
             .simple-form-submit

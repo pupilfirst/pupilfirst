@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 feature 'Talent Form' do
-  include_context 'allow_temporary_net_connect'
-
   context 'User visits talent page' do
     before :each do
       visit talent_path

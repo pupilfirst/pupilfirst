@@ -15,17 +15,9 @@ feature 'Incubation' do
   let!(:read_playbook) { create :target_template, populate_on_start: true, assigner: faculty, title: 'Read Playbook', role: Target::ROLE_FOUNDER }
   let!(:pick_product_idea) { create :target_template, populate_on_start: true, assigner: faculty, title: 'Pick Product Idea', role: 'product' }
 
-  before :all do
-    WebMock.allow_net_connect!
-  end
-
   before :each do
     # Block all RestClient POST-s.
     allow(RestClient).to receive(:post)
-  end
-
-  after :all do
-    WebMock.disable_net_connect!
   end
 
   context 'when cofounder arrives at accept invitation path' do

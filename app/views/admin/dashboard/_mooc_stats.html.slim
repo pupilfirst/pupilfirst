@@ -1,0 +1,15 @@
+.dashboard-item
+  .heading SixWays MOOC
+
+  .content
+    h6 Students
+    p
+      ' Total: #{@presenter.mooc_stats[:students_total]}
+      br
+      ' Started MOOC: #{@presenter.mooc_stats[:students_started]}
+
+    h6 Quiz Attempts
+    p
+      ' Total: #{@presenter.mooc_stats[:quizzes_total]}
+      br
+      ' Distinct: #{@presenter.mooc_stats[:quizzes_distinct]}

@@ -12,25 +12,28 @@ class InstamojoController < ApplicationController
 
   # POST /instamojo/webhook
   def webhook
-    return unless authentic_request?
-    payment = Payment.find_by instamojo_payment_request_id: params[:payment_request_id]
+    if authentic_request?
+      payment = Payment.find_by instamojo_payment_request_id: params[:payment_request_id]
 
-    update_params = {
-      instamojo_payment_id: params[:payment_id],
-      instamojo_payment_status: params[:status],
-      fees: params[:fees],
-      webhook_received_at: Time.now
-    }
+      update_params = {
+        instamojo_payment_id: params[:payment_id],
+        instamojo_payment_status: params[:status],
+        fees: params[:fees],
+        webhook_received_at: Time.now
+      }
 
-    update_params[:instamojo_payment_request_status] = 'Completed' if params[:status] == 'Credit'
+      update_params[:instamojo_payment_request_status] = 'Completed' if params[:status] == 'Credit'
 
-    payment.update update_params
-    payment.perform_post_payment_tasks!
+      payment.update update_params
+      payment.perform_post_payment_tasks!
 
-    render nothing: true
+      head :ok
+    else
+      head :unauthorized
+    end
   end
 
-  protected
+  private
 
   def authentic_request?
     salt = Rails.application.secrets.instamojo_salt
@@ -38,9 +41,6 @@ class InstamojoController < ApplicationController
     digest = OpenSSL::Digest.new('sha1')
     computed_mac = OpenSSL::HMAC.hexdigest(digest, salt, data)
 
-    return true if params[:mac] == computed_mac
-
-    head :unauthorized
-    false
+    params[:mac] == computed_mac
   end
 end

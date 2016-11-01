@@ -48,16 +48,6 @@ feature 'Faculty Connect' do
     end
 
     context 'Founder is admin of startup' do
-      before :all do
-        # Let URL requests through to allow JS test to work.
-        WebMock.allow_net_connect!
-      end
-
-      after :all do
-        # Lock it down again.
-        WebMock.disable_net_connect!
-      end
-
       before :each do
         # Make our 'founder' the admin.
         startup.admin.update(startup_admin: false)

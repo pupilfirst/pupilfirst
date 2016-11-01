@@ -914,6 +914,7 @@ DEPENDENCIES
   reform
   reform-rails
   require_all
+  responders
   rest-client
   roadie-rails
   rspec-rails (~> 3.5.0)

@@ -1,6 +1,6 @@
 class ConnectRequestController < ApplicationController
   # Ask to authenticate if no token for join_session. Only faculty is given token.
-  before_filter :authenticate_and_return, only: :join_session, unless: proc { params[:token].present? }
+  before_action :authenticate_and_return, only: :join_session, unless: proc { params[:token].present? }
 
   # GET /connect_request/:id/feedback/from_team/:token
   def feedback_from_team

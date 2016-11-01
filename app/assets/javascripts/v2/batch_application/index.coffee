@@ -55,11 +55,16 @@ emailsShouldMatch = ->
     emailInput.blur ->
       validateEmailMatch() if emailConfirmationInput.val().length
 
-setupSelect2Inputs = ->
+getCollegeInputSelector = ->
   collegeInput = $('#batch_application_college_id')
 
   if collegeInput.length == 0
     collegeInput = $('#prospective_applicant_college_id')
+
+  collegeInput
+
+setupSelect2Inputs = ->
+  collegeInput = getCollegeInputSelector()
 
   if collegeInput.length
     collegeSearchUrl = collegeInput.data('searchUrl')
@@ -78,6 +83,13 @@ setupSelect2Inputs = ->
         results: (data, page) ->
           return { results: data }
         cache: true
+
+destroySelect2Inputs = ->
+  collegeInput = getCollegeInputSelector()
+
+  if collegeInput.length
+    collegeInput.select2('destroy')
+    collegeInput.val('')
 
 toggleReferenceTextField = ->
   if $('#batch_application_reference').val() == 'Other (Please Specify)'
@@ -178,7 +190,6 @@ setupOldApplicationCertificateDownloadButtons = ->
 $(document).on 'page:change', setupTogglingCollegeField
 $(document).on 'page:change', setupTogglingReferenceField
 $(document).on 'page:change', setupOldApplicationCertificateDownloadButtons
-$(document).on 'page:change', setupSelect2Inputs
 $(document).on 'page:change', emailsShouldMatch
 $(document).on 'page:change', setupStickyStartApplicationForm
 $(document).on 'page:change', scrolltoStartapplicationForm
@@ -186,3 +197,11 @@ $(document).on 'page:change', stickyApplyButtonOnApplyPage
 $(document).on 'page:change', helpIntercomPopup
 $(document).on 'page:change', readmoreFAQ
 $(document).on 'page:before-change', destroyWaypoints
+
+$(document).on 'turbolinks:load', ->
+  if $('.admission-process').length
+    setupSelect2Inputs()
+
+$(document).on 'turbolinks:before-cache', ->
+  if $('.admission-process').length
+    destroySelect2Inputs()

@@ -7,7 +7,10 @@
         a.table_tools_button href=admin_dashboard_path(batch: batch) #{batch.name} Batch
 
 .dashboard-container
-  == render 'intercom_support_stats' if multiple_batches_selected?
+  - if multiple_batches_selected?
+    == render 'intercom_support_stats'
+    == render 'mooc_stats'
+
   == render 'core_stats' unless multiple_batches_selected?
   == render 'visits'
   == render 'timeline_event_status'

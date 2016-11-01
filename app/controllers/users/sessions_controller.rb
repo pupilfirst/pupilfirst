@@ -1,5 +1,6 @@
 module Users
   class SessionsController < ApplicationController
+    include Devise::Controllers::Rememberable
     layout 'application_v2'
 
     # GET /user/sign_in
@@ -25,7 +26,10 @@ module Users
       response = UserAuthenticationService.authenticate_token(params[:token])
       if response[:success]
         @user = User.find(response[:user_id])
+
         sign_in @user
+        remember_me @user unless params[:shared_device] == 'true'
+
         flash[:success] = response[:message]
         redirect_to after_sign_in_path_for(@user)
       else

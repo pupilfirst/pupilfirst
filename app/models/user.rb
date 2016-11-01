@@ -4,7 +4,7 @@ class User < ApplicationRecord
   has_secure_token :login_token
 
   # database_authenticable is required by devise_for to generate the session routes
-  devise :database_authenticatable, :trackable
+  devise :database_authenticatable, :trackable, :rememberable
 
   validates :email, presence: true, uniqueness: true, email: true
 end

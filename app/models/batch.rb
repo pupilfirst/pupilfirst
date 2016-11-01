@@ -23,7 +23,7 @@ class Batch < ApplicationRecord
   }
 
   # Batches that opened for applications at some point of time in the past.
-  scope :opened_for_applications, -> { joins(:batch_stages).uniq }
+  scope :opened_for_applications, -> { joins(:batch_stages).distinct }
 
   validates :theme, presence: true
   validates :batch_number, presence: true, numericality: true, uniqueness: true

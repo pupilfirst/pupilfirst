@@ -32,19 +32,6 @@ describe Startup, broken: true do
     expect { startup.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
-  describe '.student_startups' do
-    it "should return only students startups" do
-      create :startup
-      startup_2 = create :startup
-      university = create :university
-
-      student_founder = create :founder, university: university, roll_number: rand(10_000).to_s
-      startup_2.founders << student_founder
-
-      expect(Startup.student_startups).to eq([startup_2])
-    end
-  end
-
   it "validates the size of pitch" do
     startup = build(:startup, pitch: Faker::Lorem.words(200).join(' '))
     expect { startup.save! }.to raise_error(ActiveRecord::RecordInvalid)

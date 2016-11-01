@@ -9,7 +9,7 @@ describe UserAuthenticationService do
 
   context 'invoked to mail login token' do
     scenario 'user with given email does not exist' do
-      response = subject.mail_login_token('random@example.com', 'some_referer')
+      response = subject.mail_login_token('random@example.com', 'some_referer', true)
 
       # it returns user not found error
       expect(response[:success]).to be_falsey
@@ -18,7 +18,7 @@ describe UserAuthenticationService do
 
     scenario 'user with given email exists' do
       old_token = user.login_token
-      response = subject.mail_login_token('valid_email@example.com', 'www.example.com')
+      response = subject.mail_login_token('valid_email@example.com', 'www.example.com', true)
 
       expect(response[:success]).to be_truthy
       expect(response[:message]).to eq('Login token successfully emailed.')

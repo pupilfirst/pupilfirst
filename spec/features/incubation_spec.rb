@@ -53,7 +53,7 @@ feature 'Incubation' do
       fill_in 'University Roll Number', with: '12345'
       fill_in 'Mobile Number', with: '9876543210'
 
-      click_on 'Sign Me Up!'
+      page.find('input[type=submit]').trigger('click')
 
       # founder should be at phone number verification page.
       expect(page).to have_text('Verification Code Sent!')

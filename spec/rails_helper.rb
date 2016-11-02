@@ -54,6 +54,14 @@ RSpec.configure do |config|
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
 
+  # Set type to :service for all service_spec-s.
+  config.define_derived_metadata(file_path: Regexp.new('/spec/services/')) do |metadata|
+    metadata[:type] = :service
+  end
+
+  # Include email helpers in service specs.
+  config.include Capybara::Email::DSL, type: :service
+
   # Include Factory Girl's helpers.
   config.include FactoryGirl::Syntax::Methods
 

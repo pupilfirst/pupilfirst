@@ -24,16 +24,12 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    if resource.is_a?(Founder)
-      referer = session.delete :referer
+    referer = params[:referer] || session[:referer]
 
-      if referer
-        referer
-      elsif current_founder.startup.present?
-        startup_url(current_founder.startup)
-      else
-        super
-      end
+    if referer
+      referer
+    elsif resource.is_a?(Founder) && current_founder.startup.present?
+      startup_url(current_founder.startup)
     else
       super
     end
@@ -44,10 +40,6 @@ class ApplicationController < ActionController::Base
     return unless current_founder
 
     @platform_feedback_for_form = PlatformFeedback.new(founder_id: current_founder.id)
-  end
-
-  def current_user
-    @current_user ||= User.find_by(login_token: read_cookie(:login_token))
   end
 
   def current_mooc_student

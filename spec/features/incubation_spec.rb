@@ -39,8 +39,8 @@ feature 'Incubation' do
       fill_in 'Last name', with: 'Nobody'
       fill_in 'New password', with: 'password'
       fill_in 'Confirm new password', with: 'password'
-      choose 'Male'
       fill_in 'Date of birth', with: '1990-01-01'
+      choose 'Male'
 
       # Roll number field should be hidden by default
       expect(page).to_not have_text('University Roll Number')

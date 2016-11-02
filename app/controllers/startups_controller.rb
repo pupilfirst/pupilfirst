@@ -173,7 +173,7 @@ class StartupsController < ApplicationController
 
   def load_filter_options
     @batches = Startup.available_batches.order('batch_number DESC')
-    @categories = StartupCategory.joins(:startups).where.not(startups: { batch_id: nil }).uniq
+    @categories = StartupCategory.joins(:startups).where.not(startups: { batch_id: nil }).distinct
     @stages = Startup.batched.pluck(:stage).uniq
   end
 

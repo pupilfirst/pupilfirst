@@ -183,4 +183,18 @@ ActiveAdmin.register ApplicationSubmission do
 
     f.actions
   end
+
+  csv do
+    column :team_lead_name do |submission|
+      submission.batch_application.team_lead.name
+    end
+
+    column :team_lead_email do |submission|
+      submission.batch_application.team_lead.email
+    end
+
+    column :team_lead_phone do |submission|
+      submission.batch_application.team_lead.phone
+    end
+  end
 end

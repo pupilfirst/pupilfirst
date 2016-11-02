@@ -17,12 +17,10 @@ feature 'Resources' do
   let!(:approved_resource_for_batch_2) { create :resource, share_status: Resource::SHARE_STATUS_APPROVED, batch: batch_2 }
 
   before :all do
-    WebMock.allow_net_connect!
     PublicSlackTalk.mock = true
   end
 
   after :all do
-    WebMock.disable_net_connect!
     PublicSlackTalk.mock = false
   end
 

@@ -5,7 +5,8 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 
-require 'webmock/rspec' # Disable all net connections
+require 'webmock/rspec'
+WebMock.disable_net_connect!(allow_localhost: true) # Disable all net connections except ones to localhost
 
 # Let's spec emails.
 require 'capybara/email/rspec'

@@ -210,8 +210,6 @@ feature 'Applying to SV.CO' do
     end
 
     scenario 'applicant adds cofounder details', js: true do
-      WebMock.allow_net_connect!
-
       visit apply_continue_path(token: batch_applicant.token, shared_device: false)
 
       # TODO: Replace this with click_link when PhantomJS moves to next version. It currently doesn't render flexbox correctly:
@@ -242,8 +240,6 @@ feature 'Applying to SV.CO' do
 
       # Ensure that the cofounders have been stored.
       expect(batch_application.cofounders.count).to eq(2)
-
-      WebMock.disable_net_connect!
     end
 
     context 'when applicant has submitted for stage 2' do

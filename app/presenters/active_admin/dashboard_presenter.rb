@@ -21,10 +21,12 @@ module ActiveAdmin
 
     def mooc_stats
       @mooc_stats ||= {
-        students_total: MoocStudent.count,
-        students_started: MoocStudent.where.not(completed_chapters: nil).count,
+        registrations_total: MoocStudent.count,
+        registrations_started: MoocStudent.where.not(completed_chapters: nil).count,
+        registrations_trend: MoocStudent.group_by_week(:created_at, last: 8).count.values.join(', '),
         quizzes_total: QuizAttempt.count,
-        quizzes_distinct: QuizAttempt.distinct.count(:mooc_student_id)
+        quizzes_distinct: QuizAttempt.distinct.count(:mooc_student_id),
+        quizzes_trend: QuizAttempt.group_by_week(:created_at, last: 8).count.values.join(', ')
       }
     end
   end

@@ -6,14 +6,6 @@ feature 'Feedback Popup' do
   let(:faculty) { create :faculty }
   let!(:feedback) { create :startup_feedback, faculty: faculty, startup: startup }
 
-  before :all do
-    WebMock.allow_net_connect!
-  end
-
-  after :all do
-    WebMock.disable_net_connect!
-  end
-
   context 'User visits a startup page with show_feedback in url params' do
     scenario 'User is not logged in' do
       visit startup_path(startup, show_feedback: feedback.id)

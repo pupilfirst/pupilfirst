@@ -9,14 +9,6 @@ feature 'Timeline Builder' do
 
   let(:event_description) { Faker::Lorem.words(10).join ' ' }
 
-  before :all do
-    WebMock.allow_net_connect!
-  end
-
-  after :all do
-    WebMock.disable_net_connect!
-  end
-
   before :each do
     # Add founder as founder of startup.
     startup.founders << founder

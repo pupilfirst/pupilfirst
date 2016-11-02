@@ -4,7 +4,7 @@ ActiveAdmin.register BatchApplicant do
   menu parent: 'Admissions', label: 'Applicants'
 
   permit_params :batch_application_id, :name, :gender, :email, :phone, :role, :team_lead, :tag_list, :reference,
-    :college_id, :notes,
+    :college_id, :notes, :fee_payment_method,
     college_attributes: [:name, :also_known_as, :city, :state_id, :established_year, :website, :contact_numbers, :replacement_university_id]
 
   scope :all, default: true
@@ -144,6 +144,7 @@ ActiveAdmin.register BatchApplicant do
       end
 
       row :reference
+      row :fee_payment_method
       row :notes
       row :last_sign_in_at
     end
@@ -201,6 +202,7 @@ ActiveAdmin.register BatchApplicant do
       f.input :role, as: :select, collection: Founder.valid_roles
       f.input :reference
       f.input :notes
+      f.input :fee_payment_method, as: :select, collection: BatchApplicant::FEE_PAYMENT_METHODS
     end
 
     if f.object.college.blank? || !f.object.college&.persisted?

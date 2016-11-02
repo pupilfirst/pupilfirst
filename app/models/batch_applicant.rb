@@ -1,6 +1,8 @@
 class BatchApplicant < ApplicationRecord
   include Taggable
 
+  FEE_PAYMENT_METHODS = ['Regular Fee', 'Postpaid Fee', 'Hardship Scholarship', 'Merit Scholarship'].freeze
+
   has_many :applications_as_team_lead, class_name: 'BatchApplication', foreign_key: 'team_lead_id', dependent: :restrict_with_error
   has_and_belongs_to_many :batch_applications
   has_many :payments
@@ -33,6 +35,7 @@ class BatchApplicant < ApplicationRecord
   # Basic validations.
   validates :email, presence: true, uniqueness: true, email: true
   validates :phone, mobile_number: true
+  validates_inclusion_of :fee_payment_method, in: FEE_PAYMENT_METHODS, allow_blank: true
 
   has_secure_token
 

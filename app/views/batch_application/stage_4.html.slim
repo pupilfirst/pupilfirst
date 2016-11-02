@@ -1,5 +1,4 @@
-/ Stage four is pre-selection. We have shortlisted teams for the batch, and need to ask them to do a few things. Not
-  entirely sure what we need them to do at this point.
+/ Stage four is pre-selection. We have shortlisted teams for the batch, and need to ask them to do a few things.
 
 - content_for :head do
   title SV.CO Apply Now
@@ -18,36 +17,33 @@
     == render 'application_progress'
   .container-md-center.content-box.application-stages-content.m-t-3.m-b-3.text-xs-center
     h4.m-b-1
-      ' Congratulations. Your team has got what it needs to build the next great startup!
+      ' Congratulations! You have been selected to Batch #{current_batch.batch_number} starting #{current_batch.start_date.strftime('%B %d, %Y')}.
 
     p.m-b-1
-      ' Congratulations on passing our interview process! You've got to complete a few formalities before we can get this next batch rolling.
+      ' This is the first step on an exciting journey that will help you build a startup & teach you amazing skills that will change your life.
+      .text-xs-left
+        h5 Next Steps:
 
-    code Include form to accept required documents.
+        ul
+          li All founders have to form a partnership.
+          li All founders have to fill in, sign & send across a legal agreement.
+          li All founders who have a Regular Fee status should pay the required Program Fee.
+          li All founders who have a Hardship Scholarship or Postpaid Fee option should submit additional documentation.
+          li The last date to complete all required documentation is #{(current_batch.start_date - 15.days).strftime('%B %d, %Y')}.
 
-/- content_for :head do
-/  title SV.CO Apply Now
-/  meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
-/
-/.container
-/  .apply-banner
-/    .row
-/      .col-md-4
-/        h1 Pre-selection!
-/        p.header-light
-/          ' Congratulations. Your team has got what it needs to build the next great startup!
-/.apply-container
-/  .container
-/    .row
-/      .col-md-7.col-md-push-5
-/        .batch-results
-/          .result-head
-/            h3 Congratulations on passing our interview process!
-/            p You've got to complete a few formalities before we can get this next batch rolling.
-/            code What exactly needs to be accepted at this point?
-/
-/            = simple_form_for :pre_selection do |f|
-/              = f.input :some_file, as: :file
-/              = f.submit 'Submit documents'
-/
-/      == render 'left_bar'
+        ' Write to #{mail_to 'help@sv.co'} for information on how to complete these steps.
+
+        h5.m-t-1 Fee Payment Status:
+
+        table.table.table-sm
+          thead.thead-default
+            tr
+              th Founder Name
+              th Fee Payment Method
+              th Confirmation Status
+          tbody
+            - current_application.batch_applicants.each do |applicant|
+              tr
+                td #{applicant.name}
+                td Undecided
+                td Undecided

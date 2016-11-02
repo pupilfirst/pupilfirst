@@ -3,8 +3,7 @@ ActiveAdmin.register BatchApplication do
 
   menu parent: 'Admissions', label: 'Applications', priority: 1
 
-  permit_params :batch_id, :application_stage_id, :university_id, :team_achievement, :team_lead_id, :college, :state,
-    :tag_list, :team_size
+  permit_params :batch_id, :application_stage_id, :university_id, :team_achievement, :team_lead_id, :college, :state, :tag_list, :team_size, batch_applicants_attributes: [:id, :fee_payment_method]
 
   batch_action :promote, confirm: 'Are you sure?' do |ids|
     promoted = 0
@@ -277,6 +276,16 @@ ActiveAdmin.register BatchApplication do
         end
       end
 
+      row :fee_payment_details do
+        ul do
+          batch_application.batch_applicants.each do |applicant|
+            li do
+              "#{applicant.name} - #{applicant.fee_payment_method.presence}"
+            end
+          end
+        end
+      end
+
       row :tags do |batch_application|
         linked_tags(batch_application.tags)
       end
@@ -348,6 +357,10 @@ ActiveAdmin.register BatchApplication do
       f.input :application_stage, collection: ApplicationStage.all.order(number: 'ASC')
       f.input :tag_list, input_html: { value: f.object.tag_list.join(','), 'data-application-tags' => BatchApplication.tag_counts_on(:tags).pluck(:name).to_json }
       f.input :team_achievement
+
+      f.has_many :batch_applicants, heading: 'Fee Payment Methods:', new_record: false do |g|
+        g.input :fee_payment_method, as: :select, collection: BatchApplicant::FEE_PAYMENT_METHODS, label: g.object.name
+      end
     end
 
     f.actions

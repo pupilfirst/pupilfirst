@@ -7,6 +7,7 @@ class BatchApplication < ApplicationRecord
   belongs_to :application_stage
   has_many :application_submissions, dependent: :destroy
   has_and_belongs_to_many :batch_applicants
+  accepts_nested_attributes_for :batch_applicants
   has_one :college, through: :team_lead
   belongs_to :team_lead, class_name: 'BatchApplicant'
   belongs_to :university

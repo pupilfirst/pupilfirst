@@ -7,6 +7,7 @@ after 'development:universities', 'development:states', 'development:users' do
 
   MoocStudent.create!(
     email: 'mooc_student@sv.co',
+    name: 'MOOC Student',
     university: University.first,
     college: Faker::Lorem.words(2).join(' '),
     semester: MoocStudent.valid_semester_values.sample,

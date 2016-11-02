@@ -244,6 +244,10 @@ ActiveAdmin.register BatchApplication do
       end.join(', ')
     end
 
+    column :cofounder_emails do |batch_application|
+      batch_application.cofounders.map(&:email).join(', ')
+    end
+
     column :created_at
   end
 

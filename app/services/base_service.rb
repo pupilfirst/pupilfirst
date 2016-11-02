@@ -5,6 +5,10 @@ class BaseService
     print "[#{current_timestamp}] #{message}\n"
   end
 
+  def url_helpers
+    Rails.application.routes.url_helpers
+  end
+
   private
 
   def current_timestamp

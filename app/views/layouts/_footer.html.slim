@@ -20,10 +20,13 @@ footer
                 = link_to 'Faculty', faculty_index_path
             .sitemap.pull-left
               div
-                - if current_founder
-                  = link_to 'Profile', founder_profile_path(slug: current_founder.slug)
+                - if current_user
+                  - if current_founder
+                    = link_to 'Profile', founder_profile_path(slug: current_founder.slug)
+                  - else
+                    = link_to 'Sign Out', destroy_user_session_path, method: :delete
                 - else
-                  = link_to 'Sign In', new_founder_session_path
+                  = link_to 'Sign In', new_user_session_path
               div
                 = link_to 'About', about_path
               div

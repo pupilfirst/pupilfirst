@@ -48,7 +48,7 @@ feature 'MoocStudent Sign In' do
 
       # user follows link in email and logs-in
       mooc_student.user.reload
-      visit authenticate_path(token: mooc_student.user.login_token, referer: six_ways_start_path)
+      visit user_token_path(token: mooc_student.user.login_token, referer: six_ways_start_path)
 
       # user must be logged-in and allowed to start course
       expect(page).to have_link('Start the Course')

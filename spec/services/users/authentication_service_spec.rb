@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe UserAuthenticationService do
+describe Users::AuthenticationService do
   subject { described_class }
 
   let!(:user) { create :user, email: 'valid_email@example.com' }
@@ -30,7 +30,7 @@ describe UserAuthenticationService do
 
         open_email('valid_email@example.com')
         expect(current_email.subject).to eq('Log in to SV.CO')
-        expect(current_email.body).to include('http://localhost:3000/authenticate?')
+        expect(current_email.body).to include('http://localhost:3000/users/token?')
         expect(current_email.body).to include('referer=www.example.com')
         expect(current_email.body).to include("token=#{user.login_token}")
       end

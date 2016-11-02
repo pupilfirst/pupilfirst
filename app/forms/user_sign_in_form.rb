@@ -11,7 +11,7 @@ class UserSignInForm < Reform::Form
   end
 
   def save
-    response = UserAuthenticationService.mail_login_token(email, referer, shared_device?)
+    response = Users::AuthenticationService.mail_login_token(email, referer, shared_device?)
     raise "Unexpected error while emailing token to #{email}" unless response[:success]
   end
 

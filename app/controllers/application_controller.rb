@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   after_action :prepare_unobtrusive_flash
 
   helper_method :current_mooc_student
+  helper_method :current_founder
 
   # When in production, respond to requests that ask for unhandled formats with 406.
   rescue_from ActionView::MissingTemplate do |exception|
@@ -26,12 +27,10 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource)
     referer = params[:referer] || session[:referer]
 
-    if referer
+    if referer.present?
       referer
-    elsif resource.is_a?(Founder) && current_founder.startup.present?
-      startup_url(current_founder.startup)
     else
-      super
+      Users::AfterSignInPathResolverService.new(resource).after_sign_in_path
     end
   end
 
@@ -44,6 +43,10 @@ class ApplicationController < ActionController::Base
 
   def current_mooc_student
     @current_mooc_student ||= MoocStudent.find_by(user: current_user) if current_user.present?
+  end
+
+  def current_founder
+    @current_founder ||= current_user&.founder
   end
 
   # Hack to allow Intercom to insert its script's hash into our CSP.

@@ -17,7 +17,7 @@
     == render 'application_progress'
   .container-md-center.content-box.application-stages-content.m-t-3.m-b-3.text-xs-center
     h4.m-b-1
-      ' Congratulations! You have been selected to Batch #{current_batch.batch_number} starting #{current_batch.start_date.strftime('%B %d, %Y')}.
+      ' Congratulations! You have been selected to Batch #{@batch_application.batch_number} starting #{@batch_application.batch_start_date}.
 
     p.m-b-1
       ' This is the first step on an exciting journey that will help you build a startup & teach you amazing skills that will change your life.
@@ -29,7 +29,7 @@
           li All founders have to fill in, sign & send across a legal agreement.
           li All founders who have a Regular Fee status should pay the required Program Fee.
           li All founders who have a Hardship Scholarship or Postpaid Fee option should submit additional documentation.
-          li The last date to complete all required documentation is #{(current_batch.start_date - 15.days).strftime('%B %d, %Y')}.
+          li The last date to complete all required documentation is #{@batch_application.document_submission_deadline}.
 
         ' Write to #{mail_to 'help@sv.co'} for information on how to complete these steps.
 
@@ -42,8 +42,8 @@
               th Fee Payment Method
               th Confirmation Status
           tbody
-            - current_application.batch_applicants.each do |applicant|
+            - @batch_application.fee_payment_table.each do |row|
               tr
-                td #{applicant.name}
-                td Undecided
-                td Undecided
+                td #{row[:name]}
+                td #{row[:method]}
+                td #{row[:confirmation]}

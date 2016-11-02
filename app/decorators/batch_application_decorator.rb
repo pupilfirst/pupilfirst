@@ -25,6 +25,28 @@ class BatchApplicationDecorator < Draper::Decorator
     @overall_percentile ||= grading_service.overall_percentile&.round(1)
   end
 
+  def batch_start_date
+    batch.start_date.strftime('%B %d, %Y')
+  end
+
+  def batch_number
+    batch.batch_number
+  end
+
+  def document_submission_deadline
+    (batch.start_date - 15.days).strftime('%B %d, %Y')
+  end
+
+  def fee_payment_table
+    batch_applicants.each_with_object([]) do |applicant, result|
+      result << {
+        name: applicant.name,
+        method: applicant.fee_payment_method.presence || 'Not Available',
+        confirmation: confirmation_status(applicant)
+      }
+    end
+  end
+
   private
 
   def grading_service
@@ -33,5 +55,16 @@ class BatchApplicationDecorator < Draper::Decorator
 
   def grade
     @grade ||= grading_service.grade
+  end
+
+  def confirmation_status(applicant)
+    case applicant.fee_payment_method
+      when 'Regular Fee', 'Merit Scholarship'
+        'Confirmed'
+      when 'Postpaid Fee', 'Hardship Scholarship'
+        'Valid on Submission of Documents'
+      else
+        'Not Available'
+    end
   end
 end

@@ -1,4 +1,4 @@
-.modal.action-form.fade.invest-hire-modal aria-hidden="true" aria-labelledby="Invest_Hire_Talents" role="dialog" tabindex="-1" data-show-on-load=(@show_form ? 'true' : nil)
+.modal.action-form.invest-hire-modal aria-hidden="true" aria-labelledby="Invest_Hire_Talents" role="dialog" tabindex="-1" data-show-on-load=(@show_form ? 'true' : nil) class="#{'fade' unless Rails.env.test?}"
   .modal-dialog.modal-lg
     .modal-content
       .modal-header.text-center

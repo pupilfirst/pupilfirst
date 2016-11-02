@@ -6,7 +6,6 @@ feature 'Talent Form' do
       visit talent_path
     end
 
-    # TODO: This test is unreliable, and fails at line specified below. #unreliable
     scenario 'User submits form for acquiring teams', js: true do
       # ensure user is on talent page without the talent form
       expect(page).to have_text('Discover Great Startups')
@@ -19,9 +18,8 @@ feature 'Talent Form' do
       fill_in 'Mobile number', with: '9876543210'
       fill_in 'Organization', with: 'Some Company Name'
       fill_in 'Website', with: 'www.example.com'
-      click_on 'Submit'
+      click_button 'Submit'
 
-      # TODO: This is a #unreliable check.
       expect(page).to have_content('An email with your query has been sent to help@sv.co.')
 
       open_email('help@sv.co')

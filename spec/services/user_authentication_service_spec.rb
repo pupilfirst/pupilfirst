@@ -3,8 +3,6 @@ require 'rails_helper'
 describe UserAuthenticationService do
   subject { described_class }
 
-  include Capybara::Email::DSL
-
   let!(:user) { create :user, email: 'valid_email@example.com' }
 
   describe '.mail_login_token' do

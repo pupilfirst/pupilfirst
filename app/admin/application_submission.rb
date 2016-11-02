@@ -3,7 +3,7 @@ ActiveAdmin.register ApplicationSubmission do
 
   menu parent: 'Admissions'
 
-  permit_params :application_stage_id, :batch_application_id, :score, :notes, :file,
+  permit_params :application_stage_id, :batch_application_id, :score, :notes, :file, :feedback_for_team,
     application_submission_urls_attributes: [:id, :name, :url, :score, :admin_user_id, :_destroy]
 
   filter :batch_application_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'Batch'
@@ -156,6 +156,8 @@ ActiveAdmin.register ApplicationSubmission do
         Kramdown::Document.new(notes).to_html.html_safe if notes.present?
       end
 
+      row :feedback_for_team
+
       row :created_at
       row :updated_at
     end
@@ -170,6 +172,7 @@ ActiveAdmin.register ApplicationSubmission do
       f.input :file
       f.input :score
       f.input :notes, placeholder: 'Use markdown to format.'
+      f.input :feedback_for_team
     end
 
     f.inputs 'Submitted URLs' do

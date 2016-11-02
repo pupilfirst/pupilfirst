@@ -47,6 +47,10 @@ class BatchApplicationDecorator < Draper::Decorator
     end
   end
 
+  def interview_feedback
+    application_submissions.where(application_stage: ApplicationStage.find_by(name: 'Interview')).last.feedback_for_team
+  end
+
   private
 
   def grading_service

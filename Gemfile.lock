@@ -495,6 +495,7 @@ GEM
     has_secure_token (1.0.0)
       activerecord (>= 3.0)
     hashdiff (0.3.0)
+    hashie (3.4.4)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     http_router (0.11.2)
@@ -557,11 +558,34 @@ GEM
     mini_portile2 (2.1.0)
     minitest (5.9.1)
     multi_json (1.12.1)
+    multi_xml (0.5.5)
     multipart-post (2.0.0)
     netrc (0.11.0)
     nio4r (1.2.1)
     nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
+    oauth2 (1.2.0)
+      faraday (>= 0.8, < 0.10)
+      jwt (~> 1.0)
+      multi_json (~> 1.3)
+      multi_xml (~> 0.5)
+      rack (>= 1.2, < 3)
+    omniauth (1.3.1)
+      hashie (>= 1.2, < 4)
+      rack (>= 1.0, < 3)
+    omniauth-facebook (4.0.0)
+      omniauth-oauth2 (~> 1.2)
+    omniauth-github (1.1.2)
+      omniauth (~> 1.0)
+      omniauth-oauth2 (~> 1.1)
+    omniauth-google-oauth2 (0.4.1)
+      jwt (~> 1.5.2)
+      multi_json (~> 1.3)
+      omniauth (>= 1.1.1)
+      omniauth-oauth2 (>= 1.3.1)
+    omniauth-oauth2 (1.3.1)
+      oauth2 (~> 1.0)
+      omniauth (~> 1.2)
     orm_adapter (0.5.0)
     overcommit (0.37.0)
       childprocess (~> 0.5.8)
@@ -882,6 +906,9 @@ DEPENDENCIES
   lita-slack!
   logstash-logger
   mini_magick
+  omniauth-facebook
+  omniauth-github
+  omniauth-google-oauth2
   overcommit
   passenger (>= 5.0.22)
   pg

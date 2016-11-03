@@ -9,6 +9,7 @@ ActiveAdmin.register User do
 
     column :email
     column :mooc_student
+    column :founder
 
     actions
   end
@@ -16,7 +17,15 @@ ActiveAdmin.register User do
   show do
     attributes_table do
       row :email
-      row :login_token
+      row :mooc_student
+      row :founder
+    end
+
+    panel 'Technical details' do
+      attributes_table_for user do
+        row :id
+        row :login_token
+      end
     end
   end
 end

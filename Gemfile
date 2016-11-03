@@ -96,6 +96,11 @@ gem 'draper', '~> 3.0.0.pre1' # Decorators/View-Models for Rails Applications # 
 gem 'skylight' # Skylight agent for Ruby https://www.skylight.io
 gem 'responders' # A set of Rails responders to dry up your application (respond_to / with)
 
+# Omniauth providers
+gem 'omniauth-google-oauth2' # Oauth2 strategy for Google
+gem 'omniauth-facebook' # Facebook OAuth2 Strategy for OmniAuth http://mkdynamic.github.com/omniauth-facebook
+gem 'omniauth-github' # GitHub strategy for OmniAuth
+
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify' # Superb notifications library. http://sciactive.github.io/pnotify/

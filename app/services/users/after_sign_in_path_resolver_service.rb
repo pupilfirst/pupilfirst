@@ -9,8 +9,8 @@ module Users
     end
 
     def after_sign_in_path
-      if @user.founder.present? && current_founder.startup.present?
-        url_helpers.startup_path(current_founder.startup)
+      if @user.founder.present? && @user.founder.startup.present?
+        url_helpers.startup_path(@user.founder.startup)
       elsif @user.mooc_student.present?
         url_helpers.six_ways_start_path
       else

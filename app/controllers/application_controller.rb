@@ -29,6 +29,8 @@ class ApplicationController < ActionController::Base
 
     if referer.present?
       referer
+    elsif resource.is_a?(AdminUser)
+      super
     else
       Users::AfterSignInPathResolverService.new(resource).after_sign_in_path
     end

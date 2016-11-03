@@ -19,6 +19,10 @@
       | Hello there!
     .simple-form-container
       .row
+        div = link_to('Google', user_google_oauth2_omniauth_authorize_path)
+        div = link_to('Facebook', user_facebook_omniauth_authorize_path)
+        div = link_to('Gituhb', user_github_omniauth_authorize_path)
+
         = simple_form_for @form, url: user_send_login_email_path(referer: params[:referer]), html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
 
           = f.input :email

@@ -2,35 +2,90 @@
   title SV.CO Login
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
 
+- content_for :head
+  title SV.CO Sign In
 
-.secondary-banner
-  .container
-    .application-stages-head.text-xs-center
-      h1
-        | Please supply your
-        span
-          | &nbsp;email address.
+.login-container.m-x-auto.m-t-3.m-b-3.clearfix
+  .col-md-6.login-notice.content-box.text-xs-center
+    .notice-section.with-border-btm
+      = image_tag 'founders/sessions/sv-spaceship.svg', class: 'img-fluid m-x-auto'
       h4
-        ' We'll email you a log-in link to establish your identity.
+        = link_to apply_path, class: "batch-link-head" do
+          ' Applications for
+          br
+          | <strong>Batch #3</strong> are open!
+          br
+          ' <strong>Click here</strong> to get started.
+    .notice-section
+      = image_tag 'founders/sessions/fly-a-kite.svg', class: 'img-fluid m-x-auto'
+      h4
+        =link_to six_ways_path, class: "startincollege-link-head" do
+          ' Looking for the
+          br
+          |	<strong>#StartInCollege Six Ways</strong> course?
+          br
+          ' <strong>Click here</strong> to get started.
 
-.container
-  .container-md-center.content-box.m-t-3.m-b-3
-    h5.form-section-title.text-uppercase.font-semibold.m-b-2
-      | Hello there!
-    .simple-form-container
-      .row
-        div = link_to('Google', user_google_oauth2_omniauth_authorize_path)
-        div = link_to('Facebook', user_facebook_omniauth_authorize_path)
-        div = link_to('Gituhb', user_github_omniauth_authorize_path)
+  .col-md-6.devise-user-form.content-box.devise-user-login
+    .sign-in-kid.m-x-auto.m-b-1
+      = image_tag 'founders/sessions/sign-in-kid.svg', class: 'img-fluid m-x-auto'
+    h3.text-xs-center.m-b-2 Sign in with your SV.CO ID!
 
-        = simple_form_for @form, url: user_send_login_email_path(referer: params[:referer]), html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
+    a.oauth-login.login-with-google href=user_google_oauth2_omniauth_authorize_path
+      i.fa.fa-google.oauth-icon
+      | Continue with Google
+    a.oauth-login.login-with-facebook href=user_facebook_omniauth_authorize_path
+      i.fa.fa-facebook.oauth-icon
+      | Continue with Facebook
+    a.oauth-login.login-with-github href=user_github_omniauth_authorize_path
+      i.fa.fa-github.oauth-icon
+      | Continue with Github
 
-          = f.input :email
-          = f.input :referer, as: :hidden, wrapper_html: { class: 'm-b-0' }
-          = f.input :shared_device, as: :boolean,
-            label: '&nbsp;I am on a shared device. Log me out when I leave.'.html_safe,
-            wrapper_html: { class: 'p-l-1 m-b-1' }
+    = form_for @form, url: user_send_login_email_path(referer: params[:referer]) do |f|
+      .wrapped-input
+        = image_tag 'founders/sessions/email.svg'
+        = f.text_field :email, required: true, placeholder: 'SV.CO ID (email)'
 
-          .offset-sm-3
-            .simple-form-submit
-              = f.submit 'Send Login Email', class: 'btn btn-primary btn-md text-uppercase'
+      .remember-forgot.clearfix.m-t-1.m-b-2
+        .login-option.col-md-6
+          = f.check_box :shared_device, class: 'css-checkbox'
+          = f.label :shared_device, 'Shared Device?', class: 'css-label'
+
+      .text-xs-center
+        = f.submit 'Sign in', class: 'btn btn-primary btn-md text-uppercase sign-in-btn'
+
+    /.footer.text-xs-center.m-t-2
+      /= render 'founders/shared/links'
+/
+/
+/.secondary-banner
+/  .container
+/    .application-stages-head.text-xs-center
+/      h1
+/        | Please supply your
+/        span
+/          | &nbsp;email address.
+/      h4
+/        ' We'll email you a log-in link to establish your identity.
+/
+/.container
+/  .container-md-center.content-box.m-t-3.m-b-3
+/    h5.form-section-title.text-uppercase.font-semibold.m-b-2
+/      | Hello there!
+/    .simple-form-container
+/      .row
+/        div = link_to('Google', user_google_oauth2_omniauth_authorize_path)
+/        div = link_to('Facebook', user_facebook_omniauth_authorize_path)
+/        div = link_to('Gituhb', user_github_omniauth_authorize_path)
+/
+/        = simple_form_for @form, url: user_send_login_email_path(referer: params[:referer]), html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
+/
+/          = f.input :email
+/          = f.input :referer, as: :hidden, wrapper_html: { class: 'm-b-0' }
+/          = f.input :shared_device, as: :boolean,
+/            label: '&nbsp;I am on a shared device. Log me out when I leave.'.html_safe,
+/            wrapper_html: { class: 'p-l-1 m-b-1' }
+/
+/          .offset-sm-3
+/            .simple-form-submit
+/              = f.submit 'Send Login Email', class: 'btn btn-primary btn-md text-uppercase'

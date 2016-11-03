@@ -1,0 +1,48 @@
+@import "variables";
+
+$facebook-color: #3b5998;
+$github-color: #333;
+$google-color: #dd4b39;
+
+.oauth-login {
+  width: 100%;
+  font-size: 110%;
+  padding: 0.8rem;
+  border: 1px solid $grey-border;
+  margin-bottom: 2rem;
+  display: block;
+}
+
+.oauth-icon {
+  padding-right: 0.8rem;
+}
+
+.login-with-facebook {
+  background-color: $facebook-color;
+  border: 1px solid $facebook-color;
+  color: white;
+
+  &:hover {
+    color: white;
+    background-color: darken($facebook-color, 10%);
+  }
+}
+
+.login-with-github {
+  background-color: $github-color;
+  border: 1px solid $github-color;
+  color: white;
+
+  &:hover {
+    color: white;
+    background-color: darken($github-color, 10%);
+  }
+}
+
+.login-with-google {
+  color: $dark-grey-text;
+
+  &:hover {
+    color: $google-color;
+  }
+}

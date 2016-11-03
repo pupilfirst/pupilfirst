@@ -22,6 +22,7 @@ ActiveAdmin.register BatchApplicant do
     collection: -> { BatchApplicant.tag_counts_on(:tags).pluck(:name).sort }
 
   filter :batch_applications_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'With applications in batch'
+  filter :fee_payment_method, as: :select, collection: -> { BatchApplicant::FEE_PAYMENT_METHODS }
   filter :phone
   filter :reference_eq, as: :select, collection: proc { BatchApplicant.reference_sources[0..-2] }, label: 'Reference (Selected)'
   filter :reference, label: 'Reference (Free-form)'

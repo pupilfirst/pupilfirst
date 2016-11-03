@@ -13,6 +13,8 @@ module Users
         url_helpers.startup_path(current_founder.startup)
       elsif @user.mooc_student.present?
         url_helpers.six_ways_start_path
+      else
+        url_helpers.root_path
       end
     end
   end

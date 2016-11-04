@@ -293,6 +293,7 @@ class BatchApplicationController < ApplicationController
 
   def stage_4
     @batch_application = current_application.decorate
+    @form = StageFourFounderDetailsForm.new(current_application)
   end
 
   def stage_4_submit

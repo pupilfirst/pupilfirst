@@ -47,3 +47,21 @@
                 td #{row[:name]}
                 td #{row[:method]}
                 td #{row[:confirmation]}
+
+        .founder-details-form
+          = simple_form_for(@form, url: '#', method: :post, html: { class: 'form-horizontal' }, wrapper: :horizontal_form) do |f|
+
+            .founders-list
+              = f.fields_for :batch_applicants do |c|
+                = c.input :name, input_html: { maxlength: 250 }
+                = c.input :role, as: :select, collection: Founder.valid_roles
+                = c.input :born_on, as: :string, required: true, label: 'Date of birth', placeholder: 'YYYY-MM-DD', input_html: { class: 'date-picker', data: { format: 'Y-m-d' } }
+                = c.input :guardian_name, label: 'Name of Guardian'
+                = c.input :guardian_relation, label: 'Relation with Guardian'
+                = c.input :current_address
+                = c.input :permanent_address
+                = c.input :phone
+                = c.input :id_proof_number, label: 'ID Proof Number'
+
+              .pull-sm-right.m-b-1
+                = f.submit 'Generate Agreements', class: 'btn btn-success text-uppercase' do

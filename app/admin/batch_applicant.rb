@@ -3,8 +3,8 @@ ActiveAdmin.register BatchApplicant do
 
   menu parent: 'Admissions', label: 'Applicants'
 
-  permit_params :batch_application_id, :name, :gender, :email, :phone, :role, :team_lead, :tag_list, :reference,
-    :college_id, :notes, :fee_payment_method,
+  permit_params :name, :gender, :email, :phone, :role, :team_lead, :tag_list, :reference,
+    :college_id, :notes, :fee_payment_method, { batch_application_ids: [] },
     college_attributes: [:name, :also_known_as, :city, :state_id, :established_year, :website, :contact_numbers, :replacement_university_id]
 
   scope :all, default: true

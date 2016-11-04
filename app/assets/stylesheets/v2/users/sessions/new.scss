@@ -8,9 +8,11 @@ $google-color: #dd4b39;
   width: 100%;
   font-size: 110%;
   padding: 0.8rem;
+  text-align: center;
   border: 1px solid $grey-border;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   display: block;
+  border-radius: 3rem;
 }
 
 .oauth-icon {

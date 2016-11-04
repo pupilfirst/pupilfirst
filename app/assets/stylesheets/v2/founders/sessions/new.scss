@@ -1,6 +1,6 @@
 .login-container {
-  max-width: 55rem;
-  display: flex;
+  //max-width: 55rem;
+  //display: flex;
 
   @include media-breakpoint-down(sm) {
     display: block;
@@ -9,7 +9,6 @@
 .login-notice {
   background-color: white;
   padding: 30px;
-  margin: 0 15px;
   position: relative;
 
   img {

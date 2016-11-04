@@ -5,54 +5,59 @@
 - content_for :head
   title SV.CO Sign In
 
-.login-container.m-x-auto.m-t-3.m-b-3.clearfix
-  .col-md-6.login-notice.content-box.text-xs-center
-    .notice-section.with-border-btm
-      = image_tag 'founders/sessions/sv-spaceship.svg', class: 'img-fluid m-x-auto'
-      h4
-        = link_to apply_path, class: "batch-link-head" do
-          ' Applications for
-          br
-          | <strong>Batch #3</strong> are open!
-          br
-          ' <strong>Click here</strong> to get started.
-    .notice-section
-      = image_tag 'founders/sessions/fly-a-kite.svg', class: 'img-fluid m-x-auto'
-      h4
-        =link_to six_ways_path, class: "startincollege-link-head" do
-          ' Looking for the
-          br
-          |	<strong>#StartInCollege Six Ways</strong> course?
-          br
-          ' <strong>Click here</strong> to get started.
+.container
+  .row
+    .col-xl-10.offset-xl-1.col-lg-12
+      .login-container.m-x-auto.m-t-3.m-b-3.clearfix
+        .row
+          .col-md-6.push-md-6
+            .devise-user-form.content-box.devise-user-login
+              .sign-in-kid.m-x-auto.m-b-1
+                = image_tag 'founders/sessions/sign-in-kid.svg', class: 'img-fluid m-x-auto'
+              h3.text-xs-center.m-b-2 Sign in with your SV.CO ID!
 
-  .col-md-6.devise-user-form.content-box.devise-user-login
-    .sign-in-kid.m-x-auto.m-b-1
-      = image_tag 'founders/sessions/sign-in-kid.svg', class: 'img-fluid m-x-auto'
-    h3.text-xs-center.m-b-2 Sign in with your SV.CO ID!
+              a.oauth-login.login-with-google href=user_google_oauth2_omniauth_authorize_path
+                i.fa.fa-google.oauth-icon
+                | Continue with Google
+              a.oauth-login.login-with-facebook href=user_facebook_omniauth_authorize_path
+                i.fa.fa-facebook.oauth-icon
+                | Continue with Facebook
+              a.oauth-login.login-with-github href=user_github_omniauth_authorize_path
+                i.fa.fa-github.oauth-icon
+                | Continue with Github
 
-    a.oauth-login.login-with-google href=user_google_oauth2_omniauth_authorize_path
-      i.fa.fa-google.oauth-icon
-      | Continue with Google
-    a.oauth-login.login-with-facebook href=user_facebook_omniauth_authorize_path
-      i.fa.fa-facebook.oauth-icon
-      | Continue with Facebook
-    a.oauth-login.login-with-github href=user_github_omniauth_authorize_path
-      i.fa.fa-github.oauth-icon
-      | Continue with Github
+              = form_for @form, url: user_send_login_email_path(referer: params[:referer]) do |f|
+                .wrapped-input
+                  = image_tag 'founders/sessions/email.svg'
+                  = f.text_field :email, required: true, placeholder: 'SV.CO ID (email)'
 
-    = form_for @form, url: user_send_login_email_path(referer: params[:referer]) do |f|
-      .wrapped-input
-        = image_tag 'founders/sessions/email.svg'
-        = f.text_field :email, required: true, placeholder: 'SV.CO ID (email)'
+                .remember-forgot.clearfix.m-t-1.m-b-2
+                  .login-option.col-md-6
+                    = f.check_box :shared_device, class: 'css-checkbox'
+                    = f.label :shared_device, 'Are you using a shared device?', class: 'css-label'
 
-      .remember-forgot.clearfix.m-t-1.m-b-2
-        .login-option.col-md-6
-          = f.check_box :shared_device, class: 'css-checkbox'
-          = f.label :shared_device, 'Shared Device?', class: 'css-label'
-
-      .text-xs-center
-        = f.submit 'Sign in', class: 'btn btn-primary btn-md text-uppercase sign-in-btn'
+                .text-xs-center
+                  = f.submit 'Sign in', class: 'btn btn-primary btn-md text-uppercase sign-in-btn'
+          .col-md-6.pull-md-6
+            .login-notice.content-box.text-xs-center
+              .notice-section.with-border-btm
+                = image_tag 'founders/sessions/sv-spaceship.svg', class: 'img-fluid m-x-auto'
+                h4
+                  = link_to apply_path, class: "batch-link-head" do
+                    ' Applications for
+                    br
+                    | <strong>Batch #3</strong> are open!
+                    br
+                    ' <strong>Click here</strong> to get started.
+              .notice-section
+                = image_tag 'founders/sessions/fly-a-kite.svg', class: 'img-fluid m-x-auto'
+                h4
+                  =link_to six_ways_path, class: "startincollege-link-head" do
+                    ' Looking for the
+                    br
+                    |	<strong>#StartInCollege Six Ways</strong> course?
+                    br
+                    ' <strong>Click here</strong> to get started.
 
     /.footer.text-xs-center.m-t-2
       /= render 'founders/shared/links'

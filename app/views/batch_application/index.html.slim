@@ -306,7 +306,46 @@
               ' We are here to <strong>help you</strong>
             p
               ' Please email your doubts or questions to <strong>help@sv.co</strong>
+
         .fees-section#fees
+          #microsoft-student-partners.panel-group
+            .card
+              h4
+                a.card-block.accordion-toggle.collapsed data-parent="#microsoft-student-partners" data-toggle="collapse" href="#msp-info"
+                  | For Microsoft Student Partners
+              #msp-info.card-text.collapse
+                p.m-b-1
+                  ' We've partnered with Microsoft to help Microsoft Student Partners build startups while in
+                  ' college. If you are a Microsoft Student Partner, then form a team of 2 to 10 students. The
+                  ' team needs to have at least one Microsoft Student Partner.
+
+                h3 Key Benefits for Microsoft Student Partner Teams
+
+                ul
+                  li
+                    ' For Microsoft Student Partners, the team Application Fee of &#8377;3000 will be waived off.
+                    ' The Microsoft Student Partner has to be the team lead and apply online using his Microsoft Student
+                    ' Partner email address using the application form on this page. Send a mail from the same address
+                    ' to #{mail_to 'help@sv.co'} with the subject:
+                    ' <strong>Microsoft Student Partner Application for SV.CO</strong>.
+                    ' We will respond within 48 hours after promoting the application to the next stage: Coding
+                    ' &amp; Video Challenge, which will skip the payment procedure. Please do not make the payment for
+                    | the application.
+                  li
+                    ' Microsoft Student Partners can refer the programme to other Microsoft Student
+                    ' Partners. If both the teams get selected, we will give 5% scholarship on the programme fee.
+                  li Teams which get selected to SV.CO Programme get access to Microsoft Bizspark.
+
+                h3 Upon Graduation
+
+                ul
+                  li Teams which get selected to SV.CO will be applicants to the Imagine Cup programme.
+                  li Teams at graduation will be referred to Microsoft India Accelerator programme.
+
+                p
+                  ' Selection for graduation perks will be based on Microsoft's internal criteria. Our teams become
+                  | qualified leads for Microsoft's larger ecosystem.
+
           h2
             ' <strong>Fees</strong>
           #fee-accordion.panel-group

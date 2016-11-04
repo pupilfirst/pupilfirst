@@ -192,7 +192,7 @@ ActiveAdmin.register BatchApplicant do
     f.semantic_errors(*f.object.errors.keys)
 
     f.inputs do
-      f.input :batch_applications
+      f.input :batch_applications, collection: BatchApplication.all.includes(:team_lead, :batch)
       f.input :name
       f.input :email
       f.input :tag_list, input_html: { value: f.object.tag_list.join(','), 'data-applicant-tags' => BatchApplicant.tag_counts_on(:tags).pluck(:name).to_json }

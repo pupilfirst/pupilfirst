@@ -11,9 +11,9 @@
             .content-box.user-login.m-b-1
               .sign-in-kid.m-x-auto.m-b-1
                 = image_tag 'founders/sessions/sign-in-kid.svg', class: 'img-fluid m-x-auto'
-              h3.text-xs-center.m-b-2 Sign in with your SV.CO ID!
-
               #sign-in-with-federated class=hidden_sign_in_class('federated')
+                h3.text-xs-center.m-b-2 Sign in to SV.CO
+
                 a.oauth-login.login-with-google href=user_google_oauth2_omniauth_authorize_path
                   i.fa.fa-google.oauth-icon
                   | Continue with Google
@@ -25,6 +25,8 @@
                   | Continue with Github
 
               #sign-in-with-email class=hidden_sign_in_class('email')
+                h3.text-xs-center.m-b-2 Sign in with your SV.CO ID
+
                 = form_for @form, url: user_send_login_email_path(referer: params[:referer]) do |f|
                   = f.hidden_field :referer
 
@@ -61,7 +63,7 @@
               .notice-section
                 = image_tag 'founders/sessions/fly-a-kite.svg', class: 'img-fluid m-x-auto'
                 h4
-                  =link_to six_ways_path, class: "startincollege-link-head" do
+                  = link_to six_ways_path, class: "startincollege-link-head" do
                     ' Looking for the
                     br
                     |	<strong>#StartInCollege Six Ways</strong> course?

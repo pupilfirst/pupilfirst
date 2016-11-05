@@ -5,11 +5,17 @@ module Users
     # GET /users/auth/:provider/callback
     def oauth_callback
       raise_not_found if auth_hash.blank?
-      @user = Users::AuthenticationService.user_from_oauth(auth_hash)
-      sign_in @user
-      remember_me @user
-      console
-      redirect_to after_sign_in_path_for(@user)
+      email = auth_hash.dig(:info, :email)
+      user = User.find_by(email: email)
+
+      if user.present?
+        sign_in user
+        remember_me user
+        redirect_to after_sign_in_path_for(user)
+      else
+        flash[:notice] = "Your email address: #{email} is not registered at SV.CO"
+        redirect_to new_user_session_path
+      end
     end
 
     alias google_oauth2 oauth_callback

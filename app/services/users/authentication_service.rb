@@ -17,12 +17,6 @@ module Users
       new(token: token).authenticate_token
     end
 
-    def self.user_from_oauth(auth_hash)
-      email = auth_hash.dig(:info, :email)
-      raise "Email missing in auth_hash: #{auth_hash.inspect}" if email.blank?
-      User.where(email: email).first_or_create!
-    end
-
     def mail_login_token
       return user_not_found_error unless @user.present?
 

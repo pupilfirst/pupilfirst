@@ -70,29 +70,4 @@ describe Users::AuthenticationService do
       end
     end
   end
-
-  describe '.user_from_oauth' do
-    context "when supplied with an existing user's email" do
-      it 'returns user' do
-        returned_user = subject.user_from_oauth(info: { email: user.email })
-        expect(returned_user).to eq(user)
-      end
-    end
-
-    context 'when supplied with a new email address' do
-      it 'creates new user' do
-        expect do
-          subject.user_from_oauth(info: { email: 'new_user@example.com' })
-        end.to change(User, :count).by(1)
-      end
-
-      it 'returns new user' do
-        returned_user = subject.user_from_oauth(info: { email: 'new_user@example.com' })
-
-        expect(returned_user).to be_a(User)
-        expect(returned_user).to be_persisted
-        expect(returned_user.email).to eq('new_user@example.com')
-      end
-    end
-  end
 end

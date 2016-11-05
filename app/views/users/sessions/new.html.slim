@@ -32,7 +32,7 @@
 
                   .wrapped-input
                     = image_tag 'founders/sessions/email.svg'
-                    = f.text_field :email, required: true, placeholder: 'SV.CO ID (email)'
+                    = f.text_field :email, required: true, placeholder: 'SV.CO ID (email)', maxlength: 250, type: 'email'
                     - if f.object.errors[:email].present?
                       p.error-under-input = f.object.errors[:email].join(', ')
 

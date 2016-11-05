@@ -8,36 +8,48 @@
 .container
   .row
     .col-xl-10.offset-xl-1.col-lg-12
-      .login-container.m-x-auto.m-t-3.m-b-3.clearfix
+      .login-container.m-x-auto.m-t-2.m-b-3.clearfix
         .row
           .col-md-6.push-md-6
-            .devise-user-form.content-box.devise-user-login
+            .content-box.user-login.m-b-1
               .sign-in-kid.m-x-auto.m-b-1
                 = image_tag 'founders/sessions/sign-in-kid.svg', class: 'img-fluid m-x-auto'
               h3.text-xs-center.m-b-2 Sign in with your SV.CO ID!
 
-              a.oauth-login.login-with-google href=user_google_oauth2_omniauth_authorize_path
-                i.fa.fa-google.oauth-icon
-                | Continue with Google
-              a.oauth-login.login-with-facebook href=user_facebook_omniauth_authorize_path
-                i.fa.fa-facebook.oauth-icon
-                | Continue with Facebook
-              a.oauth-login.login-with-github href=user_github_omniauth_authorize_path
-                i.fa.fa-github.oauth-icon
-                | Continue with Github
+              #sign-in-with-federated class=hidden_sign_in_class('federated')
+                a.oauth-login.login-with-google href=user_google_oauth2_omniauth_authorize_path
+                  i.fa.fa-google.oauth-icon
+                  | Continue with Google
+                a.oauth-login.login-with-facebook href=user_facebook_omniauth_authorize_path
+                  i.fa.fa-facebook.oauth-icon
+                  | Continue with Facebook
+                a.oauth-login.login-with-github href=user_github_omniauth_authorize_path
+                  i.fa.fa-github.oauth-icon
+                  | Continue with Github
 
-              = form_for @form, url: user_send_login_email_path(referer: params[:referer]) do |f|
-                .wrapped-input
-                  = image_tag 'founders/sessions/email.svg'
-                  = f.text_field :email, required: true, placeholder: 'SV.CO ID (email)'
+              #sign-in-with-email class=hidden_sign_in_class('email')
+                = form_for @form, url: user_send_login_email_path(referer: params[:referer]) do |f|
+                  = f.hidden_field :referer
 
-                .remember-forgot.clearfix.m-t-1.m-b-2
-                  .login-option.col-md-6
-                    = f.check_box :shared_device, class: 'css-checkbox'
-                    = f.label :shared_device, 'Are you using a shared device?', class: 'css-label'
+                  .wrapped-input
+                    = image_tag 'founders/sessions/email.svg'
+                    = f.text_field :email, required: true, placeholder: 'SV.CO ID (email)'
+                    - if f.object.errors[:email].present?
+                      p.error-under-input = f.object.errors[:email].join(', ')
 
-                .text-xs-center
-                  = f.submit 'Sign in', class: 'btn btn-primary btn-md text-uppercase sign-in-btn'
+                  .remember-forgot.clearfix.m-t-1.m-b-2
+                    .login-option.text-xs-center
+                      = f.check_box :shared_device, class: 'css-checkbox'
+                      = f.label :shared_device, 'Are you using a shared device?', class: 'css-label'
+
+                  .text-xs-center
+                    = f.submit 'Email me a link to sign in', class: 'btn btn-primary btn-md text-uppercase sign-in-btn'
+
+              .switch-sign-in-method-links.text-xs-center.m-t-2
+                a.switch-to-email class=hidden_sign_in_class('email', link: true)
+                  | Sign in with email
+                a.switch-to-federated class=hidden_sign_in_class('federated', link: true)
+                  | Or sign in with Google, Facebook, or Github
           .col-md-6.pull-md-6
             .login-notice.content-box.text-xs-center
               .notice-section.with-border-btm
@@ -58,39 +70,3 @@
                     |	<strong>#StartInCollege Six Ways</strong> course?
                     br
                     ' <strong>Click here</strong> to get started.
-
-    /.footer.text-xs-center.m-t-2
-      /= render 'founders/shared/links'
-/
-/
-/.secondary-banner
-/  .container
-/    .application-stages-head.text-xs-center
-/      h1
-/        | Please supply your
-/        span
-/          | &nbsp;email address.
-/      h4
-/        ' We'll email you a log-in link to establish your identity.
-/
-/.container
-/  .container-md-center.content-box.m-t-3.m-b-3
-/    h5.form-section-title.text-uppercase.font-semibold.m-b-2
-/      | Hello there!
-/    .simple-form-container
-/      .row
-/        div = link_to('Google', user_google_oauth2_omniauth_authorize_path)
-/        div = link_to('Facebook', user_facebook_omniauth_authorize_path)
-/        div = link_to('Gituhb', user_github_omniauth_authorize_path)
-/
-/        = simple_form_for @form, url: user_send_login_email_path(referer: params[:referer]), html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
-/
-/          = f.input :email
-/          = f.input :referer, as: :hidden, wrapper_html: { class: 'm-b-0' }
-/          = f.input :shared_device, as: :boolean,
-/            label: '&nbsp;I am on a shared device. Log me out when I leave.'.html_safe,
-/            wrapper_html: { class: 'p-l-1 m-b-1' }
-/
-/          .offset-sm-3
-/            .simple-form-submit
-/              = f.submit 'Send Login Email', class: 'btn btn-primary btn-md text-uppercase'

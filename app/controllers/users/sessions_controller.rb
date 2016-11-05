@@ -23,6 +23,7 @@ module Users
       if @form.validate(sign_in_params)
         @form.save
       else
+        @sign_in_error = true
         render 'new'
       end
     end

@@ -64,3 +64,4 @@
 //= require v2/tour
 //= require v2/story
 //= require v2/six_ways
+//= require v2/users

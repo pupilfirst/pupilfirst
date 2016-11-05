@@ -3,8 +3,8 @@ ActiveAdmin.register BatchApplicant do
 
   menu parent: 'Admissions', label: 'Applicants'
 
-  permit_params :batch_application_id, :name, :gender, :email, :phone, :role, :team_lead, :tag_list, :reference,
-    :college_id, :notes, :fee_payment_method,
+  permit_params :name, :gender, :email, :phone, :role, :team_lead, :tag_list, :reference,
+    :college_id, :notes, :fee_payment_method, { batch_application_ids: [] },
     college_attributes: [:name, :also_known_as, :city, :state_id, :established_year, :website, :contact_numbers, :replacement_university_id]
 
   scope :all, default: true
@@ -22,6 +22,7 @@ ActiveAdmin.register BatchApplicant do
     collection: -> { BatchApplicant.tag_counts_on(:tags).pluck(:name).sort }
 
   filter :batch_applications_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'With applications in batch'
+  filter :fee_payment_method, as: :select, collection: -> { BatchApplicant::FEE_PAYMENT_METHODS }
   filter :phone
   filter :reference_eq, as: :select, collection: proc { BatchApplicant.reference_sources[0..-2] }, label: 'Reference (Selected)'
   filter :reference, label: 'Reference (Free-form)'
@@ -191,7 +192,7 @@ ActiveAdmin.register BatchApplicant do
     f.semantic_errors(*f.object.errors.keys)
 
     f.inputs do
-      f.input :batch_applications
+      f.input :batch_applications, collection: BatchApplication.all.includes(:team_lead, :batch)
       f.input :name
       f.input :email
       f.input :tag_list, input_html: { value: f.object.tag_list.join(','), 'data-applicant-tags' => BatchApplicant.tag_counts_on(:tags).pluck(:name).to_json }

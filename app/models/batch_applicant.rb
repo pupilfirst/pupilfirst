@@ -35,11 +35,11 @@ class BatchApplicant < ApplicationRecord
   # Basic validations.
   validates :email, presence: true, uniqueness: true, email: true
   validates :phone, mobile_number: true
-  validates_inclusion_of :fee_payment_method, in: FEE_PAYMENT_METHODS, allow_blank: true
+  validates_inclusion_of :fee_payment_method, in: FEE_PAYMENT_METHODS, allow_nil: true
 
   has_secure_token
 
-  normalize_attribute :gender, :reference, :phone
+  normalize_attribute :gender, :reference, :phone, :fee_payment_method
 
   def applied_to?(batch)
     return false unless batch_applications.present?

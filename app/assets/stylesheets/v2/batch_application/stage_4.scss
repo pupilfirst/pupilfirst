@@ -1,0 +1,42 @@
+.first-step-quote {
+  h3 {
+    line-height: 1.4;
+    border-bottom: 1px dashed $brand-secondary;
+  }
+}
+.preselection-steps {
+  border-left: 1px dashed $gray-border;
+
+  ul {
+    padding-left: 1.125rem;
+
+    li {
+      list-style: circle;
+      line-height: 1.5;
+      padding-bottom: 10px;
+      font-size: 1rem;
+
+      p {
+        strong {
+          font-style: $font-semibold;
+        }
+      }
+    }
+  }
+}
+.payment-status-table {
+  border: 1px solid $light-primary;
+
+  th, td {
+    padding: 1rem;
+  }
+
+  thead {
+    tr {
+      th {
+        color: white;
+        background-color: $light-primary;
+      }
+    }
+  }
+}

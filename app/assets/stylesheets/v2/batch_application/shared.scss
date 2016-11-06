@@ -212,3 +212,8 @@
 .stages-alert-icon {
   max-width: 400px;
 }
+.congrats-box {
+  border: 1px dashed $brand-secondary;
+  @include border-radius(5px);
+  background-color: lighten($light-secondary, 50%);
+}

@@ -15,35 +15,60 @@
 .container
   .m-t-3
     == render 'application_progress'
-  .container-md-center.content-box.application-stages-content.m-t-3.m-b-3.text-xs-center
-    h4.m-b-1
-      ' Congratulations! You have been selected to Batch #{@batch_application.batch_number} starting #{@batch_application.batch_start_date}.
 
-    p.m-b-1
-      ' This is the first step on an exciting journey that will help you build a startup & teach you amazing skills that will change your life.
-      .text-xs-left
-        h5 Next Steps:
+  .container-md-center.content-box.application-stages-content.m-t-3.m-b-3
+    .congrats-box.m-b-3.p-a-1.text-xs-center
+      h3.brand-secondary
+        ' <strong>Congratulations!</strong> &#128144;
+      h4.font-regular.brand-secondary
+        ' You have been selected to Batch #{@batch_application.batch_number}
+        | starting #{@batch_application.batch_start_date}.
+    .row
+      .col-md-5.text-xs-left
+        .first-step-quote
+          h3.m-b-1.p-b-1.brand-secondary
+            ' <strong>This is the first step</strong>
+            br
+            ' on an exciting journey that will help you build a
+            | startup &amp; teach you amazing skills that will change your life.
+          p.p-b-1
+            ' Write to #{mail_to 'help@sv.co'} for information on how to complete these steps.
 
-        ul
-          li All founders have to form a partnership.
-          li All founders have to fill in, sign & send across a legal agreement.
-          li All founders who have a Regular Fee status should pay the required Program Fee.
-          li All founders who have a Hardship Scholarship or Postpaid Fee option should submit additional documentation.
-          li The last date to complete all required documentation is #{@batch_application.document_submission_deadline}.
+      .col-md-7.text-xs-left.preselection-steps
+        h5.font-semibold
+          | Next Steps:
 
-        ' Write to #{mail_to 'help@sv.co'} for information on how to complete these steps.
+        ul.m-b-0
+          li
+            p
+              | All founders have to <strong>form a partnership</strong>.
+          li
+            p
+              | All founders have to <strong>fill in, sign &amp; send across a legal agreement.</strong>
+          li
+            p
+              | All founders who have a Regular Fee status should <strong>pay the required Program Fee.</strong>
+          li
+            p
+              ' All founders who have a Hardship Scholarship or Postpaid Fee option
+              | should submit additional documentation.
+          li
+            p
+              ' The <strong>last date</strong> to complete all required documentation is
+              | <strong>#{@batch_application.document_submission_deadline}.</strong>
 
-        h5.m-t-1 Fee Payment Status:
+    .text-xs-left
+      h5.m-t-1.font-semibold Fee Payment Status:
 
-        table.table.table-sm
-          thead.thead-default
+      table.table.table-sm.payment-status-table.p-a-1
+        thead.thead-default
+          tr
+            th Founder Name
+            th Fee Payment Method
+            th Confirmation Status
+        tbody
+          - @batch_application.fee_payment_table.each do |row|
             tr
-              th Founder Name
-              th Fee Payment Method
-              th Confirmation Status
-          tbody
-            - @batch_application.fee_payment_table.each do |row|
-              tr
-                td #{row[:name]}
-                td #{row[:method]}
-                td #{row[:confirmation]}
+              td #{row[:name]}
+              td #{row[:method]}
+              td #{row[:confirmation]}

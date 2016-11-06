@@ -42,7 +42,7 @@ class SixWaysController < ApplicationController
     if @form.validate(params[:mooc_student_signup])
       @user = @form.save
       @skip_container = true
-      render 'user_sessions/send_email'
+      render 'users/sessions/send_login_email'
     else
       render 'student_details'
     end

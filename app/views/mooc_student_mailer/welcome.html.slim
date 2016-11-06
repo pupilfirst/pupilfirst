@@ -9,14 +9,14 @@
 
   p
     ' Please
-    ' #{link_to 'click here', user_sessions_new_url(token: @mooc_student.user.login_token, referer: six_ways_start_url)}
+    ' #{link_to 'click here', authenticate_url(token: @mooc_student.user.login_token, referer: six_ways_start_url)}
     | to login to your SV.CO account and get started!
 
   p
     ' If you're unable to click on the link above, then please copy and paste the following link into your browser's
     | address bar:
 
-  p.monospace = user_sessions_new_url(token: @mooc_student.user.login_token, referer: six_ways_start_url)
+  p.monospace = authenticate_url(token: @mooc_student.user.login_token, referer: six_ways_start_url)
 
   p Please note that this is a private URL and should not be shared.
 

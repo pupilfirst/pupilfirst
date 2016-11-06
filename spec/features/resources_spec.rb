@@ -64,19 +64,14 @@ feature 'Resources' do
       # Make the founder a founder of approved startup.
       startup.founders << founder
 
-      # Sign in the founder.
-      visit new_founder_session_path
-      fill_in 'founder_email', with: founder.email
-      fill_in 'founder_password', with: 'password'
-      click_on 'Sign in'
+      # Log in the founder.
+      visit user_token_path(token: founder.user.login_token, referer: resources_path)
     end
 
     context "Founder's startup is not approved" do
       let(:startup) { create :startup, dropped_out: true }
 
       scenario 'Founder visits resources page' do
-        visit resources_path
-
         expect(page).to have_selector('.resource', count: 2)
         expect(page).to have_text(public_resource_1.title[0..10])
         expect(page).to have_text(public_resource_2.title[0..10])
@@ -91,8 +86,6 @@ feature 'Resources' do
 
     context "Founder's startup is approved" do
       scenario 'Founder visits resources page' do
-        visit resources_path
-
         expect(page).to have_text('Please do not share these resources outside your founding team')
         expect(page).to have_selector('.resource', count: 3)
         expect(page).to have_text(public_resource_1.title[0..10])
@@ -104,8 +97,6 @@ feature 'Resources' do
         let(:startup) { create :startup, batch: batch_1 }
 
         scenario 'Founder visits resources page' do
-          visit resources_path
-
           expect(page).to have_selector('.resource', count: 4)
           expect(page).to have_text(public_resource_1.title[0..10])
           expect(page).to have_text(public_resource_2.title[0..10])

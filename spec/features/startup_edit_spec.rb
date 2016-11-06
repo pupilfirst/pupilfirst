@@ -14,11 +14,7 @@ feature 'Startup Edit' do
     startup.founders << founder
 
     # Log in the founder.
-    visit new_founder_session_path
-    fill_in 'founder_email', with: founder.email
-    fill_in 'founder_password', with: 'password'
-    click_on 'Sign in'
-    visit edit_founder_startup_path
+    visit user_token_url(token: founder.user.login_token, referer: edit_founder_startup_path)
 
     # founder should now be on his startup edit page.
   end

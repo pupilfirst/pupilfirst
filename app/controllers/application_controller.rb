@@ -92,6 +92,12 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def authenticate_founder!
+    # User must be logged in
+    user = authenticate_user!
+    redirect_to root_url unless user.founder.present?
+  end
+
   def csp_directives
     [
       image_sources,

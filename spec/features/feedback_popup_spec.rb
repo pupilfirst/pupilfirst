@@ -11,11 +11,10 @@ feature 'Feedback Popup' do
       visit startup_path(startup, show_feedback: feedback.id)
 
       # user must be redirected to sign in page
-      expect(page).to have_text('Sign in with your SV.CO ID')
+      expect(page).to have_text('Sign in to SV.CO')
 
-      fill_in 'founder_email', with: founder.email
-      fill_in 'founder_password', with: 'password'
-      click_on 'Sign in'
+      # Log in the founder.
+      visit user_token_path(token: founder.user.login_token)
 
       # user must be redirected back to the startup page
       expect(page).to have_text(startup.product_name)
@@ -23,10 +22,7 @@ feature 'Feedback Popup' do
     end
 
     scenario 'User is logged in but not a founder of the startup' do
-      visit new_founder_session_path
-      fill_in 'founder_email', with: founder.email
-      fill_in 'founder_password', with: 'password'
-      click_on 'Sign in'
+      visit user_token_path(token: founder.user.login_token)
 
       # try to visit the startup path with show_feedback flag set
       visit startup_path(startup, show_feedback: feedback.id)
@@ -39,17 +35,16 @@ feature 'Feedback Popup' do
     scenario 'User is logged in as a founder of the startup', js: true do
       startup.founders << founder
       startup.reload
-      visit new_founder_session_path
-      fill_in 'founder_email', with: founder.email
-      fill_in 'founder_password', with: 'password'
-      click_on 'Sign in'
+
+      visit user_token_path(token: founder.user.login_token)
 
       # try to visit the startup path with show_feedback flag set
       visit startup_path(startup, show_feedback: feedback.id)
 
       # no feedback modal should be open
       expect(page).to have_text(startup.product_name)
-      expect(page).to have_css ".modal"
+      expect(page).to have_css '.modal'
+
       within('div#improvement-modal') do
         expect(page).to have_text("Feedback from #{faculty.name}")
         expect(page).to have_text(feedback.feedback)

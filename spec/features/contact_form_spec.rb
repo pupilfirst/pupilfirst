@@ -17,15 +17,10 @@ feature 'About / Contact Spec' do
       startup.founders << founder
 
       # Log in the founder.
-      visit new_founder_session_path
-      fill_in 'founder_email', with: founder.email
-      fill_in 'founder_password', with: 'password'
-      click_on 'Sign in'
+      visit user_token_path(token: founder.user.login_token, referer: about_contact_path)
     end
 
     scenario 'Founder of startup visits contact page' do
-      visit about_contact_path
-
       expect(page).to have_selector("input[value='#{founder.fullname}']")
       expect(page).to have_selector("input[value='#{founder.email}']")
       expect(page).to have_selector("input[value='#{founder.startup.display_name}']")

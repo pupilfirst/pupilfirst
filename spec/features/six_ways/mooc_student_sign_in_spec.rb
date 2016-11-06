@@ -21,7 +21,7 @@ feature 'MoocStudent Sign In' do
       expect(page).to have_text('Previewing as a guest!')
     end
 
-    scenario 'User chooses to login as Student' do
+    scenario 'User chooses to login as Student', js: true do
       expect(page).to_not have_link('Start the Course')
 
       click_link 'Sign-up as Student'
@@ -32,23 +32,25 @@ feature 'MoocStudent Sign In' do
       expect(page).to have_text('Did this once before? Log in instead.')
 
       click_link 'Log in'
+
       # user must be re-directed to the users/sign-in page
-      expect(page).to have_text('Please supply your email address.')
+      expect(page).to have_text('Sign in to SV.CO')
 
       # user submits email
-      fill_in 'Email', with: mooc_student.email
-      click_button 'Send Login Email'
+      # click_link 'Sign in with email'
+      page.find('a.switch-to-email').click
+      fill_in 'user_sign_in_email', with: mooc_student.email
+      click_button 'Email me a link to sign in'
 
       # user must be informed that login email was sent
-      expect(page).to have_text('Log-in link sent!')
+      expect(page).to have_text('Sign-in link sent!')
 
       # user must have received login email
       open_email(mooc_student.email)
       expect(current_email.subject).to eq('Log in to SV.CO')
 
       # user follows link in email and logs-in
-      mooc_student.user.reload
-      visit user_token_path(token: mooc_student.user.login_token, referer: six_ways_start_path)
+      visit user_token_path(token: mooc_student.user.reload.login_token, referer: six_ways_start_path)
 
       # user must be logged-in and allowed to start course
       expect(page).to have_link('Start the Course')

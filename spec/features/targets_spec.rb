@@ -15,11 +15,8 @@ feature 'Targets spec' do
 
   context 'founder does not have verified timeline event for founder target' do
     scenario 'founder checks targets' do
-      # Log in with founder.
-      visit new_founder_session_path
-      fill_in 'founder_email', with: founder.email
-      fill_in 'founder_password', with: 'password'
-      click_on 'Sign in'
+      # Log in the founder.
+      visit user_token_path(token: founder.user.login_token)
 
       expect(page).to have_selector('.pending-count', text: '1')
     end

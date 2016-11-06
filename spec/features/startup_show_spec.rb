@@ -8,12 +8,9 @@ feature 'Startup Show' do
   before :each do
     startup.founders << founder
     target.update(assignee: startup)
-    visit new_founder_session_path
-    fill_in 'founder_email', with: founder.email
-    fill_in 'founder_password', with: 'password'
-    click_on 'Sign in'
 
-    visit startup_path(startup)
+    # Log in the founder.
+    visit user_token_path(token: founder.user.login_token)
   end
 
   context 'Founder visits show page of his startup' do

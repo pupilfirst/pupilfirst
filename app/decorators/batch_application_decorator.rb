@@ -53,7 +53,7 @@ class BatchApplicationDecorator < Draper::Decorator
 
   # used to display interview feedback in stage_3_rejected.html.slim
   def interview_feedback
-    application_submissions.where(application_stage: ApplicationStage.find_by(name: 'Interview')).last&.feedback_for_team
+    application_submissions.where(application_stage: ApplicationStage.interview_stage).last&.feedback_for_team
   end
 
   private

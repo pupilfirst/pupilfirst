@@ -49,7 +49,17 @@
                 td #{row[:confirmation]}
 
         .founder-details-form
-          = simple_form_for(@form, url: '#', method: :post, html: { class: 'form-horizontal' }, wrapper: :horizontal_form) do |f|
+          = simple_form_for(@form, url: apply_founder_details_submit_path, method: :post, html: { class: 'form-horizontal' }, wrapper: :horizontal_form) do |f|
+            - if f.object.errors.present?
+              .alert.alert-warning.alert-dismissable.fade.in role='alert'
+
+                strong There were problems with your submission.
+                | &nbsp;Please check all fields and try again.
+
+                - if f.object.errors[:base].present?
+                  ul.m-t-1
+                    - f.object.errors[:base].each do |error_message|
+                      li #{error_message}
 
             .founders-list
               = f.fields_for :batch_applicants do |c|

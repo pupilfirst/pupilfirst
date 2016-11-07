@@ -296,6 +296,21 @@ class BatchApplicationController < ApplicationController
     @form = StageFourFounderDetailsForm.new(current_application)
   end
 
+  # POST /apply/founder_details_submit
+  # receives founder details, generates required pdf and redirects back to updated stage_4 page
+  def founder_details_submit
+    @batch_application = current_application.decorate
+    @form = StageFourFounderDetailsForm.new(current_application)
+    if @form.validate(params[:stage_four_founder_details])
+      @form.save
+      flash[:success] = 'Founder details successfully saved. Agreements ready to be downloaded.'
+      redirect_to apply_stage_path(4)
+    else
+      flash[:error] = 'Error(s) in founder details. Please fix and retry!'
+      render 'stage_4'
+    end
+  end
+
   def stage_4_submit
     # TODO: Server-side error handling for stage 4 inputs.
 

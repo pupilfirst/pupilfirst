@@ -111,6 +111,7 @@ Rails.application.routes.draw do
     post 'restart', action: 'restart_application'
     get 'cofounders', action: 'cofounders_form'
     post 'cofounders', action: 'cofounders_save'
+    post 'founder_details_submit'
 
     # TODO: Remove this after batch 3 intake is complete. Added to account for emails sent out before application process was overhauled.
     get 'identify/3', to: redirect('/apply')

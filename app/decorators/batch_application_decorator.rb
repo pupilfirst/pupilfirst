@@ -56,6 +56,16 @@ class BatchApplicationDecorator < Draper::Decorator
     application_submissions.where(application_stage: ApplicationStage.find_by(name: 'Interview')).last&.feedback_for_team
   end
 
+  def partnership_deed_ready?
+    partnership_deed_content.present?
+  end
+
+  def partnership_deed_content
+    return nil unless founders_details_complete?
+
+    "<h1> Partnership Deed </h1>"
+  end
+
   private
 
   def grading_service
@@ -75,5 +85,10 @@ class BatchApplicationDecorator < Draper::Decorator
       else
         'Not Available'
     end
+  end
+
+  def founders_details_complete?
+    # TODO
+    true
   end
 end

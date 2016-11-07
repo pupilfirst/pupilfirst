@@ -1,0 +1,10 @@
+.container-md-center
+  .content-box.m-b-3
+    .partnership-deed-preview-header.p-b-1.m-b-2
+      h3
+        | Partnership Deed
+      button.partnership-deed-download-button.btn.btn-primary.btn-md.text-uppercase.pull-xs-right
+        i.fa.fa-download
+        ' &nbsp;Download Now
+    .partnership-deed-preview-container.hidden-sm-down.text-xs-center
+      iframe#partnership-deed-content src='' data-source=@batch_application.partnership_deed_content

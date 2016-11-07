@@ -31,8 +31,6 @@
             br
             ' on an exciting journey that will help you build a
             | startup &amp; teach you amazing skills that will change your life.
-          p.p-b-1
-            ' Write to #{mail_to 'help@sv.co'} for information on how to complete these steps.
 
       .col-md-7.text-xs-left.preselection-steps
         h5.font-semibold
@@ -56,6 +54,10 @@
             p
               ' The <strong>last date</strong> to complete all required documentation is
               | <strong>#{@batch_application.document_submission_deadline}.</strong>
+        p
+          ' Write to #{mail_to 'help@sv.co'} for information on how to complete
+          br
+          | these steps.
 
     .text-xs-left
       h5.m-t-1.font-semibold Fee Payment Status:

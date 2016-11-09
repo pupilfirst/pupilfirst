@@ -37,7 +37,7 @@ class BatchApplicationDecorator < Draper::Decorator
 
   # used to display submission deadline in stage4.html.slim
   def document_submission_deadline
-    (batch.start_date - 15.days).strftime('%B %d, %Y')
+    batch.batch_stages.where(application_stage: ApplicationStage.find(4)).first.ends_at.strftime('%B %d, %Y')
   end
 
   # used to display fee payment table in stage4.html.slim

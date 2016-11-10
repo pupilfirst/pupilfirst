@@ -16,7 +16,7 @@ class MoocStudent
         mooc_student = MoocStudent.where(user_id: user.id).first_or_create!(attributes)
 
         # Send the user a login email, welcoming him / her to SixWays.
-        MoocStudentMailer.welcome(mooc_student).deliver_later
+        MoocStudentMailer.welcome(mooc_student).deliver_now
 
         # Return the user
         user

@@ -1,3 +1,9 @@
+### 7 November, 2016
+
+#### Bugfixes
+
+  - Fixed a minor bug related to the _Filter by Tag_ feature on the Library page.
+
 ### 31 October, 2016
 
 #### Bugfixes

@@ -60,7 +60,7 @@ feature 'Application Interview Stage' do
 
         scenario 'user is shown rejected state page' do
           visit apply_continue_path
-          expect(page).to have_content("We're sorry, but your team didn't make the cut during the interview process.")
+          expect(page).to have_content("but your team didn't make the cut during the interview process.")
         end
       end
     end

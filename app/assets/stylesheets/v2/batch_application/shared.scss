@@ -217,3 +217,19 @@
   @include border-radius(5px);
   background-color: lighten($light-secondary, 50%);
 }
+.sorry-box {
+  border: 1px dashed $alert-background;
+  @include border-radius(5px);
+  background-color: lighten($alert-background, 30%);
+
+  h3, h4 {
+    color: red;
+  }
+}
+.feedback-box {
+  border: 1px dashed $brand-secondary;
+
+  .card-header {
+    background-color: lighten($light-secondary, 50%);
+  }
+}

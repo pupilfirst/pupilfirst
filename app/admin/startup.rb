@@ -307,9 +307,11 @@ ActiveAdmin.register Startup do
 
       row :team_members do
         if startup.team_members.present?
-          startup.team_members.each do |team_member|
-            div do
-              link_to team_member.name, [:admin, team_member]
+          ul do
+            startup.team_members.each do |team_member|
+              li do
+                link_to team_member.name, admin_team_member_path(team_member)
+              end
             end
           end
         end

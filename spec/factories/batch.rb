@@ -23,6 +23,10 @@ FactoryGirl.define do
       end
     end
 
+    trait :in_stage_2 do
+      in_stage_1 # They're active together. :-)
+    end
+
     trait :in_stage_3 do
       start_date { 2.months.from_now }
       end_date { 8.months.from_now }

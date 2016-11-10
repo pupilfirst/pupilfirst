@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161102121341) do
+ActiveRecord::Schema.define(version: 20161110173349) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -141,12 +141,12 @@ ActiveRecord::Schema.define(version: 20161102121341) do
     t.integer  "application_stage_id"
     t.integer  "university_id"
     t.text     "team_achievement"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.integer  "team_lead_id"
     t.string   "college_text"
     t.string   "state"
-    t.integer  "team_size"
+    t.integer  "team_size",            default: 2
     t.datetime "swept_at"
     t.datetime "swept_in_at"
     t.index ["application_stage_id"], name: "index_batch_applications_on_application_stage_id", using: :btree

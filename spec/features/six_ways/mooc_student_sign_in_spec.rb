@@ -36,9 +36,12 @@ feature 'MoocStudent Sign In' do
       # user must be re-directed to the users/sign-in page
       expect(page).to have_text('Sign in to SV.CO')
 
-      # user submits email
-      # click_link 'Sign in with email'
-      page.find('a.switch-to-email').click
+      # Let's use email login method.
+      page.find('a.switch-to-email').click # can't use click_link because element has no href.
+
+      # The form must now change.
+      expect(page).to have_text('Sign in with your SV.CO ID')
+
       fill_in 'user_sign_in_email', with: mooc_student.email
       click_button 'Email me a link to sign in'
 

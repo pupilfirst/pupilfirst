@@ -25,7 +25,7 @@ ActiveAdmin.register BatchApplication do
 
     BatchApplication.where(id: ids).each do |batch_application|
       if batch_application.interviewable?
-        BatchApplication::MarkInterviewAttendedService.new(batch_application).execute
+        BatchApplications::MarkInterviewAttendedService.new(batch_application).execute
         marked += 1
       end
     end
@@ -333,7 +333,7 @@ ActiveAdmin.register BatchApplication do
     batch_application = BatchApplication.find(params[:id])
 
     if batch_application.interviewable?
-      BatchApplication::MarkInterviewAttendedService.new(batch_application).execute
+      BatchApplications::MarkInterviewAttendedService.new(batch_application).execute
       flash[:success] = 'Application has been marked as having attended interview.'
       redirect_back(fallback_location: admin_batch_applications_url)
     end

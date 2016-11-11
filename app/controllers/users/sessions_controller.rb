@@ -1,29 +1,36 @@
 module Users
-  class SessionsController < ApplicationController
+  class SessionsController < Devise::SessionsController
     include Devise::Controllers::Rememberable
+
+    before_action :skip_container, only: [:new, :send_login_email]
+
     layout 'application_v2'
 
     # GET /user/sign_in
     def new
-      @skip_container = true
-      form_data = OpenStruct.new(referer: params[:referer])
-      @form = UserSignInForm.new(form_data)
+      if current_user.present?
+        flash[:alert] = 'You are already signed in.'
+        redirect_to root_url
+      else
+        form_data = OpenStruct.new(referer: params[:referer])
+        @form = UserSignInForm.new(form_data)
+      end
     end
 
-    # POST user/send_email - find or create user from email received
+    # POST /user/send_email - find or create user from email received
     def send_login_email
-      @skip_container = true
       @form = UserSignInForm.new(OpenStruct.new)
       if @form.validate(sign_in_params)
         @form.save
       else
+        @sign_in_error = true
         render 'new'
       end
     end
 
-    # GET /authenticate - link to sign_in user with token in params
-    def authenticate
-      response = UserAuthenticationService.authenticate_token(params[:token])
+    # GET /user/token - link to sign_in user with token in params
+    def token
+      response = Users::AuthenticationService.authenticate_token(params[:token])
       if response[:success]
         @user = User.find(response[:user_id])
 
@@ -39,7 +46,18 @@ module Users
       end
     end
 
+    # POST /user/sign_in
+    #
+    # This route is disabled for the moment since we do not support logging in with password.
+    def create
+      raise_not_found
+    end
+
     private
+
+    def skip_container
+      @skip_container = true
+    end
 
     def sign_in_params
       params.require(:user_sign_in).permit(:email, :referer, :shared_device)

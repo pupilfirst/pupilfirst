@@ -40,7 +40,7 @@ ActiveAdmin.register TeamMember do
       end
 
       row :avatar do |team_member|
-        image_tag team_member.avatar.thumb.url
+        image_tag team_member.avatar.thumb.url if team_member.avatar.present?
       end
     end
   end

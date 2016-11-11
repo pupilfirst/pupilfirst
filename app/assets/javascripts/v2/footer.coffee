@@ -8,7 +8,7 @@ setupPolicies = ->
       # Load privacy policy.
       $.get '/policies/privacy', (data) ->
         policyModal.find('.modal-title').html('Privacy Policy')
-        policyModal.find('.modal-body').html(data)
+        policyModal.find('.modal-body').html(data['policy'])
         policyModal.modal('show')
         policyModal.data('loaded', 'privacy')
 
@@ -21,7 +21,7 @@ setupPolicies = ->
       # Load terms of use.
       $.get '/policies/terms', (data) ->
         policyModal.find('.modal-title').html('Terms of Use')
-        policyModal.find('.modal-body').html(data)
+        policyModal.find('.modal-body').html(data['policy'])
         policyModal.modal('show')
         policyModal.data('loaded', 'terms')
 

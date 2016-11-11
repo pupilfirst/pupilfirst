@@ -26,12 +26,13 @@ founders_list.each do |email, first_name, last_name, born_on, gender, phone|
   # Don't recreate entries.
   next if Founder.find_by(email: email).present?
 
+  user = User.where(email: email).first_or_create!
+
   Founder.create!(
     email: email,
+    user: user,
     first_name: first_name,
     last_name: last_name,
-    password: 'password',
-    password_confirmation: 'password',
     confirmed_at: Time.now,
     born_on: born_on,
     gender: gender,

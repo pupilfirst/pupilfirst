@@ -15,23 +15,26 @@
     - unless current_founder
       li role="presentation"
         = link_to 'About', about_path, class: 'top-nav-link'
-    - if current_founder
-      li role="presentation" class="dropdown"
-        a.dropdown-toggle.logged-in-avatar-link data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
-          = image_tag profile_image_url(current_founder, gravatar_size: 40, avatar_version: :thumb), class: 'logged-in-user-link'
-        ul.dropdown-menu
-          li role="presentation"
-            = link_to founder_profile_path(slug: current_founder.slug) do
-              i.fa.fa-list-ul
-              | &nbsp;Profile
-          li role="presentation"
-            = link_to destroy_founder_session_path, method: :delete do
-              i.fa.fa-sign-out
-              | &nbsp;Logout
-          li role="presentation"
-            a href="#" data-toggle="modal" data-target="#platform-feedback-modal"
-              i.fa.fa-comment-o
-              | &nbsp;Submit Feedback
+    - if current_user
+      - if current_founder
+        li role="presentation" class="dropdown"
+          a.dropdown-toggle.logged-in-avatar-link data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
+            = image_tag profile_image_url(current_founder, gravatar_size: 40, avatar_version: :thumb), class: 'logged-in-user-link'
+          ul.dropdown-menu
+            li role="presentation"
+              = link_to founder_profile_path(slug: current_founder.slug) do
+                i.fa.fa-list-ul
+                | &nbsp;Profile
+            li role="presentation"
+              = link_to destroy_user_session_path, method: :delete do
+                i.fa.fa-sign-out
+                | &nbsp;Logout
+            li role="presentation"
+              a href="#" data-toggle="modal" data-target="#platform-feedback-modal"
+                i.fa.fa-comment-o
+                | &nbsp;Submit Feedback
+      - else
+        li role="presentation" = link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'top-nav-link'
 
     - elsif @hide_sign_in.blank?
-      li role="presentation" = link_to 'Sign In', new_founder_session_path, class: 'top-nav-link'
+      li role="presentation" = link_to 'Sign In', new_user_session_path, class: 'top-nav-link'

@@ -29,6 +29,10 @@ class ApplicationStage < ApplicationRecord
     find_by(number: 3)
   end
 
+  def self.shortlist_stage
+    find_by(number: 4)
+  end
+
   def self.final_stage
     find_by(final_stage: true)
   end

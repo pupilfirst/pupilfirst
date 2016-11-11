@@ -14,12 +14,9 @@ feature 'Timeline Builder' do
     startup.founders << founder
 
     # Log in the founder.
-    visit new_founder_session_path
-    fill_in 'founder_email', with: founder.email
-    fill_in 'founder_password', with: 'password'
-    click_on 'Sign in'
+    visit user_token_path(token: founder.user.login_token)
 
-    # founder should now be on the startup timeline page.
+    # Founder should now be on the startup timeline page (no referer needed).
   end
 
   context 'Founder visits Timeline page of verified startup' do

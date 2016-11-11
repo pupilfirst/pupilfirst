@@ -58,7 +58,7 @@ class BatchApplicant < ApplicationRecord
 
   def self.reference_sources
     ['Friend', 'Seniors', '#StartinCollege Event', 'Newspaper/Magazine',
-     'TV', 'SV.CO Blog', 'Instagram', 'Facebook', 'Twitter',
+     'TV', 'SV.CO Blog', 'Instagram', 'Facebook', 'Twitter', 'Microsoft Student Partner',
      'Other (Please Specify)']
   end
 

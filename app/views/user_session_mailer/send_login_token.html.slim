@@ -5,7 +5,10 @@
   | Hi,
 
 = content_for :body
-  - login_url = authenticate_url(token: @user.login_token, referer: @referer, shared_device: @shared_device)
+  - if @referer.present?
+    - login_url = user_token_url(token: @user.login_token, referer: @referer, shared_device: @shared_device)
+  - else
+    - login_url = user_token_url(token: @user.login_token, shared_device: @shared_device)
 
   p
     ' Please #{link_to 'click here', login_url} to login to

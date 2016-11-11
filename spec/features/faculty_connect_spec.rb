@@ -33,15 +33,10 @@ feature 'Faculty Connect' do
       startup.founders << founder
 
       # Log in the founder.
-      visit new_founder_session_path
-      fill_in 'founder_email', with: founder.email
-      fill_in 'founder_password', with: 'password'
-      click_on 'Sign in'
+      visit user_token_path(token: founder.user.login_token, referer: faculty_index_path)
     end
 
     scenario 'Founder visits faculty page' do
-      visit faculty_index_path
-
       # One of the two cards should have a disabled connect button with a special message for non-admins.
       expect(page.find('.faculty-card', text: faculty_1.name)).to have_selector('.available-marker', count: 1)
       expect(page).to have_selector(".disabled.connect-link[title='Faculty Connect is only available to #{startup.admin.fullname} (your team lead)']", count: 1)
@@ -50,14 +45,15 @@ feature 'Faculty Connect' do
     context 'Founder is admin of startup' do
       before :each do
         # Make our 'founder' the admin.
-        startup.admin.update(startup_admin: false)
-        founder.update(startup_admin: true)
+        startup.admin.update!(startup_admin: false)
+        founder.update!(startup_admin: true)
       end
 
       context 'Admin has a pending request with faculty' do
         let!(:connect_request) { create :connect_request, connect_slot: connect_slot_1, startup: startup }
 
         scenario 'Founder visits faculty page' do
+          # Reload the page.
           visit faculty_index_path
 
           # One of the two cards should have a disabled connect button with a special message for non-admins.
@@ -68,6 +64,7 @@ feature 'Faculty Connect' do
       end
 
       scenario 'Admin of batched-approved startup creates connect request', js: true do
+        # Reload the page.
         visit faculty_index_path
 
         page.find('a.connect-link').click

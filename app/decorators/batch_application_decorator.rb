@@ -37,7 +37,7 @@ class BatchApplicationDecorator < Draper::Decorator
 
   # used to display submission deadline in stage4.html.slim
   def document_submission_deadline
-    (batch.start_date - 15.days).strftime('%B %d, %Y')
+    batch.batch_stages.where(application_stage: ApplicationStage.shortlist_stage).first.ends_at.strftime('%B %d, %Y')
   end
 
   # used to display fee payment table in stage4.html.slim
@@ -53,7 +53,7 @@ class BatchApplicationDecorator < Draper::Decorator
 
   # used to display interview feedback in stage_3_rejected.html.slim
   def interview_feedback
-    application_submissions.where(application_stage: ApplicationStage.find_by(name: 'Interview')).last&.feedback_for_team
+    application_submissions.where(application_stage: ApplicationStage.interview_stage).last&.feedback_for_team
   end
 
   def partnership_deed_ready?

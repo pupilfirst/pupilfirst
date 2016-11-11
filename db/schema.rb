@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161104103243) do
+ActiveRecord::Schema.define(version: 20161110173349) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -149,12 +149,12 @@ ActiveRecord::Schema.define(version: 20161104103243) do
     t.integer  "application_stage_id"
     t.integer  "university_id"
     t.text     "team_achievement"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.integer  "team_lead_id"
     t.string   "college_text"
     t.string   "state"
-    t.integer  "team_size"
+    t.integer  "team_size",            default: 2
     t.datetime "swept_at"
     t.datetime "swept_in_at"
     t.index ["application_stage_id"], name: "index_batch_applications_on_application_stage_id", using: :btree
@@ -347,6 +347,7 @@ ActiveRecord::Schema.define(version: 20161104103243) do
     t.string   "skype_id"
     t.string   "startup_token"
     t.boolean  "exited",                    default: false
+    t.integer  "user_id"
     t.index ["confirmation_token"], name: "index_founders_on_confirmation_token", unique: true, using: :btree
     t.index ["invitation_token"], name: "index_founders_on_invitation_token", unique: true, using: :btree
     t.index ["invited_batch_id"], name: "index_founders_on_invited_batch_id", using: :btree
@@ -355,6 +356,7 @@ ActiveRecord::Schema.define(version: 20161104103243) do
     t.index ["slug"], name: "index_founders_on_slug", unique: true, using: :btree
     t.index ["startup_token"], name: "index_founders_on_startup_token", using: :btree
     t.index ["university_id"], name: "index_founders_on_university_id", using: :btree
+    t.index ["user_id"], name: "index_founders_on_user_id", using: :btree
   end
 
   create_table "glossary_terms", force: :cascade do |t|
@@ -764,6 +766,7 @@ ActiveRecord::Schema.define(version: 20161104103243) do
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
+  add_foreign_key "founders", "users"
   add_foreign_key "payments", "batch_applications"
   add_foreign_key "resources", "batches"
   add_foreign_key "startup_feedback", "faculty"

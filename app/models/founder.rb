@@ -18,7 +18,7 @@ class Founder < ApplicationRecord
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :invitable, :database_authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable
+  # devise :invitable, :database_authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable
 
   serialize :roles
 
@@ -34,6 +34,7 @@ class Founder < ApplicationRecord
   has_many :ahoy_events, class_name: 'Ahoy::Event', as: :user
   has_many :targets, dependent: :destroy, as: :assignee
   has_many :platform_feedback
+  belongs_to :user
 
   scope :batched, -> { joins(:startup).merge(Startup.batched) }
   scope :for_batch_id_in, -> (ids) { joins(:startup).where(startups: { batch_id: ids }) }
@@ -307,7 +308,7 @@ class Founder < ApplicationRecord
 
   # A simple flag, which returns true if the founder signed in less than 15 seconds ago.
   def just_signed_in
-    current_sign_in_at > 15.seconds.ago
+    user.current_sign_in_at > 15.seconds.ago
   end
 
   def founder?

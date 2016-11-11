@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
-  devise_for :users, only: :sessions, controllers: { sessions: 'users/sessions' }
+  devise_for :users, only: [:sessions, :omniauth_callbacks], controllers: { sessions: 'users/sessions', omniauth_callbacks: 'users/omniauth_callbacks' }
+
   devise_scope :user do
-    post :user_send_login_email, controller: 'users/sessions', action: 'send_login_email'
-    get :authenticate, controller: 'users/sessions', action: 'authenticate'
+    post 'users/send_login_email', controller: 'users/sessions', action: 'send_login_email', as: 'user_send_login_email'
+    get 'users/token', controller: 'users/sessions', action: 'token', as: 'user_token'
   end
 
   authenticated :admin_user do
@@ -10,14 +11,6 @@ Rails.application.routes.draw do
   end
 
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
-
-  devise_for(
-    :founders,
-    controllers: {
-      invitations: 'founders/invitations',
-      sessions: 'founders/sessions'
-    }
-  )
 
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)

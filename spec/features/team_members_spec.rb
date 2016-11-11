@@ -8,11 +8,8 @@ feature 'Team members spec' do
     # Add founder as founder of startup.
     startup.founders << founder
 
-    # Sign in with founder.
-    visit new_founder_session_path
-    fill_in 'founder_email', with: founder.email
-    fill_in 'founder_password', with: 'password'
-    click_on 'Sign in'
+    # Sign in with Founder.
+    visit user_token_path(token: founder.user.login_token)
   end
 
   context 'founder has verified timeline event for founder target' do

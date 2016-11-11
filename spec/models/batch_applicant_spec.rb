@@ -14,4 +14,19 @@ RSpec.describe BatchApplicant, type: :model do
       expect(subject.errors).to_not be_empty
     end
   end
+
+  describe '.reference_sources' do
+    subject { described_class }
+
+    let(:expected_sources) do
+      [
+        'Friend', 'Seniors', '#StartinCollege Event', 'Newspaper/Magazine', 'TV', 'SV.CO Blog', 'Instagram', 'Facebook',
+        'Twitter', 'Microsoft Student Partner', 'Other (Please Specify)'
+      ]
+    end
+
+    it 'returns valid reference sources' do
+      expect(subject.reference_sources).to match_array(expected_sources)
+    end
+  end
 end

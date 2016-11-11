@@ -39,13 +39,23 @@ class HomeController < ApplicationController
   # GET /policies/privacy
   def privacy
     privacy_policy = File.read(File.absolute_path(Rails.root.join('privacy_policy.md')))
-    render plain: Kramdown::Document.new(privacy_policy).to_html.html_safe
+    @privacy_policy_html = Kramdown::Document.new(privacy_policy).to_html.html_safe
+
+    respond_to do |format|
+      format.json { render json: { policy: @privacy_policy_html } }
+      format.html { render layout: 'application_v2' }
+    end
   end
 
   # GET /policies/terms
   def terms
     terms_of_use = File.read(File.absolute_path(Rails.root.join('terms_of_use.md')))
-    render plain: Kramdown::Document.new(terms_of_use).to_html.html_safe
+    @terms_of_use_html = Kramdown::Document.new(terms_of_use).to_html.html_safe
+
+    respond_to do |format|
+      format.json { render json: { policy: @terms_of_use_html } }
+      format.html { render layout: 'application_v2' }
+    end
   end
 
   protected

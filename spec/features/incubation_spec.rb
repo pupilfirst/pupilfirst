@@ -1,8 +1,6 @@
 require 'rails_helper'
 
-# WARNING: The following tests run with Webmock disabled - i.e., URL calls are let through. Make sure you mock possible
-# requests unless you want to let them through. This is required for JS tests to work.
-feature 'Incubation' do
+feature 'Incubation', broken: true do
   let(:batch) { create :batch }
   let(:startup_token) { Time.now.to_s }
   let(:team_lead) { Founder.invite!(email: 'newteamlead@example.com', invited_batch: batch, startup_admin: true, startup_token: startup_token) }

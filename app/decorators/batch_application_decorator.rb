@@ -57,13 +57,7 @@ class BatchApplicationDecorator < Draper::Decorator
   end
 
   def partnership_deed_ready?
-    partnership_deed_content.present?
-  end
-
-  def partnership_deed_content
-    return nil unless founders_details_complete?
-
-    "<h1> Partnership Deed </h1>"
+    founders_details_complete?
   end
 
   private

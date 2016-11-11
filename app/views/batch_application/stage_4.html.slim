@@ -49,7 +49,7 @@
                 td #{row[:confirmation]}
 
         - if @batch_application.partnership_deed_ready?
-          = render 'partnership_deed'
+          /= render 'partnership_deed'
 
         .founder-details-form
           = simple_form_for(@form, url: apply_founder_details_submit_path, method: :post, html: { class: 'form-horizontal' }, wrapper: :horizontal_form) do |f|

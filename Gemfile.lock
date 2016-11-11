@@ -820,6 +820,7 @@ GEM
     websocket-driver (0.6.4)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
+    wicked_pdf (1.0.6)
     will_paginate (3.1.5)
     will_paginate-bootstrap4 (0.1.2)
       will_paginate (~> 3.0, >= 3.0.9)
@@ -939,6 +940,7 @@ DEPENDENCIES
   virtus
   web-console (~> 3.3.0)
   webmock
+  wicked_pdf
   will_paginate-bootstrap4
 
 RUBY VERSION

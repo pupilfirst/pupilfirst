@@ -311,6 +311,23 @@ class BatchApplicationController < ApplicationController
     end
   end
 
+  # GET /apply/partnership_deed
+  # responds with PDF version of the partnership deed
+  def partnership_deed
+    @batch_application = current_application.decorate
+
+    unless @batch_application.partnership_deed_ready?
+      flash[:error] = 'Could not generate Partnership Deed. Ensure details of all founders are provided!'
+      redirect_to apply_stage_path(4)
+    end
+
+    respond_to do |format|
+      format.pdf do
+        render pdf: 'Partnership_Deed', disposition: 'attachment'
+      end
+    end
+  end
+
   def stage_4_submit
     # TODO: Server-side error handling for stage 4 inputs.
 

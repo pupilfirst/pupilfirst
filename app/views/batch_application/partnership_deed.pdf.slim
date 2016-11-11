@@ -1,0 +1,43 @@
+h3 DEED OF PARTNERSHIP
+
+p
+  ' This Deed of Partnership (“Deed”) is made on this #{Date.today.day.ordinalize} day of #{Date.today.strftime('%B %Y')} by and between:
+
+  ol
+    - @batch_application.batch_applicants.each_with_index do |batch_applicant, index|
+      - applicant = batch_applicant.decorate
+      li #{applicant.name}, s/d/o of #{applicant.guardian_name}, aged about #{applicant.age}, residing at #{applicant.current_address} and having Aadhaar Card / Driving License / Passport No. #{applicant.id_proof_number} (hereinafter referred to as the “#{(index+1).ordinalize} Partner” which expression shall, unless it is repugnant to the context, mean and include his/her legal heirs, successors, administrators and assigns or anyone claiming through or under him/her);
+
+  ' (The above parties shall be hereinafter collectively referred to as the “Partners” and individually as “Partner”).
+
+h4 WHEREAS:
+
+ol
+  li
+    ' The Partners have decided to work together as a partnership firm to develop a commercially viable business involving __________________________________________________________________________________
+  li
+    ' The Partners have entered into this Deed of Partnership to form a partnership firm in accordance with this Deed and for laying out the rights and duties of the Partners and the terms and conditions to regulate and govern the relationship between Partners and the Firm (as defined hereinafter).
+
+h4 NOW THEREFORE, IN CONSIDERATION OF THE MUTUAL PROMISES AND COVENANTS CONTAINED HEREIN, THE PARTNERS HEREBY AGREE AS FOLLOWS:
+
+ol
+  li
+    h5 Definition
+    ol
+      li “Firm” means the partnership firm hereby formed by the Partners under this Deed in the name and style ‘__________________________________________’.
+      li “Partnership Business” shall have the meaning assigned to it under Clause 4.1 herein.
+      li “Sharing Ratio” means the inter se proportion of sharing in profits and losses amongst the Partners in the ratio set out in Clause 7.1.
+
+  li
+    h5 Commencement of the Partnership Business
+    ' The Partners agree that this Deed shall be effective from the date of execution of this Deed, as first mentioned hereinabove.
+
+  li
+    h5 Name and Address of the Firm.
+    ol
+      li The Partnership Business shall be conducted by the Partners through a firm constituted under the name and style of ‘_____________.
+      li The Firm shall have its office at _____________________ and /or at such other place or places, as is agreed between the Partners from time to time.
+
+  li
+    h5 Partnership Business
+

@@ -27,4 +27,9 @@ class BatchApplicantDecorator < Draper::Decorator
 
     'submitted_application'
   end
+
+  def age
+    return nil unless born_on.present?
+    Date.today.year - born_on.year
+  end
 end

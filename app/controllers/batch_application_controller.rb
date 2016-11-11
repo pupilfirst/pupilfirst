@@ -328,6 +328,17 @@ class BatchApplicationController < ApplicationController
     end
   end
 
+  # GET /apply/prawns_partnership_deed
+  # respond with PDF version of the partnership deed created using Prawn
+  def prawn_partnership_deed
+    respond_to do |format|
+      format.pdf do
+        pdf = PartnershipDeedPdf.new(current_application)
+        send_data pdf.render, type: 'application/pdf', filename: 'Partnership_Deed', disposition: 'inline'
+      end
+    end
+  end
+
   def stage_4_submit
     # TODO: Server-side error handling for stage 4 inputs.
 

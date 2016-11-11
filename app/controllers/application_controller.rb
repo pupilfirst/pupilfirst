@@ -107,7 +107,8 @@ class ApplicationController < ActionController::Base
       font_sources,
       'child-src https://www.youtube.com;',
       frame_sources,
-      media_sources
+      media_sources,
+      object_sources
     ]
   end
 
@@ -187,28 +188,28 @@ class ApplicationController < ActionController::Base
 
   def frame_sources
     <<~FRAME_SOURCES.squish
-            frame-src
-            data:
-            https://svlabs-public.herokuapp.com https://www.google.com
-            #{typeform_csp[:frame]} #{youtube_csp[:frame]} #{slideshare_csp[:frame]} #{speakerdeck_csp[:frame]}
+      frame-src
+      data:
+      https://svlabs-public.herokuapp.com https://www.google.com
+      #{typeform_csp[:frame]} #{youtube_csp[:frame]} #{slideshare_csp[:frame]} #{speakerdeck_csp[:frame]}
       #{google_form_csp[:frame]};
     FRAME_SOURCES
   end
 
   def image_sources
     <<~IMAGE_SOURCES.squish
-            img-src
-            'self' data: https://blog.sv.co http://www.startatsv.com https://sv-assets.sv.co https://secure.gravatar.com
-            https://uploaded-assets.sv.co #{google_analytics_csp[:image]} #{inspectlet_csp[:image]} #{facebook_csp[:image]}
+      img-src
+      'self' data: https://blog.sv.co http://www.startatsv.com https://sv-assets.sv.co https://secure.gravatar.com
+      https://uploaded-assets.sv.co #{google_analytics_csp[:image]} #{inspectlet_csp[:image]} #{facebook_csp[:image]}
       #{intercom_csp[:image]} #{instagram_csp[:image]};
     IMAGE_SOURCES
   end
 
   def script_sources
     <<~SCRIPT_SOURCES.squish
-            script-src
-            'self' 'unsafe-eval' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
-            http://www.startatsv.com https://sv-assets.sv.co #{recaptcha_csp[:script]} #{google_analytics_csp[:script]}
+      script-src
+      'self' 'unsafe-eval' https://ajax.googleapis.com https://blog.sv.co https://www.youtube.com
+      http://www.startatsv.com https://sv-assets.sv.co #{recaptcha_csp[:script]} #{google_analytics_csp[:script]}
       #{inspectlet_csp[:script]} #{facebook_csp[:script]} #{intercom_csp[:script]}
       #{instagram_csp[:script]} #{web_console_csp[:script]};
     SCRIPT_SOURCES
@@ -216,7 +217,7 @@ class ApplicationController < ActionController::Base
 
   def connect_sources
     <<~CONNECT_SOURCES.squish
-            connect-src 'self' #{inspectlet_csp[:connect]} #{intercom_csp[:connect]}
+      connect-src 'self' #{inspectlet_csp[:connect]} #{intercom_csp[:connect]}
       #{google_analytics_csp[:connect]};
     CONNECT_SOURCES
   end
@@ -228,8 +229,12 @@ class ApplicationController < ActionController::Base
   end
 
   def media_sources
-    <<~MEDIA_SOURCES
+    <<~MEDIA_SOURCES.squish
       media-src 'self' #{resource_csp[:media]} #{intercom_csp[:media]};
     MEDIA_SOURCES
+  end
+
+  def object_sources
+    "object-src 'self';"
   end
 end

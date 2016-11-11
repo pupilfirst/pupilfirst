@@ -595,6 +595,7 @@ GEM
     passenger (5.0.30)
       rack
       rake (>= 0.8.1)
+    pdf-core (0.6.1)
     pg (0.19.0)
     phony (2.15.33)
     phony_rails (0.14.4)
@@ -613,6 +614,9 @@ GEM
       actionmailer (>= 3.0.0)
       postmark (~> 1.9.0)
     powerpack (0.1.1)
+    prawn (2.1.0)
+      pdf-core (~> 0.6.1)
+      ttfunk (~> 1.4.0)
     pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -807,6 +811,7 @@ GEM
     tilt (2.0.5)
     titleize (1.4.1)
     trollop (2.1.2)
+    ttfunk (1.4.0)
     turbolinks (5.0.1)
       turbolinks-source (~> 5)
     turbolinks-source (5.0.0)
@@ -916,6 +921,7 @@ DEPENDENCIES
   phony_rails
   poltergeist
   postmark-rails
+  prawn
   pry-rails
   rails!
   rails-assets-bootstrap-tabcollapse!

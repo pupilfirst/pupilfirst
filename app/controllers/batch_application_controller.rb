@@ -312,25 +312,16 @@ class BatchApplicationController < ApplicationController
   end
 
   # GET /apply/partnership_deed
-  # responds with PDF version of the partnership deed
+  # respond with PDF version of the partnership deed created using Prawn
   def partnership_deed
     @batch_application = current_application.decorate
 
     unless @batch_application.partnership_deed_ready?
       flash[:error] = 'Could not generate Partnership Deed. Ensure details of all founders are provided!'
       redirect_to apply_stage_path(4)
+      return
     end
 
-    respond_to do |format|
-      format.pdf do
-        render pdf: 'Partnership_Deed', disposition: 'attachment'
-      end
-    end
-  end
-
-  # GET /apply/prawns_partnership_deed
-  # respond with PDF version of the partnership deed created using Prawn
-  def prawn_partnership_deed
     respond_to do |format|
       format.pdf do
         pdf = PartnershipDeedPdf.new(current_application)

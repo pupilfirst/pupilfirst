@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe BatchApplication::MarkInterviewAttendedService do
+describe BatchApplications::MarkInterviewAttendedService do
   subject { described_class.new(batch_application) }
 
   let(:batch_application) { create :batch_application, :paid }

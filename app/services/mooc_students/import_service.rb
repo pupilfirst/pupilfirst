@@ -1,4 +1,4 @@
-class MoocStudent
+module MoocStudents
   # Imports student entries into mooc_students
   #
   # The CSV file is expected to contain a header with keys 'name', 'email', 'mobile', 'gender', college', and 'semester'.
@@ -44,7 +44,7 @@ class MoocStudent
     def import_student(row)
       data = clean_up(row)
       log "Importing #{data.inspect}"
-      MoocStudent::RegistrationService.new(data).register unless dry_run?
+      MoocStudents::RegistrationService.new(data).register unless dry_run?
     end
 
     def clean_up(data)

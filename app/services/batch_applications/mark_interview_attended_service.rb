@@ -1,4 +1,4 @@
-class BatchApplication
+module BatchApplications
   # Creates an application submission for supplied batch application for the interview stage.
   class MarkInterviewAttendedService
     def initialize(batch_application)

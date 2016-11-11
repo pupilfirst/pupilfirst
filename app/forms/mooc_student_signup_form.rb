@@ -29,6 +29,6 @@ class MoocStudentSignupForm < Reform::Form
   end
 
   def save
-    MoocStudent::RegistrationService.new(to_nested_hash).register
+    MoocStudents::RegistrationService.new(to_nested_hash).register
   end
 end

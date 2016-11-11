@@ -1,4 +1,4 @@
-class MoocStudent
+module MoocStudents
   # Perform registration of a MoocStudent
   class RegistrationService
     attr_reader :attributes

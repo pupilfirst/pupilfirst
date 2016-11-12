@@ -60,7 +60,9 @@ class ResourcesController < ApplicationController
   end
 
   def paginate_resources
-    @resources = @resources.paginate(page: params[:page], per_page: 9)
+    # Ensure page is valid.
+    page = params[:page].to_i.to_s == params[:page] ? params[:page] : nil
+    @resources = @resources.paginate(page: page, per_page: 9)
   end
 
   def load_resource_tags

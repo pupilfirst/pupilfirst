@@ -201,3 +201,51 @@ en:
       founder_reminder: ":exclamation: *Reminder:* Your startup (%{startup_name}) has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes! You can <%{meeting_link}|click here> to join the meeting when it's time."
       faculty_reminder: ":exclamation: *Reminder:* You have an office hour with the founders of <%{startup_url}|%{startup_name}> starting in 30 minutes!\nThe founders plan to discuss the following questions:\n %{questions}\nYou can <%{meeting_link}|click here> to join the meeting when it's time."
       ops_team_reminder: ":exclamation: *Reminder:* <%{startup_url}|%{startup_name}> has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes. Follow up!"
+
+  partnership_deed:
+    whereas:
+      a: '<b>A.</b> The Partners have decided to work together as a partnership firm to develop a commercially viable business involving'
+      b: '<b>B.</b> The Partners have entered into this Deed of Partnership to form a partnership firm in accordance with this Deed and for laying out the rights and duties of the Partners and the terms and conditions to regulate and govern the relationship between Partners and the Firm (as defined hereinafter).'
+    s1:
+      heading: '<b>1. Definition</b>'
+      c1: '1.1 “Firm” means the partnership firm hereby formed by the Partners under this Deed in the name and style:'
+      c2: '1.2 “Partnership Business” shall have the meaning assigned to it under Clause 4.1 herein.'
+      c3: '1.3 “Sharing Ratio” means the inter se proportion of sharing in profits and losses amongst the Partners in the ratio set out in Clause 7.1.'
+    s2:
+      heading: '<b>2. Commencement of the Partnership Business</b>'
+      text: 'The Partners agree that this Deed shall be effective from the date of execution of this Deed, as first mentioned hereinabove.'
+    s3:
+      heading: '<b>3. Name and Address of the Firm</b>'
+      c1: '3.1 The Partnership Business shall be conducted by the Partners through a firm constituted under the name and style of ______________________'
+      c2: '3.2 The Firm shall have its office at ______________________ and /or at such other place or places, as is agreed between the Partners from time to time.'
+    s4:
+      heading: '<b>4. Partnership Business</b>'
+      C: 'C. The Firm has been established for the purpose of developing and operating a commercially viable business involving'
+      c1: '4.1 (“<b>Partnership Business</b>”). The Firm may also conduct such other activities, whether or not for profit, as mutually agreed to by all Partners all of which shall form part of the Partnership Business.'
+      c2: '4.2 The duration of the partnership shall be "At Will ".'
+    s5:
+      heading: '<b>5. Partners</b>'
+      c1: '5.1 No individual or body corporate may be introduced as a new partner without the consent of the existing Partners. Such incoming partner shall give his/her prior consent to act as Partner of the Firm and shall execute a deed of reconstitution agreeing to abide by the terms of the Reconstitution Deed so executed. On execution of the Reconstitution Deed, such person shall become a partner and be entitled to the rights and have such duties as set forth in such Reconstitution Deed.'
+      c2:
+        heading: '5.2 Rights of the Partners'
+        c1: '5.2.1 All the Partners hereto shall have the rights, title and interest in all the assets and properties in the Firm in the proportion of their Sharing Ratio.'
+        c2: '5.2.2 Each of the Partners would be entitled to withdraw reasonable amounts from the Firm’s account from time to time as may be mutually agreed upon between the Partners.'
+        c3:
+          text: '5.2.3 All agreements, contracts, memorandums of understanding, deeds and all such instruments to which the Firm is a party, may be signed either:'
+          c1: '5.2.3.1 by the First Partner and Second Partner, on behalf of the Firm and all Partners; or'
+          c2: '5.2.3.2 Jointly by all Partners, on behalf of the Firm, which execution shall be binding and effective  on the Firm and all Partners.'
+      c3:
+        heading: '5.3 Duties of Partners'
+        c1: '5.3.1 Every Partner shall account to the Firm for any benefit derived by her without the consent of the Firm from any transaction concerning the Firm, or from any use by her of the property, name or any business connection of the Firm.'
+        c2: '5.3.2 Every Partner shall indemnify the Firm and the other existing partner(s) for any loss caused to it by her conduct of the business on behalf of the Firm.'
+        c3: '5.3.3 Each Partner shall render true accounts and full information of all things affecting the Firm to any Partner or her legal representatives.'
+        c4: '5.3.4 Each of the Partners shall make all endeavors and devote their full working time and efforts for the fulfillment of the objectives of the Firm and for conduct of the Partnership Business.'
+        c5: '5.3.5 All intellectual property rights created and developed by each Partner in the conduct, development and operation of the Partnership Business shall be the property of the Firm and each Partner hereby assigns all such copyrights and other intellectual property rights to the Firm.'
+    s6:
+      heading: '<b>6. Capital Contribution</b>'
+      c1: '6.1 The initial capital of the Firm shall be INR _________ (Rupees ______ only). The individual contribution of each Partner shall be'
+      c2: '6.2 For any further funding of the Firm as may be deemed necessary or expedient for efficiently carrying on the Partnership Business contribution towards such funding shall be made by each Partner, from time to time, in the Sharing Ratio. The Partners shall jointly determine the funding requirements of the Firm in order to meet the needs of business from time to time.  The funding may be brought in by the Partners through capital contribution or through external borrowing on such terms as the Partners may jointly agree upon.  If the Partners agree to bring in additional capital into the Firm to meet the funding requirements or such additional capital is needed to meet the requirements of the banker in terms of the loan sanctioned and any Partner fails to contribute in part or in full, the other Partners shall be entitled to make up for such shortfall and increase their Sharing Ratio in the Firm.'
+      c3: '6.3 Partners are not entitled to any interest on the amount of capital standing to her credit in the accounts of the Firm from time to time.'
+      c4: '6.4 Contribution of a Partner may also be made by tangible, intangible, moveable or immoveable property including the time and efforts spent by each Partner in development of the Partnership Business, as may be mutually agreed upon between the Partners and any incoming partner shall bring in a minimum contribution as agreed upon by the existing Partners.'
+      c5: '6.5 The Partners may, from time to time, purchase any property, movable or immovable, in the name of the Firm for the purpose of Partnership Business.'
+      c6: '6.6 If any Partner shall advance any sum of money to the Firm over and above his due contribution to capital, the same shall be a debt due from the Firm to the Partner advancing the same and shall carry simple interest at the rate of 12% per annum or any other rate mutually agreed to by the Partners.'

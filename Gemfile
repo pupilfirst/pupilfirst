@@ -96,6 +96,7 @@ gem 'draper', '~> 3.0.0.pre1' # Decorators/View-Models for Rails Applications # 
 gem 'skylight' # Skylight agent for Ruby https://www.skylight.io
 gem 'responders' # A set of Rails responders to dry up your application (respond_to / with)
 gem 'prawn' # Used to generate partnership deed and other agreement pdfs
+gem 'prawn-table' # Support for drawing tables in prawn pdfs
 
 # Omniauth providers
 gem 'omniauth-google-oauth2' # Oauth2 strategy for Google

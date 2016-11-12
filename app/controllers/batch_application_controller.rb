@@ -325,6 +325,7 @@ class BatchApplicationController < ApplicationController
     respond_to do |format|
       format.pdf do
         pdf = PartnershipDeedPdf.new(current_application)
+        pdf.build!
         send_data pdf.render, type: 'application/pdf', filename: 'Partnership_Deed', disposition: 'inline'
       end
     end

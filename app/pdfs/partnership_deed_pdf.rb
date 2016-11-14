@@ -3,65 +3,60 @@ class PartnershipDeedPdf < Prawn::Document
     @batch_application = batch_application.decorate
     super(margin: 70)
     default_leading 5
+    font 'Times-Roman'
   end
 
   def build!
-    add_header
-    add_partners
+    add_title
+    declare_partners
     add_whereas_clause
     add_agreement_clauses
+    add_signatures
   end
 
   private
 
-  def add_header
+  def add_title
     move_down 300
-    font 'Times-Roman', style: :bold
-    text '<u>DEED OF PARTNERSHIP</u>', align: :center, inline_format: true, size: 15
+    text '<b><u>DEED OF PARTNERSHIP</u></b>', align: :center, inline_format: true, size: 15
   end
 
-  def add_partners
+  def declare_partners
     move_down 10
-    font 'Times-Roman', style: :normal
-    text "This Deed of Partnership (“<b>Deed</b>”) is made on this #{Date.today.day.ordinalize} day of #{Date.today.strftime('%B %Y')} by and between:", inline_format: true
+    text t('partnership_deed.declaration.header', day: Date.today.day.ordinalize, month: Date.today.strftime('%B %Y')), inline_format: true
     add_partner_details
+    text t('partnership_deed.declaration.footer')
   end
 
   def add_partner_details
     move_down 5
-    @batch_application.batch_applicants.each_with_index do |batch_applicant, index|
-      @applicant = batch_applicant.decorate
-      @index = index
+    @batch_application.batch_applicants.each_with_index { |applicant, index| add_founder_to_partners(applicant, index) }
+  end
 
-      text partner_description, inline_format: true, indent_paragraphs: 30
-      move_down 5
-    end
-
-    text '(The above parties shall be hereinafter collectively referred to as the “Partners” and individually as “Partner”).'
+  def add_founder_to_partners(batch_applicant, index)
+    @applicant = batch_applicant.decorate
+    @index = index + 1
+    text partner_description, inline_format: true, indent_paragraphs: 30
+    move_down 5
   end
 
   def partner_description
-    "<b>#{@index + 1}.</b> #{partner_basic_info}, #{partner_address_and_id} #{common_text_for_partner}"
-  end
-
-  def partner_basic_info
-    "#{@applicant.name}, s/d/o of #{@applicant.guardian_name}, aged about #{@applicant.age}"
-  end
-
-  def partner_address_and_id
-    "residing at #{@applicant.current_address} and having Aadhaar Card / Driving License / Passport No. #{@applicant.id_proof_number}"
-  end
-
-  def common_text_for_partner
-    "(hereinafter referred to as the “#{(@index + 1).ordinalize} Partner” which expression shall, unless it is repugnant to the context, mean and include his/her legal heirs, successors, administrators and assigns or anyone claiming through or under him/her);"
+    t(
+      'partnership_deed.declaration.partner_description',
+      index: @index,
+      ordinalized_index: @index.ordinalize,
+      name: @applicant.name,
+      guardian_name: @applicant.guardian_name,
+      age: @applicant.age,
+      current_address: @applicant.current_address,
+      id_proof_number: @applicant.id_proof_number
+    )
   end
 
   def add_whereas_clause
     move_down 10
-    font 'Times-Roman', style: :bold
-    text 'WHEREAS:'
+    text '<b>WHEREAS:</b>', inline_format: true
     move_down 5
-    font 'Times-Roman', style: :normal
     text t('partnership_deed.whereas.a'), inline_format: true
     3.times do
       move_down 15
@@ -71,105 +66,105 @@ class PartnershipDeedPdf < Prawn::Document
     text t('partnership_deed.whereas.b'), inline_format: true
   end
 
+  # rubocop: disable Metrics/AbcSize, Metrics/MethodLength
   def add_agreement_clauses
     move_down 10
-    font 'Times-Roman', style: :bold
-    text 'NOW THEREFORE, IN CONSIDERATION OF THE MUTUAL PROMISES AND COVENANTS CONTAINED HEREIN, THE PARTNERS HEREBY AGREE AS FOLLOWS:'
+    text t('partnership_deed.agreements_header'), inline_format: true
 
-    add_definitions
-    add_commencement
-    add_firm_details
-    add_partnership_business
-    add_partner_clauses
-    add_capital_contribution
-  end
-
-  def add_definitions
+    # Section 1: Definitions
     move_down 10
     font 'Times-Roman', style: :normal
-    text t('partnership_deed.s1.heading'), inline_format: true
-    move_down 10
-    text t('partnership_deed.s1.c1')
+    text t('partnership_deed.s1.part_1'), inline_format: true
     move_down 15
     stroke_horizontal_rule
     move_down 10
-    text t('partnership_deed.s1.c2')
-    text t('partnership_deed.s1.c3')
-  end
+    text t('partnership_deed.s1.part_2')
 
-  def add_commencement
+    # Section 2: Commencement of the Partnership Business
     move_down 10
-    text t('partnership_deed.s2.heading'), inline_format: true
-    move_down 10
-    text t('partnership_deed.s2.text')
-  end
+    text t('partnership_deed.s2'), inline_format: true
 
-  def add_firm_details
+    # Section 3: Name and Address of the Firm
     move_down 10
-    text t('partnership_deed.s3.heading'), inline_format: true
-    move_down 10
-    text t('partnership_deed.s3.c1')
-    text t('partnership_deed.s3.c2')
-  end
+    text t('partnership_deed.s3'), inline_format: true
 
-  def add_partnership_business
+    # Section 4: Partnership Business
     move_down 10
-    text t('partnership_deed.s4.heading'), inline_format: true
-    move_down 10
-    text t('partnership_deed.s4.C')
+    text t('partnership_deed.s4.part_1'), inline_format: true
     3.times do
       move_down 15
       stroke_horizontal_rule
     end
     move_down 10
-    text t('partnership_deed.s4.c1'), inline_format: true
-    text t('partnership_deed.s4.c2')
-  end
+    text t('partnership_deed.s4.part_2'), inline_format: true
 
-  def add_partner_clauses
+    # Section 5: Partners
     move_down 10
-    text t('partnership_deed.s5.heading'), inline_format: true
-    move_down 10
-    text t('partnership_deed.s5.c1')
-    add_s5_c2
-    add_s5_c3
-  end
+    text t('partnership_deed.s5.part_1'), inline_format: true
+    text t('partnership_deed.s5.part_2'), indent_paragraphs: 30
+    text t('partnership_deed.s5.part_3'), indent_paragraphs: 60
+    text t('partnership_deed.s5.part_4_heading')
+    text t('partnership_deed.s5.part_4'), indent_paragraphs: 30
 
-  def add_s5_c2
-    move_down 10
-    text t('partnership_deed.s5.c2.heading')
-    move_down 10
-    text t('partnership_deed.s5.c2.c1'), indent_paragraphs: 30
-    text t('partnership_deed.s5.c2.c2'), indent_paragraphs: 30
-    text t('partnership_deed.s5.c2.c3.text'), indent_paragraphs: 30
-    text t('partnership_deed.s5.c2.c3.c1'), indent_paragraphs: 60
-    text t('partnership_deed.s5.c2.c3.c2'), indent_paragraphs: 60
-  end
-
-  def add_s5_c3
-    move_down 10
-    text t('partnership_deed.s5.c3.heading')
-    move_down 10
-    text t('partnership_deed.s5.c3.c1'), indent_paragraphs: 30
-    text t('partnership_deed.s5.c3.c2'), indent_paragraphs: 30
-    text t('partnership_deed.s5.c3.c3'), indent_paragraphs: 30
-    text t('partnership_deed.s5.c3.c4'), indent_paragraphs: 30
-    text t('partnership_deed.s5.c3.c5'), indent_paragraphs: 30
-  end
-
-  def add_capital_contribution
+    # Section 6: Capital Contribution
     move_down 10
     text t('partnership_deed.s6.heading'), inline_format: true
     move_down 10
     text t('partnership_deed.s6.c1')
     add_capital_contribution_table
     move_down 10
-    text t('partnership_deed.s6.c2')
-    text t('partnership_deed.s6.c3')
-    text t('partnership_deed.s6.c4')
-    text t('partnership_deed.s6.c5')
-    text t('partnership_deed.s6.c6')
+    text t('partnership_deed.s6.c2_to_6')
+
+    # Section 7: Sharing of Profits and Losses
+    move_down 10
+    text t('partnership_deed.s7.heading'), inline_format: true
+    move_down 10
+    text t('partnership_deed.s7.c1'), inline_format: true
+    add_profit_sharing_table
+    move_down 10
+    text t('partnership_deed.s7.c2_to_3'), inline_format: true
+
+    # Section 8: Financial year and accounts
+    move_down 10
+    text t('partnership_deed.s8'), inline_format: true
+
+    # Section 9: Bank Account
+    move_down 10
+    text t('partnership_deed.s9'), inline_format: true
+
+    # Section 10: Records and Books
+    move_down 10
+    text t('partnership_deed.s10'), inline_format: true
+
+    # Section 11: Borrowing Powers
+    move_down 10
+    text t('partnership_deed.s11'), inline_format: true
+
+    # Section 12: Covenants of the Partners
+    move_down 10
+    text t('partnership_deed.s12.heading'), inline_format: true
+    text t('partnership_deed.s12.c1.heading')
+    text t('partnership_deed.s12.c1.clauses'), indent_paragraphs: 30
+    text t('partnership_deed.s12.c2.heading')
+    text t('partnership_deed.s12.c2.clauses'), indent_paragraphs: 30
+
+    # Section 13: Term
+    move_down 10
+    text t('partnership_deed.s13.part_1'), inline_format: true
+    text t('partnership_deed.s13.part_2'), indent_paragraphs: 30
+
+    # Section 14: Retirement or Death
+    move_down 10
+    text t('partnership_deed.s14.part_1'), inline_format: true
+    text t('partnership_deed.s14.part_2'), indent_paragraphs: 30
+    text t('partnership_deed.s14.part_3')
+    text t('partnership_deed.s14.part_4'), indent_paragraphs: 30
+
+    # Section 15: Miscellaneous
+    move_down 10
+    text t('partnership_deed.s15'), inline_format: true
   end
+  # rubocop: enable Metrics/AbcSize, Metrics/MethodLength
 
   def add_capital_contribution_table
     move_down 10
@@ -179,6 +174,30 @@ class PartnershipDeedPdf < Prawn::Document
     end
 
     table table_rows, position: :center, width: 300, cell_style: { inline_format: true }
+  end
+
+  def add_profit_sharing_table
+    move_down 10
+    table_rows = [['<b>Partner</b>', '<b>Sharing Ratio (in percentage)</b>']]
+    @batch_application.batch_applicants.each_with_index do |_batch_applicant, index|
+      table_rows << ["#{(index + 1).ordinalize} Partner", '']
+    end
+
+    table table_rows, position: :center, width: 300, cell_style: { inline_format: true }
+  end
+
+  def add_signatures
+    move_down 10
+    text t('partnership_deed.signatures.header')
+    @batch_application.batch_applicants.each_with_index { |_applicant, index| add_signature_section(index + 1) }
+  end
+
+  def add_signature_section(index)
+    move_down 15
+    text 'Signed and delivered by'
+    move_down 10
+    text '____________________________________'
+    text "(the #{index.ordinalize} Partner)"
   end
 
   def t(*args)

@@ -35,7 +35,7 @@ class PartnershipDeedPdf < Prawn::Document
 
   def add_founder_to_partners(batch_applicant, index)
     @applicant = batch_applicant.decorate
-    @index = index + 1
+    @index = index
     text partner_description, inline_format: true, indent_paragraphs: 30
     move_down 5
   end
@@ -43,8 +43,8 @@ class PartnershipDeedPdf < Prawn::Document
   def partner_description
     t(
       'partnership_deed.declaration.partner_description',
-      index: @index,
-      ordinalized_index: @index.ordinalize,
+      index: @index + 1,
+      ordinalized_index: ORDINALIZE[@index],
       name: @applicant.name,
       guardian_name: @applicant.guardian_name,
       age: @applicant.age,
@@ -170,7 +170,7 @@ class PartnershipDeedPdf < Prawn::Document
     move_down 10
     table_rows = [['<b>Partner</b>', '<b>Amount</b>']]
     @batch_application.batch_applicants.each_with_index do |_batch_applicant, index|
-      table_rows << ["#{(index + 1).ordinalize} Partner", '']
+      table_rows << ["#{ORDINALIZE[index]} Partner", '']
     end
 
     table table_rows, position: :center, width: 300, cell_style: { inline_format: true }
@@ -180,7 +180,7 @@ class PartnershipDeedPdf < Prawn::Document
     move_down 10
     table_rows = [['<b>Partner</b>', '<b>Sharing Ratio (in percentage)</b>']]
     @batch_application.batch_applicants.each_with_index do |_batch_applicant, index|
-      table_rows << ["#{(index + 1).ordinalize} Partner", '']
+      table_rows << ["#{ORDINALIZE[index]} Partner", '']
     end
 
     table table_rows, position: :center, width: 300, cell_style: { inline_format: true }
@@ -189,7 +189,7 @@ class PartnershipDeedPdf < Prawn::Document
   def add_signatures
     move_down 10
     text t('partnership_deed.signatures.header')
-    @batch_application.batch_applicants.each_with_index { |_applicant, index| add_signature_section(index + 1) }
+    @batch_application.batch_applicants.each_with_index { |_applicant, index| add_signature_section(index) }
   end
 
   def add_signature_section(index)
@@ -197,10 +197,12 @@ class PartnershipDeedPdf < Prawn::Document
     text 'Signed and delivered by'
     move_down 10
     text '____________________________________'
-    text "(the #{index.ordinalize} Partner)"
+    text "(The #{ORDINALIZE[index]} Partner)"
   end
 
   def t(*args)
     I18n.t(*args)
   end
+
+  ORDINALIZE = %w(First Second Third Fourth Fifth Sixth Seventh Eighth Ninth Tenth).freeze
 end

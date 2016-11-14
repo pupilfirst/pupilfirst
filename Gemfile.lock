@@ -729,6 +729,8 @@ GEM
     roadie-rails (1.1.1)
       railties (>= 3.0, < 5.1)
       roadie (~> 3.1)
+    rollbar (2.13.3)
+      multi_json
     rspec-core (3.5.4)
       rspec-support (~> 3.5.0)
     rspec-expectations (3.5.0)
@@ -767,8 +769,6 @@ GEM
     seedbank (0.4.0)
     select2-rails (3.5.10)
       thor (~> 0.14)
-    sentry-raven (2.1.2)
-      faraday (>= 0.7.6, < 0.10.x)
     signet (0.7.3)
       addressable (~> 2.3)
       faraday (~> 0.9)
@@ -944,12 +944,12 @@ DEPENDENCIES
   responders
   rest-client
   roadie-rails
+  rollbar
   rspec-rails (~> 3.5.0)
   rubocop
   sass-rails (~> 5.0)
   seedbank
   select2-rails (~> 3.5.10)
-  sentry-raven
   shortener!
   simple_form (~> 3.3.1)
   simple_form_fancy_uploads

@@ -5,6 +5,7 @@
 ## Setup for development
 
 ### Install Dependencies
+
   *  Ruby - Use RVM to install version specified in `.ruby-version`
 
 #### OSX
@@ -18,9 +19,12 @@
 
   *  Setup `database.yml` for postgresql.
   *  copy `example.env` to `.env` and set the variables as required.
-  *  Remove `SENTRY_DSN` key from `.env`. This disables the sentry-raven gem (useful only in production).
+  *  Load environment key for Rollbar from Heroku with:
+
+    heroku config -s --app sv-co | grep ROLLBAR_ACCESS_TOKEN >> .env
 
 ### Bundle
+
     $ bundle install
 
 ### Overcommit
@@ -29,6 +33,7 @@
     $ overcommit --sign
 
 ### Database setup
+
     $ rake db:setup
 
 ### Use [puma-dev](https://github.com/puma/puma-dev) to run the application.

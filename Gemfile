@@ -30,7 +30,6 @@ gem 'jquery-rails' # JQuery on Rails.
 gem 'mini_magick' # Image processing.
 gem 'pg' # PostgreSQL support.
 gem 'sass-rails', '~> 5.0'
-gem 'sentry-raven' # Reporter for Sentry Heroku add-on.
 gem 'slim' # Slim templating.
 gem 'turbolinks' # Quicker page navigation. https://github.com/turbolinks/turbolinks
 gem 'uglifier', '>= 2.7.2' # JavaScript compressor.
@@ -95,6 +94,7 @@ gem 'jspdf-rails' # HTML5 client-side pdf generation - for certificates
 gem 'draper', '~> 3.0.0.pre1' # Decorators/View-Models for Rails Applications # TODO: Pre-release version for Rails 5 support. Upgrade to stable when available.
 gem 'skylight' # Skylight agent for Ruby https://www.skylight.io
 gem 'responders' # A set of Rails responders to dry up your application (respond_to / with)
+gem 'rollbar' # Exception tracking and logging from Ruby to Rollbar https://rollbar.com
 
 # Omniauth providers
 gem 'omniauth-google-oauth2' # Oauth2 strategy for Google

@@ -50,6 +50,7 @@ class PartnershipDeedPdf < Prawn::Document
       parent_name: @applicant.parent_name,
       age: @applicant.age,
       current_address: @applicant.current_address,
+      id_proof_type: @applicant.id_proof_type,
       id_proof_number: @applicant.id_proof_number
     )
   end

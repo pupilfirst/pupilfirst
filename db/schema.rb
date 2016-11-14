@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161114104335) do
+ActiveRecord::Schema.define(version: 20161114105632) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -132,6 +132,7 @@ ActiveRecord::Schema.define(version: 20161114104335) do
     t.string   "id_proof_number"
     t.string   "id_proof"
     t.string   "address_proof"
+    t.string   "id_proof_type"
     t.index ["college_id"], name: "index_batch_applicants_on_college_id", using: :btree
     t.index ["token"], name: "index_batch_applicants_on_token", using: :btree
   end

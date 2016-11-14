@@ -101,6 +101,7 @@
                 = c.input :current_address
                 = c.input :permanent_address
                 = c.input :phone
+                = c.input :id_proof_type, as: :select, collection: BatchApplicant::ID_PROOF_TYPES
                 = c.input :id_proof_number, label: 'ID Proof Number'
 
               .pull-sm-right.m-b-1

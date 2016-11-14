@@ -1,3 +1,13 @@
+### 14 November, 2016
+
+#### Features
+
+  - We're phasing out password-based login in favor of OAuth-based login (with Google, Facebook and Github). We'll keep manual login using e-mail address as a backup option for those who don't have an account at these sites.
+
+#### Bugfixes
+
+  - Fixed a crash on the library page when navigating to different pages.
+
 ### 7 November, 2016
 
 #### Bugfixes

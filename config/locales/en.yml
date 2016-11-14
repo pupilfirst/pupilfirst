@@ -206,7 +206,7 @@ en:
     declaration:
       header: "This Deed of Partnership (“<b>Deed</b>”) is made on this %{day} day of %{month} by and between:"
       footer: '(The above parties shall be hereinafter collectively referred to as the “Partners” and individually as “Partner”).'
-      partner_description: "<b>%{index}.</b> %{name}, s/d/o of %{guardian_name}, aged about %{age}, residing at %{current_address} and having Aadhaar Card / Driving License / Passport No. %{id_proof_number} (hereinafter referred to as the “%{ordinalized_index} Partner” which expression shall, unless it is repugnant to the context, mean and include his/her legal heirs, successors, administrators and assigns or anyone claiming through or under him/her);"
+      partner_description: "<b>%{index}.</b> %{name}, %{son_or_daughter} of %{parent_name}, aged about %{age}, residing at %{current_address} and having Aadhaar Card / Driving License / Passport No. %{id_proof_number} (hereinafter referred to as the “%{ordinalized_index} Partner” which expression shall, unless it is repugnant to the context, mean and include his/her legal heirs, successors, administrators and assigns or anyone claiming through or under him/her);"
       partner_details: ""
     whereas:
       a: '<b>A.</b> The Partners have decided to work together as a partnership firm to develop a commercially viable business involving'

@@ -3,8 +3,7 @@ class StageFourFounderDetailsForm < Reform::Form
     property :name
     property :role
     property :born_on
-    property :guardian_name
-    property :guardian_relation
+    property :parent_name
     property :current_address
     property :permanent_address
     property :phone

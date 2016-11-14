@@ -96,8 +96,8 @@
                 = c.input :name, input_html: { maxlength: 250 }
                 = c.input :role, as: :select, collection: Founder.valid_roles
                 = c.input :born_on, as: :string, required: true, label: 'Date of birth', placeholder: 'YYYY-MM-DD', input_html: { class: 'date-picker', data: { format: 'Y-m-d' } }
-                = c.input :guardian_name, label: 'Name of Guardian'
-                = c.input :guardian_relation, label: 'Relation with Guardian'
+                = c.input :gender, as: :select, collection: Founder.valid_gender_values
+                = c.input :parent_name, label: 'Name of Parent'
                 = c.input :current_address
                 = c.input :permanent_address
                 = c.input :phone

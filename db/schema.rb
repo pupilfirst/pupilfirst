@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161110173349) do
+ActiveRecord::Schema.define(version: 20161114104335) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -126,8 +126,7 @@ ActiveRecord::Schema.define(version: 20161110173349) do
     t.string   "college_text"
     t.string   "fee_payment_method"
     t.date     "born_on"
-    t.string   "guardian_name"
-    t.string   "guardian_relation"
+    t.string   "parent_name"
     t.text     "current_address"
     t.text     "permanent_address"
     t.string   "id_proof_number"

@@ -46,7 +46,8 @@ class PartnershipDeedPdf < Prawn::Document
       index: @index + 1,
       ordinalized_index: ORDINALIZE[@index],
       name: @applicant.name,
-      guardian_name: @applicant.guardian_name,
+      son_or_daughter: @applicant.son_or_daughter,
+      parent_name: @applicant.parent_name,
       age: @applicant.age,
       current_address: @applicant.current_address,
       id_proof_number: @applicant.id_proof_number

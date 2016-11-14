@@ -32,4 +32,14 @@ class BatchApplicantDecorator < Draper::Decorator
     return nil unless born_on.present?
     Date.today.year - born_on.year
   end
+
+  def son_or_daughter
+    if gender == Founder::GENDER_MALE
+      'son'
+    elsif gender == Founder::GENDER_FEMALE
+      'daughter'
+    else
+      'son/daughter'
+    end
+  end
 end

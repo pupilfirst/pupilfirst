@@ -34,7 +34,7 @@ class BatchApplicant < ApplicationRecord
 
   # Basic validations.
   validates :email, presence: true, uniqueness: true, email: true
-  validates :phone, mobile_number: true
+  validates :phone, mobile_number: true, allow_nil: true
   validates_inclusion_of :fee_payment_method, in: FEE_PAYMENT_METHODS, allow_nil: true
 
   has_secure_token

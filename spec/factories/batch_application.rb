@@ -30,6 +30,10 @@ FactoryGirl.define do
       paid
 
       after(:create) do |application|
+        (application.team_size - 1).times do
+          application.batch_applicants << create(:batch_applicant)
+        end
+
         create :application_submission, :stage_2_submission, batch_application: application, scored: true
       end
     end

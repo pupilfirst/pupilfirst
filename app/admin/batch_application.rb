@@ -284,7 +284,7 @@ ActiveAdmin.register BatchApplication do
         ul do
           batch_application.batch_applicants.each do |applicant|
             li do
-              "#{applicant.name} - #{applicant.fee_payment_method}"
+              "#{applicant.name} - #{applicant.fee_payment_method || 'Unknown'}"
             end
           end
         end

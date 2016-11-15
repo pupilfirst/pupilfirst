@@ -8,6 +8,7 @@ class EducationalAgreementPdf < ApplicationPdf
   def build
     add_title_and_date
     add_agreement_parties
+    add_whereas_clause
   end
 
   private
@@ -89,6 +90,11 @@ class EducationalAgreementPdf < ApplicationPdf
     list = []
     batch_applicants.each_with_index { |_applicant, index| list << "Founder #{index + 1}" }
     list.to_sentence
+  end
+
+  def add_whereas_clause
+    move_down 10
+    text t('educational_agreement.whereas'), inline_format: true
   end
 
   def batch_applicants

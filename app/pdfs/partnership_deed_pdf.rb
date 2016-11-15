@@ -59,13 +59,7 @@ class PartnershipDeedPdf < Prawn::Document
     move_down 10
     text '<b>WHEREAS:</b>', inline_format: true
     move_down 5
-    text t('partnership_deed.whereas.a'), inline_format: true
-    3.times do
-      move_down 15
-      stroke_horizontal_rule
-    end
-    move_down 10
-    text t('partnership_deed.whereas.b'), inline_format: true
+    text t('partnership_deed.whereas_cluases'), inline_format: true
   end
 
   # rubocop: disable Metrics/AbcSize, Metrics/MethodLength
@@ -88,17 +82,11 @@ class PartnershipDeedPdf < Prawn::Document
 
     # Section 3: Name and Address of the Firm
     move_down 10
-    text t('partnership_deed.s3'), inline_format: true
+    text t('partnership_deed.s3', team_lead_address: @batch_application.team_lead.current_address), inline_format: true
 
     # Section 4: Partnership Business
     move_down 10
-    text t('partnership_deed.s4.part_1'), inline_format: true
-    3.times do
-      move_down 15
-      stroke_horizontal_rule
-    end
-    move_down 10
-    text t('partnership_deed.s4.part_2'), inline_format: true
+    text t('partnership_deed.s4'), inline_format: true
 
     # Section 5: Partners
     move_down 10
@@ -112,7 +100,7 @@ class PartnershipDeedPdf < Prawn::Document
     move_down 10
     text t('partnership_deed.s6.heading'), inline_format: true
     move_down 10
-    text t('partnership_deed.s6.c1')
+    text t('partnership_deed.s6.c1', capital: founders_count * 1000, capital_in_words: "#{HUMANIZE[founders_count - 1]} Thousand")
     add_capital_contribution_table
     move_down 10
     text t('partnership_deed.s6.c2_to_6')
@@ -172,7 +160,7 @@ class PartnershipDeedPdf < Prawn::Document
     move_down 10
     table_rows = [['<b>Partner</b>', '<b>Amount</b>']]
     @batch_application.batch_applicants.each_with_index do |_batch_applicant, index|
-      table_rows << ["#{ORDINALIZE[index]} Partner", '']
+      table_rows << ["#{ORDINALIZE[index]} Partner", 'Rs. 1000']
     end
 
     table table_rows, position: :center, width: 300, cell_style: { inline_format: true }
@@ -180,9 +168,10 @@ class PartnershipDeedPdf < Prawn::Document
 
   def add_profit_sharing_table
     move_down 10
+    share_per_founder = format('%g', format('%.2f', (100.to_f / founders_count)))
     table_rows = [['<b>Partner</b>', '<b>Sharing Ratio (in percentage)</b>']]
     @batch_application.batch_applicants.each_with_index do |_batch_applicant, index|
-      table_rows << ["#{ORDINALIZE[index]} Partner", '']
+      table_rows << ["#{ORDINALIZE[index]} Partner", "#{share_per_founder}%"]
     end
 
     table table_rows, position: :center, width: 300, cell_style: { inline_format: true }
@@ -207,4 +196,9 @@ class PartnershipDeedPdf < Prawn::Document
   end
 
   ORDINALIZE = %w(First Second Third Fourth Fifth Sixth Seventh Eighth Ninth Tenth).freeze
+  HUMANIZE = %w(One Two Three Four Five Six Seven Eight Nine Ten).freeze
+
+  def founders_count
+    @founders_count ||= @batch_application.batch_applicants.count
+  end
 end

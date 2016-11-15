@@ -1,12 +1,10 @@
-class PartnershipDeedPdf < Prawn::Document
+class PartnershipDeedPdf < ApplicationPdf
   def initialize(batch_application)
     @batch_application = batch_application.decorate
-    super(margin: 70)
-    default_leading 5
-    font 'Times-Roman'
+    super()
   end
 
-  def build!
+  def build
     add_title
     declare_partners
     add_whereas_clause
@@ -30,7 +28,7 @@ class PartnershipDeedPdf < Prawn::Document
 
   def add_partner_details
     move_down 5
-    @batch_application.batch_applicants.each_with_index { |applicant, index| add_founder_to_partners(applicant, index) }
+    batch_applicants.each_with_index { |applicant, index| add_founder_to_partners(applicant, index) }
   end
 
   def add_founder_to_partners(batch_applicant, index)
@@ -159,7 +157,7 @@ class PartnershipDeedPdf < Prawn::Document
   def add_capital_contribution_table
     move_down 10
     table_rows = [['<b>Partner</b>', '<b>Amount</b>']]
-    @batch_application.batch_applicants.each_with_index do |_batch_applicant, index|
+    batch_applicants.each_with_index do |_batch_applicant, index|
       table_rows << ["#{ORDINALIZE[index]} Partner", 'Rs. 1000']
     end
 
@@ -170,7 +168,7 @@ class PartnershipDeedPdf < Prawn::Document
     move_down 10
     share_per_founder = format('%g', format('%.2f', (100.to_f / founders_count)))
     table_rows = [['<b>Partner</b>', '<b>Sharing Ratio (in percentage)</b>']]
-    @batch_application.batch_applicants.each_with_index do |_batch_applicant, index|
+    batch_applicants.each_with_index do |_batch_applicant, index|
       table_rows << ["#{ORDINALIZE[index]} Partner", "#{share_per_founder}%"]
     end
 
@@ -180,7 +178,7 @@ class PartnershipDeedPdf < Prawn::Document
   def add_signatures
     move_down 10
     text t('partnership_deed.signatures.header')
-    @batch_application.batch_applicants.each_with_index { |_applicant, index| add_signature_section(index) }
+    batch_applicants.each_with_index { |_applicant, index| add_signature_section(index) }
   end
 
   def add_signature_section(index)
@@ -191,14 +189,14 @@ class PartnershipDeedPdf < Prawn::Document
     text "(The #{ORDINALIZE[index]} Partner)"
   end
 
-  def t(*args)
-    I18n.t(*args)
-  end
-
   ORDINALIZE = %w(First Second Third Fourth Fifth Sixth Seventh Eighth Ninth Tenth).freeze
   HUMANIZE = %w(One Two Three Four Five Six Seven Eight Nine Ten).freeze
 
   def founders_count
-    @founders_count ||= @batch_application.batch_applicants.count
+    @founders_count ||= batch_applicants.count
+  end
+
+  def batch_applicants
+    @batch_applicants ||= @batch_application.batch_applicants
   end
 end

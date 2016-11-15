@@ -325,8 +325,28 @@ class BatchApplicationController < ApplicationController
     respond_to do |format|
       format.pdf do
         pdf = PartnershipDeedPdf.new(current_application)
-        pdf.build!
+        pdf.build
         send_data pdf.render, type: 'application/pdf', filename: 'Partnership_Deed', disposition: 'inline'
+      end
+    end
+  end
+
+  # GET /apply/educational_agreement
+  # respond with PDF version of the educational agreement created using Prawn
+  def educational_agreement
+    @batch_application = current_application.decorate
+
+    unless @batch_application.educational_agreement_ready?
+      flash[:error] = 'Could not generate Agreement. Ensure details of all founders are provided!'
+      redirect_to apply_stage_path(4)
+      return
+    end
+
+    respond_to do |format|
+      format.pdf do
+        pdf = EducationalAgreementPdf.new(current_application)
+        pdf.build
+        send_data pdf.render, type: 'application/pdf', filename: 'Educational_Agreement', disposition: 'inline'
       end
     end
   end

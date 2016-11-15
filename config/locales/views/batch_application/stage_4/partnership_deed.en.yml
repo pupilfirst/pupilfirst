@@ -1,0 +1,109 @@
+en:
+  partnership_deed:
+    declaration:
+      header: "This Deed of Partnership (“<b>Deed</b>”) is made on this %{day} day of %{month} by and between:"
+      footer: '(The above parties shall be hereinafter collectively referred to as the “Partners” and individually as “Partner”).'
+      partner_description: "<b>%{index}.</b> %{name}, %{son_or_daughter} of %{parent_name}, aged about %{age}, residing at %{current_address} and having %{id_proof_type} No. %{id_proof_number} (hereinafter referred to as the “%{ordinalized_index} Partner” which expression shall, unless it is repugnant to the context, mean and include his/her legal heirs, successors, administrators and assigns or anyone claiming through or under him/her);"
+      partner_details: ""
+    whereas_cluases: "<b>A.</b> The Partners have decided to work together as a partnership firm to develop a commercially viable business involving, but not limited to: web-based and mobile products, both hardware and software, software-as-a-service (SaaS) products and software, and other information technology products, hardware and software.\n
+      <b>B.</b> The Partners have entered into this Deed of Partnership to form a partnership firm in accordance with this Deed and for laying out the rights and duties of the Partners and the terms and conditions to regulate and govern the relationship between Partners and the Firm (as defined hereinafter)."
+    agreements_header: '<b>NOW THEREFORE, IN CONSIDERATION OF THE MUTUAL PROMISES AND COVENANTS CONTAINED HEREIN, THE PARTNERS HEREBY AGREE AS FOLLOWS:</b>'
+    s1:
+      part_1: "<b>1. Definition</b>\n
+      1.1 “Firm” means the partnership firm hereby formed by the Partners under this Deed in the name and style:"
+      part_2: "1.2 “Partnership Business” shall have the meaning assigned to it under Clause 4.1 herein.
+      1.3 “Sharing Ratio” means the inter se proportion of sharing in profits and losses amongst the Partners in the ratio set out in Clause 7.1."
+    s2: "<b>2. Commencement of the Partnership Business</b>\n
+    The Partners agree that this Deed shall be effective from the date of execution of this Deed, as first mentioned hereinabove."
+    s3: "<b>3. Name and Address of the Firm</b>\n
+    3.1 The Partnership Business shall be conducted by the Partners through a firm constituted under the name and style of ______________________\n
+    3.2 The Firm shall have its office at %{team_lead_address} and /or at such other place or places, as is agreed between the Partners from time to time."
+    s4: "<b>4. Partnership Business</b>\n
+      C. The Firm has been established for the purpose of developing and operating a commercially viable business involving, but not limited to: web-based and mobile products, both hardware and software, software-as-a-service (SaaS) products and software, and other information technology products, hardware and software.\n
+      4.1 (“<b>Partnership Business</b>”). The Firm may also conduct such other activities, whether or not for profit, as mutually agreed to by all Partners all of which shall form part of the Partnership Business.\n
+      4.2 The duration of the partnership shall be \"At Will \"."
+    s5:
+      part_1: "<b>5. Partners</b>\n
+      5.1 No individual or body corporate may be introduced as a new partner without the consent of the existing Partners. Such incoming partner shall give his/her prior consent to act as Partner of the Firm and shall execute a deed of reconstitution agreeing to abide by the terms of the Reconstitution Deed so executed. On execution of the Reconstitution Deed, such person shall become a partner and be entitled to the rights and have such duties as set forth in such Reconstitution Deed.\n
+      5.2 Rights of the Partners\n"
+      part_2: "5.2.1 All the Partners hereto shall have the rights, title and interest in all the assets and properties in the Firm in the proportion of their Sharing Ratio.\n
+        5.2.2 Each of the Partners would be entitled to withdraw reasonable amounts from the Firm’s account from time to time as may be mutually agreed upon between the Partners.\n
+        5.2.3 All agreements, contracts, memorandums of understanding, deeds and all such instruments to which the Firm is a party, may be signed either:"
+      part_3: "5.2.3.1 by the First Partner and Second Partner, on behalf of the Firm and all Partners; or \n
+          5.2.3.2 Jointly by all Partners, on behalf of the Firm, which execution shall be binding and effective  on the Firm and all Partners."
+      part_4_heading: "5.3 Duties of Partners\n"
+      part_4: "5.3.1 Every Partner shall account to the Firm for any benefit derived by her without the consent of the Firm from any transaction concerning the Firm, or from any use by her of the property, name or any business connection of the Firm. \n
+        5.3.2 Every Partner shall indemnify the Firm and the other existing partner(s) for any loss caused to it by her conduct of the business on behalf of the Firm.\n
+        5.3.3 Each Partner shall render true accounts and full information of all things affecting the Firm to any Partner or her legal representatives.\n
+        5.3.4 Each of the Partners shall make all endeavors and devote their full working time and efforts for the fulfillment of the objectives of the Firm and for conduct of the Partnership Business.\n
+        5.3.5 All intellectual property rights created and developed by each Partner in the conduct, development and operation of the Partnership Business shall be the property of the Firm and each Partner hereby assigns all such copyrights and other intellectual property rights to the Firm."
+    s6:
+      heading: '<b>6. Capital Contribution</b>'
+      c1: '6.1 The initial capital of the Firm shall be INR %{capital} (Rupees %{capital_in_words} only). The individual contribution of each Partner shall be'
+      c2_to_6: "6.2 For any further funding of the Firm as may be deemed necessary or expedient for efficiently carrying on the Partnership Business contribution towards such funding shall be made by each Partner, from time to time, in the Sharing Ratio. The Partners shall jointly determine the funding requirements of the Firm in order to meet the needs of business from time to time.  The funding may be brought in by the Partners through capital contribution or through external borrowing on such terms as the Partners may jointly agree upon.  If the Partners agree to bring in additional capital into the Firm to meet the funding requirements or such additional capital is needed to meet the requirements of the banker in terms of the loan sanctioned and any Partner fails to contribute in part or in full, the other Partners shall be entitled to make up for such shortfall and increase their Sharing Ratio in the Firm.\n
+      6.3 Partners are not entitled to any interest on the amount of capital standing to her credit in the accounts of the Firm from time to time.\n
+      6.4 Contribution of a Partner may also be made by tangible, intangible, moveable or immoveable property including the time and efforts spent by each Partner in development of the Partnership Business, as may be mutually agreed upon between the Partners and any incoming partner shall bring in a minimum contribution as agreed upon by the existing Partners.\n
+      6.5 The Partners may, from time to time, purchase any property, movable or immovable, in the name of the Firm for the purpose of Partnership Business.\n
+      6.6 If any Partner shall advance any sum of money to the Firm over and above his due contribution to capital, the same shall be a debt due from the Firm to the Partner advancing the same and shall carry simple interest at the rate of 12% per annum or any other rate mutually agreed to by the Partners."
+    s7:
+      heading: '<b>7. Sharing of Profits and Losses</b>'
+      c1: '7.1 The net profits or losses of the Firm computed after deducting all expenses including rent, salaries, other establishment expenses, interest, taxes etc. in accordance with this Deed of Partnership shall be shared amongst the Partners in the following proportion (“<b>Sharing Ratio</b>”):'
+      c2_to_3: "7.2 Depending on the extent of work done and costs, if any, incurred from time to time by each Partner for the benefit of the Partnership business, the Firm may pay such amounts as mutually agreed by the Partners as salary or other remuneration to the Partners. The amounts of such salary and other remunerations or reimbursements may not be equal for each Partner and may vary from time to time. \n
+      7.3 The Partners agree that depending on the amounts of capital bought in, and the efforts and contributions made, by each Partner from time to time, the Partners may, from time to time and as mutually agreed, change the Sharing Ratio."
+    s8: "<b>8. Financial year and accounts</b>\n
+    8.1 The financial year shall commence on April 1 every year and end on March 31 of the following year.\n
+    8.2 A mutually agreeable chartered accountant shall prepare a balance sheet, profit and loss account, and expenditure statement at the end of each financial year and a copy thereof shall be furnished to each of the Partners within 90 days of close of the financial year."
+    s9: "<b>9. Bank account</b>\n
+    9.1 A bank account or bank accounts in the name of the Firm shall be opened which shall be operated jointly by the First Partner and Second Partner or jointly by all Partners or subject to any instructions as may be given to the bankers from time to time by the Firm under the signatures of all the Partners hereto.\n
+    9.2 All moneys, cheques, pay orders, demand drafts and other instruments for money shall, as and when received, be paid or deposited in the bank to the credit of the Firm’s account."
+    s10: "<b>10. Records and Books</b>\n
+    10.1 The regular books of accounts of the Firm shall be maintained in English, subject to applicable laws, at the office of Firm along with all other documents and records pertaining to the Firm. The aforesaid books, documents and records shall not be removed from such place without the prior written consent of all the Partners.\n
+    10.2 Each Partner or his/her authorized representative shall have free access to such books of accounts at all reasonable times and shall be entitled to make such copies or extract therefrom as required."
+    s11: "<b>11. Borrowing Powers</b>\n
+    The Partners hereto shall be entitled to raise loans on such terms as they deem appropriate only with the written consent of all Partners wherever deemed expedient for the purpose of the Partnership Business and the loans thereby shall be used only for the benefit of the Partnership Business and not for personal benefits of any of the Partners."
+    s12:
+      heading: '<b>12. Covenants of the Partners</b>'
+      c1:
+        heading: '12.1 Each Partner represents and warrants that he/she has entered into this partnership in his/her individual capacity and shall:'
+        clauses: "12.1.1 Conduct the Partnership Business to the greatest common advantage;\n
+        12.1.2 Each of the Partners shall give such time and attention, as may be agreed from time to time by the Partners, for the fulfillment of the objectives of the Partnership Business;\n
+        12.1.3 Be just and faithful to the other Partners and shall render to the other Partners true and full information that may affect the Firm; and\n
+        12.1.4 Handle on his/her own all debts relating to his/her personal matters not connected and separable from the Partnership Firm and shall indemnify the other Partners and the Firm against all proceedings, claims or demand in respect thereof."
+      c2:
+        heading: '12.2 Without the prior written consent of all the other Partners, no Partner shall:'
+        clauses: "12.2.1 Assign, mortgage or charge her share in the assets of the Firm;\n
+        12.2.2 Lend money belonging to the Firm or give any security or promise for the payment of money in account of the Firm except in the ordinary course of business;\n
+        12.2.3 Withdraw any personal guarantee furnished by her on behalf of the Firm to any third Party;\n
+        12.2.4 Except in the ordinary course of business, dispose of by pledge, sale or otherwise, any assets of the Firm or its profits;\n
+        12.2.5 Draw, accept or endorse any bill of exchange or promissory note on account of the Firm;\n
+        12.2.6 Give bail, bond or guarantee or become surety for any person or do or knowingly suffer any thing to be done where the assets of the Firm may be endangered;\n
+        12.2.7 Compromise or compound or, release or, discharge, any debt due to the Firm."
+    s13:
+      part_1: "<b>13. Term</b>\n
+      13.1 The Partners agree that once the Partnership business gains traction in terms of a potential product / service sale or any proposed investment by a third party investment in the Partnership Business, the Partners agree to sell and/or transfer all of the Partnership Business including all assets of the Firm to a limited liability company incorporated in India.\n
+      13.2 The Partners agree and acknowledge that the shareholding of each Partner in the company referred to in Clause 13.1 above may not necessarily be in the same proportion as the applicable Sharing Ratio subject to consent of all the Partners. The designation of each Partner in the company shall be as agreed by the Partners prior to the formation of the said company.\n
+      13.3 Unless otherwise agreed by the Partners, the partnership shall stand dissolved upon such transfer of all assets of the Firm to the company referred to in Clause 13.1 above.\n
+      13.4 Upon the dissolution of the Firm, the accounts of the Firm shall be settled as follows:"
+      part_2: "13.4.1 A balance sheet, profit and loss statement, and expenditure statement shall be drawn up at the time of dissolution of the Firm;\n
+      13.4.2 Any losses, including deficiencies of capital, shall be paid first out of profits, next out of capital, and lastly, if necessary, by the Partners individually in the Sharing Ratio\n
+      13.4.3 Assets of the Firm, after discharging all the liabilities, including loans shall be distributed among the Partners in the Sharing Ratio."
+    s14:
+      part_1: "<b>14. Retirement or Death</b>\n
+      14.1 Death, retirement or insolvency of one or more Partner shall not result in dissolution of the Firm.\n
+      14.2 Upon insolvency of a Partner, his or her rights, title and interest in the Firm shall come to an end.\n
+      14.3 Retirement"
+      part_2: "14.3.1 A Partner desiring to discontinue as a partner of the Firm, may do so after giving ninety (90) days written notice to the other Partners\n
+      14.3.2  Upon such retirement, the retiring Partner shall be entitled the amounts lying to the credit of her capital account in the Firm net of drawings made by the retiring Partner together with the profits/losses calculated on the basis of the last balance sheet drawn up prior to the date of the retirement. No amount whether by way of goodwill or similar right shall be due or payable to such retiring Partner.\n
+      14.3.3 On retirement of a Partner, the remaining Partners shall be entitled to carry on the Partnership Business with all its assets and liabilities and the retiring Partner shall execute all deeds and assurances as may be required to facilitate the same.\n
+      14.3.4 If any Partner retires from the Firm he will not be entitled to carry on the same or similar business as that of the Firm, for a period of one year from the date of retirement and he/she shall not carry on any business in the same name as that of the Firm."
+      part_3: "14.4 Death- In the event of death of any one or more Partners:"
+      part_4: "14.4.1 The legal heirs of the deceased Partner shall produce the legal heir ship certificate reflecting the legal heirs of the deceased Partner and shall nominate any one of the legal heirs to be admitted as a partner of the Firm and such heir may be admitted as a partner of the Firm in place of such deceased partner. The legal heir so admitted to the Firm as a partner shall be entitled to the right, title and interest of such deceased Partner.\n
+      14.4.2 In the absence of any agreement amongst the Partners on admission of a legal heir of the deceased Partner or in the absence of the legal heirs nominating any person to be admitted as a Partner of the Firm, the heirs of such deceased partner upon production of the legal heir ship certificate, shall be entitled the amounts lying to the credit of the deceased Partner’s capital account in the Firm net of drawings made by such deceased Partner together with the profits/losses calculated on the basis of the last balance sheet drawn up prior to the death of the deceased Partner. No amount whether by way of goodwill or similar right shall be due or payable.\n
+      14.4.3 the surviving Partners shall continue to carry on the Partnership Business under the Firm on the same terms and conditions as contained in this Deed."
+    s15: "<b>15. Miscellaneous</b>\n
+    15.1 All the other matters, for which no provision is made in this Deed of Partnership, shall be decided by the majority of the Partners for the time being of the partnership, failing which the provisions of the Indian Partnership Act, 1932 shall apply as regards the matters, not expressly provided for hereinabove.\n
+    15.2 Notice to a Partner under this Deed shall be deemed to be duly served, if the same shall be delivered to him personally or sent by post in a registered letter addressed to him at the address set out above.\n
+    15.3 The terms of this Deed may be altered, amended or modified only with the mutual consent of all the Partners in writing.\n
+    15.4 It is agreed that in case any dispute arises between the Partners hereto relating to any of their rights or duties or relating to the interpretation of any terms or conditions stipulated herein, the same shall be referred to a sole arbitrator mutually agreed upon by the Partners and the decision of such arbitrator would be final and binding on all Partners. The arbitrator shall be an independent arbitrator not related to any of the Partners. All proceedings in any such arbitration shall be conducted in English language and shall be governed by the provisions of the Arbitration and Conciliation Act, 1996 or any subsequent amendment thereto. The venue of such arbitration shall be Cochin."
+    signatures:
+      header: 'IN WITNESS WHEREOF this Deed of Partnership has been executed as a deed on the date first above written.'

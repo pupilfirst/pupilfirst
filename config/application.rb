@@ -23,6 +23,9 @@ module Svapp
 
     config.i18n.enforce_available_locales = true
 
+    # include nested directories inside locale
+    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.yml')]
+
     Dir.glob('config/routes/*.rb').each do |file|
       config.paths['config/routes.rb'] << Rails.root.join(file)
     end

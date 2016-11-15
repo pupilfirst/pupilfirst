@@ -68,16 +68,32 @@
             th Founder Name
             th Fee Payment Method
             th Confirmation Status
+            th Profile Completion
         tbody
-          - @batch_application.fee_payment_table.each do |row|
+          - @batch_application.batch_applicants.each do |batch_applicant|
+            - applicant = batch_applicant.decorate
             tr
-              td #{row[:name]}
-              td #{row[:method]}
-              td #{row[:confirmation]}
+              td #{applicant.name}
+              td #{applicant.fee_payment_method || 'Not Available'}
+              td #{applicant.confirmation_status}
+              td #{applicant.profile_completion_status}
 
-        - if @batch_application.partnership_deed_ready?
-          /= render 'partnership_deed'
+      - if @batch_application.partnership_deed_ready?
+        .alert.alert-success
+          i.fa.fa-check &nbsp;
+          ' Your Partnership Deed is ready.
+          a.alert-link href=apply_partnership_deed_path(format: :pdf) target='_blank' Download and Sign Now!
 
+      - if @batch_application.educational_agreement_ready?
+        .alert.alert-success
+          i.fa.fa-check &nbsp;
+          ' Your Agreement with SV.CO is ready.
+          a.alert-link href=apply_educational_agreement_path(format: :pdf) target='_blank' Download and Sign Now!
+
+      - if false
+        .alert.alert-warning
+          i.fa.fa-exclamation-triangle &nbsp;
+          ' Please provide details of all founders for generating required agreements!
         .founder-details-form
           = simple_form_for(@form, url: apply_founder_details_submit_path, method: :post, html: { class: 'form-horizontal' }, wrapper: :horizontal_form) do |f|
             - if f.object.errors.present?

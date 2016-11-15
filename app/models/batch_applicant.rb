@@ -67,4 +67,9 @@ class BatchApplicant < ApplicationRecord
   def multiple_applications?
     batch_applications.count > 1
   end
+
+  def profile_complete?
+    required_fields = [:name, :role, :born_on, :gender, :parent_name, :current_address, :permanent_address, :phone, :id_proof_type, :id_proof_number]
+    required_fields.all? { |field| self[field].present? }
+  end
 end

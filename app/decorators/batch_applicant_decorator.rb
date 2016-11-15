@@ -42,4 +42,29 @@ class BatchApplicantDecorator < Draper::Decorator
       'son/daughter'
     end
   end
+
+  def confirmation_status
+    case fee_payment_method
+      when 'Regular Fee', 'Merit Scholarship'
+        'Confirmed'
+      when 'Postpaid Fee', 'Hardship Scholarship'
+        'Valid on Submission of Documents'
+      else
+        'Not Available'
+    end
+  end
+
+  def mr_or_ms
+    if gender == Founder::GENDER_MALE
+      'Mr'
+    elsif gender == Founder::GENDER_FEMALE
+      'Ms'
+    else
+      'Mr/Ms'
+    end
+  end
+
+  def profile_completion_status
+    profile_complete? ? 'Complete' : 'Incomplete'
+  end
 end

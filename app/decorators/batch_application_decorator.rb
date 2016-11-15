@@ -40,25 +40,17 @@ class BatchApplicationDecorator < Draper::Decorator
     batch.batch_stages.where(application_stage: ApplicationStage.shortlist_stage).first.ends_at.strftime('%B %d, %Y')
   end
 
-  # used to display fee payment table in stage4.html.slim
-  def fee_payment_table
-    batch_applicants.each_with_object([]) do |applicant, result|
-      result << {
-        name: applicant.name,
-        method: applicant.fee_payment_method || 'Not Available',
-        confirmation: confirmation_status(applicant)
-      }
-    end
-  end
-
   # used to display interview feedback in stage_3_rejected.html.slim
   def interview_feedback
     application_submissions.where(application_stage: ApplicationStage.interview_stage).last&.feedback_for_team
   end
 
-  def partnership_deed_ready?
-    founders_details_complete?
+  def founders_profiles_complete?
+    batch_applicants.all?(&:profile_complete?)
   end
+
+  alias partnership_deed_ready? founders_profiles_complete?
+  alias educational_agreement_ready? founders_profiles_complete?
 
   private
 
@@ -68,21 +60,5 @@ class BatchApplicationDecorator < Draper::Decorator
 
   def grade
     @grade ||= grading_service.grade
-  end
-
-  def confirmation_status(applicant)
-    case applicant.fee_payment_method
-      when 'Regular Fee', 'Merit Scholarship'
-        'Confirmed'
-      when 'Postpaid Fee', 'Hardship Scholarship'
-        'Valid on Submission of Documents'
-      else
-        'Not Available'
-    end
-  end
-
-  def founders_details_complete?
-    # TODO
-    true
   end
 end

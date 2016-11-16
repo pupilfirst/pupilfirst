@@ -3,7 +3,9 @@ require 'rails_helper'
 feature 'Talent Form' do
   context 'User visits talent page' do
     before :each do
-      visit talent_path
+      # TODO: Javascript errors are being ignored here because YouTube is bugged at the moment and raising:
+      # ReferenceError: Can't find variable: ytcfg
+      visit(talent_path) rescue Capybara::Poltergeist::JavascriptError # rubocop:disable Style/RescueModifier
     end
 
     scenario 'User submits form for acquiring teams', js: true do
@@ -18,7 +20,9 @@ feature 'Talent Form' do
       fill_in 'Mobile number', with: '9876543210'
       fill_in 'Organization', with: 'Some Company Name'
       fill_in 'Website', with: 'www.example.com'
-      click_button 'Submit'
+
+      # TODO: See note above. Remove rescue when possible.
+      click_button('Submit') rescue Capybara::Poltergeist::JavascriptError # rubocop:disable Style/RescueModifier
 
       expect(page).to have_content('An email with your query has been sent to help@sv.co.')
 

@@ -104,7 +104,7 @@ Rails.application.routes.draw do
     post 'restart', action: 'restart_application'
     get 'cofounders', action: 'cofounders_form'
     post 'cofounders', action: 'cofounders_save'
-    post 'founder_details_submit'
+    patch 'update_applicant'
     get 'partnership_deed'
     get 'educational_agreement'
 

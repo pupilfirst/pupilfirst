@@ -119,6 +119,7 @@ class BatchApplicationController < ApplicationController
         raise "Unexpected application_status: #{application_status}"
     end
   end
+
   # rubocop:enable Metrics/CyclomaticComplexity
 
   # GET /apply/batch_pending
@@ -293,15 +294,21 @@ class BatchApplicationController < ApplicationController
 
   def stage_4
     @batch_application = current_application.decorate
-    @form = StageFourFounderDetailsForm.new(current_application)
+
+    if params[:update_profile]
+      applicant = current_application.batch_applicants.find(params[:update_profile])
+      @form = ApplicationStageFourForm.new(applicant)
+    end
   end
 
-  # POST /apply/founder_details_submit
+  # PATCH /apply/update_applicant
   # receives founder details, generates required pdf and redirects back to updated stage_4 page
-  def founder_details_submit
+  def update_applicant
     @batch_application = current_application.decorate
-    @form = StageFourFounderDetailsForm.new(current_application)
-    if @form.validate(params[:stage_four_founder_details])
+    applicant = current_application.batch_applicants.find(params[:application_stage_four][:id])
+    @form = ApplicationStageFourForm.new(applicant)
+
+    if @form.validate(params[:application_stage_four])
       @form.save
       flash[:success] = 'Founder details successfully saved. Agreements ready to be downloaded.'
       redirect_to apply_stage_path(4)

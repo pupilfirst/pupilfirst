@@ -65,6 +65,6 @@ class BatchApplicantDecorator < Draper::Decorator
   end
 
   def profile_completion_status
-    profile_complete? ? 'Complete' : 'Incomplete'
+    profile_complete? ? 'Complete' : h.link_to('<i class="fa fa-edit"></i> Update profile'.html_safe, "?update_profile=#{id}#update_applicant_form")
   end
 end

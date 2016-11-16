@@ -42,5 +42,14 @@ FactoryGirl.define do
       stage_2_submitted
       application_stage { create :application_stage, number: 3 }
     end
+
+    trait :stage_4 do
+      stage_3
+      application_stage { create :application_stage, number: 4 }
+
+      after(:create) do |application|
+        create :application_submission, :stage_3_submission, batch_application: application, scored: true
+      end
+    end
   end
 end

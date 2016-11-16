@@ -22,5 +22,14 @@ FactoryGirl.define do
         create :application_submission_url, application_submission: application_submission, name: 'Video Submission', url: "https://facebook.com/user#{rand(1000)}/video", score: score, admin_user: admin_user
       end
     end
+
+    trait :stage_3_submission do
+      transient do
+        scored false
+      end
+
+      application_stage { create :application_stage, number: 3 }
+      score { scored ? rand(100) : nil }
+    end
   end
 end

@@ -41,5 +41,22 @@ FactoryGirl.define do
         create :batch_stage, batch: batch, application_stage: stage_3, starts_at: 3.days.ago, ends_at: 4.days.from_now
       end
     end
+
+    trait :in_stage_4 do
+      start_date { 1.month.from_now }
+      end_date { 7.months.from_now }
+
+      after(:create) do |batch|
+        stage_1 = create(:application_stage, number: 1)
+        stage_2 = create(:application_stage, number: 2)
+        stage_3 = create(:application_stage, number: 3)
+        stage_4 = create(:application_stage, number: 4)
+
+        create :batch_stage, batch: batch, application_stage: stage_1, starts_at: 65.days.ago, ends_at: 35.days.ago
+        create :batch_stage, batch: batch, application_stage: stage_2, starts_at: 65.days.ago, ends_at: 35.days.ago
+        create :batch_stage, batch: batch, application_stage: stage_3, starts_at: 23.days.ago, ends_at: 16.days.ago
+        create :batch_stage, batch: batch, application_stage: stage_4, starts_at: 3.days.ago, ends_at: 11.days.from_now
+      end
+    end
   end
 end

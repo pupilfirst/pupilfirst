@@ -18,6 +18,10 @@
 //= require flashes
 //= require unobtrusive_flash
 
+// XDAN's datetimepicker
+// = require datetimepicker
+// = require xdan_datetimepicker
+
 //= require moment
 //= require select2
 //= require sidebar-menu

@@ -1,7 +1,7 @@
 class ApplicationPdf < Prawn::Document
   def initialize
-    super(margin: 70)
-    default_leading 5
+    super(margin: 70, page_size: 'A4')
+    default_leading 10
     font 'Times-Roman'
   end
 

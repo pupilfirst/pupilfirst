@@ -9,7 +9,6 @@ module EducationalAgreement
     def build(combinable: false)
       add_title_and_date
       add_agreement_parties
-      add_whereas_clause
       combinable ? CombinePDF.parse(render) : self
     end
 
@@ -92,11 +91,6 @@ module EducationalAgreement
       list = []
       batch_applicants.each_with_index { |_applicant, index| list << "Founder #{index + 1}" }
       list.to_sentence
-    end
-
-    def add_whereas_clause
-      move_down 10
-      text t('educational_agreement.whereas'), inline_format: true
     end
 
     def batch_applicants

@@ -1,4 +1,4 @@
-commonOptions = { scrollInput: false, scrollMonth: false }
+commonOptions = { scrollInput: false, scrollMonth: false, format: 'Y-m-d' }
 
 initializeDateTimePickers = (rootSelector) ->
   rootSelector ?= $('body')

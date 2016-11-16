@@ -351,9 +351,8 @@ class BatchApplicationController < ApplicationController
 
     respond_to do |format|
       format.pdf do
-        pdf = EducationalAgreementPdf.new(current_application)
-        pdf.build
-        send_data pdf.render, type: 'application/pdf', filename: 'Educational_Agreement', disposition: 'inline'
+        agreement_pdf = BatchApplications::EducationalAgreementPdfBuilderService.build(current_application)
+        send_data agreement_pdf.to_pdf, type: 'application/pdf', filename: 'Educational_Agreement', disposition: 'inline'
       end
     end
   end

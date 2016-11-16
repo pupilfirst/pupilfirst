@@ -94,8 +94,9 @@ gem 'jspdf-rails' # HTML5 client-side pdf generation - for certificates
 gem 'draper', '~> 3.0.0.pre1' # Decorators/View-Models for Rails Applications # TODO: Pre-release version for Rails 5 support. Upgrade to stable when available.
 gem 'skylight' # Skylight agent for Ruby https://www.skylight.io
 gem 'responders' # A set of Rails responders to dry up your application (respond_to / with)
-gem 'prawn' # Used to generate partnership deed and other agreement pdfs
+gem 'prawn' # Used to generate dynmaic portions of agreement pdfs
 gem 'prawn-table' # Support for drawing tables in prawn pdfs
+gem 'combine_pdf' # Used to combine sections of agreement pdfs
 gem 'rollbar' # Exception tracking and logging from Ruby to Rollbar https://rollbar.com
 
 # Omniauth providers

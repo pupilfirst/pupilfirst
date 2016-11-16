@@ -246,6 +246,8 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.10.0)
+    combine_pdf (0.2.31)
+      ruby-rc4 (>= 0.1.5)
     concurrent-ruby (1.0.2)
     connection_pool (2.2.0)
     crack (0.4.3)
@@ -761,6 +763,7 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.8.1)
+    ruby-rc4 (0.1.5)
     ruby_dep (1.5.0)
     safe_yaml (1.0.4)
     safely_block (0.1.1)
@@ -880,6 +883,7 @@ DEPENDENCIES
   carrierwave_backgrounder
   coderay
   coffee-rails (~> 4.1.0)
+  combine_pdf
   database_cleaner
   delayed-web
   delayed_job_active_record

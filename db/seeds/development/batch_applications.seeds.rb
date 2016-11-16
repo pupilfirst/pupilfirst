@@ -19,6 +19,7 @@ after 'development:application_stages', 'development:batches', 'development:batc
   interview_applicant = BatchApplicant.find_by(email: 'applicant+interview@gmail.com')
   interview_rejected_applicant = BatchApplicant.find_by(email: 'applicant+interview+rejected@gmail.com')
   pre_selection_applicant = BatchApplicant.find_by(email: 'applicant+pre_selection@gmail.com')
+  co_applicant = BatchApplicant.find_by(email: 'coapplicant+pre_selection@gmail.com')
 
   def sample_payment
     {
@@ -119,4 +120,5 @@ after 'development:application_stages', 'development:batches', 'development:batc
   submission = create_submission(pre_selection_application, stage_2)
   score_stage_2_submission(submission)
   create_submission(pre_selection_application, stage_3)
+  pre_selection_application.batch_applicants << co_applicant
 end

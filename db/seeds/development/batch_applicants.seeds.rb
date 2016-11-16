@@ -20,7 +20,8 @@ after 'development:colleges' do
     { email: 'applicant+submitted+rejected@gmail.com' },
     { email: 'applicant+interview@gmail.com' },
     { email: 'applicant+interview+rejected@gmail.com'},
-    { email: 'applicant+pre_selection@gmail.com'}
+    { email: 'applicant+pre_selection@gmail.com'},
+    { email: 'coapplicant+pre_selection@gmail.com'}
   ].map { |applicant| applicant.merge(applicant_defaults) }
 
   applicants.each do |applicant_attributes|

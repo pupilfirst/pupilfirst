@@ -10,7 +10,7 @@ feature 'Talent Form' do
 
     scenario 'User submits form for acquiring teams', js: true do
       # ensure user is on talent page without the talent form
-      expect(page).to have_text('Discover Great Startups')
+      expect(page).to have_text('Discover Great Startups') rescue Capybara::Poltergeist::JavascriptError # rubocop:disable Style/RescueModifier
 
       click_button 'Acquihire Teams'
       expect(page.find('#talent_query_type_acquihiring_teams')).to be_checked
@@ -24,7 +24,7 @@ feature 'Talent Form' do
       # TODO: See note above. Remove rescue when possible.
       click_button('Submit') rescue Capybara::Poltergeist::JavascriptError # rubocop:disable Style/RescueModifier
 
-      expect(page).to have_content('An email with your query has been sent to help@sv.co.')
+      expect(page).to have_content('An email with your query has been sent to help@sv.co.') rescue Capybara::Poltergeist::JavascriptError # rubocop:disable Style/RescueModifier
 
       open_email('help@sv.co')
 

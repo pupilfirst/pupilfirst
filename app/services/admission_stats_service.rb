@@ -105,7 +105,7 @@ class AdmissionStatsService
   def paid_from_earlier_batches
     return unless selected_batch_ids.length == 1 # can be calculated only if a single batch is specified
 
-    selected_applications.joins(:payment).where.not(swept_in_at: nil).count
+    selected_applications.payment_complete.where.not(swept_in_at: nil).count
   end
 
   def paid_applications_today(state_scope)

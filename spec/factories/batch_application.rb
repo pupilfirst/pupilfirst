@@ -30,6 +30,10 @@ FactoryGirl.define do
       paid
 
       after(:create) do |application|
+        (application.team_size - 1).times do
+          application.batch_applicants << create(:batch_applicant)
+        end
+
         create :application_submission, :stage_2_submission, batch_application: application, scored: true
       end
     end
@@ -37,6 +41,15 @@ FactoryGirl.define do
     trait :stage_3 do
       stage_2_submitted
       application_stage { create :application_stage, number: 3 }
+    end
+
+    trait :stage_4 do
+      stage_3
+      application_stage { create :application_stage, number: 4 }
+
+      after(:create) do |application|
+        create :application_submission, :stage_3_submission, batch_application: application, scored: true
+      end
     end
   end
 end

@@ -4,6 +4,32 @@
       ' <strong>Agreements Verified!</strong>
     h4.font-regular.brand-secondary
       ' Your agreements have been verified by SV.CO as acceptable. Follow instructions below for their submission.
+  .row.p-l-1
+    h5.font-semibold
+      | Next Steps:
+    ol
+      li
+        p Pay the Program Fee as instructed and enter Payment Reference Number below.
+      li
+        p Courier the <strong>original</strong> completed and signed Educational Services agreement to SV.CO and enter Courier details below.
+      li
+        p Upload a copy of your Partnership Deed below.
+        p <em>Note:</em>&nbsp;Do <strong>not</strong> send us your Original Partnership Deed.
+
+    h5.font-semibold
+      | Payment Instructions:
+    ul
+      li
+        p Pay Full Fee as a team in one transaction.
+      li
+        p <strong>Mention/Write Team lead's name in the Remarks field while making the NEFT transaction.</strong>
+      li
+        p <strong>Note the payment reference number</strong> as this has to be entered for verification.
+      li
+        p Initiate the payment process 4~7 days prior to the deadline as NEFT transactions take time to debit into the account. Start with adding beneficiary as soon as possible as banks usually take 24hrs to activate them.
+      li
+        p If you have any difficulties in payment, immediately write to #{mail_to 'help@sv.co'}.
+
 
   = bootstrap_form_for(@form, url: apply_stage_submit_path, layout: :horizontal, label_col: 'col-sm-2', control_col: 'col-sm-10') do |f|
     = f.file_field :partnership_deed, label_class: 'col-form-label', label: 'Partnership Deed', class: 'form-control'

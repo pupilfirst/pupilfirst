@@ -114,6 +114,7 @@ Rails.application.routes.draw do
     scope 'stage/:stage_number', as: 'stage' do
       get '', action: 'ongoing'
       post 'submit'
+      patch 'submit'
       get 'complete'
       post 'restart'
       get 'expired'

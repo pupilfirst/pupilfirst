@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161117103512) do
+ActiveRecord::Schema.define(version: 20161117113321) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -161,6 +161,10 @@ ActiveRecord::Schema.define(version: 20161117103512) do
     t.datetime "swept_at"
     t.datetime "swept_in_at"
     t.boolean  "agreements_verified",  default: false
+    t.string   "courier_name"
+    t.string   "courier_number"
+    t.string   "partnership_deed"
+    t.string   "payment_reference"
     t.index ["application_stage_id"], name: "index_batch_applications_on_application_stage_id", using: :btree
     t.index ["batch_id"], name: "index_batch_applications_on_batch_id", using: :btree
     t.index ["team_lead_id"], name: "index_batch_applications_on_team_lead_id", using: :btree

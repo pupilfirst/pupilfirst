@@ -295,7 +295,9 @@ class BatchApplicationController < ApplicationController
   def stage_4
     @batch_application = current_application.decorate
 
-    if params[:update_profile]
+    if @batch_application.agreements_verified
+      @form = ApplicationStageFourSubmissionForm.new(@batch_application)
+    elsif params[:update_profile]
       applicant = current_application.batch_applicants.find(params[:update_profile])
       @form = ApplicationStageFourForm.new(applicant)
     end
@@ -358,14 +360,10 @@ class BatchApplicationController < ApplicationController
   end
 
   def stage_4_submit
-    # TODO: Server-side error handling for stage 4 inputs.
-
-    # TODO: How to handle file uploads (if any for pre-selection)?
-    current_application.application_submissions.create!(
-      application_stage: ApplicationStage.find_by(number: 4)
-    )
-
-    redirect_to apply_stage_complete_path(stage_number: '4')
+    # current_application.application_submissions.create!(
+    #   application_stage: ApplicationStage.find_by(number: 4)
+    # )
+    redirect_to apply_stage_path(4)
   end
 
   protected

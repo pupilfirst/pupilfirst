@@ -3,7 +3,7 @@ ActiveAdmin.register BatchApplication do
 
   menu parent: 'Admissions', label: 'Applications', priority: 1
 
-  permit_params :batch_id, :application_stage_id, :university_id, :team_achievement, :team_lead_id, :college, :state, :tag_list, :team_size, batch_applicants_attributes: [:id, :fee_payment_method]
+  permit_params :batch_id, :application_stage_id, :university_id, :team_achievement, :team_lead_id, :college, :state, :tag_list, :team_size, :agreements_verified, batch_applicants_attributes: [:id, :fee_payment_method]
 
   batch_action :promote, confirm: 'Are you sure?' do |ids|
     promoted = 0
@@ -50,6 +50,7 @@ ActiveAdmin.register BatchApplication do
   filter :state, label: 'State (Deprecated)'
   filter :team_lead_reference_contains, label: 'Reference contains'
   filter :swept_in_at_not_null, as: :boolean, label: 'Swept In'
+  filter :agreements_verified
 
   filter :created_at
 
@@ -295,6 +296,7 @@ ActiveAdmin.register BatchApplication do
       end
 
       row :application_stage
+      row :agreements_verified
       row :college
 
       row 'University (Deprecated)' do |batch_application|
@@ -365,6 +367,7 @@ ActiveAdmin.register BatchApplication do
       f.has_many :batch_applicants, heading: 'Fee Payment Methods:', new_record: false do |g|
         g.input :fee_payment_method, as: :select, collection: BatchApplicant::FEE_PAYMENT_METHODS, label: g.object.name
       end
+      f.input :agreements_verified
     end
 
     f.actions

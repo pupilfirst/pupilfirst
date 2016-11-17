@@ -12,6 +12,9 @@ module BatchApplications
       pdf << CombinePDF.load('app/pdfs/educational_agreement/part_four.pdf')
       pdf << EducationalAgreement::PartFive.new(batch_application).build(combinable: true)
       pdf << CombinePDF.load('app/pdfs/educational_agreement/part_six.pdf')
+      pdf << EducationalAgreement::PartSeven.new(batch_application).build(combinable: true)
+      pdf << CombinePDF.load('app/pdfs/educational_agreement/part_eight.pdf')
+      pdf << EducationalAgreement::PartNine.new(batch_application).build(combinable: true)
     end
   end
 end

@@ -19,6 +19,19 @@ en:
       <b>Designation:</b> %{designation}\n
       <b>Address:</b> %{address}\n
       <b>Email</b>: %{email}"
-
+    part_seven:
+      founder_details: "%{index}. %{name} (name), %{designation} (designation), %{son_or_daughter} of %{parent_name}, aged %{age} years, holding %{id_proof_type} No %{id_proof_number} and residing at %{current_address} and having permanent residence at %{permanent_address} Tel No: %{phone}."
+    part_nine:
+      header: "<b>IN WITNESS WHEREOF, the said Service Provider, the Startup and the Founders have put their respective signatures hereunder on the day, month and year first above written."
+      sign_on_behalf: "Signed and delivered for and on behalf of \n
+      %{name}\n
+      (%{designation})\n\n
+      __________________________________\n
+      By: %{by_name}\n
+      Title: %{title}"
+      founder_sign: "Signed and delivered by \n
+      %{name}\n
+      (Founder %{index})\n\n
+      __________________________________\n"
 
 

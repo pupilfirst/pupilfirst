@@ -1,7 +1,10 @@
 class BatchApplicant < ApplicationRecord
   include Taggable
 
-  FEE_PAYMENT_METHODS = ['Regular Fee', 'Postpaid Fee', 'Hardship Scholarship', 'Merit Scholarship'].freeze
+  PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP = -'Hardship Scholarship'
+  PAYMENT_METHOD_POSTPAID_FEE = -'Postpaid Fee'
+  REQUIRES_INCOME_PROOF = [PAYMENT_METHOD_POSTPAID_FEE, PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP].freeze
+  FEE_PAYMENT_METHODS = ['Regular Fee', PAYMENT_METHOD_POSTPAID_FEE, PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP, 'Merit Scholarship'].freeze
   ID_PROOF_TYPES = ['Aadhaar Card', 'Driving License', 'Passport', 'Voters ID'].freeze
 
   has_many :applications_as_team_lead, class_name: 'BatchApplication', foreign_key: 'team_lead_id', dependent: :restrict_with_error
@@ -42,6 +45,11 @@ class BatchApplicant < ApplicationRecord
   has_secure_token
 
   normalize_attribute :gender, :reference, :phone, :fee_payment_method
+
+  mount_uploader :id_proof, BatchApplicantDocumentUploader
+  mount_uploader :address_proof, BatchApplicantDocumentUploader
+  mount_uploader :income_proof, BatchApplicantDocumentUploader
+  mount_uploader :letter_from_parent, BatchApplicantDocumentUploader
 
   def applied_to?(batch)
     return false unless batch_applications.present?

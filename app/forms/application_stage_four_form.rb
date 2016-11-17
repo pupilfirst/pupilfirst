@@ -6,12 +6,20 @@ class ApplicationStageFourForm < Reform::Form
   property :gender
   property :born_on
   property :parent_name
-  property :current_address
-  property :permanent_address_is_current_address, virtual: true
   property :permanent_address
+  property :address_proof
+  property :permanent_address_is_current_address, virtual: true
+  property :current_address
   property :phone
   property :id_proof_type
   property :id_proof_number
+  property :id_proof
+  property :income_proof
+  property :letter_from_parent
+  property :college_contact
+
+  # Required in the form to evaluate whether income proof fields are necessary.
+  property :fee_payment_method, writeable: false
 
   validate :ensure_applicant_is_adult
   # validate :permanent_address_is_available

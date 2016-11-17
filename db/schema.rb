@@ -133,6 +133,9 @@ ActiveRecord::Schema.define(version: 20161117103512) do
     t.string   "id_proof"
     t.string   "address_proof"
     t.string   "id_proof_type"
+    t.string   "income_proof"
+    t.string   "letter_from_parent"
+    t.string   "college_contact"
     t.index ["college_id"], name: "index_batch_applicants_on_college_id", using: :btree
     t.index ["token"], name: "index_batch_applicants_on_token", using: :btree
   end

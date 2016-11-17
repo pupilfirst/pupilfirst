@@ -312,10 +312,10 @@ class BatchApplicationController < ApplicationController
 
     if @form.validate(params[:application_stage_four])
       @form.save
-      flash[:success] = 'Founder details successfully saved. Agreements ready to be downloaded.'
+      flash[:success] = 'Applicant details were successfully saved.'
       redirect_to apply_stage_path(4)
     else
-      flash[:error] = 'Error(s) in founder details. Please fix and retry!'
+      flash[:error] = 'We were unable to save applicant details because of errors. Please try again.'
       render 'stage_4'
     end
   end

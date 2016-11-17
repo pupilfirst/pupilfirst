@@ -3,9 +3,10 @@ ActiveAdmin.register BatchApplicant do
 
   menu parent: 'Admissions', label: 'Applicants'
 
-  permit_params :name, :gender, :email, :phone, :role, :team_lead, :tag_list, :reference,
-    :college_id, :notes, :fee_payment_method, { batch_application_ids: [] },
-    college_attributes: [:name, :also_known_as, :city, :state_id, :established_year, :website, :contact_numbers, :replacement_university_id]
+  permit_params do
+    params = [:name, :email, :phone, :role, :team_lead, :tag_list, :reference, :college_id, :notes, :fee_payment_method, { batch_application_ids: [] }, college_attributes: [:name, :also_known_as, :city, :state_id, :established_year, :website, :contact_numbers, :replacement_university_id]]
+    params << [:born_on, :gender, :parent_name, :current_address, :permanent_address, :id_proof_type, :id_proof_number, :id_proof, :address_proof]
+  end
 
   scope :all, default: true
   scope :submitted_application
@@ -117,7 +118,6 @@ ActiveAdmin.register BatchApplicant do
         linked_tags(batch_applicant.tags)
       end
 
-      row :gender
       row :role
 
       row :applications do |batch_applicant|
@@ -148,6 +148,27 @@ ActiveAdmin.register BatchApplicant do
       row :fee_payment_method
       row :notes
       row :last_sign_in_at
+    end
+
+    panel 'Personal Details' do
+      attributes_table_for batch_applicant do
+        row :born_on
+        row :gender
+        row :parent_name
+        row :current_address
+        row :permanent_address
+        row :id_proof_type
+        row :id_proof_number
+
+        # TODO: Enable below rows when respective uploaders are ready.
+        # row :id_proof do
+        #   link_to(image_tag(id_proof_url(:thumb)), id_proof_url) if id_proof.present?
+        # end
+        #
+        # row :address_proof do
+        #   link_to(image_tag(address_proof_url(:thumb)), address_proof_url) if address_proof.present?
+        # end
+      end
     end
 
     panel 'Technical details' do
@@ -196,7 +217,6 @@ ActiveAdmin.register BatchApplicant do
       f.input :name
       f.input :email
       f.input :tag_list, input_html: { value: f.object.tag_list.join(','), 'data-applicant-tags' => BatchApplicant.tag_counts_on(:tags).pluck(:name).to_json }
-      f.input :gender, as: :select, collection: Founder.valid_gender_values
       f.input :phone
       f.input :college_text, label: 'College as text'
       f.input :college_id, input_html: { 'data-search-url' => colleges_url }
@@ -204,6 +224,20 @@ ActiveAdmin.register BatchApplicant do
       f.input :reference
       f.input :notes
       f.input :fee_payment_method, as: :select, collection: BatchApplicant::FEE_PAYMENT_METHODS
+    end
+
+    f.inputs 'Personal details' do
+      f.input :born_on, as: :datepicker
+      f.input :gender, as: :select, collection: Founder.valid_gender_values
+      f.input :parent_name
+      f.input :current_address
+      f.input :permanent_address
+      f.input :id_proof_type, as: :select, collection: BatchApplicant::ID_PROOF_TYPES
+      f.input :id_proof_number
+
+      # TODO: Enable below inputs when respective uploaders ready
+      # f.input :id_proof
+      # f.input :address_proof
     end
 
     if f.object.college.blank? || !f.object.college&.persisted?

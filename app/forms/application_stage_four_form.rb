@@ -74,6 +74,20 @@ class ApplicationStageFourForm < Reform::Form
   def save
     save_uploaded_files
 
-    # Save the rest.
+    self.current_address = permanent_address if permanent_address_is_current_address == '1'
+
+    model.update!(
+      name: name,
+      role: role,
+      gender: gender,
+      born_on: born_on,
+      parent_name: parent_name,
+      permanent_address: permanent_address,
+      current_address: current_address,
+      phone: phone,
+      id_proof_type: id_proof_type,
+      id_proof_number: id_proof_number,
+      college_contact: college_contact
+    )
   end
 end

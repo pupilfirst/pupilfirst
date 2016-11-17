@@ -178,14 +178,15 @@ class PartnershipDeedPdf < ApplicationPdf
   def add_signatures
     move_down 10
     text t('partnership_deed.signatures.header')
-    batch_applicants.each_with_index { |_applicant, index| add_signature_section(index) }
+    batch_applicants.each_with_index { |applicant, index| add_signature_section(applicant, index) }
   end
 
-  def add_signature_section(index)
+  def add_signature_section(applicant, index)
     move_down 15
     text 'Signed and delivered by'
     move_down 10
     text '____________________________________'
+    text applicant.name
     text "(The #{ORDINALIZE[index]} Partner)"
   end
 

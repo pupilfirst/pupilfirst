@@ -37,6 +37,13 @@ GIT
       rails
 
 GIT
+  remote: https://github.com/desheikh/rails-bootstrap-forms.git
+  revision: b582ebffd99b9df5dd03d1b1a8d29d5426e1258b
+  branch: master
+  specs:
+    bootstrap_form (2.5.2)
+
+GIT
   remote: https://github.com/harigopal/shortener.git
   revision: fa07d7225acc802483ba5cf611bb2b4fc371d06d
   branch: 74-rails-5-support
@@ -873,6 +880,7 @@ DEPENDENCIES
   attribute_normalizer (~> 1.2.0.b)
   autoprefixer-rails
   bootstrap-sass (~> 3.3.3)
+  bootstrap_form!
   bullet
   bundler-audit
   cancancan (~> 1.8)

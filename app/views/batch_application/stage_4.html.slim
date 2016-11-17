@@ -79,8 +79,7 @@
                 td #{applicant.fee_payment_method || 'Not Available'}
                 td #{applicant.confirmation_status}
 
-      - if @form.present?
-        == render 'update_applicant_form', form: @form
+      == render('update_applicant_form') if @form.present?
 
       - if @batch_application.partnership_deed_ready?
         .alert.alert-success

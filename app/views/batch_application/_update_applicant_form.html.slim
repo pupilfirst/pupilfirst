@@ -1,73 +1,22 @@
 #update_applicant_form
-  = form_for(form, url: apply_update_applicant_path) do |f|
-    h2.m-y-2 Editing #{f.object.name}'s Profile
+  h3.m-t-1.m-b-2 Editing #{@form.name}'s Profile
 
-    / TODO: Display form errors.
-
+  = bootstrap_form_for(@form, url: apply_update_applicant_path, layout: :horizontal, label_col: 'col-sm-2', control_col: 'col-sm-10') do |f|
     = f.hidden_field :id
-
-    .form-group.row
-      = f.label :name, class: 'col-sm-2 col-form-label', maxlength: 250
-      .col-sm-9
-        = f.text_field :name, class: 'form-control'
-
-    .form-group.row
-      = f.label :email, class: 'col-sm-2 col-form-label'
-      .col-sm-10
-        = f.text_field :email, class: 'form-control', disabled: true
-
-    .form-group.row
-      = f.label :role, class: 'col-sm-2 col-form-label'
-      .col-sm-10
-        = f.select(:role, Founder.valid_roles, { include_blank: 'Select role' }, class: 'form-control')
-
-    .form-group.row
-      = f.label :gender, class: 'col-sm-2 col-form-label'
-      .col-sm-10
-        = f.select(:gender, Founder.valid_gender_values, { include_blank: 'Select gender' }, class: 'form-control')
-
-    .form-group.row
-      = f.label :born_on, 'Date of Birth', class: 'col-sm-2 col-form-label'
-      .col-sm-10
-        = f.text_field :born_on, class: 'form-control date-picker', type: 'date'
-
-    .form-group.row
-      = f.label :parent_name, 'Name of Parent', class: 'col-sm-2 col-form-label'
-      .col-sm-10
-        = f.text_field :parent_name, class: 'form-control'
-
-    .form-group.row
-      = f.label :current_address, 'Current Address', class: 'col-sm-2 col-form-label'
-      .col-sm-10
-        = f.text_area :current_address, class: 'form-control'
-
+    = f.text_field :name, label_class: 'col-form-label'
+    = f.text_field :email, label_class: 'col-form-label', disabled: true
+    = f.select :role, @form.role_options, include_blank: 'Select role', label_class: 'col-form-label', help: "Unsure? Check out what our #{link_to 'Playbook has to say about roles', 'https://playbook.sv.co/4-startup-roles.html', target: '_blank'} in a startup.".html_safe
+    = f.select :gender, @form.gender_options, include_blank: 'Select gender', label_class: 'col-form-label'
+    = f.date_field :born_on, label_class: 'col-form-label', class: 'date-picker', data: { :'max-date' => 18.years.ago.strftime('%Y-%m-%d') }, label: 'Date of Birth'
+    = f.text_field :parent_name, label_class: 'col-form-label', label: "Parent's Name"
+    = f.text_area :permanent_address, label_class: 'col-form-label', label: 'Permanent Address', help: 'Please ensure that this address <strong>exactly matches</strong> the one in the submitted address proof.'.html_safe
     .form-group.row
       .offset-sm-2.col-sm-10
-        .form-check
-          = f.label :current_address_is_permanent_address, class: 'form-check-label' do
-            = f.check_box(:current_address_is_permanent_address, class: 'form-check-input')
-            | &nbsp;Is your current address and your permanent address the same?
-
-    .form-group.row
-      = f.label :permanent_address, 'Permanent Address', class: 'col-sm-2 col-form-label'
-      .col-sm-10
-        = f.text_area :permanent_address, class: 'form-control'
-
-    .form-group.row
-      = f.label :phone, 'Mobile Phone', class: 'col-sm-2 col-form-label'
-      .col-sm-10
-        = f.text_field :phone, class: 'form-control'
-
-    .form-group.row
-      = f.label :id_proof_type, 'Type of ID Proof', class: 'col-sm-2 col-form-label'
-      .col-sm-10
-        = f.select(:id_proof_type, BatchApplicant::ID_PROOF_TYPES, { include_blank: 'Select type' }, class: 'form-control')
-
-    .form-group.row
-      = f.label :id_proof_number, 'ID Proof Number', class: 'col-sm-2 col-form-label'
-      .col-sm-10
-        = f.text_field :id_proof_number, class: 'form-control'
-
+        = f.check_box :permanent_address_is_current_address, label_class: 'col-form-label', label: 'Is your current address same as your permanent address?'
+    = f.text_area :current_address, label_class: 'col-form-label', label: 'Current Address'
+    = f.phone_field :phone, label_class: 'col-form-label', label: 'Mobile Phone'
+    = f.select :id_proof_type, BatchApplicant::ID_PROOF_TYPES, include_blank: 'Select type', label_class: 'col-form-label', label: 'Type of ID Proof', help: "Your ID proof must be one of the available types. If this is an issue, please contact us at #{mail_to 'help@sv.co'}.".html_safe
+    = f.text_field :id_proof_number, label_class: 'col-form-label', label: 'ID Proof Number'
     .form-group.row
       .offset-sm-2.col-sm-10
-        = f.submit 'Update Profile', class: 'btn btn-secondary'
+        = f.submit 'Update Profile'

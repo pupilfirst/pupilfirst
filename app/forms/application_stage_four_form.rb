@@ -53,8 +53,7 @@ class ApplicationStageFourForm < Reform::Form
   end
 
   def file_required?(field)
-    return false unless model.persisted?
-    model.public_send(field).present?
+    !model.public_send(field).present?
   end
 
   def file_help_extra(field)

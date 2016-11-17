@@ -315,6 +315,9 @@ class BatchApplicationController < ApplicationController
       flash[:success] = 'Applicant details were successfully saved.'
       redirect_to apply_stage_path(4)
     else
+      # Special dispensation, since this form can have up to four file fields. It would be super-irritating to users to
+      # lose uploads to validation failure.
+      @form.save_uploaded_files
       flash[:error] = 'We were unable to save applicant details because of errors. Please try again.'
       render 'stage_4'
     end

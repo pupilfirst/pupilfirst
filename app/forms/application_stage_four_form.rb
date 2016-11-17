@@ -40,10 +40,6 @@ class ApplicationStageFourForm < Reform::Form
     errors[:current_address] << 'is required'
   end
 
-  def save
-    raise NotImplementedError
-  end
-
   def role_options
     Founder.valid_roles.each_with_object([]) do |role, options|
       options << [I18n.t("role.#{role}"), role]
@@ -54,5 +50,31 @@ class ApplicationStageFourForm < Reform::Form
     Founder.valid_gender_values.each_with_object([]) do |gender, options|
       options << [gender.capitalize, gender]
     end
+  end
+
+  def file_required?(field)
+    return false unless model.persisted?
+    model.public_send(field).present?
+  end
+
+  def file_help_extra(field)
+    model.public_send(field).present? ? "Upload another file to replace <code>#{model.filename(field)}</code>.<br/>" : ''
+  end
+
+  def save_uploaded_files
+    files = [:address_proof, :id_proof, :income_proof, :letter_from_parent]
+    files -= errors.keys
+
+    files.each do |valid_file|
+      model.public_send(:"#{valid_file}=", send(valid_file))
+    end
+
+    model.save!
+  end
+
+  def save
+    save_uploaded_files
+
+    # Save the rest.
   end
 end

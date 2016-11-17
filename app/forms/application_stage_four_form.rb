@@ -57,7 +57,7 @@ class ApplicationStageFourForm < Reform::Form
   end
 
   def file_help_extra(field)
-    model.public_send(field).present? ? "Upload another file to replace <code>#{model.filename(field)}</code>.<br/>" : ''
+    model.public_send(field).present? ? "Upload another file to replace <code>#{model.filename(field)}</code><br/>" : ''
   end
 
   def save_uploaded_files

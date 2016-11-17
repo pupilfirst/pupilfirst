@@ -14,22 +14,23 @@
     = f.select :gender, @form.gender_options, { include_blank: 'Select gender', label_class: 'col-form-label' }, { required: true }
     = f.text_field :born_on, label_class: 'col-form-label', class: 'date-picker', data: { :'max-date' => 18.years.ago.strftime('%Y-%m-%d') }, label: 'Date of Birth', required: true, placeholder: 'YYYY-MM-DD'
     = f.text_field :parent_name, label_class: 'col-form-label', label: "Parent's Name", required: true, maxlength: 250
-    = f.text_area :permanent_address, label_class: 'col-form-label', label: 'Permanent Address', help: 'Please ensure that this address <strong>exactly matches</strong> the one in the submitted address proof.'.html_safe, required: true
+    = f.text_area :permanent_address, label_class: 'col-form-label', label: 'Permanent Address', help: 'Please ensure that this address <strong>exactly matches</strong> the one in the submitted address proof.'.html_safe, required: true, rows: 4
     = f.file_field :address_proof, label_class: 'col-form-label', label: 'Proof of Address', class: 'form-control', help: "#{@form.file_help_extra(:address_proof)}Scan of <strong>self-attested copy</strong> of proof of address.".html_safe, required: @form.file_required?(:address_proof)
     .form-group.row
       .offset-sm-2.col-sm-10
         = f.check_box :permanent_address_is_current_address, label_class: 'col-form-label', label: 'Is your current address same as your permanent address?'
-    = f.text_area :current_address, label_class: 'col-form-label', label: 'Current Address'
+    = f.text_area :current_address, label_class: 'col-form-label', label: 'Current Address', rows: 4
     = f.phone_field :phone, label_class: 'col-form-label', label: 'Mobile Phone', required: true, maxlength: 17, pattern: MobileNumberValidator::FORM_EXPRESSION
     = f.select :id_proof_type, BatchApplicant::ID_PROOF_TYPES, { include_blank: 'Select type', label_class: 'col-form-label', label: 'Type of ID Proof' }, { required: true }
     = f.text_field :id_proof_number, label_class: 'col-form-label', label: 'ID Proof Number', required: true
     = f.file_field :id_proof, label_class: 'col-form-label', label: 'Proof of Identity', class: 'form-control', help: "#{@form.file_help_extra(:id_proof)}Scan of <strong>self-attested copy</strong> of proof of identity.".html_safe, required: @form.file_required?(:id_proof)
-    /- if f.object.fee_payment_method.in?(BatchApplicant::REQUIRES_INCOME_PROOF)
 
-    h4.m-b-1 The following fields are required to verify income status.
-    = f.file_field :income_proof, label_class: 'col-form-label', label: 'Proof of Income', class: 'form-control', help: "#{@form.file_help_extra(:income_proof)}Scan of Income certificate / BPL Card / ITR of applicant's parents.".html_safe, required: @form.file_required?(:income_proof)
-    = f.file_field :letter_from_parent, label_class: 'col-form-label', label: 'Letter from Parent', class: 'form-control', help: "#{@form.file_help_extra(:letter_from_parent)}Scan of letter must be attested by Principal, or HOD at the applicant's college.".html_safe, required: @form.file_required?(:letter_from_parent)
-    = f.phone_field :college_contact, label_class: 'col-form-label', label: 'College Contact Number', help: 'Please supply the contact number of the person who attested the above letter.', required: true, maxlength: 17, pattern: MobileNumberValidator::FORM_EXPRESSION
+    - if f.object.fee_payment_method.in?(BatchApplicant::REQUIRES_INCOME_PROOF)
+      h4.m-b-1 The following fields are required to verify income status.
+
+      = f.file_field :income_proof, label_class: 'col-form-label', label: 'Proof of Income', class: 'form-control', help: "#{@form.file_help_extra(:income_proof)}Scan of Income certificate / BPL Card / ITR of applicant's parents.".html_safe, required: @form.file_required?(:income_proof)
+      = f.file_field :letter_from_parent, label_class: 'col-form-label', label: 'Letter from Parent', class: 'form-control', help: "#{@form.file_help_extra(:letter_from_parent)}Scan of letter must be attested by Principal, or HOD at the applicant's college.".html_safe, required: @form.file_required?(:letter_from_parent)
+      = f.phone_field :college_contact, label_class: 'col-form-label', label: 'College Contact Number', help: 'Please supply the contact number of the person who attested the above letter.', required: true, maxlength: 17, pattern: MobileNumberValidator::FORM_EXPRESSION
     .form-group.row
       .offset-sm-2.col-sm-10
         = f.submit 'Update Profile'

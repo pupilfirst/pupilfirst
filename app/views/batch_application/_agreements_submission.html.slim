@@ -16,33 +16,7 @@
         p Upload a copy of your Partnership Deed below.
         p <em>Note:</em>&nbsp;Do <strong>not</strong> send us your Original Partnership Deed.
 
-    h5.font-semibold
-      | Payment Instructions:
-    ul
-      li
-        p
-          | Transfer your Fee to the following account:
-          .offset-md-1
-            <strong>Account Name:</strong>&nbsp;SV.CO DIGITAL PLATFORM PRIVATE LIMITED
-            br
-            <strong>Account Number:</strong>&nbsp;5020 0018 3199 57
-            br
-            <strong>IFSC Code:</strong>&nbsp;HDFC0000520
-            br
-            <strong>Banck:</strong>&nbsp;HDFC
-            br
-            <strong>Branch:</strong>Palarivattom, Kochi
-      li
-        p Pay Full Fee as a team in one transaction.
-      li
-        p <strong>Mention/Write Team lead's name in the Remarks field while making the NEFT transaction.</strong>
-      li
-        p <strong>Note the payment reference number</strong> as this has to be entered for verification.
-      li
-        p Initiate the payment process 4~7 days prior to the deadline as NEFT transactions take time to debit into the account. Start with adding beneficiary as soon as possible as banks usually take 24hrs to activate them.
-      li
-        p If you have any difficulties in payment, immediately write to #{mail_to 'help@sv.co'}.
-
+    == render 'payment_instructions'
 
   = bootstrap_form_for(@form, url: apply_stage_submit_path, layout: :horizontal, label_col: 'col-sm-2', control_col: 'col-sm-10') do |f|
     = f.file_field :partnership_deed, label_class: 'col-form-label', label: 'Partnership Deed', class: 'form-control', help: "#{@form.deed_help_extra}Scan copy of <strong>completed and signed</strong> partnership deed.".html_safe, required: !@form.model.partnership_deed.present?

@@ -1,0 +1,16 @@
+.table-responsive
+  table.table.table-sm.payment-status-table.p-a-1
+    thead.thead-default
+      tr
+        th Founder Name
+        th Profile Completion
+        th Fee Payment Method
+        th Confirmation Status
+    tbody
+      - batch_application.batch_applicants.each do |batch_applicant|
+        - applicant = batch_applicant.decorate
+        tr
+          td #{applicant.name}
+          td #{applicant.profile_completion_status}
+          td #{applicant.payment_method_with_fee(batch_application)}
+          td #{applicant.confirmation_status}

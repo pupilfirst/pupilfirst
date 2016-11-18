@@ -3,8 +3,10 @@ class BatchApplicant < ApplicationRecord
 
   PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP = -'Hardship Scholarship'
   PAYMENT_METHOD_POSTPAID_FEE = -'Postpaid Fee'
+  PAYMENT_METHOD_REGULAR_FEE = -'Regular Fee'
+  PAYMENT_METHOD_MERIT_SCHOLARSHIP = -'Merit Scholarship'
   REQUIRES_INCOME_PROOF = [PAYMENT_METHOD_POSTPAID_FEE, PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP].freeze
-  FEE_PAYMENT_METHODS = ['Regular Fee', PAYMENT_METHOD_POSTPAID_FEE, PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP, 'Merit Scholarship'].freeze
+  FEE_PAYMENT_METHODS = [PAYMENT_METHOD_REGULAR_FEE, PAYMENT_METHOD_POSTPAID_FEE, PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP, PAYMENT_METHOD_MERIT_SCHOLARSHIP].freeze
   ID_PROOF_TYPES = ['Aadhaar Card', 'Driving License', 'Passport', 'Voters ID'].freeze
 
   has_many :applications_as_team_lead, class_name: 'BatchApplication', foreign_key: 'team_lead_id', dependent: :restrict_with_error

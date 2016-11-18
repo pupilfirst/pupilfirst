@@ -1,4 +1,4 @@
-.container-md-center.content-box.application-stages-content.m-t-3.m-b-3
+.content-box.application-stages-content.m-t-3.m-b-3
   .congrats-box.m-b-3.p-a-1.text-xs-center
     h3.brand-secondary
       ' <strong>Congratulations!</strong> &#128144;
@@ -35,28 +35,10 @@
       p
         ' Write to #{mail_to 'help@sv.co'} for any queries.
 
-  .text-xs-left
-    h5.m-t-1.font-semibold Fee Payment Status:
+  h5.m-t-1.font-semibold Fee Payment Status:
 
-    .table-responsive
-      table.table.table-sm.payment-status-table.p-a-1
-        thead.thead-default
-          tr
-            th Founder Name
-            th Profile Completion
-            th Fee Payment Method
-            th Confirmation Status
-        tbody
-          - @batch_application.batch_applicants.each do |batch_applicant|
-            - applicant = batch_applicant.decorate
-            tr
-              td #{applicant.name}
-              td #{applicant.profile_completion_status}
-              td #{applicant.fee_payment_method || 'Not Available'}
-              td #{applicant.confirmation_status}
-
-    == render 'payment_instructions'
-
+  == render 'payment_status_table', batch_application: @batch_application
+  == render 'payment_instructions'
   == render('update_applicant_form') if @form.present?
 
   - if @batch_application.partnership_deed_ready?

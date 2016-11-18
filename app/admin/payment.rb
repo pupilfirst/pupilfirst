@@ -8,6 +8,7 @@ ActiveAdmin.register Payment do
   filter :batch_applicant
   filter :amount
   filter :fees
+  filter :refunded
   filter :created_at
 
   scope :all, default: true
@@ -31,6 +32,7 @@ ActiveAdmin.register Payment do
     column :amount
     column :fees
     column(:status) { |payment| t("payment.status.#{payment.status}") }
+    column :refunded
 
     actions do |payment|
       if payment.batch_application.present?
@@ -57,6 +59,20 @@ ActiveAdmin.register Payment do
     payment = Payment.find(params[:id])
     payment.archive!
     flash[:success] = "Payment ##{payment.id} has been archived!"
+    redirect_to admin_payments_path
+  end
+
+  action_item :mark_refunded, only: :show do
+    unless payment.refunded?
+      link_to 'Mark as Refunded', mark_refunded_admin_payment_path(payment), method: :post, data: { confirm: 'Are you sure?' }
+    end
+  end
+
+  member_action :mark_refunded, method: :post do
+    payment = Payment.find(params[:id])
+    payment.refunded = true
+    payment.save!
+    flash[:success] = "Payment ##{payment.id} has been marked as refunded!"
     redirect_to admin_payments_path
   end
 

@@ -2,6 +2,7 @@ class BatchApplication < ApplicationRecord
   include Taggable
 
   FEE = 3000
+  COURSE_FEE = 37_500
 
   belongs_to :batch
   belongs_to :application_stage
@@ -218,5 +219,25 @@ class BatchApplication < ApplicationRecord
   # this was included to dynamically calculate the top states for Admissions Dashboard. Later replaced by the pre-selected list of states i.e State.focused_for_admissions
   def self.top_states(n)
     joins(:university).group(:location).count.sort_by { |_k, v| v }.reverse[0..(n - 1)].to_h.keys - ['Other']
+  end
+
+  # Returns remaining course fee for a given applicant.
+  def applicant_course_fee(batch_applicant)
+    raise "BatchApplicant##{batch_applicant.id} does not belong BatchApplication##{id}" unless batch_applicants.include?(batch_applicant)
+
+    if batch_applicant.fee_payment_method == BatchApplicant::PAYMENT_METHOD_REGULAR_FEE
+      if batch_applicant == team_lead
+        COURSE_FEE - (payment&.refunded? ? 0 : payment&.amount.to_i)
+      else
+        COURSE_FEE
+      end
+    else
+      0
+    end
+  end
+
+  # Need to iterate over applicants since each could have different payment method.
+  def total_course_fee
+    batch_applicants.map { |applicant| applicant_course_fee(applicant) }.sum
   end
 end

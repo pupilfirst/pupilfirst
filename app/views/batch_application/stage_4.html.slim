@@ -16,7 +16,9 @@
   .m-t-3
     == render 'application_progress'
 
-  - if @batch_application.agreements_verified
-    == render 'agreements_submission'
-  - else
-    == render 'agreements_builder'
+  .row
+    .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
+      - if @batch_application.agreements_verified
+        == render 'agreements_submission'
+      - else
+        == render 'agreements_builder'

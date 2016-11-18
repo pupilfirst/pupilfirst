@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161117113321) do
+ActiveRecord::Schema.define(version: 20161118082159) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -432,6 +432,7 @@ ActiveRecord::Schema.define(version: 20161117113321) do
     t.integer  "original_batch_application_id"
     t.integer  "batch_applicant_id"
     t.string   "notes"
+    t.boolean  "refunded"
     t.index ["batch_applicant_id"], name: "index_payments_on_batch_applicant_id", using: :btree
     t.index ["batch_application_id"], name: "index_payments_on_batch_application_id", using: :btree
     t.index ["original_batch_application_id"], name: "index_payments_on_original_batch_application_id", using: :btree

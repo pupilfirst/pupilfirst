@@ -73,4 +73,15 @@ class BatchApplicantDecorator < Draper::Decorator
       h.link_to('<i class="fa fa-edit"></i> Update profile'.html_safe, update_query)
     end
   end
+
+  def payment_method_with_fee(batch_application)
+    return 'Not Available' if fee_payment_method.blank?
+
+    if fee_payment_method == BatchApplicant::PAYMENT_METHOD_REGULAR_FEE
+      fee = batch_application.applicant_course_fee(model)
+      "Regular Fee &ndash; <strong>&#8377;#{h.number_with_delimiter(fee)}</strong>".html_safe
+    else
+      fee_payment_method
+    end
+  end
 end

@@ -16,7 +16,8 @@ class IntercomLastApplicantEventUpdateJob < ApplicationJob
       payment_initiated: 'Payment Initiated',
       payment_complete: 'Paid Applicant',
       tasks_submitted: 'Tasks Submitted',
-      selected_for_interview: 'Selected For Interview'
+      selected_for_interview: 'Selected For Interview',
+      agreements_sent: 'Agreements Sent'
     }
   end
 
@@ -26,7 +27,8 @@ class IntercomLastApplicantEventUpdateJob < ApplicationJob
       payment_initiated: 'Payment Initiated',
       payment_complete: 'Paid Applicant',
       tasks_submitted: 'Tasks Submitted',
-      selected_for_interview: 'Selected For Interview'
+      selected_for_interview: 'Selected For Interview',
+      agreements_sent: 'Agreements Sent'
     }
   end
 
@@ -36,7 +38,8 @@ class IntercomLastApplicantEventUpdateJob < ApplicationJob
       payment_initiated: 'Payment Initiated',
       payment_complete: 'Payment Completed',
       tasks_submitted: 'Tasks Submitted',
-      selected_for_interview: 'Selected For Interview'
+      selected_for_interview: 'Selected For Interview',
+      agreements_sent: 'Agreements Sent'
     }
   end
 end

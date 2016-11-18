@@ -1,5 +1,5 @@
-class ApplicationStageFourForm < Reform::Form
-  property :id
+class ApplicationStageFourApplicantForm < Reform::Form
+  property :id, writeable: false
   property :name, validates: { presence: true, length: { maximum: 250 } }
   property :email, writeable: false
   property :role, validates: { presence: true, inclusion: Founder.valid_roles }
@@ -57,7 +57,7 @@ class ApplicationStageFourForm < Reform::Form
   end
 
   def file_help_extra(field)
-    model.public_send(field).present? ? "Upload another file to replace <code>#{model.filename(field)}</code><br/>" : ''
+    model.public_send(field).present? ? "Upload another file if you wish to replace <code>#{model.filename(field)}</code><br/>" : ''
   end
 
   def save_uploaded_files

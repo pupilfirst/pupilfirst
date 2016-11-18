@@ -299,7 +299,7 @@ class BatchApplicationController < ApplicationController
       @form = ApplicationStageFourSubmissionForm.new(@batch_application)
     elsif params[:update_profile]
       applicant = current_application.batch_applicants.find(params[:update_profile])
-      @form = ApplicationStageFourForm.new(applicant)
+      @form = ApplicationStageFourApplicantForm.new(applicant)
     end
   end
 
@@ -308,7 +308,7 @@ class BatchApplicationController < ApplicationController
   def update_applicant
     @batch_application = current_application.decorate
     applicant = current_application.batch_applicants.find(params[:application_stage_four][:id])
-    @form = ApplicationStageFourForm.new(applicant)
+    @form = ApplicationStageFourApplicantForm.new(applicant)
 
     if @form.validate(params[:application_stage_four])
       @form.save
@@ -363,10 +363,16 @@ class BatchApplicationController < ApplicationController
   end
 
   def stage_4_submit
-    # current_application.application_submissions.create!(
-    #   application_stage: ApplicationStage.find_by(number: 4)
-    # )
-    redirect_to apply_stage_path(4)
+    @batch_application = current_application.decorate
+    @form = ApplicationStageFourSubmissionForm.new(@batch_application)
+
+    if @form.validate(params[:application_stage_four_submission])
+      @form.save
+      redirect_to apply_stage_complete_path(stage_number: '4')
+    else
+      @form.save_partnership_deed
+      render 'stage_4'
+    end
   end
 
   protected

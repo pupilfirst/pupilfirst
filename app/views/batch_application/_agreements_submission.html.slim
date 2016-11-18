@@ -45,10 +45,10 @@
 
 
   = bootstrap_form_for(@form, url: apply_stage_submit_path, layout: :horizontal, label_col: 'col-sm-2', control_col: 'col-sm-10') do |f|
-    = f.file_field :partnership_deed, label_class: 'col-form-label', label: 'Partnership Deed', class: 'form-control'
-    = f.text_field :courier_name, label_class: 'col-form-label'
-    = f.text_field :courier_number, label_class: 'col-form-label'
-    = f.text_field :payment_reference, label_class: 'col-form-label'
+    = f.file_field :partnership_deed, label_class: 'col-form-label', label: 'Partnership Deed', class: 'form-control', help: "#{@form.deed_help_extra}Scan copy of <strong>completed and signed</strong> partnership deed.".html_safe, required: !@form.model.partnership_deed.present?
+    = f.text_field :courier_name, label_class: 'col-form-label', help: 'FedEx, DHL etc', required: true
+    = f.text_field :courier_number, label_class: 'col-form-label', required: true
+    = f.text_field :payment_reference, label_class: 'col-form-label', required: true
     .form-group.row
       .offset-sm-2.col-sm-10
         = f.submit 'Submit'

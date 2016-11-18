@@ -44,6 +44,8 @@ class BatchApplication < ApplicationRecord
     end
   end
 
+  mount_uploader :partnership_deed, BatchApplicantDocumentUploader
+
   validates :batch_id, presence: true
   validates :application_stage_id, presence: true
 

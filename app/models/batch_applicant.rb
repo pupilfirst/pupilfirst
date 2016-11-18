@@ -44,7 +44,7 @@ class BatchApplicant < ApplicationRecord
 
   has_secure_token
 
-  normalize_attribute :gender, :reference, :phone, :fee_payment_method
+  normalize_attribute :gender, :reference, :phone, :fee_payment_method, :id_proof_type
 
   mount_uploader :id_proof, BatchApplicantDocumentUploader
   mount_uploader :address_proof, BatchApplicantDocumentUploader

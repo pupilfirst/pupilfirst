@@ -6,7 +6,8 @@ module BatchApplications
     end
 
     def build(batch_application)
-      pdf = EducationalAgreement::PartOne.new(batch_application).build(combinable: true)
+      pdf = CombinePDF.load('app/pdfs/educational_agreement/check_list.pdf')
+      pdf << EducationalAgreement::PartOne.new(batch_application).build(combinable: true)
       pdf << CombinePDF.load('app/pdfs/educational_agreement/part_two.pdf')
       pdf << EducationalAgreement::PartThree.new(batch_application).build(combinable: true)
       pdf << CombinePDF.load('app/pdfs/educational_agreement/part_four.pdf')
@@ -15,6 +16,8 @@ module BatchApplications
       pdf << EducationalAgreement::PartSeven.new(batch_application).build(combinable: true)
       pdf << CombinePDF.load('app/pdfs/educational_agreement/part_eight.pdf')
       pdf << EducationalAgreement::PartNine.new(batch_application).build(combinable: true)
+      pdf.info[:Title] = 'Educational Agreement'
+      pdf
     end
   end
 end

@@ -7,6 +7,7 @@ module EducationalAgreement
     end
 
     def build(combinable: false)
+      move_down 300
       add_title_and_date
       add_agreement_parties
       combinable ? CombinePDF.parse(render) : self

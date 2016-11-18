@@ -32,6 +32,10 @@
     $ overcommit --install
     $ overcommit --sign
 
+### Disable Skylight Dev Warning
+
+    $ skylight disable_dev_warning
+
 ### Database setup
 
     $ rake db:setup

@@ -41,14 +41,15 @@
   == render 'payment_instructions', batch_application: @batch_application
   == render('update_applicant_form') if @form.present?
 
-  - if @batch_application.partnership_deed_ready?
-    .alert.alert-success
-      i.fa.fa-check &nbsp;
-      ' Your Partnership Deed is ready.
-      a.alert-link href=apply_partnership_deed_path(format: :pdf) target='_blank' Download, Sign and Send for Verification Now!
+  - unless @form.present?
+    - if @batch_application.partnership_deed_ready?
+      .alert.alert-success
+        i.fa.fa-check &nbsp;
+        ' Your Partnership Deed is ready.
+        a.alert-link href=apply_partnership_deed_path(format: :pdf) target='_blank' Download, Sign and Send for Verification Now!
 
-  - if @batch_application.educational_agreement_ready?
-    .alert.alert-success
-      i.fa.fa-check &nbsp;
-      ' Your Agreement with SV.CO is ready.
-      a.alert-link href=apply_educational_agreement_path(format: :pdf) target='_blank' Download, Sign and Send for Verification Now!
+    - if @batch_application.educational_agreement_ready?
+      .alert.alert-success
+        i.fa.fa-check &nbsp;
+        ' Your Agreement with SV.CO is ready.
+        a.alert-link href=apply_educational_agreement_path(format: :pdf) target='_blank' Download, Sign and Send for Verification Now!

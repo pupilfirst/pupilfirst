@@ -307,10 +307,10 @@ class BatchApplicationController < ApplicationController
   # receives founder details, generates required pdf and redirects back to updated stage_4 page
   def update_applicant
     @batch_application = current_application.decorate
-    applicant = current_application.batch_applicants.find(params[:application_stage_four][:id])
+    applicant = current_application.batch_applicants.find(params[:application_stage_four_applicant][:id])
     @form = ApplicationStageFourApplicantForm.new(applicant)
 
-    if @form.validate(params[:application_stage_four])
+    if @form.validate(params[:application_stage_four_applicant])
       @form.save
       flash[:success] = 'Applicant details were successfully saved.'
       redirect_to apply_stage_path(4)

@@ -49,7 +49,7 @@ module PartnershipDeed
         son_or_daughter: @applicant.son_or_daughter,
         parent_name: @applicant.parent_name,
         age: @applicant.age,
-        current_address: @applicant.current_address,
+        current_address: @applicant.current_address.squish,
         id_proof_type: @applicant.id_proof_type,
         id_proof_number: @applicant.id_proof_number
       )
@@ -82,7 +82,7 @@ module PartnershipDeed
 
       # Section 3: Name and Address of the Firm
       move_down 10
-      text t('partnership_deed.s3', team_lead_address: @batch_application.team_lead.current_address), inline_format: true
+      text t('partnership_deed.s3', team_lead_address: @batch_application.team_lead.current_address.squish), inline_format: true
 
       # Section 4: Partnership Business
       move_down 10

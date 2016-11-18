@@ -55,7 +55,7 @@ module EducationalAgreement
       move_down 10
       text t(
         'educational_agreement.startup_details',
-        address: @team_lead.current_address,
+        address: @team_lead.current_address.squish,
         team_lead_name: "#{@team_lead.mr_or_ms} #{@team_lead.name}",
         age: @team_lead.age,
         son_or_daughter: @team_lead.son_or_daughter,
@@ -77,7 +77,7 @@ module EducationalAgreement
         age: applicant.age,
         son_or_daughter: applicant.son_or_daughter,
         parent_name: applicant.parent_name,
-        address: applicant.current_address,
+        address: applicant.current_address.squish,
         index: index + 1,
         party_number: ORDINALIZE[index + 2]
       ), inline_format: true

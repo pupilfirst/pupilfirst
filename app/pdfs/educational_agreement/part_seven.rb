@@ -33,8 +33,8 @@ module EducationalAgreement
           age: applicant.age,
           id_proof_type: applicant.id_proof_type,
           id_proof_number: applicant.id_proof_number,
-          current_address: applicant.current_address,
-          permanent_address: applicant.permanent_address,
+          current_address: applicant.current_address.squish,
+          permanent_address: applicant.permanent_address.squish,
           phone: applicant.phone
         )
       end

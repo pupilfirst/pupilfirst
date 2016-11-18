@@ -40,7 +40,7 @@ module EducationalAgreement
         title: 'Startup',
         name: @team_lead.name,
         designation: "#{@team_lead.role.capitalize} Lead",
-        address: @team_lead.current_address,
+        address: @team_lead.current_address.squish,
         email: @team_lead.email
       ), inline_format: true
     end
@@ -53,7 +53,7 @@ module EducationalAgreement
           title: "Founder #{index + 1}",
           name: applicant.name,
           designation: "#{applicant.role.capitalize} Lead",
-          address: applicant.current_address,
+          address: applicant.current_address.squish,
           email: applicant.email
         ), inline_format: true
       end

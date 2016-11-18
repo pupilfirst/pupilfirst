@@ -10,7 +10,7 @@
     = f.hidden_field :id
     = f.text_field :name, label_class: 'col-form-label', required: true, maxlength: 250
     = f.text_field :email, label_class: 'col-form-label', disabled: true
-    = f.select :role, @form.role_options, { include_blank: 'Select role', label_class: 'col-form-label', help: "Unsure? Check out what our #{link_to 'Playbook has to say about roles', 'https://playbook.sv.co/4-startup-roles.html', target: '_blank'} in a startup.".html_safe }, { required: true }
+    = f.select :role, @form.role_options, { include_blank: 'Select role', label_class: 'col-form-label', help: "Unsure? Check out what our #{link_to 'Playbook has to say about startup roles <i class="fa fa-external-link"></i>'.html_safe, 'https://playbook.sv.co/4-startup-roles.html', target: '_blank'}".html_safe }, { required: true }
     = f.select :gender, @form.gender_options, { include_blank: 'Select gender', label_class: 'col-form-label' }, { required: true }
     = f.text_field :born_on, label_class: 'col-form-label', class: 'date-picker', data: { :'max-date' => 18.years.ago.strftime('%Y-%m-%d') }, label: 'Date of Birth', required: true, placeholder: 'YYYY-MM-DD'
     = f.text_field :parent_name, label_class: 'col-form-label', label: "Parent's Name", required: true, maxlength: 250

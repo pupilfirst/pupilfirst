@@ -1,26 +1,26 @@
-h5.font-semibold
-  | Payment Instructions:
-ul
-  li
-    p
-      | Transfer your total fee to the following account:
-      .offset-md-1
-        <strong>Account Name:</strong>&nbsp;SV.CO DIGITAL PLATFORM PRIVATE LIMITED
-        br
-        <strong>Account Number:</strong>&nbsp;5020 0018 3199 57
-        br
-        <strong>IFSC Code:</strong>&nbsp;HDFC0000520
-        br
-        <strong>Banck:</strong>&nbsp;HDFC
-        br
-        <strong>Branch:</strong>Palarivattom, Kochi
-  li
-    p Pay full fee as a team in <strong>one transaction</strong>.
-  li
-    p <strong>Mention/Write Team lead's name in the Remarks field while making the NEFT transaction.</strong>
-  li
-    p <strong>Note the payment reference number</strong> as this has to be entered for verification.
-  li
-    p Initiate the payment process 4~7 days prior to the deadline as NEFT transactions take time to debit into the account. Start with adding beneficiary as soon as possible as banks usually take 24hrs to activate them.
-  li
-    p If you have any difficulties in payment, immediately write to #{mail_to 'help@sv.co'}.
+- total_fee = batch_application.total_course_fee
+
+- if total_fee > 0
+  h5.font-semibold
+    | Payment Instructions
+  ul
+    li
+      p
+        ' Transfer your total fee &ndash; <strong>&#8377; #{number_with_delimiter(total_fee)}</strong> &ndash; to the
+        | following account:
+        ul
+          li <strong>Account Name:</strong> SV.CO DIGITAL PLATFORM PRIVATE LIMITED
+          li <strong>Account Number:</strong> <code>50200018319957</code>
+          li <strong>IFSC Code:</strong> <code>HDFC0000520</code>
+          li <strong>Bank:</strong> HDFC
+          li <strong>Branch:</strong> Palarivattom, Kochi
+    li
+      p Pay full fee as a team in <strong>one transaction</strong>.
+    li
+      p <strong>Mention/Write Team lead's name in the Remarks field while making the NEFT transaction.</strong>
+    li
+      p <strong>Note the payment reference number</strong> as this has to be entered for verification.
+    li
+      p Initiate the payment process 4~7 days prior to the deadline as NEFT transactions take time to debit into the account. Start with adding beneficiary as soon as possible as banks usually take 24hrs to activate them.
+    li
+      p If you have any difficulties in payment, immediately write to #{mail_to 'help@sv.co'}.

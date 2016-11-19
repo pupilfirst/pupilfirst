@@ -25,7 +25,7 @@
     = f.text_field :id_proof_number, label_class: 'col-form-label', label: 'ID Proof Number', required: true
     = f.file_field :id_proof, label_class: 'col-form-label', label: 'Proof of Identity', class: 'form-control', help: "#{@form.file_help_extra(:id_proof)}Scan of <strong>self-attested copy</strong> of proof of identity.".html_safe, required: @form.file_required?(:id_proof)
 
-    - if f.object.fee_payment_method.in?(BatchApplicant::REQUIRES_INCOME_PROOF)
+    - if f.object.model.income_proofs_required?
       h4.m-b-1 The following fields are required to verify income status.
 
       = f.file_field :income_proof, label_class: 'col-form-label', label: 'Proof of Income', class: 'form-control', help: "#{@form.file_help_extra(:income_proof)}Scan of Income certificate / BPL Card / ITR of applicant's parents.".html_safe, required: @form.file_required?(:income_proof)

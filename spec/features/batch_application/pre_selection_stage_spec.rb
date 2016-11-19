@@ -5,6 +5,8 @@ feature 'Pre-selection Stage' do
 
   let(:batch) { create :batch, :in_stage_4 }
   let(:batch_application) { create :batch_application, :stage_4, batch: batch, team_size: 4 }
+  let(:image_path) { File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'users', 'college_id.jpg')) }
+  let(:pdf_path) { File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')) }
 
   before do
     batch_application.batch_applicants.update_all(fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE)
@@ -13,7 +15,7 @@ feature 'Pre-selection Stage' do
     sign_in_batch_applicant(batch_application.team_lead)
   end
 
-  context 'when pre-selection stage is ongoing' do
+  context 'at the beginning of pre-selection stage' do
     scenario 'user is shown ongoing state page' do
       expect(page).to have_content('Your Startup awaits!')
       expect(page).to have_content("You have been selected to Batch #{batch.batch_number} starting #{batch.start_date.strftime('%B %d, %Y')}")
@@ -26,7 +28,7 @@ feature 'Pre-selection Stage' do
       fill_in 'Date of Birth', with: '1990-01-01'
       fill_in "Parent's Name", with: Faker::Name.name
       fill_in 'Permanent Address', with: [Faker::Address.street_address, Faker::Address.city, Faker::Address.zip].join("\n")
-      attach_file 'Proof of Address', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'users', 'college_id.jpg'))
+      attach_file 'Proof of Address', image_path
 
       unless skip_current_address
         fill_in 'Current Address', with: [Faker::Address.street_address, Faker::Address.city, Faker::Address.zip].join("\n")
@@ -35,7 +37,7 @@ feature 'Pre-selection Stage' do
       fill_in 'Mobile Phone', with: '9876543210'
       select 'Driving License', from: 'Type of ID Proof'
       fill_in 'ID Proof Number', with: Faker::Internet.password
-      attach_file 'Proof of Identity', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'users', 'college_id.jpg'))
+      attach_file 'Proof of Identity', image_path
     end
 
     scenario 'user submits applicant profile' do
@@ -67,22 +69,20 @@ feature 'Pre-selection Stage' do
       expect(applicant.current_address).to eq(applicant.permanent_address)
     end
 
-    context 'when form is submitted empty' do
-      it 'raises errors for required fields' do
-        page.find('table.payment-status-table tbody tr', match: :first).click_link 'Update profile'
-        click_button 'Update Profile'
-        expect(page).to have_selector('.form-group.row.has-danger', count: 11)
-      end
+    scenario 'form is submitted empty' do
+      page.find('table.payment-status-table tbody tr', match: :first).click_link 'Update profile'
+      click_button 'Update Profile'
+      expect(page).to have_selector('.form-group.row.has-danger', count: 11)
     end
 
     context 'when editing applicant requiring income proof' do
-      it 'requires extra information from applicant' do
+      scenario 'user submits form with extra details' do
         visit apply_stage_path(stage_number: '4', update_profile: @applicant_requiring_income_proof.id)
 
         fill_in_applicant_profile_form
 
-        attach_file 'Proof of Income', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf'))
-        attach_file 'Letter from Parent', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-thumbnail.png'))
+        attach_file 'Proof of Income', pdf_path
+        attach_file 'Letter from Parent', image_path
         fill_in 'College Contact Number', with: '8976543210'
 
         click_button 'Update Profile'
@@ -90,12 +90,59 @@ feature 'Pre-selection Stage' do
         expect(page).to have_text 'Complete. Edit'
       end
 
-      context 'when form is submitted empty' do
-        it 'raises errors for required fields' do
-          visit apply_stage_path(stage_number: '4', update_profile: @applicant_requiring_income_proof.id)
-          click_button 'Update Profile'
-          expect(page).to have_selector('.form-group.row.has-danger', count: 14)
-        end
+      scenario 'form is submitted empty' do
+        visit apply_stage_path(stage_number: '4', update_profile: @applicant_requiring_income_proof.id)
+        click_button 'Update Profile'
+        expect(page).to have_selector('.form-group.row.has-danger', count: 14)
+      end
+    end
+  end
+
+  context 'when all applicants have added profile information' do
+    let(:batch_application) { create :batch_application, :stage_4, batch: batch, team_size: 2 }
+
+    before do
+      address = [Faker::Address.street_address, Faker::Address.city, Faker::Address.zip].join("\n")
+
+      batch_application.batch_applicants.each do |applicant|
+        applicant.update(
+          fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE,
+          role: Founder.valid_roles.sample,
+          gender: Founder.valid_gender_values.sample,
+          born_on: Date.parse('1990-01-01'),
+          parent_name: Faker::Name.name,
+          permanent_address: address,
+          address_proof: File.open(image_path),
+          current_address: address,
+          phone: (9_876_543_000 + rand(999)).to_s,
+          id_proof_type: BatchApplicant::ID_PROOF_TYPES.sample,
+          id_proof_number: Faker::Internet.password,
+          id_proof: File.open(image_path)
+        )
+      end
+
+      sign_in_batch_applicant(batch_application.team_lead)
+    end
+
+    scenario 'partnership and education agreement PDFs are presented' do
+      expect(page).to have_content('Your Partnership Deed is ready.')
+      expect(page).to have_content('Your Agreement with SV.CO is ready.')
+    end
+
+    context 'when agreements have been verified' do
+      let(:batch_application) { create :batch_application, :stage_4, batch: batch, team_size: 2, agreements_verified: true }
+
+      scenario 'user submits payment details' do
+        expect(page).to have_content('Your agreements have been verified by SV.CO as acceptable.')
+        expect(page).to have_content('Transfer your total fee – ₹72,000')
+
+        attach_file 'Partnership Deed', pdf_path
+        fill_in 'Courier Name', with: 'DTDC'
+        fill_in 'Courier Number', with: 'D1234567A'
+        fill_in 'Payment Reference', with: 'HDFC123456'
+        click_button 'Submit'
+
+        expect(page).to have_text("Thank you for sending us the documents. We'll review them and get back to you as soon as we receive them.")
       end
     end
   end

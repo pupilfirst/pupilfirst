@@ -19,7 +19,7 @@ module EducationalAgreement
     end
 
     def fee
-      37_500 * @batch_application.batch_applicants.count
+      @batch_application.total_course_fee
     end
 
     def fee_in_words

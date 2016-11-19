@@ -20,7 +20,7 @@ after 'development:colleges' do
     { email: 'applicant+submitted+rejected@gmail.com' },
     { email: 'applicant+interview@gmail.com' },
     { email: 'applicant+interview+rejected@gmail.com' },
-    { email: 'applicant+pre_selection@gmail.com' }
+    { email: 'applicant+pre_selection@gmail.com', fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE }
   ].map { |applicant| applicant.merge(applicant_defaults) }
 
   applicants.each do |applicant_attributes|
@@ -28,7 +28,7 @@ after 'development:colleges' do
   end
 
   coapplicants = [
-    { email: 'coapplicant+pre_selection@gmail.com' }
+    { email: 'coapplicant+pre_selection@gmail.com', fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE }
   ].map { |applicant| applicant.merge(name: Faker::Name.name) }
 
   coapplicants.each do |applicant_attributes|

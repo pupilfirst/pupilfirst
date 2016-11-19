@@ -7,7 +7,8 @@
         th Fee Payment Method
         th Confirmation Status
     tbody
-      - batch_application.batch_applicants.each do |batch_applicant|
+      / Put the team lead at the top of the table.
+      - [batch_application.team_lead, batch_application.cofounders].flatten.each do |batch_applicant|
         - applicant = batch_applicant.decorate
         tr
           td #{applicant.name}

@@ -59,7 +59,6 @@ feature 'Pre-selection Stage' do
 
       # The current address input should disappear.
       expect(page).to_not have_selector('#application_stage_four_applicant_current_address', visible: true)
-      screenshot_and_open_image
 
       click_button 'Update Profile'
 

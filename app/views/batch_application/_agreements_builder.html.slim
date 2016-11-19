@@ -47,7 +47,7 @@
     .row.eq-height
       - if @batch_application.partnership_deed_ready?
         .col-md-6
-          a.download-partnership-deed href=apply_partnership_deed_path(format: :pdf) target='_blank'
+          a.download-partnership-deed href=apply_stage_4_partnership_deed_path(format: :pdf) target='_blank'
             .alert.alert-success.text-xs-center
               .download-icon
                 i.fa.fa-download
@@ -55,7 +55,7 @@
 
       - if @batch_application.educational_agreement_ready?
         .col-md-6
-          a.download-partnership-deed href=apply_educational_agreement_path(format: :pdf) target='_blank'
+          a.download-partnership-deed href=apply_stage_4_educational_agreement_path(format: :pdf) target='_blank'
             .alert.alert-success.text-xs-center
               .download-icon
                 i.fa.fa-download

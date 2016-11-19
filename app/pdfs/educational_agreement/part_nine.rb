@@ -27,7 +27,7 @@ module EducationalAgreement
           name: '__________________________________',
           designation: 'Startup',
           by_name: @batch_application.team_lead.name,
-          title: "#{@batch_application.team_lead.role.capitalize} Lead")
+          title: 'Team Lead')
         @batch_application.batch_applicants.each_with_index { |applicant, index| add_founder_signature(applicant, index) }
       end
     end

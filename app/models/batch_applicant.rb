@@ -79,11 +79,17 @@ class BatchApplicant < ApplicationRecord
   end
 
   def profile_complete?
-    required_fields = [:name, :role, :born_on, :gender, :parent_name, :current_address, :permanent_address, :phone, :id_proof_type, :id_proof_number]
+    required_fields = [:name, :role, :born_on, :gender, :parent_name, :current_address, :permanent_address, :address_proof, :phone, :id_proof_type, :id_proof_number, :id_proof]
+    required_fields += [:income_proof, :letter_from_parent, :college_contact] if income_proofs_required?
+
     required_fields.all? { |field| self[field].present? }
   end
 
   def filename(field)
     public_send(field).sanitized_file.original_filename
+  end
+
+  def income_proofs_required?
+    fee_payment_method.in?(REQUIRES_INCOME_PROOF)
   end
 end

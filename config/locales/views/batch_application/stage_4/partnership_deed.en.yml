@@ -15,9 +15,10 @@ en:
       1.3 “Sharing Ratio” means the inter se proportion of sharing in profits and losses amongst the Partners in the ratio set out in Clause 7.1."
     s2: "<b>2. Commencement of the Partnership Business</b>\n
     The Partners agree that this Deed shall be effective from the date of execution of this Deed, as first mentioned hereinabove."
-    s3: "<b>3. Name and Address of the Firm</b>\n
-    3.1 The Partnership Business shall be conducted by the Partners through a firm constituted under the name and style of ______________________\n
-    3.2 The Firm shall have its office at %{team_lead_address} and /or at such other place or places, as is agreed between the Partners from time to time."
+    s3:
+      heading: "<b>3. Name and Address of the Firm</b>"
+      part_1: "3.1 The Partnership Business shall be conducted by the Partners through a firm constituted under the name and style:"
+      part_2: "3.2 The Firm shall have its office at %{team_lead_address} and /or at such other place or places, as is agreed between the Partners from time to time."
     s4: "<b>4. Partnership Business</b>\n
       C. The Firm has been established for the purpose of developing and operating a commercially viable business involving, but not limited to: web-based and mobile products, both hardware and software, software-as-a-service (SaaS) products and software, and other information technology products, hardware and software.\n
       4.1 (“<b>Partnership Business</b>”). The Firm may also conduct such other activities, whether or not for profit, as mutually agreed to by all Partners all of which shall form part of the Partnership Business.\n

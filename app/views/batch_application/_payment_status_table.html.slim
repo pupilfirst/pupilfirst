@@ -1,5 +1,5 @@
 .table-responsive
-  table.table.table-sm.payment-status-table.p-a-1
+  table.table.table-sm.payment-status-table.p-a-1#payment-status-table
     thead.thead-default
       tr
         th Founder Name
@@ -7,7 +7,8 @@
         th Fee Payment Method
         th Confirmation Status
     tbody
-      - batch_application.batch_applicants.each do |batch_applicant|
+      / Put the team lead at the top of the table.
+      - [batch_application.team_lead, batch_application.cofounders].flatten.each do |batch_applicant|
         - applicant = batch_applicant.decorate
         tr
           td #{applicant.name}

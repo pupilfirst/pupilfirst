@@ -303,7 +303,7 @@ class BatchApplicationController < ApplicationController
     end
   end
 
-  # PATCH /apply/update_applicant
+  # PATCH /apply/stage/4/update_applicant
   # receives founder details, generates required pdf and redirects back to updated stage_4 page
   def update_applicant
     @batch_application = current_application.decorate
@@ -323,7 +323,7 @@ class BatchApplicationController < ApplicationController
     end
   end
 
-  # GET /apply/partnership_deed
+  # GET /apply/stage/4/partnership_deed
   # respond with PDF version of the partnership deed created using Prawn
   def partnership_deed
     @batch_application = current_application.decorate
@@ -342,7 +342,7 @@ class BatchApplicationController < ApplicationController
     end
   end
 
-  # GET /apply/educational_agreement
+  # GET /apply/stage/4/educational_agreement
   # respond with PDF version of the educational agreement created using Prawn
   def educational_agreement
     @batch_application = current_application.decorate

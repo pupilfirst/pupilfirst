@@ -104,9 +104,6 @@ Rails.application.routes.draw do
     post 'restart', action: 'restart_application'
     get 'cofounders', action: 'cofounders_form'
     post 'cofounders', action: 'cofounders_save'
-    patch 'update_applicant'
-    get 'partnership_deed'
-    get 'educational_agreement'
 
     # TODO: Remove this after batch 3 intake is complete. Added to account for emails sent out before application process was overhauled.
     get 'identify/3', to: redirect('/apply')
@@ -119,6 +116,12 @@ Rails.application.routes.draw do
       post 'restart'
       get 'expired'
       get 'rejected'
+    end
+
+    scope 'stage/4', as: 'stage_4' do
+      get 'partnership_deed'
+      get 'educational_agreement'
+      patch 'update_applicant'
     end
   end
 

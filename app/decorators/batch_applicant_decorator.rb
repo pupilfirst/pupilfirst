@@ -68,9 +68,9 @@ class BatchApplicantDecorator < Draper::Decorator
     update_query = "?update_profile=#{id}#update_applicant_form"
 
     if profile_complete?
-      "Complete. #{h.link_to('<i class="fa fa-edit"></i> Edit'.html_safe, update_query)}".html_safe
+      "<div class='tag tag-pill tag-primary m-r-1'><i class='fa fa-check-circle'></i>&nbsp;Complete</div>#{h.link_to('<i class="fa fa-edit"></i> Edit'.html_safe, update_query, class: 'edit-btn')}".html_safe
     else
-      h.link_to('<i class="fa fa-edit"></i> Update profile'.html_safe, update_query)
+      h.link_to('<i class="fa fa-list-alt"></i> Update profile'.html_safe, update_query)
     end
   end
 

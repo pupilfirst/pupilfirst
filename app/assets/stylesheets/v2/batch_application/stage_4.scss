@@ -1,12 +1,4 @@
-.first-step-quote {
-  h3 {
-    line-height: 1.4;
-    border-bottom: 1px dashed $brand-secondary;
-  }
-}
 .preselection-steps {
-  border-left: 1px dashed $gray-border;
-
   ul {
     padding-left: 1.125rem;
 
@@ -24,6 +16,9 @@
     }
   }
 }
+.payment-instructions {
+  padding: 2rem 2rem 1rem 1rem;
+}
 .payment-status-table {
   border: 1px solid $light-primary;
 
@@ -37,6 +32,26 @@
         color: white;
         background-color: $light-primary;
       }
+    }
+  }
+  .edit-btn {
+    padding-top: 2px;
+  }
+  .tag {
+    line-height: 1.4;
+  }
+}
+.download-partnership-deed {
+  .download-icon {
+    i {
+      font-size: 3rem;
+    }
+  }
+  .alert {
+    transition: all .2s;
+
+    &:hover, &:focus {
+      opacity: 0.8;
     }
   }
 }

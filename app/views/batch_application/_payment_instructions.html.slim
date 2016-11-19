@@ -1,19 +1,27 @@
 - total_fee = batch_application.total_course_fee
 
 - if total_fee > 0
-  h5.font-semibold
-    | Payment Instructions
   ul
     li
       p
         ' Transfer your total fee &ndash; <strong>&#8377; #{number_with_delimiter(total_fee)}</strong> &ndash; to the
         | following account:
-        ul
-          li <strong>Account Name:</strong> SV.CO DIGITAL PLATFORM PRIVATE LIMITED
-          li <strong>Account Number:</strong> <code>50200018319957</code>
-          li <strong>IFSC Code:</strong> <code>HDFC0000520</code>
-          li <strong>Bank:</strong> HDFC
-          li <strong>Branch:</strong> Palarivattom, Kochi
+        ul.m-t-1
+          li
+            p
+              | <strong>Account Name:</strong> SV.CO DIGITAL PLATFORM PRIVATE LIMITED
+          li
+            p
+              | <strong>Account Number:</strong> <code>50200018319957</code>
+          li
+            p
+              | <strong>IFSC Code:</strong> <code>HDFC0000520</code>
+          li
+            p
+              | <strong>Bank:</strong> HDFC
+          li
+            p
+              | <strong>Branch:</strong> Palarivattom, Kochi
     li
       p Pay full fee as a team in <strong>one transaction</strong>.
     li

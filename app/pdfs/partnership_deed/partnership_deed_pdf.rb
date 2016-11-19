@@ -82,7 +82,12 @@ module PartnershipDeed
 
       # Section 3: Name and Address of the Firm
       move_down 10
-      text t('partnership_deed.s3', team_lead_address: @batch_application.team_lead.current_address.squish), inline_format: true
+      text t('partnership_deed.s3.heading'), inline_format: true
+      text t('partnership_deed.s3.part_1')
+      move_down 15
+      stroke_horizontal_rule
+      move_down 10
+      text t('partnership_deed.s3.part_2', team_lead_address: @batch_application.team_lead.current_address.squish), inline_format: true
 
       # Section 4: Partnership Business
       move_down 10
@@ -154,6 +159,7 @@ module PartnershipDeed
       move_down 10
       text t('partnership_deed.s15'), inline_format: true
     end
+
     # rubocop: enable Metrics/AbcSize, Metrics/MethodLength
 
     def add_capital_contribution_table

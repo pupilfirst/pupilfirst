@@ -33,4 +33,5 @@
       = f.phone_field :college_contact, label_class: 'col-form-label', label: 'College Contact Number', help: 'Please supply the contact number of the person who attested the above letter.', required: true, maxlength: 17, pattern: MobileNumberValidator::FORM_EXPRESSION
     .form-group.row
       .offset-sm-2.col-sm-10
-        = f.submit 'Update Profile'
+        = f.submit 'Update Profile', class: 'm-r-1 m-t-1 btn btn-primary'
+        = link_to 'Cancel', apply_stage_path(stage_number: 4, anchor: 'payment-status-table'), class: 'm-t-1 btn btn-secondary'

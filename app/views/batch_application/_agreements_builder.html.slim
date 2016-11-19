@@ -38,8 +38,6 @@
   h5.m-t-1.font-semibold Fee Payment Status
 
   == render 'payment_status_table', batch_application: @batch_application
-  == render 'payment_instructions', batch_application: @batch_application
-  == render('update_applicant_form') if @form.present?
 
   - unless @form.present?
     - if @batch_application.partnership_deed_ready?
@@ -53,3 +51,6 @@
         i.fa.fa-check &nbsp;
         ' Your Agreement with SV.CO is ready.
         a.alert-link href=apply_educational_agreement_path(format: :pdf) target='_blank' Download, Sign and Send for Verification Now!
+
+  == render 'payment_instructions', batch_application: @batch_application
+  == render('update_applicant_form') if @form.present?

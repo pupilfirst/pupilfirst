@@ -48,7 +48,12 @@
     }
   }
   .alert {
+    height: 100%;
     transition: all .2s;
+
+    @include media-breakpoint-up(md) {
+      margin-bottom: 0;
+    }
 
     &:hover, &:focus {
       opacity: 0.8;

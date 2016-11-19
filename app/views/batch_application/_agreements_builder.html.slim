@@ -44,14 +44,14 @@
   == render('update_applicant_form') if @form.present?
 
   - unless @form.present?
-    .row
+    .row.eq-height
       - if @batch_application.partnership_deed_ready?
         .col-md-6
           a.download-partnership-deed href=apply_partnership_deed_path(format: :pdf) target='_blank'
             .alert.alert-success.text-xs-center
               .download-icon
                 i.fa.fa-download
-              | Your Partnership Deed is ready. Download, Sign and Send for Verification Now!
+              | Your <strong>Partnership Deed</strong> is ready. Download, Sign and Send for Verification Now!
 
       - if @batch_application.educational_agreement_ready?
         .col-md-6
@@ -59,4 +59,4 @@
             .alert.alert-success.text-xs-center
               .download-icon
                 i.fa.fa-download
-              | Your Agreement with SV.CO is ready. Download, Sign and Send for Verification Now!
+              | Your <strong>Agreement with SV.CO</strong> is ready. Download, Sign and Send for Verification Now!

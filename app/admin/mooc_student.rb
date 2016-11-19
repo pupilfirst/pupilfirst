@@ -5,6 +5,22 @@ ActiveAdmin.register MoocStudent do
 
   permit_params :name, :university_id, :college, :semester, :state, :gender, :user_id, :phone
 
+  filter :name
+  filter :email
+  filter :phone
+  filter :university_name_contains
+  filter :college
+  filter :semester
+  filter :state
+  filter :gender, as: :select, collection: Founder.valid_gender_values
+  filter :created_at
+
+  controller do
+    def scoped_collection
+      super.includes :university
+    end
+  end
+
   index do
     selectable_column
 

@@ -145,7 +145,7 @@ feature 'Pre-selection Stage' do
         fill_in 'Payment Reference', with: 'HDFC123456'
         click_button 'Submit'
 
-        expect(page).to have_text("Thank you for sending us the documents. We'll review them and get back to you as soon as we receive them.")
+        expect(page).to have_text("We'll review them and get back to you as soon as we receive them.")
       end
 
       scenario 'user submits empty form' do

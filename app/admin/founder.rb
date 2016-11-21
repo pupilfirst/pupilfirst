@@ -414,7 +414,7 @@ ActiveAdmin.register Founder do
     end
 
     # The email address shouldn't already be in use.
-    if Founder.find_by(email: email).present?
+    if email.present? && Founder.with_email(email).present?
       flash[:error] = 'That email address is already registered with us.'
       redirect_back(fallback_location: admin_founders_url)
       return

@@ -1,7 +1,7 @@
 class BatchApplication < ApplicationRecord
   include Taggable
 
-  FEE = 3000
+  APPLICATION_FEE = 3000
   COURSE_FEE = 37_500
 
   belongs_to :batch
@@ -101,7 +101,7 @@ class BatchApplication < ApplicationRecord
 
   # Fee amount, calculated from unpaid founders
   def fee
-    FEE
+    APPLICATION_FEE
   end
 
   # Batch application is paid depending on its payment request status.

@@ -1,10 +1,22 @@
 ## Ongoing
 
-- Review of visual timeline created for CareerKhoj is pending. [[Trello]](https://trello.com/c/DcBksRuo)
-- Addition of specs for pre-selection stage flow is pending. [[Trello]](https://trello.com/c/leh3joia)
-- Review of keynote version of Program Framework is pending. [[Trello]](https://trello.com/c/RGTgUj2U)
-- Admissions page (Stage 4) with forms and dynamic agreement PDF generation is being built. [[Trello]](https://trello.com/c/mdaZ6Avq)
-- Enterprise Edition prototype is under construction. Trello [[1]](https://trello.com/c/2sNiJrbc) [[2]](https://trello.com/c/0MZB3vhU)
+- Onboaring flow for applicants who have completed the application process is being built. [[Trello]](https://trello.com/c/DwPEHw4E)
+- Enterprise Edition prototype is under construction. [[Trello]](https://trello.com/c/0MZB3vhU)
+- Design phase of Founder dashboard is ongoing. [[Trello]](https://trello.com/c/sITTzECe)
+- Rejected and Expired pages for Stage 4 are being built [[Trello]](https://trello.com/c/4S2tDdf6)
+
+## 2016.11.21
+
+- Admissions page (Stage 4) with forms and dynamic agreement PDF generation has been deployed. [[Trello]](https://trello.com/c/mdaZ6Avq)
+- Keynote version of Program Framework is ready. [[Trello]](https://trello.com/c/RGTgUj2U)
+- Visual timeline created for CareerKhoj has been added to the MOOC. [[Trello]](https://trello.com/c/DcBksRuo)
+- Pre-selection stage flow has been spec-d. Trello [[1]](https://trello.com/c/FfONzln4) [[2]](https://trello.com/c/iufkq6vS)
+- Updated filters, removing a broken one from admin interface MOOC students list. [[Trello]](https://trello.com/c/wYw07wxp)
+- Project's Ruby has been upgraded to latest 2.3.2. [[Trello]](https://trello.com/c/K2INl9nr)
+- Admin interface's Payments listing page has been sped up with N+1 optimization. [[Trello]](https://trello.com/c/mShLs3ZS)
+- A bug preventing cofounder addition for swept applications has been squashed. [[Trello]](https://trello.com/c/Kc28MtAp)
+- Have switching error monitoring solution from Sentry to Rollbar. [[Trello]](https://trello.com/c/ltZ5Y0Nb)
+- Fixed incorrect stat reported by daily admissions stats notifier. [[Trello]](https://trello.com/c/yOZLvkd8)
 
 ## 2016.11.14
 

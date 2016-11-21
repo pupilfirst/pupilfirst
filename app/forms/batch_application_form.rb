@@ -18,7 +18,7 @@ class BatchApplicationForm < Reform::Form
   # Applicant with application should be blocked from submitting the form. Zhe should login instead.
   def do_not_reapply
     return if email.blank?
-    applicant = BatchApplicant.with_email(email)
+    applicant = BatchApplicant.with_email(email).first
 
     return if applicant.blank?
     return if applicant.batch_applications.where(batch: Batch.open_batch).blank?

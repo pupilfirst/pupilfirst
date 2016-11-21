@@ -1,3 +1,9 @@
+### 21 November, 2016
+
+#### Features
+
+  - We've updated final stages of the application process to accept more information and generate _ready-to-sign_ documents. This is expected ot speed up on-boarding considerably.
+
 ### 14 November, 2016
 
 #### Features

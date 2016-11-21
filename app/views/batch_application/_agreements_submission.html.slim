@@ -36,7 +36,7 @@
       = f.file_field :partnership_deed, label_class: 'col-form-label', label: 'Partnership Deed', class: 'form-control', help: "#{@form.deed_help_extra}Scan copy of <strong>completed and signed</strong> partnership deed.".html_safe, required: !@form.model.partnership_deed.present?
       = f.text_field :courier_name, label_class: 'col-form-label', help: 'FedEx, DHL etc.', required: true, label: 'Courier Name'
       = f.text_field :courier_number, label_class: 'col-form-label', required: true, label: 'Courier Tracking Number'
-      = f.text_field :payment_reference, label_class: 'col-form-label', required: true, label: 'Payment Reference'
+      = f.text_field :payment_reference, label_class: 'col-form-label', required: true, label: 'Payment Reference', help: 'Reference number supplied by your bank corresponding to transfer of fees.'
       .form-group.row
         .offset-sm-3.col-sm-9
           = f.submit 'Submit', class: 'btn btn-secondary btn-md text-uppercase'

@@ -35,6 +35,7 @@ module IncubationAgreement
       move_down 10
       text '<b>BETWEEN:</b>', align: :center, inline_format: true
       add_sv_co_details
+      start_new_page
       add_and_seperator
       add_startup_details
       add_founders

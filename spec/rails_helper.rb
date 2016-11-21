@@ -76,7 +76,9 @@ end
 require 'capybara/poltergeist'
 
 Capybara.register_driver :poltergeist do |app|
-  Capybara::Poltergeist::Driver.new(app, timeout: 120)
+  # TODO: Javascript errors are being ignored here because YouTube is bugged at the moment and raising:
+  # ReferenceError: Can't find variable: ytcfg
+  Capybara::Poltergeist::Driver.new(app, timeout: 120, js_errors: false)
 end
 
 Capybara.javascript_driver = :poltergeist

@@ -1,4 +1,4 @@
-#update_applicant_form
+#update_applicant_form.simple-form-container
   h3.m-t-1.m-b-2 Editing #{@form.name}'s Profile
 
   - if @form.errors.any?
@@ -6,7 +6,7 @@
       ' <strong>Oops!</strong> Looks like there are some problems with the information that you supplied. Please have
       | a look at the form and try again.
 
-  = bootstrap_form_for(@form, url: apply_stage_4_update_applicant_path, layout: :horizontal, label_col: 'col-sm-2', control_col: 'col-sm-10') do |f|
+  = bootstrap_form_for(@form, url: apply_stage_4_update_applicant_path, layout: :horizontal, label_col: 'col-sm-3', control_col: 'col-sm-9') do |f|
     = f.hidden_field :id
     = f.text_field :name, label_class: 'col-form-label', required: true, maxlength: 250
     = f.text_field :email, label_class: 'col-form-label', disabled: true
@@ -17,7 +17,7 @@
     = f.text_area :permanent_address, label_class: 'col-form-label', label: 'Permanent Address', help: 'Please ensure that this address <strong>exactly matches</strong> the one in the submitted address proof.'.html_safe, required: true, rows: 4
     = f.file_field :address_proof, label_class: 'col-form-label', label: 'Proof of Address', class: 'form-control', help: "#{@form.file_help_extra(:address_proof)}Scan of <strong>self-attested copy</strong> of proof of address.".html_safe, required: @form.file_required?(:address_proof)
     .form-group.row
-      .offset-sm-2.col-sm-10
+      .offset-sm-3.col-sm-9
         = f.check_box :permanent_address_is_current_address, label_class: 'col-form-label', label: 'Is your current address same as your permanent address?'
     = f.text_area :current_address, label_class: 'col-form-label', label: 'Current Address', rows: 4
     = f.phone_field :phone, label_class: 'col-form-label', label: 'Mobile Phone', required: true, maxlength: 17, pattern: MobileNumberValidator::FORM_EXPRESSION
@@ -32,6 +32,6 @@
       = f.file_field :letter_from_parent, label_class: 'col-form-label', label: 'Letter from Parent', class: 'form-control', help: "#{@form.file_help_extra(:letter_from_parent)}Scan of letter must be attested by Principal, or HOD at the applicant's college.".html_safe, required: @form.file_required?(:letter_from_parent)
       = f.phone_field :college_contact, label_class: 'col-form-label', label: 'College Contact Number', help: 'Please supply the contact number of the person who attested the above letter.', required: true, maxlength: 17, pattern: MobileNumberValidator::FORM_EXPRESSION
     .form-group.row
-      .offset-sm-2.col-sm-10
-        = f.submit 'Update Profile', class: 'm-r-1 m-t-1 btn btn-primary'
-        = link_to 'Cancel', apply_stage_path(stage_number: 4, anchor: 'payment-status-table'), class: 'm-t-1 btn btn-secondary'
+      .offset-sm-3.col-sm-9
+        = f.submit 'Update Profile', class: 'm-r-1 m-t-1 btn btn-primary btn-md text-uppercase'
+        = link_to 'Cancel', apply_stage_path(stage_number: 4, anchor: 'payment-status-table'), class: 'm-t-1 btn btn-secondary btn-md text-uppercase'

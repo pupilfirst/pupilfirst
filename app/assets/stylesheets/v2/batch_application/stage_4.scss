@@ -60,3 +60,25 @@
     }
   }
 }
+
+.agreements-next-steps {
+  .agreement-instructions, .fee-instructions {
+    border-bottom: 1px solid $gray-border;
+  }
+  ul {
+    padding-left: 1.25rem;
+
+    li {
+      list-style: circle;
+      line-height: 1.5;
+      padding-bottom: 10px;
+      font-size: 1rem;
+
+      p {
+        strong {
+          font-style: $font-semibold;
+        }
+      }
+    }
+  }
+}

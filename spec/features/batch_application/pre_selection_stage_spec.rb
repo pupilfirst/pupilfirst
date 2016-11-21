@@ -18,7 +18,7 @@ feature 'Pre-selection Stage' do
   context 'at the beginning of pre-selection stage' do
     scenario 'user is shown ongoing state page' do
       expect(page).to have_content('Your Startup awaits!')
-      expect(page).to have_content("You have been selected to Batch #{batch.batch_number} starting #{batch.start_date.strftime('%B %d, %Y')}")
+      expect(page).to have_content('This is the first step on an exciting journey that will help you build a startup')
       expect(page).to have_content('Transfer your total fee – ₹109,500')
     end
 
@@ -48,7 +48,8 @@ feature 'Pre-selection Stage' do
       fill_in_applicant_profile_form
       click_button 'Update Profile'
 
-      expect(page).to have_text 'Complete. Edit'
+      expect(page).to have_text 'Complete'
+      expect(page).to have_link 'Edit'
     end
 
     scenario 'user submits applicant profile reusing permanent address', js: true do
@@ -64,7 +65,8 @@ feature 'Pre-selection Stage' do
 
       click_button 'Update Profile'
 
-      expect(page).to have_text 'Complete. Edit'
+      expect(page).to have_text 'Complete'
+      expect(page).to have_link 'Edit'
       applicant = batch_application.team_lead.reload
       expect(applicant.current_address).to eq(applicant.permanent_address)
     end
@@ -87,7 +89,8 @@ feature 'Pre-selection Stage' do
 
         click_button 'Update Profile'
 
-        expect(page).to have_text 'Complete. Edit'
+        expect(page).to have_text 'Complete'
+        expect(page).to have_link 'Edit'
       end
 
       scenario 'form is submitted empty' do
@@ -138,7 +141,7 @@ feature 'Pre-selection Stage' do
 
         attach_file 'Partnership Deed', pdf_path
         fill_in 'Courier Name', with: 'DTDC'
-        fill_in 'Courier Number', with: 'D1234567A'
+        fill_in 'Courier Tracking Number', with: 'D1234567A'
         fill_in 'Payment Reference', with: 'HDFC123456'
         click_button 'Submit'
 

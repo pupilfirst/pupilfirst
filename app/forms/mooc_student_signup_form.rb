@@ -12,7 +12,9 @@ class MoocStudentSignupForm < Reform::Form
   validate :university_id_must_be_valid
 
   def mooc_student_must_not_exist
-    user = User.find_by(email: email)
+    return if email.blank?
+
+    user = User.with_email(email)
     return if user.blank?
     return if user.mooc_student.blank?
     errors[:email] << 'is already registered for the course. Log in instead?'

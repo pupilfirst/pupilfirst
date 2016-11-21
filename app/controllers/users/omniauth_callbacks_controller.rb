@@ -6,7 +6,8 @@ module Users
     def oauth_callback
       raise_not_found if auth_hash.blank?
       email = auth_hash.dig(:info, :email)
-      user = User.find_by(email: email)
+      raise_not_found if email.blank?
+      user = User.with_email(email).first
 
       if user.present?
         sign_in user

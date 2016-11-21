@@ -6,7 +6,8 @@ class UserSignInForm < Reform::Form
   validate :user_with_email_exist
 
   def user_with_email_exist
-    return if User.find_by(email: email).present?
+    retrun if email.blank?
+    return if User.with_email(email).present?
     errors[:email] << 'Could not find user with this email'
   end
 

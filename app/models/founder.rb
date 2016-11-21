@@ -60,6 +60,8 @@ class Founder < ApplicationRecord
   }
   scope :not_exited, -> { where.not(exited: true) }
 
+  scope :with_email, -> (email) { where('lower(email) = ?', email.downcase) }
+
   def self.ransackable_scopes(_auth)
     %i(ransack_tagged_with)
   end

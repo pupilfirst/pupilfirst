@@ -3,7 +3,7 @@ module Users
   class AuthenticationService
     def initialize(email: nil, referer: nil, token: nil, shared_device: true)
       @email = email
-      @user = User.with_email(email).first
+      @user = User.with_email(email).first if email.present?
       @referer = referer
       @token = token
       @shared_device = shared_device

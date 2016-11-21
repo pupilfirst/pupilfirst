@@ -8,7 +8,10 @@ class ProspectiveApplicantForm < Reform::Form
   property :college_text, validates: { length: { maximum: 250 } }
 
   def save
-    ProspectiveApplicant.where(email: email).first_or_create!({
+    prospective_applicant = ProspectiveApplicant.with_email(email).first
+    prospective_applicant = ProspectiveApplicant.create!(email: email) if prospective_applicant.blank?
+
+    prospective_applicant.update({
       name: name,
       phone: phone
     }.merge(college_details))

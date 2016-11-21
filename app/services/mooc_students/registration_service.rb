@@ -10,7 +10,8 @@ module MoocStudents
     def register
       User.transaction do
         # Find or create the user entry.
-        user = User.where(email: attributes[:email]).first_or_create!
+        user = User.with_email(attributes[:email]).first
+        user = User.create!(email: attributes[:email]) if user.blank?
 
         # Find or initialize the user entry.
         mooc_student = MoocStudent.where(user_id: user.id).first_or_create!(attributes)

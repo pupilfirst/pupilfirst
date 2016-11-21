@@ -8,4 +8,6 @@ class User < ApplicationRecord
   devise :database_authenticatable, :trackable, :rememberable, :omniauthable, omniauth_providers: [:google_oauth2, :facebook, :github]
 
   validates :email, presence: true, uniqueness: true, email: true
+
+  scope :with_email, -> (email) { where('lower(email) = ?', email.downcase) }
 end

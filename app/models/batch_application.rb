@@ -78,8 +78,9 @@ class BatchApplication < ApplicationRecord
     application_stage
   end
 
-  # Application is promotable if its stage has started.
+  # Application is promotable if its stage has started (except if it's in the final stage).
   def promotable?
+    return false if application_stage.final_stage?
     batch.stage_started?(application_stage)
   end
 

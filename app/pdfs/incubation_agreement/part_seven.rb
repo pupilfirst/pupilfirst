@@ -1,4 +1,4 @@
-module EducationalAgreement
+module IncubationAgreement
   class PartSeven < ApplicationPdf
     def initialize(batch_application)
       @batch_application = batch_application.decorate
@@ -24,7 +24,7 @@ module EducationalAgreement
         applicant = batch_applicant.decorate
         move_down 10
         text t(
-          'educational_agreement.part_seven.founder_details',
+          'incubation_agreement.part_seven.founder_details',
           index: index + 1,
           name: applicant.name,
           designation: "#{applicant.role.capitalize} Lead",

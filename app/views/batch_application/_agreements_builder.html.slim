@@ -18,7 +18,7 @@
           | Provide profile details for <strong>each founder</strong> in the table below.
       li
         p
-          | Download and print the <strong>Partnership Deed</strong> and <strong>Educational Agreement</strong> from the links that appear.
+          | Download and print the <strong>Partnership Deed</strong> and <strong>Digital Incubation Services Agreement</strong> from the links that appear.
       li
         p
           | Sign and Initial both documents as instructed on their Cover Page.
@@ -53,9 +53,9 @@
                 i.fa.fa-download
               | Your <strong>Partnership Deed</strong> is ready. Download, Sign and Send for Verification Now!
 
-      - if @batch_application.educational_agreement_ready?
+      - if @batch_application.incubation_agreement_ready?
         .col-md-6
-          a.download-partnership-deed href=apply_stage_4_educational_agreement_path(format: :pdf) target='_blank'
+          a.download-partnership-deed href=apply_stage_4_incubation_agreement_path(format: :pdf) target='_blank'
             .alert.alert-success.text-xs-center
               .download-icon
                 i.fa.fa-download

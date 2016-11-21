@@ -1,4 +1,4 @@
-module EducationalAgreement
+module IncubationAgreement
   class PartThree < ApplicationPdf
     def initialize(batch_application)
       @batch_application = batch_application.decorate
@@ -14,8 +14,8 @@ module EducationalAgreement
 
     def add_text
       move_down 10
-      text t('educational_agreement.part_three.header'), inline_format: true, align: :justify
-      text t('educational_agreement.part_three.body', fee: fee, fee_in_words: fee_in_words), inline_format: true, indent_paragraphs: 30, align: :justify
+      text t('incubation_agreement.part_three.header'), inline_format: true, align: :justify
+      text t('incubation_agreement.part_three.body', fee: fee, fee_in_words: fee_in_words), inline_format: true, indent_paragraphs: 30, align: :justify
     end
 
     def fee

@@ -120,7 +120,7 @@ Rails.application.routes.draw do
 
     scope 'stage/4', as: 'stage_4' do
       get 'partnership_deed'
-      get 'educational_agreement'
+      get 'incubation_agreement'
       patch 'update_applicant'
     end
   end

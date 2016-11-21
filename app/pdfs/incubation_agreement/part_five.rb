@@ -1,4 +1,4 @@
-module EducationalAgreement
+module IncubationAgreement
   class PartFive < ApplicationPdf
     def initialize(batch_application)
       @batch_application = batch_application.decorate
@@ -24,7 +24,7 @@ module EducationalAgreement
     def add_sv_co_details
       move_down 10
       text t(
-        'educational_agreement.part_five.party_details',
+        'incubation_agreement.part_five.party_details',
         title: 'Service Provider',
         name: 'Sanjay Vijayakumar',
         designation: 'Chief Executive Officer',
@@ -36,7 +36,7 @@ module EducationalAgreement
     def add_startup_details
       move_down 10
       text t(
-        'educational_agreement.part_five.party_details',
+        'incubation_agreement.part_five.party_details',
         title: 'Startup',
         name: @team_lead.name,
         designation: "#{@team_lead.role.capitalize} Lead",
@@ -49,7 +49,7 @@ module EducationalAgreement
       @batch_application.batch_applicants.each_with_index do |applicant, index|
         move_down 10
         text t(
-          'educational_agreement.part_five.party_details',
+          'incubation_agreement.part_five.party_details',
           title: "Founder #{index + 1}",
           name: applicant.name,
           designation: "#{applicant.role.capitalize} Lead",

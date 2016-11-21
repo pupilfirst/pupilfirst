@@ -342,12 +342,12 @@ class BatchApplicationController < ApplicationController
     end
   end
 
-  # GET /apply/stage/4/educational_agreement
-  # respond with PDF version of the educational agreement created using Prawn
-  def educational_agreement
+  # GET /apply/stage/4/incubation_agreement
+  # respond with PDF version of the digital incubation services agreement created using Prawn
+  def incubation_agreement
     @batch_application = current_application.decorate
 
-    unless @batch_application.educational_agreement_ready?
+    unless @batch_application.incubation_agreement_ready?
       flash[:error] = 'Could not generate Agreement. Ensure details of all founders are provided!'
       redirect_to apply_stage_path(4)
       return
@@ -355,8 +355,8 @@ class BatchApplicationController < ApplicationController
 
     respond_to do |format|
       format.pdf do
-        agreement_pdf = BatchApplications::EducationalAgreementPdfBuilderService.build(current_application)
-        send_data agreement_pdf.to_pdf, type: 'application/pdf', filename: 'Educational_Agreement', disposition: 'inline'
+        agreement_pdf = BatchApplications::IncubationAgreementPdfBuilderService.build(current_application)
+        send_data agreement_pdf.to_pdf, type: 'application/pdf', filename: 'Incubation_Agreement', disposition: 'inline'
       end
     end
   end

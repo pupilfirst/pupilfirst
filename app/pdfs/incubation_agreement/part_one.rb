@@ -1,4 +1,4 @@
-module EducationalAgreement
+module IncubationAgreement
   class PartOne < ApplicationPdf
     def initialize(batch_application)
       @batch_application = batch_application.decorate
@@ -17,10 +17,10 @@ module EducationalAgreement
 
     def add_title_and_date
       move_down 10
-      text t('educational_agreement.title'), align: :center, inline_format: true, size: 13
+      text t('incubation_agreement.title'), align: :center, inline_format: true, size: 13
       move_down 15
       text t(
-        'educational_agreement.date_declaration',
+        'incubation_agreement.date_declaration',
         day: Date.today.day.ordinalize,
         month: Date.today.strftime('%B %Y'),
         effective_date: effective_date
@@ -43,7 +43,7 @@ module EducationalAgreement
 
     def add_sv_co_details
       move_down 10
-      text t('educational_agreement.sv_co_details'), inline_format: true
+      text t('incubation_agreement.sv_co_details'), inline_format: true
     end
 
     def add_and_seperator
@@ -54,7 +54,7 @@ module EducationalAgreement
     def add_startup_details
       move_down 10
       text t(
-        'educational_agreement.startup_details',
+        'incubation_agreement.startup_details',
         address: @team_lead.current_address.squish,
         team_lead_name: "#{@team_lead.mr_or_ms} #{@team_lead.name}",
         age: @team_lead.age,
@@ -72,7 +72,7 @@ module EducationalAgreement
       move_down 10
       add_and_seperator
       text t(
-        'educational_agreement.founder_details',
+        'incubation_agreement.founder_details',
         name: applicant.name,
         age: applicant.age,
         son_or_daughter: applicant.son_or_daughter,
@@ -85,7 +85,7 @@ module EducationalAgreement
 
     def add_parties_footer
       move_down 10
-      text t('educational_agreement.parties_footer', founders_list: founders_list), inline_format: true
+      text t('incubation_agreement.parties_footer', founders_list: founders_list), inline_format: true
     end
 
     def founders_list

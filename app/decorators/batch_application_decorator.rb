@@ -50,7 +50,7 @@ class BatchApplicationDecorator < Draper::Decorator
   end
 
   alias partnership_deed_ready? founders_profiles_complete?
-  alias educational_agreement_ready? founders_profiles_complete?
+  alias incubation_agreement_ready? founders_profiles_complete?
 
   private
 

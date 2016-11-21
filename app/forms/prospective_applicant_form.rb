@@ -9,11 +9,13 @@ class ProspectiveApplicantForm < Reform::Form
 
   def save
     prospective_applicant = ProspectiveApplicant.with_email(email).first
-    prospective_applicant = ProspectiveApplicant.create!(email: email) if prospective_applicant.blank?
+    prospective_applicant = ProspectiveApplicant.new(email: email) if prospective_applicant.blank?
 
-    prospective_applicant.update({
+    prospective_applicant.update!({
       name: name,
       phone: phone
     }.merge(college_details))
+
+    prospective_applicant
   end
 end

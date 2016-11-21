@@ -1,7 +1,7 @@
 class BatchApplication < ApplicationRecord
   include Taggable
 
-  FEE = 3000
+  APPLICATION_FEE = 3000
   COURSE_FEE = 37_500
 
   belongs_to :batch
@@ -78,8 +78,9 @@ class BatchApplication < ApplicationRecord
     application_stage
   end
 
-  # Application is promotable if its stage has started.
+  # Application is promotable if its stage has started (except if it's in the final stage).
   def promotable?
+    return false if application_stage.final_stage?
     batch.stage_started?(application_stage)
   end
 
@@ -101,7 +102,7 @@ class BatchApplication < ApplicationRecord
 
   # Fee amount, calculated from unpaid founders
   def fee
-    FEE
+    APPLICATION_FEE
   end
 
   # Batch application is paid depending on its payment request status.

@@ -60,7 +60,8 @@ class BatchApplicationForm < Reform::Form
   end
 
   def update_or_create_team_lead
-    applicant = BatchApplicant.where(email: email).first_or_create!
+    applicant = BatchApplicant.with_email(email).first
+    applicant = BatchApplicant.create!(email: email) if applicant.blank?
 
     applicant.update(
       {

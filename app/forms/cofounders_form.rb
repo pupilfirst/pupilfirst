@@ -73,7 +73,8 @@ class CofoundersForm < Reform::Form
           persisted_cofounder.update!(name: cofounder.name)
         end
       else
-        applicant = BatchApplicant.where(email: cofounder.email).first_or_create!
+        applicant = BatchApplicant.with_email(cofounder.email).first
+        applicant = BatchApplicant.create!(email: cofounder.email) if applicant.blank?
         applicant.update!(name: cofounder.name)
         model.batch_applicants << applicant
       end

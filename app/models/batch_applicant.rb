@@ -38,6 +38,8 @@ class BatchApplicant < ApplicationRecord
 
   scope :for_batch_id_in, -> (ids) { joins(:batch_applications).where(batch_applications: { batch_id: ids }) }
 
+  scope :with_email, -> (email) { where('lower(email) = ?', email.downcase) }
+
   # Basic validations.
   validates :email, presence: true, uniqueness: true, email: true
   validates :phone, mobile_number: true, allow_nil: true

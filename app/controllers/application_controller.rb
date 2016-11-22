@@ -166,7 +166,7 @@ class ApplicationController < ActionController::Base
   def intercom_csp
     {
       script: 'https://widget.intercom.io https://js.intercomcdn.com',
-      connect: 'https://api-ping.intercom.io https://nexus-websocket-a.intercom.io https://nexus-websocket-b.intercom.io wss://nexus-websocket-a.intercom.io wss://nexus-websocket-b.intercom.io https://api-iam.intercom.io https://js.intercomcdn.com',
+      connect: 'https://api-ping.intercom.io https://nexus-websocket-a.intercom.io https://nexus-websocket-b.intercom.io wss://nexus-websocket-a.intercom.io wss://nexus-websocket-b.intercom.io https://api-iam.intercom.io https://js.intercomcdn.com https://uploads.intercomcdn.com',
       font: 'https://js.intercomcdn.com',
       image: 'https://js.intercomcdn.com https://static.intercomassets.com https://uploads.intercomcdn.com',
       media: 'https://js.intercomcdn.com'

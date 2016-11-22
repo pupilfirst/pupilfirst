@@ -1,25 +1,19 @@
-.margin-top-20
-- if current_batch.selected_applications.present?
-  .panel.panel-success
-    .panel-heading Results are out!
-    .panel-body
-      ' The following candidates were selected for SV.CO batch #{current_batch.batch_number} (#{current_batch.theme}):
-      table.table.table-striped
-        thead
-          tr
-            td Team Lead
-            td College
-            td University
-            td State
-        tbody
-          - current_batch.selected_applications.each do |application|
-            tr
-              td #{application.team_lead.name}
-              td #{application.team_lead.college.name}
-              td #{application.team_lead.college.replacement_university.name}
-              td #{application.team_lead.state.name}
-- else
-  .panel.panel-warning
-    .panel-heading Wait for the results!
-    .panel-body
-      ' The results for this batch are not yet announced! Please check back later.
+/ Stage five is the 'closed' stage. Application that have reached this state are part of the program. Congratulate them!
+
+- content_for :head do
+  title SV.CO Apply Now
+  meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
+
+.secondary-banner
+  .container
+    .stages-alert-icon.m-x-auto
+      = image_tag 'apply/batch_application/accepted-icon.svg'
+    .application-stages-head.text-xs-center
+      h1
+        ' Your Startup journey has begun!
+
+.container
+  .row
+    .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
+      .content-box.application-stages-content.m-t-3.m-b-3
+        h4.text-xs-center Your team is now a part of the program!

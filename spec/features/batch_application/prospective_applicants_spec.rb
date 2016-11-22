@@ -7,7 +7,7 @@ feature 'Prospective Applicants' do
 
     scenario 'user can register for notification' do
       visit apply_path
-      expect(page).to have_content(/Admissions to Batch #\d{1,3} is expected to start on/)
+      expect(page).to have_content(/Admissions to the (.*?) batch is expected to start by/)
 
       name = Faker::Name.name
       fill_in 'prospective_applicant_name', with: name

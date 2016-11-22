@@ -4,12 +4,12 @@
   .application-open-text
     p.font-regular.m-y-1
       span.bigger-text
-        ' Admissions to Batch ##{@presenter.next_batch_number}
+        ' Admissions to the June 2017 batch
       ' is expected to
       br
-      ' start on
+      ' start by
       span.font-semibold.brand-secondary.bigger-text
-        | Jan 1, 2017
+        | February, 2017.
 
   - if @presenter.prospective_applicant_submitted?(self)
     .application-open-text

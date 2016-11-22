@@ -15,7 +15,7 @@
     = f.text_field :born_on, label_class: 'col-form-label', class: 'date-picker', data: { :'max-date' => 18.years.ago.strftime('%Y-%m-%d') }, label: 'Date of Birth', required: true, placeholder: 'YYYY-MM-DD'
     = f.text_field :parent_name, label_class: 'col-form-label', label: "Parent's Name", required: true, maxlength: 250
     = f.text_area :permanent_address, label_class: 'col-form-label', label: 'Permanent Address', help: 'Please ensure that this address <strong>exactly matches</strong> the one in the submitted address proof.'.html_safe, required: true, rows: 4
-    = f.file_field :address_proof, label_class: 'col-form-label', label: 'Proof of Address', class: 'form-control', help: "#{@form.file_help_extra(:address_proof)}Scan of <strong>self-attested copy</strong> of proof of address.".html_safe, required: @form.file_required?(:address_proof)
+    = f.file_field :address_proof, label_class: 'col-form-label', label: 'Proof of Address', class: 'form-control', help: "#{@form.file_help_extra(:address_proof)}Color Scan of <strong>self-attested copy</strong> of proof of address.".html_safe, required: @form.file_required?(:address_proof)
     .form-group.row
       .offset-sm-3.col-sm-9
         = f.check_box :permanent_address_is_current_address, label_class: 'col-form-label', label: 'Is your current address same as your permanent address?'
@@ -23,7 +23,7 @@
     = f.phone_field :phone, label_class: 'col-form-label', label: 'Mobile Phone', required: true, maxlength: 17, pattern: MobileNumberValidator::FORM_EXPRESSION
     = f.select :id_proof_type, BatchApplicant::ID_PROOF_TYPES, { include_blank: 'Select type', label_class: 'col-form-label', label: 'Type of ID Proof' }, { required: true }
     = f.text_field :id_proof_number, label_class: 'col-form-label', label: 'ID Proof Number', required: true
-    = f.file_field :id_proof, label_class: 'col-form-label', label: 'Proof of Identity', class: 'form-control', help: "#{@form.file_help_extra(:id_proof)}Scan of <strong>self-attested copy</strong> of proof of identity.".html_safe, required: @form.file_required?(:id_proof)
+    = f.file_field :id_proof, label_class: 'col-form-label', label: 'Proof of Identity', class: 'form-control', help: "#{@form.file_help_extra(:id_proof)}Color Scan of <strong>self-attested copy</strong> of proof of identity.".html_safe, required: @form.file_required?(:id_proof)
 
     - if f.object.model.income_proofs_required?
       h4.m-b-1 The following fields are required to verify income status.

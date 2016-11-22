@@ -160,11 +160,6 @@ class BatchApplication < ApplicationRecord
     !batch.stage_active?(application_stage) && !batch.stage_expired?(application_stage)
   end
 
-  # Returns true if the application is in the final stage.
-  def complete?
-    application_stage == ApplicationStage.final_stage
-  end
-
   # Returns true if the application is in an active stage and hasn't submitted.
   def ongoing?
     batch.stage_active?(application_stage) && submission.blank?
@@ -186,8 +181,6 @@ class BatchApplication < ApplicationRecord
   end
 
   # Returns one of :ongoing, :submitted, :expired, :promoted, :rejected, or :complete
-  #
-  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def status
     if ongoing?
       :ongoing
@@ -199,14 +192,10 @@ class BatchApplication < ApplicationRecord
       :promoted
     elsif rejected?
       :rejected
-    elsif complete?
-      :complete
     else
       raise "BatchApplication ##{id} is in an unexpected state. Please investigate."
     end
   end
-
-  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   # An application that has submitted for stage 2, or beyond merits a certificate from SV.CO
   def merits_certificate?

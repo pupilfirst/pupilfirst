@@ -84,9 +84,14 @@ class Batch < ApplicationRecord
 
   # Stage is active when current time is between its bounds.
   def stage_active?(stage)
-    batch_stages.where(application_stage: stage)
-      .where('starts_at < ?', Time.now)
-      .where('ends_at > ?', Time.now).present?
+    if stage.final_stage?
+      batch_stages.where(application_stage: stage)
+        .where('starts_at < ?', Time.now).present?
+    else
+      batch_stages.where(application_stage: stage)
+        .where('starts_at < ?', Time.now)
+        .where('ends_at > ?', Time.now).present?
+    end
   end
 
   # Stage has expired when deadline has been crossed.

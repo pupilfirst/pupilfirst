@@ -18,6 +18,8 @@ RSpec.describe BatchApplication, type: :model do
       end
 
       context 'when applicant is a coapplicant' do
+        let!(:payment) { create :payment, batch_applicant: subject.team_lead, batch_application: subject }
+
         before do
           subject.batch_applicants << applicant
         end
@@ -25,8 +27,18 @@ RSpec.describe BatchApplication, type: :model do
         context 'when applicant payment method is regular fee' do
           let(:applicant) { create :batch_applicant, fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE }
 
-          it 'returns full course fee' do
-            expect(subject.applicant_course_fee(applicant)).to eq(expected_course_fee)
+          context 'when team head also has regular fee' do
+            it 'returns full course fee' do
+              subject.team_lead.update!(fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE)
+              expect(subject.applicant_course_fee(applicant)).to eq(expected_course_fee)
+            end
+          end
+
+          context 'when team lead has scholarship' do
+            it 'returns discounted course fee' do
+              subject.team_lead.update!(fee_payment_method: BatchApplicant::PAYMENT_METHOD_MERIT_SCHOLARSHIP)
+              expect(subject.applicant_course_fee(applicant)).to eq(expected_course_fee - payment.amount)
+            end
           end
         end
 

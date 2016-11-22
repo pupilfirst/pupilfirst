@@ -8,14 +8,27 @@ feature 'Pre-selection Stage' do
   let(:image_path) { File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'users', 'college_id.jpg')) }
   let(:pdf_path) { File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')) }
 
-  before do
-    batch_application.batch_applicants.update_all(fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE)
-    @applicant_requiring_income_proof = batch_application.cofounders.last
-    @applicant_requiring_income_proof.update(fee_payment_method: BatchApplicant::PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP)
-    sign_in_batch_applicant(batch_application.team_lead)
+  context 'when the team lead has scholarship' do
+    before do
+      batch_application.batch_applicants.update_all(fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE)
+      batch_application.team_lead.update(fee_payment_method: BatchApplicant::PAYMENT_METHOD_MERIT_SCHOLARSHIP)
+      batch_application.cofounders.last.update(fee_payment_method: BatchApplicant::PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP)
+      sign_in_batch_applicant(batch_application.team_lead)
+    end
+
+    scenario 'another applicant receives the 3000 rupee refund' do
+      expect(page).to have_content('Transfer your total fee – ₹72,000')
+    end
   end
 
   context 'at the beginning of pre-selection stage' do
+    before do
+      batch_application.batch_applicants.update_all(fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE)
+      @applicant_requiring_income_proof = batch_application.cofounders.last
+      @applicant_requiring_income_proof.update(fee_payment_method: BatchApplicant::PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP)
+      sign_in_batch_applicant(batch_application.team_lead)
+    end
+
     scenario 'user is shown ongoing state page' do
       expect(page).to have_content('Your Startup awaits!')
       expect(page).to have_content('This is the first step on an exciting journey that will help you build a startup')

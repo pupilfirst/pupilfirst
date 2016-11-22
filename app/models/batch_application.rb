@@ -205,6 +205,7 @@ class BatchApplication < ApplicationRecord
       raise "BatchApplication ##{id} is in an unexpected state. Please investigate."
     end
   end
+
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   # An application that has submitted for stage 2, or beyond merits a certificate from SV.CO
@@ -222,16 +223,25 @@ class BatchApplication < ApplicationRecord
     joins(:university).group(:location).count.sort_by { |_k, v| v }.reverse[0..(n - 1)].to_h.keys - ['Other']
   end
 
+  # Returns applicant eligible for receiving refund of the application fee. This refund is to be applied on the course fee.
+  def applicant_eligible_for_refund
+    if team_lead.fee_payment_method == BatchApplicant::PAYMENT_METHOD_REGULAR_FEE
+      team_lead
+    else
+      cofounders.order('name ASC').where(fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE).first
+    end
+  end
+
   # Returns remaining course fee for a given applicant.
   def applicant_course_fee(batch_applicant)
     raise "BatchApplicant##{batch_applicant.id} does not belong BatchApplication##{id}" unless batch_applicants.include?(batch_applicant)
 
-    if batch_applicant.fee_payment_method == BatchApplicant::PAYMENT_METHOD_REGULAR_FEE
-      if batch_applicant == team_lead
-        COURSE_FEE - (payment&.refunded? ? 0 : payment&.amount.to_i)
-      else
-        COURSE_FEE
-      end
+    refund_amount = payment&.refunded? ? 0 : payment&.amount.to_i
+
+    if refund_amount.positive? && batch_applicant == applicant_eligible_for_refund
+      COURSE_FEE - refund_amount
+    elsif batch_applicant.fee_payment_method == BatchApplicant::PAYMENT_METHOD_REGULAR_FEE
+      COURSE_FEE
     else
       0
     end

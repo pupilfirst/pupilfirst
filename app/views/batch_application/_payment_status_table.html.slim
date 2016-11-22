@@ -8,7 +8,7 @@
         th Confirmation Status
     tbody
       / Put the team lead at the top of the table.
-      - [batch_application.team_lead, batch_application.cofounders].flatten.each do |batch_applicant|
+      - [batch_application.team_lead, batch_application.cofounders.order('name ASC')].flatten.each do |batch_applicant|
         - applicant = batch_applicant.decorate
         tr
           td #{applicant.name}

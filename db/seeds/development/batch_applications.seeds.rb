@@ -3,14 +3,16 @@ require_relative 'helper'
 after 'development:application_stages', 'development:batches', 'development:batch_applicants', 'admin_users' do
   puts 'Seeding batch_applications'
 
-  applications_batch = Batch.find_by(batch_number: 5)
-  interview_batch = Batch.find_by(batch_number: 4)
-  pre_selection_batch = Batch.find_by(batch_number: 3)
+  applications_batch = Batch.find_by(batch_number: 6)
+  interview_batch = Batch.find_by(batch_number: 5)
+  pre_selection_batch = Batch.find_by(batch_number: 4)
+  closed_batch = Batch.find_by(batch_number: 3)
 
   stage_1 = ApplicationStage.find_by number: 1
   stage_2 = ApplicationStage.find_by number: 2
   stage_3 = ApplicationStage.find_by number: 3
   stage_4 = ApplicationStage.find_by number: 4
+  stage_5 = ApplicationStage.find_by number: 5
 
   registered_applicant = BatchApplicant.find_by(email: 'applicant+registered@gmail.com')
   paid_applicant = BatchApplicant.find_by(email: 'applicant+paid@gmail.com')
@@ -19,7 +21,9 @@ after 'development:application_stages', 'development:batches', 'development:batc
   interview_applicant = BatchApplicant.find_by(email: 'applicant+interview@gmail.com')
   interview_rejected_applicant = BatchApplicant.find_by(email: 'applicant+interview+rejected@gmail.com')
   pre_selection_applicant = BatchApplicant.find_by(email: 'applicant+pre_selection@gmail.com')
-  co_applicant = BatchApplicant.find_by(email: 'coapplicant+pre_selection@gmail.com')
+  pre_selection_co_applicant = BatchApplicant.find_by(email: 'coapplicant+pre_selection@gmail.com')
+  closed_applicant = BatchApplicant.find_by(email: 'applicant+closed@gmail.com')
+  closed_co_applicant = BatchApplicant.find_by(email: 'coapplicant+closed@gmail.com')
 
   def sample_payment
     {
@@ -57,6 +61,8 @@ after 'development:application_stages', 'development:batches', 'development:batc
         create_submission_urls(submission)
       when 3
         submission.update!(score: rand(100))
+      when 4
+        submission.update!(notes: 'This is a seeded submission for stage 4.')
       else
         raise NotImplementedError
     end
@@ -120,5 +126,14 @@ after 'development:application_stages', 'development:batches', 'development:batc
   submission = create_submission(pre_selection_application, stage_2)
   score_stage_2_submission(submission)
   create_submission(pre_selection_application, stage_3)
-  pre_selection_application.batch_applicants << co_applicant
+  pre_selection_application.batch_applicants << pre_selection_co_applicant
+
+  # Application at closed stage
+  closed_application = create_application(closed_applicant, batch: closed_batch, application_stage: stage_5, agreements_verified: true)
+  create_payment(closed_application)
+  submission = create_submission(closed_application, stage_2)
+  score_stage_2_submission(submission)
+  create_submission(closed_application, stage_3)
+  create_submission(closed_application, stage_4)
+  closed_application.batch_applicants << closed_co_applicant
 end

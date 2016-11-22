@@ -61,7 +61,7 @@ ActiveAdmin.register BatchApplication do
 
   controller do
     def scoped_collection
-      super.includes :payment # prevent N+1 queries
+      super.includes :payment, :batch, :application_stage, team_lead: { college: [:state] }
     end
   end
 

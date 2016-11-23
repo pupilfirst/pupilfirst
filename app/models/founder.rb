@@ -35,6 +35,7 @@ class Founder < ApplicationRecord
   has_many :targets, dependent: :destroy, as: :assignee
   has_many :platform_feedback
   belongs_to :user
+  belongs_to :college, optional: true
 
   scope :batched, -> { joins(:startup).merge(Startup.batched) }
   scope :for_batch_id_in, -> (ids) { joins(:startup).where(startups: { batch_id: ids }) }

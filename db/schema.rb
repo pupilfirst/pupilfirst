@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161122105525) do
+ActiveRecord::Schema.define(version: 20161123091142) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -358,6 +358,8 @@ ActiveRecord::Schema.define(version: 20161122105525) do
     t.string   "startup_token"
     t.boolean  "exited",                    default: false
     t.integer  "user_id"
+    t.integer  "college_id"
+    t.index ["college_id"], name: "index_founders_on_college_id", using: :btree
     t.index ["confirmation_token"], name: "index_founders_on_confirmation_token", unique: true, using: :btree
     t.index ["invitation_token"], name: "index_founders_on_invitation_token", unique: true, using: :btree
     t.index ["invited_batch_id"], name: "index_founders_on_invited_batch_id", using: :btree
@@ -778,6 +780,7 @@ ActiveRecord::Schema.define(version: 20161122105525) do
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
+  add_foreign_key "founders", "colleges"
   add_foreign_key "founders", "users"
   add_foreign_key "payments", "batch_applications"
   add_foreign_key "resources", "batches"

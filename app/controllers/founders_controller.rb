@@ -16,6 +16,9 @@ class FoundersController < ApplicationController
   def update
     @founder = Founder.find current_founder.id
 
+    # Remove 'other' college ID if selected by founder.
+    params[:founder].delete(:college_id) if params.dig(:founder, :college_id) == 'other'
+
     if @founder.update_attributes(founder_params)
       flash[:notice] = 'Profile updated'
       redirect_to founder_profile_path(slug: @founder.slug)
@@ -154,7 +157,7 @@ class FoundersController < ApplicationController
     params.require(:founder).permit(
       :first_name, :last_name, :avatar, :slack_username, :skype_id, :identification_proof, :college_identification, :course, :semester, :year_of_graduation,
       :about, :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :facebook_url, :angel_co_url, :github_url, :behance_url,
-      :university_id, :roll_number, :born_on, :communication_address, roles: []
+      :college_id, :roll_number, :born_on, :communication_address, roles: []
     )
   end
 end

@@ -23,7 +23,16 @@
   = f.input :skype_id, label: 'Skype Id'
   = f.input :communication_address
   = f.input :identification_proof, label: 'ID Proof', as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }, hint: 'Must be one of PAN/Passport/Aadhar/Driving License'
-  = f.association :university, include_blank: 'Not a student', collection: University.all.group_by(&:location), as: :grouped_select, group_method: :last
+
+  - college_hint = "Currently set to <strong>#{f.object.college.name}</strong>".html_safe if f.object.college.present?
+  = f.input :college_id,
+    type: :hidden,
+    label: 'College',
+    placeholder: 'Please pick your college',
+    input_html: { value: nil, 'data-search-url' => colleges_url },
+    required: false,
+    hint: college_hint
+
   = f.input :roll_number, label: 'University Roll Number'
   = f.input :college_identification, label: 'College ID', as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }
   = f.input :course, placeholder: 'B-tech in Computer Science'

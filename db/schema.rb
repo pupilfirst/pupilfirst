@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161118082159) do
+ActiveRecord::Schema.define(version: 20161122105525) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -165,8 +165,10 @@ ActiveRecord::Schema.define(version: 20161118082159) do
     t.string   "courier_number"
     t.string   "partnership_deed"
     t.string   "payment_reference"
+    t.integer  "startup_id"
     t.index ["application_stage_id"], name: "index_batch_applications_on_application_stage_id", using: :btree
     t.index ["batch_id"], name: "index_batch_applications_on_batch_id", using: :btree
+    t.index ["startup_id"], name: "index_batch_applications_on_startup_id", using: :btree
     t.index ["team_lead_id"], name: "index_batch_applications_on_team_lead_id", using: :btree
     t.index ["university_id"], name: "index_batch_applications_on_university_id", using: :btree
   end
@@ -772,6 +774,7 @@ ActiveRecord::Schema.define(version: 20161118082159) do
     t.index ["user_id", "user_type"], name: "index_visits_on_user_id_and_user_type", using: :btree
   end
 
+  add_foreign_key "batch_applications", "startups"
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"

@@ -1,28 +1,23 @@
 - if @batch.selected_applications.present?
-  h3.pull-left Selected candidates for batch #{@batch.batch_number} - #{@batch.theme}
-  - unless @batch.invites_sent?
-    a.button.pull-right href="#{invite_all_selected_admin_batch_path(@batch)}" Invite all
+  h3.pull-left Selected candidates for Batch ##{@batch.batch_number} - #{@batch.theme}
+
   table.index_table.index
     thead
       tr
         th.col Team Lead
-        th.col Co-Founders
+        th.col Cofounders
         th.col College
-        th.col University
-        th.col State
-        th.col Score
         th.col
     tbody
       - @batch.selected_applications.each do |application|
         tr class="#{cycle %w(odd even)}"
-          td.col #{application.team_lead.name } (#{application.team_lead.email})
+          td.col #{application.team_lead.name} &ndash; <code>#{application.team_lead.email}</code>
           td.col
-            - application.cofounders.each do |cofounder|
-              ' #{cofounder.email} <br>
+            ul
+              - application.cofounders.each do |applicant|
+                li
+                  ' #{applicant.name} &ndash; <code>#{applicant.email}</code>
           td.col #{application.team_lead.college.name}
-          td.col #{application.team_lead.college.replacement_university.name}
-          td.col #{application.team_lead.state.name}
-          td.col #{application.score}
           td.col #{link_to 'View Application', admin_batch_application_path(application)}
 
   - unless @batch.invites_sent?

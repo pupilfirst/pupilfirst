@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161123111803) do
+ActiveRecord::Schema.define(version: 20161124100127) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -295,7 +295,6 @@ ActiveRecord::Schema.define(version: 20161123111803) do
 
   create_table "founders", force: :cascade do |t|
     t.string   "email"
-    t.string   "first_name"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "avatar"
@@ -337,7 +336,6 @@ ActiveRecord::Schema.define(version: 20161123111803) do
     t.integer  "university_id"
     t.string   "unconfirmed_phone"
     t.string   "roles"
-    t.string   "last_name",                 default: ""
     t.string   "college_identification"
     t.boolean  "avatar_processing",         default: false
     t.string   "slack_user_id"

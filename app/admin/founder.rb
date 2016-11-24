@@ -3,7 +3,7 @@ ActiveAdmin.register Founder do
 
   controller do
     def scoped_collection
-      super.includes :university, :startup
+      super.includes :targets, :startup
     end
 
     def find_resource

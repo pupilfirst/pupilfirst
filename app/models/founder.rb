@@ -75,16 +75,6 @@ class Founder < ApplicationRecord
     errors.add(:born_on, 'must be at least 18 years old') if born_on && born_on > 18.years.ago.end_of_year
   end
 
-  validates :first_name,
-    presence: true,
-    format: { with: /\A[a-z]+\z/i, message: "Business Name format. Should be a single name with no special characters or numbers" },
-    length: { minimum: 2 }
-
-  validates :last_name,
-    presence: true,
-    format: { with: /\A[a-z]+\z/i, message: "Business Name format. Should be a single name with no special characters or numbers" },
-    length: { minimum: 2 }
-
   def self.valid_gender_values
     [GENDER_MALE, GENDER_FEMALE, GENDER_OTHER]
   end
@@ -105,8 +95,8 @@ class Founder < ApplicationRecord
 
   def slug_candidates
     [
-      [:first_name, :last_name],
-      [:first_name, :last_name, :id]
+      [:name],
+      [:name, :id]
     ]
   end
 
@@ -116,11 +106,12 @@ class Founder < ApplicationRecord
   end
 
   def should_generate_new_friendly_id?
-    first_name_changed? || last_name_changed? || super
+    name_changed? || super
   end
 
+  # TODO: Remove this method when all instance of it being used are gone. https://trello.com/c/yh0Mkfir
   def fullname
-    [first_name, last_name].join(' ')
+    name
   end
 
   # hack
@@ -148,8 +139,7 @@ class Founder < ApplicationRecord
   mount_uploader :identification_proof, IdentificationProofUploader
   process_in_background :identification_proof
 
-  normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :first_name, :last_name,
-    :slack_username, :resume_url
+  normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :name, :slack_username, :resume_url
 
   validates :twitter_url, url: true, allow_nil: true
   validates :linkedin_url, url: true, allow_nil: true
@@ -197,9 +187,8 @@ class Founder < ApplicationRecord
   before_save :capitalize_name_fragments
 
   def capitalize_name_fragments
-    return unless first_name_changed? || last_name_changed?
-    self.first_name = first_name.capitalize
-    self.last_name = last_name.capitalize
+    return unless name_changed?
+    self.name = name.titleize
   end
 
   has_secure_token :auth_token
@@ -234,11 +223,11 @@ class Founder < ApplicationRecord
   end
 
   def display_name
-    fullname.blank? ? email : fullname
+    name.blank? ? email : name
   end
 
-  def fullname_and_email
-    fullname + (email? ? ' (' + email + ')' : '')
+  def name_and_email
+    name + (email? ? ' (' + email + ')' : '')
   end
 
   def to_s
@@ -311,6 +300,7 @@ class Founder < ApplicationRecord
 
   # A simple flag, which returns true if the founder signed in less than 15 seconds ago.
   def just_signed_in
+    return false if user.current_sign_in_at.blank?
     user.current_sign_in_at > 15.seconds.ago
   end
 
@@ -392,11 +382,6 @@ class Founder < ApplicationRecord
     return 'Write a one-liner about yourself!' unless about.present?
     return 'Upload your legal ID proof!' unless identification_proof.present?
     return 'Submit a resume to your timeline to complete your profile!' unless resume_url.present?
-  end
-
-  # Return true if the founder already has all required fields for registration
-  def already_registered?
-    first_name? && last_name? && encrypted_password? && gender? && born_on?
   end
 
   # Make sure a new team lead is assigned before destroying the present one

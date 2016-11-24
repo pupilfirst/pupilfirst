@@ -155,7 +155,7 @@ class FoundersController < ApplicationController
 
   def founder_params
     params.require(:founder).permit(
-      :name, :first_name, :last_name, :avatar, :slack_username, :skype_id, :identification_proof,
+      :name, :avatar, :slack_username, :skype_id, :identification_proof,
       :college_identification, :course, :semester, :year_of_graduation, :about, :twitter_url, :linkedin_url,
       :personal_website_url, :blog_url, :facebook_url, :angel_co_url, :github_url, :behance_url, :college_id,
       :roll_number, :born_on, :communication_address, roles: []

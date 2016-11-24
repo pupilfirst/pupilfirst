@@ -196,7 +196,7 @@
             .col-sm-6.col-md-12
               h3 Founders
               hr
-              - @startup.founders.registered.order(:first_name).each do |founder|
+              - @startup.founders.registered.order(:name).each do |founder|
                 .data-founder
                   .media
                     .media-left

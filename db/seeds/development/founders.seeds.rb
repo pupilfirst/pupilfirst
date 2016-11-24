@@ -2,27 +2,23 @@ require_relative 'helper'
 
 puts 'Seeding founders'
 
-MALE = Founder::GENDER_MALE
-FEMALE = Founder::GENDER_FEMALE
-OTHER = Founder::GENDER_OTHER
-
 # 3 random founders for sv.co
 founders_list = [
-  ['someone@sv.co', 'Some', 'One', 20.years.ago, MALE, 9876543210],
-  ['thedude@sv.co', 'Big', 'Lebowski', 40.years.ago, MALE],
-  ['thirdguy@sv.co', 'Guy', 'Third', 30.years.ago, FEMALE]
+  ['someone@sv.co', 'Some One', 20.years.ago, Founder::GENDER_MALE, 9876543210],
+  ['thedude@sv.co', 'Big Lebowski', 40.years.ago, Founder::GENDER_MALE],
+  ['thirdgal@sv.co', 'Gal Third', 30.years.ago, Founder::GENDER_FEMALE]
 ]
 
 # 5 more founders for avengers
 founders_list += [
-  ['ultron@avengers.co', 'HenryJonathan', 'Pym', 40.years.ago, MALE],
-  ['wasp@avengers.co', 'Janet', 'Dyne', 25.years.ago, FEMALE],
-  ['ironman@avengers.co', 'AnthonyEdward', 'TonyStark', 40.years.ago, MALE],
-  ['hulk@avengers.co', 'Robert', 'Banner', 35.years.ago, MALE],
-  ['thor@avengers.co', 'Thor', 'Odinson', 30.years.ago, MALE]
+  ['ultron@avengers.co', 'Henry Jonathan Pym', 40.years.ago, Founder::GENDER_MALE],
+  ['wasp@avengers.co', 'Janet Dyne', 25.years.ago, Founder::GENDER_FEMALE],
+  ['ironman@avengers.co', 'Anthony Edward Tony Stark', 40.years.ago, Founder::GENDER_MALE],
+  ['hulk@avengers.co', 'Robert Banner', 35.years.ago, Founder::GENDER_MALE],
+  ['thor@avengers.co', 'Thor Odinson', 30.years.ago, Founder::GENDER_MALE]
 ]
 
-founders_list.each do |email, first_name, last_name, born_on, gender, phone|
+founders_list.each do |email, name, born_on, gender, phone|
   # Don't recreate entries.
   next if Founder.find_by(email: email).present?
 
@@ -31,8 +27,7 @@ founders_list.each do |email, first_name, last_name, born_on, gender, phone|
   Founder.create!(
     email: email,
     user: user,
-    first_name: first_name,
-    last_name: last_name,
+    name: name,
     confirmed_at: Time.now,
     born_on: born_on,
     gender: gender,

@@ -13,9 +13,11 @@ ActiveAdmin.register TimelineEvent do
 
   filter :timeline_event_type, collection: proc { TimelineEventType.all.order(:title) }
   filter :timeline_event_type_role_eq, as: :select, collection: TimelineEventType.valid_roles, label: 'Role'
+
   filter :founder, collection: proc {
     batch_id = params.dig(:q, :startup_batch_id_eq)
-    batch_id.present? ? Founder.joins(:startup).where(startups: { batch_id: batch_id }).distinct.order(:first_name) : Founder.all.order(:first_name)
+    batch_id = Batch.last.id unless batch_id.present?
+    Founder.joins(:startup).where(startups: { batch_id: batch_id }).distinct.order(:name)
   }
 
   filter :verified_status, as: :select, collection: TimelineEvent.valid_verified_status

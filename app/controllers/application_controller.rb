@@ -3,7 +3,6 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :prepare_platform_feedback, :set_content_security_policy
   after_action :prepare_unobtrusive_flash
 
@@ -76,14 +75,6 @@ class ApplicationController < ActionController::Base
   end
 
   helper_method :feature_active?
-
-  def configure_permitted_parameters
-    # Allow collecting additional attributes while accepting invitation: https://github.com/scambra/devise_invitable
-    devise_parameter_sanitizer.permit(:accept_invitation, keys:
-      [
-        :first_name, :last_name, :gender, :born_on, :university_id, :roll_number, :unconfirmed_phone
-      ])
-  end
 
   # Set headers for CSP. Be careful when changing this.
   def set_content_security_policy

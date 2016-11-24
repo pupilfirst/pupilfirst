@@ -34,7 +34,7 @@ after 'development:founders', 'development:timeline_event_types', 'development:b
 
   # Add two more co-founders
   super_startup.founders << Founder.find_by(email: 'thedude@sv.co')
-  super_startup.founders << Founder.find_by(email: 'thirdguy@sv.co')
+  super_startup.founders << Founder.find_by(email: 'thirdgal@sv.co')
 
   # a second avengers startup
   avengers_startup = Startup.new(

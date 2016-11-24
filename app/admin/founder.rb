@@ -21,8 +21,6 @@ ActiveAdmin.register Founder do
   filter :startup_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'Batch'
   filter :email
   filter :name
-  filter :first_name
-  filter :last_name
 
   filter :ransack_tagged_with,
     as: :select,
@@ -34,7 +32,7 @@ ActiveAdmin.register Founder do
   filter :university
   filter :roll_number
 
-  permit_params :name, :first_name, :last_name, :email, :remote_avatar_url, :avatar, :startup_id, :slug, :about,
+  permit_params :name, :email, :remote_avatar_url, :avatar, :startup_id, :slug, :about,
     :slack_username, :born_on, :startup_admin, :communication_address, :identification_proof,
     :phone, :invitation_token, :university_id, :roll_number, :course, :semester, :year_of_graduation,
     :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :facebook_url, :angel_co_url, :github_url, :behance_url,
@@ -53,7 +51,6 @@ ActiveAdmin.register Founder do
   index do
     selectable_column
     column :name
-    column :fullname
 
     column :targets do |founder|
       if founder.targets.present?
@@ -115,7 +112,6 @@ ActiveAdmin.register Founder do
     column :id
     column :email
     column :name
-    column :fullname
 
     column :product do |founder|
       founder.startup&.product_name
@@ -172,7 +168,6 @@ ActiveAdmin.register Founder do
       row :slug
       row :email
       row :name
-      row :fullname
 
       row :tags do |founder|
         linked_tags(founder.tags)

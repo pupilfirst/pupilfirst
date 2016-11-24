@@ -4,7 +4,7 @@ describe AdmissionStatsNotificationJob do
   subject { described_class }
 
   let!(:batch) { create(:batch, :in_stage_1).decorate }
-  let(:state) { create :state, name: 'Kerala' }
+  let!(:state) { create :state, name: 'Kerala' }
 
   let(:dummy_stats) do
     {
@@ -45,7 +45,6 @@ describe AdmissionStatsNotificationJob do
 
   it 'posts the admission stats to Slack' do
     allow(AdmissionStatsService).to receive(:load_stats).with(batch).and_return(dummy_stats)
-    allow(State).to receive(:focused_for_admissions).and_return([state])
     expect(RestClient).to receive(:post).with('http://example.com/slack', { 'text': admission_stats_summary }.to_json)
     subject.perform_now
   end

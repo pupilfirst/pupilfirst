@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161124103054) do
+ActiveRecord::Schema.define(version: 20161124103907) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -724,6 +724,7 @@ ActiveRecord::Schema.define(version: 20161124103054) do
     t.integer  "target_id"
     t.integer  "founder_id"
     t.integer  "improved_timeline_event_id"
+    t.integer  "target_template_id"
     t.index ["founder_id"], name: "index_timeline_events_on_founder_id", using: :btree
     t.index ["startup_id"], name: "index_timeline_events_on_startup_id", using: :btree
     t.index ["target_id"], name: "index_timeline_events_on_target_id", using: :btree

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161123091142) do
+ActiveRecord::Schema.define(version: 20161123111803) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -359,11 +359,13 @@ ActiveRecord::Schema.define(version: 20161123091142) do
     t.boolean  "exited",                    default: false
     t.integer  "user_id"
     t.integer  "college_id"
+    t.string   "name"
     t.index ["college_id"], name: "index_founders_on_college_id", using: :btree
     t.index ["confirmation_token"], name: "index_founders_on_confirmation_token", unique: true, using: :btree
     t.index ["invitation_token"], name: "index_founders_on_invitation_token", unique: true, using: :btree
     t.index ["invited_batch_id"], name: "index_founders_on_invited_batch_id", using: :btree
     t.index ["invited_by_id"], name: "index_founders_on_invited_by_id", using: :btree
+    t.index ["name"], name: "index_founders_on_name", using: :btree
     t.index ["reset_password_token"], name: "index_founders_on_reset_password_token", unique: true, using: :btree
     t.index ["slug"], name: "index_founders_on_slug", unique: true, using: :btree
     t.index ["startup_token"], name: "index_founders_on_startup_token", using: :btree

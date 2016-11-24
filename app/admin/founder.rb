@@ -34,7 +34,7 @@ ActiveAdmin.register Founder do
 
   permit_params :name, :email, :remote_avatar_url, :avatar, :startup_id, :slug, :about,
     :slack_username, :born_on, :startup_admin, :communication_address, :identification_proof,
-    :phone, :invitation_token, :university_id, :roll_number, :course, :semester, :year_of_graduation,
+    :phone, :invitation_token, :college_id, :roll_number, :course, :semester, :year_of_graduation,
     :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :facebook_url, :angel_co_url, :github_url, :behance_url,
     { roles: [] }, :tag_list, :gender, :skype_id, :exited
 
@@ -130,6 +130,10 @@ ActiveAdmin.register Founder do
     column :born_on
     column :communication_address
     column :about
+
+    column :college do |founder|
+      founder.college&.name
+    end
 
     column :university do |founder|
       founder.university&.name
@@ -245,6 +249,7 @@ ActiveAdmin.register Founder do
         end
       end
 
+      row :college
       row :university
       row :roll_number
 

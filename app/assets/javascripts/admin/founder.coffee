@@ -32,5 +32,32 @@ showTargetsOptionally = ->
     $(".admin-founder-#{founderId}-hidden-target").removeClass('hide')
     showLink.hide()
 
+
+setupSelect2ForFounderColleges = ->
+  collegeInput = $('#founder_college_id')
+
+  if collegeInput.length
+    collegeSearchUrl = collegeInput.data('searchUrl')
+
+    collegeInput.select2
+      width: '80%',
+      minimumInputLength: 3,
+      ajax:
+        url: collegeSearchUrl,
+        dataType: 'json',
+        quietMillis: 500,
+        data: (term, page) ->
+          return {
+            q: term
+          }
+        ,
+        results: (data, page) ->
+          return { results: data }
+        cache: true
+
 $(document).on 'page:change', showTargetsOptionally
 $(document).on 'page:change', setupSelect2ForFounderTagList
+
+$(document).on 'turbolinks:load', ->
+  if $('.formtastic.founder').length
+    setupSelect2ForFounderColleges()

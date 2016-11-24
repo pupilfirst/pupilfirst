@@ -2,10 +2,6 @@ $(document).on 'page:change', ->
   $('#verified-icon').tooltip()
   $('.truncated-founder-name').tooltip()
 
-$(document).on 'page:change', ->
-  $('#targets-tab').tabCollapse
-    tabsClass: 'hidden-md hidden-sm hidden-xs',
-    accordionClass: 'visible-md visible-sm visible-xs'
 
 $(document).on 'page:change', ->
   $(".tl_link_button").click((e) ->
@@ -383,10 +379,6 @@ startTour = ->
       {
         element: $('.timeline-panel')[0],
         intro: startupShowTour.data('timelineEvent')
-      },
-      {
-        element: $('#targets')[0],
-        intro: startupShowTour.data('targets')
       },
       {
         element: $('.data-icons')[0],

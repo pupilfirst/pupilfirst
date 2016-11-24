@@ -8,7 +8,6 @@
   data-founders=t('startup.show.tour.founders')
   data-timeline-builder=t('startup.show.tour.timeline_builder')
   data-timeline-event=t('startup.show.tour.timeline_event')
-  data-targets=t('startup.show.tour.targets')
   data-tour-flag=@tour
   ]
 
@@ -52,44 +51,6 @@
             ' &nbsp;#{@startup.latest_help_wanted.description}
             - if @startup.email?
               | Please reach out to us at #{mail_to @startup.email}
-        - if current_founder && @startup.founder?(current_founder) && current_founder.any_targets?
-          #targets.margin-bottom-20
-            h4.target-top-head.margin-top-0
-              i.fa.fa-bullseye
-              | Targets
-            hr
-            .row
-              .targets-all.col-sm-12
-                ul#targets-tab.nav.nav-tabs.nav-justified
-                  li.active
-                    a.pending-tab href="#pending-targets-list" role="presentation" data-toggle="tab"
-                      i.fa.fa-clock-o
-                      | Pending
-                      span.badge.pending-count
-                        | #{pending_targets.count}
-                      .accordian-arrow-target.pull-right.hidden-lg
-                  li
-                    a.expired-tab href="#expired-targets-list" role="presentation" data-toggle="tab"
-                      i.fa.fa-hourglass-o
-                      | Expired
-                      span.badge.expired-count
-                        | #{expired_targets.count}
-                      .accordian-arrow-target.pull-right.hidden-lg
-                  li
-                    a.completed-tab href="#completed-targets-list" role="presentation" data-toggle="tab"
-                      i.fa.fa-calendar-check-o
-                      | Completed
-                      span.badge.completed-count
-                        | #{completed_targets.count}
-                      .accordian-arrow-target.pull-right.hidden-lg
-
-                .target-content.tab-content.hidden-sm.hidden-xs
-                  #pending-targets-list.tab-pane.fade.active.in
-                    = render 'targets', targets: pending_targets
-                  #expired-targets-list.tab-pane.fade
-                    = render 'targets', targets: expired_targets
-                  #completed-targets-list.tab-pane.fade
-                    = render 'targets', targets: completed_targets
 
         .data-icons
           .row

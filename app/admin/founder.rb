@@ -29,7 +29,7 @@ ActiveAdmin.register Founder do
     collection: -> { Founder.tag_counts_on(:tags).pluck(:name).sort }
 
   filter :roles_cont, as: :select, collection: Founder.valid_roles, label: 'Role'
-  filter :university
+  filter :college_name_contains
   filter :roll_number
 
   permit_params :name, :email, :remote_avatar_url, :avatar, :startup_id, :slug, :about,

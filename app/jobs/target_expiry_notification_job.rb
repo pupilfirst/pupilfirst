@@ -1,6 +1,7 @@
 class TargetExpiryNotificationJob < ApplicationJob
   queue_as :default
 
+  # TODO: Need to be rewritten with new definitions/scopes to call a target pending.
   def perform
     # send mild reminder 5 days before expiry
     Target.pending.due_on(5.days.from_now).each do |target|

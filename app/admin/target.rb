@@ -1,13 +1,9 @@
 ActiveAdmin.register Target do
   include DisableIntercom
 
-  permit_params :assignee_id, :assignee_type, :assigner_id, :role, :status, :title, :description, :status, :resource_url,
+  permit_params :assignee_id, :assignee_type, :assigner_id, :role, :title, :description, :resource_url,
     :completion_instructions, :due_date, :slideshow_embed, :completed_at, :completion_comment, :rubric,
-    :remote_rubric_url, :target_template_id, :review_test_embed
-
-  scope :all
-  scope :pending
-  scope :expired
+    :remote_rubric_url, :review_test_embed
 
   preserve_default_filters!
 
@@ -18,7 +14,6 @@ ActiveAdmin.register Target do
     collection: proc { Object.const_get(params.dig(:q, :assignee_type_eq)).joins(:targets).distinct }
 
   filter :role, as: :select, collection: Target.valid_roles
-  filter :status, as: :select, collection: Target.valid_statuses
 
   controller do
     def create
@@ -91,14 +86,6 @@ ActiveAdmin.register Target do
       t("role.#{target.role}")
     end
 
-    column :status do |target|
-      if target.expired?
-        'Expired'
-      else
-        t("target.status.#{target.status}")
-      end
-    end
-
     column :title
     column :assigner
 
@@ -120,7 +107,6 @@ ActiveAdmin.register Target do
           end
 
           column :description
-          column 'Status', &:verified_status
           column :created_at
         end
       end
@@ -134,17 +120,8 @@ ActiveAdmin.register Target do
         t("role.#{target.role}")
       end
 
-      row :status do
-        if target.expired?
-          'Expired'
-        else
-          t("target.status.#{target.status}")
-        end
-      end
-
       row :title
       row :assigner
-      row :target_template
 
       row :rubric do
         if target.rubric.present?

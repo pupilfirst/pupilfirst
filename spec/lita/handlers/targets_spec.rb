@@ -6,7 +6,7 @@ require_relative '../../../lib/lita/handlers/targets'
 # Any problems related to messages will cause rspec to crash, without supplying correct error information.
 # https://github.com/rspec/rspec-core/issues/2163
 describe Lita::Handlers::Targets do
-  describe '#targets_handler' do
+  describe '#targets_handler', disabled: true do
     let(:response) { double 'Lita Response Object', match_data: ['targets'] }
     let(:founder) { create :founder }
     let(:slack_username_check_response) { { ok: true, members: [{ name: 'slack_username', id: 'ABCD1234' }] }.to_json }

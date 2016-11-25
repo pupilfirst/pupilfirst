@@ -139,6 +139,7 @@ module Lita
       end
     end
 
-    Lita.register_handler(Targets)
+    # TODO: Disabling till targets fixed
+    # Lita.register_handler(Targets)
   end
 end

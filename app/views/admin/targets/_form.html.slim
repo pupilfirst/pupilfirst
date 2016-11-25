@@ -34,12 +34,6 @@
         collection: [f.object.assignee],
         input_html: { disabled: true }
 
-    = f.input :status,
-      as: :select,
-      collection: Target.valid_statuses,
-      include_blank: false,
-      member_label: proc { |status| t("target.status.#{status}") }
-
     = f.input :completed_at, as: :string, input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O' } }, placeholder: 'YYYY-MM-DD HH:MM:SS'
     = f.input :completion_comment
     = f.input :title
@@ -62,6 +56,5 @@
     = f.input :assigner, collection: Faculty.active.order(:name), include_blank: false
     = f.input :rubric, as: :file
     = f.input :remote_rubric_url
-    = f.input :target_template
 
   = f.submit

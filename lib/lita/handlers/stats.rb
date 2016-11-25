@@ -9,21 +9,22 @@ module Lita
         help: { 'state of SV.CO for batch NUMBER?' => I18n.t('slack.help.state_of_svco') }
       )
 
-      route(
-        /\Aexpired team targets for batch\s*(\d*)\s*\?*\z/i,
-        :expired_team_targets,
-        command: true,
-        restrict_to: :sv_co_team,
-        help: { 'expired team targets for batch NUMBER?' => I18n.t('slack.help.expired_team_targets') }
-      )
-
-      route(
-        /\Aexpired founder targets for batch\s*(\d*)\s*\?*\z/i,
-        :expired_founder_targets,
-        command: true,
-        restrict_to: :sv_co_team,
-        help: { 'expired founder targets for batch NUMBER?' => I18n.t('slack.help.expired_founder_targets') }
-      )
+      # TODO: re-introduce these routes when the targets are corrected
+      # route(
+      #   /\Aexpired team targets for batch\s*(\d*)\s*\?*\z/i,
+      #   :expired_team_targets,
+      #   command: true,
+      #   restrict_to: :sv_co_team,
+      #   help: { 'expired team targets for batch NUMBER?' => I18n.t('slack.help.expired_team_targets') }
+      # )
+      #
+      # route(
+      #   /\Aexpired founder targets for batch\s*(\d*)\s*\?*\z/i,
+      #   :expired_founder_targets,
+      #   command: true,
+      #   restrict_to: :sv_co_team,
+      #   help: { 'expired founder targets for batch NUMBER?' => I18n.t('slack.help.expired_founder_targets') }
+      # )
 
       def state_of_batch(response)
         # lets avoid the need to pass response around
@@ -80,11 +81,6 @@ module Lita
           #{stage_wise_startup_counts_and_names}
           Number of inactive startups last week: #{inactive_startups_count_and_names}
           Number of startups in danger zone: #{endangered_startups_count_and_names}
-          Latest deployed team targets:
-          #{latest_deployed_targets_for(:startups)}
-          Latest deployed founder targets:
-          #{latest_deployed_targets_for(:founders)}
-          (*C* = Completed, *P* = Pending, *E* = Expired)
         MESSAGE
       end
 
@@ -134,23 +130,24 @@ module Lita
         MESSAGE
       end
 
+      # TODO: re-write or excise based on new target scheme
       def expired_team_targets_list
         # get all expired team targets for the batch
-        targets = Target.for_startups_in_batch(@batch_requested).expired
-
-        return I18n.t('slack.handlers.stats.no_expired_team_targets') unless targets.present?
-
-        targets_list = ''
-        # get all unique titles from the fetched targets - to group startups by them
-        target_titles = targets.pluck(:title).uniq
-
-        # fetch startup names for each group and append them to the response
-        target_titles.each_with_index do |title, index|
-          startup_ids = targets.where(title: title).pluck(:assignee_id)
-          targets_list += "#{index + 1}. _#{title}_: #{list_of_startups(Startup.find(startup_ids))}\n"
-        end
-
-        targets_list
+        # targets = Target.for_startups_in_batch(@batch_requested).expired
+        #
+        # return I18n.t('slack.handlers.stats.no_expired_team_targets') unless targets.present?
+        #
+        # targets_list = ''
+        # # get all unique titles from the fetched targets - to group startups by them
+        # target_titles = targets.pluck(:title).uniq
+        #
+        # # fetch startup names for each group and append them to the response
+        # target_titles.each_with_index do |title, index|
+        #   startup_ids = targets.where(title: title).pluck(:assignee_id)
+        #   targets_list += "#{index + 1}. _#{title}_: #{list_of_startups(Startup.find(startup_ids))}\n"
+        # end
+        #
+        # targets_list
       end
 
       def expired_founder_targets_details
@@ -160,23 +157,9 @@ module Lita
         MESSAGE
       end
 
+      # TODO: re-write or excise based on new target scheme
       def expired_founder_targets_list
-        # get all expired founder targets for the batch
-        targets = Target.for_founders_in_batch(@batch_requested).expired
-
-        return I18n.t('slack.handlers.stats.no_expired_founder_targets') unless targets.present?
-
-        targets_list = ''
-        # get all unique titles from the fetched targets - to group founders by them
-        target_titles = targets.pluck(:title).uniq
-
-        # fetch founder names for each group and append them to the response
-        target_titles.each_with_index do |title, index|
-          founder_ids = targets.where(title: title).pluck(:assignee_id)
-          targets_list += "#{index + 1}. _#{title}_: #{list_of_founders(founder_ids)}\n"
-        end
-
-        targets_list
+        # get all expired founder targets for the batc
       end
 
       def list_of_founders(founder_ids)
@@ -187,29 +170,9 @@ module Lita
           name
         end.join(', ')
       end
-
-      def latest_deployed_targets_for(scope)
-        latest_unique_titles = fetch_latest_target_titles(scope)
-
-        return "None\n" unless latest_unique_titles.present?
-
-        latest_unique_titles.map do |title|
-          completed_count = Target.send("for_#{scope}_in_batch", @batch_requested).where(title: title).completed.count
-          pending_count = Target.send("for_#{scope}_in_batch", @batch_requested).where(title: title).pending.count
-          expired_count = Target.send("for_#{scope}_in_batch", @batch_requested).where(title: title).expired.count
-
-          "_#{title}_ ( *C*: #{completed_count}, *P*: #{pending_count}, *E*: #{expired_count} )"
-        end.join(",\n") + "\n"
-      end
-
-      def fetch_latest_target_titles(scope)
-        target_titles = Target.send("for_#{scope}_in_batch", @batch_requested).order('created_at DESC').pluck(:title)
-
-        # return the latest 5 unique titles
-        target_titles.uniq[0..4]
-      end
     end
 
-    Lita.register_handler(Stats)
+    # TODO: Disabling till fixed
+    # Lita.register_handler(Stats)
   end
 end

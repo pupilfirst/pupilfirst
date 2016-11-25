@@ -310,7 +310,7 @@ ActiveAdmin.register TimelineEvent do
       row('Linked Target') do
         if timeline_event.target.present?
           a href: admin_target_url(timeline_event.target) do
-            timeline_event.target.title + ' (' + timeline_event.target.status.capitalize + ')'
+            timeline_event.target.title
           end
 
           span class: 'wrap-with-paranthesis' do

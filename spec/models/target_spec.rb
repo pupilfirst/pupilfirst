@@ -7,22 +7,6 @@ describe Target do
     allow(PublicSlackTalk).to receive(:post_message)
   end
 
-  describe '#pending?' do
-    context 'when target is in pending status' do
-      it 'returns true' do
-        expect(subject.pending?).to eq(true)
-      end
-    end
-
-    context 'when target is not in pending status' do
-      let(:subject) { create :target, status: Target::STATUS_DONE }
-
-      it 'returns false' do
-        expect(subject.pending?).to eq(false)
-      end
-    end
-  end
-
   describe '#crucial_revision?' do
     context 'when a crucial target field is updated' do
       it 'returns true' do

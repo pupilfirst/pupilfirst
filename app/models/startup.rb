@@ -92,18 +92,6 @@ class Startup < ApplicationRecord
     batched.approved.not_dropped_out.where.not(id: startups_with_karma_ids)
   end
 
-  # Batched & approved startups that don't have un-expired targets.
-  def self.without_live_targets
-    # Where status is pending.
-    without_live_targets_ids = joins(:targets).where(targets: { status: Target::STATUS_PENDING })
-
-    # Where due date isn't set, or hasn't expired.
-    without_live_targets_ids = without_live_targets_ids.where('targets.due_date IS NULL OR targets.due_date > ?', Time.now)
-
-    # All except the above.
-    batched.approved.not_dropped_out.where.not(id: without_live_targets_ids)
-  end
-
   def self.with_targets_completed_last_week
     with_completed_targets.where('targets.completed_at > ?', 1.week.ago)
   end

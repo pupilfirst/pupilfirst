@@ -428,18 +428,6 @@ class Startup < ApplicationRecord
     create_default_event %w(joined_svco)
   end
 
-  def prepopulate_targets
-    TargetTemplate.where(populate_on_start: true).each do |target_template|
-      if target_template.founder_role?
-        founders.each do |founder|
-          target_template.create_target!(founder)
-        end
-      else
-        target_template.create_target!(self)
-      end
-    end
-  end
-
   def create_default_event(types)
     types.each do |type|
       timeline_events.create(

@@ -45,8 +45,9 @@ class StartupsController < ApplicationController
       # prepopulate the timeline with a 'Joined SV.CO' entry
       @startup.prepopulate_timeline!
 
+      # TODO: Rewrite this to auto-deploy targets from the batch
       # Add day-zero targets.
-      @startup.prepopulate_targets
+      # @startup.prepopulate_targets
 
       redirect_to startup_url(@startup)
     else

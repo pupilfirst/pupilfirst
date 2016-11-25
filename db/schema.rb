@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161124103907) do
+ActiveRecord::Schema.define(version: 20161125060700) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -626,7 +626,7 @@ ActiveRecord::Schema.define(version: 20161124103907) do
     t.index ["name"], name: "index_tags_on_name", unique: true, using: :btree
   end
 
-  create_table "target_templates", force: :cascade do |t|
+  create_table "targets", force: :cascade do |t|
     t.integer  "days_from_start"
     t.string   "role"
     t.string   "title"
@@ -643,34 +643,10 @@ ActiveRecord::Schema.define(version: 20161124103907) do
     t.integer  "timeline_event_type_id"
     t.integer  "assignee_id"
     t.string   "assignee_type"
-    t.index ["assignee_id"], name: "index_target_templates_on_assignee_id", using: :btree
-    t.index ["assignee_type"], name: "index_target_templates_on_assignee_type", using: :btree
-    t.index ["populate_on_start"], name: "index_target_templates_on_populate_on_start", using: :btree
-    t.index ["timeline_event_type_id"], name: "index_target_templates_on_timeline_event_type_id", using: :btree
-  end
-
-  create_table "targets", force: :cascade do |t|
-    t.string   "role"
-    t.integer  "assigner_id"
-    t.string   "title"
-    t.text     "description"
-    t.string   "resource_url"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.string   "status"
-    t.string   "completion_instructions"
-    t.datetime "due_date"
-    t.datetime "completed_at"
-    t.text     "completion_comment"
-    t.text     "slideshow_embed"
-    t.string   "rubric"
-    t.integer  "assignee_id"
-    t.string   "assignee_type"
-    t.integer  "target_template_id"
-    t.text     "review_test_embed"
-    t.index ["assignee_id", "assignee_type"], name: "index_targets_on_assignee_id_and_assignee_type", using: :btree
-    t.index ["assigner_id"], name: "index_targets_on_assigner_id", using: :btree
-    t.index ["target_template_id"], name: "index_targets_on_target_template_id", using: :btree
+    t.index ["assignee_id"], name: "index_targets_on_assignee_id", using: :btree
+    t.index ["assignee_type"], name: "index_targets_on_assignee_type", using: :btree
+    t.index ["populate_on_start"], name: "index_targets_on_populate_on_start", using: :btree
+    t.index ["timeline_event_type_id"], name: "index_targets_on_timeline_event_type_id", using: :btree
   end
 
   create_table "team_members", force: :cascade do |t|
@@ -721,13 +697,11 @@ ActiveRecord::Schema.define(version: 20161124103907) do
     t.integer  "timeline_event_type_id"
     t.string   "verified_status"
     t.string   "grade"
-    t.integer  "target_id"
     t.integer  "founder_id"
     t.integer  "improved_timeline_event_id"
-    t.integer  "target_template_id"
+    t.integer  "target_id"
     t.index ["founder_id"], name: "index_timeline_events_on_founder_id", using: :btree
     t.index ["startup_id"], name: "index_timeline_events_on_startup_id", using: :btree
-    t.index ["target_id"], name: "index_timeline_events_on_target_id", using: :btree
     t.index ["timeline_event_type_id"], name: "index_timeline_events_on_timeline_event_type_id", using: :btree
   end
 

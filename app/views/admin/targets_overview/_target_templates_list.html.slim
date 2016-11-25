@@ -1,61 +1,63 @@
-.table_tools
-  ul.scopes.table_tools_segmented_control style="width: calc((100% - 10px)); float: right;"
-    - Startup.available_batches.each do |batch|
-      li class="#{ (batch == batch_selected ? 'selected':'') + ' scope' }"
-        a.table_tools_button href=admin_targets_overview_path(batch: batch) #{batch.name} Batch
+p BRB! Being rebuild to reflect the new scheme of targets.
 
-- if params[:template_id].present?
-  - template = TargetTemplate.find_by(id: params[:template_id])
-  - if template.present?
-    .panel
-      h3 Template Details
-      .panel_contents
-        .attributes_table
-          table
-            tbody
-              tr.row
-                th Title
-                td
-                  = link_to template.title, admin_target_template_path(template)
-              tr.row
-                th Days from Start
-                td #{template.days_from_start}
-              tr.row
-                th Completed
-                td #{assignees_list(template, status: :completed)}
-              tr.row
-                th Pending
-                td #{assignees_list(template, status: :pending)}
-              tr.row
-                th Expired
-                td #{assignees_list(template, status: :expired)}
-              tr.row
-                th Extended
-                td #{assignees_list(template, status: :extended)}
-
-- %w(team founder).each do |role|
-  h3 #{role.capitalize} Targets
-  table.index_table.index
-    thead
-      tr
-        th.col Template Title
-        th.col Days from Start
-        th.col Due Date
-        th.col Completed
-        th.col Pending
-        th.col Expired
-        th.col Extensions
-        th.col Details
-    tbody
-      - TargetTemplate.send("#{role}_role").order(:days_from_start).each do |template|
-        tr class="#{cycle %w(odd even)}"
-          td.col
-            = link_to template.title, admin_target_template_path(template)
-          td.col #{template.days_from_start}
-          td.col #{template.due_date&.strftime('%b %e, %l:%M %p')}
-          td.col #{Target.shortlist(batch_selected, :completed, template).count}
-          td.col #{Target.shortlist(batch_selected, :pending, template).count}
-          td.col #{Target.shortlist(batch_selected, :expired, template).count}
-          td.col #{Target.shortlist(batch_selected, :all, template).where('due_date > ?', template.due_date).count}
-          td.col
-            = link_to 'View Details', admin_targets_overview_path(template_id: template.id, batch: batch_selected&.id)
+/.table_tools
+/  ul.scopes.table_tools_segmented_control style="width: calc((100% - 10px)); float: right;"
+/    - Startup.available_batches.each do |batch|
+/      li class="#{ (batch == batch_selected ? 'selected':'') + ' scope' }"
+/        a.table_tools_button href=admin_targets_overview_path(batch: batch) #{batch.name} Batch
+/
+/- if params[:template_id].present?
+/  - template = TargetTemplate.find_by(id: params[:template_id])
+/  - if template.present?
+/    .panel
+/      h3 Template Details
+/      .panel_contents
+/        .attributes_table
+/          table
+/            tbody
+/              tr.row
+/                th Title
+/                td
+/                  = link_to template.title, admin_target_template_path(template)
+/              tr.row
+/                th Days from Start
+/                td #{template.days_from_start}
+/              tr.row
+/                th Completed
+/                td #{assignees_list(template, status: :completed)}
+/              tr.row
+/                th Pending
+/                td #{assignees_list(template, status: :pending)}
+/              tr.row
+/                th Expired
+/                td #{assignees_list(template, status: :expired)}
+/              tr.row
+/                th Extended
+/                td #{assignees_list(template, status: :extended)}
+/
+/- %w(team founder).each do |role|
+/  h3 #{role.capitalize} Targets
+/  table.index_table.index
+/    thead
+/      tr
+/        th.col Template Title
+/        th.col Days from Start
+/        th.col Due Date
+/        th.col Completed
+/        th.col Pending
+/        th.col Expired
+/        th.col Extensions
+/        th.col Details
+/    tbody
+/      - TargetTemplate.send("#{role}_role").order(:days_from_start).each do |template|
+/        tr class="#{cycle %w(odd even)}"
+/          td.col
+/            = link_to template.title, admin_target_template_path(template)
+/          td.col #{template.days_from_start}
+/          td.col #{template.due_date&.strftime('%b %e, %l:%M %p')}
+/          td.col #{Target.shortlist(batch_selected, :completed, template).count}
+/          td.col #{Target.shortlist(batch_selected, :pending, template).count}
+/          td.col #{Target.shortlist(batch_selected, :expired, template).count}
+/          td.col #{Target.shortlist(batch_selected, :all, template).where('due_date > ?', template.due_date).count}
+/          td.col
+/            = link_to 'View Details', admin_targets_overview_path(template_id: template.id, batch: batch_selected&.id)

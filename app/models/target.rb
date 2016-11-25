@@ -35,17 +35,11 @@ class Target < ApplicationRecord
     target_roles + Founder.valid_roles
   end
 
-  # See en.yml's target.status
-  def self.valid_statuses
-    %w(pending done)
-  end
-
   # Need to allow these two to be read for AA form.
   attr_reader :startup_id, :founder_id
 
-  validates_presence_of :assignee_id, :assignee_type, :assigner_id, :role, :title, :description, :status
+  validates_presence_of :assignee_id, :assignee_type, :assigner_id, :role, :title, :description
   validates_inclusion_of :role, in: valid_roles
-  validates_inclusion_of :status, in: valid_statuses
 
   # A target is pending if it isn't marker done, or isn't expired.
   def pending?
@@ -60,11 +54,6 @@ class Target < ApplicationRecord
   # Stored status must be pending, and due date must be present and in the past.
   def expired?
     (status == STATUS_PENDING) && due_date? && (due_date < Time.now)
-  end
-
-  # Set and clear completed at, depending on the value of stored status.
-  before_save do
-    self.completed_at = (status == STATUS_DONE ? completed_at || Time.now : nil)
   end
 
   def complete!
@@ -92,7 +81,7 @@ class Target < ApplicationRecord
   end
 
   def crucial_revision?
-    title_changed? || description_changed? || completion_instructions_changed? || due_date_changed?
+    title_changed? || description_changed? || completion_instructions_changed?
   end
 
   def revision_as_slack_message
@@ -101,7 +90,6 @@ class Target < ApplicationRecord
     message += "The revised title is: #{title}\n" if title_changed?
     message += "The description now reads: \"#{ApplicationController.helpers.strip_tags description}\"\n" if description_changed?
     message += "Completion Instructions were modified to: \"#{completion_instructions}\"\n" if completion_instructions_changed?
-    message += ":exclamation: The due date has been modified to *#{due_date.strftime('%A, %d %b %Y %l:%M %p')}* :exclamation:" if due_date_changed?
     message
   end
 

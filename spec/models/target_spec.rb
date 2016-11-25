@@ -10,7 +10,7 @@ describe Target do
   describe '#crucial_revision?' do
     context 'when a crucial target field is updated' do
       it 'returns true' do
-        subject.due_date = 1.month.from_now
+        subject.title = 'New title'
         expect(subject.crucial_revision?).to eq(true)
       end
     end
@@ -56,12 +56,6 @@ describe Target do
       it 'contains the new description' do
         subject.description = '<div>revised description<div>' # to ensure html tags are stripped
         expect(subject.revision_as_slack_message).to include("description now reads: \"revised description\"")
-      end
-    end
-    context 'when due date is changed' do
-      it 'contains the new due date' do
-        subject.due_date = 1.week.from_now
-        expect(subject.revision_as_slack_message).to include("due date has been modified to *#{subject.due_date.strftime('%A, %d %b %Y %l:%M %p')}*")
       end
     end
   end

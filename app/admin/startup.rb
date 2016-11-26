@@ -46,35 +46,36 @@ ActiveAdmin.register Startup do
       link_to startup.display_name, admin_startup_path(startup)
     end
 
-    column :targets do |startup|
-      if startup.targets.present?
-        ol do
-          hide_some_targets = startup.targets.count >= 5
-
-          startup.targets.order('updated_at DESC').each_with_index do |target, index|
-            fa_icon = if target.done?
-              'fa-calendar-check-o'
-            elsif target.expired?
-              'fa-hourglass-end'
-            else
-              'fa-clock-o'
-            end
-
-            li class: (index >= 3 && hide_some_targets ? "hide admin-startup-#{startup.id}-hidden-target" : '') do
-              link_to " #{target.title}", [:admin, target], class: "fa #{fa_icon} no-text-decoration"
-            end
-          end
-
-          if hide_some_targets
-            li do
-              a class: 'admin-startup-targets-show-link fa fa-chevron-circle-down', 'data-startup-id' => startup.id do
-                ' Show all targets'
-              end
-            end
-          end
-        end
-      end
-    end
+    # TODO: re-write if required after moving to new scheme of targets
+    # column :targets do |startup|
+    #   if startup.targets.present?
+    #     ol do
+    #       hide_some_targets = startup.targets.count >= 5
+    #
+    #       startup.targets.order('updated_at DESC').each_with_index do |target, index|
+    #         fa_icon = if target.done?
+    #           'fa-calendar-check-o'
+    #         elsif target.expired?
+    #           'fa-hourglass-end'
+    #         else
+    #           'fa-clock-o'
+    #         end
+    #
+    #         li class: (index >= 3 && hide_some_targets ? "hide admin-startup-#{startup.id}-hidden-target" : '') do
+    #           link_to " #{target.title}", [:admin, target], class: "fa #{fa_icon} no-text-decoration"
+    #         end
+    #       end
+    #
+    #       if hide_some_targets
+    #         li do
+    #           a class: 'admin-startup-targets-show-link fa fa-chevron-circle-down', 'data-startup-id' => startup.id do
+    #             ' Show all targets'
+    #           end
+    #         end
+    #       end
+    #     end
+    #   end
+    # end
 
     column :timeline_events do |startup|
       ol do
@@ -324,34 +325,35 @@ ActiveAdmin.register Startup do
       row :address
     end
 
-    if startup.targets.present?
-      div do
-        table_for startup.targets.order('created_at DESC') do
-          caption 'Linked Targets'
-
-          column 'Target' do |target|
-            a href: admin_target_path(target) do
-              target.title
-            end
-          end
-
-          column :role do |target|
-            t("role.#{target.role}")
-          end
-
-          column :status do |target|
-            if target.expired?
-              'Expired'
-            else
-              t("target.status.#{target.status}")
-            end
-          end
-
-          column :assigner
-          column :created_at
-        end
-      end
-    end
+    # TODO: re-write if required after moving to new scheme of targets
+    # if startup.targets.present?
+    #   div do
+    #     table_for startup.targets.order('created_at DESC') do
+    #       caption 'Linked Targets'
+    #
+    #       column 'Target' do |target|
+    #         a href: admin_target_path(target) do
+    #           target.title
+    #         end
+    #       end
+    #
+    #       column :role do |target|
+    #         t("role.#{target.role}")
+    #       end
+    #
+    #       column :status do |target|
+    #         if target.expired?
+    #           'Expired'
+    #         else
+    #           t("target.status.#{target.status}")
+    #         end
+    #       end
+    #
+    #       column :assigner
+    #       column :created_at
+    #     end
+    #   end
+    # end
   end
 
   form partial: 'admin/startups/form'

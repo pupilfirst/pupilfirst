@@ -92,14 +92,6 @@ class Startup < ApplicationRecord
     batched.approved.not_dropped_out.where.not(id: startups_with_karma_ids)
   end
 
-  def self.with_targets_completed_last_week
-    with_completed_targets.where('targets.completed_at > ?', 1.week.ago)
-  end
-
-  def self.with_completed_targets
-    joins(:targets).where(targets: { status: Target::STATUS_DONE })
-  end
-
   # Find all by specific category.
   def self.startup_category(category)
     joins(:startup_categories).where(startup_categories: { id: category.id })

@@ -8,15 +8,6 @@ class Target < ApplicationRecord
 
   mount_uploader :rubric, RubricUploader
 
-  STATUS_PENDING = 'pending'
-  STATUS_DONE = 'done'
-
-  # The following definitions of pending and expired is naive. A correct check requires the use of the done_for_viewer?
-  # method on individual targets by supplying the viewer.
-  scope :pending, -> { where(status: STATUS_PENDING).where('due_date >= ? OR due_date IS NULL', Time.now) }
-  scope :expired, -> { where(status: STATUS_PENDING).where('due_date < ?', Time.now) }
-
-  scope :completed, -> { where(status: STATUS_DONE) }
   scope :founder, -> { where(role: ROLE_FOUNDER) }
   scope :not_target_roles, -> { where.not(role: target_roles) }
   scope :due_on, -> (date) { where(due_date: date.beginning_of_day..date.end_of_day) }
@@ -40,25 +31,6 @@ class Target < ApplicationRecord
 
   validates_presence_of :assignee_id, :assignee_type, :assigner_id, :role, :title, :description
   validates_inclusion_of :role, in: valid_roles
-
-  # A target is pending if it isn't marker done, or isn't expired.
-  def pending?
-    !(done? || expired?)
-  end
-
-  # This is a naive check. See done_for_viewer?
-  def done?
-    status == STATUS_DONE
-  end
-
-  # Stored status must be pending, and due date must be present and in the past.
-  def expired?
-    (status == STATUS_PENDING) && due_date? && (due_date < Time.now)
-  end
-
-  def complete!
-    update!(status: STATUS_DONE)
-  end
 
   def founder?
     role == Target::ROLE_FOUNDER

@@ -6,5 +6,6 @@ FactoryGirl.define do
 
     sequence(:name) { |n| "#{Faker::Lorem.word} #{n}" }
     sequence(:number) { |n| n + 1 }
+    final_stage { number == 5 ? true : false }
   end
 end

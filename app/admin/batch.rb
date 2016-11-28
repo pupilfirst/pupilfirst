@@ -25,7 +25,7 @@ ActiveAdmin.register Batch do
     end
 
     actions do |batch|
-      if batch.applications_complete?
+      if batch.applications_complete? && !batch.invites_sent?
         span do
           link_to 'Invite all founders', selected_applications_admin_batch_path(batch)
         end
@@ -142,7 +142,9 @@ ActiveAdmin.register Batch do
   member_action :invite_all_selected do
     batch = Batch.find params[:id]
 
-    batch.invite_selected_candidates!
+    raise("Invites have already been sent for Batch##{batch.id}") if batch.invites_sent?
+
+    Startups::OnboardService.new(batch).execute
 
     if batch.invites_sent?
       flash[:success] = 'Invites sent to all selected candidates!'

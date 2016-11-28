@@ -31,5 +31,10 @@ FactoryGirl.define do
       application_stage { create :application_stage, number: 3 }
       score { scored ? rand(100) : nil }
     end
+
+    trait :stage_4 do
+      application_stage { create :application_stage, number: 4 }
+      notes 'Created by Factory Girl'
+    end
   end
 end

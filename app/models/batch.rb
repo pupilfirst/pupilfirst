@@ -60,13 +60,6 @@ class Batch < ApplicationRecord
     batch_applications.selected
   end
 
-  def invite_selected_candidates!
-    Batch.transaction do
-      selected_applications.each(&:invite_applicants!)
-      update!(invites_sent_at: Time.now)
-    end
-  end
-
   def invites_sent?
     invites_sent_at.present?
   end

@@ -13,6 +13,7 @@ class BatchApplicant < ApplicationRecord
   has_and_belongs_to_many :batch_applications
   has_many :payments
   belongs_to :college
+  belongs_to :founder, optional: true
 
   attr_accessor :reference_text
 

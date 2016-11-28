@@ -1,7 +1,31 @@
 require 'rails_helper'
 
-describe Startup, broken: true do
+describe Startup do
   subject { create :startup }
+
+  context 'when a startup with name Foo Bar exists' do
+    let(:one_batch) { create :batch }
+    let(:another_batch) { create :batch }
+    let!(:existing_startup) { create :startup, product_name: 'Foo Bar', batch: one_batch }
+
+    context 'when attempting to create another startup Foo Bar' do
+      context 'in another batch' do
+        it 'succeeds' do
+          expect do
+            create :startup, product_name: 'Foo Bar', batch: another_batch
+          end.to change(Startup, :count).by(1)
+        end
+      end
+
+      context 'in the same batch' do
+        it 'fails' do
+          expect do
+            create :startup, product_name: 'Foo Bar', batch: one_batch
+          end.to raise_error(ActiveRecord::RecordInvalid)
+        end
+      end
+    end
+  end
 
   context 'when startup is destroyed' do
     let(:startup) { create :startup }
@@ -22,13 +46,6 @@ describe Startup, broken: true do
     category_4 = create(:startup_category)
     startup.startup_categories = "#{category_1.id},#{category_2.id},#{category_3.id},#{category_4.id}"
 
-    expect { startup.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
-
-  it "should have atleast one founder" do
-    startup = create(:startup)
-    startup.founders = []
-    expect(startup.valid?).to eql(false)
     expect { startup.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
@@ -88,26 +105,6 @@ describe Startup, broken: true do
   describe '#phone' do
     it "returns startup admin's phone number" do
       expect(subject.phone).to eq subject.admin.phone
-    end
-  end
-
-  describe '#showcase_timeline_event' do
-    it 'returns last non-private verified timeline event with image' do
-      private_timeline_event_type = create :timeline_event_type, role: TimelineEventType::ROLE_FOUNDER
-
-      # Verified event with image.
-      expected_showcase_event = create :timeline_event_with_image, startup: subject, verified_at: 20.minutes.ago
-
-      # Verified event without image.
-      create :timeline_event, startup: subject, verified_at: 10.minutes.ago
-
-      # Verified private event with image.
-      create :timeline_event_with_image, timeline_event_type: private_timeline_event_type, startup: subject, verified_at: 5.minutes.ago
-
-      # Unverified event with image, latest.
-      create :timeline_event_with_image, startup: subject
-
-      expect(subject.showcase_timeline_event).to eq(expected_showcase_event)
     end
   end
 end

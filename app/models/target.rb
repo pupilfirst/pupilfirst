@@ -4,6 +4,7 @@
 class Target < ApplicationRecord
   belongs_to :assignee, polymorphic: true
   belongs_to :assigner, class_name: 'Faculty'
+  belongs_to :target_group
   has_many :timeline_events
 
   mount_uploader :rubric, RubricUploader

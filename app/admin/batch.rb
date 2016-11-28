@@ -56,6 +56,18 @@ ActiveAdmin.register Batch do
       end
     end
 
+    panel 'Targets' do
+      batch.targets.each do |target|
+        ul do
+          li do
+            span do
+              link_to target.title, admin_target_path(target)
+            end
+          end
+        end
+      end
+    end
+
     panel 'Technical details' do
       attributes_table_for batch do
         row :id

@@ -3,41 +3,12 @@
   = f.inputs 'Target details' do
     #target-founders-for-startup-url data-url=founders_for_target_admin_targets_url
 
-    - if f.object.new_record?
-      = f.input :role,
-        as: :select,
-        collection: Target.valid_roles,
-        include_blank: false,
-        member_label: proc { |role| t("role.#{role}") }
-
-      = f.input :startup_id,
-        required: true,
-        collection: Startup.all.order(:product_name),
-        as: :select,
-        label: 'Product',
-        member_label: proc { |startup| startup.display_name }
-
-      = f.input :founder_id,
-        as: :select,
-        label: 'Founder',
-        multiple: true,
-        input_html: { style: 'height: 100%' }
-    - else
-      = f.input :role,
-        as: :select,
-        collection: Target.valid_roles,
-        member_label: proc { |role| t("role.#{role}") },
-        input_html: { disabled: true }
-
-      = f.input :assignee_id,
-        as: :select,
-        collection: [f.object.assignee],
-        input_html: { disabled: true }
-
-    = f.input :completed_at, as: :string, input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O' } }, placeholder: 'YYYY-MM-DD HH:MM:SS'
-    = f.input :completion_comment
-    = f.input :title
-    = f.hidden_field :description
+    = f.input :batch, collection: Batch.all
+    = f.input :role,
+      as: :select,
+      collection: Target.valid_roles,
+      include_blank: false,
+      member_label: proc { |role| t("role.#{role}") }
 
     .label-replica
       ' Description
@@ -48,12 +19,14 @@
     - if @target.errors[:description].present?
       p.inline-errors-replica #{@target.errors[:description][0]}
 
+    = f.input :target_type, collection: Target.valid_target_types
     = f.input :slideshow_embed
     = f.input :review_test_embed
     = f.input :resource_url
     = f.input :completion_instructions
-    = f.input :due_date, as: :string, input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O' } }, placeholder: 'YYYY-MM-DD HH:MM:SS'
     = f.input :assigner, collection: Faculty.active.order(:name), include_blank: false
+    = f.input :target_group
+    = f.input :days_to_complete
     = f.input :rubric, as: :file
     = f.input :remote_rubric_url
 

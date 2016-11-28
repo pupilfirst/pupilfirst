@@ -20,6 +20,4 @@ after 'development:startups' do
       description: description
     )
   end
-
-  Target.last.update(due_date: 1.week.ago)
 end

@@ -2,10 +2,13 @@ ActiveAdmin.register Target do
   include DisableIntercom
 
   permit_params :assignee_id, :assignee_type, :assigner_id, :role, :title, :description, :resource_url,
-    :completion_instructions, :due_date, :slideshow_embed, :completed_at, :completion_comment, :rubric,
-    :remote_rubric_url, :review_test_embed
+    :completion_instructions, :days_to_complete, :slideshow_embed, :completed_at, :completion_comment, :rubric, :remote_rubric_url, :review_test_embed, :batch_id, :target_group_id, :target_type
 
   preserve_default_filters!
+
+  filter :batch
+  filter :target_group_program_week_id_eq, label: 'Program Week', as: :select, collection: proc { ProgramWeek.all }
+  filter :target_group
 
   filter :assignee_type
 
@@ -80,6 +83,18 @@ ActiveAdmin.register Target do
   index do
     selectable_column
 
+    column :batch
+    column :program_week do |target|
+      program_week = target.target_group&.program_week
+      if program_week.present?
+        link_to(program_week.name, admin_program_week_path(program_week))
+      else
+        'Not Assigned'
+      end
+    end
+    column :target_group
+
+    # TODO: Probably remove assignee for the new scheme of targets
     column :assignee
 
     column :role do |target|
@@ -87,7 +102,6 @@ ActiveAdmin.register Target do
     end
 
     column :title
-    column :assigner
 
     actions defaults: true do |target|
       link_to 'Duplicate', duplicate_admin_target_path(target)
@@ -115,6 +129,9 @@ ActiveAdmin.register Target do
     attributes_table do
       row :assignee_type
       row :assignee
+      row :batch
+      row :target_group
+      row :target_type
 
       row :role do
         t("role.#{target.role}")
@@ -137,8 +154,7 @@ ActiveAdmin.register Target do
       row :review_test_embed
       row :resource_url
       row :completion_instructions
-      row :due_date
-      row :completed_at
+      row :days_to_complete
       row :completion_comment
       row :created_at
       row :updated_at

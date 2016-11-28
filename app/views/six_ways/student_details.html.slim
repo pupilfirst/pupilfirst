@@ -12,40 +12,41 @@
           | &nbsp;about yourself!
 
 .container
-  .container-md-center.content-box.m-t-3.m-b-3
-    - unless current_user.present?
-      .alert.alert-success
-        p Did this once before? #{link_to 'Log in', new_user_session_path(referer: six_ways_start_url)} instead.
+  .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
+    .content-box.m-t-3.m-b-3
+      - unless current_user.present?
+        .alert.alert-success
+          p Did this once before? #{link_to 'Log in', new_user_session_path(referer: six_ways_start_url)} instead.
 
-    h5.form-section-title.font-semibold.m-b-2
-      | Sign up for '#StartInCollege Six Ways'!
-    .simple-form-container
-      .row
-        = simple_form_for @form, url: six_ways_create_student_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { radio_buttons: :horizontal_radio_and_checkboxes } do |f|
-          = f.input :name, required: true
-          = f.input :email, required: true, disabled: @disable_email
+      h5.form-section-title.font-semibold.m-b-2
+        | Sign up for '#StartInCollege Six Ways'!
+      .simple-form-container
+        .row
+          = simple_form_for @form, url: six_ways_create_student_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { radio_buttons: :horizontal_radio_and_checkboxes } do |f|
+            = f.input :name, required: true
+            = f.input :email, required: true, disabled: @disable_email
 
-          = f.input :phone,
-            label: 'Mobile number',
-            input_html: { maxlength: 17, type: 'tel', pattern: MobileNumberValidator::FORM_EXPRESSION }
+            = f.input :phone,
+              label: 'Mobile number',
+              input_html: { maxlength: 17, type: 'tel', pattern: MobileNumberValidator::FORM_EXPRESSION }
 
-          = f.input :gender, required: true, collection: Founder.valid_gender_values, as: :radio_buttons, label_method: proc { |gender| gender.capitalize }
+            = f.input :gender, required: true, collection: Founder.valid_gender_values, as: :radio_buttons, label_method: proc { |gender| gender.capitalize }
 
-          // University is actually a required field, but select2 v3 does not play nice with HTML5 validations.
-          // TODO: Try enabling this when upgrading to select2 v4.
-          = f.input :university_id,
-            type: :hidden,
-            placeholder: 'Please pick your university',
-            input_html: { value: nil, 'data-search-url' => universities_url },
-            required: false
+            // University is actually a required field, but select2 v3 does not play nice with HTML5 validations.
+            // TODO: Try enabling this when upgrading to select2 v4.
+            = f.input :university_id,
+              type: :hidden,
+              placeholder: 'Please pick your university',
+              input_html: { value: nil, 'data-search-url' => universities_url },
+              required: false
 
-          = f.input :college, required: true
-          = f.input :semester, as: :select, collection: MoocStudent.valid_semester_values, include_blank: 'Select your semester'
-          = f.input :state,
-            collection: proc { University.valid_state_names },
-            include_blank: 'Please pick your state',
-            required: true
+            = f.input :college, required: true
+            = f.input :semester, as: :select, collection: MoocStudent.valid_semester_values, include_blank: 'Select your semester'
+            = f.input :state,
+              collection: proc { University.valid_state_names },
+              include_blank: 'Please pick your state',
+              required: true
 
-          .offset-sm-3
-            .simple-form-submit
-              = f.submit 'Sign up', class: 'btn btn-primary btn-md text-uppercase'
+            .offset-sm-3
+              .simple-form-submit
+                = f.submit 'Sign up', class: 'btn btn-primary btn-md text-uppercase'

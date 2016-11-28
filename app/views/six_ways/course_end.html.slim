@@ -7,37 +7,38 @@
     .application-stages-head.text-xs-center
       h1 Hurray! You have completed the #StartInCollege course!
 .container
-  .container-md-center.content-box.m-t-3.m-b-3
-    h3.text-xs-center
-      | You have reached the end of this course.
-      br
-      | Your total score is <strong>#{@final_score} %</strong>.
-    h4
-      | You may now print your 'Course Completion Certificate' with the present grade or try improving your score by retaking the quizzes.
+  .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
+    .content-box.m-t-3.m-b-3
+      h3.text-xs-center
+        | You have reached the end of this course.
+        br
+        | Your total score is <strong>#{@final_score} %</strong>.
+      h4
+        | You may now print your 'Course Completion Certificate' with the present grade or try improving your score by retaking the quizzes.
 
-    table.table
-      thead
-        tr
-          th #
-          th Module
-          th Score
-          th
-      tbody
-        - CourseModule.all.each do |course_module|
-          - next unless course_module.quiz?
+      table.table
+        thead
           tr
-            th scope="row"
-              ' #{course_module.module_number}
-            td #{course_module.name}
-            td #{current_mooc_student.score_for_module(course_module)} %
-            td #{link_to 'Retry', six_ways_quiz_path(course_module.id)}
+            th #
+            th Module
+            th Score
+            th
+        tbody
+          - CourseModule.all.each do |course_module|
+            - next unless course_module.quiz?
+            tr
+              th scope="row"
+                ' #{course_module.module_number}
+              td #{course_module.name}
+              td #{current_mooc_student.score_for_module(course_module)} %
+              td #{link_to 'Retry', six_ways_quiz_path(course_module.id)}
 
-    = link_to 'Print Certificate', six_ways_completion_certificate_path, class: 'btn btn-primary btn-md text-uppercase pull-right'
+      = link_to 'Print Certificate', six_ways_completion_certificate_path, class: 'btn btn-primary btn-md text-uppercase pull-right'
 
-    .text-xs-center
-      h5 Let your friends know!
-      a href="https://www.facebook.com/sharer/sharer.php?u=sv.co/sixways" target="_blank"
-        i.fa.fa-facebook-square.fa-2x
-      - default_tweet = URI.escape "I just completed the Sixwayx MOOC course by @SVdotCO and scored #{@final_score} %. Great experience! sv.co/sixways #StartInCollege"
-      a.margin-left-10 href="https://twitter.com/intent/tweet?text=#{default_tweet}&url=sv.co/sixways" target="_blank"
-        i.fa.fa-twitter-square.fa-2x
+      .text-xs-center
+        h5 Let your friends know!
+        a href="https://www.facebook.com/sharer/sharer.php?u=sv.co/sixways" target="_blank"
+          i.fa.fa-facebook-square.fa-2x
+        - default_tweet = URI.escape "I just completed the Sixwayx MOOC course by @SVdotCO and scored #{@final_score} %. Great experience! sv.co/sixways #StartInCollege"
+        a.margin-left-10 href="https://twitter.com/intent/tweet?text=#{default_tweet}&url=sv.co/sixways" target="_blank"
+          i.fa.fa-twitter-square.fa-2x

@@ -12,16 +12,17 @@
 .container
   .m-t-3
     == render 'application_progress'
-  .container-md-center.content-box.application-stages-content.m-t-3.m-b-2.text-xs-center
-    h3
-      ' It looks like
-      span.brand-secondary.font-regular your team didn't attend the interviews
-      ' &nbsp;and hence didn't make it to the upcoming batch of SV.CO.
-    h4.m-b-1
-      ' However, you are eligible for a certificate for progressing till this stage!
-    p
-      ' If you think we&rsquo;ve made a mistake, feel free to contact us at #{mail_to 'help@sv.co'},
-      br
-      ' and we&rsquo;ll get back to you as soon as we can.
+  .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
+    .content-box.application-stages-content.m-t-3.m-b-2.text-xs-center
+      h3
+        ' It looks like
+        span.brand-secondary.font-regular your team didn't attend the interviews
+        ' &nbsp;and hence didn't make it to the upcoming batch of SV.CO.
+      h4.m-b-1
+        ' However, you are eligible for a certificate for progressing till this stage!
+      p
+        ' If you think we&rsquo;ve made a mistake, feel free to contact us at #{mail_to 'help@sv.co'},
+        br
+        ' and we&rsquo;ll get back to you as soon as we can.
 
   == render 'certificate'

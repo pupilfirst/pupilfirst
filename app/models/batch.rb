@@ -4,6 +4,8 @@ class Batch < ApplicationRecord
   has_many :batch_applications
   has_many :batch_applicants, through: :batch_applications
   has_many :batch_stages, dependent: :destroy
+  has_many :targets
+  has_many :program_weeks
 
   accepts_nested_attributes_for :batch_stages, allow_destroy: true
 
@@ -56,13 +58,6 @@ class Batch < ApplicationRecord
 
   def selected_applications
     batch_applications.selected
-  end
-
-  def invite_selected_candidates!
-    Batch.transaction do
-      selected_applications.each(&:invite_applicants!)
-      update!(invites_sent_at: Time.now)
-    end
   end
 
   def invites_sent?

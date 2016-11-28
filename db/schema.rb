@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161125060700) do
+ActiveRecord::Schema.define(version: 20161128083959) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -136,7 +136,9 @@ ActiveRecord::Schema.define(version: 20161125060700) do
     t.string   "income_proof"
     t.string   "letter_from_parent"
     t.string   "college_contact"
+    t.integer  "founder_id"
     t.index ["college_id"], name: "index_batch_applicants_on_college_id", using: :btree
+    t.index ["founder_id"], name: "index_batch_applicants_on_founder_id", using: :btree
     t.index ["token"], name: "index_batch_applicants_on_token", using: :btree
   end
 
@@ -454,6 +456,16 @@ ActiveRecord::Schema.define(version: 20161125060700) do
     t.index ["founder_id"], name: "index_platform_feedback_on_founder_id", using: :btree
   end
 
+  create_table "program_weeks", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "number"
+    t.string   "icon"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "batch_id"
+    t.index ["batch_id"], name: "index_program_weeks_on_batch_id", using: :btree
+  end
+
   create_table "prospective_applicants", force: :cascade do |t|
     t.string   "name"
     t.string   "email"
@@ -626,6 +638,15 @@ ActiveRecord::Schema.define(version: 20161125060700) do
     t.index ["name"], name: "index_tags_on_name", unique: true, using: :btree
   end
 
+  create_table "target_groups", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "program_week_id"
+    t.index ["program_week_id"], name: "index_target_groups_on_program_week_id", using: :btree
+  end
+
   create_table "targets", force: :cascade do |t|
     t.integer  "days_from_start"
     t.string   "role"
@@ -643,8 +664,13 @@ ActiveRecord::Schema.define(version: 20161125060700) do
     t.integer  "timeline_event_type_id"
     t.integer  "assignee_id"
     t.string   "assignee_type"
+    t.integer  "days_to_complete"
+    t.string   "target_type"
+    t.integer  "target_group_id"
+    t.integer  "batch_id"
     t.index ["assignee_id"], name: "index_targets_on_assignee_id", using: :btree
     t.index ["assignee_type"], name: "index_targets_on_assignee_type", using: :btree
+    t.index ["batch_id"], name: "index_targets_on_batch_id", using: :btree
     t.index ["populate_on_start"], name: "index_targets_on_populate_on_start", using: :btree
     t.index ["timeline_event_type_id"], name: "index_targets_on_timeline_event_type_id", using: :btree
   end
@@ -755,6 +781,7 @@ ActiveRecord::Schema.define(version: 20161125060700) do
     t.index ["user_id", "user_type"], name: "index_visits_on_user_id_and_user_type", using: :btree
   end
 
+  add_foreign_key "batch_applicants", "founders"
   add_foreign_key "batch_applications", "startups"
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"

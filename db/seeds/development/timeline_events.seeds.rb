@@ -7,8 +7,8 @@ after 'development:startups' do
   avengers_startup = Startup.find_by(product_name: 'SuperHeroes')
 
   # generate the default joined SV.CO event for both startups
-  super_startup.prepopulate_timeline!
-  avengers_startup.prepopulate_timeline!
+  Startups::PrepopulateTimelineService.new(super_startup).execute
+  Startups::PrepopulateTimelineService.new(avengers_startup).execute
 
   VERIFIED = TimelineEvent::VERIFIED_STATUS_VERIFIED
   PENDING = TimelineEvent::VERIFIED_STATUS_PENDING

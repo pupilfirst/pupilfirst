@@ -10,53 +10,6 @@ class StartupsController < ApplicationController
     @skip_container = true
   end
 
-  def new
-    @skip_container = true
-
-    return if redirect_non_admin
-
-    if current_founder.phone.blank?
-      session[:referer] = new_founder_startup_url
-      redirect_to phone_founder_path
-      return
-    end
-
-    if current_founder.startup&.approved?
-      flash[:alert] = 'You already have an approved startup on SV.CO!'
-      redirect_to startup_url(current_founder.startup)
-    end
-
-    @startup = Startup.new
-  end
-
-  def create
-    @startup = Startup.new startup_registration_params
-
-    # setting attributes required for registration-specific validations
-    @startup.registration_token = current_founder.startup_token
-
-    # copy over the batch from current_founders invited_batch
-    @startup.batch = current_founder.invited_batch
-
-    if @startup.save
-      # generate a more meaningful slug
-      @startup.regenerate_slug!
-
-      # prepopulate the timeline with a 'Joined SV.CO' entry
-      @startup.prepopulate_timeline!
-
-      # TODO: Rewrite this to auto-deploy targets from the batch
-      # Add day-zero targets.
-      # @startup.prepopulate_targets
-
-      redirect_to startup_url(@startup)
-    else
-      # redirect back to startup new form to show errors
-      @skip_container = true
-      render 'startups/new'
-    end
-  end
-
   def show
     @skip_container = true
     @startup = Startup.friendly.find(params[:id])
@@ -146,15 +99,6 @@ class StartupsController < ApplicationController
   end
 
   private
-
-  def redirect_non_admin
-    if current_founder.startup_admin?
-      false
-    else
-      redirect_to(root_path, redirect_from: 'registration')
-      true
-    end
-  end
 
   def load_startups
     batch_id = params.dig(:startups_filter, :batch)

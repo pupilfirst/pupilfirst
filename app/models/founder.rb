@@ -36,6 +36,7 @@ class Founder < ApplicationRecord
   has_many :platform_feedback
   belongs_to :user
   belongs_to :college, optional: true
+  has_one :batch_applicant
 
   scope :batched, -> { joins(:startup).merge(Startup.batched) }
   scope :for_batch_id_in, -> (ids) { joins(:startup).where(startups: { batch_id: ids }) }
@@ -133,7 +134,6 @@ class Founder < ApplicationRecord
   process_in_background :college_identification
 
   mount_uploader :identification_proof, IdentificationProofUploader
-  process_in_background :identification_proof
 
   normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :name, :slack_username, :resume_url
 

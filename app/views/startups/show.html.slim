@@ -157,7 +157,7 @@
             .col-sm-6.col-md-12
               h3 Founders
               hr
-              - @startup.founders.registered.order(:name).each do |founder|
+              - @startup.founders.order(:name).each do |founder|
                 .data-founder
                   .media
                     .media-left
@@ -176,20 +176,7 @@
                           li
                             a href="#{founder.linkedin_url}" target='_blank'
                               i.fa.fa-linkedin-square
-              - if @startup.founder?(current_founder)
-                - @startup.founders.not_registered.order(:email).each do |founder|
-                  .data-founder
-                    .media
-                      .media-left
-                        a.media-object
-                          .founder-image style="background-image: url('#{profile_image_url founder, gravatar_size: 128, avatar_version: :mid}');"
-                      .media-body
-                        .media-heading
-                          .text-lowercase #{founder.email}
-                        p This founder is yet to complete his registration on SV.CO!
-              - elsif @startup.founders.not_registered.present?
-                .alert.alert-info
-                  ' + #{pluralize(@startup.founders.not_registered.count, 'founder')} yet to register!
+
         .row
           - if @startup.team_members.present?
             .col-sm-6.col-md-12

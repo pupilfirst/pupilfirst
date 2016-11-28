@@ -2,18 +2,39 @@
   title SV.CO Apply Now
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
 
-.container
-  .apply-banner
-    .row
-      .col-md-4
-        h1 Forget to send documents in time?
-.apply-container
+.secondary-banner
   .container
-    .row
-      .col-md-7.col-md-push-5
-        .batch-results.margin-bottom-20
-          .result-head
-            p
-              ' Did you forget to mail in signed documents in time? We'll reach out to you as soon as possible.
+    .stages-alert-icon.m-x-auto
+      = image_tag 'apply/batch_application/expired-icon.svg'
+    .application-stages-head.text-xs-center
+      h2
+        | Agreements &amp; Fee Deadline is Over!
 
-      == render 'left_bar'
+.container
+  .m-t-3
+    == render 'application_progress'
+
+  .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
+    .content-box.application-stages-content.m-t-3.m-b-2.text-xs-center
+      h4.font-semibold
+        ' Unfortunately you missed the deadline for paying the fee and
+        br
+        | will not make it to Batch
+
+      p.m-b-2
+        ' If this is a mistake, write to #{mail_to 'help@sv.co'} immediately!
+
+      h4
+        ' Because of the limited number of scholarships available, we couldn't
+        ' sponsor your team fully. We're sorry that you're missing out on this
+        | amazing opportunity to build your startup. <strong>Do apply again!</strong>
+
+      h4
+        ' The dates of the next batch start will always be available at #{link_to 'www.sv.co/apply', apply_url}
+        br
+          | Best wishes from the Team at SV.CO.
+
+      h5.m-b-1.m-t-1.font-semibold
+        ' You are also eligible for a certificate for progressing till this stage!
+
+  == render 'certificate'

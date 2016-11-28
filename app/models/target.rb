@@ -28,6 +28,17 @@ class Target < ApplicationRecord
     target_roles + Founder.valid_roles
   end
 
+  TYPE_TODO = 'To Do'
+  TYPE_ATTEND = 'Attend'
+  TYPE_READ = 'Read'
+  TYPE_LEARN = 'Learn'
+
+  def self.valid_target_types
+    [TYPE_TODO, TYPE_ATTEND, TYPE_READ, TYPE_LEARN].freeze
+  end
+
+  validates_inclusion_of :target_type, in: valid_target_types, allow_nil: true
+
   # Need to allow these two to be read for AA form.
   attr_reader :startup_id, :founder_id
 

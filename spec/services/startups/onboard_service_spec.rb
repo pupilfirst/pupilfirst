@@ -25,6 +25,7 @@ describe Startups::OnboardService do
       new_startup = batch_application.reload.startup
 
       expect(new_startup.product_name).to match(/[A-Z][a-z]+\s[A-Z][a-z]+/)
+      expect(new_startup.batch).to eq(batch_application.batch)
     end
 
     it 'sets up founders correctly' do

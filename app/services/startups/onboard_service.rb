@@ -39,7 +39,7 @@ module Startups
 
       begin
         name = ProductNameGeneratorService.new.fun_name
-        Startup.create!(product_name: name, batch_application: batch_application)
+        @batch.startups.create!(product_name: name, batch_application: batch_application)
       rescue ActiveRecord::RecordNotUnique
         retry
       end

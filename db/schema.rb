@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161128082342) do
+ActiveRecord::Schema.define(version: 20161128082710) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -660,6 +660,7 @@ ActiveRecord::Schema.define(version: 20161128082342) do
     t.string   "assignee_type"
     t.integer  "days_to_complete"
     t.string   "target_type"
+    t.integer  "target_group_id"
     t.index ["assignee_id"], name: "index_targets_on_assignee_id", using: :btree
     t.index ["assignee_type"], name: "index_targets_on_assignee_type", using: :btree
     t.index ["populate_on_start"], name: "index_targets_on_populate_on_start", using: :btree

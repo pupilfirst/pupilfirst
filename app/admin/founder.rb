@@ -244,9 +244,7 @@ ActiveAdmin.register Founder do
 
       row :identification_proof do
         if founder.identification_proof.present?
-          link_to founder.identification_proof.url do
-            image_tag founder.identification_proof.thumb.url
-          end
+          link_to 'Click here to open in new window', founder.identification_proof.url, target: '_blank'
         end
       end
 

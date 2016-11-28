@@ -99,7 +99,7 @@ class Startup < ApplicationRecord
 
   has_many :founders
 
-  validates_presence_of :product_name
+  validates :product_name, presence: true, uniqueness: { case_sensitive: false, scope: :batch_id }
 
   has_and_belongs_to_many :startup_categories do
     def <<(_category)
@@ -127,10 +127,6 @@ class Startup < ApplicationRecord
 
   # TODO: probable stale attribute
   attr_reader :validate_registration_type
-
-  # TODO: is the validate_web_mandatory_fields flag still required?
-  # Some fields are mandatory when editing from web.
-  validates_presence_of :product_name, if: :validate_web_mandatory_fields
 
   # TODO: probably stale
   # Registration type is required when registering.
@@ -401,20 +397,6 @@ class Startup < ApplicationRecord
       timeline_events.order(:event_on, :updated_at).reverse_order
     else
       timeline_events.verified_or_needs_improvement.order(:event_on, :updated_at).reverse_order
-    end
-  end
-
-  def prepopulate_timeline!
-    create_default_event %w(joined_svco)
-  end
-
-  def create_default_event(types)
-    types.each do |type|
-      timeline_events.create(
-        founder: admin, timeline_event_type: TimelineEventType.find_by(key: type), auto_populated: true,
-        image: File.open("#{Rails.root}/app/assets/images/timeline/joined_svco_cover.png"),
-        verified_at: Time.now, event_on: Time.now
-      )
     end
   end
 

@@ -49,12 +49,13 @@ after 'development:founders', 'development:timeline_event_types', 'development:b
 
   # make ironman the team lead
   founder = Founder.find_by(email: 'ironman@avengers.co')
+  founder.update!(startup_admin: true)
   avengers_startup.founders << founder
-  avengers_startup.save!
 
   # Add all the other avengers as founders
   avengers_startup.founders << Founder.find_by(email: 'ultron@avengers.co')
   avengers_startup.founders << Founder.find_by(email: 'wasp@avengers.co')
   avengers_startup.founders << Founder.find_by(email: 'hulk@avengers.co')
   avengers_startup.founders << Founder.find_by(email: 'thor@avengers.co')
+  avengers_startup.save!
 end

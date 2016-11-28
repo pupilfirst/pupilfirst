@@ -112,21 +112,6 @@ class BatchApplication < ApplicationRecord
     payment.paid?
   end
 
-  def invite_applicants!
-    # create unique tokens using time and id
-    startup_token = Time.now.in_time_zone('Asia/Calcutta').strftime('%a, %e %b %Y, %I:%M:%S %p IST') + " ID#{id}"
-
-    Founder.transaction do
-      # Invite team lead.
-      Founder.invite! email: team_lead.email, invited_batch: batch, startup_token: startup_token, startup_admin: true
-
-      # Invite cofounders one by one.
-      cofounders.each do |cofounder|
-        Founder.invite! email: cofounder.email, invited_batch: batch, startup_token: startup_token
-      end
-    end
-  end
-
   # Called after payment is known to have succeeded. This automatically promotes stage 1 applications to stage 2.
   def perform_post_payment_tasks!
     promote!(force: true) if application_stage.initial_stage?

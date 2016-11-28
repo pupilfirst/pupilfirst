@@ -136,7 +136,9 @@ ActiveRecord::Schema.define(version: 20161128083959) do
     t.string   "income_proof"
     t.string   "letter_from_parent"
     t.string   "college_contact"
+    t.integer  "founder_id"
     t.index ["college_id"], name: "index_batch_applicants_on_college_id", using: :btree
+    t.index ["founder_id"], name: "index_batch_applicants_on_founder_id", using: :btree
     t.index ["token"], name: "index_batch_applicants_on_token", using: :btree
   end
 
@@ -779,6 +781,7 @@ ActiveRecord::Schema.define(version: 20161128083959) do
     t.index ["user_id", "user_type"], name: "index_visits_on_user_id_and_user_type", using: :btree
   end
 
+  add_foreign_key "batch_applicants", "founders"
   add_foreign_key "batch_applications", "startups"
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"

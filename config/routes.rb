@@ -29,7 +29,7 @@ Rails.application.routes.draw do
       patch 'update_password'
     end
 
-    resource :startup, only: [:new, :create, :edit, :update, :destroy] do
+    resource :startup, only: [:edit, :update, :destroy] do
       post :add_founder
       patch :remove_founder
       patch :change_admin

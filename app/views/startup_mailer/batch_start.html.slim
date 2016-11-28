@@ -1,0 +1,22 @@
+= content_for :heading
+  | Your startup journey awaits!
+
+= content_for :salutation
+  | Hello,
+
+= content_for :body
+  p
+    ' Congratulations on your acceptance to SV.CO&rsquo;s six month Silicon Valley programme. We hope you&rsquo;re ready
+    | to get started!
+
+  p
+    ' Your new startup's timeline is now ready. #{link_to 'Click here', @startup} to login with your registered email
+    | address and get started!
+
+  p
+    ' If you're unable to click on the link to your startup timeline (above), then please copy and paste the following
+    | link into your browser's address bar:
+
+  p.monospace = startup_url(@startup)
+
+  p Good luck, and have fun!

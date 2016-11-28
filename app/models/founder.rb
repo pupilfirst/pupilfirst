@@ -47,10 +47,6 @@ class Founder < ApplicationRecord
   scope :non_founders, -> { where(startup_id: nil) }
   scope :in_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch.id }) }
 
-  # a verified 'phone' implies registration was completed
-  scope :registered, -> { where.not(phone: nil) }
-  scope :not_registered, -> { where(phone: nil) }
-
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
 

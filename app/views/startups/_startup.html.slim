@@ -69,7 +69,7 @@
       .startupcard-footer.clearfix
         - if startup.founders.present?
           .founder-avatar-list
-            - startup.founders.registered.order(:name).each do |founder|
+            - startup.founders.order(:name).each do |founder|
               .founder-tooltip.tooltip-popup
                 a.tooltip-item.startup-founder-avatar href=founder_profile_url(slug: founder.slug)
                   img alt="Founder profile image" src="#{profile_image_url founder, gravatar_size: 128, avatar_version: :mid}"

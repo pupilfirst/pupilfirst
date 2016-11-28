@@ -206,7 +206,7 @@ module PartnershipDeed
     end
 
     def batch_applicants
-      @batch_applicants ||= @batch_application.batch_applicants
+      @batch_applicants ||= [@batch_application.team_lead] + @batch_application.cofounders.to_a
     end
   end
 end

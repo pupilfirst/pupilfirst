@@ -14,7 +14,6 @@ ActiveAdmin.register MoocStudent do
   filter :state
   filter :gender, as: :select, collection: Founder.valid_gender_values
   filter :created_at
-  filter :completed_chapters
 
   controller do
     def scoped_collection

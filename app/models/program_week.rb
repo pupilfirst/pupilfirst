@@ -3,5 +3,5 @@ class ProgramWeek < ApplicationRecord
   belongs_to :batch
 
   validates_presence_of :name, :number
-  # validates_uniqueness_of :number, scope: :batch_id
+  validates_uniqueness_of :number, scope: :batch_id
 end

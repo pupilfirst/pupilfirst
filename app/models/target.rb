@@ -42,7 +42,7 @@ class Target < ApplicationRecord
   # Need to allow these two to be read for AA form.
   attr_reader :startup_id, :founder_id
 
-  validates_presence_of :assignee_id, :assignee_type, :assigner_id, :role, :title, :description
+  validates_presence_of :role, :title, :description
   validates_inclusion_of :role, in: valid_roles
 
   def founder?

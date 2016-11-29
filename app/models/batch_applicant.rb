@@ -1,5 +1,6 @@
 class BatchApplicant < ApplicationRecord
   include Taggable
+  include PrivateFilenameRetrievable
 
   PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP = -'Hardship Scholarship'
   PAYMENT_METHOD_POSTPAID_FEE = -'Postpaid Fee'
@@ -86,10 +87,6 @@ class BatchApplicant < ApplicationRecord
     required_fields += [:income_proof, :letter_from_parent, :college_contact] if income_proofs_required?
 
     required_fields.all? { |field| self[field].present? }
-  end
-
-  def filename(field)
-    public_send(field).sanitized_file.original_filename
   end
 
   def income_proofs_required?

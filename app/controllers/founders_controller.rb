@@ -9,12 +9,12 @@ class FoundersController < ApplicationController
 
   # GET /founders/:id/edit
   def edit
-    @founder = current_founder
+    @founder = current_founder.decorate
   end
 
   # PATCH /founders/:id
   def update
-    @founder = Founder.find current_founder.id
+    @founder = current_founder
 
     # Remove 'other' college ID if selected by founder.
     params[:founder].delete(:college_id) if params.dig(:founder, :college_id) == 'other'
@@ -23,6 +23,7 @@ class FoundersController < ApplicationController
       flash[:notice] = 'Profile updated'
       redirect_to founder_profile_path(slug: @founder.slug)
     else
+      @founder = @founder.decorate
       render 'edit'
     end
   end

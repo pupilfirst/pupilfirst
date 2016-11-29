@@ -21,6 +21,14 @@ ActiveAdmin.register MoocStudent do
     end
   end
 
+  scope :all, default: true
+  scope 'Module 2 Complete' do |mooc_students|
+    mooc_students.completed_quiz(CourseModule.find_by(module_number: 2))
+  end
+  scope 'Module 3 Complete' do |mooc_students|
+    mooc_students.completed_quiz(CourseModule.find_by(module_number: 3))
+  end
+
   index do
     selectable_column
 

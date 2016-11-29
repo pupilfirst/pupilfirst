@@ -1,3 +1,13 @@
+### 29 November, 2016
+
+#### Features
+
+  - The on-boarding process of new founders has been rebuilt to require no extra action from founders, given that we've accepted most of the information we need during the application process.
+
+#### Bugfixes
+
+  - The live chat feature's image upload function was broken. This has been fixed.
+
 ### 21 November, 2016
 
 #### Features

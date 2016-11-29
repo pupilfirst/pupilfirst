@@ -1,9 +1,24 @@
 ## Ongoing
 
-- Onboaring flow for applicants who have completed the application process is being built. [[Trello]](https://trello.com/c/DwPEHw4E)
-- Enterprise Edition prototype is under construction. [[Trello]](https://trello.com/c/0MZB3vhU)
+- Changes to database and admin interface for new Founder Dashboard and Targets Framework is in progress. [[Trello]](https://trello.com/c/1Q0bNMcR)
 - Design phase of Founder dashboard is ongoing. [[Trello]](https://trello.com/c/sITTzECe)
-- Rejected and Expired pages for Stage 4 are being built [[Trello]](https://trello.com/c/4S2tDdf6)
+
+## 2016.11.29
+
+- Onboaring flow for applicants who have completed the application is online. Trello [[1]](https://trello.com/c/DwPEHw4E) [[2]](https://trello.com/c/OldpCMgw)
+- Application fee refund is now applied to another applicant if team lead has scholarship. [[Trello]](https://trello.com/c/1B9R2566)
+- `target_templates` table has been removed in favor of using the `targets` table. [[Trello]](https://trello.com/c/bcSLW4JN)
+- Fix: Intercom image uploads were broken. [[Trello]](https://trello.com/c/Rr6lDSUo)
+- Visual timeline of _CareerKhojj_ was updated. [[Trello]](https://trello.com/c/qH1vLXB4)
+- Stage 4 completion pages have a new banner. [[Trello]](https://trello.com/c/4S2tDdf6)
+- Seed final stage application and applicants. [[Trello]](https://trello.com/c/ADnDQxrg)
+- Admissions Stats notification job now has a basic spec. [[Trello]](https://trello.com/c/verll8rm)
+- `BatchApplication#status` now correctly handles _closed_ state applications. [[Trello]](https://trello.com/c/ldDeR6Rz)
+- Startups are now created with a _fun name_. [[Trello]](https://trello.com/c/xdmQNNYS)
+- Founders do not require registration scopes. [[Trello]](https://trello.com/c/7Bv91hhr)
+- Upgrade to Ruby 2.3.3. [[Trello]](https://trello.com/c/5yat3uvI)
+- Founder's `first_name` and `last_name` have been merged to new `name`. [[Trello]](https://trello.com/c/yh0Mkfir)
+- Content has been added for final stage rejection and expiry pages. [[Trello]](https://trello.com/c/WDJdFd93)
 
 ## 2016.11.21
 

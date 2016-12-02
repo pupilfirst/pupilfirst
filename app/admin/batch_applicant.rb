@@ -161,11 +161,11 @@ ActiveAdmin.register BatchApplicant do
         row :id_proof_number
 
         row :id_proof do |applicant|
-          link_to(image_tag(applicant.id_proof_url(:thumb)), applicant.id_proof_url) if applicant.id_proof.present?
+          link_to 'Click here to open in new window', applicant.id_proof.url, target: '_blank' if applicant.id_proof.present?
         end
 
         row :address_proof do |applicant|
-          link_to(image_tag(applicant.address_proof_url(:thumb)), applicant.address_proof_url) if applicant.address_proof.present?
+          link_to 'Click here to open in new window', applicant.address_proof.url, target: '_blank' if applicant.address_proof.present?
         end
       end
     end

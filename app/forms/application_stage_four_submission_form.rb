@@ -26,6 +26,6 @@ class ApplicationStageFourSubmissionForm < Reform::Form
   end
 
   def deed_help_extra
-    model.partnership_deed.present? ? "Upload another file if you wish to replace <code>#{model.partnership_deed.file.filename}</code><br/>" : ''
+    "Upload another file if you wish to replace <code>#{model.filename(:partnership_deed)}</code><br/>" if model.partnership_deed.present?
   end
 end

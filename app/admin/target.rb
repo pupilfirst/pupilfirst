@@ -94,7 +94,6 @@ ActiveAdmin.register Target do
     end
     column :target_group
 
-    # TODO: Probably remove assignee for the new scheme of targets
     column :assignee
 
     column :role do |target|

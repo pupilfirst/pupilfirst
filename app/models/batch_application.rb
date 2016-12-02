@@ -1,5 +1,6 @@
 class BatchApplication < ApplicationRecord
   include Taggable
+  include PrivateFilenameRetrievable
 
   APPLICATION_FEE = 3000
   COURSE_FEE = 37_500

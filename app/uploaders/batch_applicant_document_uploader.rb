@@ -1,5 +1,4 @@
 class BatchApplicantDocumentUploader < CarrierWave::Uploader::Base
-  include CarrierWave::Backgrounder::Delay
   include CarrierWave::MiniMagick
   include CarrierWave::BombShelter
 

@@ -45,6 +45,7 @@ class FoundersController < ApplicationController
 
   # GET /founder/dashboard
   def dashboard
+    @header_non_floating = true
     @skip_container = true
     render layout: 'application_v2'
   end

@@ -1,0 +1,46 @@
+.founder-dashboard-container {
+  background-color: #F5F5F5;
+}
+.fixed-dashboard-header {
+  background-color: white;
+  height: 100px;
+  border-bottom: 1px solid $gray-border;
+}
+.targets-board {
+  max-width: 45rem;
+  position: relative;
+
+  .program-week {
+    margin: 120px 0 0 0;
+    padding: 0;
+    list-style: none;
+    position: relative;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      bottom: -60px;
+      background: $light-secondary;
+      left: calc(50% - 2px);
+      width: 3px;
+      z-index: 0;
+    }
+    .target-group {
+      position: relative;
+      background-color: white;
+      border: 1px solid $gray-border;
+      margin-bottom: 60px;
+      @include border-radius(10px);
+
+      .target-group-header {
+        padding: 30px;
+      }
+
+      .target {
+        border-top: 1px solid $gray-border;
+        padding: 30px;
+      }
+    }
+  }
+}

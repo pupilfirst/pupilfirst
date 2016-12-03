@@ -607,10 +607,6 @@ GEM
       rake (>= 0.8.1)
     pdf-core (0.6.1)
     pg (0.19.0)
-    phony (2.15.33)
-    phony_rails (0.14.4)
-      activesupport (>= 3.0)
-      phony (~> 2.15)
     poltergeist (1.11.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -933,7 +929,6 @@ DEPENDENCIES
   overcommit
   passenger (>= 5.0.22)
   pg
-  phony_rails
   poltergeist
   postmark-rails
   prawn

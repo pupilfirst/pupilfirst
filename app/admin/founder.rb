@@ -236,8 +236,6 @@ ActiveAdmin.register Founder do
       end
 
       row :phone
-      row :unconfirmed_phone
-      row :phone_verification_code
       row :communication_address
 
       row :designation

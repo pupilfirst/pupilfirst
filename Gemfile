@@ -35,7 +35,6 @@ gem 'turbolinks' # Quicker page navigation. https://github.com/turbolinks/turbol
 gem 'uglifier', '>= 2.7.2' # JavaScript compressor.
 gem 'rest-client' # Used to contact Fast Alerts' API.
 gem 'cancancan', '~> 1.8' # Used to manage administrator types and roles in the ActiveAdmin interface.
-gem 'phony_rails' # Phone number validation and normalization.
 
 # Select2 javascript select box improvement library, using in ActiveAdmin interface.
 # TODO: This gem currently serves version 3.x of select2. Version 4 (released) has breaking changes. Take care when upgrading.

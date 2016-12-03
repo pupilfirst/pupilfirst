@@ -61,25 +61,6 @@ ActiveAdmin.register Target do
     end
   end
 
-  member_action :duplicate, method: :get do
-    target = Target.find(params[:id])
-    redirect_to(
-      new_admin_target_path(
-        target: {
-          role: target.role, title: target.title, description: target.description,
-          resource_url: target.resource_url, completion_instructions: target.completion_instructions,
-          due_date_date: target.due_date_date, due_date_time_hour: target.due_date.hour,
-          due_date_time_minute: target.due_date.min, slideshow_embed: target.slideshow_embed,
-          assigner_id: target.assigner.id, review_test_embed: target.review_test_embed
-        }
-      )
-    )
-  end
-
-  action_item :duplicate, only: :show do
-    link_to 'Duplicate', duplicate_admin_target_path(id: params[:id])
-  end
-
   index do
     selectable_column
 
@@ -102,9 +83,7 @@ ActiveAdmin.register Target do
 
     column :title
 
-    actions defaults: true do |target|
-      link_to 'Duplicate', duplicate_admin_target_path(target)
-    end
+    actions
   end
 
   show do |target|

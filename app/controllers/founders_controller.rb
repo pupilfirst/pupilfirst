@@ -28,22 +28,6 @@ class FoundersController < ApplicationController
     end
   end
 
-  # PATCH /founder/update_password
-  def update_password
-    @founder = current_founder
-
-    if @founder.update_with_password(founder_password_change_params)
-      # Sign in the founder by passing validation in case his password changed
-      sign_in @founder, bypass: true
-
-      flash[:success] = 'Password updated'
-
-      redirect_to founder_profile_path(slug: @founder.slug)
-    else
-      render 'edit'
-    end
-  end
-
   # GET /founder/phone
   def phone
     @skip_container = true

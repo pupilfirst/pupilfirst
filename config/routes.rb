@@ -25,10 +25,6 @@ Rails.application.routes.draw do
       post 'verify'
     end
 
-    collection do
-      patch 'update_password'
-    end
-
     resource :startup, only: [:edit, :update, :destroy] do
       post :add_founder
       patch :remove_founder

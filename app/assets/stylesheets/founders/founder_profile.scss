@@ -209,21 +209,6 @@
           color: #6b6b6b;
         }
 
-        .founder-email, .phone-number {
-          font-size: 14px;
-          color: #6b6b6b;
-          margin-right: 25px;
-
-          @media (max-width: $screen-md-max) {
-            margin-right: 5px;
-          }
-        }
-
-        .founder-email i, .phone-number i {
-          margin-right: 10px;
-          font-size: 16px;
-        }
-
         @media (min-width: $screen-sm-max) {
           padding-left: 0;
         }

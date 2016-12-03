@@ -16,15 +16,6 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
 
   resource :founder, only: [:edit, :update] do
-    member do
-      get 'phone'
-      patch 'set_unconfirmed_phone'
-      get 'phone_verification'
-      post 'code'
-      patch 'resend'
-      post 'verify'
-    end
-
     resource :startup, only: [:edit, :update, :destroy] do
       post :add_founder
       patch :remove_founder

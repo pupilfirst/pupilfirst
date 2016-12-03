@@ -200,17 +200,6 @@ class Founder < ApplicationRecord
   end
 
   validates_uniqueness_of :slack_username, allow_blank: true
-  validates_uniqueness_of :phone, allow_blank: true
-
-  validate :unconfirmed_phone_must_be_unique
-
-  def unconfirmed_phone_must_be_unique
-    return if unconfirmed_phone.nil?
-    return unless unconfirmed_phone_changed?
-    return if Founder.find_by(phone: unconfirmed_phone).blank?
-
-    errors[:unconfirmed_phone] << 'is taken. Please enter your personal mobile phone number.'
-  end
 
   validate :slack_username_format
 
@@ -237,32 +226,6 @@ class Founder < ApplicationRecord
     self.startup_id = nil
     self.startup_admin = nil
     save! validate: false
-  end
-
-  # Store unconfirmed phone number in a standardized form. Confirmed phone number will be copied from this field.
-  phony_normalize :unconfirmed_phone, default_country_code: 'IN', add_plus: false
-
-  # Validate the unconfirmed phone number after it has been normalized.
-  validates_plausible_phone :unconfirmed_phone, normalized_country_code: 'IN', allow_nil: true
-
-  def generate_phone_number_verification_code!
-    self.phone_verification_code = SecureRandom.random_number(1_000_000).to_s.ljust(6, '0')
-    self.verification_code_sent_at = Time.now
-    save!
-
-    [phone_verification_code, unconfirmed_phone]
-  end
-
-  def verify_phone_number!(verification_code)
-    if unconfirmed_phone? && (verification_code == phone_verification_code)
-      # Store 'verified' phone number
-      self.phone = unconfirmed_phone
-      self.unconfirmed_phone = nil
-      self.phone_verification_code = nil
-      save!
-    else
-      raise Exceptions::PhoneNumberVerificationFailed, 'Supplied verification code does not match stored values.'
-    end
   end
 
   def_delegator :startup, :present?, :member_of_startup?

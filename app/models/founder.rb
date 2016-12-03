@@ -228,30 +228,6 @@ class Founder < ApplicationRecord
     save! validate: false
   end
 
-  def_delegator :startup, :present?, :member_of_startup?
-
-  # Add founder with given email as co-founder if possible.
-  def add_as_founder_to_startup!(email)
-    founder = Founder.find_by email: email
-
-    raise Exceptions::FounderNotFound unless founder
-
-    if founder.startup.present?
-      exception_class = if founder.startup == startup
-        Exceptions::FounderAlreadyMemberOfStartup
-      else
-        Exceptions::FounderAlreadyHasStartup
-      end
-
-      raise exception_class
-    else
-      founder.startup = startup
-      founder.save! validate: false
-
-      FounderMailer.cofounder_addition(email, self).deliver_later
-    end
-  end
-
   def self.valid_roles
     %w(product engineering marketing governance design)
   end
@@ -356,13 +332,6 @@ class Founder < ApplicationRecord
     team_lead_candidate&.update!(startup_admin: true)
   end
 
-  # Only applicable to startup admins, during startup creation.
-  def pending_cofounders
-    raise StandardError unless startup_admin? && startup.blank?
-
-    Founder.where.not(id: id).where(startup_token: startup_token).order('id ASC')
-  end
-
   # Should we give the founder a tour of the timeline? If so, we shouldn't give it again.
   def tour_timeline?
     if timeline_toured?
@@ -385,10 +354,6 @@ class Founder < ApplicationRecord
 
   def any_targets?
     targets.present? || startup&.targets.present?
-  end
-
-  def self.lead_of(startup_token)
-    find_by(startup_token: startup_token, startup_admin: true)
   end
 
   def latest_nps

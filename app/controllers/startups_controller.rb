@@ -1,7 +1,6 @@
 class StartupsController < ApplicationController
   before_action :authenticate_founder!, except: [:show, :index]
-  before_action :restrict_to_startup_founders, only: [:edit, :update, :add_founder]
-  before_action :restrict_to_startup_admin, only: [:remove_founder, :create]
+  before_action :restrict_to_startup_founders, only: [:edit, :update]
 
   # GET /startups
   def index
@@ -44,38 +43,6 @@ class StartupsController < ApplicationController
     else
       render 'startups/edit'
     end
-  end
-
-  # POST /add_founder
-  def add_founder
-    begin
-      current_founder.add_as_founder_to_startup!(params[:cofounder][:email])
-    rescue Exceptions::FounderNotFound
-      flash[:error] = "Couldn't find a founder with the SV.CO ID you supplied. Please verify founder's registered email address."
-    rescue Exceptions::FounderAlreadyMemberOfStartup
-      flash[:info] = 'The SV.CO ID you supplied is already linked to your startup!'
-    rescue Exceptions::FounderAlreadyHasStartup
-      flash[:notice] = 'The SV.CO ID you supplied is already linked to another startup. Are you sure you have the right e-mail address?'
-    else
-      flash[:success] = "SV.CO ID #{params[:email]} has been linked to your startup as founder"
-    end
-
-    redirect_to edit_founder_startup_path
-  end
-
-  # PATCH /remove_founder
-  def remove_founder
-    founder_to_remove = current_founder.startup.founders.find_by id: params[:founder_id]
-
-    if founder_to_remove.present?
-      founder_to_remove.startup_id = nil
-      founder_to_remove.save(validate: false)
-      flash.now[:success] = 'The founder was successfully removed from your startup!'
-    else
-      flash.now[:error] = 'There was an error in removing the founder!'
-    end
-
-    redirect_to edit_founder_startup_path
   end
 
   # DELETE /founders/:id/startup/destroy
@@ -141,11 +108,6 @@ class StartupsController < ApplicationController
 
   def restrict_to_startup_founders
     return if current_founder
-    raise_not_found
-  end
-
-  def restrict_to_startup_admin
-    return if current_founder.startup_admin?
     raise_not_found
   end
 

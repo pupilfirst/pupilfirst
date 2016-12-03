@@ -1,36 +1,6 @@
 - content_for :head
   title SV.CO Edit #{@startup.product_name} Timeline
 
-h2.page-header Modify founders
-
-.row
-  .col-sm-9.col-sm-offset-3
-    table.table.founders-table
-      caption Current list of founders
-      tbody
-        tr
-          td colspan="2"
-            ' #{current_founder.email}
-            strong
-              | (you)
-        - @startup.cofounders(current_founder).each do |cofounder|
-          tr
-            td #{cofounder.email}
-            td
-              - if @startup.admin?(current_founder)
-                = button_to 'Remove', remove_founder_founder_startup_path(founder_id: cofounder.id), method: :patch, class: 'btn btn-danger btn-xs', data: { confirm: 'Are you sure you want to remove this founder from your startup?' }
-
-- if @startup.founders.size < 5
-  = simple_form_for :cofounder, url: add_founder_founder_startup_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean } do |f|
-    = f.input :email, placeholder: 'founder@yourstartup.com', label: "Founder's SV.CO ID"
-
-    .form-group
-      .col-sm-offset-3.col-sm-9
-        = f.button :submit, 'Add as co-founder', class: 'btn btn-primary btn-flat'
-- else
-  .alert.alert-danger.col-sm-offset-3.col-sm-9
-    ' You have reached the maximum number of founders allowed!
-
 - if feature_active? :team_members
   h2.page-header#modify-team-members Modify team members
 

@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
 
   resource :founder, only: [:edit, :update] do
-    resource :startup, only: [:edit, :update, :destroy] do
+    resource :startup, only: [:edit, :update] do
       resources :timeline_events, only: [:create, :destroy, :update]
       resources :team_members, except: [:index]
     end

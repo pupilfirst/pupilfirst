@@ -162,9 +162,6 @@ Rails.application.routes.draw do
   # custom defined 404 route to use with shortener gem's config
   get '/404', to: 'home#not_found'
 
-  # to test rotating background images.
-  get '/test_background', to: 'home#test_background'
-
   # Previous sixways page re-directed to startincollege
   # get 'sixways', to: redirect('/startincollege')
 

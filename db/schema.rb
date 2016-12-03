@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161129062517) do
+ActiveRecord::Schema.define(version: 20161203065011) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -647,6 +647,13 @@ ActiveRecord::Schema.define(version: 20161129062517) do
     t.integer  "number"
     t.index ["number"], name: "index_target_groups_on_number", using: :btree
     t.index ["program_week_id"], name: "index_target_groups_on_program_week_id", using: :btree
+  end
+
+  create_table "target_prerequisites", force: :cascade do |t|
+    t.integer "target_id"
+    t.integer "prerequisite_target_id"
+    t.index ["prerequisite_target_id"], name: "index_target_prerequisites_on_prerequisite_target_id", using: :btree
+    t.index ["target_id"], name: "index_target_prerequisites_on_target_id", using: :btree
   end
 
   create_table "targets", force: :cascade do |t|

@@ -88,4 +88,14 @@ class Target < ApplicationRecord
 
     Target.send(batch_scope, batch).send(status_scope).where(target_template: template)
   end
+
+  # due date for the target calculated using days_to_complete starting from program_week start.
+  def due_date
+    return nil unless days_to_complete.present?
+
+    week_start = target_group&.program_week&.start_date
+    return nil unless week_start.present?
+
+    week_start + days_to_complete.days
+  end
 end

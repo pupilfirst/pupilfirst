@@ -16,4 +16,18 @@
   .row
     .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
       .content-box.application-stages-content.m-t-3.m-b-3
-        h4.text-xs-center Your team is now a part of the program!
+        .congrats-box.p-a-1.text-xs-center
+          h3.brand-secondary
+            ' <strong>Congratulations!&#128144;</strong>
+          h4.font-regular.brand-secondary
+            ' We have verified your agreements, and have processed your payment.
+        h4.font-regular.text-xs-center.m-t-2
+          ' You'll soon receive a payment receipt to your team lead's email.
+          br
+          ' We expect the batch to <strong>start on #{@batch.start_date.strftime('%B %-d, %Y')}.</strong>
+        p.text-xs-center
+          '	Please contact #{mail_to 'help@sv.co'} for any questions.
+        p.m-t-1.text-xs-center
+          | Regards,
+        h4.text-xs-center.font-regular.brand-primary
+          |	Team at SV.CO

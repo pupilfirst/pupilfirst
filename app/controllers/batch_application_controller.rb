@@ -311,6 +311,10 @@ class BatchApplicationController < ApplicationController
     @batch_application = current_application.decorate
   end
 
+  def stage_5
+    @batch = current_application.batch
+  end
+
   # PATCH /apply/stage/4/update_applicant
   # receives founder details, generates required pdf and redirects back to updated stage_4 page
   def update_applicant

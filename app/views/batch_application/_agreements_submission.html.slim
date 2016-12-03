@@ -39,4 +39,4 @@
       = f.text_field :payment_reference, label_class: 'col-form-label', required: true, label: 'Payment Reference', help: 'Reference number supplied by your bank corresponding to transfer of fees.'
       .form-group.row
         .offset-sm-3.col-sm-9
-          = f.submit 'Submit', class: 'btn btn-secondary btn-md text-uppercase'
+          = f.submit 'Submit', class: 'btn btn-secondary btn-md text-uppercase', data: { :'disable-with' => 'Uploading...' }

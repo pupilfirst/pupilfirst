@@ -43,6 +43,12 @@ class FoundersController < ApplicationController
     end
   end
 
+  # GET /founder/dashboard
+  def dashboard
+    @skip_container = true
+    render layout: 'application_v2'
+  end
+
   # GET /founder/phone
   def phone
     @skip_container = true

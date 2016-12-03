@@ -17,6 +17,7 @@ Rails.application.routes.draw do
 
   resource :founder, only: [:edit, :update] do
     member do
+      get 'dashboard'
       get 'phone'
       patch 'set_unconfirmed_phone'
       get 'phone_verification'

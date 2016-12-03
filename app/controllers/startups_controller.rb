@@ -45,26 +45,6 @@ class StartupsController < ApplicationController
     end
   end
 
-  # DELETE /founders/:id/startup/destroy
-  def destroy
-    @startup = current_founder.startup
-
-    if current_founder.startup_admin
-      if current_founder.startup_admin && current_founder.valid_password?(startup_destroy_params[:password])
-        @startup.destroy!
-        flash[:success] = 'Your startup profile and all associated data has been deleted.'
-        redirect_to root_url
-        return
-      else
-        flash.now[:error] = 'Authentication failed!'
-      end
-    else
-      flash.now[:error] = 'You are not allowed to perform this action!'
-    end
-
-    render 'edit'
-  end
-
   private
 
   def load_startups

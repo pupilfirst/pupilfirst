@@ -199,10 +199,6 @@ class Startup < ApplicationRecord
 
   normalize_attribute :pitch, :product_description, :email, :phone
 
-  attr_accessor :full_validation
-
-  after_initialize ->() { @full_validation = true }
-
   normalize_attribute :website do |value|
     case value
       when '' then

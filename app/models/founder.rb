@@ -116,10 +116,7 @@ class Founder < ApplicationRecord
 
   # hack
   attr_accessor :inviter_name
-  attr_accessor :accept_startup
-  attr_accessor :full_validation
 
-  after_initialize ->() { @full_validation = false }
   after_update :send_password_change_email, if: :needs_password_change_email?
 
   # Email is not required for an unregistered 'contact' founder.

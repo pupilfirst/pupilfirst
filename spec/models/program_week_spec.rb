@@ -1,5 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe ProgramWeek, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  subject { described_class }
+  let(:batch) { create :batch }
+
+  it 'ensures uniqueness of week number in batch' do
+    subject.create! name: 'foo', number: 1, batch: batch
+
+    expect do
+      subject.create! name: 'bar', number: 1, batch: batch
+    end.to raise_error(ActiveRecord::RecordInvalid)
+  end
 end

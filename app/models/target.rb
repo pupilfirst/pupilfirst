@@ -46,6 +46,12 @@ class Target < ApplicationRecord
 
   validates_presence_of :role, :title, :description
   validates_inclusion_of :role, in: valid_roles
+  validate :batch_matches_program_week_batch
+
+  def batch_matches_program_week_batch
+    return unless batch.present? && target_group&.program_week&.batch.present?
+    errors.add(:batch, "Does not match Program week's batch") unless batch == target_group.program_week.batch
+  end
 
   def founder?
     role == Target::ROLE_FOUNDER

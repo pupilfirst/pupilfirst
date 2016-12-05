@@ -1,7 +1,23 @@
 ## Ongoing
 
-- Changes to database and admin interface for new Founder Dashboard and Targets Framework is in progress. [[Trello]](https://trello.com/c/1Q0bNMcR)
 - Design phase of Founder dashboard is ongoing. [[Trello]](https://trello.com/c/sITTzECe)
+
+## 2016.12.05
+
+- Changes to database and admin interface to account for Founder Dashboard and Targets Framework is mostly complete. [[Trello]](https://trello.com/c/1Q0bNMcR)
+- Removed the ability for founders to add new founders and remove existing founders from their startup. [[Trello]](https://trello.com/c/Rggpxzqf)
+- Founders no longer have to validate their phone numbers - it is freely editable. [[Trello]](https://trello.com/c/A1mM8nP2)
+- Password change form was removed from Founder's edit page. [[Trello]](https://trello.com/c/0EG9eMXd)
+- Founder edit form has been improved to display filename of existing identification proof. [[Trello]](https://trello.com/c/UDt744bi)
+- Incorrect office address on the `/about/contact` page has been updated. [[Trello]](https://trello.com/c/lWlNp20a)
+- MOOC Students list on admin interface has been updated to include module completion scopes. [[Trello]](https://trello.com/c/lw1XCmhk)
+- Generated partnership deed has been updated to list the team lead as the first in any list. [[Trello]](https://trello.com/c/ceBNV7Ob)
+- Content was added to the Stage 5 (completion) page of application process. [[Trello]](https://trello.com/c/i8ZS7KSE)
+- Applicant's ID and Address proof are now displayed in the admin interface. [[Trello]](https://trello.com/c/oMKQ8fev)
+- Stage 4 forms now display an _Uploading..._ message when the button is disabled after clicking submit. [[Trello]](https://trello.com/c/zZMogPOP)
+- Removed unused code related to removal of a startup via user-initiated action. [[Trello]](https://trello.com/c/IkJl3B3g)
+- Removed unused `test_background` action from `HomeController`, along with related files. [[Trello]](https://trello.com/c/47enFle3)
+- Seeded data for Founders has been updated to match data available at the end of current admission process. [[Trello]](https://trello.com/c/WbFzcOaw)
 
 ## 2016.11.29
 

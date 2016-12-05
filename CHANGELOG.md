@@ -1,3 +1,10 @@
+### 5 December, 2016
+
+#### Features
+
+  - Founders can now freely change their stored phone number without SMS-based validation.
+  - This isn't a feature addition, but as part of one - OAuth-based login, the password change form has been removed since it is no longer needed.
+
 ### 29 November, 2016
 
 #### Features

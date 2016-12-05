@@ -39,7 +39,3 @@ founders_list.each do |email, name, born_on, gender, phone|
     identification_proof: File.open(image_path)
   )
 end
-
-# Give each startup an admin
-Founder.find_by(email: 'thedude@sv.co').update!(startup_admin: true)
-Founder.find_by(email: 'ironman@avengers.co').update!(startup_admin: true)

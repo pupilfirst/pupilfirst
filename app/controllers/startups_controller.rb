@@ -34,7 +34,6 @@ class StartupsController < ApplicationController
   def update
     @current_founder = current_founder
     @startup = @current_founder.startup
-    @startup.founders.each { |f| f.full_validation = true }
     @startup.validate_web_mandatory_fields = true
 
     if @startup.update(startup_params)

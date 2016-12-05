@@ -1,7 +1,6 @@
 module Targets
   class StatusService
     STATUS_PENDING = :pending
-    STATUS_EXPIRED = :expired
     STATUS_COMPLETE = :complete
     STATUS_UNAVAILABLE = :unavailable
 
@@ -12,30 +11,36 @@ module Targets
 
     def status
       return STATUS_COMPLETE if complete?
-      return STATUS_EXPIRED if due_date_past?
-      return STATUS_PENDING if prerequisites_complete?
+      return STATUS_PENDING if pending_prerequisites.empty?
       STATUS_UNAVAILABLE
     end
 
-    def pending_prerequisites
-      return unless status == STATUS_UNAVAILABLE
+    def completed_prerequisites
+      Target.where(id: completed_prerequisites_ids)
+    end
 
-      # Return array of pending prerequisite targets.
-      raise NotImplementedError
+    def pending_prerequisites
+      @target.prerequisite_targets.where.not(id: completed_prerequisites_ids)
     end
 
     private
 
     def complete?
-      raise NotImplementedError
+      owner_events.where(target: @target).present?
     end
 
-    def due_date_past?
-      raise NotImplementedError
+    def owner_events
+      owner.timeline_events.verified_or_needs_improvement
     end
 
-    def prerequisites_complete?
-      raise NotImplementedError
+    def owner
+      @target.founder? ? @founder : @founder.startup
+    end
+
+    def completed_prerequisites_ids
+      @completed_prerequisites_ids ||= begin
+        owner_events.where(target: @target.prerequisite_targets.pluck(:id)).select(:target_id).distinct
+      end
     end
   end
 end

@@ -61,7 +61,7 @@ class Target < ApplicationRecord
 
   # TODO: Probably find a way to move this to the corresponding admin controller update action
   # attempts to use after_update hook of activeadmin, overriding its update action or writing a after_filter for update didnt work
-  after_update :notify_revision, if: :crucial_revision?
+  # after_update :notify_revision, if: :crucial_revision?
 
   def notify_revision
     PublicSlackTalk.post_message message: revision_as_slack_message, founders: slack_targets

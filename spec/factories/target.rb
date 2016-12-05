@@ -1,20 +1,14 @@
 FactoryGirl.define do
   factory :target do
-    role { Target.valid_roles.sample }
-    assigner { create :faculty }
-
-    # The assignee can be a founder or a startup, depending on role.
-    assignee do
-      startup = create :startup
-
-      if role == Target::ROLE_FOUNDER
-        startup.founders.first
-      else
-        startup
-      end
-    end
-
     title { Faker::Lorem.words(6).join ' ' }
+    role { Target.valid_roles.sample }
     description { Faker::Lorem.words(200).join ' ' }
+    target_type { Target.valid_target_types.sample }
+    days_to_complete { 1 + rand(60) }
+    batch
+
+    trait :with_program_week do
+      target_group { create :target_group, batch: batch }
+    end
   end
 end

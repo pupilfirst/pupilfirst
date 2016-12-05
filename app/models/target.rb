@@ -13,7 +13,7 @@ class Target < ApplicationRecord
   mount_uploader :rubric, RubricUploader
 
   scope :founder, -> { where(role: ROLE_FOUNDER) }
-  scope :not_target_roles, -> { where.not(role: target_roles) }
+  scope :not_founder, -> { where.not(role: ROLE_FOUNDER) }
   scope :due_on, -> (date) { where(due_date: date.beginning_of_day..date.end_of_day) }
 
   scope :for_founders_in_batch, -> (batch) { where(assignee: batch.founders.not_dropped_out.not_exited) }

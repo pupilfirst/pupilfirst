@@ -5,5 +5,5 @@ class TargetGroup < ApplicationRecord
 
   validates :name, presence: true
   validates :description, presence: true
-  validates :number, presence: true, uniqueness: { scope: [:program_week_id] }
+  validates :sort_index, presence: true, uniqueness: { scope: [:program_week_id] }
 end

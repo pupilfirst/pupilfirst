@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161203095146) do
+ActiveRecord::Schema.define(version: 20161206113420) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -639,9 +639,9 @@ ActiveRecord::Schema.define(version: 20161203095146) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.integer  "program_week_id"
-    t.integer  "number"
-    t.index ["number"], name: "index_target_groups_on_number", using: :btree
+    t.integer  "sort_index"
     t.index ["program_week_id"], name: "index_target_groups_on_program_week_id", using: :btree
+    t.index ["sort_index"], name: "index_target_groups_on_sort_index", using: :btree
   end
 
   create_table "target_prerequisites", force: :cascade do |t|

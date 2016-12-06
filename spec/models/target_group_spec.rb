@@ -12,7 +12,7 @@ RSpec.describe TargetGroup, type: :model do
           name: Faker::Lorem.word,
           description: Faker::Lorem.sentence,
           program_week: target_group.program_week,
-          number: target_group.number
+          sort_index: target_group.sort_index
         )
       end.to raise_error(ActiveRecord::RecordInvalid)
     end

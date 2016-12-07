@@ -51,38 +51,6 @@ ActiveAdmin.register Founder do
   index do
     selectable_column
     column :name
-
-    #  TODO: re-write if required after moving to new scheme of targets
-    # column :targets do |founder|
-    #   if founder.targets.present?
-    #     ol do
-    #       hide_some_targets = founder.targets.count >= 5
-    #
-    #       founder.targets.order('updated_at DESC').each_with_index do |target, index|
-    #         fa_icon = if target.done?
-    #           'fa-calendar-check-o'
-    #         elsif target.expired?
-    #           'fa-hourglass-end'
-    #         else
-    #           'fa-clock-o'
-    #         end
-    #
-    #         li class: (index >= 3 && hide_some_targets ? "hide admin-founder-#{founder.id}-hidden-target" : '') do
-    #           link_to " #{target.title}", [:admin, target], class: "fa #{fa_icon} no-text-decoration"
-    #         end
-    #       end
-    #
-    #       if hide_some_targets
-    #         li do
-    #           a class: 'admin-founder-targets-show-link fa fa-chevron-circle-down', 'data-founder-id' => founder.id do
-    #             ' Show all targets'
-    #           end
-    #         end
-    #       end
-    #     end
-    #   end
-    # end
-
     column :email
 
     column :product_name do |founder|
@@ -268,35 +236,6 @@ ActiveAdmin.register Founder do
         row :last_sign_in_at
       end
     end
-
-    # TODO: re-write if required after moving to new scheme of targets
-    # if founder.targets.present?
-    #   div do
-    #     table_for founder.targets.order('created_at DESC') do
-    #       caption 'Linked Targets'
-    #       column 'Target' do |target|
-    #         a href: admin_target_path(target) do
-    #           target.title
-    #         end
-    #       end
-    #
-    #       column :role do |target|
-    #         t("role.#{target.role}")
-    #       end
-    #
-    #       column :status do |target|
-    #         if target.expired?
-    #           'Expired'
-    #         else
-    #           t("target.status.#{target.status}")
-    #         end
-    #       end
-    #
-    #       column :assigner
-    #       column :created_at
-    #     end
-    #   end
-    # end
   end
 
   action_item :feedback, only: :show, if: proc { Founder.friendly.find(params[:id]).startup.present? } do

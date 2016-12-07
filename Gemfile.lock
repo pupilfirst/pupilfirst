@@ -805,8 +805,6 @@ GEM
       temple (~> 0.7.6)
       tilt (>= 1.3.3, < 2.1)
     slop (3.6.0)
-    spring (2.0.0)
-      activesupport (>= 4.2)
     sprockets (3.7.0)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -974,7 +972,6 @@ DEPENDENCIES
   simplecov
   skylight
   slim
-  spring
   titleize
   turbolinks
   uglifier (>= 2.7.2)

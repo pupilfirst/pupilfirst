@@ -7,8 +7,12 @@ FactoryGirl.define do
     days_to_complete { 1 + rand(60) }
     batch
 
+    transient do
+      week_number nil
+    end
+
     trait :with_program_week do
-      target_group { create :target_group, batch: batch }
+      target_group { create :target_group, batch: batch, week_number: week_number }
     end
   end
 end

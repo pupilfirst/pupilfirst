@@ -106,4 +106,8 @@ class Target < ApplicationRecord
 
     week_start + days_to_complete.days
   end
+
+  def status(founder)
+    Targets::StatusService.new(self, founder).status
+  end
 end

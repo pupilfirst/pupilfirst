@@ -1,7 +1,10 @@
 module Targets
   class StatusService
-    STATUS_PENDING = :pending
     STATUS_COMPLETE = :complete
+    STATUS_NEEDS_IMPROVEMENT = :needs_improvement
+    STATUS_SUBMITTED = :submitted
+    STATUS_EXPIRED = :expired
+    STATUS_PENDING = :pending
     STATUS_UNAVAILABLE = :unavailable
 
     def initialize(target, founder)
@@ -10,9 +13,13 @@ module Targets
     end
 
     def status
-      return STATUS_COMPLETE if complete?
-      return STATUS_PENDING if pending_prerequisites.empty?
-      STATUS_UNAVAILABLE
+      if linked_event.present?
+        return STATUS_COMPLETE if linked_event.verified?
+        linked_event.needs_improvement? ? STATUS_NEEDS_IMPROVEMENT : STATUS_SUBMITTED
+      else
+        return STATUS_UNAVAILABLE if pending_prerequisites.present?
+        @target.due_date.past? ? STATUS_EXPIRED : STATUS_PENDING
+      end
     end
 
     def completed_prerequisites
@@ -25,8 +32,8 @@ module Targets
 
     private
 
-    def complete?
-      owner_events.where(target: @target).present?
+    def linked_event
+      owner.timeline_events.where(target: @target).last
     end
 
     def owner_events

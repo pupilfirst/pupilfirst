@@ -11,7 +11,7 @@ after 'development:program_weeks' do
   first_week_group_names.each_with_index do |name, index|
     TargetGroup.create!(
       name: name,
-      number: index + 1,
+      sort_index: index + 1,
       description: Faker::Lorem.words(10).join(' '),
       program_week: first_week
     )
@@ -20,7 +20,7 @@ after 'development:program_weeks' do
   second_week_group_names.each_with_index do |name, index|
     TargetGroup.create!(
       name: name,
-      number: index + 1,
+      sort_index: index + 1,
       description: Faker::Lorem.words(10).join(' '),
       program_week: second_week
     )

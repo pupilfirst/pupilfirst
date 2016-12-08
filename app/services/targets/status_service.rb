@@ -33,7 +33,7 @@ module Targets
     private
 
     def linked_event
-      owner.timeline_events.where(target: @target).last
+      @linked_event ||= owner.timeline_events.where(target: @target).last
     end
 
     def owner_events
@@ -41,7 +41,7 @@ module Targets
     end
 
     def owner
-      @target.founder? ? @founder : @founder.startup
+      @owner ||= @target.founder? ? @founder : @founder.startup
     end
 
     def completed_prerequisites_ids

@@ -18,23 +18,8 @@ Rails.application.routes.draw do
   resource :founder, only: [:edit, :update] do
     member do
       get 'dashboard'
-      get 'phone'
-      patch 'set_unconfirmed_phone'
-      get 'phone_verification'
-      post 'code'
-      patch 'resend'
-      post 'verify'
     end
-
-    collection do
-      patch 'update_password'
-    end
-
-    resource :startup, only: [:edit, :update, :destroy] do
-      post :add_founder
-      patch :remove_founder
-      patch :change_admin
-
+    resource :startup, only: [:edit, :update] do
       resources :timeline_events, only: [:create, :destroy, :update]
       resources :team_members, except: [:index]
     end
@@ -162,9 +147,6 @@ Rails.application.routes.draw do
 
   # custom defined 404 route to use with shortener gem's config
   get '/404', to: 'home#not_found'
-
-  # to test rotating background images.
-  get '/test_background', to: 'home#test_background'
 
   # Previous sixways page re-directed to startincollege
   # get 'sixways', to: redirect('/startincollege')

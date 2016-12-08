@@ -7,6 +7,8 @@ class MoocStudent < ApplicationRecord
 
   serialize :completed_chapters, Array
 
+  scope :completed_quiz, -> (course_module) { MoocStudent.joins(:quiz_attempts).where(quiz_attempts: { course_module_id: course_module.id }).distinct }
+
   def self.valid_semester_values
     %w(I II III IV V VI VII VIII Graduated Other)
   end

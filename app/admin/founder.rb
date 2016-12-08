@@ -51,38 +51,6 @@ ActiveAdmin.register Founder do
   index do
     selectable_column
     column :name
-
-    #  TODO: re-write if required after moving to new scheme of targets
-    # column :targets do |founder|
-    #   if founder.targets.present?
-    #     ol do
-    #       hide_some_targets = founder.targets.count >= 5
-    #
-    #       founder.targets.order('updated_at DESC').each_with_index do |target, index|
-    #         fa_icon = if target.done?
-    #           'fa-calendar-check-o'
-    #         elsif target.expired?
-    #           'fa-hourglass-end'
-    #         else
-    #           'fa-clock-o'
-    #         end
-    #
-    #         li class: (index >= 3 && hide_some_targets ? "hide admin-founder-#{founder.id}-hidden-target" : '') do
-    #           link_to " #{target.title}", [:admin, target], class: "fa #{fa_icon} no-text-decoration"
-    #         end
-    #       end
-    #
-    #       if hide_some_targets
-    #         li do
-    #           a class: 'admin-founder-targets-show-link fa fa-chevron-circle-down', 'data-founder-id' => founder.id do
-    #             ' Show all targets'
-    #           end
-    #         end
-    #       end
-    #     end
-    #   end
-    # end
-
     column :email
 
     column :product_name do |founder|
@@ -205,24 +173,6 @@ ActiveAdmin.register Founder do
       end
 
       row :startup_admin
-
-      row :registration_status do |founder|
-        if founder.startup_token.present?
-          if founder.startup_admin?
-            "This founder is team lead of a startup that hasn't completed registration."
-          else
-            team_lead = Founder.find_by(startup_admin: true, startup_token: founder.startup_token)
-
-            "This founder is part of a team led by #{link_to team_lead.display_name, admin_founder_path(team_lead)}, "\
-            "who hasn't completed startup registration.".html_safe
-          end
-        elsif founder.phone.blank?
-          "This founder's startup has registered, but his/ her registration is incomplete."
-        else
-          'Registration is complete.'
-        end
-      end
-
       row :about
       row :born_on
       row :slack_username
@@ -236,8 +186,6 @@ ActiveAdmin.register Founder do
       end
 
       row :phone
-      row :unconfirmed_phone
-      row :phone_verification_code
       row :communication_address
 
       row :designation
@@ -288,35 +236,6 @@ ActiveAdmin.register Founder do
         row :last_sign_in_at
       end
     end
-
-    # TODO: re-write if required after moving to new scheme of targets
-    # if founder.targets.present?
-    #   div do
-    #     table_for founder.targets.order('created_at DESC') do
-    #       caption 'Linked Targets'
-    #       column 'Target' do |target|
-    #         a href: admin_target_path(target) do
-    #           target.title
-    #         end
-    #       end
-    #
-    #       column :role do |target|
-    #         t("role.#{target.role}")
-    #       end
-    #
-    #       column :status do |target|
-    #         if target.expired?
-    #           'Expired'
-    #         else
-    #           t("target.status.#{target.status}")
-    #         end
-    #       end
-    #
-    #       column :assigner
-    #       column :created_at
-    #     end
-    #   end
-    # end
   end
 
   action_item :feedback, only: :show, if: proc { Founder.friendly.find(params[:id]).startup.present? } do
@@ -332,110 +251,8 @@ ActiveAdmin.register Founder do
     link_to 'Public Slack Messages', admin_public_slack_messages_path(q: { founder_id_eq: params[:id] })
   end
 
-  action_item :invite_team, only: :index do
-    link_to 'Invite team', invite_team_form_admin_founders_path
-  end
-
-  action_item :invite_founder, only: :index do
-    link_to 'Invite founder', invite_founder_form_admin_founders_path
-  end
-
   action_item :view_targets, only: :show do
     link_to 'View Targets', admin_targets_path(q: { assignee_type_eq: 'Founder', assignee_id_eq: founder.id })
-  end
-
-  collection_action :invite_team_form do
-  end
-
-  collection_action :invite_founder_form do
-  end
-
-  collection_action :send_team_invites, method: :post do
-    invited_to_batch = Batch.find params[:invited_to_batch]
-    team_lead = params[:team_lead_email]
-    founders = params[:founder_emails].reject(&:blank?)
-
-    # Team lead is mandatory.
-    if team_lead.blank?
-      flash[:error] = 'Team lead is mandatory.'
-      redirect_back(fallback_location: admin_founders_url)
-      return
-    end
-
-    # There should be at least two other founders.
-    if founders.count < 2
-      flash[:error] = 'Two other founders, besides the team lead are required.'
-      redirect_back(fallback_location: admin_founders_url)
-      return
-    end
-
-    # Check whether all the emails look OK.
-    if ([team_lead] + founders).select { |founder_email| !(founder_email =~ /@/) }.present?
-      flash[:error] = 'Not all email addresses look right. Please enter emails again.'
-      redirect_back(fallback_location: admin_founders_url)
-      return
-    end
-
-    # None of the founders should already exist.
-    if ([team_lead] + founders).select { |founder_email| Founder.find_by email: founder_email }.present?
-      flash[:error] = 'None of the supplied email addresses should be of existing founders.'
-      redirect_back(fallback_location: admin_founders_url)
-      return
-    end
-
-    # Set the same startup token for all invites. This'll let us associate them when team lead creates startup.
-    startup_token = Time.now.in_time_zone('Asia/Calcutta').strftime('%a, %e %b %Y, %I:%M:%S %p IST')
-
-    # Invite team lead.
-    Founder.invite! email: team_lead, invited_batch: invited_to_batch, startup_token: startup_token, startup_admin: true
-
-    # Invite founders one by one.
-    founders.each do |founder_email|
-      Founder.invite! email: founder_email, invited_batch: invited_to_batch, startup_token: startup_token
-    end
-
-    flash[:success] = 'Invitations successfully sent!'
-    redirect_to action: :index
-  end
-
-  collection_action :send_founder_invite, method: :post do
-    startup = Startup.find_by id: params.dig(:invite, :startup_id)
-    token = params.dig(:invite, :startup_token)
-    email = params.dig(:invite, :email)
-
-    # Either startup or token should be picked.
-    if (startup.blank? && token.blank?) || (startup.present? && token.present?)
-      flash[:error] = 'Only one of startup or token should be picked.'
-      redirect_back(fallback_location: admin_founders_url)
-      return
-    end
-
-    # Check whether the emails look OK.
-    unless email =~ /@/
-      flash[:error] = "That email address doesn't look right. Please enter it again."
-      redirect_back(fallback_location: admin_founders_url)
-      return
-    end
-
-    # The email address shouldn't already be in use.
-    if email.present? && Founder.with_email(email).present?
-      flash[:error] = 'That email address is already registered with us.'
-      redirect_back(fallback_location: admin_founders_url)
-      return
-    end
-
-    founder_params = if startup.present?
-      { startup: startup, invited_batch: startup.batch }
-    else
-      team_lead = Founder.find_by startup_admin: true, startup_token: token
-      { startup_token: token, invited_batch: team_lead.invited_batch }
-    end.merge(email: email)
-
-    # Invite the founder
-    Founder.invite! founder_params
-
-    flash[:success] = 'Invitation successfully sent!'
-    redirect_to action: :index
   end
 
   form partial: 'admin/founders/form'

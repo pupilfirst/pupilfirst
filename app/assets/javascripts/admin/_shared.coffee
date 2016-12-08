@@ -17,6 +17,7 @@ select2Initializations = ->
   $('#vocalist_ping_channel').select2(width: '300px');
   $('#vocalist_ping_startups').select2(width: '300px');
   $('#vocalist_ping_founders').select2(width: '300px');
+  $('#application_submission_batch_application_id').select2(width: '300px');
 
 # Manually link site_title logo to /admin as activeskin messes up setting config.site_title_link
 $(document).on 'page:change', ->

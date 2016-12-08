@@ -2,7 +2,7 @@ ActiveAdmin.register Target do
   include DisableIntercom
 
   permit_params :assignee_id, :assignee_type, :assigner_id, :role, :title, :description, :resource_url,
-    :completion_instructions, :days_to_complete, :slideshow_embed, :completed_at, :completion_comment, :rubric, :remote_rubric_url, :review_test_embed, :batch_id, :target_group_id, :target_type
+    :completion_instructions, :days_to_complete, :slideshow_embed, :completed_at, :completion_comment, :rubric, :remote_rubric_url, :review_test_embed, :batch_id, :target_group_id, :target_type, prerequisite_target_ids: []
 
   preserve_default_filters!
 
@@ -19,65 +19,46 @@ ActiveAdmin.register Target do
   filter :role, as: :select, collection: Target.valid_roles
 
   controller do
-    def create
-      startup = Startup.find_by id: params[:target][:startup_id]
-
-      @target = Target.new permitted_params[:target]
-      @target.assignee = startup if startup.present?
-
-      unless @target.valid?
-        render :new
-        return
-      end
-
-      if params.dig(:target, :role) == 'founder'
-        # Then we're creating one of more founder targets.
-        targets = create_multiple_founder_targets!
-        flash[:success] = "Created #{targets.count} targets"
-        redirect_to admin_targets_url
-      else
-        # Then we're just creating a single startup target.
-        @target.save!
-        AllTargetNotificationsJob.perform_later @target, 'new_target'
-        flash[:success] = 'New target has been created.'
-        redirect_to admin_target_url(@target)
-      end
-    end
-
-    def create_multiple_founder_targets!
-      founder_ids = params[:target][:founder_id].reject(&:blank?)
-      startup = Startup.find_by(id: params[:target][:startup_id])
-
-      # Founders can either be all (of a startup), or selected list.
-      founders = founder_ids.include?('all') ? startup.founders : Founder.where(id: founder_ids)
-
-      founders.map do |founder|
-        target = Target.new permitted_params[:target]
-        target.assignee = founder
-        target.save!
-
-        AllTargetNotificationsJob.perform_later target, 'new_target'
-      end
-    end
-  end
-
-  member_action :duplicate, method: :get do
-    target = Target.find(params[:id])
-    redirect_to(
-      new_admin_target_path(
-        target: {
-          role: target.role, title: target.title, description: target.description,
-          resource_url: target.resource_url, completion_instructions: target.completion_instructions,
-          due_date_date: target.due_date_date, due_date_time_hour: target.due_date.hour,
-          due_date_time_minute: target.due_date.min, slideshow_embed: target.slideshow_embed,
-          assigner_id: target.assigner.id, review_test_embed: target.review_test_embed
-        }
-      )
-    )
-  end
-
-  action_item :duplicate, only: :show do
-    link_to 'Duplicate', duplicate_admin_target_path(id: params[:id])
+    # def create
+    #   startup = Startup.find_by id: params[:target][:startup_id]
+    #
+    #   @target = Target.new permitted_params[:target]
+    #   @target.assignee = startup if startup.present?
+    #
+    #   unless @target.valid?
+    #     render :new
+    #     return
+    #   end
+    #
+    #   if params.dig(:target, :role) == 'founder'
+    #     # Then we're creating one of more founder targets.
+    #     targets = create_multiple_founder_targets!
+    #     flash[:success] = "Created #{targets.count} targets"
+    #     redirect_to admin_targets_url
+    #   else
+    #     # Then we're just creating a single startup target.
+    #     @target.save!
+    #     AllTargetNotificationsJob.perform_later @target, 'new_target'
+    #     flash[:success] = 'New target has been created.'
+    #     redirect_to admin_target_url(@target)
+    #   end
+    # end
+    #
+    # def create_multiple_founder_targets!
+    #   founder_ids = params[:target][:founder_id].reject(&:blank?)
+    #   startup = Startup.find_by(id: params[:target][:startup_id])
+    #
+    #   # Founders can either be all (of a startup), or selected list.
+    #   founders = founder_ids.include?('all') ? startup.founders : Founder.where(id: founder_ids)
+    #
+    #   founders.map do |founder|
+    #     target = Target.new permitted_params[:target]
+    #     target.assignee = founder
+    #     target.save!
+    #
+    #     AllTargetNotificationsJob.perform_later target, 'new_target'
+    #   end
+    # end
   end
 
   index do
@@ -94,7 +75,6 @@ ActiveAdmin.register Target do
     end
     column :target_group
 
-    # TODO: Probably remove assignee for the new scheme of targets
     column :assignee
 
     column :role do |target|
@@ -103,9 +83,7 @@ ActiveAdmin.register Target do
 
     column :title
 
-    actions defaults: true do |target|
-      link_to 'Duplicate', duplicate_admin_target_path(target)
-    end
+    actions
   end
 
   show do |target|
@@ -127,6 +105,20 @@ ActiveAdmin.register Target do
     end
 
     attributes_table do
+      row :title
+
+      row :prerequisite_targets do
+        if target.prerequisite_targets.present?
+          ul do
+            target.prerequisite_targets.each do |prerequisite_target|
+              li do
+                link_to prerequisite_target.title, admin_target_path(prerequisite_target)
+              end
+            end
+          end
+        end
+      end
+
       row :assignee_type
       row :assignee
       row :batch
@@ -137,7 +129,6 @@ ActiveAdmin.register Target do
         t("role.#{target.role}")
       end
 
-      row :title
       row :assigner
 
       row :rubric do

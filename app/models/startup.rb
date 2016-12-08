@@ -197,10 +197,6 @@ class Startup < ApplicationRecord
 
   normalize_attribute :pitch, :product_description, :email, :phone
 
-  attr_accessor :full_validation
-
-  after_initialize ->() { @full_validation = true }
-
   normalize_attribute :website do |value|
     case value
       when '' then
@@ -490,37 +486,6 @@ class Startup < ApplicationRecord
     else
       (Batch.last.end_date - 7.days).end_of_week
     end.in_time_zone('Asia/Calcutta') + 18.hours
-  end
-
-  # UPDATE: commenting out below code as it appears a simple call to short_url from view in fact creates short urls on the go if they are absent
-  # # generate/clean up shortened urls for external links
-  # after_save :update_shortened_urls
-  #
-  # def update_shortened_urls
-  #   # all the attributes that need a shortened url
-  #   external_links = ["presentation_link", "wireframe_link", "prototype_link", "product_video_link"]
-  #
-  #   # create new shortened url for any new attribute in the external_links list
-  #   # TODO: Probably rewrite without the use of eval ?
-  #   external_links.each do |link|
-  #     eval "next unless #{link}_changed?"
-  #     eval "Shortener::ShortenedUrl.generate(#{link})"
-  #
-  #     # TODO: delete stale shortened url entry for old value
-  #   end
-  # end
-
-  # Registration token must be set before startup can be created - equal to startup_token of team lead.
-  attr_accessor :registration_token
-
-  after_create :assign_founders
-
-  # Use registration_token to link founders.
-  def assign_founders
-    return if registration_token.blank?
-
-    # Assign founders to startup, and wipe the startup token to indicate completion of this event.
-    Founder.where(startup_token: registration_token).update_all(startup_id: id, startup_token: nil)
   end
 
   class << self

@@ -1,6 +1,7 @@
 require 'rails_helper'
 
-describe Target do
+# TODO: Rewrite if required. All tests here as stale.
+describe Target, disabled: true do
   subject { create :target }
 
   before do

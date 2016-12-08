@@ -45,17 +45,6 @@ feature 'Startup Edit' do
       expect(page).to have_selector('div.form-group.startup_product_name.has-error')
     end
 
-    scenario 'Founder adds a valid co-founder to the startup' do
-      fill_in 'cofounder_email', with: co_founder.email
-      click_on 'Add as co-founder'
-
-      expect(page).to have_selector('.founders-table', text: co_founder.email)
-      co_founder.reload
-      expect(co_founder.startup).to eq(startup)
-      open_email(co_founder.email)
-      expect(current_email.subject).to eq('SVApp: You have been added as startup cofounder!')
-    end
-
     scenario 'Non-admin founder views delete startup section' do
       expect(page).to have_text('Only the team leader can delete a startup\'s profile')
     end

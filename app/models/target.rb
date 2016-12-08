@@ -7,11 +7,13 @@ class Target < ApplicationRecord
   belongs_to :target_group
   belongs_to :batch
   has_many :timeline_events
+  has_many :target_prerequisites
+  has_many :prerequisite_targets, through: :target_prerequisites
 
   mount_uploader :rubric, RubricUploader
 
   scope :founder, -> { where(role: ROLE_FOUNDER) }
-  scope :not_target_roles, -> { where.not(role: target_roles) }
+  scope :not_founder, -> { where.not(role: ROLE_FOUNDER) }
   scope :due_on, -> (date) { where(due_date: date.beginning_of_day..date.end_of_day) }
 
   scope :for_founders_in_batch, -> (batch) { where(assignee: batch.founders.not_dropped_out.not_exited) }
@@ -44,6 +46,12 @@ class Target < ApplicationRecord
 
   validates_presence_of :role, :title, :description
   validates_inclusion_of :role, in: valid_roles
+  validate :batch_matches_program_week_batch
+
+  def batch_matches_program_week_batch
+    return unless batch.present? && target_group&.program_week&.batch.present?
+    errors.add(:batch, "Does not match Program week's batch") unless batch == target_group.program_week.batch
+  end
 
   def founder?
     role == Target::ROLE_FOUNDER
@@ -59,7 +67,7 @@ class Target < ApplicationRecord
 
   # TODO: Probably find a way to move this to the corresponding admin controller update action
   # attempts to use after_update hook of activeadmin, overriding its update action or writing a after_filter for update didnt work
-  after_update :notify_revision, if: :crucial_revision?
+  # after_update :notify_revision, if: :crucial_revision?
 
   def notify_revision
     PublicSlackTalk.post_message message: revision_as_slack_message, founders: slack_targets
@@ -87,5 +95,19 @@ class Target < ApplicationRecord
     batch_scope = template.founder_role? ? :for_founders_in_batch : :for_startups_in_batch
 
     Target.send(batch_scope, batch).send(status_scope).where(target_template: template)
+  end
+
+  # due date for the target calculated using days_to_complete starting from program_week start.
+  def due_date
+    return nil unless days_to_complete.present?
+
+    week_start = target_group&.program_week&.start_date
+    return nil unless week_start.present?
+
+    week_start + days_to_complete.days
+  end
+
+  def status(founder)
+    Targets::StatusService.new(self, founder).status
   end
 end

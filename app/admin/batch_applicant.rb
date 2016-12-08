@@ -160,14 +160,13 @@ ActiveAdmin.register BatchApplicant do
         row :id_proof_type
         row :id_proof_number
 
-        # TODO: Enable below rows when respective uploaders are ready.
-        # row :id_proof do
-        #   link_to(image_tag(id_proof_url(:thumb)), id_proof_url) if id_proof.present?
-        # end
-        #
-        # row :address_proof do
-        #   link_to(image_tag(address_proof_url(:thumb)), address_proof_url) if address_proof.present?
-        # end
+        row :id_proof do |applicant|
+          link_to 'Click here to open in new window', applicant.id_proof.url, target: '_blank' if applicant.id_proof.present?
+        end
+
+        row :address_proof do |applicant|
+          link_to 'Click here to open in new window', applicant.address_proof.url, target: '_blank' if applicant.address_proof.present?
+        end
       end
     end
 
@@ -234,10 +233,8 @@ ActiveAdmin.register BatchApplicant do
       f.input :permanent_address
       f.input :id_proof_type, as: :select, collection: BatchApplicant::ID_PROOF_TYPES
       f.input :id_proof_number
-
-      # TODO: Enable below inputs when respective uploaders ready
-      # f.input :id_proof
-      # f.input :address_proof
+      f.input :id_proof
+      f.input :address_proof
     end
 
     if f.object.college.blank? || !f.object.college&.persisted?

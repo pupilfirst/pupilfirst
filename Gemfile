@@ -35,7 +35,6 @@ gem 'turbolinks' # Quicker page navigation. https://github.com/turbolinks/turbol
 gem 'uglifier', '>= 2.7.2' # JavaScript compressor.
 gem 'rest-client' # Used to contact Fast Alerts' API.
 gem 'cancancan', '~> 1.8' # Used to manage administrator types and roles in the ActiveAdmin interface.
-gem 'phony_rails' # Phone number validation and normalization.
 
 # Select2 javascript select box improvement library, using in ActiveAdmin interface.
 # TODO: This gem currently serves version 3.x of select2. Version 4 (released) has breaking changes. Take care when upgrading.
@@ -134,9 +133,6 @@ group :development do
   # gem 'better_errors' # Better error info on the front-end.
   # gem 'binding_of_caller' # For advanced better_errors features - REPL, local/instance variable inspection etc.
   gem 'web-console', '~> 3.3.0' # TODO: Restored until better_errors speeds up again.
-
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
   gem 'listen' # The Listen gem listens to file modifications and notifies you about the changes.
 end
 

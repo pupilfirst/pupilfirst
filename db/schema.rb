@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161129062517) do
+ActiveRecord::Schema.define(version: 20161207072921) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -300,11 +300,11 @@ ActiveRecord::Schema.define(version: 20161129062517) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "avatar"
-    t.string   "encrypted_password",        default: ""
+    t.string   "encrypted_password",     default: ""
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",             default: 0,     null: false
+    t.integer  "sign_in_count",          default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -330,16 +330,14 @@ ActiveRecord::Schema.define(version: 20161129062517) do
     t.string   "gender"
     t.string   "phone"
     t.text     "communication_address"
-    t.string   "phone_verification_code"
     t.boolean  "startup_admin"
     t.integer  "year_of_graduation"
     t.string   "roll_number"
     t.string   "slack_username"
     t.integer  "university_id"
-    t.string   "unconfirmed_phone"
     t.string   "roles"
     t.string   "college_identification"
-    t.boolean  "avatar_processing",         default: false
+    t.boolean  "avatar_processing",      default: false
     t.string   "slack_user_id"
     t.string   "personal_website_url"
     t.string   "blog_url"
@@ -350,25 +348,20 @@ ActiveRecord::Schema.define(version: 20161129062517) do
     t.string   "resume_url"
     t.string   "slug"
     t.string   "about"
-    t.datetime "verification_code_sent_at"
-    t.integer  "invited_batch_id"
     t.boolean  "timeline_toured"
     t.string   "identification_proof"
     t.string   "skype_id"
-    t.string   "startup_token"
-    t.boolean  "exited",                    default: false
+    t.boolean  "exited",                 default: false
     t.integer  "user_id"
     t.integer  "college_id"
     t.string   "name"
     t.index ["college_id"], name: "index_founders_on_college_id", using: :btree
     t.index ["confirmation_token"], name: "index_founders_on_confirmation_token", unique: true, using: :btree
     t.index ["invitation_token"], name: "index_founders_on_invitation_token", unique: true, using: :btree
-    t.index ["invited_batch_id"], name: "index_founders_on_invited_batch_id", using: :btree
     t.index ["invited_by_id"], name: "index_founders_on_invited_by_id", using: :btree
     t.index ["name"], name: "index_founders_on_name", using: :btree
     t.index ["reset_password_token"], name: "index_founders_on_reset_password_token", unique: true, using: :btree
     t.index ["slug"], name: "index_founders_on_slug", unique: true, using: :btree
-    t.index ["startup_token"], name: "index_founders_on_startup_token", using: :btree
     t.index ["university_id"], name: "index_founders_on_university_id", using: :btree
     t.index ["user_id"], name: "index_founders_on_user_id", using: :btree
   end
@@ -644,9 +637,16 @@ ActiveRecord::Schema.define(version: 20161129062517) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.integer  "program_week_id"
-    t.integer  "number"
-    t.index ["number"], name: "index_target_groups_on_number", using: :btree
+    t.integer  "sort_index"
     t.index ["program_week_id"], name: "index_target_groups_on_program_week_id", using: :btree
+    t.index ["sort_index"], name: "index_target_groups_on_sort_index", using: :btree
+  end
+
+  create_table "target_prerequisites", force: :cascade do |t|
+    t.integer "target_id"
+    t.integer "prerequisite_target_id"
+    t.index ["prerequisite_target_id"], name: "index_target_prerequisites_on_prerequisite_target_id", using: :btree
+    t.index ["target_id"], name: "index_target_prerequisites_on_target_id", using: :btree
   end
 
   create_table "targets", force: :cascade do |t|

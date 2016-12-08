@@ -80,14 +80,16 @@
   .startup-logo-container {
     width: 100px;
     height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: white;
     @include border-radius(30%);
     padding: 1rem;
     box-shadow: 0px 1px 8px 0px lighten($gray-dark, 20%);
 
     .startup-logo {
-      width: 70px;
-      height: 70px;
+      width: 100%;
     }
   }
   .product-details {
@@ -119,8 +121,8 @@
         }
 
         img {
-          max-width: 38px;
-          max-height: 38px;
+          max-width: 36px;
+          max-height: 36px;
         }
       }
     }

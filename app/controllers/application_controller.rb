@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
 
   before_action :prepare_platform_feedback, :set_content_security_policy
   after_action :prepare_unobtrusive_flash
+  before_action :sign_out_if_required
 
   helper_method :current_mooc_student
   helper_method :current_founder
@@ -82,6 +83,12 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def sign_out_if_required
+    service = Users::ManualSignOutService.new(self, current_user)
+    service.sign_out_if_required
+    redirect_to root_url if service.signed_out?
+  end
 
   def authenticate_founder!
     # User must be logged in

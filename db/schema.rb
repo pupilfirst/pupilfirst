@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161207072921) do
+ActiveRecord::Schema.define(version: 20161208063530) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -198,6 +198,8 @@ ActiveRecord::Schema.define(version: 20161207072921) do
     t.datetime "invites_sent_at"
     t.datetime "campaign_start_at"
     t.integer  "target_application_count"
+    t.integer  "enterprise_id"
+    t.index ["enterprise_id"], name: "index_batches_on_enterprise_id", using: :btree
   end
 
   create_table "colleges", force: :cascade do |t|
@@ -260,6 +262,22 @@ ActiveRecord::Schema.define(version: 20161207072921) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+  end
+
+  create_table "enterprise_administrators", force: :cascade do |t|
+    t.integer  "admin_user_id"
+    t.integer  "enterprise_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["admin_user_id"], name: "index_enterprise_administrators_on_admin_user_id", using: :btree
+    t.index ["enterprise_id"], name: "index_enterprise_administrators_on_enterprise_id", using: :btree
+  end
+
+  create_table "enterprises", force: :cascade do |t|
+    t.string   "name"
+    t.string   "identifier", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "faculty", force: :cascade do |t|
@@ -355,8 +373,10 @@ ActiveRecord::Schema.define(version: 20161207072921) do
     t.integer  "user_id"
     t.integer  "college_id"
     t.string   "name"
+    t.integer  "enterprise_id"
     t.index ["college_id"], name: "index_founders_on_college_id", using: :btree
     t.index ["confirmation_token"], name: "index_founders_on_confirmation_token", unique: true, using: :btree
+    t.index ["enterprise_id"], name: "index_founders_on_enterprise_id", using: :btree
     t.index ["invitation_token"], name: "index_founders_on_invitation_token", unique: true, using: :btree
     t.index ["invited_by_id"], name: "index_founders_on_invited_by_id", using: :btree
     t.index ["name"], name: "index_founders_on_name", using: :btree
@@ -741,13 +761,14 @@ ActiveRecord::Schema.define(version: 20161207072921) do
     t.string   "email"
     t.string   "login_token"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",       default: 0
+    t.integer  "sign_in_count",            default: 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.string   "encrypted_password",  default: "", null: false
+    t.string   "encrypted_password",       default: "", null: false
     t.string   "remember_token"
+    t.boolean  "sign_out_at_next_request"
   end
 
   create_table "visits", id: :uuid, default: nil, force: :cascade do |t|
@@ -782,10 +803,14 @@ ActiveRecord::Schema.define(version: 20161207072921) do
 
   add_foreign_key "batch_applicants", "founders"
   add_foreign_key "batch_applications", "startups"
+  add_foreign_key "batches", "enterprises"
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
+  add_foreign_key "enterprise_administrators", "admin_users"
+  add_foreign_key "enterprise_administrators", "enterprises"
   add_foreign_key "founders", "colleges"
+  add_foreign_key "founders", "enterprises"
   add_foreign_key "founders", "users"
   add_foreign_key "payments", "batch_applications"
   add_foreign_key "resources", "batches"

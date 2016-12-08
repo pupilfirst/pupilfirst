@@ -157,8 +157,6 @@ class Startup < ApplicationRecord
   # New set of validations for incubation wizard
   store :metadata, accessors: [:updated_from]
 
-  validates_presence_of :product_name
-
   before_validation do
     # Set registration_type to nil if its set as blank from backend.
     self.registration_type = nil if registration_type.blank?

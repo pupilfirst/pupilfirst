@@ -39,7 +39,7 @@ class Target < ApplicationRecord
     [TYPE_TODO, TYPE_ATTEND, TYPE_READ, TYPE_LEARN].freeze
   end
 
-  validates_inclusion_of :target_type, in: valid_target_types, allow_nil: true
+  validates_inclusion_of :target_type, in: valid_target_types
 
   # Need to allow these two to be read for AA form.
   attr_reader :startup_id, :founder_id

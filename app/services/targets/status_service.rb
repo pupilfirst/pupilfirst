@@ -6,6 +6,7 @@ module Targets
     STATUS_EXPIRED = :expired
     STATUS_PENDING = :pending
     STATUS_UNAVAILABLE = :unavailable
+    STATUS_NOT_ACCEPTED = :not_accepted
 
     def initialize(target, founder)
       @target = target
@@ -13,13 +14,9 @@ module Targets
     end
 
     def status
-      if linked_event.present?
-        return STATUS_COMPLETE if linked_event.verified?
-        linked_event.needs_improvement? ? STATUS_NEEDS_IMPROVEMENT : STATUS_SUBMITTED
-      else
-        return STATUS_UNAVAILABLE if pending_prerequisites.present?
-        @target.due_date.past? ? STATUS_EXPIRED : STATUS_PENDING
-      end
+      return status_from_event if linked_event.present?
+      return STATUS_UNAVAILABLE if pending_prerequisites.present?
+      @target.due_date.past? ? STATUS_EXPIRED : STATUS_PENDING
     end
 
     def completed_prerequisites
@@ -31,6 +28,12 @@ module Targets
     end
 
     private
+
+    def status_from_event
+      return STATUS_COMPLETE if linked_event.verified?
+      return STATUS_NOT_ACCEPTED if linked_event.not_accepted?
+      linked_event.needs_improvement? ? STATUS_NEEDS_IMPROVEMENT : STATUS_SUBMITTED
+    end
 
     def linked_event
       owner.timeline_events.where(target: @target).last

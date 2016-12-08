@@ -69,6 +69,11 @@ describe Targets::StatusService do
         event_for_target.update!(verified_status: TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT)
         expect(subject.status).to eq(Targets::StatusService::STATUS_NEEDS_IMPROVEMENT)
       end
+
+      it 'returns not_accepted if the event is marked not_accepted' do
+        event_for_target.update!(verified_status: TimelineEvent::VERIFIED_STATUS_NOT_ACCEPTED)
+        expect(subject.status).to eq(Targets::StatusService::STATUS_NOT_ACCEPTED)
+      end
     end
   end
 

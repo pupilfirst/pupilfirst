@@ -56,3 +56,4 @@
 //= require about
 //= require talent
 //= require batch_applications
+//= require team_members

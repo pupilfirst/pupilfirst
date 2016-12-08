@@ -25,8 +25,8 @@ feature 'Team members spec' do
 
       # On the 'new' page.
       fill_in 'Name', with: 'Jack Sparrow'
-      check 'Product'
-      check 'Engineering'
+      select 'Product', from: 'Roles'
+      select 'Engineering', from: 'Roles'
       fill_in 'Email address', with: 'jack.sparrow@sv.co'
       page.attach_file 'team_member_avatar', File.expand_path(Rails.root.join('spec', 'support', 'uploads', 'faculty', 'jack_sparrow.png'))
 
@@ -52,9 +52,9 @@ feature 'Team members spec' do
       visit edit_founder_startup_url
       click_on 'Add new team member'
 
-      check 'Product'
-      check 'Engineering'
-      check 'Governance'
+      select 'Product', from: 'Roles'
+      select 'Engineering', from: 'Roles'
+      select 'Governance', from: 'Roles'
       click_on 'List new team member'
 
       expect(page.find('.team_member_roles')[:class]).to include('has-error')

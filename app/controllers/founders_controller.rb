@@ -34,6 +34,7 @@ class FoundersController < ApplicationController
     @skip_container = true
 
     @startup = current_founder.startup
+    @program_weeks = @startup.batch.program_weeks.includes(target_groups: :targets)
 
     render layout: 'application_v2'
   end

@@ -66,6 +66,7 @@
 //= require v2/batch_application
 //= require v2/resources
 //= require v2/tour
+//= require v2/founders
 //= require v2/story
 //= require v2/six_ways
 //= require v2/users

@@ -13,54 +13,338 @@
           a.founder-avatar-bubble href=""
           a.founder-avatar-bubble href=""
           a.founder-avatar-bubble href=""
+          a.founder-avatar-bubble href=""
 .founder-dashboard-container
   .fixed-dashboard-header
     .container
 
-  .targets-board.m-x-auto
+  .targets-board.m-x-auto.target-accordion
     .program-week
-      .target-group
-        .target-group-header.text-xs-center
-          h4.brand-primary.font-regular
-            | Welcome to SV.CO!
-          p
-            ' Here, I focus on a range of items and features that we use in life
-            ' without giving them a second thought such as Coca Cola, body muscles
-            | and holding ones own breath.
-        .target
-          | Team/Todo: Add Info to your Startup Profile
-        .target
-          | Team/Todo: Add Info to your Startup Profile
-        .target
-          | Team/Todo: Add Info to your Startup Profile
+      .program-week-header
+        span.program-week-number
+          | Week 1
+        span.program-week-icon
+        span.program-week-title
+          | Bootcamp
 
       .target-group
         .target-group-header.text-xs-center
           h4.brand-primary.font-regular
             | Welcome to SV.CO!
-          p
+          .target-group-details
             ' Here, I focus on a range of items and features that we use in life
             ' without giving them a second thought such as Coca Cola, body muscles
             | and holding ones own breath.
         .target
-          | Team/Todo: Add Info to your Startup Profile
+          .target-title-link.clearfix
+            = image_tag 'founders/dashboard/team_todo_icon.svg', class: "target-icon"
+            .target-header
+              h6.target-title
+                span.target-type-tag.hidden-xs-down
+                  | Team/Todo:
+                | Add Info to your Startup Profile
+              .target-title-info.hidden-xs-down
+                .target-deadline.font-regular
+                  | Suggested Deadline:
+                  span.target-deadline-date
+                    | Jan 17
+                .target-karma-points.font-regular
+                  | Points:
+                  span.earn-karma-points
+                    | 20
+            .target-status.tag.tag-pill.needs-improvement
+              | Needs Improvement
+          .target-description
+            .target-description-header.clearfix.m-b-1
+              h6.pull-sm-left.assigner-name.m-a-0
+                | Assigned by&nbsp;
+                span.font-regular
+                  | Vishnu Gopal
+              h6.pull-sm-right.target-due-date.m-a-0.alert-background
+                | Due date:&nbsp;
+                span.font-regular
+                  | Jan 7 at 11:59 PM.
+            p
+              ' Picking a Product Idea is your first major milestone. The slides
+              | below have some guidelines on how to pick right.
+            p
+              ' Submit a Product Idea Updated event with a one-page attachment
+              | (details in the slides) on the rationale behind why you have picked this idea.
         .target
-          | Team/Todo: Add Info to your Startup Profile
+          .target-title-link.clearfix
+            = image_tag 'founders/dashboard/team_todo_icon.svg', class: "target-icon"
+            .target-header
+              h6.target-title
+                span.target-type-tag.hidden-xs-down
+                  | Team/Todo:
+                | Add Info to your Startup Profile
+              .target-title-info.hidden-xs-down
+                .target-deadline.font-regular
+                  | Suggested Deadline:
+                  span.target-deadline-date
+                    | Jan 17
+                .target-karma-points.font-regular
+                  | Points:
+                  span.earn-karma-points
+                    | 20
+            .target-status.tag.tag-pill.pending
+              | Pending
+          .target-description
+            .target-description-header.clearfix.m-b-1
+              h6.pull-sm-left.assigner-name.m-a-0
+                | Assigned by&nbsp;
+                span.font-regular
+                  | Vishnu Gopal
+              h6.pull-sm-right.target-due-date.m-a-0.alert-background
+                | Due date:&nbsp;
+                span.font-regular
+                  | Jan 7 at 11:59 PM.
+            p
+              ' Picking a Product Idea is your first major milestone. The slides
+              | below have some guidelines on how to pick right.
+            p
+              ' Submit a Product Idea Updated event with a one-page attachment
+              | (details in the slides) on the rationale behind why you have picked this idea.
         .target
-          | Team/Todo: Add Info to your Startup Profile
-
-    .program-week
+          .target-title-link.clearfix
+            = image_tag 'founders/dashboard/team_todo_icon.svg', class: "target-icon"
+            .target-header
+              h6.target-title
+                span.target-type-tag.hidden-xs-down
+                  | Team/Todo:
+                | Add Info to your Startup Profile
+              .target-title-info.hidden-xs-down
+                .target-deadline.font-regular
+                  | Suggested Deadline:
+                  span.target-deadline-date
+                    | Jan 17
+                .target-karma-points.font-regular
+                  | Points:
+                  span.earn-karma-points
+                    | 20
+            .target-status.tag.tag-pill.expired
+              | Expired
+          .target-description
+            .target-description-header.clearfix.m-b-1
+              h6.pull-sm-left.assigner-name.m-a-0
+                | Assigned by&nbsp;
+                span.font-regular
+                  | Vishnu Gopal
+              h6.pull-sm-right.target-due-date.m-a-0.alert-background
+                | Due date:&nbsp;
+                span.font-regular
+                  | Jan 7 at 11:59 PM.
+            ' Here, I focus on a range of items and features that we use in life
+            ' without giving them a second thought such as Coca Cola, body muscles
+            | and holding ones own breath.
       .target-group
         .target-group-header.text-xs-center
           h4.brand-primary.font-regular
             | Welcome to SV.CO!
-          p
+          p.target-group-details
             ' Here, I focus on a range of items and features that we use in life
             ' without giving them a second thought such as Coca Cola, body muscles
             | and holding ones own breath.
         .target
-          | Team/Todo: Add Info to your Startup Profile
+          .target-title-link.clearfix
+            = image_tag 'founders/dashboard/team_todo_icon.svg', class: "target-icon"
+            .target-header
+              h6.target-title
+                span.target-type-tag.hidden-xs-down
+                  | Team/Todo:
+                | Add Info to your Startup Profile
+              .target-title-info.hidden-xs-down
+                .target-deadline.font-regular
+                  | Suggested Deadline:
+                  span.target-deadline-date
+                    | Jan 17
+                .target-karma-points.font-regular
+                  | Points:
+                  span.earn-karma-points
+                    | 20
+            .target-status.tag.tag-pill.unavailable
+              | Unavailable
+          .target-description
+            .target-description-header.clearfix.m-b-1
+              h6.pull-sm-left.assigner-name.m-a-0
+                | Assigned by&nbsp;
+                span.font-regular
+                  | Vishnu Gopal
+              h6.pull-sm-right.target-due-date.m-a-0.alert-background
+                | Due date:&nbsp;
+                span.font-regular
+                  | Jan 7 at 11:59 PM.
+            p
+              ' Here, I focus on a range of items and features that we use in life
+              ' without giving them a second thought such as Coca Cola, body muscles
+              | and holding ones own breath.
         .target
-          | Team/Todo: Add Info to your Startup Profile
+          .target-title-link.clearfix
+            = image_tag 'founders/dashboard/team_todo_icon.svg', class: "target-icon"
+            .target-header
+              h6.target-title
+                span.target-type-tag.hidden-xs-down
+                  | Team/Todo:
+                | Add Info to your Startup Profile
+              .target-title-info.hidden-xs-down
+                .target-deadline.font-regular
+                  | Suggested Deadline:
+                  span.target-deadline-date
+                    | Jan 17
+                .target-karma-points.font-regular
+                  | Points:
+                  span.earn-karma-points
+                    | 20
+            .target-status.tag.tag-pill.submitted
+              | Submitted
+          .target-description
+            .target-description-header.clearfix.m-b-1
+              h6.pull-sm-left.assigner-name.m-a-0
+                | Assigned by&nbsp;
+                span.font-regular
+                  | Vishnu Gopal
+              h6.pull-sm-right.target-due-date.m-a-0.alert-background
+                | Due date:&nbsp;
+                span.font-regular
+                  | Jan 7 at 11:59 PM.
+            p
+              ' Here, I focus on a range of items and features that we use in life
+              ' without giving them a second thought such as Coca Cola, body muscles
+              | and holding ones own breath.
         .target
-          | Team/Todo: Add Info to your Startup Profile
+          .target-title-link.clearfix
+            = image_tag 'founders/dashboard/team_todo_icon.svg', class: "target-icon"
+            .target-header
+              h6.target-title
+                span.target-type-tag.hidden-xs-down
+                  | Team/Todo:
+                | Add Info to your Startup Profile
+              .target-title-info.hidden-xs-down
+                .target-deadline.font-regular
+                  | Suggested Deadline:
+                  span.target-deadline-date
+                    | Jan 17
+                .target-karma-points.font-regular
+                  | Points:
+                  span.earn-karma-points
+                    | 20
+            .target-status.tag.tag-pill.verified
+              | Verified
+          .target-description
+            .target-description-header.clearfix.m-b-1
+              h6.pull-sm-left.assigner-name.m-a-0
+                | Assigned by&nbsp;
+                span.font-regular
+                  | Vishnu Gopal
+              h6.pull-sm-right.target-due-date.m-a-0.alert-background
+                | Due date:&nbsp;
+                span.font-regular
+                  | Jan 7 at 11:59 PM.
+            p
+              ' Here, I focus on a range of items and features that we use in life
+              ' without giving them a second thought such as Coca Cola, body muscles
+              | and holding ones own breath.
+
+    .program-week
+      .program-week-header
+        span.program-week-number
+          | Week 2
+        span.program-week-icon
+        span.program-week-title
+          | Start Building  Alpha Prototype
+      .target-group
+        .target-group-header.text-xs-center
+          h4.brand-primary.font-regular
+            | Welcome to SV.CO!
+          p.target-group-details
+            ' Here, I focus on a range of items and features that we use in life
+            ' without giving them a second thought such as Coca Cola, body muscles
+            | and holding ones own breath.
+        .target
+          .target-title-link.clearfix
+            = image_tag 'founders/dashboard/team_todo_icon.svg', class: "target-icon"
+            .target-header
+              h6.target-title
+                span.target-type-tag.hidden-xs-down
+                  | Team/Todo:
+                | Add Info to your Startup Profile
+              .target-title-info.hidden-xs-down
+                .target-deadline.font-regular
+                  | Suggested Deadline:
+                  span.target-deadline-date
+                    | Jan 17
+                .target-karma-points.font-regular
+                  | Points:
+                  span.earn-karma-points
+                    | 20
+            .target-status.tag.tag-pill.needs-improvement
+              | Needs Improvement
+          .target-description
+            .target-description-header.clearfix.m-b-1
+              h6.pull-sm-left.assigner-name.m-a-0
+                | Assigned by&nbsp;
+                span.font-regular
+                  | Vishnu Gopal
+              h6.pull-sm-right.target-due-date.m-a-0.alert-background
+                | Due date:&nbsp;
+                span.font-regular
+                  | Jan 7 at 11:59 PM.
+            p
+              ' Here, I focus on a range of items and features that we use in life
+              ' without giving them a second thought such as Coca Cola, body muscles
+              | and holding ones own breath.
+        .target
+          .target-title-link.clearfix
+            = image_tag 'founders/dashboard/team_todo_icon.svg', class: "target-icon"
+            .target-header
+              h6.target-title
+                span.target-type-tag.hidden-xs-down
+                  | Team/Todo:
+                | Add Info to your Startup Profile
+              .target-title-info.hidden-xs-down
+                .target-deadline.font-regular
+                  | Suggested Deadline:
+                  span.target-deadline-date
+                    | Jan 17
+                .target-karma-points.font-regular
+                  | Points:
+                  span.earn-karma-points
+                    | 20
+            .target-status.tag.tag-pill.needs-improvement
+              | Needs Improvement
+          .target-description
+            .target-description-header.clearfix.m-b-1
+              h6.pull-sm-left.assigner-name.m-a-0
+                | Assigned by&nbsp;
+                span.font-regular
+                  | Vishnu Gopal
+              h6.pull-sm-right.target-due-date.m-a-0.alert-background
+                | Due date:&nbsp;
+                span.font-regular
+                  | Jan 7 at 11:59 PM.
+            p
+              ' Here, I focus on a range of items and features that we use in life
+              ' without giving them a second thought such as Coca Cola, body muscles
+              | and holding ones own breath.
+        .target
+          .target-title-link.clearfix
+            = image_tag 'founders/dashboard/team_todo_icon.svg', class: "target-icon"
+            .target-header
+              h5.target-title
+                span.target-type-tag.light-grey-text
+                  | Team/Todo:
+                | Add Info to your Startup Profile
+          .target-description
+            .target-description-header.clearfix.m-b-1
+              h6.pull-sm-left.assigner-name.m-a-0
+                | Assigned by&nbsp;
+                span.font-regular
+                  | Vishnu Gopal
+              h6.pull-sm-right.target-due-date.m-a-0.alert-background
+                | Due date:&nbsp;
+                span.font-regular
+                  | Jan 7 at 11:59 PM.
+            p
+              ' Here, I focus on a range of items and features that we use in life
+              ' without giving them a second thought such as Coca Cola, body muscles
+              | and holding ones own breath.

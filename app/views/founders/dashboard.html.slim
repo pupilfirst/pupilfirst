@@ -2,18 +2,18 @@
   .container
     .startup-profile
       .m-x-auto.startup-logo-container
+        = image_tag "#{@startup.logo_url}", class: 'startup-logo'
       .product-details.text-xs-center
         h3.product-title.font-semibold
-          | Shrello
-        p
-          | by Titan Technologies
+          | #{@startup.product_name}
+        - if @startup.name.present?
+          p
+            | by #{@startup.name}
         .startup-founders.text-xs-center
-          a.founder-avatar-bubble href=""
-          a.founder-avatar-bubble href=""
-          a.founder-avatar-bubble href=""
-          a.founder-avatar-bubble href=""
-          a.founder-avatar-bubble href=""
-          a.founder-avatar-bubble href=""
+          - @startup.founders.each do |founder|
+            a.founder-avatar-bubble href=founder_profile_path(founder.slug)
+              = image_tag profile_image_url(founder), class: 'img-circle'
+
 .founder-dashboard-container
   .fixed-dashboard-header
     .container

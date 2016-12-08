@@ -28,6 +28,16 @@ class FoundersController < ApplicationController
     end
   end
 
+  # GET /founder/dashboard
+  def dashboard
+    @header_non_floating = true
+    @skip_container = true
+
+    @startup = current_founder.startup
+
+    render layout: 'application_v2'
+  end
+
   private
 
   # If founder's startup has already been created (by team lead), take him there. Otherwise, take him to consent screen.

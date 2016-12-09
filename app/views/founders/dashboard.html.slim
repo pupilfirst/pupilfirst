@@ -19,7 +19,7 @@
     .container
 
   .targets-board.m-x-auto.target-accordion
-    - @program_weeks.order(:number).each do |program_week|
+    - @program_weeks.each do |program_week|
       - next unless program_week.target_groups.present?
       .program-week
         .program-week-header
@@ -29,7 +29,7 @@
           span.program-week-title
             | #{program_week.name}
 
-        - program_week.target_groups.order(:sort_index).each do |target_group|
+        - program_week.target_groups.each do |target_group|
           .target-group
             .target-group-header.text-xs-center
               h4.brand-primary.font-regular
@@ -37,7 +37,7 @@
               .target-group-details
                 ' #{target_group.description}
 
-            - target_group.targets.order(:days_to_complete).each do |target|
+            - target_group.targets.each do |target|
               .target
                 .target-title-link.clearfix
                   = image_tag 'founders/dashboard/team_todo_icon.svg', class: "target-icon"

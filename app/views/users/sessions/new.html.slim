@@ -14,6 +14,10 @@
               #sign-in-with-federated class=hidden_sign_in_class('federated')
                 h3.text-xs-center.m-b-2 Sign in to SV.CO
 
+                - if Rails.env.development?
+                  a.oauth-login.login-as-developer href=user_developer_omniauth_authorize_path
+                    i.fa.fa-code.oauth-icon
+                    | Continue as Developer
                 a.oauth-login.login-with-google href=user_google_oauth2_omniauth_authorize_path
                   i.fa.fa-google.oauth-icon
                   | Continue with Google

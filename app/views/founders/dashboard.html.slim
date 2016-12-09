@@ -51,10 +51,11 @@
                         | Suggested Deadline:
                         span.target-deadline-date
                           | #{target.due_date.strftime('%b %e')}
-                      .target-karma-points.font-regular
-                        | Points:
-                        span.earn-karma-points
-                          | 20
+                      - if target.points_earnable.present?
+                        .target-karma-points.font-regular
+                          | Points:
+                          span.earn-karma-points
+                            | #{target.points_earnable}
                   .target-status.tag.tag-pill.needs-improvement class="#{target.status_badge_class(current_founder)}"
                     | #{target.status_text(current_founder)}
                 .target-description

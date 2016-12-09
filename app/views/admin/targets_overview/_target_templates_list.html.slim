@@ -61,3 +61,29 @@ p BRB! Being rebuild to reflect the new scheme of targets.
 /          td.col #{Target.shortlist(batch_selected, :all, template).where('due_date > ?', template.due_date).count}
 /          td.col
 /            = link_to 'View Details', admin_targets_overview_path(template_id: template.id, batch: batch_selected&.id)
+
+table
+  thead
+    tr
+      th.col Target Name
+      th.col Completed
+      th.col Submitted
+      th.col Needs Improvement
+      th.col Not Accepted
+      th.col Unavailable
+      th.col Pending
+      th.col Expired
+
+  tbody
+    - @targets.each do |target|
+      tr
+        td.col #{target.title}
+        td.col #{target.stats_service.completed_count}
+        td.col #{target.stats_service.submitted_count}
+        td.col #{target.stats_service.needs_improvement_count}
+        td.col #{target.stats_service.not_accepted_count}
+        td.col #{target.stats_service.unavailable_count}
+        td.col #{target.stats_service.pending_count}
+        td.col #{target.stats_service.expired_count}
+
+

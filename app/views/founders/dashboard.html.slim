@@ -1,80 +1,83 @@
-.dashboard-header
-  .container
-    .startup-profile
-      .m-x-auto.startup-logo-container
-        = image_tag "#{@startup.logo_url}", class: 'startup-logo'
-      .product-details.text-xs-center
-        h3.product-title.font-semibold
-          | #{@startup.product_name}
-        - if @startup.name.present?
-          p
-            | by #{@startup.name}
-        .startup-founders.text-xs-center
-          - @startup.founders.each do |founder|
-            a.founder-avatar-bubble href=founder_profile_path(founder.slug)
-              = image_tag profile_image_url(founder), class: 'img-circle'
-
-.founder-dashboard-container
-  .fixed-dashboard-header
+#founder-dashboard
+  .dashboard-header
     .container
+      .startup-profile
+        .m-x-auto.startup-logo-container
+          = image_tag "#{@startup.logo_url}", class: 'startup-logo'
+        .product-details.text-xs-center
+          h3.product-title.font-semibold
+            | #{@startup.product_name}
+          - if @startup.name.present?
+            p
+              | by #{@startup.name}
+          .startup-founders.text-xs-center
+            - @startup.founders.each do |founder|
+              a.founder-avatar-bubble href=founder_profile_path(founder.slug)
+                = image_tag profile_image_url(founder), class: 'img-circle'
 
-  .targets-board.m-x-auto.target-accordion
-    - @program_weeks.order(:number).each do |program_week|
-      - next unless program_week.target_groups.present?
-      .program-week
-        .program-week-header
-          span.program-week-number
-            | Week #{program_week.number}
-          span.program-week-icon
-          span.program-week-title
-            | #{program_week.name}
+  .founder-dashboard-container
+    .fixed-dashboard-header
+      .container
+        .dashboard-header-container
+          button.btn.btn-with-icon.btn-md.btn-secondary.text-uppercase.btn-timeline-builder data-toggle="modal"
+            i.fa.fa-plus
+            ' Add Event
 
-        - program_week.target_groups.order(:sort_index).each do |target_group|
-          .target-group
-            .target-group-header.text-xs-center
-              h4.brand-primary.font-regular
-                | #{target_group.name}
-              .target-group-details
-                ' #{target_group.description}
+    .targets-board.m-x-auto.target-accordion
+      - @program_weeks.order(:number).each do |program_week|
+        - next unless program_week.target_groups.present?
+        .program-week
+          .program-week-header
+            span.program-week-number
+              | Week #{program_week.number}
+            span.program-week-icon
+              = image_tag 'founders/dashboard/program-week-icons/read_icon.svg'
+            span.program-week-title
+              | #{program_week.name}
 
-            - target_group.targets.order(:days_to_complete).each do |target|
-              .target
-                .target-title-link.clearfix
-                  = image_tag 'founders/dashboard/team_todo_icon.svg', class: "target-icon"
-                  .target-header
-                    h6.target-title
-                      span.target-type-tag.hidden-xs-down
-                        | #{target.target_type}
-                      | #{target.title}
-                    .target-title-info.hidden-xs-down
-                      .target-deadline.font-regular
-                        | Suggested Deadline:
-                        span.target-deadline-date
-                          | #{target.due_date.strftime('%b %e')}
-                      .target-karma-points.font-regular
-                        | Points:
-                        span.earn-karma-points
-                          | 20
-                  .target-status.tag.tag-pill.needs-improvement class="#{status_class(target.status(current_founder))}"
-                    | #{status_text(target.status(current_founder))}
-                .target-description
-                  .target-description-header.clearfix.m-b-1
-                    - if target.assigner.present?
-                      h6.pull-sm-left.assigner-name.m-a-0
-                        | Assigned by&nbsp;
+          - program_week.target_groups.order(:sort_index).each do |target_group|
+            .target-group
+              .target-group-header.text-xs-center
+                h4.brand-primary.font-regular
+                  | #{target_group.name}
+                .target-group-details
+                  ' #{target_group.description}
+
+              - target_group.targets.order(:days_to_complete).each do |target|
+                .target
+                  .target-title-link.clearfix
+                    = image_tag 'founders/dashboard/team_todo_icon.svg', class: "target-icon"
+                    .target-header
+                      h6.target-title
+                        span.target-type-tag.hidden-xs-down
+                          | #{target.target_type}
+                        | #{target.title}
+                      .target-title-info.hidden-xs-down
+                        .target-deadline.font-regular
+                          | Suggested Deadline:
+                          span.target-deadline-date
+                            | #{target.due_date.strftime('%b %e')}
+                        .target-karma-points.font-regular
+                          | Points:
+                          span.earn-karma-points
+                            | 20
+                    .target-status.tag.tag-pill.needs-improvement class="#{status_class(target.status(current_founder))}"
+                      | #{status_text(target.status(current_founder))}
+                  .target-description
+                    .target-description-header.clearfix.m-b-1
+                      - if target.assigner.present?
+                        h6.pull-sm-left.assigner-name.m-a-0
+                          | Assigned by&nbsp;
+                          span.font-regular
+                            | #{target.assigner.name}
+                      h6.pull-sm-right.target-due-date.m-a-0.alert-background
+                        | Due date:&nbsp;
                         span.font-regular
-                          | #{target.assigner.name}
-                    h6.pull-sm-right.target-due-date.m-a-0.alert-background
-                      | Due date:&nbsp;
-                      span.font-regular
-                        | #{target.due_date.strftime('%b %e')} at 11:59 PM.
-                  p
-                    ' #{target.description}
-                  p
-                    ' #{target.completion_instructions}
-                  .complete-target-block.m-t-1.text-xs-center
-                    a.btn.btn-with-icon.btn-md.btn-secondary href='#'
-                      i.fa.fa-upload
-                      ' COMPLETE
+                          | #{target.due_date.strftime('%b %e')} at 11:59 PM.
+                    p
+                      ' #{target.description}
+                    p
+                      ' #{target.completion_instructions}
+                    == render 'submission_panel'
 
 == render 'timeline_builder'

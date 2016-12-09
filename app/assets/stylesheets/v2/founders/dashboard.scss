@@ -3,9 +3,20 @@
 }
 .fixed-dashboard-header {
   background-color: white;
-  height: 100px;
   border-bottom: 1px solid $gray-border;
   box-shadow: 0px 2px 10px 0px lighten($gray-light, 35%);
+
+  .dashboard-header-container {
+    display: flex;
+    height: 100px;
+    padding: 25px 0;
+    justify-content: center;
+    align-items: center;
+  }
+}
+.complete-target-block {
+  border-top: 1px solid $gray-border;
+  padding: 2rem 0 1rem;
 }
 .targets-board, .target-accordion {
   max-width: 50rem;
@@ -44,13 +55,19 @@
         left: 50%;
         transform: translateX(-50%);
         @include border-radius(50%);
-        display: inline-block;
-        width: 43px;
-        height: 43px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 45px;
+        height: 45px;
         background-color: white;
         border: 3px solid $light-secondary;
         box-shadow: 0px 0 8px 0px lighten($brand-secondary, 40%);
         z-index: 1;
+
+        img {
+          width: 20px;
+        }
       }
       .program-week-number {
         position: absolute;
@@ -240,8 +257,11 @@
           &.expired {
             background-color: rgba(255, 64, 64, 0.7);
           }
-          &.verified {
+          &.complete {
             background-color: rgba(50, 180, 117, 0.7);
+          }
+          &.not-accepted {
+            background-color: rgba(46, 47, 51, 0.7);
           }
         }
 
@@ -268,13 +288,8 @@
               }
             }
           }
-          .complete-target-block {
-            border-top: 1px solid $gray-border;
-            padding: 2rem 0 1rem;
-
-            .btn {
-              margin-left: -46px;
-            }
+          .btn-timeline-builder {
+            margin-left: -46px;
           }
         }
       }

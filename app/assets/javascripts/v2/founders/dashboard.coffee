@@ -12,6 +12,11 @@ targetAccordion = ->
     dropDown.stop(false, true).slideToggle(200)
     t.preventDefault()
 
+timelineBuilderModal = ->
+  $('.btn-timeline-builder').click () ->
+    $("#timeline-builder").modal('show');
+
 $(document).on 'turbolinks:load', ->
-  if $('.targets-board').length
+  if $('#founder-dashboard').length
     targetAccordion()
+    timelineBuilderModal()

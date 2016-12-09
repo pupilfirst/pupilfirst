@@ -1,0 +1,6 @@
+.startup-founders
+  - @startup.founders.each do |founder|
+    a.founder-avatar-bubble href=founder_profile_path(founder.slug)
+      .target-complete-check.img-circle
+        i.fa.fa-check-circle.brand-primary
+      = image_tag profile_image_url(founder), class: 'img-circle'

@@ -1,3 +1,46 @@
 #timeline-builder {
+  .modal-dialog {
+    max-width: 45rem;
 
+    .modal-content {
+      border: 1px solid $gray-border;
+      @include border-radius(10px);
+      overflow: hidden;
+
+      .modal-body {
+        padding: 0;
+        position: relative;
+
+        .close {
+          position: absolute;
+          margin: 1.25rem;
+          right: 0;
+        }
+
+        textarea {
+          padding: 1.25rem 3rem 1.25rem 1.25rem;
+          line-height: 1.5;
+          outline: none;
+          resize: none;
+          border: 0;
+          font-size: 1.125rem;
+          font-weight: $font-light;
+        }
+        .uploaded-files-block {
+          padding: 1rem 0;
+          margin: 0 1.25rem;
+          border-top: 1px dashed $gray-border;
+
+          .uploded-file-tag {
+            width: 150px;
+            height: 30px;
+            display: inline-block;
+            border: 1px solid $brand-secondary;
+            background-color: $primary-background;
+            @include border-radius(20px);
+          }
+        }
+      }
+    }
+  }
 }

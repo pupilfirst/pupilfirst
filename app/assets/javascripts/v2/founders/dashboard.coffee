@@ -14,7 +14,8 @@ targetAccordion = ->
 
 timelineBuilderModal = ->
   $('.btn-timeline-builder').click () ->
-    $("#timeline-builder").modal('show');
+    $('#timeline-builder').modal()
+      backdrop: 'static'
 
 $(document).on 'turbolinks:load', ->
   if $('#founder-dashboard').length

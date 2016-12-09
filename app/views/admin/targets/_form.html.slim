@@ -6,9 +6,8 @@
     = f.input :batch, collection: Batch.all, include_blank: false
     = f.input :role,
       as: :select,
-      collection: Target.valid_roles,
-      include_blank: false,
-      member_label: proc { |role| t("role.#{role}") }
+      collection: Target.valid_roles.map { |r| [t("role.#{r}"), r] },
+      include_blank: false
 
     = f.input :title
     = f.hidden_field :description

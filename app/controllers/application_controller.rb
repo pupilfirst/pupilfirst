@@ -85,7 +85,7 @@ class ApplicationController < ActionController::Base
   private
 
   def sign_out_if_required
-    service = Users::ManualSignOutService.new(self, current_user)
+    service = ::Users::ManualSignOutService.new(self, current_user)
     service.sign_out_if_required
     redirect_to root_url if service.signed_out?
   end

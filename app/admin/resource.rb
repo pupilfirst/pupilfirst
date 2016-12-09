@@ -11,8 +11,7 @@ ActiveAdmin.register Resource do
 
   filter :startup,
     collection: Startup.batched.order(:product_name),
-    label: 'Product',
-    member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : 's'}" }
+    label: 'Product'
 
   filter :share_status,
     collection: Resource.valid_share_statuses
@@ -120,8 +119,8 @@ ActiveAdmin.register Resource do
     f.inputs 'Resource details' do
       f.input :share_status,
         as: :select,
-        collection: Resource.valid_share_statuses,
-        member_label: proc { |share_status| t("resource.share_status.#{share_status}") }
+        collection: Resource.valid_share_statuses.map { |s| [t("resource.share_status.#{s}"), s] },
+        include_blank: false
 
       f.input :batch, label: 'Shared with Batch', placeholder: 'Leave this unselected to share with all batches.'
       f.input :startup, label: 'Shared with Startup'

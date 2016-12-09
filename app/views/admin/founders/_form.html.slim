@@ -10,7 +10,7 @@
     = f.input :about
     = f.input :born_on, as: :date_select, :start_year => 1920, :end_year => Date.today.year - 10
     = f.input :gender, as: :select, collection: Founder.valid_gender_values
-    = f.input :startup, label: 'Product', member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }
+    = f.input :startup, label: 'Product'
     = f.input :startup_admin
     = f.input :communication_address
     = f.input :slack_username

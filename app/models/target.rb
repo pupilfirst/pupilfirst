@@ -110,4 +110,8 @@ class Target < ApplicationRecord
   def status(founder)
     Targets::StatusService.new(self, founder).status
   end
+
+  def stats_service
+    @stats_service ||= Targets::StatsService.new(self)
+  end
 end

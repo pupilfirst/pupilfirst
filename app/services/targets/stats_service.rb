@@ -34,6 +34,21 @@ module Targets
       @target.founder? ? pending_founders.count : pending_startups.count
     end
 
+    # Returns count of Startups or Founders who have the target expired
+    def expired_count
+      @target.founder? ? expired_founders.count : expired_startups.count
+    end
+
+    # Returns count of Startups or Founders who have submitted the target
+    def submitted_count
+      @target.founder? ? submitted_founders.count : submitted_startups.count
+    end
+
+    # Returns count of Startups or Founders whose submission needs improvement
+    def needs_improvement_count
+      @target.founder? ? needs_improvement_founders.count : needs_improvement_startups.count
+    end
+
     private
 
     def events_of_completion
@@ -57,11 +72,35 @@ module Targets
     end
 
     def pending_founders
-      @target.batch.founders - completed_founders - unavailable_founders
+      @target.batch.founders.select { |founder| @target.status(founder) == Targets::StatusService::STATUS_PENDING }
     end
 
     def pending_startups
-      @target.batch.startups - completed_startups - unavailable_startups
+      @target.batch.startups.select { |startup| @target.status(startup.admin) == Targets::StatusService::STATUS_PENDING }
+    end
+
+    def expired_founders
+      @target.batch.founders.select { |founder| @target.status(founder) == Targets::StatusService::STATUS_EXPIRED }
+    end
+
+    def expired_startups
+      @target.batch.startups.select { |startup| @target.status(startup.admin) == Targets::StatusService::STATUS_EXPIRED }
+    end
+
+    def submitted_founders
+      @target.batch.founders.select { |founder| @target.status(founder) == Targets::StatusService::STATUS_SUBMITTED }
+    end
+
+    def submitted_startups
+      @target.batch.startups.select { |startup| @target.status(startup.admin) == Targets::StatusService::STATUS_SUBMITTED }
+    end
+
+    def needs_improvement_founders
+      @target.batch.founders.select { |founder| @target.status(founder) == Targets::StatusService::STATUS_NEEDS_IMPROVEMENT }
+    end
+
+    def needs_improvement_startups
+      @target.batch.startups.select { |startup| @target.status(startup.admin) == Targets::StatusService::STATUS_NEEDS_IMPROVEMENT }
     end
   end
 end

@@ -4,29 +4,9 @@ module Targets
       @target = target
     end
 
-    # Returns array of Startups or Founders who have completed the target
-    def completed_assignees
-      @target.founder? ? completed_founders : completed_startups
-    end
-
-    # Returns count of Startups or Founders who have completed the target
-    def completed_count
-      @target.founder? ? completed_founders.count : completed_startups.count
-    end
-
-    # Returns array of Startups or Founders who have the target unavailable
-    def unavailable_assignees
-      @target.founder? ? unavailable_founders : unavailable_startups
-    end
-
     # Returns count of Startups or Founders who have the target unavailable
     def unavailable_count
       @target.founder? ? unavailable_founders.count : unavailable_startups.count
-    end
-
-    # Returns array of Startups or Founders who have the target pending
-    def pending_assignees
-      @target.founder? ? pending_founders : pending_startups
     end
 
     # Returns count of Startups or Founders who have the target pending
@@ -39,6 +19,11 @@ module Targets
       @target.founder? ? expired_founders.count : expired_startups.count
     end
 
+    # Returns count of Startups or Founders who have completed the target
+    def completed_count
+      @target.founder? ? completed_founders.count : completed_startups.count
+    end
+
     # Returns count of Startups or Founders who have submitted the target
     def submitted_count
       @target.founder? ? submitted_founders.count : submitted_startups.count
@@ -49,18 +34,46 @@ module Targets
       @target.founder? ? needs_improvement_founders.count : needs_improvement_startups.count
     end
 
+    def not_accepted_count
+      @target.founder? ? not_accepted_founders.count : not_accepted_startups.count
+    end
+
     private
 
-    def events_of_completion
-      @completed_events ||= TimelineEvent.where(target: @target).verified_or_needs_improvement
+    def linked_events
+      TimelineEvent.where(target: @target)
     end
 
     def completed_founders
-      @completed_founders ||= Founder.where(id: events_of_completion.select(:founder_id).distinct)
+      @completed_founders ||= Founder.where(id: linked_events.verified.select(:founder_id).distinct)
     end
 
     def completed_startups
-      @completed_startups ||= Startup.where(id: events_of_completion.select(:startup_id).distinct)
+      @completed_startups ||= Startup.where(id: linked_events.verified.select(:startup_id).distinct)
+    end
+
+    def submitted_founders
+      @submitted_founders ||= Founder.where(id: linked_events.pending.select(:founder_id).distinct)
+    end
+
+    def submitted_startups
+      @submitted_startups ||= Startup.where(id: linked_events.pending.select(:startup_id).distinct)
+    end
+
+    def needs_improvement_founders
+      @needs_improvement_founders ||= Founder.where(id: linked_events.needs_improvement.select(:founder_id).distinct)
+    end
+
+    def needs_improvement_startups
+      @needs_improvement_startups ||= Startup.where(id: linked_events.needs_improvement.select(:startup_id).distinct)
+    end
+
+    def not_accepted_founders
+      @not_accepted_founders ||= Founder.where(id: linked_events.not_accepted.select(:founder_id).distinct)
+    end
+
+    def not_accepted_startups
+      @not_accepted_startups ||= Startup.where(id: linked_events.not_accepted.select(:startup_id).distinct)
     end
 
     def unavailable_founders
@@ -85,22 +98,6 @@ module Targets
 
     def expired_startups
       @target.batch.startups.select { |startup| @target.status(startup.admin) == Targets::StatusService::STATUS_EXPIRED }
-    end
-
-    def submitted_founders
-      @target.batch.founders.select { |founder| @target.status(founder) == Targets::StatusService::STATUS_SUBMITTED }
-    end
-
-    def submitted_startups
-      @target.batch.startups.select { |startup| @target.status(startup.admin) == Targets::StatusService::STATUS_SUBMITTED }
-    end
-
-    def needs_improvement_founders
-      @target.batch.founders.select { |founder| @target.status(founder) == Targets::StatusService::STATUS_NEEDS_IMPROVEMENT }
-    end
-
-    def needs_improvement_startups
-      @target.batch.startups.select { |startup| @target.status(startup.admin) == Targets::StatusService::STATUS_NEEDS_IMPROVEMENT }
     end
   end
 end

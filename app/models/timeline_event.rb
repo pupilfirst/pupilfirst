@@ -65,6 +65,7 @@ class TimelineEvent < ApplicationRecord
   scope :verified, -> { where(verified_status: VERIFIED_STATUS_VERIFIED) }
   scope :pending, -> { where(verified_status: VERIFIED_STATUS_PENDING) }
   scope :needs_improvement, -> { where(verified_status: VERIFIED_STATUS_NEEDS_IMPROVEMENT) }
+  scope :not_accepted, -> { where(verified_status: VERIFIED_STATUS_NOT_ACCEPTED) }
   scope :verified_or_needs_improvement, -> { where(verified_status: [VERIFIED_STATUS_VERIFIED, VERIFIED_STATUS_NEEDS_IMPROVEMENT]) }
   scope :has_image, -> { where.not(image: nil) }
   scope :from_approved_startups, -> { joins(:startup).merge(Startup.approved) }

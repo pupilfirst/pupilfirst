@@ -11,6 +11,8 @@ Rails.application.routes.draw do
     end
   end
 
+  post 'users/email_bounce', controller: 'users/postmark_webhook', action: 'email_bounce'
+
   authenticated :admin_user do
     mount Delayed::Web::Engine, at: '/jobs'
   end

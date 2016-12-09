@@ -31,7 +31,7 @@
               #sign-in-with-email class=hidden_sign_in_class('email')
                 h3.text-xs-center.m-b-2 Sign in with your SV.CO ID
 
-                = form_for @form, url: user_send_login_email_path(referer: params[:referer]) do |f|
+                = form_for @form, url: user_send_login_email_path do |f|
                   = f.hidden_field :referer
 
                   .wrapped-input

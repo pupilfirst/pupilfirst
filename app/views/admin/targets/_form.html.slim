@@ -6,9 +6,8 @@
     = f.input :batch, collection: Batch.all, include_blank: false
     = f.input :role,
       as: :select,
-      collection: Target.valid_roles,
-      include_blank: false,
-      member_label: proc { |role| t("role.#{role}") }
+      collection: Target.valid_roles.map { |r| [t("role.#{r}"), r] },
+      include_blank: false
 
     = f.input :title
     = f.hidden_field :description
@@ -23,6 +22,7 @@
       p.inline-errors-replica #{@target.errors[:description][0]}
 
     = f.input :target_type, collection: Target.valid_target_types
+    = f.input :points_earnable
     = f.input :prerequisite_targets, collection: @target.batch.present? ? @target.batch.targets.where.not(id: @target.id) : [], include_blank: @target.batch.present? ? false : 'Assign a batch and save this target first'
     = f.input :slideshow_embed
     = f.input :review_test_embed

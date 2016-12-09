@@ -198,18 +198,19 @@ ActiveAdmin.register TimelineEvent do
     f.inputs 'Event Details' do
       f.input :startup,
         include_blank: true,
-        label: 'Product',
-        member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }
+        label: 'Product'
+
       f.input :founder, label: 'Founder', as: :select, collection: f.object.persisted? ? f.object.startup.founders : [], include_blank: false
       f.input :timeline_event_type, include_blank: false
       f.input :description
       f.input :image
       f.input :event_on, as: :datepicker
       f.input :grade, as: :select, collection: TimelineEvent.valid_grades, required: false
+
       f.input :improved_timeline_event,
         as: :select,
-        collection: f.object.improved_event_candidates,
-        member_label: proc { |event| "#{event.title} (#{event.event_on.strftime('%b %d')})" } if f.object.persisted?
+        collection: f.object.persisted? ? f.object.improved_event_candidates.map { |e| "#{e.title} (#{e.event_on.strftime('%b %d')})" } : []
+
       f.input :serialized_links, as: :hidden
     end
 

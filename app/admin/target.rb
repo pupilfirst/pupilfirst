@@ -2,7 +2,7 @@ ActiveAdmin.register Target do
   include DisableIntercom
 
   permit_params :assignee_id, :assignee_type, :assigner_id, :role, :title, :description, :resource_url,
-    :completion_instructions, :days_to_complete, :slideshow_embed, :completed_at, :completion_comment, :rubric, :remote_rubric_url, :review_test_embed, :batch_id, :target_group_id, :target_type, prerequisite_target_ids: []
+    :completion_instructions, :days_to_complete, :slideshow_embed, :completed_at, :completion_comment, :rubric, :remote_rubric_url, :review_test_embed, :batch_id, :target_group_id, :target_type, :points_earnable, prerequisite_target_ids: []
 
   preserve_default_filters!
 
@@ -124,6 +124,7 @@ ActiveAdmin.register Target do
       row :batch
       row :target_group
       row :target_type
+      row :points_earnable
 
       row :role do
         t("role.#{target.role}")

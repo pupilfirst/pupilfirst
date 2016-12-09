@@ -62,8 +62,7 @@ ActiveAdmin.register KarmaPoint do
     f.inputs 'Extra' do
       f.input :startup,
         include_blank: true,
-        label: 'Product',
-        member_label: proc { |startup| "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}" }
+        label: 'Product'
 
       f.input :founder,
         label: 'Founder',

@@ -104,6 +104,7 @@ en:
   recaptcha:
     errors:
       verification_failed: Verification of Recaptcha failed. Please try again.
+
   role:
     team: Team
     product: Product
@@ -112,10 +113,17 @@ en:
     design: Design
     governance: Governance
     founder: All Founders
+
   target:
     status:
-      pending: Pending
-      done: Done
+      complete: 'Complete'
+      needs_improvement: 'Needs Improvement'
+      submitted: 'Submitted'
+      expired: 'Expired'
+      pending: 'Pending'
+      unavailable: 'Unavailable'
+      not_accepted: 'Not Accepted'
+
   timeline_event:
     grade:
       good: 'Good'

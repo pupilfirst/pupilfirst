@@ -34,8 +34,8 @@ class FoundersController < ApplicationController
     @skip_container = true
 
     @startup = current_founder.startup
-    # eager-load everything required for the dashboard. Order them too!
-    @program_weeks = @startup.batch.program_weeks.includes(target_groups: { targets: :assigner }).order(:number, 'target_groups.sort_index', 'targets.days_to_complete')
+    # eager-load everything required for the dashboard. Order and decorate them too!
+    @program_weeks = @startup.batch.program_weeks.includes(target_groups: { targets: :assigner }).order(:number, 'target_groups.sort_index', 'targets.days_to_complete').decorate
 
     render layout: 'application_v2'
   end

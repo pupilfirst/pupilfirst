@@ -55,8 +55,8 @@
                         | Points:
                         span.earn-karma-points
                           | 20
-                  .target-status.tag.tag-pill.needs-improvement class="#{status_class(target.status(current_founder))}"
-                    | #{status_text(target.status(current_founder))}
+                  .target-status.tag.tag-pill.needs-improvement class="#{target.status_badge_class(current_founder)}"
+                    | #{target.status_text(current_founder)}
                 .target-description
                   .target-description-header.clearfix.m-b-1
                     - if target.assigner.present?

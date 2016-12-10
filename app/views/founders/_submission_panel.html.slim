@@ -1,4 +1,56 @@
 .complete-target-block.m-t-2.text-xs-center
+  .target-feedback.complete
+    .feedback-icon.img-circle
+      i.fa.fa-thumbs-o-up
+    .feedback-message.text-xs-left
+      p.feedback-message-head.font-semibold
+        | Target completed
+      p.feedback-message-detail
+        | on Jan 5th at 10:20 PM
+
+  .target-feedback.needs-improvement
+   .feedback-icon.img-circle
+     i.fa.fa-line-chart
+   .feedback-message.text-xs-left
+     p.feedback-message-head.font-semibold
+       | Needs improvement
+     p.feedback-message-detail
+       | Nam dapibus nisl vitae elit fringilla.
+
+  .target-feedback.expired
+    .feedback-icon.img-circle
+      i.fa.fa-hourglass-half
+    .feedback-message.text-xs-left
+      p.feedback-message-head.font-semibold
+        | Target expired
+      p.feedback-message-detail
+        | Nam dapibus nisl vitae elit fringilla.
+
+  .target-feedback.not-accepted
+    .feedback-icon.img-circle
+      i.fa.fa-thumbs-o-down
+    .feedback-message.text-xs-left
+      p.feedback-message-head.font-semibold
+        | Submission not accepted
+      p.feedback-message-detail
+        | Nam dapibus nisl vitae elit fringilla.
+
+  .target-feedback.unavailable
+    .feedback-icon.img-circle
+      i.fa.fa-lock
+    .feedback-message.text-xs-left
+      p.feedback-message-head.font-semibold
+        | Unavailable targets
+      p.feedback-message-detail
+        | Nam dapibus nisl vitae elit fringilla.
+
+  .submit-instruction.font-regular
+    p
+      ' Submit a Product Idea Updated event with a one-page attachment (details in the slides)
+      | on the rationale behind why you have picked this idea.
   button.btn.btn-with-icon.btn-md.btn-secondary.text-uppercase.btn-timeline-builder data-toggle="modal"
     i.fa.fa-upload
-    ' Complete
+    ' Submit
+  / button.btn.btn-with-icon.btn-md.btn-secondary.text-uppercase.btn-timeline-builder data-toggle="modal"
+  /   i.fa.fa-upload
+  /   ' Re-submit

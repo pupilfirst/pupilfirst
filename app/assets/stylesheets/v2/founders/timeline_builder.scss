@@ -11,7 +11,7 @@
         padding: 0;
         position: relative;
 
-        .close {
+        .modal-close {
           position: absolute;
           margin: 1.25rem;
           right: 0;
@@ -38,6 +38,10 @@
             border: 1px solid $brand-secondary;
             background-color: $primary-background;
             @include border-radius(20px);
+
+            .remove-uploaded-file {
+              font-size: 1rem;
+            }
           }
         }
       }

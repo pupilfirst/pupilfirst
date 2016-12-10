@@ -2,20 +2,22 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
         <textarea class="form-control" id="exampleTextarea" rows="4" placeholder="What’s been happening?" autofocus></textarea>
         <div class="uploaded-files-block clearfix">
-          <a href="#" class="uploded-file-tag pull-xs-left m-r-1">
+          <div class="uploded-file-tag pull-xs-left m-r-1">
+            <button type="button" class="close remove-uploaded-file">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="uploded-file-tag pull-xs-left m-r-1">
 
-          </a>
-          <a href="#" class="uploded-file-tag pull-xs-left m-r-1">
+          </div>
+          <div class="uploded-file-tag pull-xs-left m-r-1">
 
-          </a>
-          <a href="#" class="uploded-file-tag pull-xs-left m-r-1">
-
-          </a>
+          </div>
         </div>
       </div>
     </div>

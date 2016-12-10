@@ -18,6 +18,52 @@
   border-top: 1px solid $gray-border;
   padding: 2rem 0 1rem;
 }
+.target-feedback {
+  display: flex;
+  justify-content: center;
+  margin-left: -46px;
+  margin-bottom: 1rem;
+
+  &.submitted {
+    color: $brand-secondary;
+  }
+  &.needs-improvement {
+    color: $alert-background;
+  }
+  &.unavailable, &.expired, &.not-accepted  {
+    color: rgba(255, 64, 64, 1.0);
+  }
+  &.complete {
+    color: $brand-primary;
+  }
+
+  .feedback-icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border: 1px solid $gray-border;
+  }
+  .feedback-message {
+    padding-left: 1rem;
+    margin-left: 1rem;
+    border-left: 1px solid $gray-border;
+
+    .feedback-message-head {
+      font-size: 1.125rem;
+    }
+    .feedback-message-detail {
+      font-size: 0.875rem;
+    }
+  }
+}
+.submit-instruction {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  color: $light-grey-text;
+}
 .targets-board, .target-accordion {
   max-width: 50rem;
   padding: 0 15px;

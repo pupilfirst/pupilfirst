@@ -30,7 +30,7 @@ class MoocStudentSignupForm < Reform::Form
     self.email = options[:email]
   end
 
-  def save
-    MoocStudents::RegistrationService.new(to_nested_hash).register
+  def save(send_sign_in_email:)
+    MoocStudents::RegistrationService.new(to_nested_hash, send_sign_in_email).register
   end
 end

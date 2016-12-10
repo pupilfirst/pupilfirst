@@ -30,7 +30,7 @@
             span.program-week-number
               | Week #{program_week.number}
             span.program-week-icon
-              = image_tag 'founders/dashboard/program-week-icons/read_icon.svg'
+              = image_tag "founders/dashboard/program-week-icons/#{program_week.icon_name}"
             span.program-week-title
               | #{program_week.name}
 
@@ -45,7 +45,7 @@
               - target_group.targets.each do |target|
                 .target
                   .target-title-link.clearfix
-                    = image_tag 'founders/dashboard/team_todo_icon.svg', class: "target-icon"
+                    = image_tag "founders/dashboard/target-type-icons/#{target.type_icon_name}", class: "target-icon"
                     .target-header
                       h6.target-title
                         span.target-type-tag.hidden-xs-down
@@ -78,7 +78,7 @@
                       ' #{target.description}
                     p
                       ' #{target.completion_instructions}
-                    == render 'founder_completion'
+                    == render 'founder_completion', target: target if target.founder?
                     == render 'submission_panel'
 
 == render 'timeline_builder'

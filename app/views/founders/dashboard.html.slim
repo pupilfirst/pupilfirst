@@ -45,7 +45,7 @@
               - target_group.targets.each do |target|
                 .target
                   .target-title-link.clearfix
-                    = image_tag 'founders/dashboard/team_todo_icon.svg', class: "target-icon"
+                    = image_tag "founders/dashboard/target-type-icons/#{target.type_icon_name}", class: "target-icon"
                     .target-header
                       h6.target-title
                         span.target-type-tag.hidden-xs-down

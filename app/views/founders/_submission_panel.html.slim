@@ -1,48 +1,14 @@
 .complete-target-block.m-t-2.text-xs-center
-  .target-feedback.complete
-    .feedback-icon.img-circle
-      i.fa.fa-thumbs-o-up
-    .feedback-message.text-xs-left
-      p.feedback-message-head.font-semibold
-        | Target completed
-      p.feedback-message-detail
-        | on Jan 5th at 10:20 PM
+  - unless target.pending_for?(current_founder)
+    .target-feedback class="#{target.status_badge_class(current_founder)}"
+      .feedback-icon.img-circle
+        i.fa class="#{target.status_fa_icon(current_founder)}"
+      .feedback-message.text-xs-left
+        p.feedback-message-head.font-semibold
 
-  .target-feedback.needs-improvement
-   .feedback-icon.img-circle
-     i.fa.fa-line-chart
-   .feedback-message.text-xs-left
-     p.feedback-message-head.font-semibold
-       | Needs improvement
-     p.feedback-message-detail
-       | Nam dapibus nisl vitae elit fringilla.
-
-  .target-feedback.expired
-    .feedback-icon.img-circle
-      i.fa.fa-hourglass-half
-    .feedback-message.text-xs-left
-      p.feedback-message-head.font-semibold
-        | Target expired
-      p.feedback-message-detail
-        | Nam dapibus nisl vitae elit fringilla.
-
-  .target-feedback.not-accepted
-    .feedback-icon.img-circle
-      i.fa.fa-thumbs-o-down
-    .feedback-message.text-xs-left
-      p.feedback-message-head.font-semibold
-        | Submission not accepted
-      p.feedback-message-detail
-        | Nam dapibus nisl vitae elit fringilla.
-
-  .target-feedback.unavailable
-    .feedback-icon.img-circle
-      i.fa.fa-lock
-    .feedback-message.text-xs-left
-      p.feedback-message-head.font-semibold
-        | Unavailable targets
-      p.feedback-message-detail
-        | Nam dapibus nisl vitae elit fringilla.
+          | #{target.status_report_text(current_founder)}
+        p.feedback-message-detail
+          | #{target.status_hint_text(current_founder)}
 
   .submit-instruction.font-regular
     p

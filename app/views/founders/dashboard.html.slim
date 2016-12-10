@@ -78,7 +78,7 @@
                       ' #{target.description}
                     p
                       ' #{target.completion_instructions}
-                    == render 'founder_completion'
+                    == render 'founder_completion', target: target if target.founder?
                     == render 'submission_panel'
 
 == render 'timeline_builder'

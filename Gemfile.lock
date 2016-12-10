@@ -635,6 +635,8 @@ GEM
     rack (2.0.1)
     rack-attack (5.0.1)
       rack
+    rack-mini-profiler (0.10.1)
+      rack (>= 1.2.0)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails-assets-bootstrap-tabcollapse (0.2.7)
@@ -932,6 +934,7 @@ DEPENDENCIES
   prawn
   prawn-table
   pry-rails
+  rack-mini-profiler
   rails!
   rails-assets-bootstrap-tabcollapse!
   rails-assets-chartkick!

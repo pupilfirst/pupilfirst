@@ -134,6 +134,7 @@ group :development do
   # gem 'binding_of_caller' # For advanced better_errors features - REPL, local/instance variable inspection etc.
   gem 'web-console', '~> 3.3.0' # TODO: Restored until better_errors speeds up again.
   gem 'listen' # The Listen gem listens to file modifications and notifies you about the changes.
+  gem 'rack-mini-profiler' # Middleware that displays speed badge for every html page.
 end
 
 group :test do

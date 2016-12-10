@@ -37,12 +37,19 @@ class SixWaysController < ApplicationController
   # POST /sixways/create_student
   def create_student
     @form = MoocStudentSignupForm.new(MoocStudent.new)
-    @form.prepopulate! email: current_user&.email
+
+    # Override the supplied email if user is already logged in.
+    params[:mooc_student_signup][:email] = current_user.email if current_user.present?
 
     if @form.validate(params[:mooc_student_signup])
-      @user = @form.save
-      @skip_container = true
-      render 'users/sessions/send_login_email'
+      @user = @form.save(send_sign_in_email: current_user.blank?)
+
+      if current_user.present?
+        redirect_to six_ways_start_url
+      else
+        @skip_container = true
+        render 'users/sessions/send_login_email'
+      end
     else
       render 'student_details'
     end

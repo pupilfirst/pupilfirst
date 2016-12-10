@@ -4,7 +4,14 @@ Rails.application.routes.draw do
   devise_scope :user do
     post 'users/send_login_email', controller: 'users/sessions', action: 'send_login_email', as: 'user_send_login_email'
     get 'users/token', controller: 'users/sessions', action: 'token', as: 'user_token'
+
+    if Rails.env.development?
+      get 'users/auth/developer', controller: 'users/omniauth_callbacks', action: 'passthru', as: 'user_developer_omniauth_authorize'
+      post 'users/auth/developer/callback', controller: 'users/omniauth_callbacks', action: 'developer'
+    end
   end
+
+  post 'users/email_bounce', controller: 'users/postmark_webhook', action: 'email_bounce'
 
   authenticated :admin_user do
     mount Delayed::Web::Engine, at: '/jobs'

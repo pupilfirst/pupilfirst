@@ -44,7 +44,7 @@ module MoocStudents
     def import_student(row)
       data = clean_up(row)
       log "Importing #{data.inspect}"
-      MoocStudents::RegistrationService.new(data).register unless dry_run?
+      MoocStudents::RegistrationService.new(data, true).register unless dry_run?
     end
 
     def clean_up(data)

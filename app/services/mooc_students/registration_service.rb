@@ -3,8 +3,9 @@ module MoocStudents
   class RegistrationService
     attr_reader :attributes
 
-    def initialize(attributes)
+    def initialize(attributes, send_sign_in_email)
       @attributes = attributes
+      @send_sign_in_email = send_sign_in_email
     end
 
     def register
@@ -17,7 +18,10 @@ module MoocStudents
         mooc_student = MoocStudent.where(user_id: user.id).first_or_create!(attributes)
 
         # Send the user a login email, welcoming him / her to SixWays.
-        MoocStudentMailer.welcome(mooc_student).deliver_now
+        if @send_sign_in_email
+          user.regenerate_login_token if user.login_token.blank?
+          MoocStudentMailer.welcome(mooc_student).deliver_now
+        end
 
         # Return the user
         user

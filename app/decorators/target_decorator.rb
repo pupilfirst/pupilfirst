@@ -28,4 +28,8 @@ class TargetDecorator < Draper::Decorator
         TEAM_TODO_ICON
     end
   end
+
+  def completed_by?(founder)
+    status(founder).in? [Targets::StatusService::STATUS_COMPLETE, Targets::StatusService::STATUS_NEEDS_IMPROVEMENT]
+  end
 end

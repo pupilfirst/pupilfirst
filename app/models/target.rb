@@ -111,10 +111,6 @@ class Target < ApplicationRecord
     Targets::StatusService.new(self, founder).status
   end
 
-  def completed_by?(founder)
-    status(founder).in? [Targets::StatusService::STATUS_COMPLETE, Targets::StatusService::STATUS_NEEDS_IMPROVEMENT]
-  end
-
   def stats_service
     @stats_service ||= Targets::StatsService.new(self)
   end

@@ -30,7 +30,7 @@
             span.program-week-number
               | Week #{program_week.number}
             span.program-week-icon
-              = image_tag 'founders/dashboard/program-week-icons/read_icon.svg'
+              = image_tag "founders/dashboard/program-week-icons/#{program_week.icon_name}"
             span.program-week-title
               | #{program_week.name}
 

@@ -1,3 +1,11 @@
+### 12 December, 2016
+
+#### Bugfixes
+
+  - A signed-in user, registering for our MOOC is now taken directly to start of MOOC after registration, instead of being emailed another sign-in link.
+  - The OAuth-based login process now correctly redirects users to the restricted page they were attempting to access (if any) after successful sign-in.
+  - The startup team member add / edit form was non-functional. We'd introduced HTML5 client-side validations a while back, and this was blocking the form from being submitted - this has been fixed.
+
 ### 5 December, 2016
 
 #### Features

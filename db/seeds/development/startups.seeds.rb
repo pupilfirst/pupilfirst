@@ -9,7 +9,7 @@ after 'development:founders', 'development:timeline_event_types', 'development:b
     product_name: 'Super Product',
     product_description: 'This really is a superb product! ;)',
     agreement_signed_at: 18.months.ago,
-    batch: Batch.first,
+    batch: Batch.find_by(batch_number: 7),
     website: 'https://www.superstartup.in',
     logo: File.open(File.join(Rails.root, "app/assets/images/logo.png")),
     presentation_link: 'https://slideshare.net/superstartupdeck',

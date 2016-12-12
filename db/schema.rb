@@ -668,7 +668,6 @@ ActiveRecord::Schema.define(version: 20161209133402) do
     t.string   "target_type"
     t.integer  "target_group_id"
     t.integer  "batch_id"
-    t.integer  "points_earnable"
     t.index ["assignee_id"], name: "index_targets_on_assignee_id", using: :btree
     t.index ["assignee_type"], name: "index_targets_on_assignee_type", using: :btree
     t.index ["batch_id"], name: "index_targets_on_batch_id", using: :btree

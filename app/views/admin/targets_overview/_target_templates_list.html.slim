@@ -1,4 +1,4 @@
-p BRB! Being rebuild to reflect the new scheme of targets.
+
 
 /.table_tools
 /  ul.scopes.table_tools_segmented_control style="width: calc((100% - 10px)); float: right;"
@@ -62,28 +62,38 @@ p BRB! Being rebuild to reflect the new scheme of targets.
 /          td.col
 /            = link_to 'View Details', admin_targets_overview_path(template_id: template.id, batch: batch_selected&.id)
 
-table
-  thead
-    tr
-      th.col Target Name
-      th.col Completed
-      th.col Submitted
-      th.col Needs Improvement
-      th.col Not Accepted
-      th.col Unavailable
-      th.col Pending
-      th.col Expired
+.table_tools
+  ul.scopes.table_tools_segmented_control style="width: calc((100% - 10px)); float: right;"
+    - Batch.all.each do |batch|
+      li class="#{ ((batch.id == params[:batch].to_i) ? 'selected' : '') + ' scope' }"
+        a.table_tools_button href=admin_targets_overview_path(batch: batch) #{batch.name} Batch
 
-  tbody
-    - @targets.each do |target|
+- if @targets.present?
+  table
+    thead
       tr
-        td.col #{target.title}
-        td.col #{target.stats_service.completed_count}
-        td.col #{target.stats_service.submitted_count}
-        td.col #{target.stats_service.needs_improvement_count}
-        td.col #{target.stats_service.not_accepted_count}
-        td.col #{target.stats_service.unavailable_count}
-        td.col #{target.stats_service.pending_count}
-        td.col #{target.stats_service.expired_count}
+        th.col Target Name
+        th.col Completed
+        th.col Submitted
+        th.col Needs Improvement
+        th.col Not Accepted
+        th.col Unavailable
+        th.col Pending
+        th.col Expired
+
+    tbody
+      - @targets.each do |target|
+        tr
+          td.col #{target.title}
+          td.col #{target.stats_service.completed_count}
+          td.col #{target.stats_service.submitted_count}
+          td.col #{target.stats_service.needs_improvement_count}
+          td.col #{target.stats_service.not_accepted_count}
+          td.col #{target.stats_service.unavailable_count}
+          td.col #{target.stats_service.pending_count}
+          td.col #{target.stats_service.expired_count}
+
+- else
+  p. The selected batch does not have any targets
 
 

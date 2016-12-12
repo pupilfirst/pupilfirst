@@ -3,7 +3,11 @@ ActiveAdmin.register_page 'Targets Overview' do
     skip_after_action :intercom_rails_auto_include
 
     def index
-      @targets = Target.all
+      load_targets
+    end
+
+    def load_targets
+      @targets = params[:batch].present? ? Target.where(batch_id: params[:batch]) : Batch.last.targets
     end
   end
 

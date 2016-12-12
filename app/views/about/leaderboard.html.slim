@@ -9,7 +9,7 @@ ol.breadcrumb.margin-top-20
 
 h1.page-header.header-light
   | Leaderboard
-  - if Startup.available_batches.live.present?
+  - if false # Startup.available_batches.live.present?
     small &nbsp;#{Startup.leaderboard_start_date.strftime('%B %-d')} to #{Startup.leaderboard_end_date.strftime('%B %-d')}
 
 .row
@@ -23,7 +23,7 @@ h1.page-header.header-light
       p Please read the <a href="http://playbook.sv.co/3.1-leaderboards.html">Leaderboards</a> page on the Playbook.
 
       div
-        - if Startup.available_batches.live.present?
+        - if false # Startup.available_batches.live.present?
           ul.nav.nav-tabs role="tablist"
             - Startup.available_batches.live.each_with_index do |batch, index|
               li class="#{index==0 ? "active" : ""}" role="presentation"

@@ -76,8 +76,6 @@
                           | #{target.due_date.strftime('%b %e')} at 11:59 PM.
                     p
                       ' #{target.description}
-                    p
-                      ' #{target.completion_instructions}
                     == render 'founder_completion', target: target if target.founder?
                     == render 'submission_panel', target: target
 

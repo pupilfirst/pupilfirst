@@ -69,7 +69,7 @@
         a.table_tools_button href=admin_targets_overview_path(batch: batch) #{batch.name} Batch
 
 - if @targets.present?
-  table
+  table.index_table.index
     thead
       tr
         th.col Target Name
@@ -82,16 +82,20 @@
         th.col Expired
 
     tbody
-      - @targets.each do |target|
+      - @targets.each_with_index do |week_targets, index|
         tr
-          td.col #{target.title}
-          td.col #{target.stats_service.completed_count}
-          td.col #{target.stats_service.submitted_count}
-          td.col #{target.stats_service.needs_improvement_count}
-          td.col #{target.stats_service.not_accepted_count}
-          td.col #{target.stats_service.unavailable_count}
-          td.col #{target.stats_service.pending_count}
-          td.col #{target.stats_service.expired_count}
+          td.col
+            strong Week #{index + 1}
+        - week_targets.each do |target|
+          tr
+            td.col #{target.title}
+            td.col #{target.stats_service.completed_count}
+            td.col #{target.stats_service.submitted_count}
+            td.col #{target.stats_service.needs_improvement_count}
+            td.col #{target.stats_service.not_accepted_count}
+            td.col #{target.stats_service.unavailable_count}
+            td.col #{target.stats_service.pending_count}
+            td.col #{target.stats_service.expired_count}
 
 - else
   p. The selected batch does not have any targets

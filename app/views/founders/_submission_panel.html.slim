@@ -10,12 +10,12 @@
         p.feedback-message-detail
           | #{target.status_hint_text(current_founder)}
 
-  .submit-instruction.font-regular
-    p
-      ' #{target.completion_instructions}
-  button.btn.btn-with-icon.btn-md.btn-secondary.text-uppercase.btn-timeline-builder data-toggle="modal"
-    i.fa.fa-upload
-    ' Submit
-  / button.btn.btn-with-icon.btn-md.btn-secondary.text-uppercase.btn-timeline-builder data-toggle="modal"
-  /   i.fa.fa-upload
-  /   ' Re-submit
+  - if target.submittable?(current_founder)
+    .submit-instruction.font-regular
+      p
+        ' #{target.completion_instructions}
+    / TODO: Probably show feedback too here, if available
+
+    button.btn.btn-with-icon.btn-md.btn-secondary.text-uppercase.btn-timeline-builder data-toggle="modal"
+      i.fa class="#{target.submit_button_fa_icon(current_founder)}"
+      ' #{target.submit_button_text(current_founder)}

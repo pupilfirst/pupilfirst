@@ -63,4 +63,20 @@ class TargetDecorator < Draper::Decorator
   def pending_for?(founder)
     status(founder) == Targets::StatusService::STATUS_PENDING
   end
+
+  def submittable?(founder)
+    status(founder).in? [Targets::StatusService::STATUS_PENDING, Targets::StatusService::STATUS_NEEDS_IMPROVEMENT, Targets::StatusService::STATUS_NOT_ACCEPTED, Targets::StatusService::STATUS_EXPIRED]
+  end
+
+  def re_submittable?(founder)
+    status(founder).in? [Targets::StatusService::STATUS_NEEDS_IMPROVEMENT, Targets::StatusService::STATUS_NOT_ACCEPTED]
+  end
+
+  def submit_button_fa_icon(founder)
+    re_submittable?(founder) ? 'fa-repeat' : 'fa-upload'
+  end
+
+  def submit_button_text(founder)
+    re_submittable?(founder) ? 'Re-Submit' : 'Submit'
+  end
 end

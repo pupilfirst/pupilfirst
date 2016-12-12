@@ -30,6 +30,8 @@ class FoundersController < ApplicationController
 
   # GET /founder/dashboard
   def dashboard
+    raise_not_found unless feature_active? :founder_dashboard
+
     @header_non_floating = true
     @skip_container = true
 

@@ -6,7 +6,7 @@ class FacultyWeeklySlotsPromptJob < ApplicationJob
     Faculty.where(self_service: true).each do |faculty|
       # copy last available set of weekly slots
       faculty.copy_weekly_slots!
-      puts "Sending Mail to #{faculty.name}"
+      Rails.logger.info "Sending Mail to #{faculty.name}"
       FacultyMailer.request_next_week_slots(faculty).deliver_later
     end
   end

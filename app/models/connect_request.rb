@@ -18,9 +18,6 @@ class ConnectRequest < ApplicationRecord
 
   delegate :faculty, :slot_at, to: :connect_slot
 
-  validates_presence_of :connect_slot_id, :startup_id, :questions, :status
-  validates_uniqueness_of :connect_slot_id
-
   STATUS_REQUESTED = 'requested'
   STATUS_CONFIRMED = 'confirmed'
 
@@ -28,9 +25,12 @@ class ConnectRequest < ApplicationRecord
     [STATUS_REQUESTED, STATUS_CONFIRMED]
   end
 
-  validates_inclusion_of :status, in: valid_statuses
-
-  validates_length_of :questions, maximum: MAX_QUESTIONS_LENGTH
+  validates :connect_slot_id, presence: true, uniqueness: true
+  validates :startup_id, presence: true
+  validates :questions, presence: true, length: { maximum: MAX_QUESTIONS_LENGTH }
+  validates :status, presence: true, inclusion: { in: valid_statuses }
+  validates :rating_of_faculty, numericality: { greater_than: 0, less_than: 6 }, allow_nil: true
+  validates :rating_of_team, numericality: { greater_than: 0, less_than: 6 }, allow_nil: true
 
   before_validation :set_status_for_nil
 
@@ -118,8 +118,6 @@ class ConnectRequest < ApplicationRecord
 
   scope :requested, -> { where(status: STATUS_REQUESTED) }
   scope :confirmed, -> { where(status: STATUS_CONFIRMED) }
-
-  validates_numericality_of :rating_of_faculty, :rating_of_team, greater_than: 0, less_than: 6, allow_nil: true
 
   def assign_karma_points(rating)
     rating = rating.to_i

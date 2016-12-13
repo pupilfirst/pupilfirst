@@ -5,7 +5,6 @@ class Faculty < ApplicationRecord
   # use name as slug
   include FriendlyId
   friendly_id :name, use: [:slugged, :finders]
-  validates_format_of :slug, with: /\A[a-z0-9\-_]+\z/i, allow_nil: true
 
   mount_uploader :image, FacultyImageUploader
   process_in_background :image
@@ -16,45 +15,43 @@ class Faculty < ApplicationRecord
   has_many :targets, dependent: :restrict_with_error, foreign_key: 'assigner_id'
   has_many :connect_slots, dependent: :destroy
   has_many :connect_requests, through: :connect_slots
-
-  # link alumni faculty to their founder profile
-  belongs_to :founder
-  validates_presence_of :founder, message: 'Must link alumni to their faculty profile', if: :alumni?
-
-  def alumni?
-    category == CATEGORY_ALUMNI
-  end
+  belongs_to :founder # link alumni faculty to their founder profile
 
   CATEGORY_TEAM = 'team'
   CATEGORY_VISITING_FACULTY = 'visiting_faculty'
   CATEGORY_ADVISORY_BOARD = 'advisory_board'
   CATEGORY_ALUMNI = 'alumni'
 
-  validates_presence_of :name, :title, :category, :image
+  COMPENSATION_VOLUNTEER = 'volunteer'
+  COMPENSATION_PAID = 'paid'
+
+  COMMITMENT_PART_TIME = 'part_time'
+  COMMITMENT_FULL_TIME = 'full_time'
 
   def self.valid_categories
     [CATEGORY_TEAM, CATEGORY_VISITING_FACULTY, CATEGORY_ADVISORY_BOARD, CATEGORY_ALUMNI]
   end
 
-  validates_inclusion_of :category, in: valid_categories
-
-  COMPENSATION_VOLUNTEER = 'volunteer'
-  COMPENSATION_PAID = 'paid'
-
   def self.valid_compensation_values
     [COMPENSATION_VOLUNTEER, COMPENSATION_PAID]
   end
-
-  validates_inclusion_of :compensation, in: valid_compensation_values, allow_blank: true
-
-  COMMITMENT_PART_TIME = 'part_time'
-  COMMITMENT_FULL_TIME = 'full_time'
 
   def self.valid_commitment_values
     [COMMITMENT_PART_TIME, COMMITMENT_FULL_TIME]
   end
 
-  validates_inclusion_of :commitment, in: valid_commitment_values, allow_blank: true
+  def alumni?
+    category == CATEGORY_ALUMNI
+  end
+
+  validates :name, presence: true
+  validates :title, presence: true
+  validates :category, inclusion: { in: valid_categories }, presence: true
+  validates :image, presence: true
+  validates :compensation, inclusion: { in: valid_compensation_values }, allow_blank: true
+  validates :commitment, inclusion: { in: valid_commitment_values }, allow_blank: true
+  validates :slug, format: { with: /\A[a-z0-9\-_]+\z/i }, allow_nil: true
+  validates :founder, presence: { message: 'Must link alumni to their faculty profile' }, if: :alumni?
 
   scope :active, -> { where.not(inactive: true) }
   scope :team, -> { where(category: CATEGORY_TEAM).order('sort_index ASC') }

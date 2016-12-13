@@ -24,11 +24,11 @@ class Instagram
   def self.cached_response(count)
     Rails.cache.fetch(cache_key(count), expires_in: 1.hour) do
       response = begin
-        puts 'Contacting Instagram API. This should occur only once per hour per process.'
+        Rails.logger.info 'Contacting Instagram API. This should occur only once per hour per process.'
         load_from_api(count)
       rescue RestClient::Exception
         Rails.cache.fetch(cache_backup_key(count), expires_in: 24.hours) do
-          puts 'Contacting Instagram API. Backup cache has expired. Something is probably wrong...'
+          Rails.logger.info 'Contacting Instagram API. Backup cache has expired. Something is probably wrong...'
           load_from_api(count, cache_backup: false)
         end
       end

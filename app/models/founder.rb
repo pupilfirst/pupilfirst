@@ -66,22 +66,28 @@ class Founder < ApplicationRecord
     %i(ransack_tagged_with)
   end
 
-  validates_presence_of :born_on
-
-  validate :age_more_than_18
-
-  def age_more_than_18
-    errors.add(:born_on, 'must be at least 18 years old') if born_on && born_on > 18.years.ago.end_of_year
-  end
-
   def self.valid_gender_values
     [GENDER_MALE, GENDER_FEMALE, GENDER_OTHER]
   end
 
+  validates :born_on, presence: true
   validates :gender, inclusion: { in: valid_gender_values }
+  validates :twitter_url, url: true, allow_nil: true
+  validates :linkedin_url, url: true, allow_nil: true
+  validates :email, uniqueness: true, allow_nil: true
+  validates :slack_username, uniqueness: true, allow_blank: true
 
-  # Validations during incubation
-  validates_presence_of :roll_number, if: :university_id
+  # TODO: The following validation is probably invalid.
+  validates :roll_number, presence: true, if: :university_id
+
+  validate :slack_username_format
+  validate :age_more_than_18
+  validate :role_must_be_valid
+  validate :slack_username_must_exist
+
+  def age_more_than_18
+    errors.add(:born_on, 'must be at least 18 years old') if born_on && born_on > 18.years.ago.end_of_year
+  end
 
   before_validation do
     self.roll_number = nil unless university.present?
@@ -113,18 +119,18 @@ class Founder < ApplicationRecord
     name
   end
 
-  # hack
+  # TODO: Is this hack required?
   attr_accessor :inviter_name
 
+  # TODO: This emailer is not required anymore since password-based login has been removed.
   after_update :send_password_change_email, if: :needs_password_change_email?
 
   # Email is not required for an unregistered 'contact' founder.
+  #
+  # TODO: Possibly useless method.
   def email_required?
     !invitation_token.present?
   end
-
-  # Validate presence of e-mail for everyone except contacts with invitation token (unregistered contacts).
-  validates_uniqueness_of :email, unless: ->(founder) { founder.invitation_token.present? }
 
   mount_uploader :avatar, AvatarUploader
   process_in_background :avatar
@@ -135,12 +141,6 @@ class Founder < ApplicationRecord
   mount_uploader :identification_proof, IdentificationProofUploader
 
   normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :name, :slack_username, :resume_url
-
-  validates :twitter_url, url: true, allow_nil: true
-  validates :linkedin_url, url: true, allow_nil: true
-
-  validate :role_must_be_valid
-  validate :slack_username_must_exist
 
   def role_must_be_valid
     roles.each do |role|
@@ -194,10 +194,6 @@ class Founder < ApplicationRecord
     return unless slack_username.present? && slack_username.starts_with?('@')
     self.slack_username = slack_username[1..-1]
   end
-
-  validates_uniqueness_of :slack_username, allow_blank: true
-
-  validate :slack_username_format
 
   def slack_username_format
     return if slack_username.blank?

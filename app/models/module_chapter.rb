@@ -8,10 +8,11 @@ class ModuleChapter < ApplicationRecord
     name_changed? || super
   end
 
-  validates_presence_of :chapter_number, :name, :course_module_id
-  validates_uniqueness_of :chapter_number, scope: :course_module_id
-
   serialize :links
+
+  validates :chapter_number, presence: true, uniqueness: { scope: :course_module_id }
+  validates :name, presence: true
+  validates :course_module_id, presence: true
 
   validate :serialized_links_is_properly_formatted
 

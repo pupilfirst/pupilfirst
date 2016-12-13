@@ -14,8 +14,9 @@ class CourseModule < ApplicationRecord
   has_many :module_chapters
   accepts_nested_attributes_for :module_chapters, allow_destroy: true
 
-  validates_presence_of :name, :module_number, :publish_at
-  validates_uniqueness_of :module_number, :name
+  validates :name, presence: true, uniqueness: true
+  validates :module_number, presence: true, uniqueness: true
+  validates :publish_at, presence: true
 
   def self.valid_module_numbers
     CourseModule.all.pluck(:module_number)

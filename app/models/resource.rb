@@ -24,8 +24,10 @@ class Resource < ApplicationRecord
     [SHARE_STATUS_PUBLIC, SHARE_STATUS_APPROVED]
   end
 
-  validates_presence_of :file, :title, :description
-  validates_inclusion_of :share_status, in: valid_share_statuses
+  validates :file, presence: true
+  validates :title, presence: true
+  validates :description, presence: true
+  validates :share_status, inclusion: { in: valid_share_statuses }
 
   mount_uploader :file, ResourceFileUploader
   mount_uploader :thumbnail, ResourceThumbnailUploader

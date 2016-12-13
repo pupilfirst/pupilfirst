@@ -14,6 +14,19 @@ AllCops:
     - 'app/models/mentor.rb'
     - 'app/controllers/mentoring_controller.rb'
 
+# Rails specific
+
+Rails:
+  Enabled: true
+Rails/OutputSafety:
+  Enabled: false # This disallows .html_safe
+Rails/TimeZone:
+  Enabled: false # This enforces Time.zone.now
+Rails/Date:
+  Enabled: false # This enforces Time.zone.today
+Rails/HasAndBelongsToMany:
+  Enabled: false # This disallows HABTM.
+
 # Project styling
 
 Style/AlignParameters:

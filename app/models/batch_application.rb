@@ -206,7 +206,7 @@ class BatchApplication < ApplicationRecord
     if team_lead.fee_payment_method == BatchApplicant::PAYMENT_METHOD_REGULAR_FEE
       team_lead
     else
-      cofounders.order('name ASC').where(fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE).first
+      cofounders.order('name ASC').find_by(fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE)
     end
   end
 

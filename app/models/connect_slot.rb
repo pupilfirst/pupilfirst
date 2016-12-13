@@ -7,8 +7,8 @@ class ConnectSlot < ApplicationRecord
 
   before_destroy :check_for_connect_request
 
-  validates_presence_of :faculty_id, :slot_at
-  validates_uniqueness_of :slot_at, scope: [:faculty_id]
+  validates :faculty_id, presence: true
+  validates :slot_at, presence: true, uniqueness: { scope: [:faculty_id] }
 
   validate :faculty_must_have_email
 

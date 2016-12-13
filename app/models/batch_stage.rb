@@ -2,8 +2,7 @@ class BatchStage < ApplicationRecord
   belongs_to :batch
   belongs_to :application_stage
 
-  validates_uniqueness_of :application_stage_id, scope: [:batch_id]
-
+  validates :application_stage_id, uniqueness: { scope: [:batch_id] }
   validates :starts_at, presence: true
 
   # It is possible for BatchStage to be instantiated without application stage (an error captured by validation above),

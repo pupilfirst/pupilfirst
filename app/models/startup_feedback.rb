@@ -9,7 +9,9 @@ class StartupFeedback < ApplicationRecord
   # mount uploader for attachment
   mount_uploader :attachment, StartupFeedbackAttachmentUploader
 
-  validates_presence_of :faculty, :feedback, :startup
+  validates :faculty_id, presence: true
+  validates :feedback, presence: true
+  validates :startup_id, presence: true
 
   REGEX_TIMELINE_EVENT_URL = %r{startups/.*event-(?<event_id>[\d]+)}
 

@@ -16,8 +16,8 @@ class TimelineEvent < ApplicationRecord
   process_in_background :image
 
   serialize :links
-  validates_presence_of :event_on, :startup_id, :founder_id, :timeline_event_type, :description
-  delegate :founder_event?, :title, to: :timeline_event_type
+
+  delegate :end_iteration?, :founder_event?, :title, to: :timeline_event_type
 
   MAX_DESCRIPTION_CHARACTERS = 300
 
@@ -30,8 +30,6 @@ class TimelineEvent < ApplicationRecord
     [VERIFIED_STATUS_VERIFIED, VERIFIED_STATUS_PENDING, VERIFIED_STATUS_NEEDS_IMPROVEMENT, VERIFIED_STATUS_NOT_ACCEPTED]
   end
 
-  validates_inclusion_of :verified_status, in: valid_verified_status
-
   GRADE_GOOD = 'good'
   GRADE_GREAT = 'great'
   GRADE_WOW = 'wow'
@@ -41,11 +39,15 @@ class TimelineEvent < ApplicationRecord
   end
 
   normalize_attribute :grade
-  validates_inclusion_of :grade, in: valid_grades, allow_nil: true
 
-  validates_length_of :description,
-    maximum: MAX_DESCRIPTION_CHARACTERS,
-    message: "must be within #{MAX_DESCRIPTION_CHARACTERS} characters"
+  validates :grade, inclusion: { in: valid_grades }, allow_nil: true
+  validates :verified_status, inclusion: { in: valid_verified_status }
+  validates :verified_at, presence: true, if: proc { verified? || needs_improvement? }
+  validates :event_on, presence: true
+  validates :startup_id, presence: true
+  validates :founder_id, presence: true
+  validates :timeline_event_type, presence: true
+  validates :description, presence: true, length: { maximum: MAX_DESCRIPTION_CHARACTERS, message: "must be within #{MAX_DESCRIPTION_CHARACTERS} characters" }
 
   before_validation do
     if verified_status_changed?
@@ -54,8 +56,6 @@ class TimelineEvent < ApplicationRecord
     end
     self.verified_status ||= VERIFIED_STATUS_PENDING
   end
-
-  validates_presence_of :verified_at, if: proc { verified? || needs_improvement? }
 
   accepts_nested_attributes_for :timeline_event_files, allow_destroy: true
 
@@ -159,10 +159,6 @@ class TimelineEvent < ApplicationRecord
 
   def iteration
     startup.iteration(at_event: self)
-  end
-
-  def end_iteration?
-    timeline_event_type.end_iteration?
   end
 
   def update_and_require_reverification(params)

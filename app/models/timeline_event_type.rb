@@ -4,9 +4,6 @@
 class TimelineEventType < ApplicationRecord
   has_many :timeline_events, dependent: :restrict_with_error
 
-  validates_presence_of :key, :title, :badge
-  validates_uniqueness_of :key
-
   TYPE_END_ITERATION = 'end_iteration'
   TYPE_NEW_DECK = 'new_product_deck'
   TYPE_NEW_WIREFRAME = 'new_wireframe'
@@ -52,7 +49,10 @@ class TimelineEventType < ApplicationRecord
     [ROLE_GOVERNANCE, ROLE_MARKETING, ROLE_ENGINEERING, ROLE_PRODUCT, ROLE_TEAM, ROLE_DESIGN, ROLE_FOUNDER, ROLE_OTHER]
   end
 
-  validates_inclusion_of :role, in: valid_roles
+  validates :key, presence: true, uniqueness: true
+  validates :title, presence: true
+  validates :badge, presence: true
+  validates :role, inclusion: { in: valid_roles }
 
   def founder_event?
     role == ROLE_FOUNDER

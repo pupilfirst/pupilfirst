@@ -159,18 +159,18 @@ class IntercomClient
   ## Methods below were created for cleaning up user_id from existing intercom users - a one-time correction measure.
 
   def alter_and_delete(user)
-    puts "Altering user #{user.email} who is a dupe of an essential user..."
+    Rails.logger.info "Altering user #{user.email} who is a dupe of an essential user..."
     components = user.email.split('@')
     new_email = "#{components.first}+#{rand(10_000)}@#{components.last}"
     user.email = new_email
     user.user_id = nil
     rescued_call { intercom_client.users.save(user) }
 
-    puts 'Now deleting the same user...'
+    Rails.logger.info 'Now deleting the same user...'
     rescued_call { intercom_client.users.delete(user) }
   end
 
-  # rubocop:disable MethodLength, Metrics/PerceivedComplexity
+  # rubocop:disable MethodLength, Metrics/PerceivedComplexity, Metrics/AbcSize
   def strip_user_ids_from_segment(segment_name)
     users = get_users_by_segment(segment_name)
     raise 'No Users found in the Segment' unless users.present?
@@ -178,15 +178,15 @@ class IntercomClient
 
     all_users.each_with_index do |user, index|
       if user.user_id.nil?
-        puts "User ##{index} already has nil user_id. Skipping."
+        Rails.logger.info "User ##{index} already has nil user_id. Skipping."
         next
       end
 
-      puts "Stripping user_id from user ##{index} with email '#{user.email}'"
+      Rails.logger.info "Stripping user_id from user ##{index} with email '#{user.email}'"
 
       if user_emails.include?(user.email)
         if users[user.id].present?
-          puts "Essential user #{user.email} with ID #{user.id} encountered. Only wiping."
+          Rails.logger.info "Essential user #{user.email} with ID #{user.id} encountered. Only wiping."
           user.user_id = nil
           rescued_call { intercom_client.users.save(user) }
         else
@@ -203,7 +203,7 @@ class IntercomClient
       end
     end
   end
-  # rubocop:enable MethodLength, Metrics/PerceivedComplexity
+  # rubocop:enable MethodLength, Metrics/PerceivedComplexity, Metrics/AbcSize
 
   def get_segment_id(segment_name)
     segment_id = nil

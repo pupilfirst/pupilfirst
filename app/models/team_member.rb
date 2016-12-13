@@ -14,6 +14,9 @@ class TeamMember < ApplicationRecord
     roles.delete('')
   end
 
+  validates :startup_id, presence: true
+  validates :name, presence: true
+
   validate :roles_must_be_valid
 
   def roles_must_be_valid
@@ -35,6 +38,4 @@ class TeamMember < ApplicationRecord
   def roles
     super || []
   end
-
-  validates_presence_of :startup_id, :name
 end

@@ -49,7 +49,6 @@ class Startup < ApplicationRecord
   scope :agreement_signed, -> { where 'agreement_signed_at IS NOT NULL' }
   scope :agreement_live, -> { where('agreement_signed_at > ?', AGREEMENT_DURATION.years.ago) }
   scope :agreement_expired, -> { where('agreement_signed_at < ?', AGREEMENT_DURATION.years.ago) }
-  scope :without_founders, -> { where.not(id: (Founder.pluck(:startup_id).uniq - [nil])) }
   scope :timeline_verified, -> { joins(:timeline_events).where(timeline_events: { verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED }).distinct }
   scope :batched_and_approved, -> { batched.approved }
 
@@ -99,8 +98,6 @@ class Startup < ApplicationRecord
 
   has_many :founders
 
-  validates :product_name, presence: true, uniqueness: { case_sensitive: false, scope: :batch_id }
-
   has_and_belongs_to_many :startup_categories do
     def <<(_category)
       raise 'Use startup_categories= to enforce startup category limit'
@@ -128,31 +125,25 @@ class Startup < ApplicationRecord
   # TODO: probable stale attribute
   attr_reader :validate_registration_type
 
-  # TODO: probably stale
-  # Registration type is required when registering.
-  validates_presence_of :registration_type, if: ->(startup) { startup.validate_registration_type }
+  # Friendly ID!
+  friendly_id :slug
+
+  validates :slug, format: { with: /\A[a-z0-9\-_]+\z/i }, allow_nil: true
+  validates :product_name, presence: true, uniqueness: { case_sensitive: false, scope: :batch_id }
 
   # TODO: probably stale
-  # Registration type should be one of Pvt. Ltd., Partnership, or LLC.
-  validates :registration_type,
-    inclusion: { in: valid_registration_types },
-    allow_nil: true
+  validates :registration_type, presence: true, if: ->(startup) { startup.validate_registration_type }
+  validates :registration_type, inclusion: { in: valid_registration_types }, allow_nil: true
 
   # Product Progress should be one of acceptable list.
-  validates :product_progress,
-    inclusion: { in: valid_product_progress_values },
-    allow_nil: true,
-    allow_blank: true
+  validates :product_progress, inclusion: { in: valid_product_progress_values }, allow_nil: true
 
-  validates_numericality_of :pin, allow_nil: true, greater_than_or_equal_to: 100_000, less_than_or_equal_to: 999_999 # PIN Code is always 6 digits
+  # PIN Code is always 6 digits
+  validates :pin, numericality: { greater_than_or_equal_to: 100_000, less_than_or_equal_to: 999_999 }, allow_nil: true
 
-  validates_length_of :product_description,
-    maximum: MAX_PRODUCT_DESCRIPTION_CHARACTERS,
-    message: "must be within #{MAX_PRODUCT_DESCRIPTION_CHARACTERS} characters"
+  validates :product_description, length: { maximum: MAX_PRODUCT_DESCRIPTION_CHARACTERS, message: "must be within #{MAX_PRODUCT_DESCRIPTION_CHARACTERS} characters" }
 
-  validates_length_of :pitch,
-    maximum: MAX_PITCH_CHARACTERS,
-    message: "must be within #{MAX_PITCH_CHARACTERS} characters"
+  validates :pitch, length: { maximum: MAX_PITCH_CHARACTERS, message: "must be within #{MAX_PITCH_CHARACTERS} characters" }
 
   # New set of validations for incubation wizard
   store :metadata, accessors: [:updated_from]
@@ -175,10 +166,6 @@ class Startup < ApplicationRecord
     # Clear out associations from associated Founders (and pending ones).
     Founder.where(startup_id: id).update_all(startup_id: nil, startup_admin: nil)
   end
-
-  # Friendly ID!
-  friendly_id :slug
-  validates_format_of :slug, with: /\A[a-z0-9\-_]+\z/i, allow_nil: true
 
   def approved?
     dropped_out != true

@@ -31,7 +31,7 @@ module Lita
         # TODO: Channel name should be accessible directly from message.room_object.name, but it isn't. Fix when possible.
         # See: https://github.com/kenjij/lita-slack/issues/44
         # Alert: As mentioned in link above, the following approach to extract channel will fail for private messages.
-        channel = Lita::Room.find_by_id(message.room_object.id).try(:name)
+        channel = Lita::Room.find_by_id(message.room_object.id).try(:name) # rubocop:disable Rails/DynamicFindBy
 
         PublicSlackMessage.create!(
           body: message.body, slack_username: message.user.mention_name, founder: message_author, channel: channel,

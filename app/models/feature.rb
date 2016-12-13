@@ -1,7 +1,8 @@
 # Feature flags! Set any key and check for it with Feature.active?(key, [current_founder])
 # See documentation of method to see how to store the JSON value.
 class Feature < ApplicationRecord
-  validates_presence_of :key, :value
+  validates :key, presence: true
+  validates :value, presence: true
 
   validate :value_must_be_json
 
@@ -15,7 +16,7 @@ class Feature < ApplicationRecord
   #     OR
   # {"active": true}
   def self.active?(key, founder = nil)
-    feature = where(key: key).first
+    feature = find_by(key: key)
 
     return false unless feature
 

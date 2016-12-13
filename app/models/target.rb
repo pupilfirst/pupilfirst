@@ -38,13 +38,15 @@ class Target < ApplicationRecord
     [TYPE_TODO, TYPE_ATTEND, TYPE_READ, TYPE_LEARN].freeze
   end
 
-  validates_inclusion_of :target_type, in: valid_target_types
-
   # Need to allow these two to be read for AA form.
   attr_reader :startup_id, :founder_id
 
-  validates_presence_of :role, :title, :description, :days_to_complete
-  validates_inclusion_of :role, in: valid_roles
+  validates :target_type, inclusion: { in: valid_target_types }
+  validates :role, presence: true, inclusion: { in: valid_roles }
+  validates :title, presence: true
+  validates :description, presence: true
+  validates :days_to_complete, presence: true
+
   validate :batch_matches_program_week_batch
 
   def batch_matches_program_week_batch

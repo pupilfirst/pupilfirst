@@ -1,5 +1,6 @@
 class GlossaryTerm < ApplicationRecord
-  validates_presence_of :term, :definition
+  validates :term, presence: true
+  validates :definition, presence: true
 
   before_save do
     self.term = term.downcase

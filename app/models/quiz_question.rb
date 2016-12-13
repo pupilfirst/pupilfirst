@@ -3,7 +3,8 @@ class QuizQuestion < ApplicationRecord
   has_many :answer_options
   accepts_nested_attributes_for :answer_options, allow_destroy: true
 
-  validates_presence_of :question, :course_module_id
+  validates :question, presence: true
+  validates :course_module_id, presence: true
 
   # TODO: Valdiation below is broken. Suspect implementation of nested form by activeadmin + persistence issues. Disabling it except for persisted questions.
   validate :must_have_exactly_one_correct_answer
@@ -19,6 +20,6 @@ class QuizQuestion < ApplicationRecord
   end
 
   def correct_answer
-    answer_options.where(correct_answer: true).first
+    answer_options.find_by(correct_answer: true)
   end
 end

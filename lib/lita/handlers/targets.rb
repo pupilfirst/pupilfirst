@@ -13,6 +13,8 @@ module Lita
 
       attr_reader :response
 
+      delegate :startup, to: :founder
+
       def targets_handler(response)
         @response = response
 
@@ -124,10 +126,6 @@ module Lita
         @targets ||= begin
           (founder.targets + startup.targets).sort_by(&:created_at).reverse
         end[0..4]
-      end
-
-      def startup
-        founder.startup
       end
 
       def founder

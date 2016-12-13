@@ -2,7 +2,7 @@
 class BaseService
   def log(message)
     return if Rails.env.test?
-    print "[#{current_timestamp}] #{message}\n"
+    Rails.logger.info "[#{current_timestamp}] #{message}\n"
   end
 
   def url_helpers

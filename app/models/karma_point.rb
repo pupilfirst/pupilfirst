@@ -4,8 +4,8 @@ class KarmaPoint < ApplicationRecord
 
   belongs_to :source, polymorphic: true
 
-  validates_uniqueness_of :source_id, scope: [:source_type], allow_nil: true
-  validates_presence_of :points
+  validates :source_id, uniqueness: { scope: [:source_type] }, allow_nil: true
+  validates :points, presence: true
 
   validate :needs_startup_or_founder
 

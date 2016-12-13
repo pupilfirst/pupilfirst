@@ -2,8 +2,8 @@ class University < ApplicationRecord
   has_many :founders, dependent: :restrict_with_error
   has_many :batch_applications
 
-  validates_uniqueness_of :name, presence: true
-  validates_presence_of :location
+  validates :name, uniqueness: true, presence: true
+  validates :location, presence: true
 
   def self.valid_state_names
     [
@@ -20,7 +20,7 @@ class University < ApplicationRecord
     if Rails.env.production?
       find(8)
     else
-      where("name LIKE '%Other%'").first
+      find_by("name LIKE '%Other%'")
     end
   end
 

@@ -5,7 +5,7 @@ FactoryGirl.define do
     initialize_with { ApplicationStage.where(number: number).first_or_create }
 
     sequence(:name) { |n| "#{Faker::Lorem.word} #{n}" }
-    sequence(:number) { |n| n }
+    sequence(:number)
     final_stage { number == 5 ? true : false }
   end
 end

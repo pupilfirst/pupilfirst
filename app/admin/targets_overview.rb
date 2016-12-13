@@ -6,16 +6,12 @@ ActiveAdmin.register_page 'Targets Overview' do
       load_targets
     end
 
+    private
+
     def load_targets
       batch = params[:batch].present? ? Batch.find_by(id: params[:batch]) : Batch.last
-      @targets = []
-      batch.program_weeks.order(:number).each do |week|
-        week_targets = []
-        week.target_groups.each do |target_groups|
-          week_targets << target_groups.targets
-        end
-        week_targets.flatten!
-        @targets << week_targets
+      @targets = batch.program_weeks.order(:number).map do |week|
+        week.target_groups.map(&:targets).flatten
       end
     end
   end

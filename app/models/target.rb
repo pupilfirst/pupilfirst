@@ -9,7 +9,6 @@ class Target < ApplicationRecord
   has_many :timeline_events
   has_many :target_prerequisites
   has_many :prerequisite_targets, through: :target_prerequisites
-
   mount_uploader :rubric, RubricUploader
 
   scope :founder, -> { where(role: ROLE_FOUNDER) }

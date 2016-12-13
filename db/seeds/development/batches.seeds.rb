@@ -68,3 +68,14 @@ Batch.create!(
   target_application_count: 100,
   slack_channel: '#saas'
 )
+
+Batch.create!(
+  theme: 'SaaS',
+  batch_number: 7,
+  description: 'The sixth batch of SV.CO focusing on SaaS Solutions, which has just started',
+  start_date: 10.days.ago,
+  end_date: 23.weeks.from_now,
+  campaign_start_at: 1.month.ago,
+  target_application_count: 100,
+  slack_channel: '#saas'
+)

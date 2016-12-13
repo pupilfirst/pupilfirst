@@ -123,6 +123,22 @@ en:
       pending: 'Pending'
       unavailable: 'Unavailable'
       not_accepted: 'Not Accepted'
+    status_report:
+      complete: 'Target Completed'
+      needs_improvement: 'Submission Needs Improvement'
+      submitted: 'Submission Being Verified'
+      expired: 'Target Expired'
+      pending: 'Target Pending'
+      unavailable: 'Target Unavailable'
+      not_accepted: 'Submission Not Accepted'
+    status_hint:
+      complete: 'Completed on %{date}'
+      needs_improvement: 'Consider feedback and try re-submitting!'
+      submitted: 'Submitted on %{date}'
+      expired: 'You can still try submitting!'
+      pending: 'Follow completion instructions and submit!'
+      unavailable: 'Complete prerequisites first!'
+      not_accepted: 'Re-submit based on feedback!'
 
   timeline_event:
     grade:

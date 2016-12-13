@@ -10,7 +10,8 @@ module Users
 
     def after_sign_in_path
       if @user.founder.present? && @user.founder.startup.present?
-        url_helpers.dashboard_founder_path
+        return url_helpers.dashboard_founder_path if Feature.active?(:founder_dashboard, @user.founder)
+        url_helpers.startup_path(@user.founder.startup)
       elsif @user.mooc_student.present?
         url_helpers.six_ways_start_path
       else

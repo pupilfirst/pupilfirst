@@ -1,6 +1,17 @@
 ## Ongoing
 
-- Design phase of Founder dashboard is ongoing. [[Trello]](https://trello.com/c/sITTzECe)
+- New Founder dashboard (frontend and backend) is being built. [[Trello]](https://trello.com/c/sITTzECe)
+
+## 2016.12.12
+
+- Individual users can now be logged out (when they visit the website) from the admin interface using a new _Sign Out At Next Request_ feature on the User page. [[Trello]](https://trello.com/c/qoUXik8V)
+- Fixed broken Founder's team member add / edit form. Incorrely applied HTML5 validations were blocking the form from being submitted. [[Trello]](https://trello.com/c/QaiLMzaC)
+- The OAuth login method now correctly redirects user to referer path after successful login. [[Trello]](https://trello.com/c/FZTXZICE)
+- A signed-in user, registering for MOOC is now taken directly to start page of MOOC, instead of being emailed another login link. [[Trello]](https://trello.com/c/OrtU2aRM)
+- The admin interface for creating application submissions now allows for searching of batch application using select2. [[Trello]](https://trello.com/c/y3fTfvmT)
+- Removed use of `member_label` option from all Formtastic forms since it has been deprecated. [[Trello]](https://trello.com/c/xQWbKUp6)
+- Removed `invited_batch` association from `Founder`. [[Trello]](https://trello.com/c/KSTtTMs5)
+- Removed unused `full_validation` accessor from Startup and Founder. [[Trello]](https://trello.com/c/JS9HE4ac)
 
 ## 2016.12.05
 

@@ -44,6 +44,12 @@ GIT
     bootstrap_form (2.5.2)
 
 GIT
+  remote: https://github.com/harigopal/quilt.git
+  revision: 15399b3a8b22eb7d52b33f97db543b823692ec37
+  specs:
+    quilt (0.1.0)
+
+GIT
   remote: https://github.com/harigopal/shortener.git
   revision: fa07d7225acc802483ba5cf611bb2b4fc371d06d
   branch: 74-rails-5-support
@@ -934,6 +940,7 @@ DEPENDENCIES
   prawn
   prawn-table
   pry-rails
+  quilt!
   rack-mini-profiler
   rails!
   rails-assets-bootstrap-tabcollapse!

@@ -1,0 +1,23 @@
+module Startups
+  class IdenticonLogoService
+    def initialize(startup)
+      @startup = startup
+    end
+
+    def base64_svg
+      logo = Quilt::Identicon.new "#{@startup.product_name}.#{@startup.id}", options
+      Base64.encode64(logo.to_blob)
+    end
+
+    private
+
+    def options
+      color.present? ? { color: color } : {}
+    end
+
+    def color
+      possible_color = @startup.product_name.split.first.downcase
+      possible_color.in?(ProductNameGeneratorService::COLORS) ? possible_color : nil
+    end
+  end
+end

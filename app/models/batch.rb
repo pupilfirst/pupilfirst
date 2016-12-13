@@ -31,7 +31,8 @@ class Batch < ApplicationRecord
 
   validates :theme, presence: true
   validates :batch_number, presence: true, numericality: true, uniqueness: true
-  validates_presence_of :start_date, :end_date
+  validates :start_date, presence: true
+  validates :end_date, presence: true
   validates :slack_channel, slack_channel_name: true, allow_nil: true
   validates :campaign_start_at, presence: true
   validates :target_application_count, presence: true
@@ -44,7 +45,7 @@ class Batch < ApplicationRecord
 
   # TODO: Batch.current should probably be re-written to account for overlapping batches.
   def self.current
-    where('start_date <= ? and end_date >= ?', Time.now, Time.now).first
+    find_by('start_date <= ? and end_date >= ?', Time.now, Time.now)
   end
 
   # If the current batch isn't present, supply last.

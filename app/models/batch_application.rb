@@ -52,6 +52,8 @@ class BatchApplication < ApplicationRecord
   validates :batch_id, presence: true
   validates :application_stage_id, presence: true
 
+  delegate :batch_number, to: :batch
+
   # If a team lead is present (should be), display his name and batch number as title, otherwise use this entry's ID.
   def display_name
     if team_lead.present?

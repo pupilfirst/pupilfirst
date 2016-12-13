@@ -149,6 +149,13 @@ ActiveAdmin.register ApplicationSubmission do
         end
       end
 
+      row :partnership_deed do |application_submission|
+        partnership_deed = application_submission.batch_application.partnership_deed
+        if partnership_deed.present?
+          link_to 'Click to open in new tab', partnership_deed.url, target: '_blank'
+        end
+      end if application_submission.application_stage == ApplicationStage.shortlist_stage
+
       row :score
 
       row :notes do |application_submission|

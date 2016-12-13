@@ -3,7 +3,10 @@
     .container
       .startup-profile
         .m-x-auto.startup-logo-container
-          = image_tag "#{@startup.logo_url}", class: 'startup-logo'
+          - if @startup.logo.present?
+            = image_tag "#{@startup.logo_url}", class: 'startup-logo'
+          - else
+            = @startup.identicon_logo
         .product-details.text-xs-center
           h3.product-title.font-semibold
             | #{@startup.product_name}
@@ -75,7 +78,7 @@
                         span.font-regular
                           | #{target.due_date.strftime('%b %e')} at 11:59 PM.
                     p
-                      ' #{target.description}
+                      ' #{target.description.html_safe}
                     == render 'founder_completion', target: target if target.founder?
                     == render 'submission_panel', target: target
 

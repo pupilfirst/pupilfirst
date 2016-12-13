@@ -4,7 +4,8 @@ describe Targets::StatusService do
   subject { described_class.new(target, startup.admin) }
 
   let(:startup) { create :startup }
-  let(:target) { create :target, :with_program_week, role: Target::ROLE_FOUNDER, days_to_complete: 60, week_number: 2 }
+  let(:batch) { create :batch }
+  let(:target) { create :target, :with_program_week, role: Target::ROLE_FOUNDER, days_to_complete: 60, week_number: 1, batch: batch }
   let(:prerequisite_target) { create :target, role: Target::ROLE_FOUNDER }
 
   let!(:event_for_prerequisite_target) do

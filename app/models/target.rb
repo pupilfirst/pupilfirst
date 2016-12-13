@@ -43,7 +43,7 @@ class Target < ApplicationRecord
   # Need to allow these two to be read for AA form.
   attr_reader :startup_id, :founder_id
 
-  validates_presence_of :role, :title, :description
+  validates_presence_of :role, :title, :description, :days_to_complete
   validates_inclusion_of :role, in: valid_roles
   validate :batch_matches_program_week_batch
 

@@ -25,7 +25,7 @@ feature 'Admin Target Modifications' do
     let(:target) { create :target, :with_program_week, batch: batch }
     let!(:batch_2) { create :batch }
 
-    it 'displays error if admin modifies batch to a different one' do
+    scenario 'admin modifies batch to a different one' do
       # visit the edit page of the target
       visit edit_admin_target_path(target.id)
       expect(page).to have_text('Edit Target')

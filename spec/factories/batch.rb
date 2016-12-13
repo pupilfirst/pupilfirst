@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :batch do
     theme { Faker::Lorem.word }
-    sequence(:batch_number) { |n| n }
+    sequence(:batch_number)
     description { Faker::Lorem.words(10).join ' ' }
     start_date { 1.month.ago }
     end_date { 5.months.from_now }
@@ -56,6 +56,22 @@ FactoryGirl.define do
         create :batch_stage, batch: batch, application_stage: stage_2, starts_at: 65.days.ago, ends_at: 35.days.ago
         create :batch_stage, batch: batch, application_stage: stage_3, starts_at: 23.days.ago, ends_at: 16.days.ago
         create :batch_stage, batch: batch, application_stage: stage_4, starts_at: 3.days.ago, ends_at: 11.days.from_now
+      end
+    end
+
+    trait :with_targets_for_startups do
+      start_date { Date.today }
+      end_date { 24.weeks.from_now }
+
+      # create 10 targets in the first week's first group.
+      after(:create) do |batch|
+        create_list(:target, 10, :with_program_week, :for_startup, batch: batch, week_number: 1, group_index: 1)
+      end
+    end
+
+    trait :with_startups do
+      after(:create) do |batch|
+        create_list(:startup, 4, batch: batch)
       end
     end
   end

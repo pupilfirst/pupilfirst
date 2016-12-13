@@ -1,8 +1,8 @@
 FactoryGirl.define do
   factory :target_group do
     name { Faker::Lorem.word }
-    program_week
-    sequence(:sort_index) { |n| n }
+    program_week { ProgramWeek.find_by(number: week_number) || create(:program_week, batch: batch) }
+    sequence(:sort_index)
     description { Faker::Lorem.sentence }
 
     transient do

@@ -3,7 +3,10 @@
     .container
       .startup-profile
         .m-x-auto.startup-logo-container
-          = image_tag "#{@startup.logo_url}", class: 'startup-logo'
+          - if @startup.logo.present?
+            = image_tag "#{@startup.logo_url}", class: 'startup-logo'
+          - else
+            = @startup.identicon_logo
         .product-details.text-xs-center
           h3.product-title.font-semibold
             | #{@startup.product_name}

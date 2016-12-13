@@ -99,6 +99,7 @@ gem 'prawn-table' # Support for drawing tables in prawn pdfs
 gem 'combine_pdf' # Used to combine sections of agreement pdfs
 gem 'rollbar' # Exception tracking and logging from Ruby to Rollbar https://rollbar.com
 gem 'humanize' # Convert numbers to english words
+gem 'quilt', github: 'harigopal/quilt' # A Ruby library for generating identicons.
 
 # Omniauth providers
 gem 'omniauth-google-oauth2' # Oauth2 strategy for Google

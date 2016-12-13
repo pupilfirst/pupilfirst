@@ -14,10 +14,26 @@ targetAccordion = ->
 
 timelineBuilderModal = ->
   $('.btn-timeline-builder').click () ->
-    $('#timeline-builder').modal()
-      backdrop: 'static'
+    $('#timeline-builder').modal backdrop: 'static'
+
+customFileupload = ->
+  inputs = document.querySelectorAll('.file-choose')
+  Array::forEach.call inputs, (input) ->
+    label = input.nextElementSibling
+    labelVal = label.innerHTML
+    input.addEventListener 'change', (e) ->
+      fileName = ''
+      if @files and @files.length > 1
+        fileName = (@getAttribute('data-multiple-caption') or '').replace('{count}', @files.length)
+      else
+        fileName = e.target.value.split('\\').pop()
+      if fileName
+        label.querySelector('span').innerHTML = fileName
+      else
+        label.innerHTML = labelVal
 
 $(document).on 'turbolinks:load', ->
   if $('#founder-dashboard').length
     targetAccordion()
     timelineBuilderModal()
+    customFileupload()

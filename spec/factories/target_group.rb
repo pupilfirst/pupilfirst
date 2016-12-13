@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :target_group do
     name { Faker::Lorem.word }
     program_week
-    sequence(:sort_index) { |n| n + 1 }
+    sequence(:sort_index) { |n| n }
     description { Faker::Lorem.sentence }
 
     transient do

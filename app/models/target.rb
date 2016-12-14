@@ -91,13 +91,6 @@ class Target < ApplicationRecord
     rubric.sanitized_file.original_filename
   end
 
-  # used in admin 'Targets Overview' page to count targets which satisfy batch, status and template conditions
-  def self.shortlist(batch, status_scope, template)
-    batch_scope = template.founder_role? ? :for_founders_in_batch : :for_startups_in_batch
-
-    Target.send(batch_scope, batch).send(status_scope).where(target_template: template)
-  end
-
   # due date for the target calculated using days_to_complete starting from program_week start.
   def due_date
     return nil unless days_to_complete.present?

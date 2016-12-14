@@ -79,7 +79,7 @@
                           | #{target.due_date.strftime('%b %e')} at 11:59 PM.
                     p
                       ' #{target.description.html_safe}
-                    == render 'founder_completion', target: target if target.founder?
+                    == render 'founder_completion', target: target if target.founder_role?
                     == render 'submission_panel', target: target
 
 == render 'timeline_builder'

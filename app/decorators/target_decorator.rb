@@ -50,7 +50,7 @@ class TargetDecorator < Draper::Decorator
       when Target::TYPE_ATTEND
         ATTEND_SESSION_ICON
       when Target::TYPE_TODO
-        founder? ? PERSONAL_TODO_ICON : TEAM_TODO_ICON
+        founder_role? ? PERSONAL_TODO_ICON : TEAM_TODO_ICON
       else
         TEAM_TODO_ICON
     end

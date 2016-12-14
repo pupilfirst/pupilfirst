@@ -54,7 +54,7 @@ class Target < ApplicationRecord
     errors.add(:batch, "Does not match Program week's batch") unless batch == target_group.program_week.batch
   end
 
-  def founder?
+  def founder_role?
     role == Target::ROLE_FOUNDER
   end
 

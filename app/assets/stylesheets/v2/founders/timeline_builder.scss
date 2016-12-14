@@ -80,7 +80,7 @@
             .link-upload-form, .file-upload-form {
               display: flex;
 
-              .link-title-group, .link-url-group, .file-title-group, .file-choose-group, .sharing-option-group {
+              .link-title-group, .link-url-group, .file-title-group, .file-choose-group, .visibility-option-group {
                 width: 100%;
                 margin-right: 1rem;
 
@@ -93,7 +93,7 @@
                   font-size: 1rem;
                 }
               }
-              .sharing-option-group {
+              .visibility-option-group {
                 max-width: 100px;
               }
             }

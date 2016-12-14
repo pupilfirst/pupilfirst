@@ -1,10 +1,10 @@
 class FoundersController < ApplicationController
   before_action :authenticate_founder!, except: :founder_profile
+  before_action :skip_container, only: [:founder_profile, :dashboard]
 
   def founder_profile
     @founder = Founder.friendly.find(params[:slug])
     @timeline = @founder.activity_timeline
-    @skip_container = true
   end
 
   # GET /founders/:id/edit
@@ -33,7 +33,6 @@ class FoundersController < ApplicationController
     raise_not_found unless feature_active? :founder_dashboard
 
     @header_non_floating = true
-    @skip_container = true
 
     @startup = current_founder.startup.decorate
     # eager-load everything required for the dashboard. Order and decorate them too!
@@ -43,6 +42,10 @@ class FoundersController < ApplicationController
   end
 
   private
+
+  def skip_container
+    @skip_container = true
+  end
 
   # If founder's startup has already been created (by team lead), take him there. Otherwise, take him to consent screen.
   def create_startup_or_timeline_path

@@ -44,7 +44,7 @@ module Targets
     end
 
     def owner
-      @owner ||= @target.founder? ? @founder : @founder.startup
+      @owner ||= @target.founder_role? ? @founder : @founder.startup
     end
 
     def completed_prerequisites_ids

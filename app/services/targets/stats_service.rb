@@ -6,36 +6,36 @@ module Targets
 
     # Returns count of Startups or Founders who have the target unavailable
     def unavailable_count
-      @target.founder? ? unavailable_founders.count : unavailable_startups.count
+      @target.founder_role? ? unavailable_founders.count : unavailable_startups.count
     end
 
     # Returns count of Startups or Founders who have the target pending
     def pending_count
-      @target.founder? ? pending_founders.count : pending_startups.count
+      @target.founder_role? ? pending_founders.count : pending_startups.count
     end
 
     # Returns count of Startups or Founders who have the target expired
     def expired_count
-      @target.founder? ? expired_founders.count : expired_startups.count
+      @target.founder_role? ? expired_founders.count : expired_startups.count
     end
 
     # Returns count of Startups or Founders who have completed the target
     def completed_count
-      @target.founder? ? completed_founders.count : completed_startups.count
+      @target.founder_role? ? completed_founders.count : completed_startups.count
     end
 
     # Returns count of Startups or Founders who have submitted the target
     def submitted_count
-      @target.founder? ? submitted_founders.count : submitted_startups.count
+      @target.founder_role? ? submitted_founders.count : submitted_startups.count
     end
 
     # Returns count of Startups or Founders whose submission needs improvement
     def needs_improvement_count
-      @target.founder? ? needs_improvement_founders.count : needs_improvement_startups.count
+      @target.founder_role? ? needs_improvement_founders.count : needs_improvement_startups.count
     end
 
     def not_accepted_count
-      @target.founder? ? not_accepted_founders.count : not_accepted_startups.count
+      @target.founder_role? ? not_accepted_founders.count : not_accepted_startups.count
     end
 
     private

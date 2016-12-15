@@ -16,7 +16,7 @@ formatOptions = (element) ->
   elementData = $(element).data()
   options = {}
 
-  $.each ['format', 'minDate', 'maxDate', 'step'], (_index, property) ->
+  $.each ['format', 'minDate', 'maxDate', 'step', 'allowTimes', 'defaultTime'], (_index, property) ->
     options[property] = elementData[property]
 
   options

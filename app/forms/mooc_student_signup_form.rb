@@ -10,6 +10,7 @@ class MoocStudentSignupForm < Reform::Form
 
   validate :mooc_student_must_not_exist
   validate :university_id_must_be_valid
+  validate :email_must_not_be_bounced
 
   def mooc_student_must_not_exist
     return if email.blank?
@@ -24,6 +25,14 @@ class MoocStudentSignupForm < Reform::Form
     return if university_id.blank? # Presence validator will show correct message.
     return if University.find_by(id: university_id).present?
     errors[:university_id] << 'is invalid'
+  end
+
+  def email_must_not_be_bounced
+    return if email.blank?
+
+    user = User.with_email(email).first
+    return if user.blank?
+    errors[:email] << 'previous mails to this address were bouncing! Supply a different one.' if user.email_bounced
   end
 
   def prepopulate!(options)

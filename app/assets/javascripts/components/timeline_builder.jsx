@@ -9,11 +9,13 @@ const TimelineBuilder = React.createClass({
     }
   },
 
-  showAdder: function (type) {
+  toggleAdder: function (type) {
     if (type == 'link') {
-      this.setState({showLinkAdder: true, showFileAdder: false});
+      let newState = !this.state.showLinkAdder;
+      this.setState({showLinkAdder: newState, showFileAdder: false});
     } else {
-      this.setState({showLinkAdder: false, showFileAdder: true});
+      let newState = !this.state.showFileAdder;
+      this.setState({showLinkAdder: false, showFileAdder: newState});
     }
   },
 
@@ -48,7 +50,7 @@ const TimelineBuilder = React.createClass({
         <TimelineBuilderFileAdder/>
         }
 
-        <TimelineBuilderActionBar adderClickedCB={ this.showAdder } activeAdder={ this.activeAdder() }/>
+        <TimelineBuilderActionBar adderClickedCB={ this.toggleAdder } activeAdder={ this.activeAdder() }/>
       </div>
     )
   }

@@ -4,38 +4,44 @@ module Targets
       @target = target
     end
 
-    # Returns count of Startups or Founders who have the target unavailable
-    def unavailable_count
-      @target.founder_role? ? unavailable_founders.count : unavailable_startups.count
+    def counts
+      {
+        completed: completed_assignees.count,
+        submitted: submitted_assignees.count,
+        needs_improvement: needs_improvement_assignees.count,
+        not_accepted: not_accepted_assignees.count,
+        pending: pending_assignees.count,
+        expired: expired_assignees.count,
+        unavailable: unavailable_assignees.count
+      }
     end
 
-    # Returns count of Startups or Founders who have the target pending
-    def pending_count
-      @target.founder_role? ? pending_founders.count : pending_startups.count
+    def completed_assignees
+      @completed_assignees ||= event_owners(linked_events.verified)
     end
 
-    # Returns count of Startups or Founders who have the target expired
-    def expired_count
-      @target.founder_role? ? expired_founders.count : expired_startups.count
+    def submitted_assignees
+      @submitted_assignees ||= event_owners(linked_events.pending)
     end
 
-    # Returns count of Startups or Founders who have completed the target
-    def completed_count
-      @target.founder_role? ? completed_founders.count : completed_startups.count
+    def needs_improvement_assignees
+      @needs_improvement_assignees ||= event_owners(linked_events.needs_improvement)
     end
 
-    # Returns count of Startups or Founders who have submitted the target
-    def submitted_count
-      @target.founder_role? ? submitted_founders.count : submitted_startups.count
+    def not_accepted_assignees
+      @not_accepted_assignees ||= event_owners(linked_events.not_accepted)
     end
 
-    # Returns count of Startups or Founders whose submission needs improvement
-    def needs_improvement_count
-      @target.founder_role? ? needs_improvement_founders.count : needs_improvement_startups.count
+    def pending_assignees
+      assignees_in_batch.select { |assignee| status_for(assignee) == Targets::StatusService::STATUS_PENDING }
     end
 
-    def not_accepted_count
-      @target.founder_role? ? not_accepted_founders.count : not_accepted_startups.count
+    def expired_assignees
+      assignees_in_batch.select { |assignee| status_for(assignee) == Targets::StatusService::STATUS_EXPIRED }
+    end
+
+    def unavailable_assignees
+      assignees_in_batch.select { |assignee| status_for(assignee) == Targets::StatusService::STATUS_UNAVAILABLE }
     end
 
     private
@@ -44,60 +50,36 @@ module Targets
       TimelineEvent.where(target: @target)
     end
 
-    def completed_founders
-      @completed_founders ||= Founder.where(id: linked_events.verified.select(:founder_id).distinct)
+    def event_owners(events)
+      @target.founder_role? ? founders(events) : startups(events)
     end
 
-    def completed_startups
-      @completed_startups ||= Startup.where(id: linked_events.verified.select(:startup_id).distinct)
+    def founders(events)
+      Founder.where(id: events.select(:founder_id).distinct)
     end
 
-    def submitted_founders
-      @submitted_founders ||= Founder.where(id: linked_events.pending.select(:founder_id).distinct)
+    def startups(events)
+      Startup.where(id: events.select(:startup_id).distinct)
     end
 
-    def submitted_startups
-      @submitted_startups ||= Startup.where(id: linked_events.pending.select(:startup_id).distinct)
+    def assignees_in_batch
+      @target.founder_role? ? founders_in_batch : startups_in_batch
     end
 
-    def needs_improvement_founders
-      @needs_improvement_founders ||= Founder.where(id: linked_events.needs_improvement.select(:founder_id).distinct)
+    def founders_in_batch
+      @target.batch.founders
     end
 
-    def needs_improvement_startups
-      @needs_improvement_startups ||= Startup.where(id: linked_events.needs_improvement.select(:startup_id).distinct)
+    def startups_in_batch
+      @target.batch.startups
     end
 
-    def not_accepted_founders
-      @not_accepted_founders ||= Founder.where(id: linked_events.not_accepted.select(:founder_id).distinct)
+    def status_for(assignee)
+      @target.status(representative(assignee))
     end
 
-    def not_accepted_startups
-      @not_accepted_startups ||= Startup.where(id: linked_events.not_accepted.select(:startup_id).distinct)
-    end
-
-    def unavailable_founders
-      @target.batch.founders.select { |founder| @target.status(founder) == Targets::StatusService::STATUS_UNAVAILABLE }
-    end
-
-    def unavailable_startups
-      @target.batch.startups.select { |startup| @target.status(startup.admin) == Targets::StatusService::STATUS_UNAVAILABLE }
-    end
-
-    def pending_founders
-      @target.batch.founders.select { |founder| @target.status(founder) == Targets::StatusService::STATUS_PENDING }
-    end
-
-    def pending_startups
-      @target.batch.startups.select { |startup| @target.status(startup.admin) == Targets::StatusService::STATUS_PENDING }
-    end
-
-    def expired_founders
-      @target.batch.founders.select { |founder| @target.status(founder) == Targets::StatusService::STATUS_EXPIRED }
-    end
-
-    def expired_startups
-      @target.batch.startups.select { |startup| @target.status(startup.admin) == Targets::StatusService::STATUS_EXPIRED }
+    def representative(assignee)
+      assignee.is_a?(Founder) ? assignee : assignee.admin
     end
   end
 end

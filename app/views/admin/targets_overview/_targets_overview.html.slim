@@ -89,13 +89,13 @@
         - week_targets.each do |target|
           tr
             td.col #{target.title}
-            td.col #{target.stats_service.completed_count}
-            td.col #{target.stats_service.submitted_count}
-            td.col #{target.stats_service.needs_improvement_count}
-            td.col #{target.stats_service.not_accepted_count}
-            td.col #{target.stats_service.unavailable_count}
-            td.col #{target.stats_service.pending_count}
-            td.col #{target.stats_service.expired_count}
+            td.col #{target.stats_service.counts[:completed]}
+            td.col #{target.stats_service.counts[:submitted]}
+            td.col #{target.stats_service.counts[:needs_improvement]}
+            td.col #{target.stats_service.counts[:not_accepted]}
+            td.col #{target.stats_service.counts[:unavailable]}
+            td.col #{target.stats_service.counts[:pending]}
+            td.col #{target.stats_service.counts[:expired]}
 
 - else
   p. The selected batch does not have any targets

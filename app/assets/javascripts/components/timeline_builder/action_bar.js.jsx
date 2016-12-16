@@ -1,28 +1,28 @@
 const TimelineBuilderActionBar = React.createClass({
   propTypes: {
     formClickedCB: React.PropTypes.func,
-    activeAdder: React.PropTypes.string
+    currentForm: React.PropTypes.string
   },
 
   getInitialState: function () {
     return null;
   },
 
-  adderClasses: function (type) {
+  formLinkClasses: function (type) {
     let classes = (type == 'link') ? 'link-upload' : 'file-upload';
 
-    if (this.props.activeAdder == type) {
+    if (this.props.currentForm == type) {
       classes += ' active-tab';
     }
 
     return classes;
   },
 
-  showLinkAdder: function () {
+  showLinkForm: function () {
     this.props.formClickedCB('link')
   },
 
-  showFileAdder: function () {
+  showFileForm: function () {
     this.props.formClickedCB('file')
   },
 
@@ -34,11 +34,11 @@ const TimelineBuilderActionBar = React.createClass({
             <i className="fa fa-file-image-o"/>
             <span className="tab-label">Image</span>
           </div>
-          <div className={ this.adderClasses('link') } onClick={ this.showLinkAdder }>
+          <div className={ this.formLinkClasses('link') } onClick={ this.showLinkForm }>
             <i className="fa fa-link"/>
             <span className="tab-label">Link</span>
           </div>
-          <div className={ this.adderClasses('file') } onClick={ this.showFileAdder }>
+          <div className={ this.formLinkClasses('file') } onClick={ this.showFileForm }>
             <i className="fa fa-file-text-o"/>
             <span className="tab-label">File</span>
           </div>

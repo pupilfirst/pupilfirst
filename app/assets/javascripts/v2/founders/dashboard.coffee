@@ -14,7 +14,7 @@ targetAccordion = ->
 
 timelineBuilderModal = ->
   $('.btn-timeline-builder').click () ->
-    $('#timeline-builder').modal backdrop: 'static'
+    $('.timeline-builder').modal(backdrop: 'static')
 
 customFileupload = ->
   inputs = document.querySelectorAll('.file-choose')

@@ -5,7 +5,7 @@ const TimelineBuilderFileAdder = React.createClass({
 
   render: function () {
     return (
-      <div className="file-upload-block">
+      <div className="attachment-form">
         <form className="form-inline file-upload-form">
           <div className="form-group file-title-group">
             <label className="sr-only" htmlFor="fileTitle">File Title</label>

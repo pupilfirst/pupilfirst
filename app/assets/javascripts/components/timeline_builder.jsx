@@ -42,13 +42,19 @@ const TimelineBuilder = React.createClass({
         <TimelineBuilderAttachments/>
         }
 
-        { this.state.showLinkAdder &&
-        <TimelineBuilderLinkAdder/>
-        }
+        <React.addons.CSSTransitionGroup
+          transitionName="timeline-builder-adder"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300}>
 
-        { this.state.showFileAdder &&
-        <TimelineBuilderFileAdder/>
-        }
+          { this.state.showLinkAdder &&
+          <TimelineBuilderLinkAdder key="1"/>
+          }
+
+          { this.state.showFileAdder &&
+          <TimelineBuilderFileAdder key="1"/>
+          }
+        </React.addons.CSSTransitionGroup>
 
         <TimelineBuilderActionBar adderClickedCB={ this.toggleAdder } activeAdder={ this.activeAdder() }/>
       </div>

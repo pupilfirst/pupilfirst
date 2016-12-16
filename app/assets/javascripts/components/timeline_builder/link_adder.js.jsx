@@ -5,7 +5,7 @@ const TimelineBuilderLinkAdder = React.createClass({
 
   render: function () {
     return (
-      <div className="link-upload-block">
+      <div className="attachment-form">
         <form className="form-inline link-upload-form">
           <div className="form-group link-title-group">
             <label className="sr-only" htmlFor="linkTitle">Link Title</label>

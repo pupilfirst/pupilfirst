@@ -5,8 +5,8 @@ const TimelineBuilderAttachments = React.createClass({
 
   render: function () {
     return (
-      <div className="uploaded-files-block clearfix">
-        <div className="uploded-file-tag pull-xs-left m-r-1 m-t-1">
+      <div className="attachments-container clearfix">
+        <div className="attachment pull-xs-left m-r-1 m-t-1">
           <i className="fa fa-file-image-o"/>
           <span className="file-name">
                     Cover_photograph.jpg
@@ -15,7 +15,7 @@ const TimelineBuilderAttachments = React.createClass({
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div className="uploded-file-tag pull-xs-left m-r-1 m-t-1">
+        <div className="attachment pull-xs-left m-r-1 m-t-1">
           <i className="fa fa-link"/>
           <span className="file-name">
                     Link Title
@@ -24,7 +24,7 @@ const TimelineBuilderAttachments = React.createClass({
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div className="uploded-file-tag pull-xs-left m-r-1 m-t-1">
+        <div className="attachment pull-xs-left m-r-1 m-t-1">
           <i className="fa fa-file-text-o"/>
           <span className="file-name">
                     File Name

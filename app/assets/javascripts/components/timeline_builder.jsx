@@ -36,6 +36,51 @@ const TimelineBuilder = React.createClass({
     return this.state.links.length > 0 || this.state.files.length > 0 || this.state.cover_image != null
   },
 
+  submit: function (event) {
+    // TODO: Run presence validations.
+    // TODO: Create form and submit it with AJAX.
+
+    // Block the submit from going through.
+    event.preventDefault();
+
+    let form = $('.timeline-builder-hidden-form');
+    let formData = new FormData(form[0]);
+
+    let description = $('.timeline-builder-textarea').val();
+
+    formData.append('timeline_event[description]', description);
+
+    // Submit form data using AJAX and set a progress handler function.
+    $.ajax({
+      url: form.attr('action'),
+      type: form.attr('method'),
+
+      xhr: function () {
+        let myXhr = $.ajaxSettings.xhr();
+
+        // if (myXhr.upload) { // Check if upload property exists.
+        //   // For handling the progress of the upload.
+        //   myXhr.upload.addEventListener('progress', progressHandlingFunction, false);
+        // }
+
+        return myXhr;
+      },
+
+      // Ajax events.
+      // beforeSend: beforeSendHandler,
+      // success: completeHandler,
+      // error: errorHandler,
+
+      // Form data
+      data: formData,
+
+      // Options to tell jQuery not to process data or worry about content-type.
+      cache: false,
+      contentType: false,
+      processData: false
+    });
+  },
+
   render: function () {
     return (
       <div>
@@ -46,7 +91,8 @@ const TimelineBuilder = React.createClass({
         }
 
         <TimelineBuilderAttachmentForm currentForm={ this.currentForm() } previousForm={ this.state.previousForm }/>
-        <TimelineBuilderActionBar formClickedCB={ this.toggleForm } currentForm={ this.currentForm() }/>
+        <TimelineBuilderActionBar formClickedCB={ this.toggleForm } currentForm={ this.currentForm() }
+                                  submitCB={ this.submit }/>
       </div>
     )
   }

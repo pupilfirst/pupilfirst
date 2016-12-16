@@ -6,6 +6,9 @@
           <span aria-hidden="true">&times;</span>
         </button>
 
+        <%= form_tag founder_startup_timeline_events_path, method: :post, class: 'timeline-builder-hidden-form' do |f| %>
+        <% end %>
+
         <%= react_component('TimelineBuilder') %>
       </div>
     </div>

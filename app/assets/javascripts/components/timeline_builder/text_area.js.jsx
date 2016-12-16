@@ -5,7 +5,7 @@ const TimelineBuilderTextArea = React.createClass({
 
   render: function () {
     return (
-      <textarea className="form-control" id="timelineTextarea" rows="4" placeholder="What&rsquo;s been happening?"/>
+      <textarea className="form-control timeline-builder-textarea" rows="4" placeholder="What&rsquo;s been happening?"/>
     )
   }
 });

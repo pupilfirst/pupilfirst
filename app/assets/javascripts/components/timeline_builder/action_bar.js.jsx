@@ -1,6 +1,6 @@
 const TimelineBuilderActionBar = React.createClass({
   propTypes: {
-    adderClickedCB: React.PropTypes.func,
+    formClickedCB: React.PropTypes.func,
     activeAdder: React.PropTypes.string
   },
 
@@ -19,11 +19,11 @@ const TimelineBuilderActionBar = React.createClass({
   },
 
   showLinkAdder: function () {
-    this.props.adderClickedCB('link')
+    this.props.formClickedCB('link')
   },
 
   showFileAdder: function () {
-    this.props.adderClickedCB('file')
+    this.props.formClickedCB('file')
   },
 
   render: function () {

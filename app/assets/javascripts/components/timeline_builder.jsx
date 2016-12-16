@@ -4,25 +4,28 @@ const TimelineBuilder = React.createClass({
       links: [],
       files: [],
       cover_image: null,
-      showLinkAdder: false,
-      showFileAdder: false
+      showLinkForm: false,
+      showFileForm: false,
+      previousForm: null
     }
   },
 
-  toggleAdder: function (type) {
+  toggleForm: function (type) {
+    let previousForm = this.currentForm();
+
     if (type == 'link') {
-      let newState = !this.state.showLinkAdder;
-      this.setState({showLinkAdder: newState, showFileAdder: false});
+      let newState = !this.state.showLinkForm;
+      this.setState({showLinkForm: newState, showFileForm: false, previousForm: previousForm});
     } else {
-      let newState = !this.state.showFileAdder;
-      this.setState({showLinkAdder: false, showFileAdder: newState});
+      let newState = !this.state.showFileForm;
+      this.setState({showLinkForm: false, showFileForm: newState, previousForm: previousForm});
     }
   },
 
-  activeAdder: function () {
-    if (this.state.showLinkAdder) {
+  currentForm: function () {
+    if (this.state.showLinkForm) {
       return 'link'
-    } else if (this.state.showFileAdder) {
+    } else if (this.state.showFileForm) {
       return 'file'
     } else {
       return null
@@ -42,21 +45,8 @@ const TimelineBuilder = React.createClass({
         <TimelineBuilderAttachments/>
         }
 
-        <React.addons.CSSTransitionGroup
-          transitionName="timeline-builder-adder"
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={300}>
-
-          { this.state.showLinkAdder &&
-          <TimelineBuilderLinkAdder key="1"/>
-          }
-
-          { this.state.showFileAdder &&
-          <TimelineBuilderFileAdder key="1"/>
-          }
-        </React.addons.CSSTransitionGroup>
-
-        <TimelineBuilderActionBar adderClickedCB={ this.toggleAdder } activeAdder={ this.activeAdder() }/>
+        <TimelineBuilderAttachmentForm currentForm={ this.currentForm() } previousForm={ this.state.previousForm }/>
+        <TimelineBuilderActionBar formClickedCB={ this.toggleForm } currentForm={ this.currentForm() }/>
       </div>
     )
   }

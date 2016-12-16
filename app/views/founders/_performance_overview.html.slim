@@ -1,0 +1,42 @@
+.performance-overview.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close.modal-close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true"
+            | &times;
+        h4.modal-title.font-regular
+          i.fa.fa-tachometer
+          | Startup progress:
+          span.font-light.startup-name
+            | #{@startup.product_name}
+      .modal-body
+        .startup-stats
+          .stats-section
+            svg viewbox=("0 0 32 32")
+              circle.circle-primary cx="16" cy="16" r="16" style=("stroke-dasharray: 40 100;")
+            .status-chart-data.img-circle.text-xs-center
+              p
+                | Days
+              h5.brand-primary.font-regular.m-b-0
+                |	20/180
+          .stats-section
+            svg viewbox=("0 0 32 32")
+              circle.circle-secondary cx="16" cy="16" r="16" style=("stroke-dasharray: 32 100;")
+            .status-chart-data.img-circle.text-xs-center
+              p
+               | Targets
+              h5.brand-secondary.font-regular.m-b-0
+                | 10/260
+          .stats-section.leaderboard-rank-section.text-xs-center
+            | Leaderboard Rank
+            .leaderboard-rank.font-semibold.alert-background
+              | 3
+            p
+              | Karma points : 130
+        .performance-meter.text-xs-center
+          .performance-bar
+            .performance-pointer.text-uppercase.font-semibold
+              | Average
+          p.performance-description
+            | Performance Meter

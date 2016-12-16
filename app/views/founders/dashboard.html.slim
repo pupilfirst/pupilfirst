@@ -21,10 +21,16 @@
   .founder-dashboard-container
     .fixed-dashboard-header
       .container
-        .dashboard-header-container
-          button.btn.btn-with-icon.btn-md.btn-secondary.text-uppercase.btn-timeline-builder data-toggle="modal"
-            i.fa.fa-plus
-            ' Add Event
+        .dashboard-header-container.clearfix
+          .pull-xs-left
+
+          .pull-xs-right
+            a.performance-overview-link.brand-primary data-toggle="modal"
+              i.fa.fa-tachometer.light-primary
+              | Performance
+            button.btn.btn-with-icon.btn-md.btn-secondary.text-uppercase.btn-timeline-builder data-toggle="modal"
+              i.fa.fa-plus
+              | Add Event
     .targets-board.m-x-auto.target-accordion
       - @program_weeks.each do |program_week|
         - next unless program_week.target_groups.present?
@@ -83,3 +89,4 @@
                     == render 'submission_panel', target: target
 
 == render 'timeline_builder'
+== render 'performance_overview'

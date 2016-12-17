@@ -40,6 +40,15 @@ const TimelineBuilder = React.createClass({
     return this.state.links.length > 0 || this.state.files.length > 0 || this.state.cover_image != null
   },
 
+  addAttachment: function (type, properties) {
+    if (type == 'link') {
+      this.setState({links: this.state.links.concat([properties])});
+      this.toggleForm('link')
+    } else {
+      console.log('Unhandled attachment type: ', type)
+    }
+  },
+
   submit: function (event) {
     // TODO: Run presence validations.
     // TODO: Create form and submit it with AJAX.
@@ -94,7 +103,8 @@ const TimelineBuilder = React.createClass({
         <TimelineBuilderAttachments/>
         }
 
-        <TimelineBuilderAttachmentForm currentForm={ this.currentForm() } previousForm={ this.state.previousForm }/>
+        <TimelineBuilderAttachmentForm currentForm={ this.currentForm() } previousForm={ this.state.previousForm }
+                                       addAttachmentCB={ this.addAttachment }/>
         <TimelineBuilderActionBar formClickedCB={ this.toggleForm } currentForm={ this.currentForm() }
                                   submitCB={ this.submit } timelineEventTypes={ this.props.timelineEventTypes }/>
       </div>

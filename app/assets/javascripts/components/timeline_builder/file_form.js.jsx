@@ -1,6 +1,6 @@
 const TimelineBuilderFileForm = React.createClass({
-  getInitialState: function () {
-    return null;
+  propTypes: {
+    addAttachmentCB: React.PropTypes.func
   },
 
   render: function () {

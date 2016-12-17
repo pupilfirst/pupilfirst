@@ -1,9 +1,13 @@
 const TimelineBuilder = React.createClass({
+  propTypes: {
+    timelineEventTypes: React.PropTypes.object
+  },
+
   getInitialState: function () {
     return {
       links: [],
       files: [],
-      cover_image: null,
+      coverImage: null,
       showLinkForm: false,
       showFileForm: false,
       previousForm: null
@@ -92,7 +96,7 @@ const TimelineBuilder = React.createClass({
 
         <TimelineBuilderAttachmentForm currentForm={ this.currentForm() } previousForm={ this.state.previousForm }/>
         <TimelineBuilderActionBar formClickedCB={ this.toggleForm } currentForm={ this.currentForm() }
-                                  submitCB={ this.submit }/>
+                                  submitCB={ this.submit } timelineEventTypes={ this.props.timelineEventTypes }/>
       </div>
     )
   }

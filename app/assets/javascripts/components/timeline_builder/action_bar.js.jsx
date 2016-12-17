@@ -2,7 +2,8 @@ const TimelineBuilderActionBar = React.createClass({
   propTypes: {
     formClickedCB: React.PropTypes.func,
     currentForm: React.PropTypes.string,
-    submitCB: React.PropTypes.func
+    submitCB: React.PropTypes.func,
+    timelineEventTypes: React.PropTypes.object
   },
 
   getInitialState: function () {
@@ -25,6 +26,12 @@ const TimelineBuilderActionBar = React.createClass({
 
   showFileForm: function () {
     this.props.formClickedCB('file')
+  },
+
+  timelineEventTypes: function () {
+    Object.keys(this.props.timelineEventTypes).forEach(function (role, _index) {
+
+    });
   },
 
   render: function () {
@@ -50,11 +57,11 @@ const TimelineBuilderActionBar = React.createClass({
         </div>
         <div className="select-tabs">
           <div className="type-of-event-select">
-            <select className="form-control" id="typeofEvent">
-              <option>Type of Event</option>
-              <option>Moved to Prototyping Stage Stage Stage</option>
-              <option>Joined sv.co</option>
-              <option>Received Bank Loan</option>
+            <select className="form-control timeline-builder__timeline_event_type">
+              { Object.keys(this.props.timelineEventTypes).map(function (role, index) {
+                return <TimelineBuilderTimelineEventGroup key={ index } role={ role }
+                                                          timelineEvents={ this.props.timelineEventTypes[role] }/>
+              }, this)}
             </select>
           </div>
           <div className="submit-btn">

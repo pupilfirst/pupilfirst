@@ -1,4 +1,4 @@
-#timeline-builder {
+.timeline-builder {
   .modal-dialog {
     max-width: 45rem;
 
@@ -28,7 +28,7 @@
           font-size: 1.125rem;
           font-weight: $font-light;
         }
-        .uploaded-files-block {
+        .attachments-container {
           padding: 0 0 1rem 0;
           margin: 0 1.25rem;
           border-top: 1px dashed $gray-border;
@@ -37,7 +37,7 @@
             margin-right: 0;
           }
 
-          .uploded-file-tag {
+          .attachment {
             width: 170px;
             height: 30px;
             display: flex;
@@ -70,14 +70,14 @@
             }
           }
         }
-        .link-upload-block, .file-upload-block {
+        .attachment-form-container {
           padding: 1.25rem;
           background-color: $dark-primary-background;
           border-top: 1px solid $gray-border;
           box-shadow: inset 0 10px 10px -10px rgba(0,0,0,0.1), inset 0 10px 10px -10px rgba(0,0,0,0.1);
 
           @include media-breakpoint-up(sm) {
-            .link-upload-form, .file-upload-form {
+            .attachment-form {
               display: flex;
 
               .link-title-group, .link-url-group, .file-title-group, .file-choose-group, .visibility-option-group {
@@ -98,6 +98,7 @@
               }
             }
           }
+
           .file-choose-group {
             height: 40px;
 

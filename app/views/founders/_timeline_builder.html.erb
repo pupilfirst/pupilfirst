@@ -1,10 +1,13 @@
-<div id="timeline-builder" class="modal fade">
+<div class="timeline-builder modal fade">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body">
         <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
+
+        <%= form_tag founder_startup_timeline_events_path, method: :post, class: 'timeline-builder-hidden-form' do |f| %>
+        <% end %>
 
         <%= react_component('TimelineBuilder') %>
       </div>

@@ -14,7 +14,7 @@ targetAccordion = ->
 
 timelineBuilderModal = ->
   $('.btn-timeline-builder').click () ->
-    $('#timeline-builder').modal backdrop: 'static'
+    $('.timeline-builder').modal(backdrop: 'static')
 
 performanceMeterModal = ->
   $('.performance-overview-link').click () ->

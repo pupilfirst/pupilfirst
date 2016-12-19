@@ -391,6 +391,7 @@ startTour = ->
     ]
   )
 
+
   tour.onexit enableTourButton
   tour.oncomplete enableTourButton
   disableTourButton()

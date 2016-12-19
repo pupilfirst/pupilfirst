@@ -7,11 +7,38 @@
   box-shadow: 0px 2px 10px 0px lighten($gray-light, 35%);
 
   .dashboard-header-container {
-    // display: flex;
+    max-width: 50rem;
     height: 100px;
-    padding: 25px 0;
-    // justify-content: center;
-    // align-items: center;
+    padding: 25px 15px;
+
+    @include media-breakpoint-down(sm) {
+      height: auto;
+      padding: 25px 0;
+    }
+  }
+}
+.performance-overview-link {
+  display: inline-block;
+  margin-right: 20px;
+  cursor: pointer;
+  letter-spacing: 0.04rem;
+  box-shadow: 0px 2px 5px 0px lighten($gray-light, 35%);
+
+  @include media-breakpoint-down(sm) {
+    width: auto;
+    font-size: 0.625rem;
+    padding: 10px;
+  }
+}
+.btn-timeline-builder {
+  box-shadow: 0px 2px 5px 0px lighten($gray-light, 35%);
+  border: 1px solid $brand-secondary;
+  display: inline-block;
+
+  @include media-breakpoint-down(sm) {
+    width: auto;
+    font-size: 0.625rem;
+    padding: 10px;
   }
 }
 .complete-target-block {
@@ -25,16 +52,23 @@
   margin-bottom: 1rem;
 
   &.submitted {
-    color: $brand-secondary;
+    color: rgba(0, 138, 193, 0.7);
   }
   &.needs-improvement {
-    color: $alert-background;
+    color: rgba(10, 165, 227, 0.7);
+
   }
-  &.unavailable, &.expired, &.not-accepted  {
-    color: rgba(255, 64, 64, 1.0);
+  &.unavailable {
+    color: rgba(153, 153, 153, 0.7);
+  }
+  &.expired {
+    color: rgba(255, 64, 64, 0.7);
+  }
+  &.not-accepted  {
+    color: rgba(46, 47, 51, 0.7);
   }
   &.complete {
-    color: $brand-primary;
+    color: rgba(50, 180, 117, 0.7);
   }
 
   .feedback-icon {
@@ -64,7 +98,7 @@
   margin-bottom: 1rem;
   color: $light-grey-text;
 }
-.targets-board, .target-accordion {
+.targets-board {
   max-width: 50rem;
   padding: 0 15px;
   position: relative;
@@ -206,8 +240,14 @@
 
           @include media-breakpoint-down(md) {
             padding: 20px;
+
+            &:before {
+              right: 20px;
+            }
           }
           &.active {
+            background-color: $primary-background;
+
             &:before {
               transform: rotate(45deg);
             }
@@ -246,7 +286,7 @@
             }
             @include media-breakpoint-down(sm) {
               font-size: 0.875rem;
-              max-width: 200px;
+              max-width: 150px;
             }
           }
           .target-title-info {
@@ -285,8 +325,9 @@
           right: 25px;
 
           @include media-breakpoint-down(xs) {
-            float: none;
             font-size: 0.75rem;
+            right: 15px;
+            padding: 7px 10px;
           }
           &.needs-improvement {
             background-color: rgba(10, 165, 227, 0.7);

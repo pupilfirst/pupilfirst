@@ -21,15 +21,17 @@
   .founder-dashboard-container
     .fixed-dashboard-header
       .container
-        .dashboard-header-container.clearfix
-          .pull-xs-left
+        .dashboard-header-container.clearfix.m-x-auto.text-xs-center
+          / .pull-xs-left
 
-          .pull-xs-right
-            a.performance-overview-link.brand-primary data-toggle="modal"
-              i.fa.fa-tachometer.light-primary
+          / .pull-xs-right
+          button.btn.btn-with-icon.btn-md.btn-ghost-primary.performance-overview-link.text-uppercase data-toggle="modal"
+            i.fa.fa-tachometer
+            span
               | Performance
-            button.btn.btn-with-icon.btn-md.btn-secondary.text-uppercase.btn-timeline-builder data-toggle="modal"
-              i.fa.fa-plus
+          button.btn.btn-with-icon.btn-md.btn-secondary.text-uppercase.btn-timeline-builder data-toggle="modal"
+            i.fa.fa-plus
+            span
               | Add Event
     .targets-board.m-x-auto.target-accordion
       - @program_weeks.each do |program_week|
@@ -57,10 +59,10 @@
                     = image_tag "founders/dashboard/target-type-icons/#{target.type_icon_name}", class: "target-icon"
                     .target-header
                       h6.target-title
-                        span.target-type-tag.hidden-xs-down
+                        span.target-type-tag.hidden-sm-down
                           | #{target.target_type}
                         | #{target.title}
-                      .target-title-info.hidden-xs-down
+                      .target-title-info
                         .target-deadline.font-regular
                           | Suggested Deadline:
                           span.target-deadline-date
@@ -70,8 +72,11 @@
                             | Points:
                             span.earn-karma-points
                               | #{target.points_earnable}
-                    .target-status.tag.tag-pill.needs-improvement class="#{target.status_badge_class(current_founder)}"
-                      | #{target.status_text(current_founder)}
+                    .target-status.tag.tag-pill class="#{target.status_badge_class(current_founder)}"
+                      .span.hidden-md-up
+                        i.fa.fa-check
+                      .span.hidden-sm-down
+                        | #{target.status_text(current_founder)}
                   .target-description
                     .target-description-header.clearfix.m-b-1
                       - if target.assigner.present?

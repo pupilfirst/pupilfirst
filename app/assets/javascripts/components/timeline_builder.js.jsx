@@ -40,6 +40,24 @@ const TimelineBuilder = React.createClass({
     return this.state.links.length > 0 || this.state.files.length > 0 || this.state.cover_image != null
   },
 
+  attachments: function () {
+    let currentAttachments = [];
+
+    if (this.state.coverImage != null) {
+      currentAttachments.push({type: 'cover', title: this.state.coverImage.title});
+    }
+
+    this.state.links.forEach(function (link, index) {
+      currentAttachments.push({type: 'link', index: index, title: link.title})
+    });
+
+    this.state.files.forEach(function (file, index) {
+      currentAttachments.push({type: 'file', index: index, title: file.title})
+    });
+
+    return currentAttachments;
+  },
+
   addAttachment: function (type, properties) {
     if (type == 'link') {
       this.setState({links: this.state.links.concat([properties])});
@@ -100,7 +118,7 @@ const TimelineBuilder = React.createClass({
         <TimelineBuilderTextArea/>
 
         { this.hasAttachments() &&
-        <TimelineBuilderAttachments/>
+        <TimelineBuilderAttachments attachments={ this.attachments() }/>
         }
 
         <TimelineBuilderAttachmentForm currentForm={ this.currentForm() } previousForm={ this.state.previousForm }

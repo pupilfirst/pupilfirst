@@ -14,7 +14,11 @@ targetAccordion = ->
 
 timelineBuilderModal = ->
   $('.btn-timeline-builder').click () ->
-    $('#timeline-builder').modal backdrop: 'static'
+    $('.timeline-builder').modal(backdrop: 'static')
+
+performanceMeterModal = ->
+  $('.performance-overview-link').click () ->
+    $('.performance-overview').modal()
 
 customFileupload = ->
   inputs = document.querySelectorAll('.file-choose')
@@ -86,3 +90,4 @@ $(document).on 'turbolinks:load', ->
     timelineBuilderModal()
     customFileupload()
     giveATour()
+    performanceMeterModal()

@@ -59,11 +59,14 @@ FactoryGirl.define do
       end
     end
 
-    trait :with_targets_for_startups do
-      start_date { Date.today }
+    # batch which started 1 day ago
+    trait :just_started do
+      start_date { 1.day.ago }
       end_date { 24.weeks.from_now }
+    end
 
-      # create 10 targets in the first week's first group.
+    # batch with 10 targets for startups in the first week first group
+    trait :with_targets_for_startups do
       after(:create) do |batch|
         create_list(:target, 10, :with_program_week, :for_startup, batch: batch, week_number: 1, group_index: 1)
       end
@@ -71,7 +74,7 @@ FactoryGirl.define do
 
     trait :with_startups do
       after(:create) do |batch|
-        create_list(:startup, 4, batch: batch)
+        create_list(:startup, 10, batch: batch)
       end
     end
   end

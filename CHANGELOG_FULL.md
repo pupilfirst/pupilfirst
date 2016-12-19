@@ -1,6 +1,19 @@
 ## Ongoing
 
-- New Founder dashboard (frontend and backend) is being built. [[Trello]](https://trello.com/c/sITTzECe)
+- New Founder dashboard design is being implemented. [[Trello]](https://trello.com/c/sITTzECe)
+- Backend for new dashboard is being worked on. [[Trello]](https://trello.com/c/5tbjVflT)
+- New timeline builder for the new dashboard is being wired up with React. [[Trello]](https://trello.com/c/EvCvyGdH)
+
+## 2016.12.19
+
+- Deployed a new target overview page for revamped program framework. [[Trello]](https://trello.com/c/rPvTRmUT)
+- Add a link to view uploaded partnership deed from the stage 4 submission page on active admin. [[Trello]](https://trello.com/c/oW8EqOUU)
+- Added a fallback identicon logo for startups, colored according to their auto-generated name. [[Trello]](https://trello.com/c/ihrvZlEZ)
+- Automatically select 11:59 PM as time for `ends_at` of a batch's applications stage. [[Trello]](https://trello.com/c/iVD2ztcN)
+- Updated address given on the apply page. [[Trello]](https://trello.com/c/fsifLdjl)
+- Added some additional validations to Target. [[Trello]](https://trello.com/c/wRtX41Hl)
+- Improved how `sequence`-s were used in Factory Girl templates. [[Trello]](https://trello.com/c/fxl9mEAC)
+- Added Rails-specific checks to our Rubocop runs. [[Trello]](https://trello.com/c/UkWirRRS)
 
 ## 2016.12.12
 
@@ -11,6 +24,7 @@
 - The admin interface for creating application submissions now allows for searching of batch application using select2. [[Trello]](https://trello.com/c/y3fTfvmT)
 - Removed use of `member_label` option from all Formtastic forms since it has been deprecated. [[Trello]](https://trello.com/c/xQWbKUp6)
 - Removed `invited_batch` association from `Founder`. [[Trello]](https://trello.com/c/KSTtTMs5)
+- `TargetGroup.number` was renamed to `sort_index` to clarify its purpose. [[Trello]](https://trello.com/c/4yoHu0bz)
 - Removed unused `full_validation` accessor from Startup and Founder. [[Trello]](https://trello.com/c/JS9HE4ac)
 
 ## 2016.12.05

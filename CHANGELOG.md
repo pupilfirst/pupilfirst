@@ -1,3 +1,9 @@
+### 19 December, 2016
+
+#### Content
+
+  - Updated SV.CO's physical address, given on the application page.
+
 ### 12 December, 2016
 
 #### Bugfixes

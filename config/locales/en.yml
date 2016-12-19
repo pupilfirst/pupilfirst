@@ -93,7 +93,16 @@ en:
             founder: Thank you for improving this event with a later event!
             public: This event was improved upon with a later submission!
           status_text: Improved Later
-
+  dashboard:
+    show:
+      tour:
+        intro: Welcome to your dashboard! All your progress during the course of the program will be available here. The entire program is divided into program weeks, each of which will have target groups and associated targets.
+        week_number: Indicates the program week number. The target groups to be completed in the indicated week will be listed below.
+        target_group: Your target groups will have all the targets listed along with its completion status.
+        target: The target pane will have the name of the target and its completion status. On clicking the target, you will get detailed information on the target, founder status, the due date and the target submission button.
+        target_details: Detailed information on the target, its due-date and founder-wise status.
+        target_status: This indicates the present status of the target.
+        add_event: Click to add timeline events for your startup. Once approved by the SV.CO team, (most) timeline events are displayed to the public.
   resource:
     share_status:
       approved: 'Only with approved startups'

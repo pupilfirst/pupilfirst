@@ -36,9 +36,58 @@ customFileupload = ->
       else
         label.innerHTML = labelVal
 
+giveATour = ->
+  startTour() if $('#dashboard-show-tour').length > 0
+
+startTour = ->
+  startupShowTour = $('#dashboard-show-tour')
+
+  tour = introJs()
+
+  tour.setOptions(
+    skipLabel: 'Close',
+    steps: [
+      {
+        element: $('.dashboard-header')[0],
+        intro: startupShowTour.data('intro')
+      },
+      {
+        element: $('.program-week-number')[0],
+        intro: startupShowTour.data('programWeekNumber')
+      },
+      {
+        element: $('.target-group-header')[0],
+        intro: startupShowTour.data('targetGroup')
+      },
+      {
+        element: $('.target-title-link')[0],
+        intro: startupShowTour.data('target')
+
+      },
+      {
+        element: $('.target-description')[0],
+        intro: startupShowTour.data('targetDetails')
+      },
+      {
+        element: $('.target-status')[0],
+        intro: startupShowTour.data('targetStatus')
+      },
+      {
+        element: $('.dashboard-header-container')[0],
+        intro: startupShowTour.data('addEvent')
+      }
+    ]
+  )
+
+  # Open the first target so that its contents are available for intro-ing.
+  $('.target-title-link:first').trigger('click')
+
+  tour.start()
+
 $(document).on 'turbolinks:load', ->
   if $('#founder-dashboard').length
     targetAccordion()
     timelineBuilderModal()
     customFileupload()
+    giveATour()
     performanceMeterModal()

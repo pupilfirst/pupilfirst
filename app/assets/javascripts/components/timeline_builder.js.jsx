@@ -67,6 +67,20 @@ const TimelineBuilder = React.createClass({
     }
   },
 
+  removeAttachment: function (type, index) {
+    if (type == 'cover') {
+      this.setState({coverImage: null});
+    } else if (type == 'link') {
+      let updatedLinks = this.state.links.slice();
+      updatedLinks.splice(index, 1);
+      this.setState({links: updatedLinks})
+    } else if (type == 'file') {
+      let updatedFiles = this.state.files.slice();
+      updatedFiles.splice(index, 1);
+      this.setState({links: updatedFiles})
+    }
+  },
+
   submit: function (event) {
     // TODO: Run presence validations.
     // TODO: Create form and submit it with AJAX.
@@ -118,7 +132,7 @@ const TimelineBuilder = React.createClass({
         <TimelineBuilderTextArea/>
 
         { this.hasAttachments() &&
-        <TimelineBuilderAttachments attachments={ this.attachments() }/>
+        <TimelineBuilderAttachments attachments={ this.attachments() } removeAttachmentCB = { this.removeAttachment }/>
         }
 
         <TimelineBuilderAttachmentForm currentForm={ this.currentForm() } previousForm={ this.state.previousForm }

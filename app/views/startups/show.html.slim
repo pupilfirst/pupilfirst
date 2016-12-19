@@ -218,7 +218,7 @@
 
     /Form to post new timeline event
     .col-md-8.col-md-pull-4
-      - if current_founder && @startup.founder?(current_founder)
+      /- if current_founder && @startup.founder?(current_founder)
         == render 'startups/timeline_builder', event: @timeline_event
 
       - events_for_display = @startup.timeline_events_for_display(current_founder)

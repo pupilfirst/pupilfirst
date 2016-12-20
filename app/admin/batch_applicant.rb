@@ -23,6 +23,7 @@ ActiveAdmin.register BatchApplicant do
     collection: -> { BatchApplicant.tag_counts_on(:tags).pluck(:name).sort }
 
   filter :batch_applications_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'With applications in batch'
+  filter :batch_applications_application_stage_id_eq, as: :select, collection: proc { ApplicationStage.all }, label: 'With applications in stage'
   filter :fee_payment_method, as: :select, collection: -> { BatchApplicant::FEE_PAYMENT_METHODS }
   filter :phone
   filter :reference_eq, as: :select, collection: proc { BatchApplicant.reference_sources[0..-2] }, label: 'Reference (Selected)'
@@ -205,6 +206,13 @@ ActiveAdmin.register BatchApplicant do
     end
 
     column :college_text
+
+    column 'Latest Application Id' do |batch_applicant|
+      batch_applicant.batch_applications.last.id
+    end
+
+    column :permanent_address
+
     column :created_at
   end
 

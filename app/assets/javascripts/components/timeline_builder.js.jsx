@@ -62,8 +62,11 @@ const TimelineBuilder = React.createClass({
     if (type == 'link') {
       this.setState({links: this.state.links.concat([properties])});
       this.toggleForm('link')
+    } else if (type == 'file') {
+      this.setState({files: this.state.files.concat([properties])});
+      this.toggleForm('file')
     } else {
-      console.log('Unhandled attachment type: ', type)
+      console.warn('Unhandled attachment type: ', type)
     }
   },
 
@@ -76,9 +79,16 @@ const TimelineBuilder = React.createClass({
       this.setState({links: updatedLinks})
     } else if (type == 'file') {
       let updatedFiles = this.state.files.slice();
-      updatedFiles.splice(index, 1);
-      this.setState({links: updatedFiles})
+      let removedFile = updatedFiles.splice(index, 1)[0];
+      this.removeFileFromHiddenForm(removedFile.identifier);
+      this.setState({files: updatedFiles})
+    } else {
+      console.warn("Unable to handle instrution to remove attachment of type " + type);
     }
+  },
+
+  removeFileFromHiddenForm: function(identifier) {
+    $('[name="timeline_event[files][' + identifier + ']"').remove()
   },
 
   submit: function (event) {
@@ -132,7 +142,7 @@ const TimelineBuilder = React.createClass({
         <TimelineBuilderTextArea/>
 
         { this.hasAttachments() &&
-        <TimelineBuilderAttachments attachments={ this.attachments() } removeAttachmentCB = { this.removeAttachment }/>
+        <TimelineBuilderAttachments attachments={ this.attachments() } removeAttachmentCB={ this.removeAttachment }/>
         }
 
         <TimelineBuilderAttachmentForm currentForm={ this.currentForm() } previousForm={ this.state.previousForm }

@@ -20,10 +20,6 @@ performanceMeterModal = ->
   $('.performance-overview-link').click () ->
     $('.performance-overview').modal()
 
-viewSlidesModal = ->
-  $('.view-slides-btn').click () ->
-    $('.view-slides').modal()
-
 customFileupload = ->
   inputs = document.querySelectorAll('.file-choose')
   Array::forEach.call inputs, (input) ->
@@ -95,4 +91,3 @@ $(document).on 'turbolinks:load', ->
     customFileupload()
     giveATour()
     performanceMeterModal()
-    viewSlidesModal()

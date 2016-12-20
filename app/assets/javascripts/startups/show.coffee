@@ -356,61 +356,6 @@ resetOnHideFeedbackModal = ->
 addTooltipToHideCheckbox = ->
   $("#hide-from-public").tooltip()
 
-giveATour = ->
-  startTour() if $('#startup-show-tour').data('tour-flag')
-
-
-startTour = ->
-  startupShowTour = $('#startup-show-tour')
-
-  tour = introJs()
-
-  tour.setOptions(
-    skipLabel: 'Close',
-    steps: [
-      {
-        element: $('h1.product-name')[0],
-        intro: startupShowTour.data('intro')
-      },
-      {
-        element: $('.timeline-builder')[0],
-        intro: startupShowTour.data('timelineBuilder')
-      },
-      {
-        element: $('.timeline-panel')[0],
-        intro: startupShowTour.data('timelineEvent')
-      },
-      {
-        element: $('.data-icons')[0],
-        intro: startupShowTour.data('dataPoints')
-      },
-      {
-        element: $('.data-founder')[0],
-        intro: startupShowTour.data('founders')
-      }
-    ]
-  )
-
-
-  tour.onexit enableTourButton
-  tour.oncomplete enableTourButton
-  disableTourButton()
-  tour.start()
-
-disableTourButton = ->
-  tourButton = $('button.tour-button')
-  tourButton.tooltip('destroy')
-  tourButton.attr('disabled', true)
-
-enableTourButton = ->
-  tourButton = $('button.tour-button')
-  tourButton.removeAttr('disabled')
-  tourButton.tooltip()
-
-handleTourButtonClick = ->
-  $('#tour-button').on 'click', ->
-    startTour()
-
 $(document).on 'page:change', timelineBuilderSubmitChecks
 $(document).on 'page:change', setupSelect2ForEventType
 $(document).on 'page:change', clearErrorsOnOpeningSelect2
@@ -425,5 +370,3 @@ $(document).on 'page:change', resetOnHideFeedbackModal
 $(document).on 'page:change', addTooltipToHideCheckbox
 $(document).on 'page:change', markSelectedAttachments
 $(document).on 'page:change', updateAttachmentsTabTitle
-$(document).on 'page:change', giveATour
-$(document).on 'page:change', handleTourButtonClick

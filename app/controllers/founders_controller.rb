@@ -37,7 +37,7 @@ class FoundersController < ApplicationController
     @startup = current_founder.startup.decorate
     # eager-load everything required for the dashboard. Order and decorate them too!
     @program_weeks = @startup.batch.program_weeks.includes(:batch, target_groups: { targets: :assigner }).order(:number, 'target_groups.sort_index', 'targets.days_to_complete').decorate
-
+    @tour = take_on_tour?
     render layout: 'application_v2'
   end
 
@@ -69,5 +69,9 @@ class FoundersController < ApplicationController
       :personal_website_url, :blog_url, :facebook_url, :angel_co_url, :github_url, :behance_url, :college_id,
       :roll_number, :born_on, :communication_address, roles: []
     )
+  end
+
+  def take_on_tour?
+    current_founder.present? && current_founder.startup == @startup.model && (current_founder.tour_dashboard? || params[:tour].present?)
   end
 end

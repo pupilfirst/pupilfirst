@@ -2,15 +2,6 @@
   title SV.CO Verified Timeline for #{@startup.product_name}
   meta name="description" content="#{@startup.display_name}: #{@startup.product_description}"
 
-#startup-show-tour.hide [
-  data-intro=t('startup.show.tour.intro')
-  data-data-points=t('startup.show.tour.data_points')
-  data-founders=t('startup.show.tour.founders')
-  data-timeline-builder=t('startup.show.tour.timeline_builder')
-  data-timeline-event=t('startup.show.tour.timeline_event')
-  data-tour-flag=@tour
-  ]
-
 .container
   - if @startup.dropped_out?
     .alert.alert-danger.margin-top-20
@@ -28,8 +19,6 @@
           small.edit-startup-link
             a href=edit_founder_startup_path
               i.fa.fa-pencil
-        - if @startup.founder?(current_founder)
-          button#tour-button.tour-button.btn-3d.text-uppercase.margin-bottom-20.font-weight-600 data-toggle="tooltip" data-placement="top" title="Take a tour of this page"
       .startup-name
         - if @startup.name.present?
           ' (by #{@startup.name})

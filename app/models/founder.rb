@@ -324,12 +324,12 @@ class Founder < ApplicationRecord
     team_lead_candidate&.update!(startup_admin: true)
   end
 
-  # Should we give the founder a tour of the timeline? If so, we shouldn't give it again.
-  def tour_timeline?
-    if timeline_toured?
+  # Should we give the founder a tour of the founder dashboard? If so, we shouldn't give it again.
+  def tour_dashboard?
+    if dashboard_toured
       false
     else
-      update!(timeline_toured: true)
+      update!(dashboard_toured: true)
       true
     end
   end

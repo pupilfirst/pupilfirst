@@ -20,11 +20,7 @@ class StartupsController < ApplicationController
         redirect_to new_user_session_path, alert: 'Please sign in to continue!'
       end
     end
-
     @timeline_event = timeline_event_for_builder
-
-    # Should we take the user on a tour?
-    @tour = take_on_tour?
   end
 
   def edit
@@ -88,11 +84,6 @@ class StartupsController < ApplicationController
   def restrict_to_startup_founders
     return if current_founder
     raise_not_found
-  end
-
-  # A tour of timeline page may be given if user is founder of viewed startup, or the tour param is present.
-  def take_on_tour?
-    current_founder.present? && current_founder.startup == @startup && (current_founder.tour_timeline? || params[:tour])
   end
 
   # If an event_id is available, use that, otherwise supply a new timeline event.

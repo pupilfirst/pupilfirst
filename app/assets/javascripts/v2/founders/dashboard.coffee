@@ -37,7 +37,7 @@ customFileupload = ->
         label.innerHTML = labelVal
 
 giveATour = ->
-  startTour() if $('#dashboard-show-tour').length > 0
+  startTour() if $('#dashboard-show-tour').data('tour-flag')
 
 startTour = ->
   startupShowTour = $('#dashboard-show-tour')
@@ -48,7 +48,7 @@ startTour = ->
     skipLabel: 'Close',
     steps: [
       {
-        element: $('.dashboard-header')[0],
+        element: $('.startup-profile')[0],
         intro: startupShowTour.data('intro')
       },
       {

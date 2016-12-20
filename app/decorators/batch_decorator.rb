@@ -20,4 +20,13 @@ class BatchDecorator < Draper::Decorator
   def total_campaign_days
     (admission_close_at.to_date - campaign_start_at.to_date).to_i
   end
+
+  def present_week_number
+    return '0' unless (start_date - 1.day).past?
+    ((Date.today - start_date).to_f / 7).ceil
+  end
+
+  def week_percentage
+    ((present_week_number.to_f / 24) * 100).to_i
+  end
 end

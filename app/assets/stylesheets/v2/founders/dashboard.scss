@@ -75,6 +75,7 @@
     width: 50px;
     height: 50px;
     display: flex;
+    flex-shrink: 0;
     justify-content: center;
     align-items: center;
     background-color: white;
@@ -92,9 +93,15 @@
       font-size: 0.875rem;
     }
   }
+  @include media-breakpoint-down(sm) {
+    margin-left: 0;
+    justify-content: flex-start;
+  }
 }
 .submit-instruction {
-  font-size: 1rem;
+  font-size: 0.875rem;
+  font-weight: $font-light;
+  letter-spacing: 0.02rem;
   margin-bottom: 1rem;
   color: $light-grey-text;
 }
@@ -359,6 +366,10 @@
           font-size: 1.125rem;
           font-weight: $font-light;
 
+          .target-description-btn {
+            font-size: 0.875rem;
+          }
+
           @include media-breakpoint-down(sm) {
             padding: 15px 20px 20px 42px;
           }
@@ -377,6 +388,13 @@
           }
           .btn-timeline-builder {
             margin-left: -46px;
+
+            @include media-breakpoint-down(sm) {
+              margin: 0;
+              display: block;
+              width: 100%;
+              font-size: 0.875rem;
+            }
           }
         }
       }

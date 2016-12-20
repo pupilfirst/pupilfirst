@@ -80,7 +80,7 @@
                           span.target-deadline-date
                             | #{target.due_date.strftime('%b %e')}
                         - if target.points_earnable.present?
-                          .target-karma-points.font-regular
+                          .target-karma-points.font-regular.hidden-sm-down
                             | Points:
                             span.earn-karma-points
                               | #{target.points_earnable}
@@ -103,7 +103,24 @@
                     p
                       ' #{target.description.html_safe}
                     == render 'founder_completion', target: target if target.founder_role?
+                    .m-t-2
+                      button.btn.btn-with-icon.btn-sm.btn-ghost-secondary.text-uppercase.m-r-1.m-b-1.view-slides-btn data-toggle="modal"
+                        i.fa.fa-slideshare
+                        span
+                          | View Slides
+
+                      a.btn.btn-with-icon.btn-sm.btn-ghost-secondary.text-uppercase.m-r-1.m-b-1 target='_blank' href=""
+                        i.fa.fa-book
+                        span
+                          | Learn More
+
+                      a.btn.btn-with-icon.btn-sm.btn-ghost-primary.text-uppercase.m-b-1 target='_blank' href=""
+                        i.fa.fa-download
+                        span
+                          | Download Rubric
+
                     == render 'submission_panel', target: target
 
+== render 'view-slides'
 == render 'timeline_builder'
 == render 'performance_overview'

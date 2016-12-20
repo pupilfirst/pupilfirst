@@ -22,6 +22,7 @@ performanceMeterModal = ->
 
 viewSlidesModal = ->
   $('.view-slides-btn').click () ->
+    $('#slides-wrapper').html($(this).data('embed-code'))
     $('.view-slides').modal()
 
 giveATour = ->

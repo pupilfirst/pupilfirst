@@ -104,20 +104,23 @@
                       ' #{target.description.html_safe}
                     == render 'founder_completion', target: target if target.founder_role?
                     .m-t-2
-                      button.btn.btn-with-icon.btn-sm.btn-ghost-secondary.text-uppercase.m-r-1.m-b-1.view-slides-btn data-toggle="modal"
-                        i.fa.fa-slideshare
-                        span
-                          | View Slides
+                      - if target.slideshow_embed.present?
+                        button.btn.btn-with-icon.btn-sm.btn-ghost-secondary.text-uppercase.m-r-1.m-b-1.view-slides-btn data-toggle="modal" data-embed-code=target.slideshow_embed
+                          i.fa.fa-slideshare
+                          span
+                            | View Slides
 
-                      a.btn.btn-with-icon.btn-sm.btn-ghost-secondary.text-uppercase.m-r-1.m-b-1 target='_blank' href=""
-                        i.fa.fa-book
-                        span
-                          | Learn More
+                      - if target.resource_url.present?
+                        a.btn.btn-with-icon.btn-sm.btn-ghost-secondary.text-uppercase.m-r-1.m-b-1 target='_blank' href=target.resource_url
+                          i.fa.fa-book
+                          span
+                            | Learn More
 
-                      a.btn.btn-with-icon.btn-sm.btn-ghost-primary.text-uppercase.m-b-1 target='_blank' href=""
-                        i.fa.fa-download
-                        span
-                          | Download Rubric
+                      - if target.rubric.present?
+                        a.btn.btn-with-icon.btn-sm.btn-ghost-primary.text-uppercase.m-b-1 target='_blank' href=target.rubric_url
+                          i.fa.fa-download
+                          span
+                            | Download Rubric
 
                     == render 'submission_panel', target: target
 

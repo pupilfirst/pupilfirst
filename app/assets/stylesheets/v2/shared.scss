@@ -119,10 +119,6 @@
     box-shadow: 0 0 5px 0 lighten($gray-dark, 20%);
     @include border-radius(50%);
 
-    @include media-breakpoint-down(sm) {
-      margin: 20px -5px 0 -5px;
-    }
-
     img {
       max-width: 36px;
       max-height: 36px;
@@ -132,6 +128,13 @@
     }
     &:last-child {
       margin: 20px 0 0 6px;
+    }
+    @include media-breakpoint-down(sm) {
+      margin: 20px -5px 0 -5px;
+
+      &:first-child, &:last-child {
+        margin: 20px 0 0 0;
+      }
     }
   }
   .target-complete-check {

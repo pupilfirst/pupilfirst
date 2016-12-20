@@ -83,7 +83,7 @@ describe Targets::StatsService do
 
   describe '#pending_assignees' do
     it 'returns array of pending assignees' do
-      expect(subject.pending_assignees).to eq(Startup.all.order('id DESC').limit(5).to_a)
+      expect(subject.pending_assignees.sort).to eq(Startup.all.order('id DESC').limit(5).to_a.sort)
     end
   end
 end

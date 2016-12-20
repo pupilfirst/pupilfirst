@@ -57,7 +57,8 @@ const TimelineBuilderActionBar = React.createClass({
         </div>
         <div className="select-tabs">
           <div className="type-of-event-select">
-            <select className="form-control timeline-builder__timeline_event_type">
+            <select className="form-control timeline-builder__timeline_event_type" defaultValue="">
+              <option disabled="disabled" value="">Select Type</option>
               { Object.keys(this.props.timelineEventTypes).map(function (role, index) {
                 return <TimelineBuilderTimelineEventGroup key={ index } role={ role }
                                                           timelineEvents={ this.props.timelineEventTypes[role] }/>

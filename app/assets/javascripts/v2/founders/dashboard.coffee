@@ -20,21 +20,9 @@ performanceMeterModal = ->
   $('.performance-overview-link').click () ->
     $('.performance-overview').modal()
 
-customFileupload = ->
-  inputs = document.querySelectorAll('.file-choose')
-  Array::forEach.call inputs, (input) ->
-    label = input.nextElementSibling
-    labelVal = label.innerHTML
-    input.addEventListener 'change', (e) ->
-      fileName = ''
-      if @files and @files.length > 1
-        fileName = (@getAttribute('data-multiple-caption') or '').replace('{count}', @files.length)
-      else
-        fileName = e.target.value.split('\\').pop()
-      if fileName
-        label.querySelector('span').innerHTML = fileName
-      else
-        label.innerHTML = labelVal
+viewSlidesModal = ->
+  $('.view-slides-btn').click () ->
+    $('.view-slides').modal()
 
 giveATour = ->
   startTour() if $('#dashboard-show-tour').data('tour-flag')
@@ -88,6 +76,6 @@ $(document).on 'turbolinks:load', ->
   if $('#founder-dashboard').length
     targetAccordion()
     timelineBuilderModal()
-    customFileupload()
     giveATour()
     performanceMeterModal()
+    viewSlidesModal()

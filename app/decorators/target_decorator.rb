@@ -79,4 +79,8 @@ class TargetDecorator < Draper::Decorator
   def submit_button_text(founder)
     re_submittable?(founder) ? 'Re-Submit' : 'Submit'
   end
+
+  def team_or_personal
+    founder_role? ? 'Personal' : 'Team'
+  end
 end

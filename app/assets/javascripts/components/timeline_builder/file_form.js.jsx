@@ -27,7 +27,6 @@ const TimelineBuilderFileForm = React.createClass({
   clearForm: function () {
     $('.js-file-title').val('');
     $('.js-file-visibility').val('public');
-    $('.js-attachment-file-label').find('span').html('')
   },
 
   copyFileInputToHiddenForm: function () {
@@ -49,7 +48,7 @@ const TimelineBuilderFileForm = React.createClass({
     this.setState({identifier: $('.js-hidden-file').length});
   },
 
-  inputName: function() {
+  inputName: function () {
     return "timeline_event[files][" + this.state.identifier + "]"
   },
 
@@ -60,17 +59,7 @@ const TimelineBuilderFileForm = React.createClass({
           <label className="sr-only" htmlFor="fileTitle">File Title</label>
           <input className="form-control file-title js-file-title" type="text" placeholder="Title"/>
         </div>
-        <div className="form-group file-choose-group">
-          <input type="file" className="form-control-file file-choose js-attachment-file"
-                 id="timeline-builder__file-input"/>
-          <label htmlFor="timeline-builder__file-input" className="js-attachment-file-label">
-            <span/>
-            <div className="choose-file-btn">
-              <i className="fa fa-upload"/>
-              CHOOSE FILE
-            </div>
-          </label>
-        </div>
+        <TimelineBuilderFilePicker key={ this.state.identifier }/>
         <div className="form-group visibility-option-group">
           <select className="form-control visibility-option js-file-visibility">
             <option>Public</option>

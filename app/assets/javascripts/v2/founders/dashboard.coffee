@@ -20,15 +20,6 @@ performanceMeterModal = ->
   $('.performance-overview-link').click () ->
     $('.performance-overview').modal()
 
-customFileupload = ->
-  inputElement = $('.js-attachment-file')
-
-  inputElement.on 'change', (event) ->
-    labelElement = inputElement.next('.js-attachment-file-label')
-    fileName = $(event.target).val().split('\\').pop()
-    labelText = fileName ? fileName : ''
-    labelElement.find('span').html(labelText)
-
 giveATour = ->
   startTour() if $('#dashboard-show-tour').length > 0
 
@@ -81,6 +72,5 @@ $(document).on 'turbolinks:load', ->
   if $('#founder-dashboard').length
     targetAccordion()
     timelineBuilderModal()
-    customFileupload()
     giveATour()
     performanceMeterModal()

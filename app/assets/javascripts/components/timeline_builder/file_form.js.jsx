@@ -4,7 +4,7 @@ const TimelineBuilderFileForm = React.createClass({
   },
 
   getInitialState: function () {
-    return {identifier: 0}
+    return {identifier: this.generateIdentifier()}
   },
 
   fileSubmit: function (event) {
@@ -14,7 +14,7 @@ const TimelineBuilderFileForm = React.createClass({
 
     this.props.addAttachmentCB('file', {
       title: $('.js-file-title').val(),
-      visibility: $('.js-link-visibility').val(),
+      visibility: $('.js-file-visibility').val(),
       identifier: this.state.identifier
     });
 
@@ -39,13 +39,16 @@ const TimelineBuilderFileForm = React.createClass({
 
     // Prep the original input for submission.
     originalInput.removeAttr('id class');
-    originalInput.addClass('js-hidden-file');
     originalInput.attr('name', this.inputName());
+  },
+
+  generateIdentifier: function () {
+    return '' + (new Date).getTime();
   },
 
   regenerateIdentifier: function () {
     // The identifier for the next file = 0 + number of files already present.
-    this.setState({identifier: $('.js-hidden-file').length});
+    return this.setState({identifier: this.generateIdentifier()});
   },
 
   inputName: function () {
@@ -62,8 +65,8 @@ const TimelineBuilderFileForm = React.createClass({
         <TimelineBuilderFilePicker key={ this.state.identifier }/>
         <div className="form-group visibility-option-group">
           <select className="form-control visibility-option js-file-visibility">
-            <option>Public</option>
-            <option>Private</option>
+            <option value="public">Public</option>
+            <option value="private">Private</option>
           </select>
         </div>
         <button type="submit" className="btn btn-secondary" onClick={ this.fileSubmit }>

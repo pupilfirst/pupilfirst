@@ -21,20 +21,13 @@ performanceMeterModal = ->
     $('.performance-overview').modal()
 
 customFileupload = ->
-  inputs = document.querySelectorAll('.file-choose')
-  Array::forEach.call inputs, (input) ->
-    label = input.nextElementSibling
-    labelVal = label.innerHTML
-    input.addEventListener 'change', (e) ->
-      fileName = ''
-      if @files and @files.length > 1
-        fileName = (@getAttribute('data-multiple-caption') or '').replace('{count}', @files.length)
-      else
-        fileName = e.target.value.split('\\').pop()
-      if fileName
-        label.querySelector('span').innerHTML = fileName
-      else
-        label.innerHTML = labelVal
+  inputElement = $('.js-attachment-file')
+
+  inputElement.on 'change', (event) ->
+    labelElement = inputElement.next('.js-attachment-file-label')
+    fileName = $(event.target).val().split('\\').pop()
+    labelText = fileName ? fileName : ''
+    labelElement.find('span').html(labelText)
 
 giveATour = ->
   startTour() if $('#dashboard-show-tour').length > 0

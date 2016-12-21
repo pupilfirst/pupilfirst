@@ -7,6 +7,7 @@
   data-target-details=t('dashboard.show.tour.target_details')
   data-target-status=t('dashboard.show.tour.target_status')
   data-add-event=t('dashboard.show.tour.add_event')
+  data-performance=t('dashboard.show.tour.performance')
   data-tour-flag=@tour.to_s
   ]
 
@@ -37,11 +38,11 @@
           / .pull-xs-left
 
           / .pull-xs-right
-          button.btn.btn-with-icon.btn-md.btn-ghost-primary.performance-overview-link.text-uppercase data-toggle="modal"
+          button#performance-button.btn.btn-with-icon.btn-md.btn-ghost-primary.performance-overview-link.text-uppercase data-toggle="modal"
             i.fa.fa-tachometer
             span
               | Performance
-          button.btn.btn-with-icon.btn-md.btn-secondary.text-uppercase.btn-timeline-builder data-toggle="modal"
+          button#add-event-button.btn.btn-with-icon.btn-md.btn-secondary.text-uppercase.btn-timeline-builder data-toggle="modal"
             i.fa.fa-plus
             span
               | Add Event

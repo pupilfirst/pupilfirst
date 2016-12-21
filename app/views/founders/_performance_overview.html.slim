@@ -31,12 +31,12 @@
           .stats-section.leaderboard-rank-section.text-xs-center
             | Leaderboard Rank
             .leaderboard-rank.font-semibold.alert-background
-              | 3
+              | #{@startup.leaderboard_rank}
             p
-              | Karma points : 130
+              | Last Week Karma : #{@startup.last_week_karma}
         .performance-meter.text-xs-center
           .performance-bar
-            .performance-pointer.text-uppercase.font-semibold
-              | Average
+            .performance-pointer.text-uppercase.font-semibold data-value=@startup.relative_performance
+              | #{@startup.performance_label}
           p.performance-description
             | Performance Meter

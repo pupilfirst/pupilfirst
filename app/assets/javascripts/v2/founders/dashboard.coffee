@@ -20,6 +20,10 @@ performanceMeterModal = ->
   $('.performance-overview-link').click () ->
     $('.performance-overview').modal()
 
+setPerformancePointer = ->
+  value = $('.performance-pointer').data('value') - 5
+  $('.performance-pointer')[0].style.left = value + '%'
+
 viewSlidesModal = ->
   $('.view-slides-btn').click () ->
     $('#slides-wrapper').html($(this).data('embed-code'))
@@ -83,4 +87,5 @@ $(document).on 'turbolinks:load', ->
     timelineBuilderModal()
     giveATour()
     performanceMeterModal()
+    setPerformancePointer()
     viewSlidesModal()

@@ -40,6 +40,7 @@ class TargetDecorator < Draper::Decorator
   TEAM_TODO_ICON = 'team_todo_icon.svg'.freeze
   PERSONAL_TODO_ICON = 'personal_todo_icon.svg'.freeze
   LEARN_ICON = 'read_icon.svg'.freeze
+  READ_ICON = 'read_icon.svg'.freeze
 
   def type_icon_name
     case target_type

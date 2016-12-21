@@ -31,8 +31,8 @@ class StartupDecorator < Draper::Decorator
       when 10 then 'Disappointing'
       when 30 then 'Poor'
       when 50 then 'Average'
-      when 70 then 'Good'
-      when 90 then 'Extra-ordinary'
+      when 70 then 'Satisfactory'
+      when 90 then 'Excellent'
     end
   end
 

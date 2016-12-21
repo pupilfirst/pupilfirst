@@ -61,8 +61,12 @@ startTour = ->
         intro: startupShowTour.data('targetStatus')
       },
       {
-        element: $('.dashboard-header-container')[0],
+        element: $('#add-event-button')[0],
         intro: startupShowTour.data('addEvent')
+      },
+      {
+        element: $('#performance-button')[0],
+        intro: startupShowTour.data('performance')
       }
     ]
   )

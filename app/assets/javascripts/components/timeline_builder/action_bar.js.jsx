@@ -3,7 +3,10 @@ const TimelineBuilderActionBar = React.createClass({
     formClickedCB: React.PropTypes.func,
     currentForm: React.PropTypes.string,
     submitCB: React.PropTypes.func,
-    timelineEventTypes: React.PropTypes.object
+    timelineEventTypes: React.PropTypes.object,
+    coverImage: React.PropTypes.object,
+    addAttachmentCB: React.PropTypes.func,
+    imageButtonKey: React.PropTypes.string
   },
 
   getInitialState: function () {
@@ -38,10 +41,8 @@ const TimelineBuilderActionBar = React.createClass({
     return (
       <div className="timeline-submit-tabs">
         <div className="upload-tabs">
-          <div className="image-upload">
-            <i className="fa fa-file-image-o"/>
-            <span className="tab-label">Image</span>
-          </div>
+          <TimelineBuilderImageButton key={ this.props.imageButtonKey } coverImage={ this.props.coverImage }
+                                      addAttachmentCB={ this.props.addAttachmentCB }/>
           <div className={ this.formLinkClasses('link') } onClick={ this.showLinkForm }>
             <i className="fa fa-link"/>
             <span className="tab-label">Link</span>

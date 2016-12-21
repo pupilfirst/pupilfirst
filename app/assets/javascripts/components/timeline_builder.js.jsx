@@ -10,8 +10,13 @@ const TimelineBuilder = React.createClass({
       coverImage: null,
       showLinkForm: false,
       showFileForm: false,
-      previousForm: null
+      previousForm: null,
+      imageButtonKey: this.generateKey()
     }
+  },
+
+  generateKey: function () {
+    return '' + (new Date).getTime();
   },
 
   toggleForm: function (type) {
@@ -37,7 +42,7 @@ const TimelineBuilder = React.createClass({
   },
 
   hasAttachments: function () {
-    return this.state.links.length > 0 || this.state.files.length > 0 || this.state.cover_image != null
+    return this.state.links.length > 0 || this.state.files.length > 0 || this.state.coverImage != null
   },
 
   attachments: function () {
@@ -65,29 +70,41 @@ const TimelineBuilder = React.createClass({
     } else if (type == 'file') {
       this.setState({files: this.state.files.concat([properties])});
       this.toggleForm('file')
+    } else if (type == 'cover') {
+      // The key for image button is regenerated to ensure the button component is regenerated.
+      this.setState({coverImage: {title: 'Cover Image'}, imageButtonKey: this.generateKey()});
     } else {
       console.warn('Unhandled attachment type: ', type)
     }
   },
 
   removeAttachment: function (type, index) {
-    if (type == 'cover') {
-      this.setState({coverImage: null});
-    } else if (type == 'link') {
-      let updatedLinks = this.state.links.slice();
-      updatedLinks.splice(index, 1);
-      this.setState({links: updatedLinks})
-    } else if (type == 'file') {
-      let updatedFiles = this.state.files.slice();
-      let removedFile = updatedFiles.splice(index, 1)[0];
-      this.removeFileFromHiddenForm(removedFile.identifier);
-      this.setState({files: updatedFiles})
-    } else {
-      console.warn("Unable to handle instrution to remove attachment of type " + type);
+    switch (type) {
+      case 'cover':
+        this.removeCoverImageFromHiddenForm();
+        this.setState({coverImage: null});
+        break;
+      case 'link':
+        let updatedLinks = this.state.links.slice();
+        updatedLinks.splice(index, 1);
+        this.setState({links: updatedLinks});
+        break;
+      case 'file':
+        let updatedFiles = this.state.files.slice();
+        let removedFile = updatedFiles.splice(index, 1)[0];
+        this.removeFileFromHiddenForm(removedFile.identifier);
+        this.setState({files: updatedFiles});
+        break;
+      default:
+        console.warn("Unable to handle instruction to remove attachment of type " + type);
     }
   },
 
-  removeFileFromHiddenForm: function(identifier) {
+  removeCoverImageFromHiddenForm: function () {
+    $('[name="timeline_event[image]"]').remove()
+  },
+
+  removeFileFromHiddenForm: function (identifier) {
     $('[name="timeline_event[files][' + identifier + ']"').remove()
   },
 
@@ -148,7 +165,9 @@ const TimelineBuilder = React.createClass({
         <TimelineBuilderAttachmentForm currentForm={ this.currentForm() } previousForm={ this.state.previousForm }
                                        addAttachmentCB={ this.addAttachment }/>
         <TimelineBuilderActionBar formClickedCB={ this.toggleForm } currentForm={ this.currentForm() }
-                                  submitCB={ this.submit } timelineEventTypes={ this.props.timelineEventTypes }/>
+                                  submitCB={ this.submit } timelineEventTypes={ this.props.timelineEventTypes }
+                                  addAttachmentCB={ this.addAttachment } coverImage={ this.state.coverImage }
+                                  imageButtonKey={ this.state.imageButtonKey }/>
       </div>
     )
   }

@@ -1,0 +1,29 @@
+.dashboard-header
+  .container
+    .startup-profile.clearfix
+      .m-x-auto.startup-logo-container
+        - if @startup.logo.present?
+          = image_tag "#{@startup.logo_url}", class: 'startup-logo'
+        - else
+          = @startup.identicon_logo
+      .product-details
+        h3.product-title.font-semibold
+          | #{@startup.product_name}
+        - if @startup.name.present?
+          p
+            | by #{@startup.name}
+        .startup-founders
+          - @startup.founders.limit(3).each do |founder|
+            a.founder-avatar-bubble href=founder_profile_path(founder.slug)
+              = image_tag profile_image_url(founder), class: 'img-circle'
+          - if @startup.founders.count > 4
+            a.founder-avatar-bubble.text-xs-center.hidden-sm-up.reamining-founders
+              span.reamining-founders-count
+                | +#{@startup.founders.count - 3}
+            - @startup.founders[3..-1].each do |founder|
+              a.founder-avatar-bubble.hidden-sm-down href=founder_profile_path(founder.slug)
+                = image_tag profile_image_url(founder), class: 'img-circle'
+
+          - elsif @startup.founders.count == 4
+            a.founder-avatar-bubble href=founder_profile_path(@startup.founders.last.slug)
+              = image_tag profile_image_url(@startup.founders.last), class: 'img-circle'

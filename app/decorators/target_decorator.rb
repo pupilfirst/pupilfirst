@@ -32,6 +32,8 @@ class TargetDecorator < Draper::Decorator
         'fa-lock'
       when Targets::StatusService::STATUS_SUBMITTED
         'fa-hourglass-half'
+      when Targets::StatusService::STATUS_PENDING
+        'fa-clock-o'
     end
   end
   # rubocop:enable Metrics/CyclomaticComplexity

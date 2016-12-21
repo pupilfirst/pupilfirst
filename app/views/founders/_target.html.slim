@@ -1,0 +1,58 @@
+- target_group.targets.each do |target|
+  .target
+    .target-title-link.clearfix
+      = image_tag "founders/dashboard/target-type-icons/#{target.type_icon_name}", class: "target-icon"
+      .target-header
+        h6.target-title
+          span.target-type-tag.hidden-sm-down
+            | #{target.team_or_personal}/#{target.target_type}
+          | #{target.title}
+        .target-title-info
+          .target-deadline.font-regular
+            | Suggested Deadline:
+            span.target-deadline-date
+              | #{target.due_date.strftime('%b %e')}
+          - if target.points_earnable.present?
+            .target-karma-points.font-regular.hidden-sm-down
+              | Points:
+              span.earn-karma-points
+                | #{target.points_earnable}
+      .target-status.tag.tag-pill class="#{target.status_badge_class(current_founder)}"
+        span.target-status-icon
+          i.fa class="#{target.status_fa_icon(current_founder)}"
+        span.hidden-sm-down
+          | #{target.status_text(current_founder)}
+    .target-description
+      .target-description-header.clearfix.m-b-1
+        - if target.assigner.present?
+          h6.pull-sm-left.assigner-name.m-a-0
+            | Assigned by&nbsp;
+            span.font-regular
+              | #{target.assigner.name}
+        h6.pull-sm-right.target-due-date.m-a-0.alert-background
+          | Due date:&nbsp;
+          span.font-regular
+            | #{target.due_date.strftime('%b %e')} at 11:59 PM.
+      p
+        ' #{target.description.html_safe}
+      == render 'founder_completion', target: target if target.founder_role?
+      .m-t-2
+        - if target.slideshow_embed.present?
+          button.btn.btn-with-icon.btn-sm.btn-ghost-secondary.text-uppercase.m-r-1.m-b-1.view-slides-btn data-toggle="modal" data-embed-code=target.slideshow_embed
+            i.fa.fa-slideshare
+            span
+              | View Slides
+
+        - if target.resource_url.present?
+          a.btn.btn-with-icon.btn-sm.btn-ghost-secondary.text-uppercase.m-r-1.m-b-1 target='_blank' href=target.resource_url
+            i.fa.fa-book
+            span
+              | Learn More
+
+        - if target.rubric.present?
+          a.btn.btn-with-icon.btn-sm.btn-ghost-primary.text-uppercase.m-b-1 target='_blank' href=target.rubric_url
+            i.fa.fa-download
+            span
+              | Download Rubric
+
+      == render 'submission_panel', target: target

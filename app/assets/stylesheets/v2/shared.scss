@@ -75,6 +75,10 @@
   background-repeat: repeat-x;
   background-position: center bottom;
   background-size: cover;
+
+  @include media-breakpoint-down(sm) {
+    min-height: auto;
+  }
 }
 .startup-profile {
   .startup-logo-container {
@@ -88,17 +92,38 @@
     padding: 1rem;
     box-shadow: 0px 1px 8px 0px lighten($gray-dark, 20%);
 
+    @include media-breakpoint-down(sm) {
+      float: left;
+    }
     .startup-logo {
       width: 100%;
     }
   }
   .product-details {
+    text-align: center;
+
+    @include media-breakpoint-down(sm) {
+      float: left;
+      text-align: left;
+      margin-left: 20px;
+    }
+
     .product-title {
       padding-top: 12px;
       margin-bottom: 5px;
       color: white;
       letter-spacing: 0.03rem;
       text-shadow: 0px 1px 3px lighten($gray-dark, 10%);
+
+      @include media-breakpoint-down(sm) {
+        padding-top: 5px;
+        font-size: 1.25rem;
+        margin-bottom: 3px;
+        max-width: 160px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
     p {
       color: white;
@@ -130,12 +155,24 @@
       margin: 20px 0 0 6px;
     }
     @include media-breakpoint-down(sm) {
-      margin: 20px -5px 0 -5px;
+      margin: 10px -5px 0 -5px;
 
       &:first-child, &:last-child {
-        margin: 20px 0 0 0;
+        margin: 10px 0 0 0;
       }
     }
+  }
+  .reamining-founders {
+    margin: 0;
+    vertical-align: middle;
+    font-size: 1.125rem;
+    font-weight: $font-semibold;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .reamining-founders-count {
+    color: $brand-secondary;
   }
   .target-complete-check {
     position: absolute;

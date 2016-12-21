@@ -5,16 +5,15 @@
   background-color: white;
   border-bottom: 1px solid $gray-border;
   box-shadow: 0px 2px 10px 0px lighten($gray-light, 35%);
+}
+.dashboard-header-container {
+  max-width: 50rem;
+  height: 100px;
+  padding: 25px 15px;
 
-  .dashboard-header-container {
-    max-width: 50rem;
-    height: 100px;
-    padding: 25px 15px;
-
-    @include media-breakpoint-down(sm) {
-      height: auto;
-      padding: 25px 0;
-    }
+  @include media-breakpoint-down(sm) {
+    height: auto;
+    padding: 25px 0;
   }
 }
 .performance-overview-link {
@@ -56,7 +55,6 @@
   }
   &.needs-improvement {
     color: rgba(10, 165, 227, 0.7);
-
   }
   &.unavailable {
     color: rgba(153, 153, 153, 0.7);
@@ -81,22 +79,21 @@
     background-color: white;
     border: 1px solid $gray-border;
   }
-  .feedback-message {
-    padding-left: 1rem;
-    margin-left: 1rem;
-    border-left: 1px solid $gray-border;
-
-    .feedback-message-head {
-      font-size: 1.125rem;
-    }
-    .feedback-message-detail {
-      font-size: 0.875rem;
-    }
-  }
   @include media-breakpoint-down(sm) {
     margin-left: 0;
     justify-content: flex-start;
   }
+}
+.feedback-message {
+  padding-left: 1rem;
+  margin-left: 1rem;
+  border-left: 1px solid $gray-border;
+}
+.feedback-message-head {
+  font-size: 1.125rem;
+}
+.feedback-message-detail {
+  font-size: 0.875rem;
 }
 .submit-instruction {
   font-size: 0.875rem;
@@ -109,295 +106,296 @@
   max-width: 50rem;
   padding: 0 15px;
   position: relative;
+}
 
-  .program-week {
-    margin: 140px 0 0 0;
-    padding: 0;
-    list-style: none;
-    position: relative;
+.program-week {
+  margin: 140px 0 0 0;
+  padding: 0;
+  list-style: none;
+  position: relative;
 
+  &:before {
+    content: '';
+    position: absolute;
+    top: -70px;
+    bottom: -70px;
+    background: $light-secondary;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    box-shadow: 0px 0 8px 0px lighten($brand-secondary, 40%);
+    z-index: 0;
+  }
+}
+
+.program-week-header {
+  position: absolute;
+  top: -70px;
+  bottom: -70px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.program-week-icon {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  @include border-radius(50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 45px;
+  height: 45px;
+  background-color: white;
+  border: 3px solid $light-secondary;
+  box-shadow: 0px 0 8px 0px lighten($brand-secondary, 40%);
+  z-index: 1;
+
+  img {
+    width: 20px;
+  }
+}
+.program-week-number {
+  position: absolute;
+  right: 40px;
+  text-align: right;
+  display: inline-block;
+  min-width: 80px;
+  top: -3px;
+  color: $light-grey-text;
+  font-size: 0.875rem;
+}
+.program-week-title {
+  position: absolute;
+  left: 40px;
+  top: -5px;
+  color: $brand-secondary;
+  display: inline-block;
+  min-width: 300px;
+  font-size: 1rem;
+
+  @include media-breakpoint-down(sm) {
+    min-width: 100px;
+    top: -3px;
+    font-size: 0.875rem;
+  }
+}
+.target-group {
+  position: relative;
+  background-color: white;
+  border: 1px solid $gray-border;
+  margin-bottom: 60px;
+  box-shadow: 0px 2px 10px 0px lighten($gray-light, 35%);
+  @include border-radius(10px);
+}
+.target-group-header {
+  padding: 30px;
+}
+.target-group--header-details {
+  max-width: 28rem;
+  margin: 0 auto;
+}
+
+.target {
+  border-top: 1px solid $gray-border;
+  position: relative;
+  background-color: white;
+  overflow: hidden;
+  transition: box-shadow .2s;
+
+  &:last-child {
+    @include border-radius(0 0 10px 10px);
+  }
+
+  &.open {
+    box-shadow: 0 0 5px 1px $light-secondary;
+    z-index: 2;
+    @include border-radius(5px);
+
+    .target-title-link {
+      border-bottom: 1px dashed $gray-border;
+      box-shadow: 0 0 6px 5px lighten($gray-light, 40%);
+
+      .target-title {
+        color: $brand-secondary;
+      }
+    }
+  }
+}
+.target-title-link {
+  width: 100%;
+  position: relative;
+  padding: 30px;
+  cursor: pointer;
+  transition: all .2s;
+
+  &:before {
+    width: 8px;
+    height: 8px;
+    border-right: 1px solid $light-grey-text;
+    border-bottom: 1px solid $light-grey-text;
+    position: absolute;
+    right: 30px;
+    content: " ";
+    top: 47%;
+    transform: rotate(-45deg);
+    transition: all .2s;
+  }
+
+  @include media-breakpoint-down(md) {
+    padding: 20px;
 
     &:before {
-      content: '';
-      position: absolute;
-      top: -70px;
-      bottom: -70px;
-      background: $light-secondary;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 3px;
-      box-shadow: 0px 0 8px 0px lighten($brand-secondary, 40%);
-      z-index: 0;
+      right: 20px;
     }
-    .program-week-header {
-      position: absolute;
-      top: -70px;
-      bottom: -70px;
-      left: 50%;
-      transform: translateX(-50%);
+  }
+  &.active {
+    background-color: $primary-background;
 
-      .program-week-icon {
-        position: absolute;
-        top: -15px;
-        left: 50%;
-        transform: translateX(-50%);
-        @include border-radius(50%);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 45px;
-        height: 45px;
-        background-color: white;
-        border: 3px solid $light-secondary;
-        box-shadow: 0px 0 8px 0px lighten($brand-secondary, 40%);
-        z-index: 1;
+    &:before {
+      transform: rotate(45deg);
+    }
+  }
 
-        img {
-          width: 20px;
-        }
-      }
-      .program-week-number {
-        position: absolute;
-        right: 40px;
-        text-align: right;
-        display: inline-block;
-        min-width: 80px;
-        top: -3px;
-        color: $light-grey-text;
-        font-size: 0.875rem;
-      }
-      .program-week-title {
-        position: absolute;
-        left: 40px;
-        top: -5px;
-        color: $brand-secondary;
-        display: inline-block;
-        min-width: 300px;
-        font-size: 1rem;
+  &:hover, &:focus {
+    background-color: $primary-background;
 
-        @include media-breakpoint-down(sm) {
-          min-width: 100px;
-          top: -3px;
-          font-size: 0.875rem;
+    .target-title {
+      color: $brand-secondary;
+    }
+  }
+}
+.target-icon {
+  width: 25px;
+  margin-right: 1rem;
+  float: left;
+}
+.target-header {
+  float: left;
+}
+.target-title-info {
+  font-size: 0.75rem;
+  letter-spacing: 0.02rem;
+  margin-top: 6px;
+
+  > div {
+    border-right: 1px solid darken($gray-border, 10%);
+    margin-right: 10px;
+    padding-right: 10px;
+
+    &:last-child {
+      border-width: 0;
+    }
+  }
+
+  .target-deadline, .target-karma-points {
+    display: inline-block;
+    color: $light-grey-text;
+
+    .target-deadline-date, .earn-karma-points {
+      color: $dark-grey-text;
+      padding-left: 5px;
+    }
+  }
+}
+.target-title {
+  font-weight: $font-regular;
+  margin: 0;
+  font-size: 1rem;
+  letter-spacing: 0.02rem;
+  transition: color .2s;
+  max-width: 460px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  .target-type-tag {
+    color: $light-grey-text;
+    padding-right: 5px;
+  }
+  @include media-breakpoint-down(sm) {
+    font-size: 0.875rem;
+    max-width: 150px;
+  }
+}
+.target-status {
+  float: right;
+  padding: 7px 15px;
+  font-size: 0.75rem;
+  letter-spacing: 0.02rem;
+  position: relative;;
+  top: 8px;
+  right: 25px;
+
+  @include media-breakpoint-up(md) {
+    .target-status-icon {
+      margin-right: 5px;
+    }
+  }
+  @include media-breakpoint-down(xs) {
+    font-size: 0.75rem;
+    right: 15px;
+    padding: 7px 10px;
+  }
+  &.needs-improvement {
+    background-color: rgba(10, 165, 227, 0.7);
+  }
+  &.submitted {
+    background-color: rgba(0, 138, 193, 0.7);
+  }
+  &.pending {
+    background-color: rgba(227, 180, 98, 0.7);
+  }
+  &.unavailable {
+    background-color: rgba(153, 153, 153, 0.7);
+  }
+  &.expired {
+    background-color: rgba(255, 64, 64, 0.7);
+  }
+  &.complete {
+    background-color: rgba(50, 180, 117, 0.7);
+  }
+  &.not-accepted {
+    background-color: rgba(46, 47, 51, 0.7);
+  }
+}
+
+.target-description {
+  display: none;
+  padding: 15px 30px 20px 55px;
+  margin-left: 1rem;
+  font-size: 1.125rem;
+  font-weight: $font-light;
+
+  .target-description-btn {
+    font-size: 0.875rem;
+  }
+
+  @include media-breakpoint-down(sm) {
+    padding: 15px 20px 20px 42px;
+  }
+
+  .target-description-header {
+    border-bottom: 1px dashed $gray-border;
+    padding-bottom: 15px;
+
+    @include media-breakpoint-down(sm) {
+      h6 {
+        &:first-child {
+          padding-bottom: 10px;
         }
       }
     }
+  }
+  .btn-timeline-builder {
+    margin-left: -46px;
 
-    .target-group {
-      position: relative;
-      background-color: white;
-      border: 1px solid $gray-border;
-      margin-bottom: 60px;
-      box-shadow: 0px 2px 10px 0px lighten($gray-light, 35%);
-      @include border-radius(10px);
-
-      .target-group-header {
-        padding: 30px;
-
-        .target-group-details {
-          max-width: 28rem;
-          margin: 0 auto;
-        }
-      }
-
-      .target {
-        border-top: 1px solid $gray-border;
-        position: relative;
-        background-color: white;
-        overflow: hidden;
-        transition: box-shadow .2s;
-
-        &:last-child {
-          @include border-radius(0 0 10px 10px);
-        }
-
-        &.open {
-          box-shadow: 0 0 5px 1px $light-secondary;
-          z-index: 2;
-          @include border-radius(5px);
-
-          .target-title-link {
-            border-bottom: 1px dashed $gray-border;
-            box-shadow: 0 0 6px 5px lighten($gray-light, 40%);
-
-            .target-title {
-              color: $brand-secondary;
-            }
-          }
-        }
-        .target-title-link {
-          width: 100%;
-          position: relative;
-          padding: 30px;
-          cursor: pointer;
-          transition: all .2s;
-
-          &:before {
-            width: 8px;
-            height: 8px;
-            border-right: 1px solid $light-grey-text;
-            border-bottom: 1px solid $light-grey-text;
-            position: absolute;
-            right: 30px;
-            content: " ";
-            top: 47%;
-            transform: rotate(-45deg);
-            transition: all .2s;
-          }
-
-          @include media-breakpoint-down(md) {
-            padding: 20px;
-
-            &:before {
-              right: 20px;
-            }
-          }
-          &.active {
-            background-color: $primary-background;
-
-            &:before {
-              transform: rotate(45deg);
-            }
-          }
-
-          &:hover, &:focus {
-            background-color: $primary-background;
-
-            .target-title {
-              color: $brand-secondary;
-            }
-          }
-        }
-        .target-icon {
-          width: 25px;
-          margin-right: 1rem;
-          float: left;
-        }
-        .target-header {
-          float: left;
-
-          .target-title {
-            font-weight: $font-regular;
-            margin: 0;
-            font-size: 1rem;
-            letter-spacing: 0.02rem;
-            transition: color .2s;
-            max-width: 460px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-
-            .target-type-tag {
-              color: $light-grey-text;
-              padding-right: 5px;
-            }
-            @include media-breakpoint-down(sm) {
-              font-size: 0.875rem;
-              max-width: 150px;
-            }
-          }
-          .target-title-info {
-            font-size: 0.75rem;
-            letter-spacing: 0.02rem;
-            margin-top: 6px;
-
-            > div {
-              border-right: 1px solid darken($gray-border, 10%);
-              margin-right: 10px;
-              padding-right: 10px;
-
-              &:last-child {
-                border-width: 0;
-              }
-            }
-
-            .target-deadline, .target-karma-points {
-              display: inline-block;
-              color: $light-grey-text;
-
-              .target-deadline-date, .earn-karma-points {
-                color: $dark-grey-text;
-                padding-left: 5px;
-              }
-            }
-          }
-        }
-        .target-status {
-          float: right;
-          padding: 7px 15px;
-          font-size: 0.75rem;
-          letter-spacing: 0.02rem;
-          position: relative;;
-          top: 8px;
-          right: 25px;
-
-          @include media-breakpoint-down(xs) {
-            font-size: 0.75rem;
-            right: 15px;
-            padding: 7px 10px;
-          }
-          &.needs-improvement {
-            background-color: rgba(10, 165, 227, 0.7);
-          }
-          &.submitted {
-            background-color: rgba(0, 138, 193, 0.7);
-          }
-          &.pending {
-            background-color: rgba(227, 180, 98, 0.7);
-          }
-          &.unavailable {
-            background-color: rgba(153, 153, 153, 0.7);
-          }
-          &.expired {
-            background-color: rgba(255, 64, 64, 0.7);
-          }
-          &.complete {
-            background-color: rgba(50, 180, 117, 0.7);
-          }
-          &.not-accepted {
-            background-color: rgba(46, 47, 51, 0.7);
-          }
-        }
-
-        .target-description {
-          display: none;
-          padding: 15px 30px 20px 55px;
-          margin-left: 1rem;
-          font-size: 1.125rem;
-          font-weight: $font-light;
-
-          .target-description-btn {
-            font-size: 0.875rem;
-          }
-
-          @include media-breakpoint-down(sm) {
-            padding: 15px 20px 20px 42px;
-          }
-
-          .target-description-header {
-            border-bottom: 1px dashed $gray-border;
-            padding-bottom: 15px;
-
-            @include media-breakpoint-down(sm) {
-              h6 {
-                &:first-child {
-                  padding-bottom: 10px;
-                }
-              }
-            }
-          }
-          .btn-timeline-builder {
-            margin-left: -46px;
-
-            @include media-breakpoint-down(sm) {
-              margin: 0;
-              display: block;
-              width: 100%;
-              font-size: 0.875rem;
-            }
-          }
-        }
-      }
+    @include media-breakpoint-down(sm) {
+      margin: 0;
+      display: block;
+      width: 100%;
+      font-size: 0.875rem;
     }
   }
 }

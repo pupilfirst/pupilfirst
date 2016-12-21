@@ -280,6 +280,7 @@ GEM
       delayed_job (>= 3.0, < 5)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
+    descriptive_statistics (2.4.0)
     devise (4.2.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -898,6 +899,7 @@ DEPENDENCIES
   database_cleaner
   delayed-web
   delayed_job_active_record
+  descriptive_statistics (~> 2.4.0)
   devise
   devise_invitable
   dotenv-rails

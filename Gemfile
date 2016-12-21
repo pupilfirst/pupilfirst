@@ -100,6 +100,7 @@ gem 'combine_pdf' # Used to combine sections of agreement pdfs
 gem 'rollbar' # Exception tracking and logging from Ruby to Rollbar https://rollbar.com
 gem 'humanize' # Convert numbers to english words
 gem 'quilt', github: 'harigopal/quilt' # A Ruby library for generating identicons.
+gem 'descriptive_statistics', '~> 2.4.0', require: 'descriptive_statistics/safe' # Used to calculate basic stat measures such as std. deviation (eg: To calculate relative performance of startups)
 
 # Omniauth providers
 gem 'omniauth-google-oauth2' # Oauth2 strategy for Google

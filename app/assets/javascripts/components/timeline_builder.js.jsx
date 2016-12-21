@@ -10,6 +10,7 @@ const TimelineBuilder = React.createClass({
       coverImage: null,
       showLinkForm: false,
       showFileForm: false,
+      showDateForm: false,
       previousForm: null,
       imageButtonKey: this.generateKey()
     }
@@ -24,25 +25,30 @@ const TimelineBuilder = React.createClass({
 
     if (type == 'link') {
       let newState = !this.state.showLinkForm;
-      this.setState({showLinkForm: newState, showFileForm: false, previousForm: previousForm});
-    } else {
+      this.setState({showLinkForm: newState, showFileForm: false, showDateForm: false, previousForm: previousForm});
+    } else if (type == 'file') {
       let newState = !this.state.showFileForm;
-      this.setState({showLinkForm: false, showFileForm: newState, previousForm: previousForm});
+      this.setState({showLinkForm: false, showFileForm: newState, showDateForm: false, previousForm: previousForm});
+    } else {
+      let newState = !this.state.showDateForm;
+      this.setState({showLinkForm: false, showFileForm: false, showDateForm: newState, previousForm: previousForm});
     }
   },
 
   currentForm: function () {
     if (this.state.showLinkForm) {
-      return 'link'
+      return 'link';
     } else if (this.state.showFileForm) {
-      return 'file'
+      return 'file';
+    } else if (this.state.showDateForm) {
+      return 'date';
     } else {
-      return null
+      return null;
     }
   },
 
   hasAttachments: function () {
-    return this.state.links.length > 0 || this.state.files.length > 0 || this.state.coverImage != null
+    return this.state.links.length > 0 || this.state.files.length > 0 || this.state.coverImage != null;
   },
 
   attachments: function () {

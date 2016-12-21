@@ -14,7 +14,15 @@ const TimelineBuilderActionBar = React.createClass({
   },
 
   formLinkClasses: function (type) {
-    let classes = (type == 'link') ? 'link-upload' : 'file-upload';
+    let classes = '';
+
+    if (type == 'link') {
+      classes = 'link-upload'
+    } else if (type == 'file') {
+      classes = 'file-upload'
+    } else {
+      classes = 'date-of-event'
+    }
 
     if (this.props.currentForm == type) {
       classes += ' active-tab';
@@ -29,6 +37,10 @@ const TimelineBuilderActionBar = React.createClass({
 
   showFileForm: function () {
     this.props.formClickedCB('file')
+  },
+
+  showDateForm: function () {
+    this.props.formClickedCB('date')
   },
 
   timelineEventTypes: function () {
@@ -51,7 +63,7 @@ const TimelineBuilderActionBar = React.createClass({
             <i className="fa fa-file-text-o"/>
             <span className="tab-label">File</span>
           </div>
-          <div className="date-of-event">
+          <div className={ this.formLinkClasses('date') } onClick={ this.showDateForm }>
             <i className="fa fa-calendar"/>
             <span className="tab-label">Date</span>
           </div>

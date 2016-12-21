@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 feature 'Team members spec' do
-  let(:founder) { create :founder, confirmed_at: Time.now }
+  let(:founder) { create :founder }
   let(:startup) { create :startup }
 
   before do

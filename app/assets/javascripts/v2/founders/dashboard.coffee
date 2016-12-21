@@ -20,6 +20,17 @@ performanceMeterModal = ->
   $('.performance-overview-link').click () ->
     $('.performance-overview').modal()
 
+setPerformancePointer = ->
+  value = $('.performance-pointer').data('value') - 5
+  $('.performance-pointer')[0].style.left = value + '%'
+  color = switch
+    when value == 5 then 'red'
+    when value == 25 then 'orange'
+    when value == 45 then 'gold'
+    when value == 65 then 'yellowgreen'
+    else 'green'
+  $('.performance-pointer')[0].style.color = color
+
 viewSlidesModal = ->
   $('.view-slides-btn').click () ->
     $('#slides-wrapper').html($(this).data('embed-code'))
@@ -62,8 +73,12 @@ startTour = ->
         intro: startupShowTour.data('targetStatus')
       },
       {
-        element: $('.dashboard-header-container')[0],
+        element: $('#add-event-button')[0],
         intro: startupShowTour.data('addEvent')
+      },
+      {
+        element: $('#performance-button')[0],
+        intro: startupShowTour.data('performance')
       }
     ]
   )
@@ -79,4 +94,5 @@ $(document).on 'turbolinks:load', ->
     timelineBuilderModal()
     giveATour()
     performanceMeterModal()
+    setPerformancePointer()
     viewSlidesModal()

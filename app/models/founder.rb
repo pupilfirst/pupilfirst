@@ -121,10 +121,6 @@ class Founder < ApplicationRecord
 
   # TODO: Is this hack required?
   attr_accessor :inviter_name
-
-  # TODO: This emailer is not required anymore since password-based login has been removed.
-  after_update :send_password_change_email, if: :needs_password_change_email?
-
   # Email is not required for an unregistered 'contact' founder.
   #
   # TODO: Possibly useless method.
@@ -415,13 +411,5 @@ class Founder < ApplicationRecord
   def increment_activity_count(timeline, month, week)
     timeline[month][:counts][week] ||= 0
     timeline[month][:counts][week] += 1
-  end
-
-  def needs_password_change_email?
-    encrypted_password_was.present? && encrypted_password_changed? && persisted?
-  end
-
-  def send_password_change_email
-    FounderMailer.password_changed(self).deliver_later
   end
 end

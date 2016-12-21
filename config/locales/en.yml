@@ -93,6 +93,7 @@ en:
         target_details: Detailed information on the target, its due-date and founder-wise status.
         target_status: This indicates the present status of the target.
         add_event: Click to add timeline events for your startup. Once approved by the SV.CO team, (most) timeline events are displayed to the public.
+        performance: Indicates the performance of your startup.
   resource:
     share_status:
       approved: 'Only with approved startups'

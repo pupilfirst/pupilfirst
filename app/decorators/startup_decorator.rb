@@ -13,4 +13,30 @@ class StartupDecorator < Draper::Decorator
   def completed_targets_percentage
     ((completed_targets_count.to_f / batch.targets.count) * 100).to_i
   end
+
+  def leaderboard_rank
+    performance_service.leaderboard_rank(model) || '?'
+  end
+
+  def last_week_karma
+    performance_service.last_week_karma(model)
+  end
+
+  def relative_performance
+    performance_service.relative_performance(model)
+  end
+
+  def performance_label
+    case relative_performance
+      when 10 then 'Disappointing'
+      when 30 then 'Poor'
+      when 50 then 'Average'
+      when 70 then 'Satisfactory'
+      when 90 then 'Excellent'
+    end
+  end
+
+  def performance_service
+    @performance_service ||= Startups::PerformanceService.new
+  end
 end

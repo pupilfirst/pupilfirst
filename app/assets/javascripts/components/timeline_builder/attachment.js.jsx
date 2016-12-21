@@ -7,7 +7,7 @@ const TimelineBuilderAttachment = React.createClass({
   iconClasses: function () {
     switch (this.props.attachment.type) {
       case 'cover':
-        return 'fa fa-image-o';
+        return 'fa fa-picture-o';
       case 'file':
         return 'fa fa-file-text-o';
       case 'link':

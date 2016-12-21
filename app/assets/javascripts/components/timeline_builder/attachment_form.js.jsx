@@ -2,7 +2,8 @@ const TimelineBuilderAttachmentForm = React.createClass({
   propTypes: {
     currentForm: React.PropTypes.string,
     previousForm: React.PropTypes.string,
-    addAttachmentCB: React.PropTypes.func
+    addAttachmentCB: React.PropTypes.func,
+    selectedDate: React.PropTypes.string
   },
 
   getInitialState: function () {
@@ -42,6 +43,11 @@ const TimelineBuilderAttachmentForm = React.createClass({
 
         <div className="attachment-form-container js-file-form" style={ this.formVisible('file') }>
           <TimelineBuilderFileForm addAttachmentCB={ this.props.addAttachmentCB }/>
+        </div>
+
+        <div className="attachment-form-container js-date-form" style={ this.formVisible('date') }>
+          <TimelineBuilderDateForm addAttachmentCB={ this.props.addAttachmentCB }
+                                   selectedDate={ this.props.selectedDate }/>
         </div>
       </div>
     )

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161220124808) do
+ActiveRecord::Schema.define(version: 20161221113508) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -300,19 +300,6 @@ ActiveRecord::Schema.define(version: 20161220124808) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "avatar"
-    t.string   "encrypted_password",     default: ""
-    t.string   "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,     null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
-    t.string   "confirmation_token"
-    t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
-    t.string   "unconfirmed_email"
     t.string   "invitation_token"
     t.datetime "invitation_created_at"
     t.datetime "invitation_sent_at"
@@ -356,11 +343,9 @@ ActiveRecord::Schema.define(version: 20161220124808) do
     t.string   "name"
     t.boolean  "dashboard_toured"
     t.index ["college_id"], name: "index_founders_on_college_id", using: :btree
-    t.index ["confirmation_token"], name: "index_founders_on_confirmation_token", unique: true, using: :btree
     t.index ["invitation_token"], name: "index_founders_on_invitation_token", unique: true, using: :btree
     t.index ["invited_by_id"], name: "index_founders_on_invited_by_id", using: :btree
     t.index ["name"], name: "index_founders_on_name", using: :btree
-    t.index ["reset_password_token"], name: "index_founders_on_reset_password_token", unique: true, using: :btree
     t.index ["slug"], name: "index_founders_on_slug", unique: true, using: :btree
     t.index ["university_id"], name: "index_founders_on_university_id", using: :btree
     t.index ["user_id"], name: "index_founders_on_user_id", using: :btree

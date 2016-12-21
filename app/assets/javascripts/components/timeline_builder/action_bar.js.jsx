@@ -6,7 +6,8 @@ const TimelineBuilderActionBar = React.createClass({
     timelineEventTypes: React.PropTypes.object,
     coverImage: React.PropTypes.object,
     addAttachmentCB: React.PropTypes.func,
-    imageButtonKey: React.PropTypes.string
+    imageButtonKey: React.PropTypes.string,
+    selectedDate: React.PropTypes.string
   },
 
   getInitialState: function () {
@@ -49,6 +50,15 @@ const TimelineBuilderActionBar = React.createClass({
     });
   },
 
+  dateLabel: function() {
+    if (this.props.selectedDate != null) {
+      let date = moment(this.props.selectedDate, 'YYYY-MM-DD');
+      return date.format('MMM D');
+    } else {
+      return 'Date';
+    }
+  },
+
   render: function () {
     return (
       <div className="timeline-submit-tabs">
@@ -65,7 +75,7 @@ const TimelineBuilderActionBar = React.createClass({
           </div>
           <div className={ this.formLinkClasses('date') } onClick={ this.showDateForm }>
             <i className="fa fa-calendar"/>
-            <span className="tab-label">Date</span>
+            <span className="tab-label">{ this.dateLabel() }</span>
           </div>
         </div>
         <div className="select-tabs">

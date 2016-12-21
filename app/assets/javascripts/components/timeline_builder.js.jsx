@@ -7,6 +7,7 @@ const TimelineBuilder = React.createClass({
     return {
       links: [],
       files: [],
+      date: null,
       coverImage: null,
       showLinkForm: false,
       showFileForm: false,
@@ -79,6 +80,8 @@ const TimelineBuilder = React.createClass({
     } else if (type == 'cover') {
       // The key for image button is regenerated to ensure the button component is regenerated.
       this.setState({coverImage: {title: 'Cover Image'}, imageButtonKey: this.generateKey()});
+    } else if (type == 'date') {
+      this.setState({date: properties.value});
     } else {
       console.warn('Unhandled attachment type: ', type)
     }
@@ -169,11 +172,11 @@ const TimelineBuilder = React.createClass({
         }
 
         <TimelineBuilderAttachmentForm currentForm={ this.currentForm() } previousForm={ this.state.previousForm }
-                                       addAttachmentCB={ this.addAttachment }/>
+                                       addAttachmentCB={ this.addAttachment } selectedDate={ this.state.date }/>
         <TimelineBuilderActionBar formClickedCB={ this.toggleForm } currentForm={ this.currentForm() }
                                   submitCB={ this.submit } timelineEventTypes={ this.props.timelineEventTypes }
                                   addAttachmentCB={ this.addAttachment } coverImage={ this.state.coverImage }
-                                  imageButtonKey={ this.state.imageButtonKey }/>
+                                  imageButtonKey={ this.state.imageButtonKey } selectedDate={ this.state.date }/>
       </div>
     )
   }

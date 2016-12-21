@@ -2,9 +2,10 @@ class TimelineBuilderDateForm extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {date: this.today()};
+    let startDate = (props.selectedDate == null) ? this.today() : props.selectedDate;
+    this.state = {date: startDate};
+
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -33,12 +34,7 @@ class TimelineBuilderDateForm extends React.Component {
     }
 
     this.setState({date: newDate});
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-
-    console.log("Save " + this.state.date);
+    this.props.addAttachmentCB('date', {value: newDate});
   }
 
   render() {
@@ -46,10 +42,12 @@ class TimelineBuilderDateForm extends React.Component {
       <div>
         <input type="text" className="js-timeline-builder__date-input" placeholder="YYYY-MM-DD"
                onChange={ this.handleChange }/>
-        <button type="submit" className="btn btn-secondary" onClick={ this.handleSubmit }>
-          <i className="fa fa-check"/>
-        </button>
       </div>
     )
   }
 }
+
+TimelineBuilderDateForm.props = {
+  selectedDate: React.PropTypes.string,
+  addAttachmentCB: React.PropTypes.func
+};

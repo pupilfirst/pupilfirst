@@ -117,7 +117,7 @@ module Startups
     def relative_measure(karma)
       m = mean_karma
       s_d = standard_deviation_in_karma
-      return 50 unless m.positive? && s_d.positive?
+      return 50 unless m&.positive? && s_d&.positive?
 
       return 10 if karma < (m - (2 * s_d))
       return 30 if karma.in?((m - (2 * s_d))..(m - s_d))

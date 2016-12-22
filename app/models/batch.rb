@@ -111,4 +111,9 @@ class Batch < ApplicationRecord
   def final_stage?
     stage_started?(ApplicationStage.final_stage)
   end
+
+  def present_week_number
+    return nil unless (start_date - 1.day).past?
+    ((Date.today - start_date).to_f / 7).ceil
+  end
 end

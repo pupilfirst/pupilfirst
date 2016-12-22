@@ -19,7 +19,7 @@
               p
                 | Week
               h5.brand-primary.font-regular.m-b-0
-                |	#{@batch.present_week_number}/24
+                |	#{@batch.present_week_number || '0'}/24
           .stats-section
             svg viewbox=("0 0 32 32")
               circle.circle-secondary cx="16" cy="16" r="16" style=("stroke-dasharray: #{@startup.completed_targets_percentage} #{100 - @startup.completed_targets_percentage};")

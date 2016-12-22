@@ -2,7 +2,7 @@ module Startups
   class PerformanceService
     # returns array of startup ids in the batch and their ranks
     def leaderboard(batch)
-      @batch = batch.decorate
+      @batch = batch
       @batch.present_week_number.in?(1..24) ? rank_list : nil
     end
 
@@ -11,13 +11,13 @@ module Startups
     end
 
     def last_week_karma(startup)
-      @batch = startup.batch.decorate
+      @batch = startup.batch
       startups_sorted_by_points.detect { |startup_id, _points| startup_id == startup.id }&.second || 0
     end
 
     # returns a relative performance measure for a startup as a %
     def relative_performance(startup)
-      @batch = startup.batch.decorate
+      @batch = startup.batch
       karma = last_week_karma(startup)
       relative_measure(karma)
     end
@@ -72,7 +72,7 @@ module Startups
     end
 
     def startups_in_batch
-      Startup.not_dropped_out.where(batch: @batch.model)
+      Startup.not_dropped_out.where(batch: @batch)
     end
 
     # Starts on the week before last's Monday 6 PM IST.

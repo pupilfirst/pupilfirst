@@ -7,7 +7,8 @@ const TimelineBuilderActionBar = React.createClass({
     coverImage: React.PropTypes.object,
     addDataCB: React.PropTypes.func,
     imageButtonKey: React.PropTypes.string,
-    selectedDate: React.PropTypes.string
+    selectedDate: React.PropTypes.string,
+    submissionProgress: React.PropTypes.number
   },
 
   getInitialState: function () {
@@ -18,11 +19,11 @@ const TimelineBuilderActionBar = React.createClass({
     let classes = '';
 
     if (type == 'link') {
-      classes = 'upload-section__tab link-upload'
+      classes = 'timeline-builder__upload-section-tab link-upload'
     } else if (type == 'file') {
-      classes = 'upload-section__tab file-upload'
+      classes = 'timeline-builder__upload-section-tab file-upload'
     } else {
-      classes = 'upload-section__tab date-of-event'
+      classes = 'timeline-builder__upload-section-tab date-of-event'
     }
 
     if (this.props.currentForm == type) {
@@ -87,7 +88,7 @@ const TimelineBuilderActionBar = React.createClass({
         </div>
 
         <div className="select-section">
-          <div className="select-section__tab type-of-event-select">
+          <div className="timeline-builder__select-section-tab type-of-event-select">
             <select className="form-control timeline-builder__timeline_event_type" defaultValue="" onChange={ this.handleTimelineEventTypeChange }>
 
               <option disabled="disabled" value="">Select Type</option>
@@ -96,11 +97,7 @@ const TimelineBuilderActionBar = React.createClass({
               }, this)}
             </select>
           </div>
-          <div className="select-section__tab submit-btn">
-            <button type="submit" className="btn btn-primary text-xs-uppercase" onClick={ this.props.submitCB }>
-              Submit
-            </button>
-          </div>
+          <TimelineBuilderSubmitButton submissionProgress={ this.props.submissionProgress } submitCB={ this.props.submitCB }/>
         </div>
       </div>
     )

@@ -14,7 +14,8 @@ const TimelineBuilder = React.createClass({
       showDateForm: false,
       previousForm: null,
       imageButtonKey: this.generateKey(),
-      timeline_event_type_id: null
+      timeline_event_type_id: null,
+      submissionProgress: null
     }
   },
 
@@ -124,9 +125,6 @@ const TimelineBuilder = React.createClass({
     // TODO: Run presence validations.
     // TODO: Create form and submit it with AJAX.
 
-    // Block the submit from going through.
-    event.preventDefault();
-
     let form = $('.timeline-builder-hidden-form');
     let formData = new FormData(form[0]);
 
@@ -143,21 +141,12 @@ const TimelineBuilder = React.createClass({
       url: form.attr('action'),
       type: form.attr('method'),
 
-      xhr: function () {
-        let myXhr = $.ajaxSettings.xhr();
-
-        // if (myXhr.upload) { // Check if upload property exists.
-        //   // For handling the progress of the upload.
-        //   myXhr.upload.addEventListener('progress', progressHandlingFunction, false);
-        // }
-
-        return myXhr;
-      },
+      xhr: this.xhrCallback,
 
       // Ajax events.
-      // beforeSend: beforeSendHandler,
-      // success: completeHandler,
-      // error: errorHandler,
+      beforeSend: this.handleBeforeSubmission,
+      success: this.handleSubmissionComplete,
+      error: this.handleSubmissionError,
 
       // Form data
       data: formData,
@@ -169,6 +158,36 @@ const TimelineBuilder = React.createClass({
     });
   },
 
+  xhrCallback: function () {
+    let myXhr = $.ajaxSettings.xhr();
+
+    if (myXhr.upload != null) { // Check if upload property exists.
+      // For handling the progress of the upload.
+      myXhr.upload.addEventListener('progress', this.handleSubmissionProgress, false);
+    }
+
+    return myXhr;
+  },
+
+  handleBeforeSubmission: function () {
+    this.setState({submissionProgress: -1})
+  },
+
+  handleSubmissionProgress: function (event) {
+    if (event.lengthComputable) {
+      let percentDone = Math.round((event.loaded / event.total) * 100);
+      this.setState({submissionProgress: percentDone});
+    }
+  },
+
+  handleSubmissionError: function () {
+    console.warn("handleSubmissionError() has not been implemented!");
+  },
+
+  handleSubmissionComplete: function () {
+    console.warn("handleSubmissionComplete() has not been implemented!")
+  },
+
   render: function () {
     return (
       <div>
@@ -178,12 +197,8 @@ const TimelineBuilder = React.createClass({
         <TimelineBuilderAttachments attachments={ this.attachments() } removeAttachmentCB={ this.removeAttachment }/>
         }
 
-        <TimelineBuilderAttachmentForm currentForm={ this.currentForm() } previousForm={ this.state.previousForm }
-                                       addAttachmentCB={ this.addData } selectedDate={ this.state.date }/>
-        <TimelineBuilderActionBar formClickedCB={ this.toggleForm } currentForm={ this.currentForm() }
-                                  submitCB={ this.submit } timelineEventTypes={ this.props.timelineEventTypes }
-                                  addDataCB={ this.addData } coverImage={ this.state.coverImage }
-                                  imageButtonKey={ this.state.imageButtonKey } selectedDate={ this.state.date }/>
+        <TimelineBuilderAttachmentForm currentForm={ this.currentForm() } previousForm={ this.state.previousForm } addAttachmentCB={ this.addData } selectedDate={ this.state.date }/>
+        <TimelineBuilderActionBar formClickedCB={ this.toggleForm } currentForm={ this.currentForm() } submitCB={ this.submit } timelineEventTypes={ this.props.timelineEventTypes } addDataCB={ this.addData } coverImage={ this.state.coverImage } imageButtonKey={ this.state.imageButtonKey } selectedDate={ this.state.date } submissionProgress={ this.state.submissionProgress }/>
       </div>
     )
   }

@@ -51,6 +51,13 @@
   @include media-breakpoint-down(sm) {
     width: 100px;
   }
+  .timeline-builder__remove-attachment {
+    font-size: 1rem;
+    outline: none;
+    padding: 6px 10px;
+    border-left: 1px solid $light-grey-text;
+    color: red;
+  }
 }
 .timeline-builder__attachment-title {
   width: 100px;
@@ -60,13 +67,6 @@
 }
 .timeline-builder__attachment-icon {
   margin: 0 5px 0 10px;
-}
-.timeline-builder__remove-attachment {
-  font-size: 1rem;
-  outline: none;
-  padding: 6px 10px;
-  border-left: 1px solid $light-grey-text;
-  color: red;
 }
 .timeline-builder__attachment-form-container {
   padding: 1.25rem;
@@ -176,7 +176,7 @@
   }
 }
 
-.upload-section__tab, .select-section__tab {
+.timeline-builder__upload-section-tab, .timeline-builder__select-section-tab {
   padding: 0 20px;
   display: flex;
   align-items: center;
@@ -220,7 +220,7 @@
     }
   }
 }
-.upload-section__tab {
+.timeline-builder__upload-section-tab {
   transition: all .2s;
 
   &:hover, &:focus {

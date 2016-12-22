@@ -37,7 +37,7 @@ class TimelineBuilderImageButton extends React.Component {
   }
 
   actionTabClasses() {
-    let classes = 'upload-section__tab image-upload';
+    let classes = 'timeline-builder__upload-section-tab image-upload';
 
     if (this.props.coverImage != null) {
       classes += ' action-tab-disabled'

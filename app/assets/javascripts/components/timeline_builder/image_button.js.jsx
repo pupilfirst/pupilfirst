@@ -50,8 +50,8 @@ class TimelineBuilderImageButton extends React.Component {
     return (
       <div className={ this.actionTabClasses() } onClick={ this.handleImageButtonClick }>
         <input type="file" onChange={ this.handleImageChange } className="js-timeline-builder__image-input hidden-xs-up"/>
-        <i className="fa fa-file-image-o"/>
-        <span className="tab-label">Image</span>
+        <i className="timeline-builder__upload-section-icon fa fa-file-image-o"/>
+        <span className="timeline-builder__tab-label">Image</span>
       </div>
     )
   }

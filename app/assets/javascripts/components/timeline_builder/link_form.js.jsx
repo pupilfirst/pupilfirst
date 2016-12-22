@@ -92,12 +92,12 @@ const TimelineBuilderLinkForm = React.createClass({
           <small className="form-text text-muted">Please enter a full URL, starting with http(s).</small>
         </div>
         <div className="form-group timeline-builder__form-group timeline-builder__visibility-option-group">
-          <select className="form-control visibility-option js-link-visibility">
+          <select className="form-control timeline-builder__visibility-option js-link-visibility">
             <option value="public">Public</option>
             <option value="private">Private</option>
           </select>
         </div>
-        <button className="btn btn-secondary" onClick={ this.linkSubmit }>
+        <button className="btn btn-secondary timeline-builder__attachment-button" onClick={ this.linkSubmit }>
           <i className="fa fa-check"/>
         </button>
       </form>

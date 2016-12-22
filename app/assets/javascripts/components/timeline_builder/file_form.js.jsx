@@ -64,12 +64,12 @@ const TimelineBuilderFileForm = React.createClass({
         </div>
         <TimelineBuilderFilePicker key={ this.state.identifier }/>
         <div className="form-group timeline-builder__form-group timeline-builder__visibility-option-group">
-          <select className="form-control visibility-option js-file-visibility">
+          <select className="form-control timeline-builder__visibility-option js-file-visibility">
             <option value="public">Public</option>
             <option value="private">Private</option>
           </select>
         </div>
-        <button type="submit" className="btn btn-secondary" onClick={ this.fileSubmit }>
+        <button type="submit" className="btn btn-secondary timeline-builder__attachment-button" onClick={ this.fileSubmit }>
           <i className="fa fa-check"/>
         </button>
       </form>

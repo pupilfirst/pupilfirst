@@ -31,7 +31,7 @@ class TimelineBuilderSubmitButton extends React.Component {
 
   render() {
     return (
-      <div className="submit-btn timeline-builder__select-section-tab">
+      <div className="timeline-builder__submit-btn timeline-builder__select-section-tab">
         <button type="submit" disabled={ this.submissionInProgress() } className="btn btn-primary text-xs-uppercase"
                 onClick={ this.handleSubmit }>
           { this.submissionInProgress() &&

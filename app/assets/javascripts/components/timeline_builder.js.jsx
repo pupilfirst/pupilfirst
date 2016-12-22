@@ -13,7 +13,8 @@ const TimelineBuilder = React.createClass({
       showFileForm: false,
       showDateForm: false,
       previousForm: null,
-      imageButtonKey: this.generateKey()
+      imageButtonKey: this.generateKey(),
+      timeline_event_type_id: null
     }
   },
 
@@ -70,7 +71,7 @@ const TimelineBuilder = React.createClass({
     return currentAttachments;
   },
 
-  addAttachment: function (type, properties) {
+  addData: function (type, properties) {
     if (type == 'link') {
       this.setState({links: this.state.links.concat([properties])});
       this.toggleForm('link')
@@ -82,6 +83,8 @@ const TimelineBuilder = React.createClass({
       this.setState({coverImage: {title: 'Cover Image'}, imageButtonKey: this.generateKey()});
     } else if (type == 'date') {
       this.setState({date: properties.value});
+    } else if (type == 'timeline_event_type') {
+      this.setState({timeline_event_type_id: properties.id});
     } else {
       console.warn('Unhandled attachment type: ', type)
     }
@@ -130,6 +133,10 @@ const TimelineBuilder = React.createClass({
     let description = $('.timeline-builder-textarea').val();
 
     formData.append('timeline_event[description]', description);
+    formData.append('timeline_event[date]', this.state.date);
+    formData.append('timeline_event[links]', JSON.stringify(this.state.links));
+    formData.append('timeline_event[files_metadata]', JSON.stringify(this.state.files));
+    formData.append('timeline_event[timeline_event_type_id]', this.state.timeline_event_type_id);
 
     // Submit form data using AJAX and set a progress handler function.
     $.ajax({
@@ -172,10 +179,10 @@ const TimelineBuilder = React.createClass({
         }
 
         <TimelineBuilderAttachmentForm currentForm={ this.currentForm() } previousForm={ this.state.previousForm }
-                                       addAttachmentCB={ this.addAttachment } selectedDate={ this.state.date }/>
+                                       addAttachmentCB={ this.addData } selectedDate={ this.state.date }/>
         <TimelineBuilderActionBar formClickedCB={ this.toggleForm } currentForm={ this.currentForm() }
                                   submitCB={ this.submit } timelineEventTypes={ this.props.timelineEventTypes }
-                                  addAttachmentCB={ this.addAttachment } coverImage={ this.state.coverImage }
+                                  addDataCB={ this.addData } coverImage={ this.state.coverImage }
                                   imageButtonKey={ this.state.imageButtonKey } selectedDate={ this.state.date }/>
       </div>
     )

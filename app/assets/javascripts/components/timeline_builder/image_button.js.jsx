@@ -20,7 +20,7 @@ class TimelineBuilderImageButton extends React.Component {
 
     if (fileName.length > 0) {
       this.moveImageInputToHiddenForm(inputElement);
-      this.props.addAttachmentCB('cover')
+      this.props.addDataCB('cover')
     }
   }
 
@@ -59,5 +59,5 @@ class TimelineBuilderImageButton extends React.Component {
 
 TimelineBuilderImageButton.propTypes = {
   coverImage: React.PropTypes.object,
-  addAttachmentCB: React.PropTypes.func
+  addDataCB: React.PropTypes.func
 };

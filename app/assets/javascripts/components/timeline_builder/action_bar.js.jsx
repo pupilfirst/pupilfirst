@@ -5,7 +5,7 @@ const TimelineBuilderActionBar = React.createClass({
     submitCB: React.PropTypes.func,
     timelineEventTypes: React.PropTypes.object,
     coverImage: React.PropTypes.object,
-    addAttachmentCB: React.PropTypes.func,
+    addDataCB: React.PropTypes.func,
     imageButtonKey: React.PropTypes.string,
     selectedDate: React.PropTypes.string
   },
@@ -50,7 +50,7 @@ const TimelineBuilderActionBar = React.createClass({
     });
   },
 
-  dateLabel: function() {
+  dateLabel: function () {
     if (this.props.selectedDate != null) {
       let date = moment(this.props.selectedDate, 'YYYY-MM-DD');
       return date.format('MMM D');
@@ -59,12 +59,20 @@ const TimelineBuilderActionBar = React.createClass({
     }
   },
 
+  handleTimelineEventTypeChange: function (event) {
+    let timelineEventTypeSelect = $(event.target);
+
+    if (timelineEventTypeSelect.val().length > 0) {
+      this.props.addDataCB('timeline_event_type', {id: timelineEventTypeSelect.val()})
+    }
+  },
+
   render: function () {
     return (
       <div className="timeline-submit-tabs">
         <div className="upload-tabs">
           <TimelineBuilderImageButton key={ this.props.imageButtonKey } coverImage={ this.props.coverImage }
-                                      addAttachmentCB={ this.props.addAttachmentCB }/>
+                                      addDataCB={ this.props.addDataCB }/>
           <div className={ this.formLinkClasses('link') } onClick={ this.showLinkForm }>
             <i className="fa fa-link"/>
             <span className="tab-label">Link</span>
@@ -80,7 +88,8 @@ const TimelineBuilderActionBar = React.createClass({
         </div>
         <div className="select-tabs">
           <div className="type-of-event-select">
-            <select className="form-control timeline-builder__timeline_event_type" defaultValue="">
+            <select className="form-control timeline-builder__timeline_event_type" defaultValue=""
+                    onChange={ this.handleTimelineEventTypeChange }>
               <option disabled="disabled" value="">Select Type</option>
               { Object.keys(this.props.timelineEventTypes).map(function (role, index) {
                 return <TimelineBuilderTimelineEventGroup key={ index } role={ role }

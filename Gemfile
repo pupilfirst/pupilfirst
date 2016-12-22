@@ -4,8 +4,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repository_path| "https://github.com/#{repository_path}.git" }
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-# TODO: Switch to rubygems version when 5.0.1 is released. The stable branch is required for a patch related to reading of serialized YAML data stored by Rails 4.2-.
-gem 'rails', github: 'rails/rails', branch: '5-0-stable'
+gem 'rails', '= 5.0.1'
 
 gem 'dotenv-rails', groups: [:development, :test]
 

@@ -25,17 +25,17 @@ const TimelineBuilderLinkForm = React.createClass({
 
   render: function () {
     return (
-      <form className="form-inline attachment-form">
-        <div className="form-group link-title-group">
+      <form className="form-inline timeline-builder__attachment-form">
+        <div className="form-group timeline-builder__form-group">
           <label className="sr-only" htmlFor="linkTitle">Link Title</label>
           <input className="form-control link-title js-link-title" type="text" placeholder="Title"/>
         </div>
-        <div className="form-group link-url-group">
+        <div className="form-group timeline-builder__form-group">
           <label className="sr-only" htmlFor="linkUrl">URL</label>
           <input className="form-control link-url js-link-url" type="text" placeholder="URL"/>
           <small className="form-text text-muted hidden-xs-up">Please enter a full URL, starting with http(s).</small>
         </div>
-        <div className="form-group visibility-option-group">
+        <div className="form-group timeline-builder__form-group timeline-builder__visibility-option-group">
           <select className="form-control visibility-option js-link-visibility">
             <option value="public">Public</option>
             <option value="private">Private</option>

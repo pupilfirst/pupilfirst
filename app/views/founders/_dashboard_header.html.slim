@@ -13,17 +13,19 @@
           p
             | by #{@startup.name}
         .startup-founders
-          - @startup.founders.limit(3).each do |founder|
-            a.founder-avatar-bubble href=founder_profile_path(founder.slug)
-              = image_tag profile_image_url(founder), class: 'img-circle'
-          - if @startup.founders.count > 4
-            a.founder-avatar-bubble.text-xs-center.hidden-sm-up.reamining-founders
-              span.reamining-founders-count
-                | +#{@startup.founders.count - 3}
-            - @startup.founders[3..-1].each do |founder|
-              a.founder-avatar-bubble.hidden-sm-down href=founder_profile_path(founder.slug)
+          .hidden-xs-down
+            - @startup.founders.each do |founder|
+              a.founder-avatar-bubble href=founder_profile_path(founder.slug)
                 = image_tag profile_image_url(founder), class: 'img-circle'
-
-          - elsif @startup.founders.count == 4
-            a.founder-avatar-bubble href=founder_profile_path(@startup.founders.last.slug)
-              = image_tag profile_image_url(@startup.founders.last), class: 'img-circle'
+          .hidden-sm-up
+            - if @startup.founders.count > 4
+              - @startup.founders.order(:id).limit(3).each do |founder|
+                .founder-avatar-bubble
+                  = image_tag profile_image_url(founder), class: 'img-circle'
+              .founder-avatar-bubble.text-xs-center.reamining-founders
+                span.reamining-founders-count
+                  | +#{@startup.founders.count - 3}
+            - else
+              - @startup.founders.each do |founder|
+                .founder-avatar-bubble
+                  = image_tag profile_image_url(founder), class: 'img-circle'

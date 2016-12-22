@@ -57,13 +57,13 @@ const TimelineBuilderFileForm = React.createClass({
 
   render: function () {
     return (
-      <form className="form-inline attachment-form">
-        <div className="form-group file-title-group">
+      <form className="form-inline timeline-builder__attachment-form">
+        <div className="form-group timeline-builder__form-group">
           <label className="sr-only" htmlFor="fileTitle">File Title</label>
           <input className="form-control file-title js-file-title" type="text" placeholder="Title"/>
         </div>
         <TimelineBuilderFilePicker key={ this.state.identifier }/>
-        <div className="form-group visibility-option-group">
+        <div className="form-group timeline-builder__form-group timeline-builder__visibility-option-group">
           <select className="form-control visibility-option js-file-visibility">
             <option value="public">Public</option>
             <option value="private">Private</option>

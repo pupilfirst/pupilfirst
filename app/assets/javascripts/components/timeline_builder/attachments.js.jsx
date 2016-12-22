@@ -6,7 +6,7 @@ const TimelineBuilderAttachments = React.createClass({
 
   render: function () {
     return (
-      <div className="attachments-container clearfix">
+      <div className="timeline-builder__attachments-container clearfix">
         { this.props.attachments.map(function (attachment, index) {
           return <TimelineBuilderAttachment attachment={ attachment } key={ index } removeAttachmentCB={ this.props.removeAttachmentCB }/>
         }, this)}

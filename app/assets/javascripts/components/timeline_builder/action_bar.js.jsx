@@ -18,11 +18,11 @@ const TimelineBuilderActionBar = React.createClass({
     let classes = '';
 
     if (type == 'link') {
-      classes = 'link-upload'
+      classes = 'upload-section__tab link-upload'
     } else if (type == 'file') {
-      classes = 'file-upload'
+      classes = 'upload-section__tab file-upload'
     } else {
-      classes = 'date-of-event'
+      classes = 'upload-section__tab date-of-event'
     }
 
     if (this.props.currentForm == type) {
@@ -70,9 +70,8 @@ const TimelineBuilderActionBar = React.createClass({
   render: function () {
     return (
       <div className="timeline-submit-tabs">
-        <div className="upload-tabs">
-          <TimelineBuilderImageButton key={ this.props.imageButtonKey } coverImage={ this.props.coverImage }
-                                      addDataCB={ this.props.addDataCB }/>
+        <div className="upload-section">
+          <TimelineBuilderImageButton key={ this.props.imageButtonKey } coverImage={ this.props.coverImage } addDataCB={ this.props.addDataCB }/>
           <div className={ this.formLinkClasses('link') } onClick={ this.showLinkForm }>
             <i className="fa fa-link"/>
             <span className="tab-label">Link</span>
@@ -86,18 +85,18 @@ const TimelineBuilderActionBar = React.createClass({
             <span className="tab-label">{ this.dateLabel() }</span>
           </div>
         </div>
-        <div className="select-tabs">
-          <div className="type-of-event-select">
-            <select className="form-control timeline-builder__timeline_event_type" defaultValue=""
-                    onChange={ this.handleTimelineEventTypeChange }>
+
+        <div className="select-section">
+          <div className="select-section__tab type-of-event-select">
+            <select className="form-control timeline-builder__timeline_event_type" defaultValue="" onChange={ this.handleTimelineEventTypeChange }>
+
               <option disabled="disabled" value="">Select Type</option>
               { Object.keys(this.props.timelineEventTypes).map(function (role, index) {
-                return <TimelineBuilderTimelineEventGroup key={ index } role={ role }
-                                                          timelineEvents={ this.props.timelineEventTypes[role] }/>
+                return <TimelineBuilderTimelineEventGroup key={ index } role={ role } timelineEvents={ this.props.timelineEventTypes[role] }/>
               }, this)}
             </select>
           </div>
-          <div className="submit-btn">
+          <div className="select-section__tab submit-btn">
             <button type="submit" className="btn btn-primary text-xs-uppercase" onClick={ this.props.submitCB }>
               Submit
             </button>

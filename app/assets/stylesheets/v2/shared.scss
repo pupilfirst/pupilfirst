@@ -158,12 +158,11 @@
       margin: 10px -5px 0 -5px;
 
       &:first-child, &:last-child {
-        margin: 10px 0 0 0;
+        margin: 0px 0 0 0;
       }
     }
   }
   .reamining-founders {
-    margin: 0;
     vertical-align: middle;
     font-size: 1.125rem;
     font-weight: $font-semibold;

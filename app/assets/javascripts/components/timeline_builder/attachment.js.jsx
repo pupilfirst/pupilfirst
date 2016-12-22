@@ -5,13 +5,15 @@ const TimelineBuilderAttachment = React.createClass({
   },
 
   iconClasses: function () {
+    let baseClass = "timeline-builder__attachment-icon";
+
     switch (this.props.attachment.type) {
       case 'cover':
-        return 'fa fa-picture-o';
+        return baseClass + ' fa fa-picture-o';
       case 'file':
-        return 'fa fa-file-text-o';
+        return baseClass + ' fa fa-file-text-o';
       case 'link':
-        return 'fa fa-link';
+        return baseClass + ' fa fa-link';
     }
   },
 
@@ -21,10 +23,10 @@ const TimelineBuilderAttachment = React.createClass({
 
   render: function () {
     return (
-      <div className="attachment pull-xs-left m-r-1 m-t-1">
+      <div className="timeline-builder__attachment pull-xs-left m-r-1 m-t-1">
         <i className={ this.iconClasses() }/>
         <span className="attachment-title">{ this.props.attachment.title }</span>
-        <button type="button" className="close remove-attachment" onClick={ this.removeAttachment }>
+        <button type="button" className="close timeline-builder__remove-attachment" onClick={ this.removeAttachment }>
           <span aria-hidden="true">&times;</span>
         </button>
       </div>

@@ -37,15 +37,15 @@ const TimelineBuilderAttachmentForm = React.createClass({
   render: function () {
     return (
       <div>
-        <div className="attachment-form-container js-link-form" style={ this.formVisible('link') }>
+        <div className="timeline-builder__attachment-form-container js-link-form" style={ this.formVisible('link') }>
           <TimelineBuilderLinkForm addAttachmentCB={ this.props.addAttachmentCB }/>
         </div>
 
-        <div className="attachment-form-container js-file-form" style={ this.formVisible('file') }>
+        <div className="timeline-builder__attachment-form-container js-file-form" style={ this.formVisible('file') }>
           <TimelineBuilderFileForm addAttachmentCB={ this.props.addAttachmentCB }/>
         </div>
 
-        <div className="attachment-form-container js-date-form" style={ this.formVisible('date') }>
+        <div className="timeline-builder__attachment-form-container js-date-form" style={ this.formVisible('date') }>
           <TimelineBuilderDateForm addAttachmentCB={ this.props.addAttachmentCB }
                                    selectedDate={ this.props.selectedDate }/>
         </div>

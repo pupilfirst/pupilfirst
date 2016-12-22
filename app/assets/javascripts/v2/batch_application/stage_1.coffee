@@ -35,4 +35,7 @@ stickCodeVideoSubmitForm = ->
 
 $(document).on 'page:change', prepareCofounderFields
 $(document).on 'page:change', toggleCofounderCountFieldOnLoad
-$(document).on 'page:change', stickCodeVideoSubmitForm
+
+$(document).on 'turbolinks:load', ->
+  if $('#code-video-submit').length > 0
+    stickCodeVideoSubmitForm()

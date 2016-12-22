@@ -1,4 +1,4 @@
-$(document).on 'page:change', ->
+prepPage = ->
   $('#transparency-sidebar').stickit
     top: 100
 
@@ -24,3 +24,7 @@ $(document).on 'page:change', ->
     $.scrollTo $(this).attr('href'), 500, offset: -95
     $('.active').removeClass 'active'
     $(this).addClass 'active'
+
+$(document).on 'turbolinks:load', ->
+  if $('.home__story').length > 0
+    prepPage()

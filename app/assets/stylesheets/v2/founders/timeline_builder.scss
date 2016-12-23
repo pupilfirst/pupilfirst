@@ -1,11 +1,13 @@
 .timeline-builder__popup {
   max-width: 45rem;
 }
+
 .timeline-builder__popup-content {
   border: 1px solid $gray-border;
   @include border-radius(10px);
   overflow: hidden;
 }
+
 .timeline-builder__popup-body {
   padding: 0;
   position: relative;
@@ -18,6 +20,7 @@
     outline: none;
   }
 }
+
 .timeline-builder__textarea {
   padding: 1.25rem 3rem 1.25rem 1.25rem;
   line-height: 1.5;
@@ -27,6 +30,7 @@
   font-size: 1.125rem;
   font-weight: $font-light;
 }
+
 .timeline-builder__attachments-container {
   padding: 0 0 1rem 0;
   margin: 0 1.25rem;
@@ -36,6 +40,7 @@
     margin-right: 0;
   }
 }
+
 .timeline-builder__attachment {
   width: 170px;
   height: 30px;
@@ -51,6 +56,7 @@
   @include media-breakpoint-down(sm) {
     width: 100px;
   }
+
   .timeline-builder__remove-attachment {
     font-size: 1rem;
     outline: none;
@@ -59,21 +65,25 @@
     color: red;
   }
 }
+
 .timeline-builder__attachment-title {
   width: 100px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .timeline-builder__attachment-icon {
   margin: 0 5px 0 10px;
 }
+
 .timeline-builder__attachment-form-container {
   padding: 1.25rem;
   background-color: $dark-primary-background;
   border-top: 1px solid $gray-border;
   box-shadow: inset 0 10px 10px -10px rgba(0, 0, 0, 0.1), inset 0 10px 10px -10px rgba(0, 0, 0, 0.1);
 }
+
 @include media-breakpoint-up(sm) {
   .timeline-builder__attachment-form {
     display: flex;
@@ -114,6 +124,7 @@
   position: absolute;
   z-index: -1;
 }
+
 .timeline-builder__file-label {
   border: 1px solid $gray-border;
   @include border-radius(5px);
@@ -126,6 +137,7 @@
   width: 100%;
   cursor: pointer;
 }
+
 .timeline-builder__choose-file-btn {
   height: 100%;
   position: absolute;
@@ -135,9 +147,11 @@
   background-color: $alert-background;
   padding: 8px 10px;
 }
+
 .timeline-builder__choose-file-btn-icon {
   margin-right: 5px;
 }
+
 .timeline-builder__file-name {
   width: 120px;
   display: inline-block;
@@ -148,6 +162,7 @@
   line-height: 2.5;
   vertical-align: middle;
 }
+
 .timeline-builder__submit-tabs {
   display: flex;
   height: 50px;
@@ -157,20 +172,27 @@
     display: block;
     height: auto;
   }
+
   .timeline-builder__submit-btn {
     border-right: 0;
     display: flex;
+
+    @include media-breakpoint-up(md) {
+      flex-shrink: 0;
+    }
   }
 }
 .timeline-builder__upload-section, .timeline-builder__select-section {
   display: flex;
   width: 100%;
 }
+
 .timeline-builder__upload-section {
   @include media-breakpoint-down(sm) {
     border-bottom: 1px solid $gray-border;
   }
 }
+
 .timeline-builder__type-of-event-select {
   max-width: 240px;
 
@@ -186,7 +208,6 @@
   border-right: 1px solid $gray-border;
   background-color: white;
   color: darken($light-grey-text, 20%);
-  cursor: pointer;
   transition: all .2s;
 
   @include media-breakpoint-down(sm) {
@@ -196,17 +217,40 @@
     padding: 10px 20px;
   }
 }
+
+.timeline-builder__upload-section-tab {
+  cursor: pointer;
+  transition: all .2s;
+
+  &:hover, &:focus {
+    background-color: $dark-primary-background;
+    color: $brand-secondary;
+  }
+}
+
+.timeline-builder__select-section-tab {
+  @include media-breakpoint-down(sm) {
+    padding: 5px 20px;
+    margin: 10px 0;
+  }
+}
+
 .timeline-builder__tab-label {
   @include media-breakpoint-down(sm) {
     display: block;
   }
 }
+
 .timeline-builder__upload-section-icon {
   margin-right: 7px;
 
   @include media-breakpoint-down(sm) {
     margin-right: 0;
   }
+}
+
+.timeline-builder__date-input {
+
 }
 
 .timeline-builder__active-tab {
@@ -224,19 +268,14 @@
     width: 100%;
   }
 }
-.timeline-builder__upload-section-tab {
-  transition: all .2s;
 
-  &:hover, &:focus {
-    background-color: $dark-primary-background;
-    color: $brand-secondary;
-  }
-}
 .date-of-event {
   @include media-breakpoint-up(md) {
     flex-shrink: 0;
+    padding: 0 18px;
   }
 }
+
 .action-tab-disabled {
   color: lighten($light-grey-text, 30%);
   cursor: not-allowed;

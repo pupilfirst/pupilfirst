@@ -11,7 +11,7 @@ class TimelineBuilderSubmitButton extends React.Component {
     } else if (this.props.submissionProgress == 100) {
       return 'Done';
     } else if (this.props.submissionProgress >= 0) {
-      return " " + this.props.submissionProgress + "%";
+      return this.props.submissionProgress + "%";
     } else {
       return '';
     }
@@ -32,7 +32,7 @@ class TimelineBuilderSubmitButton extends React.Component {
   render() {
     return (
       <div className="timeline-builder__submit-btn timeline-builder__select-section-tab">
-        <button type="submit" disabled={ this.submissionInProgress() } className="btn btn-primary text-xs-uppercase"
+        <button type="submit" disabled={ this.submissionInProgress() } className="btn btn-with-icon btn-primary text-xs-uppercase"
                 onClick={ this.handleSubmit }>
           { this.submissionInProgress() &&
           <i className="fa fa-cog fa-spin"/>

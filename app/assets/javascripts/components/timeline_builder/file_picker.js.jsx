@@ -1,20 +1,30 @@
 class TimelineBuilderFilePicker extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {fileLabel: ''};
+    this.state = {
+      fileLabel: '',
+      hasError: props.hasError
+    };
     this.handleChange = this.handleChange.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    this.setState({hasError: newProps.hasError});
   }
 
   handleChange(event) {
     let fileName = $(event.target).val().split('\\').pop();
     let newLabelText = fileName ? fileName : '';
-    this.setState({fileLabel: newLabelText});
+    this.setState({fileLabel: newLabelText, hasError: false});
+  }
+
+  formGroupClassNames() {
+    return ("form-group timeline-builder__form-group timeline-builder__file-choose-group" + (this.state.hasError ? ' has-danger' : ''));
   }
 
   render() {
     return (
-      <div className="form-group timeline-builder__form-group timeline-builder__file-choose-group">
+      <div className={ this.formGroupClassNames() } >
         <input type="file" className="form-control-file timeline-builder__file-choose js-attachment-file"
                id="timeline-builder__file-input" onChange={ this.handleChange }/>
         <label className="timeline-builder__file-label" htmlFor="timeline-builder__file-input">
@@ -24,6 +34,9 @@ class TimelineBuilderFilePicker extends React.Component {
             CHOOSE FILE
           </div>
         </label>
+        { this.state.hasError &&
+        <div className="form-control-feedback">Choose a valid file!</div>
+        }
       </div>
     )
   }

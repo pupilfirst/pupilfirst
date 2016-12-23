@@ -4,14 +4,27 @@ const TimelineBuilderFileForm = React.createClass({
   },
 
   getInitialState: function () {
-    return {identifier: this.generateIdentifier()}
+    return {
+      identifier: this.generateIdentifier(),
+      hasTitleError: false,
+      hasFileError: false
+    }
   },
 
   fileSubmit: function (event) {
     event.preventDefault();
+    if (this.validate()) {
+      this.storeFile();
+      setTimeout(this.clearForm, 500);
+    }
+  },
 
-    // TODO: Add validations.
+  clearForm: function () {
+    $('.js-file-title').val('');
+    $('.js-file-visibility').val('public');
+  },
 
+  storeFile: function () {
     this.props.addAttachmentCB('file', {
       title: $('.js-file-title').val(),
       visibility: $('.js-file-visibility').val(),
@@ -20,13 +33,6 @@ const TimelineBuilderFileForm = React.createClass({
 
     this.copyFileInputToHiddenForm();
     this.regenerateIdentifier();
-
-    setTimeout(this.clearForm, 500);
-  },
-
-  clearForm: function () {
-    $('.js-file-title').val('');
-    $('.js-file-visibility').val('public');
   },
 
   copyFileInputToHiddenForm: function () {
@@ -51,18 +57,49 @@ const TimelineBuilderFileForm = React.createClass({
     return this.setState({identifier: this.generateIdentifier()});
   },
 
+  validate: function () {
+    let titleError = false;
+    let fileError = false;
+
+    if ($('.js-file-title').val().length == 0) {
+      titleError = true;
+    }
+
+    if ($('.js-attachment-file').val().length == 0) {
+      fileError = true;
+    }
+
+    if (titleError || fileError){
+      this.setState({hasTitleError: titleError, hasFileError: fileError});
+      return false;
+    }
+
+    return true;
+  },
+
   inputName: function () {
     return "timeline_event[files][" + this.state.identifier + "]"
+  },
+
+  titleFormGroupClasses: function() {
+    return "form-group timeline-builder__form-group" + (this.state.hasTitleError ? ' has-danger' : '');
+  },
+
+  clearTitleError: function () {
+    this.setState({hasTitleError: false});
   },
 
   render: function () {
     return (
       <form className="form-inline timeline-builder__attachment-form">
-        <div className="form-group timeline-builder__form-group">
+        <div className={this.titleFormGroupClasses()}>
           <label className="sr-only" htmlFor="fileTitle">File Title</label>
-          <input className="form-control file-title js-file-title" type="text" placeholder="Title"/>
+          <input className="form-control file-title js-file-title" type="text" placeholder="Title" onFocus={ this.clearTitleError }/>
+          { this.state.hasTitleError &&
+          <div className="form-control-feedback">Enter a valid title!</div>
+          }
         </div>
-        <TimelineBuilderFilePicker key={ this.state.identifier }/>
+        <TimelineBuilderFilePicker key={ this.state.identifier } hasError={ this.state.hasFileError }/>
         <div className="form-group timeline-builder__form-group timeline-builder__visibility-option-group">
           <select className="form-control timeline-builder__visibility-option js-file-visibility">
             <option value="public">Public</option>

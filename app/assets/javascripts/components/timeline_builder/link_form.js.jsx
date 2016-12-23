@@ -53,7 +53,7 @@ const TimelineBuilderLinkForm = React.createClass({
     this.props.addAttachmentCB('link', {
       title: $('.js-link-title').val(),
       url: $('.js-link-url').val(),
-      visibility: $('.js-link-visibility').val()
+      private: $('.js-link-visibility').val() == 'private'
     });
   },
 

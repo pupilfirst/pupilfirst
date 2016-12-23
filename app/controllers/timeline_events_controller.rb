@@ -60,7 +60,7 @@ class TimelineEventsController < ApplicationController
   def timeline_builder_params
     params.require(:timeline_event).permit(
       :timeline_event_type_id, :event_on, :description, :image, :links, :files_metadata,
-      files: params[:timeline_event][:files].keys
+      files: (params[:timeline_event][:files]&.keys || [])
     )
   end
 

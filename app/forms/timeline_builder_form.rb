@@ -16,6 +16,8 @@ class TimelineBuilderForm < Reform::Form
   end
 
   def files_should_have_metadata
+    return if files.blank?
+
     missing_metadata = files.keys.any? do |identifier|
       parsed_files_metadata[identifier].blank?
     end
@@ -48,16 +50,22 @@ class TimelineBuilderForm < Reform::Form
         image: image
       )
 
-      # Save timeline event files with metadata.
-      files.each do |identifier, file|
-        metadata = parsed_files_metadata[identifier]
+      create_files(timeline_event)
+    end
+  end
 
-        timeline_event.timeline_event_files.create!(
-          file: file,
-          title: metadata['title'],
-          private: metadata['private']
-        )
-      end
+  # Save timeline event files with metadata.
+  def create_files(timeline_event)
+    return if files.blank?
+
+    files.each do |identifier, file|
+      metadata = parsed_files_metadata[identifier]
+
+      timeline_event.timeline_event_files.create!(
+        file: file,
+        title: metadata['title'],
+        private: metadata['private']
+      )
     end
   end
 end

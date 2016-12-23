@@ -35,7 +35,7 @@ class TimelineBuilderFilePicker extends React.Component {
           </div>
         </label>
         { this.state.hasError &&
-        <div className="form-control-feedback">Choose a valid file!</div>
+        <div className="form-control-feedback m-t-0">Choose a valid file!</div>
         }
       </div>
     )

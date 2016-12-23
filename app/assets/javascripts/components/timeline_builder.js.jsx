@@ -86,6 +86,10 @@ const TimelineBuilder = React.createClass({
       this.setState({coverImage: {title: 'Cover Image'}, imageButtonKey: this.generateKey()});
     } else if (type == 'date') {
       this.setState({date: properties.value});
+
+      if (properties.hideDateForm) {
+        this.toggleForm('date');
+      }
     } else if (type == 'timeline_event_type') {
       this.setState({timeline_event_type_id: properties.id});
     } else {

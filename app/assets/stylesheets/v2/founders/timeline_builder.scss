@@ -42,7 +42,7 @@
 }
 
 .timeline-builder__attachment {
-  width: 170px;
+  width: 150px;
   height: 30px;
   display: flex;
   align-items: center;
@@ -67,7 +67,7 @@
 }
 
 .timeline-builder__attachment-title {
-  width: 100px;
+  width: 90px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -110,10 +110,6 @@
       width: 100%;
     }
   }
-}
-
-.timeline-builder__file-choose-group {
-  height: 40px;
 }
 
 .timeline-builder__file-choose {
@@ -236,6 +232,8 @@
 }
 
 .timeline-builder__tab-label {
+  line-height: 2;
+
   @include media-breakpoint-down(sm) {
     display: block;
   }
@@ -248,9 +246,19 @@
     margin-right: 0;
   }
 }
+.timeline-builder__attachment-datepicker-form {
+  display: block;
 
-.timeline-builder__date-input {
+  .timeline-builder__date-input {
+    width: 100%;
+  }
+  .timeline-builder__attachment-datepicker-form-btn {
+    padding: 0;
 
+    @include media-breakpoint-down(sm) {
+      padding: 0 15px;
+    }
+  }
 }
 
 .timeline-builder__active-tab {

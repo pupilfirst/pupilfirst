@@ -78,7 +78,7 @@ const TimelineBuilder = React.createClass({
       this.toggleForm('link')
     } else if (type == 'file') {
       let updatedFiles = $.extend(true, {}, this.state.files);
-      updatedFiles[properties.identifier] = {title: properties.title, visibility: properties.visibility};
+      updatedFiles[properties.identifier] = properties;
       this.setState({files: updatedFiles});
       this.toggleForm('file')
     } else if (type == 'cover') {

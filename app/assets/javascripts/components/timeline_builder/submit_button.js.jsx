@@ -11,7 +11,7 @@ class TimelineBuilderSubmitButton extends React.Component {
     } else if (this.props.submissionProgress == 100) {
       return 'Done';
     } else if (this.props.submissionProgress >= 0) {
-      return " " + this.props.submissionProgress + "%";
+      return this.props.submissionProgress + "%";
     } else {
       return '';
     }

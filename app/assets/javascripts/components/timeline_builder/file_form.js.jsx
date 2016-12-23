@@ -31,7 +31,7 @@ const TimelineBuilderFileForm = React.createClass({
   storeFile: function () {
     this.props.addAttachmentCB('file', {
       title: $('.js-file-title').val(),
-      visibility: $('.js-file-visibility').val(),
+      private: $('.js-file-visibility').val() == 'private',
       identifier: this.state.identifier
     });
 

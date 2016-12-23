@@ -72,13 +72,21 @@ const TimelineBuilder = React.createClass({
     return currentAttachments;
   },
 
+  attachmentsCount: function () {
+    return this.state.links.length + Object.keys(this.state.files).length
+  },
+
+  attachmentAllowed: function () {
+    return this.attachmentsCount() < 3;
+  },
+
   addData: function (type, properties) {
     if (type == 'link') {
       this.setState({links: this.state.links.concat([properties])});
       this.toggleForm('link')
     } else if (type == 'file') {
       let updatedFiles = $.extend(true, {}, this.state.files);
-      updatedFiles[properties.identifier] = {title: properties.title, visibility: properties.visibility};
+      updatedFiles[properties.identifier] = properties;
       this.setState({files: updatedFiles});
       this.toggleForm('file')
     } else if (type == 'cover') {
@@ -134,7 +142,7 @@ const TimelineBuilder = React.createClass({
     let form = $('.timeline-builder-hidden-form');
     let formData = new FormData(form[0]);
 
-    let description = $('timeline-builder__textarea').val();
+    let description = $('.js-timeline-builder__textarea').val();
 
     formData.append('timeline_event[description]', description);
     formData.append('timeline_event[event_on]', this.state.date);
@@ -209,7 +217,7 @@ const TimelineBuilder = React.createClass({
                                   submitCB={ this.submit } timelineEventTypes={ this.props.timelineEventTypes }
                                   addDataCB={ this.addData } coverImage={ this.state.coverImage }
                                   imageButtonKey={ this.state.imageButtonKey } selectedDate={ this.state.date }
-                                  submissionProgress={ this.state.submissionProgress }/>
+                                  submissionProgress={ this.state.submissionProgress } attachmentAllowed={ this.attachmentAllowed() }/>
       </div>
     )
   }

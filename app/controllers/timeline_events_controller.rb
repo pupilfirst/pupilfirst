@@ -4,20 +4,14 @@ class TimelineEventsController < ApplicationController
 
   # POST /founder/startup/timeline_events
   def create
-    @startup = current_founder.startup
-    @timeline_event = @startup.timeline_events.new timeline_event_params.merge(
-      links: JSON.parse(timeline_event_params[:links]),
-      founder: current_founder,
-      files: params.permit!.dig(:timeline_event, :files),
-      files_metadata: JSON.parse(timeline_event_params[:files_metadata])
-    )
+    timeline_event = TimelineEvent.new
+    @timeline_builder_form = TimelineBuilderForm.new(timeline_event)
 
-    if @timeline_event.save
-      flash.now[:success] = 'Your new timeline event has been submitted to the SV.CO team for approval!'
-      head :ok
+    if @timeline_builder_form.validate(timeline_builder_params)
+      @timeline_builder_form.save(current_founder)
+      render json: { success: true }
     else
-      flash.now[:error] = 'There seems to be an error in your submission. Please try again!'
-      head :unprocessable_entity
+      render json: { success: false }
     end
   end
 
@@ -62,6 +56,13 @@ class TimelineEventsController < ApplicationController
   end
 
   private
+
+  def timeline_builder_params
+    params.require(:timeline_event).permit(
+      :timeline_event_type_id, :event_on, :description, :image, :links, :files_metadata,
+      files: (params[:timeline_event][:files]&.keys || [])
+    )
+  end
 
   def timeline_event_params
     params.require(:timeline_event).permit(

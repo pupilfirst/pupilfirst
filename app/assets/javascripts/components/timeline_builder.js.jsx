@@ -6,7 +6,7 @@ const TimelineBuilder = React.createClass({
   getInitialState: function () {
     return {
       links: [],
-      files: [],
+      files: {},
       date: null,
       coverImage: null,
       showLinkForm: false,
@@ -51,7 +51,7 @@ const TimelineBuilder = React.createClass({
   },
 
   hasAttachments: function () {
-    return this.state.links.length > 0 || this.state.files.length > 0 || this.state.coverImage != null;
+    return this.state.links.length > 0 || !$.isEmptyObject(this.state.files) || this.state.coverImage != null;
   },
 
   attachments: function () {
@@ -65,8 +65,8 @@ const TimelineBuilder = React.createClass({
       currentAttachments.push({type: 'link', index: index, title: link.title})
     });
 
-    this.state.files.forEach(function (file, index) {
-      currentAttachments.push({type: 'file', index: index, title: file.title})
+    $.each(this.state.files, function (identifier, file_data) {
+      currentAttachments.push({type: 'file', index: identifier, title: file_data.title})
     });
 
     return currentAttachments;
@@ -77,7 +77,9 @@ const TimelineBuilder = React.createClass({
       this.setState({links: this.state.links.concat([properties])});
       this.toggleForm('link')
     } else if (type == 'file') {
-      this.setState({files: this.state.files.concat([properties])});
+      let updatedFiles = $.extend(true, {}, this.state.files);
+      updatedFiles[properties.identifier] = {title: properties.title, visibility: properties.visibility};
+      this.setState({files: updatedFiles});
       this.toggleForm('file')
     } else if (type == 'cover') {
       // The key for image button is regenerated to ensure the button component is regenerated.
@@ -103,9 +105,9 @@ const TimelineBuilder = React.createClass({
         this.setState({links: updatedLinks});
         break;
       case 'file':
-        let updatedFiles = this.state.files.slice();
-        let removedFile = updatedFiles.splice(index, 1)[0];
-        this.removeFileFromHiddenForm(removedFile.identifier);
+        let updatedFiles = $.extend(true, {}, this.state.files);
+        delete updatedFiles[index];
+        this.removeFileFromHiddenForm(index);
         this.setState({files: updatedFiles});
         break;
       default:
@@ -131,7 +133,7 @@ const TimelineBuilder = React.createClass({
     let description = $('timeline-builder__textarea').val();
 
     formData.append('timeline_event[description]', description);
-    formData.append('timeline_event[date]', this.state.date);
+    formData.append('timeline_event[event_on]', this.state.date);
     formData.append('timeline_event[links]', JSON.stringify(this.state.links));
     formData.append('timeline_event[files_metadata]', JSON.stringify(this.state.files));
     formData.append('timeline_event[timeline_event_type_id]', this.state.timeline_event_type_id);
@@ -197,8 +199,13 @@ const TimelineBuilder = React.createClass({
         <TimelineBuilderAttachments attachments={ this.attachments() } removeAttachmentCB={ this.removeAttachment }/>
         }
 
-        <TimelineBuilderAttachmentForm currentForm={ this.currentForm() } previousForm={ this.state.previousForm } addAttachmentCB={ this.addData } selectedDate={ this.state.date }/>
-        <TimelineBuilderActionBar formClickedCB={ this.toggleForm } currentForm={ this.currentForm() } submitCB={ this.submit } timelineEventTypes={ this.props.timelineEventTypes } addDataCB={ this.addData } coverImage={ this.state.coverImage } imageButtonKey={ this.state.imageButtonKey } selectedDate={ this.state.date } submissionProgress={ this.state.submissionProgress }/>
+        <TimelineBuilderAttachmentForm currentForm={ this.currentForm() } previousForm={ this.state.previousForm }
+                                       addAttachmentCB={ this.addData } selectedDate={ this.state.date }/>
+        <TimelineBuilderActionBar formClickedCB={ this.toggleForm } currentForm={ this.currentForm() }
+                                  submitCB={ this.submit } timelineEventTypes={ this.props.timelineEventTypes }
+                                  addDataCB={ this.addData } coverImage={ this.state.coverImage }
+                                  imageButtonKey={ this.state.imageButtonKey } selectedDate={ this.state.date }
+                                  submissionProgress={ this.state.submissionProgress }/>
       </div>
     )
   }

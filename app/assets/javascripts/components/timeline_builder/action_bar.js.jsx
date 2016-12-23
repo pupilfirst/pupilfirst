@@ -8,20 +8,27 @@ const TimelineBuilderActionBar = React.createClass({
     addDataCB: React.PropTypes.func,
     imageButtonKey: React.PropTypes.string,
     selectedDate: React.PropTypes.string,
-    submissionProgress: React.PropTypes.number
+    submissionProgress: React.PropTypes.number,
+    attachmentAllowed: React.PropTypes.bool
   },
 
   getInitialState: function () {
-    return null;
+    return {
+      attachmentAllowed: this.props.attachmentAllowed
+    };
+  },
+
+  componentWillReceiveProps: function(newProps) {
+    this.setState({attachmentAllowed: newProps.attachmentAllowed});
   },
 
   formLinkClasses: function (type) {
     let classes = '';
 
     if (type == 'link') {
-      classes = 'timeline-builder__upload-section-tab link-upload'
+      classes = 'timeline-builder__upload-section-tab link-upload' + (this.state.attachmentAllowed ? '' : ' action-tab-disabled')
     } else if (type == 'file') {
-      classes = 'timeline-builder__upload-section-tab file-upload'
+      classes = 'timeline-builder__upload-section-tab file-upload'+ (this.state.attachmentAllowed ? '' : ' action-tab-disabled')
     } else {
       classes = 'timeline-builder__upload-section-tab date-of-event'
     }
@@ -34,11 +41,15 @@ const TimelineBuilderActionBar = React.createClass({
   },
 
   showLinkForm: function () {
-    this.props.formClickedCB('link')
+    if (this.state.attachmentAllowed) {
+      this.props.formClickedCB('link');
+    }
   },
 
   showFileForm: function () {
-    this.props.formClickedCB('file')
+    if (this.state.attachmentAllowed) {
+      this.props.formClickedCB('file');
+    }
   },
 
   showDateForm: function () {

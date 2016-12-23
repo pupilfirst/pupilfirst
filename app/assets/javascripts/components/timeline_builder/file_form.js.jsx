@@ -22,6 +22,10 @@ const TimelineBuilderFileForm = React.createClass({
   clearForm: function () {
     $('.js-file-title').val('');
     $('.js-file-visibility').val('public');
+    this.setState({
+      hasTitleError: false,
+      hasFileError: false
+    });
   },
 
   storeFile: function () {

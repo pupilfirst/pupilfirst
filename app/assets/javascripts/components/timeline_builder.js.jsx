@@ -130,7 +130,7 @@ const TimelineBuilder = React.createClass({
     let form = $('.timeline-builder-hidden-form');
     let formData = new FormData(form[0]);
 
-    let description = $('timeline-builder__textarea').val();
+    let description = $('.js-timeline-builder__textarea').val();
 
     formData.append('timeline_event[description]', description);
     formData.append('timeline_event[event_on]', this.state.date);

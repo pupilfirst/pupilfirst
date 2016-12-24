@@ -6,7 +6,7 @@ class TimelineBuilderSubmitButton extends React.Component {
   }
 
   submitLabel() {
-    switch(this.submissionState()) {
+    switch (this.submissionState()) {
       case 'pending':
         return 'Submit';
       case 'done':
@@ -45,7 +45,7 @@ class TimelineBuilderSubmitButton extends React.Component {
   }
 
   buttonClasses() {
-    let classes = "btn btn-with-icon text-xs-uppercase";
+    let classes = "btn btn-with-icon text-xs-uppercase js-timeline-builder__submit-button";
 
     if (this.props.hasSubmissionError) {
       return classes + ' btn-danger';
@@ -56,9 +56,11 @@ class TimelineBuilderSubmitButton extends React.Component {
 
   render() {
     return (
-      <div className="timeline-builder__submit-btn timeline-builder__select-section-tab">
+      <div className="timeline-builder__submit-container timeline-builder__select-section-tab">
         <button type="submit" disabled={ this.submitDisabled() } className={ this.buttonClasses() }
-                onClick={ this.handleSubmit }>
+                onClick={ this.handleSubmit } data-title="Unexpected Error"
+                data-content="Oops! Something went wrong. The SV.CO team has been notified of this error. Please reload the page and try again, or contact us on Slack to speed us up!"
+                data-placement="bottom" data-trigger="manual">
           { this.submissionState() == 'ongoing' &&
           <i className="fa fa-cog fa-spin"/>
           }
@@ -66,7 +68,7 @@ class TimelineBuilderSubmitButton extends React.Component {
           <i className="fa fa-check"/>
           }
           { this.submissionState() == 'error' &&
-          <i className="fa exclamation-circle"/>
+          <i className="fa fa-exclamation-triangle"/>
           }
           { this.submitLabel() }
         </button>

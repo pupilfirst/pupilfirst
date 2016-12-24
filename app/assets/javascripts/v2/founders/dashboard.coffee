@@ -27,9 +27,10 @@ resetTimelineBuilderAndShow = ->
 handleTimelineBuilderPopoversHiding = ->
   # Hide all error popovers if modal is closed
   $('.timeline-builder').on('hide.bs.modal', (event) ->
-    $('.js-timeline-builder__textarea').popover('hide');
-    $('.date-of-event').popover('hide');
-    $('.timeline-builder__timeline_event_type').popover('hide');
+    $('.js-timeline-builder__textarea').popover('dispose');
+    $('.date-of-event').popover('dispose');
+    $('.timeline-builder__timeline_event_type').popover('dispose');
+    $('.js-timeline-builder__submit-button').popover('dispose');
   )
 
 handleTimelineBuilderModal = ->

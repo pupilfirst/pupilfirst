@@ -231,6 +231,7 @@ const TimelineBuilder = React.createClass({
 
   handleSubmissionError: function () {
     this.setState({hasSubmissionError: true});
+    $('.js-timeline-builder__submit-button').popover('show');
   },
 
   handleSubmissionComplete: function () {

@@ -6,8 +6,8 @@ const TimelineBuilderFileForm = React.createClass({
   getInitialState: function () {
     return {
       identifier: this.generateIdentifier(),
-      hasTitleError: false,
-      hasFileError: false
+      titleError: false,
+      fileMissingError: false
     }
   },
 
@@ -23,8 +23,8 @@ const TimelineBuilderFileForm = React.createClass({
     $('.js-file-title').val('');
     $('.js-file-visibility').val('public');
     this.setState({
-      hasTitleError: false,
-      hasFileError: false
+      titleError: false,
+      fileMissingError: false
     });
   },
 
@@ -63,22 +63,26 @@ const TimelineBuilderFileForm = React.createClass({
 
   validate: function () {
     let titleError = false;
-    let fileError = false;
+    let fileMissingError = false;
 
     if ($('.js-file-title').val().length == 0) {
       titleError = true;
     }
 
     if ($('.js-attachment-file').val().length == 0) {
-      fileError = true;
+      fileMissingError = true;
     }
 
-    if (titleError || fileError){
-      this.setState({hasTitleError: titleError, hasFileError: fileError});
+    if (titleError || fileMissingError){
+      this.setState({titleError: titleError, fileMissingError: fileMissingError});
       return false;
     }
 
     return true;
+  },
+
+  clearPickerErrors: function () {
+    this.setState({fileMissingError: false});
   },
 
   inputName: function () {
@@ -86,11 +90,11 @@ const TimelineBuilderFileForm = React.createClass({
   },
 
   titleFormGroupClasses: function() {
-    return "form-group timeline-builder__form-group" + (this.state.hasTitleError ? ' has-danger' : '');
+    return "form-group timeline-builder__form-group" + (this.state.titleError ? ' has-danger' : '');
   },
 
   clearTitleError: function () {
-    this.setState({hasTitleError: false});
+    this.setState({titleError: false});
   },
 
   render: function () {
@@ -99,11 +103,11 @@ const TimelineBuilderFileForm = React.createClass({
         <div className={this.titleFormGroupClasses()}>
           <label className="sr-only" htmlFor="fileTitle">File Title</label>
           <input className="form-control file-title js-file-title" type="text" placeholder="Title" onFocus={ this.clearTitleError }/>
-          { this.state.hasTitleError &&
+          { this.state.titleError &&
           <div className="form-control-feedback">Enter a valid title!</div>
           }
         </div>
-        <TimelineBuilderFilePicker key={ this.state.identifier } hasError={ this.state.hasFileError }/>
+        <TimelineBuilderFilePicker key={ this.state.identifier } fileMissingError={ this.state.fileMissingError } clearErrorsCB={ this.clearPickerErrors }/>
         <div className="form-group timeline-builder__form-group timeline-builder__visibility-option-group">
           <select className="form-control timeline-builder__visibility-option js-file-visibility">
             <option value="public">Public</option>

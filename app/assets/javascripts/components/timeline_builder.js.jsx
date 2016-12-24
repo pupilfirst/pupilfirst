@@ -23,9 +23,9 @@ const TimelineBuilder = React.createClass({
     }
   },
 
-  onComponentDidMount() {
-    // TODO: This is a new timeline builder. Wipe out existing files in hidden form, if any.
-
+  componentDidMount: function() {
+    // Remove all file inputs from hidden form.
+    $('.timeline-builder-hidden-form').find('input[type="file"]').remove();
   },
 
   generateKey: function () {

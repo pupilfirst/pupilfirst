@@ -1,6 +1,7 @@
 const TimelineBuilder = React.createClass({
   propTypes: {
-    timelineEventTypes: React.PropTypes.object
+    timelineEventTypes: React.PropTypes.object,
+    selectedTimelineEventTypeId: React.PropTypes.number
   },
 
   getInitialState: function () {

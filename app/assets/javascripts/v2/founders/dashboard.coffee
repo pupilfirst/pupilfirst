@@ -13,7 +13,34 @@ targetAccordion = ->
     t.preventDefault()
 
 timelineBuilderModal = ->
-  $('.btn-timeline-builder').click () ->
+  $('.js-founder-dashboard__add-event-button').click () ->
+    $('.timeline-builder').modal(backdrop: 'static')
+
+timelineBuilderModalPrefilled = ->
+  $('.js-founder-dashboard__target-submit-button').click (event) ->
+    selectedTimelineEventType = $(event.target).data('timelineEventTypeId')
+
+    timelineBuilderContainer = $('[data-react-class="TimelineBuilder"]')
+    timelineBuilderHiddenForm = $('.js-timeline-builder__hidden-form')
+
+    # TODO: Wipe file input elements from the hidden form.
+
+    # TODO: Unmount the original timeline builder component.
+    ReactDOM.unmountComponentAtNode(timelineBuilderContainer[0]);
+
+    # Amend the props with selected timeline event type.
+    reactProps = JSON.parse(timelineBuilderContainer.attr('data-react-props'))
+
+    if selectedTimelineEventType
+      reactProps['selectedTimelineEventTypeId'] = selectedTimelineEventType
+    else
+      delete reactProps['selectedTimelineEventTypeId']
+
+    timelineBuilderContainer.attr('data-react-props', JSON.stringify(reactProps))
+
+    # Now rebuild the React component.
+    ReactRailsUJS.mountComponents()
+
     $('.timeline-builder').modal(backdrop: 'static')
 
 performanceMeterModal = ->
@@ -96,3 +123,4 @@ $(document).on 'turbolinks:load', ->
     performanceMeterModal()
     setPerformancePointer()
     viewSlidesModal()
+    timelineBuilderModalPrefilled()

@@ -1,7 +1,8 @@
 const TimelineBuilder = React.createClass({
   propTypes: {
     timelineEventTypes: React.PropTypes.object,
-    selectedTimelineEventTypeId: React.PropTypes.number
+    selectedTimelineEventTypeId: React.PropTypes.number,
+    targetId: React.PropTypes.number
   },
 
   getInitialState: function () {
@@ -152,6 +153,7 @@ const TimelineBuilder = React.createClass({
 
       let description = $('.js-timeline-builder__textarea').val();
 
+      formData.append('timeline_event[target_id]', this.props.targetId);
       formData.append('timeline_event[description]', description);
       formData.append('timeline_event[event_on]', this.state.date);
       formData.append('timeline_event[links]', JSON.stringify(this.state.links));

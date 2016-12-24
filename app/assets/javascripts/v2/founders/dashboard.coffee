@@ -18,7 +18,9 @@ timelineBuilderModal = ->
 
 timelineBuilderModalPrefilled = ->
   $('.js-founder-dashboard__target-submit-button').click (event) ->
-    selectedTimelineEventType = $(event.target).data('timelineEventTypeId')
+    submitButton = $(event.target)
+    selectedTimelineEventTypeId = submitButton.data('timelineEventTypeId')
+    selectedTargetId = submitButton.data('targetId')
 
     timelineBuilderContainer = $('[data-react-class="TimelineBuilder"]')
     timelineBuilderHiddenForm = $('.js-timeline-builder__hidden-form')
@@ -28,11 +30,13 @@ timelineBuilderModalPrefilled = ->
     # TODO: Unmount the original timeline builder component.
     ReactDOM.unmountComponentAtNode(timelineBuilderContainer[0]);
 
-    # Amend the props with selected timeline event type.
+    # Amend the props with target ID and selected timeline event type.
     reactProps = JSON.parse(timelineBuilderContainer.attr('data-react-props'))
 
-    if selectedTimelineEventType
-      reactProps['selectedTimelineEventTypeId'] = selectedTimelineEventType
+    reactProps['targetId'] = selectedTargetId
+
+    if selectedTimelineEventTypeId
+      reactProps['selectedTimelineEventTypeId'] = selectedTimelineEventTypeId
     else
       delete reactProps['selectedTimelineEventTypeId']
 

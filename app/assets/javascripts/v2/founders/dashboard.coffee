@@ -43,6 +43,13 @@ timelineBuilderModalPrefilled = ->
 
     $('.timeline-builder').modal(backdrop: 'static')
 
+  # Hide all error popovers if modal is closed
+  $('.timeline-builder').on('hidden.bs.modal', (event) ->
+    $('.js-timeline-builder__textarea').popover('hide');
+    $('.date-of-event').popover('hide');
+    $('.timeline-builder__timeline_event_type').popover('hide');
+  )
+
 performanceMeterModal = ->
   $('.performance-overview-link').click () ->
     $('.performance-overview').modal()

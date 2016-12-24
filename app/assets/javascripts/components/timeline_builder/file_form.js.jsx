@@ -7,7 +7,8 @@ const TimelineBuilderFileForm = React.createClass({
     return {
       identifier: this.generateIdentifier(),
       titleError: false,
-      fileMissingError: false
+      fileMissingError: false,
+      fileSizeError: false
     }
   },
 
@@ -24,7 +25,8 @@ const TimelineBuilderFileForm = React.createClass({
     $('.js-file-visibility').val('public');
     this.setState({
       titleError: false,
-      fileMissingError: false
+      fileMissingError: false,
+      fileSizeError: false
     });
   },
 
@@ -64,17 +66,20 @@ const TimelineBuilderFileForm = React.createClass({
   validate: function () {
     let titleError = false;
     let fileMissingError = false;
+    let fileSizeError = false;
 
     if ($('.js-file-title').val().length == 0) {
       titleError = true;
     }
 
-    if ($('.js-attachment-file').val().length == 0) {
+    if ($('.js-attachment-file')[0].files.length == 0) {
       fileMissingError = true;
+    } else if ($('.js-attachment-file')[0].files[0].size > 5120000) {
+      fileSizeError = true;
     }
 
-    if (titleError || fileMissingError){
-      this.setState({titleError: titleError, fileMissingError: fileMissingError});
+    if (titleError || fileMissingError || fileSizeError){
+      this.setState({titleError: titleError, fileMissingError: fileMissingError, fileSizeError: fileSizeError});
       return false;
     }
 
@@ -82,7 +87,7 @@ const TimelineBuilderFileForm = React.createClass({
   },
 
   clearPickerErrors: function () {
-    this.setState({fileMissingError: false});
+    this.setState({fileMissingError: false, fileSizeError: false});
   },
 
   inputName: function () {
@@ -107,7 +112,7 @@ const TimelineBuilderFileForm = React.createClass({
           <div className="form-control-feedback">Enter a valid title!</div>
           }
         </div>
-        <TimelineBuilderFilePicker key={ this.state.identifier } fileMissingError={ this.state.fileMissingError } clearErrorsCB={ this.clearPickerErrors }/>
+        <TimelineBuilderFilePicker key={ this.state.identifier } fileMissingError={ this.state.fileMissingError } fileSizeError={ this.state.fileSizeError } clearErrorsCB={ this.clearPickerErrors }/>
         <div className="form-group timeline-builder__form-group timeline-builder__visibility-option-group">
           <select className="form-control timeline-builder__visibility-option js-file-visibility">
             <option value="public">Public</option>

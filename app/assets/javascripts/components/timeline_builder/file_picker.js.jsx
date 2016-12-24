@@ -12,8 +12,12 @@ class TimelineBuilderFilePicker extends React.Component {
     this.props.clearErrorsCB();
   }
 
+  hasAnyError() {
+    return this.props.fileMissingError || this.props.fileSizeError
+  }
+
   formGroupClassNames() {
-    return ("form-group timeline-builder__form-group timeline-builder__file-choose-group" + (this.props.fileMissingError ? ' has-danger' : ''));
+    return ("form-group timeline-builder__form-group timeline-builder__file-choose-group" + (this.hasAnyError() ? ' has-danger' : ''));
   }
 
   render() {
@@ -30,6 +34,9 @@ class TimelineBuilderFilePicker extends React.Component {
         </label>
         { this.props.fileMissingError &&
         <div className="form-control-feedback m-t-0">Choose a valid file!</div>
+        }
+        { this.props.fileSizeError &&
+        <div className="form-control-feedback m-t-0">Size cannot exceed 5MB!</div>
         }
       </div>
     )

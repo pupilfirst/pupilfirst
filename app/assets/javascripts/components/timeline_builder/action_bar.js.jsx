@@ -12,7 +12,8 @@ const TimelineBuilderActionBar = React.createClass({
     attachmentAllowed: React.PropTypes.bool,
     showDateError: React.PropTypes.bool,
     showEventTypeError: React.PropTypes.bool,
-    resetErrorsCB: React.PropTypes.func
+    resetErrorsCB: React.PropTypes.func,
+    timelineEventTypeId: React.PropTypes.string
   },
 
   componentDidUpdate: function () {
@@ -85,7 +86,8 @@ const TimelineBuilderActionBar = React.createClass({
     let timelineEventTypeSelect = $(event.target);
 
     if (timelineEventTypeSelect.val().length > 0) {
-      this.props.addDataCB('timeline_event_type', {id: timelineEventTypeSelect.val()})
+      let newTimelineEventTypeId = parseInt(timelineEventTypeSelect.val());
+      this.props.addDataCB('timeline_event_type', {id: parseInt(newTimelineEventTypeId)});
     }
   },
 
@@ -113,10 +115,10 @@ const TimelineBuilderActionBar = React.createClass({
 
         <div className="timeline-builder__select-section">
           <div className="timeline-builder__select-section-tab timeline-builder__type-of-event-select">
-            <select className="form-control timeline-builder__timeline_event_type" defaultValue=""
+            <select className="form-control timeline-builder__timeline_event_type"
                     onChange={ this.handleTimelineEventTypeChange } data-toggle="popover" data-title="Type Missing!"
                     data-content="Please select an appropriate timeline event type." data-placement="bottom"
-                    data-trigger="manual">
+                    data-trigger="manual" value={ this.props.timelineEventTypeId }>
 
               <option disabled="disabled" value="">Select Type</option>
               { Object.keys(this.props.timelineEventTypes).map(function (role, index) {

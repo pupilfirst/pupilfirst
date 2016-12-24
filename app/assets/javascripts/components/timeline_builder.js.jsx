@@ -15,12 +15,17 @@ const TimelineBuilder = React.createClass({
       showDateForm: false,
       previousForm: null,
       imageButtonKey: this.generateKey(),
-      timeline_event_type_id: null,
       submissionProgress: null,
       showDescriptionError: false,
       showDateError: false,
-      showEventTypeError: false
+      showEventTypeError: false,
+      timelineEventTypeId: this.props.selectedTimelineEventTypeId
     }
+  },
+
+  onComponentDidMount() {
+    // TODO: This is a new timeline builder. Wipe out existing files in hidden form, if any.
+
   },
 
   generateKey: function () {
@@ -103,7 +108,7 @@ const TimelineBuilder = React.createClass({
         this.toggleForm('date');
       }
     } else if (type == 'timeline_event_type') {
-      this.setState({timeline_event_type_id: properties.id});
+      this.setState({timelineEventTypeId: properties.id});
     } else {
       console.warn('Unhandled attachment type: ', type)
     }
@@ -151,7 +156,7 @@ const TimelineBuilder = React.createClass({
       formData.append('timeline_event[event_on]', this.state.date);
       formData.append('timeline_event[links]', JSON.stringify(this.state.links));
       formData.append('timeline_event[files_metadata]', JSON.stringify(this.state.files));
-      formData.append('timeline_event[timeline_event_type_id]', this.state.timeline_event_type_id);
+      formData.append('timeline_event[timeline_event_type_id]', this.state.timelineEventTypeId);
 
       // Submit form data using AJAX and set a progress handler function.
       $.ajax({
@@ -198,7 +203,7 @@ const TimelineBuilder = React.createClass({
       return false;
     }
 
-    if (this.state.timeline_event_type_id == null) {
+    if (this.state.timelineEventTypeId == null) {
       this.setState({showEventTypeError: true});
       return false;
     }
@@ -229,10 +234,35 @@ const TimelineBuilder = React.createClass({
     console.warn("handleSubmissionComplete() has not been implemented!")
   },
 
+  sampleText: function () {
+    if (this.state.timelineEventTypeId == null) {
+      return null;
+    } else {
+      let filtered = Object.values(this.props.timelineEventTypes).filter(function (element) {
+        return this.state.timelineEventTypeId.toString() in element;
+      }, this);
+
+      if (filtered.length > 0) {
+        return filtered[0][this.state.timelineEventTypeId.toString()].sample;
+      } else {
+        return null;
+      }
+    }
+  },
+
+  timelineEventTypeIdForSelect: function() {
+    if (this.state.timelineEventTypeId == null) {
+      return '';
+    } else {
+      return this.state.timelineEventTypeId.toString();
+    }
+  },
+
   render: function () {
     return (
       <div>
-        <TimelineBuilderTextArea showError={ this.state.showDescriptionError } resetErrorsCB={ this.resetErrors }/>
+        <TimelineBuilderTextArea showError={ this.state.showDescriptionError } resetErrorsCB={ this.resetErrors }
+                                 placeholder={ this.sampleText() }/>
 
         { this.hasAttachments() &&
         <TimelineBuilderAttachments attachments={ this.attachments() } removeAttachmentCB={ this.removeAttachment }/>
@@ -240,13 +270,16 @@ const TimelineBuilder = React.createClass({
 
         <TimelineBuilderAttachmentForm currentForm={ this.currentForm() } previousForm={ this.state.previousForm }
                                        addAttachmentCB={ this.addData } selectedDate={ this.state.date }/>
+
         <TimelineBuilderActionBar formClickedCB={ this.toggleForm } currentForm={ this.currentForm() }
                                   submitCB={ this.submit } timelineEventTypes={ this.props.timelineEventTypes }
                                   addDataCB={ this.addData } coverImage={ this.state.coverImage }
                                   imageButtonKey={ this.state.imageButtonKey } selectedDate={ this.state.date }
                                   submissionProgress={ this.state.submissionProgress }
-                                  attachmentAllowed={ this.attachmentAllowed() } showDateError={ this.state.showDateError }
-                                  showEventTypeError={this.state.showEventTypeError} resetErrorsCB={ this.resetErrors }/>
+                                  attachmentAllowed={ this.attachmentAllowed() }
+                                  showDateError={ this.state.showDateError } resetErrorsCB={ this.resetErrors }
+                                  showEventTypeError={this.state.showEventTypeError}
+                                  timelineEventTypeId={ this.timelineEventTypeIdForSelect() }/>
       </div>
     )
   }

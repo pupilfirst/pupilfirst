@@ -6,6 +6,7 @@ class Target < ApplicationRecord
   belongs_to :assigner, class_name: 'Faculty'
   belongs_to :target_group
   belongs_to :batch
+  belongs_to :timeline_event_type, optional: true
   has_many :timeline_events
   has_many :target_prerequisites
   has_many :prerequisite_targets, through: :target_prerequisites

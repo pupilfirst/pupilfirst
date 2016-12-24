@@ -9,9 +9,10 @@ class TimelineEventsController < ApplicationController
 
     if @timeline_builder_form.validate(timeline_builder_params)
       @timeline_builder_form.save(current_founder)
-      render json: { success: true }
+      flash.now[:success] = 'Your timeline event will be reviewed soon!'
+      head :ok
     else
-      render json: { success: false }
+      raise "Validation of timeline event creation request failed. Error messages follow: #{@timeline_builder_form.errors.to_json}"
     end
   end
 

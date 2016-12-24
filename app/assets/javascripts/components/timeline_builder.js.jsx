@@ -17,6 +17,7 @@ const TimelineBuilder = React.createClass({
       previousForm: null,
       imageButtonKey: this.generateKey(),
       submissionProgress: null,
+      hasSubmissionError: false,
       showDescriptionError: false,
       showDateError: false,
       showEventTypeError: false,
@@ -24,7 +25,7 @@ const TimelineBuilder = React.createClass({
     }
   },
 
-  componentDidMount: function() {
+  componentDidMount: function () {
     // Remove all file inputs from hidden form.
     $('.timeline-builder-hidden-form').find('input[type="file"]').remove();
   },
@@ -229,11 +230,11 @@ const TimelineBuilder = React.createClass({
   },
 
   handleSubmissionError: function () {
-    console.warn("handleSubmissionError() has not been implemented!");
+    this.setState({hasSubmissionError: true});
   },
 
   handleSubmissionComplete: function () {
-    console.warn("handleSubmissionComplete() has not been implemented!")
+    location.reload();
   },
 
   sampleText: function () {
@@ -252,7 +253,7 @@ const TimelineBuilder = React.createClass({
     }
   },
 
-  timelineEventTypeIdForSelect: function() {
+  timelineEventTypeIdForSelect: function () {
     if (this.state.timelineEventTypeId == null) {
       return '';
     } else {
@@ -281,7 +282,8 @@ const TimelineBuilder = React.createClass({
                                   attachmentAllowed={ this.attachmentAllowed() }
                                   showDateError={ this.state.showDateError } resetErrorsCB={ this.resetErrors }
                                   showEventTypeError={this.state.showEventTypeError}
-                                  timelineEventTypeId={ this.timelineEventTypeIdForSelect() }/>
+                                  timelineEventTypeId={ this.timelineEventTypeIdForSelect() }
+                                  hasSubmissionError={ this.state.hasSubmissionError }/>
       </div>
     )
   }

@@ -9,6 +9,7 @@ const TimelineBuilderActionBar = React.createClass({
     imageButtonKey: React.PropTypes.string,
     selectedDate: React.PropTypes.string,
     submissionProgress: React.PropTypes.number,
+    hasSubmissionError: React.PropTypes.bool,
     attachmentAllowed: React.PropTypes.bool,
     showDateError: React.PropTypes.bool,
     showEventTypeError: React.PropTypes.bool,
@@ -128,7 +129,8 @@ const TimelineBuilderActionBar = React.createClass({
             </select>
           </div>
           <TimelineBuilderSubmitButton submissionProgress={ this.props.submissionProgress }
-                                       submitCB={ this.props.submitCB }/>
+                                       submitCB={ this.props.submitCB }
+                                       hasSubmissionError={ this.props.hasSubmissionError }/>
         </div>
       </div>
     )

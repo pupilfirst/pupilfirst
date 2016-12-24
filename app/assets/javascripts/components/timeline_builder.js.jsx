@@ -215,7 +215,11 @@ const TimelineBuilder = React.createClass({
   },
 
   resetErrors: function () {
-    this.setState({showDescriptionError: false, showDateError: false, showEventTypeError: false});
+    this.setState({
+      showDescriptionError: false,
+      showDateError: false,
+      showEventTypeError: false
+    });
   },
 
   handleBeforeSubmission: function () {

@@ -16,7 +16,10 @@ const TimelineBuilder = React.createClass({
       previousForm: null,
       imageButtonKey: this.generateKey(),
       timeline_event_type_id: null,
-      submissionProgress: null
+      submissionProgress: null,
+      descriptionError: false,
+      dateError: false,
+      eventTypeError: false
     }
   },
 
@@ -137,40 +140,40 @@ const TimelineBuilder = React.createClass({
   },
 
   submit: function (event) {
-    // TODO: Run presence validations.
-    // TODO: Create form and submit it with AJAX.
+    if (this.validate()) {
 
-    let form = $('.timeline-builder-hidden-form');
-    let formData = new FormData(form[0]);
+      let form = $('.timeline-builder-hidden-form');
+      let formData = new FormData(form[0]);
 
-    let description = $('.js-timeline-builder__textarea').val();
+      let description = $('.js-timeline-builder__textarea').val();
 
-    formData.append('timeline_event[description]', description);
-    formData.append('timeline_event[event_on]', this.state.date);
-    formData.append('timeline_event[links]', JSON.stringify(this.state.links));
-    formData.append('timeline_event[files_metadata]', JSON.stringify(this.state.files));
-    formData.append('timeline_event[timeline_event_type_id]', this.state.timeline_event_type_id);
+      formData.append('timeline_event[description]', description);
+      formData.append('timeline_event[event_on]', this.state.date);
+      formData.append('timeline_event[links]', JSON.stringify(this.state.links));
+      formData.append('timeline_event[files_metadata]', JSON.stringify(this.state.files));
+      formData.append('timeline_event[timeline_event_type_id]', this.state.timeline_event_type_id);
 
-    // Submit form data using AJAX and set a progress handler function.
-    $.ajax({
-      url: form.attr('action'),
-      type: form.attr('method'),
+      // Submit form data using AJAX and set a progress handler function.
+      $.ajax({
+        url: form.attr('action'),
+        type: form.attr('method'),
 
-      xhr: this.xhrCallback,
+        xhr: this.xhrCallback,
 
-      // Ajax events.
-      beforeSend: this.handleBeforeSubmission,
-      success: this.handleSubmissionComplete,
-      error: this.handleSubmissionError,
+        // Ajax events.
+        beforeSend: this.handleBeforeSubmission,
+        success: this.handleSubmissionComplete,
+        error: this.handleSubmissionError,
 
-      // Form data
-      data: formData,
+        // Form data
+        data: formData,
 
-      // Options to tell jQuery not to process data or worry about content-type.
-      cache: false,
-      contentType: false,
-      processData: false
-    });
+        // Options to tell jQuery not to process data or worry about content-type.
+        cache: false,
+        contentType: false,
+        processData: false
+      });
+    }
   },
 
   xhrCallback: function () {
@@ -182,6 +185,32 @@ const TimelineBuilder = React.createClass({
     }
 
     return myXhr;
+  },
+
+  validate: function () {
+    descriptionMissing = $('.timeline-builder__textarea').val().length == 0;
+    if (descriptionMissing) {
+      this.setState({descriptionError: true, dateError: false, eventTypeError: false});
+      return false;
+    }
+
+    dateMissing = $('.js-timeline-builder__date-input').val().length == 0;
+    if (dateMissing) {
+      this.setState({descriptionError: false, dateError: true, eventTypeError: false});
+      return false;
+    }
+
+    eventTypeMissing = !$('.timeline-builder__timeline_event_type').val();
+    if (eventTypeMissing) {
+      this.setState({descriptionError: false, dateError: false, eventTypeError: true});
+      return false;
+    }
+
+    return true;
+  },
+
+  resetErrorsCB: function () {
+    this.setState({descriptionError: false, dateError: false, eventTypeError: false});
   },
 
   handleBeforeSubmission: function () {
@@ -206,7 +235,7 @@ const TimelineBuilder = React.createClass({
   render: function () {
     return (
       <div>
-        <TimelineBuilderTextArea/>
+        <TimelineBuilderTextArea hasError={ this.state.descriptionError }/>
 
         { this.hasAttachments() &&
         <TimelineBuilderAttachments attachments={ this.attachments() } removeAttachmentCB={ this.removeAttachment }/>
@@ -218,7 +247,9 @@ const TimelineBuilder = React.createClass({
                                   submitCB={ this.submit } timelineEventTypes={ this.props.timelineEventTypes }
                                   addDataCB={ this.addData } coverImage={ this.state.coverImage }
                                   imageButtonKey={ this.state.imageButtonKey } selectedDate={ this.state.date }
-                                  submissionProgress={ this.state.submissionProgress } attachmentAllowed={ this.attachmentAllowed() }/>
+                                  submissionProgress={ this.state.submissionProgress }
+                                  attachmentAllowed={ this.attachmentAllowed() } dateError={ this.state.dateError }
+                                  eventTypeError={this.state.eventTypeError} resetErrorsCB={ this.resetErrorsCB }/>
       </div>
     )
   }

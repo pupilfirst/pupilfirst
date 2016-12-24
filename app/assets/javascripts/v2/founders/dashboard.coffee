@@ -12,11 +12,30 @@ targetAccordion = ->
     dropDown.stop(false, true).slideToggle(200)
     t.preventDefault()
 
-timelineBuilderModal = ->
-  $('.js-founder-dashboard__add-event-button').click () ->
-    $('.timeline-builder').modal(backdrop: 'static')
+resetTimelineBuilderAndShow = ->
+  timelineBuilderContainer = $('[data-react-class="TimelineBuilder"]')
 
-timelineBuilderModalPrefilled = ->
+  # Unmount the original timeline builder component.
+  ReactDOM.unmountComponentAtNode(timelineBuilderContainer[0]);
+
+  # Now rebuild the React component.
+  ReactRailsUJS.mountComponents()
+
+  # ...and show the modal.
+  $('.timeline-builder').modal(backdrop: 'static')
+
+handleTimelineBuilderPopoversHiding = ->
+  # Hide all error popovers if modal is closed
+  $('.timeline-builder').on('hide.bs.modal', (event) ->
+    $('.js-timeline-builder__textarea').popover('hide');
+    $('.date-of-event').popover('hide');
+    $('.timeline-builder__timeline_event_type').popover('hide');
+  )
+
+handleTimelineBuilderModal = ->
+  $('.js-founder-dashboard__add-event-button').click(resetTimelineBuilderAndShow)
+
+handleTimelineBuilderModalPrefilled = ->
   $('.js-founder-dashboard__target-submit-button').click (event) ->
     submitButton = $(event.target)
     selectedTimelineEventTypeId = submitButton.data('timelineEventTypeId')
@@ -24,11 +43,6 @@ timelineBuilderModalPrefilled = ->
 
     timelineBuilderContainer = $('[data-react-class="TimelineBuilder"]')
     timelineBuilderHiddenForm = $('.js-timeline-builder__hidden-form')
-
-    # TODO: Wipe file input elements from the hidden form.
-
-    # TODO: Unmount the original timeline builder component.
-    ReactDOM.unmountComponentAtNode(timelineBuilderContainer[0]);
 
     # Amend the props with target ID and selected timeline event type.
     reactProps = JSON.parse(timelineBuilderContainer.attr('data-react-props'))
@@ -42,17 +56,7 @@ timelineBuilderModalPrefilled = ->
 
     timelineBuilderContainer.attr('data-react-props', JSON.stringify(reactProps))
 
-    # Now rebuild the React component.
-    ReactRailsUJS.mountComponents()
-
-    $('.timeline-builder').modal(backdrop: 'static')
-
-  # Hide all error popovers if modal is closed
-  $('.timeline-builder').on('hidden.bs.modal', (event) ->
-    $('.js-timeline-builder__textarea').popover('hide');
-    $('.date-of-event').popover('hide');
-    $('.timeline-builder__timeline_event_type').popover('hide');
-  )
+    resetTimelineBuilderAndShow()
 
 performanceMeterModal = ->
   $('.performance-overview-link').click () ->
@@ -129,9 +133,10 @@ startTour = ->
 $(document).on 'turbolinks:load', ->
   if $('#founder-dashboard').length
     targetAccordion()
-    timelineBuilderModal()
+    handleTimelineBuilderModal()
+    handleTimelineBuilderModalPrefilled()
+    handleTimelineBuilderPopoversHiding()
     giveATour()
     performanceMeterModal()
     setPerformancePointer()
     viewSlidesModal()
-    timelineBuilderModalPrefilled()

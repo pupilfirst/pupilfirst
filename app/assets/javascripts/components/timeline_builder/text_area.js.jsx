@@ -1,34 +1,33 @@
-const TimelineBuilderTextArea = React.createClass({
-  propTypes: {
-    hasError: React.PropTypes.bool
-  },
+class TimelineBuilderTextArea extends React.Component {
+  constructor(props) {
+    super(props);
 
-  getInitialState: function () {
-    return {
-      hasError: this.props.hasError
-    };
-  },
+    this.handleChange = this.handleChange.bind(this)
+  }
 
-  componentWillReceiveProps: function(newProps) {
-    this.setState({hasError: newProps.hasError});
-  },
-
-  clearError: function () {
-    this.setState({hasError: false});
-  },
-
-  componentDidUpdate: function () {
-    if (this.state.hasError) {
+  componentDidUpdate() {
+    if (this.props.showError) {
       $('.js-timeline-builder__textarea').popover('show');
     } else {
       $('.js-timeline-builder__textarea').popover('hide');
     }
-  },
+  }
 
-  render: function () {
+  handleChange() {
+    this.props.resetErrorsCB();
+  }
+
+  render() {
     return (
       <textarea className="form-control js-timeline-builder__textarea timeline-builder__textarea" rows="4"
-                placeholder="What&rsquo;s been happening?"  data-toggle="popover" data-title="Description Missing!" data-content="Please add a summary describing the event." data-placement="bottom" onClick={ this.clearError }/>
+                placeholder="What&rsquo;s been happening?" data-toggle="popover" data-title="Description Missing!"
+                data-content="Please add a summary describing the event." data-placement="bottom" data-trigger="manual"
+                onFocus={ this.handleChange }/>
     )
   }
-});
+}
+
+TimelineBuilderTextArea.propTypes = {
+  showError: React.PropTypes.bool,
+  resetErrorsCB: React.PropTypes.func
+};

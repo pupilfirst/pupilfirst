@@ -17,9 +17,9 @@ const TimelineBuilder = React.createClass({
       imageButtonKey: this.generateKey(),
       timeline_event_type_id: null,
       submissionProgress: null,
-      descriptionError: false,
-      dateError: false,
-      eventTypeError: false
+      showDescriptionError: false,
+      showDateError: false,
+      showEventTypeError: false
     }
   },
 
@@ -188,29 +188,26 @@ const TimelineBuilder = React.createClass({
   },
 
   validate: function () {
-    descriptionMissing = $('.timeline-builder__textarea').val().length == 0;
-    if (descriptionMissing) {
-      this.setState({descriptionError: true, dateError: false, eventTypeError: false});
+    if ($('.timeline-builder__textarea').val().length == 0) {
+      this.setState({showDescriptionError: true});
       return false;
     }
 
-    dateMissing = $('.js-timeline-builder__date-input').val().length == 0;
-    if (dateMissing) {
-      this.setState({descriptionError: false, dateError: true, eventTypeError: false});
+    if (this.state.date == null) {
+      this.setState({showDateError: true});
       return false;
     }
 
-    eventTypeMissing = !$('.timeline-builder__timeline_event_type').val();
-    if (eventTypeMissing) {
-      this.setState({descriptionError: false, dateError: false, eventTypeError: true});
+    if (this.state.timeline_event_type_id == null) {
+      this.setState({showEventTypeError: true});
       return false;
     }
 
     return true;
   },
 
-  resetErrorsCB: function () {
-    this.setState({descriptionError: false, dateError: false, eventTypeError: false});
+  resetErrors: function () {
+    this.setState({showDescriptionError: false, showDateError: false, showEventTypeError: false});
   },
 
   handleBeforeSubmission: function () {
@@ -235,7 +232,7 @@ const TimelineBuilder = React.createClass({
   render: function () {
     return (
       <div>
-        <TimelineBuilderTextArea hasError={ this.state.descriptionError }/>
+        <TimelineBuilderTextArea showError={ this.state.showDescriptionError } resetErrorsCB={ this.resetErrors }/>
 
         { this.hasAttachments() &&
         <TimelineBuilderAttachments attachments={ this.attachments() } removeAttachmentCB={ this.removeAttachment }/>
@@ -248,8 +245,8 @@ const TimelineBuilder = React.createClass({
                                   addDataCB={ this.addData } coverImage={ this.state.coverImage }
                                   imageButtonKey={ this.state.imageButtonKey } selectedDate={ this.state.date }
                                   submissionProgress={ this.state.submissionProgress }
-                                  attachmentAllowed={ this.attachmentAllowed() } dateError={ this.state.dateError }
-                                  eventTypeError={this.state.eventTypeError} resetErrorsCB={ this.resetErrorsCB }/>
+                                  attachmentAllowed={ this.attachmentAllowed() } showDateError={ this.state.showDateError }
+                                  showEventTypeError={this.state.showEventTypeError} resetErrorsCB={ this.resetErrors }/>
       </div>
     )
   }

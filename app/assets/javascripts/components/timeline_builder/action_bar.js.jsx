@@ -115,7 +115,7 @@ const TimelineBuilderActionBar = React.createClass({
         </div>
 
         <div className="timeline-builder__select-section">
-          <div className="timeline-builder__select-section-tab timeline-builder__type-of-event-select">
+          <div className="timeline-builder__select-section-tab timeline-builder__timeline-event-type-select-wrapper">
             <select className="form-control js-timeline-builder__timeline-event-type-select"
                     onChange={ this.handleTimelineEventTypeChange } data-toggle="popover" data-title="Type Missing!"
                     data-content="Please select an appropriate timeline event type." data-placement="bottom"

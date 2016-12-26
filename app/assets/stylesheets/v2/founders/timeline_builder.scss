@@ -43,6 +43,14 @@
   color: $light-grey-text;
 }
 
+.timeline-builder__textarea__counter--danger {
+  color: red;
+}
+
+.timeline-builder__textarea__counter--warning {
+  color: orange;
+}
+
 .timeline-builder__attachments-container {
   padding: 0 0 1rem 0;
   margin: 0 1.25rem;

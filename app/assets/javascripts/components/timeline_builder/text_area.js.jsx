@@ -2,7 +2,10 @@ class TimelineBuilderTextArea extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {counterText: ''};
+
     this.resetErrors = this.resetErrors.bind(this);
+    this.updateCounter = this.updateCounter.bind(this);
   }
 
   componentDidUpdate() {
@@ -25,14 +28,40 @@ class TimelineBuilderTextArea extends React.Component {
     }
   }
 
+  updateCounter() {
+    if (  this.textCount() == 0) {
+      this.setState({counterText: ''});
+      return;
+    } else {
+      let text = this.textCount() + "/300";
+      this.setState({counterText: text});
+      return;
+    }
+  }
+
+  textCount() {
+    let text = $('.js-timeline-builder__textarea').val();
+    return (text ? text.length : 0);
+  }
+
+  counterClasses() {
+    let textClass ='';
+    if (this.textCount() == 300) {
+      textClass = "timeline-builder__textarea__counter--danger";
+    } else if (this.textCount() > 200) {
+      textClass = "timeline-builder__textarea__counter--warning";
+    }
+    return "timeline-builder__textarea__counter " + textClass;
+  }
+
   render() {
     return (
       <div className="timeline-builder__textarea-wrapper">
       <textarea className="form-control js-timeline-builder__textarea timeline-builder__textarea" rows="4"
                 data-toggle="popover" data-title="Description Missing!" placeholder={ this.placeholder() }
                 data-content="Please add a summary describing the event." data-placement="bottom" data-trigger="manual"
-                onFocus={ this.resetErrors }/>
-      <div className="timeline-builder__textarea__counter">11/300</div>
+                onFocus={ this.resetErrors } onChange={ this.updateCounter } maxLength="300"/>
+      <div className={ this.counterClasses() }>{ this.state.counterText }</div>
       </div>
     )
   }

@@ -2,7 +2,7 @@ class TimelineBuilderTextArea extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleChange = this.handleChange.bind(this);
+    this.resetErrors = this.resetErrors.bind(this);
   }
 
   componentDidUpdate() {
@@ -13,7 +13,7 @@ class TimelineBuilderTextArea extends React.Component {
     }
   }
 
-  handleChange() {
+  resetErrors() {
     this.props.resetErrorsCB();
   }
 
@@ -27,10 +27,13 @@ class TimelineBuilderTextArea extends React.Component {
 
   render() {
     return (
+      <div className="timeline-builder__textarea-wrapper">
       <textarea className="form-control js-timeline-builder__textarea timeline-builder__textarea" rows="4"
                 data-toggle="popover" data-title="Description Missing!" placeholder={ this.placeholder() }
                 data-content="Please add a summary describing the event." data-placement="bottom" data-trigger="manual"
-                onFocus={ this.handleChange }/>
+                onFocus={ this.resetErrors }/>
+      <div className="timeline-builder__textarea__counter">11/300</div>
+      </div>
     )
   }
 }

@@ -66,7 +66,7 @@ class TimelineBuilderImageButton extends React.Component {
       <div className={ this.actionTabClasses() } onClick={ this.handleImageButtonClick } data-toggle="popover"
            data-title="Too Large!" data-content="Please select an image less than 5MB in size." data-placement="bottom"
            data-trigger="manual">
-        <input type="file" onChange={ this.handleImageChange } className="js-timeline-builder__image-input hidden-xs-up"/>
+        <input type="file" onChange={ this.handleImageChange } className="js-timeline-builder__image-input hidden-xs-up" accept=".png,.jpg,.jpeg,.svg,image/png,image/jpeg,image/pjpeg"/>
         <i className="timeline-builder__upload-section-icon fa fa-file-image-o"/>
         <span className="timeline-builder__tab-label">Image</span>
       </div>

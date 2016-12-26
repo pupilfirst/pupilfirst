@@ -25,9 +25,9 @@ const TimelineBuilderActionBar = React.createClass({
     }
 
     if (this.props.showEventTypeError) {
-      $('.timeline-builder__timeline_event_type').popover('show');
+      $('.js-timeline-builder__timeline-event-type-select').popover('show');
     } else {
-      $('.timeline-builder__timeline_event_type').popover('hide');
+      $('.js-timeline-builder__timeline-event-type-select').popover('hide');
     }
   },
 
@@ -116,7 +116,7 @@ const TimelineBuilderActionBar = React.createClass({
 
         <div className="timeline-builder__select-section">
           <div className="timeline-builder__select-section-tab timeline-builder__type-of-event-select">
-            <select className="form-control timeline-builder__timeline_event_type"
+            <select className="form-control js-timeline-builder__timeline-event-type-select"
                     onChange={ this.handleTimelineEventTypeChange } data-toggle="popover" data-title="Type Missing!"
                     data-content="Please select an appropriate timeline event type." data-placement="bottom"
                     data-trigger="manual" value={ this.props.timelineEventTypeId }>

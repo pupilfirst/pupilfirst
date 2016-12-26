@@ -5,6 +5,10 @@ ActiveAdmin.register ConnectSlot do
 
   menu parent: 'Faculty'
 
+  filter :faculty
+  filter :faculty_category_eq, label: 'Facutly Type', as: :select, collection: proc { Faculty.valid_categories }
+  filter :slot_at
+
   scope :available_for_founder
 
   index do

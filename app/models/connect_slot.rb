@@ -34,7 +34,7 @@ class ConnectSlot < ApplicationRecord
     if optional_id
       where("(id NOT in (SELECT DISTINCT(connect_slot_id) FROM connect_requests) AND slot_at > ?) OR id = #{optional_id}", Time.now)
     else
-      where('id NOT in (SELECT DISTINCT(connect_slot_id) FROM connect_requests)').upcoming
+      where('connect_slots.id NOT in (SELECT DISTINCT(connect_slot_id) FROM connect_requests)').upcoming
     end.order('slot_at ASC')
   end
 

@@ -31,6 +31,7 @@ handleTimelineBuilderPopoversHiding = ->
     $('.date-of-event').popover('dispose');
     $('.timeline-builder__timeline_event_type').popover('dispose');
     $('.js-timeline-builder__submit-button').popover('dispose');
+    $('.image-upload').popover('dispose');
   )
 
 handleTimelineBuilderModal = ->

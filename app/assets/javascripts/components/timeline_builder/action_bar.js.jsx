@@ -23,12 +23,6 @@ const TimelineBuilderActionBar = React.createClass({
     } else {
       $('.date-of-event').popover('hide');
     }
-
-    if (this.props.showEventTypeError) {
-      $('.js-timeline-builder__timeline-event-type-select').popover('show');
-    } else {
-      $('.js-timeline-builder__timeline-event-type-select').popover('hide');
-    }
   },
 
   formLinkClasses: function (type) {
@@ -81,17 +75,6 @@ const TimelineBuilderActionBar = React.createClass({
     }
   },
 
-  handleTimelineEventTypeChange: function (event) {
-    this.props.resetErrorsCB();
-
-    let timelineEventTypeSelect = $(event.target);
-
-    if (timelineEventTypeSelect.val().length > 0) {
-      let newTimelineEventTypeId = parseInt(timelineEventTypeSelect.val());
-      this.props.addDataCB('timeline_event_type', {id: parseInt(newTimelineEventTypeId)});
-    }
-  },
-
   render: function () {
     return (
       <div className="timeline-builder__submit-tabs">
@@ -115,19 +98,11 @@ const TimelineBuilderActionBar = React.createClass({
         </div>
 
         <div className="timeline-builder__select-section">
-          <div className="timeline-builder__select-section-tab timeline-builder__timeline-event-type-select-wrapper">
-            <select className="form-control js-timeline-builder__timeline-event-type-select"
-                    onChange={ this.handleTimelineEventTypeChange } data-toggle="popover" data-title="Type Missing!"
-                    data-content="Please select an appropriate timeline event type." data-placement="bottom"
-                    data-trigger="manual" value={ this.props.timelineEventTypeId }>
-
-              <option disabled="disabled" value="">Select Type</option>
-              { Object.keys(this.props.timelineEventTypes).map(function (role, index) {
-                return <TimelineBuilderTimelineEventGroup key={ index } role={ role }
-                                                          timelineEvents={ this.props.timelineEventTypes[role] }/>
-              }, this)}
-            </select>
-          </div>
+          <TimelineBuilderEventTypeSelect resetErrorsCB={ this.props.resetErrorsCB }
+                                          addDataCB={ this.props.addDataCB }
+                                          timelineEventTypes={ this.props.timelineEventTypes }
+                                          timelineEventTypeId={ this.props.timelineEventTypeId }
+                                          showEventTypeError={ this.props.showEventTypeError }/>
           <TimelineBuilderSubmitButton submissionProgress={ this.props.submissionProgress }
                                        submitCB={ this.props.submitCB }
                                        hasSubmissionError={ this.props.hasSubmissionError }/>

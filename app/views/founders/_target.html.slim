@@ -1,5 +1,5 @@
 - target_group.targets.each do |target|
-  .target
+  .target id="target-#{target.id}"
     .target-title-link.clearfix
       = image_tag "founders/dashboard/target-type-icons/#{target.type_icon_name}", class: "target-icon"
       .target-header

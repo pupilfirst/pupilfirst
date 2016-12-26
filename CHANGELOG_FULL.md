@@ -1,8 +1,17 @@
 ## Ongoing
 
-- New Founder dashboard design is being implemented. [[Trello]](https://trello.com/c/sITTzECe)
-- Backend for new dashboard is being worked on. [[Trello]](https://trello.com/c/5tbjVflT)
-- New timeline builder for the new dashboard is being wired up with React. [[Trello]](https://trello.com/c/EvCvyGdH)
+- Basic specs for Founder dashboard are being written. [[Trello]](https://trello.com/c/hYu3Wr5E)
+- Timeline builder with basic features is functional - now working on stretch goals. [[Trello]](https://trello.com/c/EvCvyGdH)
+
+## 2016.12.26
+
+- Founder dashboard's initial design and implementation phase is complete. [[Trello]](https://trello.com/c/sITTzECe)
+- Performance overview panel on the Founder dashboard is functional. [[Trello]](https://trello.com/c/86LHvVl7)
+- Old timeline builder was removed from the Startup timeline page. [[Trello]](https://trello.com/c/tbiXwK2m)
+- A webhook to handle bounce callbacks from Postmark has been implemented. [[Trello]](https://trello.com/c/UBsLzPnf)
+- Added a provision to filter batch applicants by application stage and included some extra info to their CSV export. [[Trello]](https://trello.com/c/W9aWWsQn)
+- Fixed a flaky StatsService spec. [[Trello]](https://trello.com/c/Av8vIe3D)
+- Rails has been upgraded to latest 5.0.1. [[Trello]](https://trello.com/c/Zv06zafp)
 
 ## 2016.12.19
 

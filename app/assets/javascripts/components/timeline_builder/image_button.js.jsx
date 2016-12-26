@@ -1,14 +1,14 @@
 class TimelineBuilderImageButton extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {showSizeError: false};
+    this.state = {showSizeError: false, showFormatError: false};
 
     this.handleImageButtonClick = this.handleImageButtonClick.bind(this);
     this.handleImageChange = this.handleImageChange.bind(this);
   }
 
   componentDidUpdate() {
-    if (this.state.showSizeError) {
+    if (this.state.showSizeError || this.state.showFormatError) {
       $('.image-upload').popover('show');
     } else {
       $('.image-upload').popover('hide');
@@ -16,7 +16,7 @@ class TimelineBuilderImageButton extends React.Component {
   }
 
   handleImageButtonClick() {
-    this.setState({showSizeError: false});
+    this.setState({showSizeError: false, showFormatError: false});
 
     if (this.props.coverImage != null) {
       return;
@@ -28,10 +28,15 @@ class TimelineBuilderImageButton extends React.Component {
   handleImageChange(event) {
     let inputElement = $(event.target);
     let fileName = inputElement.val().split('\\').pop();
+    let fileExtension = fileName.match(/\.([^\.]+)$/)[1];
 
     if (fileName.length > 0) {
-      if (inputElement[0].files[0].size > 1000000) {
+      if (inputElement[0].files[0].size > 5120000) {
         this.setState({showSizeError: true});
+        return;
+      }
+      if ($.inArray(fileExtension,['png','jpg','jpeg','svg']) == (-1)) {
+        this.setState({showFormatError: true});
         return;
       }
 
@@ -61,10 +66,20 @@ class TimelineBuilderImageButton extends React.Component {
     return classes
   }
 
+  errorPopoverText() {
+    if (this.state.showSizeError) {
+      return 'Please select an image less than 5MB in size.'
+    } else if (this.state.showFormatError) {
+      return 'Only .png, .jpg, .jpeg and .svg files are accepted.'
+    } else {
+      return ''
+    }
+  }
+
   render() {
     return (
       <div className={ this.actionTabClasses() } onClick={ this.handleImageButtonClick } data-toggle="popover"
-           data-title="Too Large!" data-content="Please select an image less than 5MB in size." data-placement="bottom"
+           data-title="File Invalid!" data-content={ this.errorPopoverText() } data-placement="bottom"
            data-trigger="manual">
         <input type="file" onChange={ this.handleImageChange } className="js-timeline-builder__image-input hidden-xs-up" accept=".png,.jpg,.jpeg,.svg,image/png,image/jpeg,image/pjpeg"/>
         <i className="timeline-builder__upload-section-icon fa fa-file-image-o"/>

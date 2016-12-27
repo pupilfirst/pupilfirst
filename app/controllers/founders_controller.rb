@@ -60,10 +60,6 @@ class FoundersController < ApplicationController
     end
   end
 
-  def founder_password_change_params
-    params.require(:founder).permit(:current_password, :password, :password_confirmation)
-  end
-
   def founder_params
     params.require(:founder).permit(
       :name, :avatar, :slack_username, :skype_id, :identification_proof, :phone,

@@ -78,28 +78,12 @@ module Startups
 
     # Starts on the week before last's Monday 6 PM IST.
     def last_week_start_date
-      if monday? && before_evening?
-        8.days.ago.beginning_of_week
-      else
-        7.days.ago.beginning_of_week
-      end.in_time_zone('Asia/Calcutta') + 18.hours
+      DatesService.last_week_start_date
     end
 
     # Ends on last week's Monday 6 PM IST.
     def last_week_end_date
-      if monday? && before_evening?
-        8.days.ago.end_of_week
-      else
-        7.days.ago.end_of_week
-      end.in_time_zone('Asia/Calcutta') + 18.hours
-    end
-
-    def monday?
-      Date.today.in_time_zone('Asia/Calcutta').wday == 1
-    end
-
-    def before_evening?
-      Time.now.in_time_zone('Asia/Calcutta').hour < 18
+      DatesService.last_week_end_date
     end
 
     def startup_points_hash

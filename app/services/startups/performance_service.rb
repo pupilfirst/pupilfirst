@@ -6,13 +6,12 @@ module Startups
       @batch.present_week_number.in?(1..24) ? rank_list : nil
     end
 
-    def leaderboard_rank(startup)
-      leaderboard(startup.batch).detect { |startup_id, _rank| startup_id == startup.id }&.second
+    def leaderboard_rank(specified_startup)
+      leaderboard(specified_startup.batch).detect { |startup, _rank, _points| startup == specified_startup }&.second
     end
 
-    def last_week_karma(startup)
-      @batch = startup.batch
-      startups_sorted_by_points.detect { |startup_id, _points| startup_id == startup.id }&.second || 0
+    def last_week_karma(specified_startup)
+      leaderboard(specified_startup.batch).detect { |startup, _rank, _points| startup == specified_startup }&.third
     end
 
     # returns a relative performance measure for a startup as a %
@@ -35,11 +34,11 @@ module Startups
     end
 
     def ranks_without_points
-      startups_without_points.each.map { |startup| [startup.id, last_rank_with_points + 1] }
+      startups_without_points.each.map { |startup| [startup, last_rank_with_points + 1, 0] }
     end
 
     def last_rank_with_points
-      ranks_with_points.present? ? ranks_with_points[-1][-1] : 0
+      ranks_with_points.present? ? ranks_with_points[-1][1] : 0
     end
 
     def rank(startup_points, index)
@@ -54,7 +53,7 @@ module Startups
 
       @last_points = points
 
-      [startup_id, rank]
+      [Startup.find_by(id: startup_id), rank, points]
     end
 
     def startups_sorted_by_points

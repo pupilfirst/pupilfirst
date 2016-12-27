@@ -17,11 +17,10 @@ describe Startups::PerformanceService do
 
   describe '#leaderboard' do
     it 'returns the leaderboard rank list for the batch' do
-      startup_ids = batch.startups.order(:id).pluck(:id)
       expected_ranks = [8, 7, 5, 5, 4, 3, 2, 1, 9, 9]
-      expected_rank_list = startup_ids.each_with_index.map { |id, index| [id, expected_ranks[index]] }
+      expected_leaderboard = batch.startups.order(:id).each_with_index.map { |id, index| [id, expected_ranks[index], SAMPLE_POINTS[index] || 0] }
 
-      expect(subject.leaderboard(batch).sort).to eq(expected_rank_list)
+      expect(subject.leaderboard(batch).sort).to eq(expected_leaderboard)
     end
   end
 

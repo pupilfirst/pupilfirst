@@ -41,7 +41,11 @@ class TimelineBuilderTextArea extends React.Component {
 
   textCount() {
     let text = $('.js-timeline-builder__textarea').val();
-    return (text ? text.length : 0);
+    return (text ? this.byteCount(text) : 0);
+  }
+
+  byteCount(string) {
+      return encodeURI(string).split(/%..|./).length - 1;
   }
 
   counterClasses() {

@@ -20,6 +20,10 @@ class TimelineBuilderDateForm extends React.Component {
     })
   }
 
+  componentWillUnmount() {
+    $('.js-timeline-builder__date-input').datetimepicker('destroy');
+  }
+
   today() {
     return moment().format('YYYY-MM-DD');
   }

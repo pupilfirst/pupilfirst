@@ -7,7 +7,7 @@ class TimelineBuilderEventTypeSelect extends React.Component {
 
   componentDidMount() {
     let timelineEventTypeSelect = $('.js-timeline-builder__timeline-event-type-select');
-    timelineEventTypeSelect.select2();
+    timelineEventTypeSelect.select2({placeholder: "Select Type of Event"});
     timelineEventTypeSelect.on('change', this.handleTimelineEventTypeChange);
   }
 
@@ -41,7 +41,7 @@ class TimelineBuilderEventTypeSelect extends React.Component {
            data-content="Please select an appropriate timeline event type." data-placement="bottom">
         <select className="form-control js-timeline-builder__timeline-event-type-select"
                 defaultValue={ this.props.timelineEventTypeId }>
-          {/*<option disabled="disabled" value="">Select Type</option>*/}
+          <option/>
           { Object.keys(this.props.timelineEventTypes).map(function (role, index) {
             return <TimelineBuilderTimelineEventGroup key={ index } role={ role }
                                                       timelineEvents={ this.props.timelineEventTypes[role] }/>

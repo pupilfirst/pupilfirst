@@ -1,7 +1,9 @@
 module Startups
   class PerformanceService
     # returns array of startup ids in the batch and their ranks
-    def leaderboard(batch)
+    def leaderboard(batch, start_date: nil, end_date: nil)
+      @start_date = start_date || last_week_start_date
+      @end_date = end_date || last_week_end_date
       @batch = batch
       @batch.present_week_number.in?(1..24) ? rank_list : nil
     end
@@ -62,8 +64,8 @@ module Startups
 
     def startups_with_points
       startups_in_batch.joins(:karma_points)
-        .where('karma_points.created_at > ?', start_date)
-        .where('karma_points.created_at < ?', end_date)
+        .where('karma_points.created_at > ?', @start_date)
+        .where('karma_points.created_at < ?', @end_date)
     end
 
     def startups_without_points
@@ -75,7 +77,7 @@ module Startups
     end
 
     # Starts on the week before last's Monday 6 PM IST.
-    def start_date
+    def last_week_start_date
       if monday? && before_evening?
         8.days.ago.beginning_of_week
       else
@@ -84,7 +86,7 @@ module Startups
     end
 
     # Ends on last week's Monday 6 PM IST.
-    def end_date
+    def last_week_end_date
       if monday? && before_evening?
         8.days.ago.end_of_week
       else

@@ -81,7 +81,8 @@ class TimelineBuilderImageButton extends React.Component {
       <div className={ this.actionTabClasses() } onClick={ this.handleImageButtonClick } data-toggle="popover"
            data-title="File Invalid!" data-content={ this.errorPopoverText() } data-placement="bottom"
            data-trigger="manual">
-        <input type="file" onChange={ this.handleImageChange } className="js-timeline-builder__image-input hidden-xs-up" accept=".png,.jpg,.jpeg,.svg,image/png,image/jpeg,image/pjpeg"/>
+        <label className="sr-only" htmlFor="timeline-builder__image-input">Cover Image</label>
+        <input id="timeline-builder__image-input" type="file" onChange={ this.handleImageChange } className="js-timeline-builder__image-input hidden-xs-up" accept=".png,.jpg,.jpeg,.svg,image/png,image/jpeg,image/pjpeg"/>
         <i className="timeline-builder__upload-section-icon fa fa-file-image-o"/>
         <span className="timeline-builder__tab-label">Image</span>
       </div>

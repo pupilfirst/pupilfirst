@@ -67,7 +67,10 @@ class TimelineBuilderTextArea extends React.Component {
                 data-toggle="popover" data-title="Description Missing!" placeholder={ this.placeholder() }
                 data-content="Please add a summary describing the event." data-placement="bottom" data-trigger="manual"
                 onFocus={ this.resetErrors } onChange={ this.updateCounter } maxLength="300"/>
+
+        { this.state.counterText != '' &&
         <div className={ this.counterClasses() }>{ this.state.counterText }</div>
+        }
       </div>
     )
   }

@@ -16,6 +16,10 @@ class TimelineBuilderEventTypeSelect extends React.Component {
     $('.js-timeline-builder__timeline-event-type-select-wrapper').popover(status);
   }
 
+  componentWillUnmount() {
+    $('.js-timeline-builder__timeline-event-type-select').select2("destroy");
+  }
+
   handleTimelineEventTypeChange(event) {
     this.props.resetErrorsCB();
 

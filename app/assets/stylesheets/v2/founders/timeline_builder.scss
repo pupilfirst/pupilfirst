@@ -18,7 +18,12 @@
     padding: 1rem;
     right: 0;
     outline: none;
+    z-index: 1;
   }
+}
+
+.timeline-builder__textarea-wrapper {
+  position: relative;
 }
 
 .timeline-builder__textarea {
@@ -29,6 +34,21 @@
   border: 0;
   font-size: 1.125rem;
   font-weight: $font-light;
+}
+
+.timeline-builder__textarea__counter {
+  position: absolute;
+  bottom: 1.25rem;
+  right: 3rem;
+  color: $light-grey-text;
+}
+
+.timeline-builder__textarea__counter--danger {
+  color: red;
+}
+
+.timeline-builder__textarea__counter--warning {
+  color: orange;
 }
 
 .timeline-builder__attachments-container {

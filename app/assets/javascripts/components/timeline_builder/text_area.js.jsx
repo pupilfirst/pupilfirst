@@ -29,7 +29,7 @@ class TimelineBuilderTextArea extends React.Component {
   }
 
   updateCounter() {
-    if (  this.textCount() == 0) {
+    if (this.textCount() == 0) {
       this.setState({counterText: ''});
       return;
     } else {
@@ -41,17 +41,23 @@ class TimelineBuilderTextArea extends React.Component {
 
   textCount() {
     let text = $('.js-timeline-builder__textarea').val();
-    return (text ? text.length : 0);
+    return (text ? this.byteCount(text) : 0);
+  }
+
+  byteCount(string) {
+    return encodeURI(string).split(/%..|./).length - 1;
   }
 
   counterClasses() {
-    let textClass ='';
+    let classes = 'timeline-builder__textarea-counter';
+
     if (this.textCount() == 300) {
-      textClass = "timeline-builder__textarea__counter--danger";
+      classes += " timeline-builder__textarea-counter--danger";
     } else if (this.textCount() > 200) {
-      textClass = "timeline-builder__textarea__counter--warning";
+      classes += " timeline-builder__textarea-counter--warning";
     }
-    return "timeline-builder__textarea__counter " + textClass;
+
+    return classes;
   }
 
   render() {
@@ -61,7 +67,7 @@ class TimelineBuilderTextArea extends React.Component {
                 data-toggle="popover" data-title="Description Missing!" placeholder={ this.placeholder() }
                 data-content="Please add a summary describing the event." data-placement="bottom" data-trigger="manual"
                 onFocus={ this.resetErrors } onChange={ this.updateCounter } maxLength="300"/>
-      <div className={ this.counterClasses() }>{ this.state.counterText }</div>
+        <div className={ this.counterClasses() }>{ this.state.counterText }</div>
       </div>
     )
   }

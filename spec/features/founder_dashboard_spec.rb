@@ -1,19 +1,20 @@
 require 'rails_helper'
 
 feature 'Founder Dashboard' do
-  # create a batch with targets for startups
-  # let!(:batch) { create :batch, :just_started, :with_startups, :with_targets_for_startups }
+  # The basics.
   let(:startup) { create :startup }
   let(:batch) { startup.batch }
-
-  # select a sample target for testing
-  # let(:founder) { Founder.first }
   let(:founder) { startup.admin }
 
+  # Program weeks.
   let!(:program_week_1) { create :program_week, batch: batch, number: 1 }
   let(:program_week_2) { create :program_week, batch: batch, number: 2 }
   let(:program_week_3) { create :program_week, batch: batch, number: 3 }
+
+  # Target group we're interested in.
   let(:target_group_1) { create :target_group, program_week: program_week_1 }
+
+  # Individual targets of different types.
   let!(:pending_target) { create :target, target_group: target_group_1, days_to_complete: 60 }
   let(:completed_target) { create :target, target_group: target_group_1 }
   let(:not_accepted_target) { create :target, target_group: target_group_1 }
@@ -22,13 +23,16 @@ feature 'Founder Dashboard' do
   let!(:target_with_prerequisites) { create :target, target_group: target_group_1, prerequisite_targets: [pending_target] }
 
   before do
+    # Additional program weeks are displayed only if they have at least one target group in them.
     create(:target_group, program_week: program_week_2)
     create(:target_group, program_week: program_week_3)
 
+    # Timeline events to take targets to specific states.
     create(:timeline_event, startup: startup, target: completed_target, verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED)
     create(:timeline_event, startup: startup, target: not_accepted_target, verified_status: TimelineEvent::VERIFIED_STATUS_NOT_ACCEPTED)
     create(:timeline_event, startup: startup, target: needs_improvement_target, verified_status: TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT)
 
+    # Extra target groups in tested program week.
     3.times do
       create :target_group, program_week: program_week_1
     end
@@ -48,6 +52,9 @@ feature 'Founder Dashboard' do
   end
 
   scenario 'founder visits dashboard', js: true do
+    # There should be no tour.
+    expect(page).to_not have_selector('.introjs-tooltipReferenceLayer', visible: false)
+
     # Open the performance window.
     click_button 'Performance'
     expect(page).to have_selector('.startup-stats')
@@ -58,9 +65,7 @@ feature 'Founder Dashboard' do
     # Open the timeline builder modal.
     click_button 'Add Event'
     expect(page).to have_selector("div[data-react-class='TimelineBuilder']", visible: true)
-    within('.timeline-builder.modal') do
-      find('.timeline-builder__modal-close').click
-    end
+    find('.timeline-builder__modal-close').click
 
     # Check whether there's correct number of program weeks.
     expect(page).to have_selector('.program-week-number', count: 3)

@@ -35,11 +35,9 @@ handleTimelineBuilderPopoversHiding = ->
   )
 
 handleTimelineBuilderModal = ->
-  $('.js-founder-dashboard__add-event-button').click(resetTimelineBuilderAndShow)
-
-handleTimelineBuilderModalPrefilled = ->
-  $('.js-founder-dashboard__target-submit-button').click (event) ->
+  $('.js-founder-dashboard__trigger-builder').click (event) ->
     submitButton = $(event.target)
+
     selectedTimelineEventTypeId = submitButton.data('timelineEventTypeId')
     selectedTargetId = submitButton.data('targetId')
 
@@ -49,7 +47,10 @@ handleTimelineBuilderModalPrefilled = ->
     # Amend the props with target ID and selected timeline event type.
     reactProps = JSON.parse(timelineBuilderContainer.attr('data-react-props'))
 
-    reactProps['targetId'] = selectedTargetId
+    if selectedTargetId
+      reactProps['targetId'] = selectedTargetId
+    else
+      delete reactProps['targetId']
 
     if selectedTimelineEventTypeId
       reactProps['selectedTimelineEventTypeId'] = selectedTimelineEventTypeId
@@ -140,7 +141,6 @@ $(document).on 'turbolinks:load', ->
   if $('#founder-dashboard').length
     targetAccordion()
     handleTimelineBuilderModal()
-    handleTimelineBuilderModalPrefilled()
     handleTimelineBuilderPopoversHiding()
     giveATour()
     performanceMeterModal()

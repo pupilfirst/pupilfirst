@@ -7,14 +7,22 @@ ActiveAdmin.register_page 'Leaderboards' do
 
   controller do
     def index
-      @batch = if params[:karma_points_filter].try(:[], :batch).present?
-        Batch.find params[:karma_points_filter][:batch].to_i
-      else
-        Batch.current_or_last
-      end
+      @batch = Batch.find_by(id: params[:karma_points_filter].try(:[], :batch)) || Batch.current_or_last
 
-      @after = params[:karma_points_filter].try(:[], :after).present? ? Date.parse(params[:karma_points_filter][:after]) : Date.today.beginning_of_week
-      @before = params[:karma_points_filter].try(:[], :before).present? ? Date.parse(params[:karma_points_filter][:before]) : Date.today
+      @after = start_date.present? ? Date.parse(start_date) : DatesService.last_week_start_date
+      @before = end_date.present? ? Date.parse(end_date) : DatesService.last_week_end_date
+
+      @leaderboard = Startups::PerformanceService.new.leaderboard(@batch, start_date: @after, end_date: @before)
+    end
+
+    private
+
+    def start_date
+      params[:karma_points_filter].try(:[], :after)
+    end
+
+    def end_date
+      params[:karma_points_filter].try(:[], :before)
     end
   end
 

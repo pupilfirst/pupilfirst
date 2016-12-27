@@ -73,13 +73,9 @@ module Lita
 
       def ranked_list_for_batch(batch)
         rank_list = ''
-        ranked_startups = Startup.leaderboard_of_batch batch
-        ranked_startups.each do |startup_id, rank|
-          rank_list += "#{rank}. <#{Rails.application.routes.url_helpers.startup_url(Startup.find(startup_id))}|#{Startup.find(startup_id).product_name}>\n"
-        end
-        unranked_startups = Startup.without_karma_and_rank_for_batch batch
-        unranked_startups[0].each do |startup|
-          rank_list += "#{ranked_startups.length + 1}. <#{Rails.application.routes.url_helpers.startup_url(startup)}|#{startup.product_name}>\n"
+        ranked_startups = Startups::PerformanceService.new.leaderboard(batch)
+        ranked_startups.each do |startup, rank, _points|
+          rank_list += "#{rank}. <#{Rails.application.routes.url_helpers.startup_url(startup)}|#{startup.product_name}>\n"
         end
         rank_list
       end

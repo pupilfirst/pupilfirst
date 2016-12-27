@@ -22,15 +22,6 @@ module ActiveAdmin
       end
     end
 
-    def startups_by_karma(batch:, after:, before:)
-      Startup.joins(:karma_points)
-        .where(batch: batch)
-        .where(karma_points: { created_at: (after.beginning_of_day..before.end_of_day) })
-        .group(:startup_id)
-        .sum(:points)
-        .sort_by { |_startup_id, points| points }.reverse
-    end
-
     def founders_by_karma(batch:, after:, before:)
       Founder.joins(:startup, :karma_points)
         .where(startups: { batch_id: batch.id })

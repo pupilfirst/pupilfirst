@@ -1,6 +1,6 @@
 module Startups
   class PerformanceService
-    # returns array of startup ids in the batch and their ranks
+    # returns leaderboard array of [startup, rank, points]
     def leaderboard(batch, start_date: nil, end_date: nil)
       @start_date = start_date || last_week_start_date
       @end_date = end_date || last_week_end_date
@@ -23,7 +23,7 @@ module Startups
       relative_measure(karma)
     end
 
-    # private
+    private
 
     def rank_list
       ranks_with_points + ranks_without_points

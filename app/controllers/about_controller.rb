@@ -12,6 +12,8 @@ class AboutController < ApplicationController
 
   # GET /about/leaderboard
   def leaderboard
+    @live_batches = Startup.available_batches.live
+    @leaderboards = leaderboards_for(@live_batches)
   end
 
   # GET /about/press-kit
@@ -50,5 +52,13 @@ class AboutController < ApplicationController
     return true if Rails.env.test?
 
     verify_recaptcha(model: @contact_form, message: 'Whoops. Verification of Recaptcha failed. Please try again.')
+  end
+
+  def leaderboards_for(batches)
+    leaderboards = {}
+    batches.each do |batch|
+      leaderboards[batch.batch_number] = Startups::PerformanceService.new.leaderboard(batch)
+    end
+    leaderboards
   end
 end

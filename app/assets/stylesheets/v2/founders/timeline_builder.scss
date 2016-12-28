@@ -39,12 +39,12 @@
 .timeline-builder__textarea-counter {
   position: absolute;
   bottom: 1.25rem;
-  right: 3rem;
+  right: 1rem;
   color: white;
   padding: 0.2rem 0.5rem;
   background-color: rgba(0, 0, 0, 0.3);
   border: 1px transparent;
-  border-radius: 1rem;
+  @include border-radius(1rem);
 }
 
 .timeline-builder__textarea-counter--danger {

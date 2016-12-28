@@ -279,24 +279,18 @@
   letter-spacing: 0.02rem;
   margin-top: 6px;
 
-  > div {
-    border-right: 1px solid darken($gray-border, 10%);
-    margin-right: 10px;
-    padding-right: 10px;
-
-    &:last-child {
-      border-width: 0;
-    }
-  }
-
   .target-deadline, .target-karma-points {
     display: inline-block;
+    padding: 0 10px;
     color: $light-grey-text;
 
     .target-deadline-date, .earn-karma-points {
       color: $dark-grey-text;
       padding-left: 5px;
     }
+  }
+  .target-karma-points {
+    border-left: 1px solid darken($gray-border, 10%);
   }
 }
 .target-title {

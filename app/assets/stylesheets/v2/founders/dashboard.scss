@@ -319,6 +319,13 @@
     max-width: 150px;
   }
 }
+.target-title--sm {
+  font-weight: $font-regular;
+  margin: 0 0 10px 0;
+  font-size: 1rem;
+  line-height: 1.4;
+  letter-spacing: 0.02rem;
+}
 .target-status {
   float: right;
   padding: 7px 15px;

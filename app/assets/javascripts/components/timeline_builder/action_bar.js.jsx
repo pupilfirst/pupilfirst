@@ -9,26 +9,35 @@ const TimelineBuilderActionBar = React.createClass({
     imageButtonKey: React.PropTypes.string,
     selectedDate: React.PropTypes.string,
     submissionProgress: React.PropTypes.number,
-    attachmentAllowed: React.PropTypes.bool
+    hasSubmissionError: React.PropTypes.bool,
+    attachmentAllowed: React.PropTypes.bool,
+    showDateError: React.PropTypes.bool,
+    showEventTypeError: React.PropTypes.bool,
+    resetErrorsCB: React.PropTypes.func,
+    timelineEventTypeId: React.PropTypes.string
   },
 
-  getInitialState: function () {
-    return {
-      attachmentAllowed: this.props.attachmentAllowed
-    };
-  },
+  componentDidUpdate: function () {
+    if (this.props.showDateError) {
+      $('.date-of-event').popover('show');
+    } else {
+      $('.date-of-event').popover('hide');
+    }
 
-  componentWillReceiveProps: function(newProps) {
-    this.setState({attachmentAllowed: newProps.attachmentAllowed});
+    if (this.props.showEventTypeError) {
+      $('.js-timeline-builder__timeline-event-type-select').popover('show');
+    } else {
+      $('.js-timeline-builder__timeline-event-type-select').popover('hide');
+    }
   },
 
   formLinkClasses: function (type) {
     let classes = '';
 
     if (type == 'link') {
-      classes = 'timeline-builder__upload-section-tab link-upload' + (this.state.attachmentAllowed ? '' : ' action-tab-disabled')
+      classes = 'timeline-builder__upload-section-tab link-upload' + (this.props.attachmentAllowed ? '' : ' action-tab-disabled')
     } else if (type == 'file') {
-      classes = 'timeline-builder__upload-section-tab file-upload'+ (this.state.attachmentAllowed ? '' : ' action-tab-disabled')
+      classes = 'timeline-builder__upload-section-tab file-upload' + (this.props.attachmentAllowed ? '' : ' action-tab-disabled')
     } else {
       classes = 'timeline-builder__upload-section-tab date-of-event'
     }
@@ -41,19 +50,20 @@ const TimelineBuilderActionBar = React.createClass({
   },
 
   showLinkForm: function () {
-    if (this.state.attachmentAllowed) {
+    if (this.props.attachmentAllowed) {
       this.props.formClickedCB('link');
     }
   },
 
   showFileForm: function () {
-    if (this.state.attachmentAllowed) {
+    if (this.props.attachmentAllowed) {
       this.props.formClickedCB('file');
     }
   },
 
   showDateForm: function () {
-    this.props.formClickedCB('date')
+    this.props.resetErrorsCB();
+    this.props.formClickedCB('date');
   },
 
   timelineEventTypes: function () {
@@ -72,10 +82,13 @@ const TimelineBuilderActionBar = React.createClass({
   },
 
   handleTimelineEventTypeChange: function (event) {
+    this.props.resetErrorsCB();
+
     let timelineEventTypeSelect = $(event.target);
 
     if (timelineEventTypeSelect.val().length > 0) {
-      this.props.addDataCB('timeline_event_type', {id: timelineEventTypeSelect.val()})
+      let newTimelineEventTypeId = parseInt(timelineEventTypeSelect.val());
+      this.props.addDataCB('timeline_event_type', {id: parseInt(newTimelineEventTypeId)});
     }
   },
 
@@ -83,7 +96,8 @@ const TimelineBuilderActionBar = React.createClass({
     return (
       <div className="timeline-builder__submit-tabs">
         <div className="timeline-builder__upload-section">
-          <TimelineBuilderImageButton key={ this.props.imageButtonKey } coverImage={ this.props.coverImage } addDataCB={ this.props.addDataCB }/>
+          <TimelineBuilderImageButton key={ this.props.imageButtonKey } coverImage={ this.props.coverImage }
+                                      addDataCB={ this.props.addDataCB }/>
           <div className={ this.formLinkClasses('link') } onClick={ this.showLinkForm }>
             <i className="timeline-builder__upload-section-icon fa fa-link"/>
             <span className="timeline-builder__tab-label">Link</span>
@@ -92,23 +106,36 @@ const TimelineBuilderActionBar = React.createClass({
             <i className="timeline-builder__upload-section-icon fa fa-file-text-o"/>
             <span className="timeline-builder__tab-label">File</span>
           </div>
-          <div className={ this.formLinkClasses('date') } onClick={ this.showDateForm }>
+          <div className={ this.formLinkClasses('date') } onClick={ this.showDateForm } data-toggle="popover"
+               data-title="Date Missing!" data-content="Please select a date for the event." data-placement="bottom"
+               data-trigger="manual">
             <i className="timeline-builder__upload-section-icon fa fa-calendar"/>
             <span className="timeline-builder__tab-label">{ this.dateLabel() }</span>
           </div>
         </div>
 
         <div className="timeline-builder__select-section">
-          <div className="timeline-builder__select-section-tab timeline-builder__type-of-event-select">
-            <select className="form-control timeline-builder__timeline_event_type" defaultValue="" onChange={ this.handleTimelineEventTypeChange }>
+          <div className="timeline-builder__select-section-tab timeline-builder__timeline-event-type-select-wrapper">
+            <label className="sr-only" htmlFor="timeline-builder__timeline-event-type-select">
+              Timeline Event Type
+            </label>
+
+            <select id="timeline-builder__timeline-event-type-select"
+                    className="form-control js-timeline-builder__timeline-event-type-select"
+                    onChange={ this.handleTimelineEventTypeChange } data-toggle="popover" data-title="Type Missing!"
+                    data-content="Please select an appropriate timeline event type." data-placement="bottom"
+                    data-trigger="manual" value={ this.props.timelineEventTypeId }>
 
               <option disabled="disabled" value="">Select Type</option>
               { Object.keys(this.props.timelineEventTypes).map(function (role, index) {
-                return <TimelineBuilderTimelineEventGroup key={ index } role={ role } timelineEvents={ this.props.timelineEventTypes[role] }/>
+                return <TimelineBuilderTimelineEventGroup key={ index } role={ role }
+                                                          timelineEvents={ this.props.timelineEventTypes[role] }/>
               }, this)}
             </select>
           </div>
-          <TimelineBuilderSubmitButton submissionProgress={ this.props.submissionProgress } submitCB={ this.props.submitCB }/>
+          <TimelineBuilderSubmitButton submissionProgress={ this.props.submissionProgress }
+                                       submitCB={ this.props.submitCB }
+                                       hasSubmissionError={ this.props.hasSubmissionError }/>
         </div>
       </div>
     )

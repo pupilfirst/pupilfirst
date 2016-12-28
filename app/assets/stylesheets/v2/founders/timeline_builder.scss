@@ -18,7 +18,12 @@
     padding: 1rem;
     right: 0;
     outline: none;
+    z-index: 1;
   }
+}
+
+.timeline-builder__textarea-wrapper {
+  position: relative;
 }
 
 .timeline-builder__textarea {
@@ -29,6 +34,25 @@
   border: 0;
   font-size: 1.125rem;
   font-weight: $font-light;
+}
+
+.timeline-builder__textarea-counter {
+  position: absolute;
+  bottom: 1.25rem;
+  right: 3rem;
+  color: white;
+  padding: 0.2rem 0.5rem;
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px transparent;
+  border-radius: 1rem;
+}
+
+.timeline-builder__textarea-counter--danger {
+  background-color: rgba(255, 0, 0, 0.5);
+}
+
+.timeline-builder__textarea-counter--warning {
+  background-color: rgba(255, 120, 0, 0.5);
 }
 
 .timeline-builder__attachments-container {
@@ -169,7 +193,7 @@
     height: auto;
   }
 
-  .timeline-builder__submit-btn {
+  .timeline-builder__submit-container {
     border-right: 0;
     display: flex;
 
@@ -178,6 +202,7 @@
     }
   }
 }
+
 .timeline-builder__upload-section, .timeline-builder__select-section {
   display: flex;
   width: 100%;
@@ -189,7 +214,7 @@
   }
 }
 
-.timeline-builder__type-of-event-select {
+.timeline-builder__timeline-event-type-select-wrapper {
   max-width: 240px;
 
   select {
@@ -246,6 +271,7 @@
     margin-right: 0;
   }
 }
+
 .timeline-builder__attachment-datepicker-form {
   display: block;
 

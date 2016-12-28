@@ -1,27 +1,34 @@
 h2 Startup Karma for Batch #{@batch.name} (##{@batch.id})
 
 ul
-  - collection = startups_by_karma(batch: @batch, after: @after, before: @before)
   li
+    - active_count = @leaderboard.present? ? @leaderboard.count : 0
     strong Active teams:
-    | &nbsp;#{collection.count}
+    | &nbsp;#{active_count}
   li
     strong Inactive teams:
-    | &nbsp;#{Startup.not_dropped_out.where(batch: @batch).count - collection.count}
+    | &nbsp;#{Startup.not_dropped_out.where(batch: @batch).count - active_count}
 
-table.index_table
-  thead
-    tr
-      th Product
-      th.sorted-desc.sortable
-        a.not-a-link href='#' Karma Points
-  tbody
-    - startups_by_karma(batch: @batch, after: @after, before: @before).each_with_index do |points_array, idx|
-      - startup_id, points = points_array
-      - startup = Startup.find(startup_id)
-      tr class="#{(idx + 1).even? ? 'even' : 'odd'}"
-        td = link_to "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}", admin_startup_path(startup)
-        td = points
+- if @leaderboard.present?
+  table.index_table
+    thead
+      tr
+        th Rank
+        th Product
+        th.sorted-desc.sortable
+          a.not-a-link href='#' Karma Points
+    tbody
+      - @leaderboard.each_with_index do |entry, index|
+        - binding.pry
+        - rank = entry[1]
+        - startup = entry[0]
+        - points = entry[2]
+        tr class="#{(index + 1).even? ? 'even' : 'odd'}"
+          td = rank
+          td = link_to "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}", admin_startup_path(startup)
+          td = points
+- else
+  p This batch does not have a leaderboard now!
 
 h2 Founder Karma for Batch #{@batch.name} (##{@batch.id})
 

@@ -37,7 +37,7 @@ const TimelineBuilderLinkForm = React.createClass({
       urlError = true;
     }
 
-    if (titleError || urlError){
+    if (titleError || urlError) {
       this.setState({hasTitleError: titleError, hasUrlError: urlError});
       return false;
     }
@@ -57,11 +57,11 @@ const TimelineBuilderLinkForm = React.createClass({
     });
   },
 
-  titleFormGroupClasses: function() {
+  titleFormGroupClasses: function () {
     return "form-group timeline-builder__form-group" + (this.state.hasTitleError ? ' has-danger' : '');
   },
 
-  urlFormGroupClasses: function() {
+  urlFormGroupClasses: function () {
     return "form-group timeline-builder__form-group" + (this.state.hasUrlError ? ' has-danger' : '');
   },
 
@@ -77,22 +77,26 @@ const TimelineBuilderLinkForm = React.createClass({
     return (
       <form className="form-inline timeline-builder__attachment-form">
         <div className={ this.titleFormGroupClasses() }>
-          <label className="sr-only" htmlFor="linkTitle">Link Title</label>
-          <input className="form-control link-title js-link-title" type="text" placeholder="Title" onFocus={ this.clearTitleError }/>
+          <label className="sr-only" htmlFor="timeline-builder__link-title-input">Link Title</label>
+          <input id="timeline-builder__link-title-input" className="form-control link-title js-link-title" type="text"
+                 placeholder="Title" onFocus={ this.clearTitleError }/>
           { this.state.hasTitleError &&
           <div className="form-control-feedback">Enter a valid title!</div>
           }
         </div>
         <div className={ this.urlFormGroupClasses() }>
-          <label className="sr-only" htmlFor="linkUrl">URL</label>
-          <input className="form-control link-url js-link-url" type="text" placeholder="URL" onFocus={ this.clearUrlError }/>
+          <label className="sr-only" htmlFor="timeline-builder__link-url-input">URL</label>
+          <input id="timeline-builder__link-url-input" className="form-control link-url js-link-url" type="text"
+                 placeholder="URL" onFocus={ this.clearUrlError }/>
           { this.state.hasUrlError &&
           <div className="form-control-feedback">Enter a valid URL!</div>
           }
           <small className="form-text text-muted">Please enter a full URL, starting with http(s).</small>
         </div>
         <div className="form-group timeline-builder__form-group timeline-builder__visibility-option-group">
-          <select className="form-control timeline-builder__visibility-option js-link-visibility">
+          <label className="sr-only" htmlFor="timeline-builder__link-visibility-select">Link Visibility</label>
+          <select id="timeline-builder__link-visibility-select"
+                  className="form-control timeline-builder__visibility-option js-link-visibility">
             <option value="public">Public</option>
             <option value="private">Private</option>
           </select>

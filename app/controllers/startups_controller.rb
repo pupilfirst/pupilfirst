@@ -77,10 +77,6 @@ class StartupsController < ApplicationController
     params.require(:startup).permit(:product_name)
   end
 
-  def startup_destroy_params
-    params.require(:startup).permit(:password)
-  end
-
   def restrict_to_startup_founders
     return if current_founder
     raise_not_found

@@ -22,6 +22,7 @@
       p.inline-errors-replica #{@target.errors[:description][0]}
 
     = f.input :target_type, collection: Target.valid_target_types
+    = f.input :timeline_event_type, include_blank: 'Select default timeline event type'
     = f.input :points_earnable
     = f.input :prerequisite_targets, collection: @target.batch.present? ? @target.batch.targets.where.not(id: @target.id) : [], include_blank: @target.batch.present? ? false : 'Assign a batch and save this target first'
     = f.input :slideshow_embed

@@ -6,8 +6,9 @@ const TimelineBuilderFileForm = React.createClass({
   getInitialState: function () {
     return {
       identifier: this.generateIdentifier(),
-      hasTitleError: false,
-      hasFileError: false
+      titleError: false,
+      fileMissingError: false,
+      fileSizeError: false
     }
   },
 
@@ -23,8 +24,9 @@ const TimelineBuilderFileForm = React.createClass({
     $('.js-file-title').val('');
     $('.js-file-visibility').val('public');
     this.setState({
-      hasTitleError: false,
-      hasFileError: false
+      titleError: false,
+      fileMissingError: false,
+      fileSizeError: false
     });
   },
 
@@ -63,54 +65,66 @@ const TimelineBuilderFileForm = React.createClass({
 
   validate: function () {
     let titleError = false;
-    let fileError = false;
+    let fileMissingError = false;
+    let fileSizeError = false;
 
     if ($('.js-file-title').val().length == 0) {
       titleError = true;
     }
 
-    if ($('.js-attachment-file').val().length == 0) {
-      fileError = true;
+    if ($('.js-attachment-file')[0].files.length == 0) {
+      fileMissingError = true;
+    } else if ($('.js-attachment-file')[0].files[0].size > 5120000) {
+      fileSizeError = true;
     }
 
-    if (titleError || fileError){
-      this.setState({hasTitleError: titleError, hasFileError: fileError});
+    if (titleError || fileMissingError || fileSizeError) {
+      this.setState({titleError: titleError, fileMissingError: fileMissingError, fileSizeError: fileSizeError});
       return false;
     }
 
     return true;
   },
 
+  clearPickerErrors: function () {
+    this.setState({fileMissingError: false, fileSizeError: false});
+  },
+
   inputName: function () {
     return "timeline_event[files][" + this.state.identifier + "]"
   },
 
-  titleFormGroupClasses: function() {
-    return "form-group timeline-builder__form-group" + (this.state.hasTitleError ? ' has-danger' : '');
+  titleFormGroupClasses: function () {
+    return "form-group timeline-builder__form-group" + (this.state.titleError ? ' has-danger' : '');
   },
 
   clearTitleError: function () {
-    this.setState({hasTitleError: false});
+    this.setState({titleError: false});
   },
 
   render: function () {
     return (
       <form className="form-inline timeline-builder__attachment-form">
         <div className={this.titleFormGroupClasses()}>
-          <label className="sr-only" htmlFor="fileTitle">File Title</label>
-          <input className="form-control file-title js-file-title" type="text" placeholder="Title" onFocus={ this.clearTitleError }/>
-          { this.state.hasTitleError &&
+          <label className="sr-only" htmlFor="timeline-builder__file-title-input">File Title</label>
+          <input id="timeline-builder__file-title-input" className="form-control file-title js-file-title" type="text"
+                 placeholder="Title" onFocus={ this.clearTitleError }/>
+          { this.state.titleError &&
           <div className="form-control-feedback">Enter a valid title!</div>
           }
         </div>
-        <TimelineBuilderFilePicker key={ this.state.identifier } hasError={ this.state.hasFileError }/>
+        <TimelineBuilderFilePicker key={ this.state.identifier } fileMissingError={ this.state.fileMissingError }
+                                   fileSizeError={ this.state.fileSizeError } clearErrorsCB={ this.clearPickerErrors }/>
         <div className="form-group timeline-builder__form-group timeline-builder__visibility-option-group">
-          <select className="form-control timeline-builder__visibility-option js-file-visibility">
+          <label className="sr-only" htmlFor="timeline-builder__file-visibility-select">File Visibility</label>
+          <select id="timeline-builder__file-visibility-select"
+                  className="form-control timeline-builder__visibility-option js-file-visibility">
             <option value="public">Public</option>
             <option value="private">Private</option>
           </select>
         </div>
-        <button type="submit" className="btn btn-secondary timeline-builder__attachment-button" onClick={ this.fileSubmit }>
+        <button type="submit" className="btn btn-secondary timeline-builder__attachment-button"
+                onClick={ this.fileSubmit }>
           <i className="fa fa-check"/>
         </button>
       </form>

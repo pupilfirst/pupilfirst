@@ -226,16 +226,6 @@ ActiveAdmin.register Founder do
         row :behance_url
       end
     end
-
-    panel 'Devise details' do
-      attributes_table_for founder do
-        row :confirmed_at
-        row :reset_password_sent_at
-        row :sign_in_count
-        row :current_sign_in_at
-        row :last_sign_in_at
-      end
-    end
   end
 
   action_item :feedback, only: :show, if: proc { Founder.friendly.find(params[:id]).startup.present? } do

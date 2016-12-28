@@ -9,11 +9,6 @@ class FounderMailer < ApplicationMailer
     mail(to: current_founder.email, subject: 'You have successfully submitted your request for incubation at Startup Village.')
   end
 
-  def password_changed(founder)
-    @founder = founder
-    mail(to: founder.email, subject: "Your password has been changed")
-  end
-
   # Mail sent a little while after the a confirmed connect request meeting occured.
   #
   # @param connect_request [ConnectRequest] Request for a meeting which recently occurred.

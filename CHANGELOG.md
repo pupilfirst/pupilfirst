@@ -1,3 +1,11 @@
+### 26 December, 2016
+
+#### Features
+
+  - We've retired the form used by founders to create new timeline events in favor of a brand new version. This will be launched along with the Founder Dashboard page for the upcoming batch.
+  - We've improved the handling of invalid email addresses being
+  used to sign into the website - we now store information on whether attempts to send an email to an address has bounced - so as to supply an appropriate error message instead of silently failing.
+
 ### 19 December, 2016
 
 #### Content

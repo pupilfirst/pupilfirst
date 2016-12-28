@@ -12,9 +12,54 @@ targetAccordion = ->
     dropDown.stop(false, true).slideToggle(200)
     t.preventDefault()
 
-timelineBuilderModal = ->
-  $('.btn-timeline-builder').click () ->
-    $('.timeline-builder').modal(backdrop: 'static')
+resetTimelineBuilderAndShow = ->
+  timelineBuilderContainer = $('[data-react-class="TimelineBuilder"]')
+
+  # Unmount the original timeline builder component.
+  ReactDOM.unmountComponentAtNode(timelineBuilderContainer[0]);
+
+  # Now rebuild the React component.
+  ReactRailsUJS.mountComponents()
+
+  # ...and show the modal.
+  $('.timeline-builder').modal(backdrop: 'static')
+
+handleTimelineBuilderPopoversHiding = ->
+  # Hide all error popovers if modal is closed
+  $('.timeline-builder').on('hide.bs.modal', (event) ->
+    $('.js-timeline-builder__textarea').popover('dispose');
+    $('.date-of-event').popover('dispose');
+    $('.js-timeline-builder__timeline-event-type-select').popover('dispose');
+    $('.js-timeline-builder__submit-button').popover('dispose');
+    $('.image-upload').popover('dispose');
+  )
+
+handleTimelineBuilderModal = ->
+  $('.js-founder-dashboard__trigger-builder').click (event) ->
+    submitButton = $(event.target)
+
+    selectedTimelineEventTypeId = submitButton.data('timelineEventTypeId')
+    selectedTargetId = submitButton.data('targetId')
+
+    timelineBuilderContainer = $('[data-react-class="TimelineBuilder"]')
+    timelineBuilderHiddenForm = $('.js-timeline-builder__hidden-form')
+
+    # Amend the props with target ID and selected timeline event type.
+    reactProps = JSON.parse(timelineBuilderContainer.attr('data-react-props'))
+
+    if selectedTargetId
+      reactProps['targetId'] = selectedTargetId
+    else
+      delete reactProps['targetId']
+
+    if selectedTimelineEventTypeId
+      reactProps['selectedTimelineEventTypeId'] = selectedTimelineEventTypeId
+    else
+      delete reactProps['selectedTimelineEventTypeId']
+
+    timelineBuilderContainer.attr('data-react-props', JSON.stringify(reactProps))
+
+    resetTimelineBuilderAndShow()
 
 performanceMeterModal = ->
   $('.performance-overview-link').click () ->
@@ -88,11 +133,17 @@ startTour = ->
 
   tour.start()
 
+hideIntercomOnSmallScreen = ->
+    # TODO: There might be a better way to do this!
+    window.Intercom('shutdown') if window.innerWidth < 576
+
 $(document).on 'turbolinks:load', ->
   if $('#founder-dashboard').length
     targetAccordion()
-    timelineBuilderModal()
+    handleTimelineBuilderModal()
+    handleTimelineBuilderPopoversHiding()
     giveATour()
     performanceMeterModal()
     setPerformancePointer()
     viewSlidesModal()
+    hideIntercomOnSmallScreen()

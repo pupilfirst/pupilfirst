@@ -9,10 +9,6 @@ class FounderMailerPreview < ActionMailer::Preview
     FounderMailer.incubation_request_submitted(Founder.first)
   end
 
-  def password_changed
-    FounderMailer.password_changed(Founder.first)
-  end
-
   def connect_request_feedback
     FounderMailer.connect_request_feedback(ConnectRequest.first)
   end

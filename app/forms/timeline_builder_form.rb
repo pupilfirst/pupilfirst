@@ -1,4 +1,5 @@
 class TimelineBuilderForm < Reform::Form
+  property :target_id
   property :description, validates: { presence: true, length: { maximum: TimelineEvent::MAX_DESCRIPTION_CHARACTERS } }
   property :timeline_event_type_id, validates: { presence: true }
   property :event_on, validates: { presence: true }
@@ -26,7 +27,11 @@ class TimelineBuilderForm < Reform::Form
   end
 
   def timeline_event_type
-    @timeline_event_type ||= TimelineEventType.find(timeline_event_type_id)
+    @timeline_event_type ||= TimelineEventType.find_by(id: timeline_event_type_id)
+  end
+
+  def target
+    @target ||= Target.find_by(id: target_id)
   end
 
   def parsed_files_metadata
@@ -41,6 +46,7 @@ class TimelineBuilderForm < Reform::Form
   def save(founder)
     TimelineEvent.transaction do
       timeline_event = TimelineEvent.create!(
+        target: target,
         founder: founder,
         startup: founder.startup,
         description: description,

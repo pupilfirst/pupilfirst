@@ -281,7 +281,6 @@
 
   .target-deadline, .target-karma-points {
     display: inline-block;
-    padding: 0 10px;
     color: $light-grey-text;
 
     .target-deadline-date, .earn-karma-points {
@@ -290,6 +289,8 @@
     }
   }
   .target-karma-points {
+    padding: 0 10px;
+    margin-left: 10px;
     border-left: 1px solid darken($gray-border, 10%);
   }
 }

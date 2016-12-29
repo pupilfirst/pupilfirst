@@ -399,6 +399,7 @@ class Startup < ApplicationRecord
     label
   end
 
+  # TODO: What the heck does this method do? Is there a better way to write this?
   def self.available_batches
     Batch.where(id: Startup.batched.pluck(:batch_id).uniq)
   end

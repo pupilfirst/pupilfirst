@@ -1,5 +1,6 @@
 require 'rails_helper'
 
+# Note: This spec uses a lot of `trigger('click')` instead of `.click` to avoid issues with ongoing animations.
 feature 'Timeline Builder' do
   include UserSpecHelper
 
@@ -36,23 +37,21 @@ feature 'Timeline Builder' do
     fill_in 'Link Title', with: 'Link to SV.CO'
     fill_in 'URL', with: 'https://www.sv.co'
     select 'Private', from: 'Link Visibility'
-    find('.timeline-builder__attachment-button').click
+    find('.timeline-builder__attachment-button').trigger('click')
     expect(page).to_not have_content('Please enter a full URL, starting with http(s).') # ensure link section is closed
 
-    # Open the file form with trigger instead of regular click to avoid animation issue.
     find('.timeline-builder__upload-section-tab.file-upload').trigger('click')
     expect(page).to have_selector('.timeline-builder__file-label')
 
     fill_in 'File Title', with: 'A PDF File'
     attach_file 'timeline-builder__file-input', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')), visible: false
-    find('.timeline-builder__attachment-button').click
+    find('.timeline-builder__attachment-button').trigger('click')
     expect(page).to_not have_selector('.timeline-builder__file-label') # ensure file section is closed
 
-    # Open the date form with trigger instead of regular click to avoid animation issue.
     find('.timeline-builder__upload-section-tab.date-of-event').trigger('click')
     expect(page).to have_content('Date of event')
 
-    find('.timeline-builder__attachment-button').click
+    find('.timeline-builder__attachment-button').trigger('click')
     expect(page).to_not have_content('Date of event') # ensure date section is closed
 
     select timeline_event_type.title, from: 'Timeline Event Type'
@@ -92,7 +91,7 @@ feature 'Timeline Builder' do
     # File fields empty.
     find('.timeline-builder__upload-section-tab.file-upload').trigger('click')
     expect(page).to have_selector('.timeline-builder__file-label')
-    find('.timeline-builder__attachment-button').trigger('click') # because it might be animating in.
+    find('.timeline-builder__attachment-button').trigger('click')
 
     expect(page).to have_content('Enter a valid title!')
     expect(page).to have_content('Choose a valid file!')

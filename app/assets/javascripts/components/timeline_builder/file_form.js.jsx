@@ -74,7 +74,7 @@ const TimelineBuilderFileForm = React.createClass({
 
     if ($('.js-attachment-file')[0].files.length == 0) {
       fileMissingError = true;
-    } else if ($('.js-attachment-file')[0].files[0].size > 5120000) {
+    } else if ($('.js-attachment-file')[0].files[0].size > 5242880) {
       fileSizeError = true;
     }
 

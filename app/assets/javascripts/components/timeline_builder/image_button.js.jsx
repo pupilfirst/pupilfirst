@@ -27,22 +27,32 @@ class TimelineBuilderImageButton extends React.Component {
 
   handleImageChange(event) {
     let inputElement = $(event.target);
+
+    if (inputElement.val() != '') {
+      if (this.validate(inputElement)) {
+        this.moveImageInputToHiddenForm(inputElement);
+        this.props.addDataCB('cover');
+      }
+    }
+  }
+
+  validate(inputElement) {
+    // File size should be < 5 MB.
+    if (inputElement[0].files[0].size > 5242880) {
+      this.setState({showSizeError: true});
+      return false;
+    }
+
+    // Restrict to image types.
     let fileName = inputElement.val().split('\\').pop();
     let fileExtension = fileName.match(/\.([^\.]+)$/)[1];
 
-    if (fileName.length > 0) {
-      if (inputElement[0].files[0].size > 5120000) {
-        this.setState({showSizeError: true});
-        return;
-      }
-      if ($.inArray(fileExtension,['png','jpg','jpeg','svg']) == (-1)) {
-        this.setState({showFormatError: true});
-        return;
-      }
-
-      this.moveImageInputToHiddenForm(inputElement);
-      this.props.addDataCB('cover');
+    if ($.inArray(fileExtension, ['png', 'jpg', 'jpeg', 'svg']) == (-1)) {
+      this.setState({showFormatError: true});
+      return false;
     }
+
+    return true;
   }
 
   moveImageInputToHiddenForm(originalInput) {
@@ -82,7 +92,9 @@ class TimelineBuilderImageButton extends React.Component {
            data-title="File Invalid!" data-content={ this.errorPopoverText() } data-placement="bottom"
            data-trigger="manual">
         <label className="sr-only" htmlFor="timeline-builder__image-input">Cover Image</label>
-        <input id="timeline-builder__image-input" type="file" onChange={ this.handleImageChange } className="js-timeline-builder__image-input hidden-xs-up" accept=".png,.jpg,.jpeg,.svg,image/png,image/jpeg,image/pjpeg"/>
+        <input id="timeline-builder__image-input" type="file" onChange={ this.handleImageChange }
+               className="js-timeline-builder__image-input hidden-xs-up"
+               accept=".png,.jpg,.jpeg,.svg,image/png,image/jpeg,image/pjpeg"/>
         <i className="timeline-builder__upload-section-icon fa fa-file-image-o"/>
         <span className="timeline-builder__tab-label">Image</span>
       </div>

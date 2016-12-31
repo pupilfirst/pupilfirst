@@ -4,6 +4,10 @@ class ApplicationStage < ApplicationRecord
   validates :name, presence: true
   validates :number, presence: true, uniqueness: true
 
+  def display_name
+    "##{number} #{name}"
+  end
+
   # Returns next stage using number.
   def next
     ApplicationStage.find_by number: (number + 1)

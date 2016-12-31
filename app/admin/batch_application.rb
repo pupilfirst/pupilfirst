@@ -36,7 +36,7 @@ ActiveAdmin.register BatchApplication do
   end
 
   filter :batch
-  filter :application_stage
+  filter :application_stage, collection: -> { ApplicationStage.order(:number) }
 
   filter :ransack_tagged_with,
     as: :select,

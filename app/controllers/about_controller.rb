@@ -12,7 +12,8 @@ class AboutController < ApplicationController
 
   # GET /about/leaderboard
   def leaderboard
-    @live_batches = Startup.available_batches.live
+    # TODO: correct @live_batches once the test batches are cleaned up.
+    @live_batches = nil # Startup.available_batches.live
     @leaderboards = leaderboards_for(@live_batches)
   end
 
@@ -55,10 +56,10 @@ class AboutController < ApplicationController
   end
 
   def leaderboards_for(batches)
-    leaderboards = {}
-    batches.each do |batch|
+    return nil unless batches.present?
+
+    batches.each_with_object({}) do |batch, leaderboards|
       leaderboards[batch.batch_number] = Startups::PerformanceService.new.leaderboard(batch)
     end
-    leaderboards
   end
 end

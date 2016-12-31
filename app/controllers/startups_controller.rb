@@ -20,7 +20,6 @@ class StartupsController < ApplicationController
         redirect_to new_user_session_path, alert: 'Please sign in to continue!'
       end
     end
-    @timeline_event = timeline_event_for_builder
   end
 
   def edit
@@ -80,14 +79,5 @@ class StartupsController < ApplicationController
   def restrict_to_startup_founders
     return if current_founder
     raise_not_found
-  end
-
-  # If an event_id is available, use that, otherwise supply a new timeline event.
-  def timeline_event_for_builder
-    if params[:event_id]
-      @startup.timeline_events.find(params[:event_id])
-    else
-      @startup.timeline_events.new
-    end
   end
 end

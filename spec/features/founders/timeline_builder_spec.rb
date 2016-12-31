@@ -31,7 +31,7 @@ feature 'Timeline Builder' do
     attach_file 'Cover Image', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'users', 'college_id.jpg')), visible: false
 
     # Open the link form.
-    find('.timeline-builder__upload-section-tab.link-upload').click
+    find('.timeline-builder__upload-section-tab.link-upload').trigger('click')
     expect(page).to have_content('Please enter a full URL, starting with http(s).')
 
     fill_in 'Link Title', with: 'Link to SV.CO'

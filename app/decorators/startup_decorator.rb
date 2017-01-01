@@ -11,7 +11,9 @@ class StartupDecorator < Draper::Decorator
   end
 
   def completed_targets_percentage
-    ((completed_targets_count.to_f / batch.targets.count) * 100).to_i
+    batch_targets = batch.targets.count
+    return 0 unless batch_targets.positive?
+    ((completed_targets_count.to_f / batch_targets) * 100).to_i
   end
 
   def leaderboard_rank

@@ -197,7 +197,7 @@ class ApplicationController < ActionController::Base
   def image_sources
     <<~IMAGE_SOURCES.squish
       img-src
-      'self' data: https://blog.sv.co http://www.startatsv.com https://sv-assets.sv.co https://secure.gravatar.com
+      'self' data: blob: https://blog.sv.co http://www.startatsv.com https://sv-assets.sv.co https://secure.gravatar.com
       https://uploaded-assets.sv.co #{google_analytics_csp[:image]} #{inspectlet_csp[:image]} #{facebook_csp[:image]}
       #{intercom_csp[:image]} #{instagram_csp[:image]};
     IMAGE_SOURCES

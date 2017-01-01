@@ -1,7 +1,9 @@
 module Startups
   class PerformanceService
-    # returns array of startup ids in the batch and their ranks
-    def leaderboard(batch)
+    # returns leaderboard array of [startup, rank, points]
+    def leaderboard(batch, start_date: nil, end_date: nil)
+      @start_date = start_date || last_week_start_date
+      @end_date = end_date || last_week_end_date
       @batch = batch
       @batch.present_week_number.in?(1..24) ? rank_list : nil
     end
@@ -21,7 +23,7 @@ module Startups
       relative_measure(karma)
     end
 
-    # private
+    private
 
     def rank_list
       ranks_with_points + ranks_without_points
@@ -62,8 +64,8 @@ module Startups
 
     def startups_with_points
       startups_in_batch.joins(:karma_points)
-        .where('karma_points.created_at > ?', start_date)
-        .where('karma_points.created_at < ?', end_date)
+        .where('karma_points.created_at > ?', @start_date)
+        .where('karma_points.created_at < ?', @end_date)
     end
 
     def startups_without_points
@@ -75,29 +77,13 @@ module Startups
     end
 
     # Starts on the week before last's Monday 6 PM IST.
-    def start_date
-      if monday? && before_evening?
-        8.days.ago.beginning_of_week
-      else
-        7.days.ago.beginning_of_week
-      end.in_time_zone('Asia/Calcutta') + 18.hours
+    def last_week_start_date
+      DatesService.last_week_start_date
     end
 
     # Ends on last week's Monday 6 PM IST.
-    def end_date
-      if monday? && before_evening?
-        8.days.ago.end_of_week
-      else
-        7.days.ago.end_of_week
-      end.in_time_zone('Asia/Calcutta') + 18.hours
-    end
-
-    def monday?
-      Date.today.in_time_zone('Asia/Calcutta').wday == 1
-    end
-
-    def before_evening?
-      Time.now.in_time_zone('Asia/Calcutta').hour < 18
+    def last_week_end_date
+      DatesService.last_week_end_date
     end
 
     def startup_points_hash

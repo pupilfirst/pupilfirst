@@ -7,3 +7,5 @@ Rails.application.load_tasks
 
 # Update the ruby-advisory-db and run audit
 task default: 'bundler:audit'
+
+Knapsack.load_tasks if defined?(Knapsack)

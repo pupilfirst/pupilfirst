@@ -12,6 +12,9 @@ class AboutController < ApplicationController
 
   # GET /about/leaderboard
   def leaderboard
+    # TODO: correct @live_batches once the test batches are cleaned up.
+    @live_batches = nil # Startup.available_batches.live
+    @leaderboards = leaderboards_for(@live_batches)
   end
 
   # GET /about/press-kit
@@ -50,5 +53,13 @@ class AboutController < ApplicationController
     return true if Rails.env.test?
 
     verify_recaptcha(model: @contact_form, message: 'Whoops. Verification of Recaptcha failed. Please try again.')
+  end
+
+  def leaderboards_for(batches)
+    return nil unless batches.present?
+
+    batches.each_with_object({}) do |batch, leaderboards|
+      leaderboards[batch.batch_number] = Startups::PerformanceService.new.leaderboard(batch)
+    end
   end
 end

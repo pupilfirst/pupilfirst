@@ -3,53 +3,25 @@ require 'rails_helper'
 RSpec.describe Batch, type: :model do
   subject { create :batch }
 
-  # context 'when application stage changes' do
-  #   let!(:first_stage) { create :application_stage, name: 'First Stage', number: 1 }
-  #   let!(:second_stage) { create :application_stage, name: 'Second Stage', number: 2 }
-  #   let!(:third_stage) { create :application_stage, name: 'Third Stage', number: 3 }
-  #   let!(:final_stage) { create :application_stage, name: 'Last Stage', number: 4, final_stage: true }
-  #
-  #   context 'when application is set to initial stage' do
-  #     it 'does nothing' do
-  #       expect(EmailApplicantsJob).to_not receive(:new)
-  #
-  #       subject.update!(
-  #         application_stage: first_stage,
-  #         application_stage_deadline: Time.now,
-  #         next_stage_starts_on: 7.days.from_now
-  #       )
-  #     end
-  #   end
-  #
-  #   context 'when application is set to final stage' do
-  #     it 'does nothing' do
-  #       expect(EmailApplicantsJob).to_not receive(:new)
-  #
-  #       subject.update!(
-  #         application_stage: final_stage,
-  #         application_stage_deadline: Time.now
-  #       )
-  #     end
-  #   end
-  #
-  #   context 'when application is set to any intermediary stage' do
-  #     before do
-  #       # This application's lead should not receive any mail.
-  #       create :batch_application, batch: subject, application_stage: second_stage
-  #
-  #       # This application's lead should receive a mail.
-  #       create :batch_application, batch: subject, application_stage: third_stage
-  #     end
-  #
-  #     it 'send emails' do
-  #       expect do
-  #         subject.update!(
-  #           application_stage: third_stage,
-  #           application_stage_deadline: Time.now,
-  #           next_stage_starts_on: 7.days.from_now
-  #         )
-  #       end.to change { ActionMailer::Base.deliveries.count }.by(2)
-  #     end
-  #   end
-  # end
+  describe '#display_name' do
+    it 'returns number followed by name' do
+      expect(subject.display_name).to eq("##{subject.batch_number} #{subject.theme}")
+    end
+  end
+
+  describe '#present_week_number' do
+    context 'when batch has started' do
+      it 'returns week number' do
+        expect(subject.present_week_number).to eq(5)
+      end
+    end
+
+    context 'when batch has not started' do
+      subject { create :batch, start_date: 1.day.from_now }
+
+      it 'returns nil' do
+        expect(subject.present_week_number).to eq(nil)
+      end
+    end
+  end
 end

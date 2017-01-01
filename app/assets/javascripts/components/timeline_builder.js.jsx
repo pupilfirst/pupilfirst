@@ -18,6 +18,7 @@ const TimelineBuilder = React.createClass({
       imageButtonKey: this.generateKey(),
       submissionProgress: null,
       hasSubmissionError: false,
+      submissionSuccessful: false,
       showDescriptionError: false,
       showDateError: false,
       showEventTypeError: false,
@@ -239,7 +240,12 @@ const TimelineBuilder = React.createClass({
   },
 
   handleSubmissionComplete: function () {
-    location.reload();
+    // Reload the window after 100ms.
+    setTimeout(function () {
+      window.location.reload();
+    }, 100);
+
+    this.setState({submissionSuccessful: true});
   },
 
   sampleText: function () {
@@ -288,7 +294,8 @@ const TimelineBuilder = React.createClass({
                                   showDateError={ this.state.showDateError } resetErrorsCB={ this.resetErrors }
                                   showEventTypeError={this.state.showEventTypeError}
                                   timelineEventTypeId={ this.timelineEventTypeIdForSelect() }
-                                  hasSubmissionError={ this.state.hasSubmissionError }/>
+                                  hasSubmissionError={ this.state.hasSubmissionError }
+                                  submissionSuccessful={ this.state.submissionSuccessful }/>
       </div>
     )
   }

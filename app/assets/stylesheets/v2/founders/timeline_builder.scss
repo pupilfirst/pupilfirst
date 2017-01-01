@@ -214,15 +214,6 @@
   }
 }
 
-.timeline-builder__timeline-event-type-select-wrapper {
-  width: 100%;
-  max-width: 240px;
-
-  select {
-    border: 0;
-  }
-}
-
 .timeline-builder__upload-section-tab, .timeline-builder__select-section-tab {
   padding: 0 20px;
   display: flex;
@@ -247,6 +238,17 @@
   &:hover, &:focus {
     background-color: $dark-primary-background;
     color: $brand-secondary;
+  }
+}
+
+.timeline-builder__timeline-event-type-select-wrapper {
+  width: 100%;
+  padding: 0 20px 0 10px;
+  max-width: 240px;
+
+  .select2 {
+    width: 100% !important;
+    outline: 0;
   }
 }
 

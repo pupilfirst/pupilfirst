@@ -8,12 +8,18 @@ module Startups
       @batch.present_week_number.in?(1..24) ? rank_list : nil
     end
 
+    # TODO: Manual memoization is ugly. Move to pertinent method.
     def leaderboard_rank(specified_startup)
-      leaderboard(specified_startup.batch).detect { |startup, _rank, _points| startup == specified_startup }&.second
+      memoized_leaderboard = leaderboard(specified_startup.batch)
+      return if memoized_leaderboard.nil?
+      memoized_leaderboard.detect { |startup, _rank, _points| startup == specified_startup }&.second
     end
 
+    # TODO: Manual memoization is ugly. Move to pertinent method.
     def last_week_karma(specified_startup)
-      leaderboard(specified_startup.batch).detect { |startup, _rank, _points| startup == specified_startup }&.third
+      memoized_leaderboard = leaderboard(specified_startup.batch)
+      return if memoized_leaderboard.nil?
+      memoized_leaderboard.detect { |startup, _rank, _points| startup == specified_startup }&.third
     end
 
     # returns a relative performance measure for a startup as a %

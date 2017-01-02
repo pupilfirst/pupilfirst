@@ -65,8 +65,8 @@ html lang='en'
                   ' If your feedback is useful, it shows you can think well of product ideas and improvement, and we'll reward you with Karma Points & a special timeline event :)
                   hr
                     = f.input :founder_id, as: :hidden
-                    = f.input :feedback_type, as: :select, collection: PlatformFeedback.types_of_feedback, include_blank: false
-                    = f.input :description, input_html: { rows: 5 }
+                    = f.input :feedback_type, as: :select, collection: PlatformFeedback.types_of_feedback, include_blank: 'Select type', required: true
+                    = f.input :description, input_html: { rows: 5 }, required: true
                     = f.input :attachment, as: :file
                     hr
                     p How likely is it that you would recommend SV.CO to a friend?

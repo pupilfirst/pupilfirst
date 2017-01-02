@@ -30,7 +30,6 @@ founders_list.each do |email, name, born_on, gender, phone|
     email: email,
     user: user,
     name: name,
-    confirmed_at: Time.now,
     born_on: born_on,
     gender: gender,
     phone: phone,

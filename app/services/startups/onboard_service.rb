@@ -12,7 +12,9 @@ module Startups
 
       startups.each do |startup|
         Startups::PrepopulateTimelineService.new(startup).execute
-        send_notification_emails(startup)
+
+        # TODO: Mail has been disabled. Remove completely if this is unused.
+        # send_notification_emails(startup)
       end
 
       @batch.update!(invites_sent_at: Time.now)

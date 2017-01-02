@@ -54,7 +54,7 @@ feature 'Team members spec' do
 
       select 'Product', from: 'Roles'
       select 'Engineering', from: 'Roles'
-      select 'Governance', from: 'Roles'
+      select 'Design', from: 'Roles'
       click_on 'List new team member'
 
       expect(page.find('.team_member_roles')[:class]).to include('has-error')

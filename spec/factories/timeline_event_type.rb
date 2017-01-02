@@ -9,7 +9,7 @@ FactoryGirl.define do
 
     factory :tet_team_formed do
       key 'team_formed'
-      role 'Governance'
+      role 'Product'
       title 'Team Formed'
     end
 
@@ -22,14 +22,14 @@ FactoryGirl.define do
 
     factory :tet_one_liner do
       key 'one_liner'
-      role 'Governance'
+      role 'Product'
       title 'Set New One-Liner'
       suggested_stage 'moved_to_idea_discovery,moved_to_customer_validation'
     end
 
     factory :tet_joined do
       key 'joined_svco'
-      role 'Governance'
+      role 'Product'
       title 'Joined SV.CO'
       suggested_stage 'moved_to_idea_discovery'
     end

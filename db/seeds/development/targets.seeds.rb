@@ -9,7 +9,7 @@ after 'development:target_groups' do
   # 1st week 1st group targets - all completed
   target_group = batch.program_weeks.find_by(number: 1).target_groups.find_by(sort_index: 1)
   target_details = [
-    { title: 'Add Info to your Startup Profile', role: 'governance', type: Target::TYPE_TODO, days: 7 },
+    { title: 'Add Info to your Startup Profile', role: 'product', type: Target::TYPE_TODO, days: 7 },
     { title: 'Add Info to your Founder Profile', role: 'founder', type: Target::TYPE_TODO, days: 7 },
     { title: 'Join Public Slack', role: 'founder', type: Target::TYPE_TODO, days: 3 }
   ]
@@ -41,10 +41,10 @@ after 'development:target_groups' do
   target_details = [
     { title: 'Apply for a Passport', role: 'founder', type: Target::TYPE_TODO, days: 5 },
     { title: 'Open a Personal Bank Account', role: 'founder', type: Target::TYPE_TODO, days: 10 },
-    { title: 'Confirm Partnership Registration', role: 'governance', type: Target::TYPE_TODO, days: 10 },
-    { title: 'Apply for a Company PAN Card', role: 'governance', type: Target::TYPE_TODO, days: 20 },
-    { title: 'Open Company Bank Account', role: 'governance', type: Target::TYPE_TODO, days: 15 },
-    { title: 'Apply for AWS Credits', role: 'governance', type: Target::TYPE_TODO, days: 15 }
+    { title: 'Confirm Partnership Registration', role: 'product', type: Target::TYPE_TODO, days: 10 },
+    { title: 'Apply for a Company PAN Card', role: 'product', type: Target::TYPE_TODO, days: 20 },
+    { title: 'Open Company Bank Account', role: 'product', type: Target::TYPE_TODO, days: 15 },
+    { title: 'Apply for AWS Credits', role: 'product', type: Target::TYPE_TODO, days: 15 }
   ]
 
   target_details.each do |details|
@@ -96,8 +96,8 @@ after 'development:target_groups' do
   target_group = batch.program_weeks.find_by(number: 1).target_groups.find_by(sort_index: 3)
   target_details = [
     { title: 'Framework Expectations', role: 'product', type: Target::TYPE_ATTEND, days: 20 },
-    { title: 'Town Hall #1', role: 'governance', type: Target::TYPE_ATTEND, days: 1 },
-    { title: 'What is SaaS?', role: 'governance', type: Target::TYPE_ATTEND, days: 1 }
+    { title: 'Town Hall #1', role: 'product', type: Target::TYPE_ATTEND, days: 1 },
+    { title: 'What is SaaS?', role: 'product', type: Target::TYPE_ATTEND, days: 1 }
   ]
 
   target_details.each do |details|
@@ -115,7 +115,7 @@ after 'development:target_groups' do
   # 1st week 4th group target - pending
   Target.create!(
     title: "Freshdesk's Story",
-    role: 'marketing',
+    role: 'product',
     description: Faker::Lorem.words(10).join(' '),
     target_type: Target::TYPE_ATTEND,
     days_to_complete: 1,
@@ -128,7 +128,7 @@ after 'development:target_groups' do
   target_details = [
     { title: 'Study the Idea Library', role: 'product', type: Target::TYPE_TODO, days: 14 },
     { title: 'Shortlist Ideas', role: 'product', type: Target::TYPE_TODO, days: 14 },
-    { title: 'Design Experiments, Surveys & Interviews', role: 'marketing', type: Target::TYPE_TODO, days: 20 }
+    { title: 'Design Experiments, Surveys & Interviews', role: 'product', type: Target::TYPE_TODO, days: 20 }
   ]
 
   target_details.each do |details|

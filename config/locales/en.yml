@@ -108,10 +108,8 @@ en:
   role:
     team: Team
     product: Product
-    marketing: 'Marketing & Sales'
     engineering: Engineering
     design: Design
-    governance: Governance
     founder: All Founders
 
   target:

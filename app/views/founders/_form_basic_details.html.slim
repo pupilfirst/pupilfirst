@@ -17,14 +17,13 @@
   = f.input :communication_address
   = f.input :identification_proof, label: 'ID Proof', as: :file, hint: founder.identification_proof_hint
 
-  - college_hint = "Currently set to <strong>#{f.object.college.name}</strong>".html_safe if f.object.college.present?
   = f.input :college_id,
-    type: :hidden,
+    as: :select,
     label: 'College',
     placeholder: 'Please pick your college',
-    input_html: { value: nil, 'data-search-url' => colleges_url },
-    required: false,
-    hint: college_hint
+    input_html: { 'data-search-url' => colleges_url },
+    required: true,
+    collection: f.object.college.present? ? [f.object.college] : []
 
   = f.input :roll_number, label: 'University Roll Number'
   = f.input :college_identification, label: 'College ID', as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }

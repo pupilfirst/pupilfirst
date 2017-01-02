@@ -39,12 +39,14 @@ module Startups
     def create_startup(batch_application)
       return batch_application.startup if batch_application.startup.present?
 
-      begin
-        name = ProductNameGeneratorService.new.fun_name
-        @batch.startups.create!(product_name: name, batch_application: batch_application)
-      rescue ActiveRecord::RecordInvalid
-        retry
+      name_generator = ProductNameGeneratorService.new
+      name = name_generator.fun_name
+
+      while @batch.startups.find_by(product_name: name).present?
+        name = name_generator.fun_name
       end
+
+      @batch.startups.create!(product_name: name, batch_application: batch_application)
     end
 
     def create_founder(applicant, startup, team_lead:)

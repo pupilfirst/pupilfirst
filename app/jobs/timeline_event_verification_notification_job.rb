@@ -17,7 +17,7 @@ class TimelineEventVerificationNotificationJob < ApplicationJob
     elsif @timeline_event.not_accepted?
       { founders: @timeline_event.startup&.founders }
     else
-      { channel: '#general' }
+      { channel: @timeline_event.startup.batch.slack_channel }
     end
 
     # ping appropriate message on slack

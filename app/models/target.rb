@@ -30,7 +30,7 @@ class Target < ApplicationRecord
     target_roles + Founder.valid_roles
   end
 
-  TYPE_TODO = 'To Do'
+  TYPE_TODO = 'Todo'
   TYPE_ATTEND = 'Attend'
   TYPE_READ = 'Read'
   TYPE_LEARN = 'Learn'

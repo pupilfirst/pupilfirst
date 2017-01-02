@@ -6,17 +6,19 @@ setupSelect2Inputs = ->
 
     universityInput.select2
       minimumInputLength: 3,
+      placeholder: 'Please pick your university',
       ajax:
         url: universitySearchUrl,
         dataType: 'json',
-        quietMillis: 500,
-        data: (term, page) ->
+        delay: 500,
+        data: (params) ->
           return {
-            q: term
+            q: params.term
           }
         ,
-        results: (data, page) ->
+        processResults: (data, params) ->
           return { results: data }
+        ,
         cache: true
 
     $('#mooc_student_signup_state').select2

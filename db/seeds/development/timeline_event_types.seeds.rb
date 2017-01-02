@@ -5,6 +5,8 @@ def self.seed_image(image_name)
 end
 
 timeline_event_types = [
+  ['founder_update', 'Founder', 'Founder Update', "I've got a few things to share! [...]", nil, nil],
+  ['team_update', 'Product', 'Team Update', 'Anything else you want to talk about! Proof: Not needed.', nil, nil],
   ['graduated', 'Product', 'Graduated from Startup Village', "Our [team/team member] has graduated from Startup Village by [being hired/being acqui-hired/becoming sustainable/getting admission to higher studies/getting funded/joining an accelerator]. We're now an alumni, and happy to help other startups!", 'Graduation method - Offer Letter, Admission Letter, Letter of Intent to Acquire, Funding Proof, Accelerator Invitation Letter.', nil, 'graduated'],
   ['bank_loan', 'Product', 'Received Bank Loan', "We've received a Bank Loan from [KSIDC/Federal Bank/...] to execute our project with very favourable repayment terms.", 'Email/Letter from Loan Agency. Bank Account Statement.', nil, 'bank_loan'],
   ['end_iteration', 'Product', 'End of Current Iteration', "We've worked hard on our product, and we're ready with [a new iteration]. Our primary learning from this iteration was [...].", 'Proof: Not Needed', nil, 'end_iteration'],

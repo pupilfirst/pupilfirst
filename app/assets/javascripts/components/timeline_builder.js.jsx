@@ -252,15 +252,17 @@ const TimelineBuilder = React.createClass({
     if (this.state.timelineEventTypeId == null) {
       return null;
     } else {
-      let filtered = Object.values(this.props.timelineEventTypes).filter(function (element) {
-        return this.state.timelineEventTypeId.toString() in element;
-      }, this);
+      let timelineEventTypeId = this.state.timelineEventTypeId.toString();
 
-      if (filtered.length > 0) {
-        return filtered[0][this.state.timelineEventTypeId.toString()].sample;
-      } else {
-        return null;
+      for (let role in this.props.timelineEventTypes) {
+        let role_types = this.props.timelineEventTypes[role];
+
+        if (timelineEventTypeId in role_types) {
+          return role_types[timelineEventTypeId]['sample'];
+        }
       }
+
+      return null;
     }
   },
 

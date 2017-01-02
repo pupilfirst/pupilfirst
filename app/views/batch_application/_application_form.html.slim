@@ -36,13 +36,12 @@
       .hidden-xs-up
         = f.input :reference_text, label: false, placeholder: 'How did you hear about us?', required: false
 
-      // TODO: College is actually a required field, but select2 v3 does not play nice with HTML5 validations. Try enabling this when upgrading to select2 v4.
       = f.input :college_id,
-        type: :hidden,
+        as: :select,
         label: false,
-        placeholder: 'Please pick your college',
         input_html: { value: nil, 'data-search-url' => colleges_url },
-        required: false
+        required: true,
+        collection: []
 
       .hidden-xs-up
         = f.input :college_text,

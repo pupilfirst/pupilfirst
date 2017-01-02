@@ -226,7 +226,7 @@ ActiveAdmin.register BatchApplicant do
       f.input :tag_list, input_html: { value: f.object.tag_list.join(','), 'data-applicant-tags' => BatchApplicant.tag_counts_on(:tags).pluck(:name).to_json }
       f.input :phone
       f.input :college_text, label: 'College as text'
-      f.input :college_id, input_html: { 'data-search-url' => colleges_url }
+      f.input :college_id, as: :select, input_html: { 'data-search-url' => colleges_url }, collection: f.object.college.present? ? [f.object.college] : []
       f.input :role, as: :select, collection: Founder.valid_roles
       f.input :reference
       f.input :notes

@@ -71,16 +71,17 @@ setupSelect2Inputs = ->
 
     collegeInput.select2
       minimumInputLength: 3,
+      placeholder: 'Please pick your college',
       ajax:
         url: collegeSearchUrl,
         dataType: 'json',
-        quietMillis: 500,
-        data: (term, page) ->
+        delay: 500,
+        data: (params) ->
           return {
-            q: term
+            q: params.term
           }
         ,
-        results: (data, page) ->
+        processResults: (data, params) ->
           return { results: data }
         cache: true
 

@@ -34,13 +34,13 @@ setupSelect2ForBatchApplicantColleges = ->
       ajax:
         url: collegeSearchUrl,
         dataType: 'json',
-        quietMillis: 500,
-        data: (term, page) ->
+        delay: 500,
+        data: (params) ->
           return {
-            q: term
+            q: params.term
           }
         ,
-        results: (data, page) ->
+        processResults: (data, params) ->
           return { results: data }
         cache: true
 

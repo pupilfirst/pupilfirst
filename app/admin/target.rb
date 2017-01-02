@@ -4,7 +4,7 @@ ActiveAdmin.register Target do
   permit_params :assignee_id, :assignee_type, :assigner_id, :role, :title, :description, :resource_url,
     :completion_instructions, :days_to_complete, :slideshow_embed, :completed_at, :completion_comment, :rubric,
     :remote_rubric_url, :review_test_embed, :batch_id, :target_group_id, :target_type, :points_earnable,
-    :timeline_event_type_id, prerequisite_target_ids: []
+    :timeline_event_type_id, :sort_index, prerequisite_target_ids: []
 
   preserve_default_filters!
 
@@ -77,7 +77,7 @@ ActiveAdmin.register Target do
     end
     column :target_group
 
-    column :assignee
+    column :sort_index
 
     column :role do |target|
       t("role.#{target.role}")
@@ -126,6 +126,7 @@ ActiveAdmin.register Target do
       row :assignee
       row :batch
       row :target_group
+      row :sort_index
       row :target_type
       row :points_earnable
 

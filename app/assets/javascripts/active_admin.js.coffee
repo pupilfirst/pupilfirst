@@ -12,7 +12,7 @@
 #= require pnotify/pnotify.js
 #= require pnotify
 
-#= require select2
+#= require select2-full
 #= require trix
 
 # XDAN's datetimepicker

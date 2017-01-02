@@ -32,13 +32,11 @@
 
             = f.input :gender, required: true, collection: Founder.valid_gender_values, as: :radio_buttons, label_method: proc { |gender| gender.capitalize }
 
-            // University is actually a required field, but select2 v3 does not play nice with HTML5 validations.
-            // TODO: Try enabling this when upgrading to select2 v4.
             = f.input :university_id,
-              type: :hidden,
-              placeholder: 'Please pick your university',
+              as: :select,
               input_html: { value: nil, 'data-search-url' => universities_url },
-              required: false
+              required: true,
+              collection: []
 
             = f.input :college, required: true
             = f.input :semester, as: :select, collection: MoocStudent.valid_semester_values, include_blank: 'Select your semester'

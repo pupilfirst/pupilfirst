@@ -1,29 +1,29 @@
 require_relative 'helper'
 
-after 'development:target_groups' do
+after 'development:target_groups', 'development:timeline_event_types' do
   puts 'Seeding targets'
 
   batch = Batch.find_by(batch_number: 7)
   founder = Founder.find_by(email: 'someone@sv.co')
+  founder_update = TimelineEventType.find_by(key: 'founder_update')
+  team_update = TimelineEventType.find_by(key: 'team_update')
 
   # 1st week 1st group targets - all completed
   target_group = batch.program_weeks.find_by(number: 1).target_groups.find_by(sort_index: 1)
   target_details = [
-    { title: 'Add Info to your Startup Profile', role: 'product', type: Target::TYPE_TODO, days: 7 },
-    { title: 'Add Info to your Founder Profile', role: 'founder', type: Target::TYPE_TODO, days: 7 },
-    { title: 'Join Public Slack', role: 'founder', type: Target::TYPE_TODO, days: 3 }
+    { title: 'Add Info to your Startup Profile', role: 'product', timeline_event_type: founder_update },
+    { title: 'Add Info to your Founder Profile', role: 'founder', timeline_event_type: founder_update },
+    { title: 'Join Public Slack', role: 'founder', days_to_complete: 3, timeline_event_type: founder_update }
   ]
 
   target_details.each do |details|
-    target = Target.create!(
-      title: details[:title],
-      role: details[:role],
+    target = Target.create!({
       description: Faker::Lorem.words(10).join(' '),
-      target_type: details[:type],
-      days_to_complete: details[:days],
       target_group: target_group,
-      batch: batch
-    )
+      batch: batch,
+      target_type: Target::TYPE_TODO,
+      days_to_complete: 7
+    }.merge(details))
 
     founder.timeline_events.create!(
       startup: founder.startup,
@@ -39,24 +39,21 @@ after 'development:target_groups' do
   # 1st week 2nd group targets - partially completed
   target_group = batch.program_weeks.find_by(number: 1).target_groups.find_by(sort_index: 2)
   target_details = [
-    { title: 'Apply for a Passport', role: 'founder', type: Target::TYPE_TODO, days: 5 },
-    { title: 'Open a Personal Bank Account', role: 'founder', type: Target::TYPE_TODO, days: 10 },
-    { title: 'Confirm Partnership Registration', role: 'product', type: Target::TYPE_TODO, days: 10 },
-    { title: 'Apply for a Company PAN Card', role: 'product', type: Target::TYPE_TODO, days: 20 },
-    { title: 'Open Company Bank Account', role: 'product', type: Target::TYPE_TODO, days: 15 },
-    { title: 'Apply for AWS Credits', role: 'product', type: Target::TYPE_TODO, days: 15 }
+    { title: 'Apply for a Passport', role: 'founder', days_to_complete: 5, timeline_event_type: founder_update },
+    { title: 'Open a Personal Bank Account', role: 'founder', days_to_complete: 10, timeline_event_type: founder_update },
+    { title: 'Confirm Partnership Registration', role: 'product', days_to_complete: 10, timeline_event_type: team_update },
+    { title: 'Apply for a Company PAN Card', role: 'product', days_to_complete: 20, timeline_event_type: team_update },
+    { title: 'Open Company Bank Account', role: 'product', days_to_complete: 15, timeline_event_type: team_update },
+    { title: 'Apply for AWS Credits', role: 'product', days_to_complete: 15, timeline_event_type: team_update }
   ]
 
   target_details.each do |details|
-    Target.create!(
-      title: details[:title],
-      role: details[:role],
+    Target.create!({
       description: Faker::Lorem.words(10).join(' '),
-      target_type: details[:type],
-      days_to_complete: details[:days],
+      target_type: Target::TYPE_TODO,
       target_group: target_group,
       batch: batch
-    )
+    }.merge(details))
   end
 
   # mark one target as not accepted

@@ -217,7 +217,7 @@ class Founder < ApplicationRecord
   end
 
   def self.valid_roles
-    %w(product engineering marketing governance design)
+    %w(product engineering design)
   end
 
   def roles

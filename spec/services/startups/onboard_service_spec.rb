@@ -51,6 +51,8 @@ describe Startups::OnboardService do
     end
 
     it 'sends emails to founders' do
+      pending 'Disabled because of https://trello.com/c/nyszoy5p'
+
       subject.execute
 
       open_email(batch_application.reload.team_lead.founder.email)

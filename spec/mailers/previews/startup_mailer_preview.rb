@@ -9,4 +9,8 @@ class StartupMailerPreview < ActionMailer::Preview
 
     StartupMailer.connect_request_confirmed(connect_request)
   end
+
+  def batch_start
+    StartupMailer.batch_start(Startup.first)
+  end
 end

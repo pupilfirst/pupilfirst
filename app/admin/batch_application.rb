@@ -3,7 +3,8 @@ ActiveAdmin.register BatchApplication do
 
   menu parent: 'Admissions', label: 'Applications', priority: 1
 
-  permit_params :batch_id, :application_stage_id, :university_id, :team_achievement, :team_lead_id, :college, :state, :tag_list, :team_size, :agreements_verified, batch_applicants_attributes: [:id, :fee_payment_method]
+  permit_params :batch_id, :application_stage_id, :university_id, :team_achievement, :team_lead_id, :college, :state,
+    :team_size, :agreements_verified, batch_applicants_attributes: [:id, :fee_payment_method], tag_list: []
 
   batch_action :promote, confirm: 'Are you sure?' do |ids|
     promoted = 0
@@ -361,7 +362,13 @@ ActiveAdmin.register BatchApplication do
       f.input :team_lead, collection: f.object.batch_applicants, include_blank: false
       f.input :team_size, as: :select, collection: 2..10, include_blank: false
       f.input :application_stage, collection: ApplicationStage.all.order(number: 'ASC')
-      f.input :tag_list, input_html: { value: f.object.tag_list.join(','), 'data-application-tags' => BatchApplication.tag_counts_on(:tags).pluck(:name).to_json }
+
+      f.input :tag_list,
+        as: :select,
+        'data-resource-tags' => BatchApplication.tag_counts_on(:tags).pluck(:name).to_json,
+        collection: BatchApplication.tag_counts_on(:tags).pluck(:name),
+        multiple: true
+
       f.input :team_achievement
 
       f.has_many :batch_applicants, heading: 'Fee Payment Methods:', new_record: false do |g|

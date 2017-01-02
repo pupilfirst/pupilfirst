@@ -1,7 +1,22 @@
 ## Ongoing
 
-- Basic specs for Founder dashboard are being written. [[Trello]](https://trello.com/c/hYu3Wr5E)
-- Timeline builder with basic features is functional - now working on stretch goals. [[Trello]](https://trello.com/c/EvCvyGdH)
+- Lots of work related to launch of the third batch.
+- Timeline builder has a few more stretch goals to complete. Mostly done. [[Trello]](https://trello.com/c/EvCvyGdH)
+
+## 2017.01.02
+
+- Start of third batch! We've launched the new Founder Dashboard to the public.
+- Added select2 picker for timeline event type on the admin target page. [[Trello]](https://trello.com/c/8CE9D48i)
+- Fixed an issue with large image uploads on the timeline builder. Trello. [[1]](https://trello.com/c/6wTNKd3d) [[2]](https://trello.com/c/oJznwasB)
+- Added a processing stage for the timeline builder, in between submission and 200 return from server. [[Trello]](https://trello.com/c/h8pwPVq3)
+- Faculty slots can by filtered by faculty time on admin interface. [[Trello]](https://trello.com/c/qJDvMAyj)
+- Public slack invite was broken when iframe sandboxing was performed. This has been fixed. [[Trello]](https://trello.com/c/WHMGHx4s)
+- Founder dashboard specs are in place. [[Trello]](https://trello.com/c/hYu3Wr5E)
+- Specs for timeline builder are in place. [[Trello]](https://trello.com/c/IKUxpUhV)
+- The knapsack gem has been introduced to correctly split workload on the CI. [[Trello]](https://trello.com/c/Me0cgSES)
+- Devise columns were dropped from Founder model. [[Trello]](https://trello.com/c/FlelMOLh)
+- Fixed a bunch of crash-situations on production. [[Trello]](https://trello.com/c/0HKcmlwr)
+- Coverage report and knapsack are activated only when required. This speeds up testing by ~10%. [[Trello]](https://trello.com/c/ciUQLaRv)
 
 ## 2016.12.26
 

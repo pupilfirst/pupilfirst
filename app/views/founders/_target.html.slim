@@ -9,7 +9,7 @@
           | #{target.title}
         .target-title-info
           .target-deadline.font-regular
-            | Suggested Deadline:
+            | Complete by:
             span.target-deadline-date
               | #{target.due_date.strftime('%b %e')}
           - if target.points_earnable.present?

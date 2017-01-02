@@ -14,7 +14,7 @@
               | #{target.due_date.strftime('%b %e')}
           - if target.points_earnable.present?
             .target-karma-points.font-regular.hidden-sm-down
-              | Points:
+              | Karma Points:
               span.earn-karma-points
                 | #{target.points_earnable}
       .target-status.tag.tag-pill class="#{target.status_badge_class(current_founder)}"

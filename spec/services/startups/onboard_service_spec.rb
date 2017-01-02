@@ -65,5 +65,21 @@ describe Startups::OnboardService do
 
       expect(batch_application.reload.startup.timeline_events.verified.count).to eq(1)
     end
+
+    context 'when product name collision occurs' do
+      let!(:third_batch_application) { create :batch_application, :stage_5, batch: batch_application.batch }
+      let(:mock_service) { instance_double('Startups::ProductNameGeneratorService') }
+
+      before do
+        allow(Startups::ProductNameGeneratorService).to receive(:new).and_return(mock_service)
+        allow(mock_service).to receive(:fun_name).and_return('foo', 'foo', 'bar')
+      end
+
+      it 'creates startup with another name' do
+        subject.execute
+
+        expect(Startup.pluck(:product_name)).to eq(%w(foo bar))
+      end
+    end
   end
 end

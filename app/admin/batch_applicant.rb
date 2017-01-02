@@ -3,10 +3,12 @@ ActiveAdmin.register BatchApplicant do
 
   menu parent: 'Admissions', label: 'Applicants'
 
-  permit_params do
-    params = [:name, :email, :phone, :role, :team_lead, :tag_list, :reference, :college_id, :notes, :fee_payment_method, { batch_application_ids: [] }, college_attributes: [:name, :also_known_as, :city, :state_id, :established_year, :website, :contact_numbers, :replacement_university_id]]
-    params << [:born_on, :gender, :parent_name, :current_address, :permanent_address, :id_proof_type, :id_proof_number, :id_proof, :address_proof]
-  end
+  # rubocop:disable Style/AlignArray
+  permit_params :name, :email, :phone, :role, :team_lead, :reference, :college_id, :notes, :fee_payment_method,
+    :born_on, :gender, :parent_name, :current_address, :permanent_address, :id_proof_type, :id_proof_number, :id_proof,
+    :address_proof, batch_application_ids: [], tag_list: [], college_attributes: [:name, :also_known_as, :city,
+      :state_id, :established_year, :website, :contact_numbers, :replacement_university_id]
+  # rubocop:enable Style/AlignArray
 
   scope :all, default: true
   scope :submitted_application
@@ -223,7 +225,13 @@ ActiveAdmin.register BatchApplicant do
       f.input :batch_applications, collection: BatchApplication.all.includes(:team_lead, :batch)
       f.input :name
       f.input :email
-      f.input :tag_list, input_html: { value: f.object.tag_list.join(','), 'data-applicant-tags' => BatchApplicant.tag_counts_on(:tags).pluck(:name).to_json }
+
+      f.input :tag_list,
+        as: :select,
+        'data-resource-tags' => BatchApplicant.tag_counts_on(:tags).pluck(:name).to_json,
+        collection: BatchApplicant.tag_counts_on(:tags).pluck(:name),
+        multiple: true
+
       f.input :phone
       f.input :college_text, label: 'College as text'
       f.input :college_id, as: :select, input_html: { 'data-search-url' => colleges_url }, collection: f.object.college.present? ? [f.object.college] : []

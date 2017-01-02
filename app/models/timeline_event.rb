@@ -222,11 +222,16 @@ class TimelineEvent < ApplicationRecord
   end
 
   def points_for_grade
-    {
-      GRADE_GOOD => 10,
-      GRADE_GREAT => 20,
-      GRADE_WOW => 40
+    minimum_point_for_target = target&.points_earnable
+    return minimum_point_for_target unless grade.present?
+
+    multiplier = {
+      GRADE_GOOD => 1,
+      GRADE_GREAT => 1.5,
+      GRADE_WOW => 2
     }.with_indifferent_access[grade]
+
+    minimum_point_for_target * multiplier
   end
 
   # A hidden timeline event is not displayed to user if user isn't logged in, or isn't the founder linked to event.

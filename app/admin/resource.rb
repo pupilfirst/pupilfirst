@@ -1,7 +1,7 @@
 ActiveAdmin.register Resource do
   include DisableIntercom
 
-  permit_params :title, :description, :file, :thumbnail, :share_status, :batch_id, :startup_id, :tag_list
+  permit_params :title, :description, :file, :thumbnail, :share_status, :batch_id, :startup_id, tag_list: []
 
   controller do
     def find_resource
@@ -128,7 +128,12 @@ ActiveAdmin.register Resource do
       f.input :thumbnail, as: :file
       f.input :title
       f.input :description
-      f.input :tag_list, input_html: { value: f.object.tag_list.join(','), 'data-resource-tags' => Resource.tag_counts_on(:tags).pluck(:name).to_json }
+
+      f.input :tag_list,
+        as: :select,
+        'data-resource-tags' => Resource.tag_counts_on(:tags).pluck(:name).to_json,
+        collection: Resource.tag_counts_on(:tags).pluck(:name),
+        multiple: true
     end
 
     f.actions

@@ -21,7 +21,7 @@
 //= require xdan_datetimepicker
 
 //= require moment
-//= require select2
+//= require select2-full
 //= require googleanalytics/autotrack
 //= require google_analytics
 //= require facebook_pixel

@@ -2,7 +2,7 @@
 module ActiveAdmin
   module DashboardHelper
     def days_elapsed
-      (Date.today - batch_selected.start_date).to_i
+      (Date.today - batch_selected.start_date).to_i + 1
     end
 
     def batch_duration

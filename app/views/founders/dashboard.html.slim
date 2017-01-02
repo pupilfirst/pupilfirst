@@ -52,7 +52,9 @@
                 .target-group-header-details
                   ' #{target_group.description}
 
-              == render 'target', target_group: target_group
+              - target_group.targets.each do |target|
+                == render 'target', target: target
+
 == render 'view-slides'
 == render 'timeline_builder'
 == render 'performance_overview'

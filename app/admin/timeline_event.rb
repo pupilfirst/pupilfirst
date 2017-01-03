@@ -137,32 +137,6 @@ ActiveAdmin.register TimelineEvent do
     end
   end
 
-  member_action :verify, method: :post do
-    timeline_event = TimelineEvent.find(params[:id])
-    timeline_event.verify!
-    TimelineEventVerificationNotificationJob.perform_later timeline_event
-    redirect_to action: :show
-  end
-
-  member_action :revert_to_pending, method: :post do
-    TimelineEvent.find(params[:id]).revert_to_pending!
-    redirect_to action: :show
-  end
-
-  member_action :mark_needs_improvement, method: :post do
-    timeline_event = TimelineEvent.find(params[:id])
-    timeline_event.mark_needs_improvement!
-    TimelineEventVerificationNotificationJob.perform_later timeline_event
-    redirect_to action: :show
-  end
-
-  member_action :mark_not_accepted, method: :post do
-    timeline_event = TimelineEvent.find(params[:id])
-    timeline_event.mark_not_accepted!
-    TimelineEventVerificationNotificationJob.perform_later timeline_event
-    redirect_to action: :show
-  end
-
   member_action :save_link_as_resume_url, method: :post do
     timeline_event = TimelineEvent.find(params[:id])
     timeline_event.founder.update!(resume_url: timeline_event.links[params[:index].to_i][:url])
@@ -252,46 +226,7 @@ ActiveAdmin.register TimelineEvent do
 
       row :event_on
 
-      row :verified_status do
-        span do
-          "#{timeline_event.verified_status} "
-        end
-
-        # an event in any state (other than already verified) can be verified
-        verification_confirm = 'Are you sure you want to verify this event?'
-        verification_confirm += ' The Verification will be announced on Public Slack' unless timeline_event.founder_event?
-        unless timeline_event.verified?
-          span do
-            button_to 'Verify and Accept', verify_admin_timeline_event_path,
-              form_class: 'inline-button',
-              data: { confirm: verification_confirm }
-          end
-        end
-
-        # an event in any state (other than already marked for improvement) can be marked for improvement
-        unless timeline_event.needs_improvement?
-          span do
-            button_to 'Verify and Mark Needs Improvement', mark_needs_improvement_admin_timeline_event_path,
-              form_class: 'inline-button'
-          end
-        end
-
-        # an event in any state (other than already rejected) can be marked not accepted
-        unless timeline_event.not_accepted?
-          span do
-            button_to 'Mark Not Accepted', mark_not_accepted_admin_timeline_event_path,
-              form_class: 'inline-button'
-          end
-        end
-
-        # any non pending event can be retracted back to pending
-        unless timeline_event.pending?
-          span do
-            button_to 'Revert to Pending', revert_to_pending_admin_timeline_event_path,
-              form_class: 'inline-button'
-          end
-        end
-      end
+      row :verified_status
 
       row :verified_at
 

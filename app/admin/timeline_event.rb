@@ -35,6 +35,11 @@ ActiveAdmin.register TimelineEvent do
     def scoped_collection
       super.includes :startup, :timeline_event_type
     end
+
+    def show
+      @status_update_form = Admin::TimelineEventStatusUpdateForm.new(TimelineEvent.find(params[:id]))
+      super
+    end
   end
 
   index do
@@ -116,33 +121,20 @@ ActiveAdmin.register TimelineEvent do
     redirect_to action: :show
   end
 
-  member_action :grade, method: :post do
-    timeline_event = TimelineEvent.find params[:id]
+  member_action :update_status, method: :patch do
+    timeline_event = TimelineEvent.find(params[:id])
+    @status_update_form = Admin::TimelineEventStatusUpdateForm.new(timeline_event)
 
-    # If a grade has been picked, add that and create Karma Points.
-    if params[:grade].present?
-      timeline_event.update!(grade: params[:grade])
-
-      # if private event, assign karma points to the founder too
-      founder = timeline_event.founder_event? ? timeline_event.founder : nil
-      assigned_to = timeline_event.founder_event? ? 'the founder and startup' : 'the startup' # used in flash message
-
-      karma_point = KarmaPoint.create!(
-        source: timeline_event,
-        founder: founder,
-        startup: timeline_event.startup,
-        activity_type: "Added a new Timeline event - #{timeline_event.title}",
-        points: timeline_event.points_for_grade
-      )
-
-      flash[:success] = "Karma points (#{timeline_event.points_for_grade}) have been assigned to #{assigned_to}."
-
-      Rails.logger.info event: :timeline_event_karma_point_created, karma_point_id: karma_point.id
+    if @status_update_form.validate(params[:admin_timeline_event_status_update])
+      timeline_event, points = @status_update_form.save
+      flash_message = "Timeline Event marked #{timeline_event.verified_status}"
+      flash_message += " and #{points} Karma Points added" if points.present?
+      flash[:success] = flash_message
+      redirect_to action: :show
     else
-      flash[:error] = 'A grade is required for processing.'
+      flash[:error] = "Status update failed!"
+      render :show, layout: false
     end
-
-    redirect_to action: :show
   end
 
   member_action :verify, method: :post do
@@ -370,9 +362,7 @@ ActiveAdmin.register TimelineEvent do
       end
     end
 
-    if timeline_event.to_be_graded?
-      render partial: 'grade_form', locals: { timeline_event: timeline_event }
-    end
+    render partial: 'update_status_form'
 
     render partial: 'target_form', locals: { timeline_event: timeline_event }
 

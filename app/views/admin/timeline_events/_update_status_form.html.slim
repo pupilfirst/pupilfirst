@@ -1,0 +1,6 @@
+= semantic_form_for @status_update_form, url: update_status_admin_timeline_event_path do |f|
+  = f.semantic_errors *f.object.errors.keys
+  = f.inputs 'Update Grade & Status' do
+    = f.input :grade, collection: TimelineEvent.valid_grades, required: false
+    = f.input :verified_status, collection: TimelineEvent.valid_verified_status, include_blank: false, required: true
+    = f.submit 'Update'

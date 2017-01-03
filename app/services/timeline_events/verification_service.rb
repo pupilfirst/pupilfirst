@@ -5,16 +5,54 @@ module TimelineEvents
       @target = @timeline_event.target
     end
 
-    def verify(grade: nil)
+    # rubocop:disable Metrics/CyclomaticComplexity
+    def update_status(status, grade)
+      raise 'Unexpected grade specified' unless grade.blank? || grade.in?(TimelineEvent.valid_grades)
       @grade = grade
+      @timeline_event.update!(grade: @grade)
 
+      @new_status = status
+      case @new_status
+        when TimelineEvent::VERIFIED_STATUS_VERIFIED then mark_verified
+        when TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT then mark_needs_improvement
+        when TimelineEvent::VERIFIED_STATUS_NOT_ACCEPTED then mark_not_accepted
+        when TimelineEvent::VERIFIED_STATUS_PENDING then mark_pending
+        else raise 'Unexpected status specified!'
+      end
+
+      [@timeline_event, applicable_points]
+    end
+    # rubocop:enable Metrics/CyclomaticComplexity
+
+    private
+
+    def mark_verified
       TimelineEvent.transaction do
         @timeline_event.verify!
         update_karma_points
       end
     end
 
-    private
+    def mark_needs_improvement
+      TimelineEvent.transaction do
+        @timeline_event.mark_needs_improvement!
+        update_karma_points
+      end
+    end
+
+    def mark_not_accepted
+      TimelineEvent.transaction do
+        @timeline_event.mark_not_accepted!
+        remove_previous_points if @target.present?
+      end
+    end
+
+    def mark_pending
+      TimelineEvent.transaction do
+        @timeline_event.revert_to_pending!
+        remove_previous_points if @target.present?
+      end
+    end
 
     def update_karma_points
       return unless points_for_target.present?
@@ -42,7 +80,8 @@ module TimelineEvents
     end
 
     def applicable_points
-      return points_for_target unless @grade.present?
+      return nil unless @new_status.in?([TimelineEvent::VERIFIED_STATUS_VERIFIED, TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT])
+      return points_for_target unless @grade.present? && @new_status == TimelineEvent::VERIFIED_STATUS_VERIFIED
 
       points_for_target * grade_multiplier
     end

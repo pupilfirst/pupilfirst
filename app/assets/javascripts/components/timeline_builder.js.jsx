@@ -70,15 +70,15 @@ const TimelineBuilder = React.createClass({
     let currentAttachments = [];
 
     if (this.state.coverImage != null) {
-      currentAttachments.push({type: 'cover', title: this.state.coverImage.title});
+      currentAttachments.push({type: 'cover', title: this.state.coverImage.title, private: false});
     }
 
     this.state.links.forEach(function (link, index) {
-      currentAttachments.push({type: 'link', index: index, title: link.title})
+      currentAttachments.push({type: 'link', index: index, title: link.title, private: link.private})
     });
 
     $.each(this.state.files, function (identifier, file_data) {
-      currentAttachments.push({type: 'file', index: identifier, title: file_data.title})
+      currentAttachments.push({type: 'file', index: identifier, title: file_data.title, private: file_data.private})
     });
 
     return currentAttachments;

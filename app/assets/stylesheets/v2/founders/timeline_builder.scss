@@ -70,6 +70,7 @@
   height: 30px;
   display: flex;
   align-items: center;
+  overflow: hidden;
   color: $light-grey-text;
   font-size: 0.75rem;
   justify-content: space-around;
@@ -99,7 +100,13 @@
 }
 
 .timeline-builder__attachment-icon {
-  margin: 0 5px 0 10px;
+  margin: 0 6px 0 10px;
+}
+
+.timeline-builder__attachment-private-indicator {
+  padding: 6px 10px;
+  box-shadow: inset -4px 0 4px -5px #999;
+  background: repeating-linear-gradient(-45deg, $gray-border, $gray-border 2px, $primary-background 2px, $primary-background 3px);
 }
 
 .timeline-builder__attachment-form-container {

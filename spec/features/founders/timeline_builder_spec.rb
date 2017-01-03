@@ -124,7 +124,7 @@ feature 'Timeline Builder' do
     find('.timeline-builder__attachment-button').click
 
     # Timeline event type missing.
-    click_button 'Submit'
+    find_button('Submit').trigger('click')
     expect(page).to have_content('Please select an appropriate timeline event type.')
   end
 end

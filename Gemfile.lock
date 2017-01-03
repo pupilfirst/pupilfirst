@@ -675,7 +675,7 @@ GEM
     rails-assets-slick-carousel (1.6.0)
       rails-assets-jquery (>= 1.7)
     rails-assets-tether (1.3.7)
-    rails-assets-trix (0.9.9)
+    rails-assets-trix (0.10.0)
     rails-assets-waypoints (4.0.1)
     rails-dom-testing (2.0.1)
       activesupport (>= 4.2.0, < 6.0)

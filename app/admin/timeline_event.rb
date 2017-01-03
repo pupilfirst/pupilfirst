@@ -1,7 +1,7 @@
 ActiveAdmin.register TimelineEvent do
   include DisableIntercom
 
-  permit_params :description, :timeline_event_type_id, :image, :event_on, :startup_id, :grade,
+  permit_params :description, :timeline_event_type_id, :image, :event_on, :startup_id,
     :founder_id, :serialized_links, :improved_timeline_event_id, timeline_event_files_attributes: [:id, :title, :file, :private, :_destroy]
 
   filter :startup_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'Batch'
@@ -171,7 +171,6 @@ ActiveAdmin.register TimelineEvent do
       f.input :description
       f.input :image
       f.input :event_on, as: :datepicker
-      f.input :grade, as: :select, collection: TimelineEvent.valid_grades, required: false
 
       f.input :improved_timeline_event,
         as: :select,

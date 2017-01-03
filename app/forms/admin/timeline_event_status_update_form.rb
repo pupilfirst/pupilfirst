@@ -17,10 +17,10 @@ module Admin
     end
 
     def save
-      if points.present?
-        TimelineEvents::VerificationService.new(model).update_status(verified_status, points: points)
-      elsif grade.present?
+      if model.target&.points_earnable.present?
         TimelineEvents::VerificationService.new(model).update_status(verified_status, grade: grade)
+      elsif points.present? || points&.empty?
+        TimelineEvents::VerificationService.new(model).update_status(verified_status, points: points)
       else
         raise 'Unexpected arguments!'
       end

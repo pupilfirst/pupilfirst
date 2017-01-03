@@ -1,6 +1,11 @@
 ActiveAdmin.register Startup do
   include DisableIntercom
 
+  permit_params :product_name, :product_description, :legal_registered_name, :website, :email, :logo, :facebook_link,
+    :twitter_link, :created_at, :updated_at, :dropped_out, :registration_type, :agreement_signed_at,
+    :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug, :batch_id,
+    startup_category_ids: [], founder_ids: [], tag_list: []
+
   filter :product_name, as: :select
   filter :batch
   filter :stage, as: :select, collection: proc { stages_collection }
@@ -295,10 +300,4 @@ ActiveAdmin.register Startup do
   end
 
   form partial: 'admin/startups/form'
-
-  permit_params :product_name, :product_description, :legal_registered_name, :website, :email, :logo, :facebook_link, :twitter_link,
-    { startup_category_ids: [] }, { founder_ids: [] },
-    :created_at, :updated_at, :dropped_out, :registration_type,
-    :agreement_signed_at, :presentation_link, :product_video_link, :wireframe_link, :prototype_link, :slug, :batch_id,
-    :tag_list
 end

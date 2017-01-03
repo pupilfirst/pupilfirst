@@ -2,25 +2,10 @@ setupSelect2ForStartupTagList = ->
   startupTagList = $('#startup_tag_list')
 
   if startupTagList.length
-    currentStartupTags = startupTagList.data('startupTags')
-    select2Data = $.map currentStartupTags, (tag) ->
-      {
-        id: tag,
-        text: tag
-      }
-
-    startupTagList.select2(
+    startupTagList.select2
       width: '80%',
       placeholder: 'Select some tags',
-      tags: true,
-      data: select2Data,
-      createSearchChoice: (term, data) ->
-        filteredData = $(data).filter ->
-          this.text.localeCompare(term) == 0
-
-        if filteredData.length == 0
-          return {id: term, text: term}
-    )
+      tags: true
 
 $(document).on 'page:change', ->
     $('#startup_founder_ids').select2({ placeholder : 'Add Founder' })

@@ -129,7 +129,7 @@ class Founder < ApplicationRecord
   end
 
   mount_uploader :avatar, AvatarUploader
-  process_in_background :avatar
+  # process_in_background :avatar
 
   mount_uploader :college_identification, CollegeIdentificationUploader
   process_in_background :college_identification

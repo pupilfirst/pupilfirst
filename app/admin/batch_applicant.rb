@@ -228,7 +228,6 @@ ActiveAdmin.register BatchApplicant do
 
       f.input :tag_list,
         as: :select,
-        'data-resource-tags' => BatchApplicant.tag_counts_on(:tags).pluck(:name).to_json,
         collection: BatchApplicant.tag_counts_on(:tags).pluck(:name),
         multiple: true
 

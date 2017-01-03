@@ -6,12 +6,14 @@ module TimelineEvents
     end
 
     # rubocop:disable Metrics/CyclomaticComplexity
-    def update_status(status, grade)
+    def update_status(status, grade: nil, points: nil)
       raise 'Unexpected grade specified' unless grade.blank? || grade.in?(TimelineEvent.valid_grades)
-      @grade = grade
-      @timeline_event.update!(grade: @grade)
 
+      @grade = grade
+      @points = points
+      @timeline_event.update!(grade: @grade)
       @new_status = status
+
       case @new_status
         when TimelineEvent::VERIFIED_STATUS_VERIFIED then mark_verified
         when TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT then mark_needs_improvement
@@ -43,25 +45,30 @@ module TimelineEvents
     def mark_not_accepted
       TimelineEvent.transaction do
         @timeline_event.mark_not_accepted!
-        remove_previous_points if @target.present?
+        reset_karma_points
       end
     end
 
     def mark_pending
       TimelineEvent.transaction do
         @timeline_event.revert_to_pending!
-        remove_previous_points if @target.present?
+        reset_karma_points
       end
     end
 
     def update_karma_points
-      return unless points_for_target.present?
+      return unless @points.present? || points_for_target.present?
 
-      remove_previous_points if @target.present?
+      reset_karma_points
       add_karma_points
     end
 
-    def remove_previous_points
+    def reset_karma_points
+      KarmaPoint.where(source: @timeline_event).delete_all
+      remove_previous_points_for_target if @target.present?
+    end
+
+    def remove_previous_points_for_target
       KarmaPoint.where(source: @target.timeline_events).delete_all
     end
 
@@ -80,6 +87,8 @@ module TimelineEvents
     end
 
     def applicable_points
+      return @points if @points.present?
+
       return nil unless @new_status.in?([TimelineEvent::VERIFIED_STATUS_VERIFIED, TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT])
       return points_for_target unless @grade.present? && @new_status == TimelineEvent::VERIFIED_STATUS_VERIFIED
 

@@ -131,7 +131,6 @@ ActiveAdmin.register Resource do
 
       f.input :tag_list,
         as: :select,
-        'data-resource-tags' => Resource.tag_counts_on(:tags).pluck(:name).to_json,
         collection: Resource.tag_counts_on(:tags).pluck(:name),
         multiple: true
     end

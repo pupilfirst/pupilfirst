@@ -29,6 +29,12 @@
   border: 1px solid #932419;
 }
 
+trix-toolbar {
+  .button_row {
+    justify-content: flex-start;
+  }
+}
+
 trix-toolbar .button_group {
   border: 0;
 

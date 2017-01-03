@@ -65,6 +65,12 @@
     }
   }
 }
+.platform-feedback__title {
+  line-height: 1.4;
+  border-bottom: 1px solid $gray-border;
+}
+
+// founder dashboard
 
 .dashboard-header {
   width: 100%;
@@ -145,7 +151,6 @@
     width: 40px;
     height: 40px;
     display: inline-flex;
-    overflow: hidden;
     justify-content: center;
     align-items: center;
     vertical-align: middle;
@@ -156,9 +161,8 @@
     @include border-radius(50%);
 
     img {
-      margin: auto;
-      flex-shrink: 0;
       width: 38px;
+      flex-shrink: 0;
     }
     &:first-child {
       margin: 20px 6px 0 0;

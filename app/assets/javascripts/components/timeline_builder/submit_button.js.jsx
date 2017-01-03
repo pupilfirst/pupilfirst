@@ -49,7 +49,7 @@ class TimelineBuilderSubmitButton extends React.Component {
   }
 
   buttonClasses() {
-    let classes = "btn btn-with-icon text-xs-uppercase js-timeline-builder__submit-button";
+    let classes = "btn btn-with-icon text-uppercase js-timeline-builder__submit-button";
 
     if (this.props.hasSubmissionError) {
       return classes + ' btn-danger';

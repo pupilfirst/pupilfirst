@@ -209,7 +209,7 @@
   }
 
   &.open {
-    box-shadow: 0 0 5px 1px $light-secondary;
+    box-shadow: 0 0 25px 1px #cecece;
     z-index: 2;
     @include border-radius(5px);
 

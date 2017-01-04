@@ -110,8 +110,9 @@ feature 'Timeline Builder' do
     find('.timeline-builder__upload-section-tab.link-upload').trigger('click')
     expect(page).to_not have_content('Please enter a full URL, starting with http(s).')
 
-    # Description missing.
-    click_button 'Submit'
+    # Description just a bunch of spaces.
+    find('.timeline-builder__textarea').set('   ')
+    find_button('Submit').trigger('click')
     expect(page).to have_content('Please add a summary describing the event.')
 
     find('.timeline-builder__textarea').set('description text')

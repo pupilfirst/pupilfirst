@@ -10,5 +10,12 @@ loadFoundersForStartup = ->
     $.get(foundersForStartupUrl, { startup_id: selectedStartupId }).success (data) ->
       $('#timeline_event_founder_id').html(data.founder_options)
 
+setupTargetSelect2 = ->
+  $('.js-admin-timeline-events__link-target-select').select2();
+
 $(document).on 'page:change', betterFormControls
 $(document).on 'page:change', loadFoundersForStartup
+
+$(document).on 'turbolinks:load', ->
+  if $('.admin-timeline_events__show').length
+    setupTargetSelect2()

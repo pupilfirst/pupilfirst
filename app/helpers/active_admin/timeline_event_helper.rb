@@ -1,10 +1,12 @@
 module ActiveAdmin
   module TimelineEventHelper
     def grouped_targets_for_linking(timeline_event)
+      targets = Target.where(batch: timeline_event.startup.batch)
+
       targets = if timeline_event.timeline_event_type.founder_event?
-        Target.founder
+        targets.founder
       else
-        Target.not_founder
+        targets.not_founder
       end
 
       # TODO: bring back below code after correcting the required scopes

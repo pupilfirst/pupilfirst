@@ -195,6 +195,8 @@ ActiveAdmin.register TimelineEvent do
   end
 
   show do |timeline_event|
+    div(class: 'admin-timeline_events__show')
+
     attributes_table do
       row :product do |startup|
         startup = timeline_event.startup
@@ -298,7 +300,9 @@ ActiveAdmin.register TimelineEvent do
 
     render partial: 'update_status_form'
 
-    render partial: 'target_form', locals: { timeline_event: timeline_event }
+    if timeline_event.target.blank?
+      render partial: 'target_form', locals: { timeline_event: timeline_event }
+    end
 
     feedback = StartupFeedback.for_timeline_event(timeline_event)
 

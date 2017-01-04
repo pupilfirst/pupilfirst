@@ -50,7 +50,7 @@ class BatchApplicationForm < Reform::Form
       application.batch_applicants << applicant
 
       # Send login email when all's done.
-      applicant.send_sign_in_email(defer: true)
+      UserSessionMailer.send_login_token(applicant.user, nil, true).deliver_later
     end
 
     # Update user info on intercom
@@ -63,15 +63,15 @@ class BatchApplicationForm < Reform::Form
   def update_or_create_team_lead
     applicant = BatchApplicant.with_email(email).first
     applicant = BatchApplicant.create!(email: email) if applicant.blank?
-
+    user = User.with_email(email).first || User.create!(email: email)
     applicant.update(
       {
         name: name,
         phone: phone,
-        reference: supplied_reference
+        reference: supplied_reference,
+        user: user
       }.merge(college_details)
     )
-
     applicant
   end
 

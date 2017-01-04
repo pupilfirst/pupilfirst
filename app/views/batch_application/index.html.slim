@@ -18,7 +18,7 @@
           .notice.strong-notice
             ' Did you complete registration once before?
           .link
-            = link_to 'Sign In to Continue', apply_identify_path, class: 'btn btn-primary btn-md text-uppercase'
+            = link_to 'Sign In to Continue', apply_continue_path, class: 'btn btn-primary btn-md text-uppercase'
 
       - if @presenter.old_applications.any?
         #application-certificate-background data-background=@presenter.old_applications.first.certificate_background_image_base64

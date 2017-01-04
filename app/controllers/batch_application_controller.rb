@@ -2,6 +2,7 @@ class BatchApplicationController < ApplicationController
   before_action :ensure_team_lead_signed_in, except: %w(index register identify send_sign_in_email continue sign_in_email_sent notify)
   before_action :ensure_accurate_stage_number, only: %w(ongoing submit complete restart expired rejected)
   before_action :load_common_instance_variables
+  before_action :authenticate_batch_applicant!, except: %w(index register qnotify)
 
   layout 'application_v2'
 
@@ -57,9 +58,9 @@ class BatchApplicationController < ApplicationController
   end
 
   # GET /apply/identify
-  def identify
-    @form = BatchApplicantSignInForm.new(BatchApplicant.new)
-  end
+  # def identify
+  # @form = BatchApplicantSignInForm.new(BatchApplicant.new)
+  # end
 
   # POST /apply/send_sign_in_email
   def send_sign_in_email
@@ -426,10 +427,7 @@ class BatchApplicationController < ApplicationController
 
   # Returns currently 'signed in' application founder.
   def current_batch_applicant
-    @current_batch_applicant ||= begin
-      token = session[:applicant_token] || cookies[:applicant_token]
-      BatchApplicant.find_by token: token
-    end
+    @current_batch_applicant ||= current_user&.batch_applicant
   end
 
   # Returns one of :pending, :ongoing, :expired, :rejected, :submitted, :complete, or :promoted to indicate which view
@@ -492,6 +490,12 @@ class BatchApplicationController < ApplicationController
   end
 
   def sign_in_applicant_temporarily(applicant)
-    session[:applicant_token] = applicant.token
+    sign_in applicant.user
+  end
+
+  def authenticate_batch_applicant!
+    # User must be logged in
+    user = authenticate_user!
+    redirect_to root_url unless user.batch_applicant.present?
   end
 end

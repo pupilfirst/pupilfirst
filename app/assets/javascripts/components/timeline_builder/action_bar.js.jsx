@@ -30,11 +30,14 @@ const TimelineBuilderActionBar = React.createClass({
     let classes = '';
 
     if (type == 'link') {
-      classes = 'timeline-builder__upload-section-tab link-upload' + (this.props.attachmentAllowed ? '' : ' action-tab-disabled')
+      classes = 'timeline-builder__upload-section-tab link-upload';
+      classes += this.props.attachmentAllowed ? '' : ' action-tab-disabled';
     } else if (type == 'file') {
-      classes = 'timeline-builder__upload-section-tab file-upload' + (this.props.attachmentAllowed ? '' : ' action-tab-disabled')
+      classes = 'timeline-builder__upload-section-tab file-upload';
+      classes += this.props.attachmentAllowed ? '' : ' action-tab-disabled';
     } else {
-      classes = 'timeline-builder__upload-section-tab date-of-event'
+      classes = 'timeline-builder__upload-section-tab date-of-event';
+      classes += this.disableTab() ? ' action-tab-disabled' : '';
     }
 
     if (this.props.currentForm == type) {
@@ -76,12 +79,16 @@ const TimelineBuilderActionBar = React.createClass({
     }
   },
 
+  disableTab: function () {
+    return this.props.submissionProgress != null
+  },
+
   render: function () {
     return (
       <div className="timeline-builder__submit-tabs">
         <div className="timeline-builder__upload-section">
           <TimelineBuilderImageButton key={ this.props.imageButtonKey } coverImage={ this.props.coverImage }
-                                      addDataCB={ this.props.addDataCB }/>
+                                      addDataCB={ this.props.addDataCB } disabled={ this.disableTab() }/>
           <div className={ this.formLinkClasses('link') } onClick={ this.showLinkForm }>
             <i className="timeline-builder__upload-section-icon fa fa-link"/>
             <span className="timeline-builder__tab-label">Link</span>
@@ -99,7 +106,7 @@ const TimelineBuilderActionBar = React.createClass({
         </div>
 
         <div className="timeline-builder__select-section">
-          <TimelineBuilderEventTypeSelect resetErrorsCB={ this.props.resetErrorsCB }
+          <TimelineBuilderEventTypeSelect resetErrorsCB={ this.props.resetErrorsCB } disabled={ this.disableTab() }
                                           addDataCB={ this.props.addDataCB }
                                           timelineEventTypes={ this.props.timelineEventTypes }
                                           timelineEventTypeId={ this.props.timelineEventTypeId }

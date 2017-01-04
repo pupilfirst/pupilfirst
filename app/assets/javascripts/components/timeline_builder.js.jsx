@@ -89,7 +89,7 @@ const TimelineBuilder = React.createClass({
   },
 
   attachmentAllowed: function () {
-    return this.attachmentsCount() < 3;
+    return this.attachmentsCount() < 3 && this.state.submissionProgress == null;
   },
 
   addData: function (type, properties) {

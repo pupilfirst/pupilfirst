@@ -14,6 +14,7 @@ class TimelineBuilderEventTypeSelect extends React.Component {
   componentDidUpdate() {
     let status = this.props.showEventTypeError ? 'show' : 'hide';
     $('.js-timeline-builder__timeline-event-type-select-wrapper').popover(status);
+    $('.js-timeline-builder__timeline-event-type-select').prop('disabled', this.props.disabled);
   }
 
   componentWillUnmount() {
@@ -66,5 +67,6 @@ TimelineBuilderEventTypeSelect.propTypes = {
   resetErrorsCB: React.PropTypes.func,
   timelineEventTypeId: React.PropTypes.string,
   timelineEventTypes: React.PropTypes.object,
-  showEventTypeError: React.PropTypes.bool
+  showEventTypeError: React.PropTypes.bool,
+  disabled: React.PropTypes.bool
 };

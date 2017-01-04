@@ -101,8 +101,8 @@ const TimelineBuilderLinkForm = React.createClass({
             <option value="private">Private</option>
           </select>
         </div>
-        <button className="btn btn-secondary timeline-builder__attachment-button" onClick={ this.linkSubmit }>
-          <i className="fa fa-check"/>
+        <button className="btn btn-secondary text-uppercase timeline-builder__attachment-button" onClick={ this.linkSubmit }>
+          Add Link
         </button>
       </form>
     )

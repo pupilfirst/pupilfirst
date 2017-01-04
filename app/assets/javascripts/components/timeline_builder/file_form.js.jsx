@@ -123,9 +123,9 @@ const TimelineBuilderFileForm = React.createClass({
             <option value="private">Private</option>
           </select>
         </div>
-        <button type="submit" className="btn btn-secondary timeline-builder__attachment-button"
+        <button type="submit" className="btn btn-secondary text-uppercase timeline-builder__attachment-button"
                 onClick={ this.fileSubmit }>
-          <i className="fa fa-check"/>
+          Add File
         </button>
       </form>
     )

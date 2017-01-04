@@ -79,7 +79,7 @@
   @include border-radius(20px);
 
   @include media-breakpoint-down(sm) {
-    width: 100px;
+    width: 130px;
   }
 
   .timeline-builder__remove-attachment {
@@ -132,7 +132,10 @@
 
   .timeline-builder__attachment-button {
     height: 40px;
+    min-width: 55px;
     font-size: 1rem;
+    flex-shrink: 0;
+    font-size: 0.75rem;
   }
 
   .timeline-builder__visibility-option-group {
@@ -181,7 +184,7 @@
 }
 
 .timeline-builder__file-name {
-  width: 120px;
+  width: 100px;
   display: inline-block;
   padding: 0 10px;
   text-overflow: ellipsis;
@@ -189,11 +192,15 @@
   overflow: hidden;
   line-height: 2.5;
   vertical-align: middle;
+
+  @include media-breakpoint-down(sm) {
+    width: 140px;
+  }
 }
 
 .timeline-builder__submit-tabs {
   display: flex;
-  height: 50px;
+  height: 55px;
   border-top: 1px solid $gray-border;
 
   @include media-breakpoint-down(sm) {

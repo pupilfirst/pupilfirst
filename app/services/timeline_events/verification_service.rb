@@ -22,7 +22,7 @@ module TimelineEvents
         else raise 'Unexpected status specified!'
       end
 
-      # TimelineEventVerificationNotificationJob.perform_later @timeline_event
+      TimelineEventVerificationNotificationJob.perform_later @timeline_event
 
       [@timeline_event, applicable_points]
     end

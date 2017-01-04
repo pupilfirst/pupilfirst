@@ -18,6 +18,7 @@ const TimelineBuilder = React.createClass({
       imageButtonKey: this.generateKey(),
       submissionProgress: null,
       hasSubmissionError: false,
+      submissionSuccessful: false,
       showDescriptionError: false,
       showDateError: false,
       showEventTypeError: false,
@@ -69,15 +70,15 @@ const TimelineBuilder = React.createClass({
     let currentAttachments = [];
 
     if (this.state.coverImage != null) {
-      currentAttachments.push({type: 'cover', title: this.state.coverImage.title});
+      currentAttachments.push({type: 'cover', title: this.state.coverImage.title, private: false});
     }
 
     this.state.links.forEach(function (link, index) {
-      currentAttachments.push({type: 'link', index: index, title: link.title})
+      currentAttachments.push({type: 'link', index: index, title: link.title, private: link.private})
     });
 
     $.each(this.state.files, function (identifier, file_data) {
-      currentAttachments.push({type: 'file', index: identifier, title: file_data.title})
+      currentAttachments.push({type: 'file', index: identifier, title: file_data.title, private: file_data.private})
     });
 
     return currentAttachments;
@@ -146,8 +147,12 @@ const TimelineBuilder = React.createClass({
     $('[name="timeline_event[files][' + identifier + ']"').remove()
   },
 
-  submit: function (event) {
-    if (this.validate()) {
+  submit: function () {
+    if (this.state.showLinkForm) {
+      $('.js-timeline-builder__add-link-button').trigger('click');
+    } else if (this.state.showFileForm) {
+      $('.js-timeline-builder__add-file-button').trigger('click');
+    } else if (this.validate()) {
 
       let form = $('.timeline-builder-hidden-form');
       let formData = new FormData(form[0]);
@@ -196,7 +201,7 @@ const TimelineBuilder = React.createClass({
   },
 
   validate: function () {
-    if ($('.timeline-builder__textarea').val().length == 0) {
+    if ($('.timeline-builder__textarea').val().trim().length == 0) {
       this.setState({showDescriptionError: true});
       return false;
     }
@@ -239,22 +244,29 @@ const TimelineBuilder = React.createClass({
   },
 
   handleSubmissionComplete: function () {
-    location.reload();
+    // Reload the window after 100ms.
+    setTimeout(function () {
+      window.location.reload();
+    }, 100);
+
+    this.setState({submissionSuccessful: true});
   },
 
   sampleText: function () {
     if (this.state.timelineEventTypeId == null) {
       return null;
     } else {
-      let filtered = Object.values(this.props.timelineEventTypes).filter(function (element) {
-        return this.state.timelineEventTypeId.toString() in element;
-      }, this);
+      let timelineEventTypeId = this.state.timelineEventTypeId.toString();
 
-      if (filtered.length > 0) {
-        return filtered[0][this.state.timelineEventTypeId.toString()].sample;
-      } else {
-        return null;
+      for (let role in this.props.timelineEventTypes) {
+        let role_types = this.props.timelineEventTypes[role];
+
+        if (timelineEventTypeId in role_types) {
+          return role_types[timelineEventTypeId]['sample'];
+        }
       }
+
+      return null;
     }
   },
 
@@ -288,7 +300,8 @@ const TimelineBuilder = React.createClass({
                                   showDateError={ this.state.showDateError } resetErrorsCB={ this.resetErrors }
                                   showEventTypeError={this.state.showEventTypeError}
                                   timelineEventTypeId={ this.timelineEventTypeIdForSelect() }
-                                  hasSubmissionError={ this.state.hasSubmissionError }/>
+                                  hasSubmissionError={ this.state.hasSubmissionError }
+                                  submissionSuccessful={ this.state.submissionSuccessful }/>
       </div>
     )
   }

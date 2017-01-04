@@ -36,17 +36,15 @@ class TimelineEventType < ApplicationRecord
     TYPE_STAGE_SCALE => 'http://playbook.sv.co/stages/5.5-scale.html'
   }.freeze
 
-  ROLE_GOVERNANCE = 'Governance'
-  ROLE_MARKETING = 'Marketing & Sales'
   ROLE_ENGINEERING = 'Engineering'
   ROLE_PRODUCT = 'Product'
-  ROLE_TEAM = 'Team'
   ROLE_DESIGN = 'Design'
+  ROLE_TEAM = 'Team'
   ROLE_FOUNDER = 'Founder'
   ROLE_OTHER = 'Other'
 
   def self.valid_roles
-    [ROLE_GOVERNANCE, ROLE_MARKETING, ROLE_ENGINEERING, ROLE_PRODUCT, ROLE_TEAM, ROLE_DESIGN, ROLE_FOUNDER, ROLE_OTHER]
+    [ROLE_ENGINEERING, ROLE_PRODUCT, ROLE_TEAM, ROLE_DESIGN, ROLE_FOUNDER, ROLE_OTHER]
   end
 
   validates :key, presence: true, uniqueness: true

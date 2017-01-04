@@ -1,7 +1,7 @@
 ActiveAdmin.register TimelineEvent do
   include DisableIntercom
 
-  permit_params :description, :timeline_event_type_id, :image, :event_on, :startup_id, :grade,
+  permit_params :description, :timeline_event_type_id, :image, :event_on, :startup_id,
     :founder_id, :serialized_links, :improved_timeline_event_id, timeline_event_files_attributes: [:id, :title, :file, :private, :_destroy]
 
   filter :startup_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'Batch'
@@ -34,6 +34,11 @@ ActiveAdmin.register TimelineEvent do
   controller do
     def scoped_collection
       super.includes :startup, :timeline_event_type
+    end
+
+    def show
+      @status_update_form = Admin::TimelineEventStatusUpdateForm.new(TimelineEvent.find(params[:id]))
+      super
     end
   end
 
@@ -116,59 +121,20 @@ ActiveAdmin.register TimelineEvent do
     redirect_to action: :show
   end
 
-  member_action :grade, method: :post do
-    timeline_event = TimelineEvent.find params[:id]
+  member_action :update_status, method: :patch do
+    timeline_event = TimelineEvent.find(params[:id])
+    @status_update_form = Admin::TimelineEventStatusUpdateForm.new(timeline_event)
 
-    # If a grade has been picked, add that and create Karma Points.
-    if params[:grade].present?
-      timeline_event.update!(grade: params[:grade])
-
-      # if private event, assign karma points to the founder too
-      founder = timeline_event.founder_event? ? timeline_event.founder : nil
-      assigned_to = timeline_event.founder_event? ? 'the founder and startup' : 'the startup' # used in flash message
-
-      karma_point = KarmaPoint.create!(
-        source: timeline_event,
-        founder: founder,
-        startup: timeline_event.startup,
-        activity_type: "Added a new Timeline event - #{timeline_event.title}",
-        points: timeline_event.points_for_grade
-      )
-
-      flash[:success] = "Karma points (#{timeline_event.points_for_grade}) have been assigned to #{assigned_to}."
-
-      Rails.logger.info event: :timeline_event_karma_point_created, karma_point_id: karma_point.id
+    if @status_update_form.validate(params[:admin_timeline_event_status_update])
+      timeline_event, points = @status_update_form.save
+      flash_message = "Timeline Event marked #{timeline_event.verified_status}"
+      flash_message += " and #{points} Karma Points added" if points.present?
+      flash[:success] = flash_message
+      redirect_to action: :show
     else
-      flash[:error] = 'A grade is required for processing.'
+      flash[:error] = "Status update failed!"
+      render :show, layout: false
     end
-
-    redirect_to action: :show
-  end
-
-  member_action :verify, method: :post do
-    timeline_event = TimelineEvent.find(params[:id])
-    timeline_event.verify!
-    TimelineEventVerificationNotificationJob.perform_later timeline_event
-    redirect_to action: :show
-  end
-
-  member_action :revert_to_pending, method: :post do
-    TimelineEvent.find(params[:id]).revert_to_pending!
-    redirect_to action: :show
-  end
-
-  member_action :mark_needs_improvement, method: :post do
-    timeline_event = TimelineEvent.find(params[:id])
-    timeline_event.mark_needs_improvement!
-    TimelineEventVerificationNotificationJob.perform_later timeline_event
-    redirect_to action: :show
-  end
-
-  member_action :mark_not_accepted, method: :post do
-    timeline_event = TimelineEvent.find(params[:id])
-    timeline_event.mark_not_accepted!
-    TimelineEventVerificationNotificationJob.perform_later timeline_event
-    redirect_to action: :show
   end
 
   member_action :save_link_as_resume_url, method: :post do
@@ -205,7 +171,6 @@ ActiveAdmin.register TimelineEvent do
       f.input :description
       f.input :image
       f.input :event_on, as: :datepicker
-      f.input :grade, as: :select, collection: TimelineEvent.valid_grades, required: false
 
       f.input :improved_timeline_event,
         as: :select,
@@ -230,6 +195,8 @@ ActiveAdmin.register TimelineEvent do
   end
 
   show do |timeline_event|
+    div(class: 'admin-timeline_events__show')
+
     attributes_table do
       row :product do |startup|
         startup = timeline_event.startup
@@ -260,46 +227,7 @@ ActiveAdmin.register TimelineEvent do
 
       row :event_on
 
-      row :verified_status do
-        span do
-          "#{timeline_event.verified_status} "
-        end
-
-        # an event in any state (other than already verified) can be verified
-        verification_confirm = 'Are you sure you want to verify this event?'
-        verification_confirm += ' The Verification will be announced on Public Slack' unless timeline_event.founder_event?
-        unless timeline_event.verified?
-          span do
-            button_to 'Verify and Accept', verify_admin_timeline_event_path,
-              form_class: 'inline-button',
-              data: { confirm: verification_confirm }
-          end
-        end
-
-        # an event in any state (other than already marked for improvement) can be marked for improvement
-        unless timeline_event.needs_improvement?
-          span do
-            button_to 'Verify and Mark Needs Improvement', mark_needs_improvement_admin_timeline_event_path,
-              form_class: 'inline-button'
-          end
-        end
-
-        # an event in any state (other than already rejected) can be marked not accepted
-        unless timeline_event.not_accepted?
-          span do
-            button_to 'Mark Not Accepted', mark_not_accepted_admin_timeline_event_path,
-              form_class: 'inline-button'
-          end
-        end
-
-        # any non pending event can be retracted back to pending
-        unless timeline_event.pending?
-          span do
-            button_to 'Revert to Pending', revert_to_pending_admin_timeline_event_path,
-              form_class: 'inline-button'
-          end
-        end
-      end
+      row :verified_status
 
       row :verified_at
 
@@ -370,11 +298,11 @@ ActiveAdmin.register TimelineEvent do
       end
     end
 
-    if timeline_event.to_be_graded?
-      render partial: 'grade_form', locals: { timeline_event: timeline_event }
-    end
+    render partial: 'update_status_form'
 
-    render partial: 'target_form', locals: { timeline_event: timeline_event }
+    if timeline_event.target.blank?
+      render partial: 'target_form', locals: { timeline_event: timeline_event }
+    end
 
     feedback = StartupFeedback.for_timeline_event(timeline_event)
 

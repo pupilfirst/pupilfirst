@@ -74,7 +74,7 @@ const TimelineBuilderFileForm = React.createClass({
 
     if ($('.js-attachment-file')[0].files.length == 0) {
       fileMissingError = true;
-    } else if ($('.js-attachment-file')[0].files[0].size > 5120000) {
+    } else if ($('.js-attachment-file')[0].files[0].size > 5242880) {
       fileSizeError = true;
     }
 
@@ -123,9 +123,9 @@ const TimelineBuilderFileForm = React.createClass({
             <option value="private">Private</option>
           </select>
         </div>
-        <button type="submit" className="btn btn-secondary timeline-builder__attachment-button"
-                onClick={ this.fileSubmit }>
-          <i className="fa fa-check"/>
+        <button type="submit" onClick={ this.fileSubmit }
+                className="btn btn-secondary text-uppercase timeline-builder__attachment-button js-timeline-builder__add-file-button">
+          Add File
         </button>
       </form>
     )

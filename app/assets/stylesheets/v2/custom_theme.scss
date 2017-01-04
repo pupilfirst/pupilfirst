@@ -238,7 +238,7 @@ p {
 }
 .simple-form-container {
   .form-group {
-    margin-bottom: 1.75rem;
+    margin-bottom: 1.25rem;
 
     .control-label {
       margin-bottom: 0;
@@ -257,12 +257,12 @@ p {
       font-weight: $font-regular;
       text-shadow: 0 0 0 #000;
     }
-    .radio-inline {
+    .radio, .radio-inline {
       padding-top: 7px;
       margin-right: 20px;
 
       input {
-        margin-right: 10px;
+        margin-right: 8px;
       }
     }
     .form-control {

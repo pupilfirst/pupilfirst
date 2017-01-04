@@ -32,11 +32,10 @@ ActiveAdmin.register Founder do
   filter :college_name_contains
   filter :roll_number
 
-  permit_params :name, :email, :remote_avatar_url, :avatar, :startup_id, :slug, :about,
-    :slack_username, :born_on, :startup_admin, :communication_address, :identification_proof,
-    :phone, :invitation_token, :college_id, :roll_number, :course, :semester, :year_of_graduation,
-    :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :facebook_url, :angel_co_url, :github_url, :behance_url,
-    { roles: [] }, :tag_list, :gender, :skype_id, :exited
+  permit_params :name, :email, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :slack_username, :born_on,
+    :startup_admin, :communication_address, :identification_proof, :phone, :invitation_token, :college_id, :roll_number,
+    :course, :semester, :year_of_graduation, :twitter_url, :linkedin_url, :personal_website_url, :blog_url,
+    :facebook_url, :angel_co_url, :github_url, :behance_url, :gender, :skype_id, :exited, roles: [], tag_list: []
 
   batch_action :tag, form: proc { { tag: Founder.tag_counts_on(:tags).pluck(:name) } } do |ids, inputs|
     Founder.where(id: ids).each do |founder|

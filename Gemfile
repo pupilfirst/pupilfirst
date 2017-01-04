@@ -37,7 +37,7 @@ gem 'cancancan', '~> 1.8' # Used to manage administrator types and roles in the 
 
 # Select2 javascript select box improvement library, using in ActiveAdmin interface.
 # TODO: This gem currently serves version 3.x of select2. Version 4 (released) has breaking changes. Take care when upgrading.
-gem 'select2-rails', '~> 3.5.10'
+gem 'select2-rails', '~> 4.0.3'
 
 gem 'bootstrap-sass', '~> 3.3.3' # Official Sass port of Bootstrap.
 gem 'autoprefixer-rails' # Autoprefixer for Ruby and Ruby on Rails.
@@ -158,6 +158,7 @@ group :development, :test do
   gem 'simplecov', require: false # Code coverage for Ruby 1.9+
   gem 'overcommit', require: false # A fully configurable and extendable Git hook manager
   gem 'fuubar' # The instafailing RSpec progress bar formatter.
+  gem 'knapsack' # Knapsack splits tests across CI nodes so that tests will run comparable time on each node.
 end
 
 group :production do

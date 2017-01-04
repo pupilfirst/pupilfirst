@@ -39,12 +39,12 @@
 .timeline-builder__textarea-counter {
   position: absolute;
   bottom: 1.25rem;
-  right: 3rem;
+  right: 1.25rem;
   color: white;
   padding: 0.2rem 0.5rem;
   background-color: rgba(0, 0, 0, 0.3);
   border: 1px transparent;
-  border-radius: 1rem;
+  @include border-radius(1rem);
 }
 
 .timeline-builder__textarea-counter--danger {
@@ -70,6 +70,7 @@
   height: 30px;
   display: flex;
   align-items: center;
+  overflow: hidden;
   color: $light-grey-text;
   font-size: 0.75rem;
   justify-content: space-around;
@@ -78,7 +79,7 @@
   @include border-radius(20px);
 
   @include media-breakpoint-down(sm) {
-    width: 100px;
+    width: 130px;
   }
 
   .timeline-builder__remove-attachment {
@@ -94,11 +95,18 @@
   width: 90px;
   white-space: nowrap;
   overflow: hidden;
+  color: $brand-secondary;
   text-overflow: ellipsis;
 }
 
 .timeline-builder__attachment-icon {
-  margin: 0 5px 0 10px;
+  margin: 0 6px 0 10px;
+}
+
+.timeline-builder__attachment-private-indicator {
+  padding: 6px 10px;
+  box-shadow: inset -4px 0 4px -5px #999;
+  background: repeating-linear-gradient(-45deg, $gray-border, $gray-border 2px, $primary-background 2px, $primary-background 3px);
 }
 
 .timeline-builder__attachment-form-container {
@@ -124,7 +132,10 @@
 
   .timeline-builder__attachment-button {
     height: 40px;
+    min-width: 55px;
     font-size: 1rem;
+    flex-shrink: 0;
+    font-size: 0.75rem;
   }
 
   .timeline-builder__visibility-option-group {
@@ -173,7 +184,7 @@
 }
 
 .timeline-builder__file-name {
-  width: 120px;
+  width: 100px;
   display: inline-block;
   padding: 0 10px;
   text-overflow: ellipsis;
@@ -181,11 +192,15 @@
   overflow: hidden;
   line-height: 2.5;
   vertical-align: middle;
+
+  @include media-breakpoint-down(sm) {
+    width: 140px;
+  }
 }
 
 .timeline-builder__submit-tabs {
   display: flex;
-  height: 50px;
+  height: 55px;
   border-top: 1px solid $gray-border;
 
   @include media-breakpoint-down(sm) {
@@ -214,14 +229,6 @@
   }
 }
 
-.timeline-builder__timeline-event-type-select-wrapper {
-  max-width: 240px;
-
-  select {
-    border: 0;
-  }
-}
-
 .timeline-builder__upload-section-tab, .timeline-builder__select-section-tab {
   padding: 0 20px;
   display: flex;
@@ -246,6 +253,16 @@
   &:hover, &:focus {
     background-color: $dark-primary-background;
     color: $brand-secondary;
+  }
+}
+
+.timeline-builder__timeline-event-type-select-wrapper {
+  width: 100%;
+  padding: 0 20px 0 10px;
+  max-width: 240px;
+
+  .select2 {
+    outline: 0;
   }
 }
 

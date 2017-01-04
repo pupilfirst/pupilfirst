@@ -65,6 +65,12 @@
     }
   }
 }
+.platform-feedback__title {
+  line-height: 1.4;
+  border-bottom: 1px solid $gray-border;
+}
+
+// founder dashboard
 
 .dashboard-header {
   width: 100%;
@@ -144,7 +150,10 @@
     position: relative;
     width: 40px;
     height: 40px;
-    display: inline-block;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
     margin: 20px 6px 0 6px;
     background-color: white;
     border: 2px solid white;
@@ -152,8 +161,8 @@
     @include border-radius(50%);
 
     img {
-      max-width: 36px;
-      max-height: 36px;
+      width: 38px;
+      flex-shrink: 0;
     }
     &:first-child {
       margin: 20px 6px 0 0;
@@ -165,7 +174,7 @@
       margin: 10px -5px 0 -5px;
 
       &:first-child, &:last-child {
-        margin: 0px 0 0 0;
+        margin: 10px 0 0 0;
       }
     }
   }

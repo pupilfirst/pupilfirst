@@ -24,6 +24,11 @@ const TimelineBuilderAttachment = React.createClass({
   render: function () {
     return (
       <div className="timeline-builder__attachment pull-xs-left m-r-1 m-t-1">
+        { this.props.attachment.private &&
+        <div className="timeline-builder__attachment-private-indicator">
+          <i className="fa fa-lock"/>
+        </div>
+        }
         <i className={ this.iconClasses() }/>
         <span className="timeline-builder__attachment-title">{ this.props.attachment.title }</span>
         <button type="button" className="close timeline-builder__remove-attachment" onClick={ this.removeAttachment }>

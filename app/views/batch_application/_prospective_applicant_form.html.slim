@@ -28,13 +28,12 @@
         = f.input :phone, label: false, placeholder: 'Mobile phone number',
           input_html: { maxlength: 17, type: 'tel', pattern: MobileNumberValidator::FORM_EXPRESSION }
 
-        // TODO: College is actually a required field, but select2 v3 does not play nice with HTML5 validations. Try enabling this when upgrading to select2 v4.
         = f.input :college_id,
-          type: :hidden,
+          as: :select,
           label: false,
-          placeholder: 'Please pick your college',
           input_html: { value: nil, 'data-search-url' => colleges_url },
-          required: false
+          required: true,
+          collection: []
 
         .hidden-xs-up
           = f.input :college_text,

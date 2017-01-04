@@ -5,7 +5,7 @@
     ol
       li.input.select.required
         = label_tag :target_id, 'Link Target', class: 'label'
-        = select_tag :target_id, options_from_collection_for_select(grouped_targets_for_linking(timeline_event), 'id', 'title'), include_blank: true
+        = select_tag :target_id, options_from_collection_for_select(grouped_targets_for_linking(timeline_event), 'id', 'title'), include_blank: true, class: 'js-admin-timeline-events__link-target-select'
     ol
       li.action.input_action
         = submit_tag 'Link Target'

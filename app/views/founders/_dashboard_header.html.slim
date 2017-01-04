@@ -16,16 +16,16 @@
           .hidden-xs-down
             - @startup.founders.each do |founder|
               a.founder-avatar-bubble href=founder_profile_path(founder.slug)
-                = image_tag profile_image_url(founder), class: 'img-circle'
+                = image_tag profile_image_url(founder, avatar_version: :mid), class: 'img-circle'
           .hidden-sm-up
             - if @startup.founders.count > 4
               - @startup.founders.order(:id).limit(3).each do |founder|
                 .founder-avatar-bubble
-                  = image_tag profile_image_url(founder), class: 'img-circle'
+                  = image_tag profile_image_url(founder, avatar_version: :thumb), class: 'img-circle'
               .founder-avatar-bubble.text-xs-center.reamining-founders
                 span.reamining-founders-count
                   | +#{@startup.founders.count - 3}
             - else
               - @startup.founders.each do |founder|
                 .founder-avatar-bubble
-                  = image_tag profile_image_url(founder), class: 'img-circle'
+                  = image_tag profile_image_url(founder, avatar_version: :thumb), class: 'img-circle'

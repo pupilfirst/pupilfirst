@@ -28,7 +28,7 @@ module ApplicationHelper
     end
   end
 
-  def startup_or_root_url
-    current_founder&.startup.present? ? startup_url(current_founder.startup) : root_url
+  def dashboard_or_root_url
+    current_founder&.startup.present? ? dashboard_founder_url : root_url
   end
 end

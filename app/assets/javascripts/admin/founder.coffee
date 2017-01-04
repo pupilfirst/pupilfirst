@@ -5,25 +5,10 @@ setupSelect2ForFounderTagList = ->
   founderTagList = $('#founder_tag_list')
 
   if founderTagList.length
-    currentFounderTags = founderTagList.data('founderTags')
-    select2Data = $.map currentFounderTags, (tag) ->
-      {
-        id: tag,
-        text: tag
-      }
-
-    founderTagList.select2(
+    founderTagList.select2
       width: '80%',
       placeholder: 'Select some tags',
-      tags: true,
-      data: select2Data,
-      createSearchChoice: (term, data) ->
-        filteredData = $(data).filter ->
-          this.text.localeCompare(term) == 0
-
-        if filteredData.length == 0
-          return {id: term, text: term}
-    )
+      tags: true
 
 showTargetsOptionally = ->
   $('.admin-founder-targets-show-link').click (event) ->
@@ -45,13 +30,13 @@ setupSelect2ForFounderColleges = ->
       ajax:
         url: collegeSearchUrl,
         dataType: 'json',
-        quietMillis: 500,
-        data: (term, page) ->
+        delay: 500,
+        data: (params) ->
           return {
-            q: term
+            q: params.term
           }
         ,
-        results: (data, page) ->
+        processResults: (data, params) ->
           return { results: data }
         cache: true
 

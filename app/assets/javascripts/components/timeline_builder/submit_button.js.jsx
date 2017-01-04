@@ -9,10 +9,12 @@ class TimelineBuilderSubmitButton extends React.Component {
     switch (this.submissionState()) {
       case 'pending':
         return 'Submit';
-      case 'done':
-        return 'Done';
       case 'ongoing':
         return this.props.submissionProgress + "%";
+      case 'processing':
+        return 'Wait';
+      case 'done':
+        return 'Done';
       case 'error':
         return 'Error';
       default:
@@ -21,10 +23,12 @@ class TimelineBuilderSubmitButton extends React.Component {
   }
 
   submissionState() {
-    if (this.props.hasSubmissionError) {
+    if (this.props.submissionSuccessful) {
+      return 'done';
+    } else if (this.props.hasSubmissionError) {
       return 'error';
     } else if (this.props.submissionProgress == 100) {
-      return 'done';
+      return 'processing';
     } else if (this.props.submissionProgress != null) {
       return 'ongoing';
     } else {
@@ -45,12 +49,27 @@ class TimelineBuilderSubmitButton extends React.Component {
   }
 
   buttonClasses() {
-    let classes = "btn btn-with-icon text-xs-uppercase js-timeline-builder__submit-button";
+    let classes = "btn btn-with-icon text-uppercase js-timeline-builder__submit-button";
 
     if (this.props.hasSubmissionError) {
       return classes + ' btn-danger';
     } else {
       return classes + ' btn-primary';
+    }
+  }
+
+  iconClasses() {
+    switch (this.submissionState()) {
+      case 'ongoing':
+        return 'fa fa-cog fa-spin';
+      case 'processing':
+        return 'fa fa-circle-o-notch fa-spin';
+      case 'done':
+        return 'fa fa-check';
+      case 'error':
+        return 'fa fa-exclamation-triangle';
+      default:
+        return null;
     }
   }
 
@@ -61,14 +80,8 @@ class TimelineBuilderSubmitButton extends React.Component {
                 onClick={ this.handleSubmit } data-title="Unexpected Error"
                 data-content="Oops! Something went wrong. The SV.CO team has been notified of this error. Please reload the page and try again, or contact us on Slack to speed us up!"
                 data-placement="bottom" data-trigger="manual">
-          { this.submissionState() == 'ongoing' &&
-          <i className="fa fa-cog fa-spin"/>
-          }
-          { this.submissionState() == 'done' &&
-          <i className="fa fa-check"/>
-          }
-          { this.submissionState() == 'error' &&
-          <i className="fa fa-exclamation-triangle"/>
+          { this.iconClasses() &&
+          <i className={ this.iconClasses() }/>
           }
           { this.submitLabel() }
         </button>
@@ -80,5 +93,6 @@ class TimelineBuilderSubmitButton extends React.Component {
 TimelineBuilderSubmitButton.propTypes = {
   submissionProgress: React.PropTypes.number,
   submitCB: React.PropTypes.func,
-  hasSubmissionError: React.PropTypes.bool
+  hasSubmissionError: React.PropTypes.bool,
+  submissionSuccessful: React.PropTypes.bool,
 };

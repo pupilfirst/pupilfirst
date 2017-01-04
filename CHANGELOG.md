@@ -1,3 +1,13 @@
+### 2 January, 2017
+
+#### Features
+
+  - Batch 3 is now live! We've launched the new founder dashboard, detailing our six-month program's target framework, and a much easier method to submit timeline events and receive feedback.
+
+#### Bugfixes
+
+  - The form for joining our Public Slack channel was non-functional on most browsers - this has been fixed.
+
 ### 26 December, 2016
 
 #### Features

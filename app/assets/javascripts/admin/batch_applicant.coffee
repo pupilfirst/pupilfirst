@@ -2,25 +2,10 @@ setupSelect2ForBatchApplicantTagList = ->
   batchApplicantTagList = $('#batch_applicant_tag_list')
 
   if batchApplicantTagList.length
-    currentFounderTags = batchApplicantTagList.data('applicantTags')
-    select2Data = $.map currentFounderTags, (tag) ->
-      {
-        id: tag,
-        text: tag
-      }
-
-    batchApplicantTagList.select2(
+    batchApplicantTagList.select2
       width: '80%',
       placeholder: 'Select some tags',
-      tags: true,
-      data: select2Data,
-      createSearchChoice: (term, data) ->
-        filteredData = $(data).filter ->
-          this.text.localeCompare(term) == 0
-
-        if filteredData.length == 0
-          return {id: term, text: term}
-    )
+      tags: true
 
 setupSelect2ForBatchApplicantColleges = ->
   collegeInput = $('#batch_applicant_college_id')
@@ -34,13 +19,13 @@ setupSelect2ForBatchApplicantColleges = ->
       ajax:
         url: collegeSearchUrl,
         dataType: 'json',
-        quietMillis: 500,
-        data: (term, page) ->
+        delay: 500,
+        data: (params) ->
           return {
-            q: term
+            q: params.term
           }
         ,
-        results: (data, page) ->
+        processResults: (data, params) ->
           return { results: data }
         cache: true
 

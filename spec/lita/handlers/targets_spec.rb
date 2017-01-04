@@ -34,7 +34,7 @@ describe Lita::Handlers::Targets do
       let(:expired_founder_target) { create :target, role: Target::ROLE_FOUNDER, assignee: founder, due_date: 2.days.ago }
 
       let(:complete_startup_target) do
-        create :target, role: 'governance', assignee: startup, due_date: 1.week.ago, status: Target::STATUS_DONE
+        create :target, role: 'product', assignee: startup, due_date: 1.week.ago, status: Target::STATUS_DONE
       end
 
       let(:expired_startup_target) { create :target, role: 'design', assignee: startup, due_date: 3.days.ago }

@@ -30,11 +30,10 @@ founders_list.each do |email, name, born_on, gender, phone|
     email: email,
     user: user,
     name: name,
-    confirmed_at: Time.now,
     born_on: born_on,
     gender: gender,
     phone: phone,
-    roles: Founder.valid_roles.sample(1 + rand(2)),
+    roles: Founder.valid_roles.sample([1, 2].sample),
     communication_address: [Faker::Address.street_address, Faker::Address.city, Faker::Address.zip].join("\n"),
     identification_proof: File.open(image_path)
   )

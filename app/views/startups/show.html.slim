@@ -180,36 +180,11 @@
                     .media-body
                       h4.media-heading #{truncated_founder_name team_member.name}
                       p.designation #{founder_roles(team_member.roles)}
-          /- if @startup.mentors?
-            .col-sm-6.col-md-12
-              h3 Mentors
-              hr
-              .media
-                .media-left
-                  img.media-object src="#{image_url 'faculty/visiting_faculty/george_brody.png'}"
-                .media-body
-                  h4.media-heading Amit Singh
-                  p.designation Chief Executive Officer
-                  p.company Google Inc.
-          /- if @startup.investors?
-            .col-sm-6.col-md-12.tl-investor
-              h3 Investors
-              hr
-              .media
-                .media-left
-                  img.media-object src="#{image_url 'faculty/advisory_board/kris_gopalakrishnan.png'}"
-                .media-body
-                  h4.media-heading Amit Singh
-                  p.designation Chief Executive Officer
-                  p.company Google Inc.
 
     / Container right end
 
     /Form to post new timeline event
     .col-md-8.col-md-pull-4
-      /- if current_founder && @startup.founder?(current_founder)
-        == render 'startups/timeline_builder', event: @timeline_event
-
       - events_for_display = @startup.timeline_events_for_display(current_founder)
 
       - if events_for_display.present?
@@ -249,7 +224,7 @@
                       i.fa.fa-exclamation-circle
                       | &nbsp;#{needs_improvement_status_text(event)}
                   - elsif event.not_accepted?
-                    .verified-status-notice href="#" data-toggle="tooltip" title="We are sorry, but this event is not acceptable. Please edit the event based on feedback and resubmit for approval."
+                    .verified-status-notice href="#" data-toggle="tooltip" title="We are sorry, but this event is not acceptable. Please create a new event based on feedback and resubmit for approval."
                       i.fa.fa-exclamation-circle
                       | &nbsp;Not Accepted
                   = image_tag 'timeline/dash.png'
@@ -257,23 +232,16 @@
 
                   - if current_founder && @startup.founder?(current_founder)
                     - if event.verified_or_needs_improvement?
-                      .old-to-edit href="#" data-toggle="tooltip" title="To edit/delete this event, please write to help@sv.co."
+                      .old-to-edit href="#" data-toggle="tooltip" title="To delete this event, please write to help@sv.co."
                         button.btn.btn-danger.btn-sm.btn-flat.btn-with-default-padding.disabled.margin-right-5.delete-link
                           i.fa.fa-times
                           | &nbsp;Delete
-                        button.btn.btn-info.btn-sm.btn-flat.btn-with-default-padding.edit-link.disabled
-                          i.fa.fa-pencil
-                          | &nbsp;Edit
                     - else
                       = button_to founder_startup_timeline_event_url(event),
                         method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',
                         data: { confirm: 'This action cannot be reversed. Are you sure?' } do
                         i.fa.fa-times
                         | &nbsp; Delete
-                      = link_to startup_path(@startup, event_id: event.id),
-                        class: 'btn btn-info btn-sm btn-flat btn-with-default-padding' do
-                        i.fa.fa-pencil
-                        | &nbsp;Edit
               - else
                 .timeline id="event-#{event.id}"
                   li style="padding:0" class="timeline#{cycle '', '-inverted', name: 'card_position'}"
@@ -296,7 +264,7 @@
                             i.fa.fa-exclamation-circle
                             | &nbsp;#{needs_improvement_status_text(event)}
                         - elsif event.not_accepted?
-                          .verified-status-notice href="#" data-toggle="tooltip" title="We are sorry, but this event is not acceptable. Please edit the event based on feedback and resubmit for approval."
+                          .verified-status-notice href="#" data-toggle="tooltip" title="We are sorry, but this event is not acceptable. Please create a new event based on feedback and resubmit for approval."
                             i.fa.fa-exclamation-circle
                             | &nbsp;Not Accepted
                         h4.timeline-title-panel
@@ -343,22 +311,16 @@
 
                         - if current_founder && @startup.founder?(current_founder)
                           - if event.verified_or_needs_improvement?
-                            .old-to-edit href="#" data-toggle="tooltip" title="To edit/delete this event, please write to help@sv.co."
+                            .old-to-edit href="#" data-toggle="tooltip" title="To delete this event, please write to help@sv.co."
                               button.btn.btn-danger.btn-sm.btn-flat.btn-with-default-padding.disabled.margin-right-5.delete-link
                                 i.fa.fa-times
                                 | &nbsp;Delete
-                              button.btn.btn-info.btn-sm.btn-flat.btn-with-default-padding.edit-link.disabled
-                                i.fa.fa-pencil
-                                | &nbsp;Edit
                           - else
                             = button_to founder_startup_timeline_event_url(event),
                               method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',
                               data: { confirm: 'This action cannot be reversed. Are you sure?' } do
                               i.fa.fa-times
                               | &nbsp;Delete
-                            = link_to startup_path(@startup, event_id: event.id), class: 'btn btn-info btn-sm btn-flat btn-with-default-padding edit-link' do
-                              i.fa.fa-pencil
-                              | &nbsp;Edit
       - else
         .main-timeline
           .tl-iteration

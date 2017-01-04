@@ -30,14 +30,12 @@ class FoundersController < ApplicationController
 
   # GET /founder/dashboard
   def dashboard
-    raise_not_found unless feature_active? :founder_dashboard
-
     @header_non_floating = true
 
     @startup = current_founder.startup.decorate
     @batch = @startup.batch.decorate
     # eager-load everything required for the dashboard. Order and decorate them too!
-    @program_weeks = @batch.program_weeks.includes(:batch, target_groups: { targets: :assigner }).order(:number, 'target_groups.sort_index', 'targets.days_to_complete').decorate
+    @program_weeks = @batch.program_weeks.includes(:batch, target_groups: { targets: :assigner }).order(:number, 'target_groups.sort_index', 'targets.sort_index').decorate
     @tour = take_on_tour?
 
     render layout: 'application_v2'

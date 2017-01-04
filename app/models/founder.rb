@@ -129,7 +129,7 @@ class Founder < ApplicationRecord
   end
 
   mount_uploader :avatar, AvatarUploader
-  process_in_background :avatar
+  # process_in_background :avatar
 
   mount_uploader :college_identification, CollegeIdentificationUploader
   process_in_background :college_identification
@@ -193,9 +193,9 @@ class Founder < ApplicationRecord
 
   def slack_username_format
     return if slack_username.blank?
-    username_match = slack_username.match(/^@?([\w\.]+)$/)
+    username_match = slack_username.match(/^@?([a-z\d\.\_\-]{,20})$/)
     return if username_match.present?
-    errors.add(:slack_username, 'is not valid. Should only contain letters, numbers, and underscores.')
+    errors.add(:slack_username, 'is not valid. Should only contain lower-case letters, numbers, periods, hyphen and underscores.')
   end
 
   def display_name
@@ -217,7 +217,7 @@ class Founder < ApplicationRecord
   end
 
   def self.valid_roles
-    %w(product engineering marketing governance design)
+    %w(product engineering design)
   end
 
   def roles

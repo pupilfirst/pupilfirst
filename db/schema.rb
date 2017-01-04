@@ -641,8 +641,8 @@ ActiveRecord::Schema.define(version: 20170102142706) do
     t.text     "description"
     t.string   "completion_instructions"
     t.string   "resource_url"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.text     "slideshow_embed"
     t.integer  "assigner_id"
     t.string   "rubric"
@@ -655,6 +655,7 @@ ActiveRecord::Schema.define(version: 20170102142706) do
     t.integer  "target_group_id"
     t.integer  "batch_id"
     t.integer  "points_earnable"
+    t.integer  "sort_index",              default: 999
     t.index ["assignee_id"], name: "index_targets_on_assignee_id", using: :btree
     t.index ["assignee_type"], name: "index_targets_on_assignee_type", using: :btree
     t.index ["batch_id"], name: "index_targets_on_batch_id", using: :btree

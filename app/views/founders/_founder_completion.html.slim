@@ -4,4 +4,4 @@
       - if target.completed_by?(founder)
         .target-complete-check.img-circle
           i.fa.fa-check-circle.brand-primary
-      = image_tag profile_image_url(founder), class: 'img-circle'
+      = image_tag profile_image_url(founder, avatar_version: :mid), class: 'img-circle'

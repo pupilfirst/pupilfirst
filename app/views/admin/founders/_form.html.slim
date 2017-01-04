@@ -5,7 +5,12 @@
     = f.input :email
     = f.input :name
     = f.input :phone
-    = f.input :tag_list, input_html: { value: f.object.tag_list.join(','), 'data-founder-tags' => Founder.tag_counts_on(:tags).pluck(:name).to_json }
+
+    = f.input :tag_list,
+      as: :select,
+      collection: Founder.tag_counts_on(:tags).pluck(:name),
+      multiple: true
+
     = f.input :roles, as: :check_boxes, collection: Founder.valid_roles
     = f.input :about
     = f.input :born_on, as: :date_select, :start_year => 1920, :end_year => Date.today.year - 10
@@ -18,7 +23,7 @@
     = f.input :resume_url
     = f.input :avatar, as: :file
     = f.input :identification_proof, as: :file
-    = f.input :college_id, input_html: { 'data-search-url' => colleges_url }
+    = f.input :college_id, as: :select, input_html: { 'data-search-url' => colleges_url }, collection: f.object.college.present? ? [f.object.college] : []
     = f.input :roll_number
     = f.input :course
     = f.input :semester

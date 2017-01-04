@@ -1,3 +1,7 @@
+- content_for :head
+  title SV.CO Founder Dashboard
+  meta name="description" content="A guided set of targets on how to build a great startup."
+
 #dashboard-show-tour.hide [
   data-intro=t('dashboard.show.tour.intro')
   data-program-week-number=t('dashboard.show.tour.week_number')
@@ -48,7 +52,9 @@
                 .target-group-header-details
                   ' #{target_group.description}
 
-              == render 'target', target_group: target_group
+              - target_group.targets.each do |target|
+                == render 'target', target: target
+
 == render 'view-slides'
 == render 'timeline_builder'
 == render 'performance_overview'

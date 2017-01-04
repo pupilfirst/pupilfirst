@@ -193,9 +193,9 @@ class Founder < ApplicationRecord
 
   def slack_username_format
     return if slack_username.blank?
-    username_match = slack_username.match(/^@?([\w\.]+)$/)
+    username_match = slack_username.match(/^@?([a-z\d\.\_\-]{,20})$/)
     return if username_match.present?
-    errors.add(:slack_username, 'is not valid. Should only contain letters, numbers, and underscores.')
+    errors.add(:slack_username, 'is not valid. Should only contain lower-case letters, numbers, periods, hyphen and underscores.')
   end
 
   def display_name

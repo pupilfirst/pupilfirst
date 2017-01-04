@@ -197,7 +197,7 @@ const TimelineBuilder = React.createClass({
   },
 
   validate: function () {
-    if ($('.timeline-builder__textarea').val().length == 0) {
+    if ($('.timeline-builder__textarea').val().trim().length == 0) {
       this.setState({showDescriptionError: true});
       return false;
     }

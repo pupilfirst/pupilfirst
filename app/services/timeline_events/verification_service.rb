@@ -90,6 +90,7 @@ module TimelineEvents
 
     def applicable_points
       return @points if @points.present?
+      return nil if @points&.empty?
 
       return nil unless @new_status.in?([TimelineEvent::VERIFIED_STATUS_VERIFIED, TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT])
       return points_for_target unless @grade.present? && @new_status == TimelineEvent::VERIFIED_STATUS_VERIFIED

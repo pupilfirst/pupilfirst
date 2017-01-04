@@ -4,7 +4,7 @@ ActiveAdmin.register Target do
   permit_params :assignee_id, :assignee_type, :assigner_id, :role, :title, :description, :resource_url,
     :completion_instructions, :days_to_complete, :slideshow_embed, :completed_at, :completion_comment, :rubric,
     :remote_rubric_url, :review_test_embed, :batch_id, :target_group_id, :target_type, :points_earnable,
-    :timeline_event_type_id, :sort_index, prerequisite_target_ids: []
+    :timeline_event_type_id, :sort_index, :auto_verified, prerequisite_target_ids: []
 
   preserve_default_filters!
 
@@ -122,6 +122,7 @@ ActiveAdmin.register Target do
         end
       end
 
+      row :auto_verified
       row :assignee_type
       row :assignee
       row :batch

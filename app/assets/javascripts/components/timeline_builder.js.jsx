@@ -147,8 +147,12 @@ const TimelineBuilder = React.createClass({
     $('[name="timeline_event[files][' + identifier + ']"').remove()
   },
 
-  submit: function (event) {
-    if (this.validate()) {
+  submit: function () {
+    if (this.state.showLinkForm) {
+      $('.js-timeline-builder__add-link-button').trigger('click');
+    } else if (this.state.showFileForm) {
+      $('.js-timeline-builder__add-file-button').trigger('click');
+    } else if (this.validate()) {
 
       let form = $('.timeline-builder-hidden-form');
       let formData = new FormData(form[0]);

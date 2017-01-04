@@ -52,7 +52,7 @@ class TimelineBuilderImageButton extends React.Component {
     let fileName = inputElement.val().split('\\').pop();
     let fileExtension = fileName.match(/\.([^\.]+)$/)[1];
 
-    if ($.inArray(fileExtension, ['png', 'jpg', 'jpeg', 'svg']) == (-1)) {
+    if ($.inArray(fileExtension.toLowerCase(), ['png', 'jpg', 'jpeg', 'svg']) == (-1)) {
       this.setState({showFormatError: true});
       return false;
     }

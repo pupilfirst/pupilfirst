@@ -1,5 +1,5 @@
 class StartupsController < ApplicationController
-  before_action :authenticate_founder!, except: [:show, :index]
+  before_action :authenticate_founder!, except: [:show, :index, :timeline_event_show]
   before_action :restrict_to_startup_founders, only: [:edit, :update]
 
   # GET /startups
@@ -20,6 +20,15 @@ class StartupsController < ApplicationController
         redirect_to new_user_session_path, alert: 'Please sign in to continue!'
       end
     end
+  end
+
+  # GET /startups/:id/:event_title/:event_id
+  def timeline_event_show
+    @skip_container = true
+    @startup = Startup.friendly.find(params[:id])
+    @timeline_event_for_og = @startup.timeline_events.find_by(id: params[:event_id])
+    raise_not_found unless @timeline_event_for_og.present?
+    render 'show'
   end
 
   def edit

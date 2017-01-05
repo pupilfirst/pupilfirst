@@ -122,7 +122,7 @@ ActiveAdmin.register Target do
         end
       end
 
-      row :auto_verified
+      # row :auto_verified
       row :assignee_type
       row :assignee
       row :batch

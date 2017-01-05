@@ -77,9 +77,18 @@ setPerformancePointer = ->
   $('.performance-pointer')[0].style.color = color
 
 viewSlidesModal = ->
-  $('.view-slides-btn').click () ->
-    $('#slides-wrapper').html($(this).data('embed-code'))
-    $('.view-slides').modal()
+  $('.view-slides-btn').click (event) ->
+    slidesModal = $('.view-slides')
+    viewSlidesButton = $(event.target).closest('button')
+
+    slidesModal.on 'show.bs.modal', ->
+      $('#slides-wrapper').html(viewSlidesButton.data('embed-code'))
+
+    slidesModal.on 'hide.bs.modal', ->
+      $('#slides-wrapper').html('')
+
+    slidesModal.modal()
+
 
 giveATour = ->
   startTour() if $('#dashboard-show-tour').data('tour-flag')

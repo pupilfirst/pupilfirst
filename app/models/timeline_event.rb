@@ -74,7 +74,7 @@ class TimelineEvent < ApplicationRecord
   scope :for_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch.id }) }
   scope :for_batch_id_in, -> (ids) { joins(:startup).where(startups: { batch_id: ids }) }
   scope :not_private, -> { where(timeline_event_type: TimelineEventType.where.not(role: TimelineEventType::ROLE_FOUNDER)) }
-  scope :not_improved, -> { where(improved_timeline_event_id: nil) }
+  scope :not_improved, -> { needs_improvement.where(improved_timeline_event_id: nil) }
 
   after_initialize :make_links_an_array
 

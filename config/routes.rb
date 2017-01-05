@@ -32,10 +32,17 @@ Rails.application.routes.draw do
     end
   end
 
+  # TODO: This route was included for auto-verification flow which was later stalled. Leaving it here for re-use if required.
+  # scope 'founder/dashboard', as: 'founder_dashboard', controller: 'founders/dashboard' do
+  #   post 'toggle_auto_verified_target/:target_id', action: 'toggle_auto_verified_target', as: 'toggle_auto_verified_target'
+  # end
+
   resources :startups, only: [:index, :show] do
     collection do
       post 'team_leader_consent'
     end
+
+    get ':event_title/:event_id', on: :member, action: 'timeline_event_show', as: 'timeline_event_show'
 
     resources :timeline_events, only: [] do
       resources :timeline_event_files, only: [] do

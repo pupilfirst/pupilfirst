@@ -22,7 +22,7 @@ class FacultyController < ApplicationController
     connect_request = connect_slot.build_connect_request(startup: current_founder.startup, questions: questions)
 
     if connect_request.save
-      flash[:success] = 'Connect Request has been submitted. You will receive an email once its confirmed.'
+      flash[:success] = "Connect Request has been submitted. You will receive an email once it's confirmed."
     else
       flash[:error] = 'Something went wrong while attempting to create connect request! :('
     end

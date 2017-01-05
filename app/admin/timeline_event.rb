@@ -61,7 +61,14 @@ ActiveAdmin.register TimelineEvent do
     end
 
     column 'Founder', :founder
-    column :event_on
+
+    column('Linked Target') do |timeline_event|
+      if timeline_event.target.present?
+        a href: admin_target_url(timeline_event.target) do
+          timeline_event.target.title
+        end
+      end
+    end
 
     column :verified_status do |timeline_event|
       if timeline_event.verified?
@@ -111,7 +118,7 @@ ActiveAdmin.register TimelineEvent do
       timeline_event.update(target: target)
 
       # Assign as improved_timeline_event, if applicable
-      timeline_event.set_as_improved_timeline_event
+      TimelineEvents::MarkAsImprovedTargetService(timeline_event).execute
 
       flash[:success] = 'Target has been linked.'
     else

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170102142706) do
+ActiveRecord::Schema.define(version: 20170104082136) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -641,8 +641,8 @@ ActiveRecord::Schema.define(version: 20170102142706) do
     t.text     "description"
     t.string   "completion_instructions"
     t.string   "resource_url"
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
     t.text     "slideshow_embed"
     t.integer  "assigner_id"
     t.string   "rubric"
@@ -656,6 +656,7 @@ ActiveRecord::Schema.define(version: 20170102142706) do
     t.integer  "batch_id"
     t.integer  "points_earnable"
     t.integer  "sort_index",              default: 999
+    t.boolean  "auto_verified",           default: false
     t.index ["assignee_id"], name: "index_targets_on_assignee_id", using: :btree
     t.index ["assignee_type"], name: "index_targets_on_assignee_type", using: :btree
     t.index ["batch_id"], name: "index_targets_on_batch_id", using: :btree

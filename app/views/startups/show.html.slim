@@ -2,6 +2,17 @@
   title SV.CO Verified Timeline for #{@startup.product_name}
   meta name="description" content="#{@startup.display_name}: #{@startup.product_description}"
 
+  - if @timeline_event_for_og.present?
+    meta property="og:type" content="article"
+    /meta property="og:rich_attachment" content="true"
+    meta property="og:title" content=@timeline_event_for_og.title
+    meta property="og:description" content=@timeline_event_for_og.description
+    meta property="og:site_name" content="SV.CO"
+    meta property="article:published_time" content=@timeline_event_for_og.event_on.strftime('%Y-%m-%d')
+    meta property="article:publisher" content="https://www.facebook.com/svdotco"
+    /meta property="article:author" content=""
+    meta property="og:image" content=@timeline_event_for_og.image.url
+
 .container
   - if @startup.dropped_out?
     .alert.alert-danger.margin-top-20

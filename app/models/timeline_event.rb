@@ -74,7 +74,7 @@ class TimelineEvent < ApplicationRecord
   scope :for_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch.id }) }
   scope :for_batch_id_in, -> (ids) { joins(:startup).where(startups: { batch_id: ids }) }
   scope :not_private, -> { where(timeline_event_type: TimelineEventType.where.not(role: TimelineEventType::ROLE_FOUNDER)) }
-  scope :not_improved, -> { where(improved_timeline_event_id: nil) }
+  scope :not_improved, -> { needs_improvement.where(improved_timeline_event_id: nil) }
 
   after_initialize :make_links_an_array
 
@@ -267,20 +267,6 @@ class TimelineEvent < ApplicationRecord
       .where(timeline_event_type: timeline_event_type)
       .where('created_at > ?', created_at)
       .where.not(id: id).order('event_on DESC')
-  end
-
-  def set_as_improved_timeline_event
-    previous_event_for_target.update(improved_timeline_event_id: id) if previous_event_for_target.present?
-  end
-
-  def previous_event_for_target
-    return nil unless target.present?
-
-    founder_or_startup.timeline_events
-      .where(target_id: target.id, timeline_event_type: timeline_event_type)
-      .where.not(id: id)
-      .where('created_at < ?', created_at)
-      .order('created_at DESC').first
   end
 
   private

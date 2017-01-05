@@ -42,7 +42,7 @@ class ConnectRequest < ApplicationRecord
 
   def post_confirmation_tasks
     return unless status_changed? && confirmed? && confirmed_at.blank?
-    create_google_calendar_event if Rails.env.production?
+    ConnectRequests::CreateCalendarEventService.new(self).execute if Rails.env.production?
     send_mails_for_confirmed
     save_confirmation_time!
     create_faculty_connect_session_rating_job
@@ -90,24 +90,6 @@ class ConnectRequest < ApplicationRecord
     StartupMailer.connect_request_confirmed(self).deliver_later
   end
 
-  def create_google_calendar_event
-    google_calendar.create_event do |e|
-      e.title = calendar_event_title
-      e.start_time = slot_at.iso8601
-      e.end_time = (slot_at + MEETING_DURATION).iso8601
-      e.attendees = attendees
-      e.description = calendar_event_description
-      e.guests_can_invite_others = false
-      e.guests_can_see_other_guests = false
-
-      # Default visibility should be sufficient since it equals calendar's setting.
-      # e.visibility = 'public'
-
-      # Send an sms 1 day before the office hour and a pop-up message 1 hour before
-      e.reminders = { 'useDefault' => false, 'overrides' => [{ 'method' => 'popup', 'minutes' => 60 }, { 'method' => 'sms', 'minutes' => (24 * 60) }] }
-    end
-  end
-
   def requested?
     status == STATUS_REQUESTED
   end
@@ -138,37 +120,5 @@ class ConnectRequest < ApplicationRecord
       4 => 20,
       5 => 40
     }[rating]
-  end
-
-  def attendees
-    [{ 'email' => faculty.email, 'displayName' => faculty.name, 'responseStatus' => 'needsAction' }] + startup.founders.map do |founder|
-      {
-        'email' => founder.email,
-        'displayName' => founder.fullname,
-        'responseStatus' => 'needsAction'
-      }
-    end
-  end
-
-  def calendar_event_description
-    "Product: #{startup.display_name}\\n" \
-    "Timeline: #{Rails.application.routes.url_helpers.startup_url(startup, host: 'https://sv.co')}\\n" \
-    "Team lead: #{startup.admin.fullname}\\n\\n" \
-    "Questions Asked:\\n\\n" \
-    "#{questions.delete("\r").to_json[1..-2]}" # Remove \r-s and quotes introduced by to_json.
-  end
-
-  def google_calendar
-    Google::Calendar.new(
-      client_id: ENV['GOOGLE_CLIENT_ID'],
-      client_secret: ENV['GOOGLE_CLIENT_SECRET'],
-      redirect_url: ENV['GOOGLE_OAUTH_REDIRECT_URL'],
-      calendar: ENV['GOOGLE_CALENDAR_ID'],
-      refresh_token: ENV['GOOGLE_REFRESH_TOKEN']
-    )
-  end
-
-  def calendar_event_title
-    "#{startup.product_name} / #{faculty.name} (Faculty Connect)"
   end
 end

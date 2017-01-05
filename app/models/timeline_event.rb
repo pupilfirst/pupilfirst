@@ -269,20 +269,6 @@ class TimelineEvent < ApplicationRecord
       .where.not(id: id).order('event_on DESC')
   end
 
-  def set_as_improved_timeline_event
-    previous_event_for_target.update(improved_timeline_event_id: id) if previous_event_for_target.present?
-  end
-
-  def previous_event_for_target
-    return nil unless target.present?
-
-    founder_or_startup.timeline_events
-      .where(target_id: target.id, timeline_event_type: timeline_event_type)
-      .where.not(id: id)
-      .where('created_at < ?', created_at)
-      .order('created_at DESC').first
-  end
-
   private
 
   def privileged_founder?(founder)

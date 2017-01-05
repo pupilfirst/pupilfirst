@@ -57,6 +57,8 @@ class TimelineBuilderForm < Reform::Form
       )
 
       create_files(timeline_event)
+
+      TimelineEvents::AfterFounderSubmitJob.perform_later(timeline_event)
     end
   end
 

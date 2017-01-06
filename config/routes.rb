@@ -42,6 +42,8 @@ Rails.application.routes.draw do
       post 'team_leader_consent'
     end
 
+    get ':event_title/:event_id', on: :member, action: 'timeline_event_show', as: 'timeline_event_show'
+
     resources :timeline_events, only: [] do
       resources :timeline_event_files, only: [] do
         member do

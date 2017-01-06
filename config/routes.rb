@@ -25,6 +25,8 @@ Rails.application.routes.draw do
   resource :founder, only: [:edit, :update] do
     member do
       get 'dashboard'
+      post 'facebook_connect'
+      get 'facebook_connect_callback'
     end
     resource :startup, only: [:edit, :update] do
       resources :timeline_events, only: [:create, :destroy, :update]

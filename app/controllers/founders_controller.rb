@@ -41,6 +41,18 @@ class FoundersController < ApplicationController
     render layout: 'application_v2'
   end
 
+  def facebook_connect
+    @oauth = Founders::FacebookService.new(current_founder)
+    redirect_to @oauth.oauth_url
+  end
+
+  def facebook_connect_callback
+    @oauth = Founders::FacebookService.new(current_founder)
+    @oauth.update_access_token!(params[:code])
+    flash[:success] = 'Facebook Connection Successful!'
+    redirect_to dashboard_founder_path
+  end
+
   private
 
   def skip_container

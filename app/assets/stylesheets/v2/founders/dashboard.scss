@@ -21,7 +21,8 @@
   margin-right: 20px;
   cursor: pointer;
   letter-spacing: 0.04rem;
-  box-shadow: 0px 2px 5px 0px lighten($gray-light, 35%);
+  border: 1px solid $gray-border;
+  box-shadow: 0 0 5px 0 lighten($gray-light, 35%);
 
   @include media-breakpoint-down(sm) {
     width: auto;
@@ -30,7 +31,7 @@
   }
 }
 .btn-timeline-builder {
-  box-shadow: 0px 2px 5px 0px lighten($gray-light, 35%);
+  box-shadow: 0 0 5px 0 lighten($gray-light, 35%);
   border: 1px solid $brand-secondary;
   display: inline-block;
 
@@ -39,6 +40,14 @@
     font-size: 0.625rem;
     padding: 10px;
   }
+}
+.filter-targets-dropdown {
+  background-color: white;
+  border: 1px solid $gray-border;
+  box-shadow: 0 0 5px 0 lighten($gray-light, 35%);
+}
+.filter-targets-dropdown__icon {
+  color: $brand-secondary;
 }
 .complete-target-block {
   border-top: 1px solid $gray-border;

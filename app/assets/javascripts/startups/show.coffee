@@ -356,6 +356,11 @@ resetOnHideFeedbackModal = ->
 addTooltipToHideCheckbox = ->
   $("#hide-from-public").tooltip()
 
+moveToSpecefiedEvent = ->
+  if $(".main-timeline").length && $(".main-timeline").data('timelineEventId')
+    window.location = window.location.href + "#event-" + $(".main-timeline").data('timelineEventId')
+
+
 $(document).on 'page:change', timelineBuilderSubmitChecks
 $(document).on 'page:change', setupSelect2ForEventType
 $(document).on 'page:change', clearErrorsOnOpeningSelect2
@@ -370,3 +375,4 @@ $(document).on 'page:change', resetOnHideFeedbackModal
 $(document).on 'page:change', addTooltipToHideCheckbox
 $(document).on 'page:change', markSelectedAttachments
 $(document).on 'page:change', updateAttachmentsTabTitle
+$(document).on 'page:change', moveToSpecefiedEvent

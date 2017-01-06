@@ -1,6 +1,9 @@
 class TimelineBuilderForm < Reform::Form
+  # Add some slack to the max limit to allow for different length calculation at the front-end.
+  MAX_DESCRIPTION_CHARACTERS = (TimelineEvent::MAX_DESCRIPTION_CHARACTERS * 1.1).to_i
+
   property :target_id
-  property :description, validates: { presence: true, length: { maximum: TimelineEvent::MAX_DESCRIPTION_CHARACTERS } }
+  property :description, validates: { presence: true, length: { maximum: MAX_DESCRIPTION_CHARACTERS } }
   property :timeline_event_type_id, validates: { presence: true }
   property :event_on, validates: { presence: true }
   property :links

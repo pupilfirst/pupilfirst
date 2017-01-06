@@ -47,7 +47,7 @@ class TimelineEvent < ApplicationRecord
   validates :startup_id, presence: true
   validates :founder_id, presence: true
   validates :timeline_event_type, presence: true
-  validates :description, presence: true, length: { maximum: MAX_DESCRIPTION_CHARACTERS, message: "must be within #{MAX_DESCRIPTION_CHARACTERS} characters" }
+  validates :description, presence: true
 
   before_validation do
     if verified_status_changed?
@@ -74,7 +74,7 @@ class TimelineEvent < ApplicationRecord
   scope :for_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch.id }) }
   scope :for_batch_id_in, -> (ids) { joins(:startup).where(startups: { batch_id: ids }) }
   scope :not_private, -> { where(timeline_event_type: TimelineEventType.where.not(role: TimelineEventType::ROLE_FOUNDER)) }
-  scope :not_improved, -> { needs_improvement.where(improved_timeline_event_id: nil) }
+  scope :not_improved, -> { needs_improvement.joins(:target).where(improved_timeline_event_id: nil) }
 
   after_initialize :make_links_an_array
 

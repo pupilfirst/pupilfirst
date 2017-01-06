@@ -51,7 +51,7 @@
             | Learn More
 
       - if target.rubric.present?
-        a.btn.btn-with-icon.btn-sm.btn-ghost-primary.text-uppercase.m-b-1 target='_blank' href=target.rubric_url
+        a.btn.btn-with-icon.btn-sm.btn-ghost-primary.text-uppercase.m-b-1 target='_blank' href=download_rubric_target_path(target)
           i.fa.fa-download
           span
             | Download Rubric

@@ -189,6 +189,12 @@ Rails.application.routes.draw do
     get 'completion_certificate'
   end
 
+  resources :targets, only: [] do
+    member do
+      get 'download_rubric'
+    end
+  end
+
   # used for shortened urls from the shortener gem
   get '/:id', to: 'shortener/shortened_urls#show'
 end

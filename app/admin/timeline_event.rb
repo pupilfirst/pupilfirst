@@ -118,7 +118,7 @@ ActiveAdmin.register TimelineEvent do
       timeline_event.update(target: target)
 
       # Assign as improved_timeline_event, if applicable
-      TimelineEvents::MarkAsImprovedTargetService(timeline_event).execute
+      TimelineEvents::MarkAsImprovedTargetService.new(timeline_event).execute
 
       flash[:success] = 'Target has been linked.'
     else

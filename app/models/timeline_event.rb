@@ -47,7 +47,7 @@ class TimelineEvent < ApplicationRecord
   validates :startup_id, presence: true
   validates :founder_id, presence: true
   validates :timeline_event_type, presence: true
-  validates :description, presence: true, length: { maximum: MAX_DESCRIPTION_CHARACTERS, message: "must be within #{MAX_DESCRIPTION_CHARACTERS} characters" }
+  validates :description, presence: true
 
   before_validation do
     if verified_status_changed?

@@ -156,7 +156,7 @@ class ApplicationController < ActionController::Base
 
   def facebook_csp
     {
-      image: 'https://www.facebook.com/tr/',
+      image: 'https://www.facebook.com/tr/ https://scontent.xx.fbcdn.net',
       script: 'https://connect.facebook.net'
     }
   end

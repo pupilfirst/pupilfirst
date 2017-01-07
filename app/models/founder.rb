@@ -356,6 +356,10 @@ class Founder < ApplicationRecord
     latest_nps.present? && latest_nps < 7
   end
 
+  def facebook_connected?
+    fb_access_token.present? && fb_token_expires_at > Time.now
+  end
+
   private
 
   def batch_start_date

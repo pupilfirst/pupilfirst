@@ -106,6 +106,8 @@ gem 'omniauth-google-oauth2' # Oauth2 strategy for Google
 gem 'omniauth-facebook' # Facebook OAuth2 Strategy for OmniAuth http://mkdynamic.github.com/omniauth-facebook
 gem 'omniauth-github' # GitHub strategy for OmniAuth
 
+gem 'koala', '~> 2.2' # Library for Facebook with support for OAuth authentication, the Graph and REST APIs
+
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-pnotify' # Superb notifications library. http://sciactive.github.io/pnotify/

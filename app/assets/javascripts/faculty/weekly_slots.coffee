@@ -1,41 +1,67 @@
 slotsClickHandler = ->
-  $('.connect-slot').click (event) ->
+  $('.weekly-slots__connect-slot').click (event) ->
     slot = $(event.target)
+    day = slot.data('day')
+
+    return if slot.hasClass('weekly-slots__connect-slot--requested')
 
     # Mark (or unmark) selected class.
-    slot.toggleClass('selected')
-    slotValue = [slot.data('day'),parseFloat(slot.data('time'))]
+    slot.toggleClass('weekly-slots__connect-slot--selected')
+    slotValue = { time: parseFloat(slot.data('time')), requested: false }
 
     if $('#list_of_slots').val().length > 0
-      current_slots = JSON.parse($('#list_of_slots').val())
+      currentSlots = JSON.parse($('#list_of_slots').val())
     else
-      current_slots = []
+      currentSlots = {}
 
-    if slot.hasClass('selected')
-      current_slots.push(slotValue)
+    if slot.hasClass('weekly-slots__connect-slot--selected')
+      currentSlots[day] ||= []
+      currentSlots[day].push(slotValue)
     else
-      index = findSlot(current_slots, slotValue)
+      index = findSlot(currentSlots[day], slotValue)
 
       if index > -1
-        current_slots.splice(index, 1);
+        currentSlots[day].splice(index, 1);
 
-    $('#list_of_slots').val(JSON.stringify(current_slots))
+    $('#list_of_slots').val(JSON.stringify(currentSlots))
 
 findSlot = (list, slotValue) ->
   i = 0
+
   while i < list.length
-    if String(list[i]) == String(slotValue)
+    if list[i].time == slotValue.time
       return i
     i++
+
   -1
 
 markPresentSlots = ->
-  if $('#list_of_slots').length and $('#list_of_slots').val().length > 0
-    current_slots = JSON.parse($('#list_of_slots').val())
-    for slot in current_slots
-      $(".connect-slot[data-day='"+slot[0]+"'][data-time='"+slot[1].toFixed(1)+"']").addClass('selected')
+  listOfSlots = $('#list_of_slots')
 
-$(document).on 'page:change', slotsClickHandler
-$(document).on 'page:change', findSlot
-$(document).on 'page:change', markPresentSlots
-$(window).on 'load', markPresentSlots
+  if listOfSlots.length and listOfSlots.val().length > 0
+    currentSlots = JSON.parse(listOfSlots.val())
+
+    for day, slots of currentSlots
+      for slot in slots
+        slotClasses = 'weekly-slots__connect-slot--selected'
+        slotClasses += ' weekly-slots__connect-slot--requested' if slot.requested
+        time = slot.time
+        $(".weekly-slots__connect-slot[data-day='" + day + "'][data-time='" + time.toFixed(1) + "']").addClass(slotClasses)
+
+  addTooltipsToRequestedSlots()
+
+addTooltipsToRequestedSlots = ->
+  $('.weekly-slots__connect-slot--requested').popover
+    title: 'Cannot modify'
+    content: 'This slot has been requested by a founder. Please contact help@sv.co if you wish to cancel this session.'
+    trigger: 'hover'
+    placement: 'bottom'
+
+$(window).on 'load', ->
+  if $('#faculty__weekly-slots').length
+    markPresentSlots()
+
+$(document).on 'turbolinks:load', ->
+  if $('#faculty__weekly-slots').length
+    markPresentSlots()
+    slotsClickHandler()

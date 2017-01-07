@@ -94,6 +94,13 @@ en:
         target_status: This indicates the present status of the target.
         add_event: Click to add timeline events for your startup. Once approved by the SV.CO team, (most) timeline events are displayed to the public.
         performance: Indicates the performance of your startup.
+      performance_descriptions:
+        description_10_html: "Your team seems to be struggling. Make sure you have completed all targets before deadline, and get better grades in your submissions."
+        description_30_html: "Your team is performing okay, but it's slightly behind the rest of the batch. If you have any Needs Improvement targets, put in the work to make them Verified with <em>Great</em> or <em>Wow</em> grades."
+        description_50_html: "Your team is performing adequately, pretty much the same as the rest of your batch. <br /> Attempt to get <em>Great</em> and <em>Wow</em> grades for important targets to advance."
+        description_70_html: "Your team is performing better than most of the batch. Attempt to get more <em>Wow</em> grades for important targets to advance."
+        description_90_html: "Your team is performing exceptionally. Great stuff, we have high hopes from you :)"
+
   resource:
     share_status:
       approved: 'Only with approved startups'

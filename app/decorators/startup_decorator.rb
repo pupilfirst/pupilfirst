@@ -30,11 +30,11 @@ class StartupDecorator < Draper::Decorator
 
   def performance_label
     case relative_performance
-      when 10 then 'Disappointing'
-      when 30 then 'Poor'
-      when 50 then 'Average'
-      when 70 then 'Satisfactory'
-      when 90 then 'Excellent'
+      when 10 then 'Below Average'
+      when 30 then 'Average'
+      when 50 then 'Good'
+      when 70 then 'Great'
+      when 90 then 'Wow'
     end
   end
 

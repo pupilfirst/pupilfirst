@@ -27,6 +27,7 @@ Rails.application.routes.draw do
       get 'dashboard'
       post 'facebook_connect'
       get 'facebook_connect_callback'
+      post 'facebook_disconnect'
     end
     resource :startup, only: [:edit, :update] do
       resources :timeline_events, only: [:create, :destroy, :update]

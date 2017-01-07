@@ -28,6 +28,10 @@ module Founders
       }
     end
 
+    def disconnect!
+      @founder.update!(fb_access_token: nil, fb_token_expires_at: nil)
+    end
+
     private
 
     def oauth

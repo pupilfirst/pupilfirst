@@ -53,6 +53,12 @@ class FoundersController < ApplicationController
     redirect_to edit_founder_path
   end
 
+  def facebook_disconnect
+    Founders::FacebookService.new(current_founder).disconnect!
+    flash[:success] = 'Facebook disconnected successfully!'
+    redirect_to edit_founder_path
+  end
+
   private
 
   def skip_container

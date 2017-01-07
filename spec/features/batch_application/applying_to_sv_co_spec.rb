@@ -14,7 +14,7 @@ feature 'Applying to SV.CO' do
     let!(:batch_stage_1) { create :batch_stage, batch: batch, application_stage: application_stage_1 }
     let!(:batch_stage_2) { create :batch_stage, batch: batch, application_stage: application_stage_2, starts_at: 16.days.from_now, ends_at: 46.days.from_now }
 
-    scenario 'user submits application and pays', focus: true, js: true do
+    scenario 'user submits application and pays', js: true do
       visit apply_path
       expect(page).to have_text('Did you complete registration once before?')
 

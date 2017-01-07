@@ -50,7 +50,7 @@ class FoundersController < ApplicationController
     @oauth = Founders::FacebookService.new(current_founder)
     @oauth.update_access_token!(params[:code])
     flash[:success] = 'Facebook Connection Successful!'
-    redirect_to dashboard_founder_path
+    redirect_to edit_founder_path
   end
 
   private

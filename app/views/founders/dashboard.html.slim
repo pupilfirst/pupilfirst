@@ -21,18 +21,30 @@
     .fixed-dashboard-header
       .container
         .dashboard-header-container.clearfix.m-x-auto.text-xs-center
-          .pull-xs-left
-            .btn-group
-              button.btn.btn-with-icon.btn-ghost-primary.btn-md.filter-targets-dropdown.dropdown-toggle aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" type="button"
+          .pull-sm-left.pull-xs-right
+            .btn-group.filter-targets-dropdown
+              button.btn.btn-with-icon.btn-ghost-primary.btn-md.text-xs-left.filter-targets-dropdown__button.dropdown-toggle aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" type="button"
                 span.filter-targets-dropdown__icon
                   i.fa.fa-sliders
-                | All Targets
-              .dropdown-menu
-                button.dropdown-item type="button" Expiring soon targets
-                button.dropdown-item type="button" Expired targets
-                button.dropdown-item type="button" Not accepted targets
+                span.hidden-xs-down.p-r-1
+                  | All targets
+                span.pull-xs-right.filter-targets-dropdown__arrow.hidden-xs-down
 
-          .pull-xs-right
+              .dropdown-menu.filter-targets-dropdown__menu
+                a.dropdown-item.filter-targets-dropdown__menu-item href="" role="button"
+                  span.filter-targets-dropdown__menu-item-icon
+                    i.fa.fa-clock-o
+                  | Expiring soon targets
+                a.dropdown-item.filter-targets-dropdown__menu-item href="" role="button"
+                  span.filter-targets-dropdown__menu-item-icon
+                    i.fa.fa-hourglass-end
+                  | Expired targets
+                a.dropdown-item.filter-targets-dropdown__menu-item href="" role="button"
+                  span.filter-targets-dropdown__menu-item-icon
+                    i.fa.fa-thumbs-o-down
+                  | Not accepted targets
+
+          .pull-sm-right.pull-xs-left
             button#performance-button.btn.btn-with-icon.btn-md.btn-ghost-primary.performance-overview-link.text-uppercase data-toggle="modal"
               i.fa.fa-tachometer
               span
@@ -42,8 +54,14 @@
               span
                 | Add Event
     .targets-board.m-x-auto.target-accordion
-      - @program_weeks.first.target_groups.first.targets.each do |target|
-        == render 'target', target: target
+      .target-group.m-y-3
+        .target-group-header.text-xs-center
+          h3.font-regular Expiring soon targets
+          p
+            | Here, I focus on a range of items and features that we use in life.
+
+        - @program_weeks.first.target_groups.first.targets.each do |target|
+          == render 'target', target: target
 
       - @program_weeks.each do |program_week|
         - next unless program_week.target_groups.present?

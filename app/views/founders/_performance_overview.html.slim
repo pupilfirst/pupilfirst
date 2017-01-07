@@ -39,4 +39,4 @@
             .performance-pointer.text-uppercase.font-semibold data-value=@startup.relative_performance
               | #{@startup.performance_label}
           p.performance-description
-            | Performance Meter
+            == t("dashboard.show.performance_descriptions.description_#{@startup.relative_performance}_html")

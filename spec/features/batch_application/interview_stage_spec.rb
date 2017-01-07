@@ -1,18 +1,20 @@
 require 'rails_helper'
 
 feature 'Application Interview Stage' do
-  include BatchApplicantSpecHelper
+  include UserSpecHelper
 
   let(:batch) { create :batch, :in_stage_3 }
-  let(:batch_application) { create :batch_application, :stage_3, batch: batch }
+  let(:batch_applicant) { batch_application.team_lead }
+  let!(:batch_application) { create :batch_application, :stage_3, batch: batch }
   let(:stage_3) { create :application_stage, number: 3 }
 
   before do
-    sign_in_batch_applicant(batch_application.team_lead)
+    sign_in_user(batch_applicant.user, referer: apply_continue_path)
   end
 
   context 'when interview stage is ongoing' do
     scenario 'user is shown ongoing state page' do
+      visit apply_continue_path
       expect(page).to have_content("You've made it to the interviews!")
     end
 

@@ -8,6 +8,7 @@ feature 'Applying to SV.CO' do
   let!(:college) { create :college }
 
   include_context 'mocked_instamojo'
+  include UserSpecHelper
 
   context 'when a batch is open for applications' do
     let(:batch) { create :batch }
@@ -63,14 +64,12 @@ feature 'Applying to SV.CO' do
 
     context 'when an applied user returns' do
       # ready-to-use returning applicant and his application
-      let(:batch_applicant) { create :batch_applicant, :with_user }
-
+      let!(:batch_applicant) { batch_application.team_lead }
       let!(:batch_application) do
         create :batch_application,
           batch: batch,
           application_stage: ApplicationStage.initial_stage,
-          college: college,
-          team_lead_id: batch_applicant.id
+          college: college
       end
 
       before do
@@ -79,7 +78,7 @@ feature 'Applying to SV.CO' do
 
       scenario 'returning applicant restarts application' do
         # user signs in
-        visit user_token_path(token: batch_applicant.user.login_token, referer: apply_path)
+        sign_in_user(batch_applicant.user, referer: apply_path)
         expect(page).to have_text('You have already completed registration')
         click_on 'Continue application'
 
@@ -97,9 +96,8 @@ feature 'Applying to SV.CO' do
         let!(:batch_stage_2) { create :batch_stage, batch: batch, application_stage: application_stage_2 }
 
         scenario 'applicant did not complete payment in time' do
-          # continue_path = apply_continue_path(token: batch_applicant.user.login_token, referer: apply_path)
-          # visit continue_path
-          visit user_token_path(token: batch_applicant.user.login_token, referer: apply_continue_path)
+          # user signs in
+          sign_in_user(batch_applicant.user, referer: apply_continue_path)
           expect(page).to have_content 'Application process has closed'
         end
       end
@@ -108,14 +106,12 @@ feature 'Applying to SV.CO' do
 
   context 'when a batch has moved to stage 2 - coding and video' do
     let(:batch) { create :batch }
-    let(:batch_applicant) { create :batch_applicant, :with_user }
-
+    let!(:batch_applicant) { batch_application.team_lead }
     let!(:batch_application) do
       create :batch_application,
         batch: batch,
         application_stage: ApplicationStage.initial_stage,
         college: college,
-        team_lead_id: batch_applicant.id,
         team_size: 2
     end
 
@@ -140,8 +136,8 @@ feature 'Applying to SV.CO' do
 
     context 'when cofounders are absent' do
       scenario 'paid applicant fails to submit his code and video links' do
-        # visit apply_continue_path(token: batch_applicant.token, shared_device: false)
-        visit user_token_path(token: batch_applicant.user.login_token, referer: apply_continue_path)
+        # user signs in
+        sign_in_user(batch_applicant.user, referer: apply_continue_path)
 
         # user must see the coding and video tasks
         expect(page).to have_text('Coding Task')
@@ -164,7 +160,8 @@ feature 'Applying to SV.CO' do
       end
 
       scenario 'paid applicant is able to submit code and video links' do
-        visit user_token_path(token: batch_applicant.user.login_token, referer: apply_continue_path)
+        # user signs in
+        sign_in_user(batch_applicant.user, referer: apply_continue_path)
 
         # User must see the coding and video tasks.
         expect(page).to have_text('Coding Task')
@@ -186,7 +183,8 @@ feature 'Applying to SV.CO' do
     end
 
     scenario 'applicant adds cofounder details', js: true do
-      visit user_token_path(token: batch_applicant.user.login_token, referer: apply_continue_path)
+      # user signs in
+      sign_in_user(batch_applicant.user, referer: apply_continue_path)
 
       # TODO: Replace this with click_link when PhantomJS moves to next version. It currently doesn't render flexbox correctly:
       # See: https://github.com/ariya/phantomjs/issues/14365
@@ -240,7 +238,8 @@ feature 'Applying to SV.CO' do
       end
 
       scenario 'applicant removes existing submission' do
-        visit user_token_path(token: batch_applicant.user.login_token, referer: apply_continue_path)
+        # user signs in
+        sign_in_user(batch_applicant.user, referer: apply_continue_path)
 
         # user submission must be acknowledged
         expect(page).to have_text('Your coding and hustling submissions has been received')

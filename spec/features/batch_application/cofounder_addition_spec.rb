@@ -2,9 +2,10 @@ require 'rails_helper'
 
 # Happy path of cofounder addition is tested in applying_to_sv_co_spec.rb
 feature 'Cofounder addition' do
-  include BatchApplicantSpecHelper
+  include UserSpecHelper
 
   let(:batch) { create :batch, :in_stage_2 }
+  let(:batch_applicant) { batch_application.team_lead }
   let(:batch_application) { create :batch_application, batch: batch }
   let(:stage_2) { create :application_stage, number: 2 }
 
@@ -12,9 +13,9 @@ feature 'Cofounder addition' do
     it 'displays one editable cofounder' do
       # Manually move the application to stage 2.
       batch_application.update!(application_stage: stage_2)
-      sign_in_batch_applicant(batch_application.team_lead)
 
-      visit apply_cofounders_path
+      # User signs in
+      sign_in_user(batch_applicant.user, referer: apply_cofounders_path)
 
       expect(page).to have_selector('.cofounder.content-box', count: 1)
     end
@@ -22,13 +23,13 @@ feature 'Cofounder addition' do
 
   context 'when application has been swept from one batch to another' do
     let(:older_batch) { create :batch, :in_stage_3 }
-    let(:team_lead) { create :batch_applicant }
+    let(:team_lead) { create :batch_applicant, :with_user }
     let!(:old_application) { create :batch_application, :stage_2_submitted, team_lead: team_lead, team_size: 2, batch: older_batch }
     let!(:batch_application) { create :batch_application, :paid, batch: batch, team_lead: team_lead, team_size: 2 }
 
     it 'allows re-addition of cofounders' do
-      sign_in_batch_applicant(batch_application.team_lead)
-      visit apply_cofounders_path
+      # User signs in
+      sign_in_user(team_lead.user, referer: apply_cofounders_path)
 
       cofounder = old_application.cofounders.first
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170104082136) do
+ActiveRecord::Schema.define(version: 20170107113146) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -114,13 +114,10 @@ ActiveRecord::Schema.define(version: 20170104082136) do
     t.string   "email"
     t.string   "phone"
     t.string   "role"
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
-    t.string   "token"
-    t.datetime "sign_in_email_sent_at"
-    t.string   "reference",             default: "Other"
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.string   "reference",          default: "Other"
     t.text     "notes"
-    t.datetime "last_sign_in_at"
     t.datetime "latest_payment_at"
     t.integer  "college_id"
     t.string   "college_text"
@@ -140,7 +137,6 @@ ActiveRecord::Schema.define(version: 20170104082136) do
     t.integer  "user_id"
     t.index ["college_id"], name: "index_batch_applicants_on_college_id", using: :btree
     t.index ["founder_id"], name: "index_batch_applicants_on_founder_id", using: :btree
-    t.index ["token"], name: "index_batch_applicants_on_token", using: :btree
   end
 
   create_table "batch_applicants_applications", id: false, force: :cascade do |t|

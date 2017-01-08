@@ -49,8 +49,6 @@ class BatchApplicant < ApplicationRecord
   validates :fee_payment_method, inclusion: { in: FEE_PAYMENT_METHODS }, allow_nil: true
   validates :id_proof_type, inclusion: { in: ID_PROOF_TYPES }, allow_nil: true
 
-  has_secure_token
-
   normalize_attribute :gender, :reference, :phone, :fee_payment_method, :id_proof_type
 
   mount_uploader :id_proof, BatchApplicantDocumentUploader

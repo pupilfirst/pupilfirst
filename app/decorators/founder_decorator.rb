@@ -10,6 +10,8 @@ class FounderDecorator < Draper::Decorator
   end
 
   def fb_basic_info
+    return nil unless facebook_connected?
+
     @fb_basic_info ||= fb_service.basic_info
   end
 

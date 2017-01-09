@@ -39,6 +39,17 @@ module Founders
       publish_permission && publish_permission['status'] == 'granted'
     end
 
+    # TODO: Probably also ensure the token is for the same founder
+    def token_valid?(token)
+      return false unless token
+
+      api(ENV['FACEBOOK_APP_ACCESS_TOKEN']).debug_token(token).dig('data', 'is_valid')
+    end
+
+    def reconfirm_token!
+      token_valid?(@founder.fb_access_token) ? true : disconnect!
+    end
+
     private
 
     def oauth

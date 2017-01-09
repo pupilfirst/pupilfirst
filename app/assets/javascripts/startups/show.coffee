@@ -358,7 +358,7 @@ addTooltipToHideCheckbox = ->
 
 moveToSpecefiedEvent = ->
   if $(".main-timeline").length && $(".main-timeline").data('timelineEventId')
-    window.location = window.location.href + "#event-" + $(".main-timeline").data('timelineEventId')
+    window.location.hash = "#event-" + $(".main-timeline").data('timelineEventId')
 
 
 $(document).on 'page:change', timelineBuilderSubmitChecks

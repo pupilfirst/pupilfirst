@@ -9,7 +9,7 @@ module Founders
       oauth.url_for_oauth_code(permissions: 'publish_actions')
     end
 
-    def update_access_token!(code)
+    def save_access_token!(code)
       token_info = oauth.get_access_token_info(code)
       @founder.update!(
         fb_access_token: token_info['access_token'],
@@ -39,7 +39,7 @@ module Founders
     end
 
     def redirect_url
-      Rails.application.routes.url_helpers.facebook_connect_callback_founder_url
+      Rails.application.routes.url_helpers.founder_facebook_connect_callback_url
     end
   end
 end

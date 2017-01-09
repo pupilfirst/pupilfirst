@@ -28,7 +28,7 @@ module Lita
             # reply to the source channel if not a private message
             else
               channel = response.message.source.room
-              PublicSlackTalk.post_message message: leaderboard_response_message, channel: channel
+              reply_using_api_post_message message: leaderboard_response_message, channel: channel
             end
 
           rescue

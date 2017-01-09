@@ -62,7 +62,10 @@ module Lita
 
         # Build response considering batch requested, if any
         response = ''
-        batches = @batch_requested.present? ? Batch.where(batch_number: @batch_requested) : Batch.live
+
+        # TODO: The batch is hard-coded to Batch 3 for now. Replace with Batch.live when batches are cleaned up.
+        batches = Batch.where(batch_number: 3)
+        # batches = @batch_requested.present? ? Batch.where(batch_number: @batch_requested) : Batch.live
         batches.each do |batch|
           response += "*<#{Rails.application.routes.url_helpers.about_leaderboard_url}\
           |Latest published leaderboard for Batch #{batch.batch_number} (#{batch.name})>:* \n#{ranked_list_for_batch batch}"

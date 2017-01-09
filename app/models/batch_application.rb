@@ -5,7 +5,7 @@ class BatchApplication < ApplicationRecord
   APPLICATION_FEE = 3000
   COURSE_FEE = 37_500
 
-  belongs_to :batch
+  belongs_to :application_round
   belongs_to :application_stage
   has_many :application_submissions, dependent: :destroy
   has_and_belongs_to_many :batch_applicants
@@ -49,7 +49,7 @@ class BatchApplication < ApplicationRecord
 
   mount_uploader :partnership_deed, BatchApplicantDocumentUploader
 
-  validates :batch_id, presence: true
+  validates :application_round_id, presence: true
   validates :application_stage_id, presence: true
 
   delegate :batch_number, to: :batch

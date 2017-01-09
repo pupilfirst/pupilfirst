@@ -180,7 +180,7 @@ feature 'Pre-selection Stage' do
         let(:stage_5) { create(:application_stage, number: 5) }
 
         before do
-          BatchStage.find_by(batch: batch, application_stage: stage_4).update!(ends_at: 1.day.ago)
+          RoundStage.find_by(batch: batch, application_stage: stage_4).update!(ends_at: 1.day.ago)
           create(:batch_stage, batch: batch, application_stage: stage_5, starts_at: 3.days.ago)
         end
 

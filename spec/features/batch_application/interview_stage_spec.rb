@@ -30,7 +30,7 @@ feature 'Application Interview Stage' do
 
   context 'when interview stage is over' do
     before do
-      BatchStage.find_by(batch: batch, application_stage: stage_3).update!(ends_at: 1.day.ago)
+      RoundStage.find_by(batch: batch, application_stage: stage_3).update!(ends_at: 1.day.ago)
     end
 
     context 'when applicant has not attended interview' do
@@ -54,7 +54,7 @@ feature 'Application Interview Stage' do
         let(:stage_4) { create(:application_stage, number: 4) }
 
         before do
-          BatchStage.find_by(batch: batch, application_stage: stage_3).update!(ends_at: 1.day.ago)
+          RoundStage.find_by(batch: batch, application_stage: stage_3).update!(ends_at: 1.day.ago)
           create(:batch_stage, batch: batch, application_stage: stage_4, starts_at: 3.days.ago, ends_at: 4.days.from_now)
         end
 

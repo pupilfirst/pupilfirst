@@ -1,5 +1,5 @@
 class ApplicationStage < ApplicationRecord
-  has_many :batch_applications
+  has_many :batch_applications, dependent: :restrict_with_error
 
   validates :name, presence: true
   validates :number, presence: true, uniqueness: true

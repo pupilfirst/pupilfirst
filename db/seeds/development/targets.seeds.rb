@@ -3,7 +3,7 @@ require_relative 'helper'
 after 'development:target_groups', 'development:timeline_event_types' do
   puts 'Seeding targets'
 
-  batch = Batch.find_by(batch_number: 7)
+  batch = Batch.find_by(batch_number: 2)
   founder = Founder.find_by(email: 'someone@sv.co')
   founder_update = TimelineEventType.find_by(key: 'founder_update')
   team_update = TimelineEventType.find_by(key: 'team_update')

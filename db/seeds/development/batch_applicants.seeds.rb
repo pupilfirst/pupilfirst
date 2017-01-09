@@ -6,7 +6,6 @@ after 'development:colleges' do
   def applicant_defaults
     {
       name: Faker::Name.name,
-      gender: Founder.valid_gender_values.sample,
       phone: "9876543#{100 + rand(100)}",
       college: College.order('RANDOM()').first,
       reference: BatchApplicant.reference_sources[0..-2].sample
@@ -16,24 +15,16 @@ after 'development:colleges' do
   applicants = [
     { email: 'applicant+registered@gmail.com' },
     { email: 'applicant+paid@gmail.com' },
-    { email: 'applicant+submitted@gmail.com' },
-    { email: 'applicant+submitted+rejected@gmail.com' },
+    { email: 'applicant+video@gmail.com' },
     { email: 'applicant+interview@gmail.com' },
-    { email: 'applicant+interview+rejected@gmail.com' },
-    { email: 'applicant+pre_selection@gmail.com', fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE },
-    { email: 'applicant+closed@gmail.com', fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE }
-  ].map { |applicant| applicant.merge(applicant_defaults) }
+    { email: 'coapplicant+interview@gmail.com' },
+    { email: 'applicant+pre_selection@gmail.com', fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE, reference: nil },
+    { email: 'coapplicant+pre_selection@gmail.com', fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE, reference: nil },
+    { email: 'applicant+closed@gmail.com', fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE, reference: nil },
+    { email: 'coapplicant+closed@gmail.com', fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE, reference: nil }
+  ].map { |applicant| applicant_defaults.merge(applicant) }
 
   applicants.each do |applicant_attributes|
-    BatchApplicant.where(applicant_attributes).first_or_create!
-  end
-
-  coapplicants = [
-    { email: 'coapplicant+pre_selection@gmail.com', fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE },
-    { email: 'coapplicant+closed@gmail.com', fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE }
-  ].map { |applicant| applicant.merge(name: Faker::Name.name) }
-
-  coapplicants.each do |applicant_attributes|
     BatchApplicant.where(applicant_attributes).first_or_create!
   end
 

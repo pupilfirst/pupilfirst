@@ -3,13 +3,15 @@ require_relative 'helper'
 after 'development:founders', 'development:timeline_event_types', 'development:batches', 'development:categories' do
   puts 'Seeding startups'
 
+  batch = Batch.find_by(batch_number: 2)
+
   # Startup with live agreement.
   super_startup = Startup.new(
     name: 'Super Startup',
     product_name: 'Super Product',
     product_description: 'This really is a superb product! ;)',
     agreement_signed_at: 18.months.ago,
-    batch: Batch.find_by(batch_number: 7),
+    batch: batch,
     website: 'https://www.superstartup.in',
     logo: File.open(File.join(Rails.root, "app/assets/images/logo.png")),
     presentation_link: 'https://slideshare.net/superstartupdeck',
@@ -42,7 +44,7 @@ after 'development:founders', 'development:timeline_event_types', 'development:b
     product_name: 'SuperHeroes',
     product_description: 'Earths Mightiest Heroes joined forces to take on threats that were too big for any one hero to tackle.',
     agreement_signed_at: 2.years.ago,
-    batch: Batch.second,
+    batch: batch,
     website: 'https://www.avengers.co',
     startup_categories: [StartupCategory.second, StartupCategory.last]
   )

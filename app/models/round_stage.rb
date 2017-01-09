@@ -1,14 +1,14 @@
-class BatchStage < ApplicationRecord
-  belongs_to :batch
+class RoundStage < ApplicationRecord
+  belongs_to :application_round
   belongs_to :application_stage
 
-  validates :application_stage_id, uniqueness: { scope: [:batch_id] }
+  validates :application_stage_id, uniqueness: { scope: [:application_round_id] }
   validates :starts_at, presence: true
 
-  # It is possible for BatchStage to be instantiated without application stage (an error captured by validation above),
+  # It is possible for RoundStage to be instantiated without application stage (an error captured by validation above),
   # but in order to handle that error, we should treat it as a possible case in this related validation.
   # rubocop:disable Style/DoubleNegation
-  validates :ends_at, presence: true, unless: proc { |batch_stage| !!batch_stage.application_stage&.final_stage? }
+  validates :ends_at, presence: true, unless: proc { |round_stage| !!round_stage.application_stage&.final_stage? }
   # rubocop:enable Style/DoubleNegation
 
   validate :should_start_before_end
@@ -22,9 +22,9 @@ class BatchStage < ApplicationRecord
 
   def active?
     if application_stage.final_stage?
-      starts_at < Time.now
+      starts_at < Time.zone.now
     else
-      starts_at < Time.now && ends_at > Time.now
+      starts_at < Time.zone.now && ends_at > Time.zone.now
     end
   end
 end

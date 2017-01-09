@@ -3,7 +3,8 @@ ActiveAdmin.register ApplicationRound do
 
   menu parent: 'Admissions'
 
-  permit_params :batch_id, :number, :starts_at, :ends_at, :campaign_start_at, :target_application_count
+  permit_params :batch_id, :number, :campaign_start_at, :target_application_count,
+    round_stages_attributes: [:id, :application_stage_id, :starts_at, :ends_at, :_destroy]
 
   controller do
     def scoped_collection
@@ -19,10 +20,39 @@ ActiveAdmin.register ApplicationRound do
 
     column :batch
     column :number
-    column :starts_at
-    column :ends_at
+
+    column :active_stages do |batch|
+      batch.round_stages.select(&:active?).map { |active_round_stage| active_round_stage.application_stage.name }.join ', '
+    end
 
     actions
+  end
+
+  show do |application_round|
+    attributes_table do
+      row :batch
+      row :number
+      row :campaign_start_at
+      row :target_application_count
+    end
+
+    panel 'Round Stages' do
+      application_round.round_stages.joins(:application_stage).order('application_stage.number') do |round_stage|
+        attributes_table_for round_stage do
+          row :application_stage
+          row :starts_at
+          row :ends_at
+        end
+      end
+    end
+
+    panel 'Technical details' do
+      attributes_table_for application_round do
+        row :id
+        row :created_at
+        row :updated_at
+      end
+    end
   end
 
   form do |f|
@@ -32,22 +62,20 @@ ActiveAdmin.register ApplicationRound do
       f.input :batch, collection: Batch.order('created_at DESC')
       f.input :number
 
-      f.input :starts_at,
-        as: :string,
-        input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O' } },
-        placeholder: 'YYYY-MM-DD HH:MM:SS'
-
-      f.input :ends_at,
-        as: :string,
-        input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O', 'allow-times': '["23:59"]', 'default-time': '23:59' } },
-        placeholder: 'YYYY-MM-DD HH:MM:SS'
-
       f.input :campaign_start_at,
         as: :string,
         input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O' } },
         placeholder: 'YYYY-MM-DD HH:MM:SS'
 
       f.input :target_application_count
+    end
+
+    f.inputs 'Stage Dates' do
+      f.has_many :round_stages, heading: false, allow_destroy: true, new_record: 'Add Stage' do |s|
+        s.input :application_stage, collection: ApplicationStage.order('number ASC')
+        s.input :starts_at, as: :string, input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O' } }, placeholder: 'YYYY-MM-DD HH:MM:SS'
+        s.input :ends_at, as: :string, input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O', 'allow-times': '["23:59"]', 'default-time': '23:59' } }, placeholder: 'YYYY-MM-DD HH:MM:SS'
+      end
     end
 
     f.actions

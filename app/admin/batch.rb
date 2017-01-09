@@ -3,7 +3,8 @@ ActiveAdmin.register Batch do
 
   menu parent: 'Admissions'
 
-  permit_params :theme, :description, :start_date, :end_date, :batch_number, :slack_channel, :campaign_start_at, :target_application_count, batch_stages_attributes: [:id, :application_stage_id, :starts_at, :ends_at, :_destroy]
+  permit_params :theme, :description, :start_date, :end_date, :batch_number, :slack_channel, :campaign_start_at,
+    :target_application_count
 
   config.sort_order = 'batch_number_asc'
 
@@ -19,10 +20,6 @@ ActiveAdmin.register Batch do
     column :theme
     column :start_date
     column :end_date
-
-    column :active_stages do |batch|
-      batch.batch_stages.select(&:active?).map { |active_batch_stage| active_batch_stage.application_stage.name }.join ', '
-    end
 
     actions do |batch|
       if batch.applications_complete? && !batch.invites_sent?
@@ -46,12 +43,14 @@ ActiveAdmin.register Batch do
       row :target_application_count
     end
 
-    panel 'Application Stages' do
-      batch.batch_stages.sort_by { |batch_stage| batch_stage.application_stage.number }.each do |batch_stage|
-        attributes_table_for batch_stage do
-          row :application_stage
-          row :starts_at
-          row :ends_at
+    panel 'Application Rounds' do
+      batch.application_rounds.order('number ASC').each do |application_round|
+        application_round.round_stages.joins(:application_stage).order('application_stage.number') do |round_stage|
+          attributes_table_for round_stage do
+            row :application_stage
+            row :starts_at
+            row :ends_at
+          end
         end
       end
     end
@@ -101,14 +100,6 @@ ActiveAdmin.register Batch do
       f.input :slack_channel
       f.input :campaign_start_at, label: 'Campaign Start Date', as: :datepicker
       f.input :target_application_count
-    end
-
-    f.inputs 'Stage Dates' do
-      f.has_many :batch_stages, heading: false, allow_destroy: true, new_record: 'Add Stage' do |s|
-        s.input :application_stage, collection: ApplicationStage.order('number ASC')
-        s.input :starts_at, as: :string, input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O' } }, placeholder: 'YYYY-MM-DD HH:MM:SS'
-        s.input :ends_at, as: :string, input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O', 'allow-times': '["23:59"]', 'default-time': '23:59' } }, placeholder: 'YYYY-MM-DD HH:MM:SS'
-      end
     end
 
     f.actions

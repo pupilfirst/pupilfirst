@@ -3,31 +3,29 @@ class Batch < ApplicationRecord
   has_many :founders, through: :startups
   has_many :batch_applications
   has_many :batch_applicants, through: :batch_applications
-  has_many :batch_stages, dependent: :destroy
+  has_many :application_rounds, dependent: :destroy
   has_many :targets
   has_many :program_weeks
   has_many :target_groups, through: :program_weeks
-
-  accepts_nested_attributes_for :batch_stages, allow_destroy: true
 
   scope :live, -> { where('start_date <= ? and end_date >= ?', Time.now, Time.now) }
   scope :not_completed, -> { where('end_date >= ?', Time.now) }
 
   scope :open_for_applications, lambda {
-    joins(:batch_stages)
-      .where(batch_stages: { application_stage_id: ApplicationStage.initial_stage })
-      .where('batch_stages.starts_at < ?', Time.now)
-      .where('batch_stages.ends_at > ?', Time.now)
+    joins(application_rounds: :round_stages)
+      .where(round_stages: { application_stage_id: ApplicationStage.initial_stage })
+      .where('round_stages.starts_at < ?', Time.now)
+      .where('round_stages.ends_at > ?', Time.now)
   }
 
   scope :ongoing_applications, lambda {
-    joins(:batch_stages)
-      .where(batch_stages: { application_stage_id: ApplicationStage.final_stage })
-      .where('batch_stages.starts_at > ?', Time.now)
+    joins(application_rounds: :round_stages)
+      .where(round_stages: { application_stage_id: ApplicationStage.final_stage })
+      .where('round_stages.starts_at > ?', Time.now)
   }
 
   # Batches that opened for applications at some point of time in the past.
-  scope :opened_for_applications, -> { joins(:batch_stages).distinct }
+  scope :opened_for_applications, -> { joins(application_rounds: :round_stages).distinct }
 
   validates :theme, presence: true
   validates :batch_number, presence: true, numericality: true, uniqueness: true
@@ -68,10 +66,13 @@ class Batch < ApplicationRecord
 
   # Returns true if applications for this batch closes within 7 days.
   def applications_close_soon?
-    initial_stage = ApplicationStage.initial_stage
-    return false unless stage_active?(initial_stage)
-    return false if batch_stages.find_by(application_stage: initial_stage).ends_at > 7.days.from_now
-    true
+    # TODO: This needs to be re-implemented in ApplicationRound
+    raise NotImplementedError
+
+    # initial_stage = ApplicationStage.initial_stage
+    # return false unless stage_active?(initial_stage)
+    # return false if batch_stages.find_by(application_stage: initial_stage).ends_at > 7.days.from_now
+    # true
   end
 
   # Currently 'open' batch - the one which is accepting new applications.
@@ -80,24 +81,33 @@ class Batch < ApplicationRecord
   end
 
   # Stage is active when current time is between its bounds.
-  def stage_active?(stage)
-    if stage.final_stage?
-      batch_stages.where(application_stage: stage)
-        .where('starts_at < ?', Time.now).present?
-    else
-      batch_stages.where(application_stage: stage)
-        .where('starts_at < ?', Time.now)
-        .where('ends_at > ?', Time.now).present?
-    end
+  def stage_active?(_stage)
+    # TODO: This needs to be re-implemented in ApplicationRound
+    raise NotImplementedError
+
+    # if stage.final_stage?
+    #   batch_stages.where(application_stage: stage)
+    #     .where('starts_at < ?', Time.now).present?
+    # else
+    #   batch_stages.where(application_stage: stage)
+    #     .where('starts_at < ?', Time.now)
+    #     .where('ends_at > ?', Time.now).present?
+    # end
   end
 
   # Stage has expired when deadline has been crossed.
-  def stage_expired?(stage)
-    batch_stages.where(application_stage: stage).where('ends_at < ?', Time.now).present?
+  def stage_expired?(_stage)
+    # TODO: This needs to be re-implemented in ApplicationRound
+    raise NotImplementedError
+
+    # batch_stages.where(application_stage: stage).where('ends_at < ?', Time.now).present?
   end
 
-  def stage_started?(stage)
-    batch_stages.where(application_stage: stage).where('starts_at < ?', Time.now).present?
+  def stage_started?(_stage)
+    # TODO: This needs to be re-implemented in ApplicationRound
+    raise NotImplementedError
+
+    # batch_stages.where(application_stage: stage).where('starts_at < ?', Time.now).present?
   end
 
   def applications_complete?

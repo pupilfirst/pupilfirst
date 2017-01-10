@@ -10,7 +10,6 @@ class FoundersController < ApplicationController
   # GET /founders/:id/edit
   def edit
     @founder = current_founder.decorate
-    Founders::FacebookService.new(current_founder).reconfirm_token!
   end
 
   # PATCH /founders/:id

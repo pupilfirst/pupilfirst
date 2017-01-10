@@ -64,7 +64,8 @@ class BatchApplicationForm < Reform::Form
     applicant = BatchApplicant.with_email(email).first
     applicant = BatchApplicant.create!(email: email) if applicant.blank?
     user = User.with_email(email).first || User.create!(email: email)
-    applicant.update(
+
+    applicant.update!(
       {
         name: name,
         phone: phone,
@@ -72,6 +73,7 @@ class BatchApplicationForm < Reform::Form
         user: user
       }.merge(college_details)
     )
+
     applicant
   end
 

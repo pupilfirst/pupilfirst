@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170106124125) do
+ActiveRecord::Schema.define(version: 20170109110927) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -116,11 +116,8 @@ ActiveRecord::Schema.define(version: 20170106124125) do
     t.string   "role"
     t.datetime "created_at",                              null: false
     t.datetime "updated_at",                              null: false
-    t.string   "token"
-    t.datetime "sign_in_email_sent_at"
     t.string   "reference",             default: "Other"
     t.text     "notes"
-    t.datetime "last_sign_in_at"
     t.datetime "latest_payment_at"
     t.integer  "college_id"
     t.string   "college_text"
@@ -137,9 +134,12 @@ ActiveRecord::Schema.define(version: 20170106124125) do
     t.string   "letter_from_parent"
     t.string   "college_contact"
     t.integer  "founder_id"
+    t.integer  "user_id"
+    t.datetime "last_sign_in_at"
+    t.datetime "sign_in_email_sent_at"
+    t.string   "token"
     t.index ["college_id"], name: "index_batch_applicants_on_college_id", using: :btree
     t.index ["founder_id"], name: "index_batch_applicants_on_founder_id", using: :btree
-    t.index ["token"], name: "index_batch_applicants_on_token", using: :btree
   end
 
   create_table "batch_applicants_applications", id: false, force: :cascade do |t|
@@ -399,6 +399,8 @@ ActiveRecord::Schema.define(version: 20170106124125) do
     t.integer  "user_id"
     t.string   "phone"
     t.text     "completed_chapters"
+    t.integer  "college_id"
+    t.string   "college_text"
   end
 
   create_table "payments", force: :cascade do |t|

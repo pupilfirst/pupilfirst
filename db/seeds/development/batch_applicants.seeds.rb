@@ -25,7 +25,8 @@ after 'development:colleges' do
   ].map { |applicant| applicant_defaults.merge(applicant) }
 
   applicants.each do |applicant_attributes|
-    BatchApplicant.where(applicant_attributes).first_or_create!
+    user = User.create!(email: applicant_attributes[:email]);
+    BatchApplicant.where(applicant_attributes.merge(user: user)).first_or_create!
   end
 
   # Prep the closed stage applicants with even more info.

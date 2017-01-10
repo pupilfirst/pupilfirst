@@ -356,6 +356,10 @@ class Founder < ApplicationRecord
     latest_nps.present? && latest_nps < 7
   end
 
+  def facebook_connected?
+    fb_access_token.present? && fb_token_expires_at > Time.now && fb_access_token_valid?
+  end
+
   private
 
   def batch_start_date
@@ -411,5 +415,9 @@ class Founder < ApplicationRecord
   def increment_activity_count(timeline, month, week)
     timeline[month][:counts][week] ||= 0
     timeline[month][:counts][week] += 1
+  end
+
+  def fb_access_token_valid?
+    Founders::FacebookService.new(self).token_valid?(fb_access_token)
   end
 end

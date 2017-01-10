@@ -1,7 +1,39 @@
 ## Ongoing
 
-- Lots of work related to launch of the third batch.
-- Timeline builder has a few more stretch goals to complete. Mostly done. [[Trello]](https://trello.com/c/EvCvyGdH)
+- Multiple application rounds are being implemented. [[Trello]](https://trello.com/c/pUZ1cfBW)
+- Feature to connect facebook account to founder profile, for auto-posting timeline events to FB wall, is in the works. [[Trello]](https://trello.com/c/y83pIThP)
+- MOOC Registration is being updated to use colleges table instead of old universities table. [[Trello]](https://trello.com/c/fk9GaeVV)
+
+## 2017.01.09
+
+- Timeline builder is complete. [[Trello]](https://trello.com/c/EvCvyGdH)
+- Lots of content changes. Trello [[1]](https://trello.com/c/wVg6rab5) [[2]](https://trello.com/c/wUewbsDu) [[3]](https://trello.com/c/srYlal5g) [[4]](https://trello.com/c/7sJxQd0U) [[5]](https://trello.com/c/GYYWxHko) [[6]](https://trello.com/c/mVaE6Wth) [[7]](https://trello.com/c/gtxUrA9R) [[8]](https://trello.com/c/t05hkC54)
+- There was a minor mismatch between length validation of timeline event description on the client and the server, which caused issues when max-ed out length was submitted. Some slack has been added to prevent any further issues. [[Trello]](https://trello.com/c/CQphNlXs)
+- The _Not Improved_ scope for Timeline Events on the admin interface has been rebuilt to work properly with latest data. A timeline builder submission now automatically links itself to previous event needing improvement, if one exists. [[Trello]](https://trello.com/c/T8fVAC24)
+- Videos in the dashboard target slides no longer continue to play after being closed. [[Trello]](https://trello.com/c/TWXJAzwA)
+- The count of participating universities shown on the home page was stuck at zero. The calculation has been fixed to match latest data. [[Trello]](https://trello.com/c/PR0EXJ1D)
+- A confirmed faculty connect request now successfully creates a Google Calendar event - it wasn't working because of an authorization issue. [[Trello]](https://trello.com/c/6yUBp5pH)
+- All buttons on the timeline builder action bar are now disabled once the submission process begins. [[Trello]](https://trello.com/c/38FrxweH)
+- When submitting a timeline event with a file or a link, clicking the submit button now runs validations on an open file or link form, to ensure that any currently entered values are not missed out when sending data to the server. [[Trello]](https://trello.com/c/3BTo76cs)
+- Link Target form in the admin interface for a Timeline event was broken. [[Trello]](https://trello.com/c/v3ImB3e0)
+- Removed case-sensitivity from timeline builder's cover image file selector. This allows users to pick files with all-caps file extensions. [[Trello]](https://trello.com/c/URwxeKLL)
+- Timeline builder now trims the description to calculate its length and before sending it to the server. [[Trello]](https://trello.com/c/bA9ucMxX)
+- Karma Points are now automatically awarded upon verification of timeline event, based on assigned grade. [[Trello]](https://trello.com/c/UzeeehnJ)
+- Slack username validation on the Founder edit page has been updated to match Slack's latest standard. [[Trello]](https://trello.com/c/1LwnobUQ)
+- The Rich text editor used to edit Target descriptions in the admin interface was not displaying list style icons correctly. [[Trello]](https://trello.com/c/j2LY0Lzx)
+- Fixed broken tag entry inputs because of recent update to Select2 (to v4). [[Trello]](https://trello.com/c/0OqBuso2)
+- Fixed an crash when revisiting the Founder edit page immediately after uploading a new avatar image. [[Trello]](https://trello.com/c/Mv4VIe1Z)
+- Clicking the logo after being signed in now leads to founder dashboard page. [[Trello]](https://trello.com/c/WJAnLqqo)
+- The timeline builder would not open on Safari when triggered from a target which has a default timeline event type. This was caused by the presence of some ES7 Javascript that Safari couldn't parse. The ES7 segments have been replaced with ES6 for compatibility. [[Trello]](https://trello.com/c/oZn1JHdE)
+- Targets can now be sorted within Target groups. [[Trello]](https://trello.com/c/aCExMZx2)
+- Automatic email sent after onboarding has been disabled. [[Trello]](https://trello.com/c/nyszoy5p)
+- The number of roles available to Founders has been reduced to three. [[Trello]](https://trello.com/c/ChGDeb4c)
+- The submit feedback form available to signed-in founders had broken styling. [[Trello]](https://trello.com/c/CdbtrL6w)
+- The check (tick) button to the right of file and link form elements in the timeline builder now reads `ADD` to clearly communicate its purpose. [[Trello]](https://trello.com/c/fcqgBO9N)
+- The _Download Rubric_ button within targets on the founder dashboard now generate a S3 download link on demand, so as to prevent timeouts. [[Trello]](https://trello.com/c/doUVwdNJ)
+- The Faculty weekly slots interface has been updated to prevent members from attempting to delete slots that have a connect request (pending or confirmed) upon them. [[Trello]](https://trello.com/c/gBZVUzqE)
+- The sign-up form for the MOOC was broken because selection of state was impossible - caused by recent upgrade of Select2 (to v4). [[Trello]](https://trello.com/c/0tDl9pZf)
+- The timeline tour has been replaced with a dashboard tour. [[Trello]](https://trello.com/c/hhelb3p3)
 
 ## 2017.01.02
 

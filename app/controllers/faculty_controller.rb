@@ -65,27 +65,34 @@ class FacultyController < ApplicationController
     start_date = 7.days.from_now.beginning_of_week.to_date
 
     # reset next week slots to empty
-    faculty.connect_slots.next_week.delete_all
+    faculty.connect_slots.next_week.destroy_all
 
-    list.each do |slot|
-      date = start_date + slot[0] - 1 # index of dates start at 1
-      hour = slot[1].to_i
-      minute = ((slot[1].to_f - hour) * 60).to_s.delete('.')[0..1]
+    list.keys.each do |day|
+      day_number = day.to_i
 
-      # Save submitted week slots
-      ConnectSlot.create(
-        faculty: faculty, slot_at: Time.parse("#{date} #{hour.to_s.rjust(2, '0')}:#{minute}:00 +0530")
-      )
+      list[day].each do |slot|
+        time = slot['time'] # From value
+
+        date = start_date + day_number - 1 # index of dates start at 1
+        hour = time.to_i
+        minute = ((time.to_f - hour) * 60).to_s.delete('.')[0..1]
+
+        # Save submitted week slots
+        ConnectSlot.create(
+          faculty: faculty, slot_at: Time.parse("#{date} #{hour.to_s.rjust(2, '0')}:#{minute}:00 +0530")
+        )
+      end
     end
   end
 
   def create_slot_list_for(faculty)
     slots = faculty.connect_slots.next_week
-    list = slots.map do |slot|
+
+    slots.each_with_object({}) do |slot, list_of_slots|
       day = (slot.slot_at.to_date - 7.days.from_now.beginning_of_week.to_date).to_i + 1
+      list_of_slots[day] ||= []
       time = slot.slot_at.hour + slot.slot_at.min.to_f / 60
-      "[#{day},#{time}]"
-    end.join(',')
-    "[#{list}]"
+      list_of_slots[day] << { 'time' => time, 'requested' => slot.connect_request.present? }
+    end.to_json
   end
 end

@@ -4,3 +4,22 @@
 .margin-top-20
 h2 Editing #{@founder.fullname}'s profile...
 = render 'form_basic_details', founder: @founder
+
+- if feature_active? :facebook_connect
+  .margin-top-20
+  h4 Connected Accounts
+  hr
+  - if @founder.facebook_connected?
+    i.fa.fa-facebook-square.fa-2x
+    span
+      | &nbsp;
+      = link_to @founder.fb_basic_info[:link] do
+        = image_tag @founder.fb_basic_info[:picture_url], size: 35
+        ' #{@founder.fb_basic_info[:name]}
+      = link_to '(Disconnect)', founder_facebook_disconnect_path, method: :post
+  - else
+    = button_to founder_facebook_connect_path, class: 'btn btn-primary btn-flat' do
+      i.fa.fa-facebook-official
+      span
+        | &nbsp;Connect
+  .margin-bottom-20

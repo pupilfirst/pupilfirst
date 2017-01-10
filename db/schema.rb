@@ -339,6 +339,8 @@ ActiveRecord::Schema.define(version: 20170107113146) do
     t.integer  "college_id"
     t.string   "name"
     t.boolean  "dashboard_toured"
+    t.string   "fb_access_token"
+    t.datetime "fb_token_expires_at"
     t.index ["college_id"], name: "index_founders_on_college_id", using: :btree
     t.index ["invitation_token"], name: "index_founders_on_invitation_token", unique: true, using: :btree
     t.index ["invited_by_id"], name: "index_founders_on_invited_by_id", using: :btree

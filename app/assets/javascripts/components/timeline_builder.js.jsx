@@ -158,7 +158,7 @@ const TimelineBuilder = React.createClass({
       let formData = new FormData(form[0]);
 
       let description = $('.js-timeline-builder__textarea').val();
-      let share_on_facebook = $('.timeline-builder__social-bar-toggle-switch-input')[0].checked;
+      let share_on_facebook = $('.timeline-builder__social-bar-toggle-switch-input').prop('checked');
 
       formData.append('timeline_event[target_id]', this.props.targetId);
       formData.append('timeline_event[description]', description);

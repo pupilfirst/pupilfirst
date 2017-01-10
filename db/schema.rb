@@ -137,6 +137,7 @@ ActiveRecord::Schema.define(version: 20170107113146) do
     t.integer  "user_id"
     t.index ["college_id"], name: "index_batch_applicants_on_college_id", using: :btree
     t.index ["founder_id"], name: "index_batch_applicants_on_founder_id", using: :btree
+    t.index ["user_id"], name: "index_batch_applicants_on_user_id", using: :btree
   end
 
   create_table "batch_applicants_applications", id: false, force: :cascade do |t|
@@ -772,6 +773,7 @@ ActiveRecord::Schema.define(version: 20170107113146) do
   end
 
   add_foreign_key "batch_applicants", "founders"
+  add_foreign_key "batch_applicants", "users"
   add_foreign_key "batch_applications", "startups"
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"

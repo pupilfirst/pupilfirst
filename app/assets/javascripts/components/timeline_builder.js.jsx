@@ -284,6 +284,10 @@ const TimelineBuilder = React.createClass({
         <TimelineBuilderTextArea showError={ this.state.showDescriptionError } resetErrorsCB={ this.resetErrors }
                                  placeholder={ this.sampleText() }/>
 
+        { false &&
+        <TimelineBuilderSocialBar />
+        }
+
         { this.hasAttachments() &&
         <TimelineBuilderAttachments attachments={ this.attachments() } removeAttachmentCB={ this.removeAttachment }/>
         }

@@ -23,16 +23,18 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
 
   resource :founder, only: [:edit, :update] do
-    member do
-      get 'dashboard'
-      post 'facebook_connect'
-      get 'facebook_connect_callback'
-      post 'facebook_disconnect'
-    end
+    get 'dashboard', on: :member
+
     resource :startup, only: [:edit, :update] do
       resources :timeline_events, only: [:create, :destroy, :update]
       resources :team_members, except: [:index]
     end
+  end
+
+  scope 'founder/facebook', as: 'founder_facebook', controller: 'founders/facebook_connect' do
+    post 'connect'
+    get 'connect_callback'
+    post 'disconnect'
   end
 
   # TODO: This route was included for auto-verification flow which was later stalled. Leaving it here for re-use if required.

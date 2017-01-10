@@ -2,25 +2,25 @@ module Founders
   class FacebookService
     def initialize(founder)
       @founder = founder
-      @api = Koala::Facebook::API.new(founder.fb_access_token) if @founder.facebook_connected?
     end
 
     def oauth_url
       oauth.url_for_oauth_code(permissions: 'publish_actions')
     end
 
-    def update_access_token!(code)
+    def get_access_token_info(code)
       token_info = oauth.get_access_token_info(code)
-      @founder.update!(
-        fb_access_token: token_info['access_token'],
-        fb_token_expires_at: token_info['expires'].to_i.seconds.from_now
-      )
+      [token_info['access_token'], token_info['expires'].to_i.seconds.from_now]
+    end
+
+    def save_token_info!(token, expires)
+      @founder.update!(fb_access_token: token, fb_token_expires_at: expires)
     end
 
     def basic_info
       raise 'UnAuthorized Founder' unless @founder.facebook_connected?
 
-      result = @api.get_object(:me, fields: [:name, :picture, :link])
+      result = api(@founder.fb_access_token).get_object(:me, fields: [:name, :picture, :link])
       {
         name: result['name'],
         picture_url: result.dig('picture', 'data', 'url'),
@@ -32,14 +32,36 @@ module Founders
       @founder.update!(fb_access_token: nil, fb_token_expires_at: nil)
     end
 
+    def permissions_granted?(token)
+      permissions = api(token).get_object(:me, fields: :permissions).dig('permissions', 'data')
+      publish_permission = permissions.detect { |p| p['permission'] == 'publish_actions' }
+
+      publish_permission && publish_permission['status'] == 'granted'
+    end
+
+    # TODO: Probably also ensure the token is for the same founder
+    def token_valid?(token)
+      return false unless token
+
+      api(ENV['FACEBOOK_APP_ACCESS_TOKEN']).debug_token(token).dig('data', 'is_valid')
+    end
+
+    def reconfirm_token!
+      token_valid?(@founder.fb_access_token) ? true : disconnect!
+    end
+
     private
 
     def oauth
       @oauth ||= Koala::Facebook::OAuth.new(ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET'], redirect_url)
     end
 
+    def api(token)
+      Koala::Facebook::API.new(token)
+    end
+
     def redirect_url
-      Rails.application.routes.url_helpers.facebook_connect_callback_founder_url
+      Rails.application.routes.url_helpers.founder_facebook_connect_callback_url
     end
   end
 end

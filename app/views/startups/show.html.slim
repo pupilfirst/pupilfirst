@@ -196,7 +196,7 @@
 
     /Form to post new timeline event
     .col-md-8.col-md-pull-4
-      - events_for_display = @startup.timeline_events_for_display(current_founder)
+      - events_for_display = @startup.timeline_events_for_display(current_founder).decorate
 
       - if events_for_display.present?
         .main-timeline data-timeline-event-id=@timeline_event_for_og&.id
@@ -279,7 +279,7 @@
                             i.fa.fa-exclamation-circle
                             | &nbsp;Not Accepted
                         h4.timeline-title-panel
-                          a.timeline-title href="#{startup_url(event.startup, anchor: "event-#{event.id}")}"
+                          a.timeline-title href=event.facebook_friendly_url
                             ' #{event.title}
                             i.fa.fa-link
                           / display info icon if founder

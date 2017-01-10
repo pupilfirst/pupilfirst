@@ -390,7 +390,7 @@ ActiveRecord::Schema.define(version: 20170109110927) do
     t.string   "email"
     t.string   "name"
     t.integer  "university_id"
-    t.string   "college"
+    t.string   "college_text"
     t.string   "semester"
     t.string   "state"
     t.string   "gender"
@@ -400,7 +400,7 @@ ActiveRecord::Schema.define(version: 20170109110927) do
     t.string   "phone"
     t.text     "completed_chapters"
     t.integer  "college_id"
-    t.string   "college_text"
+    t.index ["college_id"], name: "index_mooc_students_on_college_id", using: :btree
   end
 
   create_table "payments", force: :cascade do |t|

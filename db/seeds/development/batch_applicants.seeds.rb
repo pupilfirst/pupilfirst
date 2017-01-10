@@ -25,7 +25,7 @@ after 'development:colleges' do
   ].map { |applicant| applicant_defaults.merge(applicant) }
 
   applicants.each do |applicant_attributes|
-    user = User.create!(email: applicant_attributes[:email]);
+    user = User.create!(email: applicant_attributes[:email])
     BatchApplicant.where(applicant_attributes.merge(user: user)).first_or_create!
   end
 

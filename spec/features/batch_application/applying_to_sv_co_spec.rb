@@ -42,7 +42,6 @@ feature 'Applying to SV.CO' do
       click_on 'Pay Fees Online'
 
       # uses must be re-directed to the payment's long_url
-      puts long_url
       expect(page.current_url).to eq(long_url)
 
       payment = Payment.last

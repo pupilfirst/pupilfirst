@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170107113146) do
+ActiveRecord::Schema.define(version: 20170110070819) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -703,8 +703,8 @@ ActiveRecord::Schema.define(version: 20170107113146) do
     t.string   "image"
     t.integer  "startup_id"
     t.text     "links"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
     t.date     "event_on"
     t.datetime "verified_at"
     t.integer  "timeline_event_type_id"
@@ -713,6 +713,7 @@ ActiveRecord::Schema.define(version: 20170107113146) do
     t.integer  "founder_id"
     t.integer  "improved_timeline_event_id"
     t.integer  "target_id"
+    t.boolean  "share_on_facebook",          default: false
     t.index ["founder_id"], name: "index_timeline_events_on_founder_id", using: :btree
     t.index ["startup_id"], name: "index_timeline_events_on_startup_id", using: :btree
     t.index ["timeline_event_type_id"], name: "index_timeline_events_on_timeline_event_type_id", using: :btree

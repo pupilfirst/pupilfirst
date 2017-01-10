@@ -13,6 +13,8 @@
     /meta property="article:author" content=""
     meta property="og:image" content=@timeline_event_for_og.image.url
 
+#startups__show
+
 .container
   - if @startup.dropped_out?
     .alert.alert-danger.margin-top-20
@@ -205,7 +207,7 @@
               | Timeline of #{@startup.iteration.ordinalize} iteration.
             = image_tag 'timeline/dash.png'
             br
-            a#read-from-beginning href="#begin"  Read from the beginning.
+            a#read-from-beginning href="#"  Read from the beginning.
           ul#timeline-list
             - events_for_display.each do |event|
               / Do not display hidden events to public.

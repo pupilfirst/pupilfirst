@@ -158,6 +158,7 @@ const TimelineBuilder = React.createClass({
       let formData = new FormData(form[0]);
 
       let description = $('.js-timeline-builder__textarea').val();
+      let share_on_facebook = $('.timeline-builder__social-bar-toggle-switch-input').prop('checked');
 
       formData.append('timeline_event[target_id]', this.props.targetId);
       formData.append('timeline_event[description]', description);
@@ -165,6 +166,7 @@ const TimelineBuilder = React.createClass({
       formData.append('timeline_event[links]', JSON.stringify(this.state.links));
       formData.append('timeline_event[files_metadata]', JSON.stringify(this.state.files));
       formData.append('timeline_event[timeline_event_type_id]', this.state.timelineEventTypeId);
+      formData.append('timeline_event[share_on_facebook]', share_on_facebook);
 
       // Submit form data using AJAX and set a progress handler function.
       $.ajax({

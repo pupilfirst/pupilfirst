@@ -10,6 +10,7 @@ class TimelineBuilderForm < Reform::Form
   property :files, virtual: true
   property :files_metadata, virtual: true
   property :image
+  property :share_on_facebook
 
   validate :timeline_event_type_should_exist
   validate :files_should_have_metadata
@@ -56,7 +57,8 @@ class TimelineBuilderForm < Reform::Form
         timeline_event_type: timeline_event_type,
         event_on: Time.zone.parse(event_on),
         links: parsed_links,
-        image: image
+        image: image,
+        share_on_facebook: share_on_facebook
       )
 
       create_files(timeline_event)

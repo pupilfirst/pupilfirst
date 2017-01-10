@@ -3,23 +3,16 @@ ActiveAdmin.register MoocStudent do
 
   menu parent: 'SixWays'
 
-  permit_params :name, :university_id, :college, :semester, :state, :gender, :user_id, :phone
+  permit_params :name, :college_id, :semester, :state, :gender, :user_id, :phone
 
   filter :name
   filter :email
   filter :phone
-  filter :university_name_contains
-  filter :college
+  filter :college_name_contains
   filter :semester
   filter :state
   filter :gender, as: :select, collection: Founder.valid_gender_values
   filter :created_at
-
-  controller do
-    def scoped_collection
-      super.includes :university
-    end
-  end
 
   scope :all, default: true
   scope 'Module 2 Complete' do |mooc_students|
@@ -35,7 +28,6 @@ ActiveAdmin.register MoocStudent do
     column :name_or_email do |student|
       student.name.present? ? student.name : student.email
     end
-    column :university
     column :college
     column :state
 
@@ -47,11 +39,10 @@ ActiveAdmin.register MoocStudent do
 
     f.inputs do
       f.input :name
-      f.input :university_id, as: :select, collection: University.all
-      f.input :college
-      f.input :state
+      f.input :college_id, as: :select, input_html: { 'data-search-url' => colleges_url }, collection: f.object.college.present? ? [f.object.college] : []
+      f.input :college_text, label: 'College as text'
+      f.input :state, as: :select, collection: University.valid_state_names
       f.input :gender, as: :select, collection: Founder.valid_gender_values, include_blank: false
-      f.input :user_id, as: :select, collection: User.all.pluck(:email, :id), label_method: :first
       f.input :phone
     end
 
@@ -63,9 +54,8 @@ ActiveAdmin.register MoocStudent do
     column(:email) { |student| student.user.email }
     column :phone
     column :gender
-    column :college
+    column(:college) { |student| student.college.present? ? student.college.name : student.college_text }
     column :semester
-    column(:university) { |student| student.university.name }
     column :state
   end
 end

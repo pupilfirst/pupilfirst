@@ -138,7 +138,7 @@ class SixWaysController < ApplicationController
   end
 
   def update_params
-    params.require(:mooc_student).permit(:name, :gender, :university_id, :college, :semester, :state)
+    params.require(:mooc_student).permit(:name, :gender, :college_id, :semester, :state)
   end
 
   def module_exists?

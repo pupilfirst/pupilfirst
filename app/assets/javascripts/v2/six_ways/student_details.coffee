@@ -7,17 +7,17 @@ setupStateSelect2 = ->
     $('#mooc_student_signup_state').select2
       matcher: oldMatcher(matchOutsideIndia)
 
-setupUniversitySelect2 = ->
-  universityInput = $('#mooc_student_signup_university_id')
+setupCollegeSelect2 = ->
+  collegeInput = $('#mooc_student_signup_college_id')
 
-  if universityInput.length
-    universitySearchUrl = universityInput.data('searchUrl')
+  if collegeInput.length
+    collegeSearchUrl = collegeInput.data('searchUrl')
 
-    universityInput.select2
+    collegeInput.select2
       minimumInputLength: 3,
-      placeholder: 'Please pick your university',
+      placeholder: 'Please pick your college',
       ajax:
-        url: universitySearchUrl,
+        url: collegeSearchUrl,
         dataType: 'json',
         delay: 500,
         data: (params) ->
@@ -30,7 +30,22 @@ setupUniversitySelect2 = ->
         ,
         cache: true
 
+setupTogglingCollegeField = ->
+  if $('#mooc_student_signup_college_id').length
+    toggleCollegeTextField()
+    $('#mooc_student_signup_college_id').change toggleCollegeTextField
+
+toggleCollegeTextField = ->
+  if $('#mooc_student_signup_college_id').val() == 'other'
+    collegeTextInput = $("#mooc_student_signup_college_text")
+    collegeTextInput.prop('disabled', false)
+    collegeTextInput.parent().parent().parent().removeClass('hidden-xs-up')
+    $("#mooc_student_signup_college_id").parent().parent().addClass('hidden-xs-up')
+    collegeTextInput.focus()
+
+$(document).on 'page:change', setupTogglingCollegeField
+
 $(document).on 'turbolinks:load', ->
   if $('#six-ways__student-details').length
-    setupUniversitySelect2()
     setupStateSelect2()
+    setupCollegeSelect2()

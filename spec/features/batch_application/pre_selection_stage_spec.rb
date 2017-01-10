@@ -1,10 +1,11 @@
 require 'rails_helper'
 
 feature 'Pre-selection Stage' do
-  include BatchApplicantSpecHelper
+  include UserSpecHelper
 
-  let(:batch) { create :batch, :in_stage_4 }
-  let(:batch_application) { create :batch_application, :stage_4, batch: batch, team_size: 4 }
+  let!(:batch) { create :batch, :in_stage_4 }
+  let(:batch_applicant) { batch_application.team_lead }
+  let!(:batch_application) { create :batch_application, :stage_4, batch: batch, team_size: 4 }
   let(:image_path) { File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'users', 'college_id.jpg')) }
   let(:pdf_path) { File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')) }
 
@@ -13,7 +14,7 @@ feature 'Pre-selection Stage' do
       batch_application.batch_applicants.update_all(fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE)
       batch_application.team_lead.update(fee_payment_method: BatchApplicant::PAYMENT_METHOD_MERIT_SCHOLARSHIP)
       batch_application.cofounders.last.update(fee_payment_method: BatchApplicant::PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP)
-      sign_in_batch_applicant(batch_application.team_lead)
+      sign_in_user(batch_applicant.user, referer: apply_continue_path)
     end
 
     scenario 'another applicant receives the 3000 rupee refund' do
@@ -26,7 +27,7 @@ feature 'Pre-selection Stage' do
       batch_application.batch_applicants.update_all(fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE)
       @applicant_requiring_income_proof = batch_application.cofounders.last
       @applicant_requiring_income_proof.update(fee_payment_method: BatchApplicant::PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP)
-      sign_in_batch_applicant(batch_application.team_lead)
+      sign_in_user(batch_applicant.user, referer: apply_continue_path)
     end
 
     scenario 'user is shown ongoing state page' do
@@ -137,7 +138,7 @@ feature 'Pre-selection Stage' do
         )
       end
 
-      sign_in_batch_applicant(batch_application.team_lead)
+      sign_in_user(batch_application.team_lead.user, referer: apply_continue_path)
     end
 
     scenario 'partnership and education agreement PDFs are presented' do

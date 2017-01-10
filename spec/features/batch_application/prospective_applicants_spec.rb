@@ -5,9 +5,7 @@ feature 'Prospective Applicants' do
     let!(:previous_batch) { create :batch }
     let!(:college) { create :college }
 
-    scenario 'user can register for notification' do
-      pending 'college id picking is broken'
-
+    scenario 'user can register for notification', js: true do
       visit apply_path
       expect(page).to have_content(/Admissions to the (.*?) batch is expected to start by/)
 
@@ -15,7 +13,10 @@ feature 'Prospective Applicants' do
       fill_in 'prospective_applicant_name', with: name
       fill_in 'prospective_applicant_email', with: Faker::Internet.email(name)
       fill_in 'prospective_applicant_phone', with: '9876543210'
-      fill_in 'prospective_applicant_college_id', with: college.id
+
+      # Fill in college name because we don't want to bother with dynamically loaded select2.
+      select "My college isn't listed", from: 'prospective_applicant_college_id'
+      fill_in 'prospective_applicant_college_text', with: college.name
 
       click_on 'Notify Me'
 

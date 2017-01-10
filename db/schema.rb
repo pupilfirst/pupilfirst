@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170109103742) do
+ActiveRecord::Schema.define(version: 20170110070819) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -124,13 +124,10 @@ ActiveRecord::Schema.define(version: 20170109103742) do
     t.string   "email"
     t.string   "phone"
     t.string   "role"
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
-    t.string   "token"
-    t.datetime "sign_in_email_sent_at"
-    t.string   "reference",             default: "Other"
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.string   "reference",          default: "Other"
     t.text     "notes"
-    t.datetime "last_sign_in_at"
     t.datetime "latest_payment_at"
     t.integer  "college_id"
     t.string   "college_text"
@@ -147,9 +144,10 @@ ActiveRecord::Schema.define(version: 20170109103742) do
     t.string   "letter_from_parent"
     t.string   "college_contact"
     t.integer  "founder_id"
+    t.integer  "user_id"
     t.index ["college_id"], name: "index_batch_applicants_on_college_id", using: :btree
     t.index ["founder_id"], name: "index_batch_applicants_on_founder_id", using: :btree
-    t.index ["token"], name: "index_batch_applicants_on_token", using: :btree
+    t.index ["user_id"], name: "index_batch_applicants_on_user_id", using: :btree
   end
 
   create_table "batch_applicants_applications", id: false, force: :cascade do |t|
@@ -715,8 +713,8 @@ ActiveRecord::Schema.define(version: 20170109103742) do
     t.string   "image"
     t.integer  "startup_id"
     t.text     "links"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
     t.date     "event_on"
     t.datetime "verified_at"
     t.integer  "timeline_event_type_id"
@@ -725,6 +723,7 @@ ActiveRecord::Schema.define(version: 20170109103742) do
     t.integer  "founder_id"
     t.integer  "improved_timeline_event_id"
     t.integer  "target_id"
+    t.boolean  "share_on_facebook",          default: false
     t.index ["founder_id"], name: "index_timeline_events_on_founder_id", using: :btree
     t.index ["startup_id"], name: "index_timeline_events_on_startup_id", using: :btree
     t.index ["timeline_event_type_id"], name: "index_timeline_events_on_timeline_event_type_id", using: :btree
@@ -786,6 +785,7 @@ ActiveRecord::Schema.define(version: 20170109103742) do
 
   add_foreign_key "application_rounds", "batches"
   add_foreign_key "batch_applicants", "founders"
+  add_foreign_key "batch_applicants", "users"
   add_foreign_key "batch_applications", "application_rounds"
   add_foreign_key "batch_applications", "startups"
   add_foreign_key "connect_requests", "connect_slots"

@@ -14,6 +14,7 @@ class BatchApplicant < ApplicationRecord
   has_and_belongs_to_many :batch_applications
   has_many :payments
   belongs_to :college
+  belongs_to :user
   belongs_to :founder, optional: true
 
   attr_accessor :reference_text
@@ -48,8 +49,6 @@ class BatchApplicant < ApplicationRecord
   validates :fee_payment_method, inclusion: { in: FEE_PAYMENT_METHODS }, allow_nil: true
   validates :id_proof_type, inclusion: { in: ID_PROOF_TYPES }, allow_nil: true
 
-  has_secure_token
-
   normalize_attribute :gender, :reference, :phone, :fee_payment_method, :id_proof_type
 
   mount_uploader :id_proof, BatchApplicantDocumentUploader
@@ -61,15 +60,6 @@ class BatchApplicant < ApplicationRecord
     return false unless batch_applications.present?
 
     batch_applications.find_by(batch_id: batch.id).present?
-  end
-
-  def send_sign_in_email(shared_device: false, defer: false)
-    # Send email.
-    mailer = BatchApplicantMailer.sign_in(self, shared_device)
-    defer ? mailer.deliver_later : mailer.deliver_now
-
-    # Mark when email was sent.
-    update!(sign_in_email_sent_at: Time.now)
   end
 
   def self.reference_sources

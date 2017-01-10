@@ -33,7 +33,7 @@
           label: false,
           input_html: { value: nil, 'data-search-url' => colleges_url },
           required: true,
-          collection: []
+          collection: [["My college isn't listed", 'other']]
 
         .hidden-xs-up
           = f.input :college_text,

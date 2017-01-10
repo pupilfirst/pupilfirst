@@ -101,17 +101,11 @@ Rails.application.routes.draw do
     get '', action: 'index'
     post 'register'
     post 'notify'
-    get 'identify'
-    post 'send_sign_in_email'
-    get 'sign_in_email_sent'
     get 'continue'
     get 'batch_pending'
     post 'restart', action: 'restart_application'
     get 'cofounders', action: 'cofounders_form'
     post 'cofounders', action: 'cofounders_save'
-
-    # TODO: Remove this after batch 3 intake is complete. Added to account for emails sent out before application process was overhauled.
-    get 'identify/3', to: redirect('/apply')
 
     scope 'stage/:stage_number', as: 'stage' do
       get '', action: 'ongoing'

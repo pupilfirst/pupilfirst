@@ -25,9 +25,9 @@ feature 'Applying to SV.CO' do
       fill_in 'batch_application_email_confirmation', with: 'elcapitan@thesea.com'
       fill_in 'batch_application_phone', with: '9876543210'
 
-      # Insert the option into the college select because we can't be bothered to use the select2 interface.
-      page.execute_script("$('#batch_application_college_id').append('<option value=\"#{college.id}\">#{college.name}</option>');")
-      select college.name, from: 'batch_application_college_id'
+      # Fill in college name because we don't want to bother with dynamically loaded select2.
+      select "My college isn't listed", from: 'batch_application_college_id'
+      fill_in 'batch_application_college_text', with: college.name
 
       click_on 'Submit my application'
 

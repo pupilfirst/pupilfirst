@@ -1,7 +1,7 @@
 class BatchApplicationController < ApplicationController
   before_action :ensure_accurate_stage_number, only: %w(ongoing submit complete restart expired rejected)
   before_action :load_common_instance_variables
-  before_action :authenticate_batch_applicant!, except: %w(index register qnotify)
+  before_action :authenticate_batch_applicant!, except: %w(index register notify)
 
   layout 'application_v2'
 

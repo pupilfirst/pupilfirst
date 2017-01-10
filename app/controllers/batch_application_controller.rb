@@ -430,6 +430,10 @@ class BatchApplicationController < ApplicationController
   def authenticate_batch_applicant!
     # User must be logged in
     user = authenticate_user!
-    redirect_to root_url unless user.batch_applicant.present?
+
+    unless user.batch_applicant.present?
+      flash[:notice] = 'You are not an applicant. Please go through the registration process.'
+      redirect_to apply_url
+    end
   end
 end

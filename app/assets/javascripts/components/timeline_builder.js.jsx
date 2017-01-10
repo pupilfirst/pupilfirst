@@ -158,7 +158,9 @@ const TimelineBuilder = React.createClass({
       let form = $('.timeline-builder-hidden-form');
       let formData = new FormData(form[0]);
 
-      let share_on_facebook = $('.timeline-builder__social-bar-toggle-switch-input').prop('checked');
+      // TODO: enable this when the share button is made visible
+      // let share_on_facebook = $('.timeline-builder__social-bar-toggle-switch-input').prop('checked');
+      let share_on_facebook = false;
 
       formData.append('timeline_event[target_id]', this.props.targetId);
       formData.append('timeline_event[description]', this.state.description);

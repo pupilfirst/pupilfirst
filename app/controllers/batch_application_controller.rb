@@ -6,8 +6,8 @@ class BatchApplicationController < ApplicationController
 
   layout 'application_v2'
 
-  helper_method :current_batch
   helper_method :current_application
+  helper_method :current_application_round
   helper_method :application_stage
   helper_method :application_stage_number
   helper_method :stage_expired?
@@ -89,7 +89,7 @@ class BatchApplicationController < ApplicationController
 
   # GET /apply/cofounders
   def cofounders_form
-    if current_batch.final_stage? || application_stage_number != 2
+    if current_application_round.final_stage? || application_stage_number != 2
       return redirect_to(apply_continue_path)
     end
 
@@ -99,7 +99,7 @@ class BatchApplicationController < ApplicationController
 
   # POST /apply/cofounders
   def cofounders_save
-    raise_not_found if current_batch.final_stage?
+    raise_not_found if current_application_round.final_stage?
     @form = CofoundersForm.new(current_application)
 
     if @form.validate(params[:cofounders])
@@ -338,9 +338,9 @@ class BatchApplicationController < ApplicationController
   protected
 
   # Returns currently active batch.
-  def current_batch
-    @current_batch ||= begin
-      current_application.batch
+  def current_application_round
+    @current_application_round ||= begin
+      current_application.application_round
     end
   end
 
@@ -370,11 +370,11 @@ class BatchApplicationController < ApplicationController
 
   # Batch's stage should have expired, and current stage should be same as application stage.
   def stage_expired?
-    @stage_expired ||= current_batch.stage_expired?(application_stage)
+    @stage_expired ||= current_application_round.stage_expired?(application_stage)
   end
 
   def stage_active?
-    @stage_active ||= current_batch.stage_active?(application_stage)
+    @stage_active ||= current_application_round.stage_active?(application_stage)
   end
 
   private

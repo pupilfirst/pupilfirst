@@ -88,10 +88,44 @@ class BatchApplicationDecorator < Draper::Decorator
     end
   end
 
+  def pretty_stage_status(stage_number)
+    status = stage_status_service.status(stage_number)
+
+    if status == :ongoing
+      "Ends on #{stage_deadline}"
+    else
+      status.to_s.tr('_', ' ').capitalize
+    end
+  end
+
+  def pretty_stage_deadline
+    stage_deadline.strftime('%b %d')
+  end
+
+  # Used to determine which stage applicant is in for the progress bar.
+  def stage_active_class(stage_number)
+    expected_stage_number = (status == :promoted ? application_stage.number - 1 : application_stage.number)
+    expected_stage_number == stage_number ? 'applicant-stage' : ''
+  end
+
+  def payment_button_message
+    payment.present? ? t('batch_application.stage_1.payment_retry') : t('batch_application.stage_1.payment_start')
+  end
+
+  def applications_close_soon_message(batch)
+    deadline = stage_deadline.strftime('%d %b, %l:%M %p (%z)')
+    delta = time_ago_in_words(stage_deadline)
+    t('batch_application.general.applications_close_soon_html', batch_number: batch.batch_number, deadline: deadline, delta: delta)
+  end
+
   alias partnership_deed_ready? founders_profiles_complete?
   alias incubation_agreement_ready? founders_profiles_complete?
 
   private
+
+  def stage_status_service
+    @stage_status_service ||= BatchApplications::StageStatusService.new(model)
+  end
 
   def grading_service
     BatchApplicationGradingService.new(model)

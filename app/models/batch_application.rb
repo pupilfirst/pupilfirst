@@ -235,4 +235,8 @@ class BatchApplication < ApplicationRecord
       application_submissions.find_by(application_stage: stage_2)
     end
   end
+
+  def stage_deadline
+    application_round.round_stages.find_by(application_stage: application_stage).ends_at
+  end
 end

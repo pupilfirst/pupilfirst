@@ -269,6 +269,12 @@ class TimelineEvent < ApplicationRecord
       .where.not(id: id).order('event_on DESC')
   end
 
+  def facebook_friendly_url
+    Rails.application.routes.url_helpers.timeline_event_show_startup_url(
+      id: startup.slug, event_title: title.parameterize, event_id: id
+    )
+  end
+
   private
 
   def privileged_founder?(founder)

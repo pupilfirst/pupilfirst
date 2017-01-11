@@ -10,7 +10,6 @@ class BatchApplicationController < ApplicationController
   helper_method :current_application
   helper_method :application_stage
   helper_method :application_stage_number
-  helper_method :application_status
   helper_method :stage_expired?
   helper_method :stage_active?
 
@@ -19,7 +18,7 @@ class BatchApplicationController < ApplicationController
   end
 
   # POST /apply/register
-  def create
+  def register
     form = @batch_application.form
 
     if form.validate(params[:batch_application])
@@ -57,11 +56,7 @@ class BatchApplicationController < ApplicationController
   def continue
     from = params[:from].present? ? { from: params[:from] } : {}
 
-    case application_status
-      when :pending
-        redirect_to apply_path(from)
-      when :batch_pending
-        redirect_to apply_batch_pending_path(from)
+    case current_application&.status
       when :ongoing
         redirect_to apply_stage_path(from.merge(stage_number: application_stage_number))
       when :expired
@@ -72,17 +67,14 @@ class BatchApplicationController < ApplicationController
         redirect_to apply_stage_complete_path(from.merge(stage_number: application_stage_number))
       when :promoted
         redirect_to apply_stage_complete_path(from.merge(stage_number: (application_stage_number - 1)))
+      when nil
+        redirect_to apply_path(from)
       else
-        raise "Unexpected application_status: #{application_status}"
+        raise "Unexpected application status: #{current_application.status}"
     end
   end
 
   # rubocop:enable Metrics/CyclomaticComplexity
-
-  # GET /apply/batch_pending
-  def batch_pending
-    return redirect_to(apply_continue_path) if applicant_status != :batch_pending
-  end
 
   # POST /apply/restart
   def restart_application
@@ -122,14 +114,14 @@ class BatchApplicationController < ApplicationController
 
   # GET /apply/stage/:stage_number
   def ongoing
-    return redirect_to(apply_continue_path) if application_status != :ongoing
+    return redirect_to(apply_continue_path) if current_application&.status != :ongoing
     try "stage_#{application_stage_number}"
     render "stage_#{application_stage_number}"
   end
 
   # POST /apply/stage/:stage_number/submit
   def submit
-    raise_not_found if application_status != :ongoing
+    raise_not_found if current_application&.status != :ongoing
 
     begin
       send "stage_#{application_stage_number}_submit"
@@ -140,15 +132,15 @@ class BatchApplicationController < ApplicationController
 
   # GET /apply/stage/:stage_number/complete
   def complete
-    return redirect_to(apply_continue_path) unless application_status.in? [:submitted, :promoted]
-    stage_number = (application_status == :promoted ? application_stage_number - 1 : application_stage_number)
+    return redirect_to(apply_continue_path) unless current_application&.status.in? [:submitted, :promoted]
+    stage_number = (current_application&.status == :promoted ? application_stage_number - 1 : application_stage_number)
     try "stage_#{stage_number}_complete"
     render "stage_#{stage_number}_complete"
   end
 
   # POST /apply/stage/:stage_number/restart
   def restart
-    return redirect_to(apply_continue_path) if application_status != :submitted || stage_expired?
+    return redirect_to(apply_continue_path) if current_application&.status != :submitted || stage_expired?
     raise_not_found if stage_expired?
 
     begin
@@ -160,14 +152,14 @@ class BatchApplicationController < ApplicationController
 
   # GET /apply/stage/:stage_number/expired
   def expired
-    return redirect_to(apply_continue_path) if application_status != :expired
+    return redirect_to(apply_continue_path) if current_application&.status != :expired
     try "stage_#{application_stage_number}_expired"
     render "stage_#{application_stage_number}_expired"
   end
 
   # GET /apply/stage/:stage_number/rejected
   def rejected
-    return redirect_to(apply_continue_path) if application_status != :rejected
+    return redirect_to(apply_continue_path) if current_application&.status != :rejected
     try "stage_#{application_stage_number}_rejected"
     render "stage_#{application_stage_number}_rejected"
   end
@@ -371,20 +363,9 @@ class BatchApplicationController < ApplicationController
   def current_application
     @current_application ||= begin
       if current_batch_applicant.present?
-        if session[:application_selected_batch_id].present?
-          selected_batch = Batch.find session[:application_selected_batch_id]
-          current_batch_applicant.batch_applications.find_by(batch: selected_batch)
-        else
-          current_batch_applicant.batch_applications.order('created_at DESC').first
-        end
+        current_batch_applicant.batch_applications.order('created_at DESC').first
       end
     end
-  end
-
-  # Returns one of :pending, :ongoing, :expired, :rejected, :submitted, :complete, or :promoted to indicate which view
-  # should be rendered.
-  def application_status
-    @application_status ||= (current_application&.status || :pending)
   end
 
   # Batch's stage should have expired, and current stage should be same as application stage.
@@ -408,7 +389,7 @@ class BatchApplicationController < ApplicationController
   def ensure_accurate_stage_number
     # If the application has been promoted, but batch is still at the earlier stage, the displayed stage number will be
     # one less than the application's stage.
-    expected_stage_number = (application_status == :promoted ? application_stage_number - 1 : application_stage_number)
+    expected_stage_number = (current_application&.status == :promoted ? application_stage_number - 1 : application_stage_number)
     redirect_to apply_continue_path if params[:stage_number].to_i != expected_stage_number
   end
 

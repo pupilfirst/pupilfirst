@@ -24,12 +24,12 @@
       .row.code-video-links.text-xs-center
         h3.m-b-1
           | Your submission:
-        - stage_2_submission.application_submission_urls.each do |entry|
+        - current_application.stage_2_submission.application_submission_urls.each do |entry|
           .col-md-4
-            .submission-links class= url_entry_class(entry.name)
+            .submission-links class=current_application.url_entry_class(entry.name)
               = link_to entry.name, entry.url, target: '_blank'
 
-      - if restartable?
+      - if current_application.restartable?
         hr.m-y-2
           h3.text-xs-center
             ' Made mistakes in your submission? That's okay!

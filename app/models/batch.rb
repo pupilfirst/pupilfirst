@@ -64,62 +64,9 @@ class Batch < ApplicationRecord
     invites_sent_at.present?
   end
 
-  # Returns true if applications for this batch closes within 7 days.
-  def applications_close_soon?
-    # TODO: This needs to be re-implemented in ApplicationRound
-    raise NotImplementedError
-
-    # initial_stage = ApplicationStage.initial_stage
-    # return false unless stage_active?(initial_stage)
-    # return false if batch_stages.find_by(application_stage: initial_stage).ends_at > 7.days.from_now
-    # true
-  end
-
   # Currently 'open' batch - the one which is accepting new applications.
   def self.open_batch
     open_for_applications.first if open_for_applications.any?
-  end
-
-  # Stage is active when current time is between its bounds.
-  def stage_active?(_stage)
-    # TODO: This needs to be re-implemented in ApplicationRound
-    raise NotImplementedError
-
-    # if stage.final_stage?
-    #   batch_stages.where(application_stage: stage)
-    #     .where('starts_at < ?', Time.now).present?
-    # else
-    #   batch_stages.where(application_stage: stage)
-    #     .where('starts_at < ?', Time.now)
-    #     .where('ends_at > ?', Time.now).present?
-    # end
-  end
-
-  # Stage has expired when deadline has been crossed.
-  def stage_expired?(_stage)
-    # TODO: This needs to be re-implemented in ApplicationRound
-    raise NotImplementedError
-
-    # batch_stages.where(application_stage: stage).where('ends_at < ?', Time.now).present?
-  end
-
-  def stage_started?(_stage)
-    # TODO: This needs to be re-implemented in ApplicationRound
-    raise NotImplementedError
-
-    # batch_stages.where(application_stage: stage).where('starts_at < ?', Time.now).present?
-  end
-
-  def applications_complete?
-    stage_started?(ApplicationStage.final_stage)
-  end
-
-  def initial_stage?
-    stage_active?(ApplicationStage.initial_stage)
-  end
-
-  def final_stage?
-    stage_started?(ApplicationStage.final_stage)
   end
 
   def present_week_number

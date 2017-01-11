@@ -57,11 +57,7 @@ class BatchApplication < ApplicationRecord
   # If a team lead is present (should be), display his name and batch number as title, otherwise use this entry's ID.
   def display_name
     if team_lead.present?
-      if batch.present?
-        "#{team_lead&.name} (#{batch.name})"
-      else
-        "#{team_lead&.name} (Batch Pending)"
-      end
+      "#{team_lead&.name} (#{application_round.name})"
     else
       "Batch Application ##{id}"
     end
@@ -85,12 +81,11 @@ class BatchApplication < ApplicationRecord
   # Application is promotable if its stage has started (except if it's in the final stage).
   def promotable?
     return false if application_stage.final_stage?
-    batch.stage_started?(application_stage)
+    application_round.stage_started?(application_stage)
   end
 
   # Returns true if application is in interview stage.
   def interviewable?
-    return false if batch.blank?
     interview_stage = ApplicationStage.interview_stage
 
     # Not if already interviewed
@@ -146,27 +141,27 @@ class BatchApplication < ApplicationRecord
 
   # Returns true if application has been upgraded to a stage that is currently not active.
   def promoted?
-    !batch.stage_active?(application_stage) && !batch.stage_expired?(application_stage)
+    !application_round.stage_active?(application_stage) && !application_round.stage_expired?(application_stage)
   end
 
   # Returns true if the application is in an active stage and hasn't submitted.
   def ongoing?
-    batch.stage_active?(application_stage) && submission.blank?
+    application_round.stage_active?(application_stage) && submission.blank?
   end
 
   # Returns true application has a submission for current stage.
   def submitted?
-    submission.present? && !batch.stage_started?(application_stage.next)
+    submission.present? && !application_round.stage_started?(application_stage.next)
   end
 
   # Returns true if stage has expired and there's no submssion.
   def expired?
-    batch.stage_expired?(application_stage) && submission.blank?
+    application_round.stage_expired?(application_stage) && submission.blank?
   end
 
   # Returns true if application's stage has expired, there's a submission, and the next stage has started.
   def rejected?
-    batch.stage_expired?(application_stage) && batch.stage_started?(application_stage.next) && submission.present?
+    application_round.stage_expired?(application_stage) && application_round.stage_started?(application_stage.next) && submission.present?
   end
 
   # Returns one of :ongoing, :submitted, :expired, :promoted, :rejected, or :complete
@@ -228,5 +223,16 @@ class BatchApplication < ApplicationRecord
   # Need to iterate over applicants since each could have different payment method.
   def total_course_fee
     batch_applicants.map { |applicant| applicant_course_fee(applicant) }.sum
+  end
+
+  def restartable?
+    submitted? && !stage_expired?
+  end
+
+  def stage_2_submission
+    @stage_2_submission ||= begin
+      stage_2 = ApplicationStage.find_by(number: 2)
+      application_submissions.find_by(application_stage: stage_2)
+    end
   end
 end

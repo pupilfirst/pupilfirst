@@ -1,16 +1,6 @@
 # encoding: utf-8
 
 module BatchApplicationsHelper
-  def next_stage_date
-    target_stage = if application_status == :promoted
-      current_application.application_stage
-    else
-      current_application.application_stage.next
-    end
-
-    current_batch.batch_stages.find_by(application_stage: target_stage).starts_at.strftime('%A, %b %e')
-  end
-
   def payment_button_message(batch_application)
     batch_application.payment.present? ? t('batch_application.stage_1.payment_retry') : t('batch_application.stage_1.payment_start')
   end
@@ -53,33 +43,5 @@ module BatchApplicationsHelper
 
   def deadline_time
     current_batch.batch_stages.find_by(application_stage: application_stage).ends_at
-  end
-
-  def stage_2_submission
-    @stage_2_submission ||= begin
-      ApplicationSubmission.where(
-        batch_application_id: current_application.id,
-        application_stage: ApplicationStage.find_by(number: 2)
-      ).first
-    end
-  end
-
-  def url_entry_class(name)
-    name = name.downcase
-    if 'code'.in? name
-      'icon-code'
-    elsif 'video'.in? name
-      'icon-video'
-    elsif 'web'.in? name
-      'icon-website'
-    elsif 'app'.in? name
-      'icon-application'
-    else
-      'icon-default'
-    end
-  end
-
-  def restartable?
-    application_status == :submitted && !stage_expired?
   end
 end

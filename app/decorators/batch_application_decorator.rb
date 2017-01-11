@@ -2,7 +2,7 @@ class BatchApplicationDecorator < Draper::Decorator
   delegate_all
 
   def form
-    @application_form ||= BatchApplicationForm.new(model)
+    @application_form ||= BatchApplicationForm.new(BatchApplicant.new)
   end
 
   def old_applications(applicant)
@@ -45,7 +45,7 @@ class BatchApplicationDecorator < Draper::Decorator
 
   # used in stage4.html.slim
   def batch_start_date
-    batch.start_date.strftime('%B %d, %Y')
+    application_round.batch.start_date.strftime('%B %d, %Y')
   end
 
   # used to display submission deadline in stage4.html.slim
@@ -60,6 +60,32 @@ class BatchApplicationDecorator < Draper::Decorator
 
   def founders_profiles_complete?
     batch_applicants.all?(&:profile_complete?)
+  end
+
+  def next_stage_date
+    target_stage = if model.status == :promoted
+      application_stage
+    else
+      application_stage.next
+    end
+
+    application_round.round_stages.find_by(application_stage: target_stage).starts_at.strftime('%A, %b %e')
+  end
+
+  def url_entry_class(name)
+    name = name.downcase
+
+    if 'code'.in? name
+      'icon-code'
+    elsif 'video'.in? name
+      'icon-video'
+    elsif 'web'.in? name
+      'icon-website'
+    elsif 'app'.in? name
+      'icon-application'
+    else
+      'icon-default'
+    end
   end
 
   alias partnership_deed_ready? founders_profiles_complete?

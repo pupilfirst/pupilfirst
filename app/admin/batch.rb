@@ -22,7 +22,7 @@ ActiveAdmin.register Batch do
     column :end_date
 
     actions do |batch|
-      if batch.applications_complete? && !batch.invites_sent?
+      if batch.application_rounds.present? && !batch.invites_sent?
         span do
           link_to 'Invite all founders', selected_applications_admin_batch_path(batch)
         end

@@ -99,10 +99,9 @@ Rails.application.routes.draw do
 
   scope 'apply', as: 'apply', controller: 'batch_application' do
     get '', action: 'index'
-    post 'create'
+    post 'register'
     post 'notify'
     get 'continue'
-    get 'batch_pending'
     post 'restart', action: 'restart_application'
     get 'cofounders', action: 'cofounders_form'
     post 'cofounders', action: 'cofounders_save'

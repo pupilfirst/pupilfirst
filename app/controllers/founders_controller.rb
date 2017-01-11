@@ -37,6 +37,7 @@ class FoundersController < ApplicationController
     # eager-load everything required for the dashboard. Order and decorate them too!
     @program_weeks = @batch.program_weeks.includes(:batch, target_groups: { targets: :assigner }).order(:number, 'target_groups.sort_index', 'targets.sort_index').decorate
     @tour = take_on_tour?
+    @show_facebook_toggle = params[:fb_test].present?
 
     render layout: 'application_v2'
   end

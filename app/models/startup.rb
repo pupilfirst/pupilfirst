@@ -287,6 +287,7 @@ class Startup < ApplicationRecord
     founders - [founder]
   end
 
+  # TODO: There's a possiblity that this will generate a slug that already exists, breaking uniqueness validation (DB level).
   def generate_randomized_slug
     if product_name.present?
       "#{product_name.parameterize}-#{rand 1000}"

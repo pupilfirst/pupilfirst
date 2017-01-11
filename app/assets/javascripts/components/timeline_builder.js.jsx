@@ -2,7 +2,8 @@ const TimelineBuilder = React.createClass({
   propTypes: {
     timelineEventTypes: React.PropTypes.object,
     selectedTimelineEventTypeId: React.PropTypes.number,
-    targetId: React.PropTypes.number
+    targetId: React.PropTypes.number,
+    showFacebookToggle: React.PropTypes.bool
   },
 
   getInitialState: function () {
@@ -22,7 +23,8 @@ const TimelineBuilder = React.createClass({
       showDescriptionError: false,
       showDateError: false,
       showEventTypeError: false,
-      timelineEventTypeId: this.props.selectedTimelineEventTypeId
+      timelineEventTypeId: this.props.selectedTimelineEventTypeId,
+      description: ''
     }
   },
 
@@ -156,12 +158,14 @@ const TimelineBuilder = React.createClass({
 
       let form = $('.timeline-builder-hidden-form');
       let formData = new FormData(form[0]);
+      let share_on_facebook = false;
 
-      let description = $('.js-timeline-builder__textarea').val();
-      let share_on_facebook = $('.timeline-builder__social-bar-toggle-switch-input').prop('checked');
+      if (this.props.showFacebookToggle) {
+        share_on_facebook = $('.timeline-builder__social-bar-toggle-switch-input').prop('checked');
+      }
 
       formData.append('timeline_event[target_id]', this.props.targetId);
-      formData.append('timeline_event[description]', description);
+      formData.append('timeline_event[description]', this.state.description);
       formData.append('timeline_event[event_on]', this.state.date);
       formData.append('timeline_event[links]', JSON.stringify(this.state.links));
       formData.append('timeline_event[files_metadata]', JSON.stringify(this.state.files));
@@ -280,15 +284,18 @@ const TimelineBuilder = React.createClass({
     }
   },
 
+  updateDescription: function () {
+    let description = $('.js-timeline-builder__textarea').val().trim();
+    this.setState({description: description});
+  },
+
   render: function () {
     return (
       <div>
         <TimelineBuilderTextArea showError={ this.state.showDescriptionError } resetErrorsCB={ this.resetErrors }
-                                 placeholder={ this.sampleText() }/>
+                                 placeholder={ this.sampleText() } textChangeCB={ this.updateDescription }/>
 
-        { false &&
-        <TimelineBuilderSocialBar />
-        }
+        <TimelineBuilderSocialBar description={ this.state.description } showFacebookToggle={ this.props.showFacebookToggle }/>
 
         { this.hasAttachments() &&
         <TimelineBuilderAttachments attachments={ this.attachments() } removeAttachmentCB={ this.removeAttachment }/>

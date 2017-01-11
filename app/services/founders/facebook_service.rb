@@ -46,10 +46,6 @@ module Founders
       api(ENV['FACEBOOK_APP_ACCESS_TOKEN']).debug_token(token).dig('data', 'is_valid')
     end
 
-    def reconfirm_token!
-      token_valid?(@founder.fb_access_token) ? true : disconnect!
-    end
-
     private
 
     def oauth

@@ -22,10 +22,6 @@
   }
 }
 
-.timeline-builder__textarea-wrapper {
-  position: relative;
-}
-
 .timeline-builder__textarea {
   padding: 1.25rem 3rem 1.25rem 1.25rem;
   line-height: 1.5;
@@ -36,9 +32,9 @@
   font-weight: $font-light;
 }
 
-.timeline-builder__textarea-counter {
+.timeline-builder-social-bar__textarea-counter {
   position: absolute;
-  bottom: 1.25rem;
+  bottom: 1rem;
   right: 1.25rem;
   color: white;
   padding: 0.2rem 0.5rem;
@@ -47,11 +43,11 @@
   @include border-radius(1rem);
 }
 
-.timeline-builder__textarea-counter--danger {
+.timeline-builder-social-bar__textarea-counter--danger {
   background-color: rgba(255, 0, 0, 0.5);
 }
 
-.timeline-builder__textarea-counter--warning {
+.timeline-builder-social-bar__textarea-counter--warning {
   background-color: rgba(255, 120, 0, 0.5);
 }
 
@@ -342,6 +338,7 @@
 }
 
 .timeline-builder__social-bar {
+  position: relative;
   padding: 1rem 1.25rem;
 }
 

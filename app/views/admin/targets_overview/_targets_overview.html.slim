@@ -4,7 +4,14 @@
       li class="#{ ((batch.id == params[:batch].to_i) ? 'selected' : '') + ' scope' }"
         a.table_tools_button href=admin_targets_overview_path(batch: batch) #{batch.name} Batch
 
-#admin-target-overview__index data-target-stats-url=admin_targets_overview_target_stats_url
+#admin-target-overview__index data-target-stats-url=admin_targets_overview_target_stats_url data-target-stat-details-url=admin_targets_overview_target_stat_details_url
+
+table.index_table.index.js-hook.target-overview__stat-details-table
+  thead
+    tr
+      th.col Assignee Type
+      th.col Assignee
+  tbody
 
 - if @targets.present?
   table.index_table.index
@@ -28,15 +35,29 @@
           tr
             td.col
               ' #{target.title}
-              a.js-target-overview__load-stats-link.target-overview__load-stats-link data-target-id=target.id
+              a.js-hook.target-overview__load-stats-link data-target-id=target.id
                 | Load
-            td.col.js-targets-overview__completed-count
-            td.col.js-targets-overview__submitted-count
-            td.col.js-targets-overview__needs-improvement-count
-            td.col.js-targets-overview__not-accepted-count
-            td.col.js-targets-overview__unavailable-count
-            td.col.js-targets-overview__pending-count
-            td.col.js-targets-overview__expired-count
+            td.col
+              a.js-hook.targets-overview__load-details-link data-type='completed' data-target-id=target.id
+                span.js-targets-overview__completed-count
+            td.col
+              a.js-hook.targets-overview__load-details-link data-type='submitted' data-target-id=target.id
+                span.js-targets-overview__submitted-count
+            td.col
+              a.js-hook.targets-overview__load-details-link data-type='needs_improvement' data-target-id=target.id
+                span.js-targets-overview__needs-improvement-count
+            td.col
+              a.js-hook.targets-overview__load-details-link data-type='not_accepted' data-target-id=target.id
+                span.js-targets-overview__not-accepted-count
+            td.col
+              a.js-hook.targets-overview__load-details-link data-type='unavailable' data-target-id=target.id
+                span.js-targets-overview__unavailable-count
+            td.col
+              a.js-hook.targets-overview__load-details-link data-type='pending' data-target-id=target.id
+                span.js-targets-overview__pending-count
+            td.col
+              a.js-hook.targets-overview__load-details-link data-type='expired' data-target-id=target.id
+                span.js-targets-overview__expired-count
 
 - else
   p The selected batch does not have any targets

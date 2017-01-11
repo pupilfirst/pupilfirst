@@ -282,7 +282,7 @@ class Founder < ApplicationRecord
 
   # Returns true if any of the social URL are stored. Used on profile page.
   def social_url_present?
-    [twitter_url, facebook_url, linkedin_url, personal_website_url, blog_url, angel_co_url, github_url, behance_url].any?(&:present?)
+    [twitter_url, linkedin_url, personal_website_url, blog_url, angel_co_url, github_url, behance_url].any?(&:present?)
   end
 
   # Returns the percentage of profile completion as an integer

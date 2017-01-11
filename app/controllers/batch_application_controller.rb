@@ -1,11 +1,11 @@
 class BatchApplicationController < ApplicationController
   before_action :ensure_accurate_stage_number, only: %w(ongoing submit complete restart expired rejected)
   before_action :load_common_instance_variables
-  before_action :authenticate_batch_applicant!, except: %w(index register notify)
+  before_action :authenticate_batch_applicant!, except: %w(index create notify)
+  before_action :load_index, only: %w(index create notify)
 
   layout 'application_v2'
 
-  helper_method :current_batch_applicant
   helper_method :current_batch
   helper_method :current_application
   helper_method :application_stage
@@ -16,27 +16,22 @@ class BatchApplicationController < ApplicationController
 
   # GET /apply
   def index
-    applicant = current_batch_applicant || BatchApplicant.new
-    @presenter = ApplicationIndexPresenter.new(applicant)
   end
 
   # POST /apply/register
-  def register
-    @presenter = ApplicationIndexPresenter.new
-    form = @presenter.batch_application_form
+  def create
+    form = @batch_application.form
 
     if form.validate(params[:batch_application])
       begin
         applicant = form.save
       rescue Postmark::InvalidMessageError
-        form.errors[:base] << "Our email delivery service refused to accept the supplied address. Please ensure that it is a valid email address. If you're still having issues, please contact us using live chat or at help@sv.co"
+        form.errors[:base] << t('batch_application.create.email_error')
         render 'index'
-        return
+      else
+        sign_in_applicant_temporarily(applicant)
+        redirect_to apply_stage_path(stage_number: application_stage_number, continue_mail_sent: 'yes')
       end
-
-      sign_in_applicant_temporarily(applicant)
-
-      redirect_to apply_stage_path(stage_number: application_stage_number, continue_mail_sent: 'yes')
     else
       render 'index'
     end
@@ -44,8 +39,7 @@ class BatchApplicationController < ApplicationController
 
   # POST /apply/notify
   def notify
-    @presenter = ApplicationIndexPresenter.new
-    form = @presenter.prospective_applicant_form
+    form = @prospective_applicant.form
 
     if form.validate(params[:prospective_applicant])
       prospective_applicant = form.save
@@ -387,11 +381,6 @@ class BatchApplicationController < ApplicationController
     end
   end
 
-  # Returns currently 'signed in' application founder.
-  def current_batch_applicant
-    @current_batch_applicant ||= current_user&.batch_applicant
-  end
-
   # Returns one of :pending, :ongoing, :expired, :rejected, :submitted, :complete, or :promoted to indicate which view
   # should be rendered.
   def application_status
@@ -435,5 +424,10 @@ class BatchApplicationController < ApplicationController
       flash[:notice] = 'You are not an applicant. Please go through the registration process.'
       redirect_to apply_url
     end
+  end
+
+  def load_index
+    @batch_application ||= BatchApplication.new.decorate
+    @prospective_applicant ||= ProspectiveApplicant.new.decorate
   end
 end

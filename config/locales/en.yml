@@ -54,6 +54,8 @@ en:
       paid: Paid
       failed: Failed
   batch_application:
+    create:
+      email_error: "Our email delivery service refused to accept the supplied address. Please ensure that it is a valid email address. If you're still having issues, please contact us using live chat or at help@sv.co"
     general:
       submission_failure: Something went wrong when attempting to process your submission. Please contact us at help@sv.co.
       applications_close_soon_html: Applications for batch %{batch_number} will close on <strong>%{deadline}</strong>. You have <strong>%{delta}</strong> to submit your application.

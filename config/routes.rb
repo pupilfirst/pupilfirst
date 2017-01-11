@@ -67,7 +67,7 @@ Rails.application.routes.draw do
     post 'contact', action: 'send_contact_email'
   end
 
-  resources :faculty, only: %w(index show) do
+  resources :faculty, only: [:index, :show] do
     post 'connect', on: :member
     collection do
       get 'filter/:active_tab', to: 'faculty#index'
@@ -99,7 +99,7 @@ Rails.application.routes.draw do
 
   scope 'apply', as: 'apply', controller: 'batch_application' do
     get '', action: 'index'
-    post 'register'
+    post 'create'
     post 'notify'
     get 'continue'
     get 'batch_pending'

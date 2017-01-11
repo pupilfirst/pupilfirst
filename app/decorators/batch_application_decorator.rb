@@ -1,6 +1,24 @@
 class BatchApplicationDecorator < Draper::Decorator
   delegate_all
 
+  def form
+    @application_form ||= BatchApplicationForm.new(model)
+  end
+
+  def old_applications(applicant)
+    return [] if applicant.nil? || applicant.batch_applications.blank?
+
+    applications = applicant.batch_applications.select do |application|
+      application.status.in? [:expired, :complete, :rejected]
+    end
+
+    applications.map { |application| BatchApplicationDecorator.decorate(application) }
+  end
+
+  def applications_open?
+    Batch.open_for_applications.any?
+  end
+
   def certificate_background_image_base64
     APP_CONSTANTS[:certificate_background_base64]
   end

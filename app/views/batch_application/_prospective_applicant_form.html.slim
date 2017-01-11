@@ -9,14 +9,14 @@
       span.font-semibold.brand-secondary.bigger-text
         | February, 2017.
 
-  - if @presenter.prospective_applicant_submitted?(self)
+  - if @prospective_applicant.submitted?
     .application-open-text
       p.font-regular.m-t-1
         span.bigger-text
           ' Thank you for your interest!
         ' We'll send you an email when admissions for the next batch is about to open.
   - else
-    = simple_form_for @presenter.prospective_applicant_form,
+    = simple_form_for @prospective_applicant.form,
       url: apply_notify_path,
       wrapper: :vertical_form do |f|
       .simple-form-container

@@ -35,7 +35,7 @@ ActiveAdmin.register Founder do
   permit_params :name, :email, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :slack_username, :born_on,
     :startup_admin, :communication_address, :identification_proof, :phone, :invitation_token, :college_id, :roll_number,
     :course, :semester, :year_of_graduation, :twitter_url, :linkedin_url, :personal_website_url, :blog_url,
-    :facebook_url, :angel_co_url, :github_url, :behance_url, :gender, :skype_id, :exited, roles: [], tag_list: []
+    :angel_co_url, :github_url, :behance_url, :gender, :skype_id, :exited, roles: [], tag_list: []
 
   batch_action :tag, form: proc { { tag: Founder.tag_counts_on(:tags).pluck(:name) } } do |ids, inputs|
     Founder.where(id: ids).each do |founder|
@@ -123,7 +123,6 @@ ActiveAdmin.register Founder do
     column :twitter_url
     column :personal_website_url
     column :blog_url
-    column :facebook_url
     column :angel_co_url
     column :github_url
     column :behance_url
@@ -216,7 +215,6 @@ ActiveAdmin.register Founder do
     panel 'Social links' do
       attributes_table_for founder do
         row :twitter_url
-        row :facebook_url
         row :linkedin_url
         row :personal_website_url
         row :blog_url

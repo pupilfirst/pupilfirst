@@ -42,7 +42,8 @@
 
   // Move the logo up a little bit to center it in shrunken state (xs).
   .navbar-brand {
-    padding: 15px 0 0 0;
+    padding-top: 15px;
+    padding-bottom: 0;
     height: auto;
 
     @media (max-width: $screen-xs-max) {

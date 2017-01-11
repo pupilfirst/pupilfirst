@@ -1,7 +1,7 @@
 module TimelineEvents
   class FacebookPostService
     def initialize(timeline_event)
-      @timeline_event = timeline_event.decorate
+      @timeline_event = timeline_event
       @founder = timeline_event.founder
     end
 

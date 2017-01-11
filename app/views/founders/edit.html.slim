@@ -10,16 +10,22 @@ h2 Editing #{@founder.fullname}'s profile...
   h4 Connected Accounts
   hr
   - if @founder.facebook_connected?
-    i.fa.fa-facebook-square.fa-2x
-    span
-      | &nbsp;
-      = link_to @founder.fb_basic_info[:link] do
-        = image_tag @founder.fb_basic_info[:picture_url], size: 35
-        ' #{@founder.fb_basic_info[:name]}
-      = link_to '(Disconnect)', founder_facebook_disconnect_path, method: :post
+    .connected-account__container.margin-bottom-20
+      span.connected-account_icon
+        i.fa.fa-facebook-square.fa-2x
+      .connected-account-profile
+        .connected-account-profile__link
+          = link_to @founder.fb_basic_info[:link] do
+            = image_tag @founder.fb_basic_info[:picture_url], size: 35, class: 'img-circle connected-account-profile__avatar'
+            ' #{@founder.fb_basic_info[:name]}
+        = link_to 'Disconnect', founder_facebook_disconnect_path, method: :post, class: 'btn btn-primary connected-account-profile__disconnect-btn'
   - else
-    = button_to founder_facebook_connect_path, class: 'btn btn-primary btn-flat' do
-      i.fa.fa-facebook-official
-      span
-        | &nbsp;Connect
-  .margin-bottom-20
+    .row.margin-bottom-20
+      .connected-account__label.col-xs-3.text-right
+        | Facebook
+      .col-xs-9
+        = button_to founder_facebook_connect_path, class: 'btn btn-primary' do
+          span.connected-account__facebook-icon
+            i.fa.fa-facebook-square.fa-2x
+          span.connected-account__facebook-label
+            | &nbsp;Connect

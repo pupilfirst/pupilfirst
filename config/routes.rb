@@ -160,8 +160,8 @@ Rails.application.routes.draw do
   # custom defined 404 route to use with shortener gem's config
   get '/404', to: 'home#not_found'
 
-  # Previous sixways page re-directed to startincollege
-  # get 'sixways', to: redirect('/startincollege')
+  # /slack redirected to /about/slack
+  get '/slack', to: redirect('/about/slack')
 
   # Also have /StartInCollege
   get 'StartInCollege', to: redirect('/startincollege')

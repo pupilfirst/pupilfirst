@@ -43,13 +43,13 @@ module Founders
     def token_valid?(token)
       return false unless token
 
-      api(ENV['FACEBOOK_APP_ACCESS_TOKEN']).debug_token(token).dig('data', 'is_valid')
+      api(ENV['FACEBOOK_DEV_APP_ACCESS_TOKEN']).debug_token(token).dig('data', 'is_valid')
     end
 
     private
 
     def oauth
-      @oauth ||= Koala::Facebook::OAuth.new(ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET'], redirect_url)
+      @oauth ||= Koala::Facebook::OAuth.new(ENV['FACEBOOK_DEV_APP_KEY'], ENV['FACEBOOK_DEV_APP_SECRET'], redirect_url)
     end
 
     def api(token)

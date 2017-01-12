@@ -96,7 +96,7 @@ class BatchApplicationDecorator < Draper::Decorator
     status = stage_status_service.status(stage_number)
 
     if status == :ongoing
-      "Ends on #{stage_deadline}"
+      "Ends on #{stage_deadline.strftime('%b %d')}"
     else
       status.to_s.tr('_', ' ').capitalize
     end

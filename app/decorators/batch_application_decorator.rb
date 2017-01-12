@@ -108,8 +108,9 @@ class BatchApplicationDecorator < Draper::Decorator
 
   # Used to determine which stage applicant is in for the progress bar.
   def stage_active_class(stage_number)
+    base_class = stage_status_service.status(stage_number).to_s
     expected_stage_number = (status == :promoted ? application_stage.number - 1 : application_stage.number)
-    expected_stage_number == stage_number ? 'applicant-stage' : ''
+    expected_stage_number == stage_number ? base_class + ' applicant-stage' : base_class
   end
 
   def payment_button_message

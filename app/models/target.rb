@@ -4,12 +4,14 @@
 class Target < ApplicationRecord
   belongs_to :assignee, polymorphic: true
   belongs_to :assigner, class_name: 'Faculty'
-  belongs_to :target_group
-  belongs_to :batch
   belongs_to :timeline_event_type, optional: true
   has_many :timeline_events
   has_many :target_prerequisites
   has_many :prerequisite_targets, through: :target_prerequisites
+  belongs_to :target_group
+  has_one :program_week, through: :target_group
+  has_one :batch, through: :target_group
+
   mount_uploader :rubric, RubricUploader
 
   scope :founder, -> { where(role: ROLE_FOUNDER) }

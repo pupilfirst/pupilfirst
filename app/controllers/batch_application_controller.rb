@@ -122,9 +122,11 @@ class BatchApplicationController < ApplicationController
   def submit
     raise_not_found if current_application&.status != :ongoing
 
-    begin
-      send "stage_#{application_stage_number}_submit"
-    rescue NoMethodError
+    submit_method = "stage_#{application_stage_number}_submit"
+
+    if respond_to?(submit_method)
+      public_send(submit_method)
+    else
       raise_not_found
     end
   end
@@ -142,9 +144,11 @@ class BatchApplicationController < ApplicationController
     return redirect_to(apply_continue_path) if current_application&.status != :submitted || stage_expired?
     raise_not_found if stage_expired?
 
-    begin
-      send "stage_#{application_stage_number}_restart"
-    rescue NoMethodError
+    restart_method = "stage_#{application_stage_number}_restart"
+
+    if respond_to?(restart_method)
+      public_send(restart_method)
+    else
       raise_not_found
     end
   end

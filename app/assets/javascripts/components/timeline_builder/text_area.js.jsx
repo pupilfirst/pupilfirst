@@ -29,7 +29,7 @@ class TimelineBuilderTextArea extends React.Component {
       <textarea className="form-control js-timeline-builder__textarea timeline-builder__textarea" rows="4"
                 data-toggle="popover" data-title="Description Missing!" placeholder={ this.placeholder() }
                 data-content="Please add a summary describing the event." data-placement="bottom" data-trigger="manual"
-                onFocus={ this.resetErrors } onChange={ this.props.textChangeCB } maxLength="300"/>
+                onFocus={ this.resetErrors } onChange={ this.props.textChangeCB } maxLength="500"/>
     )
   }
 }

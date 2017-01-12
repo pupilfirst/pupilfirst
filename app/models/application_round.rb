@@ -8,6 +8,17 @@ class ApplicationRound < ApplicationRecord
 
   accepts_nested_attributes_for :round_stages, allow_destroy: true
 
+  scope :open_for_applications, lambda {
+    joins(:round_stages)
+      .where(round_stages: { application_stage_id: ApplicationStage.initial_stage })
+      .where('round_stages.starts_at < ?', Time.now)
+      .where('round_stages.ends_at > ?', Time.now)
+  }
+
+  def display_name
+    "Batch #{batch.batch_number} Round #{number}"
+  end
+
   # Stage is active when current time is between its bounds.
   def stage_active?(stage)
     if stage.final_stage?
@@ -42,5 +53,10 @@ class ApplicationRound < ApplicationRecord
 
   def final_stage?
     stage_started?(ApplicationStage.final_stage)
+  end
+
+  # Currently 'open' round - the one which is accepting new applications.
+  def self.open_round
+    open_for_applications.first if open_for_applications.any?
   end
 end

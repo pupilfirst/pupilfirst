@@ -1,23 +1,23 @@
 // CSS in batch_application/shared.scss
 .application-progress
   ul.list-unstyled.application-progress-steps.text-xs-center
-    li class=stage_active_class(1),stage_status(1)
-      .application-stage.stage-1 class=stage_active_class(1),stage_status(1)
+    li class=current_application.stage_active_class(1)
+      .application-stage.stage-1 class=current_application.stage_active_class(1)
         p Pay Registration Fee
-        .stage-status = pretty_stage_status(1)
-    li class=stage_active_class(2),stage_status(2)
-      .application-stage.stage-2 class=stage_active_class(2),stage_status(2)
+        .stage-status = current_application.pretty_stage_status(1)
+    li class=current_application.stage_active_class(2)
+      .application-stage.stage-2 class=current_application.stage_active_class(2)
         p
           | Coding &amp; Video Task
-        .stage-status = pretty_stage_status(2)
-    li class=stage_active_class(3),stage_status(3)
-      .application-stage.stage-3 class=stage_active_class(3),stage_status(3)
+        .stage-status = current_application.pretty_stage_status(2)
+    li class=current_application.stage_active_class(3)
+      .application-stage.stage-3 class=current_application.stage_active_class(3)
         p Interview
-        .stage-status = pretty_stage_status(3)
-    li class=stage_active_class(4),stage_status(4)
-      .application-stage.stage-4 class=stage_active_class(4),stage_status(4)
+        .stage-status = current_application.pretty_stage_status(3)
+    li class=current_application.stage_active_class(4)
+      .application-stage.stage-4 class=current_application.stage_active_class(4)
         p Pre-selection
-        .stage-status = pretty_stage_status(4)
-    li class=stage_active_class(5),stage_status(5)
-      .application-stage.stage-5 class=stage_active_class(5),stage_status(5)
+        .stage-status = current_application.pretty_stage_status(4)
+    li class=current_application.stage_active_class(5)
+      .application-stage.stage-5 class=current_application.stage_active_class(5)
         p Batch<br/>Start

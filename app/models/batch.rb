@@ -12,10 +12,7 @@ class Batch < ApplicationRecord
   scope :not_completed, -> { where('end_date >= ?', Time.now) }
 
   scope :open_for_applications, lambda {
-    joins(application_rounds: :round_stages)
-      .where(round_stages: { application_stage_id: ApplicationStage.initial_stage })
-      .where('round_stages.starts_at < ?', Time.now)
-      .where('round_stages.ends_at > ?', Time.now)
+    joins(:application_rounds).merge(ApplicationRound.open_for_applications)
   }
 
   scope :ongoing_applications, lambda {
@@ -25,7 +22,7 @@ class Batch < ApplicationRecord
   }
 
   # Batches that opened for applications at some point of time in the past.
-  scope :opened_for_applications, -> { joins(application_rounds: :round_stages).distinct }
+  scope :opened_for_applications, -> { joins(:application_rounds).distinct }
 
   validates :theme, presence: true
   validates :batch_number, presence: true, numericality: true, uniqueness: true
@@ -62,11 +59,6 @@ class Batch < ApplicationRecord
 
   def invites_sent?
     invites_sent_at.present?
-  end
-
-  # Currently 'open' batch - the one which is accepting new applications.
-  def self.open_batch
-    open_for_applications.first if open_for_applications.any?
   end
 
   def present_week_number

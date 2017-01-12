@@ -9,13 +9,12 @@ class IntercomNewApplicantCreateJob < ApplicationJob
     intercom = IntercomClient.new
     user = intercom.find_or_create_user(email: applicant.email, name: applicant.name)
 
-    intercom.update_user(user, phone: applicant.phone, college: applicant_college_name, batch: open_batch_name, university: applicant_university)
+    intercom.update_user(user, phone: applicant.phone, college: applicant_college_name, application_round: open_round_name, university: applicant_university)
     IntercomLastApplicantEventUpdateJob.perform_later(applicant, 'submitted_application')
   end
 
-  def open_batch_name
-    batch = Batch.open_batch
-    "##{batch.batch_number} #{batch.theme}"
+  def open_round_name
+    ApplicationRound.open_round.display_name
   end
 
   def applicant_college_name

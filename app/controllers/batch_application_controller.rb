@@ -2,7 +2,7 @@ class BatchApplicationController < ApplicationController
   before_action :ensure_accurate_stage_number, only: %w(ongoing submit complete restart expired rejected)
   before_action :load_common_instance_variables
   before_action :authenticate_batch_applicant!, except: %w(index create notify)
-  before_action :load_index, only: %w(index create notify)
+  before_action :load_index, only: %w(index register notify)
 
   layout 'application_v2'
 
@@ -363,7 +363,7 @@ class BatchApplicationController < ApplicationController
   def current_application
     @current_application ||= begin
       if current_batch_applicant.present?
-        current_batch_applicant.batch_applications.order('created_at DESC').first
+        current_batch_applicant.batch_applications.order('created_at DESC').first&.decorate
       end
     end
   end

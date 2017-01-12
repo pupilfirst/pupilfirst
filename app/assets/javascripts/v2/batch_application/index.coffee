@@ -33,6 +33,7 @@ readmoreFAQ = ->
 
 emailsShouldMatch = ->
   batchApplicationForm = $('#new_batch_application')
+
   if batchApplicationForm.length
     emailInput = $('#batch_application_email')
     emailConfirmationInput = $('#batch_application_email_confirmation')
@@ -191,7 +192,6 @@ setupOldApplicationCertificateDownloadButtons = ->
 $(document).on 'page:change', setupTogglingCollegeField
 $(document).on 'page:change', setupTogglingReferenceField
 $(document).on 'page:change', setupOldApplicationCertificateDownloadButtons
-$(document).on 'page:change', emailsShouldMatch
 $(document).on 'page:change', scrolltoStartapplicationForm
 $(document).on 'page:change', stickyApplyButtonOnApplyPage
 $(document).on 'page:change', helpIntercomPopup
@@ -199,9 +199,10 @@ $(document).on 'page:change', readmoreFAQ
 $(document).on 'page:before-change', destroyWaypoints
 
 $(document).on 'turbolinks:load', ->
-  if $('.batch-application__index').length
+  if $('#batch-application__index').length
     setupSelect2Inputs()
     setupStickyStartApplicationForm()
+    emailsShouldMatch()
 
 $(document).on 'turbolinks:before-cache', ->
   if $('.admission-process').length

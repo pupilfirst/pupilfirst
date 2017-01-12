@@ -21,7 +21,7 @@ class BatchApplicationForm < Reform::Form
     applicant = BatchApplicant.with_email(email).first
 
     return if applicant.blank?
-    return if applicant.batch_applications.where(batch: Batch.open_batch).blank?
+    return if applicant.batch_applications.where(application_round: ApplicationRound.open_round).blank?
 
     errors[:base] << 'You have already completed this step. Please sign in instead.'
     errors[:email] << 'is already an applicant'
@@ -39,6 +39,14 @@ class BatchApplicationForm < Reform::Form
     return if email == email_confirmation
     errors[:base] << 'Supplied email address and its confirmation do not match.'
     errors[:email_confirmation] << 'email addresses do not match'
+  end
+
+  def prepopulate!(batch_applicant)
+    return if batch_applicant.blank?
+
+    self.name = batch_applicant.name
+    self.email = batch_applicant.email
+    self.phone = batch_applicant.phone
   end
 
   def save
@@ -79,7 +87,7 @@ class BatchApplicationForm < Reform::Form
 
   def create_application(applicant)
     BatchApplication.create!(
-      batch: Batch.open_batch,
+      application_round: ApplicationRound.open_round,
       application_stage: ApplicationStage.initial_stage,
       team_lead_id: applicant.id
     )

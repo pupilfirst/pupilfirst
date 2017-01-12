@@ -2,7 +2,11 @@ class BatchApplicationDecorator < Draper::Decorator
   delegate_all
 
   def form
-    @application_form ||= BatchApplicationForm.new(BatchApplicant.new)
+    @form ||= begin
+      form = BatchApplicationForm.new(BatchApplicant.new)
+      form.prepopulate!(h.current_batch_applicant)
+      form
+    end
   end
 
   def old_applications(applicant)
@@ -109,13 +113,13 @@ class BatchApplicationDecorator < Draper::Decorator
   end
 
   def payment_button_message
-    payment.present? ? t('batch_application.stage_1.payment_retry') : t('batch_application.stage_1.payment_start')
+    payment.present? ? h.t('batch_application.stage_1.payment_retry') : h.t('batch_application.stage_1.payment_start')
   end
 
-  def applications_close_soon_message(batch)
+  def closes_soon_message
     deadline = stage_deadline.strftime('%d %b, %l:%M %p (%z)')
     delta = time_ago_in_words(stage_deadline)
-    t('batch_application.general.applications_close_soon_html', batch_number: batch.batch_number, deadline: deadline, delta: delta)
+    t('batch_application.general.applications_close_soon_html', batch_number: application_round.batch.batch_number, deadline: deadline, delta: delta)
   end
 
   alias partnership_deed_ready? founders_profiles_complete?

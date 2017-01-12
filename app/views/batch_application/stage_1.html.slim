@@ -2,13 +2,15 @@
   title SV.CO Apply Now
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
 
+#batch-application__stage-1
+
 .secondary-banner
   .container
     .application-stages-head.text-xs-center
       h1 Registration Fee
       h4.m-x-auto Payment pending
 .container
-  == render('applications_close_soon', batch: current_batch) if current_batch.applications_close_soon?
+  == render 'applications_close_soon' if current_application_round.closes_soon?
   .m-t-3
     == render 'application_progress'
 
@@ -46,20 +48,13 @@
               html: { class: 'form-horizontal' },
               wrapper: :horizontal_form do |f|
 
-              = f.input :team_size_select,
+              = f.input :team_size,
                 label: 'Team Size',
-                collection: ['2', '3', '4', '5', 'More than 5 (Enter number)'],
+                collection: %w(2 3 4 5 6),
                 as: :select,
                 include_blank: 'Please select your total team size'
 
-              .hidden-xs-up
-                = f.input :team_size_number,
-                  label: 'Team Size',
-                  placeholder: 'Enter team size',
-                  input_html: { type: :number, min: '2', max: '10' },
-                  disabled: true
-
-              .text-xs-center.m-t-2 class="#{f.object.team_size_select.blank? ? 'hidden-xs-up' : ''}"
+              .text-xs-center.m-t-2 class="#{f.object.team_size.blank? ? 'hidden-xs-up' : ''}"
                 .paywith-instamojo
                   div
                     h3.m-b-1
@@ -69,7 +64,7 @@
                       br
                       | to proceed to the next stage.
 
-                    = f.submit payment_button_message(current_application), class: 'btn btn-primary btn-md text-uppercase'
+                    = f.submit current_application.payment_button_message, class: 'btn btn-primary btn-md text-uppercase'
       .restart-application.m-t-2
         h6.text-xs-center
           ' Made mistakes in your application? That's okay!

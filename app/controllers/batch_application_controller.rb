@@ -246,7 +246,6 @@ class BatchApplicationController < ApplicationController
   def stage_2
     @continue_mail_sent = params[:continue_mail_sent]
     @form = BatchApplications::PaymentForm.new(current_application)
-    @form.prepopulate!
   end
 
   # Payment stage submission handler.

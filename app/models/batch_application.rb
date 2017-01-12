@@ -2,7 +2,7 @@ class BatchApplication < ApplicationRecord
   include Taggable
   include PrivateFilenameRetrievable
 
-  APPLICATION_FEE = 3000
+  APPLICATION_FEE = 1000
   COURSE_FEE = 37_500
 
   belongs_to :application_round

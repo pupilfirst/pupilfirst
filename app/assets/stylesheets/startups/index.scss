@@ -140,6 +140,10 @@
       @media (max-width: $screen-sm-max) {
         height: auto;
       }
+      @media (max-width: $screen-md-max) and (min-width: $screen-md-min) {
+        height: 400px;
+        overflow: visible;
+      }
 
       .links-menu {
         position: absolute;

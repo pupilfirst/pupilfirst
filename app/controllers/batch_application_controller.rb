@@ -252,7 +252,7 @@ class BatchApplicationController < ApplicationController
     # Save number of cofounders, and redirect to Instamojo.
     @form = BatchApplications::PaymentForm.new(current_application)
 
-    if @form.validate(params[:application_stage_one])
+    if @form.validate(params[:batch_applications_payment])
       begin
         payment = @form.save
       rescue Instamojo::PaymentRequestCreationFailed

@@ -26,6 +26,8 @@ module BatchApplications
 
         IntercomLastApplicantEventUpdateJob.perform_later(model.team_lead, 'payment_initiated') unless Rails.env.test?
       end
+
+      model.payment
     end
 
     def create_new_payment

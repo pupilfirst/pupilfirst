@@ -41,7 +41,7 @@ ActiveAdmin.register ApplicationRound do
     end
 
     panel 'Round Stages' do
-      application_round.round_stages.joins(:application_stage).order('application_stage.number') do |round_stage|
+      application_round.round_stages.joins(:application_stage).order('application_stages.number').each do |round_stage|
         attributes_table_for round_stage do
           row :application_stage
           row :starts_at

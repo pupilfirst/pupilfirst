@@ -244,7 +244,6 @@ class BatchApplicationController < ApplicationController
 
   # Payment stage.
   def stage_2
-    @continue_mail_sent = params[:continue_mail_sent]
     @form = BatchApplications::PaymentForm.new(current_application)
   end
 

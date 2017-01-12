@@ -3,7 +3,6 @@
   = f.inputs 'Target details' do
     #target-founders-for-startup-url data-url=founders_for_target_admin_targets_url
 
-    = f.input :batch, collection: Batch.all, include_blank: false
     = f.input :role,
       as: :select,
       collection: Target.valid_roles.map { |r| [t("role.#{r}"), r] },

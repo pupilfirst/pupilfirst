@@ -16,7 +16,7 @@ ActiveAdmin.register Payment do
 
   controller do
     def scoped_collection
-      super.includes :batch_applicant, batch_application: [:batch, :team_lead]
+      super.includes :batch_applicant, batch_application: [:team_lead]
     end
   end
 
@@ -35,7 +35,6 @@ ActiveAdmin.register Payment do
 
     column :batch_applicant
     column :amount
-    column :fees
     column(:status) { |payment| t("payment.status.#{payment.status}") }
     column :refunded
 

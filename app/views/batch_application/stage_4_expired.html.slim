@@ -7,34 +7,22 @@
     .stages-alert-icon.m-x-auto
       = image_tag 'apply/batch_application/expired-icon.svg'
     .application-stages-head.text-xs-center
-      h2
-        | Agreements &amp; Fee Deadline is Over!
+      h1
+        ' Deadline for tests are over.
 
 .container
   .m-t-3
     == render 'application_progress'
-
   .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
-    .content-box.application-stages-content.m-t-3.m-b-2.text-xs-center
-      h4.font-semibold
-        ' Unfortunately you missed the deadline for paying the fee and
-        br
-        | will not make it to Batch
+    .content-box.application-stages-content.m-t-3.m-b-3.text-xs-center
+      h4.m-b-1
+        ' We&rsquo;re sorry, but
+        span.brand-secondary.font-semibold you missed the deadline for submitting your code and video
+        ' &nbsp;and because of this your application for Batch ##{current_batch.batch_number} has been automatically
+        | rejected.
 
-      p.m-b-2
-        ' If this is a mistake, write to #{mail_to 'help@sv.co'} immediately!
+      p.m-b-1
+        ' If you couldn&rsquo;t submit because of unforeseen circumstances, contact #{mail_to 'help@sv.co'} and
+        ' we&rsquo;ll see if we can help out. In most cases, we&rsquo;ll ask you to apply again to the next batch.
 
-      h4
-        ' Because of the limited number of scholarships available, we couldn't
-        ' sponsor your team fully. We're sorry that you're missing out on this
-        | amazing opportunity to build your startup. <strong>Do apply again!</strong>
-
-      h4
-        ' The dates of the next batch start will always be available at #{link_to 'www.sv.co/apply', apply_url}
-        br
-          | Best wishes from the Team at SV.CO.
-
-      h5.m-b-1.m-t-1.font-semibold
-        ' You are also eligible for a certificate for progressing till this stage!
-
-  == render 'certificate'
+      p Please check #{link_to 'www.sv.co/apply', apply_url} to see if a batch is live.

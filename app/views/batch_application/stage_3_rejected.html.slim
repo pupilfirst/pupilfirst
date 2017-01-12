@@ -7,33 +7,25 @@
     .stages-alert-icon.m-x-auto
       = image_tag 'apply/batch_application/just-missed-icon.svg'
     .application-stages-head.text-xs-center
-      h2 Your team didn't make the cut!
-
+      h2 Your coding and hustling submissions were rejected.
 .container
   .m-t-3
     == render 'application_progress'
-
   .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
     .content-box.application-stages-content.m-t-3.m-b-2.text-xs-center
-      .sorry-box.m-b-1.p-a-1
-        h3.m-a-0
-          ' <strong>We're sorry,</strong> &#128543;
-        h4.m-a-0
-          ' but your team didn't make the cut during the interview process.
-      h4
-        ' <strong>Don't be disappointed though!</strong> A lot of folks make it to Startup Village
-        | only on their second or third try, so <strong>do apply again.</strong>
-      .feedback-box.card.m-t-2
-        p.card-header.m-a-0.brand-secondary.font-semibold
-          - if @batch_application.interview_feedback.present?
-            ' Meanwhile, here is some feedback from our Interview Faculty to perform better next time:
-        .card-block
-          p "#{@batch_application.interview_feedback}"
-      h4.m-b-1.m-t-1
-        ' You are also eligible for a certificate for progressing till this stage!
+      h4.m-b-1
+        ' After evaluation, your team&rsquo;s coding and video submissions for Batch #{current_batch.batch_number}
+        span.brand-secondary.font-semibold scored #{@batch_application.overall_percentile.round(1)} percentile.
+        ' &nbsp;Because of great submissions by other applicants,
+        span.brand-secondary.font-semibold our cutoff for this batch was above 60 percentile.
+
+      p.m-b-1
+        ' We&rsquo;re sorry! You didn&rsquo;t make it into Batch #{current_batch.batch_number}. Just a note: please
+        ' don&rsquo;t be disappointed. A lot of folks make it into Startup Village only on their second or third try, so
+        | do apply again!
+
       p
-        ' If you think we&rsquo;ve made a mistake, feel free to contact us at #{mail_to 'help@sv.co'},
-        br
-        | and we&rsquo;ll get back to you as soon as we can.
+        ' If you think there&rsquo;s we&rsquo;ve made a mistake in our evaluation, feel free to contact us at
+        | #{mail_to 'help@sv.co'}, and we&rsquo;ll get back to you as soon as we can.
 
   == render 'certificate'

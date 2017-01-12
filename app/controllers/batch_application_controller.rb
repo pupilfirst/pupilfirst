@@ -2,16 +2,12 @@ class BatchApplicationController < ApplicationController
   before_action :ensure_accurate_stage_number, only: %w(ongoing submit complete restart expired rejected)
   before_action :load_common_instance_variables
   before_action :authenticate_batch_applicant!, except: %w(index create notify)
-  before_action :load_index, only: %w(index register notify)
+  before_action :load_index_variables, only: %w(index register notify)
 
   layout 'application_v2'
 
   helper_method :current_application
   helper_method :current_application_round
-  helper_method :application_stage
-  helper_method :application_stage_number
-  helper_method :stage_expired?
-  helper_method :stage_active?
 
   # GET /apply
   def index
@@ -28,7 +24,9 @@ class BatchApplicationController < ApplicationController
         form.errors[:base] << t('batch_application.create.email_error')
         render 'index'
       else
-        sign_in_applicant_temporarily(applicant)
+        # Sign in user immediately to allow him to proceed to screening.
+        sign_in applicant.user
+
         redirect_to apply_stage_path(stage_number: application_stage_number, continue_mail_sent: 'yes')
       end
     else
@@ -93,14 +91,14 @@ class BatchApplicationController < ApplicationController
       return redirect_to(apply_continue_path)
     end
 
-    @form = CofoundersForm.new(current_application)
+    @form = BatchApplications::CofoundersForm.new(current_application)
     @form.prepopulate!
   end
 
   # POST /apply/cofounders
   def cofounders_save
     raise_not_found if current_application_round.final_stage?
-    @form = CofoundersForm.new(current_application)
+    @form = BatchApplications::CofoundersForm.new(current_application)
 
     if @form.validate(params[:cofounders])
       @form.save
@@ -115,6 +113,7 @@ class BatchApplicationController < ApplicationController
   # GET /apply/stage/:stage_number
   def ongoing
     return redirect_to(apply_continue_path) if current_application&.status != :ongoing
+    @batch_application = current_application.decorate
     try "stage_#{application_stage_number}"
     render "stage_#{application_stage_number}"
   end
@@ -153,6 +152,7 @@ class BatchApplicationController < ApplicationController
   # GET /apply/stage/:stage_number/expired
   def expired
     return redirect_to(apply_continue_path) if current_application&.status != :expired
+    @batch_application = current_application.decorate
     try "stage_#{application_stage_number}_expired"
     render "stage_#{application_stage_number}_expired"
   end
@@ -160,108 +160,9 @@ class BatchApplicationController < ApplicationController
   # GET /apply/stage/:stage_number/rejected
   def rejected
     return redirect_to(apply_continue_path) if current_application&.status != :rejected
+    @batch_application = current_application.decorate
     try "stage_#{application_stage_number}_rejected"
     render "stage_#{application_stage_number}_rejected"
-  end
-
-  ####
-  ## Public methods after this after called with 'try'.
-  ####
-
-  def stage_1
-    @continue_mail_sent = params[:continue_mail_sent]
-    @form = ApplicationStageOneForm.new(current_application)
-    @form.prepopulate!
-  end
-
-  def stage_1_submit
-    # Save number of cofounders, and redirect to Instamojo.
-    @form = ApplicationStageOneForm.new(current_application)
-
-    if @form.validate(params[:application_stage_one])
-      begin
-        payment = @form.save
-      rescue Instamojo::PaymentRequestCreationFailed
-        flash[:error] = 'We were unable to contact our payment partner. Please try again in a few minutes.'
-        redirect_to apply_stage_path(stage_number: 1, error: 'payment_request_failed')
-        return
-      end
-
-      if Rails.env.development?
-        render plain: "Redirect to #{payment.long_url}"
-      else
-        redirect_to payment.long_url
-      end
-    else
-      render 'stage_1'
-    end
-  end
-
-  def stage_2
-    application_submission = ApplicationSubmission.new
-    @form = ApplicationStageTwoForm.new(application_submission)
-  end
-
-  # TODO: Refactor this to use a decorator / view object.
-  def stage_2_rejected
-    @batch_application = current_application.decorate
-  end
-
-  def stage_2_submit
-    application_submission = ApplicationSubmission.new(
-      application_stage: ApplicationStage.find_by(number: 2),
-      batch_application: current_application
-    )
-
-    @form = ApplicationStageTwoForm.new(application_submission)
-
-    if @form.validate(params[:application_stage_two])
-      @form.save
-      redirect_to apply_stage_complete_path(stage_number: '2')
-    else
-      render 'batch_application/stage_2'
-    end
-  end
-
-  def stage_2_restart
-    stage_2_submission = current_application.application_submissions.where(application_stage_id: application_stage.id).first
-    stage_2_submission.destroy!
-    redirect_to apply_stage_path(stage_number: 2)
-  end
-
-  def stage_3
-    @batch_application = current_application.decorate
-  end
-
-  def stage_3_expired
-    @batch_application = current_application.decorate
-  end
-
-  def stage_3_rejected
-    @batch_application = current_application.decorate
-  end
-
-  def stage_4
-    @batch_application = current_application.decorate
-
-    if @batch_application.agreements_verified
-      @form = ApplicationStageFourSubmissionForm.new(@batch_application)
-    elsif params[:update_profile]
-      applicant = current_application.batch_applicants.find(params[:update_profile])
-      @form = ApplicationStageFourApplicantForm.new(applicant)
-    end
-  end
-
-  def stage_4_expired
-    @batch_application = current_application.decorate
-  end
-
-  def stage_4_rejected
-    @batch_application = current_application.decorate
-  end
-
-  def stage_5
-    @batch = current_application.batch
   end
 
   # PATCH /apply/stage/4/update_applicant
@@ -269,7 +170,7 @@ class BatchApplicationController < ApplicationController
   def update_applicant
     @batch_application = current_application.decorate
     applicant = current_application.batch_applicants.find(params[:application_stage_four_applicant][:id])
-    @form = ApplicationStageFourApplicantForm.new(applicant)
+    @form = BatchApplications::PreselectionStageApplicantForm.new(applicant)
 
     if @form.validate(params[:application_stage_four_applicant])
       @form.save
@@ -322,9 +223,120 @@ class BatchApplicationController < ApplicationController
     end
   end
 
+  ####
+  ## Public methods after this after called with 'try'.
+  ####
+
+  # Screening submission handler.
+  def stage_1_submit
+    raise NotImplementedError
+  end
+
+  # Payment stage.
+  def stage_2
+    @continue_mail_sent = params[:continue_mail_sent]
+    @form = BatchApplications::PaymentForm.new(current_application)
+    @form.prepopulate!
+  end
+
+  # Payment stage submission handler.
+  def stage_2_submit
+    # Save number of cofounders, and redirect to Instamojo.
+    @form = BatchApplications::PaymentForm.new(current_application)
+
+    if @form.validate(params[:application_stage_one])
+      begin
+        payment = @form.save
+      rescue Instamojo::PaymentRequestCreationFailed
+        flash[:error] = 'We were unable to contact our payment partner. Please try again in a few minutes.'
+        redirect_to apply_stage_path(stage_number: 1, error: 'payment_request_failed')
+        return
+      end
+
+      if Rails.env.development?
+        render plain: "Redirect to #{payment.long_url}"
+      else
+        redirect_to payment.long_url
+      end
+    else
+      render 'stage_1'
+    end
+  end
+
+  # Coding stage
+  def stage_3
+    application_submission = ApplicationSubmission.new
+    @form = BatchApplications::CodingStageForm.new(application_submission)
+  end
+
+  # Coding stage submissions handler.
+  def stage_3_submit
+    application_submission = ApplicationSubmission.new(
+      application_stage: ApplicationStage.find_by(number: 3),
+      batch_application: current_application
+    )
+
+    @form = BatchApplications::CodingStageForm.new(application_submission)
+
+    if @form.validate(params[:application_stage_two])
+      @form.save
+      redirect_to apply_stage_complete_path(stage_number: '3')
+    else
+      render 'batch_application/stage_2'
+    end
+  end
+
+  # Coding stage restart handler.
+  def stage_3_restart
+    stage_2_submission = current_application.application_submissions.where(application_stage_id: current_application_stage.id).first
+    stage_2_submission.destroy!
+    redirect_to apply_stage_path(stage_number: 2)
+  end
+
+  # Video stage
+  def stage_4
+    application_submission = ApplicationSubmission.new
+    @form = BatchApplications::CodingStageForm.new(application_submission)
+  end
+
+  # Video stage submissions handler.
   def stage_4_submit
+    application_submission = ApplicationSubmission.new(
+      application_stage: ApplicationStage.find_by(number: 2),
+      batch_application: current_application
+    )
+
+    @form = BatchApplications::CodingStageForm.new(application_submission)
+
+    if @form.validate(params[:application_stage_two])
+      @form.save
+      redirect_to apply_stage_complete_path(stage_number: '2')
+    else
+      render 'batch_application/stage_2'
+    end
+  end
+
+  # Video stage restart handler.
+  def stage_4_restart
+    stage_2_submission = current_application.application_submissions.where(application_stage_id: current_application_stage.id).first
+    stage_2_submission.destroy!
+    redirect_to apply_stage_path(stage_number: 2)
+  end
+
+  # Pre-selection stage.
+  def stage_6
+    if @batch_application.agreements_verified
+      @form = BatchApplications::PreselectionStageSubmissionForm.new(@batch_application)
+    elsif params[:update_profile]
+      applicant = current_application.batch_applicants.find(params[:update_profile])
+      @form = BatchApplications::PreselectionStageApplicantForm.new(applicant)
+    end
+  end
+
+  # Pre-selection submission handler.
+  def stage_6_submit
     @batch_application = current_application.decorate
-    @form = ApplicationStageFourSubmissionForm.new(@batch_application)
+    @form = BatchApplications::PreselectionStageSubmissionForm.new(@batch_application)
 
     if @form.validate(params[:application_stage_four_submission])
       @form.save
@@ -333,6 +345,11 @@ class BatchApplicationController < ApplicationController
       @form.save_partnership_deed
       render 'stage_4'
     end
+  end
+
+  # Closed stage.
+  def stage_7
+    @batch = current_application.batch
   end
 
   protected
@@ -344,7 +361,7 @@ class BatchApplicationController < ApplicationController
     end
   end
 
-  def application_stage
+  def current_application_stage
     @application_stage ||= begin
       if current_application.blank?
         ApplicationStage.find_by number: 1
@@ -356,7 +373,7 @@ class BatchApplicationController < ApplicationController
 
   # Returns stage number of current applicant.
   def application_stage_number
-    @application_stage_number ||= application_stage.number
+    @application_stage_number ||= current_application_stage.number
   end
 
   # Returns batch application of current applicant.
@@ -393,10 +410,6 @@ class BatchApplicationController < ApplicationController
     redirect_to apply_continue_path if params[:stage_number].to_i != expected_stage_number
   end
 
-  def sign_in_applicant_temporarily(applicant)
-    sign_in applicant.user
-  end
-
   def authenticate_batch_applicant!
     # User must be logged in
     user = authenticate_user!
@@ -407,7 +420,7 @@ class BatchApplicationController < ApplicationController
     end
   end
 
-  def load_index
+  def load_index_variables
     @batch_application ||= BatchApplication.new.decorate
     @prospective_applicant ||= ProspectiveApplicant.new.decorate
   end

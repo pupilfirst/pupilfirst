@@ -3,7 +3,7 @@ class BatchApplicationDecorator < Draper::Decorator
 
   def form
     @form ||= begin
-      form = BatchApplicationForm.new(BatchApplicant.new)
+      form = BatchApplications::RegistrationForm.new(BatchApplicant.new)
       form.prepopulate!(h.current_batch_applicant)
       form
     end

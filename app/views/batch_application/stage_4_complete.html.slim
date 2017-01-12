@@ -5,17 +5,39 @@
 .secondary-banner
   .container
     .stages-alert-icon.m-x-auto
-      = image_tag 'apply/batch_application/awaiting-documents.svg'
+      = image_tag 'apply/batch_application/code-video-accepted.svg'
     .application-stages-head.text-xs-center
-      h2 Awaiting your Documents!
-
-.container
+      h1 Coding and hustling submissions accepted!
+.container.stage-2-complete-container
   .m-t-3
     == render 'application_progress'
   .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
-    .content-box.application-stages-content.m-t-3.m-b-2.text-xs-center
-      .congrats-box.p-a-1.text-xs-center
-        h3.brand-secondary
-          ' <strong>Thank you for sending us the documents.&#128077;</strong>
-        h4.font-regular.brand-secondary
-          ' We'll review them and get back to you as soon as we receive them.
+    .content-box.m-t-3.m-b-3
+      h4.m-b-1.text-xs-center
+        span.brand-secondary.font-regular
+          | Your coding and hustling submissions has been received.
+        br
+        ' The SV.CO team will take a look at it soon as possible, and results for all entries will be published by
+        span.brand-primary.font-semibold
+          | &nbsp;#{next_stage_date}.
+
+      .row.code-video-links.text-xs-center
+        h3.m-b-1
+          | Your submission:
+        - current_application.stage_2_submission.application_submission_urls.each do |entry|
+          .col-md-4
+            .submission-links class=current_application.url_entry_class(entry.name)
+              = link_to entry.name, entry.url, target: '_blank'
+
+      - if current_application.restartable?
+        hr.m-y-2
+          h3.text-xs-center
+            ' Made mistakes in your submission? That's okay!
+            br
+            ' You can
+
+            span.brand-secondary.font-semibold
+              | re-submit anytime before the deadline.
+
+        .text-xs-center.m-t-1
+          = button_to 'Redo your submission', apply_stage_restart_path(stage_number: 2), class: 'btn btn-secondary btn-md text-uppercase', data: { confirm: 'This will delete your current submission. Continue?' }

@@ -7,72 +7,10 @@
 .secondary-banner
   .container
     .application-stages-head.text-xs-center
-      h1 Registration Fee
-      h4.m-x-auto Payment pending
+      h1 Screening
+      h4.m-x-auto Sub-heading message
 .container
   == render 'applications_close_soon' if current_application_round.closes_soon?
-  .m-t-3
-    == render 'application_progress'
 
-  .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
-    - if @continue_mail_sent
-        .alert.alert-success.m-t-2
-          button type="button" class="close" data-dismiss="alert" aria-label="Close"
-            span aria-hidden="true" &times;
-          .text-xs-center
-            ' &nbsp;We have sent you an email that will allow you to continue the application process, should you close this
-            | window.
-
-  .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
-    .content-box.m-t-3.m-b-3.apply-submitted
-      h3.text-xs-center.m-b-2
-        ' Your application data has been stored.
-        br
-        ' You now need to
-        span.brand-secondary.font-semibold pay the registration fee.
-
-      - if current_application.payment.present?
-        .alert.alert-warning.m-t-1
-          i.fa.fa-warning
-          ' &nbsp;It looks like you've attempted to pay at least once before, but didn't complete the process. Note that it
-          ' might take a few minutes for the payment status to update, if you experienced network issues after completing
-          ' the payment. Please contact us at #{mail_to 'help@sv.co'} if you're experiencing any issue.
-
-      .row
-        .col-md-12
-          #applicant-fee-data.hidden-xs-up
-          .simple-form-container
-            = simple_form_for @form,
-              url: apply_stage_submit_path(stage_number: 1),
-              method: :post,
-              html: { class: 'form-horizontal' },
-              wrapper: :horizontal_form do |f|
-
-              = f.input :team_size,
-                label: 'Team Size',
-                collection: %w(2 3 4 5 6),
-                as: :select,
-                include_blank: 'Please select your total team size'
-
-              .text-xs-center.m-t-2 class="#{f.object.team_size.blank? ? 'hidden-xs-up' : ''}"
-                .paywith-instamojo
-                  div
-                    h3.m-b-1
-                      ' You need to pay
-                      span.brand-secondary.font-semibold
-                        ' Rs. #{BatchApplication::APPLICATION_FEE},
-                      br
-                      | to proceed to the next stage.
-
-                    = f.submit current_application.payment_button_message, class: 'btn btn-primary btn-md text-uppercase'
-      .restart-application.m-t-2
-        h6.text-xs-center
-          ' Made mistakes in your application? That's okay!
-          br
-          ' You can
-
-          span.brand-secondary.font-semibold
-            | restart the application process.
-
-      .text-xs-center.m-t-1
-        = button_to 'Cancel and Restart Application', apply_restart_path, class: 'btn btn-secondary btn-md text-uppercase', data: { confirm: 'This will delete the saved application. Continue?' }
+  .text-xs-center.m-y-1
+    = button_to 'Move to next stage', apply_stage_submit_path(stage_number: 1), class: 'btn btn-primary btn-md text-uppercase'

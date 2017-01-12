@@ -2,190 +2,77 @@
   title SV.CO Apply Now
   meta name="description" content="SV.CO helps a team of students develop an idea, build a prototype and collect feedback from early customers."
 
+#batch-application__stage-1
+
+.secondary-banner
+  .container
+    .application-stages-head.text-xs-center
+      h1 Registration Fee
+      h4.m-x-auto Payment pending
 .container
-  .m-t-3.m-b-2
+  == render 'applications_close_soon' if current_application_round.closes_soon?
+  .m-t-3
     == render 'application_progress'
 
-  .row
-    .col-lg-8.col-md-12.m-t-2
-      - if current_application.cofounders.blank?
-        .card.content-box.notice-with-link.m-b-1
-          .notice
-            ' Before getting started with these tasks, please consider adding some details about your cofounders.
-          .link
-            = link_to 'Add cofounder details', apply_cofounders_path, class: 'btn btn-primary btn-md text-uppercase'
-      - else
-        .card.content-box.notice-with-link.m-b-1
-          .notice
-            ' Thanks for submitting details about your cofounders. You can edit these details at any time.
-          .link
-            = link_to 'Edit cofounder details', apply_cofounders_path, class: 'btn btn-secondary btn-md text-uppercase'
+  .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
+    - if @continue_mail_sent
+        .alert.alert-success.m-t-2
+          button type="button" class="close" data-dismiss="alert" aria-label="Close"
+            span aria-hidden="true" &times;
+          .text-xs-center
+            ' &nbsp;We have sent you an email that will allow you to continue the application process, should you close this
+            | window.
 
-      .code-video-task.content-box.m-t-2.m-b-1
-        h6.font-semibold.text-uppercase.m-b-1
-          | Coding &amp; Video task
-        .coding-task.m-b-3
-          h2 Coding Task
+  .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
+    .content-box.m-t-3.m-b-3.apply-submitted
+      h3.text-xs-center.m-b-2
+        ' Your application data has been stored.
+        br
+        ' You now need to
+        span.brand-secondary.font-semibold pay the registration fee.
 
-          .task-container.m-b-2.clearfix
-              - if current_application.batch == Batch.where(batch_number: 5).first
-                .col-md-5.content-box.task-box
-                  .task-icon
-                    = image_tag 'apply/batch_application/money-manager.svg'
-                  p
-                    | Build a money manager that help people to track their expenditure.
-                .col-md-2.or-text
-                  p.text-xs-center
-                    | OR
-                .col-md-5.content-box.task-box
-                  .task-icon
-                    = image_tag 'apply/batch_application/group-study.svg'
-                  p
-                    | Develop a product that helps students in studying and preparing for exams.
-              - else
-                .col-md-5.content-box.task-box
-                  .task-icon
-                    = image_tag 'apply/batch_application/game-task.svg'
-                  p
-                    | Build a casual game that people would love to play.
-                .col-md-2.or-text
-                  p.text-xs-center
-                    | OR
-                .col-md-5.content-box.task-box
-                  .task-icon
-                    = image_tag 'apply/batch_application/car-love-task.svg'
-                  p
-                    | Develop a product that helps people purchase a car they will love.
+      - if current_application.payment.present?
+        .alert.alert-warning.m-t-1
+          i.fa.fa-warning
+          ' &nbsp;It looks like you've attempted to pay at least once before, but didn't complete the process. Note that it
+          ' might take a few minutes for the payment status to update, if you experienced network issues after completing
+          ' the payment. Please contact us at #{mail_to 'help@sv.co'} if you're experiencing any issue.
 
-          h3 Instructions:
+      .row
+        .col-md-12
+          #applicant-fee-data.hidden-xs-up
+          .simple-form-container
+            = simple_form_for @form,
+              url: apply_stage_submit_path(stage_number: 1),
+              method: :post,
+              html: { class: 'form-horizontal' },
+              wrapper: :horizontal_form do |f|
 
-          ul
-            li
-              p
-                | You should aim to spend around 1-2 weeks on this task.
-            li
-              p
-                | You should work on this task as a team.
-            li
-              p
-                | You can develop this in any language.
-            li
-              p
-                | You can build an app or a website.
-            li
-              p
-                | <strong>IMPORTANT:</strong> Your submission should <strong>include a link to a working app install bundle (.APK/.IPA) or a link to a fully working website.</strong>
-            li
-              p
-                | You should also <strong>submit the full source code repository for the app or the website.</strong> This should include code commit history.
-            li
-              p
-                | The source code need not include necessary libraries and utilities, but should have an easy way to install all such dependencies.
-
-          h3 Scoring Criteria:
-
-          ul
-            li
-              p
-                | <strong>Purpose.</strong> How well does the product developed solve the problem statement.
-            li
-              p
-                | <strong>Design.</strong> How well does the product communicate its intent to the user. Includes visual design, usability and user experience.
-            li
-              p
-                | <strong>Code Quality.</strong> The quality of the codebase submitted. Includes tests developed, abstractions and data structures used, programming languages, libraries and tools selected, and technical debt analysis.
-
-        .video-task.p-t-2
-          h2.video-task-head
-            | Video Task
-          .task-container.m-b-2.clearfix
-            .content-box.task-box.video-task-box
-              .task-icon
-                  = image_tag 'apply/batch_application/video-task.svg', class: "img-fluid"
-              p Introduce your team to SV.CO in a video, and let us know why your team will do well in the program.
-
-          h3 Instructions:
-
-          ul
-            li
-              p
-                | You should record a video of your team members speaking.
-            li
-              p
-                | The video should be maximum 3 minutes long.
-            li
-              p
-                | Your video submission should be uploaded publicly on Facebook.
-            li
-              p
-                | Do make sure that the video and audio track is clear.
-
-          h3 Scoring Criteria:
-
-          ul
-            li
-              p
-                | <strong>Clarity.</strong> How confidently the founders communicate on screen.
-            li
-              p
-                | <strong>Participation.</strong> The number of co-founders who speak, and how frequently they speak.
-            li
-              p
-                | <strong>Creativity.</strong> We&rsquo;re looking for original ways that founders impress us here 😍
-            li
-              p
-                | <strong>Likes &amp; Shares.</strong> The number of likes and shares your video receives on Facebook.
-
-      .content-box.m-b-3
-        .application-close-alert.code-video-deadline.clearfix
-          .col-md-2.close-alert-icon
-            i.fa.fa-hourglass-half
-          .col-md-10
-            h4.m-b-0
-              | Coding &amp; Video Task Ends on <strong>#{current_application.pretty_stage_deadline}</strong>
-
-    .col-lg-4.col-md-12#code-video-submit
-      .m-t-2.m-b-3
-        = simple_form_for @form, url: apply_stage_submit_path(batch: params[:batch]) do |f|
-          - if f.object.errors.present?
-            .alert.alert-warning.alert-dismissable.fade.in role='alert'
-
-              strong There were problems with your submission.
-              | &nbsp;Please check all fields and try again.
-
-              - if f.object.errors[:base].present?
-                ul.m-t-1
-                  - f.object.errors[:base].each do |error_message|
-                    li #{error_message}
-
-          .code-video-submit-form.content-box
-            h5.form-section-title.text-uppercase.font-semibold
-              | Coding Submission
-            .simple-form-container
-              = f.input :git_repo_url,
-                label: 'Github or BitBucket repository:',
-                placeholder: 'https://github.com/user/repo'
-
-              = f.input :app_type,
-                label: "We've built a:",
+              = f.input :team_size,
+                label: 'Team Size',
+                collection: %w(2 3 4 5 6),
                 as: :select,
-                collection: ['Website', 'Mobile Application'],
-                include_blank: false
+                include_blank: 'Please select your total team size'
 
-              = f.input :website,
-                label: false,
-                placeholder: 'http://yourwebsite.com'
+              .text-xs-center.m-t-2 class="#{f.object.team_size.blank? ? 'hidden-xs-up' : ''}"
+                .paywith-instamojo
+                  div
+                    h3.m-b-1
+                      ' You need to pay
+                      span.brand-secondary.font-semibold
+                        ' Rs. #{BatchApplication::APPLICATION_FEE},
+                      br
+                      | to proceed to the next stage.
 
-              = f.input :executable,
-                label: false,
-                placeholder: 'https://www.dropbox.com/s/...'
+                    = f.submit current_application.payment_button_message, class: 'btn btn-primary btn-md text-uppercase'
+      .restart-application.m-t-2
+        h6.text-xs-center
+          ' Made mistakes in your application? That's okay!
+          br
+          ' You can
 
-              h5.form-section-title.text-uppercase.font-semibold
-                | Video Submission
+          span.brand-secondary.font-semibold
+            | restart the application process.
 
-              = f.input :video_url,
-                label: 'Link to video on Facebook:',
-                placeholder: 'https://facebook.com/user/videos/...'
-
-              div
-                = f.submit 'Submit your entries', class: 'btn btn-primary btn-md text-uppercase'
+      .text-xs-center.m-t-1
+        = button_to 'Cancel and Restart Application', apply_restart_path, class: 'btn btn-secondary btn-md text-uppercase', data: { confirm: 'This will delete the saved application. Continue?' }

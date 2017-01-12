@@ -1,4 +1,5 @@
-/ Stage five is the 'closed' stage. Application that have reached this state are part of the program. Congratulate them!
+/ Stage five is the interview stage. There's no input at this stage. Just need to inform the candidates of timing of
+  interview.
 
 - content_for :head do
   title SV.CO Apply Now
@@ -7,27 +8,22 @@
 .secondary-banner
   .container
     .stages-alert-icon.m-x-auto
-      = image_tag 'apply/batch_application/accepted-icon.svg'
+      = image_tag 'apply/batch_application/prepare-for-interview.svg'
     .application-stages-head.text-xs-center
       h1
-        ' Your Startup journey has begun!
+        ' Prepare for interviews!
 
 .container
-  .row
-    .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
-      .content-box.application-stages-content.m-t-3.m-b-3
-        .congrats-box.p-a-1.text-xs-center
-          h3.brand-secondary
-            ' <strong>Congratulations!&#128144;</strong>
-          h4.font-regular.brand-secondary
-            ' We have verified your agreements, and have processed your payment.
-        h4.font-regular.text-xs-center.m-t-2
-          ' You'll soon receive a payment receipt to your team lead's email.
-          br
-          ' We expect the batch to <strong>start on #{@batch.start_date.strftime('%B %-d, %Y')}.</strong>
-        p.text-xs-center
-          '	Please contact #{mail_to 'help@sv.co'} for any questions.
-        p.m-t-1.text-xs-center
-          | Regards,
-        h4.text-xs-center.font-regular.brand-primary
-          |	Team at SV.CO
+  .m-t-3
+    == render 'application_progress'
+  .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
+    .content-box.application-stages-content.m-t-3.m-b-3.text-xs-center
+      h4.m-b-1
+        ' You've made it to the interviews!
+
+      p.m-b-1
+        ' After evaluation, your team&rsquo;s coding and video submissions for Batch #{current_batch.batch_number}
+        span.brand-secondary.font-semibold scored #{@batch_application.overall_percentile.round(1)} percentile.
+
+      p.m-b-1
+        ' We will inform you about interview venues and dates soon.

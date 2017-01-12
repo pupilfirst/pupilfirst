@@ -19,6 +19,8 @@ class ApplicationRound < ApplicationRecord
     "Batch #{batch.batch_number} Round #{number}"
   end
 
+  alias name display_name
+
   # Stage is active when current time is between its bounds.
   def stage_active?(stage)
     if stage.final_stage?

@@ -6,6 +6,10 @@ ActiveAdmin.register ApplicationRound do
   permit_params :batch_id, :number, :campaign_start_at, :target_application_count,
     round_stages_attributes: [:id, :application_stage_id, :starts_at, :ends_at, :_destroy]
 
+  filter :batch
+  filter :number
+  filter :created_atg
+
   controller do
     def scoped_collection
       # https://github.com/activeadmin/activeadmin/issues/659#issuecomment-224429833

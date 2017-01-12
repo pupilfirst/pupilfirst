@@ -83,7 +83,7 @@ after 'development:application_stages', 'development:batches' do
     { stage: stage_1, start: 82.days.ago, end: 52.days.ago },
     { stage: stage_2, start: 82.days.ago, end: 52.days.ago },
     { stage: stage_3, start: 82.days.ago, end: 52.days.ago },
-    { stage: stage_4, start: 47.days.ago, end: 22.days.from_now },
+    { stage: stage_4, start: 47.days.ago, end: 22.days.ago },
     { stage: stage_5, start: 17.days.ago, end: 7.days.ago },
     { stage: stage_6, start: 2.days.ago, end: 18.days.from_now },
     { stage: stage_7, start: 18.days.from_now }

@@ -229,7 +229,13 @@ class BatchApplicationController < ApplicationController
 
   # Screening submission handler.
   def stage_1_submit
-    raise NotImplementedError
+    new_application_stage = current_application.promote!
+
+    if new_application_stage.number == 2
+      redirect_to apply_stage_path(stage_number: 2)
+    else
+      raise "Unable to promote BatchApplication##{current_application.id} to Stage 2. Please inspect."
+    end
   end
 
   # Payment stage.

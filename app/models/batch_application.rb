@@ -75,7 +75,7 @@ class BatchApplication < ApplicationRecord
       save!
     end
 
-    application_stage
+    reload.application_stage
   end
 
   # Application is promotable if its stage has started (except if it's in the final stage).

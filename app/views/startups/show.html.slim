@@ -3,7 +3,7 @@
   meta name="description" content="#{@startup.display_name}: #{@startup.product_description}"
 
   - if @timeline_event_for_og.present?
-    meta property="fb:app_id" content=ENV['FACEBOOK_DEV_APP_KEY']
+    meta property="fb:app_id" content=ENV['FACEBOOK_KEY']
     meta property="og:type" content="article"
     /meta property="og:rich_attachment" content="true"
     meta property="og:title" content=@timeline_event_for_og.title

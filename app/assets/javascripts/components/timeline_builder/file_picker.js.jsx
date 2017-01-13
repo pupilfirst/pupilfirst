@@ -17,13 +17,13 @@ class TimelineBuilderFilePicker extends React.Component {
   }
 
   formGroupClassNames() {
-    return ("form-group timeline-builder__form-group timeline-builder__file-choose-group" + (this.hasAnyError() ? ' has-danger' : ''));
+    return ("form-group timeline-builder__form-group" + (this.hasAnyError() ? ' has-danger' : ''));
   }
 
   render() {
     return (
       <div className={ this.formGroupClassNames() }>
-        <input type="file" className="form-control-file timeline-builder__file-choose js-attachment-file"
+        <input type="file" className="form-control-file timeline-builder__file-input js-hook"
                id="timeline-builder__file-input" onChange={ this.handleChange }/>
         <label className="timeline-builder__file-label" htmlFor="timeline-builder__file-input">
           <span className="timeline-builder__file-name">{ this.state.fileLabel }</span>

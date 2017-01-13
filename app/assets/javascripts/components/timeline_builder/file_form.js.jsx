@@ -42,7 +42,7 @@ const TimelineBuilderFileForm = React.createClass({
   },
 
   copyFileInputToHiddenForm: function () {
-    let originalInput = $('.js-attachment-file');
+    let originalInput = $('.js-hook.timeline-builder__file-input');
     let clonedInput = originalInput.clone();
     let hiddenForm = $('.timeline-builder-hidden-form');
 
@@ -72,9 +72,11 @@ const TimelineBuilderFileForm = React.createClass({
       titleError = true;
     }
 
-    if ($('.js-attachment-file')[0].files.length == 0) {
+    let fileInput = $('.js-hook.timeline-builder__file-input')[0];
+
+    if (fileInput.files.length == 0) {
       fileMissingError = true;
-    } else if ($('.js-attachment-file')[0].files[0].size > 5242880) {
+    } else if (fileInput.files[0].size > 5242880) {
       fileSizeError = true;
     }
 

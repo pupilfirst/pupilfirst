@@ -100,7 +100,7 @@ class BatchApplicationController < ApplicationController
     raise_not_found if current_application_round.final_stage?
     @form = BatchApplications::CofoundersForm.new(current_application)
 
-    if @form.validate(params[:cofounders])
+    if @form.validate(params[:batch_applications_cofounders])
       @form.save
 
       flash[:success] = 'Thank you for updating cofounder details.'

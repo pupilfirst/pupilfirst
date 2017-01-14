@@ -36,7 +36,9 @@ module BatchApplications
       cofounders.each do |cofounder|
         next if cofounder.model.persisted?
 
-        if cofounder.email.present? && model.batch.batch_applicants.with_email(cofounder.email).present?
+        batch = model.application_round.batch
+
+        if cofounder.email.present? && batch.batch_applicants.with_email(cofounder.email).present?
           errors[:base] << "An applicant with email #{cofounder.email} already exists in our database. If this is your friend who registered by accident, please ask them to login and revoke application. Mail help@sv.co or use the chat below for any help."
           cofounder.errors[:email] << 'is already associated with an application'
         end

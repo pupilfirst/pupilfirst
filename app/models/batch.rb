@@ -1,9 +1,9 @@
 class Batch < ApplicationRecord
   has_many :startups
   has_many :founders, through: :startups
-  has_many :batch_applications
-  has_many :batch_applicants, through: :batch_applications
   has_many :application_rounds, dependent: :destroy
+  has_many :batch_applications, through: :application_rounds
+  has_many :batch_applicants, through: :batch_applications
   has_many :program_weeks
   has_many :target_groups, through: :program_weeks
   has_many :targets, through: :program_weeks

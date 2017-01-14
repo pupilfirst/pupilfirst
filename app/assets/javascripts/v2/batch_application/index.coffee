@@ -32,11 +32,11 @@ readmoreFAQ = ->
     moreLink: '<a class="read-more-link" href="#">Read More</a>'
 
 emailsShouldMatch = ->
-  batchApplicationForm = $('#new_batch_application')
+  batchApplicationForm = $('#new_batch_applications_registration')
 
   if batchApplicationForm.length
-    emailInput = $('#batch_application_email')
-    emailConfirmationInput = $('#batch_application_email_confirmation')
+    emailInput = $('#batch_applications_registration_email')
+    emailConfirmationInput = $('#batch_applications_registration_email_confirmation')
 
     validateEmailMatch = ->
       email = emailInput.val()
@@ -57,7 +57,7 @@ emailsShouldMatch = ->
       validateEmailMatch() if emailConfirmationInput.val().length
 
 getCollegeInputSelector = ->
-  collegeInput = $('#batch_application_college_id')
+  collegeInput = $('#batch_applications_registration_college_id')
 
   if collegeInput.length == 0
     collegeInput = $('#prospective_applicant_college_id')
@@ -94,22 +94,22 @@ destroySelect2Inputs = ->
     collegeInput.val('')
 
 toggleReferenceTextField = ->
-  if $('#batch_application_reference').val() == 'Other (Please Specify)'
-    referenceTextInput = $('#batch_application_reference_text')
+  if $('#batch_applications_registration_reference').val() == 'Other (Please Specify)'
+    referenceTextInput = $('#batch_applications_registration_reference_text')
     referenceTextInput.parent().parent().removeClass('hidden-xs-up')
-    $('#batch_application_reference').parent().addClass('hidden-xs-up')
+    $('#batch_applications_registration_reference').parent().addClass('hidden-xs-up')
     referenceTextInput.focus()
 
 setupTogglingReferenceField = ->
-  if $('#batch_application_reference').length
+  if $('#batch_applications_registration_reference').length
     toggleReferenceTextField()
-    $('#batch_application_reference').change toggleReferenceTextField
+    $('#batch_applications_registration_reference').change toggleReferenceTextField
 
 toggleCollegeTextField = ->
   formName = null
 
-  if $('#batch_application_college_id').val() == 'other'
-    formName = 'batch_application'
+  if $('#batch_applications_registration_college_id').val() == 'other'
+    formName = 'batch_applications_registration'
   else if $('#prospective_applicant_college_id').val() == 'other'
     formName = 'prospective_applicant'
 
@@ -121,9 +121,9 @@ toggleCollegeTextField = ->
     collegeTextInput.focus()
 
 setupTogglingCollegeField = ->
-  if $('#batch_application_college_id').length
+  if $('#batch_applications_registration_college_id').length
     toggleCollegeTextField()
-    $('#batch_application_college_id').change toggleCollegeTextField
+    $('#batch_applications_registration_college_id').change toggleCollegeTextField
 
   if $('#prospective_applicant_college_id').length
     toggleCollegeTextField()

@@ -60,7 +60,7 @@ getCollegeInputSelector = ->
   collegeInput = $('#batch_applications_registration_college_id')
 
   if collegeInput.length == 0
-    collegeInput = $('#prospective_applicant_college_id')
+    collegeInput = $('#batch_applications_prospective_applicant_college_id')
 
   collegeInput
 
@@ -110,8 +110,8 @@ toggleCollegeTextField = ->
 
   if $('#batch_applications_registration_college_id').val() == 'other'
     formName = 'batch_applications_registration'
-  else if $('#prospective_applicant_college_id').val() == 'other'
-    formName = 'prospective_applicant'
+  else if $('#batch_applications_prospective_applicant_college_id').val() == 'other'
+    formName = 'batch_applications_prospective_applicant'
 
   if formName != null
     collegeTextInput = $("##{formName}_college_text")
@@ -125,9 +125,9 @@ setupTogglingCollegeField = ->
     toggleCollegeTextField()
     $('#batch_applications_registration_college_id').change toggleCollegeTextField
 
-  if $('#prospective_applicant_college_id').length
+  if $('#batch_applications_prospective_applicant_college_id').length
     toggleCollegeTextField()
-    $('#prospective_applicant_college_id').change toggleCollegeTextField
+    $('#batch_applications_prospective_applicant_college_id').change toggleCollegeTextField
 
 setupStickyStartApplicationForm = ->
   stickApplicationForm()

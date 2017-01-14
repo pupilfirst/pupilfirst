@@ -2,7 +2,7 @@ class ProspectiveApplicantDecorator < Draper::Decorator
   delegate_all
 
   def form
-    @form ||= ProspectiveApplicantForm.new(model)
+    @form ||= BatchApplications::ProspectiveApplicantForm.new(model)
   end
 
   def submitted?

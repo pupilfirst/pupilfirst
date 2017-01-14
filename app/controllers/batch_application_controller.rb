@@ -38,7 +38,7 @@ class BatchApplicationController < ApplicationController
   def notify
     form = @prospective_applicant.form
 
-    if form.validate(params[:prospective_applicant])
+    if form.validate(params[:batch_applications_prospective_applicant])
       prospective_applicant = form.save
       session[:prospective_applicant_email] = prospective_applicant.email
       redirect_to apply_path

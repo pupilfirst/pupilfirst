@@ -87,7 +87,7 @@ class BatchApplicationController < ApplicationController
 
   # GET /apply/cofounders
   def cofounders_form
-    if current_application_round.final_stage? || application_stage_number != 2
+    if current_application_round.final_stage? || !application_stage_number.in?([3, 4])
       return redirect_to(apply_continue_path)
     end
 

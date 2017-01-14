@@ -3,7 +3,7 @@ ActiveAdmin.register BatchApplication do
 
   menu parent: 'Admissions', label: 'Applications', priority: 1
 
-  permit_params :batch_id, :application_stage_id, :university_id, :team_achievement, :team_lead_id, :college, :state,
+  permit_params :application_round_id, :application_stage_id, :university_id, :team_achievement, :team_lead_id, :college, :state,
     :team_size, :agreements_verified, batch_applicants_attributes: [:id, :fee_payment_method], tag_list: []
 
   batch_action :promote, confirm: 'Are you sure?' do |ids|
@@ -36,7 +36,18 @@ ActiveAdmin.register BatchApplication do
     redirect_to collection_path
   end
 
-  filter :batch
+  filter :application_round_batch_id_eq, label: 'Batch', as: :select, collection: proc { Batch.all }
+
+  filter :application_round, as: :select, label: 'Application Round', collection: proc {
+    batch_id = params.dig(:q, :application_round_batch_id_eq)
+
+    if batch_id.present?
+      ApplicationRound.where(batch_id: batch_id)
+    else
+      [['Pick batch first', '']]
+    end
+  }
+
   filter :application_stage, collection: -> { ApplicationStage.order(:number) }
 
   filter :ransack_tagged_with,
@@ -62,14 +73,14 @@ ActiveAdmin.register BatchApplication do
 
   controller do
     def scoped_collection
-      super.includes :payment, :batch, :application_stage, team_lead: { college: [:state] }
+      super.includes :payment, { application_round: :batch }, :application_stage, team_lead: { college: [:state] }
     end
   end
 
   index do
     selectable_column
 
-    column :batch
+    column :application_round
 
     column :team_lead do |batch_application|
       team_lead = batch_application.team_lead
@@ -255,7 +266,7 @@ ActiveAdmin.register BatchApplication do
 
   show do
     attributes_table do
-      row :batch
+      row :application_round
       row :team_lead
 
       row :contact_number do
@@ -358,7 +369,7 @@ ActiveAdmin.register BatchApplication do
     f.semantic_errors(*f.object.errors.keys)
 
     f.inputs do
-      f.input :batch
+      f.input :application_round
       f.input :team_lead, collection: f.object.batch_applicants, include_blank: false
       f.input :team_size, as: :select, collection: 2..10, include_blank: false
       f.input :application_stage, collection: ApplicationStage.all.order(number: 'ASC')

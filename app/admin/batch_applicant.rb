@@ -24,7 +24,18 @@ ActiveAdmin.register BatchApplicant do
     label: 'Tags',
     collection: -> { BatchApplicant.tag_counts_on(:tags).pluck(:name).sort }
 
-  filter :batch_applications_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'With applications in batch'
+  filter :batch_applications_application_round_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'With applications in batch'
+
+  filter :batch_applications_application_round_id_eq, as: :select, label: 'With application in round', collection: proc {
+    batch_id = params.dig(:q, :batch_applications_application_round_batch_id_eq)
+
+    if batch_id.present?
+      ApplicationRound.where(batch_id: batch_id)
+    else
+      [['Pick batch first', '']]
+    end
+  }
+
   filter :batch_applications_application_stage_id_eq, as: :select, collection: proc { ApplicationStage.all }, label: 'With applications in stage'
   filter :fee_payment_method, as: :select, collection: -> { BatchApplicant::FEE_PAYMENT_METHODS }
   filter :phone
@@ -192,9 +203,9 @@ ActiveAdmin.register BatchApplicant do
       if batch_applicant.batch_applications.present?
         batch_applicant.batch_applications.map do |application|
           if application.team_lead == batch_applicant
-            "Team lead on batch #{application.batch.batch_number}"
+            "Team lead on #{application.application_round.display_name}"
           else
-            "Cofounder on batch #{application.batch.batch_number}"
+            "Cofounder on #{application.application_round.display_name}"
           end
         end.join(', ')
       end
@@ -220,7 +231,7 @@ ActiveAdmin.register BatchApplicant do
     f.semantic_errors(*f.object.errors.keys)
 
     f.inputs do
-      f.input :batch_applications, collection: BatchApplication.all.includes(:team_lead, :batch)
+      f.input :batch_applications, collection: BatchApplication.all.includes(:team_lead, :application_round)
       f.input :name
       f.input :email
 

@@ -77,7 +77,7 @@ class BatchApplicationController < ApplicationController
   # POST /apply/restart
   def restart_application
     # Only applications in stage 1 can restart.
-    raise_not_found if application_stage_number != 1
+    raise_not_found unless application_stage_number.in?([1, 2])
     current_application&.restart!
 
     flash[:success] = 'Your previous application has been discarded.'

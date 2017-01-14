@@ -1,6 +1,6 @@
 module BatchApplications
-  class CodingStageForm < Reform::Form
-    property :video_url, virtual: true, validates: { presence: true, url: true }
+  class VideoStageForm < Reform::Form
+    property :video_url, validates: { presence: true, url: true }
 
     validate :coapplicants_should_be_present
     validate :video_url_must_be_acceptable
@@ -16,10 +16,14 @@ module BatchApplications
       errors[:video_url] << 'is not a valid Facebook URL' unless video_url =~ %r{https?\://.*(facebook)}
     end
 
-    def save
+    def save(batch_application)
       ApplicationSubmission.transaction do
-        model.save!
-        model.application_submission_urls.create!(name: 'Video Submission', url: video_url)
+        submission = ApplicationSubmission.new(
+          application_stage: ApplicationStage.find_by(number: 4),
+          batch_application: batch_application
+        )
+
+        submission.application_submission_urls.create!(name: 'Video Submission', url: video_url)
       end
 
       IntercomLastApplicantEventUpdateJob.perform_later(model.batch_application.team_lead, 'video_task_submitted') unless Rails.env.test?

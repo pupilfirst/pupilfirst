@@ -1,9 +1,12 @@
 module BatchApplications
   class CodingStageForm < Reform::Form
-    property :git_repo_url, virtual: true, validates: { presence: true, url: true }
-    property :app_type, virtual: true
-    property :executable, virtual: true, validates: { url: true, allow_blank: true }
-    property :website, virtual: true, validates: { url: true, allow_blank: true }
+    SUBMISSION_TYPES = %w(coding_task previous_work).freeze
+
+    property :submission_type, validates: { inclusion: SUBMISSION_TYPES }
+    property :git_repo_url, validates: { presence: true, url: true }
+    property :app_type
+    property :executable, validates: { url: true, allow_blank: true }
+    property :website, validates: { url: true, allow_blank: true }
 
     # Ensure git_repo_url is from github or bitbucket
     validate :git_repo_url_must_be_acceptable
@@ -20,15 +23,22 @@ module BatchApplications
       errors[:website] << 'either this or executable should be supplied'
     end
 
-    def save
+    def save(batch_application)
       ApplicationSubmission.transaction do
-        model.save!
-        model.application_submission_urls.create!(name: 'Code Repository', url: git_repo_url)
-        model.application_submission_urls.create!(name: 'Live Website', url: prepend_http_if_required(website)) if website.present?
-        model.application_submission_urls.create!(name: 'Application Binary', url: executable) if executable.present?
+        notes = submission_type == 'coding_task' ? 'Coding Task Submission' : 'Previous Work Submission'
+
+        submission = ApplicationSubmission.create!(
+          application_stage: ApplicationStage.find_by(number: 3),
+          batch_application: batch_application,
+          notes: notes
+        )
+
+        submission.application_submission_urls.create!(name: 'Code Repository', url: git_repo_url)
+        submission.application_submission_urls.create!(name: 'Live Website', url: prepend_http_if_required(website)) if website.present?
+        submission.application_submission_urls.create!(name: 'Application Binary', url: executable) if executable.present?
       end
 
-      IntercomLastApplicantEventUpdateJob.perform_later(model.batch_application.team_lead, 'coding_task_submitted') unless Rails.env.test?
+      IntercomLastApplicantEventUpdateJob.perform_later(batch_application.team_lead, 'coding_task_submitted') unless Rails.env.test?
     end
 
     def prepend_http_if_required(url)

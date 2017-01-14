@@ -272,21 +272,15 @@ class BatchApplicationController < ApplicationController
 
   # Coding stage
   def stage_3
-    application_submission = ApplicationSubmission.new
-    @form = BatchApplications::CodingStageForm.new(application_submission)
+    @form = BatchApplications::CodingStageForm.new(OpenStruct.new)
   end
 
   # Coding stage submissions handler.
   def stage_3_submit
-    application_submission = ApplicationSubmission.new(
-      application_stage: ApplicationStage.find_by(number: 3),
-      batch_application: current_application
-    )
-
-    @form = BatchApplications::CodingStageForm.new(application_submission)
+    @form = BatchApplications::CodingStageForm.new(OpenStruct.new)
 
     if @form.validate(params[:batch_applications_coding_stage])
-      @form.save
+      @form.save(current_application)
       redirect_to apply_stage_complete_path(stage_number: '3')
     else
       render 'batch_application/stage_3'
@@ -302,21 +296,15 @@ class BatchApplicationController < ApplicationController
 
   # Video stage
   def stage_4
-    application_submission = ApplicationSubmission.new
-    @form = BatchApplications::CodingStageForm.new(application_submission)
+    @form = BatchApplications::VideoStageForm.new(OpenStruct.new)
   end
 
   # Video stage submissions handler.
   def stage_4_submit
-    application_submission = ApplicationSubmission.new(
-      application_stage: ApplicationStage.find_by(number: 4),
-      batch_application: current_application
-    )
-
-    @form = BatchApplications::CodingStageForm.new(application_submission)
+    @form = BatchApplications::VideoStageForm.new(OpenStruct.new)
 
     if @form.validate(params[:batch_applications_video_stage])
-      @form.save
+      @form.save(current_application)
       redirect_to apply_stage_complete_path(stage_number: '4')
     else
       render 'batch_application/stage_4'

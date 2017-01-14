@@ -108,6 +108,13 @@
             h5.form-section-title.text-uppercase.font-semibold
               | Coding Submission
             .simple-form-container
+              = f.input :submission_type,
+                as: :select,
+                label: 'Type of Submission:',
+                collection: BatchApplications::CodingStageForm::SUBMISSION_TYPES,
+                include_blank: 'Select type',
+                label_method: lambda { |value| value.gsub('_', ' ').titleize }
+
               = f.input :git_repo_url,
                 label: 'Github or BitBucket repository:',
                 placeholder: 'https://github.com/user/repo'

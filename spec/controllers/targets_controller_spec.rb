@@ -4,7 +4,7 @@ describe TargetsController do
   include Devise::Test::ControllerHelpers
 
   let!(:startup) { create :startup }
-  let!(:target) { create :target, :with_rubric, batch: startup.batch }
+  let!(:target) { create :target, :with_rubric, :with_program_week, batch: startup.batch }
 
   describe 'GET download_rubric' do
     context 'when user is not logged in' do

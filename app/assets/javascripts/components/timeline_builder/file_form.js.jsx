@@ -1,6 +1,8 @@
 const TimelineBuilderFileForm = React.createClass({
   propTypes: {
-    addAttachmentCB: React.PropTypes.func
+    addAttachmentCB: React.PropTypes.func,
+    showSelectedFileError: React.PropTypes.bool,
+    resetErrorsCB: React.PropTypes.func
   },
 
   getInitialState: function () {
@@ -14,15 +16,24 @@ const TimelineBuilderFileForm = React.createClass({
 
   fileSubmit: function (event) {
     event.preventDefault();
+
     if (this.validate()) {
       this.storeFile();
       setTimeout(this.clearForm, 500);
     }
   },
 
+  discardFileForm: function (event) {
+    event.preventDefault();
+    this.props.resetErrorsCB();
+    this.regenerateIdentifier();
+    this.clearForm();
+  },
+
   clearForm: function () {
     $('.js-file-title').val('');
     $('.js-file-visibility').val('public');
+
     this.setState({
       titleError: false,
       fileMissingError: false,
@@ -42,7 +53,7 @@ const TimelineBuilderFileForm = React.createClass({
   },
 
   copyFileInputToHiddenForm: function () {
-    let originalInput = $('.js-attachment-file');
+    let originalInput = $('.js-hook.timeline-builder__file-input');
     let clonedInput = originalInput.clone();
     let hiddenForm = $('.timeline-builder-hidden-form');
 
@@ -72,9 +83,11 @@ const TimelineBuilderFileForm = React.createClass({
       titleError = true;
     }
 
-    if ($('.js-attachment-file')[0].files.length == 0) {
+    let fileInput = $('.js-hook.timeline-builder__file-input')[0];
+
+    if (fileInput.files.length == 0) {
       fileMissingError = true;
-    } else if ($('.js-attachment-file')[0].files[0].size > 5242880) {
+    } else if (fileInput.files[0].size > 5242880) {
       fileSizeError = true;
     }
 
@@ -114,7 +127,8 @@ const TimelineBuilderFileForm = React.createClass({
           }
         </div>
         <TimelineBuilderFilePicker key={ this.state.identifier } fileMissingError={ this.state.fileMissingError }
-                                   fileSizeError={ this.state.fileSizeError } clearErrorsCB={ this.clearPickerErrors }/>
+                                   fileSizeError={ this.state.fileSizeError } clearErrorsCB={ this.clearPickerErrors }
+                                   showSelectedFileError={ this.props.showSelectedFileError }/>
         <div className="form-group timeline-builder__form-group timeline-builder__visibility-option-group">
           <label className="sr-only" htmlFor="timeline-builder__file-visibility-select">File Visibility</label>
           <select id="timeline-builder__file-visibility-select"
@@ -126,6 +140,11 @@ const TimelineBuilderFileForm = React.createClass({
         <button type="submit" onClick={ this.fileSubmit }
                 className="btn btn-secondary text-uppercase timeline-builder__attachment-button js-timeline-builder__add-file-button">
           Add File
+        </button>
+
+        <button onClick={ this.discardFileForm }
+                className="btn btn-danger text-uppercase timeline-builder__clear-file-form-button">
+          Discard
         </button>
       </form>
     )

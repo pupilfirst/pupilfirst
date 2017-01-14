@@ -19,7 +19,7 @@ class TimelineEvent < ApplicationRecord
 
   delegate :end_iteration?, :founder_event?, :title, to: :timeline_event_type
 
-  MAX_DESCRIPTION_CHARACTERS = 300
+  MAX_DESCRIPTION_CHARACTERS = 500
 
   VERIFIED_STATUS_PENDING = 'Pending'
   VERIFIED_STATUS_NEEDS_IMPROVEMENT = 'Needs Improvement'

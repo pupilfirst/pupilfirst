@@ -6,9 +6,9 @@ class TimelineBuilderTextAreaCounter extends React.Component {
   counterClasses() {
     let classes = 'timeline-builder-social-bar__textarea-counter';
 
-    if (this.textCount() == 300) {
+    if (this.textCount() == 500) {
       classes += " timeline-builder-social-bar__textarea-counter--danger";
-    } else if (this.textCount() > 200) {
+    } else if (this.textCount() > 400) {
       classes += " timeline-builder-social-bar__textarea-counter--warning";
     }
 
@@ -28,7 +28,7 @@ class TimelineBuilderTextAreaCounter extends React.Component {
     if (this.textCount() == 0) {
       return '';
     } else {
-      let text = this.textCount() + "/300";
+      let text = this.textCount() + "/500";
       return text;
     }
   }

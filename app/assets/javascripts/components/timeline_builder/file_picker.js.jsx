@@ -5,6 +5,27 @@ class TimelineBuilderFilePicker extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
+  componentDidUpdate() {
+    if (this.props.showSelectedFileError) {
+      let fileLabel = $('.timeline-builder__file-label');
+      fileLabel.popover({
+        trigger: 'manual',
+        placement: 'bottom',
+        title: 'Forgetting something?',
+        content: 'Do you want to upload this file? If so, please click the <em>Add File</em> button.',
+        html: true
+      });
+
+      fileLabel.popover('show');
+    } else {
+      $('.timeline-builder__file-label').popover('hide');
+    }
+  }
+
+  componentWillUnmount() {
+    $('.timeline-builder__file-label').popover('dispose');
+  }
+
   handleChange(event) {
     let fileName = $(event.target).val().split('\\').pop();
     let newLabelText = fileName ? fileName : '';
@@ -17,19 +38,26 @@ class TimelineBuilderFilePicker extends React.Component {
   }
 
   formGroupClassNames() {
-    return ("form-group timeline-builder__form-group timeline-builder__file-choose-group" + (this.hasAnyError() ? ' has-danger' : ''));
+    return ("form-group timeline-builder__form-group" + (this.hasAnyError() ? ' has-danger' : ''));
+  }
+
+  labelText() {
+    if (this.state.fileLabel.length > 0) {
+      return this.state.fileLabel;
+    } else {
+      return 'CHOOSE FILE';
+    }
   }
 
   render() {
     return (
       <div className={ this.formGroupClassNames() }>
-        <input type="file" className="form-control-file timeline-builder__file-choose js-attachment-file"
+        <input type="file" className="form-control-file timeline-builder__file-input js-hook"
                id="timeline-builder__file-input" onChange={ this.handleChange }/>
         <label className="timeline-builder__file-label" htmlFor="timeline-builder__file-input">
-          <span className="timeline-builder__file-name">{ this.state.fileLabel }</span>
           <div className="timeline-builder__choose-file-btn">
             <i className="timeline-builder__choose-file-btn-icon fa fa-upload"/>
-            CHOOSE FILE
+            <span className="timeline-builder__choose-file-button-text">{ this.labelText() }</span>
           </div>
         </label>
         { this.props.fileMissingError &&
@@ -46,5 +74,6 @@ class TimelineBuilderFilePicker extends React.Component {
 TimelineBuilderFilePicker.propTypes = {
   clearErrorsCB: React.PropTypes.func,
   fileMissingError: React.PropTypes.bool,
-  fileSizeError: React.PropTypes.bool
+  fileSizeError: React.PropTypes.bool,
+  showSelectedFileError: React.PropTypes.bool
 };

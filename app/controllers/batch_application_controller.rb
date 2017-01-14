@@ -1,7 +1,7 @@
 class BatchApplicationController < ApplicationController
   before_action :ensure_accurate_stage_number, only: %w(ongoing submit complete restart expired rejected)
   before_action :load_common_instance_variables
-  before_action :authenticate_batch_applicant!, except: %w(index create notify)
+  before_action :authenticate_batch_applicant!, except: %w(index register notify)
   before_action :load_index_variables, only: %w(index register notify)
 
   layout 'application_v2'
@@ -17,7 +17,7 @@ class BatchApplicationController < ApplicationController
   def register
     form = @batch_application.form
 
-    if form.validate(params[:batch_application])
+    if form.validate(params[:batch_applications_registration])
       begin
         applicant = form.save
       rescue Postmark::InvalidMessageError
@@ -27,7 +27,7 @@ class BatchApplicationController < ApplicationController
         # Sign in user immediately to allow him to proceed to screening.
         sign_in applicant.user
 
-        redirect_to apply_stage_path(stage_number: application_stage_number, continue_mail_sent: 'yes')
+        redirect_to apply_stage_path(stage_number: application_stage_number)
       end
     else
       render 'index'

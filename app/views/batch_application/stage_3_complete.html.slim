@@ -19,12 +19,12 @@
         br
         ' The SV.CO team will take a look at it soon as possible, and results for all entries will be published by
         span.brand-primary.font-semibold
-          | &nbsp;#{next_stage_date}.
+          | &nbsp;#{current_application.next_stage_date}.
 
       .row.code-video-links.text-xs-center
         h3.m-b-1
           | Your submission:
-        - current_application.stage_2_submission.application_submission_urls.each do |entry|
+        - current_application.stage_3_submission.application_submission_urls.each do |entry|
           .col-md-4
             .submission-links class=current_application.url_entry_class(entry.name)
               = link_to entry.name, entry.url, target: '_blank'
@@ -40,4 +40,4 @@
               | re-submit anytime before the deadline.
 
         .text-xs-center.m-t-1
-          = button_to 'Redo your submission', apply_stage_restart_path(stage_number: 2), class: 'btn btn-secondary btn-md text-uppercase', data: { confirm: 'This will delete your current submission. Continue?' }
+          = button_to 'Redo your submission', apply_stage_restart_path(stage_number: 3), class: 'btn btn-secondary btn-md text-uppercase', data: { confirm: 'This will delete your current submission. Continue?' }

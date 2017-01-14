@@ -141,8 +141,7 @@ class BatchApplicationController < ApplicationController
 
   # POST /apply/stage/:stage_number/restart
   def restart
-    return redirect_to(apply_continue_path) if current_application&.status != :submitted || stage_expired?
-    raise_not_found if stage_expired?
+    return redirect_to(apply_continue_path) if current_application&.status != :submitted || current_application.stage_expired?
 
     restart_method = "stage_#{application_stage_number}_restart"
 
@@ -286,19 +285,19 @@ class BatchApplicationController < ApplicationController
 
     @form = BatchApplications::CodingStageForm.new(application_submission)
 
-    if @form.validate(params[:application_stage_two])
+    if @form.validate(params[:batch_applications_coding_stage])
       @form.save
       redirect_to apply_stage_complete_path(stage_number: '3')
     else
-      render 'batch_application/stage_2'
+      render 'batch_application/stage_3'
     end
   end
 
   # Coding stage restart handler.
   def stage_3_restart
-    stage_2_submission = current_application.application_submissions.where(application_stage_id: current_application_stage.id).first
-    stage_2_submission.destroy!
-    redirect_to apply_stage_path(stage_number: 2)
+    stage_3_submission = current_application.application_submissions.where(application_stage_id: current_application_stage.id).first
+    stage_3_submission.destroy!
+    redirect_to apply_stage_path(stage_number: 3)
   end
 
   # Video stage
@@ -310,25 +309,25 @@ class BatchApplicationController < ApplicationController
   # Video stage submissions handler.
   def stage_4_submit
     application_submission = ApplicationSubmission.new(
-      application_stage: ApplicationStage.find_by(number: 2),
+      application_stage: ApplicationStage.find_by(number: 4),
       batch_application: current_application
     )
 
     @form = BatchApplications::CodingStageForm.new(application_submission)
 
-    if @form.validate(params[:application_stage_two])
+    if @form.validate(params[:batch_applications_video_stage])
       @form.save
-      redirect_to apply_stage_complete_path(stage_number: '2')
+      redirect_to apply_stage_complete_path(stage_number: '4')
     else
-      render 'batch_application/stage_2'
+      render 'batch_application/stage_4'
     end
   end
 
   # Video stage restart handler.
   def stage_4_restart
-    stage_2_submission = current_application.application_submissions.where(application_stage_id: current_application_stage.id).first
-    stage_2_submission.destroy!
-    redirect_to apply_stage_path(stage_number: 2)
+    stage_4_submission = current_application.application_submissions.where(application_stage_id: current_application_stage.id).first
+    stage_4_submission.destroy!
+    redirect_to apply_stage_path(stage_number: 4)
   end
 
   # Pre-selection stage.
@@ -391,15 +390,6 @@ class BatchApplicationController < ApplicationController
         current_batch_applicant.batch_applications.order('created_at DESC').first&.decorate
       end
     end
-  end
-
-  # Batch's stage should have expired, and current stage should be same as application stage.
-  def stage_expired?
-    @stage_expired ||= current_application_round.stage_expired?(application_stage)
-  end
-
-  def stage_active?
-    @stage_active ||= current_application_round.stage_active?(application_stage)
   end
 
   private

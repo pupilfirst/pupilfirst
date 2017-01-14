@@ -232,10 +232,18 @@ class BatchApplication < ApplicationRecord
     submitted? && !stage_expired?
   end
 
-  def stage_2_submission
-    @stage_2_submission ||= begin
-      stage_2 = ApplicationStage.find_by(number: 2)
-      application_submissions.find_by(application_stage: stage_2)
+  def stage_expired?
+    application_round.stage_expired?(application_stage)
+  end
+
+  def stage_active?
+    application_round.stage_active?(application_stage)
+  end
+
+  def stage_3_submission
+    @stage_3_submission ||= begin
+      stage_3 = ApplicationStage.find_by(number: 3)
+      application_submissions.find_by(application_stage: stage_3)
     end
   end
 

@@ -6,15 +6,8 @@ FactoryGirl.define do
     target_type { Target.valid_target_types.sample }
     days_to_complete { 1 + rand(60) }
 
-    batch do
-      if target_group.present?
-        target_group.program_week.batch
-      else
-        create :batch
-      end
-    end
-
     transient do
+      batch nil
       week_number nil
       group_index nil
     end

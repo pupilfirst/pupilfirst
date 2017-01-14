@@ -35,7 +35,7 @@ ActiveAdmin.register Founder do
   permit_params :name, :email, :remote_avatar_url, :avatar, :startup_id, :slug, :about, :slack_username, :born_on,
     :startup_admin, :communication_address, :identification_proof, :phone, :invitation_token, :college_id, :roll_number,
     :course, :semester, :year_of_graduation, :twitter_url, :linkedin_url, :personal_website_url, :blog_url,
-    :facebook_url, :angel_co_url, :github_url, :behance_url, :gender, :skype_id, :exited, roles: [], tag_list: []
+    :angel_co_url, :github_url, :behance_url, :gender, :skype_id, :exited, roles: [], tag_list: []
 
   batch_action :tag, form: proc { { tag: Founder.tag_counts_on(:tags).pluck(:name) } } do |ids, inputs|
     Founder.where(id: ids).each do |founder|
@@ -123,7 +123,6 @@ ActiveAdmin.register Founder do
     column :twitter_url
     column :personal_website_url
     column :blog_url
-    column :facebook_url
     column :angel_co_url
     column :github_url
     column :behance_url
@@ -215,8 +214,18 @@ ActiveAdmin.register Founder do
 
     panel 'Social links' do
       attributes_table_for founder do
+        row 'Facebook Connected' do |founder|
+          span class: "status_tag #{founder.fb_access_token.present? ? 'yes' : 'no'}" do
+            founder.fb_access_token.present?
+          end
+          if founder.fb_access_token.present?
+            span style: "display:inline-block" do
+              button_to 'Disconnect', disconnect_from_facebook_admin_founder_path(founder), method: :patch
+            end
+          end
+        end
+        row :fb_token_expires_at
         row :twitter_url
-        row :facebook_url
         row :linkedin_url
         row :personal_website_url
         row :blog_url
@@ -242,6 +251,12 @@ ActiveAdmin.register Founder do
 
   action_item :view_targets, only: :show do
     link_to 'View Targets', admin_targets_path(q: { assignee_type_eq: 'Founder', assignee_id_eq: founder.id })
+  end
+
+  member_action :disconnect_from_facebook, method: :patch do
+    founder = Founder.friendly.find(params[:id])
+    Founders::FacebookService.new(founder).disconnect!
+    redirect_to admin_founder_path(founder), alert: 'Founder profile disconnected from Facebook!'
   end
 
   form partial: 'admin/founders/form'

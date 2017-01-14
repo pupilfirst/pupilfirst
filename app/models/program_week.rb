@@ -1,5 +1,6 @@
 class ProgramWeek < ApplicationRecord
   has_many :target_groups
+  has_many :targets, through: :target_groups
   belongs_to :batch
 
   validates :name, presence: true

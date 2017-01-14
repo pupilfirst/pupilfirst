@@ -4,9 +4,9 @@ class Batch < ApplicationRecord
   has_many :batch_applications
   has_many :batch_applicants, through: :batch_applications
   has_many :batch_stages, dependent: :destroy
-  has_many :targets
   has_many :program_weeks
   has_many :target_groups, through: :program_weeks
+  has_many :targets, through: :program_weeks
 
   accepts_nested_attributes_for :batch_stages, allow_destroy: true
 

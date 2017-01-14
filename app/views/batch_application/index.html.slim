@@ -8,17 +8,18 @@
     ' &nbsp;Applications for our January 2017 batch is now closed.
   .row.application-process
     .col-lg-8.col-md-12
-      .card.content-box.notice-with-link.m-t-2.m-b-0
-        - if current_application.present? && current_application.team_lead == current_batch_applicant
+      - if current_application.present? && current_application.team_lead == current_batch_applicant
+        .card.content-box.notice-with-link.m-t-2.m-b-0
           .notice.strong-notice
             ' You have already completed registration.
           .link
             = link_to 'Continue application', apply_continue_path, class: 'btn btn-primary btn-md text-uppercase'
-        - else
+      - elsif current_user.blank?
+        .card.content-box.notice-with-link.m-t-2.m-b-0
           .notice.strong-notice
             ' Did you complete registration once before?
           .link
-            = link_to 'Sign In to Continue', apply_identify_path, class: 'btn btn-primary btn-md text-uppercase'
+            = link_to 'Sign In to Continue', new_user_session_path(referer: apply_continue_path), class: 'btn btn-primary btn-md text-uppercase'
 
       - if @presenter.old_applications.any?
         #application-certificate-background data-background=@presenter.old_applications.first.certificate_background_image_base64

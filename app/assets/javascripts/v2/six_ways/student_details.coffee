@@ -1,4 +1,13 @@
-setupSelect2Inputs = ->
+matchOutsideIndia = (term, text) ->
+  return true if text.toUpperCase().indexOf(term.toUpperCase()) == 0 || text.toUpperCase().indexOf('INDIA') >= 0
+  false
+
+setupStateSelect2 = ->
+  $.fn.select2.amd.require ['select2/compat/matcher'], (oldMatcher) ->
+    $('#mooc_student_signup_state').select2
+      matcher: oldMatcher(matchOutsideIndia)
+
+setupUniversitySelect2 = ->
   universityInput = $('#mooc_student_signup_university_id')
 
   if universityInput.length
@@ -21,8 +30,7 @@ setupSelect2Inputs = ->
         ,
         cache: true
 
-    $('#mooc_student_signup_state').select2
-      matcher: (term, text, opt) ->
-        text.toUpperCase().indexOf(term.toUpperCase()) >= 0 || opt.html().toUpperCase().indexOf('INDIA') >= 0
-
-$(document).on 'page:change', setupSelect2Inputs
+$(document).on 'turbolinks:load', ->
+  if $('#six-ways__student-details').length
+    setupUniversitySelect2()
+    setupStateSelect2()

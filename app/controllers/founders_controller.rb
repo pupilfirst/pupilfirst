@@ -37,26 +37,9 @@ class FoundersController < ApplicationController
     # eager-load everything required for the dashboard. Order and decorate them too!
     @program_weeks = @batch.program_weeks.includes(:batch, target_groups: { targets: :assigner }).order(:number, 'target_groups.sort_index', 'targets.sort_index').decorate
     @tour = take_on_tour?
+    @show_facebook_toggle = params[:fb_test].present?
 
     render layout: 'application_v2'
-  end
-
-  def facebook_connect
-    @oauth = Founders::FacebookService.new(current_founder)
-    redirect_to @oauth.oauth_url
-  end
-
-  def facebook_connect_callback
-    @oauth = Founders::FacebookService.new(current_founder)
-    @oauth.update_access_token!(params[:code])
-    flash[:success] = 'Facebook Connection Successful!'
-    redirect_to edit_founder_path
-  end
-
-  def facebook_disconnect
-    Founders::FacebookService.new(current_founder).disconnect!
-    flash[:success] = 'Facebook disconnected successfully!'
-    redirect_to edit_founder_path
   end
 
   private
@@ -80,7 +63,7 @@ class FoundersController < ApplicationController
     params.require(:founder).permit(
       :name, :avatar, :slack_username, :skype_id, :identification_proof, :phone,
       :college_identification, :course, :semester, :year_of_graduation, :about, :twitter_url, :linkedin_url,
-      :personal_website_url, :blog_url, :facebook_url, :angel_co_url, :github_url, :behance_url, :college_id,
+      :personal_website_url, :blog_url, :angel_co_url, :github_url, :behance_url, :college_id,
       :roll_number, :born_on, :communication_address, roles: []
     )
   end

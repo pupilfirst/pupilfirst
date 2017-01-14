@@ -93,7 +93,7 @@ module Startups
     end
 
     def startup_points_hash
-      @startup_points_hast ||= startups_sorted_by_points.to_h.extend(DescriptiveStatistics)
+      @startup_points_hash ||= startups_sorted_by_points.to_h.extend(DescriptiveStatistics)
     end
 
     def mean_karma
@@ -113,7 +113,7 @@ module Startups
       return 10 if karma < (m - (2 * s_d))
       return 30 if karma.in?((m - (2 * s_d))..(m - s_d))
       return 50 if karma.in?((m - s_d)..(m + s_d))
-      return 10 if karma.in?((m + s_d)..(m + (2 * s_d)))
+      return 70 if karma.in?((m + s_d)..(m + (2 * s_d)))
       return 90 if karma > (m + (2 * s_d))
       50 # fall-back to average
     end

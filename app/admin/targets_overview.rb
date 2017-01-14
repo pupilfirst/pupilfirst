@@ -21,4 +21,17 @@ ActiveAdmin.register_page 'Targets Overview' do
   content do
     render 'targets_overview'
   end
+
+  # Route to respond to AJAX request for target stats.
+  page_action :target_stats do
+    target = Target.find(params[:target_id])
+    render json: target.stats_service.counts
+  end
+
+  page_action :target_stat_details do
+    target = Target.find(params[:target_id])
+    assignees = target.stats_service.public_send("#{params[:type]}_assignees")
+
+    render json: assignees
+  end
 end

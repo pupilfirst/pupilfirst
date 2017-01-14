@@ -25,29 +25,30 @@
             .btn-group.filter-targets-dropdown
               button.btn.btn-with-icon.btn-ghost-primary.btn-md.text-xs-left.filter-targets-dropdown__button.dropdown-toggle aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" type="button"
                 span.filter-targets-dropdown__icon
-                  i.fa.fa-sliders
+                  i.fa.fa-filter
                 span.hidden-xs-down.p-r-1
                   | All targets
                 span.pull-xs-right.filter-targets-dropdown__arrow.hidden-xs-down
 
               .dropdown-menu.filter-targets-dropdown__menu
-                a.dropdown-item.filter-targets-dropdown__menu-item href="" role="button"
-                  span.filter-targets-dropdown__menu-item-icon
-                    i.fa.fa-clock-o
-                  | Expiring soon targets
-                a.dropdown-item.filter-targets-dropdown__menu-item href="" role="button"
-                  span.filter-targets-dropdown__menu-item-icon
-                    i.fa.fa-hourglass-end
-                  | Expired targets
-                a.dropdown-item.filter-targets-dropdown__menu-item href="" role="button"
-                  span.filter-targets-dropdown__menu-item-icon
-                    i.fa.fa-thumbs-o-down
-                  | Not accepted targets
-
-                a.dropdown-item.filter-targets-dropdown__menu-item href="" role="button"
-                  span.filter-targets-dropdown__menu-item-icon
-                    i.fa.fa-line-chart
-                  | Needs improvement
+                - Founders::TargetsFilterService.filters_for_dashboard.each do |filter|
+                  a.dropdown-item.filter-targets-dropdown__menu-item href=dashboard_founder_path(filter: filter) role="button"
+                    span.filter-targets-dropdown__menu-item-icon
+                      i.fa class=TargetDecorator.fa_icon_for_filter(filter)
+                    | #{filter}
+                /a.dropdown-item.filter-targets-dropdown__menu-item href="" role="button"
+                /  span.filter-targets-dropdown__menu-item-icon
+                /    i.fa.fa-hourglass-end
+                /  | Expired targets
+                /a.dropdown-item.filter-targets-dropdown__menu-item href="" role="button"
+                /  span.filter-targets-dropdown__menu-item-icon
+                /    i.fa.fa-thumbs-o-down
+                /  | Not accepted targets
+                /
+                /a.dropdown-item.filter-targets-dropdown__menu-item href="" role="button"
+                /  span.filter-targets-dropdown__menu-item-icon
+                /    i.fa.fa-line-chart
+                /  | Needs improvement
 
           .pull-sm-right.pull-xs-left
             button#performance-button.btn.btn-with-icon.btn-md.btn-ghost-primary.performance-overview-link.text-uppercase data-toggle="modal"
@@ -65,30 +66,29 @@
           p
             | Here, I focus on a range of items and features that we use in life.
 
-        - @program_weeks.first.target_groups.first.targets.each do |target|
-          == render 'target', target: target
+      - if @filtered_targets.present?
+        == render 'selected_targets'
+      - else
+        - @program_weeks.reverse.each do |program_week|
+          - next unless program_week.target_groups.present?
+          .program-week
+            .program-week-header
+              span.program-week-number
+                | Week #{program_week.number}
+              span.program-week-icon
+                = image_tag "founders/dashboard/program-week-icons/#{program_week.icon_name}"
+              span.program-week-title
+                | #{program_week.name}
+            - program_week.target_groups.each do |target_group|
+              .target-group
+                .target-group-header.text-xs-center
+                  h4.brand-primary.font-regular
+                    | #{target_group.name}
+                  .target-group-header-details
+                    ' #{target_group.description}
 
-      - @program_weeks.reverse.each do |program_week|
-        - next unless program_week.target_groups.present?
-        .program-week
-          .program-week-header
-            span.program-week-number
-              | Week #{program_week.number}
-            span.program-week-icon
-              = image_tag "founders/dashboard/program-week-icons/#{program_week.icon_name}"
-            span.program-week-title
-              | #{program_week.name}
-
-          - program_week.target_groups.each do |target_group|
-            .target-group
-              .target-group-header.text-xs-center
-                h4.brand-primary.font-regular
-                  | #{target_group.name}
-                .target-group-header-details
-                  ' #{target_group.description}
-
-              - target_group.targets.each do |target|
-                == render 'target', target: target
+                - target_group.targets.each do |target|
+                  == render 'target', target: target
 
 == render 'view-slides'
 == render 'timeline_builder'

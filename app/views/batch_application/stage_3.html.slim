@@ -28,34 +28,19 @@
           h2 Coding Task
 
           .task-container.m-b-2.clearfix
-              - if current_application.batch == Batch.where(batch_number: 5).first
-                .col-md-5.content-box.task-box
-                  .task-icon
-                    = image_tag 'apply/batch_application/money-manager.svg'
-                  p
-                    | Build a money manager that help people to track their expenditure.
-                .col-md-2.or-text
-                  p.text-xs-center
-                    | OR
-                .col-md-5.content-box.task-box
-                  .task-icon
-                    = image_tag 'apply/batch_application/group-study.svg'
-                  p
-                    | Develop a product that helps students in studying and preparing for exams.
-              - else
-                .col-md-5.content-box.task-box
-                  .task-icon
-                    = image_tag 'apply/batch_application/game-task.svg'
-                  p
-                    | Build a casual game that people would love to play.
-                .col-md-2.or-text
-                  p.text-xs-center
-                    | OR
-                .col-md-5.content-box.task-box
-                  .task-icon
-                    = image_tag 'apply/batch_application/car-love-task.svg'
-                  p
-                    | Develop a product that helps people purchase a car they will love.
+            .col-md-5.content-box.task-box
+              .task-icon
+                = image_tag 'apply/batch_application/game-task.svg'
+              p
+                | Build a casual game that people would love to play.
+            .col-md-2.or-text
+              p.text-xs-center
+                | OR
+            .col-md-5.content-box.task-box
+              .task-icon
+                = image_tag 'apply/batch_application/car-love-task.svg'
+              p
+                | Develop a product that helps people purchase a car they will love.
 
           h3 Instructions:
 
@@ -95,54 +80,13 @@
               p
                 | <strong>Code Quality.</strong> The quality of the codebase submitted. Includes tests developed, abstractions and data structures used, programming languages, libraries and tools selected, and technical debt analysis.
 
-        .video-task.p-t-2
-          h2.video-task-head
-            | Video Task
-          .task-container.m-b-2.clearfix
-            .content-box.task-box.video-task-box
-              .task-icon
-                  = image_tag 'apply/batch_application/video-task.svg', class: "img-fluid"
-              p Introduce your team to SV.CO in a video, and let us know why your team will do well in the program.
-
-          h3 Instructions:
-
-          ul
-            li
-              p
-                | You should record a video of your team members speaking.
-            li
-              p
-                | The video should be maximum 3 minutes long.
-            li
-              p
-                | Your video submission should be uploaded publicly on Facebook.
-            li
-              p
-                | Do make sure that the video and audio track is clear.
-
-          h3 Scoring Criteria:
-
-          ul
-            li
-              p
-                | <strong>Clarity.</strong> How confidently the founders communicate on screen.
-            li
-              p
-                | <strong>Participation.</strong> The number of co-founders who speak, and how frequently they speak.
-            li
-              p
-                | <strong>Creativity.</strong> We&rsquo;re looking for original ways that founders impress us here 😍
-            li
-              p
-                | <strong>Likes &amp; Shares.</strong> The number of likes and shares your video receives on Facebook.
-
       .content-box.m-b-3
         .application-close-alert.code-video-deadline.clearfix
           .col-md-2.close-alert-icon
             i.fa.fa-hourglass-half
           .col-md-10
             h4.m-b-0
-              | Coding &amp; Video Task Ends on <strong>#{current_application.pretty_stage_deadline}</strong>
+              | Coding Stage ends on <strong>#{current_application.pretty_stage_deadline}</strong>
 
     .col-lg-4.col-md-12#code-video-submit
       .m-t-2.m-b-3
@@ -180,12 +124,5 @@
                 label: false,
                 placeholder: 'https://www.dropbox.com/s/...'
 
-              h5.form-section-title.text-uppercase.font-semibold
-                | Video Submission
-
-              = f.input :video_url,
-                label: 'Link to video on Facebook:',
-                placeholder: 'https://facebook.com/user/videos/...'
-
               div
-                = f.submit 'Submit your entries', class: 'btn btn-primary btn-md text-uppercase'
+                = f.submit 'Submit your entry', class: 'btn btn-primary btn-md text-uppercase'

@@ -153,7 +153,8 @@ GEM
       tzinfo (~> 1.1)
     acts-as-taggable-on (4.0.0)
       activerecord (>= 4.0)
-    addressable (2.4.0)
+    addressable (2.5.0)
+      public_suffix (~> 2.0, >= 2.0.2)
     ahoy_matey (1.5.2)
       addressable
       browser (~> 2.0)
@@ -384,7 +385,7 @@ GEM
       activesupport (>= 4.1, < 5.1)
     has_secure_token (1.0.0)
       activerecord (>= 3.0)
-    hashdiff (0.3.0)
+    hashdiff (0.3.2)
     hashie (3.4.4)
     heapy (0.1.2)
     http-cookie (1.0.3)
@@ -398,8 +399,8 @@ GEM
     inflecto (0.0.2)
     iniparse (1.4.2)
     insensitive_hash (0.3.3)
-    intercom (3.5.9)
-      json (~> 1.8)
+    intercom (3.5.10)
+      json (>= 1.8)
     intercom-rails (0.3.4)
       activesupport (> 3.0)
     ipaddress (0.8.3)
@@ -412,7 +413,7 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (5.0.5)
       railties (>= 3.2.16)
-    json (1.8.3)
+    json (2.0.3)
     jspdf-rails (1.0.3)
       jquery-rails
       rails (>= 3.1.0)
@@ -523,6 +524,7 @@ GEM
       slop (~> 3.4)
     pry-rails (0.3.4)
       pry (>= 0.9.10)
+    public_suffix (2.0.5)
     puma (3.6.0)
     rack (2.0.1)
     rack-attack (5.0.1)
@@ -757,7 +759,7 @@ GEM
       activemodel (>= 5.0)
       debug_inspector
       railties (>= 5.0)
-    webmock (2.1.0)
+    webmock (2.3.2)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
@@ -900,7 +902,7 @@ DEPENDENCIES
   will_paginate-bootstrap4
 
 RUBY VERSION
-   ruby 2.3.3p222
+   ruby 2.4.0p0
 
 BUNDLED WITH
-   1.13.6
+   1.13.7

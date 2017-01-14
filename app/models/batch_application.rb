@@ -110,9 +110,9 @@ class BatchApplication < ApplicationRecord
     payment.paid?
   end
 
-  # Called after payment is known to have succeeded. This automatically promotes stage 1 applications to stage 2.
+  # Called after payment is known to have succeeded. This automatically promotes stage 2 applications to stage 3.
   def perform_post_payment_tasks!
-    promote!(force: true) if application_stage.initial_stage?
+    promote!(force: true) if application_stage.number == 2
   end
 
   # Destroys all trace of an application so that applicant can start again.

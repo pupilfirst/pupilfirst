@@ -6,7 +6,18 @@ ActiveAdmin.register ApplicationSubmission do
   permit_params :application_stage_id, :batch_application_id, :score, :notes, :file, :feedback_for_team,
     application_submission_urls_attributes: [:id, :name, :url, :score, :admin_user_id, :_destroy]
 
-  filter :batch_application_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'Batch'
+  filter :batch_application_application_round_batch_id_eq, as: :select, collection: proc { Batch.all }, label: 'With submissions in batch'
+
+  filter :batch_application_application_round_id_eq, as: :select, label: 'With submissions in round', collection: proc {
+    batch_id = params.dig(:q, :batch_application_application_round_batch_id_eq)
+
+    if batch_id.present?
+      ApplicationRound.where(batch_id: batch_id)
+    else
+      [['Pick batch first', '']]
+    end
+  }
+
   filter :batch_application_college_state_id_eq, as: :select, collection: proc { State.all }, label: 'State'
   filter :application_stage
   filter :batch_application_team_lead_name, as: :string, label: 'Team Lead Name'
@@ -16,7 +27,7 @@ ActiveAdmin.register ApplicationSubmission do
 
   controller do
     def scoped_collection
-      super.includes :application_stage, application_submission_urls: [:admin_user], batch_application: [{ team_lead: [{ college: [:state] }] }, :batch, :application_stage]
+      super.includes :application_stage, application_submission_urls: [:admin_user], batch_application: [{ team_lead: [{ college: [:state] }] }, :application_stage]
     end
   end
 
@@ -175,7 +186,7 @@ ActiveAdmin.register ApplicationSubmission do
 
     f.inputs do
       f.input :application_stage
-      f.input :batch_application, collection: BatchApplication.payment_complete.includes(:batch, :team_lead) unless f.object.persisted?
+      f.input :batch_application, collection: BatchApplication.payment_complete.includes(:application_round, :team_lead) unless f.object.persisted?
       f.input :file
       f.input :score
       f.input :notes, placeholder: 'Use markdown to format.'

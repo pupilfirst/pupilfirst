@@ -214,6 +214,17 @@ ActiveAdmin.register Founder do
 
     panel 'Social links' do
       attributes_table_for founder do
+        row 'Facebook Connected' do |founder|
+          span class: "status_tag #{founder.fb_access_token.present? ? 'yes' : 'no'}" do
+            founder.fb_access_token.present?
+          end
+          if founder.fb_access_token.present?
+            span style: "display:inline-block" do
+              button_to 'Disconnect', disconnect_from_facebook_admin_founder_path(founder), method: :patch
+            end
+          end
+        end
+        row :fb_token_expires_at
         row :twitter_url
         row :linkedin_url
         row :personal_website_url
@@ -240,6 +251,12 @@ ActiveAdmin.register Founder do
 
   action_item :view_targets, only: :show do
     link_to 'View Targets', admin_targets_path(q: { assignee_type_eq: 'Founder', assignee_id_eq: founder.id })
+  end
+
+  member_action :disconnect_from_facebook, method: :patch do
+    founder = Founder.friendly.find(params[:id])
+    Founders::FacebookService.new(founder).disconnect!
+    redirect_to admin_founder_path(founder), alert: 'Founder profile disconnected from Facebook!'
   end
 
   form partial: 'admin/founders/form'

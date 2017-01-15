@@ -37,7 +37,7 @@
     = f.input :assigner, collection: Faculty.active.order(:name), include_blank: false
 
     = f.input :target_group,
-      collection: (@target.batch.present? ? @target.batch.target_groups : TargetGroup.all).sorted_by_week,
+      collection: (@target.batch.present? ? @target.batch.target_groups : TargetGroup.all).sorted_by_week.includes(:program_week),
       include_blank: false
 
     = f.input :sort_index

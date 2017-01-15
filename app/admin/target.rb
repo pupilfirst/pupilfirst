@@ -21,52 +21,20 @@ ActiveAdmin.register Target do
   filter :role, as: :select, collection: Target.valid_roles
 
   controller do
-    # def create
-    #   startup = Startup.find_by id: params[:target][:startup_id]
-    #
-    #   @target = Target.new permitted_params[:target]
-    #   @target.assignee = startup if startup.present?
-    #
-    #   unless @target.valid?
-    #     render :new
-    #     return
-    #   end
-    #
-    #   if params.dig(:target, :role) == 'founder'
-    #     # Then we're creating one of more founder targets.
-    #     targets = create_multiple_founder_targets!
-    #     flash[:success] = "Created #{targets.count} targets"
-    #     redirect_to admin_targets_url
-    #   else
-    #     # Then we're just creating a single startup target.
-    #     @target.save!
-    #     AllTargetNotificationsJob.perform_later @target, 'new_target'
-    #     flash[:success] = 'New target has been created.'
-    #     redirect_to admin_target_url(@target)
-    #   end
-    # end
-    #
-    # def create_multiple_founder_targets!
-    #   founder_ids = params[:target][:founder_id].reject(&:blank?)
-    #   startup = Startup.find_by(id: params[:target][:startup_id])
-    #
-    #   # Founders can either be all (of a startup), or selected list.
-    #   founders = founder_ids.include?('all') ? startup.founders : Founder.where(id: founder_ids)
-    #
-    #   founders.map do |founder|
-    #     target = Target.new permitted_params[:target]
-    #     target.assignee = founder
-    #     target.save!
-    #
-    #     AllTargetNotificationsJob.perform_later target, 'new_target'
-    #   end
-    # end
+    def scoped_collection
+      super.includes target_group: { program_week: :batch }
+    end
   end
 
   index do
     selectable_column
 
-    column :batch
+    column :batch do |target|
+      if target.target_group.present?
+        "##{target.target_group.program_week.batch.batch_number}"
+      end
+    end
+
     column :program_week do |target|
       program_week = target.target_group&.program_week
       if program_week.present?

@@ -9,8 +9,28 @@ ActiveAdmin.register Target do
   preserve_default_filters!
 
   filter :target_group_program_week_batch_id_eq, label: 'Batch', as: :select, collection: proc { Batch.all }
-  filter :target_group_program_week_id_eq, label: 'Program Week', as: :select, collection: proc { ProgramWeek.all }
-  filter :target_group
+
+  filter :target_group_program_week_id_eq, as: :select, label: 'Program Week', collection: proc {
+    batch_id = params.dig(:q, :target_group_program_week_batch_id_eq)
+
+    if batch_id.present?
+      batch = Batch.find(batch_id)
+      batch.program_weeks.order(:number)
+    else
+      [['Select Batch first', '']]
+    end
+  }
+
+  filter :target_group, collection: proc {
+    batch_id = params.dig(:q, :target_group_program_week_batch_id_eq)
+
+    if batch_id.present?
+      batch = Batch.find(batch_id)
+      batch.target_groups.sorted_by_week
+    else
+      [['Select Batch first', '']]
+    end
+  }
 
   filter :assignee_type
 

@@ -38,7 +38,7 @@ module Founders
     private
 
     def batch_targets
-      Target.joins(:target_groups)
+      Target.joins(:target_group)
     end
 
     def submitted_founder_targets

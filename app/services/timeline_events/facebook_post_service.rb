@@ -5,7 +5,10 @@ module TimelineEvents
     end
 
     def post
-      @timeline_event.founder_event? ? post_to_founder(@timeline_event.founder) : post_to_all_founders(@timeline_event.startup)
+      return false if @timeline_event.founder_event?
+
+      post_to_all_founders(@timeline_event.startup)
+      true
     end
 
     private
@@ -15,11 +18,9 @@ module TimelineEvents
         log "Attempting to post #{@timeline_event.facebook_friendly_url} to #{founder.name}'s Facebook wall."
         result = facebook_client(founder).put_connections(:me, :feed, link: @timeline_event.facebook_friendly_url)
         log "Posted on #{founder.name}'s Facebook wall. Post id: #{result['id']}" if result['id'].present?
-        true
       else
         Founders::FacebookService.new(founder).disconnect!
         # TODO: Probably send a vocalist ping informing missing facebook connection
-        false
       end
     end
 

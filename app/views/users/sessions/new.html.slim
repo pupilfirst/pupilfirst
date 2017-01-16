@@ -32,6 +32,12 @@
                 h3.text-xs-center.m-b-2 Sign in with your SV.CO ID
 
                 = form_for @form, url: user_send_login_email_path do |f|
+                  - if f.object.errors.present? && f.object.errors[:base].present?
+                    .alert.alert-warning.alert-dismissable.fade.in role='alert'
+                      ul.m-b-0
+                        - f.object.errors[:base].each do |error_message|
+                          li #{error_message}
+
                   = f.hidden_field :referer
 
                   .wrapped-input

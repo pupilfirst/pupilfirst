@@ -1,3 +1,21 @@
+### 16 January, 2017
+
+#### Features
+
+  - Founders can now connect their Facebook account to auto-post timeline events to their wall upon verification.
+  - Login process for applicants has been upgraded to latest method - OAuth-based login + single-use email.
+
+#### UX and UI
+
+  - Registration process for SixWays MOOC now supplies a searchable list of colleges (instead of asking for University and College).
+  - Timeline event description length limit has been increased to 500 characters.
+  - When submitting a timeline event, the form now points out if a file has been selected, but not added to list of attachments, even if the file form is closed.
+
+#### Bugfixes
+
+  - Fixed a bug in the rendering of cards on startups page.
+  - Fixed a bug preventing Vocalist from replying to leaderboard requests from Slack channels.
+
 ### 9 January, 2017
 
 #### Features

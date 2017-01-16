@@ -4,11 +4,11 @@ module Founders
       @founder = founder
     end
 
-    EXPIRES_IN_A_WEEK = 'expires_soon'.freeze
-    EXPIRED = 'expired'.freeze
-    NOT_ACCEPTED = 'not_accepted'.freeze
-    NEEDS_IMPROVEMENT = 'needs_improvement'.freeze
-    ALL_TARGETS = 'all_targets'.freeze
+    EXPIRES_IN_A_WEEK = -'expires_soon'
+    EXPIRED = -'expired'
+    NOT_ACCEPTED = -'not_accepted'
+    NEEDS_IMPROVEMENT = -'needs_improvement'
+    ALL_TARGETS = -'all_targets'
 
     def self.filters_for_dashboard
       [EXPIRES_IN_A_WEEK, EXPIRED, NOT_ACCEPTED, NEEDS_IMPROVEMENT, ALL_TARGETS].freeze

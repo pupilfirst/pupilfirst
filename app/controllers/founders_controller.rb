@@ -34,10 +34,15 @@ class FoundersController < ApplicationController
 
     @startup = current_founder.startup.decorate
     @batch = @startup.batch.decorate
-    # eager-load everything required for the dashboard. Order and decorate them too!
-    @program_weeks = @batch.program_weeks.includes(:batch, target_groups: { targets: :assigner }).order(:number, 'target_groups.sort_index', 'targets.sort_index').decorate
     @tour = take_on_tour?
     @show_facebook_toggle = params[:fb_test].present?
+
+    if filtered_targets_required?
+      @filtered_targets = Founders::TargetsFilterService.new(current_founder).filter(params[:filter])
+    else
+      # eager-load everything required for the dashboard. Order and decorate them too!
+      @program_weeks = @batch.program_weeks.includes(:batch, target_groups: { targets: :assigner }).order(:number, 'target_groups.sort_index', 'targets.sort_index').decorate
+    end
 
     render layout: 'application_v2'
   end
@@ -70,5 +75,12 @@ class FoundersController < ApplicationController
 
   def take_on_tour?
     current_founder.present? && current_founder.startup == @startup.model && (current_founder.tour_dashboard? || params[:tour].present?)
+  end
+
+  def filtered_targets_required?
+    return false unless params[:filter].present?
+    return false if params[:filter] == Founders::TargetsFilterService::ALL_TARGETS
+    return true if Founders::TargetsFilterService.filters_for_dashboard.include?(params[:filter])
+    false
   end
 end

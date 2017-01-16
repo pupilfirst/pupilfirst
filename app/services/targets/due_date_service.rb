@@ -10,20 +10,19 @@ module Targets
     end
 
     def expiring?(target)
-      return true if due_date(target) < 8.days.from_now
+      true if due_date(target).between?(Date.today, 8.days.from_now)
     end
-
-    # private
 
     def prepare
-      targets = Target.includes(target_group: :program_week).where(program_weeks: { batch_id: @batch.id })
+      # Eagerly load all required data for calculating due dates
+      targets = Target.includes(target_group: { program_week: :batch }).where(program_weeks: { batch_id: @batch.id })
+
       @due_dates_hash = targets.each_with_object({}) do |target, hash|
-        week_number = target.program_week.number
-        program_week_start_date = @batch.start_date + ((week_number - 1) * 7).days
-        due_date = program_week_start_date + target.days_to_complete.days
-        hash[target.id] = due_date
+        hash[target.id] = target.due_date
       end
     end
+
+    private
 
     def due_date(target)
       @due_dates_hash[target.id]

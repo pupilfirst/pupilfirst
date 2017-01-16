@@ -27,28 +27,18 @@
                 span.filter-targets-dropdown__icon
                   i.fa.fa-filter
                 span.hidden-xs-down.p-r-1
-                  | All targets
+                 - if params[:filter].present?
+                   | #{ t("dashboard.show.target_filters.#{params[:filter]}.filter_text") }
+                 - else
+                   | All Targets
                 span.pull-xs-right.filter-targets-dropdown__arrow.hidden-xs-down
 
               .dropdown-menu.filter-targets-dropdown__menu
-                - Founders::TargetsFilterService.filters_for_dashboard.each do |filter|
+                - Founders::TargetsFilterService.filters_except(params[:filter]).each do |filter|
                   a.dropdown-item.filter-targets-dropdown__menu-item href=dashboard_founder_path(filter: filter) role="button"
                     span.filter-targets-dropdown__menu-item-icon
                       i.fa class=TargetDecorator.fa_icon_for_filter(filter)
-                    | #{filter}
-                /a.dropdown-item.filter-targets-dropdown__menu-item href="" role="button"
-                /  span.filter-targets-dropdown__menu-item-icon
-                /    i.fa.fa-hourglass-end
-                /  | Expired targets
-                /a.dropdown-item.filter-targets-dropdown__menu-item href="" role="button"
-                /  span.filter-targets-dropdown__menu-item-icon
-                /    i.fa.fa-thumbs-o-down
-                /  | Not accepted targets
-                /
-                /a.dropdown-item.filter-targets-dropdown__menu-item href="" role="button"
-                /  span.filter-targets-dropdown__menu-item-icon
-                /    i.fa.fa-line-chart
-                /  | Needs improvement
+                    | #{ t("dashboard.show.target_filters.#{filter}.filter_text") }
 
           .pull-sm-right.pull-xs-left
             button#performance-button.btn.btn-with-icon.btn-md.btn-ghost-primary.performance-overview-link.text-uppercase data-toggle="modal"
@@ -60,13 +50,7 @@
               span
                 | Add Event
     .targets-board.m-x-auto.target-accordion
-      .target-group.m-y-3
-        .target-group-header.text-xs-center
-          h3.font-regular Expiring soon targets
-          p
-            | Here, I focus on a range of items and features that we use in life.
-
-      - if @filtered_targets.present?
+      - if params[:filter].present? && params[:filter] != 'all_targets'
         == render 'selected_targets'
       - else
         - @program_weeks.reverse.each do |program_week|

@@ -1,5 +1,5 @@
 module TimelineEvents
-  class FacebookPostService
+  class FacebookPostService < BaseService
     def initialize(timeline_event)
       @timeline_event = timeline_event
     end
@@ -12,7 +12,10 @@ module TimelineEvents
 
     def post_to_founder(founder)
       if founder.facebook_token_valid?
-        facebook_client(founder).put_connections(:me, :feed, link: @timeline_event.facebook_friendly_url)
+        log "Attempting to post #{@timeline_event.facebook_friendly_url} to #{founder.name}'s Facebook wall."
+        result = facebook_client(founder).put_connections(:me, :feed, link: @timeline_event.facebook_friendly_url)
+        log "Posted on #{founder.name}'s Facebook wall. Post id: #{result['id']}" if result['id'].present?
+        true
       else
         Founders::FacebookService.new(founder).disconnect!
         # TODO: Probably send a vocalist ping informing missing facebook connection

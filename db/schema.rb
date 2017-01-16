@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170112120835) do
+ActiveRecord::Schema.define(version: 20170116102931) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -737,7 +737,6 @@ ActiveRecord::Schema.define(version: 20170112120835) do
     t.string   "encrypted_password",       default: "", null: false
     t.string   "remember_token"
     t.boolean  "sign_out_at_next_request"
-    t.boolean  "email_bounced"
     t.datetime "email_bounced_at"
     t.string   "email_bounce_type"
   end

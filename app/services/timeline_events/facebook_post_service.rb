@@ -11,7 +11,7 @@ module TimelineEvents
     private
 
     def post_to_founder(founder)
-      if founder.facebook_connected?
+      if founder.facebook_token_valid?
         facebook_client(founder).put_connections(:me, :feed, link: @timeline_event.facebook_friendly_url)
       else
         Founders::FacebookService.new(founder).disconnect!

@@ -13,8 +13,9 @@ module Founders
       [token_info['access_token'], token_info['expires'].to_i.seconds.from_now]
     end
 
-    def save_token_info!(token, expires)
-      @founder.update!(fb_access_token: token, fb_token_expires_at: expires)
+    def save_facebook_info!(token, expires)
+      facebook_url = api(token).get_object(:me, fields: [:link])['link']
+      @founder.update!(fb_access_token: token, fb_token_expires_at: expires, facebook_url: facebook_url)
     end
 
     def basic_info

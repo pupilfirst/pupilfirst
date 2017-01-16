@@ -35,7 +35,6 @@ class FoundersController < ApplicationController
     @startup = current_founder.startup.decorate
     @batch = @startup.batch.decorate
     @tour = take_on_tour?
-    @show_facebook_toggle = params[:fb_test].present?
 
     if filtered_targets_required?
       @filtered_targets = Founders::TargetsFilterService.new(current_founder).filter(params[:filter])

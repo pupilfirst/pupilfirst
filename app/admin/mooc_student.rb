@@ -34,7 +34,18 @@ ActiveAdmin.register MoocStudent do
     column :name_or_email do |student|
       student.name.present? ? student.name : student.email
     end
-    column :college
+
+    column :college do |mooc_student|
+      if mooc_student.college.present?
+        link_to mooc_student.college.name, admin_college_path(mooc_student.college)
+      elsif mooc_student.college_text.present?
+        span "#{mooc_student.college_text} "
+        span admin_create_college_link(mooc_student.college_text)
+      else
+        content_tag :em, 'Unknown'
+      end
+    end
+
     column :state
 
     actions

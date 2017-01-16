@@ -12,7 +12,7 @@ class UserSignInForm < Reform::Form
   end
 
   def email_should_not_have_bounced
-    return unless user&.email_bounced?
+    return unless user&.email_bounced_at.present?
     errors[:base] << 'We cannot send a sign-in email to this address because a previous attempt failed. Please contact help@sv.co for more information.'
     errors[:email] << 'is an address which bounced'
   end

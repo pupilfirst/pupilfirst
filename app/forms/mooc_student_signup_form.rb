@@ -27,7 +27,7 @@ class MoocStudentSignupForm < Reform::Form
 
     user = User.with_email(email).first
     return if user.blank?
-    errors[:email] << 'previous mails to this address were bouncing! Supply a different one.' if user.email_bounced
+    errors[:email] << 'previous mails to this address were bouncing! Supply a different one.' if user.email_bounced_at.present?
   end
 
   def prepopulate!(options)

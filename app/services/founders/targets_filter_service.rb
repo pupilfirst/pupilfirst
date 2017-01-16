@@ -29,6 +29,8 @@ module Founders
             expiring_targets
           when NOT_ACCEPTED
             not_accepted_targets
+          else
+            raise "Unexpected filter value '#{filter}'"
         end
       targets.map(&:decorate)
     end

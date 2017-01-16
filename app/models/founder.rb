@@ -282,7 +282,7 @@ class Founder < ApplicationRecord
 
   # Returns true if any of the social URL are stored. Used on profile page.
   def social_url_present?
-    [twitter_url, facebook_url, linkedin_url, personal_website_url, blog_url, angel_co_url, github_url, behance_url].any?(&:present?)
+    [twitter_url, linkedin_url, personal_website_url, blog_url, angel_co_url, github_url, behance_url].any?(&:present?)
   end
 
   # Returns the percentage of profile completion as an integer
@@ -357,7 +357,7 @@ class Founder < ApplicationRecord
   end
 
   def facebook_connected?
-    fb_access_token.present? && fb_token_expires_at > Time.now
+    fb_access_token.present? && fb_token_expires_at > Time.now && fb_access_token_valid?
   end
 
   private
@@ -415,5 +415,9 @@ class Founder < ApplicationRecord
   def increment_activity_count(timeline, month, week)
     timeline[month][:counts][week] ||= 0
     timeline[month][:counts][week] += 1
+  end
+
+  def fb_access_token_valid?
+    Founders::FacebookService.new(self).token_valid?(fb_access_token)
   end
 end

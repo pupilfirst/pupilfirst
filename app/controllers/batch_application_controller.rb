@@ -1,7 +1,7 @@
 class BatchApplicationController < ApplicationController
-  before_action :ensure_team_lead_signed_in, except: %w(index register identify send_sign_in_email continue sign_in_email_sent notify)
   before_action :ensure_accurate_stage_number, only: %w(ongoing submit complete restart expired rejected)
   before_action :load_common_instance_variables
+  before_action :authenticate_batch_applicant!, except: %w(index register notify)
 
   layout 'application_v2'
 
@@ -56,48 +56,11 @@ class BatchApplicationController < ApplicationController
     end
   end
 
-  # GET /apply/identify
-  def identify
-    @form = BatchApplicantSignInForm.new(BatchApplicant.new)
-  end
-
-  # POST /apply/send_sign_in_email
-  def send_sign_in_email
-    @skip_container = true
-
-    @form = BatchApplicantSignInForm.new(BatchApplicant.new)
-
-    if @form.validate(params[:batch_applicant_sign_in])
-      begin
-        @form.save
-      rescue Postmark::InvalidMessageError
-        @form.errors[:base] << 'Our email delivery service refused to accept the supplied address. It is likely that a previous email hard-bounced, or was reported as spam. Please contact us using live chat or at help@sv.co for more information.'
-        render 'batch_application/identify'
-        return
-      end
-
-      # Delete existing session / cookie login if a manual login is requested. This allows applicant to change signed-in ID.
-      session.delete :applicant_token
-      cookies.delete :applicant_token
-
-      redirect_to apply_sign_in_email_sent_path(batch_number: params[:batch_number])
-    else
-      render 'batch_application/identify'
-    end
-  end
-
-  # GET /apply/sign_in_email_sent
-  def sign_in_email_sent
-    @skip_container = true
-  end
-
   # GET /apply/continue
   #
   # This is the link supplied in emails. Routes applicant to correct location.
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize
   def continue
-    check_token
-
     from = params[:from].present? ? { from: params[:from] } : {}
 
     case application_status
@@ -426,10 +389,7 @@ class BatchApplicationController < ApplicationController
 
   # Returns currently 'signed in' application founder.
   def current_batch_applicant
-    @current_batch_applicant ||= begin
-      token = session[:applicant_token] || cookies[:applicant_token]
-      BatchApplicant.find_by token: token
-    end
+    @current_batch_applicant ||= current_user&.batch_applicant
   end
 
   # Returns one of :pending, :ongoing, :expired, :rejected, :submitted, :complete, or :promoted to indicate which view
@@ -455,34 +415,6 @@ class BatchApplicationController < ApplicationController
     @hide_nav_links = true
   end
 
-  # Check whether a token parameter has been supplied. Sign in application founder if there's a corresponding entry.
-  def check_token
-    return if params[:token].blank?
-    applicant = BatchApplicant.find_by token: params[:token]
-
-    if applicant.blank?
-      flash[:error] = 'That token is invalid.'
-      return
-    end
-
-    # Sign in the current application founder.
-    @current_batch_applicant = applicant
-
-    if params[:shared_device] == 'true'
-      # If applicant has indicated that zhe is on a shared device, create session variable instead of cookie.
-      session[:applicant_token] = applicant.token
-    else
-      # Store a cookie that'll keep applicant signed in for 3 months.
-      cookies[:applicant_token] = { value: applicant.token, expires: 3.months.from_now }
-    end
-  end
-
-  # Only let in team leads of existing applications.
-  def ensure_team_lead_signed_in
-    return if current_application.present? && current_application.team_lead == current_batch_applicant
-    redirect_to apply_identify_path(batch: params[:batch_number])
-  end
-
   # Make sure that the stage number supplied in the URL matches application's state.
   def ensure_accurate_stage_number
     # If the application has been promoted, but batch is still at the earlier stage, the displayed stage number will be
@@ -492,6 +424,16 @@ class BatchApplicationController < ApplicationController
   end
 
   def sign_in_applicant_temporarily(applicant)
-    session[:applicant_token] = applicant.token
+    sign_in applicant.user
+  end
+
+  def authenticate_batch_applicant!
+    # User must be logged in
+    user = authenticate_user!
+
+    unless user.batch_applicant.present?
+      flash[:notice] = 'You are not an applicant. Please go through the registration process.'
+      redirect_to apply_url
+    end
   end
 end

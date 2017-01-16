@@ -5,21 +5,27 @@
 h2 Editing #{@founder.fullname}'s profile...
 = render 'form_basic_details', founder: @founder
 
-- if feature_active? :facebook_connect
-  .margin-top-20
-  h4 Connected Accounts
-  hr
-  - if @founder.facebook_connected?
-    i.fa.fa-facebook-square.fa-2x
-    span
-      | &nbsp;
-      = link_to @founder.fb_basic_info[:link] do
-        = image_tag @founder.fb_basic_info[:picture_url], size: 35
-        ' #{@founder.fb_basic_info[:name]}
-      = link_to '(Disconnect)', facebook_disconnect_founder_path, method: :post
-  - else
-    = button_to facebook_connect_founder_path, class: 'btn btn-primary btn-flat' do
-      i.fa.fa-facebook-official
-      span
-        | &nbsp;Connect
-  .margin-bottom-20
+.margin-top-20
+h4 Connected Accounts
+hr
+- if @founder.facebook_connected?
+  .connected-account__container.margin-bottom-20
+    span.connected-account_icon
+      i.fa.fa-facebook-square.fa-2x
+    .connected-account-profile
+      .connected-account-profile__link
+        = link_to @founder.fb_basic_info[:link] do
+          = image_tag @founder.fb_basic_info[:picture_url], size: 35, class: 'img-circle connected-account-profile__avatar'
+          ' #{@founder.fb_basic_info[:name]}
+      = link_to 'Disconnect', founder_facebook_disconnect_path, method: :post, class: 'btn btn-primary connected-account-profile__disconnect-btn'
+- else
+  .row.margin-bottom-20
+    .connected-account__label.col-xs-3.text-right
+      | Facebook
+    .col-xs-9
+      = button_to founder_facebook_connect_path, class: 'btn btn-primary' do
+        span.connected-account__facebook-icon
+          i.fa.fa-facebook-square.fa-2x
+        span.connected-account__facebook-label
+          | &nbsp;Connect
+      .margin-top-10 Once connected, you can choose to post your personal and team events onto your Facebook wall.

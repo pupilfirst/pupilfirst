@@ -2,7 +2,8 @@ const TimelineBuilder = React.createClass({
   propTypes: {
     timelineEventTypes: React.PropTypes.object,
     selectedTimelineEventTypeId: React.PropTypes.number,
-    targetId: React.PropTypes.number
+    targetId: React.PropTypes.number,
+    allowFacebookShare: React.PropTypes.bool
   },
 
   getInitialState: function () {
@@ -22,7 +23,9 @@ const TimelineBuilder = React.createClass({
       showDescriptionError: false,
       showDateError: false,
       showEventTypeError: false,
-      timelineEventTypeId: this.props.selectedTimelineEventTypeId
+      showSelectedFileError: false,
+      timelineEventTypeId: this.props.selectedTimelineEventTypeId,
+      description: ''
     }
   },
 
@@ -37,6 +40,8 @@ const TimelineBuilder = React.createClass({
 
   toggleForm: function (type) {
     let previousForm = this.currentForm();
+
+    this.resetErrors();
 
     if (type == 'link') {
       let newState = !this.state.showLinkForm;
@@ -152,19 +157,35 @@ const TimelineBuilder = React.createClass({
       $('.js-timeline-builder__add-link-button').trigger('click');
     } else if (this.state.showFileForm) {
       $('.js-timeline-builder__add-file-button').trigger('click');
-    } else if (this.validate()) {
+    } else if ($('.js-hook.timeline-builder__file-input').val() !== '') {
+      // Open the form, show the error, and hide it after a short while.
+      this.toggleForm('file');
 
+      let that = this;
+
+      setTimeout(function () {
+        that.setState({showSelectedFileError: true});
+      }, 300);
+
+      setTimeout(function () {
+        that.setState({showSelectedFileError: false});
+      }, 5000);
+    } else if (this.validate()) {
       let form = $('.timeline-builder-hidden-form');
       let formData = new FormData(form[0]);
+      let share_on_facebook = false;
 
-      let description = $('.js-timeline-builder__textarea').val();
+      if (this.props.allowFacebookShare) {
+        share_on_facebook = $('.timeline-builder__social-bar-toggle-switch-input').prop('checked');
+      }
 
       formData.append('timeline_event[target_id]', this.props.targetId);
-      formData.append('timeline_event[description]', description);
+      formData.append('timeline_event[description]', this.state.description);
       formData.append('timeline_event[event_on]', this.state.date);
       formData.append('timeline_event[links]', JSON.stringify(this.state.links));
       formData.append('timeline_event[files_metadata]', JSON.stringify(this.state.files));
       formData.append('timeline_event[timeline_event_type_id]', this.state.timelineEventTypeId);
+      formData.append('timeline_event[share_on_facebook]', share_on_facebook);
 
       // Submit form data using AJAX and set a progress handler function.
       $.ajax({
@@ -223,7 +244,8 @@ const TimelineBuilder = React.createClass({
     this.setState({
       showDescriptionError: false,
       showDateError: false,
-      showEventTypeError: false
+      showEventTypeError: false,
+      showSelectedFileError: false
     });
   },
 
@@ -278,18 +300,28 @@ const TimelineBuilder = React.createClass({
     }
   },
 
+  updateDescription: function () {
+    let description = $('.js-timeline-builder__textarea').val().trim();
+    this.setState({description: description});
+  },
+
   render: function () {
     return (
       <div>
         <TimelineBuilderTextArea showError={ this.state.showDescriptionError } resetErrorsCB={ this.resetErrors }
-                                 placeholder={ this.sampleText() }/>
+                                 placeholder={ this.sampleText() } textChangeCB={ this.updateDescription }/>
+
+        <TimelineBuilderSocialBar description={ this.state.description }
+                                  allowFacebookShare={ this.props.allowFacebookShare }/>
 
         { this.hasAttachments() &&
         <TimelineBuilderAttachments attachments={ this.attachments() } removeAttachmentCB={ this.removeAttachment }/>
         }
 
         <TimelineBuilderAttachmentForm currentForm={ this.currentForm() } previousForm={ this.state.previousForm }
-                                       addAttachmentCB={ this.addData } selectedDate={ this.state.date }/>
+                                       addAttachmentCB={ this.addData } selectedDate={ this.state.date }
+                                       showSelectedFileError={ this.state.showSelectedFileError }
+                                       resetErrorsCB={ this.resetErrors }/>
 
         <TimelineBuilderActionBar formClickedCB={ this.toggleForm } currentForm={ this.currentForm() }
                                   submitCB={ this.submit } timelineEventTypes={ this.props.timelineEventTypes }

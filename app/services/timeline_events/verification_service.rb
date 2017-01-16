@@ -34,6 +34,7 @@ module TimelineEvents
       TimelineEvent.transaction do
         @timeline_event.verify!
         update_karma_points
+        post_on_facebook if @timeline_event.share_on_facebook
       end
     end
 
@@ -110,6 +111,10 @@ module TimelineEvents
 
     def points_for_target
       @points_for_target ||= @target&.points_earnable
+    end
+
+    def post_on_facebook
+      TimelineEvents::FacebookPostJob.perform_later(@timeline_event)
     end
   end
 end

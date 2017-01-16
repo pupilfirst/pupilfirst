@@ -150,7 +150,6 @@ ActiveAdmin.register BatchApplicant do
       row :reference
       row :fee_payment_method
       row :notes
-      row :last_sign_in_at
     end
 
     panel 'Personal Details' do
@@ -176,7 +175,6 @@ ActiveAdmin.register BatchApplicant do
     panel 'Technical details' do
       attributes_table_for batch_applicant do
         row :id
-        row :sign_in_email_sent_at
         row :created_at
         row :updated_at
       end

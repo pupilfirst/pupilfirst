@@ -42,6 +42,10 @@
 
   // Move the logo up a little bit to center it in shrunken state (xs).
   .navbar-brand {
+    padding-top: 15px;
+    padding-bottom: 0;
+    height: auto;
+
     @media (max-width: $screen-xs-max) {
       padding-top: 10px;
     }
@@ -135,7 +139,7 @@
   }
 
   nav {
-    .site-logo { max-height: 50px; }
+    .site-logo { height: 50px; }
 
     .navbar-collapse {
       @media (max-width: $screen-xs-max) {

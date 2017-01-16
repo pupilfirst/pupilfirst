@@ -131,10 +131,19 @@
       border: 1px solid #d7d7d7;
       background-color: white;
       border-radius: 5px;
-      min-height: 210px;
+      height: 215px;
+      overflow: hidden;
       margin: 15px 0;
       box-shadow: 0 0 5px 0 rgba(0,0,0,0.1);
       position: relative;
+
+      @media (max-width: $screen-sm-max) {
+        height: auto;
+      }
+      @media (max-width: $screen-md-max) and (min-width: $screen-md-min) {
+        height: 400px;
+        overflow: visible;
+      }
 
       .links-menu {
         position: absolute;
@@ -366,6 +375,7 @@
           .founder-avatar-list {
             margin-right: 15px;
             max-height: 42px;
+            width: 260px;
             float: left;
 
             .startup-founder-avatar {
@@ -375,20 +385,18 @@
               outline: 0;
               display: inline-block;
               border-radius: 50%;
+              background: white;
               border: 2px solid #ebeaea;
 
               img {
                 width: 100%;
-              }
-              @media (max-width: $screen-xs-max) {
-                width: 50px;
-                height: 50px;
               }
             }
             @media (max-width: $screen-xs-max) {
               float: none;
               max-height: 100%;
               margin: 0 0 10px;
+              width: auto;
             }
           }
           .view-timeline-btn {
@@ -435,6 +443,8 @@
               margin-right: 0;
             }
             @media (min-width: $screen-xs-max) {
+              margin: 0 -4px;
+
               &:hover {
                 pointer-events: auto;
 
@@ -519,8 +529,11 @@
 
             h2 {
               margin: 0;
-              padding: 15px 0 0;
+              padding: 15px 15px 0 0;
               font-size: 18px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
             }
             .founder-role {
               font-size: 12px;

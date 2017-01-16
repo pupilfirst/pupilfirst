@@ -13,7 +13,7 @@ class AboutController < ApplicationController
   # GET /about/leaderboard
   def leaderboard
     # TODO: correct @live_batches once the test batches are cleaned up.
-    @live_batches = nil # Startup.available_batches.live
+    @live_batches = Batch.where(batch_number: 3) # Startup.available_batches.live
     @leaderboards = leaderboards_for(@live_batches)
   end
 

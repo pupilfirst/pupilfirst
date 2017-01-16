@@ -19,7 +19,7 @@ class TimelineEvent < ApplicationRecord
 
   delegate :end_iteration?, :founder_event?, :title, to: :timeline_event_type
 
-  MAX_DESCRIPTION_CHARACTERS = 300
+  MAX_DESCRIPTION_CHARACTERS = 500
 
   VERIFIED_STATUS_PENDING = 'Pending'
   VERIFIED_STATUS_NEEDS_IMPROVEMENT = 'Needs Improvement'
@@ -267,6 +267,12 @@ class TimelineEvent < ApplicationRecord
       .where(timeline_event_type: timeline_event_type)
       .where('created_at > ?', created_at)
       .where.not(id: id).order('event_on DESC')
+  end
+
+  def facebook_friendly_url
+    Rails.application.routes.url_helpers.timeline_event_show_startup_url(
+      id: startup.slug, event_title: title.parameterize, event_id: id
+    )
   end
 
   private

@@ -23,16 +23,18 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
 
   resource :founder, only: [:edit, :update] do
-    member do
-      get 'dashboard'
-      post 'facebook_connect'
-      get 'facebook_connect_callback'
-      post 'facebook_disconnect'
-    end
+    get 'dashboard', on: :member
+
     resource :startup, only: [:edit, :update] do
       resources :timeline_events, only: [:create, :destroy, :update]
       resources :team_members, except: [:index]
     end
+  end
+
+  scope 'founder/facebook', as: 'founder_facebook', controller: 'founders/facebook_connect' do
+    post 'connect'
+    get 'connect_callback'
+    post 'disconnect'
   end
 
   # TODO: This route was included for auto-verification flow which was later stalled. Leaving it here for re-use if required.
@@ -99,17 +101,11 @@ Rails.application.routes.draw do
     get '', action: 'index'
     post 'register'
     post 'notify'
-    get 'identify'
-    post 'send_sign_in_email'
-    get 'sign_in_email_sent'
     get 'continue'
     get 'batch_pending'
     post 'restart', action: 'restart_application'
     get 'cofounders', action: 'cofounders_form'
     post 'cofounders', action: 'cofounders_save'
-
-    # TODO: Remove this after batch 3 intake is complete. Added to account for emails sent out before application process was overhauled.
-    get 'identify/3', to: redirect('/apply')
 
     scope 'stage/:stage_number', as: 'stage' do
       get '', action: 'ongoing'
@@ -165,8 +161,8 @@ Rails.application.routes.draw do
   # custom defined 404 route to use with shortener gem's config
   get '/404', to: 'home#not_found'
 
-  # Previous sixways page re-directed to startincollege
-  # get 'sixways', to: redirect('/startincollege')
+  # /slack redirected to /about/slack
+  get '/slack', to: redirect('/about/slack')
 
   # Also have /StartInCollege
   get 'StartInCollege', to: redirect('/startincollege')

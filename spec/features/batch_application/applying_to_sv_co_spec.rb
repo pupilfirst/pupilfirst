@@ -8,15 +8,14 @@ feature 'Applying to SV.CO' do
   let!(:college) { create :college }
 
   include_context 'mocked_instamojo'
+  include UserSpecHelper
 
   context 'when a batch is open for applications' do
     let(:batch) { create :batch }
     let!(:batch_stage_1) { create :batch_stage, batch: batch, application_stage: application_stage_1 }
     let!(:batch_stage_2) { create :batch_stage, batch: batch, application_stage: application_stage_2, starts_at: 16.days.from_now, ends_at: 46.days.from_now }
 
-    scenario 'user submits application and pays' do
-      pending 'college id picking is broken'
-
+    scenario 'user submits application and pays', js: true do
       visit apply_path
       expect(page).to have_text('Did you complete registration once before?')
 
@@ -25,19 +24,17 @@ feature 'Applying to SV.CO' do
       fill_in 'batch_application_email', with: 'elcapitan@thesea.com'
       fill_in 'batch_application_email_confirmation', with: 'elcapitan@thesea.com'
       fill_in 'batch_application_phone', with: '9876543210'
-      fill_in 'batch_application_college_id', with: college.id
+
+      # Fill in college name because we don't want to bother with dynamically loaded select2.
+      select "My college isn't listed", from: 'batch_application_college_id'
+      fill_in 'batch_application_college_text', with: college.name
+
       click_on 'Submit my application'
 
-      # user must be at the payment page
       expect(page).to have_text('You now need to pay the registration fee')
 
-      # user must have recieved a 'Continue Application' email
-      open_email('elcapitan@thesea.com')
-      expect(current_email.subject).to eq('Continue application at SV.CO')
-
       # prepare for invoking payment
-      batch_applicant = BatchApplicant.find_by(email: 'elcapitan@thesea.com')
-      batch_application = batch_applicant.batch_applications.last
+      batch_application = BatchApplication.last
 
       # user selects co-founder count and clicks pay
       select '2', from: 'application_stage_one_team_size_select'
@@ -66,14 +63,12 @@ feature 'Applying to SV.CO' do
 
     context 'when an applied user returns' do
       # ready-to-use returning applicant and his application
-      let(:batch_applicant) { create :batch_applicant }
-
+      let!(:batch_applicant) { batch_application.team_lead }
       let!(:batch_application) do
         create :batch_application,
           batch: batch,
           application_stage: ApplicationStage.initial_stage,
-          college: college,
-          team_lead_id: batch_applicant.id
+          college: college
       end
 
       before do
@@ -82,41 +77,17 @@ feature 'Applying to SV.CO' do
 
       scenario 'returning applicant restarts application' do
         # user signs in
-        visit apply_path
-        expect(page).to have_text('Did you complete registration once before?')
-
-        click_on 'Sign In to Continue'
-        expect(page).to have_text('Please supply your email address')
-
-        fill_in 'batch_applicant_sign_in_email', with: batch_applicant.email
-        click_on 'Resend link to resume application'
-
-        # user must be told an email was sent
-        expect(page).to have_text("Please use the link that we've mailed you to resume the application process")
-
-        # user must have recieved a 'Continue Application' email
-        open_email(batch_applicant.email)
-        continue_path = apply_continue_path(token: batch_applicant.token, shared_device: false)
-        expect(current_email.body).to have_text(continue_path)
-
-        # user follows login link sent
-        visit continue_path
+        sign_in_user(batch_applicant.user, referer: apply_path)
+        expect(page).to have_text('You have already completed registration')
+        click_on 'Continue application'
 
         # user must be at the payment page
         expect(page).to have_text('You now need to pay the registration fee')
 
+        # user clicks on the 'Cancel and Restart Application' button, returns to the apply page and remains signed in
         click_on 'Cancel and Restart Application'
-
-        expect(page).to have_text('Did you complete registration once before?')
-
-        # Applicant should be blocked from visiting inner pages, now that he doesn't have an application.
-        visit apply_cofounders_path
-
-        expect(page).to have_text("Haven't submitted an application yet?")
-
-        visit apply_stage_path(stage_number: 1)
-
-        expect(page).to have_text("Haven't submitted an application yet?")
+        expect(page).to have_no_button('Continue application')
+        expect(page).to have_no_button('Sign In to Continue')
       end
 
       context 'when applicant stage has expired' do
@@ -124,9 +95,8 @@ feature 'Applying to SV.CO' do
         let!(:batch_stage_2) { create :batch_stage, batch: batch, application_stage: application_stage_2 }
 
         scenario 'applicant did not complete payment in time' do
-          continue_path = apply_continue_path(token: batch_applicant.token, shared_device: false)
-          visit continue_path
-
+          # user signs in
+          sign_in_user(batch_applicant.user, referer: apply_continue_path)
           expect(page).to have_content 'Application process has closed'
         end
       end
@@ -135,14 +105,12 @@ feature 'Applying to SV.CO' do
 
   context 'when a batch has moved to stage 2 - coding and video' do
     let(:batch) { create :batch }
-    let(:batch_applicant) { create :batch_applicant }
-
+    let!(:batch_applicant) { batch_application.team_lead }
     let!(:batch_application) do
       create :batch_application,
         batch: batch,
         application_stage: ApplicationStage.initial_stage,
         college: college,
-        team_lead_id: batch_applicant.id,
         team_size: 2
     end
 
@@ -167,7 +135,8 @@ feature 'Applying to SV.CO' do
 
     context 'when cofounders are absent' do
       scenario 'paid applicant fails to submit his code and video links' do
-        visit apply_continue_path(token: batch_applicant.token, shared_device: false)
+        # user signs in
+        sign_in_user(batch_applicant.user, referer: apply_continue_path)
 
         # user must see the coding and video tasks
         expect(page).to have_text('Coding Task')
@@ -190,7 +159,8 @@ feature 'Applying to SV.CO' do
       end
 
       scenario 'paid applicant is able to submit code and video links' do
-        visit apply_continue_path(token: batch_applicant.token, shared_device: false)
+        # user signs in
+        sign_in_user(batch_applicant.user, referer: apply_continue_path)
 
         # User must see the coding and video tasks.
         expect(page).to have_text('Coding Task')
@@ -212,7 +182,8 @@ feature 'Applying to SV.CO' do
     end
 
     scenario 'applicant adds cofounder details', js: true do
-      visit apply_continue_path(token: batch_applicant.token, shared_device: false)
+      # user signs in
+      sign_in_user(batch_applicant.user, referer: apply_continue_path)
 
       # TODO: Replace this with click_link when PhantomJS moves to next version. It currently doesn't render flexbox correctly:
       # See: https://github.com/ariya/phantomjs/issues/14365
@@ -266,7 +237,8 @@ feature 'Applying to SV.CO' do
       end
 
       scenario 'applicant removes existing submission' do
-        visit apply_continue_path(token: batch_applicant.token, shared_device: false)
+        # user signs in
+        sign_in_user(batch_applicant.user, referer: apply_continue_path)
 
         # user submission must be acknowledged
         expect(page).to have_text('Your coding and hustling submissions has been received')

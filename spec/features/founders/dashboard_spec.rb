@@ -71,7 +71,7 @@ feature 'Founder Dashboard' do
     expect(page).to have_selector('.program-week-number', count: 3)
 
     # Check whether there's correct number of target groups in a selected program week.
-    within('.program-week', match: :first) do
+    within(all('.program-week').last) do
       expect(page).to have_selector('.target-group', count: 4)
     end
 

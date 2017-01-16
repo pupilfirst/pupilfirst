@@ -27,6 +27,10 @@ feature 'Timeline Builder' do
     click_button 'Add Event'
     find('.timeline-builder__textarea').set(description)
 
+    # TODO: Enable this and the corresponding expectation below when facebook share is ready.
+    # Mark to be shared on facebook
+    # find('.timeline-builder__social-bar-toggle-switch-handle').click
+
     # Pick a cover image.
     attach_file 'Cover Image', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'users', 'college_id.jpg')), visible: false
 
@@ -83,6 +87,7 @@ feature 'Timeline Builder' do
     expect(file.private).to eq(false)
 
     expect(te.event_on).to eq(Date.today)
+    # expect(te.share_on_facebook).to eq(true)
   end
 
   scenario 'Founder encounters errors when using timeline builder', js: true do

@@ -33,7 +33,7 @@
             span
               | Add Event
     .targets-board.m-x-auto.target-accordion
-      - @program_weeks.each do |program_week|
+      - @program_weeks.reverse.each do |program_week|
         - next unless program_week.target_groups.present?
         .program-week
           .program-week-header

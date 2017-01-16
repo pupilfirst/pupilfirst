@@ -37,9 +37,8 @@ class StartupFeedback < ApplicationRecord
     formatted_reference_url = reference_url.present? ? "<#{reference_url}|recent update>" : "recent update"
     salutation = "Hey! You have some feedback from #{faculty.name} on your #{formatted_reference_url}.\n"
     feedback_url = Rails.application.routes.url_helpers.startup_url(startup, show_feedback: id)
-    feedback_text = "<#{feedback_url}|Click here> to view the feedback.\n"
-    footer = "A copy of this feedback has also been emailed to you."
-    salutation + feedback_text + footer
+    feedback_text = "<#{feedback_url}|Click here> to view the feedback."
+    salutation + feedback_text
   end
 
   def attachment_file_name

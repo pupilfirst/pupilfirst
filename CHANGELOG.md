@@ -1,3 +1,31 @@
+### 9 January, 2017
+
+#### Features
+
+  - Karma Points are now automatically awarded upon verification of timeline event, based on assigned grade.
+
+#### UX and UI
+
+  - All buttons on the timeline builder action bar are now disabled once the submission process begins.
+  - When submitting a timeline event with a file or a link, clicking the submit button now runs validations on an open file or link form, to ensure that any currently entered values are not missed out when sending data to the server.
+  - Clicking the logo after being signed in now leads to founder dashboard page.
+  - The check (tick) button to the right of file and link form elements in the timeline builder now reads `ADD` to clearly communicate its purpose.
+  - The _Download Rubric_ button within targets on the founder dashboard now generate a S3 download link on demand, so as to prevent timeouts.
+
+#### Bugfixes
+
+  - There was a minor mismatch between length validation of timeline event description on the client and the server, which caused issues when max-ed out length was submitted. Some slack has been added to prevent any further issues.
+  - Videos in the dashboard target slides no longer continue to play after being closed.
+  - A confirmed faculty connect request now successfully creates a Google Calendar event, marking all participants - it wasn't working because of an authorization issue.
+  - Timeline builder now trims the description to calculate its length and before sending it to the server.
+  - Slack username validation on the Founder edit page has been updated to match Slack's latest standard.
+  - Fixed an crash when revisiting the Founder edit page immediately after uploading a new avatar image.
+  - The timeline builder would not open on Safari when triggered from a target which has a default timeline event type. This was caused by the presence of some ES7 Javascript that Safari couldn't parse. The ES7 segments have been replaced with ES6 for compatibility.
+  - The submit feedback form available to signed-in founders had broken styling.
+  - The sign-up form for SixWays MOOC was non-functional because selection of state was broken - this has been fixed.
+  - Removed case-sensitivity from timeline builder's cover image file selector. This allows users to pick files with all-caps file extensions.
+  - The count of participating universities shown on the home page was stuck at zero. The calculation has been fixed to match latest data.
+
 ### 2 January, 2017
 
 #### Features

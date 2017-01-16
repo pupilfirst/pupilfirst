@@ -20,7 +20,6 @@ after 'development:target_groups', 'development:timeline_event_types' do
     target = Target.create!({
       description: Faker::Lorem.words(10).join(' '),
       target_group: target_group,
-      batch: batch,
       target_type: Target::TYPE_TODO,
       days_to_complete: 7
     }.merge(details))
@@ -52,7 +51,6 @@ after 'development:target_groups', 'development:timeline_event_types' do
       description: Faker::Lorem.words(10).join(' '),
       target_type: Target::TYPE_TODO,
       target_group: target_group,
-      batch: batch
     }.merge(details))
   end
 
@@ -105,7 +103,6 @@ after 'development:target_groups', 'development:timeline_event_types' do
       target_type: details[:type],
       days_to_complete: details[:days],
       target_group: target_group,
-      batch: batch
     )
   end
 
@@ -117,7 +114,6 @@ after 'development:target_groups', 'development:timeline_event_types' do
     target_type: Target::TYPE_ATTEND,
     days_to_complete: 1,
     target_group: batch.program_weeks.find_by(number: 1).target_groups.find_by(sort_index: 4),
-    batch: batch
   )
 
   # 1st week 5th group targets - all pending
@@ -136,7 +132,6 @@ after 'development:target_groups', 'development:timeline_event_types' do
       target_type: details[:type],
       days_to_complete: details[:days],
       target_group: target_group,
-      batch: batch
     )
   end
 end

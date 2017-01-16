@@ -18,7 +18,7 @@ module Targets
       targets = Target.includes(target_group: { program_week: :batch }).where(program_weeks: { batch_id: @batch.id })
 
       @due_dates_hash = targets.each_with_object({}) do |target, hash|
-        hash[target.id] = target.due_date
+        hash[target.id] = target.due_date.end_of_day
       end
     end
 

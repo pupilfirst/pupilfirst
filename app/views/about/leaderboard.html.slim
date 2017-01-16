@@ -10,7 +10,7 @@ ol.breadcrumb.margin-top-20
 h1.page-header.header-light
   | Leaderboard
   - if @live_batches.present?
-    small &nbsp;#{Startup.leaderboard_start_date.strftime('%B %-d')} to #{Startup.leaderboard_end_date.strftime('%B %-d')}
+    small &nbsp;#{DatesService.last_week_start_date.strftime('%B %-d')} to #{DatesService.last_week_end_date.strftime('%B %-d')}
 
 .row
   .col-sm-8

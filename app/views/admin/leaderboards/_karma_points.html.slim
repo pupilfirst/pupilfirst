@@ -19,7 +19,6 @@ ul
           a.not-a-link href='#' Karma Points
     tbody
       - @leaderboard.each_with_index do |entry, index|
-        - binding.pry
         - rank = entry[1]
         - startup = entry[0]
         - points = entry[2]

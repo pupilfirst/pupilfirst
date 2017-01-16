@@ -1,0 +1,14 @@
+.target-group.m-y-3
+  .target-group-header.text-xs-center
+    h4.brand-primary.font-regular
+      | #{ t("dashboard.show.target_filters.#{params[:filter]}.title") }
+    .target-group-header-details
+    - if @filtered_targets.present?
+      p #{ t("dashboard.show.target_filters.#{params[:filter]}.description") }
+    - else
+      p There are no targets to show
+
+  - if @filtered_targets.present?
+    - @filtered_targets.each do |target|
+      == render 'target', target: target
+

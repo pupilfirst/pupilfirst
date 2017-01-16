@@ -21,39 +21,58 @@
     .fixed-dashboard-header
       .container
         .dashboard-header-container.clearfix.m-x-auto.text-xs-center
-          / .pull-xs-left
+          .pull-sm-left.pull-xs-right
+            .btn-group.filter-targets-dropdown
+              button.btn.btn-with-icon.btn-ghost-primary.btn-md.text-xs-left.filter-targets-dropdown__button.dropdown-toggle aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" type="button"
+                span.filter-targets-dropdown__icon
+                  i.fa.fa-filter
+                span.hidden-xs-down.p-r-1
+                 - if params[:filter].present?
+                   | #{ t("dashboard.show.target_filters.#{params[:filter]}.filter_text") }
+                 - else
+                   | All Targets
+                span.pull-xs-right.filter-targets-dropdown__arrow.hidden-xs-down
 
-          / .pull-xs-right
-          button#performance-button.btn.btn-with-icon.btn-md.btn-ghost-primary.performance-overview-link.text-uppercase data-toggle="modal"
-            i.fa.fa-tachometer
-            span
-              | Performance
-          button#add-event-button.btn.btn-with-icon.btn-md.btn-secondary.text-uppercase.btn-timeline-builder.js-founder-dashboard__trigger-builder data-toggle="modal"
-            i.fa.fa-plus
-            span
-              | Add Event
+              .dropdown-menu.filter-targets-dropdown__menu
+                - Founders::TargetsFilterService.filters_except(params[:filter]).each do |filter|
+                  a.dropdown-item.filter-targets-dropdown__menu-item href=dashboard_founder_path(filter: filter) role="button"
+                    span.filter-targets-dropdown__menu-item-icon
+                      i.fa class=TargetDecorator.fa_icon_for_filter(filter)
+                    | #{ t("dashboard.show.target_filters.#{filter}.filter_text") }
+
+          .pull-sm-right.pull-xs-left
+            button#performance-button.btn.btn-with-icon.btn-md.btn-ghost-primary.performance-overview-link.text-uppercase data-toggle="modal"
+              i.fa.fa-tachometer
+              span
+                | Performance
+            button#add-event-button.btn.btn-with-icon.btn-md.btn-secondary.text-uppercase.btn-timeline-builder.js-founder-dashboard__trigger-builder data-toggle="modal"
+              i.fa.fa-plus
+              span
+                | Add Event
     .targets-board.m-x-auto.target-accordion
-      - @program_weeks.reverse.each do |program_week|
-        - next unless program_week.target_groups.present?
-        .program-week
-          .program-week-header
-            span.program-week-number
-              | Week #{program_week.number}
-            span.program-week-icon
-              = image_tag "founders/dashboard/program-week-icons/#{program_week.icon_name}"
-            span.program-week-title
-              | #{program_week.name}
+      - if @filtered_targets.present?
+        == render 'selected_targets'
+      - else
+        - @program_weeks.reverse.each do |program_week|
+          - next unless program_week.target_groups.present?
+          .program-week
+            .program-week-header
+              span.program-week-number
+                | Week #{program_week.number}
+              span.program-week-icon
+                = image_tag "founders/dashboard/program-week-icons/#{program_week.icon_name}"
+              span.program-week-title
+                | #{program_week.name}
+            - program_week.target_groups.each do |target_group|
+              .target-group
+                .target-group-header.text-xs-center
+                  h4.brand-primary.font-regular
+                    | #{target_group.name}
+                  .target-group-header-details
+                    ' #{target_group.description}
 
-          - program_week.target_groups.each do |target_group|
-            .target-group
-              .target-group-header.text-xs-center
-                h4.brand-primary.font-regular
-                  | #{target_group.name}
-                .target-group-header-details
-                  ' #{target_group.description}
-
-              - target_group.targets.each do |target|
-                == render 'target', target: target
+                - target_group.targets.each do |target|
+                  == render 'target', target: target
 
 == render 'view-slides'
 == render 'timeline_builder'

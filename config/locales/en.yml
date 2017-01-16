@@ -100,7 +100,25 @@ en:
         description_50_html: "Your team is performing adequately, pretty much the same as the rest of your batch. <br /> Attempt to get <em>Great</em> and <em>Wow</em> grades for important targets to advance."
         description_70_html: "Your team is performing better than most of the batch. Attempt to get more <em>Wow</em> grades for important targets to advance."
         description_90_html: "Your team is performing exceptionally. Great stuff, we have high hopes from you :)"
-
+      target_filters:
+        expires_soon:
+          filter_text: 'Expiring within 7 days'
+          title: 'Targets Expiring Soon'
+          description: 'The listed targets expire within 7 days and are pending submission'
+        expired:
+          filter_text: 'Expired'
+          title: 'Expired Targets'
+          description: 'The listed targets have expired. You can still try submitting!'
+        not_accepted:
+          filter_text: 'Not Accepted'
+          title: 'Targets Not Accepted'
+          description: 'The listed target submissions are not accepted. Re-submit based on feedback!'
+        needs_improvement:
+          filter_text: 'Needs Improvement'
+          title: 'Targets Need Improvement'
+          description: 'The listed targets need improvement. Consider feedback and try re-submitting!'
+        all_targets:
+          filter_text: 'All Targets'
   resource:
     share_status:
       approved: 'Only with approved startups'

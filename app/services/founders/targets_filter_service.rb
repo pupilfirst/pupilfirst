@@ -37,14 +37,18 @@ module Founders
 
     private
 
+    def batch_targets
+      Target.joins(:target_groups)
+    end
+
     def submitted_founder_targets
       # Targets with founder role, where @founder has submitted an event.
-      Target.founder.joins(:timeline_events).where(timeline_events: { founder_id: @founder.id })
+      batch_targets.founder.joins(:timeline_events).where(timeline_events: { founder_id: @founder.id })
     end
 
     def submitted_startup_targets
       # Targets with team roles, where anyone from @founder's team has submitted an event.
-      Target.not_founder.joins(:timeline_events).where(timeline_events: { startup_id: @founder.startup.id })
+      batch_targets.not_founder.joins(:timeline_events).where(timeline_events: { startup_id: @founder.startup.id })
     end
 
     def submitted_targets
@@ -52,11 +56,11 @@ module Founders
     end
 
     def timeline_event_missing_targets
-      Target.left_joins(:timeline_events).where(timeline_events: { id: nil })
+      batch_targets.left_joins(:timeline_events).where(timeline_events: { id: nil })
     end
 
     def timeline_events_mismatch_targets
-      Target.left_joins(:timeline_events).where.not(timeline_events: { id: @founder.timeline_events.select(:id) })
+      batch_targets.left_joins(:timeline_events).where.not(timeline_events: { id: @founder.timeline_events.select(:id) })
     end
 
     def not_submitted_founder_targets

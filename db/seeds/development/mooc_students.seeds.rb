@@ -2,14 +2,14 @@ require_relative 'helper'
 
 puts 'Seeding mooc_students'
 
-after 'development:universities', 'development:states', 'development:users' do
+after 'development:states', 'development:users', 'development:colleges' do
   user = User.find_by(email: 'mooc_student@sv.co')
+  college = College.find_by(name: 'Cochin University of Science and Technology, Kochi')
 
   MoocStudent.create!(
     email: 'mooc_student@sv.co',
     name: 'MOOC Student',
-    university: University.first,
-    college: Faker::Lorem.words(2).join(' '),
+    college: college,
     semester: MoocStudent.valid_semester_values.sample,
     state: State.all.sample.name,
     gender: Founder.valid_gender_values.sample,

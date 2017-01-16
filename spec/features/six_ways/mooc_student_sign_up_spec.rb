@@ -10,9 +10,7 @@ feature 'MoocStudent Sign In' do
   let(:university) { create :university }
 
   context 'User visits the sixways start page' do
-    scenario 'User signs up for MOOC' do
-      pending 'college id picking is broken'
-
+    scenario 'User signs up for MOOC', js: true do
       visit six_ways_start_path
 
       click_link 'Sign-up as Student'
@@ -21,15 +19,14 @@ feature 'MoocStudent Sign In' do
       fill_in 'Email', with: 'johndoe@sv.co'
       fill_in 'Mobile number', with: '9876543210'
       choose 'Male'
-      fill_in 'mooc_student_signup_university_id', with: university.id
-      fill_in 'College', with: 'Doe Learning Centre'
+      select "My college isn't listed", from: 'mooc_student_signup_college_id'
+      fill_in 'mooc_student_signup_college_text', with: 'Doe Learning Centre'
       select 'Graduated', from: 'Semester'
       select 'Kerala', from: 'State'
 
       click_button 'Sign up'
 
       expect(page).to have_content('Sign-in link sent!')
-
       open_email('johndoe@sv.co')
 
       mooc_student = MoocStudent.last
@@ -43,9 +40,7 @@ feature 'MoocStudent Sign In' do
   context 'logged in user visits sixways start page' do
     let(:user) { create :user }
 
-    scenario 'User signs up for MOOC' do
-      pending 'college id picking is broken'
-
+    scenario 'User signs up for MOOC', js: true do
       sign_in_user(user, referer: six_ways_start_path)
 
       click_link 'Sign-up as Student'
@@ -53,8 +48,8 @@ feature 'MoocStudent Sign In' do
       fill_in 'Name', with: 'John Doe'
       fill_in 'Mobile number', with: '9876543210'
       choose 'Male'
-      fill_in 'mooc_student_signup_university_id', with: university.id
-      fill_in 'College', with: 'Doe Learning Centre'
+      select "My college isn't listed", from: 'mooc_student_signup_college_id'
+      fill_in 'mooc_student_signup_college_text', with: 'Doe Learning Centre'
       select 'Graduated', from: 'Semester'
       select 'Kerala', from: 'State'
 

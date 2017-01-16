@@ -22,6 +22,12 @@ ActiveAdmin.register MoocStudent do
     mooc_students.completed_quiz(CourseModule.find_by(module_number: 3))
   end
 
+  controller do
+    def scoped_collection
+      super.includes :college
+    end
+  end
+
   index do
     selectable_column
 

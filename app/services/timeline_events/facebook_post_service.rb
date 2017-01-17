@@ -1,5 +1,7 @@
 module TimelineEvents
-  class FacebookPostService < BaseService
+  class FacebookPostService
+    include Loggable
+
     def initialize(timeline_event)
       @timeline_event = timeline_event
     end

@@ -1,7 +1,9 @@
 # This service will restore team lead entries to applications with payment entries if they're missing. It retrieves the
 # team lead's email and name from Instamojo's API through the stored payment details, creates the applicant, and
 # re-links it as application's lead and payment's applicant.
-class TeamLeadRestorationService < BaseService
+class TeamLeadRestorationService
+  include Loggable
+
   def initialize(dry_run: true)
     @dry_run = dry_run
   end

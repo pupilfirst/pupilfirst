@@ -1,0 +1,236 @@
+.application-stage-1-header {
+
+}
+.applicant-screening {
+  padding: 0;
+  position: relative;
+	width: 100%;
+  display: flex;
+
+  &:before {
+    background-color: $gray-border;
+    content: "";
+    display: block;
+    width: 1px;
+    height: 100%;
+    background-position: center center;
+    position: absolute;
+    top: 0;
+    left: calc(50% - 1px);
+  }
+}
+
+.applicant-screening__section {
+  width: 50%;
+  display: inline-flex;
+  position: relative;
+}
+
+
+.applicant-screening__section-left--shrunk {
+  width: 30%;
+  background-color: white;
+
+  .applicant-screening__cover {
+    background-color: $light-secondary;
+  }
+}
+
+.applicant-screening__section-right--shrunk {
+  width: 30%;
+  background-color: white;
+
+  .applicant-screening__cover {
+    background-color: $light-secondary;
+  }
+}
+
+.applicant-screening__section-right--expanded {
+  width: 70%;
+  background-color: white;
+
+  .applicant-screening__cover {
+    display: none;
+  }
+
+  .coder-question {
+    display: block;
+  }
+}
+
+.applicant-screening__section-left--expanded {
+  width: 70%;
+
+  .applicant-screening__cover {
+    display: none;
+  }
+
+  .non-coder-question {
+    display: block;
+  }
+}
+
+.applicant-screening__section-left {
+
+}
+
+.applicant-screening__section-right {
+
+}
+
+.applicant-screening__cover {
+  width: 100%;
+  padding: 3.75rem;
+  transition: all .2s;
+  cursor: pointer;
+
+  h2 {
+    transition: all .2s;
+  }
+
+  &:hover, &:focus {
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.10);
+
+    h2 {
+      color: $brand-secondary;
+    }
+  }
+}
+
+.applicant-screening__icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  width: 125px;
+  height: 125px;
+  border: 1px dashed $light-secondary;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.10);
+  overflow: hidden;
+  position: relative;
+
+  img {
+    width: 200px;
+  }
+}
+
+.applicant-screening__question {
+  background-color: white;
+  padding: 1.875rem;
+  display: none;
+  width: 100%;
+}
+
+.applicant-screening__question-section {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.applicant-screening__question-number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  font-size: 1.875rem;
+  background-color: white;
+  width: 50px;
+  height: 50px;
+  color: $light-secondary;
+  border: 1px solid $light-secondary;
+  box-shadow: 0 0 10px 0 lighten($light-secondary, 30%);;
+  @include border-radius(50%);
+
+  &:before {
+    background-color: $light-secondary;
+    content: "";
+    display: block;
+    width: 30px;
+    height: 1px;
+    background-position: center center;
+    position: absolute;
+    left: -31px;
+    top: calc(50% - 1px);
+  }
+}
+
+.applicant-screening__answer-options {
+  border-bottom: 1px solid $gray-border;
+}
+
+
+
+
+
+
+
+//
+//
+// .page {
+// 	position: relative;
+// 	top: 0;
+// 	overflow: auto;
+// 	min-height: 100%;
+// 	width: 75%;
+// 	height: auto;
+// 	font-size: 1.4em;
+//   transition: transform 0.5s ease-in-out;
+// }
+//
+// .page-right {
+// 	left: 25%;
+// 	outline: 5px solid #ecf0f1; /* avoid rounding gaps */
+// 	background: #ecf0f1;
+// 	color: #97a8b2;
+// 	transform: translateX(100%);
+// }
+//
+// .page-left {
+// 	left: 0;
+// 	outline: 5px solid #34495e; /* avoid rounding gaps */
+// 	background: #34495e;
+// 	color: #fff;
+// 	text-align: right;
+// 	transform: translateX(-100%);
+// }
+//
+// .reset-layout .page,
+// .applicant-screening.open-right .page-left,
+// .applicant-screening.open-left .page-right,
+// .applicant-screening.close-right .page-left,
+// .applicant-screening.close-left .page-right {
+// 	position: absolute;
+// 	overflow: hidden;
+// 	height: 100%;
+// }
+//
+// .applicant-screening.open-right .page-right,
+// .applicant-screening.open-left .page-left {
+// 	position: relative;
+// 	overflow: auto;
+// 	height: auto;
+// }
+//
+// /* Right side open */
+// .open-right .applicant-screening__section-left {
+// 	-webkit-transform: translateX(-60%) scale(.5);
+// 	transform: translateX(-60%) scale(.5);
+// }
+//
+// .open-right .applicant-screening__section-right {
+// 	z-index: 200;
+// 	-webkit-transform: translateX(-150%);
+// 	transform: translateX(-150%);
+// }
+//
+// /* Left side open */
+// .open-left .applicant-screening__section-right {
+// 	-webkit-transform: translateX(60%) scale(.5);
+// 	transform: translateX(60%) scale(.5);
+// }
+//
+// .open-left .applicant-screening__section-left {
+// 	z-index: 200;
+// 	-webkit-transform: translateX(150%);
+// 	transform: translateX(150%);
+// }

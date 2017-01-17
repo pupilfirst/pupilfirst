@@ -29,8 +29,6 @@ class Batch < ApplicationRecord
   validates :start_date, presence: true
   validates :end_date, presence: true
   validates :slack_channel, slack_channel_name: true, allow_nil: true
-  validates :campaign_start_at, presence: true
-  validates :target_application_count, presence: true
 
   def display_name
     "##{batch_number} #{theme}"

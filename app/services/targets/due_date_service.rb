@@ -10,7 +10,7 @@ module Targets
     end
 
     def expiring?(target)
-      true if due_date(target).between?(Date.today, 8.days.from_now)
+      due_date(target).between?(Date.today, 8.days.from_now)
     end
 
     def prepare

@@ -19,26 +19,26 @@ module Founders
     end
 
     def filter(filter)
-      targets =
-        case filter
-          when EXPIRED
-            expired_targets
-          when NEEDS_IMPROVEMENT
-            needs_improvement_targets
-          when EXPIRES_IN_A_WEEK
-            expiring_targets
-          when NOT_ACCEPTED
-            not_accepted_targets
-          else
-            raise "Unexpected filter value '#{filter}'"
-        end
+      targets = case filter
+        when EXPIRED
+          expired_targets
+        when NEEDS_IMPROVEMENT
+          needs_improvement_targets
+        when EXPIRES_IN_A_WEEK
+          expiring_targets
+        when NOT_ACCEPTED
+          not_accepted_targets
+        else
+          raise "Unexpected filter value '#{filter}'"
+      end
+
       targets.map(&:decorate)
     end
 
     private
 
     def batch_targets
-      Target.joins(:target_group)
+      @founder.startup.batch.targets
     end
 
     def submitted_founder_targets

@@ -15,7 +15,7 @@ module Founders
         facebook_client = Founders::FacebookService.new(current_founder)
         token, expires = facebook_client.get_access_token_info(params[:code])
         if facebook_client.permissions_granted?(token)
-          facebook_client.save_token_info!(token, expires)
+          facebook_client.save_facebook_info!(token, expires)
           flash[:success] = 'Facebook Connection Successful!'
         else
           flash[:error] = 'Publish rights are required. Please try again!'

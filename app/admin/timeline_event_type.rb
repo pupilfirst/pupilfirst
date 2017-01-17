@@ -3,6 +3,11 @@ ActiveAdmin.register TimelineEventType do
 
   menu parent: 'Timeline Events'
 
+  filter :key
+  filter :title
+  filter :role, as: :select, collection: TimelineEventType.valid_roles
+  filter :created_at
+
   index do
     selectable_column
     column :key

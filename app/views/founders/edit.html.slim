@@ -8,7 +8,7 @@ h2 Editing #{@founder.fullname}'s profile...
 .margin-top-20
 h4 Connected Accounts
 hr
-- if @founder.facebook_connected?
+- if @founder.facebook_token_valid?
   .connected-account__container.margin-bottom-20
     span.connected-account_icon
       i.fa.fa-facebook-square.fa-2x

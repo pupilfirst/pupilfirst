@@ -2,7 +2,9 @@ module Users
   # Returns path to which user is to be sent after signing in.
   #
   # This is useful for when no referer is supplied to the sign in path.
-  class AfterSignInPathResolverService < BaseService
+  class AfterSignInPathResolverService
+    include RoutesResolvable
+
     def initialize(user)
       @user = user
       raise "Can only resolve paths for instances of User. Given #{resource.class}." unless @user.is_a?(User)

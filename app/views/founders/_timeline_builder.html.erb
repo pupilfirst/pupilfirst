@@ -9,7 +9,7 @@
         <%= form_tag founder_startup_timeline_events_path, method: :post, class: 'timeline-builder-hidden-form js-timeline-builder__hidden-form' do |f| %>
         <% end %>
 
-        <%= react_component('TimelineBuilder', { timelineEventTypes: TimelineEventTypes::ListService.new(@startup).list, allowFacebookShare: current_founder.facebook_connected? } ) %>
+        <%= react_component('TimelineBuilder', { timelineEventTypes: TimelineEventTypes::ListService.new(@startup).list, allowFacebookShare: current_founder.facebook_token_available? } ) %>
       </div>
     </div>
   </div>

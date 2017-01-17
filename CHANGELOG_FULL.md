@@ -1,8 +1,22 @@
 ## Ongoing
 
 - Multiple application rounds are being implemented. [[Trello]](https://trello.com/c/pUZ1cfBW)
-- Feature to connect facebook account to founder profile, for auto-posting timeline events to FB wall, is in the works. [[Trello]](https://trello.com/c/y83pIThP)
-- MOOC Registration is being updated to use colleges table instead of old universities table. [[Trello]](https://trello.com/c/fk9GaeVV)
+- Design of the new screening stage for application process is in the works. [[Trello]](https://trello.com/c/rCMyzKia)
+
+## 2017.01.16
+
+- Feature to connect facebook account to founder profile, for auto-posting timeline events to FB wall has been launched. [[Trello]](https://trello.com/c/y83pIThP)
+- MOOC Registration now uses colleges table instead of old universities table. [[Trello]](https://trello.com/c/fk9GaeVV)
+- Fixed a bug in the positioning of cards on startups page. [[Trello]](https://trello.com/c/zyaPvvEq)
+- Batch Applicant now uses User model for login. [[Trello]](https://trello.com/c/B5dZ1SlR)
+- Fixed a bug preventing Vocalist from sending learderboard to channels. [[Trello]](https://trello.com/c/loMy4bs5)
+- Updated Vocalist message, removing note about sent email since it was disabled. [[Trello]](https://trello.com/c/htAkuS4v)
+- Updated the targets overview page to target stats only on demand. [[Trello]](https://trello.com/c/NRgFwgU1)
+- Updated the targets overview page to display list of assignees for a target stat when one particular figure is clicked. [[Trello]](https://trello.com/c/iumFHDBD)
+- Timeline event description limit was increased to 500 characters. [[Trello]](https://trello.com/c/tnY587i6)
+- Timeline builder submit verification was updated to check for selected file even if file form is closed. [[Trello]](https://trello.com/c/cv1m1u1S)
+- `batch_id` was removed from `Target`. This prevents mismatch in batch between target's batch and its program week's batch. [[Trello]](https://trello.com/c/r0EqxTuV)
+- Fixed a bug in performance service which caused high-performing starts to show as low-performers. [[Trello]](https://trello.com/c/G7zXa0zq)
 
 ## 2017.01.09
 

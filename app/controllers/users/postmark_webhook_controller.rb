@@ -17,7 +17,7 @@ module Users
     end
 
     def mark_user_unemailable
-      @user.update!(email_bounced: true, email_bounced_at: params[:BouncedAt], email_bounce_type: params[:Type])
+      @user.update!(email_bounced_at: params[:BouncedAt], email_bounce_type: params[:Type])
     end
   end
 end

@@ -50,13 +50,6 @@ class Target < ApplicationRecord
   validates :description, presence: true
   validates :days_to_complete, presence: true
 
-  validate :batch_matches_program_week_batch
-
-  def batch_matches_program_week_batch
-    return unless batch.present? && target_group&.program_week&.batch.present?
-    errors.add(:batch, "Does not match Program week's batch") unless batch == target_group.program_week.batch
-  end
-
   def founder_role?
     role == Target::ROLE_FOUNDER
   end

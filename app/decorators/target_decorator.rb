@@ -36,6 +36,7 @@ class TargetDecorator < Draper::Decorator
         'fa-clock-o'
     end
   end
+
   # rubocop:enable Metrics/CyclomaticComplexity
 
   ATTEND_SESSION_ICON = 'attend_session_icon.svg'.freeze
@@ -85,5 +86,13 @@ class TargetDecorator < Draper::Decorator
 
   def team_or_personal
     founder_role? ? 'Personal' : 'Team'
+  end
+
+  def self.fa_icon_for_filter(filter)
+    { Founders::TargetsFilterService::EXPIRES_IN_A_WEEK => 'fa-clock-o',
+      Founders::TargetsFilterService::EXPIRED => 'fa-hourglass-end',
+      Founders::TargetsFilterService::NOT_ACCEPTED => 'fa-thumbs-o-down',
+      Founders::TargetsFilterService::NEEDS_IMPROVEMENT => 'fa-line-chart',
+      Founders::TargetsFilterService::ALL_TARGETS => 'fa-list-ul' }[filter]
   end
 end

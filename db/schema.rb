@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170112120835) do
+ActiveRecord::Schema.define(version: 20170117081606) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -176,6 +176,7 @@ ActiveRecord::Schema.define(version: 20170112120835) do
     t.string   "payment_reference"
     t.integer  "startup_id"
     t.integer  "application_round_id"
+    t.boolean  "generate_certificate", default: false
     t.index ["application_round_id"], name: "index_batch_applications_on_application_round_id", using: :btree
     t.index ["application_stage_id"], name: "index_batch_applications_on_application_stage_id", using: :btree
     t.index ["startup_id"], name: "index_batch_applications_on_startup_id", using: :btree
@@ -386,8 +387,7 @@ ActiveRecord::Schema.define(version: 20170112120835) do
   create_table "mooc_students", force: :cascade do |t|
     t.string   "email"
     t.string   "name"
-    t.integer  "university_id"
-    t.string   "college"
+    t.string   "college_text"
     t.string   "semester"
     t.string   "state"
     t.string   "gender"
@@ -396,6 +396,8 @@ ActiveRecord::Schema.define(version: 20170112120835) do
     t.integer  "user_id"
     t.string   "phone"
     t.text     "completed_chapters"
+    t.integer  "college_id"
+    t.index ["college_id"], name: "index_mooc_students_on_college_id", using: :btree
   end
 
   create_table "payments", force: :cascade do |t|
@@ -746,7 +748,6 @@ ActiveRecord::Schema.define(version: 20170112120835) do
     t.string   "encrypted_password",       default: "", null: false
     t.string   "remember_token"
     t.boolean  "sign_out_at_next_request"
-    t.boolean  "email_bounced"
     t.datetime "email_bounced_at"
     t.string   "email_bounce_type"
   end

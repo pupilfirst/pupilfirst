@@ -5,7 +5,9 @@ module MoocStudents
   # The service also expects to be supplied with a University for which the import is to be performed.
   #
   # TODO: This script will fail once ReplacementUniversity replaces the University model for mooc_students. Update when applicable.
-  class ImportService < BaseService
+  class ImportService
+    include Loggable
+
     attr_reader :source_csv_url, :university
     attr_accessor :invalid
 

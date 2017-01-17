@@ -240,11 +240,8 @@ class BatchApplication < ApplicationRecord
     application_round.stage_active?(application_stage)
   end
 
-  def stage_3_submission
-    @stage_3_submission ||= begin
-      stage_3 = ApplicationStage.find_by(number: 3)
-      application_submissions.find_by(application_stage: stage_3)
-    end
+  def stage_submission(number)
+    application_submissions.find_by(application_stage: ApplicationStage.where(number: number))
   end
 
   def stage_deadline

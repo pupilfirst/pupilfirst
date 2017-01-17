@@ -6,9 +6,7 @@ class TimelineBuilderSocialBar extends React.Component {
   render() {
     return(
       <div className="timeline-builder__social-bar">
-        { this.props.showFacebookToggle &&
-        <TimelineBuilderFacebookShareToggleButton />
-        }
+        <TimelineBuilderFacebookShareToggleButton disabled={ !this.props.allowFacebookShare }/>
         <TimelineBuilderTextAreaCounter description={ this.props.description } />
       </div>
     );
@@ -17,5 +15,5 @@ class TimelineBuilderSocialBar extends React.Component {
 
 TimelineBuilderSocialBar.propTypes = {
   description: React.PropTypes.string,
-  showFacebookToggle: React.PropTypes.bool
+  allowFacebookShare: React.PropTypes.bool
 };

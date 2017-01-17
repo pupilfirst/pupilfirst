@@ -25,16 +25,21 @@ class ApplicationStage < ApplicationRecord
     find_by(number: 1)
   end
 
+  def self.coding_stage
+    find_by(number: 3)
+  end
+
+  # TODO: testing_stage is two different stages now.
   def self.testing_stage
     find_by(number: 2)
   end
 
   def self.interview_stage
-    find_by(number: 3)
+    find_by(number: 5)
   end
 
   def self.shortlist_stage
-    find_by(number: 4)
+    find_by(number: 6)
   end
 
   def self.final_stage

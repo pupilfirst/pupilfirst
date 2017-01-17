@@ -9,7 +9,7 @@
 .dashboard-header-container {
   max-width: 50rem;
   height: 100px;
-  padding: 25px 15px;
+  padding: 30px 15px 28px;
 
   @include media-breakpoint-down(sm) {
     height: auto;
@@ -21,23 +21,98 @@
   margin-right: 20px;
   cursor: pointer;
   letter-spacing: 0.04rem;
-  box-shadow: 0px 2px 5px 0px lighten($gray-light, 35%);
+  border: 1px solid $gray-border;
+  box-shadow: 0 0 5px 0 lighten($gray-light, 35%);
 
   @include media-breakpoint-down(sm) {
     width: auto;
     font-size: 0.625rem;
-    padding: 10px;
+    padding: 12px;
   }
 }
 .btn-timeline-builder {
-  box-shadow: 0px 2px 5px 0px lighten($gray-light, 35%);
+  box-shadow: 0 0 5px 0 lighten($gray-light, 35%);
   border: 1px solid $brand-secondary;
   display: inline-block;
 
   @include media-breakpoint-down(sm) {
     width: auto;
     font-size: 0.625rem;
-    padding: 10px;
+    padding: 12px;
+  }
+}
+
+.filter-targets-dropdown__button {
+  background-color: white;
+  border: 1px solid $gray-border;
+  min-width: 200px;
+  color: $brand-secondary;
+  box-shadow: 0 0 5px 0 lighten($gray-light, 35%);
+
+  &:after {
+    content: none;
+  }
+
+  &:hover, &:focus {
+    color: $brand-secondary;
+    background-color: white;
+    box-shadow: 0 0 10px 0 lighten($gray-light, 30%);
+  }
+  @include media-breakpoint-down(sm) {
+    min-width: auto;
+    padding: 10px 15px;
+  }
+}
+.filter-targets-dropdown {
+  &.open {
+    .filter-targets-dropdown__button {
+      border-radius: 0;
+    }
+  }
+}
+.filter-targets-dropdown__menu {
+  padding: 0;
+  width: 100%;
+  box-shadow: 0 2px 10px 0 lighten($gray-light, 35%);
+
+  @include media-breakpoint-down(xs) {
+    right: 0;
+    left: auto;
+    width: auto;
+  }
+}
+.filter-targets-dropdown__menu-item {
+  padding: 8px 20px 8px 24px;
+  font-size: 0.875rem;
+
+  &:hover {
+    color: $brand-secondary;
+  }
+}
+.filter-targets-dropdown__icon {
+  color: $brand-primary;
+  margin-right: 5px;
+
+  @include media-breakpoint-down(xs) {
+    margin: 0;
+
+    i {
+      margin: 0;
+    }
+  }
+}
+.filter-targets-dropdown__menu-item-icon {
+  color: $light-grey-text;
+  margin-right: 8px;
+}
+.filter-targets-dropdown__arrow {
+  display: inline-block;
+  color: $light-grey-text;
+
+  &:before {
+    font-size: 1rem;
+    line-height: 0.5;
+    @include fa-icon(angle-down);
   }
 }
 .complete-target-block {

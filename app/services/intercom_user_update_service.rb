@@ -1,7 +1,9 @@
 # This service updates all relevant attributes of Intercom Users who are associated with Batch Applicants
 #
 # Updated info include Batch, College, Univeristy, and Last Applicant Event
-class IntercomUserUpdateService < BaseService
+class IntercomUserUpdateService
+  include Loggable
+
   attr_reader :intercom, :user, :batch_applicant
 
   def self.update_all

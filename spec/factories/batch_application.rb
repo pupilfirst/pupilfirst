@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :batch_application do
-    batch
+    application_round
     application_stage { create :application_stage, number: 1 }
     team_lead { create :batch_applicant, :with_user }
     college

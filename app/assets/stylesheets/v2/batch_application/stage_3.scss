@@ -1,0 +1,50 @@
+.testing-stage-complete__container {
+  .content-box {
+    h3, h4 {
+      line-height: 1.4;
+    }
+  }
+}
+
+.testing-stage-complete__link-wrapper {
+  padding: 0;
+  background: no-repeat 20px center;
+  background-size: 35px auto;
+  text-align: left;
+}
+
+.testing-stage-complete__link-wrapper--code {
+  background-image: asset-url("apply/batch_application/icon-code.svg");
+}
+
+.testing-stage-complete__link-wrapper--video {
+  background-image: asset-url("apply/batch_application/icon-video.svg");
+}
+
+.testing-stage-complete__link-wrapper--default {
+  background-image: asset-url("apply/batch_application/icon-website.svg");
+}
+
+.testing-stage-complete__link-wrapper--application {
+  background-image: asset-url("apply/batch_application/icon-application.svg");
+}
+
+.testing-stage-complete__link-wrapper--default {
+  background-image: asset-url("apply/batch_application/icon-default.svg");
+}
+
+.testing-stage-complete__link {
+  text-align: center;
+  padding: 20px 10px 20px 70px;
+  @extend .content-box;
+  display: block;
+  background-color: transparent;
+
+  &:hover {
+    border-color: $light-secondary;
+  }
+
+  @include media-breakpoint-down(sm) {
+    margin-bottom: 15px;
+  }
+}

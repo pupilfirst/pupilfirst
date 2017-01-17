@@ -1,12 +1,9 @@
-# Create new services by inherting from this class.
-class BaseService
+module Loggable
+  extend ActiveSupport::Concern
+
   def log(message)
     return if Rails.env.test?
     Rails.logger.info "[#{current_timestamp}] #{message}\n"
-  end
-
-  def url_helpers
-    Rails.application.routes.url_helpers
   end
 
   private

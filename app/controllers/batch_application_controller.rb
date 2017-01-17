@@ -289,8 +289,14 @@ class BatchApplicationController < ApplicationController
 
   # Coding stage restart handler.
   def stage_3_restart
-    stage_3_submission = current_application.application_submissions.where(application_stage_id: current_application_stage.id).first
-    stage_3_submission.destroy!
+    BatchApplication.transaction do
+      stage_3_submission = current_application.application_submissions.where(application_stage_id: current_application_stage.id).first
+      stage_3_submission.destroy!
+
+      # Also reset the generate_certificate flag.
+      current_application.update!(generate_certificate: false)
+    end
+
     redirect_to apply_stage_path(stage_number: 3)
   end
 

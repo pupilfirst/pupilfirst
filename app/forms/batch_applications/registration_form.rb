@@ -1,6 +1,7 @@
 module BatchApplications
   class RegistrationForm < Reform::Form
     include CollegeAddable
+    include EmailBounceValidatable
 
     property :name, validates: { presence: true, length: { maximum: 250 } }
     property :email, validates: { presence: true, length: { maximum: 250 }, email: true }

@@ -1,15 +1,16 @@
 class MoocStudentSignupForm < Reform::Form
+  include CollegeAddable
+
   property :name, validates: { presence: true, length: { maximum: 250 } }
   property :email, virtual: true, validates: { presence: true, length: { maximum: 250 }, email: true }
   property :phone, validates: { presence: true, mobile_number: true }
   property :gender, validates: { presence: true, inclusion: Founder.valid_gender_values }
-  property :university_id, validates: { presence: true }
-  property :college, validates: { presence: true, length: { maximum: 250 } }
+  property :college_id, validates: { presence: true }
+  property :college_text, validates: { length: { maximum: 250 } }
   property :semester, validates: { presence: true, inclusion: MoocStudent.valid_semester_values }
   property :state, validates: { presence: true, length: { maximum: 250 } }
 
   validate :mooc_student_must_not_exist
-  validate :university_id_must_be_valid
   validate :email_must_not_be_bounced
 
   def mooc_student_must_not_exist
@@ -21,18 +22,12 @@ class MoocStudentSignupForm < Reform::Form
     errors[:email] << 'is already registered for the course. Log in instead?'
   end
 
-  def university_id_must_be_valid
-    return if university_id.blank? # Presence validator will show correct message.
-    return if University.find_by(id: university_id).present?
-    errors[:university_id] << 'is invalid'
-  end
-
   def email_must_not_be_bounced
     return if email.blank?
 
     user = User.with_email(email).first
     return if user.blank?
-    errors[:email] << 'previous mails to this address were bouncing! Supply a different one.' if user.email_bounced
+    errors[:email] << 'previous mails to this address were bouncing! Supply a different one.' if user.email_bounced_at.present?
   end
 
   def prepopulate!(options)

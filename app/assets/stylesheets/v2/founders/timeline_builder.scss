@@ -262,6 +262,10 @@
   padding: 0 20px 0 10px;
   max-width: 240px;
 
+  @include media-breakpoint-down(sm) {
+    max-width: 170px;
+  }
+
   .select2 {
     outline: 0;
   }

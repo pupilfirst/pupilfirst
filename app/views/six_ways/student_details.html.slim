@@ -24,6 +24,16 @@
       .simple-form-container
         .row
           = simple_form_for @form, url: six_ways_create_student_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { radio_buttons: :horizontal_radio_and_checkboxes } do |f|
+            - if f.object.errors.present?
+              .alert.alert-warning.alert-dismissable.fade.in role='alert'
+
+                strong There were problems with your submission.
+                | &nbsp;Please check all fields and try again.
+
+                - if f.object.errors[:base].present?
+                  ul.m-t-1
+                    - f.object.errors[:base].each do |error_message|
+                      li #{error_message}
             = f.input :name, required: true
             = f.input :email, required: true, disabled: @disable_email
 
@@ -33,13 +43,19 @@
 
             = f.input :gender, required: true, collection: Founder.valid_gender_values, as: :radio_buttons, label_method: proc { |gender| gender.capitalize }
 
-            = f.input :university_id,
+            = f.input :college_id,
               as: :select,
-              input_html: { value: nil, 'data-search-url' => universities_url },
+              input_html: { value: nil, 'data-search-url' => colleges_url },
               required: true,
-              collection: []
+              collection: [["My college isn't listed", 'other']]
 
-            = f.input :college, required: true
+            .hidden-xs-up
+              = f.input :college_text,
+                label: 'College',
+                placeholder: 'Name of your college',
+                required: true,
+                input_html: {maxlength: 250, disabled: true}
+
             = f.input :semester, as: :select, collection: MoocStudent.valid_semester_values, include_blank: 'Select your semester'
             = f.input :state,
               collection: proc { University.valid_state_names },

@@ -10,99 +10,6 @@ feature 'Applying to SV.CO' do
   include_context 'mocked_instamojo'
   include UserSpecHelper
 
-  context 'when a batch is open for applications' do
-    let(:batch) { create :batch }
-    let!(:batch_stage_1) { create :batch_stage, batch: batch, application_stage: application_stage_1 }
-    let!(:batch_stage_2) { create :batch_stage, batch: batch, application_stage: application_stage_2, starts_at: 16.days.from_now, ends_at: 46.days.from_now }
-
-    scenario 'user submits application and pays', js: true do
-      visit apply_path
-      expect(page).to have_text('Did you complete registration once before?')
-
-      # user fills the form and submits
-      fill_in 'batch_application_name', with: 'Jack Sparrow'
-      fill_in 'batch_application_email', with: 'elcapitan@thesea.com'
-      fill_in 'batch_application_email_confirmation', with: 'elcapitan@thesea.com'
-      fill_in 'batch_application_phone', with: '9876543210'
-
-      # Fill in college name because we don't want to bother with dynamically loaded select2.
-      select "My college isn't listed", from: 'batch_application_college_id'
-      fill_in 'batch_application_college_text', with: college.name
-
-      click_on 'Submit my application'
-
-      expect(page).to have_text('You now need to pay the registration fee')
-
-      # prepare for invoking payment
-      batch_application = BatchApplication.last
-
-      # user selects co-founder count and clicks pay
-      select '2', from: 'application_stage_one_team_size_select'
-      expect(page).to have_text('You need to pay Rs. 3000')
-      click_on 'Pay Fees Online'
-
-      # uses must be re-directed to the payment's long_url
-      expect(page.current_url).to eq(long_url)
-
-      payment = Payment.last
-      # ensure we got the right payment
-      expect(payment.batch_application).to eq(batch_application)
-
-      # mimic payment completion
-      payment.update!(
-        instamojo_payment_request_status: 'Completed',
-        instamojo_payment_status: 'Credit',
-        paid_at: Time.now
-      )
-      payment.batch_application.perform_post_payment_tasks!
-
-      # user reaches stage/1/complete
-      visit apply_stage_complete_path(stage_number: '1')
-      expect(page).to have_text('your payment has been accepted')
-    end
-
-    context 'when an applied user returns' do
-      # ready-to-use returning applicant and his application
-      let!(:batch_applicant) { batch_application.team_lead }
-      let!(:batch_application) do
-        create :batch_application,
-          batch: batch,
-          application_stage: ApplicationStage.initial_stage,
-          college: college
-      end
-
-      before do
-        batch_application.batch_applicants << batch_applicant
-      end
-
-      scenario 'returning applicant restarts application' do
-        # user signs in
-        sign_in_user(batch_applicant.user, referer: apply_path)
-        expect(page).to have_text('You have already completed registration')
-        click_on 'Continue application'
-
-        # user must be at the payment page
-        expect(page).to have_text('You now need to pay the registration fee')
-
-        # user clicks on the 'Cancel and Restart Application' button, returns to the apply page and remains signed in
-        click_on 'Cancel and Restart Application'
-        expect(page).to have_no_button('Continue application')
-        expect(page).to have_no_button('Sign In to Continue')
-      end
-
-      context 'when applicant stage has expired' do
-        let!(:batch_stage_1) { create :batch_stage, batch: batch, application_stage: application_stage_1, starts_at: 45.days.ago, ends_at: 15.days.ago }
-        let!(:batch_stage_2) { create :batch_stage, batch: batch, application_stage: application_stage_2 }
-
-        scenario 'applicant did not complete payment in time' do
-          # user signs in
-          sign_in_user(batch_applicant.user, referer: apply_continue_path)
-          expect(page).to have_content 'Application process has closed'
-        end
-      end
-    end
-  end
-
   context 'when a batch has moved to stage 2 - coding and video' do
     let(:batch) { create :batch }
     let!(:batch_applicant) { batch_application.team_lead }
@@ -131,54 +38,6 @@ feature 'Applying to SV.CO' do
         paid_at: Time.now
 
       payment.batch_application.perform_post_payment_tasks!
-    end
-
-    context 'when cofounders are absent' do
-      scenario 'paid applicant fails to submit his code and video links' do
-        # user signs in
-        sign_in_user(batch_applicant.user, referer: apply_continue_path)
-
-        # user must see the coding and video tasks
-        expect(page).to have_text('Coding Task')
-
-        # user fills the stage 2 form and submits
-        fill_in 'application_stage_two_git_repo_url', with: 'https://github.com'
-        select 'Website', from: 'application_stage_two_app_type'
-        fill_in 'application_stage_two_website', with: 'http://example.com'
-        fill_in 'application_stage_two_video_url', with: 'https://facebook.com'
-        click_on 'Submit your entries'
-
-        # user submission must be acknowledged
-        expect(page).to have_text('Please add cofounders before submitting this form')
-      end
-    end
-
-    context 'when cofounders are present' do
-      before do
-        batch_application.batch_applicants << create(:batch_applicant)
-      end
-
-      scenario 'paid applicant is able to submit code and video links' do
-        # user signs in
-        sign_in_user(batch_applicant.user, referer: apply_continue_path)
-
-        # User must see the coding and video tasks.
-        expect(page).to have_text('Coding Task')
-        expect(page).to have_text('Video Task')
-
-        # User fills the stage 2 form and submits.
-        fill_in 'application_stage_two_git_repo_url', with: 'https://github.com/user/repo'
-        select 'Website', from: 'application_stage_two_app_type'
-        fill_in 'application_stage_two_website', with: 'example.com'
-        fill_in 'application_stage_two_video_url', with: 'https://facebook.com/user/videos/random'
-        click_on 'Submit your entries'
-
-        # User submission must be acknowledged.
-        expect(page).to have_text('Your coding and hustling submissions has been received')
-
-        # Example link should have had http prepended since its missing.
-        expect(page).to have_link('Live Website', href: 'http://example.com')
-      end
     end
 
     scenario 'applicant adds cofounder details', js: true do
@@ -213,42 +72,6 @@ feature 'Applying to SV.CO' do
 
       # Ensure that the cofounders have been stored.
       expect(batch_application.cofounders.count).to eq(2)
-    end
-
-    context 'when applicant has submitted for stage 2' do
-      let(:application_submission) do
-        create :application_submission,
-          application_stage: application_stage_2,
-          batch_application: batch_application
-      end
-
-      before do
-        create :application_submission_url, application_submission: application_submission
-
-        create :application_submission_url,
-          application_submission: application_submission,
-          name: 'Facebook Video',
-          url: 'https://facebook.com/video'
-
-        create :application_submission_url,
-          application_submission: application_submission,
-          name: 'Code Repository',
-          url: 'https://github.com/user/repo'
-      end
-
-      scenario 'applicant removes existing submission' do
-        # user signs in
-        sign_in_user(batch_applicant.user, referer: apply_continue_path)
-
-        # user submission must be acknowledged
-        expect(page).to have_text('Your coding and hustling submissions has been received')
-
-        click_on 'Redo your submission'
-
-        # user must see the coding and video tasks
-        expect(page).to have_text('Coding Task')
-        expect(page).to have_text('Video Task')
-      end
     end
   end
 end

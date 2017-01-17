@@ -25,7 +25,15 @@ module BatchApplications
 
     def save(batch_application)
       ApplicationSubmission.transaction do
-        notes = submission_type == 'coding_task' ? 'Coding Task Submission' : 'Previous Work Submission'
+        notes = if submission_type == 'coding_task'
+          # Since submission is a coding task, the application merits a certificate.
+          batch_application.update!(generate_certificate: true)
+          'Coding Task Submission'
+        else
+          # Since submissions is previous work, we won't be comparing it against other submissions.
+          batch_application.update!(generate_certificate: false)
+          'Previous Work Submission'
+        end
 
         submission = ApplicationSubmission.create!(
           application_stage: ApplicationStage.find_by(number: 3),
@@ -35,7 +43,7 @@ module BatchApplications
 
         submission.application_submission_urls.create!(name: 'Code Repository', url: git_repo_url)
         submission.application_submission_urls.create!(name: 'Live Website', url: prepend_http_if_required(website)) if website.present?
-        submission.application_submission_urls.create!(name: 'Application Binary', url: executable) if executable.present?
+        submission.application_submission_urls.create!(name: 'Application Binary', url: prepend_http_if_required(executable)) if executable.present?
       end
 
       IntercomLastApplicantEventUpdateJob.perform_later(batch_application.team_lead, 'coding_task_submitted') unless Rails.env.test?

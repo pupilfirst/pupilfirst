@@ -34,7 +34,6 @@ IntercomRails.config do |config|
   # The method/variable that contains the logged in user in your controllers.
   # If it is `current_user` or `@user`, then you can ignore this
   #
-  config.user.current = proc { current_batch_applicant }
   # config.user.current = [Proc.new { current_user }]
 
   # == Include for logged out Users
@@ -45,7 +44,7 @@ IntercomRails.config do |config|
   # == User model class
   # The class which defines your user model
   #
-  config.user.model = proc { BatchApplicant }
+  # config.user.model = proc { User }
 
   # == Lead/custom attributes for non-signed up users
   # Pass additional attributes to for potential leads or
@@ -65,10 +64,7 @@ IntercomRails.config do |config|
   # You can provide either a method name which will be sent to the current
   # user object, or a Proc which will be passed the current user.
   #
-  # config.user.custom_data = {
-  #   :plan => Proc.new { |current_user| current_user.plan.name },
-  #   :favorite_color => :favorite_color
-  # }
+  config.user.custom_data = proc { |current_user| Users::IntercomDataService.new(current_user).data }
 
   # == Current company method/variable
   # The method/variable that contains the current company for the current user,

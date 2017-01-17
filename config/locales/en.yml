@@ -114,7 +114,7 @@ en:
           title: 'Targets with Unacceptable Submissions'
           description: 'The listed target submissions are not accepted. Re-submit based on feedback!'
         needs_improvement:
-          filter_text: 'Targets which Need Improvement'
+          filter_text: 'Needs Improvement'
           title: 'Targets which Need Improvement'
           description: 'The listed targets need improvement. Consider feedback and try re-submitting!'
         all_targets:

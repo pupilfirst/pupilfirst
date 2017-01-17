@@ -144,7 +144,7 @@ en:
       submitted: 'Submitted'
       expired: 'Expired'
       pending: 'Pending'
-      unavailable: 'Unavailable'
+      unavailable: 'Locked'
       not_accepted: 'Not Accepted'
     status_report:
       complete: 'Target Completed'
@@ -152,7 +152,7 @@ en:
       submitted: 'Submission Being Verified'
       expired: 'Target Expired'
       pending: 'Target Pending'
-      unavailable: 'Target Unavailable'
+      unavailable: 'Target Locked'
       not_accepted: 'Submission Not Accepted'
     status_hint:
       complete: 'Completed on %{date}'

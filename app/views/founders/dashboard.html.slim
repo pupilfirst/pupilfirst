@@ -50,7 +50,7 @@
               span
                 | Add Event
     .targets-board.m-x-auto.target-accordion
-      - if @filtered_targets.present?
+      - if instance_variable_defined?(:@filtered_targets)
         == render 'selected_targets'
       - else
         - @program_weeks.reverse.each do |program_week|

@@ -36,12 +36,12 @@ class FoundersController < ApplicationController
     @batch = @startup.batch.decorate
     @tour = take_on_tour?
 
-    # if filtered_targets_required?
-    #   @filtered_targets = Founders::TargetsFilterService.new(current_founder).filter(params[:filter])
-    # else
-    # eager-load everything required for the dashboard. Order and decorate them too!
-    @program_weeks = @batch.program_weeks.includes(:batch, target_groups: { targets: :assigner }).order(:number, 'target_groups.sort_index', 'targets.sort_index').decorate
-    # end
+    if filtered_targets_required?
+      @filtered_targets = Founders::TargetsFilterService.new(current_founder).filter(params[:filter])
+    else
+      # Eager-load everything required for the dashboard. Order and decorate them too!
+      @program_weeks = @batch.program_weeks.includes(:batch, target_groups: { targets: :assigner }).order(:number, 'target_groups.sort_index', 'targets.sort_index').decorate
+    end
 
     render layout: 'application_v2'
   end

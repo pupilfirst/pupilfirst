@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170116102931) do
+ActiveRecord::Schema.define(version: 20170117081606) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -176,6 +176,7 @@ ActiveRecord::Schema.define(version: 20170116102931) do
     t.string   "payment_reference"
     t.integer  "startup_id"
     t.integer  "application_round_id"
+    t.boolean  "generate_certificate", default: false
     t.index ["application_round_id"], name: "index_batch_applications_on_application_round_id", using: :btree
     t.index ["application_stage_id"], name: "index_batch_applications_on_application_stage_id", using: :btree
     t.index ["startup_id"], name: "index_batch_applications_on_startup_id", using: :btree

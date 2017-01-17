@@ -105,7 +105,7 @@ feature 'Founder Dashboard' do
 
     find("#target-#{target_with_prerequisites.id} .target-title-link").trigger('click')
     within("#target-#{target_with_prerequisites.id}") do
-      expect(page).to have_content('Target Unavailable').and have_no_button
+      expect(page).to have_content('Target Locked').and have_no_button
     end
   end
 end

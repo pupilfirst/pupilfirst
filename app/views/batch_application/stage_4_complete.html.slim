@@ -8,7 +8,7 @@
       = image_tag 'apply/batch_application/code-video-accepted.svg'
     .application-stages-head.text-xs-center
       h1 Coding and hustling submissions accepted!
-.container.stage-2-complete-container
+.container.testing-stage-complete__container
   .m-t-3
     == render 'application_progress'
   .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
@@ -21,13 +21,13 @@
         span.brand-primary.font-semibold
           | &nbsp;#{next_stage_date}.
 
-      .row.code-video-links.text-xs-center
+      .row.text-xs-center
         h3.m-b-1
           | Your submission:
-        - current_application.stage_2_submission.application_submission_urls.each do |entry|
-          .col-md-4
-            .submission-links class=current_application.url_entry_class(entry.name)
-              = link_to entry.name, entry.url, target: '_blank'
+        - current_application.stage_submission(4).application_submission_urls.each do |entry|
+          .col-md-12
+            .testing-stage-complete__link-wrapper class=current_application.url_entry_class(entry.name)
+              = link_to entry.name, entry.url, target: '_blank', class: 'testing-stage-complete__link'
 
       - if current_application.restartable?
         hr.m-y-2

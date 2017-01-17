@@ -80,15 +80,15 @@ class BatchApplicationDecorator < Draper::Decorator
     name = name.downcase
 
     if 'code'.in? name
-      'icon-code'
+      'testing-stage-complete__link-wrapper--code'
     elsif 'video'.in? name
-      'icon-video'
+      'testing-stage-complete__link-wrapper--video'
     elsif 'web'.in? name
-      'icon-website'
+      'testing-stage-complete__link-wrapper--website'
     elsif 'app'.in? name
-      'icon-application'
+      'testing-stage-complete__link-wrapper--application'
     else
-      'icon-default'
+      'testing-stage-complete__link-wrapper--default'
     end
   end
 

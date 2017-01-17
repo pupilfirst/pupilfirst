@@ -25,7 +25,15 @@ module BatchApplications
 
     def save(batch_application)
       ApplicationSubmission.transaction do
-        notes = submission_type == 'coding_task' ? 'Coding Task Submission' : 'Previous Work Submission'
+        notes = if submission_type == 'coding_task'
+          # Since submission is a coding task, the application merits a certificate.
+          batch_application.update!(generate_certificate: true)
+          'Coding Task Submission'
+        else
+          # Since submissions is previous work, we won't be comparing it against other submissions.
+          batch_application.update!(generate_certificate: false)
+          'Previous Work Submission'
+        end
 
         submission = ApplicationSubmission.create!(
           application_stage: ApplicationStage.find_by(number: 3),

@@ -308,6 +308,7 @@ ActiveAdmin.register BatchApplication do
       end
 
       row :application_stage
+      row :generate_certificate
       row :agreements_verified
       row :college
 

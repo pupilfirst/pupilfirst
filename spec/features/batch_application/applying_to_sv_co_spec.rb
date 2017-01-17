@@ -40,54 +40,6 @@ feature 'Applying to SV.CO' do
       payment.batch_application.perform_post_payment_tasks!
     end
 
-    context 'when cofounders are absent' do
-      scenario 'paid applicant fails to submit his code and video links' do
-        # user signs in
-        sign_in_user(batch_applicant.user, referer: apply_continue_path)
-
-        # user must see the coding and video tasks
-        expect(page).to have_text('Coding Task')
-
-        # user fills the stage 2 form and submits
-        fill_in 'application_stage_two_git_repo_url', with: 'https://github.com'
-        select 'Website', from: 'application_stage_two_app_type'
-        fill_in 'application_stage_two_website', with: 'http://example.com'
-        fill_in 'application_stage_two_video_url', with: 'https://facebook.com'
-        click_on 'Submit your entries'
-
-        # user submission must be acknowledged
-        expect(page).to have_text('Please add cofounders before submitting this form')
-      end
-    end
-
-    context 'when cofounders are present' do
-      before do
-        batch_application.batch_applicants << create(:batch_applicant)
-      end
-
-      scenario 'paid applicant is able to submit code and video links' do
-        # user signs in
-        sign_in_user(batch_applicant.user, referer: apply_continue_path)
-
-        # User must see the coding and video tasks.
-        expect(page).to have_text('Coding Task')
-        expect(page).to have_text('Video Task')
-
-        # User fills the stage 2 form and submits.
-        fill_in 'application_stage_two_git_repo_url', with: 'https://github.com/user/repo'
-        select 'Website', from: 'application_stage_two_app_type'
-        fill_in 'application_stage_two_website', with: 'example.com'
-        fill_in 'application_stage_two_video_url', with: 'https://facebook.com/user/videos/random'
-        click_on 'Submit your entries'
-
-        # User submission must be acknowledged.
-        expect(page).to have_text('Your coding and hustling submissions has been received')
-
-        # Example link should have had http prepended since its missing.
-        expect(page).to have_link('Live Website', href: 'http://example.com')
-      end
-    end
-
     scenario 'applicant adds cofounder details', js: true do
       # user signs in
       sign_in_user(batch_applicant.user, referer: apply_continue_path)
@@ -120,42 +72,6 @@ feature 'Applying to SV.CO' do
 
       # Ensure that the cofounders have been stored.
       expect(batch_application.cofounders.count).to eq(2)
-    end
-
-    context 'when applicant has submitted for stage 2' do
-      let(:application_submission) do
-        create :application_submission,
-          application_stage: application_stage_2,
-          batch_application: batch_application
-      end
-
-      before do
-        create :application_submission_url, application_submission: application_submission
-
-        create :application_submission_url,
-          application_submission: application_submission,
-          name: 'Facebook Video',
-          url: 'https://facebook.com/video'
-
-        create :application_submission_url,
-          application_submission: application_submission,
-          name: 'Code Repository',
-          url: 'https://github.com/user/repo'
-      end
-
-      scenario 'applicant removes existing submission' do
-        # user signs in
-        sign_in_user(batch_applicant.user, referer: apply_continue_path)
-
-        # user submission must be acknowledged
-        expect(page).to have_text('Your coding and hustling submissions has been received')
-
-        click_on 'Redo your submission'
-
-        # user must see the coding and video tasks
-        expect(page).to have_text('Coding Task')
-        expect(page).to have_text('Video Task')
-      end
     end
   end
 end

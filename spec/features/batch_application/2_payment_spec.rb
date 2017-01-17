@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Batch Application Payment', focus: true do
+feature 'Batch Application Payment' do
   # Things that are assumed to exist.
   let(:batch) { create :batch }
   let!(:application_round) { create :application_round, :in_stage_1, batch: batch }
@@ -11,7 +11,7 @@ feature 'Batch Application Payment', focus: true do
   include_context 'mocked_instamojo'
   include UserSpecHelper
 
-  scenario 'user pays for application', js: true do
+  scenario 'applicant pays for application', js: true do
     sign_in_user(batch_applicant.user)
     expect(page).to have_text('You now need to pay the registration fee')
 

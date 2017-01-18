@@ -59,22 +59,16 @@ module Founders
       batch_targets.left_joins(:timeline_events).where(timeline_events: { id: nil })
     end
 
-    def timeline_events_mismatch_targets
-      batch_targets.left_joins(:timeline_events).where.not(timeline_events: { id: @founder.timeline_events.select(:id) })
+    def timeline_events_mismatch_founder_targets
+      batch_targets.founder.left_joins(:timeline_events).where.not(timeline_events: { id: @founder.timeline_events.select(:id) })
     end
 
-    def not_submitted_founder_targets
-      # Targets with founder role, where @founder has not submitted an event.
-      timeline_events_mismatch_targets.or(timeline_event_missing_targets).founder
-    end
-
-    def not_submitted_startup_targets
-      # Targets with team roles, where no one from @founder's team has submitted an event.
-      timeline_events_mismatch_targets.or(timeline_event_missing_targets).not_founder
+    def timeline_events_mismatch_startup_targets
+      batch_targets.not_founder.left_joins(:timeline_events).where.not(timeline_events: { id: @founder.startup.timeline_events.select(:id) })
     end
 
     def not_submitted_targets
-      not_submitted_founder_targets.or(not_submitted_startup_targets).distinct
+      timeline_event_missing_targets.or(timeline_events_mismatch_founder_targets).or(timeline_events_mismatch_startup_targets).distinct
     end
 
     def expired_targets

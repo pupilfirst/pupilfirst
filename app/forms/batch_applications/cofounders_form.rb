@@ -3,7 +3,10 @@ module BatchApplications
     collection :cofounders, populate_if_empty: BatchApplicant do
       property :id
       property :name, validates: { presence: true, length: { maximum: 250 } }
-      property :email, validates: { presence: true, length: { maximum: 250 }, format: { with: /\S+@\S+/, message: "doesn't look like an email" } }
+      property :email, validates: { presence: true, length: { maximum: 250 }, format: { with: EmailValidator::REGULAR_EXPRESSION, message: "doesn't look like an email" } }
+      property :phone, validates: { presence: true, mobile_number: true }
+      property :college_id, validates: { presence: true }
+      property :college_text, validates: { length: { maximum: 250 } }
       property :delete, virtual: true
     end
 
@@ -11,10 +14,11 @@ module BatchApplications
     validate :limit_cofounders_count
     validate :cofounders_must_be_unique
     validate :do_not_repeat_cofounders
+    validate :cofounder_must_have_college_id_or_text
 
     def limit_cofounders_count
-      unless cofounders.count.in? 1..9
-        errors[:base] << 'You can have maximum 9 cofounders, and a minimum of 1.'
+      unless cofounders.count.in? 1..5
+        errors[:base] << 'You can have maximum 5 cofounders, and a minimum of 1.'
       end
     end
 
@@ -61,6 +65,21 @@ module BatchApplications
       errors[:base] << "It looks like you've repeated some cofounder email addresses." if has_error
     end
 
+    def cofounder_must_have_college_id_or_text
+      cofounders.each do |cofounder|
+        next if cofounder.college_id.present? && cofounder.college_id != 'other'
+        next if cofounder.college_text.present?
+
+        errors[:base] << "Please pick a college for #{cofounder.name}."
+
+        if cofounder.college_id == 'other'
+          cofounder.errors[:college_text] << "can't be blank"
+        else
+          cofounder.errors[:college_id] << 'must be selected'
+        end
+      end
+    end
+
     def prepopulate!
       self.cofounders = [BatchApplicant.new] * (model.team_size - 1) if cofounders.empty?
     end
@@ -68,22 +87,38 @@ module BatchApplications
     def save
       cofounders.each do |cofounder|
         if cofounder.id.present?
-          persisted_cofounder = model.cofounders.find(cofounder.id)
-
-          if cofounder.delete == '1'
-            persisted_cofounder.destroy!
-          else
-            persisted_cofounder.update!(name: cofounder.name)
-          end
+          update_applicant(cofounder)
         else
-          applicant = BatchApplicant.with_email(cofounder.email).first
-          applicant = BatchApplicant.create!(email: cofounder.email) if applicant.blank?
-          applicant.update!(name: cofounder.name)
-          model.batch_applicants << applicant
+          create_applicant(cofounder)
         end
       end
 
       model.update!(team_size: model.batch_applicants.count)
+    end
+
+    def create_applicant(cofounder)
+      applicant = BatchApplicant.with_email(cofounder.email).first
+      applicant = BatchApplicant.create!(email: cofounder.email) if applicant.blank?
+      applicant.update!(college_details(index).merge(name: cofounder.name))
+      model.batch_applicants << applicant
+    end
+
+    def update_applicant(cofounder)
+      persisted_cofounder = model.cofounders.find(cofounder.id)
+
+      if cofounder.delete == '1'
+        persisted_cofounder.destroy!
+      else
+        persisted_cofounder.update!(college_details(cofounder).merge(name: cofounder.name, phone: cofounder.phone))
+      end
+    end
+
+    def college_details(cofounder)
+      if cofounder.college_text.present?
+        { college_text: cofounder.college_text }
+      else
+        { college_id: cofounder.college_id }
+      end
     end
   end
 end

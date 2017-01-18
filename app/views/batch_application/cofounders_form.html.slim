@@ -7,6 +7,8 @@
     .application-stages-head.text-xs-center
       h1 Update Cofounder Details
 
+#batch-application__cofounders-form data-college-search-url=colleges_url
+
 .container
   .m-t-2.m-b-2
     .row
@@ -58,14 +60,31 @@
                     input_html: { maxlength: 250, type: :email, disabled: c.object.persisted? },
                     label: 'Email address'
 
+                  = c.input :phone, label: 'Mobile phone number',
+                    input_html: { maxlength: 17, type: 'tel', pattern: MobileNumberValidator::FORM_EXPRESSION }
+
+                  = c.input :college_id,
+                    as: :select,
+                    input_html: { value: nil, 'data-search-url' => colleges_url },
+                    required: true,
+                    collection: [["My college isn't listed", 'other']]
+
+                  .hidden-xs-up
+                    = c.input :college_text,
+                      placeholder: 'Name of your college',
+                      required: true,
+                      input_html: { maxlength: 250, disabled: true }
+
                   - if c.object.persisted?
                     = c.input :delete, as: :boolean, label: '&nbsp;Delete this cofounder'.html_safe
 
             .clearfix
               .pull-sm-left.m-b-1
-                button.add-another-cofounder.btn.btn-secondary.text-uppercase
+                a.js-hook.cofounders-form__add-cofounder-button.btn.btn-secondary.text-uppercase
                   i.fa.fa-plus
                   ' &nbsp; Add cofounder
 
               .pull-sm-right.m-b-1
                 = f.submit 'Save cofounders', class: 'btn btn-success text-uppercase' do
+
+        = react_component('CofoundersForm', { authenticityToken: form_authenticity_token, path: apply_cofounders_path, cofounders: @form.cofounders, errors: @form.errors, collegesUrl: colleges_url })

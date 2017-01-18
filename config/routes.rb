@@ -197,6 +197,14 @@ Rails.application.routes.draw do
     end
   end
 
+  scope 'paytm', as: 'paytm', controller: 'paytm' do
+    get 'pay'
+    post 'callback'
+  end
+
+  # TODO: Remove this route once PayTM is correctly configured with '/paytm/callback' as the redirect_url.
+  post '/', to: 'home#paytm_callback'
+
   # used for shortened urls from the shortener gem
   get '/:id', to: 'shortener/shortened_urls#show'
 end

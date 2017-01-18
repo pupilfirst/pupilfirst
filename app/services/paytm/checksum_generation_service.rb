@@ -5,20 +5,20 @@ module Paytm
 
     def initialize(order_id:, customer_id:, amount:, phone:, email:)
       @params_list = {
-        m_id: ENV['PATYM_MERCHANT_ID'],
-        order_id: order_id,
-        cust_id: customer_id,
-        industry_type_id: ENV['PAYTM_INDUSTRY_TYPE_ID'],
-        channel_id: ENV['PAYTM_CHANNEL_ID'],
-        txn_amount: amount,
-        msisdn: phone,
-        email: email,
-        website: ENV['PAYTM_MERCHANT_WEBSITE_URL']
+        "MID": ENV.fetch('PAYTM_MERCHANT_ID'),
+        "ORDER_ID": order_id,
+        "CUST_ID": customer_id,
+        "INDUSTRY_TYPE_ID": ENV.fetch('PAYTM_INDUSTRY_TYPE_ID'),
+        "CHANNEL_ID": ENV.fetch('PAYTM_CHANNEL_ID'),
+        "TXN_AMOUNT": amount,
+        "MSISDN": phone,
+        "EMAIL": email,
+        "WEBSITE": ENV.fetch('PAYTM_MERCHANT_WEBSITE_NAME')
       }
     end
 
     def generate_checksum
-      new_pg_checksum(@params_list, ENV['PAYTM_MERCHANT_KEY']).delete("\n")
+      new_pg_checksum(@params_list, ENV.fetch('PAYTM_MERCHANT_KEY')).delete("\n")
     end
   end
 end

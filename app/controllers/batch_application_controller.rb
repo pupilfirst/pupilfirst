@@ -1,7 +1,7 @@
 class BatchApplicationController < ApplicationController
   before_action :ensure_accurate_stage_number, only: %w(ongoing submit complete restart expired rejected)
   before_action :load_common_instance_variables
-  before_action :authenticate_batch_applicant!, except: %w(index register notify)
+  before_action :authenticate_team_lead!, except: %w(index register notify)
   before_action :load_index_variables, only: %w(index register notify)
 
   layout 'application_v2'
@@ -54,7 +54,7 @@ class BatchApplicationController < ApplicationController
   def continue
     from = params[:from].present? ? { from: params[:from] } : {}
 
-    case current_application&.status
+    case current_application.status
       when :ongoing
         redirect_to apply_stage_path(from.merge(stage_number: application_stage_number))
       when :expired
@@ -65,8 +65,6 @@ class BatchApplicationController < ApplicationController
         redirect_to apply_stage_complete_path(from.merge(stage_number: application_stage_number))
       when :promoted
         redirect_to apply_stage_complete_path(from.merge(stage_number: (application_stage_number - 1)))
-      when nil
-        redirect_to apply_path(from)
       else
         raise "Unexpected application status: #{current_application.status}"
     end
@@ -381,7 +379,7 @@ class BatchApplicationController < ApplicationController
   def current_application
     @current_application ||= begin
       if current_batch_applicant.present?
-        current_batch_applicant.batch_applications.order('created_at DESC').first&.decorate
+        current_batch_applicant.applications_as_team_lead.order('created_at DESC').first&.decorate
       end
     end
   end
@@ -402,12 +400,24 @@ class BatchApplicationController < ApplicationController
     redirect_to apply_continue_path if params[:stage_number].to_i != expected_stage_number
   end
 
-  def authenticate_batch_applicant!
+  def authenticate_team_lead!
     # User must be logged in
     user = authenticate_user!
 
     unless user.batch_applicant.present?
       flash[:notice] = 'You are not an applicant. Please go through the registration process.'
+      redirect_to apply_url
+      return
+    end
+
+    unless user.batch_applicant.batch_applications.any?
+      flash[:notice] = 'You have not submitted an application. Please go through the registration process.'
+      redirect_to apply_url
+      return
+    end
+
+    unless current_application.present?
+      flash[:notice] = 'You are part of an application, but are not the team lead. If you wish to create a new application as team lead, please go through the registration process.'
       redirect_to apply_url
     end
   end

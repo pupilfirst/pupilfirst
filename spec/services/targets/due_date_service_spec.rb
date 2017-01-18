@@ -4,7 +4,7 @@ describe Targets::DueDateService do
   subject { described_class.new(batch) }
 
   # create a batch with targets for startups
-  let!(:batch) { create :batch, :just_started, :with_startups, :with_targets_for_startups }
+  let!(:batch) { create :batch, :with_startups, :with_targets_for_startups, start_date: 1.day.ago }
   # select sample targets for testing
   let(:target_1) { Target.first }
   let(:target_2) { Target.last }

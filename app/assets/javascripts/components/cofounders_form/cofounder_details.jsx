@@ -108,15 +108,14 @@ class CofoundersFormCofounderDetails extends React.Component {
           pattern="\+?[0-9]{8,16}" value={ this.cofounderValue('phone') }/>
 
         { !this.state.useCollegeText &&
-        <div className="form-group select required batch_applications_cofounders_cofounders_college_id">
-          <label className="control-label select required"
-            htmlFor="batch_applications_cofounders_cofounders_attributes_0_college_id">
+        <div className="form-group select required">
+          <label className="control-label select required" htmlFor={ this.selectId() }>
             <abbr title="required">*</abbr> College
           </label>
 
           <select defaultValue={ this.cofounderValue('college_id') } className="form-control select required"
             required="required" aria-required="true" id={ this.selectId() }
-            name="batch_applications_cofounders[cofounders_attributes][0][college_id]">
+            name={ "batch_applications_cofounders[cofounders_attributes][" + this.props.index + "][college_id]" }>
             <option value=""/>
             { this.hasCollege() &&
             <option value={ this.cofounderValue('college_id') }>{ this.props.collegeName }</option>

@@ -71,7 +71,7 @@ class CofoundersFormCofounderDetails extends React.Component {
   }
 
   persisted() {
-    return typeof(this.cofounderValue('id')) !== 'undefined';
+    return (typeof(this.cofounderValue('id')) !== 'undefined') && (this.cofounderValue('id') !== null) && (this.cofounderValue('id') !== '');
   }
 
   deleteCheckboxId() {

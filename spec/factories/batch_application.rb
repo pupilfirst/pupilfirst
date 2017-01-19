@@ -11,6 +11,7 @@ FactoryGirl.define do
 
     trait :payment_requested do
       team_size { (2..10).to_a.sample }
+      application_stage { create :application_stage, number: 2 }
 
       after(:create) do |application|
         create :payment, batch_application: application, batch_applicant: application.team_lead
@@ -19,46 +20,56 @@ FactoryGirl.define do
 
     trait :paid do
       team_size { (2..10).to_a.sample }
-      application_stage { create :application_stage, number: 2 }
+      application_stage { create :application_stage, number: 3 }
 
       after(:create) do |application|
         create :payment, batch_application: application, batch_applicant: application.team_lead, paid_at: Time.now
       end
     end
 
-    trait :stage_2_submitted do
+    trait :coding_stage_submitted do
       paid
 
       after(:create) do |application|
+        create :application_submission, :coding, batch_application: application, scored: true
+      end
+    end
+
+    trait :video_stage_submitted do
+      coding_stage_submitted
+
+      before(:create) do |application|
         (application.team_size - 1).times do
           application.batch_applicants << create(:batch_applicant)
         end
-
-        create :application_submission, :stage_2_submission, batch_application: application, scored: true
       end
-    end
-
-    trait :stage_3 do
-      stage_2_submitted
-      application_stage { create :application_stage, number: 3 }
-    end
-
-    trait :stage_4 do
-      stage_3
-      application_stage { create :application_stage, number: 4 }
 
       after(:create) do |application|
-        create :application_submission, :stage_3_submission, batch_application: application, scored: true
+        create :application_submission, :video, batch_application: application, scored: true
       end
     end
 
-    trait :stage_5 do
-      stage_4
+    trait :interview_stage do
+      video_stage_submitted
       application_stage { create :application_stage, number: 5 }
+    end
+
+    trait :pre_selection_stage do
+      interview_stage
+      application_stage { create :application_stage, number: 6 }
+
+      after(:create) do |application|
+        create :application_submission, :interview, batch_application: application, scored: true
+      end
+    end
+
+    trait :closed_stage do
+      pre_selection_stage
+      application_stage { create :application_stage, number: 7 }
       agreements_verified true
 
       after(:create) do |application|
-        create :application_submission, :stage_4, batch_application: application
+        create :application_submission, :pre_selection, batch_application: application
 
         image_path = File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'users', 'college_id.jpg'))
         address = [Faker::Address.street_address, Faker::Address.city, Faker::Address.zip].join("\n")

@@ -2,8 +2,14 @@ class CofoundersFormCofounderDetails extends React.Component {
   constructor(props) {
     super(props);
 
+    let useCollegeText = false;
+
+    if (props.cofounder.fields.college_id === null && props.cofounder.fields.college_text.length > 0) {
+      useCollegeText = true;
+    }
+
     this.state = {
-      useCollegeText: false
+      useCollegeText: useCollegeText
     };
 
     this.handleCollegeChange = this.handleCollegeChange.bind(this);

@@ -34,7 +34,7 @@
                       ' #{startup.product_name}: #{event.title}
                     span.time-ago
                       | (#{time_ago_in_words(event.event_on)} ago)
-                    p = event.description
+                    p = simple_format(event.description)
                   .startup-footer
                     .startup-basebox.clearfix
                       .startup-event-logo.pull-left

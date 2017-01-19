@@ -30,7 +30,7 @@ module BatchApplications
       return if persisted_cofounders.blank?
 
       return if persisted_cofounders.select do |persisted_cofounder|
-        persisted_cofounder.delete != '1'
+        persisted_cofounder.delete != 'on'
       end.present?
 
       errors[:base] << 'You must have at least one cofounder.'
@@ -67,12 +67,12 @@ module BatchApplications
 
     def cofounder_must_have_college_id_or_text
       cofounders.each do |cofounder|
-        next if cofounder.college_id.present? && cofounder.college_id != 'other'
         next if cofounder.college_text.present?
+        next if College.find_by(id: cofounder.college_id).present?
 
         errors[:base] << "Please pick a college for #{cofounder.name}."
 
-        if cofounder.college_id == 'other'
+        if cofounder.college_id.blank?
           cofounder.errors[:college_text] << "can't be blank"
         else
           cofounder.errors[:college_id] << 'must be selected'
@@ -99,14 +99,14 @@ module BatchApplications
     def create_applicant(cofounder)
       applicant = BatchApplicant.with_email(cofounder.email).first
       applicant = BatchApplicant.create!(email: cofounder.email) if applicant.blank?
-      applicant.update!(college_details(index).merge(name: cofounder.name))
+      applicant.update!(college_details(cofounder).merge(name: cofounder.name, phone: cofounder.phone))
       model.batch_applicants << applicant
     end
 
     def update_applicant(cofounder)
       persisted_cofounder = model.cofounders.find(cofounder.id)
 
-      if cofounder.delete == '1'
+      if cofounder.delete == 'on'
         persisted_cofounder.destroy!
       else
         persisted_cofounder.update!(college_details(cofounder).merge(name: cofounder.name, phone: cofounder.phone))
@@ -118,6 +118,13 @@ module BatchApplications
         { college_text: cofounder.college_text }
       else
         { college_id: cofounder.college_id }
+      end
+    end
+
+    def college_names
+      cofounders.each_with_object({}) do |cofounder, names|
+        next if cofounder.college_id.nil?
+        names[cofounder.college_id] = College.find(cofounder.college_id).name
       end
     end
   end

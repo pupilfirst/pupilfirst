@@ -49,8 +49,9 @@ class CofoundersFormCofounderInput extends React.Component {
         </label>
 
         <input className={ this.inputClasses() } maxLength={ this.props.maxLength } required="required"
-               aria-required="true" size={ this.props.maxLength } type={ this.inputType() } name={ this.inputName() }
-               id={ this.inputId() } pattern={ this.props.pattern }/>
+          aria-required="true" size={ this.props.maxLength } type={ this.inputType() } name={ this.inputName() }
+          id={ this.inputId() } pattern={ this.props.pattern } defaultValue={ this.props.value }
+          disabled={ this.props.disabled }/>
         { this.hasError() &&
         <span className="help-block">{ this.props.error }</span>
         }
@@ -66,5 +67,7 @@ CofoundersFormCofounderInput.PropTypes = {
   name: React.PropTypes.string,
   type: React.PropTypes.string,
   pattern: React.PropTypes.string,
-  error: React.PropTypes.string
+  error: React.PropTypes.string,
+  value: React.PropTypes.string,
+  disabled: React.PropTypes.bool,
 };

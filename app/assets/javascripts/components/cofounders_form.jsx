@@ -30,6 +30,16 @@ class CofoundersForm extends React.Component {
     this.setState({cofounders: this.state.cofounders.concat([newCofounder])});
   }
 
+  collegeName(cofounder) {
+    let collegeId = cofounder.fields.college_id;
+
+    if (collegeId !== null) {
+      return this.props.collegeNames[collegeId];
+    } else {
+      return null;
+    }
+  }
+
   render() {
     return (
       <div className="apply-cofounders-form">
@@ -41,7 +51,8 @@ class CofoundersForm extends React.Component {
             {this.state.cofounders.map(function (cofounder, index) {
               return (
                 <CofoundersFormCofounderDetails cofounder={ cofounder } key={ index } index={ index }
-                                                collegesUrl={ this.props.collegesUrl }/>
+                  collegesUrl={ this.props.collegesUrl }
+                  collegeName={ this.collegeName(cofounder) }/>
               );
             }, this)}
           </div>
@@ -49,7 +60,7 @@ class CofoundersForm extends React.Component {
           <div className="clearfix">
             <div className="pull-sm-left m-b-1">
               <a className="btn btn-secondary cofounders-form__add-cofounder-button text-uppercase"
-                 onClick={ this.addCofounder }>
+                onClick={ this.addCofounder }>
                 <i className="fa fa-plus"/> Add cofounder
               </a>
             </div>
@@ -69,5 +80,6 @@ CofoundersForm.propTypes = {
   path: React.PropTypes.string,
   cofounders: React.PropTypes.array,
   errors: React.PropTypes.object,
-  collegesUrl: React.PropTypes.string
+  collegesUrl: React.PropTypes.string,
+  collegeNames: React.PropTypes.object
 };

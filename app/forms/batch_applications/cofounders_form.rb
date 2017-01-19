@@ -127,5 +127,9 @@ module BatchApplications
         names[cofounder.college_id] = College.find(cofounder.college_id).name
       end
     end
+
+    def cofounders_for_react
+      JSON.parse(cofounders.to_json).map { |c| c.slice('fields', 'errors') }
+    end
   end
 end

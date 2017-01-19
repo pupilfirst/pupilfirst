@@ -5,7 +5,7 @@ module BatchApplications
       property :name, validates: { presence: true, length: { maximum: 250 } }
       property :email, validates: { presence: true, length: { maximum: 250 }, format: { with: EmailValidator::REGULAR_EXPRESSION, message: "doesn't look like an email" } }
       property :phone, validates: { presence: true, mobile_number: true }
-      property :college_id, validates: { presence: true }
+      property :college_id
       property :college_text, validates: { length: { maximum: 250 } }
       property :delete, virtual: true
     end

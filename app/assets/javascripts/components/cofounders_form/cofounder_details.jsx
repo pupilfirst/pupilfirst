@@ -4,7 +4,7 @@ class CofoundersFormCofounderDetails extends React.Component {
 
     let useCollegeText = false;
 
-    if (props.cofounder.fields.college_id === null && props.cofounder.fields.college_text.length > 0) {
+    if (props.cofounder.fields.college_id === null && props.cofounder.fields.college_text != null) {
       useCollegeText = true;
     }
 
@@ -103,7 +103,8 @@ class CofoundersFormCofounderDetails extends React.Component {
         }
 
         <CofoundersFormCofounderInput label="Name" index={ this.props.index } key={ "name-" + this.props.index }
-          maxLength={ 250 } name="name" type="string" value={ this.cofounderValue('name') }/>
+          maxLength={ 250 } name="name" type="string" value={ this.cofounderValue('name') }
+          error={ this.errorForField('name') }/>
 
         <CofoundersFormCofounderInput label="Email address" index={ this.props.index }
           key={ "email-" + this.props.index } maxLength={ 250 } name="email" type="email"
@@ -111,7 +112,7 @@ class CofoundersFormCofounderDetails extends React.Component {
 
         <CofoundersFormCofounderInput label="Mobile phone number" index={ this.props.index }
           key={ "phone-" + this.props.index } maxLength={ 17 } name="phone" type="tel"
-          pattern="\+?[0-9]{8,16}" value={ this.cofounderValue('phone') }/>
+          pattern="\+?[0-9]{8,16}" value={ this.cofounderValue('phone') } error={ this.errorForField('phone') }/>
 
         { !this.state.useCollegeText &&
         <div className="form-group select required">
@@ -135,7 +136,7 @@ class CofoundersFormCofounderDetails extends React.Component {
 
         { this.state.useCollegeText &&
         <CofoundersFormCofounderInput label="Name of your college" index={ this.props.index } type="string"
-          key={ "college-text-" + this.props.index } maxLength={ 250 }
+          key={ "college-text-" + this.props.index } maxLength={ 250 } error={ this.errorForField('college_text') }
           name="college_text" value={ this.cofounderValue('college_text') }/>
         }
 

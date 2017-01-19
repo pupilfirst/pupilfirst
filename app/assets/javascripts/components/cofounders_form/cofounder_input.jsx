@@ -38,7 +38,7 @@ class CofoundersFormCofounderInput extends React.Component {
   }
 
   hasError() {
-    return typeof(this.props.error) !== 'undefined';
+    return this.props.error !== null;
   }
 
   render() {

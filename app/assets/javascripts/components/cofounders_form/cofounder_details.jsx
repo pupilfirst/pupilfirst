@@ -17,7 +17,7 @@ class CofoundersFormCofounderDetails extends React.Component {
   }
 
   canDelete() {
-    return !this.persisted();
+    return !this.persisted() && this.props.allowDelete;
   }
 
   componentDidMount() {
@@ -65,7 +65,11 @@ class CofoundersFormCofounderDetails extends React.Component {
   }
 
   errorForField(field) {
-    return this.props.cofounder.errors[field][0];
+    if (this.props.cofounder.errors[field]) {
+      return this.props.cofounder.errors[field][0];
+    } else {
+      return null;
+    }
   }
 
   cofounderValue(field) {
@@ -102,16 +106,16 @@ class CofoundersFormCofounderDetails extends React.Component {
           name={ "batch_applications_cofounders[cofounders_attributes][" + this.props.index + "][id]" }/>
         }
 
-        <CofoundersFormCofounderInput label="Name" index={ this.props.index } key={ "name-" + this.props.index }
+        <CofoundersFormCofounderInput label="Name" index={ this.props.index } key={ "name-" + this.props.generatedKey }
           maxLength={ 250 } name="name" type="string" value={ this.cofounderValue('name') }
           error={ this.errorForField('name') }/>
 
         <CofoundersFormCofounderInput label="Email address" index={ this.props.index }
-          key={ "email-" + this.props.index } maxLength={ 250 } name="email" type="email"
+          key={ "email-" + this.props.generatedKey } maxLength={ 250 } name="email" type="email"
           error={ this.errorForField('email') } value={ this.cofounderValue('email') } disabled={ this.persisted() }/>
 
         <CofoundersFormCofounderInput label="Mobile phone number" index={ this.props.index }
-          key={ "phone-" + this.props.index } maxLength={ 17 } name="phone" type="tel"
+          key={ "phone-" + this.props.generatedKey } maxLength={ 17 } name="phone" type="tel"
           pattern="\+?[0-9]{8,16}" value={ this.cofounderValue('phone') } error={ this.errorForField('phone') }/>
 
         { !this.state.useCollegeText &&
@@ -136,7 +140,8 @@ class CofoundersFormCofounderDetails extends React.Component {
 
         { this.state.useCollegeText &&
         <CofoundersFormCofounderInput label="Name of your college" index={ this.props.index } type="string"
-          key={ "college-text-" + this.props.index } maxLength={ 250 } error={ this.errorForField('college_text') }
+          key={ "college-text-" + this.props.generatedKey } maxLength={ 250 }
+          error={ this.errorForField('college_text') }
           name="college_text" value={ this.cofounderValue('college_text') }/>
         }
 
@@ -162,5 +167,7 @@ CofoundersFormCofounderDetails.propTypes = {
   collegesUrl: React.PropTypes.string,
   index: React.PropTypes.number,
   collegeName: React.PropTypes.string,
-  deleteCB: React.PropTypes.func
+  deleteCB: React.PropTypes.func,
+  allowDelete: React.PropTypes.bool,
+  generatedKey: React.PropTypes.string
 };

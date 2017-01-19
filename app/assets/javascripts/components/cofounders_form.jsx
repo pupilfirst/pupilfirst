@@ -2,12 +2,23 @@ class CofoundersForm extends React.Component {
   constructor(props) {
     super(props);
 
+    let initialCofounderKeys = [];
+
+    for (let i = 0; i < this.props.cofounders.length; i++) {
+      initialCofounderKeys.push(this.generateKey(i));
+    }
+
     this.state = {
-      cofounders: this.props.cofounders
+      cofounders: this.props.cofounders,
+      cofounderKeys: initialCofounderKeys
     };
 
     this.addCofounder = this.addCofounder.bind(this);
     this.deleteCofounderCB = this.deleteCofounderCB.bind(this);
+  }
+
+  generateKey(index) {
+    return '' + (new Date).getTime() + index;
   }
 
   addCofounder() {
@@ -19,16 +30,15 @@ class CofoundersForm extends React.Component {
         name: null,
         phone: null
       },
-      errors: {
-        college_id: [],
-        college_text: [],
-        email: [],
-        name: [],
-        phone: []
-      }
+      errors: {}
     };
 
-    this.setState({cofounders: this.state.cofounders.concat([newCofounder])});
+    let newIndex = this.state.cofounders.length;
+
+    this.setState({
+      cofounders: this.state.cofounders.concat([newCofounder]),
+      cofounderKeys: this.state.cofounderKeys.concat([this.generateKey(newIndex)])
+    });
   }
 
   collegeName(cofounder) {
@@ -43,8 +53,20 @@ class CofoundersForm extends React.Component {
 
   deleteCofounderCB(index) {
     let updatedCofounders = this.state.cofounders.slice();
+    let updatedCofounderKeys = this.state.cofounderKeys.slice();
+
     updatedCofounders.splice(index, 1);
-    this.setState({cofounders: updatedCofounders});
+    updatedCofounderKeys.splice(index, 1);
+
+    gthis.setState({cofounders: updatedCofounders, cofounderKeys: updatedCofounderKeys});
+  }
+
+  allowDelete() {
+    return this.state.cofounders.length > 1;
+  }
+
+  cofounderKey(index) {
+    return this.state.cofounderKeys[index];
   }
 
   render() {
@@ -57,9 +79,10 @@ class CofoundersForm extends React.Component {
           <div className="cofounders-list">
             {this.state.cofounders.map(function (cofounder, index) {
               return (
-                <CofoundersFormCofounderDetails cofounder={ cofounder } key={ index } index={ index }
-                  collegesUrl={ this.props.collegesUrl } collegeName={ this.collegeName(cofounder) }
-                  deleteCB={ this.deleteCofounderCB }/>
+                <CofoundersFormCofounderDetails cofounder={ cofounder } key={ this.cofounderKey(index) } index={ index }
+                  generatedKey={ this.cofounderKey(index) } collegesUrl={ this.props.collegesUrl }
+                  collegeName={ this.collegeName(cofounder) } deleteCB={ this.deleteCofounderCB }
+                  allowDelete={ this.allowDelete() }/>
               );
             }, this)}
           </div>

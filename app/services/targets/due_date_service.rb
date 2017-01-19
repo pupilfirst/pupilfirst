@@ -5,11 +5,12 @@ module Targets
     end
 
     def expired?(target)
-      return true if due_date(target) < Time.now
-      false
+      prepare_if_required
+      due_date(target) < Time.now
     end
 
     def expiring?(target)
+      prepare_if_required
       due_date(target).between?(Date.today, 8.days.from_now)
     end
 
@@ -23,6 +24,10 @@ module Targets
     end
 
     private
+
+    def prepare_if_required
+      prepare unless instance_variable_defined?(:@due_dates_hash)
+    end
 
     def due_date(target)
       @due_dates_hash[target.id]

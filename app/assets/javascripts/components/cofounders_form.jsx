@@ -58,7 +58,7 @@ class CofoundersForm extends React.Component {
     updatedCofounders.splice(index, 1);
     updatedCofounderKeys.splice(index, 1);
 
-    gthis.setState({cofounders: updatedCofounders, cofounderKeys: updatedCofounderKeys});
+    this.setState({cofounders: updatedCofounders, cofounderKeys: updatedCofounderKeys});
   }
 
   allowDelete() {
@@ -67,6 +67,10 @@ class CofoundersForm extends React.Component {
 
   cofounderKey(index) {
     return this.state.cofounderKeys[index];
+  }
+
+  addCofounderAllowed() {
+    return this.state.cofounders.length < 5
   }
 
   render() {
@@ -88,12 +92,14 @@ class CofoundersForm extends React.Component {
           </div>
 
           <div className="clearfix">
+            { this.addCofounderAllowed() &&
             <div className="pull-sm-left m-b-1">
               <a className="btn btn-secondary cofounders-form__add-cofounder-button text-uppercase"
                 onClick={ this.addCofounder }>
                 <i className="fa fa-plus"/> Add cofounder
               </a>
             </div>
+            }
 
             <div className="pull-sm-right m-b-1">
               <button type="submit" className="btn btn-success text-uppercase">Save cofounders</button>

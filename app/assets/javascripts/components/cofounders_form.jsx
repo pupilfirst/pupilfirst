@@ -73,9 +73,39 @@ class CofoundersForm extends React.Component {
     return this.state.cofounders.length < 5
   }
 
+  hasErrors() {
+    return Object.keys(this.props.errors).length > 0;
+  }
+
+  hasBaseErrors() {
+    return this.baseErrorMessages().length > 0
+  }
+
+  baseErrorMessages() {
+    if (typeof(this.props.errors.base) === 'undefined') {
+      return [];
+    } else {
+      return this.props.errors.base;
+    }
+  }
+
   render() {
     return (
       <div className="apply-cofounders-form">
+        { this.hasErrors() &&
+        <div className="alert alert-warning alert-dismissable fade in" role='alert'>
+          <strong>There were problems with your submission. Please check all fields and try again.</strong>
+
+          { this.hasBaseErrors() &&
+          <ul className="m-t-1">
+            {this.baseErrorMessages().map(function (baseErrorMessage) {
+              return <li>{ baseErrorMessage }</li>;
+            })}
+          </ul>
+          }
+        </div>
+        }
+
         <form className="simple_form form-horizontal" action={ this.props.path } acceptCharset="UTF-8" method="post">
           <input name="utf8" type="hidden" value="✓"/>
           <input type="hidden" name="authenticity_token" value={ this.props.authenticityToken }/>

@@ -7,6 +7,7 @@ class CofoundersForm extends React.Component {
     };
 
     this.addCofounder = this.addCofounder.bind(this);
+    this.deleteCofounderCB = this.deleteCofounderCB.bind(this);
   }
 
   addCofounder() {
@@ -40,6 +41,12 @@ class CofoundersForm extends React.Component {
     }
   }
 
+  deleteCofounderCB(index) {
+    let updatedCofounders = this.state.cofounders.slice();
+    updatedCofounders.splice(index, 1);
+    this.setState({cofounders: updatedCofounders});
+  }
+
   render() {
     return (
       <div className="apply-cofounders-form">
@@ -51,8 +58,8 @@ class CofoundersForm extends React.Component {
             {this.state.cofounders.map(function (cofounder, index) {
               return (
                 <CofoundersFormCofounderDetails cofounder={ cofounder } key={ index } index={ index }
-                  collegesUrl={ this.props.collegesUrl }
-                  collegeName={ this.collegeName(cofounder) }/>
+                  collegesUrl={ this.props.collegesUrl } collegeName={ this.collegeName(cofounder) }
+                  deleteCB={ this.deleteCofounderCB }/>
               );
             }, this)}
           </div>

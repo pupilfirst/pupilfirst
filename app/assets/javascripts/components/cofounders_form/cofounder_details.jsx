@@ -7,6 +7,7 @@ class CofoundersFormCofounderDetails extends React.Component {
     };
 
     this.handleCollegeChange = this.handleCollegeChange.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   canDelete() {
@@ -77,11 +78,15 @@ class CofoundersFormCofounderDetails extends React.Component {
     return "cofounders-form__cofounder-delete-checkbox-" + this.props.index;
   }
 
+  handleDelete() {
+    this.props.deleteCB(this.props.index);
+  }
+
   render() {
     return (
       <div className="cofounder content-box">
         { this.canDelete() &&
-        <div className="cofounder-delete-button">
+        <div className="cofounder-delete-button" onClick={ this.handleDelete }>
           <i className="fa fa-times-circle"/>
         </div>
         }
@@ -150,5 +155,6 @@ CofoundersFormCofounderDetails.propTypes = {
   cofounder: React.PropTypes.object,
   collegesUrl: React.PropTypes.string,
   index: React.PropTypes.number,
-  collegeName: React.PropTypes.string
+  collegeName: React.PropTypes.string,
+  deleteCB: React.PropTypes.func
 };

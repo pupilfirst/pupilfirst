@@ -55,20 +55,8 @@ module Founders
       submitted_founder_targets.or(submitted_startup_targets)
     end
 
-    def timeline_event_missing_targets
-      batch_targets.left_joins(:timeline_events).where(timeline_events: { id: nil })
-    end
-
-    def timeline_events_mismatch_founder_targets
-      batch_targets.founder.left_joins(:timeline_events).where.not(timeline_events: { id: @founder.timeline_events.select(:id) })
-    end
-
-    def timeline_events_mismatch_startup_targets
-      batch_targets.not_founder.left_joins(:timeline_events).where.not(timeline_events: { id: @founder.startup.timeline_events.select(:id) })
-    end
-
     def not_submitted_targets
-      timeline_event_missing_targets.or(timeline_events_mismatch_founder_targets).or(timeline_events_mismatch_startup_targets).distinct
+      batch_targets.where.not(id: submitted_targets)
     end
 
     def expired_targets
@@ -80,11 +68,11 @@ module Founders
     end
 
     def needs_improvement_targets
-      submitted_founder_targets.or(submitted_startup_targets).merge(TimelineEvent.needs_improvement)
+      submitted_targets.merge(TimelineEvent.needs_improvement)
     end
 
     def not_accepted_targets
-      submitted_founder_targets.or(submitted_startup_targets).merge(TimelineEvent.not_accepted)
+      submitted_targets.merge(TimelineEvent.not_accepted)
     end
 
     def due_date_service

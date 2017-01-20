@@ -166,14 +166,15 @@ class BatchApplicationController < ApplicationController
     render "stage_#{application_stage_number}_rejected"
   end
 
-  # PATCH /apply/stage/4/update_applicant
-  # receives founder details, generates required pdf and redirects back to updated stage_4 page
+  # PATCH /apply/stage/6/update_applicant
+  # receives founder details, generates required pdf and redirects back to updated preselection stage page
   def update_applicant
     @batch_application = current_application.decorate
-    applicant = current_application.batch_applicants.find(params[:application_stage_four_applicant][:id])
+    applicant_params = params[:batch_applications_preselection_stage_applicant]
+    applicant = current_application.batch_applicants.find(applicant_params[:id])
     @form = BatchApplications::PreselectionStageApplicantForm.new(applicant)
 
-    if @form.validate(params[:application_stage_four_applicant])
+    if @form.validate(applicant_params)
       @form.save
       flash[:success] = 'Applicant details were successfully saved.'
       redirect_to apply_stage_path(4)
@@ -182,18 +183,18 @@ class BatchApplicationController < ApplicationController
       # lose uploads to validation failure.
       @form.save_uploaded_files
       flash[:error] = 'We were unable to save applicant details because of errors. Please try again.'
-      render 'stage_4'
+      render 'stage_6'
     end
   end
 
-  # GET /apply/stage/4/partnership_deed
+  # GET /apply/stage/6/partnership_deed
   # respond with PDF version of the partnership deed created using Prawn
   def partnership_deed
     @batch_application = current_application.decorate
 
     unless @batch_application.partnership_deed_ready?
       flash[:error] = 'Could not generate Partnership Deed. Ensure details of all founders are provided!'
-      redirect_to apply_stage_path(4)
+      redirect_to apply_stage_path(6)
       return
     end
 
@@ -205,14 +206,14 @@ class BatchApplicationController < ApplicationController
     end
   end
 
-  # GET /apply/stage/4/incubation_agreement
+  # GET /apply/stage/6/incubation_agreement
   # respond with PDF version of the digital incubation services agreement created using Prawn
   def incubation_agreement
     @batch_application = current_application.decorate
 
     unless @batch_application.incubation_agreement_ready?
       flash[:error] = 'Could not generate Agreement. Ensure details of all founders are provided!'
-      redirect_to apply_stage_path(4)
+      redirect_to apply_stage_path(6)
       return
     end
 
@@ -337,12 +338,12 @@ class BatchApplicationController < ApplicationController
     @batch_application = current_application.decorate
     @form = BatchApplications::PreselectionStageSubmissionForm.new(@batch_application)
 
-    if @form.validate(params[:application_stage_four_submission])
+    if @form.validate(params[:batch_applications_preselection_stage_submission])
       @form.save
       redirect_to apply_stage_complete_path(stage_number: '4')
     else
       @form.save_partnership_deed
-      render 'stage_4'
+      render 'stage_6'
     end
   end
 

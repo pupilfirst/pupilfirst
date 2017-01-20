@@ -116,7 +116,7 @@ Rails.application.routes.draw do
       get 'rejected'
     end
 
-    scope 'stage/4', as: 'stage_4' do
+    scope 'stage/6', as: 'pre_selection_stage' do
       get 'partnership_deed'
       get 'incubation_agreement'
       patch 'update_applicant'

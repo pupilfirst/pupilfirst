@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'Batch Application Registration' do
   # Things that are assumed to exist.
   let(:batch) { create :batch }
-  let!(:application_round) { create :application_round, :in_stage_1, batch: batch }
+  let!(:application_round) { create :application_round, :screening_stage, batch: batch }
 
   include UserSpecHelper
 

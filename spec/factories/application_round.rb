@@ -6,7 +6,7 @@ FactoryGirl.define do
     target_application_count 100
 
     # Stage 1, 2 and 3 occur together.
-    trait :in_stage_1 do
+    trait :screening_stage do
       after(:create) do |application_round|
         stage_1 = create(:application_stage, number: 1)
         stage_2 = create(:application_stage, number: 2)
@@ -20,7 +20,7 @@ FactoryGirl.define do
       end
     end
 
-    trait :in_stage_4 do
+    trait :video_stage do
       after(:create) do |application_round|
         stage_1 = create(:application_stage, number: 1)
         stage_2 = create(:application_stage, number: 2)
@@ -36,7 +36,7 @@ FactoryGirl.define do
       end
     end
 
-    trait :in_stage_5 do
+    trait :interview_stage do
       after(:create) do |application_round|
         stage_1 = create(:application_stage, number: 1)
         stage_2 = create(:application_stage, number: 2)
@@ -54,7 +54,7 @@ FactoryGirl.define do
       end
     end
 
-    trait :in_stage_6 do
+    trait :pre_selection_stage do
       after(:create) do |application_round|
         stage_1 = create(:application_stage, number: 1)
         stage_2 = create(:application_stage, number: 2)

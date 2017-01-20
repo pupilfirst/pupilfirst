@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'Application Interview Stage' do
   include UserSpecHelper
 
-  let(:application_round) { create :application_round, :in_stage_5 }
+  let(:application_round) { create :application_round, :interview_stage }
   let(:batch_application) { create :batch_application, :interview_stage, application_round: application_round }
   let(:batch_applicant) { batch_application.team_lead }
   let(:interview_stage) { create :application_stage, :interview }

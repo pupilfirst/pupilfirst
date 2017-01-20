@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'Pre-selection Stage' do
   include UserSpecHelper
 
-  let(:application_round) { create :application_round, :in_stage_6 }
+  let(:application_round) { create :application_round, :pre_selection_stage }
   let(:batch_applicant) { batch_application.team_lead }
   let!(:batch_application) { create :batch_application, :pre_selection_stage, application_round: application_round, team_size: 4 }
   let(:image_path) { File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'users', 'college_id.jpg')) }

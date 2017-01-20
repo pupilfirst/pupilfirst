@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'Batch Application Payment' do
   # Things that are assumed to exist.
   let(:batch) { create :batch }
-  let!(:application_round) { create :application_round, :in_stage_1, batch: batch }
+  let!(:application_round) { create :application_round, :screening_stage, batch: batch }
   let(:payment_stage) { create :application_stage, number: 2 }
   let!(:batch_application) { create :batch_application, application_round: application_round, application_stage: payment_stage }
   let(:batch_applicant) { batch_application.team_lead }

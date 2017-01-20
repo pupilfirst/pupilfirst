@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'Batch Application Coding Stage' do
   # Things that are assumed to exist.
   let(:batch) { create :batch }
-  let!(:application_round) { create :application_round, :in_stage_1, batch: batch }
+  let!(:application_round) { create :application_round, :screening_stage, batch: batch }
   let(:payment_stage) { create :application_stage, number: 2 }
 
   # Note that application is created in stage 2, but will be upgraded to stage 2 by code in before block.

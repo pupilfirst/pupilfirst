@@ -4,7 +4,7 @@ require 'rails_helper'
 feature 'Cofounder addition' do
   include UserSpecHelper
 
-  let(:application_round) { create :application_round, :in_stage_1 }
+  let(:application_round) { create :application_round, :screening_stage }
   let(:batch_application) { create :batch_application, :paid, team_size: 2, application_round: application_round }
   let(:batch_applicant) { batch_application.team_lead }
 
@@ -67,7 +67,7 @@ feature 'Cofounder addition' do
   end
 
   context 'when application has been swept from one batch to another' do
-    let(:older_round) { create :application_round, :in_stage_4 }
+    let(:older_round) { create :application_round, :video_stage }
     let(:team_lead) { create :batch_applicant, :with_user }
     let!(:old_application) { create :batch_application, :video_stage_submitted, team_lead: team_lead, team_size: 2, application_round: older_round }
     let!(:batch_application) { create :batch_application, :paid, application_round: application_round, team_lead: team_lead, team_size: 2 }

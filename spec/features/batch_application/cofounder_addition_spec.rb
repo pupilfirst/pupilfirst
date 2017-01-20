@@ -5,11 +5,56 @@ feature 'Cofounder addition' do
   include UserSpecHelper
 
   let(:application_round) { create :application_round, :in_stage_1 }
+  let(:batch_application) { create :batch_application, :paid, team_size: 2, application_round: application_round }
   let(:batch_applicant) { batch_application.team_lead }
-  let(:batch_application) { create :batch_application, application_round: application_round }
-  let(:stage_3) { create :application_stage, number: 3 }
+
+  scenario 'applicant adds cofounder details', js: true do
+    # user signs in
+    sign_in_user(batch_applicant.user, referer: apply_continue_path)
+
+    expect(page).to have_content('Before getting started with the coding task, please consider adding some details about your cofounders')
+
+    # TODO: Replace this with click_link when PhantomJS moves to next version. It currently doesn't render flexbox correctly:
+    # See: https://github.com/ariya/phantomjs/issues/14365
+    find_link('Add cofounder details').trigger('click')
+
+    # The page should ask for details of one co-founder.
+    expect(page).to have_selector('.cofounder.content-box', count: 1)
+
+    # Add another, and fill in details for two.
+    name = Faker::Name.name
+    fill_in 'Name', with: name
+    fill_in 'Email address', with: Faker::Internet.email(name)
+    fill_in 'Mobile phone number', with: (9_876_543_210 + rand(1000)).to_s
+    select "My college isn't listed", from: 'College'
+    fill_in 'Name of your college', with: Faker::Lorem.words(3).join(' ')
+
+    # The link doesn't have an href. Hence the trigger('click')
+    page.find('.cofounders-form__add-cofounder-button').trigger('click')
+
+    expect(page).to have_selector('.cofounder.content-box', count: 2)
+
+    within all('.cofounder.content-box').last do
+      name = Faker::Name.name
+      fill_in 'Name', with: name
+      fill_in 'Email address', with: Faker::Internet.email(name)
+      fill_in 'Mobile phone number', with: (9_876_543_210 + rand(1000)).to_s
+      select "My college isn't listed", from: 'College'
+      fill_in 'Name of your college', with: Faker::Lorem.words(3).join(' ')
+    end
+
+    click_button 'Save cofounders'
+
+    expect(page).to have_content(/edit cofounder details/i)
+
+    # Ensure that the cofounders have been stored.
+    expect(batch_application.cofounders.count).to eq(2)
+  end
 
   context 'when editing cofounders after having payment skipped manually', js: true do
+    let(:batch_application) { create :batch_application, application_round: application_round }
+    let(:stage_3) { create :application_stage, number: 3 }
+
     it 'displays one editable cofounder' do
       # Manually move the application to coding stage.
       batch_application.update!(application_stage: stage_3)

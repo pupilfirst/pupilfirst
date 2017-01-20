@@ -26,7 +26,7 @@ module BatchApplications
       return if applicant.batch_applications.where(application_round: ApplicationRound.open_round).blank?
 
       errors[:base] << 'You have already completed this step. Please sign in instead.'
-      errors[:email] << 'is already an applicant'
+      errors[:email] << 'is already an applicant in this round'
     end
 
     def college_should_exist

@@ -1,7 +1,7 @@
 class BatchApplicationController < ApplicationController
   before_action :ensure_accurate_stage_number, only: %w(ongoing submit complete restart expired rejected)
   before_action :load_common_instance_variables
-  before_action :authenticate_batch_applicant!, except: %w(index register notify)
+  before_action :authenticate_team_lead!, except: %w(index register notify)
   before_action :load_index_variables, only: %w(index register notify)
 
   layout 'application_v2'
@@ -54,7 +54,7 @@ class BatchApplicationController < ApplicationController
   def continue
     from = params[:from].present? ? { from: params[:from] } : {}
 
-    case current_application&.status
+    case current_application.status
       when :ongoing
         redirect_to apply_stage_path(from.merge(stage_number: application_stage_number))
       when :expired
@@ -65,8 +65,6 @@ class BatchApplicationController < ApplicationController
         redirect_to apply_stage_complete_path(from.merge(stage_number: application_stage_number))
       when :promoted
         redirect_to apply_stage_complete_path(from.merge(stage_number: (application_stage_number - 1)))
-      when nil
-        redirect_to apply_path(from)
       else
         raise "Unexpected application status: #{current_application.status}"
     end
@@ -168,14 +166,15 @@ class BatchApplicationController < ApplicationController
     render "stage_#{application_stage_number}_rejected"
   end
 
-  # PATCH /apply/stage/4/update_applicant
-  # receives founder details, generates required pdf and redirects back to updated stage_4 page
+  # PATCH /apply/stage/6/update_applicant
+  # receives founder details, generates required pdf and redirects back to updated preselection stage page
   def update_applicant
     @batch_application = current_application.decorate
-    applicant = current_application.batch_applicants.find(params[:application_stage_four_applicant][:id])
+    applicant_params = params[:batch_applications_preselection_stage_applicant]
+    applicant = current_application.batch_applicants.find(applicant_params[:id])
     @form = BatchApplications::PreselectionStageApplicantForm.new(applicant)
 
-    if @form.validate(params[:application_stage_four_applicant])
+    if @form.validate(applicant_params)
       @form.save
       flash[:success] = 'Applicant details were successfully saved.'
       redirect_to apply_stage_path(4)
@@ -184,18 +183,18 @@ class BatchApplicationController < ApplicationController
       # lose uploads to validation failure.
       @form.save_uploaded_files
       flash[:error] = 'We were unable to save applicant details because of errors. Please try again.'
-      render 'stage_4'
+      render 'stage_6'
     end
   end
 
-  # GET /apply/stage/4/partnership_deed
+  # GET /apply/stage/6/partnership_deed
   # respond with PDF version of the partnership deed created using Prawn
   def partnership_deed
     @batch_application = current_application.decorate
 
     unless @batch_application.partnership_deed_ready?
       flash[:error] = 'Could not generate Partnership Deed. Ensure details of all founders are provided!'
-      redirect_to apply_stage_path(4)
+      redirect_to apply_stage_path(6)
       return
     end
 
@@ -207,14 +206,14 @@ class BatchApplicationController < ApplicationController
     end
   end
 
-  # GET /apply/stage/4/incubation_agreement
+  # GET /apply/stage/6/incubation_agreement
   # respond with PDF version of the digital incubation services agreement created using Prawn
   def incubation_agreement
     @batch_application = current_application.decorate
 
     unless @batch_application.incubation_agreement_ready?
       flash[:error] = 'Could not generate Agreement. Ensure details of all founders are provided!'
-      redirect_to apply_stage_path(4)
+      redirect_to apply_stage_path(6)
       return
     end
 
@@ -339,12 +338,12 @@ class BatchApplicationController < ApplicationController
     @batch_application = current_application.decorate
     @form = BatchApplications::PreselectionStageSubmissionForm.new(@batch_application)
 
-    if @form.validate(params[:application_stage_four_submission])
+    if @form.validate(params[:batch_applications_preselection_stage_submission])
       @form.save
       redirect_to apply_stage_complete_path(stage_number: '4')
     else
       @form.save_partnership_deed
-      render 'stage_4'
+      render 'stage_6'
     end
   end
 
@@ -381,7 +380,7 @@ class BatchApplicationController < ApplicationController
   def current_application
     @current_application ||= begin
       if current_batch_applicant.present?
-        current_batch_applicant.batch_applications.order('created_at DESC').first&.decorate
+        current_batch_applicant.applications_as_team_lead.order('created_at DESC').first&.decorate
       end
     end
   end
@@ -402,12 +401,24 @@ class BatchApplicationController < ApplicationController
     redirect_to apply_continue_path if params[:stage_number].to_i != expected_stage_number
   end
 
-  def authenticate_batch_applicant!
+  def authenticate_team_lead!
     # User must be logged in
     user = authenticate_user!
 
     unless user.batch_applicant.present?
       flash[:notice] = 'You are not an applicant. Please go through the registration process.'
+      redirect_to apply_url
+      return
+    end
+
+    unless user.batch_applicant.batch_applications.any?
+      flash[:notice] = 'You have not submitted an application. Please go through the registration process.'
+      redirect_to apply_url
+      return
+    end
+
+    unless current_application.present?
+      flash[:notice] = 'You are part of an application, but are not the team lead. If you wish to create a new application as team lead, please go through the registration process.'
       redirect_to apply_url
     end
   end

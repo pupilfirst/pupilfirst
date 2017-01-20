@@ -3,9 +3,9 @@ require 'rails_helper'
 feature 'Pre-selection Stage' do
   include UserSpecHelper
 
-  let!(:batch) { create :batch, :in_stage_4 }
+  let(:application_round) { create :application_round, :in_stage_6 }
   let(:batch_applicant) { batch_application.team_lead }
-  let!(:batch_application) { create :batch_application, :stage_4, batch: batch, team_size: 4 }
+  let!(:batch_application) { create :batch_application, :pre_selection_stage, application_round: application_round, team_size: 4 }
   let(:image_path) { File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'users', 'college_id.jpg')) }
   let(:pdf_path) { File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')) }
 
@@ -116,7 +116,7 @@ feature 'Pre-selection Stage' do
   end
 
   context 'when all applicants have added profile information' do
-    let(:batch_application) { create :batch_application, :stage_4, batch: batch, team_size: 2 }
+    let(:batch_application) { create :batch_application, :pre_selection_stage, application_round: application_round, team_size: 2 }
 
     before do
       address = [Faker::Address.street_address, Faker::Address.city, Faker::Address.zip].join("\n")
@@ -147,7 +147,7 @@ feature 'Pre-selection Stage' do
     end
 
     context 'when agreements have been verified' do
-      let(:batch_application) { create :batch_application, :stage_4, batch: batch, team_size: 2, agreements_verified: true }
+      let(:batch_application) { create :batch_application, :pre_selection_stage, application_round: application_round, team_size: 2, agreements_verified: true }
 
       scenario 'user submits payment details' do
         expect(page).to have_content('Your agreements have been verified by SV.CO as acceptable.')
@@ -181,8 +181,8 @@ feature 'Pre-selection Stage' do
         let(:stage_5) { create(:application_stage, number: 5) }
 
         before do
-          RoundStage.find_by(batch: batch, application_stage: stage_4).update!(ends_at: 1.day.ago)
-          create(:batch_stage, batch: batch, application_stage: stage_5, starts_at: 3.days.ago)
+          RoundStage.find_by(application_round: application_round, application_stage: stage_4).update!(ends_at: 1.day.ago)
+          create(:batch_stage, application_round: application_round, application_stage: stage_5, starts_at: 3.days.ago)
         end
 
         scenario 'user is shown rejected state page'

@@ -242,7 +242,7 @@
                       i.fa.fa-exclamation-circle
                       | &nbsp;Not Accepted
                   = image_tag 'timeline/dash.png'
-                  p #{event.description}
+                  p #{simple_format(event.description)}
 
                   - if current_founder && @startup.founder?(current_founder)
                     - if event.verified_or_needs_improvement?
@@ -303,7 +303,7 @@
                               ' (#{((event.event_on- @startup.earliest_team_event_date).to_i + 1).ordinalize} day)
                       .timeline-body
                         .tl-body
-                          p #{event.description}
+                          p #{simple_format(event.description)}
 
                         - attachments = event.attachments_for_founder(current_founder)
 

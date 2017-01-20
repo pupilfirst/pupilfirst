@@ -1,4 +1,8 @@
-# This module is included in BatchApplicationForm and ProspectiveApplicantForm
+# This module is included in:
+#   BatchApplications::RegistrationForm
+#   BatchApplications::ProspectiveApplicantForm,
+#   MoocStudentSignupForm
+#
 module CollegeAddable
   extend ActiveSupport::Concern
 

@@ -48,7 +48,7 @@
     .row.eq-height
       - if @batch_application.partnership_deed_ready?
         .col-md-6
-          a.download-partnership-deed href=apply_stage_4_partnership_deed_path(format: :pdf) target='_blank'
+          a.download-partnership-deed href=apply_pre_selection_stage_partnership_deed_path(format: :pdf) target='_blank'
             .alert.alert-success.text-xs-center
               .download-icon
                 i.fa.fa-download
@@ -56,7 +56,7 @@
 
       - if @batch_application.incubation_agreement_ready?
         .col-md-6
-          a.download-partnership-deed href=apply_stage_4_incubation_agreement_path(format: :pdf) target='_blank'
+          a.download-partnership-deed href=apply_pre_selection_stage_incubation_agreement_path(format: :pdf) target='_blank'
             .alert.alert-success.text-xs-center
               .download-icon
                 i.fa.fa-download

@@ -222,7 +222,9 @@ ActiveAdmin.register TimelineEvent do
       row('Founder') { timeline_event.founder }
       row :iteration
       row :timeline_event_type
-      row :description
+      row :description do
+        simple_format(timeline_event.description)
+      end
 
       row :image do
         if timeline_event.image.present?

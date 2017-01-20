@@ -23,6 +23,6 @@ feature 'Batch Application Registration' do
 
     click_on 'Submit my application'
 
-    expect(page).to have_text('Screening')
+    expect(page).to have_text('Do you know how to code?')
   end
 end

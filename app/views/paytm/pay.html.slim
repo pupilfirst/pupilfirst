@@ -1,0 +1,15 @@
+h1 PayTM Test page
+
+= form_tag 'https://pguat.paytm.com/oltp-web/processTransaction', method: :post do
+  = hidden_field_tag 'REQUEST_TYPE', 'DEFAULT'
+  = hidden_field_tag 'MID', ENV['PAYTM_MERCHANT_ID']
+  = hidden_field_tag 'ORDER_ID', 2
+  = hidden_field_tag 'CUST_ID', 1
+  = hidden_field_tag 'INDUSTRY_TYPE_ID', ENV['PAYTM_INDUSTRY_TYPE_ID']
+  = hidden_field_tag 'CHANNEL_ID', ENV['PAYTM_CHANNEL_ID']
+  = hidden_field_tag 'TXN_AMOUNT', 100
+  = hidden_field_tag 'MOBILE_NO', 8111835190
+  = hidden_field_tag 'EMAIL', 'ajaleelp@gmail.com'
+  = hidden_field_tag 'WEBSITE', ENV['PAYTM_MERCHANT_WEBSITE_NAME']
+  = hidden_field_tag 'CHECKSUMHASH', 'OigsNM+hEXtkSRggCfV1nukua/BQLP0InKhiEt5un+pcVE6wmMuFJfBbs7CZpnWw8RmY8PCJIuVDRGBWlUxRtRdbI6MGC0HOLkVTW7sp/6s='
+  = submit_tag 'Pay'

@@ -1,4 +1,6 @@
 class HomeController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: :paytm_callback
+
   def index
     @skip_container = true
     @sitewide_notice = true if %w(startupvillage.in registration).include?(params[:redirect_from])
@@ -52,6 +54,10 @@ class HomeController < ApplicationController
       format.json { render json: { policy: @terms_of_use_html } }
       format.html { render layout: 'application_v2' }
     end
+  end
+
+  # TODO: Remove this route once PayTM is correctly configured with '/paytm/callback' as the redirect_url.
+  def paytm_callback
   end
 
   protected

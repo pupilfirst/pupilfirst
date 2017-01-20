@@ -6,7 +6,7 @@
       ' <strong>Oops!</strong> Looks like there are some problems with the information that you supplied. Please have
       | a look at the form and try again.
 
-  = bootstrap_form_for(@form, url: apply_stage_4_update_applicant_path, layout: :horizontal, label_col: 'col-sm-3', control_col: 'col-sm-9') do |f|
+  = bootstrap_form_for(@form, url: apply_pre_selection_stage_update_applicant_path, layout: :horizontal, label_col: 'col-sm-3', control_col: 'col-sm-9') do |f|
     = f.hidden_field :id
     = f.text_field :name, label_class: 'col-form-label', required: true, maxlength: 250
     = f.text_field :email, label_class: 'col-form-label', disabled: true

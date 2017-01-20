@@ -212,6 +212,10 @@ ActiveAdmin.register BatchApplication do
       team_lead.phone if team_lead.present?
     end
 
+    column 'Reference' do |batch_application|
+      batch_application.team_lead&.reference
+    end
+
     column :payment_status do |batch_application|
       if batch_application.payment.present?
         t("payment.status.#{batch_application.payment.status}")

@@ -25,7 +25,10 @@
             .btn-group.filter-targets-dropdown
               button.btn.btn-with-icon.btn-ghost-primary.btn-md.text-xs-left.filter-targets-dropdown__button.dropdown-toggle aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" type="button"
                 span.filter-targets-dropdown__icon
-                  i.fa.fa-filter
+                  - if instance_variable_defined?(:@filtered_targets)
+                    i.fa class=TargetDecorator.fa_icon_for_filter(params[:filter])
+                  - else
+                    i.fa.fa-filter
                 span.hidden-xs-down.p-r-1
                  - if params[:filter].present?
                    | #{ t("dashboard.show.target_filters.#{params[:filter]}.filter_text") }

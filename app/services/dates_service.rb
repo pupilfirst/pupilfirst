@@ -18,10 +18,10 @@ class DatesService
   end
 
   def self.monday?
-    Date.today.in_time_zone('Asia/Calcutta').wday == 1
+    Time.zone.now.wday == 1
   end
 
   def self.before_evening?
-    Time.now.in_time_zone('Asia/Calcutta').hour < 18
+    Time.zone.now.hour < 18
   end
 end

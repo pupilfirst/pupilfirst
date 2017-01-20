@@ -2,25 +2,50 @@ require 'rails_helper'
 
 describe Startups::PerformanceService do
   subject { described_class.new }
+  include ActiveSupport::Testing::TimeHelpers
 
   let!(:batch) { create :batch, :with_startups, start_date: 12.days.ago }
 
-  SAMPLE_POINTS = [10, 200, 210, 210, 240, 280, 500, 1000].freeze
+  POINTS_LAST_WEEK = [10, 200, 210, 210, 240, 280, 500, 1000].freeze
+  POINTS_TWO_WEEKS_BACK = [100, 200, 300, 400].freeze
 
   before do
-    # add karma points to some startups
-    SAMPLE_POINTS.each.with_index(1) do |points, index|
+    # add some karma points for last week
+    POINTS_LAST_WEEK.each.with_index(1) do |points, index|
       startup = batch.startups.order(:id).limit(index).last
-      create :karma_point, :for_last_week, startup: startup, points: points
+      create :karma_point, created_at: 10.days.ago, startup: startup, points: points
+    end
+
+    # calculate last weeks leaderboard
+    ranks_last_week = [8, 7, 5, 5, 4, 3, 2, 1, 9, 9]
+    @leaderboard_last_week = batch.startups.order(:id).each_with_index.map do |startup, index|
+      [startup, ranks_last_week[index], POINTS_LAST_WEEK[index] || 0]
+    end
+
+    # add some karma points for two weeks back
+    POINTS_TWO_WEEKS_BACK.each.with_index(1) do |points, index|
+      startup = batch.startups.order(:id).limit(index).last
+      create :karma_point, created_at: 15.days.ago, startup: startup, points: points
+    end
+
+    # calculate leaderboard two weeks back
+    ranks_two_weeks_back = [4, 3, 2, 1, 5, 5, 5, 5, 5, 5]
+    @leaderboard_two_week_back = batch.startups.order(:id).each_with_index.map do |startup, index|
+      [startup, ranks_two_weeks_back[index], POINTS_TWO_WEEKS_BACK[index] || 0]
     end
   end
 
   describe '#leaderboard' do
-    it 'returns the leaderboard rank list for the batch' do
-      expected_ranks = [8, 7, 5, 5, 4, 3, 2, 1, 9, 9]
-      expected_leaderboard = batch.startups.order(:id).each_with_index.map { |id, index| [id, expected_ranks[index], SAMPLE_POINTS[index] || 0] }
-
-      expect(subject.leaderboard(batch).sort).to eq(expected_leaderboard)
+    it 'returns the correct leaderboard when invoked throughout a day' do
+      (0..24).each do |hour|
+        travel_to(Time.zone.now.beginning_of_week + hour.hours) do
+          if hour >= 18
+            expect(subject.leaderboard(batch).sort).to eq(@leaderboard_last_week)
+          else
+            expect(subject.leaderboard(batch).sort).to eq(@leaderboard_two_week_back)
+          end
+        end
+      end
     end
   end
 

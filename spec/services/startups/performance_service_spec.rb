@@ -38,7 +38,7 @@ describe Startups::PerformanceService do
   describe '#leaderboard' do
     it 'returns the correct leaderboard when invoked throughout a day' do
       (0..24).each do |hour|
-        travel_to(Time.now.beginning_of_week + hour.hours) do
+        travel_to(Time.zone.now.beginning_of_week + hour.hours) do
           if hour >= 18
             expect(subject.leaderboard(batch).sort).to eq(@leaderboard_last_week)
           else

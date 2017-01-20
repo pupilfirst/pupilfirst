@@ -50,9 +50,13 @@ class BatchApplicationGradingService
     ).find_by(name: 'Video Submission')&.score
   end
 
+  def application_round
+    @batch ||= batch_application.application_round
+  end
+
   def total_submissions
     @total_submissions ||= ApplicationSubmission.joins(:batch_application)
-      .where(batch_applications: { batch_id: batch_application.batch.id })
+      .where(batch_applications: { application_round_id: application_round.id })
       .where(application_stage: ApplicationStage.testing_stage)
       .count
   end
@@ -60,7 +64,7 @@ class BatchApplicationGradingService
   def defeated_submissions
     @defeated_submissions ||= begin
       ApplicationSubmission.joins(:batch_application)
-        .where(batch_applications: { batch_id: batch_application.batch.id })
+        .where(batch_applications: { application_round_id: application_round.id })
         .where(application_stage: ApplicationStage.testing_stage)
         .where('score < ?', submission_score)
         .count
@@ -69,14 +73,14 @@ class BatchApplicationGradingService
 
   def defeated_code_submissions
     ApplicationSubmissionUrl.joins(application_submission: :batch_application)
-      .where(batch_applications: { batch_id: batch_application.batch.id }, name: 'Code Submission')
+      .where(batch_applications: { application_round_id: application_round.id }, name: 'Code Submission')
       .where('application_submission_urls.score < ?', code_score)
       .count
   end
 
   def defeated_video_submissions
     ApplicationSubmissionUrl.joins(application_submission: :batch_application)
-      .where(batch_applications: { batch_id: batch_application.batch.id }, name: 'Video Submission')
+      .where(batch_applications: { application_round_id: application_round.id }, name: 'Video Submission')
       .where('application_submission_urls.score < ?', video_score)
       .count
   end

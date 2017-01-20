@@ -21,8 +21,10 @@
       h4.m-b-1
         ' You've made it to the interviews!
 
-      p.m-b-1
-        ' After evaluation, your team&rsquo;s coding and video submissions for Batch #{current_batch.batch_number}
+      / TODO: Redo the scores section at this point.
+      /p.m-b-1
+        ' After evaluation, your team&rsquo;s coding and video submissions for Batch
+        ' #{current_application.application_round.batch.batch_number}
         span.brand-secondary.font-semibold scored #{@batch_application.overall_percentile.round(1)} percentile.
 
       p.m-b-1

@@ -1,11 +1,55 @@
-.application-stage-1-header {
+.application-stage-1-header__thanks-text {
+  display: inline-block;
+  position: relative;
+  margin-bottom: 10px;
+  letter-spacing: 0.2rem;
 
+  &:before, &:after {
+    content: "";
+    position: absolute;
+    background-color: $gray-border;
+    display: block;
+    height: 1px;
+    top: calc(50% - 1px);
+    width: 120px;
+
+    @include media-breakpoint-down(md) {
+      width: 30px;
+    }
+  }
+
+  &:before {
+    right: 100%;
+    margin-right: 15px;
+  }
+
+  &:after {
+    left: 100%;
+    margin-left: 15px;
+  }
 }
+
+.application-stage-1-header__description {
+  @include media-breakpoint-down(sm) {
+    font-size: 1rem;
+  }
+}
+
+.application-stage-1-header__question {
+  @include media-breakpoint-down(sm) {
+    font-size: 1.5rem;
+  }
+}
+
 .applicant-screening {
   padding: 0;
   position: relative;
 	width: 100%;
   display: flex;
+
+  @include media-breakpoint-up(md) {
+    height: 450px;
+  }
 
   &:before {
     background-color: $gray-border;
@@ -24,8 +68,45 @@
   width: 50%;
   display: inline-flex;
   position: relative;
+  transition: all .2s;
 }
 
+.applicant-screening__cover {
+  width: 100%;
+  padding: 3rem;
+  transition: all .2s;
+  pointer-events: none;
+
+  @include media-breakpoint-down(md) {
+    padding: 1rem;
+  }
+
+  .applicant-screening-choice {
+    transition: all .2s;
+
+    @include media-breakpoint-down(md) {
+      font-size: 1rem;
+    }
+  }
+
+  &:hover, &:focus {
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.10);
+
+    .applicant-screening-choice {
+      color: $brand-secondary;
+    }
+  }
+}
+
+.applicant-screening-btn {
+  pointer-events: auto;
+}
+
+.applicant-screening__cover-content {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
 
 .applicant-screening__section-left--shrunk {
   width: 30%;
@@ -33,6 +114,15 @@
 
   .applicant-screening__cover {
     background-color: $light-secondary;
+    box-shadow: inset -10px 0px 10px -10px $dark-secondary;
+
+    .applicant-screening-choice {
+      color: white;
+
+      @include media-breakpoint-down(md) {
+        font-size: 0.75rem;
+      }
+    }
   }
 }
 
@@ -42,6 +132,11 @@
 
   .applicant-screening__cover {
     background-color: $light-secondary;
+    box-shadow: inset 10px 0px 10px -10px $dark-secondary;
+
+    .applicant-screening-choice {
+      color: white;
+    }
   }
 }
 
@@ -70,33 +165,6 @@
   }
 }
 
-.applicant-screening__section-left {
-
-}
-
-.applicant-screening__section-right {
-
-}
-
-.applicant-screening__cover {
-  width: 100%;
-  padding: 3.75rem;
-  transition: all .2s;
-  cursor: pointer;
-
-  h2 {
-    transition: all .2s;
-  }
-
-  &:hover, &:focus {
-    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.10);
-
-    h2 {
-      color: $brand-secondary;
-    }
-  }
-}
-
 .applicant-screening__icon {
   display: flex;
   justify-content: center;
@@ -112,9 +180,14 @@
   img {
     width: 200px;
   }
+
+  @include media-breakpoint-down(md) {
+    width: 60px;
+    height: 60px;
+  }
 }
 
-.applicant-screening__question {
+.applicant-screening__quiz {
   background-color: white;
   padding: 1.875rem;
   display: none;
@@ -131,7 +204,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
+  position: relative;
   font-size: 1.875rem;
   background-color: white;
   width: 50px;
@@ -154,83 +227,53 @@
   }
 }
 
+.applicant-screening__question {
+  max-width: 36rem;
+  line-height: 1.4;
+
+  @include media-breakpoint-down(sm) {
+    font-size: 1rem;
+  }
+}
+
+.applicant-screening__answer-hint-text {
+  max-width: 32rem;
+  line-height: 1.5;
+  font-size: 1rem;
+}
+
 .applicant-screening__answer-options {
   border-bottom: 1px solid $gray-border;
 }
 
+.applicant-screening__answer-option-label {
+  padding-left: 2.125rem;
+  display: inline-block;
+}
+.applicant-screening__answer-option-label + .applicant-screening__answer-option-label {
+  margin-left: 2rem;
 
+  @include media-breakpoint-down(xs) {
+    margin-left: 1.5rem;
+  }
+}
 
+.applicant-screening__answer-option-indicator {
+  top: 0.15rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: white;
+  box-shadow: 0 0 3px 3px $gray-border;
+}
+.applicant-screening__answer-option-description {
+  font-size: 1.125rem;
+}
 
+.applicant-screening__answer-option-input {
 
-
-
-//
-//
-// .page {
-// 	position: relative;
-// 	top: 0;
-// 	overflow: auto;
-// 	min-height: 100%;
-// 	width: 75%;
-// 	height: auto;
-// 	font-size: 1.4em;
-//   transition: transform 0.5s ease-in-out;
-// }
-//
-// .page-right {
-// 	left: 25%;
-// 	outline: 5px solid #ecf0f1; /* avoid rounding gaps */
-// 	background: #ecf0f1;
-// 	color: #97a8b2;
-// 	transform: translateX(100%);
-// }
-//
-// .page-left {
-// 	left: 0;
-// 	outline: 5px solid #34495e; /* avoid rounding gaps */
-// 	background: #34495e;
-// 	color: #fff;
-// 	text-align: right;
-// 	transform: translateX(-100%);
-// }
-//
-// .reset-layout .page,
-// .applicant-screening.open-right .page-left,
-// .applicant-screening.open-left .page-right,
-// .applicant-screening.close-right .page-left,
-// .applicant-screening.close-left .page-right {
-// 	position: absolute;
-// 	overflow: hidden;
-// 	height: 100%;
-// }
-//
-// .applicant-screening.open-right .page-right,
-// .applicant-screening.open-left .page-left {
-// 	position: relative;
-// 	overflow: auto;
-// 	height: auto;
-// }
-//
-// /* Right side open */
-// .open-right .applicant-screening__section-left {
-// 	-webkit-transform: translateX(-60%) scale(.5);
-// 	transform: translateX(-60%) scale(.5);
-// }
-//
-// .open-right .applicant-screening__section-right {
-// 	z-index: 200;
-// 	-webkit-transform: translateX(-150%);
-// 	transform: translateX(-150%);
-// }
-//
-// /* Left side open */
-// .open-left .applicant-screening__section-right {
-// 	-webkit-transform: translateX(60%) scale(.5);
-// 	transform: translateX(60%) scale(.5);
-// }
-//
-// .open-left .applicant-screening__section-left {
-// 	z-index: 200;
-// 	-webkit-transform: translateX(150%);
-// 	transform: translateX(150%);
-// }
+  &:checked {
+    ~ .applicant-screening__answer-option-indicator  {
+        background-color: $brand-primary;
+    }
+  }
+}

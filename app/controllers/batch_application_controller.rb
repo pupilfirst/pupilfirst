@@ -242,7 +242,23 @@ class BatchApplicationController < ApplicationController
 
   # Payment stage.
   def stage_2
-    @form = BatchApplications::PaymentForm.new(current_application)
+    @payment_form = BatchApplications::PaymentForm.new(current_application)
+    @coupon = current_application.coupon
+    @coupon_form = BatchApplications::CouponForm.new(OpenStruct.new) unless @coupon.present?
+  end
+
+  # Handle coupon codes submissions
+  def coupon_submit
+    stage_2
+
+    if @coupon_form.validate(params[:batch_applications_coupon])
+      @coupon_form.apply_coupon!(current_application)
+      flash.now[:success] = 'Coupon applied successfully!'
+      redirect_to apply_stage_path(stage_number: 2)
+    else
+      flash.now[:error] = 'Coupon not valid!'
+      render 'stage_2'
+    end
   end
 
   # Payment stage submission handler.

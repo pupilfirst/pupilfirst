@@ -33,7 +33,7 @@
         .col-md-12
           #applicant-fee-data.hidden-xs-up
           .simple-form-container
-            = simple_form_for @form,
+            = simple_form_for @payment_form,
               url: apply_stage_submit_path(stage_number: 2),
               method: :post,
               html: { class: 'form-horizontal' },
@@ -56,6 +56,20 @@
                       | to proceed to the next stage.
 
                     = f.submit current_application.payment_button_message, class: 'btn btn-primary btn-md text-uppercase'
+
+          - if @coupon.present?
+            p Coupon with code #{@coupon.code} applied!
+          - else
+            .simple-form-container.m-t-2
+              = simple_form_for @coupon_form,
+                url: apply_coupon_submit_path,
+                method: :post,
+                html: { class: 'form-horizontal' },
+                wrapper: :horizontal_form do |f|
+
+                = f.input :code
+                = f.submit 'Apply'
+
       .restart-application.m-t-2
         h6.text-xs-center
           ' Made mistakes in your application? That's okay!

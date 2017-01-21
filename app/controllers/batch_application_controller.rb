@@ -253,12 +253,19 @@ class BatchApplicationController < ApplicationController
 
     if @coupon_form.validate(params[:batch_applications_coupon])
       @coupon_form.apply_coupon!(current_application)
-      flash.now[:success] = 'Coupon applied successfully!'
+      flash[:success] = 'Coupon applied successfully!'
       redirect_to apply_stage_path(stage_number: 2)
     else
       flash.now[:error] = 'Coupon not valid!'
       render 'stage_2'
     end
+  end
+
+  # Remove an applied coupon
+  def coupon_remove
+    current_application.update!(coupon: nil)
+    flash[:success] = 'Coupon removed successfully!'
+    redirect_to apply_stage_path(stage_number: 2)
   end
 
   # Payment stage submission handler.

@@ -58,7 +58,9 @@
                     = f.submit current_application.payment_button_message, class: 'btn btn-primary btn-md text-uppercase'
 
           - if @coupon.present?
-            p Coupon with code #{@coupon.code} applied!
+            p
+              | Coupon with code #{@coupon.code} applied!
+              = button_to 'Remove', apply_coupon_remove_path, method: :patch
           - else
             .simple-form-container.m-t-2
               = simple_form_for @coupon_form,

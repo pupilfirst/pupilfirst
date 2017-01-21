@@ -106,6 +106,7 @@ Rails.application.routes.draw do
     get 'cofounders', action: 'cofounders_form'
     post 'cofounders', action: 'cofounders_save'
     post 'coupon_submit'
+    patch 'coupon_remove'
 
     scope 'stage/:stage_number', as: 'stage' do
       get '', action: 'ongoing'

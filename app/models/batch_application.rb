@@ -103,7 +103,12 @@ class BatchApplication < ApplicationRecord
 
   # Fee amount, calculated from unpaid founders
   def fee
-    APPLICATION_FEE
+    coupon.present? ? discounted_fee : APPLICATION_FEE
+  end
+
+  # Application fee after discout coupon applied
+  def discounted_fee
+    (APPLICATION_FEE * (1 - (coupon.discount_percentage.to_f / 100))).round
   end
 
   # Batch application is paid depending on its payment request status.

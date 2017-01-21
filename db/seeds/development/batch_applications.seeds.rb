@@ -63,6 +63,7 @@ after 'development:application_stages', 'development:batch_applicants', 'admin_u
     case application_stage.number
       when 3 # Coding
         create_submission_urls(:coding, submission)
+        application.update!(generate_certificate: true)
       when 4 # Video
         create_submission_urls(:video, submission)
       when 5 # Interview

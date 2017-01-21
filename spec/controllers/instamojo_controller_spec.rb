@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 describe InstamojoController do
-  let(:application_stage) { create :application_stage, number: 1 }
-  let!(:application_stage_2) { create :application_stage, number: 2 }
+  let(:payment_stage) { create :application_stage, :payment }
+  let!(:coding_stage) { create :application_stage, :coding }
 
-  let(:batch) { create :batch }
-  let(:batch_application) { create :batch_application, application_stage: application_stage, batch: batch }
+  let(:application_round) { create :application_round, :screening_stage }
+  let(:batch_application) { create :batch_application, application_stage: payment_stage, application_round: application_round }
   let(:instamojo_payment_request_id) { SecureRandom.hex }
   let(:long_url) { Faker::Internet.url }
   let(:short_url) { Faker::Internet.url }
@@ -45,8 +45,8 @@ describe InstamojoController do
       expect(payment.instamojo_payment_status).to eq('Credit')
       expect(payment.fees).to eq(123.45)
 
-      # Expect the application to have moved to stage 2.
-      expect(payment.batch_application.application_stage.number).to eq(2)
+      # Expect the application to have moved to coding stage.
+      expect(payment.batch_application.application_stage).to eq(ApplicationStage.coding_stage)
     end
 
     it 'redirects to continue page with a from parameter' do
@@ -76,8 +76,8 @@ describe InstamojoController do
       expect(payment.instamojo_payment_status).to eq('Credit')
       expect(payment.fees).to eq(43.21)
 
-      # Expect the application to have moved to stage 2.
-      expect(payment.batch_application.application_stage.number).to eq(2)
+      # Expect the application to have moved to coding stage.
+      expect(payment.batch_application.application_stage).to eq(ApplicationStage.coding_stage)
     end
 
     context 'when mac is incorrect or missing' do

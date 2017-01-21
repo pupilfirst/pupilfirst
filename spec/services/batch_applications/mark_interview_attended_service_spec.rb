@@ -6,10 +6,10 @@ describe BatchApplications::MarkInterviewAttendedService do
   let(:batch_application) { create :batch_application, :paid }
 
   before do
-    create :application_stage, number: 1
-    create :application_stage, number: 2
-    create :application_stage, number: 3
-    create :application_stage, number: 4
+    create :application_stage, :screening
+    create :application_stage, :coding
+    create :application_stage, :video
+    create :application_stage, :interview
   end
 
   context 'when batch application is not in interview stage' do
@@ -21,7 +21,7 @@ describe BatchApplications::MarkInterviewAttendedService do
   end
 
   context 'when batch application is in interview stage' do
-    let(:batch_application) { create :batch_application, :stage_3 }
+    let(:batch_application) { create :batch_application, :interview_stage }
 
     it 'creates submission for interview stage' do
       expect do

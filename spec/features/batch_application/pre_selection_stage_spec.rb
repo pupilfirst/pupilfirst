@@ -88,12 +88,12 @@ feature 'Pre-selection Stage' do
     scenario 'form is submitted empty' do
       page.find('table.payment-status-table tbody tr', match: :first).click_link 'Update profile'
       click_button 'Update Profile'
-      expect(page).to have_selector('.form-group.row.has-danger', count: 11)
+      expect(page).to have_selector('.form-group.row.has-danger', count: 10)
     end
 
     context 'when editing applicant requiring income proof' do
       scenario 'user submits form with extra details' do
-        visit apply_stage_path(stage_number: '4', update_profile: @applicant_requiring_income_proof.id)
+        visit apply_stage_path(stage_number: '6', update_profile: @applicant_requiring_income_proof.id)
 
         fill_in_applicant_profile_form
 
@@ -108,9 +108,9 @@ feature 'Pre-selection Stage' do
       end
 
       scenario 'form is submitted empty' do
-        visit apply_stage_path(stage_number: '4', update_profile: @applicant_requiring_income_proof.id)
+        visit apply_stage_path(stage_number: '6', update_profile: @applicant_requiring_income_proof.id)
         click_button 'Update Profile'
-        expect(page).to have_selector('.form-group.row.has-danger', count: 14)
+        expect(page).to have_selector('.form-group.row.has-danger', count: 13)
       end
     end
   end

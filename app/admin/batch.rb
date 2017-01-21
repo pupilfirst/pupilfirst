@@ -123,16 +123,6 @@ ActiveAdmin.register Batch do
     redirect_to admin_batch_path(batch)
   end
 
-  member_action :sweep_in_applications do
-    @batch = Batch.find params[:id]
-    @unbatched = BatchApplication.where(batch: nil)
-    render 'sweep_in_applications'
-  end
-
-  action_item :sweep_in_applications, only: :show, if: proc { resource&.initial_stage? } do
-    link_to('Sweep in Applications', sweep_in_applications_admin_batch_path(Batch.find(params[:id])))
-  end
-
   member_action :selected_applications do
     @batch = Batch.find params[:id]
     render 'batch_invite_page'
@@ -156,22 +146,5 @@ ActiveAdmin.register Batch do
     end
 
     redirect_to selected_applications_admin_batch_path(batch)
-  end
-
-  member_action :create_sweep_job, method: :post do
-    sweep_unpaid = params[:sweep_in_applications][:sweep_unpaid] == '1'
-    sweep_batch_ids = (params[:sweep_in_applications][:source_batch_ids] - ['']).map(&:to_i)
-    skip_payment = params.dig(:sweep_in_applications, :skip_payment) == '1'
-
-    batch = Batch.find params[:id]
-
-    if batch.initial_stage?
-      BatchSweepJob.perform_later(batch.id, sweep_unpaid, sweep_batch_ids, current_admin_user.email, skip_payment: skip_payment)
-      flash[:success] = 'Sweep Job has been created. You will be sent an email with the results when it is complete.'
-    else
-      flash[:error] = "Did not initiate sweep. Batch ##{batch.batch_number} is not in initial stage."
-    end
-
-    redirect_to admin_batch_path(batch)
   end
 end

@@ -59,6 +59,38 @@ ActiveAdmin.register ApplicationRound do
     end
   end
 
+  member_action :sweep_in_applications do
+    @application_round = ApplicationRound.find(params[:id])
+    render 'sweep_in_applications'
+  end
+
+  action_item :sweep_in_applications, only: :show, if: proc { resource&.initial_stage? } do
+    link_to('Sweep in Applications', sweep_in_applications_admin_application_round_path(ApplicationRound.find(params[:id])))
+  end
+
+  member_action :create_sweep_job, method: :post do
+    sweep_unpaid = params[:sweep_in_applications][:sweep_unpaid] == '1'
+    sweep_application_round_ids = (params[:sweep_in_applications][:source_application_round_ids] - ['']).map(&:to_i)
+    skip_payment = params.dig(:sweep_in_applications, :skip_payment) == '1'
+    application_round = ApplicationRound.find(params[:id])
+
+    if application_round.initial_stage?
+      BatchSweepJob.perform_later(
+        application_round.id,
+        sweep_unpaid,
+        sweep_application_round_ids,
+        current_admin_user.email,
+        skip_payment: skip_payment
+      )
+
+      flash[:success] = 'Sweep Job has been created. You will be sent an email with the results when it is complete.'
+    else
+      flash[:error] = "Did not initiate sweep. #{application_round.display_name} is not in initial stage."
+    end
+
+    redirect_to admin_application_round_path(application_round)
+  end
+
   form do |f|
     f.semantic_errors(*f.object.errors.keys)
 

@@ -6,7 +6,7 @@
 
 = content_for :body
   p
-    ' You had recently created a job to sweep applications into ##{@target_application_round.display_name}. The results
+    ' You had recently created a job to sweep applications into #{@target_application_round.display_name}. The results
     | for the job are as follows:
 
   - if @counts.empty?

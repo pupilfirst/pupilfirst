@@ -138,13 +138,6 @@ class Founder < ApplicationRecord
     end
   end
 
-  before_save :fetch_slack_user_id
-
-  def fetch_slack_user_id
-    return unless slack_username_changed?
-    self.slack_user_id = slack_username.present? ? @new_slack_user_id : nil
-  end
-
   before_save :capitalize_name_fragments
 
   def capitalize_name_fragments

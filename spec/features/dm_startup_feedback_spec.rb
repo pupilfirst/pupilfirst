@@ -34,8 +34,8 @@ feature 'DM Startup Feedback' do
       .to_return(body: '{"ok":true,"channel":{"id":"D123456"}}')
 
     # add slack info for founders
-    startup.founders.first.update!(slack_username: 'founder1')
-    startup.founders.second.update!(slack_username: 'founder2')
+    startup.founders.first.update!(slack_username: 'founder1', slack_user_id: 'UABCDEF')
+    startup.founders.second.update!(slack_username: 'founder2', slack_user_id: 'U123456')
     startup.reload
   end
 

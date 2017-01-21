@@ -7,6 +7,7 @@ class BatchApplication < ApplicationRecord
 
   belongs_to :application_round
   belongs_to :application_stage
+  has_one :batch, through: :application_round
   has_many :application_submissions, dependent: :destroy
   has_and_belongs_to_many :batch_applicants
   accepts_nested_attributes_for :batch_applicants

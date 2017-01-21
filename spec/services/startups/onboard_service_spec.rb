@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 describe Startups::OnboardService do
-  let(:batch_application) { create :batch_application, :stage_5 }
-  let!(:batch_application_expired) { create :batch_application, :stage_4, batch: batch_application.batch }
+  let(:closed_round) { create :application_round, :closed_stage }
+  let(:batch_application) { create :batch_application, :closed_stage, application_round: closed_round }
+  let!(:batch_application_expired) { create :batch_application, :pre_selection_stage, application_round: closed_round }
 
   before do
     create :tet_joined
@@ -67,7 +68,7 @@ describe Startups::OnboardService do
     end
 
     context 'when product name collision occurs' do
-      let!(:third_batch_application) { create :batch_application, :stage_5, batch: batch_application.batch }
+      let!(:third_batch_application) { create :batch_application, :closed_stage, application_round: closed_round }
       let(:mock_service) { instance_double('Startups::ProductNameGeneratorService') }
 
       before do

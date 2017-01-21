@@ -13,6 +13,18 @@ showOrHidePaymentButton = (cofounderCountSelectValue) ->
   else
     $('.paywith-instamojo').parent().addClass('hidden-xs-up')
 
+handleCouponFormVisibility = ->
+  $('#coupon-form-show').click ->
+    $('#coupon-form').removeClass('hidden-xs-up')
+    $('#coupon-form-hide').removeClass('hidden-xs-up')
+    $('#coupon-form-show').addClass('hidden-xs-up')
+
+  $('#coupon-form-hide').click ->
+    $('#coupon-form').addClass('hidden-xs-up')
+    $('#coupon-form-hide').addClass('hidden-xs-up')
+    $('#coupon-form-show').removeClass('hidden-xs-up')
+
 $(document).on 'turbolinks:load', ->
   if $('#batch-application__stage-2').length > 0
     prepareTeamSizeField()
+    handleCouponFormVisibility()

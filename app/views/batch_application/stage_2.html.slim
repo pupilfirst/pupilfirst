@@ -62,7 +62,9 @@
               | Coupon with code #{@coupon.code} applied!
               = button_to 'Remove', apply_coupon_remove_path, method: :patch
           - else
-            .simple-form-container.m-t-2
+            a#coupon-form-show
+              ' Have a discount coupon?
+            #coupon-form.simple-form-container.m-t-2.hidden-xs-up
               = simple_form_for @coupon_form,
                 url: apply_coupon_submit_path,
                 method: :post,
@@ -71,6 +73,8 @@
 
                 = f.input :code
                 = f.submit 'Apply'
+            a#coupon-form-hide.hidden-xs-up
+              ' Hide
 
       .restart-application.m-t-2
         h6.text-xs-center

@@ -103,8 +103,7 @@ RSpec.describe BatchApplication, type: :model do
   end
 
   describe '#total_course_fee' do
-    subject { create :batch_application, :stage_4 }
-
+    subject { create :batch_application, :pre_selection_stage }
     let(:payment) { create :payment, batch_applicant: subject.team_lead, batch_application: subject }
 
     before do

@@ -11,14 +11,14 @@ class BatchApplicantMailer < ApplicationMailer
     mail(to: batch_application.team_lead.email, subject: "SV.CO batch #{@batch.batch_number} results are out!")
   end
 
-  def swept(team_lead, batch)
-    @team_lead = team_lead
-    @batch = batch
-    mail(to: team_lead.email, subject: "Reapply to Batch ##{batch.batch_number} at SV.CO")
+  def swept(batch_application)
+    @team_lead = batch_application.team_lead
+    @application_round = batch_application.application_round
+    mail(to: @team_lead.email, subject: "Reapply to #{@application_round.display_name} at SV.CO")
   end
 
-  def swept_skip_payment(team_lead)
-    @team_lead = team_lead
-    mail(to: team_lead.email, subject: 'Your chance to reapply at SV.CO, for FREE!')
+  def swept_skip_payment(batch_application)
+    @team_lead = batch_application.team_lead
+    mail(to: @team_lead.email, subject: 'Your chance to reapply at SV.CO, for FREE!')
   end
 end

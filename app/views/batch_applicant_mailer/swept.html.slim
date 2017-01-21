@@ -1,5 +1,5 @@
 = content_for :heading
-  | Reapply to Batch ##{@batch.batch_number} at SV.CO
+  | Reapply to #{@application_round.display_name} at SV.CO
 
 = content_for :salutation
   | Hello #{@team_lead.name},
@@ -7,8 +7,7 @@
 = content_for :body
   p We're sending you this email because you had previously applied to SV.CO.
 
-  p
-    ' We have started accepting applications to a new batch, and would like to welcome you to participate.
+  p We have started accepting applications to a new batch, and would like to welcome you to participate.
 
   p
     ' If you would like to know the status of your previous application, please visit the

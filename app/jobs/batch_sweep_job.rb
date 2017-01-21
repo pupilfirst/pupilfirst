@@ -1,42 +1,44 @@
 class BatchSweepJob < ApplicationJob
   queue_as :default
 
-  def perform(batch_id, sweep_unpaid, sweep_batch_ids, admin_email, skip_payment: false)
-    @batch = Batch.find batch_id
+  def perform(application_round_id, sweep_unpaid, sweep_round_ids, admin_email, skip_payment: false)
+    @application_round = ApplicationRound.find application_round_id
     @skip_payment = skip_payment
-    raise 'Target batch is not in initial stage' unless @batch.initial_stage?
+    raise 'Target batch is not in initial stage' unless @application_round.initial_stage?
 
     sweep_unpaid_applications if sweep_unpaid
-    sweep_from_batches(sweep_batch_ids)
+    sweep_from_rounds(sweep_round_ids)
     send_email(admin_email)
   end
 
   def sweep_unpaid_applications
-    other_applications = BatchApplication.where.not(batch: @batch)
-    uninitiated_applications = other_applications.includes(:payment).where(payments: { id: nil })
-    unpaid_applications = other_applications.joins(:payment).merge(Payment.requested)
-    count_for_email 'Payment missing applications swept' => uninitiated_applications.count
-    count_for_email 'Payment initiated applications swept' => unpaid_applications.count
-    (uninitiated_applications + unpaid_applications).each { |application| application.update!(batch_id: @batch.id, swept_in_at: Time.now) }
+    other_applications = BatchApplication.where.not(application_round: @application_round)
+    unpaid_applications = other_applications.joins(:application_stage).where('application_stages.number < ?', coding_stage.number)
+    count_for_email 'Applications before coding stage' => unpaid_applications.count
+    unpaid_applications.each { |application| application.update!(application_round: @application_round, swept_in_at: Time.now) }
   end
 
-  def sweep_from_batches(batch_ids)
-    sweep_results = batch_ids.each_with_object({}) do |batch_id, results|
-      source_batch = Batch.find batch_id
-      expired, ignored, rejected = sweep_from_batch(source_batch)
-      results["From Batch ##{source_batch.batch_number}"] = { 'Rejected swept' => rejected, 'Expired swept' => expired, 'Ignored' => ignored }
+  def sweep_from_rounds(round_ids)
+    sweep_results = round_ids.each_with_object({}) do |round_id, results|
+      source_round = ApplicationRound.find(round_id)
+      expired, ignored, rejected = sweep_from_round(source_round)
+      results["From #{source_round.display_name}"] = { 'Rejected swept' => rejected, 'Expired swept' => expired, 'Ignored' => ignored }
     end
 
     count_for_email sweep_results
   end
 
-  def sweep_from_batch(source_batch)
+  def coding_stage
+    @coding_stage ||= ApplicationStage.coding_stage
+  end
+
+  def sweep_from_round(source_round)
     rejected = 0
     expired = 0
     ignored = 0
 
-    source_batch.batch_applications.each do |batch_application|
-      if batch_application.swept_at.present? || batch_application.application_stage.initial_stage?
+    source_round.batch_applications.each do |batch_application|
+      if batch_application.swept_at.present? || batch_application.application_stage.number < coding_stage.number
         ignored += 1
         next
       end
@@ -59,7 +61,7 @@ class BatchSweepJob < ApplicationJob
   def send_email(admin_email)
     AdminUserMailer.batch_sweep(
       admin_email,
-      @batch.batch_number,
+      @application_round,
       @counts
     ).deliver_later
   end
@@ -72,7 +74,7 @@ class BatchSweepJob < ApplicationJob
   # Creates a (pristine) duplicate of this application into given batch.
   def duplicate_application(batch_application)
     new_application = BatchApplication.create!(
-      batch: @batch,
+      application_round: @application_round,
       team_lead: batch_application.team_lead,
       application_stage: new_application_stage,
       college: batch_application.college,
@@ -85,19 +87,13 @@ class BatchSweepJob < ApplicationJob
     batch_application.update!(swept_at: Time.now)
 
     if @skip_payment
-      skip_payment(new_application)
-      BatchApplicantMailer.swept_skip_payment(batch_application.team_lead).deliver_later
+      BatchApplicantMailer.swept_skip_payment(batch_application).deliver_later
     else
-      BatchApplicantMailer.swept(batch_application.team_lead, @batch).deliver_later
+      BatchApplicantMailer.swept(batch_application).deliver_later
     end
   end
 
-  # Create a dummy payment entry and
-  def skip_payment(batch_application)
-    PaymentCreateService.new(batch_application, skip_payment: true).execute
-  end
-
   def new_application_stage
-    @skip_payment ? ApplicationStage.testing_stage : ApplicationStage.initial_stage
+    @skip_payment ? ApplicationStage.coding_stage : ApplicationStage.initial_stage
   end
 end

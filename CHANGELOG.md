@@ -1,3 +1,18 @@
+### 23 January, 2017
+
+#### Features
+
+  - Added ability to filter targets on the Founder Dashboard.
+
+#### UX and UI
+
+  - Timeline event descriptions now include line-breaks when being displayed in the startup timeline.
+  - The application registration form and the user sign-in form now block users and display an error message if the address being used has bounced emails in the past.
+
+#### Bugfixes
+
+  - We've fixed a timing-related bug with the Startup Leaderboard - the results should now be accurate when viewing after midnight.
+
 ### 16 January, 2017
 
 #### Features

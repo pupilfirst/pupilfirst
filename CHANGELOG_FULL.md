@@ -2,6 +2,21 @@
 
 - Multiple application rounds are being implemented. [[Trello]](https://trello.com/c/pUZ1cfBW)
 - Design of the new screening stage for application process is in the works. [[Trello]](https://trello.com/c/rCMyzKia)
+- Two founder edit forms are being merged. [[Trello]](https://trello.com/c/2LR1zNne)
+
+## 2017.01.23
+
+- Added ability to filter targets on the Founder Dashboard. [[Trello]](https://trello.com/c/TImTvbU3)
+- We've (possibly) fixed a timing bug in the leaderboard generation service - specs related to this have also been improved. [[Trello]](https://trello.com/c/ouvsGOmc)
+- Integration with PayTM was tested successfully. The code related to this will be kept in the repository for future use (if required). [[Trello]](https://trello.com/c/OAQoefbY)
+- Timeline event descriptions no longer ignore line-breaks when being displayed in the startup timeline and in the admin interface. [[Trello]](https://trello.com/c/jhiglpQl)
+- `BaseService` has been removed and its functionality has been extracted into _concens_. [[Trello]](https://trello.com/c/cA4Fd5Oo)
+- The _Share on Facebook_ feature has been disabled (silently) for Founder-specific events. [[Trello]](https://trello.com/c/MnjtJKyb)
+- Intercom now correctly fetches user details from the `User` model. [[Trello]](https://trello.com/c/XjBqXvDL)
+- `Founders::TargetFilterService` and `Targets::DueDateService` have been spec-d. [[Trello]](https://trello.com/c/RFlWtEAZ)
+- The application registration form now blocks emails that have previously bounced. [[Trello]](https://trello.com/c/Ha9zA4V2)
+- The sign-in form now blocks and informs users if the email address their has previously bounced. [[Trello]](https://trello.com/c/SYBKrT60)
+- `User.email_bounced` boolean column has been removed in favor of using `User.email_bounced_at` to perform the same check. [[Trello]](https://trello.com/c/8wniFfnY)
 
 ## 2017.01.16
 

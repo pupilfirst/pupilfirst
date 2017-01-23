@@ -1,6 +1,6 @@
 module BatchApplications
   class VideoStageForm < Reform::Form
-    property :video_url, validates: { presence: true, url: true }
+    property :video_url, validates: { presence: true, url: true }, virtual: true
 
     validate :coapplicants_should_be_present
     validate :video_url_must_be_acceptable
@@ -18,7 +18,7 @@ module BatchApplications
 
     def save(batch_application)
       ApplicationSubmission.transaction do
-        submission = ApplicationSubmission.new(
+        submission = ApplicationSubmission.create!(
           application_stage: ApplicationStage.find_by(number: 4),
           batch_application: batch_application
         )

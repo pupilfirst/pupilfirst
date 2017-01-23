@@ -324,12 +324,12 @@ class BatchApplicationController < ApplicationController
 
   # Video stage
   def stage_4
-    @form = BatchApplications::VideoStageForm.new(OpenStruct.new)
+    @form = BatchApplications::VideoStageForm.new(current_application)
   end
 
   # Video stage submissions handler.
   def stage_4_submit
-    @form = BatchApplications::VideoStageForm.new(OpenStruct.new)
+    @form = BatchApplications::VideoStageForm.new(current_application)
 
     if @form.validate(params[:batch_applications_video_stage])
       @form.save(current_application)

@@ -41,7 +41,7 @@ module BatchApplications
           notes: notes
         )
 
-        submission.application_submission_urls.create!(name: 'Code Repository', url: git_repo_url)
+        submission.application_submission_urls.create!(name: 'Code Submission', url: git_repo_url)
         submission.application_submission_urls.create!(name: 'Live Website', url: prepend_http_if_required(website)) if website.present?
         submission.application_submission_urls.create!(name: 'Application Binary', url: prepend_http_if_required(executable)) if executable.present?
       end

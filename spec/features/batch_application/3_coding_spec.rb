@@ -78,7 +78,7 @@ feature 'Batch Application Coding Stage' do
 
       create :application_submission_url,
         application_submission: application_submission,
-        name: 'Code Repository',
+        name: 'Code Submission',
         url: 'https://github.com/user/repo'
 
       create :application_submission_url,

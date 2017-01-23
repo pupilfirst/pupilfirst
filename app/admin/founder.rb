@@ -81,8 +81,16 @@ ActiveAdmin.register Founder do
     column :email
     column :name
 
+    column :startup_admin do |founder|
+      founder.startup_admin? ? "Yes" : "No"
+    end
+
     column :product do |founder|
       founder.startup&.product_name
+    end
+
+    column :company do |founder|
+      founder.startup&.legal_registered_name
     end
 
     column :batch do |founder|

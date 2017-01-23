@@ -32,7 +32,7 @@ module Founders
           raise "Unexpected filter value '#{filter}'"
       end
 
-      targets.map(&:decorate)
+      sorted(targets).map(&:decorate)
     end
 
     private
@@ -77,6 +77,10 @@ module Founders
 
     def due_date_service
       @due_date_service ||= Targets::DueDateService.new(@founder.startup.batch).tap(&:prepare)
+    end
+
+    def sorted(targets)
+      targets.sort_by { |target| due_date_service.due_date(target) }
     end
   end
 end

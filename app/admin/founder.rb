@@ -81,7 +81,7 @@ ActiveAdmin.register Founder do
     column :email
     column :name
 
-    column :startup_admin do |founder|
+    column :team_lead do |founder|
       founder.startup_admin? ? "Yes" : "No"
     end
 

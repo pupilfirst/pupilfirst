@@ -33,14 +33,16 @@
   h5.m-t-3.font-semibold.brand-secondary Fee Payment Status
   == render 'payment_status_table', batch_application: @batch_application
 
-  .fees-section.p-t-2.p-b-2
-    #payment-instructions.panel-group
-      .card
-        h4
-          a.card-block.accordion-toggle.collapsed data-parent="#payment-instructions" data-toggle="collapse" href="#payment-info"
-            | Payment Instructions
-        #payment-info.collapse.payment-instructions
-          == render 'payment_instructions', batch_application: @batch_application
+  - total_fee = @batch_application.total_course_fee
+  - if total_fee > 0
+    .fees-section.p-t-2.p-b-2
+      #payment-instructions.panel-group
+        .card
+          h4
+            a.card-block.accordion-toggle.collapsed data-parent="#payment-instructions" data-toggle="collapse" href="#payment-info"
+              | Payment Instructions
+          #payment-info.collapse.payment-instructions
+            == render 'payment_instructions', total_fee: total_fee
 
   == render('update_applicant_form') if @form.present?
 

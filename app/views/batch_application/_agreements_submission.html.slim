@@ -27,10 +27,12 @@
         li
           p Upload a copy of your Partnership Deed below.
           p <em>Note:</em>&nbsp;Do <strong>not</strong> send us your Original Partnership Deed.
-    .fee-instructions.m-t-2.m-b-2
-      h5.font-semibold.instructions-head.brand-primary
-        | Fee:
-      == render 'payment_instructions'
+    - total_fee = @batch_application.total_course_fee
+    - if total_fee > 0
+      .fee-instructions.m-t-2.m-b-2
+        h5.font-semibold.instructions-head.brand-primary
+          | Fee:
+        == render 'payment_instructions', total_fee: total_fee
   .simple-form-container
     = bootstrap_form_for(@form, url: apply_stage_submit_path, layout: :horizontal, label_col: 'col-sm-3', control_col: 'col-sm-9') do |f|
       = f.file_field :partnership_deed, label_class: 'col-form-label', label: 'Partnership Deed', class: 'form-control', help: "#{@form.deed_help_extra}Scan copy of <strong>completed and signed</strong> partnership deed.".html_safe, required: !@form.model.partnership_deed.present?

@@ -21,15 +21,15 @@ class BatchApplicationGradingService
   private
 
   def code_percentile
-    return unless total_submissions.positive? && code_score.present?
+    return unless total_code_submissions.positive? && code_score.present?
 
-    (defeated_code_submissions.to_f / total_submissions) * 100
+    (defeated_code_submissions.to_f / total_code_submissions) * 100
   end
 
   def video_percentile
-    return unless total_submissions.positive? && video_score.present?
+    return unless total_video_submissions.positive? && video_score.present?
 
-    (defeated_video_submissions.to_f / total_submissions) * 100
+    (defeated_video_submissions.to_f / total_video_submissions) * 100
   end
 
   def submission_score
@@ -58,6 +58,20 @@ class BatchApplicationGradingService
     @total_submissions ||= ApplicationSubmission.joins(:batch_application)
       .where(batch_applications: { application_round_id: application_round.id })
       .where(application_stage: ApplicationStage.testing_stage)
+      .count
+  end
+
+  def total_code_submissions
+    @total_code_submissions ||= ApplicationSubmission.joins(:batch_application)
+      .where(batch_applications: { application_round_id: application_round.id })
+      .where(application_stage: ApplicationStage.coding_stage)
+      .count
+  end
+
+  def total_video_submissions
+    @total_video_submissions ||= ApplicationSubmission.joins(:batch_application)
+      .where(batch_applications: { application_round_id: application_round.id })
+      .where(application_stage: ApplicationStage.video_stage)
       .count
   end
 

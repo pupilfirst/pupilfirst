@@ -22,7 +22,9 @@
         ' its own destiny, and SV.CO might not be a right fit for you at this stage.
         br
         | Best wishes from the Team at SV.CO &amp; have a great future!
-      h5.m-b-1.m-t-1.font-semibold
-        ' You are also eligible for a certificate for progressing till this stage!
+      - if current_application.generate_certificate
+        h5.m-b-1.m-t-1.font-semibold
+          ' You are also eligible for a certificate for progressing till this stage!
 
-  == render 'certificate'
+  - if current_application.generate_certificate
+    == render 'certificate'

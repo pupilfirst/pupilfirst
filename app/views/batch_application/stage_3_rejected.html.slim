@@ -7,25 +7,27 @@
     .stages-alert-icon.m-x-auto
       = image_tag 'apply/batch_application/just-missed-icon.svg'
     .application-stages-head.text-xs-center
-      h2 Your coding and hustling submissions were rejected.
+      h2 Your coding  submissions was rejected.
 .container
   .m-t-3
     == render 'application_progress'
   .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
     .content-box.application-stages-content.m-t-3.m-b-2.text-xs-center
       h4.m-b-1
-        ' After evaluation, your team&rsquo;s coding and video submissions for Batch #{current_batch.batch_number}
-        span.brand-secondary.font-semibold scored #{@batch_application.overall_percentile.round(1)} percentile.
-        ' &nbsp;Because of great submissions by other applicants,
-        span.brand-secondary.font-semibold our cutoff for this batch was above 60 percentile.
+        - if current_application.generate_certificate
+          ' After evaluation, your team&rsquo;s coding submissions
+          span.brand-secondary.font-semibold scored #{current_application.percentile_code_score.round(1)} percentile.
+          / TODO: Probably remove percentiles and cut-offs based on them
+          ' &nbsp;Because of great submissions by other applicants,
+          span.brand-secondary.font-semibold our cutoff for this batch was above 60 percentile.
+        ' &nbsp;We&rsquo;re sorry! You didn&rsquo;t make it into Batch #{current_application.batch.batch_number}.
 
       p.m-b-1
-        ' We&rsquo;re sorry! You didn&rsquo;t make it into Batch #{current_batch.batch_number}. Just a note: please
-        ' don&rsquo;t be disappointed. A lot of folks make it into Startup Village only on their second or third try, so
-        | do apply again!
+        ' Just a note: please don&rsquo;t be disappointed. A lot of folks make it into Startup Village only on their second or third try, so do apply again!
 
       p
         ' If you think there&rsquo;s we&rsquo;ve made a mistake in our evaluation, feel free to contact us at
         | #{mail_to 'help@sv.co'}, and we&rsquo;ll get back to you as soon as we can.
 
-  == render 'certificate'
+  - if current_application.generate_certificate
+    == render 'certificate'

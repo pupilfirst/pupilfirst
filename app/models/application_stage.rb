@@ -29,6 +29,10 @@ class ApplicationStage < ApplicationRecord
     find_by(number: 3)
   end
 
+  def self.video_stage
+    find_by(number: 4)
+  end
+
   # TODO: testing_stage is two different stages now.
   def self.testing_stage
     find_by(number: 2)

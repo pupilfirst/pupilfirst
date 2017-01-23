@@ -23,17 +23,19 @@
       h4
         ' <strong>Don't be disappointed though!</strong> A lot of folks make it to Startup Village
         | only on their second or third try, so <strong>do apply again.</strong>
-      .feedback-box.card.m-t-2
-        p.card-header.m-a-0.brand-secondary.font-semibold
-          - if @batch_application.interview_feedback.present?
+      - if @batch_application.interview_feedback.present?
+        .feedback-box.card.m-t-2
+          p.card-header.m-a-0.brand-secondary.font-semibold
             ' Meanwhile, here is some feedback from our Interview Faculty to perform better next time:
-        .card-block
-          p "#{@batch_application.interview_feedback}"
-      h4.m-b-1.m-t-1
-        ' You are also eligible for a certificate for progressing till this stage!
+          .card-block
+            p "#{@batch_application.interview_feedback}"
+      - if current_application.generate_certificate
+        h4.m-b-1.m-t-1
+          ' You are also eligible for a certificate for progressing till this stage!
       p
         ' If you think we&rsquo;ve made a mistake, feel free to contact us at #{mail_to 'help@sv.co'},
         br
         | and we&rsquo;ll get back to you as soon as we can.
 
-  == render 'certificate'
+  - if current_application.generate_certificate
+    == render 'certificate'

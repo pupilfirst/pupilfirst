@@ -32,7 +32,13 @@ class BatchApplicationDecorator < Draper::Decorator
   end
 
   def preliminary_result
-    application_stage.number > 2 ? 'Selected for Interview' : 'Not Selected'
+    if application_stage.number > 4
+      'Selected for Interview'
+    elsif application_stage.number == 4
+      'Selected for Video Task'
+    else
+      'Not Selected'
+    end
   end
 
   def percentile_code_score

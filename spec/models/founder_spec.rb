@@ -12,42 +12,6 @@ describe Founder do
     end
   end
 
-  context 'Slack integration' do
-    before :each do
-      stub_request(:get, "https://slack.com/api/users.list?token=xxxxxx")
-        .to_return(body: '{"ok":true,"members":[{"id":"UABCDEFGH","name":"slackuser"}]}')
-    end
-
-    context 'founder updates slack_username to a random name not on public slack' do
-      it 'validates absence of username in SV.CO public slack and raises error' do
-        founder = create :founder
-        founder.update(slack_username: 'abc')
-        expect(a_request(:get, "https://slack.com/api/users.list?token=xxxxxx")).to have_been_made.once
-        expect(founder.errors[:slack_username]).to include('a user with this mention name does not exist on SV.CO Public Slack')
-      end
-    end
-
-    context 'founder updates slack_username to a valid name on public slack' do
-      it 'validates presence of username in SV.CO public slack and updates succesfully' do
-        founder = create :founder
-        founder.update(slack_username: 'slackuser')
-        expect(a_request(:get, "https://slack.com/api/users.list?token=xxxxxx")).to have_been_made.once
-        expect(founder.errors[:slack_username]).to be_empty
-        expect(founder.slack_user_id).to_not be_nil
-      end
-    end
-
-    context 'founder empties slack_username' do
-      it 'clears slack_user_id and sends no query to slack' do
-        founder = create :founder
-        founder.update(slack_username: '')
-        expect(a_request(:get, "https://slack.com/api/users.list?token=xxxxxx")).not_to have_been_made
-        expect(founder.slack_username).to be_nil
-        expect(founder.slack_user_id).to be_nil
-      end
-    end
-  end
-
   describe '#activity_timeline' do
     it 'returns activity count by month and week' do
       # Use this as reference time (replacement for Time.now).

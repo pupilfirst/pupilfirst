@@ -72,18 +72,10 @@ class Founder < ApplicationRecord
 
   validates :born_on, presence: true
   validates :gender, inclusion: { in: valid_gender_values }
-  validates :twitter_url, url: true, allow_nil: true
-  validates :linkedin_url, url: true, allow_nil: true
   validates :email, uniqueness: true, allow_nil: true
-  validates :slack_username, uniqueness: true, allow_blank: true
 
-  # TODO: The following validation is probably invalid.
-  validates :roll_number, presence: true, if: :university_id
-
-  validate :slack_username_format
   validate :age_more_than_18
   validate :role_must_be_valid
-  validate :slack_username_must_exist
 
   def age_more_than_18
     errors.add(:born_on, 'must be at least 18 years old') if born_on && born_on > 18.years.ago.end_of_year
@@ -146,35 +138,6 @@ class Founder < ApplicationRecord
     end
   end
 
-  def slack_username_must_exist
-    return if slack_username.blank?
-    return unless slack_username_changed?
-    return if Rails.env.development?
-
-    response_json = JSON.parse(RestClient.get("https://slack.com/api/users.list?token=#{Rails.application.secrets.slack_token}"))
-
-    unless response_json['ok']
-      errors.add(:slack_username, 'unable to validate username from slack. Please try again')
-      return
-    end
-
-    valid_names = response_json['members'].map { |m| m['name'] }
-    index = valid_names.index slack_username
-
-    if index.present?
-      @new_slack_user_id = response_json['members'][index]['id']
-    else
-      errors.add(:slack_username, 'a user with this mention name does not exist on SV.CO Public Slack')
-    end
-  end
-
-  before_save :fetch_slack_user_id
-
-  def fetch_slack_user_id
-    return unless slack_username_changed?
-    self.slack_user_id = slack_username.present? ? @new_slack_user_id : nil
-  end
-
   before_save :capitalize_name_fragments
 
   def capitalize_name_fragments
@@ -189,13 +152,6 @@ class Founder < ApplicationRecord
   def remove_at_symbol_from_slack_username
     return unless slack_username.present? && slack_username.starts_with?('@')
     self.slack_username = slack_username[1..-1]
-  end
-
-  def slack_username_format
-    return if slack_username.blank?
-    username_match = slack_username.match(/^@?([a-z\d\.\_\-]{,21})$/)
-    return if username_match.present?
-    errors.add(:slack_username, 'is not valid. Should only contain lower-case letters, numbers, periods, hyphen and underscores.')
   end
 
   def display_name

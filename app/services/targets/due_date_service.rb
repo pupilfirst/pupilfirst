@@ -23,14 +23,14 @@ module Targets
       end
     end
 
+    def due_date(target)
+      @due_dates_hash[target.id]
+    end
+
     private
 
     def prepare_if_required
       prepare unless instance_variable_defined?(:@due_dates_hash)
-    end
-
-    def due_date(target)
-      @due_dates_hash[target.id]
     end
   end
 end

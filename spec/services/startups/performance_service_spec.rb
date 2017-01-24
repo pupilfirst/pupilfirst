@@ -10,10 +10,12 @@ describe Startups::PerformanceService do
   POINTS_TWO_WEEKS_BACK = [100, 200, 300, 400].freeze
 
   before do
+    last_week = Time.zone.now.beginning_of_week - 3.days
+
     # add some karma points for last week
     POINTS_LAST_WEEK.each.with_index(1) do |points, index|
       startup = batch.startups.order(:id).limit(index).last
-      create :karma_point, created_at: 10.days.ago, startup: startup, points: points
+      create :karma_point, created_at: last_week, startup: startup, points: points
     end
 
     # calculate last weeks leaderboard
@@ -22,10 +24,12 @@ describe Startups::PerformanceService do
       [startup, ranks_last_week[index], POINTS_LAST_WEEK[index] || 0]
     end
 
+    two_weeks_ago = Time.zone.now.beginning_of_week - 10.days
+
     # add some karma points for two weeks back
     POINTS_TWO_WEEKS_BACK.each.with_index(1) do |points, index|
       startup = batch.startups.order(:id).limit(index).last
-      create :karma_point, created_at: 15.days.ago, startup: startup, points: points
+      create :karma_point, created_at: two_weeks_ago, startup: startup, points: points
     end
 
     # calculate leaderboard two weeks back
@@ -51,14 +55,27 @@ describe Startups::PerformanceService do
 
   describe '#leaderboard_rank' do
     it 'returns the leaderboard rank of the specified startup' do
-      expect(subject.leaderboard_rank(batch.startups.first)).to eq(8)
+      travel_to(Time.zone.now.beginning_of_week) do
+        expect(subject.leaderboard_rank(batch.startups.first)).to eq(4)
+      end
+
+      travel_to(Time.zone.now.end_of_week - 1.hour) do
+        expect(subject.leaderboard_rank(batch.startups.first)).to eq(8)
+      end
     end
   end
 
   describe '#last_week_karma' do
     it 'returns the karma points earned last week by the specified startup' do
-      expect(subject.last_week_karma(batch.startups.second)).to eq(200)
-      expect(subject.last_week_karma(batch.startups.last)).to eq(0)
+      travel_to(Time.zone.now.beginning_of_week) do
+        expect(subject.last_week_karma(batch.startups.first)).to eq(100)
+        expect(subject.last_week_karma(batch.startups.last)).to eq(0)
+      end
+
+      travel_to(Time.zone.now.end_of_week - 1.hour) do
+        expect(subject.last_week_karma(batch.startups.first)).to eq(10)
+        expect(subject.last_week_karma(batch.startups.last)).to eq(0)
+      end
     end
   end
 
@@ -66,9 +83,11 @@ describe Startups::PerformanceService do
     it 'returns a relative measure of performance for the startup specified' do
       startups = batch.startups.order(:id)
 
-      expect(subject.relative_performance(startups.first)).to eq(30)
-      expect(subject.relative_performance(startups.fifth)).to eq(50)
-      expect(subject.relative_performance(startups.limit(8).last)).to eq(90)
+      travel_to(Time.zone.now.end_of_week - 1.hour) do
+        expect(subject.relative_performance(startups.first)).to eq(30)
+        expect(subject.relative_performance(startups.fifth)).to eq(50)
+        expect(subject.relative_performance(startups.limit(8).last)).to eq(90)
+      end
     end
   end
 end

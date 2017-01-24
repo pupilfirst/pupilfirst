@@ -52,7 +52,7 @@ ActiveAdmin.register Founder do
     column :name
     column :email
 
-    column :product_name do |founder|
+    column :product_name, sortable: 'founders.startup_id' do |founder|
       if founder.startup.present?
         a href: admin_startup_path(founder.startup) do
           span do

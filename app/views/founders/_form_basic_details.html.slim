@@ -1,4 +1,4 @@
-= simple_form_for @form, url: founder_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean, file: :horizontal_file_input } do |f|
+= simple_form_for form, url: founder_path, html: { class: 'form-horizontal' }, wrapper: :horizontal_form, wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, boolean: :horizontal_boolean, file: :horizontal_file_input } do |f|
 
   = f.error_notification
 
@@ -8,20 +8,20 @@
   = f.input :avatar, as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }, required: false
   = f.input :about, label: 'One-Liner', placeholder: 'One-liner about yourself', input_html: { maxlength: 255 }, required: false
 
-  - if founder.startup.present?
+  - if @founder.startup.present?
     = f.input :roles, label: 'Role at Startup', as: :select, collection: Founder.valid_roles, label_method: ->(role) { t "role.#{role}" }, include_hidden: false, input_html: { multiple: true }, required: false
 
   = f.input :slack_username, label: (link_to 'Public Slack Username<sup>?</sup></a>'.html_safe, about_slack_url, target: '_blank'), placeholder: 'mention_name (excluding @)', required: false
   = f.input :skype_id, label: 'Skype Id', required: false
   = f.input :communication_address
-  = f.input :identification_proof, label: 'ID Proof', as: :file, hint: founder.identification_proof_hint, required: false
+  = f.input :identification_proof, label: 'ID Proof', as: :file, hint: @founder.identification_proof_hint, required: false
 
   = f.input :college_id,
     as: :select,
     label: 'College',
     placeholder: 'Please pick your college',
     input_html: { 'data-search-url' => colleges_url },
-    collection: f.object.model.college.present? ? [f.object.model.college] : []
+    collection: f.object.model.college.present? ? [f.object.model.college] : [["My college isn't listed", 'other']]
 
   = f.input :twitter_url, label: 'Twitter Profile URL', input_html: { maxlength: 255 }, required: false
   = f.input :linkedin_url, label: 'LinkedIn Profile URL', input_html: { maxlength: 255 }, required: false

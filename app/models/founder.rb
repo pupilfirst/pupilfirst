@@ -75,7 +75,6 @@ class Founder < ApplicationRecord
   validates :email, uniqueness: true, allow_nil: true
 
   validate :age_more_than_18
-  validate :role_must_be_valid
 
   def age_more_than_18
     errors.add(:born_on, 'must be at least 18 years old') if born_on && born_on > 18.years.ago.end_of_year
@@ -129,14 +128,6 @@ class Founder < ApplicationRecord
   mount_uploader :identification_proof, IdentificationProofUploader
 
   normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :name, :slack_username, :resume_url
-
-  def role_must_be_valid
-    roles.each do |role|
-      unless Founder.valid_roles.include? role
-        errors.add(:roles, 'contained unrecognized value')
-      end
-    end
-  end
 
   before_save :capitalize_name_fragments
 

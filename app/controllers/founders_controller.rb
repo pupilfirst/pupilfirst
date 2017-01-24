@@ -10,21 +10,18 @@ class FoundersController < ApplicationController
   # GET /founders/:id/edit
   def edit
     @founder = current_founder.decorate
-    @form = Founders::EditForm.new(current_founder)
   end
 
   # PATCH /founders/:id
   def update
-    @founder = current_founder
+    @founder = current_founder.decorate
+    form = @founder.form
 
-    # Remove 'other' college ID if selected by founder.
-    params[:founders_edit].delete(:college_id) if params.dig(:founders_edit, :college_id) == 'other'
-
-    if @founder.update_attributes(founder_params)
-      flash[:notice] = 'Profile updated'
+    if form.validate(params[:founders_edit])
+      form.save
+      flash[:success] = 'Your profile has been updated.'
       redirect_to founder_profile_path(slug: @founder.slug)
     else
-      @founder = @founder.decorate
       render 'edit'
     end
   end

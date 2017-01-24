@@ -3,10 +3,16 @@ class ApplicantScreening extends React.Component {
     super(props);
 
     this.state = {
-      selectedSide: null
+      selectedSide: null,
+      baseKey: this.generateKey()
     };
 
     this.selectSectionCB = this.selectSectionCB.bind(this);
+    this.resetCB = this.resetCB.bind(this);
+  }
+
+  generateKey() {
+    return '' + (new Date).getTime();
   }
 
   containerClasses() {
@@ -28,18 +34,18 @@ class ApplicantScreening extends React.Component {
   }
 
   resetCB() {
-    this.setState({selectedSide: null});
+    this.setState({selectedSide: null, baseKey: this.generateKey()});
   }
 
   render() {
     return (
       <div className={ this.containerClasses() }>
-        <ApplicantScreeningSection key="section-left" side="left" selectSectionCB={ this.selectSectionCB }
-          resetCB={ this.resetCB }
-          selectedSide={ this.state.selectedSide } iconPath={ this.props.coderIconPath }/>
-        <ApplicantScreeningSection key="section-right" side="right" selectSectionCB={ this.selectSectionCB }
-          resetCB={ this.resetCB }
-          selectedSide={ this.state.selectedSide } iconPath={ this.props.nonCoderIconPath }/>
+        <ApplicantScreeningSection key={ "section-left-" + this.state.baseKey } side="left"
+          selectSectionCB={ this.selectSectionCB } resetCB={ this.resetCB } selectedSide={ this.state.selectedSide }
+          iconPath={ this.props.coderIconPath }/>
+        <ApplicantScreeningSection key={ "section-right-" + this.state.baseKey } side="right"
+          selectSectionCB={ this.selectSectionCB } resetCB={ this.resetCB } selectedSide={ this.state.selectedSide }
+          iconPath={ this.props.nonCoderIconPath }/>
       </div>
     );
   }

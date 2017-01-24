@@ -15,7 +15,8 @@ class IntercomLastApplicantEventUpdateJob < ApplicationJob
       submitted_application: 'Applicant',
       payment_initiated: 'Payment Initiated',
       payment_complete: 'Paid Applicant',
-      tasks_submitted: 'Tasks Submitted',
+      coding_task_submitted: 'Coding Task Submitted',
+      video_task_submitted: 'Video Task Submitted',
       selected_for_interview: 'Selected For Interview',
       agreements_sent: 'Agreements Sent'
     }
@@ -26,7 +27,8 @@ class IntercomLastApplicantEventUpdateJob < ApplicationJob
       submitted_application: 'Applicant',
       payment_initiated: 'Payment Initiated',
       payment_complete: 'Paid Applicant',
-      tasks_submitted: 'Tasks Submitted',
+      coding_task_submitted: 'Coding Task Submitted',
+      video_task_submitted: 'Video Task Submitted',
       selected_for_interview: 'Selected For Interview',
       agreements_sent: 'Agreements Sent'
     }
@@ -37,7 +39,8 @@ class IntercomLastApplicantEventUpdateJob < ApplicationJob
       submitted_application: 'Submitted Application',
       payment_initiated: 'Payment Initiated',
       payment_complete: 'Payment Completed',
-      tasks_submitted: 'Tasks Submitted',
+      coding_task_submitted: 'Coding Task Submitted',
+      video_task_submitted: 'Video Task Submitted',
       selected_for_interview: 'Selected For Interview',
       agreements_sent: 'Agreements Sent'
     }

@@ -19,7 +19,9 @@ class ApplicantScreening extends React.Component {
     let classes = "content-box applicant-screening m-b-3";
 
     if (this.state.selectedSide == 'right') {
-      classes += " applicant-screening__reverse-order"
+      classes += " applicant-screening--mobile-column-reverse";
+    } else if (this.state.selectedSide == 'left') {
+      classes += " applicant-screening--mobile-column";
     }
 
     return classes;

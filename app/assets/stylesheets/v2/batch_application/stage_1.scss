@@ -62,16 +62,6 @@
     top: 0;
     left: calc(50% - 1px);
   }
-
-  @include media-breakpoint-down(sm) {
-    flex-direction: column;
-  }
-}
-
-.applicant-screening__reverse-order {
-  @include media-breakpoint-down(sm) {
-    flex-direction: column-reverse;
-  }
 }
 
 .applicant-screening--mobile-column {
@@ -170,23 +160,15 @@
     .applicant-screening__cover {
       display: flex;
     }
-  < < < < < < < HEAD . applicant-screening-choice {
-    margin: 0 0 0 1rem;
-  }
+
+    .applicant-screening-choice {
+      margin: 0 0 0 1rem;
+    }
 
     .applicant-screening__icon {
       margin: 0;
     }
 
-  == == == = . applicant-screening-choice {
-    margin: 0 0 0 1rem;
-  }
-
-    .applicant-screening__icon {
-      margin: 0;
-    }
-
-    > > > > > > > application-rounds-design
     .applicant-screening-btn {
       display: none;
     }

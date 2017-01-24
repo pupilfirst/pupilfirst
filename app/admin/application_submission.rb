@@ -186,7 +186,7 @@ ActiveAdmin.register ApplicationSubmission do
 
     f.inputs do
       f.input :application_stage
-      f.input :batch_application, collection: BatchApplication.payment_complete.includes(:application_round, :team_lead) unless f.object.persisted?
+      f.input :batch_application, collection: BatchApplication.all.includes(:application_round, :team_lead) unless f.object.persisted?
       f.input :file
       f.input :score
       f.input :notes, placeholder: 'Use markdown to format.'

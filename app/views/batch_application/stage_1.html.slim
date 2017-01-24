@@ -5,23 +5,24 @@
 #batch-application__stage-1
 
 .container
-  .application-stage-1-header.text-xs-center.m-y-2
+  .application-stage-1-header.text-xs-center.m-t-3.m-b-2
     p.application-stage-1-header__thanks-text.text-uppercase.brand-primary.m-x-auto Thank you for applying
     h3.application-stage-1-header__description Let&rsquo;s find out if you are a right fit for our program.
     h2.application-stage-1-header__question.font-semibold Do you know how to code?
 
-  .content-box.applicant-screening.m-b-3
-    .applicant-screening__section.applicant-screening__section-left.applicant-screening__section-left--shrunk
-      .applicant-screening__cover.coder-cover.text-xs-center
+  .content-box.applicant-screening.m-b-3.applicant-screening__reverse-order
+    .applicant-screening__section.applicant-screening__section-left.applicant-screening__section-left--expanded
+      .applicant-screening__cover.coder-cover
         .applicant-screening__cover-content
-          .applicant-screening__icon.img-circle.m-x-auto.m-b-2
+          .applicant-screening__icon.img-circle
             = image_tag 'apply/batch_application/programmer-icon.svg'
 
-          h2.applicant-screening-choice.m-b-2
+          h2.applicant-screening-choice
             | Yes, I am a
             .font-semibold good programmer
 
-          = button_to 'GET STARTED', apply_stage_submit_path(stage_number: 1), class: 'btn btn-primary btn-md text-uppercase applicant-screening-btn'
+          button.btn.btn-primary.btn-md.applicant-screening-btn
+            span START
 
       .applicant-screening__quiz.non-coder-question
         .applicant-screening__question-section
@@ -46,17 +47,18 @@
               i.fa.fa-arrow-right
               | Next
 
-    .applicant-screening__section.applicant-screening__section-right.applicant-screening__section-right--expanded
-      .applicant-screening__cover.non-coder-cover.text-xs-center
+    .applicant-screening__section.applicant-screening__section-right.applicant-screening__section-right--shrunk
+      .applicant-screening__cover.non-coder-cover
         .applicant-screening__cover-content
-          .applicant-screening__icon.img-circle.m-x-auto.m-b-2
-            = image_tag 'apply/batch_application/programmer-icon.svg'
+          .applicant-screening__icon.img-circle
+            = image_tag 'apply/batch_application/hipster-icon.svg'
 
-          h2.applicant-screening-choice.m-b-2
+          h2.applicant-screening-choice
             | No, I have
             .font-semibold other skills
 
-          = button_to 'GET STARTED', apply_stage_submit_path(stage_number: 1), class: 'btn btn-primary btn-md text-uppercase applicant-screening-btn'
+          button.btn.btn-primary.btn-md.applicant-screening-btn
+            span START
 
       .applicant-screening__quiz.coder-question
         .applicant-screening__question-section

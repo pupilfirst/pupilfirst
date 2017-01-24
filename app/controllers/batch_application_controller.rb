@@ -297,8 +297,8 @@ class BatchApplicationController < ApplicationController
   def bypass_payment
     # save the team size
     current_application.update!(team_size: params[:batch_applications_payment][:team_size])
-
     current_application.perform_post_payment_tasks!
+    IntercomLastApplicantEventUpdateJob.perform_later(current_application.team_lead, 'payment_skipped')
     redirect_to apply_stage_path(stage_number: 3)
   end
 

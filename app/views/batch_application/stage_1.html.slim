@@ -10,6 +10,8 @@
     h3.application-stage-1-header__description Let&rsquo;s find out if you are a right fit for our program.
     h2.application-stage-1-header__question.font-semibold Do you know how to code?
 
+  == react_component('ApplicantScreening', { coderIconPath: image_path('apply/batch_application/programmer-icon.svg'), nonCoderIconPath: image_path('apply/batch_application/hipster-icon.svg') })
+
   .content-box.applicant-screening.m-b-3.applicant-screening__reverse-order
     .applicant-screening__section.applicant-screening__section-left.applicant-screening__section-left--expanded
       .applicant-screening__cover.coder-cover
@@ -86,5 +88,5 @@
 .container
   == render 'applications_close_soon' if current_application_round.closes_soon?
 
-  / .text-xs-center.m-y-1
-  /   = button_to 'Move to next stage', apply_stage_submit_path(stage_number: 1), class: 'btn btn-primary btn-md text-uppercase'
+    / .text-xs-center.m-y-1
+    /   = button_to 'Move to next stage', apply_stage_submit_path(stage_number: 1), class: 'btn btn-primary btn-md text-uppercase'

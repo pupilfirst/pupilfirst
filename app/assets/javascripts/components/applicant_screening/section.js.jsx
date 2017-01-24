@@ -1,0 +1,61 @@
+class ApplicantScreeningSection extends React.Component {
+  containerClasses() {
+    let baseClass = 'applicant-screening__section-' + this.props.side;
+    let classes = 'applicant-screening__section ' + baseClass;
+
+    if (this.isQuiz()) {
+      classes += ' ' + baseClass + "--expanded";
+    } else if (this.isCover() && this.props.selectedSide !== null) {
+      classes += ' ' + baseClass + "--shrunk";
+    }
+
+    return classes;
+  }
+
+  isCover() {
+    return this.props.selectedSide === null || this.props.selectedSide === this.props.side;
+  }
+
+  isQuiz() {
+    return this.props.selectedSide !== this.props.side && this.props.selectedSide !== null;
+  }
+
+  coverType() {
+    if (this.props.side === 'left') {
+      return 'coder';
+    } else {
+      return 'non-coder';
+    }
+  }
+
+  quizType() {
+    if (this.props.side === 'left') {
+      return 'non-coder';
+    } else {
+      return 'coder';
+    }
+  }
+
+  render() {
+    return (
+      <div className={ this.containerClasses() }>
+        { this.isCover() &&
+        <ApplicantScreeningCover type={ this.coverType() } selectSectionCB={ this.props.selectSectionCB }
+          iconPath={ this.props.iconPath } selected={ this.props.selectedSide !== null }/>
+        }
+
+        { this.isQuiz() &&
+        <ApplicantScreeningQuiz type={ this.quizType() } resetCB={ this.props.resetCB }/>
+        }
+      </div>
+    );
+  }
+}
+
+ApplicantScreeningSection.propTypes = {
+  side: React.PropTypes.string,
+  iconPath: React.PropTypes.string,
+  selectedSide: React.PropTypes.string,
+  selectSectionCB: React.PropTypes.func,
+  resetCB: React.PropTypes.func
+};

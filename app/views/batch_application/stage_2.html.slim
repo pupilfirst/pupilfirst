@@ -49,14 +49,17 @@
                 .paywith-instamojo
                   div
                     h3.m-b-1
-                      ' You need to pay
-                      - if current_application.fee < BatchApplication::APPLICATION_FEE
-                        del
-                          ' Rs. #{BatchApplication::APPLICATION_FEE}
-                      span.brand-secondary.font-semibold
-                        ' Rs. #{current_application.fee}
-                      br
-                      | to proceed to the next stage.
+                      - if current_application.fee == 0
+                        ' Hurray! You can now proceed to the next stage without any payment.
+                      - else
+                        ' You need to pay
+                        - if current_application.fee < BatchApplication::APPLICATION_FEE
+                          del
+                            ' Rs. #{BatchApplication::APPLICATION_FEE}
+                        span.brand-secondary.font-semibold
+                          ' Rs. #{current_application.fee}
+                        br
+                        | to proceed to the next stage.
 
                     = f.submit current_application.payment_button_message, class: 'btn btn-primary btn-md text-uppercase'
 

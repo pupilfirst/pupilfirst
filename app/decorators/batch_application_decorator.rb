@@ -120,7 +120,13 @@ class BatchApplicationDecorator < Draper::Decorator
   end
 
   def payment_button_message
-    payment.present? ? h.t('batch_application.stage_1.payment_retry') : h.t('batch_application.stage_1.payment_start')
+    if fee.zero? || Rails.env.development?
+      h.t('batch_application.stage_1.payment_skip')
+    elsif payment.present?
+      h.t('batch_application.stage_1.payment_retry')
+    else
+      h.t('batch_application.stage_1.payment_start')
+    end
   end
 
   def closes_soon_message

@@ -66,6 +66,7 @@ en:
       submission_failure: Something went wrong when we tried to save your application data. Please contact help@sv.co if this error persists.
       payment_start: Pay Fees Online
       payment_retry: Retry Payment
+      payment_skip: Proceed to Next Stage
     stage_2:
       submission_failure: Something seems wrong. Please ensure your urls are valid and re-submit
   faculty:

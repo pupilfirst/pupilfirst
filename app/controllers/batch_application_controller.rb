@@ -274,6 +274,11 @@ class BatchApplicationController < ApplicationController
     @form = BatchApplications::PaymentForm.new(current_application)
 
     if @form.validate(params[:batch_applications_payment])
+      if current_application.fee.zero? || Rails.env.development?
+        bypass_payment
+        return
+      end
+
       begin
         payment = @form.save
       rescue Instamojo::PaymentRequestCreationFailed
@@ -282,14 +287,19 @@ class BatchApplicationController < ApplicationController
         return
       end
 
-      if Rails.env.development?
-        render plain: "Redirect to #{payment.long_url}"
-      else
-        redirect_to payment.long_url
-      end
+      redirect_to payment.long_url
     else
       render 'stage_1'
     end
+  end
+
+  # Perform post payment tasks and promote to stage 3
+  def bypass_payment
+    # save the team size
+    current_application.update!(team_size: params[:batch_applications_payment][:team_size])
+
+    current_application.perform_post_payment_tasks!
+    redirect_to apply_stage_path(stage_number: 3)
   end
 
   # Coding stage

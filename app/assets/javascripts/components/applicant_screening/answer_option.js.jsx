@@ -14,8 +14,8 @@ class ApplicantScreeningAnswerOption extends React.Component {
   render() {
     return (
       <label className="custom-control custom-radio applicant-screening__answer-option-label">
-        <input className="custom-control-input applicant-screening__answer-option-input" id="radio1" name="radio"
-          type="radio" onChange={ this.handleChange }/>
+        <input className="custom-control-input applicant-screening__answer-option-input" type="radio" name="foo"
+          onChange={ this.handleChange }/>
         <span className="custom-control-indicator applicant-screening__answer-option-indicator"/>
         <span className="custom-control-description applicant-screening__answer-option-description">
           { this.props.text }

@@ -12,8 +12,9 @@
 
   == react_component('ApplicantScreening', { coderIconPath: image_path('apply/batch_application/programmer-icon.svg'), nonCoderIconPath: image_path('apply/batch_application/hipster-icon.svg') })
 
-  .content-box.applicant-screening.m-b-3.applicant-screening__reverse-order
-    .applicant-screening__section.applicant-screening__section-left.applicant-screening__section-left--expanded
+  .content-box.applicant-screening.m-b-3
+    /.applicant-screening--mobile-column
+    .applicant-screening__section.applicant-screening__section-left.applicant-screening__section-left--shrunk
       .applicant-screening__cover.coder-cover
         .applicant-screening__cover-content
           .applicant-screening__icon.img-circle
@@ -30,6 +31,7 @@
         .applicant-screening__question-section
           .applicant-screening__question-number.m-b-2.font-semibold
             | 1
+
           h3.applicant-screening__question.font-semibold Have you built websites and/or apps?
           .applicant-screening__answer-options.p-t-1.p-b-2
             label.custom-control.custom-radio.applicant-screening__answer-option-label
@@ -49,7 +51,7 @@
               i.fa.fa-arrow-right
               | Next
 
-    .applicant-screening__section.applicant-screening__section-right.applicant-screening__section-right--shrunk
+    .applicant-screening__section.applicant-screening__section-right.applicant-screening__section-right--expanded
       .applicant-screening__cover.non-coder-cover
         .applicant-screening__cover-content
           .applicant-screening__icon.img-circle
@@ -66,6 +68,7 @@
         .applicant-screening__question-section
           .applicant-screening__question-number.m-b-2.font-semibold
             | 1
+
           h3.applicant-screening__question.font-semibold Have you completed a technical course at Coursera, Udacity or other MOOCs?
           .applicant-screening__answer-options.p-t-1.p-b-2
             label.custom-control.custom-radio.custom-radio.applicant-screening__answer-option-label
@@ -84,6 +87,42 @@
             button.btn.btn-with-icon.btn-primary.btn-md.text-uppercase
               i.fa.fa-arrow-right
               | Next
+
+        .applicant-screening__quiz-result
+          h3.font-semibold.brand-primary.m-b-2
+            | &#x1F389;&nbsp;Congratulations
+
+          p.applicant-screening__quiz-result-text.m-b-1
+            span.font-semibold
+             ' You have cleared the screening process
+            ' &#x1F604; and now
+            span.font-semibold
+              ' it’s time to get a partner who can code.
+            | To build a startup you need at least one engineer who can build a basic product.
+          p.applicant-screening__quiz-result-text.m-b-1
+            ' As a Hustler/hipster your first task is to find the coder which is a
+            ' significant step in building your startup. Hunting a good technical
+            ' co-founder is a skill which many young people do not possess.
+            ' But we think, you have the hunger and skill to take this journey ahead
+            | and build your startup.
+
+          button.btn.btn-with-icon.btn-primary.btn-md.text-uppercase
+            i.fa.fa-arrow-right
+            | Continue Application
+
+        .applicant-screening__quiz-result
+          h3.font-semibold.brand-danger.m-b-2
+            | &#x1F61F;&nbsp;Sorry
+
+          p.applicant-screening__quiz-result-text.m-b-1
+            span.font-semibold
+             ' You have not cleared our basic evaluation process.
+            ' This course might not be a right fit for you. But, we encourage
+            | you to build your skills in design/product  role and restart your process. Thank you.
+
+          button.btn.btn-with-icon.btn-primary.btn-md.text-uppercase
+            i.fa.fa-arrow-right
+            | Re-start
 
 .container
   == render 'applications_close_soon' if current_application_round.closes_soon?

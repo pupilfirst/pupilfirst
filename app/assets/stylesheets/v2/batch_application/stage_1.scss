@@ -44,11 +44,11 @@
 .applicant-screening {
   padding: 0;
   position: relative;
-	width: 100%;
+  width: 100%;
   display: flex;
 
   @include media-breakpoint-up(md) {
-    height: 450px;
+    min-height: 450px;
   }
 
   &:before {
@@ -69,6 +69,18 @@
 }
 
 .applicant-screening__reverse-order {
+  @include media-breakpoint-down(sm) {
+    flex-direction: column-reverse;
+  }
+}
+
+.applicant-screening--mobile-column {
+  @include media-breakpoint-down(sm) {
+    flex-direction: column;
+  }
+}
+
+.applicant-screening--mobile-column-reverse {
   @include media-breakpoint-down(sm) {
     flex-direction: column-reverse;
   }
@@ -114,7 +126,6 @@
   }
 }
 
-
 .applicant-screening-btn {
   pointer-events: auto;
 
@@ -159,15 +170,23 @@
     .applicant-screening__cover {
       display: flex;
     }
-
-    .applicant-screening-choice {
-      margin: 0 0 0 1rem;
-    }
+  < < < < < < < HEAD . applicant-screening-choice {
+    margin: 0 0 0 1rem;
+  }
 
     .applicant-screening__icon {
       margin: 0;
     }
 
+  == == == = . applicant-screening-choice {
+    margin: 0 0 0 1rem;
+  }
+
+    .applicant-screening__icon {
+      margin: 0;
+    }
+
+    > > > > > > > application-rounds-design
     .applicant-screening-btn {
       display: none;
     }
@@ -331,6 +350,18 @@
   font-size: 1rem;
 }
 
+.applicant-screening__quiz-result {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.applicant-screening__quiz-result-text {
+  max-width: 32rem;
+  line-height: 1.5;
+  font-size: 1.125rem;
+}
+
 .applicant-screening__answer-options {
   border-bottom: 1px solid $gray-border;
 }
@@ -339,6 +370,7 @@
   padding-left: 2.125rem;
   display: inline-block;
 }
+
 .applicant-screening__answer-option-label + .applicant-screening__answer-option-label {
   margin-left: 2rem;
 }
@@ -350,6 +382,7 @@
   background-color: white;
   box-shadow: 0 0 3px 3px $gray-border;
 }
+
 .applicant-screening__answer-option-description {
   font-size: 1.125rem;
 }
@@ -357,8 +390,8 @@
 .applicant-screening__answer-option-input {
 
   &:checked {
-    ~ .applicant-screening__answer-option-indicator  {
-        background-color: $brand-primary;
+    ~ .applicant-screening__answer-option-indicator {
+      background-color: $brand-primary;
     }
   }
 }

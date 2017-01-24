@@ -140,13 +140,9 @@ class BatchApplication < ApplicationRecord
     destroy!
   end
 
-  # Returns either a completed Payment (Stage 1), or ApplicationSubmission (any other stage), or nil
+  # Returns an ApplicationSubmission for current stage, if any.
   def submission
-    if application_stage.initial_stage?
-      payment.present? && payment.paid? ? payment : nil
-    else
-      application_submissions.find_by(application_stage: application_stage)
-    end
+    application_submissions.find_by(application_stage: application_stage)
   end
 
   # Returns true if application has been upgraded to a stage that is currently not active.

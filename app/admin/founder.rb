@@ -3,7 +3,7 @@ ActiveAdmin.register Founder do
 
   controller do
     def scoped_collection
-      super.includes :targets, :startup
+      super.includes :startup
     end
 
     def find_resource
@@ -68,13 +68,21 @@ ActiveAdmin.register Founder do
     end
 
     column 'Total Karma (Personal)' do |founder|
-      points = founder.karma_points.sum(:points)
-      link_to points, admin_karma_points_path(q: { founder_id_eq: founder.id })
+      points = founder.karma_points&.sum(:points)
+      if points.present?
+        link_to points, admin_karma_points_path(q: { founder_id_eq: founder.id })
+      else
+        'Not Available'
+      end
     end
 
     column 'Total Karma (Team)' do |founder|
-      points = founder.startup.karma_points.sum(:points)
-      link_to points, admin_karma_points_path(q: { startup_id_eq: founder.startup.id })
+      points = founder.startup&.karma_points&.sum(:points)
+      if points.present?
+        link_to points, admin_karma_points_path(q: { startup_id_eq: founder.startup&.id })
+      else
+        'Not Available'
+      end
     end
 
     actions
@@ -106,11 +114,11 @@ ActiveAdmin.register Founder do
     end
 
     column 'Total Karma (Personal)' do |founder|
-      founder.karma_points.sum(:points)
+      founder.karma_points&.sum(:points) || 'Not Available'
     end
 
     column 'Total Karma (Team)' do |founder|
-      founder.startup.karma_points.sum(:points)
+      founder.startup&.karma_points&.sum(:points) || 'Not Available'
     end
 
     column :phone

@@ -23,11 +23,11 @@ ActiveAdmin.register Coupon do
     f.semantic_errors(*f.object.errors.keys)
 
     f.inputs 'Coupon Details' do
-      f.input :code
-      f.input :coupon_type, as: :select, collection: Coupon.valid_coupon_types
-      f.input :discount_percentage
-      f.input :expires_at, as: :datepicker
-      f.input :redeem_limit
+      f.input :code, hint: 'The code that must be entered to activate this coupon.'
+      f.input :coupon_type, as: :select, collection: Coupon.valid_coupon_types, hint: "Choose 'Discount' for simple discounts - the other types have special conditions that must be fulfilled for use."
+      f.input :discount_percentage, hint: 'Percentage discount from application fee.'
+      f.input :expires_at, as: :datepicker, hint: 'The date at which the coupon will be disabled. Leave this as blank to create a coupon that never expires.'
+      f.input :redeem_limit, hint: 'The number of times this coupon can be used. Set it to zero to allow infinite redeems.'
     end
 
     f.actions

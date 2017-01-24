@@ -48,7 +48,7 @@
   display: flex;
 
   @include media-breakpoint-up(md) {
-    height: 450px;
+    min-height: 450px;
   }
 
   &:before {
@@ -62,13 +62,15 @@
     top: 0;
     left: calc(50% - 1px);
   }
+}
 
+.applicant-screening--mobile-column {
   @include media-breakpoint-down(sm) {
     flex-direction: column;
   }
 }
 
-.applicant-screening__reverse-order {
+.applicant-screening--mobile-column-reverse {
   @include media-breakpoint-down(sm) {
     flex-direction: column-reverse;
   }
@@ -329,6 +331,17 @@
   max-width: 32rem;
   line-height: 1.5;
   font-size: 1rem;
+}
+
+.applicant-screening__quiz-result {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.applicant-screening__quiz-result-text {
+  max-width: 32rem;
+  line-height: 1.5;
+  font-size: 1.125rem;
 }
 
 .applicant-screening__answer-options {

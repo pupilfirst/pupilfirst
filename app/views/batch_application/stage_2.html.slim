@@ -60,24 +60,25 @@
 
                     = f.submit current_application.payment_button_message, class: 'btn btn-primary btn-md text-uppercase'
 
-          - if @coupon.present?
-            p
-              | Coupon with code #{@coupon.code} applied!
-              = button_to 'Remove', apply_coupon_remove_path, method: :patch
-          - else
-            a#coupon-form-show
-              ' Have a discount coupon?
-            #coupon-form.simple-form-container.m-t-2.hidden-xs-up
-              = simple_form_for @coupon_form,
-                url: apply_coupon_submit_path,
-                method: :post,
-                html: { class: 'form-horizontal' },
-                wrapper: :horizontal_form do |f|
+          - if feature_active?('coupon')
+            - if @coupon.present?
+              p
+                | Coupon with code #{@coupon.code} applied!
+                = button_to 'Remove', apply_coupon_remove_path, method: :patch
+            - else
+              a#coupon-form-show
+                ' Have a discount coupon?
+              #coupon-form.simple-form-container.m-t-2.hidden-xs-up
+                = simple_form_for @coupon_form,
+                  url: apply_coupon_submit_path,
+                  method: :post,
+                  html: { class: 'form-horizontal' },
+                  wrapper: :horizontal_form do |f|
 
-                = f.input :code
-                = f.submit 'Apply'
-            a#coupon-form-hide.hidden-xs-up
-              ' Hide
+                  = f.input :code
+                  = f.submit 'Apply'
+              a#coupon-form-hide.hidden-xs-up
+                ' Hide
 
       .restart-application.m-t-2
         h6.text-xs-center

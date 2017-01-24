@@ -165,7 +165,7 @@ ActiveAdmin.register ApplicationSubmission do
         if partnership_deed.present?
           link_to 'Click to open in new tab', partnership_deed.url, target: '_blank'
         end
-      end if application_submission.application_stage == ApplicationStage.shortlist_stage
+      end if application_submission.application_stage == ApplicationStage.pre_selection_stage
 
       row :score
 

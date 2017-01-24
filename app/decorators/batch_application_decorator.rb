@@ -60,7 +60,7 @@ class BatchApplicationDecorator < Draper::Decorator
 
   # used to display submission deadline in stage4.html.slim
   def document_submission_deadline
-    batch.batch_stages.where(application_stage: ApplicationStage.shortlist_stage).first.ends_at.strftime('%B %d, %Y')
+    batch.batch_stages.where(application_stage: ApplicationStage.pre_selection_stage).first.ends_at.strftime('%B %d, %Y')
   end
 
   # used to display interview feedback in stage_3_rejected.html.slim

@@ -14,7 +14,7 @@ module BatchApplications
       ApplicationSubmission.transaction do
         # create a placebo submission to mark stage complete
         model.application_submissions.create!(
-          application_stage: ApplicationStage.shortlist_stage,
+          application_stage: ApplicationStage.pre_selection_stage,
           notes: "Fee payment reference: #{payment_reference}. Agreement couriered via #{courier_name} (reference: #{courier_number})"
         )
 

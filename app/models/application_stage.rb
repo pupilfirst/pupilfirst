@@ -42,7 +42,7 @@ class ApplicationStage < ApplicationRecord
     find_by(number: 5)
   end
 
-  def self.shortlist_stage
+  def self.pre_selection_stage
     find_by(number: 6)
   end
 

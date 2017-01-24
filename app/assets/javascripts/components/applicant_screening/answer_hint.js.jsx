@@ -11,7 +11,7 @@ class ApplicantScreeningAnswerHint extends React.Component {
         if (this.props.correctAnswer) {
           return 'Great stuff! We&rsquo;ve noticed that engineers who have commitment to other online courses generally do well in our program.';
         } else {
-          return "Our program is a paid 6-month course that requires at least 10 hours of commitment a week. Successful founders are committed to their startup journey.";
+          return "Our program is a paid six-month course that requires at least 10 hours of commitment a week. Successful founders are committed to their startup journey.";
         }
       case(3):
         if (this.props.correctAnswer) {

@@ -23,7 +23,8 @@ class ApplicantScreeningQuiz extends React.Component {
         }
 
         { this.state.quizPassed !== null &&
-        <ApplicantScreeningQuizResult passed={ this.state.quizPassed } resetCB={ this.props.resetCB }/>
+        <ApplicantScreeningQuizResult passed={ this.state.quizPassed } resetCB={ this.props.resetCB }
+          type={ this.props.type }/>
         }
       </div>
     );

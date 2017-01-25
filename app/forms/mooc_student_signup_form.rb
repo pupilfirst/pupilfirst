@@ -1,5 +1,6 @@
 class MoocStudentSignupForm < Reform::Form
   include CollegeAddable
+  include EmailBounceValidatable
 
   property :name, validates: { presence: true, length: { maximum: 250 } }
   property :email, virtual: true, validates: { presence: true, length: { maximum: 250 }, email: true }
@@ -11,7 +12,6 @@ class MoocStudentSignupForm < Reform::Form
   property :state, validates: { presence: true, length: { maximum: 250 } }
 
   validate :mooc_student_must_not_exist
-  validate :email_must_not_be_bounced
 
   def mooc_student_must_not_exist
     return if email.blank?
@@ -20,14 +20,6 @@ class MoocStudentSignupForm < Reform::Form
     return if user.blank?
     return if user.mooc_student.blank?
     errors[:email] << 'is already registered for the course. Log in instead?'
-  end
-
-  def email_must_not_be_bounced
-    return if email.blank?
-
-    user = User.with_email(email).first
-    return if user.blank?
-    errors[:email] << 'previous mails to this address were bouncing! Supply a different one.' if user.email_bounced_at.present?
   end
 
   def prepopulate!(options)

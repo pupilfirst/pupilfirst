@@ -351,6 +351,9 @@
       .paytm-logo {
         height: 25px;
       }
+      .digitalocean-logo {
+        height: 30px;
+      }
       .ficci-logo {
         height: 50px;
       }
@@ -372,13 +375,16 @@
           padding-top: 0;
         }
       }
-      &:nth-child(even) {
+      &:nth-child(2n) {
         border: 1px solid $gray-border;
         border-width: 0 1px 0 1px;
 
         @include media-breakpoint-down(sm) {
           border-width: 0 0 1px 0;
         }
+      }
+      &:last-child {
+        border-width: 0 0 0 1px;
       }
     }
     @include media-breakpoint-down(sm) {

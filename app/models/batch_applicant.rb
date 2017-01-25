@@ -83,4 +83,14 @@ class BatchApplicant < ApplicationRecord
   def income_proofs_required?
     fee_payment_method.in?(REQUIRES_INCOME_PROOF)
   end
+
+  def generate_referral_coupon!
+    Coupon.create!(
+      code: rand(36**6).to_s(36),
+      coupon_type: Coupon::TYPE_DISCOUNT,
+      discount_percentage: Coupon::REFERRAL_DISCOUNT,
+      redeem_limit: Coupon::REFERRAL_LIMIT,
+      referrer: self
+    )
+  end
 end

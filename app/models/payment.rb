@@ -78,6 +78,9 @@ class Payment < ApplicationRecord
     # update the team leads latest payment date
     batch_applicant.update!(latest_payment_at: paid_at)
 
+    # create a referral coupon for the applicant
+    batch_applicant.generate_referral_coupon!
+
     # Let the batch application (if still linked) take care of its stuff.
     batch_application&.perform_post_payment_tasks!
 

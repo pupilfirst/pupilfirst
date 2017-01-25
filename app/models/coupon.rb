@@ -5,6 +5,9 @@ class Coupon < ApplicationRecord
   TYPE_DISCOUNT = -'Discount'
   TYPE_MSP = -'Microsoft Student Partner'
 
+  REFERRAL_DISCOUNT = 25
+  REFERRAL_LIMIT = 0
+
   def self.valid_coupon_types
     [TYPE_DISCOUNT, TYPE_MSP]
   end
@@ -12,6 +15,7 @@ class Coupon < ApplicationRecord
   validates :code, uniqueness: true, presence: true
   validates :coupon_type, inclusion: { in: valid_coupon_types }
   validates :discount_percentage, presence: true, inclusion: { in: 0..100, message: 'must be between 0 and 100' }
+  validates :referrer_id, uniqueness: true, allow_nil: true
 
   def still_valid?
     (expires_at.blank? || expires_at.future?) && redeems_left?

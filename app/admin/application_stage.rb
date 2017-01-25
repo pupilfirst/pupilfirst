@@ -6,6 +6,9 @@ ActiveAdmin.register ApplicationStage do
   permit_params :name, :number, :final_stage
   config.sort_order = 'number_asc'
 
+  filter :name
+  filter :number
+
   index do
     selectable_column
 

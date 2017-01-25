@@ -16,6 +16,7 @@ class BatchApplicant < ApplicationRecord
   belongs_to :college
   belongs_to :user
   belongs_to :founder, optional: true
+  has_one :referral_coupon, class_name: 'Coupon', foreign_key: 'referrer_id'
 
   attr_accessor :reference_text
 

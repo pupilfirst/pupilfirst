@@ -1,0 +1,5 @@
+.sitewide-notice
+  .container
+    p
+      ' You are now impersonating <strong>#{current_user.email}</strong>&nbsp;
+      ' #{link_to 'Stop', impersonation_path, method: :delete, class: 'btn btn-sm'}

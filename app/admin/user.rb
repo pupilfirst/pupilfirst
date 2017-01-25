@@ -49,4 +49,14 @@ ActiveAdmin.register User do
 
     redirect_to action: :show
   end
+
+  action_item :impersonate, only: :show do
+    link_to 'Impersonate', impersonate_admin_user_path(user), method: :post
+  end
+
+  member_action :impersonate, method: :post do
+    user = User.find(params[:id])
+    impersonate_user(user)
+    redirect_to root_url
+  end
 end

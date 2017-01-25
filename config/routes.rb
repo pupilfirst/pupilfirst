@@ -203,6 +203,8 @@ Rails.application.routes.draw do
     post 'callback'
   end
 
+  resource :impersonation, only: %w(destroy)
+
   # TODO: Remove this route once PayTM is correctly configured with '/paytm/callback' as the redirect_url.
   post '/', to: 'home#paytm_callback'
 

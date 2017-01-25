@@ -29,6 +29,7 @@ html lang='en'
           .sitewide-notice
             .container
               p == yield :sitewide_notice
+        == render 'layouts/pretender' if @pretender
 
         .container
           .navbar-header

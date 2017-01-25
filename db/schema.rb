@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170117081606) do
+ActiveRecord::Schema.define(version: 20170116102931) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,16 +73,6 @@ ActiveRecord::Schema.define(version: 20170117081606) do
     t.string   "value"
     t.text     "hint_text"
     t.index ["quiz_question_id"], name: "index_answer_options_on_quiz_question_id", using: :btree
-  end
-
-  create_table "application_rounds", force: :cascade do |t|
-    t.integer  "batch_id"
-    t.integer  "number"
-    t.datetime "campaign_start_at"
-    t.integer  "target_application_count"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-    t.index ["batch_id"], name: "index_application_rounds_on_batch_id", using: :btree
   end
 
   create_table "application_stages", force: :cascade do |t|
@@ -158,6 +148,7 @@ ActiveRecord::Schema.define(version: 20170117081606) do
   end
 
   create_table "batch_applications", force: :cascade do |t|
+    t.integer  "batch_id"
     t.integer  "application_stage_id"
     t.integer  "university_id"
     t.text     "team_achievement"
@@ -175,13 +166,22 @@ ActiveRecord::Schema.define(version: 20170117081606) do
     t.string   "partnership_deed"
     t.string   "payment_reference"
     t.integer  "startup_id"
-    t.integer  "application_round_id"
-    t.boolean  "generate_certificate", default: false
-    t.index ["application_round_id"], name: "index_batch_applications_on_application_round_id", using: :btree
     t.index ["application_stage_id"], name: "index_batch_applications_on_application_stage_id", using: :btree
+    t.index ["batch_id"], name: "index_batch_applications_on_batch_id", using: :btree
     t.index ["startup_id"], name: "index_batch_applications_on_startup_id", using: :btree
     t.index ["team_lead_id"], name: "index_batch_applications_on_team_lead_id", using: :btree
     t.index ["university_id"], name: "index_batch_applications_on_university_id", using: :btree
+  end
+
+  create_table "batch_stages", force: :cascade do |t|
+    t.integer  "batch_id"
+    t.integer  "application_stage_id"
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.index ["application_stage_id"], name: "index_batch_stages_on_application_stage_id", using: :btree
+    t.index ["batch_id"], name: "index_batch_stages_on_batch_id", using: :btree
   end
 
   create_table "batches", force: :cascade do |t|
@@ -515,17 +515,6 @@ ActiveRecord::Schema.define(version: 20170117081606) do
     t.index ["startup_id"], name: "index_resources_on_startup_id", using: :btree
   end
 
-  create_table "round_stages", force: :cascade do |t|
-    t.integer  "application_stage_id"
-    t.datetime "starts_at"
-    t.datetime "ends_at"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-    t.integer  "application_round_id"
-    t.index ["application_round_id"], name: "index_round_stages_on_application_round_id", using: :btree
-    t.index ["application_stage_id"], name: "index_round_stages_on_application_stage_id", using: :btree
-  end
-
   create_table "shortened_urls", force: :cascade do |t|
     t.integer  "owner_id"
     t.string   "owner_type", limit: 20
@@ -782,10 +771,8 @@ ActiveRecord::Schema.define(version: 20170117081606) do
     t.index ["user_id", "user_type"], name: "index_visits_on_user_id_and_user_type", using: :btree
   end
 
-  add_foreign_key "application_rounds", "batches"
   add_foreign_key "batch_applicants", "founders"
   add_foreign_key "batch_applicants", "users"
-  add_foreign_key "batch_applications", "application_rounds"
   add_foreign_key "batch_applications", "startups"
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
@@ -794,7 +781,6 @@ ActiveRecord::Schema.define(version: 20170117081606) do
   add_foreign_key "founders", "users"
   add_foreign_key "payments", "batch_applications"
   add_foreign_key "resources", "batches"
-  add_foreign_key "round_stages", "application_rounds"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "team_members", "startups"
   add_foreign_key "timeline_event_files", "timeline_events"

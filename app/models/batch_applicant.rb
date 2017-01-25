@@ -93,4 +93,8 @@ class BatchApplicant < ApplicationRecord
       referrer: self
     )
   end
+
+  def referrer
+    applications_as_team_lead&.last&.referrer
+  end
 end

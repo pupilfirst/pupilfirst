@@ -1,0 +1,12 @@
+= content_for :heading
+  | Thank you for your referral!
+
+= content_for :salutation
+  | Hello #{@referrer.name},
+
+= content_for :body
+  p
+    ' #{@applicant.name} just applied to SV.CO using your reference. As a token of appreciation, we would like to offer you a Rs.250 cash back!
+  p
+    ' We are currently processing this refund. Contact #{mail_to 'help@sv.co'} if you do not hear from us in two weeks. Meanwhile, keep referring!
+

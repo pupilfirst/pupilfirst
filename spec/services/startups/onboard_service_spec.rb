@@ -79,7 +79,9 @@ describe Startups::OnboardService do
       it 'creates startup with another name' do
         subject.execute
 
-        expect(Startup.pluck(:product_name)).to eq(%w(foo bar))
+        product_names = Startup.pluck(:product_name)
+        expect(product_names.count).to eq(2)
+        expect(product_names - %w(foo bar)).to be_empty
       end
     end
   end

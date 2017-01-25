@@ -3,7 +3,7 @@ ActiveAdmin.register Founder do
 
   controller do
     def scoped_collection
-      super.includes :targets, :startup
+      super.includes :startup
     end
 
     def find_resource
@@ -50,9 +50,8 @@ ActiveAdmin.register Founder do
   index do
     selectable_column
     column :name
-    column :email
 
-    column :product_name do |founder|
+    column :product_name, sortable: 'founders.startup_id' do |founder|
       if founder.startup.present?
         a href: admin_startup_path(founder.startup) do
           span do
@@ -68,9 +67,22 @@ ActiveAdmin.register Founder do
       end
     end
 
-    column :karma_points do |founder|
-      points = founder.karma_points.where('created_at > ?', Date.today.beginning_of_week).sum(:points)
-      link_to points, admin_karma_points_path(q: { founder_id_eq: founder.id })
+    column 'Total Karma (Personal)' do |founder|
+      points = founder.karma_points&.sum(:points)
+      if points.present?
+        link_to points, admin_karma_points_path(q: { founder_id_eq: founder.id })
+      else
+        'Not Available'
+      end
+    end
+
+    column 'Total Karma (Team)' do |founder|
+      points = founder.startup&.karma_points&.sum(:points)
+      if points.present?
+        link_to points, admin_karma_points_path(q: { startup_id_eq: founder.startup&.id })
+      else
+        'Not Available'
+      end
     end
 
     actions
@@ -99,6 +111,14 @@ ActiveAdmin.register Founder do
 
     column :roles do |founder|
       founder.roles.join ', '
+    end
+
+    column 'Total Karma (Personal)' do |founder|
+      founder.karma_points&.sum(:points) || 'Not Available'
+    end
+
+    column 'Total Karma (Team)' do |founder|
+      founder.startup&.karma_points&.sum(:points) || 'Not Available'
     end
 
     column :phone

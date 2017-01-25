@@ -15,6 +15,10 @@ class FounderDecorator < Draper::Decorator
     @fb_basic_info ||= fb_service.basic_info
   end
 
+  def form
+    @form ||= Founders::EditForm.new(model)
+  end
+
   private
 
   def fb_service

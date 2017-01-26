@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 feature 'DM Startup Feedback' do
+  include UserSpecHelper
+
   let!(:admin) { create :admin_user, admin_type: 'superadmin' }
   let!(:batch) { create :batch }
   let!(:startup) { create :startup, batch: batch }
@@ -20,10 +22,7 @@ feature 'DM Startup Feedback' do
 
   before :each do
     # Sign in as admin
-    visit admin_root_path
-    fill_in 'admin_user_email', with: admin.email
-    fill_in 'admin_user_password', with: admin.password
-    click_on 'Login'
+    sign_in_user(admin.user)
 
     # stub requests to slack API
     stub_request(:get, "https://slack.com/api/users.list?token=xxxxxx")

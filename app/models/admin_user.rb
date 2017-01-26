@@ -2,14 +2,11 @@
 # frozen_string_literal: true
 
 class AdminUser < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
-
   TYPE_SUPERADMIN = 'superadmin'
   TYPE_FACULTY = 'faculty'
 
   belongs_to :faculty
+  belongs_to :user
 
   # Scores submissions
   has_many :application_submission_urls
@@ -23,7 +20,17 @@ class AdminUser < ApplicationRecord
     [TYPE_SUPERADMIN, TYPE_FACULTY]
   end
 
+  validates :email, presence: true, email: true
+  validates :fullname, presence: true
   validates :admin_type, inclusion: { in: admin_user_types }, allow_nil: true
+
+  after_create :link_to_user
+
+  def link_to_user
+    user = User.with_email(email).first
+    user = User.create!(email: email) if user.blank?
+    update!(user: user)
+  end
 
   def display_name
     email

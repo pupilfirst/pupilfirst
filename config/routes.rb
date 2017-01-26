@@ -19,7 +19,6 @@ Rails.application.routes.draw do
 
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
 
-  devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
   resource :founder, only: [:edit, :update] do
@@ -202,6 +201,8 @@ Rails.application.routes.draw do
     get 'pay'
     post 'callback'
   end
+
+  resource :impersonation, only: %w(destroy)
 
   # TODO: Remove this route once PayTM is correctly configured with '/paytm/callback' as the redirect_url.
   post '/', to: 'home#paytm_callback'

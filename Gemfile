@@ -107,6 +107,7 @@ gem 'omniauth-facebook' # Facebook OAuth2 Strategy for OmniAuth http://mkdynamic
 gem 'omniauth-github' # GitHub strategy for OmniAuth
 
 gem 'koala', '~> 2.2' # Library for Facebook with support for OAuth authentication, the Graph and REST APIs
+gem 'pretender' # Log in as another user in Rails
 
 # Rails assets!
 source 'https://rails-assets.org' do

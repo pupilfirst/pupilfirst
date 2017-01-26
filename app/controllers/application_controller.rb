@@ -3,9 +3,13 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
+  # Activate pretender.
+  impersonates :user
+
   before_action :prepare_platform_feedback, :set_content_security_policy
   after_action :prepare_unobtrusive_flash
   before_action :sign_out_if_required
+  before_action :pretender
 
   helper_method :current_mooc_student
   helper_method :current_founder
@@ -239,5 +243,9 @@ class ApplicationController < ActionController::Base
 
   def object_sources
     "object-src 'self';"
+  end
+
+  def pretender
+    @pretender = true if current_user != true_user
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170125084651) do
+ActiveRecord::Schema.define(version: 20170126091947) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,16 +31,7 @@ ActiveRecord::Schema.define(version: 20170125084651) do
   end
 
   create_table "admin_users", force: :cascade do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
-    t.string   "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
+    t.string   "email",      default: "", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "username"
@@ -48,9 +39,10 @@ ActiveRecord::Schema.define(version: 20170125084651) do
     t.string   "fullname"
     t.string   "admin_type"
     t.integer  "faculty_id"
+    t.integer  "user_id"
     t.index ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
     t.index ["faculty_id"], name: "index_admin_users_on_faculty_id", using: :btree
-    t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
+    t.index ["user_id"], name: "index_admin_users_on_user_id", using: :btree
   end
 
   create_table "ahoy_events", id: :uuid, default: nil, force: :cascade do |t|
@@ -794,6 +786,7 @@ ActiveRecord::Schema.define(version: 20170125084651) do
     t.index ["user_id", "user_type"], name: "index_visits_on_user_id_and_user_type", using: :btree
   end
 
+  add_foreign_key "admin_users", "users"
   add_foreign_key "application_rounds", "batches"
   add_foreign_key "batch_applicants", "founders"
   add_foreign_key "batch_applicants", "users"

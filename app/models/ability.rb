@@ -2,8 +2,11 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
+    user = user.admin_user if user.is_a?(User)
+
     case user.admin_type
       when AdminUser::TYPE_SUPERADMIN
+        can :impersonate, User
         can :manage, :all
       when AdminUser::TYPE_FACULTY
         can :read, :all

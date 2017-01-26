@@ -11,16 +11,33 @@ module Users
     end
 
     def after_sign_in_path
-      if @user.founder.present? && @user.founder.startup.present?
-        return url_helpers.dashboard_founder_path if Feature.active?(:founder_dashboard, @user.founder)
-        url_helpers.startup_path(@user.founder.startup)
-      elsif @user.batch_applicant.present?
-        url_helpers.apply_continue_path
-      elsif @user.mooc_student.present?
-        url_helpers.six_ways_start_path
-      else
-        url_helpers.root_path
-      end
+      admin_path || founder_path || applicant_path || mooc_student_path || root_path
+    end
+
+    private
+
+    def admin_path
+      return if @user.admin_user.blank?
+      url_helpers.admin_dashboard_path
+    end
+
+    def founder_path
+      return if @user.founder&.startup.blank?
+      url_helpers.dashboard_founder_path
+    end
+
+    def applicant_path
+      return if @user.batch_applicant.blank?
+      url_helpers.apply_continue_path
+    end
+
+    def mooc_student_path
+      return if @user.mooc_student.blank?
+      url_helpers.six_ways_start_path
+    end
+
+    def root_path
+      url_helpers.root_path
     end
   end
 end

@@ -44,7 +44,7 @@ module Founders
 
     def slack_username_must_exist
       return if slack_username.blank?
-      return unless slack_username_changed?
+      return unless slack_username != model.slack_username
       return if Rails.env.development?
 
       response_json = JSON.parse(RestClient.get("https://slack.com/api/users.list?token=#{Rails.application.secrets.slack_token}"))

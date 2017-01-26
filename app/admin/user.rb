@@ -50,13 +50,25 @@ ActiveAdmin.register User do
     redirect_to action: :show
   end
 
-  action_item :impersonate, only: :show do
+  action_item :impersonate, only: :show, if: proc { can? :impersonate, User } do
     link_to 'Impersonate', impersonate_admin_user_path(user), method: :post
   end
 
   member_action :impersonate, method: :post do
     user = User.find(params[:id])
-    impersonate_user(user)
-    redirect_to root_url
+
+    if can? :impersonate, User
+      if user.admin_user.present?
+        flash[:error] = 'You may not impersonate another admin user!'
+      else
+        impersonate_user(user)
+        redirect_to root_url
+        return
+      end
+    else
+      flash[:error] = 'You are not allowed to access that!'
+    end
+
+    redirect_to admin_user_path(user)
   end
 end

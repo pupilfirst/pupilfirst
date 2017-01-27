@@ -33,4 +33,6 @@ class Coupon < ApplicationRecord
     coupon_usage = CouponUsage.where(coupon: self, batch_application: batch_application).last
     coupon_usage.update!(redeemed_at: Time.now)
   end
+
+  alias_attribute :name, :code
 end

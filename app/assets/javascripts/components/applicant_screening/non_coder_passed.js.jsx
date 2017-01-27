@@ -4,7 +4,7 @@ class ApplicantScreeningNonCoderPassed extends React.Component {
       <div>
         <p className="applicant-screening__quiz-result-text m-b-1">
           <span className="font-semibold">You have cleared the screening process</span> and now&nbsp;
-          <span className="font-semibold">it’s time to get a partner who can code.</span>&nbsp;
+          <span className="font-semibold">it&rsquo;s time to get a partner who can code.</span>&nbsp;
           To build a startup you need at least one engineer who can build a basic product.
         </p>
 

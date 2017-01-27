@@ -163,8 +163,16 @@ ActiveAdmin.register Startup do
   end
 
   member_action :change_admin, method: :patch do
-    Startup.friendly.find(params[:id]).admin.update(startup_admin: nil)
-    Founder.find(params[:founder_id]).update(startup_admin: true)
+    Startup.transaction do
+      startup = Startup.friendly.find(params[:id])
+
+      # Remove the old admin.
+      startup.admin.update!(startup_admin: nil)
+
+      # Add the new admin.
+      startup.founders.friendly.find(params[:founder_id]).update(startup_admin: true)
+    end
+
     redirect_to action: :show
   end
 

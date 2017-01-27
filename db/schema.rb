@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170126091947) do
+ActiveRecord::Schema.define(version: 20170127030652) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -226,6 +226,14 @@ ActiveRecord::Schema.define(version: 20170126091947) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["faculty_id"], name: "index_connect_slots_on_faculty_id", using: :btree
+  end
+
+  create_table "coupon_usages", force: :cascade do |t|
+    t.integer  "coupon_id"
+    t.integer  "batch_application_id"
+    t.datetime "redeemed_at"
+    t.index ["batch_application_id"], name: "index_coupon_usages_on_batch_application_id", using: :btree
+    t.index ["coupon_id"], name: "index_coupon_usages_on_coupon_id", using: :btree
   end
 
   create_table "coupons", force: :cascade do |t|

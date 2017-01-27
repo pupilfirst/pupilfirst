@@ -170,7 +170,10 @@ ActiveAdmin.register Startup do
       startup.admin&.update!(startup_admin: nil)
 
       # Add the new admin.
-      startup.founders.friendly.find(params[:founder_id]).update(startup_admin: true)
+      new_team_lead = startup.founders.friendly.find(params[:founder_id])
+      new_team_lead.update!(startup_admin: true)
+
+      flash[:success] = "The new team lead is now #{new_team_lead.display_name}"
     end
 
     redirect_to action: :show

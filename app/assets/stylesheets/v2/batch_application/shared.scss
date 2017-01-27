@@ -59,25 +59,35 @@
         }
         &.stage-1 {
           &:before {
-            background-image: asset-url('apply/batch_application/application-progress/application-fee-blue.svg');
+            background-image: asset-url('apply/batch_application/application-progress/screening-blue.svg');
           }
         }
         &.stage-2 {
           &:before {
-            background-image: asset-url('apply/batch_application/application-progress/coding-video-blue.svg');
+            background-image: asset-url('apply/batch_application/application-progress/application-fee-blue.svg');
           }
         }
         &.stage-3 {
           &:before {
-            background-image: asset-url('apply/batch_application/application-progress/interview-blue.svg');
+            background-image: asset-url('apply/batch_application/application-progress/coding-task-blue.svg');
           }
         }
         &.stage-4 {
           &:before {
-            background-image: asset-url('apply/batch_application/application-progress/pre-selection-blue.svg');
+            background-image: asset-url('apply/batch_application/application-progress/video-task-blue.svg');
           }
         }
         &.stage-5 {
+          &:before {
+            background-image: asset-url('apply/batch_application/application-progress/interview-blue.svg');
+          }
+        }
+        &.stage-6 {
+          &:before {
+            background-image: asset-url('apply/batch_application/application-progress/pre-selection-blue.svg');
+          }
+        }
+        &.stage-7 {
           &:before {
             background-image: asset-url('apply/batch_application/application-progress/complete-blue.svg');
           }
@@ -100,25 +110,35 @@
           }
           &.stage-1 {
             &:before {
-              background-image: asset-url('apply/batch_application/application-progress/application-fee-white.svg');
+              background-image: asset-url('apply/batch_application/application-progress/screening-white.svg');
             }
           }
           &.stage-2 {
             &:before {
-              background-image: asset-url('apply/batch_application/application-progress/coding-video-white.svg');
+              background-image: asset-url('apply/batch_application/application-progress/application-fee-white.svg');
             }
           }
           &.stage-3 {
             &:before {
-              background-image: asset-url('apply/batch_application/application-progress/interview-white.svg');
+              background-image: asset-url('apply/batch_application/application-progress/coding-task-white.svg');
             }
           }
           &.stage-4 {
             &:before {
-              background-image: asset-url('apply/batch_application/application-progress/pre-selection-white.svg');
+              background-image: asset-url('apply/batch_application/application-progress/video-task-white.svg');
             }
           }
           &.stage-5 {
+            &:before {
+              background-image: asset-url('apply/batch_application/application-progress/interview-white.svg');
+            }
+          }
+          &.stage-6 {
+            &:before {
+              background-image: asset-url('apply/batch_application/application-progress/pre-selection-white.svg');
+            }
+          }
+          &.stage-7 {
             &:before {
               background-image: asset-url('apply/batch_application/application-progress/complete-white.svg');
             }
@@ -143,25 +163,35 @@
             }
             &.stage-1 {
               &:before {
-                background-image: asset-url('apply/batch_application/application-progress/application-fee-blue.svg');
+                background-image: asset-url('apply/batch_application/application-progress/screening-blue.svg');
               }
             }
             &.stage-2 {
               &:before {
-                background-image: asset-url('apply/batch_application/application-progress/coding-video-blue.svg');
+                background-image: asset-url('apply/batch_application/application-progress/application-fee-blue.svg');
               }
             }
             &.stage-3 {
               &:before {
-                background-image: asset-url('apply/batch_application/application-progress/interview-blue.svg');
+                background-image: asset-url('apply/batch_application/application-progress/coding-task-blue.svg');
               }
             }
             &.stage-4 {
               &:before {
-                background-image: asset-url('apply/batch_application/application-progress/pre-selection-blue.svg');
+                background-image: asset-url('apply/batch_application/application-progress/video-task-blue.svg');
               }
             }
             &.stage-5 {
+              &:before {
+                background-image: asset-url('apply/batch_application/application-progress/interview-blue.svg');
+              }
+            }
+            &.stage-6 {
+              &:before {
+                background-image: asset-url('apply/batch_application/application-progress/pre-selection-blue.svg');
+              }
+            }
+            &.stage-7 {
               &:before {
                 background-image: asset-url('apply/batch_application/application-progress/complete-blue.svg');
               }

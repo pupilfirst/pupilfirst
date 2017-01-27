@@ -100,9 +100,10 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_founder!
-    # User must be logged in
-    user = authenticate_user!
-    redirect_to root_url unless user.founder.present?
+    # User must be logged in.
+    authenticate_user!
+
+    redirect_to root_url unless current_user.founder.present?
   end
 
   def csp_directives

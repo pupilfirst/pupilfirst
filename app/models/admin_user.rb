@@ -14,7 +14,7 @@ class AdminUser < ApplicationRecord
   mount_uploader :avatar, AvatarUploader
   process_in_background :avatar
 
-  normalize_attribute :password, :password_confirmation, :fullname, :avatar
+  normalize_attribute :fullname, :avatar
 
   def self.admin_user_types
     [TYPE_SUPERADMIN, TYPE_FACULTY]

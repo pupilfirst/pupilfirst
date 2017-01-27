@@ -5,7 +5,5 @@ puts 'Seeding admin_users'
 AdminUser.create!(
   fullname: 'Development Admin',
   email: 'admin@example.com',
-  password: 'password',
-  password_confirmation: 'password',
   admin_type: 'superadmin'
 )

@@ -25,7 +25,7 @@ class Coupon < ApplicationRecord
   def redeems_left?
     return true if redeem_limit.zero?
 
-    redeem_count = BatchApplication.where(coupon: self).count
+    redeem_count = CouponUsage.redeemed.where(coupon: self).count
     redeem_count < redeem_limit
   end
 end

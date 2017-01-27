@@ -4,4 +4,6 @@ class CouponUsage < ApplicationRecord
 
   validates :coupon, presence: true
   validates :batch_application, presence: true
+
+  scope :redeemed, -> { where.not(redeemed_at: nil) }
 end

@@ -11,7 +11,7 @@ module BatchApplications
 
     def apply_coupon!(batch_application)
       coupon = Coupon.find_by(code: code)
-      batch_application.update!(coupon: coupon)
+      CouponUsage.create!(coupon: coupon, batch_application: batch_application)
     end
   end
 end

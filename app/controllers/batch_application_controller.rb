@@ -243,7 +243,7 @@ class BatchApplicationController < ApplicationController
   # Payment stage.
   def stage_2
     @payment_form = BatchApplications::PaymentForm.new(current_application)
-    @coupon = current_application.coupon
+    @coupon = current_application.coupons.last
     @coupon_form = BatchApplications::CouponForm.new(OpenStruct.new) unless @coupon.present?
   end
 
@@ -263,7 +263,8 @@ class BatchApplicationController < ApplicationController
 
   # Remove an applied coupon
   def coupon_remove
-    current_application.update!(coupon: nil)
+    latest_coupon = current_application.coupons.last
+    current_application.coupon_usages.where(coupon: latest_coupon).last.delete
     flash[:success] = 'Coupon removed successfully!'
     redirect_to apply_stage_path(stage_number: 2)
   end

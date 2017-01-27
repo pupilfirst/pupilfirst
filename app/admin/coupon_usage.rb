@@ -5,6 +5,9 @@ ActiveAdmin.register CouponUsage do
 
   actions :index, :show
 
+  scope :all
+  scope :redeemed
+
   index do
     column :coupon
     column :batch_application

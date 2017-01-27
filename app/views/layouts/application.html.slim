@@ -51,7 +51,7 @@ html lang='en'
       == yield :header
 
       - if current_founder
-        #platform-feedback-modal.modal.fade role="dialog"
+        #platform-feedback-modal.platform-feedback-modal.modal.fade role="dialog"
           .modal-dialog
             .modal-content
               = simple_form_for @platform_feedback_for_form,

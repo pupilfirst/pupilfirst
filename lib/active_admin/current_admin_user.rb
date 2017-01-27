@@ -2,6 +2,10 @@ module ActiveAdmin
   module CurrentAdminUser
     extend ActiveSupport::Concern
 
+    included do
+      helper_method :current_admin_user
+    end
+
     def current_admin_user
       @current_admin_user ||= current_user&.admin_user
     end

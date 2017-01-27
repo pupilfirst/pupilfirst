@@ -263,28 +263,27 @@ class BatchApplicationController < ApplicationController
 
   # Remove an applied coupon
   def coupon_remove
-    latest_coupon = current_application.coupons.last
-    current_application.coupon_usages.where(coupon: latest_coupon).last.delete
+    remove_latest_coupon
     flash[:success] = 'Coupon removed successfully!'
     redirect_to apply_stage_path(stage_number: 2)
   end
 
   # Payment stage submission handler.
   def stage_2_submit
+    # Re-direct back if applied coupon is not valid anymore
+    return if applied_coupon_not_valid?
+
     # Save number of cofounders, and redirect to Instamojo.
     @form = BatchApplications::PaymentForm.new(current_application)
 
     if @form.validate(params[:batch_applications_payment])
-      if current_application.fee.zero? || Rails.env.development?
-        bypass_payment
-        return
-      end
+      return if payment_bypassed?
 
       begin
         payment = @form.save
       rescue Instamojo::PaymentRequestCreationFailed
         flash[:error] = 'We were unable to contact our payment partner. Please try again in a few minutes.'
-        redirect_to apply_stage_path(stage_number: 1, error: 'payment_request_failed')
+        redirect_to apply_stage_path(stage_number: 2, error: 'payment_request_failed')
         return
       end
 
@@ -460,5 +459,27 @@ class BatchApplicationController < ApplicationController
   def load_index_variables
     @batch_application ||= BatchApplication.new.decorate
     @prospective_applicant ||= ProspectiveApplicant.new.decorate
+  end
+
+  def remove_latest_coupon
+    latest_coupon = current_application.coupons.last
+    current_application.coupon_usages.where(coupon: latest_coupon).last.delete
+  end
+
+  def applied_coupon_not_valid?
+    coupon = current_application.latest_coupon
+    return false if coupon.blank? || coupon.still_valid?
+
+    remove_latest_coupon
+    flash[:error] = 'The coupon you applied is no longer valid. Try again!'
+    redirect_to apply_stage_path(stage_number: 2)
+    true
+  end
+
+  def payment_bypassed?
+    return false unless current_application.fee.zero? || Rails.env.development?
+
+    bypass_payment
+    true
   end
 end

@@ -15,6 +15,8 @@ class StartupFeedback < ApplicationRecord
 
   REGEX_TIMELINE_EVENT_URL = %r{startups/.*event-(?<event_id>[\d]+)}
 
+  normalize_attribute :activity_type
+
   # Returns all feedback for a given timeline event.
   def self.for_timeline_event(event)
     where('reference_url LIKE ?', "%event-#{event.id}").order('updated_at desc')

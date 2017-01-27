@@ -166,8 +166,8 @@ ActiveAdmin.register Startup do
     Startup.transaction do
       startup = Startup.friendly.find(params[:id])
 
-      # Remove the old admin.
-      startup.admin.update!(startup_admin: nil)
+      # Remove the old admin, if any.
+      startup.admin&.update!(startup_admin: nil)
 
       # Add the new admin.
       startup.founders.friendly.find(params[:founder_id]).update(startup_admin: true)

@@ -1,5 +1,6 @@
 class Coupon < ApplicationRecord
-  has_many :batch_applications
+  has_many :coupon_usages
+  has_many :batch_applications, through: :coupon_usages
   belongs_to :referrer, class_name: 'BatchApplicant'
 
   TYPE_DISCOUNT = -'Discount'

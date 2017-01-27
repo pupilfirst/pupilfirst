@@ -17,8 +17,9 @@ class BatchApplication < ApplicationRecord
   has_one :payment, dependent: :restrict_with_error
   has_many :archived_payments, class_name: 'Payment', foreign_key: 'original_batch_application_id'
   belongs_to :startup, optional: true
-  belongs_to :coupon, optional: true
-  has_one :referrer, through: :coupon
+  has_many :coupon_usages
+  has_many :coupons, through: :coupon_usages
+  has_many :referrers, through: :coupons
 
   scope :selected, -> { joins(:application_stage).where(application_stages: { final_stage: true }) }
 

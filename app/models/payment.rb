@@ -78,6 +78,9 @@ class Payment < ApplicationRecord
     # update the team leads latest payment date
     batch_applicant.update!(latest_payment_at: paid_at)
 
+    # mark the coupon applied, if any, as redeemed
+    batch_application.latest_coupon.mark_redeemed!(batch_application) if batch_application.latest_coupon.present?
+
     # create a referral coupon for the current applicant
     batch_applicant.generate_referral_coupon!
 

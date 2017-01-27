@@ -28,4 +28,9 @@ class Coupon < ApplicationRecord
     redeem_count = CouponUsage.redeemed.where(coupon: self).count
     redeem_count < redeem_limit
   end
+
+  def mark_redeemed!(batch_application)
+    coupon_usage = CouponUsage.where(coupon: self, batch_application: batch_application).last
+    coupon_usage.update!(redeemed_at: Time.now)
+  end
 end

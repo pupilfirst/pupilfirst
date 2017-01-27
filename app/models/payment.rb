@@ -82,7 +82,7 @@ class Payment < ApplicationRecord
     batch_applicant.generate_referral_coupon!
 
     # initiate referral refund if current applicant was referred by someone
-    BatchApplicants::ReferralRefundService.new(batch_applicant).execute if batch_applicant.referrer.present?
+    BatchApplicants::ReferralRewardService.new(batch_applicant).execute if batch_applicant.referrer.present?
 
     # Let the batch application (if still linked) take care of its stuff.
     batch_application&.perform_post_payment_tasks!

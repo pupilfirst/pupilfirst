@@ -17,6 +17,8 @@ class BatchApplicant < ApplicationRecord
   belongs_to :user
   belongs_to :founder, optional: true
   has_one :referral_coupon, class_name: 'Coupon', foreign_key: 'referrer_id'
+  has_many :coupon_usages, through: :referral_coupon
+  has_many :referred_applications, class_name: 'BatchApplication', through: :coupon_usages, source: 'batch_application'
 
   attr_accessor :reference_text
 
@@ -43,6 +45,8 @@ class BatchApplicant < ApplicationRecord
   scope :for_batch_id_in, -> (ids) { joins(:batch_applications).where(batch_applications: { batch_id: ids }) }
 
   scope :with_email, -> (email) { where('lower(email) = ?', email.downcase) }
+
+  scope :with_referrals, -> { joins(:referred_applications).distinct }
 
   # Basic validations.
   validates :email, presence: true, uniqueness: true, email: true

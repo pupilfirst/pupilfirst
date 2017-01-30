@@ -12,17 +12,19 @@ ActiveAdmin.register CouponUsage do
   preserve_default_filters!
   filter :redeemed_at_not_null, as: :boolean, label: 'Redeemed'
   filter :rewarded_at_not_null, as: :boolean, label: 'Rewarded'
+  filter :referrer, collection: proc { BatchApplicant.with_referrals }
 
   controller do
     def scoped_collection
       # TODO: More N+1 queries to avoid here
-      super.includes(:coupon)
+      super.includes(:coupon, :batch_application)
     end
   end
 
   index do
     column :coupon
     column :batch_application
+    column :referrer
     column :redeemed_at do |coupon_usage|
       coupon_usage.redeemed_at || 'Not Redeemed'
     end

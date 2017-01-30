@@ -8,6 +8,13 @@ ActiveAdmin.register CouponUsage do
   scope :all
   scope :redeemed
 
+  controller do
+    def scoped_collection
+      # TODO: More N+1 queries to avoid here
+      super.includes(:coupon)
+    end
+  end
+
   index do
     column :coupon
     column :batch_application

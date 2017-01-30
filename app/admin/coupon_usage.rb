@@ -10,6 +10,7 @@ ActiveAdmin.register CouponUsage do
   scope :referrals
 
   preserve_default_filters!
+  filter :redeemed_at_not_null, as: :boolean, label: 'Redeemed'
   filter :rewarded_at_not_null, as: :boolean, label: 'Rewarded'
 
   controller do

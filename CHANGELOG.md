@@ -1,3 +1,19 @@
+### 30 January, 2017
+
+#### Features
+
+  - The admissions process has been re-worked to allow multiple rounds of admission for a single batch.
+  - A new screening (first) stage has been introduced to the application process, and the combined coding and video test has been split into two separate stages.
+
+#### UX and UI
+
+ - The profile edit page for founders had two separate forms for basic and social-media-related information. They have been merged into one.
+
+#### Bugfixes
+
+- The submit feedback form was inaccessible when viewed from the home page - its styling was also broken. Both these issues have been fixed.
+- The submit feedback form's horizontal resize ability has been disabled to prevent it from overflowing its container's bounds.
+
 ### 23 January, 2017
 
 #### Features

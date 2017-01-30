@@ -1,8 +1,24 @@
 ## Ongoing
 
-- Multiple application rounds are being implemented. [[Trello]](https://trello.com/c/pUZ1cfBW)
-- Design of the new screening stage for application process is in the works. [[Trello]](https://trello.com/c/rCMyzKia)
-- Two founder edit forms are being merged. [[Trello]](https://trello.com/c/2LR1zNne)
+- Coupons for application fee are in the works. [[Trello]](https://trello.com/c/kuxOIeR7)
+- The Leaderboard is being updated to show delta from past position. [[Trello]](https://trello.com/c/RQtl703K)
+
+## 2017.01.30
+
+- Application rounds for application process has been deployed. [[Trello]](https://trello.com/c/pUZ1cfBW)
+- A brand new screening stage (initial stage) for application process has been implemented. [[Trello]](https://trello.com/c/rCMyzKia)
+- The founder edit page now has a single unified form. [[Trello]](https://trello.com/c/2LR1zNne)
+- Admin Users can now impersonate any regular user - basically sign in as users and see what they see, do what they can do. [[Trello]](https://trello.com/c/i25kcRNu)
+- The separate login process for Admin users has been removed in favor of main site's login. Single sign-on FTW. [[Trello]](https://trello.com/c/eTm2QN2l)
+- More partners have been added to the front-page. Trello. [[1]](https://trello.com/c/mIG2hUPp) [[2]](https://trello.com/c/f6H6XuQK)
+- The submit feedback form's horizontal resize ability has been removed to prevent display bugs. [[Trello]](https://trello.com/c/L1xv5jj8)
+- The option to change team lead for a startup from the admin interface was broken. This has been fixed and updated. [[Trello]](https://trello.com/c/ivwpQ34a)
+- The submit feedback form was inaccessible when viewed from the home page - its styling was also broken. Both these issues have been fixed. [[Trello]](https://trello.com/c/1J1xeKSm)
+- Sum of karma points have been added to admin interface's Founder#index page. [[Trello]](https://trello.com/c/Sp7qqAxB)
+- More information was added to Founder CSV export from admin interface. Also, the index table can now be sorted by product_name. [[Trello]](https://trello.com/c/genrJ118)
+- JS error checking has been restored to Talent form spec. [[Trello]](https://trello.com/c/gOGxftPO)
+- `EmailBounceValidatable` is now used in the MOOC Registration form. [[Trello]](https://trello.com/c/Iq7rwMLp)
+- A bunch of old, unused partials related to homepage were removed. [[Trello]](https://trello.com/c/0O2iLAZW)
 
 ## 2017.01.23
 

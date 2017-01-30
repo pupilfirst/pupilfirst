@@ -6,4 +6,5 @@ class CouponUsage < ApplicationRecord
   validates :batch_application, presence: true
 
   scope :redeemed, -> { where.not(redeemed_at: nil) }
+  scope :referrals, -> { joins(:coupon).where.not(coupons: { referrer_id: nil }) }
 end

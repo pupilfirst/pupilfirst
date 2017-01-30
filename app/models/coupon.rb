@@ -3,6 +3,8 @@ class Coupon < ApplicationRecord
   has_many :batch_applications, through: :coupon_usages
   belongs_to :referrer, class_name: 'BatchApplicant'
 
+  scope :referrals, -> { where.not(referrer_id: nil) }
+
   TYPE_DISCOUNT = -'Discount'
   TYPE_MSP = -'Microsoft Student Partner'
 

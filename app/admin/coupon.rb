@@ -7,6 +7,9 @@ ActiveAdmin.register Coupon do
 
   filter :coupon_type
 
+  scope :all
+  scope :referrals
+
   index do
     selectable_column
 
@@ -15,6 +18,7 @@ ActiveAdmin.register Coupon do
     column :discount_percentage
     column :expires_at
     column :redeem_limit
+    column :referrer
 
     actions
   end

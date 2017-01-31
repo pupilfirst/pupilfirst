@@ -1,5 +1,5 @@
-# This service updates all relevant attributes of Intercom Users who are associated with Batch Applicants
-#
+# This service updates all relevant attributes of Intercom Users who are associated with Batch Applicants.
+# Call update_all whenever data at intercom needs to be synced with the BatchApplicant data.
 # Updated info include Batch, College, Univeristy, and Last Applicant Event
 class IntercomUserUpdateService
   include Loggable

@@ -59,7 +59,7 @@ class AboutController < ApplicationController
     return nil unless batches.present?
 
     batches.each_with_object({}) do |batch, leaderboards|
-      leaderboards[batch.batch_number] = Startups::PerformanceService.new.leaderboard(batch)
+      leaderboards[batch.batch_number] = Startups::PerformanceService.new.leaderboard_with_change_in_rank(batch)
     end
   end
 end

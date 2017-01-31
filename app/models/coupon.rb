@@ -27,7 +27,7 @@ class Coupon < ApplicationRecord
   def redeems_left?
     return true if redeem_limit.zero?
 
-    redeem_count = CouponUsage.redeemed.where(coupon: self).count
+    redeem_count = coupon_usages.redeemed.count
     redeem_count < redeem_limit
   end
 
@@ -37,4 +37,19 @@ class Coupon < ApplicationRecord
   end
 
   alias_attribute :name, :code
+
+  # ransacker filter for admin index page
+  ransacker :validity, formatter: proc { |v|
+    coupons = if v == 'Valid'
+      Coupon.all.select(&:still_valid?)
+    elsif v == 'Invalid'
+      Coupon.all.reject(&:still_valid?)
+    else
+      Coupon.all
+    end
+
+    coupons.present? ? coupons.map(&:id) : nil
+  } do |parent|
+    parent.table[:id]
+  end
 end

@@ -5,7 +5,8 @@ ActiveAdmin.register Coupon do
 
   permit_params :code, :coupon_type, :discount_percentage, :expires_at, :redeem_limit
 
-  filter :coupon_type
+  filter :coupon_type, as: :select, collection: proc { Coupon.valid_coupon_types }
+  filter :validity_in, as: :select, collection: %w(Valid Invalid), label: 'Validity'
 
   scope :all
   scope :referrals

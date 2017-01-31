@@ -8,6 +8,26 @@ module Startups
       @batch.present_week_number.in?(1..24) ? rank_list : nil
     end
 
+    # returns leaderboard array of [startup, rank, points, change_in_rank]
+    def leaderboard_with_change_in_rank(batch)
+      return nil unless batch.present_week_number.in?(1..24)
+
+      change_in_rank = if batch.present_week_number == 1
+        Array.new(batch.startups.count, 0)
+      else
+        current_leaderboard = leaderboard(batch)
+        start_date_last_week = @start_date - 7.days
+        end_date_last_week = @end_date - 7.days
+        previous_leaderboard = leaderboard(batch, start_date: start_date_last_week, end_date: end_date_last_week)
+
+        current_leaderboard.map do |startup_rank_points|
+          previous_leaderboard.detect { |startup, _rank, _points| startup == startup_rank_points[0] }&.second - startup_rank_points[1]
+        end
+      end
+
+      current_leaderboard.each_with_index.map { |startup_rank_points, index| startup_rank_points + [change_in_rank[index]] }
+    end
+
     # TODO: Manual memoization is ugly. Move to pertinent method.
     def leaderboard_rank(specified_startup)
       memoized_leaderboard = leaderboard(specified_startup.batch)

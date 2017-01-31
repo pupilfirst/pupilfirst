@@ -37,6 +37,12 @@ describe Startups::PerformanceService do
     @leaderboard_two_week_back = batch.startups.order(:id).each_with_index.map do |startup, index|
       [startup, ranks_two_weeks_back[index], POINTS_TWO_WEEKS_BACK[index] || 0]
     end
+
+    # calculate change in ranks between the two weeks and create leaderboard with change in ranks
+    change_in_ranks = [-4, -4, -3, -4, 1, 2, 3, 4, -4, -4]
+    @leaderboard_with_change_in_rank = @leaderboard_last_week.each_with_index.map do |startup_rank_points, index|
+      startup_rank_points + [change_in_ranks[index]]
+    end
   end
 
   describe '#leaderboard' do
@@ -49,6 +55,15 @@ describe Startups::PerformanceService do
             expect(subject.leaderboard(batch).sort).to eq(@leaderboard_two_week_back)
           end
         end
+      end
+    end
+  end
+
+  describe '#leaderboard_with_change_in_rank' do
+    it 'returns the leaderboard with the change in rank compared to previous week' do
+      hour = 19
+      travel_to(Time.zone.now.beginning_of_week + hour.hours) do
+        expect(subject.leaderboard_with_change_in_rank(batch).sort).to eq(@leaderboard_with_change_in_rank)
       end
     end
   end

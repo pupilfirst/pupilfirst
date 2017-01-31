@@ -30,14 +30,31 @@
           ' the payment. Please contact us at #{mail_to 'help@sv.co'} if you're experiencing any issue.
 
       .row
-        .col-md-12
+        .offset-md-3.col-md-6.offset-md-3
+          - if feature_active?('coupon')
+            - if @coupon.present?
+              p
+                | Coupon with code #{@coupon.code} applied!
+                = button_to 'Remove', apply_coupon_remove_path, method: :patch
+            - else
+              .coupon-form-container
+                #coupon-form-show.coupon-form-show.brand-secondary.font-semibold
+                  ' Have a discount coupon?
+                #coupon-form.simple-form-container.hidden-xs-up
+                  = simple_form_for @coupon_form,
+                    url: apply_coupon_submit_path,
+                    method: :post do |f|
+
+                    = f.input :code, label: false, autofocus: true, placeholder: 'Enter Code'
+                    = f.submit 'Apply Code', class: 'btn btn-secondary btn-sm text-uppercase'
+                    #coupon-form-hide.coupon-form-hide.hidden-xs-up.btn.btn-ghost-secondary.btn-sm.text-uppercase
+                      ' Hide
+
           #applicant-fee-data.hidden-xs-up
-          .simple-form-container
+          .simple-form-container.m-t-2
             = simple_form_for @payment_form,
               url: apply_stage_submit_path(stage_number: 2),
-              method: :post,
-              html: { class: 'form-horizontal' },
-              wrapper: :horizontal_form do |f|
+              method: :post do |f|
 
               = f.input :team_size,
                 label: 'Team Size',
@@ -62,26 +79,6 @@
                         | to proceed to the next stage.
 
                     = f.submit current_application.payment_button_message, class: 'btn btn-primary btn-md text-uppercase'
-
-          - if feature_active?('coupon')
-            - if @coupon.present?
-              p
-                | Coupon with code #{@coupon.code} applied!
-                = button_to 'Remove', apply_coupon_remove_path, method: :patch
-            - else
-              a#coupon-form-show
-                ' Have a discount coupon?
-              #coupon-form.simple-form-container.m-t-2.hidden-xs-up
-                = simple_form_for @coupon_form,
-                  url: apply_coupon_submit_path,
-                  method: :post,
-                  html: { class: 'form-horizontal' },
-                  wrapper: :horizontal_form do |f|
-
-                  = f.input :code
-                  = f.submit 'Apply'
-              a#coupon-form-hide.hidden-xs-up
-                ' Hide
 
       .restart-application.m-t-2
         h6.text-xs-center

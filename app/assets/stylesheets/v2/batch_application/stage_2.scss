@@ -21,6 +21,33 @@
   padding-left: 33%;
 }
 
+.coupon-form-container {
+  border: 1px dashed $gray-border;
+  padding: 1rem;
+  @include border-radius;
+}
+
+.coupon-form-hide {
+  margin: 0 0 0 1rem;
+
+  @include media-breakpoint-down(sm) {
+    margin: 1rem 0 0 0;
+  }
+}
+
+.coupon-form-show {
+  font-size: 1rem;
+  border-bottom: 1px solid $brand-secondary;
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  transition: all .2s;
+
+  &:hover {
+    color: $light-secondary;
+  }
+}
+
 .restart-application {
   border-top: 1px solid $gray-border;
   padding-top: 20px;

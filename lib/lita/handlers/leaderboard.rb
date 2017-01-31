@@ -25,7 +25,7 @@ module Lita
                 reply_using_api_post_message channel: response.message.source.room, message: leaderboard_response_message
               end
 
-            # reply to the source channel if not a private message
+              # reply to the source channel if not a private message
             else
               channel = response.message.source.room
               reply_using_api_post_message message: leaderboard_response_message, channel: channel
@@ -36,6 +36,7 @@ module Lita
           end
         end
       end
+
       # rubocop:enable Metrics/AbcSize
 
       # send a relevant please wait method
@@ -76,9 +77,18 @@ module Lita
 
       def ranked_list_for_batch(batch)
         rank_list = ''
-        ranked_startups = Startups::PerformanceService.new.leaderboard(batch)
-        ranked_startups.each do |startup, rank, _points|
-          rank_list += "#{rank}. <#{Rails.application.routes.url_helpers.startup_url(startup)}|#{startup.product_name}>\n"
+        ranked_startups = Startups::PerformanceService.new.leaderboard_with_change_in_rank(batch)
+        ranked_startups.each do |startup, rank, _points, change_in_rank|
+          indicator = ''
+          case change_in_rank
+            when 0
+              indicator = ':left_right_arrow:'
+            when negative
+              indicator = ':arrow_down_small:'
+            when positive
+              indicator = ':arrow_up_small:'
+          end
+          rank_list += "#{rank}.#{indicator}#{change_in_rank} <#{Rails.application.routes.url_helpers.startup_url(startup)}|#{startup.product_name}>\n"
         end
         rank_list
       end

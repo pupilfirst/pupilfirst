@@ -30,8 +30,12 @@ class FoundersController < ApplicationController
   def dashboard
     @header_non_floating = true
 
-    @startup = current_founder.startup.decorate
-    @batch = @startup.batch.decorate
+    @startup = current_founder.startup&.decorate
+    @batch = @startup&.batch&.decorate
+
+    # founders without proper startups will not have dashboards
+    raise_not_found unless @startup.present? && @batch.present?
+
     @tour = take_on_tour?
 
     if filtered_targets_required?

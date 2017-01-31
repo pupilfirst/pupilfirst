@@ -1,5 +1,5 @@
 namespace :lita do
-  desc 'Send out e-mails and push notifications for startup agreements that are about to expire.'
+  desc 'Handle vocalist notifications and responses on Public Slack.'
   task vocalist: [:environment] do
     # Require lita, and adapter.
     require 'lita'

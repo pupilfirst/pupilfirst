@@ -65,7 +65,7 @@ class AdmissionStatsService
   end
 
   def selected_applications
-    BatchApplication.where(batch_id: selected_batch_ids)
+    BatchApplication.joins(:batch).where(batches: { id: selected_batch_ids })
   end
 
   def total_applications
@@ -73,16 +73,16 @@ class AdmissionStatsService
   end
 
   def total_applicants
-    selected_applications.sum(:team_size) + BatchApplication.where(batch_id: selected_batch_ids, team_size: nil).count
+    selected_applications.sum(:team_size) + BatchApplication.joins(:batch).where(team_size: nil, batches: { id: selected_batch_ids }).count
   end
 
   def total_universities
     # University.joins(:batch_applications).where(batch_applications: { batch: selected_batch_ids }).uniq.count
-    ReplacementUniversity.joins(:batch_applications).where(batch_applications: { batch: selected_batch_ids }).distinct.count
+    ReplacementUniversity.joins(batch_applications: :batch).where(batches: { id: selected_batch_ids }).distinct.count
   end
 
   def total_locations
-    State.joins(:batch_applications).where(batch_applications: { batch: selected_batch_ids }).distinct.count
+    State.joins(batch_applications: :batch).where(batches: { id: selected_batch_ids }).distinct.count
   end
 
   def unique_visits

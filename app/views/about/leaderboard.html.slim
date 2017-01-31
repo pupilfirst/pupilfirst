@@ -40,9 +40,13 @@ h1.page-header.header-light
                       th Team Lead
                   tbody
                     - @leaderboards[batch.batch_number].each do |rank_array|
-                      - startup, rank, points = rank_array
+                      - startup, rank, points, change_in_rank = rank_array
                       tr
-                        td = rank
+                        td.leaderboard__rank
+                          span.leaderboard__rank-number = rank
+                          span.leaderboard__rank-change
+                            i.fa class=change_in_rank_icon(change_in_rank)
+                            span.leaderboard__rank-delta = change_in_rank
                         td = link_to "#{startup.product_name} #{startup.name.present? ? "(#{startup.name})" : ''}", startup_path(startup)
                         td = startup.admin.try(:fullname)
 

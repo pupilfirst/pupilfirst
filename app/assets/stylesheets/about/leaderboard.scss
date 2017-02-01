@@ -5,19 +5,51 @@
 
 .leaderboard__rank-number {
   margin-right: 5px;
+  width: 20px;
+  font-weight: bold;
+  display: inline-block;
+
+  @media (max-width: $screen-xs-max) {
+    display: block;
+    width: auto;
+    margin: 0 auto 5px;
+    text-align: center;
+  }
 }
 
 .leaderboard__rank-change {
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  border: 1px solid #e5e5e5;
+  padding: 0 5px;
 
-
+  @media (max-width: $screen-xs-max) {
+    display: block;
+    min-width: 50px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
 }
 
 .leaderboard__rank-icon {
-  margin-right: 2px;
+  margin-right: 4px;
+  font-size: 13px;
+}
+
+.leaderboard__rank-icon--green {
+  color: #0F9D58;
+}
+
+.leaderboard__rank-icon--red {
+  color: #d9534f;
+}
+
+.leaderboard__rank-icon--grey {
+  color: #999999;
 }
 
 .leaderboard__rank-delta {
-  color: $light-grey-text;
-  margin-right: 3px;
+  color: darken($light-grey-text, 10%);
 }
 

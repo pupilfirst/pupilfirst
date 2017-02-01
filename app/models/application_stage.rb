@@ -33,11 +33,6 @@ class ApplicationStage < ApplicationRecord
     find_by(number: 4)
   end
 
-  # TODO: testing_stage is two different stages now.
-  def self.testing_stage
-    find_by(number: 2)
-  end
-
   def self.interview_stage
     find_by(number: 5)
   end

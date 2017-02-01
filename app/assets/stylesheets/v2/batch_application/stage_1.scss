@@ -301,7 +301,7 @@
   height: 50px;
   color: $light-secondary;
   border: 1px solid $light-secondary;
-  box-shadow: 0 0 10px 0 lighten($light-secondary, 30%);;
+  box-shadow: 0 0 10px 0 lighten($light-secondary, 30%);
   @include border-radius(50%);
 
   &:before {

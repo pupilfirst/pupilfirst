@@ -25,6 +25,32 @@
   border: 1px dashed $gray-border;
   padding: 1rem;
   @include border-radius;
+  background-color: $primary-background;
+}
+
+.coupon-box {
+  border: 1px dotted $brand-secondary;
+  background-color: lighten($light-secondary, 50%);
+  @include border-radius(5px);
+  padding: 5px;
+  margin: 0 5px;
+  line-height: 2;
+  font-size: 0.875rem;
+  letter-spacing: 0.04rem;
+  color: $brand-secondary;
+}
+
+.coupon-applied-box {
+  color: $brand-primary;
+  border-bottom: 1px dashed $gray-border;
+}
+
+.coupon-instructions {
+  background-color: lighten($alert-background, 30%);
+  border: 1px dotted $alert-background;
+  @include border-radius(5px);
+  padding: 10px;
+  color: darken($alert-background, 25%);
 }
 
 .coupon-form-hide {

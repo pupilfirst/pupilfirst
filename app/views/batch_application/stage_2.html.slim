@@ -30,17 +30,24 @@
           ' the payment. Please contact us at #{mail_to 'help@sv.co'} if you're experiencing any issue.
 
       .row
-        .offset-md-3.col-md-6.offset-md-3
+        .offset-md-2.col-md-8
           - if feature_active?('coupon')
-            - if @coupon.present?
-              p
-                | Coupon with code #{@coupon.code} applied!
+            .coupon-form-container.text-xs-center
+              - if @coupon.present?
+                .coupon-applied-box.p-b-1
+                  ' Coupon with code
+                  span.coupon-box
+                    | #{@coupon.code}
+                  | applied!
+
                 - if @coupon.instructions.present?
-                  br
-                  ' Note: #{@coupon.instructions}
-                = button_to 'Remove', apply_coupon_remove_path, method: :patch
-            - else
-              .coupon-form-container
+                  .coupon-instructions.m-t-1
+                    p
+                      span.font-semibold
+                        ' Note:
+                      | #{@coupon.instructions}
+                = button_to 'Remove', apply_coupon_remove_path, method: :patch, class: 'btn btn-ghost-secondary btn-sm text-uppercase m-t-1'
+              - else
                 #coupon-form-show.coupon-form-show.brand-secondary.font-semibold
                   ' Have a discount coupon?
                 #coupon-form.simple-form-container.hidden-xs-up

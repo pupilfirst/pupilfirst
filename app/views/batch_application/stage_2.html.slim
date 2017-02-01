@@ -35,6 +35,9 @@
             - if @coupon.present?
               p
                 | Coupon with code #{@coupon.code} applied!
+                - if @coupon.instructions.present?
+                  br
+                  ' Note: #{@coupon.instructions}
                 = button_to 'Remove', apply_coupon_remove_path, method: :patch
             - else
               .coupon-form-container

@@ -3,7 +3,7 @@ ActiveAdmin.register Coupon do
 
   menu parent: 'Admissions'
 
-  permit_params :code, :coupon_type, :discount_percentage, :expires_at, :redeem_limit
+  permit_params :code, :coupon_type, :discount_percentage, :expires_at, :redeem_limit, :instructions
 
   filter :coupon_type, as: :select, collection: proc { Coupon.valid_coupon_types }
   filter :validity_in, as: :select, collection: %w(Valid Invalid), label: 'Validity'
@@ -33,6 +33,7 @@ ActiveAdmin.register Coupon do
       f.input :discount_percentage, hint: 'Percentage discount from application fee.'
       f.input :expires_at, as: :datepicker, hint: 'The date at which the coupon will be disabled. Leave this as blank to create a coupon that never expires.'
       f.input :redeem_limit, hint: 'The number of times this coupon can be used. Set it to zero to allow infinite redeems.'
+      f.input :instructions
     end
 
     f.actions

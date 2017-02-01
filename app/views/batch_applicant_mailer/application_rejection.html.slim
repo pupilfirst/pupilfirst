@@ -6,23 +6,19 @@
 
 = content_for :body
   p
-    ' We're sorry to inform you that you didn't make it to the January 2017 batch of Startup Village Silicon Valley programme.
-    - if @batch_application.overall_percentile.present?
-      ' We've received some terrific video and coding submissions this time and your team has <strong>scored #{@batch_application.overall_percentile.round(1)} percentile</strong>, falling short of our cutoff of 50 percentile.
+    ' We're sorry to inform you that you didn't make it to the batch #{@batch.batch_number} of Startup Village Silicon Valley programme.
+    - if @batch_application.any_grade_present?
+      ' We've received some terrific video and coding submissions this time and your team's submissions fell short of our cutoffs. Your percentile scores were:
+      br
+      br
+      ' Coding Task: #{@batch_application.percentile_code_score}
+      br
+      ' Video Task: #{@batch_application.percentile_video_score}
 
-  p
-    ' But Hey! All's not bad - a lot of the teams only make it to Startup Village only on their second or third attempts and <strong>we want to give you one more chance!</strong>
-
-      We're launching a new challenge to become part of the January batch and you can attempt it free of cost, unlike new applicants.
-
-      We're hoping that you'll give it another shot and come out victorious.
-
-    ' Come back to #{link_to 'www.sv.co/apply', apply_url} on 25th October to receive your new challenge.
-
-  - if @batch_application.overall_percentile.present?
     p
       ' If you think we've made a mistake in our evaluation, feel free to contact us at #{mail_to 'help@sv.co'} and we'll get back to you as soon as we can.
 
-    p Login at #{link_to 'www.sv.co/apply', apply_url} before 20th October to download your score certificate.
+    - if @batch_application.any_grade_present?
+      p Login at #{link_to 'www.sv.co/apply', apply_url} to download your score certificate.
 
   p <em> "Failure is simply the opportunity to begin again, this time more intelligently." – Henry Ford (Founder of Ford Motor Company)</em>

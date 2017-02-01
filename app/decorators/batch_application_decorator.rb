@@ -49,10 +49,6 @@ class BatchApplicationDecorator < Draper::Decorator
     grade[:video]&.round(1) || 'Not Available'
   end
 
-  def overall_percentile
-    @overall_percentile ||= grading_service.overall_percentile&.round(1)
-  end
-
   # used in stage4.html.slim
   def batch_start_date
     application_round.batch.start_date.strftime('%B %d, %Y')
@@ -138,6 +134,14 @@ class BatchApplicationDecorator < Draper::Decorator
   alias partnership_deed_ready? founders_profiles_complete?
   alias incubation_agreement_ready? founders_profiles_complete?
 
+  def grade
+    @grade ||= grading_service.grade
+  end
+
+  def any_grade_present?
+    grade[:code].present? || grade[:video].present?
+  end
+
   private
 
   def stage_status_service
@@ -146,9 +150,5 @@ class BatchApplicationDecorator < Draper::Decorator
 
   def grading_service
     BatchApplicationGradingService.new(model)
-  end
-
-  def grade
-    @grade ||= grading_service.grade
   end
 end

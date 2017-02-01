@@ -12,12 +12,6 @@ class BatchApplicationGradingService
     }
   end
 
-  def overall_percentile
-    return unless total_submissions.positive? && submission_score.present?
-
-    (defeated_submissions.to_f / total_submissions) * 100
-  end
-
   private
 
   def code_percentile
@@ -30,12 +24,6 @@ class BatchApplicationGradingService
     return unless total_video_submissions.positive? && video_score.present?
 
     (defeated_video_submissions.to_f / total_video_submissions) * 100
-  end
-
-  def submission_score
-    @submission ||= batch_application.application_submissions.find_by(
-      application_stage: ApplicationStage.testing_stage
-    )&.score
   end
 
   def code_score
@@ -54,13 +42,6 @@ class BatchApplicationGradingService
     @batch ||= batch_application.application_round
   end
 
-  def total_submissions
-    @total_submissions ||= ApplicationSubmission.joins(:batch_application)
-      .where(batch_applications: { application_round_id: application_round.id })
-      .where(application_stage: ApplicationStage.testing_stage)
-      .count
-  end
-
   def total_code_submissions
     @total_code_submissions ||= ApplicationSubmission.joins(:batch_application)
       .where(batch_applications: { application_round_id: application_round.id })
@@ -73,16 +54,6 @@ class BatchApplicationGradingService
       .where(batch_applications: { application_round_id: application_round.id })
       .where(application_stage: ApplicationStage.video_stage)
       .count
-  end
-
-  def defeated_submissions
-    @defeated_submissions ||= begin
-      ApplicationSubmission.joins(:batch_application)
-        .where(batch_applications: { application_round_id: application_round.id })
-        .where(application_stage: ApplicationStage.testing_stage)
-        .where('score < ?', submission_score)
-        .count
-    end
   end
 
   def defeated_code_submissions

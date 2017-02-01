@@ -11,9 +11,9 @@ class BatchApplicantMailerPreview < ActionMailer::Preview
   end
 
   def application_rejection
-    application = BatchApplication.first
+    application = BatchApplication.last
     batch = application.batch
-    stage = ApplicationStage.testing_stage
+    stage = ApplicationStage.interview_stage
     BatchApplicantMailer.application_rejection(batch, stage, application)
   end
 

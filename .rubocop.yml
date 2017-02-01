@@ -36,10 +36,10 @@ Style/MultilineOperationIndentation:
 Style/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 Style/CaseIndentation:
-  IndentWhenRelativeTo: end
+  EnforcedStyle: end
   IndentOneStep: true
 Lint/EndAlignment:
-  AlignWith: variable
+  EnforcedStyleAlignWith: variable
 Style/VariableNumber:
   Enabled: false
 Metrics/BlockLength:

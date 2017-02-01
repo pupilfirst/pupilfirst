@@ -69,7 +69,7 @@ module Lita
         # batches = @batch_requested.present? ? Batch.where(batch_number: @batch_requested) : Batch.live
         batches.each do |batch|
           response += "*<#{Rails.application.routes.url_helpers.about_leaderboard_url}\
-          |Latest published leaderboard for Batch #{batch.batch_number} (#{batch.name})>:* \n#{ranked_list_for_batch batch}"
+          |Leaderboard for Batch #{batch.batch_number} (#{batch.name}) #{DatesService.last_week_start_date.strftime('%B %-d')} to #{DatesService.last_week_end_date.strftime('%B %-d')}>:* \n#{ranked_list_for_batch batch}"
         end
 
         response

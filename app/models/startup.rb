@@ -376,9 +376,9 @@ class Startup < ApplicationRecord
 
   def timeline_events_for_display(viewer)
     if viewer && self == viewer.startup
-      timeline_events.order(:event_on, :updated_at).reverse_order
+      timeline_events.order(:event_on, :updated_at).reverse_order.decorate
     else
-      timeline_events.verified_or_needs_improvement.order(:event_on, :updated_at).reverse_order
+      timeline_events.verified_or_needs_improvement.order(:event_on, :updated_at).reverse_order.decorate
     end
   end
 

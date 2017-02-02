@@ -8,7 +8,7 @@ class TimelineEventDecorator < Draper::Decorator
   private
 
   def description_with_target_prefix
-    "<em>After #{target_prefix} '#{target.title}':</em>\n #{description}"
+    "After #{target_prefix} <em>#{target.title}:</em>\n #{description}"
   end
 
   def target_prefix

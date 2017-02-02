@@ -80,13 +80,13 @@ module Lita
         ranked_startups = Startups::PerformanceService.new.leaderboard_with_change_in_rank(batch)
         ranked_startups.each do |startup, rank, _points, change_in_rank|
           indicator = if change_in_rank.negative?
-            ':arrow_down_small:'
+            ':rank_down:'
           elsif change_in_rank.positive?
-            ':arrow_up_small:'
+            ':rank_up:'
           else
-            ':left_right_arrow:'
+            ':rank_nochange:'
           end
-          rank_list += "*#{format('%02d', rank)}.* (#{indicator} #{format('%+03d', change_in_rank)})  <#{Rails.application.routes.url_helpers.startup_url(startup)}|#{startup.product_name}>\n"
+          rank_list += "*#{format('%02d', rank)}.* (#{indicator}#{format('%+03d', change_in_rank)})  <#{Rails.application.routes.url_helpers.startup_url(startup)}|#{startup.product_name}>\n"
         end
         rank_list
       end

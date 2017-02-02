@@ -86,7 +86,7 @@ module Lita
           else
             ':rank_nochange:'
           end
-          rank_list += "*#{format('%02d', rank)}.* (#{indicator} #{format('%+03d', change_in_rank)})  <#{Rails.application.routes.url_helpers.startup_url(startup)}|#{startup.product_name}>\n"
+          rank_list += "*#{format('%02d', rank)}.* (#{indicator}#{format('%+03d', change_in_rank)})  <#{Rails.application.routes.url_helpers.startup_url(startup)}|#{startup.product_name}>\n"
         end
         rank_list
       end

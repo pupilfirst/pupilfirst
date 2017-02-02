@@ -118,6 +118,10 @@
 .complete-target-block {
   border-top: 1px solid $gray-border;
   padding: 2rem 0 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 .target-feedback {
   display: flex;
@@ -175,7 +179,13 @@
   font-weight: $font-light;
   letter-spacing: 0.02rem;
   margin-bottom: 1rem;
+  margin-left: -46px;
+  max-width: 30rem;
   color: $light-grey-text;
+
+  @include media-breakpoint-down(sm) {
+    margin-left: 0;
+  }
 }
 .targets-board {
   max-width: 50rem;
@@ -474,5 +484,12 @@
       width: 100%;
       font-size: 0.875rem;
     }
+  }
+  ol, ul {
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+  ul {
+    list-style: circle;
   }
 }

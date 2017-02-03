@@ -5,7 +5,7 @@ ActiveAdmin.register_page 'Admissions Dashboard' do
     skip_after_action :intercom_rails_auto_include
 
     def index
-      @presenter = ActiveAdmin::AdmissionsDashboardPresenter.new(params[:batch])
+      @presenter = ActiveAdmin::AdmissionsDashboardPresenter.new(params[:round])
     end
   end
 

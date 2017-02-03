@@ -42,7 +42,7 @@ class BatchApplicant < ApplicationRecord
       .merge(Payment.paid).distinct
   }
 
-  scope :for_batch_id_in, -> (ids) { joins(:batch_applications).where(batch_applications: { batch_id: ids }) }
+  scope :for_round_id_in, -> (ids) { joins(batch_applications: :application_round).where(batch_applications: { application_round_id: ids }) }
 
   scope :with_email, -> (email) { where('lower(email) = ?', email.downcase) }
 

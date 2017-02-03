@@ -15,9 +15,9 @@
 
       li
         ' Payment Completed: #{@presenter.paid_applications(:all)} (+#{@presenter.paid_applications_today(:all)})
-        - if @presenter.paid_from_earlier_batches.present? && @presenter.paid_from_earlier_batches.positive?
+        - if @presenter.paid_from_earlier_rounds.present? && @presenter.paid_from_earlier_rounds.positive?
           br
-          ' Moved-in from earlier batches: #{@presenter.paid_from_earlier_batches}
+          ' Moved-in from earlier batches: #{@presenter.paid_from_earlier_rounds}
         br
         - State.focused_for_admissions.each do |state|
           ' #{state.name}: #{@presenter.paid_applications(state)} (+#{@presenter.paid_applications_today(state)})&nbsp;

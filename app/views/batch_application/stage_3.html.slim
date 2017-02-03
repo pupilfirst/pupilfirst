@@ -116,26 +116,9 @@
               | Coding Stage ends on <strong>#{current_application.pretty_stage_deadline}</strong>
 
     .col-lg-4.col-md-12#code-video-head
-      .m-t-2.m-b-2
-        .coupon-share-container.content-box.text-xs-center
-          h3.coupon-share-container__title.font-regular.brand-primary.m-b-1
-            ' Share your coupon
-            span.coupon-share-container__subtitle
-              | for referral rewards
-          .coupon-box
-            | COUPON0001
-          .coupon-share.clearfix.m-t-1.hidden-xs-up
-            .pull-xs-left.light-secondary
-              .coupon-share__copy
-                i.fa.fa-files-o
-            .pull-xs-right
-              | Share:
-              .coupon-share__icon.coupon-share__icon--facebook
-                i.fa.fa-facebook
-              .coupon-share__icon.coupon-share__icon--twitter
-                i.fa.fa-twitter
+      == render 'referral_coupon'
 
-      .m-b-3
+      .m-t-2.m-b-3
         = simple_form_for @form, url: apply_stage_submit_path(batch: params[:batch]) do |f|
           - if f.object.errors.present?
             .alert.alert-warning.alert-dismissable.fade.in role='alert'

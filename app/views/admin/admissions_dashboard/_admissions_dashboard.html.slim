@@ -1,19 +1,21 @@
-- ongoing_applications = Batch.ongoing_applications.order('batch_number DESC')
-- if ongoing_applications.any?
+- ongoing_rounds = ApplicationRound.opened_for_applications.order('campaign_start_at DESC')
+- if ongoing_rounds.any?
   table.admissions-dashboard-progress
     thead
       tr
-        th Batch
-        th #1 Payment
-        th #2 Submissions
-        th #3 Interview
-        th #4 Pre-selection
-        th #5 Closed
+        th Application Round
+        th #1 Screening
+        th #2 Payment
+        th #3 Coding Test
+        th #4 Video Test
+        th #5 Interview
+        th #6 Pre-Selection
+        th #7 Closed
     tbody
-      - ongoing_applications.each do |open_batch|
+      - ongoing_rounds.each do |open_round|
         tr
-          th = open_batch.batch_number
-          - open_batch.batch_stages.joins(:application_stage).order('application_stages.number ASC').each do |stage|
+          th = open_round.display_name
+          - open_round.round_stages.joins(:application_stage).order('application_stages.number ASC').each do |stage|
             td
               .start-time #{stage.starts_at.strftime('%b %d %H:%M')}
 
@@ -25,11 +27,11 @@
 
 .table_tools
   ul.scopes.table_tools_segmented_control style="width: calc((100% - 10px)); float: right;"
-    li class="#{ (multiple_batches_selected? ? 'selected':'') + ' scope' }"
-      a.table_tools_button href=admin_admissions_dashboard_path All Batches
-    - Batch.opened_for_applications.order('batch_number DESC').each do |batch|
-      li class="#{ (([batch.id] == selected_batch_ids) ? 'selected' : '') + ' scope' }"
-        a.table_tools_button href=admin_admissions_dashboard_path(batch: batch) #{batch.name} Batch
+    li class="#{ (multiple_rounds_selected? ? 'selected':'') + ' scope' }"
+      a.table_tools_button href=admin_admissions_dashboard_path All Rounds
+    - ApplicationRound.opened_for_applications.order('campaign_start_at DESC').each do |application_round|
+      li class="#{ (([application_round.id] == selected_round_ids) ? 'selected' : '') + ' scope' }"
+        a.table_tools_button href=admin_admissions_dashboard_path(round: application_round) #{application_round.display_name}
 
 .admissions-dashboard-container
   == render 'admission_stats'

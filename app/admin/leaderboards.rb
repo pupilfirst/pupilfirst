@@ -8,11 +8,15 @@ ActiveAdmin.register_page 'Leaderboards' do
   controller do
     def index
       @batch = Batch.find_by(id: params[:karma_points_filter].try(:[], :batch)) || Batch.current_or_last
-
       @after = start_date.present? ? Date.parse(start_date) : DatesService.last_week_start_date
       @before = end_date.present? ? Date.parse(end_date) : DatesService.last_week_end_date
-
-      @leaderboard = Startups::PerformanceService.new.leaderboard(@batch, start_date: @after, end_date: @before)
+      if params[:karma_points_filter].present?
+        @leaderboard = Startups::PerformanceService.new.leaderboard(@batch, start_date: @after, end_date: @before)
+        @rank_changes_present = false
+      else
+        @leaderboard_with_change_in_rank = Startups::PerformanceService.new.leaderboard_with_change_in_rank(@batch)
+        @rank_changes_present = true
+      end
     end
 
     private

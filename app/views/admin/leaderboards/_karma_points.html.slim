@@ -9,23 +9,31 @@ ul
     strong Inactive teams:
     | &nbsp;#{Startup.not_dropped_out.where(batch: @batch).count - active_count}
 
-- if @leaderboard.present?
+- if @leaderboard.present? || @leaderboard_with_change_in_rank.present?
+  - leaderboard = @rank_changes_present ? @leaderboard_with_change_in_rank : @leaderboard
   table.index_table
     thead
       tr
         th Rank
+        - if @rank_changes_present
+          th Change in Rank
         th Product
         th.sorted-desc.sortable
           a.not-a-link href='#' Karma Points
     tbody
-      - @leaderboard.each_with_index do |entry, index|
+      - leaderboard.each_with_index do |entry, index|
         - rank = entry[1]
         - startup = entry[0]
         - points = entry[2]
+        - if @rank_changes_present
+          - change_in_rank = entry[3]
         tr class="#{(index + 1).even? ? 'even' : 'odd'}"
           td = rank
+          - if @rank_changes_present
+            td = change_in_rank
           td = link_to "#{startup.product_name}#{startup.name.present? ? " (#{startup.name})" : ''}", admin_startup_path(startup)
           td = points
+
 - else
   p This batch does not have a leaderboard now!
 

@@ -28,18 +28,6 @@
   background-color: $primary-background;
 }
 
-.coupon-box {
-  border: 1px dotted $brand-secondary;
-  background-color: lighten($light-secondary, 50%);
-  @include border-radius(5px);
-  padding: 5px;
-  margin: 0 5px;
-  line-height: 2;
-  font-size: 0.875rem;
-  letter-spacing: 0.04rem;
-  color: $brand-secondary;
-}
-
 .coupon-applied-box {
   color: $brand-primary;
   border-bottom: 1px dashed $gray-border;

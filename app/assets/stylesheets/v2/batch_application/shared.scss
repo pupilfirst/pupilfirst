@@ -263,3 +263,50 @@
     background-color: lighten($light-secondary, 50%);
   }
 }
+
+.coupon-box {
+  display: inline-block;
+  border: 1px dashed $brand-secondary;
+  background-color: lighten($light-secondary, 50%);
+  @include border-radius(5px);
+  padding: 5px;
+  margin: 0 5px;
+  line-height: 2;
+  font-size: 0.875rem;
+  letter-spacing: 0.04rem;
+  color: $brand-secondary;
+}
+
+.coupon-share {
+  border-top: 1px solid $gray-border;
+  padding: 1rem 0 0;
+}
+
+.coupon-share-container__subtitle {
+  display: block;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: $dark-grey-text;
+}
+
+.coupon-share__copy {
+  font-size: 1rem;
+}
+
+.coupon-share__icon {
+  display: inline-block;
+  padding: 0 1rem;
+  font-size: 1rem;
+
+  &:first-child {
+    border-right: 1px solid $gray-border;
+  }
+}
+
+.coupon-share__icon--facebook {
+  color: #3B5998;
+}
+
+.coupon-share__icon--twitter {
+  color: #00ACED;
+}

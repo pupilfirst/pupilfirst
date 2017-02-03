@@ -15,6 +15,12 @@ class ApplicationRound < ApplicationRecord
       .where('round_stages.ends_at > ?', Time.now)
   }
 
+  scope :opened_for_applications, lambda {
+    joins(:round_stages)
+      .where(round_stages: { application_stage_id: ApplicationStage.initial_stage })
+      .where('round_stages.starts_at < ?', Time.now)
+  }
+
   def display_name
     "Batch #{batch.batch_number} Round #{number}"
   end

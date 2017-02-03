@@ -10,7 +10,7 @@ describe AdmissionStatsNotificationJob, broken: true do
     {
       total_visits_today: 1000,
       paid_applications: 100,
-      paid_from_earlier_batches: 20,
+      paid_from_earlier_rounds: 20,
       paid_applications_today: 5,
       payment_initiated: 20,
       payment_initiated_today: 3,

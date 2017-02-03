@@ -21,7 +21,7 @@ class AdmissionStatsNotificationJob < ApplicationJob
       *Campaign Progress:* Day #{days_passed}/#{total_days} (#{days_left} days left)
       *Target Achieved:* #{stats[:paid_applications]}/#{target_count} applications.
       *Payments Completed:* #{stats[:paid_applications]} (+#{stats[:paid_applications_today]})
-      :point_up_2: _Note that #{stats[:paid_from_earlier_batches]} of these were moved-in from earlier batches._
+      :point_up_2: _Note that #{stats[:paid_from_earlier_rounds]} of these were moved-in from earlier batches._
       *Payments Intiated:* #{stats[:payment_initiated]} (+#{stats[:payment_initiated_today]})
       *Applications Started:* #{stats[:submitted_applications]} (+#{stats[:submitted_applications_today]})
       *Paid Applications From:* #{state_wise_paid_count}

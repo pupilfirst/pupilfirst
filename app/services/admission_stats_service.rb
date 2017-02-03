@@ -1,18 +1,18 @@
 class AdmissionStatsService
-  attr_reader :selected_batch_ids
+  attr_reader :selected_round_ids
 
-  # returns stats for all batches which have opened for applications
+  # returns stats for all roundss which have opened for applications
   def self.load_overall_stats
-    new.load_stats(Batch.opened_for_applications.pluck(:id))
+    new.load_stats(ApplicationRound.opened_for_applications.pluck(:id))
   end
 
-  # return stats for the specified batch
-  def self.load_stats(batch)
-    new.load_stats([batch.id])
+  # return stats for the specified round
+  def self.load_stats(application_round)
+    new.load_stats([application_round.id])
   end
 
-  def load_stats(batch_ids)
-    @selected_batch_ids = batch_ids
+  def load_stats(selected_round_ids)
+    @selected_round_ids = selected_round_ids
 
     {
       total_applications: total_applications,
@@ -22,7 +22,7 @@ class AdmissionStatsService
       total_visits: unique_visits,
       total_visits_today: unique_visits_today,
       paid_applications: paid_applications(:all),
-      paid_from_earlier_batches: paid_from_earlier_batches,
+      paid_from_earlier_rounds: paid_from_earlier_rounds,
       paid_applications_today: paid_applications_today(:all),
       payment_initiated: payment_initiated(:all),
       payment_initiated_today: payment_initiated_today(:all),
@@ -65,7 +65,7 @@ class AdmissionStatsService
   end
 
   def selected_applications
-    BatchApplication.joins(:batch).where(batches: { id: selected_batch_ids })
+    BatchApplication.joins(:application_round).where(application_rounds: { id: selected_round_ids })
   end
 
   def total_applications
@@ -73,16 +73,16 @@ class AdmissionStatsService
   end
 
   def total_applicants
-    selected_applications.sum(:team_size) + BatchApplication.joins(:batch).where(team_size: nil, batches: { id: selected_batch_ids }).count
+    selected_applications.sum(:team_size) + BatchApplication.joins(:application_round).where(team_size: nil, application_rounds: { id: selected_round_ids }).count
   end
 
   def total_universities
     # University.joins(:batch_applications).where(batch_applications: { batch: selected_batch_ids }).uniq.count
-    ReplacementUniversity.joins(batch_applications: :batch).where(batches: { id: selected_batch_ids }).distinct.count
+    ReplacementUniversity.joins(batch_applications: :application_round).where(application_rounds: { id: selected_round_ids }).distinct.count
   end
 
   def total_locations
-    State.joins(batch_applications: :batch).where(batches: { id: selected_batch_ids }).distinct.count
+    State.joins(batch_applications: :application_round).where(application_rounds: { id: selected_round_ids }).distinct.count
   end
 
   def unique_visits
@@ -102,8 +102,8 @@ class AdmissionStatsService
   end
 
   # applications which were paid but for earlier batches
-  def paid_from_earlier_batches
-    return unless selected_batch_ids.length == 1 # can be calculated only if a single batch is specified
+  def paid_from_earlier_rounds
+    return unless selected_round_ids.length == 1 # can be calculated only if a single batch is specified
 
     selected_applications.payment_complete.where.not(swept_in_at: nil).count
   end

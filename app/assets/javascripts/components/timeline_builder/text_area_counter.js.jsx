@@ -35,7 +35,7 @@ class TimelineBuilderTextAreaCounter extends React.Component {
 
   render() {
     return(
-      <div>
+      <div className="timeline-builder-social-bar__textarea-counter-container pull-xs-right">
         { this.counterText() != '' &&
         <div className={ this.counterClasses() }>{ this.counterText() }</div>
         }

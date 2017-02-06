@@ -4,7 +4,7 @@
     span.coupon-share-container__subtitle
       | for referral rewards
   .coupon-box
-    | COUPON0001
+    | #{current_batch_applicant.referral_coupon.code}
   .coupon-share.clearfix.m-t-1
     .pull-xs-left.light-secondary
       .coupon-share__copy
@@ -12,6 +12,11 @@
     .pull-xs-right
       | Share:
       .coupon-share__icon.coupon-share__icon--facebook
-        i.fa.fa-facebook
+        a href="https://www.facebook.com/sharer/sharer.php?u=sv.co/apply" target="_blank"
+          i.fa.fa-facebook
       .coupon-share__icon.coupon-share__icon--twitter
-        i.fa.fa-twitter
+        - default_tweet = URI.escape "Use coupon code: #{current_batch_applicant.referral_coupon.code} and get instant discount of 25% for your application at @SVdotCO"
+        a.margin-left-10 href="https://twitter.com/intent/tweet?text=#{default_tweet}&url=sv.co/apply" target="_blank"
+          i.fa.fa-twitter
+  input.coupon-share__copy-field
+

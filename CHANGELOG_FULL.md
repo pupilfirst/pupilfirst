@@ -1,7 +1,18 @@
 ## Ongoing
 
-- Coupons for application fee are in the works. [[Trello]](https://trello.com/c/kuxOIeR7)
-- The Leaderboard is being updated to show delta from past position. [[Trello]](https://trello.com/c/RQtl703K)
+- Coupons for application fee are in the works. [[Trello]](https://trello.com/c/DXWCTAQ9)
+- Admissions Dashboard on admin interface is being fixed. [[Trello]](https://trello.com/c/2mvrHSEX)
+
+## 2017.02.06
+
+- The Leaderboard has been updated to show delta from past position. This update applies to page on the website public page, Vocalist's response, and admin leaderboard page. [[Trello]](https://trello.com/c/RQtl703K)
+- The icon for website was broken on the submitted-state page for coding stage of application process. [[Trello]](https://trello.com/c/7OAbTHyq)
+- `ApplicationStage#testing_stage` has been excised now that it has been replaced by two separate stages. [[Trello]](https://trello.com/c/2ZvDk5BO)
+- Overall percentile score and mention of cutoff percentile scores have been removed. We still display percentile score for a stage - this should be worked on later. [[Trello]](https://trello.com/c/CNbIz6my)
+- `/about/slack` was displaying a missing app error from Heroku. The `slackin` app has been recreated using `hosting@sv.co` on Heroku, and the new instance is now being used. [[Trello]](https://trello.com/c/YyeOwd66)
+- Timeline events linked to targets now prefix description with information about the target. [[Trello]](https://trello.com/c/6S846QRQ)
+- When responding to leaderboard requests, Vocalist now includes the time frame for which the leaderboard was generated. [[Trello]](https://trello.com/c/D8mKg7Xc)
+- Fixed uneven spacing between bullet points and paragraphs in target descriptions. [[Trello]](https://trello.com/c/miaS1Ppm)
 
 ## 2017.01.30
 

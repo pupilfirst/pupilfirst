@@ -42,5 +42,6 @@
         .text-xs-center.m-t-1
           = button_to 'Redo your submission', apply_stage_restart_path(stage_number: 4), class: 'btn btn-secondary btn-md text-uppercase', data: { confirm: 'This will delete your current submission. Continue?' }
 
-    .m-b-3
-      == render 'referral_coupon'
+    .m-b-3.offset-md-3.col-md-6
+      - if current_batch_applicant.referral_coupon.present?
+        == render 'referral_coupon'

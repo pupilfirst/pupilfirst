@@ -31,5 +31,7 @@
           | Regards,
         h4.text-xs-center.font-regular.brand-primary
           |	Team at SV.CO
-      .m-b-3
-        == render 'referral_coupon'
+
+      .m-b-3.offset-md-3.col-md-6
+        - if current_batch_applicant.referral_coupon.present?
+          == render 'referral_coupon'

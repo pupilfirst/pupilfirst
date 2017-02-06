@@ -40,8 +40,9 @@
         br
         | and we&rsquo;ll get back to you as soon as we can.
 
-    .m-b-3
-      == render 'referral_coupon'
+    .m-b-3.offset-md-3.col-md-6
+      - if current_batch_applicant.referral_coupon.present?
+        == render 'referral_coupon'
 
   - if current_application.generate_certificate
     == render 'certificate'

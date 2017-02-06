@@ -26,8 +26,9 @@
         h5.m-b-1.m-t-1.font-semibold
           ' You are also eligible for a certificate for progressing till this stage!
 
-    .m-b-3
-      == render 'referral_coupon'
+    .m-b-3.offset-md-3.col-md-6
+      - if current_batch_applicant.referral_coupon.present?
+        == render 'referral_coupon'
 
   - if current_application.generate_certificate
     == render 'certificate'

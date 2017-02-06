@@ -37,4 +37,5 @@
         ' We will inform you about interview venues and dates soon.
 
     .m-b-3.offset-md-3.col-md-6
-      == render 'referral_coupon'
+      - if current_batch_applicant.referral_coupon.present?
+        == render 'referral_coupon'

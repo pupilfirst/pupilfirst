@@ -1,7 +1,7 @@
 class AdmissionStatsService
   attr_reader :selected_round_ids
 
-  # returns stats for all roundss which have opened for applications
+  # returns stats for all rounds which have opened for applications
   def self.load_overall_stats
     new.load_stats(ApplicationRound.opened_for_applications.pluck(:id))
   end

@@ -1,3 +1,19 @@
+### 6 February, 2017
+
+#### Features
+
+  - The Leaderboard has been updated to show delta from past week's position. This update applies to public leaderboard page and Vocalist's response on SV.CO's Public Slack.
+
+#### UX and UI
+
+  - Timeline events linked to targets now prefix its description with information about the target.
+  - When responding to leaderboard requests, Vocalist now includes the time frame for which the leaderboard was generated.
+  - Cleaned up uneven spacing between bullet points and paragraphs in target descriptions.
+
+#### Bugfixes
+
+  - `/about/slack` was displaying a missing app error from Heroku. This sign-up form for SV.CO's Public Slack has been restored.
+
 ### 30 January, 2017
 
 #### Features

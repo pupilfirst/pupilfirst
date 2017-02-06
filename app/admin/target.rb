@@ -6,8 +6,6 @@ ActiveAdmin.register Target do
     :remote_rubric_url, :review_test_embed, :target_group_id, :target_type, :points_earnable,
     :timeline_event_type_id, :sort_index, :auto_verified, prerequisite_target_ids: []
 
-  preserve_default_filters!
-
   filter :target_group_program_week_batch_id_eq, label: 'Batch', as: :select, collection: proc { Batch.all }
 
   filter :target_group_program_week_id_eq, as: :select, label: 'Program Week', collection: proc {
@@ -32,13 +30,19 @@ ActiveAdmin.register Target do
     end
   }
 
-  filter :assignee_type
+  filter :assigner
+  filter :assignee_type, as: :select, collection: %w(Founder Startup)
 
   filter :assignee,
     if: proc { params.dig(:q, :assignee_type_eq).present? },
     collection: proc { Object.const_get(params.dig(:q, :assignee_type_eq)).joins(:targets).distinct }
 
   filter :role, as: :select, collection: Target.valid_roles
+  filter :timeline_event_type
+  filter :program_week
+  filter :title
+  filter :target_type, as: :select, collection: Target.valid_target_types
+  filter :auto_verified
 
   controller do
     def scoped_collection

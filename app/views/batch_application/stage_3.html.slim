@@ -116,7 +116,8 @@
               | Coding Stage ends on <strong>#{current_application.pretty_stage_deadline}</strong>
 
     .col-lg-4.col-md-12#code-video-head
-      == render 'referral_coupon'
+      - if current_batch_applicant.referral_coupon.present?
+        == render 'referral_coupon'
 
       .m-t-2.m-b-3
         = simple_form_for @form, url: apply_stage_submit_path(batch: params[:batch]) do |f|

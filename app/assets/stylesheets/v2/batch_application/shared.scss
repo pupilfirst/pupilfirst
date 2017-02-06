@@ -282,6 +282,21 @@
   padding: 1rem 0 0;
 }
 
+.coupon-share-container {
+  position:relative;
+
+  &:before {
+    content: '';
+    position:absolute;
+    top: .5em;
+    right: .5em;
+    bottom: .5em;
+    left: .5em;
+    border: 1px $gray-border dashed;
+    @include border-radius(5px);
+  }
+}
+
 .coupon-share-container__subtitle {
   display: block;
   font-size: 1rem;

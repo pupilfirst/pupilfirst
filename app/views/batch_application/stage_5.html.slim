@@ -17,17 +17,24 @@
   .m-t-3
     == render 'application_progress'
   .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
-    .content-box.application-stages-content.m-t-3.m-b-3.text-xs-center
+    .content-box.application-stages-content.m-t-3.text-xs-center
+      h3.m-b-1.font-semibold
+        ' You&rsquo;ve made it to the interviews!
+
       h4.m-b-1
-        ' You've made it to the interviews!
-
-      p.m-b-1
-        ' After evaluation, your team&rsquo;s percentile scores for the coding and video submissions for Batch
+        ' After evaluation, your team&rsquo;s percentile scores for
+        ' the coding and video submissions for Batch
         ' #{current_application.application_round.batch.batch_number} were:
-        br
-        span.brand-secondary.font-semibold Coding Task: #{current_application.percentile_code_score}
-        br
-        span.brand-secondary.font-semibold Video Task: #{current_application.percentile_video_score}
+      .row
+        .col-md-6
+          .code-video-score.brand-secondary.font-semibold.m-b-1
+            | Coding Task: #{current_application.percentile_code_score}
+        .col-md-6
+          .code-video-score.brand-secondary.font-semibold.m-b-1
+            | Video Task: #{current_application.percentile_video_score}
 
-      p.m-b-1
+      h5
         ' We will inform you about interview venues and dates soon.
+
+    .m-b-3.offset-md-3.col-md-6
+      == render 'referral_coupon'

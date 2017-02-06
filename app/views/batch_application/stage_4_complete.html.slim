@@ -12,7 +12,7 @@
   .m-t-3
     == render 'application_progress'
   .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
-    .content-box.m-t-3.m-b-3
+    .content-box.m-t-3
       h4.m-b-1.text-xs-center
         span.brand-secondary.font-regular
           | Your video submission has been received.
@@ -41,3 +41,6 @@
 
         .text-xs-center.m-t-1
           = button_to 'Redo your submission', apply_stage_restart_path(stage_number: 4), class: 'btn btn-secondary btn-md text-uppercase', data: { confirm: 'This will delete your current submission. Continue?' }
+
+    .m-b-3
+      == render 'referral_coupon'

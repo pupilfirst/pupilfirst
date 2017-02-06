@@ -13,9 +13,12 @@
   .m-t-3
     == render 'application_progress'
   .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
-    .content-box.application-stages-content.m-t-3.m-b-2.text-xs-center
+    .content-box.application-stages-content.m-t-3.text-xs-center
       .congrats-box.p-a-1.text-xs-center
         h3.brand-secondary
           ' <strong>Thank you for sending us the documents.&#128077;</strong>
         h4.font-regular.brand-secondary
           ' We'll review them and get back to you as soon as we receive them.
+
+    .m-b-3
+      == render 'referral_coupon'

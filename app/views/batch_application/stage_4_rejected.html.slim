@@ -12,7 +12,7 @@
   .m-t-3
     == render 'application_progress'
   .offset-lg-1.col-lg-10.offset-xl-2.col-xl-8
-    .content-box.application-stages-content.m-t-3.m-b-2.text-xs-center
+    .content-box.application-stages-content.m-t-3.text-xs-center
       h4.m-b-1
         ' After evaluation, your team&rsquo;s video submission for Batch #{current_application.batch.batch_number}
         span.brand-secondary.font-semibold scored #{@batch_application.percentile_video_score.round(1)} percentile.
@@ -28,6 +28,9 @@
       p
         ' If you think there&rsquo;s we&rsquo;ve made a mistake in our evaluation, feel free to contact us at
         | #{mail_to 'help@sv.co'}, and we&rsquo;ll get back to you as soon as we can.
+
+    .m-b-3
+      == render 'referral_coupon'
 
   - if current_application.generate_certificate
     == render 'certificate'

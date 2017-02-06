@@ -124,7 +124,7 @@ class CofoundersForm extends React.Component {
           <div className="clearfix">
             { this.addCofounderAllowed() &&
             <div className="pull-sm-left m-b-1">
-              <a className="btn btn-secondary cofounders-form__add-cofounder-button text-uppercase"
+              <a className="btn btn-secondary btn-md cofounders-form__add-cofounder-button text-uppercase"
                 onClick={ this.addCofounder }>
                 <i className="fa fa-plus"/> Add cofounder
               </a>
@@ -132,7 +132,7 @@ class CofoundersForm extends React.Component {
             }
 
             <div className="pull-sm-right m-b-1">
-              <button type="submit" className="btn btn-success text-uppercase">Save cofounders</button>
+              <button type="submit" className="btn btn-primary btn-md text-uppercase">Save cofounders</button>
             </div>
           </div>
         </form>

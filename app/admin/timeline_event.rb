@@ -84,7 +84,7 @@ ActiveAdmin.register TimelineEvent do
   end
 
   action_item :view, only: :show do
-    link_to('View Timeline Entry', startup_url(timeline_event.startup, anchor: "event-#{timeline_event.id}"), target: '_blank')
+    link_to('View Timeline Entry', timeline_event.share_url, target: '_blank')
   end
 
   action_item :feedback, only: :show do

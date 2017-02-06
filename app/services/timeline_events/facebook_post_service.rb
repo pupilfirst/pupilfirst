@@ -17,8 +17,8 @@ module TimelineEvents
 
     def post_to_founder(founder)
       if founder.facebook_token_valid?
-        log "Attempting to post #{@timeline_event.facebook_friendly_url} to #{founder.name}'s Facebook wall."
-        result = facebook_client(founder).put_connections(:me, :feed, link: @timeline_event.facebook_friendly_url)
+        log "Attempting to post #{@timeline_event.share_url} to #{founder.name}'s Facebook wall."
+        result = facebook_client(founder).put_connections(:me, :feed, link: @timeline_event.share_url)
         log "Posted on #{founder.name}'s Facebook wall. Post id: #{result['id']}" if result['id'].present?
       else
         Founders::FacebookService.new(founder).disconnect!

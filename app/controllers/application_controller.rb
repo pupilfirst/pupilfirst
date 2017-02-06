@@ -1,7 +1,6 @@
 class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
+  # Prevent CSRF attacks by resetting user session. Note that this is different from the default of :exception.
+  protect_from_forgery with: :reset_session
 
   # Activate pretender.
   impersonates :user

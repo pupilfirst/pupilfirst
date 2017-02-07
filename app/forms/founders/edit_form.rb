@@ -47,20 +47,12 @@ module Founders
       return unless slack_username != model.slack_username
       return if Rails.env.development?
 
-      response_json = JSON.parse(RestClient.get("https://slack.com/api/users.list?token=#{Rails.application.secrets.slack_token}"))
-
-      unless response_json['ok']
-        errors.add(:slack_username, 'unable to validate username from slack. Please try again')
-        return
-      end
-
-      valid_names = response_json['members'].map { |m| m['name'] }
-      index = valid_names.index slack_username
-
-      if index.present?
-        @new_slack_user_id = response_json['members'][index]['id']
-      else
-        errors.add(:slack_username, 'a user with this mention name does not exist on SV.CO Public Slack')
+      begin
+        model.slack_user_id = Slack::FindUserService.new(slack_username).id
+      rescue Slack::UserNotFoundException
+        errors.add(:slack_username, 'username is not registered on SV.CO Public Slack')
+      rescue Slack::ApiFailedException
+        errors.add(:slack_username, 'unable to validate username from Slack. Please try again')
       end
     end
 
@@ -72,9 +64,10 @@ module Founders
       errors[:college_id] << 'is invalid'
     end
 
-    def save
-      self.college_id = nil if college_id == 'other'
-      super
+    def save!
+      sync
+      model.college_id = nil if college_id == 'other'
+      model.save!
     end
   end
 end

@@ -18,7 +18,7 @@ class FoundersController < ApplicationController
     form = @founder.form
 
     if form.validate(params[:founders_edit])
-      form.save
+      form.save!
       flash[:success] = 'Your profile has been updated.'
       redirect_to founder_profile_path(slug: @founder.slug)
     else

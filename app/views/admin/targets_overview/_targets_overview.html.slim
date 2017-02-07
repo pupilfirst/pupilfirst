@@ -4,13 +4,14 @@
       li class="#{ ((batch.id == params[:batch].to_i) ? 'selected' : '') + ' scope' }"
         a.table_tools_button href=admin_targets_overview_path(batch: batch) #{batch.name} Batch
 
-#admin-target-overview__index data-target-stats-url=admin_targets_overview_target_stats_url data-target-stat-details-url=admin_targets_overview_target_stat_details_url
+#admin-target-overview__index data-target-stats-url=admin_targets_overview_target_stats_url data-target-stat-details-url=admin_targets_overview_target_stat_details_url data-target-linked-event-url=admin_targets_overview_target_linked_event_url
 
 table.index_table.index.js-hook.target-overview__stat-details-table
   thead
     tr
       th.col Assignee Type
       th.col Assignee
+      th.col Linked Event
   tbody
 
 - if @targets.present?

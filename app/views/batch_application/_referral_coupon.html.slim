@@ -3,20 +3,20 @@
     ' Share your coupon
     span.coupon-share-container__subtitle
       | for referral rewards
-  .coupon-box
+  .coupon-box data-toggle="tooltip" title="Copied!" data-content="The coupon code has been copied to your clipboard."
     | #{current_batch_applicant.referral_coupon.code}
   .coupon-share.clearfix.m-t-1
     .pull-xs-left.light-secondary
-      .coupon-share__copy
+      .coupon-share__copy data-toggle="tooltip" title="Copied!" data-content="The coupon code has been copied to your clipboard."
         i.fa.fa-files-o
     .pull-xs-right
       | Share:
-      .coupon-share__icon.coupon-share__icon--facebook
-        a href="https://www.facebook.com/sharer/sharer.php?u=sv.co/apply" target="_blank"
-          i.fa.fa-facebook
-      .coupon-share__icon.coupon-share__icon--twitter
-        - default_tweet = URI.escape "Use coupon code: #{current_batch_applicant.referral_coupon.code} and get instant discount of 25% for your application at @SVdotCO"
-        a.margin-left-10 href="https://twitter.com/intent/tweet?text=#{default_tweet}&url=sv.co/apply" target="_blank"
-          i.fa.fa-twitter
+
+      a.coupon-share__icon.coupon-share__icon--facebook href="https://www.facebook.com/sharer/sharer.php?u=sv.co/apply" target="_blank"
+        i.fa.fa-facebook
+
+      - default_tweet = URI.escape "Use coupon code: #{current_batch_applicant.referral_coupon.code} and get instant discount of 25% for your application at @SVdotCO"
+      a.coupon-share__icon.coupon-share__icon--twitter href="https://twitter.com/intent/tweet?text=#{default_tweet}&url=sv.co/apply" target="_blank"
+        i.fa.fa-twitter
   input.coupon-share__copy-field
 

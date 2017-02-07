@@ -118,6 +118,7 @@ class Faculty < ApplicationRecord
     end
   end
 
+  # TODO: Refactor this validation to use Slack::FindUserService
   validate :slack_username_must_exist
 
   def slack_username_must_exist

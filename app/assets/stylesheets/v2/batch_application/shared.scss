@@ -275,6 +275,11 @@
   font-size: 0.875rem;
   letter-spacing: 0.04rem;
   color: $brand-secondary;
+  cursor: pointer;
+
+  &:hover, &:focus {
+    color: $dark-secondary;
+  }
 }
 
 .coupon-share {
@@ -292,6 +297,10 @@
 .coupon-share__copy {
   font-size: 1rem;
   cursor: pointer;
+
+  &:hover, &:focus {
+    color: $dark-secondary;
+  }
 }
 
 .coupon-share__icon {
@@ -301,6 +310,10 @@
 
   &:first-child {
     border-right: 1px solid $gray-border;
+  }
+
+  &:hover, &:focus {
+    color: $dark-secondary;
   }
 }
 

@@ -1,37 +1,9 @@
 #header {
   &.header {
     height: 85px;
-    left: 0;
-    position: fixed;
-    top: 0;
+    position: relative;
     width: 100%;
     z-index: 1000;
-
-    &.header-non-floating {
-      position: relative;
-    }
-  }
-
-  .sitewide-notice {
-    background-color: $light-primary;
-    text-align: center;
-    line-height: 2;
-    margin: -20px -20px 10px;
-    padding: 10px;
-    color: white;
-
-    a {
-      color: white;
-      border: 1px solid #fff;
-      border-radius: 20px;
-
-      &:hover, &:focus {
-        background-color: white;
-        color: $light-primary;
-        text-decoration: none;
-      }
-      @include media-breakpoint-down(sm) { display: inline-block; }
-    }
   }
 
   .navbar,
@@ -241,5 +213,26 @@
         right: auto;
       }
     }
+  }
+}
+
+.sitewide-notice {
+  background-color: $light-primary;
+  text-align: center;
+  line-height: 2;
+  padding: 10px;
+  color: white;
+
+  a {
+    color: white;
+    border: 1px solid #fff;
+    border-radius: 20px;
+
+    &:hover, &:focus {
+      background-color: white;
+      color: $light-primary;
+      text-decoration: none;
+    }
+    @include media-breakpoint-down(sm) { display: inline-block; }
   }
 }

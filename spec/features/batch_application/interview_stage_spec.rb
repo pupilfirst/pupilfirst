@@ -11,7 +11,7 @@ feature 'Application Interview Stage' do
   context 'when interview stage is ongoing' do
     scenario 'user is shown ongoing state page' do
       sign_in_user(batch_applicant.user, referer: apply_continue_path)
-      expect(page).to have_content("You've made it to the interviews!")
+      expect(page).to have_content("You’ve made it to the interviews!")
     end
 
     context 'when user has attended interview' do

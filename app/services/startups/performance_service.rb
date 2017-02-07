@@ -62,7 +62,9 @@ module Startups
     end
 
     def ranks_without_points
-      startups_without_points.each.map { |startup| [startup, last_rank_with_points + 1, 0] }
+      # counts the startups which has the same last rank in the rank-list with points
+      last_rank_count = ranks_with_points.count { |x| x[1] == last_rank_with_points }
+      startups_without_points.each.map { |startup| [startup, last_rank_with_points + last_rank_count, 0] }
     end
 
     def last_rank_with_points

@@ -38,16 +38,6 @@ ActiveAdmin.register_page 'Targets Overview' do
   page_action :target_linked_event do
     assignee_key = params[:assignee_type] == 'startup' ? :startup_id : :founder_id
     linked_events = TimelineEvent.where(assignee_key => params[:assignee_id], target_id: params[:target_id])
-
-    scope = {
-      completed: :verified,
-      needs_improvement: :needs_improvement,
-      not_accepted: :not_accepted,
-      submitted: :pending
-    }.fetch(params[:type].to_sym)
-
-    linked_events.public_send(scope)
-
     render json: linked_events.order('event_on DESC').first
   end
 end

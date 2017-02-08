@@ -166,6 +166,7 @@ end
 
 group :production do
   gem 'rails_12factor' # Makes running your Rails app easier. Based on the ideas behind 12factor.net.
+  gem 'dalli'
 end
 
 ruby '2.3.3'

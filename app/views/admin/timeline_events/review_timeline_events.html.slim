@@ -1,1 +1,2 @@
-p Something goes here.
+h3 Total events pending review: #{@review_data.length}
+= react_component('EventsReviewDashboard', { reviewData: @review_data})

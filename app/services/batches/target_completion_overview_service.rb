@@ -1,4 +1,7 @@
 module Batches
+  # This generates an overview of completion status for all targets for all startups in a batch. The _csv method
+  # converts the data to a (simpler) CSV and writes it to the public path. My expectation is that Heroku's ephemeral
+  # filesystem will keep the file accessible for a short period of time, during which it can be downloaded.
   class TargetCompletionOverviewService
     include RoutesResolvable
 

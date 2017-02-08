@@ -1,7 +1,6 @@
 module Batches
-  # This generates an overview of completion status for all targets for all startups in a batch. The _csv method
-  # converts the data to a (simpler) CSV and writes it to the public path. My expectation is that Heroku's ephemeral
-  # filesystem will keep the file accessible for a short period of time, during which it can be downloaded.
+  # This generates an overview of completion status for all targets for all startups in a batch. The mail_overview
+  # method emails the overview as simplified CSV (attachment) to a supplied address.
   class TargetCompletionOverviewService
     include RoutesResolvable
 
@@ -16,9 +15,7 @@ module Batches
     end
 
     def overview_csv
-      path = public_path
-
-      CSV.open(path, 'wb') do |csv|
+      CSV.generate do |csv|
         csv << ['Startups'] + targets.map(&:title)
 
         startups.each do |startup|
@@ -32,15 +29,17 @@ module Batches
           csv << row
         end
       end
+    end
 
-      [url_helpers.root_url, path.split('/').last].join('/').squeeze('/')
+    def mail_overview(email_address)
+      AdminUserMailer.target_completion_overview(email_address, overview_csv, filename, @batch.batch_number).deliver_now
     end
 
     private
 
-    def public_path
+    def filename
       timestamp = Time.zone.now.strftime('%Y%m%d%H%M%S')
-      File.absolute_path(Rails.root.join('public', "target_completion_overview_#{timestamp}.csv"))
+      "target_completion_overview_#{timestamp}.csv"
     end
 
     def csv_completion_status(status, target)

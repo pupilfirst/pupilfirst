@@ -133,7 +133,11 @@ class Founder < ApplicationRecord
 
   def capitalize_name_fragments
     return unless name_changed?
-    self.name = name.titleize
+
+    self.name = name.split.map do |name_fragment|
+      name_fragment[0] = name_fragment[0].capitalize
+      name_fragment
+    end.join(' ')
   end
 
   has_secure_token :auth_token

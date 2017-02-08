@@ -243,6 +243,7 @@ GEM
       safe_yaml (~> 1.0.0)
     css_parser (1.4.6)
       addressable
+    dalli (2.7.6)
     database_cleaner (1.5.3)
     debug_inspector (0.0.2)
     declarative (0.0.8)
@@ -900,6 +901,7 @@ DEPENDENCIES
   coderay
   coffee-rails (~> 4.1.0)
   combine_pdf
+  dalli
   database_cleaner
   delayed-web
   delayed_job_active_record

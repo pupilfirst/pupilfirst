@@ -15,7 +15,7 @@ class Coupon < ApplicationRecord
     [TYPE_DISCOUNT, TYPE_MSP]
   end
 
-  validates :code, uniqueness: true, presence: true
+  validates :code, uniqueness: true, presence: true, length: { in: 4..10 }
   validates :coupon_type, inclusion: { in: valid_coupon_types }
   validates :discount_percentage, presence: true, inclusion: { in: 0..100, message: 'must be between 0 and 100' }
   validates :referrer_id, uniqueness: true, allow_nil: true

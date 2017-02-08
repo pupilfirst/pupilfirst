@@ -82,13 +82,12 @@ loadLinkedEventOnDemand = ->
     targetId = clickedLink.data('targetId')
     assigneeId = clickedLink.data('assigneeId')
     assigneeType = clickedLink.data('assigneeType')
-    statType = clickedLink.data('type')
-    console.log("Fetching the #{statType} event submitted by #{assigneeType} #{assigneeId} against target #{targetId}")
+    console.log("Fetching the latest event submitted by #{assigneeType} #{assigneeId} against target #{targetId}")
 
     targetLinkedEventUrl = $('#admin-target-overview__index').data('targetLinkedEventUrl')
     $.get(
       url: targetLinkedEventUrl
-      data: { target_id: targetId, type: statType, assignee_type: assigneeType, assignee_id: assigneeId }
+      data: { target_id: targetId, assignee_type: assigneeType, assignee_id: assigneeId }
       success: (data) ->
         clickedLink.html("<a href='/admin/timeline_events/#{data.id}' target='_blank'>Event #{data.id} (#{data.event_on})</a>")
       beforeSend: ->

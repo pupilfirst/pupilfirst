@@ -1,12 +1,13 @@
 class AdmissionStatsNotificationJob < ApplicationJob
   queue_as :default
-  attr_reader :batch, :stats
+  attr_reader :application_round, :stats
 
   def perform
-    @batch = Batch.open_for_applications.order(:start_date).first
-    return unless batch.present?
-    @batch = @batch.decorate
-    @stats = AdmissionStatsService.load_stats(batch)
+    # @batch = Batch.open_for_applications.order(:start_date).first
+    @application_round = ApplicationRound.open_for_applications.order('starts_at DESC').first
+    return unless application_round.present?
+    @application_round = @application_round.decorate
+    @stats = AdmissionStatsService.load_stats(application_round)
 
     slack_webhook_url = Rails.application.secrets.slack_general_webhook_url
     json_payload = { 'text': admission_stats_summary }.to_json
@@ -17,7 +18,7 @@ class AdmissionStatsNotificationJob < ApplicationJob
 
   def admission_stats_summary
     <<~MESSAGE
-      > Here are the *Admission Campaign Stats for Batch #{batch.batch_number}* today:
+      > Here are the *Admission Campaign Stats for #{application_round.display_name}* today:
       *Campaign Progress:* Day #{days_passed}/#{total_days} (#{days_left} days left)
       *Target Achieved:* #{stats[:paid_applications]}/#{target_count} applications.
       *Payments Completed:* #{stats[:paid_applications]} (+#{stats[:paid_applications_today]})
@@ -45,23 +46,23 @@ class AdmissionStatsNotificationJob < ApplicationJob
   end
 
   def dashboard_url
-    Rails.application.routes.url_helpers.admin_admissions_dashboard_url(batch: batch.id)
+    Rails.application.routes.url_helpers.admin_admissions_dashboard_url(round: application_round.id)
   end
 
   def days_passed
-    batch.campaign_days_passed
+    application_round.campaign_days_passed
   end
 
   def total_days
-    batch.total_campaign_days
+    application_round.total_campaign_days
   end
 
   def days_left
-    batch.campaign_days_left
+    application_round.campaign_days_left
   end
 
   def target_count
-    batch.target_application_count
+    application_round.target_application_count
   end
 
   def top_references_today

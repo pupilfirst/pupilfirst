@@ -35,4 +35,8 @@ class AdminUser < ApplicationRecord
   def display_name
     email
   end
+
+  def superadmin?
+    admin_type == TYPE_SUPERADMIN
+  end
 end

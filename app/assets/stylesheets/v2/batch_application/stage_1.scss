@@ -282,6 +282,9 @@
   padding: 1.875rem;
   display: none;
   width: 100%;
+  background-image: asset-url('apply/batch_application/screening-bg.svg');
+  background-position: bottom center;
+  background-repeat: no-repeat;
 }
 
 .applicant-screening__question-section {
@@ -346,6 +349,7 @@
 
 .applicant-screening__answer-options {
   border-bottom: 1px solid $gray-border;
+  box-shadow: inset 0px -1px 0px 0px white;
 }
 
 .applicant-screening__answer-option-label {

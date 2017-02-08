@@ -244,7 +244,10 @@ class BatchApplicationController < ApplicationController
   def stage_2
     @payment_form = BatchApplications::PaymentForm.new(current_application)
     @coupon = current_application.coupons.last
-    @coupon_form = BatchApplications::CouponForm.new(OpenStruct.new) unless @coupon.present?
+    unless @coupon.present?
+      @coupon_form = BatchApplications::CouponForm.new(OpenStruct.new)
+      @coupon_form.prepopulate!(current_application)
+    end
   end
 
   # Handle coupon codes submissions
@@ -287,7 +290,7 @@ class BatchApplicationController < ApplicationController
         return
       end
 
-      redirect_to payment.long_url
+      observable_redirect_to(payment.long_url)
     else
       render 'stage_1'
     end

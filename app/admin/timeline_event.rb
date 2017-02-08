@@ -83,6 +83,16 @@ ActiveAdmin.register TimelineEvent do
     actions
   end
 
+  action_item :review, only: :index do
+    link_to 'Review Timeline Events', review_timeline_events_admin_timeline_events_path
+  end
+
+  collection_action :review_timeline_events do
+    batch = Batch.current
+    @review_data = TimelineEvents::ReviewDataService.new(batch).data
+    render 'review_timeline_events'
+  end
+
   action_item :view, only: :show do
     link_to('View Timeline Entry', timeline_event.share_url, target: '_blank')
   end

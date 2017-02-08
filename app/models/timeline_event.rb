@@ -11,6 +11,7 @@ class TimelineEvent < ApplicationRecord
   has_many :timeline_event_files, dependent: :destroy
 
   belongs_to :improved_timeline_event, class_name: 'TimelineEvent'
+  has_one :improvement_of, class_name: 'TimelineEvent', foreign_key: 'improved_timeline_event_id'
 
   mount_uploader :image, TimelineImageUploader
   process_in_background :image

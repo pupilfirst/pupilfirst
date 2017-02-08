@@ -13,7 +13,7 @@ Rails.application.routes.draw do
 
   post 'users/email_bounce', controller: 'users/postmark_webhook', action: 'email_bounce'
 
-  authenticated :admin_user do
+  authenticate :user, ->(u) { u.admin_user&.superadmin? } do
     mount Delayed::Web::Engine, at: '/jobs'
   end
 

@@ -27,7 +27,7 @@ html lang='en'
 
   body
     section#header class="#{@large_header_class ? "large-header #{@large_header_class} navbar-start-transparent" : ''}"
-      nav.navbar.navbar-default.navbar-fixed-top role="navigation" class="#{@large_header_class ? '' : 'shrink'}"
+      nav.navbar.navbar-default role="navigation" class="#{@large_header_class ? '' : 'shrink'}"
         - if @sitewide_notice
           .sitewide-notice
             .container
@@ -47,7 +47,6 @@ html lang='en'
 
           = render 'layouts/nav_links'
 
-      .nav-spacer
       == yield :header
 
       - if current_founder

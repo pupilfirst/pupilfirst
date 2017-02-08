@@ -21,7 +21,7 @@ feature 'Batch Application Payment' do
     click_on 'Pay Fees Online'
 
     # User must be re-directed to the payment's long_url.
-    expect(page.current_url).to eq(long_url)
+    expect(page).to have_content("redirected to: #{long_url}")
 
     payment = Payment.last
     # ensure we got the right payment

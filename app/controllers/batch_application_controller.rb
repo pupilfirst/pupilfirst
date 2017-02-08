@@ -287,7 +287,7 @@ class BatchApplicationController < ApplicationController
         return
       end
 
-      redirect_to payment.long_url
+      observable_redirect_to(payment.long_url)
     else
       render 'stage_1'
     end

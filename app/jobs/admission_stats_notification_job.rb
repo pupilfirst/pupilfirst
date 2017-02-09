@@ -6,7 +6,6 @@ class AdmissionStatsNotificationJob < ApplicationJob
     # @batch = Batch.open_for_applications.order(:start_date).first
     @application_round = ApplicationRound.open_for_applications.order('starts_at DESC').first
     return unless application_round.present?
-    @application_round = @application_round.decorate
     @stats = AdmissionStatsService.load_stats(application_round)
 
     slack_webhook_url = Rails.application.secrets.slack_general_webhook_url

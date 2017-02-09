@@ -58,27 +58,27 @@ module Founders
     end
 
     def latest_event_per_founder_target
-      events_for_founder_targets.select('DISTINCT ON (target_id) *').order('target_id, event_on DESC')
+      events_for_founder_targets.select('DISTINCT ON (target_id) *').order('target_id, created_at DESC')
     end
 
     def latest_event_per_startup_target
-      events_for_startup_targets.select('DISTINCT ON (target_id) *').order('target_id, event_on DESC')
+      events_for_startup_targets.select('DISTINCT ON (target_id) *').order('target_id, created_at DESC')
     end
 
     def needs_improvement_founder_targets
-      Target.where(id: latest_event_per_founder_target.needs_improvement.pluck(:target_id))
+      Target.where(id: latest_event_per_founder_target.select(&:needs_improvement?).map(&:target_id))
     end
 
     def needs_improvement_startup_targets
-      Target.where(id: latest_event_per_startup_target.needs_improvement.pluck(:target_id))
+      Target.where(id: latest_event_per_startup_target.select(&:needs_improvement?).map(&:target_id))
     end
 
     def not_accepted_founder_targets
-      Target.where(id: latest_event_per_founder_target.not_accepted.pluck(:target_id))
+      Target.where(id: latest_event_per_founder_target.select(&:not_accepted?).map(&:target_id))
     end
 
     def not_accepted_startup_targets
-      Target.where(id: latest_event_per_startup_target.not_accepted.pluck(:target_id))
+      Target.where(id: latest_event_per_startup_target.select(&:not_accepted?).map(&:target_id))
     end
 
     def submitted_founder_targets

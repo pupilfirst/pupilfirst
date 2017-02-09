@@ -22,7 +22,10 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
 
   resource :founder, only: [:edit, :update] do
-    get 'dashboard', on: :member
+    member do
+      get 'dashboard'
+      get 'performance_stats'
+    end
 
     resource :startup, only: [:edit, :update] do
       resources :timeline_events, only: [:create, :destroy, :update]

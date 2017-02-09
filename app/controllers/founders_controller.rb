@@ -48,6 +48,14 @@ class FoundersController < ApplicationController
     render layout: 'application_v2'
   end
 
+  # GET /founder/performance_stats
+  def performance_stats
+    @startup = current_founder.startup&.decorate
+    @batch = @startup&.batch&.decorate
+
+    render layout: false
+  end
+
   private
 
   def skip_container

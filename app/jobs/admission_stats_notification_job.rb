@@ -3,7 +3,6 @@ class AdmissionStatsNotificationJob < ApplicationJob
   attr_reader :application_round, :stats
 
   def perform
-    # @batch = Batch.open_for_applications.order(:start_date).first
     @application_round = ApplicationRound.open_for_applications.order('starts_at DESC').first
     return unless application_round.present?
     @stats = AdmissionStatsService.load_stats(application_round)

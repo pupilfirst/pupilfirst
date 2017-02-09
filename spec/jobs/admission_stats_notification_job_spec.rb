@@ -3,7 +3,7 @@ require 'rails_helper'
 describe AdmissionStatsNotificationJob do
   subject { described_class }
 
-  let!(:application_round) { create(:application_round).decorate }
+  let!(:application_round) { create :application_round }
   let!(:round_stage) { create :round_stage, application_round: application_round }
   let!(:state) { create :state, name: 'Kerala' }
 

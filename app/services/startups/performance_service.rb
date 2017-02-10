@@ -5,7 +5,12 @@ module Startups
       @start_date = start_date || last_week_start_date
       @end_date = end_date || last_week_end_date
       @batch = batch
-      @batch.present_week_number.in?(1..24) ? rank_list : nil
+
+      @leaderboard = Hash.new do |hash, key|
+        hash[key] = key.first.present_week_number.in?(1..24) ? rank_list : nil
+      end
+
+      @leaderboard[[@batch, @start_date, @end_date]]
     end
 
     # returns leaderboard array of [startup, rank, points, change_in_rank]
@@ -28,18 +33,16 @@ module Startups
       current_leaderboard.each_with_index.map { |startup_rank_points, index| startup_rank_points + [change_in_rank[index]] }
     end
 
-    # TODO: Manual memoization is ugly. Move to pertinent method.
     def leaderboard_rank(specified_startup)
-      memoized_leaderboard = leaderboard(specified_startup.batch)
-      return if memoized_leaderboard.nil?
-      memoized_leaderboard.detect { |startup, _rank, _points| startup == specified_startup }&.second
+      leaderboard_for_run = leaderboard(specified_startup.batch)
+      return if leaderboard_for_run.nil?
+      leaderboard_for_run.detect { |startup, _rank, _points| startup == specified_startup }&.second
     end
 
-    # TODO: Manual memoization is ugly. Move to pertinent method.
     def last_week_karma(specified_startup)
-      memoized_leaderboard = leaderboard(specified_startup.batch)
-      return if memoized_leaderboard.nil?
-      memoized_leaderboard.detect { |startup, _rank, _points| startup == specified_startup }&.third
+      leaderboard_for_run = leaderboard(specified_startup.batch)
+      return if leaderboard_for_run.nil?
+      leaderboard_for_run.detect { |startup, _rank, _points| startup == specified_startup }&.third
     end
 
     # returns a relative performance measure for a startup as a %
@@ -52,7 +55,8 @@ module Startups
     private
 
     def rank_list
-      ranks_with_points + ranks_without_points
+      ranks_with_points_for_run = ranks_with_points
+      ranks_with_points_for_run + ranks_without_points(ranks_with_points_for_run)
     end
 
     def ranks_with_points
@@ -61,14 +65,14 @@ module Startups
       startups_sorted_by_points.each_with_index.map { |startup_points, index| rank(startup_points, index) }
     end
 
-    def ranks_without_points
+    def ranks_without_points(rank_with_points_for_run)
       # counts the startups which has the same last rank in the rank-list with points
-      last_rank_count = ranks_with_points.count { |x| x[1] == last_rank_with_points }
-      startups_without_points.each.map { |startup| [startup, last_rank_with_points + last_rank_count, 0] }
+      last_rank_count = rank_with_points_for_run.count { |x| x[1] == last_rank_with_points(rank_with_points_for_run) }
+      startups_without_points.each.map { |startup| [startup, last_rank_with_points(rank_with_points_for_run) + last_rank_count, 0] }
     end
 
-    def last_rank_with_points
-      ranks_with_points.present? ? ranks_with_points[-1][1] : 0
+    def last_rank_with_points(rank_with_points_for_run)
+      rank_with_points_for_run.present? ? rank_with_points_for_run[-1][1] : 0
     end
 
     def rank(startup_points, index)
@@ -97,7 +101,7 @@ module Startups
     end
 
     def startups_without_points
-      startups_in_batch.where.not(id: startups_with_points.pluck(:startup_id).uniq)
+      startups_in_batch.where.not(id: startups_with_points.select(:startup_id).distinct(:startup_id))
     end
 
     def startups_in_batch

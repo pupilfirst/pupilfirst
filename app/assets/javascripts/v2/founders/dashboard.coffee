@@ -1,5 +1,8 @@
 targetAccordion = ->
-  $('.target-accordion .target-title-link').click (t) ->
+  scope = $('.target-accordion .target-title-link')
+  scope.off('click')
+
+  scope.on('click', (t) ->
     dropDown = $(this).closest('.target').find('.target-description')
     $(this).closest('.target-accordion').find('.target-description').not(dropDown).slideUp(200)
     $('.target').removeClass 'open'
@@ -11,6 +14,7 @@ targetAccordion = ->
       $(this).parent().addClass 'open'
     dropDown.stop(false, true).slideToggle(200)
     t.preventDefault()
+  )
 
 resetTimelineBuilderAndShow = ->
   timelineBuilderContainer = $('[data-react-class="TimelineBuilder"]')
@@ -36,7 +40,10 @@ handleTimelineBuilderPopoversHiding = ->
   )
 
 handleTimelineBuilderModal = ->
-  $('.js-founder-dashboard__trigger-builder').click (event) ->
+  scope = $('.js-founder-dashboard__trigger-builder')
+  scope.off('click')
+
+  scope.on('click', (event) ->
     submitButton = $(event.target)
 
     selectedTimelineEventTypeId = submitButton.data('timelineEventTypeId')
@@ -61,6 +68,7 @@ handleTimelineBuilderModal = ->
     timelineBuilderContainer.attr('data-react-props', JSON.stringify(reactProps))
 
     resetTimelineBuilderAndShow()
+  )
 
 setPerformancePointer = ->
   value = $('.performance-pointer').data('value') - 5
@@ -74,7 +82,10 @@ setPerformancePointer = ->
   $('.performance-pointer')[0].style.color = color
 
 viewSlidesModal = ->
-  $('.view-slides-btn').click (event) ->
+  scope = $('.view-slides-btn')
+  scope.off('click')
+
+  scope.on('click', (event) ->
     slidesModal = $('.view-slides')
     viewSlidesButton = $(event.target).closest('button')
 
@@ -85,7 +96,7 @@ viewSlidesModal = ->
       $('#slides-wrapper').html('')
 
     slidesModal.modal()
-
+  )
 
 giveATour = ->
   startTour() if $('#dashboard-show-tour').data('tour-flag')
@@ -165,6 +176,37 @@ loadPerformanceOnDemand = ->
         performanceOverview.data('loading', false)
       )
 
+loadProgramWeekOnDemand = ->
+  loadingElement = $('.js-program-week__loading')
+  return unless loadingElement.length
+
+  new Waypoint.Inview({
+    element: loadingElement[0]
+    enter: (direction) ->
+      return if loadingElement.data('loading')
+      loadingElement.data('loading', true)
+      weekUrl = loadingElement.data('weekUrl')
+      thisWaypoint = this
+
+      $.get(weekUrl).done((data) ->
+        programWeek = loadingElement.closest('.program-week')
+        programWeek.replaceWith(data)
+
+        # Set up loading waypoint for the next week.
+        loadProgramWeekOnDemand()
+
+        # Set up click listeners on the new program week.
+        handleTimelineBuilderModal()
+        targetAccordion()
+        viewSlidesModal()
+      ).fail(->
+        console.log("Failed to load week's data from server. :-(")
+      ).always(->
+        # Delete this waypoint.
+        thisWaypoint.destroy()
+      )
+  })
+
 $(document).on 'turbolinks:load', ->
   if $('#founder-dashboard').length
     targetAccordion()
@@ -174,3 +216,4 @@ $(document).on 'turbolinks:load', ->
     viewSlidesModal()
     hideIntercomOnSmallScreen()
     loadPerformanceOnDemand()
+    loadProgramWeekOnDemand()

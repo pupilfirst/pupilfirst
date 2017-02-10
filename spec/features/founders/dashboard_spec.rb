@@ -68,6 +68,21 @@ feature 'Founder Dashboard' do
     find('.timeline-builder__modal-close').click
 
     # Check whether there's correct number of program weeks.
+    expect(page).to have_selector('.program-week-number', count: 2)
+
+    # Scroll to bottom.
+    page.execute_script('window.scrollBy(0, $(window).height())')
+
+    # Week 2 should be loaded.
+    expect(page).to have_content(program_week_2.name)
+
+    # Scroll to bottom again.
+    page.execute_script('window.scrollBy(0, $(window).height())')
+
+    # Week 1 should be loaded.
+    expect(page).to have_content(program_week_1.name)
+
+    # All three weeks should be visible.
     expect(page).to have_selector('.program-week-number', count: 3)
 
     # Check whether there's correct number of target groups in a selected program week.

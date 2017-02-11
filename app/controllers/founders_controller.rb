@@ -42,7 +42,7 @@ class FoundersController < ApplicationController
       @filtered_targets = Founders::TargetsFilterService.new(current_founder).filter(params[:filter])
     else
       # Eager-load everything required for the dashboard. Order and decorate them too!
-      @program_week = @batch.program_weeks.includes(:batch, target_groups: { targets: :assigner }).order(:number, 'target_groups.sort_index', 'targets.sort_index').last.decorate
+      @program_week = @batch.program_weeks.includes(:batch, target_groups: { targets: :assigner }).order(:number, 'target_groups.sort_index', 'targets.sort_index').last&.decorate
     end
 
     render layout: 'application_v2'

@@ -56,8 +56,13 @@
     .targets-board.m-x-auto.target-accordion
       - if instance_variable_defined?(:@filtered_targets)
         == render 'selected_targets'
-      - else
+      - elsif @program_week.present?
         == render 'program_week', program_week: @program_week
+      - else
+        .target-group.m-y-3
+          .target-group-header.text-xs-center
+            .target-group-header-details
+              p There are no targets to show
 
 == render 'view-slides'
 == render 'timeline_builder'

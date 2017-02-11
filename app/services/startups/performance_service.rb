@@ -17,10 +17,11 @@ module Startups
     def leaderboard_with_change_in_rank(batch)
       return nil unless batch.present_week_number.in?(1..24)
 
+      current_leaderboard = leaderboard(batch)
+
       change_in_rank = if batch.present_week_number == 1
         Array.new(batch.startups.count, 0)
       else
-        current_leaderboard = leaderboard(batch)
         start_date_last_week = @start_date - 7.days
         end_date_last_week = @end_date - 7.days
         previous_leaderboard = leaderboard(batch, start_date: start_date_last_week, end_date: end_date_last_week)

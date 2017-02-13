@@ -83,6 +83,20 @@ ActiveAdmin.register TimelineEvent do
     actions
   end
 
+  member_action :quick_review, method: :post do
+    timeline_event = TimelineEvent.find(params[:id])
+    raise unless timeline_event.pending?
+
+    status = {
+      needs_improvement: TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT,
+      not_accepted: TimelineEvent::VERIFIED_STATUS_NOT_ACCEPTED,
+      verified: TimelineEvent::VERIFIED_STATUS_VERIFIED
+    }.fetch(params[:status].to_sym)
+
+    TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade])
+    head :ok
+  end
+
   action_item :review, only: :index do
     link_to 'Review Timeline Events', review_timeline_events_admin_timeline_events_path
   end

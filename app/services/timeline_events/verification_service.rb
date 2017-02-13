@@ -73,8 +73,8 @@ module TimelineEvents
 
     def remove_previous_points_for_target
       founder = @timeline_event.founder
-      target_timeline_events_from_founder = @target.timeline_events.where(founder: founder)
-      KarmaPoint.where(source: target_timeline_events_from_founder).delete_all
+      previous_target_timeline_events = @target.founder_role? ? @target.timeline_events.where(founder: founder) : @target.timeline_events.where(startup: founder.startup)
+      KarmaPoint.where(source: previous_target_timeline_events).delete_all
     end
 
     def add_karma_points

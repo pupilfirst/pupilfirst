@@ -1,0 +1,29 @@
+.program-week
+  .program-week-header
+    span.program-week-number
+      | Week #{program_week.number}
+    span.program-week-icon
+      = image_tag "founders/dashboard/program-week-icons/#{program_week.icon_name}"
+    span.program-week-title
+      | #{program_week.name}
+  - program_week.target_groups.each do |target_group|
+    .target-group
+      .target-group-header.text-xs-center
+        h4.brand-primary.font-regular
+          | #{target_group.name}
+        .target-group-header-details
+          ' #{target_group.description}
+
+      - target_group.targets.each do |target|
+        == render 'target', target: target
+
+/ Add a loading section at the bottom if this isn't the first week.
+- if program_week.number > 1
+  .program-week
+    .program-week-header
+      span.program-week-number.js-program-week__loading data-week-url=load_program_week_founder_url(week_number: program_week.number - 1)
+        | Week #{program_week.number - 1}
+      span.program-week-icon
+        i.fa.fa-refresh.fa-spin.brand-primary
+      span.program-week-title
+        | Loading...

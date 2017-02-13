@@ -11,7 +11,7 @@
 #### OSX
 
   *  imagemagick - `brew install imagemagick`
-  *  postgresql - `brew cask install postgres`
+  *  postgresql - Install [Postgres.app](http://postgresapp.com) and follow instructions.
   *  PhantomJS - `brew install phantomjs`
   *  puma-dev - `brew install puma/puma/puma-dev`
 

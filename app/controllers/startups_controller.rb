@@ -13,14 +13,18 @@ class StartupsController < ApplicationController
   def show
     @skip_container = true
     @startup = Startup.friendly.find(params[:id])
+
     if params[:show_feedback].present?
       if current_founder.present?
         @feedback_to_show = @startup.startup_feedback.where(id: params[:show_feedback]).first if @startup.founder?(current_founder)
       else
         session[:referer] = request.original_url
         redirect_to new_user_session_path, alert: 'Please sign in to continue!'
+        return
       end
     end
+
+    @events_for_display = @startup.timeline_events_for_display(current_founder)
   end
 
   # GET /startups/:id/:event_title/:event_id

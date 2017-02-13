@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170201075005) do
+ActiveRecord::Schema.define(version: 20170210073611) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
 
   create_table "active_admin_comments", force: :cascade do |t|
@@ -181,13 +182,11 @@ ActiveRecord::Schema.define(version: 20170201075005) do
     t.text     "description"
     t.date     "start_date"
     t.date     "end_date"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.integer  "batch_number"
     t.string   "slack_channel"
     t.datetime "invites_sent_at"
-    t.datetime "campaign_start_at"
-    t.integer  "target_application_count"
   end
 
   create_table "colleges", force: :cascade do |t|

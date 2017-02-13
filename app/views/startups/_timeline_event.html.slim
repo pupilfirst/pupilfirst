@@ -1,0 +1,78 @@
+.timeline id="event-#{event.id}"
+  li style="padding:0" class="timeline#{cycle '', '-inverted', name: 'card_position'}"
+    .timeline-badge class="color#{cycle *((1..14).to_a)}"
+      = image_tag "#{event.timeline_event_type.badge_url}", width: '70'
+    .timeline-panel
+      - if event.founder_event?
+        .hidden-marker href="#" data-toggle="tooltip" title="This event is not visible on the public startup timeline."
+          i.fa.fa-user-secret
+      - if event.image?
+        .img-responsive.tl-event-image
+          = image_tag event.image
+      .timeline-heading
+        - if event.pending?
+          .verified-status-notice href="#" data-toggle="tooltip" title="We will verify this event very soon! If you haven't heard from us in 24 hours, do ping us on Slack!"
+            i.fa.fa-exclamation-circle
+            | &nbsp;Pending verification
+        - elsif event.needs_improvement?
+          .verified-status-notice href="#" data-toggle="tooltip" title="#{needs_improvement_tooltip_text(event)}"
+            i.fa.fa-exclamation-circle
+            | &nbsp;#{needs_improvement_status_text(event)}
+        - elsif event.not_accepted?
+          .verified-status-notice href="#" data-toggle="tooltip" title="We are sorry, but this event is not acceptable. Please create a new event based on feedback and resubmit for approval."
+            i.fa.fa-exclamation-circle
+            | &nbsp;Not Accepted
+        h4.timeline-title-panel
+          a.timeline-title href=event.share_url
+            ' #{event.title}
+            i.fa.fa-link
+          / display info icon if founder
+          - if current_founder && @startup.founder?(current_founder)
+            - latest_feedback = StartupFeedback.for_timeline_event(event).first
+            - if latest_feedback.present?
+              - feedback = latest_feedback.feedback
+              - faculty = "#{latest_feedback.faculty.name} of Team SV"
+              a.fa.fa-comment.pull-right.pointer-cursor.show-feedback-button [data-feedback="#{latest_feedback.feedback}"
+                data-faculty="#{faculty}" data-attachment-url="#{latest_feedback&.attachment&.url}"
+                data-attachment-name="#{latest_feedback&.attachment_file_name}"]
+
+        p.tl-date
+          small
+            i.fa.fa-calendar
+            ' &nbsp;#{event.event_on.strftime("%B %e, %Y")}
+            - if @startup.earliest_team_event_date.present? && !event.founder_event? && event.verified_or_needs_improvement?
+              ' (#{((event.event_on- @startup.earliest_team_event_date).to_i + 1).ordinalize} day)
+      .timeline-body
+        .tl-body
+          p #{simple_format(event.detailed_description)}
+
+        - attachments = event.attachments_for_founder(current_founder)
+
+        - if attachments.present?
+          .timeline-footer.tl-footer
+            - attachments.each do |attachment|
+              - if attachment[:url]
+                a.tl-link-button href="#{short_url(attachment[:url])}" target="_blank"
+                  - if attachment[:private]
+                    i.fa.fa-user-secret
+                    | &nbsp;
+                  | #{attachment[:title]}
+              - else # it is a file
+                a.tl-link-button href="#{short_url(download_startup_timeline_event_timeline_event_file_url(@startup, event, attachment[:file]))}" target="_blank"
+                  - if attachment[:private]
+                    i.fa.fa-user-secret
+                    | &nbsp;
+                  | #{attachment[:title]}
+
+        - if current_founder && @startup.founder?(current_founder)
+          - if event.verified_or_needs_improvement?
+            .old-to-edit href="#" data-toggle="tooltip" title="To delete this event, please write to help@sv.co."
+              button.btn.btn-danger.btn-sm.btn-flat.btn-with-default-padding.disabled.margin-right-5.delete-link
+                i.fa.fa-times
+                | &nbsp;Delete
+          - else
+            = button_to founder_startup_timeline_event_url(event),
+              method: :delete, class: 'btn btn-danger btn-sm btn-flat btn-with-default-padding',
+              data: { confirm: 'This action cannot be reversed. Are you sure?' } do
+              i.fa.fa-times
+              | &nbsp;Delete

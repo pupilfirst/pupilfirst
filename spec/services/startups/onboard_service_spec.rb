@@ -40,7 +40,7 @@ describe Startups::OnboardService do
       cofounder = co_applicant.founder
 
       expect(cofounder.user).to eq(User.find_by(email: co_applicant.email))
-      expect(cofounder.name).to eq(co_applicant.name.titleize)
+      expect(cofounder.name).to eq(co_applicant.name)
       expect(cofounder.email).to eq(co_applicant.email)
       expect(cofounder.gender).to eq(co_applicant.gender)
       expect(cofounder.born_on).to eq(co_applicant.born_on)

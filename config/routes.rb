@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     member do
       get 'dashboard'
       get 'performance_stats'
+      get 'load_program_week'
     end
 
     resource :startup, only: [:edit, :update] do

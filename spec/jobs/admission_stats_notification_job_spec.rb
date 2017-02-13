@@ -1,9 +1,10 @@
 require 'rails_helper'
 
-describe AdmissionStatsNotificationJob, broken: true do
+describe AdmissionStatsNotificationJob do
   subject { described_class }
 
-  let!(:batch) { create(:batch, :in_stage_1).decorate }
+  let!(:application_round) { create :application_round }
+  let!(:round_stage) { create :round_stage, application_round: application_round }
   let!(:state) { create :state, name: 'Kerala' }
 
   let(:dummy_stats) do
@@ -24,13 +25,13 @@ describe AdmissionStatsNotificationJob, broken: true do
     }
   end
 
-  let(:dashboard_url) { Rails.application.routes.url_helpers.admin_admissions_dashboard_url(batch: batch.id) }
+  let(:dashboard_url) { Rails.application.routes.url_helpers.admin_admissions_dashboard_url(round: application_round.id) }
 
   let(:admission_stats_summary) do
     <<~MESSAGE
-      > Here are the *Admission Campaign Stats for Batch #{batch.batch_number}* today:
-      *Campaign Progress:* Day #{batch.campaign_days_passed}/#{batch.total_campaign_days} (#{batch.campaign_days_left} days left)
-      *Target Achieved:* 100/#{batch.target_application_count} applications.
+      > Here are the *Admission Campaign Stats for #{application_round.display_name}* today:
+      *Campaign Progress:* Day #{application_round.campaign_days_passed}/#{application_round.total_campaign_days} (#{application_round.campaign_days_left} days left)
+      *Target Achieved:* 100/#{application_round.target_application_count} applications.
       *Payments Completed:* 100 (+5)
       :point_up_2: _Note that 20 of these were moved-in from earlier batches._
       *Payments Intiated:* 20 (+3)
@@ -44,7 +45,7 @@ describe AdmissionStatsNotificationJob, broken: true do
   end
 
   it 'posts the admission stats to Slack' do
-    allow(AdmissionStatsService).to receive(:load_stats).with(batch).and_return(dummy_stats)
+    allow(AdmissionStatsService).to receive(:load_stats).with(application_round).and_return(dummy_stats)
     expect(RestClient).to receive(:post).with('http://example.com/slack', { 'text': admission_stats_summary }.to_json)
     subject.perform_now
   end

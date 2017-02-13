@@ -6,13 +6,13 @@ body {
   background-color: $primary-background;
   font-size: $font-size-sm;
   position: relative;
-}
-body {
+
   &.modal-open {
     overflow-y: hidden;
     padding-right: 0 !important;
   }
 }
+
 a {
   transition: all .2s;
 

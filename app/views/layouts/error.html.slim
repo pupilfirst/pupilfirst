@@ -26,7 +26,7 @@ html lang='en'
 
   body
     section#header
-      nav.navbar.navbar-default.navbar-fixed-top.shrink role="navigation"
+      nav.navbar.navbar-default.shrink role="navigation"
         .container
           .navbar-header
             button.navbar-toggle.collapsed type="button" data-toggle="collapse" data-target="#sv-navbar"
@@ -54,7 +54,6 @@ html lang='en'
               li role="presentation"
                 = link_to 'Library', resources_path, class: 'top-nav-link'
 
-      .nav-spacer
       == yield :header
 
     .container

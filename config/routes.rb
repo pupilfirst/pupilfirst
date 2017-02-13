@@ -13,7 +13,7 @@ Rails.application.routes.draw do
 
   post 'users/email_bounce', controller: 'users/postmark_webhook', action: 'email_bounce'
 
-  authenticated :admin_user do
+  authenticate :user, ->(u) { u.admin_user&.superadmin? } do
     mount Delayed::Web::Engine, at: '/jobs'
   end
 
@@ -22,7 +22,11 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
 
   resource :founder, only: [:edit, :update] do
-    get 'dashboard', on: :member
+    member do
+      get 'dashboard'
+      get 'performance_stats'
+      get 'load_program_week'
+    end
 
     resource :startup, only: [:edit, :update] do
       resources :timeline_events, only: [:create, :destroy, :update]

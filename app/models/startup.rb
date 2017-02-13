@@ -375,11 +375,14 @@ class Startup < ApplicationRecord
   end
 
   def timeline_events_for_display(viewer)
-    if viewer && self == viewer.startup
-      timeline_events.order(:event_on, :updated_at).reverse_order.decorate
-    else
-      timeline_events.verified_or_needs_improvement.order(:event_on, :updated_at).reverse_order.decorate
+    events_for_display = timeline_events
+
+    # Only display verified of needs-improvement events if 'viewer' is not a member of this startup.
+    if viewer&.startup != self
+      events_for_display = events_for_display.verified_or_needs_improvement
     end
+
+    events_for_display.order(:event_on, :updated_at).reverse_order.decorate
   end
 
   # Update stage whenever startup is updated. Note that this is also triggered from TimelineEvent after_commit.

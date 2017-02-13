@@ -90,6 +90,15 @@ class ApplicationController < ActionController::Base
     response.headers['Content-Security-Policy'] = ("default-src 'none'; " + csp_directives.join(' '))
   end
 
+  # Makes redirects observable from integration tests.
+  def observable_redirect_to(url)
+    if Rails.env.test?
+      render plain: "If this wasn't an integration test, you'd be redirected to: #{url}"
+    else
+      redirect_to(url)
+    end
+  end
+
   private
 
   def sign_out_if_required

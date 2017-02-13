@@ -34,4 +34,10 @@ ActiveAdmin.register_page 'Targets Overview' do
 
     render json: assignees
   end
+
+  page_action :target_linked_event do
+    assignee_key = params[:assignee_type] == 'startup' ? :startup_id : :founder_id
+    linked_events = TimelineEvent.where(assignee_key => params[:assignee_id], target_id: params[:target_id])
+    render json: linked_events.order('event_on DESC').first
+  end
 end

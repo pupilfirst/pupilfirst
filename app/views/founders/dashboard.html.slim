@@ -45,7 +45,7 @@
                     | #{ t("dashboard.show.target_filters.#{filter}.filter_text") }
 
           .pull-sm-right.pull-xs-left
-            button#performance-button.btn.btn-with-icon.btn-md.btn-ghost-primary.performance-overview-link.text-uppercase data-toggle="modal"
+            button#performance-button.btn.btn-with-icon.btn-md.btn-ghost-primary.performance-overview-link.text-uppercase data-toggle="modal" data-performance-url=performance_stats_founder_url
               i.fa.fa-tachometer
               span
                 | Performance
@@ -56,27 +56,13 @@
     .targets-board.m-x-auto.target-accordion
       - if instance_variable_defined?(:@filtered_targets)
         == render 'selected_targets'
+      - elsif @program_week.present?
+        == render 'program_week', program_week: @program_week
       - else
-        - @program_weeks.reverse.each do |program_week|
-          - next unless program_week.target_groups.present?
-          .program-week
-            .program-week-header
-              span.program-week-number
-                | Week #{program_week.number}
-              span.program-week-icon
-                = image_tag "founders/dashboard/program-week-icons/#{program_week.icon_name}"
-              span.program-week-title
-                | #{program_week.name}
-            - program_week.target_groups.each do |target_group|
-              .target-group
-                .target-group-header.text-xs-center
-                  h4.brand-primary.font-regular
-                    | #{target_group.name}
-                  .target-group-header-details
-                    ' #{target_group.description}
-
-                - target_group.targets.each do |target|
-                  == render 'target', target: target
+        .target-group.m-y-3
+          .target-group-header.text-xs-center
+            .target-group-header-details
+              p There are no targets to show
 
 == render 'view-slides'
 == render 'timeline_builder'

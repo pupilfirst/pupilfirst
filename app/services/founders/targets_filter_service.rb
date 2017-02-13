@@ -41,6 +41,46 @@ module Founders
       @founder.startup.batch.targets
     end
 
+    def founder_targets_in_batch
+      batch_targets.founder
+    end
+
+    def startup_targets_in_batch
+      batch_targets.not_founder
+    end
+
+    def events_for_founder_targets
+      @founder.timeline_events.where(target_id: founder_targets_in_batch)
+    end
+
+    def events_for_startup_targets
+      @founder.startup.timeline_events.where(target_id: startup_targets_in_batch)
+    end
+
+    def latest_event_per_founder_target
+      events_for_founder_targets.select('DISTINCT ON (target_id) *').order('target_id, created_at DESC')
+    end
+
+    def latest_event_per_startup_target
+      events_for_startup_targets.select('DISTINCT ON (target_id) *').order('target_id, created_at DESC')
+    end
+
+    def needs_improvement_founder_targets
+      Target.where(id: latest_event_per_founder_target.select(&:needs_improvement?).map(&:target_id))
+    end
+
+    def needs_improvement_startup_targets
+      Target.where(id: latest_event_per_startup_target.select(&:needs_improvement?).map(&:target_id))
+    end
+
+    def not_accepted_founder_targets
+      Target.where(id: latest_event_per_founder_target.select(&:not_accepted?).map(&:target_id))
+    end
+
+    def not_accepted_startup_targets
+      Target.where(id: latest_event_per_startup_target.select(&:not_accepted?).map(&:target_id))
+    end
+
     def submitted_founder_targets
       # Targets with founder role, where @founder has submitted an event.
       batch_targets.founder.joins(:timeline_events).where(timeline_events: { founder_id: @founder.id })
@@ -68,11 +108,11 @@ module Founders
     end
 
     def needs_improvement_targets
-      submitted_targets.merge(TimelineEvent.needs_improvement)
+      needs_improvement_founder_targets.or(needs_improvement_startup_targets)
     end
 
     def not_accepted_targets
-      submitted_targets.merge(TimelineEvent.not_accepted)
+      not_accepted_founder_targets.or(not_accepted_startup_targets)
     end
 
     def due_date_service

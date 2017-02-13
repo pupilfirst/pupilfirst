@@ -1,5 +1,5 @@
 copyToClipboard = ->
-  $('.coupon-share__copy').click ->
+  $('.coupon-share__copy, .coupon-box').click ->
     copyField = $('.coupon-share__copy-field')
     copyField.addClass('coupon-share__copy-field--visible')
     copyField.val($('.coupon-box').text())

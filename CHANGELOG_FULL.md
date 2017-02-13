@@ -1,7 +1,30 @@
 ## Ongoing
 
-- Coupons for application fee are in the works. [[Trello]](https://trello.com/c/DXWCTAQ9)
-- Admissions Dashboard on admin interface is being fixed. [[Trello]](https://trello.com/c/2mvrHSEX)
+- A severe memory leak is being diagnosed. [[Trello]](https://trello.com/c/s15YSnFv)
+- A timeline events review interface for admins is being built. [[Trello]](https://trello.com/c/mfPTX78v)
+- All SV.CO pages are being updated to use _v2_ styling. [[Trello]](https://trello.com/c/EwhCpesZ)
+- An issue with the Leaderboard, causing its results for the past week to change over time is being checked. [[Trello]](https://trello.com/c/z4rKABRx)
+
+## 2017.02.13
+
+- Coupons for application fee has been implemented. [[Trello]](https://trello.com/c/DXWCTAQ9)
+- Admissions Dashboard on admin interface has been fixed. [[Trello]](https://trello.com/c/2mvrHSEX)
+- The `IntercomUserUpdateService` has been removed. [[Trello]](https://trello.com/c/o6xekZ8S)
+- The performance of Founder dashboard has been greatly improved. [[Trello]](https://trello.com/c/z3Fbdaar)
+- The `AdmissionStatsNotificationJob` has been reinstated after updates to make it work with application rounds. [[Trello]](https://trello.com/c/cm4MUQUN)
+- Fixed an issue with `AdmissionStatsService` which caused it to report same startups / founders for multiple statuses per target. [[Trello]](https://trello.com/c/xARzgOzK)
+- Fixed a bug related to the Founder edit form which rendered Vocalist unable to ping founders on Slack. [[Trello]](https://trello.com/c/1RD10gc0)
+- Authenticity token errors are now managed by resetting session - this should reduce (eliminate, really) instances of users seeing related exceptions. [[Trello]](https://trello.com/c/bJmoTE3O)
+- Admissions dashboard on the admin interface has been fixed to work with application rounds. [[Trello]](https://trello.com/c/2mvrHSEX)
+- The Targets index page on admin interface has been sped up by trimming available filters. [[Trello]](https://trello.com/c/Of3r5UlI)
+- The link to share timeline event in admin interface has been updated to latest standard. [[Trello]](https://trello.com/c/mtSHHst7)
+- The leaderboard now correctly calculates the rank for startups without points for a week, when there is more than one startup sharing a rank placed above them. [[Trello]](https://trello.com/c/lruqHGQi)
+- Fixed a minor mismatch in margins on Target descriptions on the Founder dashboard. [[Trello]](https://trello.com/c/W33CrzP9)
+- Round-specific columns were removed from `Batch` table. [[Trello]](https://trello.com/c/IPsQRkC9)
+- Fixed a bug on the Founder dashboard causing filters to display targets that did not fit its criteria. [[Trello]](https://trello.com/c/UFPJXcDs)
+- Fixed a crash that occurred when founders from earlier batches visited their dashboard page. [[Trello]](https://trello.com/c/UqeGUed9)
+- Fixed a failure of specs for payment stage by introducing `observable_redirect_to`. [[Trello]](https://trello.com/c/ufObIMyk)
+- Updated the `/jobs` route to check if logged in user had a corresponding super-admin entry to allow access. [[Trello]](https://trello.com/c/lTs9nfiQ)
 
 ## 2017.02.06
 

@@ -1,3 +1,21 @@
+### 13 February, 2017
+
+#### Performance
+
+  - The performance of the Founder dashboard has been greatly improved - it's about 30x faster (!) on average, on initial load.
+
+#### UX and UI
+
+  - We've changed the behavior of how our application handles issues related to presence of a valid authenticity token in form submissions. This eliminates occasional error messages that pop up when the web browser fails to send the expected token.
+  - Improved margins of Target descriptions on the Founder dashboard for greater readability on mobile devices.
+
+#### Bugfixes
+
+  - Fixed a bug related to the Founder profile edit form which rendered Vocalist unable to ping founders on Slack.
+  - Fixed a bug on the Founder dashboard causing filters to display targets that did not fit its criteria.
+  - Fixed a crash that occurred when founders from earlier batches visited their dashboard page.
+  - The leaderboard now correctly calculates the rank for startups without points for a week, when there is more than one startup sharing a rank placed above them.
+
 ### 6 February, 2017
 
 #### Features

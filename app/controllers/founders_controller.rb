@@ -28,8 +28,6 @@ class FoundersController < ApplicationController
 
   # GET /founder/dashboard
   def dashboard
-    @header_non_floating = true
-
     @startup = current_founder.startup&.decorate
     @batch = @startup&.batch&.decorate
 

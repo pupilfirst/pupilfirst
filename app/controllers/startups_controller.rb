@@ -31,6 +31,7 @@ class StartupsController < ApplicationController
   def timeline_event_show
     @skip_container = true
     @startup = Startup.friendly.find(params[:id])
+    @events_for_display = @startup.timeline_events_for_display(current_founder)
     @timeline_event_for_og = @startup.timeline_events.find_by(id: params[:event_id])
     raise_not_found unless @timeline_event_for_og.present?
     render 'show'

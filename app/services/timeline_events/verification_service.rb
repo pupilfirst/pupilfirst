@@ -91,15 +91,19 @@ module TimelineEvents
       @timeline_event.founder_event? ? @timeline_event.founder : nil
     end
 
+    # TODO: Clean this up!
+    # rubocop:disable Metrics/CyclomaticComplexity
     def applicable_points
       return @points if @points.present?
       return nil if @points&.empty?
 
-      return nil unless @new_status.in?([TimelineEvent::VERIFIED_STATUS_VERIFIED, TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT])
+      return nil unless @new_status.in?([TimelineEvent::VERIFIED_STATUS_VERIFIED, TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT]) && points_for_target.present?
+
       return points_for_target unless @grade.present? && @new_status == TimelineEvent::VERIFIED_STATUS_VERIFIED
 
       points_for_target * grade_multiplier
     end
+    # rubocop:enable Metrics/CyclomaticComplexity
 
     def grade_multiplier
       {

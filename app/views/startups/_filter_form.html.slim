@@ -1,10 +1,11 @@
-.filter-box.clearfix
-  = simple_form_for :startups_filter, url: startups_path, method: :get, html: { class: 'form-horizontal' },
-    wrapper: :horizontal_form do |f|
-    .filter-dropdown
-      = f.input :batch, collection: @batches, include_blank: 'Any', label: 'Batch', required: false, selected: params.dig(:startups_filter, :batch)
-    .filter-dropdown
-      = f.input :category, collection: @categories, include_blank: 'Any', label: 'Category', required: false, selected: params.dig(:startups_filter, :category)
-    .filter-dropdown
-      = f.input :stage, collection: @stages, label_method: ->(stage) { TimelineEventType::STAGE_NAMES[stage] }, include_blank: 'Any', label: 'Stage', required: false, selected: params.dig(:startups_filter, :stage)
-    = submit_tag 'Go!', class: 'btn btn-primary pull-left filter-go-btn pull-left'
+.filter-box__container.m-b-1.p-y-1
+  = simple_form_for :startups_filter, url: startups_path, method: :get do |f|
+    .filter-box.row
+      .col-md-3.filter-dropdown
+        = f.input :batch, collection: @batches, include_blank: 'Any', label: 'Batch', required: false, input_html: { class: 'filter-dropdown__select' }, selected: params.dig(:startups_filter, :batch)
+      .col-md-3.filter-dropdown
+        = f.input :category, collection: @categories, include_blank: 'Any', label: 'Category', required: false, input_html: { class: 'filter-dropdown__select' }, selected: params.dig(:startups_filter, :category)
+      .col-md-3.filter-dropdown
+        = f.input :stage, collection: @stages, label_method: ->(stage) { TimelineEventType::STAGE_NAMES[stage] }, include_blank: 'Any', label: 'Stage', required: false, input_html: { class: 'filter-dropdown__select' }, selected: params.dig(:startups_filter, :stage)
+      .col-md-3
+        = submit_tag 'FILTER', class: 'btn btn-primary filter-go-btn'

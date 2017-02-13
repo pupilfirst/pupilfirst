@@ -1,91 +1,88 @@
-.col-md-6
-  .startup-card.clearfix
+.col-lg-6.col-md-12
+  .startup-card.content-box.clearfix
     - if extra_links_present? startup
-      .dropdown.links-menu
+      .dropdown.external-links
         button.btn.btn-link.more-menu-dots.dropdown-toggle data-toggle="dropdown" type="button"
           span.dots-menu
-        ul.dropdown-menu.pull-right
+        .dropdown-menu.dropdown-menu-right.external-links__dropdown
           - if startup.wireframe_link?
-            li
-              a href="#{short_url(startup.wireframe_link)}" target="_blank"
-                i.fa.fa-object-group
-                ' #{startup.product_name} design
-            li.divider
+            a.dropdown-item.external-links__dropdown--item.brand-secondary href="#{short_url(startup.wireframe_link)}" target="_blank"
+              i.external-links__dropdown--icon.fa.fa-object-group
+              ' #{startup.product_name} design
+
           - if startup.website?
-            li
-              a href="#{startup.website}" target="_blank"
-                i.fa.fa-globe
-                ' #{startup.website}
-            li.divider
+            a.dropdown-item.external-links__dropdown--item.brand-secondary href="#{startup.website}" target="_blank"
+              i.external-links__dropdown--icon.fa.fa-globe
+              ' #{startup.website}
+
           - if startup.prototype_link?
-            li
-              a href="#{short_url(startup.prototype_link)}" target="_blank"
-                i.fa.fa-cube
-                ' Prototype Link
-            li.divider
+            a.dropdown-item.external-links__dropdown--item.brand-secondary href="#{short_url(startup.prototype_link)}" target="_blank"
+              i.external-links__dropdown--icon.fa.fa-cube
+              ' Prototype Link
+
           - if startup.facebook_link?
-            li
-              a href="#{startup.facebook_link}" target="_blank"
-                i.fa.fa-facebook-square
-                ' #{startup.facebook_link}
-            li.divider
+            a.dropdown-item.external-links__dropdown--item.brand-secondary href="#{startup.facebook_link}" target="_blank"
+              i.external-links__dropdown--icon.fa.fa-facebook-square
+              ' #{startup.facebook_link}
+
           - if startup.twitter_link?
-            li
-              a href="#{startup.twitter_link}" target="_blank"
-                i.fa.fa-twitter-square
-                ' #{startup.twitter_link}
+            a.dropdown-item.external-links__dropdown--item.brand-secondary href="#{startup.twitter_link}" target="_blank"
+              i.external-links__dropdown--icon.fa.fa-twitter-square
+              ' #{startup.twitter_link}
 
     .startup-logo-block
       a.startup-logo-image href=startup_url(startup)
         - if startup.logo.present?
-          = image_tag startup.logo.url
+          = image_tag startup.logo.url, class: 'img-fluid'
         - else
           = startup.product_name || startup.name
 
     .startup-details
-      a.product-name.font-weight-400 href=startup_url(startup)
-        ' #{startup.product_name}
-      - if startup.startup_categories.present?
-        span.industry
-          img alt="Startup industry icon" src="#{image_url 'startups/icons/industry-icon.png'}"
-          | #{startup.startup_categories.pluck(:name).join(', ')}
-      .fade-text
-        p
-          = startup.product_description
-      .startups-links
+      .startup-details__header
+        a.product-name.brand-secondary.font-semibold href=startup_url(startup)
+          ' #{startup.product_name}
+
+        - if startup.startup_categories.present?
+          .startup-industry
+            span.startup-industry-icon
+              i.fa.fa-address-card-o
+            | #{startup.startup_categories.pluck(:name).join(', ')}
+
+      p.startup-details__description.font-light
+        = startup.product_description
+      .startups-attachments
+        a.startup-attachments__link href="#{TimelineEventType::STAGE_LINKS[startup.stage]}" target="_blank" title="#{TimelineEventType::STAGE_NAMES[startup.stage]} Stage"
+          img.startups-link__icon alt="Product Stage" src="#{image_url 'startups/icons/product-stage-icon.svg'}"
+          ' #{TimelineEventType::STAGE_NAMES[startup.stage]}
+
         - if startup.presentation_link?
-          a.product-deck href="#{short_url(startup.presentation_link)}" target="_blank" title="Product Deck"
-            img alt="Product Deck" src="#{image_url 'startups/icons/product-deck-icon.png'}"
+          a.startup-attachments__link href="#{short_url(startup.presentation_link)}" target="_blank" title="Product Deck"
+            img.startups-link__icon alt="Product Deck" src="#{image_url 'startups/icons/product-deck-icon.svg'}"
             ' Product Deck
         - if startup.product_video_link?
-          a.product-video href="#{short_url(startup.product_video_link)}" target="_blank" title="Product Video"
-            img alt="Product Video" src="#{image_url 'startups/icons/product-video-icon.png'}"
+          a.startup-attachments__link href="#{short_url(startup.product_video_link)}" target="_blank" title="Product Video"
+            img.startups-link__icon alt="Product Video" src="#{image_url 'startups/icons/product-video-icon.svg'}"
             ' Product Video
-
-        a.startup-stage href="#{TimelineEventType::STAGE_LINKS[startup.stage]}" target="_blank" title="#{TimelineEventType::STAGE_NAMES[startup.stage]} Stage"
-          img alt="Product Stage" src="#{image_url 'startups/icons/product-stage-icon.png'}"
-          ' #{TimelineEventType::STAGE_NAMES[startup.stage]} Stage
 
       .startupcard-footer.clearfix
         - if startup.founders.present?
           .founder-avatar-list
             - startup.founders.order(:name).each do |founder|
-              .founder-tooltip.tooltip-popup
-                a.tooltip-item.startup-founder-avatar href=founder_profile_url(slug: founder.slug)
-                  img alt="Founder profile image" src="#{profile_image_url founder, gravatar_size: 128, avatar_version: :mid}"
-                span.tooltip-content.clearfix
-                  img alt="Founder profile image" src="#{profile_image_url founder, gravatar_size: 128, avatar_version: :mid}"
-                  span.tooltip-text
-                    h2
+              .founder-avatar.founder-tooltip.tooltip-popup
+                a.founder-tooltip-item.founder-avatar__thumbnail href=founder_profile_url(slug: founder.slug)
+                  img.founder-avatar__thumbnail--image alt="Founder profile image" src="#{profile_image_url founder, gravatar_size: 128, avatar_version: :mid}"
+                span.founder-tooltip-content.clearfix
+                  img.founder-tooltip-thumbnail alt="Founder profile image" src="#{profile_image_url founder, gravatar_size: 128, avatar_version: :mid}"
+                  .founder-tooltip-text
+                    h4.founder-tooltip-header.font-semibold
                       = founder.fullname
                     - if founder.roles.present?
-                      span.founder-role
+                      .founder-tooltip-role
                         = founder.roles.map { |role| t("role.#{role}") }.join ', '
-                    a.profile-view href=founder_profile_url(slug: founder.slug)
-                      i.fa.fa-user
+                    a.founder-profile-view-link href=founder_profile_url(slug: founder.slug)
+                      span.founder-profile-view-link__icon.i.fa.fa-user-circle-o
                       | View Profile
 
           .view-timeline-btn
-            a.timeline-btn href=startup_url(startup)
-              i.fa.fa-eye
+            a.btn.btn-sm.btn-primary.text-uppercase href=startup_url(startup)
               ' Timeline

@@ -11,9 +11,10 @@
 
 .startups-bg
   .container
-    .row.startup-list-box
+    .startup-list-box
       = render 'filter_form'
       - if @startups.present?
-        = render @startups, cached: true
+        .row
+          = render @startups, cached: true
       - else
         p.alert.alert-warning No startups match the filter criteria provided!

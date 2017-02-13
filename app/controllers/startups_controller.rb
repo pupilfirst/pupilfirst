@@ -7,6 +7,7 @@ class StartupsController < ApplicationController
     load_startups
     load_filter_options
     @skip_container = true
+    render layout: 'application_v2'
   end
 
   def show

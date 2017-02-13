@@ -501,6 +501,7 @@
     right: 0;
   }
 }
+
 .startup-details__description {
   width: 355px;
   overflow: hidden;
@@ -508,6 +509,16 @@
   height: 40px;
   letter-spacing: 0.01rem;
   margin-top: 8px;
+
+  @include media-breakpoint-down(lg) {
+    width: 100%;
+  }
+  @include media-breakpoint-only(md) {
+
+  }
+  @include media-breakpoint-down(sm) {
+    height: auto;
+  }
 
   &:after {
     content: "";
@@ -519,31 +530,9 @@
     height: 21px;
     background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 70%);
 
-    // @media (max-width: $screen-md-max) and (min-width: $screen-md-min) , (max-width: $screen-xs-max) {
-    //   width: 0;
-    // }
-  }
-
-  p {
-    margin: 0;
-
-    // @media (max-width: $screen-xs-max) {
-    //   font-size: 14px;
-    // }
-  }
-  // @media (max-width: $screen-xs-max) {
-  //   height: auto;
-  //   width: 100%;
-  // }
-  // @media (min-width: $screen-xs-max) and (max-width: $screen-sm-max) {
-  //   width: 100%;
-  // }
-  // @media (max-width: $screen-md-max) and (min-width: $screen-md-min) {
-  //   width: auto;
-  // }
-
-  @include media-breakpoint-down(lg) {
-    width: 100%;
+    @include media-breakpoint-down(sm) {
+      width: 0;
+    }
   }
 }
 

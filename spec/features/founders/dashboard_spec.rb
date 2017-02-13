@@ -85,10 +85,8 @@ feature 'Founder Dashboard' do
     # All three weeks should be visible.
     expect(page).to have_selector('.program-week-number', count: 3)
 
-    # Check whether there's correct number of target groups in a selected program week.
-    within(all('.program-week').last) do
-      expect(page).to have_selector('.target-group', count: 4)
-    end
+    # Check whether there's correct number of target groups in the page.
+    expect(page).to have_selector('.target-group', count: 6)
 
     # Check whether clicking each target gives the correct information.
     # 'Trigger' clicks on the element instead of actually clicking on it to avoid timing issues

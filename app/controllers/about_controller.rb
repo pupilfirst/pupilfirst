@@ -4,6 +4,7 @@ class AboutController < ApplicationController
   # GET /about
   def index
     @sitewide_notice = params[:redirect_from] == 'startupvillage.in'
+    render layout: 'application_v2'
   end
 
   # GET /about/slack

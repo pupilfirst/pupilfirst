@@ -7,15 +7,15 @@
   title About SV.CO: A learning platform for first-time founders
   meta name="description" content="Startup Village is launching an online-first learning platform for first-time founders, supplying tools and resources needed to create a successful startup."
 
-ol.breadcrumb class="#{@sitewide_notice.present? ? 'margin-top-60' : 'margin-top-20'}"
-  li = link_to 'Home', root_path
-  li.active About
+ol.breadcrumb.m-t-2
+  li.breadcrumb-item = link_to 'Home', root_path
+  li.breadcrumb-item.active About
 
-h1.page-header.header-light About Startup Village
+h1.p-b-1 About Startup Village
 
 .row
   .col-sm-8
-    #about-main.about-text
+    #about-main.about-text.font-light
       p At SV.CO we are building an online University for student founders.
 
       p We believe young founders today are special. Never before in history has it been possible for so few to build products for so many. We have a unique opportunity to teach <i>everyone</i> how to build great startups, right in school and college.
@@ -28,5 +28,5 @@ h1.page-header.header-light About Startup Village
 
       p Building on our knowledge acquired from mentoring startups, ​we're now ​an online-first learning platform for first-time founders. SV.CO is the first learning platform for entrepreneurship that verifies results & rewards founders with a real degree by partnering with ​​recognised Universities.
 
-  .col-md-3.col-md-offset-1.col-sm-4
+  .col-md-3.offset-md-1.col-sm-4
     = render partial: 'about_links'

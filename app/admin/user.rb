@@ -6,6 +6,12 @@ ActiveAdmin.register User do
 
   filter :email
 
+  controller do
+    def scoped_collection
+      super.includes :mooc_student, :founder
+    end
+  end
+
   index do
     selectable_column
 

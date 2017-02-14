@@ -13,8 +13,6 @@
     = f.input :activity_type
     = f.input :reference_url, label: 'Reference URL'
     = f.input :attachment, as: :file
-    = f.input :event_status, label: 'Mark Event as:', as: :select, collection: TimelineEvent.valid_verified_status, selected: TimelineEvent.find(@startup_feedback.event_id).verified_status, include_blank: false if @startup_feedback.event_id.present?
-    = f.input :event_id, as: :hidden
 
   = f.submit
 br

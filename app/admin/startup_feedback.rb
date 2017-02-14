@@ -2,7 +2,7 @@ ActiveAdmin.register StartupFeedback do
   include DisableIntercom
 
   menu parent: 'Startups', label: 'Feedback'
-  permit_params :feedback, :reference_url, :startup_id, :send_email, :faculty_id, :activity_type, :attachment, :event_id, :event_status
+  permit_params :feedback, :reference_url, :startup_id, :send_email, :faculty_id, :activity_type, :attachment
 
   preserve_default_filters!
   filter :startup_product_name, as: :select, collection: proc { Startup.all.order(:product_name).pluck(:product_name).uniq }
@@ -11,19 +11,6 @@ ActiveAdmin.register StartupFeedback do
     def scoped_collection
       super.includes :startup, :faculty
     end
-  end
-
-  # update timeline event status if included in feedback
-  after_create do |startup_feedback|
-    next unless startup_feedback.persisted?
-
-    next unless startup_feedback.event_id.present? && startup_feedback.event_status.present?
-
-    timeline_event = TimelineEvent.find(startup_feedback.event_id)
-    next if timeline_event.verified_status == startup_feedback.event_status
-
-    timeline_event.update!(verified_status: startup_feedback.event_status)
-    TimelineEventVerificationNotificationJob.perform_later(timeline_event) if timeline_event.verified_or_needs_improvement?
   end
 
   index title: 'Startup Feedback' do

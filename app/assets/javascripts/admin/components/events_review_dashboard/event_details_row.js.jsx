@@ -81,10 +81,17 @@ class EventsReviewDashboardEventDetailsRow extends React.Component {
               }
             )}
           </div>
+          <br/>
           <div>
             <i className="fa fa-edit"/>&nbsp;
             <a href={'/admin/timeline_events/' + this.props.eventData['event_id'] + '/edit'} target='_blank'>
               Edit Event
+            </a>
+          </div>
+          <div>
+            <i className="fa fa-comment-o"/>&nbsp;
+            <a href={this.props.eventData['feedback_url']} target='_blank'>
+              Add Feedback
             </a>
           </div>
         </td>

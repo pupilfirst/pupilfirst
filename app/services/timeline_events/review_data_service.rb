@@ -1,5 +1,7 @@
 module TimelineEvents
   class ReviewDataService
+    include RoutesResolvable
+
     def initialize(batch)
       @batch = batch
     end
@@ -19,7 +21,8 @@ module TimelineEvents
           target_id: event.target_id,
           target_title: event.target&.title,
           links: event.links,
-          files: event.timeline_event_files
+          files: event.timeline_event_files,
+          feedback_url: feedback_url(event)
         }
       end
     end
@@ -28,6 +31,16 @@ module TimelineEvents
 
     def batch_timeline_events
       TimelineEvent.where(founder: @batch.founders)
+    end
+
+    def feedback_url(timeline_event)
+      url_helpers.new_admin_startup_feedback_path(
+        startup_feedback: {
+          startup_id: timeline_event.startup.id,
+          reference_url: url_helpers.startup_url(timeline_event.startup, anchor: "event-#{timeline_event.id}"),
+          event_id: timeline_event.id
+        }
+      )
     end
   end
 end

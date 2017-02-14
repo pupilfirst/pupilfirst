@@ -7,12 +7,12 @@
   title SV.CO Contact Details
   meta name="description" content="Contact the Startup Village team at help@sv.co. Mingle with the community on our Public Slack Forum. Or drop by at our campuses at Kochi and Visakhapatnam."
 
-ol.breadcrumb class="#{@sitewide_notice.present? ? 'margin-top-60' : 'margin-top-20'}"
-  li = link_to 'Home', root_path
-  li = link_to 'About', about_path
-  li.active Contact
+ol.breadcrumb.m-t-2
+  li.breadcrumb-item = link_to 'Home', root_path
+  li.breadcrumb-item = link_to 'About', about_path
+  li.breadcrumb-item.active Contact
 
-h1.page-header.header-light Contact
+h1 Contact
 
 .row
   .col-sm-8
@@ -22,57 +22,57 @@ h1.page-header.header-light Contact
         a href="#new_contact_form" <em>form</em> at the bottom of this page
         | &nbsp;can help with that!
 
-      p.margin-bottom-20
+      p
         ' Alternatively, join our #{link_to 'Public Slack Forum', about_slack_path}, to get in contact with both the
         | SV.CO team, and the community.
 
-      .row.margin-bottom-10
-        .col-md-6
-          .contact-location
-            .google-maps-iframe-container
-              iframe.contact-google-map frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/view?zoom=16&center=12.93116%2C77.63232&key=#{ENV['GOOGLE_BROWSER_KEY']}" allowfullscreen=true sandbox="allow-same-origin allow-scripts"
-            address
-              strong SV.CO
-              br
-              p
-                | SV.CO, 1<sup>st</sup> Floor, 777, JK Heritage
-                br
-                | 80ft Road, 4<sup>th</sup> Block, Koramangala,
-                br
-                | Bengaluru &mdash; 560034
+      .contact-location.content-box.m-t-1.m-b-1
+        .google-maps-iframe-container
+          iframe.contact-google-map frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/view?zoom=16&center=12.93116%2C77.63232&key=#{ENV['GOOGLE_BROWSER_KEY']}" allowfullscreen=true sandbox="allow-same-origin allow-scripts"
+        address
+          h4.font-semibold SV.CO
+          p
+            ' SV.CO, 1
+            sup st
+            | &nbsp;Floor, 777, JK Heritage
+          p
+            ' 80ft Road, 4
+            sup th
+            ' &nbsp;Block, Koramangala,
+          p
+            | Bengaluru &mdash; 560034
 
-      = simple_form_for @contact_form,
-        url: about_contact_url,
-        method: :post,
-        html: { class: 'form-horizontal' },
-        wrapper: :horizontal_form,
-        wrapper_mappings: { check_boxes: :horizontal_radio_and_checkboxes, radio_buttons: :horizontal_radio_and_checkboxes, file: :horizontal_file_input, boolean: :horizontal_boolean } do |f|
+      .row
+        .col-md-8
+          = simple_form_for @contact_form,
+            url: about_contact_url,
+            method: :post do |f|
 
-        legend Contact Form
+            h3.font-semibold Contact Form
 
-        - if f.object.errors.present?
-          .alert.alert-warning.alert-dismissable.fade.in role='alert'
-            strong There were problems with your submission.
-            | &nbsp;Please check all fields and try again.
+            - if f.object.errors.present?
+              .alert.alert-warning.alert-dismissable.fade.in role='alert'
+                strong There were problems with your submission.
+                | &nbsp;Please check all fields and try again.
 
-            - if f.object.errors[:base].present?
-              ul.m-t-1
-                - f.object.errors[:base].each do |error_message|
-                  li #{error_message}
+                - if f.object.errors[:base].present?
+                  ul.m-t-1
+                    - f.object.errors[:base].each do |error_message|
+                      li #{error_message}
 
-        = f.input :name, label: 'Your name', input_html: { maxlength: 50 }
-        = f.input :email, type: 'email', label: 'Email address', input_html: { maxlength: 50 }
-        = f.input :mobile, label: 'Mobile phone number', input_html: { maxlength: 20 }
-        = f.input :company, label: 'Company you represent', input_html: { maxlength: 50 }
-        = f.input :query_type, label: 'Type of query', as: :select, include_blank: false, collection: ContactForm::VALID_QUERY_TYPES
-        #contact-alerts.col-sm-9.col-sm-offset-3.alert.alert-warning
-        = f.input :query, as: :text, input_html: { rows: 5, maxlength: 600 }
+            = f.input :name, label: 'Your name', input_html: { maxlength: 50 }
+            = f.input :email, type: 'email', label: 'Email address', input_html: { maxlength: 50 }
+            = f.input :mobile, label: 'Mobile phone number', input_html: { maxlength: 20 }
+            = f.input :company, label: 'Company you represent', input_html: { maxlength: 50 }
+            = f.input :query_type, label: 'Type of query', as: :select, include_blank: false, collection: ContactForm::VALID_QUERY_TYPES
+            #contact-alerts.alert.alert-warning
+            = f.input :query, as: :text, input_html: { rows: 5, maxlength: 600 }
 
-        .form-group
-          .col-sm-9.col-sm-offset-3
-            = recaptcha_tags
-            = button_tag type: :submit, class: 'btn btn-primary contact-submit-button' do
-              i.fa.fa-send
-              | &nbsp;Submit
-  .col-md-3.col-md-offset-1.col-sm-4
+            .form-group
+              = recaptcha_tags
+              = button_tag type: :submit, class: 'btn btn-primary text-uppercase contact-submit-button m-t-1 m-b-2' do
+                i.fa.fa-send
+                | &nbsp;Submit
+
+  .col-md-4.col-sm-4
     = render 'about_links'

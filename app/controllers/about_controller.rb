@@ -28,6 +28,7 @@ class AboutController < ApplicationController
     @contact_form = ContactForm.new(OpenStruct.new)
     @contact_form.prepopulate!(current_founder)
     @sitewide_notice = params[:redirect_from] == 'startupvillage.in'
+    render layout: 'application_v2'
   end
 
   # POST /about/contact

@@ -59,12 +59,12 @@
 // require faculty
 // require startups
 // require timeline_events
-// require about
 // require transparency
 // require talent
 //= require v2/home
 //= require v2/batch_application
 //= require v2/resources
+//= require v2/about
 //= require v2/tour
 //= require v2/founders
 //= require v2/story

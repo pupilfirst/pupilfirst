@@ -492,7 +492,7 @@ GEM
       iniparse (~> 1.4)
     parser (2.3.1.4)
       ast (~> 2.2)
-    passenger (5.0.30)
+    passenger (5.1.2)
       rack
       rake (>= 0.8.1)
     pdf-core (0.6.1)

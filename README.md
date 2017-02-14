@@ -6,7 +6,7 @@
 
 ### Install Dependencies
 
-  *  Ruby - Use RVM to install version specified in `.ruby-version`
+  *  Ruby - Use [rbenv](https://github.com/rbenv/rbenv) to install version specified in `.ruby-version`.
 
 #### OSX
 

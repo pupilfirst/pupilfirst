@@ -103,6 +103,14 @@ ActiveAdmin.register TimelineEvent do
     head :ok
   end
 
+  member_action :get_attachment do
+    timeline_event = TimelineEvent.find(params[:id])
+    file_url = timeline_event.timeline_event_files.where(title: params[:title]).first&.file&.url
+    raise_not_found unless file_url.present?
+
+    redirect_to file_url
+  end
+
   action_item :review, only: :index do
     link_to 'Review Timeline Events', review_timeline_events_admin_timeline_events_path
   end

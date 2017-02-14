@@ -74,8 +74,8 @@ class EventsReviewDashboardEventDetailsRow extends React.Component {
           <div>
             { this.props.eventData['files'].map(function (file) {
                 return (
-                  <div key={file.file.url + file.title}>
-                    <i className="fa fa-file"/>&nbsp;<a href={file.file.url} target='_blank'>{file.title}</a>
+                  <div key={file.id + file.title}>
+                    <i className="fa fa-file"/>&nbsp;<a href={'/admin/timeline_events/' + file.timeline_event_id + '/get_attachment?title=' + file.title} target='_blank'>{file.title}</a>
                   </div>
                 )
               }

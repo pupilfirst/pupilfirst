@@ -45,15 +45,15 @@ class EventsReviewDashboardEventDetailsRow extends React.Component {
             <br/>
             {
               !this.state.showDescriptionEdit &&
-              <div>
-                <pre>"{this.state.description}"</pre>
+              <div style={{width: '260px'}}>
+                <pre style={{width: '100%', whiteSpace: 'pre-wrap'}}>"{this.state.description}"</pre>
                 <a onClick={this.toggleDescriptionForm}>Edit Description</a>
               </div>
             }
             {
               this.state.showDescriptionEdit &&
               <div>
-                <textarea type="text" style={{width: '100%', height: '50px'}} value={this.state.description} onChange={this.handleDescriptionChange}/>
+                <textarea type="text" style={{width: '260px', height: '150px'}} value={this.state.description} onChange={this.handleDescriptionChange}/>
                 <br/>
                 <a className="button" onClick={this.saveDescription}>Save</a>
               </div>

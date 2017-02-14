@@ -17,6 +17,14 @@ class EventsReviewDashboardEventBasicInfoRow extends React.Component {
             { !this.props.eventData['target_id'] &&
             <span>None</span>
             }
+            { this.props.eventData['improvement_of'] &&
+            <div>
+              <strong>Improvement of: </strong>
+              <a href={'/admin/timeline_events/' + this.props.eventData['improvement_of']['id']} target='_blank'>
+                {this.props.eventData['improvement_of_title'] + ' (' + this.props.eventData['improvement_of']['verified_status'] + ')'}
+              </a>
+            </div>
+            }
           </strong>
         </td>
 

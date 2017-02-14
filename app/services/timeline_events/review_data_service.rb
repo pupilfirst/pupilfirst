@@ -7,7 +7,7 @@ module TimelineEvents
     end
 
     def data
-      batch_timeline_events.pending.includes(:timeline_event_type, :founder, :startup, :target, :timeline_event_files).order('timeline_events.created_at').each_with_object({}) do |event, hash|
+      batch_timeline_events.pending.includes(:timeline_event_type, :founder, :startup, :target, :timeline_event_files, improvement_of: :timeline_event_type).order('timeline_events.created_at').each_with_object({}) do |event, hash|
         hash[event.id] = {
           event_id: event.id,
           title: event.title,
@@ -22,7 +22,9 @@ module TimelineEvents
           target_title: event.target&.title,
           links: event.links,
           files: event.timeline_event_files,
-          feedback_url: feedback_url(event)
+          feedback_url: feedback_url(event),
+          improvement_of: event.improvement_of,
+          improvement_of_title: event.improvement_of&.title
         }
       end
     end

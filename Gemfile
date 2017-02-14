@@ -139,6 +139,10 @@ group :development do
   gem 'web-console', '~> 3.3.0' # TODO: Restored until better_errors speeds up again.
   gem 'listen' # The Listen gem listens to file modifications and notifies you about the changes.
   gem 'rack-mini-profiler' # Middleware that displays speed badge for every html page.
+
+  # Go faster, off the Rails - Benchmarks for your whole Rails app
+  gem 'derailed_benchmarks'
+  gem 'stackprof' # Required by derailed_benchmarks.
 end
 
 group :test do

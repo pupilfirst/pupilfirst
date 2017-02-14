@@ -93,7 +93,9 @@ ActiveAdmin.register TimelineEvent do
       verified: TimelineEvent::VERIFIED_STATUS_VERIFIED
     }.fetch(params[:status].to_sym)
 
-    TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade])
+    points = params[:points].present? ? params[:points].to_i : nil
+
+    TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade], points: points)
     head :ok
   end
 

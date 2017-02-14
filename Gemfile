@@ -17,9 +17,7 @@ gem 'carrierwave_backgrounder' # Backgrounder for carrierwave.
 gem 'carrierwave-bombshelter' # Protects your carrierwave from image bombs (and such).
 
 # Required by Carrierwave to upload to S3.
-# TODO: Replace this with fog-aws when possible. Fog is a super-fat gem.
-# Make sure app will boot up in production mode afterwards. Carrierwave has trouble working with fog-aws.
-gem 'fog'
+gem 'fog-aws', require: 'fog/aws'
 
 gem 'coffee-rails', '~> 4.1.0' # Coffeescript on Rails.
 gem 'devise' # User auth library.

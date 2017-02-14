@@ -1,4 +1,41 @@
 class EventsReviewDashboardEventDetailsRow extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {description: this.props.eventData['description'], showDescriptionEdit: false};
+    this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
+    this.saveDescription = this.saveDescription.bind(this);
+    this.toggleDescriptionForm = this.toggleDescriptionForm.bind(this);
+  }
+
+  handleDescriptionChange(event) {
+    this.setState({description: event.target.value});
+  }
+
+  saveDescription() {
+    let description = this.state.description;
+    let eventId = this.props.eventData['event_id'];
+    let postUrl = '/admin/timeline_events/' + eventId + '/update_description';
+    let toggleDescripitionForm = this.toggleDescriptionForm;
+    $.post({
+      url: postUrl,
+      data: {description: description},
+      success: function () {
+        console.log('Description updated.');
+        toggleDescripitionForm();
+      },
+      beforeSend: function () {
+        event.target.innerHTML = 'Saving...'
+      },
+      error: function () {
+        alert('Failed to update description. Try again')
+      }
+    });
+  }
+
+  toggleDescriptionForm() {
+    this.setState({showDescriptionEdit: !this.state.showDescriptionEdit})
+  }
+
   render() {
     return (
       <tr>
@@ -6,18 +43,32 @@ class EventsReviewDashboardEventDetailsRow extends React.Component {
           <div>
             <strong>Description:</strong>
             <br/>
-            "{this.props.eventData['description']}"
+            {
+              !this.state.showDescriptionEdit &&
+              <div>
+                <pre>"{this.state.description}"</pre>
+                <a onClick={this.toggleDescriptionForm}>Edit Description</a>
+              </div>
+            }
+            {
+              this.state.showDescriptionEdit &&
+              <div>
+                <textarea type="text" style={{width: '100%', height: '50px'}} value={this.state.description} onChange={this.handleDescriptionChange}/>
+                <br/>
+                <a className="button" onClick={this.saveDescription}>Save</a>
+              </div>
+            }
           </div>
         </td>
         <td>
           <div>
-            {/*<strong>Attached Links: </strong>*/}
             { this.props.eventData['links'].map(function (link) {
-              return (
-                <div key={link.url + link.title}>
-                  <i className="fa fa-link"/>&nbsp;<a href={link.url} target='_blank'>{link.title}</a>
-                </div>
-              )}
+                return (
+                  <div key={link.url + link.title}>
+                    <i className="fa fa-link"/>&nbsp;<a href={link.url} target='_blank'>{link.title}</a>
+                  </div>
+                )
+              }
             )}
           </div>
           <div>
@@ -40,7 +91,8 @@ class EventsReviewDashboardEventDetailsRow extends React.Component {
       </tr>
     )
   }
-};
+}
+;
 
 EventsReviewDashboardEventDetailsRow.propTypes = {
   eventData: React.PropTypes.object

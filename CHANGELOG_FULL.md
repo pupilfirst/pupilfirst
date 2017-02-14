@@ -25,6 +25,7 @@
 - Fixed a crash that occurred when founders from earlier batches visited their dashboard page. [[Trello]](https://trello.com/c/UqeGUed9)
 - Fixed a failure of specs for payment stage by introducing `observable_redirect_to`. [[Trello]](https://trello.com/c/ufObIMyk)
 - Updated the `/jobs` route to check if logged in user had a corresponding super-admin entry to allow access. [[Trello]](https://trello.com/c/lTs9nfiQ)
+- All references to a floating header (top-menu) have been removed. [[Trello]](https://trello.com/c/G96vAaRt)
 
 ## 2017.02.06
 

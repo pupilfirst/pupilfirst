@@ -97,6 +97,12 @@ ActiveAdmin.register TimelineEvent do
     head :ok
   end
 
+  member_action :update_description, method: :post do
+    timeline_event = TimelineEvent.find(params[:id])
+    timeline_event.update!(description: params[:description])
+    head :ok
+  end
+
   action_item :review, only: :index do
     link_to 'Review Timeline Events', review_timeline_events_admin_timeline_events_path
   end

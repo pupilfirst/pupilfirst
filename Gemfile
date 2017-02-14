@@ -1,3 +1,5 @@
+ruby '2.4.0'
+
 source 'https://rubygems.org'
 
 # Required to suppress warnings about insecure :github source.
@@ -39,7 +41,7 @@ gem 'select2-rails', '~> 4.0.3'
 
 gem 'bootstrap-sass', '~> 3.3.3' # Official Sass port of Bootstrap.
 gem 'autoprefixer-rails' # Autoprefixer for Ruby and Ruby on Rails.
-gem 'simple_form', '~> 3.3.1' # Simple-form with support for Bootstrap 3.
+gem 'simple_form', '~> 3.4.0' # Simple-form with support for Bootstrap 3.
 gem 'simple_form_fancy_uploads' # simple_form custom inputs to get image/link previews with file uploads. https://github.com/apeacox/simple_form_fancy_uploads
 gem 'bootstrap_form', github: 'desheikh/rails-bootstrap-forms', branch: 'master' # TODO: Replace this with v4 branch of bootstrap-ruby/rails-bootstrap-forms See https://trello.com/c/7wUOmaeM
 
@@ -170,5 +172,3 @@ group :production do
   gem 'rails_12factor' # Makes running your Rails app easier. Based on the ideas behind 12factor.net.
   gem 'dalli'
 end
-
-ruby '2.4.0'

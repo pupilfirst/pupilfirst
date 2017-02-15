@@ -83,6 +83,12 @@ class EventsReviewDashboardEventDetailsRow extends React.Component {
           </div>
           <br/>
           <div>
+            <i className="fa fa-eye"/>&nbsp;
+            <a data-method="post" href={'/admin/users/' + this.props.eventData['user_id'] + '/impersonate?referer=/startups/' + this.props.eventData['startup_id']} target='_blank'>
+              Preview as Founder
+            </a>
+          </div>
+          <div>
             <i className="fa fa-edit"/>&nbsp;
             <a href={'/admin/timeline_events/' + this.props.eventData['event_id'] + '/edit'} target='_blank'>
               Edit Event

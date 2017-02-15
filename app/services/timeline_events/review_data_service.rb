@@ -20,8 +20,8 @@ module TimelineEvents
           feedback_url: feedback_url(event)
         }
 
-        merge_owner_details(event, hash[event.id])
-        merge_target_details(event, hash[event.id])
+        hash[event.id] = merge_owner_details(event, hash[event.id])
+        hash[event.id] = merge_target_details(event, hash[event.id])
       end
     end
 

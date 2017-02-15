@@ -6,6 +6,12 @@ ActiveAdmin.register User do
 
   filter :email
 
+  controller do
+    def scoped_collection
+      super.includes :mooc_student, :founder
+    end
+  end
+
   index do
     selectable_column
 
@@ -57,12 +63,15 @@ ActiveAdmin.register User do
   member_action :impersonate, method: :post do
     user = User.find(params[:id])
 
+    # clear any previous impersonations
+    stop_impersonating_user
+
     if can? :impersonate, User
       if user.admin_user.present?
         flash[:error] = 'You may not impersonate another admin user!'
       else
         impersonate_user(user)
-        redirect_to root_url
+        redirect_to params[:referer] || root_url
         return
       end
     else

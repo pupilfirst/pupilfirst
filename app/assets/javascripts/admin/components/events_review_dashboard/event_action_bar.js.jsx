@@ -28,7 +28,7 @@ class EventsReviewDashboardEventActionBar extends React.Component {
 
     if ( !this.state.status ) {
       this.setState({statusMissing: true});
-    } else if ( !this.state.grade && !this.state.points ) {
+    } else if ( this.state.status == 'verified' && (!this.state.grade && !this.state.points) ) {
       this.setState({gradingMissing: true});
     }
     else {
@@ -89,7 +89,9 @@ class EventsReviewDashboardEventActionBar extends React.Component {
           </label>
         </td>
         <td>
-          { this.props.targetId &&
+          { this.state.status == 'verified' &&
+          <div>
+            { this.props.targetId &&
             <div>
               <strong>Grade:</strong>
               <br/>
@@ -110,9 +112,11 @@ class EventsReviewDashboardEventActionBar extends React.Component {
               <br/>
               <span>OR</span><br/>
             </div>
+            }
+            <strong>Points:</strong><br/>
+            <input style={{width: '50px'}} type='number' value={this.state.points} onChange={ this.pointsChange }/>
+          </div>
           }
-          <strong>Points:</strong><br/>
-          <input style={{width: '50px'}} type='number' value={this.state.points} onChange={ this.pointsChange }/>
         </td>
         <td>
           <a className='button' onClick={ this.saveReview }>Save Review</a>

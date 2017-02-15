@@ -37,7 +37,7 @@ feature 'Batch Application Payment' do
 
     # User reaches coding stage.
     visit apply_continue_path
-    expect(page).to have_text('Before getting started with the coding task, please consider adding some details about your cofounders.')
+    expect(page).to have_text('Build your dream startup team now')
   end
 
   scenario 'returning applicant restarts application' do

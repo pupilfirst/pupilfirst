@@ -12,7 +12,7 @@ feature 'Cofounder addition' do
     # user signs in
     sign_in_user(batch_applicant.user, referer: apply_continue_path)
 
-    expect(page).to have_content('Before getting started with the coding task, please consider adding some details about your cofounders')
+    expect(page).to have_content('Build your dream startup team now')
 
     # TODO: Replace this with click_link when PhantomJS moves to next version. It currently doesn't render flexbox correctly:
     # See: https://github.com/ariya/phantomjs/issues/14365

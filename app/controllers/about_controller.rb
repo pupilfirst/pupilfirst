@@ -9,6 +9,7 @@ class AboutController < ApplicationController
 
   # GET /about/slack
   def slack
+    render layout: 'application_v2'
   end
 
   # GET /about/leaderboard
@@ -22,6 +23,7 @@ class AboutController < ApplicationController
   # GET /about/press-kit
   def media_kit
     @media_kit_url = 'https://drive.google.com/folderview?id=0B9--SdQuJvHpfjJiam1nTnJCNnVIYkY2NVFXWTQwbXNpWUFoQU1oc1RZSHJraG4yb2Y1cDA&usp=sharing'
+    render layout: 'application_v2'
   end
 
   # GET /about/contact

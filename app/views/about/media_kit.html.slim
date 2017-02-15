@@ -2,16 +2,16 @@
   title SV.CO Media/Press Kit
   meta name="description" content="Download a write-up of SV.CO, high quality logos, photographs of founders and team members, and pictures of our campuses at Kochi and Visakhapatnam."
 
-ol.breadcrumb.margin-top-20
-  li = link_to 'Home', root_path
-  li = link_to 'About', about_path
-  li.active Media Kit
+ol.breadcrumb.m-t-2
+  li.breadcrumb-item = link_to 'Home', root_path
+  li.breadcrumb-item = link_to 'About', about_path
+  li.breadcrumb-item.active Media Kit
 
-h1.page-header.header-light Media Kit
+h1 Media Kit
 
 .row
-  .col-sm-8
-    .about-text
+  .col-md-8
+    .about-text.font-light
       p The following media kit contains:
       ul
         li
@@ -29,9 +29,9 @@ h1.page-header.header-light Media Kit
         li
           p Product screenshots
       p
-        a class="btn btn-primary" href="#{@media_kit_url}" target="_blank"
-          span class="glyphicon glyphicon-download-alt"
-            '  Download
+        a class="btn btn-primary text-uppercase btn-with-icon" href="#{@media_kit_url}" target="_blank"
+          i.fa.fa-download
+          '  Download
 
-  .col-md-3.col-md-offset-1.col-sm-4
+  .col-md-4
     = render partial: 'about_links'

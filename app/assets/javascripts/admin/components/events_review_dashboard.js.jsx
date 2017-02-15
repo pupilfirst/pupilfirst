@@ -16,7 +16,7 @@ class EventsReviewDashboard extends React.Component {
     return (
       <div>
         <h3> Total events pending review: {Object.keys(this.state.reviewData).length}</h3>
-        <table className="index_table index">
+        <table>
           <tbody><tr><td>
           { Object.keys(this.state.reviewData).map(function (key) {
             return (

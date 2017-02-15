@@ -28,7 +28,7 @@ class EventsReviewDashboardEventActionBar extends React.Component {
 
     if ( !this.state.status ) {
       this.setState({statusMissing: true});
-    } else if ( !this.state.grade && !this.state.points ) {
+    } else if ( this.state.status == 'verified' && (!this.state.grade && !this.state.points) ) {
       this.setState({gradingMissing: true});
     }
     else {

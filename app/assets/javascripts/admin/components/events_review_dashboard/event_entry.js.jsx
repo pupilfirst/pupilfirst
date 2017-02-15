@@ -1,7 +1,7 @@
 class EventsReviewDashboardEventEntry extends React.Component {
   render() {
     return (
-      <table className="index_table index" style={{tableLayout: 'fixed', border: '1px'}}>
+      <table className="event-entry-table">
         <tbody>
           <EventsReviewDashboardEventBasicInfoRow eventData={this.props.eventData}/>
           <EventsReviewDashboardEventDetailsRow eventData={this.props.eventData}/>

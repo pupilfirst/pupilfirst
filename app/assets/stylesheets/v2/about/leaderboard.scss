@@ -1,6 +1,7 @@
-
-.leaderboard__rank {
-
+.leaderboard__date-range {
+  @include media-breakpoint-down (sm) {
+    display: block;
+  }
 }
 
 .leaderboard__rank-number {
@@ -9,7 +10,7 @@
   font-weight: bold;
   display: inline-block;
 
-  @media (max-width: $screen-xs-max) {
+  @include media-breakpoint-down (md) {
     display: block;
     width: auto;
     margin: 0 auto 5px;
@@ -23,7 +24,7 @@
   border: 1px solid #e5e5e5;
   padding: 0 5px;
 
-  @media (max-width: $screen-xs-max) {
+  @include media-breakpoint-down (md) {
     display: block;
     min-width: 50px;
     margin: 0;

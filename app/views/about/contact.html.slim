@@ -15,7 +15,7 @@ ol.breadcrumb.m-t-2
 h1 Contact
 
 .row
-  .col-sm-8
+  .col-md-8
     .contact-container
       p
         ' Send us an e-mail at #{mail_to 'help@sv.co'}, and we'll get back to you as soon as we can. The
@@ -29,10 +29,10 @@ h1 Contact
       .contact-location.content-box.m-t-1.m-b-1
         .google-maps-iframe-container
           iframe.contact-google-map frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/view?zoom=16&center=12.93116%2C77.63232&key=#{ENV['GOOGLE_BROWSER_KEY']}" allowfullscreen=true sandbox="allow-same-origin allow-scripts"
-        address
+        address.m-t-1.m-b-0
           h4.font-semibold SV.CO
           p
-            ' SV.CO, 1
+            ' 1
             sup st
             | &nbsp;Floor, 777, JK Heritage
           p
@@ -74,5 +74,5 @@ h1 Contact
                 i.fa.fa-send
                 | &nbsp;Submit
 
-  .col-md-4.col-sm-4
+  .col-md-4
     = render 'about_links'

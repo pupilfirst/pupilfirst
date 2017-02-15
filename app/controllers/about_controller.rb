@@ -16,6 +16,7 @@ class AboutController < ApplicationController
     # TODO: correct @live_batches once the test batches are cleaned up.
     @live_batches = Batch.where(batch_number: 3) # Startup.available_batches.live
     @leaderboards = leaderboards_for(@live_batches)
+    render layout: 'application_v2'
   end
 
   # GET /about/press-kit

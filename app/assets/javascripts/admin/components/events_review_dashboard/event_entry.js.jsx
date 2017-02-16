@@ -1,11 +1,13 @@
 class EventsReviewDashboardEventEntry extends React.Component {
   render() {
     return (
-      <table className="review-dashboard_event-entry-table">
+      <table className="review-dashboard_event-entry-table index">
         <tbody>
-          <EventsReviewDashboardEventBasicInfoRow eventData={this.props.eventData}/>
-          <EventsReviewDashboardEventDetailsRow eventData={this.props.eventData}/>
-          <EventsReviewDashboardEventActionBar eventId={this.props.eventData['event_id']} removeEventCB={this.props.removeEventCB} targetId={this.props.eventData['target_id']}/>
+          <tr>
+            <td><EventsReviewDashboardEventDetailsColumn eventData={this.props.eventData}/></td>
+            <td><EventsReviewDashboardEventDescriptionColumn eventData={this.props.eventData}/></td>
+            <td><EventsReviewDashboardEventActionsColumn eventData={this.props.eventData} removeEventCB={this.props.removeEventCB}/></td>
+          </tr>
         </tbody>
       </table>
     )

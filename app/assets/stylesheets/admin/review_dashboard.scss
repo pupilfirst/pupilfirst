@@ -1,3 +1,11 @@
-.event-entry-table {
+.review-dashboard_event-entry-table {
   border: 1px solid;
+}
+
+.review-dashboard_event-description {
+  font-size: 14px;
+  line-height: 25px;
+  widows: 100%;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }

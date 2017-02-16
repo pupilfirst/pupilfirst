@@ -46,7 +46,7 @@ class EventsReviewDashboardEventDetailsRow extends React.Component {
             {
               !this.state.showDescriptionEdit &&
               <div style={{width: '260px'}}>
-                <pre style={{width: '100%', whiteSpace: 'pre-wrap'}}>"{this.state.description}"</pre>
+                <div className="review-dashboard_event-description">{this.state.description}</div>
                 <a onClick={this.toggleDescriptionForm}>Edit Description</a>
               </div>
             }

@@ -1,7 +1,7 @@
 class EventsReviewDashboardEventEntry extends React.Component {
   render() {
     return (
-      <table className="event-entry-table">
+      <table className="review-dashboard_event-entry-table">
         <tbody>
           <EventsReviewDashboardEventBasicInfoRow eventData={this.props.eventData}/>
           <EventsReviewDashboardEventDetailsRow eventData={this.props.eventData}/>

@@ -6,7 +6,7 @@ class EventsReviewDashboardEventEntry extends React.Component {
           <tr>
             <td><EventsReviewDashboardEventDetailsColumn eventData={this.props.eventData}/></td>
             <td><EventsReviewDashboardEventDescriptionColumn eventData={this.props.eventData}/></td>
-            <td><EventsReviewDashboardEventActionsColumn eventData={this.props.eventData} removeEventCB={this.props.removeEventCB}/></td>
+            <td style={{width: '600px'}}><EventsReviewDashboardEventActionsColumn eventData={this.props.eventData} removeEventCB={this.props.removeEventCB}/></td>
           </tr>
         </tbody>
       </table>

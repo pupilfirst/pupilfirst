@@ -113,6 +113,22 @@ ActiveAdmin.register TimelineEvent do
     redirect_to file_url
   end
 
+  member_action :save_feedback, method: :post do
+    raise unless params[:feedback].present?
+
+    timeline_event = TimelineEvent.find(params[:id])
+    reference_url = startup_url(timeline_event.startup, anchor: "event-#{timeline_event.id}")
+
+    StartupFeedback.create!(
+      feedback: params[:feedback],
+      startup: timeline_event.startup,
+      reference_url: reference_url,
+      faculty: current_admin_user&.faculty
+    )
+
+    head :ok
+  end
+
   action_item :review, only: :index do
     link_to 'Review Timeline Events', review_timeline_events_admin_timeline_events_path
   end

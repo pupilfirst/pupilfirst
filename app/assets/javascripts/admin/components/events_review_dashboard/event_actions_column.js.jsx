@@ -1,13 +1,28 @@
 class EventsReviewDashboardEventActionsColumn extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {status: null, grade: null, points: '', statusMissing: false, gradingMissing: false};
+    this.state = {
+      status: null,
+      grade: null,
+      points: '',
+      statusMissing: false,
+      gradingMissing: false,
+      feedback: '',
+      showFeedbackForm: false,
+      feedbackMissing: false,
+      feedbackRecorded: false,
+    };
     this.statusChange = this.statusChange.bind(this);
     this.gradeChange = this.gradeChange.bind(this);
     this.pointsChange = this.pointsChange.bind(this);
     this.saveReview = this.saveReview.bind(this);
     this.radioInputId = this.radioInputId.bind(this);
     this.radioInputName = this.radioInputName.bind(this);
+    this.eventFeedbackFormId = this.eventFeedbackFormId.bind(this);
+    this.feedbackChange = this.feedbackChange.bind(this);
+    this.saveFeedback = this.saveFeedback.bind(this);
+    this.toggleFeedbackForm = this.toggleFeedbackForm.bind(this);
+    this.markFeedbackRecorded = this.markFeedbackRecorded.bind(this);
   }
 
   statusChange(event) {
@@ -69,6 +84,55 @@ class EventsReviewDashboardEventActionsColumn extends React.Component {
     return 'event-' + this.props.eventData['event_id'] + '-' + name;
   }
 
+  eventFeedbackFormId () {
+    return 'event-feedback-form-' + this.props.eventData['event_id'];
+  }
+
+  feedbackChange (value) {
+    this.setState({feedback: value, feedbackMissing: false});
+  }
+
+  markFeedbackRecorded () {
+    this.setState({feedbackRecorded: true})
+  }
+
+  saveFeedback (event) {
+    this.setState({feedbackMissing: false});
+    if (!this.state.feedback) {
+      this.setState({feedbackMissing: true});
+    } else {
+      console.log('Saving Feedback');
+      let eventId = this.props.eventData['event_id'];
+      let feedback = this.state.feedback;
+      let toggleFeedbackForm = this.toggleFeedbackForm;
+      let markFeedbackRecorded = this.markFeedbackRecorded;
+      let postUrl = '/admin/timeline_events/' + eventId + '/save_feedback';
+      $.post({
+        url: postUrl,
+        data: {feedback: feedback},
+        success: function () {
+          console.log('Feedback Saved!');
+          new PNotify({
+            title: 'Feedback Saved!',
+            text: 'Your feedback for event ' + eventId + ' was saved successfully'
+          });
+          markFeedbackRecorded();
+          toggleFeedbackForm();
+        },
+        beforeSend: function () {
+          event.target.innerHTML = 'Saving Feedback...'
+        },
+        error: function () {
+          alert('Failed to save your feedback. Try again')
+        }
+      });
+    }
+  }
+
+  toggleFeedbackForm () {
+    this.setState({showFeedbackForm: !this.state.showFeedbackForm})
+  }
+
   render () {
     return (
       <div>
@@ -78,18 +142,49 @@ class EventsReviewDashboardEventActionsColumn extends React.Component {
             Preview as Founder
           </a>
         </div><br/>
+
+
         <div>
           <i className="fa fa-edit"/>&nbsp;
           <a href={'/admin/timeline_events/' + this.props.eventData['event_id'] + '/edit'} target='_blank'>
             Edit Event
           </a>
         </div><br/>
+
+
+        { !this.state.showFeedbackForm &&
         <div>
-          <i className="fa fa-comment-o"/>&nbsp;
-          <a href={this.props.eventData['feedback_url']} target='_blank'>
-            Add Feedback
-          </a>
-        </div><br/>
+          { this.state.feedbackRecorded &&
+          <div>
+            <i className="fa fa-check-square-o"/>&nbsp;
+            <span>New Feedback Recorded</span>
+          </div>
+          }
+          { !this.state.feedbackRecorded &&
+          <div>
+            <i className="fa fa-comment-o"/>&nbsp;
+            <a onClick={ this.toggleFeedbackForm }>
+              Add Feedback
+            </a>
+          </div>
+          }
+        </div>
+        }
+
+
+        { this.state.showFeedbackForm &&
+        <div>
+          <EventsReviewDashboardTrixEditor onChange={ this.feedbackChange } value={ this.state.feedback }/>
+          <br/>
+          <a className='button' onClick={ this.saveFeedback }>Save Feedback</a>
+          <a className='button' onClick={ this.toggleFeedbackForm }>Close</a>
+          { this.state.feedbackMissing &&
+          <div style={{color: 'red'}}>Enter a feedback first!</div>
+          }
+        </div>
+        }
+
+        <br/>
         <div>
           <strong>Status:</strong>
           <br/>
@@ -106,6 +201,8 @@ class EventsReviewDashboardEventActionsColumn extends React.Component {
                    onChange={ this.statusChange }/>&nbsp;Not Accepted&nbsp;
           </label>
           <br/>
+
+
           { this.state.status == 'verified' &&
           <div>
             <br/>
@@ -131,11 +228,15 @@ class EventsReviewDashboardEventActionsColumn extends React.Component {
               <span>OR</span><br/>
             </div>
             }
+
+
             <strong>Points:</strong><br/>
             <input style={{width: '50px'}} type='number' value={this.state.points} onChange={ this.pointsChange }/>
           </div>
           }
           <br/>
+
+
           <a className='button' onClick={ this.saveReview }>Save Review</a>
           { this.state.statusMissing &&
           <div style={{color: 'red'}}>Select a status first!</div>
@@ -149,6 +250,6 @@ class EventsReviewDashboardEventActionsColumn extends React.Component {
   }
 }
 
-EventsReviewDashboardEventDetailsColumn.propTypes = {
+EventsReviewDashboardEventActionsColumn.propTypes = {
   eventData: React.PropTypes.object
 };

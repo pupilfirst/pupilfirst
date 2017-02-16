@@ -2,8 +2,8 @@ class TalentController < ApplicationController
   # GET /talent
   def index
     @skip_container = true
-
     @talent_form = TalentForm.new(OpenStruct.new)
+    render layout: 'application_v2'
   end
 
   # POST /talent/contact

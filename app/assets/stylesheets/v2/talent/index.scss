@@ -3,203 +3,213 @@
   height: auto;
   background-repeat: repeat-x;
   background-position: center top;
+}
 
-  .hero-headline {
-    font-size: 36px;
-    font-weight: 300;
-    min-height: 60px;
-    margin: 85px 0 40px;
+.talent-hero-headline {
+  font-size: 2.25rem;
+  min-height: 60px;
+  margin: 0 0 40px;
+  padding-top: 70px;
 
-    &.type {
+  @include media-breakpoint-down(md) {
+    font-size: 1.75rem;
+  }
+}
 
-      .hero-words-wrapper {
-        vertical-align: top;
-        overflow: hidden;
-        position: relative;
-        font-weight: 400;
-        margin-left: 8px;
+.talent-hero-headline__type {
+  b {
+    font-weight: $font-regular;
+    visibility: hidden;
+    display: inline;
 
-        &:after {
-          /* vertical bar */
-          content: '';
-          position: absolute;
-          right: 0;
-          top: 50%;
-          bottom: auto;
-          transform: translateY(-50%);
-          height: 90%;
-          width: 1px;
-          background-color: #000;
-        }
-        &.waiting::after {
-          animation: type-pulse 1s infinite;
-        }
-        &.selected {
-          background-color: #0089d0;
-          &:after {
-            visibility: hidden;
-          }
-          b {
-            color: #fff;
-          }
-        }
-      }
-      b {
-        font-weight: 400;
-        visibility: hidden;
-        display: inline;
-
-        &.is-visible {
-          visibility: visible;
-        }
-      }
-      i {
-        position: absolute;
-        visibility: hidden;
-        font-style: normal;
-
-        &.in {
-          position: relative;
-          visibility: visible;
-        }
-      }
-    }
-    @media (max-width: $screen-sm-max) {
-      font-size: 28px;
+    &.is-visible {
+      visibility: visible;
     }
   }
-  @keyframes type-pulse {
-    0% {
-      transform: translateY(-50%) scale(1);
-      opacity: 1;
-    }
-    40% {
-      transform: translateY(-50%) scale(0.9);
-      opacity: 0;
-    }
-    100% {
-      transform: translateY(-50%) scale(0);
-      opacity: 0;
+  i {
+    position: absolute;
+    visibility: hidden;
+    font-style: normal;
+
+    &.in {
+      position: relative;
+      visibility: visible;
     }
   }
 }
-.tab-container {
-  background-color: white;
-  border-radius: 5px;
-  box-shadow: 0 0 15px 0 rgba(0,0,0,0.15);
 
-  .nav
-  {
-    li {
-      margin: 0;
-      a {
+.hero-words-wrapper {
+  vertical-align: top;
+  overflow: hidden;
+  position: relative;
+  font-weight: $font-regular;
+  margin-left: 8px;
+
+  &:after {
+    /* vertical bar */
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+    height: 90%;
+    width: 1px;
+    background-color: #000;
+  }
+  &.waiting::after {
+    animation: type-pulse 1s infinite;
+  }
+  &.selected {
+    background-color: #0089d0;
+
+    &:after {
+      visibility: hidden;
+    }
+    b {
+      color: #fff;
+    }
+  }
+}
+
+@keyframes type-pulse {
+  0% {
+    transform: translateY(-50%) scale(1);
+    opacity: 1;
+  }
+  40% {
+    transform: translateY(-50%) scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(-50%) scale(0);
+    opacity: 0;
+  }
+}
+
+.talent-nav-tab {
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid $gray-border;
+  box-shadow: $box-shadow;
+
+  .nav {
+    background-color: $primary-background;
+    display: flex;
+
+    .talent-tab-item {
+      flex: 1 1 100%;
+      text-align: center;
+
+      .talent-tab-link {
         outline: 0;
         text-transform: uppercase;
         border-radius: 0;
-        border-right: 1px solid #dddddd;
+        border-right: 1px solid $gray-border;
         padding: 15px 15px;
         margin: 0;
-        background-color: #F9F9F9;
 
-        .tab-icon {
-          opacity: 0.5;
-          height: 40px;
-          width: 40px;
-          background-size: contain;
-          display: inline-block;
-          vertical-align: middle;
-          margin-right: 10px;
-          background-repeat: no-repeat;
+        &:focus, &:hover {
+          background-color: white;
+          border-top-color: white;
+          border-left-color: white;
 
-          &.acquihire-team-icon {
-            background-image: asset-url("talent/Acquihire-teams-icon.svg");
-          }
-          &.hire-founders-icon {
-            background-image: asset-url("talent/Hire-founders-icon.svg");
-          }
-          &.invest-in-startups-icon {
-            background-image: asset-url("talent/Invest-in-stratups-icon.svg");
-          }
-          &.accelerate-icon {
-            background-image: asset-url("talent/Accelerate-icon.svg");
-          }
-          @media (max-width: $screen-xs-max) {
-            margin: 0;
-          }
-          @media (min-width: $screen-sm-min) and (max-width: $screen-md-max) {
-            width: 30px;
-            height: 30px;
-            display: block;
-            margin: 0 auto 10px;
+          .talent-tab-icon {
+            opacity: 1;
           }
         }
-        @media (max-width: $screen-sm-max) {
-          border-bottom: 1px solid #ddd;
-          font-size: 12px;
+
+        &.active {
+          background-color: white;
+          border-top-color: white;
+          border-left-color: white;
+
+          .talent-tab-icon {
+            opacity: 1;
+          }
+        }
+        @include media-breakpoint-down(lg) {
+          font-size: 0.75rem;
+        }
+        @include media-breakpoint-between(sm, md) {
+          font-size: 0.5rem;
         }
       }
       &:last-child a {
         border-right-color: white;
       }
-      &.active {
-        a, a:focus, a:hover {
-          background-color: white;
-          border-top-color: white;
-          border-left-color: white;
-
-          .tab-icon {
-            opacity: 1;
-          }
-          @media (max-width: $screen-xs-max) {
-            border-bottom-color: white;
-          }
-        }
-      }
-      @media (max-width: $screen-xs-max) {
-        width: 25%;
-        float: left;
-      }
-    }
-  }
-  .talent-tab-content {
-    padding: 30px;
-
-    h2 {
-      font-size: 22px;
-      line-height: 30px;
-      margin: 5px 0 20px;
-      font-weight: normal;
-    }
-    p {
-      font-size: 16px;
-      line-height: 28px;
-    }
-    @media (max-width: $screen-xs-max) {
-      text-align: center;
     }
   }
 }
+
+.talent-tab-icon {
+  opacity: 0.5;
+  height: 40px;
+  width: 40px;
+  background-size: contain;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 10px;
+  background-repeat: no-repeat;
+
+  &.acquihire-team-icon {
+    background-image: asset-url("talent/Acquihire-teams-icon.svg");
+  }
+  &.hire-founders-icon {
+    background-image: asset-url("talent/Hire-founders-icon.svg");
+  }
+  &.invest-in-startups-icon {
+    background-image: asset-url("talent/Invest-in-stratups-icon.svg");
+  }
+  &.accelerate-icon {
+    background-image: asset-url("talent/Accelerate-icon.svg");
+  }
+  @include media-breakpoint-down(sm) {
+    margin: 0;
+  }
+  @include media-breakpoint-between(sm, md) {
+    width: 30px;
+    height: 30px;
+    display: block;
+    margin: 0 auto 10px;
+  }
+}
+
+.talent-tab-content {
+  padding: 30px;
+
+  p {
+    font-size: 16px;
+    line-height: 28px;
+  }
+  @include media-breakpoint-down(sm) {
+    text-align: center;
+  }
+}
+
+.talent-tab-content__header {
+  line-height: 1.4;
+}
+
 .talent-video-playlist, .testimonial-video {
   width: 100%;
   height: 330px;
   box-shadow: 0 0 15px 0 rgba(0,0,0,0.15);
   border: 5px solid #ffffff;
 
-  @media (max-width: $screen-xs-max) {
+  @include media-breakpoint-down(sm) {
     height: auto;
   }
 }
-.graduates-join {
-  margin-top: 20px;
-}
+
 .company-slide {
-  margin: 45px 1px 45px 0;
+  margin: 45px 1px 60px 0;
 
   .slide-item {
     padding: 0 40px 10px;
     min-height: 275px;
     outline: none;
-    border-right: 1px solid #DEDEDE;
+    border-right: 1px solid $gray-border;
 
     .company-logo {
       display:flex;
@@ -219,15 +229,15 @@
       font-weight: 300;
       line-height: 28px;
     }
-    @media (max-width: $screen-xs-max) {
+    @include media-breakpoint-down(sm) {
       border-right-width: 0px;
     }
   }
 }
+
 .talkto-founders {
   background-color: rgba(246,246,246,0.75);
-  border-top: 1px solid #E4E4E4;
-  padding: 20px 0;
+  border-top: 1px solid $gray-border;
 
   h3 {
     font-size: 18px;
@@ -239,9 +249,10 @@
       display: block;
     }
   }
+
   .talks-ways-container {
     background-color: white;
-    border: 1px solid #EAEAEA;
+    border: 1px solid $gray-border;
     border-radius: 10px;
     max-width: 960px;
     padding: 25px 50px;
@@ -265,23 +276,23 @@
       &.broadcast-icon {
         background-image: asset-url("talent/broadcast-icon.svg");
       }
-      @media (max-width: $screen-xs-max) {
+      @include media-breakpoint-down(sm) {
         margin-bottom: 15px;
       }
     }
     .talks-ways-section {
-        padding-bottom: 15px;
-        padding-top: 25px;
+      padding-bottom: 15px;
+      padding-top: 25px;
 
-        @media (max-width: $screen-xs-max) {
-          &:first-child {
-            border-bottom: 1px solid #ddd;
-          }
+      @include media-breakpoint-down(sm) {
+        &:first-child {
+          border-bottom: 1px solid #ddd;
         }
+      }
     }
+
     .talks-ways-content {
       h4 {
-        color: #0089D0;
         font-size: 18px;
         margin-top: 0;
       }
@@ -291,52 +302,68 @@
         font-size: 14px;
         line-height: 23px;
       }
-      @media (max-width: $screen-xs-max) {
+      @include media-breakpoint-down(sm) {
         text-align: center;
       }
     }
   }
 }
+
+.talks-ways-section__box {
+  display: flex;
+  text-align: left;
+  align-items: center;
+
+  @include media-breakpoint-down(sm) {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
 .testimonial-slide-item {
   margin-top: 55px;
   outline: none;
 }
 .testimonial-container {
   background-color: rgba(254,245,230,0.25);
-  padding: 20px 0;
   border: 1px solid #F1DAB4;
   border-width: 1px 0;
+}
 
-  .testimonial-head {
-    border-left: 3px solid #0089D0;
-    padding-left: 15px;
-    margin-top: 20px;
+.testimonial-head {
+  border-left: 3px solid #0089D0;
+  padding-left: 15px;
+  margin-top: 20px;
 
-    h2 {
-      font-size: 30px;
-      line-height: 21px;
-      margin: 0 0 15px;
+  h2 {
+    font-size: 30px;
+    line-height: 21px;
+    margin: 0 0 15px;
 
-      @media (max-width: $screen-xs-max) {
-        font-size: 24px;
-        line-height: 25px;
-        margin: 0 0 10px;
-      }
-    }
-    .role {
-      display: block;
-      font-size: 16px;
-      font-style: italic;
-      line-height: 15px;
+    @include media-breakpoint-down(sm) {
+      font-size: 24px;
+      line-height: 25px;
+      margin: 0 0 10px;
     }
   }
-  .testimonial-quote {
-    font-size: 21px;
-    line-height: 37px;
+  .role {
+    display: block;
+    font-size: 16px;
     font-style: italic;
-    padding: 50px 25px 0 15px;
+    line-height: 15px;
   }
 }
+
+.testimonial-quote {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  padding: 30px 25px 0 15px;
+
+  @include media-breakpoint-down(sm) {
+    font-size: 1rem;
+  }
+}
+
 .graduate-subhead {
   font-size: 26px;
   color: #7F7F7F;
@@ -375,36 +402,11 @@
     top: 135px;
     transform: translateX(-50%);
   }
-  @media (max-width: $screen-xs-max) {
+  @include media-breakpoint-down(sm) {
     font-size: 25px;
   }
 }
-.talent-action-btn {
-  border-radius: 30px;
-  font-size: 15px;
-  letter-spacing: 0.05em;
-  font-weight: normal;
-  margin: 20px 0;
-  padding: 15px 30px;
-  outline: 0;
-  display: inline-block;
-  box-shadow: 0 0 10px 0 rgba(0,0,0,0.15);
 
-  &:active, &:focus {
-    outline: 0 !important;
-  }
-
-  &.white-action {
-    background-color: white;
-    border: 1px solid #0089D0;
-    color: #0089D0;
-  }
-  &.green-action {
-    background-color: #499E43;
-    border: 1px solid #2F8829;
-    color: white;
-  }
-}
 .slick-dots {
   li {
     margin: 0 3px;
@@ -482,7 +484,7 @@
       margin: auto;
       max-width: 650px;
 
-      @media (max-width: $screen-xs-max) {
+      @include media-breakpoint-down(sm) {
         text-align: left;
       }
     }
@@ -526,7 +528,7 @@
         left: 50%;
         transform: translateX(-50%);
 
-        @media (max-width: $screen-xs-max) {
+        @include media-breakpoint-down(sm) {
           text-align: center;
           font-size: 15px;
           width: 230px;
@@ -555,7 +557,7 @@
         }
       }
 
-      @media (max-width: $screen-xs-max) {
+      @include media-breakpoint-down(sm) {
         text-align: left;
       }
     }

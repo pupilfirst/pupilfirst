@@ -6,101 +6,101 @@
 
 .talent-hero
   .container
-    .hero-intro.text-center
-      h1.hero-headline.letters.type
+    .hero-intro.text-xs-center
+      h1.talent-hero-headline.letters.talent-hero-headline__type
         span Discover Great Startups for your
         span.hero-words-wrapper
           b.is-visible Investment Fund
           b Company
           b Accelerator
-    .tab-container
+    .tab-container.talent-nav-tab
       ul.nav.nav-tabs.nav-justified role="tablist"
-        li.active role="presentation"
-          a aria-controls="acquihire-teams" data-toggle="tab" href="#acquihire-teams" role="tab"
-            .tab-icon.acquihire-team-icon
-            span.hidden-xs
+        li.nav-item.talent-tab-item role="presentation"
+          a.nav-link.talent-tab-link.active aria-controls="acquihire-teams" data-toggle="tab" href="#acquihire-teams" role="tab"
+            .talent-tab-icon.acquihire-team-icon
+            span.hidden-xs-down
               | Acquihire Teams
-        li role="presentation"
-          a aria-controls="hire-founders" data-toggle="tab" href="#hire-founders" role="tab"
-            .tab-icon.hire-founders-icon
-            span.hidden-xs
+        li.nav-item.talent-tab-item role="presentation"
+          a.nav-link.talent-tab-link aria-controls="hire-founders" data-toggle="tab" href="#hire-founders" role="tab"
+            .talent-tab-icon.hire-founders-icon
+            span.hidden-xs-down
               | Hire Founders
-        li role="presentation"
-          a aria-controls="invest-in-startups" data-toggle="tab" href="#invest-in-startups" role="tab"
-            .tab-icon.invest-in-startups-icon
-            span.hidden-xs
+        li.nav-item.talent-tab-item role="presentation"
+          a.nav-link.talent-tab-link aria-controls="invest-in-startups" data-toggle="tab" href="#invest-in-startups" role="tab"
+            .talent-tab-icon.invest-in-startups-icon
+            span.hidden-xs-down
               | Invest in startups
-        li role="presentation"
-          a aria-controls="build-startup-pipeline" data-toggle="tab" href="#build-startup-pipeline" role="tab"
-            .tab-icon.accelerate-icon
-            span.hidden-xs
+        li.nav-item.talent-tab-item role="presentation"
+          a.nav-link.talent-tab-link aria-controls="build-startup-pipeline" data-toggle="tab" href="#build-startup-pipeline" role="tab"
+            .talent-tab-icon.accelerate-icon
+            span.hidden-xs-down
               | Build a startup pipeline
 
       .tab-content.talent-tab-content
         #acquihire-teams.tab-pane.fade.in.active role="tabpanel"
           .row
-            .col-md-7
+            .col-lg-7.col-md-12
               iframe.talent-video-playlist src="https://www.youtube.com/embed/SWR95X-lmz4?list=PLrvZyo34miDJt-m4a0WKUPqMvnmJ-9hVO&enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
-            .col-md-5
-              h2
+            .col-lg-5.col-md-12
+              h3.talent-tab-content__header.font-regular.m-y-1
                 ' Companies like <strong>Tally</strong>
                 | have acquired founding teams from SV.CO.
-              p.font-weight-300
+              p.font-light
                 ' Hiring a team brings you their combined strengths into your company.
                 ' Our teams usually have full-stack developers, mobile&#8209;focused engineers and data analysts.
                 ' The best part? All of their work is public #{link_to 'through our timelines.', startups_path}
-              button.btn.talent-action-btn.white-action.text-uppercase data-selection='acquihiring_teams'
+              button.btn.btn-lg.btn-primary.talent-action-btn.text-uppercase.m-y-2 data-selection='acquihiring_teams'
                 | Acquihire Teams
 
         #hire-founders.tab-pane.fade.in role="tabpanel"
           .row
-            .col-md-7
+            .col-lg-7.col-md-12
               iframe.talent-video-playlist src="https://www.youtube.com/embed/cqyOZI4AopI?list=PLrvZyo34miDL8J63zyVLNonPjUK8Q-m6U&enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
-            .col-md-5
-              h2
+            .col-lg-5.col-md-12
+              h3.talent-tab-content__header.font-regular.m-y-1
                 ' Companies like <strong>Goqii, Ola &amp; Freecharge</strong>
                 | have hired great founders from SV.CO.
-              p.font-weight-300
+              p.font-light
                 ' We work with some of the best young founders in India.
                 ' Hire Android, iOS &amp; Backend engineers who have built
                 ' <em>real products</em> and have industry know&#8209;how. We also
                 ' try to match founders&#8217; deep interests with an industry sector
                 ' so you get people who are deeply passionate about the work
                 | you do.
-              button.btn.talent-action-btn.white-action.text-uppercase data-selection='hiring_founders'
+              button.btn.btn-lg.btn-primary.talent-action-btn.m-y-2.text-uppercase data-selection='hiring_founders'
                 | Hire Founders
         #invest-in-startups.tab-pane.fade.in role="tabpanel"
           .row
-            .col-md-7
+            .col-lg-7.col-md-12
               iframe.talent-video-playlist src="https://www.youtube.com/embed/QmavQDI3SV4?list=PLrvZyo34miDIszuU6tptnX5coYUkWVcQi&enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
-            .col-md-5
-              h2
+            .col-lg-5.col-md-12
+              h3.talent-tab-content__header.font-regular.m-y-1
                 ' <strong>Fin, Reckone</strong> and <strong>iTraveller</strong>
                 | have been funded by amazing investors who are SV.CO partners.
-              p.font-weight-300
+              p.font-light
                 ' If you're an angel or seed investor, sign up with us to get access to budding startups.
                 | We'll put you in touch early and you can interact with them even as they build their products.
-              button.btn.talent-action-btn.white-action.text-uppercase data-selection='investing_in_startups'
+              button.btn.btn-lg.btn-primary.talent-action-btn.m-y-2.text-uppercase data-selection='investing_in_startups'
                 | Invest in Startups
         #build-startup-pipeline.tab-pane.fade.in role="tabpanel"
           .row
-            .col-md-7
+            .col-lg-7.col-md-12
               iframe.talent-video-playlist src="https://www.youtube.com/embed/vjDdSdfitKY?enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
-            .col-md-5
-              h2
+            .col-lg-5.col-md-12
+              h3.talent-tab-content__header.font-regular.m-y-1
                 ' Startups like
                 ' <strong>Profoundis</strong>
                 ' go on to join SV.CO&#8217;s Partner Accelerators.
-              p.font-weight-300
+              p.font-light
                 ' If you're an accelerator based in India, get access to our startups to build a
                 ' strong pipeline of great companies. You can subscribe to our themed batches like
                 | <em>SaaS</em> or <em>FinTech</em> and get early updates on products our founders are building.
-              button.btn.talent-action-btn.white-action.text-uppercase data-selection='accelerating_startups'
+              button.btn.btn-lg.btn-primary.talent-action-btn.m-y-2.text-uppercase data-selection='accelerating_startups'
                 | Build Startup Pipeline
 
-.graduates-join.text-center.clearfix
+.graduates-join.m-t-3.text-xs-center.clearfix
   .container
-    h2.text-center.font-weight-300.graduate-subhead
+    h2.text-xs-center.font-light.graduate-subhead
       span.graduate-subhead-icon.graduates-join-icon
       | Our Graduates Join
     .company-slide
@@ -168,106 +168,112 @@
             ' SV incubate, Fin Robotics has raised Series A funding from Kalaari Capital, an early&#8209;stage,
             | technology&#8209;focused venture capital firm.
 
-.talkto-founders.text-center
+.talkto-founders.text-xs-center.p-y-3
   .container
-    h2.text-center.font-weight-300.graduate-subhead
+    h2.text-xs-center.font-light.graduate-subhead
       span.graduate-subhead-icon.talkto-graduates-icon
       | Talk to Our Founders Early
     h3
       ' Interact with our batch founders &amp; identify great talent
       span.font-weight-400 even while our program is ongoing.
+
     .talks-ways-container
       .row
-        .col-md-6.talks-ways-section
-          .row
+        .col-lg-6.talks-ways-section
+          .row.talks-ways-section__box
             .col-md-3.col-sm-3.ways-icon.faculty-join-icon
-            .col-md-9.col-sm-9.text-left.talks-ways-content
-              h4
+            .col-md-9.col-sm-9.talks-ways-content
+              h4.light-secondary.font-regular
                 | Join as SV.CO Faculty
               p
                 ' A half-hour per week commitment to our batch.
                 | Founders send you office hour requests with topics they'd like to discuss about.
 
-        .col-md-6.talks-ways-section
-          .row
+        .col-lg-6.talks-ways-section
+          .row.talks-ways-section__box
             .col-md-3.col-sm-3.ways-icon.broadcast-icon
-            .col-md-9.col-sm-9.text-left.talks-ways-content
-              h4
+            .col-md-9.col-sm-9.talks-ways-content
+              h4.light-secondary.font-regular
                 | Broadcast to our Batch Live
               p
                 ' Present a topic to our Batch or be part of an AMA session with interesting questions from our young
                 | founders.
-    button.btn.talent-action-btn.green-action.text-uppercase data-selection='joining_svco_as_faculty'
+    button.btn.btn-lg.btn-primary.talent-action-btn.m-t-2.text-uppercase data-selection='joining_svco_as_faculty'
       | Join as SV.CO Faculty
-.testimonial-container
+
+.testimonial-container.p-y-3
   .container
-    h2.text-center.font-weight-300.graduate-subhead
+    h2.text-xs-center.font-light.graduate-subhead
       span.graduate-subhead-icon.testimonial-icon
       | What Our Partners Say
+
     .testimonial-carousel.owl-theme
       .testimonial-slide-item
         div
-          .col-md-5
+          .col-lg-5.col-md-12
             .testimonial-head
-              h2.font-weight-300
+              h2
                 | Harish Sivaramakrishnan
-              span.role.font-weight-300
+              span.role.font-light
                 | VP of Design, Snapdeal
-            p.testimonial-quote.font-weight-300
+            p.testimonial-quote.font-light.m-b-1
               ' &#8220;Budding the idea of entrepreneurship right when they are in college,
               ' working with real products that touch customers is super valuable,
               ' it's the need of the hour and I'm personally very excited to see what's going to
               | come out of all these young people.&#8221;
-          .col-md-7
+          .col-lg-7.col-md-12
             iframe.testimonial-video src="https://www.youtube.com/embed/ut-J7cuQpzI?enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+
       .testimonial-slide-item
         div
-          .col-md-5
+          .col-lg-5.col-md-12
             .testimonial-head
-              h2.font-weight-300
+              h2
                 | Vinod Malhotra
-              span.role.font-weight-300
+              span.role.font-light
                 | Chief of R&amp;D, Tally Solutions
-            p.testimonial-quote.font-weight-300
+            p.testimonial-quote.font-light.m-b-1
               ' &#8220;Really impressed with the program that Startup Village is running, I would say
               | it's very admirable, because if you look ahead what is going to drive this country forward is innovation.&#8221;
-          .col-md-7
+          .col-lg-7.col-md-12
             iframe.testimonial-video src="https://www.youtube.com/embed/qEZ1RamKt6k?enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+
       .testimonial-slide-item
         div
-          .col-md-5
+          .col-lg-5.col-md-12
             .testimonial-head
-              h2.font-weight-300
+              h2
                 | Amit Saini
-              span.role.font-weight-300
+              span.role.font-light
                 | Director of Engineering, Ola
-            p.testimonial-quote.font-weight-300
+            p.testimonial-quote.font-light.m-b-1
               ' &#8220;When we got hold of Startup Village, we were very much excited and we found
               | a great talent pool. A very exciting day for us!&#8221;
 
-          .col-md-7
+          .col-lg-7.col-md-12
             iframe.testimonial-video src="https://www.youtube.com/embed/z2e5o5ftgRc?enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+
       .testimonial-slide-item
         div
-          .col-md-5
+          .col-lg-5.col-md-12
             .testimonial-head
-              h2.font-weight-300
+              h2
                 | Sachin Janghel
-              span.role.font-weight-300
+              span.role.font-light
                 | CTO, GOQII
-            p.testimonial-quote.font-weight-300
+            p.testimonial-quote.font-light.m-b-1
               ' &#8220;I'm really excited to be here and what I found here was really fascinating people with lots
               | of talent who are trying to solve real problems. I think what Startup Village is doing is really great.&#8221;
 
-          .col-md-7
-
+          .col-lg-7.col-md-12
             iframe.testimonial-video src="https://www.youtube.com/embed/jiZs9BqC8vw?enablejsapi=1" frameborder="0" allowfullscreen="allowfullscreen" sandbox="allow-same-origin allow-scripts"
+
 .footer-action
   .container
-    .footer-action-box.text-center
-      h2.font-weight-300
+    .footer-action-box.text-xs-center
+      h2
         ' We're trying to build a new generation of product founders right in college.
         | It's the first of its kind in India. Partner with us early!
 
-      button.btn.talent-action-btn.green-action.text-uppercase
+      button.btn.btn-lg.btn-primary.talent-action-btn.m-y-2.green-action.text-uppercase
         | Partner with SV.CO

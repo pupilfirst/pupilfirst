@@ -4,7 +4,7 @@ describe Startups::PerformanceService do
   subject { described_class.new }
   include ActiveSupport::Testing::TimeHelpers
 
-  let!(:batch) { create :batch, :with_startups, start_date: 12.days.ago }
+  let!(:batch) { create :batch, :with_startups, start_date: 15.days.ago }
 
   POINTS_LAST_WEEK = [10, 200, 210, 210, 240, 280, 500, 1000].freeze
   POINTS_TWO_WEEKS_BACK = [100, 200, 300, 400].freeze

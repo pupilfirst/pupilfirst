@@ -1,13 +1,28 @@
-class EventsReviewDashboardEventActionBar extends React.Component {
+class EventsReviewDashboardEventActionsColumn extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {status: null, grade: null, points: '', statusMissing: false, gradingMissing: false};
+    this.state = {
+      status: null,
+      grade: null,
+      points: '',
+      statusMissing: false,
+      gradingMissing: false,
+      feedback: '',
+      showFeedbackForm: false,
+      feedbackMissing: false,
+      feedbackRecorded: false,
+    };
     this.statusChange = this.statusChange.bind(this);
     this.gradeChange = this.gradeChange.bind(this);
     this.pointsChange = this.pointsChange.bind(this);
     this.saveReview = this.saveReview.bind(this);
     this.radioInputId = this.radioInputId.bind(this);
     this.radioInputName = this.radioInputName.bind(this);
+    this.eventFeedbackFormId = this.eventFeedbackFormId.bind(this);
+    this.feedbackChange = this.feedbackChange.bind(this);
+    this.saveFeedback = this.saveFeedback.bind(this);
+    this.toggleFeedbackForm = this.toggleFeedbackForm.bind(this);
+    this.markFeedbackRecorded = this.markFeedbackRecorded.bind(this);
   }
 
   statusChange(event) {
@@ -34,7 +49,7 @@ class EventsReviewDashboardEventActionBar extends React.Component {
     else {
       console.log('Saving Review...');
       this.setState({statusMissing: false, gradingMissing: false});
-      let eventId = this.props.eventId;
+      let eventId = this.props.eventData['event_id'];
       let status = this.state.status;
       let grade = this.state.grade;
       let points = this.state.points;
@@ -62,17 +77,115 @@ class EventsReviewDashboardEventActionBar extends React.Component {
   }
 
   radioInputId(name) {
-    return name + '-' + this.props.eventId;
+    return name + '-' + this.props.eventData['event_id'];
   }
 
   radioInputName(name) {
-    return 'event-' + this.props.eventId + '-' + name;
+    return 'event-' + this.props.eventData['event_id'] + '-' + name;
   }
 
-  render() {
+  eventFeedbackFormId () {
+    return 'event-feedback-form-' + this.props.eventData['event_id'];
+  }
+
+  feedbackChange (value) {
+    this.setState({feedback: value, feedbackMissing: false});
+  }
+
+  markFeedbackRecorded () {
+    this.setState({feedbackRecorded: true})
+  }
+
+  saveFeedback (event) {
+    this.setState({feedbackMissing: false});
+    if (!this.state.feedback) {
+      this.setState({feedbackMissing: true});
+    } else {
+      console.log('Saving Feedback');
+      let eventId = this.props.eventData['event_id'];
+      let feedback = this.state.feedback;
+      let toggleFeedbackForm = this.toggleFeedbackForm;
+      let markFeedbackRecorded = this.markFeedbackRecorded;
+      let postUrl = '/admin/timeline_events/' + eventId + '/save_feedback';
+      $.post({
+        url: postUrl,
+        data: {feedback: feedback},
+        success: function () {
+          console.log('Feedback Saved!');
+          new PNotify({
+            title: 'Feedback Saved!',
+            text: 'Your feedback for event ' + eventId + ' was saved successfully'
+          });
+          markFeedbackRecorded();
+          toggleFeedbackForm();
+        },
+        beforeSend: function () {
+          event.target.innerHTML = 'Saving Feedback...'
+        },
+        error: function () {
+          alert('Failed to save your feedback. Try again')
+        }
+      });
+    }
+  }
+
+  toggleFeedbackForm () {
+    this.setState({showFeedbackForm: !this.state.showFeedbackForm})
+  }
+
+  render () {
     return (
-      <tr>
-        <td colSpan='2'>
+      <div>
+        <div>
+          <i className="fa fa-eye"/>&nbsp;
+          <a data-method="post" href={'/admin/users/' + this.props.eventData['user_id'] + '/impersonate?referer=/startups/' + this.props.eventData['startup_id']} target='_blank'>
+            Preview as Founder
+          </a>
+        </div><br/>
+
+
+        <div>
+          <i className="fa fa-edit"/>&nbsp;
+          <a href={'/admin/timeline_events/' + this.props.eventData['event_id'] + '/edit'} target='_blank'>
+            Edit Event
+          </a>
+        </div><br/>
+
+
+        { !this.state.showFeedbackForm &&
+        <div>
+          { this.state.feedbackRecorded &&
+          <div>
+            <i className="fa fa-check-square-o"/>&nbsp;
+            <span>New Feedback Recorded</span>
+          </div>
+          }
+          { !this.state.feedbackRecorded &&
+          <div>
+            <i className="fa fa-comment-o"/>&nbsp;
+            <a onClick={ this.toggleFeedbackForm }>
+              Add Feedback
+            </a>
+          </div>
+          }
+        </div>
+        }
+
+
+        { this.state.showFeedbackForm &&
+        <div>
+          <EventsReviewDashboardTrixEditor onChange={ this.feedbackChange } value={ this.state.feedback }/>
+          <br/>
+          <a className='button' onClick={ this.saveFeedback }>Save Feedback</a>
+          <a className='button' onClick={ this.toggleFeedbackForm }>Close</a>
+          { this.state.feedbackMissing &&
+          <div style={{color: 'red'}}>Enter a feedback first!</div>
+          }
+        </div>
+        }
+
+        <br/>
+        <div>
           <strong>Status:</strong>
           <br/>
           <label htmlFor={ this.radioInputId('verified') }>
@@ -87,11 +200,13 @@ class EventsReviewDashboardEventActionBar extends React.Component {
             <input type='radio' id={ this.radioInputId('not_accepted') } value='not_accepted' name={ this.radioInputName('status') }
                    onChange={ this.statusChange }/>&nbsp;Not Accepted&nbsp;
           </label>
-        </td>
-        <td>
+          <br/>
+
+
           { this.state.status == 'verified' &&
           <div>
-            { this.props.targetId &&
+            <br/>
+            { this.props.eventData['target_id'] &&
             <div>
               <strong>Grade:</strong>
               <br/>
@@ -113,12 +228,15 @@ class EventsReviewDashboardEventActionBar extends React.Component {
               <span>OR</span><br/>
             </div>
             }
+
+
             <strong>Points:</strong><br/>
             <input style={{width: '50px'}} type='number' value={this.state.points} onChange={ this.pointsChange }/>
           </div>
           }
-        </td>
-        <td>
+          <br/>
+
+
           <a className='button' onClick={ this.saveReview }>Save Review</a>
           { this.state.statusMissing &&
           <div style={{color: 'red'}}>Select a status first!</div>
@@ -126,15 +244,12 @@ class EventsReviewDashboardEventActionBar extends React.Component {
           { this.state.gradingMissing &&
           <div style={{color: 'red'}}>Specify grade or point!</div>
           }
-        </td>
-      </tr>
+        </div>
+      </div>
     )
   }
 }
-;
 
-EventsReviewDashboardEventActionBar.propTypes = {
-  eventId: React.PropTypes.number,
-  targetId: React.PropTypes.number,
-  removeEventCB: React.PropTypes.func
+EventsReviewDashboardEventActionsColumn.propTypes = {
+  eventData: React.PropTypes.object
 };

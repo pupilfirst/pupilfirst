@@ -15,17 +15,23 @@ module TimelineEvents
       @new_status = status
 
       case @new_status
-        when TimelineEvent::VERIFIED_STATUS_VERIFIED then mark_verified
-        when TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT then mark_needs_improvement
-        when TimelineEvent::VERIFIED_STATUS_NOT_ACCEPTED then mark_not_accepted
-        when TimelineEvent::VERIFIED_STATUS_PENDING then mark_pending
-        else raise 'Unexpected status specified!'
+        when TimelineEvent::VERIFIED_STATUS_VERIFIED
+          mark_verified
+        when TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT
+          mark_needs_improvement
+        when TimelineEvent::VERIFIED_STATUS_NOT_ACCEPTED
+          mark_not_accepted
+        when TimelineEvent::VERIFIED_STATUS_PENDING
+          mark_pending
+        else
+          raise 'Unexpected status specified!'
       end
 
       TimelineEventVerificationNotificationJob.perform_later @timeline_event
 
       [@timeline_event, applicable_points]
     end
+
     # rubocop:enable Metrics/CyclomaticComplexity
 
     private
@@ -48,42 +54,44 @@ module TimelineEvents
     def mark_not_accepted
       TimelineEvent.transaction do
         @timeline_event.mark_not_accepted!
-        reset_karma_points
       end
     end
 
     def mark_pending
       TimelineEvent.transaction do
         @timeline_event.revert_to_pending!
-        reset_karma_points
       end
     end
 
     def update_karma_points
       return unless @points.present? || points_for_target.present?
-
-      reset_karma_points
       add_karma_points
     end
 
-    def reset_karma_points
-      KarmaPoint.where(source: @timeline_event).delete_all
-      remove_previous_points_for_target if @target.present?
-    end
-
-    def remove_previous_points_for_target
+    def previous_points_for_target
       founder = @timeline_event.founder
       previous_target_timeline_events = @target.founder_role? ? @target.timeline_events.where(founder: founder) : @target.timeline_events.where(startup: founder.startup)
-      KarmaPoint.where(source: previous_target_timeline_events).delete_all
+      KarmaPoint.where(source: previous_target_timeline_events).sum(:points)
+    end
+
+    def points_for_new_status
+      if @points.present?
+        @points
+      else
+        applicable_points > previous_points_for_target ? applicable_points - previous_points_for_target : 0
+      end
     end
 
     def add_karma_points
+      points = points_for_new_status
+      return if points.zero?
+
       KarmaPoint.create!(
         source: @timeline_event,
         founder: founder,
         startup: @timeline_event.startup,
         activity_type: "Added a new Timeline event - #{@timeline_event.title}",
-        points: applicable_points
+        points: points
       )
     end
 
@@ -93,16 +101,15 @@ module TimelineEvents
 
     # TODO: Clean this up!
     # rubocop:disable Metrics/CyclomaticComplexity
-    def applicable_points
-      return @points if @points.present?
-      return nil if @points&.empty?
 
-      return nil unless @new_status.in?([TimelineEvent::VERIFIED_STATUS_VERIFIED, TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT]) && points_for_target.present?
+    def applicable_points
+      return 0 unless @new_status.in?([TimelineEvent::VERIFIED_STATUS_VERIFIED, TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT]) && points_for_target.present?
 
       return points_for_target unless @grade.present? && @new_status == TimelineEvent::VERIFIED_STATUS_VERIFIED
 
       points_for_target * grade_multiplier
     end
+
     # rubocop:enable Metrics/CyclomaticComplexity
 
     def grade_multiplier
@@ -114,7 +121,9 @@ module TimelineEvents
     end
 
     def points_for_target
-      @points_for_target ||= @target&.points_earnable
+      @points_for_target ||= begin
+        @target&.points_earnable || 0
+      end
     end
 
     def post_on_facebook

@@ -2,6 +2,7 @@ class TargetGroup < ApplicationRecord
   has_many :targets
   belongs_to :program_week
   has_one :batch, through: :program_week
+  belongs_to :level
 
   validates :name, presence: true
   validates :description, presence: true

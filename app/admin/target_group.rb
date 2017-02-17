@@ -2,11 +2,11 @@ ActiveAdmin.register TargetGroup do
   include DisableIntercom
   menu parent: 'Targets'
 
-  permit_params :name, :description, :program_week_id, :sort_index
+  permit_params :name, :description, :program_week_id, :sort_index, :level_id, :milestone
 
   controller do
     def scoped_collection
-      super.includes :program_week
+      super.includes :program_week, :level
     end
   end
 
@@ -14,6 +14,8 @@ ActiveAdmin.register TargetGroup do
     selectable_column
 
     column :program_week
+    column :level
+    column :milestone
     column :sort_index
     column :name
     column :description

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170217093642) do
+ActiveRecord::Schema.define(version: 20170217095606) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -657,6 +657,9 @@ ActiveRecord::Schema.define(version: 20170217093642) do
     t.datetime "updated_at",      null: false
     t.integer  "program_week_id"
     t.integer  "sort_index"
+    t.boolean  "milestone"
+    t.integer  "level_id"
+    t.index ["level_id"], name: "index_target_groups_on_level_id", using: :btree
     t.index ["program_week_id"], name: "index_target_groups_on_program_week_id", using: :btree
     t.index ["sort_index"], name: "index_target_groups_on_sort_index", using: :btree
   end
@@ -819,6 +822,7 @@ ActiveRecord::Schema.define(version: 20170217093642) do
   add_foreign_key "resources", "batches"
   add_foreign_key "round_stages", "application_rounds"
   add_foreign_key "startup_feedback", "faculty"
+  add_foreign_key "target_groups", "levels"
   add_foreign_key "team_members", "startups"
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "startups"

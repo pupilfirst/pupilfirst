@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170217101445) do
+ActiveRecord::Schema.define(version: 20170217105523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -614,7 +614,10 @@ ActiveRecord::Schema.define(version: 20170217101445) do
     t.string   "product_video_link"
     t.integer  "batch_id"
     t.boolean  "dropped_out",           default: false
+    t.integer  "level_id"
+    t.integer  "iteration"
     t.index ["batch_id"], name: "index_startups_on_batch_id", using: :btree
+    t.index ["level_id"], name: "index_startups_on_level_id", using: :btree
     t.index ["slug"], name: "index_startups_on_slug", unique: true, using: :btree
     t.index ["stage"], name: "index_startups_on_stage", using: :btree
   end
@@ -824,6 +827,7 @@ ActiveRecord::Schema.define(version: 20170217101445) do
   add_foreign_key "resources", "batches"
   add_foreign_key "round_stages", "application_rounds"
   add_foreign_key "startup_feedback", "faculty"
+  add_foreign_key "startups", "levels"
   add_foreign_key "target_groups", "levels"
   add_foreign_key "team_members", "startups"
   add_foreign_key "timeline_event_files", "timeline_events"

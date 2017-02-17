@@ -358,7 +358,7 @@ class Startup < ApplicationRecord
 
   # Returns current iteration, counting end-of-iteration events. If at_event is supplied, it calculates iteration during
   # that event.
-  def iteration(at_event: nil)
+  def calculated_iteration(at_event: nil)
     if at_event
       timeline_events.where('created_at < ?', at_event.created_at)
     else

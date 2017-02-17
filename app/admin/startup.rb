@@ -213,6 +213,7 @@ ActiveAdmin.register Startup do
         end
       end
 
+      row :level
       row :batch
       row :iteration
 

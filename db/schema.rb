@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170210073611) do
+ActiveRecord::Schema.define(version: 20170217093642) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -383,6 +383,15 @@ ActiveRecord::Schema.define(version: 20170210073611) do
     t.index ["founder_id"], name: "index_karma_points_on_founder_id", using: :btree
     t.index ["source_id"], name: "index_karma_points_on_source_id", using: :btree
     t.index ["startup_id"], name: "index_karma_points_on_startup_id", using: :btree
+  end
+
+  create_table "levels", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "number"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["number"], name: "index_levels_on_number", using: :btree
   end
 
   create_table "module_chapters", force: :cascade do |t|

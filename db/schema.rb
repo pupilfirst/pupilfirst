@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170217095606) do
+ActiveRecord::Schema.define(version: 20170217101445) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -692,6 +692,8 @@ ActiveRecord::Schema.define(version: 20170217095606) do
     t.integer  "points_earnable"
     t.integer  "sort_index",              default: 999
     t.boolean  "auto_verified",           default: false
+    t.datetime "session_at"
+    t.boolean  "chore",                   default: false
     t.index ["assignee_id"], name: "index_targets_on_assignee_id", using: :btree
     t.index ["assignee_type"], name: "index_targets_on_assignee_type", using: :btree
     t.index ["timeline_event_type_id"], name: "index_targets_on_timeline_event_type_id", using: :btree

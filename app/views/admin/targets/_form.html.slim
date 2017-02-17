@@ -11,6 +11,9 @@
       include_blank: false
 
     = f.input :title
+    = f.input :session_at, as: :string, input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O' } }
+    = f.input :chore
+
     = f.hidden_field :description
 
     .label-replica

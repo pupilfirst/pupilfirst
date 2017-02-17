@@ -4,8 +4,10 @@ ActiveAdmin.register Target do
   permit_params :assignee_id, :assignee_type, :assigner_id, :role, :title, :description, :resource_url,
     :completion_instructions, :days_to_complete, :slideshow_embed, :completed_at, :completion_comment, :rubric,
     :remote_rubric_url, :review_test_embed, :target_group_id, :target_type, :points_earnable,
-    :timeline_event_type_id, :sort_index, :auto_verified, prerequisite_target_ids: []
+    :timeline_event_type_id, :sort_index, :auto_verified, :session_at, :chore, prerequisite_target_ids: []
 
+  filter :session_at_not_null, as: :boolean, label: 'Sessions'
+  filter :chore
   filter :target_group_program_week_batch_id_eq, label: 'Batch', as: :select, collection: proc { Batch.all }
 
   filter :target_group_program_week_id_eq, as: :select, label: 'Program Week', collection: proc {
@@ -101,6 +103,8 @@ ActiveAdmin.register Target do
     attributes_table do
       row :title
       row :timeline_event_type
+      row :session_at
+      row :chore
 
       row :prerequisite_targets do
         if target.prerequisite_targets.present?

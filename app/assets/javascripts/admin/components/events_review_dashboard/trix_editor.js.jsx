@@ -9,7 +9,6 @@ class EventsReviewDashboardTrixEditor extends React.Component {
   componentDidMount () {
     this.trix = ReactDOM.findDOMNode(this);
     $(document).on('trix-change', this.onChange);
-    this.trix.editor.insertHTML(this.props.value);
   }
 
   componentWillUnmount () {
@@ -28,4 +27,4 @@ class EventsReviewDashboardTrixEditor extends React.Component {
       <trix-editor />
     )
   }
-};
+}

@@ -5,7 +5,7 @@ class TimelineEvent < ApplicationRecord
   belongs_to :startup
   belongs_to :founder
   belongs_to :timeline_event_type
-  belongs_to :target
+  belongs_to :task, polymorphic: true
 
   has_one :karma_point, as: :source
   has_many :timeline_event_files, dependent: :destroy

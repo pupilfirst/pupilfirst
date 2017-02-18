@@ -2,7 +2,7 @@ module TimelineEvents
   class VerificationService
     def initialize(timeline_event)
       @timeline_event = timeline_event
-      @target = @timeline_event.target
+      @task = @timeline_event.task
     end
 
     # rubocop:disable Metrics/CyclomaticComplexity
@@ -64,21 +64,21 @@ module TimelineEvents
     end
 
     def update_karma_points
-      return unless @points.present? || points_for_target.present?
+      return unless @points.present? || points_for_task.present?
       add_karma_points
     end
 
-    def previous_points_for_target
+    def previous_points_for_task
       founder = @timeline_event.founder
-      previous_target_timeline_events = @target.founder_role? ? @target.timeline_events.where(founder: founder) : @target.timeline_events.where(startup: founder.startup)
-      KarmaPoint.where(source: previous_target_timeline_events).sum(:points)
+      previous_task_timeline_events = @task.founder_role? ? @task.timeline_events.where(founder: founder) : @task.timeline_events.where(startup: founder.startup)
+      KarmaPoint.where(source: previous_task_timeline_events).sum(:points)
     end
 
     def points_for_new_status
       if @points.present?
         @points
       else
-        applicable_points > previous_points_for_target ? applicable_points - previous_points_for_target : 0
+        applicable_points > previous_points_for_task ? applicable_points - previous_points_for_task : 0
       end
     end
 
@@ -100,11 +100,11 @@ module TimelineEvents
     end
 
     def applicable_points
-      return 0 unless @new_status.in?([TimelineEvent::VERIFIED_STATUS_VERIFIED, TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT]) && points_for_target.present?
+      return 0 unless @new_status.in?([TimelineEvent::VERIFIED_STATUS_VERIFIED, TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT]) && points_for_task.present?
 
-      return points_for_target unless @grade.present? && @new_status == TimelineEvent::VERIFIED_STATUS_VERIFIED
+      return points_for_task unless @grade.present? && @new_status == TimelineEvent::VERIFIED_STATUS_VERIFIED
 
-      points_for_target * grade_multiplier
+      points_for_task * grade_multiplier
     end
 
     def grade_multiplier
@@ -115,9 +115,9 @@ module TimelineEvents
       }.with_indifferent_access[@grade]
     end
 
-    def points_for_target
-      @points_for_target ||= begin
-        @target&.points_earnable || 0
+    def points_for_task
+      @points_for_task ||= begin
+        @task&.points_earnable || 0
       end
     end
 

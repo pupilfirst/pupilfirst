@@ -3,7 +3,7 @@ module TimelineEvents
     queue_as :default
 
     def perform(timeline_event)
-      MarkAsImprovedTargetService.new(timeline_event).execute
+      MarkAsImprovedTaskService.new(timeline_event).execute
     end
   end
 end

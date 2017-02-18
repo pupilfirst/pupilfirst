@@ -28,9 +28,9 @@ feature 'Founder Dashboard' do
     create(:target_group, program_week: program_week_3)
 
     # Timeline events to take targets to specific states.
-    create(:timeline_event, startup: startup, task: completed_target, verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED)
-    create(:timeline_event, startup: startup, task: not_accepted_target, verified_status: TimelineEvent::VERIFIED_STATUS_NOT_ACCEPTED)
-    create(:timeline_event, startup: startup, task: needs_improvement_target, verified_status: TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT)
+    create(:timeline_event, startup: startup, target: completed_target, verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED)
+    create(:timeline_event, startup: startup, target: not_accepted_target, verified_status: TimelineEvent::VERIFIED_STATUS_NOT_ACCEPTED)
+    create(:timeline_event, startup: startup, target: needs_improvement_target, verified_status: TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT)
 
     # Extra target groups in tested program week.
     3.times do

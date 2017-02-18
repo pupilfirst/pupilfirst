@@ -21,10 +21,10 @@ describe Founders::TargetsFilterService do
   describe '#filter' do
     before do
       # Create timeline events and set the verified status as required
-      create(:timeline_event, founder: founder, startup: startup, task: needs_improvement_target, verified_status: TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT)
-      create(:timeline_event, founder: founder, startup: startup, task: not_accepted_target, verified_status: TimelineEvent::VERIFIED_STATUS_NOT_ACCEPTED)
-      create(:timeline_event, founder: startup_2.founders.sample, startup: startup_2, task: startup_2_completed_target, verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED)
-      create(:timeline_event, founder: (startup.founders - [founder]).sample, startup: startup, task: cofounder_completed_target, verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED)
+      create(:timeline_event, founder: founder, startup: startup, target: needs_improvement_target, verified_status: TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT)
+      create(:timeline_event, founder: founder, startup: startup, target: not_accepted_target, verified_status: TimelineEvent::VERIFIED_STATUS_NOT_ACCEPTED)
+      create(:timeline_event, founder: startup_2.founders.sample, startup: startup_2, target: startup_2_completed_target, verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED)
+      create(:timeline_event, founder: (startup.founders - [founder]).sample, startup: startup, target: cofounder_completed_target, verified_status: TimelineEvent::VERIFIED_STATUS_VERIFIED)
     end
 
     it 'returns targets based on the target filter specified' do

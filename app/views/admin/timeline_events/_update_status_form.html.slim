@@ -2,8 +2,8 @@
   = f.semantic_errors *f.object.errors.keys
   = f.inputs 'Update Status & Allot Karma' do
     = f.input :verified_status, collection: TimelineEvent.valid_verified_status, include_blank: false, required: true
-    - points_from_task = @status_update_form.model.task&.points_earnable
-    - if points_from_task.present?
+    - points_from_target = @status_update_form.model.target&.points_earnable
+    - if points_from_target.present?
       = f.input :grade, collection: TimelineEvent.valid_grades, required: false
     - else
       = f.input :points, as: :number

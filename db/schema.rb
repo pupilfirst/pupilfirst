@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170217121706) do
+ActiveRecord::Schema.define(version: 20170218091349) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
 
   create_table "active_admin_comments", force: :cascade do |t|
@@ -751,9 +752,8 @@ ActiveRecord::Schema.define(version: 20170217121706) do
     t.string   "grade"
     t.integer  "founder_id"
     t.integer  "improved_timeline_event_id"
-    t.integer  "task_id"
+    t.integer  "target_id"
     t.boolean  "share_on_facebook",          default: false
-    t.string   "task_type"
     t.index ["founder_id"], name: "index_timeline_events_on_founder_id", using: :btree
     t.index ["startup_id"], name: "index_timeline_events_on_startup_id", using: :btree
     t.index ["timeline_event_type_id"], name: "index_timeline_events_on_timeline_event_type_id", using: :btree

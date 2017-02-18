@@ -47,7 +47,7 @@ module Targets
     private
 
     def latest_linked_events
-      linked_events = TimelineEvent.where(task: @target)
+      linked_events = TimelineEvent.where(target: @target)
 
       # Return only the latest per assignee.
       if @target.founder_role?

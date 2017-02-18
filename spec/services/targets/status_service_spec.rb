@@ -10,7 +10,7 @@ describe Targets::StatusService do
 
   let!(:event_for_prerequisite_target) do
     create :timeline_event,
-      task: prerequisite_target,
+      target: prerequisite_target,
       startup: startup
   end
 
@@ -47,7 +47,7 @@ describe Targets::StatusService do
     context 'when the target has an associated timeline event' do
       let!(:event_for_target) do
         create :timeline_event,
-          task: target,
+          target: target,
           startup: startup
       end
 

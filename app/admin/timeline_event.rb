@@ -62,9 +62,11 @@ ActiveAdmin.register TimelineEvent do
 
     column 'Founder', :founder
 
-    column :task do |timeline_event|
-      if timeline_event.task.present?
-        link_to "#{timeline_event.task_type}: #{timeline_event.task.title}", polymorphic_url([:admin, timeline_event.task])
+    column('Linked Target') do |timeline_event|
+      if timeline_event.target.present?
+        a href: admin_target_url(timeline_event.target) do
+          timeline_event.target.title
+        end
       end
     end
 
@@ -154,10 +156,10 @@ ActiveAdmin.register TimelineEvent do
     )
   end
 
-  member_action :unlink_task, method: :post do
+  member_action :unlink_target, method: :post do
     timeline_event = TimelineEvent.find params[:id]
-    timeline_event.update! task: nil
-    flash[:success] = 'Task unlinked.'
+    timeline_event.update! target: nil
+    flash[:success] = 'Target unlinked.'
     redirect_to action: :show
   end
 
@@ -172,7 +174,7 @@ ActiveAdmin.register TimelineEvent do
       timeline_event.update(target: target)
 
       # Assign as improved_timeline_event, if applicable
-      TimelineEvents::MarkAsImprovedTaskService.new(timeline_event).execute
+      TimelineEvents::MarkAsImprovedTargetService.new(timeline_event).execute
 
       flash[:success] = 'Target has been linked.'
     else
@@ -295,14 +297,14 @@ ActiveAdmin.register TimelineEvent do
 
       row :verified_at
 
-      row('Linked Task') do
-        if timeline_event.task.present?
-          a href: polymorphic_url([:admin, timeline_event.task]) do
-            "#{timeline_event.task_type}: #{timeline_event.task.title}"
+      row('Linked Target') do
+        if timeline_event.target.present?
+          a href: admin_target_url(timeline_event.target) do
+            timeline_event.target.title
           end
 
           span class: 'wrap-with-paranthesis' do
-            link_to 'Unlink', unlink_task_admin_timeline_event_path, method: :post, data: { confirm: 'Are you sure?' }
+            link_to 'Unlink', unlink_target_admin_timeline_event_path, method: :post, data: { confirm: 'Are you sure?' }
           end
         end
       end
@@ -364,7 +366,7 @@ ActiveAdmin.register TimelineEvent do
 
     render partial: 'update_status_form'
 
-    if timeline_event.task.blank?
+    if timeline_event.target.blank?
       render partial: 'target_form', locals: { timeline_event: timeline_event }
     end
 

@@ -5,7 +5,7 @@ class TimelineEvent < ApplicationRecord
   belongs_to :startup
   belongs_to :founder
   belongs_to :timeline_event_type
-  belongs_to :task, polymorphic: true
+  belongs_to :target
 
   has_one :karma_point, as: :source
   has_many :timeline_event_files, dependent: :destroy
@@ -75,7 +75,7 @@ class TimelineEvent < ApplicationRecord
   scope :for_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch.id }) }
   scope :for_batch_id_in, -> (ids) { joins(:startup).where(startups: { batch_id: ids }) }
   scope :not_private, -> { where(timeline_event_type: TimelineEventType.where.not(role: TimelineEventType::ROLE_FOUNDER)) }
-  scope :not_improved, -> { needs_improvement.where(improved_timeline_event_id: nil) }
+  scope :not_improved, -> { needs_improvement.joins(:target).where(improved_timeline_event_id: nil) }
 
   after_initialize :make_links_an_array
 

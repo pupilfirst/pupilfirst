@@ -36,7 +36,7 @@ module Targets
     end
 
     def linked_event
-      @linked_event ||= owner.timeline_events.where(task: @target).last
+      @linked_event ||= owner.timeline_events.where(target: @target).last
     end
 
     def owner_events
@@ -49,7 +49,7 @@ module Targets
 
     def completed_prerequisites_ids
       @completed_prerequisites_ids ||= begin
-        owner_events.where(task_type: 'Target', task_id: @target.prerequisite_targets.pluck(:id)).select(:task_id).distinct
+        owner_events.where(target: @target.prerequisite_targets.pluck(:id)).select(:target_id).distinct
       end
     end
   end

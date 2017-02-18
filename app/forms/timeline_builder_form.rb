@@ -2,7 +2,7 @@ class TimelineBuilderForm < Reform::Form
   # Add some slack to the max limit to allow for different length calculation at the front-end.
   MAX_DESCRIPTION_CHARACTERS = (TimelineEvent::MAX_DESCRIPTION_CHARACTERS * 1.1).to_i
 
-  property :task_id
+  property :target_id
   property :description, validates: { presence: true, length: { maximum: MAX_DESCRIPTION_CHARACTERS } }
   property :timeline_event_type_id, validates: { presence: true }
   property :event_on, validates: { presence: true }
@@ -35,7 +35,7 @@ class TimelineBuilderForm < Reform::Form
   end
 
   def target
-    @target ||= Target.find_by(id: task_id)
+    @target ||= Target.find_by(id: target_id)
   end
 
   def parsed_files_metadata
@@ -50,7 +50,7 @@ class TimelineBuilderForm < Reform::Form
   def save(founder)
     TimelineEvent.transaction do
       timeline_event = TimelineEvent.create!(
-        task: target,
+        target: target,
         founder: founder,
         startup: founder.startup,
         description: description,

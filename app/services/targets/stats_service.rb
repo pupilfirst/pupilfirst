@@ -62,7 +62,7 @@ module Targets
     end
 
     def founders(events)
-      Founder.where(id: events.map(&:founder_id))
+      Founder.where(id: events.map(&:founder_id)).not_exited
     end
 
     def startups(events)
@@ -74,7 +74,7 @@ module Targets
     end
 
     def founders_in_batch
-      @target.batch.founders
+      @target.batch.founders.not_exited
     end
 
     def startups_in_batch

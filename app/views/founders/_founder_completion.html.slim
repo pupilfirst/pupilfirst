@@ -1,5 +1,5 @@
 .startup-founders
-  - @startup.founders.each do |founder|
+  - @startup.founders.not_exited.each do |founder|
     a.founder-avatar-bubble href=founder_profile_path(founder.slug)
       - if target.completed_by?(founder)
         .target-complete-check.img-circle

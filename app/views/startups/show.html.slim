@@ -156,11 +156,11 @@
                         - @no_of_days = (Date.today - @startup.latest_team_event_date).to_i
                         ' #{@no_of_days} #{'day'.pluralize(@no_of_days)} ago)
         .row
-          - if @startup.founders.present?
+          - if @startup.founders.not_exited.present?
             .col-sm-6.col-md-12
               h3 Founders
               hr
-              - @startup.founders.order(:name).each do |founder|
+              - @startup.founders.not_exited.order(:name).each do |founder|
                 .data-founder
                   .media
                     .media-left

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170217101445) do
+ActiveRecord::Schema.define(version: 20170220075229) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -212,8 +212,8 @@ ActiveRecord::Schema.define(version: 20170217101445) do
     t.datetime "updated_at",             null: false
     t.datetime "confirmed_at"
     t.datetime "feedback_mails_sent_at"
-    t.integer  "rating_of_faculty"
-    t.integer  "rating_of_team"
+    t.integer  "rating_for_faculty"
+    t.integer  "rating_for_team"
     t.index ["connect_slot_id"], name: "index_connect_requests_on_connect_slot_id", using: :btree
     t.index ["startup_id"], name: "index_connect_requests_on_startup_id", using: :btree
   end

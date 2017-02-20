@@ -110,10 +110,10 @@ class Faculty < ApplicationRecord
   # @return [NilClass, Float] nil if we can't compute average rating - float value if we can.
   def average_rating
     @average_rating ||= begin
-      rated_sessions = connect_requests.where.not(rating_of_faculty: nil)
+      rated_sessions = connect_requests.where.not(rating_for_faculty: nil)
       return nil if rated_sessions.count < 5
 
-      ratings = rated_sessions.pluck(:rating_of_faculty)
+      ratings = rated_sessions.pluck(:rating_for_faculty)
       ratings.inject(:+).to_f / ratings.size
     end
   end

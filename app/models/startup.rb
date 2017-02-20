@@ -108,7 +108,6 @@ class Startup < ApplicationRecord
   has_many :timeline_events, dependent: :destroy
   has_many :startup_feedback, dependent: :destroy
   has_many :karma_points, dependent: :restrict_with_exception
-  has_many :targets, dependent: :destroy, as: :assignee
   has_many :connect_requests, dependent: :destroy
   has_many :team_members, dependent: :destroy
 

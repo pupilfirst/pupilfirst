@@ -34,7 +34,6 @@ class Founder < ApplicationRecord
   has_many :timeline_events
   has_many :visits, as: :user
   has_many :ahoy_events, class_name: 'Ahoy::Event', as: :user
-  has_many :targets, dependent: :destroy, as: :assignee
   has_many :platform_feedback
   belongs_to :user
   belongs_to :college, optional: true

@@ -46,18 +46,18 @@ describe Target, disabled: true do
   #   end
   # end
 
-  describe '#revision_as_slack_message' do
-    context 'when title is changed' do
-      it 'contains the new title' do
-        subject.title = 'New Title'
-        expect(subject.revision_as_slack_message).to include("revised title is: New Title")
-      end
-    end
-    context 'when description is changed' do
-      it 'contains the new description' do
-        subject.description = '<div>revised description<div>' # to ensure html tags are stripped
-        expect(subject.revision_as_slack_message).to include("description now reads: \"revised description\"")
-      end
-    end
-  end
+  # describe '#revision_as_slack_message' do
+  #   context 'when title is changed' do
+  #     it 'contains the new title' do
+  #       subject.title = 'New Title'
+  #       expect(subject.revision_as_slack_message).to include("revised title is: New Title")
+  #     end
+  #   end
+  #   context 'when description is changed' do
+  #     it 'contains the new description' do
+  #       subject.description = '<div>revised description<div>' # to ensure html tags are stripped
+  #       expect(subject.revision_as_slack_message).to include("description now reads: \"revised description\"")
+  #     end
+  #   end
+  # end
 end

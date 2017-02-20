@@ -10,11 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170218101436) do
+ActiveRecord::Schema.define(version: 20170220071419) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
 
   create_table "active_admin_comments", force: :cascade do |t|
@@ -687,8 +686,6 @@ ActiveRecord::Schema.define(version: 20170218101436) do
     t.string   "rubric"
     t.text     "review_test_embed"
     t.integer  "timeline_event_type_id"
-    t.integer  "assignee_id"
-    t.string   "assignee_type"
     t.integer  "days_to_complete"
     t.string   "target_type"
     t.integer  "target_group_id"
@@ -699,8 +696,6 @@ ActiveRecord::Schema.define(version: 20170218101436) do
     t.boolean  "chore",                   default: false
     t.text     "video_embed"
     t.datetime "last_session_at"
-    t.index ["assignee_id"], name: "index_targets_on_assignee_id", using: :btree
-    t.index ["assignee_type"], name: "index_targets_on_assignee_type", using: :btree
     t.index ["chore"], name: "index_targets_on_chore", using: :btree
     t.index ["session_at"], name: "index_targets_on_session_at", using: :btree
     t.index ["timeline_event_type_id"], name: "index_targets_on_timeline_event_type_id", using: :btree

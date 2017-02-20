@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170220075229) do
+ActiveRecord::Schema.define(version: 20170220102539) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -682,7 +682,6 @@ ActiveRecord::Schema.define(version: 20170220075229) do
     t.text     "slideshow_embed"
     t.integer  "assigner_id"
     t.string   "rubric"
-    t.text     "review_test_embed"
     t.integer  "timeline_event_type_id"
     t.integer  "assignee_id"
     t.string   "assignee_type"

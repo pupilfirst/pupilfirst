@@ -3,7 +3,7 @@ ActiveAdmin.register Target do
 
   permit_params :assignee_id, :assignee_type, :assigner_id, :role, :title, :description, :resource_url,
     :completion_instructions, :days_to_complete, :slideshow_embed, :completed_at, :completion_comment, :rubric,
-    :remote_rubric_url, :review_test_embed, :target_group_id, :target_type, :points_earnable,
+    :remote_rubric_url, :target_group_id, :target_type, :points_earnable,
     :timeline_event_type_id, :sort_index, :auto_verified, :session_at, :chore, prerequisite_target_ids: []
 
   filter :session_at_not_null, as: :boolean, label: 'Sessions'
@@ -144,7 +144,6 @@ ActiveAdmin.register Target do
       end
 
       row :slideshow_embed
-      row :review_test_embed
       row :resource_url
       row :completion_instructions
       row :days_to_complete

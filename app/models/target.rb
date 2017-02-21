@@ -93,4 +93,8 @@ class Target < ApplicationRecord
   def stats_service
     @stats_service ||= Targets::StatsService.new(self)
   end
+
+  def session?
+    session_at.present?
+  end
 end

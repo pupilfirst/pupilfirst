@@ -1,9 +1,18 @@
 ## Ongoing
 
-- A severe memory leak is being diagnosed. [[Trello]](https://trello.com/c/s15YSnFv)
-- A timeline events review interface for admins is being built. [[Trello]](https://trello.com/c/mfPTX78v)
-- All SV.CO pages are being updated to use _v2_ styling. [[Trello]](https://trello.com/c/EwhCpesZ)
-- An issue with the Leaderboard, causing its results for the past week to change over time is being checked. [[Trello]](https://trello.com/c/z4rKABRx)
+- Design and implementation of Stage 1 of switch to subscription model is ongoing. [[Trello]](https://trello.com/c/r5wuULZ2)
+- The timeline events review interface is undergoing further upgrades. [[Trello]](https://trello.com/c/Bb5BlFQK)
+
+## 2017.02.21
+
+- A timeline events review interface for admins has been deployed. [[Trello]](https://trello.com/c/mfPTX78v)
+- A roadmap for implementation of Stage 1 of subscription model was built. [[Trello]](https://trello.com/c/tnocfHyM)
+- An issue with the Leaderboard, which caused its results for the past week to change has been resolved. [[Trello]](https://trello.com/c/z4rKABRx)
+- A time-related bug in `performance_service_spec.rb` was resolved. [[Trello]](https://trello.com/c/43YAIv1R)
+- The invite form to SV.CO's Public Slack at `/about/slack` was broken due to changes in Slack policy - this has been fixed. [[Trello]](https://trello.com/c/WbRnbcxu)
+- The platform now runs of Ruby's latest version - 2.4.0. [[Trello]](https://trello.com/c/EaGs2y6L)
+- MSP coupons are now restricted to specific email addresses. [[Trello]](https://trello.com/c/Fg63StTw)
+- Closed a hole which allowed multiple karma point entries to exist for the same team target. [[Trello]](https://trello.com/c/TbfTPgSC)
 
 ## 2017.02.13
 

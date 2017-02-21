@@ -100,7 +100,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_ability
-    @current_ability ||= Ability.new(true_user)
+    @current_ability ||= ::Ability.new(true_user)
   end
 
   private

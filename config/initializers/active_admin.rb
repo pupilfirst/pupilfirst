@@ -243,6 +243,15 @@ ActiveAdmin.setup do |config|
     end
   end
 
+  # Add 'Review Timeline Events' under 'Timeline Events' menu
+
+  config.namespace :admin do |admin|
+    admin.build_menu :default do |menu|
+      menu.add label: 'Review Timeline Events', url: proc { review_timeline_events_admin_timeline_events_path }, parent: 'Timeline Events',
+               if: proc { current_admin_user&.superadmin? }
+    end
+  end
+
   # == Download Links
   #
   # You can disable download links on resource listing pages,

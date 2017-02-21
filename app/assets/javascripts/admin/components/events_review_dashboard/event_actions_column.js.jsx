@@ -138,7 +138,7 @@ class EventsReviewDashboardEventActionsColumn extends React.Component {
       <div>
         <div>
           <i className="fa fa-eye"/>&nbsp;
-          <a data-method="post" href={'/admin/users/' + this.props.eventData['user_id'] + '/impersonate?referer=/startups/' + this.props.eventData['startup_id']} target='_blank'>
+          <a data-method="post" href={ this.props.eventData['impersonate_url'] } target='_blank'>
             Preview as Founder
           </a>
         </div><br/>

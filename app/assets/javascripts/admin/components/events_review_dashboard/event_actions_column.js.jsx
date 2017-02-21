@@ -69,8 +69,10 @@ class EventsReviewDashboardEventActionsColumn extends React.Component {
         beforeSend: function () {
           event.target.innerHTML = 'Recording Review...'
         },
-        error: function () {
-          alert('Failed to record your review. Try again')
+        error: function (response) {
+          let error = (response.responseJSON && response.responseJSON.error) ? response.responseJSON.error : 'Something went wrong at the server. Try again';
+          alert(error);
+          location.reload();
         }
       });
     }

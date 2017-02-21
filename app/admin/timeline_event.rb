@@ -85,18 +85,21 @@ ActiveAdmin.register TimelineEvent do
 
   member_action :quick_review, method: :post do
     timeline_event = TimelineEvent.find(params[:id])
-    raise unless timeline_event.pending?
+    if timeline_event.pending?
+      status = {
+        needs_improvement: TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT,
+        not_accepted: TimelineEvent::VERIFIED_STATUS_NOT_ACCEPTED,
+        verified: TimelineEvent::VERIFIED_STATUS_VERIFIED
+      }.fetch(params[:status].to_sym)
 
-    status = {
-      needs_improvement: TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT,
-      not_accepted: TimelineEvent::VERIFIED_STATUS_NOT_ACCEPTED,
-      verified: TimelineEvent::VERIFIED_STATUS_VERIFIED
-    }.fetch(params[:status].to_sym)
+      points = params[:points].present? ? params[:points].to_i : nil
 
-    points = params[:points].present? ? params[:points].to_i : nil
-
-    TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade], points: points)
-    head :ok
+      TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade], points: points)
+      head :ok
+    else
+      # someone else already reviewed this event! Ask javascript to reload page.
+      render json: { error: 'Event no longer pending review! Refreshing your dashboard.' }.to_json, status: 422
+    end
   end
 
   member_action :update_description, method: :post do

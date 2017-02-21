@@ -99,6 +99,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def current_ability
+    @current_ability ||= Ability.new(true_user)
+  end
+
   private
 
   def sign_out_if_required

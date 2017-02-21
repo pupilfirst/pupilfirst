@@ -1,4 +1,4 @@
-.review-dashboard_event-entry-table {
+.review-dashboard__event-entry-table {
   border: 1px solid;
   width: 100%;
   td {
@@ -6,10 +6,35 @@
   }
 }
 
-.review-dashboard_event-description {
-  font-size: 14px;
-  line-height: 25px;
+.review-dashboard__event-description {
+  font-size: 12px;
+  line-height: 1.6;
   width: 100%;
   white-space: pre-wrap;
   word-wrap: break-word;
 }
+
+.review-dashboard__add-feedback-link {
+  cursor: pointer;
+}
+
+.review-dashboard__save-feedback-button {
+  cursor: pointer;
+}
+
+.review-dashboard__close-feedback-button {
+  cursor: pointer;
+}
+
+.review-dashboard__edit-description-link {
+  cursor: pointer;
+}
+
+.review-dashboard__save-description-button {
+  cursor: pointer;
+}
+
+.review-dashboard__save-review-button {
+  cursor: pointer;
+}
+

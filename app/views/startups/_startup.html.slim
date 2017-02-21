@@ -65,9 +65,9 @@
             ' Product Video
 
       .startupcard-footer.clearfix
-        - if startup.founders.present?
+        - if startup.founders.not_exited.present?
           .founder-avatar-list
-            - startup.founders.order(:name).each do |founder|
+            - startup.founders.not_exited.order(:name).each do |founder|
               .founder-avatar.founder-tooltip.tooltip-popup
                 a.founder-tooltip-item.founder-avatar__thumbnail href=founder_profile_url(slug: founder.slug)
                   img.founder-avatar__thumbnail--image alt="Founder profile image" src="#{profile_image_url founder, gravatar_size: 128, avatar_version: :mid}"

@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170220071419) do
+ActiveRecord::Schema.define(version: 20170220102539) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
 
   create_table "active_admin_comments", force: :cascade do |t|
@@ -211,8 +212,8 @@ ActiveRecord::Schema.define(version: 20170220071419) do
     t.datetime "updated_at",             null: false
     t.datetime "confirmed_at"
     t.datetime "feedback_mails_sent_at"
-    t.integer  "rating_of_faculty"
-    t.integer  "rating_of_team"
+    t.integer  "rating_for_faculty"
+    t.integer  "rating_for_team"
     t.index ["connect_slot_id"], name: "index_connect_requests_on_connect_slot_id", using: :btree
     t.index ["startup_id"], name: "index_connect_requests_on_startup_id", using: :btree
   end
@@ -684,7 +685,6 @@ ActiveRecord::Schema.define(version: 20170220071419) do
     t.text     "slideshow_embed"
     t.integer  "assigner_id"
     t.string   "rubric"
-    t.text     "review_test_embed"
     t.integer  "timeline_event_type_id"
     t.integer  "days_to_complete"
     t.string   "target_type"

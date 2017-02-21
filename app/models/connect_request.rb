@@ -29,8 +29,8 @@ class ConnectRequest < ApplicationRecord
   validates :startup_id, presence: true
   validates :questions, presence: true, length: { maximum: MAX_QUESTIONS_LENGTH }
   validates :status, presence: true, inclusion: { in: valid_statuses }
-  validates :rating_of_faculty, numericality: { greater_than: 0, less_than: 6 }, allow_nil: true
-  validates :rating_of_team, numericality: { greater_than: 0, less_than: 6 }, allow_nil: true
+  validates :rating_for_faculty, numericality: { greater_than: 0, less_than: 6 }, allow_nil: true
+  validates :rating_for_team, numericality: { greater_than: 0, less_than: 6 }, allow_nil: true
 
   before_validation :set_status_for_nil
 

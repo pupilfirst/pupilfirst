@@ -14,7 +14,7 @@
             | by #{@startup.name}
         .startup-founders
           .hidden-xs-down
-            - @startup.founders.each do |founder|
+            - @startup.founders.not_exited.each do |founder|
               a.founder-avatar-bubble href=founder_profile_path(founder.slug)
                 = image_tag profile_image_url(founder, avatar_version: :mid), class: 'img-circle'
           .hidden-sm-up

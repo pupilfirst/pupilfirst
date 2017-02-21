@@ -1,3 +1,10 @@
+### 21 February, 2017
+
+#### Bugfixes
+
+  - A few issues related to the assignment of karma points for improved timeline events, and _consistency_ of the weekly leaderboard, have been resolved.
+  - The invite form to SV.CO's Public Slack at `/about/slack` was broken due to changes in Slack policy - this has been fixed.
+
 ### 13 February, 2017
 
 #### Performance

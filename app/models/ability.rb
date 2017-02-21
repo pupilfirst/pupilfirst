@@ -12,6 +12,7 @@ class Ability
       when AdminUser::TYPE_FACULTY
         can :read, :all
         can :manage, [StartupFeedback, Resource]
+        can :update, [TimelineEvent]
     end
 
     can :read, ActiveAdmin::Page, name: 'Dashboard'

@@ -69,8 +69,10 @@ class EventsReviewDashboardEventActionsColumn extends React.Component {
         beforeSend: function () {
           event.target.innerHTML = 'Recording Review...'
         },
-        error: function () {
-          alert('Failed to record your review. Try again')
+        error: function (response) {
+          let error = (response.responseJSON && response.responseJSON.error) ? response.responseJSON.error : 'Something went wrong at the server. Try again';
+          alert(error);
+          location.reload();
         }
       });
     }
@@ -138,11 +140,10 @@ class EventsReviewDashboardEventActionsColumn extends React.Component {
       <div>
         <div>
           <i className="fa fa-eye"/>&nbsp;
-          <a data-method="post" href={'/admin/users/' + this.props.eventData['user_id'] + '/impersonate?referer=/startups/' + this.props.eventData['startup_id']} target='_blank'>
+          <a data-method="post" href={ this.props.eventData['impersonate_url'] } target='_blank'>
             Preview as Founder
           </a>
         </div><br/>
-
 
         <div>
           <i className="fa fa-edit"/>&nbsp;
@@ -163,7 +164,7 @@ class EventsReviewDashboardEventActionsColumn extends React.Component {
           { !this.state.feedbackRecorded &&
           <div>
             <i className="fa fa-comment-o"/>&nbsp;
-            <a onClick={ this.toggleFeedbackForm }>
+            <a className="cursor-pointer" onClick={ this.toggleFeedbackForm }>
               Add Feedback
             </a>
           </div>
@@ -176,8 +177,8 @@ class EventsReviewDashboardEventActionsColumn extends React.Component {
         <div>
           <EventsReviewDashboardTrixEditor onChange={ this.feedbackChange } value={ this.state.feedback }/>
           <br/>
-          <a className='button' onClick={ this.saveFeedback }>Save Feedback</a>
-          <a className='button' onClick={ this.toggleFeedbackForm }>Close</a>
+          <a className='button cursor-pointer' onClick={ this.saveFeedback }>Save Feedback</a>
+          <a className='button cursor-pointer' onClick={ this.toggleFeedbackForm }>Close</a>
           { this.state.feedbackMissing &&
           <div style={{color: 'red'}}>Enter a feedback first!</div>
           }
@@ -237,7 +238,7 @@ class EventsReviewDashboardEventActionsColumn extends React.Component {
           <br/>
 
 
-          <a className='button' onClick={ this.saveReview }>Save Review</a>
+          <a className='button cursor-pointer' onClick={ this.saveReview }>Save Review</a>
           { this.state.statusMissing &&
           <div style={{color: 'red'}}>Select a status first!</div>
           }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170220102539) do
+ActiveRecord::Schema.define(version: 20170222064857) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -531,6 +531,7 @@ ActiveRecord::Schema.define(version: 20170220102539) do
     t.string   "slug"
     t.integer  "batch_id"
     t.integer  "startup_id"
+    t.text     "video_embed"
     t.index ["batch_id"], name: "index_resources_on_batch_id", using: :btree
     t.index ["share_status", "batch_id"], name: "index_resources_on_share_status_and_batch_id", using: :btree
     t.index ["slug"], name: "index_resources_on_slug", using: :btree

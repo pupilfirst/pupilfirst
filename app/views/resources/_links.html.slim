@@ -1,7 +1,8 @@
 .resource-links
-  a.btn.btn-ghost-secondary.btn-sm.btn-with-icon.text-uppercase href=download_resource_url(resource) target='_blank'
-    i.fa.fa-download
-    | &nbsp; Download
+  - if resource.file.present?
+    a.btn.btn-ghost-secondary.btn-sm.btn-with-icon.text-uppercase href=download_resource_url(resource) target='_blank'
+      i.fa.fa-download
+      | &nbsp; Download
 
   - if resource.stream? && !playing
     a.btn.btn-ghost-primary.stream-resource.btn-sm.btn-with-icon.text-uppercase href=resource_url(resource, watch: true)

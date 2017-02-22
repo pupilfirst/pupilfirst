@@ -115,6 +115,7 @@ class Startup < ApplicationRecord
   accepts_nested_attributes_for :admin
 
   belongs_to :batch
+  belongs_to :level
 
   attr_accessor :validate_web_mandatory_fields
 

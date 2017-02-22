@@ -1,4 +1,4 @@
-.review-dashboard_event-entry-table {
+.review-dashboard__event-entry-table {
   border: 1px solid;
   width: 100%;
   td {
@@ -6,10 +6,12 @@
   }
 }
 
-.review-dashboard_event-description {
-  font-size: 14px;
-  line-height: 25px;
+.review-dashboard__event-description {
+  font-size: 12px;
+  line-height: 1.6;
   width: 100%;
   white-space: pre-wrap;
   word-wrap: break-word;
 }
+
+

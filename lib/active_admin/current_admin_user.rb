@@ -7,7 +7,7 @@ module ActiveAdmin
     end
 
     def current_admin_user
-      @current_admin_user ||= current_user&.admin_user || true_user&.admin_user
+      @current_admin_user ||= true_user&.admin_user
     end
 
     def authenticate_admin_user!

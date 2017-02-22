@@ -32,15 +32,15 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
     // clear all error messages
     this.setState({statusMissing: false, gradingMissing: false});
 
-    if ( !this.state.status ) {
+    if (!this.state.status) {
       this.setState({statusMissing: true});
-    } else if ( this.state.status == 'verified' && (!this.state.grade && !this.state.points) ) {
+    } else if (this.state.status == 'verified' && (!this.state.grade && !this.state.points)) {
       this.setState({gradingMissing: true});
     }
     else {
       console.log('Saving Review...');
       this.setState({statusMissing: false, gradingMissing: false});
-      let eventId = this.props.eventID;
+      let eventId = this.props.eventId;
       let status = this.state.status;
       let grade = this.state.grade;
       let points = this.state.points;
@@ -70,11 +70,11 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
   }
 
   radioInputId(name) {
-    return name + '-' + this.props.eventID;
+    return name + '-' + this.props.eventId;
   }
 
   radioInputName(name) {
-    return 'event-' + this.props.eventID + '-' + name;
+    return 'event-' + this.props.eventId + '-' + name;
   }
 
   render() {
@@ -102,7 +102,7 @@ class EventsReviewDashboardEventStatusUpdate extends React.Component {
         { this.state.status == 'verified' &&
         <div>
           <br/>
-          { this.props.targetID &&
+          { this.props.targetId &&
           <div>
             <strong>Grade:</strong>
             <br/>

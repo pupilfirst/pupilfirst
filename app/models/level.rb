@@ -3,4 +3,5 @@ class Level < ApplicationRecord
   validates :name, presence: true
 
   has_many :target_groups
+  has_many :startups
 end

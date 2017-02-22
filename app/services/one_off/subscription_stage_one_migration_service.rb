@@ -50,7 +50,7 @@ module OneOff
     def remove_stale_targets
       Rails.logger.info 'Removing stale targets...'
 
-      targets_without_group = Target.includes(:target_group).where(target_groups: { id: nil })
+      targets_without_group = Target.includes(:target_group).where(target_groups: { id: nil }, session_at: nil, chore: false)
       targets_without_group.destroy_all
     end
 

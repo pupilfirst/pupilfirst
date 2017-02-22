@@ -1,12 +1,12 @@
 .target id="target-#{target.id}"
-  .target-title-link.clearfix
-    = image_tag "founders/dashboard/target-type-icons/#{target.type_icon_name}", class: "target-icon"
-    .target-header
-      h6.target-title
-        span.target-type-tag.hidden-sm-down
+  .founder-dashboard-target-header__container.clearfix
+    = image_tag "founders/dashboard/target-type-icons/#{target.type_icon_name}", class: "founder-dashboard-target-header__icon"
+    .founder-dashboard-target-header__title
+      h6.founder-dashboard-target-header__headline
+        span.founder-dashboard-target-header__type-tag.hidden-sm-down
           | #{target.team_or_personal}/#{target.target_type}
         | #{target.title}
-      .target-title-info
+      .founder-dashboard-target-header__headline-info
         .target-deadline.font-regular
           | Complete by:
           span.target-deadline-date
@@ -16,8 +16,8 @@
             | Karma Points:
             span.earn-karma-points
               | #{target.points_earnable}
-    .target-status.tag.tag-pill class="#{target.status_badge_class(current_founder)}"
-      span.target-status-icon
+    .founder-dashboard-target-header__status-badge.tag.tag-pill class="#{target.status_badge_class(current_founder)}"
+      span.founder-dashboard-target-header__status-badge-icon
         i.fa class="#{target.status_fa_icon(current_founder)}"
       span.hidden-sm-down
         | #{target.status_text(current_founder)}
@@ -32,7 +32,7 @@
         | Due date:&nbsp;
         span.font-regular
           | #{target.due_date.strftime('%b %e')} at 11:59 PM.
-    h6.target-title--sm.hidden-md-up
+    h6.founder-dashboard-target-header__headline--sm.hidden-md-up
       | #{target.title}
     p
       ' #{target.description.html_safe}

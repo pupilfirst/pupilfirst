@@ -91,32 +91,32 @@ feature 'Founder Dashboard' do
     # Check whether clicking each target gives the correct information.
     # 'Trigger' clicks on the element instead of actually clicking on it to avoid timing issues
     # with animation.
-    find("#target-#{expired_target.id} .target-title-link").trigger('click')
+    find("#target-#{expired_target.id} .founder-dashboard-target-header__container").trigger('click')
     within("#target-#{expired_target.id}") do
       expect(page).to have_content('Target Expired').and have_content('You can still try submitting!').and have_button('Submit')
     end
 
-    find("#target-#{pending_target.id} .target-title-link").trigger('click')
+    find("#target-#{pending_target.id} .founder-dashboard-target-header__container").trigger('click')
     within("#target-#{pending_target.id}") do
       expect(page).to have_content('Due date').and have_button('Submit')
     end
 
-    find("#target-#{completed_target.id} .target-title-link").trigger('click')
+    find("#target-#{completed_target.id} .founder-dashboard-target-header__container").trigger('click')
     within("#target-#{completed_target.id}") do
       expect(page).to have_content('Target Completed').and have_no_button('Submit')
     end
 
-    find("#target-#{not_accepted_target.id} .target-title-link").trigger('click')
+    find("#target-#{not_accepted_target.id} .founder-dashboard-target-header__container").trigger('click')
     within("#target-#{not_accepted_target.id}") do
       expect(page).to have_content('Submission Not Accepted').and have_button('Re-Submit')
     end
 
-    find("#target-#{needs_improvement_target.id} .target-title-link").trigger('click')
+    find("#target-#{needs_improvement_target.id} .founder-dashboard-target-header__container").trigger('click')
     within("#target-#{needs_improvement_target.id}") do
       expect(page).to have_content('Submission Needs Improvement').and have_button('Re-Submit')
     end
 
-    find("#target-#{target_with_prerequisites.id} .target-title-link").trigger('click')
+    find("#target-#{target_with_prerequisites.id} .founder-dashboard-target-header__container").trigger('click')
     within("#target-#{target_with_prerequisites.id}") do
       expect(page).to have_content('Target Locked').and have_no_button
     end

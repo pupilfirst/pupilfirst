@@ -1,5 +1,5 @@
 targetAccordion = ->
-  scope = $('.target-accordion .target-title-link')
+  scope = $('.target-accordion .founder-dashboard-target-header__container')
   scope.off('click')
 
   scope.on('click', (t) ->
@@ -9,7 +9,7 @@ targetAccordion = ->
     if $(this).hasClass('active')
       $(this).removeClass 'active'
     else
-      $(this).closest('.target-accordion').find('.target-title-link.active').removeClass 'active'
+      $(this).closest('.target-accordion').find('.founder-dashboard-target-header__container.active').removeClass 'active'
       $(this).addClass 'active'
       $(this).parent().addClass 'open'
     dropDown.stop(false, true).slideToggle(200)
@@ -122,7 +122,7 @@ startTour = ->
         intro: startupShowTour.data('targetGroup')
       },
       {
-        element: $('.target-title-link')[0],
+        element: $('.founder-dashboard-target-header__container')[0],
         intro: startupShowTour.data('target')
 
       },
@@ -131,7 +131,7 @@ startTour = ->
         intro: startupShowTour.data('targetDetails')
       },
       {
-        element: $('.target-status')[0],
+        element: $('.founder-dashboard-target-header__status-badge')[0],
         intro: startupShowTour.data('targetStatus')
       },
       {
@@ -146,7 +146,7 @@ startTour = ->
   )
 
   # Open the first target so that its contents are available for intro-ing.
-  $('.target-title-link:first').trigger('click')
+  $('.founder-dashboard-target-header__container:first').trigger('click')
 
   tour.start()
 

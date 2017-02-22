@@ -30,10 +30,13 @@ module OneOff
 
     # Move startups to their appropriate level.
     def level_startups
-      # TODO: Decide what logic is to be used here.
-      Rails.logger.info 'Leveling startups...'
+      Rails.logger.info 'Levelling up startups...'
 
-      raise 'The level_startups method has yet to be built'
+      Startup.where(batch: current_batch).each do |startup|
+        while Startups::LevelUpEligibilityService.new(startup).eligible?
+          Startups::LevelUpService.new(startup).execute
+        end
+      end
     end
 
     # Set iteration to 2 for startups from earlier batches.

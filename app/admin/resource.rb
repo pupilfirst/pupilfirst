@@ -1,7 +1,7 @@
 ActiveAdmin.register Resource do
   include DisableIntercom
 
-  permit_params :title, :description, :file, :thumbnail, :share_status, :batch_id, :startup_id, tag_list: []
+  permit_params :title, :description, :file, :thumbnail, :share_status, :batch_id, :startup_id, :video_embed, tag_list: []
 
   controller do
     def find_resource
@@ -98,6 +98,7 @@ ActiveAdmin.register Resource do
       end
 
       row :description
+      row :video_embed
 
       row :thumbnail do |resource|
         if resource.thumbnail.present?
@@ -128,6 +129,7 @@ ActiveAdmin.register Resource do
       f.input :thumbnail, as: :file
       f.input :title
       f.input :description
+      f.input :video_embed
 
       f.input :tag_list,
         as: :select,

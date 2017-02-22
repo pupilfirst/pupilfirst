@@ -13,7 +13,10 @@ h1.m-b-1 #{@resource.title}
   - if @stream_video
     .m-b-2
       .embed-responsive.embed-responsive-16by9
-        = videojs_rails sources: { mp4: @stream_video}, class: 'embed-responsive-item'
+        - if @resource.video_embed
+          = @stream_video.html_safe
+        - else
+          = videojs_rails sources: { mp4: @stream_video}, class: 'embed-responsive-item'
   - else
     .pull-md-left.m-r-2
       - if @resource.thumbnail.present?

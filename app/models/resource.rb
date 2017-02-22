@@ -24,10 +24,17 @@ class Resource < ApplicationRecord
     [SHARE_STATUS_PUBLIC, SHARE_STATUS_APPROVED]
   end
 
-  validates :file, presence: true
   validates :title, presence: true
   validates :description, presence: true
   validates :share_status, inclusion: { in: valid_share_statuses }
+
+  validate :file_or_video_embed_must_be_present
+
+  def file_or_video_embed_must_be_present
+    return if file.present? || video_embed.present?
+
+    errors[:base] << 'A video embed or file is required.'
+  end
 
   mount_uploader :file, ResourceFileUploader
   mount_uploader :thumbnail, ResourceThumbnailUploader
@@ -70,7 +77,7 @@ class Resource < ApplicationRecord
   end
 
   def stream?
-    content_type.end_with? '/mp4'
+    video_embed.present? || content_type.end_with?('/mp4')
   end
 
   def increment_downloads!

@@ -59,6 +59,19 @@ feature 'Resources' do
     end
   end
 
+  context 'With a video embed resource' do
+    let!(:video_embed_code) { '<iframe src="https://www.youtube.com/sample"></iframe>'}
+    let!(:public_video_embed_resource) { create :resource, file: nil, video_embed: video_embed_code }
+
+    scenario 'founder can stream video embed' do
+      visit resources_path
+
+      page.find('.stream-resource').click
+
+      expect(page).to have_selector('iframe')
+    end
+  end
+
   context 'founder is a logged in founder' do
     before :each do
       # Make the founder a founder of approved startup.

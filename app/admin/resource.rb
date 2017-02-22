@@ -98,7 +98,9 @@ ActiveAdmin.register Resource do
       end
 
       row :description
-      row :video_embed
+      row :video_embed do |resource|
+        resource.video_embed.html_safe
+      end
 
       row :thumbnail do |resource|
         if resource.thumbnail.present?

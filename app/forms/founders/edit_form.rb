@@ -3,7 +3,7 @@ module Founders
     property :name, validates: { presence: true }
     property :born_on, validates: { presence: true }
     property :phone, validates: { presence: true, mobile_number: true }
-    property :avatar
+    property :avatar, validates: { file_size: { less_than: 2.megabytes }, file_content_type: { allow: %w(image/jpeg image/png image/gif) } }
     property :about, validates: { length: { maximum: 250 } }
     property :roles
     property :slack_username

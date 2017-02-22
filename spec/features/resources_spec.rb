@@ -60,7 +60,7 @@ feature 'Resources' do
   end
 
   context 'With a video embed resource' do
-    let!(:video_embed_code) { '<iframe src="https://www.youtube.com/sample"></iframe>'}
+    let!(:video_embed_code) { '<iframe src="https://www.youtube.com/sample"></iframe>' }
     let!(:public_video_embed_resource) { create :resource, file: nil, video_embed: video_embed_code }
 
     scenario 'founder can stream video embed' do

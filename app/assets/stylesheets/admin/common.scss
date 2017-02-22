@@ -1,7 +1,3 @@
-.clear-both {
-  clear: both;
-}
-
 .active-admin-notification {
   background-color: white;
 }
@@ -34,10 +30,6 @@ table > caption {
 // Use with form_class on button_to-s in AA views.
 .inline-button {
   display: inline;
-}
-
-.no-text-decoration {
-  text-decoration: none !important;
 }
 
 .aa-error-hint {
@@ -80,12 +72,4 @@ a.disabled_action_link {
       }
     }
   }
-}
-
-.float-left {
-  float: left;
-}
-
-.float-right {
-  float: right;
 }

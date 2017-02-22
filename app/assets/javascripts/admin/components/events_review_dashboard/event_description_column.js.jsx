@@ -44,8 +44,8 @@ class EventsReviewDashboardEventDescriptionColumn extends React.Component {
         {
           !this.state.showDescriptionEdit &&
           <div style={{width: '260px'}}>
-            <div className="review-dashboard_event-description">{this.state.description}</div>
-            <a onClick={this.toggleDescriptionForm}>Edit Description</a>
+            <div className="review-dashboard__event-description">{this.state.description}</div>
+            <a className="cursor-pointer" onClick={this.toggleDescriptionForm}>Edit Description</a>
           </div>
         }
         {
@@ -53,7 +53,7 @@ class EventsReviewDashboardEventDescriptionColumn extends React.Component {
           <div>
             <textarea type="text" style={{width: '260px', height: '150px'}} value={this.state.description} onChange={this.handleDescriptionChange}/>
             <br/><br/>
-            <a className="button" onClick={this.saveDescription}>Save</a>
+            <a className="button cursor-pointer" onClick={this.saveDescription}>Save</a>
           </div>
         }
       </div>

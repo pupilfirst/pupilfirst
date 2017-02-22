@@ -17,7 +17,8 @@ module TimelineEvents
           description: event.description,
           links: event.links,
           files: event.timeline_event_files,
-          feedback_url: feedback_url(event)
+          feedback_url: feedback_url(event),
+          impersonate_url: impersonate_url(event)
         }
 
         hash[event.id] = merge_owner_details(event, hash[event.id])
@@ -57,6 +58,10 @@ module TimelineEvents
           event_id: timeline_event.id
         }
       )
+    end
+
+    def impersonate_url(timeline_event)
+      url_helpers.impersonate_admin_user_url(timeline_event.founder.user, referer: timeline_event.share_url)
     end
   end
 end

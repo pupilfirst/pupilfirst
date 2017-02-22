@@ -8,6 +8,7 @@ class Ability
       when AdminUser::TYPE_SUPERADMIN
         can :impersonate, User
         can :manage, :all
+        can :quick_review, TimelineEvent
       when AdminUser::TYPE_FACULTY
         can :read, :all
         can :manage, [StartupFeedback, Resource]

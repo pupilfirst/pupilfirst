@@ -85,18 +85,21 @@ ActiveAdmin.register TimelineEvent do
 
   member_action :quick_review, method: :post do
     timeline_event = TimelineEvent.find(params[:id])
-    raise unless timeline_event.pending?
+    if timeline_event.pending?
+      status = {
+        needs_improvement: TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT,
+        not_accepted: TimelineEvent::VERIFIED_STATUS_NOT_ACCEPTED,
+        verified: TimelineEvent::VERIFIED_STATUS_VERIFIED
+      }.fetch(params[:status].to_sym)
 
-    status = {
-      needs_improvement: TimelineEvent::VERIFIED_STATUS_NEEDS_IMPROVEMENT,
-      not_accepted: TimelineEvent::VERIFIED_STATUS_NOT_ACCEPTED,
-      verified: TimelineEvent::VERIFIED_STATUS_VERIFIED
-    }.fetch(params[:status].to_sym)
+      points = params[:points].present? ? params[:points].to_i : nil
 
-    points = params[:points].present? ? params[:points].to_i : nil
-
-    TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade], points: points)
-    head :ok
+      TimelineEvents::VerificationService.new(timeline_event).update_status(status, grade: params[:grade], points: points)
+      head :ok
+    else
+      # someone else already reviewed this event! Ask javascript to reload page.
+      render json: { error: 'Event no longer pending review! Refreshing your dashboard.' }.to_json, status: 422
+    end
   end
 
   member_action :update_description, method: :post do
@@ -130,13 +133,20 @@ ActiveAdmin.register TimelineEvent do
   end
 
   action_item :review, only: :index do
-    link_to 'Review Timeline Events', review_timeline_events_admin_timeline_events_path
+    if current_admin_user&.superadmin?
+      link_to 'Review Timeline Events', review_timeline_events_admin_timeline_events_path
+    end
   end
 
   collection_action :review_timeline_events do
-    batch = Batch.current
-    @review_data = TimelineEvents::ReviewDataService.new(batch).data
-    render 'review_timeline_events'
+    if can? :quick_review, TimelineEvent
+      batch = Batch.current
+      @review_data = TimelineEvents::ReviewDataService.new(batch).data
+      render 'review_timeline_events'
+    else
+      flash[:error] = 'Not authorized to access page.'
+      redirect_to admin_timeline_events_path
+    end
   end
 
   action_item :view, only: :show do
@@ -363,8 +373,6 @@ ActiveAdmin.register TimelineEvent do
         end
       end
     end
-
-    render partial: 'update_status_form'
 
     if timeline_event.target.blank?
       render partial: 'target_form', locals: { timeline_event: timeline_event }

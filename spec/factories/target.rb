@@ -5,6 +5,7 @@ FactoryGirl.define do
     description { Faker::Lorem.words(200).join ' ' }
     target_type { Target.valid_target_types.sample }
     days_to_complete { 1 + rand(60) }
+    target_group
 
     transient do
       batch nil

@@ -159,7 +159,7 @@
             $word.parents('.hero-words-wrapper').addClass('waiting');
           }, 200);
         }
-        if (!$ool) {
+        if (!$bool) {
           setTimeout(function () {
             hideWord($word)
           }, animationDelay)

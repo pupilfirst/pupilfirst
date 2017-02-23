@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170222064857) do
+ActiveRecord::Schema.define(version: 20170223085923) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -697,7 +697,9 @@ ActiveRecord::Schema.define(version: 20170222064857) do
     t.boolean  "chore",                   default: false
     t.text     "video_embed"
     t.datetime "last_session_at"
+    t.integer  "level_id"
     t.index ["chore"], name: "index_targets_on_chore", using: :btree
+    t.index ["level_id"], name: "index_targets_on_level_id", using: :btree
     t.index ["session_at"], name: "index_targets_on_session_at", using: :btree
     t.index ["timeline_event_type_id"], name: "index_targets_on_timeline_event_type_id", using: :btree
   end

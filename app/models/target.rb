@@ -10,6 +10,7 @@ class Target < ApplicationRecord
   belongs_to :target_group
   has_one :program_week, through: :target_group
   has_one :batch, through: :target_group
+  belongs_to :level
 
   mount_uploader :rubric, RubricUploader
 
@@ -45,6 +46,27 @@ class Target < ApplicationRecord
   validates :title, presence: true
   validates :description, presence: true
   validates :days_to_complete, presence: true
+
+  validate :type_of_target_must_be_unique
+
+  def type_of_target_must_be_unique
+    return if target_group.present? ^ session_at.present? ^ chore
+    errors[:base] << 'Target must be one of chore, session or a vanilla target'
+  end
+
+  validate :chore_or_session_must_have_level
+
+  def chore_or_session_must_have_level
+    return unless chore || session_at.present?
+    errors[:level] << 'is required for chore/session' unless level.present?
+  end
+
+  validate :vanilla_target_must_have_target_group
+
+  def vanilla_target_must_have_target_group
+    return if chore || session_at.present?
+    errors[:target_group] << 'is required if target is not a chore or session' unless target_group.present?
+  end
 
   def founder_role?
     role == Target::ROLE_FOUNDER

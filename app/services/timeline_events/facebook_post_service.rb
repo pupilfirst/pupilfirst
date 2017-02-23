@@ -18,10 +18,15 @@ module TimelineEvents
     def post_to_founder(founder)
       if founder.facebook_token_valid?
         log "Attempting to post #{@timeline_event.share_url} to #{founder.name}'s Facebook wall."
-        result = facebook_client(founder).put_connections(:me, :feed, link: @timeline_event.share_url)
-        log "Posted on #{founder.name}'s Facebook wall. Post id: #{result['id']}" if result['id'].present?
+
+        begin
+          result = facebook_client(founder).put_connections(:me, :feed, link: @timeline_event.share_url)
+          log "Posted on #{founder.name}'s Facebook wall. Post id: #{result['id']}" if result['id'].present?
+        rescue Koala::Facebook::ClientError => e
+          handle_client_error(founder, e.message)
+        end
       else
-        Founders::FacebookService.new(founder).disconnect!
+        disconnect(founder)
         # TODO: Probably send a vocalist ping informing missing facebook connection
       end
     end
@@ -34,6 +39,16 @@ module TimelineEvents
 
     def facebook_client(founder)
       Koala::Facebook::API.new(founder.fb_access_token)
+    end
+
+    def handle_client_error(founder, message)
+      log "Failed to post to #{founder.name}'s Facebook wall. Error message follows: #{message}"
+      log "Disconnecting Founder##{founder.id} #{founder.name}..."
+      disconnect(founder)
+    end
+
+    def disconnect(founder)
+      Founders::FacebookService.new(founder).disconnect!
     end
   end
 end

@@ -158,10 +158,6 @@ class TimelineEvent < ApplicationRecord
     end
   end
 
-  def iteration
-    startup.calculated_iteration(at_event: self)
-  end
-
   def update_and_require_reverification(params)
     params[:verified_at] = nil
     params[:verified_status] = VERIFIED_STATUS_PENDING

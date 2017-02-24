@@ -356,16 +356,6 @@ class Startup < ApplicationRecord
     changed_stage_event ? changed_stage_event.timeline_event_type.key : TimelineEventType::TYPE_STAGE_IDEA
   end
 
-  # Returns current iteration, counting end-of-iteration events. If at_event is supplied, it calculates iteration during
-  # that event.
-  def calculated_iteration(at_event: nil)
-    if at_event
-      timeline_events.where('created_at < ?', at_event.created_at)
-    else
-      timeline_events
-    end.end_of_iteration_events.verified.count + 1
-  end
-
   def timeline_verified?
     approved? && timeline_events.verified.present?
   end

@@ -141,7 +141,7 @@
                     img.media-object alt="Iteration icon" src="#{image_url 'timeline/icons/iteration.png'}"
                   .media-body
                     h4.media-heading Product Iteration
-                    p.data-content #{@startup.calculated_iteration.ordinalize}
+                    p.data-content #{@startup.iteration.ordinalize}
             - if @startup.earliest_team_event_date.present?
               .col-sm-6.col-md-12
                 .media
@@ -203,7 +203,7 @@
         .main-timeline data-timeline-event-id=@timeline_event_for_og&.id
           .tl-iteration
             p
-              | Timeline of #{@startup.calculated_iteration.ordinalize} iteration.
+              | Timeline
             = image_tag 'timeline/dash.png'
             br
             a#read-from-beginning href="#"  Read from the beginning.

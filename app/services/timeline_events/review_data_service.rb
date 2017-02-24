@@ -15,12 +15,10 @@ module TimelineEvents
           event_on: event.event_on.strftime('%b %d, %Y'),
           created_at: event.created_at.strftime('%b %d %H:%M'),
           description: event.description,
-          links: event.links,
-          files: event.timeline_event_files,
-          feedback_url: feedback_url(event),
-          impersonate_url: impersonate_url(event)
+          feedback_url: feedback_url(event)
         }
 
+        hash[event.id] = merge_attachment_details(event, hash[event.id])
         hash[event.id] = merge_owner_details(event, hash[event.id])
         hash[event.id] = merge_target_details(event, hash[event.id])
       end
@@ -28,12 +26,21 @@ module TimelineEvents
 
     private
 
+    def merge_attachment_details(event, hash)
+      hash.merge(
+        links: event.links,
+        files: event.timeline_event_files,
+        image: event.image&.file&.original_filename
+      )
+    end
+
     def merge_owner_details(event, hash)
       hash.merge(
         founder_id: event.founder_id,
         founder_name: event.founder.name,
         startup_id: event.startup_id,
-        startup_name: event.startup.product_name
+        startup_name: event.startup.product_name,
+        impersonate_url: impersonate_url(event)
       )
     end
 

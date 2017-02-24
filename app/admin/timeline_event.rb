@@ -116,6 +116,11 @@ ActiveAdmin.register TimelineEvent do
     redirect_to file_url
   end
 
+  member_action :get_image do
+    timeline_event = TimelineEvent.find(params[:id])
+    redirect_to timeline_event.image.url
+  end
+
   member_action :save_feedback, method: :post do
     raise unless params[:feedback].present?
 

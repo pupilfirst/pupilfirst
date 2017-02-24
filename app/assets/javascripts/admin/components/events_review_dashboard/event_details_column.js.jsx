@@ -65,6 +65,11 @@ class EventsReviewDashboardEventDetailsColumn extends React.Component {
             }
           )}
         </div>
+        { this.props.eventData['image'] &&
+        <div>
+          <i className="fa fa-file-image-o"/>&nbsp;<a href={'/admin/timeline_events/' + this.props.eventData['event_id'] + '/get_image'} target='_blank'>{this.props.eventData['image']}</a>
+        </div>
+        }
       </div>
     )
   }

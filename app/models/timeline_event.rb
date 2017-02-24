@@ -272,6 +272,10 @@ class TimelineEvent < ApplicationRecord
     )
   end
 
+  def image_filename
+    image&.sanitized_file&.original_filename
+  end
+
   private
 
   def privileged_founder?(founder)
@@ -334,9 +338,5 @@ class TimelineEvent < ApplicationRecord
 
   def first_link_url
     links.first.try(:[], :url)
-  end
-
-  def image_filename
-    image&.sanitized_file&.original_filename
   end
 end

@@ -273,6 +273,7 @@ class TimelineEvent < ApplicationRecord
   end
 
   def image_filename
+    return if image.blank?
     image&.sanitized_file&.original_filename
   end
 

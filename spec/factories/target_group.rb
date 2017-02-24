@@ -4,6 +4,7 @@ FactoryGirl.define do
     program_week { ProgramWeek.find_by(number: week_number) || create(:program_week, batch: batch) }
     sequence(:sort_index)
     description { Faker::Lorem.sentence }
+    level
 
     transient do
       batch nil

@@ -2,7 +2,6 @@
 # frozen_string_literal: true
 
 class Target < ApplicationRecord
-  belongs_to :assignee, polymorphic: true
   belongs_to :assigner, class_name: 'Faculty'
   belongs_to :timeline_event_type, optional: true
   has_many :timeline_events
@@ -11,15 +10,13 @@ class Target < ApplicationRecord
   belongs_to :target_group
   has_one :program_week, through: :target_group
   has_one :batch, through: :target_group
+  belongs_to :level
 
   mount_uploader :rubric, RubricUploader
 
   scope :founder, -> { where(role: ROLE_FOUNDER) }
   scope :not_founder, -> { where.not(role: ROLE_FOUNDER) }
   scope :due_on, -> (date) { where(due_date: date.beginning_of_day..date.end_of_day) }
-
-  scope :for_founders_in_batch, -> (batch) { where(assignee: batch.founders.not_dropped_out.not_exited) }
-  scope :for_startups_in_batch, -> (batch) { where(assignee: batch.startups.not_dropped_out) }
 
   ROLE_FOUNDER = 'founder'
 
@@ -50,38 +47,51 @@ class Target < ApplicationRecord
   validates :description, presence: true
   validates :days_to_complete, presence: true
 
+  validate :type_of_target_must_be_unique
+
+  def type_of_target_must_be_unique
+    return if [target_group, session_at, chore].one?
+    errors[:base] << 'Target must be one of chore, session or a vanilla target'
+  end
+
+  validate :chore_or_session_must_have_level
+
+  def chore_or_session_must_have_level
+    return unless chore || session?
+    errors[:level] << 'is required for chore/session' unless level.present?
+  end
+
+  validate :vanilla_target_must_have_target_group
+
+  def vanilla_target_must_have_target_group
+    return if chore || session?
+    errors[:target_group] << 'is required if target is not a chore or session' unless target_group.present?
+  end
+
   def founder_role?
     role == Target::ROLE_FOUNDER
   end
 
-  def slack_targets
-    @slack_targets ||= assignee.is_a?(Startup) ? assignee.founders : [assignee]
-  end
-
-  def startup
-    @startup ||= assignee.is_a?(Startup) ? assignee : assignee.startup
-  end
-
-  # TODO: Probably find a way to move this to the corresponding admin controller update action
+  # TODO: Update or excise revision notifications for the new level based program framework:
   # attempts to use after_update hook of activeadmin, overriding its update action or writing a after_filter for update didnt work
   # after_update :notify_revision, if: :crucial_revision?
 
-  def notify_revision
-    PublicSlackTalk.post_message message: revision_as_slack_message, founders: slack_targets
-  end
-
-  def crucial_revision?
-    title_changed? || description_changed? || completion_instructions_changed?
-  end
-
-  def revision_as_slack_message
-    message = "Hey! #{assigner.name} has revised the target (<#{Rails.application.routes.url_helpers.startup_url(startup)}|#{title}>) "\
-    "he recently assigned to #{assignee.is_a?(Startup) ? 'your startup ' + startup.product_name : 'you'}\n"
-    message += "The revised title is: #{title}\n" if title_changed?
-    message += "The description now reads: \"#{ApplicationController.helpers.strip_tags description}\"\n" if description_changed?
-    message += "Completion Instructions were modified to: \"#{completion_instructions}\"\n" if completion_instructions_changed?
-    message
-  end
+  # def notify_revision
+  #   PublicSlackTalk.post_message message: revision_as_slack_message, founders: slack_targets
+  # end
+  #
+  # def crucial_revision?
+  #   title_changed? || description_changed? || completion_instructions_changed?
+  # end
+  #
+  # def revision_as_slack_message
+  #   message = "Hey! #{assigner.name} has revised the target (<#{Rails.application.routes.url_helpers.startup_url(startup)}|#{title}>) "\
+  #   "he recently assigned to #{assignee.is_a?(Startup) ? 'your startup ' + startup.product_name : 'you'}\n"
+  #   message += "The revised title is: #{title}\n" if title_changed?
+  #   message += "The description now reads: \"#{ApplicationController.helpers.strip_tags description}\"\n" if description_changed?
+  #   message += "Completion Instructions were modified to: \"#{completion_instructions}\"\n" if completion_instructions_changed?
+  #   message
+  # end
 
   def rubric_filename
     rubric.sanitized_file.original_filename
@@ -104,5 +114,9 @@ class Target < ApplicationRecord
 
   def stats_service
     @stats_service ||= Targets::StatsService.new(self)
+  end
+
+  def session?
+    session_at.present?
   end
 end

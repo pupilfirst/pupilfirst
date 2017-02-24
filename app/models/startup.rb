@@ -108,7 +108,6 @@ class Startup < ApplicationRecord
   has_many :timeline_events, dependent: :destroy
   has_many :startup_feedback, dependent: :destroy
   has_many :karma_points, dependent: :restrict_with_exception
-  has_many :targets, dependent: :destroy, as: :assignee
   has_many :connect_requests, dependent: :destroy
   has_many :team_members, dependent: :destroy
 
@@ -116,6 +115,7 @@ class Startup < ApplicationRecord
   accepts_nested_attributes_for :admin
 
   belongs_to :batch
+  belongs_to :level
 
   attr_accessor :validate_web_mandatory_fields
 
@@ -358,7 +358,7 @@ class Startup < ApplicationRecord
 
   # Returns current iteration, counting end-of-iteration events. If at_event is supplied, it calculates iteration during
   # that event.
-  def iteration(at_event: nil)
+  def calculated_iteration(at_event: nil)
     if at_event
       timeline_events.where('created_at < ?', at_event.created_at)
     else

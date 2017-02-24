@@ -277,10 +277,6 @@ ActiveAdmin.register Founder do
     link_to 'Public Slack Messages', admin_public_slack_messages_path(q: { founder_id_eq: params[:id] })
   end
 
-  action_item :view_targets, only: :show do
-    link_to 'View Targets', admin_targets_path(q: { assignee_type_eq: 'Founder', assignee_id_eq: founder.id })
-  end
-
   member_action :disconnect_from_facebook, method: :patch do
     founder = Founder.friendly.find(params[:id])
     Founders::FacebookService.new(founder).disconnect!

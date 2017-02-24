@@ -159,7 +159,7 @@ class TimelineEvent < ApplicationRecord
   end
 
   def iteration
-    startup.iteration(at_event: self)
+    startup.calculated_iteration(at_event: self)
   end
 
   def update_and_require_reverification(params)

@@ -30,7 +30,7 @@ module TimelineEvents
       hash.merge(
         links: event.links,
         files: event.timeline_event_files,
-        image: event.image&.file&.original_filename
+        image: event.image_filename
       )
     end
 

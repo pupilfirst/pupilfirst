@@ -110,10 +110,11 @@ ActiveAdmin.register TimelineEvent do
 
   member_action :get_attachment do
     timeline_event = TimelineEvent.find(params[:id])
-    file_url = timeline_event.timeline_event_files.where(title: params[:title]).first&.file&.url
-    raise_not_found unless file_url.present?
+    timeline_event_file = timeline_event.timeline_event_files.find_by(id: params[:timeline_event_file_id])
 
-    redirect_to file_url
+    raise_not_found if timeline_event_file.blank?
+
+    redirect_to timeline_event_file.file.url
   end
 
   member_action :get_image do

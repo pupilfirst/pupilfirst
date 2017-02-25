@@ -59,7 +59,7 @@ class EventsReviewDashboardEventDetailsColumn extends React.Component {
           { this.props.eventData['files'].map(function (file) {
               return (
                 <div key={file.id + file.title}>
-                  <i className="fa fa-file"/>&nbsp;<a href={'/admin/timeline_events/' + file.timeline_event_id + '/get_attachment?title=' + file.title} target='_blank'>{file.title}</a>
+                  <i className="fa fa-file"/>&nbsp;<a href={'/admin/timeline_events/' + file.timeline_event_id + '/get_attachment?timeline_event_file_id=' + file.id} target='_blank'>{file.title}</a>
                 </div>
               )
             }

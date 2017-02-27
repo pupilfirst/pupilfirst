@@ -66,6 +66,9 @@ Rails.application.configure do
 
   # Roadie asset host.
   config.roadie.url_options = { host: 'www.sv.dev', scheme: 'https' }
+
+  # Oink::Middleware logs memory and activerecord usage by default.
+  config.middleware.use Oink::Middleware
 end
 
 Rails.application.default_url_options = Rails.application.config.action_mailer.default_url_options

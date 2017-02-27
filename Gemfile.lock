@@ -390,6 +390,7 @@ GEM
     hashdiff (0.3.2)
     hashie (3.4.4)
     heapy (0.1.2)
+    hodel_3000_compliant_logger (0.1.1)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     http_router (0.11.2)
@@ -473,6 +474,9 @@ GEM
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
+    oink (0.10.1)
+      activerecord
+      hodel_3000_compliant_logger
     omniauth (1.3.1)
       hashie (>= 1.2, < 4)
       rack (>= 1.0, < 3)
@@ -838,6 +842,7 @@ DEPENDENCIES
   lita-slack!
   logstash-logger
   mini_magick
+  oink
   omniauth-facebook
   omniauth-github
   omniauth-google-oauth2

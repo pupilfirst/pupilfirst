@@ -145,6 +145,7 @@ group :development do
   # Go faster, off the Rails - Benchmarks for your whole Rails app
   gem 'derailed_benchmarks'
   gem 'stackprof' # Required by derailed_benchmarks.
+  gem 'oink' # Log parser to identify actions which significantly increase VM heap size
 end
 
 group :test do

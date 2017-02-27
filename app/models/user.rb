@@ -3,6 +3,7 @@ class User < ApplicationRecord
   has_one :founder, dependent: :restrict_with_error
   has_one :batch_applicant, dependent: :restrict_with_error
   has_one :admin_user, dependent: :restrict_with_error
+  has_many :user_activities
 
   has_secure_token :login_token
 

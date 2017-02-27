@@ -80,9 +80,11 @@ class Resource < ApplicationRecord
     video_embed.present? || content_type.end_with?('/mp4')
   end
 
-  def increment_downloads!
-    self.downloads += 1
-    save!
+  def increment_downloads(user)
+    update!(downloads: downloads + 1)
+    if user.present?
+      Users::ActivityService.new(user).create(UserActivity::ACTIVITY_TYPE_RESOURCE_DOWNLOAD, 'resource_id' => id)
+    end
   end
 
   after_create :notify_on_slack

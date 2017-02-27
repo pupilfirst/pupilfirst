@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170223092745) do
+ActiveRecord::Schema.define(version: 20170227083509) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -769,9 +769,11 @@ ActiveRecord::Schema.define(version: 20170223092745) do
   end
 
   create_table "user_activities", force: :cascade do |t|
-    t.integer "user_id"
-    t.string  "role"
-    t.json    "meta_data"
+    t.integer  "user_id"
+    t.string   "activity_type"
+    t.json     "metadata"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.index ["user_id"], name: "index_user_activities_on_user_id", using: :btree
   end
 

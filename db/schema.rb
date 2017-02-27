@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170223085923) do
+ActiveRecord::Schema.define(version: 20170223092745) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -768,6 +768,13 @@ ActiveRecord::Schema.define(version: 20170223085923) do
     t.string   "location"
   end
 
+  create_table "user_activities", force: :cascade do |t|
+    t.integer "user_id"
+    t.string  "role"
+    t.json    "meta_data"
+    t.index ["user_id"], name: "index_user_activities_on_user_id", using: :btree
+  end
+
   create_table "users", force: :cascade do |t|
     t.string   "email"
     t.string   "login_token"
@@ -834,4 +841,5 @@ ActiveRecord::Schema.define(version: 20170223085923) do
   add_foreign_key "team_members", "startups"
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "startups"
+  add_foreign_key "user_activities", "users"
 end

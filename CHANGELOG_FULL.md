@@ -1,7 +1,27 @@
 ## Ongoing
 
 - Design and implementation of Stage 1 of switch to subscription model is ongoing. [[Trello]](https://trello.com/c/r5wuULZ2)
-- The timeline events review interface is undergoing further upgrades. [[Trello]](https://trello.com/c/Bb5BlFQK)
+- A method for manually tracking user activity is being implemented. [[Trello]](https://trello.com/c/oQRYSyAt)
+
+## 2017.02.27
+
+- The timeline events review interface has undergone multiple upgrades. Trello. [[1]](https://trello.com/c/Bb5BlFQK)[[2]](https://trello.com/c/KKzA5SrC)[[3]](https://trello.com/c/nLaVTALZ)[[4]](https://trello.com/c/TVWC7SZx)
+- The startup feedback mailer sent out when faculty adds feedback for a startup was broken - this has been fixed. [[Trello]](https://trello.com/c/lPXWuq06)
+- A link to startup's timeline page has been added to AA's CSV export of startups. [[Trello]](https://trello.com/c/gdyp76ZX)
+- `Startup#calculated_iteration` has been removed in favor of the stored `iteration` column. [[Trello]](https://trello.com/c/Y68bAd0B)
+- We no longer list exited founders on front-end pages. There's a follow up task related to this to block them from accessing founder-actions. [[Trello]](https://trello.com/c/tlGy0axx)
+- Fixed a crash in the startup edit form, caused by the presence of a startup category that was duplicated. [[Trello]](https://trello.com/c/n6ujXMNw)
+- Fixed a bug in a header animation on the `/talent` page. [[Trello]](https://trello.com/c/7JTGGHsi)
+- Added server-side validation for Founder's avatar image file-type - this prevents a crash if a founder attempts to upload non-image files. [[Trello]](https://trello.com/c/U187opW5)
+- A basic spec was added for the `/startups/:slug/:event_title/:id` route. [[Trello]](https://trello.com/c/msk7KWXi)
+- A `video_embed` field was added to `Resource` - this allows for already uploaded YT videos to be used on the resource page, instead of having to upload the video again to our S3 store. [[Trello]](https://trello.com/c/Wonoaifv)
+- Fixed a bug in the `Ability` class where it was checking ability against impersonated user instead of true user. [[Trello]](https://trello.com/c/lWiH9kme)
+- Rollbar now reports using `true_user` instead of the impersonated user. [[Trello]](https://trello.com/c/tgKZOgiJ)
+- All old / stale React components were removed. [[Trello]](https://trello.com/c/adVovmuE)
+- The unused `review_test_embed` field was removed from `Target`. [[Trello]](https://trello.com/c/uIusJgnY)
+- The rating titles for faculty connect requests were updated to reduce confusion about their purpose. [[Trello]](https://trello.com/c/VRTIefOl)
+- The stale polymorphic assignee field was removed from `Target`. [[Trello]](https://trello.com/c/Y7ckhAZd)
+- OAuth exceptions which occur while attempting to post a timeline event to a founder's wall are now handled by disconnecting the user, instead of just crashing. [[Trello]](https://trello.com/c/yoHUWCIF)
 
 ## 2017.02.21
 

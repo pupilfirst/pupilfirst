@@ -35,11 +35,6 @@ ActiveAdmin.register TimelineEvent do
     def scoped_collection
       super.includes :startup, :timeline_event_type
     end
-
-    def show
-      @status_update_form = Admin::TimelineEventStatusUpdateForm.new(TimelineEvent.find(params[:id]))
-      super
-    end
   end
 
   index do
@@ -198,22 +193,6 @@ ActiveAdmin.register TimelineEvent do
     end
 
     redirect_to action: :show
-  end
-
-  member_action :update_status, method: :patch do
-    timeline_event = TimelineEvent.find(params[:id])
-    @status_update_form = Admin::TimelineEventStatusUpdateForm.new(timeline_event)
-
-    if @status_update_form.validate(params[:admin_timeline_event_status_update])
-      timeline_event, points = @status_update_form.save
-      flash_message = "Timeline Event marked #{timeline_event.verified_status}"
-      flash_message += " and #{points} Karma Points added" if points.present?
-      flash[:success] = flash_message
-      redirect_to action: :show
-    else
-      flash[:error] = "Status update failed!"
-      render :show, layout: false
-    end
   end
 
   member_action :save_link_as_resume_url, method: :post do

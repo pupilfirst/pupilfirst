@@ -123,13 +123,35 @@ ActiveAdmin.register TimelineEvent do
     timeline_event = TimelineEvent.find(params[:id])
     reference_url = startup_url(timeline_event.startup, anchor: "event-#{timeline_event.id}")
 
-    StartupFeedback.create!(
+    feedback = StartupFeedback.create!(
       feedback: params[:feedback],
       startup: timeline_event.startup,
       reference_url: reference_url,
       faculty: current_admin_user&.faculty
     )
 
+    founder_params = feedback.for_founder? ? { founder_id: feedback.timeline_event.founder.id } : {}
+
+    render json: { feedback_id: feedback.id }.merge(founder_params)
+  end
+
+  member_action :send_slack_feedback, method: :post do
+    startup_feedback = StartupFeedback.find(params[:feedback_id])
+    founder = Founder.find(params[:founder_id]) if params[:founder_id].present?
+
+    begin
+      response = StartupFeedbackModule::SlackService.new(startup_feedback, founder: founder).send
+    rescue StartupFeedbackModule::SlackService::CommunicationFailure
+      render json: { error: 'Failed to communicate with Slack API' }, status: :internal_server_error
+    else
+      render json: { success: response }
+    end
+  end
+
+  member_action :send_email_feedback, method: :post do
+    startup_feedback = StartupFeedback.find(params[:feedback_id])
+    founder = Founder.find(params[:founder_id]) if params[:founder_id].present?
+    StartupFeedbackModule::EmailService.new(startup_feedback, founder: founder).send
     head :ok
   end
 

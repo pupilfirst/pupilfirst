@@ -47,17 +47,17 @@ ActiveAdmin.register StartupFeedback do
     column :sent_at do |startup_feedback|
       if startup_feedback.sent_at.present?
         startup_feedback.sent_at
-      elsif startup_feedback.pending_email_to_founder?
+      elsif startup_feedback.for_founder?
         link_to(
-          'Email Founder Now!',
-          email_feedback_to_founder_admin_startup_feedback_path(id: startup_feedback.id, founder_id: startup_feedback.timeline_event.founder_id),
-          method: :put, data: { confirm: 'Are you sure you want to email this feedback to the founder?' }
+          'Email Founder Now',
+          email_feedback_admin_startup_feedback_path(startup_feedback, founder_id: startup_feedback.timeline_event.founder_id),
+          method: :post, data: { confirm: 'Are you sure you want to email this feedback to the founder?' }
         )
       else
         link_to(
-          'Email Now!',
+          'Email Now',
           email_feedback_admin_startup_feedback_path(startup_feedback),
-          method: :put, data: { confirm: 'Are you sure you want to email & DM this feedback to all founders?' }
+          method: :post, data: { confirm: 'Are you sure you want to email & DM this feedback to all founders?' }
         )
       end
     end
@@ -65,15 +65,15 @@ ActiveAdmin.register StartupFeedback do
     column :slack_feedback do |startup_feedback|
       if startup_feedback.for_founder?
         link_to(
-          'DM Founder Now!',
-          slack_feedback_to_founder_admin_startup_feedback_path(startup_feedback, founder_id: startup_feedback.timeline_event.founder_id),
-          method: :put, data: { confirm: 'Are you sure you want to DM this feedback to the founder on slack?' }
+          'DM Founder Now',
+          slack_feedback_admin_startup_feedback_path(startup_feedback, founder_id: startup_feedback.timeline_event.founder_id),
+          method: :post, data: { confirm: 'Are you sure you want to DM this feedback to the founder on slack?' }
         )
       else
         link_to(
-          'DM on Slack Now!',
+          'DM on Slack Now',
           slack_feedback_admin_startup_feedback_path(startup_feedback),
-          method: :put, data: { confirm: 'Are you sure you want to DM this feedback to all founders on slack?' }
+          method: :post, data: { confirm: 'Are you sure you want to DM this feedback to all founders on slack?' }
         )
       end
     end
@@ -117,7 +117,6 @@ ActiveAdmin.register StartupFeedback do
           span class: 'wrap-with-paranthesis' do
             link_to 'Remove', remove_feedback_attachment_admin_startup_feedback_path(startup_feedback), method: :put, data: { confirm: 'Are you sure?' }
           end
-          # a(href: remove_feedback_attachment_admin_startup_feedback_path(startup_feedback)) { 'Remove' }
         end
       end
 
@@ -129,8 +128,8 @@ ActiveAdmin.register StartupFeedback do
           div do
             link_to(
               "Send Email to founder (#{founder.fullname})",
-              email_feedback_to_founder_admin_startup_feedback_path(id: startup_feedback.id, founder_id: startup_feedback.timeline_event.founder_id),
-              method: :put, data: { confirm: 'Are you sure you want to email this feedback to the founder?' },
+              email_feedback_admin_startup_feedback_path(startup_feedback, founder_id: startup_feedback.timeline_event.founder_id),
+              method: :post, data: { confirm: 'Are you sure you want to email this feedback to the founder?' },
               class: 'button'
             )
           end
@@ -139,7 +138,7 @@ ActiveAdmin.register StartupFeedback do
             link_to(
               'Send Email to all founders.',
               email_feedback_admin_startup_feedback_path(startup_feedback),
-              method: :put, data: { confirm: 'Are you sure you want to email this feedback to all founders?' },
+              method: :post, data: { confirm: 'Are you sure you want to email this feedback to all founders?' },
               class: 'button'
             )
           end
@@ -147,8 +146,8 @@ ActiveAdmin.register StartupFeedback do
           div(class: 'admin-startup-feedback-show-or') { 'OR' }
 
           div do
-            render 'admin/startup_feedback/email_feedback_to_founder',
-              form_path: email_feedback_to_founder_admin_startup_feedback_path,
+            render 'admin/startup_feedback/email_feedback',
+              form_path: email_feedback_admin_startup_feedback_path,
               startup_feedback: startup_feedback
           end
         end
@@ -160,8 +159,8 @@ ActiveAdmin.register StartupFeedback do
           div do
             link_to(
               "Send DM to founder (#{founder.fullname})",
-              slack_feedback_to_founder_admin_startup_feedback_path(startup_feedback, founder_id: startup_feedback.timeline_event.founder_id),
-              method: :put, data: { confirm: 'Are you sure you want to DM this feedback to the founder on slack?' },
+              slack_feedback_admin_startup_feedback_path(startup_feedback, founder_id: startup_feedback.timeline_event.founder_id),
+              method: :post, data: { confirm: 'Are you sure you want to DM this feedback to the founder on slack?' },
               class: 'button'
             )
           end
@@ -170,15 +169,15 @@ ActiveAdmin.register StartupFeedback do
             link_to(
               'Send DM to all founders.',
               slack_feedback_admin_startup_feedback_path(startup_feedback),
-              method: :put, data: { confirm: 'Are you sure you want to DM this feedback to all founders on slack?' },
+              method: :post, data: { confirm: 'Are you sure you want to DM this feedback to all founders on slack?' },
               class: 'button'
             )
           end
           div(class: 'admin-startup-feedback-show-or') { 'OR' }
 
           div do
-            render 'admin/startup_feedback/slack_feedback_to_founder',
-              form_path: slack_feedback_to_founder_admin_startup_feedback_path,
+            render 'admin/startup_feedback/slack_feedback',
+              form_path: slack_feedback_admin_startup_feedback_path,
               startup_feedback: startup_feedback
           end
         end
@@ -188,10 +187,30 @@ ActiveAdmin.register StartupFeedback do
 
   form partial: 'admin/startup_feedback/form'
 
-  member_action :email_feedback, method: :put do
+  member_action :email_feedback, method: :post do
     startup_feedback = StartupFeedback.find params[:id]
-    StartupMailer.feedback_as_email(startup_feedback).deliver_later
-    startup_feedback.update(sent_at: Time.now)
+    founder = Founder.find(params[:founder_id]) if params[:founder_id].present?
+
+    StartupFeedbackModule::EmailService.new(startup_feedback, founder: founder).send
+
+    message_target = founder.present? ? founder.email : 'all founders'
+    flash[:alert] = "Your feedback has been sent to #{message_target}"
+
+    redirect_back(fallback_location: admin_startup_feedback_index_url)
+  end
+
+  member_action :slack_feedback, method: :post do
+    startup_feedback = StartupFeedback.find params[:id]
+    founder = Founder.find(params[:founder_id]) if params[:founder_id].present?
+
+    begin
+      response = StartupFeedbackModule::SlackService.new(startup_feedback, founder: founder).send
+    rescue StartupFeedbackModule::SlackService::CommunicationFailure
+      flash[:error] = 'Could not communicate with Slack. Try again.'
+    else
+      flash[:alert] = response
+    end
+
     redirect_back(fallback_location: admin_startup_feedback_index_url)
   end
 
@@ -203,91 +222,35 @@ ActiveAdmin.register StartupFeedback do
     redirect_back(fallback_location: admin_startup_feedback_index_url)
   end
 
-  member_action :slack_feedback, method: :put do
-    startup_feedback = StartupFeedback.find params[:id]
-    founders = startup_feedback.startup.founders
-
-    # post to slack
-    response = PublicSlackTalk.post_message message: startup_feedback.as_slack_message, founders: founders
-
-    # show failure error if no response was received from PublicSlackTalk
-    unless response.present?
-      flash[:error] = 'Could not communicate with Slack. Try again.'
-      redirect_back(fallback_location: admin_startup_feedback_index_url)
-      return
-    end
-
-    # form appropriate flash message with details from response
-    success_names = Founder.find(founders.ids - response.errors.keys).map(&:slack_username).join(', ')
-    failure_names = Founder.find(founders.ids & response.errors.keys).map(&:fullname).join(', ')
-    success_message = success_names.present? ? "Your feedback has been sent as DM to: #{success_names} \n" : ''
-    failure_message = failure_names.present? ? "Failed to ping: #{failure_names}" : ''
-    flash[:alert] = success_message + failure_message
-
-    redirect_back(fallback_location: admin_startup_feedback_index_url)
-  end
-
-  member_action :email_feedback_to_founder, method: :put do
-    startup_feedback = StartupFeedback.find params[:id]
-    founder = Founder.find(params[:founder_id])
-    StartupMailer.feedback_as_email(startup_feedback, founder: founder).deliver_later
-    # Mark feedback as sent.
-    startup_feedback.update(sent_at: Time.now)
-    flash[:alert] = "Your feedback has been sent to #{founder.email}"
-    redirect_back(fallback_location: admin_startup_feedback_index_url)
-  end
-
-  member_action :slack_feedback_to_founder, method: :put do
-    startup_feedback = StartupFeedback.find params[:id]
-    founder = Founder.find(params[:founder_id])
-
-    # post to slack
-    response = PublicSlackTalk.post_message message: startup_feedback.as_slack_message, founder: founder
-
-    # show failure error if no response was received from PublicSlackTalk
-    unless response.present?
-      flash[:error] = 'Could not communicate with Slack. Try again.'
-      redirect_back(fallback_location: admin_startup_feedback_index_url)
-      return
-    end
-
-    flash[:alert] = if response.errors.any?
-      "Could not ping #{founder.slack_username} on slack. Please try again"
-    else
-      "Your feedback has been sent as a DM to #{founder.slack_username} on slack"
-    end
-    redirect_back(fallback_location: admin_startup_feedback_index_url)
-  end
-
   action_item :email_feedback, only: :show, if: proc { startup_feedback.sent_at.blank? && !startup_feedback.for_founder? } do
-    link_to(
-      'Email Now!',
-      email_feedback_admin_startup_feedback_path(startup_feedback),
-      method: :put, data: { confirm: 'Are you sure you want to email this feedback to all founders?' }
-    )
+    if startup_feedback.for_founder?
+      link_to(
+        'Email Founder Now!',
+        email_feedback_admin_startup_feedback_path(startup_feedback, founder_id: startup_feedback.timeline_event.founder_id),
+        method: :post, data: { confirm: 'Are you sure you want to email this feedback to the founder?' }
+      )
+    else
+      link_to(
+        'Email Now!',
+        email_feedback_admin_startup_feedback_path(startup_feedback),
+        method: :post, data: { confirm: 'Are you sure you want to email this feedback to all founders?' }
+      )
+    end
   end
 
-  action_item :email_feedback_to_founder, only: :show, if: proc { startup_feedback.pending_email_to_founder? } do
-    link_to(
-      'Email Founder Now!',
-      email_feedback_to_founder_admin_startup_feedback_path(id: startup_feedback.id, founder_id: startup_feedback.timeline_event.founder_id),
-      method: :put, data: { confirm: 'Are you sure you want to email this feedback to the founder?' }
-    )
-  end
-
-  action_item :slack_feedback, only: :show, if: proc { !startup_feedback.for_founder? } do
-    link_to(
-      'DM on Slack Now!',
-      slack_feedback_admin_startup_feedback_path(startup_feedback),
-      method: :put, data: { confirm: 'Are you sure you want to DM this feedback to all founders on slack?' }
-    )
-  end
-
-  action_item :slack_feedback, only: :show, if: proc { startup_feedback.for_founder? } do
-    link_to(
-      'DM Founder on Slack Now!',
-      slack_feedback_to_founder_admin_startup_feedback_path(startup_feedback, founder_id: startup_feedback.timeline_event.founder_id),
-      method: :put, data: { confirm: 'Are you sure you want to DM this feedback to the founder on slack?' }
-    )
+  action_item :slack_feedback, only: :show do
+    if startup_feedback.for_founder?
+      link_to(
+        'DM Founder on Slack Now!',
+        slack_feedback_admin_startup_feedback_path(startup_feedback, founder_id: startup_feedback.timeline_event.founder_id),
+        method: :post, data: { confirm: 'Are you sure you want to DM this feedback to the founder on slack?' }
+      )
+    else
+      link_to(
+        'DM on Slack Now!',
+        slack_feedback_admin_startup_feedback_path(startup_feedback),
+        method: :post, data: { confirm: 'Are you sure you want to DM this feedback to all founders on slack?' }
+      )
+    end
   end
 end

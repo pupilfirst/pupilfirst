@@ -6,7 +6,8 @@ class EventsReviewDashboardEventFeedback extends React.Component {
       feedback: '',
       showFeedbackForm: false,
       feedbackMissing: false,
-      feedbackRecorded: false,
+      feedbackId: null,
+      founderId: null
     };
 
     this.eventFeedbackFormId = this.eventFeedbackFormId.bind(this);
@@ -16,52 +17,50 @@ class EventsReviewDashboardEventFeedback extends React.Component {
     this.markFeedbackRecorded = this.markFeedbackRecorded.bind(this);
   }
 
-  eventFeedbackFormId () {
+  eventFeedbackFormId() {
     return 'event-feedback-form-' + this.props.eventId;
   }
 
-  feedbackChange (value) {
+  feedbackChange(value) {
     this.setState({feedback: value, feedbackMissing: false});
   }
 
-  markFeedbackRecorded () {
-    this.setState({feedbackRecorded: true})
+  markFeedbackRecorded(feedbackId, founderId) {
+    this.setState({feedbackId: feedbackId, founderId: founderId})
   }
 
-  saveFeedback (event) {
+  saveFeedback(event) {
     this.setState({feedbackMissing: false});
     if (!this.state.feedback) {
       this.setState({feedbackMissing: true});
     } else {
-      console.log('Saving Feedback');
       let eventId = this.props.eventId;
       let feedback = this.state.feedback;
       let toggleFeedbackForm = this.toggleFeedbackForm;
       let markFeedbackRecorded = this.markFeedbackRecorded;
       let postUrl = '/admin/timeline_events/' + eventId + '/save_feedback';
+
       $.post({
         url: postUrl,
         data: {feedback: feedback},
-        success: function () {
-          console.log('Feedback Saved!');
-          new PNotify({
-            title: 'Feedback Saved!',
-            text: 'Your feedback for event ' + eventId + ' was saved successfully'
-          });
-          markFeedbackRecorded();
-          toggleFeedbackForm();
-        },
         beforeSend: function () {
           event.target.innerHTML = 'Saving Feedback...'
-        },
-        error: function () {
-          alert('Failed to save your feedback. Try again')
         }
+      }).done(function (response) {
+        new PNotify({
+          title: 'Feedback Saved!',
+          text: 'Your feedback for event ' + eventId + ' was saved successfully'
+        });
+
+        markFeedbackRecorded(response.feedback_id, response.founder_id);
+        toggleFeedbackForm();
+      }).fail(function () {
+        alert('Failed to save your feedback. Try again.')
       });
     }
   }
 
-  toggleFeedbackForm () {
+  toggleFeedbackForm() {
     this.setState({showFeedbackForm: !this.state.showFeedbackForm})
   }
 
@@ -70,13 +69,11 @@ class EventsReviewDashboardEventFeedback extends React.Component {
       <div className="margin-bottom-10">
         { !this.state.showFeedbackForm &&
         <div>
-          { this.state.feedbackRecorded &&
-          <div>
-            <i className="fa fa-check-square-o"/>&nbsp;
-            <span>New Feedback Recorded</span>
-          </div>
+          { this.state.feedbackId != null &&
+          <EventsReviewDashboardFeedbackActions feedbackId={ this.state.feedbackId } founderId={ this.state.founderId }
+            eventId={ this.props.eventId }/>
           }
-          { !this.state.feedbackRecorded &&
+          { this.state.feedbackId == null &&
           <div>
             <i className="fa fa-comment-o"/>&nbsp;
             <a className="cursor-pointer" onClick={ this.toggleFeedbackForm }>
@@ -98,6 +95,7 @@ class EventsReviewDashboardEventFeedback extends React.Component {
           }
         </div>
         }
-      </div> )
+      </div>
+    );
   }
-};
+}

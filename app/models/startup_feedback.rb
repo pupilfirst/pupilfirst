@@ -50,8 +50,4 @@ class StartupFeedback < ApplicationRecord
   def for_founder?
     for_timeline_event? && timeline_event&.founder_event?
   end
-
-  def pending_email_to_founder?
-    for_founder? && sent_at.blank?
-  end
 end

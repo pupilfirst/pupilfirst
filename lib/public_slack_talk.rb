@@ -51,6 +51,7 @@ class PublicSlackTalk
     post_to_channel if @channel
   end
 
+  # TODO: Hari - This method should probably be refactored to avoid mutating the instance variable.
   def post_to_founders
     # post to each founder in the founders array
     @founders.each do |u|

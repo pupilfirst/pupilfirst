@@ -28,7 +28,9 @@ ActiveAdmin.register UserActivity do
     column('Activity Information') do |user_activity|
       case user_activity.activity_type
         when UserActivity::ACTIVITY_TYPE_RESOURCE_DOWNLOAD
-          "Downloaded resource: #{Resource.find_by(id: user_activity.metadata['resource_id']).title}"
+          "Downloaded resource: #{Resource.find_by(id: user_activity.metadata['resource_id'])&.title || 'Info Missing'}"
+        when UserActivity::ACTIVITY_TYPE_FACULTY_CONNECT_REQUEST
+          "Connect Request with faculty: #{ConnectRequest.find_by(id: user_activity.metadata['connect_request_id'])&.connect_slot&.faculty&.name || 'Info Missing'}"
         else
           'Unknown activity type'
       end

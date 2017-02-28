@@ -53,7 +53,7 @@ class Resource < ApplicationRecord
   delegate :content_type, to: :file
 
   def self.for(founder)
-    if founder&.startup&.approved?
+    if !founder&.exited && founder&.startup&.approved?
       where(
         'share_status = ? OR (share_status = ? AND batch_id IS ? AND startup_id IS ?) OR '\
         '(share_status = ? AND batch_id = ? AND startup_id IS ?) OR (share_status = ? AND startup_id = ?)',

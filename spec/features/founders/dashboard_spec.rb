@@ -51,6 +51,14 @@ feature 'Founder Dashboard' do
     end
   end
 
+  context 'when founder has exited the programme' do
+    scenario 'founder visits dashboard', js: true do
+      founder.update!(exited: true)
+      visit dashboard_founder_path
+      expect(page).to have_text('not an active founder anymore')
+    end
+  end
+
   scenario 'founder visits dashboard', js: true do
     # There should be no tour.
     expect(page).to_not have_selector('.introjs-tooltipReferenceLayer', visible: false)

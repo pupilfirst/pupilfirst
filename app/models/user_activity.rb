@@ -1,8 +1,8 @@
 class UserActivity < ApplicationRecord
   belongs_to :user
 
-  ACTIVITY_TYPE_RESOURCE_DOWNLOAD = -'resource_download'
-  ACTIVITY_TYPE_FACULTY_CONNECT_REQUEST = -'faculty_connect_request'
+  ACTIVITY_TYPE_RESOURCE_DOWNLOAD = -'Resource Download'
+  ACTIVITY_TYPE_FACULTY_CONNECT_REQUEST = -'Faculty Connect Request'
 
   def self.valid_activity_types
     [ACTIVITY_TYPE_RESOURCE_DOWNLOAD, ACTIVITY_TYPE_FACULTY_CONNECT_REQUEST]

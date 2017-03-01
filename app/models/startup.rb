@@ -117,8 +117,6 @@ class Startup < ApplicationRecord
   belongs_to :batch
   belongs_to :level
 
-  attr_accessor :validate_web_mandatory_fields
-
   # use the old name attribute as an alias for legal_registered_name
   alias_attribute :name, :legal_registered_name
 

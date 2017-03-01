@@ -1,6 +1,5 @@
 class TimelineEventsController < ApplicationController
   before_action :authenticate_founder!, except: [:activity]
-  before_action :restrict_to_startup_founders, except: [:activity]
 
   # POST /founder/startup/timeline_events
   def create
@@ -69,10 +68,5 @@ class TimelineEventsController < ApplicationController
     params.require(:timeline_event).permit(
       :timeline_event_type_id, :event_on, :description, :image, :links, :files_metadata
     )
-  end
-
-  def restrict_to_startup_founders
-    return if current_founder
-    raise_not_found
   end
 end

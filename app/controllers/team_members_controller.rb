@@ -1,5 +1,5 @@
 class TeamMembersController < ApplicationController
-  before_action :authenticate_founder!, :restrict_to_startup_founders
+  before_action :authenticate_founder!
 
   # GET /founder/startup/team_members/new
   def new
@@ -61,10 +61,5 @@ class TeamMembersController < ApplicationController
 
   def team_member_params
     params.require(:team_member).permit(:name, :email, :avatar, roles: [])
-  end
-
-  def restrict_to_startup_founders
-    return if current_founder
-    raise_not_found
   end
 end

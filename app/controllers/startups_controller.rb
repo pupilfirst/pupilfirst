@@ -1,6 +1,5 @@
 class StartupsController < ApplicationController
   before_action :authenticate_founder!, except: [:show, :index, :timeline_event_show]
-  before_action :restrict_to_startup_founders, only: [:edit, :update]
 
   # GET /startups
   def index
@@ -42,9 +41,7 @@ class StartupsController < ApplicationController
   end
 
   def update
-    @current_founder = current_founder
-    @startup = @current_founder.startup
-    @startup.validate_web_mandatory_fields = true
+    @startup = current_founder.startup
 
     if @startup.update(startup_params)
       flash[:success] = 'Startup details have been updated.'
@@ -89,10 +86,5 @@ class StartupsController < ApplicationController
 
   def startup_registration_params
     params.require(:startup).permit(:product_name)
-  end
-
-  def restrict_to_startup_founders
-    return if current_founder
-    raise_not_found
   end
 end

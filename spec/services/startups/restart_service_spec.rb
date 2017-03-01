@@ -20,6 +20,14 @@ describe Startups::RestartService do
       end
     end
 
+    context "when level is not less than startup's level" do
+      it 'raises Startups::RestartService::LevelInvalid' do
+        expect do
+          subject.new(startup, startup.admin).restart(level_4, reason)
+        end.to raise_error(Startups::RestartService::LevelInvalid)
+      end
+    end
+
     context 'when the level is proper' do
       before do
         subject.new(startup, startup.admin).restart(level_2, reason)

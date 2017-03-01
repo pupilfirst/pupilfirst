@@ -111,7 +111,7 @@ feature 'Founder Dashboard' do
 
     find("#target-#{completed_target.id} .target-title-link").trigger('click')
     within("#target-#{completed_target.id}") do
-      expect(page).to have_content('Target Completed').and have_no_button('Submit')
+      expect(page).to have_content('Target Completed').and have_button('Re-Submit')
     end
 
     find("#target-#{not_accepted_target.id} .target-title-link").trigger('click')

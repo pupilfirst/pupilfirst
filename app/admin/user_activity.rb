@@ -24,6 +24,7 @@ ActiveAdmin.register UserActivity do
     end
 
     column :activity_type
+    column :created_at
 
     column('Activity Information') do |user_activity|
       case user_activity.activity_type

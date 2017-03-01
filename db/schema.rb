@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170227083509) do
+ActiveRecord::Schema.define(version: 20170301070216) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
 
   create_table "active_admin_comments", force: :cascade do |t|
@@ -691,7 +692,6 @@ ActiveRecord::Schema.define(version: 20170227083509) do
     t.integer  "target_group_id"
     t.integer  "points_earnable"
     t.integer  "sort_index",              default: 999
-    t.boolean  "auto_verified",           default: false
     t.datetime "session_at"
     t.boolean  "chore",                   default: false
     t.text     "video_embed"

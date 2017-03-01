@@ -12,30 +12,34 @@ class DatesService
 
     # Weeks start at Monday 6 PM IST.
     def week_start(time)
-      time.beginning_of_week.in_time_zone('Asia/Calcutta') + 18.hours
+      week_beginning(time).in_time_zone('Asia/Calcutta') + 18.hours
     end
 
     # Weeks end at Monday 5:59:59 PM IST.
     def week_end(time)
-      time.end_of_week.in_time_zone('Asia/Calcutta') + 18.hours
+      week_beginning(time).end_of_week.in_time_zone('Asia/Calcutta') + 18.hours
     end
 
     private
 
-    def last_week
-      if monday? && before_evening?
-        8.days.ago
+    def week_beginning(time)
+      if monday?(time) && before_evening?(time)
+        (time - 1.day)
       else
-        7.days.ago
-      end
+        time
+      end.beginning_of_week
     end
 
-    def monday?
-      Time.zone.now.wday == 1
+    def last_week
+      week_beginning(7.days.ago)
     end
 
-    def before_evening?
-      Time.zone.now.hour < 18
+    def monday?(time = Time.zone.now)
+      time.wday == 1
+    end
+
+    def before_evening?(time = Time.zone.now)
+      time.hour < 18
     end
   end
 end

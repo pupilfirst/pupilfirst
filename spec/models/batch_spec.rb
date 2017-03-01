@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Batch, type: :model do
-  subject { create :batch }
+  subject { create :batch, start_date: 30.days.ago }
 
   describe '#display_name' do
     it 'returns number followed by name' do

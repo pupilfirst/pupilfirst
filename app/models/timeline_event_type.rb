@@ -52,6 +52,9 @@ class TimelineEventType < ApplicationRecord
   validates :badge, presence: true
   validates :role, inclusion: { in: valid_roles }
 
+  scope :moved_to_stage, -> { where(key: stage_keys) }
+  scope :suggested_for, ->(startup) { where('suggested_stage LIKE ?', "%#{startup.current_stage}%").where.not(id: startup.current_stage_event_types.map(&:id)) }
+
   def founder_event?
     role == ROLE_FOUNDER
   end
@@ -103,8 +106,11 @@ class TimelineEventType < ApplicationRecord
     TimelineEventType.stage_keys.include?(key)
   end
 
-  scope :end_iteration, -> { where(key: TYPE_END_ITERATION) }
-  scope :moved_to_stage, -> { where(key: stage_keys) }
-  scope :suggested_for, ->(startup) { where('suggested_stage LIKE ?', "%#{startup.current_stage}%").where.not(id: startup.current_stage_event_types.map(&:id)) }
-  scope :help_wanted, -> { where(key: TYPE_HELP_WANTED) }
+  def self.end_iteration
+    find_by(key: TYPE_END_ITERATION)
+  end
+
+  def self.help_wanted
+    find_by(key: TYPE_HELP_WANTED)
+  end
 end

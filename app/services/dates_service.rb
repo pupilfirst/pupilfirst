@@ -2,12 +2,12 @@ class DatesService
   class << self
     # Start date(time) for 'last' week.
     def last_week_start_date
-      week_start(last_week)
+      week_start(1.week.ago)
     end
 
     # End date(time) for 'last' week.
     def last_week_end_date
-      week_end(last_week)
+      week_end(1.week.ago)
     end
 
     # Weeks start at Monday 6 PM IST.
@@ -28,10 +28,6 @@ class DatesService
       else
         time
       end.beginning_of_week
-    end
-
-    def last_week
-      week_beginning(7.days.ago)
     end
 
     def monday?(time = Time.zone.now)

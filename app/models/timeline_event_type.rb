@@ -28,14 +28,6 @@ class TimelineEventType < ApplicationRecord
     TYPE_STAGE_SCALE => 'Scale'
   }.freeze
 
-  STAGE_LINKS = {
-    TYPE_STAGE_IDEA => 'http://playbook.sv.co/stages/5.1-idea-discovery.html',
-    TYPE_STAGE_PROTOTYPE => 'http://playbook.sv.co/stages/5.2-prototyping.html',
-    TYPE_STAGE_CUSTOMER => 'http://playbook.sv.co/stages/5.3-customer-validation.html',
-    TYPE_STAGE_EFFICIENCY => 'http://playbook.sv.co/stages/5.4-efficiency.html',
-    TYPE_STAGE_SCALE => 'http://playbook.sv.co/stages/5.5-scale.html'
-  }.freeze
-
   ROLE_ENGINEERING = 'Engineering'
   ROLE_PRODUCT = 'Product'
   ROLE_DESIGN = 'Design'

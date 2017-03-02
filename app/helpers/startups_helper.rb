@@ -12,15 +12,6 @@ module StartupsHelper
     end
   end
 
-  def stage_link(stage)
-    text = TimelineEventType::STAGE_NAMES[stage]
-    link = TimelineEventType::STAGE_LINKS[stage]
-
-    link_to link, target: '_blank' do
-      "#{text} <i class='fa fa-external-link'></i>".html_safe
-    end
-  end
-
   def truncated_founder_name(name)
     truncate name, length: 20, separator: ' ', omission: ''
   end

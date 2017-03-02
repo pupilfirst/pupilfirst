@@ -14,10 +14,87 @@ h1 Public Slack Forum
     #transparency-intiative.about-text.font-light
       p SV.CO has a public slack forum for discussion by the community. Members from the SV.CO team are often online and you'll get quick answers to your queries. Almost all our communication with registered members of SV.CO is also through this channel, so you'll get a feel for how our community works.
 
-      p To sign up, join below. By joining, you read and agree to the <a href="#">Community Code of Conduct</a>.
+      p
+        ' To sign up, join below. By joining, you read and agree to the
+        a href='#' data-toggle="modal" data-target="#code-of-conduct" Community Code of Conduct.
 
       / Embed slackin app deployed to heroku using https://github.com/Wiredcraft/slackin
       iframe class="slack" src="https://sv-co-public-slackin.herokuapp.com" scrolling="no" seamless="seamless" sandbox="allow-same-origin allow-scripts allow-forms"
 
   .col-md-4
     = render partial: 'about_links'
+
+#code-of-conduct.code-of-conduct__modal.modal.fade role="dialog"
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close data-dismiss="modal" type="button"  &times;
+        h3.modal-title Code of Conduct
+      .modal-body.code-of-conduct__modal-body
+        h4 Conduct
+        p.m-y-1 Contact: #{mail_to 'help@sv.co'}
+
+        ol.code-of-conduct__ordered-list
+          li
+            ' We want the SV.CO community to provide a friendly, safe and welcoming environment for all, regardless of
+            | gender, sexual orientation, disability, ethnicity, religion, or similar personal characteristic.
+          li
+            ' On Slack, Github, email or at any community event, please avoid using overtly sexual nicknames or other
+            | nicknames that might detract from a friendly, safe and welcoming environment for all.
+          li Please be kind and courteous. There's no need to be mean or rude.
+          li
+            ' Respect that people have differences of opinion and that every decision carries a trade-off and numerous
+            | costs. There is seldom a right answer.
+          li
+            ' We will exclude you from interaction if you insult, demean or harass anyone. That is not welcome
+            ' behaviour. We interpret the term &ldquo;harassment&rdquo; as including the definition in the
+            a href="http://citizencodeofconduct.org/" target='_blank' Citizen Code of Conduct
+            ' &nbsp;if you have any lack of clarity about what might be included in that concept, please read their
+            ' definition. In particular, we don&rsquo;t tolerate behavior that excludes people in socially marginalized
+            | groups.
+          li
+            ' Private harassment is also unacceptable. No matter who you are, if you feel you have been or are being
+            ' harassed or made uncomfortable by a community member, please contact #{mail_to 'help@sv.co'} immediately.
+            ' Whether you&rsquo;re a regular contributor or a newcomer, we care about making this community a safe place
+            | for you and we&rsquo;ve got your back.
+          li Likewise any spamming, trolling, flaming, baiting or other attention-stealing behaviour is not welcome.
+
+        h4 Moderation
+
+        p.m-y-1
+          ' These are the policies for upholding our community&rsquo;s standards of conduct in our communication
+          | channels, most notably in Slack and Github discussion channels.
+
+        ol.code-of-conduct__ordered-list
+          li
+            ' Remarks that violate the SV.CO standards of conduct, including hateful, hurtful, oppressive, or
+            ' exclusionary remarks, are not allowed (cursing is allowed, but never targeting another user, and never
+            | in a hateful manner).
+          li
+            ' Remarks that moderators find inappropriate, whether listed in the code of conduct or not, are also not
+            | allowed.
+          li Moderators will first respond to such remarks with a warning.
+          li If the warning is unheeded, the user will be removed out of the communication channel to cool off.
+          li If the user comes back and continues to make trouble, they will be banned, i.e., indefinitely excluded.
+          li
+            ' Moderators may choose at their discretion to un-ban the user if it was a first offense and they offer the
+            | offended party a genuine apology.
+          li
+            ' If a moderator bans someone and you think it was unjustified, please take it up with that moderator, or
+            | with a different moderator, in private. Complaints about bans in-channel are not allowed.
+          li
+            ' Moderators are held to a higher standard than other community members. If a moderator creates an
+            | inappropriate situation, they should expect less leeway than others.
+          li
+            ' If someone takes issue with something you said or did, resist the urge to be defensive. Just stop doing
+            ' what it was they complained about and apologize. Even if you feel you were misinterpreted or unfairly
+            ' accused, chances are good there was something you could&rsquo;ve communicated better &mdash; remember that
+            ' it&rsquo;s your responsibility to make your fellow SV.CO members comfortable. Everyone wants to get along
+            ' and we are all here first and foremost because we want to talk about cool technology. You will find that
+            | people will be eager to assume good intent and forgive as long as you earn their trust.
+
+        p
+          ' Adapted from the Rust Language
+          | #{link_to 'Code of Conduct', 'https://www.rust-lang.org/conduct.html', target: '_blank'}.
+      .modal-footer
+        button.btn.btn-default data-dismiss="modal" type="button"  Close

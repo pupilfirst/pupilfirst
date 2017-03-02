@@ -1,0 +1,16 @@
+.code-of-conduct__modal {
+  text-align: justify;
+}
+
+.code-of-conduct__modal-body {
+  padding: 25px;
+}
+
+.code-of-conduct__ordered-list {
+  padding: 0 25px;
+
+  // Breaking BEM here for convenience.
+  li {
+    margin-bottom: 0.7rem;
+  }
+}

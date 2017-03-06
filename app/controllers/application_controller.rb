@@ -116,9 +116,9 @@ class ApplicationController < ActionController::Base
     authenticate_user!
 
     founder = current_user.founder
-    return if founder.present? && !founder.exited
+    return if founder.present? && !founder.exited?
 
-    flash[:error] = 'You are not an active founder anymore!' if founder.exited
+    flash[:error] = 'You are not an active founder anymore!' if founder&.exited?
     redirect_to root_path
   end
 

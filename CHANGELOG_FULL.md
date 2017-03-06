@@ -1,7 +1,20 @@
 ## Ongoing
 
 - Design and implementation of Stage 1 of switch to subscription model is ongoing. [[Trello]](https://trello.com/c/r5wuULZ2)
-- A method for manually tracking user activity is being implemented. [[Trello]](https://trello.com/c/oQRYSyAt)
+
+## 2017.03.06
+- `UserActivity` table has been introduced to track free-form activity - currently tracks resource downloads and connect request creation. Trello [[1]](https://trello.com/c/oQRYSyAt)[[2]](https://trello.com/c/0pHSZ2MT)
+- Vocalist pings for feedback submission have been restored. [[Trello]](https://trello.com/c/qks1vNwo)
+- Founders are now allowed to re-submit targets even after completion. [[Trello]](https://trello.com/c/biQsh8Vj)
+- The contact form was removed from `/about/contact` since Intercom is preferred / easier. [[Trello]](https://trello.com/c/Gfsoe6JL)
+- Exited founders are now prevented from taking _founder-actions_. [[Trello]](https://trello.com/c/OfWmlTiw)
+- Fixed a minor bug in spec for `Batch` that caused it to fail on March 1. [[Trello]](https://trello.com/c/ZtupISoG)
+- Updated gem `letter_opener_web` to avoid deprecation warnings. [[Trello]](https://trello.com/c/v7pgrqCK)
+- The `PublicSlackTalk` class was refactored to remove multiple (unnecessary) methods of replying to a request. [[Trello]](https://trello.com/c/cJD4yDJR)
+- Some stale code related to `VerificationService` was removed. [[Trello]](https://trello.com/c/2YGWAfZA)
+- Ahoy's logs now store the logged in `User` insted of `Founder`. [[Trello]](https://trello.com/c/ioJFRJbV)
+- Removed the `auto_verified` flag from `Target` and all related code. [[Trello]](https://trello.com/c/KSAjU4hZ)
+
 
 ## 2017.02.27
 

@@ -1,3 +1,17 @@
+### 6 March, 2017
+
+#### Features
+
+- Founders are now allowed to re-submit targets even after completion.
+
+#### UX and UI
+
+- The contact form was removed from `/about/contact` since using _Intercom_ is easier.
+
+#### Bugfixes
+
+- Vocalist pings for timeline event feedback have been restored.
+
 ### 27 February, 2017
 
 #### Features

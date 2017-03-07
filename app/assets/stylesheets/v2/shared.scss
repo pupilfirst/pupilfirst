@@ -72,7 +72,7 @@
 
 // founder dashboard
 
-.dashboard-header {
+.founder-dashboard-header__container {
   width: 100%;
   min-height: 280px;
   padding: 30px 0;
@@ -86,65 +86,55 @@
     min-height: auto;
   }
 }
-.startup-profile {
-  .startup-logo-container {
-    width: 100px;
-    height: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: white;
-    @include border-radius(30%);
-    padding: 1rem;
-    box-shadow: 0px 1px 8px 0px lighten($gray-dark, 20%);
 
-    @include media-breakpoint-down(sm) {
-      float: left;
-    }
-    .startup-logo {
-      width: 100%;
-    }
-  }
-  .product-details {
-    text-align: center;
+.founder-dashboard-header__startup-logo-container {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  @include border-radius(30%);
+  padding: 1rem;
+  box-shadow: 0px 1px 8px 0px lighten($gray-dark, 20%);
 
-    @include media-breakpoint-down(sm) {
-      float: left;
-      text-align: left;
-      margin-left: 20px;
-    }
-
-    .product-title {
-      padding-top: 12px;
-      margin-bottom: 5px;
-      color: white;
-      letter-spacing: 0.03rem;
-      text-shadow: 0px 1px 3px lighten($gray-dark, 10%);
-
-      @include media-breakpoint-down(sm) {
-        padding-top: 5px;
-        font-size: 1.25rem;
-        margin-bottom: 3px;
-        max-width: 160px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-    }
-    .startup-name {
-      color: white;
-      letter-spacing: 0.04rem;
-      text-shadow: 0px 1px 2px lighten($gray-dark, 10%);
-
-      @include media-breakpoint-down(sm) {
-        max-width: 160px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-    }
+  @include media-breakpoint-down(sm) {
+    float: left;
   }
 }
+
+.founder-dashboard-header__startup-logo {
+  width: 100%;
+}
+
+.founder-dashboard-header__product-details {
+  text-align: center;
+
+  @include media-breakpoint-down(sm) {
+    float: left;
+    text-align: left;
+    margin-left: 20px;
+  }
+}
+
+.founder-dashboard-header__product-title {
+  padding-top: 12px;
+  margin-bottom: 5px;
+  color: white;
+  letter-spacing: 0.03rem;
+  text-shadow: 0px 1px 3px lighten($gray-dark, 10%);
+
+  @include media-breakpoint-down(sm) {
+    padding-top: 5px;
+    font-size: 1.25rem;
+    margin-bottom: 3px;
+    max-width: 160px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
 .startup-founders {
   .founder-avatar-bubble {
     position: relative;

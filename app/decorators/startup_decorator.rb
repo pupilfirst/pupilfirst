@@ -3,7 +3,7 @@ class StartupDecorator < Draper::Decorator
 
   def identicon_logo
     base64_logo = Startups::IdenticonLogoService.new(model).base64_svg
-    h.image_tag("data:image/svg+xml;base64,#{base64_logo}", class: 'startup-logo')
+    h.image_tag("data:image/svg+xml;base64,#{base64_logo}", class: 'founder-dashboard-header__startup-logo')
   end
 
   def completed_targets_count

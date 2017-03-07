@@ -1,18 +1,16 @@
-.dashboard-header
+.founder-dashboard-header__container
   .container
-    .startup-profile.clearfix
-      .m-x-auto.startup-logo-container
+    .founder-dashboard-header__startup-profile.clearfix
+      .m-x-auto.founder-dashboard-header__startup-logo-container.hidden-xs-down
         - if @startup.logo.present?
-          = image_tag "#{@startup.logo_url}", class: 'startup-logo'
+          = image_tag "#{@startup.logo_url}", class: 'founder-dashboard-header__startup-logo'
         - else
           = @startup.identicon_logo
-      .product-details
-        h3.product-title.font-semibold
+      .founder-dashboard-header__product-details
+        h3.founder-dashboard-header__product-title.font-semibold
           | #{@startup.product_name}
         - if @startup.name.present?
-          p.startup-name
-            | by #{@startup.name}
-        .startup-founders
+        .startup-founders.hidden-xs-down
           .hidden-xs-down
             - @startup.founders.not_exited.each do |founder|
               a.founder-avatar-bubble href=founder_profile_path(founder.slug)

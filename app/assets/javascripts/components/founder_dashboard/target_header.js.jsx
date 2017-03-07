@@ -8,8 +8,8 @@ class FounderDashboardTargetHeader extends React.Component {
 
   render() {
     return (
-      <div className="founder-dashboard-target-header__container clearfix">
-        <img className="founder-dashboard-target-header__icon" src=""/>
+      <div className="founder-dashboard-target-header__container clearfix founder-dashboard-target-header__container--active">
+        <img className="founder-dashboard-target-header__icon" src= {'/assets/founders/dashboard/target-type-icons/personal_todo_icon.svg'} />
         <div className="founder-dashboard-target-header__title">
           <h6 className="founder-dashboard-target-header__headline">
             {/*#{target.team_or_personal}/#{target.target_type}*/}

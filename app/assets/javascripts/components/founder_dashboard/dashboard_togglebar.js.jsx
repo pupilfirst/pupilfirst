@@ -6,19 +6,19 @@ class FounderDashboardToggleBar extends React.Component {
         <div className="founder-dashboard-togglebar__toggle">
           <div className="btn-group founder-dashboard-togglebar__toggle-group" data-toggle="buttons">
             <label className="btn founder-dashboard-togglebar__toggle-btn btn-md active m-a-0">
-              <input type="radio" name="toggle-options" id="toggle-option1" autocomplete="off" checked/>TARGETS
+              <input type="radio" name="toggle-options" id="toggle-option1" defaultChecked/>TARGETS
             </label>
             <label className="btn founder-dashboard-togglebar__toggle-btn btn-md m-a-0">
               <span className="badge badge-pill badge-primary founder-dashboard-togglebar__toggle-btn-notify">
                 20
               </span>
-              <input type="radio" name="toggle-options" id="toggle-option2" autocomplete="off"/>CHORES
+              <input type="radio" name="toggle-options" id="toggle-option2"/>CHORES
             </label>
             <label className="btn founder-dashboard-togglebar__toggle-btn btn-md m-a-0">
               <span className="badge badge-pill badge-primary founder-dashboard-togglebar__toggle-btn-notify">
                 2
               </span>
-              <input type="radio" name="toggle-options" id="toggle-option3" autocomplete="off"/>SESSIONS
+              <input type="radio" name="toggle-options" id="toggle-option3"/>SESSIONS
             </label>
           </div>
         </div>

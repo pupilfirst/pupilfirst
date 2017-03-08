@@ -331,12 +331,10 @@
 
 .submit-instruction {
   font-size: 0.875rem;
-  font-weight: $font-light;
   letter-spacing: 0.02rem;
   margin-bottom: 1rem;
   margin-left: -46px;
   max-width: 30rem;
-  color: $light-grey-text;
 
   @include media-breakpoint-down(sm) {
     margin-left: 0;
@@ -435,7 +433,7 @@
   border: 1px solid $gray-border;
   box-shadow: 0px 2px 10px 0px lighten($gray-light, 35%);
   @include border-radius(10px);
-  margin: 0 0 50px 0;
+  margin: 0 0 40px 0;
   padding: 0;
   list-style: none;
   position: relative;
@@ -639,8 +637,6 @@
 .target-description {
   padding: 15px 30px 20px 55px;
   margin-left: 1rem;
-  font-size: 1.125rem;
-  font-weight: $font-light;
 
   .target-description-btn {
     font-size: 0.875rem;
@@ -651,8 +647,8 @@
   }
 
   .target-description-header {
-    padding-top: 5px;
-    padding-bottom: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 
     @include media-breakpoint-down(sm) {
       h6 {
@@ -661,6 +657,10 @@
         }
       }
     }
+  }
+  .target-description-content {
+    font-size: 1rem;
+    line-height: 1.9;
   }
   .btn-timeline-builder {
     margin-left: -46px;

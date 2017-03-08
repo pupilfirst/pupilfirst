@@ -277,6 +277,7 @@ GEM
       actionmailer (>= 4.0.0)
       devise (>= 4.0.0)
     diff-lcs (1.2.5)
+    diffy (3.1.0)
     disposable (0.3.2)
       declarative (>= 0.0.8, < 1.0.0)
       representable (>= 2.4.0, <= 3.1.0)
@@ -810,6 +811,7 @@ DEPENDENCIES
   descriptive_statistics (~> 2.4.0)
   devise
   devise_invitable
+  diffy
   dotenv-rails
   draper (~> 3.0.0.pre1)
   dry-validation

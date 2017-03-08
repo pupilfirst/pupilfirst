@@ -99,7 +99,9 @@ ActiveAdmin.register TimelineEvent do
 
   member_action :update_description, method: :post do
     timeline_event = TimelineEvent.find(params[:id])
+    old_description = timeline_event.description
     timeline_event.update!(description: params[:description])
+    TimelineEvents::DescriptionUpdateNotificationJob.perform_later(timeline_event, old_description)
     head :ok
   end
 

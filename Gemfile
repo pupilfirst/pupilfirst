@@ -108,8 +108,8 @@ gem 'omniauth-github' # GitHub strategy for OmniAuth
 
 gem 'koala', '~> 2.2' # Library for Facebook with support for OAuth authentication, the Graph and REST APIs
 gem 'pretender' # Log in as another user in Rails
-
 gem 'file_validators' # Adds file validators to ActiveModel.
+gem 'diffy' # Easy Diffing in Ruby.
 
 # Rails assets!
 source 'https://rails-assets.org' do

@@ -263,3 +263,10 @@ en:
       founder_reminder: ":exclamation: *Reminder:* Your startup (%{startup_name}) has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes! You can <%{meeting_link}|click here> to join the meeting when it's time."
       faculty_reminder: ":exclamation: *Reminder:* You have an office hour with the founders of <%{startup_url}|%{startup_name}> starting in 30 minutes!\nThe founders plan to discuss the following questions:\n %{questions}\nYou can <%{meeting_link}|click here> to join the meeting when it's time."
       ops_team_reminder: ":exclamation: *Reminder:* <%{startup_url}|%{startup_name}> has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes. Follow up!"
+
+  jobs:
+    timeline_event:
+      description_update_notification:
+        heading: >
+          An SV.CO faculty member has updated the description in your timeline event (<%{event_url}|%{event_title}>).
+          See changes below:

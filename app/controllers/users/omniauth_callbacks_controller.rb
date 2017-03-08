@@ -14,7 +14,12 @@ module Users
       if user.present?
         sign_in user
         remember_me user
-        redirect_to request.env['omniauth.origin'] || after_sign_in_path_for(user)
+
+        # resolve the issue of flashing message 'You are already signed in' on first sign in
+        origin = request.env['omniauth.origin']
+        origin = nil if origin =~ %r{users/sign_in}
+
+        redirect_to origin || after_sign_in_path_for(user)
       else
         flash[:notice] = "Your email address: #{email} is not registered at SV.CO"
         redirect_to new_user_session_path

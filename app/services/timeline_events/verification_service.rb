@@ -69,7 +69,7 @@ module TimelineEvents
     end
 
     def previous_points_for_target
-      return 0 unless @target.present?
+      return 0 if @target.blank?
       founder = @timeline_event.founder
       previous_target_timeline_events = @target.founder_role? ? @target.timeline_events.where(founder: founder) : @target.timeline_events.where(startup: founder.startup)
       KarmaPoint.where(source: previous_target_timeline_events).sum(:points)

@@ -11,62 +11,74 @@ class TimelineEventVerificationNotificationJob < ApplicationJob
     # return if invoked for a pending event - Pending events have no associated notifications, yet
     return if @timeline_event.pending?
 
-    # decide the appropriate channel to ping - private ping for founder events and not accepted ones, general channel for public announcements
-    target =  if @timeline_event.founder_event?
-      { founder: @timeline_event.founder }
-    elsif @timeline_event.not_accepted?
-      { founders: @timeline_event.startup&.founders }
-    else
-      { channel: @timeline_event.startup.batch.slack_channel }
-    end
-
-    # ping appropriate message on slack
-    PublicSlackTalk.post_message({ message: slack_notice }.merge(target))
+    # send message to the founder who submitted the event for both founder and startup targets.
+    send_founder_message
+    # send notification to the all the founders in a team except the founder who submitted the event.
+    send_team_message
+    # send event verification message to public slack channel for startup targets.
+    send_public_message
   end
 
   private
 
-  # form appropriate slack message
-  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-  def slack_notice
+  def send_founder_message
+    target = { founder: @timeline_event.founder }
+
+    slack_message = message('founder', event_status, event_type: event_type)
+    PublicSlackTalk.post_message({ message: slack_message }.merge(target))
+  end
+
+  def send_team_message
+    return if @timeline_event.founder_event?
+
+    target = { founders: @timeline_event.startup&.founders - [@timeline_event.founder] }
+
+    slack_message = message('team', event_status)
+
+    PublicSlackTalk.post_message({ message: slack_message }.merge(target))
+  end
+
+  def send_public_message
+    return if @timeline_event.founder_event? || @timeline_event.not_accepted?
+
+    target = { channel: @timeline_event.startup.batch.slack_channel }
+
+    slack_message = message('public', event_status)
+
+    PublicSlackTalk.post_message({ message: slack_message }.merge(target))
+  end
+
+  def event_type
+    @timeline_event.founder_event? ? 'founder_event' : 'startup_event'
+  end
+
+  def event_status
     if @timeline_event.verified?
-      @timeline_event.founder_event? ? private_verification_notice : public_verification_notice
+      'verified'
     elsif @timeline_event.needs_improvement?
-      @timeline_event.founder_event? ? private_needs_improvement_notice : public_needs_improvement_notice
-    elsif @timeline_event.not_accepted?
-      @timeline_event.founder_event? ? private_not_accepted_notice : public_not_accepted_notice
+      'needs_improvement'
+    else
+      'not_accepted'
     end
   end
-  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
-  def private_verification_notice
-    I18n.t "slack_notifications.timeline_events.verification.private", event_title: @timeline_event.title, event_url: @timeline_event_url
+  def message(target, status, event_type: nil)
+    if target == 'founder'
+      I18n.t "slack_notifications.timeline_events.#{target}.#{status}.#{event_type}", message_params
+    else
+      I18n.t "slack_notifications.timeline_events.#{target}.#{status}", message_params
+    end
   end
 
-  def private_needs_improvement_notice
-    I18n.t "slack_notifications.timeline_events.needs_improvement.private", event_title: @timeline_event.title, event_url: @timeline_event_url
-  end
-
-  def private_not_accepted_notice
-    I18n.t "slack_notifications.timeline_events.not_accepted.private", event_title: @timeline_event.title, event_url: @timeline_event_url
-  end
-
-  def public_verification_notice
-    I18n.t "slack_notifications.timeline_events.verification.public",
-      startup_url: @startup_url, startup_product_name: @startup.product_name, event_url: @timeline_event_url,
-      event_title: @timeline_event.title, event_description: @timeline_event.description, links_attached_notice: links_attached_notice
-  end
-
-  def public_needs_improvement_notice
-    I18n.t "slack_notifications.timeline_events.needs_improvement.public",
-      startup_url: @startup_url, startup_product_name: @startup.product_name, event_url: @timeline_event_url,
-      event_title: @timeline_event.title, event_description: @timeline_event.description, links_attached_notice: links_attached_notice
-  end
-
-  # this is not exactly 'public' but to 'all founders'. Using public for consistency in naming
-  def public_not_accepted_notice
-    I18n.t "slack_notifications.timeline_events.not_accepted.public",
-      event_title: @timeline_event.title, event_url: @timeline_event_url, startup_product_name: @startup.product_name
+  def message_params
+    {
+      startup_url: @startup_url,
+      startup_product_name: @startup.product_name,
+      event_url: @timeline_event_url,
+      event_title: @timeline_event.title,
+      event_description: @timeline_event.description,
+      links_attached_notice: links_attached_notice
+    }
   end
 
   def links_attached_notice

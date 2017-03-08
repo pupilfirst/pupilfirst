@@ -6,7 +6,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repository_path| "https://github.com/#{repository_path}.git" }
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '= 5.0.1'
+gem 'rails', '= 5.0.2'
 
 gem 'dotenv-rails', groups: [:development, :test]
 

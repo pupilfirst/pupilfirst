@@ -33,8 +33,12 @@ class StartupsController < ApplicationController
     show
 
     @timeline_event_for_og = @startup.timeline_events.find_by(id: params[:event_id])
-    raise_not_found unless @timeline_event_for_og.present?
-    render 'show'
+
+    if @timeline_event_for_og.blank? || @timeline_event_for_og.hidden_from?(current_founder)
+      raise_not_found
+    else
+      render 'show'
+    end
   end
 
   # GET /startups/:id/events/:page

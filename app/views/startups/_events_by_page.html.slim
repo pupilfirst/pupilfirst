@@ -1,0 +1,14 @@
+- page_start = (page - 1) * 20
+- page_end = (20 * page) - 1
+
+- events[page_start..page_end].each do |event|
+  - if event.end_iteration?
+    == render 'timeline_event_end_iteration', event: event, startup: startup
+  - else
+    == render 'timeline_event', event: event, startup: startup
+
+- if more
+  /.startup-show__load-events-button style="text-align: center;"
+  .text-center.margin-top-10
+    a.js-startup-show__load-events-link.btn.btn-primary href="#" data-load-url=paged_events_startup_url(startup, page: page + 1)
+      | Load more events

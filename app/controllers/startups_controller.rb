@@ -1,5 +1,5 @@
 class StartupsController < ApplicationController
-  before_action :authenticate_founder!, except: [:show, :index, :timeline_event_show]
+  before_action :authenticate_founder!, except: [:show, :index, :timeline_event_show, :paged_events]
 
   # GET /startups
   def index
@@ -24,6 +24,7 @@ class StartupsController < ApplicationController
     end
 
     @events_for_display = @startup.timeline_events_for_display(current_founder)
+    @has_more_events = more_events?(@events_for_display, 1)
   end
 
   # GET /startups/:id/:event_title/:event_id
@@ -34,6 +35,16 @@ class StartupsController < ApplicationController
     @timeline_event_for_og = @startup.timeline_events.find_by(id: params[:event_id])
     raise_not_found unless @timeline_event_for_og.present?
     render 'show'
+  end
+
+  # GET /startups/:id/events/:page
+  def paged_events
+    # Reuse the startup action, because that's what this page also shows.
+    show
+    @page = params[:page].to_i
+    @has_more_events = more_events?(@events_for_display, @page)
+
+    render layout: false
   end
 
   def edit
@@ -52,6 +63,11 @@ class StartupsController < ApplicationController
   end
 
   private
+
+  def more_events?(events, page)
+    return false if events.count <= 20
+    events.count > page * 20
+  end
 
   def load_startups
     batch_id = params.dig(:startups_filter, :batch)

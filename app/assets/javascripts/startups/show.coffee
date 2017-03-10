@@ -36,7 +36,7 @@ resetOnHideFeedbackModal = ->
     $('#improvement-modal').find('.attachment-download-btn').attr('href', "")
 
 moveToFocusedEvent = ->
-  if $(".startup-show__og-timeline-event").length
+  if $("#focused-event").length
     window.location.hash = "#focused-event"
 
 handleLoadMoreEvents = ->

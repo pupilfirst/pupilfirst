@@ -3,9 +3,8 @@
     .hidden-marker href="#" data-toggle="tooltip" title="This event is not visible on the public startup timeline."
       i.fa.fa-user-secret
   - if event.image?
-    - unless defined?(hide_image) && hide_image
-      .img-responsive.tl-event-image
-        = image_tag event.image
+    .img-responsive.tl-event-image
+      = image_tag event.image
   .timeline-heading
     - if event.pending?
       .verified-status-notice href="#" data-toggle="tooltip" title="We will verify this event very soon! If you haven't heard from us in 24 hours, do ping us on Slack!"

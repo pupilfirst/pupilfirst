@@ -200,8 +200,13 @@
     /Form to post new timeline event
     .col-md-8.col-md-pull-4
       - if @timeline_event_for_og.present?
-        .startup-show__og-timeline-event#focused-event
-          == render 'timeline_panel', event: @timeline_event_for_og.decorate, startup: @startup, hide_image: true
+        .main-timeline
+          .tl-iteration
+            p#focused-event
+              | Focused Event
+            = image_tag 'timeline/dash.png'
+          ul
+            == render 'timeline_event', event: @timeline_event_for_og.decorate, startup: @startup
 
       - if @events_for_display.present?
         .main-timeline

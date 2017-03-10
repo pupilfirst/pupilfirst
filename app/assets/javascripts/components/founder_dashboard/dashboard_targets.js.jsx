@@ -4,7 +4,7 @@ class FounderDashboardTargets extends React.Component {
     return (
       <div>
         <FounderDashboardActionBar/>
-        <FounderDashboardTargetGroup/>
+        <FounderDashboardTargetCollection/>
       </div>
     );
   }

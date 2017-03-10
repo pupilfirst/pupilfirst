@@ -5,8 +5,8 @@
 
 .founder-dashboard-togglebar__container {
   position: relative;
-  top: -20px;
-  height: 40px;
+  top: -24px;
+  height: 48px;
   margin-bottom: 30px;
 
   @include media-breakpoint-down(sm) {
@@ -31,7 +31,7 @@
 .founder-dashboard-togglebar__toggle-btn {
   background-color: white;
   color: $light-grey-text;
-  padding: 0.75rem 1.875rem;
+  padding: 1rem 1.875rem;
   width: 120px;
 
   @include media-breakpoint-down(xs) {
@@ -116,6 +116,93 @@
   }
 }
 
+.founder-dashboard-sessions__tag-select-container {
+  display: inline-block;
+  width: 420px;
+  @include border-radius(30px);
+  box-shadow: 0 2px 10px 0px rgba(0, 0, 0, 0.07);
+
+  @include media-breakpoint-down(sm) {
+    width: 240px;
+    margin-right: 10px;
+  }
+
+  .select2-selection--multiple {
+    height: 42px;
+    @include border-radius(30px 0 0 30px);
+    border-color: $gray-border;
+    background-color: $primary-background;
+
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: 1px;
+      top: 1px;
+      right: 0;
+      width: 20%;
+      background: linear-gradient(to right, rgba(249, 249, 249, 0), rgba(249, 249, 249, 1) 75%);
+    }
+
+    .select2-selection__choice {
+      margin-left: 4px;
+      margin-right: 4px;
+      font-size: 0.75rem;
+      padding: 2px 6px;
+      background-color: lighten($light-primary, 45%);
+      border: 1px solid $light-primary;
+      letter-spacing: 0.02rem;
+      @include border-radius(30px);
+    }
+
+    .select2-selection__rendered {
+      width: 340px;
+      display: block;
+      position: relative;
+      overflow: hidden;
+
+      > li {
+        display: inline-block;
+        float: none;
+      }
+    }
+  }
+
+  .select2-container--open {
+    &.select2-container--below {
+      .select2-selection--multiple {
+        @include border-radius(20px 0 0 0);
+      }
+    }
+  }
+  .select2-container--open {
+    &.select2-container--above {
+      border: 1px solid $gray-border;
+
+      .select2-selection--multiple {
+        @include border-radius(0 0 0 20px);
+      }
+    }
+  }
+
+  .select2-container--focus .select2-selection--multiple {
+    border-color: $gray-border;
+  }
+
+  .select2-search__field {
+    margin-left: 5px;
+    height: 30px;
+  }
+}
+
+.btn-session-tag-select {
+  border-color: $gray-border;
+}
+
+.founder-dashboard-sessions__tag-select {
+  min-width: 200px;
+  max-width: 400px;
+}
+
 .founder-dashboard-actionbar__show-more-menu {
   line-height: 30px;
   padding: 0 5px 0 0;
@@ -188,6 +275,7 @@
 
 .btn-timeline-builder {
   display: inline-block;
+  box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
 
   @include media-breakpoint-down(sm) {
     width: auto;

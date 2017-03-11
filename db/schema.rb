@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170222064857) do
+ActiveRecord::Schema.define(version: 20170301070216) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -692,12 +692,13 @@ ActiveRecord::Schema.define(version: 20170222064857) do
     t.integer  "target_group_id"
     t.integer  "points_earnable"
     t.integer  "sort_index",              default: 999
-    t.boolean  "auto_verified",           default: false
     t.datetime "session_at"
     t.boolean  "chore",                   default: false
     t.text     "video_embed"
     t.datetime "last_session_at"
+    t.integer  "level_id"
     t.index ["chore"], name: "index_targets_on_chore", using: :btree
+    t.index ["level_id"], name: "index_targets_on_level_id", using: :btree
     t.index ["session_at"], name: "index_targets_on_session_at", using: :btree
     t.index ["timeline_event_type_id"], name: "index_targets_on_timeline_event_type_id", using: :btree
   end
@@ -766,6 +767,15 @@ ActiveRecord::Schema.define(version: 20170222064857) do
     t.string   "location"
   end
 
+  create_table "user_activities", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "activity_type"
+    t.json     "metadata"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["user_id"], name: "index_user_activities_on_user_id", using: :btree
+  end
+
   create_table "users", force: :cascade do |t|
     t.string   "email"
     t.string   "login_token"
@@ -832,4 +842,5 @@ ActiveRecord::Schema.define(version: 20170222064857) do
   add_foreign_key "team_members", "startups"
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "startups"
+  add_foreign_key "user_activities", "users"
 end

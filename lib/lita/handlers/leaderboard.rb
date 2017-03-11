@@ -3,7 +3,6 @@ module Lita
     class Leaderboard < Handler
       route(/\Aleaderboard\s*\?*\s*(\d*)\s*\?*\z/i, :leaderboard, command: true, help: { 'leaderboard? [BATCH NUMBER]' => I18n.t('slack.help.leaderboard') })
 
-      # rubocop:disable Metrics/AbcSize
       def leaderboard(response)
         ActiveRecord::Base.connection_pool.with_connection do
           # check if a particular batch was requested by parsing the regex matches
@@ -13,31 +12,12 @@ module Lita
           send_wait_message(response)
 
           begin
-            # respond directly to the user if private message
-            if response.message.source.private_message
-              slack_username = response.message.source.user.metadata['mention_name']
-              founder = ::Founder.find_by(slack_username: slack_username)
-
-              # Fallback to using the SLACK postMessage API method for users who are not registered on SV.CO
-              if founder
-                PublicSlackTalk.post_message message: leaderboard_response_message, founder: founder
-              else
-                reply_using_api_post_message channel: response.message.source.room, message: leaderboard_response_message
-              end
-
-              # reply to the source channel if not a private message
-            else
-              channel = response.message.source.room
-              reply_using_api_post_message message: leaderboard_response_message, channel: channel
-            end
-
+            response.reply leaderboard_response_message
           rescue
             response.reply(':confused: Oops! Something seems wrong. Please try again later!')
           end
         end
       end
-
-      # rubocop:enable Metrics/AbcSize
 
       # send a relevant please wait method
       def send_wait_message(response)
@@ -46,12 +26,6 @@ module Lita
         else
           response.reply('Please wait while I fetch the leaderboards of all current batches for you :simple_smile:')
         end
-      end
-
-      # reply to non-SV.CO users using the SLACK API directly
-      def reply_using_api_post_message(channel:, message:)
-        RestClient.get "https://slack.com/api/chat.postMessage?token=#{Rails.application.secrets.slack_token}&channel=#{channel}"\
-        "&text=#{CGI.escape message}&as_user=true"
       end
 
       # construct the leaderboard response to be send
@@ -86,8 +60,11 @@ module Lita
           else
             ':rank_nochange:'
           end
-          rank_list += "*#{format('%02d', rank)}.* #{indicator}#{format('%+03d', change_in_rank)} - <#{Rails.application.routes.url_helpers.startup_url(startup)}|#{startup.product_name}>\n"
+
+          signed_change_in_rank = format('%+d', change_in_rank).rjust(3)
+          rank_list += "*#{format('%02d', rank)}.* #{indicator}`#{signed_change_in_rank}` - <#{Rails.application.routes.url_helpers.startup_url(startup)}|#{startup.product_name}>\n"
         end
+
         rank_list
       end
     end

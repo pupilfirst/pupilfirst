@@ -35,11 +35,6 @@ ActiveAdmin.register TimelineEvent do
     def scoped_collection
       super.includes :startup, :timeline_event_type
     end
-
-    def show
-      @status_update_form = Admin::TimelineEventStatusUpdateForm.new(TimelineEvent.find(params[:id]))
-      super
-    end
   end
 
   index do
@@ -104,16 +99,24 @@ ActiveAdmin.register TimelineEvent do
 
   member_action :update_description, method: :post do
     timeline_event = TimelineEvent.find(params[:id])
+    old_description = timeline_event.description
     timeline_event.update!(description: params[:description])
+    TimelineEvents::DescriptionUpdateNotificationJob.perform_later(timeline_event, old_description)
     head :ok
   end
 
   member_action :get_attachment do
     timeline_event = TimelineEvent.find(params[:id])
-    file_url = timeline_event.timeline_event_files.where(title: params[:title]).first&.file&.url
-    raise_not_found unless file_url.present?
+    timeline_event_file = timeline_event.timeline_event_files.find_by(id: params[:timeline_event_file_id])
 
-    redirect_to file_url
+    raise_not_found if timeline_event_file.blank?
+
+    redirect_to timeline_event_file.file.url
+  end
+
+  member_action :get_image do
+    timeline_event = TimelineEvent.find(params[:id])
+    redirect_to timeline_event.image.url
   end
 
   member_action :save_feedback, method: :post do
@@ -122,13 +125,35 @@ ActiveAdmin.register TimelineEvent do
     timeline_event = TimelineEvent.find(params[:id])
     reference_url = startup_url(timeline_event.startup, anchor: "event-#{timeline_event.id}")
 
-    StartupFeedback.create!(
+    feedback = StartupFeedback.create!(
       feedback: params[:feedback],
       startup: timeline_event.startup,
       reference_url: reference_url,
       faculty: current_admin_user&.faculty
     )
 
+    founder_params = feedback.for_founder? ? { founder_id: feedback.timeline_event.founder.id } : {}
+
+    render json: { feedback_id: feedback.id }.merge(founder_params)
+  end
+
+  member_action :send_slack_feedback, method: :post do
+    startup_feedback = StartupFeedback.find(params[:feedback_id])
+    founder = Founder.find(params[:founder_id]) if params[:founder_id].present?
+
+    begin
+      response = StartupFeedbackModule::SlackService.new(startup_feedback, founder: founder).send
+    rescue StartupFeedbackModule::SlackService::CommunicationFailure
+      render json: { error: 'Failed to communicate with Slack API' }, status: :internal_server_error
+    else
+      render json: { success: response }
+    end
+  end
+
+  member_action :send_email_feedback, method: :post do
+    startup_feedback = StartupFeedback.find(params[:feedback_id])
+    founder = Founder.find(params[:founder_id]) if params[:founder_id].present?
+    StartupFeedbackModule::EmailService.new(startup_feedback, founder: founder).send
     head :ok
   end
 
@@ -192,22 +217,6 @@ ActiveAdmin.register TimelineEvent do
     end
 
     redirect_to action: :show
-  end
-
-  member_action :update_status, method: :patch do
-    timeline_event = TimelineEvent.find(params[:id])
-    @status_update_form = Admin::TimelineEventStatusUpdateForm.new(timeline_event)
-
-    if @status_update_form.validate(params[:admin_timeline_event_status_update])
-      timeline_event, points = @status_update_form.save
-      flash_message = "Timeline Event marked #{timeline_event.verified_status}"
-      flash_message += " and #{points} Karma Points added" if points.present?
-      flash[:success] = flash_message
-      redirect_to action: :show
-    else
-      flash[:error] = "Status update failed!"
-      render :show, layout: false
-    end
   end
 
   member_action :save_link_as_resume_url, method: :post do

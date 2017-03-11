@@ -99,7 +99,7 @@ ActiveAdmin.register Resource do
 
       row :description
       row :video_embed do |resource|
-        resource.video_embed.html_safe
+        resource.video_embed&.html_safe
       end
 
       row :thumbnail do |resource|

@@ -17,7 +17,7 @@ class ResourcesController < ApplicationController
 
     return unless params[:watch].present? && @resource.stream?
 
-    @resource.increment_downloads!
+    @resource.increment_downloads(current_user)
     @stream_video = @resource.file&.url || @resource.video_embed
 
   rescue ActiveRecord::RecordNotFound
@@ -34,7 +34,7 @@ class ResourcesController < ApplicationController
 
   def download
     resource = Resource.for(current_founder).find(params[:id])
-    resource.increment_downloads!
+    resource.increment_downloads(current_user)
     redirect_to resource.file.url
   end
 

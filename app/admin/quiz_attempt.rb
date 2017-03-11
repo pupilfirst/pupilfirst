@@ -13,4 +13,17 @@ ActiveAdmin.register QuizAttempt do
 
     actions
   end
+
+  csv do
+    column :id
+
+    column :name do |quiz_attempt|
+      quiz_attempt.mooc_student&.name
+    end
+
+    column :score
+    column :total_questions
+    column :attempted_questions
+    column :created_at
+  end
 end

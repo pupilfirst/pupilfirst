@@ -53,7 +53,7 @@ class Founder < ApplicationRecord
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
 
   scope :active_on_slack, -> (since, upto) { joins(:public_slack_messages).where(public_slack_messages: { created_at: since..upto }) }
-  scope :active_on_web, -> (since, upto) { joins(:visits).where(visits: { started_at: since..upto }) }
+  scope :active_on_web, -> (since, upto) { joins(user: :visits).where(visits: { started_at: since..upto }) }
   scope :inactive, lambda {
     where(exited: false).where.not(id: active_on_slack(Time.now.beginning_of_week, Time.now)).where.not(id: active_on_web(Time.now.beginning_of_week, Time.now))
   }

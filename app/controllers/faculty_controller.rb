@@ -23,6 +23,7 @@ class FacultyController < ApplicationController
 
     if connect_request.save
       flash[:success] = "Connect Request has been submitted. You will receive an email once it's confirmed."
+      Users::ActivityService.new(current_founder.user).create(UserActivity::ACTIVITY_TYPE_FACULTY_CONNECT_REQUEST, 'connect_request_id' => connect_request.id)
     else
       flash[:error] = 'Something went wrong while attempting to create connect request! :('
     end

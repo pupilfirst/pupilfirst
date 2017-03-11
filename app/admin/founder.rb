@@ -141,7 +141,7 @@ ActiveAdmin.register Founder do
     column :year_of_graduation
 
     column :slack_username
-    column(:skype_username, &:skype_id)
+    column(:skype_username) { |founder| founder.skype_id } # rubocop:disable Style/SymbolProc
 
     column :startup_admin?
     column :slug

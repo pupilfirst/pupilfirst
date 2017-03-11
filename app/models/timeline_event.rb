@@ -158,10 +158,6 @@ class TimelineEvent < ApplicationRecord
     end
   end
 
-  def iteration
-    startup.calculated_iteration(at_event: self)
-  end
-
   def update_and_require_reverification(params)
     params[:verified_at] = nil
     params[:verified_status] = VERIFIED_STATUS_PENDING
@@ -274,6 +270,11 @@ class TimelineEvent < ApplicationRecord
     Rails.application.routes.url_helpers.timeline_event_show_startup_url(
       id: startup.slug, event_title: title.parameterize, event_id: id
     )
+  end
+
+  def image_filename
+    return if image.blank?
+    image&.sanitized_file&.original_filename
   end
 
   private

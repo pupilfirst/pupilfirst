@@ -117,8 +117,6 @@ class Startup < ApplicationRecord
   belongs_to :batch
   belongs_to :level
 
-  attr_accessor :validate_web_mandatory_fields
-
   # use the old name attribute as an alias for legal_registered_name
   alias_attribute :name, :legal_registered_name
 
@@ -356,16 +354,6 @@ class Startup < ApplicationRecord
     changed_stage_event ? changed_stage_event.timeline_event_type.key : TimelineEventType::TYPE_STAGE_IDEA
   end
 
-  # Returns current iteration, counting end-of-iteration events. If at_event is supplied, it calculates iteration during
-  # that event.
-  def calculated_iteration(at_event: nil)
-    if at_event
-      timeline_events.where('created_at < ?', at_event.created_at)
-    else
-      timeline_events
-    end.end_of_iteration_events.verified.count + 1
-  end
-
   def timeline_verified?
     approved? && timeline_events.verified.present?
   end
@@ -382,7 +370,10 @@ class Startup < ApplicationRecord
       events_for_display = events_for_display.verified_or_needs_improvement
     end
 
-    events_for_display.order(:event_on, :updated_at).reverse_order.decorate
+    decorated_events = events_for_display.order(:event_on, :updated_at).reverse_order.decorate
+
+    # Hide founder events from everyone other than author of event.
+    decorated_events.reject { |event| event.hidden_from?(viewer) }
   end
 
   # Update stage whenever startup is updated. Note that this is also triggered from TimelineEvent after_commit.

@@ -1,3 +1,35 @@
+### 6 March, 2017
+
+#### Features
+
+- Founders are now allowed to re-submit targets even after completion.
+
+#### UX and UI
+
+- The contact form was removed from `/about/contact` since using _Intercom_ is easier.
+
+#### Bugfixes
+
+- Vocalist pings for timeline event feedback have been restored.
+
+### 27 February, 2017
+
+#### Features
+
+  - Library resources can now display embedded Youtube videos.
+
+#### UX and UI
+
+  - Rating titles for faculty connect requests were updated to reduce confusion about their purpose.
+
+#### Bugfixes
+
+  - The startup feedback mailer sent out when faculty adds feedback for a startup was broken - this has been fixed.
+  - We no longer list _exited_ founders on front-end pages.
+  - Fixed a crash in the startup edit form caused by presence of incorrect related data.
+  - Fixed a bug in a header animation on the `/talent` page.
+  - Added server-side validation for Founder's avatar image file-type - this prevents a crash if a founder attempts to upload non-image files.
+
 ### 21 February, 2017
 
 #### Bugfixes

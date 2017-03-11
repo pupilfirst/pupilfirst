@@ -13,6 +13,7 @@
     = f.input :title
     = f.input :session_at, as: :string, input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O' } }
     = f.input :chore
+    = f.input :level
 
     = f.hidden_field :description
 
@@ -39,13 +40,11 @@
     = f.input :assigner, collection: Faculty.active.order(:name), include_blank: false
 
     = f.input :target_group,
-      collection: (@target.batch.present? ? @target.batch.target_groups : TargetGroup.all).sorted_by_week.includes(:program_week),
-      include_blank: false
+      collection: (@target.batch.present? ? @target.batch.target_groups : TargetGroup.all).sorted_by_week.includes(:program_week)
 
     = f.input :sort_index
     = f.input :days_to_complete
     = f.input :rubric, as: :file
     = f.input :remote_rubric_url
-    /= f.input :auto_verified
 
   = f.submit

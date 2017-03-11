@@ -60,7 +60,7 @@ en:
       submission_failure: Something went wrong when attempting to process your submission. Please contact us at help@sv.co.
       applications_close_soon_html: Applications for batch %{batch_number} will close on <strong>%{deadline}</strong>. You have <strong>%{delta}</strong> to submit your application.
     stage_1:
-      application_page_read_html: I have gone through application page and I understand the conditions of the <a href='http://playbook.sv.co/2-legal-agreement.html' target='_blank'>legal agreement that I will be required to sign</a>, if my team is short-listed for the program.
+      application_page_read_html: I have gone through application page and I understand the conditions of the legal agreement that I will be required to sign, if my team is short-listed for the program.
       team_lead_consent: I understand that I'm the designated Team Lead and I will accept all communication on behalf of the team during this application process.
       fees_consent: I agree that I have read the application page and understood all fees related to the program.
       submission_failure: Something went wrong when we tried to save your application data. Please contact help@sv.co if this error persists.
@@ -225,15 +225,27 @@ en:
 
   slack_notifications:
     timeline_events:
-      verification:
-        private: "Your new timeline entry (<%{event_url}|%{event_title}>) has been verified by SV.CO"
-        public: "<%{startup_url}|%{startup_product_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>\n*Description:* %{event_description}\n%{links_attached_notice}"
-      needs_improvement:
-        private: "Your new timeline entry (<%{event_url}|%{event_title}>) has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
-        public: "<%{startup_url}|%{startup_product_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>\n*Description:* %{event_description}\n%{links_attached_notice}"
-      not_accepted:
-        private: "Your new timeline entry (<%{event_url}|%{event_title}>) has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
-        public: "The new timeline entry (<%{event_url}|%{event_title}>) submitted by  your startup %{startup_product_name} has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
+      founder:
+        verified:
+          founder_event: "Your new timeline entry (<%{event_url}|%{event_title}>) has been verified by SV.CO"
+          startup_event: "Your new timeline entry (<%{event_url}|%{event_title}>) for <%{startup_url}|%{startup_product_name}> has been verified by SV.CO"
+        needs_improvement:
+          founder_event: "Your new timeline entry (<%{event_url}|%{event_title}>) has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
+          startup_event: "Your new timeline entry (<%{event_url}|%{event_title}>) for <%{startup_url}|%{startup_product_name}> has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
+        not_accepted:
+          founder_event: "Your new timeline entry (<%{event_url}|%{event_title}>) has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
+          startup_event: "The new timeline entry (<%{event_url}|%{event_title}>) submitted by you for <%{startup_url}|%{startup_product_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
+      team:
+        verified: "Your startup <%{startup_url}|%{startup_product_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>"
+        needs_improvement: "Your startup <%{startup_url}|%{startup_product_name}> has a new timeline entry: (<%{event_url}|%{event_title}>) and has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
+        not_accepted: "The new timeline entry (<%{event_url}|%{event_title}>) submitted by  your startup <%{startup_url}|%{startup_product_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
+      public:
+        verified: &slack_notifications_public_verified |
+          <%{startup_url}|%{startup_product_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>
+          *Description:* %{event_description}
+          %{links_attached_notice}
+        needs_improvement: *slack_notifications_public_verified
+
     targets:
       new_target:
         salutation: "Hey! %{assigner} has assigned %{assignee} a new target: *<%{startup_url}|%{title}>*\n"
@@ -251,3 +263,10 @@ en:
       founder_reminder: ":exclamation: *Reminder:* Your startup (%{startup_name}) has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes! You can <%{meeting_link}|click here> to join the meeting when it's time."
       faculty_reminder: ":exclamation: *Reminder:* You have an office hour with the founders of <%{startup_url}|%{startup_name}> starting in 30 minutes!\nThe founders plan to discuss the following questions:\n %{questions}\nYou can <%{meeting_link}|click here> to join the meeting when it's time."
       ops_team_reminder: ":exclamation: *Reminder:* <%{startup_url}|%{startup_name}> has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes. Follow up!"
+
+  jobs:
+    timeline_event:
+      description_update_notification:
+        heading: >
+          An SV.CO faculty member has updated the description in your timeline event (<%{event_url}|%{event_title}>).
+          See changes below:

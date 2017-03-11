@@ -28,14 +28,6 @@ class TimelineEventType < ApplicationRecord
     TYPE_STAGE_SCALE => 'Scale'
   }.freeze
 
-  STAGE_LINKS = {
-    TYPE_STAGE_IDEA => 'http://playbook.sv.co/stages/5.1-idea-discovery.html',
-    TYPE_STAGE_PROTOTYPE => 'http://playbook.sv.co/stages/5.2-prototyping.html',
-    TYPE_STAGE_CUSTOMER => 'http://playbook.sv.co/stages/5.3-customer-validation.html',
-    TYPE_STAGE_EFFICIENCY => 'http://playbook.sv.co/stages/5.4-efficiency.html',
-    TYPE_STAGE_SCALE => 'http://playbook.sv.co/stages/5.5-scale.html'
-  }.freeze
-
   ROLE_ENGINEERING = 'Engineering'
   ROLE_PRODUCT = 'Product'
   ROLE_DESIGN = 'Design'
@@ -51,6 +43,9 @@ class TimelineEventType < ApplicationRecord
   validates :title, presence: true
   validates :badge, presence: true
   validates :role, inclusion: { in: valid_roles }
+
+  scope :moved_to_stage, -> { where(key: stage_keys) }
+  scope :suggested_for, ->(startup) { where('suggested_stage LIKE ?', "%#{startup.current_stage}%").where.not(id: startup.current_stage_event_types.map(&:id)) }
 
   def founder_event?
     role == ROLE_FOUNDER
@@ -103,8 +98,11 @@ class TimelineEventType < ApplicationRecord
     TimelineEventType.stage_keys.include?(key)
   end
 
-  scope :end_iteration, -> { where(key: TYPE_END_ITERATION) }
-  scope :moved_to_stage, -> { where(key: stage_keys) }
-  scope :suggested_for, ->(startup) { where('suggested_stage LIKE ?', "%#{startup.current_stage}%").where.not(id: startup.current_stage_event_types.map(&:id)) }
-  scope :help_wanted, -> { where(key: TYPE_HELP_WANTED) }
+  def self.end_iteration
+    find_by(key: TYPE_END_ITERATION)
+  end
+
+  def self.help_wanted
+    find_by(key: TYPE_HELP_WANTED)
+  end
 end

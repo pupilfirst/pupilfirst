@@ -33,5 +33,11 @@ FactoryGirl.define do
       title 'Joined SV.CO'
       suggested_stage 'moved_to_idea_discovery'
     end
+
+    factory :tet_end_iteration do
+      key TimelineEventType::TYPE_END_ITERATION
+      role 'Product'
+      title 'End of Iteration'
+    end
   end
 end

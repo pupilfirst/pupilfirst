@@ -1,6 +1,5 @@
 class StartupsController < ApplicationController
-  before_action :authenticate_founder!, except: [:show, :index, :timeline_event_show]
-  before_action :restrict_to_startup_founders, only: [:edit, :update]
+  before_action :authenticate_founder!, except: [:show, :index, :timeline_event_show, :paged_events]
 
   # GET /startups
   def index
@@ -25,6 +24,7 @@ class StartupsController < ApplicationController
     end
 
     @events_for_display = @startup.timeline_events_for_display(current_founder)
+    @has_more_events = more_events?(@events_for_display, 1)
   end
 
   # GET /startups/:id/:event_title/:event_id
@@ -33,8 +33,22 @@ class StartupsController < ApplicationController
     show
 
     @timeline_event_for_og = @startup.timeline_events.find_by(id: params[:event_id])
-    raise_not_found unless @timeline_event_for_og.present?
-    render 'show'
+
+    if @timeline_event_for_og.blank? || @timeline_event_for_og.hidden_from?(current_founder)
+      raise_not_found
+    else
+      render 'show'
+    end
+  end
+
+  # GET /startups/:id/events/:page
+  def paged_events
+    # Reuse the startup action, because that's what this page also shows.
+    show
+    @page = params[:page].to_i
+    @has_more_events = more_events?(@events_for_display, @page)
+
+    render layout: false
   end
 
   def edit
@@ -42,9 +56,7 @@ class StartupsController < ApplicationController
   end
 
   def update
-    @current_founder = current_founder
-    @startup = @current_founder.startup
-    @startup.validate_web_mandatory_fields = true
+    @startup = current_founder.startup
 
     if @startup.update(startup_params)
       flash[:success] = 'Startup details have been updated.'
@@ -55,6 +67,11 @@ class StartupsController < ApplicationController
   end
 
   private
+
+  def more_events?(events, page)
+    return false if events.count <= 20
+    events.count > page * 20
+  end
 
   def load_startups
     batch_id = params.dig(:startups_filter, :batch)
@@ -89,10 +106,5 @@ class StartupsController < ApplicationController
 
   def startup_registration_params
     params.require(:startup).permit(:product_name)
-  end
-
-  def restrict_to_startup_founders
-    return if current_founder
-    raise_not_found
   end
 end

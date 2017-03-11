@@ -96,6 +96,7 @@ ActiveAdmin.register Startup do
   csv do
     column :product_name
     column :product_description
+    column(:timeline_link) { |startup| startup_url(startup) }
     column :presentation_link
     column :product_video_link
     column :wireframe_link

@@ -1,14 +1,15 @@
 .dashboard-item
-  - founder_visits = Visit.includes(founder: :startup).where(started_at: (3.weeks.ago..Time.now)).where(startups: { batch_id: selected_batch_ids })
+  - founder_visits = Visit.includes(logged_in_user: { founder: :startup }).where(started_at: (3.weeks.ago..Time.now)).where(startups: { batch_id: selected_batch_ids })
+
   .heading Recent visits (Only logged-in founders)
 
   .content
     - founder_visits.order('visits.started_at DESC').limit(10).each do |visit|
       .recent-visit
         ' &nbsp;#{visit.started_at.strftime('%b %e, %H:%M')}:
-        = link_to visit.user.fullname, admin_founder_path(visit.user)
+        = link_to visit.user.founder.fullname, admin_founder_path(visit.user.founder)
         ' &nbsp;&dash;
-        = link_to visit.user.startup.product_name, admin_startup_path(visit.user.startup)
+        = link_to visit.user.founder.startup.product_name, admin_startup_path(visit.user.founder.startup)
 
   .footer-spacer
 

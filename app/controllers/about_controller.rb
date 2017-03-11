@@ -28,24 +28,8 @@ class AboutController < ApplicationController
 
   # GET /about/contact
   def contact
-    @contact_form = ContactForm.new(OpenStruct.new)
-    @contact_form.prepopulate!(current_founder)
     @sitewide_notice = params[:redirect_from] == 'startupvillage.in'
     render layout: 'application_v2'
-  end
-
-  # POST /about/contact
-  def send_contact_email
-    @contact_form = ContactForm.new(OpenStruct.new)
-
-    if @contact_form.validate(contact_form_params) && recaptcha_valid?
-      @contact_form.send_mail
-      flash[:success] = "An email with your query has been sent to help@sv.co. We'll get back to you as soon as we can."
-      redirect_to about_contact_path
-    else
-      flash.now[:error] = 'Please make sure that you filled out all required fields in the contact form.'
-      render 'contact'
-    end
   end
 
   private

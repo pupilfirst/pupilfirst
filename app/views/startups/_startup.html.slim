@@ -51,7 +51,7 @@
       p.startup-details__description.font-light
         = startup.product_description
       .startups-attachments
-        a.startup-attachments__link href="#{TimelineEventType::STAGE_LINKS[startup.stage]}" target="_blank" title="#{TimelineEventType::STAGE_NAMES[startup.stage]} Stage"
+        span.startup-attachments__link title="#{TimelineEventType::STAGE_NAMES[startup.stage]} Stage"
           img.startups-link__icon alt="Product Stage" src="#{image_url 'startups/icons/product-stage-icon.svg'}"
           ' #{TimelineEventType::STAGE_NAMES[startup.stage]}
 

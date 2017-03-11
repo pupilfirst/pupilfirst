@@ -59,8 +59,15 @@ class Batch < ApplicationRecord
     invites_sent_at.present?
   end
 
+  # Return the week number for this batch.
   def present_week_number
-    return nil unless (start_date - 1.day).past?
-    ((Date.today - start_date).to_f / 7).ceil
+    return nil unless start_date.beginning_of_day.past?
+    return 1 if Date.today == start_date
+
+    days_elapsed = (Date.today - start_date)
+    weeks_elapsed = days_elapsed.to_f / 7
+
+    # Let's round up.
+    weeks_elapsed.ceil
   end
 end

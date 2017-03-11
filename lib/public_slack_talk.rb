@@ -35,10 +35,33 @@ class PublicSlackTalk
     new(channel: target[:channel], founder: target[:founder], founders: target[:founders], message: message).tap(&:process)
   end
 
+  def upload_file(content, filetype, filename)
+    return if Rails.env.development?
+
+    @channel = fetch_im_id
+
+    url = 'https://slack.com/api/files.upload'
+
+    response_json = JSON.parse RestClient.post(
+      url,
+      token: @token,
+      channels: @channel,
+      content: content,
+      filetype: filetype,
+      filename: filename
+    )
+
+    error_key = @founder.present? ? @founder.id : 'Slack'
+    @errors[error_key] = response_json['error'] unless response_json['ok']
+  rescue RestClient::Exception => err
+    error_key = @founder.present? ? @founder.id : 'RestClient'
+    @errors[error_key] = err.response.body
+  end
+
   def process
     # post message to appropriate channel
     if @channel.present?
-      raise'could not validate channel specified' unless channel_valid?
+      raise 'could not validate channel specified' unless channel_valid?
       post_to_channel
     end
     post_to_founder if @founder.present?
@@ -51,6 +74,7 @@ class PublicSlackTalk
     post_to_channel if @channel
   end
 
+  # TODO: Hari - This method should probably be refactored to avoid mutating the instance variable.
   def post_to_founders
     # post to each founder in the founders array
     @founders.each do |u|

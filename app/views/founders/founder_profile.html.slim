@@ -9,7 +9,7 @@
         .col-md-2
           #complete-profile-left.profile data-toggle='tooltip' data-placement='bottom' title="#{@founder == current_founder ? @founder.profile_completion_instruction : ''}"
             = image_tag profile_image_url(@founder, gravatar_size: 140, avatar_version: :mid), class: 'img-responsive'
-            - if current_founder == @founder
+            - if current_founder == @founder && !@founder.exited
               .progress-container
                 .progress.profile-progress
                   - if @founder.profile_completion_percentage >= 80
@@ -23,7 +23,7 @@
                 span.progress-value
                   = @founder.profile_completion_percentage
                   | % complete
-              - if @founder.profile_completion_percentage < 100
+              - if !@founder.exited && @founder.profile_completion_percentage < 100
                 a.profile-complete-button href=edit_founder_url
                   ' Complete Your Profile
         div class="col-md-#{@founder.startup&.logo.present? ? 7 : 10}"
@@ -32,7 +32,7 @@
               .col-lg-7.col-md-12.profile-name
                 h2
                   = @founder.fullname
-                  - if current_founder == @founder
+                  - if current_founder == @founder && !@founder.exited
                     a.profile-edit-button href=edit_founder_url title="Edit Your Profile"
                       i.fa.fa-pencil
                       | Edit

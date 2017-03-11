@@ -4,7 +4,7 @@ ActiveAdmin.register Target do
   permit_params :assigner_id, :role, :title, :description, :resource_url,
     :completion_instructions, :days_to_complete, :slideshow_embed, :completed_at, :completion_comment, :rubric,
     :remote_rubric_url, :target_group_id, :target_type, :points_earnable,
-    :timeline_event_type_id, :sort_index, :auto_verified, :session_at, :chore, prerequisite_target_ids: []
+    :timeline_event_type_id, :sort_index, :session_at, :chore, :level_id, prerequisite_target_ids: []
 
   filter :session_at_not_null, as: :boolean, label: 'Sessions'
   filter :chore
@@ -32,13 +32,13 @@ ActiveAdmin.register Target do
     end
   }
 
+  filter :level
   filter :assigner
   filter :role, as: :select, collection: Target.valid_roles
   filter :timeline_event_type
   filter :program_week
   filter :title
   filter :target_type, as: :select, collection: Target.valid_target_types
-  filter :auto_verified
 
   controller do
     def scoped_collection
@@ -64,6 +64,10 @@ ActiveAdmin.register Target do
       end
     end
     column :target_group
+
+    column :level do |target|
+      target.level.present? ? target.level : target.target_group.level
+    end
 
     column :sort_index
 
@@ -99,6 +103,7 @@ ActiveAdmin.register Target do
       row :timeline_event_type
       row :session_at
       row :chore
+      row :level
 
       row :prerequisite_targets do
         if target.prerequisite_targets.present?
@@ -112,7 +117,6 @@ ActiveAdmin.register Target do
         end
       end
 
-      # row :auto_verified
       row :batch
       row :target_group
       row :sort_index

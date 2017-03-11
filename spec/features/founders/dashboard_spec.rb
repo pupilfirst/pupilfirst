@@ -51,6 +51,14 @@ feature 'Founder Dashboard' do
     end
   end
 
+  context 'when founder has exited the programme' do
+    scenario 'founder visits dashboard', js: true do
+      founder.update!(exited: true)
+      visit dashboard_founder_path
+      expect(page).to have_text('not an active founder anymore')
+    end
+  end
+
   scenario 'founder visits dashboard', js: true do
     # There should be no tour.
     expect(page).to_not have_selector('.introjs-tooltipReferenceLayer', visible: false)
@@ -103,7 +111,7 @@ feature 'Founder Dashboard' do
 
     find("#target-#{completed_target.id} .founder-dashboard-target-header__container").trigger('click')
     within("#target-#{completed_target.id}") do
-      expect(page).to have_content('Target Completed').and have_no_button('Submit')
+      expect(page).to have_content('Target Completed').and have_button('Re-Submit')
     end
 
     find("#target-#{not_accepted_target.id} .founder-dashboard-target-header__container").trigger('click')

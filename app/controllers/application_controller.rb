@@ -115,7 +115,11 @@ class ApplicationController < ActionController::Base
     # User must be logged in.
     authenticate_user!
 
-    redirect_to root_url unless current_user.founder.present?
+    founder = current_user.founder
+    return if founder.present? && !founder.exited?
+
+    flash[:error] = 'You are not an active founder anymore!' if founder&.exited?
+    redirect_to root_path
   end
 
   def csp_directives

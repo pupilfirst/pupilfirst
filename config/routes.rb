@@ -23,9 +23,10 @@ Rails.application.routes.draw do
 
   resource :founder, only: [:edit, :update] do
     member do
-      get 'dashboard'
-      get 'performance_stats'
-      get 'load_program_week'
+      scope module: 'founders', controller: 'dashboard' do
+        get 'dashboard'
+        get 'performance_stats'
+      end
     end
 
     resource :startup, only: [:edit, :update] do

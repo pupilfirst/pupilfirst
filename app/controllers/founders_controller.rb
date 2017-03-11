@@ -26,48 +26,6 @@ class FoundersController < ApplicationController
     end
   end
 
-  # GET /founder/dashboard
-  def dashboard
-    @startup = current_founder.startup&.decorate
-    @batch = @startup&.batch&.decorate
-
-    # founders without proper startups will not have dashboards
-    raise_not_found unless @startup.present? && @batch.present?
-
-    @tour = take_on_tour?
-
-    if filtered_targets_required?
-      @filtered_targets = Founders::TargetsFilterService.new(current_founder).filter(params[:filter])
-    else
-      # Eager-load everything required for the dashboard. Order and decorate them too!
-      @program_week = @batch.program_weeks.includes(:batch, target_groups: { targets: :assigner }).order(:number, 'target_groups.sort_index', 'targets.sort_index').last&.decorate
-    end
-
-    render layout: 'application_v2'
-  end
-
-  # GET /founder/performance_stats
-  def performance_stats
-    @startup = current_founder.startup&.decorate
-    @batch = @startup&.batch&.decorate
-
-    render layout: false
-  end
-
-  # GET /founder/load_program_week?week_number
-  def load_program_week
-    @startup = current_founder.startup&.decorate
-    @batch = @startup&.batch&.decorate
-
-    @program_week = @batch.program_weeks
-      .includes(:batch, target_groups: { targets: :assigner })
-      .order('target_groups.sort_index', 'targets.sort_index')
-      .find_by(number: params[:week_number].to_i)
-      .decorate
-
-    render layout: false
-  end
-
   private
 
   def skip_container
@@ -92,16 +50,5 @@ class FoundersController < ApplicationController
       :personal_website_url, :blog_url, :angel_co_url, :github_url, :behance_url, :college_id,
       :roll_number, :born_on, :communication_address, roles: []
     )
-  end
-
-  def take_on_tour?
-    current_founder.present? && current_founder.startup == @startup.model && (current_founder.tour_dashboard? || params[:tour].present?)
-  end
-
-  def filtered_targets_required?
-    return false unless params[:filter].present?
-    return false if params[:filter] == Founders::TargetsFilterService::ALL_TARGETS
-    return true if Founders::TargetsFilterService.filters_for_dashboard.include?(params[:filter])
-    false
   end
 end

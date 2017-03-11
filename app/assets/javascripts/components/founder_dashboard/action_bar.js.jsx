@@ -1,13 +1,20 @@
 class FounderDashboardActionBar extends React.Component {
-
   render() {
     return (
       <div className="founder-dashboard-actionbar__container p-x-1 m-x-auto">
         <div className="founder-dashboard-actionbar__box">
-          {/*<FounderDashboardTargetsFilter/>
+          { this.props.filter === 'targets' &&
+          <FounderDashboardTargetsFilter/>
+          }
+
+          { this.props.filter === 'chores' &&
           <FounderDashboardChoresFilter/>
-          <FounderDashboardSessionsTagSelect/>*/}
+          }
+
+          { this.props.filter === 'sessions' &&
           <FounderDashboardSessionsTagSelect/>
+          }
+
           <div className="pull-xs-right">
             <button id="#add-event-button" className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder hidden-sm-down m-r-1" data-toggle="modal">
               <i className="fa fa-plus"/>
@@ -32,3 +39,7 @@ class FounderDashboardActionBar extends React.Component {
     );
   }
 }
+
+FounderDashboardActionBar.propTypes = {
+  filter: React.PropTypes.string
+};

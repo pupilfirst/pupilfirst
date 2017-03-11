@@ -1,9 +1,8 @@
 class FounderDashboardSessions extends React.Component {
-
   render() {
     return (
       <div>
-        <FounderDashboardActionBar/>
+        <FounderDashboardActionBar filter='sessions'/>
         <FounderDashboardTargetCollection/>
       </div>
     );

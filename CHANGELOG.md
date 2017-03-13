@@ -1,3 +1,19 @@
+### 13 March, 2017
+
+#### Features
+
+  - When a founder gets a new verified timeline event, Vocalist sends a new notification to co-founders.
+  - When a SV.CO faculty member edits the description of a timeline event, the author is notified by Vocalist of the update, along with a _diff_.
+
+#### UX and UI
+
+  - Initial load time of the Startup timeline page has been cut down by deferring loading of earlier events.
+
+#### Bugfixes
+
+  - Fixed an incorrect flash message that appeared when signing in using OAuth.
+  - Fixed a crash that occurred when an unauthenticated user attempts to access a restricted founder URL.
+
 ### 6 March, 2017
 
 #### Features

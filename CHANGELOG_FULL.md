@@ -2,6 +2,21 @@
 
 - Design and implementation of Stage 1 of switch to subscription model is ongoing. [[Trello]](https://trello.com/c/r5wuULZ2)
 
+## 2017.03.13
+
+- `Startup#show` load times have been cut down by deferring loading of earlier events. [[Trello]](https://trello.com/c/X6BccOYq)
+- When a founder gets a new verified timeline event, co-founders are notified by Vocalist of the event. [[Trello]](https://trello.com/c/f2N6yxbY)
+- When a SV.CO faculty member edits a timeline event description, the author is notified by Vocalist of the update with a _diff_. [[Trello]](https://trello.com/c/0lKcEILd)
+- The `timeline_event_show` route no longer exposed private event data via OG tags. [[Trello]](https://trello.com/c/BGPpmMmS)
+- Added name of student to list of columns exported as CSV from AA `QuizAttempts#index`. [[Trello]](https://trello.com/c/O4sLnNLt)
+- Fixed an incorrect flash message appearing upon login using OAuth. [[Trello]](https://trello.com/c/BGNC2CNG)
+- Fixed an issue with Web visit stats displayed on AA Dashboard. [[Trello]](https://trello.com/c/f82EEldQ)
+- All references to the Playbook were removed from the website. [[Trello]](https://trello.com/c/PGcxm9Ut)
+- Fixed a crash that occurred when unauthenticated user attempts to access a restricted founder route. [[Trello]](https://trello.com/c/2M0cFvXz)
+- Fixed a bug which resulted in AA Founder CSV downloads being empty. [[Trello]](https://trello.com/c/rjjaOc07)
+- Fixed a mistake in `VerificationService` in calculating previous points for a target. [[Trello]](https://trello.com/c/aCkEUDnO)
+- Rails was upgraded to latest 5.0.2. [[Trello]](https://trello.com/c/ZAIbxeYI)
+
 ## 2017.03.06
 - `UserActivity` table has been introduced to track free-form activity - currently tracks resource downloads and connect request creation. Trello [[1]](https://trello.com/c/oQRYSyAt)[[2]](https://trello.com/c/0pHSZ2MT)
 - Vocalist pings for feedback submission have been restored. [[Trello]](https://trello.com/c/qks1vNwo)

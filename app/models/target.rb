@@ -53,6 +53,7 @@ class Target < ApplicationRecord
     # TODO: Enforce target_group exclusion only after stage 1 is merged into master.
     # return if [target_group, session_at, chore].one?
 
+    return unless chore? || session?
     return if [session_at, chore].one?
     errors[:base] << 'Target must be one of chore, session or a vanilla target'
   end

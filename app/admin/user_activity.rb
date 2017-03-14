@@ -4,7 +4,7 @@ ActiveAdmin.register UserActivity do
   menu parent: 'Dashboard'
   actions :index, :show
 
-  filter :user, as: :select, collection: proc { User.joins(:user_activities).distinct.order(:email).pluck(:email, :id) }
+  filter :user, as: :select, collection: []
   filter :activity_type, as: :select, collection: UserActivity.valid_activity_types
   config.sort_order = 'updated_at_desc'
 
@@ -12,6 +12,10 @@ ActiveAdmin.register UserActivity do
     def scoped_collection
       super.includes :user
     end
+  end
+
+  collection_action :users do
+    render json: Users::Select2SearchService.search_for_user(params[:q])
   end
 
   index do

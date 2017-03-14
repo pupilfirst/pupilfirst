@@ -13,6 +13,14 @@ module Founders
       # founders without proper startups will not have dashboards
       raise_not_found unless @startup.present? && @batch.present?
 
+      dashboard_data_service = Founders::DashboardDataService.new(current_founder)
+
+      @react_data = {
+        targetGroups: dashboard_data_service.target_groups,
+        chores: dashboard_data_service.chores,
+        sessions: dashboard_data_service.sessions
+      }
+
       @tour = tour_dashboard?
     end
 

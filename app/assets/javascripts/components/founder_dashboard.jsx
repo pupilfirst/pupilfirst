@@ -19,17 +19,23 @@ class FounderDashboard extends React.Component {
         <FounderDashboardToggleBar selected={ this.state.activeTab } chooseTabCB={ this.chooseTab }/>
 
         { this.state.activeTab === 'targets' &&
-        <FounderDashboardTargets/>
+        <FounderDashboardTargets targetGroups={ this.props.targetGroups }/>
         }
 
         { this.state.activeTab === 'chores' &&
-        <FounderDashboardChores/>
+        <FounderDashboardChores chores={ this.props.chores }/>
         }
 
         { this.state.activeTab === 'sessions' &&
-        <FounderDashboardSessions/>
+        <FounderDashboardSessions sessions={ this.props.sessions }/>
         }
       </div>
     );
   }
 }
+
+FounderDashboard.propTypes = {
+  targetGroups: React.PropTypes.array,
+  chores: React.PropTypes.array,
+  sessions: React.PropTypes.array,
+};

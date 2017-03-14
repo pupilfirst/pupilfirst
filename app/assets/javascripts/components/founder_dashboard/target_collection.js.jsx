@@ -1,4 +1,9 @@
 class FounderDashboardTargetCollection extends React.Component {
+  targets() {
+    return this.props.targets.map(function(target) {
+      return <FounderDashboardTarget key={ target.id }/>
+    })
+  }
 
   render() {
     return (
@@ -6,17 +11,23 @@ class FounderDashboardTargetCollection extends React.Component {
         <div className="founder-dashboard-target-group__box">
           <div className="founder-dashboard-target-group__header text-xs-center">
             <h4 className="brand-primary font-regular">
-              {/*#{target_group.name}*/}
-              Upcoming Sessions
+              { this.props.name }
             </h4>
+
             <div className="founder-dashboard-target-group__header-info">
-              {/*#{target_group.description}*/}
-              Get in sync with the Program
+              { this.props.description }
             </div>
           </div>
-          <FounderDashboardTarget/>
+
+          { this.targets() }
         </div>
       </div>
     );
   }
 }
+
+FounderDashboardTargetCollection.propTypes = {
+  name: React.PropTypes.string,
+  description: React.PropTypes.string,
+  targets: React.PropTypes.array,
+};

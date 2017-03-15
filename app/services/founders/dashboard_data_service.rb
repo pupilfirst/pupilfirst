@@ -4,23 +4,15 @@ module Founders
       @founder = founder
     end
 
-    def target_groups
-      @target_groups ||= startup.level.target_groups.includes(targets: :assigner)
-        .order('target_groups.sort_index', 'targets.sort_index')
-        .decorate
-        .as_json(
-          only: target_group_fields,
-          include: {
-            targets: {
-              only: target_fields,
-              include: {
-                assigner: {
-                  only: [:id, :name]
-                }
-              }
-            }
-          }
-        )
+    def levels
+      @levels ||= (1..startup.level.number).each_with_object({}) do |level_number, levels|
+        level = Level.find_by(number: level_number)
+
+        levels[level_number] = {
+          name: level.name,
+          target_groups: target_groups(level)
+        }
+      end
     end
 
     def chores
@@ -48,6 +40,25 @@ module Founders
     end
 
     private
+
+    def target_groups(level)
+      level.target_groups.includes(targets: :assigner)
+        .order('target_groups.sort_index', 'targets.sort_index')
+        .decorate
+        .as_json(
+          only: target_group_fields,
+          include: {
+            targets: {
+              only: target_fields,
+              include: {
+                assigner: {
+                  only: [:id, :name]
+                }
+              }
+            }
+          }
+        )
+    end
 
     def startup
       @startup ||= @founder.startup

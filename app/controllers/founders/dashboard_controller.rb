@@ -16,7 +16,7 @@ module Founders
       dashboard_data_service = Founders::DashboardDataService.new(current_founder)
 
       @react_data = {
-        targetGroups: dashboard_data_service.target_groups,
+        levels: dashboard_data_service.levels,
         chores: dashboard_data_service.chores,
         sessions: dashboard_data_service.sessions
       }

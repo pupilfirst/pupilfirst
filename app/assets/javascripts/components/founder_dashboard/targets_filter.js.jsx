@@ -1,41 +1,43 @@
 class FounderDashboardTargetsFilter extends React.Component {
+  levelOptions() {
+    let maxLevel = Math.max.apply(null, Object.keys(this.props.levels));
+
+    let options = [];
+
+    for (let level = 1; level <= maxLevel; level++) {
+      options.push(<FounderDashboardTargetsFilterOption key={ 'target-filter-level-' + level } level={ level }
+        name={ this.props.levels[level] } pickFilterCB={ this.props.pickFilterCB }/>);
+    }
+
+    return options;
+  }
 
   render() {
     return (
       <div className="btn-group filter-targets-dropdown">
-        <button className="btn btn-with-icon btn-ghost-primary btn-md text-xs-left filter-targets-dropdown__button dropdown-toggle" aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" type="button">
+        <button aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" type="button"
+          className="btn btn-with-icon btn-ghost-primary btn-md text-xs-left filter-targets-dropdown__button dropdown-toggle">
           <span className="filter-targets-dropdown__icon">
-            {/*- if instance_variable_defined?(:@filtered_targets)
-              i.fa class=TargetDecorator.fa_icon_for_filter(params[:filter])
-            - else
-              i.fa.fa-filter*/}
             <i className="fa fa-sliders"/>
           </span>
+
           <span className="p-r-1">
-           {/*- if params[:filter].present?
-             | #{ t("dashboard.show.target_filters.#{params[:filter]}.filter_text") }
-           - else
-             | All Targets*/}
-            All Targets
+            { this.props.levels[this.props.chosenLevel] }
           </span>
-          <span className="pull-xs-right filter-targets-dropdown__arrow"></span>
+
+          <span className="pull-xs-right filter-targets-dropdown__arrow"/>
         </button>
 
         <div className="dropdown-menu filter-targets-dropdown__menu">
-          {/*- selected_filter =  instance_variable_defined?(:@filtered_targets) ? params[:filter] : 'all_targets'
-          - Founders::TargetsFilterService.filters_except(selected_filter).each do |filter|
-            a.dropdown-item.filter-targets-dropdown__menu-item href=dashboard_founder_path(filter: filter) role="button"
-              span.filter-targets-dropdown__menu-item-icon
-                i.fa class=TargetDecorator.fa_icon_for_filter(filter)
-              | #{ t("dashboard.show.target_filters.#{filter}.filter_text") }*/}
-          <a className="dropdown-item filter-targets-dropdown__menu-item" href="#" role="button">
-            <span className="filter-targets-dropdown__menu-item-icon">
-              <i className="fa fa-line-chart"/>
-            </span>
-            Level 1: Idea Discovery
-          </a>
+          { this.levelOptions() }
         </div>
       </div>
     );
   }
 }
+
+FounderDashboardTargetsFilter.propTypes = {
+  levels: React.PropTypes.object,
+  chosenLevel: React.PropTypes.number,
+  pickFilterCB: React.PropTypes.func
+};

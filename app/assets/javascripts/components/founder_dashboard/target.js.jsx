@@ -42,10 +42,12 @@ class FounderDashboardTarget extends React.Component {
   render() {
     return (
       <div className={ this.containerClasses() }>
-        <FounderDashboardTargetHeader onClickCB={ this.handleClick } descriptionOpen={ this.state.showDescription }/>
+        <FounderDashboardTargetHeader onClickCB={ this.handleClick } descriptionOpen={ this.state.showDescription }
+          target={ this.props.target }/>
 
         <div className='founder-dashboard-target__description-container' id={ this.sliderId() }>
-          <FounderDashboardTargetDescription key={ 'description-' + this.props.target.id }/>
+          <FounderDashboardTargetDescription key={ 'description-' + this.props.target.id }
+            target={ this.props.target }/>
         </div>
       </div>
     );

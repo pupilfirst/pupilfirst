@@ -1,7 +1,7 @@
 class FounderDashboardTargetCollection extends React.Component {
   targets() {
     return this.props.targets.map(function(target) {
-      return <FounderDashboardTarget key={ target.id }/>
+      return <FounderDashboardTarget key={ target.id } target={ target }/>
     })
   }
 

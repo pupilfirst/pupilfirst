@@ -575,6 +575,11 @@
   }
 }
 
+// Target description should start hidden.
+.founder-dashboard-target__description-container {
+  display: none;
+}
+
 .founder-dashboard-target-header__container {
   width: 100%;
   position: relative;

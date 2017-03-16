@@ -1,7 +1,8 @@
 class FounderDashboardTargetHeader extends React.Component {
   statusBadgeClasses() {
     let classes = "founder-dashboard-target-header__status-badge tag tag-pill";
-    /*classes +="#{target.status_badge_class(current_founder)}"*/
+    let statusClass = this.props.target.status.replace('_', '-');
+    classes += (' ' + statusClass);
     return classes;
   }
 
@@ -52,6 +53,25 @@ class FounderDashboardTargetHeader extends React.Component {
     }
   }
 
+  statusString() {
+    switch (this.props.target.status) {
+      case 'complete':
+        return 'Complete';
+      case 'needs_improvement':
+        return 'Needs Improvement';
+      case 'submitted':
+        return 'Submitted';
+      case 'expired':
+        return 'Expired';
+      case 'pending':
+        return 'Pending';
+      case 'unavailable':
+        return 'Locked';
+      case 'not_accepted':
+        return 'Not Accepted';
+    }
+  }
+
   render() {
     return (
       <div className={ this.containerClasses() } onClick={ this.props.onClickCB }>
@@ -78,8 +98,9 @@ class FounderDashboardTargetHeader extends React.Component {
           </span>
 
           <span className="hidden-sm-down">
-            Pending
+            {/*Pending*/}
             {/*#{target.status_text(current_founder)}*/}
+            { this.statusString() }
           </span>
         </div>
       </div>

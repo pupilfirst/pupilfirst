@@ -16,33 +16,41 @@ module Founders
     end
 
     def chores
-      @chores ||= Target.includes(:assigner).where(chore: true)
-        .order(:sort_index)
-        .decorate
-        .as_json(
-          only: target_fields,
-          include: {
-            assigner: { only: assigner_fields }
-          }
-        )
+      @chores ||= begin
+        targets = Target.includes(:assigner).where(chore: true)
+          .order(:sort_index)
+          .decorate
+          .as_json(
+            only: target_fields,
+            include: {
+              assigner: { only: assigner_fields }
+            }
+          )
+
+        targets_with_status(targets)
+      end
     end
 
     def sessions
-      @sessions ||= Target.where.not(session_at: nil)
-        .order(:sort_index)
-        .decorate
-        .as_json(
-          only: target_fields,
-          include: {
-            assigner: { only: assigner_fields }
-          }
-        )
+      @sessions ||= begin
+        targets = Target.where.not(session_at: nil)
+          .order(:sort_index)
+          .decorate
+          .as_json(
+            only: target_fields,
+            include: {
+              assigner: { only: assigner_fields }
+            }
+          )
+
+        targets_with_status(targets)
+      end
     end
 
     private
 
     def target_groups(level)
-      level.target_groups.includes(targets: :assigner)
+      groups = level.target_groups.includes(targets: :assigner)
         .order('target_groups.sort_index', 'targets.sort_index')
         .decorate
         .as_json(
@@ -58,6 +66,30 @@ module Founders
             }
           }
         )
+
+      groups_with_target_status(groups)
+    end
+
+    def targets_with_status(targets)
+      targets.map do |target_data|
+        target_data_with_status(target_data)
+      end
+    end
+
+    def groups_with_target_status(groups)
+      groups.map do |group|
+        group['targets'] = group['targets'].map do |target_data|
+          target_data_with_status(target_data)
+        end
+
+        group
+      end
+    end
+
+    def target_data_with_status(target_data)
+      target = Target.find(target_data['id'])
+      target_data['status'] = target.status(@founder).to_s
+      target_data
     end
 
     def startup

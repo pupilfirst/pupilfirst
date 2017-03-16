@@ -24,7 +24,7 @@ class FounderDashboardTargetDescription extends React.Component {
         </h6>
 
         <p className="target-description-content" dangerouslySetInnerHTML={{__html: this.props.target.description}}/>
-        <FounderDashboardSubmissionPanel/>
+        <FounderDashboardSubmissionPanel target={ this.props.target }/>
       </div>
     );
   }

@@ -24,12 +24,15 @@ class FounderDashboardTargetDescription extends React.Component {
         </h6>
 
         <p className="target-description-content" dangerouslySetInnerHTML={{__html: this.props.target.description}}/>
-        <FounderDashboardSubmissionPanel target={ this.props.target }/>
+
+        <FounderDashboardSubmissionPanel target={ this.props.target }
+          openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/>
       </div>
     );
   }
 }
 
 FounderDashboardTargetDescription.propTypes = {
-  target: React.PropTypes.object
+  target: React.PropTypes.object,
+  openTimelineBuilderCB: React.PropTypes.func
 };

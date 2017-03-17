@@ -21,9 +21,9 @@ class FounderDashboardTargets extends React.Component {
   targetCollections() {
     return this.targetGroups().map(function (targetGroup) {
       return <FounderDashboardTargetCollection key={ targetGroup.id } name={ targetGroup.name }
-        description={ targetGroup.description }
+        description={ targetGroup.description } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }
         targets={ targetGroup.targets }/>
-    });
+    }, this);
   }
 
   filterData() {
@@ -46,7 +46,8 @@ class FounderDashboardTargets extends React.Component {
   render() {
     return (
       <div>
-        <FounderDashboardActionBar filter='targets' filterData={ this.filterData() } pickFilterCB={ this.pickFilter }/>
+        <FounderDashboardActionBar filter='targets' filterData={ this.filterData() } pickFilterCB={ this.pickFilter }
+          openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/>
         { this.targetCollections() }
       </div>
     );
@@ -54,5 +55,6 @@ class FounderDashboardTargets extends React.Component {
 }
 
 FounderDashboardTargets.propTypes = {
-  levels: React.PropTypes.object
+  levels: React.PropTypes.object,
+  openTimelineBuilderCB: React.PropTypes.func
 };

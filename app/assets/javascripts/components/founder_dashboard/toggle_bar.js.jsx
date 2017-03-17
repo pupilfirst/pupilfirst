@@ -2,11 +2,11 @@ class FounderDashboardToggleBar extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleClick = this.handleClick.bind(this)
+    this.openTimelineBuilder = this.openTimelineBuilder.bind(this);
   }
 
-  handleClick() {
-    this.props.chooseTabCB()
+  openTimelineBuilder() {
+    this.props.openTimelineBuilderCB()
   }
 
   isChosenTab(tab) {
@@ -26,11 +26,11 @@ class FounderDashboardToggleBar extends React.Component {
               chosen={ this.isChosenTab('sessions') }/>
           </div>
         </div>
+
         <div className="founder-dashboard-add-event__container pull-xs-right hidden-md-up">
-          <button id="#add-event-button"
-            className="btn btn-md btn-secondary text-uppercase founder-dashboard-add-event__btn js-founder-dashboard__trigger-builder"
-            data-toggle="modal">
-            <i className="fa fa-plus"/>
+          <button onClick={ this.openTimelineBuilder }
+            className="btn btn-md btn-secondary text-uppercase founder-dashboard-add-event__btn js-founder-dashboard__trigger-builder">
+            <i className="fa fa-plus" aria-hidden="true"/><span className="sr-only">Add Timeline Event</span>
           </button>
         </div>
       </div>
@@ -40,5 +40,6 @@ class FounderDashboardToggleBar extends React.Component {
 
 FounderDashboardToggleBar.propTypes = {
   selected: React.PropTypes.string,
-  chooseTabCB: React.PropTypes.func
+  chooseTabCB: React.PropTypes.func,
+  openTimelineBuilderCB: React.PropTypes.func
 };

@@ -17,7 +17,7 @@
 #founder-dashboard
   == render 'dashboard_header'
 
-  == react_component('FounderDashboard', @react_data)
+  == react_component('FounderDashboard', @react_data.merge(authenticityToken: form_authenticity_token))
 
   / .founder-dashboard-container
   /   .fixed-dashboard-header
@@ -67,5 +67,5 @@
   /             p There are no targets to show
 
 == render 'view-slides'
-== render 'timeline_builder'
+/== render 'timeline_builder'
 == render 'performance_overview'

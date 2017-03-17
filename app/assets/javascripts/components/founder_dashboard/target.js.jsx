@@ -47,7 +47,7 @@ class FounderDashboardTarget extends React.Component {
 
         <div className='founder-dashboard-target__description-container' id={ this.sliderId() }>
           <FounderDashboardTargetDescription key={ 'description-' + this.props.target.id }
-            target={ this.props.target }/>
+            target={ this.props.target } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/>
         </div>
       </div>
     );
@@ -55,5 +55,6 @@ class FounderDashboardTarget extends React.Component {
 }
 
 FounderDashboardTarget.propTypes = {
-  target: React.PropTypes.object
+  target: React.PropTypes.object,
+  openTimelineBuilderCB: React.PropTypes.func
 };

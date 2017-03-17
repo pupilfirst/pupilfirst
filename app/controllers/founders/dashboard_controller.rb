@@ -14,11 +14,14 @@ module Founders
       raise_not_found unless @startup.present? && @batch.present?
 
       dashboard_data_service = Founders::DashboardDataService.new(current_founder)
+      list_service = TimelineEventTypes::ListService.new(@startup)
 
       @react_data = {
         levels: dashboard_data_service.levels,
         chores: dashboard_data_service.chores,
-        sessions: dashboard_data_service.sessions
+        sessions: dashboard_data_service.sessions,
+        timelineEventTypes: list_service.list,
+        allowFacebookShare: current_founder.facebook_token_available?
       }
 
       @tour = tour_dashboard?

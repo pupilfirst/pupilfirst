@@ -1,4 +1,10 @@
 class FounderDashboardSubmissionPanel extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.handleSubmitClick = this.handleSubmitClick.bind(this);
+  }
+
   isSubmittable() {
     return !(['unavailable', 'submitted'].indexOf(this.props.target.status) != -1);
   }
@@ -89,6 +95,10 @@ class FounderDashboardSubmissionPanel extends React.Component {
     return this.isPending() || this.isExpired() ? 'Submit' : 'Re-Submit';
   }
 
+  handleSubmitClick() {
+    this.props.openTimelineBuilderCB(this.props.target.id, this.props.target.timeline_event_type_id)
+  }
+
   render() {
     return (
       <div className="complete-target-block m-t-1 text-xs-center">
@@ -113,7 +123,7 @@ class FounderDashboardSubmissionPanel extends React.Component {
           <div className="submit-instruction font-regular">
             <p>{ this.props.target.completion_instructions }</p>
           </div>
-          <button data-toggle="modal"
+          <button onClick={ this.handleSubmitClick }
             className="btn btn-with-icon btn-md btn-secondary text-uppercase btn-timeline-builder js-founder-dashboard__trigger-builder">
             <i className="fa fa-upload"/>
             { this.submitButtonText() }
@@ -126,5 +136,6 @@ class FounderDashboardSubmissionPanel extends React.Component {
 }
 
 FounderDashboardSubmissionPanel.propTypes = {
-  target: React.PropTypes.object
+  target: React.PropTypes.object,
+  openTimelineBuilderCB: React.PropTypes.func
 };

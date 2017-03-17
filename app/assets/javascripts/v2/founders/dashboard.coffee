@@ -209,11 +209,11 @@ loadProgramWeekOnDemand = ->
 
 $(document).on 'turbolinks:load', ->
   if $('#founder-dashboard').length
-    targetAccordion()
-    handleTimelineBuilderModal()
-    handleTimelineBuilderPopoversHiding()
+#    targetAccordion()
+#    handleTimelineBuilderModal()
+#    handleTimelineBuilderPopoversHiding()
     giveATour()
     viewSlidesModal()
     hideIntercomOnSmallScreen()
     loadPerformanceOnDemand()
-    loadProgramWeekOnDemand()
+#    loadProgramWeekOnDemand()

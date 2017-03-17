@@ -16,7 +16,7 @@ module Targets
     def status
       return status_from_event if linked_event.present?
       return STATUS_UNAVAILABLE if pending_prerequisites.present?
-      @target.due_date.past? ? STATUS_EXPIRED : STATUS_PENDING
+      @target.due_date&.past? ? STATUS_EXPIRED : STATUS_PENDING
     end
 
     def completed_prerequisites

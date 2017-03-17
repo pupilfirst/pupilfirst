@@ -75,11 +75,11 @@ class FounderDashboardSubmissionPanel extends React.Component {
   statusHintText() {
     switch (this.props.target.status) {
       case 'complete':
-        return 'Completed on %{date}';
+        return 'Completed on ' + this.submittedAt();
       case 'needs_improvement':
         return 'Consider feedback and try re-submitting!';
       case 'submitted':
-        return 'Submitted on %{date}';
+        return 'Submitted on ' + this.submittedAt();
       case 'expired':
         return 'You can still try submitting!';
       case 'pending':
@@ -88,6 +88,15 @@ class FounderDashboardSubmissionPanel extends React.Component {
         return 'Complete prerequisites first!';
       case 'not_accepted':
         return 'Re-submit based on feedback!';
+    }
+  }
+
+  submittedAt() {
+    if (this.props.target.status == 'submitted' || this.props.target.status == 'complete') {
+      return moment(this.props.target.submitted_at).format('MMM D')
+    } else {
+      console.error('submittedAt() called for target with status ' + this.props.target.status);
+      return null;
     }
   }
 

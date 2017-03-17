@@ -88,7 +88,15 @@ module Founders
 
     def target_data_with_status(target_data)
       target = Target.find(target_data['id'])
+
+      # Add status of target to compiled data.
       target_data['status'] = target.status(@founder).to_s
+
+      # Add time of submission of last event, necessary for submitted and completed state.
+      if target_data['status'].in?([Targets::StatusService::STATUS_SUBMITTED, Targets::StatusService::STATUS_COMPLETE])
+        target_data['submitted_at'] = target.timeline_events.last.created_at.iso8601
+      end
+
       target_data
     end
 

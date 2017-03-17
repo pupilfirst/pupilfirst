@@ -5,12 +5,12 @@ module Startups
   class RestartService
     LevelInvalid = Class.new(StandardError)
 
-    def initialize(startup, founder)
-      @startup = startup
+    def initialize(founder)
       @founder = founder
+      @startup = @founder.startup
     end
 
-    def restart(level, reason)
+    def request_restart(level, reason)
       raise LevelInvalid if level.number < 2 || !(level.number < @startup.level.number)
 
       Startup.transaction do
@@ -22,8 +22,9 @@ module Startups
           event_on: Time.zone.now
         )
 
+        # TODO: this should be deferred until the event is verified
         # Increment iteration and set new level.
-        @startup.update!(iteration: @startup.iteration + 1, level: level)
+        # @startup.update!(iteration: @startup.iteration + 1, level: level)
       end
     end
   end

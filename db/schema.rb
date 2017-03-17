@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170301070216) do
+ActiveRecord::Schema.define(version: 20170317121722) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -614,9 +614,10 @@ ActiveRecord::Schema.define(version: 20170301070216) do
     t.string   "prototype_link"
     t.string   "product_video_link"
     t.integer  "batch_id"
-    t.boolean  "dropped_out",           default: false
+    t.boolean  "dropped_out",                default: false
     t.integer  "level_id"
     t.integer  "iteration"
+    t.integer  "requested_restart_level_id"
     t.index ["batch_id"], name: "index_startups_on_batch_id", using: :btree
     t.index ["level_id"], name: "index_startups_on_level_id", using: :btree
     t.index ["slug"], name: "index_startups_on_slug", unique: true, using: :btree

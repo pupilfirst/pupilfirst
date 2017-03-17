@@ -22,10 +22,13 @@ module Startups
           event_on: Time.zone.now
         )
 
-        # TODO: this should be deferred until the event is verified
-        # Increment iteration and set new level.
-        # @startup.update!(iteration: @startup.iteration + 1, level: level)
+        # Store the requested restart level
+        @startup.update!(requested_restart_level: level)
       end
+    end
+
+    def restart!(level)
+      @startup.update!(iteration: @startup.iteration + 1, level: level)
     end
   end
 end

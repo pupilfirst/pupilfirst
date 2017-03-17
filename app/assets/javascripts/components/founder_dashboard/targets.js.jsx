@@ -3,15 +3,10 @@ class FounderDashboardTargets extends React.Component {
     super(props);
 
     this.state = {
-      chosenLevel: this.currentLevel()
+      chosenLevel: props.currentLevel
     };
 
     this.pickFilter = this.pickFilter.bind(this);
-  }
-
-  // Current level is is maximum of available levels.
-  currentLevel() {
-    return Math.max.apply(null, Object.keys(this.props.levels));
   }
 
   targetGroups() {
@@ -29,7 +24,7 @@ class FounderDashboardTargets extends React.Component {
   filterData() {
     let levels = {};
 
-    for (let level = 1; level <= this.currentLevel(); level++) {
+    for (let level = 1; level <= this.props.currentLevel; level++) {
       levels[level] = this.props.levels[level].name;
     }
 
@@ -55,6 +50,7 @@ class FounderDashboardTargets extends React.Component {
 }
 
 FounderDashboardTargets.propTypes = {
+  currentLevel: React.PropTypes.number,
   levels: React.PropTypes.object,
   openTimelineBuilderCB: React.PropTypes.func
 };

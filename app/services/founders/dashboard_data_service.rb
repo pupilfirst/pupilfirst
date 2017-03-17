@@ -17,13 +17,14 @@ module Founders
 
     def chores
       @chores ||= begin
-        targets = Target.includes(:assigner).where(chore: true)
+        targets = Target.includes(:assigner, :level).where(chore: true)
           .order(:sort_index)
           .decorate
           .as_json(
             only: target_fields,
             include: {
-              assigner: { only: assigner_fields }
+              assigner: { only: assigner_fields },
+              level: { only: [:number] }
             }
           )
 

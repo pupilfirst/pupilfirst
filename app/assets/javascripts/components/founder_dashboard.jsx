@@ -40,11 +40,13 @@ class FounderDashboard extends React.Component {
           openTimelineBuilderCB={ this.openTimelineBuilder }/>
 
         { this.state.activeTab === 'targets' &&
-        <FounderDashboardTargets levels={ this.props.levels } openTimelineBuilderCB={ this.openTimelineBuilder }/>
+        <FounderDashboardTargets currentLevel={ this.props.currentLevel } levels={ this.props.levels }
+          openTimelineBuilderCB={ this.openTimelineBuilder }/>
         }
 
         { this.state.activeTab === 'chores' &&
-        <FounderDashboardChores chores={ this.props.chores } openTimelineBuilderCB={ this.openTimelineBuilder }/>
+        <FounderDashboardChores currentLevel={ this.props.currentLevel } chores={ this.props.chores }
+          openTimelineBuilderCB={ this.openTimelineBuilder }/>
         }
 
         { this.state.activeTab === 'sessions' &&
@@ -63,6 +65,7 @@ class FounderDashboard extends React.Component {
 }
 
 FounderDashboard.propTypes = {
+  currentLevel: React.PropTypes.number,
   levels: React.PropTypes.object,
   chores: React.PropTypes.array,
   sessions: React.PropTypes.array,

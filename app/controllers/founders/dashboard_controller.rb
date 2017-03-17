@@ -17,6 +17,7 @@ module Founders
       list_service = TimelineEventTypes::ListService.new(@startup)
 
       @react_data = {
+        currentLevel: @startup.level.number,
         levels: dashboard_data_service.levels,
         chores: dashboard_data_service.chores,
         sessions: dashboard_data_service.sessions,

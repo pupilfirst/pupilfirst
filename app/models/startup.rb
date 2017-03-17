@@ -403,4 +403,8 @@ class Startup < ApplicationRecord
     # returns ids of n toppers on the leaderboard
     Startups::PerformanceService.new.leaderboard(batch)[0..count - 1].map { |startup, _rank, _points| startup.id }
   end
+
+  def restartable_levels
+    Level.where(number: 2..(level.number - 1))
+  end
 end

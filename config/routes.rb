@@ -26,6 +26,7 @@ Rails.application.routes.draw do
       scope module: 'founders', controller: 'dashboard' do
         get 'dashboard'
         get 'performance_stats'
+        post 'startup_restart'
       end
     end
 

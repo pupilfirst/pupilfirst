@@ -1,0 +1,32 @@
+#startup-restart-form.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        | Restart your startup journey!
+        button.close.modal-close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true"
+            | &times;
+      .modal-body
+        - if @startup.restartable_levels.present?
+          .simple-form-container.m-t-2
+            = simple_form_for @restart_form, url: startup_restart_founder_path,
+              method: :post,
+              html: { class: 'form-horizontal' },
+              wrapper: :horizontal_form,
+              wrapper_mappings: { file: :horizontal_file_input, boolean: :horizontal_boolean } do |f|
+
+              = f.input :level_id, label: 'Level',
+                collection: current_founder.startup.restartable_levels,
+                include_blank: false
+              = f.input :reason, label: 'Reason',
+                input_html: { maxlength: 300, rows: 10 },
+                as: :text,
+                placeholder: 'Let us know why you plan to restart your startup journey from the above level.'
+
+              .form-group
+                .col-sm-9.offset-sm-3
+                  = button_tag type: :submit, class: 'btn btn-primary action-submit text-uppercase' do
+                    | &nbsp;Restart
+        - else
+          .alert.alert-danger role="alert"
+            | Too soon! Your startup does not have a level it can restart from yet.

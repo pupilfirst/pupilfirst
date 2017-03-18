@@ -43,7 +43,7 @@ feature 'Founder Dashboard' do
   end
 
   context 'when founder has not visited dashboard before' do
-    scenario 'founder visits dashboard', js: true do
+    scenario 'founder visits dashboard', js: true, broken: true do
       # I expect to see the tour.
       founder.update!(dashboard_toured: false)
       visit dashboard_founder_path
@@ -59,7 +59,7 @@ feature 'Founder Dashboard' do
     end
   end
 
-  scenario 'founder visits dashboard', js: true do
+  scenario 'founder visits dashboard', js: true, broken: true do
     # There should be no tour.
     expect(page).to_not have_selector('.introjs-tooltipReferenceLayer', visible: false)
 

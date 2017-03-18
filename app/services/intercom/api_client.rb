@@ -20,7 +20,7 @@ module Intercom
 
       payload[:params] = params if params.present?
 
-      response = RestClrient.get(url, payload)
+      response = RestClient.get(url, payload)
       JSON.parse(response.body)
     end
   end

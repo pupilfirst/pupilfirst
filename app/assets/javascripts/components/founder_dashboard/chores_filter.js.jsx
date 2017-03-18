@@ -2,11 +2,6 @@ class FounderDashboardChoresFilter extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      chosenStatus: 'all'
-    };
-
-    this.pickFilter = this.pickFilter.bind(this);
     this.dropdownStatuses = this.dropdownStatuses.bind(this);
 
     validStatuses = ['all', 'pending', 'submitted', 'completed', 'not_accepted', 'needs_improvement'];
@@ -14,7 +9,7 @@ class FounderDashboardChoresFilter extends React.Component {
 
   dropdownStatuses() {
     return validStatuses.filter(function (status) {
-      return status !== this.state.chosenStatus
+      return status !== this.props.chosenStatus
     }, this);
   }
 
@@ -29,10 +24,6 @@ class FounderDashboardChoresFilter extends React.Component {
     }[status];
   }
 
-  pickFilter(status) {
-    this.setState({chosenStatus: status});
-  }
-
   render() {
     return (
       <div className="btn-group filter-targets-dropdown">
@@ -41,7 +32,7 @@ class FounderDashboardChoresFilter extends React.Component {
             <i className="fa fa-filter"/>
           </span>
           <span className="p-r-1">
-            {this.dropdownLabel(this.state.chosenStatus)}
+            {this.dropdownLabel(this.props.chosenStatus)}
           </span>
           <span className="pull-xs-right filter-targets-dropdown__arrow"></span>
         </button>
@@ -49,7 +40,7 @@ class FounderDashboardChoresFilter extends React.Component {
           {
             this.dropdownStatuses().map( function (status) {
               return <FounderDashboardChoresFilterOption key={status} name={status}
-                pickFilterCB={this.pickFilter} dropdownLabel={this.dropdownLabel}/>
+                pickFilterCB={this.props.pickFilterCB} dropdownLabel={this.dropdownLabel}/>
             }, this)
           }
         </div>

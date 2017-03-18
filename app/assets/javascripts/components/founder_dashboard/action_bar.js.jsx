@@ -19,7 +19,7 @@ class FounderDashboardActionBar extends React.Component {
           }
 
           { this.props.filter === 'chores' &&
-          <FounderDashboardChoresFilter/>
+          <FounderDashboardChoresFilter pickFilterCB={ this.props.choresFilterCB } chosenStatus={ this.props.chosenStatus }/>
           }
 
           { this.props.filter === 'sessions' &&

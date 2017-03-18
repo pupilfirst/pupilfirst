@@ -1,32 +1,47 @@
 class FounderDashboardChores extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      chosenStatus: 'all'
+    };
+
+    this.pickFilter = this.pickFilter.bind(this);
+    this.choresForCurrentLevel = this.choresForCurrentLevel.bind(this);
+    this.choresForPreviousLevels = this.choresForPreviousLevels.bind(this);
+  }
+
   choresForCurrentLevel() {
-    let that = this;
-
-    return this.props.chores.reduce(function (chores, target) {
-      if (target.level.number === that.props.currentLevel) {
-        chores.push(target)
-      }
-
-      return chores;
-    }, []);
+    return this.filteredChores().filter(function (chore) {
+      return chore.level.number === this.props.currentLevel;
+    }, this);
   }
 
   choresForPreviousLevels() {
-    let that = this;
+    return this.filteredChores().filter(function (chore) {
+      return chore.level.number < this.props.currentLevel;
+    }, this);
+  }
 
-    return this.props.chores.reduce(function (chores, target) {
-      if (target.level.number < that.props.currentLevel) {
-        chores.push(target)
-      }
+  pickFilter(status) {
+    this.setState({chosenStatus: status});
+  }
 
-      return chores;
-    }, []);
+  filteredChores() {
+    if (this.state.chosenStatus === 'all') {
+      return this.props.chores;
+    } else {
+      return this.props.chores.filter(function (chore) {
+        return chore.status === this.state.chosenStatus;
+      }, this);
+    }
   }
 
   render() {
     return (
       <div>
-        <FounderDashboardActionBar filter='chores' openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/>
+        <FounderDashboardActionBar filter='chores' openTimelineBuilderCB={ this.props.openTimelineBuilderCB }
+        chosenStatus={ this.state.chosenStatus } choresFilterCB={ this.pickFilter }/>
         <FounderDashboardTargetCollection key='chores-current-level' name='Chores for current level'
           targets={ this.choresForCurrentLevel() } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/>
         <FounderDashboardTargetCollection key='chores-previous-levels' name='Chores for previous levels'

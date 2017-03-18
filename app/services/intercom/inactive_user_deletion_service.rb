@@ -23,7 +23,7 @@ module Intercom
 
     # extract user information from intercom stale users/leads and create a contact list in the format
     # required by sendinblue
-    # rubocop:disable Metrics/CyclomaticComplexity
+    # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     def contacts_to_upload
       contact_list = []
       stale_users_and_leads = stale_users + stale_leads
@@ -34,10 +34,10 @@ module Intercom
         next if stale_user.email.blank?
         user_details['email'] = stale_user.email
         user_details['attributes'] = { 'NAME' => stale_user.name || '',
-                                       'PHONE' => stale_user.custom_attributes['phone'] || 0,
+                                       'PHONE' => stale_user.phone || stale_user.custom_attributes['phone'] || 0,
                                        'COLLEGE' => stale_user.custom_attributes['college'] || '',
                                        'UNIVERSITY' => stale_user.custom_attributes['university'] || '' }
-        user_details['listid'] = [4]
+        user_details['listid'] = [6]
         contact_list[index] = user_details
       end
       contact_list

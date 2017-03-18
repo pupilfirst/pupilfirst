@@ -39,7 +39,7 @@ module Intercom
 
         {
           email: stale_user.email,
-          listid: [4],
+          listid: [6],
           attributes: sendinblue_attributes(stale_user)
         }
       end - [nil]
@@ -47,11 +47,11 @@ module Intercom
 
     def sendinblue_attributes(user)
       attributes = {}
-      attributes[:NAME] = user.name if user.name.present?
-      attributes[:PHONE] = user.custom_attributes['phone'] if user.custom_attributes['phone'].present?
-      attributes[:PHONE] = user.phone if user.phone.present?
-      attributes[:COLLEGE] = user.custom_attributes['college'] if user.custom_attributes['college'].present?
-      attributes[:UNIVERSITY] = user.custom_attributes['university'] if user.custom_attributes['university'].present?
+      attributes['NAME'] = user.name if user.name.present?
+      attributes['PHONE'] = user.custom_attributes['phone'] if user.custom_attributes['phone'].present?
+      attributes['PHONE'] = user.phone if user.phone.present?
+      attributes['COLLEGE'] = user.custom_attributes['college'] if user.custom_attributes['college'].present?
+      attributes['UNIVERSITY'] = user.custom_attributes['university'] if user.custom_attributes['university'].present?
       attributes
     end
 
@@ -74,14 +74,7 @@ module Intercom
     end
 
     def segment_id(segment_name)
-      segment_id = nil
-
-      @intercom_client.segments.all.each do |segment|
-        next unless segment.name == segment_name
-        segment_id = segment.id
-      end
-
-      segment_id
+      @intercom_client.segments.all.find { |segment| segment.name == segment_name }&.id
     end
   end
 end

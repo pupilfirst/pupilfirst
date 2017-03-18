@@ -40,7 +40,8 @@ module Founders
           .as_json(
             only: target_fields,
             include: {
-              assigner: { only: assigner_fields }
+              assigner: { only: assigner_fields },
+              level: { only: [:number] }
             }
           )
 
@@ -112,7 +113,7 @@ module Founders
     def target_fields
       [
         :id, :role, :title, :description, :completion_instructions, :resource_url, :slideshow_embed, :video_embed,
-        :days_to_complete, :points_earnable, :timeline_event_type_id
+        :days_to_complete, :points_earnable, :timeline_event_type_id, :session_at
       ]
     end
 

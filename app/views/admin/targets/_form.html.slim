@@ -11,8 +11,14 @@
       include_blank: false
 
     = f.input :title
-    = f.input :session_at, as: :string, input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O' } }
     = f.input :chore
+    = f.input :session_at, as: :string, input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O' } }
+
+    = f.input :tag_list,
+      as: :select,
+      collection: Target.tag_counts_on(:tags).pluck(:name),
+      multiple: true
+
     = f.input :level
 
     = f.hidden_field :description

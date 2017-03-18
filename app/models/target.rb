@@ -12,11 +12,19 @@ class Target < ApplicationRecord
   has_one :batch, through: :target_group
   belongs_to :level
 
+  acts_as_taggable
   mount_uploader :rubric, RubricUploader
 
   scope :founder, -> { where(role: ROLE_FOUNDER) }
   scope :not_founder, -> { where.not(role: ROLE_FOUNDER) }
   scope :due_on, -> (date) { where(due_date: date.beginning_of_day..date.end_of_day) }
+
+  # Custom scope to allow AA to filter by intersection of tags.
+  scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
+
+  def self.ransackable_scopes(_auth)
+    %i(ransack_tagged_with)
+  end
 
   ROLE_FOUNDER = 'founder'
 

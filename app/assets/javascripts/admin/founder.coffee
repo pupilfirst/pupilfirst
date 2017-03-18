@@ -10,6 +10,9 @@ setupSelect2ForFounderTagList = ->
       placeholder: 'Select some tags',
       tags: true
 
+destroySelect2ForFounderTagList = ->
+  $('#founder_tag_list').select2('destroy')
+
 showTargetsOptionally = ->
   $('.admin-founder-targets-show-link').click (event) ->
     showLink = $(event.target)
@@ -41,7 +44,8 @@ setupSelect2ForFounderColleges = ->
         cache: true
 
 $(document).on 'page:change', showTargetsOptionally
-$(document).on 'page:change', setupSelect2ForFounderTagList
+$(document).on 'turbolinks:load', setupSelect2ForFounderTagList
+$(document).on 'turbolinks:before-cache', destroySelect2ForFounderTagList
 
 $(document).on 'turbolinks:load', ->
   if $('.formtastic.founder').length

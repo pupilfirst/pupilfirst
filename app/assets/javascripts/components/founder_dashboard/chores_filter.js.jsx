@@ -1,39 +1,57 @@
 class FounderDashboardChoresFilter extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      chosenStatus: 'all'
+    };
+
+    this.pickFilter = this.pickFilter.bind(this);
+    this.dropdownStatuses = this.dropdownStatuses.bind(this);
+
+    validStatuses = ['all', 'pending', 'submitted', 'completed', 'not_accepted', 'needs_improvement'];
+  }
+
+  dropdownStatuses() {
+    return validStatuses.filter(function (status) {
+      return status !== this.state.chosenStatus
+    }, this);
+  }
+
+  dropdownLabel(status) {
+    return {
+      all: 'All Chores',
+      pending: 'Pending',
+      submitted: 'Submitted',
+      completed: 'Completed',
+      not_accepted: 'Not Accepted',
+      needs_improvement: 'Needs Improvement'
+    }[status];
+  }
+
+  pickFilter(status) {
+    this.setState({chosenStatus: status});
+  }
 
   render() {
     return (
       <div className="btn-group filter-targets-dropdown">
         <button className="btn btn-with-icon btn-ghost-primary btn-md text-xs-left filter-targets-dropdown__button dropdown-toggle" aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" type="button">
           <span className="filter-targets-dropdown__icon">
-            {/*- if instance_variable_defined?(:@filtered_targets)
-              i.fa class=TargetDecorator.fa_icon_for_filter(params[:filter])
-            - else
-              i.fa.fa-filter*/}
-            <i className="fa fa-sliders"/>
+            <i className="fa fa-filter"/>
           </span>
           <span className="p-r-1">
-           {/*- if params[:filter].present?
-             | #{ t("dashboard.show.target_filters.#{params[:filter]}.filter_text") }
-           - else
-             | All Targets*/}
-            All Chores
+            {this.dropdownLabel(this.state.chosenStatus)}
           </span>
           <span className="pull-xs-right filter-targets-dropdown__arrow"></span>
         </button>
-
         <div className="dropdown-menu filter-targets-dropdown__menu">
-          {/*- selected_filter =  instance_variable_defined?(:@filtered_targets) ? params[:filter] : 'all_targets'
-          - Founders::TargetsFilterService.filters_except(selected_filter).each do |filter|
-            a.dropdown-item.filter-targets-dropdown__menu-item href=dashboard_founder_path(filter: filter) role="button"
-              span.filter-targets-dropdown__menu-item-icon
-                i.fa class=TargetDecorator.fa_icon_for_filter(filter)
-              | #{ t("dashboard.show.target_filters.#{filter}.filter_text") }*/}
-          <a className="dropdown-item filter-targets-dropdown__menu-item" href="#" role="button">
-            <span className="filter-targets-dropdown__menu-item-icon">
-              <i className="fa fa-line-chart"/>
-            </span>
-            Level 1: Idea Discovery
-          </a>
+          {
+            this.dropdownStatuses().map( function (status) {
+              return <FounderDashboardChoresFilterOption key={status} name={status}
+                pickFilterCB={this.pickFilter} dropdownLabel={this.dropdownLabel}/>
+            }, this)
+          }
         </div>
       </div>
     );

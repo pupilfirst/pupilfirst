@@ -172,7 +172,6 @@ class TimelineEvent < ApplicationRecord
     add_link_for_new_prototype!
     add_link_for_new_video!
     add_link_for_new_resume!
-    reset_startup_level!
   end
 
   def revert_to_pending!
@@ -340,11 +339,5 @@ class TimelineEvent < ApplicationRecord
 
   def first_link_url
     links.first.try(:[], :url)
-  end
-
-  def reset_startup_level!
-    return unless timeline_event_type.end_iteration? && startup.requested_restart_level.present?
-
-    Startups::RestartService.new(startup.admin).restart!(startup.requested_restart_level)
   end
 end

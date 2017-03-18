@@ -41,6 +41,7 @@ module TimelineEvents
         @timeline_event.verify!
         update_karma_points
         post_on_facebook if @timeline_event.share_on_facebook
+        reset_startup_level if @timeline_event.timeline_event_type.end_iteration?
       end
     end
 
@@ -124,6 +125,13 @@ module TimelineEvents
 
     def post_on_facebook
       TimelineEvents::FacebookPostJob.perform_later(@timeline_event)
+    end
+
+    def reset_startup_level
+      startup = @timeline_event.startup
+      return if startup.requested_restart_level.blank?
+
+      Startups::RestartService.new(startup.admin).restart(startup.requested_restart_level)
     end
   end
 end

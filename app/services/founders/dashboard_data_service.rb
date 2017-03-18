@@ -40,12 +40,23 @@ module Founders
           .as_json(
             only: target_fields,
             include: {
-              assigner: { only: assigner_fields }
+              assigner: { only: assigner_fields },
+              level: { only: [:number] },
+              taggings: {
+                only: [],
+                include: {
+                  tag: { only: [:name] }
+                }
+              }
             }
           )
 
         targets_with_status(targets)
       end
+    end
+
+    def session_tags
+      @session_tags ||= Target.tag_counts_on(:tags).pluck(:name)
     end
 
     private
@@ -112,7 +123,7 @@ module Founders
     def target_fields
       [
         :id, :role, :title, :description, :completion_instructions, :resource_url, :slideshow_embed, :video_embed,
-        :days_to_complete, :points_earnable, :timeline_event_type_id
+        :days_to_complete, :points_earnable, :timeline_event_type_id, :session_at
       ]
     end
 

@@ -23,7 +23,8 @@ class FounderDashboardActionBar extends React.Component {
           }
 
           { this.props.filter === 'sessions' &&
-          <FounderDashboardSessionsTagSelect/>
+          <FounderDashboardSessionsTagSelect tags={ this.props.filterData.tags }
+            chooseTagsCB={ this.props.pickFilterCB }/>
           }
 
           <div className="pull-xs-right">
@@ -44,7 +45,8 @@ class FounderDashboardActionBar extends React.Component {
                   Performance
                 </a>
 
-                <a className="dropdown-item filter-targets-dropdown__menu-item" data-toggle="modal" data-target="#startup-restart-form" role="button">
+                <a className="dropdown-item filter-targets-dropdown__menu-item" data-toggle="modal"
+                  data-target="#startup-restart-form" role="button">
                   Restart
                 </a>
               </div>

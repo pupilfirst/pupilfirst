@@ -3,11 +3,11 @@ ActiveAdmin.register Target do
 
   permit_params :assigner_id, :role, :title, :description, :resource_url,
     :completion_instructions, :days_to_complete, :slideshow_embed, :completed_at, :completion_comment, :rubric,
-    :remote_rubric_url, :target_group_id, :target_type, :points_earnable,
-    :timeline_event_type_id, :sort_index, :session_at, :chore, :level_id, prerequisite_target_ids: []
+    :remote_rubric_url, :target_group_id, :target_type, :points_earnable, :timeline_event_type_id, :sort_index,
+    :session_at, :chore, :level_id, prerequisite_target_ids: [], tag_list: []
 
-  filter :session_at_not_null, as: :boolean, label: 'Sessions'
-  filter :chore
+  filter :session_at_not_null, as: :boolean, label: 'Session?'
+  filter :chore, label: 'Chore?'
   filter :target_group_program_week_batch_id_eq, label: 'Batch', as: :select, collection: proc { Batch.all }
 
   filter :target_group_program_week_id_eq, as: :select, label: 'Program Week', collection: proc {
@@ -40,6 +40,12 @@ ActiveAdmin.register Target do
   filter :title
   filter :target_type, as: :select, collection: Target.valid_target_types
 
+  filter :ransack_tagged_with,
+    as: :select,
+    multiple: true,
+    label: 'Tags',
+    collection: -> { Target.tag_counts_on(:tags).pluck(:name).sort }
+
   controller do
     def scoped_collection
       super.includes target_group: { program_week: :batch }
@@ -48,34 +54,18 @@ ActiveAdmin.register Target do
 
   index do
     selectable_column
-
-    column :batch do |target|
-      if target.target_group.present?
-        "##{target.target_group.program_week.batch.batch_number}"
-      end
-    end
-
-    column :program_week do |target|
-      program_week = target.target_group&.program_week
-      if program_week.present?
-        link_to(program_week.name, admin_program_week_path(program_week))
-      else
-        'Not Assigned'
-      end
-    end
-    column :target_group
+    column :title
 
     column :level do |target|
       target.level.present? ? target.level : target.target_group.level
     end
 
+    column :target_group
     column :sort_index
 
     column :role do |target|
       t("role.#{target.role}")
     end
-
-    column :title
 
     actions
   end
@@ -102,6 +92,11 @@ ActiveAdmin.register Target do
       row :title
       row :timeline_event_type
       row :session_at
+
+      row :tags do |founder|
+        linked_tags(founder.tags)
+      end
+
       row :chore
       row :level
 

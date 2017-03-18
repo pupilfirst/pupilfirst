@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 # Note: This spec uses a lot of `trigger('click')` instead of `.click` to avoid issues with ongoing animations.
-feature 'Timeline Builder' do
+feature 'Timeline Builder', broken: true do
   include UserSpecHelper
 
   let(:startup) { create :startup }

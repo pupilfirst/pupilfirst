@@ -23,9 +23,9 @@ class FounderDashboardSessions extends React.Component {
     return (
       <div>
         <FounderDashboardActionBar filter='sessions' openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/>
-        <FounderDashboardTargetCollection key='sessions-upcoming' name='Upcoming Sessions'
+        <FounderDashboardTargetCollection key='sessions-upcoming' name='Upcoming Sessions' displayDate={ true }
           targets={ this.upcomingSessions() } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/>
-        <FounderDashboardTargetCollection key='sessions-past' name='Past Sessions'
+        <FounderDashboardTargetCollection key='sessions-past' name='Past Sessions' displayDate={ true }
           targets={ this.pastSessions() } openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/>
       </div>
     );

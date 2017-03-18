@@ -39,6 +39,29 @@ class FounderDashboardTargetHeader extends React.Component {
   }
 
   targetDateString() {
+    if (this.props.displayDate) {
+      return this.sessionAtString();
+    } else {
+      return this.daysToCompleteString();
+    }
+  }
+
+  sessionAtString() {
+    if (typeof(this.props.target.session_at) === 'undefined' || this.props.target.session_at === null) {
+      return null;
+    } else {
+      return (
+        <span>
+          Session at:
+          <span className="founder-dashboard-target-header__info-value">
+            { moment(this.props.target.session_at).format('MMM D, h:mm A') }
+          </span>
+        </span>
+      );
+    }
+  }
+
+  daysToCompleteString() {
     if (typeof(this.props.target.days_to_complete) === 'undefined' || this.props.target.days_to_complete === null) {
       return null;
     } else {
@@ -98,8 +121,6 @@ class FounderDashboardTargetHeader extends React.Component {
           </span>
 
           <span className="hidden-sm-down">
-            {/*Pending*/}
-            {/*#{target.status_text(current_founder)}*/}
             { this.statusString() }
           </span>
         </div>
@@ -111,5 +132,10 @@ class FounderDashboardTargetHeader extends React.Component {
 FounderDashboardTargetHeader.propTypes = {
   onClickCB: React.PropTypes.func,
   descriptionOpen: React.PropTypes.bool,
-  target: React.PropTypes.object
+  target: React.PropTypes.object,
+  displayDate: React.PropTypes.bool
+};
+
+FounderDashboardTargetHeader.defaultProps = {
+  displayDate: false
 };

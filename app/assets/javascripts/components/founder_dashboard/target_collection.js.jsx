@@ -2,7 +2,7 @@ class FounderDashboardTargetCollection extends React.Component {
   targets() {
     return this.props.targets.map(function (target) {
       return <FounderDashboardTarget key={ target.id } target={ target }
-        openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/>
+        openTimelineBuilderCB={ this.props.openTimelineBuilderCB } displayDate={ this.props.displayDate }/>
     }, this);
   }
 
@@ -31,5 +31,6 @@ FounderDashboardTargetCollection.propTypes = {
   name: React.PropTypes.string,
   description: React.PropTypes.string,
   targets: React.PropTypes.array,
-  openTimelineBuilderCB: React.PropTypes.func
+  openTimelineBuilderCB: React.PropTypes.func,
+  displayDate: React.PropTypes.bool
 };

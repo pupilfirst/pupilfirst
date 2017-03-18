@@ -21,6 +21,7 @@ module Founders
         levels: dashboard_data_service.levels,
         chores: dashboard_data_service.chores,
         sessions: dashboard_data_service.sessions,
+        sessionTags: dashboard_data_service.session_tags,
         timelineEventTypes: list_service.list,
         allowFacebookShare: current_founder.facebook_token_available?
       }

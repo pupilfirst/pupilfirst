@@ -41,12 +41,22 @@ module Founders
             only: target_fields,
             include: {
               assigner: { only: assigner_fields },
-              level: { only: [:number] }
+              level: { only: [:number] },
+              taggings: {
+                only: [],
+                include: {
+                  tag: { only: [:name] }
+                }
+              }
             }
           )
 
         targets_with_status(targets)
       end
+    end
+
+    def session_tags
+      @session_tags ||= Target.tag_counts_on(:tags).pluck(:name)
     end
 
     private

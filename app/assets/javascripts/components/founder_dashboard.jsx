@@ -50,7 +50,8 @@ class FounderDashboard extends React.Component {
         }
 
         { this.state.activeTab === 'sessions' &&
-        <FounderDashboardSessions sessions={ this.props.sessions } openTimelineBuilderCB={ this.openTimelineBuilder }/>
+        <FounderDashboardSessions sessions={ this.props.sessions } sessionTags={ this.props.sessionTags }
+          openTimelineBuilderCB={ this.openTimelineBuilder }/>
         }
 
         { this.state.timelineBuilderVisible &&
@@ -69,6 +70,7 @@ FounderDashboard.propTypes = {
   levels: React.PropTypes.object,
   chores: React.PropTypes.array,
   sessions: React.PropTypes.array,
+  sessionTags: React.PropTypes.array,
   timelineEventTypes: React.PropTypes.object,
   allowFacebookShare: React.PropTypes.bool,
   authenticityToken: React.PropTypes.string

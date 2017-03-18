@@ -1,14 +1,21 @@
 module Intercom
   # The service removes inactive users/leads from Intercom and uploads the contacts to sendinblue
   class InactiveUserDeletionService
+    include Loggable
+
     def initialize
-      @intercom_client = Intercom::Client.new(token: ENV.fetch('INTERCOM_ACCESS_TOKEN'))
-      @sendinblue_client = Sendinblue::Mailin.new('https://api.sendinblue.com/v2.0', ENV.fetch('SENDINBLUE_API_KEY'))
+      @intercom_client = Intercom::Client.new(token: Rails.application.secrets.intercom_access_token)
+      @sendinblue_client = Sendinblue::Mailin.new('https://api.sendinblue.com/v2.0', Rails.application.secrets.sendinblue_api_key)
     end
 
     def execute
+      log 'Uploading contacts to SendinBlue...'
       upload_contacts_to_sendinblue
+
+      log 'Deleting inactive users from Intercom...'
       delete_inactive_users
+
+      log 'Deleting inactive leads from Intercom...'
       delete_inactive_leads
     end
 
@@ -16,31 +23,36 @@ module Intercom
 
     def upload_contacts_to_sendinblue
       return if contacts_to_upload.blank?
+
       contacts_to_upload.each do |contact|
         @sendinblue_client.create_update_user(contact)
       end
     end
 
-    # extract user information from intercom stale users/leads and create a contact list in the format
-    # required by sendinblue
-    # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    # Extract user information from intercom stale users/leads and create a contact list in the format required by SendinBlue.
     def contacts_to_upload
-      contact_list = []
-      stale_users_and_leads = stale_users + stale_leads
-      return if stale_users_and_leads.blank?
-      stale_users_and_leads.each_with_index do |stale_user, index|
-        user_details = {}
-        # ignore stale leads without email, as email is mandatory for sendinblue contact
+      stale_contacts = stale_users + stale_leads
+      log "There are #{stale_contacts.count} contacts to upload..."
+
+      stale_contacts.map do |stale_user|
         next if stale_user.email.blank?
-        user_details['email'] = stale_user.email
-        user_details['attributes'] = { 'NAME' => stale_user.name || '',
-                                       'PHONE' => stale_user.phone || stale_user.custom_attributes['phone'] || 0,
-                                       'COLLEGE' => stale_user.custom_attributes['college'] || '',
-                                       'UNIVERSITY' => stale_user.custom_attributes['university'] || '' }
-        user_details['listid'] = [6]
-        contact_list[index] = user_details
-      end
-      contact_list
+
+        {
+          email: stale_user.email,
+          listid: [4],
+          attributes: sendinblue_attributes(stale_user)
+        }
+      end - [nil]
+    end
+
+    def sendinblue_attributes(user)
+      attributes = {}
+      attributes[:NAME] = user.name if user.name.present?
+      attributes[:PHONE] = user.custom_attributes['phone'] if user.custom_attributes['phone'].present?
+      attributes[:PHONE] = user.phone if user.phone.present?
+      attributes[:COLLEGE] = user.custom_attributes['college'] if user.custom_attributes['college'].present?
+      attributes[:UNIVERSITY] = user.custom_attributes['university'] if user.custom_attributes['university'].present?
+      attributes
     end
 
     def delete_inactive_users
@@ -54,27 +66,21 @@ module Intercom
     end
 
     def stale_users
-      @stale_users ||= rescued_call { @intercom_client.users.find_all(segment_id: get_segment_id('Stale Users')).to_a }
+      @stale_users ||= @intercom_client.users.find_all(segment_id: segment_id('Stale Users')).to_a
     end
 
     def stale_leads
-      @stale_leads ||= rescued_call { @intercom_client.users.find_all(segment_id: get_segment_id('Stale Leads')).to_a }
+      @stale_leads ||= @intercom_client.users.find_all(segment_id: segment_id('Stale Leads')).to_a
     end
 
-    def rescued_call
-      yield
-    rescue Intercom::ResourceNotFound, Intercom::MultipleMatchingUsersError
-      raise
-    rescue Intercom::IntercomError => e
-      raise Exceptions::IntercomError, "#{e.class}: #{e.message}}"
-    end
-
-    def get_segment_id(segment_name)
+    def segment_id(segment_name)
       segment_id = nil
-      rescued_call { @intercom_client.segments.all }.each do |segment|
+
+      @intercom_client.segments.all.each do |segment|
         next unless segment.name == segment_name
         segment_id = segment.id
       end
+
       segment_id
     end
   end

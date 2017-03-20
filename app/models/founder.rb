@@ -81,8 +81,6 @@ class Founder < ApplicationRecord
   end
 
   before_validation do
-    self.roll_number = nil unless university.present?
-
     # Remove blank roles, if any.
     roles.delete('')
   end
@@ -127,7 +125,8 @@ class Founder < ApplicationRecord
 
   mount_uploader :identification_proof, IdentificationProofUploader
 
-  normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :name, :slack_username, :resume_url
+  normalize_attribute :startup_id, :invitation_token, :twitter_url, :linkedin_url, :name, :slack_username, :resume_url,
+    :semester, :year_of_graduation
 
   before_save :capitalize_name_fragments
 

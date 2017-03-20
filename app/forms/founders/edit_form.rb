@@ -11,6 +11,11 @@ module Founders
     property :communication_address, validates: { presence: true, length: { maximum: 250 } }
     property :identification_proof
     property :college_id, validates: { presence: true }
+    property :roll_number
+    property :college_identification
+    property :course
+    property :semester, validates: { inclusion: MoocStudent.valid_semester_values, allow_blank: true }
+    property :year_of_graduation, validates: { inclusion: (1990..2020), allow_blank: true }
     property :twitter_url, validates: { url: true, allow_blank: true }
     property :linkedin_url, validates: { url: true, allow_blank: true }
     property :personal_website_url, validates: { url: true, allow_blank: true }
@@ -25,7 +30,7 @@ module Founders
     validate :college_must_exist
     validate :roles_must_be_valid
 
-    delegate :avatar?, to: :model
+    delegate :avatar?, :college_identification?, to: :model
 
     def roles_must_be_valid
       roles.each do |role|
@@ -62,6 +67,11 @@ module Founders
       return if College.find(college_id).present?
 
       errors[:college_id] << 'is invalid'
+    end
+
+    # Manually coerce year_of_graduation to number.
+    def year_of_graduation=(value)
+      super(value.present? ? value.to_i : nil)
     end
 
     def save!

@@ -36,6 +36,11 @@ h2 Editing #{@founder.fullname}'s profile...
     input_html: { 'data-search-url' => colleges_url },
     collection: f.object.model.college.present? ? [f.object.model.college] : [["My college isn't listed", 'other']]
 
+  = f.input :roll_number, label: 'University Roll Number', required: false
+  = f.input :college_identification, label: 'College Identification', as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }, required: false
+  = f.input :course, placeholder: 'B-tech in Computer Science', required: false
+  = f.input :semester, as: :select, required: false, collection: MoocStudent.valid_semester_values, include_blank: 'Pick your semester'
+  = f.input :year_of_graduation, as: :select, collection: 2010..2025, required: false, include_blank: 'Pick the year when you graduate from college'
   = f.input :twitter_url, label: 'Twitter Profile URL', input_html: { maxlength: 255 }, required: false
   = f.input :linkedin_url, label: 'LinkedIn Profile URL', input_html: { maxlength: 255 }, required: false
   = f.input :personal_website_url, label: 'Personal Website URL', input_html: { maxlength: 255 }, required: false

@@ -89,11 +89,14 @@ en:
   dashboard:
     show:
       tour:
-        intro: Welcome to your dashboard! All your progress during the course of the program will be available here. The entire program is divided into program weeks, each of which will have target groups and associated targets.
-        week_number: Indicates the program week number. The target groups to be completed in the indicated week will be listed below.
+        intro: Welcome to your personal dashboard! Your startup's journey through multiple levels of this program will be available here.
+        toggle_bar: The program consists of targets, chores and sessions. You complete these at your pace to move up through levels.
+        targets: Each level has a set of prescribed compulsory targets. You will have to redo these if you restart your journey at any level.
+        chores: Chores are tasks which need to be completed only once in your Startup Journey.
+        sessions: A number of live and recorded sessions guide you as you progress.
         target_group: Your target groups will have all the targets listed along with its completion status.
-        target: The target pane will have the name of the target and its completion status. On clicking the target, you will get detailed information on the target, founder status, the due date and the target submission button.
-        target_details: Detailed information on the target, its due-date and founder-wise status.
+        target: The target pane will have the name of the target and its completion status. On clicking the target, you will get detailed information on the target, founder status and the target submission button.
+        target_details: Detailed information on the target and founder-wise status.
         target_status: This indicates the present status of the target.
         add_event: Click to add timeline events for your startup. Once approved by the SV.CO team, (most) timeline events are displayed to the public.
         performance: Indicates the performance of your startup.

@@ -93,15 +93,27 @@ startTour = ->
     skipLabel: 'Close',
     steps: [
       {
-        element: $('.startup-profile')[0],
+        element: $('.founder-dashboard-header__container')[0],
         intro: startupShowTour.data('intro')
       },
       {
-        element: $('.program-week-number')[0],
-        intro: startupShowTour.data('programWeekNumber')
+        element: $('.founder-dashboard-togglebar__toggle-group')[0],
+        intro: startupShowTour.data('toggleBar')
       },
       {
-        element: $('.target-group-header')[0],
+        element: $('.founder-dashboard-togglebar__toggle-btn')[0],
+        intro: startupShowTour.data('targets')
+      },
+      {
+        element: $('.founder-dashboard-togglebar__toggle-btn')[1],
+        intro: startupShowTour.data('chores')
+      },
+      {
+        element: $('.founder-dashboard-togglebar__toggle-btn')[2],
+        intro: startupShowTour.data('sessions')
+      },
+      {
+        element: $('.founder-dashboard-target-group__container')[0],
         intro: startupShowTour.data('targetGroup')
       },
       {
@@ -118,12 +130,8 @@ startTour = ->
         intro: startupShowTour.data('targetStatus')
       },
       {
-        element: $('#add-event-button')[0],
+        element: $('.btn-timeline-builder')[0],
         intro: startupShowTour.data('addEvent')
-      },
-      {
-        element: $('#performance-button')[0],
-        intro: startupShowTour.data('performance')
       }
     ]
   )

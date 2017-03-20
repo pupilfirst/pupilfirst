@@ -28,7 +28,7 @@ module Startups
     end
 
     def restart(level)
-      @startup.update!(iteration: @startup.iteration + 1, level: level)
+      @startup.update!(iteration: @startup.iteration + 1, level: level, requested_restart_level: nil)
     end
   end
 end

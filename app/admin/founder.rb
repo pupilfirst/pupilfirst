@@ -132,7 +132,7 @@ ActiveAdmin.register Founder do
     end
 
     column :university do |founder|
-      founder.university&.name
+      founder.college&.replacement_university&.name
     end
 
     column :roll_number
@@ -223,7 +223,15 @@ ActiveAdmin.register Founder do
       end
 
       row :college
-      row :university
+
+      row :university do |founder|
+        university = founder.college&.replacement_university
+
+        if university.present?
+          link_to university.name, admin_replacement_university_path(university)
+        end
+      end
+
       row :roll_number
 
       row :college_identification do

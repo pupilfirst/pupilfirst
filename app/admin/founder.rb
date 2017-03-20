@@ -245,6 +245,7 @@ ActiveAdmin.register Founder do
       row :course
       row :semester
       row :year_of_graduation
+      row :backlog
       row :exited
     end
 

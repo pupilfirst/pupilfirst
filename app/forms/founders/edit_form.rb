@@ -16,6 +16,7 @@ module Founders
     property :course
     property :semester, validates: { inclusion: MoocStudent.valid_semester_values, allow_blank: true }
     property :year_of_graduation, validates: { inclusion: (1990..2020), allow_blank: true }
+    property :backlog
     property :twitter_url, validates: { url: true, allow_blank: true }
     property :linkedin_url, validates: { url: true, allow_blank: true }
     property :personal_website_url, validates: { url: true, allow_blank: true }

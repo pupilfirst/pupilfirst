@@ -21,7 +21,7 @@ gem 'carrierwave-bombshelter' # Protects your carrierwave from image bombs (and 
 # Required by Carrierwave to upload to S3.
 gem 'fog-aws', require: 'fog/aws'
 
-gem 'coffee-rails', '~> 4.1.0' # Coffeescript on Rails.
+gem 'coffee-rails', '~> 4.2.0' # Coffeescript on Rails.
 gem 'devise' # User auth library.
 gem 'devise_invitable' # Allow invites to be sent out.
 gem 'jbuilder', '~> 2.0' # Standard part of Rails, but unused, since we don't have an API.
@@ -99,7 +99,7 @@ gem 'combine_pdf' # Used to combine sections of agreement pdfs
 gem 'rollbar' # Exception tracking and logging from Ruby to Rollbar https://rollbar.com
 gem 'humanize' # Convert numbers to english words
 gem 'quilt', github: 'harigopal/quilt' # A Ruby library for generating identicons.
-gem 'descriptive_statistics', '~> 2.4.0', require: 'descriptive_statistics/safe' # Used to calculate basic stat measures such as std. deviation (eg: To calculate relative performance of startups)
+gem 'descriptive_statistics', require: 'descriptive_statistics/safe' # Used to calculate basic stat measures such as std. deviation (eg: To calculate relative performance of startups)
 
 # Omniauth providers
 gem 'omniauth-google-oauth2' # Oauth2 strategy for Google
@@ -138,7 +138,7 @@ group :development do
   gem 'bullet' # Detect N+1 queries.
   # gem 'better_errors' # Better error info on the front-end.
   # gem 'binding_of_caller' # For advanced better_errors features - REPL, local/instance variable inspection etc.
-  gem 'web-console', '~> 3.3.0' # TODO: Restored until better_errors speeds up again.
+  gem 'web-console' # TODO: Restored until better_errors speeds up again.
   gem 'listen' # The Listen gem listens to file modifications and notifies you about the changes.
   gem 'rack-mini-profiler' # Middleware that displays speed badge for every html page.
 

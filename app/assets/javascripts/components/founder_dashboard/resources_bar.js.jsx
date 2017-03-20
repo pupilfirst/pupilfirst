@@ -1,26 +1,33 @@
 class FounderDashboardResourcesBar extends React.Component {
-  showSlides(event) {
-    let slidesModal = $('.view-slides');
-    let viewSlidesButton = $(event.target).closest('button');
+  showEmbed(event) {
+    let embedModal = $('.view-embed');
+    let viewEmbedButton = $(event.target).closest('button');
 
-    slidesModal.on('show.bs.modal', function () {
-      $('#slides-wrapper').html(viewSlidesButton.data('embed-code'));
+    embedModal.on('show.bs.modal', function () {
+      $('#embed-wrapper').html(viewEmbedButton.data('embed-code'));
     });
 
-    slidesModal.on('hide.bs.modal', function() {
-      $('#slides-wrapper').html('');
+    embedModal.on('hide.bs.modal', function() {
+      $('#embed-wrapper').html('');
     });
 
-    slidesModal.modal();
+    embedModal.modal();
   }
 
   render() {
     return(
       <div className="m-t-1">
         { this.props.target.slideshow_embed &&
-        <button className="btn btn-with-icon btn-sm btn-ghost-secondary text-uppercase m-r-1 m-b-1 view-slides-btn" data-toggle="modal" data-embed-code={ this.props.target.slideshow_embed } onClick={ this.showSlides }>
+        <button className="btn btn-with-icon btn-sm btn-ghost-secondary text-uppercase m-r-1 m-b-1" data-toggle="modal" data-embed-code={ this.props.target.slideshow_embed } onClick={ this.showEmbed }>
           <i className="fa fa-slideshare"/>
           <span>&nbsp;View Slides</span>
+        </button>
+        }
+
+        { this.props.target.video_embed &&
+        <button className="btn btn-with-icon btn-sm btn-ghost-secondary text-uppercase m-r-1 m-b-1" data-toggle="modal" data-embed-code={ this.props.target.video_embed } onClick={ this.showEmbed }>
+          <i className="fa fa-play"/>
+          <span>&nbsp;Play Video</span>
         </button>
         }
 

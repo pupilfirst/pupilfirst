@@ -131,4 +131,7 @@ class Target < ApplicationRecord
   def session?
     session_at.present?
   end
+
+  # this is included in the target JSONs the DashboardDataService responds with
+  alias has_rubric rubric?
 end

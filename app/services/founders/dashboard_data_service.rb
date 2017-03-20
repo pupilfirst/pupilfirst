@@ -22,6 +22,7 @@ module Founders
           .decorate
           .as_json(
             only: target_fields,
+            methods: :has_rubric,
             include: {
               assigner: { only: assigner_fields },
               level: { only: [:number] }
@@ -39,6 +40,7 @@ module Founders
           .decorate
           .as_json(
             only: target_fields,
+            methods: :has_rubric,
             include: {
               assigner: { only: assigner_fields },
               level: { only: [:number] },
@@ -70,6 +72,7 @@ module Founders
           include: {
             targets: {
               only: target_fields,
+              methods: :has_rubric,
               include: {
                 assigner: {
                   only: [:id, :name]

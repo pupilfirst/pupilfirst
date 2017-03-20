@@ -81,23 +81,6 @@ setPerformancePointer = ->
     else 'green'
   $('.performance-pointer')[0].style.color = color
 
-viewSlidesModal = ->
-  scope = $('.view-slides-btn')
-  scope.off('click')
-
-  scope.on('click', (event) ->
-    slidesModal = $('.view-slides')
-    viewSlidesButton = $(event.target).closest('button')
-
-    slidesModal.on 'show.bs.modal', ->
-      $('#slides-wrapper').html(viewSlidesButton.data('embed-code'))
-
-    slidesModal.on 'hide.bs.modal', ->
-      $('#slides-wrapper').html('')
-
-    slidesModal.modal()
-  )
-
 giveATour = ->
   startTour() if $('#dashboard-show-tour').data('tour-flag')
 
@@ -213,7 +196,6 @@ $(document).on 'turbolinks:load', ->
 #    handleTimelineBuilderModal()
 #    handleTimelineBuilderPopoversHiding()
     giveATour()
-    viewSlidesModal()
     hideIntercomOnSmallScreen()
     loadPerformanceOnDemand()
 #    loadProgramWeekOnDemand()

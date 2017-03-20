@@ -25,6 +25,8 @@ class FounderDashboardTargetDescription extends React.Component {
 
         <p className="target-description-content" dangerouslySetInnerHTML={{__html: this.props.target.description}}/>
 
+        <FounderDashboardResourcesBar target={ this.props.target }/>
+
         <FounderDashboardSubmissionPanel target={ this.props.target }
           openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/>
       </div>

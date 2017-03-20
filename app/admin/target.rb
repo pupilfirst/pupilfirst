@@ -2,7 +2,7 @@ ActiveAdmin.register Target do
   include DisableIntercom
 
   permit_params :assigner_id, :role, :title, :description, :resource_url,
-    :completion_instructions, :days_to_complete, :slideshow_embed, :completed_at, :completion_comment, :rubric,
+    :completion_instructions, :days_to_complete, :slideshow_embed, :video_embed, :completed_at, :completion_comment, :rubric,
     :remote_rubric_url, :target_group_id, :target_type, :points_earnable, :timeline_event_type_id, :sort_index,
     :session_at, :chore, :level_id, prerequisite_target_ids: [], tag_list: []
 
@@ -135,6 +135,7 @@ ActiveAdmin.register Target do
       end
 
       row :slideshow_embed
+      row :video_embed
       row :resource_url
       row :completion_instructions
       row :days_to_complete

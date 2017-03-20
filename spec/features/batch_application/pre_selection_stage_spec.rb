@@ -11,7 +11,7 @@ feature 'Pre-selection Stage' do
 
   context 'when the team lead has scholarship' do
     before do
-      batch_application.batch_applicants.update_all(fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE)
+      batch_application.batch_applicants.update(fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE)
       batch_application.team_lead.update(fee_payment_method: BatchApplicant::PAYMENT_METHOD_MERIT_SCHOLARSHIP)
       batch_application.cofounders.last.update(fee_payment_method: BatchApplicant::PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP)
       sign_in_user(batch_applicant.user, referer: apply_continue_path)
@@ -24,7 +24,7 @@ feature 'Pre-selection Stage' do
 
   context 'at the beginning of pre-selection stage' do
     before do
-      batch_application.batch_applicants.update_all(fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE)
+      batch_application.batch_applicants.update(fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE)
       @applicant_requiring_income_proof = batch_application.cofounders.last
       @applicant_requiring_income_proof.update(fee_payment_method: BatchApplicant::PAYMENT_METHOD_HARDSHIP_SCHOLARSHIP)
       sign_in_user(batch_applicant.user, referer: apply_continue_path)

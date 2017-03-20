@@ -16,7 +16,7 @@ class Target < ApplicationRecord
 
   scope :founder, -> { where(role: ROLE_FOUNDER) }
   scope :not_founder, -> { where.not(role: ROLE_FOUNDER) }
-  scope :due_on, -> (date) { where(due_date: date.beginning_of_day..date.end_of_day) }
+  scope :due_on, ->(date) { where(due_date: date.beginning_of_day..date.end_of_day) }
 
   ROLE_FOUNDER = 'founder'
 

@@ -58,6 +58,7 @@ class HomeController < ApplicationController
 
   # TODO: Remove this route once PayTM is correctly configured with '/paytm/callback' as the redirect_url.
   def paytm_callback
+    # There's nothing to load.
   end
 
   protected

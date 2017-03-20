@@ -31,7 +31,7 @@ class TimelineEventVerificationNotificationJob < ApplicationJob
   def send_team_message
     return if @timeline_event.founder_event?
 
-    target = { founders: @timeline_event.startup&.founders - [@timeline_event.founder] }
+    target = { founders: (@timeline_event.startup&.founders || []) - [@timeline_event.founder] }
 
     slack_message = message('team', event_status)
 

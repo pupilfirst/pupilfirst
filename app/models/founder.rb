@@ -40,26 +40,27 @@ class Founder < ApplicationRecord
   has_one :batch_applicant
 
   scope :batched, -> { joins(:startup).merge(Startup.batched) }
-  scope :for_batch_id_in, -> (ids) { joins(:startup).where(startups: { batch_id: ids }) }
+  scope :for_batch_id_in, ->(ids) { joins(:startup).where(startups: { batch_id: ids }) }
   scope :not_dropped_out, -> { joins(:startup).merge(Startup.not_dropped_out) }
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }
   # TODO: Do we need this anymore ?
   scope :student_entrepreneurs, -> { where.not(university_id: nil) }
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
   scope :non_founders, -> { where(startup_id: nil) }
-  scope :in_batch, -> (batch) { joins(:startup).where(startups: { batch_id: batch.id }) }
+  scope :in_batch, ->(batch) { joins(:startup).where(startups: { batch_id: batch.id }) }
 
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
 
-  scope :active_on_slack, -> (since, upto) { joins(:public_slack_messages).where(public_slack_messages: { created_at: since..upto }) }
-  scope :active_on_web, -> (since, upto) { joins(user: :visits).where(visits: { started_at: since..upto }) }
+  scope :active_on_slack, ->(since, upto) { joins(:public_slack_messages).where(public_slack_messages: { created_at: since..upto }) }
+  scope :active_on_web, ->(since, upto) { joins(user: :visits).where(visits: { started_at: since..upto }) }
+
   scope :inactive, lambda {
     where(exited: false).where.not(id: active_on_slack(Time.now.beginning_of_week, Time.now)).where.not(id: active_on_web(Time.now.beginning_of_week, Time.now))
   }
   scope :not_exited, -> { where.not(exited: true) }
 
-  scope :with_email, -> (email) { where('lower(email) = ?', email.downcase) }
+  scope :with_email, ->(email) { where('lower(email) = ?', email.downcase) }
 
   def self.ransackable_scopes(_auth)
     %i(ransack_tagged_with)

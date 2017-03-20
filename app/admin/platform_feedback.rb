@@ -58,12 +58,14 @@ ActiveAdmin.register PlatformFeedback do
   member_action :assign_karma_point, method: :post do
     platform_feedback = PlatformFeedback.find params[:id]
 
-    KarmaPoint.create!(
-      source: platform_feedback,
-      founder: platform_feedback.founder,
-      activity_type: "Submitted Platform Feedback on #{platform_feedback.created_at.strftime('%b %d, %Y')}",
-      points: params[:karma_point]
-    ) if params[:karma_point].present?
+    if params[:karma_point].present?
+      KarmaPoint.create!(
+        source: platform_feedback,
+        founder: platform_feedback.founder,
+        activity_type: "Submitted Platform Feedback on #{platform_feedback.created_at.strftime('%b %d, %Y')}",
+        points: params[:karma_point]
+      )
+    end
 
     platform_feedback.update(notes: params[:notes]) if params[:notes].present?
 

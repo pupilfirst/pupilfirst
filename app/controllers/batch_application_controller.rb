@@ -11,6 +11,7 @@ class BatchApplicationController < ApplicationController
 
   # GET /apply
   def index
+    # There's nothing to load.
   end
 
   # POST /apply/register
@@ -131,7 +132,7 @@ class BatchApplicationController < ApplicationController
 
   # GET /apply/stage/:stage_number/complete
   def complete
-    return redirect_to(apply_continue_path) unless current_application&.status.in? [:submitted, :promoted]
+    return redirect_to(apply_continue_path) unless current_application&.status&.in?([:submitted, :promoted])
     stage_number = (current_application&.status == :promoted ? application_stage_number - 1 : application_stage_number)
     try "stage_#{stage_number}_complete"
     render "stage_#{stage_number}_complete"

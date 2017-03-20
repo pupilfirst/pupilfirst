@@ -107,7 +107,7 @@ RSpec.describe BatchApplication, type: :model do
     let(:payment) { create :payment, batch_applicant: subject.team_lead, batch_application: subject }
 
     before do
-      subject.batch_applicants.update_all(fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE)
+      subject.batch_applicants.update(fee_payment_method: BatchApplicant::PAYMENT_METHOD_REGULAR_FEE)
     end
 
     it 'returns sum of course fee for applicants' do

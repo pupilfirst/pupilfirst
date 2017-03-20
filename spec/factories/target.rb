@@ -18,7 +18,7 @@ FactoryGirl.define do
     end
 
     trait :with_rubric do
-      rubric { Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')) }
+      rubric { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')) }
     end
 
     trait :with_program_week do

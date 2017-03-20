@@ -8,7 +8,7 @@ namespace :lita do
     # Require all handlers.
     require_rel '../lita/handlers/*'
 
-    lita_config_path = File.expand_path(File.join(Rails.root, 'config', 'lita_config.rb'))
+    lita_config_path = File.expand_path(Rails.root.join('config', 'lita_config.rb'))
     Lita.run(lita_config_path)
   end
 end

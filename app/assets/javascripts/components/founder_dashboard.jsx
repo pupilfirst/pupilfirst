@@ -39,6 +39,8 @@ class FounderDashboard extends React.Component {
         <FounderDashboardToggleBar selected={ this.state.activeTab } chooseTabCB={ this.chooseTab }
           openTimelineBuilderCB={ this.openTimelineBuilder }/>
 
+        { this.props.requestedRestartLevel && <FounderDashboardRestartWarning/> }
+
         { this.state.activeTab === 'targets' &&
         <FounderDashboardTargets currentLevel={ this.props.currentLevel } levels={ this.props.levels }
           openTimelineBuilderCB={ this.openTimelineBuilder }/>

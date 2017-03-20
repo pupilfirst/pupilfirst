@@ -7,7 +7,10 @@
           span aria-hidden="true"
             | &times;
       .modal-body
-        - if @startup.restartable_levels.present?
+        - if @startup.requested_restart_level.present?
+          .alert.alert-danger role="alert"
+            | Your startup has already requested a restart! Please wait for approval.
+        - elsif @startup.restartable_levels.present?
           .simple-form-container.m-t-2
             = simple_form_for @restart_form, url: startup_restart_founder_path,
               method: :post,
@@ -28,5 +31,5 @@
                   = button_tag type: :submit, class: 'btn btn-primary action-submit text-uppercase' do
                     | &nbsp;Restart
         - else
-          .alert.alert-danger role="alert"
+          .alert.alert-warning role="alert"
             | Too soon! Your startup does not have a level it can restart from yet.

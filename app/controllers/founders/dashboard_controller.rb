@@ -18,6 +18,7 @@ module Founders
 
       @react_data = {
         currentLevel: @startup.level.number,
+        requestedRestartLevel: @startup.requested_restart_level&.number,
         levels: dashboard_data_service.levels,
         chores: dashboard_data_service.chores,
         sessions: dashboard_data_service.sessions,

@@ -7,8 +7,6 @@ class FounderDashboardChores extends React.Component {
     };
 
     this.pickFilter = this.pickFilter.bind(this);
-    this.choresForCurrentLevel = this.choresForCurrentLevel.bind(this);
-    this.choresForPreviousLevels = this.choresForPreviousLevels.bind(this);
   }
 
   choresForCurrentLevel() {

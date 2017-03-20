@@ -49,6 +49,7 @@ module TimelineEvents
       TimelineEvent.transaction do
         @timeline_event.mark_needs_improvement!
         update_karma_points
+        reset_startup_level if @timeline_event.timeline_event_type.end_iteration?
       end
     end
 

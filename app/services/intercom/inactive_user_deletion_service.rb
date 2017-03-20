@@ -3,7 +3,8 @@ module Intercom
   class InactiveUserDeletionService
     include Loggable
 
-    def initialize
+    def initialize(mock: false)
+      @mock = mock
       @intercom_client = Intercom::Client.new(token: Rails.application.secrets.intercom_access_token)
       @sendinblue_client = Sendinblue::Mailin.new('https://api.sendinblue.com/v2.0', Rails.application.secrets.sendinblue_api_key)
     end
@@ -25,7 +26,11 @@ module Intercom
       return if contacts_to_upload.blank?
 
       contacts_to_upload.each do |contact|
-        @sendinblue_client.create_update_user(contact)
+        if @mock
+          log "@sendinblue_client.create_update_user({ email: '#{contact[:email]}', ...})"
+        else
+          @sendinblue_client.create_update_user(contact)
+        end
       end
     end
 
@@ -39,7 +44,7 @@ module Intercom
 
         {
           email: stale_user.email,
-          listid: [6],
+          listid: ENV.fetch('SENDINBLUE_IMPORT_LIST_ID'),
           attributes: sendinblue_attributes(stale_user)
         }
       end - [nil]
@@ -47,22 +52,30 @@ module Intercom
 
     def sendinblue_attributes(user)
       attributes = {}
-      attributes['NAME'] = user.name if user.name.present?
-      attributes['PHONE'] = user.custom_attributes['phone'] if user.custom_attributes['phone'].present?
-      attributes['PHONE'] = user.phone if user.phone.present?
-      attributes['COLLEGE'] = user.custom_attributes['college'] if user.custom_attributes['college'].present?
-      attributes['UNIVERSITY'] = user.custom_attributes['university'] if user.custom_attributes['university'].present?
+      attributes[:NAME] = user.name if user.name.present?
+      attributes[:PHONE] = user.custom_attributes['phone'] if user.custom_attributes['phone'].present?
+      attributes[:PHONE] = user.phone if user.phone.present?
+      attributes[:COLLEGE] = user.custom_attributes['college'] if user.custom_attributes['college'].present?
+      attributes[:UNIVERSITY] = user.custom_attributes['university'] if user.custom_attributes['university'].present?
       attributes
     end
 
     def delete_inactive_users
       return if stale_users.blank?
-      @intercom_client.users.submit_bulk_job(delete_items: @stale_users)
+      if @mock
+        log "@intercom_client.users.submit_bulk_job(delete_items: [#{@stale_users.count} users])"
+      else
+        @intercom_client.users.submit_bulk_job(delete_items: @stale_users)
+      end
     end
 
     def delete_inactive_leads
       return if stale_leads.blank?
-      @intercom_client.users.submit_bulk_job(delete_items: @stale_leads)
+      if @mock
+        log "@intercom_client.users.submit_bulk_job(delete_items: [#{@stale_leads.count} users])"
+      else
+        @intercom_client.users.submit_bulk_job(delete_items: @stale_leads)
+      end
     end
 
     def stale_users

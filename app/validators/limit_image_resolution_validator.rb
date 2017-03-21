@@ -3,7 +3,8 @@
 class LimitImageResolutionValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     return if value.blank?
-    return if FastImage.type(value&.tempfile).blank?
+    return unless value.respond_to?(:tempfile)
+    return if FastImage.type(value.tempfile).blank?
 
     width, height = FastImage.size(value.tempfile)
 

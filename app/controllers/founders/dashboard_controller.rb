@@ -32,14 +32,6 @@ module Founders
       @tour = tour_dashboard?
     end
 
-    # GET /founder/performance_stats
-    def performance_stats
-      @startup = current_founder.startup&.decorate
-      @batch = @startup&.batch&.decorate
-
-      render layout: false
-    end
-
     # POST /founder/startup_restart
     def startup_restart
       startup = current_founder.startup

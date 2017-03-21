@@ -145,28 +145,6 @@ hideIntercomOnSmallScreen = ->
     # TODO: There might be a better way to do this!
     window.Intercom('shutdown') if window.innerWidth < 576
 
-loadPerformanceOnDemand = ->
-  $('#performance-button').click (event) ->
-    performanceOverview = $('.performance-overview')
-
-    # Open the modal.
-    performanceOverview.modal()
-
-    # Load performance data using AJAX if required.
-    unless performanceOverview.data('loaded') || performanceOverview.data('loading')
-      performanceOverview.data('loading', true)
-      performanceUrl = $(event.target).closest('button').data('performanceUrl')
-
-      $.get(performanceUrl).done((data) ->
-        performanceOverview.find('.modal-body').html(data)
-        setPerformancePointer()
-        performanceOverview.data('loaded', true)
-      ).fail(->
-        console.log("Failed to load performance data from server. :-(")
-      ).always(->
-        performanceOverview.data('loading', false)
-      )
-
 loadProgramWeekOnDemand = ->
   loadingElement = $('.js-program-week__loading')
   return unless loadingElement.length
@@ -205,5 +183,5 @@ $(document).on 'turbolinks:load', ->
 #    handleTimelineBuilderPopoversHiding()
     giveATour()
     hideIntercomOnSmallScreen()
-    loadPerformanceOnDemand()
+    setPerformancePointer()
 #    loadProgramWeekOnDemand()

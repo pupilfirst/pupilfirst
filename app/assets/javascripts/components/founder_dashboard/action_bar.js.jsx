@@ -41,7 +41,8 @@ class FounderDashboardActionBar extends React.Component {
               </button>
 
               <div className="dropdown-menu filter-targets-dropdown__menu dropdown-menu-right">
-                <a className="dropdown-item filter-targets-dropdown__menu-item" href="#" role="button">
+                <a className="dropdown-item filter-targets-dropdown__menu-item" data-toggle="modal"
+                   data-target="#performance-overview-modal" role="button">
                   Performance
                 </a>
 

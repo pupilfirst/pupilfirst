@@ -83,7 +83,11 @@ module Intercom
     end
 
     def intercom_segment_users(segment)
-      @intercom_client.users.find_all(segment_id: segment_id(segment)).to_a
+      @intercom_segment_users ||= Hash.new do |hash, key|
+        hash[key] = @intercom_client.users.find_all(segment_id: segment_id(key)).to_a
+      end
+
+      @intercom_segment_users[segment]
     end
 
     def segment_id(segment_name)
@@ -91,12 +95,13 @@ module Intercom
         @intercom_segments ||= @intercom_client.segments.all
         @intercom_segments.find { |segment| segment.name == segment_name }&.id
       end
+
       @segment_id[segment_name]
     end
 
     def list_id(list_name)
       @list_id = Hash.new do
-        @sendinblue_lists = @sendinblue_client.get_lists({})
+        @sendinblue_lists ||= @sendinblue_client.get_lists({})
         @sendinblue_lists['data'].detect { |list| list['name'] == list_name }['id']
       end
       @list_id[list_name]

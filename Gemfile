@@ -169,6 +169,7 @@ group :development, :test do
   gem 'overcommit', require: false # A fully configurable and extendable Git hook manager
   gem 'fuubar' # The instafailing RSpec progress bar formatter.
   gem 'knapsack' # Knapsack splits tests across CI nodes so that tests will run comparable time on each node.
+  gem 'rails_stats' # external/replacement version of rake stats
 end
 
 group :production do

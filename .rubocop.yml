@@ -36,10 +36,10 @@ Style/MultilineOperationIndentation:
 Style/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 Style/CaseIndentation:
-  IndentWhenRelativeTo: end
+  EnforcedStyle: end
   IndentOneStep: true
 Lint/EndAlignment:
-  AlignWith: variable
+  EnforcedStyleAlignWith: variable
 Style/VariableNumber:
   Enabled: false
 Metrics/BlockLength:
@@ -51,6 +51,8 @@ Metrics/BlockLength:
 
 # Concessions (remove these if possible / appropriate).
 
+Bundler/OrderedGems:
+  Enabled: false # we have a ton of gems, grouped arbitrarily. Could be tackled later.
 Style/FrozenStringLiteralComment:
   Enabled: false # forces addition of frozen string literal directive to all files. WTF.
 Metrics/LineLength:

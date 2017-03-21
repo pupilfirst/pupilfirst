@@ -53,6 +53,7 @@ class FacultyController < ApplicationController
 
   # GET /faculty/slots_saved/:token
   def slots_saved
+    # There's nothing to load.
   end
 
   private

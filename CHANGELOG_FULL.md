@@ -2,6 +2,11 @@
 
 - Design and implementation of Stage 1 of switch to subscription model is ongoing. [[Trello]](https://trello.com/c/r5wuULZ2)
 
+## 2017.03.20
+
+- Admin Interface's _User Activity_ list now has a user filter that loads users using AJAX instead of pre-loading. [[Trello]](https://trello.com/c/ePsDNjky)
+- Restored a bunch of fields to the Founder profile edit page - they were accidentally removed in an earlier commit. Also added a new field along with the change, required for graduation. [[Trello]](https://trello.com/c/WsZn995T)
+
 ## 2017.03.13
 
 - `Startup#show` load times have been cut down by deferring loading of earlier events. [[Trello]](https://trello.com/c/X6BccOYq)

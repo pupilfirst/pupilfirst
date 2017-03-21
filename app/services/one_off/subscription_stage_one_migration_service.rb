@@ -43,7 +43,7 @@ module OneOff
     def upgrade_legacy_startups
       Rails.logger.info 'Upgrading legacy startups...'
 
-      Startup.where.not(batch: current_batch).update_all(iteration: 2)
+      Startup.where.not(batch: current_batch).update(iteration: 2)
     end
 
     # Remove targets that don't belong to a group.

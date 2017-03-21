@@ -85,15 +85,6 @@ class FoundersController < ApplicationController
     end
   end
 
-  def founder_params
-    params.require(:founders_edit).permit(
-      :name, :avatar, :slack_username, :skype_id, :identification_proof, :phone,
-      :college_identification, :course, :semester, :year_of_graduation, :about, :twitter_url, :linkedin_url,
-      :personal_website_url, :blog_url, :angel_co_url, :github_url, :behance_url, :college_id,
-      :roll_number, :born_on, :communication_address, roles: []
-    )
-  end
-
   def take_on_tour?
     current_founder.present? && current_founder.startup == @startup.model && (current_founder.tour_dashboard? || params[:tour].present?)
   end

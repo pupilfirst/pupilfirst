@@ -9,5 +9,6 @@ class PaytmController < ApplicationController
   # TODO: Configure PayTM's callback_url to point here. Now using a temporary 'home#paytm_callback'
   # POST /paytm/callback
   def callback
+    # There's nothing to load.
   end
 end

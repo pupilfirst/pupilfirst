@@ -1,3 +1,9 @@
+### 20 March, 2017
+
+#### Features
+
+  - Added some new fields to the Founder profile edit page to accept data that will be useful for graduation.
+
 ### 13 March, 2017
 
 #### Features

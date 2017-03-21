@@ -12,7 +12,7 @@ module Founders
     property :identification_proof
     property :college_id, validates: { presence: true }
     property :roll_number
-    property :college_identification
+    property :college_identification, validates: { file_size: { less_than: 2.megabytes }, file_content_type: { allow: %w(image/jpeg image/png image/gif) } }
     property :course
     property :semester, validates: { inclusion: MoocStudent.valid_semester_values, allow_blank: true }
     property :year_of_graduation, validates: { inclusion: (1990..2020), allow_blank: true }

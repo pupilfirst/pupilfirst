@@ -20,10 +20,10 @@ class FounderDashboardToggleBar extends React.Component {
           <div className="btn-group founder-dashboard-togglebar__toggle-group">
             <FounderDashboardToggleBarTab tabType='targets' pendingCount={ 0 } chooseTabCB={ this.props.chooseTabCB }
               chosen={ this.isChosenTab('targets') }/>
-            <FounderDashboardToggleBarTab tabType='chores' pendingCount={ 20 } chooseTabCB={ this.props.chooseTabCB }
-              chosen={ this.isChosenTab('chores') }/>
-            <FounderDashboardToggleBarTab tabType='sessions' pendingCount={ 2 } chooseTabCB={ this.props.chooseTabCB }
-              chosen={ this.isChosenTab('sessions') }/>
+            <FounderDashboardToggleBarTab tabType='chores' pendingCount={ this.props.pendingChores }
+              chooseTabCB={ this.props.chooseTabCB } chosen={ this.isChosenTab('chores') }/>
+            <FounderDashboardToggleBarTab tabType='sessions' pendingCount={ this.props.pendingSessions }
+              chooseTabCB={ this.props.chooseTabCB } chosen={ this.isChosenTab('sessions') }/>
           </div>
         </div>
 
@@ -41,5 +41,7 @@ class FounderDashboardToggleBar extends React.Component {
 FounderDashboardToggleBar.propTypes = {
   selected: React.PropTypes.string,
   chooseTabCB: React.PropTypes.func,
-  openTimelineBuilderCB: React.PropTypes.func
+  openTimelineBuilderCB: React.PropTypes.func,
+  pendingChores: React.PropTypes.number,
+  pendingSessions: React.PropTypes.number,
 };

@@ -33,11 +33,20 @@ class FounderDashboard extends React.Component {
     this.setState({timelineBuilderVisible: true, timelineBuilderParams: builderParams});
   }
 
+  pendingCount(targetType) {
+    let targets = targetType == 'chores' ? this.props.chores : this.props.sessions;
+
+    return targets.filter(function(target) {
+      return target.status === 'pending';
+    }).length;
+  }
+
   render() {
     return (
       <div className="founder-dashboard-container p-b-2">
         <FounderDashboardToggleBar selected={ this.state.activeTab } chooseTabCB={ this.chooseTab }
-          openTimelineBuilderCB={ this.openTimelineBuilder }/>
+          openTimelineBuilderCB={ this.openTimelineBuilder } pendingChores={ this.pendingCount('chores') }
+          pendingSessions={ this.pendingCount('sessions') }/>
 
         { this.props.requestedRestartLevel && <FounderDashboardRestartWarning/> }
 

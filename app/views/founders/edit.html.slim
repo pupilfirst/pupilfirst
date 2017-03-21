@@ -37,7 +37,7 @@ h2.margin-bottom-20 Editing #{@founder.fullname}'s profile
     collection: f.object.model.college.present? ? [f.object.model.college] : [["My college isn't listed", 'other']]
 
   = f.input :roll_number, label: 'University Roll Number', required: false
-  = f.input :college_identification, label: 'College Identification', as: :image_preview, input_html: { preview_version: :thumb }, required: false
+  = f.input :college_identification, label: 'College Identification', as: :image_preview, input_html: { preview_version: :thumb, accept: 'image/*' }, required: false
   = f.input :course, placeholder: 'B-tech in Computer Science', required: false
   = f.input :semester, as: :select, required: false, collection: MoocStudent.valid_semester_values, include_blank: 'Pick your semester'
   = f.input :year_of_graduation, as: :select, collection: 2010..2025, required: false, include_blank: 'Pick the year when you graduate from college'

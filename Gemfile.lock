@@ -603,6 +603,8 @@ GEM
       rails_serve_static_assets
       rails_stdout_logging
     rails_serve_static_assets (0.0.5)
+    rails_stats (1.0.0)
+      rake
     rails_stdout_logging (0.0.5)
     railties (5.0.2)
       actionpack (= 5.0.2)
@@ -884,6 +886,7 @@ DEPENDENCIES
   rails-assets-trix!
   rails-assets-waypoints!
   rails_12factor
+  rails_stats
   react-rails
   recaptcha
   reform

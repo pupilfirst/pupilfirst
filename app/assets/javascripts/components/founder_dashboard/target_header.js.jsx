@@ -93,6 +93,17 @@ class FounderDashboardTargetHeader extends React.Component {
     }
   }
 
+  statusIconClasses() {
+    return {
+      complete: 'fa fa-thumbs-o-up',
+      needs_improvement: 'fa fa-line-chart',
+      submitted: 'fa fa-hourglass-half',
+      pending: 'fa fa-clock-o',
+      unavailable: 'fa fa-lock',
+      not_accepted: 'fa fa-thumbs-o-down'
+    }[this.props.target.status];
+  }
+
   render() {
     return (
       <div className={ this.containerClasses() } onClick={ this.props.onClickCB }>
@@ -115,7 +126,7 @@ class FounderDashboardTargetHeader extends React.Component {
 
         <div className={ this.statusBadgeClasses() }>
           <span className="founder-dashboard-target-header__status-badge-icon">
-            <i className="fa"/>
+            <i className={ this.statusIconClasses() }/>
           </span>
 
           <span className="hidden-sm-down">

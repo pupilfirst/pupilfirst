@@ -39,7 +39,6 @@ describe Targets::StatsService do
         needs_improvement: 1,
         not_accepted: 1,
         pending: 5,
-        expired: 0,
         unavailable: 1
       )
     end
@@ -72,12 +71,6 @@ describe Targets::StatsService do
   describe '#submitted_assignees' do
     it 'returns array of submitted assignees' do
       expect(subject.submitted_assignees).to eq([Startup.fifth])
-    end
-  end
-
-  describe '#expired_assignees' do
-    it 'returns array of expired assignees' do
-      expect(subject.expired_assignees).to eq([])
     end
   end
 

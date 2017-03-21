@@ -15,7 +15,6 @@ loadStatsOnDemand = ->
         row.find('.js-targets-overview__not-accepted-count').html(data.not_accepted)
         row.find('.js-targets-overview__unavailable-count').html(data.unavailable)
         row.find('.js-targets-overview__pending-count').html(data.pending)
-        row.find('.js-targets-overview__expired-count').html(data.expired)
       beforeSend: ->
         clickedLink.html('Loading...')
       complete: ->

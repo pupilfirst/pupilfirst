@@ -13,10 +13,6 @@ class FounderDashboardSubmissionPanel extends React.Component {
     return (this.props.target.status === 'pending');
   }
 
-  isExpired() {
-    return (this.props.target.status === 'expired');
-  }
-
   targetFeedbackClasses() {
     let classes = 'target-feedback';
     let statusClass = this.props.target.status.replace('_', '-');
@@ -33,9 +29,6 @@ class FounderDashboardSubmissionPanel extends React.Component {
         break;
       case 'needs_improvement':
         classes += ' fa-line-chart';
-        break;
-      case 'expired':
-        classes += ' fa-hourglass-end';
         break;
       case 'not_accepted':
         classes += ' fa-thumbs-o-down';
@@ -61,8 +54,6 @@ class FounderDashboardSubmissionPanel extends React.Component {
         return 'Submission Needs Improvement';
       case 'submitted':
         return 'Submission Being Verified';
-      case 'expired':
-        return 'Target Expired';
       case 'pending':
         return 'Target Pending';
       case 'unavailable':
@@ -80,8 +71,6 @@ class FounderDashboardSubmissionPanel extends React.Component {
         return 'Consider feedback and try re-submitting!';
       case 'submitted':
         return 'Submitted on ' + this.submittedAt();
-      case 'expired':
-        return 'You can still try submitting!';
       case 'pending':
         return 'Follow completion instructions and submit!';
       case 'unavailable':
@@ -101,7 +90,7 @@ class FounderDashboardSubmissionPanel extends React.Component {
   }
 
   submitButtonText() {
-    return this.isPending() || this.isExpired() ? 'Submit' : 'Re-Submit';
+    return this.isPending() ? 'Submit' : 'Re-Submit';
   }
 
   handleSubmitClick() {

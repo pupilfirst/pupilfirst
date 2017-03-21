@@ -84,8 +84,6 @@ class FounderDashboardTargetHeader extends React.Component {
         return 'Needs Improvement';
       case 'submitted':
         return 'Submitted';
-      case 'expired':
-        return 'Expired';
       case 'pending':
         return 'Pending';
       case 'unavailable':

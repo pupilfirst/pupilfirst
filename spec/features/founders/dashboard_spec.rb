@@ -19,7 +19,6 @@ feature 'Founder Dashboard' do
   let(:completed_target) { create :target, target_group: target_group_1 }
   let(:not_accepted_target) { create :target, target_group: target_group_1 }
   let(:needs_improvement_target) { create :target, target_group: target_group_1 }
-  let!(:expired_target) { create :target, target_group: target_group_1, days_to_complete: 0 }
   let!(:target_with_prerequisites) { create :target, target_group: target_group_1, prerequisite_targets: [pending_target] }
 
   before do
@@ -99,11 +98,6 @@ feature 'Founder Dashboard' do
     # Check whether clicking each target gives the correct information.
     # 'Trigger' clicks on the element instead of actually clicking on it to avoid timing issues
     # with animation.
-    find("#target-#{expired_target.id} .founder-dashboard-target-header__container").trigger('click')
-    within("#target-#{expired_target.id}") do
-      expect(page).to have_content('Target Expired').and have_content('You can still try submitting!').and have_button('Submit')
-    end
-
     find("#target-#{pending_target.id} .founder-dashboard-target-header__container").trigger('click')
     within("#target-#{pending_target.id}") do
       expect(page).to have_content('Due date').and have_button('Submit')

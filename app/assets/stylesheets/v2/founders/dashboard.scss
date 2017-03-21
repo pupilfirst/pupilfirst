@@ -382,9 +382,6 @@
   &.unavailable {
     color: rgba(153, 153, 153, 0.7);
   }
-  &.expired {
-    color: rgba(255, 64, 64, 0.7);
-  }
   &.not-accepted  {
     color: rgba(46, 47, 51, 0.7);
   }
@@ -720,9 +717,6 @@
   }
   &.unavailable {
     background-color: rgba(153, 153, 153, 0.7);
-  }
-  &.expired {
-    background-color: rgba(255, 64, 64, 0.7);
   }
   &.complete {
     background-color: rgba(50, 180, 117, 0.7);

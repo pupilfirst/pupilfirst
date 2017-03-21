@@ -11,7 +11,6 @@ module Targets
         needs_improvement: needs_improvement_assignees.count,
         not_accepted: not_accepted_assignees.count,
         pending: pending_assignees.count,
-        expired: expired_assignees.count,
         unavailable: unavailable_assignees.count
       }
     end
@@ -34,10 +33,6 @@ module Targets
 
     def pending_assignees
       assignees_in_batch.select { |assignee| status_for(assignee) == Targets::StatusService::STATUS_PENDING }
-    end
-
-    def expired_assignees
-      assignees_in_batch.select { |assignee| status_for(assignee) == Targets::StatusService::STATUS_EXPIRED }
     end
 
     def unavailable_assignees

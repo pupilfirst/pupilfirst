@@ -107,14 +107,6 @@ en:
         description_70_html: "Your team is performing better than most of the batch. Attempt to get more <em>Wow</em> grades for important targets to advance."
         description_90_html: "Your team is performing exceptionally. Great stuff, we have high hopes from you :)"
       target_filters:
-        expires_soon:
-          filter_text: 'Expiring within 7 days'
-          title: 'Targets Expiring Soon'
-          description: 'The listed targets expire within 7 days and are pending submission'
-        expired:
-          filter_text: 'Expired'
-          title: 'Expired Targets'
-          description: 'The listed targets have expired. You can still try submitting!'
         not_accepted:
           filter_text: 'Not Accepted'
           title: 'Targets with Unacceptable Submissions'
@@ -148,7 +140,6 @@ en:
       complete: 'Complete'
       needs_improvement: 'Needs Improvement'
       submitted: 'Submitted'
-      expired: 'Expired'
       pending: 'Pending'
       unavailable: 'Locked'
       not_accepted: 'Not Accepted'
@@ -156,7 +147,6 @@ en:
       complete: 'Target Completed'
       needs_improvement: 'Submission Needs Improvement'
       submitted: 'Submission Being Verified'
-      expired: 'Target Expired'
       pending: 'Target Pending'
       unavailable: 'Target Locked'
       not_accepted: 'Submission Not Accepted'
@@ -164,7 +154,6 @@ en:
       complete: 'Completed on %{date}'
       needs_improvement: 'Consider feedback and try re-submitting!'
       submitted: 'Submitted on %{date}'
-      expired: 'You can still try submitting!'
       pending: 'Follow completion instructions and submit!'
       unavailable: 'Complete prerequisites first!'
       not_accepted: 'Re-submit based on feedback!'
@@ -249,19 +238,6 @@ en:
           %{links_attached_notice}
         needs_improvement: *slack_notifications_public_verified
 
-    targets:
-      new_target:
-        salutation: "Hey! %{assigner} has assigned %{assignee} a new target: *<%{startup_url}|%{title}>*\n"
-        description: "Description: \"%{description}\"\n"
-        resouce_url: "The faculty has also provided <%{resource_url}|a useful link> to assist you.\n"
-        due_date: "The due date to complete this target is :exclamation: *%{due_date}*"
-      mild_reminder: ":timer_clock: *Reminder:* %{assignee} a target - _<%{startup_url}|%{title}>_ - assigned by %{assigner} due in 5 days!"
-      strong_reminder: ":exclamation: *Urgent:* It seems that the target - _<%{startup_url}|%{title}>_ - assigned to %{assignee} by %{assigner} due in 2 days is not yet complete! Please complete the same at the earliest and submit the corresponding timeline entry for verification!"
-      batch_deploy:
-        salutation: "Attention Founders! %{assigner} has assigned all startups in the %{batch_name} batch a new target: %{title}\n"
-        description: "Description: \"%{description}\"\n "
-        resouce_url: "The faculty has also provided <%{resource_url}|a useful link> to assist you.\n"
-        due_date: "The due date to complete this target is :exclamation: *%{due_date}*"
     connect_sessions:
       founder_reminder: ":exclamation: *Reminder:* Your startup (%{startup_name}) has an office hour with <%{faculty_url}|%{faculty_name}> starting in 30 minutes! You can <%{meeting_link}|click here> to join the meeting when it's time."
       faculty_reminder: ":exclamation: *Reminder:* You have an office hour with the founders of <%{startup_url}|%{startup_name}> starting in 30 minutes!\nThe founders plan to discuss the following questions:\n %{questions}\nYou can <%{meeting_link}|click here> to join the meeting when it's time."

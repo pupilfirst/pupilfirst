@@ -25,7 +25,6 @@ table.index_table.index.js-hook.target-overview__stat-details-table
         th.col Not Accepted
         th.col Unavailable
         th.col Pending
-        th.col Expired
 
     tbody
       - @targets.each_with_index do |week_targets, index|
@@ -56,9 +55,6 @@ table.index_table.index.js-hook.target-overview__stat-details-table
             td.col
               a.js-hook.targets-overview__load-details-link data-type='pending' data-target-id=target.id
                 span.js-targets-overview__pending-count
-            td.col
-              a.js-hook.targets-overview__load-details-link data-type='expired' data-target-id=target.id
-                span.js-targets-overview__expired-count
 
 - else
   p The selected batch does not have any targets

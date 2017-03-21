@@ -3,7 +3,6 @@ module Targets
     STATUS_COMPLETE = :complete
     STATUS_NEEDS_IMPROVEMENT = :needs_improvement
     STATUS_SUBMITTED = :submitted
-    STATUS_EXPIRED = :expired
     STATUS_PENDING = :pending
     STATUS_UNAVAILABLE = :unavailable
     STATUS_NOT_ACCEPTED = :not_accepted
@@ -16,7 +15,7 @@ module Targets
     def status
       return status_from_event if linked_event.present?
       return STATUS_UNAVAILABLE if pending_prerequisites.present?
-      @target.due_date&.past? ? STATUS_EXPIRED : STATUS_PENDING
+      STATUS_PENDING
     end
 
     def completed_prerequisites

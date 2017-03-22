@@ -78,7 +78,10 @@ module Intercom
       if @mock
         log "@intercom_client.users.submit_bulk_job(delete_items: [#{segment_users.count} users])"
       else
-        @intercom_client.users.submit_bulk_job(delete_items: segment_users)
+        # Intercom API supports bulk jobs for only maximum 100 items per request. Split users to chunks of 100.
+        segment_users.each_slice(100).each do |segment_users_chunk|
+          @intercom_client.users.submit_bulk_job(delete_items: segment_users_chunk)
+        end
       end
     end
 

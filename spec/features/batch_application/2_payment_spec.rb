@@ -59,7 +59,7 @@ feature 'Batch Application Payment' do
   context 'when payment stage has expired' do
     before do
       initial_stages = application_round.round_stages.where(application_stage: ApplicationStage.where(number: [1, 2, 3]))
-      initial_stages.update_all(starts_at: 45.days.ago, ends_at: 15.days.ago)
+      initial_stages.update(starts_at: 45.days.ago, ends_at: 15.days.ago)
     end
 
     scenario 'applicant did not complete payment in time' do

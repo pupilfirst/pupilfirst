@@ -42,13 +42,4 @@ class FoundersController < ApplicationController
       root_path(redirect_from: 'registration')
     end
   end
-
-  def founder_params
-    params.require(:founders_edit).permit(
-      :name, :avatar, :slack_username, :skype_id, :identification_proof, :phone,
-      :college_identification, :course, :semester, :year_of_graduation, :about, :twitter_url, :linkedin_url,
-      :personal_website_url, :blog_url, :angel_co_url, :github_url, :behance_url, :college_id,
-      :roll_number, :born_on, :communication_address, roles: []
-    )
-  end
 end

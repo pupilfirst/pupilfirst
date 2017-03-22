@@ -7,16 +7,14 @@ class MoocStudent < ApplicationRecord
 
   serialize :completed_chapters, Array
 
-  scope :completed_quiz, -> (course_module) { MoocStudent.joins(:quiz_attempts).where(quiz_attempts: { course_module_id: course_module.id }).distinct }
+  scope :completed_quiz, ->(course_module) { MoocStudent.joins(:quiz_attempts).where(quiz_attempts: { course_module_id: course_module.id }).distinct }
 
   def self.valid_semester_values
     %w(I II III IV V VI VII VIII Graduated Other)
   end
 
   def score
-    # rubocop: disable SingleLineBlockParams
     CourseModule.with_quiz.inject(0.0) { |sum, course_module| sum + score_for_module(course_module) } / CourseModule.with_quiz.count
-    # rubocop: enable SingleLineBlockParams
   end
 
   def score_for_module(course_module)

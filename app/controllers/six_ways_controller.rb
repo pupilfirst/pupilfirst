@@ -11,6 +11,7 @@ class SixWaysController < ApplicationController
   #
   # Landing page for sixways
   def index
+    # There's nothing to load.
   end
 
   # GET /sixways/start
@@ -22,6 +23,7 @@ class SixWaysController < ApplicationController
 
   # Landing page for GTU MOOC
   def gtu_index
+    # There's nothing to load.
   end
 
   # GET /sixways/student_details
@@ -119,6 +121,7 @@ class SixWaysController < ApplicationController
   #
   # Display the completion certificate with provision to download as pdf
   def completion_certificate
+    # There's nothing to load.
   end
 
   private

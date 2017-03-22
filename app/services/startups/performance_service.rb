@@ -27,7 +27,8 @@ module Startups
         previous_leaderboard = leaderboard(batch, start_date: start_date_last_week, end_date: end_date_last_week)
 
         current_leaderboard.map do |startup_rank_points|
-          previous_leaderboard.detect { |startup, _rank, _points| startup == startup_rank_points[0] }&.second - startup_rank_points[1]
+          previous_rank = previous_leaderboard.detect { |startup, _rank, _points| startup == startup_rank_points[0] }&.second
+          previous_rank.present? ? (previous_rank - startup_rank_points[1]) : 0
         end
       end
 

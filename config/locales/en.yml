@@ -24,30 +24,13 @@ en:
     index:
       main_bleed_message_html: "SV.CO is for ambitious students to learn how to build a <strong>real</strong> startup and experience <strong>Silicon Valley</strong> while still in college."
       background_1_messages:
-        main:
-          message_1_html: "The world&apos;s best proving ground for <strong>student founders</strong> who want to <strong>join India&apos;s best startups</strong>."
-          message_2_html: "&ldquo;Through SV.CO, we built a great product and showed it to real customers. We&apos;re very happy to bring our skills to a larger company.&rdquo;"
         secondary_html: "Varghese, Sidharth, Rakhul and Renjith of Z-Pay built a prototype during SV.CO&apos;s six month startup course and got acqui-hired by Tally Solutions, Bangalore."
       background_2_messages:
-        main:
-          message_1_html: "The world&apos;s best proving ground for <strong>student founders</strong> who want to <strong>join the best Universities</strong>."
-          message_2_html: "&ldquo;Even in this day and age, my college education prioritised mugging up and writing exams. SV.CO gave me an opportunity to learn from my experiences.&rdquo;"
         secondary_html: "Arun of handME built a prototype during SV.CO&apos;s six month startup course and got both a job offer from Goqii and selection to the prestigious Draper University in the US."
       background_3_messages:
-        main:
-          message_1_html: "The world&apos;s best proving ground for <strong>student founders</strong> who want to <strong>decimate all expectations</strong>."
-          message_2_html: "&ldquo;We built a startup product right in college &amp; showed it to real customers. Even when some things didn&apos;t work, SV.CO&apos;s six ways to graduate opened up many more opportunities for us.&rdquo;"
         secondary_html: "Two amazing woman founders: Sarah of SYM and Arya of Walat. Both teams built complete prototypes during SV.CO&apos;s six month startup course."
       background_4_messages:
-        main:
-          message_1_html: "The world's best proving ground for <strong>student startups</strong> who want to <strong>jumpstart their products</strong>."
-          message_2_html: "&ldquo;We joined engineering college in search of a job, but through SV.CO we learnt how to challenge the status quo &amp; become job creators instead.&rdquo;"
         secondary_html: "Ajmal, Aswin, Balram and Kishan of Spenwise built a prototype during SV.CO&apos;s six month startup course and got selected at Zone Startups, Mumbai to continue their startup journey."
-      background_5_messages:
-        main:
-          message_1_html: "The world&apos;s best proving ground for <strong>student startups</strong> who want to <strong>get early funding</strong>."
-          message_2_html: "&ldquo;We built a great product and saw early traction at SV.CO. Now that we&apos;ve raised seed funding, we want a great launch for our product.&rdquo;"
-        secondary_html: "Aravind, Sarah and Vivek of SYM built a prototype during SV.CO&apos;s six month startup course and raised seed funding from AskME.com to scale up their product."
   payment:
     status:
       requested: Requested
@@ -57,18 +40,11 @@ en:
     create:
       email_error: "Our email delivery service refused to accept the supplied address. Please ensure that it is a valid email address. If you're still having issues, please contact us using live chat or at help@sv.co"
     general:
-      submission_failure: Something went wrong when attempting to process your submission. Please contact us at help@sv.co.
       applications_close_soon_html: Applications for batch %{batch_number} will close on <strong>%{deadline}</strong>. You have <strong>%{delta}</strong> to submit your application.
     stage_1:
-      application_page_read_html: I have gone through application page and I understand the conditions of the legal agreement that I will be required to sign, if my team is short-listed for the program.
-      team_lead_consent: I understand that I'm the designated Team Lead and I will accept all communication on behalf of the team during this application process.
-      fees_consent: I agree that I have read the application page and understood all fees related to the program.
-      submission_failure: Something went wrong when we tried to save your application data. Please contact help@sv.co if this error persists.
       payment_start: Pay Fees Online
       payment_retry: Retry Payment
       payment_skip: Proceed to Next Stage
-    stage_2:
-      submission_failure: Something seems wrong. Please ensure your urls are valid and re-submit
   faculty:
     commitment:
       part_time: Part-Time

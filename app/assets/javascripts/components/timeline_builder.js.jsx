@@ -5,7 +5,8 @@ const TimelineBuilder = React.createClass({
     targetId: React.PropTypes.number,
     allowFacebookShare: React.PropTypes.bool,
     authenticityToken: React.PropTypes.string,
-    closeTimelineBuilderCB: React.PropTypes.func
+    closeTimelineBuilderCB: React.PropTypes.func,
+    targetSubmissionCB: React.PropTypes.func
   },
 
   getInitialState: function () {
@@ -286,12 +287,16 @@ const TimelineBuilder = React.createClass({
   },
 
   handleSubmissionComplete: function () {
-    // Reload the window after 100ms.
-    setTimeout(function () {
-      window.location.reload();
-    }, 100);
-
+    // show done on timeline builder
     this.setState({submissionSuccessful: true});
+
+    // mark target submitted, if applicable
+    if (this.props.targetId) {
+      this.props.targetSubmissionCB(this.props.targetId);
+    };
+
+    // hide the timeline builder
+    $('.timeline-builder').modal('hide');
   },
 
   sampleText: function () {

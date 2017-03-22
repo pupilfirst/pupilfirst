@@ -3,6 +3,9 @@ class FounderDashboard extends React.Component {
     super(props);
 
     this.state = {
+      levels: this.props.levels,
+      chores: this.props.chores,
+      sessions: this.props.sessions,
       activeTab: 'targets',
       timelineBuilderVisible: false,
       timelineBuilderParams: {
@@ -14,6 +17,7 @@ class FounderDashboard extends React.Component {
     this.chooseTab = this.chooseTab.bind(this);
     this.closeTimelineBuilder = this.closeTimelineBuilder.bind(this);
     this.openTimelineBuilder = this.openTimelineBuilder.bind(this);
+    this.handleTargetSubmission = this.handleTargetSubmission.bind(this);
   }
 
   chooseTab(tab) {
@@ -34,11 +38,37 @@ class FounderDashboard extends React.Component {
   }
 
   pendingCount(targetType) {
-    let targets = targetType == 'chores' ? this.props.chores : this.props.sessions;
+    let targets = targetType == 'chores' ? this.state.chores : this.state.sessions;
 
     return targets.filter(function(target) {
       return target.status === 'pending';
     }).length;
+  }
+
+  handleTargetSubmission(targetId) {
+    let updatedLevels = $.extend(true, {}, this.state.levels);
+    let updateSubmissionStatus = this.updateSubmissionStatus;
+
+    $.each(updatedLevels, function(index, level) {
+      $.each(level.target_groups, function (index, targetGroup) {
+        targetGroup.targets = updateSubmissionStatus(targetGroup.targets.slice(), targetId);
+      })
+    });
+
+    let updatedChores = updateSubmissionStatus(this.state.chores.slice(), targetId);
+    let updatedSessions = updateSubmissionStatus(this.state.sessions.slice(), targetId);
+
+    this.setState({levels: updatedLevels, chores: updatedChores, sessions: updatedSessions});
+  }
+
+  updateSubmissionStatus(targets, targetId) {
+    $.each(targets, function(index, target) {
+      if (target.id === targetId) {
+        target.status = 'submitted';
+        return false;
+      }
+    });
+    return targets;
   }
 
   render() {
@@ -51,17 +81,17 @@ class FounderDashboard extends React.Component {
         { this.props.requestedRestartLevel && <FounderDashboardRestartWarning/> }
 
         { this.state.activeTab === 'targets' &&
-        <FounderDashboardTargets currentLevel={ this.props.currentLevel } levels={ this.props.levels }
+        <FounderDashboardTargets currentLevel={ this.props.currentLevel } levels={ this.state.levels }
           openTimelineBuilderCB={ this.openTimelineBuilder }/>
         }
 
         { this.state.activeTab === 'chores' &&
-        <FounderDashboardChores currentLevel={ this.props.currentLevel } chores={ this.props.chores }
+        <FounderDashboardChores currentLevel={ this.props.currentLevel } chores={ this.state.chores }
           openTimelineBuilderCB={ this.openTimelineBuilder }/>
         }
 
         { this.state.activeTab === 'sessions' &&
-        <FounderDashboardSessions sessions={ this.props.sessions } sessionTags={ this.props.sessionTags }
+        <FounderDashboardSessions sessions={ this.state.sessions } sessionTags={ this.props.sessionTags }
           openTimelineBuilderCB={ this.openTimelineBuilder }/>
         }
 
@@ -69,7 +99,7 @@ class FounderDashboard extends React.Component {
         <TimelineBuilder timelineEventTypes={ this.props.timelineEventTypes }
           allowFacebookShare={ this.props.allowFacebookShare } authenticityToken={ this.props.authenticityToken }
           closeTimelineBuilderCB={ this.closeTimelineBuilder } targetId={ this.state.timelineBuilderParams.targetId }
-          selectedTimelineEventTypeId={ this.state.timelineBuilderParams.selectedTimelineEventTypeId }/>
+          selectedTimelineEventTypeId={ this.state.timelineBuilderParams.selectedTimelineEventTypeId } targetSubmissionCB={ this.handleTargetSubmission }/>
         }
       </div>
     );

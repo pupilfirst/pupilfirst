@@ -66,7 +66,7 @@ ActiveAdmin.register Target do
     column :target_group
 
     column :level do |target|
-      target.level.present? ? target.level : target.target_group.level
+      target.level.present? ? target.level : target.target_group&.level
     end
 
     column :sort_index

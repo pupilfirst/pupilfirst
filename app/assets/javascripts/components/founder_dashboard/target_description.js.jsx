@@ -23,7 +23,7 @@ class FounderDashboardTargetDescription extends React.Component {
           { this.props.target.title }
         </h6>
 
-        <p className="target-description-content" dangerouslySetInnerHTML={{__html: this.props.target.description}}/>
+        <p className="target-description-content font-light" dangerouslySetInnerHTML={{__html: this.props.target.description}}/>
 
         <FounderDashboardResourcesBar target={ this.props.target }/>
 

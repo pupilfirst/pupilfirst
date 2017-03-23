@@ -677,7 +677,7 @@
 .founder-dashboard-target-header__headline--sm {
   font-weight: $font-regular;
   margin: 0 0 10px 0;
-  font-size: 1rem;
+  font-size: 1.125rem;
   line-height: 1.4;
   letter-spacing: 0.02rem;
 }
@@ -768,8 +768,9 @@
     }
   }
   .target-description-content {
-    font-size: 1rem;
-    line-height: 1.9;
+    font-size: 1.125rem;
+    line-height: 1.8;
+    letter-spacing: 0.01rem;
   }
   .btn-timeline-builder {
     margin-left: -46px;

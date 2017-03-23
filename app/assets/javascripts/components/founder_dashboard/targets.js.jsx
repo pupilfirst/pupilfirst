@@ -52,5 +52,6 @@ class FounderDashboardTargets extends React.Component {
 FounderDashboardTargets.propTypes = {
   currentLevel: React.PropTypes.number,
   levels: React.PropTypes.object,
-  openTimelineBuilderCB: React.PropTypes.func
+  openTimelineBuilderCB: React.PropTypes.func,
+  eligibleToLevelUp: React.PropTypes.bool
 };

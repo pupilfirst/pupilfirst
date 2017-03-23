@@ -98,6 +98,33 @@
   }
 }
 
+.founder-dashboard-levelup-notification__container {
+  max-width: 52rem;
+  position: relative;
+}
+
+.founder-dashboard-levelup-notification__box {
+  background-color: white;
+  background-image: asset-url("founders/dashboard/level_up_box-bg.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: 1px solid $gray-border;
+  box-shadow: 0px 10px 30px 0px lighten($gray-light, 35%);
+  @include border-radius(20px);
+  margin: 0 0 40px 0;
+  list-style: none;
+  position: relative;
+}
+
+.founder-dashboard-levelup__description {
+  max-width: 35rem;
+  font-size: 1rem;
+}
+
+.btn-founder-dashboard-level-up {
+  box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+}
+
 .founder-dashboard-actionbar__container {
   max-width: 50rem;
   position: relative;
@@ -123,9 +150,8 @@
 
 .founder-dashboard-sessions__tag-select-container {
   display: inline-block;
-  width: 420px;
+  width: 320px;
   @include border-radius(30px);
-  box-shadow: 0 2px 10px 0px rgba(0, 0, 0, 0.07);
 
   @include media-breakpoint-down(sm) {
     width: 240px;
@@ -133,20 +159,11 @@
   }
 
   .select2-selection--multiple {
+    margin: 0;
     height: 42px;
-    @include border-radius(30px 0 0 30px);
+    @include border-radius(30px);
     border-color: $gray-border;
     background-color: $primary-background;
-
-    &:after {
-      content: '';
-      position: absolute;
-      bottom: 1px;
-      top: 1px;
-      right: 0;
-      width: 20%;
-      background: linear-gradient(to right, rgba(249, 249, 249, 0), rgba(249, 249, 249, 1) 75%);
-    }
 
     .select2-selection__choice {
       margin-left: 4px;
@@ -160,7 +177,6 @@
     }
 
     .select2-selection__rendered {
-      width: 340px;
       display: block;
       position: relative;
       overflow: hidden;
@@ -175,16 +191,14 @@
   .select2-container--open {
     &.select2-container--below {
       .select2-selection--multiple {
-        @include border-radius(20px 0 0 0);
+        @include border-radius(20px 20px 0 0);
       }
     }
   }
   .select2-container--open {
     &.select2-container--above {
-      border: 1px solid $gray-border;
-
       .select2-selection--multiple {
-        @include border-radius(0 0 0 20px);
+        @include border-radius(0 0 20px 20px);
       }
     }
   }
@@ -199,8 +213,11 @@
   }
 }
 
+
+
 .btn-session-tag-select {
   border-color: $gray-border;
+  height: 40px;
 }
 
 .founder-dashboard-sessions__tag-select {
@@ -516,6 +533,19 @@
 .founder-dashboard-target-group__container {
   max-width: 50rem;
   position: relative;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: -80px;
+    background: $light-secondary;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    box-shadow: 0px 0 8px 0px lighten($brand-secondary, 40%);
+    z-index: 0;
+  }
 }
 
 .founder-dashboard-target-group__box {
@@ -527,19 +557,6 @@
   padding: 0;
   list-style: none;
   position: relative;
-
-  &:before {
-    content: '';
-    position: absolute;
-    top: 110px;
-    bottom: -80px;
-    background: $light-secondary;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 3px;
-    box-shadow: 0px 0 8px 0px lighten($brand-secondary, 40%);
-    z-index: 0;
-  }
 }
 
 .founder-dashboard-target-group__header {

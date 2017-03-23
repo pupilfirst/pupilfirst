@@ -41,6 +41,8 @@ class FounderDashboardTargets extends React.Component {
   render() {
     return (
       <div>
+        <FounderDashboardLevelupNotification/>
+
         <FounderDashboardActionBar filter='targets' filterData={ this.filterData() } pickFilterCB={ this.pickFilter }
           openTimelineBuilderCB={ this.props.openTimelineBuilderCB }/>
         { this.targetCollections() }

@@ -30,18 +30,10 @@ class FounderDashboardSessionsTagSelect extends React.Component {
   render() {
     return (
       <div className="founder-dashboard-sessions__tag-select-container">
-        <div className="input-group">
-          <select multiple="multiple"
-            className="founder-dashboard-sessions__tag-select js-founder-dashboard-sessions-tag-select form-control">
-            { this.tagOptions() }
-          </select>
-
-          <span className="input-group-btn">
-            <button className="btn btn-md btn-ghost-secondary btn-session-tag-select" type="button">
-              <i className="fa fa-search"/>
-            </button>
-          </span>
-        </div>
+        <select multiple="multiple"
+          className="founder-dashboard-sessions__tag-select js-founder-dashboard-sessions-tag-select form-control">
+          { this.tagOptions() }
+        </select>
       </div>
     );
   }
